@@ -1,0 +1,91 @@
+<html>
+<head>
+    <title>NextThought App</title>
+
+    <link rel="stylesheet" type="text/css" href="extjs/resources/css/ext-all-gray.css">
+    <link rel="stylesheet" type="text/css" href="resources/css/panel-reset.css">
+    <style>
+    	#saerchbar .x-panel-body, 
+    	#saerchbar .x-panel-body-default {
+			background: #7889A3;
+		}
+		#east-home > .x-panel-header,
+		#west-home > .x-panel-header, 
+		#east-stream > .x-panel-header, 
+		#west-stream > .x-panel-header, 
+		#east-book > .x-panel-header, 
+		#west-book > .x-panel-header {
+			display: none;
+		}
+		
+		#loading-mask {
+			position: absolute;
+			left: 0;
+			top: 0;
+			width: 100%;
+			height: 100%;
+			z-index: 20000;
+			background-color: white;
+		}
+		#loading {
+			position: absolute;
+			left: 50%;
+			top: 50%;
+			padding: 2px;
+			z-index: 20001;
+			height: auto;
+			margin: -35px 0 0 -30px;
+		}
+		
+		#loading .loading-indicator {
+			background: url(resources/images/loading.gif) no-repeat;
+			color: #555;
+			font: bold 11px tahoma, arial, helvetica;
+			padding: 0px 25px;
+			margin: 0;
+			text-align: center;
+			height: auto;
+		}
+		
+		.x-mask-msg{
+			background: white;
+			color: #555;
+		}
+		
+		.x-mask-msg div {
+			background-image: url(resources/images/loading.gif) !important;
+			background-color: transparent;
+			background-position: 10px center;
+			padding: 10px 15px 10px 30px;
+		}
+		
+		.viewport-too-small {
+			width: 100%;
+			height: 100%;
+			padding: 0 !important;
+
+		}
+		
+		.viewport-too-small div{
+			border: none !important;
+			background: white !important;
+			font-size: 2.4em;
+			padding: 4em !important;
+			text-align: center;
+		}
+</style>
+</head>
+<body>
+	<div id="loading-mask"></div>
+	<div id="loading">
+		<div class="loading-indicator">Loading...</div>
+	</div
+
+	<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- <script type="text/javascript" src="http://alpha.nextthought.com/prealgebra/js/mathjaxconfig.js"></script> -->
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.6.2.min.js"></script>
+    <script type="text/javascript" src="resources/NTIJSInjection.js"></script>
+    <script type="text/javascript" src="extjs/ext-debug.js"></script>
+    <script type="text/javascript" src="app.js"></script>	
+</body>
+</html>

@@ -1,0 +1,10 @@
+{
+	"server" : {
+        "host": "http://astro.local/~jgrimes",
+        "data": "/dataserver",
+        "library": "/library/library.json",
+        "relatedContent": "/workspace/WebApp/data.json",
+        "username": "sjohnson",
+        "password": "temp001"
+    }
+}
