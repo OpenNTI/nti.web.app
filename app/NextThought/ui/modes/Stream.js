@@ -7,17 +7,53 @@ Ext.define('NextThought.ui.modes.Stream', {
 	frame: false,
 	autoScroll: false,
 	defaults:{ border: false, frame: false },
-	layout: 'border',
+	// layout: 'border',
+	layout: { type:'hbox', align: 'stretch'},
     items: [],
 	
     
     constructor: function(config){
-    	this.modeButton = config.toggleButton;
-    	
-    	this.items.push({
+    	this.initConfig(config);
+    	this.self.superclass.constructor.apply(this,arguments);
+    	return this;
+    },
+    
+    initComponent: function(){
+    	var bb= { xtype: 'toolbar', cls: 'x-docked-noborder-top', items: {focusable: false, disabled:true,text:'&nbsp;',xtype:'button'}};
+   		this.callParent(arguments);
+
+		this.add({ /*xtype:'tbspacer',*/ flex:1, focusable: false, dockedItems: bb });
+
+		this.add({
+    		region: 'west', 
+    		id: 'west-stream', 
+    		// flex: 1, 
+    		// minWidth: MIN_SIDE_WIDTH,
+    		width: MIN_SIDE_WIDTH,
+    		
+    		// split: true, 
+    		collapsible:true, 
+    		items: Ext.create('NextThought.ui.FilterControl',{id:'stream-control'}),
+    		dockedItems: [{
+				xtype: 'toolbar',
+				cls: 'x-docked-noborder-top',
+				items: ['->',
+					{
+						text: '&pi;',
+						xtype: 'button',
+						handler: function(e,c){
+							Ext.getCmp('object-explorer').show();
+						}
+					}
+				]
+			}]
+    	});   		
+   		
+   		this.add({
     		region: 'center',
-    		flex: 3, 
-    		minWidth: CENTER_WIDTH,
+    		// flex: 3, 
+    		// minWidth: CENTER_WIDTH,
+    		width: CENTER_WIDTH,
     		
     		border: false,
 			frame: false,
@@ -37,41 +73,22 @@ Ext.define('NextThought.ui.modes.Stream', {
 					}]
 			},
     		items: Ext.create('NextThought.ui.views.ItemNavigator', {})
-    	}); 
-    	
-    	this.items.push({
-    		region: 'west', 
-    		id: 'west-stream', 
-    		flex: 1, 
-    		split: true, 
-    		collapsible:true, 
-    		minWidth: MIN_SIDE_WIDTH,
-    		items: Ext.create('NextThought.ui.FilterControl',{id:'stream-control'}),
-    		dockedItems: [{
-				xtype: 'toolbar',
-				cls: 'x-docked-noborder-top',
-				items: ['->',
-					{
-						text: '&pi;',
-						xtype: 'button',
-						handler: function(e,c){
-							Ext.getCmp('object-explorer').show();
-						}
-					}
-				]
-			}]
     	});
     	
-    	this.items.push({
+    	
+    	
+    	
+    	this.add({
     		region: 'east', 
     		id:'east-stream',
     		frame: false,
 			border: false,
 			defaults: {frame: false, border: false}, 
-    		split: true, 
+    		// split: true, 
     		collapsible:true, 
-    		flex: 1, 
-    		minWidth: MIN_SIDE_WIDTH,
+    		// flex: 1, 
+    		// minWidth: MIN_SIDE_WIDTH,
+    		width: MIN_SIDE_WIDTH,
         	dockedItems: [{
 				xtype: 'toolbar',
 				cls: 'x-docked-noborder-top',
@@ -114,15 +131,10 @@ Ext.define('NextThought.ui.modes.Stream', {
 		    		].join('')
 		    	}
     	]
-    	});
+    	}); 
     	
     	
-    	this.self.superclass.constructor.apply(this,arguments);
-    	return this;
-    },
-    
-    initComponent: function(){
-   		this.callParent(arguments);
+    	this.add({ /*xtype:'tbspacer',*/ flex:1, focusable: false, dockedItems: bb });
     }
     
 });

@@ -7,8 +7,8 @@ Ext.define('NextThought.ui.modes.Reader', {
 	frame: false,
 	autoScroll: false,
 	defaults:{ border: false, frame: false },
-	layout: 'border',
-	// layout: 'hbox',
+	// layout: 'border',
+	layout: { type:'hbox', align: 'stretch'},
     items: [],
 	
     
@@ -19,9 +19,10 @@ Ext.define('NextThought.ui.modes.Reader', {
     },
     
     initComponent: function(){
+    	var bb= { xtype: 'toolbar', cls: 'x-docked-noborder-top', items: {focusable: false, disabled:true,text:'&nbsp;',xtype:'button'}};
    		this.callParent(arguments);
-   		
-   		// this.add({ xtype:'tbspacer', flex:1 });
+
+		this.add({ /*xtype:'tbspacer',*/ flex:1, focusable: false, dockedItems: bb });
     	
     	this.add({
     		region: 'west', 
@@ -49,8 +50,9 @@ Ext.define('NextThought.ui.modes.Reader', {
    		
    		this.add({
     		region: 'center',
-    		flex: 1, 
-    		minWidth: CENTER_WIDTH,
+    		// flex: 1, 
+    		// minWidth: CENTER_WIDTH,
+    		width: CENTER_WIDTH,
     		
     		border: false,
 			frame: false,
@@ -74,9 +76,9 @@ Ext.define('NextThought.ui.modes.Reader', {
     		split: true, 
     		collapsible:true, 
     		// flex: 1, 
-    		// width: MIN_SIDE_WIDTH,
-    		minWidth: MIN_SIDE_WIDTH,
-        	dockedItems: [{
+    		// minWidth: MIN_SIDE_WIDTH,
+    		width: MIN_SIDE_WIDTH,
+        	dockedItems: {
 				xtype: 'toolbar',
 				cls: 'x-docked-noborder-top',
 				items: ['Community','->',
@@ -85,7 +87,7 @@ Ext.define('NextThought.ui.modes.Reader', {
 						xtype: 'button'
 					}
 				]
-			}],
+			},
 			items: [
 				{
 					padding: 5,
@@ -121,7 +123,7 @@ Ext.define('NextThought.ui.modes.Reader', {
     	]
     	});
     	
-    	// this.add({ xtype:'tbspacer', flex:1 });
+		this.add({ /*xtype:'tbspacer',*/ flex:1, focusable: false, dockedItems: bb });
     }
     
 });

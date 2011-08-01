@@ -52,9 +52,9 @@ Ext.define('NextThought.ui.TopControls', {
     		html: [
     		'<div style="float: right;  white-space: nowrap; margin-right: 5px">',
     			'<span style="padding: 5px; padding-top: 6px;font-size: 12px; vertical-align: middle">jsg2021</span> ',
-    			'| <span style="font-size: 9px; width: 24px; height: 24px; text-align: center; display: inline-block; padding-top: 6px; background: black; color: white;border-radius: 3px;">0</span> ',
-    			'| <img src="resources/faces/me.jpg" width=24 height=24 valign=middle> ',
-    			'| <img src="resources/images/gear.png" width=19 height=19 valign=middle>',
+    			' <span style="width: 24px; height: 23px; padding-top: 2px; display: inline-block; text-align: center; vertical-align: middle; background: url(\'resources/images/notify.png\') no-repeat -25px 0px;">0</span> ',
+    			//' <img src="resources/faces/me.jpg" width=24 height=24 valign=middle> ',
+    			' <img src="resources/images/gear.png" width=19 height=19 valign=middle>',
     		'</div>'
     		].join('') });
     }

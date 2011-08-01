@@ -6,35 +6,33 @@ Ext.define('NextThought.ui.modes.Home', {
 	border: false, 
 	frame: false,
 	defaults:{ border: false, frame: false },
-	layout: 'border',
+	// layout: 'border',
+	layout: { type:'hbox', align: 'stretch'},
+	
     items: [],
 	
     
     constructor: function(config){
-    	this.modeButton = config.toggleButton;
+    	this.initConfig(config);
+    	this.self.superclass.constructor.apply(this,arguments);
+    	return this;
+    },
+    
+    initComponent: function(){
+    	var bb= { xtype: 'toolbar', cls: 'x-docked-noborder-top', items: {focusable: false, disabled:true,text:'&nbsp;',xtype:'button'}};
     	
-    	this.items.push(Ext.create('NextThought.ui.content.Library',{id: 'myLibrary', region: 'center', flex: 3, minWidth: CENTER_WIDTH, librarySource: config.librarySource,
-    	
-    	dockedItems: [{
-				xtype: 'toolbar',
-				cls: 'x-docked-noborder-top',
-				items: ['Library','->',
-					{
-						text: '&nbsp;',
-						xtype: 'button'
-					}
-				]
-			}]
-    	
-    	})); 
-    	
-    	this.items.push({
+   		this.callParent(arguments);
+   		
+   		this.add({ /*xtype:'tbspacer',*/ flex:1, focusable: false, dockedItems: bb });
+   		
+   		this.add({
     		region: 'west', 
     		id: 'west-home', 
-    		split: true, 
+    		//split: true, 
     		collapsible:true, 
-    		flex: 1, 
-    		minWidth: MIN_SIDE_WIDTH,
+    		//flex: 1, 
+    		// minWidth: MIN_SIDE_WIDTH,
+    		width: MIN_SIDE_WIDTH,
     		dockedItems: [{
 				xtype: 'toolbar',
 				cls: 'x-docked-noborder-top',
@@ -49,14 +47,37 @@ Ext.define('NextThought.ui.modes.Home', {
 				]
 			}]
     	});
-    	
-    	this.items.push({
+
+		this.add(Ext.create('NextThought.ui.content.Library',{
+			id: 'myLibrary', 
+			region: 'center', 
+			// flex: 3, 
+			// minWidth: CENTER_WIDTH,
+			width: CENTER_WIDTH,
+			librarySource: this.librarySource,
+	    	dockedItems: [{
+					xtype: 'toolbar',
+					cls: 'x-docked-noborder-top',
+					items: ['Library','->',
+						{
+							text: '&nbsp;',
+							xtype: 'button',
+							focusable: false,
+							disabled: true
+						}
+					]
+				}]
+	    	
+	    	})); 
+
+		this.add({
     		region: 'east', 
     		id:'east-home', 
-    		split: true, 
+    		//split: true, 
     		collapsible:true, 
-    		flex: 1, 
-    		minWidth: MIN_SIDE_WIDTH, 
+    		// flex: 1, 
+    		// minWidth: MIN_SIDE_WIDTH, 
+    		width: MIN_SIDE_WIDTH, 
         	dockedItems: [{
 				xtype: 'toolbar',
 				cls: 'x-docked-noborder-top',
@@ -67,15 +88,9 @@ Ext.define('NextThought.ui.modes.Home', {
 					}
 				]
 			}]
-    	});
-    	
-    	
-    	this.self.superclass.constructor.apply(this,arguments);
-    	return this;
-    },
-    
-    initComponent: function(){
-   		this.callParent(arguments);
+    	});   		
+   		
+   		this.add({ /*xtype:'tbspacer',*/ flex:1, focusable: false, dockedItems: bb });
     }
     
 });
