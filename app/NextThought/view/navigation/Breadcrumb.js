@@ -11,14 +11,10 @@ Ext.define('NextThought.view.navigation.Breadcrumb', {
     _current: {},
     
     constructor: function(config){
-    	if(!config || !config.librarySource){
-    		throw "no config, or no library source";
-    	}
-    	
     	this.addEvents({"change" : true});
 
     	this.self.superclass.constructor.apply(this,arguments);
-		config.librarySource.on('loaded', this._libraryLoaded, this);    	
+		NextThought.librarySource.on('loaded', this._libraryLoaded, this);    	
     	return this;
     },
     

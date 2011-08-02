@@ -5,13 +5,9 @@ Ext.define('NextThought.view.content.Library', {
 	cls: 'x-library-home',
     
     constructor: function(config){
-    	if(!config || !config.librarySource){
-    		throw "no config, or no library source";
-    	}
-    	
     	this.self.superclass.constructor.apply(this,arguments);
     	
-    	config.librarySource.on('loaded', this._libraryLoaded, this);
+    	NextThought.librarySource.on('loaded', this._libraryLoaded, this);
     	
     	return this;
     },

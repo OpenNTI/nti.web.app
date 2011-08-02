@@ -14,9 +14,6 @@ Ext.define('NextThought.view.TopControls', {
     items: [],
     
     constructor: function(config){
-    	if(!config || !config.modeSwitch){
-    		throw "no config, or no modeSwitch control";
-    	}
     	this.initConfig(config);
     	this.self.superclass.constructor.apply(this,arguments);
     	return this;
@@ -40,7 +37,7 @@ Ext.define('NextThought.view.TopControls', {
     		// border: true,
     		layout: 'hbox',
     		items: [
-    			this.config.modeSwitch,
+    			NextThought.modeSwitcher,
     			{ xtype: 'textfield', margin: 5, emptyText:'Search...'},
     		]
     	});

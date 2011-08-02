@@ -63,8 +63,8 @@ Ext.define('NextThought.view.modes.Reader', {
 			layout: 'card',
     		
     		height: 800,
-    		dockedItems: Ext.create('NextThought.view.navigation.Breadcrumb', Ext.copyTo({id:'breadcrumb',dock:'top'}, this, 'librarySource')),
-    		items: Ext.create('NextThought.view.content.Reader', Ext.copyTo({id:'myReader'}, this, 'librarySource'))
+    		dockedItems: Ext.create('NextThought.view.navigation.Breadcrumb', {id:'breadcrumb',dock:'top'}),
+    		items: Ext.create('NextThought.view.content.Reader', {id:'myReader'})
     	}); 
     	
     	this.add({

@@ -13,22 +13,12 @@ Ext.define('NextThought.view.ModeContainer', {
 	items:[],
 	
 	constructor: function(config){
-    	if(!config || !config.librarySource){
-    		throw "no config, or no library source";
-    	}
-    	if(!config || !config.modeSwitch){
-    		throw "no config, or no modeSwitch control";
-    	}
-    	
-    	var ms = config.modeSwitch,
-    		ls = config.librarySource;
-    	
-    	this.items.push(Ext.create('NextThought.view.modes.Home',   {id: 'a', librarySource: ls, toggleButton: ms.addMode('home-mode','home-mode', Ext.bind(this._switchHome,this)) } ));
-    	this.items.push(Ext.create('NextThought.view.modes.Reader', {id: 'b', librarySource: ls, toggleButton: ms.addMode('book-mode','book-mode', Ext.bind(this._switchBook,this)) } ));
-    	this.items.push(Ext.create('NextThought.view.modes.Stream', {id: 'c', librarySource: ls, toggleButton: ms.addMode('strm-mode','strm-mode', Ext.bind(this._switchStream,this)) } ));
+		var m = this, ms = NextThought.modeSwitcher;
+    	this.items.push(Ext.create('NextThought.view.modes.Home',   {id: 'a', toggleButton: ms.addMode('home-mode','home-mode', Ext.bind(this._switchHome,this)) } ));
+    	this.items.push(Ext.create('NextThought.view.modes.Reader', {id: 'b', toggleButton: ms.addMode('book-mode','book-mode', Ext.bind(this._switchBook,this)) } ));
+    	this.items.push(Ext.create('NextThought.view.modes.Stream', {id: 'c', toggleButton: ms.addMode('strm-mode','strm-mode', Ext.bind(this._switchStream,this)) } ));
 
     	this.self.superclass.constructor.apply(this,arguments);
-    	var m = this;
     	setTimeout(function(){
 			m.items.get(1).toggleButton.toggle(true);
     	},100);
