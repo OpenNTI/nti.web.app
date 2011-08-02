@@ -11,11 +11,25 @@ Ext.application({
     ],
     
     launch: function() {
+    	console.log('launch app');
+    	NextThought.librarySource = Ext.create('NextThought.model.LibrarySource',{});
 		NextThought.modeSwitcher = Ext.create('NextThought.view.navigation.Switcher',{});
-		NextThought.oe = Ext.create('Ext.Window', { id:'object-explorer', title: 'Nav', x:100,y:100,width: 400, height: 250, maximizable:true, minimizable:true, layout: 'fit', closeAction: 'hide', items: Ext.create('NextThought.view.views.ItemNavigator', {})});
+		NextThought.oe = Ext.create('Ext.Window', { 
+			id:'object-explorer', 
+			title: 'Nav', 
+			x:100,
+			y:100,
+			width: 400, 
+			height: 250, 
+			maximizable:true, 
+			minimizable:true, 
+			layout: 'fit', 
+			closeAction: 'hide', 
+			items: Ext.create('NextThought.view.views.ItemNavigator', {})
+		});
 
-		var l = NextThought.librarySource = Ext.create('NextThought.model.LibrarySource'),
-			vp = Ext.create('NextThought.view.Viewport').getEl();
+		var l = NextThought.librarySource,
+			vp = Ext.create('NextThought.view.Viewport',{}).getEl();
         
         l.on('loaded', function(){
         	Ext.Ajax.on('beforerequest', function(connection,options){vp.mask('Loading...');});
@@ -29,7 +43,7 @@ Ext.application({
 	        }, 100);
         	
         });
-        
+
         l.load();
         Ext.EventManager.onWindowResize(resizeBlocker);
     }

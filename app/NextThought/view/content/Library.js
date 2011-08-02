@@ -4,16 +4,9 @@ Ext.define('NextThought.view.content.Library', {
 	
 	cls: 'x-library-home',
     
-    constructor: function(config){
-    	this.self.superclass.constructor.apply(this,arguments);
-    	
-    	NextThought.librarySource.on('loaded', this._libraryLoaded, this);
-    	
-    	return this;
-    },
-    
     initComponent: function(){
    		this.callParent(arguments);
+    	NextThought.librarySource.on('loaded', this._libraryLoaded, this);
     },
     
     

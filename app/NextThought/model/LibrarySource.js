@@ -8,14 +8,12 @@ Ext.define('NextThought.model.LibrarySource', {
             loaded : true
         });
 
-		Ext.copyTo(this,config,'listeners');
-        this.self.superclass.constructor.call(this, config);
+        this.callParent(arguments);
         return this;
     },
     
 	load: function(){
 		if(this._library || this._req){
-			//?
 			//this.fireEvent('loaded',this._library);
 			console.log('already loaded/loading');
 			return false;

@@ -13,11 +13,6 @@ Ext.define('NextThought.view.navigation.Switcher', {
 	},
 	items: [],
     
-    constructor: function(config){
-    	this.self.superclass.constructor.apply(this,arguments);
-    	return this;
-    },
-    
     initComponent: function(){
    		this.callParent(arguments);
     },
@@ -43,6 +38,7 @@ Ext.define('NextThought.view.navigation.Switcher', {
     
     render: function(){
     	this.callParent(arguments);
+    	if(this.items.length)
     	this.setWidth(this.items.get(0).getWidth()*this.items.length);
     },
     

@@ -7,15 +7,9 @@ Ext.define('NextThought.view.Header', {
     border: false,
     frame: false,
     
-    constructor: function(config){
-    	this.items.push(Ext.create('NextThought.view.TopControls', {id: 'saerchbar'} ));
-    	
-    	this.self.superclass.constructor.apply(this,arguments);
-    	return this;
-    },
-    
     initComponent: function(){
    		this.callParent(arguments);
+    	this.add(Ext.create('NextThought.view.TopControls', {id: 'saerchbar'} ));
     }
     
 });

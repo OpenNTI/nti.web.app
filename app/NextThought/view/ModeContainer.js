@@ -12,16 +12,18 @@ Ext.define('NextThought.view.ModeContainer', {
 	activeItem: 0,
 	items:[],
 	
-	constructor: function(config){
-		var m = this, ms = NextThought.modeSwitcher;
-    	this.items.push(Ext.create('NextThought.view.modes.Home',   {id: 'a', toggleButton: ms.addMode('home-mode','home-mode', Ext.bind(this._switchHome,this)) } ));
-    	this.items.push(Ext.create('NextThought.view.modes.Reader', {id: 'b', toggleButton: ms.addMode('book-mode','book-mode', Ext.bind(this._switchBook,this)) } ));
-    	this.items.push(Ext.create('NextThought.view.modes.Stream', {id: 'c', toggleButton: ms.addMode('strm-mode','strm-mode', Ext.bind(this._switchStream,this)) } ));
+	constructor: function(){//i don't know why the initComponent isn't called... put everything in the constructor for this class.
+    	this.callParent(arguments);
+    	
+		var m = this, 
+			ms = NextThought.modeSwitcher, 
+			s = function(){ m.items.get(1).toggleButton.toggle(true); };
+		
+    	this.add(Ext.create('NextThought.view.modes.Home',   {id: 'a', toggleButton: ms.addMode('home-mode','home-mode', Ext.bind(this._switchHome,this)) } ));
+    	this.add(Ext.create('NextThought.view.modes.Reader', {id: 'b', toggleButton: ms.addMode('book-mode','book-mode', Ext.bind(this._switchBook,this)) } ));
+    	this.add(Ext.create('NextThought.view.modes.Stream', {id: 'c', toggleButton: ms.addMode('strm-mode','strm-mode', Ext.bind(this._switchStream,this)) } ));
 
-    	this.self.superclass.constructor.apply(this,arguments);
-    	setTimeout(function(){
-			m.items.get(1).toggleButton.toggle(true);
-    	},100);
+    	setTimeout(s,100);
     	return this;
 	},
 	

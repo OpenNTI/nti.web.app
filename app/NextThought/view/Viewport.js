@@ -7,11 +7,6 @@ Ext.define('NextThought.view.Viewport', {
 	defaults:{ border: false, frame: false },
 	layout: 'border',
 	
-	 constructor: function(config){
-    	this.self.superclass.constructor.apply(this,arguments);
-    	return this;
-    },
-    
     initComponent: function(){
    		this.callParent(arguments);
 	

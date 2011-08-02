@@ -9,11 +9,6 @@ Ext.define('NextThought.view.FilterControl', {
     layout: 'hbox',
     padding: 5,
     
-    constructor: function(config){
-    	this.self.superclass.constructor.apply(this,arguments);
-    	return this;
-    },
-    
     initComponent: function(){
    		this.callParent(arguments);
    		this.add({flex: 1});

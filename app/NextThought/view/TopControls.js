@@ -13,12 +13,6 @@ Ext.define('NextThought.view.TopControls', {
 	},
     items: [],
     
-    constructor: function(config){
-    	this.initConfig(config);
-    	this.self.superclass.constructor.apply(this,arguments);
-    	return this;
-    },
-    
     initComponent: function(){
    		this.callParent(arguments);
    		

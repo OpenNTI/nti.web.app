@@ -12,12 +12,6 @@ Ext.define('NextThought.view.modes.Stream', {
     items: [],
 	
     
-    constructor: function(config){
-    	this.initConfig(config);
-    	this.self.superclass.constructor.apply(this,arguments);
-    	return this;
-    },
-    
     initComponent: function(){
     	var bb= { xtype: 'toolbar', cls: 'x-docked-noborder-top', items: {focusable: false, disabled:true,text:'&nbsp;',xtype:'button'}};
    		this.callParent(arguments);

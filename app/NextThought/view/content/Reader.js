@@ -7,8 +7,8 @@ Ext.define('NextThought.view.content.Reader', {
 	_highlights: [],
 	_tracker: null,
 	
-	constructor: function(){
-
+    initComponent: function(){
+   		this.callParent(arguments);
 		this._contextMenu = Ext.create('Ext.menu.Menu', {
 			items : [
 				{
@@ -23,15 +23,6 @@ Ext.define('NextThought.view.content.Reader', {
 				}
 			]
 		});
-
-		
-		//this.self.superclass.constructor.apply(this,arguments);
-		this.callParent(arguments);
-    	return this;
-	},
-    
-    initComponent: function(){
-   		this.callParent(arguments);
         // this.setActive({},'/prealgebra/index.html',true);
     },
 
@@ -141,6 +132,11 @@ Ext.define('NextThought.view.content.Reader', {
 		this.setActive(state.book, state.path, true);
 	},
     
+    
+    
+    _loadContentAnnotatoins: function(ntiid){
+    	console.log('this is where we will pull in highlights/notes/etc for the page: '+ntiid);
+    },
 
 
     /**
@@ -179,7 +175,8 @@ Ext.define('NextThought.view.content.Reader', {
 	        		head = c.substring(0,start),
 	        		body = c.substring(start, end),
 	        		css = /\<link.*href="(.*\.css)".*\>/gi,
-	        		meta = /\<meta.*\>/gi;
+	        		meta = /\<meta.*\>/gi,
+	        		ntiid;
 	        	
 	        	css = head.match(css);
 	        	meta = head.match(meta);
@@ -203,6 +200,7 @@ Ext.define('NextThought.view.content.Reader', {
 	            this.el.select('#NTIContent .navigation').remove();
 	            this.el.select('#NTIContent .breadcrumbs').remove();
 	            this.el.select('.x-reader-pane a[href]').on('click',this._onClick,this,{book: book, scope:this,stopEvent:true});
+	            ntiid = this.el.select('meta[name=NTIID]').first().getAttribute('content');
 	            
 	            this.relayout();
 	            
@@ -210,9 +208,7 @@ Ext.define('NextThought.view.content.Reader', {
 	            	callback();
 	            }
 	            
-	            if(NextThought && NextThought.Common){
-		            NextThought.Common.startIntegrationPoints();
-	            }
+	            this._loadContentAnnotatoins(ntiid);
 	        },
 	    error: function(){ 
 	        console.log("Error");

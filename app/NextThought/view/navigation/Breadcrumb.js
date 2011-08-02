@@ -10,17 +10,17 @@ Ext.define('NextThought.view.navigation.Breadcrumb', {
     _books: [],
     _current: {},
     
-    constructor: function(config){
+    constructor: function(){
     	this.addEvents({"change" : true});
 
-    	this.self.superclass.constructor.apply(this,arguments);
-		NextThought.librarySource.on('loaded', this._libraryLoaded, this);    	
+    	this.callParent(arguments);
+		NextThought.librarySource.on('loaded', this._libraryLoaded, this);
     	return this;
     },
     
-    initComponent: function(){
-   		this.callParent(arguments);
-    },
+    // initComponent: function(){
+   		// this.callParent(arguments);
+    // },
     
     
 	_libraryLoaded: function(library){

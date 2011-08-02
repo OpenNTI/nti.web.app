@@ -45,11 +45,6 @@ Ext.define('NextThought.view.views.ItemNavigator', {
 		generic: 'resources/images/generic.png'
 	},
 	
-	constructor: function(config){
-    	this.self.superclass.constructor.apply(this,arguments);
-    	return this;
-   	},
-   	
    	
    	initComponent: function(){
    		this.callParent(arguments);
