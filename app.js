@@ -10,12 +10,22 @@ Ext.application({
     appFolder: 'app/NextThought',
     
     controllers: [
-    	'Config'
+    	'Config',
+    	'Login'
     ],
     
     launch: function() {
     	console.log('launch app');
-    	NTIAppStart();
+    	
+    	setTimeout(function(){
+	        	Ext.get('loading').remove();
+	        	Ext.get('loading-mask').fadeOut({remove:true});
+	        	resizeBlocker(Ext.Element.getViewWidth());
+	        }, 100);
+
+		Ext.create('NextThought.view.LoginWindow',{callback: NTIAppStart}).show();
+
+    	//NTIAppStart();
     }
 });
 
@@ -46,13 +56,6 @@ function NTIAppStart(){
         	Ext.Ajax.on('beforerequest', function(connection,options){vp.mask('Loading...');});
 			Ext.Ajax.on('requestcomplete', function(connection,options){vp.unmask();});
 			Ext.Ajax.on('requestexception', function(connection,options){vp.unmask();});
-			      
-	        setTimeout(function(){
-	        	Ext.get('loading').remove();
-	        	Ext.get('loading-mask').fadeOut({remove:true});
-	        	resizeBlocker(Ext.Element.getViewWidth());
-	        }, 100);
-        	
         });
 
         l.load();
