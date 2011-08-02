@@ -1,7 +1,10 @@
+
 var CENTER_WIDTH = 768,
 	MIN_SIDE_WIDTH = 216,
 	MIN_WIDTH = 1024;
 	
+
+
 Ext.application({
     name: 'NextThought',
     appFolder: 'app/NextThought',
@@ -12,7 +15,15 @@ Ext.application({
     
     launch: function() {
     	console.log('launch app');
-    	NextThought.librarySource = Ext.create('NextThought.model.LibrarySource',{});
+    	NTIAppStart();
+    }
+});
+
+
+
+
+function NTIAppStart(){
+		NextThought.librarySource = Ext.create('NextThought.model.LibrarySource',{});
 		NextThought.modeSwitcher = Ext.create('NextThought.view.navigation.Switcher',{});
 		NextThought.oe = Ext.create('Ext.Window', { 
 			id:'object-explorer', 
@@ -46,9 +57,7 @@ Ext.application({
 
         l.load();
         Ext.EventManager.onWindowResize(resizeBlocker);
-    }
-});
-
+}
 
 
 
