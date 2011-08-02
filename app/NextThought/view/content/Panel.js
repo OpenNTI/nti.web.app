@@ -1,5 +1,5 @@
 
-Ext.define('NextThought.ui.content.Panel', {
+Ext.define('NextThought.view.content.Panel', {
 	extend: 'Ext.panel.Panel',
 	
 	autoScroll:true,

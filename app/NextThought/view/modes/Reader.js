@@ -1,6 +1,6 @@
 
 
-Ext.define('NextThought.ui.modes.Stream', {
+Ext.define('NextThought.view.modes.Reader', {
 	extend: 'Ext.panel.Panel',
 	
     border: false, 
@@ -23,17 +23,16 @@ Ext.define('NextThought.ui.modes.Stream', {
    		this.callParent(arguments);
 
 		this.add({ /*xtype:'tbspacer',*/ flex:1, focusable: false, dockedItems: bb });
-
-		this.add({
+    	
+    	this.add({
     		region: 'west', 
-    		id: 'west-stream', 
+    		id: 'west-book', 
     		// flex: 1, 
-    		// minWidth: MIN_SIDE_WIDTH,
     		width: MIN_SIDE_WIDTH,
-    		
-    		// split: true, 
+    		split: true, 
     		collapsible:true, 
-    		items: Ext.create('NextThought.ui.FilterControl',{id:'stream-control'}),
+    		minWidth: MIN_SIDE_WIDTH,
+    		items: Ext.create('NextThought.view.FilterControl',{}),
     		dockedItems: [{
 				xtype: 'toolbar',
 				cls: 'x-docked-noborder-top',
@@ -47,11 +46,11 @@ Ext.define('NextThought.ui.modes.Stream', {
 					}
 				]
 			}]
-    	});   		
+    	});
    		
    		this.add({
     		region: 'center',
-    		// flex: 3, 
+    		// flex: 1, 
     		// minWidth: CENTER_WIDTH,
     		width: CENTER_WIDTH,
     		
@@ -64,32 +63,22 @@ Ext.define('NextThought.ui.modes.Stream', {
 			layout: 'card',
     		
     		height: 800,
-    		dockedItems: {
-				xtype: 'toolbar',
-				cls: 'x-docked-noborder-top',
-				items: ['Stream','->',{
-						text: '&nbsp;',
-						xtype: 'button'
-					}]
-			},
-    		items: Ext.create('NextThought.ui.views.ItemNavigator', {})
-    	});
-    	
-    	
-    	
+    		dockedItems: Ext.create('NextThought.view.navigation.Breadcrumb', Ext.copyTo({id:'breadcrumb',dock:'top'}, this, 'librarySource')),
+    		items: Ext.create('NextThought.view.content.Reader', Ext.copyTo({id:'myReader'}, this, 'librarySource'))
+    	}); 
     	
     	this.add({
     		region: 'east', 
-    		id:'east-stream',
+    		id:'east-book',
     		frame: false,
 			border: false,
 			defaults: {frame: false, border: false}, 
-    		// split: true, 
+    		split: true, 
     		collapsible:true, 
     		// flex: 1, 
     		// minWidth: MIN_SIDE_WIDTH,
     		width: MIN_SIDE_WIDTH,
-        	dockedItems: [{
+        	dockedItems: {
 				xtype: 'toolbar',
 				cls: 'x-docked-noborder-top',
 				items: ['Community','->',
@@ -98,7 +87,7 @@ Ext.define('NextThought.ui.modes.Stream', {
 						xtype: 'button'
 					}
 				]
-			}],
+			},
 			items: [
 				{
 					padding: 5,
@@ -117,24 +106,24 @@ Ext.define('NextThought.ui.modes.Stream', {
 		    		'<img src="resources/faces/12.jpg" style="margin: 0.1em" width=32 height=32 style="float: left">',
 		    		
 		    		
-		    		'<h4 style="margin: 2em 0 0 0";>Suggested People</h4>',
+		    		'<h4 style="margin: 2em 0 0 0";>Related Items</h4>',
 		    		'<hr size=1/>',
-		    		'<p style="margin: 0.6em 0"><img src="resources/faces/10.jpg" style="margin: 0.1em" width=32 height=32 valign=top> Eric Anderson</p>',
-		    		'<p style="margin: 0.6em 0"><img src="resources/faces/09.jpg" style="margin: 0.1em" width=32 height=32 valign=top> Jane Doe</p>',
-		    		'<p style="margin: 0.6em 0"><img src="resources/faces/12.jpg" style="margin: 0.1em" width=32 height=32 valign=top> Bugs Bunny</p>',
+		    		'<p style="margin: 0.6em 0"><img valign=top src="resources/images/video.png" width=16 height=16> Video on quadradic formula</p>',
+		    		'<p style="margin: 0.6em 0"><img valign=top src="resources/images/video.png" width=16 height=16> Video on division</p>',
+		    		'<p style="margin: 0.6em 0"><img valign=top src="resources/images/generic.png" width=16 height=16> Pre-Calculas, by Art of Problem Solving</p>',
 		    		
-		    		'<h4 style="margin: 2em 0 0 0";>Widget App Store</h4>',
+		    		'<h4 style="margin: 2em 0 0 0";>Stream</h4>',
 		    		'<hr size=1/>',
-		    		'<p style="margin: 0.6em 0">Add</p>',
-		    		
+		    		'<p style="margin: 0.6em 0"><img valign=top src="resources/images/conversation.png" width=16 height=16> Just now, John Doe made a comment on a thread in Chapter 2, section 1.</p>',
+		    		'<p style="margin: 0.6em 0"><img valign=top src="resources/images/conversation.png" width=16 height=16> 2 minutes ago, Jonathan responded to John Doe\s comment. </p>',
+		    		'<p style="margin: 0.6em 0"><img valign=top src="resources/images/conversation.png" width=16 height=16> 5 minutes ago, John Doe made a comment in Chapter 2, section 1.</p>',
 		    		
 		    		].join('')
 		    	}
     	]
-    	}); 
+    	});
     	
-    	
-    	this.add({ /*xtype:'tbspacer',*/ flex:1, focusable: false, dockedItems: bb });
+		this.add({ /*xtype:'tbspacer',*/ flex:1, focusable: false, dockedItems: bb });
     }
     
 });

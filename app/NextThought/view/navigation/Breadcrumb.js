@@ -1,5 +1,5 @@
 
-Ext.define('NextThought.ui.navigation.Breadcrumb', {
+Ext.define('NextThought.view.navigation.Breadcrumb', {
 	extend: 'Ext.toolbar.Toolbar',
 	
 	cls: 'x-breadcrumbs-bar',

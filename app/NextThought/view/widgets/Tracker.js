@@ -1,6 +1,6 @@
 
 
-Ext.define('NextThought.ui.widgets.Tracker', {
+Ext.define('NextThought.view.widgets.Tracker', {
 	_base: "",
 	_numberOfDots: 50,
 	_parent: null,

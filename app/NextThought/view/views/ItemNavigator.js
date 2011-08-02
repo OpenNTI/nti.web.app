@@ -1,6 +1,6 @@
 
 
-Ext.define('NextThought.ui.views.ItemNavigator', {
+Ext.define('NextThought.view.views.ItemNavigator', {
 	extend:'Ext.panel.Panel',
 	frame: false,
 	border: false,

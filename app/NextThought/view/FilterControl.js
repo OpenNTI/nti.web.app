@@ -1,5 +1,5 @@
 
-Ext.define('NextThought.ui.FilterControl', {
+Ext.define('NextThought.view.FilterControl', {
 	extend: 'Ext.panel.Panel',
 	
 	cls: 'x-filter-control-panel',

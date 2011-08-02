@@ -1,5 +1,5 @@
 
-Ext.define('NextThought.ui.Header', {
+Ext.define('NextThought.view.Header', {
 	extend: 'Ext.panel.Panel',
 	
 	cls: 'x-header-bar',
@@ -15,7 +15,7 @@ Ext.define('NextThought.ui.Header', {
     		throw "no config, or no modeSwitch control";
     	}
     	
-    	this.items.push(Ext.create('NextThought.ui.TopControls', Ext.copyTo({id: 'saerchbar'}, config, 'modeSwitch,librarySource') ));
+    	this.items.push(Ext.create('NextThought.view.TopControls', Ext.copyTo({id: 'saerchbar'}, config, 'modeSwitch,librarySource') ));
     	
     	this.self.superclass.constructor.apply(this,arguments);
     	return this;

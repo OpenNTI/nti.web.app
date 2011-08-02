@@ -1,6 +1,6 @@
 
 
-Ext.define('NextThought.data.LibrarySource', {
+Ext.define('NextThought.model.LibrarySource', {
 	extend: 'Ext.util.Observable',
 	
     constructor: function(config) {

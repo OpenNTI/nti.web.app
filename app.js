@@ -1,5 +1,5 @@
 //Ext.Loader.setConfig({enabled: true});
-Ext.Loader.setPath('NextThought', 'app/NextThought/');
+// Ext.Loader.setPath('NextThought', 'app/NextThought/');
 
 var NextThought = NextThought || {};
 NextThought.Common = NextThought.Common || {};
@@ -13,7 +13,9 @@ var CENTER_WIDTH = 768,
 	
 
 Ext.application({
-    name: 'NextThought App',
+    name: 'NextThought',
+    appFolder: 'app/NextThought',
+    
     launch: function() {
 
 		EVENTS = Ext.create('NextThought.events.EventBus',{});
@@ -25,13 +27,13 @@ Ext.application({
 			failure: function(r,o) { console.log('failed to load config'); }
 		});
 		
-		var library = Ext.create('NextThought.data.LibrarySource',{}),
-			switcher = Ext.create('NextThought.ui.navigation.Switcher',{}),
+		var library = Ext.create('NextThought.model.LibrarySource',{}),
+			switcher = Ext.create('NextThought.view.navigation.Switcher',{}),
 			
-    		win = Ext.create('Ext.Window', { id:'object-explorer', title: 'Nav', x:100,y:100,width: 400, height: 250, maximizable:true, minimizable:true, layout: 'fit', closeAction: 'hide', items: Ext.create('NextThought.ui.views.ItemNavigator', {})}),
+    		win = Ext.create('Ext.Window', { id:'object-explorer', title: 'Nav', x:100,y:100,width: 400, height: 250, maximizable:true, minimizable:true, layout: 'fit', closeAction: 'hide', items: Ext.create('NextThought.view.views.ItemNavigator', {})}),
 		
-			header	= Ext.create('NextThought.ui.Header', { region: 'north', modeSwitch: switcher, librarySource: library}),
-			modes = Ext.create('NextThought.ui.ModeContainer', { region: 'center', id: 'mode-ctr', modeSwitch: switcher, librarySource: library});
+			header	= Ext.create('NextThought.view.Header', { region: 'north', modeSwitch: switcher, librarySource: library}),
+			modes = Ext.create('NextThought.view.ModeContainer', { region: 'center', id: 'mode-ctr', modeSwitch: switcher, librarySource: library});
 		
     	
     	Ext.create('Ext.container.Viewport', {

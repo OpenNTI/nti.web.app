@@ -1,5 +1,5 @@
 
-Ext.define('NextThought.ui.navigation.Switcher', {
+Ext.define('NextThought.view.navigation.Switcher', {
 	extend: 'Ext.panel.Panel',
 	
 	frame: false,

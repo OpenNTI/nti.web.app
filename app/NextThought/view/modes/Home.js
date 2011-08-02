@@ -1,6 +1,6 @@
 
 
-Ext.define('NextThought.ui.modes.Home', {
+Ext.define('NextThought.view.modes.Home', {
 	extend: 'Ext.panel.Panel',
 	
 	border: false, 
@@ -48,7 +48,7 @@ Ext.define('NextThought.ui.modes.Home', {
 			}]
     	});
 
-		this.add(Ext.create('NextThought.ui.content.Library',{
+		this.add(Ext.create('NextThought.view.content.Library',{
 			id: 'myLibrary', 
 			region: 'center', 
 			// flex: 3, 

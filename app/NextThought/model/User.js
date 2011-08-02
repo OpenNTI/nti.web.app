@@ -1,5 +1,5 @@
 
-Ext.define('NextThought.data.models.User', {
+Ext.define('NextThought.model.User', {
     extend: 'Ext.data.Model',
     fields: [
         { name: 'id', type: 'int' },

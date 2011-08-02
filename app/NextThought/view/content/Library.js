@@ -1,6 +1,6 @@
 
-Ext.define('NextThought.ui.content.Library', {
-	extend:'NextThought.ui.content.Panel',
+Ext.define('NextThought.view.content.Library', {
+	extend:'NextThought.view.content.Panel',
 	
 	cls: 'x-library-home',
     

@@ -1,6 +1,6 @@
 
-Ext.define('NextThought.ui.content.Reader', {
-	extend:'NextThought.ui.content.Panel',
+Ext.define('NextThought.view.content.Reader', {
+	extend:'NextThought.view.content.Panel',
 	cls: 'x-reader-pane',
 	
 	items: [{cls:'x-panel-reset', id:'NTIContent', margin: '0 0 0 50px'}],
@@ -39,7 +39,7 @@ Ext.define('NextThought.ui.content.Reader', {
 		this.callParent(arguments);
 
 		if(!this._tracker)
-			this._tracker = Ext.create('NextThought.ui.widgets.Tracker',this.el.dom, this.el.dom.firstChild);
+			this._tracker = Ext.create('NextThought.view.widgets.Tracker',this.el.dom, this.el.dom.firstChild);
 
 		this.el.on('mouseup', this._onContextMenuHandler, this);
 	},
@@ -73,7 +73,7 @@ Ext.define('NextThought.ui.content.Reader', {
 		}
 		
 		this._highlights.push(
-			Ext.create('NextThought.ui.widgets.Highlight', this._selection, this.items.get(0).el.dom.firstChild, this));
+			Ext.create('NextThought.view.widgets.Highlight', this._selection, this.items.get(0).el.dom.firstChild, this));
 	},
 	
 	

@@ -1,6 +1,6 @@
 
 
-Ext.define('NextThought.ui.widgets.Highlight', {
+Ext.define('NextThought.view.widgets.Highlight', {
 	
 	_sel: null,
 	_cmp: null,
