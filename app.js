@@ -11,7 +11,8 @@ Ext.application({
     
     controllers: [
     	'Config',
-    	'Login'
+    	'Login',
+    	'Modes'
     ],
     
     launch: function() {
@@ -34,7 +35,7 @@ Ext.application({
 
 function NTIAppStart(){
 		NextThought.librarySource = Ext.create('NextThought.model.LibrarySource',{});
-		NextThought.modeSwitcher = Ext.create('NextThought.view.navigation.Switcher',{});
+		NextThought.modeSwitcher = Ext.create('NextThought.view.navigation.ModeSwitcher',{});
 		NextThought.oe = Ext.create('Ext.Window', { 
 			id:'object-explorer', 
 			title: 'Nav', 

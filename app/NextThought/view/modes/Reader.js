@@ -1,17 +1,8 @@
 
 
-Ext.define('NextThought.view.modes.Reader', {
-	extend: 'Ext.panel.Panel',
+Ext.define( 'NextThought.view.modes.Reader', {
+	extend: 'NextThought.view.modes.Mode',
 	
-    border: false, 
-	frame: false,
-	autoScroll: false,
-	defaults:{ border: false, frame: false },
-	// layout: 'border',
-	layout: { type:'hbox', align: 'stretch'},
-    items: [],
-	
-    
     initComponent: function(){
     	var bb= { xtype: 'toolbar', cls: 'x-docked-noborder-top', items: {focusable: false, disabled:true,text:'&nbsp;',xtype:'button'}};
    		this.callParent(arguments);

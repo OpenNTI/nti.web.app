@@ -11,6 +11,6 @@ Ext.define('NextThought.view.Viewport', {
    		this.callParent(arguments);
 	
 		this.add(Ext.create('NextThought.view.Header', { region: 'north'}));
-		this.add(Ext.create('NextThought.view.ModeContainer', { region: 'center', id: 'mode-ctr'}));
+		this.add(Ext.create('NextThought.view.modes.Container', { region: 'center', id: 'mode-ctr'}));
 	}
 });

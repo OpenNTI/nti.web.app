@@ -1,6 +1,7 @@
 
-Ext.define('NextThought.view.navigation.Switcher', {
+Ext.define('NextThought.view.navigation.ModeSwitcher', {
 	extend: 'Ext.panel.Panel',
+	alias : 'widget.modeswitcher',
 	
 	frame: false,
 	border: false,
@@ -12,13 +13,14 @@ Ext.define('NextThought.view.navigation.Switcher', {
 		shrinkToFit: false,
 	},
 	items: [],
+	modeReference: null,
     
     initComponent: function(){
    		this.callParent(arguments);
     },
     
     
-    addMode: function(label, cls, handler){
+    addMode: function(label, cls){
     	var b = Ext.create('Ext.button.Button', { 
     		iconCls: cls, 
     		title: label,
@@ -26,8 +28,8 @@ Ext.define('NextThought.view.navigation.Switcher', {
     		enableToggle: true, 
     		border: false,
     		margin: 0,
-    		toggleGroup: 'headSwitcher', 
-    		toggleHandler: handler? handler : Ext.bind(this.switchState, this) 
+    		toggleGroup: 'modeSwitcher'//, 
+    		// toggleHandler: Ext.bind(this.switchState, this)
 		});
     		
     	this.add(b);
@@ -39,14 +41,11 @@ Ext.define('NextThought.view.navigation.Switcher', {
     render: function(){
     	this.callParent(arguments);
     	if(this.items.length)
-    	this.setWidth(this.items.get(0).getWidth()*this.items.length);
+	    	this.setWidth(this.items.get(0).getWidth()*this.items.length);
     },
-    
     
     switchState: function(btn, state){
     	console.log('Unhandled:',arguments);
     }
-    
-    
     
 });
