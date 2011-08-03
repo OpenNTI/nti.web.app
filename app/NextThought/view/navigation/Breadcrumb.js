@@ -29,7 +29,7 @@ Ext.define('NextThought.view.navigation.Breadcrumb', {
 		var me = this;
 		Ext.each(this._library.titles, function(o,i){
 			if(o.index)
-				me.loadToc(o.index);
+				me.loadToc(o.index, function(){});
 		});
 		
 		this.reset();
@@ -100,14 +100,19 @@ Ext.define('NextThought.view.navigation.Breadcrumb', {
 	},
 	
 	
-	loadToc: function(index){
+	loadToc: function(index, callback){
 		var url = _AppConfig.server.host+index;
 		Ext.Ajax.request({
 			url: url,
-			async: false,
+			async: !!callback,
 			scope: this,
 			failure: function(r,o) { console.log('failed to load index: '+url); },
-			success: function(r,o) { this._books[index] = r.responseXML; }
+			success: function(r,o) { 
+				this._books[index] = r.responseXML; 
+				if( callback ){
+					callback();
+				}
+			}
 		});
 	},
 	
