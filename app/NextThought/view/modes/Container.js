@@ -18,12 +18,11 @@ Ext.define( 'NextThought.view.modes.Container', {
     	this.callParent(arguments);
     	
 		var m = this, 
-			ms = NextThought.modeSwitcher, 
 			s = function(){ m.items.get(1).toggleButton.toggle(true); };
 		
-    	this.add(Ext.create('NextThought.view.modes.Home',   {id: 'a', toggleButton: ms.addMode('home-mode','home-mode') } ));
-    	this.add(Ext.create('NextThought.view.modes.Reader', {id: 'b', toggleButton: ms.addMode('book-mode','book-mode') } ));
-    	this.add(Ext.create('NextThought.view.modes.Stream', {id: 'c', toggleButton: ms.addMode('strm-mode','strm-mode') } ));
+    	this.add(Ext.create('NextThought.view.modes.Home',   {id: 'a'} ));
+    	this.add(Ext.create('NextThought.view.modes.Reader', {id: 'b'} ));
+    	this.add(Ext.create('NextThought.view.modes.Stream', {id: 'c'} ));
 
     	setTimeout(s,100);
 	}

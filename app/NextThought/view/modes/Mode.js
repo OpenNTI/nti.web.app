@@ -12,6 +12,8 @@ Ext.define( 'NextThought.view.modes.Mode', {
 
     initComponent: function(){
     	this.callParent(arguments);
+    	var id = this.id;
+    	this.toggleButton = NextThought.modeSwitcher.addMode(id+'mode label',id+'-mode-icon')
     	this.toggleButton.modeReference = this;
     },
     
