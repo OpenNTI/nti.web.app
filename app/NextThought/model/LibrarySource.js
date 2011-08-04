@@ -2,6 +2,7 @@
 
 Ext.define('NextThought.model.LibrarySource', {
 	extend: 'Ext.util.Observable',
+	_tocs: [],
 	
     constructor: function(config) {
         this.addEvents({
@@ -11,6 +12,19 @@ Ext.define('NextThought.model.LibrarySource', {
         this.callParent(arguments);
         return this;
     },
+    
+    getTitles: function(){
+    	return this._library.titles;
+    },
+    
+    getToc: function(index){
+    	if(index && !this._tocs[index]){
+    		this._loadToc(index);
+    	}
+    	
+    	return this._tocs[index];
+    },
+    
     
 	load: function(){
 		if(this._library || this._req){
@@ -32,7 +46,7 @@ Ext.define('NextThought.model.LibrarySource', {
 			},
 			success: function(r,o) {
 				this._library = Ext.decode(r.responseText);
-				go.call(this);
+				this._libraryLoaded(Ext.bind(go,this));
 			}
 		});
 		
@@ -44,5 +58,39 @@ Ext.define('NextThought.model.LibrarySource', {
 	},
 	
 	
-
+	
+    _libraryLoaded: function(callback){
+		var me = this, stack = [];
+		Ext.each(this._library.titles, function(o){
+			if(!o.index){ return; }
+			stack.push(o.index);
+		});
+		
+		Ext.each(this._library.titles, function(o){
+			if(!o.index){return;}
+			me._loadToc(o.index, function(){
+				stack.pop();
+				if(stack.length==0 && callback){
+					callback.call(this);
+				}
+			});
+		});
+	},
+	
+	
+	_loadToc: function(index, callback){
+		var url = _AppConfig.server.host+index;
+		Ext.Ajax.request({
+			url: url,
+			async: !!callback,
+			scope: this,
+			failure: function(r,o) { console.log('failed to load index: '+url); },
+			success: function(r,o) { 
+				this._tocs[index] = r.responseXML; 
+				if( callback ){
+					callback();
+				}
+			}
+		});
+	}
 });

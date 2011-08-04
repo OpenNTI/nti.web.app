@@ -1,44 +1,25 @@
 
 Ext.define('NextThought.view.navigation.Breadcrumb', {
 	extend: 'Ext.toolbar.Toolbar',
+	alias: 'widget.breadcrumbbar',
 	
 	cls: 'x-breadcrumbs-bar',
     items: [],
     border: false,
     
-    _library: null,
-    _books: [],
     _current: {},
     
     constructor: function(){
-    	this.addEvents({"change" : true});
-
+    	this.addEvents({'change': true, 'navigate': true});
     	this.callParent(arguments);
-		NextThought.librarySource.on('loaded', this._libraryLoaded, this);
     	return this;
     },
     
-    // initComponent: function(){
-   		// this.callParent(arguments);
-    // },
+    initComponent: function(){
+   		this.callParent(arguments);
+   		this._librarySource = NextThought.librarySource;
+    },
     
-    
-	_libraryLoaded: function(library){
-		this._library = library;
-		
-		var me = this;
-		Ext.each(this._library.titles, function(o,i){
-			if(o.index)
-				me.loadToc(o.index, function(){});
-		});
-		
-		this.reset();
-		
-		var b = this._library.titles[0];
-		Ext.getCmp('myReader').setActive(b, b.root+'sect0001.html');		
-	},
-	
-	
 	reset: function(book){
 		this._current = {};
 		this.removeAll(true);
@@ -73,16 +54,12 @@ Ext.define('NextThought.view.navigation.Breadcrumb', {
 			return {};
 		}
 		
-		if(!this._books[b.index]){
-			this.loadToc(b.index);
-		}
-		
-		var xml = this._books[b.index] 
+		var xml = this._librarySource.getToc(b.index), 
 			q = "topic[href^="+this._current.location.replace('.','\\.')+"]",
 			l = Ext.DomQuery.selectNode(q,xml);
 		return {
 			book: b,
-			toc: b? this._books[b.index] : undefined,
+			toc: xml,
 			location: l 
 		};
 	},
@@ -98,24 +75,6 @@ Ext.define('NextThought.view.navigation.Breadcrumb', {
 		this.renderBredcrumb(book, loc.toc, loc.location, this);
 		this.fireEvent('change',loc);
 	},
-	
-	
-	loadToc: function(index, callback){
-		var url = _AppConfig.server.host+index;
-		Ext.Ajax.request({
-			url: url,
-			async: !!callback,
-			scope: this,
-			failure: function(r,o) { console.log('failed to load index: '+url); },
-			success: function(r,o) { 
-				this._books[index] = r.responseXML; 
-				if( callback ){
-					callback();
-				}
-			}
-		});
-	},
-	
 	
 	
 	renderBredcrumb: function(book, xml, currentLocation, container) {
@@ -170,16 +129,18 @@ Ext.define('NextThought.view.navigation.Breadcrumb', {
 	_getLibraryMenu: function(book){
 		var list = [];
 		
-		Ext.each(this._library.titles, function(o){
-			var xml = this._books[o.index],
+		Ext.each(this._librarySource.getTitles(), function(o){
+			var xml = this._librarySource.getToc(o.index),
 				b	= [],
 				m	= {
 					text: o.title,
 					checked: book && o.index==book.index,
 					group: 'library',
 					listeners: {
+						scope: this,
 						click: function(){
-							Ext.getCmp('myReader').setActive(o, o.href);
+							console.log(this.$className);
+							this.fireEvent('navigate',o, o.href);
 						}
 					}
 				};
@@ -238,8 +199,10 @@ Ext.define('NextThought.view.navigation.Breadcrumb', {
         var leaf = {
         	text: labelText,
         	listeners: {
+        		scope: this,
         		click: function(){
-        			Ext.getCmp('myReader').setActive(book, book.root+href);
+        			console.log(this.$className);
+        			this.fireEvent('navigate',book, book.root+href);
         		}
         	}
         };

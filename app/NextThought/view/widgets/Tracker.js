@@ -1,6 +1,7 @@
 
 
 Ext.define('NextThought.view.widgets.Tracker', {
+	// extend: 'Ext.util.Observable',
 	_base: "",
 	_numberOfDots: 50,
 	_parent: null,

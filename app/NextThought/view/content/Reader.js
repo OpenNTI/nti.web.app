@@ -1,6 +1,7 @@
 
 Ext.define('NextThought.view.content.Reader', {
 	extend:'NextThought.view.content.Panel',
+	alias: 'widget.reader-panel',
 	cls: 'x-reader-pane',
 	
 	items: [{cls:'x-panel-reset', id:'NTIContent', margin: '0 0 0 50px'}],
