@@ -86,11 +86,23 @@ Ext.define('NextThought.model.LibrarySource', {
 			scope: this,
 			failure: function(r,o) { console.log('failed to load index: '+url); },
 			success: function(r,o) { 
-				this._tocs[index] = r.responseXML; 
+				this._tocs[index] = ? r.responseXML : this._parseXML(r.responseText); 
 				if( callback ){
 					callback();
 				}
 			}
 		});
+	},
+	
+	_parseXML: function(txt) {
+		if (window.DOMParser) {
+			return new DOMParser().parseFromString(txt,"text/xml");
+		}
+		
+		// Internet Explorer
+		var x = new ActiveXObject("Microsoft.XMLDOM");
+		x.async="false"; 
+		x.loadXML(txt);
+		return x;
 	}
 });
