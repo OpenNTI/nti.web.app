@@ -86,7 +86,7 @@ Ext.define('NextThought.model.LibrarySource', {
 			scope: this,
 			failure: function(r,o) { console.log('failed to load index: '+url); },
 			success: function(r,o) { 
-				this._tocs[index] = ? r.responseXML : this._parseXML(r.responseText); 
+				this._tocs[index] = r.responseXML? r.responseXML : this._parseXML(r.responseText); 
 				if( callback ){
 					callback();
 				}
