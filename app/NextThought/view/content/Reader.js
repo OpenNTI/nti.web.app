@@ -3,6 +3,7 @@ Ext.define('NextThought.view.content.Reader', {
 	extend:'NextThought.view.content.Panel',
 	alias: 'widget.reader-panel',
 	requires: ['NextThought.model.Highlight',
+			   'NextThought.model.Note',
 			   'NextThought.util.HighlightUtils'],
 	cls: 'x-reader-pane',
 	
@@ -160,7 +161,14 @@ Ext.define('NextThought.view.content.Reader', {
     	}
     },
     
-    
+     _notesLoaded: function(records, operation, success) {
+    	Ext.each(records, 
+    		function(r){
+    			console.log(r);
+    		},
+    		this
+    	)
+    },
     _highlightsLoaded: function(records, operation, success) {
     	Ext.each(records, 
     		function(r){
@@ -188,10 +196,16 @@ Ext.define('NextThought.view.content.Reader', {
     _loadContentAnnotatoins: function(ntiid){
     	this._ntiid = ntiid;
     	console.log('this is where we will pull in highlights/notes/etc for the page: '+ntiid);
-		var store = Ext.create('Ext.data.Store',{model: 'NextThought.model.Highlight', proxy: {type: 'nti', collectionName: 'Highlights', ntiid: ntiid}});
-		store.load({
+		var highlightStore = Ext.create('Ext.data.Store',{model: 'NextThought.model.Highlight', proxy: {type: 'nti', collectionName: 'Highlights', ntiid: ntiid}});
+		var noteStore = Ext.create('Ext.data.Store',{model: 'NextThought.model.Note', proxy: {type: 'nti', collectionName: 'Notes', ntiid: ntiid}});
+		
+		highlightStore.load({
 			scope:this,
 			callback:this._highlightsLoaded
+		});
+		noteStore.load({
+			scope:this,
+			callback:this._notesLoaded
 		});
     },
 

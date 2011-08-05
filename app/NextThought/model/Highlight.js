@@ -15,6 +15,7 @@ Ext.define('NextThought.model.Highlight', {
     ],
     proxy: {
     	type: 'nti',
-    	collectionName: 'Highlights'
+    	collectionName: 'Highlights',
+    	model: 'NextThought.model.Highlight'
     }
 });

@@ -6,6 +6,10 @@ Ext.define('NextThought.proxy.NTIRest', {
 	url: '',
     appendId: true, //default
     reader: {type: 'nti'},
+    constructor: function(config) {
+    	Ext.copyTo(this.reader, config, 'model');
+    	this.callParent(arguments);
+    },
 
     buildUrl: function(request){
  	    var me 		  = this,
@@ -17,11 +21,14 @@ Ext.define('NextThought.proxy.NTIRest', {
 	        ntiid	  = record ? record.get('ntiid') : me.ntiid ? me.ntiid : undefined,
 	        appendId  = me.appendId,
 	        id        = record ? record.get('id') : operation.id;
-
+	        
 		if (!me.collectionName) {
 			throw 'No collectionName given';
 		}
-
+		if (!ntiid) {
+			throw 'No NTIId given';
+		}
+		
  		if (ntiid) {
             if (!url.match(/\/$/)) {
                 url += '/';

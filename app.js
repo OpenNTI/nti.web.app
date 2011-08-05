@@ -5,6 +5,22 @@ var CENTER_WIDTH = 768,
 	
 
 
+function testNote() {
+	var ntiid = Ext.select('meta[name=NTIID]').first().getAttribute('content');
+	var Note = Ext.ModelMgr.getModel('NextThought.model.Note');
+	var store = Ext.create('Ext.data.Store',{model: 'NextThought.model.Note', proxy: {type: 'nti', collectionName: 'Notes', ntiid: ntiid}});
+	var note = Ext.create('NextThought.model.Note', {text: 'this is my note', xpath: 'id("NTIContent")/DIV', ntiid: ntiid});
+	note.save({success:function(){
+		console.log(arguments);
+	}});
+	store.load({
+			scope:this,
+			callback:function() {
+				console.log('loaded notes', arguments);
+			}
+		});
+}
+
 	
 function resizeBlocker(w, h, e){
 	var i = !!(w<MIN_WIDTH),
