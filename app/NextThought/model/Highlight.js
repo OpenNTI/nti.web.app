@@ -2,16 +2,14 @@
 Ext.define('NextThought.model.Highlight', {
     extend: 'Ext.data.Model',
     requires: ['NextThought.proxy.NTIRest'],
+    idProperty: 'OID',
     fields: [
         { name: 'id', mapping: 'ID', type: 'int' },
-        { name: 'startAnchor', type: 'string' },
+        { name: 'startXpath', type: 'string' },
         { name: 'startOffset', type: 'int' },
-       	{ name: 'startHighlightedText', type: 'string' },
-     	{ name: 'startHighlightedFullText', type: 'string' },
-     	{ name: 'endAnchor', type: 'string' },
+     	{ name: 'endXpath', type: 'string' },
        	{ name: 'endOffset', type: 'int' },
-       	{ name: 'endHighlightedText', type: 'string' },
-       	{ name: 'endHighlightedFullText', type: 'string' },
+       	{ name: 'color', type: 'string', defaultValue: 'yellow' },
        	{ name: 'modifiedtime', type: 'string' },
        	{ name: 'ntiid', type: 'string'}
     ],

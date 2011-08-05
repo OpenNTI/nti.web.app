@@ -74,12 +74,19 @@ Ext.define('NextThought.view.content.Reader', {
 		highlight.save({
 			scope:this,
 			success:function(){
-				this._highlights.push(
-					Ext.create('NextThought.view.widgets.Highlight', this._selection, this.items.get(0).el.dom.firstChild, this));
+				this._createHighlightWidget(this._selection, highlight);
 			}
 		});	
 	},
 	
+	
+	_createHighlightWidget: function(range, record){
+		this._highlights.push(
+					Ext.create(
+						'NextThought.view.widgets.Highlight', 
+						range, record,
+						this.items.get(0).el.dom.firstChild, this));
+	},
 	
 	saveSelection: function() {
 		if (window.getSelection) {  // all browsers, except IE before version 9
@@ -152,8 +159,9 @@ Ext.define('NextThought.view.content.Reader', {
     		return null;
     	}
     },
+    
+    
     _highlightsLoaded: function(records, operation, success) {
-    	console.log(arguments);
     	Ext.each(records, 
     		function(r){
     			var endElement = this._getNodeFromXPath(r.get('endAnchor'));
@@ -164,7 +172,6 @@ Ext.define('NextThought.view.content.Reader', {
     				range.setEnd(endElement ? endElement : startElement, r.get('endOffset'));
     				range.setStart(startElement, r.get('startOffset'));
     				if (!startElement || range.collapsed) throw 'rageing tempor tantrum';
-    				console.log('new range', range, r);
     			}
     			catch(e) {
     				console.log('destroying', r, e);
@@ -172,8 +179,7 @@ Ext.define('NextThought.view.content.Reader', {
     				return;
     			}
     			
-    			this._highlights.push(
-					Ext.create('NextThought.view.widgets.Highlight', range, this.items.get(0).el.dom.firstChild, this));
+    			this._createHighlightWidget(range, r);
     		},
     		this
     	);
@@ -205,8 +211,10 @@ Ext.define('NextThought.view.content.Reader', {
         
         var b = this._resolveBase(this._getPathPart(path)),
         	f = this._getFilename(path),
-			p = this.items.get(0);
+			p = this.items.get(0),
+			vp= Ext.getCmp('viewport').getEl();
         
+        vp.mask('Loading...');
         
 		Ext.getCmp('breadcrumb').setActive(book, f);
 		
@@ -260,10 +268,12 @@ Ext.define('NextThought.view.content.Reader', {
 	            }
 	            
 	            this._loadContentAnnotatoins(ntiid);
+	            vp.unmask();
 	        },
-	    error: function(){ 
-	        console.log("Error");
-	        }
+	    	error: function(){ 
+	    		console.log("Error", arguments); 
+	    		vp.unmask(); 
+	    	}
 	    });
     },
     

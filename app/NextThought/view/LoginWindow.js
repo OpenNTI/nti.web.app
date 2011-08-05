@@ -72,7 +72,6 @@ Ext.define('NextThought.view.LoginWindow', {
    		this.callParent(arguments);
     },
     
-    
     show: function(){
     	this.callParent(arguments);
     	this.down('textfield').focus();

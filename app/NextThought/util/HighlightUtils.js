@@ -34,7 +34,8 @@ Ext.define('NextThought.util.HighlightUtils',
 			var endNode = range.endContainer;
 			highlight.set('endAnchor', this.getPathTo(endNode));
 			highlight.set('endOffset', range.endOffset);
-	
+			
+			return highlight;
 		},
 		ascendToAnchor: function(textNode) {
 			var parentNode = textNode;

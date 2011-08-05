@@ -7,7 +7,7 @@ Ext.define('NextThought.view.widgets.Highlight', {
 	_canvas: null,
 	_menu: null,
 
-	constructor: function(selection, container, component){
+	constructor: function(selection, record, container, component){
 		var d = Ext.query('.highlight-nibs',container);
 		
 		this._cmp = component;
@@ -20,6 +20,8 @@ Ext.define('NextThought.view.widgets.Highlight', {
 
 		this._cmp.on('resize', this.onResize, this);
 		Ext.EventManager.onWindowResize(this.onResize, this);
+		
+		Ext.get(this._img).on('click',function(){ this.cleanup(); record.destroy(); }, this);
 		
 		this.render();
 		return this;

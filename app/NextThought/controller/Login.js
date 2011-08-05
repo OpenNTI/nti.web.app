@@ -1,7 +1,7 @@
-Ext.require('NextThought.util.Base64');
 
 Ext.define('NextThought.controller.Login', {
     extend: 'Ext.app.Controller',
+    requires:['NextThought.util.Base64'],
 
 	views: [
         'LoginWindow'
@@ -10,8 +10,16 @@ Ext.define('NextThought.controller.Login', {
     init: function() {
     	this.http = this._getHTTPObject();
     	this.control({
+    		'loginwindow': {
+    			beforeshow: function(win,opts){ 
+    				if(this.attemptLogin(_AppConfig.server)){
+    					win.callback();
+    					return false;
+    				} 
+    			}
+    		},
             'loginwindow button[actionName=login]': {
-                click: this.attemptLogin
+                click: this.loginClicked
             },
             'loginwindow button[actionName=cancel]': {
                 click: function(){
@@ -34,31 +42,35 @@ Ext.define('NextThought.controller.Login', {
 	    }
 	    return false;
 	},
-
-    attemptLogin: function(button) {
-	    var win    = button.up('window'),
-	        form   = win.down('form'),
-	        values = form.getValues(),
-	        s = _AppConfig.server;
-
-		if(!form.getForm().isValid()){
-			return;
-		}
-		
+	
+	attemptLogin: function(values){
 		//try to auth for future calls to server
-		var base64 = Ext.create('Base64');
-		var authString = base64.basicAuthString(values.username, values.password);
+		var s = _AppConfig.server,
+			a = Base64.basicAuthString(values.username, values.password);
+			
 		this.http.open("GET", s.host + s.data + 'users/' + values.username, false, values.username, values.password);
-		this.http.setRequestHeader("Authorization", authString);
+		this.http.setRequestHeader("Authorization", a);
 		this.http.send('');
 		if (this.http.status == 401) {
-			return; //we failed auth	
+			return false; //we failed auth
 		}
 		
 		//Auto inject all future request with the auth string
 		Ext.Ajax.defaultHeaders = Ext.Ajax.defaultHeaders || {};
-		Ext.Ajax.defaultHeaders['Authorization']= authString;
-		_AppConfig.server.username = values.username;
+		Ext.Ajax.defaultHeaders['Authorization']= a;
+		Ext.copyTo(_AppConfig.server, values, 'username');
+		
+		return true;
+	},
+
+    loginClicked: function(button) {
+	    var win    = button.up('window'),
+	        form   = win.down('form'),
+	        values = form.getValues();
+
+		if(!form.getForm().isValid() || !this.attemptLogin(values)) {
+			return;
+		}
 		
 	    win.close();
 		win.callback();

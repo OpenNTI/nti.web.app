@@ -1,6 +1,12 @@
 Ext.define('NextThought.util.Base64',
 {
 	alternateClassName: 'Base64',
+	statics: {
+		basicAuthString: function(username, password) {
+			return "Basic " + Ext.create('NextThought.util.Base64').encode( username + ":" + password );
+		}
+	},
+	
 	_keyStr : 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=',
 
 	encode: function(stringToEncode) {
@@ -61,9 +67,5 @@ Ext.define('NextThought.util.Base64',
 		}
 
 		return utftext;
-	},
-	
-	basicAuthString: function(username, password) {
-		return "Basic " + this.encode( username + ":" + password );
 	}
 });

@@ -6,6 +6,7 @@ Ext.define('NextThought.view.Viewport', {
 	frame: false,
 	defaults:{ border: false, frame: false },
 	layout: 'border',
+	id: 'viewport',
 	
     initComponent: function(){
    		this.callParent(arguments);

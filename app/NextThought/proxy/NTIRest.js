@@ -16,7 +16,7 @@ Ext.define('NextThought.proxy.NTIRest', {
 	        url       = _AppConfig.server.host + _AppConfig.server.data + 'users/' + _AppConfig.server.username +'/' + me.collectionName,
 	        ntiid	  = record ? record.get('ntiid') : me.ntiid ? me.ntiid : undefined,
 	        appendId  = me.appendId,
-	        id        = record ? record.getId() : operation.id;
+	        id        = record ? record.get('id') : operation.id;
 
 		if (!me.collectionName) {
 			throw 'No collectionName given';
@@ -46,7 +46,14 @@ Ext.define('NextThought.proxy.NTIRest', {
     	//set up some directions about how to read the data in the reader:
     	this.reader.hasNtiid = !!ntiid;
     	this.reader.hasId = me.appendId && id!==undefined;
-    	console.log("IDs=", me.appendId, id, this.reader.hasId, result);
+    	
+    	console.log(
+    		'appendId:', me.appendId, 
+    		'id:',id,
+    		'hasId:',this.reader.hasId, 
+    		'record:',record, 
+    		'url:',result
+    		);
     	
     	return 	result;
     }

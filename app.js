@@ -35,20 +35,13 @@ Ext.application({
     ],
     
     launch: function() {
-    	console.log('launch app');
-    	Ext.EventManager.onWindowResize(resizeBlocker);
-    	
-    	setTimeout(function(){
-	        	Ext.get('loading').remove();
-	        	Ext.get('loading-mask').fadeOut({remove:true});
-	        	resizeBlocker(Ext.Element.getViewWidth());
-	        }, 100);
+    	setTimeout(clearMask, 100);
 
-		Ext.create('NextThought.view.LoginWindow',{callback: NTIAppStart}).show();
+		Ext.create('NextThought.view.LoginWindow',{callback: appStart}).show();
 
-
-		function NTIAppStart(){
+		function appStart(){
 			NextThought.modeSwitcher = Ext.create('NextThought.view.navigation.ModeSwitcher',{});
+			
 			Ext.create('Ext.Window', { 
 				id:'object-explorer', 
 				title: 'Nav', 
@@ -63,16 +56,16 @@ Ext.application({
 				items: Ext.create('NextThought.view.views.ItemNavigator', {})
 			});
 	
-			var l = NextThought.librarySource,
-				vp = Ext.create('NextThought.view.Viewport',{}).getEl();
-	        
-	        l.on('loaded', function(){
-	        	Ext.Ajax.on('beforerequest', function(connection,options){vp.mask('Loading...');});
-				Ext.Ajax.on('requestcomplete', function(connection,options){vp.unmask();});
-				Ext.Ajax.on('requestexception', function(connection,options){vp.unmask();});
-	        });
-	        l.load();
+			Ext.EventManager.onWindowResize(resizeBlocker);
+			Ext.create('NextThought.view.Viewport',{}).getEl();
+	        NextThought.librarySource.load();
 		}
+		
+		function clearMask(){
+        	Ext.get('loading').remove();
+        	Ext.get('loading-mask').fadeOut({remove:true});
+        	resizeBlocker(Ext.Element.getViewWidth());
+        }
     }
 });
 
