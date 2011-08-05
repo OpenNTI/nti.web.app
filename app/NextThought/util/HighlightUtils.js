@@ -29,10 +29,10 @@ Ext.define('NextThought.util.HighlightUtils',
 			var highlight = Ext.create('NextThought.model.Highlight');
 			
 			var startNode = range.startContainer;
-			highlight.set('startAnchor', this.getPathTo(startNode));
+			highlight.set('startXpath', this.getPathTo(startNode));
 			highlight.set('startOffset', range.startOffset);
 			var endNode = range.endContainer;
-			highlight.set('endAnchor', this.getPathTo(endNode));
+			highlight.set('endXpath', this.getPathTo(endNode));
 			highlight.set('endOffset', range.endOffset);
 			
 			return highlight;

@@ -17,14 +17,19 @@ Ext.define('NextThought.reader.Json', {
 			console.log('readRecords:',me, arguments);
 		}
 		
+		if(Ext.isArray(data)){
+			return this.callParent(arguments);
+		}
 		//special case where data returns to us after saving without an array
-		if (!i && !Ext.isArray(data)) {
+		else if (!i) {
 			return this.callParent([data]);
 		}
 		
-		if (me.hasId) {
+		else if (me.hasId) {
 			return this.callParent(arguments);
 		}
+		
+
 		
 		if (me.hasNtiid){
 			records = this.getNestedRecords(i);

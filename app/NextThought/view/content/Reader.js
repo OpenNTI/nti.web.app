@@ -4,6 +4,7 @@ Ext.define('NextThought.view.content.Reader', {
 	alias: 'widget.reader-panel',
 	requires: ['NextThought.model.Highlight',
 			   'NextThought.model.Note',
+			   'NextThought.proxy.UserDataLoader',
 			   'NextThought.util.HighlightUtils'],
 	cls: 'x-reader-pane',
 	
@@ -163,19 +164,20 @@ Ext.define('NextThought.view.content.Reader', {
     	}
     },
     
-     _notesLoaded: function(records, operation, success) {
-    	Ext.each(records, 
+    _objectsLoaded: function(bins) {
+    	
+    	Ext.each(bins.Note, 
     		function(r){
     			console.log(r);
+    			r.destroy();
     		},
     		this
     	)
-    },
-    _highlightsLoaded: function(records, operation, success) {
-    	Ext.each(records, 
+    	
+    	Ext.each(bins.Highlight, 
     		function(r){
-    			var endElement = this._getNodeFromXPath(r.get('endAnchor'));
-    			var startElement = this._getNodeFromXPath(r.get('startAnchor'));
+    			var endElement = this._getNodeFromXPath(r.get('endXpath'));
+    			var startElement = this._getNodeFromXPath(r.get('startXpath'));
     			var range = document.createRange();
     		
     			try {
@@ -185,7 +187,7 @@ Ext.define('NextThought.view.content.Reader', {
     			}
     			catch(e) {
     				if(NextThought.isDebug) {
-    					console.log('destroying', r, e);
+    					console.log('destroying', r, e, e.toString());
     				}
     				r.destroy();
     				return;
@@ -199,16 +201,8 @@ Ext.define('NextThought.view.content.Reader', {
     
     _loadContentAnnotatoins: function(ntiid){
     	this._ntiid = ntiid;
-		var highlightStore = Ext.create('Ext.data.Store',{model: 'NextThought.model.Highlight', proxy: {type: 'nti', collectionName: 'Highlights', ntiid: ntiid}});
-		var noteStore = Ext.create('Ext.data.Store',{model: 'NextThought.model.Note', proxy: {type: 'nti', collectionName: 'Notes', ntiid: ntiid}});
-		
-		highlightStore.load({
-			scope:this,
-			callback:this._highlightsLoaded
-		});
-		noteStore.load({
-			scope:this,
-			callback:this._notesLoaded
+		UserDataLoader.getPageItems(ntiid, {
+			success: Ext.bind(this._objectsLoaded, this)
 		});
     },
 
