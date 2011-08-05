@@ -41,10 +41,5 @@ Ext.define('NextThought.view.navigation.ModeSwitcher', {
     	this.callParent(arguments);
     	if(this.items.length)
 	    	this.setWidth(this.items.get(0).getWidth()*this.items.length);
-    },
-    
-    switchState: function(btn, state){
-    	console.log('Unhandled:',arguments);
     }
-    
 });

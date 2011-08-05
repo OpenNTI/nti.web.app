@@ -1,6 +1,6 @@
 
 
-Ext.define('NextThought.model.LibrarySource', {
+Ext.define('NextThought.Library', {
 	extend: 'Ext.util.Observable',
 	_tocs: [],
 	
@@ -40,7 +40,9 @@ Ext.define('NextThought.model.LibrarySource', {
 			url: b + l,
 			scope: this,
 			failure: function(r,o) {
-				console.log('failed to load library'); 
+				if(NextThought.isDebug) 
+					console.log('failed to load library');
+					 
 				this._library = null;
 				go.call(this);
 			},
@@ -84,7 +86,7 @@ Ext.define('NextThought.model.LibrarySource', {
 			url: url,
 			async: !!callback,
 			scope: this,
-			failure: function(r,o) { console.log('failed to load index: '+url); },
+			failure: function() { if(NextThought.isDebug) console.log('failed to load index: '+url, arguments); },
 			success: function(r,o) { 
 				this._tocs[index] = r.responseXML? r.responseXML : this._parseXML(r.responseText);
 				if(!this._tocs[index]){

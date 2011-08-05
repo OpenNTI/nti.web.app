@@ -156,7 +156,9 @@ Ext.define('NextThought.view.content.Reader', {
     		return document.evaluate(xpath, document).iterateNext();
     	}
     	catch(e) {
-    		console.log(xpath, e);
+    		if(NextThought.isDebug) {
+    			console.log(xpath, e);
+    		}
     		return null;
     	}
     },
@@ -182,7 +184,9 @@ Ext.define('NextThought.view.content.Reader', {
     				if (!startElement || range.collapsed) throw 'rageing tempor tantrum';
     			}
     			catch(e) {
-    				console.log('destroying', r, e);
+    				if(NextThought.isDebug) {
+    					console.log('destroying', r, e);
+    				}
     				r.destroy();
     				return;
     			}
@@ -195,7 +199,6 @@ Ext.define('NextThought.view.content.Reader', {
     
     _loadContentAnnotatoins: function(ntiid){
     	this._ntiid = ntiid;
-    	console.log('this is where we will pull in highlights/notes/etc for the page: '+ntiid);
 		var highlightStore = Ext.create('Ext.data.Store',{model: 'NextThought.model.Highlight', proxy: {type: 'nti', collectionName: 'Highlights', ntiid: ntiid}});
 		var noteStore = Ext.create('Ext.data.Store',{model: 'NextThought.model.Note', proxy: {type: 'nti', collectionName: 'Notes', ntiid: ntiid}});
 		
@@ -265,7 +268,7 @@ Ext.define('NextThought.view.content.Reader', {
 				                })
 	        		 .replace(	/href=\"(.*?)\"/mig, 
 				                function fixReferences(s,g) {
-				                	if(g.indexOf("#")>=0)console.log(g);
+				                	if(g.indexOf("#")>=0 && NextThought.isDebug) console.log(g);
 				                    return 'href="'+b+g+'"';
 				                });
 	        	
@@ -285,7 +288,9 @@ Ext.define('NextThought.view.content.Reader', {
 	            vp.unmask();
 	        },
 	    	error: function(){ 
-	    		console.log("Error", arguments); 
+	    		if(NextThought.isDebug) {
+	    			console.log("Error", arguments);
+	    		} 
 	    		vp.unmask(); 
 	    	}
 	    });

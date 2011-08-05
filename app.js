@@ -44,13 +44,13 @@ Ext.application({
     appFolder: 'app/NextThought',
     
     controllers: [
-    	'Config',
     	'Login',
     	'Modes',
     	'Application'
     ],
     
     launch: function() {
+		NextThought.isDebug = true;
     	setTimeout(clearMask, 100);
 
 		Ext.create('NextThought.view.LoginWindow',{callback: appStart}).show();

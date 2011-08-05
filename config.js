@@ -1,4 +1,4 @@
-{
+var _AppConfig = {
 	"server" : {
         "host": "http://tdaley.local:8080",
         "data": "/dataserver/",
@@ -7,4 +7,4 @@
         "username": "tdaley",
         "password": "temp001"
     }
-}
+};

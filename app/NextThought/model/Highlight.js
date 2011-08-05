@@ -1,7 +1,7 @@
 
 Ext.define('NextThought.model.Highlight', {
     extend: 'Ext.data.Model',
-    requires: ['NextThought.proxy.NTIRest'],
+    requires: ['NextThought.proxy.Rest'],
     idProperty: 'OID',
     fields: [
         { name: 'id', mapping: 'ID', type: 'int' },

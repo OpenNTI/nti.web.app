@@ -139,7 +139,9 @@ Ext.define('NextThought.view.navigation.Breadcrumb', {
 					listeners: {
 						scope: this,
 						click: function(){
-							console.log(this.$className);
+							if(NextThought.isDebug) {
+								console.log(this.$className);
+							}
 							this.fireEvent('navigate',o, o.href);
 						}
 					}
@@ -201,7 +203,9 @@ Ext.define('NextThought.view.navigation.Breadcrumb', {
         	listeners: {
         		scope: this,
         		click: function(){
-        			console.log(this.$className);
+        			if(NextThought.isDebug) {
+        				console.log(this.$className);
+        			}
         			this.fireEvent('navigate',book, book.root+href);
         		}
         	}

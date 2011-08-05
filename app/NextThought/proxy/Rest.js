@@ -1,7 +1,7 @@
-Ext.define('NextThought.proxy.NTIRest', {
+Ext.define('NextThought.proxy.Rest', {
     extend: 'Ext.data.proxy.Rest',
     alias: 'proxy.nti',
-    requires: ['NextThought.reader.NTIJson'],
+    requires: ['NextThought.reader.Json'],
 	
 	url: '',
     appendId: true, //default
@@ -54,13 +54,15 @@ Ext.define('NextThought.proxy.NTIRest', {
     	this.reader.hasNtiid = !!ntiid;
     	this.reader.hasId = me.appendId && id!==undefined;
     	
-    	console.log(
-    		'appendId:', me.appendId, 
-    		'id:',id,
-    		'hasId:',this.reader.hasId, 
-    		'record:',record, 
-    		'url:',result
-    		);
+    	if(NextThought.isDebug){
+	    	console.log(
+	    		'appendId:', me.appendId, 
+	    		'id:',id,
+	    		'hasId:',this.reader.hasId, 
+	    		'record:',record, 
+	    		'url:',result
+	    		);
+    	}
     	
     	return 	result;
     }

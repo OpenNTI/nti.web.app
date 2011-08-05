@@ -61,7 +61,7 @@ Ext.define('NextThought.view.widgets.Tracker', {
 		
 		}
 		catch(e){
-			console.log(e);
+			console.log(e, arguments);
 		}
 	},
 	
@@ -72,7 +72,7 @@ Ext.define('NextThought.view.widgets.Tracker', {
 			t = this._body.scrollTop,
 			h = this._body.scrollHeight-m,
 			v = h*toYPercent;
-		console.log(v);
+		
 		this._body.scrollTop = v;
 	},
 	
@@ -194,8 +194,6 @@ Ext.define('NextThought.view.widgets.Tracker', {
 		
 		this._top = Math.floor(this._height/2)-Math.floor(guessedHeight/2)-padding;
 		this._top = this._top<5 ? 5 : this._top;
-		
-		//console.log(this);
 	},
 	
 	

@@ -1,6 +1,6 @@
 Ext.define('NextThought.model.Person', {
     extend: 'Ext.data.Model',
-    requires: ['NextThought.proxy.NTIRest'],
+    requires: ['NextThought.proxy.Rest'],
     idProperty: 'OID',
     belongsTo: 'NextThought.model.Group',
     fields: [

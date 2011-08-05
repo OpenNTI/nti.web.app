@@ -10,7 +10,7 @@ Ext.define('NextThought.controller.Application', {
 	],
 
     init: function() {
-    	 var l = NextThought.librarySource = Ext.create('NextThought.model.LibrarySource');
+    	 var l = NextThought.librarySource = Ext.create('NextThought.Library');
     	 l.on('loaded', function(){
     	 	var b = l._library.titles[0];
 			Ext.getCmp('myReader').setActive(b, b.root+'sect0001.html');
