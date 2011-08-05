@@ -2,6 +2,8 @@
 Ext.define('NextThought.view.content.Reader', {
 	extend:'NextThought.view.content.Panel',
 	alias: 'widget.reader-panel',
+	requires: ['NextThought.model.Highlight',
+			   'NextThought.util.HighlightUtils'],
 	cls: 'x-reader-pane',
 	
 	items: [{cls:'x-panel-reset', id:'NTIContent', margin: '0 0 0 50px'}],
@@ -64,8 +66,18 @@ Ext.define('NextThought.view.content.Reader', {
 			return;
 		}
 		
-		this._highlights.push(
-			Ext.create('NextThought.view.widgets.Highlight', this._selection, this.items.get(0).el.dom.firstChild, this));
+		//var me = this;
+		
+		var highlight = HighlightUtils.selectionToNTIHighlight(this._selection);
+		highlight.set('ntiid', this._ntiid);
+		console.log('the highlight', highlight);
+		highlight.save({
+			scope:this,
+			success:function(){
+				this._highlights.push(
+					Ext.create('NextThought.view.widgets.Highlight', this._selection, this.items.get(0).el.dom.firstChild, this));
+			}
+		});	
 	},
 	
 	
@@ -85,30 +97,28 @@ Ext.define('NextThought.view.content.Reader', {
 	},
 
 
-	// restoreSelection: function() {
-		// if (window.getSelection) {  // all browsers, except IE before version 9
-			// window.getSelection().removeAllRanges();
-			// window.getSelection().addRange (this._selection);
-		// }
-		// else {
-			// if (document.body.createTextRange) {    // Internet Explorer 8 and below
-				// rangeObj = document.body.createTextRange();
-				// rangeObj.moveToBookmark(this._selection);
-				// rangeObj.select();
-			// }
-		// }
-	// },
+	restoreSelection: function() {
+		if (window.getSelection) {  // all browsers, except IE before version 9
+			window.getSelection().removeAllRanges();
+			window.getSelection().addRange (this._selection);
+		}
+		else {
+			if (document.body.createTextRange) {    // Internet Explorer 8 and below
+				rangeObj = document.body.createTextRange();
+				rangeObj.moveToBookmark(this._selection);
+				rangeObj.select();
+			}
+		}
+	},
 	
 	
     contextHightlightAction: function(e){
     	this.renderSelection();
     	this.contextAction(e);
-    	translateSelectAndSave();
     },
     
     contextNoteAction: function(e){
     	this.contextAction(e);
-    	NTINewNote(e.pageX, e.pageY);
     },
     
     contextAction: function(e){
@@ -133,10 +143,50 @@ Ext.define('NextThought.view.content.Reader', {
 		this.setActive(state.book, state.path, true);
 	},
     
-    
+    _getNodeFromXPath: function(xpath) {
+    	try {
+    		return document.evaluate(xpath, document).iterateNext();
+    	}
+    	catch(e) {
+    		console.log(xpath, e);
+    		return null;
+    	}
+    },
+    _highlightsLoaded: function(records, operation, success) {
+    	console.log(arguments);
+    	Ext.each(records, 
+    		function(r){
+    			var endElement = this._getNodeFromXPath(r.get('endAnchor'));
+    			var startElement = this._getNodeFromXPath(r.get('startAnchor'));
+    			var range = document.createRange();
+    		
+    			try {
+    				range.setEnd(endElement ? endElement : startElement, r.get('endOffset'));
+    				range.setStart(startElement, r.get('startOffset'));
+    				if (!startElement || range.collapsed) throw 'rageing tempor tantrum';
+    				console.log('new range', range, r);
+    			}
+    			catch(e) {
+    				console.log('destroying', r, e);
+    				r.destroy();
+    				return;
+    			}
+    			
+    			this._highlights.push(
+					Ext.create('NextThought.view.widgets.Highlight', range, this.items.get(0).el.dom.firstChild, this));
+    		},
+    		this
+    	);
+	},
     
     _loadContentAnnotatoins: function(ntiid){
+    	this._ntiid = ntiid;
     	console.log('this is where we will pull in highlights/notes/etc for the page: '+ntiid);
+		var store = Ext.create('Ext.data.Store',{model: 'NextThought.model.Highlight', proxy: {type: 'nti', collectionName: 'Highlights', ntiid: ntiid}});
+		store.load({
+			scope:this,
+			callback:this._highlightsLoaded
+		});
     },
 
 

@@ -1,10 +1,10 @@
 {
 	"server" : {
-        "host": "http://astro.local/~jgrimes",
-        "data": "/dataserver",
+        "host": "http://tdaley.local:8080",
+        "data": "/dataserver/",
         "library": "/library/library.json",
-        "relatedContent": "/workspace/WebApp/data.json",
-        "username": "sjohnson",
+        "relatedContent": "/NextThoughtWebApp/data.json",
+        "username": "tdaley",
         "password": "temp001"
     }
 }
