@@ -7,7 +7,7 @@ Ext.define('NextThought.model.Group', {
         { name: 'name', type: 'string' }
     ],
     associations: [
-        {type: 'hasMany', model: 'NextThought.model.Person', name: 'people'}
+        {type: 'hasMany', model: 'NextThought.model.User', name: 'people'}
     ],
     proxy: {
     	type: 'nti',
