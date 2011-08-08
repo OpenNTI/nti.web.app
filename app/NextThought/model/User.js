@@ -5,7 +5,8 @@ Ext.define('NextThought.model.User', {
     belongsTo: 'NextThought.model.Group',
     fields: [
         { name: 'id', mapping: 'ID', type: 'int' },
-        { name: 'name', type: 'string' }
+        { name: 'name', type: 'string' },
+        { name: 'ContainerId', type: 'string'}
     ],
     proxy: {
     	type: 'nti',

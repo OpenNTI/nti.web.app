@@ -93,6 +93,62 @@ Ext.define('NextThought.proxy.UserDataLoader',{
 			
 		},
 		
+				
+		getRecursiveStream: function(containerId, callbacks) {
+			if (!containerId) containerId = 'aops-prealgebra-129';
+			var h = _AppConfig.server.host,
+				d = _AppConfig.server.data,
+				u = _AppConfig.server.username;
+				url = h+d+'users/'+u+'/Pages/' + containerId + "/RecursiveStream/";
+				
+			console.log("inside getRecursivyStream", url);	
+				
+			this._streamRequest = Ext.Ajax.request({
+				url: url,
+				scope: this,
+				callback: function() {
+					this._streamRequest = null;
+				},
+				failure: function() {
+					if(callbacks && callbacks.failure) {
+						callbacks.failure.apply(callbacks.scope || this, arguments);
+					} 
+					else if(NextThought.isDebug)
+						console.log('Could not load stream',arguments);
+				},
+				success: function(r, o) {
+					var json = Ext.decode(r.responseText);
+					if(!json || !json.Items){
+						if(callbacks && callbacks.failure){
+							callbacks.failure.call(callbacks.scope || this, 'bad group dataz');
+						} 
+						else if(NextThought.isDebug){
+							console.log('Response sucked:', r, 'bad json:', json);
+						}
+						return;
+					}
+					
+					Ext.each(json.Items, function(i, x){
+						var reader = this._getReaderForModel('NextThought.model.'+i.Item.Class);
+						json.Items[x] = reader.read(i.Item).records[0];						
+						console.log('recursive stream items', json.Items[x], i.Item);
+					}, 
+					this);
+				}
+			});
+			
+		},
+		
+		_getReaderForModel: function(modelClass) {
+			this._readers = this._readers || [];
+			
+			if (!this._readers[modelClass]) {
+				this._readers[modelClass] = Ext.create('NextThought.reader.Json',{model: modelClass, proxy: 'nti'});
+			}
+			
+			return this._readers[modelClass];
+			
+		},
 		getPageItems: function(pageId, callbacks){
 			var h = _AppConfig.server.host,
 				d = _AppConfig.server.data,
@@ -128,8 +184,7 @@ Ext.define('NextThought.proxy.UserDataLoader',{
 					
 					for(var key in bins){
 						if(!bins.hasOwnProperty(key)) continue;
-						var cls = 'NextThought.model.'+key;
-						var reader = Ext.create('NextThought.reader.Json',{model: cls, proxy: 'nti'});
+						var reader = this._getReaderForModel('NextThought.model.'+key);
 						
 						bins[key]= reader.read(bins[key]).records;
 					}

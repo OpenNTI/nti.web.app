@@ -9,9 +9,10 @@ Ext.define('NextThought.model.Highlight', {
         { name: 'startOffset', type: 'int' },
      	{ name: 'endXpath', type: 'string' },
        	{ name: 'endOffset', type: 'int' },
+       	{ name: 'Creator', type: 'string'},
        	{ name: 'color', type: 'string', defaultValue: 'yellow' },
        	{ name: 'modifiedtime', type: 'string' },
-       	{ name: 'ntiid', type: 'string'}
+       	{ name: 'ContainerId', type: 'string'}
     ],
     proxy: {
     	type: 'nti',

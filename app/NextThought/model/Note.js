@@ -9,7 +9,8 @@ Ext.define('NextThought.model.Note', {
         { name: 'text', type: 'string' },
         { name: 'color', type: 'string', defaultValue: 'yellow' },
        	{ name: 'modifiedtime', type: 'string' },
-       	{ name: 'ntiid', type: 'string'}
+       	{ name: 'Creator', type: 'string'},
+       	{ name: 'ContainerId', type: 'string'}
     ],
     proxy: {
     	type: 'nti',

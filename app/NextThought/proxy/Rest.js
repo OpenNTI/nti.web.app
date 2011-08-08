@@ -18,23 +18,23 @@ Ext.define('NextThought.proxy.Rest', {
 	        record    = records[0],
 	        format    = me.format,
 	        url       = _AppConfig.server.host + _AppConfig.server.data + 'users/' + _AppConfig.server.username +'/' + me.collectionName,
-	        ntiid	  = record ? record.get('ntiid') : me.ntiid ? me.ntiid : undefined,
+	        containerId	  = record ? record.get('ContainerId') : me.containerId ? me.containerId : undefined,
 	        appendId  = me.appendId,
 	        id        = record ? record.get('id') : operation.id;
 	        
 		if (!me.collectionName) {
 			throw 'No collectionName given';
 		}
-		if (!ntiid) {
-			throw 'No NTIId given';
+		if (!containerId) {
+			throw 'No containerId given';
 		}
 		
- 		if (ntiid) {
+ 		if (containerId) {
             if (!url.match(/\/$/)) {
                 url += '/';
             }
       
-            url += ntiid;
+            url += containerId;
         }
         if (me.appendId && operation.action!='create' && id!==undefined) {
             if (!url.match(/\/$/)) {
@@ -51,7 +51,7 @@ Ext.define('NextThought.proxy.Rest', {
     	me.appendId = appendId;
     	
     	//set up some directions about how to read the data in the reader:
-    	this.reader.hasNtiid = !!ntiid;
+    	this.reader.hasContainerId = !!containerId;
     	this.reader.hasId = me.appendId && id!==undefined;
     	
     	if(NextThought.isDebug){

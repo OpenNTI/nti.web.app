@@ -4,7 +4,8 @@ Ext.define('NextThought.model.Group', {
     idProperty: 'OID',
     fields: [
         { name: 'id', mapping: 'ID', type: 'int' },
-        { name: 'name', type: 'string' }
+        { name: 'name', type: 'string' },
+        { name: 'ContainerId', type: 'string'}
     ],
     associations: [
         {type: 'hasMany', model: 'NextThought.model.User', name: 'people'}

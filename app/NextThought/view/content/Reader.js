@@ -77,7 +77,7 @@ Ext.define('NextThought.view.content.Reader', {
 		}
 		
 		var note = AnnotationUtils.selectionToNote(range);
-		note.set('ntiid', this._ntiid);
+		note.set('ContainerId', this._containerId);
 		console.log('the note', note);
 		note.save({
 			scope:this,
@@ -93,7 +93,7 @@ Ext.define('NextThought.view.content.Reader', {
 		}
 		
 		var highlight = AnnotationUtils.selectionToHighlight(range);
-		highlight.set('ntiid', this._ntiid);
+		highlight.set('ContainerId', this._containerId);
 		console.log('the highlight', highlight);
 		highlight.save({
 			scope:this,
@@ -214,9 +214,9 @@ Ext.define('NextThought.view.content.Reader', {
 		
     },
     
-    _loadContentAnnotatoins: function(ntiid){
-    	this._ntiid = ntiid;
-		UserDataLoader.getPageItems(ntiid, {
+    _loadContentAnnotatoins: function(containerId){
+    	this._containerId = containerId;
+		UserDataLoader.getPageItems(containerId, {
 			scope:this,
 			success: this._objectsLoaded
 		});
@@ -262,7 +262,7 @@ Ext.define('NextThought.view.content.Reader', {
 	        		body = c.substring(start, end),
 	        		css = /\<link.*href="(.*\.css)".*\>/gi,
 	        		meta = /\<meta.*\>/gi,
-	        		ntiid;
+	        		containerId;
 	        	
 	        	css = head.match(css);
 	        	meta = head.match(meta);
@@ -286,7 +286,7 @@ Ext.define('NextThought.view.content.Reader', {
 	            this.el.select('#NTIContent .navigation').remove();
 	            this.el.select('#NTIContent .breadcrumbs').remove();
 	            this.el.select('.x-reader-pane a[href]').on('click',this._onClick,this,{book: book, scope:this,stopEvent:true});
-	            ntiid = this.el.select('meta[name=NTIID]').first().getAttribute('content');
+	            containerId = this.el.select('meta[name=NTIID]').first().getAttribute('content');
 	            
 	            this.relayout();
 	            
@@ -294,7 +294,7 @@ Ext.define('NextThought.view.content.Reader', {
 	            	callback();
 	            }
 	            
-	            this._loadContentAnnotatoins(ntiid);
+	            this._loadContentAnnotatoins(containerId);
 	            vp.unmask();
 	        },
 	    	error: function(){ 
