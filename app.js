@@ -89,18 +89,23 @@ Ext.application({
 Ext.onReady(function(){
 	Ext.Ajax.on(
 		'beforerequest', function f(connection,options){
-    		var method = f.caller.caller.caller.caller,
-                parentClass, methodName;
-
-            if (!method.$owner) {
-                method = method.caller;
-            }
-
-            parentClass = method.$owner.$className;
-            methodName = method.$name;
-    		
-    		
-    		if(options&&options.async===false)console.log('WARNING: Synchronous Call in: '+ parentClass+"."+methodName  );
+			try {
+	    		var method = f.caller.caller.caller.caller,
+	                parentClass, methodName;
+	
+	            if (!method.$owner) {
+	                method = method.caller;
+	            }
+	
+	            parentClass = method.$owner.$className;
+	            methodName = method.$name;
+	    		
+	    		
+	    		if(options&&options.async===false)console.log('WARNING: Synchronous Call in: '+ parentClass+"."+methodName  );
+    		}
+    		catch (e) {
+    			console.log('exception in beforerequest', e);
+    		}
 		});
 });
 

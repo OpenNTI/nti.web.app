@@ -1,10 +1,10 @@
 var _AppConfig = {
 	"server" : {
-        "host": "http://tdaley.local:8080",
+        "host": "http://curie.local:8080",
         "data": "/dataserver/",
         "library": "/library/library.json",
         "relatedContent": "/NextThoughtWebApp/data.json",
-        "username": "tdaley",
+        "username": "sjohnson",
         "password": "temp001"
     }
 };

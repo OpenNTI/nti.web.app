@@ -1,6 +1,5 @@
-
-
 Ext.define('NextThought.view.widgets.Highlight', {
+	extend: 'NextThought.view.widgets.Widget',
 	
 	_sel: null,
 	_cmp: null,
@@ -8,14 +7,14 @@ Ext.define('NextThought.view.widgets.Highlight', {
 	_menu: null,
 
 	constructor: function(selection, record, container, component){
-		var d = Ext.query('.highlight-nibs',container);
+		var d = Ext.query('.document-nibs',container);
 		
 		this._cmp = component;
 		this._sel = selection;
 		
 		this._canvas = this.createElement('canvas',container,'highlight-object','position: absolute; pointer-events: none;');
 		
-		this._div = d.length>0? d[0] : this.createElement('div',container,'highlight-nibs');
+		this._div = d.length>0? d[0] : this.createElement('div',container,'document-nibs');
 		this._img = this.createImage(Ext.BLANK_IMAGE_URL,this._div,'action','width: 24px; height: 24px; background: yellow; position: absolute;');
 
 		this._cmp.on('resize', this.onResize, this);
@@ -26,26 +25,6 @@ Ext.define('NextThought.view.widgets.Highlight', {
 		this.render();
 		return this;
 	},
-	
-	
-	createElement: function(tag,parent,cls,css){
-		var el = document.createElement(tag);
-		if(cls)Ext.get(el).addCls(cls);
-		if(css)el.setAttribute('style',css);
-		parent.appendChild(el);
-		return el;
-	},
-	
-	
-	createImage: function(src,parent,cls,css){
-		var el = document.createElement('img');
-		el.setAttribute('src',src);
-		if(cls)Ext.get(el).addCls(cls);
-		if(css)el.setAttribute('style',css);
-		parent.appendChild(el);
-		return el;
-	},
-	
 	
 	cleanup: function(){
 		this._cmp.un('resize', this.onResize, this);

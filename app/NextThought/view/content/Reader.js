@@ -5,11 +5,12 @@ Ext.define('NextThought.view.content.Reader', {
 	requires: ['NextThought.model.Highlight',
 			   'NextThought.model.Note',
 			   'NextThought.proxy.UserDataLoader',
-			   'NextThought.util.HighlightUtils'],
+			   'NextThought.util.AnnotationUtils'],
 	cls: 'x-reader-pane',
 	
 	items: [{cls:'x-panel-reset', id:'NTIContent', margin: '0 0 0 50px'}],
 	_highlights: [],
+	_notes: [],
 	_tracker: null,
 	
     initComponent: function(){
@@ -53,15 +54,36 @@ Ext.define('NextThought.view.content.Reader', {
 	},
 	
 	
-	clearHighlights: function(){
-		Ext.each(this._highlights, function(v){
+	clearAnnotations: function(){
+		//same syntax, so just concat and go through all of these
+		var stuffToCleanup = this._highlights.concat(this._notes);
+		
+		this._highlights = [];
+		this._notes = [];
+
+		Ext.each(stuffToCleanup, function(v){
 			v.cleanup();
 			delete v;
 		});
-		
-		this._highlights = [];
 	},
 	
+	addNote: function(){
+		if(!this._selection) {
+			return;
+		}
+		
+		//var me = this;
+		
+		var note = AnnotationUtils.selectionToNote(this._selection);
+		note.set('ntiid', this._ntiid);
+		console.log('the note', note);
+		note.save({
+			scope:this,
+			success:function(){
+				this._createNoteWidget(note, true);
+			}
+		});	
+	},
 	
 	addHighlight: function(){
 		if(!this._selection) {
@@ -70,7 +92,7 @@ Ext.define('NextThought.view.content.Reader', {
 		
 		//var me = this;
 		
-		var highlight = HighlightUtils.selectionToNTIHighlight(this._selection);
+		var highlight = AnnotationUtils.selectionToHighlight(this._selection);
 		highlight.set('ntiid', this._ntiid);
 		console.log('the highlight', highlight);
 		highlight.save({
@@ -87,6 +109,14 @@ Ext.define('NextThought.view.content.Reader', {
 					Ext.create(
 						'NextThought.view.widgets.Highlight', 
 						range, record,
+						this.items.get(0).el.dom.firstChild, this));
+	},
+	
+	_createNoteWidget: function(record, edit){
+		this._notes.push(
+					Ext.create(
+						'NextThought.view.widgets.Note', 
+						record,
 						this.items.get(0).el.dom.firstChild, this));
 	},
 	
@@ -168,41 +198,47 @@ Ext.define('NextThought.view.content.Reader', {
     	
     	Ext.each(bins.Note, 
     		function(r){
-    			console.log(r);
-    			r.destroy();
+    			if (!this._createNoteWidget(r)) r.destroy();
     		},
     		this
     	)
     	
     	Ext.each(bins.Highlight, 
     		function(r){
-    			var endElement = this._getNodeFromXPath(r.get('endXpath'));
-    			var startElement = this._getNodeFromXPath(r.get('startXpath'));
-    			var range = document.createRange();
-    		
-    			try {
-    				range.setEnd(endElement ? endElement : startElement, r.get('endOffset'));
-    				range.setStart(startElement, r.get('startOffset'));
-    				if (!startElement || range.collapsed) throw 'rageing tempor tantrum';
-    			}
-    			catch(e) {
-    				if(NextThought.isDebug) {
-    					console.log('destroying', r, e, e.toString());
-    				}
-    				r.destroy();
-    				return;
-    			}
-    			
-    			this._createHighlightWidget(range, r);
+    			var range = this._buildRangeFromRecord(r);
+    			if (!range) r.destroy();
+    			else this._createHighlightWidget(range, r);
     		},
     		this
     	);
 	},
     
+    _buildRangeFromRecord: function(r) {
+		var endElement = this._getNodeFromXPath(r.get('endXpath'));
+		var startElement = this._getNodeFromXPath(r.get('startXpath'));
+		var range = document.createRange();
+	
+		try {
+			range.setEnd(endElement ? endElement : startElement, r.get('endOffset'));
+			range.setStart(startElement, r.get('startOffset'));
+			if (!startElement || range.collapsed) throw 'rageing tempor tantrum';
+			return range;
+		}
+		catch(e) {
+			if(NextThought.isDebug) {
+				console.log('bad range', r, e, e.toString());
+			}
+		}
+		
+		return null;
+		
+    },
+    
     _loadContentAnnotatoins: function(ntiid){
     	this._ntiid = ntiid;
 		UserDataLoader.getPageItems(ntiid, {
-			success: Ext.bind(this._objectsLoaded, this)
+			scope:this,
+			success: this._objectsLoaded
 		});
     },
 
@@ -213,7 +249,7 @@ Ext.define('NextThought.view.content.Reader', {
      * @param {boolean} skipHistory Do not put this into the history
      */
     setActive: function(book, path, skipHistory, callback) {
-        this.clearHighlights();
+        this.clearAnnotations();
     	this.activate();
         this.active = path;
 
