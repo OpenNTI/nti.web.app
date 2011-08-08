@@ -36,7 +36,10 @@ Ext.define('NextThought.view.content.Reader', {
 		this.callParent(arguments);
 
 		if(!this._tracker)
-			this._tracker = Ext.create('NextThought.view.widgets.Tracker',this.el.dom, this.el.dom.firstChild);
+			this._tracker = Ext.create(
+				'NextThought.view.widgets.Tracker',
+				this.el.dom,
+				this.el.dom.firstChild);
 
 		this.el.on('mouseup', this._onContextMenuHandler, this);
 	},
@@ -44,12 +47,13 @@ Ext.define('NextThought.view.content.Reader', {
 	
 	_onContextMenuHandler: function(e) {
 		e.preventDefault();
-		
-		this.saveSelection();
-		if(this._selection && !this._selection.collapsed) {
+		var range = this.getSelection();
+		if( range && !range.collapsed ) {
+			this.addHighlight(range);
 			this._contextMenu.showAt(e.getXY());
-			this.addHighlight();
-			//setTimeout(Ext.bind(this.restoreSelection, this), 10);
+		}
+		else {
+			
 		}
 	},
 	
@@ -67,14 +71,12 @@ Ext.define('NextThought.view.content.Reader', {
 		});
 	},
 	
-	addNote: function(){
-		if(!this._selection) {
+	addNote: function(range){
+		if(!range) {
 			return;
 		}
 		
-		//var me = this;
-		
-		var note = AnnotationUtils.selectionToNote(this._selection);
+		var note = AnnotationUtils.selectionToNote(range);
 		note.set('ntiid', this._ntiid);
 		console.log('the note', note);
 		note.save({
@@ -85,20 +87,18 @@ Ext.define('NextThought.view.content.Reader', {
 		});	
 	},
 	
-	addHighlight: function(){
-		if(!this._selection) {
+	addHighlight: function(range){
+		if(!range) {
 			return;
 		}
 		
-		//var me = this;
-		
-		var highlight = AnnotationUtils.selectionToHighlight(this._selection);
+		var highlight = AnnotationUtils.selectionToHighlight(range);
 		highlight.set('ntiid', this._ntiid);
 		console.log('the highlight', highlight);
 		highlight.save({
 			scope:this,
 			success:function(){
-				this._createHighlightWidget(this._selection, highlight);
+				this._createHighlightWidget(range, highlight);
 			}
 		});	
 	},
@@ -109,7 +109,8 @@ Ext.define('NextThought.view.content.Reader', {
 					Ext.create(
 						'NextThought.view.widgets.Highlight', 
 						range, record,
-						this.items.get(0).el.dom.firstChild, this));
+						this.items.get(0).el.dom.firstChild, 
+						this));
 	},
 	
 	_createNoteWidget: function(record, edit){
@@ -117,53 +118,32 @@ Ext.define('NextThought.view.content.Reader', {
 					Ext.create(
 						'NextThought.view.widgets.Note', 
 						record,
-						this.items.get(0).el.dom.firstChild, this));
+						this.items.get(0).el.dom.firstChild, 
+						this));
 	},
 	
-	saveSelection: function() {
+	getSelection: function() {
 		if (window.getSelection) {  // all browsers, except IE before version 9
 			var selection = window.getSelection();
 			if (selection.rangeCount > 0) {
-				this._selection = selection.getRangeAt(0);
+				return selection.getRangeAt(0);
 			}
 		}
 		else {
 			if (document.selection) {   // Internet Explorer 8 and below
 				var range = document.selection.createRange();
-				this._selection = range.getBookmark();
+				return range.getBookmark();
 			}
 		}
+		
+		return null;
 	},
 
-
-	restoreSelection: function() {
-		if (window.getSelection) {  // all browsers, except IE before version 9
-			window.getSelection().removeAllRanges();
-			window.getSelection().addRange (this._selection);
-		}
-		else {
-			if (document.body.createTextRange) {    // Internet Explorer 8 and below
-				rangeObj = document.body.createTextRange();
-				rangeObj.moveToBookmark(this._selection);
-				rangeObj.select();
-			}
-		}
-	},
 	
 	
-    contextHightlightAction: function(e){
-    	this.renderSelection();
-    	this.contextAction(e);
-    },
+    contextHightlightAction: function(e){},
     
-    contextNoteAction: function(e){
-    	this.contextAction(e);
-    },
-    
-    contextAction: function(e){
-    	this.restoreSelection();
-		this._selection = undefined;
-    },
+    contextNoteAction: function(e){},
     
     
     _appendHistory: function(book, path) {

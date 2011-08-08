@@ -49,14 +49,14 @@ Ext.define('NextThought.view.views.ItemNavigator', {
    	initComponent: function(){
    		this.callParent(arguments);
 
-		var b = _AppConfig.server.host,
-			l = _AppConfig.server.relatedContent;   		
-   		Ext.Ajax.request({
-			url: b+l,
-			scope: this,
-			success: function(r,o) { this._data = Ext.decode(r.responseText); this._renderList(); },
-			failure: function(r,o) { if(NextThought.isDebug) console.log('failed to load data', arguments ); }
-		});
+		// var b = _AppConfig.server.host,
+			// l = _AppConfig.server.relatedContent;   		
+   		// Ext.Ajax.request({
+			// url: b+l,
+			// scope: this,
+			// success: function(r,o) { this._data = Ext.decode(r.responseText); this._renderList(); },
+			// failure: function(r,o) { if(NextThought.isDebug) console.log('failed to load data', arguments ); }
+		// });
    	},
    	
    	

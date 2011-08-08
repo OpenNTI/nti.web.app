@@ -4,6 +4,8 @@ Ext.define('NextThought.proxy.UserDataLoader',{
 	alternateClassName: 'UserDataLoader',
 	statics:{
 		
+		
+		
 		getFriends: function(callbacks) {
 			this.getGroups({success: success, faulure: failure});
 			
@@ -23,6 +25,7 @@ Ext.define('NextThought.proxy.UserDataLoader',{
 						console.log('WARNING: I haz friends dataz 4 u, but u no giv meh callbax');
 					}
 			}
+			
 			function failure() {
 				if(callbacks && callbacks.failure) 
 					callbacks.failure.call(callbacks.scope || this);
@@ -30,6 +33,10 @@ Ext.define('NextThought.proxy.UserDataLoader',{
 					console.log('Could not load groups',arguments);
 			}
 		},
+		
+		
+		
+		
 		
 		getGroups: function(callbacks) {
 			var h = _AppConfig.server.host,

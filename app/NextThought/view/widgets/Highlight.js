@@ -12,9 +12,9 @@ Ext.define('NextThought.view.widgets.Highlight', {
 		this._cmp = component;
 		this._sel = selection;
 		
-		this._canvas = this.createElement('canvas',container,'highlight-object','position: absolute; pointer-events: none;');
+		this._canvas = this.createElement('canvas',container,'highlight-object unselectable','position: absolute; pointer-events: none;');
 		
-		this._div = d.length>0? d[0] : this.createElement('div',container,'document-nibs');
+		this._div = d.length>0? d[0] : this.createElement('div',container,'document-nibs unselectable');
 		this._img = this.createImage(Ext.BLANK_IMAGE_URL,this._div,'action','width: 24px; height: 24px; background: yellow; position: absolute;');
 
 		this._cmp.on('resize', this.onResize, this);
