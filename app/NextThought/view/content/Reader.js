@@ -34,12 +34,17 @@ Ext.define('NextThought.view.content.Reader', {
 
 	render: function(){
 		this.callParent(arguments);
+		
+		var d=this.el.dom;
+		
+		if(Ext.isIE){
+			d.unselectable = false;
+			d.firstChild.unselectable = false;
+		}
 
 		if(!this._tracker)
 			this._tracker = Ext.create(
-				'NextThought.view.widgets.Tracker',
-				this.el.dom,
-				this.el.dom.firstChild);
+				'NextThought.view.widgets.Tracker', d, d.firstChild);
 
 		this.el.on('mouseup', this._onContextMenuHandler, this);
 	},

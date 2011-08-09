@@ -69,6 +69,17 @@ Ext.application({
 
 
 Ext.onReady(function(){
+	if(Ext.isIE){
+    	Ext.panel.Panel.override({
+    		render: function(){
+    			this.callOverridden(arguments);
+    			var d=this.el.dom;
+    			d.firstChild.unselectable = true;
+    			d.unselectable = true;
+    		}
+    	});
+	}
+	
 	Ext.Ajax.on(
 		'beforerequest', function f(connection,options){
 			try {
