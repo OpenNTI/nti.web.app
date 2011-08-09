@@ -171,7 +171,7 @@ Ext.define('NextThought.view.navigation.Breadcrumb', {
 	_renderBranch: function(book, leafs, node, selectedNode) {
         Ext.each(node.childNodes,function(v){
             if(v.nodeName=="#text"||!v.hasAttribute("label")){
-            	console.log(v);
+            	//console.log(v);
             	return;
             }
             leafs.push(this._renderLeafFromTopic(book, v, v==selectedNode));
@@ -188,9 +188,10 @@ Ext.define('NextThought.view.navigation.Breadcrumb', {
     
         if(topicNode.childNodes.length > 0){
             var list = [];
+            leaf.menu = list;
             this._renderBranch(book,list,topicNode);
-            if(list.lenght) {
-	            leaf.menu = list;
+            if(!leaf.menu.length){
+            	leaf.menu = undefined;
             }
         }
         
@@ -206,9 +207,6 @@ Ext.define('NextThought.view.navigation.Breadcrumb', {
         	listeners: {
         		scope: this,
         		click: function(){
-        			if(NextThought.isDebug) {
-        				console.log(this.$className);
-        			}
         			this.fireEvent('navigate',book, book.root+href);
         		}
         	}

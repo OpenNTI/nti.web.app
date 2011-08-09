@@ -55,10 +55,7 @@ Ext.define('NextThought.view.widgets.Tracker', {
 			var c = this._canvas;
 			c.width = c.height = 0;
 			
-			if(loc.book){
-				this.render(loc.book.firstChild, loc.location);
-			}
-		
+			this.render(loc.toc, loc.location);
 		}
 		catch(e){
 			console.log(e, arguments);
@@ -125,7 +122,9 @@ Ext.define('NextThought.view.widgets.Tracker', {
 			this._offsetX = c.getLeft(false);
 			this._offsetY = c.getTop(false);
 		}
-		
+		if(!e){
+			return null;
+		}
 		var x = e.getX? e.getX()-this._offsetX : -1, 
 			y = e.getY? e.getY()-this._offsetY-this._topPadding : -1,
 			region = null;
@@ -210,7 +209,8 @@ Ext.define('NextThought.view.widgets.Tracker', {
 
 		if(n) {
 			Ext.each(p.childNodes,function(v){
-				if(v.nodeName=="#text")return;
+				if(v.nodeName=="#text"||!v.hasAttribute(a))return;
+				
 				r.push({
 					height: parseInt(v.getAttribute(a),10),
 					node: v
@@ -241,7 +241,6 @@ Ext.define('NextThought.view.widgets.Tracker', {
 			this.clear();
 			return;
 		}
-		
 		this.calculateSizes(current);
 		if(this._regions){
 			delete this._regions;
