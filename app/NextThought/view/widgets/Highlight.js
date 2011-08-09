@@ -91,14 +91,17 @@ Ext.define('NextThought.view.widgets.Highlight', {
 				if (!o._menu) return;
 				o.clearListeners();
 				var item = Ext.create('Ext.menu.Item', {
-					text: 'Annotation ' + (i + 1),
-					menu: o._menu});
+						text: 'Annotation '+(i+1),
+						menu: o._menu
+				});
 				
+				item.on('afterrender',Ext.bind(this.updateMenuIcon, item, [o._color]));
 				o.on('colorchanged', this.updateMenuIcon, item);
 				
 				menu.add(item);
 			},
 			this);
+			menu.on('hide', function(){menu.destroy();})
 			menu.showBy(Ext.get(this._img), 'bl');
 			return;
 		}
@@ -108,16 +111,10 @@ Ext.define('NextThought.view.widgets.Highlight', {
 	},
 	
 	updateMenuIcon: function(color) {
-		console.log('update color to ' + color);
-		Ext.each(this.el.select('img.x-menu-item-icon'), function(o){
-			console.log('item to color?', o)	
-		}, 
-		this);
-		
-		
-		// .first().setStyle('background-color', color);
-		
-		
+		var img = this.el.select('img.x-menu-item-icon').first()
+		if(img){
+			img.setStyle('background', '#'+color);
+		}
 	},
 	
 	_multiAnnotation: function() {
