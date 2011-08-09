@@ -10,6 +10,10 @@ Ext.define('NextThought.view.widgets.Highlight', {
 	_color: null,
 
 	constructor: function(selection, record, container, component){
+		this.addEvents({
+            colorchanged : true
+        });
+        
 		var d = Ext.query('.document-nibs',container);
 		
 		this._cmp = component;
@@ -20,6 +24,7 @@ Ext.define('NextThought.view.widgets.Highlight', {
 		
 		this._div = d.length>0? d[0] : this.createElement('div',container,'document-nibs unselectable');
 		this._img = this.createImage(Ext.BLANK_IMAGE_URL,this._div,'action','width: 24px; background: yellow; height: 24px; position: absolute;');
+		this._img._annotation = this;
 
 		this._cmp.on('resize', this.onResize, this);
 		Ext.EventManager.onWindowResize(this.onResize, this);
@@ -58,8 +63,6 @@ Ext.define('NextThought.view.widgets.Highlight', {
 	_updateColor: function() {
 		this._color = this._record.get('color');
 		this._rgba = this._hexToRGBA(this._color);
-		
-		console.log('rgba', this._rgba);
 
 		Ext.get(this._img).setStyle('background', '#' + this._color);
 		this.render();		
@@ -68,9 +71,10 @@ Ext.define('NextThought.view.widgets.Highlight', {
 	_colorSelected: function(colorPicker, color) {
 		this._record.set('color', color);
 		this._updateColor();
-		this._record.save();		
+		this._record.save();	
+		this.fireEvent('colorchanged', color);	
 	},
-		
+
 	_removeMe: function() {
 		this.cleanup();
 		this._record.destroy();
@@ -78,7 +82,57 @@ Ext.define('NextThought.view.widgets.Highlight', {
 	
 	onClick: function(e) {
 		e.preventDefault();
+		this.clearListeners();
+		
+		var annotations = this._multiAnnotation();
+		if (annotations && annotations.length > 1) {
+			var menu = Ext.create('Ext.menu.Menu');
+			Ext.each(annotations, function(o, i){
+				if (!o._menu) return;
+				o.clearListeners();
+				var item = Ext.create('Ext.menu.Item', {
+					text: 'Annotation ' + (i + 1),
+					menu: o._menu});
+				
+				o.on('colorchanged', this.updateMenuIcon, item);
+				
+				menu.add(item);
+			},
+			this);
+			menu.showBy(Ext.get(this._img), 'bl');
+			return;
+		}
+		
+		//single annotation
 		this._menu.showBy(Ext.get(this._img), 'bl');
+	},
+	
+	updateMenuIcon: function(color) {
+		console.log('update color to ' + color);
+		Ext.each(this.el.select('img.x-menu-item-icon'), function(o){
+			console.log('item to color?', o)	
+		}, 
+		this);
+		
+		
+		// .first().setStyle('background-color', color);
+		
+		
+	},
+	
+	_multiAnnotation: function() {
+		var nibs = this._div.childNodes,
+			result = [],
+			top = this._img.style.top;
+		Ext.each(nibs, function(o){
+			if (o._annotation)
+				if (top == o.style.top){ 
+					result.push(o._annotation);
+				}
+		},
+		this);
+		
+		return result;
 	},
 	
 	cleanup: function(){

@@ -1,4 +1,5 @@
 Ext.define('NextThought.view.widgets.Widget', {
+	extend: 'Ext.util.Observable',
 	createElement: function(tag,parent,cls,css){
 		var el = document.createElement(tag);
 		if(cls)Ext.get(el).addCls(cls);
