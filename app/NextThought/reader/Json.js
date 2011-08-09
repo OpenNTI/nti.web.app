@@ -31,7 +31,7 @@ Ext.define('NextThought.reader.Json', {
 		
 
 		
-		if (me.hasNtiid){
+		if (me.hasContainerId){
 			records = this.getNestedRecords(i);
 		}
 		else {
