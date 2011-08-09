@@ -38,7 +38,7 @@ Ext.define('NextThought.view.TopControls', {
     	
     	// this.add({ xtype:'tbspacer', flex:1 });
     	
-    	this.add({ width: MIN_SIDE_WIDTH, height: 25, border: true,
+    	this.add({ width: MIN_SIDE_WIDTH, height: 25, border: false,
     		// border: true, 
     		html: [
     		'<div style="float: right;  white-space: nowrap; margin-right: 5px">',

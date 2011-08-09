@@ -170,7 +170,10 @@ Ext.define('NextThought.view.navigation.Breadcrumb', {
 	
 	_renderBranch: function(book, leafs, node, selectedNode) {
         Ext.each(node.childNodes,function(v){
-            if(v.nodeName=="#text")return;
+            if(v.nodeName=="#text"||!v.hasAttribute("label")){
+            	console.log(v);
+            	return;
+            }
             leafs.push(this._renderLeafFromTopic(book, v, v==selectedNode));
         }, this);
    },
@@ -179,16 +182,16 @@ Ext.define('NextThought.view.navigation.Breadcrumb', {
    
    _renderLeafFromTopic: function(book, topicNode, selected) {
         
-        var label = topicNode.hasAttribute("label")
-                    ? topicNode.getAttribute("label")
-                    : "no label",
+        var label = topicNode.getAttribute("label"),
             href = topicNode.getAttribute("href"),
             leaf = this._renderLeaf(book, label, href, selected);
     
         if(topicNode.childNodes.length > 0){
             var list = [];
-            leaf.menu = list;
             this._renderBranch(book,list,topicNode);
+            if(list.lenght) {
+	            leaf.menu = list;
+            }
         }
         
         return leaf;
