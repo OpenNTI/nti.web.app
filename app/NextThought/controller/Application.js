@@ -6,6 +6,9 @@ Ext.define('NextThought.controller.Application', {
 	views: [
 		'navigation.Breadcrumb',
 		'widgets.Tracker',
+		'widgets.Highlight',
+		'widgets.Note',
+		'widgets.NoteEditor',
 		'content.Reader'
 	],
 
@@ -20,6 +23,20 @@ Ext.define('NextThought.controller.Application', {
     	 this.control({
     	 	'breadcrumbbar':{
     	 		'navigate': this.navigate
+    	 	},
+    	 	
+    	 	'reader-panel':{
+    	 		'edit-note': function(note){
+    	 			Ext.create('NextThought.view.widgets.NoteEditor',{record: note}).show();
+    	 		}
+    	 	},
+    	 	
+    	 	'notepanel button':{
+    	 		'click': this.onNoteAction
+    	 	},
+    	 	
+    	 	'noteeditor button':{
+				'click': this.onNoteEditorButton
     	 	}
     	 });
     },
@@ -27,6 +44,38 @@ Ext.define('NextThought.controller.Application', {
     onLaunch: function(){
     },
     
+    
+    onNoteAction: function(btn, event){
+    	var p = btn.up('notepanel');
+    		r = p._owner;
+    		c = p._annotation;
+    	if(btn.isEdit){
+    		r.fireEvent('edit-note', c.getRecord());
+    	}
+    	else if(btn.isDelete){
+    		c.remove();
+    	}
+    },
+    
+    onNoteEditorButton: function(btn, event){
+    	var win = btn.up('window'),
+    		cmp = win.down('htmleditor');
+
+		if(!btn.isCancel){
+			win.el.mask('Saving...');
+			win.record.set('text',cmp.getValue());
+			win.record.save({
+				scope: this,
+				success:function(newRecord,operation){
+					win.close();
+					win.record.fireEvent('updated',newRecord);
+				}
+			});
+		}
+    	else {
+	    	win.close();
+    	}
+    },
     
     
     navigate: function(book, ref){

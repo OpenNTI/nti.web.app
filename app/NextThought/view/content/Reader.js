@@ -14,6 +14,7 @@ Ext.define('NextThought.view.content.Reader', {
 	_tracker: null,
 	
     initComponent: function(){
+    	this.addEvents('edit-note');
    		this.callParent(arguments);
 		this._contextMenu = Ext.create('Ext.menu.Menu', {
 			items : [
@@ -29,7 +30,6 @@ Ext.define('NextThought.view.content.Reader', {
 				}
 			]
 		});
-        // this.setActive({},'/prealgebra/index.html',true);
     },
 
 	render: function(){
@@ -84,12 +84,8 @@ Ext.define('NextThought.view.content.Reader', {
 		var note = AnnotationUtils.selectionToNote(range);
 		note.set('ContainerId', this._containerId);
 		console.log('the note', note);
-		note.save({
-			scope:this,
-			success:function(){
-				this._createNoteWidget(note, true);
-			}
-		});	
+		this.fireEvent('edit-note', note);
+		this._createNoteWidget(note, true);	
 	},
 	
 	addHighlight: function(range){
@@ -119,12 +115,19 @@ Ext.define('NextThought.view.content.Reader', {
 	},
 	
 	_createNoteWidget: function(record, edit){
-		this._notes.push(
+		try{ 
+			this._notes.push(
 					Ext.create(
 						'NextThought.view.widgets.Note', 
 						record,
 						this.items.get(0).el.dom.firstChild, 
 						this));
+			return true;
+		}
+		catch(e){
+			
+		}
+		return false;
 	},
 	
 	getSelection: function() {
@@ -183,7 +186,10 @@ Ext.define('NextThought.view.content.Reader', {
     	
     	Ext.each(bins.Note, 
     		function(r){
-    			if (!this._createNoteWidget(r)) r.destroy();
+    			if (!this._createNoteWidget(r)){
+    				console.log('removing bad note');
+	    			r.destroy();
+    			}
     		},
     		this
     	)
@@ -191,7 +197,10 @@ Ext.define('NextThought.view.content.Reader', {
     	Ext.each(bins.Highlight, 
     		function(r){
     			var range = this._buildRangeFromRecord(r);
-    			if (!range) r.destroy();
+    			if (!range){
+    				console.log('removing bad highlight');
+	    			r.destroy();
+    			} 
     			else this._createHighlightWidget(range, r);
     		},
     		this

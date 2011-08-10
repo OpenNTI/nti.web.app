@@ -1,0 +1,19 @@
+Ext.define('NextThought.view.widgets.NoteEditor', {
+	extend: 'Ext.window.Window',
+	alias : 'widget.noteeditor',
+	
+	closable: false,
+	maximizable:true,
+	border: false,
+	layout: 'fit',
+	title: 'Edit Note',
+	bbar: ['->',
+  		{ xtype: 'button', text: 'Save' },
+  		{ xtype: 'button', text: 'Cancel', isCancel: true }
+	],
+	
+	initComponent: function(){
+		this.callParent(arguments);
+		this.add({ xtype: 'htmleditor', enableAlignments: false, value: this.record.get('text') });
+	}
+});

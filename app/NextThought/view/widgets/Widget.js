@@ -1,5 +1,6 @@
 Ext.define('NextThought.view.widgets.Widget', {
 	extend: 'Ext.util.Observable',
+	
 	createElement: function(tag,parent,cls,css){
 		var el = document.createElement(tag);
 		if(cls)Ext.get(el).addCls(cls);
@@ -7,6 +8,7 @@ Ext.define('NextThought.view.widgets.Widget', {
 		parent.appendChild(el);
 		return el;
 	},
+	
 	createImage: function(src,parent,cls,css){
 		var el = document.createElement('img');
 		el.setAttribute('src',src);
@@ -15,6 +17,19 @@ Ext.define('NextThought.view.widgets.Widget', {
 		parent.appendChild(el);
 		return el;
 	},
+	
+	getNodeFromXPath: function(xpath) {
+    	try {
+    		return document.evaluate(xpath, document).iterateNext();
+    	}
+    	catch(e) {
+    		if(NextThought.isDebug) {
+    			console.log(xpath, e);
+    		}
+    		return null;
+    	}
+    },
+	
 	cleanup: function(){
 		throw 'Must override';
 	}

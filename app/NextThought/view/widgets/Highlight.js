@@ -1,11 +1,8 @@
 Ext.define('NextThought.view.widgets.Highlight', {
-	extend: 'NextThought.view.widgets.Widget',
+	extend: 'NextThought.view.widgets.Annotation',
 	
 	_sel: null,
-	_cmp: null,
 	_canvas: null,
-	_menu: null,
-	_record: null,
 	_rgba: null,
 	_color: null,
 
@@ -13,55 +10,46 @@ Ext.define('NextThought.view.widgets.Highlight', {
 		this.addEvents({
             colorchanged : true
         });
-        
-		var d = Ext.query('.document-nibs',container);
-		
-		this._cmp = component;
+        this.callParent([record, container, component]);
 		this._sel = selection;
-		this._record = record;
-		
-		this._canvas = this.createElement('canvas',container,'highlight-object unselectable','position: absolute; pointer-events: none;');
-		
-		this._div = d.length>0? d[0] : this.createElement('div',container,'document-nibs unselectable');
-		this._img = this.createImage(Ext.BLANK_IMAGE_URL,this._div,'action','width: 24px; background: yellow; height: 24px; position: absolute;');
-		this._img._annotation = this;
-
-		this._cmp.on('resize', this.onResize, this);
-		Ext.EventManager.onWindowResize(this.onResize, this);
-				
-		this._menu = Ext.create('Ext.menu.Menu', {
-			items : [
-				{
-					text : 'Remove Highlight',
-					handler: Ext.bind(this._removeMe, this)
-				},
-				{
-					text : 'Change Color',
-					menu: {
-                        items: [
-                            Ext.create('Ext.ColorPalette', {
-                                listeners: {
-                                	scope: this,
-                       				select: this._colorSelected
-                                }
-                    		})
-                    	]
-					}
-				},
-				{
-					text : 'Add a Note'
-				}
-			]
-		});
-		
-		Ext.get(this._img).on('click', this.onClick, this);
-
+		var c = this._createCanvasContainer('canvas-highlight-container');
+		this._canvas = this.createElement('canvas',c.dom,'highlight-object unselectable','position: absolute; pointer-events: none;');
 		this._updateColor();
 		return this;
 	},
 	
+	_createCanvasContainer: function(id){
+		var e = Ext.get(id),
+			n = e ? e.dom : this.createElement('div',this._cnt,'document-highlights unselectable');
+		n.setAttribute('id',id);
+		return Ext.get(n);
+	},
+	
+	_buildMenu: function(){
+		var items = [{
+				text : 'Remove Highlight',
+				handler: Ext.bind(this.remove, this)
+			},{
+				text : 'Change Color',
+				menu: [Ext.create('Ext.ColorPalette', {
+	                listeners: { scope: this, select: this._colorSelected }})]
+			},{
+				text : 'Add a Note',
+				handler: Ext.bind(this._addNote, this)
+		}];
+		return this.callParent([items]);
+	},
+	
+	_menuItemHook: function(o,item, menu){
+		item.on('afterrender',Ext.bind(this.updateMenuIcon, item, [o._color]));
+		o.on('colorchanged', this.updateMenuIcon, item);
+	},
+	
 	_updateColor: function() {
 		this._color = this._record.get('color');
+		if ('yellow' == this._color) {
+			this._color = 'FFFF00';
+		}
 		this._rgba = this._hexToRGBA(this._color);
 
 		Ext.get(this._img).setStyle('background', '#' + this._color);
@@ -74,42 +62,12 @@ Ext.define('NextThought.view.widgets.Highlight', {
 		this._record.save();	
 		this.fireEvent('colorchanged', color);	
 	},
+	
+	
+	_addNote: function(){
+		this._cmp.addNote(this._sel);
+	},
 
-	_removeMe: function() {
-		this.cleanup();
-		this._record.destroy();
-	},
-	
-	onClick: function(e) {
-		e.preventDefault();
-		this.clearListeners();
-		
-		var annotations = this._multiAnnotation();
-		if (annotations && annotations.length > 1) {
-			var menu = Ext.create('Ext.menu.Menu');
-			Ext.each(annotations, function(o, i){
-				if (!o._menu) return;
-				o.clearListeners();
-				var item = Ext.create('Ext.menu.Item', {
-						text: 'Annotation '+(i+1),
-						menu: o._menu
-				});
-				
-				item.on('afterrender',Ext.bind(this.updateMenuIcon, item, [o._color]));
-				o.on('colorchanged', this.updateMenuIcon, item);
-				
-				menu.add(item);
-			},
-			this);
-			menu.on('hide', function(){menu.destroy();})
-			menu.showBy(Ext.get(this._img), 'bl');
-			return;
-		}
-		
-		//single annotation
-		this._menu.showBy(Ext.get(this._img), 'bl');
-	},
-	
 	updateMenuIcon: function(color) {
 		var img = this.el.select('img.x-menu-item-icon').first()
 		if(img){
@@ -117,26 +75,9 @@ Ext.define('NextThought.view.widgets.Highlight', {
 		}
 	},
 	
-	_multiAnnotation: function() {
-		var nibs = this._div.childNodes,
-			result = [],
-			top = this._img.style.top;
-		Ext.each(nibs, function(o){
-			if (o._annotation)
-				if (top == o.style.top){ 
-					result.push(o._annotation);
-				}
-		},
-		this);
-		
-		return result;
-	},
-	
 	cleanup: function(){
-		this._cmp.un('resize', this.onResize, this);
-		Ext.EventManager.removeResizeListener(this.onResize, this);
+		this.callParent(arguments);
 		Ext.get(this._canvas).remove();
-		Ext.get(this._img).remove();
 		delete this._sel;
 	},
 	
@@ -163,7 +104,9 @@ Ext.define('NextThought.view.widgets.Highlight', {
 			c = this._canvas,
 			p = Ext.get(this._div.parentNode),
 			l = s.length;
-			
+		if(!r){
+			r = s[0];
+		}	
 		Ext.get(c).moveTo(r.left, r.top);
 		c.width = r.width; c.height = r.height;
 

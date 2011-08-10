@@ -29,8 +29,8 @@ Ext.define('NextThought.util.AnnotationUtils',
 		selectionToNote: function(range) {
 			var note = Ext.create('NextThought.model.Note');
 			
-			var endNode = range.endContainer;
-			var blockNode = this.fundBlockParent(endNode);
+			var node = range.startContainer || range.endContainer;
+			var blockNode = this.findBlockParent(node);
 			
 			if (!blockNode) throw 'No block node found.';
 			
@@ -45,8 +45,8 @@ Ext.define('NextThought.util.AnnotationUtils',
 			return c;
 		},
 		isBlockNode: function(n) {
-			var displayStyle = Ext.get(n).getStyle('display');
-			return ('block'== displayStyle); 
+			var e = Ext.get(n);
+			return (e && e.getStyle('display')=='block' && e.getStyle('position')=='static'); 
 		},
 		selectionToHighlight: function(range) {
 			var highlight = Ext.create('NextThought.model.Highlight');

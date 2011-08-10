@@ -17,4 +17,6 @@ Ext.define('NextThought.model.Note', {
     	collectionName: 'Notes',
     	model: 'NextThought.model.Note'
     }
+    
+    
 });

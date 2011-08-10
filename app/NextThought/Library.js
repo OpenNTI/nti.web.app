@@ -43,8 +43,8 @@ Ext.define('NextThought.Library', {
 				if(NextThought.isDebug) 
 					console.log('failed to load library');
 					 
-				this._library = null;
-				go.call(this);
+				alert("Failed to load library");
+				this._req = null;
 			},
 			success: function(r,o) {
 				this._library = Ext.decode(r.responseText);

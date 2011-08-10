@@ -47,12 +47,18 @@ Ext.define('NextThought.controller.Login', {
 		//try to auth for future calls to server
 		var s = _AppConfig.server,
 			a = Base64.basicAuthString(values.username, values.password);
-			
-		this.http.open("GET", s.host + s.data + 'users/' + values.username, false, values.username, values.password);
-		this.http.setRequestHeader("Authorization", a);
-		this.http.send('');
-		if (this.http.status == 401) {
-			return false; //we failed auth
+		
+		try{	
+			this.http.open("GET", s.host + s.data + 'users/' + values.username, false, values.username, values.password);
+			this.http.setRequestHeader("Authorization", a);
+			this.http.send('');
+			if (this.http.status == 401) {
+				return false; //we failed auth
+			}
+		}
+		catch(e){
+			console.log(e);
+			return false;
 		}
 		
 		//Auto inject all future request with the auth string

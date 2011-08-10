@@ -1,33 +1,95 @@
-Ext.define('NextThought.view.widgets.Note', {
-	extend: 'NextThought.view.widgets.Widget',
+Ext.define( 'NextThought.view.widgets.Note', {
+	extend: 'NextThought.view.widgets.Annotation',
+	requires:[
+			'NextThought.view.widgets.NotePanel'
+			],
 
-	_rec: null,
-	_cmp: null,
-	_menu: null,
+	_anchorNode : null,
+	_noteContainer: null,
+	_noteDiv: null,
+	
+	_originalPadding: 0,
 
 	constructor: function(record, container, component){
-		var d = Ext.query('.document-nibs',container);
+		this.callParent([record, container, component]);
 		
-		this._cmp = component;
+		var me = this,
+			xpath = record.get('xpath'),
+			a = Ext.get(me.getNodeFromXPath(xpath)),
+			c = me._createNoteContainer(xpath);
+	
+		me._anchorNode = a;
+		me._noteContainer = c;
+		me._originalPadding = a.dom.originalPadding!==undefined 
+			? a.dom.originalPadding
+			: a.getPadding('b');
+		a.dom.originalPadding = me._originalPadding;
 		
-		this._div = d.length>0? d[0] : this.createElement('div',container,'document-nibs');
-		this._img = this.createImage(Ext.BLANK_IMAGE_URL,this._div,'action','width: 24px; height: 24px; background: yellow; position: absolute;');
-
-		this._cmp.on('resize', this.onResize, this);
-		Ext.EventManager.onWindowResize(this.onResize, this);
+		// console.log('original padding:',me._originalPadding);
+		 
+		me.noteDiv = me.createElement('div',c.dom,'x-note-panel');
+		me.noteDiv._annotation = me;
 		
-		//Ext.get(this._img).on('click',function(){ this.cleanup(); record.destroy(); }, this);
-		
-		//this.render();
-		return this;
+		me.noteCmp = Ext.create('widget.notepanel',{ renderTo: me.noteDiv, _annotation: me, _owner: component });
+		me.noteUpdated(record);
+		me.noteCmp.doLayout();
+		return me;
 	},
-	onResize : function(e){
-		//this.render();
+	
+	
+	noteUpdated: function(record){
+		// console.log('noteUpdated');
+		this._record = record;
+		record.on('updated',this.noteUpdated, this);
+		this.noteCmp.update(record.get('text'));
+		this.onResize();
+		this._cmp.fireEvent('resize',{});
 	},
+	
+	_buildMenu: function(){
+		var items = [{
+				text : 'Remove Note',
+				handler: Ext.bind(this.remove, this)
+			}];
+		return this.callParent([items]);
+	},
+	
+	_createNoteContainer: function(id){
+		var e = Ext.get(id),
+			n = e ? e.dom : this.createElement('div',this._cnt,'document-notes unselectable');
+		n.setAttribute('id',id);
+		return Ext.get(n);
+	},
+	
 	cleanup: function(){
-		this._cmp.un('resize', this.onResize, this);
-		Ext.EventManager.removeResizeListener(this.onResize, this);
-		Ext.get(this._img).remove();
-		delete this._rec;
+		this.callParent(arguments);
+		this.noteCmp.destroy();
+		delete this.noteCmp;
+		Ext.get(this.noteDiv).remove();
+		this.onResize();
+	},
+	
+	onResize : function(e){
+		var p = Ext.get(this._cnt),
+			c = this._noteContainer,
+			a = this._anchorNode,
+			i = this._originalPadding,
+			h = 0;
+		c.setWidth(a.getWidth());
+		// a.setStyle('border', '1px solid green');
+		
+		h = c.getHeight();
+		
+		a.setStyle('padding-bottom',(i+h)+'px');
+
+		// c.alignTo(a, 'tl-bl?',[0,-h]);
+		c.moveTo(a.getLeft(),a.getBottom()-h);
+		Ext.get(this._img).moveTo(p.getLeft(), c.getTop());
+		
+		//always move to the end
+		if(c.dom.nextSibling)
+			this._cnt.appendChild(c.dom);
+			
+		this._cmp.doLayout();
 	}
 });

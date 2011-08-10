@@ -10,11 +10,12 @@ Ext.define('NextThought.reader.Json', {
 	
 	readRecords: function(data) {
 		var me = this,
+			mName = me.model.$className,
 			i = data.Items,
 			records = [];
 
 		if(NextThought.isDebug) {
-			console.log('readRecords:',me, arguments);
+			console.log('read records:',mName, me, arguments);
 		}
 		
 		if(Ext.isArray(data)){
@@ -42,10 +43,12 @@ Ext.define('NextThought.reader.Json', {
 		}	
 		
 		if(NextThought.isDebug) {
-			console.log('readRecords result:', records);
+			console.log('read records result:',mName, records);
 		}
 		return this.callParent([records]);
 	},
+	
+	
 	getNestedRecords: function(collection) {
 		var result = [];
 		for (var key in collection) {
