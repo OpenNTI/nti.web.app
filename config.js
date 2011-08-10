@@ -1,12 +1,13 @@
 var _AppConfig = {
 	"server" : {
         //"host": "http://astro.local:8080",
-        // "host": "http://tdaley.local:8080",
+        //"host": "http://tdaley.local:8080",
+		//"host": "http://csanchez.local:8080",
         "host": "http://curie.local:8080",
-        // "host": "http://alpha.nextthought.com",
+        //"host": "http://alpha.nextthought.com",
         "data": "/dataserver/",
         "library": "/library/library.json",
-        "username": "sjohnson",
+        "username": "csanchez@nextthought.com",
         "password": "temp001"
     }
 };
