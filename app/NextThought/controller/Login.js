@@ -24,7 +24,7 @@ Ext.define('NextThought.controller.Login', {
             'loginwindow button[actionName=cancel]': {
                 click: function(){
                 	window.location.replace('http://www.nextthought.com');
-                },
+                }
             }
         });
     },

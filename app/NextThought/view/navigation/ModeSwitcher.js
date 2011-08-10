@@ -10,7 +10,7 @@ Ext.define('NextThought.view.navigation.ModeSwitcher', {
 		type: 'hbox',
 		pack: 'start',
 		align: 'middle',
-		shrinkToFit: false,
+		shrinkToFit: false
 	},
 	items: [],
 	modeReference: null,
