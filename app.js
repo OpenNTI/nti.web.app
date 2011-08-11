@@ -39,6 +39,12 @@ Ext.application({
 
 		function appStart(){
 			NextThought.modeSwitcher = Ext.create('NextThought.view.navigation.ModeSwitcher',{});
+			if(!NextThought.modeSwitcher){
+				console.log('failed to load switer');
+				Ext.getBody().mask('load failed');
+				return;
+			}
+			
 			
 			Ext.create('Ext.Window', { 
 				id:'object-explorer', 
