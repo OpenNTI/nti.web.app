@@ -11,7 +11,7 @@ Ext.define( 'NextThought.view.widgets.Note', {
 	_originalPadding: 0,
 
 	constructor: function(record, container, component){
-		this.callParent([record, container, component]);
+		this.callParent([record, container, component,'resources/images/charms/note-white.png']);
 		
 		var me = this,
 			xpath = record.get('xpath'),

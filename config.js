@@ -7,6 +7,7 @@ var _AppConfig = {
         "data": "/dataserver/",
         "library": "/library/library.json",
         "username": "jonathan.grimes",
+        // "username": "jason.madden@nextthought.com",
         "password": "temp001"
     }
 };

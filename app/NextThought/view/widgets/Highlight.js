@@ -10,7 +10,7 @@ Ext.define('NextThought.view.widgets.Highlight', {
 		this.addEvents({
             colorchanged : true
         });
-        this.callParent([record, container, component]);
+        this.callParent([record, container, component,'resources/images/charms/highlight-white.png']);
 		this._sel = selection;
 		var c = this._createCanvasContainer('canvas-highlight-container');
 		this._canvas = this.createElement('canvas',c.dom,'highlight-object unselectable','position: absolute; pointer-events: none;');

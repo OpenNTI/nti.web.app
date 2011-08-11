@@ -4,6 +4,7 @@ Ext.define('NextThought.util.AnnotationUtils',
 			   'NextThought.model.Note'],
 	alternateClassName: 'AnnotationUtils',
 	statics: {
+		
 		getPathTo: function(element) {
 			var nodeName = element.nodeName;
 			
@@ -26,6 +27,8 @@ Ext.define('NextThought.util.AnnotationUtils',
 		            ix++;
 		    }
 		},
+		
+		
 		selectionToNote: function(range) {
 			var note = Ext.create('NextThought.model.Note');
 			
@@ -37,6 +40,8 @@ Ext.define('NextThought.util.AnnotationUtils',
 			note.set('xpath', this.getPathTo(blockNode));
 			return note;
 		},
+		
+		
 		findBlockParent: function(n) {
 			var c = n;
 			while(c && !this.isBlockNode(c)) {
@@ -44,10 +49,14 @@ Ext.define('NextThought.util.AnnotationUtils',
 			}
 			return c;
 		},
+		
+		
 		isBlockNode: function(n) {
 			var e = Ext.get(n);
 			return (e && e.getStyle('display')=='block' && e.getStyle('position')=='static'); 
 		},
+		
+		
 		selectionToHighlight: function(range) {
 			var highlight = Ext.create('NextThought.model.Highlight');
 			
@@ -60,6 +69,8 @@ Ext.define('NextThought.util.AnnotationUtils',
 			
 			return highlight;
 		},
+		
+		
 		ascendToAnchor: function(textNode) {
 			var parentNode = textNode;
 			if (this.isTextNode(textNode)) {
@@ -101,6 +112,8 @@ Ext.define('NextThought.util.AnnotationUtils',
 			//if we make it here, we haven't found an anchor name:
 			return null;
 		},
+		
+		
 		anchorNameOrNull: function(node) {
 			if (node.name != null && node.name.trim().length > 0) {
 				return node.name;
@@ -109,6 +122,8 @@ Ext.define('NextThought.util.AnnotationUtils',
 				return null;
 			}
 		},
+		
+		
 		findLastAnchorFromChildren: function(node) {
 			var children = node.childNodes;
 			var anchorFound = null;
@@ -138,21 +153,30 @@ Ext.define('NextThought.util.AnnotationUtils',
 		
 			return anchorFound;
 		},
+		
+		
+		
 		isMathNode: function(node) {
 			return node && $(node).hasClass( 'math' );
-		},		
+		},
+		
+		
 		isTextNode: function(node) {
 			if( node.nodeValue != null ) {
 				return true;
 			}
 			return false;
 		},
+		
+		
 		isImageNode: function(node) {
 			if (node.nodeName == "IMG") {
 				return true;
 			}
 			return false;
 		},
+		
+		
 		getNodeTextValue: function(node) {
 			var math = this.climbToMathNode(node);
 			var img = this.digForImageNode(node);
@@ -173,6 +197,8 @@ Ext.define('NextThought.util.AnnotationUtils',
 			}
 		
 		},
+		
+		
 		getDOMTreeId: function(node) {
 			var parentNode = node;
 			var parents = 0;
@@ -194,6 +220,8 @@ Ext.define('NextThought.util.AnnotationUtils',
 			//if we make it here, we haven't found an anchor name:
 			return "DOMTreeID:" + parents + "," + sibs;
 		},
+		
+		
 		digForImageNode: function(n) {
 			if (this.isImageNode(n)) {
 				return n;
@@ -213,6 +241,8 @@ Ext.define('NextThought.util.AnnotationUtils',
 				}
 			}
 		},
+		
+		
 		climbToMathNode: function(node) {
 			var topMathNode = null;
 		
@@ -230,6 +260,8 @@ Ext.define('NextThought.util.AnnotationUtils',
 		
 			return topMathNode;
 		},
+		
+		
 		findLastHighlightableNodeFromChildren: function(node, stopNode) {
 			var children = node.childNodes;
 			var last = null;

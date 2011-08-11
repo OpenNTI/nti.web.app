@@ -2,6 +2,13 @@
 
 Ext.define('NextThought.proxy.UserDataLoader',{
 	alternateClassName: 'UserDataLoader',
+	requires: [
+			'NextThought.model.Note',
+			'NextThought.model.Highlight',
+			'NextThought.model.FriendsList',
+			'NextThought.model.User',
+    		'NextThought.model.UnresolvedFriend'
+    		],
 	statics:{
 		
 		
@@ -10,16 +17,21 @@ Ext.define('NextThought.proxy.UserDataLoader',{
 			this.getGroups({success: success, faulure: failure});
 			
 			function success(bins) {
-				var set = {};
+				var set = {}, key;
+				
 				Ext.each(bins, function(o){
-					Ext.each(o.friends, function(f){
-						set[f.ID] = true;
+					Ext.each(o.get('friends'), function(f){
+						var u = f.get('Username'),
+							c = set[u];
+						if(c && /unresolved/i.test(c)) return;
+						set[u] = f;
 					},
 					this);
 				},
 				this);
+				
 				if(callbacks && callbacks.success){
-						callbacks.success.call(callbacks.scope || this, set);
+						callbacks.success.call(callbacks.scope || this, this._toArray(set));
 					}
 					else if(NextThought.isDebug){
 						console.log('WARNING: I haz friends dataz 4 u, but u no giv meh callbax');
@@ -72,8 +84,8 @@ Ext.define('NextThought.proxy.UserDataLoader',{
 						}
 						return;
 					}
-				
-					var bins = this._binItems(json);
+
+					var bins = this._binAndParseItems(json);
 					if (!bins || !bins.FriendsList) {
 						if(NextThought.isDebug){
 							console.log('Response sucked:', r, 'bad json:', json);
@@ -82,7 +94,7 @@ Ext.define('NextThought.proxy.UserDataLoader',{
 					}
 					
 					if(callbacks && callbacks.success){
-						callbacks.success.call(callbacks.scope || this, bins);
+						callbacks.success.call(callbacks.scope || this, bins.FriendsList);
 					}
 					else if(NextThought.isDebug){
 						console.log('WARNING: I haz groupz dataz 4 u, but u no giv meh callbax');
@@ -132,7 +144,7 @@ Ext.define('NextThought.proxy.UserDataLoader',{
 						var reader = this._getReaderForModel('NextThought.model.'+i.Item.Class);
 						json.Items[x] = reader.read(i.Item).records[0];						
 						console.log('recursive stream items', json.Items[x], i.Item);
-					}, 
+					},
 					this);
 				}
 			});
@@ -141,7 +153,6 @@ Ext.define('NextThought.proxy.UserDataLoader',{
 		
 		_getReaderForModel: function(modelClass) {
 			this._readers = this._readers || [];
-			
 			if (!this._readers[modelClass]) {
 				this._readers[modelClass] = Ext.create('NextThought.reader.Json',{model: modelClass, proxy: 'nti'});
 			}
@@ -180,14 +191,7 @@ Ext.define('NextThought.proxy.UserDataLoader',{
 						return;
 					}
 
-					var bins = this._binItems(json.Items);
-					
-					for(var key in bins){
-						if(!bins.hasOwnProperty(key)) continue;
-						var reader = this._getReaderForModel('NextThought.model.'+key);
-						
-						bins[key]= reader.read(bins[key]).records;
-					}
+					var bins = this._binAndParseItems(json.Items);
 					
 					if(callbacks && callbacks.success){
 						callbacks.success.call(callbacks.scope || this, bins);
@@ -197,6 +201,13 @@ Ext.define('NextThought.proxy.UserDataLoader',{
 					}
 				}
 			});
+		},
+		
+		
+		_toArray: function(s){
+			var r=[],k;
+			for(k in s){if(!s.hasOwnProperty(k))continue;r.push(s[k]);}
+			return r;
 		},
 		
 		
@@ -224,7 +235,33 @@ Ext.define('NextThought.proxy.UserDataLoader',{
 				}
 				bins[o.Class].push(o);
 			}
+		},
+
+		_binAndParseItems: function(items){
+			var bins = this._binItems(items), key;
+			for(key in bins){
+				if(!bins.hasOwnProperty(key)) continue;
+				bins[key] = this._getReaderForModel('NextThought.model.'+key).read(bins[key]).records;
+			}
+			return bins;
+		},
+		
+		
+		flattenBins: function(bins){
+			var result = [], key;
+			for(key in bins){
+				if(!bins.hasOwnProperty(key)) continue;
+				result = result.concat(bins[key]);
+			}
+			return result;
+		},
+		
+		
+		parseItems: function(items){
+			return this.flattenBins(this._binAndParseItems(items));
 		}
 	}
+	
+	
 	
 });

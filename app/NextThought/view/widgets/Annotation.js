@@ -9,7 +9,7 @@ Ext.define( 'NextThought.view.widgets.Annotation', {
 	_menu: null,
 	_record: null,
 	
-	constructor: function(record, container, component) {
+	constructor: function(record, container, component, icon) {
 		
 		this._cnt = container;
 		this._cmp = component;
@@ -19,7 +19,7 @@ Ext.define( 'NextThought.view.widgets.Annotation', {
 		
 		var d = Ext.query('.document-nibs',container);
 		this._div = d.length>0? d[0] : this.createElement('div',container,'document-nibs unselectable');
-		this._img = this.createImage(Ext.BLANK_IMAGE_URL,this._div,'action','width: 16px; background: yellow; height: 16px; position: absolute;');
+		this._img = this.createImage(icon?icon:Ext.BLANK_IMAGE_URL,this._div,'action','width: 17px; background: yellow; height: 17px; position: absolute;');
 		this._img._annotation = this;
 		this._menu = this._buildMenu();
 		Ext.get(this._img).on('click', this.onClick, this);
