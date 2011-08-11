@@ -2,6 +2,10 @@
 
 Ext.define( 'NextThought.view.modes.Mode', {
 	extend: 'Ext.panel.Panel',
+	requires: [
+			'NextThought.view.widgets.LeftColumn',
+			'NextThought.view.widgets.RightColumn'
+			],
 
 	autoScroll: false,
 	border: false, 

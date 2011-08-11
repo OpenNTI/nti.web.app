@@ -1,5 +1,5 @@
 
-Ext.define('NextThought.view.TopControls', {
+Ext.define('NextThought.view.widgets.TopControls', {
 	extend: 'Ext.panel.Panel',
 	
 	cls: 'x-brand-and-search-bar',

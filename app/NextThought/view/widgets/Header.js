@@ -1,5 +1,5 @@
 
-Ext.define('NextThought.view.Header', {
+Ext.define('NextThought.view.widgets.Header', {
 	extend: 'Ext.panel.Panel',
 	
 	cls: 'x-header-bar',
@@ -9,7 +9,7 @@ Ext.define('NextThought.view.Header', {
     
     initComponent: function(){
    		this.callParent(arguments);
-    	this.add(Ext.create('NextThought.view.TopControls', {id: 'saerchbar'} ));
+    	this.add(Ext.create('NextThought.view.widgets.TopControls', {id: 'saerchbar'} ));
     }
     
 });
