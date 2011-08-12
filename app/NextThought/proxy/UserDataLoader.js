@@ -3,6 +3,7 @@
 Ext.define('NextThought.proxy.UserDataLoader',{
 	alternateClassName: 'UserDataLoader',
 	requires: [
+			'NextThought.model.Change',
 			'NextThought.model.Note',
 			'NextThought.model.Highlight',
 			'NextThought.model.FriendsList',
@@ -11,6 +12,45 @@ Ext.define('NextThought.proxy.UserDataLoader',{
     		],
 	statics:{
 		
+		
+		resolveUser: function(userId, callback){
+			this.resolvedUsers = this.resolvedUsers || {};
+			
+			var h = _AppConfig.server.host,
+				d = _AppConfig.server.data,
+				u = _AppConfig.server.username,
+				url = h+d+'UserSearch/'+userId,
+				cache = this.resolvedUsers;
+				
+			if(cache[userId]){
+				if(callback)
+					callback(cache[userId]);
+			}
+			else
+			Ext.Ajax.request({
+				url: url,
+				scope: this,
+				async: !!callback,
+				callback: function(o,success,r){
+					if(!callback)return;
+					
+					if(!success){
+						callback();
+						return;
+					}
+					
+					var json = Ext.decode(r.responseText),
+						bins = this._binAndParseItems(json.Items);
+						
+					if(bins.User.length>1)
+						console.log('WARNING: many matching users:', userId, bins.User);
+
+					callback(cache[userId] = bins.User[0]);
+				}
+			});
+			
+			return cache[userId];
+		},
 		
 		
 		getFriends: function(callbacks) {
@@ -104,15 +144,16 @@ Ext.define('NextThought.proxy.UserDataLoader',{
 			
 		},
 		
-				
 		getRecursiveStream: function(containerId, callbacks) {
+			return this.getStream(containerId, callbacks, "RecursiveStream");
+		},
+				
+		getStream: function(containerId, callbacks, stream) {
 			if (!containerId) containerId = 'aops-prealgebra-129';
 			var h = _AppConfig.server.host,
 				d = _AppConfig.server.data,
 				u = _AppConfig.server.username;
-				url = h+d+'users/'+u+'/Pages/' + containerId + "/RecursiveStream/";
-				
-			console.log("inside getRecursivyStream", url);	
+				url = h+d+'users/'+u+'/Pages/' + containerId + '/' + (stream? stream : "Stream") + '/';
 				
 			this._streamRequest = Ext.Ajax.request({
 				url: url,
@@ -138,13 +179,21 @@ Ext.define('NextThought.proxy.UserDataLoader',{
 						}
 						return;
 					}
-					
+					var cReader = this._getReaderForModel('NextThought.model.Change');
 					Ext.each(json.Items, function(i, x){
 						var reader = this._getReaderForModel('NextThought.model.'+i.Item.Class);
-						json.Items[x] = reader.read(i.Item).records[0];						
-						console.log('recursive stream items', json.Items[x], i.Item);
+						i.Item = reader.read(i.Item).records[0];
+						
+						json.Items[x] = cReader.read(i).records[0];
 					},
 					this);
+					
+					if(callbacks && callbacks.success){
+						callbacks.success.call(callbacks.scope || this, json.Items);
+					}
+					else if(NextThought.isDebug){
+						console.log('WARNING: I haz change dataz 4 u, but u no giv meh callbax');
+					}
 				}
 			});
 			

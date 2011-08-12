@@ -14,6 +14,17 @@ Ext.data.Types.FRIEND_LIST = {
     }
 };
 
+Ext.data.Types.USER = {
+	type: 'User',
+    convert: function(v,o) {
+        return UserDataLoader.resolveUser(v);
+    },
+    sortType: function(v) {
+    	console.log('sort by User:',arguments);
+        return '';
+    }
+};
+
 
 
 Ext.define('NextThought.model.FriendsList', {

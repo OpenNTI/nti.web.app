@@ -16,6 +16,8 @@ Ext.define( 'NextThought.view.widgets.Note', {
 			xpath = record.get('xpath'),
 			a = Ext.get(me.getNodeFromXPath(xpath)),
 			c = me._createNoteContainer(xpath);
+			
+		a = a? a : Ext.get(Ext.query('#nticontent .page-contents')[0]).dom.firstChild;
 	
 		me._anchorNode = a;
 		me._noteContainer = c;

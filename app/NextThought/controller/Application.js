@@ -10,6 +10,8 @@ Ext.define('NextThought.controller.Application', {
 		'widgets.Note',
 		'widgets.NoteEditor',
 		'widgets.PeopleList',
+		'widgets.RelatedItemsList',
+		'widgets.MiniStreamList',
 		'content.Reader',
 		'widgets.Tracker'
 	],
@@ -18,10 +20,18 @@ Ext.define('NextThought.controller.Application', {
         {
             ref: 'reader',
             selector: 'reader-panel'
-        },
-        {
+        },{
+            ref: 'readerBreadcrumb',
+            selector: 'reader-mode-container breadcrumbbar'
+        },{
             ref: 'readerPeople',
             selector: 'reader-mode-container people-list'
+        },{
+            ref: 'readerRelated',
+            selector: 'reader-mode-container related-items'
+        },{
+            ref: 'readerStream',
+            selector: 'reader-mode-container mini-stream'
         }
     ],
 
@@ -29,7 +39,7 @@ Ext.define('NextThought.controller.Application', {
     	 var l = NextThought.librarySource = Ext.create('NextThought.Library');
     	 l.on('loaded', function(){
     	 	var b = l._library.titles[0];
-			this.getReader().setActive(b, b.root+'sect0001.html');
+			this.navigate(b, b.root+'sect0001.html');
     	 },
     	 this);
     	 
@@ -44,9 +54,27 @@ Ext.define('NextThought.controller.Application', {
     	 			Ext.create('NextThought.view.widgets.NoteEditor',{record: note}).show();
     	 		},
     	 		
+    	 		'location-changed': function(id){
+    	 			this.getReaderStream().setContainer(id);
+    	 			this.getReaderRelated().setLocation(
+    	 				this.getReaderBreadcrumb().getLocation());
+    	 		},
+    	 		
     	 		'publish-contributors': function(c){
-    	 			this.getReaderPeople().setContributors(c);
+    	 			var t = this.getReaderPeople(),
+    	 				b = Ext.Function.createBuffered(t.setContributors,100,t,[c]);
+    	 			
+    	 			for(k in c){
+    	 				if(c.hasOwnProperty(k))
+	    	 				UserDataLoader.resolveUser(k,b);
+    	 			}
+    	 			
+    	 			b();
     	 		}
+    	 	},
+    	 	
+    	 	'reader-mode-container related-items':{
+    	 		'navigate': this.navigate
     	 	},
     	 	
     	 	'notepanel button':{
@@ -68,8 +96,14 @@ Ext.define('NextThought.controller.Application', {
     
     
     readerFilterChanged: function(newFilter){
-    	this.getReader().applyFilter(newFilter);
-    	this.getReaderPeople().applyFilter(newFilter);
+    	var o = [
+	    	this.getReader(),
+	    	this.getReaderPeople(),
+	    	this.getReaderRelated(),
+	    	this.getReaderStream()
+	    	];
+	    	
+    	Ext.each(o,function(i){i.applyFilter(newFilter);});
     },
     
     

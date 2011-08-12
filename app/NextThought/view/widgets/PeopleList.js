@@ -37,33 +37,23 @@ Ext.define('NextThought.view.widgets.PeopleList', {
 	},
 
 	updateList: function(){
-		UserDataLoader.getFriends({
-			scope: this,
-			success: this.listUsers});
-	},
-	
-	listUsers: function(u){
-		var c = 0, p = this.items.get(1);
+		var k, c = 0, p = this.items.get(1);
 		p.removeAll();
-		
-		//TODO: update to allow contribs from people not in the filter IF public is in the filter.
-		Ext.each(u, function(f){
-			var i = f.get('avatarURL'),
-				n = f.get('Username');
-			
-			i = i ? i : Ext.BLANK_IMAGE_URL;
-			
+		for(k in this._contributors){
+			this._contributors.hasOwnProperty(k);
 			if(c>=10){
-				this.add({xtype: 'button', text:'More'});
-				return false;
+				p.add({xtype: 'button', text:'More'});
+				break;
 			}
-			
-			if(this._filter.shareTargets[n] && this._contributors[n]){
+				
+			if(this._filter.shareTargets[k]){
 				c++;
-				p.add({xtype: 'image', src: i, height: 36, width: 36});
+				UserDataLoader.resolveUser(k, function(f){
+					p.add({	xtype: 'image', 
+							src: (f? f.get('avatarURL') : Ext.BLANK_IMAGE_URL), 
+							height: 36, width: 36});
+				});
 			}
-			
-		},
-		this);
+		}
 	}
 });

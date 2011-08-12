@@ -14,7 +14,7 @@ Ext.define('NextThought.view.content.Reader', {
 	_filter: null,
 	
     initComponent: function(){
-    	this.addEvents('edit-note','publish-contributors');
+    	this.addEvents('edit-note','publish-contributors','location-changed');
    		this.callParent(arguments);
 		this._contextMenu = Ext.create('Ext.menu.Menu', {
 			items : [
@@ -192,8 +192,6 @@ Ext.define('NextThought.view.content.Reader', {
     	Ext.each(bins.Note, 
     		function(r){
     			if (!this._createNoteWidget(r)){
-    				console.log('removing bad note');
-	    			r.destroy();
 	    			return;
     			}
 				contributors[r.get('Creator')] = true;
@@ -206,7 +204,7 @@ Ext.define('NextThought.view.content.Reader', {
     			var range = this._buildRangeFromRecord(r);
     			if (!range){
     				console.log('removing bad highlight');
-	    			r.destroy();
+	    			//r.destroy();
 	    			return;
     			} 
     			contributors[r.get('Creator')] = true;
@@ -321,6 +319,7 @@ Ext.define('NextThought.view.content.Reader', {
 	            }
 	            
 	            this._loadContentAnnotatoins(containerId);
+	            this.fireEvent('location-changed', containerId);
 	            vp.unmask();
 	        },
 	    	error: function(){ 

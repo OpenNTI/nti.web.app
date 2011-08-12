@@ -132,7 +132,8 @@ Ext.define('NextThought.controller.FilterControl', {
 			filter = {groups:{},types:[], shareTargets:{}}, 
 			cmp = Ext.getCmp(id), 
 			groups = this.getGroups(id),
-			types = this.getTypes(id);
+			types = this.getTypes(id),
+			u = _AppConfig.server.username;
 			
 		Ext.each(groups, function(g){
 			if(!g.getValue()) return;
@@ -153,7 +154,8 @@ Ext.define('NextThought.controller.FilterControl', {
 		
 		
 		if(filter.includeMe){
-			filter.includeMe = _AppConfig.server.username;
+			filter.includeMe = u;
+			// filter.shareTargets[u] = true;
 		}
 		
 		Ext.each(types,function(t){
