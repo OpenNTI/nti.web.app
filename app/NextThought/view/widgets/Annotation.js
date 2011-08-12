@@ -14,7 +14,7 @@ Ext.define( 'NextThought.view.widgets.Annotation', {
 		me._cnt = container;
 		me._cmp = component;
 		me._record = record;
-		me._isVisible = me.testFilter(component._filter);
+		me._isVisible = record.phantom || me.testFilter(component._filter);
 		me._cmp.on('resize', me.onResize, me);
 		me._cmp.on('afterlayout',Ext.Function.createBuffered(me.onResize,100,me));
 		Ext.EventManager.onWindowResize(me.onResize, me);
