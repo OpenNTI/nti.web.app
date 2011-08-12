@@ -7,22 +7,32 @@ Ext.define('NextThought.view.widgets.Highlight', {
 	_color: null,
 
 	constructor: function(selection, record, container, component){
-		this.addEvents({
+		var me = this, c;
+		me.addEvents({
             colorchanged : true
         });
-        this.callParent([record, container, component,'resources/images/charms/highlight-white.png']);
-		this._sel = selection;
-		var c = this._createCanvasContainer('canvas-highlight-container');
-		this._canvas = this.createElement('canvas',c.dom,'highlight-object unselectable','position: absolute; pointer-events: none;');
-		this._updateColor();
-		return this;
+        me.callParent([record, container, component,'resources/images/charms/highlight-white.png']);
+		me._sel = selection;
+
+		c = me._createCanvasContainer('canvas-highlight-container');
+		me._canvas = me.createElement('canvas',c.dom,'highlight-object unselectable','position: absolute; pointer-events: none;'+(me._isVisible?'':'visibility:hidden;'));
+		me._updateColor();
+		return me;
 	},
 	
 	_createCanvasContainer: function(id){
 		var e = Ext.get(id),
-			n = e ? e.dom : this.createElement('div',this._cnt,'document-highlights unselectable');
+			n = e ? e.dom : this.createElement('div',this._cnt,'document-highlights unselectable'),
+			p = n.parentNode;
 		n.setAttribute('id',id);
+		p.insertBefore(n,p.firstChild);
 		return Ext.get(n);
+	},
+	
+	visibilityChanged: function(show){
+		this.callParent(arguments);
+		var c = Ext.get(this._canvas);
+		show? c.show() : c.hide();
 	},
 	
 	_buildMenu: function(){

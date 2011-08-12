@@ -14,9 +14,9 @@ Ext.define('NextThought.reader.Json', {
 			i = data.Items,
 			records = [];
 
-		if(NextThought.isDebug) {
-			console.log('read records:',mName, me, arguments);
-		}
+		// if(NextThought.isDebug) {
+			// console.log('read records:',mName, me, arguments);
+		// }
 		
 		if(Ext.isArray(data)){
 			return this.callParent(arguments);

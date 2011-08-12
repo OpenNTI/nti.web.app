@@ -2,13 +2,17 @@
 
 Ext.define( 'NextThought.view.modes.Reader', {
 	extend: 'NextThought.view.modes.Mode',
+	alias: 'widget.reader-mode-container',
+	requires: [
+			'NextThought.view.widgets.FilterControlPanel'
+			],
 	
     initComponent: function(){
     	var bb= { xtype: 'toolbar', cls: 'x-docked-noborder-top', items: {focusable: false, disabled:true,text:'&nbsp;',xtype:'button'}};
    		this.callParent(arguments);
 
 		this.add({ /*xtype:'tbspacer',*/ flex:1, focusable: false, dockedItems: bb });
-    	this.add({ region: 'west', id: 'west-book', xtype: 'leftColumn' });
+    	this.add({ region: 'west', id: 'west-book', xtype: 'leftColumn', columnWidget: {xtype:'filter-control'} });
    		
    		this.add({
     		region: 'center',

@@ -2,6 +2,10 @@
 
 Ext.define( 'NextThought.view.modes.Home', {
 	extend: 'NextThought.view.modes.Mode',
+	alias: 	'widget.home-mode-container',
+	requires: [
+			'NextThought.view.content.Library'
+			],
 	
     initComponent: function(){
     	var bb= { xtype: 'toolbar', cls: 'x-docked-noborder-top', items: {focusable: false, disabled:true,text:'&nbsp;'}};

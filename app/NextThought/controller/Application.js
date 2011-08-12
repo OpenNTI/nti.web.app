@@ -4,6 +4,7 @@ Ext.define('NextThought.controller.Application', {
     extend: 'Ext.app.Controller',
 
 	views: [
+		'modes.Reader',
 		'navigation.Breadcrumb',
 		'widgets.Tracker',
 		'widgets.Highlight',
@@ -11,13 +12,21 @@ Ext.define('NextThought.controller.Application', {
 		'widgets.NoteEditor',
 		'content.Reader'
 	],
+	
+	refs: [
+        {
+            ref: 'reader',
+            selector: 'reader-panel'
+        }
+    ],
 
     init: function() {
     	 var l = NextThought.librarySource = Ext.create('NextThought.Library');
     	 l.on('loaded', function(){
     	 	var b = l._library.titles[0];
-			Ext.getCmp('myReader').setActive(b, b.root+'sect0001.html');
-    	 });
+			this.getReader().setActive(b, b.root+'sect0001.html');
+    	 },
+    	 this);
     	 
     	 
     	 this.control({
@@ -37,11 +46,20 @@ Ext.define('NextThought.controller.Application', {
     	 	
     	 	'noteeditor button':{
 				'click': this.onNoteEditorButton
+    	 	},
+    	 	
+    	 	'reader-mode-container filter-control':{
+    	 		'filter-changed': this.readerFilterChanged
     	 	}
     	 });
     },
     
     onLaunch: function(){
+    },
+    
+    
+    readerFilterChanged: function(newFilter){
+    	this.getReader().applyFilter(newFilter);
     },
     
     
@@ -79,8 +97,7 @@ Ext.define('NextThought.controller.Application', {
     
     
     navigate: function(book, ref){
-    	//reader-panel
-    	Ext.getCmp('myReader').setActive(book, ref);
+    	this.getReader().setActive(book, ref);
     }
     
     

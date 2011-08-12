@@ -28,6 +28,7 @@ Ext.application({
     controllers: [
     	'Login',
     	'Modes',
+    	'FilterControl',
     	'Application'
     ],
     

@@ -12,7 +12,6 @@ Ext.define( 'NextThought.view.widgets.Note', {
 
 	constructor: function(record, container, component){
 		this.callParent([record, container, component,'resources/images/charms/note-white.png']);
-		
 		var me = this,
 			xpath = record.get('xpath'),
 			a = Ext.get(me.getNodeFromXPath(xpath)),
@@ -27,7 +26,7 @@ Ext.define( 'NextThought.view.widgets.Note', {
 		
 		// console.log('original padding:',me._originalPadding);
 		 
-		me.noteDiv = me.createElement('div',c.dom,'x-note-panel');
+		me.noteDiv = me.createElement('div',c.dom,'x-note-panel',(me._isVisible?'':'display:none;'));
 		me.noteDiv._annotation = me;
 		
 		me.noteCmp = Ext.create('widget.notepanel',{ renderTo: me.noteDiv, _annotation: me, _owner: component });
@@ -36,6 +35,17 @@ Ext.define( 'NextThought.view.widgets.Note', {
 		return me;
 	},
 	
+	visibilityChanged: function(show){
+		var me = this, c = Ext.get(me.noteDiv);
+		me.callParent(arguments);
+		show? c.show() : c.hide();
+		if(me.noteCmp)
+			me.noteCmp.doLayout();
+		// me.onResize();
+		setTimeout(function(){
+			me._cmp.fireEvent('resize');
+		},100);
+	},
 	
 	noteUpdated: function(record){
 		// console.log('noteUpdated');
@@ -69,11 +79,12 @@ Ext.define( 'NextThought.view.widgets.Note', {
 		this.onResize();
 	},
 	
-	onResize : function(e){
-		var p = Ext.get(this._cnt),
-			c = this._noteContainer,
-			a = this._anchorNode,
-			i = this._originalPadding,
+	onResize : function(){
+		var me= this,
+			p = Ext.get(me._cnt),
+			c = me._noteContainer,
+			a = me._anchorNode,
+			i = me._originalPadding,
 			h = 0;
 		c.setWidth(a.getWidth());
 		// a.setStyle('border', '1px solid green');
@@ -84,12 +95,12 @@ Ext.define( 'NextThought.view.widgets.Note', {
 
 		// c.alignTo(a, 'tl-bl?',[0,-h]);
 		c.moveTo(a.getLeft(),a.getBottom()-h);
-		Ext.get(this._img).moveTo(p.getLeft(), c.getTop());
+		Ext.get(me._img).moveTo(p.getLeft(), c.getTop());
 		
 		//always move to the end
 		if(c.dom.nextSibling)
-			this._cnt.appendChild(c.dom);
+			me._cnt.appendChild(c.dom);
 			
-		this._cmp.doLayout();
+		me._cmp.doLayout();
 	}
 });

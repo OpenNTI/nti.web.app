@@ -10,28 +10,93 @@ Ext.define( 'NextThought.view.widgets.Annotation', {
 	_record: null,
 	
 	constructor: function(record, container, component, icon) {
-		
-		this._cnt = container;
-		this._cmp = component;
-		this._record = record;
-		this._cmp.on('resize', this.onResize, this);
-		Ext.EventManager.onWindowResize(this.onResize, this);
+		var me = this;
+		me._cnt = container;
+		me._cmp = component;
+		me._record = record;
+		me._isVisible = me.testFilter(component._filter);
+		me._cmp.on('resize', me.onResize, me);
+		me._cmp.on('afterlayout',Ext.Function.createBuffered(me.onResize,100,me));
+		Ext.EventManager.onWindowResize(me.onResize, me);
 		
 		var d = Ext.query('.document-nibs',container);
-		this._div = d.length>0? d[0] : this.createElement('div',container,'document-nibs unselectable');
-		this._img = this.createImage(icon?icon:Ext.BLANK_IMAGE_URL,this._div,'action','width: 17px; background: yellow; height: 17px; position: absolute;');
-		this._img._annotation = this;
-		this._menu = this._buildMenu();
-		Ext.get(this._img).on('click', this.onClick, this);
+		me._div = d.length>0? d[0] : me.createElement('div',container,'document-nibs unselectable');
+		me._img = me.createImage(icon?icon:Ext.BLANK_IMAGE_URL,me._div,
+				'action',
+				'width: 17px; background: yellow; height: 17px; position: absolute;'+(me._isVisible?'':'visibility:hidden;'));
+		me._img._annotation = me;
+		me._menu = me._buildMenu();
+		Ext.get(me._img).on('click', me.onClick, me);
 	},
 	
 	cleanup: function(){
-		this._cmp.un('resize', this.onResize, this);
-		Ext.EventManager.removeResizeListener(this.onResize, this);
-		Ext.get(this._img).remove();
-		this._menu.destroy();
-		delete this._menu;
-		delete this._record;
+		var me = this;
+		me._cmp.un('resize', me.onResize, me);
+		Ext.EventManager.removeResizeListener(me.onResize, me);
+		Ext.get(me._img).remove();
+		me._menu.destroy();
+		delete me._menu;
+		delete me._record;
+	},
+	
+	testFilter: function(filter){
+		if(!filter || !filter.types || !filter.groups) return false;
+		
+		if(filter.types.toString().indexOf(this.$className)<0){
+			return false;
+		}
+		
+		
+		var p = this._record.get('Creator'),
+			pass = false,
+			targets = {}, 
+			isUnknown = /unresolved/i;
+			
+		if(filter.includeMe == p){
+			return true;
+		}
+		
+		Ext.each(filter.groups, function(g){
+			targets[g.get('Username')] = true;
+			Ext.each(g.get('friends'),function(f){
+				if(isUnknown.test(f.$className))return;
+				targets[f.get('Username')]=true;
+			},
+			this);
+		},
+		this);
+
+		Ext.each(this._record.get('sharedWith'), function(f){
+			//backwards compatibility 
+			if(typeof(f)=='string') {
+				if(targets[f]){
+					pass = true;
+					return false;
+				}
+			}
+			else if( targets[f.get('Username')] ){
+				pass = true;
+				return false;
+			}
+
+		}, this);		
+		
+		
+		return pass;
+	},
+	
+	updateFilterState: function(newFilter){
+		var v = this.testFilter(newFilter);
+		if(v != this._isVisible){
+			this._isVisible = v;
+			this.visibilityChanged(v);
+		}
+	},
+	
+	visibilityChanged: function(show){
+		// console.log('vis change');
+		var i = Ext.get(this._img);
+		show? i.show() : i.hide();
 	},
 	
 	onResize : function(e){

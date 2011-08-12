@@ -2,6 +2,11 @@
 
 Ext.define( 'NextThought.view.modes.Container', {
 	extend: 'Ext.panel.Panel',
+	requires: [
+			'NextThought.view.modes.Home',
+			'NextThought.view.modes.Reader',
+			'NextThought.view.modes.Stream'
+			],
 	
 	// plain: true,
 	border: false, 
@@ -20,9 +25,9 @@ Ext.define( 'NextThought.view.modes.Container', {
 		var m = this, 
 			s = function(){ m.items.get(1).toggleButton.toggle(true); };
 		
-    	this.add(Ext.create('NextThought.view.modes.Home',   {id: 'a'} ));
-    	this.add(Ext.create('NextThought.view.modes.Reader', {id: 'b'} ));
-    	this.add(Ext.create('NextThought.view.modes.Stream', {id: 'c'} ));
+    	this.add({id: 'a', xtype: 'home-mode-container'});
+    	this.add({id: 'b', xtype: 'reader-mode-container'});
+    	this.add({id: 'c', xtype: 'stream-mode-container'});
 
     	setTimeout(s,100);
 	}

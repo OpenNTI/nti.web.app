@@ -8,22 +8,25 @@ Ext.define('NextThought.util.AnnotationUtils',
 		getPathTo: function(element) {
 			var nodeName = element.nodeName;
 			
-		    if (element.id && element.id.indexOf('ext-')!=0)
+		    if (element.id && !/ext\-|a\d+/i.test(element.id))
 		        return 'id("'+element.id+'")';
 		    if (element===document.body)
-		        return nodeName;
+		        throw 'too far!';
 		
 			if (nodeName == '#text') {
 				nodeName = 'text()';
 			}
 		
-		    var ix= 0;
-		    var siblings= element.parentNode.childNodes;
-		    for (var i= 0; i<siblings.length; i++) {
-		        var sibling= siblings[i];
+		    var i=0,
+		    	ix= 0,
+		    	siblings= element.parentNode.childNodes,
+		    	len = siblings.length;
+
+		    for (; i<len; i++) {
+		        var sibling = siblings[i];
 		        if (sibling===element)
 		            return this.getPathTo(element.parentNode)+'/'+nodeName+'['+(ix+1)+']';
-		        if (/*sibling.nodeType===1 && */sibling.nodeName===element.nodeName)
+		        if (sibling.nodeName==element.nodeName)
 		            ix++;
 		    }
 		},
@@ -52,8 +55,10 @@ Ext.define('NextThought.util.AnnotationUtils',
 		
 		
 		isBlockNode: function(n) {
-			var e = Ext.get(n);
-			return (e && e.getStyle('display')=='block' && e.getStyle('position')=='static'); 
+			var e = Ext.get(n),
+				p = /static|relative/i,
+				d = /block|box/i;
+			return (e && d.test(e.getStyle('display')) && p.test(e.getStyle('position'))); 
 		},
 		
 		

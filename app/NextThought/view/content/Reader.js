@@ -8,10 +8,10 @@ Ext.define('NextThought.view.content.Reader', {
 			   'NextThought.util.AnnotationUtils'],
 	cls: 'x-reader-pane',
 	
-	items: [{cls:'x-panel-reset', id:'NTIContent', margin: '0 0 0 50px'}],
-	_highlights: [],
-	_notes: [],
+	items: [{cls:'x-panel-reset', margin: '0 0 0 50px'}],
+	_annotations: [],
 	_tracker: null,
+	_filter: null,
 	
     initComponent: function(){
     	this.addEvents('edit-note');
@@ -31,6 +31,16 @@ Ext.define('NextThought.view.content.Reader', {
 			]
 		});
     },
+    
+    
+    applyFilter: function(newFilter){
+    	// console.log('applyFilter:', newFilter);
+    	this._filter = newFilter;
+    	Ext.each(this._annotations,function(a){
+    		a.updateFilterState(this._filter);
+    	},this);
+    },
+
 
 	render: function(){
 		this.callParent(arguments);
@@ -64,16 +74,11 @@ Ext.define('NextThought.view.content.Reader', {
 	
 	
 	clearAnnotations: function(){
-		//same syntax, so just concat and go through all of these
-		var stuffToCleanup = this._highlights.concat(this._notes);
-		
-		this._highlights = [];
-		this._notes = [];
-
-		Ext.each(stuffToCleanup, function(v){
+		Ext.each(this._annotations, function(v){
 			v.cleanup();
 			delete v;
 		});
+		this._annotations = [];
 	},
 	
 	addNote: function(range){
@@ -106,7 +111,7 @@ Ext.define('NextThought.view.content.Reader', {
 	
 	
 	_createHighlightWidget: function(range, record){
-		this._highlights.push(
+		this._annotations.push(
 					Ext.create(
 						'NextThought.view.widgets.Highlight', 
 						range, record,
@@ -116,7 +121,7 @@ Ext.define('NextThought.view.content.Reader', {
 	
 	_createNoteWidget: function(record, edit){
 		try{ 
-			this._notes.push(
+			this._annotations.push(
 					Ext.create(
 						'NextThought.view.widgets.Note', 
 						record,
@@ -125,7 +130,7 @@ Ext.define('NextThought.view.content.Reader', {
 			return true;
 		}
 		catch(e){
-			
+			console.log('Error notes:',e);
 		}
 		return false;
 	},
@@ -296,7 +301,7 @@ Ext.define('NextThought.view.content.Reader', {
 				                    return 'href="'+b+g+'"';
 				                });
 	        	
-	        	p.update(c);
+	        	p.update('<div id="NTIContent">'+c+'</div>');
 	            this.el.select('#NTIContent .navigation').remove();
 	            this.el.select('#NTIContent .breadcrumbs').remove();
 	            this.el.select('.x-reader-pane a[href]').on('click',this._onClick,this,{book: book, scope:this,stopEvent:true});

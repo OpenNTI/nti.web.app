@@ -44,6 +44,7 @@ Ext.define('NextThought.controller.Login', {
 	},
 	
 	attemptLogin: function(values){
+		values = this.sanitizeValues(values);
 		//try to auth for future calls to server
 		var s = _AppConfig.server,
 			a = Base64.basicAuthString(values.username, values.password);
@@ -67,6 +68,16 @@ Ext.define('NextThought.controller.Login', {
 		Ext.copyTo(_AppConfig.server, values, 'username');
 		
 		return true;
+	},
+	
+	sanitizeValues: function(values){
+		var u = values ? values.username:'';
+		
+		if(u.indexOf('@')<0){
+			values.username = u+'@nextthought.com';
+		}
+		
+		return values;
 	},
 
     loginClicked: function(button) {

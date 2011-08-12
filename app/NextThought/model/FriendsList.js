@@ -2,6 +2,7 @@ Ext.require('NextThought.proxy.UserDataLoader');
 
 Ext.data.Types.FRIEND_LIST = {
     convert: function(v) {
+    	console.log('convert', arguments);
         return UserDataLoader.parseItems(v);
     },
     sortType: function(v) {
