@@ -7,10 +7,9 @@ Ext.define('NextThought.view.widgets.FilterControlPanel', {
 			],
 
 	width: MIN_SIDE_WIDTH,
-	// layout: 'vbox',
 	
 	constructor: function(){
-		this.addEvents('filter-changed');
+		this.addEvents('filter-changed','filter-control-loaded');
 		this.callParent(arguments);
 	},
 
@@ -75,5 +74,8 @@ Ext.define('NextThought.view.widgets.FilterControlPanel', {
 		form.add({ xtype:'checkbox', padding: p, boxLabel: 'Notes', model: 'NextThought.view.widgets.Note' });
 		
 		this.add(form);
+		
+		
+		this.fireEvent('filter-control-loaded',this.getId());
 	}
 });

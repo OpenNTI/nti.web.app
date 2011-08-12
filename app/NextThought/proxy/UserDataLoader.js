@@ -55,7 +55,6 @@ Ext.define('NextThought.proxy.UserDataLoader',{
 				d = _AppConfig.server.data,
 				u = _AppConfig.server.username;
 				url = h+d+'users/'+u+'/FriendsLists/';
-				
 			// console.log("inside getGroups", url);	
 			// debugger;	
 				

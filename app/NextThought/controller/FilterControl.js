@@ -29,6 +29,9 @@ Ext.define('NextThought.controller.FilterControl', {
     
 	init: function() {
     	this.control({
+    		'filter-control':{
+    			'filter-control-loaded': this.setState
+    		},
     		'filter-control checkboxfield[name="allgroupsbutton"]': {
     			change: this.allGroupsSelected
     		},
@@ -55,6 +58,20 @@ Ext.define('NextThought.controller.FilterControl', {
     	return true;
     },
     
+    
+    setState: function(id){
+    	if(!this.beginChanges(id))
+    		return;
+		
+		//TODO: rebuild saved state
+		
+		this.getAllGroupsButton(id).setValue(true);
+    	this.getAllTypesButton(id).setValue(true);
+		Ext.each(this.getGroups(id), function(c){ c.setValue(true); },this);
+		Ext.each(this.getTypes(id), function(c){ c.setValue(true); },this);
+		
+		this.rebuildFilter(id);
+    },
     
     
     allGroupsSelected: function(me, nv, ov, opts){
@@ -111,7 +128,8 @@ Ext.define('NextThought.controller.FilterControl', {
 	},
 	
 	rebuildFilterBuffered: function(id){
-		var filter = {groups:[],types:[]}, 
+		var isUnknown = /unresolved/i,
+			filter = {groups:{},types:[], shareTargets:{}}, 
 			cmp = Ext.getCmp(id), 
 			groups = this.getGroups(id),
 			types = this.getTypes(id);
@@ -123,9 +141,16 @@ Ext.define('NextThought.controller.FilterControl', {
 				return;
 			}
 			
-			filter.groups.push(g.record);
+			Ext.each(g.record.get('friends'),function(f){
+				// if(isUnknown.test(f.$className))return;
+				filter.shareTargets[f.get('Username')]=true;
+			},
+			this);
+			
+			filter.groups[g.record.get('Username')] = g.record;
 		},
 		this);
+		
 		
 		if(filter.includeMe){
 			filter.includeMe = _AppConfig.server.username;

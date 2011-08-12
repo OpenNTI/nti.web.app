@@ -85,8 +85,9 @@ Ext.define( 'NextThought.view.widgets.Note', {
 			c = me._noteContainer,
 			a = me._anchorNode,
 			i = me._originalPadding,
+			w = Ext.get(Ext.query('#nticontent .page-contents')[0]).getWidth(),
 			h = 0;
-		c.setWidth(a.getWidth());
+		c.setWidth(w);
 		// a.setStyle('border', '1px solid green');
 		
 		h = c.getHeight();
@@ -94,7 +95,7 @@ Ext.define( 'NextThought.view.widgets.Note', {
 		a.setStyle('padding-bottom',(i+h)+'px');
 
 		// c.alignTo(a, 'tl-bl?',[0,-h]);
-		c.moveTo(a.getLeft(),a.getBottom()-h);
+		c.moveTo(p.getLeft()+p.getPadding('l'),a.getBottom()-h);
 		Ext.get(me._img).moveTo(p.getLeft(), c.getTop());
 		
 		//always move to the end

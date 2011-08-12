@@ -4,6 +4,7 @@ Ext.define('NextThought.model.UnresolvedFriend', {
     idProperty: 'Username',
     // belongsTo: 'NextThought.model.FriendsList',
     fields: [
-        { name: 'Username', type: 'string' }
+        { name: 'Username', type: 'string' },
+        { name: 'avatarURL', type: 'string' }
     ]
 });

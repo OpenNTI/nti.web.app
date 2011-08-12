@@ -17,7 +17,7 @@ Ext.define('NextThought.view.widgets.Tracker', {
 	_offsetY: 0,
 
 
-	constructor: function(container, body){
+	constructor: function(cmp,container, body){
 		this._locationProvider = Ext.getCmp('breadcrumb');
 		this._parent = container;
 		this._body	 = body;
@@ -37,6 +37,7 @@ Ext.define('NextThought.view.widgets.Tracker', {
 		b.on('mousemove', h, this);
 		b.on('mouseover', h, this);
 		b.on('mouseout', h, this);
+		cmp.on('resize', h, this);
 		
 		this._locationProvider.on('change',this._onChangeLocation, this);
 		Ext.EventManager.onWindowResize(this._onResize, this);

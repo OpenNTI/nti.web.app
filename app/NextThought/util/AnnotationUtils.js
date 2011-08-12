@@ -8,7 +8,7 @@ Ext.define('NextThought.util.AnnotationUtils',
 		getPathTo: function(element) {
 			var nodeName = element.nodeName;
 			
-		    if (element.id && !/ext\-|a\d+/i.test(element.id))
+		    if (element.id && !/ext\-|a\d+|math/i.test(element.id))
 		        return 'id("'+element.id+'")';
 		    if (element===document.body)
 		        throw 'too far!';
@@ -56,7 +56,7 @@ Ext.define('NextThought.util.AnnotationUtils',
 		
 		isBlockNode: function(n) {
 			var e = Ext.get(n),
-				p = /static|relative/i,
+				p = /static/i,
 				d = /block|box/i;
 			return (e && d.test(e.getStyle('display')) && p.test(e.getStyle('position'))); 
 		},

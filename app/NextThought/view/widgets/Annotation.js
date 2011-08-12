@@ -40,46 +40,28 @@ Ext.define( 'NextThought.view.widgets.Annotation', {
 	},
 	
 	testFilter: function(filter){
-		if(!filter || !filter.types || !filter.groups) return false;
-		
-		if(filter.types.toString().indexOf(this.$className)<0){
+		if(	!filter 
+		 || !filter.types
+		 || !filter.groups
+		 || filter.types.toString().indexOf(this.$className)<0)
 			return false;
-		}
-		
 		
 		var p = this._record.get('Creator'),
-			pass = false,
-			targets = {}, 
-			isUnknown = /unresolved/i;
+			targets = filter.shareTargets,
+			pass = !!targets[p];
 			
 		if(filter.includeMe == p){
 			return true;
 		}
 		
-		Ext.each(filter.groups, function(g){
-			targets[g.get('Username')] = true;
-			Ext.each(g.get('friends'),function(f){
-				if(isUnknown.test(f.$className))return;
-				targets[f.get('Username')]=true;
-			},
-			this);
+		Ext.each(this._record.get('sharedWith'), function(f){
+			if(pass)return false;
+			//backwards compatibility 
+			if(typeof(f)=='string') { if(targets[f]) pass = true; }
+			//future format:
+			else if( targets[f.get('Username')] ) pass = true;
 		},
 		this);
-
-		Ext.each(this._record.get('sharedWith'), function(f){
-			//backwards compatibility 
-			if(typeof(f)=='string') {
-				if(targets[f]){
-					pass = true;
-					return false;
-				}
-			}
-			else if( targets[f.get('Username')] ){
-				pass = true;
-				return false;
-			}
-
-		}, this);		
 		
 		
 		return pass;

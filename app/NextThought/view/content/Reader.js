@@ -14,7 +14,7 @@ Ext.define('NextThought.view.content.Reader', {
 	_filter: null,
 	
     initComponent: function(){
-    	this.addEvents('edit-note');
+    	this.addEvents('edit-note','publish-contributors');
    		this.callParent(arguments);
 		this._contextMenu = Ext.create('Ext.menu.Menu', {
 			items : [
@@ -54,7 +54,7 @@ Ext.define('NextThought.view.content.Reader', {
 
 		if(!this._tracker)
 			this._tracker = Ext.create(
-				'NextThought.view.widgets.Tracker', d, d.firstChild);
+				'NextThought.view.widgets.Tracker', this, d, d.firstChild);
 
 		this.el.on('mouseup', this._onContextMenuHandler, this);
 	},
@@ -188,13 +188,15 @@ Ext.define('NextThought.view.content.Reader', {
     },
     
     _objectsLoaded: function(bins) {
-    	
+    	var contributors = {};
     	Ext.each(bins.Note, 
     		function(r){
     			if (!this._createNoteWidget(r)){
     				console.log('removing bad note');
 	    			r.destroy();
+	    			return;
     			}
+				contributors[r.get('Creator')] = true;
     		},
     		this
     	)
@@ -205,11 +207,16 @@ Ext.define('NextThought.view.content.Reader', {
     			if (!range){
     				console.log('removing bad highlight');
 	    			r.destroy();
+	    			return;
     			} 
-    			else this._createHighlightWidget(range, r);
+    			contributors[r.get('Creator')] = true;
+    			this._createHighlightWidget(range, r);
     		},
     		this
     	);
+    	
+    	
+    	this.fireEvent('publish-contributors',contributors);
 	},
     
     _buildRangeFromRecord: function(r) {

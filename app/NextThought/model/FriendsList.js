@@ -1,14 +1,17 @@
 Ext.require('NextThought.proxy.UserDataLoader');
 
 Ext.data.Types.FRIEND_LIST = {
-    convert: function(v) {
-    	console.log('convert', arguments);
+	type: 'FriendList',
+    convert: function(v,o) {
+    	if(!/FriendsList/i.test(o.$className))
+    		console.log('convert', arguments);
+    		
         return UserDataLoader.parseItems(v);
     },
     sortType: function(v) {
+    	console.log('sort by FriendList:',arguments);
         return '';
-    },
-    type: 'FriendList'
+    }
 };
 
 

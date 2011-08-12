@@ -6,17 +6,22 @@ Ext.define('NextThought.controller.Application', {
 	views: [
 		'modes.Reader',
 		'navigation.Breadcrumb',
-		'widgets.Tracker',
 		'widgets.Highlight',
 		'widgets.Note',
 		'widgets.NoteEditor',
-		'content.Reader'
+		'widgets.PeopleList',
+		'content.Reader',
+		'widgets.Tracker'
 	],
 	
 	refs: [
         {
             ref: 'reader',
             selector: 'reader-panel'
+        },
+        {
+            ref: 'readerPeople',
+            selector: 'reader-mode-container people-list'
         }
     ],
 
@@ -37,6 +42,10 @@ Ext.define('NextThought.controller.Application', {
     	 	'reader-panel':{
     	 		'edit-note': function(note){
     	 			Ext.create('NextThought.view.widgets.NoteEditor',{record: note}).show();
+    	 		},
+    	 		
+    	 		'publish-contributors': function(c){
+    	 			this.getReaderPeople().setContributors(c);
     	 		}
     	 	},
     	 	
@@ -60,6 +69,7 @@ Ext.define('NextThought.controller.Application', {
     
     readerFilterChanged: function(newFilter){
     	this.getReader().applyFilter(newFilter);
+    	this.getReaderPeople().applyFilter(newFilter);
     },
     
     

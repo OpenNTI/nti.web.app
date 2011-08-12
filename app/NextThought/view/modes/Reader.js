@@ -4,7 +4,8 @@ Ext.define( 'NextThought.view.modes.Reader', {
 	extend: 'NextThought.view.modes.Mode',
 	alias: 'widget.reader-mode-container',
 	requires: [
-			'NextThought.view.widgets.FilterControlPanel'
+			'NextThought.view.widgets.FilterControlPanel',
+			'NextThought.view.widgets.ReaderItemsPanel'
 			],
 	
     initComponent: function(){
@@ -30,7 +31,7 @@ Ext.define( 'NextThought.view.modes.Reader', {
     		items: Ext.create('NextThought.view.content.Reader', {id:'myReader'})
     	}); 
     	
-    	this.add({ region: 'east', id:'east-book', xtype: 'rightColumn'});
+    	this.add({ region: 'east', id:'east-book', xtype: 'rightColumn', columnWidget: {xtype:'reader-items'} });
 		this.add({ /*xtype:'tbspacer',*/ flex:1, focusable: false, dockedItems: bb });
     }
     
