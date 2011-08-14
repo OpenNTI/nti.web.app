@@ -32,10 +32,9 @@ Ext.define('NextThought.proxy.UserDataLoader',{
 				scope: this,
 				async: !!callback,
 				callback: function(o,success,r){
-					if(!callback)return;
 					
 					if(!success){
-						callback();
+						if(callback)callback();
 						return;
 					}
 					
@@ -45,10 +44,13 @@ Ext.define('NextThought.proxy.UserDataLoader',{
 					if(bins.User.length>1)
 						console.log('WARNING: many matching users:', userId, bins.User);
 
-					callback(cache[userId] = bins.User[0]);
+					cache[userId] = bins.User[0];
+
+					if(!callback)return;
+						callback(cache[userId]);
 				}
 			});
-			
+
 			return cache[userId];
 		},
 		

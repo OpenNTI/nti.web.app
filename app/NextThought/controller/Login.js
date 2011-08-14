@@ -1,7 +1,10 @@
 
 Ext.define('NextThought.controller.Login', {
     extend: 'Ext.app.Controller',
-    requires:['NextThought.util.Base64'],
+    requires:[
+    		'NextThought.util.Base64',
+    		'NextThought.proxy.UserDataLoader'
+    		],
 
 	views: [
         'LoginWindow'
@@ -66,7 +69,9 @@ Ext.define('NextThought.controller.Login', {
 		//Auto inject all future request with the auth string
 		Ext.Ajax.defaultHeaders = Ext.Ajax.defaultHeaders || {};
 		Ext.Ajax.defaultHeaders['Authorization']= a;
-		Ext.copyTo(_AppConfig.server, values, 'username');
+		Ext.copyTo(s, values, 'username');
+		
+		s.userObject = UserDataLoader.resolveUser(values.username);
 		
 		return true;
 	},

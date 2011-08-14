@@ -38,13 +38,17 @@ Ext.define('NextThought.view.widgets.TopControls', {
     	
     	// this.add({ xtype:'tbspacer', flex:1 });
     	
+    	var u = _AppConfig.server.userObject,
+    		n = u.get('realname'),
+    		a = u.get('avatarURL');
+    	
     	this.add({ width: MIN_SIDE_WIDTH, height: 25, border: false,
     		// border: true, 
     		html: [
     		'<div style="float: right;  white-space: nowrap; margin-right: 5px">',
-    			'<span style="padding: 5px; padding-top: 6px;font-size: 12px; vertical-align: middle; cursor: pointer;">'+_AppConfig.server.username+'</span> ',
+    			'<span style="padding: 5px; padding-top: 6px;font-size: 12px; vertical-align: middle; cursor: pointer;">'+n+'</span> ',
     			' <span style="width: 24px; height: 23px; padding-top: 2px; display: inline-block; text-align: center; cursor: pointer; vertical-align: middle;margin-top: 2px; background: url(\'resources/images/notify.png\') no-repeat -25px 0px;">0</span> ',
-    			' <img src="resources/faces/me.jpg" width=24 height=24 valign=middle> ',
+    			' <img src="'+a+'" width=24 height=24 valign=middle> ',
     			' <img src="resources/images/gear.png" width=19 height=19 valign=middle>',
     		'</div>'
     		].join('') });
