@@ -161,6 +161,11 @@ Ext.define('NextThought.controller.Application', {
 				success: function(newRecord){
 					this.reloadGroups();
 					win.close();
+				},
+				failed: function(){
+					console.log('failed to save group',arguments);
+					win.close();
+					this.reloadGroups();
 				}
 			});
 			return;

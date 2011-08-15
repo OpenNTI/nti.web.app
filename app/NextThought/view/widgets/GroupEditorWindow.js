@@ -101,5 +101,6 @@ Ext.define('NextThought.view.widgets.GroupEditorWindow', {
     	this._store.add(items);
     	sel.setValue('');
     	sel.clearInvalid();
+    	sel.collapse();
     }
 });
