@@ -28,7 +28,7 @@ Ext.define('NextThought.view.widgets.MiniStreamList', {
 		    run: function(){
 		    	if(!this._containerId)return;
 		    	
-		        UserDataLoader.getStream(
+		        UserDataLoader.getRecursiveStream(
 		        	this._containerId,{
 		        	scope: this,
 		        	success: function(stream){

@@ -85,6 +85,7 @@ Ext.define( 'NextThought.view.widgets.Note', {
 	},
 	
 	onResize : function(){
+		try{
 		var me= this,
 			p = Ext.get(me._cnt),
 			c = me._noteContainer,
@@ -108,5 +109,9 @@ Ext.define( 'NextThought.view.widgets.Note', {
 			me._cnt.appendChild(c.dom);
 			
 		me._cmp.doLayout();
+		}
+		catch(e){
+			console.log(e);
+		}
 	}
 });

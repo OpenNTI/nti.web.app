@@ -116,6 +116,11 @@ Ext.define('NextThought.view.widgets.Highlight', {
 	},
 	
 	render: function(){
+		if(!this._sel){
+			this.cleanup();
+			return;
+		}
+		
 		var r = this._sel.getBoundingClientRect(),
 			s = this._sel.getClientRects(),
 			c = this._canvas,

@@ -43,8 +43,10 @@ Ext.define( 'NextThought.view.widgets.Annotation', {
 		me._cmp.un('resize', me.onResize, me);
 		Ext.EventManager.removeResizeListener(me.onResize, me);
 		Ext.get(me._img).remove();
-		me._menu.destroy();
-		delete me._menu;
+		if(me._menu){
+			me._menu.destroy();
+			delete me._menu;
+		}
 		delete me._record;
 	},
 	
