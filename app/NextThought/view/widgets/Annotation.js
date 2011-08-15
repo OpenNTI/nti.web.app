@@ -8,13 +8,18 @@ Ext.define( 'NextThought.view.widgets.Annotation', {
 	_cmp: null,
 	_menu: null,
 	_record: null,
+	_isMine: false,
 	
 	constructor: function(record, container, component, icon) {
 		var me = this;
+		me.addEvents('share-with');
+		me.enableBubble('share-with');
+		
 		me._cnt = container;
 		me._cmp = component;
 		me._record = record;
 		me._isVisible = record.phantom || me.testFilter(component._filter);
+		me._isMine = record.get('Creator') == _AppConfig.server.username;
 		me._cmp.on('resize', me.onResize, me);
 		me._cmp.on('afterlayout',Ext.Function.createBuffered(me.onResize,100,me));
 		Ext.EventManager.onWindowResize(me.onResize, me);
@@ -27,6 +32,10 @@ Ext.define( 'NextThought.view.widgets.Annotation', {
 		me._img._annotation = me;
 		me._menu = me._buildMenu();
 		Ext.get(me._img).on('click', me.onClick, me);
+	},
+	
+	getBubbleTarget: function(){
+		return this._cmp;
 	},
 	
 	cleanup: function(){
@@ -98,6 +107,21 @@ Ext.define( 'NextThought.view.widgets.Annotation', {
 	
 	
 	_buildMenu: function(items) {
+		//if(!this._isMine)return null;
+		var m = this;
+
+		if(items){
+			if(items.length) items.push('-');
+			items.push({
+				text: 'Share With',
+				handler: function(){
+					m.fireEvent('share-with',m._record);
+				}
+			},{
+				text: 'Get Shared Info',
+				handler: function(){}
+			});
+		}
 		return Ext.create('Ext.menu.Menu',{items: items});
 	},
 	

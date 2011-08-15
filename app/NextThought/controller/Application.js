@@ -4,20 +4,27 @@ Ext.define('NextThought.controller.Application', {
     extend: 'Ext.app.Controller',
 
 	views: [
+		'Viewport',
 		'modes.Reader',
+		'modes.Groups',
 		'navigation.Breadcrumb',
 		'widgets.Highlight',
 		'widgets.Note',
 		'widgets.NoteEditor',
 		'widgets.PeopleList',
 		'widgets.RelatedItemsList',
+		'widgets.ShareWithWindow',
 		'widgets.MiniStreamList',
+		'widgets.GroupEditorWindow',
 		'content.Reader',
 		'widgets.Tracker'
 	],
 	
 	refs: [
         {
+            ref: 'viewport',
+            selector: 'master-view'
+        },{
             ref: 'reader',
             selector: 'reader-panel'
         },{
@@ -45,32 +52,18 @@ Ext.define('NextThought.controller.Application', {
     	 
     	 
     	 this.control({
+    	 	'master-view':{
+				'edit-note': this.editNote,
+				'share-with': this.shareWith
+    	 	},
+    	 	
     	 	'breadcrumbbar':{
     	 		'navigate': this.navigate
     	 	},
     	 	
     	 	'reader-panel':{
-    	 		'edit-note': function(note){
-    	 			Ext.create('NextThought.view.widgets.NoteEditor',{record: note}).show();
-    	 		},
-    	 		
-    	 		'location-changed': function(id){
-    	 			this.getReaderStream().setContainer(id);
-    	 			this.getReaderRelated().setLocation(
-    	 				this.getReaderBreadcrumb().getLocation());
-    	 		},
-    	 		
-    	 		'publish-contributors': function(c){
-    	 			var t = this.getReaderPeople(),
-    	 				b = Ext.Function.createBuffered(t.setContributors,100,t,[c]);
-    	 			
-    	 			for(k in c){
-    	 				if(c.hasOwnProperty(k))
-	    	 				UserDataLoader.resolveUser(k,b);
-    	 			}
-    	 			
-    	 			b();
-    	 		}
+    	 		'location-changed': this.readerLocationChanged,
+    	 		'publish-contributors': this.readerPublishedContributors
     	 	},
     	 	
     	 	'reader-mode-container related-items':{
@@ -87,12 +80,71 @@ Ext.define('NextThought.controller.Application', {
     	 	
     	 	'reader-mode-container filter-control':{
     	 		'filter-changed': this.readerFilterChanged
+    	 	},
+    	 	
+    	 	'sharewithwindow button':{
+    	 		'click': this.shareWithButton
+    	 	},
+    	 	
+    	 	'groups-mode-container dataview':{
+    	 		'itemdblclick':function(a, rec){
+    	 			console.log(arguments);
+    	 			Ext.create('NextThought.view.widgets.GroupEditorWindow',{record: rec}).show();
+    	 		}
+    	 	},
+    	 	'groupeditor':{
+    	 		
     	 	}
     	 });
     },
     
     onLaunch: function(){
     },
+    
+    
+    shareWithButton: function(btn){
+		var win = btn.up('window'),
+			form= win.down('form'),
+			shbx= win.down('sharewithinput'),
+			rec = win.record;
+		
+		if(btn.isCancel){
+			win.close();
+		}
+		
+		if(!form.getForm().isValid()){
+			return false;
+		}
+		
+		rec.set('shareWith',shbx.valueModels);
+		rec.save({
+			scope: this,
+			success:function(newRecord,operation){
+				win.close();
+				rec.fireEvent('updated',newRecord);
+			}
+		});
+	},
+    
+    
+    readerLocationChanged: function(id){
+		this.getReaderStream().setContainer(id);
+		this.getReaderRelated().setLocation(
+			this.getReaderBreadcrumb().getLocation());
+	},
+	
+	
+	readerPublishedContributors: function(c){
+		var t = this.getReaderPeople(),
+			b = Ext.Function.createBuffered(t.setContributors,100,t,[c]);
+		
+		for(k in c){
+			if(c.hasOwnProperty(k))
+ 				UserDataLoader.resolveUser(k,b);
+		}
+		
+		b();
+	},
     
     
     readerFilterChanged: function(newFilter){
@@ -109,13 +161,15 @@ Ext.define('NextThought.controller.Application', {
     
     onNoteAction: function(btn, event){
     	var p = btn.up('notepanel');
-    		r = p._owner;
-    		c = p._annotation;
-    	if(btn.isEdit){
-    		r.fireEvent('edit-note', c.getRecord());
-    	}
-    	else if(btn.isDelete){
+    		r = p._owner,
+    		e = btn.eventName,
+    		rec = p._annotation.getRecord();
+    	
+    	if(/delete/i.test(e)){
     		c.remove();
+    	}
+    	else {
+	    	this.getViewport().fireEvent(e, rec);
     	}
     },
     
@@ -139,6 +193,13 @@ Ext.define('NextThought.controller.Application', {
     	}
     },
     
+    shareWith: function(record){
+    	Ext.create('NextThought.view.widgets.ShareWithWindow',{record: record}).show();
+    },
+    
+    editNote: function(note){
+		Ext.create('NextThought.view.widgets.NoteEditor',{record: note}).show();
+ 	},
     
     navigate: function(book, ref){
     	this.getReader().setActive(book, ref);

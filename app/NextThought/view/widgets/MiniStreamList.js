@@ -68,7 +68,6 @@ Ext.define('NextThought.view.widgets.MiniStreamList', {
 		
 		if(!this._stream)return;
 		
-		
 		for(k in this._stream){
 			if(!this._stream.hasOwnProperty(k))continue;
 			change = this._stream[k];

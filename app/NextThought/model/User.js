@@ -1,7 +1,11 @@
-Ext.define('NextThought.model.User', {
+Ext.define(	'NextThought.model.User', {
     extend: 'Ext.data.Model',
-    requires: ['NextThought.proxy.Rest'],
-    idProperty: 'OID',
+    requires: [
+    		'NextThought.proxy.Rest',
+    		'NextThought.proxy.UserSearch'
+	],
+    // idProperty: 'OID',
+    idProperty: 'id',
     // belongsTo: 'NextThought.model.FriendsList',
     fields: [
         { name: 'Last Modified', type: 'date' },
@@ -21,8 +25,7 @@ Ext.define('NextThought.model.User', {
          */
     ],
     proxy: {
-    	type: 'nti',
-    	collectionName: 'Users',
+    	type: 'usersearch',
     	model: 'NextThought.model.User'
     }
 });

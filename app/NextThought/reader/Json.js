@@ -11,14 +11,19 @@ Ext.define('NextThought.reader.Json', {
 	readRecords: function(data) {
 		var me = this,
 			mName = me.model.$className,
-			i = data.Items,
+			i = me.root===false? data : data.Items,
 			records = [];
 
 		// if(NextThought.isDebug) {
-			// console.log('read records:',mName, me, arguments);
+			// console.log('read records:',mName, 
+			// 'this:', me, 
+			// 'root:', me.root,
+			// 'i', i, 
+			// 'args:',arguments);
 		// }
 		
-		if(Ext.isArray(data)){
+		
+		if(Ext.isArray(data) || me.hasId){
 			return this.callParent(arguments);
 		}
 		//special case where data returns to us after saving without an array
@@ -26,9 +31,6 @@ Ext.define('NextThought.reader.Json', {
 			return this.callParent([data]);
 		}
 		
-		else if (me.hasId) {
-			return this.callParent(arguments);
-		}
 		
 
 		
@@ -42,9 +44,10 @@ Ext.define('NextThought.reader.Json', {
 			}
 		}	
 		
-		if(NextThought.isDebug) {
-			console.log('read records result:',mName, records);
-		}
+		// if(NextThought.isDebug) {
+			// console.log('read records result:',mName, records);
+		// }
+		
 		return this.callParent([records]);
 	},
 	

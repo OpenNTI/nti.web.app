@@ -59,10 +59,13 @@ Ext.define( 'NextThought.view.widgets.Note', {
 	},
 	
 	_buildMenu: function(){
-		var items = [{
+		var items = [];
+		
+		if(this._isMine)
+			items.push({
 				text : 'Remove Note',
 				handler: Ext.bind(this.remove, this)
-			}];
+			});
 		return this.callParent([items]);
 	},
 	

@@ -1,6 +1,7 @@
 
 Ext.define('NextThought.view.Viewport', {
 	extend: 'Ext.container.Viewport',
+	alias: 'widget.master-view',
 	
 	border: false, 
 	frame: false,

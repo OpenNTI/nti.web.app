@@ -15,6 +15,7 @@ Ext.define('NextThought.view.content.Reader', {
 	
     initComponent: function(){
     	this.addEvents('edit-note','publish-contributors','location-changed');
+    	this.enableBubble('edit-note');
    		this.callParent(arguments);
 		this._contextMenu = Ext.create('Ext.menu.Menu', {
 			items : [

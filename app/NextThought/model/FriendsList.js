@@ -55,13 +55,10 @@ Ext.define('NextThought.model.FriendsList', {
 			realname: "List1"
 		*/
     ],
-    hasMany:[
-    	{ model: 'NextThought.model.User', name: 'users' },
-        { model: 'NextThought.model.UnresolvedFriend', name: 'unresolved' }
-    ],
     proxy: {
     	type: 'nti',
     	collectionName: 'FriendsLists',
+    	reader: { type: 'nti', hasContainerId: true, root: false },
     	model: 'NextThought.model.FriendsList'
     }
 });

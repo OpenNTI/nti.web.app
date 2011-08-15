@@ -16,10 +16,10 @@ Ext.define('NextThought.controller.Login', {
     		'loginwindow': {
     			beforeshow: function(win,opts){
     				//do remember me login stuff here: 
-    				// if(this.attemptLogin(_AppConfig.server)){
-    					// win.callback();
-    					// return false;
-    				// } 
+    				if(this.attemptLogin(_AppConfig.server)){
+    					win.callback();
+    					return false;
+    				} 
     			}
     		},
             'loginwindow button[actionName=login]': {

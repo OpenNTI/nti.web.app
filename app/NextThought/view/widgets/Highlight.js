@@ -36,17 +36,24 @@ Ext.define('NextThought.view.widgets.Highlight', {
 	},
 	
 	_buildMenu: function(){
-		var items = [{
+		var items = [];
+		
+		if(this._isMine) {
+			items.push({
 				text : 'Remove Highlight',
 				handler: Ext.bind(this.remove, this)
 			},{
 				text : 'Change Color',
 				menu: [Ext.create('Ext.ColorPalette', {
-	                listeners: { scope: this, select: this._colorSelected }})]
-			},{
-				text : 'Add a Note',
-				handler: Ext.bind(this._addNote, this)
-		}];
+                listeners: { scope: this, select: this._colorSelected }})]
+			});
+		}
+		
+		items.push({
+			text : 'Add a Note',
+			handler: Ext.bind(this._addNote, this)
+		});
+		
 		return this.callParent([items]);
 	},
 	

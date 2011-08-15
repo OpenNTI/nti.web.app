@@ -5,7 +5,8 @@ Ext.define( 'NextThought.view.modes.Container', {
 	requires: [
 			'NextThought.view.modes.Home',
 			'NextThought.view.modes.Reader',
-			'NextThought.view.modes.Stream'
+			'NextThought.view.modes.Stream',
+			'NextThought.view.modes.Groups'
 			],
 	
 	// plain: true,
@@ -28,6 +29,7 @@ Ext.define( 'NextThought.view.modes.Container', {
     	this.add({id: 'a', xtype: 'home-mode-container'});
     	this.add({id: 'b', xtype: 'reader-mode-container'});
     	this.add({id: 'c', xtype: 'stream-mode-container'});
+    	this.add({id: 'c', xtype: 'groups-mode-container'});
 
     	setTimeout(s,100);
 	}

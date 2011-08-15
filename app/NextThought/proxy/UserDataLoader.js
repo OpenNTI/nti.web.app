@@ -55,6 +55,82 @@ Ext.define('NextThought.proxy.UserDataLoader',{
 		},
 		
 		
+		userSearch: function(userQuery, callbacks){
+			var h = _AppConfig.server.host,
+				d = _AppConfig.server.data,
+				url = h+d+'UserSearch/'+userQuery;
+			
+			if(this._userSearch){
+				Ext.Ajax.abort(this._userSearch);
+			}
+			
+			this._userSearch = Ext.Ajax.request({
+				url: url,
+				scope: this,
+				callback: function(){
+					this._userSearch = null;
+				},
+				failure: function(){
+					if(callbacks && callbacks.failure) {
+						callbacks.failure.apply(callbacks.scope || this, arguments);
+					} 
+					else if(NextThought.isDebug)
+						console.log('Could not load user search',arguments);
+				},
+				success: function(r){
+					var json = Ext.decode(r.responseText),
+						bins;
+						
+					if(!json){
+						if(callbacks && callbacks.failure){
+							callbacks.failure.call(callbacks.scope || this, 'bad dataz');
+						} 
+						else if(NextThought.isDebug){
+							console.log('Response sucked:', r, 'bad json:', json);
+						}
+						return;
+					}
+					
+					bins = this._binAndParseItems(json.Items);
+					
+					if(callbacks && callbacks.success){
+						callbacks.success.call(callbacks.scope || this, bins.User);
+					}
+					else if(NextThought.isDebug){
+						console.log('WARNING: I haz dataz 4 u, but u no giv meh callbax');
+					}
+				}
+			});
+		},
+		
+		
+		
+		getUserSearchStore: function(){
+			
+			if(!this._userSearchStore) {
+				this._userSearchStore = Ext.create('Ext.data.Store', {
+			        model: 'NextThought.model.User'
+			    });
+		   	}
+			
+			return this._userSearchStore;
+			
+		},
+		getFriendsListsStore: function(){
+			
+			if(!this._friendsListsStore) {
+				this._friendsListsStore = Ext.create('Ext.data.Store', {
+				    model: 'NextThought.model.FriendsList',
+				    autoLoad: true
+				});
+		   	}
+			
+			return this._friendsListsStore;
+			
+		},
+		
+		
+		
 		getFriends: function(callbacks) {
 			this.getGroups({success: success, faulure: failure});
 			
@@ -147,11 +223,11 @@ Ext.define('NextThought.proxy.UserDataLoader',{
 		},
 		
 		getRecursiveStream: function(containerId, callbacks) {
+			if (!containerId) containerId = 'aops-prealgebra-129';
 			return this.getStream(containerId, callbacks, "RecursiveStream");
 		},
 				
 		getStream: function(containerId, callbacks, stream) {
-			if (!containerId) containerId = 'aops-prealgebra-129';
 			var h = _AppConfig.server.host,
 				d = _AppConfig.server.data,
 				u = _AppConfig.server.username;

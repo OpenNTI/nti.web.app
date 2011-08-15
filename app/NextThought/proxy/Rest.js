@@ -25,9 +25,9 @@ Ext.define('NextThought.proxy.Rest', {
 		if (!me.collectionName) {
 			throw 'No collectionName given';
 		}
-		if (!containerId) {
-			throw 'No containerId given';
-		}
+		// if (!containerId) {
+			// throw 'No containerId given';
+		// }
 		
  		if (containerId) {
             if (!url.match(/\/$/)) {
@@ -47,22 +47,22 @@ Ext.define('NextThought.proxy.Rest', {
         request.url = url;
     	
     	me.appendId = false;
-    	var result = this.callParent(arguments);
+    	var result = me.callParent(arguments);
     	me.appendId = appendId;
     	
     	//set up some directions about how to read the data in the reader:
-    	this.reader.hasContainerId = !!containerId;
-    	this.reader.hasId = me.appendId && id!==undefined;
+    	me.reader.hasContainerId = me.reader.hasContainerId || !!containerId;
+    	me.reader.hasId = me.appendId && id!==undefined;
     	
-    	if(NextThought.isDebug){
-	    	console.log(
-	    		'appendId:', me.appendId, 
-	    		'id:',id,
-	    		'hasId:',this.reader.hasId, 
-	    		'record:',record, 
-	    		'url:',result
-	    		);
-    	}
+    	// if(NextThought.isDebug){
+	    	// console.log(
+	    		// 'appendId:', me.appendId, 
+	    		// 'id:',id,
+	    		// 'hasId:',me.reader.hasId, 
+	    		// 'record:',record, 
+	    		// 'url:',result
+	    		// );
+    	// }
     	
     	return 	result;
     }

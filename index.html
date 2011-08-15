@@ -96,6 +96,73 @@
 			-o-user-select: text !important;
 			user-select: text !important;
 		}
+		
+		
+		
+		
+		
+		
+#group-editor-view .x-panel-body{
+    background: white;
+    font: 11px Arial, Helvetica, sans-serif;
+}
+#group-editor-view .group{
+    background: #dddddd;
+    padding: 3px;
+    padding-bottom: 0;
+}
+
+.x-quirks #group-editor-view .group {
+    padding-bottom: 3px;
+}
+
+#group-editor-view .group img{
+    height: 80px;
+    width: 80px;
+}
+#group-editor-view .group-wrap{
+    float: left;
+    margin: 4px;
+    margin-right: 0;
+    padding: 5px;
+}
+#group-editor-view .group-wrap span {
+    
+    display: block;
+    overflow: hidden;
+    text-align: center;
+    width: 86px; // for ie to ensure that the text is centered
+}
+
+#group-editor-view .x-item-over{
+    border:1px solid #dddddd;
+    background: #efefef url(resources/images/over.gif) repeat-x left top;
+    padding: 4px;
+}
+
+#group-editor-view .x-item-selected{
+    background: #eff5fb url(resources/images/selected.gif) no-repeat right bottom;
+    border:1px solid #99bbe8;
+    padding: 4px;
+}
+#group-editor-view .x-item-selected .group{
+    background:transparent;
+}
+
+.x-view-selector {
+    position:absolute;
+    left:0;
+    top:0;
+    width:0;
+    border:1px dotted;
+    opacity: .5;
+    -moz-opacity: .5;
+    filter:alpha(opacity=50);
+    zoom:1;
+    background-color:#c3daf9;
+    border-color:#3399bb;
+}
+
 </style>
 </head>
 <body>
