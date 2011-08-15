@@ -2,6 +2,7 @@
 
 Ext.define('NextThought.controller.Application', {
     extend: 'Ext.app.Controller',
+    requires: ['NextThought.proxy.UserDataLoader'],
 
 	views: [
 		'Viewport',

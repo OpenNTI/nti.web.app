@@ -1,7 +1,7 @@
 Ext.define('NextThought.view.widgets.NotePanel',{
 	extend : 'Ext.panel.Panel',
 	alias: 'widget.notepanel',
-	requires: [],
+	requires: ['NextThought.proxy.UserDataLoader'],
 	
 	cls : 'x-note-panel-cmp',
 	layout : 'fit',

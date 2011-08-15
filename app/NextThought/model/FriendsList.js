@@ -1,4 +1,3 @@
-Ext.require('NextThought.proxy.UserDataLoader');
 
 Ext.data.Types.FRIEND_LIST = {
 	type: 'FriendList',

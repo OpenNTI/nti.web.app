@@ -1,6 +1,7 @@
 Ext.define( 'NextThought.view.widgets.ShareWithWindow', {
 	extend: 'Ext.window.Window',
 	requires: [
+			'NextThought.proxy.UserDataLoader',
 			'NextThought.view.widgets.ShareWithInput'
 			],
 	alias : 'widget.sharewithwindow',
