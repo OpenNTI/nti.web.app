@@ -16,7 +16,7 @@ Ext.define( 'NextThought.view.modes.Groups', {
 		this.add({ region: 'west', id: 'west-groups', xtype: 'leftColumn', columnWidget: {} });
    		
    		this.add({
-   			id: 'group-editor-view',
+			cls: 'x-dataview-panel',
     		region: 'center',
     		width: CENTER_WIDTH,
     		
@@ -28,7 +28,12 @@ Ext.define( 'NextThought.view.modes.Groups', {
     		dockedItems: {
 				xtype: 'toolbar',
 				cls: 'x-docked-noborder-top',
-				items: ['Groups','->',{ text: '&nbsp;', focusable: false, disabled:true }]
+				items: ['Groups:','-',
+					{ text: 'Create', createItem: true },
+					{ text: 'Delete', disabled: true, deleteItem: true },
+					'->',
+					{ text: '&nbsp;', focusable: false, disabled:true }
+				]
 			},
 			
 			items: {
@@ -37,9 +42,10 @@ Ext.define( 'NextThought.view.modes.Groups', {
 				emptyText: 'No groups available',
 				tpl: [
 	                '<tpl for=".">',
-	                    '<div class="group-wrap" id="{username}">',
-	                    '<div class="group"><img src="{avatarURL}" title="{realname}"></div>',
-	                    '<span>{realname}</span></div>',
+	                    '<div class="item-wrap" id="{username}">',
+		                    '<div class="item">',
+		                    	'<img src="{avatarURL}" title="{realname}"></div>',
+                    		'<span>{realname}</span></div>',
 	                '</tpl>',
 	                '<div class="x-clear"></div>'
 	            ],
@@ -47,7 +53,7 @@ Ext.define( 'NextThought.view.modes.Groups', {
 	            singleSelect: true,
 	            trackOver: true,
 	            overItemCls: 'x-item-over',
-	            itemSelector: 'div.group-wrap'
+	            itemSelector: 'div.item-wrap'
 			}
     	});
     	

@@ -189,33 +189,32 @@ Ext.define('NextThought.view.content.Reader', {
     },
     
     _objectsLoaded: function(bins) {
-    	var contributors = {};
-    	Ext.each(bins.Note, 
+    	var contributors = {}, me = this;
+
+		Ext.each(bins.Highlight, 
     		function(r){
-    			if (!this._createNoteWidget(r)){
-	    			return;
-    			}
-				contributors[r.get('Creator')] = true;
-    		},
-    		this
-    	)
-    	
-    	Ext.each(bins.Highlight, 
-    		function(r){
-    			var range = this._buildRangeFromRecord(r);
+    			var range = me._buildRangeFromRecord(r);
     			if (!range){
     				console.log('removing bad highlight');
 	    			//r.destroy();
 	    			return;
     			} 
     			contributors[r.get('Creator')] = true;
-    			this._createHighlightWidget(range, r);
-    		},
-    		this
+    			me._createHighlightWidget(range, r);
+    		}
     	);
+
+    	Ext.each(bins.Note, 
+    		function(r){
+    			if (!me._createNoteWidget(r)){
+	    			return;
+    			}
+				contributors[r.get('Creator')] = true;
+    		}
+    	)
     	
     	
-    	this.fireEvent('publish-contributors',contributors);
+    	me.fireEvent('publish-contributors',contributors);
 	},
     
     _buildRangeFromRecord: function(r) {

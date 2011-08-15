@@ -123,6 +123,12 @@ Ext.define('NextThought.proxy.UserDataLoader',{
 				    model: 'NextThought.model.FriendsList',
 				    autoLoad: true
 				});
+				
+				this._friendsListsStore.filter([{
+		            fn: function(record) {
+		                return ! /public\@/i.test(record.get('Username'));
+		            }
+		        }]);
 		   	}
 			
 			return this._friendsListsStore;

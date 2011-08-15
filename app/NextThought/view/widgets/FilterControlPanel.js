@@ -7,6 +7,8 @@ Ext.define('NextThought.view.widgets.FilterControlPanel', {
 			],
 
 	width: MIN_SIDE_WIDTH,
+	border: false,
+	defaults: {border: false, defaults:{border:false}},
 	
 	constructor: function(){
 		this.addEvents('filter-changed','filter-control-loaded');
@@ -17,7 +19,11 @@ Ext.define('NextThought.view.widgets.FilterControlPanel', {
    		this.callParent(arguments);
    		this.setWidth(MIN_SIDE_WIDTH);
    		
-   		UserDataLoader.getGroups({
+   		this.reload();
+	},
+	
+	reload: function(){
+		UserDataLoader.getGroups({
    			scope: this,
    			success: this.addGroups
    		});
@@ -25,6 +31,7 @@ Ext.define('NextThought.view.widgets.FilterControlPanel', {
 	
 	
 	addGroups : function(groups){
+		this.removeAll();
 		var p = 'auto auto auto 10px';
 		this.add({ border: false,html:'&nbsp;', padding: 30});
 		
