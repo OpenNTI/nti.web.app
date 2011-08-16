@@ -11,7 +11,6 @@ Ext.define('NextThought.controller.Login', {
     ],
 
     init: function() {
-    	this.http = this._getHTTPObject();
     	this.control({
     		'loginwindow': {
     			beforeshow: function(win,opts){
@@ -33,33 +32,23 @@ Ext.define('NextThought.controller.Login', {
         });
     },
     
-    _getHTTPObject: function() {
-	    if (typeof XMLHttpRequest != 'undefined') {
-	        return new XMLHttpRequest();
-	    }
-	    try {
-	        return new ActiveXObject("Msxml2.XMLHTTP");
-	    } catch (e) {
-	        try {
-	            return new ActiveXObject("Microsoft.XMLHTTP");
-	        } catch (e) {}
-	    }
-	    return false;
-	},
 	
 	attemptLogin: function(values){
 		values = this.sanitizeValues(values);
 		//try to auth for future calls to server
 		var s = _AppConfig.server,
-			a = Base64.basicAuthString(values.username, values.password);
+			a = Base64.basicAuthString(values.username, values.password),
+			success = false;
 		
 		try{	
-			this.http.open("GET", s.host + s.data + 'users/' + values.username, false, values.username, values.password);
-			this.http.setRequestHeader("Authorization", a);
-			this.http.send('');
-			if (this.http.status == 401) {
-				return false; //we failed auth
-			}
+			Ext.Ajax.request({
+				url: s.host + s.data + 'users/' + values.username, 
+				headers:{ "Authorization": a},
+				async: false, 
+				callback: function(q,s,r){success=s;}
+			});
+			if(!success)
+			return false;
 		}
 		catch(e){
 			console.log(e);
