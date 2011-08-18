@@ -31,12 +31,14 @@ Ext.define('NextThought.view.widgets.Tracker', {
 			e = Ext.get(container),
 			b = Ext.get(body),
 			h = this.hoverHandler;
+
 		b.on('scroll', h, this);
 		c.on('click', this.clickHandler,this);
 		c.on('mousemove', h, this);
 		b.on('mousemove', h, this);
 		b.on('mouseover', h, this);
 		b.on('mouseout', h, this);
+
 		cmp.on('resize', h, this);
 		
 		this._locationProvider.on('change',this._onChangeLocation, this);
@@ -78,7 +80,6 @@ Ext.define('NextThought.view.widgets.Tracker', {
 	hoverHandler: function(e){
 		var region = this.getRegion(e),
 			current = this._locationProvider.getLocation();
-		 
 		this.render(
 			current.toc,
 			current.location,
@@ -117,11 +118,10 @@ Ext.define('NextThought.view.widgets.Tracker', {
 	
 	
 	getRegion: function(e){
-		
 		if(!this._offsetX){
 			var c = Ext.get(this._canvas);
-			this._offsetX = c.getLeft(false);
-			this._offsetY = c.getTop(false);
+			this._offsetX = c.getLeft();
+			this._offsetY = c.getTop();
 		}
 		if(!e){
 			return null;
