@@ -17,6 +17,8 @@ Ext.define( 'NextThought.view.widgets.Note', {
             a = Ext.get(Ext.query('a[name=' + record.get('anchorPoint') + ']')[0]),
             c;
 
+        me._cmp.on('afterlayout', me.onResize, me);
+
         a = a ? a : Ext.get(Ext.query('#nticontent a[name]')[0]);
         c = me._createNoteContainer(a.dom.getAttribute('name'));
         a.setStyle('display', 'block');
@@ -48,6 +50,7 @@ Ext.define( 'NextThought.view.widgets.Note', {
 			me.noteCmp.doLayout();
 		// me.onResize();
 		setTimeout(function(){
+            console.log('note visability changed, firing resize');
 			me._cmp.fireEvent('resize');
 		},100);
 	},
@@ -58,6 +61,7 @@ Ext.define( 'NextThought.view.widgets.Note', {
 		record.on('updated',this.noteUpdated, this);
 		this.noteCmp.update(record.get('text'));
 		this.onResize();
+        console.log('note updated, firing resize');
 		this._cmp.fireEvent('resize',{});
 	},
 	
@@ -81,6 +85,7 @@ Ext.define( 'NextThought.view.widgets.Note', {
 	
 	cleanup: function(){
 		this.callParent(arguments);
+        this._cmp.un('afterlayout', this.onResize, this);
 		this.noteCmp.destroy();
 		delete this.noteCmp;
 		Ext.get(this.noteDiv).remove();
@@ -104,17 +109,18 @@ Ext.define( 'NextThought.view.widgets.Note', {
 		a.setStyle('padding-bottom',(i+h)+'px');
 
 		// c.alignTo(a, 'tl-bl?',[0,-h]);
-		c.moveTo(p.getLeft()+p.getPadding('l'),a.getBottom()-h);
+		c.moveTo(p.getLeft()+p.getPadding('l'),a.getTop());
 		Ext.get(me._img).moveTo(p.getLeft(), c.getTop());
 		
 		//always move to the end
 		if(c.dom.nextSibling)
 			me._cnt.appendChild(c.dom);
 			
-		me._cmp.doLayout();
+		//me._cmp.doLayout();
+        me.noteCmp.doLayout();
 		}
 		catch(e){
-			console.log(e);
+			console.log(e,e.message, e.stack);
 		}
 	}
 });

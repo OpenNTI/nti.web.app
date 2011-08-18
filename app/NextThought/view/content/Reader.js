@@ -17,7 +17,8 @@ Ext.define('NextThought.view.content.Reader', {
     	this.addEvents('edit-note','publish-contributors','location-changed');
     	this.enableBubble('edit-note');
    		this.callParent(arguments);
-		this._contextMenu = Ext.create('Ext.menu.Menu', {
+
+    	this._contextMenu = Ext.create('Ext.menu.Menu', {
 			items : [
 				{
 					text : 'Highlight',
@@ -213,7 +214,7 @@ Ext.define('NextThought.view.content.Reader', {
     		}
     	)
     	
-    	
+    	me.bufferedDelayedRelayout();
     	me.fireEvent('publish-contributors',contributors);
 	},
     
@@ -238,7 +239,7 @@ Ext.define('NextThought.view.content.Reader', {
 		
     },
     
-    _loadContentAnnotatoins: function(containerId){
+    _loadContentAnnotations: function(containerId){
     	this._containerId = containerId;
 		UserDataLoader.getPageItems(containerId, {
 			scope:this,
@@ -312,16 +313,18 @@ Ext.define('NextThought.view.content.Reader', {
 	            this.el.select('.x-reader-pane a[href]').on('click',this._onClick,this,{book: book, scope:this,stopEvent:true});
 	            containerId = this.el.select('meta[name=NTIID]').first().getAttribute('content');
 	            
-	            this.relayout();
+
 	            
 	            if( callback ){
 	            	callback();
 	            }
 	            
-	            this._loadContentAnnotatoins(containerId);
+	            this._loadContentAnnotations(containerId);
 	            this.fireEvent('location-changed', containerId);
 	            vp.unmask();
-	        },
+
+                this.bufferedDelayedRelayout();
+            },
 	    	error: function(){ 
 	    		if(NextThought.isDebug) {
 	    			console.log("Error", arguments);

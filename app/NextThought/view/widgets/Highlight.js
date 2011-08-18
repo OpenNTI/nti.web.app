@@ -17,6 +17,8 @@ Ext.define('NextThought.view.widgets.Highlight', {
 		c = me._createCanvasContainer('canvas-highlight-container');
 		me._canvas = me.createElement('canvas',c.dom,'highlight-object unselectable','position: absolute; pointer-events: none;'+(me._isVisible?'':'visibility:hidden;'));
 		me._updateColor();
+
+        me.render = Ext.Function.createBuffered(me.render,100,me,[true]);
 		return me;
 	},
 	
@@ -100,6 +102,7 @@ Ext.define('NextThought.view.widgets.Highlight', {
 	
 	
 	onResize : function(e){
+
 		this.render();
 	},
 	
@@ -124,10 +127,10 @@ Ext.define('NextThought.view.widgets.Highlight', {
 		var r = this._sel.getBoundingClientRect(),
 			s = this._sel.getClientRects(),
 			c = this._canvas,
-			p = Ext.get(this._div.parentNode),
+			p = this._parent ? this._parent : (this._parent = Ext.get(this._div.parentNode)),
 			l = s.length;
 		if(!r){
-			r = s[0];
+            return;
 		}	
 		Ext.get(c).moveTo(r.left, r.top);
 		c.width = r.width; c.height = r.height;

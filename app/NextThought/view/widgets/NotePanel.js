@@ -23,7 +23,7 @@ Ext.define('NextThought.view.widgets.NotePanel',{
 		var t = [],
 			m = this,
 			a = m._annotation;
-			
+		if(!u) throw 'bad user';
 		t.push({
 			xtype: 'image', 
 			src: u.get('avatarURL'), 

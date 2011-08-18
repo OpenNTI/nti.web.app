@@ -28,7 +28,7 @@ Ext.define('NextThought.view.navigation.ModeSwitcher', {
     		enableToggle: true, 
     		border: false,
     		margin: 0,
-    		text: label,
+    	//	text: label,
     		toggleGroup: 'modeSwitcher'
 		});
     		

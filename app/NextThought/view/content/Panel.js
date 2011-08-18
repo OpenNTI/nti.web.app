@@ -6,6 +6,14 @@ Ext.define('NextThought.view.content.Panel', {
 	frame: false,
 	border: false,
 	defaults: {frame: false, border: false},
+
+    initComponent: function(){
+        this.callParent(arguments);
+
+        this.bufferedDelayedRelayout = Ext.Function.createBuffered(
+            Ext.Function.createDelayed(this.relayout, 100, this),
+            100, this);
+    },
 	
 	activate: function() {
 		this.relayout();
@@ -14,10 +22,11 @@ Ext.define('NextThought.view.content.Panel', {
     
     relayout: function(){
     	this.ownerCt.doComponentLayout();
-    	//this.doLayout();
-        //VIEWPORT.doComponentLayout();
+    	this.doComponentLayout();
+    	this.doLayout();
     },
-    
+
+
     
     _getPathPart: function(path) {
     	if(!path){
