@@ -39,7 +39,7 @@ Ext.define('NextThought.view.widgets.Tracker', {
 		b.on('mouseover', h, this);
 		b.on('mouseout', h, this);
 
-		cmp.on('resize', h, this);
+		cmp.on('resize', this._onResize, this);
 		
 		this._locationProvider.on('change',this._onChangeLocation, this);
 		Ext.EventManager.onWindowResize(this._onResize, this);
