@@ -152,7 +152,7 @@ Ext.define('NextThought.util.AnnotationUtils',
 				var previousSibling = parentNode.previousSibling;
 				while(previousSibling != null) {
 					if (previousSibling.nodeName == 'A') {
-						var name = this.anchorNameOrNull(previousSibling);
+						name = this.anchorNameOrNull(previousSibling);
 						if (name != null) {
 							//if we found a name, return it, otherwise allow this to continue.
 							return name;
@@ -219,23 +219,16 @@ Ext.define('NextThought.util.AnnotationUtils',
 		
 		
 		isMathNode: function(node) {
-			return node && $(node).hasClass( 'math' );
+            return (node && Ext.get(node).hasCls('math'));
 		},
 		
 		
 		isTextNode: function(node) {
-			if( node.nodeValue != null ) {
-				return true;
-			}
-			return false;
-		},
-		
-		
+			return (node && node.nodeValue != null);
+        },
+
 		isImageNode: function(node) {
-			if (node.nodeName == "IMG") {
-				return true;
-			}
-			return false;
+			return (node && node.nodeName == "IMG");
 		},
 		
 		

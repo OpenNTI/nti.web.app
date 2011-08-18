@@ -1,7 +1,7 @@
 
 Ext.data.Types.FRIEND_LIST = {
 	type: 'FriendList',
-    convert: function(v,o) {
+    convert: function(v) {
         return !v.length || typeof(v[0])=='string'? v : UserDataLoader.parseItems(v);
     },
     sortType: function(v) {
@@ -10,9 +10,11 @@ Ext.data.Types.FRIEND_LIST = {
     }
 };
 
+/*
+ * Not currently used
 Ext.data.Types.USER = {
 	type: 'User',
-    convert: function(v,o) {
+    convert: function(v) {
         return UserDataLoader.resolveUser(v);
     },
     sortType: function(v) {
@@ -20,7 +22,7 @@ Ext.data.Types.USER = {
         return '';
     }
 };
-
+*/
 
 
 Ext.define('NextThought.model.FriendsList', {
