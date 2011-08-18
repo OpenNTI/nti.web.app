@@ -12,28 +12,31 @@ Ext.define( 'NextThought.view.widgets.Note', {
 
 	constructor: function(record, container, component){
 		this.callParent([record, container, component,'resources/images/charms/note-white.png']);
-		var me = this,
-			xpath = record.get('xpath'),
-			a = Ext.get(me.getNodeFromXPath(xpath)),
-			c = me._createNoteContainer(xpath);
-			
-		a = a? a : Ext.get(Ext.query('#nticontent .page-contents')[0]).dom.firstChild;
-	
+
+        var me = this,
+            a = Ext.get(Ext.query('a[name=' + record.get('anchorPoint') + ']')[0]),
+            c;
+
+        a = a ? a : Ext.get(Ext.query('#nticontent a[name]')[0]);
+        c = me._createNoteContainer(a.dom.getAttribute('name'));
+        a.setStyle('display', 'block');
+
 		me._anchorNode = a;
 		me._noteContainer = c;
-		me._originalPadding = a.dom.originalPadding!==undefined 
+		me._originalPadding = a.dom.originalPadding!==undefined
 			? a.dom.originalPadding
 			: a.getPadding('b');
 		a.dom.originalPadding = me._originalPadding;
-		
+
 		// console.log('original padding:',me._originalPadding);
-		 
+
 		me.noteDiv = me.createElement('div',c.dom,'x-note-panel',(me._isVisible?'':'display:none;'));
 		me.noteDiv._annotation = me;
-		
+
 		me.noteCmp = Ext.create('widget.notepanel',{ renderTo: me.noteDiv, _annotation: me, _owner: component });
 		me.noteUpdated(record);
 		me.noteCmp.doLayout();
+
 		return me;
 	},
 	

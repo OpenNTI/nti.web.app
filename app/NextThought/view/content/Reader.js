@@ -131,7 +131,7 @@ Ext.define('NextThought.view.content.Reader', {
 			return true;
 		}
 		catch(e){
-			console.log('Error notes:',e);
+			console.log('Error notes:',e, e.toString(), e.stack);
 		}
 		return false;
 	},

@@ -237,10 +237,11 @@ Ext.define('NextThought.controller.Application', {
     	var p = btn.up('notepanel');
     		r = p._owner,
     		e = btn.eventName,
-    		rec = p._annotation.getRecord();
+            a = p._annotation,
+    		rec = a.getRecord();
     	
     	if(/delete/i.test(e)){
-    		c.remove();
+    		a.remove();
     	}
     	else {
 	    	this.getViewport().fireEvent(e, rec);

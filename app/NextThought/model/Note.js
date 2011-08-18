@@ -8,10 +8,13 @@ Ext.define('NextThought.model.Note', {
     idProperty: 'OID',
     fields: [
         { name: 'id', mapping: 'ID', type: 'int' },
-        { name: 'xpath', type: 'string' },
+        { name: 'anchorPoint', type: 'string' },
+        { name: 'anchorType', type: 'string', defaultValue: 'previousPreviousName'},
+        { name: 'left', type: 'int' },
+        { name: 'top', type: 'int' },
         { name: 'text', type: 'string' },
         { name: 'color', type: 'string', defaultValue: 'yellow' },
-       	{ name: 'modifiedtime', type: 'string' },
+       	{ name: 'Last Modified', type: 'datetime' },
        	{ name: 'Creator', type: 'string'},
        	{ name: 'ContainerId', type: 'string'},
        	{ name: 'sharedWith', type: Ext.data.Types.FRIEND_LIST }//, defaultValue: ['jonathan.grimes@nextthought.com'] }

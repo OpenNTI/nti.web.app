@@ -34,16 +34,30 @@ Ext.define('NextThought.util.AnnotationUtils',
 		
 		selectionToNote: function(range) {
 			var note = Ext.create('NextThought.model.Note');
-			
+			     debugger;
 			var node = range.startContainer || range.endContainer;
-			var blockNode = this.findBlockParent(node);
-			
+            var blockNode = this.findBlockParent(node);
+
 			if (!blockNode) throw 'No block node found.';
-			
-			note.set('xpath', this.getPathTo(blockNode));
+
+            var anchorNode = this.getNextAnchor(blockNode);
+            var pageOffsets = Ext.get(anchorNode).getOffsetsTo(Ext.get('NTIContent'));
+            note.set('anchorPoint', anchorNode.getAttribute('name'));
+            note.set('top', pageOffsets[0]);
+            note.set('left', pageOffsets[1]);
 			return note;
 		},
-		
+
+        getNextAnchor: function(node) {
+            var anchor = null;
+            Ext.each(Ext.query('A[name]'), function(a){
+                if (a.compareDocumentPosition(node) == 2) { //2 == preceedes
+                    anchor = a;
+                    return false;
+                }
+            });
+            return anchor;
+        },
 		
 		findBlockParent: function(n) {
 			var c = n;
@@ -219,7 +233,11 @@ Ext.define('NextThought.util.AnnotationUtils',
 		
 		
 		isMathNode: function(node) {
-            return (node && Ext.get(node).hasCls('math'));
+            if (!node || !node.getAttribute) return false;
+
+            var cls = node.getAttribute('className') || node.getAttribute('class');
+
+            return (cls && cls.indexOf('math') >= 0);
 		},
 		
 		
