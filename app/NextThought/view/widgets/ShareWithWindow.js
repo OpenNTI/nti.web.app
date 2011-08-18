@@ -23,7 +23,7 @@ Ext.define( 'NextThought.view.widgets.ShareWithWindow', {
 			u = UserDataLoader.resolveUser(m.record.get('Creator')),
 			a = u.get('avatarURL'),
 			n = u.get('realname'),
-			t = m.record.raw.Class,
+			t = m.record.getModelName(),
 			content = m.record.get('text') || 'This item does not have text';
 			
 		m.callParent(arguments);

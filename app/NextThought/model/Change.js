@@ -7,5 +7,8 @@ Ext.define('NextThought.model.Change', {
         { name: 'Last Modified', type: 'date' },
         { name: 'Creator', type: 'string' },
         { name: 'Item', type: 'auto' }
-    ]
+    ],
+    getModelName: function() {
+        return 'Change';
+    }
 });

@@ -63,18 +63,75 @@ Ext.define('NextThought.util.AnnotationUtils',
 		
 		
 		selectionToHighlight: function(range) {
-			var highlight = Ext.create('NextThought.model.Highlight');
-			
-			var startNode = range.startContainer;
-			highlight.set('startXpath', this.getPathTo(startNode));
-			highlight.set('startOffset', range.startOffset);
-			var endNode = range.endContainer;
+			var highlight = Ext.create('NextThought.model.Highlight'),
+                startNode = range.startContainer,
+                endNode = range.endContainer;
+
+            highlight.set('text', range.toString());
+
+            //start information
+         	highlight.set('startXpath', this.getPathTo(startNode));
+			highlight.set('startAnchor', this.ascendToAnchor(startNode));
+            highlight.set('startOffset', range.startOffset);
+            //end information
 			highlight.set('endXpath', this.getPathTo(endNode));
+            highlight.set('endAnchor', this.ascendToAnchor(endNode));
 			highlight.set('endOffset', range.endOffset);
-			
+
+            //special case when the end node is a div containing an img.
+            if (this.isBlockNode(endNode) && this.isImageNode(endNode.firstChild)){
+                endNode = endNode.firstChild;
+            }
+
+            this._fixHighlightEndpoints(endNode, startNode, highlight);
 			return highlight;
 		},
-		
+
+        _fixHighlightEndpoints: function(endNode, startNode, highlight) {
+
+            if (!this.isTextNode(endNode) && !this.isMathNode(endNode) && !this.isImageNode(endNode)) {
+
+                var end = null;
+                var workingNode = endNode;
+
+                while(!end) {
+                    workingNode = (workingNode.previousSibling) ? workingNode.previousSibling : workingNode.parentNode;
+                    end = this.findLastHighlightableNodeFromChildren(workingNode, endNode);
+                    if (end) {
+                        endNode = end;
+                        highlight.set('endAnchor', this.ascendToAnchor(end));
+                        if (isTextNode(end)) {
+                            highlight.set('endOffset', endNode.nodeValue.length);
+                        }
+                    }
+                }
+            }
+
+            //now we have our start and end, let's see if we span anchors
+            var fullText = this.getNodeTextValue(startNode),
+                endOffset = highlight.get('endOffset'),
+                startOffset = highlight.get('startOffset');
+
+            if (startNode === endNode) {
+                //same anchor, this effects our snippets, there is no end snippet
+                highlight.set('startHighlightedFullText', fullText);
+                highlight.set('startHighlightedText', (fullText != startNode.nodeValue) ? fullText : startNode.nodeValue.substring(startOffset, endOffset));
+                highlight.set('endAnchor', null); //we don't need to save this.
+            }
+            else {
+                //different anchors, we'll have 2 snippets
+                highlight.set('startHighlightedFullText', fullText);
+                highlight.set('startHighlightedText', (fullText != startNode.nodeValue) ? fullText : startNode.nodeValue.substring(startOffset));
+                highlight.set('endHighlightedFullText', this.getNodeTextValue(endNode));
+
+                highlight.set('endHighlightedText',
+                    (endOffset != 0 && endNode.nodeValue != null)
+                        ? (fullText != endNode.nodeValue)
+                            ? fullText
+                            : endNode.nodeValue.substring(0, endOffset)
+                        : highlight.get('endHighlightedFullText'));
+            }
+        },
 		
 		ascendToAnchor: function(textNode) {
 			var parentNode = textNode;

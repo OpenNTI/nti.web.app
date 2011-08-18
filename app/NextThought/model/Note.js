@@ -20,7 +20,9 @@ Ext.define('NextThought.model.Note', {
     	type: 'nti',
     	collectionName: 'Notes',
     	model: 'NextThought.model.Note'
+    },
+    getModelName: function() {
+        return 'Note';
     }
-    
-    
+
 });

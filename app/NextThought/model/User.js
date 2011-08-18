@@ -27,5 +27,8 @@ Ext.define(	'NextThought.model.User', {
     proxy: {
     	type: 'usersearch',
     	model: 'NextThought.model.User'
+    },
+    getModelName: function() {
+        return 'User';
     }
 });

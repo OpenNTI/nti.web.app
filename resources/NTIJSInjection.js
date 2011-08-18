@@ -2,6 +2,10 @@
 
 var NextThought = NextThought || {};
 
+//This global variable will be injected into the global object (window),
+//in the desktop-ui mockup, we change this variable's value on each ajax call.
+var documentURL = document.URL;
+
 /**
 *
 *  Base64 encode / decode
@@ -83,6 +87,19 @@ function NTIInlineNoteSaveSelection()
 	NTILastSelectionAnchor = document.getSelection().anchorNode;
 }
 
+/**
+ * @return The given note, set with a hidden class and otherwise styled.
+ */
+function NTIInlineNoteApplyStyle( newChild )
+{
+	newChild.className = 'inlinenote';
+	return newChild;
+}
+
+/**
+ * @return The JSON string for a two element array of
+ * anchor point and anchor type.
+ */
 function NTIInlineNoteMakeFromSelectionOrAt( html, x, y )
 {
 	//If there is a selection, use that because the
@@ -99,7 +116,9 @@ function NTIInlineNoteMakeFromSelectionOrAt( html, x, y )
 		parent = anchorNode.parentElement;
 		if( parent && $(parent).hasClass( "page-contents" ) ) {
 			//Hmm. OK. We found the root element, not the one we were looking for.
-			//This is because much of our pages have dorked content.
+			//In the past, some pages failed to have proper paragraph
+			//structure so this was common. It should be
+			//much less common now.
 			if( anchorNode.nodeType == Node.TEXT_NODE ) {
 				//So instead we'll put it here.
 				parent = anchorNode;
@@ -107,20 +126,22 @@ function NTIInlineNoteMakeFromSelectionOrAt( html, x, y )
 			}
 		}
 	}
+	var log = "";
 	if( !parent ) {
 		parent = document.elementFromPoint(x,y);
+		log += "Got parent from point";
 	}
 	if( !parent ) {
-		return "No element at " + x + " and " + y;
+		return null;
 	}
 
 	var newChild = document.createElement( "span" );
-	//We don't actually want clicks on these, nor are they styled
-	//like floating notes. But we want them to be found.
-	newChild.className = 'inlinenote hidden';
 	newChild.innerHTML = html;
+	newChild = NTIInlineNoteApplyStyle( newChild );
 	if( doBefore ) {
+		log += " doBefore; ";
 		if( parent.nextSibling ) {
+			log += " nextSibling; ";
 			parent.parentElement.insertBefore( newChild, parent.nextSibling );
 		}
 		else {
@@ -128,23 +149,67 @@ function NTIInlineNoteMakeFromSelectionOrAt( html, x, y )
 		}
 	}
 	else {
+		log += " do direct; ";
 		parent.appendChild( newChild );
 	}
 
-	newChild.style.display = 'block';
-	newChild.style.border = '1px grey solid';
-	newChild.style.webkitTransition = "all 1s ease-in";
-	newChild.style.webkitTransitionProperty = "all";
-	newChild.style.marginLeft = "1em";
-	newChild.style.paddingLeft = "1em";
-	newChild.style.marginRight = "1em";
-	newChild.style.borderRadius = '9px';
-	newChild.style.width = 'auto';
-	newChild.style.height = 'auto';
-	window.setTimeout( function() {
-						   $(newChild).toggleClass( 'hidden' );
-					   }, 100 );
-	return "Added to " + parent;
+	window.setTimeout( function() { $(newChild).removeClass( 'hidden' ); },
+					   100 );
+
+	//Find the nearest anchor point
+	var anchorPoint = null, anchorType = null;
+	console.log( parent );
+	if( parent['id'] ) {
+		anchorPoint = parent['id'];
+		anchorType = 'id';
+	}
+	// TODO: This does not handle encountering a text node.
+	else if( parent.previousSibling && parent.previousSibling['name'] ) {
+		anchorPoint = parent.previousSibling['name'];
+		anchorType = 'previousName';
+	}
+	//Try to go one further up
+	else if( parent.previousSibling && parent.previousSibling.previousSibling && parent.previousSibling.previousSibling['name'] ) {
+		anchorPoint = parent.previousSibling.previousSibling['name'];
+		anchorType = 'previousPreviousName';
+	}
+	else {
+		log += " up three, no anchor; ";
+		if( parent.previousSibling ) { log += "; prevSib: " + parent.previousSibling; }
+		if( parent.previousSibling.previousSibling ) { log += "; prevSib: " + parent.previousSibling.previousSibling; }
+	}
+	return JSON.stringify( [anchorPoint, anchorType, log] );
+}
+
+function NTIInlineNoteShowAtAnchor( html, anchorPoint, anchorType )
+{
+	var parent = null;
+	//TODO: Error handling.
+	try {
+		if( anchorType == 'id' ) {
+			parent = document.getElementById( anchorPoint );
+		}
+		else if( anchorType == 'previousName' ) {
+			var anchor = $('a[name='+anchorPoint+']')[0];
+			parent = anchor.nextSibling;
+		}
+		else if( anchorType == 'previousPreviousName' ) {
+			var anchor = $('a[name='+anchorPoint+']')[0];
+			parent = anchor.nextSibling.nextSibling;
+		}
+
+		var newChild = document.createElement( "span" );
+		newChild.innerHTML = html;
+		newChild = NTIInlineNoteApplyStyle( newChild );
+		$(newChild).removeClass('hidden');
+		$(parent).append( newChild );
+		return "Displayed note " + newChild.outerHTML
+			+ " at " + anchorPoint + "/" + NTIGetHTMLElementPosition( newChild )
+			+ " under " + parent + " at " + NTIGetHTMLElementPosition( parent );
+	}
+	catch( e ) {
+		return "Failed to display: " + e;
+	}
 }
 
 function NTIDebugEltAtPt( x, y )
@@ -209,15 +274,8 @@ function NTIInlineNoteUpdate( html, x, y )
  */
 function NTIGetHTMLElementPosition( element )
 {
-	var left = 0;
-	var top = 0;
-	if( element.offsetParent ) {
-		do {
-			left += element.offsetLeft;
-			top += element.offsetTop;
-		} while( (element = element.offsetParent) );
-	}
-	return [left,top];
+	var offset = $( element ).offset();
+	return [offset.left, offset.top];
 }
 
 /**
@@ -289,15 +347,15 @@ function NTISubmitOverlayedForm( answers, inputSel, submitSel )
 
 function NTIGetHTMLElementsAtPoint( x, y )
 {
-	var tags = ",";
+	var tags = [];
 	var e = document.elementFromPoint(x,y);
 	while( e ) {
 		if( e.tagName ) {
-			tags += e.tagName + ',';
+			tags.push( e.tagName );
 		}
 		e = e.parentNode;
 	}
-	return tags;
+	return JSON.stringify( tags );
 }
 
 /**
@@ -351,7 +409,7 @@ function NTIIsPointInteresting( x, y )
 {
 	//Walk up the DOM, see if there is anything that wants to
 	//handle a click or touch
-	//NOTE: This is broken if addEventListener is used. Hack for notes.
+	//NOTE: This is broken if addEventListener is used.
 	var elem = document.elementFromPoint(x,y);
 	var e = elem;
 	while( e ) {
@@ -360,7 +418,6 @@ function NTIIsPointInteresting( x, y )
 			||	e.ontouchend
 			||	e.ontouchmove
 			||	(e.tagName == 'A' && e.hasAttribute('href'))
-			||	e.className == 'note'
 			||	e.className == 'timestamp') {
 			return true;
 		}
@@ -1626,9 +1683,11 @@ function NTIOnStateSet(ds, user, pwd)
 	password = pwd;
 
 	//Setup defaults for jQuery AJAX
+	//NOTE: The username cannot contain a
+	//@: WebKit does BAD things--silently breaks.
 	$.ajaxSetup(
 		{
-			username: username,
+			username:  username.replace( '@', '%40' ),
 			password: password,
 			xhrFields: {
 				withCredentials: "true"
@@ -1845,6 +1904,16 @@ function NTIHideHighlights()
 {
 	$(".highlight").addClass( "highlightHidden" );
 	Highlight.onhighlightsloaded = NTIHideHighlights;
+}
+
+function NTIChangeHighlightColor( color )
+{
+	//Add the rule to the last sheet so it takes priority
+	var sheets = document.styleSheets;
+	sheets[sheets.length - 1].addRule( '#NTIContent .highlight',
+									   //plain: 'background-color: ' + color );
+									   //Gradient:
+									   'background-image: -webkit-gradient(linear, left top, left bottom, from(white), to(' + color + '))');
 }
 
 function Highlight() {
@@ -2553,7 +2622,14 @@ function syncData (type,onsynccomplete) {
 		   function(result)
 		   {
 			   var serverPageLastModified = result['Last Modified']; //seconds since epoc
-			   var serverDataForPage = result['Items'];
+
+			   var serverDataForPage = null;
+			   if( result['Items'] ) {
+					serverDataForPage = result['Items'];
+			   }
+			   else {
+			   		serverDataForPage = result;
+			   }
 			   var localDataForPage = objectsFromLocalStorage(type);
 
 			   if(!localDataForPage){

@@ -56,5 +56,8 @@ Ext.define('NextThought.model.FriendsList', {
     	collectionName: 'FriendsLists',
     	reader: { type: 'nti', hasContainerId: true, root: false },
     	model: 'NextThought.model.FriendsList'
+    },
+    getModelName: function() {
+        return 'Group';
     }
 });
