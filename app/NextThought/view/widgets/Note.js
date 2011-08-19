@@ -61,7 +61,6 @@ Ext.define( 'NextThought.view.widgets.Note', {
 		record.on('updated',this.noteUpdated, this);
 		this.noteCmp.update(record.get('text'));
 		this.onResize();
-        console.log('note updated, firing resize');
 		this._cmp.fireEvent('resize',{});
 	},
 	
@@ -100,16 +99,25 @@ Ext.define( 'NextThought.view.widgets.Note', {
 			a = me._anchorNode,
 			i = me._originalPadding,
 			w = Ext.get(Ext.query('#nticontent .page-contents')[0]).getWidth(),
-			h = 0;
+			h = 0,
+            extra= 0,
+            adjust=0,
+            nx= a.next(),
+            pr= a.prev();
+
 		c.setWidth(w);
-		// a.setStyle('border', '1px solid green');
-		
+//		a.setStyle('border', '1px solid green');
+
+        adjust += pr.getPadding('b')+pr.getMargin('b');
+        extra += nx.getPadding('t')+nx.getMargin('t') + adjust;
+
 		h = c.getHeight();
-		
-		a.setStyle('padding-bottom',(i+h)+'px');
+
+		a.setStyle('padding-bottom',(i+h+extra)+'px');
 
 		// c.alignTo(a, 'tl-bl?',[0,-h]);
-		c.moveTo(p.getLeft()+p.getPadding('l'),a.getTop());
+		c.moveTo(p.getLeft()+p.getPadding('l'),a.getTop()+(adjust?0:extra));
+        //move the nib to the top-aligning corner of the note container
 		Ext.get(me._img).moveTo(p.getLeft(), c.getTop());
 		
 		//always move to the end
