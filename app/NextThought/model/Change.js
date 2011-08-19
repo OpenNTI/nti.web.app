@@ -3,6 +3,7 @@ Ext.define('NextThought.model.Change', {
     idProperty: 'OID',
     fields: [
         { name: 'id', mapping: 'ID', type: 'int' },
+        { name: 'OID', type: 'string' },
         { name: 'ChangeType', type: 'string' },
         { name: 'Last Modified', type: 'date' },
         { name: 'Creator', type: 'string' },

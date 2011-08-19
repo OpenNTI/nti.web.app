@@ -107,7 +107,7 @@ Ext.onReady(function(){
     		catch (e) {
     			loc = e.stack;
     		}
-    		if(options&&options.async===false)console.log('WARNING: Synchronous Call in: '+ loc  );
+    		if(options&&options.async===false)console.log('WARNING: Synchronous Call in: '+ loc, connection, options );
 		});
 });
 

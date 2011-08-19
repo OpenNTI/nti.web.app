@@ -263,9 +263,9 @@ Ext.define('NextThought.proxy.UserDataLoader',{
 						}
 						return;
 					}
-					var cReader = this._getReaderForModel('NextThought.model.Change');
+					var cReader = this._getReaderForModel('Change');
 					Ext.each(json.Items, function(i, x){
-						var reader = this._getReaderForModel('NextThought.model.'+i.Item.Class);
+						var reader = this._getReaderForModel(i.Item.Class);
 						i.Item = reader.read(i.Item).records[0];
 						
 						json.Items[x] = cReader.read(i).records[0];
@@ -285,8 +285,14 @@ Ext.define('NextThought.proxy.UserDataLoader',{
 		
 		_getReaderForModel: function(modelClass) {
 			this._readers = this._readers || [];
-			if (!this._readers[modelClass]) {
-				this._readers[modelClass] = Ext.create('NextThought.reader.Json',{model: modelClass, proxy: 'nti'});
+
+            if (!NextThought.model.hasOwnProperty(modelClass)){
+                console.log('no model for NextThought.model.' + modelClass);
+                return;
+            }
+
+            if (!this._readers[modelClass]) {
+				this._readers[modelClass] = Ext.create('NextThought.reader.Json',{model: 'NextThought.model.'+modelClass, proxy: 'nti'});
 			}
 			
 			return this._readers[modelClass];
@@ -361,8 +367,8 @@ Ext.define('NextThought.proxy.UserDataLoader',{
 			
 			
 			function addToBin(o) {
-				if(!o.Class) return;
-				if(!bins[o.Class]){
+			    if(!o.Class) return;
+                if(!bins[o.Class]){
 					bins[o.Class] = [];
 				}
 				bins[o.Class].push(o);
@@ -372,8 +378,14 @@ Ext.define('NextThought.proxy.UserDataLoader',{
 		_binAndParseItems: function(items){
 			var bins = this._binItems(items), key;
 			for(key in bins){
+                var reader = this._getReaderForModel(key);
 				if(!bins.hasOwnProperty(key)) continue;
-				bins[key] = this._getReaderForModel('NextThought.model.'+key).read(bins[key]).records;
+                if(!reader) {
+                    console.log('No reader for key', key, 'objects: ', bins[key]);
+                    continue;
+                }
+
+				bins[key] = reader.read(bins[key]).records;
 			}
 			return bins;
 		},

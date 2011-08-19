@@ -11,12 +11,28 @@ Ext.define('NextThought.proxy.Rest', {
     	this.callParent(arguments);
     },
 
-    buildUrl: function(request){
+    buildUrl: function(request) {
+        var me = this,
+            appendId  = me.appendId,
+            action = request.operation.action;
+
+        if (action!='update' && action!='destroy')
+            me.buildUrlForGeneralUse(request);
+        else
+            me.buildUrlForModify(request);
+
+        me.appendId = false;
+    	var result = me.callParent(arguments);
+    	me.appendId = appendId;
+
+        return result;
+    },
+
+    buildUrlForGeneralUse: function(request){
  	    var me 		  = this,
 	        operation = request.operation,
 	        records   = operation.records || [],
 	        record    = records[0],
-	        format    = me.format,
 	        url       = _AppConfig.server.host + _AppConfig.server.data + 'users/' + _AppConfig.server.username +'/' + me.collectionName,
 	        containerId	  = record ? record.get('ContainerId') : me.containerId ? me.containerId : undefined,
 	        appendId  = me.appendId,
@@ -25,10 +41,7 @@ Ext.define('NextThought.proxy.Rest', {
 		if (!me.collectionName) {
 			throw 'No collectionName given';
 		}
-		// if (!containerId) {
-			// throw 'No containerId given';
-		// }
-		
+
  		if (containerId) {
             if (!url.match(/\/$/)) {
                 url += '/';
@@ -36,20 +49,10 @@ Ext.define('NextThought.proxy.Rest', {
       
             url += containerId;
         }
-        if (me.appendId && operation.action!='create' && id!==undefined) {
-            if (!url.match(/\/$/)) {
-                url += '/';
-            }
-      
-            url += id;
-        }
+
         
         request.url = url;
-    	
-    	me.appendId = false;
-    	var result = me.callParent(arguments);
-    	me.appendId = appendId;
-    	
+
     	//set up some directions about how to read the data in the reader:
     	me.reader.hasContainerId = me.reader.hasContainerId || !!containerId;
     	me.reader.hasId = me.appendId && id!==undefined;
@@ -63,8 +66,26 @@ Ext.define('NextThought.proxy.Rest', {
 	    		// 'url:',result
 	    		// );
     	// }
-    	
-    	return 	result;
+    },
+
+    buildUrlForModify: function(request) {
+        var me 		  = this,
+	        operation = request.operation,
+	        records   = operation.records || [],
+	        record    = records[0],
+	        url       = _AppConfig.server.host + _AppConfig.server.data + 'Objects',
+	        id        = record.get('OID');
+
+
+        //always append OID
+        if (!url.match(/\/$/)) {
+            url += '/';
+        }
+        url += id;
+
+        request.url = url;
+        me.reader.hasId = true;
     }
+
 	
 });

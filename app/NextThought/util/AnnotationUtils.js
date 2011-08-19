@@ -34,7 +34,6 @@ Ext.define('NextThought.util.AnnotationUtils',
 		
 		selectionToNote: function(range) {
 			var note = Ext.create('NextThought.model.Note');
-			     debugger;
 			var node = range.startContainer || range.endContainer;
             var blockNode = this.findBlockParent(node);
 

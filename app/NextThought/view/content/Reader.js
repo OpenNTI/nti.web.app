@@ -183,7 +183,7 @@ Ext.define('NextThought.view.content.Reader', {
     	}
     	catch(e) {
     		if(NextThought.isDebug) {
-    			console.log(xpath, e);
+    			console.log('xpath:', xpath, 'error:', e, e.message, e.stack);
     		}
     		return null;
     	}

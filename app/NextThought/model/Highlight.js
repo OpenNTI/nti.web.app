@@ -8,6 +8,7 @@ Ext.define('NextThought.model.Highlight', {
     idProperty: 'OID',
     fields: [
         { name: 'id', mapping: 'ID', type: 'int' },
+        { name: 'OID', type: 'string' },
         { name: 'startXpath', type: 'string' },
         { name: 'startAnchor', type: 'string' },
         { name: 'startHighlightedFullText', type: 'string' },
@@ -20,7 +21,7 @@ Ext.define('NextThought.model.Highlight', {
        	{ name: 'endOffset', type: 'int' },
        	{ name: 'Creator', type: 'string'},
        	{ name: 'color', type: 'string', defaultValue: 'yellow' },
-       	{ name: 'modifiedtime', type: 'string' },
+       	{ name: 'Last Modified', type: 'date' },
        	{ name: 'ContainerId', type: 'string'},
         { name: 'text', type: 'string' },
        	{ name: 'sharedWith', type: Ext.data.Types.FRIEND_LIST }//, defaultValue: ['jonathan.grimes@nextthought.com'] }
