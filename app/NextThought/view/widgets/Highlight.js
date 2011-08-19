@@ -27,7 +27,8 @@ Ext.define('NextThought.view.widgets.Highlight', {
 			n = e ? e.dom : this.createElement('div',this._cnt,'document-highlights unselectable'),
 			p = n.parentNode;
 		n.setAttribute('id',id);
-		p.insertBefore(n,p.firstChild);
+		p.appendChild(n);
+//        p.insertBefore(n,p.firstChild);
 		return Ext.get(n);
 	},
 	

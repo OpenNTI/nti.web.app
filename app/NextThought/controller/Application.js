@@ -8,6 +8,7 @@ Ext.define('NextThought.controller.Application', {
 		'Viewport',
 		'modes.Reader',
 		'modes.Groups',
+        'modes.Stream',
 		'navigation.Breadcrumb',
 		'widgets.Highlight',
 		'widgets.Note',
@@ -18,6 +19,7 @@ Ext.define('NextThought.controller.Application', {
 		'widgets.MiniStreamList',
 		'widgets.GroupEditorWindow',
 		'content.Reader',
+        'content.Stream',
 		'widgets.Tracker'
 	],
 	
@@ -40,6 +42,12 @@ Ext.define('NextThought.controller.Application', {
         },{
             ref: 'readerStream',
             selector: 'reader-mode-container mini-stream'
+        },{
+            ref: 'streamPeople',
+            selector: 'stream-mode-container people-list'
+        },{
+            ref: 'stream',
+            selector: 'stream-mode-container stream-panel'
         }
     ],
 
@@ -81,6 +89,10 @@ Ext.define('NextThought.controller.Application', {
     	 	
     	 	'reader-mode-container filter-control':{
     	 		'filter-changed': this.readerFilterChanged
+    	 	},
+
+            'stream-mode-container filter-control':{
+    	 		'filter-changed': this.streamFilterChanged
     	 	},
     	 	
     	 	'sharewithwindow button':{
@@ -231,7 +243,15 @@ Ext.define('NextThought.controller.Application', {
 	    	
     	Ext.each(o,function(i){i.applyFilter(newFilter);});
     },
-    
+
+    streamFilterChanged: function(newFilter){
+    	var o = [
+	    	this.getStream(),
+	    	this.getStreamPeople()
+	    	];
+
+    	Ext.each(o,function(i){i.applyFilter(newFilter);});
+    },
     
     onNoteAction: function(btn, event){
     	var p = btn.up('notepanel');

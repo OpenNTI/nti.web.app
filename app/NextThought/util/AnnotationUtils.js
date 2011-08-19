@@ -73,8 +73,104 @@ Ext.define('NextThought.util.AnnotationUtils',
 				d = /block|box/i;
 			return (e && d.test(e.getStyle('display')) && p.test(e.getStyle('position'))); 
 		},
-		
-		
+
+        getNodeFromXPath: function(xpath) {
+             try {
+                 return document.evaluate(xpath, document).iterateNext();
+             }
+             catch(e) {
+                 if(NextThought.isDebug) {
+                     console.log('xpath:', xpath, 'error:', e, e.message, e.stack);
+                 }
+                 return null;
+             }
+        },
+
+        buildRangeFromRecord: function(r) {
+            var endElement = this.getNodeFromXPath(r.get('endXpath'));
+            var startElement = this.getNodeFromXPath(r.get('startXpath'));
+
+            var range = document.createRange();
+
+           try {
+                range.setEnd(endElement ? endElement : startElement, r.get('endOffset'));
+                range.setStart(startElement, r.get('startOffset'));
+                if (!startElement || range.collapsed) throw 'rageing tempor tantrum';
+                return range;
+            }
+            catch(e) {
+                if(NextThought.isDebug) {
+                    console.log('bad range', r, e, e.toString());
+                }
+            }
+
+            //if we make it this far, there's something wrong with the range, we'll try to reconstruct from anchors
+
+            return this.rangeFromAnchors(r);
+        },
+
+        getAnchor: function(a) {
+            return Ext.query('a[name=' + a +']')[0];
+        },
+
+        getNextAnchor: function(a) {
+            var all = Ext.query('a[name]'),
+                result = null,
+                anchor = a;
+
+            Ext.each(all, function(e, i){
+               if (e==a) {
+                   result = all[i+1];
+                   return false;
+               }
+            });
+
+            //this is the last anchor?
+            if (!result && anchor) {
+                while(anchor.nextSibling) {
+                    anchor = nextSibling;
+                }
+                result = anchor;
+            }
+
+            return result;
+        },
+
+		rangeFromAnchors: function(r) {
+            //TODO: this still isn't qorking quite right, if the start/end anchor are the same but have diff text nodes.
+            var startAnchor = r.get('startAnchor'),
+                endAnchor = r.get('endAnchor'),
+                startHighlightedFullText = r.get('startHighlightedFullText'),
+                endHighlightedFullText = r.get('endHighlightedFullText'),
+                tempRange = document.createRange(),
+                resultRange = document.createRange();
+
+            if(!endHighlightedFullText) {
+                endHighlightedFullText = startHighlightedFullText;
+            }
+
+            //resolve anchors to their actual DOM nodes
+            startAnchor = this.getAnchor(startAnchor)
+            endAnchor = endAnchor ? this.getAnchor(endAnchor) : this.getNextAnchor(startAnchor);
+
+            tempRange.setStart(startAnchor, 0);
+            tempRange.setEnd(endAnchor, 0);
+
+            var text,
+                texts = document.evaluate('.//text()', tempRange.commonAncestorContainer);
+
+            while(resultRange.collapsed && (text = texts.iterateNext())){
+                if (text.nodeValue==startHighlightedFullText) {
+                    resultRange.setStart(text, r.get('startOffset'));
+                }
+                if (text.nodeValue==endHighlightedFullText) {
+                    resultRange.setEnd(text, r.get('endOffset'));
+                }
+            }
+
+            return resultRange.collapsed ? null : resultRange;
+        },
+
 		selectionToHighlight: function(range) {
 			var highlight = Ext.create('NextThought.model.Highlight'),
                 startNode = range.startContainer,
@@ -101,7 +197,6 @@ Ext.define('NextThought.util.AnnotationUtils',
 		},
 
         _fixHighlightEndpoints: function(endNode, startNode, highlight) {
-
             if (!this.isTextNode(endNode) && !this.isMathNode(endNode) && !this.isImageNode(endNode)) {
 
                 var end = null;
@@ -137,6 +232,7 @@ Ext.define('NextThought.util.AnnotationUtils',
                 highlight.set('startHighlightedText', (fullText != startNode.nodeValue) ? fullText : startNode.nodeValue.substring(startOffset));
                 highlight.set('endHighlightedFullText', this.getNodeTextValue(endNode));
 
+                fullText = this.getNodeTextValue(endNode);
                 highlight.set('endHighlightedText',
                     (endOffset != 0 && endNode.nodeValue != null)
                         ? (fullText != endNode.nodeValue)

@@ -177,24 +177,13 @@ Ext.define('NextThought.view.content.Reader', {
 		this.setActive(state.book, state.path, true);
 	},
     
-    _getNodeFromXPath: function(xpath) {
-    	try {
-    		return document.evaluate(xpath, document).iterateNext();
-    	}
-    	catch(e) {
-    		if(NextThought.isDebug) {
-    			console.log('xpath:', xpath, 'error:', e, e.message, e.stack);
-    		}
-    		return null;
-    	}
-    },
-    
+
     _objectsLoaded: function(bins) {
     	var contributors = {}, me = this;
 
 		Ext.each(bins.Highlight, 
     		function(r){
-    			var range = me._buildRangeFromRecord(r);
+    			var range = AnnotationUtils.buildRangeFromRecord(r);
     			if (!range){
     				console.log('removing bad highlight');
 	    			//r.destroy();
@@ -217,27 +206,7 @@ Ext.define('NextThought.view.content.Reader', {
     	me.bufferedDelayedRelayout();
     	me.fireEvent('publish-contributors',contributors);
 	},
-    
-    _buildRangeFromRecord: function(r) {
-		var endElement = this._getNodeFromXPath(r.get('endXpath'));
-		var startElement = this._getNodeFromXPath(r.get('startXpath'));
-		var range = document.createRange();
-	
-		try {
-			range.setEnd(endElement ? endElement : startElement, r.get('endOffset'));
-			range.setStart(startElement, r.get('startOffset'));
-			if (!startElement || range.collapsed) throw 'rageing tempor tantrum';
-			return range;
-		}
-		catch(e) {
-			if(NextThought.isDebug) {
-				console.log('bad range', r, e, e.toString());
-			}
-		}
-		
-		return null;
-		
-    },
+
     
     _loadContentAnnotations: function(containerId){
     	this._containerId = containerId;
