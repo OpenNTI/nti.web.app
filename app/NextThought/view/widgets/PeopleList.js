@@ -37,7 +37,7 @@ Ext.define('NextThought.view.widgets.PeopleList', {
 	},
 
 	updateList: function(){
-		var k, c = 0, p = this.items.get(1);
+		var k, c = 0, p = this.items.get(1), f = this._filter;
 		p.removeAll();
 		for(k in this._contributors){
 			this._contributors.hasOwnProperty(k);
@@ -46,7 +46,7 @@ Ext.define('NextThought.view.widgets.PeopleList', {
 				break;
 			}
 				
-			if(this._filter.shareTargets[k]){
+			if(f.shareTargets && f.shareTargets[k]){
 				c++;
 				UserDataLoader.resolveUser(k, function(f){
 					p.add({	xtype: 'image', 

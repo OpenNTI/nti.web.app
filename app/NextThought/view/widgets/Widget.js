@@ -20,7 +20,7 @@ Ext.define('NextThought.view.widgets.Widget', {
 	
 	getNodeFromXPath: function(xpath) {
     	try {
-    		return document.evaluate(xpath, document).iterateNext();
+    		return document.evaluate(xpath, document, null, XPathResult.ANY_TYPE, null).iterateNext();
     	}
     	catch(e) {
     		if(NextThought.isDebug) {

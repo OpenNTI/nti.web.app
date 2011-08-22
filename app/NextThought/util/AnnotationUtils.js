@@ -76,7 +76,7 @@ Ext.define('NextThought.util.AnnotationUtils',
 
         getNodeFromXPath: function(xpath) {
              try {
-                 return document.evaluate(xpath, document).iterateNext();
+                 return document.evaluate(xpath, document, null, XPathResult.ANY_TYPE, null).iterateNext();
              }
              catch(e) {
                  if(NextThought.isDebug) {
@@ -157,7 +157,8 @@ Ext.define('NextThought.util.AnnotationUtils',
             tempRange.setEnd(endAnchor, 0);
 
             var text,
-                texts = document.evaluate('.//text()', tempRange.commonAncestorContainer);
+                texts = document.evaluate(  './/text()', tempRange.commonAncestorContainer,
+                                            null, XPathResult.ORDERED_NODE_ITERATOR_TYPE, null);
 
             while(resultRange.collapsed && (text = texts.iterateNext())){
                 if (text.nodeValue==startHighlightedFullText) {

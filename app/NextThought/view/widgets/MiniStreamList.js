@@ -73,7 +73,7 @@ Ext.define('NextThought.view.widgets.MiniStreamList', {
 			change = this._stream[k];
 			var u = change.get('Creator');
 			
-			if(f.shareTargets[ u ] || (f.includeMe && f.includeMe==u)){
+			if(f.shareTargets && f.shareTargets[ u ] || (f.includeMe && f.includeMe==u)){
 				
 				u = UserDataLoader.resolveUser(u);
 				

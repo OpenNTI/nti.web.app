@@ -3,7 +3,8 @@ Ext.define('NextThought.view.widgets.FilterControlPanel', {
 	extend: 'Ext.panel.Panel',
 	alias: 'widget.filter-control',
 	requires: [
-			'NextThought.proxy.UserDataLoader'
+			'Ext.form.field.Checkbox',
+            'NextThought.proxy.UserDataLoader'
 			],
 
 	width: MIN_SIDE_WIDTH,
@@ -31,35 +32,38 @@ Ext.define('NextThought.view.widgets.FilterControlPanel', {
 	
 	
 	addGroups : function(groups){
-		this.removeAll();
-		var p = 'auto auto auto 10px';
-		this.add({ border: false,html:'&nbsp;', padding: 30});
-		
-		var form = Ext.create('Ext.form.Panel',{border: false});
-		form.add({ border: false,html:'<div>Who:</div><hr size=1/>', padding: '10px auto'});		
-		form.add({
-			cls: 'x-all-filter-btn',
-			name: 'allgroupsbutton',
-			xtype: 'checkbox',
-			boxLabel: 'All'
-		});
-		
+        this.removeAll();
+		var p = 'auto auto auto 10px',
+            form = Ext.create('Ext.form.Panel',{border: false});
+
+        this.add({ border: false,html:'&nbsp;', padding: 30});
+        this.add(form);
+
+        form.add({ border: false,html:'<div>Who:</div><hr size=1/>', padding: '10px auto'});
+
+        form.add({
+            boxLabel: 'All',
+            cls: 'x-all-filter-btn',
+            name: 'allgroupsbutton',
+            xtype: 'checkbox'
+        });
+
 		form.add({
 			padding: p,
 			cls: 'user-group',
 			usergroup: true,
-			xtype:'checkbox',
+			xtype:'checkboxfield',
 			boxLabel: 'Me',
-			isMe: true	
+			isMe: true
 		});
-		
-		Ext.each(groups, 
+
+		Ext.each(groups,
 			function(v){
 				form.add({
 					padding: p,
 					cls: 'user-group',
 					usergroup: true,
-					xtype:'checkbox',
+					xtype:'checkboxfield',
 					boxLabel: v.get('realname'),	
 					record: v
 				});
@@ -67,22 +71,18 @@ Ext.define('NextThought.view.widgets.FilterControlPanel', {
 			this
 		);
 		
-	
 		form.add({ border: false,html:'<div>What:</div><hr size=1/>', padding: '10px auto'});
 		
 		form.add({
 			cls: 'x-all-filter-btn',
 			name: 'alltypesbutton',
-			xtype: 'checkbox',
+			xtype: 'checkboxfield',
 			boxLabel: 'All'
 		});
 		
 		form.add({ xtype:'checkbox', padding: p, boxLabel: 'Highlights', model: 'NextThought.view.widgets.Highlight' });
 		form.add({ xtype:'checkbox', padding: p, boxLabel: 'Notes', model: 'NextThought.view.widgets.Note' });
-		
-		this.add(form);
-		
-		
+
 		this.fireEvent('filter-control-loaded',this.getId());
 	}
 });
