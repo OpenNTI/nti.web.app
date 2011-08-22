@@ -298,11 +298,16 @@ Ext.define('NextThought.proxy.UserDataLoader',{
 			return this._readers[modelClass];
 			
 		},
-		getPageItems: function(pageId, callbacks){
+
+        getPageItems: function(pageId, callbacks){
+            return this.getItems(callbacks, '/Pages/'+pageId+'/UserGeneratedData');
+        },
+
+		getItems: function(callbacks, postFix){
 			var h = _AppConfig.server.host,
 				d = _AppConfig.server.data,
 				u = _AppConfig.server.username;
-				url = h+d+'users/'+u+'/Pages/'+pageId+'/UserGeneratedData';
+				url = h+d+'users/'+u+(postFix ? postFix : "") ;
 				
 			this._pageItemsRequest = Ext.Ajax.request({
 				url: url,
@@ -318,19 +323,9 @@ Ext.define('NextThought.proxy.UserDataLoader',{
 						console.log('Could not load items',arguments);
 				},
 				success: function(r,o) {
-					var json = Ext.decode(r.responseText);
-					if(!json || !json.Items){
-						if(callbacks && callbacks.failure){
-							callbacks.failure.call(callbacks.scope || this, 'bad dataz');
-						} 
-						else if(NextThought.isDebug){
-							console.log('Response sucked:', r, 'bad json:', json);
-						}
-						return;
-					}
+					var json = Ext.decode(r.responseText),
+                        bins = this._iterateAndCollect(json);
 
-					var bins = this._binAndParseItems(json.Items);
-					
 					if(callbacks && callbacks.success){
 						callbacks.success.call(callbacks.scope || this, bins);
 					}
@@ -341,7 +336,31 @@ Ext.define('NextThought.proxy.UserDataLoader',{
 			});
 		},
 		
-		
+		_iterateAndCollect: function(json) {
+            var bins = {},
+                me = this;
+
+            if (Ext.isArray(json)) {
+				Ext.each(json, function(o, key){
+					collect(o, key);
+				},
+				me);
+			}
+			else {
+				for (var key in json) {
+					if (!json.hasOwnProperty(key)) continue;
+					collect(json[key], key);
+				}
+			}
+			return bins;
+
+            function collect(o, key) {
+                if (/FriendsLists/i.test(key) || typeof(o) != 'object') return;
+
+			    me._binAndParseItems(o, bins);
+			}
+        },
+
 		_toArray: function(s){
 			var r=[],k;
 			for(k in s){if(!s.hasOwnProperty(k))continue;r.push(s[k]);}
@@ -349,8 +368,8 @@ Ext.define('NextThought.proxy.UserDataLoader',{
 		},
 		
 		
-		_binItems: function(items){
-			var bins = {};
+		_binItems: function(items, existingBins){
+			var bins = existingBins || {};
 			if (Ext.isArray(items)) {
 				Ext.each(items, function(o){
 					addToBin(o);
@@ -375,8 +394,8 @@ Ext.define('NextThought.proxy.UserDataLoader',{
 			}
 		},
 
-		_binAndParseItems: function(items){
-			var bins = this._binItems(items), key;
+		_binAndParseItems: function(items, existingBins){
+			var bins = this._binItems(items, existingBins), key;
 			for(key in bins){
                 var reader = this._getReaderForModel(key);
 				if(!bins.hasOwnProperty(key)) continue;

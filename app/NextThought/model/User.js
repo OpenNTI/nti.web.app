@@ -8,7 +8,7 @@ Ext.define(	'NextThought.model.User', {
     idProperty: 'id',
     // belongsTo: 'NextThought.model.FriendsList',
     fields: [
-        { name: 'Last Modified', type: 'date' },
+        { name: 'Last Modified', type: 'date', dateFormat: 'timestamp' },
         { name: 'id', mapping: 'ID', type: 'string' },
         { name: 'Username', type: 'string' },
         { name: 'alias', type: 'string' },

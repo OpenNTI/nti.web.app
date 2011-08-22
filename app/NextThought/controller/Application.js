@@ -10,6 +10,7 @@ Ext.define('NextThought.controller.Application', {
 		'modes.Groups',
         'modes.Stream',
 		'navigation.Breadcrumb',
+        'widgets.ItemNavigator',
 		'widgets.Highlight',
 		'widgets.Note',
 		'widgets.NoteEditor',
@@ -20,7 +21,9 @@ Ext.define('NextThought.controller.Application', {
 		'widgets.GroupEditorWindow',
 		'content.Reader',
         'content.Stream',
-		'widgets.Tracker'
+		'widgets.Tracker',
+        'widgets.LeftColumn',
+        'widgets.RightColumn'
 	],
 	
 	refs: [
@@ -63,9 +66,14 @@ Ext.define('NextThought.controller.Application', {
     	 this.control({
     	 	'master-view':{
 				'edit-note': this.editNote,
-				'share-with': this.shareWith
+				'share-with': this.shareWith,
+                'object-changed' : this.objectChanged
     	 	},
-    	 	
+
+            'leftColumn button[objectExplorer]': {
+                'click': this.objectExplorerClicked
+            },
+
     	 	'breadcrumbbar':{
     	 		'navigate': this.navigate
     	 	},
@@ -133,10 +141,41 @@ Ext.define('NextThought.controller.Application', {
     	 	},
     	 	'group-editor button':{
     	 		'click': this.groupEditorButtonClicked
-    	 	}
+    	 	},
+            'item-navigator': {
+                'annotation-destroyed': this.removeAnnotation
+            }
     	 });
     },
-    
+
+    removeAnnotation: function(oid){
+        this.getReader().removeAnnotation(oid);
+    },
+
+    objectChanged: function() {
+        if (!this.objectExplorer || !this.objectExplorer.isVisible()) return;
+        Ext.ComponentQuery.query('window item-navigator')[0].reload();
+    },
+
+    objectExplorerClicked: function(btn, e, o) {
+        if (!this.objectExplorer) {
+            this.objectExplorer = 	Ext.create('Ext.Window', {
+				id:'object-explorer',
+				title: 'Nav',
+				x:100,
+				y:100,
+				width: 400,
+				height: 250,
+				maximizable:true,
+				minimizable:true,
+				layout: 'fit',
+				closeAction: 'hide',
+				items: Ext.create('widget.item-navigator', {})
+			});
+        }
+
+        this.objectExplorer.show();
+    },
 	
 	reloadGroups: function(){
 		UserDataLoader.getFriendsListsStore().load();

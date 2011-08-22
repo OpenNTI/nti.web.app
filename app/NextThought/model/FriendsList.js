@@ -32,7 +32,7 @@ Ext.define('NextThought.model.FriendsList', {
 			],
     idProperty: 'OID',
     fields: [
-    	{ name: 'Last Modified', type: 'date' },
+    	{ name: 'Last Modified', type: 'date', dateFormat: 'timestamp' },
         { name: 'id', mapping: 'ID', type: 'string' },
         { name: 'OID', type: 'string' },
         { name: 'Creator', type: 'string' },

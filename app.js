@@ -45,21 +45,6 @@ Ext.application({
 				Ext.getBody().mask('load failed');
 				return;
 			}
-			
-			
-			Ext.create('Ext.Window', { 
-				id:'object-explorer', 
-				title: 'Nav', 
-				x:100,
-				y:100,
-				width: 400, 
-				height: 250, 
-				maximizable:true, 
-				minimizable:true, 
-				layout: 'fit', 
-				closeAction: 'hide', 
-				items: Ext.create('NextThought.view.views.ItemNavigator', {})
-			});
 	
 			Ext.EventManager.onWindowResize(resizeBlocker);
 			Ext.create('NextThought.view.Viewport',{}).getEl();

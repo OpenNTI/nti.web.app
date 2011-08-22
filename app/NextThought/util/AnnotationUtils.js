@@ -39,7 +39,7 @@ Ext.define('NextThought.util.AnnotationUtils',
 
 			if (!blockNode) throw 'No block node found.';
 
-            var anchorNode = this.getNextAnchor(blockNode);
+            var anchorNode = this.getNextAnchorInDOM(blockNode);
             var pageOffsets = Ext.get(anchorNode).getOffsetsTo(Ext.get('NTIContent'));
             note.set('anchorPoint', anchorNode.getAttribute('name'));
             note.set('top', pageOffsets[0]);
@@ -47,7 +47,7 @@ Ext.define('NextThought.util.AnnotationUtils',
 			return note;
 		},
 
-        getNextAnchor: function(node) {
+        getNextAnchorInDOM: function(node) {
             var anchor = null;
             Ext.each(Ext.query('A[name]'), function(a){
                 if (a.compareDocumentPosition(node) == 2) { //2 == preceedes
@@ -103,7 +103,6 @@ Ext.define('NextThought.util.AnnotationUtils',
                     console.log('bad range', r, e, e.toString());
                 }
             }
-
             //if we make it this far, there's something wrong with the range, we'll try to reconstruct from anchors
 
             return this.rangeFromAnchors(r);
@@ -125,14 +124,6 @@ Ext.define('NextThought.util.AnnotationUtils',
                }
             });
 
-            //this is the last anchor?
-            if (!result && anchor) {
-                while(anchor.nextSibling) {
-                    anchor = nextSibling;
-                }
-                result = anchor;
-            }
-
             return result;
         },
 
@@ -142,8 +133,8 @@ Ext.define('NextThought.util.AnnotationUtils',
                 endAnchor = r.get('endAnchor'),
                 startHighlightedFullText = r.get('startHighlightedFullText'),
                 endHighlightedFullText = r.get('endHighlightedFullText'),
-                tempRange = document.createRange(),
-                resultRange = document.createRange();
+                resultRange = document.createRange(),
+                container = null;
 
             if(!endHighlightedFullText) {
                 endHighlightedFullText = startHighlightedFullText;
@@ -153,11 +144,21 @@ Ext.define('NextThought.util.AnnotationUtils',
             startAnchor = this.getAnchor(startAnchor)
             endAnchor = endAnchor ? this.getAnchor(endAnchor) : this.getNextAnchor(startAnchor);
 
-            tempRange.setStart(startAnchor, 0);
-            tempRange.setEnd(endAnchor, 0);
+
+
+            try {
+                var tempRange = document.createRange();
+                tempRange.setStart(startAnchor, 0);
+                tempRange.setEnd(endAnchor, 0);
+                container = tempRange.commonAncestorContainer;
+            }
+            catch (e) {
+                console.log('End Anchor is null', e, e.message, e.stack);
+                container = Ext.get(startAnchor).up('.page-content').dom;
+            }
 
             var text,
-                texts = document.evaluate(  './/text()', tempRange.commonAncestorContainer,
+                texts = document.evaluate(  './/text()', container,
                                             null, XPathResult.ORDERED_NODE_ITERATOR_TYPE, null);
 
             while(resultRange.collapsed && (text = texts.iterateNext())){
@@ -175,17 +176,19 @@ Ext.define('NextThought.util.AnnotationUtils',
 		selectionToHighlight: function(range) {
 			var highlight = Ext.create('NextThought.model.Highlight'),
                 startNode = range.startContainer,
-                endNode = range.endContainer;
+                endNode = range.endContainer,
+                startAnchor = this.ascendToAnchor(startNode),
+                endAnchor = this.ascendToAnchor(endNode);
 
             highlight.set('text', range.toString());
 
             //start information
          	highlight.set('startXpath', this.getPathTo(startNode));
-			highlight.set('startAnchor', this.ascendToAnchor(startNode));
+			highlight.set('startAnchor', startAnchor);
             highlight.set('startOffset', range.startOffset);
             //end information
 			highlight.set('endXpath', this.getPathTo(endNode));
-            highlight.set('endAnchor', this.ascendToAnchor(endNode));
+            if (startAnchor != endAnchor) highlight.set('endAnchor', endAnchor);
 			highlight.set('endOffset', range.endOffset);
 
             //special case when the end node is a div containing an img.
@@ -221,15 +224,14 @@ Ext.define('NextThought.util.AnnotationUtils',
                 endOffset = highlight.get('endOffset'),
                 startOffset = highlight.get('startOffset');
 
-            if (startNode === endNode) {
+            if (!highlight.get('endAnchor')) {
                 //same anchor, this effects our snippets, there is no end snippet
                 highlight.set('startHighlightedFullText', fullText);
                 highlight.set('startHighlightedText', (fullText != startNode.nodeValue) ? fullText : startNode.nodeValue.substring(startOffset, endOffset));
-                highlight.set('endAnchor', null); //we don't need to save this.
             }
             else {
                 //different anchors, we'll have 2 snippets
-                highlight.set('startHighlightedFullText', fullText);
+                highlight.set('startHighlightedFullText', fullText);                                                                                        ß
                 highlight.set('startHighlightedText', (fullText != startNode.nodeValue) ? fullText : startNode.nodeValue.substring(startOffset));
                 highlight.set('endHighlightedFullText', this.getNodeTextValue(endNode));
 

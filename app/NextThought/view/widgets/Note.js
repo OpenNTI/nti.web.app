@@ -118,14 +118,16 @@ Ext.define( 'NextThought.view.widgets.Note', {
 		// c.alignTo(a, 'tl-bl?',[0,-h]);
 		c.moveTo(p.getLeft()+p.getPadding('l'),a.getTop()+(adjust?0:extra));
         //move the nib to the top-aligning corner of the note container
-		Ext.get(me._img).moveTo(p.getLeft(), c.getTop());
+        if (me._img)
+		    Ext.get(me._img).moveTo(p.getLeft(), c.getTop());
 		
 		//always move to the end
 		if(c.dom.nextSibling)
 			me._cnt.appendChild(c.dom);
 			
-		//me._cmp.doLayout();
-        me.noteCmp.doLayout();
+		if (me.noteCmp)
+            me.noteCmp.doLayout();
+
 		}
 		catch(e){
 			console.log(e,e.message, e.stack);

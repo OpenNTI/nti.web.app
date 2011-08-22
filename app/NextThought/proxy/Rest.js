@@ -25,6 +25,9 @@ Ext.define('NextThought.proxy.Rest', {
     	var result = me.callParent(arguments);
     	me.appendId = appendId;
 
+        //fire an event to Viewport in case anyone cares
+        Ext.ComponentQuery.query('master-view')[0].fireEvent('object-changed');
+
         return result;
     },
 
