@@ -11,6 +11,13 @@ Ext.define('NextThought.proxy.Rest', {
     	this.callParent(arguments);
     },
 
+    doRequest: function(){
+        this.callParent(arguments);
+
+        //fire an event to Viewport in case anyone cares
+        Ext.ComponentQuery.query('master-view')[0].fireEvent('object-changed');
+    },
+
     buildUrl: function(request) {
         var me = this,
             appendId  = me.appendId,
@@ -24,9 +31,6 @@ Ext.define('NextThought.proxy.Rest', {
         me.appendId = false;
     	var result = me.callParent(arguments);
     	me.appendId = appendId;
-
-        //fire an event to Viewport in case anyone cares
-        Ext.ComponentQuery.query('master-view')[0].fireEvent('object-changed');
 
         return result;
     },

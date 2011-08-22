@@ -12,7 +12,7 @@ Ext.define('NextThought.view.widgets.ItemNavigator', {
    	initComponent: function(){
         var me = this;
    		me.callParent(arguments);
-
+        //me.el.mask('loading...');
         me._store = Ext.create('Ext.data.Store',{
             model: 'NextThought.model.GenericObject',
 			proxy: 'memory'
@@ -80,7 +80,7 @@ Ext.define('NextThought.view.widgets.ItemNavigator', {
     },
 
     reload: function() {
-       this._store.removeAll(false);
+       //this._store.removeAll(false);
        UserDataLoader.getItems({
             scope: this,
             success: this.itemsLoaded
@@ -88,11 +88,31 @@ Ext.define('NextThought.view.widgets.ItemNavigator', {
     },
 
     itemsLoaded: function(bins) {
-        for (var key in bins) {
-            if (!bins.hasOwnProperty(key)) continue;
-            this._store.add(bins[key]);
-        }
+        var me = this,
+            OIDs = {},
+            id = null,
+            s = this._store,
+            key;
 
-        console.log('items loaded', arguments);
+        for (key in bins) {
+            if (!bins.hasOwnProperty(key)) continue;
+            Ext.each(bins[key], function(r){
+                id = r.get('OID');
+                OIDs[id]=true;
+
+                if(s.indexOfId(id)<0)
+                    s.add(r);
+            },
+            me);
+        }
+        //remove records
+        s.each(function(r){
+            if(!!OIDs[r.get('OID')]) return;
+
+            s.remove(r);
+        },me);
+
+        if (me.el.isMasked())
+            me.el.unmask();
     }
 });

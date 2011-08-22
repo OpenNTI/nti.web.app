@@ -76,7 +76,7 @@ Ext.define('NextThought.view.content.Reader', {
 
     removeAnnotation: function(oid) {
         Ext.each(this._annotations, function(v, i){
-			if (v._record.get('OID') != oid) return;
+            if (!v || v._record.get('OID') != oid) return;
             v.cleanup();
             delete v;
             this._annotations[i] = null;
