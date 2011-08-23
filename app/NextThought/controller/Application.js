@@ -142,6 +142,9 @@ Ext.define('NextThought.controller.Application', {
     	 	'group-editor button':{
     	 		'click': this.groupEditorButtonClicked
     	 	},
+            'item-navigator gridpanel': {
+                'itemdblclick': this.itemNavigatorItemActivated
+            },
             'item-navigator': {
                 'annotation-destroyed': this.removeAnnotation
             }
@@ -155,6 +158,15 @@ Ext.define('NextThought.controller.Application', {
     objectChanged: function() {
         if (!this.objectExplorer || !this.objectExplorer.isVisible()) return;
         Ext.ComponentQuery.query('window item-navigator')[0].reload();
+    },
+
+    itemNavigatorItemActivated: function(control, record, dom, index) {
+        var containerId = record.get('ContainerId'),
+            bookInfo = NextThought.librarySource.findLocation(containerId),
+            book = bookInfo.book,
+            href = bookInfo.location.getAttribute('href');
+
+        this.navigate(book, book.root + href);
     },
 
     objectExplorerClicked: function(btn, e, o) {

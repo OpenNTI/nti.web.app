@@ -63,11 +63,13 @@ Ext.define('NextThought.Library', {
 	
     _libraryLoaded: function(callback){
 		var me = this, stack = [];
+	    //The reason for iteration 1 is to load the stack with the number of TOCs I'm going to load
 		Ext.each(this._library.titles, function(o){
 			if(!o.index){ return; }
 			stack.push(o.index);
 		});
-		
+
+        //Iteration 2 loads TOC async, so once the last one loads, callback if available
 		Ext.each(this._library.titles, function(o){
 			if(!o.index){return;}
 			me._loadToc(o.index, function(){
@@ -109,5 +111,26 @@ Ext.define('NextThought.Library', {
 		x.async="false"; 
 		x.loadXML(txt);
 		return x;
-	}
+	},
+
+    findLocation: function(containerId) {
+        var result = null;
+
+        Ext.each(this._library.titles, function(o){
+            result = this._resolveBookLocation(o, containerId);
+            if (result) return false;
+        }, this);
+
+        return result;
+    },
+
+    _resolveBookLocation: function(book, containerId) {
+        var xml = this.getToc(book.index),
+			l = Ext.DomQuery.selectNode("topic[ntiid="+containerId+"]",xml);
+
+        if (l) return {book:book, location:l};
+
+        //if l wasn't resolved.
+        return null;
+    }
 });

@@ -52,7 +52,8 @@ Ext.define('NextThought.view.widgets.ItemNavigator', {
                     },
                     {
                         xtype: 'actioncolumn',
-                        width: 30,
+                        width: 50,
+                        sortable: false,
                         items: [{
                             icon   : 'extjs/examples/shared/icons/fam/delete.gif',  // Use a URL in the icon config
                             tooltip: 'Remove',
@@ -64,6 +65,15 @@ Ext.define('NextThought.view.widgets.ItemNavigator', {
                                 s.removeAt(rowIndex);
                                 me.fireEvent('annotation-destroyed', r.get('OID'));
                                 r.destroy();
+                            }
+                        },
+                        {
+                            icon   : 'extjs/examples/shared/icons/fam/application_go.png',  // Use a URL in the icon config
+                            tooltip: 'Go to',
+                            scope: me,
+                            handler: function(grid, rowIndex, colIndex) {
+                                var r = me._store.getAt(rowIndex);
+                                grid.fireEvent('itemdblclick', grid, r, null, rowIndex);
                             }
                         }]
                     }

@@ -71,7 +71,7 @@ Ext.onReady(function(){
     		}
     	});
 	}
-	
+	Ext.Ajax.timeout==60000;
 	Ext.Ajax.on(
 		'beforerequest', function f(connection,options){
 			var loc = '';
