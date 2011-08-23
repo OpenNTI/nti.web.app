@@ -173,11 +173,11 @@ Ext.define('NextThought.controller.Application', {
         if (!this.objectExplorer) {
             this.objectExplorer = 	Ext.create('Ext.Window', {
 				id:'object-explorer',
-				title: 'Nav',
+				title: 'My Stuff',
 				x:100,
 				y:100,
-				width: 400,
-				height: 250,
+				width: 500,
+				height: 350,
 				maximizable:true,
 				minimizable:true,
 				layout: 'fit',

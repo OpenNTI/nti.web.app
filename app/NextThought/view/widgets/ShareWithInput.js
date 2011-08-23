@@ -24,7 +24,7 @@ Ext.define( 'NextThought.view.widgets.ShareWithInput', {
             '</div>';
         }
     },
-    // pageSize: 10,
+    pageSize: 5,
 	
 	emptyText: 'Share with...',	
 	enableKeyEvents: true,
