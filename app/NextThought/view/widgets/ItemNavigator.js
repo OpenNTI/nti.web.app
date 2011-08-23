@@ -98,6 +98,9 @@ Ext.define('NextThought.view.widgets.ItemNavigator', {
             if (!bins.hasOwnProperty(key)) continue;
             Ext.each(bins[key], function(r){
                 id = r.get('OID');
+
+                if (!id) return;
+
                 OIDs[id]=true;
 
                 if(s.indexOfId(id)<0)

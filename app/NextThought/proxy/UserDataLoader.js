@@ -352,12 +352,13 @@ Ext.define('NextThought.proxy.UserDataLoader',{
 					collect(json[key], key);
 				}
 			}
+
+            me._binAndParseItems([], bins);
 			return bins;
 
             function collect(o, key) {
                 if (/FriendsLists/i.test(key) || typeof(o) != 'object') return;
-
-			    me._binAndParseItems(o, bins);
+                me._binItems(o, bins)
 			}
         },
 
