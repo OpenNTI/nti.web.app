@@ -68,7 +68,7 @@ Ext.define('NextThought.controller.Login', {
 	sanitizeValues: function(values){
 		var u = values ? values.username:'';
 		
-		if(u.indexOf('@')<0){
+		if(u && u.indexOf('@')<0){
 			values.username = u+'@nextthought.com';
 		}
 		
