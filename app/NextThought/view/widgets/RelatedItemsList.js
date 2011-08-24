@@ -65,6 +65,7 @@ Ext.define('NextThought.view.widgets.RelatedItemsList', {
 	
 	
 	getRelatedItems: function(loc){
+        if(!loc.location) return {};
 		var related = loc.location.getElementsByTagName('Related'),
 			map = {};
 		

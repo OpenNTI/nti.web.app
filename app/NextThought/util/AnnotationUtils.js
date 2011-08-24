@@ -103,8 +103,8 @@ Ext.define('NextThought.util.AnnotationUtils',
                     console.log('bad range', r, e, e.toString());
                 }
             }
-            //if we make it this far, there's something wrong with the range, we'll try to reconstruct from anchors
 
+            //if we make it this far, there's something wrong with the range, we'll try to reconstruct from anchors
             return this.rangeFromAnchors(r);
         },
 
@@ -144,8 +144,6 @@ Ext.define('NextThought.util.AnnotationUtils',
             startAnchor = this.getAnchor(startAnchor)
             endAnchor = endAnchor ? this.getAnchor(endAnchor) : this.getNextAnchor(startAnchor);
 
-
-
             try {
                 var tempRange = document.createRange();
                 tempRange.setStart(startAnchor, 0);
@@ -154,7 +152,7 @@ Ext.define('NextThought.util.AnnotationUtils',
             }
             catch (e) {
                 console.log('End Anchor is null', e, e.message, e.stack);
-                container = Ext.get(startAnchor).up('.page-content').dom;
+                container = Ext.get(startAnchor).up('.page-contents').dom;
             }
 
             var text,
@@ -170,7 +168,16 @@ Ext.define('NextThought.util.AnnotationUtils',
                 }
             }
 
-            return resultRange.collapsed ? null : resultRange;
+            //add xpaths here for simplicity next time
+            if (!resultRange.collapsed) {
+                r.set('startXpath', this.getPathTo(resultRange.startContainer));
+			    r.set('endXpath', this.getPathTo(resultRange.endContainer));
+                r.save();
+
+                return resultRange;
+            }
+
+            return null;
         },
 
 		selectionToHighlight: function(range) {
@@ -195,6 +202,8 @@ Ext.define('NextThought.util.AnnotationUtils',
             if (this.isBlockNode(endNode) && this.isImageNode(endNode.firstChild)){
                 endNode = endNode.firstChild;
             }
+
+            debugger;
 
             this._fixHighlightEndpoints(endNode, startNode, highlight);
 			return highlight;

@@ -6,8 +6,8 @@ var _AppConfig = {
         // "host": "http://alpha.nextthought.com",
         "data": "/dataserver/",
         "library": "/library/library.json",
-        "username": "jonathan.grimes",
-        // "username": "jason.madden",
+        //"username": "jonathan.grimes",
+        "username": "jason.madden",
         "password": "temp001"
     }
 };

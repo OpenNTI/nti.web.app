@@ -292,7 +292,7 @@ Ext.define('NextThought.proxy.UserDataLoader',{
             }
 
             if (!this._readers[modelClass]) {
-				this._readers[modelClass] = Ext.create('NextThought.reader.Json',{model: 'NextThought.model.'+modelClass, proxy: 'nti'});
+				this._readers[modelClass] = Ext.create('NextThought.proxy.reader.Json',{model: 'NextThought.model.'+modelClass, proxy: 'nti'});
 			}
 			
 			return this._readers[modelClass];

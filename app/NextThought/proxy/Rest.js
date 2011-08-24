@@ -1,11 +1,14 @@
 Ext.define('NextThought.proxy.Rest', {
     extend: 'Ext.data.proxy.Rest',
     alias: 'proxy.nti',
-    requires: ['NextThought.reader.Json'],
+    requires: ['NextThought.proxy.reader.Json',
+               'NextThought.proxy.writer.Json'],
 	
 	url: '',
     appendId: true, //default
     reader: {type: 'nti'},
+    writer: {type: 'nti'},
+
     constructor: function(config) {
     	Ext.copyTo(this.reader, config, 'model');
     	this.callParent(arguments);
