@@ -247,13 +247,14 @@ Ext.define('NextThought.controller.Application', {
 		
 		if(btn.isCancel){
 			win.close();
+            return;
 		}
 		
 		if(!form.getForm().isValid()){
 			return false;
 		}
-		
-		rec.set('shareWith',shbx.valueModels);
+
+        rec.set('sharedWith',Ext.data.Types.SHARED_WITH.convert(shbx.valueModels));
 		rec.save({
 			scope: this,
 			success:function(newRecord,operation){

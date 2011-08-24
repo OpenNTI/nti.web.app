@@ -203,7 +203,7 @@ Ext.define('NextThought.util.AnnotationUtils',
                 endNode = endNode.firstChild;
             }
 
-            debugger;
+            //debugger;
 
             this._fixHighlightEndpoints(endNode, startNode, highlight);
 			return highlight;

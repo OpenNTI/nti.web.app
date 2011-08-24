@@ -38,5 +38,11 @@ Ext.define( 'NextThought.view.widgets.ShareWithWindow', {
 				{anchor: '100%', xtype: 'sharewithinput' }
 			]
 		});
-	}
+
+        this.down('sharewithinput').on('select', this._selectSearch, this);
+	},
+
+    _selectSearch: function(sel, items) {
+    	sel.collapse();
+    }
 });

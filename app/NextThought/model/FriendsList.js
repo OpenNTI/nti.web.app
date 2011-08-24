@@ -2,10 +2,54 @@
 Ext.data.Types.FRIEND_LIST = {
 	type: 'FriendList',
     convert: function(v) {
-        return !v.length || typeof(v[0])=='string'? v : UserDataLoader.parseItems(v);
+        var u = [];
+
+        Ext.each(v, function(o){
+
+            if(typeof(o)=='string')
+                u.push(o);
+            else if(o.get)
+                u.push(o.get('Username'));
+            else if(o.Username)
+                u.push(UserDataLoader.parseItems([o])[0]);
+            else
+                console.log("WARNING: Could not handle Object: ", o, arguments);
+
+        });
+
+        return u;
     },
     sortType: function(v) {
     	console.log('sort by FriendList:',arguments);
+        return '';
+    }
+};
+
+
+Ext.data.Types.SHARED_WITH = {
+	type: 'SharedWith',
+    convert: function(v) {
+        var u = [];
+
+        Ext.each(v, function(o){
+            var p =
+                typeof(o)=='string'
+                    ? o
+                    : o.get
+                        ? o.get('Username')
+                        : o.Username
+                            ? o.Username
+                            : null;
+            if(!p)
+                console.log("WARNING: Could not handle Object: ", o, arguments);
+            else
+                u.push(p);
+        });
+
+        return u;
+    },
+    sortType: function(v) {
+    	console.log('sort by SharedWith:',arguments);
         return '';
     }
 };

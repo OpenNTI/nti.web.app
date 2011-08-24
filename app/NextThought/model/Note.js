@@ -19,7 +19,7 @@ Ext.define('NextThought.model.Note', {
        	{ name: 'Last Modified', type: 'date', dateFormat: 'timestamp' },
        	{ name: 'Creator', type: 'string'},
        	{ name: 'ContainerId', type: 'string'},
-       	{ name: 'sharedWith', type: Ext.data.Types.FRIEND_LIST }//, defaultValue: ['jonathan.grimes@nextthought.com'] }
+       	{ name: 'sharedWith', type: Ext.data.Types.SHARED_WITH }//, defaultValue: ['jonathan.grimes@nextthought.com'] }
     ],
     proxy: {
     	type: 'nti',
