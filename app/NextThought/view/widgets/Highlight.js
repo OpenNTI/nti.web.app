@@ -37,18 +37,33 @@ Ext.define('NextThought.view.widgets.Highlight', {
 		var c = Ext.get(this._canvas);
 		show? c.show() : c.hide();
 	},
-	
+
+
+    savePhantom: function(){
+        if(!this._record.phantom)return;
+        this.isSaving = true;
+        this._record.save({
+            scope: this,
+            failure:function(){
+                this.cleanup();
+                delete this;
+            },
+            success:function(newRecord){
+                this._record = newRecord;
+            }
+        });
+    },
+
 	_buildMenu: function(){
-		var items = [];
-		
+		var items = [],r = this._record;
 		if(this._isMine) {
 			items.push({
-				text : 'Remove Highlight',
-				handler: Ext.bind(this.remove, this)
-			},{
-				text : 'Change Color',
-				menu: [Ext.create('Ext.ColorPalette', {
-                listeners: { scope: this, select: this._colorSelected }})]
+                    text : (r.phantom?'Save':'Remove')+' Highlight',
+                    handler: Ext.bind(r.phantom? this.savePhantom : this.remove, this)
+                },{
+                    text : 'Change Color',
+                    menu: [Ext.create('Ext.ColorPalette', {
+                    listeners: { scope: this, select: this._colorSelected }})]
 			});
 		}
 		
@@ -85,6 +100,7 @@ Ext.define('NextThought.view.widgets.Highlight', {
 	
 	
 	_addNote: function(){
+        this.savePhantom();
 		this._cmp.addNote(this._sel);
 	},
 

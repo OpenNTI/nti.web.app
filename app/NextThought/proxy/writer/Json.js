@@ -16,7 +16,7 @@ Ext.define('NextThought.proxy.writer.Json', {
             output[key] = defaults[key];
         }
 
-        console.log('defaults = ', defaults, 'output = ', output);
+        //console.log('defaults = ', defaults, 'output = ', output);
         return output;
     }
 });

@@ -17,21 +17,6 @@ Ext.define('NextThought.view.content.Reader', {
     	this.addEvents('edit-note','publish-contributors','location-changed');
     	this.enableBubble('edit-note');
    		this.callParent(arguments);
-
-    	this._contextMenu = Ext.create('Ext.menu.Menu', {
-			items : [
-				{
-					text : 'Highlight',
-					iconCls : 'edit'//,
-					// hadler : edit
-				},
-				{
-					text : 'Note',
-					iconCls : 'edit'//,
-					// hadler : edit
-				}
-			]
-		});
     },
     
     
@@ -66,11 +51,7 @@ Ext.define('NextThought.view.content.Reader', {
 		e.preventDefault();
 		var range = this.getSelection();
 		if( range && !range.collapsed ) {
-			this.addHighlight(range);
-			this._contextMenu.showAt(e.getXY());
-		}
-		else {
-			
+			this.addHighlight(range, e.getXY());
 		}
 	},
 
@@ -104,32 +85,39 @@ Ext.define('NextThought.view.content.Reader', {
 		this._createNoteWidget(note, true);	
 	},
 	
-	addHighlight: function(range){
+	addHighlight: function(range, xy){
 		if(!range) {
 			return;
 		}
 		
-		var highlight = AnnotationUtils.selectionToHighlight(range);
-		highlight.set('ContainerId', this._containerId);
-		console.log('the highlight', highlight);
-		highlight.save({
-			scope:this,
-			success:function(){
-				this._createHighlightWidget(range, highlight);
-			}
-		});	
+		var highlight = AnnotationUtils.selectionToHighlight(range),
+            menu,
+		    w = this._createHighlightWidget(range, highlight);
+
+        highlight.set('ContainerId', this._containerId);
+
+        menu = w.getMenu();
+        menu.on('hide', function(){
+            if(!w.isSaving){
+                w.cleanup();
+                delete w;
+            }
+        });
+        menu.showAt(xy);
+
 	},
 	
 	
 	_createHighlightWidget: function(range, record){
-		this._annotations.push(
-					Ext.create(
-						'NextThought.view.widgets.Highlight', 
-						range, record,
-						this.items.get(0).el.dom.firstChild, 
-						this));
+        var w = Ext.create(
+            'NextThought.view.widgets.Highlight',
+            range, record,
+            this.items.get(0).el.dom.firstChild,
+            this);
+        this._annotations.push(w);
+        return w;
 	},
-	
+
 	_createNoteWidget: function(record, edit){
 		try{ 
 			this._annotations.push(

@@ -30,7 +30,7 @@ Ext.define( 'NextThought.view.widgets.Annotation', {
 				'action',
 				'width: 17px; background: yellow; height: 17px; position: absolute;'+(me._isVisible?'':'visibility:hidden;'));
 		me._img._annotation = me;
-		me._menu = me._buildMenu();
+		//me._menu = me._buildMenu();
 		Ext.get(me._img).on('click', me.onClick, me);
 
         me.onResize = b;
@@ -108,6 +108,16 @@ Ext.define( 'NextThought.view.widgets.Annotation', {
 		this._record.destroy();
 		this.cleanup();
 	},
+
+
+    getMenu: function(){
+        var m = this._buildMenu();
+        m.on('hide', function(){
+            m.destroy();
+        });
+
+        return m;
+    },
 	
 	
 	_buildMenu: function(items) {
@@ -137,11 +147,11 @@ Ext.define( 'NextThought.view.widgets.Annotation', {
 		if (annotations && annotations.length > 1) {
 			var menu = Ext.create('Ext.menu.Menu');
 			Ext.each(annotations, function(o, i){
-				if (!o._menu) return;
+				if (!o.getMenu) return;
 				o.clearListeners();
 				var item = Ext.create('Ext.menu.Item', {
 						text: 'Annotation '+(i+1),
-						menu: o._menu.cloneConfig()
+						menu: o.getMenu()
 				});
 				
 				this._menuItemHook(o,item, menu);
@@ -157,7 +167,7 @@ Ext.define( 'NextThought.view.widgets.Annotation', {
 		}
 		
 		//single annotation
-		this._menu.showBy(Ext.get(this._img), 'bl');
+		this.getMenu().showBy(Ext.get(this._img), 'bl');
 	},
 	
 	_menuItemHook: function(o,item, menu){
