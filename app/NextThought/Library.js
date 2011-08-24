@@ -43,7 +43,8 @@ Ext.define('NextThought.Library', {
 				if(NextThought.isDebug) 
 					console.log('failed to load library');
 					 
-				alert("Failed to load library");
+				//alert("Failed to load library");
+                window.location.reload();
 				this._req = null;
 			},
 			success: function(r,o) {
