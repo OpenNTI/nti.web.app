@@ -1,24 +1,27 @@
+var COOKIE = '_z';
 
 Ext.define('NextThought.controller.Login', {
     extend: 'Ext.app.Controller',
     requires:[
     		'NextThought.util.Base64',
-    		'NextThought.proxy.UserDataLoader'
+    		'NextThought.proxy.UserDataLoader',
+            'Ext.util.Cookies'
     		],
 
 	views: [
-        'LoginWindow'
+        'LoginWindow',
+        'widgets.SessionInfo'
     ],
 
     init: function() {
-    	this.control({
+       	this.control({
     		'loginwindow': {
     			beforeshow: function(win,opts){
-    				//do remember me login stuff here: 
-    				if(this.attemptLogin(_AppConfig.server)){
-    					win.callback();
-    					return false;
-    				} 
+    				//do remember me login stuff here:
+                    if (Ext.util.Cookies.get(COOKIE) && this.attemptLogin()){
+                        win.callback();
+                        return false;
+                    }
     			}
     		},
             'loginwindow button[actionName=login]': {
@@ -28,18 +31,29 @@ Ext.define('NextThought.controller.Login', {
                 click: function(){
                 	window.location.replace('http://www.nextthought.com');
                 }
+            },
+            'session-info' : {
+                logout: this.handleLogout
             }
         });
     },
     
-	
+	handleLogout: function() {
+        var dt = Ext.Date.add(new Date(), Ext.Date.MONTH, -1);
+        Ext.util.Cookies.set(COOKIE, '', dt);
+        window.location.reload();
+    },
+
 	attemptLogin: function(values){
 		values = this.sanitizeValues(values);
 		//try to auth for future calls to server
 		var s = _AppConfig.server,
-			a = Base64.basicAuthString(values.username, values.password),
+            c = Ext.JSON.decode(Ext.util.Cookies.get(COOKIE)),
+			a = (!values) ? c.a : Base64.basicAuthString(values.username, values.password),
 			success = false;
-		
+
+        if (!values) values = {username: c.u};
+
 		try{	
 			Ext.Ajax.request({
 				url: s.host + s.data + 'users/' + values.username, 
@@ -59,6 +73,9 @@ Ext.define('NextThought.controller.Login', {
 		Ext.Ajax.defaultHeaders = Ext.Ajax.defaultHeaders || {};
 		Ext.Ajax.defaultHeaders['Authorization']= a;
 		Ext.copyTo(s, values, 'username');
+
+        var dt = Ext.Date.add(new Date(), Ext.Date.MONTH, 1);
+        Ext.util.Cookies.set(COOKIE, Ext.JSON.encode({a:a, u:values.username}), values.remember ? dt : null);
 		
 		s.userObject = UserDataLoader.resolveUser(values.username);
 		

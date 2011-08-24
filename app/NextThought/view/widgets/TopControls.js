@@ -1,6 +1,8 @@
 
 Ext.define('NextThought.view.widgets.TopControls', {
 	extend: 'Ext.panel.Panel',
+    alias: 'widget.top-controls',
+    requires: ['NextThought.view.widgets.SessionInfo'],
 	
 	cls: 'x-brand-and-search-bar',
 	frame: false,
@@ -37,11 +39,12 @@ Ext.define('NextThought.view.widgets.TopControls', {
     	});
     	
     	// this.add({ xtype:'tbspacer', flex:1 });
-    	
+    	/*
     	var u = _AppConfig.server.userObject,
     		n = u.get('realname'),
     		a = u.get('avatarURL');
-    	
+
+        moved to session info
     	this.add({ width: MIN_SIDE_WIDTH, height: 25, border: false,
     		// border: true, 
     		html: [
@@ -52,5 +55,7 @@ Ext.define('NextThought.view.widgets.TopControls', {
     			' <img src="resources/images/gear.png" width=19 height=19 valign=middle>',
     		'</div>'
     		].join('') });
+    	*/
+        this.add({xtype: 'session-info'});
     }
 });

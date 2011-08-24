@@ -64,6 +64,11 @@ Ext.define('NextThought.view.LoginWindow', {
 			            name: 'password',
 			            allowBlank: false,
 			            value: (p!='ask'?p:undefined)
+		        	},{
+			            xtype: 'checkboxfield',
+                        margin: '0 0 0 30px',
+			            boxLabel: 'Keep me logged in on this computer',
+			            name: 'remember'
 		        	}
 		        ]
 		    }

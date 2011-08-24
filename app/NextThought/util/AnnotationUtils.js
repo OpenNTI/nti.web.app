@@ -446,7 +446,7 @@ Ext.define('NextThought.util.AnnotationUtils',
 			var children = node.childNodes;
 			var last = null;
 		
-			if ((isTextNode(node) && node.nodeValue.trim() != "") || isMathNode(node) || isImageNode(node)) {
+			if ((this.isTextNode(node) && node.nodeValue.trim() != "") || this.isMathNode(node) || this.isImageNode(node)) {
 				last = node;
 			}
 		
