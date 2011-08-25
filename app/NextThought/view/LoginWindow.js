@@ -7,7 +7,7 @@ Ext.define('NextThought.view.LoginWindow', {
 	
 	title: 'Login', 
 	width: 400, 
-	height: 150, 
+//	height: 150,
 	// modal: true, 
 	resizable: false,
 	closable: false,
@@ -29,8 +29,6 @@ Ext.define('NextThought.view.LoginWindow', {
     }],
 	
     initComponent: function(){
-    	var u = _AppConfig.server.username,
-    		p = _AppConfig.server.password;
     	this.items = [
             {
             	xtype:'form',
@@ -42,31 +40,38 @@ Ext.define('NextThought.view.LoginWindow', {
 		            anchor: '100%'
 		        },
 		
-		        layout: {
-		            type: 'vbox',
-		            align: 'stretch'
-		        },
+//		        layout: {
+//		            type: 'vbox',
+//		            align: 'stretch'
+//		        },
+
+                layout: 'anchor',
+                defaults: {
+                    anchor: '100%',
+                    allowBlank: false
+                },
 		
 		        items: [
-		        	{
+                    {
+                        name: 'login-message',
+                        cls: 'x-login-message-box',
+                        border: false,
+                        html: 'Please enter your login information:'
+                    },{
 			            xtype: 'textfield',
 			            emptyText: 'email@address.com',
 			            fieldLabel: 'Username',
-			            name: 'username',
-			            allowBlank: false,
-			            // vtype: 'email',
-			            value: (u!='ask'?u:undefined)
+			            name: 'username'
+			            //vtype: 'email'
 		        	},{
 			            xtype: 'textfield',
 			            emptyText: 'password',
 			            inputType: 'password',
 			            fieldLabel: 'Password',
-			            name: 'password',
-			            allowBlank: false,
-			            value: (p!='ask'?p:undefined)
+			            name: 'password'
 		        	},{
 			            xtype: 'checkboxfield',
-                        margin: '0 0 0 30px',
+                        margin: '0 0 0 60px',
 			            boxLabel: 'Keep me logged in on this computer',
 			            name: 'remember'
 		        	}
@@ -75,6 +80,12 @@ Ext.define('NextThought.view.LoginWindow', {
         ];
     	
    		this.callParent(arguments);
+    },
+
+    render: function(){
+        this.callParent(arguments);
+        this.down('textfield[name=username]').inputEl.dom.autocomplete = 'on';
+        this.down('textfield[name=password]').inputEl.dom.autocomplete = 'on';
     },
     
     show: function(){

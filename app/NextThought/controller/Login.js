@@ -95,9 +95,14 @@ Ext.define('NextThought.controller.Login', {
     loginClicked: function(button) {
 	    var win    = button.up('window'),
 	        form   = win.down('form'),
-	        values = form.getValues();
+	        values = form.getValues(),
+            m      = form.down('panel[name=login-message]');
 
 		if(!form.getForm().isValid() || !this.attemptLogin(values)) {
+            form.getForm().reset();
+            m.addCls('error');
+            m.update('Could not login, please try again');
+            win.doLayout();
 			return;
 		}
 		
