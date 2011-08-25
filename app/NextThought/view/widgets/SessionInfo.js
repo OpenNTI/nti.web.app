@@ -30,7 +30,12 @@ Ext.define('NextThought.view.widgets.SessionInfo', {
     		n = u.get('realname'),
     		a = u.get('avatarURL');
 
-        this.add({cls: 'x-username',
+
+        this._menu = Ext.create('Ext.menu.Menu', {items: this._buildMenu()});
+        this._menu.on('mouseleave', this._hideMenu, this);
+
+
+        this.add({cls: 'x-username', username: true,
             html: '<span style="padding: 5px; padding-top: 6px;font-size: 12px; vertical-align: middle; cursor: pointer;">'+n+'</span>'
                 + '<img src="'+a+'" width=24 height=24 valign=middle>' });
 
@@ -44,11 +49,32 @@ Ext.define('NextThought.view.widgets.SessionInfo', {
 
     render: function(){
         this.callParent(arguments);
-        this.down('image[settings]').el.on('click', this._click, this);
+        this.down('panel[username]').el.on('mouseover', this._mouseOverUsername, this);
+        //this.down('image[settings]').el.on('click', this._click, this);
+    },
+
+
+    _buildMenu: function(){
+        return [
+            {
+                text: 'Logout',
+                scope: this,
+                handler: this._click
+            }
+        ];
+    },
+
+    _hideMenu: function(){
+        var m = this._menu;
+        setTimeout(function(){m.hide()},10);
+    },
+
+    _mouseOverUsername: function(e){
+        this._menu.showBy(
+            this.down('panel[username]').el);
     },
 
     _click: function(){
-        console.log('click');
         this.fireEvent('logout');
     }
 });
