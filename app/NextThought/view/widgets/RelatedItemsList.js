@@ -51,7 +51,7 @@ Ext.define('NextThought.view.widgets.RelatedItemsList', {
   								
   								me.fireEvent('navigate', m.book, m.book.root+m.href);
   							});
-						},
+						}
   					}
   				}
 			});

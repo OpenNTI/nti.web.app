@@ -39,16 +39,22 @@ Ext.application({
 		Ext.create('NextThought.view.LoginWindow',{callback: appStart}).show();
 
 		function appStart(){
-			NextThought.modeSwitcher = Ext.create('NextThought.view.navigation.ModeSwitcher',{});
-			if(!NextThought.modeSwitcher){
-				console.log('failed to load switer');
-				Ext.getBody().mask('load failed');
-				return;
-			}
-	
-			Ext.EventManager.onWindowResize(resizeBlocker);
-			Ext.create('NextThought.view.Viewport',{}).getEl();
-	        NextThought.librarySource.load();
+
+            try{
+                NextThought.modeSwitcher = Ext.create('NextThought.view.navigation.ModeSwitcher',{});
+                if(!NextThought.modeSwitcher){
+                    console.log('failed to load switer');
+                    Ext.getBody().mask('load failed');
+                    return;
+                }
+
+                Ext.EventManager.onWindowResize(resizeBlocker);
+                Ext.create('NextThought.view.Viewport',{}).getEl();
+                NextThought.librarySource.load();
+            }
+            catch(e){
+                console.log(e, e.message, e.stack);
+            }
 		}
 		
 		function clearMask(){

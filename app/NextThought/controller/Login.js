@@ -98,11 +98,16 @@ Ext.define('NextThought.controller.Login', {
 	        values = form.getValues(),
             m      = form.down('panel[name=login-message]');
 
+
+        win.el.mask('Please Wait...');
+        win.doLayout();
+
 		if(!form.getForm().isValid() || !this.attemptLogin(values)) {
             form.getForm().reset();
             m.addCls('error');
             m.update('Could not login, please try again');
             win.doLayout();
+            win.el.unmask();
 			return;
 		}
 		
