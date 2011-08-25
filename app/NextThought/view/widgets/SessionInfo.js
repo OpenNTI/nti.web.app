@@ -36,14 +36,12 @@ Ext.define('NextThought.view.widgets.SessionInfo', {
 
 
         this.add({cls: 'x-username', username: true,
-            html: '<span style="padding: 5px; padding-top: 6px;font-size: 12px; vertical-align: middle; cursor: pointer;">'+n+'</span>'
-                + '<img src="'+a+'" width=24 height=24 valign=middle>' });
+            html: '<span>'+n+'</span><img src="'+a+'" width=24 height=24 valign=middle>' });
 
-        this.add({
-            html: '<span style="width: 24px; height: 23px; padding-top: 2px; display: inline-block; text-align: center; cursor: pointer; vertical-align: middle;margin-top: 2px; background: url(\'resources/images/notify.png\') no-repeat -25px 0px;">0</span>'
-        });
+        this.add({html: '<span class="notification-box-widget">0</span>'});
 
-        this.add({xtype: 'image', src:'resources/images/gear.png?', height: 26, width: 26, margin: '0 3px 0 0', settings: true});
+        this.add({  xtype: 'image', src:'resources/images/gear.png',
+                    height: 26, width: 26, margin: '0 3px 0 0', settings: true});
     },
 
 
@@ -69,7 +67,7 @@ Ext.define('NextThought.view.widgets.SessionInfo', {
         setTimeout(function(){m.hide()},10);
     },
 
-    _mouseOverUsername: function(e){
+    _mouseOverUsername: function(){
         this._menu.showBy(
             this.down('panel[username]').el);
     },
