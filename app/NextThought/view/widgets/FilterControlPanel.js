@@ -36,7 +36,7 @@ Ext.define('NextThought.view.widgets.FilterControlPanel', {
 		var p = 'auto auto auto 10px',
             form = Ext.create('Ext.form.Panel',{border: false});
 
-        this.add({ border: false,html:'&nbsp;', padding: 30});
+//        this.add({ border: false,html:'&nbsp;', padding: 10});
         this.add(form);
 
         form.add({ border: false,html:'<div>Who:</div><hr size=1/>', padding: '10px auto'});
