@@ -22,33 +22,72 @@ Ext.define('NextThought.view.widgets.SessionInfo', {
         height: 25,
         border: false
     },
+    _stream: [],
 
     initComponent: function() {
         this.callParent(arguments);
 
-        var u = _AppConfig.server.userObject,
+        var me = this,
+            u = _AppConfig.server.userObject,
     		n = u.get('realname'),
-    		a = u.get('avatarURL');
+    		a = u.get('avatarURL'),
+            c = _AppConfig.server.userObject.get('notificationsLastRead');
 
 
-        this._menu = Ext.create('Ext.menu.Menu', {items: this._buildMenu()});
-        this._menu.on('mouseleave', this._hideMenu, this);
+        me._menu = Ext.create('Ext.menu.Menu', {items: me._buildMenu()});
+        me._menu.on('mouseleave', me._hideMenu, this);
 
 
-        this.add({cls: 'x-username', username: true,
+        me.add({cls: 'x-username', username: true,
             html: '<span>'+n+'</span><img src="'+a+'" width=24 height=24 valign=middle>' });
 
-        this.add({html: '<span class="notification-box-widget">0</span>'});
+        me.add({html: '<span class="notification-box-widget"></span>', notification: true});
 
-        this.add({  xtype: 'image', src:'resources/images/gear.png',
+        me.add({  xtype: 'image', src:'resources/images/gear.png',
                     height: 26, width: 26, margin: '0 3px 0 0', settings: true});
+
+        // Start a simple clock task that updates a div once per second
+		me._task = {
+		    run: function(){
+		    	 UserDataLoader.resolveUser(u.get('Username'),
+		        	function(user){
+                        var key = 'NotificationCount';
+
+                        if (user) u.set(key, user.get(key));
+
+                        me.update();
+		        	},
+                     true // force resolve
+		        );
+		    },
+		    scope: this,
+		    interval: 30000//30 sec
+		}
     },
 
+    update: function() {
+        var u = _AppConfig.server.userObject,
+            l = u.get('NotificationCount'),
+            e = this.down('panel[notification]').el.down('span'),
+            clsName = 'unread';
+
+        //set unread class
+        if (l) e.addCls(clsName);
+        else e.removeCls(clsName);
+
+//        (l?e.addCls:e.removeCls).apply(e, clsName);
+
+        e.dom.innerHTML = l > 99 ? '++' : l;
+
+    },
 
     render: function(){
         this.callParent(arguments);
         this.down('panel[username]').el.on('mouseover', this._mouseOverUsername, this);
         //this.down('image[settings]').el.on('click', this._click, this);
+
+        //start the task to check for notifications
+        Ext.TaskManager.start(this._task);
     },
 
 

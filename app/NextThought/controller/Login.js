@@ -78,6 +78,8 @@ Ext.define('NextThought.controller.Login', {
         Ext.util.Cookies.set(COOKIE, Ext.JSON.encode({a:a, u:values.username}), values.remember ? dt : null);
 		
 		s.userObject = UserDataLoader.resolveUser(values.username);
+//        s.userObject.set('lastLoginDate', new Date());
+//        s.userObject.save();
 		
 		return true;
 	},

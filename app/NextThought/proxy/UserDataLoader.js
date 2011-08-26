@@ -13,7 +13,7 @@ Ext.define('NextThought.proxy.UserDataLoader',{
 	statics:{
 		
 		
-		resolveUser: function(userId, callback){
+		resolveUser: function(userId, callback, force){
 			this.resolvedUsers = this.resolvedUsers || {};
 			
 			var h = _AppConfig.server.host,
@@ -22,7 +22,7 @@ Ext.define('NextThought.proxy.UserDataLoader',{
 				url = h+d+'UserSearch/'+userId,
 				cache = this.resolvedUsers;
 				
-			if(cache[userId]){
+			if(cache[userId] && !force){
 				if(callback)
 					callback(cache[userId]);
 			}
@@ -227,21 +227,43 @@ Ext.define('NextThought.proxy.UserDataLoader',{
 			});
 			
 		},
-		
+
+        /*
+        Returns the date in GMT formatted as 'Tue, 15 Nov 1994 08:12:31 GMT'
+        use this in the request:  headers: {'If-Modified-Since': this.getUTC(new Date())},
+         */
+        getUTC: function(date) {
+            var offset = Ext.Date.getGMTOffset(date, true),
+                  cmps = offset.split(':'),
+                  hour = parseInt(cmps[0],10),
+                   min =  parseInt(cmps[1],10),
+                absSum = (Math.abs(hour*60) + min)*60000,
+                  mult = (hour < 0) ? 1 : -1,
+               gmtDate = +date + (mult * absSum);
+            return Ext.Date.format(new Date(gmtDate), 'D, d M Y H:i:s \\G\\M\\T');
+        },
+
+        getRecursiveStreamSince: function(containerId, sinceDate, callbacks) {
+			if (!containerId) containerId = 'aops-prealgebra-129';
+			return this.getStream(containerId, sinceDate, callbacks, "RecursiveStream");
+		},
+
 		getRecursiveStream: function(containerId, callbacks) {
 			if (!containerId) containerId = 'aops-prealgebra-129';
-			return this.getStream(containerId, callbacks, "RecursiveStream");
+			return this.getStream(containerId, null, callbacks, "RecursiveStream");
 		},
 				
-		getStream: function(containerId, callbacks, stream) {
+		getStream: function(containerId, sinceDate, callbacks, stream) {
 			var h = _AppConfig.server.host,
 				d = _AppConfig.server.data,
-				u = _AppConfig.server.username;
+				u = _AppConfig.server.username,
+                headers = (sinceDate) ? {'If-Modified-Since': this.getUTC(sinceDate)} : {};
 				url = h+d+'users/'+u+'/Pages/' + containerId + '/' + (stream? stream : "Stream") + '/';
 				
 			this._streamRequest = Ext.Ajax.request({
 				url: url,
 				scope: this,
+                headers: headers,
 				callback: function() {
 					this._streamRequest = null;
 				},
@@ -253,12 +275,13 @@ Ext.define('NextThought.proxy.UserDataLoader',{
 						console.log('Could not load stream',arguments);
 				},
 				success: function(r, o) {
-					var json = Ext.decode(r.responseText);
+
+					var json = (!r.responseText) ? {} : Ext.decode(r.responseText);
 					if(!json || !json.Items){
 						if(callbacks && callbacks.failure){
 							callbacks.failure.call(callbacks.scope || this, 'bad group dataz');
 						} 
-						else if(NextThought.isDebug){
+						else if(NextThought.isDebug && !sinceDate){
 							console.log('Response sucked:', r, 'bad json:', json);
 						}
 						return;
