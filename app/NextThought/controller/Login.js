@@ -52,17 +52,17 @@ Ext.define('NextThought.controller.Login', {
 			a = (!values) ? c.a : Base64.basicAuthString(values.username, values.password),
 			success = false;
 
-        if (!values) values = {username: c.u};
+        if (!values) values = Base64.getAuthInfo(c.a);
 
-		try{	
-			Ext.Ajax.request({
-				url: s.host + s.data + 'users/' + values.username, 
+		try{
+            Ext.Ajax.request({
+				url: s.host + s.data + 'users/' + values.username,
 				headers:{ "Authorization": a},
-				async: false, 
+				async: false,
 				callback: function(q,s,r){success=s;}
 			});
 			if(!success)
-			return false;
+			    return false;
 		}
 		catch(e){
 			console.log(e);
@@ -72,15 +72,15 @@ Ext.define('NextThought.controller.Login', {
 		//Auto inject all future request with the auth string
 		Ext.Ajax.defaultHeaders = Ext.Ajax.defaultHeaders || {};
 		Ext.Ajax.defaultHeaders['Authorization']= a;
+
 		Ext.copyTo(s, values, 'username');
+        Ext.copyTo(Ext.Ajax, values, 'username,password');
 
         var dt = Ext.Date.add(new Date(), Ext.Date.MONTH, 1);
         Ext.util.Cookies.set(COOKIE, Ext.JSON.encode({a:a, u:values.username}), values.remember ? dt : null);
 		
 		s.userObject = UserDataLoader.resolveUser(values.username);
-//        s.userObject.set('lastLoginDate', new Date());
-//        s.userObject.save();
-		
+
 		return true;
 	},
 	
