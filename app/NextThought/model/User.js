@@ -4,14 +4,15 @@ Ext.define(	'NextThought.model.User', {
     		'NextThought.proxy.Rest',
     		'NextThought.proxy.UserSearch'
 	],
-    // idProperty: 'OID',
-    idProperty: 'id',
+    idProperty: 'OID',
+
     // belongsTo: 'NextThought.model.FriendsList',
     fields: [
         { name: 'Last Modified', type: 'date', dateFormat: 'timestamp' },
         { name: 'lastLoginTime', type: 'date', dateFormat: 'timestamp' },
         { name: 'NotificationCount', type: 'int' },
         { name: 'id', mapping: 'ID', type: 'string' },
+        { name: 'OID', type: 'string' },
         { name: 'Username', type: 'string' },
         { name: 'alias', type: 'string' },
         { name: 'realname', type: 'string' },
@@ -27,7 +28,7 @@ Ext.define(	'NextThought.model.User', {
          */
     ],
     proxy: {
-    	type: 'usersearch',
+    	type: 'nti',
     	model: 'NextThought.model.User'
     },
     getModelName: function() {

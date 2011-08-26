@@ -13,7 +13,6 @@ Ext.define('NextThought.util.Base64',
                 d = Ext.create('NextThought.util.Base64').decode(c),
                 a = d.split(':');
 
-            console.log(a);
             return {'username': a[0], 'password': a[1]};
         }
 	},

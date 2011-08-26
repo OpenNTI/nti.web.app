@@ -86,10 +86,15 @@ Ext.define('NextThought.view.widgets.SessionInfo', {
         this.down('panel[username]').el.on('mouseover', this._mouseOverUsername, this);
         //this.down('image[settings]').el.on('click', this._click, this);
 
+        this.down('panel[notification]').el.on('click', this._clickNotifications, this);
+
         //start the task to check for notifications
         Ext.TaskManager.start(this._task);
     },
 
+    _clickNotifications: function() {
+        this.fireEvent('notification-clicked');
+    },
 
     _buildMenu: function(){
         return [

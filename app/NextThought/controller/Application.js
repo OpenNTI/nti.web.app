@@ -23,7 +23,9 @@ Ext.define('NextThought.controller.Application', {
         'content.Stream',
 		'widgets.Tracker',
         'widgets.LeftColumn',
-        'widgets.RightColumn'
+        'widgets.RightColumn',
+        'widgets.SessionInfo',
+        'widgets.NotificationsPopover'
 	],
 	
 	refs: [
@@ -51,6 +53,9 @@ Ext.define('NextThought.controller.Application', {
         },{
             ref: 'stream',
             selector: 'stream-mode-container stream-panel'
+        },{
+            ref: 'sessionInfo',
+            selector: 'session-info'
         }
     ],
 
@@ -147,6 +152,9 @@ Ext.define('NextThought.controller.Application', {
             },
             'item-navigator': {
                 'annotation-destroyed': this.removeAnnotation
+            },
+            'session-info': {
+                'notification-clicked': this.popoverNotifications
             }
     	 });
     },
@@ -158,6 +166,16 @@ Ext.define('NextThought.controller.Application', {
     objectChanged: function() {
         if (!this.objectExplorer || !this.objectExplorer.isVisible()) return;
         Ext.ComponentQuery.query('window item-navigator')[0].reload();
+    },
+
+    popoverNotifications: function() {
+
+        var popover = Ext.create('widget.notifications-popover');
+
+console.log('popover', popover, this.getSessionInfo());
+
+        popover.alignTo(this.getSessionInfo());
+        popover.show();
     },
 
     itemNavigatorItemActivated: function(control, record, dom, index) {
