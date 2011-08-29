@@ -5,6 +5,8 @@ Ext.define('NextThought.view.widgets.NotePanel',{
 	
 	cls : 'x-note-panel-cmp',
 	layout : 'fit',
+
+    defaults: { border: false, defaults: { border: false}},
 	
 	initComponent: function(){
 		this.callParent(arguments);
@@ -25,14 +27,17 @@ Ext.define('NextThought.view.widgets.NotePanel',{
 			a = m._annotation;
 		if(!u) throw 'bad user';
 		t.push({
-			xtype: 'image', 
-			src: u.get('avatarURL'), 
-			height: 16, width: 16
+			    xtype: 'image',
+			    src: u.get('avatarURL'),
+			    height: 16, width: 16
 			},
-			u.get('realname'));
-			
+			u.get('realname'),
+            '->');
+
+        t.push({ text : 'Reply', eventName: 'reply' });
+
 		if(a._isMine){
-			t.push('->',
+			t.push(
 				{ text : 'Edit', eventName: 'edit-note' },
 				{ text : 'Share', eventName: 'share-with' },
 				{ text : 'Delete', eventName: 'delete' }
@@ -43,11 +48,8 @@ Ext.define('NextThought.view.widgets.NotePanel',{
 		m.addDocked({
             xtype: 'panel',
             dock: 'bottom',
-            items: [
-
-                {html: 'Reply'}
-
-            ]
+            border: false, defaults: { border: false},
+            items: []
         });
 	}
 	

@@ -10,13 +10,8 @@ Ext.define('NextThought.controller.Application', {
 		'modes.Groups',
         'modes.Stream',
 		'navigation.Breadcrumb',
-        'widgets.ItemNavigator',
-		'widgets.Highlight',
-		'widgets.Note',
-		'widgets.NoteEditor',
 		'widgets.PeopleList',
 		'widgets.RelatedItemsList',
-		'widgets.ShareWithWindow',
 		'widgets.MiniStreamList',
 		'widgets.GroupEditorWindow',
 		'content.Reader',
@@ -60,153 +55,91 @@ Ext.define('NextThought.controller.Application', {
     ],
 
     init: function() {
-    	 var l = NextThought.librarySource = Ext.create('NextThought.Library');
-    	 l.on('loaded', function(){
-    	 	var b = l._library.titles[0];
-			this.navigate(b, b.root+'sect0001.html');
-    	 },
-    	 this);
-    	 
-    	 
-    	 this.control({
-    	 	'master-view':{
-				'edit-note': this.editNote,
-				'share-with': this.shareWith,
-                'object-changed' : this.objectChanged
-    	 	},
+        var l = NextThought.librarySource = Ext.create('NextThought.Library');
+        l.on('loaded', function(){
+                var b = l._library.titles[0];
+                this.navigate(b, b.root+'sect0001.html');
+            },
+            this);
 
-            'leftColumn button[objectExplorer]': {
-                'click': this.objectExplorerClicked
+
+        this.control({
+            'breadcrumbbar':{
+                'navigate': this.navigate
             },
 
-    	 	'breadcrumbbar':{
-    	 		'navigate': this.navigate
-    	 	},
-    	 	
-    	 	'reader-panel':{
-    	 		'location-changed': this.readerLocationChanged,
-    	 		'publish-contributors': this.readerPublishedContributors
-    	 	},
-    	 	
-    	 	'reader-mode-container related-items':{
-    	 		'navigate': this.navigate
-    	 	},
-    	 	
-    	 	'notepanel button':{
-    	 		'click': this.onNoteAction
-    	 	},
-    	 	
-    	 	'noteeditor button':{
-				'click': this.onNoteEditorButton
-    	 	},
-    	 	
-    	 	'reader-mode-container filter-control':{
-    	 		'filter-changed': this.readerFilterChanged
-    	 	},
+            'reader-panel':{
+                'location-changed': this.readerLocationChanged,
+                'publish-contributors': this.readerPublishedContributors
+            },
+
+            'reader-mode-container related-items':{
+                'navigate': this.navigate
+            },
+
+            'reader-mode-container filter-control':{
+                'filter-changed': this.readerFilterChanged
+            },
 
             'stream-mode-container filter-control':{
-    	 		'filter-changed': this.streamFilterChanged
-    	 	},
-    	 	
-    	 	'sharewithwindow button':{
-    	 		'click': this.shareWithButton
-    	 	},
-    	 	
-    	 	'groups-mode-container toolbar button[createItem]':{
-    	 		'click':function(){
-    	 			var rec = Ext.create('NextThought.model.FriendsList');
-    	 			Ext.create('NextThought.view.widgets.GroupEditorWindow',{record: rec}).show();
-    	 		}
-    	 	},
+                'filter-changed': this.streamFilterChanged
+            },
 
-    	 	'groups-mode-container toolbar button[deleteItem]':{
-    	 		'click':function(){
-    	 			var q = 'groups-mode-container dataview';
-    	 			Ext.each(Ext.ComponentQuery.query(q),function(v){
-    	 				Ext.each(v.getSelectionModel().getSelection(), function(r){
-    	 					r.destroy();
-    	 				});
-    	 			});
-    	 			
-    	 			this.reloadGroups();
-    	 		}
-    	 	},
-    	 	
-    	 	'groups-mode-container dataview':{
-    	 		'itemdblclick':function(a, rec){
-    	 			if(rec.get('Creator')==_AppConfig.server.username)
-    	 				Ext.create('NextThought.view.widgets.GroupEditorWindow',{record: rec}).show();
-    	 		},
-    	 		'selectionchange': function(a, sel){
-    	 			var q = 'groups-mode-container toolbar button[deleteItem]';
-    	 			Ext.each(Ext.ComponentQuery.query(q),function(v){
-    	 				sel.length ? v.enable() : v.disable();
-    	 			});
-    	 		}
-    	 	},
-    	 	'group-editor button':{
-    	 		'click': this.groupEditorButtonClicked
-    	 	},
-            'item-navigator gridpanel': {
-                'itemdblclick': this.itemNavigatorItemActivated
+            'groups-mode-container toolbar button[createItem]':{
+                'click':function(){
+                    var rec = Ext.create('NextThought.model.FriendsList');
+                    Ext.create('NextThought.view.widgets.GroupEditorWindow',{record: rec}).show();
+                }
             },
-            'item-navigator': {
-                'annotation-destroyed': this.removeAnnotation
+
+            'groups-mode-container toolbar button[deleteItem]':{
+                'click':function(){
+                    var q = 'groups-mode-container dataview';
+                    Ext.each(Ext.ComponentQuery.query(q),function(v){
+                        Ext.each(v.getSelectionModel().getSelection(), function(r){
+                            r.destroy();
+                        });
+                    });
+
+                    this.reloadGroups();
+                }
             },
+
+            'groups-mode-container dataview':{
+                'itemdblclick':function(a, rec){
+                    if(rec.get('Creator')==_AppConfig.server.username)
+                        Ext.create('NextThought.view.widgets.GroupEditorWindow',{record: rec}).show();
+                },
+                'selectionchange': function(a, sel){
+                    var q = 'groups-mode-container toolbar button[deleteItem]';
+                    Ext.each(Ext.ComponentQuery.query(q),function(v){
+                        sel.length ? v.enable() : v.disable();
+                    });
+                }
+            },
+
+            'group-editor button':{
+                'click': this.groupEditorButtonClicked
+            },
+
             'session-info': {
                 'notification-clicked': this.popoverNotifications
             }
-    	 });
+        });
     },
 
-    removeAnnotation: function(oid){
-        this.getReader().removeAnnotation(oid);
-    },
-
-    objectChanged: function() {
-        if (!this.objectExplorer || !this.objectExplorer.isVisible()) return;
-        Ext.ComponentQuery.query('window item-navigator')[0].reload();
-    },
 
     popoverNotifications: function() {
 
         var popover = Ext.create('widget.notifications-popover');
 
-console.log('popover', popover, this.getSessionInfo());
+        console.log('popover', popover, this.getSessionInfo());
 
         popover.alignTo(this.getSessionInfo());
         popover.show();
     },
 
-    itemNavigatorItemActivated: function(control, record, dom, index) {
-        var containerId = record.get('ContainerId'),
-            bookInfo = NextThought.librarySource.findLocation(containerId),
-            book = bookInfo.book,
-            href = bookInfo.location.getAttribute('href');
 
-        this.navigate(book, book.root + href);
-    },
-
-    objectExplorerClicked: function(btn, e, o) {
-        if (!this.objectExplorer) {
-            this.objectExplorer = 	Ext.create('Ext.Window', {
-				id:'object-explorer',
-				title: 'My Stuff',
-				x:100,
-				y:100,
-				width: 500,
-				height: 350,
-				maximizable:true,
-				minimizable:true,
-				layout: 'fit',
-				closeAction: 'hide',
-				items: Ext.create('widget.item-navigator', {})
-			});
-        }
-
-        this.objectExplorer.show();
-    },
-	
 	reloadGroups: function(){
 		UserDataLoader.getFriendsListsStore().load();
 		Ext.each(Ext.ComponentQuery.query('filter-control'), function(g){g.reload()});
@@ -257,32 +190,6 @@ console.log('popover', popover, this.getSessionInfo());
  	},
     
     
-    shareWithButton: function(btn){
-		var win = btn.up('window'),
-			form= win.down('form'),
-			shbx= win.down('sharewithinput'),
-			rec = win.record;
-		
-		if(btn.isCancel){
-			win.close();
-            return;
-		}
-		
-		if(!form.getForm().isValid()){
-			return false;
-		}
-
-        rec.set('sharedWith',Ext.data.Types.SHARED_WITH.convert(shbx.valueModels));
-		rec.save({
-			scope: this,
-			success:function(newRecord,operation){
-				win.close();
-				rec.fireEvent('updated',newRecord);
-			}
-		});
-	},
-    
-    
     readerLocationChanged: function(id){
 		this.getReaderStream().setContainer(id);
 		this.getReaderRelated().setLocation(
@@ -323,48 +230,7 @@ console.log('popover', popover, this.getSessionInfo());
     	Ext.each(o,function(i){i.applyFilter(newFilter);});
     },
     
-    onNoteAction: function(btn, event){
-    	var p = btn.up('notepanel');
-    		r = p._owner,
-    		e = btn.eventName,
-            a = p._annotation,
-    		rec = a.getRecord();
-    	
-    	if(/delete/i.test(e)){
-    		a.remove();
-    	}
-    	else {
-	    	this.getViewport().fireEvent(e, rec);
-    	}
-    },
-    
-    onNoteEditorButton: function(btn, event){
-    	var win = btn.up('window'),
-    		cmp = win.down('htmleditor');
 
-		if(!btn.isCancel){
-			win.el.mask('Saving...');
-			win.record.set('text',cmp.getValue());
-			win.record.save({
-				scope: this,
-				success:function(newRecord,operation){
-					win.close();
-					win.record.fireEvent('updated',newRecord);
-				}
-			});
-		}
-    	else {
-	    	win.close();
-    	}
-    },
-    
-    shareWith: function(record){
-    	Ext.create('NextThought.view.widgets.ShareWithWindow',{record: record}).show();
-    },
-    
-    editNote: function(note){
-		Ext.create('NextThought.view.widgets.NoteEditor',{record: note}).show();
- 	},
     
     navigate: function(book, ref){
     	this.getReader().setActive(book, ref);

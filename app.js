@@ -29,6 +29,8 @@ Ext.application({
     	'Login',
     	'Modes',
     	'FilterControl',
+        'Annotations',
+        'ObjectExplorer',
     	'Application'
     ],
     
