@@ -3,6 +3,7 @@
 Ext.define('NextThought.proxy.UserDataLoader',{
 	alternateClassName: 'UserDataLoader',
 	requires: [
+			'NextThought.model.Community',
 			'NextThought.model.Change',
 			'NextThought.model.Note',
 			'NextThought.model.Highlight',
@@ -154,7 +155,7 @@ Ext.define('NextThought.proxy.UserDataLoader',{
 				
 				this._friendsListsStore.filter([{
 		            fn: function(record) {
-		                return ! /public\@/i.test(record.get('Username'));
+		                return ! /^everyone$/i.test(record.get('Username'));
 		            }
 		        }]);
 		   	}

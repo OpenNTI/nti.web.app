@@ -40,6 +40,15 @@ Ext.define('NextThought.view.widgets.NotePanel',{
 		}
 		
 		m.addDocked({xtype: 'toolbar', dock: 'top', items: t});
+		m.addDocked({
+            xtype: 'panel',
+            dock: 'bottom',
+            items: [
+
+                {html: 'Reply'}
+
+            ]
+        });
 	}
 	
 	

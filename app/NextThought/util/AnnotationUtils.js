@@ -221,7 +221,7 @@ Ext.define('NextThought.util.AnnotationUtils',
                     if (end) {
                         endNode = end;
                         highlight.set('endAnchor', this.ascendToAnchor(end));
-                        if (isTextNode(end)) {
+                        if (this.isTextNode(end)) {
                             highlight.set('endOffset', endNode.nodeValue.length);
                         }
                     }
