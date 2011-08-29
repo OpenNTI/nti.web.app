@@ -109,7 +109,11 @@ Ext.define('NextThought.proxy.UserDataLoader',{
 			
 			if(!this._userSearchStore) {
 				this._userSearchStore = Ext.create('Ext.data.Store', {
-			        model: 'NextThought.model.User'
+			        model: 'NextThought.model.User',
+                    proxy: {
+    	                type: 'usersearch',
+    	                model: 'NextThought.model.User'
+                    }
 			    });
 		   	}
 			

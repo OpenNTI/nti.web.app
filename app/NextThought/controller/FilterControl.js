@@ -144,7 +144,13 @@ Ext.define('NextThought.controller.FilterControl', {
 			
 			Ext.each(g.record.get('friends'),function(f){
 				// if(isUnknown.test(f.$className))return;
-				filter.shareTargets[f.get('Username')]=true;
+
+                if(!f.get || !f.get('Username')){
+				    console.log(f);
+                    return;
+                }
+
+                filter.shareTargets[f.get('Username')]=true;
 			},
 			this);
 			
