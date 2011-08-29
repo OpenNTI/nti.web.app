@@ -12,7 +12,31 @@ Ext.define('NextThought.proxy.UserDataLoader',{
     		],
 	statics:{
 		
-		
+		search: function(containerId, searchString, callback) {
+            var h = _AppConfig.server.host,
+                c = containerId ? containerId : 'prealgebra',
+				url = h+'/'+c+'/Search/'+searchString;
+                       debugger;
+            Ext.Ajax.request({
+				url: url,
+				scope: this,
+				async: !!callback,
+				callback: function(o,success,r){
+
+					if(!success){
+						if(callback)callback();
+						return;
+					}
+
+					var json = Ext.decode(r.responseText),
+						bins = this._binAndParseItems(json.Items);
+
+					if(!callback)return;
+						callback(bins.Hit);
+				}
+			});
+        },
+
 		resolveUser: function(userId, callback, force){
 			this.resolvedUsers = this.resolvedUsers || {};
 			
