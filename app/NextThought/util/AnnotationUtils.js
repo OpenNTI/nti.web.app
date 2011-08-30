@@ -41,6 +41,7 @@ Ext.define('NextThought.util.AnnotationUtils',
             reply.set('anchorPoint', note.get('anchorPoint'));
             reply.set('top', note.get('top'));
             reply.set('left', note.get('left'));
+            reply.set('ContainerId', note.get('ContainerId'));
             reply.set('inReplyTo', parent);
             reply.set('references', refs);
 

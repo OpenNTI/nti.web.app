@@ -129,7 +129,7 @@ Ext.define('NextThought.view.content.Reader', {
 	createNoteWidget: function(record){
 		try{
             if(this.annotationExists(record)){
-               throw 'Annotation already exists on the page';
+               return false;
             }
 
 			this._annotations.push(
@@ -182,7 +182,9 @@ Ext.define('NextThought.view.content.Reader', {
     
 
     _objectsLoaded: function(bins) {
-    	var contributors = {}, me = this;
+    	var contributors = {},
+            oids = {},
+            me = this;
 
 		Ext.each(bins.Highlight, 
     		function(r){
@@ -197,18 +199,44 @@ Ext.define('NextThought.view.content.Reader', {
     		}
     	);
 
-    	Ext.each(bins.Note, 
-    		function(r){
-    			if (!me.createNoteWidget(r)){
-	    			return;
-    			}
-				contributors[r.get('Creator')] = true;
-    		}
-    	)
-    	
-    	me.bufferedDelayedRelayout();
-    	me.fireEvent('publish-contributors',contributors);
-	},
+        notes(buildTree);
+
+        for(var oid in oids){
+            var o = oids[oid];
+            if(!oids.hasOwnProperty(oid) || o._parent) continue;
+
+            me.createNoteWidget(o);
+        }
+
+
+        me.bufferedDelayedRelayout();
+        me.fireEvent('publish-contributors',contributors);
+
+        //helper local functions (think of them as macros)
+
+        function notes(cb){ Ext.each(bins.Note,cb,this); }
+        function getOID(id){ var r={};notes(function(o){ if(o.get('OID')==id){r = o;return false;} }); return r;}
+
+        function buildTree(r){
+            var oid = r.get('OID'),
+                parent = r.get('inReplyTo'),
+                p;
+
+            if(!oids[oid])
+                oids[oid] = r;
+
+            if(parent){
+                p = oids[parent];
+                if(!p) p = (oids[parent] = getOID(parent));
+
+                p.children = p.children || [];
+                p.children.push(r);
+
+                r._parent = parent;
+            }
+            contributors[r.get('Creator')] = true;
+        }
+    },
 
     
     _loadContentAnnotations: function(containerId){
