@@ -34,6 +34,7 @@ Ext.application({
         'FilterControl',
         'Annotations',
         'ObjectExplorer',
+        'Search',
         'Application'
     ],
 

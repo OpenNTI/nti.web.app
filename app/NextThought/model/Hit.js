@@ -1,7 +1,7 @@
 Ext.define('NextThought.model.Hit', {
     extend: 'Ext.data.Model',
     requires: [
-    		'NextThought.proxy.Rest',
+    		'NextThought.proxy.Rest'
     		],
     fields: [
        	{ name: 'ContainerId', type: 'string'},

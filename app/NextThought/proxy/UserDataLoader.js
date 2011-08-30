@@ -9,7 +9,8 @@ Ext.define('NextThought.proxy.UserDataLoader',{
 			'NextThought.model.Highlight',
 			'NextThought.model.FriendsList',
 			'NextThought.model.User',
-    		'NextThought.model.UnresolvedFriend'
+    		'NextThought.model.UnresolvedFriend',
+            'NextThought.model.Hit'
     		],
 	statics:{
 		
@@ -17,7 +18,6 @@ Ext.define('NextThought.proxy.UserDataLoader',{
             var h = _AppConfig.server.host,
                 c = containerId ? containerId : 'prealgebra',
 				url = h+'/'+c+'/Search/'+searchString;
-                       debugger;
             Ext.Ajax.request({
 				url: url,
 				scope: this,
@@ -26,6 +26,7 @@ Ext.define('NextThought.proxy.UserDataLoader',{
 
 					if(!success){
 						if(callback)callback();
+                        console.log('ERROR: searching');
 						return;
 					}
 
@@ -208,9 +209,7 @@ Ext.define('NextThought.proxy.UserDataLoader',{
 				d = _AppConfig.server.data,
 				u = _AppConfig.server.username;
 				url = h+d+'users/'+u+'/FriendsLists/';
-			// console.log("inside getGroups", url);	
-			// debugger;	
-				
+
 			this._groupsRequest = Ext.Ajax.request({
 				url: url,
 				scope: this,

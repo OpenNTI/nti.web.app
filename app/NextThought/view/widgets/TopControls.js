@@ -34,7 +34,7 @@ Ext.define('NextThought.view.widgets.TopControls', {
     		layout: 'hbox',
     		items: [
     			NextThought.modeSwitcher,
-    			{ xtype: 'textfield', margin: 5, emptyText:'Search...', flex: 1, maxWidth: 400},
+    			{ xtype: 'textfield', margin: 5, emptyText:'Search...', flex: 1, maxWidth: 400, id: 'searchBox'}
     		]
     	});
     	
