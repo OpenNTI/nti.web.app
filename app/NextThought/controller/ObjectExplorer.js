@@ -74,6 +74,10 @@ Ext.define('NextThought.controller.ObjectExplorer', {
         }
 
         this.objectExplorer.show();
+    },
+
+    navigate: function(book, ref){
+        this.getViewport().fireEvent('navigate', book, ref);
     }
     
 });

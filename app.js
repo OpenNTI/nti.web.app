@@ -1,20 +1,20 @@
 
 var CENTER_WIDTH = 768,
-	MIN_SIDE_WIDTH = 216,
-	MIN_WIDTH = 1024;
-	
-	
+    MIN_SIDE_WIDTH = 216,
+    MIN_WIDTH = 1024;
+
+
 function resizeBlocker(w, h, e){
-	var i = !!(w<MIN_WIDTH),
-		b = Ext.getBody(),
-		m = b.isMasked();
-	
-	if(i && !m){
-		b.mask("Your browser window is too narrow","viewport-too-small");
-	} 
-	else if(!i && m){
-		b.unmask();
-	}
+    var i = !!(w<MIN_WIDTH),
+        b = Ext.getBody(),
+        m = b.isMasked();
+
+    if(i && !m){
+        b.mask("Your browser window is too narrow","viewport-too-small");
+    }
+    else if(!i && m){
+        b.unmask();
+    }
 }
 
 
@@ -24,23 +24,26 @@ function resizeBlocker(w, h, e){
 Ext.application({
     name: 'NextThought',
     appFolder: 'app/NextThought',
-    
+
     controllers: [
-    	'Login',
-    	'Modes',
-    	'FilterControl',
+        'Login',
+        'Modes',
+        'Reader',
+        'Stream',
+        'Groups',
+        'FilterControl',
         'Annotations',
         'ObjectExplorer',
-    	'Application'
+        'Application'
     ],
-    
+
     launch: function() {
-		NextThought.isDebug = true;
-    	setTimeout(clearMask, 100);
+        NextThought.isDebug = true;
+        setTimeout(clearMask, 100);
 
-		Ext.create('NextThought.view.LoginWindow',{callback: appStart}).show();
+        Ext.create('NextThought.view.LoginWindow',{callback: appStart}).show();
 
-		function appStart(){
+        function appStart(){
 
             try{
                 NextThought.modeSwitcher = Ext.create('NextThought.view.navigation.ModeSwitcher',{});
@@ -57,51 +60,51 @@ Ext.application({
             catch(e){
                 console.log(e, e.message, e.stack);
             }
-		}
-		
-		function clearMask(){
-        	Ext.get('loading').remove();
-        	Ext.get('loading-mask').fadeOut({remove:true});
-        	resizeBlocker(Ext.Element.getViewWidth());
+        }
+
+        function clearMask(){
+            Ext.get('loading').remove();
+            Ext.get('loading-mask').fadeOut({remove:true});
+            resizeBlocker(Ext.Element.getViewWidth());
         }
     }
 });
 
 
 Ext.onReady(function(){
-	if(Ext.isIE){
-    	Ext.panel.Panel.override({
-    		render: function(){
-    			this.callOverridden(arguments);
-    			var d=this.el.dom;
-    			d.firstChild.unselectable = true;
-    			d.unselectable = true;
-    		}
-    	});
-	}
-	Ext.Ajax.timeout==60000;
-	Ext.Ajax.on(
-		'beforerequest', function f(connection,options){
-			var loc = '';
-			try {
-	    		var method = f.caller.caller.caller.caller,
-	                parentClass, methodName;
+    if(Ext.isIE){
+        Ext.panel.Panel.override({
+            render: function(){
+                this.callOverridden(arguments);
+                var d=this.el.dom;
+                d.firstChild.unselectable = true;
+                d.unselectable = true;
+            }
+        });
+    }
+    Ext.Ajax.timeout==60000;
+    Ext.Ajax.on(
+        'beforerequest', function f(connection,options){
+            var loc = '';
+            try {
+                var method = f.caller.caller.caller.caller,
+                    parentClass, methodName;
 
 
-	            if (!method.$owner) {
-	                method = method.caller;
-	            }
-	
-	            parentClass = method.$owner.$className;
-	            methodName = method.$name;
-	    		
-	    		loc = parentClass+"."+methodName;
-    		}
-    		catch (e) {
-    			loc = e.stack;
-    		}
-    		if(options&&options.async===false)console.log('WARNING: Synchronous Call in: '+ loc, ' Options:', options );
-		});
+                if (!method.$owner) {
+                    method = method.caller;
+                }
+
+                parentClass = method.$owner.$className;
+                methodName = method.$name;
+
+                loc = parentClass+"."+methodName;
+            }
+            catch (e) {
+                loc = e.stack;
+            }
+            if(options&&options.async===false)console.log('WARNING: Synchronous Call in: '+ loc, ' Options:', options );
+        });
 });
 
 
@@ -112,13 +115,13 @@ Ext.onReady(function(){
 window.onpopstate = function(e) {
     var s = e?e.state:null;
     if(!s){
-    	//console.log(e);
-    	return;
+        //console.log(e);
+        return;
     }
-    
+
     console.log(e.state);
-    
+
     if(s.path){
-    	Ext.getCmp('myReader')._restore(s);
+        Ext.getCmp('myReader')._restore(s);
     }
 };

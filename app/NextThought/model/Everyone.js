@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.Community', {
+Ext.define('NextThought.model.Everyone', {
     extend: 'Ext.data.Model',
     // requires: ['NextThought.proxy.Rest'],
     idProperty: 'OID',

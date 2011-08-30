@@ -3,7 +3,7 @@
 Ext.define('NextThought.proxy.UserDataLoader',{
 	alternateClassName: 'UserDataLoader',
 	requires: [
-			'NextThought.model.Community',
+			'NextThought.model.Everyone',
 			'NextThought.model.Change',
 			'NextThought.model.Note',
 			'NextThought.model.Highlight',

@@ -1,5 +1,3 @@
-
-
 Ext.define('NextThought.controller.Modes', {
     extend: 'Ext.app.Controller',
 
