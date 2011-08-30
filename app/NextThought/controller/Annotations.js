@@ -113,11 +113,7 @@ Ext.define('NextThought.controller.Annotations', {
     },
 
     replyToNote: function(record){
-        console.log('replying to: ', record);
-        var note = AnnotationUtils.noteToReply(record);
-        note.set('ContainerId', this.getContainerId());
-
-        this.editNote(note);
+        this.editNote(AnnotationUtils.noteToReply(record));
     },
 
     shareWith: function(record){
