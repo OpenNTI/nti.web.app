@@ -101,7 +101,7 @@ Ext.define('NextThought.view.widgets.Highlight', {
 	
 	_addNote: function(){
         this.savePhantom();
-		this._cmp.addNote(this._sel);
+		this._cmp.fireEvent('create-note',this._sel);
 	},
 
 	updateMenuIcon: function(color) {

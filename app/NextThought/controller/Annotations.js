@@ -19,6 +19,8 @@ Ext.define('NextThought.controller.Annotations', {
     init: function() {
         this.control({
             'master-view':{
+                'create-note': this.addNote,
+                'reply-to-note': this.replyToNote,
 				'edit-note': this.editNote,
 				'share-with': this.shareWith
     	 	},
@@ -33,8 +35,16 @@ Ext.define('NextThought.controller.Annotations', {
 
             'sharewithwindow button':{
     	 		'click': this.shareWithButton
-    	 	},
+    	 	}
         });
+    },
+
+    getContext: function(){
+         return this.getViewport().getActive().getMainComponent();
+    },
+
+    getContainerId: function(){
+        return this.getContext().getContainerId();
     },
 
     shareWithButton: function(btn){
@@ -89,6 +99,7 @@ Ext.define('NextThought.controller.Annotations', {
 				success:function(newRecord,operation){
 					win.close();
 					win.record.fireEvent('updated',newRecord);
+                    this.attemptToAddWidget(newRecord);
 				}
 			});
 		}
@@ -97,11 +108,34 @@ Ext.define('NextThought.controller.Annotations', {
     	}
     },
 
+    attemptToAddWidget: function(record){
+        this.getContext().createNoteWidget(record);
+    },
+
+    replyToNote: function(record){
+        console.log('replying to: ', record);
+        var note = AnnotationUtils.noteToReply(record);
+        note.set('ContainerId', this.getContainerId());
+
+        this.editNote(note);
+    },
+
     shareWith: function(record){
     	Ext.create('NextThought.view.widgets.ShareWithWindow',{record: record}).show();
     },
 
-    editNote: function(note){
-		Ext.create('NextThought.view.widgets.NoteEditor',{record: note}).show();
- 	}
+    editNote: function(record){
+		Ext.create('NextThought.view.widgets.NoteEditor',{record: record}).show();
+ 	},
+
+    addNote: function(range){
+        if(!range) {
+			return;
+		}
+
+		var note = AnnotationUtils.selectionToNote(range);
+		note.set('ContainerId', this.getContainerId());
+
+        this.editNote(note);
+    }
 });

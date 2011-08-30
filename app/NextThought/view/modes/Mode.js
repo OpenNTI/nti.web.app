@@ -31,10 +31,17 @@ Ext.define( 'NextThought.view.modes.Mode', {
     	}
     	
     	ct.items.each(function(o,i,l){
-    		item = o==me? i : item;
+    		if(o==me) {
+                item = i;
+                return false;
+            }
     	});
     	
     	ct.getLayout().setActiveItem(item);
+    },
+
+    getMainComponent: function(){
+        throw 'Implement me';
     }
     
 });

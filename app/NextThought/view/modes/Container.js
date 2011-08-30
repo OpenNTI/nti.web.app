@@ -26,11 +26,15 @@ Ext.define( 'NextThought.view.modes.Container', {
 		var m = this, 
 			s = function(){ m.items.get(1).toggleButton.toggle(true); };
 		
-    	this.add({id: 'home', xtype: 'home-mode-container'});
+    	this.add({id: 'home',   xtype: 'home-mode-container'});
     	this.add({id: 'reader', xtype: 'reader-mode-container'});
     	this.add({id: 'stream', xtype: 'stream-mode-container'});
     	this.add({id: 'groups', xtype: 'groups-mode-container'});
 
     	setTimeout(s,100);
-	}
+	},
+
+    getActive: function() {
+        return this.getLayout().getActiveItem();
+    }
 });

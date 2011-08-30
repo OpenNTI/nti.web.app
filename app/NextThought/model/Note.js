@@ -9,7 +9,7 @@ Ext.define('NextThought.model.Note', {
     fields: [
         { name: 'id', mapping: 'ID', type: 'int' },
         { name: 'OID', type: 'string' },
-        { name: 'inReplyTo', type: 'string', defaultValue: null },
+        { name: 'inReplyTo', type: 'string' },
         { name: 'references', type: 'auto', defaultValue: [] },
         { name: 'Class', type: 'string' },
         { name: 'anchorPoint', type: 'string' },

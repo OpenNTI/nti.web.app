@@ -9,8 +9,10 @@ Ext.define( 'NextThought.view.modes.Reader', {
 			],
 	
     initComponent: function(){
-    	var bb= { xtype: 'toolbar', cls: 'x-docked-noborder-top', items: {focusable: false, disabled:true,text:'&nbsp;',xtype:'button'}};
-   		this.callParent(arguments);
+        this.callParent(arguments);
+
+        var bb= { xtype: 'toolbar', cls: 'x-docked-noborder-top', items: {focusable: false, disabled:true,text:'&nbsp;',xtype:'button'}},
+            reader = Ext.create('NextThought.view.content.Reader', {id:'myReader'});
 
 		this.add({ /*xtype:'tbspacer',*/ flex:1, focusable: false, dockedItems: bb });
     	this.add({ region: 'west', id: 'west-book', xtype: 'leftColumn', columnWidget: {xtype:'filter-control'} });
@@ -28,11 +30,17 @@ Ext.define( 'NextThought.view.modes.Reader', {
 			layout: 'card',
     		
     		dockedItems: Ext.create('NextThought.view.navigation.Breadcrumb', {id:'breadcrumb',dock:'top'}),
-    		items: Ext.create('NextThought.view.content.Reader', {id:'myReader'})
+    		items: reader
     	}); 
     	
     	this.add({ region: 'east', id:'east-book', xtype: 'rightColumn', columnWidget: {xtype:'reader-items'} });
 		this.add({ /*xtype:'tbspacer',*/ flex:1, focusable: false, dockedItems: bb });
+
+        this._reader = reader;
+    },
+
+
+    getMainComponent: function(){
+        return this._reader;
     }
-    
 });

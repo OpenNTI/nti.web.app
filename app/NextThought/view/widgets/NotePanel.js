@@ -34,7 +34,7 @@ Ext.define('NextThought.view.widgets.NotePanel',{
 			u.get('realname'),
             '->');
 
-        t.push({ text : 'Reply', eventName: 'reply' });
+        t.push({ text : 'Reply', eventName: 'reply-to-note' });
 
 		if(a._isMine){
 			t.push(

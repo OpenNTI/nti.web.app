@@ -30,7 +30,22 @@ Ext.define('NextThought.util.AnnotationUtils',
 		            ix++;
 		    }
 		},
-		
+
+        noteToReply: function(note){
+            var reply = Ext.create('NextThought.model.Note'),
+                parent = note.get('OID'),
+                refs = note.get('references') || [];
+
+            refs.push(parent);
+
+            reply.set('anchorPoint', note.get('anchorPoint'));
+            reply.set('top', note.get('top'));
+            reply.set('left', note.get('left'));
+            reply.set('inReplyTo', parent);
+            reply.set('references', refs);
+
+            return reply;
+        },
 		
 		selectionToNote: function(range) {
 			var note = Ext.create('NextThought.model.Note');

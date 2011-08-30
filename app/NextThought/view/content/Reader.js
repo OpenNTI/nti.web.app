@@ -14,8 +14,8 @@ Ext.define('NextThought.view.content.Reader', {
 	_filter: null,
 	
     initComponent: function(){
-    	this.addEvents('edit-note','publish-contributors','location-changed');
-    	this.enableBubble('edit-note');
+    	this.addEvents('create-note','edit-note','publish-contributors','location-changed');
+    	this.enableBubble(['create-note','edit-note']);
    		this.callParent(arguments);
     },
     
@@ -72,19 +72,25 @@ Ext.define('NextThought.view.content.Reader', {
 		});
 		this._annotations = [];
 	},
+
+
+    annotationExists: function(record){
+        var oid = record.get('OID');
+        if(!oid){
+            return false;
+        }
+
+        Ext.each(this._annotations, function(v, i){
+            if (v && v._record.get('OID') == oid){
+                oid = undefined;
+                return false;
+            }
+		});
+
+        return !oid;//if its undefined, then i found it
+    },
 	
-	addNote: function(range){
-		if(!range) {
-			return;
-		}
-		
-		var note = AnnotationUtils.selectionToNote(range);
-		note.set('ContainerId', this._containerId);
-		console.log('the note', note);
-		this.fireEvent('edit-note', note);
-		this._createNoteWidget(note, true);	
-	},
-	
+
 	addHighlight: function(range, xy){
 		if(!range) {
 			return;
@@ -106,7 +112,9 @@ Ext.define('NextThought.view.content.Reader', {
         menu.showAt(xy);
 
 	},
-	
+
+
+
 	
 	_createHighlightWidget: function(range, record){
         var w = Ext.create(
@@ -118,8 +126,12 @@ Ext.define('NextThought.view.content.Reader', {
         return w;
 	},
 
-	_createNoteWidget: function(record, edit){
-		try{ 
+	createNoteWidget: function(record){
+		try{
+            if(this.annotationExists(record)){
+               throw 'Annotation already exists on the page';
+            }
+
 			this._annotations.push(
 					Ext.create(
 						'NextThought.view.widgets.Note', 
@@ -153,11 +165,6 @@ Ext.define('NextThought.view.content.Reader', {
 
 	
 	
-    contextHightlightAction: function(e){},
-    
-    contextNoteAction: function(e){},
-    
-    
     _appendHistory: function(book, path) {
 	    history.pushState(
 	        {
@@ -170,7 +177,6 @@ Ext.define('NextThought.view.content.Reader', {
 	
 	
 	_restore: function(state) {
-		
 		this.setActive(state.book, state.path, true);
 	},
     
@@ -193,7 +199,7 @@ Ext.define('NextThought.view.content.Reader', {
 
     	Ext.each(bins.Note, 
     		function(r){
-    			if (!me._createNoteWidget(r)){
+    			if (!me.createNoteWidget(r)){
 	    			return;
     			}
 				contributors[r.get('Creator')] = true;

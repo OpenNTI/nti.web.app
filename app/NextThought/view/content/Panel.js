@@ -14,6 +14,10 @@ Ext.define('NextThought.view.content.Panel', {
             Ext.Function.createDelayed(this.relayout, 100, this),
             100, this);
     },
+
+    getContainerId: function(){
+        return this._containerId;
+    },
 	
 	activate: function() {
 		this.relayout();
