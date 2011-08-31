@@ -128,7 +128,7 @@ Ext.define('NextThought.view.content.Reader', {
 
 	createNoteWidget: function(record){
 		try{
-            if(this.annotationExists(record)){
+            if(record.get('inReplyTo') || this.annotationExists(record)){
                return false;
             }
 
@@ -199,6 +199,11 @@ Ext.define('NextThought.view.content.Reader', {
     		}
     	);
 
+        bins.Note = Ext.Array.sort(bins.Note || [], function(a,b){
+            var k = 'Last Modified';
+            return a.get(k) < b.get(k);
+        });
+
         notes(buildTree);
 
         for(var oid in oids){
@@ -215,11 +220,16 @@ Ext.define('NextThought.view.content.Reader', {
         //helper local functions (think of them as macros)
 
         function notes(cb){ Ext.each(bins.Note,cb,this); }
-        function getOID(id){ var r={};notes(function(o){ if(o.get('OID')==id){r = o;return false;} }); return r;}
+        function getOID(id){
+            var r=null;
+            notes(function(o){ if(o.get('OID')==id){r = o;return false;} });
+            return r;
+        }
 
         function buildTree(r){
             var oid = r.get('OID'),
                 parent = r.get('inReplyTo'),
+                c = r.get('Creator'),
                 p;
 
             if(!oids[oid])
@@ -228,13 +238,19 @@ Ext.define('NextThought.view.content.Reader', {
             if(parent){
                 p = oids[parent];
                 if(!p) p = (oids[parent] = getOID(parent));
+                if(!p){
+                    p = (oids[parent] = AnnotationUtils.replyToPlaceHolder(r));
+                    buildTree(p);
+                }
 
                 p.children = p.children || [];
                 p.children.push(r);
 
                 r._parent = parent;
             }
-            contributors[r.get('Creator')] = true;
+
+            if(c && Ext.String.trim(c) != '')
+                contributors[c] = true;
         }
     },
 

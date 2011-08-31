@@ -47,6 +47,10 @@ Ext.define('NextThought.proxy.UserDataLoader',{
 				u = _AppConfig.server.username,
 				url = h+d+'UserSearch/'+userId,
 				cache = this.resolvedUsers;
+
+            if(!userId || Ext.String.trim(userId)==''){
+                Ext.Error.raise('Bad user id');
+            }
 				
 			if(cache[userId] && !force){
 				if(callback)
@@ -67,8 +71,9 @@ Ext.define('NextThought.proxy.UserDataLoader',{
 					var json = Ext.decode(r.responseText),
 						bins = this._binAndParseItems(json.Items);
 						
-					if(bins.User.length>1)
-						console.log('WARNING: many matching users:', userId, bins.User);
+					if(bins.User.length>1){
+						console.log('WARNING: many matching users: "', userId, '"', bins.User);
+                    }
 
 					cache[userId] = bins.User[0];
 

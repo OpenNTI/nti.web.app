@@ -35,6 +35,10 @@ Ext.define( 'NextThought.view.widgets.Annotation', {
 
         me.onResize = b;
 	},
+
+    getCmp: function(){//return the component that represents this annotation.
+        return null;
+    },
 	
 	getBubbleTarget: function(){
 		return this._cmp;

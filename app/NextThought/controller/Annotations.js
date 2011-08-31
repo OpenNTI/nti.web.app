@@ -109,7 +109,13 @@ Ext.define('NextThought.controller.Annotations', {
     },
 
     attemptToAddWidget: function(record){
-        this.getContext().createNoteWidget(record);
+        var parent = record.get('inReplyTo');
+        if(parent){
+            parent = Ext.getCmp('note-'+parent);
+            parent.addReply(record);
+        }
+        else
+            this.getContext().createNoteWidget(record);
     },
 
     replyToNote: function(record){

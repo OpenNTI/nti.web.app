@@ -41,6 +41,10 @@ Ext.define( 'NextThought.view.widgets.Note', {
 
 		return me;
 	},
+
+    getCmp: function(){
+        return this.noteCmp;
+    },
 	
 	visibilityChanged: function(show){
 		var me = this, c = Ext.get(me.noteDiv);
@@ -57,9 +61,15 @@ Ext.define( 'NextThought.view.widgets.Note', {
 	
 	noteUpdated: function(record){
 		// console.log('noteUpdated');
-		this._record = record;
-		record.on('updated',this.noteUpdated, this);
-		this.noteCmp.update(record.get('text'));
+        var children = this._record.children,
+            parent = this._record._parent;
+
+        record.on('updated',this.noteUpdated, this);
+        record.children = children;
+        record._parent = parent;
+
+        this._record = record;
+        this.noteCmp.update(record.get('text'));
 		this.onResize();
 		this._cmp.fireEvent('resize',{});
 	},
@@ -85,9 +95,14 @@ Ext.define( 'NextThought.view.widgets.Note', {
 	cleanup: function(){
 		this.callParent(arguments);
         this._cmp.un('afterlayout', this.onResize, this);
-		this.noteCmp.destroy();
-		delete this.noteCmp;
-		Ext.get(this.noteDiv).remove();
+        if(this.noteCmp.hasReplies()){
+            this.noteCmp.removeReply();
+        }
+        else {
+		    this.noteCmp.destroy();
+		    delete this.noteCmp;
+            Ext.get(this.noteDiv).remove();
+        }
 		this.onResize();
 	},
 	

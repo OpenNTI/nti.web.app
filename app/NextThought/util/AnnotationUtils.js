@@ -47,6 +47,34 @@ Ext.define('NextThought.util.AnnotationUtils',
 
             return reply;
         },
+
+        /**
+         * From a reply, build its absent parent
+         * @param note
+         */
+        replyToPlaceHolder: function(note){
+            var holder = Ext.create('NextThought.model.Note'),
+                refs = note.get('references') || [];
+
+            if(refs.length)
+                refs.pop();
+
+            if(refs.length)
+                holder.set('inReplyTo', refs[refs.length-2]);
+
+            holder.set('Creator', null);
+            holder.set('anchorPoint', note.get('anchorPoint'));
+            holder.set('top', note.get('top'));
+            holder.set('left', note.get('left'));
+            holder.set('ContainerId', note.get('ContainerId'));
+            holder.set('OID', note.get('inReplyTo'));
+            holder.set('references', refs);
+            holder.set('text','Place Holder for deleted note');
+
+            holder.placeHolder = true;
+
+            return holder;
+        },
 		
 		selectionToNote: function(range) {
 			var note = Ext.create('NextThought.model.Note');
