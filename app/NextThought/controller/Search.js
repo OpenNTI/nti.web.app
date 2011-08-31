@@ -28,17 +28,13 @@ Ext.define('NextThought.controller.Search', {
         });
     },
 
-    searchResultClicked: function(hit) {
+    searchResultClicked: function(hit, searchValue) {
         var containerId = hit.get('ContainerId'),
             bookInfo = NextThought.librarySource.findLocation(containerId),
             book = bookInfo.book,
             href = bookInfo.location.getAttribute('href');
 
-        this.navigate(book, book.root + href);
-    },
-
-    navigate: function(book, ref) {
-        this.getViewport().fireEvent('navigate', book, ref);
+        this.getViewport().fireEvent('navigate', book, book.root + href, {text: searchValue});
     },
 
     search: function(field, e) {

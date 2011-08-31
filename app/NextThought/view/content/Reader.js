@@ -5,7 +5,10 @@ Ext.define('NextThought.view.content.Reader', {
 	requires: ['NextThought.model.Highlight',
 			   'NextThought.model.Note',
 			   'NextThought.proxy.UserDataLoader',
-			   'NextThought.util.AnnotationUtils'],
+			   'NextThought.util.AnnotationUtils',
+               'NextThought.view.widgets.SelectionHighlight',
+               'NextThought.view.widgets.Highlight',
+               'NextThought.view.widgets.Note'],
 	cls: 'x-reader-pane',
 	
 	items: [{cls:'x-panel-reset', margin: '0 0 0 50px'}],
@@ -28,6 +31,21 @@ Ext.define('NextThought.view.content.Reader', {
     	},this);
     },
 
+    showRanges: function(ranges) {
+        this._annotations.push(Ext.create('NextThought.view.widgets.SelectionHighlight', ranges, this.items.get(0).el.dom.firstChild, this));
+    },
+
+    scrollToNode: function(n) {
+        while(n && n.nodeType == 3) {
+            n = n.parentNode;
+        }
+        Ext.get(n).scrollIntoView(this.el.first());
+    },
+
+    scrollTo: function(top) {
+
+        this.el.first().scrollTo('top', top, true);
+    },
 
 	render: function(){
 		this.callParent(arguments);
@@ -328,18 +346,17 @@ Ext.define('NextThought.view.content.Reader', {
 	            this.el.select('#NTIContent .breadcrumbs').remove();
 	            this.el.select('.x-reader-pane a[href]').on('click',this._onClick,this,{book: book, scope:this,stopEvent:true});
 	            containerId = this.el.select('meta[name=NTIID]').first().getAttribute('content');
-	            
 
-	            
-	            if( callback ){
-	            	callback();
-	            }
-	            
 	            this._loadContentAnnotations(containerId);
 	            this.fireEvent('location-changed', containerId);
 	            vp.unmask();
 
+	            if( callback ){
+                    this.on('relayedout', callback, this, {single: true});
+	            }
+
                 this.bufferedDelayedRelayout();
+
             },
 	    	error: function(){ 
 	    		if(NextThought.isDebug) {

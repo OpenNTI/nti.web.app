@@ -12,6 +12,7 @@ Ext.define('NextThought.view.widgets.SearchResultsPopover', {
     renderTo: Ext.getBody(),
     defaults: {border: false,
               defaults: {border: false}},
+    _searchVal: null,
 
     initComponent: function() {
         this.addEvents('goto');
@@ -22,6 +23,7 @@ Ext.define('NextThought.view.widgets.SearchResultsPopover', {
 
     performSearch: function(searchValue) {
         this.items.get(0).removeAll();
+        this._searchVal = searchValue;
         UserDataLoader.search(null, searchValue, this.updateContents);
     },
 
@@ -63,14 +65,14 @@ Ext.define('NextThought.view.widgets.SearchResultsPopover', {
             p.add(content);
 
             //wait till it's added to access el
-            content.getEl().on('click', this.searchResultClicked, this, {hit: h});
+            content.getEl().on('click', this.searchResultClicked, this, {hit: h, searchValue: this._searchVal});
 		}
 
         this.el.unmask();
     },
 
     searchResultClicked: function(event, dom, opts) {
-        this.fireEvent('goto', opts.hit);
+        this.fireEvent('goto', opts.hit, opts.searchValue);
         this.close();
 
     },

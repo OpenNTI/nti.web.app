@@ -8,6 +8,7 @@ Ext.define('NextThought.view.content.Panel', {
 	defaults: {frame: false, border: false},
 
     initComponent: function(){
+        this.addEvents('relayedout');
         this.callParent(arguments);
 
         this.bufferedDelayedRelayout = Ext.Function.createBuffered(
@@ -28,6 +29,7 @@ Ext.define('NextThought.view.content.Panel', {
     	this.ownerCt.doComponentLayout();
     	this.doComponentLayout();
     	this.doLayout();
+        this.fireEvent('relayedout', this);
     },
 
 
