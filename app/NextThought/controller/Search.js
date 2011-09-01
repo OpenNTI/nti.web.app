@@ -20,7 +20,9 @@ Ext.define('NextThought.controller.Search', {
     init: function() {
     	 this.control({
             '#searchBox': {
-                specialkey: this.search
+                'search': this.search,
+                'cleared-search': this.clearSearch
+
             },
             'search-results-popover': {
                  'goto': this.searchResultClicked
@@ -37,9 +39,15 @@ Ext.define('NextThought.controller.Search', {
         this.getViewport().fireEvent('navigate', book, book.root + href, {text: searchValue});
     },
 
-    search: function(field, e) {
-        if (e.getKey() != e.ENTER) return;
+    clearSearch: function(){
+        var popover = this.getSearchPopover();
 
+        if(popover){
+            popover.destroy();
+        }
+    },
+
+    search: function(field) {
         var searchVal = field.getSubmitValue();
 
         var popover = this.getSearchPopover() || Ext.create('widget.search-results-popover');

@@ -1,4 +1,4 @@
-Ext.define( 'NextThought.view.widgets.ShareWithInput', {
+Ext.define( 'NextThought.view.form.ShareWithInput', {
 	// extend: 'Ext.form.field.Text',
 	extend: 'Ext.form.field.ComboBox',
 	requires: [

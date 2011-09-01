@@ -2,7 +2,10 @@
 Ext.define('NextThought.view.widgets.TopControls', {
 	extend: 'Ext.panel.Panel',
     alias: 'widget.top-controls',
-    requires: ['NextThought.view.widgets.SessionInfo'],
+    requires: [
+        'NextThought.view.form.SearchField',
+        'NextThought.view.widgets.SessionInfo'
+    ],
 	
 	cls: 'x-brand-and-search-bar',
 	frame: false,
@@ -34,7 +37,9 @@ Ext.define('NextThought.view.widgets.TopControls', {
     		layout: 'hbox',
     		items: [
     			NextThought.modeSwitcher,
-    			{ xtype: 'textfield', margin: 5, emptyText:'Search...', flex: 1, maxWidth: 400, id: 'searchBox'}
+    			{ xtype: 'searchfield', margin: 5, emptyText:'Search...', flex: 1, maxWidth: 400, id: 'searchBox'}
+    			//{ xtype: 'textfield', margin: 5, emptyText:'Search...', flex: 1, maxWidth: 400, id: 'searchBox'}
+
     		]
     	});
     	

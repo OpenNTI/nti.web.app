@@ -1,3 +1,7 @@
+Ext.Loader.setPath('Ext.ux', 'extjs/examples/ux');
+Ext.require([
+    'Ext.data.*'
+]);
 
 var CENTER_WIDTH = 768,
     MIN_SIDE_WIDTH = 216,

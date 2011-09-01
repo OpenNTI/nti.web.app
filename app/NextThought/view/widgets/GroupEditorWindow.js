@@ -7,7 +7,7 @@ Ext.define('NextThought.view.widgets.GroupEditorWindow', {
 	requires: [
 			'NextThought.model.User',
 			// 'NextThought.model.UnresolvedFriend',
-			'NextThought.view.widgets.ShareWithInput'
+			'NextThought.view.form.ShareWithInput'
 	],
 	
 	title: 'Edit Group',
