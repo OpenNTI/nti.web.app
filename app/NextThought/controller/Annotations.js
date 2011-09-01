@@ -50,7 +50,7 @@ Ext.define('NextThought.controller.Annotations', {
     shareWithButton: function(btn){
 		var win = btn.up('window'),
 			form= win.down('form'),
-			shbx= win.down('sharewithinput'),
+			shbx= win.down('usersearchinput'),
 			rec = win.record;
 
 		if(btn.isCancel){

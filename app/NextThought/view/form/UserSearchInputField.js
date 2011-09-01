@@ -1,10 +1,10 @@
-Ext.define( 'NextThought.view.form.ShareWithInput', {
+Ext.define( 'NextThought.view.form.UserSearchInputField', {
 	// extend: 'Ext.form.field.Text',
 	extend: 'Ext.form.field.ComboBox',
 	requires: [
 			'NextThought.proxy.UserDataLoader'
 	],
-	alias : 'widget.sharewithinput',
+	alias : 'widget.usersearchinput',
 	
 	allowBlank: false,
     displayField: 'realname',

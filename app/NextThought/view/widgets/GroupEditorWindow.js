@@ -7,7 +7,7 @@ Ext.define('NextThought.view.widgets.GroupEditorWindow', {
 	requires: [
 			'NextThought.model.User',
 			// 'NextThought.model.UnresolvedFriend',
-			'NextThought.view.form.ShareWithInput'
+			'NextThought.view.form.UserSearchInputField'
 	],
 	
 	title: 'Edit Group',
@@ -89,11 +89,11 @@ Ext.define('NextThought.view.widgets.GroupEditorWindow', {
 			        }
 				},
 				{html:'<hr size=1/>'},
-				{xtype: 'sharewithinput', margin: 5, emptyText: 'Search...', allowBlank: true, enableKeyEvents: true }
+				{xtype: 'usersearchinput', margin: 5, emptyText: 'Search...', allowBlank: true, enableKeyEvents: true }
 			]
 		});
 		
-		var s = this.down('sharewithinput');
+		var s = this.down('usersearchinput');
 		s.on('select', this._selectSearch, this);
 	},
 	

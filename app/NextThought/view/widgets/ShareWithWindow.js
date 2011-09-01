@@ -2,7 +2,7 @@ Ext.define( 'NextThought.view.widgets.ShareWithWindow', {
 	extend: 'Ext.window.Window',
 	requires: [
 			'NextThought.proxy.UserDataLoader',
-			'NextThought.view.form.ShareWithInput'
+			'NextThought.view.form.UserSearchInputField'
 			],
 	alias : 'widget.sharewithwindow',
 	
@@ -35,11 +35,11 @@ Ext.define( 'NextThought.view.widgets.ShareWithWindow', {
 				{anchor: '100%', html:'<img src="'+a+'" width=24 height=24 valign=middle atl="'+n+'"/> '+t+' by '+n+':<hr size=1/>'},
 				{anchor: '100%', html:content, padding: '0 0 0 15px'},
 				{anchor: '100%', html:'<hr size=1/>'},
-				{anchor: '100%', xtype: 'sharewithinput' }
+				{anchor: '100%', xtype: 'usersearchinput' }
 			]
 		});
 
-        this.down('sharewithinput').on('select', this._selectSearch, this);
+        this.down('usersearchinput').on('select', this._selectSearch, this);
 	},
 
     _selectSearch: function(sel, items) {
