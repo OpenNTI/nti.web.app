@@ -10,7 +10,7 @@ Ext.define('NextThought.view.form.SearchField', {
     hasSearch : false,
 
     initComponent: function(){
-        this.addEvents('');
+        this.addEvents('search', 'cleared-search');
         this.callParent(arguments);
         this.on('specialkey', function(f, e){
             if(e.getKey() == e.ENTER){

@@ -15,6 +15,7 @@ Ext.define('NextThought.view.content.Reader', {
 	_annotations: [],
 	_tracker: null,
 	_filter: null,
+    _searchAnnotations: null,
 	
     initComponent: function(){
     	this.addEvents('create-note','edit-note','publish-contributors','location-changed');
@@ -32,7 +33,14 @@ Ext.define('NextThought.view.content.Reader', {
     },
 
     showRanges: function(ranges) {
-        this._annotations.push(Ext.create('NextThought.view.widgets.SelectionHighlight', ranges, this.items.get(0).el.dom.firstChild, this));
+        this._searchAnnotations = Ext.create('NextThought.view.widgets.SelectionHighlight', ranges, this.items.get(0).el.dom.firstChild, this);
+    },
+
+    clearSearchRanges: function() {
+        if (!this._searchAnnotations) return;
+
+        this._searchAnnotations.cleanup();
+        this._searchAnnotations = null;
     },
 
     scrollToNode: function(n) {
@@ -81,7 +89,7 @@ Ext.define('NextThought.view.content.Reader', {
             this._annotations[i] = null;
 		}, this);
     },
-	
+
 	clearAnnotations: function(){
 		Ext.each(this._annotations, function(v){
             if (!v) return;
@@ -89,6 +97,7 @@ Ext.define('NextThought.view.content.Reader', {
 			delete v;
 		});
 		this._annotations = [];
+        this.clearSearchRanges();
 	},
 
 
@@ -130,9 +139,6 @@ Ext.define('NextThought.view.content.Reader', {
         menu.showAt(xy);
 
 	},
-
-
-
 	
 	_createHighlightWidget: function(range, record){
         var w = Ext.create(

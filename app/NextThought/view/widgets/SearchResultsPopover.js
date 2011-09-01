@@ -43,12 +43,18 @@ Ext.define('NextThought.view.widgets.SearchResultsPopover', {
         var k, h,
             p = this.items.get(0);
 
-     	if(!hits) {
-            this.el.unmask();
-            return;
-        }
+     	if(!hits || hits.length == 0) {
+             var content = Ext.create('Ext.panel.Panel',
+                 {html: '<b>No search results</b>',
+                     border: false,
+                     margin: 10});
 
-		for(k in hits){
+             p.add(content);
+             this.el.unmask();
+             return;
+         }
+
+        for(k in hits){
             if(!hits.hasOwnProperty(k))continue;
             h = hits[k];
 
@@ -56,7 +62,7 @@ Ext.define('NextThought.view.widgets.SearchResultsPopover', {
                 t = h.get('Title'),
                 ty = h.get('Type');
 
-            var content = Ext.create('Ext.panel.Panel',
+            content = Ext.create('Ext.panel.Panel',
                 {html: '<b>' + t + '</b>' +
                        ' - ' + s,
                  border: false,

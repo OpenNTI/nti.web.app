@@ -37,7 +37,8 @@ Ext.define('NextThought.controller.Reader', {
     init: function() {
         this.control({
             'master-view':{
-                'navigate': this.navigate
+                'navigate': this.navigate,
+                'cleared-search': this.clearSearch
             },
 
             'breadcrumbbar':{
@@ -60,6 +61,9 @@ Ext.define('NextThought.controller.Reader', {
         });
     },
 
+    clearSearch: function() {
+        this.getReader().clearSearchRanges();
+    },
 
     navigate: function(book, ref, scrollToOptions){
         this.getReader().setActive(book, ref, null, scrollToOptions ?

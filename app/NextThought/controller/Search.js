@@ -22,7 +22,6 @@ Ext.define('NextThought.controller.Search', {
             '#searchBox': {
                 'search': this.search,
                 'cleared-search': this.clearSearch
-
             },
             'search-results-popover': {
                  'goto': this.searchResultClicked
@@ -45,6 +44,8 @@ Ext.define('NextThought.controller.Search', {
         if(popover){
             popover.destroy();
         }
+
+         this.getViewport().fireEvent('cleared-search');
     },
 
     search: function(field) {
