@@ -21,7 +21,10 @@ Ext.define('NextThought.controller.Search', {
     	 this.control({
             '#searchBox': {
                 'search': this.search,
-                'cleared-search': this.clearSearch
+                'cleared-search': this.clearSearch,
+                'select-down' : this.selectDown,
+                'select-up' : this.selectUp,
+                'choose-selection': this.chooseSelection
             },
             'search-results-popover': {
                  'goto': this.searchResultClicked
@@ -36,6 +39,24 @@ Ext.define('NextThought.controller.Search', {
             href = bookInfo.location.getAttribute('href');
 
         this.getViewport().fireEvent('navigate', book, book.root + href, {text: searchValue});
+    },
+
+    selectDown: function() {
+        var popover = this.getSearchPopover();
+        if(popover){
+            popover.select(false);
+        }
+    },
+
+    selectUp: function() {
+        var popover = this.getSearchPopover();
+        if(popover) popover.select(true);
+    },
+
+    chooseSelection: function() {
+        var popover = this.getSearchPopover();
+
+        if(popover) popover.chooseSelection();
     },
 
     clearSearch: function(){

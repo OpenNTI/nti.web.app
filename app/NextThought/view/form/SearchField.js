@@ -10,11 +10,22 @@ Ext.define('NextThought.view.form.SearchField', {
     hasSearch : false,
 
     initComponent: function(){
-        this.addEvents('search', 'cleared-search');
+        this.addEvents('search', 'cleared-search', 'select-down', 'select-up', 'choose-selection');
         this.callParent(arguments);
         this.on('specialkey', function(f, e){
-            if(e.getKey() == e.ENTER){
+            //trigger search if enter is pressed, or if down is pressed and there isn't already a search
+            if(!this.hasSearch && (e.getKey() == e.ENTER || e.getKey() == e.DOWN)){
                 this.onTrigger2Click();
+            }
+            else if (e.getKey() == e.DOWN) {
+                this.onSelectDown();
+            }
+            else if (e.getKey() == e.UP) {
+                this.onSelectUp();
+            }
+            else if (e.getKey() == e.ENTER || e.getKey() == e.RIGHT) {
+                //someone pressed enter when the search is visable, means navigate to selection
+                this.onChooseSelection();
             }
         }, this);
     },
@@ -22,6 +33,22 @@ Ext.define('NextThought.view.form.SearchField', {
     afterRender: function(){
         this.callParent();
         this.triggerEl.item(0).setDisplayed('none');
+    },
+
+    onSelectDown: function() {
+        var me = this;
+        me.fireEvent('select-down');
+    },
+
+    onSelectUp: function() {
+        var me = this;
+        me.fireEvent('select-up');
+    },
+
+    onChooseSelection: function() {
+        var me = this;
+        this.hasSearch = false;
+        me.fireEvent('choose-selection');
     },
 
     onTrigger1Click : function(){

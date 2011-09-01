@@ -4,15 +4,18 @@ Ext.define('NextThought.view.widgets.SearchResultsPopover', {
 
     autoScroll: true,
     floating: true,
-    closable: true,
+    closable: false,
     border: true,
     width: 400,
     height: 250,
-    items: [{margin: 3}],
+    padding: 3,
+    itemSelected: -1,
+    noResults: false,
     renderTo: Ext.getBody(),
     defaults: {border: false,
               defaults: {border: false}},
     _searchVal: null,
+    _hits: [],
 
     initComponent: function() {
         this.addEvents('goto');
@@ -22,7 +25,7 @@ Ext.define('NextThought.view.widgets.SearchResultsPopover', {
     },
 
     performSearch: function(searchValue) {
-        this.items.get(0).removeAll();
+        this.removeAll();
         this._searchVal = searchValue;
         UserDataLoader.search(null, searchValue, this.updateContents);
     },
@@ -38,10 +41,54 @@ Ext.define('NextThought.view.widgets.SearchResultsPopover', {
         this.el.mask("Searching");
     },
 
+    chooseSelection: function() {
+         if (this.noResults) return;
+
+         var p = this,
+             i = p.items.get(this.itemSelected),
+             h = this._hits[this.itemSelected];
+
+        this.searchResultClicked(null, null, {hit: h, searchValue: this._searchVal});
+    },
+
+
+    scroll: function(p) {
+        p.el.scrollIntoView(this.el.first(), false);
+    } ,
+
+    select: function(up) {
+        if (this.noResults) return;
+
+        var p = this,
+            i = p.items.get(this.itemSelected),
+            CLASS = 'search-result-selection';
+
+        //remove current selection
+        if (i) i.removeCls(CLASS);
+
+        //increment to next
+        this.itemSelected += (up) ? -1 : 1;
+        i = p.items.get(this.itemSelected);
+
+        //if next is off the edge, wrap
+        if (!i) {
+            this.itemSelected = (up) ? p.items.length-1 : 0;
+            i = p.items.get(this.itemSelected);
+        }
+
+        i.addCls(CLASS);
+        this.scroll(i);
+    },
 
     updateContents: function(hits) {
         var k, h,
-            p = this.items.get(0);
+            p = this;
+
+        //save hits
+        this._hits = hits;
+
+        //reset no results flag
+        this.noResults = false;
 
      	if(!hits || hits.length == 0) {
              var content = Ext.create('Ext.panel.Panel',
@@ -51,6 +98,7 @@ Ext.define('NextThought.view.widgets.SearchResultsPopover', {
 
              p.add(content);
              this.el.unmask();
+             this.noResults = true;
              return;
          }
 
@@ -60,23 +108,45 @@ Ext.define('NextThought.view.widgets.SearchResultsPopover', {
 
 			var s = h.get('Snippet'),
                 t = h.get('Title'),
-                ty = h.get('Type');
+                ty = h.get('Type'),
+                el;
 
             content = Ext.create('Ext.panel.Panel',
                 {html: '<b>' + t + '</b>' +
                        ' - ' + s,
                  border: false,
-                 margin: 10});
+                 padding: 10});
 
             p.add(content);
 
             //wait till it's added to access el
-            content.getEl().on('click', this.searchResultClicked, this, {hit: h, searchValue: this._searchVal});
+            el = content.getEl();
+            el.on('click', this.searchResultClicked, this, {hit: h, searchValue: this._searchVal});
+            el.on('mouseover', this.highlightItem, this, {cmp: content});
 		}
 
         this.el.unmask();
     },
 
+    highlightItem: function(event, dom, opts) {
+        if (this.noResults) return;
+
+        var p = this.items,
+            CLASS = 'search-result-selection';
+
+        //remove all highlighting from other classes, add highlighting to the selected, reset index
+        Ext.each(p.items, function(c, i){
+            if (c == opts.cmp) {
+                c.addCls(CLASS);
+                this.itemSelected = i;
+                this.scroll(c);
+            }
+            else c.removeCls(CLASS);
+        }, this);
+
+
+
+    },
     searchResultClicked: function(event, dom, opts) {
         this.fireEvent('goto', opts.hit, opts.searchValue);
         this.close();
