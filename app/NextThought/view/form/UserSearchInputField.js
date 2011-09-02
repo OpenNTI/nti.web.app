@@ -14,6 +14,7 @@ Ext.define( 'NextThought.view.form.UserSearchInputField', {
     anchor: '100%',
     multiSelect:true,
     minChars: 1,
+    valueField: 'Username',
 
     listConfig: {
         loadingText: 'Searching...',
@@ -26,7 +27,7 @@ Ext.define( 'NextThought.view.form.UserSearchInputField', {
     },
 //    pageSize: 5,
 	
-	emptyText: 'Share with...',	
+	emptyText: 'Search...',
 	enableKeyEvents: true,
 	
 	constructor: function(){

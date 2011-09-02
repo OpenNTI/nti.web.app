@@ -2,7 +2,7 @@ Ext.define( 'NextThought.view.widgets.ShareWithWindow', {
 	extend: 'Ext.window.Window',
 	requires: [
 			'NextThought.proxy.UserDataLoader',
-			'NextThought.view.form.UserSearchInputField'
+			'NextThought.view.form.ShareWithField'
 			],
 	alias : 'widget.sharewithwindow',
 	
@@ -11,7 +11,7 @@ Ext.define( 'NextThought.view.widgets.ShareWithWindow', {
 	border: false,
 	width: 450,
 	modal: true,
-	defaults: {border: false, defaults: {border: false, margin: 8}},
+	defaults: {border: false, defaults: {anchor: '100%', border: false, margin: 8}},
 	layout: 'fit',
 	bbar: ['->',
   		{ xtype: 'button', text: 'Share' },
@@ -24,6 +24,7 @@ Ext.define( 'NextThought.view.widgets.ShareWithWindow', {
 			a = u.get('avatarURL'),
 			n = u.get('realname'),
 			t = m.record.getModelName(),
+            sw= m.record.get('sharedWith'),
 			content = m.record.get('text') || 'This item does not have text';
 			
 		m.callParent(arguments);
@@ -31,18 +32,12 @@ Ext.define( 'NextThought.view.widgets.ShareWithWindow', {
 			xtype: 'form',
 			layout: 'anchor',
 			items:[
-				{anchor: '100%', html:'<span style="font-size: 16pt; font-weight: normal">Share this...</span>'},
-				{anchor: '100%', html:'<img src="'+a+'" width=24 height=24 valign=middle atl="'+n+'"/> '+t+' by '+n+':<hr size=1/>'},
-				{anchor: '100%', html:content, padding: '0 0 0 15px'},
-				{anchor: '100%', html:'<hr size=1/>'},
-				{anchor: '100%', xtype: 'usersearchinput' }
+				{ html:'<span style="font-size: 16pt; font-weight: normal">Share this...</span>'},
+				{ html:'<img src="'+a+'" width=24 height=24 valign=middle atl="'+n+'"/> '+t+' by '+n+':<hr size=1/>'},
+				{ html:content, padding: '0 0 0 15px'},
+				{ html:'<hr size=1/>'},
+				{ xtype: 'sharewith', value: sw }
 			]
 		});
-
-        this.down('usersearchinput').on('select', this._selectSearch, this);
-	},
-
-    _selectSearch: function(sel, items) {
-    	sel.collapse();
-    }
+	}
 });

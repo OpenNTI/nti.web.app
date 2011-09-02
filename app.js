@@ -90,26 +90,19 @@ Ext.onReady(function(){
     Ext.Ajax.timeout==60000;
     Ext.Ajax.on(
         'beforerequest', function f(connection,options){
-            var loc = '';
-            try {
-                var method = f.caller.caller.caller.caller,
-                    parentClass, methodName;
-
-
-                if (!method.$owner) {
-                    method = method.caller;
+            if(options&&options.async===false){
+                var loc = '';
+                try {
+                    loc = printStackTrace()[7];
+                }
+                catch (e) {
+                    loc = e.stack;
                 }
 
-                parentClass = method.$owner.$className;
-                methodName = method.$name;
-
-                loc = parentClass+"."+methodName;
+                console.log('WARNING: Synchronous Call in: ', loc, ' Options:', options );
             }
-            catch (e) {
-                loc = e.stack;
-            }
-            if(options&&options.async===false)console.log('WARNING: Synchronous Call in: '+ loc, ' Options:', options );
-        });
+        }
+    );
 });
 
 

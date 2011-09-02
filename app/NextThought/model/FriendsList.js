@@ -42,8 +42,11 @@ Ext.data.Types.SHARED_WITH = {
                             : null;
             if(!p)
                 console.log("WARNING: Could not handle Object: ", o, arguments);
-            else
+            else  {
                 u.push(p);
+                //asynchronously resolve this user so its cached and ready
+                UserDataLoader.resolveUser(p,function(){});
+            }
         });
 
         return u;

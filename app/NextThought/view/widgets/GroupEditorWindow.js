@@ -89,7 +89,7 @@ Ext.define('NextThought.view.widgets.GroupEditorWindow', {
 			        }
 				},
 				{html:'<hr size=1/>'},
-				{xtype: 'usersearchinput', margin: 5, emptyText: 'Search...', allowBlank: true, enableKeyEvents: true }
+				{xtype: 'usersearchinput', margin: 5, allowBlank: true, enableKeyEvents: true }
 			]
 		});
 		

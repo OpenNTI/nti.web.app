@@ -50,7 +50,7 @@ Ext.define('NextThought.controller.Annotations', {
     shareWithButton: function(btn){
 		var win = btn.up('window'),
 			form= win.down('form'),
-			shbx= win.down('usersearchinput'),
+			shbx= win.down('sharewith'),
 			rec = win.record;
 
 		if(btn.isCancel){
@@ -62,7 +62,7 @@ Ext.define('NextThought.controller.Annotations', {
 			return false;
 		}
 
-        rec.set('sharedWith',Ext.data.Types.SHARED_WITH.convert(shbx.valueModels));
+        rec.set('sharedWith',shbx.getValue());
 		rec.save({
 			scope: this,
 			success:function(newRecord,operation){

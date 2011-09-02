@@ -14,7 +14,10 @@ Ext.define('NextThought.view.form.SearchField', {
         this.callParent(arguments);
         this.on('specialkey', function(f, e){
             //trigger search if enter is pressed, or if down is pressed and there isn't already a search
-            if(!this.hasSearch && (e.getKey() == e.ENTER || e.getKey() == e.DOWN)){
+            if(e.getKey() == e.ESC){
+                  this.onTrigger1Click();
+            }
+            else if(!this.hasSearch && (e.getKey() == e.ENTER || e.getKey() == e.DOWN)){
                 this.onTrigger2Click();
             }
             else if (e.getKey() == e.DOWN) {

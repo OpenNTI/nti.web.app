@@ -135,9 +135,9 @@ Ext.define( 'NextThought.view.widgets.Annotation', {
 				handler: function(){
 					m.fireEvent('share-with',m._record);
 				}
-			},{
-				text: 'Get Shared Info',
-				handler: function(){}
+//			},{
+//				text: 'Get Shared Info',
+//				handler: function(){}
 			});
 		}
 		return Ext.create('Ext.menu.Menu',{items: items});

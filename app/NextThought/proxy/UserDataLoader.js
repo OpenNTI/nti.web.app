@@ -69,13 +69,16 @@ Ext.define('NextThought.proxy.UserDataLoader',{
 					}
 					
 					var json = Ext.decode(r.responseText),
-						bins = this._binAndParseItems(json.Items);
-						
-					if(bins.User.length>1){
-						console.log('WARNING: many matching users: "', userId, '"', bins.User);
+						bins = this._binAndParseItems(json.Items),
+                        list = bins.User || bins.Community || bins.FriendsList || bins.Group;
+
+
+                    if(list.length>1){
+                        console.log('WARNING: many matching users: "', userId, '"', list);
                     }
 
-					cache[userId] = bins.User[0];
+                    cache[userId] = list[0];
+
 
 					if(!callback)return;
 						callback(cache[userId]);
@@ -144,7 +147,14 @@ Ext.define('NextThought.proxy.UserDataLoader',{
                     proxy: {
     	                type: 'usersearch',
     	                model: 'NextThought.model.User'
-                    }
+                    }//,
+//                    filters: [
+//                        {
+//                            filterFn: function(m){
+//                                return /@/.test(m.get('id'));
+//                            }
+//                        }
+//                    ]
 			    });
 		   	}
 			
