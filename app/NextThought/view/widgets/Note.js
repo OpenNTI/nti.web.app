@@ -95,14 +95,14 @@ Ext.define( 'NextThought.view.widgets.Note', {
 	cleanup: function(){
 		this.callParent(arguments);
         this._cmp.un('afterlayout', this.onResize, this);
-        if(this.noteCmp.hasReplies()){
-            this.noteCmp.removeReply();
-        }
-        else {
+//        if(this.noteCmp.hasReplies()){
+//            this.noteCmp.removeReply();
+//        }
+//        else {
 		    this.noteCmp.destroy();
 		    delete this.noteCmp;
             Ext.get(this.noteDiv).remove();
-        }
+//        }
 		this.onResize();
 	},
 	
