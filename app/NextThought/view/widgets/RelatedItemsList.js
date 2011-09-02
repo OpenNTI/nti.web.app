@@ -64,36 +64,38 @@ Ext.define('NextThought.view.widgets.RelatedItemsList', {
 	},
 	
 	
-	getRelatedItems: function(loc){
+    getRelatedItems: function(loc){
         if(!loc.location) return {};
-		var related = loc.location.getElementsByTagName('Related'),
-			map = {};
+        var related = loc.location.getElementsByTagName('Related'),
+            map = {};
 		
-		Ext.each(related, function(r){
-			r = r.firstChild;
-			do{
-			
-			var id = r.getAttribute('ntiid'),
-				type = r.getAttribute('type'),
-				topic = Ext.DomQuery.selectNode('topic[ntiid='+id+']',loc.toc),
-				label = topic.getAttribute('label'),
-				href = topic.getAttribute('href');
+        Ext.each(related, function(r){
+            r = r.firstChild;
+            do{
+                if(!r.getAttribute)continue;
+
+                var id = r.getAttribute('ntiid'),
+                    type = r.getAttribute('type'),
+                    target = NextThought.librarySource.findLocation(id),
+                    location = target? target.location : null,
+                    label = location? location.getAttribute('label') : 'Unknown: '+id,
+                    href = location? location.getAttribute('href') : '#';
 				
-				if(!map[id]){
-					map[id] = {
-						book: loc.book,
-						id: id,
-						type: type,
-						label: label,
-						href: href
-					};
-				}
-			}
-			while(r = r.nextSibling); 
+                if(!map[id]){
+                    map[id] = {
+                        book: loc.book,
+                        id: id,
+                        type: type,
+                        label: label,
+                        href: href
+                    };
+                }
+            }
+            while(r = r.nextSibling);
 			
-		},this);
+        },this);
 		
-		return map;
-	}
+        return map;
+    }
 
 });
