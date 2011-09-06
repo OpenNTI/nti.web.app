@@ -105,20 +105,25 @@ Ext.define('NextThought.view.widgets.NotePanel',{
         return !!this.gutter.items.length;
     },
 
-    removeReply: function(){
+    cleanupReply: function(){
         var m = this,
             children = m._record.children,
             parent = m._record._parent,
             a = m._annotation,
             p = a._parentAnnotation ? a._parentAnnotation : a;
 
-        m._record.destroy();
+
         if(m.hasReplies()) {
             m.removeDocked(m.getDockedItems('toolbar')[0]);
             m.update('Place holder for deleted note');
         }
         else m.destroy();
         p.onResize();
+    },
+
+    removeReply: function(){
+        this.cleanupReply();
+        this._record.destroy();
     },
 
 
