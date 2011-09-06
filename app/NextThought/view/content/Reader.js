@@ -287,7 +287,10 @@ Ext.define('NextThought.view.content.Reader', {
     	this._containerId = containerId;
 		UserDataLoader.getPageItems(containerId, {
 			scope:this,
-			success: this._objectsLoaded
+			success: this._objectsLoaded,
+            failure: function(){
+                //TODO: Fill in
+            }
 		});
     },
 

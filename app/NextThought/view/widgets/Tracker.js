@@ -127,7 +127,7 @@ Ext.define('NextThought.view.widgets.Tracker', {
 			return null;
 		}
 		var x = e.getX? e.getX()-this._offsetX : -1, 
-			y = e.getY? e.getY()-this._offsetY-this._topPadding : -1,
+			y = e.getY? e.getY()-this._offsetY : -1,
 			region = null;
 			
 		Ext.each(this._regions,function(v,i){
@@ -153,14 +153,12 @@ Ext.define('NextThought.view.widgets.Tracker', {
 
 	calculateSizes: function(current){
 		this._height = Ext.get(this._parent).getHeight(true);
-		// this._width = 60;//Ext.get(this._parent).getWidth();
-		this._topPadding = Ext.get(this._parent).getHeight()-this._height;
-		
+
 		this._canvas.width = this.width;
 		this._canvas.height = this._height;
 	
-		var halfWidth = Math.floor(this.width/2),
-			padding = this._topPadding,
+		var halfWidth = Math.ceil(this.width/2),
+            padding = 30,
 			info = this.getSectionCount(current),
 			sum = this._sum(info,'height'),
 			dots = this._numberOfDots,
@@ -176,23 +174,26 @@ Ext.define('NextThought.view.widgets.Tracker', {
 			info[i].height = v;
 			total += v;
 		});
-		
-		this._diameter = Math.floor(this._height/(total+lines));
-		this._diameter = this._diameter>halfWidth? halfWidth : this._diameter;
-			
-		this._radius = Math.floor(this._diameter/2);
-		this._radius = this._radius < 5 ? 5 : this._radius;
-		
+
+        var d = (this._height-padding)/(total+lines);
+
+		this._diameter = Math.ceil( d );
+
+		this._radius = this._diameter/2;
+        this._radius = this._radius < 4.5 ? 4.5 : this._radius;
+
 		this._gap = Math.floor(this._radius/2);
 		this._gap = this._gap > 1 ? this._gap : 1;
 		
 		this._radius -= this._gap;
 		this._diameter = this._radius * 2;
-		
+
+        console.log(this._radius, this._diameter, this._gap);
+
 		var guessedHeight = (total*(this._gap+this._diameter))
 						  + (lines*(this._gap+this._radius+3));
 		
-		this._top = Math.floor(this._height/2)-Math.floor(guessedHeight/2)-padding;
+		this._top = Math.floor(this._height/2)-Math.floor(guessedHeight/2);
 		this._top = this._top<5 ? 5 : this._top;
 	},
 	
@@ -325,7 +326,7 @@ Ext.define('NextThought.view.widgets.Tracker', {
 		// ctx.fill();
 		
 		ctx.beginPath();
-		ctx.arc(x, y, this._radius, 0, Math.PI*2, true);
+		ctx.arc((this._diameter*3)-this._radius-this._gap, y, this._radius, 0, Math.PI*2, true);
 		ctx.closePath();
 		ctx.fill();
 		
