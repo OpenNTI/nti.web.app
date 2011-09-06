@@ -23,16 +23,16 @@ Ext.define('NextThought.view.navigation.Breadcrumb', {
 	reset: function(book){
 		this._current = {};
 		this.removeAll(true);
-		this.add({
-			text: 'You',
-			listeners: {
-				scope: this,
-				click: function(){
-					// Ext.getCmp('myLibrary').activate();
-					this.reset();
-				}
-			}
-		});
+//		this.add({
+//			text: 'You',
+//			listeners: {
+//				scope: this,
+//				click: function(){
+//					// Ext.getCmp('myLibrary').activate();
+//					this.reset();
+//				}
+//			}
+//		});
 		
 		
 		if(!book){
@@ -84,6 +84,7 @@ Ext.define('NextThought.view.navigation.Breadcrumb', {
 	    var dq = Ext.DomQuery,
 	    	toc = dq.selectNode('topic',xml).parentNode,
 	        nodes = [],
+            first = true;
 	        selectedBranch = currentLocation,
 	        level = selectedBranch ? selectedBranch.parentNode : dq.selectNode("topic[href]",xml).parentNode;
 
@@ -93,6 +94,7 @@ Ext.define('NextThought.view.navigation.Breadcrumb', {
 	        
 	        var leafs = [],
 	        	branches = {
+                    cls: first? 'x-breadcrumb-end': '',
 		        	text: selectedBranch 
 		                ? selectedBranch.getAttribute("label"): 'Select Chapter'
 		                
@@ -111,6 +113,7 @@ Ext.define('NextThought.view.navigation.Breadcrumb', {
 	        //back up the tree...all the way to the root.
 	        selectedBranch = level;
 	        level = level.parentNode;
+            first = false;
 	    }
 	    
 	    container.add({
