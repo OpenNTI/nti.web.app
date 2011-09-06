@@ -331,6 +331,8 @@ Ext.define('NextThought.proxy.UserDataLoader',{
 					}
 					var cReader = this._getReaderForModel('Change');
 					Ext.each(json.Items, function(i, x){
+                        if (!i.Item) return; //Empty change, probably a deleted item.
+
 						var reader = this._getReaderForModel(i.Item.Class);
 						i.Item = reader.read(i.Item).records[0];
 						
