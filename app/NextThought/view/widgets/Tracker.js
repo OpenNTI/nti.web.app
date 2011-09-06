@@ -188,8 +188,6 @@ Ext.define('NextThought.view.widgets.Tracker', {
 		this._radius -= this._gap;
 		this._diameter = this._radius * 2;
 
-        console.log(this._radius, this._diameter, this._gap);
-
 		var guessedHeight = (total*(this._gap+this._diameter))
 						  + (lines*(this._gap+this._radius+3));
 		

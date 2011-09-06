@@ -43,15 +43,28 @@ Ext.define('NextThought.view.content.Reader', {
         this._searchAnnotations = null;
     },
 
+    scrollToTarget: function(target){
+        var e = this.el.query('*[name='+target+']');
+        if(!e || !e.length)
+            console.log('no target found: ',target);
+        else
+            this.scrollToNode(e[0]);
+    },
+
     scrollToNode: function(n) {
         while(n && n.nodeType == 3) {
             n = n.parentNode;
         }
-        Ext.get(n).scrollIntoView(this.el.first());
+
+        var e = this.el.first(),
+            h = e.getTop()+ 10,
+            t = e.dom.scrollTop;
+
+        this.scrollTo(t+Ext.get(n).getTop()-h);
+        //Ext.get(n).scrollIntoView(this.el.first());
     },
 
     scrollTo: function(top) {
-
         this.el.first().scrollTo('top', top, true);
     },
 
@@ -303,24 +316,36 @@ Ext.define('NextThought.view.content.Reader', {
     setActive: function(book, path, skipHistory, callback) {
         this.clearAnnotations();
     	this.activate();
-        this.active = path;
 
-        if(!skipHistory)
-        	this._appendHistory(book, path);
-        
         var b = this._resolveBase(this._getPathPart(path)),
         	f = this._getFilename(path),
 			p = this.items.get(0),
+            pc = path.split('#'),
+            target = pc.length>1? pc[1] : null,
 			vp= Ext.getCmp('viewport').getEl();
-        
+
+        if(this.active == pc[0]){
+            if( callback ){
+                callback();
+            }
+
+            if(target)
+                this.scrollToTarget(target);
+
+            return;
+        }
+
+        this.active = pc[0];
+
+        if(!skipHistory)
+        	this._appendHistory(book, path);
+
+
         vp.mask('Loading...');
-        
+
 		Ext.getCmp('breadcrumb').setActive(book, f);
-		
-		//p.update('');
-		//this.items.get(0).update('');
     	this.el.dom.firstChild.scrollTop = 0;
-        
+
         Ext.Ajax.request({
 			url: b+f,
 			scope: this,
@@ -352,10 +377,7 @@ Ext.define('NextThought.view.content.Reader', {
 				                function fixReferences(s,g) {
                                     var i = g.indexOf("#");
 
-				                	if(i>0 && NextThought.isDebug)
-                                        console.log(g);
-
-                                    else if(i==0){
+				                	if(i==0){
                                         return s;
                                     }
 
@@ -376,8 +398,15 @@ Ext.define('NextThought.view.content.Reader', {
                     this.on('relayedout', callback, this, {single: true});
 	            }
 
-                this.bufferedDelayedRelayout();
+                if(target){
+                    this.on('relayedout',
+                        function(){
+                            this.scrollToTarget(target);
+                        },
+                        this, {single: true});
+                }
 
+                this.bufferedDelayedRelayout();
             },
 	    	error: function(){
                 vp.unmask();
@@ -389,17 +418,19 @@ Ext.define('NextThought.view.content.Reader', {
     
     
     _onClick: function(e, el, o){
-    	
-    	var h = _AppConfig.server.host,
+    	var m = this,
     		r = el.href,
-    		p = r.substring(h.length);
+    		p = r.substring(_AppConfig.server.host.length),
+            hash = p.indexOf('#');
 
-        if(p.indexOf('#')>=0){
-            console.log('clicked anchor reference: ', p);
-            return;
+        if(hash>=0){
+            if(hash==0){
+                console.log(p);
+                return;
+            }
         }
 
-    	this.setActive(o.book, p);
+    	m.setActive(o.book, p);
     }
 });
 
