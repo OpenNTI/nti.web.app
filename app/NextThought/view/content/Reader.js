@@ -349,7 +349,13 @@ Ext.define('NextThought.view.content.Reader', {
 				                function fixReferences(s,g) {
                                     var i = g.indexOf("#");
 
-				                	if(i>0 && NextThought.isDebug) console.log(g);
+				                	if(i>0 && NextThought.isDebug)
+                                        console.log(g);
+
+                                    else if(i==0){
+                                        return s;
+                                    }
+
 				                    return 'href="'+b+g+'"';
 				                });
 	        	
@@ -387,7 +393,8 @@ Ext.define('NextThought.view.content.Reader', {
     		r = el.href,
     		p = r.substring(h.length);
 
-        if(r.indexOf('#')>=0){
+        if(p.indexOf('#')>=0){
+            console.log('clicked anchor reference: ', p);
             return;
         }
 
