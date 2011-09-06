@@ -123,8 +123,8 @@ Ext.define( 'NextThought.view.widgets.Note', {
 		c.setWidth(w);
 //		a.setStyle('border', '1px solid green');
 
-        adjust += pr.getPadding('b')+pr.getMargin('b');
-        extra += nx.getPadding('t')+nx.getMargin('t') + adjust;
+        adjust += pr?(pr.getPadding('b')+pr.getMargin('b')):0;
+        extra += (nx?(nx.getPadding('t')+nx.getMargin('t')):0) + adjust;
 
 		h = c.getHeight();
 
