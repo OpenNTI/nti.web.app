@@ -41,9 +41,9 @@ Ext.define('NextThought.view.widgets.RelatedItemsList', {
 			m  = map[id];
 			
 			p.add({
-				items: {
+
 	  				xtype: 'box',
-	  				autoEl: {tag: 'a', href: '#', html: m.label},
+	  				autoEl: {tag: 'a', href: '#', html: m.label, cls: 'internal-link', style: 'display: block'},
 	  				listeners: {
     					'afterrender': function(c) {
   							c.el.on('click', function(e){
@@ -53,7 +53,7 @@ Ext.define('NextThought.view.widgets.RelatedItemsList', {
   							});
 						}
   					}
-  				}
+
 			});
 		}
 		

@@ -225,6 +225,10 @@ Ext.define('NextThought.util.AnnotationUtils',
         },
 
 		selectionToHighlight: function(range) {
+            if(range.collapsed){
+                return;
+            }
+
 			var highlight = Ext.create('NextThought.model.Highlight'),
                 startNode = range.startContainer,
                 endNode = range.endContainer,

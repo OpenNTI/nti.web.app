@@ -124,3 +124,14 @@ window.onpopstate = function(e) {
         Ext.getCmp('myReader')._restore(s);
     }
 };
+
+
+
+
+
+
+
+function togglehint(event) {
+	Ext.get(event.target.nextSibling).toggleCls("hidden");
+	return false;
+}

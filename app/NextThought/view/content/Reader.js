@@ -125,7 +125,11 @@ Ext.define('NextThought.view.content.Reader', {
 		
 		var highlight = AnnotationUtils.selectionToHighlight(range),
             menu,
-		    w = this._createHighlightWidget(range, highlight);
+		    w;
+
+        if(!highlight) return;
+
+        w = this._createHighlightWidget(range, highlight);
 
         highlight.set('ContainerId', this._containerId);
 
@@ -343,7 +347,9 @@ Ext.define('NextThought.view.content.Reader', {
 				                })
 	        		 .replace(	/href=\"(.*?)\"/mig, 
 				                function fixReferences(s,g) {
-				                	if(g.indexOf("#")>=0 && NextThought.isDebug) console.log(g);
+                                    var i = g.indexOf("#");
+
+				                	if(i>0 && NextThought.isDebug) console.log(g);
 				                    return 'href="'+b+g+'"';
 				                });
 	        	
@@ -380,7 +386,11 @@ Ext.define('NextThought.view.content.Reader', {
     	var h = _AppConfig.server.host,
     		r = el.href,
     		p = r.substring(h.length);
-    	
+
+        if(r.indexOf('#')>=0){
+            return;
+        }
+
     	this.setActive(o.book, p);
     }
 });
