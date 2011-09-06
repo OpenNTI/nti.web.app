@@ -27,6 +27,7 @@ Ext.define('NextThought.proxy.UserDataLoader',{
 
 					if(!success){
                         Logging.logAndAlertError('There was an error searching', arguments);
+                        if (callback) callback();
 						return;
 					}
 
@@ -65,6 +66,7 @@ Ext.define('NextThought.proxy.UserDataLoader',{
 					
 					if(!success){
                         Logging.logAndAlertError('There was an error resolving users', arguments);
+                        if (callback) callback();
                         return;
 					}
 					
@@ -307,6 +309,7 @@ Ext.define('NextThought.proxy.UserDataLoader',{
 					this._streamRequest = null;
 				},
 				failure: function() {
+                    //TODO - this does not stop task manager for some reason
                     Logging.logAndAlertError('There was an error getting stream contents', 'Will attempt to call failure callback', arguments);
 					if(callbacks && callbacks.failure) {
 						callbacks.failure.apply(callbacks.scope || this, arguments);

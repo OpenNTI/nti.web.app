@@ -377,8 +377,8 @@ Ext.define('NextThought.view.content.Reader', {
 
             },
 	    	error: function(){
+                vp.unmask();
                 Logging.logAndAlertError('There was an error getting content', arguments);
-	    		vp.unmask(); 
 	    	}
 	    });
     },

@@ -1,7 +1,8 @@
 Ext.define('NextThought.proxy.UserSearch', {
     extend: 'Ext.data.proxy.Rest',
     alias: 'proxy.usersearch',
-    requires: ['NextThought.proxy.reader.Json'],
+    requires: ['NextThought.proxy.reader.Json',
+               'NextThought.util.Logging'],
 	
 	url: '',
     appendId: false, //default
@@ -9,6 +10,7 @@ Ext.define('NextThought.proxy.UserSearch', {
     constructor: function(config) {
     	Ext.copyTo(this.reader, config, 'model');
     	this.callParent(arguments);
+        this.on('exception', this._exception, this);
     },
 
     buildUrl: function(request){
@@ -22,6 +24,10 @@ Ext.define('NextThought.proxy.UserSearch', {
     	request.params = undefined;
     	me.reader.hasContainerId = true;
     	return this.callParent(arguments);
+    },
+
+    _exception: function() {
+          Logging.logAndAlertError('Error searching for users, try again later', arguments)
     }
 	
 });

@@ -2,7 +2,8 @@ Ext.define('NextThought.proxy.Rest', {
     extend: 'Ext.data.proxy.Rest',
     alias: 'proxy.nti',
     requires: ['NextThought.proxy.reader.Json',
-               'NextThought.proxy.writer.Json'],
+               'NextThought.proxy.writer.Json',
+               'NextThought.util.Logging'],
 	
 	url: '',
     appendId: true, //default
@@ -12,6 +13,7 @@ Ext.define('NextThought.proxy.Rest', {
     constructor: function(config) {
     	Ext.copyTo(this.reader, config, 'model');
     	this.callParent(arguments);
+        this.on('exception', this._exception, this);
     },
 
     doRequest: function(){
@@ -95,7 +97,9 @@ Ext.define('NextThought.proxy.Rest', {
 
         request.url = url;
         me.reader.hasId = true;
-    }
+    },
 
-	
+    _exception: function() {
+        Logging.logAndAlertError('Error getting data, try again later', arguments)
+    }
 });

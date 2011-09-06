@@ -54,10 +54,12 @@ Ext.define('NextThought.view.widgets.SessionInfo', {
                         var key = 'NotificationCount';
 
                         if (user) u.set(key, user.get(key));
+                        else Ext.TaskManager.stop(me._task);
 
                         me.update();
+
 		        	},
-                     true // force resolve
+                    true // force resolve
 		        );
 		    },
 		    scope: this,
