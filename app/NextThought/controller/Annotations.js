@@ -109,6 +109,9 @@ Ext.define('NextThought.controller.Annotations', {
     },
 
     attemptToAddWidget: function(record){
+        //check to see if reply is already there, if so, don't do anything...
+        if (Ext.get('note-' + record.get('OID'))) return;
+
         var parent = record.get('inReplyTo');
         if(parent){
             parent = Ext.getCmp('note-'+parent);
