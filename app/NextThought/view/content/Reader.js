@@ -421,11 +421,12 @@ Ext.define('NextThought.view.content.Reader', {
     	var m = this,
     		r = el.href,
     		p = r.substring(_AppConfig.server.host.length),
-            hash = p.indexOf('#');
+            hash = p.split('#');
 
-        if(hash>=0){
-            if(hash==0){
-                console.log(p);
+        if(hash.length>1){
+
+            if(hash[1].length==0){
+                console.log('empty hash',r);
                 return;
             }
         }
