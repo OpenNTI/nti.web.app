@@ -8,7 +8,7 @@ Ext.define('NextThought.view.widgets.PeopleList', {
 	border: false,
 	//height: 40,
 	defaults: {border: false},
-	items:[{html:'People:<hr size=1/>', padding: '10px auto 0'},{margin: '1 0 1 1'}],
+	items:[{html:'People:', cls: 'sidebar-header'},{margin: '1 0 1 1'}],
 	
 	_filter: {},
 	_contributors: {},

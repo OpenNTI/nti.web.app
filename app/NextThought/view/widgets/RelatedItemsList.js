@@ -9,7 +9,7 @@ Ext.define('NextThought.view.widgets.RelatedItemsList', {
 	margin: '15px auto',
 	defaults: {border: false, defaults: {border: false}},
 	
-	items:[{html:'Related Items:<hr size=1/>'},{}],
+	items:[{html:'Related Items:', cls: 'sidebar-header'},{}],
 	
 	_filter: {},
 	
@@ -26,7 +26,7 @@ Ext.define('NextThought.view.widgets.RelatedItemsList', {
 	initComponent: function(){
 		this.callParent(arguments);
 	},
-	
+
 	setLocation: function(loc){
 		var map = this.getRelatedItems(loc),
 			id,

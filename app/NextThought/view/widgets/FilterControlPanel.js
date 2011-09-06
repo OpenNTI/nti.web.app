@@ -33,13 +33,14 @@ Ext.define('NextThought.view.widgets.FilterControlPanel', {
 	
 	addGroups : function(groups){
         this.removeAll();
+        this.removeAll();
 		var p = 'auto auto auto 10px',
             form = Ext.create('Ext.form.Panel',{border: false});
 
 //        this.add({ border: false,html:'&nbsp;', padding: 10});
         this.add(form);
 
-        form.add({ border: false,html:'<div>Who:</div><hr size=1/>', padding: '10px auto'});
+        form.add({ border: false,html:'Who:', cls: 'sidebar-header'});
 
         form.add({
             boxLabel: 'All',
@@ -71,7 +72,7 @@ Ext.define('NextThought.view.widgets.FilterControlPanel', {
 			this
 		);
 		
-		form.add({ border: false,html:'<div>What:</div><hr size=1/>', padding: '10px auto'});
+		form.add({ border: false,html:'What:', cls: 'sidebar-header'});
 		
 		form.add({
 			cls: 'x-all-filter-btn',
