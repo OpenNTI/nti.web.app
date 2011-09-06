@@ -39,5 +39,11 @@ Ext.define( 'NextThought.view.widgets.ShareWithWindow', {
 				{ xtype: 'sharewith', value: sw }
 			]
 		});
-	}
+	},
+
+    show: function(){
+        this.callParent(arguments);
+//        var e = this.down('sharewith');
+//        setTimeout(function(){e.focus();}, 500);
+    }
 });

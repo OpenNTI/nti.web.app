@@ -16,8 +16,9 @@ Ext.define( 'NextThought.view.modes.Home', {
    		this.add({ region: 'west', id: 'west-home', xtype: 'leftColumn' });
 
 		this.add(Ext.create('NextThought.view.content.Library',{
-			id: 'myLibrary', 
-			region: 'center', 
+			id: 'myLibrary',
+            cls: 'x-focus-pane',
+            region: 'center',
 			width: CENTER_WIDTH,
 	    	dockedItems: [{
 					xtype: 'toolbar',

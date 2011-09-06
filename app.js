@@ -43,6 +43,7 @@ Ext.application({
     ],
 
     launch: function() {
+//        Ext.FocusManager.enable();
         NextThought.isDebug = true;
         setTimeout(clearMask, 100);
 

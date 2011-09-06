@@ -60,7 +60,7 @@ Ext.define('NextThought.view.widgets.NotePanel',{
 		if(u && u.get('Username')==_AppConfig.server.username){
 			t.push(
 				{ text : 'Edit', eventName: 'edit-note' },
-				r._parent?'-':{ text : 'Share', eventName: 'share-with' },
+				{ text : 'Share', eventName: 'share-with' },
 				{ text : 'Delete', eventName: 'delete' }
 				);
 		}

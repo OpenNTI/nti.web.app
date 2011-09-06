@@ -12,6 +12,7 @@ Ext.define( 'NextThought.view.modes.Mode', {
 	frame: false,
 	defaults:{ border: false, frame: false },
 	layout: { type:'hbox', align: 'stretch'},
+    cls: 'x-application-mode-pane',
     items: [],
 
     initComponent: function(){

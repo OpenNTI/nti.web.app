@@ -116,6 +116,8 @@ Ext.define('NextThought.controller.Annotations', {
         }
         else
             this.getContext().createNoteWidget(record);
+
+        this.getContext().fireEvent('resize');
     },
 
     replyToNote: function(record){

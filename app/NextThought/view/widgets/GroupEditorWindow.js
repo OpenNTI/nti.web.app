@@ -96,6 +96,12 @@ Ext.define('NextThought.view.widgets.GroupEditorWindow', {
 		var s = this.down('usersearchinput');
 		s.on('select', this._selectSearch, this);
 	},
+
+    show: function(){
+        this.callParent(arguments);
+        var e = this.down('textfield');
+        setTimeout(function(){e.focus();}, 500);
+    },
 	
     _selectSearch: function(sel, items) {
     	this._store.add(items);

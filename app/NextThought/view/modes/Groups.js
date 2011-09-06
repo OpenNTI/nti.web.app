@@ -16,7 +16,7 @@ Ext.define( 'NextThought.view.modes.Groups', {
 		this.add({ region: 'west', id: 'west-groups', xtype: 'leftColumn', columnWidget: {} });
    		
    		this.add({
-			cls: 'x-dataview-panel',
+			cls: 'x-dataview-panel x-focus-pane',
     		region: 'center',
     		width: CENTER_WIDTH,
     		

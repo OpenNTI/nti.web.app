@@ -15,6 +15,7 @@ Ext.define( 'NextThought.view.modes.Stream', {
    		
    		this.add({
             xtype: 'stream-panel',
+            cls: 'x-focus-pane',
     		region: 'center',
     		width: CENTER_WIDTH,
     		

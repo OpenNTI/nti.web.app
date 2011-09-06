@@ -18,6 +18,7 @@ Ext.define( 'NextThought.view.modes.Reader', {
     	this.add({ region: 'west', id: 'west-book', xtype: 'leftColumn', columnWidget: {xtype:'filter-control'} });
    		
    		this.add({
+            cls: 'x-focus-pane',
     		region: 'center',
     		width: CENTER_WIDTH,
     		

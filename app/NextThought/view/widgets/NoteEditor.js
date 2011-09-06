@@ -15,5 +15,12 @@ Ext.define('NextThought.view.widgets.NoteEditor', {
 	initComponent: function(){
 		this.callParent(arguments);
 		this.add({ xtype: 'htmleditor', enableAlignments: false, value: this.record.get('text') });
-	}
+	},
+
+    show: function(){
+        this.callParent(arguments);
+        var e = this.down('htmleditor');
+        setTimeout(function(){e.focus();}, 500);
+    }
+
 });

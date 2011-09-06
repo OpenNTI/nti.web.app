@@ -63,6 +63,8 @@ Ext.define('NextThought.controller.Login', {
 			});
 			if(!success)
 			    return false;
+
+            s.userObject = UserDataLoader.resolveUser(values.username);
 		}
 		catch(e){
 			console.log(e);
@@ -78,8 +80,6 @@ Ext.define('NextThought.controller.Login', {
 
         var dt = Ext.Date.add(new Date(), Ext.Date.MONTH, 1);
         Ext.util.Cookies.set(COOKIE, Ext.JSON.encode({a:a, u:values.username}), values.remember ? dt : null);
-		
-		s.userObject = UserDataLoader.resolveUser(values.username);
 
 		return true;
 	},

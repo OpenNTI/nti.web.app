@@ -40,6 +40,12 @@ Ext.define('NextThought.view.form.ShareWithField', {
         b.on('blur', this._blur, this);
     },
 
+    focus: function(){
+        this.callParent(arguments);
+        this.down('usersearchinput').focus();
+    },
+
+
     initValue: function(){
         var m = this;
         Ext.each(m.value, function(o){
