@@ -376,10 +376,8 @@ Ext.define('NextThought.view.content.Reader', {
                 this.bufferedDelayedRelayout();
 
             },
-	    	error: function(){ 
-	    		if(NextThought.isDebug) {
-	    			console.log("Error", arguments);
-	    		} 
+	    	error: function(){
+                Logging.logAndAlertError('There was an error getting content', arguments);
 	    		vp.unmask(); 
 	    	}
 	    });

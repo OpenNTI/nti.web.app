@@ -45,6 +45,7 @@ Ext.define('NextThought.view.widgets.Highlight', {
         this._record.save({
             scope: this,
             failure:function(){
+                Logging.logAndAlertError('Failed to save', arguments);
                 this.cleanup();
                 delete this;
             },

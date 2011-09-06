@@ -68,7 +68,10 @@ Ext.define('NextThought.controller.Annotations', {
 			success:function(newRecord,operation){
 				win.close();
 				rec.fireEvent('updated',newRecord);
-			}
+			},
+            failure:function(){
+                Logging.logAndAlertError('Failed to save', arguments);
+            }
 		});
 	},
 
@@ -100,7 +103,10 @@ Ext.define('NextThought.controller.Annotations', {
 					win.close();
 					win.record.fireEvent('updated',newRecord);
                     this.attemptToAddWidget(newRecord);
-				}
+				},
+                failure:function(){
+                    Logging.logAndAlertError('Failed to save', arguments);
+                }
 			});
 		}
     	else {

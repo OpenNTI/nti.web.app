@@ -85,7 +85,7 @@ Ext.define('NextThought.controller.Groups', {
                     win.close();
                 },
                 failed: function(){
-                    console.log('failed to save group',arguments);
+                    Logging.logAndAlertError('Failed to save', arguments);
                     win.close();
                     this.reloadGroups();
                 }

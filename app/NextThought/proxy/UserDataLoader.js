@@ -10,7 +10,8 @@ Ext.define('NextThought.proxy.UserDataLoader',{
 			'NextThought.model.FriendsList',
 			'NextThought.model.User',
     		'NextThought.model.UnresolvedFriend',
-            'NextThought.model.Hit'
+            'NextThought.model.Hit',
+            'NextThought.util.Logging'
     		],
 	statics:{
 		
@@ -25,8 +26,7 @@ Ext.define('NextThought.proxy.UserDataLoader',{
 				callback: function(o,success,r){
 
 					if(!success){
-						if(callback)callback();
-                        console.log('ERROR: searching');
+                        Logging.logAndAlertError('There was an error searching', arguments);
 						return;
 					}
 
@@ -64,8 +64,8 @@ Ext.define('NextThought.proxy.UserDataLoader',{
 				callback: function(o,success,r){
 					
 					if(!success){
-						if(callback)callback();
-						return;
+                        Logging.logAndAlertError('There was an error resolving users', arguments);
+                        return;
 					}
 					
 					var json = Ext.decode(r.responseText),
@@ -105,11 +105,10 @@ Ext.define('NextThought.proxy.UserDataLoader',{
 					this._userSearch = null;
 				},
 				failure: function(){
+                    Logging.logAndAlertError('There was an error searching for user', 'Will attempt to call failure callback', arguments);
 					if(callbacks && callbacks.failure) {
 						callbacks.failure.apply(callbacks.scope || this, arguments);
-					} 
-					else if(NextThought.isDebug)
-						console.log('Could not load user search',arguments);
+					}
 				},
 				success: function(r){
 					var json = Ext.decode(r.responseText),
@@ -179,47 +178,45 @@ Ext.define('NextThought.proxy.UserDataLoader',{
 			return this._friendsListsStore;
 			
 		},
-		
-		
-		
-		getFriends: function(callbacks) {
-			this.getGroups({success: success, faulure: failure});
-			
-			function success(bins) {
-				var set = {}, key;
-				
-				Ext.each(bins, function(o){
-					Ext.each(o.get('friends'), function(f){
-						var u = f.get('Username'),
-							c = set[u];
-						if(c && /unresolved/i.test(c)) return;
-						set[u] = f;
-					},
-					this);
-				},
-				this);
-				
-				if(callbacks && callbacks.success){
-						callbacks.success.call(callbacks.scope || this, this._toArray(set));
-					}
-					else if(NextThought.isDebug){
-						console.log('WARNING: I haz friends dataz 4 u, but u no giv meh callbax');
-					}
-			}
-			
-			function failure() {
-				if(callbacks && callbacks.failure) 
-					callbacks.failure.call(callbacks.scope || this);
-				else if (NextThought.isDebug)
-					console.log('Could not load groups',arguments);
-			}
-		},
-		
-		
-		
-		
-		
-		getGroups: function(callbacks) {
+
+
+
+        getFriends: function(callbacks) {
+            this.getGroups({success: success, faulure: failure});
+
+            function success(bins) {
+                var set = {}, key;
+
+                Ext.each(bins, function(o){
+                        Ext.each(o.get('friends'), function(f){
+                                var u = f.get('Username'),
+                                    c = set[u];
+                                if(c && /unresolved/i.test(c)) return;
+                                set[u] = f;
+                            },
+                            this);
+                    },
+                    this);
+
+                if(callbacks && callbacks.success){
+                    callbacks.success.call(callbacks.scope || this, this._toArray(set));
+                }
+                else if(NextThought.isDebug){
+                    console.log('WARNING: I haz friends dataz 4 u, but u no giv meh callbax');
+                }
+            }
+
+            function failure() {
+                if(callbacks && callbacks.failure)
+                    callbacks.failure.call(callbacks.scope || this);
+            }
+        },
+
+
+
+
+
+        getGroups: function(callbacks) {
 			var h = _AppConfig.server.host,
 				d = _AppConfig.server.data,
 				u = _AppConfig.server.username;
@@ -232,11 +229,10 @@ Ext.define('NextThought.proxy.UserDataLoader',{
 					this._groupsRequest = null;
 				},
 				failure: function() {
-					if(callbacks && callbacks.failure) {
+                    Logging.logAndAlertError('There was an error getting groups', 'Will attempt to call failure callback', arguments);
+					 if(callbacks && callbacks.failure) {
 						callbacks.failure.apply(callbacks.scope || this, arguments);
-					} 
-					else if(NextThought.isDebug)
-						console.log('Could not load groups',arguments);
+					}
 				},
 				success: function(r, o) {
 					var json = Ext.decode(r.responseText);
@@ -311,11 +307,10 @@ Ext.define('NextThought.proxy.UserDataLoader',{
 					this._streamRequest = null;
 				},
 				failure: function() {
+                    Logging.logAndAlertError('There was an error getting stream contents', 'Will attempt to call failure callback', arguments);
 					if(callbacks && callbacks.failure) {
 						callbacks.failure.apply(callbacks.scope || this, arguments);
-					} 
-					else if(NextThought.isDebug)
-						console.log('Could not load stream',arguments);
+					}
 				},
 				success: function(r, o) {
 
@@ -384,11 +379,10 @@ Ext.define('NextThought.proxy.UserDataLoader',{
 					this._pageItemsRequest = null;
 				},
 				failure: function() {
+                    Logging.logAndAlertError('There was an error getting data', 'Will attempt to call failure callback', arguments);
 					if(callbacks && callbacks.failure) {
 						callbacks.failure.apply(callbacks.scope || this, arguments);
-					} 
-					else if(NextThought.isDebug)
-						console.log('Could not load items',arguments);
+					}
 				},
 				success: function(r,o) {
 					var json = Ext.decode(r.responseText),

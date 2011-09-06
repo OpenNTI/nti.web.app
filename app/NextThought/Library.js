@@ -89,7 +89,9 @@ Ext.define('NextThought.Library', {
 			url: url,
 			async: !!callback,
 			scope: this,
-			failure: function() { if(NextThought.isDebug) console.log('failed to load index: '+url, arguments); },
+			failure: function() {
+                Logging.logAndAlertError('There was an error loading library', url, arguments);
+            },
 			success: function(r,o) { 
 				this._tocs[index] = r.responseXML? r.responseXML : this._parseXML(r.responseText);
 				if(!this._tocs[index]){
