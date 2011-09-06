@@ -34,10 +34,8 @@ Ext.define('NextThought.view.widgets.FilterControlPanel', {
 	addGroups : function(groups){
         this.removeAll();
         this.removeAll();
-		var p = 'auto auto auto 10px',
-            form = Ext.create('Ext.form.Panel',{border: false});
+		var form = Ext.create('Ext.form.Panel',{border: false});
 
-//        this.add({ border: false,html:'&nbsp;', padding: 10});
         this.add(form);
 
         form.add({ border: false,html:'Who:', cls: 'sidebar-header'});
@@ -50,7 +48,6 @@ Ext.define('NextThought.view.widgets.FilterControlPanel', {
         });
 
 		form.add({
-			padding: p,
 			cls: 'user-group',
 			usergroup: true,
 			xtype:'checkboxfield',
@@ -61,7 +58,6 @@ Ext.define('NextThought.view.widgets.FilterControlPanel', {
 		Ext.each(groups,
 			function(v){
 				form.add({
-					padding: p,
 					cls: 'user-group',
 					usergroup: true,
 					xtype:'checkboxfield',
@@ -81,8 +77,8 @@ Ext.define('NextThought.view.widgets.FilterControlPanel', {
 			boxLabel: 'All'
 		});
 		
-		form.add({ xtype:'checkbox', padding: p, boxLabel: 'Highlights', model: 'NextThought.view.widgets.Highlight' });
-		form.add({ xtype:'checkbox', padding: p, boxLabel: 'Notes', model: 'NextThought.view.widgets.Note' });
+		form.add({ xtype:'checkbox', boxLabel: 'Highlights', model: 'NextThought.view.widgets.Highlight' });
+		form.add({ xtype:'checkbox', boxLabel: 'Notes', model: 'NextThought.view.widgets.Note' });
 
 		this.fireEvent('filter-control-loaded',this.getId());
 	}
