@@ -67,6 +67,12 @@ Ext.define('NextThought.view.content.Stream', {
 		for(k in this._stream){
 			if(!this._stream.hasOwnProperty(k))continue;
 			change = this._stream[k];
+
+            if (!change.get) {
+                console.log('This change has no get method, what is it?', change);
+                continue;
+            }
+
 			var u = change.get('Creator');
 
 			if(f.shareTargets[ u ] || (f.includeMe && f.includeMe==u)){
