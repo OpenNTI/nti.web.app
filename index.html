@@ -6,22 +6,60 @@
     <link rel="stylesheet" type="text/css" href="resources/css/panel-reset.css">
     <style>
 
-        .mode-switcher .mode-button
+        .mode-switcher .mode-button,
+        .mode-switcher .mode-button button
         {
             border: none;
+            margin: 0;
+            padding: 0;
             background: none;
-            width: 32px;
+            width: 32px !important;
             height: 32px;
         }
         .mode-switcher .mode-button.x-pressed{
-            background: white;
+            /*background: white;*/
         }
 
-        .mode-switcher .home-mode-icon,
-        .mode-switcher .reader-mode-icon,
-        .mode-switcher .stream-mode-icon,
-        .mode-switcher .groups-mode-icon,
-        .mode-switcher .classroom-mode-icon{}
+        .mode-switcher .mode-button .x-btn-icon{
+            background-image: url('resources/images/nti-pc-icons-masthead.png');
+            width: 30px;
+            height: 30px
+        }
+
+        .mode-switcher .home-mode-icon{
+            background-position: -5px -3px;
+        }
+        .mode-switcher .x-pressed .home-mode-icon{
+            background-position: -5px -39px;
+        }
+
+        .mode-switcher .reader-mode-icon{
+            background-position: -41px -4px;
+        }
+        .mode-switcher .x-pressed .reader-mode-icon{
+            background-position: -40px -40px;
+        }
+
+        .mode-switcher .stream-mode-icon{
+            background-position: -74px -5px;
+        }
+        .mode-switcher .x-pressed .stream-mode-icon{
+            background-position: -74px -40px;
+        }
+
+        .mode-switcher .groups-mode-icon{
+            background-position: -109px -5px;
+        }
+        .mode-switcher .x-pressed .groups-mode-icon{
+            background-position: -109px -41px;
+        }
+
+        .mode-switcher .classroom-mode-icon{
+            background-position: -144px -6px;
+        }
+        .mode-switcher .x-pressed .classroom-mode-icon{
+            background-position: -144px -41px;
+        }
 
         .search-result-selection,
         .search-result-selection .x-panel-body,
@@ -45,9 +83,9 @@
             line-height: 1.5em;
         }
 
-        .x-panel #nticontent .hint {
-            padding: 0 !important;
-        }
+        /*.x-panel #nticontent .hint {*/
+            /*padding: 0 !important;*/
+        /*}*/
 
         .settings-gear{
             background-image: url('resources/images/gear-18.png');

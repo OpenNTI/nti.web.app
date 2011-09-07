@@ -26,7 +26,7 @@ Ext.define('NextThought.view.navigation.ModeSwitcher', {
     		iconCls: cls,
     		title: label,
     		allowDepress: false,
-    		enableToggle: true, 
+    		enableToggle: true,
     		//border: false,
     		//margin: 0,
     	    //text: label,
