@@ -33,7 +33,10 @@ Ext.define('NextThought.view.content.Stream', {
 		        	success: function(stream){
 		        		this._stream = stream;
 		        		this.updateStream();
-		        	}
+		        	},
+                    failure: function(){
+                        Ext.TaskManager.stop(this._task);
+                    }
 		        });
 		    },
 		    scope: this,

@@ -309,7 +309,6 @@ Ext.define('NextThought.proxy.UserDataLoader',{
 					this._streamRequest = null;
 				},
 				failure: function() {
-                    //TODO - this does not stop task manager for some reason
                     Logging.logAndAlertError('There was an error getting stream contents', 'Will attempt to call failure callback', arguments);
 					if(callbacks && callbacks.failure) {
 						callbacks.failure.apply(callbacks.scope || this, arguments);
