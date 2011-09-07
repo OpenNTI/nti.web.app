@@ -11,7 +11,7 @@ Ext.define( 'NextThought.view.modes.Classroom', {
    		this.callParent(arguments);
    		
    		this.add({ /*xtype:'tbspacer',*/ flex:1, focusable: false, dockedItems: bb });
-   		this.add({ region: 'west', id: 'west-home', xtype: 'leftColumn' });
+   		this.add({ region: 'west', id: 'west-class', xtype: 'leftColumn', columnWidget: {} });
 
 		this.add({
 			cls: 'x-focus-pane',
@@ -32,7 +32,7 @@ Ext.define( 'NextThought.view.modes.Classroom', {
 	    	
 	    	});
 
-		this.add({ region: 'east', id:'east-home', xtype: 'rightColumn' });
+		this.add({ region: 'east', id:'east-class', xtype: 'rightColumn', columnWidget: {} });
    		this.add({ /*xtype:'tbspacer',*/ flex:1, focusable: false, dockedItems: bb });
     }
     

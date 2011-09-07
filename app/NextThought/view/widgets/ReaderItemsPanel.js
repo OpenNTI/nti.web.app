@@ -9,7 +9,10 @@ Ext.define('NextThought.view.widgets.ReaderItemsPanel', {
 			],
 			
 	width: MIN_SIDE_WIDTH,
-	
+
+    defaults: {
+        margin: 'auto auto 15px auto'
+    },
 	items: [
 		{xtype: 'people-list'},
 		{xtype: 'related-items'},

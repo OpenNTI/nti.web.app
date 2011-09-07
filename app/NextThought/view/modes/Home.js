@@ -13,7 +13,7 @@ Ext.define( 'NextThought.view.modes.Home', {
    		this.callParent(arguments);
    		
    		this.add({ /*xtype:'tbspacer',*/ flex:1, focusable: false, dockedItems: bb });
-   		this.add({ region: 'west', id: 'west-home', xtype: 'leftColumn' });
+   		this.add({ region: 'west', id: 'west-home', xtype: 'leftColumn', columnWidget: {} });
 
 		this.add(Ext.create('NextThought.view.content.Library',{
 			id: 'myLibrary',
@@ -35,7 +35,7 @@ Ext.define( 'NextThought.view.modes.Home', {
 	    	
 	    	})); 
 
-		this.add({ region: 'east', id:'east-home', xtype: 'rightColumn' });   		
+		this.add({ region: 'east', id:'east-home', xtype: 'rightColumn', columnWidget: {} });
    		this.add({ /*xtype:'tbspacer',*/ flex:1, focusable: false, dockedItems: bb });
     }
     

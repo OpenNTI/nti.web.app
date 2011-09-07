@@ -49,6 +49,7 @@ Ext.define('NextThought.view.widgets.MiniStreamList', {
 	
 	initComponent: function(){
 		this.callParent(arguments);
+        this.hide();
 	},
 	
 	setContainer: function(id){
@@ -63,7 +64,7 @@ Ext.define('NextThought.view.widgets.MiniStreamList', {
 	},
 
 	updateStream: function(){
-		var k, change, 
+		var k, change, c=0,
 			p = this.items.get(1),
 			f = this._filter;
 			
@@ -77,7 +78,7 @@ Ext.define('NextThought.view.widgets.MiniStreamList', {
 			var u = change.get('Creator');
 			
 			if(f.shareTargets && f.shareTargets[ u ] || (f.includeMe && f.includeMe==u)){
-				
+				c++;
 				u = UserDataLoader.resolveUser(u);
 				
 				p.add({html: '<img width=16 height=16 src="'+u.get('avatarURL')+'" valign=middle>'
@@ -89,5 +90,7 @@ Ext.define('NextThought.view.widgets.MiniStreamList', {
 					+'...'});
 			}
 		}
+
+        (c==0? this.hide : this.show).call(this);
 	}
 });
