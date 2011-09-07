@@ -4,19 +4,19 @@ Ext.define('NextThought.util.AnnotationUtils',
 			   'NextThought.model.Note'],
 	alternateClassName: 'AnnotationUtils',
 	statics: {
-		
+
 		getPathTo: function(element) {
 			var nodeName = element.nodeName;
-			
+
 		    if (element.id && !/ext\-|a\d+|math/i.test(element.id))
 		        return 'id("'+element.id+'")';
 		    if (element===document.body)
 		        throw 'too far!';
-		
+
 			if (nodeName == '#text') {
 				nodeName = 'text()';
 			}
-		
+
 		    var i=0,
 		    	ix= 0,
 		    	siblings= element.parentNode.childNodes,

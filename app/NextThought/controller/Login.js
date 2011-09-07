@@ -20,7 +20,7 @@ Ext.define('NextThought.controller.Login', {
                     if (Ext.util.Cookies.get(COOKIE)){
                         try{
                             var c = Ext.JSON.decode(Ext.util.Cookies.get(COOKIE));
-                            win.setUsername(decodeURIComponent(c.u));
+                            win.setUsername(c.u);
                             win.setRemember();
                         }
                         catch(e){
@@ -54,12 +54,14 @@ Ext.define('NextThought.controller.Login', {
     },
 
 	attemptLogin: function(values, successCallback, failureCallback){
-		values = this.sanitizeValues(values);
-		//try to auth for future calls to server
 		var m = this,
             s = _AppConfig.server,
             c = Ext.JSON.decode(Ext.util.Cookies.get(COOKIE)),
-			a = (!values) ? c.a : Base64.basicAuthString(values.username, values.password);
+			a = (!values)
+                ? c.a
+                : Base64.basicAuthString(
+                        encodeURIComponent(values.username),
+                        values.password);
 
         if (!values) values = Base64.getAuthInfo(c.a);
 
@@ -95,13 +97,7 @@ Ext.define('NextThought.controller.Login', {
 			console.log('AttemptLogin Exception: ', e);
 		}
 	},
-	
-	sanitizeValues: function(values){
-		if(values)
-	        values.username = encodeURIComponent(values.username);
 
-		return values;
-	},
 
     loginClicked: function(button) {
 	    var win    = button.up('window'),
