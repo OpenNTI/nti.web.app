@@ -47,7 +47,8 @@ Ext.application({
         NextThought.isDebug = true;
         setTimeout(clearMask, 100);
 
-        Ext.create('NextThought.view.LoginWindow',{callback: appStart}).show();
+        Ext.create('NextThought.view.LoginWindow',{callback: appStart});
+
 
         function appStart(){
 

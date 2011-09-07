@@ -16,24 +16,33 @@ Ext.define('NextThought.controller.Login', {
     init: function() {
        	this.control({
     		'loginwindow': {
-    			beforeshow: function(win,opts){
-    				//do remember me login stuff here:
-                    if (Ext.util.Cookies.get(COOKIE) && this.attemptLogin()){
-                        win.callback();
-                        return false;
+                'initialized': function(win){
+                    if (Ext.util.Cookies.get(COOKIE)){
+                        try{
+                            var c = Ext.JSON.decode(Ext.util.Cookies.get(COOKIE));
+                            win.setUsername(decodeURIComponent(c.u));
+                            win.setRemember();
+                        }
+                        catch(e){
+                            console.log(e, e.message);
+                        }
+
+                        this.attemptLogin(null, win.callback, function(){win.show();});
                     }
-    			}
+                    else
+                        win.show();
+                 }
     		},
             'loginwindow button[actionName=login]': {
-                click: this.loginClicked
+                'click': this.loginClicked
             },
             'loginwindow button[actionName=cancel]': {
-                click: function(){
+                'click': function(){
                 	window.location.replace('http://www.nextthought.com');
                 }
             },
             'session-info' : {
-                logout: this.handleLogout
+                'logout': this.handleLogout
             }
         });
     },
@@ -44,13 +53,13 @@ Ext.define('NextThought.controller.Login', {
         window.location.reload();
     },
 
-	attemptLogin: function(values){
+	attemptLogin: function(values, successCallback, failureCallback){
 		values = this.sanitizeValues(values);
 		//try to auth for future calls to server
-		var s = _AppConfig.server,
+		var m = this,
+            s = _AppConfig.server,
             c = Ext.JSON.decode(Ext.util.Cookies.get(COOKIE)),
-			a = (!values) ? c.a : Base64.basicAuthString(values.username, values.password),
-			success = false;
+			a = (!values) ? c.a : Base64.basicAuthString(values.username, values.password);
 
         if (!values) values = Base64.getAuthInfo(c.a);
 
@@ -58,39 +67,39 @@ Ext.define('NextThought.controller.Login', {
             Ext.Ajax.request({
 				url: s.host + s.data + 'users/' + values.username,
 				headers:{ "Authorization": a},
-				async: false,
-				callback: function(q,s,r){success=s;}
-			});
-			if(!success)
-			    return false;
+				callback: function(q,success,r){
 
-            s.userObject = UserDataLoader.resolveUser(values.username);
+                    if(success){
+                        //Auto inject all future request with the auth string
+                        Ext.Ajax.defaultHeaders = Ext.Ajax.defaultHeaders || {};
+                        Ext.Ajax.defaultHeaders['Authorization']= a;
+
+                        Ext.copyTo(s, values, 'username');
+                        Ext.copyTo(Ext.Ajax, values, 'username,password');
+
+                        var dt = Ext.Date.add(new Date(), Ext.Date.MONTH, 1);
+                        Ext.util.Cookies.set(COOKIE, Ext.JSON.encode({a:a, u:values.username}), values.remember ? dt : null);
+
+                        UserDataLoader.resolveUser(values.username, function(user){
+                            s.userObject = user;
+                            successCallback.call(m);
+                        });
+                    }
+                    else
+                        failureCallback.call(m);
+
+                }
+			});
 		}
 		catch(e){
-			console.log(e);
-			return false;
+			console.log('AttemptLogin Exception: ', e);
 		}
-		
-		//Auto inject all future request with the auth string
-		Ext.Ajax.defaultHeaders = Ext.Ajax.defaultHeaders || {};
-		Ext.Ajax.defaultHeaders['Authorization']= a;
-
-		Ext.copyTo(s, values, 'username');
-        Ext.copyTo(Ext.Ajax, values, 'username,password');
-
-        var dt = Ext.Date.add(new Date(), Ext.Date.MONTH, 1);
-        Ext.util.Cookies.set(COOKIE, Ext.JSON.encode({a:a, u:values.username}), values.remember ? dt : null);
-
-		return true;
 	},
 	
 	sanitizeValues: function(values){
-		var u = values ? values.username:'';
-		
-		if(u && u.indexOf('@')<0){
-			values.username = u+'@nextthought.com';
-		}
-		
+		if(values)
+	        values.username = encodeURIComponent(values.username);
+
 		return values;
 	},
 
@@ -104,16 +113,25 @@ Ext.define('NextThought.controller.Login', {
         win.el.mask('Please Wait...');
         win.doLayout();
 
-		if(!form.getForm().isValid() || !this.attemptLogin(values)) {
+		if(!form.getForm().isValid()) {
+            tryAgain();
+			return;
+		}
+
+        this.attemptLogin(values, success, tryAgain);
+
+        function success(){
+	        win.close();
+		    win.callback();
+        }
+
+
+        function tryAgain(){
             form.getForm().reset();
             m.addCls('error');
             m.update('Could not login, please try again');
             win.doLayout();
             win.el.unmask();
-			return;
-		}
-		
-	    win.close();
-		win.callback();
+        }
 	}
 });

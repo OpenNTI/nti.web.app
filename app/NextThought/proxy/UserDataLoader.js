@@ -74,6 +74,11 @@ Ext.define('NextThought.proxy.UserDataLoader',{
 						bins = this._binAndParseItems(json.Items),
                         list = bins.User || bins.Community || bins.FriendsList || bins.Group;
 
+                    if(!list){
+                        console.log('No matching users for "'+userId+'"');
+                        if (callback) callback();
+                        return;
+                    }
 
                     if(list.length>1){
                         console.log('WARNING: many matching users: "', userId, '"', list);
