@@ -5,6 +5,24 @@
     <link rel="stylesheet" type="text/css" href="extjs/resources/css/ext-all-gray.css">
     <link rel="stylesheet" type="text/css" href="resources/css/panel-reset.css">
     <style>
+
+        .mode-switcher .mode-button
+        {
+            border: none;
+            background: none;
+            width: 32px;
+            height: 32px;
+        }
+        .mode-switcher .mode-button.x-pressed{
+            background: white;
+        }
+
+        .mode-switcher .home-mode-icon,
+        .mode-switcher .reader-mode-icon,
+        .mode-switcher .stream-mode-icon,
+        .mode-switcher .groups-mode-icon,
+        .mode-switcher .classroom-mode-icon{}
+
         .search-result-selection,
         .search-result-selection .x-panel-body,
         .search-result-selection .x-panel-body-default {
@@ -20,10 +38,6 @@
         a.internal-link:active,
         a.internal-link:hover,
         a.internal-link:visited
-        a,
-        a:active,
-        a:hover,
-        a:visited
         {
             color: #7889A3;
             text-decoration: none;
@@ -31,8 +45,12 @@
             line-height: 1.5em;
         }
 
-        .x-body #nticontent .hint {
-            padding: 0;
+        .x-panel #nticontent .hint {
+            padding: 0 !important;
+        }
+
+        .settings-gear{
+            background-image: url('resources/images/gear-18.png');
         }
 
         .x-breadcrumbs-bar .x-btn-arrow {
@@ -139,7 +157,7 @@
             cursor: pointer;
             vertical-align: middle;
             margin-top: 2px;
-            background: url(resources/images/notify.png) no-repeat -21px 0px;
+            background: url(resources/images/notify.png) no-repeat -22px 0px;
         }
 
         span.notification-box-widget.unread {

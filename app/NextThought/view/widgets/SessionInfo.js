@@ -43,9 +43,6 @@ Ext.define('NextThought.view.widgets.SessionInfo', {
 
         me.add({html: '<span class="notification-box-widget"></span>', notification: true});
 
-        me.add({  xtype: 'image', src:'resources/images/gear.png',
-                    height: 26, width: 26, margin: '0 3px 0 0', settings: true});
-
         // Start a simple clock task that updates a div once per second
 		me._task = {
 		    run: function(){
@@ -101,9 +98,17 @@ Ext.define('NextThought.view.widgets.SessionInfo', {
     _buildMenu: function(){
         return [
             {
+                text: 'Account'
+            },{
+                text: 'Settings',
+                scope: this,
+                iconCls: 'settings-gear',
+                handler: this._settings
+            },'-',
+            {
                 text: 'Logout',
                 scope: this,
-                handler: this._click
+                handler: this._logout
             }
         ];
     },
@@ -118,7 +123,11 @@ Ext.define('NextThought.view.widgets.SessionInfo', {
             this.down('panel[username]').el);
     },
 
-    _click: function(){
+    _logout: function(){
         this.fireEvent('logout');
+    },
+
+    _settings: function(){
+
     }
 });

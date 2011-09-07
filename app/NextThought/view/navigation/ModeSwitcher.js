@@ -2,7 +2,8 @@
 Ext.define('NextThought.view.navigation.ModeSwitcher', {
 	extend: 'Ext.panel.Panel',
 	alias : 'widget.modeswitcher',
-	
+
+    cls: 'mode-switcher',
 	frame: false,
 	border: false,
 	margin: 5,
@@ -18,26 +19,25 @@ Ext.define('NextThought.view.navigation.ModeSwitcher', {
     initComponent: function(){
    		this.callParent(arguments);
     },
-    
-    
+
     addMode: function(label, cls){
-    	var b = Ext.create('Ext.button.Button', { 
-    		iconCls: cls, 
+    	var b = Ext.create('Ext.button.Button', {
+            cls: 'mode-button ',
+    		iconCls: cls,
     		title: label,
     		allowDepress: false,
     		enableToggle: true, 
-    		border: false,
-    		margin: 0,
-    	//	text: label,
+    		//border: false,
+    		//margin: 0,
+    	    //text: label,
     		toggleGroup: 'modeSwitcher'
 		});
-    		
+    	console.log(arguments);
     	this.add(b);
     	
     	return b;
     },
-    
-    
+
     render: function(){
     	this.callParent(arguments);
     	if(this.items.length)
