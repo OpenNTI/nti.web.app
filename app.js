@@ -5,7 +5,7 @@ Ext.require([
 
 var CENTER_WIDTH = 768,
     MIN_SIDE_WIDTH = 216,
-    MIN_WIDTH = 1024;
+    MIN_WIDTH = 1200;
 
 
 function resizeBlocker(w, h, e){

@@ -41,7 +41,7 @@ Ext.define('NextThought.view.widgets.TopControls', {
             ]
         });
 
-        this.add({ xtype: 'searchfield', margin: 5, emptyText:'Search...', width: CENTER_WIDTH, id: 'searchBox'});
+        this.add({ xtype: 'searchfield', margin: 5, emptyText:'Search...', minWidth: 400, maxWidth: CENTER_WIDTH, flex: 1, id: 'searchBox'});
 
         this.add({
             layout: 'hbox',
