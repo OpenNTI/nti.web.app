@@ -32,8 +32,8 @@ Ext.define('NextThought.view.navigation.ModeSwitcher', {
     	    //text: label,
     		toggleGroup: 'modeSwitcher'
 		});
-    	console.log(arguments);
-    	this.add(b);
+
+        this.add(b);
     	
     	return b;
     },
