@@ -2,7 +2,8 @@ Ext.define('NextThought.view.widgets.RelatedItemsList', {
 	extend: 'Ext.panel.Panel',
 	alias: 'widget.related-items',
 	requires: [
-			'NextThought.proxy.UserDataLoader'
+			'NextThought.proxy.UserDataLoader',
+            'NextThought.view.windows.VideoWindow'
 			],
 	
 	border: false,
@@ -38,25 +39,51 @@ Ext.define('NextThought.view.widgets.RelatedItemsList', {
 			if(!map.hasOwnProperty(id))continue;
 			
 			m  = map[id];
-			
-			p.add({
 
-	  				xtype: 'box',
-	  				autoEl: {tag: 'a', href: '#', html: m.label, cls: 'internal-link', style: 'display: block'},
-	  				listeners: {
-    					'afterrender': function(c) {
-  							c.el.on('click', function(e){
-  								e.preventDefault();
-  								
-  								me.fireEvent('navigate', m.book, m.book.root+m.href);
-  							});
-						}
-  					}
+            var listeners = { 'afterrender': function(c) { c.el.on('click', me.clicked, me, {entry:m}); } },
+                label = {
+                    xtype: 'box',
+                    autoEl: {tag: 'a', href: '#', html: m.label, cls: 'internal-link', style: 'display: block'},
+                    listeners: listeners
+                },
+                icon = {
+                    xtype: 'box',
+                    autoEl: {tag: 'img', src: m.icon},
+                    listeners: listeners
+                };
 
+
+            p.add({
+                cls: 'related-item',
+                layout: {
+                    type:'hbox',
+                    align: 'middle'
+                },
+                items: [icon, label]
 			});
 		}
 		
 	},
+
+    clicked : function(e,el,opts){
+        var m = opts.entry;
+        e.preventDefault();
+
+        if(m.type=='index')
+            this.fireEvent('navigate', m.book, m.book.root+m.href);
+
+        else if(m.type=='video'){
+            Ext.create('widget.video-window', {
+                title: m.label,
+                src:[{
+                    src: m.book.root+m.href,
+                    type: 'video/mp4'
+                }]
+            }).show();
+
+        }
+        console.log(m);
+    },
 	
 	applyFilter: function(filter){
 		this._filter = filter;
@@ -73,20 +100,26 @@ Ext.define('NextThought.view.widgets.RelatedItemsList', {
             do{
                 if(!r.getAttribute)continue;
 
-                var id = r.getAttribute('ntiid'),
+                var tag= r.tagName,
+                    id = r.getAttribute('ntiid'),
                     type = r.getAttribute('type'),
-                    target = NextThought.librarySource.findLocation(id),
+
+                    target = tag=='page' ? NextThought.librarySource.findLocation(id) : null,
                     location = target? target.location : null,
-                    label = location? location.getAttribute('label') : 'Unknown: '+id,
-                    href = location? location.getAttribute('href') : '#';
+                    book = target? target.book : loc.book,
+
+                    label = location? location.getAttribute('label') : r.getAttribute('title'),
+                    href = (location? location : r ).getAttribute('href'),
+                    icon = r.getAttribute('icon');
 				
                 if(!map[id]){
                     map[id] = {
-                        book: loc.book,
+                        book: book,
                         id: id,
                         type: type,
                         label: label,
-                        href: href
+                        href: href,
+                        icon: icon? book.root+icon : book.icon
                     };
                 }
             }

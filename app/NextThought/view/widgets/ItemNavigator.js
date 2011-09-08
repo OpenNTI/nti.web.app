@@ -138,7 +138,7 @@ Ext.define('NextThought.view.widgets.ItemNavigator', {
             id = null,
             s = this._store,
             key;
-
+        console.log('bins', bins);
         for (key in bins) {
             if (!bins.hasOwnProperty(key)) continue;
             Ext.each(bins[key], function(r){
