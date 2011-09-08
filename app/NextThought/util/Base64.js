@@ -4,7 +4,7 @@ Ext.define('NextThought.util.Base64',
 	statics: {
         prefix: "Basic ",
 		basicAuthString: function(username, password) {
-			return this.prefix + Ext.create('NextThought.util.Base64').encode( username + ":" + password );
+			return this.prefix + Ext.create('NextThought.util.Base64').encode( encodeURIComponent(username) + ":" + password );
 		},
         getAuthInfo: function(s) {
             if (!s || s.indexOf(this.prefix) != 0) return null; //not an auth string
@@ -13,7 +13,7 @@ Ext.define('NextThought.util.Base64',
                 d = Ext.create('NextThought.util.Base64').decode(c),
                 a = d.split(':');
 
-            return {'username': a[0], 'password': a[1]};
+            return {'username': decodeURIComponent(a[0]), 'password': a[1]};
         }
 	},
 	

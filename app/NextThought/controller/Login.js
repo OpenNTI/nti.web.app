@@ -1,4 +1,4 @@
-var COOKIE = '_zz';
+var COOKIE = '_z';
 
 Ext.define('NextThought.controller.Login', {
     extend: 'Ext.app.Controller',
@@ -59,10 +59,7 @@ Ext.define('NextThought.controller.Login', {
             c = Ext.JSON.decode(Ext.util.Cookies.get(COOKIE)),
 			a = (!values)
                 ? c.a
-                : Base64.basicAuthString(
-                        encodeURIComponent(values.username),
-                        values.password);
-
+                : Base64.basicAuthString( values.username, values.password );
 
         if (!values) {
             values = Base64.getAuthInfo(c.a);
@@ -87,7 +84,7 @@ Ext.define('NextThought.controller.Login', {
                         Ext.util.Cookies.set(COOKIE, v,
                             values.remember
                                 ? Ext.Date.add(new Date(), Ext.Date.MONTH, 1)
-                                : undefined);
+                                : null);
 
                         UserDataLoader.resolveUser(values.username, function(user){
                             s.userObject = user;
