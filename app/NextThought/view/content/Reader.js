@@ -13,10 +13,36 @@ Ext.define('NextThought.view.content.Reader', {
 	
 	items: [{cls:'x-panel-reset', margin: '0 0 0 50px'}],
 	_annotations: [],
+    //_annotationMap: {},
 	_tracker: null,
 	_filter: null,
     _searchAnnotations: null,
-	
+    _task: null,
+
+    constructor: function(){
+		this.callParent(arguments);
+
+		this._task = {
+		    run: function(){
+                console.log('activate');
+                UserDataLoader.getPageItems(this.containerId, {
+                    scope:this,
+                    success: function(){
+                        this.clearAnnotations();
+                        this._objectsLoaded
+                    },
+                    failure: function(){
+                        //TODO: Fill in
+                    }
+		});
+		    },
+		    scope: this,
+		    interval: 10000//30 sec
+		}
+		Ext.TaskManager.start(this._task);
+		return this;
+	},
+
     initComponent: function(){
     	this.addEvents('create-note','edit-note','publish-contributors','location-changed');
     	this.enableBubble(['create-note','edit-note']);
