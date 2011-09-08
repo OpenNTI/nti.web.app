@@ -103,6 +103,7 @@ Ext.define('NextThought.view.widgets.RelatedItemsList', {
                 var tag= r.tagName,
                     id = r.getAttribute('ntiid'),
                     type = r.getAttribute('type'),
+                    qual = r.getAttribute('qualifier');
 
                     target = tag=='page' ? NextThought.librarySource.findLocation(id) : null,
                     location = target? target.location : null,
@@ -119,6 +120,7 @@ Ext.define('NextThought.view.widgets.RelatedItemsList', {
                         type: type,
                         label: label,
                         href: href,
+                        qualifier: qual,
                         icon: icon? book.root+icon : book.icon
                     };
                 }
