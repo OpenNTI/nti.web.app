@@ -28,10 +28,9 @@ Ext.define('NextThought.view.form.ShareWithField', {
         }
     ],
 
-    _selections: [],
-
     initComponent: function(){
         this.callParent(arguments);
+        this._selections = [];
         this.initField();
 
         var b = this.down('usersearchinput');
