@@ -27,9 +27,9 @@ Ext.define('NextThought.view.content.Reader', {
                 console.log('activate');
                 UserDataLoader.getPageItems(this._containerId, {
                     scope:this,
-                    success: function(){
+                    success: function(bins){
                         this.clearAnnotations();
-                        this._objectsLoaded
+                        this._objectsLoaded(bins);
                     },
                     failure: function(){
                         //TODO: Fill in
