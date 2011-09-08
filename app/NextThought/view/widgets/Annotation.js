@@ -111,6 +111,7 @@ Ext.define( 'NextThought.view.widgets.Annotation', {
 	remove: function() {
 		this._record.destroy();
 		this.cleanup();
+        this.cleanup = function(){};
 	},
 
 
