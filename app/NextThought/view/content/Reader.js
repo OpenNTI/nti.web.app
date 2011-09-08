@@ -25,7 +25,7 @@ Ext.define('NextThought.view.content.Reader', {
 		this._task = {
 		    run: function(){
                 console.log('activate');
-                UserDataLoader.getPageItems(this.containerId, {
+                UserDataLoader.getPageItems(this._containerId, {
                     scope:this,
                     success: function(){
                         this.clearAnnotations();
