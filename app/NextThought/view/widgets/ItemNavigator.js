@@ -25,6 +25,8 @@ Ext.define('NextThought.view.widgets.ItemNavigator', {
         ]
     },
 
+    acceptableTypes: {'Note':1,'Highlight':1},
+
     initComponent: function(){
         var me = this,
             actionColumn = {
@@ -138,9 +140,13 @@ Ext.define('NextThought.view.widgets.ItemNavigator', {
             id = null,
             s = this._store,
             key;
-        console.log('bins', bins);
+
         for (key in bins) {
-            if (!bins.hasOwnProperty(key)) continue;
+            if (!bins.hasOwnProperty(key) || !this.acceptableTypes[key]){
+                console.log('Ignoring unacceptable type:', key, ' value:', bins[key]);
+                continue;
+            }
+
             Ext.each(bins[key], function(r){
                 id = r.get('OID');
 
