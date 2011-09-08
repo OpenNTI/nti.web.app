@@ -66,7 +66,7 @@ Ext.define('NextThought.controller.Login', {
 
         if (!values) {
             values = Base64.getAuthInfo(c.a);
-            values.remember = c.r;
+            values.remember = !!c.r;
         }
 
 		try{
@@ -83,13 +83,11 @@ Ext.define('NextThought.controller.Login', {
                         Ext.copyTo(s, values, 'username');
                         Ext.copyTo(Ext.Ajax, values, 'username,password');
 
-                        var v = Ext.JSON.encode({a:a, u:values.username, r:values.remember});
+                        var v = Ext.JSON.encode({a:a, u:values.username, r:!!values.remember});
                         Ext.util.Cookies.set(COOKIE, v,
                             values.remember
                                 ? Ext.Date.add(new Date(), Ext.Date.MONTH, 1)
                                 : undefined);
-
-                        console.log(values);
 
                         UserDataLoader.resolveUser(values.username, function(user){
                             s.userObject = user;

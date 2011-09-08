@@ -119,10 +119,15 @@ window.onpopstate = function(e) {
         return;
     }
 
-    console.log(e.state);
+    console.log('History Popped, State being restored: ',e.state);
 
     if(s.path){
-        Ext.getCmp('myReader')._restore(s);
+        var r = Ext.getCmp('myReader');
+        if(!r ){
+            console.log('the reader component was not found');
+            return;
+        }
+        r._restore(s);
     }
 };
 
