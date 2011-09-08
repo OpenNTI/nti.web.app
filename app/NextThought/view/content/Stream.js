@@ -8,10 +8,10 @@ Ext.define('NextThought.view.content.Stream', {
 			],
 	cls: 'x-stream-home',
 
+    autoScroll: false,
 	border: false,
-
-	defaults: {border: false},
-	items:[{margin: 3, defaults:{border: false}}],
+    defaults: {border: false},
+	items:[{autoScroll:true, padding: 5}],
 
 	_filter: {},
 
@@ -41,7 +41,7 @@ Ext.define('NextThought.view.content.Stream', {
 		        });
 		    },
 		    scope: this,
-		    interval: 30000//30 sec
+		    interval: 300000//30 sec
 		}
 		Ext.TaskManager.start(this._task);
 		return this;
