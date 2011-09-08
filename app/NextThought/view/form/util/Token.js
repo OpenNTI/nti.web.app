@@ -22,7 +22,7 @@ Ext.define('NextThought.view.form.util.Token', {
 
                 return /public|everyone/i.test(u)
                     ? 'public'
-                    : /friendslist|community|group/i.test(m)
+                    : /friendslist|community|group/i.test(m)||!/@/.test(u)
                         ? 'group'
                         : 'person';
             }

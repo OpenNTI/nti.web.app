@@ -50,6 +50,9 @@ Ext.define('NextThought.view.form.ShareWithField', {
         Ext.each(m.value, function(o){
             var u = UserDataLoader.resolveUser(o);
             if(u)m.addSelection(u);
+            else{
+                m.addSelection(Ext.create('model.unresolved-user',{Username: o}));
+            }
         });
     },
 
@@ -108,7 +111,7 @@ Ext.define('NextThought.view.form.ShareWithField', {
 
     _addToken: function(model){
         var c = this.items.get(0),
-            text = model.get('realname');
+            text = model.get('realname') || model.get('Username');
 
         c.add({ xtype: 'token', model: model, text: text, listeners: {scope: this, click: this.__remove}});
     },
