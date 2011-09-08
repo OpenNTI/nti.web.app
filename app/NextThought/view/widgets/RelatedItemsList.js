@@ -103,7 +103,7 @@ Ext.define('NextThought.view.widgets.RelatedItemsList', {
                 var tag= r.tagName,
                     id = r.getAttribute('ntiid'),
                     type = r.getAttribute('type'),
-                    qual = r.getAttribute('qualifier');
+                    qual = r.getAttribute('qualifier'),
 
                     target = tag=='page' ? NextThought.librarySource.findLocation(id) : null,
                     location = target? target.location : null,
