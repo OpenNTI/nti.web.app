@@ -100,6 +100,23 @@ Ext.define('NextThought.view.widgets.NotePanel',{
         return r;
     },
 
+    updateFromRecord: function(record) {
+        var r = record;
+        this._record = r;
+
+        this.update(r.get('text'));
+        Ext.each(r.children, function(rec){
+            var oid = rec.get('OID'),
+                reply = Ext.getCmp('note-'+oid);
+            if (reply) {
+                reply.updateFromRecord(rec);
+            }
+            else {
+                this.addReply(rec);
+            }
+        }, this);
+    },
+
 
     hasReplies: function(){
         return !!this.gutter.items.length;

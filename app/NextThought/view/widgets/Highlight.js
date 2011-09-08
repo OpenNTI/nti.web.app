@@ -50,6 +50,7 @@ Ext.define('NextThought.view.widgets.Highlight', {
                 delete this;
             },
             success:function(newRecord){
+                this._record.fireEvent('updated', newRecord);
                 this._record = newRecord;
             }
         });

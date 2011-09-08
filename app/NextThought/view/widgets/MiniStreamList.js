@@ -2,7 +2,8 @@ Ext.define('NextThought.view.widgets.MiniStreamList', {
 	extend: 'Ext.panel.Panel',
 	alias: 'widget.mini-stream',
 	requires: [
-			'NextThought.proxy.UserDataLoader'
+			'NextThought.proxy.UserDataLoader',
+            'NextThought.view.widgets.MiniStreamEntry'
 			],
 	
 	border: false,
@@ -79,15 +80,7 @@ Ext.define('NextThought.view.widgets.MiniStreamList', {
 			
 			if(f.shareTargets && f.shareTargets[ u ] || (f.includeMe && f.includeMe==u)){
 				c++;
-				u = UserDataLoader.resolveUser(u);
-				
-				p.add({html: '<img width=16 height=16 src="'+u.get('avatarURL')+'" valign=middle>'
-					+ u.get('realname')
-					+' '
-					+change.get('ChangeType')
-					+' '
-					+change.get('Item').raw.Class
-					+'...'});
+                p.add(Ext.create('NextThought.view.widgets.MiniStreamEntry', {change: change}));
 			}
 		}
 

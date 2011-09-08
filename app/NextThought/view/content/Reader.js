@@ -12,50 +12,42 @@ Ext.define('NextThought.view.content.Reader', {
 	cls: 'x-reader-pane',
 	
 	items: [{cls:'x-panel-reset', margin: '0 0 0 50px'}],
-	_annotations: [],
-    //_annotationMap: {},
+	_annotations: {},
 	_tracker: null,
 	_filter: null,
     _searchAnnotations: null,
     _task: null,
 
-    constructor: function(){
-		this.callParent(arguments);
-
-		this._task = {
-		    run: function(){
-                console.log('activate');
-                UserDataLoader.getPageItems(this._containerId, {
-                    scope:this,
-                    success: function(bins){
-                        this.clearAnnotations();
-                        this._objectsLoaded(bins);
-                    },
-                    failure: function(){
-                        //TODO: Fill in
-                    }
-		});
-		    },
-		    scope: this,
-		    interval: 30000//30 sec
-		}
-		Ext.TaskManager.start(this._task);
-		return this;
-	},
 
     initComponent: function(){
     	this.addEvents('create-note','edit-note','publish-contributors','location-changed');
     	this.enableBubble(['create-note','edit-note']);
    		this.callParent(arguments);
+
+        this._task = {
+            run: function(){
+                console.log('inside task');
+                UserDataLoader.getPageItems(this._containerId, {
+                    scope:this,
+                    success: this._objectsLoaded,
+                    failure: function(){
+                        //TODO: Fill in
+                    }
+                });
+		    },
+		    scope: this,
+		    interval: 30000//30 sec
+		};
     },
     
     
     applyFilter: function(newFilter){
     	// console.log('applyFilter:', newFilter);
     	this._filter = newFilter;
-    	Ext.each(this._annotations,function(a){
-    		a.updateFilterState(this._filter);
-    	},this);
+    	for(var a in this._annotations) {
+            if(!this._annotations.hasOwnProperty(a)) continue;
+    		this._annotations[a].updateFilterState(this._filter);
+    	}
     },
 
     showRanges: function(ranges) {
@@ -121,21 +113,25 @@ Ext.define('NextThought.view.content.Reader', {
 	},
 
     removeAnnotation: function(oid) {
-        Ext.each(this._annotations, function(v, i){
-            if (!v || v._record.get('OID') != oid) return;
+        var v = this._annotations[oid];
+        if (v) {
             v.cleanup();
             delete v;
-            this._annotations[i] = null;
-		}, this);
+            this._annotations[oid] = undefined;
+        }
     },
 
 	clearAnnotations: function(){
-		Ext.each(this._annotations, function(v){
-            if (!v) return;
+		for(var oid in this._annotations){
+
+            if(!this._annotations.hasOwnProperty(oid)) continue;
+            var v = this._annotations[oid];
+            if (!v) continue;
 			v.cleanup();
 			delete v;
-		});
-		this._annotations = [];
+		}
+
+		this._annotations = {};
         this.clearSearchRanges();
 	},
 
@@ -146,14 +142,7 @@ Ext.define('NextThought.view.content.Reader', {
             return false;
         }
 
-        Ext.each(this._annotations, function(v, i){
-            if (v && v._record.get('OID') == oid){
-                oid = undefined;
-                return false;
-            }
-		});
-
-        return !oid;//if its undefined, then i found it
+        return !!this._annotations[oid];
     },
 	
 
@@ -184,27 +173,47 @@ Ext.define('NextThought.view.content.Reader', {
 	},
 	
 	_createHighlightWidget: function(range, record){
-        var w = Ext.create(
+
+        if (this.annotationExists(record)) {
+            this._annotations[record.get('OID')].getRecord().fireEvent('updated',record);
+            return;
+        }
+
+        var oid = record.get('OID'),
+            w = Ext.create(
             'NextThought.view.widgets.Highlight',
             range, record,
             this.items.get(0).el.dom.firstChild,
             this);
-        this._annotations.push(w);
+
+        if (!oid) {
+            oid = 'Highlight-' + new Date().getTime();
+            record.on('updated',function(r){
+                this._annotations[r.get('OID')] = this._annotations[oid];
+                this._annotations[oid] = undefined;
+            }, this);
+        }
+
+        this._annotations[oid] = w;
         return w;
 	},
 
 	createNoteWidget: function(record){
 		try{
-            if(record.get('inReplyTo') || this.annotationExists(record)){
+            if(record.get('inReplyTo')){
                return false;
             }
+            else if (this.annotationExists(record)) {
+                this._annotations[record.get('OID')].getRecord().fireEvent('updated',record);
+                return true;
+            }
 
-			this._annotations.push(
+			this._annotations[record.get('OID')] =
 					Ext.create(
 						'NextThought.view.widgets.Note', 
 						record,
 						this.items.get(0).el.dom.firstChild, 
-						this));
+						this);
 			return true;
 		}
 		catch(e){
@@ -252,9 +261,13 @@ Ext.define('NextThought.view.content.Reader', {
     	var contributors = {},
             oids = {},
             me = this;
+                 console.log('inside _objextsLoadewd');
+
+        if (!this._containerId) return;
 
 		Ext.each(bins.Highlight, 
     		function(r){
+                if (!this._containerId) return false;
     			var range = AnnotationUtils.buildRangeFromRecord(r);
     			if (!range){
     				console.log('removing bad highlight');
@@ -263,7 +276,7 @@ Ext.define('NextThought.view.content.Reader', {
     			} 
     			contributors[r.get('Creator')] = true;
     			me._createHighlightWidget(range, r);
-    		}
+    		}, this
     	);
 
         bins.Note = Ext.Array.sort(bins.Note || [], function(a,b){
@@ -274,6 +287,7 @@ Ext.define('NextThought.view.content.Reader', {
         notes(buildTree);
 
         for(var oid in oids){
+            if (!this._containerId) return;
             var o = oids[oid];
             if(!oids.hasOwnProperty(oid) || o._parent) continue;
 
@@ -324,13 +338,13 @@ Ext.define('NextThought.view.content.Reader', {
     
     _loadContentAnnotations: function(containerId){
     	this._containerId = containerId;
-		UserDataLoader.getPageItems(containerId, {
-			scope:this,
-			success: this._objectsLoaded,
-            failure: function(){
-                //TODO: Fill in
-            }
-		});
+       // Ext.TaskManager.stop(this._task);
+        if (this._task.containerId && this._task.containerId != containerId){
+            Ext.TaskManager.stop(this._task);
+        }
+
+        Ext.TaskManager.start(this._task);
+        this._task.containerId = containerId;
     },
 
 
@@ -371,6 +385,7 @@ Ext.define('NextThought.view.content.Reader', {
 
 		Ext.getCmp('breadcrumb').setActive(book, f);
     	this.el.dom.firstChild.scrollTop = 0;
+        this._containerId = null;
 
         Ext.Ajax.request({
 			url: b+f,
@@ -415,6 +430,7 @@ Ext.define('NextThought.view.content.Reader', {
 	            this.el.select('#NTIContent .breadcrumbs').remove();
 	            this.el.select('.x-reader-pane a[href]').on('click',this._onClick,this,{book: book, scope:this,stopEvent:true});
 	            containerId = this.el.select('meta[name=NTIID]').first().getAttribute('content');
+
 
 	            this._loadContentAnnotations(containerId);
 	            this.fireEvent('location-changed', containerId);

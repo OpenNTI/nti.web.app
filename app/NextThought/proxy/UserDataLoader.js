@@ -377,13 +377,19 @@ Ext.define('NextThought.proxy.UserDataLoader',{
 			var h = _AppConfig.server.host,
 				d = _AppConfig.server.data,
 				u = _AppConfig.server.username;
-				url = h+d+'users/'+u+(postFix ? postFix : "") ;
-				
-			this._pageItemsRequest = Ext.Ajax.request({
+				url = h+d+'users/'+u+(postFix ? postFix : ""),
+                request = '_requestOf:'+url;
+
+            if (this[request]){
+              console.log('canceling request ' + request);
+              Ext.Ajax.abort(this[request]);
+            }
+
+			this[request] = Ext.Ajax.request({
 				url: url,
 				scope: this,
 				callback: function() {
-					this._pageItemsRequest = null;
+					this[request] = null;
 				},
 				failure: function() {
                     Logging.logAndAlertError('There was an error getting data', 'Will attempt to call failure callback', arguments);

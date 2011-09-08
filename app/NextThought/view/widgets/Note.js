@@ -65,11 +65,11 @@ Ext.define( 'NextThought.view.widgets.Note', {
             parent = this._record._parent;
 
         record.on('updated',this.noteUpdated, this);
-        record.children = children;
-        record._parent = parent;
+        record.children = record.children || children;
+        record._parent = record._parent || parent;
 
         this._record = record;
-        this.noteCmp.update(record.get('text'));
+        this.noteCmp.updateFromRecord(record);
 		this.onResize();
 		this._cmp.fireEvent('resize',{});
 	},

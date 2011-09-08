@@ -3,7 +3,8 @@ Ext.define('NextThought.view.content.Stream', {
 	extend:'NextThought.view.content.Panel',
     alias:'widget.stream-panel',
 	requires: [
-			'NextThought.proxy.UserDataLoader'
+			'NextThought.proxy.UserDataLoader',
+            'NextThought.view.widgets.StreamEntry'
 			],
 	cls: 'x-stream-home',
 
@@ -76,16 +77,7 @@ Ext.define('NextThought.view.content.Stream', {
 			var u = change.get('Creator');
 
 			if(f.shareTargets[ u ] || (f.includeMe && f.includeMe==u)){
-
-				u = UserDataLoader.resolveUser(u);
-
-				p.add({html: '<img width=16 height=16 src="'+u.get('avatarURL')+'" valign=middle>'
-					+ u.get('realname')
-					+' '
-					+change.get('ChangeType')
-					+' '
-					+change.get('Item').raw.Class
-					+'...'});
+                p.add(Ext.create('NextThought.view.widgets.StreamEntry', {change: change}));
 			}
 		}
 	}
