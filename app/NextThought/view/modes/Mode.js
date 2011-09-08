@@ -37,8 +37,12 @@ Ext.define( 'NextThought.view.modes.Mode', {
                 return false;
             }
     	});
-    	
-    	ct.getLayout().setActiveItem(item);
+    	try{
+            ct.getLayout().setActiveItem(item);
+        }
+        catch(e){
+            console.log(e.message, e);
+        }
     },
 
     getMainComponent: function(){
