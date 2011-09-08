@@ -20,7 +20,7 @@ Ext.define('NextThought.view.widgets.VideoPanel', {
             beforedestroy: function() {
                 this.video = null;
             },
-            bodyresize   : function(panel, width, height) {
+            resize   : function(panel, width, height) {
                 if (this.video)
                     this.video.setSize(width, height);
             }
@@ -28,7 +28,9 @@ Ext.define('NextThought.view.widgets.VideoPanel', {
     },
 
     _render: function() {
-        var fallback = '';
+        var fallback = '',
+            size = this.getSize(),
+            cfg;
 
         if (this.fallbackHTML) {
             fallback = this.fallbackHTML;
@@ -46,14 +48,12 @@ Ext.define('NextThought.view.widgets.VideoPanel', {
             } else if (Ext.isGecko) {
                 fallback += '<a>Upgrade to Firefox 3.5</a>';
             } else {
-                fallback += '<a>Get Firefox 3.5</a>';
+                fallback += '<a>Get Google Chrome</a>';
             }
         }
 
         /* match the video size to the panel dimensions */
-        var size = this.getSize();
-
-        var cfg = Ext.copyTo({
+        cfg = Ext.copyTo({
                 tag   : 'video',
                 width : size.width,
                 height: size.height

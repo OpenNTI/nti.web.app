@@ -48,7 +48,7 @@ Ext.define('NextThought.view.widgets.RelatedItemsList', {
                 },
                 icon = {
                     xtype: 'box',
-                    autoEl: {tag: 'img', src: m.icon},
+                    autoEl: {tag: 'img', src: _AppConfig.server.host+m.icon},
                     listeners: listeners
                 };
 
@@ -76,7 +76,7 @@ Ext.define('NextThought.view.widgets.RelatedItemsList', {
             Ext.create('widget.video-window', {
                 title: m.label,
                 src:[{
-                    src: m.book.root+m.href,
+                    src: _AppConfig.server.host+m.book.root+m.href,
                     type: 'video/mp4'
                 }]
             }).show();
