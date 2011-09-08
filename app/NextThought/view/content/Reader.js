@@ -25,8 +25,7 @@ Ext.define('NextThought.view.content.Reader', {
    		this.callParent(arguments);
 
         this._task = {
-            run: function(){
-                console.log('inside task');
+            run: function() {
                 UserDataLoader.getPageItems(this._containerId, {
                     scope:this,
                     success: this._objectsLoaded,
@@ -123,8 +122,8 @@ Ext.define('NextThought.view.content.Reader', {
 
 	clearAnnotations: function(){
 		for(var oid in this._annotations){
-
             if(!this._annotations.hasOwnProperty(oid)) continue;
+
             var v = this._annotations[oid];
             if (!v) continue;
 			v.cleanup();
@@ -261,7 +260,6 @@ Ext.define('NextThought.view.content.Reader', {
     	var contributors = {},
             oids = {},
             me = this;
-                 console.log('inside _objextsLoadewd');
 
         if (!this._containerId) return;
 
@@ -429,6 +427,7 @@ Ext.define('NextThought.view.content.Reader', {
 	            this.el.select('#NTIContent .navigation').remove();
 	            this.el.select('#NTIContent .breadcrumbs').remove();
 	            this.el.select('.x-reader-pane a[href]').on('click',this._onClick,this,{book: book, scope:this,stopEvent:true});
+
 	            containerId = this.el.select('meta[name=NTIID]').first().getAttribute('content');
 
 
