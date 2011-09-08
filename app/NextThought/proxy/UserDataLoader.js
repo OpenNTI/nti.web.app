@@ -175,11 +175,11 @@ Ext.define('NextThought.proxy.UserDataLoader',{
 				    autoLoad: true
 				});
 				
-				this._friendsListsStore.filter([{
-		            fn: function(record) {
-		                return ! /^everyone$/i.test(record.get('Username'));
-		            }
-		        }]);
+//				this._friendsListsStore.filter([{
+//		            fn: function(record) {
+//		                return ! /^everyone$/i.test(record.get('Username'));
+//		            }
+//		        }]);
 		   	}
 			
 			return this._friendsListsStore;
