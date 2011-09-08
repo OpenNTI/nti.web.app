@@ -37,7 +37,7 @@ Ext.define('NextThought.view.content.Reader', {
 		});
 		    },
 		    scope: this,
-		    interval: 10000//30 sec
+		    interval: 30000//30 sec
 		}
 		Ext.TaskManager.start(this._task);
 		return this;
