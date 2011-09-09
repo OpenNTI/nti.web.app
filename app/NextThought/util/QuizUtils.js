@@ -48,6 +48,8 @@ Ext.define('NextThought.util.QuizUtils', {
         submitSuccess: function(r,req){
             var json = Ext.JSON.decode(r.responseText),
                 p = UserDataLoader.parseItems([json])[0];
+
+            this.showQuizResult(p);
         },
 
         showQuizResult: function(quizResult) {
