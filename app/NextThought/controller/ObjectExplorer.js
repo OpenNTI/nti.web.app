@@ -14,6 +14,9 @@ Ext.define('NextThought.controller.ObjectExplorer', {
         {
             ref: 'viewport',
             selector: 'master-view'
+        },{
+            ref: 'reader',
+            selector: 'reader-mode-container reader-panel'
         }
     ],
 

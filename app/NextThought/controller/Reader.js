@@ -18,7 +18,7 @@ Ext.define('NextThought.controller.Reader', {
             selector: 'master-view'
         },{
             ref: 'reader',
-            selector: 'reader-panel'
+            selector: 'reader-mode-container reader-panel'
         },{
             ref: 'readerBreadcrumb',
             selector: 'reader-mode-container breadcrumbbar'
