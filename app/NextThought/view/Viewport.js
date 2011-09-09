@@ -2,6 +2,11 @@
 Ext.define('NextThought.view.Viewport', {
 	extend: 'Ext.container.Viewport',
 	alias: 'widget.master-view',
+
+    requires: [
+        'NextThought.view.widgets.Header',
+        'NextThought.view.modes.Container'
+    ],
 	
 	border: false, 
 	frame: false,
