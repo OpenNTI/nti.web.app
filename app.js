@@ -181,7 +181,6 @@ function NTISubmitAnswers(){
                     p = problems[id],
                     r = p.next('.result');
 
-//               console.log(q, id, p, r);
                 r.removeCls('hidden');
                 r.addCls(qqr.get('Assessment') ? 'correct' : 'incorrect');
 
@@ -206,7 +205,6 @@ function NTISubmitAnswers(){
             }
 
             vp.getActive().getMainComponent().relayout();
-//           console.log('YOU GO GIRL!', json, p);
         }
     });
 
