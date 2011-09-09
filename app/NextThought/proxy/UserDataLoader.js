@@ -463,7 +463,7 @@ Ext.define('NextThought.proxy.UserDataLoader',{
 			
 			
 			function addToBin(o) {
-			    if(!o.Class) return;
+			    if(!o || !o.Class) return;
                 if(!bins[o.Class]){
 					bins[o.Class] = [];
 				}
