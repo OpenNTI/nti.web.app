@@ -4,9 +4,10 @@ Ext.define( 'NextThought.view.modes.Reader', {
 	extend: 'NextThought.view.modes.Mode',
 	alias: 'widget.reader-mode-container',
 	requires: [
-			'NextThought.view.widgets.FilterControlPanel',
-			'NextThought.view.widgets.ReaderItemsPanel'
-			],
+        'NextThought.view.navigation.Breadcrumb',
+        'NextThought.view.widgets.FilterControlPanel',
+        'NextThought.view.widgets.ReaderItemsPanel'
+    ],
 	
     initComponent: function(){
         this.callParent(arguments);

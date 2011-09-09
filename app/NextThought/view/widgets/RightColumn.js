@@ -8,9 +8,14 @@ Ext.define('NextThought.view.widgets.RightColumn', {
 	border: false,
 	defaults: {frame: false, border: false, padding: 5},
 	
-	width: MIN_SIDE_WIDTH,
-	
-    layout: 'hbox',
+	minWidth: MIN_SIDE_WIDTH,
+    height: '100%',
+
+
+    layout:{
+        type:'hbox',
+        align: 'stretch'
+    },
 
 	columnWidget: {'html':'assign the columnWidget property'},
 	

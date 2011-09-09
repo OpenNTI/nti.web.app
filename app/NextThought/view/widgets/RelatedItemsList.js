@@ -5,27 +5,25 @@ Ext.define('NextThought.view.widgets.RelatedItemsList', {
 			'NextThought.proxy.UserDataLoader',
             'NextThought.view.windows.VideoWindow'
 			],
-	
-	border: false,
+
+    border: false,
 	defaults: {border: false, defaults: {border: false}},
-	
-	items:[{html:'Related Items:', cls: 'sidebar-header'},{}],
-	
+
+    items:[{html:'Related Items:', cls: 'sidebar-header'},{}],
+
 	_filter: {},
 	
 	constructor: function(){
 		this.addEvents('navigate');
 		this.callParent(arguments);
-		
-		//make a buffered function out of our updater
-		//this.updateList = Ext.Function.createBuffered(this.updateList,100,this);
-		
 		return this;
 	},
 	
 	initComponent: function(){
 		this.callParent(arguments);
 	},
+
+
 
 	setLocation: function(loc){
 		var map = this.getRelatedItems(loc),
@@ -61,6 +59,10 @@ Ext.define('NextThought.view.widgets.RelatedItemsList', {
                 },
                 items: [icon, label]
 			});
+
+            //TODO: limit the number of items and add a 'more' link to show them all
+
+
 		}
 		
 	},

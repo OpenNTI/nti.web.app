@@ -8,9 +8,13 @@ Ext.define('NextThought.view.widgets.LeftColumn', {
 	border: false,
 	defaults: {frame: false, border: false, padding: 5},
 	
-	width: MIN_SIDE_WIDTH,
+	minWidth: MIN_SIDE_WIDTH,
+    height: '100%',
     		
-    layout: 'hbox',
+    layout:{
+        type:'hbox',
+        align: 'stretch'
+    },
     
     dockedItems: {
 		xtype: 'toolbar',
