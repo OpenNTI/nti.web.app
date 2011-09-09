@@ -33,6 +33,7 @@ Ext.define('NextThought.view.widgets.StreamEntry', {
         if (ct == 'Circled' && it == 'User') info = this.getCircledInfo(i);
         else if (ct == 'Shared' && it == 'Note') info = this.getSharedNoteInfo(i);
         else if (ct == 'Created' && it == 'Note') info = this.getCreatedNoteInfo(i);
+        else if (ct == 'Modified' && it == 'Note') info = this.getModifiedNoteInfo(i);
         else if (ct == 'Shared' && it == 'Highlight') info = this.getSharedHighlightInfo(i);
         else {
             //if we made it here, we don't know what to do with...
@@ -62,6 +63,12 @@ Ext.define('NextThought.view.widgets.StreamEntry', {
         var noteText = this.cleanText(i.get('text'));
 
         return 'shared a note: "<i>' + noteText + '</i>"';
+    },
+
+    getModifiedNoteInfo: function(i) {
+        var noteText = this.cleanText(i.get('text'));
+
+        return 'modified a note: "<i>' + noteText + '</i>"';
     },
 
     getSharedHighlightInfo: function(i) {
