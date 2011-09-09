@@ -73,6 +73,7 @@ Ext.define('NextThought.controller.Login', {
 				callback: function(q,success,r){
 
                     if(success){
+
                         //Auto inject all future request with the auth string
                         Ext.Ajax.defaultHeaders = Ext.Ajax.defaultHeaders || {};
                         Ext.Ajax.defaultHeaders['Authorization']= a;

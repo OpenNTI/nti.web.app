@@ -135,7 +135,15 @@ window.onpopstate = function(e) {
 
 
 
+function NTISubmitAnswers(){
+    var problems = Ext.query('.worksheet-problems input[type]'),
+        data = {};
+    Ext.each(problems,function(v){
+        data[v.getAttribute('id')] = v.value;
+    });
 
+    console.log(data);
+}
 
 function togglehint(event) {
 	Ext.get(event.target.nextSibling).toggleCls("hidden");

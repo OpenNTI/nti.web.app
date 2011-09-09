@@ -405,7 +405,9 @@ Ext.define('NextThought.view.content.Reader', {
 	        	
 	        	css = css?css.join(''):'';
 	        	meta = meta?meta.join(''):'';
-	        	
+
+                meta = meta.replace(/<meta[^<]+?viewport.+?\/>/ig,'');
+
 	        	c = meta.concat(css).concat(body)
 	        					
 	        		 .replace(	/src=\"(.*?)\"/mig, 
@@ -414,13 +416,7 @@ Ext.define('NextThought.view.content.Reader', {
 				                })
 	        		 .replace(	/href=\"(.*?)\"/mig, 
 				                function fixReferences(s,g) {
-                                    var i = g.indexOf("#");
-
-				                	if(i==0){
-                                        return s;
-                                    }
-
-				                    return 'href="'+b+g+'"';
+                                    return g.indexOf("#")==0 ? s : 'href="'+b+g+'"';
 				                });
 	        	
 	        	p.update('<div id="NTIContent">'+c+'</div>');
@@ -467,7 +463,7 @@ Ext.define('NextThought.view.content.Reader', {
         if(hash.length>1){
 
             if(hash[1].length==0){
-                console.log('empty hash',r);
+                console.log('empty hash',el);
                 return;
             }
         }
