@@ -71,7 +71,7 @@ Ext.define('NextThought.view.content.Stream', {
 			change = this._stream[k];
 
             if (!change.get) {
-                console.log('This change has no get method, what is it?', change);
+                //dead change, probably deleted...
                 continue;
             }
 

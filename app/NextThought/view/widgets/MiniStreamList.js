@@ -77,7 +77,13 @@ Ext.define('NextThought.view.widgets.MiniStreamList', {
 		for(k in this._stream){
 			if(!this._stream.hasOwnProperty(k))continue;
 			change = this._stream[k];
-			var u = change.get('Creator');
+
+            if (!change.get) {
+                //dead change, probably deleted...
+                continue;
+            }
+
+            var u = change.get('Creator');
 			
 			if(f.shareTargets && f.shareTargets[ u ] || (f.includeMe && f.includeMe==u)){
 				c++;
