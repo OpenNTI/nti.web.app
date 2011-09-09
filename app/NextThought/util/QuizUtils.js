@@ -4,6 +4,30 @@ Ext.define('NextThought.util.QuizUtils', {
     alternateClassName: 'QuizUtils',
     statics: {
 
+        /**
+         *
+         * @param iterationCallback Optional - a function that takes three arguments: function(id, inputEl, containerEl)
+         */
+        getProblemElementMap: function(iterationCallback,scope){
+            var problems = {};
+             Ext.each(
+                Ext.query('.worksheet-problems input'),
+                function(v){
+                    var id = v.getAttribute('id'),
+                        el = Ext.get(v);
+
+                    el.setVisibilityMode(Ext.Element.DISPLAY);
+                    problems[id] = el.up('.problem');
+
+                    if(iterationCallback){
+                        iterationCallback.call(scope||this, id, el, problems[id]);
+                    }
+                },
+                this);
+
+            return problems;
+        },
+
         submitAnswers: function(){
             var s = _AppConfig.server,
                 h = s.host,
@@ -16,45 +40,36 @@ Ext.define('NextThought.util.QuizUtils', {
 
             vp.mask('Grading...');
 
-            Ext.each(
-                Ext.query('.worksheet-problems input'),
-                function(v){
-                    var id = v.getAttribute('id'),
-                        el = Ext.get(v);
-                    data[id] = v.value;
-                    problems[id] = el.up('.problem');
-
-                    el.setVisibilityMode(Ext.Element.DISPLAY);
-                    el.hide();
+            problems = this.getProblemElementMap(
+                function(id,v,c){
+                    data[id] = v.getValue();
+                    v.hide();
                 },
                 this);
+
 
             Ext.Ajax.request({
                 url: url,
                 jsonData: Ext.JSON.encode(data),
                 method: 'POST',
-                problems: problems,
                 scope: this,
                 callback: function(){ vp.unmask(); },
                 failure: function(){
                     //TODO: hook up to error handling
                     console.log('FAIL', arguments);
                 },
-                success: this.submitSuccess
+                success: function(r,req){
+                    var quizResults = UserDataLoader.parseItems([ Ext.JSON.decode(r.responseText) ]);
+                    this.showQuizResult(quizResults[0], problems);
+                }
             });
         },
 
 
-        submitSuccess: function(r,req){
-            var json = Ext.JSON.decode(r.responseText),
-                p = UserDataLoader.parseItems([json])[0];
-
-            this.showQuizResult(p);
-        },
-
-        showQuizResult: function(quizResult) {
+        showQuizResult: function(quizResult, problemsElementMap) {
             var mathCls = 'mathjax tex2jax_process ',
-                ntiid = Ext.query('meta[name=NTIID]')[0].getAttribute('content');
+                ntiid = Ext.query('meta[name=NTIID]')[0].getAttribute('content'),
+                problems = problemsElementMap || this.getProblemElementMap();
 
             if(ntiid != quizResult.get('ContainerId')){
                 Ext.Error.raise('Result does not match the page!');
@@ -65,7 +80,7 @@ Ext.define('NextThought.util.QuizUtils', {
                 function(qqr){
                     var q = qqr.get('Question'),
                         id = q.get('id'),
-                        p = req.problems[id],
+                        p = problems[id],
                         r = p.next('.result');
 
                     r.removeCls('hidden');
