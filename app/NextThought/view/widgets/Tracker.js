@@ -104,7 +104,7 @@ Ext.define('NextThought.view.widgets.Tracker', {
 				var n = region.node.getAttribute('href'),
 					f = region.first;
 				
-					Ext.getCmp('myReader').setActive(
+					Ext.getCmp('readerPanel').setActive(
 						book, 
 						book.root+n, false, 
 						function(){

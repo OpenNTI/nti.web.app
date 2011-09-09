@@ -47,13 +47,19 @@ Ext.define('NextThought.util.QuizUtils', {
 
         submitSuccess: function(r,req){
             var json = Ext.JSON.decode(r.responseText),
-                p = UserDataLoader.parseItems([json])[0],
-                vp = Ext.getCmp('viewport'),
-                reader = vp.getActive().getMainComponent(),
-                mathCls = 'mathjax tex2jax_process ';
+                p = UserDataLoader.parseItems([json])[0];
+        },
+
+        showQuizResult: function(quizResult) {
+            var mathCls = 'mathjax tex2jax_process ',
+                ntiid = Ext.query('meta[name=NTIID]')[0].getAttribute('content');
+
+            if(ntiid != quizResult.get('ContainerId')){
+                Ext.Error.raise('Result does not match the page!');
+            }
 
             Ext.each(
-                p.get('Items'),
+                quizResult.get('Items'),
                 function(qqr){
                     var q = qqr.get('Question'),
                         id = q.get('id'),
@@ -76,25 +82,19 @@ Ext.define('NextThought.util.QuizUtils', {
                     });
                 });
 
-            try{
+            try {
                 MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
             }
-            catch( e ){
+            catch(e){
                 console.log('No MathJax? ',e);
             }
 
-            if (reader.scrollTo){
-                reader.relayout();
-                reader.scrollTo(0);
-            }
+            this.scrollUp();
 
             Ext.get('submit').update('Reset');
         },
 
         resetQuiz: function() {
-            var vp = Ext.getCmp('viewport'),
-                reader = vp.getActive().getMainComponent();
-
             Ext.get('submit').update('Submit');
             Ext.each(Ext.query('.worksheet-problems input'),function(v){
                 var id = v.getAttribute('id'),
@@ -112,8 +112,17 @@ Ext.define('NextThought.util.QuizUtils', {
                 el.show();
             });
 
-            reader.relayout();
-            if (reader.scrollTo) reader.scrollTo(0);
+            this.scrollUp();
+        },
+
+
+        scrollUp: function(){
+            var reader = Ext.getCmp('readerPanel');
+            if (reader.scrollTo){
+                reader.relayout();
+                reader.scrollTo(0);
+            }
+            else console.log('couldn\'t scroll/relayout reader');
         }
 
     }

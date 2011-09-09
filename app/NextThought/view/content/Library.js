@@ -39,7 +39,7 @@ Ext.define('NextThought.view.content.Library', {
 				// icon: o.icon,
 				// listeners: {
 					// click: function(){
-						// Ext.getCmp('myReader').setActive(o, o.href);
+						// Ext.getCmp('readerPanel').setActive(o, o.href);
 					// }
 				// }
 // 				

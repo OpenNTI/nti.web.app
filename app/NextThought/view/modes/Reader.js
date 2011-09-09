@@ -12,7 +12,7 @@ Ext.define( 'NextThought.view.modes.Reader', {
         this.callParent(arguments);
 
         var bb= { xtype: 'toolbar', cls: 'x-docked-noborder-top', items: {focusable: false, disabled:true,text:'&nbsp;',xtype:'button'}},
-            reader = Ext.create('NextThought.view.content.Reader', {id:'myReader'});
+            reader = Ext.create('NextThought.view.content.Reader', {id:'readerPanel'});
 
 		this.add({ /*xtype:'tbspacer',*/ flex:1, focusable: false, dockedItems: bb });
     	this.add({ region: 'west', id: 'west-book', xtype: 'leftColumn', columnWidget: {xtype:'filter-control'} });
