@@ -9,7 +9,7 @@ Ext.define('NextThought.controller.Application', {
     views: [
         'Viewport',
         'widgets.SessionInfo',
-        'widgets.NotificationsPopover'
+        'windows.NotificationsPopover'
     ],
 
     refs: [
@@ -41,7 +41,7 @@ Ext.define('NextThought.controller.Application', {
 
     popoverNotifications: function() {
 
-        var popover = Ext.create('widget.notifications-popover');
+        var popover = Ext.create('window.notifications-popover');
 
         console.log('popover', popover, this.getSessionInfo());
 

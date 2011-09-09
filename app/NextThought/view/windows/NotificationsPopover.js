@@ -1,6 +1,6 @@
-Ext.define('NextThought.view.widgets.NotificationsPopover', {
+Ext.define('NextThought.view.windows.NotificationsPopover', {
 	extend: 'Ext.panel.Panel',
-    alias: 'widget.notifications-popover',
+    alias: 'window.notifications-popover',
 
     autoScroll: true,
     floating: true,
@@ -51,16 +51,13 @@ Ext.define('NextThought.view.widgets.NotificationsPopover', {
 			if(!stream.hasOwnProperty(k))continue;
 
 			change = stream[k];
-			var u = change.get('Creator');
 
-			u = UserDataLoader.resolveUser(u);
-            p.add({html: '<img width=16 height=16 src="'+u.get('avatarURL')+'" valign=middle>'
-                + u.get('realname')
-                +' '
-                +change.get('ChangeType')
-                +' '
-                +change.get('Item').raw.Class
-                +'...'});
+            if (!change.get) {
+                //dead change, probably deleted...
+                continue;
+            }
+
+            p.add(Ext.create('NextThought.view.widgets.MiniStreamEntry', {change: change}));
 		}
 
         this.el.unmask();
