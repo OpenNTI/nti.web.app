@@ -43,8 +43,6 @@ Ext.define('NextThought.controller.Application', {
 
         var popover = Ext.create('window.notifications-popover');
 
-        console.log('popover', popover, this.getSessionInfo());
-
         popover.alignTo(this.getSessionInfo());
         popover.show();
     }
