@@ -36,7 +36,8 @@ Ext.define('NextThought.view.content.Stream', {
 		        		this.updateStream();
 		        	},
                     failure: function(){
-                        Ext.TaskManager.stop(this._task);
+                        if(NextThought.isDebug)
+                            Ext.TaskManager.stop(this._task);
                     }
 		        });
 		    },

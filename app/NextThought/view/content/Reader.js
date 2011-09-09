@@ -420,7 +420,6 @@ Ext.define('NextThought.view.content.Reader', {
                     })
                     .replace(	/href=\"(.*?)\"/mig,
                     function fixReferences(s,g) {
-                        console.log(g);
                         return g.indexOf("#")==0 ? s : 'href="'+(g.indexOf('/') == 0?h:b)+g+'"';
                     });
 
