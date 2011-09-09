@@ -122,7 +122,7 @@ window.onpopstate = function(e) {
     console.log('History Popped, State being restored: ',e.state);
 
     if(s.path){
-        var r = Ext.getCmp('myReader');
+        var r = Ext.getCmp('readerPanel');
         if(!r ){
             console.log('the reader component was not found');
             return;
