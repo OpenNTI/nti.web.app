@@ -136,11 +136,80 @@ window.onpopstate = function(e) {
 
 
 function NTISubmitAnswers(){
-    var problems = Ext.query('.worksheet-problems input[type]'),
+    var
+        s = _AppConfig.server,
+        ntiid = Ext.query('meta[name=NTIID]')[0].getAttribute('content'),
+        h = s.host,
+        d = s.data,
+        url = h+d+'users/'+s.username+'/quizresults/'+ntiid,
+        vp= Ext.getCmp('viewport');
+
+    vp.getEl().mask('Grading...');
+
+    var problems = {},
         data = {};
-    Ext.each(problems,function(v){
-        data[v.getAttribute('id')] = v.value;
+    Ext.each(Ext.query('.worksheet-problems input'),function(v){
+        var id = v.getAttribute('id'),
+            el = Ext.get(v);
+        data[id] = v.value;
+        problems[id] = el.up('.problem');
+
+        el.setVisibilityMode(Ext.Element.DISPLAY);
+        el.hide();
     });
+
+    var postData = Ext.JSON.encode(data)    ;
+
+    Ext.Ajax.request({
+        url: url,
+        jsonData: postData,
+        method: 'POST',
+        callback: function() {
+            vp.getEl().unmask();
+        },
+        failure: function(){
+            console.log('FAIL', arguments);
+        },
+        success: function(r){
+            var json = Ext.JSON.decode(r.responseText),
+                p = UserDataLoader.parseItems([json])[0],
+                qs = p.get('Items');
+
+            Ext.each(qs, function(qqr){
+                var q = qqr.get('Question'),
+                    id = q.get('id'),
+                    p = problems[id],
+                    r = p.next('.result');
+
+//               console.log(q, id, p, r);
+                r.removeCls('hidden');
+                r.addCls(qqr.get('Assessment') ? 'correct' : 'incorrect');
+
+                r.createChild({
+                    tag : 'div',
+                    html: 'Your response: \\(' + qqr.get('Response')+'\\)',
+                    cls: 'mathjax tex2jax_process response'
+                });
+
+                r.createChild({
+                    tag : 'div',
+                    html: 'Correct answer(s): ' + q.get('Answers').join(', ').replace(/\$(.+?)\$/ig, '\\($1\\)'),
+                    cls: 'mathjax tex2jax_process answer'
+                });
+            });
+
+            try{
+                //Have mathjax display the new math
+                MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+            }catch( err ){
+                console.log(err);
+            }
+
+            vp.getActive().getMainComponent().relayout();
+//           console.log('YOU GO GIRL!', json, p);
+        }
+    });
+
 
     console.log(data);
 }

@@ -11,6 +11,7 @@ Ext.define('NextThought.proxy.UserDataLoader',{
 			'NextThought.model.User',
     		'NextThought.model.UnresolvedFriend',
             'NextThought.model.Hit',
+            'NextThought.model.QuizResult',
             'NextThought.util.Logging'
     		],
 	statics:{

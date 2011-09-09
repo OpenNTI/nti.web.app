@@ -5,6 +5,46 @@
     <link rel="stylesheet" type="text/css" href="extjs/resources/css/ext-all-gray.css">
     <link rel="stylesheet" type="text/css" href="resources/css/panel-reset.css">
     <style>
+
+        /* leave here until worksheet gets updated*/
+         #nticontent .worksheet-problems .problem {
+             overflow: hidden;
+             display: block;
+             border: none;
+             text-align: left;
+             padding: 0;
+             position: relative;
+             margin: 0;
+             background: none;
+             white-space: normal;
+         }
+
+         #nticontent .worksheet-problems .problem::after {
+             display: none;
+         }
+
+
+
+
+
+
+
+
+        #nticontent div.mathjax.answer,
+        #nticontent div.mathjax.response {
+            clear: both;
+            display: block !important;
+            margin: 1.2em;
+        }
+        #nticontent .result {
+            padding:  1.2em;
+        }
+        #nticontent .result.correct {
+            background-color: #77BB4E;
+        }
+        #nticontent .result.incorrect {
+            background-color: #DD8888;
+        }
         .x-stream-entry {
             margin-bottom: 5px;
         }

@@ -356,6 +356,7 @@ Ext.define('NextThought.view.content.Reader', {
     	this.activate();
 
         var b = this._resolveBase(this._getPathPart(path)),
+            h = _AppConfig.server.host,
         	f = this._getFilename(path),
 			p = this.items.get(0),
             pc = path.split('#'),
@@ -416,7 +417,8 @@ Ext.define('NextThought.view.content.Reader', {
 				                })
 	        		 .replace(	/href=\"(.*?)\"/mig, 
 				                function fixReferences(s,g) {
-                                    return g.indexOf("#")==0 ? s : 'href="'+b+g+'"';
+                                    console.log(g);
+                                    return g.indexOf("#")==0 ? s : 'href="'+(g.indexOf('/') == 0?h:b)+g+'"';
 				                });
 	        	
 	        	p.update('<div id="NTIContent">'+c+'</div>');
