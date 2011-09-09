@@ -25,8 +25,6 @@ Ext.define('NextThought.view.widgets.ItemNavigator', {
         ]
     },
 
-    acceptableTypes: {'Note':1,'Highlight':1},
-
     initComponent: function(){
         var me = this,
             actionColumn = {
@@ -149,12 +147,13 @@ Ext.define('NextThought.view.widgets.ItemNavigator', {
             key;
 
         for (key in bins) {
-            if (!bins.hasOwnProperty(key) || !this.acceptableTypes[key]){
-                console.log('Ignoring unacceptable type:', key, ' value:', bins[key]);
-                continue;
-            }
+            if (!bins.hasOwnProperty(key)) continue;
 
-            Ext.each(bins[key], function(r){
+            Ext.each( bins[key], function(r) {
+                if (!r.get('ContainerId')){ console.log('Ignoring unacceptable value:', r);
+                    return;
+                }
+
                 id = r.get('OID');
 
                 if (!id) return;
@@ -168,10 +167,8 @@ Ext.define('NextThought.view.widgets.ItemNavigator', {
         }
         //remove records
         s.each(function(r){
-            if(!!OIDs[r.get('OID')]) return;
-
-            s.remove(r);
-        },me);
+            if(!OIDs[r.get('OID')]) s.remove(r);
+        });
 
         if (me.el.isMasked())
             me.el.unmask();
