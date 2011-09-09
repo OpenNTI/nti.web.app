@@ -87,12 +87,19 @@ Ext.define('NextThought.view.widgets.ItemNavigator', {
                 actionColumn,
                 {
                     text     : 'Text',
-                    flex     : 1,
+                    flex     : 2,
                     sortable : true,
                     dataIndex: 'text',
                     xtype    : 'templatecolumn',
-                    tpl      : '{[values.text.replace(/\<.*?\>/ig,"")]}'
+                    tpl      : '{[values.text?values.text.replace(/\<.*?\>/ig,""):""]}'
 
+                },
+                {
+                    text     : 'Container',
+                    flex     : 1,
+                    sortable : true,
+                    xtype    : 'gridcolumn',
+                    dataIndex: 'ContainerId'
                 },
                 {
                     text     : 'Last Modified',
