@@ -136,15 +136,19 @@ window.onpopstate = function(e) {
 
 
 function NTISubmitAnswers(){
-    var
-        s = _AppConfig.server,
+    if (!/submit/i.test(Ext.get('submit').dom.innerHTML)){
+        NTIResetQuiz();
+        return;
+    }
+
+    var s = _AppConfig.server,
         ntiid = Ext.query('meta[name=NTIID]')[0].getAttribute('content'),
         h = s.host,
         d = s.data,
         url = h+d+'users/'+s.username+'/quizresults/'+ntiid,
-        vp= Ext.getCmp('viewport');
+        vp = Ext.getCmp('viewport').getEl();
 
-    vp.getEl().mask('Grading...');
+    vp.mask('Grading...');
 
     var problems = {},
         data = {};
@@ -158,54 +162,18 @@ function NTISubmitAnswers(){
         el.hide();
     });
 
-    var postData = Ext.JSON.encode(data)    ;
-
     Ext.Ajax.request({
         url: url,
-        jsonData: postData,
+        jsonData: Ext.JSON.encode(data),
         method: 'POST',
+        problems: problems,
         callback: function() {
-            vp.getEl().unmask();
+            vp.unmask();
         },
         failure: function(){
             console.log('FAIL', arguments);
         },
-        success: function(r){
-            var json = Ext.JSON.decode(r.responseText),
-                p = UserDataLoader.parseItems([json])[0],
-                qs = p.get('Items');
-
-            Ext.each(qs, function(qqr){
-                var q = qqr.get('Question'),
-                    id = q.get('id'),
-                    p = problems[id],
-                    r = p.next('.result');
-
-                r.removeCls('hidden');
-                r.addCls(qqr.get('Assessment') ? 'correct' : 'incorrect');
-
-                r.createChild({
-                    tag : 'div',
-                    html: 'Your response: \\(' + qqr.get('Response')+'\\)',
-                    cls: 'mathjax tex2jax_process response'
-                });
-
-                r.createChild({
-                    tag : 'div',
-                    html: 'Correct answer(s): ' + q.get('Answers').join(', ').replace(/\$(.+?)\$/ig, '\\($1\\)'),
-                    cls: 'mathjax tex2jax_process answer'
-                });
-            });
-
-            try{
-                //Have mathjax display the new math
-                MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
-            }catch( err ){
-                console.log(err);
-            }
-
-            vp.getActive().getMainComponent().relayout();
-        }
+        success: NTISubmitSuccess
     });
 
 
@@ -215,4 +183,74 @@ function NTISubmitAnswers(){
 function togglehint(event) {
 	Ext.get(event.target.nextSibling).toggleCls("hidden");
 	return false;
+}
+
+
+function NTISubmitSuccess(r,req){
+    var json = Ext.JSON.decode(r.responseText),
+        p = UserDataLoader.parseItems([json])[0],
+        qs = p.get('Items'),
+        vp = Ext.getCmp('viewport'),
+        reader = vp.getActive().getMainComponent();
+
+    Ext.each(qs, function(qqr){
+        var q = qqr.get('Question'),
+            id = q.get('id'),
+            p = req.problems[id],
+            r = p.next('.result');
+
+        r.removeCls('hidden');
+        r.addCls(qqr.get('Assessment') ? 'correct' : 'incorrect');
+
+        r.createChild({
+            tag : 'div',
+            html: 'Your response: \\(' + qqr.get('Response')+'\\)',
+            cls: 'mathjax tex2jax_process response'
+        });
+
+        r.createChild({
+            tag : 'div',
+            html: 'Correct answer(s): ' + q.get('Answers').join(', ').replace(/\$(.+?)\$/ig, '\\($1\\)'),
+            cls: 'mathjax tex2jax_process answer'
+        });
+    });
+
+    try{
+        //Have mathjax display the new math
+        MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+    }catch( err ){
+        console.log(err);
+    }
+
+    reader.relayout();
+    if (reader.scrollTo) reader.scrollTo(0);
+
+    Ext.get('submit').update('Reset');
+
+
+}
+
+function NTIResetQuiz() {
+    var vp = Ext.getCmp('viewport'),
+        reader = vp.getActive().getMainComponent();
+
+    Ext.get('submit').update('Submit');
+    Ext.each(Ext.query('.worksheet-problems input'),function(v){
+        var id = v.getAttribute('id'),
+            el = Ext.get(v),
+            p = el.up('.problem'),
+            r = p.next('.result');
+        v.value='';
+
+        r.addCls('hidden');
+        r.removeCls(['correct','incorrect']);
+        r.down('.response').remove();
+        r.down('.answer').remove();
+
+        el.setVisibilityMode(Ext.Element.DISPLAY);
+        el.show();
+    });
+
+    reader.relayout();
+    if (reader.scrollTo) reader.scrollTo(0);
 }
