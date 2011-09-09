@@ -117,12 +117,9 @@ Ext.define('NextThought.util.QuizUtils', {
 
 
         scrollUp: function(){
-            var reader = Ext.getCmp('readerPanel');
-            if (reader.scrollTo){
-                reader.relayout();
-                reader.scrollTo(0);
-            }
-            else console.log('couldn\'t scroll/relayout reader');
+            var p = Ext.getCmp('readerPanel');
+            p.relayout();
+            p.scrollTo(0);
         }
 
     }
