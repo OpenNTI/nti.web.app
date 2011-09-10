@@ -7,18 +7,23 @@
     <style>
 
         /* leave here until worksheet gets updated*/
+         #nticontent .worksheet-problems li{clear: both;}
+
          #nticontent .worksheet-problems .problem {
-             overflow: hidden;
+             overflow: visible;
              display: block;
              border: none;
              text-align: left;
              padding: 0;
-             position: relative;
+             position: static;
              margin: 0;
              background: none;
              white-space: normal;
          }
 
+         #nticontent .worksheet-problems .result {
+             clear: both;
+         }
          #nticontent .worksheet-problems .problem::after {
              display: none;
          }

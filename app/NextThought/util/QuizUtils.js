@@ -113,21 +113,21 @@ Ext.define('NextThought.util.QuizUtils', {
 
         resetQuiz: function() {
             Ext.get('submit').update('Submit');
-            Ext.each(Ext.query('.worksheet-problems input'),function(v){
-                var id = v.getAttribute('id'),
-                    el = Ext.get(v),
-                    p = el.up('.problem'),
-                    r = p.next('.result');
-                v.value='';
 
-                r.addCls('hidden');
-                r.removeCls(['correct','incorrect']);
-                r.down('.response').remove();
-                r.down('.answer').remove();
+            this.getProblemElementMap(
+                function(id,v,c){
+                    v.dom.value='';
+                    var r = c.next('.result');
 
-                el.setVisibilityMode(Ext.Element.DISPLAY);
-                el.show();
-            });
+                    r.addCls('hidden');
+                    r.removeCls(['correct','incorrect']);
+
+                    r.down('.response').remove();
+                    r.down('.answer').remove();
+
+                    v.show();
+                },
+                this);
 
             this.scrollUp();
         },
