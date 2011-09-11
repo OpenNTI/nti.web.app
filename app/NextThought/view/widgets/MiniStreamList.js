@@ -87,7 +87,7 @@ Ext.define('NextThought.view.widgets.MiniStreamList', {
 
 			if( /all/i.test(f.groups) || f.shareTargets && f.shareTargets[ u ] || (f.includeMe && f.includeMe==u)){
 				c++;
-                p.add(Ext.create('NextThought.view.widgets.MiniStreamEntry', {change: change}));
+                p.add({change: change, xtype: 'miniStreamEntry'});
 			}
 		}
 
