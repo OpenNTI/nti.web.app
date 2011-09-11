@@ -19,7 +19,7 @@ Ext.define('NextThought.view.widgets.LeftColumn', {
     dockedItems: {
 		xtype: 'toolbar',
 		cls: 'x-docked-noborder-top',
-		items: [ '->',{ text: '&pi;', objectExplorer: true } ]
+		items: [ '->',{ objectExplorer: true, iconCls: 'object-explorer' } ]
 	},
 
 	columnWidget: {'html':'assign the columnWidget property'},
