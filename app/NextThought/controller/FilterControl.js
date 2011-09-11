@@ -130,34 +130,39 @@ Ext.define('NextThought.controller.FilterControl', {
 	rebuildFilterBuffered: function(id){
 		var isUnknown = /unresolved/i,
 			filter = {groups:{},types:[], shareTargets:{}}, 
-			cmp = Ext.getCmp(id), 
+			cmp = Ext.getCmp(id),
+            allGroups = this.getAllGroupsButton(id).getValue(),
 			groups = this.getGroups(id),
 			types = this.getTypes(id),
 			u = _AppConfig.server.username;
-			
-		Ext.each(groups, function(g){
-			if(!g.getValue()) return;
-			if(g.isMe){
-				filter.includeMe = true;
-				return;
-			}
-			
-			Ext.each(g.record.get('friends'),function(f){
-				// if(isUnknown.test(f.$className))return;
 
-                if(!f.get || !f.get('Username')){
-				    console.log(f);
-                    return;
-                }
+        if(allGroups) filter.groups = 'all';
+        else {
+            Ext.each( groups,
+                function(g) {
+                    if(!g.getValue()) return;
+                    if(g.isMe){
+                        filter.includeMe = true;
+                        return;
+                    }
 
-                filter.shareTargets[f.get('Username')]=true;
-			},
-			this);
-			
-			filter.groups[g.record.get('Username')] = g.record;
-		},
-		this);
-		
+                    Ext.each(g.record.get('friends'),function(f){
+                            // if(isUnknown.test(f.$className))return;
+
+                            if(!f.get || !f.get('Username')){
+                                console.log(f);
+                                return;
+                            }
+
+                            filter.shareTargets[f.get('Username')]=true;
+                        },
+                        this);
+
+                    filter.groups[g.record.get('Username')] = g.record;
+                },
+                this);
+        }
+
 		
 		if(filter.includeMe){
 			filter.includeMe = u;

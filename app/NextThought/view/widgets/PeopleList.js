@@ -46,7 +46,7 @@ Ext.define('NextThought.view.widgets.PeopleList', {
 				break;
 			}
 				
-			if(f.shareTargets && f.shareTargets[k]){
+			if(/all/i.test(f.groups) || f.shareTargets && f.shareTargets[k]){
 				c++;
 				UserDataLoader.resolveUser(k, function(f){
 					p.add({	xtype: 'image', 

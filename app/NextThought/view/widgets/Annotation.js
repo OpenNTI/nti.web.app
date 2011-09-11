@@ -57,12 +57,16 @@ Ext.define( 'NextThought.view.widgets.Annotation', {
 	},
 	
 	testFilter: function(filter){
-		if(	!filter 
+        if(	!filter
 		 || !filter.types
 		 || !filter.groups
 		 || filter.types.toString().indexOf(this.$className)<0)
 			return false;
-		
+
+        if(/all/i.test(filter.groups)){
+            return true;
+        }
+
 		var p = this._record.get('Creator'),
 			targets = filter.shareTargets,
 			pass = !!targets[p];
