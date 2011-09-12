@@ -421,6 +421,10 @@ Ext.define('NextThought.view.content.Reader', {
                     .replace(	/href=\"(.*?)\"/mig,
                     function fixReferences(s,g) {
                         return g.indexOf("#")==0 ? s : 'href="'+(g.indexOf('/') == 0?h:b)+g+'"';
+                    })
+                    .replace(	/poster=\"(.*?)\"/mig,
+                    function fixReferences(s,g) {
+                        return 'poster="'+(g.indexOf('/') == 0?h:b)+g+'"';
                     });
 
                 p.update('<div id="NTIContent">'+c+'</div>');
