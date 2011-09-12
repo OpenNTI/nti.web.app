@@ -3,7 +3,7 @@ Ext.define('NextThought.view.widgets.main.TopControls', {
 	extend: 'Ext.panel.Panel',
     alias: 'widget.top-controls',
     requires: [
-        'NextThought.view.form.SearchField',
+        'NextThought.view.form.fields.SearchField',
         'NextThought.view.widgets.main.SessionInfo'
     ],
 	

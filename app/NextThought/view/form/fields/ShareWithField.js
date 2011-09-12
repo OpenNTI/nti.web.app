@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.form.ShareWithField', {
+Ext.define('NextThought.view.form.fields.ShareWithField', {
     extend: 'Ext.panel.Panel',
     alias: 'widget.sharewith',
     mixins: {
@@ -7,7 +7,7 @@ Ext.define('NextThought.view.form.ShareWithField', {
     },
     requires: [
         'NextThought.proxy.UserDataLoader',
-        'NextThought.view.form.UserSearchInputField',
+        'NextThought.view.form.fields.UserSearchInputField',
         'NextThought.view.form.util.Token'
     ],
 

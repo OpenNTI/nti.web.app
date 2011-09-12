@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.form.SearchField', {
+Ext.define('NextThought.view.form.fields.SearchField', {
     extend: 'Ext.form.field.Trigger',
 
     alias: 'widget.searchfield',

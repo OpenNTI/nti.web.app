@@ -7,7 +7,7 @@ Ext.define('NextThought.view.windows.GroupEditorWindow', {
 	requires: [
 			'NextThought.model.User',
 			// 'NextThought.model.UnresolvedFriend',
-			'NextThought.view.form.UserSearchInputField'
+			'NextThought.view.form.fields.UserSearchInputField'
 	],
 	
 	title: 'Edit Group',
