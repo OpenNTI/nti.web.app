@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.widgets.SearchResultsPopover', {
+Ext.define('NextThought.view.windows.SearchResultsPopover', {
 	extend: 'Ext.panel.Panel',
     alias: 'widget.search-results-popover',
 

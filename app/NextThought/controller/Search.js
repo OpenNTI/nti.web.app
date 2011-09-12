@@ -5,7 +5,7 @@ Ext.define('NextThought.controller.Search', {
 
 	views: [
         'Viewport',
-        'widgets.SearchResultsPopover'
+        'windows.SearchResultsPopover'
     ],
     refs: [
         {
