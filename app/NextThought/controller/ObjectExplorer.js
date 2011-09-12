@@ -72,7 +72,7 @@ Ext.define('NextThought.controller.ObjectExplorer', {
 				minimizable:true,
 				layout: 'fit',
 				closeAction: 'hide',
-				items: Ext.create('widget.item-navigator', {})
+				items: {xtype: 'item-navigator'}
 			});
         }
 
