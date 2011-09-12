@@ -77,8 +77,8 @@ Ext.define('NextThought.view.content.Stream', {
 
 			var u = change.get('Creator');
 
-			if(f.shareTargets[ u ] || (f.includeMe && f.includeMe==u)){
-                p.add(Ext.create('NextThought.view.widgets.StreamEntry', {change: change}));
+			if(/all/i.test(f.groups) || f.shareTargets[ u ] || (f.includeMe && f.includeMe==u)){
+                p.add({change: change, xtype: 'streamEntry'});
 			}
 		}
 	}
