@@ -19,7 +19,9 @@ Ext.define( 'NextThought.view.modes.Home', {
 			id: 'myLibrary',
             cls: 'x-focus-pane',
             region: 'center',
-			width: CENTER_WIDTH,
+			//width: CENTER_WIDTH,
+            flex: 6,
+            minWidth: CENTER_WIDTH/3,
 	    	dockedItems: [{
 					xtype: 'toolbar',
 					cls: 'x-docked-noborder-top',

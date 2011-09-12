@@ -29,11 +29,9 @@ Ext.define('NextThought.view.widgets.TopControls', {
         };
 
         this.add({
-            layout: {
-                type: 'hbox',
-                align: 'middle'
-            },
+            layout: 'hbox',
             flex: 1,
+            minWidth: (MIN_SIDE_WIDTH+165),
             items: [
                 banner,
                 NextThought.modeSwitcher ,
@@ -41,11 +39,12 @@ Ext.define('NextThought.view.widgets.TopControls', {
             ]
         });
 
-        this.add({ xtype: 'searchfield', margin: 5, emptyText:'Search...', minWidth: 400, maxWidth: CENTER_WIDTH, flex: 1, id: 'searchBox'});
+        this.add({ xtype: 'searchfield', margin: 5, emptyText:'Search...', minWidth: CENTER_WIDTH/3, maxWidth: CENTER_WIDTH, flex: 1, id: 'searchBox'});
 
         this.add({
             layout: 'hbox',
             flex: 1,
+            minWidth: MIN_SIDE_WIDTH,
             items: [
                 { xtype:'tbspacer', flex:1 } ,
                 {xtype: 'session-info'}

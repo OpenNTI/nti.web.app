@@ -21,8 +21,10 @@ Ext.define( 'NextThought.view.modes.Reader', {
    		this.add({
             cls: 'x-focus-pane',
     		region: 'center',
-    		width: CENTER_WIDTH,
-    		
+    		//width: CENTER_WIDTH,
+            flex: 6,
+            minWidth: CENTER_WIDTH/3,
+
     		border: false,
 			frame: false,
 			defaults: {border: false, frame: false},

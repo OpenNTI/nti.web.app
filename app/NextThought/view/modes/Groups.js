@@ -18,7 +18,9 @@ Ext.define( 'NextThought.view.modes.Groups', {
    		this.add({
 			cls: 'x-dataview-panel x-focus-pane',
     		region: 'center',
-    		width: CENTER_WIDTH,
+    		//width: CENTER_WIDTH,
+            flex: 6,
+            minWidth: CENTER_WIDTH/3,
     		
     		border: false,
 			frame: false,
