@@ -39,6 +39,7 @@ Ext.define( 'NextThought.view.modes.Mode', {
     	});
     	try{
             ct.getLayout().setActiveItem(item);
+            this.getMainComponent().relayout();
         }
         catch(e){
             console.log(e.message, e);
