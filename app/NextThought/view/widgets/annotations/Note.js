@@ -123,10 +123,12 @@ Ext.define( 'NextThought.view.widgets.annotations.Note', {
 		c.setWidth(w);
 //		a.setStyle('border', '1px solid green');
 
-        adjust += pr?(pr.getPadding('b')+pr.getMargin('b')):0;
-        extra += (nx?(nx.getPadding('t')+nx.getMargin('t')):0) + adjust;
+        if(me._isVisible){
+            adjust += pr?(pr.getPadding('b')+pr.getMargin('b')):0;
+            extra += (nx?(nx.getPadding('t')+nx.getMargin('t')):0) + adjust;
 
-		h = c.getHeight();
+            h = c.getHeight();
+        }
 
 		a.setStyle('padding-bottom',(i+h+extra)+'px');
 
