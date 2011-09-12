@@ -12,13 +12,15 @@ function resizeBlocker(w, h, e){
     var i = !!(w<MIN_WIDTH),
         b = Ext.getBody(),
         m = b.isMasked();
-
+/*
     if(i && !m){
         b.mask("Your browser window is too narrow","viewport-too-small");
     }
+
     else if(!i && m){
+    */
         b.unmask();
-    }
+    //}
 }
 
 
