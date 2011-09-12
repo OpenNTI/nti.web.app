@@ -116,6 +116,11 @@ Ext.define('NextThought.Library', {
 		return x;
 	},
 
+    findLocationTitle: function(containerId){
+        var l = this.findLocation(containerId);
+        return l? l.location.getAttribute('label') : 'Not found';
+    },
+
     findLocation: function(containerId) {
         var result = null;
 
