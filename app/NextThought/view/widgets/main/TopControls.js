@@ -4,7 +4,7 @@ Ext.define('NextThought.view.widgets.main.TopControls', {
     alias: 'widget.top-controls',
     requires: [
         'NextThought.view.form.SearchField',
-        'NextThought.view.widgets.SessionInfo'
+        'NextThought.view.widgets.main.SessionInfo'
     ],
 	
 	cls: 'x-brand-and-search-bar',

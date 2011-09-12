@@ -8,7 +8,7 @@ To look like this:
     '</div>'
  */
 
-Ext.define('NextThought.view.widgets.SessionInfo', {
+Ext.define('NextThought.view.widgets.main.SessionInfo', {
 	extend: 'Ext.panel.Panel',
     alias: 'widget.session-info',
 

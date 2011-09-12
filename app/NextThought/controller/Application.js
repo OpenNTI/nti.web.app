@@ -8,7 +8,7 @@ Ext.define('NextThought.controller.Application', {
 
     views: [
         'Viewport',
-        'widgets.SessionInfo',
+        'widgets.main.SessionInfo',
         'windows.NotificationsPopover'
     ],
 
