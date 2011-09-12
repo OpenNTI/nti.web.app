@@ -3,7 +3,7 @@ Ext.define('NextThought.controller.Groups', {
 
     views: [
         'modes.Groups',
-        'widgets.GroupEditorWindow'
+        'windows.GroupEditorWindow'
     ],
 
     init: function() {
@@ -11,7 +11,7 @@ Ext.define('NextThought.controller.Groups', {
             'groups-mode-container toolbar button[createItem]':{
                 'click':function(){
                     var rec = Ext.create('NextThought.model.FriendsList');
-                    Ext.create('NextThought.view.widgets.GroupEditorWindow',{record: rec}).show();
+                    Ext.create('NextThought.view.windows.GroupEditorWindow',{record: rec}).show();
                 }
             },
 
@@ -31,7 +31,7 @@ Ext.define('NextThought.controller.Groups', {
             'groups-mode-container dataview':{
                 'itemdblclick':function(a, rec){
                     //if(rec.get('Creator')==_AppConfig.server.username)
-                        Ext.create('NextThought.view.widgets.GroupEditorWindow',{record: rec}).show();
+                        Ext.create('NextThought.view.windows.GroupEditorWindow',{record: rec}).show();
                 },
                 'selectionchange': function(a, sel){
                     var q = 'groups-mode-container toolbar button[deleteItem]';

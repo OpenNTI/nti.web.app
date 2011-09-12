@@ -1,7 +1,7 @@
 
 
 
-Ext.define('NextThought.view.widgets.GroupEditorWindow', {
+Ext.define('NextThought.view.windows.GroupEditorWindow', {
 	extend: 'Ext.window.Window',
 	alias : 'widget.group-editor',
 	requires: [
