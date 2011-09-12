@@ -131,7 +131,7 @@ Ext.define('NextThought.view.widgets.ItemNavigator', {
     _filter: function(t){
         this._store.clearFilter();
         this._store.filter('text',
-            new RegExp(Ext.String.escapeRegex(t.getValue())))
+            new RegExp(Ext.String.escapeRegex(t.getValue())),'i')
     },
 
 
