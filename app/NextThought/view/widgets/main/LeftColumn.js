@@ -1,34 +1,33 @@
 
-Ext.define('NextThought.view.widgets.RightColumn', {
+Ext.define('NextThought.view.widgets.main.LeftColumn', {
 	extend: 'Ext.panel.Panel',
-	alias: 'widget.rightColumn',
+	alias: 'widget.leftColumn',
 	
-	cls: 'x-column x-right-column',
+	cls: 'x-column x-left-column',
 	frame: false,
 	border: false,
 	defaults: {frame: false, border: false, padding: 5},
 	
 	minWidth: MIN_SIDE_WIDTH,
     height: '100%',
-
-
+    		
     layout:{
         type:'hbox',
         align: 'stretch'
     },
+    
+    dockedItems: {
+		xtype: 'toolbar',
+		cls: 'x-docked-noborder-top',
+		items: [ '->',{ objectExplorer: true, iconCls: 'object-explorer' } ]
+	},
 
 	columnWidget: {'html':'assign the columnWidget property'},
 	
-	dockedItems: {
-		xtype: 'toolbar',
-		cls: 'x-docked-noborder-top',
-		items: ['Community','->', {text: '&nbsp;',focusable: false, disabled:true}]
-	},
-    
     initComponent: function(){
    		this.callParent(arguments);
    		this.removeAll();//just in case someone tried to populate the items property
-   		this.add(this.columnWidget);
    		this.add({flex: 1});
+   		this.add(this.columnWidget);
    	}
 });

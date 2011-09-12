@@ -49,13 +49,13 @@ Ext.application({
         NextThought.isDebug = true;
         setTimeout(clearMask, 100);
 
-        Ext.create('NextThought.view.LoginWindow',{callback: appStart});
+        Ext.create('NextThought.view.windows.LoginWindow',{callback: appStart});
 
 
         function appStart(){
 
             try{
-                NextThought.modeSwitcher = Ext.create('NextThought.view.navigation.ModeSwitcher',{});
+                NextThought.modeSwitcher = Ext.create('NextThought.view.widgets.main.ModeSwitcher',{});
                 if(!NextThought.modeSwitcher){
                     console.log('failed to load switer');
                     Ext.getBody().mask('load failed');

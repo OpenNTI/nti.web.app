@@ -77,8 +77,8 @@ Ext.define('NextThought.view.widgets.FilterControlPanel', {
 			boxLabel: 'All'
 		});
 		
-		form.add({ xtype:'checkbox', boxLabel: 'Highlights', model: 'NextThought.view.widgets.Highlight' });
-		form.add({ xtype:'checkbox', boxLabel: 'Notes', model: 'NextThought.view.widgets.Note' });
+		form.add({ xtype:'checkbox', boxLabel: 'Highlights', model: 'NextThought.view.widgets.annotations.Highlight' });
+		form.add({ xtype:'checkbox', boxLabel: 'Notes', model: 'NextThought.view.widgets.annotations.Note' });
 
 		this.fireEvent('filter-control-loaded',this.getId());
 	}

@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.LoginWindow', {
+Ext.define('NextThought.view.windows.LoginWindow', {
     extend: 'Ext.window.Window',
     alias : 'widget.loginwindow',
 	

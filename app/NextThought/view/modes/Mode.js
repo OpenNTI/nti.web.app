@@ -3,8 +3,8 @@
 Ext.define( 'NextThought.view.modes.Mode', {
 	extend: 'Ext.panel.Panel',
 	requires: [
-			'NextThought.view.widgets.LeftColumn',
-			'NextThought.view.widgets.RightColumn'
+			'NextThought.view.widgets.main.LeftColumn',
+			'NextThought.view.widgets.main.RightColumn'
 			],
 
 	autoScroll: false,

@@ -1,5 +1,5 @@
 
-Ext.define('NextThought.view.navigation.ModeSwitcher', {
+Ext.define('NextThought.view.widgets.main.ModeSwitcher', {
 	extend: 'Ext.panel.Panel',
 	alias : 'widget.modeswitcher',
 

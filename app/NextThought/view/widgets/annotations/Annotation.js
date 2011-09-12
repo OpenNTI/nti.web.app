@@ -1,5 +1,5 @@
 
-Ext.define( 'NextThought.view.widgets.Annotation', {
+Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 	extend: 'NextThought.view.widgets.Widget',
 	
 	_div: null,

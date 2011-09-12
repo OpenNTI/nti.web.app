@@ -1,9 +1,9 @@
 
-Ext.define('NextThought.view.widgets.Header', {
+Ext.define('NextThought.view.widgets.main.Header', {
 	extend: 'Ext.panel.Panel',
     alias: 'widget.master-header',
     requires: [
-        'NextThought.view.widgets.TopControls'
+        'NextThought.view.widgets.main.TopControls'
     ],
 	
 	cls: 'x-header-bar',

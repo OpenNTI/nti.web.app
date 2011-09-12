@@ -3,10 +3,10 @@ Ext.define('NextThought.controller.Annotations', {
 
 	views: [
         'Viewport',
-        'widgets.Highlight',
-		'widgets.Note',
-		'widgets.NoteEditor',
-        'widgets.ShareWithWindow'
+        'widgets.annotations.Highlight',
+		'widgets.annotations.Note',
+		'windows.NoteEditor',
+        'windows.ShareWithWindow'
     ],
 
     refs: [
@@ -134,11 +134,11 @@ Ext.define('NextThought.controller.Annotations', {
     },
 
     shareWith: function(record){
-    	Ext.create('NextThought.view.widgets.ShareWithWindow',{record: record}).show();
+    	Ext.create('NextThought.view.windows.ShareWithWindow',{record: record}).show();
     },
 
     editNote: function(record){
-		Ext.create('NextThought.view.widgets.NoteEditor',{record: record}).show();
+		Ext.create('NextThought.view.windows.NoteEditor',{record: record}).show();
  	},
 
     addNote: function(range){

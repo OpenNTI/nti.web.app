@@ -1,5 +1,6 @@
-Ext.define('NextThought.view.widgets.SelectionHighlight', {
+Ext.define('NextThought.view.widgets.annotations.SelectionHighlight', {
     extend: 'NextThought.view.widgets.Widget',
+    alias: 'annotations.SelectionHighlight',
 
 	_sels: [],
 	_canvas: null,

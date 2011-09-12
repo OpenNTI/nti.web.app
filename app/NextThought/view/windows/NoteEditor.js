@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.widgets.NoteEditor', {
+Ext.define('NextThought.view.windows.NoteEditor', {
 	extend: 'Ext.window.Window',
 	alias : 'widget.noteeditor',
 	

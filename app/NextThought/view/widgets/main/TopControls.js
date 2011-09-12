@@ -1,5 +1,5 @@
 
-Ext.define('NextThought.view.widgets.TopControls', {
+Ext.define('NextThought.view.widgets.main.TopControls', {
 	extend: 'Ext.panel.Panel',
     alias: 'widget.top-controls',
     requires: [

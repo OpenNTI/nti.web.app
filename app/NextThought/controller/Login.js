@@ -9,7 +9,7 @@ Ext.define('NextThought.controller.Login', {
     		],
 
 	views: [
-        'LoginWindow',
+        'windows.LoginWindow',
         'widgets.SessionInfo'
     ],
 

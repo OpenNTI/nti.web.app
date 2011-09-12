@@ -1,5 +1,5 @@
-Ext.define( 'NextThought.view.widgets.Note', {
-	extend: 'NextThought.view.widgets.Annotation',
+Ext.define( 'NextThought.view.widgets.annotations.Note', {
+	extend: 'NextThought.view.widgets.annotations.Annotation',
 	requires:[
 			'NextThought.view.widgets.NotePanel'
 			],

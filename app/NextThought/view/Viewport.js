@@ -4,7 +4,7 @@ Ext.define('NextThought.view.Viewport', {
 	alias: 'widget.master-view',
 
     requires: [
-        'NextThought.view.widgets.Header',
+        'NextThought.view.widgets.main.Header',
         'NextThought.view.modes.Container'
     ],
 	

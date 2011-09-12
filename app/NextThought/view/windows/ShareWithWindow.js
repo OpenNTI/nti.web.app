@@ -1,4 +1,4 @@
-Ext.define( 'NextThought.view.widgets.ShareWithWindow', {
+Ext.define( 'NextThought.view.windows.ShareWithWindow', {
 	extend: 'Ext.window.Window',
 	requires: [
 			'NextThought.proxy.UserDataLoader',

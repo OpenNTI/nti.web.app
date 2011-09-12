@@ -3,7 +3,7 @@ Ext.define('NextThought.controller.Modes', {
 
 	views: [
         'modes.Container',
-        'navigation.ModeSwitcher'
+        'widgets.main.ModeSwitcher'
     ],
 
     init: function() {

@@ -8,9 +8,9 @@ Ext.define('NextThought.view.content.Reader', {
         'NextThought.proxy.UserDataLoader',
         'NextThought.util.AnnotationUtils',
         'NextThought.util.QuizUtils',
-        'NextThought.view.widgets.SelectionHighlight',
-        'NextThought.view.widgets.Highlight',
-        'NextThought.view.widgets.Note'
+        'NextThought.view.widgets.annotations.SelectionHighlight',
+        'NextThought.view.widgets.annotations.Highlight',
+        'NextThought.view.widgets.annotations.Note'
     ],
     cls: 'x-reader-pane',
 
@@ -53,7 +53,7 @@ Ext.define('NextThought.view.content.Reader', {
     },
 
     showRanges: function(ranges) {
-        this._searchAnnotations = Ext.create('NextThought.view.widgets.SelectionHighlight', ranges, this.items.get(0).el.dom.firstChild, this);
+        this._searchAnnotations = Ext.create('annotations.SelectionHighlight', ranges, this.items.get(0).el.dom.firstChild, this);
     },
 
     clearSearchRanges: function() {
@@ -183,7 +183,7 @@ Ext.define('NextThought.view.content.Reader', {
 
         var oid = record.get('OID'),
             w = Ext.create(
-                'NextThought.view.widgets.Highlight',
+                'NextThought.view.widgets.annotations.Highlight',
                 range, record,
                 this.items.get(0).el.dom.firstChild,
                 this);
@@ -212,7 +212,7 @@ Ext.define('NextThought.view.content.Reader', {
 
             this._annotations[record.get('OID')] =
                 Ext.create(
-                    'NextThought.view.widgets.Note',
+                    'NextThought.view.widgets.annotations.Note',
                     record,
                     this.items.get(0).el.dom.firstChild,
                     this);

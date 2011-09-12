@@ -1,5 +1,5 @@
-Ext.define('NextThought.view.widgets.Highlight', {
-	extend: 'NextThought.view.widgets.Annotation',
+Ext.define('NextThought.view.widgets.annotations.Highlight', {
+	extend:'NextThought.view.widgets.annotations.Annotation',
 	
 	_sel: null,
 	_canvas: null,

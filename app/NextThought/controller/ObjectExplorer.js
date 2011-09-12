@@ -6,7 +6,7 @@ Ext.define('NextThought.controller.ObjectExplorer', {
 
 	views: [
 		'Viewport',
-        'widgets.LeftColumn',
+        'widgets.main.LeftColumn',
 		'widgets.ItemNavigator'
 	],
 	
