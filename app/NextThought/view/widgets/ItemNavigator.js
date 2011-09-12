@@ -11,14 +11,15 @@ Ext.define('NextThought.view.widgets.ItemNavigator', {
 
     dockedItems:{
         xtype: 'toolbar',
-        items: [ '->',
+        items: [// '->',
             {
                 xtype: 'triggerfield',
                 emptyText: 'Search...',
                 enableKeyEvents: true,
                 trigger1Cls: 'x-form-clear-trigger',
                 trigger2Cls: 'x-form-search-trigger',
-                width: 150,
+                //width: 150,
+                flex: 1,
                 onTrigger1Click:function(){this.reset();this.onTrigger2Click();},
                 onTrigger2Click:function(){this.fireEvent('keypress',this);}
             }
@@ -27,9 +28,24 @@ Ext.define('NextThought.view.widgets.ItemNavigator', {
 
     initComponent: function(){
         var me = this,
-            actionColumn = {
+            gotoActionColumn = {
                 xtype: 'actioncolumn',
-                width: 40,
+                width: 20,
+                hideable: false,
+                sortable: false,
+                items: [{
+                    icon   : 'extjs/examples/shared/icons/fam/application_go.png',  // Use a URL in the icon config
+                    tooltip: 'Go to',
+                    scope: me,
+                    handler: function(grid, rowIndex, colIndex) {
+                        var r = me._store.getAt(rowIndex);
+                        grid.fireEvent('itemdblclick', grid, r, null, rowIndex);
+                    }
+                }]
+            },
+            deleteActionColumn = {
+                xtype: 'actioncolumn',
+                width: 20,
                 hideable: false,
                 sortable: false,
                 items: [{
@@ -43,15 +59,6 @@ Ext.define('NextThought.view.widgets.ItemNavigator', {
                         s.removeAt(rowIndex);
                         me.fireEvent('annotation-destroyed', r.get('OID'));
                         r.destroy();
-                    }
-                },
-                {
-                    icon   : 'extjs/examples/shared/icons/fam/application_go.png',  // Use a URL in the icon config
-                    tooltip: 'Go to',
-                    scope: me,
-                    handler: function(grid, rowIndex, colIndex) {
-                        var r = me._store.getAt(rowIndex);
-                        grid.fireEvent('itemdblclick', grid, r, null, rowIndex);
                     }
                 }]
             };
@@ -82,7 +89,7 @@ Ext.define('NextThought.view.widgets.ItemNavigator', {
                 groupHeaderTpl: '{name}s ({rows.length})'
             }],
             columns: [
-                actionColumn,
+                gotoActionColumn,
                 {
                     text     : 'Text',
                     flex     : 2,
@@ -106,7 +113,8 @@ Ext.define('NextThought.view.widgets.ItemNavigator', {
                     xtype    : 'datecolumn',
                     format   : 'D M d, Y h:i',
                     dataIndex: 'Last Modified'
-                }
+                },
+                deleteActionColumn
 
             ],
             viewConfig: {
