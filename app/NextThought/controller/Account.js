@@ -5,7 +5,7 @@ Ext.define('NextThought.controller.Account', {
     ],
 
     views: [
-        'windows.Account',
+        'windows.FullScreenFormWindow',
         'windows.NotificationsPopover',
         'widgets.main.SessionInfo'
     ],
@@ -16,7 +16,7 @@ Ext.define('NextThought.controller.Account', {
 
     init: function() {
         this.control({
-            'account-window button[actionName]':{
+            '#account-window button[actionName]':{
                 'click': this.accountActionButton
             },
 
@@ -29,7 +29,7 @@ Ext.define('NextThought.controller.Account', {
 
 
     accountActionButton: function(btn){
-        var win = btn.up('account-window'),
+        var win = btn.up('fullscreen-window'),
             form= win.down('form');
 
         win.close();
@@ -46,6 +46,6 @@ Ext.define('NextThought.controller.Account', {
 
 
     showAccount: function(){
-        Ext.create('widget.account-window').show();
+        Ext.create('widget.fullscreen-window',{id: 'account-window'}).show();
     }
 });

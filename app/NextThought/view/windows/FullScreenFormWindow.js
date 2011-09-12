@@ -1,6 +1,6 @@
-Ext.define('NextThought.view.windows.Account', {
+Ext.define('NextThought.view.windows.FullScreenFormWindow', {
     extend: 'Ext.panel.Panel',
-    alias : 'widget.account-window',
+    alias : 'widget.fullscreen-window',
 
     width: 600,
     height: '100%',
@@ -27,9 +27,7 @@ Ext.define('NextThought.view.windows.Account', {
             allowBlank: false
         },
 
-        items: [
-
-        ]
+        items: []
     }],
 
     initComponent: function(){
@@ -53,6 +51,7 @@ Ext.define('NextThought.view.windows.Account', {
 
     doResize: function(w, h){
         this.setHeight(h);
+        this.center();
     }
 
 });
