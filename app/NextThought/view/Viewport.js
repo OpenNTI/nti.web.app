@@ -17,10 +17,8 @@ Ext.define('NextThought.view.Viewport', {
     initComponent: function(){
    		this.callParent(arguments);
 	    this.addEvents('clear-search', 'navigate');
-		this.add(Ext.create('NextThought.view.widgets.Header', { region: 'north'}));
-
-        this._container = Ext.create('NextThought.view.modes.Container', { region: 'center', id: 'mode-ctr'});
-		this.add(this._container);
+		this.add({xtype: 'master-header', region: 'north'});
+        this._container = this.add({xtype: 'modeContainer', region: 'center', id: 'mode-ctr'});
 	},
 
     getActive: function(){

@@ -1,6 +1,10 @@
 
 Ext.define('NextThought.view.widgets.Header', {
 	extend: 'Ext.panel.Panel',
+    alias: 'widget.master-header',
+    requires: [
+        'NextThought.view.widgets.TopControls'
+    ],
 	
 	cls: 'x-header-bar',
     items: [],
@@ -9,7 +13,7 @@ Ext.define('NextThought.view.widgets.Header', {
     
     initComponent: function(){
    		this.callParent(arguments);
-    	this.add(Ext.create('NextThought.view.widgets.TopControls', {id: 'top-controls'} ));
+    	this.add({xtype: 'top-controls', id: 'top-controls'});
     }
     
 });

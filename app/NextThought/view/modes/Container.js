@@ -2,6 +2,7 @@
 
 Ext.define( 'NextThought.view.modes.Container', {
 	extend: 'Ext.panel.Panel',
+    alias: 'widget.modeContainer',
 	requires: [
 			'NextThought.view.modes.Home',
 			'NextThought.view.modes.Reader',
