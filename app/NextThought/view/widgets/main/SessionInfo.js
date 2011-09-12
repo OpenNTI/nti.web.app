@@ -85,20 +85,18 @@ Ext.define('NextThought.view.widgets.main.SessionInfo', {
         this.down('panel[username]').el.on('mouseover', this._mouseOverUsername, this);
         //this.down('image[settings]').el.on('click', this._click, this);
 
-        this.down('panel[notification]').el.on('click', this._clickNotifications, this);
+        this.down('panel[notification]').el.on('click', this._notifications, this);
 
         //start the task to check for notifications
         Ext.TaskManager.start(this._task);
     },
 
-    _clickNotifications: function() {
-        this.fireEvent('notification-clicked');
-    },
-
     _buildMenu: function(){
         return [
             {
-                text: 'Account'
+                text: 'Account',
+                scope: this,
+                handler: this._account
             },{
                 text: 'Settings',
                 scope: this,
@@ -119,15 +117,22 @@ Ext.define('NextThought.view.widgets.main.SessionInfo', {
     },
 
     _mouseOverUsername: function(){
-        this._menu.showBy(
-            this.down('panel[username]').el);
+        this._menu.showBy(this.down('panel[username]').el);
+    },
+
+    _account: function(){
+        this.fireEvent('account');
     },
 
     _logout: function(){
         this.fireEvent('logout');
     },
 
-    _settings: function(){
+    _notifications: function() {
+        this.fireEvent('notification');
+    },
 
+    _settings: function(){
+        this.fireEvent('settings');
     }
 });

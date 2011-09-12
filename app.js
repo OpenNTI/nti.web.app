@@ -41,6 +41,7 @@ Ext.application({
         'Annotations',
         'ObjectExplorer',
         'Search',
+        'Account',
         'Application'
     ],
 
