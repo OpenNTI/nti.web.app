@@ -82,7 +82,7 @@ Ext.define('NextThought.view.form.fields.ShareWithField', {
     },
 
     isValid: function() {
-        return this._selections.length>0;
+        return this.allowBlank || this._selections.length>0;
     },
 
     getValue: function(){

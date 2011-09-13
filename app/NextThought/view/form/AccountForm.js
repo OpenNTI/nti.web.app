@@ -38,34 +38,63 @@ Ext.define('NextThought.view.form.AccountForm', {
                 {
                     xtype: 'box',
                     autoEl: {tag: 'img'},
-                    width: 64,
-                    height: 64,
-                    name: 'avatar'
+                    width: 64, height: 64,
+                    avatar: true
                 },
                 {
                     flex: 1,
-                    //layout: 'anchor',
                     items:[
                         {
-                            //fieldLabel: 'Real Name',
                             cls: 'x-real-name-field',
                             xtype: 'textfield',
+                            allowBlank: false,
                             emptyText: 'Real name',
                             name: 'realname'
                         },
                         {
                             xtype: 'textfield',
                             emptyText: 'Alias',
+                            allowBlank: false,
                             name: 'alias',
                             fieldLabel: 'Alias',
                             padding: 0,
-                            margin: '10px 0px',
+                            margin: '10px 10px 10px 0px',
                             anchor: '50%'
                         },
                         {
                             margin: '20px 0px',
                             xtype: 'box',
+                            changePassword: true,
                             autoEl: {tag: 'a', href: '#', html: 'Change password', style: 'display: block'}
+                        },
+                        {
+                            layout: 'hbox',
+                            border: false,
+                            hidden: true,
+                            changePassword: true,
+                            defaults: { flex: 1, disabled: true },
+                            items:[
+                                {
+                                    xtype: 'textfield',
+                                    name: 'password',
+                                    fieldLabel: 'New Password',
+                                    inputType: 'password',
+                                    allowBlank: false,
+                                    margin: '5px 5px 5px 0px',
+                                    minLength: 1
+                                }, {
+                                    xtype: 'textfield',
+                                    name: 'password-verify',
+                                    fieldLabel: 'Verify Password',
+                                    inputType: 'password',
+                                    allowBlank: false,
+                                    margin: '5px 0px 5px 5px',
+                                    validator: function(value) {
+                                        var password = this.previousSibling('[name=password]').getValue();
+                                        return (value === password) ? true : 'Passwords do not match.'
+                                    }
+                                }
+                            ]
                         },
                         {
                             border: false,
@@ -85,6 +114,7 @@ Ext.define('NextThought.view.form.AccountForm', {
                                     anchor: '100%',
                                     layout: 'anchor',
                                     border: false,
+                                    allowBlank: true,
                                     emptyText: 'Search to add...',
                                     xtype: 'sharewith'
                                 }
@@ -111,7 +141,8 @@ Ext.define('NextThought.view.form.AccountForm', {
 
     afterRender: function(){
         this.callParent(arguments);
-        this.down('component[name=avatar]').el.dom.src = this.account.get('avatarURL');
+        this.down('component[avatar]').el.dom.src = this.account.get('avatarURL');
+        this.down('component[changePassword]').el.on('click',this._revealPassword,this);
 
         this.setFieldValue('realname');
         this.setFieldValue('alias');
@@ -123,6 +154,17 @@ Ext.define('NextThought.view.form.AccountForm', {
         Ext.each(this.query('fieldset'), this.__setupAccordion, this);
 
     },
+
+
+     _revealPassword: function(e){
+         e.preventDefault();
+
+         this.down('component[changePassword]').hide();
+         this.down('panel[changePassword]').show();
+
+         Ext.each(this.query('textfield[inputType=password]'),function(f){f.enable();});
+     },
+
 
     __setupAccordion: function(g,i,groups){
         g.oldSetExpanded = g.setExpanded;
