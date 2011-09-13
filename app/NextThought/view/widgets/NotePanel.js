@@ -113,22 +113,24 @@ Ext.define('NextThought.view.widgets.NotePanel',{
     },
 
     updateFromRecord: function(record) {
-        var abandonedChildren = this._record.children || [];
+        var abandonedChildren = Ext.Array.clone(this._record.children) || [];
 
         this.update(record.get('text'));
 
-        Ext.each(record.children, function(rec){
-            this._claimChild(abandonedChildren, rec);
-            var oid = rec.get('OID'),
-                reply = Ext.getCmp('note-'+oid);
 
-            if (reply)
-                reply.updateFromRecord(rec);
-            else
-                this.addReply(rec);
+        if (record.children && record.children.length > 0) {
+            Ext.each(record.children, function(rec){
+                this._claimChild(abandonedChildren, rec);
+                var oid = rec.get('OID'),
+                    reply = Ext.getCmp('note-'+oid);
 
-        }, this);
+                if (reply)
+                    reply.updateFromRecord(rec);
+                else
+                    this.addReply(rec);
 
+            }, this);
+        }
         //console.log('abandoned', abandonedChildren.length);
         for (var a in abandonedChildren) {
             var oid = abandonedChildren[a].get('OID'),

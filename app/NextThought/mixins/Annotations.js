@@ -141,7 +141,6 @@ Ext.define('NextThought.mixins.Annotations', {
     createNoteWidget: function(record){
         try{
             if(record.get('inReplyTo')){
-                console.log('record', record, ' is a reply, not updating.')
                 return false;
             }
             else if (this.annotationExists(record)) {
@@ -149,7 +148,6 @@ Ext.define('NextThought.mixins.Annotations', {
                 return true;
             }
 
-            console.log('this is a new note!', record);
             this._annotations[record.get('OID')] =
                 Ext.create(
                     'NextThought.view.widgets.annotations.Note',
