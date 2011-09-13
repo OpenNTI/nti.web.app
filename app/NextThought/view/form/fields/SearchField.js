@@ -50,7 +50,6 @@ Ext.define('NextThought.view.form.fields.SearchField', {
 
     onChooseSelection: function() {
         var me = this;
-        this.hasSearch = false;
         me.fireEvent('choose-selection');
     },
 
