@@ -31,6 +31,12 @@ Ext.define('NextThought.mixins.Annotations', {
             scope: this,
             interval: 30000//30 sec
         };
+
+        this.on('afterrender',
+            function(){
+                this.el.on('mouseup', this._onContextMenuHandler, this);
+            },
+            this);
     },
 
     applyFilter: function(newFilter){
@@ -42,9 +48,11 @@ Ext.define('NextThought.mixins.Annotations', {
         }
     },
 
+
     showRanges: function(ranges) {
         this._searchAnnotations = Ext.create('annotations.SelectionHighlight', ranges, this.items.get(0).el.dom.firstChild, this);
     },
+
 
     clearSearchRanges: function() {
         if (!this._searchAnnotations) return;
@@ -52,6 +60,8 @@ Ext.define('NextThought.mixins.Annotations', {
         this._searchAnnotations.cleanup();
         this._searchAnnotations = null;
     },
+
+
     removeAnnotation: function(oid) {
         var v = this._annotations[oid];
         if (v) {
@@ -269,6 +279,34 @@ Ext.define('NextThought.mixins.Annotations', {
 
         Ext.TaskManager.start(this._task);
         this._task.containerId = containerId;
+    },
+
+
+    _onContextMenuHandler: function(e) {
+        e.preventDefault();
+        var range = this.getSelection();
+        if( range && !range.collapsed ) {
+            this.addHighlight(range, e.getXY());
+        }
+    },
+
+
+
+    getSelection: function() {
+        if (window.getSelection) {  // all browsers, except IE before version 9
+            var selection = window.getSelection();
+            if (selection.rangeCount > 0) {
+                return selection.getRangeAt(0);
+            }
+        }
+        else {
+            if (document.selection) {   // Internet Explorer 8 and below
+                var range = document.selection.createRange();
+                return range.getBookmark();
+            }
+        }
+
+        return null;
     }
 
 
