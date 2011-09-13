@@ -100,21 +100,44 @@ Ext.define('NextThought.view.widgets.NotePanel',{
         return r;
     },
 
-    updateFromRecord: function(record) {
-        var r = record;
-        this._record = r;
+    _claimChild: function(children, child) {
+        var cOid = child.get('OID');
+        for(var i in children) {
+            if (!children.hasOwnProperty(i)) continue;
+            var o = children[i].get('OID');
 
-        this.update(r.get('text'));
-        Ext.each(r.children, function(rec){
+            if (o == cOid) {
+                Ext.Array.erase(children, i, 1);
+            }
+        }
+    },
+
+    updateFromRecord: function(record) {
+        var abandonedChildren = this._record.children || [];
+
+        this.update(record.get('text'));
+
+        Ext.each(record.children, function(rec){
+            this._claimChild(abandonedChildren, rec);
             var oid = rec.get('OID'),
                 reply = Ext.getCmp('note-'+oid);
-            if (reply) {
+
+            if (reply)
                 reply.updateFromRecord(rec);
-            }
-            else {
+            else
                 this.addReply(rec);
-            }
+
         }, this);
+
+        //console.log('abandoned', abandonedChildren.length);
+        for (var a in abandonedChildren) {
+            var oid = abandonedChildren[a].get('OID'),
+                panel = Ext.getCmp('note-'+oid);
+            panel.cleanupReply();
+        }
+
+        //set the record to the new record.
+        this._record = record;
     },
 
 
