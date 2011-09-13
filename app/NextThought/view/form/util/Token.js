@@ -48,5 +48,14 @@ Ext.define('NextThought.view.form.util.Token', {
     afterRender: function(){
         this.callParent(arguments);
         this.closer.on('click', function(){this.fireEvent('click',this, this.model);}, this);
+        this.setReadOnly(!!this.readOnly);
+    },
+
+    setReadOnly: function(readOnly){
+        this.readOnly = readOnly;
+        if(readOnly)
+            this.closer.hide();
+        else
+            this.closer.show();
     }
 });

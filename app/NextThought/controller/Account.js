@@ -5,6 +5,7 @@ Ext.define('NextThought.controller.Account', {
     ],
 
     views: [
+        'form.AccountForm',
         'windows.FullScreenFormWindow',
         'windows.NotificationsPopover',
         'widgets.main.SessionInfo'
@@ -30,8 +31,8 @@ Ext.define('NextThought.controller.Account', {
 
     accountActionButton: function(btn){
         var win = btn.up('fullscreen-window'),
-            form= win.down('form');
-
+            form= win.down('account-form');
+        console.log(form.getValues());
         win.close();
     },
 
@@ -46,6 +47,9 @@ Ext.define('NextThought.controller.Account', {
 
 
     showAccount: function(){
-        Ext.create('widget.fullscreen-window',{id: 'account-window'}).show();
+        var u = _AppConfig.server.userObject;
+        Ext.create('widget.fullscreen-window',
+            {   id: 'account-window',
+                items: { xtype: 'account-form', account: u } } ).show();
     }
 });

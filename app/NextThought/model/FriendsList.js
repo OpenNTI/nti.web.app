@@ -5,11 +5,18 @@ Ext.data.Types.FRIEND_LIST = {
         var u = [];
 
         Ext.each(v, function(o){
-
-            if(typeof(o)=='string')
+            //these two branches result in a string being in the array. everything that uses this Type expects a model
+            //DEPRECATED:
+            if(typeof(o)=='string'){
+                console.log('WARNING:was string, keeping a string');
                 u.push(o);
-            else if(o.get)
+            }
+            //DEPRECATED:
+            else if(o.get){
+                console.log('WARNING:was model, converting to a string');
                 u.push(o.get('Username'));
+            }
+            //Preferred branch:
             else if(o.Username)
                 u.push(UserDataLoader.parseItems([o])[0]);
             else
@@ -26,12 +33,13 @@ Ext.data.Types.FRIEND_LIST = {
 };
 
 
-Ext.data.Types.SHARED_WITH = {
-	type: 'SharedWith',
+Ext.data.Types.USER_LIST = {
+	type: 'UserList',
     convert: function(v) {
-        var u = [];
+        var a = arguments,
+            u = [];
 
-        Ext.each(v, function(o){
+        if(v) Ext.each(v, function(o){
             var p =
                 typeof(o)=='string'
                     ? o
@@ -41,7 +49,7 @@ Ext.data.Types.SHARED_WITH = {
                             ? o.Username
                             : null;
             if(!p)
-                console.log("WARNING: Could not handle Object: ", o, arguments);
+                console.log("WARNING: Could not handle Object: ", o, a);
             else  {
                 u.push(p);
                 //asynchronously resolve this user so its cached and ready
@@ -52,24 +60,10 @@ Ext.data.Types.SHARED_WITH = {
         return u;
     },
     sortType: function(v) {
-    	console.log('sort by SharedWith:',arguments);
+    	console.log('sort by UserList:',arguments);
         return '';
     }
 };
-
-/*
- * Not currently used
-Ext.data.Types.USER = {
-	type: 'User',
-    convert: function(v) {
-        return UserDataLoader.resolveUser(v);
-    },
-    sortType: function(v) {
-    	console.log('sort by User:',arguments);
-        return '';
-    }
-};
-*/
 
 
 Ext.define('NextThought.model.FriendsList', {

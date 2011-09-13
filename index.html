@@ -54,7 +54,11 @@
 
 
 
-
+        .x-real-name-field input.x-form-text{
+            padding: 1em;
+            font-size: 2em;
+            height: 55px;
+        }
 
         .object-explorer {
             background: url('resources/images/objects16.png');
@@ -313,7 +317,8 @@
 		}
 		
 		.unselectable,
-		.x-panel-default {
+		.x-panel-default,
+        div[role=presentation]{
 			-webkit-user-select: none !important;
 			-khtml-user-select: none !important;
 			-moz-user-select: -moz-none !important;
@@ -324,7 +329,7 @@
 		
 		
 		.selectable,
-		#NTIContent {
+		#NTIContent, input {
 			-webkit-user-select: text !important;
 			-khtml-user-select: text !important;
 			-moz-user-select: text !important;

@@ -13,37 +13,62 @@ Ext.define('NextThought.view.form.fields.ShareWithField', {
 
     layout: 'anchor',
     defaults: {anchor: '100%'},
+    emptyText: 'Share with...',
     items: [
         {//contain the tokens
             cls: 'share-with-selected-tokens',
             layout: 'auto',
             border: false,
-            margin: '0 0 5px 0'
-        },{
-            xtype: 'usersearchinput',
-            emptyText: 'Share with...',
-            allowBlank: true,
-            multiSelect: false,
-            enableKeyEvents: true
+            margin: '0 0 10px 0'
         }
     ],
 
     initComponent: function(){
         this.callParent(arguments);
         this._selections = [];
-        this.initField();
+        this._inputField = this.add({
+            xtype: 'usersearchinput',
+            emptyText: this.emptyText,
+            allowBlank: true,
+            multiSelect: false,
+            enableKeyEvents: true
+        });
 
-        var b = this.down('usersearchinput');
+        this.setReadOnly(!!this.readOnly);
+
+        this.initField();
+        var b = this._inputField;
         b.on('select', this._select, this);
         b.on('focus', this._focus, this);
         b.on('blur', this._blur, this);
     },
+
+
+
+    setReadOnly: function(readOnly){
+        this.readOnly = readOnly;
+        if(readOnly)
+            this._inputField.hide();
+        else
+            this._inputField.show();
+
+        this.items.get(0).items.each(function(token){token.setReadOnly(readOnly);});
+    },
+
+
 
     focus: function(){
         this.callParent(arguments);
         this.down('usersearchinput').focus();
     },
 
+    setValue: function(value){
+        var me = this;
+        me.value = value;
+        me.checkChange();
+        me.initValue();
+        return me;
+    },
 
     initValue: function(){
         var m = this;
@@ -113,7 +138,8 @@ Ext.define('NextThought.view.form.fields.ShareWithField', {
         var c = this.items.get(0),
             text = model.get('realname') || model.get('Username');
 
-        c.add({ xtype: 'token', model: model, text: text, listeners: {scope: this, click: this.__remove}});
+        c.add({ xtype: 'token', readOnly: this.readOnly, model: model, text: text,
+                listeners: {scope: this, click: this.__remove}});
     },
 
     addSelection: function(user){

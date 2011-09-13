@@ -2,11 +2,11 @@ Ext.define(	'NextThought.model.User', {
     extend: 'Ext.data.Model',
     requires: [
     		'NextThought.proxy.Rest',
-    		'NextThought.proxy.UserSearch'
+    		'NextThought.proxy.UserSearch',
+            'NextThought.model.FriendsList'
 	],
     idProperty: 'OID',
 
-    // belongsTo: 'NextThought.model.FriendsList',
     fields: [
         { name: 'Last Modified', type: 'date', dateFormat: 'timestamp' },
         { name: 'lastLoginTime', type: 'date', dateFormat: 'timestamp' },
@@ -17,16 +17,11 @@ Ext.define(	'NextThought.model.User', {
         { name: 'Username', type: 'string' },
         { name: 'alias', type: 'string' },
         { name: 'realname', type: 'string' },
-        { name: 'avatarURL', type: 'string' }
-        /*
-         * ID: "jason.madden@nextthought.com"
-         * Last Modified: 1313077034.687196
-         * OID: "0x86"
-         * Username: "jason.madden@nextthought.com"
-         * alias: "jason.madden@nextthought.com"
-         * avatarURL: "http://www.gravatar.com/avatar/5738739998b683ac8fe23a61c32bb5a0?s=44&d=mm"
-         * realname: "Jason Madden"
-         */
+        { name: 'avatarURL', type: 'string' },
+        { name: 'accepting', type: Ext.data.Types.USER_LIST },
+        { name: 'ignoring', type: Ext.data.Types.USER_LIST },
+        { name: 'following', type: Ext.data.Types.USER_LIST },
+        { name: 'Communities', type: Ext.data.Types.USER_LIST }
     ],
     proxy: {
     	type: 'nti',

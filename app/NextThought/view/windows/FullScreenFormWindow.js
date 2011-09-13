@@ -10,26 +10,6 @@ Ext.define('NextThought.view.windows.FullScreenFormWindow', {
     modal: true,
     layout: 'fit',
 
-    items: [{
-        xtype:'form',
-        border: 0,
-        bodyPadding: 5,
-        autoScroll: true,
-
-        fieldDefaults: {
-            labelWidth: 55,
-            anchor: '100%'
-        },
-
-        layout: 'anchor',
-        defaults: {
-            anchor: '100%',
-            allowBlank: false
-        },
-
-        items: []
-    }],
-
     initComponent: function(){
         this.callParent(arguments);
         this.addDocked({
