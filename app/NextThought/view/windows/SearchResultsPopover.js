@@ -27,7 +27,8 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
     performSearch: function(searchValue) {
         this.removeAll();
         this._searchVal = searchValue;
-        UserDataLoader.search(null, searchValue, this.updateContents);
+        UserDataLoader.searchContent(null, searchValue, this.updateContents);
+        UserDataLoader.searchUserData(null, searchValue, this.updateContents);
     },
 
     render: function() {
@@ -107,10 +108,11 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
             h = hits[k];
 
 			var s = h.get('Snippet'),
-                t = h.get('Title'),
+                t = h.get('Title') || 'User Generated Content',
                 ty = h.get('Type'),
                 el;
 
+            console.log(t + ' ' + ty);
             content = Ext.create('Ext.panel.Panel',
                 {html: '<b>' + t + '</b>' +
                        ' - ' + s,
@@ -121,7 +123,7 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
 
             //wait till it's added to access el
             el = content.getEl();
-            el.on('click', this.searchResultClicked, this, {hit: h, searchValue: this._searchVal});
+            el.on('click', this.searchResultClicked, this, {hit: h, searchValue: this._searchVal, scroll: (ty == 'Note') ? false : true});
             el.on('mouseover', this.highlightItem, this, {cmp: content});
 		}
 
@@ -148,7 +150,7 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
 
     },
     searchResultClicked: function(event, dom, opts) {
-        this.fireEvent('goto', opts.hit, opts.searchValue);
+        this.fireEvent('goto', opts.hit, opts.searchValue, opts.scroll);
         this.close();
 
     },

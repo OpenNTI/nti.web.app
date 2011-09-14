@@ -15,8 +15,35 @@ Ext.define('NextThought.proxy.UserDataLoader',{
             'NextThought.util.Logging'
     		],
 	statics:{
-		
-		search: function(containerId, searchString, callback) {
+
+        searchUserData: function(containerId, searchString, callback) {
+             var h = _AppConfig.server.host,
+                d = _AppConfig.server.data,
+                c = containerId ? containerId : 'prealgebra',
+                u = _AppConfig.server.username,
+				url = h+d+'users/' +u+ '/Search/RecursiveUserGeneratedData/'+searchString;
+            Ext.Ajax.request({
+				url: url,
+				scope: this,
+				async: !!callback,
+				callback: function(o,success,r){
+
+					if(!success){
+                        Logging.logAndAlertError('There was an error searching for user generated data', arguments);
+                        if (callback) callback();
+						return;
+					}
+
+					var json = Ext.decode(r.responseText),
+						bins = this._binAndParseItems(json.Items);
+
+					if(!callback)return;
+						callback(bins.Hit);
+				}
+			});
+        },
+
+		searchContent: function(containerId, searchString, callback) {
             var h = _AppConfig.server.host,
                 c = containerId ? containerId : 'prealgebra',
 				url = h+'/'+c+'/Search/'+searchString;
@@ -312,16 +339,18 @@ Ext.define('NextThought.proxy.UserDataLoader',{
 				scope: this,
                 headers: headers,
 				callback: function() {
+                    console.log('callback', arguments);
 					this._streamRequest = null;
 				},
 				failure: function() {
+                    console.log('failure', arguments);
                     Logging.logAndAlertError('There was an error getting stream contents', 'Will attempt to call failure callback', arguments);
 					if(callbacks && callbacks.failure) {
 						callbacks.failure.apply(callbacks.scope || this, arguments);
 					}
 				},
 				success: function(r, o) {
-
+                    console.log('success', arguments);
 					var json = (!r.responseText) ? {} : Ext.decode(r.responseText);
 					if(!json || !json.Items){
 						if(callbacks && callbacks.failure){
