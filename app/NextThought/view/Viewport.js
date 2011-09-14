@@ -19,6 +19,7 @@ Ext.define('NextThought.view.Viewport', {
 	    this.addEvents('clear-search', 'navigate');
 		this.add({xtype: 'master-header', region: 'north'});
         this._container = this.add({xtype: 'modeContainer', region: 'center', id: 'mode-ctr'});
+        window.VIEWPORT = this;
 	},
 
     getActive: function(){

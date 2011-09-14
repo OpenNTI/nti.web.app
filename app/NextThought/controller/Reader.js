@@ -65,10 +65,13 @@ Ext.define('NextThought.controller.Reader', {
         this.getReader().clearSearchRanges();
     },
 
-    navigate: function(book, ref, scrollToOptions){
-        this.getReader().setActive(book, ref, null, scrollToOptions ?
-            Ext.bind(this.scrollToText, this, [scrollToOptions.text, scrollToOptions.oid]):
-            undefined);
+    navigate: function(book, ref, options){
+        this.getReader().setActive(book, ref, null,
+            options
+                ? typeof(options)=='function'
+                    ? options
+                    : Ext.bind(this.scrollToText, this, [options.text, options.oid])
+                : undefined);
     },
 
     getElementsByTagNames: function(list,obj) {

@@ -16,6 +16,7 @@ Ext.define( 'NextThought.view.modes.Mode', {
     items: [],
 
     initComponent: function(){
+        this.addEvents('activate-mode');
     	this.callParent(arguments);
     	var id = this.id;
     	this.toggleButton = NextThought.modeSwitcher.addMode(id+' mode label',id+'-mode-icon')
@@ -28,8 +29,11 @@ Ext.define( 'NextThought.view.modes.Mode', {
     		item = 0;
     		
     	if(!ct){
+            console.log('No container??');
     		return;
     	}
+
+        this.fireEvent('activate-mode', this.getId());
     	
     	ct.items.each(function(o,i,l){
     		if(o==me) {
@@ -49,8 +53,15 @@ Ext.define( 'NextThought.view.modes.Mode', {
         }
     },
 
+    relayout: function(){
+    	this.ownerCt.doComponentLayout();
+    	this.doComponentLayout();
+    	this.doLayout();
+    },
+
     getMainComponent: function(){
-        throw 'Implement me';
+        //implement me in subclasses!
+        return this;
     }
     
 });

@@ -33,7 +33,7 @@ Ext.define( 'NextThought.view.modes.Reader', {
 			activeItem: 0,
 			layout: 'card',
     		
-    		dockedItems: Ext.create('NextThought.view.navigation.Breadcrumb', {id:'breadcrumb',dock:'top'}),
+    		dockedItems: {id:'breadcrumb',dock:'top', xtype: 'breadcrumbbar'},
     		items: reader
     	}); 
     	
@@ -41,6 +41,11 @@ Ext.define( 'NextThought.view.modes.Reader', {
 		this.add({ /*xtype:'tbspacer',*/ flex:1, focusable: false, dockedItems: bb });
 
         this._reader = reader;
+    },
+
+
+    restore: function(state){
+        this._reader.restore(state);
     },
 
 

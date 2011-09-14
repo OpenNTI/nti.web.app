@@ -25,17 +25,17 @@ Ext.define( 'NextThought.view.modes.Container', {
 	initComponent: function(){
     	this.callParent(arguments);
     	
-		var m = this, 
-			s = function(){ m.items.get(1).toggleButton.toggle(true); };
-		
+		var m = this;
+
     	this.add({id: 'home',   xtype: 'home-mode-container'});
     	this.add({id: 'reader', xtype: 'reader-mode-container'});
     	this.add({id: 'stream', xtype: 'stream-mode-container'});
     	this.add({id: 'groups', xtype: 'groups-mode-container'});
         this.add({id: 'classroom', xtype: 'classroom-mode-container'});
 
-    	setTimeout(s,100);
+        this.on('afterrender', function(){ m.items.first().toggleButton.toggle(true); });
 	},
+
 
     getActive: function() {
         return this.getLayout().getActiveItem();

@@ -71,13 +71,11 @@ Ext.define('NextThought.view.content.Reader', {
 
 
     setActive: function(book, path, skipHistory, callback) {
-
-
         var b = this._resolveBase(this._getPathPart(path)),
             f = this._getFilename(path),
             pc = path.split('#'),
             target = pc.length>1? pc[1] : null,
-            vp= Ext.getCmp('viewport').getEl();
+            vp= VIEWPORT.getEl();
 
         if(this.active == pc[0]){
             if( callback ){
@@ -92,14 +90,11 @@ Ext.define('NextThought.view.content.Reader', {
 
         this.clearAnnotations();
         this.relayout();
-
         this.active = pc[0];
-
         if(!skipHistory)
             this._appendHistory(book, path);
 
         vp.mask('Loading...');
-
         Ext.getCmp('breadcrumb').setActive(book, f);
 
         Ext.Ajax.request({
@@ -232,18 +227,33 @@ Ext.define('NextThought.view.content.Reader', {
 
 
     _appendHistory: function(book, path) {
-        history.pushState(
-            {
-                book: book,
-                path: path
-            },
-            "title",""
-        );
+        var state = { reader:{ index: book.get('index'), page: path } };
+        try{
+            history.pushState(state,
+                "TODO: resolve title",
+                window.location
+
+            );
+        }
+        catch(e){
+            console.log('Error recording history:', e, e.message, e.stack, 'state:', state);
+        }
     },
 
 
-    _restore: function(state) {
-        this.setActive(state.book, state.path, true);
+    restore: function(state) {
+        if(!state || !state.reader) {
+            console.log("WARNING: Ignoring restored state data, missing state for reader");
+            return;
+        }
+
+        var b = NextThought.librarySource.getTitle(state.reader.index);
+        if(b){
+            this.setActive(b, state.reader.page, true);
+        }
+        else{
+            console.log(state.reader, 'The restored state object points to a resource that is no longer available');
+        }
     }
 
 });

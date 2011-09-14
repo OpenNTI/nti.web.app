@@ -1,24 +1,25 @@
 
 
 Ext.define('NextThought.view.widgets.Tracker', {
-	// extend: 'Ext.util.Observable',
-	_base: "",
-	_numberOfDots: 50,
-	_parent: null,
-	_body: null,
-	_height: 0,
-	width: 45,
-	_sectionHeights: [],
-	_diameter: 0,
-	_radius: 0,
-	_gap: 0,
-	_regions: [],
-	_offsetX: 0,
-	_offsetY: 0,
+
+    constructor: function(cmp,container, body){
+        Ext.apply(this,{
+            width: 45,
+            _base: "",
+            _numberOfDots: 50,
+            _height: 0,
+            _sectionHeights: [],
+            _diameter: 0,
+            _radius: 0,
+            _gap: 0,
+            _regions: [],
+            _offsetX: 0,
+            _offsetY: 0,
+            _cmp: cmp
+        });
 
 
-	constructor: function(cmp,container, body){
-		this._locationProvider = Ext.getCmp('breadcrumb');
+        this._locationProvider = Ext.getCmp('breadcrumb');
 		this._parent = container;
 		this._body	 = body;
 		this._canvas = document.createElement('canvas');
@@ -57,11 +58,10 @@ Ext.define('NextThought.view.widgets.Tracker', {
 		try{
 			var c = this._canvas;
 			c.width = c.height = 0;
-			
 			this.render(loc.toc, loc.location);
 		}
 		catch(e){
-			console.log(e, arguments);
+			console.log('Change Location Error:',e, arguments);
 		}
 	},
 	
@@ -91,25 +91,24 @@ Ext.define('NextThought.view.widgets.Tracker', {
 	
 	clickHandler: function(e){
 		var self = this,
-			region = this.getRegion(e),
+            region = this.getRegion(e),
 			current = this._locationProvider.getLocation(),
 			book = current.book,
 			ctx = this._canvas.getContext("2d");
 			
 		if(region) {
-			if(region.active) {
+            if(region.active) {
 				this.scrollToPercent(region.first? 0:region.position);
 			}
 			else {
 				var n = region.node.getAttribute('href'),
 					f = region.first;
-				
-					Ext.getCmp('readerPanel').setActive(
-						book, 
-						book.root+n, false, 
-						function(){
-							self.scrollToPercent(f?0:region.position);
-						});
+
+                VIEWPORT.fireEvent('navigate',book, book.get('root')+n, scrollTo);
+
+                function scrollTo(){
+                    self.scrollToPercent(f?0:region.position);
+                }
 				 
 			}
 		}
@@ -263,8 +262,8 @@ Ext.define('NextThought.view.widgets.Tracker', {
 		
 		Ext.each(this._sections,function(s){
 			var v = s.height;
-			var isCurentSection = current==s.node;
-			
+			var isCurentSection = current===s.node;
+
 			self.renderLineAt(ctx, r, y);
 			for(var i=0; i<v; i++) {
 				y += (g+r);

@@ -2,9 +2,13 @@
 
 Ext.define('NextThought.Library', {
 	extend: 'Ext.util.Observable',
-	_tocs: [],
+	requires:[
+        'NextThought.model.Title'
+    ],
 	
     constructor: function(config) {
+        this._tocs = [];
+        this.store = Ext.create('Ext.data.Store',{model: 'NextThought.model.Title'});
         this.addEvents({
             loaded : true
         });
@@ -12,16 +16,17 @@ Ext.define('NextThought.Library', {
         this.callParent(arguments);
         return this;
     },
-    
-    getTitles: function(){
-    	return this._library.titles;
+
+    each: function(callback, scope){
+        this.store.data.each(callback,scope||this);
     },
+
     
     getTitle: function(index){
         var title = null;
 
-        Ext.each(this._library.titles, function(t){
-            if(t && t.index == index) {
+        this.each(function(t){
+            if(t && t.get && t.get('index') == index) {
                 title = t;
                 return false;
             }
@@ -40,36 +45,25 @@ Ext.define('NextThought.Library', {
     
     
 	load: function(){
-		if(this._library || this._req){
-			//this.fireEvent('loaded',this._library);
-			console.log('already loaded/loading');
-			return false;
-		}
-		
-		
-		var b = _AppConfig.server.host,
-			l = _AppConfig.server.library;
-		this._req = Ext.Ajax.request({
-			url: b + l,
-			scope: this,
-			failure: function(r,o) {
-				if(NextThought.isDebug) 
-					console.log('failed to load library');
-					 
-				//alert("Failed to load library");
-                window.location.reload();
-				this._req = null;
-			},
-			success: function(r,o) {
-				this._library = Ext.decode(r.responseText);
-				this._libraryLoaded(Ext.bind(go,this));
-			}
-		});
-		
-		
-		function go(){
-			this.fireEvent('loaded',this._library);
-			this._req = null;
+        this.store.on('load', this._onLoad, this );
+        this.store.load();
+    },
+
+    _onLoad: function(store, records, success, operation, opts) {
+
+        if(success){
+            this._libraryLoaded(Ext.bind(go,this));
+        }
+        else {
+            if(NextThought.isDebug)
+                console.log('FAILED: load library');
+
+            alert('FAILED: load library');
+            window.location.reload();
+        }
+
+        function go(){
+			this.fireEvent('loaded',this);
 		}
 	},
 	
@@ -78,15 +72,15 @@ Ext.define('NextThought.Library', {
     _libraryLoaded: function(callback){
 		var me = this, stack = [];
 	    //The reason for iteration 1 is to load the stack with the number of TOCs I'm going to load
-		Ext.each(this._library.titles, function(o){
-			if(!o.index){ return; }
-			stack.push(o.index);
+		this.each(function(o){
+			if(!o.get||!o.get('index')){ return; }
+			stack.push(o.get('index'));
 		});
 
         //Iteration 2 loads TOC async, so once the last one loads, callback if available
-		Ext.each(this._library.titles, function(o){
-			if(!o.index){return;}
-			me._loadToc(o.index, function(){
+		this.each(function(o){
+			if(!o.get||!o.get('index')){ return; }
+			me._loadToc(o.get('index'), function(){
 				stack.pop();
 				if(stack.length==0 && callback){
 					callback.call(this);
@@ -97,24 +91,29 @@ Ext.define('NextThought.Library', {
 	
 	
 	_loadToc: function(index, callback){
-		var url = _AppConfig.server.host+index;
-		Ext.Ajax.request({
-			url: url,
-			async: !!callback,
-			scope: this,
-			failure: function() {
-                Logging.logAndAlertError('There was an error loading library', url, arguments);
-            },
-			success: function(r,o) { 
-				this._tocs[index] = r.responseXML? r.responseXML : this._parseXML(r.responseText);
-				if(!this._tocs[index]){
-					console.log('WARNING: no data for index: '+url);
-				} 
-				if( callback ){
-					callback();
-				}
-			}
-		});
+        try{
+            var url = _AppConfig.server.host+index;
+            Ext.Ajax.request({
+                url: url,
+                async: !!callback,
+                scope: this,
+                failure: function() {
+                    Logging.logAndAlertError('There was an error loading library', url, arguments);
+                },
+                success: function(r,o) {
+                    this._tocs[index] = r.responseXML? r.responseXML : this._parseXML(r.responseText);
+                    if(!this._tocs[index]){
+                        console.log('WARNING: no data for index: '+url);
+                    }
+                    if( callback ){
+                        callback();
+                    }
+                }
+            });
+        }
+        catch(e){
+            console.log('Error loading the TOC:',e, e.message, e.stack);
+        }
 	},
 	
 	_parseXML: function(txt) {
@@ -137,7 +136,7 @@ Ext.define('NextThought.Library', {
     findLocation: function(containerId) {
         var result = null;
 
-        Ext.each(this._library.titles, function(o){
+        this.each(function(o){
             result = this._resolveBookLocation(o, containerId);
             if (result) return false;
         }, this);
@@ -146,12 +145,10 @@ Ext.define('NextThought.Library', {
     },
 
     _resolveBookLocation: function(book, containerId) {
-        var xml = this.getToc(book.index),
-			l = Ext.DomQuery.selectNode("topic[ntiid="+containerId+"]",xml);
+        var l = Ext.DomQuery.selectNode("topic[ntiid="+containerId+"]", this.getToc(book.get('index')));
+        if (l)
+            return {book:book, location:l};
 
-        if (l) return {book:book, location:l};
-
-        //if l wasn't resolved.
         return null;
     }
 });

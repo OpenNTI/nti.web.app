@@ -36,7 +36,7 @@ Ext.define('NextThought.util.QuizUtils', {
                 data = {},
                 ntiid = Ext.query('meta[name=NTIID]')[0].getAttribute('content'),
                 url = h+d+'users/'+s.username+'/quizresults/'+ntiid,
-                vp = Ext.getCmp('viewport').getEl();
+                vp = VIEWPORT.getEl();
 
             vp.mask('Grading...');
 
