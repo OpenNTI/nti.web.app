@@ -43,7 +43,6 @@ Ext.define('NextThought.view.widgets.main.SessionInfo', {
 
         me.add({html: '<span class="notification-box-widget"></span>', notification: true});
 
-        // Start a simple clock task that updates a div once per second
 		me._task = {
 		    run: function(){
 		    	 UserDataLoader.resolveUser(u.get('Username'),
@@ -78,6 +77,12 @@ Ext.define('NextThought.view.widgets.main.SessionInfo', {
 
         e.dom.innerHTML = l > 99 ? '++' : l;
 
+    },
+
+     clearNotifications: function() {
+        var e = this.down('panel[notification]').el.down('span');
+        e.removeCls('unread');
+        e.dom.innerHTML = 0;
     },
 
     render: function(){
@@ -129,6 +134,7 @@ Ext.define('NextThought.view.widgets.main.SessionInfo', {
     },
 
     _notifications: function() {
+        this.clearNotifications();
         this.fireEvent('notification');
     },
 

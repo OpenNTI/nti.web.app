@@ -9,7 +9,7 @@ Ext.define(	'NextThought.model.User', {
 
     fields: [
         { name: 'Last Modified', type: 'date', dateFormat: 'timestamp' },
-        { name: 'lastLoginTime', type: 'date', dateFormat: 'timestamp' },
+        { name: 'lastLoginTime', type: 'int'},
         { name: 'NotificationCount', type: 'int' },
         { name: 'id', mapping: 'ID', type: 'string' },
         { name: 'OID', type: 'string' },

@@ -348,9 +348,14 @@ Ext.define('NextThought.proxy.UserDataLoader',{
 					}
 				},
 				success: function(r, o) {
-					var json = (!r.responseText) ? {} : Ext.decode(r.responseText);
-					if(!json || !json.Items){
-						if(callbacks && callbacks.failure){
+					var json = Ext.decode(r.responseText, true);
+                    if(!json || !json.Items){
+                        if (sinceDate) {
+                            //it's possible there are no changes since the sinceDate, responseText is emoty.
+                            console.log('no change since last update?', r);
+                            callbacks.success.call(callbacks.scope || this, []);
+                        }
+						else if(callbacks && callbacks.failure){
 							callbacks.failure.call(callbacks.scope || this, 'bad group dataz');
 						} 
 						else if(NextThought.isDebug && !sinceDate){

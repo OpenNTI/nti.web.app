@@ -12,6 +12,7 @@ Ext.define('NextThought.view.windows.NotificationsPopover', {
     items:[{margin: 3}],
     defaults: {border: false,
               defaults: {border: false}},
+    _lastLoginTime: null,
 
     initComponent: function() {
            this.callParent(arguments);
@@ -22,30 +23,41 @@ Ext.define('NextThought.view.windows.NotificationsPopover', {
 
        var me = this,
            u = _AppConfig.server.userObject,
-           lastLogin = u.get('lastLoginTime'),
+           lastLogin = u.get('lastLoginTime'), //unix time
+           lastLoginDate = new Date(lastLogin * 1000),
            height = Ext.ComponentQuery.query('master-view')[0].getHeight();
 
+        this._lastLoginTime = lastLogin;
         me.el.mask('Loading');
 
         UserDataLoader.getRecursiveStreamSince(
 		        	null,
-                    lastLogin,
+                    lastLoginDate,
                     {
                         scope: this,
                         success: this.updateContents
 		        });
 
         //adjust the last login date to reflect that we've seen notifications
-        u.set('lastLoginDate', new Date());
+        var dt = new Date(),
+            unixDate = Ext.Date.format(dt, 'U');
+        u.set('lastLoginTime', unixDate);
         u.save();
     },
 
 
     updateContents: function(stream) {
-      	var k, change,
+        var k, change,
 			p = this.items.get(0);
 
-		if(!stream)return;
+		if(!stream || stream.length == 0) {
+            p.add(Ext.create('Ext.panel.Panel',
+                 {html: '<b>No new updates</b>',
+                     border: false,
+                     margin: 10}));
+            this.el.unmask();
+            return;
+        }
 
 		for(k in stream){
 			if(!stream.hasOwnProperty(k))continue;
@@ -57,7 +69,11 @@ Ext.define('NextThought.view.windows.NotificationsPopover', {
                 continue;
             }
 
-            p.add(Ext.create('NextThought.view.widgets.MiniStreamEntry', {change: change}));
+            var lastModified = change.get('Last Modified'),
+                lastModifiedTime = lastModified.getTime() / 1000;
+
+            if (lastModifiedTime > this._lastLoginTime)
+                p.add(Ext.create('NextThought.view.widgets.MiniStreamEntry', {change: change}));
 		}
 
         this.el.unmask();
