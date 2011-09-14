@@ -17,6 +17,19 @@ Ext.define('NextThought.Library', {
     	return this._library.titles;
     },
     
+    getTitle: function(index){
+        var title = null;
+
+        Ext.each(this._library.titles, function(t){
+            if(t && t.index == index) {
+                title = t;
+                return false;
+            }
+        });
+
+        return title;
+    },
+
     getToc: function(index){
     	if(index && !this._tocs[index]){
     		this._loadToc(index);

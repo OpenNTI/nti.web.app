@@ -38,6 +38,9 @@ Ext.define( 'NextThought.view.modes.Mode', {
             }
     	});
     	try{
+            if(!this.toggleButton.pressed){
+                this.toggleButton.toggle(true);
+            }
             ct.getLayout().setActiveItem(item);
             this.getMainComponent().relayout();
         }

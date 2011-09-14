@@ -4,22 +4,23 @@ Ext.define('NextThought.view.navigation.Breadcrumb', {
 	alias: 'widget.breadcrumbbar',
 	
 	cls: 'x-breadcrumbs-bar',
-    items: [],
     border: false,
     
-    _current: {},
-    
+
     constructor: function(){
     	this.addEvents({'change': true, 'navigate': true});
     	this.callParent(arguments);
+        this._current = {};
     	return this;
     },
     
     initComponent: function(){
    		this.callParent(arguments);
-   		this._librarySource = NextThought.librarySource;
+        this.add({ text: 'Loading...' });
+        this._librarySource = NextThought.librarySource;
+        this._librarySource.on('loaded',function(){ if(!this._current.location) this.reset(); }, this);
     },
-    
+
 	reset: function(book){
 		this._current = {};
 		this.removeAll(true);

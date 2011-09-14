@@ -9,8 +9,26 @@ Ext.define('NextThought.controller.Application', {
 
         l.on('loaded', function(){
             //TODO: Restore last state
-            var b = l._library.titles[0];
-            me.getViewport().fireEvent('navigate',b, b.root+'sect0001.html');
+            var b,
+                restoredState = {
+                    page: '/prealgebra/sect0001.html',
+                    titleIndex: '/prealgebra/eclipse-toc.xml'
+                };
+
+            b = l.getTitle(restoredState.titleIndex);
+
+            if(b){
+                try{
+                    me.getViewport().fireEvent('navigate',b, restoredState.page);
+                    return;
+                }
+                catch(e){
+                    console.log(e);
+                }
+            }
+
+                Ext.getCmp('home').activate();
+
         });
     }
 });
