@@ -55,7 +55,7 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
 
     scroll: function(p) {
         p.el.scrollIntoView(this.el.first(), false);
-    } ,
+    },
 
     select: function(up) {
         if (this.noResults) return;
@@ -86,7 +86,7 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
             p = this;
 
         //save hits
-        this._hits = hits;
+        this._hits = Ext.Array.merge(this._hits, hits);
 
         //reset no results flag
         this.noResults = false;
@@ -110,10 +110,10 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
 			var s = h.get('Snippet'),
                 t = h.get('Title') || 'User Generated Content',
                 ty = h.get('Type'),
-                oid = ty.toLowerCase() + '-' + h.get('TargetOID'),
+                oid = h.get('TargetOID'),
+                target = ty.toLowerCase() + '-' + oid,
                 el;
 
-            console.log(t + ' ' + ty);
             content = Ext.create('Ext.panel.Panel',
                 {html: '<b>' + t + '</b>' +
                        ' - ' + s,
@@ -124,7 +124,7 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
 
             //wait till it's added to access el
             el = content.getEl();
-            el.on('click', this.searchResultClicked, this, {hit: h, searchValue: this._searchVal, oid: oid});
+            el.on('click', this.searchResultClicked, this, {hit: h, searchValue: this._searchVal, oid: (oid) ? target : null});
             el.on('mouseover', this.highlightItem, this, {cmp: content});
 		}
 
