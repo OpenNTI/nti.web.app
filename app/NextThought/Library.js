@@ -117,15 +117,22 @@ Ext.define('NextThought.Library', {
 	},
 	
 	_parseXML: function(txt) {
-		if (window.DOMParser) {
-			return new DOMParser().parseFromString(txt,"text/xml");
-		}
-		
-		// Internet Explorer
-		var x = new ActiveXObject("Microsoft.XMLDOM");
-		x.async="false"; 
-		x.loadXML(txt);
-		return x;
+        try{
+            if (window.DOMParser) {
+                return new DOMParser().parseFromString(txt,"text/xml");
+            }
+
+            // Internet Explorer
+            var x = new ActiveXObject("Microsoft.XMLDOM");
+            x.async="false";
+            x.loadXML(txt);
+            return x;
+        }
+        catch(e){
+            console.log('Could not parse xml for TOC');
+        }
+
+        return undefined;
 	},
 
     findLocationTitle: function(containerId){

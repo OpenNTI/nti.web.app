@@ -24,26 +24,14 @@ Ext.define('NextThought.view.navigation.Breadcrumb', {
 	reset: function(book){
 		this._current = {};
 		this.removeAll(true);
-//		this.add({
-//			text: 'You',
-//			listeners: {
-//				scope: this,
-//				click: function(){
-//					// Ext.getCmp('myLibrary').activate();
-//					this.reset();
-//				}
-//			}
-//		});
-		
-		
+
 		if(!book){
 			this.add({
 				text: 'Select item...',
 				menu: this._getLibraryMenu()
 			});
 		}
-		
-		
+
 		this.fireEvent('change',this._current);
 	},
 	
@@ -73,24 +61,32 @@ Ext.define('NextThought.view.navigation.Breadcrumb', {
 		this._current.location = location;
 		
 		var loc = this.getLocation();
-		this.renderBredcrumb(book, loc.toc, loc.location, this);
+        try{
+		    this.renderBredcrumb(book, loc.toc, loc.location, this);
+        }
+        catch(e){
+            console.log('Could not render the breadcrumb', e, e.message, e.stack);
+        }
 		this.fireEvent('change',loc);
 	},
-	
+
+
+    _selectNodeParent: function(query, dom){
+        var node = Ext.DomQuery.selectNode(query,dom);
+        return node? node.parentNode : null;
+    },
 	
 	renderBredcrumb: function(book, xml, currentLocation, container) {
 	    if(!xml){
 	        return;
 	    }
-	    var dq = Ext.DomQuery,
-	    	toc = dq.selectNode('topic',xml).parentNode,
+	    var me = this,
+            toc = me._selectNodeParent('topic',xml),
 	        nodes = [],
             first = true;
 	        selectedBranch = currentLocation,
-	        level = selectedBranch ? selectedBranch.parentNode : dq.selectNode("topic[href]",xml).parentNode;
+	        level = selectedBranch ? selectedBranch.parentNode : me._selectNodeParent("topic[href]",xml);
 
-
-	    
 	    while(level && level.parentNode){
 	        
 	        var leafs = [],
@@ -136,34 +132,27 @@ Ext.define('NextThought.view.navigation.Breadcrumb', {
 		this._librarySource.each(function(o){
 			var xml = this._librarySource.getToc(o.get('index')),
 				b	= [],
+                h   = o.get('href'),
 				m	= {
-					text: o.get('title'),
-					checked: book && o.get('index')==book.get('index'),
-					group: 'library',
-					listeners: {
-						scope: this,
-						click: function(){
-							if(NextThought.isDebug) {
-								console.log(this.$className);
-							}
-							this.fireEvent('navigate',o, o.get('href'));
-						}
+                    text: o.get('title'),
+                    checked: book && o.get('index')==book.get('index'),
+                    group: 'library',
+                    listeners: {
+                        scope: this,
+                        click: function(){
+                            if(h) this.fireEvent('navigate',o, h);
+                        }
 					}
 				};
 				
 			if(xml){
-				var dq = Ext.DomQuery,
-					toc = dq.selectNode('topic',xml).parentNode,
-					root = dq.selectNode("topic[href]",xml).parentNode;
-				
+				var root = this._selectNodeParent("topic[href]",xml);
 				this._renderBranch(o, b, root);
-				
 				if(b.length){
 					m.menu = b;
 				}
 			}
-			
-			
+
 			list.push(m);
 		}, this);
 				
@@ -173,12 +162,13 @@ Ext.define('NextThought.view.navigation.Breadcrumb', {
 	
 	
 	_renderBranch: function(book, leafs, node, selectedNode) {
+        if(!node)return;
         Ext.each(node.childNodes,function(v){
             if(v.nodeName=="#text"||!v.hasAttribute("label")){
             	//console.log(v);
             	return;
             }
-            leafs.push(this._renderLeafFromTopic(book, v, v==selectedNode));
+            leafs.push(this._renderLeafFromTopic(book, v, v==selectedNode)||{});
         }, this);
    },
    
@@ -190,7 +180,7 @@ Ext.define('NextThought.view.navigation.Breadcrumb', {
             href = topicNode.getAttribute("href"),
             leaf = this._renderLeaf(book, label, href, selected);
     
-        if(topicNode.childNodes.length > 0){
+        if(leaf && topicNode.childNodes.length > 0){
             var list = [];
             leaf.menu = list;
             this._renderBranch(book,list,topicNode);
@@ -205,13 +195,16 @@ Ext.define('NextThought.view.navigation.Breadcrumb', {
     
     
     _renderLeaf: function(book, labelText, href, selected) {
-        
+        if(!href || !labelText || !book){
+            return null;
+        }
+
         var leaf = {
         	text: labelText,
         	listeners: {
         		scope: this,
         		click: function(){
-        			this.fireEvent('navigate',book, book.get('root')+href);
+                    this.fireEvent('navigate',book, book.get('root')+href);
         		}
         	}
         };
