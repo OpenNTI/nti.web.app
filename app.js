@@ -29,6 +29,8 @@ Ext.application({
     launch: function() {
         NextThought.isDebug = true;
 
+        Ext.JSON.encodeDate = encodeDate
+
         fixIE();
         Ext.Ajax.timeout==60000;
         Ext.Ajax.on('beforerequest', beforeRequest);
@@ -95,4 +97,8 @@ function resizeBlocker(w, h, e){
     var i = !!(w<MIN_WIDTH), b = Ext.getBody(), m = b.isMasked();
     if(i && !m) b.mask("Your browser window is too narrow","viewport-too-small");
     else if(!i && m) b.unmask();
+}
+
+function encodeDate(d) {
+    return Ext.Date.format(d, 'U');
 }

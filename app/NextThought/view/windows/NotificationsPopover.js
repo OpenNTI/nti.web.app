@@ -24,7 +24,7 @@ Ext.define('NextThought.view.windows.NotificationsPopover', {
        var me = this,
            u = _AppConfig.server.userObject,
            lastLogin = u.get('lastLoginTime'), //unix time
-           lastLoginDate = new Date(lastLogin * 1000),
+           //lastLoginDate = new Date(lastLogin * 1000),
            height = Ext.ComponentQuery.query('master-view')[0].getHeight();
 
         this._lastLoginTime = lastLogin;
@@ -32,16 +32,16 @@ Ext.define('NextThought.view.windows.NotificationsPopover', {
 
         UserDataLoader.getRecursiveStreamSince(
 		        	null,
-                    lastLoginDate,
+                    lastLogin,
                     {
                         scope: this,
                         success: this.updateContents
 		        });
 
         //adjust the last login date to reflect that we've seen notifications
-        var dt = new Date(),
-            unixDate = Ext.Date.format(dt, 'U');
-        u.set('lastLoginTime', unixDate);
+        //var dt = new Date(),
+        //    unixDate = Ext.Date.format(dt, 'U');
+        u.set('lastLoginTime', new Date());
         u.save();
     },
 
@@ -69,10 +69,7 @@ Ext.define('NextThought.view.windows.NotificationsPopover', {
                 continue;
             }
 
-            var lastModified = change.get('Last Modified'),
-                lastModifiedTime = lastModified.getTime() / 1000;
-
-            if (lastModifiedTime > this._lastLoginTime)
+            if (change.get('Last Modified') > this._lastLoginTime)
                 p.add(Ext.create('NextThought.view.widgets.MiniStreamEntry', {change: change}));
 		}
 
