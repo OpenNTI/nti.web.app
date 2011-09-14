@@ -8,6 +8,7 @@ Ext.define('NextThought.model.Hit', {
        	{ name: 'ContainerId', type: 'string'},
        	{ name: 'Last Modified', type: 'date', dateFormat: 'timestamp' },
         { name: 'Snippet', type: 'string' },
+        { name: 'TargetOID', type: 'string' },
         { name: 'Title', type: 'string' },
         { name: 'Type', type: 'string' }
     ],
