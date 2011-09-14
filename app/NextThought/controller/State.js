@@ -15,50 +15,69 @@ Ext.define('NextThought.controller.State', {
     ],
 
     init: function() {
-        this._currentState = {};
+        var me = this,
+            push = window.history.pushState;
 
-        this.control({
+        me._currentState = {};
+
+        me.control({
             'master-view':{
-                'restore': this.restoreState
+                'restore': me.restoreState
             },
-
             'panel[cls=x-application-mode-pane]': {
-                'activate-mode': this.trackMode
+                'activate-mode': me.trackMode
             }
         });
 
-        var me = this;
         window.onpopstate = function(e){
+            me.isPoppingHistory = true;
             me.onPopState(e);
+            me.isPoppingHistory = false;
         };
+
+        window.history.pushState = function(){
+            if(!me.isPoppingHistory && push){
+                push.apply(history, arguments);
+            }
+        };
+
     },
 
     onPopState: function(e) {
-        var s = e?e.state:null;
-        if(!s){
-            console.log(e, 'What? no state in the popped history?? ignoring.');
-            s = BASE_STATE;
+        if(!NextThought.isInitialised){
+            return;
         }
-        console.log('History Popped, State being restored: ',e);
-        this.getViewport().fireEvent('restore', s);
+        var s = e?e.state:null,
+            v = this.getViewport();
+        if(!v){
+            console.log('no viewport');
+            return;
+        }
+        v.fireEvent('restore', s || BASE_STATE);
     },
 
 
     trackMode: function(modeId){
         if(this._currentState.active != modeId && NextThought.isInitialised){
+            console.log(this._currentState.active, modeId);
             this._currentState.active = modeId;
-            history.pushState(this._currentState,'title?',window.location);
+            history.pushState(this._currentState, 'Title Goes Here');
         }
     },
 
 
     restoreState: function(stateObject){
+        var replaceState = false;
         if(stateObject == PREVIOUS_STATE){
+            replaceState = true;
             stateObject = this.loadState();
         }
 
         var c = Ext.getCmp(stateObject.active);
-        if(c) c.activate();
+        if(c){
+            this._currentState.active = stateObject.active;
+            c.activate();
+        }
 
         for(var key in stateObject){
             if(!stateObject.hasOwnProperty(key) || !/object/i.test(typeof(stateObject[key]))) continue;
@@ -71,12 +90,16 @@ Ext.define('NextThought.controller.State', {
                     c.restore(stateScoped);
                 }
                 catch(e){
+                    console.log(e, e.message, e.stack);
                 }
             }
             else {
                 console.log('The key', key, 'did not point to a component with a restore method:', c);
             }
         }
+
+        if(replaceState)
+            history.replaceState(this._currentState);
     },
 
 
@@ -84,7 +107,7 @@ Ext.define('NextThought.controller.State', {
     loadState: function(){
         //TODO: save/read state to/from browser/server
 
-        return {
+        return history.state || {
             active: 'reader',
             reader:{
                 page: '/prealgebra/sect0001.html',

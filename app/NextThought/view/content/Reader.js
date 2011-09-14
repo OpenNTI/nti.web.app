@@ -229,11 +229,7 @@ Ext.define('NextThought.view.content.Reader', {
     _appendHistory: function(book, path) {
         var state = { reader:{ index: book.get('index'), page: path } };
         try{
-            history.pushState(state,
-                "TODO: resolve title",
-                window.location
-
-            );
+            history.pushState(state,"TODO: resolve title");
         }
         catch(e){
             console.log('Error recording history:', e, e.message, e.stack, 'state:', state);
