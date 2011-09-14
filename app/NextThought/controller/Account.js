@@ -30,17 +30,41 @@ Ext.define('NextThought.controller.Account', {
 
 
     accountActionButton: function(btn){
-        var win = btn.up('fullscreen-window'),
-            form= win.down('account-form');
-        console.log(form.getValues());
-        win.close();
+        var u = _AppConfig.server.userObject,
+            win = btn.up('fullscreen-window'),
+            form= win.down('account-form'),
+            values = form.getForm().getFieldValues();
+
+        if(btn.actionName!='save'){
+            win.close();
+            return;
+        }
+
+        if(!form.getForm().isValid()){
+            return;
+        }
+
+        for(var key in values){
+            if(!values.hasOwnProperty(key)) continue;
+            u.set(key, values[key]);
+        }
+
+        u.save({
+            scope: this,
+            failure: function(){
+                console.log('FAILURE:',arguments);
+            },
+			success:function(newRecord,operation){
+                _AppConfig.server.userObject = newRecord;
+
+                console.log('valid values:', values);
+                win.close();
+            }});
     },
 
 
     popoverNotifications: function() {
-
         var popover = Ext.create('window.notifications-popover');
-
         popover.alignTo(this.getSessionInfo());
         popover.show();
     },
