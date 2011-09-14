@@ -110,6 +110,7 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
 			var s = h.get('Snippet'),
                 t = h.get('Title') || 'User Generated Content',
                 ty = h.get('Type'),
+                oid = ty.toLowerCase() + '-' + h.get('TargetOID'),
                 el;
 
             console.log(t + ' ' + ty);
@@ -123,7 +124,7 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
 
             //wait till it's added to access el
             el = content.getEl();
-            el.on('click', this.searchResultClicked, this, {hit: h, searchValue: this._searchVal, scroll: (ty == 'Note') ? false : true});
+            el.on('click', this.searchResultClicked, this, {hit: h, searchValue: this._searchVal, oid: oid});
             el.on('mouseover', this.highlightItem, this, {cmp: content});
 		}
 
@@ -150,7 +151,7 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
 
     },
     searchResultClicked: function(event, dom, opts) {
-        this.fireEvent('goto', opts.hit, opts.searchValue, opts.scroll);
+        this.fireEvent('goto', opts.hit, opts.searchValue, opts.oid);
         this.close();
 
     },

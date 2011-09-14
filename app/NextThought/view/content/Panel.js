@@ -19,11 +19,6 @@ Ext.define('NextThought.view.content.Panel', {
     getContainerId: function(){
         return this._containerId;
     },
-	
-	activate: function() {
-		this.relayout();
-    },
-    
     
     relayout: function(){
     	this.ownerCt.doComponentLayout();

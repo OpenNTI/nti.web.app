@@ -67,7 +67,7 @@ Ext.define('NextThought.controller.Reader', {
 
     navigate: function(book, ref, scrollToOptions){
         this.getReader().setActive(book, ref, null, scrollToOptions ?
-            Ext.bind(this.scrollToText, this, [scrollToOptions.text]):
+            Ext.bind(this.scrollToText, this, [scrollToOptions.text, scrollToOptions.oid]):
             undefined);
     },
 
@@ -96,7 +96,7 @@ Ext.define('NextThought.controller.Reader', {
         return resultArray;
     },
 
-    scrollToText: function(text) {
+    scrollToText: function(text, oid) {
         if (!text) return;
 
         text = text.toLowerCase();
@@ -142,7 +142,10 @@ Ext.define('NextThought.controller.Reader', {
 
         setTimeout(function(){
             me.getReader().showRanges(ranges);
-            me.getReader().scrollTo(ranges[0].getClientRects()[0].top - 150);
+            if (oid)
+                me.getReader().scrollToId(oid);
+            else
+                me.getReader().scrollTo(ranges[0].getClientRects()[0].top - 150);
         }, 500);
     },
 

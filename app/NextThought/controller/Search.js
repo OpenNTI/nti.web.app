@@ -32,13 +32,13 @@ Ext.define('NextThought.controller.Search', {
         });
     },
 
-    searchResultClicked: function(hit, searchValue, scroll) {
+    searchResultClicked: function(hit, searchValue, oid) {
         var containerId = hit.get('ContainerId'),
             bookInfo = NextThought.librarySource.findLocation(containerId),
             book = bookInfo.book,
             href = bookInfo.location.getAttribute('href');
 
-        this.getViewport().fireEvent('navigate', book, book.root + href, (scroll) ? {text: searchValue} : null);
+        this.getViewport().fireEvent('navigate', book, book.root + href, {text: searchValue, oid: oid});
     },
 
     selectDown: function() {

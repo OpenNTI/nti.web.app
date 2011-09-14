@@ -21,7 +21,10 @@ Ext.define('NextThought.view.content.Reader', {
         this.initAnnotations();
     },
 
-
+    scrollToId: function(id) {
+        var n = Ext.getCmp(id);
+        this.scrollToNode(n.getEl());
+    },
 
     scrollToTarget: function(target){
         var e = this.el.query('*[name='+target+']');
@@ -68,8 +71,7 @@ Ext.define('NextThought.view.content.Reader', {
 
 
     setActive: function(book, path, skipHistory, callback) {
-        this.clearAnnotations();
-        this.activate();
+
 
         var b = this._resolveBase(this._getPathPart(path)),
             f = this._getFilename(path),
@@ -87,6 +89,9 @@ Ext.define('NextThought.view.content.Reader', {
 
             return;
         }
+
+        this.clearAnnotations();
+        this.relayout();
 
         this.active = pc[0];
 
