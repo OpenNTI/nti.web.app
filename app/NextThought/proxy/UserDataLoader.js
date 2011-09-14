@@ -339,18 +339,15 @@ Ext.define('NextThought.proxy.UserDataLoader',{
 				scope: this,
                 headers: headers,
 				callback: function() {
-                    console.log('callback', arguments);
 					this._streamRequest = null;
 				},
 				failure: function() {
-                    console.log('failure', arguments);
                     Logging.logAndAlertError('There was an error getting stream contents', 'Will attempt to call failure callback', arguments);
 					if(callbacks && callbacks.failure) {
 						callbacks.failure.apply(callbacks.scope || this, arguments);
 					}
 				},
 				success: function(r, o) {
-                    console.log('success', arguments);
 					var json = (!r.responseText) ? {} : Ext.decode(r.responseText);
 					if(!json || !json.Items){
 						if(callbacks && callbacks.failure){
