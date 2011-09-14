@@ -36,7 +36,7 @@ Ext.define( 'NextThought.view.windows.ShareWithWindow', {
 				{ html:'<img src="'+a+'" width=24 height=24 valign=middle atl="'+n+'"/> '+t+' by '+n+':<hr size=1/>'},
 				{ html:content, padding: '0 0 0 15px'},
 				{ html:'<hr size=1/>'},
-				{ xtype: 'sharewith', value: sw }
+				{ xtype: 'sharewith', value: sw, allowBlank: true }
 			]
 		});
 	},
