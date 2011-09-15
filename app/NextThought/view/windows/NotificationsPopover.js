@@ -73,7 +73,7 @@ Ext.define('NextThought.view.windows.NotificationsPopover', {
 
         //console.log(max, me.getHeight());
         VIEWPORT.on('resize',me.fixHeight,me, {single: true});
-    },
+    }
 
 
 
