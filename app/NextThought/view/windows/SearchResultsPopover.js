@@ -10,6 +10,10 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
     height: 250,
     padding: 3,
     renderTo: Ext.getBody(),
+    items: [
+        {title: 'Content'},
+        {title: 'User Generated'}
+    ],
     defaults: {
         border: false,
         defaults: {border: false}
@@ -19,22 +23,22 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
         //values that change should not be defined on the prototype/class, but the instance.
         Ext.apply(this,{
             itemSelected: -1,
-            noResults: false,
-            _searchVal: null,
-            _hits: []
+            _searchVal: null
         });
 
         this.addEvents('goto');
 
         this.callParent(arguments);
-        this.updateContents = Ext.bind(this.updateContents, this);
+        this.updateWithContentHits = Ext.bind(this.updateContents, this, [0], true);
+        this.updateWithUserGenHits = Ext.bind(this.updateContents, this, [1], true);
     },
 
     performSearch: function(searchValue) {
         this.removeAll();
         this._searchVal = searchValue;
-        UserDataLoader.searchContent(null, searchValue, this.updateContents);
-        UserDataLoader.searchUserData(null, searchValue, this.updateContents);
+        this._updateCount = 2;
+        UserDataLoader.searchContent(null, searchValue, this.updateWithContentHits);
+        UserDataLoader.searchUserData(null, searchValue, this.updateWithUserGenHits);
     },
 
     render: function() {
@@ -48,11 +52,11 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
     },
 
     chooseSelection: function() {
-         if (this.noResults) return;
+
 
          var p = this,
              i = p.items.get(this.itemSelected),
-             h = this._hits[this.itemSelected];
+             h = i.hit;
 
         this.searchResultClicked(null, null, {hit: h, searchValue: this._searchVal});
     },
@@ -63,7 +67,7 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
     },
 
     select: function(up) {
-        if (this.noResults) return;
+
 
         var p = this,
             i = p.items.get(this.itemSelected),
@@ -86,48 +90,45 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
         this.scroll(i);
     },
 
-    updateContents: function(hits) {
+    updateContents: function(hits, panelIndex) {
         var k, h,
-            p = this;
+            p = this.items.get(panelIndex);
+debugger;
+        if(!hits || hits.length == 0) {
+            p.add({html: '<b>No search results</b>', border: false, margin: 10});
+        }
+        else {
+            for(k in hits){
+                if(!hits.hasOwnProperty(k))continue;
+                h = hits[k];
 
-        //save hits
-        this._hits = Ext.Array.merge(this._hits, hits);
+                var s = h.get('Snippet'),
+                    t = h.get('Title') || 'User Generated Content',
+                    ty = h.get('Type'),
+                    oid = h.get('TargetOID'),
+                    target = ty.toLowerCase() + '-' + oid,
+                    opts = {hit: h, searchValue: this._searchVal, oid: oid ? target : null},
+                    content,
+                    el;
 
-        //reset no results flag
-        this.noResults = false;
+                content = p.add({html: '<b>'+t+'</b>'+' - '+s, border: false, padding: 10, hit: h});
 
-     	if(!hits || hits.length == 0) {
-             p.add({html: '<b>No search results</b>', border: false, margin: 10});
-             this.el.unmask();
-             this.noResults = true;
-             return;
-         }
+                el = content.getEl();
+                el.on('click', this.searchResultClicked, this, opts);
+                el.on('mouseover', this.highlightItem, this, {cmp: content});
+            }
+        }
+        
+        this.afterUpdate();
+    },
 
-        for(k in hits){
-            if(!hits.hasOwnProperty(k))continue;
-            h = hits[k];
-
-			var s = h.get('Snippet'),
-                t = h.get('Title') || 'User Generated Content',
-                ty = h.get('Type'),
-                oid = h.get('TargetOID'),
-                target = ty.toLowerCase() + '-' + oid,
-                opts = {hit: h, searchValue: this._searchVal, oid: oid ? target : null},
-                content,
-                el;
-
-            content = p.add({html: '<b>'+t+'</b>'+' - '+s, border: false, padding: 10});
-
-            el = content.getEl();
-            el.on('click', this.searchResultClicked, this, opts);
-            el.on('mouseover', this.highlightItem, this, {cmp: content});
-		}
-
-        this.el.unmask();
+    afterUpdate: function() {
+        this._updateCount--;
+        if (this._updateCount <= 0) this.el.unmask();
     },
 
     highlightItem: function(event, dom, opts) {
-        if (this.noResults) return;
+
 
         var p = this.items,
             CLASS = 'search-result-selection';
@@ -146,6 +147,7 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
 
     },
     searchResultClicked: function(event, dom, opts) {
+        console.log('goto', opts);
         this.fireEvent('goto', opts.hit, opts.searchValue, opts.oid);
         this.close();
 

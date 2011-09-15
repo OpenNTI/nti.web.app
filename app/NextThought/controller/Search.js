@@ -37,11 +37,11 @@ Ext.define('NextThought.controller.Search', {
             bookInfo = NextThought.librarySource.findLocation(containerId),
             book = bookInfo.book,
             href = bookInfo.location.getAttribute('href');
-
-        this.getViewport().fireEvent('navigate', book, book.root + href, {text: searchValue, oid: oid});
+        this.getViewport().fireEvent('navigate', book, book.get('root') + href, {text: searchValue, oid: oid});
     },
 
     selectDown: function() {
+        console.log('select down in controller');
         var popover = this.getSearchPopover();
         if(popover){
             popover.select(false);

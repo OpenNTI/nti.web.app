@@ -34,23 +34,21 @@ Ext.define('NextThought.view.form.fields.SearchField', {
     },
 
     afterRender: function(){
-        this.callParent();
+        this.callParent(arguments);
         this.triggerEl.item(0).setDisplayed('none');
     },
 
     onSelectDown: function() {
-        var me = this;
-        me.fireEvent('select-down');
+        console.log('select down');
+        this.fireEvent('select-down');
     },
 
     onSelectUp: function() {
-        var me = this;
-        me.fireEvent('select-up');
+        this.fireEvent('select-up');
     },
 
     onChooseSelection: function() {
-        var me = this;
-        me.fireEvent('choose-selection');
+        this.fireEvent('choose-selection');
     },
 
     onTrigger1Click : function(){

@@ -22,12 +22,17 @@ Ext.define('NextThought.proxy.UserDataLoader',{
                 c = containerId ? containerId : 'prealgebra',
                 u = _AppConfig.server.username,
 				url = h+d+'users/' +u+ '/Search/RecursiveUserGeneratedData/'+searchString;
-            Ext.Ajax.request({
+
+            if(this._searchUserData){
+				Ext.Ajax.abort(this._searchUserData);
+			}
+
+			this._searchUserData = Ext.Ajax.request({
 				url: url,
 				scope: this,
 				async: !!callback,
 				callback: function(o,success,r){
-
+                    this._searchUserData = null;
 					if(!success){
                         Logging.logAndAlertError('There was an error searching for user generated data', arguments);
                         if (callback) callback();
@@ -47,12 +52,17 @@ Ext.define('NextThought.proxy.UserDataLoader',{
             var h = _AppConfig.server.host,
                 c = containerId ? containerId : 'prealgebra',
 				url = h+'/'+c+'/Search/'+searchString;
-            Ext.Ajax.request({
+
+            if(this._searchContent){
+				Ext.Ajax.abort(this._searchContent);
+			}
+
+			this._searchContent = Ext.Ajax.request({
 				url: url,
 				scope: this,
 				async: !!callback,
 				callback: function(o,success,r){
-
+                    this._searchContent = null;
 					if(!success){
                         Logging.logAndAlertError('There was an error searching', arguments);
                         if (callback) callback();
@@ -85,41 +95,41 @@ Ext.define('NextThought.proxy.UserDataLoader',{
 				if(callback)
 					callback(cache[userId]);
 			}
-			else
-			Ext.Ajax.request({
-				url: url,
-				scope: this,
-				async: !!callback,
-				callback: function(o,success,r){
-					
-					if(!success){
-                        Logging.logAndAlertError('There was an error resolving users', arguments);
-                        if (callback) callback();
-                        return;
-					}
-					
-					var json = Ext.decode(r.responseText),
-						bins = this._binAndParseItems(json.Items),
-                        list = bins.User || bins.Community || bins.FriendsList || bins.Group;
+			else {
+                Ext.Ajax.request({
+                    url: url,
+                    scope: this,
+                    async: !!callback,
+                    callback: function(o,success,r){
 
-                    if(!list){
-                        console.log('No matching users for "'+userId+'"');
-                        if (callback) callback();
-                        return;
+                        if(!success){
+                            Logging.logAndAlertError('There was an error resolving users', arguments);
+                            if (callback) callback();
+                            return;
+                        }
+
+                        var json = Ext.decode(r.responseText),
+                            bins = this._binAndParseItems(json.Items),
+                            list = bins.User || bins.Community || bins.FriendsList || bins.Group;
+
+                        if(!list){
+                            console.log('No matching users for "'+userId+'"');
+                            if (callback) callback();
+                            return;
+                        }
+
+                        if(list.length>1){
+                            console.log('WARNING: many matching users: "', userId, '"', list);
+                        }
+
+                        cache[userId] = list[0];
+
+
+                        if(!callback)return;
+                        callback(cache[userId]);
                     }
-
-                    if(list.length>1){
-                        console.log('WARNING: many matching users: "', userId, '"', list);
-                    }
-
-                    cache[userId] = list[0];
-
-
-					if(!callback)return;
-						callback(cache[userId]);
-				}
-			});
-
+                });
+            }
 			return cache[userId];
 		},
 		
