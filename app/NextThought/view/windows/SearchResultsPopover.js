@@ -7,7 +7,6 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
     closable: false,
     border: true,
     minWidth: 400,
-    maxHeight: 400,
     padding: 3,
     renderTo: Ext.getBody(),
     defaults: {
@@ -15,19 +14,24 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
         defaults: {border: false}
     },
 
-    initComponent: function() {
+    initComponent: function(config) {
+        var me = this,
+            field = me.bindTo;
+
         //values that change should not be defined on the prototype/class, but the instance.
-        Ext.apply(this,{
+        Ext.apply(me,{
             itemSelected: -1,
             _searchVal: null,
-            _filledBoxes: {}
+            _filledBoxes: {},
+            width: Ext.Number.constrain(field.getWidth(), me.minWidth, me.maxWidth),
+            height: 50
         });
 
-        this.addEvents('goto');
+        me.addEvents('goto');
+        me.callParent(arguments);
 
-        this.callParent(arguments);
-        this.updateWithContentHits = Ext.bind(this.updateContents, this, [0], true);
-        this.updateWithUserGenHits = Ext.bind(this.updateContents, this, [1], true);
+        me.updateWithContentHits = Ext.bind(me.updateContents, me, [0], true);
+        me.updateWithUserGenHits = Ext.bind(me.updateContents, me, [1], true);
     },
 
     reset: function(){
@@ -53,6 +57,7 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
         var me = this,
             el = me.el,
             lastLogin = _AppConfig.server.userObject.get('lastLoginTime');
+        me.alignTo(me.bindTo);
 
         el.mask("Searching");
         //el.on('mouseleave', function(){me.close();}, this);
@@ -64,7 +69,7 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
             h = i? i.hit : null;
 
         if(i)
-        this.searchResultClicked(null, null, {hit: h, searchValue: this._searchVal});
+            this.searchResultClicked(null, null, {hit: h, searchValue: this._searchVal});
     },
 
 
@@ -124,10 +129,28 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
         var fb = this._filledBoxes;
         this._updateCount--;
         if (this._updateCount <= 0){
+            this.fixHeight();
+
             this.el.unmask();
             if(!fb[0] && !fb[1])
                 this.items.get(2).show();
+
+
         }
+    },
+
+
+    fixHeight: function(){
+        var me = this,
+            e = me.bindTo,
+            max = (VIEWPORT.getHeight() - e.getPosition()[1] - e.getHeight() - 10);
+        me.height = undefined;
+        me.doLayout();
+        if(me.getHeight()> max)
+            me.setHeight(max);
+
+        //console.log(max, me.getHeight());
+        VIEWPORT.on('resize',me.fixHeight,me, {single: true});
     },
 
 
@@ -154,15 +177,9 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
 
     },
 
-    alignTo: function(field) {
+    doComponentLayout: function(w,h,s,c){
         this.callParent(arguments);
 
-        var me = this,
-            height = VIEWPORT.getHeight();
-
-        me.maxHeight = (height - me.getPosition(true)[1] - 10);
-
-        me.setWidth(field.getWidth());
     }
 
 

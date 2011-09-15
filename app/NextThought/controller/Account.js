@@ -66,8 +66,7 @@ Ext.define('NextThought.controller.Account', {
 
     popoverNotifications: function() {
         var u = _AppConfig.server.userObject,
-            popover = Ext.create('window.notifications-popover');
-        popover.alignTo(this.getSessionInfo());
+            popover = Ext.create('window.notifications-popover', {bindTo: this.getSessionInfo()});
         popover.show();
 
         u.set('lastLoginTime', new Date());

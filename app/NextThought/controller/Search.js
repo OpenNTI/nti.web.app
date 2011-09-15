@@ -78,9 +78,8 @@ Ext.define('NextThought.controller.Search', {
     },
 
     search: function(field) {
-        var popover = this.getSearchPopover() || Ext.create('widget.search-results-popover');
+        var popover = this.getSearchPopover() || Ext.create('widget.search-results-popover',{bindTo: field});
 
-        popover.alignTo(field);
         //TODO: move this logic to this class
         popover.performSearch(field.getValue());
         popover.show();

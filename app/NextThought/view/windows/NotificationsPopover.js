@@ -10,7 +10,6 @@ Ext.define('NextThought.view.windows.NotificationsPopover', {
     border: true,
     frame: false,
     width: 250,
-    height: 250,
     renderTo: Ext.getBody(),
     items:[{margin: 3}],
     defaults: {border: false,
@@ -23,10 +22,10 @@ Ext.define('NextThought.view.windows.NotificationsPopover', {
 
     render: function() {
         this.callParent(arguments);
-
         var me = this,
             el = me.el;
 
+        me.alignTo(this.bindTo);
         el.mask('Loading');
         el.on('mouseleave', function(){me.close();}, this);
 
@@ -63,15 +62,18 @@ Ext.define('NextThought.view.windows.NotificationsPopover', {
         this.el.unmask();
     },
 
-    alignTo: function() {
-        this.callParent(arguments);
-
+    fixHeight: function(){
         var me = this,
-            height = VIEWPORT.getHeight();
+            e = me.bindTo,
+            max = (VIEWPORT.getHeight() - e.getPosition()[1] - e.getHeight() - 10);
+        me.height = undefined;
+        me.doLayout();
+        if(me.getHeight()> max)
+            me.setHeight(max);
 
-        me.setHeight(height - me.getPosition(true)[1] - 10);
-
-    }
+        //console.log(max, me.getHeight());
+        VIEWPORT.on('resize',me.fixHeight,me, {single: true});
+    },
 
 
 
