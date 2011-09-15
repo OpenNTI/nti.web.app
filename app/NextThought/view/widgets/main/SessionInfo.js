@@ -38,7 +38,7 @@ Ext.define('NextThought.view.widgets.main.SessionInfo', {
 
         me.add({xtype: 'identity-panel'}).on('mouseover', this._mouseOverUsername, this);
 
-        this._notifications = me.add({html: '<span class="notification-box-widget"></span>'});
+        this._notifier = me.add({html: '<span class="notification-box-widget"></span>'});
 
         me._task = {
             run: function(){
@@ -58,26 +58,20 @@ Ext.define('NextThought.view.widgets.main.SessionInfo', {
     },
 
     update: function(c) {
-        var e = this._notifications.el.down('span'),
-            clsName = 'unread';
-
-        //set unread class
-        (c?e.addCls:e.removeCls).call(e, clsName);
-
+        var e = this._notifier.el.down('span');
         e.dom.innerHTML = c > 99 ? '++' : c;
+        (c?e.addCls:e.removeCls).call(e, 'unread');
     },
 
     clearNotifications: function() {
-        var e = this._notifications.el.down('span');
+        var e = this._notifier.el.down('span');
         e.removeCls('unread');
         e.dom.innerHTML = 0;
     },
 
     render: function(){
         this.callParent(arguments);
-
-        this._notifications.el.on('click', this._notifications, this);
-        //start the task to check for notifications
+        this._notifier.el.on('click', this._notifications, this);
         Ext.TaskManager.start(this._task);
     },
 
@@ -107,7 +101,7 @@ Ext.define('NextThought.view.widgets.main.SessionInfo', {
     },
 
     _mouseOverUsername: function(){
-        this._menu.showBy(this.down('identity-panel').el);
+        this._menu.showBy(this.down('identity-panel').el, 'tr-br?');
     },
 
     _account: function(){
