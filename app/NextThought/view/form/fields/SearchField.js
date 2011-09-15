@@ -32,6 +32,7 @@ Ext.define('NextThought.view.form.fields.SearchField', {
             }
         }, this);
         this.on('change', function(f,n,o){
+            this.hasSearch = false;
             this.fireEvent('cleared-search', this);
         }, this);
     },
