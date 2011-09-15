@@ -138,7 +138,7 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
 
         this.el.select('.'+CLASS).removeCls(CLASS);
 
-        this.itemSelected = Ext.Array.indexOf(c);
+        this.itemSelected = Ext.Array.indexOf(p,c);
 
         this.scroll(c.addCls(CLASS));
     },
