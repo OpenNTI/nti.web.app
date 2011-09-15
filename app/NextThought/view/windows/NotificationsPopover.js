@@ -39,10 +39,9 @@ Ext.define('NextThought.view.windows.NotificationsPopover', {
             p = this.items.get(0);
 
         if(!stream || stream.length == 0) {
-            p.add(Ext.create('Ext.panel.Panel',
-                {html: '<b>No new updates</b>',
+            p.add( {html: '<b>No new updates</b>',
                     border: false,
-                    margin: 10}));
+                    margin: 10} );
             this.el.unmask();
             return;
         }
