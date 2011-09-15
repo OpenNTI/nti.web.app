@@ -20,6 +20,7 @@ Ext.define('NextThought.controller.Search', {
     init: function() {
     	 this.control({
             '#searchBox': {
+                'blur': this.lostFocus,
                 'search': this.search,
                 'cleared-search': this.clearSearch,
                 'select-down' : this.selectDown,
@@ -32,6 +33,11 @@ Ext.define('NextThought.controller.Search', {
         });
     },
 
+    lostFocus: function(searchBox){
+        var popover = this.getSearchPopover();
+        if(popover) popover.close();
+    },
+
     searchResultClicked: function(hit, searchValue, oid) {
         var containerId = hit.get('ContainerId'),
             bookInfo = NextThought.librarySource.findLocation(containerId),
@@ -40,11 +46,13 @@ Ext.define('NextThought.controller.Search', {
         this.getViewport().fireEvent('navigate', book, book.get('root') + href, {text: searchValue, oid: oid});
     },
 
-    selectDown: function() {
-        console.log('select down in controller');
+    selectDown: function(field) {
         var popover = this.getSearchPopover();
         if(popover){
             popover.select(false);
+        }
+        else{
+            this.search(field);
         }
     },
 
@@ -70,12 +78,11 @@ Ext.define('NextThought.controller.Search', {
     },
 
     search: function(field) {
-        var searchVal = field.getSubmitValue();
-
         var popover = this.getSearchPopover() || Ext.create('widget.search-results-popover');
 
         popover.alignTo(field);
-        popover.performSearch(searchVal);
+        //TODO: move this logic to this class
+        popover.performSearch(field.getValue());
         popover.show();
     }
 

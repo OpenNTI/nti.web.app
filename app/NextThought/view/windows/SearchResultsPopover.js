@@ -1,19 +1,15 @@
 Ext.define('NextThought.view.windows.SearchResultsPopover', {
-	extend: 'Ext.panel.Panel',
+    extend: 'Ext.panel.Panel',
     alias: 'widget.search-results-popover',
 
     autoScroll: true,
     floating: true,
     closable: false,
     border: true,
-    width: 400,
-    height: 250,
+    minWidth: 400,
+    maxHeight: 400,
     padding: 3,
     renderTo: Ext.getBody(),
-    items: [
-        {title: 'Content'},
-        {title: 'User Generated'}
-    ],
     defaults: {
         border: false,
         defaults: {border: false}
@@ -23,7 +19,8 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
         //values that change should not be defined on the prototype/class, but the instance.
         Ext.apply(this,{
             itemSelected: -1,
-            _searchVal: null
+            _searchVal: null,
+            _filledBoxes: {}
         });
 
         this.addEvents('goto');
@@ -33,8 +30,17 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
         this.updateWithUserGenHits = Ext.bind(this.updateContents, this, [1], true);
     },
 
-    performSearch: function(searchValue) {
+    reset: function(){
         this.removeAll();
+        this.add(
+            {hidden: true, title: 'Content'},
+            {hidden: true, title: 'User Generated'},
+            {hidden: true, html: '<b>No search results</b>', border: false, margin: 10}
+        );
+    },
+
+    performSearch: function(searchValue) {
+        this.reset();
         this._searchVal = searchValue;
         this._updateCount = 2;
         UserDataLoader.searchContent(null, searchValue, this.updateWithContentHits);
@@ -42,22 +48,22 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
     },
 
     render: function() {
-       this.callParent(arguments);
+        this.callParent(arguments);
 
-       var me = this,
-           lastLogin = _AppConfig.server.userObject.get('lastLoginTime'),
-           height = VIEWPORT.getHeight();
+        var me = this,
+            el = me.el,
+            lastLogin = _AppConfig.server.userObject.get('lastLoginTime');
 
-        this.el.mask("Searching");
+        el.mask("Searching");
+        //el.on('mouseleave', function(){me.close();}, this);
     },
 
     chooseSelection: function() {
+        var p = this.query('panel[hit]'),
+            i = p[this.itemSelected],
+            h = i? i.hit : null;
 
-
-         var p = this,
-             i = p.items.get(this.itemSelected),
-             h = i.hit;
-
+        if(i)
         this.searchResultClicked(null, null, {hit: h, searchValue: this._searchVal});
     },
 
@@ -67,10 +73,8 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
     },
 
     select: function(up) {
-
-
-        var p = this,
-            i = p.items.get(this.itemSelected),
+        var p = this.query('panel[hit]'),
+            i = p[this.itemSelected],
             CLASS = 'search-result-selection';
 
         //remove current selection
@@ -78,89 +82,87 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
 
         //increment to next
         this.itemSelected += (up) ? -1 : 1;
-        i = p.items.get(this.itemSelected);
+        i = p[this.itemSelected];
 
         //if next is off the edge, wrap
         if (!i) {
-            this.itemSelected = (up) ? p.items.length-1 : 0;
-            i = p.items.get(this.itemSelected);
+            this.itemSelected = (up) ? p.length-1 : 0;
+            i = p[this.itemSelected];
         }
 
-        i.addCls(CLASS);
-        this.scroll(i);
+        if(i){
+            this.scroll(i.addCls(CLASS));
+        }
     },
 
     updateContents: function(hits, panelIndex) {
-        var k, h,
-            p = this.items.get(panelIndex);
-debugger;
-        if(!hits || hits.length == 0) {
-            p.add({html: '<b>No search results</b>', border: false, margin: 10});
+        var p = this.items.get(panelIndex);
+        if(hits && hits.length > 0) {
+            p.show();
+            this._filledBoxes[panelIndex] = true;
+            Ext.each( hits,
+                function(h){
+                    var s = h.get('Snippet')    || 'blank snippet',
+                        t = h.get('Title')      || 'User Generated Content',
+                        content,
+                        el;
+
+                    content = p.add({html: '<b>'+t+'</b>'+' - '+s, border: false, padding: 10, hit: h});
+
+                    el = content.getEl();
+                    el.on('click', this.searchResultClicked, this, {hit: h});
+                    el.on('mouseover', this.highlightItem, this, {cmp: content});
+                },
+                this
+            );
         }
-        else {
-            for(k in hits){
-                if(!hits.hasOwnProperty(k))continue;
-                h = hits[k];
 
-                var s = h.get('Snippet'),
-                    t = h.get('Title') || 'User Generated Content',
-                    ty = h.get('Type'),
-                    oid = h.get('TargetOID'),
-                    target = ty.toLowerCase() + '-' + oid,
-                    opts = {hit: h, searchValue: this._searchVal, oid: oid ? target : null},
-                    content,
-                    el;
-
-                content = p.add({html: '<b>'+t+'</b>'+' - '+s, border: false, padding: 10, hit: h});
-
-                el = content.getEl();
-                el.on('click', this.searchResultClicked, this, opts);
-                el.on('mouseover', this.highlightItem, this, {cmp: content});
-            }
-        }
-        
         this.afterUpdate();
     },
 
     afterUpdate: function() {
+        var fb = this._filledBoxes;
         this._updateCount--;
-        if (this._updateCount <= 0) this.el.unmask();
+        if (this._updateCount <= 0){
+            this.el.unmask();
+            if(!fb[0] && !fb[1])
+                this.items.get(2).show();
+        }
     },
+
 
     highlightItem: function(event, dom, opts) {
-
-
-        var p = this.items,
+        var p = this.query('panel[hit]'),
+            c = opts.cmp,
             CLASS = 'search-result-selection';
 
-        //remove all highlighting from other classes, add highlighting to the selected, reset index
-        Ext.each(p.items, function(c, i){
-            if (c == opts.cmp) {
-                c.addCls(CLASS);
-                this.itemSelected = i;
-                this.scroll(c);
-            }
-            else c.removeCls(CLASS);
-        }, this);
+        this.el.select('.'+CLASS).removeCls(CLASS);
 
+        this.itemSelected = Ext.Array.indexOf(c);
 
-
+        this.scroll(c.addCls(CLASS));
     },
+
+
     searchResultClicked: function(event, dom, opts) {
-        console.log('goto', opts);
-        this.fireEvent('goto', opts.hit, opts.searchValue, opts.oid);
+        var h = opts.hit,
+            oid = h.get('TargetOID'),
+            target = oid ? (h.get('Type').toLowerCase() + '-' + oid) : null;
+
+        this.fireEvent('goto', h, this._searchVal, target);
         this.close();
 
     },
 
-    alignTo: function() {
+    alignTo: function(field) {
         this.callParent(arguments);
 
-         var me = this,
-             height = VIEWPORT.getHeight();
+        var me = this,
+            height = VIEWPORT.getHeight();
 
-        me.setHeight(height - me.getPosition(true)[1] - 10);
+        me.maxHeight = (height - me.getPosition(true)[1] - 10);
 
+        me.setWidth(field.getWidth());
     }
 
 

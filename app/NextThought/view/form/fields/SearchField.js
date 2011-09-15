@@ -15,7 +15,7 @@ Ext.define('NextThought.view.form.fields.SearchField', {
         this.on('specialkey', function(f, e){
             //trigger search if enter is pressed, or if down is pressed and there isn't already a search
             if(e.getKey() == e.ESC){
-                  this.onTrigger1Click();
+                this.onTrigger1Click();
             }
             else if(!this.hasSearch && (e.getKey() == e.ENTER || e.getKey() == e.DOWN)){
                 this.onTrigger2Click();
@@ -31,6 +31,9 @@ Ext.define('NextThought.view.form.fields.SearchField', {
                 this.onChooseSelection();
             }
         }, this);
+        this.on('change', function(f,n,o){
+            this.fireEvent('cleared-search', this);
+        }, this);
     },
 
     afterRender: function(){
@@ -39,16 +42,15 @@ Ext.define('NextThought.view.form.fields.SearchField', {
     },
 
     onSelectDown: function() {
-        console.log('select down');
-        this.fireEvent('select-down');
+        this.fireEvent('select-down',this);
     },
 
     onSelectUp: function() {
-        this.fireEvent('select-up');
+        this.fireEvent('select-up', this);
     },
 
     onChooseSelection: function() {
-        this.fireEvent('choose-selection');
+        this.fireEvent('choose-selection', this);
     },
 
     onTrigger1Click : function(){
@@ -59,7 +61,7 @@ Ext.define('NextThought.view.form.fields.SearchField', {
             me.hasSearch = false;
             me.triggerEl.item(0).setDisplayed('none');
             me.doComponentLayout();
-            me.fireEvent('cleared-search');
+            me.fireEvent('cleared-search', this);
         }
     },
 
@@ -74,6 +76,6 @@ Ext.define('NextThought.view.form.fields.SearchField', {
         me.hasSearch = true;
         me.triggerEl.item(0).setDisplayed('block');
         me.doComponentLayout();
-        me.fireEvent('search', me, value);
+        me.fireEvent('search', me);
     }
 });
