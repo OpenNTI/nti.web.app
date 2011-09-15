@@ -8,11 +8,13 @@ Ext.define('NextThought.controller.Account', {
         'form.AccountForm',
         'windows.FullScreenFormWindow',
         'windows.NotificationsPopover',
-        'widgets.main.SessionInfo'
+        'widgets.main.SessionInfo',
+        'widgets.main.Identity'
     ],
 
     refs: [
-        { ref: 'sessionInfo',     selector: 'session-info' }
+        { ref: 'sessionInfo', selector: 'session-info' },
+        { ref: 'identity', selector: 'identity-panel' }
     ],
 
     init: function() {
@@ -30,8 +32,7 @@ Ext.define('NextThought.controller.Account', {
 
 
     accountActionButton: function(btn){
-        var u = _AppConfig.server.userObject,
-            win = btn.up('fullscreen-window'),
+        var win = btn.up('fullscreen-window'),
             form= win.down('account-form'),
             values = form.getForm().getFieldValues();
 
@@ -44,11 +45,11 @@ Ext.define('NextThought.controller.Account', {
             return;
         }
 
-        for(var key in values){
+        var key,u = _AppConfig.server.userObject;
+        for(key in values){
             if(!values.hasOwnProperty(key)) continue;
             u.set(key, values[key]);
         }
-
         u.save({
             scope: this,
             failure: function(){
@@ -56,10 +57,10 @@ Ext.define('NextThought.controller.Account', {
             },
 			success:function(newRecord,operation){
                 _AppConfig.server.userObject = newRecord;
-
-                console.log('valid values:', values);
+                this.getIdentity().update(newRecord);
                 win.close();
-            }});
+            }
+        });
     },
 
 
@@ -67,13 +68,21 @@ Ext.define('NextThought.controller.Account', {
         var popover = Ext.create('window.notifications-popover');
         popover.alignTo(this.getSessionInfo());
         popover.show();
+
+//        u.set('lastLoginTime', new Date());
+//        u.save();
     },
 
 
     showAccount: function(){
-        var u = _AppConfig.server.userObject;
         Ext.create('widget.fullscreen-window',
-            {   id: 'account-window',
-                items: { xtype: 'account-form', account: u } } ).show();
+            {
+                id: 'account-window',
+                items: {
+                    xtype: 'account-form',
+                    account: _AppConfig.server.userObject
+                }
+            }
+        ).show();
     }
 });

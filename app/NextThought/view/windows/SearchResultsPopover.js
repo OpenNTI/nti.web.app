@@ -9,15 +9,21 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
     width: 400,
     height: 250,
     padding: 3,
-    itemSelected: -1,
-    noResults: false,
     renderTo: Ext.getBody(),
-    defaults: {border: false,
-              defaults: {border: false}},
-    _searchVal: null,
-    _hits: [],
+    defaults: {
+        border: false,
+        defaults: {border: false}
+    },
 
     initComponent: function() {
+        //values that change should not be defined on the prototype/class, but the instance.
+        Ext.apply(this,{
+            itemSelected: -1,
+            noResults: false,
+            _searchVal: null,
+            _hits: []
+        });
+
         this.addEvents('goto');
 
         this.callParent(arguments);
@@ -35,9 +41,8 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
        this.callParent(arguments);
 
        var me = this,
-           u = _AppConfig.server.userObject,
-           lastLogin = u.get('lastLoginTime'),
-           height = Ext.ComponentQuery.query('master-view')[0].getHeight();
+           lastLogin = _AppConfig.server.userObject.get('lastLoginTime'),
+           height = VIEWPORT.getHeight();
 
         this.el.mask("Searching");
     },
@@ -92,12 +97,7 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
         this.noResults = false;
 
      	if(!hits || hits.length == 0) {
-             var content = Ext.create('Ext.panel.Panel',
-                 {html: '<b>No search results</b>',
-                     border: false,
-                     margin: 10});
-
-             p.add(content);
+             p.add({html: '<b>No search results</b>', border: false, margin: 10});
              this.el.unmask();
              this.noResults = true;
              return;
@@ -112,19 +112,14 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
                 ty = h.get('Type'),
                 oid = h.get('TargetOID'),
                 target = ty.toLowerCase() + '-' + oid,
+                opts = {hit: h, searchValue: this._searchVal, oid: oid ? target : null},
+                content,
                 el;
 
-            content = Ext.create('Ext.panel.Panel',
-                {html: '<b>' + t + '</b>' +
-                       ' - ' + s,
-                 border: false,
-                 padding: 10});
+            content = p.add({html: '<b>'+t+'</b>'+' - '+s, border: false, padding: 10});
 
-            p.add(content);
-
-            //wait till it's added to access el
             el = content.getEl();
-            el.on('click', this.searchResultClicked, this, {hit: h, searchValue: this._searchVal, oid: (oid) ? target : null});
+            el.on('click', this.searchResultClicked, this, opts);
             el.on('mouseover', this.highlightItem, this, {cmp: content});
 		}
 
@@ -160,7 +155,7 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
         this.callParent(arguments);
 
          var me = this,
-             height = Ext.ComponentQuery.query('master-view')[0].getHeight();
+             height = VIEWPORT.getHeight();
 
         me.setHeight(height - me.getPosition(true)[1] - 10);
 

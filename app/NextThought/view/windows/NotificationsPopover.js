@@ -1,6 +1,9 @@
 Ext.define('NextThought.view.windows.NotificationsPopover', {
 	extend: 'Ext.panel.Panel',
     alias: 'window.notifications-popover',
+    requires: [
+        'NextThought.view.widgets.MiniStreamEntry'
+    ],
 
     autoScroll: true,
     floating: true,
@@ -12,37 +15,23 @@ Ext.define('NextThought.view.windows.NotificationsPopover', {
     items:[{margin: 3}],
     defaults: {border: false,
               defaults: {border: false}},
-    _lastLoginTime: null,
 
     initComponent: function() {
-           this.callParent(arguments);
+        this._lastLoginTime = null;
+        this.callParent(arguments);
     },
 
     render: function() {
        this.callParent(arguments);
 
        var me = this,
-           u = _AppConfig.server.userObject,
-           lastLogin = u.get('lastLoginTime'), //unix time
-           //lastLoginDate = new Date(lastLogin * 1000),
-           height = Ext.ComponentQuery.query('master-view')[0].getHeight();
+           lastLogin = _AppConfig.server.userObject.get('lastLoginTime'),
+           height = VIEWPORT.getHeight();
 
         this._lastLoginTime = lastLogin;
         me.el.mask('Loading');
 
-        UserDataLoader.getRecursiveStreamSince(
-		        	null,
-                    lastLogin,
-                    {
-                        scope: this,
-                        success: this.updateContents
-		        });
-
-        //adjust the last login date to reflect that we've seen notifications
-        //var dt = new Date(),
-        //    unixDate = Ext.Date.format(dt, 'U');
-        u.set('lastLoginTime', new Date());
-        u.save();
+        UserDataLoader.getRecursiveStreamSince(null, lastLogin, {scope: this, success: this.updateContents});
     },
 
 
@@ -70,7 +59,7 @@ Ext.define('NextThought.view.windows.NotificationsPopover', {
             }
 
             if (change.get('Last Modified') > this._lastLoginTime)
-                p.add(Ext.create('NextThought.view.widgets.MiniStreamEntry', {change: change}));
+                p.add({xtype: 'miniStreamEntry', change: change});
 		}
 
         this.el.unmask();
@@ -80,7 +69,7 @@ Ext.define('NextThought.view.windows.NotificationsPopover', {
         this.callParent(arguments);
 
          var me = this,
-             height = Ext.ComponentQuery.query('master-view')[0].getHeight();
+             height = VIEWPORT.getHeight();
 
         me.setHeight(height - me.getPosition(true)[1] - 10);
 
