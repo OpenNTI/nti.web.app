@@ -38,8 +38,10 @@ Ext.define('NextThought.controller.Search', {
         if(popover) popover.close();
     },
 
-    searchResultClicked: function(hit, searchValue, oid) {
-        var containerId = hit.get('ContainerId'),
+    searchResultClicked: function(hit, searchValue) {
+        var oid = hit.get('TargetOID'),
+            target = oid ? (hit.get('Type').toLowerCase() + '-' + oid) : null,
+            containerId = hit.get('ContainerId'),
             bookInfo = NextThought.librarySource.findLocation(containerId),
             book = bookInfo.book,
             href = bookInfo.location.getAttribute('href');

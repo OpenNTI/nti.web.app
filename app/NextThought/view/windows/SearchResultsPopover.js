@@ -179,11 +179,7 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
 
 
     searchResultClicked: function(event, dom, opts) {
-        var h = opts.hit,
-            oid = h.get('TargetOID'),
-            target = oid ? (h.get('Type').toLowerCase() + '-' + oid) : null;
-
-        this.fireEvent('goto', h, this._searchVal, target);
+        this.fireEvent('goto', opts.hit, this._searchVal);
         this.close();
 
     },
