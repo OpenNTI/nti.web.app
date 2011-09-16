@@ -81,5 +81,6 @@ Ext.define('NextThought.view.widgets.FilterControlPanel', {
 		form.add({ xtype:'checkbox', boxLabel: 'Notes', model: 'NextThought.view.widgets.annotations.Note' });
 
 		this.fireEvent('filter-control-loaded',this.getId());
+//        this.doLayout();
 	}
 });
