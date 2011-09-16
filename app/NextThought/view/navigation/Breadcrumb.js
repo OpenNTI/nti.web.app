@@ -17,8 +17,8 @@ Ext.define('NextThought.view.navigation.Breadcrumb', {
     initComponent: function(){
    		this.callParent(arguments);
         this.add({ text: 'Loading...' });
-        this._librarySource = NextThought.librarySource;
-        this._librarySource.on('loaded',function(){ if(!this._current.location) this.reset(); }, this);
+        this._library = NextThought.librarySource;
+        this._library.on('loaded',function(){ if(!this._current.location) this.reset(); }, this);
     },
 
 	reset: function(book){
@@ -43,7 +43,7 @@ Ext.define('NextThought.view.navigation.Breadcrumb', {
 			return {};
 		}
 		
-		var xml = this._librarySource.getToc(b.get('index')),
+		var xml = this._library.getToc(b.get('index')),
 			q = "topic[href^="+this._current.location.replace('.','\\.')+"]",
 			l = Ext.DomQuery.selectNode(q,xml);
 		return {
@@ -83,6 +83,7 @@ Ext.define('NextThought.view.navigation.Breadcrumb', {
 	    }
 	    var me = this,
             toc = me._selectNodeParent('topic',xml),
+            location = (currentLocation ? currentLocation:toc);
 	        nodes = [],
             first = true;
 	        selectedBranch = currentLocation,
@@ -121,7 +122,16 @@ Ext.define('NextThought.view.navigation.Breadcrumb', {
 	    
 	    nodes.reverse();
 	    container.add(nodes);
-	    
+
+        //add prev and next buttons
+        if (location) {
+            var navInfo = this._library.getNavigationInfo(location.getAttribute('ntiid')) || {};
+            container.add(
+                '->',
+                {text: 'prev', disabled: !navInfo.hasPrevious, location: navInfo.previousHref, book: navInfo.book},
+                {text: 'next', disabled: !navInfo.hasNext, location: navInfo.nextHref, book: navInfo.book}
+            );
+        }
 	},
 	
 	
@@ -130,20 +140,16 @@ Ext.define('NextThought.view.navigation.Breadcrumb', {
 	_getLibraryMenu: function(book){
 		var list = [];
 		
-		this._librarySource.each(function(o){
-			var xml = this._librarySource.getToc(o.get('index')),
+		this._library.each(function(o){
+			var xml = this._library.getToc(o.get('index')),
 				b	= [],
                 h   = o.get('href'),
 				m	= {
                     text: o.get('title'),
                     checked: book && o.get('index')==book.get('index'),
                     group: 'library',
-                    listeners: {
-                        scope: this,
-                        click: function(){
-                            if(h) this.fireEvent('navigate',o, h);
-                        }
-					}
+                    book: o,
+                    location: h
 				};
 				
 			if(xml){
@@ -166,7 +172,6 @@ Ext.define('NextThought.view.navigation.Breadcrumb', {
         if(!node)return;
         Ext.each(node.childNodes,function(v){
             if(v.nodeName=="#text"||!v.hasAttribute("label")){
-            	//console.log(v);
             	return;
             }
             leafs.push(this._renderLeafFromTopic(book, v, v==selectedNode)||{});
@@ -202,12 +207,8 @@ Ext.define('NextThought.view.navigation.Breadcrumb', {
 
         var leaf = {
         	text: labelText,
-        	listeners: {
-        		scope: this,
-        		click: function(){
-                    this.fireEvent('navigate',book, book.get('root')+href);
-        		}
-        	}
+            book: book,
+            location: book.get('root')+href
         };
             
         if(selected){

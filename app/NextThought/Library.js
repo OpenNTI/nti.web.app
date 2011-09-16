@@ -21,7 +21,37 @@ Ext.define('NextThought.Library', {
         this.store.data.each(callback,scope||this);
     },
 
-    
+    //TODO-consider caching the nav infos for some period of time to avoid extra work...
+    getNavigationInfo: function(ntiid) {
+        var loc = this.findLocation(ntiid),
+            book = loc ? loc.book : null,
+            root = book ? book.get('root') : '',
+            toc = book ? this.getToc(book.get('index')) : null,
+            list = toc ? Ext.DomQuery.select('toc,topic' ,toc): [],
+            i = 0,
+            len = list.length,
+            info = {};
+
+        for (i; i < len; i++) {
+            if (!list[i] || !list[i].getAttribute) {
+                console.log('error in loop', ntiid, loc, book, toc, list, i, len);
+                continue;
+            }
+
+            if(list[i].getAttribute('ntiid') == ntiid) {
+                info.hasPrevious = !!(info.previous = list[i - 1]);
+                info.hasNext = !!(info.next = list[i + 1]);
+                info.nextHref = info.hasNext ? root + info.next.getAttribute('href') : null;
+                info.previousHref = info.hasPrevious ? root + info.previous.getAttribute('href') : null;
+                info.current = list[i];
+                info.book = book;
+                break;
+            }
+        }
+
+        return info;
+    },
+
     getTitle: function(index){
         var title = null;
 
@@ -105,6 +135,15 @@ Ext.define('NextThought.Library', {
                     if(!this._tocs[index]){
                         console.log('WARNING: no data for index: '+url);
                     }
+
+                    var toRemove = Ext.DomQuery.select('topic:not([ntiid])', this._tocs[index]);
+                    Ext.each(toRemove, function(e){
+                        if (e.parentNode)
+                            e.parentNode.removeChild(e);
+                        else
+                            console.log('error, no parent node?', e);
+                    });
+
                     if( callback ){
                         callback();
                     }
@@ -152,7 +191,9 @@ Ext.define('NextThought.Library', {
     },
 
     _resolveBookLocation: function(book, containerId) {
-        var l = Ext.DomQuery.selectNode("topic[ntiid="+containerId+"]", this.getToc(book.get('index')));
+        var q='[ntiid='+containerId+']',
+            query = 'toc' + q + ',topic' + q,
+            l = Ext.DomQuery.selectNode(query, this.getToc(book.get('index')));
         if (l)
             return {book:book, location:l};
 

@@ -46,6 +46,10 @@ Ext.define('NextThought.controller.Reader', {
                 'navigate': this.navigate
             },
 
+            'breadcrumbbar *[location]' : {
+                'click' : this.buttonClicked
+            },
+
             'reader-panel':{
                 'navigate': this.navigate,
                 'location-changed': this.readerLocationChanged,
@@ -79,6 +83,15 @@ Ext.define('NextThought.controller.Reader', {
             book = bookInfo.book,
             href = bookInfo.location.getAttribute('href');
         this.navigate(book, book.get('root') + href, {oid: id});
+    },
+
+    buttonClicked: function(button) {
+        if (!button || !button.book || !button.location) return;
+
+        var book = button.book,
+            loc = button.location;
+        
+        this.navigate(book, loc);
     },
 
     navigate: function(book, ref, options){
