@@ -41,7 +41,6 @@ Ext.define('NextThought.view.widgets.MiniStreamEntry', {
         //glance w/o having to navigate to it?
         var e = this.getEl(),
             t = this.change.get('Item').get('text');
-        console.log('attaching', t, 'to', e, this.change);
         if (t) {
             Ext.create('Ext.tip.ToolTip', {
                 target: e,
