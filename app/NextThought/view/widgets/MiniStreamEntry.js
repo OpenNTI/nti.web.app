@@ -36,5 +36,17 @@ Ext.define('NextThought.view.widgets.MiniStreamEntry', {
         me.box.on('click', function(){
             VIEWPORT.fireEvent('stream-item-clicked', me.change.get('Item'));
         });
+
+        //lets put some popovers on this to show the contents?  Maybe this should be inline so as to see it at a
+        //glance w/o having to navigate to it?
+        var e = this.getEl(),
+            t = this.change.get('Item').get('text');
+        console.log('attaching', t, 'to', e, this.change);
+        if (t) {
+            Ext.create('Ext.tip.ToolTip', {
+                target: e,
+                html: t
+            });
+        }
     }
 });
