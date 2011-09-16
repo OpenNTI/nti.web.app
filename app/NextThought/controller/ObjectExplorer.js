@@ -56,7 +56,7 @@ Ext.define('NextThought.controller.ObjectExplorer', {
             book = bookInfo.book,
             href = bookInfo.location.getAttribute('href');
 
-        this.navigate(book, book.root + href);
+        this.navigate(book, book.get('root') + href);
     },
 
     objectExplorerClicked: function(btn, e, o) {
