@@ -60,7 +60,6 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
         me.alignTo(me.bindTo);
 
         el.mask("Searching");
-        //el.on('mouseleave', function(){me.close();}, this);
     },
 
     chooseSelection: function() {
