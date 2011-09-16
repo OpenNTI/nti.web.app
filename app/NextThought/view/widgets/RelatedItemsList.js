@@ -72,13 +72,13 @@ Ext.define('NextThought.view.widgets.RelatedItemsList', {
         e.preventDefault();
 
         if(m.type=='index')
-            this.fireEvent('navigate', m.book, m.book.root+m.href);
+            this.fireEvent('navigate', m.book, m.book.get('root')+m.href);
 
         else if(m.type=='video'){
             Ext.create('widget.video-window', {
                 title: m.label,
                 src:[{
-                    src: _AppConfig.server.host+m.book.root+m.href,
+                    src: _AppConfig.server.host+m.book.get('root')+m.href,
                     type: 'video/mp4'
                 }]
             }).show();
@@ -123,7 +123,7 @@ Ext.define('NextThought.view.widgets.RelatedItemsList', {
                         label: label,
                         href: href,
                         qualifier: qual,
-                        icon: icon? book.root+icon : book.icon
+                        icon: icon? book.get('root')+icon : book.get('icon')
                     };
                 }
             }
