@@ -6,7 +6,7 @@ Ext.define('NextThought.view.widgets.PeopleList', {
 			],
 	
 	border: false,
-	//height: 40,
+	padding: 5,
 	defaults: {border: false},
 	items:[{html:'People:', cls: 'sidebar-header'},{margin: '1 0 1 1'}],
 	

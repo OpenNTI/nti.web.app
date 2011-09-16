@@ -14,6 +14,7 @@ Ext.define('NextThought.view.form.fields.SearchField', {
         this.callParent(arguments);
         this.on('specialkey', function(f, e){
             //trigger search if enter is pressed, or if down is pressed and there isn't already a search
+            console.log('key=', e, ' hasSearch=', this.hasSearch);
             if(e.getKey() == e.ESC){
                 this.onTrigger1Click();
             }

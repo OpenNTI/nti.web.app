@@ -5,11 +5,13 @@ Ext.define('NextThought.view.windows.NotificationsPopover', {
         'NextThought.view.widgets.MiniStreamEntry'
     ],
 
+    cls: 'notification-popover',
     autoScroll: true,
     floating: true,
     border: true,
     frame: false,
-    width: 250,
+    width: 350,
+    height: 50,
     renderTo: Ext.getBody(),
     items:[{margin: 3}],
     defaults: {border: false,
@@ -27,14 +29,37 @@ Ext.define('NextThought.view.windows.NotificationsPopover', {
 
         me.alignTo(this.bindTo);
         el.mask('Loading');
-        el.on('mouseleave', function(){me.close();}, this);
+        el.on('mouseenter', me.cancelClose, me);
+        el.on('mouseleave', me.closePopover, me);
+        el.on('click', me.itemClicked, me);
 
-        UserDataLoader.getRecursiveStreamSince(null, me._lastLoginTime, {scope: this, success: this.updateContents});
+
+        UserDataLoader.getRecursiveStream(null, {scope: this, success: this.updateContents, failure: this.updateFailed});
     },
 
+    cancelClose: function() {
+        if (this.leaveTimer)
+            window.clearTimeout(this.leaveTimer);
+    },
+
+    closePopover: function() {
+        this.cancelClose();
+
+        var me = this;
+        this.leaveTimer = window.setTimeout(function(){me.close();}, 750);
+    },
+
+    itemClicked: function() {
+        this.close();
+    },
+
+    updateFailed: function() {
+        console.log('update failed.... so do something.');
+    },
 
     updateContents: function(stream) {
-        var k, change,
+        var k, len, change,
+            readCount = 0;
             p = this.items.get(0);
 
         if(!stream || stream.length == 0) {
@@ -45,20 +70,23 @@ Ext.define('NextThought.view.windows.NotificationsPopover', {
             return;
         }
 
-        for(k in stream){
-            if(!stream.hasOwnProperty(k))continue;
 
+
+        for(k = 0, len=stream.length; k < len && readCount < 2; k++){
             change = stream[k];
 
             if (!change.get) {
                 //dead change, probably deleted...
                 continue;
             }
-
-            if (change.get('Last Modified') > this._lastLoginTime)
-                p.add({xtype: 'miniStreamEntry', change: change});
+            var unread = (change.get('Last Modified') > this._lastLoginTime);
+            p.add({xtype: 'miniStreamEntry', change: change, cls: unread ? 'unread' : 'read'});
+            if (!unread) readCount++;
         }
 
+
+
+        this.fixHeight();
         this.el.unmask();
     },
 

@@ -9,7 +9,7 @@ Ext.define('NextThought.view.widgets.MiniStreamList', {
 	border: false,
 	margin: '15px auto',
 	defaults: {border: false},
-	items:[{html:'Recent Items:', cls:'sidebar-header'},{margin: 3, defaults:{border: false}}],
+	items:[{html:'Recent Items:', cls:'sidebar-header'},{defaults:{border: false}}],
 	
 	_filter: {},
 	_containerId: null,

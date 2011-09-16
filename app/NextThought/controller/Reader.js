@@ -38,6 +38,7 @@ Ext.define('NextThought.controller.Reader', {
         this.control({
             'master-view':{
                 'navigate': this.navigate,
+                'stream-item-clicked': this.navigateToItem,
                 'cleared-search': this.clearSearch
             },
 
@@ -63,6 +64,21 @@ Ext.define('NextThought.controller.Reader', {
 
     clearSearch: function() {
         this.getReader().clearSearchRanges();
+    },
+
+    navigateToItem: function(i) {
+        var c = i.get('Class'),
+            oid = i.get('OID'),
+            id = c.toLowerCase()+'-'+oid;
+
+        //right now, only handle notes and highlights, not sure what to do with users etc...
+        if (c != 'Note' && c != 'Highlight') return;
+
+        var containerId = i.get('ContainerId'),
+            bookInfo = NextThought.librarySource.findLocation(containerId),
+            book = bookInfo.book,
+            href = bookInfo.location.getAttribute('href');
+        this.navigate(book, book.get('root') + href, {oid: id});
     },
 
     navigate: function(book, ref, options){
@@ -100,7 +116,11 @@ Ext.define('NextThought.controller.Reader', {
     },
 
     scrollToText: function(text, oid) {
-        if (!text) return;
+        if (oid && !text) {
+            this.getReader().scrollToId(oid);
+            return;
+        }
+        else if (!text) return;
 
         text = text.toLowerCase();
 

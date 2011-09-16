@@ -52,7 +52,9 @@
         }
 
 
-
+        .notification-popover .x-stream-entry > .x-panel-body {
+            padding: 10px;
+        }
 
         .x-real-name-field input.x-form-text{
             padding: 1em;
@@ -60,10 +62,40 @@
             height: 55px;
         }
 
+
         .object-explorer {
             background: url('resources/images/objects16.png');
         }
 
+        .x-mini-stream-entry:hover {
+           background: #7889A3 !important;
+            color: white;
+        }
+
+
+        .x-mini-stream-entry {
+            position: relative;
+            overflow: hidden;
+            padding: 10px 5px;
+            cursor: pointer;
+        }
+
+        .x-mini-stream-entry div {
+            margin-left: 22px;
+        }
+
+        .x-mini-stream-entry img {
+            float: left;
+        }
+
+        .x-mini-stream-entry.read {
+            background-color: #D8D8D8;
+            margin: 0;
+        }
+        .x-mini-stream-entry.unread {
+            background-color: white;
+            font-weight: bold;
+        }
         .x-stream-entry {
             margin-bottom: 5px;
         }
@@ -491,8 +523,12 @@
 <body>
 <div id="loading-mask"></div><div id="loading"><div class="loading-indicator">Loading...</div></div>
 
+<script type="text/javascript" src="/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+<!--
 <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 <script type="text/javascript" src="http://code.jquery.com/jquery-1.6.2.min.js"></script>
+-->
 
 <script type="text/javascript" src="resources/mathjaxconfig.js"></script>
 <script type="text/javascript" src="resources/stacktrace.js"> </script>

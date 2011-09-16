@@ -6,7 +6,7 @@ Ext.define('NextThought.view.widgets.main.RightColumn', {
 	cls: 'x-column x-right-column',
 	frame: false,
 	border: false,
-	defaults: {frame: false, border: false, padding: 5},
+	defaults: {frame: false, border: false},
 	
 	minWidth: MIN_SIDE_WIDTH,
     height: '100%',

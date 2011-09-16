@@ -343,7 +343,10 @@ Ext.define('NextThought.proxy.UserDataLoader',{
 				u = _AppConfig.server.username,
                 headers = (sinceDate) ? {'If-Modified-Since': this.getUTC(sinceDate)} : {};
 				url = h+d+'users/'+u+'/Pages/' + containerId + '/' + (stream? stream : "Stream") + '/';
-				
+
+            if (!callbacks || !callbacks.success || !callbacks.failure)
+                Ext.Error.raise('Callbacks with success and failure must be defined.');
+
 			this._streamRequest = Ext.Ajax.request({
 				url: url,
 				scope: this,
@@ -365,12 +368,13 @@ Ext.define('NextThought.proxy.UserDataLoader',{
                             console.log('no change since last update?', r);
                             callbacks.success.call(callbacks.scope || this, []);
                         }
-						else if(callbacks && callbacks.failure){
-							callbacks.failure.call(callbacks.scope || this, 'bad group dataz');
-						} 
-						else if(NextThought.isDebug && !sinceDate){
-							console.log('Response sucked:', r, 'bad json:', json);
-						}
+						else {
+                            callbacks.failure.call(callbacks.scope || this, 'bad group dataz');
+
+                            if(NextThought.isDebug && !sinceDate){
+                                console.log('Response sucked:', r, 'bad json:', json);
+                            }
+                        }
 						return;
 					}
 					var cReader = this._getReaderForModel('Change');
@@ -383,7 +387,12 @@ Ext.define('NextThought.proxy.UserDataLoader',{
 						json.Items[x] = cReader.read(i).records[0];
 					},
 					this);
-					
+
+                    Ext.Array.sort(json.Items, function(a, b){
+                        var lm = 'Last Modified';
+                            return a.get(lm)<b.get(lm) ? 1 : -1;
+                    });
+
 					if(callbacks && callbacks.success){
 						callbacks.success.call(callbacks.scope || this, json.Items);
 					}
