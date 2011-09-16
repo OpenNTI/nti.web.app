@@ -66,6 +66,7 @@ Ext.define('NextThought.view.navigation.Breadcrumb', {
         }
         catch(e){
             console.log('Could not render the breadcrumb', e, e.message, e.stack);
+            this.reset();
         }
 		this.fireEvent('change',loc);
 	},

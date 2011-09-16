@@ -72,7 +72,34 @@
             color: white;
         }
 
+    /*
+    '<div class="tracker-tip">',
+            '<img src="{icon}" width=32 height=32"/>',
+            '<div>',
+                '<span class="tracker-tip-title">{title}</span> ',
+                '<span class="tracker-tip-label">{label}</span>',
+            '</div>',
+        '</div>',
+    */
+        .tracker-tip .tracker-tip-title {
+            display: block;
+            font-weight: bold;
+        }
 
+        .tracker-tip .tracker-tip-label {
+            display: block;
+        }
+
+        .tracker-tip-container,
+        .tracker-tip {
+            background: #ffffff;
+        }
+
+        .tracker-top-container .x-tip-body .tracker-tip{
+            padding: 0;
+        }
+
+        .tracker-tip,
         .x-mini-stream-entry {
             position: relative;
             overflow: hidden;
@@ -80,10 +107,14 @@
             cursor: pointer;
         }
 
+        .tracker-tip div {
+            margin-left: 40px;
+        }
         .x-mini-stream-entry div {
             margin-left: 22px;
         }
 
+        .tracker-tip img,
         .x-mini-stream-entry img {
             float: left;
         }

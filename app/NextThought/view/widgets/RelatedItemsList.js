@@ -113,7 +113,7 @@ Ext.define('NextThought.view.widgets.RelatedItemsList', {
 
                     label = location? location.getAttribute('label') : r.getAttribute('title'),
                     href = (location? location : r ).getAttribute('href'),
-                    icon = r.getAttribute('icon');
+                    icon = this.findIcon(r);
 				
                 if(!map[id]){
                     map[id] = {
@@ -132,6 +132,14 @@ Ext.define('NextThought.view.widgets.RelatedItemsList', {
         },this);
 		
         return map;
-    }
+    },
+
+    findIcon: function(node) {
+        var nodeIcon = node.getAttribute('icon');
+
+        if (!nodeIcon && node.parentNode) return this.findIcon(node.parentNode);
+
+        return nodeIcon;
+    },
 
 });

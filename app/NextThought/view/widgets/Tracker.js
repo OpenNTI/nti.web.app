@@ -2,6 +2,18 @@
 
 Ext.define('NextThought.view.widgets.Tracker', {
 
+    toolTipTpl: new Ext.XTemplate(
+        '<div class="tracker-tip">',
+            '<img src="{icon}" width=32 height=32"/>',
+            '<div>',
+                '<span class="tracker-tip-title">{title}</span> ',
+                '<span class="tracker-tip-label">{label}</span>',
+            '</div>',
+        '</div>',
+        {
+            compile:true
+        }),
+
     constructor: function(cmp,container, body){
         Ext.apply(this,{
             width: 45,
@@ -39,6 +51,15 @@ Ext.define('NextThought.view.widgets.Tracker', {
 		b.on('mousemove', h, this);
 		b.on('mouseover', h, this);
 		b.on('mouseout', h, this);
+
+        //add tooltip
+        this.toolTip = Ext.create('Ext.tip.ToolTip', {
+            cls: 'tracker-tip-container',
+            target: c,
+            trackMouse: true,
+            html: '',
+            dismissDelay: 0
+        });
 
 		cmp.on('resize', this._onResize, this);
 		
@@ -84,10 +105,50 @@ Ext.define('NextThought.view.widgets.Tracker', {
 			current.toc,
 			current.location,
 			region?region.rect:undefined);
+
+        if (!region) return;
+        
+        //set current node in tooltip if it has changed
+        try{
+            this.renderToolTip(region.node);
+        }
+        catch (err) {
+            console.log('error', err.message, err.stack);
+        }
+
 	},
 
+    renderToolTip: function(node) {
+        if ((!this.tipRendered && !node) || this.toolTip.currentNode == node) return;
 
+        var current = this._locationProvider.getLocation(),
+            book = current.book,
+            host = _AppConfig.server.host,
+            root = book.get('root'),
+            bookIcon = book.get('icon'),
+            data = {
+                title: book.get('title'),
+                label: node ? node.getAttribute('label') : '',
+                icon: this.findChapterIcon(node)
+            };
 
+        if (data.icon) data.icon = host + root + data.icon;
+        else data.icon = host + bookIcon;
+
+        this.toolTip.currentNode = node;
+        this.toolTip.update(this.toolTipTpl.apply(data));
+
+        this.tipRendered = true;
+    },
+
+    findChapterIcon: function(node) {
+        var nodeIcon = node ? node.getAttribute('icon') : null;
+
+        if (!nodeIcon && node && node.parentNode)
+            return this.findChapterIcon(node.parentNode);
+
+        return nodeIcon;
+    },
 	
 	clickHandler: function(e){
 		var self = this,
