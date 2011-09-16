@@ -75,6 +75,7 @@ Ext.define('NextThought.mixins.Annotations', {
             v.cleanup();
             delete v;
             this._annotations[oid] = undefined;
+            delete this._annotations[oid];
         }
     },
 
@@ -120,11 +121,13 @@ Ext.define('NextThought.mixins.Annotations', {
 
         menu = w.getMenu();
         menu.on('hide', function(){
-            if(!w.isSaving){
-                w.cleanup();
-                delete w;
-            }
-        });
+                if(!w.isSaving){
+                    w.cleanup();
+                    delete this._annotations[w.tempOID]; //remove the key from the object
+                    delete w;//delete the object itself
+                }
+            },
+            this);
         menu.showAt(xy);
 
     },
@@ -145,9 +148,12 @@ Ext.define('NextThought.mixins.Annotations', {
 
         if (!oid) {
             oid = 'Highlight-' + new Date().getTime();
+            w.tempOID = oid;
             record.on('updated',function(r){
                 this._annotations[r.get('OID')] = this._annotations[oid];
                 this._annotations[oid] = undefined;
+                delete this._annotations[oid];
+                delete w.tempOID;
             }, this);
         }
 
