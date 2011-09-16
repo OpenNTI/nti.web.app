@@ -100,6 +100,11 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
     },
 
     updateContents: function(hits, panelIndex) {
+        if(!this){
+            console.log('"this" has been deleted');
+            return;
+        }
+
         var p = this.items.get(panelIndex);
         if(hits && hits.length > 0) {
             p.show();
@@ -140,16 +145,23 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
 
 
     fixHeight: function(){
-        var me = this,
-            e = me.bindTo,
-            max = (VIEWPORT.getHeight() - e.getPosition()[1] - e.getHeight() - 10);
-        me.height = undefined;
-        me.doLayout();
-        if(me.getHeight()> max)
-            me.setHeight(max);
+        try{
+            var me = this,
+                e = me.bindTo,
+                max = (VIEWPORT.getHeight() - e.getPosition()[1] - e.getHeight() - 10);
+            me.height = undefined;
+            me.doLayout();
+            if(me.getHeight()> max)
+                me.setHeight(max);
 
-        //console.log(max, me.getHeight());
-        VIEWPORT.on('resize',me.fixHeight,me, {single: true});
+            //console.log(max, me.getHeight());
+            VIEWPORT.on('resize',me.fixHeight,me, {single: true});
+        }
+        catch(err){
+            if(me){
+                console.log('error', err, err.message, err.stack);
+            }
+        }
     },
 
 

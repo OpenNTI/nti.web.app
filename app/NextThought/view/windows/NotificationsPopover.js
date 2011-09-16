@@ -58,14 +58,19 @@ Ext.define('NextThought.view.windows.NotificationsPopover', {
     },
 
     updateContents: function(stream) {
+        if(!this){
+            console.log('"this" has been deleted');
+            return;
+        }
+
         var k, len, change,
             readCount = 0;
-            p = this.items.get(0);
+        p = this.items.get(0);
 
         if(!stream || stream.length == 0) {
             p.add( {html: '<b>No new updates</b>',
-                    border: false,
-                    margin: 10} );
+                border: false,
+                margin: 10} );
             this.el.unmask();
             return;
         }
@@ -92,19 +97,21 @@ Ext.define('NextThought.view.windows.NotificationsPopover', {
 
     fixHeight: function(){
         try{
-        var me = this,
-            e = me.bindTo,
-            max = (VIEWPORT.getHeight() - e.getPosition()[1] - e.getHeight() - 10);
-        me.height = undefined;
-        me.doLayout();
-        if(me.getHeight()> max)
-            me.setHeight(max);
+            var me = this,
+                e = me.bindTo,
+                max = (VIEWPORT.getHeight() - e.getPosition()[1] - e.getHeight() - 10);
+            me.height = undefined;
+            me.doLayout();
+            if(me.getHeight()> max)
+                me.setHeight(max);
 
-        //console.log(max, me.getHeight());
-        VIEWPORT.on('resize',me.fixHeight,me, {single: true});
+            //console.log(max, me.getHeight());
+            VIEWPORT.on('resize',me.fixHeight,me, {single: true});
         }
         catch(err){
-            console.log('error', err);
+            if(me){
+                console.log('error', err, err.message, err.stack);
+            }
         }
     }
 
