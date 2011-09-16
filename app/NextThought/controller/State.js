@@ -99,7 +99,7 @@ Ext.define('NextThought.controller.State', {
         }
 
         if(replaceState)
-            history.replaceState(this._currentState);
+            history.replaceState(this._currentState,'Title');
     },
 
 
