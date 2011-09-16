@@ -62,7 +62,7 @@ Ext.define('NextThought.controller.Login', {
         //Auto inject all future request with the auth string
         Ext.Ajax.defaultHeaders = Ext.Ajax.defaultHeaders || {};
         Ext.Ajax.defaultHeaders['Authorization']= a;
-        Ext.Ajax.username = username;
+        Ext.Ajax.username = encodeURIComponent(username);
         Ext.Ajax.password = password;
 
         Ext.util.Cookies.set(COOKIE, Ext.JSON.encode({a:a, u:username, r:r}),
@@ -101,8 +101,13 @@ Ext.define('NextThought.controller.Login', {
                         this.setupAuth(values.username, values.password,!!values.remember);
 
                         UserDataLoader.resolveUser(values.username, function(user){
-                            s.userObject = user;
-                            successCallback.call(m);
+                            if(user){
+                                s.userObject = user;
+                                successCallback.call(m);
+                            }
+                            else{
+                                failureCallback.call(m);
+                            }
                         });
                     }
                     else
