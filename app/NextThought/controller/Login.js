@@ -42,7 +42,8 @@ Ext.define('NextThought.controller.Login', {
                 }
             },
             'session-info' : {
-                'logout': this.handleLogout
+                'logout': this.handleLogout,
+                'password-changed': this.setupAuth
             }
         });
     },
@@ -51,6 +52,27 @@ Ext.define('NextThought.controller.Login', {
         var dt = Ext.Date.add(new Date(), Ext.Date.MONTH, -1);
         Ext.util.Cookies.set(COOKIE, '', dt);
         window.location.reload();
+    },
+
+
+    setupAuth: function(username, password, remember){
+        var r = !!(remember || this.shouldRemember()),
+            a = Base64.basicAuthString( username, password );
+
+        //Auto inject all future request with the auth string
+        Ext.Ajax.defaultHeaders = Ext.Ajax.defaultHeaders || {};
+        Ext.Ajax.defaultHeaders['Authorization']= a;
+        Ext.Ajax.username = username;
+        Ext.Ajax.password = password;
+
+        Ext.util.Cookies.set(COOKIE, Ext.JSON.encode({a:a, u:username, r:r}),
+            r ? Ext.Date.add(new Date(), Ext.Date.MONTH, 1)
+              : null);
+    },
+
+    shouldRemember: function(){
+        var c = Ext.JSON.decode(Ext.util.Cookies.get(COOKIE));
+        return c && c.r;
     },
 
 	attemptLogin: function(values, successCallback, failureCallback){
@@ -70,22 +92,13 @@ Ext.define('NextThought.controller.Login', {
             Ext.Ajax.request({
 				url: s.host + s.data + 'users/' + values.username,
 				headers:{ "Authorization": a},
+                scope: this,
 				callback: function(q,success,r){
 
                     if(success){
 
-                        //Auto inject all future request with the auth string
-                        Ext.Ajax.defaultHeaders = Ext.Ajax.defaultHeaders || {};
-                        Ext.Ajax.defaultHeaders['Authorization']= a;
-
                         Ext.copyTo(s, values, 'username');
-                        Ext.copyTo(Ext.Ajax, values, 'username,password');
-
-                        var v = Ext.JSON.encode({a:a, u:values.username, r:!!values.remember});
-                        Ext.util.Cookies.set(COOKIE, v,
-                            values.remember
-                                ? Ext.Date.add(new Date(), Ext.Date.MONTH, 1)
-                                : null);
+                        this.setupAuth(values.username, values.password,!!values.remember);
 
                         UserDataLoader.resolveUser(values.username, function(user){
                             s.userObject = user;

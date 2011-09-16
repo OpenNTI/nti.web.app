@@ -45,7 +45,13 @@ Ext.define('NextThought.controller.Account', {
             return;
         }
 
-        var key,u = _AppConfig.server.userObject;
+        var fire = false,
+            key,
+            u = _AppConfig.server.userObject;
+        if(values.password){
+            fire = true;
+            u.fields.add(new Ext.data.Field({name: 'password', type:'string'}));
+        }
         for(key in values){
             if(!values.hasOwnProperty(key)) continue;
             u.set(key, values[key]);
@@ -59,6 +65,9 @@ Ext.define('NextThought.controller.Account', {
                 _AppConfig.server.userObject = newRecord;
                 this.getIdentity().update(newRecord);
                 win.close();
+                if(fire){
+                    this.getSessionInfo().fireEvent('password-changed', u.get('Username'),values.password);
+                }
             }
         });
     },
