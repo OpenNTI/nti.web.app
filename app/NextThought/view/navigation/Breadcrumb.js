@@ -128,8 +128,8 @@ Ext.define('NextThought.view.navigation.Breadcrumb', {
             var navInfo = this._library.getNavigationInfo(location.getAttribute('ntiid')) || {};
             container.add(
                 '->',
-                {text: 'prev', disabled: !navInfo.hasPrevious, location: navInfo.previousHref, book: navInfo.book},
-                {text: 'next', disabled: !navInfo.hasNext, location: navInfo.nextHref, book: navInfo.book}
+                {iconCls: 'breadcrumb-prev', disabled: !navInfo.hasPrevious, location: navInfo.previousHref, book: navInfo.book},
+                {iconCls: 'breadcrumb-next', disabled: !navInfo.hasNext, location: navInfo.nextHref, book: navInfo.book}
             );
         }
 	},
