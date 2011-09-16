@@ -114,7 +114,7 @@ Ext.define('NextThought.view.widgets.RelatedItemsList', {
                     label = location? location.getAttribute('label') : r.getAttribute('title'),
                     href = (location? location : r ).getAttribute('href'),
                     icon = this.findIcon(r);
-console.log(id, tag, target, label);
+
                 if(!map[id]){
                     map[id] = {
                         book: book,
