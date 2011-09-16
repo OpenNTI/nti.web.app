@@ -91,6 +91,7 @@ Ext.define('NextThought.view.windows.NotificationsPopover', {
     },
 
     fixHeight: function(){
+        try{
         var me = this,
             e = me.bindTo,
             max = (VIEWPORT.getHeight() - e.getPosition()[1] - e.getHeight() - 10);
@@ -101,6 +102,10 @@ Ext.define('NextThought.view.windows.NotificationsPopover', {
 
         //console.log(max, me.getHeight());
         VIEWPORT.on('resize',me.fixHeight,me, {single: true});
+        }
+        catch(err){
+            console.log('error', err);
+        }
     }
 
 

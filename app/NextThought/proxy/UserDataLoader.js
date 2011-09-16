@@ -87,7 +87,8 @@ Ext.define('NextThought.proxy.UserDataLoader',{
 				url = h+d+'UserSearch/'+userId,
 				cache = this.resolvedUsers;
 
-            if(!userId || Ext.String.trim(userId)==''){
+            if(!userId || typeof(userId)!='string' || Ext.String.trim(userId)==''){
+                console.log('bad user "ID"??:',userId);
                 Ext.Error.raise('Bad user id');
             }
 				
