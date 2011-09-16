@@ -41,10 +41,17 @@ Ext.define('NextThought.mixins.Annotations', {
 
     applyFilter: function(newFilter){
         // console.log('applyFilter:', newFilter);
+        var _a = this._annotations;
+
         this._filter = newFilter;
-        for(var a in this._annotations) {
-            if(!this._annotations.hasOwnProperty(a)) continue;
-            this._annotations[a].updateFilterState(this._filter);
+        for(var a in _a) {
+            try {
+                if(!_a.hasOwnProperty(a) || !_a[a]) continue;
+                _a[a].updateFilterState(this._filter);
+            }
+            catch(e) {
+                console.log(_a, a, newFilter);
+            }
         }
     },
 
