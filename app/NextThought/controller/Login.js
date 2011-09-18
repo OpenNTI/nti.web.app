@@ -117,7 +117,8 @@ Ext.define('NextThought.controller.Login', {
 			});
 		}
 		catch(e){
-			console.log('AttemptLogin Exception: ', e);
+            debugger;
+			console.log('AttemptLogin Exception: ', e, e.message, e.stack);
 		}
 	},
 

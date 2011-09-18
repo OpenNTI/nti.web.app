@@ -140,6 +140,6 @@ Ext.define('NextThought.view.widgets.RelatedItemsList', {
         if (!nodeIcon && node.parentNode) return this.findIcon(node.parentNode);
 
         return nodeIcon;
-    },
+    }
 
 });

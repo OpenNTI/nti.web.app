@@ -3,26 +3,26 @@ Ext.define('NextThought.view.windows.LoginWindow', {
     alias : 'widget.loginwindow',
 	
     title: 'Login',
-    width: 400,
-//	height: 150,
-    // modal: true,
+    width: 500,
     resizable: false,
     closable: false,
-    layout: 'fit',
+    layout: 'anchor',
+
     items: [{
         xtype:'form',
         border: 0,
         bodyPadding: 5,
+        anchor: '100%',
 
         fieldDefaults: {
-            labelWidth: 55,
-            anchor: '100%'
+            labelWidth: 60,
+            margin: 15,
+            allowBlank: false,
+            anchor: '100%',
+            labelAlign: 'top'
         },
         layout: 'anchor',
-        defaults: {
-            anchor: '100%',
-            allowBlank: false
-        },
+
         items: [{
             name: 'login-message',
             cls: 'x-login-message-box',
@@ -30,16 +30,19 @@ Ext.define('NextThought.view.windows.LoginWindow', {
             html: 'Please enter your login information:'
         },{
             xtype: 'textfield',
+            cls: 'x-login-form-username',
             emptyText: 'email@address.com',
             fieldLabel: 'Username',
             name: 'username',
             vtype: 'email'
         },{
             xtype: 'textfield',
+            cls: 'x-login-form-password',
             emptyText: 'password',
             inputType: 'password',
             fieldLabel: 'Password',
             name: 'password',
+            margin: '15px 15px 15px 80px',
             listeners: {
                 specialkey: function(field, e){
                     if (e.getKey() == e.ENTER) {
@@ -50,7 +53,7 @@ Ext.define('NextThought.view.windows.LoginWindow', {
             }
         },{
             xtype: 'checkboxfield',
-            margin: '0 0 0 60px',
+            margin: '15px 15px 15px 80px',
             boxLabel: 'Keep me logged in on this computer',
             name: 'remember'
         }]
