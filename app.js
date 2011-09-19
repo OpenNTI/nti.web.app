@@ -13,6 +13,7 @@ Ext.application({
 
     controllers: [
         'State',
+        'Chat',
         'Account',
         'Annotations',
         'Application',

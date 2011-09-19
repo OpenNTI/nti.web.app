@@ -21,6 +21,8 @@ Ext.define('NextThought.view.windows.VideoWindow', {
         ]
      */
 
+    maximizable:true,
+
     constructor: function(config){
         if(!config || !config.src || !Ext.isArray(config.src)){
             throw 'you must supply a src array';

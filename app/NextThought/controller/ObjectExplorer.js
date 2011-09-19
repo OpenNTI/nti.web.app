@@ -69,7 +69,6 @@ Ext.define('NextThought.controller.ObjectExplorer', {
 				width: 500,
 				height: 350,
 				maximizable:true,
-				minimizable:true,
 				layout: 'fit',
 				closeAction: 'hide',
 				items: {xtype: 'item-navigator'}

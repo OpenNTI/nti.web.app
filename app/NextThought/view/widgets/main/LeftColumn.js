@@ -19,7 +19,10 @@ Ext.define('NextThought.view.widgets.main.LeftColumn', {
     dockedItems: {
 		xtype: 'toolbar',
 		cls: 'x-docked-noborder-top',
-		items: [ '->',{ objectExplorer: true, iconCls: 'object-explorer' } ]
+		items: [
+            '->',
+            { showChat: true, iconCls: 'chat' },
+            { objectExplorer: true, iconCls: 'object-explorer' } ]
 	},
 
 	columnWidget: {'html':'assign the columnWidget property'},

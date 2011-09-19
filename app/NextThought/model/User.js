@@ -15,6 +15,7 @@ Ext.define(	'NextThought.model.User', {
         { name: 'OID', type: 'string' },
         { name: 'Class', type: 'string' },
         { name: 'Username', type: 'string' },
+        { name: 'Presence', type: 'string' },
         { name: 'alias', type: 'string' },
         { name: 'realname', type: 'string' },
         { name: 'avatarURL', type: 'string' },
