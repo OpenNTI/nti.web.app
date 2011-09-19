@@ -27,7 +27,7 @@ Ext.define('NextThought.controller.Login', {
                             console.log(e, e.message);
                         }
 
-                        this.attemptLogin(null, win.callback, function(){win.show();});
+                        this.attemptLogin(null, function(){win.close();win.callback()}, function(){win.show();});
                     }
                     else
                         win.show();
@@ -94,7 +94,6 @@ Ext.define('NextThought.controller.Login', {
 				headers:{ "Authorization": a},
                 scope: this,
 				callback: function(q,success,r){
-
                     if(success){
 
                         Ext.copyTo(s, values, 'username');
@@ -124,7 +123,7 @@ Ext.define('NextThought.controller.Login', {
 
 
     loginClicked: function(button) {
-	    var win    = button.up('window'),
+	    var win    = button.up('loginwindow'),
 	        form   = win.down('form'),
 	        values = form.getValues(),
             m      = form.down('panel[name=login-message]');

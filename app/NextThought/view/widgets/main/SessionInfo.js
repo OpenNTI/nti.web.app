@@ -79,16 +79,18 @@ Ext.define('NextThought.view.widgets.main.SessionInfo', {
         return [
             {
                 text: 'Account',
+                iconCls: 'session-myacount',
                 scope: this,
                 handler: this._account
             },{
                 text: 'Settings',
-                scope: this,
                 iconCls: 'settings-gear',
+                scope: this,
                 handler: this._settings
             },'-',
             {
                 text: 'Logout',
+                iconCls: 'session-logout',
                 scope: this,
                 handler: this._logout
             }

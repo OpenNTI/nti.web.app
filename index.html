@@ -1,7 +1,7 @@
 <html>
 <head>
     <title>NextThought App</title>
-
+    <link rel="shortcut icon" href="favicon.ico">
     <link rel="stylesheet" type="text/css" href="extjs/resources/css/ext-all-gray.css">
     <link rel="stylesheet" type="text/css" href="resources/css/panel-reset.css">
     <style>
@@ -227,6 +227,12 @@
             line-height: 1.5em;
         }
 
+        .session-myacount{
+            background-image: url('resources/images/user_silhouette.gif');
+        }
+        .session-logout{
+            background-image: url('resources/images/sign-in.gif');
+        }
         .settings-gear{
             background-image: url('resources/images/gear-18.png');
         }
@@ -360,7 +366,8 @@
 
         .x-login-message-box {
             padding: 15px 15px 15px 48px;
-            margin-bottom: 15px;
+            background: #dfe8f6 url(resources/images/info.png) no-repeat 10px center;
+            /*margin-bottom: 15px;*/
         }
 
         .x-login-message-box,
@@ -368,6 +375,11 @@
             border: 1px solid #004d82;
             background-color: #dfe8f6;
             font-size: 12pt;
+
+        }
+
+        .x-login-message-box.error{
+            background: #800000 url(resources/images/minus-white.png) no-repeat 10px center;
         }
 
         .x-login-message-box.error,
@@ -384,10 +396,10 @@
 
         .x-login-form-username input.x-form-text{
             padding: 10px;
-            height: 40px;
+            height: 46px;
         }
 
-    .x-login-form-password label,
+        .x-login-form-password label,
         .x-login-form-password input{
             font-size: 12pt;
         }
