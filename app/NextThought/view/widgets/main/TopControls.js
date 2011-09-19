@@ -4,6 +4,7 @@ Ext.define('NextThought.view.widgets.main.TopControls', {
     alias: 'widget.top-controls',
     requires: [
         'NextThought.view.form.fields.SearchField',
+        'NextThought.view.widgets.main.ModeSwitcher',
         'NextThought.view.widgets.main.SessionInfo'
     ],
 	
@@ -19,22 +20,19 @@ Ext.define('NextThought.view.widgets.main.TopControls', {
     items: [],
 
     initComponent: function(){
-
         this.callParent(arguments);
-        var banner =  {
-            html: '<img src="resources/images/ntbanner.png" alt="banner" width="180" height="60" />',
-            border: false,
-            width: MIN_SIDE_WIDTH,
-            height: 60
-        };
-
         this.add({
             layout: 'hbox',
             flex: 1,
             minWidth: (MIN_SIDE_WIDTH+165),
             items: [
-                banner,
-                NextThought.modeSwitcher ,
+                {
+                    html: '<img src="resources/images/ntbanner.png" alt="banner" width="180" height="60" />',
+                    border: false,
+                    width: MIN_SIDE_WIDTH,
+                    height: 60
+                },
+                { xtype: 'modeswitcher' },
                 { xtype:'tbspacer', flex:1 }
             ]
         });
@@ -47,7 +45,7 @@ Ext.define('NextThought.view.widgets.main.TopControls', {
             minWidth: MIN_SIDE_WIDTH,
             items: [
                 { xtype:'tbspacer', flex:1 } ,
-                {xtype: 'session-info'}
+                { xtype: 'session-info' }
             ]
         });
     }

@@ -13,16 +13,22 @@ Ext.define('NextThought.view.Viewport', {
 	defaults:{ border: false, frame: false },
 	layout: 'border',
 	id: 'viewport',
+
+    items:[
+        {xtype: 'master-header', region: 'north'},
+        {xtype: 'modeContainer', region: 'center', id: 'mode-ctr'}
+    ],
 	
     initComponent: function(){
-   		this.callParent(arguments);
-	    this.addEvents('clear-search', 'navigate');
-		this.add({xtype: 'master-header', region: 'north'});
-        this._container = this.add({xtype: 'modeContainer', region: 'center', id: 'mode-ctr'});
         window.VIEWPORT = this;
+        this.addEvents('clear-search', 'navigate');
+        this.callParent(arguments);
 	},
 
     getActive: function(){
+        if(!this._container) {
+            this._container = this.down('modeContainer');
+        }
         return this._container.getActive();
     }
 });

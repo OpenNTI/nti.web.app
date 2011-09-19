@@ -34,38 +34,17 @@ Ext.application({
         fixIE();
         Ext.Ajax.timeout==60000;
         Ext.Ajax.on('beforerequest', beforeRequest);
+        Ext.EventManager.onWindowResize(resizeBlocker);
 
-//        Ext.FocusManager.enable();
-        setTimeout(clearMask, 100);
+        setTimeout(
+            function clearMask(){
+                Ext.get('loading').remove();
+                Ext.get('loading-mask').fadeOut({remove:true});
+                resizeBlocker(Ext.Element.getViewWidth());
+            },
+            100);
 
-        Ext.create('NextThought.view.windows.LoginWindow',{callback: appStart});
-
-
-        function appStart(){
-
-            try{
-                NextThought.modeSwitcher = Ext.create('NextThought.view.widgets.main.ModeSwitcher',{});
-                if(!NextThought.modeSwitcher){
-                    console.log('failed to load switer');
-                    Ext.getBody().mask('load failed');
-                    return;
-                }
-
-                Ext.EventManager.onWindowResize(resizeBlocker);
-                Ext.create('NextThought.view.Viewport',{});
-
-                NextThought.librarySource.load();
-            }
-            catch(e){
-                console.log(e, e.message, e.stack);
-            }
-        }
-
-        function clearMask(){
-            Ext.get('loading').remove();
-            Ext.get('loading-mask').fadeOut({remove:true});
-            resizeBlocker(Ext.Element.getViewWidth());
-        }
+        NextThought.controller.Login.login();
     }
 });
 

@@ -3,19 +3,107 @@ var COOKIE = '_z';
 Ext.define('NextThought.controller.Login', {
     extend: 'Ext.app.Controller',
     requires:[
-    		'NextThought.util.Base64',
-    		'NextThought.proxy.UserDataLoader',
-            'Ext.util.Cookies'
-    		],
+        'NextThought.util.Base64',
+        'NextThought.proxy.UserDataLoader',
+        'Ext.util.Cookies'
+    ],
 
-	views: [
+    views: [
         'windows.LoginWindow',
         'widgets.main.SessionInfo'
     ],
 
+    statics: {
+        login: function(){
+            var win = null;
+            if (Ext.util.Cookies.get(COOKIE))
+                this.attemptLogin(null,success,showLogin);
+            else
+                showLogin();
+
+            function showLogin(){
+                win = Ext.create('NextThought.view.windows.LoginWindow',{callback: success});
+            }
+
+            function success(){
+                if(win){
+                    win.close();
+                }
+                NextThought.controller.Application.launch();
+            }
+        },
+
+
+        setupAuth: function(username, password, remember){
+            var r = !!(remember || this.shouldRemember()),
+                a = Base64.basicAuthString( username, password );
+
+            //Auto inject all future request with the auth string
+            Ext.Ajax.defaultHeaders = Ext.Ajax.defaultHeaders || {};
+            Ext.Ajax.defaultHeaders['Authorization']= a;
+            Ext.Ajax.username = encodeURIComponent(username);
+            Ext.Ajax.password = password;
+
+            Ext.util.Cookies.set(COOKIE, Ext.JSON.encode({a:a, u:username, r:r}),
+                r ? Ext.Date.add(new Date(), Ext.Date.MONTH, 1)
+                    : null);
+        },
+
+        shouldRemember: function(){
+            var c = Ext.JSON.decode(Ext.util.Cookies.get(COOKIE));
+            return c && c.r;
+        },
+
+        attemptLogin: function(values, successCallback, failureCallback){
+            var m = this,
+                s = _AppConfig.server,
+                c = Ext.JSON.decode(Ext.util.Cookies.get(COOKIE)),
+                a = (!values)
+                    ? c.a
+                    : Base64.basicAuthString( values.username, values.password );
+
+            if (!values) {
+                values = Base64.getAuthInfo(c.a);
+                values.remember = !!c.r;
+            }
+
+            try{
+                Ext.Ajax.request({
+                    url: s.host + s.data + 'users/' + values.username,
+                    headers:{ "Authorization": a},
+                    scope: this,
+                    callback: function(q,success,r){
+                        if(success){
+
+                            Ext.copyTo(s, values, 'username');
+                            this.setupAuth(values.username, values.password,!!values.remember);
+
+                            UserDataLoader.resolveUser(values.username, function(user){
+                                if(user){
+                                    s.userObject = user;
+                                    successCallback.call(m);
+                                }
+                                else{
+                                    failureCallback.call(m);
+                                }
+                            });
+                        }
+                        else
+                            failureCallback.call(m);
+
+                    }
+                });
+            }
+            catch(e){
+                debugger;
+                console.log('AttemptLogin Exception: ', e, e.message, e.stack);
+            }
+        }
+    },
+
     init: function() {
-       	this.control({
-    		'loginwindow': {
+        this.control({
+            'loginwindow': {
                 'initialized': function(win){
                     if (Ext.util.Cookies.get(COOKIE)){
                         try{
@@ -26,19 +114,16 @@ Ext.define('NextThought.controller.Login', {
                         catch(e){
                             console.log(e, e.message);
                         }
-
-                        this.attemptLogin(null, function(){win.close();win.callback()}, function(){win.show();});
                     }
-                    else
-                        win.show();
-                 }
-    		},
+                    win.show();
+                }
+            },
             'loginwindow button[actionName=login]': {
                 'click': this.loginClicked
             },
             'loginwindow button[actionName=cancel]': {
                 'click': function(){
-                	window.location.replace('http://www.nextthought.com');
+                    window.location.replace('http://www.nextthought.com');
                 }
             },
             'session-info' : {
@@ -47,101 +132,33 @@ Ext.define('NextThought.controller.Login', {
             }
         });
     },
-    
-	handleLogout: function() {
+
+    handleLogout: function() {
         var dt = Ext.Date.add(new Date(), Ext.Date.MONTH, -1);
         Ext.util.Cookies.set(COOKIE, '', dt);
         window.location.reload();
     },
 
-
-    setupAuth: function(username, password, remember){
-        var r = !!(remember || this.shouldRemember()),
-            a = Base64.basicAuthString( username, password );
-
-        //Auto inject all future request with the auth string
-        Ext.Ajax.defaultHeaders = Ext.Ajax.defaultHeaders || {};
-        Ext.Ajax.defaultHeaders['Authorization']= a;
-        Ext.Ajax.username = encodeURIComponent(username);
-        Ext.Ajax.password = password;
-
-        Ext.util.Cookies.set(COOKIE, Ext.JSON.encode({a:a, u:username, r:r}),
-            r ? Ext.Date.add(new Date(), Ext.Date.MONTH, 1)
-              : null);
-    },
-
-    shouldRemember: function(){
-        var c = Ext.JSON.decode(Ext.util.Cookies.get(COOKIE));
-        return c && c.r;
-    },
-
-	attemptLogin: function(values, successCallback, failureCallback){
-		var m = this,
-            s = _AppConfig.server,
-            c = Ext.JSON.decode(Ext.util.Cookies.get(COOKIE)),
-			a = (!values)
-                ? c.a
-                : Base64.basicAuthString( values.username, values.password );
-
-        if (!values) {
-            values = Base64.getAuthInfo(c.a);
-            values.remember = !!c.r;
-        }
-
-		try{
-            Ext.Ajax.request({
-				url: s.host + s.data + 'users/' + values.username,
-				headers:{ "Authorization": a},
-                scope: this,
-				callback: function(q,success,r){
-                    if(success){
-
-                        Ext.copyTo(s, values, 'username');
-                        this.setupAuth(values.username, values.password,!!values.remember);
-
-                        UserDataLoader.resolveUser(values.username, function(user){
-                            if(user){
-                                s.userObject = user;
-                                successCallback.call(m);
-                            }
-                            else{
-                                failureCallback.call(m);
-                            }
-                        });
-                    }
-                    else
-                        failureCallback.call(m);
-
-                }
-			});
-		}
-		catch(e){
-            debugger;
-			console.log('AttemptLogin Exception: ', e, e.message, e.stack);
-		}
-	},
-
-
     loginClicked: function(button) {
-	    var win    = button.up('loginwindow'),
-	        form   = win.down('form'),
-	        values = form.getValues(),
+        var win    = button.up('loginwindow'),
+            form   = win.down('form'),
+            values = form.getValues(),
             m      = form.down('panel[name=login-message]');
 
 
         win.el.mask('Please Wait...');
         win.doLayout();
 
-		if(!form.getForm().isValid()) {
+        if(!form.getForm().isValid()) {
             tryAgain();
-			return;
-		}
+            return;
+        }
 
-        this.attemptLogin(values, success, tryAgain);
+        this.self.attemptLogin(values, success, tryAgain);
 
         function success(){
-	        win.close();
-		    win.callback();
+            win.close();
+            win.callback();
         }
 
 
@@ -152,5 +169,5 @@ Ext.define('NextThought.controller.Login', {
             win.doLayout();
             win.el.unmask();
         }
-	}
+    }
 });
