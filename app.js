@@ -3,6 +3,9 @@ Ext.require([
     'Ext.data.*'
 ]);
 
+//Add JS for socket IO for chat/presence
+document.write('<script	src="'+_AppConfig.server.host+'/socket.io/static/socket.io.js"></script>');
+
 CENTER_WIDTH = 768;
 MIN_SIDE_WIDTH = 216;
 MIN_WIDTH = 768;
@@ -19,7 +22,7 @@ Ext.application({
         'Application',
         'FilterControl',
         'Groups',
-        'Login',
+        'Session',
         'Modes',
         'ObjectExplorer',
         'Reader',
@@ -45,7 +48,7 @@ Ext.application({
             },
             100);
 
-        NextThought.controller.Login.login();
+        NextThought.controller.Session.login();
     }
 });
 

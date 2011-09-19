@@ -72,8 +72,10 @@
             background: url('resources/images/objects16.png');
         }
 
+
+        .x-chat-friend-entry:hover,
         .x-mini-stream-entry:hover {
-           background: #7889A3 !important;
+           background-color: #7889A3 !important;
             color: white;
         }
 
@@ -96,6 +98,7 @@
         }
 
         .tracker-tip,
+        .x-chat-friend-entry,
         .x-mini-stream-entry {
             position: relative;
             overflow: hidden;
@@ -106,11 +109,23 @@
         .tracker-tip div {
             margin-left: 40px;
         }
+
+        .x-chat-friend-entry {
+            padding: 5px 5px 5px 25px;
+            background: url(resources/images/offline.png) no-repeat 5px center;
+        }
+
+        .x-chat-friend-entry.Online {
+            background: url(resources/images/online.png) no-repeat 5px center;
+        }
+
+        .x-chat-friend-entry div,
         .x-mini-stream-entry div {
             margin-left: 22px;
         }
 
         .tracker-tip img,
+        .x-chat-friend-entry img,
         .x-mini-stream-entry img {
             float: left;
         }

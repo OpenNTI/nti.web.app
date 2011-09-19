@@ -1,6 +1,6 @@
 var COOKIE = '_z';
 
-Ext.define('NextThought.controller.Login', {
+Ext.define('NextThought.controller.Session', {
     extend: 'Ext.app.Controller',
     requires:[
         'NextThought.util.Base64',
@@ -49,6 +49,7 @@ Ext.define('NextThought.controller.Login', {
                     : null);
         },
 
+
         shouldRemember: function(){
             var c = Ext.JSON.decode(Ext.util.Cookies.get(COOKIE));
             return c && c.r;
@@ -77,6 +78,7 @@ Ext.define('NextThought.controller.Login', {
 
                             Ext.copyTo(s, values, 'username');
                             this.setupAuth(values.username, values.password,!!values.remember);
+                            NextThought.controller.Chat.setupSocket(values.username, values.password);
 
                             UserDataLoader.resolveUser(values.username, function(user){
                                 if(user){

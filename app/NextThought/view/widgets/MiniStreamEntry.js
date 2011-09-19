@@ -18,6 +18,7 @@ Ext.define('NextThought.view.widgets.MiniStreamEntry', {
         text: '.x-mini-stream-entry span.text',
         icon: 'img'
     },
+
     initComponent: function(){
         this.callParent(arguments);
 

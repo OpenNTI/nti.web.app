@@ -1,6 +1,10 @@
 Ext.define('NextThought.view.windows.ChatWindow', {
 	extend: 'Ext.window.Window',
 	alias : 'window.chat',
+    requires: [
+        'NextThought.view.widgets.chat.View',
+        'NextThought.view.widgets.chat.Friends'
+    ],
 
     width: 500,
     height: 350,
@@ -20,6 +24,7 @@ Ext.define('NextThought.view.windows.ChatWindow', {
             xtype: 'tabpanel',
             items: {
                 title: 'tab',
+                xtype: 'chat-view',
                 closable: true
             }
         },
@@ -31,11 +36,12 @@ Ext.define('NextThought.view.windows.ChatWindow', {
             width: 200,
             layout: 'accordion',
             items: [
+//                {
+//                    title: 'Tools'
+//                },
                 {
-                    title: 'Tools'
-                },
-                {
-                    title: 'Buddies'
+                    title: 'Friends',
+                    xtype: 'chat-friends-view'
                 }
             ]
         }
