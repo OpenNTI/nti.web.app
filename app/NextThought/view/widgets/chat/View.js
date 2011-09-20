@@ -16,8 +16,8 @@ Ext.define('NextThought.view.widgets.chat.View', {
             flex:1
         },
         {
-            xtype: 'textfield',
-            border: false
+            cls: 'chat-entry',
+            xtype: 'textfield'
         }
 
     ],

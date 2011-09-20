@@ -53,7 +53,7 @@ Ext.define('NextThought.view.windows.ChatWindow', {
             }
 
             this.down('tabpanel').setActiveTab(tab);
-            tsab.down('chat-log-view').addMessage(msg);
+            tab.down('chat-log-view').addMessage(msg);
         }, this);
         
     },

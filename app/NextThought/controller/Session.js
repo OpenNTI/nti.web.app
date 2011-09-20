@@ -138,6 +138,7 @@ Ext.define('NextThought.controller.Session', {
     handleLogout: function() {
         var dt = Ext.Date.add(new Date(), Ext.Date.MONTH, -1);
         Ext.util.Cookies.set(COOKIE, '', dt);
+        NextThought.controller.Chat.tearDownSocket();
         window.location.reload();
     },
 

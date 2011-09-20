@@ -1,6 +1,9 @@
 Ext.define('NextThought.view.widgets.chat.Log', {
 	extend:'Ext.panel.Panel',
     alias: 'widget.chat-log-view',
+    requires: [
+        'NextThought.view.widgets.chat.LogEntry'
+    ],
 
     autoScroll: true,
     layout: 'anchor',
@@ -13,7 +16,8 @@ Ext.define('NextThought.view.widgets.chat.Log', {
 
     addMessage: function(msg) {
         var o = this.add({
-                html: msg.get('Body')
+                xtype: 'chat-log-entry',
+                message: msg
             });
 
         o.el.scrollIntoView(this.el.first());

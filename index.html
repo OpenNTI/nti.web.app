@@ -73,10 +73,15 @@
         }
 
 
+        .x-chat-log-entry:hover,
         .x-chat-friend-entry:hover,
         .x-mini-stream-entry:hover {
            background-color: #7889A3 !important;
             color: white;
+        }
+
+        .x-chat-log-entry:hover .name{
+            color: black;
         }
 
         .tracker-tip .tracker-tip-title {
@@ -97,8 +102,14 @@
             padding: 0;
         }
 
+        .x-chat-log-entry .timestamp {
+            float: right;
+            padding:  0 0 5px 10px;
+        }
+
         .tracker-tip,
         .x-chat-friend-entry,
+        .x-chat-log-entry,
         .x-mini-stream-entry {
             position: relative;
             overflow: hidden;
@@ -119,12 +130,14 @@
             background: url(resources/images/online.png) no-repeat 5px center;
         }
 
+        .x-chat-log-entry div,
         .x-chat-friend-entry div,
         .x-mini-stream-entry div {
             margin-left: 22px;
         }
 
         .tracker-tip img,
+        .x-chat-log-entry img,
         .x-chat-friend-entry img,
         .x-mini-stream-entry img {
             float: left;
@@ -151,6 +164,7 @@
            line-height: 1.5em;
         }
 
+        .x-chat-log-entry .name,
         .x-stream-entry .stream-username,
         .x-stream-entry .stream-username .x-panel-body-default {
             font-weight: bold;
@@ -382,6 +396,11 @@
             background-position:4px 0px;
         }
 
+        .chat-entry .x-form-item-body input {
+            padding-top: 5px;
+            border: none;
+        }
+    
         .x-login-message-box {
             padding: 15px 15px 15px 48px;
             background: #dfe8f6 url(resources/images/info.png) no-repeat 10px center;

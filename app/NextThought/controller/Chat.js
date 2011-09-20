@@ -45,6 +45,14 @@ Ext.define('NextThought.controller.Chat', {
         },
 
         /**
+         * Destroy the socket.
+         */
+        tearDownSocket: function(){
+            this.socket.disconnect();
+            delete this.socket;
+        },
+
+        /**
          * Attempts to create a socket connection to the dataserver for this user.
          *
          * @param username
@@ -186,14 +194,23 @@ Ext.define('NextThought.controller.Chat', {
     },
 
     showFriendsList: function(cmp) {
-        UserDataLoader.getGroups({
-   			scope: cmp,
-   			success: cmp.setGroups,
-            failure: failure
-   		});
-        
+        var _task = {
+            run: function(){
+                UserDataLoader.getGroups({
+                    scope: cmp,
+                    success: cmp.setGroups,
+                    failure: failure
+                });
+            },
+            scope: this,
+            interval: 10000
+        };
+
+        Ext.TaskManager.start(_task);
+
         function failure() {
             console.log("FAIL loading groups for friends list", arguments);
+            Ext.TaskManager.stop(_task);
         }
 
     }
