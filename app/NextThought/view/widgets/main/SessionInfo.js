@@ -32,13 +32,11 @@ Ext.define('NextThought.view.widgets.main.SessionInfo', {
 
         var me = this;
 
+        this._identity = me.add({xtype: 'identity-panel'});
+        this._notifier = me.add({html: '<span class="notification-box-widget"></span>'});
+
         me._menu = Ext.create('Ext.menu.Menu', {items: me._buildMenu()});
         me._menu.on('mouseleave', me._hideMenu, this);
-
-
-        me.add({xtype: 'identity-panel'}).on('mouseover', this._mouseOverUsername, this);
-
-        this._notifier = me.add({html: '<span class="notification-box-widget"></span>'});
 
         me._task = {
             run: function(){
@@ -71,6 +69,7 @@ Ext.define('NextThought.view.widgets.main.SessionInfo', {
 
     render: function(){
         this.callParent(arguments);
+        this._identity.on('mouseover', this._mouseOverUsername, this);
         this._notifier.el.on('click', this._notifications, this);
         Ext.TaskManager.start(this._task);
     },
@@ -103,7 +102,7 @@ Ext.define('NextThought.view.widgets.main.SessionInfo', {
     },
 
     _mouseOverUsername: function(){
-        this._menu.showBy(this.down('identity-panel').el, 'tr-br?');
+        this._menu.showBy(this._identity.el, 'tr-br?');
     },
 
     _account: function(){

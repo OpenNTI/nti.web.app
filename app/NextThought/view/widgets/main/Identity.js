@@ -27,10 +27,9 @@ Ext.define('NextThought.view.widgets.main.Identity', {
     },
 
     update: function(user){
-        this.icon.dom.src = user.get('avatarURL');
+        this.icon.set({src: user.get('avatarURL')});
         this.name.update(Ext.String.ellipsis(user.get('realname'),25));
         this.doComponentLayout();
-        this.ownerCt.doComponentLayout();
     },
 
     _mouseover: function(){
