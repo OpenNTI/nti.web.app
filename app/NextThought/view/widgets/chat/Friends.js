@@ -22,7 +22,15 @@ Ext.define('NextThought.view.widgets.chat.Friends', {
             if(/everyone/i.test(g.get('id'))) return; //skip everyone group
             var groupPanel = me.add({
                 title: g.get('realname'),
-                collapsible: true
+                collapsible: true,
+                collapseFirst: false,
+                tools:[
+                    {
+                        type: 'gear',
+                        tooltip: 'open chat for this group',
+                        handler: function(){me.fireEvent('group-chat-clicked', g.get('Username'))}
+                    }
+                ]
             });
             Ext.each(g.get('friends'), function(f){
                 groupPanel.add({
