@@ -74,13 +74,12 @@ Ext.define('NextThought.controller.Chat', {
             socket.on('error', function() {me.onError.apply(me, arguments);});
             socket.on('disconnect', function() {me.onDisconnect.apply(me, arguments);});
             socket.on('chat_enteredRoom', function(){me.enteredRoom.apply(me, arguments)});
-            //socket.on('message', function(){me.onMessage.apply(me, arguments)});
             socket.on('chat_recvMessage', function(){me.onMessage.apply(me, arguments)});
 
             this.socket = socket;
         },
 
-        enterChatRoom: function(users) {
+        enterRoom: function(users) {
             if (!Ext.isArray(users)) users = [users];
             for (var k in users) {
                 if (typeof(users[k]) != 'string') {
@@ -96,6 +95,11 @@ Ext.define('NextThought.controller.Chat', {
 
             this.socket.emit('chat_enterRoom', {'Occupants': users})
         },
+
+        leaveRoom: function(room){
+            this.socket.emit('chat_exitRoom', room.data);
+        },
+
 
         postMessage: function(room, message) {
             this.socket.emit('chat_postMessage', {rooms: [room.getId()],Body: message, Class: 'MessageInfo'});
@@ -129,24 +133,30 @@ Ext.define('NextThought.controller.Chat', {
         
         this.control({
             'leftColumn button[showChat]':{
-                click: this.openChatWindow
+                'click': this.openChatWindow
             },
             'chat-friends-view' : {
-                afterrender: this.showFriendsList
+                'afterrender': this.showFriendsList,
+                'group-click': this.groupEntryClicked
             },
             'chat-friend-entry' : {
                 click : this.friendEntryClicked
             },
+            'chat-view':{
+                'beforedestroy': function(cmp){
+                    this.self.leaveRoom(cmp.roomInfo);
+                }
+            },
             'chat-log-view' : {
-                beforedestroy : function(cmp) {
+                'beforedestroy' : function(cmp) {
                     this.self.observable.un('message', cmp.addMessage, cmp);
                 },
-                afterrender : function(cmp){
+                'afterrender' : function(cmp){
                     this.self.observable.on('message', cmp.addMessage, cmp);
                 }
             },
             'chat-view textfield' : {
-                specialkey : function(f, e) {
+                'specialkey' : function(f, e) {
                     if (e.getKey() != e.ENTER) return;
                     this.self.postMessage(f.up('chat-view').roomInfo, f.getValue());
                     f.setValue('');
@@ -163,11 +173,16 @@ Ext.define('NextThought.controller.Chat', {
 
     friendEntryClicked: function(u) {
         //open a new tab to chat with this user...
-        this.self.enterChatRoom(u);
+        this.self.enterRoom(u);
+    },
+
+    groupEntryClicked: function(group){
+        this.self.enterRoom(group.get('friends'));
     },
 
     enteredRoom: function(ri) {
         this.openChatWindow();
+        console.log(ri);
         this.getChatWindow().addNewChat(ri);
     },
 

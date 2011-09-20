@@ -22,10 +22,11 @@ Ext.define('NextThought.view.widgets.chat.FriendEntry', {
         this.addEvents('click');
         this.callParent(arguments);
 
-        var u = this.user;
+        var u = this.user,
+            status = u.get('Presence') || 'offline';
 
         this.renderData['cls'] = this.cls || '';
-        this.renderData['Presence'] = u.get('Presence');
+        this.renderData['Presence'] = status.toLowerCase();
         this.renderData['avatarURL'] = u.get('avatarURL');
         this.renderData['name'] = u.get('alias')||u.get('realname');
     },
@@ -34,7 +35,19 @@ Ext.define('NextThought.view.widgets.chat.FriendEntry', {
         var me = this;
         me.callParent(arguments);
         me.box.on('click', function(){
-            me.fireEvent('click', me.user);
+            //if(!/offline/i.test(me.user.get('Presence')))
+                me.fireEvent('click', me.user);
         });
+    },
+
+    update: function(user){
+        this.user = user;
+        var status = user.get('Presence');
+
+        this.box.removeCls('offline online');
+        this.box.addCls(status.toLowerCase());
+
+        this.icon.set({src: user.get('avatarURL')});
+        this.name.update( user.get('alias')||u.get('realname') );
     }
 });
