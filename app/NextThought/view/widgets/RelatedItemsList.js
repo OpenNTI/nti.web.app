@@ -71,7 +71,7 @@ Ext.define('NextThought.view.widgets.RelatedItemsList', {
         var m = opts.entry;
         e.preventDefault();
 
-        if(m.type=='index')
+        if(m.type=='index'||m.type=='link')
             this.fireEvent('navigate', m.book, m.book.get('root')+m.href);
 
         else if(m.type=='video'){
