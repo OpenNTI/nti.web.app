@@ -147,12 +147,12 @@ Ext.define('NextThought.controller.Chat', {
                     this.self.leaveRoom(cmp.roomInfo);
                 }
             },
-            'chat-log-view' : {
+            'chat-window' : {
                 'beforedestroy' : function(cmp) {
-                    this.self.observable.un('message', cmp.addMessage, cmp);
+                    this.self.observable.un('message', cmp.onMessage, cmp);
                 },
                 'afterrender' : function(cmp){
-                    this.self.observable.on('message', cmp.addMessage, cmp);
+                    this.self.observable.on('message', cmp.onMessage, cmp);
                 }
             },
             'chat-view textfield' : {
@@ -182,7 +182,6 @@ Ext.define('NextThought.controller.Chat', {
 
     enteredRoom: function(ri) {
         this.openChatWindow();
-        console.log(ri);
         this.getChatWindow().addNewChat(ri);
     },
 

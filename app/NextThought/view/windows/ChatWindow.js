@@ -42,9 +42,25 @@ Ext.define('NextThought.view.windows.ChatWindow', {
         }
     ],
 
+    onMessage: function(msg) {
+        var rooms = msg.get('rooms');
+        Ext.each(rooms, function(r) {
+            var tab = this.down('chat-view[roomid=' + r + ']');
+
+            if(!tab) {
+                console.log('WARNING: message received for tab which no longer exists', msg, r, this.items);
+                return;
+            }
+
+            this.down('tabpanel').setActiveTab(tab);
+            tsab.down('chat-log-view').addMessage(msg);
+        }, this);
+        
+    },
+
     addNewChat: function(roomInfo) {
         var id = roomInfo.getId(),
-            tab = this.down('tab[roomid='+id+']');
+            tab = this.down('chat-view[roomid='+id+']');
 
         if (tab) {
             //tab already exists,
@@ -54,13 +70,34 @@ Ext.define('NextThought.view.windows.ChatWindow', {
 
         this.down('tabpanel').add(
             {
-                title: id,
+                title: this._generateTabName(roomInfo),
                 xtype: 'chat-view',
                 roomid: id,
                 closable: true,
                 roomInfo: roomInfo
             }
         );
+    },
+
+    _generateTabName: function(roomInfo) {
+        var occs = roomInfo.get('Occupants'),
+            numOccs = occs.length,
+            result = '',
+            max = 2;
+
+        Ext.each(occs, function(o, i){
+            if ((i+1) > max) {
+                result + ', ' + numOccs - max + ' more.';
+                return false;
+            }
+
+            if (i != 0) result += ', ';
+            var u = UserDataLoader.resolveUser(o); //TODO - do this here?
+            result += u.get('alias') || u.get('Username');
+
+        }, this);
+
+        return result;
     }
 
 });
