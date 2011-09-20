@@ -12,9 +12,8 @@ Ext.define('NextThought.view.widgets.chat.Log', {
     },
 
     addMessage: function(msg) {
-        var j = Ext.JSON.decode(msg),
-            o = this.add({
-                html: 'time=' + new Date(j.Time*1000)
+        var o = this.add({
+                html: msg.get('Body')
             });
 
         o.el.scrollIntoView(this.el.first());

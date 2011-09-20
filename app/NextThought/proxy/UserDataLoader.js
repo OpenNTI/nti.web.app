@@ -3,17 +3,19 @@
 Ext.define('NextThought.proxy.UserDataLoader',{
 	alternateClassName: 'UserDataLoader',
 	requires: [
-			'NextThought.model.Community',
-			'NextThought.model.Change',
-			'NextThought.model.Note',
-			'NextThought.model.Highlight',
-			'NextThought.model.FriendsList',
-			'NextThought.model.User',
-    		'NextThought.model.UnresolvedFriend',
-            'NextThought.model.Hit',
-            'NextThought.model.QuizResult',
-            'NextThought.util.Logging'
-    		],
+        'NextThought.model.Community',
+        'NextThought.model.Change',
+        'NextThought.model.Note',
+        'NextThought.model.Highlight',
+        'NextThought.model.FriendsList',
+        'NextThought.model.User',
+        'NextThought.model.UnresolvedFriend',
+        'NextThought.model.Hit',
+        'NextThought.model.QuizResult',
+        'NextThought.model.RoomInfo',
+        'NextThought.model.MessageInfo',
+        'NextThought.util.Logging'
+    ],
 	statics:{
 
         searchUserData: function(containerId, searchString, callback) {

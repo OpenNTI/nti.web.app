@@ -1,6 +1,6 @@
 Ext.define('NextThought.view.windows.ChatWindow', {
 	extend: 'Ext.window.Window',
-	alias : 'window.chat',
+	alias : 'widget.chat-window',
     requires: [
         'NextThought.view.widgets.chat.View',
         'NextThought.view.widgets.chat.Friends'
@@ -21,12 +21,7 @@ Ext.define('NextThought.view.windows.ChatWindow', {
     items: [
         {
             region: 'center',
-            xtype: 'tabpanel',
-            items: {
-                title: 'tab',
-                xtype: 'chat-view',
-                closable: true
-            }
+            xtype: 'tabpanel'
         },
         {
             region: 'east',
@@ -45,5 +40,27 @@ Ext.define('NextThought.view.windows.ChatWindow', {
                 }
             ]
         }
-    ]
+    ],
+
+    addNewChat: function(roomInfo) {
+        var id = roomInfo.getId(),
+            tab = this.down('tab[roomid='+id+']');
+
+        if (tab) {
+            //tab already exists,
+            this.setActiveTab(tab);
+            return;
+        }
+
+        this.down('tabpanel').add(
+            {
+                title: id,
+                xtype: 'chat-view',
+                roomid: id,
+                closable: true,
+                roomInfo: roomInfo
+            }
+        );
+    }
+
 });

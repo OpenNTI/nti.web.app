@@ -13,7 +13,6 @@ Ext.define('NextThought.view.widgets.chat.Friends', {
 
     initComponent:function() {
         this.callParent(arguments);
-        console.log('friends view init');
     },
 
     setGroups: function(groups) {
@@ -32,6 +31,5 @@ Ext.define('NextThought.view.widgets.chat.Friends', {
                 });
             })
         });
-        console.log('set groups', groups);
     }
 });

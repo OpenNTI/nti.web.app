@@ -13,6 +13,10 @@ Ext.define('NextThought.controller.Chat', {
     ],
 
     refs: [
+        {
+            ref: 'chatWindow',
+            selector: 'chat-window'
+        }
     ],
 
     statics: {
@@ -69,10 +73,32 @@ Ext.define('NextThought.controller.Chat', {
             socket.on('serverkill', function() {me.onKill.apply(me, arguments);});
             socket.on('error', function() {me.onError.apply(me, arguments);});
             socket.on('disconnect', function() {me.onDisconnect.apply(me, arguments);});
-            socket.on('message', function() {me.onMessage.apply(me, arguments);});
-            socket.on('news', function() {me.onNews.apply(me, arguments);});
+            socket.on('chat_enteredRoom', function(){me.enteredRoom.apply(me, arguments)});
+            //socket.on('message', function(){me.onMessage.apply(me, arguments)});
+            socket.on('chat_recvMessage', function(){me.onMessage.apply(me, arguments)});
 
             this.socket = socket;
+        },
+
+        enterChatRoom: function(users) {
+            if (!Ext.isArray(users)) users = [users];
+            for (var k in users) {
+                if (typeof(users[k]) != 'string') {
+                    if (users[k].get && users[k].get('Username')) {
+                        users[k] = users[k].get('Username');
+                    }
+                    else {
+                        console.log('ERROR: found something other than a user/username string in occupants list', users[k]);
+                        delete users[k];
+                    }
+                }
+            }
+
+            this.socket.emit('chat_enterRoom', {'Occupants': users})
+        },
+
+        postMessage: function(room, message) {
+            this.socket.emit('chat_postMessage', {rooms: [room.getId()],Body: message, Class: 'MessageInfo'});
         },
 
         onDisconnect: function() {
@@ -89,20 +115,21 @@ Ext.define('NextThought.controller.Chat', {
         },
 
         onMessage: function(msg) {
-            this.observable.fireEvent('message', msg);
+            this.observable.fireEvent('message', UserDataLoader.parseItems([msg])[0]);
         },
 
-        onNews: function(msg) {
-            this.observable.fireEvent('news', msg);
+        enteredRoom: function(msg) {
+            this.observable.fireEvent('enteredRoom', UserDataLoader.parseItems([msg])[0]);
         }
+
     },
 
     init: function() {
+        this.self.observable.on('enteredRoom', this.enteredRoom, this);
+        
         this.control({
             'leftColumn button[showChat]':{
-                click: function(){
-                    Ext.create('window.chat').show();
-                }
+                click: this.openChatWindow
             },
             'chat-friends-view' : {
                 afterrender: this.showFriendsList
@@ -113,19 +140,35 @@ Ext.define('NextThought.controller.Chat', {
             'chat-log-view' : {
                 beforedestroy : function(cmp) {
                     this.self.observable.un('message', cmp.addMessage, cmp);
-                    this.self.observable.un('news', cmp.addNews, cmp);
                 },
                 afterrender : function(cmp){
                     this.self.observable.on('message', cmp.addMessage, cmp);
-                    this.self.observable.on('news', cmp.addNews, cmp);
+                }
+            },
+            'chat-view textfield' : {
+                specialkey : function(f, e) {
+                    if (e.getKey() != e.ENTER) return;
+                    this.self.postMessage(f.up('chat-view').roomInfo, f.getValue());
+                    f.setValue('');
                 }
             }
 
         });
     },
 
+
+    openChatWindow: function(){
+        (this.getChatWindow() || Ext.create('widget.chat-window')).show();
+    },
+
     friendEntryClicked: function(u) {
-        console.log('friend clicked', u);
+        //open a new tab to chat with this user...
+        this.self.enterChatRoom(u);
+    },
+
+    enteredRoom: function(ri) {
+        this.openChatWindow();
+        this.getChatWindow().addNewChat(ri);
     },
 
     showFriendsList: function(cmp) {
