@@ -5,7 +5,7 @@ Ext.define(	'NextThought.model.User', {
     		'NextThought.proxy.UserSearch',
             'NextThought.model.FriendsList'
 	],
-    idProperty: 'OID',
+    idProperty: 'Username',
 
     fields: [
         { name: 'Last Modified', type: 'date', dateFormat: 'timestamp' },

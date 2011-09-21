@@ -14,7 +14,8 @@ Ext.define('NextThought.proxy.UserDataLoader',{
         'NextThought.model.QuizResult',
         'NextThought.model.RoomInfo',
         'NextThought.model.MessageInfo',
-        'NextThought.util.Logging'
+        'NextThought.util.Logging',
+        'NextThought.cache.UserRepository'
     ],
 	statics:{
 
@@ -113,7 +114,7 @@ Ext.define('NextThought.proxy.UserDataLoader',{
 
                         var json = Ext.decode(r.responseText),
                             bins = this._binAndParseItems(json.Items),
-                            list = bins.User || bins.Community || bins.FriendsList || bins.Group;
+                            list = bins.User || bins.Community;
 
                         if(!list){
                             console.log('No matching users for "'+userId+'"');
