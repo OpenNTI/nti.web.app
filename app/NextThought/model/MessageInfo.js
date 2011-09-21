@@ -1,5 +1,5 @@
 Ext.define('NextThought.model.MessageInfo', {
-    extend: 'Ext.data.Model',
+    extend: 'NextThought.model.Base',
     idProperty: 'MessageId',
     fields: [
         { name: 'MessageId', type: 'string'},

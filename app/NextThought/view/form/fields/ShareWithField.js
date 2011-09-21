@@ -73,7 +73,7 @@ Ext.define('NextThought.view.form.fields.ShareWithField', {
     initValue: function(){
         var m = this;
         Ext.each(m.value, function(o){
-            var u = UserDataLoader.resolveUser(o);
+            var u = NextThought.cache.UserRepository.getUser(o);
             if(u)m.addSelection(u);
             else{
                 m.addSelection(Ext.create('model.unresolved-user',{Username: o}));

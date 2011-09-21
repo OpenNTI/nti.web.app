@@ -1,4 +1,5 @@
 Ext.define('NextThought.cache.UserRepository', {
+    alias: 'UserRepository',
     singleton: true,
 
     constructor: function() {
@@ -19,22 +20,74 @@ Ext.define('NextThought.cache.UserRepository', {
     },
 
     refresh: function() {
-        console.log('refreshing users');
-    },
+        var s = this._store;
 
-    prefetchUser: function(username) {
-        if (typeof(username) == 'string') username = [username];
-        Ext.each(
-            username,
-            function(name){
-            this._makeRequest(name, {
-                scope: this,
-                success: function(u){
-                    this.getStore().add(u);
+        console.log('refreshing users');
+        if (!s) return;
+
+        s.each(function(u){
+            this._makeRequest(u.getId(), {
+                scope:this,
+                success: function(refreshedUser) {
+                    if (!u.equal(refreshedUser)) {
+//                        if (u.getId() == _AppConfig.userObject.getId()) {
+//
+//                        }
+                        u.fireEvent('changed', refreshedUser);
+                        s.remove(u);
+                        s.add(refreshedUser);
+                    }
                 }
             });
         },
         this);
+    },
+
+    prefetchUser: function(username, callback, scope) {
+        if (typeof(username) == 'string') username = [username];
+
+        var s = this.getStore(),
+            result = [],
+            l = username.length,
+            async = false;
+
+        Ext.each(
+            username,
+            function(name){
+                var r = s.getById(name);
+                if (r){
+                    result.push(r);
+                    return;
+                }
+                //must make a request, finish in callback so set async flag
+                async = true;
+                this._makeRequest(name, {
+                    scope: this,
+                    failure: function(){
+                        l--; //dec length so we still hit our finish state when a failure occurs.
+                        if (l == 0) finish();
+                    },
+                    success: function(u){
+                        s.add(u);
+                        result.push(u);
+
+                        //our list of results is as expected, finish
+                        if (result.length = l) {
+                            finish();
+                        }
+                    }
+                });
+            },
+            this);
+
+        if (!async) {
+            finish();//we finish linerally, everything is in the store already
+        }
+
+
+        function finish() {
+            if (callback) callback.call(scope || window, result);
+        }
     },
 
 
@@ -64,21 +117,27 @@ Ext.define('NextThought.cache.UserRepository', {
 
                     if(!success){
                         Logging.logAndAlertError('There was an error resolving users', arguments);
+                        if (callbacks && callbacks.failure) callbacks.failure.call(callbacks.scope || this);
                         return;
                     }
 
                     var json = Ext.decode(r.responseText),
                         bins = UserDataLoader._binAndParseItems(json.Items),
-                        list = bins ? bins.User : [];
+                        list = bins ? bins.User || bins.Community : [];
                     
-                    if(list.length>1){
+                    if(list && list.length>1){
                         console.log('WARNING: many matching users: "', userId, '"', list);
                     }
 
-                    result = list[0];
+                    result = list ? list[0] : null;
 
-                    if(callbacks && callbacks.success){
+                    if(result && callbacks && callbacks.success){
                         callbacks.success.call(callbacks.scope || this, result);
+                    }
+
+                    if (!result) {
+                        if (callbacks && callbacks.failure) callbacks.failure.call(callbacks.scope || this);
+                        console.log('ERROR: result is null', username, bins);
                     }
                 }
             });

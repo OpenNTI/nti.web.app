@@ -37,22 +37,12 @@ Ext.define('NextThought.view.widgets.main.SessionInfo', {
 
         me._menu = Ext.create('Ext.menu.Menu', {items: me._buildMenu()});
         me._menu.on('mouseleave', me._hideMenu, this);
+    },
 
-        me._task = {
-            run: function(){
-                UserDataLoader.resolveUser(_AppConfig.userObject.get('Username'),
-                    function(user){
-                        if (user)
-                            me.update(user.get('NotificationCount'));
-                        else
-                            Ext.TaskManager.stop(me._task);
-                    },
-                    true // force resolve
-                );
-            },
-            scope: this,
-            interval: 30000//30 sec
-        }
+
+    userUpdated: function(newUser) {
+        newUser.on('changed', this.userUpdated, this);
+        this.update(newUser.get('NotificationCount'));
     },
 
     update: function(c) {
@@ -69,9 +59,9 @@ Ext.define('NextThought.view.widgets.main.SessionInfo', {
 
     render: function(){
         this.callParent(arguments);
+        this.userUpdated(_AppConfig.userObject);
         this._identity.on('mouseover', this._mouseOverUsername, this);
         this._notifier.el.on('click', this._notifications, this);
-        Ext.TaskManager.start(this._task);
     },
 
     _buildMenu: function(){

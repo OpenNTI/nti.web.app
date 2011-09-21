@@ -16,7 +16,7 @@ Ext.data.Types.QUIZ_RESPONSE_LIST = {
 };
 
 Ext.define('NextThought.model.QuizResult', {
-    extend: 'Ext.data.Model',
+    extend: 'NextThought.model.Base',
     requires: [
     		'NextThought.proxy.Rest',
             'NextThought.model.QuizQuestionResponse'

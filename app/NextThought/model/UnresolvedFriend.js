@@ -1,5 +1,5 @@
 Ext.define('NextThought.model.UnresolvedFriend', {
-    extend: 'Ext.data.Model',
+    extend: 'NextThought.model.Base',
     alias: 'model.unresolved-user',
     // requires: ['NextThought.proxy.Rest'],
     idProperty: 'Username',

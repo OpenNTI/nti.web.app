@@ -1,5 +1,5 @@
 Ext.define(	'NextThought.model.User', {
-    extend: 'Ext.data.Model',
+    extend: 'NextThought.model.Base',
     requires: [
     		'NextThought.proxy.Rest',
     		'NextThought.proxy.UserSearch',
@@ -28,6 +28,7 @@ Ext.define(	'NextThought.model.User', {
     	type: 'nti',
     	model: 'NextThought.model.User'
     },
+
     getModelName: function() {
         return 'User';
     }

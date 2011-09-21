@@ -1,6 +1,6 @@
 
 Ext.define('NextThought.model.QuizQuestion', {
-    extend: 'Ext.data.Model',
+    extend: 'NextThought.model.Base',
     idProperty: 'OID',
     fields: [
         { name: 'Answers', type: 'auto' },

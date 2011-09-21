@@ -17,7 +17,7 @@ Ext.define('NextThought.view.widgets.NotePanel',{
         m.callParent(arguments);
 
         if(!r.placeHolder){
-            UserDataLoader.resolveUser(c,function(u){ m.addUserControls(u); });
+            NextThought.cache.UserRepository.prefetchUser(c,function(users){ m.addUserControls(users[0]); });
         }
 
         r.children = Ext.Array.sort(r.children || [], function(a,b){

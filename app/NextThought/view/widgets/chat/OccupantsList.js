@@ -24,7 +24,8 @@ Ext.define('NextThought.view.widgets.chat.OccupantsList', {
             numberOccupants = 0;
         Ext.each(a,
             function(username){
-                UserDataLoader.resolveUser(username, function(u){
+                NextThought.cache.UserRepository.prefetchUser(username, function(users){
+                    var u = users[0];
                     if (!u) {
                         console.log('ERROR, could not resolve user', username);
                     }

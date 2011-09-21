@@ -23,7 +23,7 @@ Ext.define('NextThought.view.widgets.MiniStreamEntry', {
         this.callParent(arguments);
 
         var c = this.change.get('Creator'),
-            u = UserDataLoader.resolveUser(c);
+            u = NextThought.cache.UserRepository.getUser(c);
 
         this.renderData['cls'] = this.cls || '';
         this.renderData['avatarURL'] = u.get('avatarURL');

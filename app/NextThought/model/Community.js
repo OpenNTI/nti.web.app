@@ -1,7 +1,6 @@
 Ext.define('NextThought.model.Community', {
-    extend: 'Ext.data.Model',
-    // requires: ['NextThought.proxy.Rest'],
-    idProperty: 'OID',
+    extend: 'NextThought.model.Base',
+    idProperty: 'Username',
     fields: [
         { name: 'id', mapping: 'ID', type: 'string' },
         { name: 'OID', type: 'string' },

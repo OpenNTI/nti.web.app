@@ -10,7 +10,7 @@ Ext.data.Types.QUIZ_QUESTION = {
 };
 
 Ext.define('NextThought.model.QuizQuestionResponse', {
-    extend: 'Ext.data.Model',
+    extend: 'NextThought.model.Base',
     requires: [
         'NextThought.model.QuizQuestion'
     ],

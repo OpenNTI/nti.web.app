@@ -1,5 +1,5 @@
 Ext.define('NextThought.model.Change', {
-    extend: 'Ext.data.Model',
+    extend: 'NextThought.model.Base',
     idProperty: 'OID',
     fields: [
         { name: 'id', mapping: 'ID', type: 'int' },

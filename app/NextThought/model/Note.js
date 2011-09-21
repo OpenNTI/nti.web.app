@@ -1,6 +1,6 @@
 
 Ext.define('NextThought.model.Note', {
-    extend: 'Ext.data.Model',
+    extend: 'NextThought.model.Base',
     requires: [
     		'NextThought.proxy.Rest',
     		'NextThought.model.FriendsList'

@@ -192,15 +192,7 @@ Ext.define('NextThought.controller.Reader', {
     },
 
     readerPublishedContributors: function(c){
-        var t = this.getReaderPeople(),
-            b = Ext.Function.createBuffered(t.setContributors,100,t,[c]);
-
-        for(k in c){
-            if(c.hasOwnProperty(k))
-                UserDataLoader.resolveUser(k,b);
-        }
-
-        b();
+        this.getReaderPeople().setContributors(c);
     },
 
     readerFilterChanged: function(newFilter){

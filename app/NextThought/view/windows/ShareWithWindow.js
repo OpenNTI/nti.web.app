@@ -20,7 +20,7 @@ Ext.define( 'NextThought.view.windows.ShareWithWindow', {
 	
 	initComponent: function(){
 		var m = this,
-			u = UserDataLoader.resolveUser(m.record.get('Creator')),
+			u =  NextThought.cache.UserRepository.getUser(m.record.get('Creator')),
 			a = u.get('avatarURL'),
 			n = u.get('realname'),
 			t = m.record.getModelName(),

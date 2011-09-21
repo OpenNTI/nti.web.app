@@ -1,5 +1,5 @@
 Ext.define('NextThought.model.RoomInfo', {
-    extend: 'Ext.data.Model',
+    extend: 'NextThought.model.Base',
     requires: [
         'NextThought.model.FriendsList'
     ],

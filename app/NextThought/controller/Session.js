@@ -80,7 +80,9 @@ Ext.define('NextThought.controller.Session', {
                             this.setupAuth(values.username, values.password,!!values.remember);
                             NextThought.controller.Chat.setupSocket(values.username, values.password);
 
-                            UserDataLoader.resolveUser(values.username, function(user){
+                            NextThought.cache.UserRepository.prefetchUser(values.username, function(users){
+                                var user = users[0];
+
                                 if(user){
                                     _AppConfig.userObject = user;
                                     successCallback.call(m);

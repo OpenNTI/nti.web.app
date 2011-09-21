@@ -82,8 +82,9 @@ Ext.define('NextThought.proxy.UserDataLoader',{
         },
 
 		resolveUser: function(userId, callback, force){
+		    console.log('!!!!! DEPRECATED!!!! Use UserRepository now!');
 			this.resolvedUsers = this.resolvedUsers || {};
-			
+
 			var h = _AppConfig.server.host,
 				d = _AppConfig.server.data,
 				u = _AppConfig.server.username,
@@ -94,7 +95,9 @@ Ext.define('NextThought.proxy.UserDataLoader',{
                 console.log('bad user "ID"??:',userId);
                 Ext.Error.raise('Bad user id');
             }
-				
+
+            NextThought.cache.UserRepository.prefetchUser(userId);
+
 			if(cache[userId] && !force){
 				if(callback)
 					callback(cache[userId]);
@@ -136,8 +139,8 @@ Ext.define('NextThought.proxy.UserDataLoader',{
             }
 			return cache[userId];
 		},
-		
-		
+    
+
 		userSearch: function(userQuery, callbacks){
 			var h = _AppConfig.server.host,
 				d = _AppConfig.server.data,

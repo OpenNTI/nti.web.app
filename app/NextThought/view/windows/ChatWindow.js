@@ -79,7 +79,7 @@ Ext.define('NextThought.view.windows.ChatWindow', {
             max = 2;
 
         for (var i = 0; result.length<max && i < occs.length; i++) {
-            var u = UserDataLoader.resolveUser(occs[i]);
+            var u =  NextThought.cache.UserRepository.getUser(occs[i]);
 
             if (u.getId() == _AppConfig.userObject.getId()) continue;
 

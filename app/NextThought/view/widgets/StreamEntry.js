@@ -13,7 +13,7 @@ Ext.define('NextThought.view.widgets.StreamEntry', {
         this.callParent(arguments);
 
         var c = this.change.get('Creator'),
-            u = UserDataLoader.resolveUser(c),
+            u = NextThought.cache.UserRepository.getUser(c),
             i = this.change.get('Item');
         //Add avatar:
         this.add(this.getAvatarImage(u));

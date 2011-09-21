@@ -53,7 +53,7 @@ Ext.data.Types.USER_LIST = {
             else  {
                 u.push(p);
                 //asynchronously resolve this user so its cached and ready
-                UserDataLoader.resolveUser(p,function(){});
+                NextThought.cache.UserRepository.prefetchUser(p);
             }
         });
 
@@ -67,7 +67,7 @@ Ext.data.Types.USER_LIST = {
 
 
 Ext.define('NextThought.model.FriendsList', {
-    extend: 'Ext.data.Model',
+    extend: 'NextThought.model.Base',
     requires: [
     		'NextThought.proxy.Rest'
 			],

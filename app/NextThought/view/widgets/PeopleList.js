@@ -48,7 +48,8 @@ Ext.define('NextThought.view.widgets.PeopleList', {
 				
 			if(/all/i.test(f.groups) || f.shareTargets && f.shareTargets[k]){
 				c++;
-				UserDataLoader.resolveUser(k, function(f){
+				NextThought.cache.UserRepository.prefetchUser(k, function(users){
+                    var f = users[0];
 					p.add({	xtype: 'image', 
 							src: (f? f.get('avatarURL') : Ext.BLANK_IMAGE_URL), 
 							height: 36, width: 36});

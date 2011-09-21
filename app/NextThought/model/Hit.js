@@ -1,5 +1,5 @@
 Ext.define('NextThought.model.Hit', {
-    extend: 'Ext.data.Model',
+    extend: 'NextThought.model.Base',
     requires: [
     		'NextThought.proxy.Rest'
     		],

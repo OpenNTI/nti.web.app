@@ -1,5 +1,5 @@
 Ext.define('NextThought.model.Title', {
-    extend: 'Ext.data.Model',
+    extend: 'NextThought.model.Base',
     idProperty: 'index',
     proxy: {
         type: 'ajax',
