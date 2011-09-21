@@ -21,24 +21,17 @@ Ext.define('NextThought.view.windows.ChatWindow', {
     items: [
         {
             region: 'center',
-            xtype: 'tabpanel'
-        },
+            xtype: 'tabpanel',
+        //},
+        items:
         {
-            region: 'east',
-//            collapsible: true,
-            frame: false,
-            split: true,
-            width: 200,
-            layout: 'accordion',
-            items: [
-//                {
-//                    title: 'Tools'
-//                },
-                {
-                    title: 'Friends',
-                    xtype: 'chat-friends-view'
-                }
-            ]
+            //region: 'east',
+            //collapsible: true,
+            //split: true,
+            //width: 200,
+            title: 'Friends',
+            xtype: 'chat-friends-view'
+        }
         }
     ],
 
