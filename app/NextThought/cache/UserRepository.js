@@ -21,8 +21,6 @@ Ext.define('NextThought.cache.UserRepository', {
 
     refresh: function() {
         var s = this._store;
-
-        console.log('refreshing users');
         if (!s) return;
 
         s.each(function(u){

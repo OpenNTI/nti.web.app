@@ -59,7 +59,7 @@ Ext.define('NextThought.controller.State', {
 
     trackMode: function(modeId){
         if(this._currentState.active != modeId && NextThought.isInitialised){
-            console.log(this._currentState.active, modeId);
+            //console.log(this._currentState.active, modeId);
             this._currentState.active = modeId;
             history.pushState(this._currentState, 'Title Goes Here');
         }
