@@ -1,0 +1,19 @@
+div.x-panel.sidebar-header .x-panel-body {
+    padding-bottom: 15px;
+    padding-top: 15px;
+    font-weight: bold;
+}
+
+.related-item {
+    margin-bottom: 5px;
+}
+.related-item img{
+    width: 18px !important;
+    margin-right: 5px;
+}
+.x-note-panel{
+    width: 100%;
+}
+.document-notes {
+    position: absolute;
+}

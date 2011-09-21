@@ -1,0 +1,7 @@
+/*
+many rules are in: custom-icon-with-text-widgets.css
+*/
+.chat-entry .x-form-item-body input {
+    padding-top: 5px;
+    border: none;
+}

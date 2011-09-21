@@ -1,0 +1,10 @@
+a.internal-link,
+a.internal-link:active,
+a.internal-link:hover,
+a.internal-link:visited
+{
+    color: #7889A3;
+    text-decoration: none;
+    cursor: pointer;
+    line-height: 1.5em;
+}
