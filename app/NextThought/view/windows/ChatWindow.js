@@ -75,22 +75,19 @@ Ext.define('NextThought.view.windows.ChatWindow', {
     _generateTabName: function(roomInfo) {
         var occs = roomInfo.get('Occupants'),
             numOccs = occs.length,
-            result = '',
+            result = [],
             max = 2;
 
-        Ext.each(occs, function(o, i){
-            if ((i+1) > max) {
-                result + ', ' + numOccs - max + ' more.';
-                return false;
-            }
+        for (var i = 0; result.length<max && i < occs.length; i++) {
+            var u = UserDataLoader.resolveUser(occs[i]);
 
-            if (i != 0) result += ', ';
-            var u = UserDataLoader.resolveUser(o); //TODO - do this here?
-            result += u.get('alias') || u.get('Username');
+            if (u.getId() == _AppConfig.server.userObject.getId()) continue;
 
-        }, this);
+            result.push(u.get('alias') || u.get('Username'));
+        }
+        var left = occs.length - result.length - 1;
 
-        return result;
+        return result.join(',')+(left ? '...' : '');
     }
 
 });

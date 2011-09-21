@@ -11,7 +11,12 @@ Ext.define('NextThought.model.RoomInfo', {
         { name: 'MessageCount', type: 'int' },
         { name: 'Occupants', type: Ext.data.Types.USER_LIST}
     ],
+
     getModelName: function() {
         return 'RoomInfo';
+    },
+
+    getKey: function() {
+        
     }
 });
