@@ -47,7 +47,7 @@ Ext.define('NextThought.controller.Account', {
 
         var fire = false,
             key,
-            u = _AppConfig.server.userObject;
+            u = _AppConfig.userObject;
         if(values.password){
             fire = true;
             u.fields.add(new Ext.data.Field({name: 'password', type:'string'}));
@@ -62,7 +62,7 @@ Ext.define('NextThought.controller.Account', {
                 console.log('FAILURE:',arguments);
             },
 			success:function(newRecord,operation){
-                _AppConfig.server.userObject = newRecord;
+                _AppConfig.userObject = newRecord;
                 this.getIdentity().update(newRecord);
                 win.close();
                 if(fire){
@@ -74,7 +74,7 @@ Ext.define('NextThought.controller.Account', {
 
 
     popoverNotifications: function() {
-        var u = _AppConfig.server.userObject,
+        var u = _AppConfig.userObject,
             popover = Ext.create('window.notifications-popover', {bindTo: this.getSessionInfo()});
         popover.show();
 
@@ -89,7 +89,7 @@ Ext.define('NextThought.controller.Account', {
                 id: 'account-window',
                 items: {
                     xtype: 'account-form',
-                    account: _AppConfig.server.userObject
+                    account: _AppConfig.userObject
                 }
             }
         ).show();

@@ -22,7 +22,7 @@ Ext.define('NextThought.view.widgets.main.Identity', {
 
     afterRender: function(){
         this.callParent(arguments);
-        this.update(_AppConfig.server.userObject);
+        this.update(_AppConfig.userObject);
         this.el.on('mouseover', this._mouseover, this);
     },
 

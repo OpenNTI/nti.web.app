@@ -56,7 +56,7 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
 
         var me = this,
             el = me.el,
-            lastLogin = _AppConfig.server.userObject.get('lastLoginTime');
+            lastLogin = _AppConfig.userObject.get('lastLoginTime');
         me.alignTo(me.bindTo);
 
         el.mask("Searching");

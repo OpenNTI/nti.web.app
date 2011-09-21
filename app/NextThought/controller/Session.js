@@ -82,7 +82,7 @@ Ext.define('NextThought.controller.Session', {
 
                             UserDataLoader.resolveUser(values.username, function(user){
                                 if(user){
-                                    s.userObject = user;
+                                    _AppConfig.userObject = user;
                                     successCallback.call(m);
                                 }
                                 else{

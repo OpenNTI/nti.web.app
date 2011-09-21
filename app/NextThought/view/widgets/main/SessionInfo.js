@@ -40,7 +40,7 @@ Ext.define('NextThought.view.widgets.main.SessionInfo', {
 
         me._task = {
             run: function(){
-                UserDataLoader.resolveUser(_AppConfig.server.userObject.get('Username'),
+                UserDataLoader.resolveUser(_AppConfig.userObject.get('Username'),
                     function(user){
                         if (user)
                             me.update(user.get('NotificationCount'));

@@ -18,7 +18,7 @@ Ext.define('NextThought.view.windows.NotificationsPopover', {
         defaults: {border: false}},
 
     initComponent: function() {
-        this._lastLoginTime = _AppConfig.server.userObject.get('lastLoginTime');
+        this._lastLoginTime = _AppConfig.userObject.get('lastLoginTime');
         this.callParent(arguments);
     },
 
