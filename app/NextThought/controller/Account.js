@@ -62,8 +62,6 @@ Ext.define('NextThought.controller.Account', {
                 console.log('FAILURE:',arguments);
             },
 			success:function(newRecord,operation){
-                _AppConfig.userObject = newRecord;
-                this.getIdentity().update(newRecord);
                 win.close();
                 if(fire){
                     this.getSessionInfo().fireEvent('password-changed', u.get('Username'),values.password);

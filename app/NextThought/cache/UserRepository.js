@@ -41,12 +41,23 @@ Ext.define('NextThought.cache.UserRepository', {
             ignoreNewInstance = (refreshedUser.raw && 'ignoreIfExists' in refreshedUser.raw);
 
         if (u && (!ignoreNewInstance || !u.equal(refreshedUser))) {
+            if (u.getId() == _AppConfig.userObject.getId() ){
+                if(u !== _AppConfig.userObject)
+                    _AppConfig.userObject.fireEvent('changed', refreshedUser);
+                _AppConfig.userObject = refreshedUser;
+            }
+
             u.fireEvent('changed', refreshedUser);
             s.remove(u);
             u=null;
         }
 
-        if(!u) s.add(refreshedUser);
+        if(!u){
+            s.add(refreshedUser);
+
+        }
+
+
     },
 
     prefetchUser: function(username, callback, scope) {

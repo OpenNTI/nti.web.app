@@ -27,6 +27,7 @@ Ext.define('NextThought.view.widgets.main.Identity', {
     },
 
     update: function(user){
+        user.on('changed', this.update, this);
         this.icon.set({src: user.get('avatarURL')});
         this.name.update(Ext.String.ellipsis(user.get('realname'),25));
         this.doComponentLayout();
