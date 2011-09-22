@@ -26,19 +26,26 @@ Ext.define('NextThought.cache.UserRepository', {
         s.each(function(u){
             this._makeRequest(u.getId(), {
                 scope:this,
-                success: function(refreshedUser) {
-                    if (!u.equal(refreshedUser)) {
-//                        if (u.getId() == _AppConfig.userObject.getId()) {
-//
-//                        }
-                        u.fireEvent('changed', refreshedUser);
-                        s.remove(u);
-                        s.add(refreshedUser);
-                    }
+                success: Ext.emptyFn, //loading into the store happens automatically because of the User model constructor.
+                failure: function(){
+                    console.log('ERROR: something went wrong making request', arguments, u);
                 }
             });
         },
         this);
+    },
+
+    updateUser: function(refreshedUser) {
+        var s = this.getStore(),
+            u = s.getById(refreshedUser.getId());
+
+        if (u && !u.equal(refreshedUser)) {
+            u.fireEvent('changed', refreshedUser);
+            s.remove(u);
+        }
+
+        s.add(refreshedUser);
+
     },
 
     prefetchUser: function(username, callback, scope) {
@@ -141,6 +148,15 @@ Ext.define('NextThought.cache.UserRepository', {
             });
 
         return result;
+    },
+
+    isOnline: function(username) {
+        var u = this.getUser(username);
+
+        return u && !/offline/i.test(u.get('Presence'));
     }
 
+},
+function(){
+    window.UserRepository = NextThought.cache.UserRepository;
 });

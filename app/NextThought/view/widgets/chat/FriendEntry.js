@@ -22,13 +22,9 @@ Ext.define('NextThought.view.widgets.chat.FriendEntry', {
         this.addEvents('click');
         this.callParent(arguments);
 
-        var u = this.user,
-            status = u.get('Presence') || 'offline';
+        this.update(this.user);
 
         this.renderData['cls'] = this.cls || '';
-        this.renderData['Presence'] = status.toLowerCase();
-        this.renderData['avatarURL'] = u.get('avatarURL');
-        this.renderData['name'] = u.get('alias')||u.get('realname');
     },
 
     afterRender: function() {
@@ -42,12 +38,20 @@ Ext.define('NextThought.view.widgets.chat.FriendEntry', {
 
     update: function(user){
         this.user = user;
-        var status = user.get('Presence');
+        var status = user.get('Presence') || 'offline';
 
-        this.box.removeCls('offline online');
-        this.box.addCls(status.toLowerCase());
+        if (this.rendered){
+            this.box.removeCls('offline online');
+            this.box.addCls(status.toLowerCase());
+            this.icon.set({src: user.get('avatarURL')});
+            this.name.update( user.get('alias')||u.get('realname') );
+        }
+        else {
+            this.renderData['Presence'] = status.toLowerCase();
+            this.renderData['avatarURL'] = user.get('avatarURL');
+            this.renderData['name'] = user.get('alias')||user.get('realname');
+        }
 
-        this.icon.set({src: user.get('avatarURL')});
-        this.name.update( user.get('alias')||u.get('realname') );
+        user.on('changed', this.update, this);
     }
 });

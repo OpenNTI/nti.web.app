@@ -93,15 +93,20 @@ Ext.define('NextThought.controller.Chat', {
             if (!Ext.isArray(users)) users = [users];
             for (var k in users) {
                 if (typeof(users[k]) != 'string') {
-                    if (users[k].get && users[k].get('Username')) {
-                        users[k] = users[k].get('Username');
+                    if (users[k].getId) {
+                        users[k] = users[k].getId();
                     }
                     else {
                         console.log('ERROR: found something other than a user/username string in occupants list', users[k]);
                         delete users[k];
+                        continue;
                     }
                 }
+
+                if(!UserRepository.isOnline(users[k])) delete users[k];
             }
+
+            users = Ext.Array.clean(users);
 
             //Add ourselves to this list
             var allUsers = Ext.Array.unique(users.slice().concat(_AppConfig.userObject.getId()));

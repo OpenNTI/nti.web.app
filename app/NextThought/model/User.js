@@ -29,6 +29,11 @@ Ext.define(	'NextThought.model.User', {
     	model: 'NextThought.model.User'
     },
 
+    constructor: function() {
+        this.callParent(arguments);
+        UserRepository.updateUser(this);
+    },
+
     getModelName: function() {
         return 'User';
     }
