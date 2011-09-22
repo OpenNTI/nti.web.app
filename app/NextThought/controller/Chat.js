@@ -22,6 +22,8 @@ Ext.define('NextThought.controller.Chat', {
     statics: {
         observable: Ext.create('Ext.util.Observable'),
 
+        activeRooms: {},
+
          /**
          * Set up a task that will check io availability every second until it becomes
          * available, then call setupSocket.
@@ -101,10 +103,27 @@ Ext.define('NextThought.controller.Chat', {
                 }
             }
 
+            //Add ourselves to this list
+            var allUsers = Ext.Array.unique(users.slice().concat(_AppConfig.userObject.getId()));
+           
+            //Check to see if a room with these users already exists, and use that.
+            for (var key in this.activeRooms) {
+                if (!this.activeRooms.hasOwnProperty(key)) continue;
+
+                var ri = this.activeRooms[key];
+                if (arrayEquals(ri.get('Occupants'), allUsers)) {
+                    this.observable.fireEvent('enteredRoom', ri);
+                    return;
+                }
+            }
+
+            //If we get here, there were no existing rooms, so create a new one.
             this.socket.emit('chat_enterRoom', {'Occupants': users})
         },
 
         leaveRoom: function(room){
+            delete this.activeRooms[room.getId()];
+
             this.socket.emit('chat_exitRoom', room.data);
         },
 
@@ -114,6 +133,7 @@ Ext.define('NextThought.controller.Chat', {
         },
 
         onDisconnect: function() {
+            this.activeRooms = {};
             console.log('disconnect', arguments);
         },
 
@@ -123,6 +143,7 @@ Ext.define('NextThought.controller.Chat', {
 
         onKill: function() {
             console.log( 'asked to die' );
+            this.activeRooms = {};
             this.socket.disconnect();
         },
 
@@ -131,7 +152,14 @@ Ext.define('NextThought.controller.Chat', {
         },
 
         enteredRoom: function(msg) {
-            this.observable.fireEvent('enteredRoom', UserDataLoader.parseItems([msg])[0]);
+            var roomInfo = UserDataLoader.parseItems([msg])[0];
+
+            if (roomInfo.getId() in this.activeRooms) {
+                console.log('WARNING: room already exists, all rooms/roominfo', this.activeRooms, roomInfo);
+            }
+
+            this.activeRooms[roomInfo.getId()] = roomInfo;
+            this.observable.fireEvent('enteredRoom', roomInfo);
         }
 
     },

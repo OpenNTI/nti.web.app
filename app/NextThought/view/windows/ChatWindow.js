@@ -53,24 +53,28 @@ Ext.define('NextThought.view.windows.ChatWindow', {
 
     addNewChat: function(roomInfo) {
         var id = roomInfo.getId(),
-            tab = this.down('chat-view[roomid='+id+']');
+            ocs = roomInfo.get('Occupants'),
+            tab = this.down('chat-view[roomid='+id+']'),
+            justMe = (ocs.length == 1 && ocs[0] == _AppConfig.userObject.get('Username'));
 
+        if (!tab && !justMe) {
+            tab = this.down('tabpanel').add(
+                {
+                    title: this._generateTabName(roomInfo),
+                    xtype: 'chat-view',
+                    roomid: id,
+                    closable: true,
+                    roomInfo: roomInfo
+                }
+            );
+        }
+        
         if (tab) {
-            //tab already exists,
-            this.setActiveTab(tab);
-            return;
+            this.down('tabpanel').setActiveTab(tab);
         }
 
-        this.down('tabpanel').add(
-            {
-                title: this._generateTabName(roomInfo),
-                xtype: 'chat-view',
-                roomid: id,
-                closable: true,
-                roomInfo: roomInfo
-            }
-        );
     },
+
 
     _generateTabName: function(roomInfo) {
         var occs = roomInfo.get('Occupants'),

@@ -12,7 +12,7 @@ Ext.define('NextThought.model.Base', {
 
                 if (fa !== fb){
 
-                    if(Ext.isArray(fa) && Ext.isArray(fb) && arrayEqual(fa, fb)){
+                    if(Ext.isArray(fa) && Ext.isArray(fb) && arrayEquals(fa, fb)){
                         return;
                     }
 
@@ -28,10 +28,5 @@ Ext.define('NextThought.model.Base', {
         );
 
         return r;
-
-        function arrayEqual(a, b) {
-            if (a.length != b.length) return false;
-            return Ext.Array.merge(a, b).length == a.length;
-        }
     }
 });

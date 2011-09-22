@@ -38,3 +38,8 @@ function resizeBlocker(w, h, e){
 function encodeDate(d) {
     return Ext.Date.format(d, 'U');
 }
+
+function arrayEquals(a, b) {
+    if (a.length != b.length) return false;
+    return Ext.Array.merge(a, b).length == a.length;
+}
