@@ -85,6 +85,7 @@ Ext.define('NextThought.controller.Chat', {
             socket.on('disconnect', function() {me.onDisconnect.apply(me, arguments);});
             socket.on('chat_enteredRoom', function(){me.enteredRoom.apply(me, arguments)});
             socket.on('chat_recvMessage', function(){me.onMessage.apply(me, arguments)});
+            socket.on('chat_recvMessageForModeration', function(){console.log('message to moderate', arguments)});
 
             this.socket = socket;
         },
@@ -165,6 +166,10 @@ Ext.define('NextThought.controller.Chat', {
 
             this.activeRooms[roomInfo.getId()] = roomInfo;
             this.observable.fireEvent('enteredRoom', roomInfo);
+        },
+
+        moderateChat: function(roomInfo) {
+            this.socket.emit('chat_makeModerated', roomInfo.getId(), true);
         }
 
     },
@@ -202,11 +207,20 @@ Ext.define('NextThought.controller.Chat', {
                     this.self.postMessage(f.up('chat-view').roomInfo, f.getValue());
                     f.setValue('');
                 }
+            },
+            'chat-occupants-list' : {
+                'moderate-tool-clicked' : this.moderateClicked
             }
 
         });
     },
 
+    moderateClicked: function(cmp){
+        var chatView = cmp.up('chat-view');
+
+        chatView.openModerationPanel();
+        this.self.moderateChat(chatView.roomInfo);
+    },
 
     openChatWindow: function(){
         (this.getChatWindow() || Ext.create('widget.chat-window')).show();

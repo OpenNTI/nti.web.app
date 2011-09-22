@@ -8,14 +8,24 @@ Ext.define('NextThought.view.widgets.chat.OccupantsList', {
 
     width: 125,
     collapsible: true,
+    collapseFirst: false,
     autoScroll: true,
     layout: 'anchor',
     border: false,
     title: 'Chat Room',
+
     defaults: {border: false, defaults: {border: false}},
 
     initComponent:function() {
-        this.callParent(arguments);
+        var me = this;
+
+        me.tools = [{
+            type: 'gear',
+            tooltip: 'become moderator',
+            handler: function(){me.fireEvent('moderate-tool-clicked', me)}
+        }];
+
+        me.callParent(arguments);
     },
 
     setOccupants: function(a) {

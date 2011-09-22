@@ -42,5 +42,17 @@ Ext.define('NextThought.view.widgets.chat.View', {
         this.callParent(arguments);
 
         this.down('chat-occupants-list').setOccupants(this.roomInfo.get('Occupants'));
+    },
+
+    openModerationPanel: function() {
+        console.log('Im opening my moderation panel.... (not really)');
+        this.add({
+            xtype: 'chat-log-view',
+            entryType: 'chat-log-entry-moderated',
+            region: 'west',
+            title: 'Moderated',
+            width: 200
+        });
+        this.doLayout();
     }
 }); 

@@ -2,7 +2,8 @@ Ext.define('NextThought.view.widgets.chat.Log', {
 	extend:'Ext.panel.Panel',
     alias: 'widget.chat-log-view',
     requires: [
-        'NextThought.view.widgets.chat.LogEntry'
+        'NextThought.view.widgets.chat.LogEntry',
+        'NextThought.view.widgets.chat.LogEntryModerated'
     ],
 
     autoScroll: true,
@@ -12,11 +13,12 @@ Ext.define('NextThought.view.widgets.chat.Log', {
 
     initComponent:function() {
         this.callParent(arguments);
+        this.entryType = this.entryType || 'chat-log-entry';
     },
 
     addMessage: function(msg) {
         var o = this.add({
-                xtype: 'chat-log-entry',
+                xtype: this.entryType,
                 message: msg
             });
 
