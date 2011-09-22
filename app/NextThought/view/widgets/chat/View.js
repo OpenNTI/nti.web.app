@@ -33,6 +33,11 @@ Ext.define('NextThought.view.widgets.chat.View', {
         {
             region: 'east',border: true,
             xtype: 'chat-occupants-list'
+        },
+        {
+            region: 'west',
+            hidden: true,
+            split: true
         }
     ],
 
@@ -40,19 +45,14 @@ Ext.define('NextThought.view.widgets.chat.View', {
 
     initComponent:function() {
         this.callParent(arguments);
-
         this.down('chat-occupants-list').setOccupants(this.roomInfo.get('Occupants'));
     },
 
     openModerationPanel: function() {
-        console.log('Im opening my moderation panel.... (not really)');
-        this.add({
-            xtype: 'chat-log-view',
-            entryType: 'chat-log-entry-moderated',
-            region: 'west',
-            title: 'Moderated',
-            width: 200
-        });
-        this.doLayout();
+        var cmp = this.down('panel[region=west]');
+        cmp.add({ xtype: 'chat-log-view', moderated:  true, title: 'Moderated' });
+        cmp.setWidth(100);
+        cmp.show();
+
     }
 }); 

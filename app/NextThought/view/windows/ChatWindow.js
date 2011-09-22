@@ -46,7 +46,7 @@ Ext.define('NextThought.view.windows.ChatWindow', {
             }
 
             this.down('tabpanel').setActiveTab(tab);
-            tab.down('chat-log-view').addMessage(msg);
+            tab.down('chat-log-view[moderated=false]').addMessage(msg);
         }, this);
         
     },

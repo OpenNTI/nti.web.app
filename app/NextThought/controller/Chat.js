@@ -85,7 +85,11 @@ Ext.define('NextThought.controller.Chat', {
             socket.on('disconnect', function() {me.onDisconnect.apply(me, arguments);});
             socket.on('chat_enteredRoom', function(){me.enteredRoom.apply(me, arguments)});
             socket.on('chat_recvMessage', function(){me.onMessage.apply(me, arguments)});
-            socket.on('chat_recvMessageForModeration', function(){console.log('message to moderate', arguments)});
+            socket.on('chat_recvMessageForModeration', function(m){
+                console.log('message to moderate', arguments);
+
+                socket.emit('chat_approveMessages', [m.MessageId]);
+            });
 
             this.socket = socket;
         },

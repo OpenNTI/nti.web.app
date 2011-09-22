@@ -14,6 +14,10 @@ Ext.define('NextThought.view.widgets.chat.Log', {
     initComponent:function() {
         this.callParent(arguments);
         this.entryType = this.entryType || 'chat-log-entry';
+        this.moderated = !!this.moderated;
+        if(this.moderated){
+           this.entryType+'-moderated';
+        }
     },
 
     addMessage: function(msg) {
