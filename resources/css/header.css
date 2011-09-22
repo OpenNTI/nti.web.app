@@ -62,9 +62,9 @@
 .search-result-selection .x-panel-body-default {
     background: #7889A3;
 }
-
-#top-controls .x-panel-body,
-#top-controls .x-panel-body-default {
+.x-brand-and-search-bar,
+.x-brand-and-search-bar .x-panel-body,
+.x-brand-and-search-bar .x-panel-body-default {
     background: #7889A3;
 }
 

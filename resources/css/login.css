@@ -1,13 +1,18 @@
+.x-login-form-box{
+    border-left: 1px solid #000 !important;
+    border-right: 1px solid #000 !important;
+}
+
 .x-login-message-box {
     padding: 15px 15px 15px 48px;
-    background: #dfe8f6 url(../images/info.png) no-repeat 10px center;
-    /*margin-bottom: 15px;*/
+    background: #000 url(../images/info.png) no-repeat 10px center;
 }
 
 .x-login-message-box,
 .x-login-message-box .x-panel-body{
-    border: 1px solid #004d82;
-    background-color: #dfe8f6;
+    border: 1px solid #000;
+    background-color: #000;
+    color: #fff;
     font-size: 12pt;
 
 }
