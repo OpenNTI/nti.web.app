@@ -8,7 +8,7 @@ Ext.define('NextThought.cache.UserRepository', {
             _task: {
                 scope: this,
                 run: this.refresh,
-                interval: 30000
+                interval: 10000
             }
         });
 
@@ -42,10 +42,14 @@ Ext.define('NextThought.cache.UserRepository', {
         if (u && !u.equal(refreshedUser)) {
             u.fireEvent('changed', refreshedUser);
             s.remove(u);
+            u=null;
+        }
+        else if (u) {
+            console.log('User did not change', u, refreshedUser, printStackTrace().splice(2).join('\n'));
         }
 
-        s.add(refreshedUser);
-
+        if(!u)
+            s.add(refreshedUser);
     },
 
     prefetchUser: function(username, callback, scope) {
