@@ -23,8 +23,8 @@ function beforeRequest(connection,options)
 {
     if(options&&options.async===false){
         var loc = '';
-        try { loc = printStackTrace()[7]; }
-        catch (e) { loc = e.stack; }
+        try { loc = printStackTrace().splice(7); }
+        catch (e) { loc = e.stack || e.stacktrace; }
         console.log('WARNING: Synchronous Call in: ', loc, ' Options:', options );
     }
 }

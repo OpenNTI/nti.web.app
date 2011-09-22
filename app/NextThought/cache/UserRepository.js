@@ -37,19 +37,16 @@ Ext.define('NextThought.cache.UserRepository', {
 
     updateUser: function(refreshedUser) {
         var s = this.getStore(),
-            u = s.getById(refreshedUser.getId());
+            u = s.getById(refreshedUser.getId()),
+            ignoreNewInstance = (refreshedUser.raw && 'ignoreIfExists' in refreshedUser.raw);
 
-        if (u && !u.equal(refreshedUser)) {
+        if (u && (!ignoreNewInstance || !u.equal(refreshedUser))) {
             u.fireEvent('changed', refreshedUser);
             s.remove(u);
             u=null;
         }
-        else if (u) {
-            console.log('User did not change', u, refreshedUser, printStackTrace().splice(2).join('\n'));
-        }
 
-        if(!u)
-            s.add(refreshedUser);
+        if(!u) s.add(refreshedUser);
     },
 
     prefetchUser: function(username, callback, scope) {
@@ -111,6 +108,7 @@ Ext.define('NextThought.cache.UserRepository', {
         return user;
     },
 
+
     _makeRequest: function(username, callbacks) {
         var h = _AppConfig.server.host,
             d = _AppConfig.server.data,
@@ -118,38 +116,38 @@ Ext.define('NextThought.cache.UserRepository', {
             url = h+d+'UserSearch/'+username,
             result = null;
 
-            Ext.Ajax.request({
-                url: url,
-                scope: this,
-                async: !!callbacks,
-                callback: function(o,success,r){
-
-                    if(!success){
-                        Logging.logAndAlertError('There was an error resolving users', arguments);
-                        if (callbacks && callbacks.failure) callbacks.failure.call(callbacks.scope || this);
-                        return;
-                    }
-
-                    var json = Ext.decode(r.responseText),
-                        bins = UserDataLoader._binAndParseItems(json.Items),
-                        list = bins ? bins.User || bins.Community : [];
-                    
-                    if(list && list.length>1){
-                        console.log('WARNING: many matching users: "', userId, '"', list);
-                    }
-
-                    result = list ? list[0] : null;
-
-                    if(result && callbacks && callbacks.success){
-                        callbacks.success.call(callbacks.scope || this, result);
-                    }
-
-                    if (!result) {
-                        if (callbacks && callbacks.failure) callbacks.failure.call(callbacks.scope || this);
-                        console.log('ERROR: result is null', username, bins);
-                    }
+        Ext.Ajax.request({
+            url: url,
+            scope: this,
+            async: !!callbacks,
+            callback: function userRepository_makeRequestCallback(o,success,r)
+            {
+                if(!success){
+                    Logging.logAndAlertError('There was an error resolving users', arguments);
+                    if (callbacks && callbacks.failure) callbacks.failure.call(callbacks.scope || this);
+                    return;
                 }
-            });
+
+                var json = Ext.decode(r.responseText),
+                    bins = UserDataLoader._binAndParseItems(json.Items, undefined, {ignoreIfExists: true}),
+                    list = bins ? bins.User || bins.Community : [];
+
+                if(list && list.length>1){
+                    console.log('WARNING: many matching users: "', userId, '"', list);
+                }
+
+                result = list ? list[0] : null;
+
+                if(result && callbacks && callbacks.success){
+                    callbacks.success.call(callbacks.scope || this, result);
+                }
+
+                if (!result) {
+                    if (callbacks && callbacks.failure) callbacks.failure.call(callbacks.scope || this);
+                    console.log('ERROR: result is null', username, bins);
+                }
+            }
+        });
 
         return result;
     },

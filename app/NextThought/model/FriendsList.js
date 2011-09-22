@@ -17,8 +17,12 @@ Ext.data.Types.FRIEND_LIST = {
                 u.push(o.get('Username'));
             }
             //Preferred branch:
-            else if(o.Username)
-                u.push(UserDataLoader.parseItems([o])[0]);
+            else if(o.Username){
+                if(/user/i.test(o.Class))
+                    u.push(UserRepository.getUser(o.Username));
+                else
+                    u.push(UserDataLoader.parseItems([o])[0]);
+            }
             else
                 console.log("WARNING: Could not handle Object: ", o, arguments);
 
@@ -53,7 +57,7 @@ Ext.data.Types.USER_LIST = {
             else  {
                 u.push(p);
                 //asynchronously resolve this user so its cached and ready
-                NextThought.cache.UserRepository.prefetchUser(p);
+                UserRepository.prefetchUser(p);
             }
         });
 
