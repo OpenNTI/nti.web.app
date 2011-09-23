@@ -37,7 +37,7 @@ Ext.define('NextThought.controller.Chat', {
                     }
                 },
                 scope: this,
-                interval: 1000
+                interval: 120000
             };
 
             Ext.TaskManager.start(_task);
@@ -83,8 +83,9 @@ Ext.define('NextThought.controller.Chat', {
             socket.on('chat_enteredRoom', function(){me.enteredRoom.apply(me, arguments)});
             socket.on('chat_recvMessage', function(){me.onMessage.apply(me, arguments)});
             socket.on('chat_recvMessageForModeration', function(){me.onModeratedMessage.apply(me, arguments);});
+            socket.on('chat_presenceOfUserChangedTo', function(user, presence){UserRepository._presenceChanged(user, presence);});
 
-            this.socket = socket;
+            this.socket = socket;   
         },
 
         enterRoom: function(users) {
@@ -106,28 +107,33 @@ Ext.define('NextThought.controller.Chat', {
 
             users = Ext.Array.clean(users);
 
+            var ri = this.existingRoom(users);
+            if (ri)
+                this.observable.fireEvent('enteredRoom', ri);
+            else //If we get here, there were no existing rooms, so create a new one.
+                this.socket.emit('chat_enterRoom', {'Occupants': users});
+        },
+
+        existingRoom: function(users) {
             //Add ourselves to this list
             var allUsers = Ext.Array.unique(users.slice().concat(_AppConfig.userObject.getId()));
-           
+
             //Check to see if a room with these users already exists, and use that.
             for (var key in this.activeRooms) {
                 if (!this.activeRooms.hasOwnProperty(key)) continue;
 
                 var ri = this.activeRooms[key];
                 if (arrayEquals(ri.get('Occupants'), allUsers)) {
-                    this.observable.fireEvent('enteredRoom', ri);
-                    return;
+                    return ri;
                 }
             }
-
-            //If we get here, there were no existing rooms, so create a new one.
-            this.socket.emit('chat_enterRoom', {'Occupants': users})
         },
+
 
         leaveRoom: function(room){
             delete this.activeRooms[room.getId()];
 
-            this.socket.emit('chat_exitRoom', room.data);
+            this.socket.emit('chat_exitRoom', room.getId());
         },
 
         approveMessages: function(messageIds){
@@ -166,6 +172,12 @@ Ext.define('NextThought.controller.Chat', {
 
             if (roomInfo.getId() in this.activeRooms) {
                 console.log('WARNING: room already exists, all rooms/roominfo', this.activeRooms, roomInfo);
+            }
+
+            var eri = this.existingRoom(roomInfo.get('Occupants'));
+            if (eri) {
+                eri.fireEvent('changed', roomInfo);
+                this.leaveRoom(eri);
             }
 
             this.activeRooms[roomInfo.getId()] = roomInfo;

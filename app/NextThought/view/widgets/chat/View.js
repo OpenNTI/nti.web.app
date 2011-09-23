@@ -49,6 +49,15 @@ Ext.define('NextThought.view.widgets.chat.View', {
     initComponent:function() {
         this.callParent(arguments);
         this.down('chat-occupants-list').setOccupants(this.roomInfo.get('Occupants'));
+
+        this.roomInfo.on('changed', this.changed, this);
+    },
+
+    changed: function(ri) {
+        this.roomId = ri.getId();
+        this.roomInfo = ri;
+        this.roomInfo.on('changed', this.changed, this);
+        //this.down('chat-occupants-list').setOccupants(this.roomInfo.get('Occupants'));
     },
 
     openModerationPanel: function() {

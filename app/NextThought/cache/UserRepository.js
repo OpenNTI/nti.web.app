@@ -113,7 +113,12 @@ Ext.define('NextThought.cache.UserRepository', {
 
         if (!user) {
             user = this._makeRequest(username);
-            this.getStore().add(user);
+            //user's constructor adds the user to the repo, so do the following only if the user is different somehow,
+            //this is more of an assertion.  The reason we have to do this is because things are listening to events
+            //on user instances in this repository so we cant just replace them.
+            if (user && user !== this.getStore().getById(username))
+                console.log('user does not equal user in store', user);
+                //this.getStore().add(user);
         }
 
         return user;
@@ -161,6 +166,12 @@ Ext.define('NextThought.cache.UserRepository', {
         });
 
         return result;
+    },
+
+    _presenceChanged: function(username, presence) {
+        var u = this.getUser(username);
+        u.set('Presence', presence);
+        u.fireEvent('changed', u);
     },
 
     isOnline: function(username) {

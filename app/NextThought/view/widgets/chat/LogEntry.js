@@ -57,7 +57,6 @@ Ext.define('NextThought.view.widgets.chat.LogEntry', {
             this.name.update(name);
         }
         else {
-            console.log('not rendered');
             this.renderData['name'] = name;
             this.renderData['icon'] = i;
         }

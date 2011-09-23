@@ -40,7 +40,7 @@ Ext.define('NextThought.view.windows.ChatWindow', {
             moderated = !!('moderated' in opts);
             
         Ext.each(rooms, function(r) {
-            var tab = this.down('chat-view[roomid=' + r + ']'),
+            var tab = this.down('chat-view[roomId=' + r + ']'),
                 mlog = tab ? tab.down('chat-log-view[moderated=true]') : null;
 
             if(!tab) {
@@ -61,15 +61,14 @@ Ext.define('NextThought.view.windows.ChatWindow', {
     addNewChat: function(roomInfo) {
         var id = roomInfo.getId(),
             ocs = roomInfo.get('Occupants'),
-            tab = this.down('chat-view[roomid='+id+']'),
-            justMe = (ocs.length == 1 && ocs[0] == _AppConfig.userObject.get('Username'));
+            tab = this.down('chat-view[roomId='+id+']');
 
-        if (!tab && !justMe) {
+        if (!tab) {
             tab = this.down('tabpanel').add(
                 {
                     title: this._generateTabName(roomInfo),
                     xtype: 'chat-view',
-                    roomid: id,
+                    roomId: id,
                     closable: true,
                     roomInfo: roomInfo
                 }

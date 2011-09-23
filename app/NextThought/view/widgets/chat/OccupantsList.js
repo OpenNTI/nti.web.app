@@ -30,8 +30,11 @@ Ext.define('NextThought.view.widgets.chat.OccupantsList', {
 
     setOccupants: function(a) {
         var me = this,
-            total = a.length;
+            total = a.length,
             numberOccupants = 0;
+
+        me.removeAll();
+        
         Ext.each(a,
             function(username){
                 NextThought.cache.UserRepository.prefetchUser(username, function(users){
