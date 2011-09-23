@@ -2,6 +2,7 @@
 
 Ext.define('NextThought.Library', {
 	extend: 'Ext.util.Observable',
+    singleton: true,
 	requires:[
         'NextThought.model.Title'
     ],
@@ -190,6 +191,24 @@ Ext.define('NextThought.Library', {
         return result;
     },
 
+    isOrDecendantOf: function(parentId, potentialChild) {
+        if (parentId == potentialChild) return true;
+
+        var child = this.findLocation(potentialChild),
+            l = child ? child.location : null,
+            found = false;
+
+        while(l && !found) {
+            var id = l.getAttribute('ntiid');
+
+            if (parentId == id) found = true;
+
+            l = l.parentNode;
+        }
+
+        return found;
+    },
+
     _resolveBookLocation: function(book, containerId) {
         var q='[ntiid='+containerId+']',
             query = 'toc' + q + ',topic' + q,
@@ -199,4 +218,12 @@ Ext.define('NextThought.Library', {
 
         return null;
     }
-});
+},
+function(){
+    /** @Deprecated */
+    window.NextThought.librarySource = NextThought.Library;
+
+    //preferred:
+    window.Library = NextThought.Library;
+}
+);

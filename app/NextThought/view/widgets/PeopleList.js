@@ -57,6 +57,5 @@ Ext.define('NextThought.view.widgets.PeopleList', {
 			}
 		}
 
-        (c==0? this.hide : this.show).call(this);
 	}
 });

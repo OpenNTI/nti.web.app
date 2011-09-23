@@ -238,18 +238,7 @@ Ext.define('NextThought.proxy.UserDataLoader',{
                     var cReader = this._getReaderForModel('Change');
                     Ext.each(json.Items, function(i, x){
                             if (!i.Item) return; //Empty change, probably a deleted item.
-
-                            try{
-                                var reader = this._getReaderForModel(i.Item.Class);
-                                i.Item = reader.read(i.Item).records[0];
-                            }
-                            catch(e){
-                                if(/user/i.test(i.Item.Class))
-                                    i.Item = UserRepository.getUser(i.Item.Username);
-                                else
-                                    throw e;
-                            }
-
+                            i.Item = this.parseItems([i.Item])[0];
                             json.Items[x] = cReader.read(i).records[0];
                         },
                         this);
@@ -411,7 +400,16 @@ Ext.define('NextThought.proxy.UserDataLoader',{
                     continue;
                 }
 
-                bins[key] = reader.read(bins[key]).records;
+                try{
+                    bins[key] = reader.read(bins[key]).records;
+                }
+                catch(e){
+                    if(/user/i.test(key))
+                        bins[key] = UserRepository.getUser(bins[key].Username);
+                    else
+                        throw e;
+                }
+
             }
             return bins;
         },

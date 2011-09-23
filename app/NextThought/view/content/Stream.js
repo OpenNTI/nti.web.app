@@ -14,8 +14,6 @@ Ext.define('NextThought.view.content.Stream', {
 	items:[{autoScroll:true, padding: 5}],
 
 	_filter: {},
-
-	_task: null,
 	_stream: null,
 
 	constructor: function(){
@@ -24,33 +22,31 @@ Ext.define('NextThought.view.content.Stream', {
 		//make a buffered function out of our updater
 		this.updateStream = Ext.Function.createBuffered(this.updateStream,100,this);
 
-
-		// Start a simple clock task that updates a div once per second
-		this._task = {
-		    run: function(){
-		        UserDataLoader.getRecursiveStream(
-		        	null,{
-		        	scope: this,
-		        	success: function(stream){
-		        		this._stream = stream;
-		        		this.updateStream();
-		        	},
-                    failure: function(){
-                        if(NextThought.isDebug)
-                            Ext.TaskManager.stop(this._task);
-                    }
-		        });
-		    },
-		    scope: this,
-		    interval: 300000//30 sec
-		}
-		Ext.TaskManager.start(this._task);
 		return this;
 	},
 
     initComponent: function(){
    		this.callParent(arguments);
+
+        UserDataLoader.getRecursiveStream(
+            null,{
+                scope: this,
+                success: function(stream){
+                    this._stream = stream;
+                    this.updateStream();
+                },
+                failure: function(){
+                }
+            });
+
 	},
+
+    onNotification: function(c) {
+        if (!c) return;
+        this._stream = this._stream || [];
+        this._stream.unshift(c);
+        this.updateStream();
+    },
 
 	applyFilter: function(filter){
 		this._filter = filter;

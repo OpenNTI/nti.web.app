@@ -13,8 +13,6 @@ Ext.define('NextThought.view.widgets.MiniStreamList', {
 	
 	_filter: {},
 	_containerId: null,
-	
-	_task: null,
 	_stream: null,
 	
 	constructor: function(){
@@ -23,42 +21,47 @@ Ext.define('NextThought.view.widgets.MiniStreamList', {
 		//make a buffered function out of our updater
 		this.updateStream = Ext.Function.createBuffered(this.updateStream,100,this);
 
-		
-		// Start a simple clock task that updates a div once per second
-		this._task = {
-		    run: function(){
-		    	if(!this._containerId)return;
-		    	
-		        UserDataLoader.getRecursiveStream(
-		        	this._containerId,{
-		        	scope: this,
-		        	success: function(stream){
-		        		this._stream = stream;
-		        		this.updateStream();
-		        	},
-                    failure: function() {
-                        if(NextThought.isDebug)
-                            Ext.TaskManager.stop(this._task);
-                    }
-		        });
-		    },
-		    scope: this,
-		    interval: 30000//30 sec 
-		}
-		Ext.TaskManager.start(this._task);
 		return this;
 	},
 	
 	initComponent: function(){
 		this.callParent(arguments);
-        this.hide();
+        this.setContainer(this._containerId);
 	},
 	
 	setContainer: function(id){
-		Ext.TaskManager.stop(this._task);
-		this._containerId = id;
-		Ext.TaskManager.start(this._task);
+        this._containerId = id;
+        this._stream = null;
+
+        if(!id){
+            this.updateStream();
+            return;
+        }
+
+        UserDataLoader.getRecursiveStream(id,
+            {
+                scope: this,
+                success: function(stream){
+                    this._stream = stream;
+                    this.updateStream();
+                },
+                failure: function() {}
+            });
+
+
 	},
+
+    onNotification: function(c) {
+        if (!this._containerId) return;
+        if (!c) return;
+
+        var id = c.Item ? c.Item.get('ContainerId') : null;
+        if (!id || Library.isOrDecendantOf(this._containerId, id)) {
+            this._stream = this._stream || [];
+            this._stream.unshift(c);
+            this.updateStream();
+        }
+    },
 	
 	applyFilter: function(filter){
 		this._filter = filter;
@@ -91,6 +94,6 @@ Ext.define('NextThought.view.widgets.MiniStreamList', {
 			}
 		}
 
-        (c==0? this.hide : this.show).call(this);
+        if (!c) p.add({html: 'No recent activity to show'});
 	}
 });

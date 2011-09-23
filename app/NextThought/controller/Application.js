@@ -1,6 +1,9 @@
 Ext.define('NextThought.controller.Application', {
     extend: 'Ext.app.Controller',
-
+    requires: [
+        'NextThought.Library'
+    ],
+    
     views: ['Viewport'],
 
     refs: [{ ref: 'viewport', selector: 'master-view' }],
@@ -9,7 +12,7 @@ Ext.define('NextThought.controller.Application', {
         launch: function(){
             try{
                 Ext.create('NextThought.view.Viewport');
-                NextThought.librarySource.load();
+                Library.load();
             }
             catch(e){
                 console.log(e, e.message, e.stack);
@@ -18,8 +21,7 @@ Ext.define('NextThought.controller.Application', {
     },
 
     init: function() {
-        var l = NextThought.librarySource = Ext.create('NextThought.Library');
-        l.on('loaded', this.restore, this);
+       Library.on('loaded', this.restore, this);
     },
 
     restore: function(){
