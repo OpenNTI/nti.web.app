@@ -23,8 +23,6 @@ Ext.define('NextThought.controller.Chat', {
     init: function() {
         var me = this;
 
-        this.eventBus = Ext.create('Ext.util.Observable');
-
         Socket.register({
             'chat_enteredRoom': function(){me.enteredRoom.apply(me, arguments)},
             'chat_recvMessage': function(){me.onMessage.apply(me, arguments)},
@@ -36,15 +34,6 @@ Ext.define('NextThought.controller.Chat', {
         this.control({
             'leftColumn button[showChat]':{
                 'click': this.openChatWindow
-            },
-
-            'chat-window' : {
-                'beforedestroy' : function(cmp) {
-                    this.eventBus.un('message', cmp.onMessage, cmp);
-                },
-                'afterrender' : function(cmp){
-                    this.eventBus.on('message', cmp.onMessage, cmp);
-                }
             },
 
             'chat-friends-view' : {
@@ -141,11 +130,13 @@ Ext.define('NextThought.controller.Chat', {
     },
 
     onMessage: function(msg) {
-        this.eventBus.fireEvent('message', UserDataLoader.parseItems([msg])[0]);
+        var win = this.getChatWindow();
+        if(win)win.onMessage(UserDataLoader.parseItems([msg])[0],{});
     },
 
     onModeratedMessage: function(msg) {
-        this.eventBus.fireEvent('message', UserDataLoader.parseItems([msg])[0], {moderated:true});
+        var win = this.getChatWindow();
+        if(win)win.onMessage(UserDataLoader.parseItems([msg])[0],{moderated:true});
     },
 
     enteredRoom: function(msg) {
