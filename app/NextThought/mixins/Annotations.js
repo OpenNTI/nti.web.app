@@ -24,7 +24,7 @@ Ext.define('NextThought.mixins.Annotations', {
             this);
     },
 
-    loadObjects: function() {
+    _loadObjects: function() {
         this.clearAnnotations();
         UserDataLoader.getPageItems(this._containerId, {
             scope:this,
@@ -88,7 +88,7 @@ Ext.define('NextThought.mixins.Annotations', {
     },
 
 
-    annotationExists: function(record){
+    _annotationExists: function(record){
         var oid = record.get('OID');
         if(!oid){
             return false;
@@ -128,7 +128,7 @@ Ext.define('NextThought.mixins.Annotations', {
 
     _createHighlightWidget: function(range, record){
 
-        if (this.annotationExists(record)) {
+        if (this._annotationExists(record)) {
             this._annotations[record.get('OID')].getRecord().fireEvent('updated',record);
             return;
         }
@@ -155,12 +155,12 @@ Ext.define('NextThought.mixins.Annotations', {
         return w;
     },
 
-    createNoteWidget: function(record){
+    _createNoteWidget: function(record){
         try{
             if(record.get('inReplyTo')){
                 return false;
             }
-            else if (this.annotationExists(record)) {
+            else if (this._annotationExists(record)) {
                 this._annotations[record.get('OID')].getRecord().fireEvent('updated',record);
                 return true;
             }
@@ -194,55 +194,53 @@ Ext.define('NextThought.mixins.Annotations', {
     _objectsLoaded: function(bins) {
         var contributors = {},
             oids = {},
-            a = [],
-            me = this;
+            oid,
+            me = this,
+            bin,
+            k = 'Last Modified',
+            o;
 
         if (!this._containerId) return;
 
+        //sort bins
+        for(b in bins){
+            if(bins.hasOwnProperty(b))
+            bins[b] = Ext.Array.sort(bins[b]||[],function(a,b){return a.get(k) < b.get(k);});
+        }
+
         Ext.each(bins.Highlight,
             function(r){
-                if (!this._containerId) return false;
-                a.push(r.get('OID'));
                 var range = AnnotationUtils.buildRangeFromRecord(r);
-                if (!range){
-                    console.log('removing bad highlight');
-                    //r.destroy();
-                    return;
+                if (range){
+                    contributors[r.get('Creator')] = true;
+                    me._createHighlightWidget(range, r);
                 }
-                contributors[r.get('Creator')] = true;
-                me._createHighlightWidget(range, r);
+                else{
+                    console.log('could not build highlight from record:', r);
+                }
             }, this
         );
 
-        bins.Note = Ext.Array.sort(bins.Note || [], function(a,b){
-            var k = 'Last Modified';
-            return a.get(k) < b.get(k);
-        });
-
         notes(buildTree);
 
-        //oids now has everything, let's clear out annotations that have been removed.
-        //this.purgeAnnotations(oids);
-
-        for(var oid in oids){
-            if (!this._containerId) return;
-            var o = oids[oid];
+        for(oid in oids){
+            o = oids[oid];
             if(!oids.hasOwnProperty(oid) || o._parent) continue;
 
-            me.createNoteWidget(o);
+            me._createNoteWidget(o);
         }
 
-        this._purgeRemovedObjects(a);
-        me.bufferedDelayedRelayout();
+        if( me.bufferedDelayedRelayout)
+            me.bufferedDelayedRelayout();
+
         me.fireEvent('publish-contributors',contributors);
-        //helper local functions (think of them as macros)
+        return;//end of _objectsLoaded execution
+
+        /**
+         * helper local-scope functions (think of them as macros)
+         */
 
         function notes(cb){ Ext.each(bins.Note,cb,this); }
-        function getOID(id){
-            var r=null;
-            notes(function(o){ if(o.get('OID')==id){r = o;return false;} });
-            return r;
-        }
 
         function buildTree(r){
             var oid = r.get('OID'),
@@ -250,7 +248,6 @@ Ext.define('NextThought.mixins.Annotations', {
                 c = r.get('Creator'),
                 p;
 
-            a.push(oid);
             r.children = r.children || [];
 
             if(!oids[oid])
@@ -274,12 +271,17 @@ Ext.define('NextThought.mixins.Annotations', {
                 contributors[c] = true;
         }
 
+        function getOID(id){
+            var r=null;
+            notes(function(o){ if(o.get('OID')==id){r = o;return false;} });
+            return r;
+        }
     },
 
 
     _loadContentAnnotations: function(containerId){
         this._containerId = containerId;
-        this.loadObjects();
+        this._loadObjects();
     },
 
 
