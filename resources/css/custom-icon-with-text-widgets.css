@@ -18,13 +18,15 @@
 
 
 .x-chat-log-entry:hover,
+.x-chat-log-entry.selected,
 .x-chat-friend-entry:hover,
 .x-mini-stream-entry:hover {
     background-color: #7889A3 !important;
     color: white;
 }
 
-.x-chat-log-entry:hover .name{
+.x-chat-log-entry:hover .name,
+.x-chat-log-entry.selected .name {
     color: black;
 }
 
@@ -80,11 +82,20 @@
     margin-left: 22px;
 }
 
+.x-chat-log-entry.moderated div {
+    margin-left: 37px;
+}
+
 .tracker-tip img,
 .x-chat-log-entry img,
+.x-chat-log-entry input,
 .x-chat-friend-entry img,
 .x-mini-stream-entry img {
     float: left;
+}
+
+.x-chat-log-entry input {
+    margin:  2px 5px 0 0;
 }
 
 .x-mini-stream-entry.read {

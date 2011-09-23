@@ -35,10 +35,13 @@ Ext.define('NextThought.view.windows.ChatWindow', {
         }
     ],
 
-    onMessage: function(msg) {
-        var rooms = msg.get('rooms');
+    onMessage: function(msg, opts) {
+        var rooms = msg.get('rooms'),
+            moderated = !!('moderated' in opts);
+            
         Ext.each(rooms, function(r) {
-            var tab = this.down('chat-view[roomid=' + r + ']');
+            var tab = this.down('chat-view[roomid=' + r + ']'),
+                mlog = tab ? tab.down('chat-log-view[moderated=true]') : null;
 
             if(!tab) {
                 console.log('WARNING: message received for tab which no longer exists', msg, r, this.items);
@@ -46,7 +49,11 @@ Ext.define('NextThought.view.windows.ChatWindow', {
             }
 
             this.down('tabpanel').setActiveTab(tab);
-            tab.down('chat-log-view[moderated=false]').addMessage(msg);
+            tab.down('chat-log-view[moderated='+moderated+']').addMessage(msg);
+
+            if(!moderated && mlog) {
+                mlog.removeMessage(msg);
+            }
         }, this);
         
     },

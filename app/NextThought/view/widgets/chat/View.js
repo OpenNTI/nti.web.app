@@ -36,8 +36,11 @@ Ext.define('NextThought.view.widgets.chat.View', {
         },
         {
             region: 'west',
+            minWidth: 250,
             hidden: true,
-            split: true
+            split: true,
+            layout: 'fit'
+
         }
     ],
 
@@ -51,7 +54,8 @@ Ext.define('NextThought.view.widgets.chat.View', {
     openModerationPanel: function() {
         var cmp = this.down('panel[region=west]');
         cmp.add({ xtype: 'chat-log-view', moderated:  true, title: 'Moderated' });
-        cmp.setWidth(100);
+        cmp.setWidth(250);
+
         cmp.show();
 
     }

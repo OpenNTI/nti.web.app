@@ -13,10 +13,7 @@ Ext.define('NextThought.controller.Chat', {
     ],
 
     refs: [
-        {
-            ref: 'chatWindow',
-            selector: 'chat-window'
-        }
+        { ref: 'chatWindow', selector: 'chat-window'}
     ],
 
     statics: {
@@ -85,11 +82,7 @@ Ext.define('NextThought.controller.Chat', {
             socket.on('disconnect', function() {me.onDisconnect.apply(me, arguments);});
             socket.on('chat_enteredRoom', function(){me.enteredRoom.apply(me, arguments)});
             socket.on('chat_recvMessage', function(){me.onMessage.apply(me, arguments)});
-            socket.on('chat_recvMessageForModeration', function(m){
-                console.log('message to moderate', arguments);
-
-                socket.emit('chat_approveMessages', [m.MessageId]);
-            });
+            socket.on('chat_recvMessageForModeration', function(){me.onModeratedMessage.apply(me, arguments);});
 
             this.socket = socket;
         },
@@ -137,6 +130,9 @@ Ext.define('NextThought.controller.Chat', {
             this.socket.emit('chat_exitRoom', room.data);
         },
 
+        approveMessages: function(messageIds){
+            this.socket.emit('chat_approveMessages', messageIds);
+        },
 
         postMessage: function(room, message) {
             this.socket.emit('chat_postMessage', {rooms: [room.getId()],Body: message, Class: 'MessageInfo'});
@@ -159,6 +155,10 @@ Ext.define('NextThought.controller.Chat', {
 
         onMessage: function(msg) {
             this.observable.fireEvent('message', UserDataLoader.parseItems([msg])[0]);
+        },
+
+        onModeratedMessage: function(msg) {
+            this.observable.fireEvent('message', UserDataLoader.parseItems([msg])[0], {moderated:true});
         },
 
         enteredRoom: function(msg) {
@@ -185,6 +185,14 @@ Ext.define('NextThought.controller.Chat', {
             'leftColumn button[showChat]':{
                 'click': this.openChatWindow
             },
+            'chat-window' : {
+                'beforedestroy' : function(cmp) {
+                    this.self.observable.un('message', cmp.onMessage, cmp);
+                },
+                'afterrender' : function(cmp){
+                    this.self.observable.on('message', cmp.onMessage, cmp);
+                }
+            },
             'chat-friends-view' : {
                 'afterrender': this.showFriendsList,
                 'group-click': this.groupEntryClicked
@@ -197,14 +205,9 @@ Ext.define('NextThought.controller.Chat', {
                     this.self.leaveRoom(cmp.roomInfo);
                 }
             },
-            'chat-window' : {
-                'beforedestroy' : function(cmp) {
-                    this.self.observable.un('message', cmp.onMessage, cmp);
-                },
-                'afterrender' : function(cmp){
-                    this.self.observable.on('message', cmp.onMessage, cmp);
-                }
-            },
+            'chat-log-view':{'approve': function(ids){this.self.approveMessages(ids)}},
+            'chat-log-view button[action]':{'click': this.toolClicked},
+            'chat-log-view tool[action]':{'click': this.toolClicked},
             'chat-view textfield' : {
                 'specialkey' : function(f, e) {
                     if (e.getKey() != e.ENTER) return;
@@ -217,6 +220,23 @@ Ext.define('NextThought.controller.Chat', {
             }
 
         });
+    },
+
+    toolClicked: function(field) {
+        var a = field.action.toLowerCase(),
+            b = field.up('chat-log-view[moderated=true]');
+
+        if (!a || !b){
+            console.log('Skipping action, no action specified or no logs', a, b);
+            return;
+        }
+
+        if(a in b){
+            b[a].call(b);
+        }
+        else {
+            console.log('component does not implement the function:',a);
+        }
     },
 
     moderateClicked: function(cmp){

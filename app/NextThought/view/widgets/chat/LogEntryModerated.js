@@ -1,21 +1,39 @@
 Ext.define('NextThought.view.widgets.chat.LogEntryModerated', {
-    extend: 'Ext.Component',
+    //extend: 'Ext.Component',
+    extend: 'Ext.form.field.Checkbox',
     alias: 'widget.chat-log-entry-moderated',
 
     requires: [
         'NextThought.proxy.UserDataLoader'
     ],
 
-     renderTpl: new Ext.XTemplate(
-          '<div class="x-chat-log-entry">',
-              '<div class="timestamp">M {time}</div>',
-              '<img src="{icon}" width=16 height=16"/>',
-              '<div>',
-                    '<span class="name">{name}</span> ',
-                    '<span>{body}</span> ',
-              '</div>',
-          '</div>'
-          ),
+    //renderTpl: null,
+    preventMark:true,
+    anchor: '100%',
+
+    labelableRenderTpl: [
+        '<tpl if="!hideLabel && !(!fieldLabel && hideEmptyLabel)">',
+            '<label<tpl if="inputId"> for="{inputId}"</tpl> class="{labelCls}"<tpl if="labelStyle"> style="{labelStyle}"</tpl>>',
+                '<tpl if="fieldLabel">{fieldLabel}{labelSeparator}</tpl>',
+            '</label>',
+        '</tpl>',
+        '<div class="x-chat-log-entry moderated {baseBodyCls} {fieldBodyCls}"<tpl if="inputId"> id="{baseBodyCls}-{inputId}"</tpl> role="presentation">',
+            '<div class="timestamp">{time}</div>',
+            '{subTplMarkup}',
+            '<img src="{icon}" width=16 height=16"/>',
+            '<div>',
+                '<span class="name">{name}</span> ',
+                '<span>{body}</span> ',
+            '</div>',
+        '</div>',
+
+        '<div class="{errorMsgCls}" style="display:none"></div>',
+        '<div class="{clearCls}" role="presentation"><!-- --></div>',
+        {
+            compiled: true,
+            disableFormats: true
+        }
+    ],
 
     renderSelectors: {
         box: 'div.x-chat-log-entry',
@@ -24,6 +42,7 @@ Ext.define('NextThought.view.widgets.chat.LogEntryModerated', {
     },
 
     initComponent: function(){
+        console.log('entry width', this.width);
         this.callParent(arguments);
 
         var m = this.message,
@@ -45,6 +64,20 @@ Ext.define('NextThought.view.widgets.chat.LogEntryModerated', {
         });
 
 
+    },
+
+    afterRender: function() {
+        this.callParent(arguments);
+
+        console.log('input el', this.inputEl);
+        this.box.on('click', function(e,t){
+            if(!/input/i.test(t.tagName))
+                this.setValue(!this.getValue());
+        }, this);
+        this.on('change', function(cmp, state){
+            this.box.removeCls('selected');
+            if(state) this.box.addCls('selected');
+        });
     },
 
     update: function(u) {
