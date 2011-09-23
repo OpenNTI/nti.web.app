@@ -5,6 +5,7 @@ Ext.define('NextThought.controller.Session', {
     requires:[
         'NextThought.util.Base64',
         'NextThought.proxy.UserDataLoader',
+        'NextThought.proxy.Socket',
         'Ext.util.Cookies'
     ],
 
@@ -78,7 +79,7 @@ Ext.define('NextThought.controller.Session', {
 
                             Ext.copyTo(s, values, 'username');
                             this.setupAuth(values.username, values.password,!!values.remember);
-                            NextThought.controller.Chat.setupSocket(values.username, values.password);
+                            Socket.setup(values.username, values.password);
 
                             NextThought.cache.UserRepository.prefetchUser(values.username, function(users){
                                 var user = users[0];

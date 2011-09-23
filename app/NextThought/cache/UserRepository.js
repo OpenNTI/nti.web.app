@@ -8,7 +8,7 @@ Ext.define('NextThought.cache.UserRepository', {
             _task: {
                 scope: this,
                 run: this.refresh,
-                interval: 10000
+                interval: 120000
             }
         });
 
