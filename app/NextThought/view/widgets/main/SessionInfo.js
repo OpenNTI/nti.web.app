@@ -47,8 +47,13 @@ Ext.define('NextThought.view.widgets.main.SessionInfo', {
 
     update: function(c) {
         var e = this._notifier.el.down('span');
-        e.dom.innerHTML = c > 99 ? '++' : c;
+        e.dom.innerHTML = c > 99||isNaN(c) ? '++' : c;
         (c?e.addCls:e.removeCls).call(e, 'unread');
+    },
+
+    onNotification: function(){
+        var count = this._notifier.el.down('span').dom.innerHTML;
+        this.update((parseInt(count,10)+1));
     },
 
     clearNotifications: function() {
@@ -62,6 +67,8 @@ Ext.define('NextThought.view.widgets.main.SessionInfo', {
         this.userUpdated(_AppConfig.userObject);
         this._identity.on('mouseover', this._mouseOverUsername, this);
         this._notifier.el.on('click', this._notifications, this);
+
+        NextThought.controller.Stream.registerChangeListener(this.onNotification, this);
     },
 
     _buildMenu: function(){
