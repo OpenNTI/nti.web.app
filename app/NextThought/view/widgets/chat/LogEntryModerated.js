@@ -42,7 +42,6 @@ Ext.define('NextThought.view.widgets.chat.LogEntryModerated', {
     },
 
     initComponent: function(){
-        console.log('entry width', this.width);
         this.callParent(arguments);
 
         var m = this.message,
@@ -69,7 +68,6 @@ Ext.define('NextThought.view.widgets.chat.LogEntryModerated', {
     afterRender: function() {
         this.callParent(arguments);
 
-        console.log('input el', this.inputEl);
         this.box.on('click', function(e,t){
             if(!/input/i.test(t.tagName))
                 this.setValue(!this.getValue());
@@ -85,12 +83,10 @@ Ext.define('NextThought.view.widgets.chat.LogEntryModerated', {
             i = u.get('avatarURL');
 
         if(this.rendered){
-            console.log('rendered');
             this.icon.set({src: i});
             this.name.update(name);
         }
         else {
-            console.log('not rendered');
             this.renderData['name'] = name;
             this.renderData['icon'] = i;
         }

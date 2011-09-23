@@ -25,7 +25,8 @@ Ext.define('NextThought.view.widgets.chat.View', {
                 },
                 {
                     cls: 'chat-entry',
-                    xtype: 'textfield'
+                    xtype: 'textfield',
+                    chatentry: true
                 }
 
             ]
@@ -53,6 +54,11 @@ Ext.define('NextThought.view.widgets.chat.View', {
         this.roomInfo.on('changed', this.changed, this);
     },
 
+    afterRender: function() {
+        this.callParent(arguments);
+        this.down('textfield[chatentry]').focus();
+    },
+
     changed: function(ri) {
         this.roomId = ri.getId();
         this.roomInfo = ri;
@@ -67,5 +73,6 @@ Ext.define('NextThought.view.widgets.chat.View', {
 
         cmp.show();
 
+        this.down('textfield[chatentry]').focus();
     }
 }); 

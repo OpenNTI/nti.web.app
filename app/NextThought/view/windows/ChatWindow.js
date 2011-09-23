@@ -6,7 +6,7 @@ Ext.define('NextThought.view.windows.ChatWindow', {
         'NextThought.view.widgets.chat.Friends'
     ],
 
-    width: 500,
+    width: 700,
     height: 350,
     maximizable:true,
     title: 'Chat',

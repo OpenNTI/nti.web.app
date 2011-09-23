@@ -22,7 +22,7 @@ Ext.define('NextThought.view.widgets.chat.OccupantsList', {
         me.tools = [{
             type: 'gear',
             tooltip: 'become moderator',
-            handler: function(){me.fireEvent('moderate-tool-clicked', me)}
+            action: 'moderate'
         }];
 
         me.callParent(arguments);

@@ -46,17 +46,17 @@ Ext.define('NextThought.view.widgets.chat.Log', {
                dock: 'bottom',
                items: [
                    {
-                       text: 'SA',
+                       text: 'Select All',
                        action: 'selectall'
                    },
                    {
-                       text: 'SN',
+                       text: 'Select None',
                        action: 'selectnone'},
                    {
-                       text: 'AS',
+                       text: 'Approve',
                        action: 'approve'},
                    {
-                       text: 'RS',
+                       text: 'Reject',
                        action: 'reject'}
                ]
             };

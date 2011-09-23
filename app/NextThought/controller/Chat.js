@@ -227,8 +227,8 @@ Ext.define('NextThought.controller.Chat', {
                     f.setValue('');
                 }
             },
-            'chat-occupants-list' : {
-                'moderate-tool-clicked' : this.moderateClicked
+            'chat-occupants-list tool[action=moderate]' : {
+                'click' : this.moderateClicked
             }
 
         });
