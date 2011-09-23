@@ -9,7 +9,6 @@ Ext.define('NextThought.mixins.Annotations', {
         'NextThought.view.widgets.annotations.Highlight',
         'NextThought.view.widgets.annotations.Note'
     ],
-    _task: null,
     _annotations: {},
     _filter: null,
     _searchAnnotations: null,
@@ -18,25 +17,20 @@ Ext.define('NextThought.mixins.Annotations', {
         this.addEvents('create-note','edit-note');
         this.enableBubble(['create-note','edit-note']);
 
-        this._task = {
-            run: function() {
-                UserDataLoader.getPageItems(this._containerId, {
-                    scope:this,
-                    success: this._objectsLoaded,
-                    failure: function(){
-                        //TODO: Fill in
-                    }
-                });
-            },
-            scope: this,
-            interval: 30000//30 sec
-        };
-
         this.on('afterrender',
             function(){
                 this.el.on('mouseup', this._onContextMenuHandler, this);
             },
             this);
+    },
+
+    loadObjects: function() {
+        this.clearAnnotations();
+        UserDataLoader.getPageItems(this._containerId, {
+            scope:this,
+            success: this._objectsLoaded,
+            failure: function(){} //TODO: Fill in
+        });
     },
 
     applyFilter: function(newFilter){
@@ -285,13 +279,7 @@ Ext.define('NextThought.mixins.Annotations', {
 
     _loadContentAnnotations: function(containerId){
         this._containerId = containerId;
-        // Ext.TaskManager.stop(this._task);
-        if (this._task.containerId && this._task.containerId != containerId){
-            Ext.TaskManager.stop(this._task);
-        }
-
-        Ext.TaskManager.start(this._task);
-        this._task.containerId = containerId;
+        this.loadObjects();
     },
 
 
