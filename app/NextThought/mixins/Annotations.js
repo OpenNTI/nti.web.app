@@ -22,6 +22,8 @@ Ext.define('NextThought.mixins.Annotations', {
                 this.el.on('mouseup', this._onContextMenuHandler, this);
             },
             this);
+
+        NextThought.controller.Stream.registerChangeListener(this.onNotification, this);
     },
 
     _loadObjects: function() {
@@ -179,15 +181,16 @@ Ext.define('NextThought.mixins.Annotations', {
         return false;
     },
 
-    _purgeRemovedObjects: function(oids) {
-        //clear any top level annotations that are not on the server (ie. deleted).
-        for(var key in this._annotations) {
-            if(!this._annotations.hasOwnProperty(key)) continue;
-            if (!Ext.Array.contains(oids, key)) {
-                console.log('removing top level annotation ' + key);
-                this.removeAnnotation(key);
-            }
-        }
+    onNotification: function(change){
+        if (!change || !this._containerId) return;
+        console.log('change!!',change);
+
+        var item = change.get('Item');
+        if(!item) return;
+
+        //if exists, update
+        //if not exists, add
+        //do we get delete notices?
     },
 
 

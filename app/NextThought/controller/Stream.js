@@ -17,6 +17,24 @@ Ext.define('NextThought.controller.Stream', {
         { ref: 'miniStream', selector: 'mini-stream' }
     ],
 
+    statics:{
+        eventName: 'changed',
+        evtRouter: Ext.create('Ext.util.Observable'),
+
+        registerChangeListener: function(callback, scope){
+            this.evtRouter.on(this.eventName, callback, scope||window);
+        },
+
+        removeChangeListener: function(callback, scope){
+            this.evtRouter.un(this.eventName, callback, scope||window);
+        },
+
+        fireChange: function(change){
+            this.evtRouter.fireEvent(this.eventName, change);
+        }
+
+    },
+
     init: function() {
         var me = this;
 
@@ -41,6 +59,8 @@ Ext.define('NextThought.controller.Stream', {
         change = UserDataLoader.parseItems([change])[0];
 
         Ext.each(o, function(t){t.onNotification(change);});
+
+        this.self.fireChange(change);
     },
 
     streamFilterChanged: function(newFilter){
