@@ -23,7 +23,9 @@
 
 
 
-
+#nticontent .page-contents .title{
+    border: none !important;
+}
 
 
 
