@@ -3,14 +3,17 @@ Ext.define('NextThought.view.widgets.chat.FriendEntry', {
     extend: 'Ext.Component',
     alias: 'widget.chat-friend-entry',
 
-     renderTpl: new Ext.XTemplate(
-          '<div class="x-chat-friend-entry {Presence} {cls}">',
-              '<img src="{avatarURL}" width=16 height=16"/>',
-              '<div>',
-                    '<span class="name">{name}</span> ',
-              '</div>',
-          '</div>'
-          ),
+    renderTpl: new Ext.XTemplate(
+        '<div class="x-chat-friend-entry {Presence} {cls}">',
+            '<img src="{avatarURL}" width=16 height=16"/>',
+            '<div>',
+                '<span class="name">{name}</span> ',
+            '</div>',
+        '</div>',
+        {
+            compiled: true,
+            disableFormats: true
+        }),
 
     renderSelectors: {
         box: 'div.x-chat-friend-entry',

@@ -31,6 +31,14 @@ Ext.define('NextThought.view.form.AccountForm', {
         }
     },
 
+    gravatarTpl: new Ext.XTemplate(
+        '<div style="font-weight: bold; margin-bottom: 5px">Change your avatar at <a href="http://gravatar.com" target="_blank">gravatar.com</a>.</div>',
+        'We\'re using {Username}. It may take time for changes made on gravatar.com to appear here.',
+        {
+            compiled: true,
+            disableFormats: true
+        }),
+
     items: [
         {
             layout: 'hbox',
@@ -98,6 +106,10 @@ Ext.define('NextThought.view.form.AccountForm', {
                         },
                         {
                             border: false,
+                            changeAvatar: true
+                        },
+                        {
+                            border: false,
                             margin: '10px 0px',
                             defaults: {
                                 padding: 0,
@@ -130,8 +142,6 @@ Ext.define('NextThought.view.form.AccountForm', {
                 }
             ]
         }
-
-
     ],
 
 
@@ -150,6 +160,8 @@ Ext.define('NextThought.view.form.AccountForm', {
         this.setFieldValue('following');
         this.setFieldValue('ignoring');
         this.setFieldValue('Communities');
+
+        this.down('panel[changeAvatar]').update(this.gravatarTpl.apply(this.account.data));
 
         Ext.each(this.query('fieldset'), this.__setupAccordion, this);
 
