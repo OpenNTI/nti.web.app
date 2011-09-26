@@ -31,9 +31,6 @@ Ext.define('NextThought.proxy.reader.Json', {
 			return this.callParent([data]);
 		}
 		
-		
-
-		
 		if (me.hasContainerId){
 			records = this.getNestedRecords(i);
 		}
@@ -44,13 +41,22 @@ Ext.define('NextThought.proxy.reader.Json', {
 			}
 		}	
 		
-		// if(NextThought.isDebug) {
-			// console.log('read records result:',mName, records);
-		// }
-		
-		return this.callParent([records]);
+//		if(NextThought.isDebug) {
+//			console.log('read records result:',mName, records);
+//		}
+
+        try {
+		    return this.callParent([records]);
+        }
+        catch (err) {
+            return Ext.create('Ext.data.ResultSet', {
+                total  : 0,
+                count  : 0,
+                records: [],
+                success: true
+            });
+        }
 	},
-	
 	
 	getNestedRecords: function(collection) {
 		var result = [];

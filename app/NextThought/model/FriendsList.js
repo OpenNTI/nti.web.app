@@ -88,17 +88,6 @@ Ext.define('NextThought.model.FriendsList', {
         { name: 'avatarURL', type: 'string' },
         { name: 'ContainerId', type: 'string'},
         { name: 'friends', type: Ext.data.Types.FRIEND_LIST }
-        /*
-			Creator: "jonathan.grimes@nextthought.com"
-			ID: "list1@nextthought.com"
-			Last Modified: 1313076966.748422
-			OID: "0x92"
-			Username: "list1@nextthought.com"
-			alias: "list1@nextthought.com"
-			avatarURL: "http://www.gravatar.com/avatar/0abb472ec5334de28da57a2312b712e1?s=44&d=wavatar"
-			friends: Array[3]
-			realname: "List1"
-		*/
     ],
     proxy: {
     	type: 'nti',
@@ -108,5 +97,12 @@ Ext.define('NextThought.model.FriendsList', {
     },
     getModelName: function() {
         return 'Group';
+    },
+
+    destroy: function() {
+        this.set('friends', []);
+
+        this.callParent(arguments);
     }
+
 });
