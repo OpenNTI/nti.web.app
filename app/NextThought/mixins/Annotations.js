@@ -185,11 +185,23 @@ Ext.define('NextThought.mixins.Annotations', {
         if (!change || !this._containerId) return;
         console.log('change!!',change);
 
-        var item = change.get('Item');
-        if(!item) return;
+        var item = change.get('Item'),
+            oid = item? items.get('oid') : null;
+
+        if(!item) {
+            console.log('change had no items?');
+            return;
+        }
 
         //if exists, update
+        if( oid in this._annotations){
+            this._annotations[oid].getRecord().fireEvent('updated',item);
+        }
         //if not exists, add
+        else{
+
+        }
+
         //do we get delete notices?
     },
 
