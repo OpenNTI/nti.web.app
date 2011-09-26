@@ -244,6 +244,10 @@ Ext.define('NextThought.proxy.UserDataLoader',{
                         this);
 
                     Ext.Array.sort(json.Items, function(a, b){
+                        if (!a.get || !b.get) {
+                            console.log('WARNING: Trying to sort', a, 'and', b, 'but 1 or both does not have a get method.  What is it?');
+                            return 1;
+                        }
                         var lm = 'Last Modified';
                         return a.get(lm)<b.get(lm) ? 1 : -1;
                     });
