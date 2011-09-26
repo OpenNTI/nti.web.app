@@ -141,7 +141,7 @@ Ext.define('NextThought.cache.UserRepository', {
             callback: function userRepository_makeRequestCallback(o,success,r)
             {
                 if(!success){
-                    Logging.logAndAlertError('There was an error resolving users', arguments);
+                    console.log('WARNING: There was an error resolving user:', username, arguments);
                     if (callbacks && callbacks.failure) callbacks.failure.call(callbacks.scope || this);
                     return;
                 }
