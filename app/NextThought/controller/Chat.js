@@ -37,7 +37,6 @@ Ext.define('NextThought.controller.Chat', {
             },
 
             'chat-friends-view' : {
-                'afterrender': this.showFriendsList,
                 'group-click': this.groupEntryClicked
             },
 
@@ -198,22 +197,5 @@ Ext.define('NextThought.controller.Chat', {
 
     groupEntryClicked: function(group){
         this.enterRoom(group.get('friends'));
-    },
-
-
-    showFriendsList: function(cmp) {
-
-        if(cmp && !cmp.isDestroyed){
-            UserDataLoader.getGroups({
-                scope: cmp,
-                success: cmp.setGroups,
-                failure: failure
-            });
-        }
-
-
-        function failure() {
-            console.log("FAIL loading groups for friends list", arguments);
-        }
     }
 });

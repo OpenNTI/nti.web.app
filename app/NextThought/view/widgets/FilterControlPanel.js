@@ -20,27 +20,30 @@ Ext.define('NextThought.view.widgets.FilterControlPanel', {
    		this.callParent(arguments);
    		this.setWidth(MIN_SIDE_WIDTH);
    		
-   		this.reload();
+   		//this.reload();
+        UserDataLoader.getFriendsListsStore().on('load', this.reload, this);
 	},
 	
-	reload: function(){
-		UserDataLoader.getGroups({
-   			scope: this,
-   			success: this.addGroups
-   		});
+	reload: function(store, groups, success, ops){
+//		UserDataLoader.getGroups({
+//   			scope: this,
+//   			success: this.addGroups
+//   		});
+        this.addGroups(groups);
 	},
 	
 	
 	addGroups : function(groups){
         this.removeAll();
-        this.removeAll();
-		var form = Ext.create('Ext.form.Panel',{border: false});
+
+		var form = Ext.create('Ext.form.Panel',{border: false, defaults:{border:false}});
 
         this.add(form);
 
         form.add({ border: false,html:'Who:', cls: 'sidebar-header'});
 
         form.add({
+            border: false,
             boxLabel: 'All',
             cls: 'x-all-filter-btn',
             name: 'allgroupsbutton',
@@ -48,6 +51,7 @@ Ext.define('NextThought.view.widgets.FilterControlPanel', {
         });
 
 		form.add({
+            border: false,
 			cls: 'user-group',
 			usergroup: true,
 			xtype:'checkboxfield',
@@ -58,6 +62,7 @@ Ext.define('NextThought.view.widgets.FilterControlPanel', {
 		Ext.each(groups,
 			function(v){
 				form.add({
+                    border: false,
 					cls: 'user-group',
 					usergroup: true,
 					xtype:'checkboxfield',
@@ -71,6 +76,7 @@ Ext.define('NextThought.view.widgets.FilterControlPanel', {
 		form.add({ border: false,html:'What:', cls: 'sidebar-header'});
 		
 		form.add({
+            border: false,
 			cls: 'x-all-filter-btn',
 			name: 'alltypesbutton',
 			xtype: 'checkboxfield',

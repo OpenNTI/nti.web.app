@@ -13,16 +13,23 @@ Ext.define('NextThought.view.widgets.chat.Friends', {
 
     initComponent:function() {
         this.callParent(arguments);
+        this.setGroups();
+        UserDataLoader.getFriendsListsStore().on('load', this.reload, this);
     },
 
-    setGroups: function(groups) {
+    reload: function(store, groups, success, ops) {
+        this.setGroups();
+    },
+
+    setGroups: function() {
         var me = this,
+            groups = UserDataLoader.getFriendsListsStore(),
             prevGroups = me._groups || {},
             newGroups = {};
 
 
 
-        Ext.each(groups, function(g){
+        groups.each(function(g){
             if(/everyone/i.test(g.get('id'))) return; //skip everyone group
 
             var gid = g.getId(),

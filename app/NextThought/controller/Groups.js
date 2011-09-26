@@ -49,7 +49,6 @@ Ext.define('NextThought.controller.Groups', {
 
     reloadGroups: function(){
         UserDataLoader.getFriendsListsStore().load();
-        Ext.each(Ext.ComponentQuery.query('filter-control'), function(g){g.reload()});
     },
 
 
