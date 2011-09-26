@@ -59,6 +59,8 @@ Ext.define('NextThought.view.widgets.chat.Friends', {
 
             Ext.each(g.get('friends'), function(f){
                 uid = f.getId();
+
+
                 var item = groupPanel.down('chat-friend-entry[userId='+uid+']');
                 if(item){
                     item.update(f);

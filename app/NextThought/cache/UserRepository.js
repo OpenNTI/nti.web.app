@@ -40,6 +40,8 @@ Ext.define('NextThought.cache.UserRepository', {
             u = s.getById(refreshedUser.getId()),
             ignoreNewInstance = (refreshedUser.raw && 'ignoreIfExists' in refreshedUser.raw);
 
+        //console.log('updateUser',ignoreNewInstance, refreshedUser.getId(), u, refreshedUser);
+
         if (u && (!ignoreNewInstance || !u.equal(refreshedUser))) {
             if (u.getId() == _AppConfig.userObject.getId() ){
                 if(u !== _AppConfig.userObject)
@@ -49,15 +51,14 @@ Ext.define('NextThought.cache.UserRepository', {
 
             u.fireEvent('changed', refreshedUser);
             s.remove(u);
+            //console.log('updateUser: refreshing...',refreshedUser.getId());
             u=null;
         }
 
         if(!u){
+            //console.log('updateUser: adding...',refreshedUser.getId());
             s.add(refreshedUser);
-
         }
-
-
     },
 
     prefetchUser: function(username, callback, scope) {
@@ -111,6 +112,7 @@ Ext.define('NextThought.cache.UserRepository', {
     getUser: function(username, raw) {
         var user = this.getStore().getById(username);
 
+        
         if (!user) {
             user = raw? UserDataLoader.parseItems([raw])[0] : this._makeRequest(username);
             //user's constructor adds the user to the repo, so do the following only if the user is different somehow,

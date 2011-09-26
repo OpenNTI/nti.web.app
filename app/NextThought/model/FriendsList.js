@@ -1,32 +1,28 @@
 
 Ext.data.Types.FRIEND_LIST = {
 	type: 'FriendList',
-    convert: function(v) {
+    convert: function(v,m) {
         var u = [];
 
         Ext.each(v, function(o){
-            //these two branches result in a string being in the array. everything that uses this Type expects a model
-            //DEPRECATED:
-            if(typeof(o)=='string'){
-                console.log('WARNING:was string, keeping a string');
+            var id = o.Username || o;
+
+            if(o.get){
                 u.push(o);
             }
-            //DEPRECATED:
-            else if(o.get){
-                console.log('WARNING:was model, converting to a string');
-                u.push(o.get('Username'));
+            else {
+                o = UserRepository.getUser(id);
+                if (m.updateUserRef){
+                    o.on('changed', m.updateUserRef, m);
+                }
+                u.push(o);
             }
-            //Preferred branch:
-            else if(o.Username){
-                u.push(UserRepository.getUser(o.Username, o));
-            }
-            else
-                console.log("WARNING: Could not handle Object: ", o, arguments);
 
         });
 
         return u;
     },
+
     sortType: function(v) {
     	console.log('sort by FriendList:',arguments);
         return '';
@@ -94,6 +90,16 @@ Ext.define('NextThought.model.FriendsList', {
     },
     getModelName: function() {
         return 'Group';
+    },
+
+    updateUserRef: function(u) {
+        var l = this.get('friends');
+        for(var key in l) {
+            if (!l.hasOwnProperty(key) || l[key].getId() != u.getId()) continue;
+            l[key] = u;
+        }
+
+        this.set('friends', l);
     },
 
     destroy: function() {
