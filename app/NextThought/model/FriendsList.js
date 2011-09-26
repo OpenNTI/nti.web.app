@@ -18,7 +18,7 @@ Ext.data.Types.FRIEND_LIST = {
             }
             //Preferred branch:
             else if(o.Username){
-                u.push(UserRepository.getUser(o.Username));
+                u.push(UserRepository.getUser(o.Username, o));
             }
             else
                 console.log("WARNING: Could not handle Object: ", o, arguments);

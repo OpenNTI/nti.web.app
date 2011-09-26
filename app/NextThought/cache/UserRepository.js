@@ -108,11 +108,11 @@ Ext.define('NextThought.cache.UserRepository', {
     },
 
 
-    getUser: function(username) {
+    getUser: function(username, raw) {
         var user = this.getStore().getById(username);
 
         if (!user) {
-            user = this._makeRequest(username);
+            user = raw? UserDataLoader.parseItems([raw])[0] : this._makeRequest(username);
             //user's constructor adds the user to the repo, so do the following only if the user is different somehow,
             //this is more of an assertion.  The reason we have to do this is because things are listening to events
             //on user instances in this repository so we cant just replace them.
