@@ -202,29 +202,18 @@ Ext.define('NextThought.controller.Chat', {
 
 
     showFriendsList: function(cmp) {
-        var task = {
-            run: function(){
-                if(cmp && !cmp.isDestroyed){
-                    UserDataLoader.getGroups({
-                        scope: cmp,
-                        success: cmp.setGroups,
-                        failure: failure
-                    });
-                }
-                else {
-                    Ext.TaskManager.stop(task);
-                }
-            },
-            scope: this,
-            interval: 10000
-        };
 
-        Ext.TaskManager.start(task);
+        if(cmp && !cmp.isDestroyed){
+            UserDataLoader.getGroups({
+                scope: cmp,
+                success: cmp.setGroups,
+                failure: failure
+            });
+        }
+
 
         function failure() {
             console.log("FAIL loading groups for friends list", arguments);
-            Ext.TaskManager.stop(task);
         }
-
     }
 });
