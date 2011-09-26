@@ -182,16 +182,13 @@ Ext.define('NextThought.mixins.Annotations', {
     },
 
     onNotification: function(change){
-        if (!change || !this._containerId) return;
+        var item = change && change.get? change.get('Item') : null,
+            oid = item? item.get('oid') : null,
+            cid = item? item.get('ContainerId') : null;
+
+        if (!item || !this._containerId || this._containerId != cid) return;
+
         console.log('change!!',change);
-
-        var item = change.get('Item'),
-            oid = item? items.get('oid') : null;
-
-        if(!item) {
-            console.log('change had no items?');
-            return;
-        }
 
         //if exists, update
         if( oid in this._annotations){
