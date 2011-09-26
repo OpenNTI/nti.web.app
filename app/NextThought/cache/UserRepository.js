@@ -169,9 +169,11 @@ Ext.define('NextThought.cache.UserRepository', {
     },
 
     _presenceChanged: function(username, presence) {
-        var u = this.getUser(username);
-        u.set('Presence', presence);
-        u.fireEvent('changed', u);
+        var u = this.getStore().getById(username);
+        if (u) {
+            u.set('Presence', presence);
+            u.fireEvent('changed', u);
+        }
     },
 
     isOnline: function(username) {
