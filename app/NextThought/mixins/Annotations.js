@@ -24,6 +24,11 @@ Ext.define('NextThought.mixins.Annotations', {
             this);
 
         NextThought.controller.Stream.registerChangeListener(this.onNotification, this);
+
+        this.widgetBuilder = {
+            'Highlight' : this._createHighlightWidget,
+            'Note': this._createNoteWidget
+        };
     },
 
     _loadObjects: function() {
@@ -69,7 +74,6 @@ Ext.define('NextThought.mixins.Annotations', {
         var v = this._annotations[oid];
         if (v) {
             v.cleanup();
-            delete v;
             this._annotations[oid] = undefined;
             delete this._annotations[oid];
         }
@@ -82,7 +86,6 @@ Ext.define('NextThought.mixins.Annotations', {
             var v = this._annotations[oid];
             if (!v) continue;
             v.cleanup();
-            delete v;
         }
 
         this._annotations = {};
@@ -111,7 +114,7 @@ Ext.define('NextThought.mixins.Annotations', {
 
         if(!highlight) return;
 
-        w = this._createHighlightWidget(range, highlight);
+        w = this._createHighlightWidget(highlight, range);
 
         highlight.set('ContainerId', this._containerId);
 
@@ -120,7 +123,6 @@ Ext.define('NextThought.mixins.Annotations', {
                 if(!w.isSaving){
                     w.cleanup();
                     delete this._annotations[w.tempOID]; //remove the key from the object
-                    delete w;//delete the object itself
                 }
             },
             this);
@@ -128,15 +130,20 @@ Ext.define('NextThought.mixins.Annotations', {
 
     },
 
-    _createHighlightWidget: function(range, record){
+    _createHighlightWidget: function(record, r){
+        var range = r || AnnotationUtils.buildRangeFromRecord(record),
+            oid = record.get('OID'),
+            w;
+
+        if (!range) Ext.Error.raise('could not create range');
 
         if (this._annotationExists(record)) {
             this._annotations[record.get('OID')].getRecord().fireEvent('updated',record);
-            return;
+            return null;
         }
 
-        var oid = record.get('OID'),
-            w = Ext.create(
+
+        w = Ext.create(
                 'NextThought.view.widgets.annotations.Highlight',
                 range, record,
                 this.items.get(0).el.dom.firstChild,
@@ -186,9 +193,9 @@ Ext.define('NextThought.mixins.Annotations', {
             oid = item? item.get('oid') : null,
             cid = item? item.get('ContainerId') : null;
 
-        if (!item || !this._containerId || this._containerId != cid) return;
-
-        console.log('change!!',change);
+        if (!item || !this._containerId || this._containerId != cid) {
+            return;
+        }
 
         //if exists, update
         if( oid in this._annotations){
@@ -196,7 +203,18 @@ Ext.define('NextThought.mixins.Annotations', {
         }
         //if not exists, add
         else{
+            var cls = item.get('Class'),
+                replyTo = item.get('inReplyTo'),
+                builder = this.widgetBuilder[cls],
+                result = builder ? builder.call(this, item) : null;
 
+            if (/Note/i.test(cls) && result === false && replyTo) {
+                replyTo = Ext.getCmp('note-'+replyTo);
+                replyTo.addReply(item);
+            }
+            else {
+                console.log('ERROR: Do not know what to do with this item', Ext.encode(item));
+            }
         }
 
         //do we get delete notices?
@@ -206,28 +224,25 @@ Ext.define('NextThought.mixins.Annotations', {
     _objectsLoaded: function(bins) {
         var contributors = {},
             oids = {},
-            oid,
             me = this,
-            bin,
             k = 'Last Modified',
             o;
 
         if (!this._containerId) return;
 
         //sort bins
-        for(b in bins){
+        for(var b in bins){
             if(bins.hasOwnProperty(b))
             bins[b] = Ext.Array.sort(bins[b]||[],function(a,b){return a.get(k) < b.get(k);});
         }
 
         Ext.each(bins.Highlight,
             function(r){
-                var range = AnnotationUtils.buildRangeFromRecord(r);
-                if (range){
+                try{
+                    me._createHighlightWidget(r);
                     contributors[r.get('Creator')] = true;
-                    me._createHighlightWidget(range, r);
                 }
-                else{
+                catch (err) {
                     console.log('could not build highlight from record:', r);
                 }
             }, this
@@ -235,7 +250,7 @@ Ext.define('NextThought.mixins.Annotations', {
 
         notes(buildTree);
 
-        for(oid in oids){
+        for(var oid in oids){
             o = oids[oid];
             if(!oids.hasOwnProperty(oid) || o._parent) continue;
 
@@ -246,7 +261,7 @@ Ext.define('NextThought.mixins.Annotations', {
             me.bufferedDelayedRelayout();
 
         me.fireEvent('publish-contributors',contributors);
-        return;//end of _objectsLoaded execution
+        //end of _objectsLoaded execution
 
         /**
          * helper local-scope functions (think of them as macros)

@@ -50,6 +50,8 @@ Ext.define('NextThought.proxy.Socket', {
             socket.on(k, this.control[k]);
         }
 
+        this.control = null;
+
         this.socket = socket;
     },
 
@@ -86,14 +88,19 @@ Ext.define('NextThought.proxy.Socket', {
 
     register: function(control) {
         for (var k in control) {
-            console.log('registering function ', k, ' for socket io.');
             if (!control.hasOwnProperty(k)) continue;
-            if (k in this.control) {
-                console.log('WARN: found existing control for', k, 'in', this.control);
-                continue;
-            }
 
-            this.control[k] = control[k];
+            if(!this.socket) {
+                if (k in this.control) {
+                    console.log('WARN: found existing control for', k, 'in', this.control);
+                    continue;
+                }
+
+                this.control[k] = control[k];
+            }
+            else {
+                this.socket.on(k, control[k]);
+            }
         }
     },
 
