@@ -3,9 +3,9 @@ Ext.define('NextThought.model.RoomInfo', {
     requires: [
         'NextThought.model.FriendsList'
     ],
-    idProperty: 'RoomId',
+    idProperty: 'ID',
     fields: [
-        { name: 'RoomId', type: 'string' },
+        { name: 'ID', type: 'string' },
         { name: 'Active', type: 'bool' },
         { name: 'Class', type: 'string', defaultValue: 'RoomInfo' },
         { name: 'MessageCount', type: 'int' },
