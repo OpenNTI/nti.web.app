@@ -25,6 +25,8 @@ Ext.define('NextThought.controller.Chat', {
 
         Socket.register({
             'chat_enteredRoom': function(){me.enteredRoom.apply(me, arguments)},
+            'disconnect': function(){me.socketDisconnect.apply(me, arguments)},
+            'serverkill': function(){me.socketDisconnect.apply(me, arguments)},
             'chat_recvMessage': function(){me.onMessage.apply(me, arguments)},
             'chat_recvMessageForModeration': function(){me.onModeratedMessage.apply(me, arguments);},
             'chat_presenceOfUserChangedTo': function(user, presence){UserRepository._presenceChanged(user, presence);}
@@ -118,6 +120,10 @@ Ext.define('NextThought.controller.Chat', {
         delete this.activeRooms[room.getId()];
 
         Socket.emit('chat_exitRoom', room.getId());
+    },
+
+    socketDisconnect: function(){
+       this.activeRooms = {};
     },
 
     approveMessages: function(messageIds){
