@@ -8,11 +8,11 @@ Ext.define('NextThought.cache.UserRepository', {
             _task: {
                 scope: this,
                 run: this.refresh,
-                interval: 120000
+                interval: 1200000
             }
         });
 
-        Ext.TaskManager.start(this._task);
+        //Ext.TaskManager.start(this._task);
     },
 
     getStore: function() {
