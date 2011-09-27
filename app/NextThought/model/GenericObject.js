@@ -13,6 +13,6 @@ Ext.define('NextThought.model.GenericObject', {
        	{ name: 'Last Modified', type: 'date', dateFormat: 'timestamp' },
        	{ name: 'ContainerId', type: 'string'},
         { name: 'text', type: 'string' },
-       	{ name: 'sharedWith', type: Ext.data.Types.FRIEND_LIST }
+       	{ name: 'sharedWith', type: Ext.data.Types.USER_LIST }
     ]
 });

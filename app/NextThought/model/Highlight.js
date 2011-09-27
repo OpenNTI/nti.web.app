@@ -25,7 +25,7 @@ Ext.define('NextThought.model.Highlight', {
        	{ name: 'Last Modified', type: 'date', dateFormat: 'timestamp' },
        	{ name: 'ContainerId', type: 'string'},
         { name: 'text', type: 'string' },
-       	{ name: 'sharedWith', type: Ext.data.Types.USER_LIST }//, defaultValue: ['jonathan.grimes@nextthought.com'] }
+       	{ name: 'sharedWith', type: Ext.data.Types.USER_LIST }
     ],
     proxy: {
     	type: 'nti',

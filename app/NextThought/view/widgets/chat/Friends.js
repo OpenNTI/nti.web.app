@@ -55,20 +55,19 @@ Ext.define('NextThought.view.widgets.chat.Friends', {
             newGroups[gid] = groupPanel;
             delete prevGroups[gid];
 
-            var prevFriends = groupPanel.friends, newFriends = {}, uid;
+            var prevFriends = groupPanel.friends, newFriends = {};
 
-            Ext.each(g.get('friends'), function(f){
-                uid = f.getId();
-
+            Ext.each(g.get('friends'), function(uid){
+                var friend = UserRepository.getUser(uid);
 
                 var item = groupPanel.down('chat-friend-entry[userId='+uid+']');
                 if(item){
-                    item.update(f);
+                    item.update(friend);
                 }
                 else {
                     item = groupPanel.add({
                         xtype: 'chat-friend-entry',
-                        user: f,
+                        user: friend,
                         userId: uid
                     });
                 }

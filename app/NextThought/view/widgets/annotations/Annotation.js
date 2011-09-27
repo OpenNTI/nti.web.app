@@ -77,10 +77,7 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 		
 		Ext.each(this._record.get('sharedWith'), function(f){
 			if(pass)return false;
-			//backwards compatibility 
-			if(typeof(f)=='string') { if(targets[f]) pass = true; }
-			//future format:
-			else if( targets[f.get('Username')] ) pass = true;
+			if(targets[f]) pass = true;
 		},
 		this);
 		

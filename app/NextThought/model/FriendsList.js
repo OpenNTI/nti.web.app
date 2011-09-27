@@ -1,35 +1,4 @@
 
-Ext.data.Types.FRIEND_LIST = {
-	type: 'FriendList',
-    convert: function(v,m) {
-        var u = [];
-
-        Ext.each(v, function(o){
-            var id = o.Username || o;
-
-            if(o.get){
-                u.push(o);
-            }
-            else {
-                o = UserRepository.getUser(id);
-                if (m.updateUserRef){
-                    o.on('changed', m.updateUserRef, m);
-                }
-                u.push(o);
-            }
-
-        });
-
-        return u;
-    },
-
-    sortType: function(v) {
-    	console.log('sort by FriendList:',arguments);
-        return '';
-    }
-};
-
-
 Ext.data.Types.USER_LIST = {
 	type: 'UserList',
     convert: function(v) {
@@ -80,7 +49,7 @@ Ext.define('NextThought.model.FriendsList', {
         { name: 'realname', type: 'string' },
         { name: 'avatarURL', type: 'string' },
         { name: 'ContainerId', type: 'string'},
-        { name: 'friends', type: Ext.data.Types.FRIEND_LIST }
+        { name: 'friends', type: Ext.data.Types.USER_LIST }
     ],
     proxy: {
     	type: 'nti',
@@ -90,16 +59,6 @@ Ext.define('NextThought.model.FriendsList', {
     },
     getModelName: function() {
         return 'Group';
-    },
-
-    updateUserRef: function(u) {
-        var l = this.get('friends');
-        for(var key in l) {
-            if (!l.hasOwnProperty(key) || l[key].getId() != u.getId()) continue;
-            l[key] = u;
-        }
-
-        this.set('friends', l);
     },
 
     destroy: function() {

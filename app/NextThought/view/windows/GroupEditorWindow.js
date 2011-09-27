@@ -5,8 +5,8 @@ Ext.define('NextThought.view.windows.GroupEditorWindow', {
 	extend: 'Ext.window.Window',
 	alias : 'widget.group-editor',
 	requires: [
+			'NextThought.cache.UserRepository',
 			'NextThought.model.User',
-			// 'NextThought.model.UnresolvedFriend',
 			'NextThought.view.form.fields.UserSearchInputField'
 	],
 	
@@ -19,20 +19,25 @@ Ext.define('NextThought.view.windows.GroupEditorWindow', {
 	defaults:{border: false, defaults:{border: false}},
 	
 	initComponent: function(){
-		this.callParent(arguments);
-		this.removeAll();
-	    this._store = Ext.create('Ext.data.Store',{
-			model: 'NextThought.model.User',
-			proxy: 'memory'
-		});
-	    
-	    var n = undefined;
-	    if(!this.record.phantom){
-	    	this._store.add(this.record.get('friends'));
-	    	n = this.record.get('realname');
+        var me= this,
+            n = undefined;
+        me.callParent(arguments);
+        me.removeAll();
+        me._store = Ext.create('Ext.data.Store',{
+            model: 'NextThought.model.User',
+            proxy: 'memory'
+        });
+
+	    if(!me.record.phantom){
+	    	Ext.each(me.record.get('friends'),
+                function(f){
+                    me._store.add(UserRepository.getUser(f));
+                });
+
+	    	n = me.record.get('realname');
 	    }
 
-	    this.add(
+	    me.add(
 	    	{
 	    		xtype: 'form',
 	    		bbar: ['->',
@@ -76,9 +81,8 @@ Ext.define('NextThought.view.windows.GroupEditorWindow', {
 			                items: [{
 			                    icon   : 'extjs/examples/shared/icons/fam/delete.gif',  // Use a URL in the icon config
 			                    tooltip: 'Remove',
-			                    scope: this,
 			                    handler: function(grid, rowIndex, colIndex) {
-			                        this._store.removeAt(rowIndex);
+			                        me._store.removeAt(rowIndex);
 			                    }
 			                }]
 			            }
@@ -93,8 +97,8 @@ Ext.define('NextThought.view.windows.GroupEditorWindow', {
 			]
 		});
 		
-		var s = this.down('usersearchinput');
-		s.on('select', this._selectSearch, this);
+		var s = me.down('usersearchinput');
+		s.on('select', me._selectSearch, me);
 	},
 
     show: function(){
