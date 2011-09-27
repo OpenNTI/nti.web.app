@@ -99,7 +99,7 @@ Ext.define('NextThought.proxy.Rest', {
         me.reader.hasId = true;
     },
 
-    _exception: function() {
-        Logging.logAndAlertError('Error getting data, try again later', arguments)
+    _exception: function(proxy, response, operation, eOpts) {
+        console.log('Error getting data:', arguments, '\n', printStackTrace().join('\n'));
     }
 });
