@@ -92,7 +92,8 @@ Ext.define('NextThought.proxy.Socket', {
 
             if(!this.socket) {
                 //if there's already a callback registered, sequence it.
-                var cb = this.control[k] ? Ext.Function.createSequence(x, control[k]) : control[k];
+                var x = this.control[k],
+                    cb = x ? Ext.Function.createSequence(x, control[k]) : control[k];
                 this.control[k] = cb;
             }
             else {
