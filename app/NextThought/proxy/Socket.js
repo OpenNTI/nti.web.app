@@ -91,12 +91,9 @@ Ext.define('NextThought.proxy.Socket', {
             if (!control.hasOwnProperty(k)) continue;
 
             if(!this.socket) {
-                if (k in this.control) {
-                    console.log('WARN: found existing control for', k, 'in', this.control);
-                    continue;
-                }
-
-                this.control[k] = control[k];
+                //if there's already a callback registered, sequence it.
+                var cb = this.control[k] ? Ext.Function.createSequence(x, control[k]) : control[k];
+                this.control[k] = cb;
             }
             else {
                 this.socket.on(k, control[k]);
