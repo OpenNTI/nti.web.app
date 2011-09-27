@@ -105,7 +105,6 @@ Ext.define('NextThought.proxy.Socket', {
     },
 
     onDisconnect: function() {
-        this.activeRooms = {};
         console.log('disconnect', arguments);
     },
 
@@ -115,7 +114,6 @@ Ext.define('NextThought.proxy.Socket', {
 
     onKill: function() {
         console.log( 'asked to die' );
-        this.activeRooms = {};
         this.socket.disconnect();
     }
 
