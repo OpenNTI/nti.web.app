@@ -20,8 +20,8 @@ Ext.define('NextThought.view.content.Home', {
             cls: 'library-section',
             items: [
                 {html: '<div>Library:</div>', border: false, cls: 'label', items:[
-                    {xtype: 'button', text: 'view_style_icon',enableToggle: true, toggleGroup: g, pressed: true},
-                    {xtype: 'button', text: 'view_style_grid',enableToggle: true, toggleGroup: g}
+                    {xtype: 'button', iconCls: 'view_style_grid', enableToggle: true, toggleGroup: g},
+                    {xtype: 'button', iconCls: 'view_style_icon', enableToggle: true, toggleGroup: g, pressed: true}
                 ]},
                 {xtype: 'library-view'}
             ]

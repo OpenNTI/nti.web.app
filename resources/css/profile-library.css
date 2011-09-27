@@ -56,6 +56,23 @@
     border-bottom: 2px black solid;
 }
 
+.library-section .label div.x-btn button {
+    width: 11px !important;
+    height: 11px;
+}
+
+.library-section .label div.x-btn .view_style_icon,
+.library-section .label div.x-btn .view_style_grid {
+    width: 11px; height: 11px;
+    background-image: url("../images/icon.gif");
+}
+
+.library-section .label div.x-btn .view_style_grid{
+    background-image: url("../images/list.gif");
+}
+
 .library-section .label div.x-btn{
     float: right;
+    padding: 3px !important;
+    margin-left: 2px;
 }
