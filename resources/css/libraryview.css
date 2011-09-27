@@ -1,29 +1,35 @@
-.x-groupview-panel .x-panel-body{
-    background: white;
-    font: 11px Arial, Helvetica, sans-serif;
+.x-libraryview-panel {
+    margin-bottom: 30px;
 }
 
-.x-groupview-panel .item{
-    background: #dddddd;
+.x-libraryview-panel .x-panel-body{
+    background: white;
+    /*font: 11px Arial, Helvetica, sans-serif;*/
+    font-size: 11px;
+}
+
+.x-libraryview-panel .item{
+    /*background: #fff;*/
     padding: 3px;
     padding-bottom: 0;
 }
 
-.x-quirks .x-groupview-panel .item {
+.x-quirks .x-libraryview-panel .item {
     padding-bottom: 3px;
+    text-align: center;
 }
 
-.x-groupview-panel .item img{
+.x-libraryview-panel .item img{
+    border: none;
     height: 80px;
-    width: 80px;
 }
-.x-groupview-panel .item-wrap{
+.x-libraryview-panel .item-wrap{
     float: left;
     margin: 4px;
     margin-right: 0;
     padding: 5px;
 }
-.x-groupview-panel .item-wrap span {
+.x-libraryview-panel .item-wrap span {
 
     display: block;
     overflow: hidden;
@@ -31,18 +37,18 @@
     width: 86px; // for ie to ensure that the text is centered
 }
 
-.x-groupview-panel .x-item-over{
+.x-libraryview-panel .x-item-over{
     border:1px solid #dddddd;
     background: #efefef url(../images/over.gif) repeat-x left top;
     padding: 4px;
 }
 
-.x-groupview-panel .x-item-selected{
+.x-libraryview-panel .x-item-selected{
     background: #eff5fb url(../images/selected.gif) no-repeat right bottom;
     border:1px solid #99bbe8;
     padding: 4px;
 }
-.x-groupview-panel .x-item-selected .item{
+.x-libraryview-panel .x-item-selected .item{
     background:transparent;
 }
 /*

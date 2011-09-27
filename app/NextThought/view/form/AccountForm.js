@@ -151,7 +151,7 @@ Ext.define('NextThought.view.form.AccountForm', {
 
     afterRender: function(){
         this.callParent(arguments);
-        this.down('component[avatar]').el.dom.src = this.account.get('avatarURL');
+        this.down('component[avatar]').el.dom.src = this.account.get('avatarURL').replace(/s=\d+/i, 's=200');
         this.down('component[changePassword]').el.on('click',this._revealPassword,this);
 
         this.setFieldValue('realname');

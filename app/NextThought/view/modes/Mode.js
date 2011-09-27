@@ -51,7 +51,7 @@ Ext.define( 'NextThought.view.modes.Mode', {
             this.getMainComponent().relayout();
         }
         catch(e){
-            console.log(e.message, e);
+            console.log(e.message, e.stack||e.stacktrace, e);
         }
     },
 

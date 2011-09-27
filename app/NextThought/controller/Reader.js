@@ -13,25 +13,14 @@ Ext.define('NextThought.controller.Reader', {
     ],
 
     refs: [
-        {
-            ref: 'viewport',
-            selector: 'master-view'
-        },{
-            ref: 'reader',
-            selector: 'reader-mode-container reader-panel'
-        },{
-            ref: 'readerBreadcrumb',
-            selector: 'reader-mode-container breadcrumbbar'
-        },{
-            ref: 'readerPeople',
-            selector: 'reader-mode-container people-list'
-        },{
-            ref: 'readerRelated',
-            selector: 'reader-mode-container related-items'
-        },{
-            ref: 'readerStream',
-            selector: 'reader-mode-container mini-stream'
-        }
+        { ref: 'viewport', selector: 'master-view' },
+        { ref: 'reader', selector: 'reader-mode-container reader-panel' },
+        { ref: 'readerBreadcrumb', selector: 'reader-mode-container breadcrumbbar' },
+        { ref: 'readerPeople', selector: 'reader-mode-container people-list' },
+        { ref: 'readerRelated', selector: 'reader-mode-container related-items' },
+        { ref: 'readerStream', selector: 'reader-mode-container mini-stream' },
+
+        { ref: 'readerMode', selector: 'reader-mode-container' }
     ],
 
     init: function() {
@@ -95,6 +84,7 @@ Ext.define('NextThought.controller.Reader', {
     },
 
     navigate: function(book, ref, options){
+        this.getReaderMode().activate();
         this.getReader().setActive(book, ref, null,
             options
                 ? typeof(options)=='function'

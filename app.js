@@ -18,6 +18,7 @@ Ext.application({
         'Application',
         'FilterControl',
         'Groups',
+        'Home',
         'Session',
         'Modes',
         'ObjectExplorer',

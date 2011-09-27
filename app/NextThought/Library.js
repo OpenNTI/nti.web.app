@@ -18,6 +18,10 @@ Ext.define('NextThought.Library', {
         return this;
     },
 
+    getStore: function(){
+        return this.store;
+    },
+
     each: function(callback, scope){
         this.store.data.each(callback,scope||this);
     },

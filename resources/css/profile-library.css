@@ -1,0 +1,61 @@
+/*
+ * Profile header widget css
+ */
+
+.x-component .x-profile-header {
+    position: relative;
+    overflow: hidden;
+    clear: both;
+    padding: 10px 0px;
+}
+
+.x-profile-header span.edit {
+    position: absolute;
+    display: none;
+    right: 0px; top: 10px;
+    width: 32px;
+    height: 32px;
+    background: url("../images/edit.png");
+    cursor: pointer;
+}
+
+.hover .x-profile-header span.edit {
+    display: block;
+}
+
+.x-profile-header img {
+    float: left;
+    margin: 10px 0px;
+}
+
+.x-profile-header div {
+    margin: 10px 0px 10px 138px;
+}
+
+.x-profile-header span.name {
+    font-size: 3em;
+}
+
+.x-profile-header span.bio {
+    font-size: 1.5em;
+    white-space: normal;
+}
+
+
+/*
+ * Library section
+ */
+
+.mystuff-section .label,
+.mystuff-section .label .x-panel-body,
+.library-section .label,
+.library-section .label .x-panel-body {
+    font-size: 1.2em;
+    font-weight: bold;
+    padding: 5px 0px;
+    border-bottom: 2px black solid;
+}
+
+.library-section .label div.x-btn{
+    float: right;
+}

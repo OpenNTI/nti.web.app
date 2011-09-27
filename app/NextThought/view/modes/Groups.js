@@ -4,22 +4,21 @@ Ext.define( 'NextThought.view.modes.Groups', {
 	extend: 'NextThought.view.modes.Mode',
 	alias:	'widget.groups-mode-container',
 	requires: [
-			'NextThought.proxy.UserDataLoader'
-	],
+        'NextThought.proxy.UserDataLoader',
+        'NextThought.view.widgets.GroupsView'
+    ],
 	
     initComponent: function(){
     	this.callParent(arguments);
 
 		var bb ={ xtype: 'toolbar', cls: 'x-docked-noborder-top', items: {focusable: false, disabled:true,text:'&nbsp;',xtype:'button'}};
 
-		this.add({ /*xtype:'tbspacer',*/ flex:1, focusable: false, dockedItems: bb });
+		this.add({ flex:1, focusable: false, dockedItems: bb });
 		this.add({ region: 'west', id: 'west-groups', xtype: 'leftColumn', columnWidget: {} });
    		
    		this.add({
-			cls: 'x-dataview-panel x-focus-pane',
-    		region: 'center',
-    		//width: CENTER_WIDTH,
-            flex: 6,
+			cls: 'x-focus-pane',
+    		flex: 6,
             minWidth: CENTER_WIDTH/3,
     		
     		border: false,
@@ -38,29 +37,11 @@ Ext.define( 'NextThought.view.modes.Groups', {
 				]
 			},
 			
-			items: {
-				store: UserDataLoader.getFriendsListsStore(),
-				xtype: 'dataview',
-				emptyText: 'No groups available',
-				tpl: [
-	                '<tpl for=".">',
-	                    '<div class="item-wrap" id="{username}">',
-		                    '<div class="item">',
-		                    	'<img src="{avatarURL}" title="{realname}"></div>',
-                    		'<span>{realname}</span></div>',
-	                '</tpl>',
-	                '<div class="x-clear"></div>'
-	            ],
-	            multiSelect: false,
-	            singleSelect: true,
-	            trackOver: true,
-	            overItemCls: 'x-item-over',
-	            itemSelector: 'div.item-wrap'
-			}
+			items: {xtype: 'groups-view'}
     	});
     	
     	this.add({ region: 'east', id:'east-groups', xtype: 'rightColumn', columnWidget: {} }); 
-    	this.add({ /*xtype:'tbspacer',*/ flex:1, focusable: false, dockedItems: bb });
+    	this.add({ flex:1, focusable: false, dockedItems: bb });
     }
     
 });
