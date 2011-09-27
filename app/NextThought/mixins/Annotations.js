@@ -313,10 +313,15 @@ Ext.define('NextThought.mixins.Annotations', {
 
 
     _onContextMenuHandler: function(e) {
-        e.preventDefault();
-        var range = this.getSelection();
-        if( range && !range.collapsed ) {
-            this.addHighlight(range, e.getXY());
+        try{
+            e.preventDefault();
+            var range = this.getSelection();
+            if( range && !range.collapsed ) {
+                this.addHighlight(range, e.getXY());
+            }
+        }
+        catch(e){
+            this.clearSelection();
         }
     },
 
@@ -337,6 +342,21 @@ Ext.define('NextThought.mixins.Annotations', {
         }
 
         return null;
+    },
+
+
+    clearSelection: function(){
+        try {
+            if (window.getSelection) {
+                window.getSelection().removeAllRanges();
+            }
+
+            if(document.selection)
+                document.selection.clear();
+        }
+        catch(e){
+            console.log(e);
+        }
     }
 
 
