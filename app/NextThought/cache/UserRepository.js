@@ -86,7 +86,7 @@ Ext.define('NextThought.cache.UserRepository', {
                         if (l == 0) finish();
                     },
                     success: function(u){
-                        s.add(u);
+                        //s.add(u); not necessary since the user model calls update
                         result.push(u);
 
                         //our list of results is as expected, finish
