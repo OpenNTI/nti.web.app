@@ -7,6 +7,7 @@ Ext.define('NextThought.proxy.Socket', {
         Ext.apply(me, {
             socket: null,
             control: {
+                'connect': function(){me.onConnect.apply(me, arguments);},
                 'serverkill': function() {me.onKill.apply(me, arguments);},
                 'error': function() {me.onError.apply(me, arguments);},
                 'disconnect': function() {me.onDisconnect.apply(me, arguments);}
@@ -32,27 +33,33 @@ Ext.define('NextThought.proxy.Socket', {
         }
 
         if (this.socket) {
-            socket.disconnect();
+            this.socket.disconnect();
             delete this.socket;
         }
 
+        this.auth = Array.prototype.slice.call(arguments,0);
 
         var socket = io.connect(_AppConfig.server.host),
-            me = this;
+            me = this,
+            e = socket.emit;
 
-        socket.on('connect', function() {
-            socket.emit( 'message', username, password );
-            socket.emit( 'message', 'json' );
-        });
+        socket.emit = function(){
+            console.log('socket.emit:',arguments);
+            e.apply(this, arguments);
+        };
 
         for (k in this.control) {
-            if (!this.control.hasOwnProperty(k)) continue;
-            socket.on(k, this.control[k]);
+            if(this.control.hasOwnProperty(k))
+                socket.on(k, this.control[k]);
         }
 
         this.control = null;
 
         this.socket = socket;
+    },
+
+    getSocket: function() {
+        return io.sockets[_AppConfig.server.host];
     },
 
 
@@ -67,7 +74,7 @@ Ext.define('NextThought.proxy.Socket', {
         var _task = {
             run: function(){
                 if (io) {
-                    this.setupSocket(username, password);
+                    this.setup(username, password);
                     Ext.TaskManager.stop(_task);
                 }
             },
@@ -82,8 +89,20 @@ Ext.define('NextThought.proxy.Socket', {
      * Destroy the socket.
      */
     tearDownSocket: function(){
-        this.socket.disconnect();
-        delete this.socket;
+        var s = this.socket;
+
+        if(s){
+            delete this.socket;
+            s.disconnect();
+            for(var e in s.$events){ s.removeAllListeners(e); }
+
+            //we were asked to shut down... if we reconnect, just shutdown again.
+            s.on('connect',function(){
+                s.disconnect();
+                if(NextThought.isDebug)
+                    console.log('reconnect,blocked');
+            });
+        }
     },
 
     register: function(control) {
@@ -102,17 +121,25 @@ Ext.define('NextThought.proxy.Socket', {
         }
     },
 
-    onDisconnect: function() {
-        console.log('disconnect', arguments);
+    onConnect: function() {
+        var args = ['message'].concat(this.auth);
+        this.socket.emit.apply(this.socket, args);
     },
 
     onError: function() {
         console.log('error',arguments);
     },
 
+    onDisconnect: function() {
+        if(NextThought.isDebug)
+            console.log('disconnect event');
+        //this.tearDownSocket();
+    },
+
     onKill: function() {
-        console.log( 'asked to die' );
-        this.socket.disconnect();
+        if(NextThought.isDebug)
+            console.log( 'server kill' );
+        this.tearDownSocket();
     }
 
 },
