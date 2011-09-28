@@ -89,6 +89,9 @@ Ext.define('NextThought.controller.Chat', {
 
     enterRoom: function(users) {
         if (!Ext.isArray(users)) users = [users];
+
+        users = Ext.Array.clone(users);
+        
         for (var k in users) {
             if (typeof(users[k]) != 'string') {
                 if (users[k].getId) {
@@ -202,6 +205,6 @@ Ext.define('NextThought.controller.Chat', {
     },
 
     groupEntryClicked: function(group){
-        this.enterRoom(Ext.Array.clone(group.get('friends')));
+        this.enterRoom(group.get('friends'));
     }
 });
