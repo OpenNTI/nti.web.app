@@ -100,7 +100,7 @@ Ext.define('NextThought.proxy.Socket', {
             s.on('connect',function(){
                 s.disconnect();
                 if(NextThought.isDebug)
-                    console.log('reconnect,blocked');
+                    console.log('reconnect,blocked. A refresh is needed to reconnect.');
             });
         }
     },
@@ -133,7 +133,7 @@ Ext.define('NextThought.proxy.Socket', {
     onDisconnect: function() {
         if(NextThought.isDebug)
             console.log('disconnect event');
-        //this.tearDownSocket();
+        this.tearDownSocket();
     },
 
     onKill: function() {
