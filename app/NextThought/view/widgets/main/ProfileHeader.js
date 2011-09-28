@@ -22,7 +22,7 @@ Ext.define('NextThought.view.widgets.main.ProfileHeader', {
             compiled: true,
             disableFormats: true,
             hres: function(url){
-                return url.replace(/s=\d+/i, 's=200');
+                return url.replace(/s=\d+/i, 's=128');
             }
         }),
 

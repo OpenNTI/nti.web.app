@@ -1,6 +1,6 @@
 var _AppConfig = {
 	"server" : {
-        "host": "http://localhost:8080",
+        "host": "http://curie.nextthought.com:8080",
         //"host": "http://astro.local:8080",
         //"host": "http://tdaley.local:8080",
         //"host": "http://curie.local:8080",
