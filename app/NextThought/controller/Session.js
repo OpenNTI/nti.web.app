@@ -133,7 +133,9 @@ Ext.define('NextThought.controller.Session', {
             },
             'session-info' : {
                 'logout': this.handleLogout,
-                'password-changed': this.setupAuth
+                'password-changed': function(){
+                    this.self.setupAuth.apply(this.self, arguments);
+                }
             }
         });
     },
