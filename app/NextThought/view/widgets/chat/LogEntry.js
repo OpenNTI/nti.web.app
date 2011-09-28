@@ -36,7 +36,6 @@ Ext.define('NextThought.view.widgets.chat.LogEntry', {
 
         NextThought.cache.UserRepository.prefetchUser(s, function(users){
             var u = users[0];
-            console.log('a user', u);
             if (!u) {
                 console.log('ERROR: failed to resolve user', s, m);
                 return;
