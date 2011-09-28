@@ -8,9 +8,9 @@ Ext.define('NextThought.model.MessageInfo', {
         { name: 'inReplyTo', type: 'string' },
         { name: 'Body', type: 'string' },
         { name: 'channel', type: 'string' },
-        { name: 'rooms', type: 'auto' },
+        { name: 'ContainerId', type: 'string' },
         { name: 'recipients', type: 'auto' },
-        { name: 'Last Modified', type: 'date', dateFormat: 'timestamp' }
+        { name: 'LastModified', type: 'date', dateFormat: 'timestamp' }
     ],
     getModelName: function() {
         return 'MessageInfo';

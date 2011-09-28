@@ -28,14 +28,15 @@ Ext.define('NextThought.view.widgets.chat.LogEntry', {
 
         var m = this.message,
             me = this,
-            s = m.get('Sender');
+            s = m.get('Creator');
 
-        this.renderData['time'] = Ext.Date.format(m.get('Timestamp'), 'H:i:s');
+        this.renderData['time'] = Ext.Date.format(m.get('LastModified'), 'H:i:s');
         this.renderData['name'] = 'resolving...';
         this.renderData['body'] = m.get('Body');
 
         NextThought.cache.UserRepository.prefetchUser(s, function(users){
             var u = users[0];
+            console.log('a user', u);
             if (!u) {
                 console.log('ERROR: failed to resolve user', s, m);
                 return;

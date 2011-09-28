@@ -134,7 +134,7 @@ Ext.define('NextThought.controller.Chat', {
     },
 
     postMessage: function(room, message) {
-        Socket.emit('chat_postMessage', {rooms: [room.getId()],Body: message, Class: 'MessageInfo'});
+        Socket.emit('chat_postMessage', {ContainerId: room.getId(), Body: message, Class: 'MessageInfo'});
     },
 
     onMessage: function(msg) {
