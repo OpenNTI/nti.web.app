@@ -10,7 +10,7 @@ Ext.define('NextThought.model.MessageInfo', {
         { name: 'channel', type: 'string' },
         { name: 'ContainerId', type: 'string' },
         { name: 'recipients', type: 'auto' },
-        { name: 'LastModified', type: 'date', dateFormat: 'timestamp' }
+        { name: 'Last Modified', type: 'date', dateFormat: 'timestamp' }
     ],
     getModelName: function() {
         return 'MessageInfo';

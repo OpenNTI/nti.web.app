@@ -30,7 +30,7 @@ Ext.define('NextThought.view.widgets.chat.LogEntry', {
             me = this,
             s = m.get('Creator');
 
-        this.renderData['time'] = Ext.Date.format(m.get('LastModified'), 'H:i:s');
+        this.renderData['time'] = Ext.Date.format(m.get('Last Modified'), 'H:i:s');
         this.renderData['name'] = 'resolving...';
         this.renderData['body'] = m.get('Body');
 
