@@ -202,6 +202,6 @@ Ext.define('NextThought.controller.Chat', {
     },
 
     groupEntryClicked: function(group){
-        this.enterRoom(group.get('friends'));
+        this.enterRoom(Ext.Array.clone(group.get('friends')));
     }
 });
