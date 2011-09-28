@@ -35,6 +35,7 @@ Ext.define('NextThought.view.widgets.StreamEntry', {
         else if (ct == 'Created' && it == 'Note') info = this.getCreatedNoteInfo(i);
         else if (ct == 'Modified' && it == 'Note') info = this.getModifiedNoteInfo(i);
         else if (ct == 'Shared' && it == 'Highlight') info = this.getSharedHighlightInfo(i);
+        else if (ct == 'Modified' && it == 'Highlight') info = this.getModifiedHighlightInfo(i);
         else {
             //if we made it here, we don't know what to do with...
             console.log('Not sure what to do with this in the stream!', this.change);
@@ -75,6 +76,12 @@ Ext.define('NextThought.view.widgets.StreamEntry', {
         var hlText = this.cleanText(i.get('text'));
 
         return 'shared a highlight: "<i>' + hlText + '</i>"';
+    },
+
+    getModifiedHighlightInfo: function(i) {
+        var hlText = this.cleanText(i.get('text'));
+
+        return 'modified a highlight: "<i>' + hlText + '</i>"';
     },
 
     getAvatarImage: function(u) {
