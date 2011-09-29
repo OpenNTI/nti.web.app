@@ -2,12 +2,14 @@ Ext.define('NextThought.proxy.Socket', {
     extend: 'Ext.util.Observable',
     singleton: true,
 
+    isDebug: false,
+
     constructor: function() {
         var me = this;
         Ext.apply(me, {
             disconnectStats: {
                 count:0,
-                lastDisconnect: null
+                timer: null
             },
             socket: null,
             control: {
@@ -45,13 +47,12 @@ Ext.define('NextThought.proxy.Socket', {
         for (var k in control) {
             if (!control.hasOwnProperty(k)) continue;
 
-            if(!this.socket) {
-                //if there's already a callback registered, sequence it.
-                var x = this.control[k],
-                    cb = x ? Ext.Function.createSequence(x, control[k]) : control[k];
-                this.control[k] = cb;
-            }
-            else {
+
+            //if there's already a callback registered, sequence it.
+            var x = this.control[k];
+            this.control[k] = x ? Ext.Function.createSequence(x, control[k]) : control[k];
+
+            if(this.socket) {
                 this.socket.on(k, control[k]);
             }
         }
@@ -70,37 +71,44 @@ Ext.define('NextThought.proxy.Socket', {
             return;
         }
 
-        if (this.socket) {
-            this.socket.disconnect();
-            delete this.socket;
-        }
+        this.tearDownSocket();
 
         this.auth = Array.prototype.slice.call(arguments,0);
 
         var opts =  this.disconnectStats.reconfigure ? {transports: ["xhr-polling"], 'force new connection':true} : undefined,
             socket = io.connect(_AppConfig.server.host, opts),
-            me = this,
-            e = socket.emit;
+            me = this;
 
-        console.log();
+        if(opts && this.isDebug){
+            console.log('Connect called with options:', opts);
+        }
 
-        socket.emit = function(){
-            console.log('socket.emit:',arguments);
-            e.apply(this, arguments);
-        };
+        if(NextThought.isDebug || this.isDebug){
+            socket.emit = Ext.Function.createSequence(
+                socket.emit,
+                function(){console.log('socket.emit:',arguments)}
+            );
+
+//            socket.onPacket = Ext.Function.createSequence(
+//                function(){console.log('socket.onPacket',arguments)},
+//                socket.onPacket
+//            );
+        }
 
         for (k in this.control) {
             if(this.control.hasOwnProperty(k))
                 socket.on(k, this.control[k]);
         }
 
-        //this.control = null;
-
         this.socket = socket;
     },
 
     emit: function() {
-        this.socket.emit.apply(this.socket, arguments);
+        if (this.socket)
+            this.socket.emit.apply(this.socket, arguments);
+        else if(this.isDebug) {
+            console.log('dropping emit, socket is down');
+        }
     },
 
     getSocket: function() {
@@ -111,86 +119,87 @@ Ext.define('NextThought.proxy.Socket', {
      * Destroy the socket.
      */
     tearDownSocket: function(){
-        var s = this.socket;
+        var s = this.socket,
+            m = this;
 
         if(s){
             delete this.socket;
-//            delete io.sockets[_AppConfig.server.host];
-            s.disconnect();
             for(var e in s.$events){ s.removeAllListeners(e); }
 
+            s.disconnect();
+
             //we were asked to shut down... if we reconnect, just shutdown again.
-            s.on('connect',function(){
+            s.onPacket = function(){ try{
+                if(m.isDebug) {
+                    console.log('onPacket from a dead socket???',arguments, this);
+                }
                 s.disconnect();
-                if(NextThought.isDebug)
-                    console.log('reconnect,blocked. A refresh is needed to reconnect.');
-            });
+                s.socket.disconnectSync();
+            } catch(e){ console.log('potential leaking sockets'); } };
         }
     },
 
 
-    reconfigureSocketToPoll: function() {
-        this.tearDownSocket();
-        this.setup.apply(this, this.auth);
-        this.disconnectStats.count = 0;
-        delete this.disconnectStats.reconfigure;
-    },
+    maybeReconfigureSocket: function() {
+        var ds = this.disconnectStats;
 
-    shouldReconfigureSocket: function() {
-        var timeoutThresholdInMillis = 60 * 1000, //60 seconds
-            maxSeqDisconnectsUnderThreshhold = 3,
-            time = new Date().getTime();
+        ds.count ++;
+        ds.reconfigure = true;
 
-        if (!this.disconnectStats.lastDisconnect){
-            console.log('first disconnect, initializing counter');
-            //never been disconnected before:
-            this.disconnectStats.count++;
-            this.disconnectStats.lastDisconnect = time;
-            return false;
+        if(this.isDebug) {
+            console.log('maybeReconfigureSocket',ds.count);
         }
 
+        clearTimeout(ds.timer);
+        ds.timer = setTimeout(reset,30000);
 
-        if ((time - this.disconnectStats.lastDisconnect) < timeoutThresholdInMillis) {
-            //timeout under the threshhold occurred
-            console.log('disconnect occured under threshhold');
-            this.disconnectStats.count++;
-            this.disconnectStats.lastDisconnect = time;
-            if (this.disconnectStats.count > maxSeqDisconnectsUnderThreshhold) {
-                this.disconnectStats.reconfigure = true;
-                return true;
+        if (ds.count > 3){
+            this.tearDownSocket();
+            this.setup.apply(this, this.auth);
+            reset();
+        }
+
+        function reset(){
+            if(this.isDebug) {
+                console.log('reset disconnect counter');
             }
+            clearTimeout(ds.timer);
+            ds.count = 0;
+            ds.timer = null;
+            delete ds.reconfigure;
         }
-        else {
-            console.log('disconnect occured outside of threshhold, resetting counter');
-            this.disconnectStats.count = 0;
-            this.disconnectStats.lastDisconnect = time;
-        }
-
-        return false;
     },
 
     onConnect: function() {
+        if(this.isDebug) {
+            var msg = printStackTrace().slice(3);
+            msg.unshift('connect event');
+            console.log(msg.join(('\n\t')));
+        }
         var args = ['message'].concat(this.auth);
-        this.socket.emit.apply(this.socket, args);
+        this.emit.apply(this, args);
     },
 
     onError: function() {
-        console.log('error',arguments);
+        if(this.isDebug) {
+            console.log('error',arguments);
+        }
     },
 
     onKill: function() {
-        if(NextThought.isDebug)
+        if(this.isDebug){
             console.log( 'server kill' );
+        }
         this.tearDownSocket();
     },
 
     onDisconnect: function() {
-        if(NextThought.isDebug)
-        console.log('disconnect event');
-        if (this.shouldReconfigureSocket()){
-            console.log('time to reconfigure');
-            this.reconfigureSocketToPoll();
+        if(this.isDebug) {
+            var msg = printStackTrace().slice(3);
+            msg.unshift('disconnect event');
+            console.log(msg.join(('\n\t')));
         }
+        this.maybeReconfigureSocket();
     }
 
 },
