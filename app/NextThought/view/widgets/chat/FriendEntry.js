@@ -1,5 +1,4 @@
 Ext.define('NextThought.view.widgets.chat.FriendEntry', {
-//	extend:'Ext.panel.Panel',
     extend: 'Ext.Component',
     alias: 'widget.chat-friend-entry',
 
@@ -33,6 +32,7 @@ Ext.define('NextThought.view.widgets.chat.FriendEntry', {
     afterRender: function() {
         var me = this;
         me.callParent(arguments);
+        me.initializeDropZone(me);
         me.box.on('click', function(){
             //if(!/offline/i.test(me.user.get('Presence')))
                 me.fireEvent('click', me.user);
@@ -56,5 +56,29 @@ Ext.define('NextThought.view.widgets.chat.FriendEntry', {
         }
 
         user.on('changed', this.update, this);
+    },
+
+    initializeDropZone: function(v) {
+        v.dropZone = Ext.create('Ext.dd.DropZone', v.box, {
+
+            getTargetFromEvent: function(e) {
+                return v.box.dom;
+            },
+            onNodeEnter : function(target, dd, e, data){
+                Ext.select('.drag-hover').removeCls('drag-hover');
+                Ext.fly(target).addCls('drag-hover');
+            },
+            onNodeOut : function(target, dd, e, data){
+                Ext.fly(target).removeCls('drag-hover');
+            },
+            onNodeOver : function(target, dd, e, data){
+                return Ext.dd.DropZone.prototype.dropAllowed;
+            },
+
+            onNodeDrop : function(target, dd, e, data){
+                console.log('onNodeDrop',arguments);
+                return true;
+            }
+        });
     }
 });

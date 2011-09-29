@@ -1,5 +1,4 @@
 Ext.define('NextThought.view.widgets.chat.LogEntryModerated', {
-    //extend: 'Ext.Component',
     extend: 'Ext.form.field.Checkbox',
     alias: 'widget.chat-log-entry-moderated',
 
@@ -7,7 +6,6 @@ Ext.define('NextThought.view.widgets.chat.LogEntryModerated', {
         'NextThought.proxy.UserDataLoader'
     ],
 
-    //renderTpl: null,
     preventMark:true,
     anchor: '100%',
 
@@ -67,7 +65,7 @@ Ext.define('NextThought.view.widgets.chat.LogEntryModerated', {
 
     afterRender: function() {
         this.callParent(arguments);
-
+        this.initializeDragZone(this);
         this.box.on('click', function(e,t){
             if(!/input/i.test(t.tagName))
                 this.setValue(!this.getValue());
@@ -90,5 +88,30 @@ Ext.define('NextThought.view.widgets.chat.LogEntryModerated', {
             this.renderData['name'] = name;
             this.renderData['icon'] = i;
         }
+    },
+
+
+    initializeDragZone: function(v) {
+        v.dragZone = Ext.create('Ext.dd.DragZone', v.getEl(), {
+
+            getDragData: function(e) {
+                var sourceEl = v.box.dom, d;
+                if (sourceEl) {
+                    d = sourceEl.cloneNode(true);
+                    d.id = Ext.id();
+                    return v.dragData = {
+                        sourceEl: sourceEl,
+                        repairXY: Ext.fly(sourceEl).getXY(),
+                        ddel: d,
+                        data: v.message.data
+                    };
+                }
+            },
+
+            getRepairXY: function() {
+                return this.dragData.repairXY;
+            }
+        });
     }
+
 });

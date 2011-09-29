@@ -20,6 +20,7 @@
 .x-chat-log-entry:hover,
 .x-chat-log-entry.selected,
 .x-chat-friend-entry:hover,
+.x-chat-friend-entry.drag-hover,
 .x-mini-stream-entry:hover {
     background-color: #7889A3 !important;
     color: white;

@@ -6,16 +6,16 @@ Ext.define('NextThought.view.widgets.chat.LogEntry', {
         'NextThought.proxy.UserDataLoader'
     ],
 
-     renderTpl: new Ext.XTemplate(
-          '<div class="x-chat-log-entry">',
-              '<div class="timestamp">{time}</div>',
-              '<img src="{icon}" width=16 height=16"/>',
-              '<div>',
-                    '<span class="name">{name}</span> ',
-                    '<span>{body}</span> ',
-              '</div>',
-          '</div>'
-          ),
+    renderTpl: new Ext.XTemplate(
+        '<div class="x-chat-log-entry">',
+            '<div class="timestamp">{time}</div>',
+            '<img src="{icon}" width=16 height=16"/>',
+            '<div>',
+                '<span class="name">{name}</span> ',
+                '<span>{body}</span> ',
+            '</div>',
+        '</div>'
+        ),
 
     renderSelectors: {
         box: 'div.x-chat-log-entry',
@@ -47,6 +47,11 @@ Ext.define('NextThought.view.widgets.chat.LogEntry', {
 
     },
 
+    afterRender: function(){
+        this.callParent(arguments);
+        this.initializeDragZone(this);
+    },
+
     update: function(u) {
         var name = u.get('alias') || u.get('Username'),
             i = u.get('avatarURL');
@@ -60,5 +65,28 @@ Ext.define('NextThought.view.widgets.chat.LogEntry', {
             this.renderData['name'] = name;
             this.renderData['icon'] = i;
         }
+    },
+
+    initializeDragZone: function(v) {
+        v.dragZone = Ext.create('Ext.dd.DragZone', v.getEl(), {
+
+            getDragData: function(e) {
+                var sourceEl = v.box.dom, d;
+                if (sourceEl) {
+                    d = sourceEl.cloneNode(true);
+                    d.id = Ext.id();
+                    return v.dragData = {
+                        sourceEl: sourceEl,
+                        repairXY: Ext.fly(sourceEl).getXY(),
+                        ddel: d,
+                        data: v.message.data
+                    };
+                }
+            },
+
+            getRepairXY: function() {
+                return this.dragData.repairXY;
+            }
+        });
     }
 });
