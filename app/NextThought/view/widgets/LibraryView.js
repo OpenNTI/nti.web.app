@@ -12,7 +12,7 @@ Ext.define('NextThought.view.widgets.LibraryView', {
         '<tpl for=".">',
             '<div class="item-wrap">',
                 '<div class="item">',
-                    '<img src="{icon}" title="{title}"></div>',
+                    '<img src="{[_AppConfig.server.host]}{icon}" title="{title}"></div>',
                 '<span>{title}</span></div>',
         '</tpl>',
         '<div class="x-clear"></div>'
