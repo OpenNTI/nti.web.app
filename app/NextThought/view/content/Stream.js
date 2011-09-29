@@ -27,24 +27,33 @@ Ext.define('NextThought.view.content.Stream', {
 
     initComponent: function(){
    		this.callParent(arguments);
-
-        UserDataLoader.getRecursiveStream(
-            null,{
-                scope: this,
-                success: function(stream){
-                    this._stream = stream;
-                    this.updateStream();
-                },
-                failure: function(){
-                }
-            });
-
+        this._store = UserDataLoader.getStreamStore();
+        this._store.on('add', this.onAdd, this);
+        this._store.on('load', this.onLoad, this);
 	},
 
-    onNotification: function(c) {
-        if (!c) return;
-        this._stream = this._stream || [];
-        this._stream.unshift(c);
+    onLoad: function(store, changes) {
+        var changeSet = [];
+
+        if(Ext.isArray(changes)) changeSet = changes;
+        else store.each(function(c){changeSet.push(c);}, this);
+
+        this.onAdd(store, changeSet);
+    },
+
+    onAdd: function(store, changeSet) {
+        if (!changeSet) return;
+
+        if (!Ext.isArray(changeSet)) changeSet = [changeSet];
+
+        for (var key in changeSet) {
+            if (!changeSet.hasOwnProperty(key)) continue;
+            var c = changeSet[key];
+
+            this._stream = this._stream || [];
+            this._stream.unshift(c);
+        }
+
         this.updateStream();
     },
 

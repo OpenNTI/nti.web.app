@@ -1,15 +1,14 @@
 Ext.define('NextThought.view.widgets.PeopleList', {
 	extend: 'Ext.panel.Panel',
 	alias: 'widget.people-list',
-	requires: [
-			'NextThought.proxy.UserDataLoader'
-			],
-	
+
 	border: false,
 	padding: 5,
 	defaults: {border: false},
 	items:[{html:'People:', cls: 'sidebar-header'},{margin: '1 0 1 1'}],
-	
+	mixins:{
+        avatars: 'NextThought.mixins.AvatarInformation'
+    },
 	_filter: {},
 	_contributors: {},
 	
@@ -37,10 +36,15 @@ Ext.define('NextThought.view.widgets.PeopleList', {
 	},
 
 	updateList: function(){
-		var k, c = 0, p = this.items.get(1), f = this._filter;
-		p.removeAll();
-		for(k in this._contributors){
-			this._contributors.hasOwnProperty(k);
+		var k, c = 0,
+            me = this,
+            p = me.items.get(1),
+            f = me._filter;
+
+        p.removeAll();
+
+        for(k in me._contributors){
+			me._contributors.hasOwnProperty(k);
 			if(c>=10){
 				p.add({xtype: 'button', text:'More'});
 				break;
@@ -48,11 +52,12 @@ Ext.define('NextThought.view.widgets.PeopleList', {
 				
 			if(/all/i.test(f.groups) || f.shareTargets && f.shareTargets[k]){
 				c++;
-				NextThought.cache.UserRepository.prefetchUser(k, function(users){
-                    var f = users[0];
-					p.add({	xtype: 'image', 
-							src: (f? f.get('avatarURL') : Ext.BLANK_IMAGE_URL), 
-							height: 36, width: 36});
+				UserRepository.prefetchUser(k, function(users){
+                    var f = users[0],
+					    c = p.add({	xtype: 'image',
+							    src: (f? f.get('avatarURL') : Ext.BLANK_IMAGE_URL),
+							    height: 36, width: 36});
+                        me.setupAvatarDetailToolTip(c, f);
 				});
 			}
 		}

@@ -11,8 +11,6 @@ Ext.define('NextThought.cache.UserRepository', {
                 interval: 1200000
             }
         });
-
-        //Ext.TaskManager.start(this._task);
     },
 
     getStore: function() {

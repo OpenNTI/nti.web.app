@@ -114,6 +114,38 @@ Ext.define('NextThought.proxy.UserDataLoader',{
 
         },
 
+        getStreamStore: function(){
+            var h = _AppConfig.server.host,
+                d = _AppConfig.server.data,
+                u = _AppConfig.server.username,
+                containerId = 'aops-prealgebra-129',
+                url = h+d+'users/'+u+'/Pages/' + containerId + '/RecursiveStream/';
+
+            if(!this._streamStore) {
+                this._streamStore = Ext.create('Ext.data.Store', {
+                    model: 'NextThought.model.Change',
+                    autoLoad: true,
+                    proxy: {
+                        type: 'rest',
+                        url: url,
+                        reader: {
+                            type: 'json',
+                            root: 'Items'
+                        },
+                        model: 'NextThought.model.Change'
+                    },
+                    sorters: [
+                        {
+                            property : 'Last Modified',
+                            direction: 'ASC'
+                        }
+                    ]
+                });
+            }
+
+            return this._streamStore;
+        },
+
 
         getGroups: function(callbacks) {
             var h = _AppConfig.server.host,
@@ -165,104 +197,6 @@ Ext.define('NextThought.proxy.UserDataLoader',{
             });
 
         },
-
-
-        /*
-         Returns the date in GMT formatted as 'Tue, 15 Nov 1994 08:12:31 GMT'
-         use this in the request:  headers: {'If-Modified-Since': this.getUTC(new Date())},
-         */
-        getUTC: function(date) {
-            var offset = Ext.Date.getGMTOffset(date, true),
-                cmps = offset.split(':'),
-                hour = parseInt(cmps[0],10),
-                min =  parseInt(cmps[1],10),
-                absSum = (Math.abs(hour*60) + min)*60000,
-                mult = (hour < 0) ? 1 : -1,
-                gmtDate = +date + (mult * absSum);
-            return Ext.Date.format(new Date(gmtDate), 'D, d M Y H:i:s \\G\\M\\T');
-        },
-
-
-        getRecursiveStreamSince: function(containerId, sinceDate, callbacks) {
-            if (!containerId) containerId = 'aops-prealgebra-129';
-            return this.getStream(containerId, sinceDate, callbacks, "RecursiveStream");
-        },
-
-
-        getRecursiveStream: function(containerId, callbacks) {
-            if (!containerId) containerId = 'aops-prealgebra-129';
-            return this.getStream(containerId, null, callbacks, "RecursiveStream");
-        },
-
-
-        getStream: function(containerId, sinceDate, callbacks, stream) {
-            var h = _AppConfig.server.host,
-                d = _AppConfig.server.data,
-                u = _AppConfig.server.username,
-                headers = (sinceDate) ? {'If-Modified-Since': this.getUTC(sinceDate)} : {};
-            url = h+d+'users/'+u+'/Pages/' + containerId + '/' + (stream? stream : "Stream") + '/';
-
-            if (!callbacks || !callbacks.success || !callbacks.failure)
-                Ext.Error.raise('Callbacks with success and failure must be defined.');
-
-            this._streamRequest = Ext.Ajax.request({
-                url: url,
-                scope: this,
-                headers: headers,
-                callback: function() {
-                    this._streamRequest = null;
-                },
-                failure: function() {
-                    Logging.logAndAlertError('There was an error getting stream contents', 'Will attempt to call failure callback', arguments);
-                    if(callbacks && callbacks.failure) {
-                        callbacks.failure.apply(callbacks.scope || this, arguments);
-                    }
-                },
-                success: function(r, o) {
-                    var json = Ext.decode(r.responseText, true);
-                    if(!json || !json.Items){
-                        if (sinceDate) {
-                            //it's possible there are no changes since the sinceDate, responseText is emoty.
-                            console.log('no change since last update?', r);
-                            callbacks.success.call(callbacks.scope || this, []);
-                        }
-                        else {
-                            callbacks.failure.call(callbacks.scope || this, 'bad group dataz');
-
-                            if(NextThought.isDebug && !sinceDate){
-                                console.log('Response sucked:', r, 'bad json:', json);
-                            }
-                        }
-                        return;
-                    }
-                    var cReader = this._getReaderForModel('Change');
-                    Ext.each(json.Items, function(i, x){
-                            if (!i.Item) return; //Empty change, probably a deleted item.
-                            i.Item = this.parseItems([i.Item])[0];
-                            json.Items[x] = cReader.read(i).records[0];
-                        },
-                        this);
-
-                    Ext.Array.sort(json.Items, function(a, b){
-                        if (!a.get || !b.get) {
-                            console.log('WARNING: Trying to sort', a, 'and', b, 'but 1 or both does not have a get method.  What is it?');
-                            return 1;
-                        }
-                        var lm = 'Last Modified';
-                        return a.get(lm)<b.get(lm) ? 1 : -1;
-                    });
-
-                    if(callbacks && callbacks.success){
-                        callbacks.success.call(callbacks.scope || this, json.Items);
-                    }
-                    else if(NextThought.isDebug){
-                        console.log('WARNING: I haz change dataz 4 u, but u no giv meh callbax');
-                    }
-                }
-            });
-
-        },
-
 
         getPageItems: function(pageId, callbacks){
             return this.getItems(callbacks, '/Pages/'+pageId+'/UserGeneratedData');

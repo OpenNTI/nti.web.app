@@ -203,7 +203,7 @@ Ext.define('NextThought.Library', {
             found = false;
 
         while(l && !found) {
-            var id = l.getAttribute('ntiid');
+            var id = l.getAttribute? l.getAttribute('ntiid') : null;
 
             if (parentId == id) found = true;
 

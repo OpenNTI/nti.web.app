@@ -1,3 +1,15 @@
+
+Ext.data.Types.ITEM = {
+	type: 'Item',
+    convert: function(v) {
+        return UserDataLoader.parseItems([v])[0];
+    },
+    sortType: function(v) {
+    	console.log('sort by Item:',arguments);
+        return '';
+    }
+};
+
 Ext.define('NextThought.model.Change', {
     extend: 'NextThought.model.Base',
     idProperty: 'OID',
@@ -8,7 +20,7 @@ Ext.define('NextThought.model.Change', {
         { name: 'ChangeType', type: 'string' },
         { name: 'Last Modified', type: 'date', dateFormat: 'timestamp' },
         { name: 'Creator', type: 'string' },
-        { name: 'Item', type: 'auto' }
+        { name: 'Item', type: Ext.data.Types.ITEM }
     ],
     getModelName: function() {
         return 'Change';

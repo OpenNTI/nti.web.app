@@ -14,7 +14,8 @@ Ext.define('NextThought.view.widgets.MiniStreamList', {
 	_filter: {},
 	_containerId: null,
 	_stream: null,
-	
+	_store: null,
+    
 	constructor: function(){
 		this.callParent(arguments);
 		
@@ -27,42 +28,61 @@ Ext.define('NextThought.view.widgets.MiniStreamList', {
 	initComponent: function(){
 		this.callParent(arguments);
         this.setContainer(this._containerId);
+        this._store = UserDataLoader.getStreamStore();
+        this._store.on('add', this.onAdd, this);
+        this._store.on('load', this.onLoad, this);
 	},
 	
 	setContainer: function(id){
-        this._containerId = id;
-        this._stream = null;
+        var me = this;
+        me._containerId = id;
+        me._stream = null;
 
         if(!id){
-            this.updateStream();
+            me.updateStream();
             return;
         }
 
-        UserDataLoader.getRecursiveStream(id,
-            {
-                scope: this,
-                success: function(stream){
-                    this._stream = stream;
-                    this.updateStream();
-                },
-                failure: function() {}
-            });
-
-
+        this.onLoad(this._store);
 	},
 
-    onNotification: function(c) {
-        if (!this._containerId) return;
-        if (!c) return;
+    onLoad: function(store, changes) {
+        var changeSet = [];
 
-        var id = c.Item ? c.Item.get('ContainerId') : null;
-        if (!id || Library.isOrDecendantOf(this._containerId, id)) {
-            this._stream = this._stream || [];
-            this._stream.unshift(c);
-            this.updateStream();
-        }
+        if(Ext.isArray(changes)) changeSet = changes;
+        else store.each(function(c){changeSet.push(c);}, this);
+
+        this.onAdd(store, changeSet);
     },
-	
+
+    onAdd: function(store, changeSet) {
+        if (!this._containerId) return;
+        if (!changeSet) return;
+
+        if (!Ext.isArray(changeSet)) changeSet = [changeSet];
+
+        for (var key in changeSet) {
+            if (!changeSet.hasOwnProperty(key)) continue;
+            var c = changeSet[key];
+
+            try {
+                var id = c.get('Item') ? c.get('Item').get('ContainerId') : null;
+
+
+                if (!id || Library.isOrDecendantOf(this._containerId, id)) {
+                    this._stream = this._stream || [];
+                    this._stream.unshift(c);
+
+                }
+            }
+            catch (err) {
+                console.log('Unexpected Error', err.message);
+            }
+        }
+
+        this.updateStream();
+    },
+
 	applyFilter: function(filter){
 		this._filter = filter;
 		this.updateStream();

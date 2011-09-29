@@ -33,8 +33,7 @@ Ext.define('NextThought.view.windows.NotificationsPopover', {
         el.on('mouseleave', me.closePopover, me);
         el.on('click', me.itemClicked, me);
 
-
-        UserDataLoader.getRecursiveStream(null, {scope: this, success: this.updateContents, failure: this.updateFailed});
+        this.updateContents(UserDataLoader.getStreamStore());
     },
 
     cancelClose: function() {
@@ -53,43 +52,31 @@ Ext.define('NextThought.view.windows.NotificationsPopover', {
         this.close();
     },
 
-    updateFailed: function() {
-        console.log('update failed.... so do something.');
-    },
-
-    updateContents: function(stream) {
-        if(!this){
-            console.log('"this" has been deleted');
-            return;
-        }
-
+    updateContents: function(store) {
         var k, len, change,
             readCount = 0;
         p = this.items.get(0);
 
-        if(!stream || stream.length == 0) {
-            p.add( {html: '<b>No new updates</b>',
-                border: false,
-                margin: 10} );
-            this.el.unmask();
-            return;
-        }
-
-
-
-        for(k = 0, len=stream.length; k < len && readCount < 2; k++){
-            change = stream[k];
-
+        for(var i = store.getCount() - 1; readCount < 2 && i >= 0; i--) {
+            var change = store.getAt(i);
             if (!change.get) {
                 //dead change, probably deleted...
-                continue;
+                return;
             }
+            
             var unread = (change.get('Last Modified') > this._lastLoginTime);
             p.add({xtype: 'miniStreamEntry', change: change, cls: unread ? 'unread' : 'read'});
             if (!unread) readCount++;
         }
 
 
+        if(p.items.length == 0) {
+            p.add({
+                html: '<b>No new updates</b>',
+                border: false,
+                margin: 10
+            });
+        }
 
         this.fixHeight();
         this.el.unmask();

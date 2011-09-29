@@ -43,22 +43,15 @@ Ext.define('NextThought.controller.Stream', {
         });
 
         this.control({
-            'stream-mode-container filter-control':{
+              'stream-mode-container filter-control':{
                 'filter-changed': this.streamFilterChanged
             }
         });
     },
 
     incomingChange: function(change) {
-        var o = [
-            this.getStream(),
-            this.getMiniStream()
-        ];
-
-        change.Item = UserDataLoader.parseItems([change.Item])[0];
         change = UserDataLoader.parseItems([change])[0];
-
-        Ext.each(o, function(t){t.onNotification(change);});
+        UserDataLoader.getStreamStore().add(change);
 
         this.self.fireChange(change);
     },
