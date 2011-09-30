@@ -81,7 +81,7 @@
 }
 
 .x-chat-log-entry:hover .timestamp {
-    display: none;
+    color: transparent;
 }
 
 .tracker-tip,

@@ -17,13 +17,15 @@ Ext.define('NextThought.view.widgets.chat.LogEntry', {
                 '<span class="name">{name}</span> ',
                 '<span>{body}</span> ',
             '</div>',
-        '</div>'
+        '</div>',
+        '<div class="x-chat-replies"></div>'
         ),
 
     renderSelectors: {
         box: 'div.x-chat-log-entry',
         name: '.x-chat-log-entry span.name',
-        icon: 'img'
+        icon: 'img',
+        frameBody: 'div.x-chat-replies'
     },
 
     initComponent: function(){
@@ -49,15 +51,6 @@ Ext.define('NextThought.view.widgets.chat.LogEntry', {
 
         this.add({html: 'init test 2'});
 
-    },
-
-    onRender: function() {
-      console.log('before parent');
-      this.callParent(arguments);
-      console.log('after parent');
-
-      var self = this;
-      setTimeout(function(){self.add({html: 'test'})}, 5000);
     },
 
     afterRender: function(){

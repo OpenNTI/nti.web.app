@@ -1,7 +1,10 @@
 Ext.define('NextThought.view.widgets.chat.LogEntryModerated', {
     extend: 'Ext.form.field.Checkbox',
     alias: 'widget.chat-log-entry-moderated',
-
+    mixins: {
+//        checkbox: 'Ext.form.field.Checkbox'
+        contains: 'Ext.container.Container'
+    },
     requires: [
         'NextThought.proxy.UserDataLoader'
     ],
@@ -27,7 +30,7 @@ Ext.define('NextThought.view.widgets.chat.LogEntryModerated', {
                 '<span>{body}</span> ',
             '</div>',
         '</div>',
-
+        '<div class="x-chat-replies"></div>',
         '<div class="{errorMsgCls}" style="display:none"></div>',
         '<div class="{clearCls}" role="presentation"><!-- --></div>',
         {
@@ -39,7 +42,8 @@ Ext.define('NextThought.view.widgets.chat.LogEntryModerated', {
     renderSelectors: {
         box: 'div.x-chat-log-entry',
         name: '.x-chat-log-entry span.name',
-        icon: 'img'
+        icon: 'img',
+        frameBody: 'div.x-chat-replies'
     },
 
     initComponent: function(){
