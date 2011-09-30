@@ -9,7 +9,7 @@ Ext.define('NextThought.view.widgets.chat.Log', {
     autoScroll: true,
     layout: 'anchor',
     border: false,
-    defaults: {border: false, defaults: {border: false}},
+    defaults: {border: false},
 
     getMessageQuery: function(id){
         return Ext.String.format('{0}[messageId={1}]', this.entryType, id);
@@ -110,7 +110,6 @@ Ext.define('NextThought.view.widgets.chat.Log', {
             m = this.down(this.getMessageQuery(id));
     
         if (m){
-            console.log('updating existing message item...', m, msg);
             m.update(msg);
             return;
         }
@@ -119,7 +118,6 @@ Ext.define('NextThought.view.widgets.chat.Log', {
         m = this;
 
         if (rid){
-            console.log('replying to message item...', m, msg);
             m = this.down(this.getMessageQuery(rid));
             if(!m){
                 //create place holder, reassign m the ref to place holder
@@ -142,6 +140,10 @@ Ext.define('NextThought.view.widgets.chat.Log', {
     },
 
     scroll: function(entry) {
+        var input = entry.nextSibling('chat-reply-to');
+
+        entry = input? input : entry;
+
         entry.el.scrollIntoView(this.el.first('.x-panel-body'));
     },
 

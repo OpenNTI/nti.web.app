@@ -13,28 +13,9 @@
 }
 
 
-.x-chat-log-entry:hover,
-.x-chat-log-entry.selected,
-.x-chat-friend-entry:hover,
-.x-chat-friend-entry.drag-hover,
 .x-mini-stream-entry:hover {
     background-color: #7889A3 !important;
     color: white;
-}
-
-.x-chat-log-entry:hover .name,
-.x-chat-log-entry.selected .name {
-    color: black;
-}
-
-.flagged .x-chat-log-entry.selected,
-.flagged .x-chat-log-entry:hover {
-    background-color: #fa8072 !important;
-}
-
-.flagged .x-chat-log-entry {
-    background-color: #ffdddd;
-    color: black;
 }
 
 .tracker-tip .tracker-tip-title {
@@ -55,42 +36,7 @@
     padding: 0;
 }
 
-.x-chat-log-entry span.reply {
-    position: absolute;
-    display: none;
-    right: 5px; top: 5px;
-    height: 24px;
-    cursor: pointer;
-    overflow: hidden;
-}
-
-.x-chat-log-entry span.reply-public {
-    width: 24px;
-    height: 24px;
-    display: block;
-    background: url("../images/replyTo-arrow-24.png");
-}
-
-.x-chat-log-entry:hover span.reply {
-    display: block;
-}
-
-.x-chat-log-entry .timestamp {
-    float: right;
-    padding:  0 0 5px 10px;
-}
-
-.x-chat-log-entry:hover .timestamp {
-    visibility: hidden;
-}
-
-.x-chat-replies {
-    clear: both;
-}
-
 .tracker-tip,
-.x-chat-friend-entry,
-.x-chat-log-entry,
 .x-mini-stream-entry {
     position: relative;
     overflow: hidden;
@@ -102,35 +48,13 @@
     margin-left: 40px;
 }
 
-.x-chat-friend-entry {
-    padding: 5px 5px 5px 25px;
-    background: url(../images/offline.png) no-repeat 5px center;
-}
-
-.x-chat-friend-entry.Online {
-    background: url(../images/online.png) no-repeat 5px center;
-}
-
-.x-chat-log-entry div,
-.x-chat-friend-entry div,
 .x-mini-stream-entry div {
     margin-left: 22px;
 }
 
-.x-chat-log-entry.moderated div {
-    margin-left: 37px;
-}
-
 .tracker-tip img,
-.x-chat-log-entry img,
-.x-chat-log-entry input,
-.x-chat-friend-entry img,
 .x-mini-stream-entry img {
     float: left;
-}
-
-.x-chat-log-entry input {
-    margin:  2px 5px 0 0;
 }
 
 .x-mini-stream-entry.read {
@@ -154,7 +78,6 @@
     line-height: 1.5em;
 }
 
-.x-chat-log-entry .name,
 .x-stream-entry .stream-username,
 .x-stream-entry .stream-username .x-panel-body-default {
     font-weight: bold;

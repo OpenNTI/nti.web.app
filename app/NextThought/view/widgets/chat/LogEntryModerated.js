@@ -53,8 +53,20 @@ Ext.define('NextThought.view.widgets.chat.LogEntryModerated', {
     initComponent: function(){
         Ext.container.Container.prototype.initComponent.apply(this, arguments);
         this.callParent(arguments);
-
         this.update(this.message);
+    },
+
+    add: function(){
+        var r = this.callParent(arguments),
+            reply = this.down('chat-reply-to');
+
+        if(reply && r!==reply){
+            var ci = this.items.indexOf(reply);
+            this.move(ci, this.items.getCount()-1);
+            reply.down('textfield').focus();
+        }
+
+        return r;
     },
 
     update: function(m){
@@ -100,7 +112,7 @@ Ext.define('NextThought.view.widgets.chat.LogEntryModerated', {
     click: function(event, target, eOpts){
         target = Ext.get(target);
 
-        if(target && target.hasCls('reply-public')){
+        if(target && target.hasCls('reply-public') && this.box.contains(target)){
             this.fireEvent('reply-public', this);
         }
         else if(!/input/i.test(target.tagName))

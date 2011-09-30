@@ -3,8 +3,7 @@ Ext.define('NextThought.view.widgets.chat.ReplyTo', {
     alias: 'widget.chat-reply-to',
 
     layout: 'hbox',
-    border: false,
-    //height: 30,
+    border: true,
 
     items:[
         {
@@ -35,8 +34,20 @@ Ext.define('NextThought.view.widgets.chat.ReplyTo', {
             b.fireEvent('click', b);
         });
 
+        f.on('focus', this.hideReplies, this);
+
         b.on('click', function(){
             me.fireEvent('send', f, me.replyTo);
+        });
+
+    },
+
+    hideReplies : function(){
+        var me = this;
+        Ext.each(this.up('chat-view').query('chat-reply-to[replyTo]'),function(r){
+            if(r!==me)
+                r.close();
+                //r.destroy()
         });
     },
 

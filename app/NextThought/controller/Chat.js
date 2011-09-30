@@ -176,6 +176,7 @@ Ext.define('NextThought.controller.Chat', {
 
 
         f.setValue('');
+        f.focus();
     },
 
     flaggedMenuItemClicked: function(mi) {

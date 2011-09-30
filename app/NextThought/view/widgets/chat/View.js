@@ -26,7 +26,9 @@ Ext.define('NextThought.view.widgets.chat.View', {
                 },
                 {
                     cls: 'chat-entry',
-                    xtype: 'chat-reply-to'
+                    border: false,
+                    xtype: 'chat-reply-to',
+                    mainEntry: true
                 }
 
             ]
@@ -49,14 +51,7 @@ Ext.define('NextThought.view.widgets.chat.View', {
 
     initComponent:function() {
         this.callParent(arguments);
-
         this.changed(this.roomInfo);
-
-    },
-
-    afterRender: function() {
-        this.callParent(arguments);
-        this.down('textfield[chatentry]').focus();
     },
 
     changed: function(ri) {
