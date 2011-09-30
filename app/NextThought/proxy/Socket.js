@@ -83,16 +83,16 @@ Ext.define('NextThought.proxy.Socket', {
             console.log('Connect called with options:', opts);
         }
 
-        if(NextThought.isDebug || this.isDebug){
+        if(this.isDebug){
             socket.emit = Ext.Function.createSequence(
                 socket.emit,
                 function(){console.log('socket.emit:',arguments)}
             );
 
-//            socket.onPacket = Ext.Function.createSequence(
-//                function(){console.log('socket.onPacket',arguments)},
-//                socket.onPacket
-//            );
+            socket.onPacket = Ext.Function.createSequence(
+                function(){console.log('socket.onPacket',arguments)},
+                socket.onPacket
+            );
         }
 
         for (k in this.control) {
