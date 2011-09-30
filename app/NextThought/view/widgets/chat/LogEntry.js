@@ -16,7 +16,7 @@ Ext.define('NextThought.view.widgets.chat.LogEntry', {
             '<img src="{icon}" width=16 height=16"/>',
             '<div>',
                 '<span class="name">{name}</span> ',
-                '<span>{body}</span> ',
+                '<span class="body-text">{body}</span> ',
             '</div>',
         '</div>',
         '<div class="x-chat-replies"></div>'
@@ -25,6 +25,8 @@ Ext.define('NextThought.view.widgets.chat.LogEntry', {
     renderSelectors: {
         box: 'div.x-chat-log-entry',
         name: '.x-chat-log-entry span.name',
+        text: 'span.body-text',
+        time: 'div.timestamp',
         icon: 'img',
         frameBody: 'div.x-chat-replies'
     },
@@ -32,23 +34,35 @@ Ext.define('NextThought.view.widgets.chat.LogEntry', {
     initComponent: function(){
         this.callParent(arguments);
 
-        var m = this.message,
-            me = this,
+        this.update(this.message);
+    },
+
+    update: function(m){
+        var me = this,
             s = m.get('Creator');
 
-        this.renderData['time'] = Ext.Date.format(m.get('Last Modified'), 'H:i:s');
-        this.renderData['name'] = 'resolving...';
-        this.renderData['body'] = m.get('Body');
+        me.message = m;
 
-        UserRepository.prefetchUser(s, function(users){
-            var u = users[0];
-            if (!u) {
-                console.log('ERROR: failed to resolve user', s, m);
-                return;
-            }
+        me.renderData['time'] = Ext.Date.format(m.get('Last Modified'), 'H:i:s');
+        me.renderData['name'] = 'resolving...';
+        me.renderData['body'] = m.get('Body');
 
-            me.fillInUser(u);
-        });
+        if(this.rendered){
+           me.text.update(me.renderData.body);
+           me.time.update(me.renderData.time);
+        }
+
+        if(s){
+            UserRepository.prefetchUser(s, function(users){
+                var u = users[0];
+                if (!u) {
+                    console.log('ERROR: failed to resolve user', s, m);
+                    return;
+                }
+
+                me.fillInUser(u);
+            });
+        }
     },
 
     afterRender: function(){

@@ -11,6 +11,10 @@ Ext.define('NextThought.view.widgets.chat.Log', {
     border: false,
     defaults: {border: false, defaults: {border: false}},
 
+    getMessageQuery: function(id){
+        return Ext.String.format('{0}[messageId={1}]', this.entryType, id);
+    },
+
     initComponent:function() {
 
         this.entryType = this.entryType || 'chat-log-entry';
@@ -96,27 +100,45 @@ Ext.define('NextThought.view.widgets.chat.Log', {
     },
 
     removeMessage: function(msg) {
-        var m = this.down(this.entryType+'[messageId='+msg.getId()+']');
+        var m = this.down(this.getMessageQuery(msg.getId()));
         if (m) this.remove(m);
     },
 
     addMessage: function(msg) {
         var id = msg.getId(),
             rid = msg.get('inReplyTo'),
-            m = this.down(this.entryType+'[messageId=' + id + ']');
+            m = this.down(this.getMessageQuery(id));
     
-        if (m)
+        if (m){
+            console.log('updating existing message item...', m, msg);
+            m.update(msg);
+            return;
+        }
 
-        if (rid)
-            this.down(this.entryType +  '[messageId='+msg.get('inReplyTo') +']');
+        //m is what we want to add too. It's either the root container (this) or its the replied-to-entry.
+        m = this;
 
-        var o = this.add({
+        if (rid){
+            console.log('replying to message item...', m, msg);
+            m = this.down(this.getMessageQuery(rid));
+            if(!m){
+                //create place holder, reassign m the ref to place holder
+                m = this.add({
+                    xtype: this.entryType,
+                    message: Ext.create('NextThought.model.MessageInfo'),
+                    messageId: rid
+                });
+            }
+        }
+
+        //we are going to add then scroll to
+        this.scroll(
+            m.add({
                 xtype: this.entryType,
                 message: msg,
                 messageId: msg.getId()
-            });
-
-        this.scroll(o);
+            })
+        );
     },
 
     scroll: function(entry) {

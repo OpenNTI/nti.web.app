@@ -12,6 +12,10 @@ many rules are in: custom-icon-with-text-widgets.css
     border: none;
 }
 
+.chat-entry {
+    float: none !important;
+}
+
 .chat-window .flag {
     background: url('../images/flag-16.png');
 }
