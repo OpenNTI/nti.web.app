@@ -81,7 +81,11 @@
 }
 
 .x-chat-log-entry:hover .timestamp {
-    color: transparent;
+    visibility: hidden;
+}
+
+.x-chat-replies {
+    clear: both;
 }
 
 .tracker-tip,

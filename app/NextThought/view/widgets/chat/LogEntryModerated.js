@@ -2,7 +2,7 @@ Ext.define('NextThought.view.widgets.chat.LogEntryModerated', {
     extend: 'Ext.form.field.Checkbox',
     alias: 'widget.chat-log-entry-moderated',
     mixins: {
-//        checkbox: 'Ext.form.field.Checkbox'
+        abstractContainer: 'Ext.container.AbstractContainer',
         contains: 'Ext.container.Container'
     },
     requires: [
@@ -47,9 +47,13 @@ Ext.define('NextThought.view.widgets.chat.LogEntryModerated', {
     },
 
     initComponent: function(){
+        Ext.container.Container.prototype.initComponent.apply(this, arguments);
         this.callParent(arguments);
 
-        var m = this.message,
+        this.update(this.message);
+    },
+
+    update: function(m) {
             me = this,
             s = m.get('Creator');
 
@@ -57,17 +61,15 @@ Ext.define('NextThought.view.widgets.chat.LogEntryModerated', {
         this.renderData['name'] = 'resolving...';
         this.renderData['body'] = m.get('Body');
 
-        NextThought.cache.UserRepository.prefetchUser(s, function(users){
-            var u = users[0];
+        UserRepository.prefetchUser(s, function(users){
+             var u = users[0];
             if (!u) {
                 console.log('ERROR: failed to resolve user', s, m);
                 return;
             }
 
-            me.update(u);
+            me.fillInUser(u);
         });
-
-
     },
 
     afterRender: function() {
@@ -91,7 +93,7 @@ Ext.define('NextThought.view.widgets.chat.LogEntryModerated', {
             this.setValue(!this.getValue());
     },
 
-    update: function(u) {
+    fillInUser: function(u) {
         var name = u.get('alias') || u.get('Username'),
             i = u.get('avatarURL');
 
@@ -104,7 +106,6 @@ Ext.define('NextThought.view.widgets.chat.LogEntryModerated', {
             this.renderData['icon'] = i;
         }
     },
-
 
     initializeDragZone: function(v) {
         v.dragZone = Ext.create('Ext.dd.DragZone', v.getEl(), {
@@ -127,6 +128,15 @@ Ext.define('NextThought.view.widgets.chat.LogEntryModerated', {
                 return this.dragData.repairXY;
             }
         });
+    },
+
+    showReplyToComponent: function() {
+        this.add({
+            xtype: 'chat-reply-to',
+            replyTo: this.message.getId()
+        });
     }
+
+
 
 });

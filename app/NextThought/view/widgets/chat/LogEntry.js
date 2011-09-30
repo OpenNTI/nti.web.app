@@ -3,7 +3,8 @@ Ext.define('NextThought.view.widgets.chat.LogEntry', {
     alias: 'widget.chat-log-entry',
 
     requires: [
-        'NextThought.proxy.UserDataLoader'
+        'NextThought.proxy.UserDataLoader',
+        'NextThought.view.widgets.chat.ReplyTo'
     ],
 
     renderTpl: new Ext.XTemplate(
@@ -39,18 +40,15 @@ Ext.define('NextThought.view.widgets.chat.LogEntry', {
         this.renderData['name'] = 'resolving...';
         this.renderData['body'] = m.get('Body');
 
-        NextThought.cache.UserRepository.prefetchUser(s, function(users){
+        UserRepository.prefetchUser(s, function(users){
             var u = users[0];
             if (!u) {
                 console.log('ERROR: failed to resolve user', s, m);
                 return;
             }
 
-            me.update(u);
+            me.fillInUser(u);
         });
-
-        this.add({html: 'init test 2'});
-
     },
 
     afterRender: function(){
@@ -66,7 +64,7 @@ Ext.define('NextThought.view.widgets.chat.LogEntry', {
         }
     },
 
-    update: function(u) {
+    fillInUser: function(u) {
         var name = u.get('alias') || u.get('Username'),
             i = u.get('avatarURL');
 
@@ -105,6 +103,9 @@ Ext.define('NextThought.view.widgets.chat.LogEntry', {
     },
 
     showReplyToComponent: function() {
-        
+        this.add({
+            xtype: 'chat-reply-to',
+            replyTo: this.message.getId()
+        });
     }
 });

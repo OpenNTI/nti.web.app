@@ -4,7 +4,8 @@ Ext.define('NextThought.view.widgets.chat.View', {
 
     requires: [
         'NextThought.view.widgets.chat.Log',
-        'NextThought.view.widgets.chat.OccupantsList'
+        'NextThought.view.widgets.chat.OccupantsList',
+        'NextThought.view.widgets.chat.ReplyTo'
     ],
 
     layout: 'border',
@@ -25,8 +26,7 @@ Ext.define('NextThought.view.widgets.chat.View', {
                 },
                 {
                     cls: 'chat-entry',
-                    xtype: 'textfield',
-                    chatentry: true
+                    xtype: 'chat-reply-to'
                 }
 
             ]

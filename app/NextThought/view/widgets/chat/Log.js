@@ -101,6 +101,15 @@ Ext.define('NextThought.view.widgets.chat.Log', {
     },
 
     addMessage: function(msg) {
+        var id = msg.getId(),
+            rid = msg.get('inReplyTo'),
+            m = this.down(this.entryType+'[messageId=' + id + ']');
+    
+        if (m)
+
+        if (rid)
+            this.down(this.entryType +  '[messageId='+msg.get('inReplyTo') +']');
+
         var o = this.add({
                 xtype: this.entryType,
                 message: msg,

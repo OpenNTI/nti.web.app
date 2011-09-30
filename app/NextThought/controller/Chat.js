@@ -74,12 +74,8 @@ Ext.define('NextThought.controller.Chat', {
             'chat-log-view button[action]':{'click': this.toolClicked},
             'chat-log-view tool[action]':{'click': this.toolClicked},
 
-            'chat-view textfield' : {
-                'specialkey' : function(f, e) {
-                    if (e.getKey() != e.ENTER) return;
-                    this.postMessage(f.up('chat-view').roomInfo, f.getValue());
-                    f.setValue('');
-                }
+            'chat-view chat-reply-to' : {
+                'send' : this.send
             },
             'chat-occupants-list tool[action=moderate]' : {
                 'click' : this.moderateClicked
@@ -111,8 +107,14 @@ Ext.define('NextThought.controller.Chat', {
         }
     },
 
-    postMessage: function(room, message) {
-        Socket.emit('chat_postMessage', {ContainerId: room.getId(), Body: message, Class: 'MessageInfo'});
+    postMessage: function(room, message, replyTo, channel, recipients) {
+        var m = {ContainerId: room.getId(), Body: message, Class: 'MessageInfo'};
+
+        if (replyTo) m.inReplyTo = replyTo;
+        if (channel) m.channel = channel;
+        if (recipients) m.recipients = recipients;
+        
+        Socket.emit('chat_postMessage', m);
     },
 
     approveMessages: function(messageIds){
@@ -163,6 +165,18 @@ Ext.define('NextThought.controller.Chat', {
     },
 
     /* CLIENT EVENTS */
+
+    send: function(f, mid) {
+        var room = f.up('chat-view').roomInfo,
+            val = f.getValue();
+
+        if (Ext.isEmpty(val)) return;
+        
+        this.postMessage(room, val, mid);
+
+
+        f.setValue('');
+    },
 
     flaggedMenuItemClicked: function(mi) {
         this.showMessage(mi.relatedCmp);
@@ -221,7 +235,7 @@ Ext.define('NextThought.controller.Chat', {
     },
 
     replyPublic: function(msgCmp) {
-      console.log(arguments);
+        msgCmp.showReplyToComponent();
     },
 
     /* SERVER EVENT HANDLERS*/
