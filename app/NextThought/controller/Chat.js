@@ -83,6 +83,12 @@ Ext.define('NextThought.controller.Chat', {
             },
             'chat-occupants-list tool[action=moderate]' : {
                 'click' : this.moderateClicked
+            },
+            'chat-log-entry' : {
+                'reply-public': this.replyPublic
+            },
+            'chat-log-entry-moderated' : {
+                'reply-public': this.replyPublic
             }
 
         });
@@ -212,6 +218,10 @@ Ext.define('NextThought.controller.Chat', {
         delete this.activeRooms[room.getId()];
 
         Socket.emit('chat_exitRoom', room.getId());
+    },
+
+    replyPublic: function(msgCmp) {
+      console.log(arguments);
     },
 
     /* SERVER EVENT HANDLERS*/

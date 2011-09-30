@@ -1,5 +1,5 @@
 Ext.define('NextThought.view.widgets.chat.LogEntry', {
-    extend: 'Ext.Component',
+    extend: 'Ext.container.Container',
     alias: 'widget.chat-log-entry',
 
     requires: [
@@ -8,6 +8,9 @@ Ext.define('NextThought.view.widgets.chat.LogEntry', {
 
     renderTpl: new Ext.XTemplate(
         '<div class="x-chat-log-entry">',
+            '<span class="reply">',
+                '<span class="reply-public"></span>',
+            '</span>',
             '<div class="timestamp">{time}</div>',
             '<img src="{icon}" width=16 height=16"/>',
             '<div>',
@@ -44,12 +47,30 @@ Ext.define('NextThought.view.widgets.chat.LogEntry', {
             me.update(u);
         });
 
+        this.add({html: 'init test 2'});
 
+    },
+
+    onRender: function() {
+      console.log('before parent');
+      this.callParent(arguments);
+      console.log('after parent');
+
+      var self = this;
+      setTimeout(function(){self.add({html: 'test'})}, 5000);
     },
 
     afterRender: function(){
         this.callParent(arguments);
         this.initializeDragZone(this);
+        this.el.on('click', this.click, this);
+    },
+
+    click: function(event, target, eOpts){
+        target = Ext.get(target);
+        if(target && target.hasCls('reply-public')){
+            this.fireEvent('reply-public', this);
+        }
     },
 
     update: function(u) {
@@ -88,5 +109,9 @@ Ext.define('NextThought.view.widgets.chat.LogEntry', {
                 return this.dragData.repairXY;
             }
         });
+    },
+
+    showReplyToComponent: function() {
+        
     }
 });

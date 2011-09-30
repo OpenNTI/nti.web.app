@@ -55,9 +55,33 @@
     padding: 0;
 }
 
+.x-chat-log-entry span.reply {
+    position: absolute;
+    display: none;
+    right: 5px; top: 5px;
+    height: 24px;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.x-chat-log-entry span.reply-public {
+    width: 24px;
+    height: 24px;
+    display: block;
+    background: url("../images/replyTo-arrow-24.png");
+}
+
+.x-chat-log-entry:hover span.reply {
+    display: block;
+}
+
 .x-chat-log-entry .timestamp {
     float: right;
     padding:  0 0 5px 10px;
+}
+
+.x-chat-log-entry:hover .timestamp {
+    display: none;
 }
 
 .tracker-tip,

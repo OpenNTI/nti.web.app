@@ -16,6 +16,9 @@ Ext.define('NextThought.view.widgets.chat.LogEntryModerated', {
             '</label>',
         '</tpl>',
         '<div class="x-chat-log-entry moderated {baseBodyCls} {fieldBodyCls}"<tpl if="inputId"> id="{baseBodyCls}-{inputId}"</tpl> role="presentation">',
+            '<span class="reply">',
+                '<span class="reply-public"></span>',
+            '</span>',
             '<div class="timestamp">{time}</div>',
             '{subTplMarkup}',
             '<img src="{icon}" width=16 height=16"/>',
@@ -66,14 +69,22 @@ Ext.define('NextThought.view.widgets.chat.LogEntryModerated', {
     afterRender: function() {
         this.callParent(arguments);
         this.initializeDragZone(this);
-        this.box.on('click', function(e,t){
-            if(!/input/i.test(t.tagName))
-                this.setValue(!this.getValue());
-        }, this);
+
         this.on('change', function(cmp, state){
             this.box.removeCls('selected');
             if(state) this.box.addCls('selected');
         });
+
+        this.el.on('click', this.click, this);
+    },
+
+    click: function(event, target, eOpts){
+        target = Ext.get(target);
+        if(target && target.hasCls('reply-public')){
+            this.fireEvent('reply-public', this);
+        }
+        else if(!/input/i.test(target.tagName))
+            this.setValue(!this.getValue());
     },
 
     update: function(u) {
