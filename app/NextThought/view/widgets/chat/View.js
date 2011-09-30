@@ -49,9 +49,9 @@ Ext.define('NextThought.view.widgets.chat.View', {
 
     initComponent:function() {
         this.callParent(arguments);
-        this.down('chat-occupants-list').setOccupants(this.roomInfo.get('Occupants'));
 
-        this.roomInfo.on('changed', this.changed, this);
+        this.changed(this.roomInfo);
+
     },
 
     afterRender: function() {
@@ -63,7 +63,15 @@ Ext.define('NextThought.view.widgets.chat.View', {
         this.roomId = ri.getId();
         this.roomInfo = ri;
         this.roomInfo.on('changed', this.changed, this);
-        //this.down('chat-occupants-list').setOccupants(this.roomInfo.get('Occupants'));
+        this.roomInfo.on('left-room', this.left, this);
+        this.down('chat-occupants-list').setOccupants(this.roomInfo.get('Occupants'));
+    },
+
+    left: function() {
+        this.down('textfield').destroy();
+        this.down('chat-occupants-list').disable();
+        this.roomInfo.clearListeners();
+        delete this.roomInfo;
     },
 
     openModerationPanel: function() {

@@ -76,8 +76,7 @@ Ext.define('NextThought.view.widgets.chat.FriendEntry', {
             },
 
             onNodeDrop : function(target, dd, e, data){
-                console.log('onNodeDrop',arguments);
-                return true;
+                return v.fireEvent('messages-dropped', v.user, data);
             }
         });
     }

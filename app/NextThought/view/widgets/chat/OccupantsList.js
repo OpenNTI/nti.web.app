@@ -61,7 +61,10 @@ Ext.define('NextThought.view.widgets.chat.OccupantsList', {
         function finish() {
             if (numberOccupants <= 1) {
                 //just me and someone else here
-                me.close();
+                me.hide();
+            }
+            else if(!me.isVisible()) {
+                me.show();
             }
         }
 

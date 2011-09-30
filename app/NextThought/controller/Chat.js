@@ -24,12 +24,16 @@ Ext.define('NextThought.controller.Chat', {
         var me = this;
 
         Socket.register({
-            'chat_enteredRoom': function(){me.enteredRoom.apply(me, arguments)},
-            'disconnect': function(){me.socketDisconnect.apply(me, arguments)},
-            'serverkill': function(){me.socketDisconnect.apply(me, arguments)},
+            'chat_enteredRoom': function(){me.onEnteredRoom.apply(me, arguments)},
+            'disconnect': function(){me.onSocketDisconnect.apply(me, arguments)},
+            'serverkill': function(){me.onSocketDisconnect.apply(me, arguments)},
             'chat_recvMessage': function(){me.onMessage.apply(me, arguments)},
-            'chat_recvMessageForModeration': function(){me.onModeratedMessage.apply(me, arguments);},
-            'chat_presenceOfUserChangedTo': function(user, presence){UserRepository._presenceChanged(user, presence);}
+            'chat_exitedRoom' : function(){me.onExitedRoom.apply(me, arguments)},
+            'chat_roomMembershipChanged' : function(){me.onMembershipChanged.apply(me, arguments)},
+            'chat_recvMessageForModeration' : function(){me.onModeratedMessage.apply(me, arguments);},
+            'chat_presenceOfUserChangedTo' : function(user, presence){UserRepository._presenceChanged(user, presence);},
+            'chat_recvMessageForAttention' : function(){console.log('!!!message received for attention', arguments)},
+            'chat_recvMessageForShadow' : function(){console.log('!!!got a message to shadow', arguments)}
         });
 
 
@@ -43,7 +47,8 @@ Ext.define('NextThought.controller.Chat', {
             },
 
             'chat-friend-entry' : {
-                click : this.friendEntryClicked
+                click : this.friendEntryClicked,
+                'messages-dropped' : this.flagMessagesTo
             },
 
             'chat-view':{
@@ -70,6 +75,7 @@ Ext.define('NextThought.controller.Chat', {
         });
     },
 
+    /* UTILITY METHODS */
 
     existingRoom: function(users) {
         //Add ourselves to this list
@@ -86,6 +92,13 @@ Ext.define('NextThought.controller.Chat', {
         }
     },
 
+    postMessage: function(room, message) {
+        Socket.emit('chat_postMessage', {ContainerId: room.getId(), Body: message, Class: 'MessageInfo'});
+    },
+
+    approveMessages: function(messageIds){
+        Socket.emit('chat_approveMessages', messageIds);
+    },
 
     enterRoom: function(users) {
         if (!Ext.isArray(users)) users = [users];
@@ -116,60 +129,11 @@ Ext.define('NextThought.controller.Chat', {
             Socket.emit('chat_enterRoom', {'Occupants': users});
     },
 
-
-
-
-    leaveRoom: function(room){
-        delete this.activeRooms[room.getId()];
-
-        Socket.emit('chat_exitRoom', room.getId());
-    },
-
-    socketDisconnect: function(){
-       this.activeRooms = {};
-    },
-
-    approveMessages: function(messageIds){
-        Socket.emit('chat_approveMessages', messageIds);
-    },
-
-    postMessage: function(room, message) {
-        Socket.emit('chat_postMessage', {ContainerId: room.getId(), Body: message, Class: 'MessageInfo'});
-    },
-
-    onMessage: function(msg) {
-        var win = this.getChatWindow();
-        if(win)win.onMessage(UserDataLoader.parseItems([msg])[0],{});
-    },
-
-    onModeratedMessage: function(msg) {
-        var win = this.getChatWindow();
-        if(win)win.onMessage(UserDataLoader.parseItems([msg])[0],{moderated:true});
-    },
-
-    enteredRoom: function(msg) {
-        var roomInfo = UserDataLoader.parseItems([msg])[0];
-
-        if (roomInfo.getId() in this.activeRooms) {
-            console.log('WARNING: room already exists, all rooms/roominfo', this.activeRooms, roomInfo);
-        }
-
-        var eri = this.existingRoom(roomInfo.get('Occupants'));
-        if (eri) {
-            eri.fireEvent('changed', roomInfo);
-            this.leaveRoom(eri);
-        }
-
-        this.activeRooms[roomInfo.getId()] = roomInfo;
-        
-        this.openChatWindow();
-        this.getChatWindow().addNewChat(roomInfo);
-    },
-
     moderateChat: function(roomInfo) {
         Socket.emit('chat_makeModerated', roomInfo.getId(), true);
     },
 
+    /* CLIENT EVENTS */
 
     toolClicked: function(field) {
         var a = field.action.toLowerCase(),
@@ -195,6 +159,13 @@ Ext.define('NextThought.controller.Chat', {
         this.moderateChat(chatView.roomInfo);
     },
 
+    flagMessagesTo: function(user, dropData){
+        var u = [], m = [];
+        u.push(user.getId());
+        m.push(dropData.data.ID);
+        Socket.emit('chat_flagMessagesToUsers', m, u);
+    },
+
     openChatWindow: function(){
         (this.getChatWindow() || Ext.create('widget.chat-window')).show();
     },
@@ -206,5 +177,66 @@ Ext.define('NextThought.controller.Chat', {
 
     groupEntryClicked: function(group){
         this.enterRoom(group.get('friends'));
+    },
+
+    leaveRoom: function(room){
+        if (!room) return;
+        
+        delete this.activeRooms[room.getId()];
+
+        Socket.emit('chat_exitRoom', room.getId());
+    },
+
+
+    /* SERVER EVENT HANDLERS*/
+
+    onSocketDisconnect: function(){
+       this.activeRooms = {};
+    },
+
+    onMembershipChanged: function(msg) {
+        var roomInfo = UserDataLoader.parseItems([msg])[0];
+
+        if (roomInfo.getId() in this.activeRooms)
+            this.activeRooms[roomInfo.getId()].fireEvent('changed', roomInfo);
+
+        this.activeRooms[roomInfo.getId()] = roomInfo;
+    },
+
+    onExitedRoom: function(room) {
+        if (room.ID in this.activeRooms) {
+            this.activeRooms[room.ID].fireEvent('left-room');
+            delete this.activeRooms[room.ID];
+        }
+    },
+
+    onMessage: function(msg) {
+        var win = this.getChatWindow();
+        if(win)win.onMessage(UserDataLoader.parseItems([msg])[0],{});
+    },
+
+    onModeratedMessage: function(msg) {
+        var win = this.getChatWindow();
+        if(win)win.onMessage(UserDataLoader.parseItems([msg])[0],{moderated:true});
+    },
+
+    onEnteredRoom: function(msg) {
+        var roomInfo = UserDataLoader.parseItems([msg])[0];
+
+        if (roomInfo.getId() in this.activeRooms) {
+            console.log('WARNING: room already exists, all rooms/roominfo', this.activeRooms, roomInfo);
+        }
+
+        var eri = this.existingRoom(roomInfo.get('Occupants'));
+        if (eri) {
+            eri.fireEvent('changed', roomInfo);
+            this.leaveRoom(eri);
+        }
+
+        this.activeRooms[roomInfo.getId()] = roomInfo;
+        
+        this.openChatWindow();
+        this.getChatWindow().addNewChat(roomInfo);
     }
+
 });

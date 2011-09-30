@@ -44,9 +44,9 @@ Ext.define('NextThought.view.widgets.chat.LogEntryModerated', {
 
         var m = this.message,
             me = this,
-            s = m.get('Sender');
+            s = m.get('Creator');
 
-        this.renderData['time'] = Ext.Date.format(m.get('Timestamp'), 'H:i:s');
+        this.renderData['time'] = Ext.Date.format(m.get('Last Modified'), 'H:i:s');
         this.renderData['name'] = 'resolving...';
         this.renderData['body'] = m.get('Body');
 
