@@ -107,7 +107,11 @@ Ext.define('NextThought.view.widgets.chat.Log', {
                 messageId: msg.getId()
             });
 
-        o.el.scrollIntoView(this.el.first('.x-panel-body'));
+        this.scroll(o);
+    },
+
+    scroll: function(entry) {
+        entry.el.scrollIntoView(this.el.first('.x-panel-body'));
     },
 
     addNews: function(msg) {

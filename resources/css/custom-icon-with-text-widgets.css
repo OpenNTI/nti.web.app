@@ -8,10 +8,6 @@
     height: 55px;
 }
 
-
-.chat {
-    background: url('../images/speachbubble.png');
-}
 .object-explorer {
     background: url('../images/objects16.png');
 }
@@ -28,6 +24,16 @@
 
 .x-chat-log-entry:hover .name,
 .x-chat-log-entry.selected .name {
+    color: black;
+}
+
+.flagged .x-chat-log-entry.selected,
+.flagged .x-chat-log-entry:hover {
+    background-color: #fa8072 !important;
+}
+
+.flagged .x-chat-log-entry {
+    background-color: #ffdddd;
     color: black;
 }
 

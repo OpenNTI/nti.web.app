@@ -11,12 +11,24 @@ Ext.define('NextThought.view.windows.ChatWindow', {
     maximizable:true,
     title: 'Chat',
     layout: 'border',
+    cls: 'chat-window',
 
-//    dockedItems:[{
-//        docked: 'top',
-//        xtype: 'toolbar',
-//        items:['->',{text:'hi'}]
-//    }],
+    dockedItems:[{
+        dock: 'bottom',
+        xtype: 'toolbar',
+        items:[
+            {
+                iconCls: 'flag',
+                disabled: true,
+                menu: [],
+                action: 'flagged',
+                xtype: 'splitbutton',
+                tooltip:'flagged messages'
+            }//,
+            //{text:'whispers'},
+            //{text:'shadows'}
+        ]
+    }],
 
     items: [
         {

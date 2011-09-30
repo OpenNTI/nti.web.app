@@ -32,12 +32,25 @@ Ext.define('NextThought.controller.Chat', {
             'chat_roomMembershipChanged' : function(){me.onMembershipChanged.apply(me, arguments)},
             'chat_recvMessageForModeration' : function(){me.onModeratedMessage.apply(me, arguments);},
             'chat_presenceOfUserChangedTo' : function(user, presence){UserRepository._presenceChanged(user, presence);},
-            'chat_recvMessageForAttention' : function(){console.log('!!!message received for attention', arguments)},
+            'chat_recvMessageForAttention' : function(){me.onMessageForAttention.apply(me, arguments);},
             'chat_recvMessageForShadow' : function(){console.log('!!!got a message to shadow', arguments)}
         });
 
 
         this.control({
+            'chat-window splitbutton menuitem': {
+                'click': this.flaggedMenuItemClicked
+            },
+            'chat-window splitbutton[action=flagged]': {
+                'click' : function(btn){
+                    var i = btn.menu.items,
+                        c = (btn.lastAction+1) % i.getCount();
+
+                    btn.lastAction = isNaN(c) ? 0 : c;
+
+                    this.flaggedMenuItemClicked(i.getAt(btn.lastAction));
+                }
+            },
             'leftColumn button[showChat]':{
                 'click': this.openChatWindow
             },
@@ -129,11 +142,25 @@ Ext.define('NextThought.controller.Chat', {
             Socket.emit('chat_enterRoom', {'Occupants': users});
     },
 
+    showMessage: function(msgCmp) {
+        var log = msgCmp.up('chat-log-view'),
+            tab = log.up('chat-view'),
+            tabpanel = tab.up('tabpanel');
+
+        tabpanel.setActiveTab(tab);
+        log.scroll(msgCmp);
+    },
+
+
     moderateChat: function(roomInfo) {
         Socket.emit('chat_makeModerated', roomInfo.getId(), true);
     },
 
     /* CLIENT EVENTS */
+
+    flaggedMenuItemClicked: function(mi) {
+        this.showMessage(mi.relatedCmp);
+    },
 
     toolClicked: function(field) {
         var a = field.action.toLowerCase(),
@@ -187,8 +214,42 @@ Ext.define('NextThought.controller.Chat', {
         Socket.emit('chat_exitRoom', room.getId());
     },
 
-
     /* SERVER EVENT HANDLERS*/
+
+    onMessageForAttention: function(mid) {
+        var w = this.getChatWindow();
+        if (!w) {
+            console.log('chat window is not open');
+            return;
+        }
+
+        var m = w.query('[messageId='+mid+']')[0],
+            msg = m ? m.message : null,
+            u = msg ? UserRepository.getUser(msg.get('Creator')) : null,
+            name = u ? u.get('alias') || u.get('realname') : null,
+            i = u ? u.get('avatarURL'): null,
+            b = w.query('button[action=flagged]')[0],
+            self = this;
+
+        if (!m || !msg) {
+            console.log('can not find messages')
+            return;
+        }
+
+        b.enable();
+        var c = parseInt(b.getText(), 10);
+        b.setText(isNaN(c) ? 1 : c+1);
+
+        m.addCls('flagged');
+
+        b.menu.add({
+            text:Ext.String.format('<b>{0}</b> - {1}', name, Ext.String.ellipsis(msg.get('Body'), 15)),
+            icon: i,
+            relatedCmp: m
+        });
+
+
+    },
 
     onSocketDisconnect: function(){
        this.activeRooms = {};

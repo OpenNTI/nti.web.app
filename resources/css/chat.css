@@ -1,7 +1,21 @@
 /*
 many rules are in: custom-icon-with-text-widgets.css
 */
+
+
+.chat {
+    background: url('../images/speachbubble.png');
+}
+
 .chat-entry .x-form-item-body input {
     padding-top: 5px;
     border: none;
+}
+
+.chat-window .flag {
+    background: url('../images/flag-16.png');
+}
+
+.chat-window .x-disabled .flag {
+    background: url('../images/flag-16-disabled.png');
 }
