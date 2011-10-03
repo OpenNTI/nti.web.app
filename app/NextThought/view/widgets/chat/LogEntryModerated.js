@@ -22,6 +22,7 @@ Ext.define('NextThought.view.widgets.chat.LogEntryModerated', {
         '</tpl>',
         '<div class="x-chat-log-entry moderated {baseBodyCls} {fieldBodyCls}"<tpl if="inputId"> id="{baseBodyCls}-{inputId}"</tpl> role="presentation">',
             '<span class="reply">',
+                '<span class="reply-whisper"></span>',
                 '<span class="reply-public"></span>',
             '</span>',
             '<div class="timestamp">{time}</div>',
@@ -54,19 +55,23 @@ Ext.define('NextThought.view.widgets.chat.LogEntryModerated', {
         Ext.container.Container.prototype.initComponent.apply(this, arguments);
         this.callParent(arguments);
         this.update(this.message);
-    },
 
-    add: function(){
-        var r = this.callParent(arguments),
-            reply = this.down('chat-reply-to');
+        this._add = this.add;
 
-        if(reply && r!==reply){
-            var ci = this.items.indexOf(reply);
-            this.move(ci, this.items.getCount()-1);
-            reply.down('textfield').focus();
-        }
+        //work around a mixin issue... we're mixing in a class that wasn't written as a mixin...
+        this.add = function(){
+            var r = this._add.apply(this,arguments);
+                reply = this.down('chat-reply-to');
+            console.log('r', r);
 
-        return r;
+            if(reply && r!==reply){
+                var ci = this.items.indexOf(reply);
+                this.move(ci, this.items.getCount()-1);
+                reply.down('textfield').focus();
+            }
+
+            return r;
+        };
     },
 
     update: function(m){
@@ -111,11 +116,16 @@ Ext.define('NextThought.view.widgets.chat.LogEntryModerated', {
 
     click: function(event, target, eOpts){
         target = Ext.get(target);
+        var inBox = target && this.box.contains(target),
+            tag = target? target.tagName : '';
 
-        if(target && target.hasCls('reply-public') && this.box.contains(target)){
+        if(inBox && target.hasCls('reply-public')){
             this.fireEvent('reply-public', this);
         }
-        else if(!/input/i.test(target.tagName))
+        else if(inBox && target.hasCls('reply-whisper')){
+            this.fireEvent('reply-whisper', this);
+        }
+        else if(!/input/i.test(tag))
             this.setValue(!this.getValue());
     },
 
@@ -157,7 +167,7 @@ Ext.define('NextThought.view.widgets.chat.LogEntryModerated', {
     },
 
     showReplyToComponent: function() {
-        this.add({
+        return this.add({
             xtype: 'chat-reply-to',
             replyTo: this.message.getId()
         });

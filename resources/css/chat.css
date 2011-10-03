@@ -53,11 +53,20 @@
 }
 
 .x-chat-log-entry span.reply-public {
-    width: 24px;
-    height: 24px;
-    display: block;
-    background: url("../images/replyTo-arrow-24.png");
+    width: 18px;
+    height: 18px;
+    display: inline-block;
+    margin: 2px;
+    background: url("../images/replyTo-arrow-18.png");
 }
+.x-chat-log-entry span.reply-whisper {
+    width: 16px;
+    height: 16px;
+    margin: 2px;
+    display: inline-block;
+    background: url("../images/replyTo-arrow-16.png");
+}
+
 
 .x-chat-log-entry:hover span.reply {
     display: block;

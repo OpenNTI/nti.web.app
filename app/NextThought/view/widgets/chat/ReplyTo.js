@@ -42,9 +42,14 @@ Ext.define('NextThought.view.widgets.chat.ReplyTo', {
         f.on('focus', this.hideReplies, this);
 
         b.on('click', function(){
-            me.fireEvent('send', f, me.replyTo);
+            me.fireEvent('send', f, me.replyTo, me.channel, me.recipients);
         });
 
+    },
+
+    setChannel: function(channel, recipients){
+        this.channel = channel? channel : undefined;
+        this.recipients = recipients? recipients : undefined;
     },
 
     hideReplies : function(){

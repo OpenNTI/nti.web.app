@@ -24,16 +24,19 @@ Ext.define('NextThought.controller.Chat', {
         var me = this;
 
         Socket.register({
-            'chat_enteredRoom': function(){me.onEnteredRoom.apply(me, arguments)},
             'disconnect': function(){me.onSocketDisconnect.apply(me, arguments)},
             'serverkill': function(){me.onSocketDisconnect.apply(me, arguments)},
-            'chat_recvMessage': function(){me.onMessage.apply(me, arguments)},
+            'chat_enteredRoom': function(){me.onEnteredRoom.apply(me, arguments)},
             'chat_exitedRoom' : function(){me.onExitedRoom.apply(me, arguments)},
             'chat_roomMembershipChanged' : function(){me.onMembershipChanged.apply(me, arguments)},
-            'chat_recvMessageForModeration' : function(){me.onModeratedMessage.apply(me, arguments);},
             'chat_presenceOfUserChangedTo' : function(user, presence){UserRepository._presenceChanged(user, presence);},
+            'chat_recvMessage': function(){me.onMessage.apply(me, arguments)},
             'chat_recvMessageForAttention' : function(){me.onMessageForAttention.apply(me, arguments);},
-            'chat_recvMessageForShadow' : function(){console.log('!!!got a message to shadow', arguments)}
+            'chat_recvMessageForModeration' : function(){me.onModeratedMessage.apply(me, arguments);},
+            'chat_recvMessageForShadow' : function(){
+                console.log('!!!got a message to shadow', arguments);
+                me.onMessage.apply(me, arguments);
+            }
         });
 
 
@@ -81,10 +84,12 @@ Ext.define('NextThought.controller.Chat', {
                 'click' : this.moderateClicked
             },
             'chat-log-entry' : {
-                'reply-public': this.replyPublic
+                'reply-public': this.replyPublic,
+                'reply-whisper': this.replyWhisper
             },
             'chat-log-entry-moderated' : {
-                'reply-public': this.replyPublic
+                'reply-public': this.replyPublic,
+                'reply-whisper': this.replyWhisper
             }
 
         });
@@ -113,7 +118,7 @@ Ext.define('NextThought.controller.Chat', {
         if (replyTo) m.inReplyTo = replyTo;
         if (channel) m.channel = channel;
         if (recipients) m.recipients = recipients;
-        
+
         Socket.emit('chat_postMessage', m);
     },
 
@@ -166,13 +171,13 @@ Ext.define('NextThought.controller.Chat', {
 
     /* CLIENT EVENTS */
 
-    send: function(f, mid) {
+    send: function(f, mid, channel, recipients) {
         var room = f.up('chat-view').roomInfo,
             val = f.getValue();
 
         if (Ext.isEmpty(val)) return;
         
-        this.postMessage(room, val, mid);
+        this.postMessage(room, val, mid, channel, recipients);
 
 
         f.setValue('');
@@ -236,7 +241,28 @@ Ext.define('NextThought.controller.Chat', {
     },
 
     replyPublic: function(msgCmp) {
-        msgCmp.showReplyToComponent();
+        msgCmp.showReplyToComponent().setChannel('DEFAULT');
+    },
+
+    replyWhisper: function(msgCmp) {
+        var message = msgCmp.message,
+            w = msgCmp.up('chat-window'),
+            recipients = new Ext.util.HashMap();
+
+        recipients.add(message.get('Creator'), 1);
+        recipients.add(_AppConfig.userObject.getId(), 1);
+
+        while(w && message && message.get('inReplyTo')){
+            var r = message.get('inReplyTo'),
+                m = w.down(Ext.String.format('*[messageId={1}]', r));
+
+            if(!m || !m.message)break;
+
+            message = m.message;
+            recipients.add(message.get('Creator'), 1);
+        }
+
+        msgCmp.showReplyToComponent().setChannel('WHISPER', recipients.getKeys());
     },
 
     /* SERVER EVENT HANDLERS*/

@@ -10,6 +10,7 @@ Ext.define('NextThought.view.widgets.chat.LogEntry', {
     renderTpl: new Ext.XTemplate(
         '<div class="x-chat-log-entry">',
             '<span class="reply">',
+                '<span class="reply-whisper"></span>',
                 '<span class="reply-public"></span>',
             '</span>',
             '<div class="timestamp">{time}</div>',
@@ -85,8 +86,12 @@ Ext.define('NextThought.view.widgets.chat.LogEntry', {
 
     click: function(event, target, eOpts){
         target = Ext.get(target);
-        if(target && target.hasCls('reply-public') && this.box.contains(target)){
+        var inBox = target && this.box.contains(target);
+        if(inBox && target.hasCls('reply-public')){
             this.fireEvent('reply-public', this);
+        }
+        else if(inBox && target.hasCls('reply-whisper')){
+            this.fireEvent('reply-whisper', this);
         }
     },
 
@@ -129,7 +134,7 @@ Ext.define('NextThought.view.widgets.chat.LogEntry', {
     },
 
     showReplyToComponent: function() {
-        this.add({
+        return this.add({
             xtype: 'chat-reply-to',
             replyTo: this.message.getId()
         });
