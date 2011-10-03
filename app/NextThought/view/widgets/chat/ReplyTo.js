@@ -2,8 +2,12 @@ Ext.define('NextThought.view.widgets.chat.ReplyTo', {
 	extend:'Ext.panel.Panel',
     alias: 'widget.chat-reply-to',
 
-    layout: 'hbox',
-    border: true,
+    layout: {
+        type: 'hbox',
+        align: 'stretch'
+    },
+    border: false,
+    height: 32,
 
     items:[
         {
@@ -15,13 +19,14 @@ Ext.define('NextThought.view.widgets.chat.ReplyTo', {
         {
             cls: 'reply-to-button',
             xtype: 'button',
-            text: 'enter'
+            iconCls: 'send',
+            tooltop: 'enter/send'
         }
     ],
 
     initComponent:function() {
         this.callParent(arguments);
-
+        this.addCls('reply-to-line');
         var me = this,
             b = me.down('button'),
             f = me.down('textfield');

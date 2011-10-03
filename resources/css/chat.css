@@ -117,10 +117,31 @@
 }
 
 .x-chat-log-entry input {
-    margin:  2px 5px 0 0;
+    margin:  0;
 }
 
 .x-chat-log-entry .name {
     font-weight: bold;
     color: #7889A3;
+}
+.reply-to-button button{
+    width: 32px !important;
+}
+.reply-to-button .x-btn-icon{
+    width: inherit;
+    height: inherit;
+    background-image: url("../images/br_up.png");
+    background-position: center;
+}
+
+.reply-to-line .chat-entry .x-form-item-body {
+    background-image: url('../../extjs/resources/themes/images/gray/form/text-bg.gif');
+    background-repeat: repeat-x;
+    height: 30px !important;
+}
+
+.reply-to-line .chat-entry .x-form-item-body input.x-form-text {
+    background: url("../images/br_next.png") no-repeat 2px center;
+    padding-left: 20px;
+    height: 30px !important;
 }
