@@ -27,7 +27,7 @@ Ext.define('NextThought.proxy.UserSearch', {
     },
 
     _exception: function() {
-          Logging.logAndAlertError('Error searching for users, try again later', arguments)
+        console.log('Error searching for users, try again later', arguments);
     }
 	
 });

@@ -70,7 +70,7 @@ Ext.define('NextThought.controller.Annotations', {
 				rec.fireEvent('updated',newRecord);
 			},
             failure:function(){
-                Logging.logAndAlertError('Failed to save', arguments);
+                console.log('Failed to save object');
             }
 		});
 	},
@@ -105,7 +105,7 @@ Ext.define('NextThought.controller.Annotations', {
                     this.attemptToAddWidget(newRecord);
 				},
                 failure:function(){
-                    Logging.logAndAlertError('Failed to save', arguments);
+                    console.log('failed to save note');
                 }
 			});
 		}

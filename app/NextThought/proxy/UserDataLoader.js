@@ -38,7 +38,7 @@ Ext.define('NextThought.proxy.UserDataLoader',{
                 callback: function(o,success,r){
                     this._searchUserData = null;
                     if(!success){
-                        Logging.logAndAlertError('There was an error searching for user generated data', arguments);
+                        console.log('There was an error searching for user generated data', arguments);
                         if (callback) callback();
                         return;
                     }
@@ -69,7 +69,7 @@ Ext.define('NextThought.proxy.UserDataLoader',{
                 callback: function(o,success,r){
                     this._searchContent = null;
                     if(!success){
-                        Logging.logAndAlertError('There was an error searching', arguments);
+                        console.log('There was an error searching', arguments);
                         if (callback) callback();
                         return;
                     }
@@ -160,7 +160,7 @@ Ext.define('NextThought.proxy.UserDataLoader',{
                     this._groupsRequest = null;
                 },
                 failure: function() {
-                    Logging.logAndAlertError('There was an error getting groups', 'Will attempt to call failure callback', arguments);
+                    console.log('There was an error getting groups', 'Will attempt to call failure callback', arguments);
                     if(callbacks && callbacks.failure) {
                         callbacks.failure.apply(callbacks.scope || this, arguments);
                     }
@@ -222,7 +222,7 @@ Ext.define('NextThought.proxy.UserDataLoader',{
                     this[request] = null;
                 },
                 failure: function() {
-                    Logging.logAndAlertError('There was an error getting data', 'Will attempt to call failure callback', arguments);
+                    console.log('There was an error getting data', 'Will attempt to call failure callback', arguments);
                     if(callbacks && callbacks.failure) {
                         callbacks.failure.apply(callbacks.scope || this, arguments);
                     }

@@ -45,7 +45,7 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
         this._record.save({
             scope: this,
             failure:function(){
-                Logging.logAndAlertError('Failed to save', arguments);
+                console.log('Failed to save highlight', this, this._record);
                 this.cleanup();
                 delete this;
             },

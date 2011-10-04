@@ -133,7 +133,7 @@ Ext.define('NextThought.Library', {
                 async: !!callback,
                 scope: this,
                 failure: function() {
-                    Logging.logAndAlertError('There was an error loading library', url, arguments);
+                    console.log('There was an error loading library', url, arguments);
                 },
                 success: function(r,o) {
                     this._tocs[index] = r.responseXML? r.responseXML : this._parseXML(r.responseText);

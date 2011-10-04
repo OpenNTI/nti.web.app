@@ -111,8 +111,7 @@ Ext.define('NextThought.view.content.Reader', {
             callback: function(req,success,res){
                 vp.unmask();
                 if(!success) {
-                    Logging.logAndAlertError('There was an error getting content', b+f, res);
-                    Ext.getCmp('home').activate();
+                    console.log('There was an error getting content', b+f, res);
                 }
             }
         });
