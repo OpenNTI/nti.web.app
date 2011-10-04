@@ -2,8 +2,7 @@ Ext.define('NextThought.proxy.Rest', {
     extend: 'Ext.data.proxy.Rest',
     alias: 'proxy.nti',
     requires: ['NextThought.proxy.reader.Json',
-               'NextThought.proxy.writer.Json',
-               'NextThought.util.Logging'],
+               'NextThought.proxy.writer.Json'],
 	
 	url: '',
     appendId: true, //default

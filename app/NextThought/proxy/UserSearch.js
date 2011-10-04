@@ -1,8 +1,7 @@
 Ext.define('NextThought.proxy.UserSearch', {
     extend: 'Ext.data.proxy.Rest',
     alias: 'proxy.usersearch',
-    requires: ['NextThought.proxy.reader.Json',
-               'NextThought.util.Logging'],
+    requires: ['NextThought.proxy.reader.Json'],
 	
 	url: '',
     appendId: false, //default

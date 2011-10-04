@@ -15,7 +15,6 @@ Ext.define('NextThought.proxy.UserDataLoader',{
         'NextThought.model.QuizResult',
         'NextThought.model.RoomInfo',
         'NextThought.model.MessageInfo',
-        'NextThought.util.Logging',
         'NextThought.cache.UserRepository'
     ],
     statics:{
