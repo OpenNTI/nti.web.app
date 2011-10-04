@@ -1,9 +1,3 @@
-Ext.Loader.setPath('Ext.ux', 'extjs/examples/ux');
-Ext.require([
-    'Ext.data.*'
-]);
-
-//Add JS for socket IO for chat/presence
 document.write('<script	src="'+_AppConfig.server.host+'/socket.io/static/socket.io.js"></script>');
 
 Ext.application({
