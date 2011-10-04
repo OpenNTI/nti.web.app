@@ -8,8 +8,7 @@ Ext.define('NextThought.view.widgets.RelatedItemsList', {
 
     border: false,
 	defaults: {border: false, defaults: {border: false}},
-    padding: 5,
-    items:[{html:'Related Items:', cls: 'sidebar-header'},{}],
+    items:[{html:'Related Items:', cls: 'sidebar-header'},{cls: 'sidebar-content'}],
 
 	_filter: {},
 	

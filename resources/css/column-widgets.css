@@ -1,4 +1,14 @@
-div.x-panel.sidebar-header .x-panel-body {
+.x-left-column div.sidebar-content,
+.x-left-column div.sidebar-header {
+    margin: auto 5px auto auto;
+}
+
+.x-right-column div.sidebar-content,
+.x-right-column div.sidebar-header {
+    margin: auto auto auto 5px;
+}
+
+div.sidebar-header .x-panel-body {
     padding-bottom: 15px;
     padding-top: 15px;
     font-weight: bold;

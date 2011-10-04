@@ -9,8 +9,8 @@ Ext.define('NextThought.view.widgets.FilterControlPanel', {
 
 	width: MIN_SIDE_WIDTH,
 	border: false,
-	defaults: {border: false, defaults:{border:false}},
-	
+    items: [{xtype: 'form', border: false, defaults:{border:false}}],
+
 	constructor: function(){
 		this.addEvents('filter-changed','filter-control-loaded');
 		this.callParent(arguments);
@@ -19,26 +19,17 @@ Ext.define('NextThought.view.widgets.FilterControlPanel', {
 	initComponent: function(){
    		this.callParent(arguments);
    		this.setWidth(MIN_SIDE_WIDTH);
-   		
-   		//this.reload();
         UserDataLoader.getFriendsListsStore().on('load', this.reload, this);
 	},
 	
 	reload: function(store, groups, success, ops){
-//		UserDataLoader.getGroups({
-//   			scope: this,
-//   			success: this.addGroups
-//   		});
         this.addGroups(groups);
 	},
 	
 	
 	addGroups : function(groups){
-        this.removeAll();
-
-		var form = Ext.create('Ext.form.Panel',{border: false, defaults:{border:false}});
-
-        this.add(form);
+        var form = this.items.get(0);
+        form.removeAll();
 
         form.add({ border: false,html:'Who:', cls: 'sidebar-header'});
 

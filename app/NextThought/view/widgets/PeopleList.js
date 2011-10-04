@@ -2,13 +2,13 @@ Ext.define('NextThought.view.widgets.PeopleList', {
 	extend: 'Ext.panel.Panel',
 	alias: 'widget.people-list',
 
-	border: false,
-	padding: 5,
-	defaults: {border: false},
-	items:[{html:'People:', cls: 'sidebar-header'},{margin: '1 0 1 1'}],
 	mixins:{
         avatars: 'NextThought.mixins.AvatarInformation'
     },
+
+	border: false,
+	defaults: {border: false},
+	items:[{html:'People:', cls: 'sidebar-header'},{cls: 'sidebar-content'}],
 	_filter: {},
 	_contributors: {},
 	
@@ -57,6 +57,7 @@ Ext.define('NextThought.view.widgets.PeopleList', {
 					    c = p.add({	xtype: 'image',
 							    src: (f? f.get('avatarURL') : Ext.BLANK_IMAGE_URL),
 							    height: 36, width: 36});
+
                         me.setupAvatarDetailToolTip(c, f);
 				});
 			}
