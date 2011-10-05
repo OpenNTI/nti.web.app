@@ -111,10 +111,6 @@ Ext.define('NextThought.proxy.Socket', {
         }
     },
 
-    getSocket: function() {
-        return io.sockets[_AppConfig.server.host];
-    },
-
     /**
      * Destroy the socket.
      */
