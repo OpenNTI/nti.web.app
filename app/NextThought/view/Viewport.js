@@ -18,6 +18,14 @@ Ext.define('NextThought.view.Viewport', {
         {xtype: 'master-header', region: 'north'},
         {xtype: 'modeContainer', region: 'center', id: 'mode-ctr'}
     ],
+
+    constructor: function(){
+        if(NextThought.phantomRender){
+            console.log('hey!');
+//            this.hidden = true;
+        }
+        this.callParent(arguments);
+    },
 	
     initComponent: function(){
         window.VIEWPORT = this;

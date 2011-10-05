@@ -80,6 +80,7 @@ Ext.define('NextThought.Library', {
     
     
 	load: function(){
+        this.loaded = false;
         this.store.on('load', this._onLoad, this );
         this.store.load();
     },
@@ -92,12 +93,10 @@ Ext.define('NextThought.Library', {
         else {
             if(NextThought.isDebug)
                 console.log('FAILED: load library');
-
-            alert('FAILED: load library');
-            window.location.reload();
         }
 
         function go(){
+            this.loaded = true;
 			this.fireEvent('loaded',this);
 		}
 	},

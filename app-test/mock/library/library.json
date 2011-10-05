@@ -1,0 +1,21 @@
+{
+    "title": "Library",
+    "titles": [
+        {
+            "version": "1.0",
+            "index": "/book1/eclipse-toc.xml",
+            "title": "book1",
+            "href": "/book1/index.html",
+            "root": "/book1/",
+            "icon": "/book1/icon.gif"
+        },
+        {
+            "version": "1.0",
+            "index": "/book2/eclipse-toc.xml",
+            "title": "book2",
+            "href": "/book2/index.html",
+            "root": "/book2/",
+            "icon": "/book2/icon.gif"
+        }
+    ]
+}

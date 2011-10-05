@@ -2,7 +2,7 @@
 var _AppConfig = {
     userObject: null,//construct this mock user on launch
     server: {
-        host: 'http://localhost',
+        host: 'test:',
         data: '/dataserver/',
         library: '/library/library.json',
         username: 'test@nextthought.com',
@@ -45,18 +45,32 @@ Ext.application({
     ],
 
     launch: function() {
+        NextThought.isDebug = true;
+        NextThought.phantomRender = true;
         Ext.JSON.encodeDate = encodeDate;
 
-        //either include the tests in the test.html head, or dynamically** load them before the execute()
+        hookAjax();
 
+        //include the tests in the test.html head
         jasmine.getEnv().addReporter(new jasmine.TrivialReporter());
         jasmine.getEnv().execute();
     }
 });
 
 
-/*
-    Ideas for dynamically loading tests....
 
-    TODO: make tests load dynamically.
- */
+
+
+
+
+
+function hookAjax()
+{
+    Ext.Ajax.request_forReal = Ext.Ajax.request;
+    Ext.Ajax.request = function test_ajax(o){
+        if(/^test:/i.test(o.url)){
+            o.url = o.url.replace(/^test:/i, './app-test/mock');
+        }
+        this.request_forReal.apply(this, arguments);
+    };
+}
