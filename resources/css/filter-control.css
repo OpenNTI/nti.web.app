@@ -13,6 +13,14 @@
 .filter-controls .type-filter .x-form-item-body{
     background: url("../images/filters/unkown.png") no-repeat left center;
 }
+.filter-controls .type-filter.note .x-form-item-body{
+    background: url("../images/filters/note-type.png") no-repeat left center;
+}
+.filter-controls .type-filter.highlight .x-form-item-body{
+    background: url("../images/filters/highlight-type.png") no-repeat left center;
+}
+
+
 .filter-controls .user-filter .x-form-item-body{
     background: url("../images/user_silhouette.gif") no-repeat left center;
 }
