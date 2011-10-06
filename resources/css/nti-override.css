@@ -20,15 +20,6 @@
     display: none;
 }
 
-
-
-
-#nticontent .page-contents .title{
-    border: none !important;
-}
-
-
-
 #nticontent div.mathjax.answer,
 #nticontent div.mathjax.response {
     clear: both;
