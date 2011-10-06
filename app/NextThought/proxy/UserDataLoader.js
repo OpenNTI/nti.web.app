@@ -99,6 +99,12 @@ Ext.define('NextThought.proxy.UserDataLoader',{
                     autoLoad: true,
                     sorters: [
                         {
+                            sorterFn: function(o1, o2){
+                                var a = /@/.test(o1.get('Username')),
+                                    b = /@/.test(o2.get('Username'));
+                                return a==b ? 0 : a ? -1 : 1;
+                            }
+                        },{
                             property : 'realname',
                             direction: 'ASC'
                         }
