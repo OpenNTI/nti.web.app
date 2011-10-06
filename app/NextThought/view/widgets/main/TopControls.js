@@ -22,7 +22,11 @@ Ext.define('NextThought.view.widgets.main.TopControls', {
     initComponent: function(){
         this.callParent(arguments);
         this.add({
-            layout: 'hbox',
+            layout:{
+                type: 'hbox',
+                pack: 'start',
+                align: 'stretchmax'
+            },
             flex: 1,
             minWidth: (MIN_SIDE_WIDTH+165),
             items: [

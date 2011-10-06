@@ -10,8 +10,7 @@ Ext.define('NextThought.view.widgets.main.ModeSwitcher', {
 	layout: {
 		type: 'hbox',
 		pack: 'start',
-		align: 'middle',
-		shrinkToFit: false
+        align: 'top'
 	},
 	items: [],
 	modeReference: null,
@@ -27,18 +26,15 @@ Ext.define('NextThought.view.widgets.main.ModeSwitcher', {
     		title: label,
     		allowDepress: false,
     		enableToggle: true,
-    		//border: false,
-    		//margin: 0,
-    	    //text: label,
+    	    toolTip: label,
     		toggleGroup: 'modeSwitcher'
 		});
 
         this.add(b);
-    	
     	return b;
     },
 
-    render: function(){
+    afterRender: function(){
     	this.callParent(arguments);
     	if(this.items.length)
 	    	this.setWidth(this.items.get(0).getWidth()*this.items.length);
