@@ -1,8 +1,10 @@
 Ext.define('NextThought.view.widgets.NotePanel',{
 	extend : 'Ext.panel.Panel',
 	alias: 'widget.notepanel',
-	requires: ['NextThought.proxy.UserDataLoader'],
-	
+	requires: [
+        'NextThought.cache.UserRepository'
+    ],
+
 	cls : 'x-note-panel-cmp',
 	layout : 'fit',
 
@@ -17,7 +19,7 @@ Ext.define('NextThought.view.widgets.NotePanel',{
         m.callParent(arguments);
 
         if(!r.placeHolder){
-            NextThought.cache.UserRepository.prefetchUser(c,function(users){ m.addUserControls(users[0]); });
+            UserRepository.prefetchUser(c,function(users){ m.addUserControls(users[0]); });
         }
 
         r.children = Ext.Array.sort(r.children || [], function(a,b){

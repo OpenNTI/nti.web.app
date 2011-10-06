@@ -3,10 +3,16 @@
 Ext.define('NextThought.controller.Search', {
     extend: 'Ext.app.Controller',
 
+    models: [
+        'Hit',
+        'UserSearch'
+    ],
+
 	views: [
         'Viewport',
         'windows.SearchResultsPopover'
     ],
+
     refs: [
         {
             ref: 'searchPopover',
@@ -17,6 +23,7 @@ Ext.define('NextThought.controller.Search', {
             selector: 'master-view'
         }
     ],
+
     init: function() {
     	 this.control({
             '#searchBox': {

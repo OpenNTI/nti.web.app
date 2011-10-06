@@ -1,8 +1,14 @@
 Ext.define('NextThought.controller.Chat', {
     extend: 'Ext.app.Controller',
     requires: [
-        'NextThought.proxy.UserDataLoader',
+        'NextThought.util.ParseUtils',
         'NextThought.proxy.Socket'
+    ],
+
+    models: [
+        'FriendsList',
+        'MessageInfo',
+        'RoomInfo'
     ],
 
     views: [
@@ -307,7 +313,7 @@ Ext.define('NextThought.controller.Chat', {
     },
 
     onMembershipChanged: function(msg) {
-        var roomInfo = UserDataLoader.parseItems([msg])[0];
+        var roomInfo = ParseUtils.parseItems([msg])[0];
 
         if (roomInfo.getId() in this.activeRooms)
             this.activeRooms[roomInfo.getId()].fireEvent('changed', roomInfo);
@@ -324,16 +330,16 @@ Ext.define('NextThought.controller.Chat', {
 
     onMessage: function(msg) {
         var win = this.getChatWindow();
-        if(win)win.onMessage(UserDataLoader.parseItems([msg])[0],{});
+        if(win)win.onMessage(ParseUtils.parseItems([msg])[0],{});
     },
 
     onModeratedMessage: function(msg) {
         var win = this.getChatWindow();
-        if(win)win.onMessage(UserDataLoader.parseItems([msg])[0],{moderated:true});
+        if(win)win.onMessage(ParseUtils.parseItems([msg])[0],{moderated:true});
     },
 
     onEnteredRoom: function(msg) {
-        var roomInfo = UserDataLoader.parseItems([msg])[0];
+        var roomInfo = ParseUtils.parseItems([msg])[0];
 
         if (roomInfo.getId() in this.activeRooms) {
             console.log('WARNING: room already exists, all rooms/roominfo', this.activeRooms, roomInfo);

@@ -6,7 +6,6 @@ Ext.define('NextThought.view.widgets.chat.LogEntryModerated', {
         contains: 'Ext.container.Container'
     },
     requires: [
-        'NextThought.proxy.UserDataLoader'
     ],
 
     preventMark:true,

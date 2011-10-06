@@ -3,7 +3,6 @@ Ext.define('NextThought.view.widgets.chat.LogEntry', {
     alias: 'widget.chat-log-entry',
 
     requires: [
-        'NextThought.proxy.UserDataLoader',
         'NextThought.view.widgets.chat.ReplyTo'
     ],
 

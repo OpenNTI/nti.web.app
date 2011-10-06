@@ -4,7 +4,7 @@ Ext.data.Types.QUIZ_RESPONSE_LIST = {
         var u = [];
 
         Ext.each(v, function(o){
-            u.push(UserDataLoader.parseItems([o])[0]);
+            u.push(ParseUtils.parseItems([o])[0]);
         });
 
         return u;

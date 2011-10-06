@@ -1,6 +1,11 @@
 Ext.define('NextThought.controller.Groups', {
     extend: 'Ext.app.Controller',
 
+    models: [
+        'Community',
+        'FriendsList'
+    ],
+
     views: [
         'modes.Groups',
         'windows.GroupEditorWindow'

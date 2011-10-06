@@ -2,9 +2,8 @@ Ext.define('NextThought.view.widgets.RelatedItemsList', {
 	extend: 'Ext.panel.Panel',
 	alias: 'widget.related-items',
 	requires: [
-			'NextThought.proxy.UserDataLoader',
-            'NextThought.view.windows.VideoWindow'
-			],
+        'NextThought.view.windows.VideoWindow'
+    ],
 
     border: false,
 	defaults: {border: false, defaults: {border: false}},

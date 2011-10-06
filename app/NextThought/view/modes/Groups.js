@@ -4,7 +4,6 @@ Ext.define( 'NextThought.view.modes.Groups', {
 	extend: 'NextThought.view.modes.Mode',
 	alias:	'widget.groups-mode-container',
 	requires: [
-        'NextThought.proxy.UserDataLoader',
         'NextThought.view.widgets.GroupsView'
     ],
 	

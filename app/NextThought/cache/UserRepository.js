@@ -1,6 +1,9 @@
 Ext.define('NextThought.cache.UserRepository', {
     alias: 'UserRepository',
     singleton: true,
+    requires: [
+        'NextThought.util.ParseUtils'
+    ],
 
     constructor: function() {
         Ext.apply(this,{
@@ -112,7 +115,7 @@ Ext.define('NextThought.cache.UserRepository', {
 
         
         if (!user) {
-            user = raw? UserDataLoader.parseItems([raw])[0] : this._makeRequest(username);
+            user = raw? ParseUtils.parseItems([raw])[0] : this._makeRequest(username);
             //user's constructor adds the user to the repo, so do the following only if the user is different somehow,
             //this is more of an assertion.  The reason we have to do this is because things are listening to events
             //on user instances in this repository so we cant just replace them.
@@ -145,7 +148,7 @@ Ext.define('NextThought.cache.UserRepository', {
                 }
 
                 var json = Ext.decode(r.responseText),
-                    bins = UserDataLoader._binAndParseItems(json.Items, undefined, {ignoreIfExists: true}),
+                    bins = ParseUtils.binAndParseItems(json.Items, undefined, {ignoreIfExists: true}),
                     list = bins ? bins.User || bins.Community : [];
 
                 if(list && list.length>1){

@@ -1,6 +1,14 @@
 Ext.define('NextThought.controller.Annotations', {
     extend: 'Ext.app.Controller',
 
+    models: [
+        'Highlight',
+        'Note',
+        'QuizQuestion',
+        'QuizQuestionResponse',
+        'QuizResult'
+    ],
+
 	views: [
         'Viewport',
         'widgets.annotations.Highlight',

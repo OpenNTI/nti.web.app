@@ -3,9 +3,9 @@ Ext.define('NextThought.view.content.Stream', {
 	extend:'NextThought.view.content.Panel',
     alias:'widget.stream-panel',
 	requires: [
-			'NextThought.proxy.UserDataLoader',
-            'NextThought.view.widgets.StreamEntry'
-			],
+        'NextThought.proxy.UserDataLoader',
+        'NextThought.view.widgets.StreamEntry'
+    ],
 	cls: 'x-stream-home',
 
     autoScroll: false,

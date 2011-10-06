@@ -1,7 +1,7 @@
 Ext.data.Types.QUIZ_QUESTION = {
     type: 'QuizQuestion',
     convert: function(o) {
-        return UserDataLoader.parseItems([o])[0];
+        return ParseUtils.parseItems([o])[0];
     },
     sortType: function(v) {
         console.log('sort by QuizQuestion:',arguments);

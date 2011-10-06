@@ -6,7 +6,6 @@ Ext.define('NextThought.view.form.fields.ShareWithField', {
         field: 'Ext.form.field.Field'
     },
     requires: [
-        'NextThought.proxy.UserDataLoader',
         'NextThought.view.form.fields.UserSearchInputField',
         'NextThought.view.form.util.Token'
     ],

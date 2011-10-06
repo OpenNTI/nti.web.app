@@ -1,7 +1,11 @@
 Ext.define('NextThought.controller.Account', {
     extend: 'Ext.app.Controller',
-    requires: [
-        'NextThought.proxy.UserDataLoader'
+
+    models: [
+        'FriendsList',
+        'UnresolvedFriend',
+        'UserSearch',
+        'User'
     ],
 
     views: [

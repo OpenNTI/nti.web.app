@@ -2,7 +2,6 @@ Ext.define('NextThought.view.widgets.ReaderItemsPanel', {
 	extend: 'Ext.panel.Panel',
 	alias: 'widget.reader-items',
 	requires: [
-			'NextThought.proxy.UserDataLoader',
 			'NextThought.view.widgets.PeopleList',
 			'NextThought.view.widgets.RelatedItemsList',
 			'NextThought.view.widgets.MiniStreamList'

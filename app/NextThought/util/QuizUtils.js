@@ -1,6 +1,8 @@
 
 Ext.define('NextThought.util.QuizUtils', {
-    requires: [],
+    requires: [
+        'NextThought.util.ParseUtils'
+    ],
     alternateClassName: 'QuizUtils',
     statics: {
 
@@ -59,7 +61,7 @@ Ext.define('NextThought.util.QuizUtils', {
                     console.log('FAIL', arguments);
                 },
                 success: function(r,req){
-                    var quizResults = UserDataLoader.parseItems([ Ext.JSON.decode(r.responseText) ]);
+                    var quizResults = ParseUtils.parseItems([ Ext.JSON.decode(r.responseText) ]);
                     this.showQuizResult(quizResults[0], problems);
                 }
             });

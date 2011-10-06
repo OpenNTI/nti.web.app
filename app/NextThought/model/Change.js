@@ -2,7 +2,7 @@
 Ext.data.Types.ITEM = {
 	type: 'Item',
     convert: function(v) {
-        return UserDataLoader.parseItems([v])[0];
+        return ParseUtils.parseItems([v])[0];
     },
     sortType: function(v) {
     	console.log('sort by Item:',arguments);

@@ -2,7 +2,12 @@ Ext.define('NextThought.controller.Stream', {
     extend: 'Ext.app.Controller',
 
     requires: [
-        'NextThought.proxy.Socket'
+        'NextThought.proxy.Socket',
+        'NextThought.util.ParseUtils'
+    ],
+
+    models: [
+        'Change'
     ],
 
 	views: [
@@ -50,7 +55,7 @@ Ext.define('NextThought.controller.Stream', {
     },
 
     incomingChange: function(change) {
-        change = UserDataLoader.parseItems([change])[0];
+        change = ParseUtils.parseItems([change])[0];
         UserDataLoader.getStreamStore().add(change);
 
         this.self.fireChange(change);

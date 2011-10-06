@@ -1,6 +1,15 @@
 Ext.define('NextThought.controller.Home', {
     extend: 'Ext.app.Controller',
 
+    models: [
+        'Highlight',
+        'Note',
+        'QuizQuestion',
+        'QuizQuestionResponse',
+        'QuizResult',
+        'Title'
+    ],
+
     views: [
         'content.Home',
         'modes.Home',

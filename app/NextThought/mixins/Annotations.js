@@ -3,6 +3,7 @@ Ext.define('NextThought.mixins.Annotations', {
         'NextThought.model.Highlight',
         'NextThought.model.Note',
         'NextThought.proxy.UserDataLoader',
+        'NextThought.util.ParseUtils',
         'NextThought.util.AnnotationUtils',
         'NextThought.util.QuizUtils',
         'NextThought.view.widgets.annotations.SelectionHighlight',
@@ -306,7 +307,7 @@ Ext.define('NextThought.mixins.Annotations', {
     },
 
 
-    _loadContentAnnotations: function(containerId){
+    loadContentAnnotations: function(containerId){
         this._containerId = containerId;
         this._loadObjects();
     },

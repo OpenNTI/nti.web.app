@@ -3,7 +3,6 @@ Ext.define('NextThought.view.content.Reader', {
     extend:'NextThought.view.content.Panel',
     alias: 'widget.reader-panel',
     requires: [
-        'NextThought.proxy.UserDataLoader',
         'NextThought.util.QuizUtils'
     ],
     mixins:{
@@ -140,7 +139,7 @@ Ext.define('NextThought.view.content.Reader', {
 
         containerId = this.el.select('meta[name=NTIID]').first().getAttribute('content');
 
-        this._loadContentAnnotations(containerId);
+        this.loadContentAnnotations(containerId);
         this.fireEvent('location-changed', containerId);
 
         if( callback ){

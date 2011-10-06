@@ -2,11 +2,16 @@ var COOKIE = '_z';
 
 Ext.define('NextThought.controller.Session', {
     extend: 'Ext.app.Controller',
+
     requires:[
+        'NextThought.cache.UserRepository',
         'NextThought.util.Base64',
-        'NextThought.proxy.UserDataLoader',
         'NextThought.proxy.Socket',
         'Ext.util.Cookies'
+    ],
+
+    models: [
+        'User'
     ],
 
     views: [
@@ -81,7 +86,7 @@ Ext.define('NextThought.controller.Session', {
                             this.setupAuth(values.username, values.password,!!values.remember);
                             Socket.setup(values.username, values.password);
 
-                            NextThought.cache.UserRepository.prefetchUser(values.username, function(users){
+                            UserRepository.prefetchUser(values.username, function(users){
                                 var user = users[0];
 
                                 if(user){

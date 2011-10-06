@@ -9,10 +9,12 @@ Ext.define('NextThought.proxy.reader.Json', {
 	
 	
 	readRecords: function(data) {
-		var me = this,
-			mName = me.model.$className,
-			i = me.root===false? data : data.Items,
-			records = [];
+        if(!this.model){
+            Ext.Error.raise('The model is undefined. Did we forget to require it somewhere?');
+        }
+
+        var me = this, mName = me.model.$className,
+            records = [], i = me.root===false? data : data.Items;
 
 		// if(NextThought.isDebug) {
 			// console.log('read records:',mName, 
