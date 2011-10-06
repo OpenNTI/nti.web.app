@@ -16,14 +16,12 @@ Ext.define('NextThought.view.widgets.main.Identity', {
     },
 
     initComponent: function(){
-        this.addEvents('mouseover');
         this.callParent(arguments);
     },
 
     afterRender: function(){
         this.callParent(arguments);
         this.update(_AppConfig.userObject);
-        this.el.on('mouseover', this._mouseover, this);
     },
 
     update: function(user){
@@ -31,9 +29,5 @@ Ext.define('NextThought.view.widgets.main.Identity', {
         this.icon.set({src: user.get('avatarURL')});
         this.name.update(Ext.String.ellipsis(user.get('realname'),25));
         this.doComponentLayout();
-    },
-
-    _mouseover: function(){
-        this.fireEvent('mouseover');
     }
 });

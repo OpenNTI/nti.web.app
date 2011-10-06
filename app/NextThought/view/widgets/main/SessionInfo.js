@@ -60,14 +60,26 @@ Ext.define('NextThought.view.widgets.main.SessionInfo', {
         var me = this;
         me.callParent(arguments);
         me.userUpdated(_AppConfig.userObject);
-        me._menu = Ext.create('Ext.menu.Menu', {items: me._buildMenu()});
-        me._menu.on('mouseleave', me._hideMenu, me);
-
-        me._identity.on('mouseover', me._mouseOverUsername, me);
         me._notifier.el.on('click', me._notifications, me);
 
+        me._menu = Ext.create('Ext.menu.Menu', {items: me._buildMenu()});
+
+        me._menu.on({
+            mouseleave: me._hideMenu,
+            mouseover: me._showMenu,
+            scope: me
+        });
+
+        me._identity.el.on({
+            mouseleave: me._hideMenu,
+            mousemove: me._showMenu,
+            mouseover: me._showMenu,
+            click: me._showMenu,
+            scope: me
+        });
+
         NextThought.controller.Stream.registerChangeListener(me.onNotification, me);
-        me._mouseOverUsername();
+        me._showMenu();
         me._hideMenu();
     },
 
@@ -95,10 +107,10 @@ Ext.define('NextThought.view.widgets.main.SessionInfo', {
 
     _hideMenu: function(){
         var m = this._menu;
-        this._hideMenuTimout = setTimeout(function(){m.hide()},10);
+        this._hideMenuTimout = setTimeout(function(){m.hide()},100);
     },
 
-    _mouseOverUsername: function(){
+    _showMenu: function(){
         clearTimeout(this._hideMenuTimout);
         this._menu.showBy(this._identity.el, 'tr-br?');
     },
