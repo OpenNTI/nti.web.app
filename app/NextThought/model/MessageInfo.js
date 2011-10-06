@@ -2,7 +2,8 @@ Ext.define('NextThought.model.MessageInfo', {
     extend: 'NextThought.model.Base',
     idProperty: 'ID',
     fields: [
-        { name: 'ID', type: 'string'},
+        { name: 'ID', type: 'string' },
+        { name: 'OID', type: 'string' },
         { name: 'Class', type: 'string', defaultValue: 'MessageInfo'},
         { name: 'Creator', type: 'string' },
         { name: 'inReplyTo', type: 'string' },

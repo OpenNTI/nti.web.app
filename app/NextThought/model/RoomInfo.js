@@ -6,6 +6,8 @@ Ext.define('NextThought.model.RoomInfo', {
     idProperty: 'ID',
     fields: [
         { name: 'ID', type: 'string' },
+        { name: 'OID', type: 'string' },
+        { name: 'ContainerID', type: 'string' },
         { name: 'Active', type: 'bool' },
         { name: 'Class', type: 'string', defaultValue: 'RoomInfo' },
         { name: 'MessageCount', type: 'int' },
@@ -17,6 +19,6 @@ Ext.define('NextThought.model.RoomInfo', {
     },
 
     getKey: function() {
-        
+                            //????
     }
 });
