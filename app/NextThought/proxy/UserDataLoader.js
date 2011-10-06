@@ -96,7 +96,13 @@ Ext.define('NextThought.proxy.UserDataLoader',{
             if(!this._friendsListsStore) {
                 this._friendsListsStore = Ext.create('Ext.data.Store', {
                     model: 'NextThought.model.FriendsList',
-                    autoLoad: true
+                    autoLoad: true,
+                    sorters: [
+                        {
+                            property : 'realname',
+                            direction: 'ASC'
+                        }
+                    ]
                 });
             }
 

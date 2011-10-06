@@ -1,0 +1,26 @@
+
+.filter-controls {}
+
+.filter-controls .no-filter .x-form-item-body,
+.filter-controls .user-filter .x-form-item-body,
+.filter-controls .type-filter .x-form-item-body,
+.filter-controls .user-group .x-form-item-body,
+.filter-controls .system-group .x-form-item-body {
+    padding-left: 20px;
+    background: url("../images/filters/all.png") no-repeat left center;
+}
+
+.filter-controls .type-filter .x-form-item-body{
+    background: url("../images/filters/unkown.png") no-repeat left center;
+}
+.filter-controls .user-filter .x-form-item-body{
+    background: url("../images/user_silhouette.gif") no-repeat left center;
+}
+
+.filter-controls .user-group .x-form-item-body{
+    background: url("../images/filters/fav.png") no-repeat left center;
+}
+
+.filter-controls .system-group .x-form-item-body {
+    background: url("../images/filters/public.png") no-repeat left center;
+}

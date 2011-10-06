@@ -9,7 +9,7 @@ Ext.define('NextThought.view.widgets.FilterControlPanel', {
 
 	width: MIN_SIDE_WIDTH,
 	border: false,
-    items: [{xtype: 'form', border: false, defaults:{border:false}}],
+    items: [{xtype: 'form', cls: 'filter-controls', border: false, defaults:{border:false}}],
 
 	constructor: function(){
 		this.addEvents('filter-changed','filter-control-loaded');
@@ -19,7 +19,8 @@ Ext.define('NextThought.view.widgets.FilterControlPanel', {
 	initComponent: function(){
    		this.callParent(arguments);
    		this.setWidth(MIN_SIDE_WIDTH);
-        UserDataLoader.getFriendsListsStore().on('load', this.reload, this);
+        this.store = UserDataLoader.getFriendsListsStore();
+        this.store.on('load', this.reload, this);
 	},
 	
 	reload: function(store, groups, success, ops){
@@ -27,7 +28,7 @@ Ext.define('NextThought.view.widgets.FilterControlPanel', {
 	},
 	
 	
-	addGroups : function(groups){
+	addGroups : function(){
         var form = this.items.get(0);
         form.removeAll();
 
@@ -36,25 +37,27 @@ Ext.define('NextThought.view.widgets.FilterControlPanel', {
         form.add({
             border: false,
             boxLabel: 'All',
-            cls: 'x-all-filter-btn',
+            cls: 'no-filter',
             name: 'allgroupsbutton',
             xtype: 'checkbox'
         });
 
 		form.add({
             border: false,
-			cls: 'user-group',
+			cls: 'user-filter',
 			usergroup: true,
 			xtype:'checkboxfield',
 			boxLabel: 'Me',
 			isMe: true
 		});
 
-		Ext.each(groups,
+        this.store.each(
 			function(v){
+                var hasAt = /@/.test(v.get('Username'));
+
 				form.add({
                     border: false,
-					cls: 'user-group',
+					cls: hasAt? 'user-group' : 'system-group',
 					usergroup: true,
 					xtype:'checkboxfield',
 					boxLabel: v.get('realname'),	
@@ -68,14 +71,14 @@ Ext.define('NextThought.view.widgets.FilterControlPanel', {
 		
 		form.add({
             border: false,
-			cls: 'x-all-filter-btn',
+			cls: 'no-filter',
 			name: 'alltypesbutton',
 			xtype: 'checkboxfield',
 			boxLabel: 'All'
 		});
 		
-		form.add({ xtype:'checkbox', boxLabel: 'Highlights', model: 'NextThought.view.widgets.annotations.Highlight' });
-		form.add({ xtype:'checkbox', boxLabel: 'Notes', model: 'NextThought.view.widgets.annotations.Note' });
+		form.add({ xtype:'checkbox', cls: 'type-filter', boxLabel: 'Highlights', model: 'NextThought.view.widgets.annotations.Highlight' });
+		form.add({ xtype:'checkbox', cls: 'type-filter', boxLabel: 'Notes', model: 'NextThought.view.widgets.annotations.Note' });
 
 		this.fireEvent('filter-control-loaded',this.getId());
         this.doComponentLayout();
