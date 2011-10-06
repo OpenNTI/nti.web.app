@@ -14,6 +14,9 @@ Ext.define('NextThought.view.content.Reader', {
 
     _tracker: null,
 
+    //used to bust caches between sessions
+    instantiation_time: Ext.Date.now(),
+
     initComponent: function(){
         this.addEvents('publish-contributors','location-changed');
         this.callParent(arguments);
@@ -173,8 +176,8 @@ Ext.define('NextThought.view.content.Reader', {
 
         css = head.match(css);
         meta = head.match(meta);
-
-        css = css?css.join(''):'';
+        //cache bust css
+        css = css?css.join('').replace(/\.css/gi, '.css?dc='+this.instantiation_time):'';
         meta = meta?meta.join(''):'';
 
         meta = meta.replace(/<meta[^<]+?viewport.+?\/>/ig,'');
