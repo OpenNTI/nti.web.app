@@ -104,7 +104,7 @@ Ext.define('NextThought.controller.Annotations', {
 
 		if(!btn.isCancel){
 			win.el.mask('Saving...');
-			win.record.set('text',cmp.getValue());
+			win.record.set('text',cmp.getValue().replace(/\u200b/g,''));
 			win.record.save({
 				scope: this,
 				success:function(newRecord,operation){
