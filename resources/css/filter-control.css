@@ -6,8 +6,11 @@
 .filter-controls .type-filter .x-form-item-body,
 .filter-controls .user-group .x-form-item-body,
 .filter-controls .system-group .x-form-item-body {
-    padding-left: 20px;
-    background: url("../images/filters/all.png") no-repeat left center;
+    padding-left: 22px;
+    padding-top: 1px;
+    height: 17px;
+    /*background: url("../images/filters/all.png") no-repeat left center;*/
+    background: url("../images/filters/WhoIcons.png") no-repeat 1px 1px;
 }
 
 .filter-controls .type-filter .x-form-item-body{
@@ -22,13 +25,13 @@
 
 
 .filter-controls .user-filter .x-form-item-body{
-    background: url("../images/user_silhouette.gif") no-repeat left center;
+    background: url("../images/filters/WhoIcons.png") no-repeat 1px -17px;
 }
 
 .filter-controls .user-group .x-form-item-body{
-    background: url("../images/filters/fav.png") no-repeat left center;
+    background: url("../images/filters/WhoIcons.png") no-repeat 1px -35px;
 }
 
 .filter-controls .system-group .x-form-item-body {
-    background: url("../images/filters/public.png") no-repeat left center;
+    background: url("../images/filters/WhoIcons.png") no-repeat 1px -53px;
 }
