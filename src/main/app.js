@@ -2,7 +2,7 @@ document.write('<script	src="'+_AppConfig.server.host+'/socket.io/static/socket.
 
 Ext.application({
     name: 'NextThought',
-    appFolder: 'app/NextThought',
+    appFolder: 'src/main/NextThought',
 
     controllers: [
         'State',

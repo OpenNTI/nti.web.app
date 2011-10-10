@@ -25,7 +25,7 @@ var io = {
 
 Ext.application({
     name: 'NextThought',
-    appFolder: 'app/NextThought',
+    appFolder: 'src/main/NextThought',
 
     controllers: [
         'State',
