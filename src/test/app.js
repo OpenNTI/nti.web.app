@@ -69,7 +69,7 @@ function hookAjax()
     Ext.Ajax.request_forReal = Ext.Ajax.request;
     Ext.Ajax.request = function test_ajax(o){
         if(/^test:/i.test(o.url)){
-            o.url = o.url.replace(/^test:/i, './app-test/mock');
+            o.url = o.url.replace(/^test:/i, './src/test/mock');
         }
         this.request_forReal.apply(this, arguments);
     };
