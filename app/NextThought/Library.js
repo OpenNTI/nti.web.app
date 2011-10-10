@@ -213,14 +213,29 @@ Ext.define('NextThought.Library', {
     },
 
     _resolveBookLocation: function(book, containerId) {
-        var q='[ntiid='+containerId+']',
-            query = 'toc' + q + ',topic' + q,
-            l = Ext.DomQuery.selectNode(query, this.getToc(book.get('index')));
-        if (l)
-            return {book:book, location:l};
+        var toc = this.getToc( book.get( 'index' ) );
+        if( toc.documentElement.getAttribute( 'ntiid' ) == containerId ) {
+            return {book:book, location:toc};
+        }
+        return this._recursiveResolveBookLocation( book, containerId, toc );
+    },
 
+    _recursiveResolveBookLocation: function( book, containerId, elt ) {
+        var elts = elt.getElementsByTagName( 'topic' );
+        for( var ix = 0; ix < elts.length; ix++ ) {
+            var child = elts.item(ix);
+            if( !child ) { continue; }
+            if( child.getAttribute( 'ntiid' ) == containerId ) {
+                return {book: book, location: child };
+            }
+            var cr = this._recursiveResolveBookLocation( book, containerId, child );
+            if( cr ) {
+                return cr;
+            }
+        }
         return null;
     }
+
 },
 function(){
     /** @Deprecated */

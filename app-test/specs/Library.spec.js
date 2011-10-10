@@ -92,4 +92,11 @@ describe('Library Store', function(){
 
     });
 
+
+    it('can handle Structured NTI IDs', function(){
+        var n = Library.findLocation('tag:nextthought.com,2011-07-14:AOPS-HTML-prealgebra-69');
+
+        expect(n).toBeTruthy();
+    });
+
 });
