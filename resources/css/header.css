@@ -79,7 +79,8 @@
     background-image: url('../images/sign-in.gif');
 }
 .settings-gear{
-    background-image: url('../images/gear-18.png');
+    background-image: url('../images/gear.png');
+    background-size: 24px 24px;
 }
 
 .x-application-mode-pane .x-focus-pane {
