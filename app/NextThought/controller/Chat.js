@@ -125,6 +125,7 @@ Ext.define('NextThought.controller.Chat', {
         if (channel) m.channel = channel;
         if (recipients) m.recipients = recipients;
 
+        console.log('posting message', m);
         Socket.emit('chat_postMessage', m);
     },
 
@@ -329,6 +330,7 @@ Ext.define('NextThought.controller.Chat', {
     },
 
     onMessage: function(msg) {
+        console.log('message : ', msg);
         var win = this.getChatWindow();
         if(win)win.onMessage(ParseUtils.parseItems([msg])[0],{});
     },
