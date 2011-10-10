@@ -86,7 +86,7 @@ Ext.define('NextThought.view.widgets.chat.Log', {
 
         Ext.each(this.query(this.entryType), function(f){
             if(f.getValue()){
-                a.push(f.message.getId());
+                a.push(f.message.get('ID'));
             }
         },this);
 
@@ -100,8 +100,14 @@ Ext.define('NextThought.view.widgets.chat.Log', {
     },
 
     removeMessage: function(msg) {
-        var m = this.down(this.getMessageQuery(msg.getId()));
-        if (m) this.remove(m);
+        var c,m = this.down(this.getMessageQuery(msg.getId()));
+        if (m) {
+            c = m.ownerCt;
+            c.remove(m);
+            console.log('c=', c);
+            if(c.xtype != 'chat-log-view' && c.items.getCount() == 0) c.destroy();
+        }
+
     },
 
     addMessage: function(msg) {

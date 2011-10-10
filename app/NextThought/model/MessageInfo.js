@@ -1,6 +1,6 @@
 Ext.define('NextThought.model.MessageInfo', {
     extend: 'NextThought.model.Base',
-    idProperty: 'ID',
+    idProperty: 'OID',
     fields: [
         { name: 'ID', type: 'string' },
         { name: 'OID', type: 'string' },

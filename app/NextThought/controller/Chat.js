@@ -222,7 +222,7 @@ Ext.define('NextThought.controller.Chat', {
     flagMessagesTo: function(user, dropData){
         var u = [], m = [];
         u.push(user.getId());
-        m.push(dropData.data.ID);
+        m.push(dropData.data.OID);
         Socket.emit('chat_flagMessagesToUsers', m, u);
     },
 

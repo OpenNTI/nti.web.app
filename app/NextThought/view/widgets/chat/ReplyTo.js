@@ -48,6 +48,7 @@ Ext.define('NextThought.view.widgets.chat.ReplyTo', {
     },
 
     setChannel: function(channel, recipients){
+        console.log(arguments);
         this.channel = channel? channel : undefined;
         this.recipients = recipients? recipients : undefined;
     },
