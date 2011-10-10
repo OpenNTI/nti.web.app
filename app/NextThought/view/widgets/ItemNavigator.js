@@ -106,7 +106,7 @@ Ext.define('NextThought.view.widgets.ItemNavigator', {
                     //xtype    : 'gridcolumn',
                     xtype    : 'templatecolumn',
                     dataIndex: 'ContainerId',
-                    tpl      : '{[NextThought.librarySource.findLocationTitle(values.ContainerId)]}'
+                    tpl      : '{[Library.findLocationTitle(values.ContainerId)]}'
                 },
                 {
                     text     : 'Last Modified',

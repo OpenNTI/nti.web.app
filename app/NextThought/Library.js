@@ -238,10 +238,6 @@ Ext.define('NextThought.Library', {
 
 },
 function(){
-    /** @Deprecated */
-    window.NextThought.librarySource = NextThought.Library;
-
-    //preferred:
     window.Library = NextThought.Library;
 }
 );

@@ -17,8 +17,7 @@ Ext.define('NextThought.view.navigation.Breadcrumb', {
     initComponent: function(){
    		this.callParent(arguments);
         this.add({ text: 'Loading...' });
-        this._library = NextThought.librarySource;
-        this._library.on('loaded',function(){ if(!this._current.location) this.reset(); }, this);
+        Library.on('loaded',function(){ if(!this._current.location) this.reset(); }, this);
     },
 
 	reset: function(book){
@@ -43,7 +42,7 @@ Ext.define('NextThought.view.navigation.Breadcrumb', {
 			return {};
 		}
 		
-		var xml = this._library.getToc(b.get('index')),
+		var xml = Library.getToc(b.get('index')),
 			q = "topic[href^="+this._current.location.replace('.','\\.')+"]",
 			l = Ext.DomQuery.selectNode(q,xml);
 		return {
@@ -125,7 +124,7 @@ Ext.define('NextThought.view.navigation.Breadcrumb', {
 
         //add prev and next buttons
         if (location) {
-            var navInfo = this._library.getNavigationInfo(location.getAttribute('ntiid')) || {};
+            var navInfo = Library.getNavigationInfo(location.getAttribute('ntiid')) || {};
             container.add(
                 '->',
                 {iconCls: 'breadcrumb-prev', disabled: !navInfo.hasPrevious, location: navInfo.previousHref, book: navInfo.book},
@@ -140,8 +139,8 @@ Ext.define('NextThought.view.navigation.Breadcrumb', {
 	_getLibraryMenu: function(book){
 		var list = [];
 		
-		this._library.each(function(o){
-			var xml = this._library.getToc(o.get('index')),
+		Library.each(function(o){
+			var xml = Library.getToc(o.get('index')),
 				b	= [],
                 h   = o.get('href'),
 				m	= {

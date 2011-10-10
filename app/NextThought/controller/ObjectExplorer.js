@@ -51,7 +51,7 @@ Ext.define('NextThought.controller.ObjectExplorer', {
 
     itemNavigatorItemActivated: function(control, record, dom, index) {
         var containerId = record.get('ContainerId'),
-            bookInfo = NextThought.librarySource.findLocation(containerId),
+            bookInfo = Library.findLocation(containerId),
             book = bookInfo.book,
             href = bookInfo.location.getAttribute('href');
 

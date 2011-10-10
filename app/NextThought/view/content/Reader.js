@@ -244,7 +244,7 @@ Ext.define('NextThought.view.content.Reader', {
             return;
         }
 
-        var b = NextThought.librarySource.getTitle(state.reader.index);
+        var b = Library.getTitle(state.reader.index);
         if(b){
             this.setActive(b, state.reader.page, true);
         }

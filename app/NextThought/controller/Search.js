@@ -49,7 +49,7 @@ Ext.define('NextThought.controller.Search', {
         var oid = hit.get('TargetOID'),
             target = oid ? (hit.get('Type').toLowerCase() + '-' + oid) : null,
             containerId = hit.get('ContainerId'),
-            bookInfo = NextThought.librarySource.findLocation(containerId),
+            bookInfo = Library.findLocation(containerId),
             book = bookInfo.book,
             href = bookInfo.location.getAttribute('href');
         this.getViewport().fireEvent('navigate', book, book.get('root') + href, {text: searchValue, oid: oid});
