@@ -29,14 +29,67 @@ Ext.define('NextThought.view.widgets.chat.FriendEntry', {
         this.renderData['cls'] = this.cls || '';
     },
 
+    render: function() {
+        this.callParent(arguments);
+
+
+    },
+
     afterRender: function() {
         var me = this;
         me.callParent(arguments);
         me.initializeDropZone(me);
         me.box.on('click', function(){
             //if(!/offline/i.test(me.user.get('Presence')))
-                me.fireEvent('click', me.user);
+            //me.fireEvent('click', me.user);
         });
+
+        this._setupMenu();
+    },
+
+    _setupMenu: function() {
+        //Only do this the entry is not me
+        if (_AppConfig.userObject.getId() == this.user.getId()) return;
+
+        this._menu = Ext.create('Ext.menu.Menu', {items: this._buildMenu()});
+
+        this._menu.on({
+            mouseleave: this._hideMenu,
+            mouseover: this._showMenu,
+            scope: this
+        });
+
+        this.el.on({
+            mouseleave: this._hideMenu,
+            mousemove: this._showMenu,
+            mouseover: this._showMenu,
+            click: this._showMenu,
+            scope: this
+        });
+    },
+
+    _buildMenu: function(){
+        return [
+            {
+                text: 'Shadow',
+                iconCls: 'shadow-menu',
+                scope: this,
+                handler: this._shadow
+            },{
+                text: 'Chat',
+                iconCls: 'chat-menu',
+                scope: this,
+                handler: this._chat
+            }
+        ];
+    },
+
+    _chat: function(){
+        this.fireEvent('click', this.user);
+    },
+
+    _shadow: function(){
+        this.fireEvent('shadow', this.roomId, this.user);
     },
 
     update: function(user){
@@ -56,6 +109,16 @@ Ext.define('NextThought.view.widgets.chat.FriendEntry', {
         }
 
         user.on('changed', this.update, this);
+    },
+
+    _hideMenu: function(){
+        var m = this._menu;
+        this._hideMenuTimout = setTimeout(function(){m.hide()},100);
+    },
+
+    _showMenu: function(){
+        clearTimeout(this._hideMenuTimout);
+        this._menu.showBy(this.el, 'tr-br?');
     },
 
     initializeDropZone: function(v) {

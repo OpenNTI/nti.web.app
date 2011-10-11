@@ -75,6 +75,10 @@ Ext.define('NextThought.view.widgets.chat.LogEntry', {
                 me.fillInUser(u);
             });
         }
+
+        //apply shadow class if necessary:
+        me.addCls(/shadow/i.test(m.get('Status')) ? 'shadow' : '');
+        me.addCls(m.getId() ? '' : ' nooid');
     },
 
     afterRender: function(){
@@ -95,11 +99,11 @@ Ext.define('NextThought.view.widgets.chat.LogEntry', {
     },
 
     fillInUser: function(u) {
+        console.log('fillinf in user', u);
         var name = u.get('alias') || u.get('Username'),
             i = u.get('avatarURL');
 
         if(this.rendered){
-            console.log('rendered');
             this.icon.set({src: i});
             this.name.update(name);
         }
@@ -107,6 +111,7 @@ Ext.define('NextThought.view.widgets.chat.LogEntry', {
             this.renderData['name'] = name;
             this.renderData['icon'] = i;
         }
+
     },
 
     initializeDragZone: function(v) {

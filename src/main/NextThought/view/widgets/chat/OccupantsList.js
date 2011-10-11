@@ -28,7 +28,7 @@ Ext.define('NextThought.view.widgets.chat.OccupantsList', {
         me.callParent(arguments);
     },
 
-    setOccupants: function(a) {
+    setOccupants: function(a, rid) {
         var me = this,
             total = a.length,
             numberOccupants = 0;
@@ -46,7 +46,8 @@ Ext.define('NextThought.view.widgets.chat.OccupantsList', {
                         me.add({
                             xtype: 'chat-friend-entry',
                             user: u,
-                            userId: u.getId()
+                            userId: u.getId(),
+                            roomId: rid
                         });
                     }
 

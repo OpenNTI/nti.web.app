@@ -43,6 +43,23 @@
     color: black;
 }
 
+.shadow-menu{
+    background-image: url('../images/shadow-user-16.png');
+}
+.chat-menu{
+    background-image: url('../images/speachbubble.png');
+}
+
+.shadowed .x-chat-log-entry.selected,
+.shadowed .x-chat-log-entry:hover {
+    background-color: #cecece !important;
+}
+
+.shadowed .x-chat-log-entry {
+    background-color: #f2eeee;
+    color: black;
+}
+
 .x-chat-log-entry span.reply {
     position: absolute;
     display: none;

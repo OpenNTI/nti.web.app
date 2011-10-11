@@ -39,9 +39,7 @@ Ext.define('NextThought.controller.Chat', {
             'chat_recvMessage': function(){me.onMessage.apply(me, arguments)},
             'chat_recvMessageForAttention' : function(){me.onMessageForAttention.apply(me, arguments);},
             'chat_recvMessageForModeration' : function(){me.onModeratedMessage.apply(me, arguments);},
-            'chat_recvMessageForShadow' : function(){
-                console.log('!!!got a message to shadow', arguments);
-                me.onMessage.apply(me, arguments);
+            'chat_recvMessageForShadow' : function(){me.onMessage.apply(me, arguments);
             }
         });
 
@@ -70,6 +68,7 @@ Ext.define('NextThought.controller.Chat', {
 
             'chat-friend-entry' : {
                 click : this.friendEntryClicked,
+                'shadow' : this.shadowClicked,
                 'messages-dropped' : this.flagMessagesTo
             },
 
@@ -125,7 +124,6 @@ Ext.define('NextThought.controller.Chat', {
         if (channel) m.channel = channel;
         if (recipients) m.recipients = recipients;
 
-        console.log('posting message', m);
         Socket.emit('chat_postMessage', m);
     },
 
@@ -235,6 +233,12 @@ Ext.define('NextThought.controller.Chat', {
         this.enterRoom(u);
     },
 
+    shadowClicked: function(r,user) {
+        var u = [];
+        u.push(user.getId());
+        Socket.emit('chat_shadowUsers',r, u);
+     },
+
     groupEntryClicked: function(group){
         this.enterRoom(group.get('friends'));
     },
@@ -330,7 +334,6 @@ Ext.define('NextThought.controller.Chat', {
     },
 
     onMessage: function(msg) {
-        console.log('message : ', msg);
         var win = this.getChatWindow();
         if(win)win.onMessage(ParseUtils.parseItems([msg])[0],{});
     },

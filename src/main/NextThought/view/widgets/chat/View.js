@@ -59,7 +59,7 @@ Ext.define('NextThought.view.widgets.chat.View', {
         this.roomInfo = ri;
         this.roomInfo.on('changed', this.changed, this);
         this.roomInfo.on('left-room', this.left, this);
-        this.down('chat-occupants-list').setOccupants(this.roomInfo.get('Occupants'));
+        this.down('chat-occupants-list').setOccupants(this.roomInfo.get('Occupants'), this.roomId);
     },
 
     left: function() {

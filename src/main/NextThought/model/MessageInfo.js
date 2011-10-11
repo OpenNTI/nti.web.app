@@ -7,6 +7,7 @@ Ext.define('NextThought.model.MessageInfo', {
         { name: 'Class', type: 'string', defaultValue: 'MessageInfo'},
         { name: 'Creator', type: 'string' },
         { name: 'inReplyTo', type: 'string' },
+        { name: 'Status', type: 'string' },
         { name: 'Body', type: 'string', defaultValue: '' },
         { name: 'channel', type: 'string' },
         { name: 'ContainerId', type: 'string' },

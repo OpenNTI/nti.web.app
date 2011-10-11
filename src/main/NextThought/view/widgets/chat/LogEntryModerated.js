@@ -99,6 +99,10 @@ Ext.define('NextThought.view.widgets.chat.LogEntryModerated', {
                 me.fillInUser(u);
             });
         }
+
+        //apply shadow class if necessary:
+        me.addCls(/shadow/i.test(m.get('Status')) ? 'shadow' : '');
+        me.addCls(m.getId() ? '' : ' nooid');
     },
 
     afterRender: function() {

@@ -113,8 +113,11 @@ Ext.define('NextThought.view.widgets.chat.Log', {
     addMessage: function(msg) {
         var id = msg.getId(),
             rid = msg.get('inReplyTo'),
-            m = this.down(this.getMessageQuery(id));
-    
+            m = id ? this.down(this.getMessageQuery(id)) : null,
+            mStat = msg.get('Status');
+
+        if (!id) console.log('WARNING: This message has no OID, cannot be targeted!', msg);
+
         if (m){
             m.update(msg);
             return;
@@ -133,6 +136,11 @@ Ext.define('NextThought.view.widgets.chat.Log', {
                     messageId: rid
                 });
             }
+        }
+
+        if (mStat == 'st_SHADOWED') {
+            //this is a shadowed message, make sure to add a class to it
+            m.addCls('shadowed');
         }
 
         //we are going to add then scroll to
