@@ -68,7 +68,8 @@ Ext.define('NextThought.view.widgets.chat.Friends', {
                     item = groupPanel.add({
                         xtype: 'chat-friend-entry',
                         user: friend,
-                        userId: uid
+                        userId: uid,
+                        noMenu: true
                     });
                 }
 
