@@ -25,7 +25,7 @@ function waitFor(testFx, onReady, timeOutMillis) {
                     phantom.exit(1);
                 } else {
                     // Condition fulfilled (timeout and/or condition is 'true')
-                    console.log("'waitFor()' finished in " + (new Date().getTime() - start) + "ms.");
+                    //console.log("'waitFor()' finished in " + (new Date().getTime() - start) + "ms.");
                     typeof(onReady) === "string" ? eval(onReady) : onReady(); //< Do what it's supposed to do once the condition is fulfilled
                     clearInterval(interval); //< Stop this interval
                 }
@@ -55,27 +55,45 @@ if(page){
             waitFor(
                 function(){//waiting for this to return true
                     return page.evaluate(function(){
-                        return !!document.body.querySelector('.finished-at');
+						var runner = document.body.querySelector('.runner');
+						if(!runner){
+							return !!runner;
+						}
+                        return !!runner.querySelector('.description');
                     });
                 },
                 function(){
                     page.evaluate( function() {
-                        console.log('Finished: '+document.body.querySelector('.description').innerText);
-                        var list = document.body.querySelectorAll('div.jasmine_reporter > div.suite.failed');
-                        for (i = 0; i < list.length; ++i) {
-                            var el = list[i];
-                            console.log('');
-                            console.log(el.querySelector('.description').innerText+ " FAILED");
+						var suites = document.body.querySelectorAll('.suite');
 
-                            var specs = el.querySelectorAll('.spec.failed');
-                            for (j = 0; j < specs.length; ++j) {
-                                var spec = specs[j],
-                                    trace = spec.querySelector('.stackTrace');
-                                console.log('\t'+spec.querySelector('.description').innerText+ " FAILED");
-                                console.log('\t-> Message: '+spec.querySelector('.resultMessage.fail').innerText);
-                                console.log('\t-> Stack: '+(trace!=null ? trace.innerText : 'not supported by phantomJS yet'));
-                            }
-                        }
+						for (var i = 0; i < suites.length; i++){
+							var suite = suites[i];
+
+							var suiteName = suite.querySelector('.description').innerText;
+							var passOrFail = suite.className.indexOf('passed') != -1 ? "Passed" : "Failed!";
+							console.log('Suite: '+suiteName+'\t'+passOrFail);
+							console.log('--------------------------------------------------------');
+							var specs = suite.querySelectorAll('.spec');
+							for (var j = 0; j < specs.length; j++){
+								var spec = specs[j];
+								var passed = spec.className.indexOf('passed') != -1;
+
+								var specName = spec.querySelector('.description').innerText;
+								var passOrFail = passed ? 'Passed' : "Failed!"
+								console.log('\t'+specName+'\t'+passOrFail);
+
+								if(!passed){
+									console.log('\t\t-> Message: '+spec.querySelector('.resultMessage.fail').innerText);
+									var trace = spec.querySelector('.stackTrace');
+									console.log('\t\t-> Stack: '+(trace!=null ? trace.innerText : 'not supported by phantomJS yet'));
+								}
+							}
+							console.log('');
+						}
+
+						var runner = document.body.querySelector('.runner');
+						console.log('--------------------------------------------------------');
+                        console.log('Finished: '+runner.querySelector('.description').innerText);
                     });
                     console.log('');
                     phantom.exit();
