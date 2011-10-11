@@ -6,7 +6,9 @@ Ext.define('NextThought.controller.Annotations', {
         'Note',
         'QuizQuestion',
         'QuizQuestionResponse',
-        'QuizResult'
+        'QuizResult',
+        'TranscriptSummary',
+        'Transcript'
     ],
 
 	views: [
@@ -84,7 +86,7 @@ Ext.define('NextThought.controller.Annotations', {
 	},
 
     onNoteAction: function(btn, event){
-    	var p = btn.up('notepanel');
+    	var p = btn.up('notepanel'),
     		r = p._owner,
     		e = btn.eventName,
             a = p._annotation,
@@ -146,7 +148,6 @@ Ext.define('NextThought.controller.Annotations', {
 
         //start the chat room in reply to this note
         Socket.emit('chat_enterRoom', {'Occupants': people, ContainerId: cId});
-
     },
 
     replyToNote: function(record){
