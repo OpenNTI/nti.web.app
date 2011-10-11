@@ -7,7 +7,7 @@ Ext.define('NextThought.model.RoomInfo', {
     fields: [
         { name: 'ID', type: 'string' },
         { name: 'OID', type: 'string' },
-        { name: 'ContainerID', type: 'string' },
+        { name: 'ContainerId', type: 'string' },
         { name: 'Active', type: 'bool' },
         { name: 'Class', type: 'string', defaultValue: 'RoomInfo' },
         { name: 'MessageCount', type: 'int' },

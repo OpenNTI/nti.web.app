@@ -58,6 +58,7 @@ Ext.define('NextThought.view.widgets.NotePanel',{
         }
 
         t.push('->',{ text : 'Reply', eventName: 'reply-to-note' });
+        t.push({ text : 'Chat', eventName: 'reply-as-chat' });
 
 		if(u && u.get('Username')==_AppConfig.server.username){
 			t.push(

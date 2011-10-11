@@ -99,7 +99,6 @@ Ext.define('NextThought.view.widgets.chat.LogEntry', {
     },
 
     fillInUser: function(u) {
-        console.log('fillinf in user', u);
         var name = u.get('alias') || u.get('Username'),
             i = u.get('avatarURL');
 

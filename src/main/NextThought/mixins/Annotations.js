@@ -234,7 +234,10 @@ Ext.define('NextThought.mixins.Annotations', {
         //sort bins
         for(var b in bins){
             if(bins.hasOwnProperty(b))
-            bins[b] = Ext.Array.sort(bins[b]||[],function(a,b){return a.get(k) < b.get(k);});
+            bins[b] = Ext.Array.sort(bins[b]||[],function(a,b){
+                if (!a.get || !b.get) return false;
+                return a.get(k) < b.get(k);
+            });
         }
 
         Ext.each(bins.Highlight,

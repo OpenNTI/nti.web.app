@@ -11,6 +11,7 @@ Ext.define('NextThought.controller.Annotations', {
 
 	views: [
         'Viewport',
+        'windows.ChatWindow',
         'widgets.annotations.Highlight',
 		'widgets.annotations.Note',
 		'windows.NoteEditor',
@@ -18,10 +19,8 @@ Ext.define('NextThought.controller.Annotations', {
     ],
 
     refs: [
-        {
-            ref: 'viewport',
-            selector: 'master-view'
-        }
+        {ref: 'viewport', selector: 'master-view'},
+        {ref: 'chatWindow', selector: 'chat-window'}
     ],
 
     init: function() {
@@ -29,6 +28,7 @@ Ext.define('NextThought.controller.Annotations', {
             'master-view':{
                 'create-note': this.addNote,
                 'reply-to-note': this.replyToNote,
+                'reply-as-chat': this.replyAsChat,
 				'edit-note': this.editNote,
 				'share-with': this.shareWith
     	 	},
@@ -135,6 +135,18 @@ Ext.define('NextThought.controller.Annotations', {
             this.getContext()._createNoteWidget(record);
 
         this.getContext().fireEvent('resize');
+    },
+
+    replyAsChat: function(record) {
+        var people = record.get('sharedWith'),
+            cId = record.get('ContainerId');
+
+        //open window or create a new one...
+        (this.getChatWindow() || Ext.create('widget.chat-window')).show();
+
+        //start the chat room in reply to this note
+        Socket.emit('chat_enterRoom', {'Occupants': people, ContainerId: cId});
+
     },
 
     replyToNote: function(record){
