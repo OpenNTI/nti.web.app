@@ -193,6 +193,12 @@ Ext.define('NextThought.proxy.UserDataLoader',{
             });
         },
 
+        /**
+         * Get the Transcript model for an id
+         *
+         * @param callback - method to call when we have data to return
+         * @param id - the RoomInfo id, see TranscriptSummary or RoomInfo
+         */
         getTranscript: function(callback, id) {
             var h = _AppConfig.server.host,
                 d = _AppConfig.server.data,
