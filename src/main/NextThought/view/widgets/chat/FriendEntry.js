@@ -39,10 +39,13 @@ Ext.define('NextThought.view.widgets.chat.FriendEntry', {
         var me = this;
         me.callParent(arguments);
         me.initializeDropZone(me);
-        me.box.on('click', function(){
-            //if(!/offline/i.test(me.user.get('Presence')))
-            //me.fireEvent('click', me.user);
-        });
+
+        if (this.noMenu) {
+            me.box.on('click', function(){
+                //if(!/offline/i.test(me.user.get('Presence')))
+                me.fireEvent('click', me.user);
+            });
+        }
 
         this._setupMenu();
     },
