@@ -1,20 +1,3 @@
-Ext.data.Types.QUIZ_RESPONSE_LIST = {
-    type: 'QuizResponseList',
-    convert: function(v) {
-        var u = [];
-
-        Ext.each(v, function(o){
-            u.push(ParseUtils.parseItems([o])[0]);
-        });
-
-        return u;
-    },
-    sortType: function(v) {
-        console.log('sort by QuizResponseList:',arguments);
-        return '';
-    }
-};
-
 Ext.define('NextThought.model.QuizResult', {
     extend: 'NextThought.model.Base',
     requires: [
@@ -30,7 +13,7 @@ Ext.define('NextThought.model.QuizResult', {
         { name: 'ContainerId', type: 'string' },
         { name: 'Last Modified', type: 'date', dateFormat: 'timestamp' },
         { name: 'Creator', type: 'string' },
-        { name: 'Items', type: Ext.data.Types.QUIZ_RESPONSE_LIST }
+        { name: 'Items', type: 'arrayItem' }
     ],
     proxy: {
         type: 'nti',

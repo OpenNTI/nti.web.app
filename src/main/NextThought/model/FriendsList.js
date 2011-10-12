@@ -1,37 +1,3 @@
-
-Ext.data.Types.USER_LIST = {
-	type: 'UserList',
-    convert: function(v) {
-        var a = arguments,
-            u = [];
-
-        if(v) Ext.each(v, function(o){
-            var p =
-                typeof(o)=='string'
-                    ? o
-                    : o.get
-                        ? o.get('Username')
-                        : o.Username
-                            ? o.Username
-                            : null;
-            if(!p)
-                console.log("WARNING: Could not handle Object: ", o, a);
-            else  {
-                u.push(p);
-                //asynchronously resolve this user so its cached and ready
-                UserRepository.prefetchUser(p);
-            }
-        });
-
-        return u;
-    },
-    sortType: function(v) {
-    	console.log('sort by UserList:',arguments);
-        return '';
-    }
-};
-
-
 Ext.define('NextThought.model.FriendsList', {
     extend: 'NextThought.model.Base',
     requires: [
@@ -49,7 +15,7 @@ Ext.define('NextThought.model.FriendsList', {
         { name: 'realname', type: 'string' },
         { name: 'avatarURL', type: 'string' },
         { name: 'ContainerId', type: 'string'},
-        { name: 'friends', type: Ext.data.Types.USER_LIST }
+        { name: 'friends', type: 'UserList' }
     ],
     proxy: {
     	type: 'nti',

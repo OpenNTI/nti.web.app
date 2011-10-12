@@ -149,7 +149,6 @@ Ext.define('NextThought.proxy.UserDataLoader',{
             return this._streamStore;
         },
 
-
         getPageItems: function(pageId, callbacks){
             return this.getItems(callbacks, '/Pages/'+pageId+'/UserGeneratedData');
         },
@@ -191,50 +190,6 @@ Ext.define('NextThought.proxy.UserDataLoader',{
                     }
                 }
             });
-        },
-
-        /**
-         * Get the Transcript model for an id
-         *
-         * @param callback - method to call when we have data to return
-         * @param id - the RoomInfo id, see TranscriptSummary or RoomInfo
-         */
-        getTranscript: function(callback, id) {
-            var h = _AppConfig.server.host,
-                d = _AppConfig.server.data,
-                u = _AppConfig.server.username,
-                //id = summary.get('RoomInfo').getId();
-                url = h+d+'users/' +u+ '/Transcripts/'+id;
-
-            if(this._getTranscript){
-                Ext.Ajax.abort(this._getTranscript);
-            }
-
-            this._getTranscript = Ext.Ajax.request({
-                url: url,
-                scope: this,
-                async: !!callback,
-                callback: function(o,success,r){
-                    this._getTranscript = null;
-                    if(!success){
-                        console.log('There was an error searching for user generated data', arguments);
-                        if (callback) callback();
-                        return;
-                    }
-
-                    var json = Ext.decode(r.responseText),
-                        m = ParseUtils.parseItems(json.Messages),
-                        ri = ParseUtils.parseItems([json.RoomInfo])[0];
-
-                    json.Messages = m;
-                    json.RoomInfo = ri;
-                    var t = ParseUtils.parseItems([json])[0];
-
-                    if(!callback)return;
-                    callback(t);
-                }
-            });
         }
-
     }
 });

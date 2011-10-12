@@ -1,9 +1,7 @@
 Ext.define(	'NextThought.model.User', {
     extend: 'NextThought.model.Base',
     requires: [
-    		'NextThought.proxy.Rest',
-    		'NextThought.proxy.UserSearch',
-            'NextThought.model.FriendsList'
+    		'NextThought.proxy.Rest'
 	],
     idProperty: 'Username',
 
@@ -19,10 +17,10 @@ Ext.define(	'NextThought.model.User', {
         { name: 'alias', type: 'string' },
         { name: 'realname', type: 'string' },
         { name: 'avatarURL', type: 'string' },
-        { name: 'accepting', type: Ext.data.Types.USER_LIST },
-        { name: 'ignoring', type: Ext.data.Types.USER_LIST },
-        { name: 'following', type: Ext.data.Types.USER_LIST },
-        { name: 'Communities', type: Ext.data.Types.USER_LIST }
+        { name: 'accepting', type: 'UserList' },
+        { name: 'ignoring', type: 'UserList' },
+        { name: 'following', type: 'UserList' },
+        { name: 'Communities', type: 'UserList' }
     ],
     proxy: {
     	type: 'nti',

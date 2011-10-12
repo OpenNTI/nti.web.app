@@ -11,6 +11,12 @@ Ext.define('NextThought.model.Community', {
         { name: 'realname', type: 'string' },
         { name: 'avatarURL', type: 'string' }
     ],
+    
+    constructor: function() {
+        this.callParent(arguments);
+        UserRepository.updateUser(this);
+    },
+
     getModelName: function() {
         return 'Community';
     }

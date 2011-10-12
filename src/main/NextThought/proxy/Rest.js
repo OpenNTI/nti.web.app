@@ -3,14 +3,15 @@ Ext.define('NextThought.proxy.Rest', {
     alias: 'proxy.nti',
     requires: ['NextThought.proxy.reader.Json',
                'NextThought.proxy.writer.Json'],
-	
-	url: '',
-    appendId: true, //default
-    reader: {type: 'nti'},
-    writer: {type: 'nti'},
+
+
 
     constructor: function(config) {
-    	Ext.copyTo(this.reader, config, 'model');
+        this.url = '';
+        this.appendId = true,
+        this.reader = {type: 'nti'};
+        this.writer = {type: 'nti'};
+        Ext.copyTo(this.reader, config, 'model');
     	this.callParent(arguments);
         this.on('exception', this._exception, this);
     },
@@ -24,7 +25,7 @@ Ext.define('NextThought.proxy.Rest', {
 
     buildUrl: function(request) {
         var me = this,
-            appendId  = me.appendId,
+            appendId = me.appentId,
             action = request.operation.action;
 
         if (action!='update' && action!='destroy')
@@ -61,6 +62,12 @@ Ext.define('NextThought.proxy.Rest', {
             url += containerId;
         }
 
+        if (appendId && id) {
+            if (!url.match(/\/$/)) {
+                url += '/';
+            }
+            url += id;
+        }
         
         request.url = url;
 
@@ -68,15 +75,15 @@ Ext.define('NextThought.proxy.Rest', {
     	me.reader.hasContainerId = me.reader.hasContainerId || !!containerId;
     	me.reader.hasId = me.appendId && id!==undefined;
     	
-    	// if(NextThought.isDebug){
-	    	// console.log(
-	    		// 'appendId:', me.appendId, 
-	    		// 'id:',id,
-	    		// 'hasId:',me.reader.hasId, 
-	    		// 'record:',record, 
-	    		// 'url:',result
-	    		// );
-    	// }
+//    	if(NextThought.isDebug){
+//	    	console.log(
+//	    		'appendId:', me.appendId,
+//	    		'id:',id,
+//	    		'hasId:',me.reader.hasId,
+//	    		'record:',record,
+//	    		'url:',url
+//	    		);
+//    	}
     },
 
     buildUrlForModify: function(request) {

@@ -2,8 +2,7 @@
 Ext.define('NextThought.model.Note', {
     extend: 'NextThought.model.Base',
     requires: [
-    		'NextThought.proxy.Rest',
-    		'NextThought.model.FriendsList'
+    		'NextThought.proxy.Rest'
     		],
     idProperty: 'OID',
     fields: [
@@ -21,7 +20,7 @@ Ext.define('NextThought.model.Note', {
        	{ name: 'Last Modified', type: 'date', dateFormat: 'timestamp' },
        	{ name: 'Creator', type: 'string'},
        	{ name: 'ContainerId', type: 'string'},
-       	{ name: 'sharedWith', type: Ext.data.Types.USER_LIST }
+       	{ name: 'sharedWith', type: 'UserList' }
     ],
     proxy: {
     	type: 'nti',

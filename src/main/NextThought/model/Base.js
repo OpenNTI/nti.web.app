@@ -30,3 +30,64 @@ Ext.define('NextThought.model.Base', {
         return r;
     }
 });
+
+/* converters for models which reference other models*/
+Ext.data.Types.SINGLEITEM = {
+    type: 'singleItem',
+    convert: function(v) {
+        return ParseUtils.parseItems([v])[0];
+    },
+    sortType: function(v) {
+        console.log('sort by Item:',arguments);
+        return '';
+    }
+};
+
+Ext.data.Types.ARRAYITEM = {
+    type: 'arrayItem',
+    convert: function(v) {
+        return ParseUtils.parseItems(v);
+    },
+    sortType: function(v) {
+        console.log('sort by Item:',arguments);
+        return '';
+    }
+};
+
+Ext.data.Types.USERLIST = {
+	type: 'UserList',
+    convert: function(v) {
+        try {
+            var a = arguments,
+                u = [];
+
+            if(v) Ext.each(v, function(o){
+                var p =
+                    typeof(o)=='string'
+                        ? o
+                        : o.get
+                            ? o.get('Username')
+                            : o.Username
+                                ? o.Username
+                                : null;
+                if(!p)
+                    console.log("WARNING: Could not handle Object: ", o, a);
+                else  {
+                    u.push(p);
+                    //asynchronously resolve this user so its cached and ready
+                    UserRepository.prefetchUser(p);
+                }
+            });
+
+            return u;
+        }
+        catch (err) {
+            console.log(err.message, err.stack);
+            return v;
+        }
+    },
+    sortType: function(v) {
+    	console.log('sort by UserList:',arguments);
+        return '';
+    }
+};

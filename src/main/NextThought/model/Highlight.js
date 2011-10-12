@@ -2,8 +2,7 @@
 Ext.define('NextThought.model.Highlight', {
     extend: 'NextThought.model.Base',
     requires: [
-    		'NextThought.proxy.Rest',
-    		'NextThought.model.FriendsList'
+    		'NextThought.proxy.Rest'
     		],
     idProperty: 'OID',
     fields: [
@@ -25,7 +24,7 @@ Ext.define('NextThought.model.Highlight', {
        	{ name: 'Last Modified', type: 'date', dateFormat: 'timestamp' },
        	{ name: 'ContainerId', type: 'string'},
         { name: 'text', type: 'string' },
-       	{ name: 'sharedWith', type: Ext.data.Types.USER_LIST }
+       	{ name: 'sharedWith', type: 'UserList'}
     ],
     proxy: {
     	type: 'nti',

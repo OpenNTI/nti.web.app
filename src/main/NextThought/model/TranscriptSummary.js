@@ -3,7 +3,7 @@ Ext.define('NextThought.model.TranscriptSummary', {
     //idProperty: 'OID',
     fields: [
         { name: 'Class', type: 'string', defaultValue: 'TranscriptSummary'},
-        { name: 'RoomInfo', type: 'auto' },
+        { name: 'RoomInfo', type: 'singleItem'},
         { name: 'NTIID', type: 'string' },
         { name: 'ContainerId', type: 'string' },
         { name: 'Contributors', type: 'auto' },
