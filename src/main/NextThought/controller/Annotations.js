@@ -45,7 +45,8 @@ Ext.define('NextThought.controller.Annotations', {
     	 	},
 
             'note-entry':{
-                'action': this.onNoteAction
+                'action': this.onNoteAction,
+                'load-transcript': this.onLoadTranscript
             },
 
     	 	'noteeditor button':{
@@ -109,6 +110,23 @@ Ext.define('NextThought.controller.Annotations', {
     	}
     },
 
+
+    onLoadTranscript: function(record, cmp, elm, eOpts) {
+        var id = record.get('RoomInfo').getId();
+
+        this.getModel('Transcript').load(id,{
+            scope: this,
+            failure: function(record, operation) {
+                elm.animate({listeners: { beforeanimate: function(){ elm.show(true); } }});
+            },
+            success: function(record, operation) {
+                //elm.remove();
+                cmp.insertTranscript(record);
+            }
+        });
+    },
+
+
     onNoteEditorButton: function(btn, event){
     	var win = btn.up('window'),
     		cmp = win.down('htmleditor');
@@ -135,11 +153,11 @@ Ext.define('NextThought.controller.Annotations', {
 
     attemptToAddWidget: function(record){
         //check to see if reply is already there, if so, don't do anything...
-        if (Ext.get('note-' + record.get('OID'))) return;
+        if (Ext.get('cmp-' + record.get('OID'))) return;
 
         var parent = record.get('inReplyTo');
         if(parent){
-            parent = Ext.getCmp('note-'+parent);
+            parent = Ext.getCmp('cmp-'+parent);
             parent.addReply(record);
         }
         else
@@ -149,14 +167,13 @@ Ext.define('NextThought.controller.Annotations', {
     },
 
     replyAsChat: function(record) {
-        var people = record.get('sharedWith'),
-            cId = record.get('ContainerId');
+        var reply = AnnotationUtils.noteToReply(record),
+            people = Ext.Array.unique([record.get('Creator')].concat(record.get('sharedWith'))),
+            cId = record.get('ContainerId'),
+            parent = reply.get('inReplyTo'),
+            refs = reply.get('references');
 
-        //open window or create a new one...
-        (this.getChatWindow() || Ext.create('widget.chat-window')).show();
-
-        //start the chat room in reply to this note
-        Socket.emit('chat_enterRoom', {'Occupants': people, ContainerId: cId});
+        this.getController('Chat').enterRoom(people, {ContainerId: cId, references: refs, inReplyTo: parent});
     },
 
     replyToNote: function(record){

@@ -162,7 +162,7 @@ Ext.define('NextThought.cache.UserRepository', {
 
                 if (!result) {
                     if (callbacks && callbacks.failure) callbacks.failure.call(callbacks.scope || this);
-                    console.log('ERROR: result is null', username, bins);
+                    console.log('ERROR: result is null', username, bins, url, json);
                 }
             }
         });

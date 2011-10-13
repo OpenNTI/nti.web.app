@@ -29,18 +29,16 @@ Ext.define('NextThought.mixins.Annotations', {
 
         this.widgetBuilder = {
             'Highlight' : this.createHighlightWidget,
-            'Note': this.createNoteWidget
+            'Note': this.createNoteWidget,
+            'TranscriptSummary': this.createTranscriptSummaryWidget
+        };
+
+        this.getters = {
+            'Note': function(r){return r},
+            'TranscriptSummary': function(r){return r.get('RoomInfo')}
         };
     },
 
-    loadObjects: function() {
-        this.clearAnnotations();
-        UserDataLoader.getPageItems(this._containerId, {
-            scope:this,
-            success: this.objectsLoaded,
-            failure: function(){} //TODO: Fill in
-        });
-    },
 
     applyFilter: function(newFilter){
         // console.log('applyFilter:', newFilter);
@@ -81,6 +79,7 @@ Ext.define('NextThought.mixins.Annotations', {
         }
     },
 
+
     clearAnnotations: function(){
         for(var oid in this._annotations){
             if(!this._annotations.hasOwnProperty(oid)) continue;
@@ -116,7 +115,7 @@ Ext.define('NextThought.mixins.Annotations', {
 
         if(!highlight) return;
 
-        w = this._createHighlightWidget(highlight, range);
+        w = this.widgetBuildert['Highlight'].call(this,highlight,range);
 
         highlight.set('ContainerId', this._containerId);
 
@@ -131,6 +130,7 @@ Ext.define('NextThought.mixins.Annotations', {
         menu.showAt(xy);
 
     },
+
 
     createHighlightWidget: function(record, r){
         var range = r || AnnotationUtils.buildRangeFromRecord(record),
@@ -166,9 +166,10 @@ Ext.define('NextThought.mixins.Annotations', {
         return w;
     },
 
+
     createNoteWidget: function(record){
         try{
-            if(record.get('inReplyTo')){
+            if(record.get('inReplyTo') || record._parent){
                 return false;
             }
             else if (this.annotationExists(record)) {
@@ -189,6 +190,12 @@ Ext.define('NextThought.mixins.Annotations', {
         }
         return false;
     },
+
+
+    createTranscriptSummaryWidget: function(record) {
+
+    },
+
 
     onNotification: function(change){
         var item = change && change.get? change.get('Item') : null,
@@ -211,7 +218,7 @@ Ext.define('NextThought.mixins.Annotations', {
                 result = builder ? builder.call(this, item) : null;
 
             if (/Note/i.test(cls) && result === false && replyTo) {
-                replyTo = Ext.getCmp('note-'+replyTo);
+                replyTo = Ext.getCmp('cmp-'+replyTo);
                 replyTo.addReply(item);
             }
             else {
@@ -223,70 +230,96 @@ Ext.define('NextThought.mixins.Annotations', {
     },
 
 
+    loadContentAnnotations: function(containerId){
+        this._containerId = containerId;
+        this.loadObjects();
+    },
+
+
+    loadObjects: function() {
+        this.clearAnnotations();
+        UserDataLoader.getPageItems(this._containerId, {
+            scope:this,
+            success: this.objectsLoaded,
+            failure: function(){} //TODO: Fill in
+        });
+    },
+
+
     objectsLoaded: function(bins) {
-        var contributors = {},
-            oids = {},
-            me = this,
+        var me = this,
+            contributors = {},
             k = 'Last Modified',
-            o;
+            tree = {};
 
         if (!this._containerId) return;
 
         //sort bins
         for(var b in bins){
             if(bins.hasOwnProperty(b))
-            bins[b] = Ext.Array.sort(bins[b]||[],SortModelsBy(k,true));
+            bins[b] = Ext.Array.sort(bins[b]||[],SortModelsBy(k,true,me.getters[b]));
         }
 
-        Ext.each(bins.Highlight,
-            function(r){
-                try{
-                    me.createHighlightWidget(r);
-                    contributors[r.get('Creator')] = true;
-                }
-                catch (err) {
-                    console.log('could not build highlight from record:', r);
-                }
-            }, this
-        );
 
-        notes(buildTree);
+        Ext.apply(contributors, this.buildSimpleAnnotation(bins.Highlight));
+        Ext.apply(contributors, this.buildAnnotationTree(bins.Note, tree));
+        Ext.apply(contributors, this.buildAnnotationTree(bins.TranscriptSummary, tree));
 
-        for(var oid in oids){
-            o = oids[oid];
-            if(!oids.hasOwnProperty(oid) || o._parent) continue;
-
-            me.createNoteWidget(o);
-        }
+        this.buildTreedAnnotations(tree);
 
         if( me.bufferedDelayedRelayout)
             me.bufferedDelayedRelayout();
 
         me.fireEvent('publish-contributors',contributors);
-        //end of _objectsLoaded execution
+    },
 
-        /**
-         * helper local-scope functions (think of them as macros)
-         */
 
-        function notes(cb){ Ext.each(bins.Note,cb,this); }
+    getContributors: function(record){
+        var cont = {}, c = record.get('Creator') || record.get('Contributors');
+        if(!Ext.isArray(c)) c = [c];
+        Ext.each(c, function(i){ if(i && Ext.String.trim(i) != '')cont[i] = true; });
+        return cont;
+    },
 
-        function buildTree(r){
-            var oid = r.get('OID'),
-                parent = r.get('inReplyTo'),
-                c = r.get('Creator'),
+
+    buildSimpleAnnotation: function(list){
+        var me = this, contributors = {};
+        Ext.each(list,
+            function(r){
+                try{
+                    me.widgetBuilder[r.getModelName()].call(me,r);
+                    Ext.apply(contributors, me.getContributors(r));
+                }
+                catch (err) {
+                    console.log('could not build '+r.getModelName()+' from record:', r);
+                }
+            }, this
+        );
+
+        return contributors;
+    },
+
+
+    buildAnnotationTree: function(list, tree){
+        var me = this,
+            contributors = {};
+
+        Ext.each(list, function buildTree(r){
+            var g = me.getters[r.getModelName()](r),
+                oid = g.get('OID'),
+                parent = g.get('inReplyTo'),
                 p;
 
             r.children = r.children || [];
 
-            if(!oids[oid])
-                oids[oid] = r;
+            if(!tree[oid])
+                tree[oid] = r;
 
             if(parent){
-                p = oids[parent];
-                if(!p) p = (oids[parent] = getOID(parent));
+                p = tree[parent];
+                if(!p) p = (tree[parent] = getOID(parent));
                 if(!p){
-                    p = (oids[parent] = AnnotationUtils.replyToPlaceHolder(r));
+                    p = (tree[parent] = AnnotationUtils.replyToPlaceHolder(g));
                     buildTree(p);
                 }
 
@@ -296,21 +329,30 @@ Ext.define('NextThought.mixins.Annotations', {
                 r._parent = parent;
             }
 
-            if(c && Ext.String.trim(c) != '')
-                contributors[c] = true;
-        }
+            Ext.apply(contributors, me.getContributors(g));
+        });
 
         function getOID(id){
-            var r=null;
-            notes(function(o){ if(o.get('OID')==id){r = o;return false;} });
+            var r=null,
+                f=function(o){if(o.get('OID')==id){r=o;return false;}};
+            Ext.each(list,f);
+            if(!r) Ext.each(tree,f);
             return r;
         }
+
+        return contributors;
     },
 
 
-    loadContentAnnotations: function(containerId){
-        this._containerId = containerId;
-        this.loadObjects();
+    buildTreedAnnotations: function(tree){
+        for(var oid in tree){
+            var o = tree[oid];
+            if(!tree.hasOwnProperty(oid)) continue;
+
+            var b = this.widgetBuilder[o.getModelName()];
+
+            if(b) b.call(this,o);
+        }
     },
 
 

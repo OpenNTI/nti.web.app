@@ -131,7 +131,7 @@ Ext.define('NextThought.controller.Chat', {
         Socket.emit('chat_approveMessages', messageIds);
     },
 
-    enterRoom: function(users) {
+    enterRoom: function(users, options) {
         if (!Ext.isArray(users)) users = [users];
 
         users = Ext.Array.clone(users);
@@ -157,7 +157,7 @@ Ext.define('NextThought.controller.Chat', {
         if (ri)
             this.onEnteredRoom(ri);
         else //If we get here, there were no existing rooms, so create a new one.
-            Socket.emit('chat_enterRoom', {'Occupants': users});
+            Socket.emit('chat_enterRoom', Ext.apply({'Occupants': users}, options));
     },
 
     showMessage: function(msgCmp) {

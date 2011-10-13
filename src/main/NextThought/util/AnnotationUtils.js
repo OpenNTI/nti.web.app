@@ -34,7 +34,7 @@ Ext.define('NextThought.util.AnnotationUtils',
         noteToReply: function(note){
             var reply = Ext.create('NextThought.model.Note'),
                 parent = note.get('OID'),
-                refs = note.get('references') || [];
+                refs = Ext.Array.clone(note.get('references') || []);
 
             refs.push(parent);
 

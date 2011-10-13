@@ -8,7 +8,9 @@ Ext.define('NextThought.model.RoomInfo', {
         { name: 'Active', type: 'bool' },
         { name: 'Class', type: 'string', defaultValue: 'RoomInfo' },
         { name: 'MessageCount', type: 'int' },
-        { name: 'Occupants', type: 'UserList'}
+        { name: 'Occupants', type: 'UserList'},
+        { name: 'inReplyTo', type: 'string' },
+        { name: 'references', type: 'auto', defaultValue: [] }
     ],
 
     getModelName: function() {

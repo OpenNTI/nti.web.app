@@ -16,6 +16,17 @@
 .x-nti-note:hover .controls { display: block; }
 
 
+.x-nti-note.chat-transcript { cursor: pointer; }
+.x-nti-note.chat-transcript img { margin-right: 2px; }
+.x-nti-note.chat-transcript .transcript-placeholder { margin: 0px; float: right; }
+.x-nti-note.chat-transcript .transcript-placeholder a { text-decoration: none !important; font-weight: bold; font-size: 10px; color: #444;}
+
+.x-nti-note-replies.chat-transcript,
+.x-nti-note-replies.chat-transcript .x-panel-body{ clear: both; padding-left: 0px !important; }
+
+.x-nti-note-replies.chat-transcript .x-chat-log-entry span.reply{ display: none; }
+.x-nti-note-replies.chat-transcript .x-chat-log-entry { cursor: auto; }
+
 .x-nti-note.placeholder { padding: 2px; }
 .x-nti-note.placeholder div { margin: 0px; }
 

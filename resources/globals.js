@@ -44,6 +44,19 @@ function arrayEquals(a, b) {
     return Ext.Array.merge(a, b).length == a.length;
 }
 
-function SortModelsBy(key,dir){
-    return function(a,b){ return dir? a.get(key) > b.get(key) : a.get(key) < b.get(key); };
+function SortModelsBy(key,dir,getter){
+    var g = getter;
+    if(g){
+        return function(a,b){
+            return dir
+                ? g(a).get(key) > g(b).get(key)
+                : g(a).get(key) < g(b).get(key);
+        };
+    }
+
+    return function(a,b){
+        return dir
+            ? a.get(key) > b.get(key)
+            : a.get(key) < b.get(key);
+    };
 }

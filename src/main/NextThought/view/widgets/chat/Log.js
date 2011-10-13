@@ -6,6 +6,7 @@ Ext.define('NextThought.view.widgets.chat.Log', {
         'NextThought.view.widgets.chat.LogEntryModerated'
     ],
 
+    cls: 'chat-log-view',
     autoScroll: true,
     layout: 'anchor',
     border: false,

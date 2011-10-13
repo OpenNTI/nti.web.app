@@ -51,7 +51,7 @@ Ext.define('NextThought.proxy.Rest', {
 	        id        = record ? record.get('id') : operation.id;
 	        
 		if (!me.collectionName) {
-			throw 'No collectionName given';
+			Ext.Error.raise('No collectionName given');
 		}
 
  		if (containerId) {
