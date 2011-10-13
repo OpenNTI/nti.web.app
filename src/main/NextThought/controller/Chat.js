@@ -155,7 +155,7 @@ Ext.define('NextThought.controller.Chat', {
 
         var ri = this.existingRoom(users);
         if (ri)
-            this.enteredRoom(ri);
+            this.onEnteredRoom(ri);
         else //If we get here, there were no existing rooms, so create a new one.
             Socket.emit('chat_enterRoom', {'Occupants': users});
     },
@@ -344,7 +344,7 @@ Ext.define('NextThought.controller.Chat', {
     },
 
     onEnteredRoom: function(msg) {
-        var roomInfo = ParseUtils.parseItems([msg])[0];
+        var roomInfo = msg && msg.isModel? msg : ParseUtils.parseItems([msg])[0];
 
         if (roomInfo.getId() in this.activeRooms) {
             console.log('WARNING: room already exists, all rooms/roominfo', this.activeRooms, roomInfo);

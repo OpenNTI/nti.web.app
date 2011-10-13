@@ -56,11 +56,13 @@ Ext.define('NextThought.util.AnnotationUtils',
             var holder = Ext.create('NextThought.model.Note'),
                 refs = note.get('references') || [];
 
-            if(refs.length)
+            if(refs.length){
+                refs = Ext.Array.clone(refs);
                 refs.pop();
+            }
 
             if(refs.length)
-                holder.set('inReplyTo', refs[refs.length-2]);
+                holder.set('inReplyTo', refs[refs.length-1]);
 
             holder.set('Creator', null);
             holder.set('anchorPoint', note.get('anchorPoint'));
@@ -70,6 +72,7 @@ Ext.define('NextThought.util.AnnotationUtils',
             holder.set('OID', note.get('inReplyTo'));
             holder.set('references', refs);
             holder.set('text','Place Holder for deleted note');
+            holder.set('Last Modified', note.get('Last Modified'));
 
             holder.placeHolder = true;
 

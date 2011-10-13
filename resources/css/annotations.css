@@ -1,0 +1,67 @@
+.x-nti-note {
+    border-top: 1px solid #ccc;
+    position: relative;
+    overflow: hidden;
+    padding: 10px 5px;
+}
+
+.x-nti-note div { margin-left: 22px; }
+.x-nti-note img { float: left; width: 16px; height: 16px;}
+.x-nti-note .name { font-weight: bold; color: #7889A3; padding: 0 10px 0 0; }
+.x-nti-note .timestamp { color: #7a7a7a; float: right; font-size: 9px; padding:  0 0 5px 10px; }
+
+.x-nti-note:hover { background-color: #7889A3 !important; color: white; }
+.x-nti-note:hover .name { color: black; }
+.x-nti-note:hover .timestamp { visibility: hidden; }
+.x-nti-note:hover .controls { display: block; }
+
+
+.x-nti-note.placeholder { padding: 2px; }
+.x-nti-note.placeholder div { margin: 0px; }
+
+.x-nti-note span.controls {
+    position: absolute;
+    display: none;
+    right: 5px; top: 5px;
+    height: 24px;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.x-nti-note span.controls span {
+    width: 16px;
+    height: 16px;
+    margin: 2px;
+    display: inline-block;
+    background: #ccc;
+    opacity: 0.4;
+}
+.x-nti-note span.controls span:hover{ opacity: 1; }
+
+.x-nti-note .controls span.edit,
+.x-nti-note .controls span.share,
+.x-nti-note .controls span.delete { display: none; }
+
+.x-nti-note.owner .controls span.edit,
+.x-nti-note.owner .controls span.share,
+.x-nti-note.owner .controls span.delete { display: inline-block; }
+
+.x-nti-note-replies { clear: both; padding-left: 15px; }
+
+
+.x-nti-note .controls .chat {
+    background: url("../images/chat/chat-16.png");
+}
+.x-nti-note .controls .delete {
+    background: url("../images/chat/delete-16.png");
+}
+.x-nti-note .controls .edit {
+    background: url("../images/chat/edit-16.png");
+    background-size: 16px 16px;
+}
+.x-nti-note .controls .reply {
+    background: url("../images/chat/re-16.png");
+}
+.x-nti-note .controls .share {
+    background: url("../images/chat/share-16.png");
+}

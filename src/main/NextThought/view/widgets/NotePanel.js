@@ -1,83 +1,154 @@
 Ext.define('NextThought.view.widgets.NotePanel',{
-	extend : 'Ext.panel.Panel',
-	alias: 'widget.notepanel',
-	requires: [
+    extend: 'Ext.container.Container',
+    alias: 'widget.note-entry',
+    requires: [
         'NextThought.cache.UserRepository'
     ],
 
-	cls : 'x-note-panel-cmp',
-	layout : 'fit',
+    renderTpl: new Ext.XTemplate(
+        '<div class="x-nti-note {owner}">',
+            '<span class="controls">',
+                '<span class="reply"></span>',
+                '<span class="chat"></span>',
+                '<span class="edit"></span>',
+                '<span class="share"></span>',
+                '<span class="delete"></span>',
+            '</span>',
+            '<div class="timestamp">{time}</div>',
+            '<img src="{icon}"/>',
+            '<div>',
+                '<span class="name">{name}</span> ',
+                '<span class="body-text">{body}</span> ',
+            '</div>',
+        '</div>',
+        '<div class="x-nti-note-replies"></div>'
+        ),
 
-	initComponent: function(){
+    renderSelectors: {
+        box:        '.x-nti-note',
+        name:       '.x-nti-note .name',
+        text:       '.body-text',
+        time:       '.timestamp',
+        icon:       'img',
+        controls:   '.x-nti-note .controls',
+        frameBody:  '.x-nti-note-replies'
+    },
+
+    initComponent: function(){
         var m = this,
             a = m._annotation,
             r = m._record = m._record || a._record,
-            thread = [],
             c = r.get('Creator') || _AppConfig.server.username;
 
         m.id = 'note-'+r.get('OID'),
         m.callParent(arguments);
 
-        if(!r.placeHolder){
-            UserRepository.prefetchUser(c,function(users){ m.addUserControls(users[0]); });
+        m.update(r);
+        m.buildThread(r);
+    },
+
+    buildThread: function(record){
+        var m = this;
+        Ext.each(
+            Ext.Array.sort(
+                record.children || [],
+                SortModelsBy('Last Modified', true)),
+            function(rec){
+                m.add(m.buildReply(rec));
+            }
+        );
+    },
+
+    convertToPlaceHolder: function(){
+        this.placeHolder = true;
+        this.text.update('Place holder for deleted note');
+        this.time.remove();
+        this.name.remove();
+        this.icon.remove();
+        this.controls.remove();
+        this.box.addCls('placeholder');
+
+    },
+
+    update: function(m){
+        var me = this,
+            s = m.get('Creator'),
+            owner = _AppConfig.server.username == s;
+
+        me._record = m;
+
+        me.renderData['time'] = Ext.Date.format(m.get('Last Modified') || new Date(), 'g:i:sa M j, Y');
+        me.renderData['name'] = 'resolving...';
+        me.renderData['body'] = m.get('text');
+        me.renderData['owner'] = owner ? 'owner' : '';
+
+        if(this.rendered){
+           me.text.update(me.renderData.body);
+           me.time.update(me.renderData.time);
         }
 
-        r.children = Ext.Array.sort(r.children || [], function(a,b){
-            var k = 'Last Modified';
-            return a.get(k) < b.get(k);
-        });
+        if(s){
+            UserRepository.prefetchUser(s,
+                function(users){
+                    var u = users[0];
+                    if (!u) {
+                        console.log('ERROR: failed to resolve user', s, m);
+                        return;
+                    }
 
-        Ext.each(r.children, function(rec){
-            thread.push(m.buildReply(rec));
-        });
-
-        m.gutter = Ext.create('Ext.panel.Panel',{
-            xtype: 'panel',
-            dock: 'bottom',
-            border: false,
-            items: thread
-        });
-
-		m.addDocked(m.gutter);
-	},
-	
-	
-	addUserControls: function(u){
-		var t = [],
-			m = this,
-            r = m._record;
-
-
-        if(u){
-            t.push({
-                    xtype: 'image',
-                    src: u.get('avatarURL'),
-                    height: 16, width: 16
+                    me.fillInUser(u);
                 },
-                u.get('realname'));
+                this);
         }
 
-        t.push('->',{ text : 'Reply', eventName: 'reply-to-note' });
-        t.push({ text : 'Chat', eventName: 'reply-as-chat' });
 
-		if(u && u.get('Username')==_AppConfig.server.username){
-			t.push(
-				{ text : 'Edit', eventName: 'edit-note' },
-				{ text : 'Share', eventName: 'share-with' },
-				{ text : 'Delete', eventName: 'delete' }
-				);
-		}
 
-		m.addDocked({xtype: 'toolbar', dock: 'top', items: t});
-	},
+    },
+
+    afterRender: function(){
+        this.callParent(arguments);
+        if(this._record.placeHolder){
+            this.convertToPlaceHolder();
+        }
+        this.el.on('click', this.click, this);
+    },
+
+    click: function(event, target, eOpts){
+        target = Ext.get(target);
+
+        var inBox = target && this.controls.contains(target),
+            action = inBox && target.getAttribute('className');
+        if(action){
+            this.fireEvent('action', action, this);
+        }
+    },
+
+
+    fillInUser: function(u) {
+        var name = u.get('alias') || u.get('Username'),
+            i = u.get('avatarURL'),
+            owner = u.get('Username')==_AppConfig.server.username;
+
+        if(this.rendered){
+            this.icon.set({src: i});
+            this.name.update(name);
+            this.box.removeCls('owner');
+            if(owner)this.box.addCls('owner');
+        }
+        else {
+            this.renderData['name'] = name;
+            this.renderData['icon'] = i;
+            this.renderData['owner'] = owner ? 'owner' : '';
+        }
+    },
+
 
     addReply: function(record){
         var m = this,
             a = m._annotation,
-            p = a._parentAnnotation? a._parentAnnotation : a,
-            reply = m.buildReply(record);
+            p = a._parentAnnotation? a._parentAnnotation : a;
 
-        m.gutter.add(reply);
+        m.add(m.buildReply(record));
         p.onResize();
     },
 
@@ -86,8 +157,7 @@ Ext.define('NextThought.view.widgets.NotePanel',{
         var m = this,
             a = m._annotation,
             p = a._parentAnnotation? a._parentAnnotation : a,
-            r = Ext.create('widget.notepanel',{
-                html: record.get('text'),
+            r = Ext.create('widget.note-entry',{
                 _record: record,
                 _owner: m,
                 _annotation: {
@@ -118,7 +188,7 @@ Ext.define('NextThought.view.widgets.NotePanel',{
     updateFromRecord: function(record) {
         var abandonedChildren = Ext.Array.clone(this._record.children) || [];
 
-        this.update(record.get('text'));
+        this.update(record);
 
 
         if (record.children && record.children.length > 0) {
@@ -147,7 +217,7 @@ Ext.define('NextThought.view.widgets.NotePanel',{
 
 
     hasReplies: function(){
-        return !!this.gutter.items.length;
+        return this.query('note-entry[placeHolder]').length != this.query('note-entry').length;
     },
 
     cleanupReply: function(){
@@ -159,11 +229,18 @@ Ext.define('NextThought.view.widgets.NotePanel',{
 
 
         if(m.hasReplies()) {
-            m.removeDocked(m.getDockedItems('toolbar')[0]);
-            m.update('Place holder for deleted note');
+            m.convertToPlaceHolder();
         }
         else m.destroy();
+
         p.onResize();
+    },
+
+    onRemove: function(){
+        this.callParent(arguments);
+        if(this.placeHolder && !this.hasReplies()){
+            this.destroy();
+        }
     },
 
     removeReply: function(){
@@ -182,7 +259,7 @@ Ext.define('NextThought.view.widgets.NotePanel',{
         record._parent = parent;
 
         m._record = record;
-        m.update(record.get('text'));
+        m.update(record);
         m._annotation._parentAnnotation.onResize();
     }
 

@@ -43,3 +43,7 @@ function arrayEquals(a, b) {
     if (a.length != b.length) return false;
     return Ext.Array.merge(a, b).length == a.length;
 }
+
+function SortModelsBy(key,dir){
+    return function(a,b){ return dir? a.get(key) > b.get(key) : a.get(key) < b.get(key); };
+}

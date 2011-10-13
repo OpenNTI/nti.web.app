@@ -73,7 +73,8 @@ Ext.define('NextThought.view.widgets.chat.LogEntry', {
                 }
 
                 me.fillInUser(u);
-            });
+            },
+                this);
         }
 
         //apply shadow class if necessary:

@@ -10,33 +10,34 @@ Ext.define('NextThought.mixins.Annotations', {
         'NextThought.view.widgets.annotations.Highlight',
         'NextThought.view.widgets.annotations.Note'
     ],
-    _annotations: {},
-    _filter: null,
-    _searchAnnotations: null,
 
     initAnnotations: function(){
+        this._annotations = {};
+        this._filter = null;
+        this._searchAnnotations = null;
+
         this.addEvents('create-note','edit-note');
         this.enableBubble(['create-note','edit-note']);
 
         this.on('afterrender',
             function(){
-                this.el.on('mouseup', this._onContextMenuHandler, this);
+                this.el.on('mouseup', this.onContextMenuHandler, this);
             },
             this);
 
         NextThought.controller.Stream.registerChangeListener(this.onNotification, this);
 
         this.widgetBuilder = {
-            'Highlight' : this._createHighlightWidget,
-            'Note': this._createNoteWidget
+            'Highlight' : this.createHighlightWidget,
+            'Note': this.createNoteWidget
         };
     },
 
-    _loadObjects: function() {
+    loadObjects: function() {
         this.clearAnnotations();
         UserDataLoader.getPageItems(this._containerId, {
             scope:this,
-            success: this._objectsLoaded,
+            success: this.objectsLoaded,
             failure: function(){} //TODO: Fill in
         });
     },
@@ -94,7 +95,7 @@ Ext.define('NextThought.mixins.Annotations', {
     },
 
 
-    _annotationExists: function(record){
+    annotationExists: function(record){
         var oid = record.get('OID');
         if(!oid){
             return false;
@@ -131,14 +132,14 @@ Ext.define('NextThought.mixins.Annotations', {
 
     },
 
-    _createHighlightWidget: function(record, r){
+    createHighlightWidget: function(record, r){
         var range = r || AnnotationUtils.buildRangeFromRecord(record),
             oid = record.get('OID'),
             w;
 
         if (!range) Ext.Error.raise('could not create range');
 
-        if (this._annotationExists(record)) {
+        if (this.annotationExists(record)) {
             this._annotations[record.get('OID')].getRecord().fireEvent('updated',record);
             return null;
         }
@@ -165,12 +166,12 @@ Ext.define('NextThought.mixins.Annotations', {
         return w;
     },
 
-    _createNoteWidget: function(record){
+    createNoteWidget: function(record){
         try{
             if(record.get('inReplyTo')){
                 return false;
             }
-            else if (this._annotationExists(record)) {
+            else if (this.annotationExists(record)) {
                 this._annotations[record.get('OID')].getRecord().fireEvent('updated',record);
                 return true;
             }
@@ -222,7 +223,7 @@ Ext.define('NextThought.mixins.Annotations', {
     },
 
 
-    _objectsLoaded: function(bins) {
+    objectsLoaded: function(bins) {
         var contributors = {},
             oids = {},
             me = this,
@@ -234,16 +235,13 @@ Ext.define('NextThought.mixins.Annotations', {
         //sort bins
         for(var b in bins){
             if(bins.hasOwnProperty(b))
-            bins[b] = Ext.Array.sort(bins[b]||[],function(a,b){
-                if (!a.get || !b.get) return false;
-                return a.get(k) < b.get(k);
-            });
+            bins[b] = Ext.Array.sort(bins[b]||[],SortModelsBy(k,true));
         }
 
         Ext.each(bins.Highlight,
             function(r){
                 try{
-                    me._createHighlightWidget(r);
+                    me.createHighlightWidget(r);
                     contributors[r.get('Creator')] = true;
                 }
                 catch (err) {
@@ -258,7 +256,7 @@ Ext.define('NextThought.mixins.Annotations', {
             o = oids[oid];
             if(!oids.hasOwnProperty(oid) || o._parent) continue;
 
-            me._createNoteWidget(o);
+            me.createNoteWidget(o);
         }
 
         if( me.bufferedDelayedRelayout)
@@ -312,11 +310,11 @@ Ext.define('NextThought.mixins.Annotations', {
 
     loadContentAnnotations: function(containerId){
         this._containerId = containerId;
-        this._loadObjects();
+        this.loadObjects();
     },
 
 
-    _onContextMenuHandler: function(e) {
+    onContextMenuHandler: function(e) {
         try{
             e.preventDefault();
             var range = this.getSelection();

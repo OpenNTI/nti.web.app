@@ -26,17 +26,26 @@ Ext.define('NextThought.controller.Annotations', {
     ],
 
     init: function() {
+
+        this.actionMap = {
+            'chat'  : this.replyAsChat,
+            'edit'  : this.editNote,
+            'reply' : this.replyToNote,
+            'share' : this.shareWith
+        };
+
+
         this.control({
             'master-view':{
-                'create-note': this.addNote,
-                'reply-to-note': this.replyToNote,
-                'reply-as-chat': this.replyAsChat,
-				'edit-note': this.editNote,
-				'share-with': this.shareWith
+                'create-note'   : this.addNote,
+                'reply-to-note' : this.actionMap['chat'],
+                'reply-as-chat' : this.actionMap['reply'],
+				'edit-note'     : this.actionMap['edit'],
+				'share-with'    : this.actionMap['share']
     	 	},
 
-            'notepanel button':{
-                'click': this.onNoteAction
+            'note-entry':{
+                'action': this.onNoteAction
             },
 
     	 	'noteeditor button':{
@@ -85,18 +94,18 @@ Ext.define('NextThought.controller.Annotations', {
 		});
 	},
 
-    onNoteAction: function(btn, event){
-    	var p = btn.up('notepanel'),
+    onNoteAction: function(action, note, event){
+    	var p = note,
+    		e = action,
     		r = p._owner,
-    		e = btn.eventName,
             a = p._annotation,
     		rec = a.getRecord();
 
     	if(/delete/i.test(e)){
     		a.remove();
     	}
-    	else {
-	    	this.getViewport().fireEvent(e, rec);
+    	else if(e in this.actionMap){
+	    	this.actionMap[e].call(this, rec);
     	}
     },
 
@@ -134,7 +143,7 @@ Ext.define('NextThought.controller.Annotations', {
             parent.addReply(record);
         }
         else
-            this.getContext()._createNoteWidget(record);
+            this.getContext().createNoteWidget(record);
 
         this.getContext().fireEvent('resize');
     },

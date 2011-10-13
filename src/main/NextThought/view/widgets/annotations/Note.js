@@ -35,7 +35,7 @@ Ext.define( 'NextThought.view.widgets.annotations.Note', {
 		me.noteDiv = me.createElement('div',c.dom,'x-note-panel',(me._isVisible?'':'display:none;'));
 		me.noteDiv._annotation = me;
 
-		me.noteCmp = Ext.create('widget.notepanel',{ renderTo: me.noteDiv, _annotation: me, _owner: component });
+		me.noteCmp = Ext.create('widget.note-entry',{ renderTo: me.noteDiv, _annotation: me, _owner: component });
 		me.noteUpdated(record);
 		me.noteCmp.doLayout();
 
@@ -136,8 +136,8 @@ Ext.define( 'NextThought.view.widgets.annotations.Note', {
 		c.moveTo(p.getLeft()+p.getPadding('l'),a.getTop()+(adjust?0:extra));
         //move the nib to the top-aligning corner of the note container
         if (me._img)
-		    Ext.get(me._img).moveTo(p.getLeft(), c.getTop());
-		
+		    Ext.get(me._img).moveTo(p.getLeft(), c.down('.x-nti-note img').getTop());
+
 		//always move to the end
 		if(c.dom.nextSibling)
 			me._cnt.appendChild(c.dom);

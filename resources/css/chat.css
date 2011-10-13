@@ -1,6 +1,6 @@
 
 .chat {
-    background: url('../images/speachbubble.png');
+    background: url('../images/chat/speachbubble.png');
 }
 
 .chat-entry .x-form-item-body input {
@@ -13,11 +13,11 @@
 }
 
 .chat-window .flag {
-    background: url('../images/flag-16.png');
+    background: url('../images/chat/flag-16.png');
 }
 
 .chat-window .x-disabled .flag {
-    background: url('../images/flag-16-disabled.png');
+    background: url('../images/chat/flag-16-disabled.png');
 }
 
 .x-chat-log-entry:hover,
@@ -44,10 +44,10 @@
 }
 
 .shadow-menu{
-    background-image: url('../images/shadow-user-16.png');
+    background-image: url("../images/chat/shadow-user-16.png");
 }
 .chat-menu{
-    background-image: url('../images/speachbubble.png');
+    background-image: url("../images/chat/chat-16.png");
 }
 
 .shadowed .x-chat-log-entry.selected,
@@ -69,19 +69,14 @@
     overflow: hidden;
 }
 
-.x-chat-log-entry span.reply-public {
-    width: 18px;
-    height: 18px;
-    display: inline-block;
-    margin: 2px;
-    background: url("../images/replyTo-arrow-18.png");
+.x-chat-log-entry .reply span{width:16px;height:16px;margin:2px;display: inline-block;vertical-align:middle;oopacity:0.4;}
+.x-chat-log-entry .reply span:hover{opacity: 1;}
+
+.x-chat-log-entry span.reply-public{width:22px;height:22px;background-size:22px 22px;
+    background: url("../images/chat/re-32.png");
 }
 .x-chat-log-entry span.reply-whisper {
-    width: 16px;
-    height: 16px;
-    margin: 2px;
-    display: inline-block;
-    background: url("../images/replyTo-arrow-16.png");
+    background: url("../images/chat/re-16.png");
 }
 
 
@@ -89,14 +84,8 @@
     display: block;
 }
 
-.x-chat-log-entry .timestamp {
-    float: right;
-    padding:  0 0 5px 10px;
-}
-
-.x-chat-log-entry:hover .timestamp {
-    visibility: hidden;
-}
+.x-chat-log-entry .timestamp { color: #7a7a7a; float: right; font-size: 9px; padding:  0 0 5px 10px; }
+.x-chat-log-entry:hover .timestamp { visibility: hidden; }
 
 .x-form-cb-checked .x-chat-replies .x-form-cb-checked .x-form-checkbox {
     background-position: 0 -13px;
@@ -120,11 +109,11 @@
 
 .x-chat-friend-entry {
     padding: 5px 5px 5px 25px;
-    background: url(../images/offline.png) no-repeat 5px center;
+    background: url(../images/core/offline.png) no-repeat 5px center;
 }
 
 .x-chat-friend-entry.Online {
-    background: url(../images/online.png) no-repeat 5px center;
+    background: url(../images/core/online.png) no-repeat 5px center;
 }
 
 .x-chat-log-entry div,
@@ -156,7 +145,7 @@
 .reply-to-button .x-btn-icon{
     width: inherit;
     height: inherit;
-    background-image: url("../images/br_up.png");
+    background-image: url("../images/chat/submit-22.png");
     background-position: center;
 }
 
@@ -167,7 +156,6 @@
 }
 
 .reply-to-line .chat-entry .x-form-item-body input.x-form-text {
-    background: url("../images/br_next.png") no-repeat 2px center;
-    padding-left: 20px;
+    padding-left: 10px;
     height: 30px !important;
 }
