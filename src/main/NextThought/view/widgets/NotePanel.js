@@ -186,7 +186,7 @@ Ext.define('NextThought.view.widgets.NotePanel',{
     },
 
     updateFromRecord: function(record) {
-        var abandonedChildren = Ext.Array.clone(this._record.children) || [];
+        var abandonedChildren = Ext.Array.clone(this._record.children || []);
 
         this.update(record);
 

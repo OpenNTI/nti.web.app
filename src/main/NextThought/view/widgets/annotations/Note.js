@@ -102,48 +102,55 @@ Ext.define( 'NextThought.view.widgets.annotations.Note', {
 		    this.noteCmp.destroy();
 		    delete this.noteCmp;
             Ext.get(this.noteDiv).remove();
+
+            if(!this._noteContainer.first()){
+                this._noteContainer.remove();
+                this._anchorNode.setStyle('padding-bottom',this._originalPadding+'px');
+            }
         }
 		this.onResize();
 	},
 	
 	onResize : function(){
 		try{
-		var me= this,
-			p = Ext.get(me._cnt),
-			c = me._noteContainer,
-			a = me._anchorNode,
-			i = me._originalPadding,
-			w = Ext.get(Ext.query('#nticontent .page-contents')[0]).getWidth(),
-			h = 0,
-            extra= 0,
-            adjust=0,
-            nx= a.next(),
-            pr= a.prev();
+            if(!this.noteCmp) return;
 
-		c.setWidth(w);
-//		a.setStyle('border', '1px solid green');
+            var me= this,
+                p = Ext.get(me._cnt),
+                c = me._noteContainer,
+                a = me._anchorNode,
+                i = me._originalPadding,
+                w = Ext.get(Ext.query('#nticontent .page-contents')[0]).getWidth(),
+                h = 0,
+                extra= 0,
+                adjust=0,
+                nx= a.next(),
+                pr= a.prev();
 
-        if(me._isVisible){
-            adjust += pr?(pr.getPadding('b')+pr.getMargin('b')):0;
-            extra += (nx?(nx.getPadding('t')+nx.getMargin('t')):0) + adjust;
+            c.setWidth(w);
+            //a.setStyle('border', '1px solid green');
 
-            h = c.getHeight();
-        }
+            if(me._isVisible){
+                adjust += pr?(pr.getPadding('b')+pr.getMargin('b')):0;
+                extra += (nx?(nx.getPadding('t')+nx.getMargin('t')):0) + adjust;
 
-		a.setStyle('padding-bottom',(i+h+extra)+'px');
+                h = c.getHeight();
+            }
 
-		// c.alignTo(a, 'tl-bl?',[0,-h]);
-		c.moveTo(p.getLeft()+p.getPadding('l'),a.getTop()+(adjust?0:extra));
-        //move the nib to the top-aligning corner of the note container
-        if (me._img)
-		    Ext.get(me._img).moveTo(p.getLeft(), c.down('.x-nti-note img').getTop());
+            a.setStyle('padding-bottom',(i+h+extra)+'px');
 
-		//always move to the end
-		if(c.dom.nextSibling)
-			me._cnt.appendChild(c.dom);
-			
-		if (me.noteCmp)
-            me.noteCmp.doLayout();
+            // c.alignTo(a, 'tl-bl?',[0,-h]);
+            c.moveTo(p.getLeft()+p.getPadding('l'),a.getTop()+(adjust?0:extra));
+            //move the nib to the top-aligning corner of the note container
+            if (me._img)
+                Ext.get(me._img).moveTo(p.getLeft(), c.down('.x-nti-note img').getTop());
+
+            //always move to the end
+            if(c.dom.nextSibling)
+                me._cnt.appendChild(c.dom);
+
+            if (me.noteCmp)
+                me.noteCmp.doLayout();
 
 		}
 		catch(e){
