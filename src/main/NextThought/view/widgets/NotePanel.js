@@ -132,7 +132,8 @@ Ext.define('NextThought.view.widgets.NotePanel',{
 
     insertTranscript: function(m){
 
-        this._record = m;
+        this.frameBody.hide();
+
         var panel = this.add({title: 'Chat Transcript | {date}'}),
             log = panel.add({ xtype: 'chat-log-view' }),
             a = this._annotation,
@@ -142,7 +143,13 @@ Ext.define('NextThought.view.widgets.NotePanel',{
             log.addMessage(i);
         });
 
-        p.onResize();
+        this.frameBody.show({
+            listeners: {
+                afteranimate: function(){
+                    p.onResize();
+                }
+            }
+        });
     },
 
 
@@ -197,8 +204,8 @@ Ext.define('NextThought.view.widgets.NotePanel',{
         if(action){
             this.fireEvent('action', action, this);
         }
-        else if(/TranscriptSummary/i.test(this._record.getModelName())){
-            this.fireEvent('load-transcript', this._record, this, this.box.switchOff({remove: true, useDisplay: true}));
+        else if(this.box.isDisplayed() && /TranscriptSummary/i.test(this._record.getModelName())){
+            this.fireEvent('load-transcript', this._record, this, this.box.setDisplayed(false));
         }
     },
 
