@@ -34,7 +34,7 @@ Ext.define('NextThought.view.widgets.NotePanel',{
                     '<img avatarFor="{.}"/>',
                 '</tpl>',
             '</tpl>',
-            '<div class="transcript-placeholder"><a href="#">View Log</a></div>',
+            '<div class="transcript-placeholder"><a href="#">View Log</a> (Messages: {MessageCount})</div>',
         '</div>',
         '<div class="x-nti-note-replies chat-transcript"></div>'
         ),
@@ -98,13 +98,38 @@ Ext.define('NextThought.view.widgets.NotePanel',{
     },
 
 
+    insertTranscript: function(m){
+        this.frameBody.hide();
+
+        var date = Ext.Date.format(m.get('Last Modified') || new Date(), 'M j, Y'),
+            panel = this.add({title: Ext.String.format('Chat Transcript | {0}',date)}),
+            log = panel.add({ xtype: 'chat-log-view' }),
+            a = this._annotation,
+            p = a._parentAnnotation? a._parentAnnotation : a,
+            msgs = m.get('Messages');
+
+        msg = Ext.Array.sort( msgs || [], SortModelsBy('Last Modified', true));
+
+        Ext.each(msgs, function(i){ log.addMessage(i); });
+
+        this.frameBody.show({
+            listeners: {
+                afteranimate: function(){
+                    p.fireEvent('resize');
+                }
+            }
+        });
+    },
+
+
     updateTranscriptSummaryModel: function(m){
         var me = this,
             c  = Ext.Array.clone(m.get('Contributors'));
 
 
         Ext.apply(this.renderData,{
-            contributors: Ext.Array.clone(c)
+            contributors: Ext.Array.clone(c),
+            MessageCount: m.get('RoomInfo').get('MessageCount')
         });
 
         UserRepository.prefetchUser(c, function(users){
@@ -128,30 +153,6 @@ Ext.define('NextThought.view.widgets.NotePanel',{
             });
         }, this);
 
-    },
-
-
-    insertTranscript: function(m){
-        this.frameBody.hide();
-
-        var date = Ext.Date.format(m.get('Last Modified') || new Date(), 'M j, Y'),
-            panel = this.add({title: Ext.String.format('Chat Transcript | {0}',date)}),
-            log = panel.add({ xtype: 'chat-log-view' }),
-            a = this._annotation,
-            p = a._parentAnnotation? a._parentAnnotation : a,
-            msgs = m.get('Messages');
-
-        msg = Ext.Array.sort( msgs || [], SortModelsBy('Last Modified', true));
-
-        Ext.each(msgs, function(i){ log.addMessage(i); });
-
-        this.frameBody.show({
-            listeners: {
-                afteranimate: function(){
-                    p.fireEvent('resize');
-                }
-            }
-        });
     },
 
 
