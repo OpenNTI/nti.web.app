@@ -132,7 +132,6 @@ Ext.define('NextThought.view.widgets.NotePanel',{
 
 
     insertTranscript: function(m){
-        console.log(m.data);
         this.frameBody.hide();
 
         var date = Ext.Date.format(m.get('Last Modified') || new Date(), 'M j, Y'),
@@ -142,9 +141,7 @@ Ext.define('NextThought.view.widgets.NotePanel',{
             p = a._parentAnnotation? a._parentAnnotation : a,
             msgs = m.get('Messages');
 
-        //Ext.Array.sort( msgs || [], SortModelsBy('Last Modified', true));
-
-        console.log(msgs);
+        msg = Ext.Array.sort( msgs || [], SortModelsBy('Last Modified', true));
 
         Ext.each(msgs, function(i){ log.addMessage(i); });
 
