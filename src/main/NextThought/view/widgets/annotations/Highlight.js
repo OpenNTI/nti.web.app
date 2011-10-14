@@ -3,25 +3,22 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 	
 
 	constructor: function(selection, record, container, component){
-		Ext.apply(this,{
-            _sel: null,
-            _canvas: null,
-            _rgba: null,
-            _color: null
-        });
+		var me = this,
+            userId= record.get('Creator');
 
-        var me = this;
-		me.addEvents({
-            colorchanged : true
-        });
         me.callParent([record, container, component,'resources/images/charms/highlight-white.png']);
-		me._sel = selection;
 
-		me._canvas = me._createCanvas();
+        Ext.apply(me,{
+            _sel: selection,
+            _canvas: me._createCanvas(),
+            _userId: userId
+        });
+
+
 		me.requestRender = Ext.Function.createDelayed(me.requestRender, 10, me);
+        me.self.addSource(userId);
         me.self._eventRouter.on('render',me.requestRender, me);
-
-        me._updateColor();
+        me.self._eventRouter.fireEvent('render');
         return me;
 	},
 	
@@ -31,7 +28,6 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 			p = n.parentNode;
 		n.setAttribute('id',id);
 		p.appendChild(n);
-//        p.insertBefore(n,p.firstChild);
 		return Ext.get(n);
 	},
 
@@ -86,6 +82,15 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
         });
     },
 
+
+    updateMenuIcon: function(color) {
+        var img = this.el.select('img.x-menu-item-icon').first()
+        if(img){
+            img.setStyle('background', '#'+color);
+        }
+    },
+
+
 	_buildMenu: function(){
 		var items = [],r = this._record;
 		if(this._isMine) {
@@ -105,40 +110,44 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 	
 	_menuItemHook: function(o,item, menu){
 		item.on('afterrender',Ext.bind(this.updateMenuIcon, item, [o._color]));
-		o.on('colorchanged', this.updateMenuIcon, item);
 	},
-	
-	_updateColor: function() {
-		this._color = this._record.get('color');
-		if ('yellow' == this._color) {
-			this._color = 'FFFF00';
-		}
-		this._rgba = this._hexToRGBA(this._color);
 
-		Ext.get(this._img).setStyle('background', '#' + this._color);
-        this.self._eventRouter.fireEvent('render');
-	},
-	
-	_colorSelected: function(colorPicker, color) {
-		this._record.set('color', color);
-		this._updateColor();
-		this._record.save();	
-		this.fireEvent('colorchanged', color);	
-	},
-	
-	
+    getColor: function(){
+        var idx = this.self.getColorIndex(this._userId);
+        return this.self.getColor(idx);
+    },
+
+    _colorToRGBA: function(color, alpha) {
+        var r = color.r, g = color.g, b = color.b;
+
+        if (typeof color == 'string') {
+            if(!/^[0-9A-F]+$/i.text(color))
+                color = 'FFFF00';
+
+            r = parseInt(color.substring(0, 2), 16);
+            g = parseInt(color.substring(2, 4), 16);
+            b = parseInt(color.substring(4), 16);
+        }
+
+        return Ext.String.format('rgba({0},{1},{2},{3})', r,g,b,alpha||'.3');
+    },
+
+
+    _colorToRGB: function(color){
+        var r = color.r,
+            g = color.g,
+            b = color.b;
+
+        return Ext.String.format('rgb({0},{1},{2})', r,g,b);
+    },
+
+
 	_addNote: function(){
         this.savePhantom();
 		this._cmp.fireEvent('create-note',this._sel);
 	},
 
-	updateMenuIcon: function(color) {
-		var img = this.el.select('img.x-menu-item-icon').first()
-		if(img){
-			img.setStyle('background', '#'+color);
-		}
-	},
-	
+
 	cleanup: function(){
 		this.callParent(arguments);
 		delete this._sel;
@@ -149,18 +158,6 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 	
 	onResize : function(e){
         this.requestRender();
-	},
-	
-	_hexToRGBA: function(hex) {
-		if ('yellow' == hex) {
-			hex = 'FFFF00';
-		}
-		
-		var red = hex.substring(0, 2);
-		var green = hex.substring(2, 4);
-		var blue = hex.substring(4);
-		
-		return 'rgba(' + parseInt(red, 16) + ',' + parseInt(green, 16) + ',' + parseInt(blue, 16) +',.3)';
 	},
 	
 
@@ -189,25 +186,31 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
         }
 	},
 
+
     requestRender: function(){
         if(!this._sel){
             this.cleanup();
             return;
         }
 
-        var r = this._sel.getBoundingClientRect(),
+        var i = Ext.get(this._img),
+            r = this._sel.getBoundingClientRect(),
             s = this._sel.getClientRects(),
             c = this._canvas,
             p = this._parent ? this._parent : (this._parent = Ext.get(this._div.parentNode)),
             l = s.length,
-            cXY = Ext.get(c).getXY();
+            cXY = Ext.get(c).getXY(),
+            color = this.getColor(),
+            rgba = this._colorToRGBA(color),
+            rgb = this._colorToRGB(color);
 
         if(!r){
             return;
         }
 
         //move nib
-        Ext.get(this._img).moveTo(p.getLeft(), r.top);
+        i.moveTo(p.getLeft(), r.top);
+        i.setStyle('background', rgb);
 
         //stage draw
         var avgH = 0;
@@ -216,15 +219,15 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 
         for(var i=0; i<l; i++){
             if(s[i].right == r.right && s[i].height>avgH) continue;
-            this.self.enqueue(this.drawRect(this.adjustCoordinates(s[i],cXY), this._rgba));
+            this.self.enqueue(this.drawRect(this.adjustCoordinates(s[i],cXY), rgba));
         }
 
         this.self.render();//buffered
     },
 
 
-
     statics : {
+        _sources : [],
         _eventRouter: new Ext.util.Observable(),
         _queue : [],
 
@@ -242,10 +245,102 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
             while(this._queue.length){
                 (this._queue.pop())(ctx);
             }
+        },
+
+        addSource: function(userId){
+            if(!Ext.Array.contains(this._sources, userId)){
+                this._sources.push(userId);
+                Ext.Array.sort(this._sources);
+
+                //keep the logged in user at index 0
+                var id = _AppConfig.userObject.getId();
+                Ext.Array.remove(this._sources,id);
+                this._sources.unshift(id);
+            }
+        },
+
+        getColorIndex: function(userId){
+            return Ext.Array.indexOf(this._sources,userId);
+        },
+
+        /**
+         * http://ridiculousfish.com/blog/posts/colors.html
+         * @param idx
+         */
+        hue: function(idx) {
+           /*
+            * Here we use 31 bit numbers because JavaScript doesn't have a 32 bit
+            * unsigned type, and so the conversion to float would produce a negative
+            * value.
+            */
+           var bitcount = 31;
+
+           /* Reverse the bits of idx into ridx */
+           var ridx = 0, i = 0;
+           for (i=0; i < bitcount; i++) {
+              ridx = (ridx << 1) | (idx & 1);
+              idx >>>= 1;
+           }
+
+           /* Divide by 2**bitcount */
+           var hue = ridx / Math.pow(2, bitcount);
+
+           /* Start at .6 (216 degrees) */
+           return (hue + .166) % 1;
+        },
+
+        getColor: function(idx){
+            var degrees = Math.round(this.hue(idx) * 360);
+            //console.log('degrees', degrees);
+            return hsl2rgb(degrees, 100, 50);
+
+            /*
+            HSL to RGB function sourced from:
+            http://www.codingforums.com/showpost.php?s=acaa80143f9fa9f2bb768131c14bfa3b&p=54172&postcount=2
+             */
+            function hsl2rgb(h, s, l) {
+            	var m1, m2, hue;
+            	var r, g, b
+            	s /=100;
+            	l /= 100;
+            	if (s == 0)
+            		r = g = b = (l * 255);
+            	else {
+            		if (l <= 0.5)
+            			m2 = l * (s + 1);
+            		else
+            			m2 = l + s - l * s;
+            		m1 = l * 2 - m2;
+            		hue = h / 360;
+            		r = HueToRgb(m1, m2, hue + 1/3);
+            		g = HueToRgb(m1, m2, hue);
+            		b = HueToRgb(m1, m2, hue - 1/3);
+            	}
+            	return {r: r, g: g, b: b};
+            }
+
+            function HueToRgb(m1, m2, hue) {
+            	var v;
+            	if (hue < 0)
+            		hue += 1;
+            	else if (hue > 1)
+            		hue -= 1;
+
+            	if (6 * hue < 1)
+            		v = m1 + (m2 - m1) * hue * 6;
+            	else if (2 * hue < 1)
+            		v = m2;
+            	else if (3 * hue < 2)
+            		v = m1 + (m2 - m1) * (2/3 - hue) * 6;
+            	else
+            		v = m1;
+
+            	return Math.round(255 * v);
+            }
         }
     }
 
 },
 function(){
-    this.render = Ext.Function.createBuffered(this.render,10,this);
+    this.render = Ext.Function.createBuffered(this.render,5,this);
 });

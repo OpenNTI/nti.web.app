@@ -292,7 +292,7 @@ Ext.define('NextThought.mixins.Annotations', {
                     Ext.apply(contributors, me.getContributors(r));
                 }
                 catch (err) {
-                    console.log('could not build '+r.getModelName()+' from record:', r, 'because: ', err.message, err);
+                    console.log('could not build '+r.getModelName()+' from record:', r, 'because: ', err.message, err.stack);
                 }
             }, this
         );
