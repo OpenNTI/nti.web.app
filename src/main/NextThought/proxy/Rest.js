@@ -62,7 +62,7 @@ Ext.define('NextThought.proxy.Rest', {
             url += containerId;
         }
 
-        if (appendId && id) {
+        if  ( id) {
             if (!url.match(/\/$/)) {
                 url += '/';
             }

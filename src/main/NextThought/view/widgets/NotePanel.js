@@ -132,20 +132,21 @@ Ext.define('NextThought.view.widgets.NotePanel',{
 
 
     insertTranscript: function(m){
-
+        console.log(m.data);
         this.frameBody.hide();
 
         var date = Ext.Date.format(m.get('Last Modified') || new Date(), 'M j, Y'),
             panel = this.add({title: Ext.String.format('Chat Transcript | {0}',date)}),
             log = panel.add({ xtype: 'chat-log-view' }),
             a = this._annotation,
-            p = a._parentAnnotation? a._parentAnnotation : a;
+            p = a._parentAnnotation? a._parentAnnotation : a,
+            msgs = m.get('Messages');
 
-        Ext.each(
-            Ext.Array.sort( m.get('Messages') || [], SortModelsBy('Last Modified', true)),
-            function(i){
-                log.addMessage(i);
-            });
+        //Ext.Array.sort( msgs || [], SortModelsBy('Last Modified', true));
+
+        console.log(msgs);
+
+        Ext.each(msgs, function(i){ log.addMessage(i); });
 
         this.frameBody.show({
             listeners: {

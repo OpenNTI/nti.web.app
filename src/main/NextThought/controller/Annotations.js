@@ -114,6 +114,8 @@ Ext.define('NextThought.controller.Annotations', {
     onLoadTranscript: function(record, cmp, elm, eOpts) {
         var id = record.get('RoomInfo').getId();
 
+        console.log(id, record.get('RoomInfo').data);
+
         this.getModel('Transcript').load(id,{
             scope: this,
             failure: function(record, operation) {
