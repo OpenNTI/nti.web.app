@@ -17,8 +17,8 @@
 
 
 .x-nti-note.chat-transcript { cursor: pointer; }
-.x-nti-note.chat-transcript img { margin-right: 2px; }
-.x-nti-note.chat-transcript .transcript-placeholder { margin: 0px; float: right; }
+.x-nti-note.chat-transcript img { float: right; margin-right: 2px; }
+.x-nti-note.chat-transcript .transcript-placeholder { margin: 0px; }
 .x-nti-note.chat-transcript .transcript-placeholder a { text-decoration: none !important; font-weight: bold; font-size: 10px; color: #444;}
 
 .x-nti-note-replies.chat-transcript,

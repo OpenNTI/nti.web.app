@@ -2,11 +2,13 @@ Ext.define('NextThought.view.widgets.annotations.SelectionHighlight', {
     extend: 'NextThought.view.widgets.Widget',
     alias: 'annotations.SelectionHighlight',
 
-	_sels: [],
-	_canvas: null,
-    _cont: null,
-
 	constructor: function(selections, container, component){
+        Ext.apply(this, {
+            _sels: [],
+            _canvas: null,
+            _cont: null
+        });
+
 		var me = this;
         me._cont = container;
 		me._sels = selections;

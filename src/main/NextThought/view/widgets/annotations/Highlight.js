@@ -1,13 +1,16 @@
 Ext.define('NextThought.view.widgets.annotations.Highlight', {
 	extend:'NextThought.view.widgets.annotations.Annotation',
 	
-	_sel: null,
-	_canvas: null,
-	_rgba: null,
-	_color: null,
 
 	constructor: function(selection, record, container, component){
-		var me = this, c;
+		Ext.apply(this,{
+            _sel: null,
+            _canvas: null,
+            _rgba: null,
+            _color: null
+        });
+
+        var me = this, c;
 		me.addEvents({
             colorchanged : true
         });

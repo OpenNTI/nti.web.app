@@ -2,15 +2,17 @@
 Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 	extend: 'NextThought.view.widgets.Widget',
 	
-	_div: null,
-	_img: null,
-	_cnt: null,
-	_cmp: null,
-	_menu: null,
-	_record: null,
-	_isMine: false,
-	
 	constructor: function(record, container, component, icon) {
+        Ext.apply(this, {
+            _div: null,
+            _img: null,
+            _cnt: null,
+            _cmp: null,
+            _menu: null,
+            _record: null,
+            _isMine: false
+        });
+
 		var me = this,
             b = Ext.Function.createBuffered(me.onResize,100,me,['buffered']);
 		me.addEvents('share-with');

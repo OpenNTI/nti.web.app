@@ -1,16 +1,16 @@
 Ext.define( 'NextThought.view.widgets.annotations.Note', {
 	extend: 'NextThought.view.widgets.annotations.Annotation',
 	requires:[
-			'NextThought.view.widgets.NotePanel'
-			],
-
-	_anchorNode : null,
-	_noteContainer: null,
-	_noteDiv: null,
-	
-	_originalPadding: 0,
+        'NextThought.view.widgets.NotePanel'
+    ],
 
 	constructor: function(record, container, component){
+        Ext.apply(this, {
+            _anchorNode : null,
+            _noteContainer: null,
+            _originalPadding: 0
+        });
+
 		this.callParent([record, container, component,'resources/images/charms/note-white.png']);
 
         var me = this,

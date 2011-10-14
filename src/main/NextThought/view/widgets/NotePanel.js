@@ -26,9 +26,6 @@ Ext.define('NextThought.view.widgets.NotePanel',{
 
     transcriptSummaryRenderTpl: new Ext.XTemplate(
         '<div class="x-nti-note chat-transcript">',
-            '<div class="transcript-placeholder">',
-                '<a href="#">View Log</a>',
-            '</div>',
             '<tpl for="contributors">',
                 '<tpl if="src">',
                     '<img avatarFor="{id}" src="{src}" alt="{alt}" title="{title}"/>',
@@ -37,6 +34,7 @@ Ext.define('NextThought.view.widgets.NotePanel',{
                     '<img avatarFor="{.}"/>',
                 '</tpl>',
             '</tpl>',
+            '<div class="transcript-placeholder"><a href="#">View Log</a></div>',
         '</div>',
         '<div class="x-nti-note-replies chat-transcript"></div>'
         ),
@@ -134,7 +132,8 @@ Ext.define('NextThought.view.widgets.NotePanel',{
 
         this.frameBody.hide();
 
-        var panel = this.add({title: 'Chat Transcript | {date}'}),
+        var date = Ext.Date.format(m.get('Last Modified') || new Date(), 'M j, Y'),
+            panel = this.add({title: Ext.String.format('Chat Transcript | {0}',date)}),
             log = panel.add({ xtype: 'chat-log-view' }),
             a = this._annotation,
             p = a._parentAnnotation? a._parentAnnotation : a;
