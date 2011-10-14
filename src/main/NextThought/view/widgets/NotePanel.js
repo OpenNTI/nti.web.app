@@ -104,8 +104,6 @@ Ext.define('NextThought.view.widgets.NotePanel',{
         var date = Ext.Date.format(m.get('Last Modified') || new Date(), 'M j, Y'),
             panel = this.add({title: Ext.String.format('Chat Transcript | {0}',date)}),
             log = panel.add({ xtype: 'chat-log-view' }),
-            a = this._annotation,
-            p = a._parentAnnotation? a._parentAnnotation : a,
             msgs = m.get('Messages');
 
         msg = Ext.Array.sort( msgs || [], SortModelsBy('Last Modified', true));
@@ -114,8 +112,9 @@ Ext.define('NextThought.view.widgets.NotePanel',{
 
         this.frameBody.show({
             listeners: {
+                scope: this,
                 afteranimate: function(){
-                    p.fireEvent('resize');
+                    this.sizeChanged();
                 }
             }
         });
@@ -233,12 +232,8 @@ Ext.define('NextThought.view.widgets.NotePanel',{
 
 
     addReply: function(record){
-        var m = this,
-            a = m._annotation,
-            p = a._parentAnnotation? a._parentAnnotation : a;
-
-        m.add(m.buildReply(record));
-        p.onResize();
+        this.add(this.buildReply(record));
+        this.sizeChanged();
     },
 
 
@@ -247,8 +242,7 @@ Ext.define('NextThought.view.widgets.NotePanel',{
         var m = this,
             a = m._annotation,
             p = a._parentAnnotation? a._parentAnnotation : a,
-            r = {
-                xtype: 'note-entry',
+            r = Ext.create('widget.note-entry',{
                 _record: record,
                 _owner: m,
                 _annotation: {
@@ -257,7 +251,7 @@ Ext.define('NextThought.view.widgets.NotePanel',{
                     getCmp: function(){return r;},
                     remove: function(){ r.removeReply(); }
                 }
-            };
+            });
 
         record.on('updated', r.replyUpdated, r);
 
@@ -318,9 +312,7 @@ Ext.define('NextThought.view.widgets.NotePanel',{
     cleanupReply: function(){
         var m = this,
             children = m._record.children,
-            parent = m._record._parent,
-            a = m._annotation,
-            p = a._parentAnnotation ? a._parentAnnotation : a;
+            parent = m._record._parent;
 
 
         if(m.hasReplies()) {
@@ -328,7 +320,7 @@ Ext.define('NextThought.view.widgets.NotePanel',{
         }
         else m.destroy();
 
-        p.onResize();
+        m.sizeChanged();
     },
 
     onRemove: function(){
@@ -336,6 +328,8 @@ Ext.define('NextThought.view.widgets.NotePanel',{
         if(this.placeHolder && !this.hasReplies()){
             this.destroy();
         }
+
+        this.sizeChanged();
     },
 
     removeReply: function(){
@@ -355,9 +349,14 @@ Ext.define('NextThought.view.widgets.NotePanel',{
 
         m._record = record;
         m.updateModel(record);
-        m._annotation._parentAnnotation.onResize();
-    }
+        m.sizeChanged();
+    },
 
+
+    sizeChanged: function(){
+        var a = this._annotation;
+        (a._parentAnnotation || a).fireEvent('resize');
+    }
 	
 	
 });
