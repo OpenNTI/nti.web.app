@@ -4,18 +4,14 @@ Ext.define('NextThought.view.widgets.annotations.SelectionHighlight', {
 
 	constructor: function(selections, container, component){
         Ext.apply(this, {
-            _sels: [],
-            _canvas: null,
-            _cont: null
+            _sels: selections || [],
+            _canvas: null
         });
 
 		var me = this;
-        me._cont = container;
-		me._sels = selections;
+
         me._color = 'FFFF00';
-
         me._canvas =  me.createElement('canvas',container,'search-highlight-object unselectable','position: absolute; pointer-events: none;');
-
         me.render = Ext.Function.createBuffered(me.render,100,me,[true]);
         component.on('resize', me.onResize, me);
         me.onResize();
@@ -29,7 +25,7 @@ Ext.define('NextThought.view.widgets.annotations.SelectionHighlight', {
 
 	onResize : function(e){
         var c = Ext.get(this._canvas),
-            cont = Ext.get(this._cont),
+            cont = Ext.get(this._cnt),
             pos = cont.getXY(),
             size = cont.getSize();
         c.moveTo(pos[0], pos[1]);
@@ -56,13 +52,6 @@ Ext.define('NextThought.view.widgets.annotations.SelectionHighlight', {
 
             var s = sel.getClientRects(),
                 l = s.length;
-
-            var avgH = 0;
-            Ext.each(s,function(v){
-                avgH += v.height;
-            });
-
-            avgH /= s.length;
 
             for(var i=0; i<l; i++){
                 var ac = this.adjustCoordinates(s[i], canvasXY);

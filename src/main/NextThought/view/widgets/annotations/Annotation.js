@@ -6,23 +6,19 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
         Ext.apply(this, {
             _div: null,
             _img: null,
-            _cnt: null,
-            _cmp: null,
+            _cnt: container,
+            _cmp: component,
             _menu: null,
-            _record: null,
-            _isMine: false
+            _record: record,
+            _isMine: record.get('Creator') == _AppConfig.server.username || record.phantom
         });
 
 		var me = this,
             b = Ext.Function.createBuffered(me.onResize,100,me,['buffered']);
 		me.addEvents('share-with');
 		me.enableBubble('share-with', 'resize');
-		
-		me._cnt = container;
-		me._cmp = component;
-		me._record = record;
+
 		me._isVisible = record.phantom || me.testFilter(component._filter);
-		me._isMine = record.get('Creator') == _AppConfig.server.username || record.phantom;
 		me._cmp.on('resize', b, me);
 		Ext.EventManager.onWindowResize(b, me);
 		

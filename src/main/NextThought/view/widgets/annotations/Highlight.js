@@ -10,19 +10,19 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
             _color: null
         });
 
-        var me = this, c;
+        var me = this;
 		me.addEvents({
             colorchanged : true
         });
         me.callParent([record, container, component,'resources/images/charms/highlight-white.png']);
 		me._sel = selection;
 
-		c = me._createCanvasContainer('canvas-highlight-container');
-		me._canvas = me.createElement('canvas',c.dom,'highlight-object unselectable','position: absolute; pointer-events: none;'+(me._isVisible?'':'visibility:hidden;'));
-		me._updateColor();
+		me._canvas = me._createCanvas();
+		me.requestRender = Ext.Function.createDelayed(me.requestRender, 10, me);
+        me.self._eventRouter.on('render',me.requestRender, me);
 
-        me.render = Ext.Function.createBuffered(me.render,100,me,[true]);
-		return me;
+        me._updateColor();
+        return me;
 	},
 	
 	_createCanvasContainer: function(id){
@@ -34,11 +34,38 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 //        p.insertBefore(n,p.firstChild);
 		return Ext.get(n);
 	},
+
+    _createCanvas: function(){
+        var cont = this._createCanvasContainer('canvas-highlight-container'),
+            c = cont.query('canvas')[0];
+
+        if(!c){
+            c = this.createElement(
+                'canvas',
+                cont.dom,
+                'highlight-object unselectable','position: absolute; pointer-events: none;');
+            this._cmp.on('resize', this.canvasResize, this);
+        }
+        return c;
+    },
+
+    canvasResize: function(){
+        var c = Ext.get(this._canvas),
+            cont = Ext.get(this._cnt),
+            pos = cont.getXY(),
+            size = cont.getSize();
+        c.moveTo(pos[0], pos[1]);
+        c.setSize(size.width, size.height);
+        c.set({
+            width: size.width,
+            height: size.height
+        });
+    },
 	
 	visibilityChanged: function(show){
 		this.callParent(arguments);
 		var c = Ext.get(this._canvas);
-		show? c.show() : c.hide();
+		//show? c.show() : c.hide();
 	},
 
 
@@ -65,11 +92,7 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 			items.push({
                     text : (r.phantom?'Save':'Remove')+' Highlight',
                     handler: Ext.bind(r.phantom? this.savePhantom : this.remove, this)
-                },{
-                    text : 'Change Color',
-                    menu: [Ext.create('Ext.ColorPalette', {
-                    listeners: { scope: this, select: this._colorSelected }})]
-			});
+                });
 		}
 		
 		items.push({
@@ -93,7 +116,7 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 		this._rgba = this._hexToRGBA(this._color);
 
 		Ext.get(this._img).setStyle('background', '#' + this._color);
-		this.render();		
+        this.self._eventRouter.fireEvent('render');
 	},
 	
 	_colorSelected: function(colorPicker, color) {
@@ -118,14 +141,14 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 	
 	cleanup: function(){
 		this.callParent(arguments);
-		Ext.get(this._canvas).remove();
 		delete this._sel;
+        this.self._eventRouter.un('render',this.requestRender, this);
+        this.self._eventRouter.fireEvent('render');
 	},
 	
 	
 	onResize : function(e){
-
-		this.render();
+        this.requestRender();
 	},
 	
 	_hexToRGBA: function(hex) {
@@ -140,68 +163,89 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 		return 'rgba(' + parseInt(red, 16) + ',' + parseInt(green, 16) + ',' + parseInt(blue, 16) +',.3)';
 	},
 	
-	render: function(){
-		if(!this._sel){
-			this.cleanup();
-			return;
-		}
-		
-		var r = this._sel.getBoundingClientRect(),
-			s = this._sel.getClientRects(),
-			c = this._canvas,
-			p = this._parent ? this._parent : (this._parent = Ext.get(this._div.parentNode)),
-			l = s.length;
-		if(!r){
+
+    adjustCoordinates: function(rect,offsetToTrim){
+        var r = rect,
+            o = offsetToTrim,
+            x = o[0] ? o[0] : o.left,
+            y = o[1] ? o[1] : o.top;
+
+        r.top -= y; r.left -= x;
+        return {
+            top: r.top-y,
+            left: r.left-x,
+            width: r.width,
+            height: r.height,
+            right: r.left-x+r.width,
+            bottom: r.top-y+r.height
+        };
+    },
+	
+	
+	drawRect: function(rect, fill){
+        return function(ctx){
+            ctx.fillStyle = fill;
+		    ctx.fillRect(rect.left, rect.top, rect.width, rect.height);
+        }
+	},
+
+    requestRender: function(){
+        if(!this._sel){
+            this.cleanup();
             return;
-		}	
-		Ext.get(c).moveTo(r.left, r.top);
-		c.width = r.width; c.height = r.height;
+        }
 
-		Ext.get(this._img).moveTo(p.getLeft(), r.top);
-			
-		var	ctx = c.getContext("2d"),			
-			color = this._rgba;
-	
-		ctx.fillStyle = color;
-		
-		var avgH = 0;
-		Ext.each(s,function(v){
-			avgH += v.height;
-		});
-		
-		avgH /= s.length;
+        var r = this._sel.getBoundingClientRect(),
+            s = this._sel.getClientRects(),
+            c = this._canvas,
+            p = this._parent ? this._parent : (this._parent = Ext.get(this._div.parentNode)),
+            l = s.length,
+            cXY = Ext.get(c).getXY();
 
-		for(var i=0; i<l; i++){
-			
-			if(s[i].right == r.right && s[i].height>avgH){
-				continue;
-			}
-			
-			this.drawRect(ctx,this.adjustCoordinates(s[i],r));
-			
-		}
-	},
-	
-	
-	adjustCoordinates: function(rect,offsetToTrim){
-		var r = rect, 
-			o = offsetToTrim;
-			
-		r.top -= o.top; r.left -= o.left;
-		return {
-			top: r.top-o.top,
-			left: r.left-o.left,
-			width: r.width,
-			height: r.height,
-			right: r.left-o.left+r.width,
-			bottom: r.top-o.top+r.height
-		};
-	},
-	
-	
-	drawRect: function(ctx, rect){
-		// debugger;
-		ctx.fillRect(rect.left, rect.top, rect.width, rect.height);
-	}
+        if(!r){
+            return;
+        }
 
+        //move nib
+        Ext.get(this._img).moveTo(p.getLeft(), r.top);
+
+        //stage draw
+        var avgH = 0;
+        Ext.each(s,function(v){ avgH += v.height; });
+        avgH /= l;
+
+        for(var i=0; i<l; i++){
+            if(s[i].right == r.right && s[i].height>avgH) continue;
+            this.self.enqueue(this.drawRect(this.adjustCoordinates(s[i],cXY), this._rgba));
+        }
+
+        this.self.render();//buffered
+    },
+
+
+
+    statics : {
+        _eventRouter: new Ext.util.Observable(),
+        _queue : [],
+
+        enqueue: function(op){
+            this._queue.push(op);
+        },
+
+        render: function(){
+            var	c = this._canvas = (this._canvas || Ext.query('#canvas-highlight-container canvas')[0]),
+                ctx = c.getContext("2d");
+            //reset the context
+
+            c.width = c.width;
+
+            while(this._queue.length){
+                (this._queue.pop())(ctx);
+            }
+        }
+    }
+
+},
+function(){
+    this.render = Ext.Function.createBuffered(this.render,10,this);
 });
