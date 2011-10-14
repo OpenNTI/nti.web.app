@@ -11,10 +11,17 @@ Ext.define('NextThought.mixins.Annotations', {
         'NextThought.view.widgets.annotations.Note'
     ],
 
+    GETTERS : {
+        'Note': function(r){return r},
+        'TranscriptSummary': function(r){return r.get('RoomInfo')}
+    },
+
     initAnnotations: function(){
-        this._annotations = {};
-        this._filter = null;
-        this._searchAnnotations = null;
+        Ext.apply(this,{
+            _annotations: {},
+            _filter: null,
+            _searchAnnotations: null
+        });
 
         this.addEvents('create-note','edit-note');
         this.enableBubble(['create-note','edit-note']);
@@ -25,18 +32,13 @@ Ext.define('NextThought.mixins.Annotations', {
             },
             this);
 
-        NextThought.controller.Stream.registerChangeListener(this.onNotification, this);
-
         this.widgetBuilder = {
             'Highlight' : this.createHighlightWidget,
             'Note': this.createNoteWidget,
             'TranscriptSummary': this.createTranscriptSummaryWidget
         };
 
-        this.getters = {
-            'Note': function(r){return r},
-            'TranscriptSummary': function(r){return r.get('RoomInfo')}
-        };
+        NextThought.controller.Stream.registerChangeListener(this.onNotification, this);
     },
 
 
@@ -115,7 +117,7 @@ Ext.define('NextThought.mixins.Annotations', {
 
         if(!highlight) return;
 
-        w = this.widgetBuildert['Highlight'].call(this,highlight,range);
+        w = this.widgetBuilder['Highlight'].call(this,highlight,range);
 
         highlight.set('ContainerId', this._containerId);
 
@@ -193,7 +195,6 @@ Ext.define('NextThought.mixins.Annotations', {
 
 
     createTranscriptSummaryWidget: function(record) {
-
     },
 
 
@@ -257,7 +258,7 @@ Ext.define('NextThought.mixins.Annotations', {
         //sort bins
         for(var b in bins){
             if(bins.hasOwnProperty(b))
-            bins[b] = Ext.Array.sort(bins[b]||[],SortModelsBy(k,true,me.getters[b]));
+            bins[b] = Ext.Array.sort(bins[b]||[],SortModelsBy(k,true,me.GETTERS[b]));
         }
 
 
@@ -291,7 +292,7 @@ Ext.define('NextThought.mixins.Annotations', {
                     Ext.apply(contributors, me.getContributors(r));
                 }
                 catch (err) {
-                    console.log('could not build '+r.getModelName()+' from record:', r);
+                    console.log('could not build '+r.getModelName()+' from record:', r, 'because: ', err.message, err);
                 }
             }, this
         );
@@ -305,14 +306,15 @@ Ext.define('NextThought.mixins.Annotations', {
             contributors = {};
 
         Ext.each(list, function buildTree(r){
-            var g = me.getters[r.getModelName()](r),
+            var g = me.GETTERS[r.getModelName()](r),
                 oid = g.get('OID'),
                 parent = g.get('inReplyTo'),
                 p;
 
+
             r.children = r.children || [];
 
-            if(!tree[oid])
+            if(!(oid in tree))
                 tree[oid] = r;
 
             if(parent){

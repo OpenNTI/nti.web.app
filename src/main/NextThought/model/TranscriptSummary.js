@@ -1,5 +1,6 @@
 Ext.define('NextThought.model.TranscriptSummary', {
     extend: 'NextThought.model.Base',
+    idProperty: 'RoomInfo.OID',
     fields: [
         { name: 'Class', type: 'string', defaultValue: 'TranscriptSummary'},
         { name: 'RoomInfo', type: 'singleItem'},

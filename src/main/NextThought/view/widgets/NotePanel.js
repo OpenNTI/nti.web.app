@@ -59,7 +59,7 @@ Ext.define('NextThought.view.widgets.NotePanel',{
             r = m._record = m._record || a._record,
             c = r.get('Creator') || _AppConfig.server.username;
 
-        m.id = 'cmp-'+r.get('OID');
+        m.id = 'cmp-'+(r.get('OID') || r.get('RoomInfo').get('OID'));
 
         if(/TranscriptSummary/i.test(r.getModelName())){
             m.renderTpl = m.transcriptSummaryRenderTpl;
@@ -73,15 +73,18 @@ Ext.define('NextThought.view.widgets.NotePanel',{
     },
 
     buildThread: function(record){
-        var m = this;
+        var m = this,
+            l = record.children.length;
+
         Ext.each(
-            Ext.Array.sort(
-                record.children || [],
-                SortModelsBy('Last Modified', true)),
+            Ext.Array.sort( record.children || [], SortModelsBy('Last Modified', true)),
             function(rec){
                 m.add(m.buildReply(rec));
             }
         );
+
+        if(l != this.items.getCount())
+            console.log('WARNING: Lengths are wrong!', l, this.items.getCount(), this);
     },
 
     convertToPlaceHolder: function(){
@@ -138,9 +141,11 @@ Ext.define('NextThought.view.widgets.NotePanel',{
             a = this._annotation,
             p = a._parentAnnotation? a._parentAnnotation : a;
 
-        Ext.each(m.get('Messages'),function(i){
-            log.addMessage(i);
-        });
+        Ext.each(
+            Ext.Array.sort( m.get('Messages') || [], SortModelsBy('Last Modified', true)),
+            function(i){
+                log.addMessage(i);
+            });
 
         this.frameBody.show({
             listeners: {
@@ -239,6 +244,7 @@ Ext.define('NextThought.view.widgets.NotePanel',{
 
 
     buildReply: function(record){
+        try {
         var m = this,
             a = m._annotation,
             p = a._parentAnnotation? a._parentAnnotation : a,
@@ -257,6 +263,10 @@ Ext.define('NextThought.view.widgets.NotePanel',{
         record.on('updated', r.replyUpdated, r);
 
         return r;
+        }
+        catch(e){
+            console.log(e, e.message, e.stack);
+        }
     },
 
     _claimChild: function(children, child) {
@@ -280,8 +290,8 @@ Ext.define('NextThought.view.widgets.NotePanel',{
         if (record.children && record.children.length > 0) {
             Ext.each(record.children, function(rec){
                 this._claimChild(abandonedChildren, rec);
-                var oid = rec.get('OID'),
-                    reply = Ext.getCmp('cmp-'+oid);
+                var oid = rec.get('OID') || rec.get('RoomInfo').get('OID'),
+                    reply = this.getComponent('cmp-'+oid);
 
                 if (reply)
                     reply.updateFromRecord(rec);
