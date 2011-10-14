@@ -148,7 +148,7 @@ Ext.define('NextThought.view.widgets.NotePanel',{
         this.frameBody.show({
             listeners: {
                 afteranimate: function(){
-                    p.onResize();
+                    p.fireEvent('resize');
                 }
             }
         });

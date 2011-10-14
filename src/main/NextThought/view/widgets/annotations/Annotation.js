@@ -16,7 +16,7 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 		var me = this,
             b = Ext.Function.createBuffered(me.onResize,100,me,['buffered']);
 		me.addEvents('share-with');
-		me.enableBubble('share-with');
+		me.enableBubble('share-with', 'resize');
 		
 		me._cnt = container;
 		me._cmp = component;
