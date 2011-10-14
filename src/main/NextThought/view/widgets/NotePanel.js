@@ -74,7 +74,7 @@ Ext.define('NextThought.view.widgets.NotePanel',{
 
     buildThread: function(record){
         var m = this,
-            l = record.children.length;
+            l = (record.children||[]).length;
 
         Ext.each(
             Ext.Array.sort( record.children || [], SortModelsBy('Last Modified', true)),
