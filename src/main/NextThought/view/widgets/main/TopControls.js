@@ -31,7 +31,9 @@ Ext.define('NextThought.view.widgets.main.TopControls', {
             minWidth: (MIN_SIDE_WIDTH+165),
             items: [
                 {
-                    html: '<img src="resources/images/ntbanner.png" alt="banner" width="180" height="60" />',
+                    html: Ext.String.format(
+                        '<img src="{0}" class="header-logo" alt="banner" width="180" height="60" />',
+                        Ext.BLANK_IMAGE_URL),
                     border: false,
                     width: MIN_SIDE_WIDTH,
                     height: 60

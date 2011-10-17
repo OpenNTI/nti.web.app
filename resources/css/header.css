@@ -1,3 +1,7 @@
+.header-logo {
+    background: transparent url("../images/ntbanner.png") no-repeat 0 0;
+}
+
 .mode-switcher {
     padding-top: 4px;
 }
