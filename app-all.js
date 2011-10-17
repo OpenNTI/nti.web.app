@@ -1,5 +1,5 @@
 /*
-Copyright(c) 2011 Company Name
+Copyright(c) 2011 NextThought, LLC
 */
 /*
 
