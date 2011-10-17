@@ -21,54 +21,11 @@
     <script type="text/javascript" src="http://alpha.nextthought.com/NextThoughtWebApp/resources/md5.js"></script>
     <script type="text/javascript" src="http://alpha.nextthought.com/NextThoughtWebApp/resources/globals.js"></script>
 
-    <script type="text/javascript" src="http://alpha.nextthought.com/NextThoughtWebApp/extjs/ext-debug.js"></script>
+    <script type="text/javascript" src="http://alpha.nextthought.com/NextThoughtWebApp/extjs/ext.js"></script>
 
     <script type="text/javascript" src="http://alpha.nextthought.com/NextThoughtWebApp/config.js"></script>
+    <script type="text/javascript" src="http://alpha.nextthought.com/NextThoughtWebApp/app-all.js"></script>
 
-    <script type="text/javascript"><!--
-        document.write('<script	src="'+_AppConfig.server.host+'/socket.io/static/socket.io.js"></script>');
-
-        Ext.application({
-            name: 'NextThought',
-            appFolder: _AppConfig.server.host+'/NextThoughtWebApp/src/main/NextThought',
-
-            controllers: [
-                'State',
-                'Chat',
-                'Account',
-                'Annotations',
-                'Application',
-                'FilterControl',
-                'Groups',
-                'Home',
-                'Session',
-                'Modes',
-                'ObjectExplorer',
-                'Reader',
-                'Search',
-                'Stream'
-            ],
-
-            launch: function() {
-                Ext.JSON.encodeDate = encodeDate
-
-                fixIE();
-                Ext.Ajax.timeout==60000;
-
-                setTimeout(
-                    function clearMask(){
-                        Ext.get('loading').remove();
-                        Ext.get('loading-mask').fadeOut({remove:true});
-                        resizeBlocker(Ext.Element.getViewWidth());
-                    },
-                    100);
-
-                NextThought.controller.Session.login();
-            }
-        });
-
-    -->
-    </script>
     ]]>
     </Content>
 </Module>
