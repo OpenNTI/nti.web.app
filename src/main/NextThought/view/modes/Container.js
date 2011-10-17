@@ -4,12 +4,13 @@ Ext.define( 'NextThought.view.modes.Container', {
 	extend: 'Ext.panel.Panel',
     alias: 'widget.modeContainer',
 	requires: [
-			'NextThought.view.modes.Home',
-			'NextThought.view.modes.Reader',
-			'NextThought.view.modes.Stream',
-			'NextThought.view.modes.Groups',
-            'NextThought.view.modes.Classroom'
-			],
+        'Ext.layout.container.Card',
+        'NextThought.view.modes.Home',
+        'NextThought.view.modes.Reader',
+        'NextThought.view.modes.Stream',
+        'NextThought.view.modes.Groups',
+        'NextThought.view.modes.Classroom'
+    ],
 	
 	// plain: true,
 	border: false, 

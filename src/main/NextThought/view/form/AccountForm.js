@@ -3,6 +3,8 @@ Ext.define('NextThought.view.form.AccountForm', {
     alias: 'widget.account-form',
 
     requires: [
+        'Ext.form.field.Text',
+        'Ext.form.FieldSet',
         'NextThought.view.form.fields.ShareWithField'
     ],
 

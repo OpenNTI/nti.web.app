@@ -1,6 +1,11 @@
 Ext.define('NextThought.view.windows.LoginWindow', {
     extend: 'Ext.container.Viewport',
     alias : 'widget.loginwindow',
+    requires: [
+        'Ext.Img',
+        'Ext.form.field.Text',
+        'Ext.form.field.Checkbox'
+    ],
 
     autoRender: false,
     autoShow: false,

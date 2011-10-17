@@ -2,7 +2,10 @@
 
 Ext.define('NextThought.view.widgets.ItemNavigator', {
 	extend:'Ext.panel.Panel',
-    requires: ['NextThought.proxy.UserDataLoader'],
+    requires: [
+        'Ext.grid.Panel',
+        'NextThought.proxy.UserDataLoader'
+    ],
     alias: 'widget.item-navigator',
 	frame: false,
 	border: false,
