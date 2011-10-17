@@ -20,7 +20,7 @@
     <script type="text/javascript" src="http://alpha.nextthought.com/NextThoughtWebApp/resources/md5.js"></script>
     <script type="text/javascript" src="http://alpha.nextthought.com/NextThoughtWebApp/resources/globals.js"></script>
 
-    <script type="text/javascript" src="http://alpha.nextthought.com/NextThoughtWebApp/ext/ext-debug.js"></script>
+    <script type="text/javascript" src="http://alpha.nextthought.com/NextThoughtWebApp/extjs/ext-debug.js"></script>
 
     <script type="text/javascript" src="http://alpha.nextthought.com/NextThoughtWebApp/config.js"></script>
     <script type="text/javascript" src="http://alpha.nextthought.com/NextThoughtWebApp/src/main/app.js"></script>
