@@ -70350,7 +70350,9 @@ Ext.define('NextThought.view.widgets.main.TopControls', {
             minWidth: (MIN_SIDE_WIDTH+165),
             items: [
                 {
-                    html: '<img src="resources/images/ntbanner.png" alt="banner" width="180" height="60" />',
+                    html: Ext.String.format(
+                        '<img src="{0}" class="header-logo" alt="banner" width="180" height="60" />',
+                        Ext.BLANK_IMAGE_URL),
                     border: false,
                     width: MIN_SIDE_WIDTH,
                     height: 60
@@ -70373,6 +70375,7 @@ Ext.define('NextThought.view.widgets.main.TopControls', {
         });
     }
 });
+
 
 Ext.define('NextThought.view.widgets.main.Header', {
 	extend: 'Ext.panel.Panel',
@@ -77657,7 +77660,9 @@ Ext.define('NextThought.view.windows.LoginWindow', {
         {
             cls: 'x-brand-and-search-bar',
             region: 'north',
-            html: '<img src="resources/images/ntbanner.png" alt="banner" width="180" height="60" />',
+            html: Ext.String.format(
+                '<img src="{0}" class="header-logo" alt="banner" width="180" height="60" />',
+                Ext.BLANK_IMAGE_URL),
             border: false,
             height: 60
         },
@@ -77700,11 +77705,12 @@ Ext.define('NextThought.view.windows.LoginWindow', {
                                     border: false,
                                     layout: 'hbox',
                                     items:[{
-                                        xtype: 'image',
-                                        border: false,
+                                        xtype: 'box',
                                         width: 128,
-                                        margin: '15px 0',
-                                        src: 'resources/images/user.png'
+                                        border: false,
+                                        html: Ext.String.format(
+                                            '<img src="{0}" class="login-icon" alt="login" width="128" height="128" />',
+                                            Ext.BLANK_IMAGE_URL)
                                     },{
                                         border: false,
                                         flex: 1,
@@ -77825,6 +77831,7 @@ Ext.define('NextThought.view.windows.LoginWindow', {
     }
 
 });
+
 Ext.define('NextThought.model.RoomInfo', {
     extend: 'NextThought.model.Base',
     idProperty: 'ID',
