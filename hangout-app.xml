@@ -7,11 +7,11 @@
     </ModulePrefs>
     <Content type="html">
     <![CDATA[
-    <script src="//hangoutsapi.appspot.com/static/hangout.js"></script>
     <base href="http://alpha.nextthought.com">
-    <link rel="stylesheet" type="text/css" href="/NextThoughtWebApp/extjs/resources/css/ext-all-gray.css">
-    <link rel="stylesheet" type="text/css" href="/NextThoughtWebApp/resources/css/panel-reset.css">
-    <link rel="stylesheet" type="text/css" href="/NextThoughtWebApp/resources/css/main.css">
+    <script src="//hangoutsapi.appspot.com/static/hangout.js"></script>
+    <link rel="stylesheet" type="text/css" href="http://alpha.nextthought.com/NextThoughtWebApp/extjs/resources/css/ext-all-gray.css">
+    <link rel="stylesheet" type="text/css" href="http://alpha.nextthought.com/NextThoughtWebApp/resources/css/panel-reset.css">
+    <link rel="stylesheet" type="text/css" href="http://alpha.nextthought.com/NextThoughtWebApp/resources/css/main.css">
 
     <div id="loading-mask"></div><div id="loading"><div class="loading-indicator">Loading...</div></div>
 
