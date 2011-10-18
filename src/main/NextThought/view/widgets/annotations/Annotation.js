@@ -2,18 +2,6 @@
 Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 	extend: 'NextThought.view.widgets.Widget',
 
-    statics:{
-        baseUri: null,
-
-        getBase: function(){
-            if(!this.baseUri) {
-                this.baseUri = Ext.query('link[href$=main.css]')[0].baseURI;
-            }
-
-            return this.baseUri;
-        }
-    },
-
 	constructor: function(record, container, component, icon) {
         Ext.apply(this, {
             _div: null,
@@ -36,7 +24,7 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 		
 		var d = Ext.query('.document-nibs',container);
 		me._div = d.length>0? d[0] : me.createElement('div',container,'document-nibs unselectable');
-		me._img = me.createImage(icon?(me.self.getBase()+icon):Ext.BLANK_IMAGE_URL,me._div,
+		me._img = me.createImage(icon?icon:Ext.BLANK_IMAGE_URL,me._div,
 				'action',
 				'width: 17px; background: yellow; height: 17px; position: absolute;'+(me._isVisible?'':'visibility:hidden;'));
 		me._img._annotation = me;
