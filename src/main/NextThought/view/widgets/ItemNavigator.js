@@ -3,7 +3,10 @@
 Ext.define('NextThought.view.widgets.ItemNavigator', {
 	extend:'Ext.panel.Panel',
     requires: [
+        'Ext.form.field.Trigger',
         'Ext.grid.Panel',
+        'Ext.grid.column.Action',
+        'Ext.grid.column.Template',
         'NextThought.proxy.UserDataLoader'
     ],
     alias: 'widget.item-navigator',

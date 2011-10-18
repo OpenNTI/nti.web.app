@@ -2,6 +2,7 @@ Ext.define('NextThought.view.windows.ChatWindow', {
 	extend: 'Ext.window.Window',
 	alias : 'widget.chat-window',
     requires: [
+        'Ext.button.Split',
         'Ext.tab.Panel',
         'NextThought.view.widgets.chat.View',
         'NextThought.view.widgets.chat.Friends'
