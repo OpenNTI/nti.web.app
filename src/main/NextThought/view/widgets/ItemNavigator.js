@@ -8,6 +8,7 @@ Ext.define('NextThought.view.widgets.ItemNavigator', {
         'Ext.grid.column.Action',
         'Ext.grid.column.Date',
         'Ext.grid.column.Template',
+        'Ext.grid.feature.Grouping',
         'NextThought.proxy.UserDataLoader'
     ],
     alias: 'widget.item-navigator',
