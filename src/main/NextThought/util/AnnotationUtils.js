@@ -291,7 +291,7 @@ Ext.define('NextThought.util.AnnotationUtils',
             }
             else {
                 //different anchors, we'll have 2 snippets
-                highlight.set('startHighlightedFullText', fullText);                                                                                        ß
+                highlight.set('startHighlightedFullText', fullText);
                 highlight.set('startHighlightedText', (fullText != startNode.nodeValue) ? fullText : startNode.nodeValue.substring(startOffset));
                 highlight.set('endHighlightedFullText', this.getNodeTextValue(endNode));
 
