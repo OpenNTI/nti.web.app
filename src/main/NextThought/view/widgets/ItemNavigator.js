@@ -6,6 +6,7 @@ Ext.define('NextThought.view.widgets.ItemNavigator', {
         'Ext.form.field.Trigger',
         'Ext.grid.Panel',
         'Ext.grid.column.Action',
+        'Ext.grid.column.Date',
         'Ext.grid.column.Template',
         'NextThought.proxy.UserDataLoader'
     ],
