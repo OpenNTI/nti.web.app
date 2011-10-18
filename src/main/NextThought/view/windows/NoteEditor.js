@@ -1,6 +1,9 @@
 Ext.define('NextThought.view.windows.NoteEditor', {
 	extend: 'Ext.window.Window',
 	alias : 'widget.noteeditor',
+    requires: [
+        'Ext.form.field.HtmlEditor'
+    ],
 	
 	closable: false,
 	maximizable:true,
