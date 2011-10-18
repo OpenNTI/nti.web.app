@@ -5,19 +5,20 @@ Ext.application({
     appFolder: 'src/main/NextThought',
 
     controllers: [
-        'State',
-        'Chat',
         'Account',
         'Annotations',
         'Application',
+        'Chat',
         'FilterControl',
+        'Google',
         'Groups',
         'Home',
-        'Session',
         'Modes',
         'ObjectExplorer',
         'Reader',
         'Search',
+        'Session',
+        'State',
         'Stream'
     ],
 
