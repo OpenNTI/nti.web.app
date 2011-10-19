@@ -85,7 +85,7 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
     updateMenuIcon: function(color) {
         var img = this.el.select('img.x-menu-item-icon').first()
         if(img){
-            img.setStyle('background', '#'+color);
+            img.setStyle('background', color);
         }
     },
 
@@ -108,7 +108,7 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 	},
 	
 	_menuItemHook: function(o,item, menu){
-		item.on('afterrender',Ext.bind(this.updateMenuIcon, item, [o._color]));
+		item.on('afterrender',Ext.bind(this.updateMenuIcon, item, [o._colorToRGB(o.getColor())]));
 	},
 
     getColor: function(){
@@ -247,7 +247,7 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
         },
 
         addSource: function(userId){
-            if(!Ext.Array.contains(this._sources, userId)){
+			if(userId && !Ext.Array.contains(this._sources, userId)){
                 this._sources.push(userId);
                 Ext.Array.sort(this._sources);
 
