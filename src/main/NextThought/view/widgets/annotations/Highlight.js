@@ -4,7 +4,7 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 
 	constructor: function(selection, record, container, component){
 		var me = this,
-            userId= record.get('Creator');
+            userId= record.get('Creator') || _AppConfig.userObject.getId();
 
         me.callParent([record, container, component,'resources/images/charms/highlight-white.png']);
 
@@ -41,12 +41,13 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
                 cont.dom,
                 'highlight-object','position: absolute; pointer-events: none;');
             this._cmp.on('resize', this.canvasResize, this);
+			this.canvasResize();
         }
         return c;
     },
 
     canvasResize: function(){
-        var c = Ext.get(this._canvas),
+        var c = Ext.get(this._canvas || Ext.query('#canvas-highlight-container canvas')[0]),
             cont = Ext.get(this._cnt),
             pos = cont.getXY(),
             size = cont.getSize();
@@ -112,8 +113,7 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 	},
 
     getColor: function(){
-        var idx = this.self.getColorIndex(this._userId);
-        return this.self.getColor(idx);
+		return this.self.getColor(this._userId);
     },
 
     _colorToRGBA: function(color, alpha) {
@@ -289,6 +289,10 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
         },
 
         getColor: function(idx){
+			if(typeof idx == 'string'){
+				idx = this.getColorIndex(idx);
+			}
+
             var degrees = Math.round(this.hue(idx) * 360);
             //console.log('degrees', degrees);
             return hsl2rgb(degrees, 100, 50);
