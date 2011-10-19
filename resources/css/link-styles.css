@@ -13,3 +13,9 @@ a.internal-link:visited
     cursor: pointer;
     line-height: 1.5em;
 }
+
+/* Fix strange CSS behavior ...menu item links' style were not correctly applying...this seems to fix it.*/
+.x-menu-item-link,
+.x-menu-item-text {
+	color: #222;
+}
