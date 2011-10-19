@@ -152,6 +152,7 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 		delete this._sel;
         this.self._eventRouter.un('render',this.requestRender, this);
         this.self._eventRouter.fireEvent('render');
+		this.self.render();
 	},
 	
 	
