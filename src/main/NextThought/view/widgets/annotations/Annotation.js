@@ -86,7 +86,7 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 	updateFilterState: function(newFilter){
 		var v = this.testFilter(newFilter);
 		if(v != this._isVisible){
-			this._isVisible = v;
+			this._isVisible = !!v;
 			this.visibilityChanged(v);
 		}
 	},

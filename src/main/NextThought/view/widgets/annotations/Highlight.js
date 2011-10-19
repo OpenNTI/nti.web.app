@@ -61,7 +61,7 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 	
 	visibilityChanged: function(show){
 		this.callParent(arguments);
-		//show? c.show() : c.hide();
+		this.self._eventRouter.fireEvent('render');
 	},
 
 
@@ -152,7 +152,6 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 		delete this._sel;
         this.self._eventRouter.un('render',this.requestRender, this);
         this.self._eventRouter.fireEvent('render');
-		this.self.render();
 	},
 	
 	
@@ -192,6 +191,9 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
             this.cleanup();
             return;
         }
+
+
+		if(!this._isVisible)return;
 
         var nib = Ext.get(this._img),
             r = this._sel.getBoundingClientRect(),
@@ -347,4 +349,5 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 },
 function(){
     this.render = Ext.Function.createBuffered(this.render,5,this);
+	this._eventRouter.on('render', this.render, this);
 });
