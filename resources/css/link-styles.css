@@ -1,4 +1,9 @@
-a.internal-link,
+
+#NTIContent a,
+#NTIContent a:active,
+#NTIContent a:hover,
+#NTIContent a:visited,
+#NTIContent a.internal-link,
 a.internal-link:active,
 a.internal-link:hover,
 a.internal-link:visited

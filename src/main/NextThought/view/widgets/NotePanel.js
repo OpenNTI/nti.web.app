@@ -18,7 +18,7 @@ Ext.define('NextThought.view.widgets.NotePanel',{
             '<img src="{icon}"/>',
             '<div>',
                 '<span class="name">{name}</span> ',
-                '<span class="body-text">{body}</span> ',
+                '<span class="body-text selectable">{body}</span> ',
             '</div>',
         '</div>',
         '<div class="x-nti-note-replies"></div>'

@@ -24,7 +24,7 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 	
 	_createCanvasContainer: function(id){
 		var e = Ext.get(id),
-			n = e ? e.dom : this.createElement('div',this._cnt,'document-highlights unselectable'),
+			n = e ? e.dom : this.createElement('div',this._cnt,'document-highlights'),
 			p = n.parentNode;
 		n.setAttribute('id',id);
 		p.appendChild(n);
@@ -39,7 +39,7 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
             c = this.createElement(
                 'canvas',
                 cont.dom,
-                'highlight-object unselectable','position: absolute; pointer-events: none;');
+                'highlight-object','position: absolute; pointer-events: none;');
             this._cmp.on('resize', this.canvasResize, this);
         }
         return c;
@@ -60,7 +60,6 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 	
 	visibilityChanged: function(show){
 		this.callParent(arguments);
-		var c = Ext.get(this._canvas);
 		//show? c.show() : c.hide();
 	},
 
@@ -193,7 +192,7 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
             return;
         }
 
-        var i = Ext.get(this._img),
+        var nib = Ext.get(this._img),
             r = this._sel.getBoundingClientRect(),
             s = this._sel.getClientRects(),
             c = this._canvas,
@@ -209,8 +208,8 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
         }
 
         //move nib
-        i.moveTo(p.getLeft(), r.top);
-        i.setStyle('background', rgb);
+        nib.moveTo(p.getLeft(), r.top);
+        nib.setStyle('background', rgb);
 
         //stage draw
         var avgH = 0;

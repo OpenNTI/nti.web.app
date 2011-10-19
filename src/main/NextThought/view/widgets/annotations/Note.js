@@ -89,7 +89,7 @@ Ext.define( 'NextThought.view.widgets.annotations.Note', {
 
     _createNoteContainer: function(id){
         var e = Ext.get(id),
-            n = e ? e.dom : this.createElement('div',this._cnt,'document-notes unselectable');
+            n = e ? e.dom : this.createElement('div',this._cnt,'document-notes');
         n.setAttribute('id',id);
         return Ext.get(n);
     },

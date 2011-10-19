@@ -10,8 +10,8 @@
 .x-nti-note .name { font-weight: bold; color: #7889A3; padding: 0 10px 0 0; }
 .x-nti-note .timestamp { color: #7a7a7a; float: right; font-size: 9px; padding:  0 0 5px 10px; }
 
-.x-nti-note:hover { background-color: #7889A3 !important; color: white; }
-.x-nti-note:hover .name { color: black; }
+.x-nti-note:hover {  }
+.x-nti-note:hover .name {  }
 .x-nti-note:hover .timestamp { visibility: hidden; }
 .x-nti-note:hover .controls { display: block; }
 
