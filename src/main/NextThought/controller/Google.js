@@ -9,6 +9,7 @@ Ext.define('NextThought.controller.Google', {
 				gapi.hangout.data.addStateChangeListener(Ext.bind(this.stateChangeListener,this));
 				gapi.hangout.addParticipantsListener(Ext.bind(this.participantsListener,this));
 				this.stateCtlr.on('stateChange', this.broadcastState, this);
+				history.replaceState = function(){};
 			}
 		}
 		catch(e){
@@ -18,6 +19,10 @@ Ext.define('NextThought.controller.Google', {
 
 	isHangout: function(){
 		return typeof gapi != 'undefined' && gapi.hangout;
+	},
+
+	isReady: function(){
+		return this.isHangout() && gapi.hangout.isApiReady();
 	},
 
 	onHangoutReady: function(fn){

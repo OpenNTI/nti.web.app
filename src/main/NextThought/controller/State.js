@@ -37,7 +37,7 @@ Ext.define('NextThought.controller.State', {
 
         window.history.pushState = function(){
             if(!me.isPoppingHistory && push){
-				me.fireEvent('stateChange',arguments[0]);
+				console.debug('Return value of stateChange',me.fireEvent('stateChange',arguments[0]));
                 push.apply(history, arguments);
             }
         };
@@ -82,7 +82,7 @@ Ext.define('NextThought.controller.State', {
 
         for(var key in stateObject){
             if(!stateObject.hasOwnProperty(key) || !/object/i.test(typeof(stateObject[key]))) continue;
-
+			console.debug('State Key: ',key);
             c = Ext.getCmp(key);
             if(c && c.restore){
                 try{
@@ -99,6 +99,7 @@ Ext.define('NextThought.controller.State', {
             }
         }
 
+		console.debug('State: initializing...');
         if(replaceState)
             history.replaceState(this._currentState,'Title');
     },

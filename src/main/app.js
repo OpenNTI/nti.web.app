@@ -25,7 +25,7 @@ Ext.application({
     launch: function(){
 		var g = this.getController('Google');
 
-		if(g.isHangout()){
+		if(g.isHangout() && !g.isReady()){
 			g.onHangoutReady(start);
 		}
 		else start();
