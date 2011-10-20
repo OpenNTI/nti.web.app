@@ -9,7 +9,7 @@
     <![CDATA[
     <base href="http://alpha.nextthought.com/NextThoughtWebApp/">
     <script src="//hangoutsapi.appspot.com/static/hangout.js"></script>
-    <link rel="stylesheet" type="text/css" href="http://alpha.nextthought.com/NextThoughtWebApp/extjs/resources/css/ext-all-gray.css">
+    <link rel="stylesheet" type="text/css" href="http://alpha.nextthought.com/NextThoughtWebApp/ext-4.0.7/resources/css/ext-all-gray.css">
     <link rel="stylesheet" type="text/css" href="http://alpha.nextthought.com/NextThoughtWebApp/resources/css/panel-reset.css">
     <link rel="stylesheet" type="text/css" href="http://alpha.nextthought.com/NextThoughtWebApp/resources/css/main.css">
 
@@ -22,7 +22,7 @@
     <script type="text/javascript" src="resources/md5.js"></script>
     <script type="text/javascript" src="resources/globals.js"></script>
 
-    <script type="text/javascript" src="extjs/ext.js"></script>
+    <script type="text/javascript" src="ext-4.0.7/ext.js"></script>
 
     <script type="text/javascript" src="config.js"></script>
     <script type="text/javascript" src="app-all.js"></script>
