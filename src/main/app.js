@@ -26,17 +26,21 @@ Ext.application({
 		var g = this.getController('Google');
 
 		if(g.isHangout() && !g.isReady()){
-			g.onHangoutReady(start);
+
+			//the onApiReady thing seems to not work...so, brute-force for now.
+			var i = setInterval(function(){
+				if(g.isReady()){
+					clearInterval(i);
+					start()
+				}
+			},100);
 		}
 		else start();
 
 
 		function start() {
-		    NextThought.isDebug = true;
-
 			applyHooks();
 			removeLoaderSplash();
-
 		    NextThought.controller.Session.login();
 		}
 	}

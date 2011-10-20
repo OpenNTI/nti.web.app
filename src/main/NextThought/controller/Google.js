@@ -30,10 +30,14 @@ Ext.define('NextThought.controller.Google', {
 		gapi.hangout.addApiReadyListener(fn);
 	},
 
-	broadcastState: function(delta){
+	broadcastState: function(delta) {
+		console.debug("Hangout: Broadcasting State...");
 		try{
-			console.debug("Hangout: Broadcasting State...");
-			gapi.hangout.data.submitDelta({delta:Ext.JSON.encode(delta)});
+			var state = {};
+			for(var k in delta){
+				state[k] = Ext.JSON.encode(delta[k]);
+			}
+			gapi.hangout.data.submitDelta(state);
 		}
 		catch(e){
 			console.error('Could not broadcast state',e.stack);
@@ -48,6 +52,12 @@ Ext.define('NextThought.controller.Google', {
 
 	stateChangeListener: function(adds, removes, state, metadata){
 		console.debug("State Change Listener: ",arguments);
-		//this.stateCtlr.restoreState();
+		var s = {};
+		for(var k in state){
+			if(state.hasOwnProperty(k))
+				s[k] = Ext.JSON.decode(state[k]);
+		}
+
+		this.stateCtlr.restoreState(s);
 	}
 });

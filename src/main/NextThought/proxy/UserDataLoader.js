@@ -185,9 +185,7 @@ Ext.define('NextThought.proxy.UserDataLoader',{
                     if(callbacks && callbacks.success){
                         callbacks.success.call(callbacks.scope || this, bins);
                     }
-                    else if(NextThought.isDebug){
-                        console.warn('no success callback');
-                    }
+					else console.warn('no success callback');
                 }
             });
         }

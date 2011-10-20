@@ -91,8 +91,7 @@ Ext.define('NextThought.Library', {
             this._libraryLoaded(Ext.bind(go,this));
         }
         else {
-            if(NextThought.isDebug)
-                console.error('FAILED: load library');
+			console.error('FAILED: load library');
         }
 
         function go(){

@@ -37,14 +37,21 @@ Ext.define('NextThought.controller.State', {
             me.isPoppingHistory = false;
         };
 
-        window.history.pushState = function(){
+        window.history.pushState = function(s){
             if(!me.isPoppingHistory && push){
-				if(me.fireEvent('stateChange',arguments[0]))
+				me._currentState = Ext.Object.merge(me._currentState, s);
+				if(me.fireEvent('stateChange',s))
                 	push.apply(history, arguments);
             }
         };
 
     },
+
+
+	getState: function(){
+		return Ext.clone(this._currentState);
+	},
+
 
     onPopState: function(e) {
         if(!NextThought.isInitialised || this.isHangout){
