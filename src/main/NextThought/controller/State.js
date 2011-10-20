@@ -37,6 +37,7 @@ Ext.define('NextThought.controller.State', {
 
         window.history.pushState = function(){
             if(!me.isPoppingHistory && push){
+				me.fireEvent('stateChange',arguments[0]);
                 push.apply(history, arguments);
             }
         };
@@ -105,8 +106,12 @@ Ext.define('NextThought.controller.State', {
 
 
     loadState: function(){
-        //TODO: save/read state to/from browser/server
+		if(this.getController('Google').isHangout()){
+			console.log('Setting up state for Hangout...');
+			return {};
+		}
 
+        //TODO: save/read state to/from browser/server
         return history.state || {
             active: 'reader',
             reader:{

@@ -4,9 +4,30 @@ MIN_SIDE_WIDTH = 175;
 MIN_WIDTH = 768;
 
 
+function removeLoaderSplash(){
+	setTimeout(
+		function clearMask(){
+			Ext.get('loading').remove();
+			Ext.get('loading-mask').fadeOut({remove:true});
+			resizeBlocker(Ext.Element.getViewWidth());
+		},
+		100);
+
+}
 
 
-function fixIE(){
+function applyHooks(){
+	Ext.JSON.encodeDate = function(d){return Ext.Date.format(d, 'U');};
+
+	hooksForIE();
+
+	Ext.Ajax.timeout==60000;
+	Ext.Ajax.on('beforerequest', beforeRequest);
+	Ext.EventManager.onWindowResize(resizeBlocker);
+}
+
+
+function hooksForIE(){
     if(!Ext.isIE) return;
 
     Ext.panel.Panel.override({
@@ -19,6 +40,7 @@ function fixIE(){
     });
 }
 
+
 function beforeRequest(connection,options)
 {
     if(options&&options.async===false){
@@ -29,20 +51,19 @@ function beforeRequest(connection,options)
     }
 }
 
+
 function resizeBlocker(w, h, e){
     var i = !!(w<MIN_WIDTH), b = Ext.getBody(), m = b.isMasked();
     if(i && !m) b.mask("Your browser window is too narrow","viewport-too-small");
     else if(!i && m) b.unmask();
 }
 
-function encodeDate(d) {
-    return Ext.Date.format(d, 'U');
-}
 
 function arrayEquals(a, b) {
     if (a.length != b.length) return false;
     return Ext.Array.merge(a, b).length == a.length;
 }
+
 
 function SortModelsBy(key,dir,getter){
     var g = getter;

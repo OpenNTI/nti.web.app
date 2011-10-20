@@ -22,27 +22,22 @@ Ext.application({
         'Stream'
     ],
 
-    launch: typeof gapi == 'undefined'? launch : function(){gapi.hangout.addApiReadyListener(launch)}
+    launch: function(){
+		var g = this.getController('Google');
+
+		if(g.isHangout()){
+			g.onHangoutReady(start);
+		}
+		else start();
+
+
+		function start() {
+		    NextThought.isDebug = true;
+
+			applyHooks();
+			removeLoaderSplash();
+
+		    NextThought.controller.Session.login();
+		}
+	}
 });
-
-
-function launch() {
-    NextThought.isDebug = true;
-
-    Ext.JSON.encodeDate = encodeDate
-
-    fixIE();
-    Ext.Ajax.timeout==60000;
-    Ext.Ajax.on('beforerequest', beforeRequest);
-    Ext.EventManager.onWindowResize(resizeBlocker);
-
-    setTimeout(
-        function clearMask(){
-            Ext.get('loading').remove();
-            Ext.get('loading-mask').fadeOut({remove:true});
-            resizeBlocker(Ext.Element.getViewWidth());
-        },
-        100);
-
-    NextThought.controller.Session.login();
-}
