@@ -47,7 +47,8 @@ function beforeRequest(connection,options)
         var loc = '';
         try { loc = printStackTrace().splice(7); }
         catch (e) { loc = e.stack || e.stacktrace; }
-        console.log('WARNING: Synchronous Call in: ', loc, ' Options:', options );
+		var l = (console.warn?console.warn:console.log);
+        l.call( console, 'Synchronous Call in: ', loc, ' Options:', options );
     }
 }
 
