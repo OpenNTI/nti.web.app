@@ -150,7 +150,7 @@
 }
 
 .reply-to-line .chat-entry .x-form-item-body {
-    background-image: url('../../extjs/resources/themes/images/gray/form/text-bg.gif');
+    background-image: url('../../ext-4.0.7/resources/themes/images/gray/form/text-bg.gif');
     background-repeat: repeat-x;
     height: 30px !important;
 }

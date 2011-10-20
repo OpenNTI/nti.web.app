@@ -79,7 +79,7 @@ Ext.define('NextThought.view.windows.GroupEditorWindow', {
 			                xtype: 'actioncolumn',
 			                width: 30,
 			                items: [{
-			                    icon   : 'extjs/examples/shared/icons/fam/delete.gif',  // Use a URL in the icon config
+			                    icon   : 'ext-4.0.7/examples/shared/icons/fam/delete.gif',  // Use a URL in the icon config
 			                    tooltip: 'Remove',
 			                    handler: function(grid, rowIndex, colIndex) {
 			                        me._store.removeAt(rowIndex);

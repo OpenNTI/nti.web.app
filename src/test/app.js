@@ -2,7 +2,7 @@
 var _AppConfig = {
     userObject: null,//construct this mock user on launch
     server: {
-        host: 'test:',
+        host: './src/test/mock',
         data: '/dataserver/',
         library: '/library/library.json',
         username: 'test@nextthought.com',
@@ -45,32 +45,12 @@ Ext.application({
     ],
 
     launch: function() {
-        NextThought.isDebug = true;
         NextThought.phantomRender = true;
-        Ext.JSON.encodeDate = encodeDate;
 
-        hookAjax();
+		applyHooks();
 
         //include the tests in the test.html head
         jasmine.getEnv().addReporter(new jasmine.TrivialReporter());
         jasmine.getEnv().execute();
     }
 });
-
-
-
-
-
-
-
-
-function hookAjax()
-{
-    Ext.Ajax.request_forReal = Ext.Ajax.request;
-    Ext.Ajax.request = function test_ajax(o){
-        if(/^test:/i.test(o.url)){
-            o.url = o.url.replace(/^test:/i, './src/test/mock');
-        }
-        this.request_forReal.apply(this, arguments);
-    };
-}
