@@ -23,7 +23,7 @@ function applyHooks(){
 
 	hooksForIE();
 
-	Ext.Ajax.timeout==60000;
+	Ext.Ajax.timeout==10000;
 	Ext.Ajax.on('beforerequest', beforeRequest);
 	Ext.EventManager.onWindowResize(resizeBlocker);
 }
