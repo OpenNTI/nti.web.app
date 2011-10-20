@@ -101,7 +101,7 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
 
     updateContents: function(hits, panelIndex) {
         if(!this){
-            console.log('"this" has been deleted');
+            console.debug('"this" has been deleted');
             return;
         }
 
@@ -154,7 +154,7 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
             if(me.getHeight()> max)
                 me.setHeight(max);
 
-            //console.log(max, me.getHeight());
+            //console.debug(max, me.getHeight());
             VIEWPORT.on('resize',me.fixHeight,me, {single: true});
         }
         catch(err){

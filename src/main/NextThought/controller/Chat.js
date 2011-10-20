@@ -142,7 +142,7 @@ Ext.define('NextThought.controller.Chat', {
                     users[k] = users[k].getId();
                 }
                 else {
-                    console.log('ERROR: found something other than a user/username string in occupants list', users[k]);
+                    console.error('ERROR: found something other than a user/username string in occupants list', users[k]);
                     delete users[k];
                     continue;
                 }
@@ -198,7 +198,7 @@ Ext.define('NextThought.controller.Chat', {
             b = field.up('chat-log-view[moderated=true]');
 
         if (!a || !b){
-            console.log('Skipping action, no action specified or no logs', a, b);
+            console.warn('Skipping action, no action specified or no logs', a, b);
             return;
         }
 
@@ -206,7 +206,7 @@ Ext.define('NextThought.controller.Chat', {
             b[a].call(b);
         }
         else {
-            console.log('component does not implement the function:',a);
+            console.warn('component does not implement the function:',a);
         }
     },
 
@@ -281,7 +281,7 @@ Ext.define('NextThought.controller.Chat', {
     onMessageForAttention: function(mid) {
         var w = this.getChatWindow();
         if (!w) {
-            console.log('chat window is not open');
+            console.warn('chat window is not open');
             return;
         }
 
@@ -294,7 +294,7 @@ Ext.define('NextThought.controller.Chat', {
             self = this;
 
         if (!m || !msg) {
-            console.log('can not find messages')
+            console.error('can not find messages')
             return;
         }
 
@@ -347,7 +347,7 @@ Ext.define('NextThought.controller.Chat', {
         var roomInfo = msg && msg.isModel? msg : ParseUtils.parseItems([msg])[0];
 
         if (roomInfo.getId() in this.activeRooms) {
-            console.log('WARNING: room already exists, all rooms/roominfo', this.activeRooms, roomInfo);
+            console.warn('room already exists, all rooms/roominfo', this.activeRooms, roomInfo);
         }
 
         var eri = this.existingRoom(roomInfo.get('Occupants'));

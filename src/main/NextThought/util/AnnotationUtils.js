@@ -143,7 +143,7 @@ Ext.define('NextThought.util.AnnotationUtils',
                 if (!startElement || range.collapsed) throw 'rageing tempor tantrum';
                 return range;
             }
-            catch(e) { console.log('bad range', r, e, e.toString()); }
+            catch(e) { console.warn('bad range', r, e, e.toString()); }
 
             //if we make it this far, there's something wrong with the range, we'll try to reconstruct from anchors
             return this.rangeFromAnchors(r);
@@ -417,7 +417,7 @@ Ext.define('NextThought.util.AnnotationUtils',
 				return node.nodeValue;
 			}
 			else {
-				//console.log("Cannot figure out the textual value of the node " + node);
+				//console.warn("Cannot figure out the textual value of the node " + node);
 				return null;
 			}
 		

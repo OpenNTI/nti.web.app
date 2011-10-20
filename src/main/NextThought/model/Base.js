@@ -38,7 +38,7 @@ Ext.data.Types.SINGLEITEM = {
         return ParseUtils.parseItems([v])[0];
     },
     sortType: function(v) {
-        console.log('sort by Item:',arguments);
+        console.warn('sort by Item:',arguments);
         return '';
     }
 };
@@ -71,7 +71,7 @@ Ext.data.Types.USERLIST = {
                                 ? o.Username
                                 : null;
                 if(!p)
-                    console.log("WARNING: Could not handle Object: ", o, a);
+                    console.warn("WARNING: Could not handle Object: ", o, a);
                 else  {
                     u.push(p);
                     //asynchronously resolve this user so its cached and ready

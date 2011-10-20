@@ -75,15 +75,13 @@ Ext.define('NextThought.proxy.Rest', {
     	me.reader.hasContainerId = me.reader.hasContainerId || !!containerId;
     	me.reader.hasId = me.appendId && id!==undefined;
     	
-//    	if(NextThought.isDebug){
-//	    	console.log(
-//	    		'appendId:', me.appendId,
-//	    		'id:',id,
-//	    		'hasId:',me.reader.hasId,
-//	    		'record:',record,
-//	    		'url:',url
-//	    		);
-//    	}
+//		console.debug(
+//			'appendId:', me.appendId,
+//			'id:',id,
+//			'hasId:',me.reader.hasId,
+//			'record:',record,
+//			'url:',url
+//			);
     },
 
     buildUrlForModify: function(request) {
@@ -106,6 +104,6 @@ Ext.define('NextThought.proxy.Rest', {
     },
 
     _exception: function(proxy, response, operation, eOpts) {
-        console.log('Error getting data:', arguments, '\n', printStackTrace().join('\n'));
+        console.error('Error getting data:', arguments, '\n', printStackTrace().join('\n'));
     }
 });

@@ -30,7 +30,7 @@ Ext.define( 'NextThought.view.widgets.annotations.Note', {
             : a.getPadding('b');
         a.dom.originalPadding = me._originalPadding;
 
-        // console.log('original padding:',me._originalPadding);
+        // console.debug('original padding:',me._originalPadding);
 
         me.noteDiv = me.createElement('div',c.dom,'x-note-panel',(me._isVisible?'':'display:none;'));
         me.noteDiv._annotation = me;
@@ -54,13 +54,13 @@ Ext.define( 'NextThought.view.widgets.annotations.Note', {
             me.noteCmp.doLayout();
         // me.onResize();
         setTimeout(function(){
-            console.log('note visability changed, firing resize');
+            console.debug('note visability changed, firing resize');
             me._cmp.fireEvent('resize');
         },100);
     },
 
     noteUpdated: function(record, initCode){
-        // console.log('noteUpdated');
+        // console.debug('noteUpdated');
         var children = this._record.children,
             parent = this._record._parent;
 

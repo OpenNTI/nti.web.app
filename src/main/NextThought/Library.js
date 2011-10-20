@@ -39,7 +39,7 @@ Ext.define('NextThought.Library', {
 
         for (i; i < len; i++) {
             if (!list[i] || !list[i].getAttribute) {
-                console.log('error in loop', ntiid, loc, book, toc, list, i, len);
+                console.error('error in loop', ntiid, loc, book, toc, list, i, len);
                 continue;
             }
 
@@ -92,7 +92,7 @@ Ext.define('NextThought.Library', {
         }
         else {
             if(NextThought.isDebug)
-                console.log('FAILED: load library');
+                console.error('FAILED: load library');
         }
 
         function go(){
@@ -132,12 +132,12 @@ Ext.define('NextThought.Library', {
                 async: !!callback,
                 scope: this,
                 failure: function() {
-                    console.log('There was an error loading library', url, arguments);
+                    console.error('There was an error loading library', url, arguments);
                 },
                 success: function(r,o) {
                     this._tocs[index] = r.responseXML? r.responseXML : this._parseXML(r.responseText);
                     if(!this._tocs[index]){
-                        console.log('WARNING: no data for index: '+url);
+                        console.warn('no data for index: '+url);
                     }
 
                     var toRemove = Ext.DomQuery.select('topic:not([ntiid])', this._tocs[index]);
@@ -145,7 +145,7 @@ Ext.define('NextThought.Library', {
                         if (e.parentNode)
                             e.parentNode.removeChild(e);
                         else
-                            console.log('error, no parent node?', e);
+                            console.error('no parent node?', e);
                     });
 
                     if( callback ){
@@ -155,7 +155,7 @@ Ext.define('NextThought.Library', {
             });
         }
         catch(e){
-            console.log('Error loading the TOC:',e, e.message, e.stack);
+            console.error('Error loading the TOC:',e, e.message, e.stack);
         }
 	},
 	
@@ -172,7 +172,7 @@ Ext.define('NextThought.Library', {
             return x;
         }
         catch(e){
-            console.log('Could not parse xml for TOC');
+            console.error('Could not parse xml for TOC');
         }
 
         return undefined;

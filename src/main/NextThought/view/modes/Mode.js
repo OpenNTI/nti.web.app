@@ -31,7 +31,7 @@ Ext.define( 'NextThought.view.modes.Mode', {
     		item = 0;
     		
     	if(!ct){
-            console.log('No container??');
+            console.error('No container??');
     		return;
     	}
 

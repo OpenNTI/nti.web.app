@@ -31,7 +31,7 @@ Ext.define('NextThought.view.content.Reader', {
     scrollToTarget: function(target){
         var e = this.el.query('*[name='+target+']');
         if(!e || !e.length)
-            console.log('no target found: ',target);
+            console.warn('scrollToTarget: no target found: ',target);
         else
             this.scrollToNode(e[0]);
     },
@@ -113,7 +113,7 @@ Ext.define('NextThought.view.content.Reader', {
             callback: function(req,success,res){
                 vp.unmask();
                 if(!success) {
-                    console.log('There was an error getting content', b+f, res);
+                    console.error('There was an error getting content', b+f, res);
                 }
             }
         });
@@ -217,7 +217,7 @@ Ext.define('NextThought.view.content.Reader', {
         if(hash.length>1){
 
             if(hash[1].length==0){
-                console.log('empty hash',el);
+                console.debug('empty hash',el);
                 return;
             }
         }

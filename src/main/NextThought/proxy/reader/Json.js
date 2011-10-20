@@ -16,14 +16,12 @@ Ext.define('NextThought.proxy.reader.Json', {
         var me = this, mName = me.model.$className,
             records = [], i = me.root===false? data : data.Items;
 
-		// if(NextThought.isDebug) {
-			// console.log('read records:',mName, 
-			// 'this:', me, 
-			// 'root:', me.root,
-			// 'i', i, 
-			// 'args:',arguments);
-		// }
-		
+		// console.debug('read records:',mName,
+		// 'this:', me,
+		// 'root:', me.root,
+		// 'i', i,
+		// 'args:',arguments);
+
 		
 		if(Ext.isArray(data) || me.hasId){
 			return this.callParent(arguments);
@@ -43,9 +41,7 @@ Ext.define('NextThought.proxy.reader.Json', {
 			}
 		}	
 		
-//		if(NextThought.isDebug) {
-//			console.log('read records result:',mName, records);
-//		}
+//		console.debug('read records result:',mName, records);
 
         try {
 		    return this.callParent([records]);

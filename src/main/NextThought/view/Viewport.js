@@ -22,8 +22,7 @@ Ext.define('NextThought.view.Viewport', {
 
     constructor: function(){
         if(NextThought.phantomRender){
-            console.log('hey!');
-//            this.hidden = true;
+            this.hidden = true;
         }
         this.callParent(arguments);
     },

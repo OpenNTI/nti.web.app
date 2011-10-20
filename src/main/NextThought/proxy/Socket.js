@@ -80,17 +80,17 @@ Ext.define('NextThought.proxy.Socket', {
             me = this;
 
         if(opts && this.isDebug){
-            console.log('Connect called with options:', opts);
+            console.debug('Connect called with options:', opts);
         }
 
         if(this.isDebug){
             socket.emit = Ext.Function.createSequence(
                 socket.emit,
-                function(){console.log('socket.emit:',arguments)}
+                function(){console.debug('socket.emit:',arguments)}
             );
 
             socket.onPacket = Ext.Function.createSequence(
-                function(){console.log('socket.onPacket',arguments)},
+                function(){console.debug('socket.onPacket',arguments)},
                 socket.onPacket
             );
         }
@@ -107,7 +107,7 @@ Ext.define('NextThought.proxy.Socket', {
         if (this.socket)
             this.socket.emit.apply(this.socket, arguments);
         else if(this.isDebug) {
-            console.log('dropping emit, socket is down');
+            console.debug('dropping emit, socket is down');
         }
     },
 
@@ -127,7 +127,7 @@ Ext.define('NextThought.proxy.Socket', {
             //we were asked to shut down... if we reconnect, just shutdown again.
             s.onPacket = function(){ try{
                 if(m.isDebug) {
-                    console.log('onPacket from a dead socket???',arguments, this);
+                    console.debug('onPacket from a dead socket???',arguments, this);
                 }
                 s.disconnect();
                 s.socket.disconnectSync();
@@ -143,7 +143,7 @@ Ext.define('NextThought.proxy.Socket', {
         ds.reconfigure = true;
 
         if(this.isDebug) {
-            console.log('maybeReconfigureSocket',ds.count);
+            console.debug('maybeReconfigureSocket',ds.count);
         }
 
         clearTimeout(ds.timer);
@@ -157,7 +157,7 @@ Ext.define('NextThought.proxy.Socket', {
 
         function reset(){
             if(this.isDebug) {
-                console.log('reset disconnect counter');
+                console.debug('reset disconnect counter');
             }
             clearTimeout(ds.timer);
             ds.count = 0;
@@ -170,7 +170,7 @@ Ext.define('NextThought.proxy.Socket', {
         if(this.isDebug) {
             var msg = printStackTrace().slice(3);
             msg.unshift('connect event');
-            console.log(msg.join(('\n\t')));
+            console.debug(msg.join(('\n\t')));
         }
         var args = ['message'].concat(this.auth);
         this.emit.apply(this, args);
@@ -178,13 +178,13 @@ Ext.define('NextThought.proxy.Socket', {
 
     onError: function() {
         if(this.isDebug) {
-            console.log('error',arguments);
+            console.error('socket error',arguments);
         }
     },
 
     onKill: function() {
         if(this.isDebug){
-            console.log( 'server kill' );
+            console.debug( 'server kill' );
         }
         this.tearDownSocket();
     },
@@ -193,7 +193,7 @@ Ext.define('NextThought.proxy.Socket', {
         if(this.isDebug) {
             var msg = printStackTrace().slice(3);
             msg.unshift('disconnect event');
-            console.log(msg.join(('\n\t')));
+            console.debug(msg.join(('\n\t')));
         }
         this.maybeReconfigureSocket();
     }

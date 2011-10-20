@@ -90,7 +90,7 @@ Ext.define('NextThought.controller.Annotations', {
 				rec.fireEvent('updated',newRecord);
 			},
             failure:function(){
-                console.log('Failed to save object');
+                console.error('Failed to save object');
             }
 		});
 	},
@@ -142,7 +142,7 @@ Ext.define('NextThought.controller.Annotations', {
                     this.attemptToAddWidget(newRecord);
 				},
                 failure:function(){
-                    console.log('failed to save note');
+                    console.error('failed to save note');
                 }
 			});
 		}

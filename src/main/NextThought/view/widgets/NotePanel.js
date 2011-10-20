@@ -84,7 +84,7 @@ Ext.define('NextThought.view.widgets.NotePanel',{
         );
 
         if(l != this.items.getCount())
-            console.log('WARNING: Lengths are wrong!', l, this.items.getCount(), this);
+            console.warn('Lengths are wrong!', l, this.items.getCount(), this);
     },
 
     convertToPlaceHolder: function(){
@@ -136,7 +136,7 @@ Ext.define('NextThought.view.widgets.NotePanel',{
                 this.renderData.contributors = [];
 
             Ext.each(users, function(u){
-                if (!u) { console.log('WARNING: unresolved user!'); return; }
+                if (!u) { console.warn('unresolved user!'); return; }
                 var name = u.get('alias') || u.get('Username'),
                     o = {
                         id: u.getId(),
@@ -177,7 +177,7 @@ Ext.define('NextThought.view.widgets.NotePanel',{
                 function(users){
                     var u = users[0];
                     if (!u) {
-                        console.log('ERROR: failed to resolve user', s, m);
+                        console.error('failed to resolve user', s, m);
                         return;
                     }
 
@@ -293,7 +293,7 @@ Ext.define('NextThought.view.widgets.NotePanel',{
 
             }, this);
         }
-        //console.log('abandoned', abandonedChildren.length);
+        //console.debug('abandoned', abandonedChildren.length);
         for (var a in abandonedChildren) {
             var oid = abandonedChildren[a].get('OID'),
                 panel = Ext.getCmp('cmp-'+oid);

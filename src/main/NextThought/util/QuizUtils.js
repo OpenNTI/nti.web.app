@@ -58,7 +58,7 @@ Ext.define('NextThought.util.QuizUtils', {
                 callback: function(){ vp.unmask(); },
                 failure: function(){
                     //TODO: hook up to error handling
-                    console.log('FAIL', arguments);
+                    console.error('FAIL', arguments);
                 },
                 success: function(r,req){
                     var quizResults = ParseUtils.parseItems([ Ext.JSON.decode(r.responseText) ]);

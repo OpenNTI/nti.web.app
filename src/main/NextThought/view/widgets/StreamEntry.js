@@ -38,7 +38,7 @@ Ext.define('NextThought.view.widgets.StreamEntry', {
         else if (ct == 'Modified' && it == 'Highlight') info = this.getModifiedHighlightInfo(i);
         else {
             //if we made it here, we don't know what to do with...
-            console.log('Not sure what to do with this in the stream!', this.change);
+            console.warn('Not sure what to do with this in the stream!', this.change);
         }
 
         return {

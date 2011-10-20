@@ -71,7 +71,7 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
         this._record.save({
             scope: this,
             failure:function(){
-                console.log('Failed to save highlight', this, this._record);
+                console.error('Failed to save highlight', this, this._record);
                 this.cleanup();
                 delete this;
             },
@@ -297,7 +297,7 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 			}
 
             var degrees = Math.round(this.hue(idx) * 360);
-            //console.log('degrees', degrees);
+            //console.debug('degrees', degrees);
             return hsl2rgb(degrees, 100, 50);
 
             /*

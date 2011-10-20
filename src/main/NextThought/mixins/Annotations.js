@@ -43,7 +43,7 @@ Ext.define('NextThought.mixins.Annotations', {
 
 
 	applyFilter: function(newFilter){
-		// console.log('applyFilter:', newFilter);
+		// console.debug('applyFilter:', newFilter);
 		var _a = this._annotations;
 
 		this._filter = newFilter;
@@ -220,7 +220,7 @@ Ext.define('NextThought.mixins.Annotations', {
 				replyTo.addReply(item);
 			}
 			else {
-				console.log('ERROR: Do not know what to do with this item', Ext.encode(item));
+				console.error('ERROR: Do not know what to do with this item', Ext.encode(item));
 			}
 		}
 

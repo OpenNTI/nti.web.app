@@ -92,13 +92,13 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 	},
 	
 	visibilityChanged: function(show){
-		// console.log('vis change');
+		// console.debug('vis change');
 		var i = Ext.get(this._img);
 		show? i.show() : i.hide();
 	},
 	
 	onResize : function(e){
-		console.log('WANRING: handle resizing yourself!');
+		console.warn('WANRING: handle resizing yourself!');
 	},
 
 	

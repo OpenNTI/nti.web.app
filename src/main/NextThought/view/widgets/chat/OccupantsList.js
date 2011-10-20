@@ -40,7 +40,7 @@ Ext.define('NextThought.view.widgets.chat.OccupantsList', {
                 NextThought.cache.UserRepository.prefetchUser(username, function(users){
                     var u = users[0];
                     if (!u) {
-                        console.log('ERROR, could not resolve user', username);
+                        console.error('could not resolve user', username);
                     }
                     else {
                         me.add({

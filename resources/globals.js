@@ -33,6 +33,12 @@ function ensureConsole(){
 	if(!console){
 		console = {log: function(){}};
 	}
+	if(!console.debug){
+		console.debug = Ext.Function.alias(console, 'log');
+	}
+	if(!console.info){
+		console.info = Ext.Function.alias(console, 'log');
+	}
 	if(!console.warn){
 		console.warn = Ext.Function.alias(console, 'log');
 	}

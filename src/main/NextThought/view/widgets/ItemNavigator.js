@@ -168,7 +168,7 @@ Ext.define('NextThought.view.widgets.ItemNavigator', {
             if (!bins.hasOwnProperty(key)) continue;
 
             Ext.each( bins[key], function(r) {
-                if (!r.get('ContainerId')){ console.log('Ignoring unacceptable value:', r);
+                if (!r.get('ContainerId')){ console.warn('Ignoring unacceptable value:', r);
                     return;
                 }
 

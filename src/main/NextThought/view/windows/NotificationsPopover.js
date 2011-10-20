@@ -92,7 +92,7 @@ Ext.define('NextThought.view.windows.NotificationsPopover', {
             if(me.getHeight()> max)
                 me.setHeight(max);
 
-            //console.log(max, me.getHeight());
+            //console.debug(max, me.getHeight());
             VIEWPORT.on('resize',me.fixHeight,me, {single: true});
         }
         catch(err){

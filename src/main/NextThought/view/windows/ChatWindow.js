@@ -59,7 +59,7 @@ Ext.define('NextThought.view.windows.ChatWindow', {
             mlog = tab ? tab.down('chat-log-view[moderated=true]') : null;
 
         if(!tab) {
-            console.log('WARNING: message received for tab which no longer exists', msg, r, this.items);
+            console.warn('message received for tab which no longer exists', msg, r, this.items);
             return;
         }
 

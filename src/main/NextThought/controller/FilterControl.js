@@ -167,7 +167,7 @@ Ext.define('NextThought.controller.FilterControl', {
 		},
 		this);
 		
-		//console.log('new filter:',filter);
+		//console.debug('new filter:',filter);
 		cmp.fireEvent('filter-changed', filter);
 		this.beginChanges[id] = undefined;
 	}

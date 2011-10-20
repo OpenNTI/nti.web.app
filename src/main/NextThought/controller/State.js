@@ -51,7 +51,7 @@ Ext.define('NextThought.controller.State', {
         var s = e?e.state:null,
             v = this.getViewport();
         if(!v){
-            console.log('no viewport');
+            console.error('no viewport');
             return;
         }
         v.fireEvent('restore', s || BASE_STATE);
@@ -60,7 +60,7 @@ Ext.define('NextThought.controller.State', {
 
     trackMode: function(modeId){
         if(this._currentState.active != modeId && NextThought.isInitialised){
-            //console.log(this._currentState.active, modeId);
+            //console.debug(this._currentState.active, modeId);
             this._currentState.active = modeId;
             history.pushState(this._currentState, 'Title Goes Here');
         }
@@ -95,7 +95,7 @@ Ext.define('NextThought.controller.State', {
                 }
             }
             else {
-                console.log('The key', key, 'did not point to a component with a restore method:', c);
+                console.warn('The key', key, 'did not point to a component with a restore method:', c);
             }
         }
 
@@ -107,7 +107,7 @@ Ext.define('NextThought.controller.State', {
 
     loadState: function(){
 		if(this.getController('Google').isHangout()){
-			console.log('Setting up state for Hangout...');
+			console.info('Setting up state for Hangout...');
 			return {};
 		}
 

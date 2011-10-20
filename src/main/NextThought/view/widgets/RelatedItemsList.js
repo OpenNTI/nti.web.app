@@ -82,7 +82,7 @@ Ext.define('NextThought.view.widgets.RelatedItemsList', {
             }).show();
 
         }
-        else console.log('No handler for type:',m.type, m);
+        else console.error('No handler for type:',m.type, m);
     },
 	
 	applyFilter: function(filter){

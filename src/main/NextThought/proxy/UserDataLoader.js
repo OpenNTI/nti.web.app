@@ -28,7 +28,7 @@ Ext.define('NextThought.proxy.UserDataLoader',{
                 callback: function(o,success,r){
                     this._searchUserData = null;
                     if(!success){
-                        console.log('There was an error searching for user generated data', arguments);
+                        console.error('There was an error searching for user generated data', arguments);
                         if (callback) callback();
                         return;
                     }
@@ -59,7 +59,7 @@ Ext.define('NextThought.proxy.UserDataLoader',{
                 callback: function(o,success,r){
                     this._searchContent = null;
                     if(!success){
-                        console.log('There was an error searching', arguments);
+                        console.error('There was an error searching', arguments);
                         if (callback) callback();
                         return;
                     }
@@ -162,7 +162,7 @@ Ext.define('NextThought.proxy.UserDataLoader',{
                 request = '_requestOf:'+url;
 
             if (request in this){
-                console.log('canceling request ' + request);
+                console.debug('canceling request ' + request);
                 Ext.Ajax.abort(this[request]);
             }
 
@@ -173,7 +173,7 @@ Ext.define('NextThought.proxy.UserDataLoader',{
                     delete this[request];
                 },
                 failure: function() {
-                    console.log('There was an error getting data', 'Will attempt to call failure callback', arguments);
+                    console.error('There was an error getting data', 'Will attempt to call failure callback', arguments);
                     if(callbacks && callbacks.failure) {
                         callbacks.failure.apply(callbacks.scope || this, arguments);
                     }
@@ -186,7 +186,7 @@ Ext.define('NextThought.proxy.UserDataLoader',{
                         callbacks.success.call(callbacks.scope || this, bins);
                     }
                     else if(NextThought.isDebug){
-                        console.log('WARNING: no success callback');
+                        console.warn('no success callback');
                     }
                 }
             });

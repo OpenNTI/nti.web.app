@@ -13,7 +13,7 @@ Ext.define('NextThought.util.ParseUtils',{
             this._readers = this._readers || [];
 
             if (!NextThought.model.hasOwnProperty(modelClass)){
-                console.log('no model for NextThought.model.' + modelClass);
+                console.error('no model for NextThought.model.' + modelClass);
                 return;
             }
 
@@ -94,7 +94,7 @@ Ext.define('NextThought.util.ParseUtils',{
 
                 var reader = this.getReaderForModel(key);
                 if(!reader) {
-                    console.log('No reader for key', key, 'objects: ', bins[key]);
+                    console.error('No reader for key', key, 'objects: ', bins[key]);
                     continue;
                 }
 

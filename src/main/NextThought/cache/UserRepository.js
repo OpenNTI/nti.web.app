@@ -29,7 +29,7 @@ Ext.define('NextThought.cache.UserRepository', {
                 scope:this,
                 success: Ext.emptyFn, //loading into the store happens automatically because of the User model constructor.
                 failure: function(){
-                    console.log('ERROR: something went wrong making request', arguments, u);
+                    console.error('something went wrong making request', arguments, u);
                 }
             });
         },
@@ -41,7 +41,7 @@ Ext.define('NextThought.cache.UserRepository', {
             u = s.getById(refreshedUser.getId()),
             ignoreNewInstance = (refreshedUser.raw && 'ignoreIfExists' in refreshedUser.raw);
 
-        //console.log('updateUser',ignoreNewInstance, refreshedUser.getId(), u, refreshedUser);
+        //console.debug('updateUser',ignoreNewInstance, refreshedUser.getId(), u, refreshedUser);
 
         if (u && (!ignoreNewInstance || !u.equal(refreshedUser))) {
             if (u.getId() == _AppConfig.userObject.getId() ){
@@ -52,12 +52,12 @@ Ext.define('NextThought.cache.UserRepository', {
 
             u.fireEvent('changed', refreshedUser);
             s.remove(u);
-            //console.log('updateUser: refreshing...',refreshedUser.getId());
+            //console.debug('updateUser: refreshing...',refreshedUser.getId());
             u=null;
         }
 
         if(!u){
-            //console.log('updateUser: adding...',refreshedUser.getId());
+            //console.debug('updateUser: adding...',refreshedUser.getId());
             s.add(refreshedUser);
         }
     },
@@ -119,7 +119,7 @@ Ext.define('NextThought.cache.UserRepository', {
             //this is more of an assertion.  The reason we have to do this is because things are listening to events
             //on user instances in this repository so we cant just replace them.
             if (user && user !== this.getStore().getById(username))
-                console.log('user does not equal user in store', user, this.getStore().getById(username));
+                console.warn('user does not equal user in store', user, this.getStore().getById(username));
                 //this.getStore().add(user);
         }
 
@@ -141,7 +141,7 @@ Ext.define('NextThought.cache.UserRepository', {
             callback: function userRepository_makeRequestCallback(o,success,r)
             {
                 if(!success){
-                    console.log('WARNING: There was an error resolving user:', username, arguments);
+                    console.warn('There was an error resolving user:', username, arguments);
                     if (callbacks && callbacks.failure) callbacks.failure.call(callbacks.scope || this);
                     return;
                 }
@@ -151,7 +151,7 @@ Ext.define('NextThought.cache.UserRepository', {
                     list = bins ? bins.User || bins.Community : [];
 
                 if(list && list.length>1){
-                    console.log('WARNING: many matching users: "', userId, '"', list);
+                    console.warn('many matching users: "', userId, '"', list);
                 }
 
                 result = list ? list[0] : null;
@@ -162,7 +162,7 @@ Ext.define('NextThought.cache.UserRepository', {
 
                 if (!result) {
                     if (callbacks && callbacks.failure) callbacks.failure.call(callbacks.scope || this);
-                    console.log('ERROR: result is null', username, bins, url, json);
+                    console.error('result is null', username, bins, url, json);
                 }
             }
         });

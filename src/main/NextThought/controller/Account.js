@@ -63,7 +63,7 @@ Ext.define('NextThought.controller.Account', {
         u.save({
             scope: this,
             failure: function(){
-                console.log('FAILURE:',arguments);
+                console.error('FAILURE:',arguments);
             },
 			success:function(newRecord,operation){
                 win.close();

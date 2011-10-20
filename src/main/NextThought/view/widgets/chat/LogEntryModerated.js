@@ -61,7 +61,7 @@ Ext.define('NextThought.view.widgets.chat.LogEntryModerated', {
         this.add = function(){
             var r = this._add.apply(this,arguments);
                 reply = this.down('chat-reply-to');
-            console.log('r', r);
+            //console.debug('r', r);
 
             if(reply && r!==reply){
                 var ci = this.items.indexOf(reply);
@@ -92,7 +92,7 @@ Ext.define('NextThought.view.widgets.chat.LogEntryModerated', {
             UserRepository.prefetchUser(s, function(users){
                 var u = users[0];
                 if (!u) {
-                    console.log('ERROR: failed to resolve user', s, m);
+                    console.error('failed to resolve user', s, m);
                     return;
                 }
 

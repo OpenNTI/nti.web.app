@@ -21,13 +21,13 @@ Ext.define('NextThought.controller.Google', {
 	},
 
 	onHangoutReady: function(fn){
-		console.log("Starting app in Hangout Mode");
+		console.info("Starting app in Hangout Mode");
 		gapi.hangout.addApiReadyListener(fn);
 	},
 
 	broadcastState: function(delta){
 		try{
-			console.log("Hangout: Broadcasting State...");
+			console.debug("Hangout: Broadcasting State...");
 			gapi.hangout.data.submitDelta({delta:Ext.JSON.encode(delta)});
 		}
 		catch(e){
@@ -36,11 +36,11 @@ Ext.define('NextThought.controller.Google', {
 	},
 
 	participantsListener: function(){
-		console.log("\n\n\n\nParticipants Listener: ",arguments,"\n\n\n\n");
+		console.debug("\n\n\n\nParticipants Listener: ",arguments,"\n\n\n\n");
 	},
 
 	stateChangeListener: function(){
-		console.log("\n\n\n\nState Change Listener: ",arguments,"\n\n\n\n");
+		console.debug("\n\n\n\nState Change Listener: ",arguments,"\n\n\n\n");
 		//this.stateCtlr.restoreState();
 	}
 });

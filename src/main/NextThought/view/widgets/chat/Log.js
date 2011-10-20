@@ -105,7 +105,7 @@ Ext.define('NextThought.view.widgets.chat.Log', {
         if (m) {
             c = m.ownerCt;
             c.remove(m);
-            console.log('c=', c);
+//            console.debug('c=', c);
             if(c.xtype != 'chat-log-view' && c.items.getCount() == 0) c.destroy();
         }
 
@@ -117,7 +117,7 @@ Ext.define('NextThought.view.widgets.chat.Log', {
             m = id ? this.down(this.getMessageQuery(id)) : null,
             mStat = msg.get('Status');
 
-        if (!id) console.log('WARNING: This message has no OID, cannot be targeted!', msg);
+        if (!id) console.warn('This message has no OID, cannot be targeted!', msg);
 
         if (m){
             m.update(msg);
