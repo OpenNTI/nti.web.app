@@ -233,14 +233,14 @@ Ext.define('NextThought.view.content.Reader', {
             history.pushState(state,"TODO: resolve title");
         }
         catch(e){
-            console.log('Error recording history:', e, e.message, e.stack, 'state:', state);
+            console.error('Error recording history:', e, e.message, e.stack, 'state:', state);
         }
     },
 
 
     restore: function(state) {
         if(!state || !state.reader) {
-            console.log("WARNING: Ignoring restored state data, missing state for reader");
+            console.warn("WARNING: Ignoring restored state data, missing state for reader");
             return;
         }
 
@@ -249,7 +249,7 @@ Ext.define('NextThought.view.content.Reader', {
             this.setActive(b, state.reader.page, true);
         }
         else{
-            console.log(state.reader, 'The restored state object points to a resource that is no longer available');
+            console.error(state.reader, 'The restored state object points to a resource that is no longer available');
         }
     }
 

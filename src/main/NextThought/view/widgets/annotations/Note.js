@@ -156,7 +156,7 @@ Ext.define( 'NextThought.view.widgets.annotations.Note', {
 
         }
         catch(e){
-            console.log(e,e.message, e.stack);
+            console.error('Note onResize: ',e,e.message, e.stack);
         }
     }
 });

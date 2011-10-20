@@ -159,7 +159,7 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
         }
         catch(err){
             if(me){
-                console.log('error', err, err.message, err.stack);
+                console.error('Search Popover', err, err.message, err.stack);
             }
         }
     },

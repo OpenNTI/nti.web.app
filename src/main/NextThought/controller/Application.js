@@ -10,13 +10,11 @@ Ext.define('NextThought.controller.Application', {
 
     statics: {
         launch: function(){
+			Ext.create('NextThought.view.Viewport');
             try{
-                Ext.create('NextThought.view.Viewport');
                 Library.load();
             }
-            catch(e){
-                console.log(e, e.message, e.stack);
-            }
+            catch(e){ console.error('Loading Library: ', e, e.message, e.stack); }
         }
     },
 
@@ -28,8 +26,8 @@ Ext.define('NextThought.controller.Application', {
         try{
             this.getViewport().fireEvent('restore',PREVIOUS_STATE);
         }
-        catch(e){
-            console.log(e, e.message, e.stack);
+        catch(e){//restoring state
+            console.error('Restoring State: ', e, e.message, e.stack);
             Ext.getCmp('home').activate();
         }
 

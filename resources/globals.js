@@ -17,6 +17,8 @@ function removeLoaderSplash(){
 
 
 function applyHooks(){
+	ensureConsole();
+
 	Ext.JSON.encodeDate = function(d){return Ext.Date.format(d, 'U');};
 
 	hooksForIE();
@@ -24,6 +26,19 @@ function applyHooks(){
 	Ext.Ajax.timeout==60000;
 	Ext.Ajax.on('beforerequest', beforeRequest);
 	Ext.EventManager.onWindowResize(resizeBlocker);
+}
+
+
+function ensureConsole(){
+	if(!console){
+		console = {log: function(){}};
+	}
+	if(!console.warn){
+		console.warn = Ext.Function.alias(console, 'log');
+	}
+	if(!console.error){
+		console.error = Ext.Function.alias(console, 'log');
+	}
 }
 
 
@@ -47,8 +62,7 @@ function beforeRequest(connection,options)
         var loc = '';
         try { loc = printStackTrace().splice(7); }
         catch (e) { loc = e.stack || e.stacktrace; }
-		var l = (console.warn?console.warn:console.log);
-        l.call( console, 'Synchronous Call in: ', loc, ' Options:', options );
+		console.warn( console, 'Synchronous Call in: ', loc, ' Options:', options );
     }
 }
 

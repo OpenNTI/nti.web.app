@@ -23,9 +23,7 @@ Ext.define('NextThought.view.widgets.Widget', {
     		return document.evaluate(xpath, document, null, XPathResult.ANY_TYPE, null).iterateNext();
     	}
     	catch(e) {
-    		if(NextThought.isDebug) {
-    			console.log(xpath, e);
-    		}
+			console.error('getNodeFromXPath: ',xpath, e.stack);
     		return null;
     	}
     },

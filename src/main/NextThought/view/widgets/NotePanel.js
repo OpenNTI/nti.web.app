@@ -258,7 +258,7 @@ Ext.define('NextThought.view.widgets.NotePanel',{
         return r;
         }
         catch(e){
-            console.log(e, e.message, e.stack);
+            console.error('buildReply: ',e, e.message, e.stack);
         }
     },
 

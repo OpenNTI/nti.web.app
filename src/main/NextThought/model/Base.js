@@ -49,7 +49,7 @@ Ext.data.Types.ARRAYITEM = {
         return ParseUtils.parseItems(v);
     },
     sortType: function(v) {
-        console.log('sort by Item:',arguments);
+        console.warn('sort by Item:',arguments);
         return '';
     }
 };
@@ -81,13 +81,13 @@ Ext.data.Types.USERLIST = {
 
             return u;
         }
-        catch (err) {
-            console.log(err.message, err.stack);
+        catch (e) {
+            console.error('USERLIST: Parsing Error: ',e.message, e.stack);
             return v;
         }
     },
     sortType: function(v) {
-    	console.log('sort by UserList:',arguments);
+    	console.warn('sort by UserList:',arguments);
         return '';
     }
 };

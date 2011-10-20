@@ -125,10 +125,8 @@ Ext.define('NextThought.util.AnnotationUtils',
              try {
                  return document.evaluate(xpath, document, null, XPathResult.ANY_TYPE, null).iterateNext();
              }
-             catch(e) {
-                 if(NextThought.isDebug) {
-                     console.log('xpath:', xpath, 'error:', e, e.message, e.stack);
-                 }
+             catch(e) { //getNodeFromXPath
+				 console.error('xpath:', xpath, 'error:', e, e.stack);
                  return null;
              }
         },
@@ -145,11 +143,7 @@ Ext.define('NextThought.util.AnnotationUtils',
                 if (!startElement || range.collapsed) throw 'rageing tempor tantrum';
                 return range;
             }
-            catch(e) {
-                if(NextThought.isDebug) {
-                    console.log('bad range', r, e, e.toString());
-                }
-            }
+            catch(e) { console.log('bad range', r, e, e.toString()); }
 
             //if we make it this far, there's something wrong with the range, we'll try to reconstruct from anchors
             return this.rangeFromAnchors(r);
@@ -198,7 +192,7 @@ Ext.define('NextThought.util.AnnotationUtils',
                 container = tempRange.commonAncestorContainer;
             }
             catch (e) {
-                console.log('End Anchor is null', e, e.message, e.stack);
+                console.warn('End Anchor is null', e, e.stack);
                 container = Ext.get(startAnchor).up('.page-contents').dom;
             }
 

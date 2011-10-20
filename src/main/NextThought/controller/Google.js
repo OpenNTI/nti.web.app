@@ -2,20 +2,18 @@ Ext.define('NextThought.controller.Google', {
     extend: 'Ext.app.Controller',
 
     init: function() {
+		try{
+			this.stateCtlr = this.getController('State');
 
-		var stateCtlr = this.getController('State');
-
-        if(this.isHangout()){
-			stateCtlr.on('stateChange', this.broadcastState, this);
-
-            gapi.hangout.data.addStateChangeListener(function(){
-                console.log("\n\n\n\nState Change Listener: ",arguments,"\n\n\n\n");
-				//stateCtlr.restoreState();
-            });
-            gapi.hangout.addParticipantsListener(function(){
-                console.log("\n\n\n\nParticipants Listener: ",arguments,"\n\n\n\n");
-            });
-        }
+			if(this.isHangout()){
+				gapi.hangout.data.addStateChangeListener(Ext.bind(this.stateChangeListener,this));
+				gapi.hangout.addParticipantsListener(Ext.bind(this.participantsListener,this));
+				this.stateCtlr.on('stateChange', this.broadcastState, this);
+			}
+		}
+		catch(e){
+			console.error('Could not establish hangout events: ', e.stack);
+		}
     },
 
 	isHangout: function(){
@@ -23,10 +21,26 @@ Ext.define('NextThought.controller.Google', {
 	},
 
 	onHangoutReady: function(fn){
+		console.log("Starting app in Hangout Mode");
 		gapi.hangout.addApiReadyListener(fn);
 	},
 
 	broadcastState: function(delta){
-		gapi.hangout.data.submitDelta({delta:Ext.JSON.encode(delta)});
+		try{
+			console.log("Hangout: Broadcasting State...");
+			gapi.hangout.data.submitDelta({delta:Ext.JSON.encode(delta)});
+		}
+		catch(e){
+			console.error('Could not broadcast state',e.stack);
+		}
+	},
+
+	participantsListener: function(){
+		console.log("\n\n\n\nParticipants Listener: ",arguments,"\n\n\n\n");
+	},
+
+	stateChangeListener: function(){
+		console.log("\n\n\n\nState Change Listener: ",arguments,"\n\n\n\n");
+		//this.stateCtlr.restoreState();
 	}
 });

@@ -97,7 +97,7 @@ Ext.define('NextThought.view.windows.NotificationsPopover', {
         }
         catch(err){
             if(me){
-                console.log('error', err, err.message, err.stack);
+                console.error('NotificationPopover Height-adjustment', err, err.message, err.stack);
             }
         }
     }

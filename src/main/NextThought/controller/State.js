@@ -91,7 +91,7 @@ Ext.define('NextThought.controller.State', {
                     c.restore(stateScoped);
                 }
                 catch(e){
-                    console.log(e, e.message, e.stack);
+                    console.error('Setting state: ', e, e.message, e.stack);
                 }
             }
             else {

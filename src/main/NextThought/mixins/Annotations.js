@@ -52,9 +52,7 @@ Ext.define('NextThought.mixins.Annotations', {
 				if(!_a.hasOwnProperty(a) || !_a[a]) continue;
 				_a[a].updateFilterState(this._filter);
 			}
-			catch(e) {
-				console.log(_a, a, newFilter);
-			}
+			catch(e) { console.error('Annotation Filter Error: ', _a, a, newFilter); }
 		}
 	},
 
@@ -187,9 +185,8 @@ Ext.define('NextThought.mixins.Annotations', {
 					this);
 			return true;
 		}
-		catch(e){
-			console.log('Error notes:',e, e.toString(), e.stack);
-		}
+		catch(e){ console.error('Error notes:',e, e.toString(), e.stack); }
+
 		return false;
 	},
 
@@ -291,9 +288,7 @@ Ext.define('NextThought.mixins.Annotations', {
 					me.widgetBuilder[r.getModelName()].call(me,r);
 					Ext.apply(contributors, me.getContributors(r));
 				}
-				catch (err) {
-					console.log('could not build '+r.getModelName()+' from record:', r, 'because: ', err.message, err.stack);
-				}
+				catch(e){console.error('Could not build '+r.getModelName()+' from record:', r, 'because: ', e.stack); }
 			}, this
 		);
 
@@ -375,9 +370,7 @@ Ext.define('NextThought.mixins.Annotations', {
 				this.addHighlight(range, e.getXY());
 			}
 		}
-		catch(e){
-			this.clearSelection();
-		}
+		catch(e){ this.clearSelection(); }
 	},
 
 
@@ -409,9 +402,7 @@ Ext.define('NextThought.mixins.Annotations', {
 			if(document.selection)
 				document.selection.clear();
 		}
-		catch(e){
-			console.log(e);
-		}
+		catch(e){ console.warn(e.stack); }
 	}
 
 

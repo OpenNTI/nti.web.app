@@ -122,7 +122,7 @@ Ext.define('NextThought.controller.Session', {
                             win.setRemember();
                         }
                         catch(e){
-                            console.log(e, e.message);
+                            console.error('Session init',e, e.message);
                         }
                     }
                     win.show();

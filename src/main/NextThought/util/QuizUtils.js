@@ -105,7 +105,7 @@ Ext.define('NextThought.util.QuizUtils', {
                 MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
             }
             catch(e){
-                console.log('No MathJax? ',e);
+                console.warn('No MathJax? ',e);
             }
 
             this.scrollUp();

@@ -82,7 +82,7 @@ Ext.define('NextThought.view.widgets.Tracker', {
 			this.render(loc.toc, loc.location);
 		}
 		catch(e){
-			console.log('Change Location Error:',e, arguments);
+			console.error('Change Location Error:',e, arguments);
 		}
 	},
 	
@@ -113,7 +113,7 @@ Ext.define('NextThought.view.widgets.Tracker', {
             this.renderToolTip(region.node);
         }
         catch (err) {
-            console.log('error', err.message, err.stack);
+            console.error('error', err.message, err.stack);
         }
 
 	},

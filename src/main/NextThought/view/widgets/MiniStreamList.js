@@ -76,7 +76,7 @@ Ext.define('NextThought.view.widgets.MiniStreamList', {
                 }
             }
             catch (err) {
-                console.log('Unexpected Error', err.message);
+                console.error('Unexpected Error', err.message);
             }
         }
 

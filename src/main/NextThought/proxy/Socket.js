@@ -131,7 +131,7 @@ Ext.define('NextThought.proxy.Socket', {
                 }
                 s.disconnect();
                 s.socket.disconnectSync();
-            } catch(e){ console.log('potential leaking sockets'); } };
+            } catch(e){ console.warn('potential leaking sockets'); } };
         }
     },
 
