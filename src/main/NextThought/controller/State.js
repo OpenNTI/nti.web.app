@@ -91,7 +91,6 @@ Ext.define('NextThought.controller.State', {
 
         for(var key in stateObject){
             if(!stateObject.hasOwnProperty(key) || !/object/i.test(typeof(stateObject[key]))) continue;
-			console.debug('State Key: ',key);
             c = Ext.getCmp(key);
             if(c && c.restore){
                 try{
