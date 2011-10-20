@@ -38,14 +38,16 @@ Ext.define('NextThought.controller.Google', {
 		catch(e){
 			console.error('Could not broadcast state',e.stack);
 		}
+
+		return false;
 	},
 
 	participantsListener: function(){
-		console.debug("\n\n\n\nParticipants Listener: ",arguments,"\n\n\n\n");
+		console.debug("Participants Listener: ",arguments);
 	},
 
-	stateChangeListener: function(){
-		console.debug("\n\n\n\nState Change Listener: ",arguments,"\n\n\n\n");
+	stateChangeListener: function(adds, removes, state, metadata){
+		console.debug("State Change Listener: ",arguments);
 		//this.stateCtlr.restoreState();
 	}
 });

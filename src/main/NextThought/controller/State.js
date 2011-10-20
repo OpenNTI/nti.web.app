@@ -20,6 +20,8 @@ Ext.define('NextThought.controller.State', {
 
         me._currentState = {};
 
+		me.isHangout = this.getController('Google').isHangout();
+
         me.control({
             'master-view':{
                 'restore': me.restoreState
@@ -37,15 +39,15 @@ Ext.define('NextThought.controller.State', {
 
         window.history.pushState = function(){
             if(!me.isPoppingHistory && push){
-				console.debug('Return value of stateChange',me.fireEvent('stateChange',arguments[0]));
-                push.apply(history, arguments);
+				if(me.fireEvent('stateChange',arguments[0]))
+                	push.apply(history, arguments);
             }
         };
 
     },
 
     onPopState: function(e) {
-        if(!NextThought.isInitialised){
+        if(!NextThought.isInitialised || this.isHangout){
             return;
         }
         var s = e?e.state:null,
@@ -99,7 +101,6 @@ Ext.define('NextThought.controller.State', {
             }
         }
 
-		console.debug('State: initializing...');
         if(replaceState)
             history.replaceState(this._currentState,'Title');
     },
@@ -107,7 +108,7 @@ Ext.define('NextThought.controller.State', {
 
 
     loadState: function(){
-		if(this.getController('Google').isHangout()){
+		if(this.isHangout){
 			console.info('Setting up state for Hangout...');
 			return {};
 		}
