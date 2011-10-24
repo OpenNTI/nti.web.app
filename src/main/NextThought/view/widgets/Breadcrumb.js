@@ -1,5 +1,5 @@
 
-Ext.define('NextThought.view.navigation.Breadcrumb', {
+Ext.define('NextThought.view.widgets.Breadcrumb', {
 	extend: 'Ext.toolbar.Toolbar',
 	alias: 'widget.breadcrumbbar',
 	

@@ -4,8 +4,8 @@ Ext.define('NextThought.controller.Reader', {
     views: [
         'modes.Container',
         'modes.Reader',
-        'navigation.Breadcrumb',
         'content.Reader',
+        'widgets.Breadcrumb',
         'widgets.PeopleList',
         'widgets.RelatedItemsList',
         'widgets.MiniStreamList',
