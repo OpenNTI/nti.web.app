@@ -9,7 +9,10 @@ Ext.define('NextThought.view.widgets.FilterControlPanel', {
 
 	width: MIN_SIDE_WIDTH,
 	border: false,
-    items: [{xtype: 'form', cls: 'filter-controls', border: false, defaults:{border:false}}],
+    items: [{
+		xtype: 'form', layout: 'anchor', cls: 'filter-controls',
+		border: false, defaults:{border:false, anchor: '100%'}
+	}],
 
 	constructor: function(){
 		this.addEvents('filter-changed','filter-control-loaded');
