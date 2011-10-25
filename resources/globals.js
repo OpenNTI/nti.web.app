@@ -3,6 +3,11 @@ CENTER_WIDTH = 768;
 MIN_SIDE_WIDTH = 175;
 MIN_WIDTH = 768;
 
+window.onerror = function(){
+	document.body.innerHTML = '';
+	Ext.getBody().mask("Ooops, now this is embarrasing...<br/>there was an unexpected error, please try again.","body-mask");
+};
+
 
 function removeLoaderSplash(){
 	setTimeout(
@@ -75,7 +80,7 @@ function beforeRequest(connection,options)
 
 function resizeBlocker(w, h, e){
     var i = !!(w<MIN_WIDTH), b = Ext.getBody(), m = b.isMasked();
-    if(i && !m) b.mask("Your browser window is too narrow","viewport-too-small");
+    if(i && !m) b.mask("Your browser window is too narrow","body-mask");
     else if(!i && m) b.unmask();
 }
 

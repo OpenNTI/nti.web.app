@@ -1,18 +1,3 @@
-.viewport-too-small {
-    width: 100%;
-    height: 100%;
-    padding: 0 !important;
-
-}
-
-.viewport-too-small div{
-    border: none !important;
-    background: white !important;
-    font-size: 2.4em;
-    padding: 4em !important;
-    text-align: center;
-}
-
 #loading-mask {
     position: absolute;
     left: 0;
@@ -52,4 +37,19 @@
     background-color: transparent;
     background-position: 10px center;
     padding: 10px 15px 10px 30px;
+}
+
+.body-mask {
+    width: 100%;
+    height: 100%;
+    padding: 0 !important;
+
+}
+
+.x-mask-msg.body-mask div{
+    border: none !important;
+    background: white !important;
+    font-size: 2.4em;
+    padding: 4em !important;
+    text-align: center;
 }
