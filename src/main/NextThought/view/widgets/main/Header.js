@@ -10,10 +10,11 @@ Ext.define('NextThought.view.widgets.main.Header', {
     items: [],
     border: false,
     frame: false,
+	layout: 'anchor',
     
     initComponent: function(){
    		this.callParent(arguments);
-    	this.add({xtype: 'top-controls', id: 'top-controls'});
+    	this.add({xtype: 'top-controls', id: 'top-controls', anchor: '100%'});
     }
     
 });
