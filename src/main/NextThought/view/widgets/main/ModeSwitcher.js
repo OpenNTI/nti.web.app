@@ -21,7 +21,7 @@ Ext.define('NextThought.view.widgets.main.ModeSwitcher', {
     		title: label,
     		allowDepress: false,
     		enableToggle: true,
-    	    toolTip: label,
+    	    tooltip: label,
     		toggleGroup: 'modeSwitcher'
 		});
 
