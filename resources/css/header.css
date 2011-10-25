@@ -2,7 +2,7 @@
     background: transparent url("../images/ntbanner.png") no-repeat 0 0;
 }
 
-.mode-switcher {
+.mode-switcher .x-panel-body{
     padding-top: 4px;
 }
 

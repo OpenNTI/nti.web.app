@@ -6,18 +6,13 @@ Ext.define('NextThought.view.widgets.main.ModeSwitcher', {
     cls: 'mode-switcher',
 	frame: false,
 	border: false,
-	margin: 5,
 	layout: {
 		type: 'hbox',
 		pack: 'start',
-        align: 'top'
+        align: 'middle'
 	},
 	items: [],
 	modeReference: null,
-    
-    initComponent: function(){
-   		this.callParent(arguments);
-    },
 
     addMode: function(label, cls){
     	var b = Ext.create('Ext.button.Button', {
