@@ -151,12 +151,14 @@ Ext.define('NextThought.view.windows.LoginWindow', {
 
 
     destroy: function(){
-        var el = this.el.down('.x-box-inner');
+		var el = this.getEl().down('.x-box-inner');
         Ext.EventManager.removeResizeListener(this.fireResize, this);
         this.callParent(arguments);
         if(el){
             el.remove();
         }
+
+		this.destroy = this.close = function(){};
     },
 
 
