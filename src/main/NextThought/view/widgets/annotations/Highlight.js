@@ -192,7 +192,6 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
             return;
         }
 
-
 		if(!this._isVisible)return;
 
         var nib = Ext.get(this._img),
@@ -238,7 +237,7 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
         },
 
         render: function(){
-            var	c = this._canvas = (this._canvas || Ext.query('#canvas-highlight-container canvas')[0]),
+            var	c = Ext.query('#canvas-highlight-container canvas')[0],
                 ctx = c.getContext("2d");
             //reset the context
 
