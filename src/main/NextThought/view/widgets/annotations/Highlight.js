@@ -1,6 +1,6 @@
 Ext.define('NextThought.view.widgets.annotations.Highlight', {
 	extend:'NextThought.view.widgets.annotations.Annotation',
-	
+
 
 	constructor: function(selection, record, container, component){
 		var me = this,
@@ -21,7 +21,7 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
         me.self._eventRouter.fireEvent('render');
         return me;
 	},
-	
+
 	_createCanvasContainer: function(id){
 		var e = Ext.get(id),
 			n = e ? e.dom : this.createElement('div',this._cnt,'document-highlights'),
@@ -58,7 +58,7 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
             height: size.height
         });
     },
-	
+
 	visibilityChanged: function(show){
 		this.callParent(arguments);
 		this.self._eventRouter.fireEvent('render');
@@ -99,15 +99,15 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
                     handler: Ext.bind(r.phantom? this.savePhantom : this.remove, this)
                 });
 		}
-		
+
 		items.push({
 			text : 'Add a Note',
 			handler: Ext.bind(this._addNote, this)
 		});
-		
+
 		return this.callParent([items]);
 	},
-	
+
 	_menuItemHook: function(o,item, menu){
 		item.on('afterrender',Ext.bind(this.updateMenuIcon, item, [o._colorToRGB(o.getColor())]));
 	},
@@ -153,12 +153,12 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
         this.self._eventRouter.un('render',this.requestRender, this);
         this.self._eventRouter.fireEvent('render');
 	},
-	
-	
+
+
 	onResize : function(e){
         this.requestRender();
 	},
-	
+
 
     adjustCoordinates: function(rect,offsetToTrim){
         var r = rect,
@@ -176,8 +176,8 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
             bottom: r.top-y+r.height
         };
     },
-	
-	
+
+
 	drawRect: function(rect, fill){
         return function(ctx){
             ctx.fillStyle = fill;

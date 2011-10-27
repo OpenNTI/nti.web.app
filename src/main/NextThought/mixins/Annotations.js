@@ -23,8 +23,7 @@ Ext.define('NextThought.mixins.Annotations', {
 			_searchAnnotations: null
 		});
 
-		this.addEvents('create-note','edit-note');
-		this.enableBubble(['create-note','edit-note']);
+		this.addEvents('create-note');
 
 		this.on('afterrender',
 			function(){

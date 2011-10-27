@@ -24,6 +24,7 @@ Ext.define('NextThought.view.Viewport', {
         if(NextThought.phantomRender){
             this.hidden = true;
         }
+
         this.callParent(arguments);
     },
 	

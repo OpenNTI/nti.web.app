@@ -36,13 +36,10 @@ Ext.define('NextThought.controller.Annotations', {
 
 
         this.control({
-            'master-view':{
-                'create-note'   : this.addNote,
-                'reply-to-note' : this.actionMap['chat'],
-                'reply-as-chat' : this.actionMap['reply'],
-				'edit-note'     : this.actionMap['edit'],
-				'share-with'    : this.actionMap['share']
-    	 	},
+            'reader-panel':{
+				'create-note'   : this.addNote,
+                'share-with'    : this.actionMap['share']
+			},
 
             'note-entry':{
                 'action': this.onNoteAction,
@@ -56,7 +53,7 @@ Ext.define('NextThought.controller.Annotations', {
             'sharewithwindow button':{
     	 		'click': this.shareWithButton
     	 	}
-        });
+        },{});
     },
 
     getContext: function(){
