@@ -85,7 +85,8 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 							draggable: true,
 							type: shape,
 						},
-						this.toolDefaults(shape, color, x, y)));
+						this.toolDefaults(shape, color, x, y)
+				));
 
 		sp.show(true);
 
