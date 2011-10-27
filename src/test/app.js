@@ -41,7 +41,8 @@ Ext.application({
         'ObjectExplorer',
         'Reader',
         'Search',
-        'Stream'
+        'Stream',
+		'Whiteboard'
     ],
 
     launch: function() {
