@@ -23,7 +23,7 @@ Ext.define('NextThought.mixins.Annotations', {
 			_searchAnnotations: null
 		});
 
-		this.addEvents('create-note');
+		this.addEvents('share-with','create-note');
 
 		this.on('afterrender',
 			function(){

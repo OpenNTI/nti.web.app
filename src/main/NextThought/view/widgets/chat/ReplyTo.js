@@ -32,7 +32,6 @@ Ext.define('NextThought.view.widgets.chat.ReplyTo', {
             f = me.down('textfield');
 
         me.addEvents('send');
-        me.enableBubble('send');
 
         f.on('specialkey', function(x, e){
             if (e.getKey() != e.ENTER) return;

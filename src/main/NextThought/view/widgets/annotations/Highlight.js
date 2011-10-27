@@ -143,7 +143,7 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 
 	_addNote: function(){
         this.savePhantom();
-		this._cmp.fireEvent('create-note',this._sel);
+		this.getCmp().fireEvent('create-note',this._sel);
 	},
 
 

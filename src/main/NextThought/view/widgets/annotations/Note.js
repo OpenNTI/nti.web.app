@@ -55,7 +55,7 @@ Ext.define( 'NextThought.view.widgets.annotations.Note', {
         // me.onResize();
         setTimeout(function(){
             console.debug('note visability changed, firing resize');
-            me._cmp.fireEvent('resize');
+            me.getCmp().fireEvent('resize');
         },100);
     },
 
@@ -73,7 +73,7 @@ Ext.define( 'NextThought.view.widgets.annotations.Note', {
             this.noteCmp.updateFromRecord(record);
             this.onResize();
         }
-        this._cmp.fireEvent('resize',{});
+		this.getCmp().fireEvent('resize');
     },
 
     _buildMenu: function(){
