@@ -1,5 +1,10 @@
 Ext.define('NextThought.view.widgets.draw.Resizer', {
 	extend: 'Ext.draw.CompositeSprite',
+	requires: [
+		'NextThought.view.widgets.draw.ResizerNib'
+	],
+
+	nibSize: 8,
 
 	propertyMap: {
 		tl	: {style:{cursor: 'nwse-resize'},	attrs: 'x-y'},
@@ -156,7 +161,7 @@ Ext.define('NextThought.view.widgets.draw.Resizer', {
 
 	addNib: function(cfg, type){
 		var me= this,
-			r = me.add(Ext.create('Ext.draw.Sprite', Ext.apply(cfg,me.nibBase))),
+			r = me.add(Ext.create('widget.sprite-resizer-nib', Ext.apply(cfg,{nibSize:this.nibSize}))),
 			p = me.propertyMap[type];
 
 		r.setStyle(p.style);
@@ -223,20 +228,6 @@ Ext.define('NextThought.view.widgets.draw.Resizer', {
 
 },
 function(){
-	var s = 8;
-	Ext.apply(this.prototype,{
-		nibSize : s,
-		nibBase : {
-			draggable: true,
-			type: 'rect',
-			width: s,
-			height: s,
-			fill: '#cccccc',
-			stroke: '#0000ff',
-			'stroke-width': 1,
-			group: 'resize'
-		}
-	});
 
 	this.prototype.drawNibsForPath = this.prototype.drawNibsForRect;
 	this.prototype.drawNibsForText = this.prototype.drawNibsForRect;

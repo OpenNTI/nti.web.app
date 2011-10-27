@@ -78,6 +78,74 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 
 
 
+
+	loadScene: function(canvasJSON){
+		var shapes = canvasJSON.shapeList,
+			s = this.getSurface();
+
+		Ext.each(shapes, itr, this);
+
+		function itr(shape){
+			var o = Ext.apply(shape,{
+				draggable: true,
+				type: shape['Class'].toLowerCase(),
+				x: shape.point.x,
+				y: shape.point.y
+			});
+
+
+			s.add(o).show(true);
+		}
+	},
+
+
+
+
+	saveScene: function(){
+		var shapes = [];
+
+		this.getSurface().items.each(
+			function(i){
+				var a = Ext.clone(i.attr),
+					bb = i.getBBox(), x, y;
+
+				if(i.isNib || a.hidden || (!bb.width && !bb.height))return;
+
+				x = a.x + a.translation.x;
+				y = a.y + a.translation.y;
+
+				if(a.rotation.degrees)
+					a.rotation	= a.rotation.degrees;
+				else
+					delete a.rotation;
+
+				delete a.hidden;
+				delete a.translation;
+				delete a.scaling;
+				delete a.x;
+				delete a.y;
+
+				a["Class"]		= Ext.String.capitalize(i.type);
+				a["point"]		= { "Class":"Point", "x":x, "y":y };
+				a["length"]		= a.size || a.radius || Math.sqrt((x*x)+(y*y));
+
+				shapes.push(a);
+			},
+			this
+		);
+
+
+
+		console.log(shapes);
+
+		return {
+			"Class":"Canvas",
+			"shapeList": shapes
+		};
+	},
+
+
+
 	addShape: function(shape, x,y, color){
 		var sp = this.getSurface().add(
 				Ext.apply(

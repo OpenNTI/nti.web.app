@@ -107,7 +107,11 @@ Ext.define('NextThought.controller.Whiteboard', {
 		this.surfaceMouseMove(e);
 
 		//clean up
-		if(this.sprite) delete this.sprite;
+		if(this.sprite){
+			var bb = this.sprite.getBBox();
+			if(!bb.width && !bb.height)this.sprite.destroy();
+			delete this.sprite;
+		}
 		if(this.surfacePosition) delete this.surfacePosition;
 	},
 
