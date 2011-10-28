@@ -19,45 +19,104 @@ Ext.define('NextThought.view.widgets.draw.Resizer', {
 	},
 
 	attributeModifiers: {
-		'x': function(dx, dy, tx, ty)
-		{
-			var a = this.sprite.attr,
-				t = a.translation,
-				g = this.groups;
+		'x': function(dx, dy, tx, ty) { return this.updateSpriteXY(dx,0,tx,0); },
+		'y': function(dx, dy, tx, ty) { return this.updateSpriteXY(0,dy,0,ty); },
+		'x-y': function(dx, dy, tx, ty) { return this.updateSpriteXY(dx,dy,tx,ty); },
+		'width': function(dx, dy, tx, ty) { return this.updateSpriteWH(dx,0,tx,0); },
+		'height': function(dx, dy, tx, ty) { return this.updateSpriteWH(0,dy,0,ty); },
+		'width-height': function(dx, dy, tx, ty) { return this.updateSpriteWH(dx,dy,tx,ty); },
+		'y-width': function(dx, dy, tx, ty) { return this.updateSpriteYW(dx,dy,tx,ty); },
+		'x-height': function(dx, dy, tx, ty) { return this.updateSpriteXH(dx,dy,tx,ty); },
+		'radius': function(dx, dy, tx, ty){ return this.updateSpriteRadius(dx,dy,tx,ty); }
+	},
 
-			this.sprite.setAttributes( {
+	updateSpriteRadius: function(dx, dy, tx, ty){
+		var a = this.sprite.attr;
+		this.sprite.setAttributes( { radius: Math.abs(a.radius+dx) }, true);
+		return {x: tx};
+	},
+
+	updateSpriteXY: function(dx, dy, tx, ty) {
+		var a = this.sprite.attr,
+			t = a.translation;
+
+		this.sprite.setAttributes( {
 				x:a.x+t.x+dx,
-				y:a.y+t.y,
+				y:a.y+t.y+dy,
+				height: Math.abs( a.height - dy ),
 				width: Math.abs( a.width - dx ),
 				translation:{x:0,y:0}
 			},
 			true);
 
-			g.x.setAttributes({ translation:{x:tx} },true);
-			if(g.mX) g.mX.setAttributes({ translation:{x:(tx/2)} },true);
+		this.updateNibs(tx,ty, 'x','y');
 
-			return {x:tx};
-		},
+		return {x:tx ,y:ty};
+	},
 
-		'y': function(dx, dy, tx, ty)
-		{
-			var a = this.sprite.attr,
-				t = a.translation,
-				g = this.groups;
 
-			this.sprite.setAttributes( {
-				x:a.x+t.x,
-				y:a.y+t.y+dy,
-				height: Math.abs( a.height - dy ),
-				translation:{x:0,y:0}
-			},
-			true);
+	updateSpriteWH: function(dx, dy, tx, ty) {
+		var a = this.sprite.attr,
+			t = a.translation;
 
-			g.y.setAttributes({ translation:{y:ty} },true);
-			if(g.mY) g.mY.setAttributes({ translation:{y:(ty/2)} },true);
+		this.sprite.setAttributes( {
+			x:a.x+t.x,
+			y:a.y+t.y,
+			height: Math.abs( a.height + dy ),
+			width: Math.abs( a.width + dx ),
+			translation:{x:0,y:0}
+		}, true);
 
-			return {y:ty};
-		}
+		this.updateNibs(tx,ty, 'width','height');
+
+		return {x:tx ,y:ty};
+	},
+
+
+	updateSpriteXH: function(dx, dy, tx, ty) {
+		var a = this.sprite.attr,
+			t = a.translation;
+
+		this.sprite.setAttributes( {
+			x:a.x+t.x+dx,
+			y:a.y+t.y,
+			height: Math.abs( a.height + dy ),
+			width: Math.abs( a.width - dx ),
+			translation:{x:0,y:0}
+		}, true);
+
+		this.updateNibs(tx,ty, 'x','height');
+
+		return {x:tx ,y:ty};
+	},
+
+
+	updateSpriteYW: function(dx, dy, tx, ty) {
+		var a = this.sprite.attr,
+			t = a.translation;
+
+		this.sprite.setAttributes( {
+			x:a.x+t.x,
+			y:a.y+t.y+dy,
+			height: Math.abs( a.height - dy ),
+			width: Math.abs( a.width + dx ),
+			translation:{x:0,y:0}
+		}, true);
+
+		this.updateNibs(tx,ty, 'width','y');
+
+		return {x:tx ,y:ty};
+	},
+
+	updateNibs: function(tx,ty, g1, g2){
+		var g = this.groups;
+		if(tx) g[g1].setAttributes({ translate:{x:tx} });
+		if(ty) g[g2].setAttributes({ translate:{y:ty} });
+
+		if(tx && g.mX) g.mX.setAttributes({ translate:{x:(tx/2)} });
+		if(ty && g.mY) g.mY.setAttributes({ translate:{y:(ty/2)} });
+
+		this.redraw();
 	},
 
 	constructor: function(whiteboard,sprite){
