@@ -355,7 +355,13 @@ Ext.define('NextThought.view.widgets.NotePanel',{
 
     sizeChanged: function(){
         var a = this._annotation;
-        (a._parentAnnotation || a).fireEvent('resize');
+		try{
+        	a = (a._parentAnnotation || a);
+			a.getCmp().fireEvent('resize');
+		}
+		catch(e){
+			console.error(e.stack);
+		}
     }
 	
 	
