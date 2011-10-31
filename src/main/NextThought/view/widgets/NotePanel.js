@@ -248,7 +248,6 @@ Ext.define('NextThought.view.widgets.NotePanel',{
                 _annotation: {
                     _parentAnnotation: p,
                     getRecord: function(){return record},
-                    getCmp: function(){return r;},
                     remove: function(){ r.removeReply(); }
                 }
             });
@@ -357,7 +356,7 @@ Ext.define('NextThought.view.widgets.NotePanel',{
         var a = this._annotation;
 		try{
         	a = (a._parentAnnotation || a);
-			a.getCmp().fireEvent('resize');
+			a.fireEvent('resize');
 		}
 		catch(e){
 			console.error(e.stack);

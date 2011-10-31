@@ -1,11 +1,11 @@
 Ext.define('NextThought.proxy.Socket', {
-    extend: 'Ext.util.Observable',
     singleton: true,
-
-    isDebug: false,
+	isDebug: false,
+	mixins: { observable: 'Ext.util.Observable' },
 
     constructor: function() {
         var me = this;
+		me.mixins.observable.constructor.call(me);
         Ext.apply(me, {
             disconnectStats: {
                 count:0,

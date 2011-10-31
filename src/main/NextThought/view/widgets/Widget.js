@@ -1,5 +1,12 @@
 Ext.define('NextThought.view.widgets.Widget', {
-	extend: 'Ext.util.Observable',
+
+	mixins: {
+		observable: 'Ext.util.Observable'
+	},
+
+	constructor: function(){
+		this.mixins.observable.constructor.call(this);
+	},
 	
 	createElement: function(tag,parent,cls,css){
 		var el = document.createElement(tag);

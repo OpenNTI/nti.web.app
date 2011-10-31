@@ -16,6 +16,9 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 		var me = this,
             b = Ext.Function.createBuffered(me.onResize,100,me,['buffered']);
 
+		me.addEvents('resize');
+		me.enableBubble('resize');
+
 		me._isVisible = record.phantom || me.testFilter(component._filter);
 		me._cmp.on('resize', b, me);
 		Ext.EventManager.onWindowResize(b, me);
@@ -31,6 +34,9 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 
         me.onResize = b;
 	},
+
+	getBubbleParent: function(){ return this._cmp; },
+	getBubbleTarget: function(){ return this._cmp; },
 
     getCmp: function(){
         return this._cmp;

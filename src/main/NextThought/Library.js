@@ -1,11 +1,12 @@
 
 
 Ext.define('NextThought.Library', {
-	extend: 'Ext.util.Observable',
     singleton: true,
+	mixins: { observable: 'Ext.util.Observable' },
 	requires:[
         'NextThought.model.Title'
     ],
+
 	
     constructor: function(config) {
         this._tocs = [];
@@ -15,6 +16,7 @@ Ext.define('NextThought.Library', {
         });
 
         this.callParent(arguments);
+		this.mixins.observable.constructor.call(this);
         return this;
     },
 
