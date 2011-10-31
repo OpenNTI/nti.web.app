@@ -43,6 +43,7 @@ Ext.application({
 			applyHooks();
 			removeLoaderSplash();
 		    NextThought.controller.Session.login();
+			NextThought.isReady = true;
 		}
 	}
 });
