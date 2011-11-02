@@ -26,14 +26,7 @@ Ext.define('NextThought.view.widgets.draw.Resizer', {
 		'height': function(dx, dy, tx, ty) { return this.updateSpriteWH(0,dy,0,ty); },
 		'width-height': function(dx, dy, tx, ty) { return this.updateSpriteWH(dx,dy,tx,ty); },
 		'y-width': function(dx, dy, tx, ty) { return this.updateSpriteYW(dx,dy,tx,ty); },
-		'x-height': function(dx, dy, tx, ty) { return this.updateSpriteXH(dx,dy,tx,ty); },
-		'radius': function(dx, dy, tx, ty){ return this.updateSpriteRadius(dx,dy,tx,ty); }
-	},
-
-	updateSpriteRadius: function(dx, dy, tx, ty){
-		var a = this.sprite.attr;
-		this.sprite.setAttributes( { radius: Math.abs(a.radius+dx) }, true);
-		return {x: tx};
+		'x-height': function(dx, dy, tx, ty) { return this.updateSpriteXH(dx,dy,tx,ty); }
 	},
 
 	updateSpriteXY: function(dx, dy, tx, ty) {
@@ -133,33 +126,8 @@ Ext.define('NextThought.view.widgets.draw.Resizer', {
 	drawNibs: function(sprite){
 		this.groups = {};
 
-		var t = Ext.String.capitalize(sprite.type),
-			fn = this['drawNibsFor'+t];
-
 		this.reset();
 
-		if(!fn){
-			console.warn("No method for shape: "+t);
-			return;
-		}
-
-		fn.call(this, sprite);
-	},
-
-
-	drawNibsForCircle: function(sprite){
-
-		var a = sprite.attr,
-			t = a.translation || {},
-			o = (this.nibSize/2),
-			x = a.x + t.x - o,
-			y = a.y + t.y - o;
-
-		this.addNib({x: x+a.radius,	y: y}, 'd');
-	},
-
-
-	drawNibsForRect: function(sprite){
 		var b	= sprite.getBBox(),
 			x	= b.x,
 			y	= b.y,

@@ -5,7 +5,8 @@ Ext.define('NextThought.view.widgets.draw.ResizerNib', {
 	constructor: function(config){
 		this.callParent([Ext.apply({
 			draggable: true,
-			type: 'rect',
+			type: 'circle',
+			radius: config.nibSize/2,
 			width: config.nibSize,
 			height: config.nibSize,
 			fill: '#cccccc',

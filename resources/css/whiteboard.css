@@ -1,21 +1,27 @@
 
 .whiteboard-toolbar .x-btn-icon.tool{
-	background: pink;
+	background: url(../images/draw/whiteboard-tools.png);
+	width: 20px !important;
 }
 .whiteboard-toolbar .x-btn-icon.tool.rect{
-	background: red;
+	background-position: -78px -2px;/*-5px -2px*/
 }
 .whiteboard-toolbar .x-btn-icon.tool.circle{
-	background: green;
+	background-position: -55px -2px;
 }
 .whiteboard-toolbar .x-btn-icon.tool.line{
-	background: blue;
+	background-position: -154px -2px;
+}
+.whiteboard-toolbar .x-btn-icon.tool.path{
+	background-position: -179px -2px;
 }
 .whiteboard-toolbar .x-btn-icon.tool.text{
-	background: yellow;
+	background-position: -129px -2px;
 }
 .whiteboard-toolbar .x-btn-icon.tool.delete{
-	background: purple;
+	background: url(../images/minus-white.png);
+	background-size: 16px;
+	width: 16px !important;
 }
 
 .whiteboard .x-surface {

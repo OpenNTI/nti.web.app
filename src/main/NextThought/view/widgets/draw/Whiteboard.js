@@ -4,55 +4,140 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 	requires	: [
 		'Ext.draw.Component',
 		'Ext.menu.ColorPicker',
-		'NextThought.view.widgets.draw.Resizer'
+		'NextThought.view.widgets.draw.Resizer',
+		'NextThought.view.widgets.draw.Polygon',
+		'NextThought.view.widgets.draw.Ellipse'
 	],
 
 	cls: 'whiteboard',
 	layout:'fit',
-	items: { xtype: 'draw', viewBox: false },
+	items: { xtype: 'draw', viewBox: false},
 	dockedItems: [{
-		dock: 'left',
+		dock: 'top',
 		xtype: 'toolbar',
 		cls: 'whiteboard-toolbar',
 		defaults: {enableToggle: true, toggleGroup:'draw'},
 		items: [
-			{ iconCls: 'tool rect',		tooltip: 'rect',		shape: 'rect' },
-			{ iconCls: 'tool circle',	tooltip: 'circle',		shape: 'circle' },
-			{ iconCls: 'tool line',		tooltip: 'line',		shape: 'path'},
-			{ iconCls: 'tool text',		tooltip: 'text box',	shape: 'text'},
+			{	iconCls: 'tool rect',		tooltip: 'polygon',		shape: 'polygon',
+				menu: {
+				items: {
+					xtype: 'buttongroup',
+					title: 'polygon options',
+					columns: 1,
+					items:[ {
+						xtype: 'numberfield',
+						fieldLabel: 'Sides',
+						name: 'sides',
+						value: 4,
+						minValue: 3
+					} ]
+			} } },
+
+			{	iconCls: 'tool circle',		tooltip: 'circle',		shape: 'ellipse' },
+			{	iconCls: 'tool line',		tooltip: 'line',		shape: 'line'},
+			{	iconCls: 'tool path',		tooltip: 'path',		shape: 'path'},
+			{	iconCls: 'tool text',		tooltip: 'text box',	shape: 'text'},
+
 			'-',
-			{ iconCls: 'tool delete',	tooltip: 'delete',		action: 'delete', toggleGroup: null, enableToggle: false },
+
+			{	iconCls: 'tool delete',		tooltip: 'delete',		action: 'delete', text: 'remove selection', toggleGroup: null, enableToggle: false },
+
 			'->',
 			{
-				action: 'pick-color',
-				iconCls: 'tool color', tooltip: 'Color',
+				xtype: 'numberfield',
+				fieldLabel: 'Stroke',
+				name: 'stroke-width',
+				width: 100,
+				labelWidth: 40,
+				value: 1,
+				minValue: 1
+			},{
+				action: 'pick-stroke-color',
+				iconCls: 'color', tooltip: 'Stroke Color',
 				enableToggle: false,
-				toggleGroup: null
+				toggleGroup: null,
+				menu: {xtype: 'colormenu', colorFor: 'stoke'}
+			},'-',{
+				text: 'Fill',
+				action: 'pick-fill-color',
+				iconCls: 'color', tooltip: 'Fill Color',
+				enableToggle: false,
+				toggleGroup: null,
+				menu: {xtype: 'colormenu', colorFor: 'fill'}
 			}
 		]
 	}],
 
+	shapeTypeMap: {
+		ellipse: 'ellipse',
+		line: 'base',
+		path: 'base',
+		polygon: 'polygon',
+		text: 'base'
+	},
 
-	toolDefaults: function(shape, color, x, y){
-		color = color||'#79BB3F';
+
+	toolDefaults: function(shape, color, x, y, strokeWidth, sides){
+		strokeWidth = strokeWidth||2;
+		sides = sides || 4;
 
 		var d = {
-			rect: {},
 			circle: {},
-
-			path: {
-				fill			: 'none',
-				'stroke-width'	: 2,
-				stroke			: color
-			},
-
+			polygon: { sides: sides },
+			path: { type: 'path', fill: 'none', translate: {} },
+			line: { type: 'path', fill: 'none', translate: {}, getShape:function(){return 'line'} },
 			text: {
-				text	: 'Text Box',
-				font	: '18px Arial'
+				type: 'text',
+				text: 'Place holder text',
+				font: '18px Arial'
 			}
 		};
 
-		return Ext.apply({x:x, y:y, fill:color},d[shape]);
+		var cfg = {
+			translate: {x:x,y:y},
+			'stroke-width': strokeWidth,
+			stroke: color.stroke,
+			fill: color.fill
+		};
+
+		return Ext.apply(cfg,d[shape]);
+	},
+
+
+	addShape: function(shape, x,y, strokeWidth, sides, color){
+
+		var sp = Ext.widget('sprite-'+this.shapeTypeMap[shape],
+				this.toolDefaults(shape, color, x, y, strokeWidth, sides));
+
+		this.getSurface().add(sp).show(true);
+
+		this.relay(sp,'click');
+		this.relay(sp,'dblclick');
+
+		return sp;
+
+	},
+
+
+	relay: function(sprite, event){
+		sprite.el.on(
+				event,
+				function(e){
+					e.stopPropagation();
+					e.preventDefault();
+					this.fireEvent('sprite-'+event,sprite)
+				},
+				this);
+	},
+
+
+	removeSelection: function(){
+		if(!this.selection)return;
+
+		this.selection.sprite.destroy();
+
+		this.selection.destroy();
+		delete this.selection;
 	},
 
 
@@ -79,9 +164,10 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 
 
 
-	loadScene: function(canvasJSON){
+	loadScene: function(canvasJSON,n){
 		var shapes = canvasJSON.shapeList,
-			s = this.getSurface();
+			s = this.getSurface(),
+			w = this.getWidth();
 
 		Ext.each(shapes, itr, this);
 
@@ -89,10 +175,9 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 			var o = Ext.apply(shape,{
 				draggable: true,
 				type: shape['Class'].toLowerCase(),
-				x: shape.point.x,
-				y: shape.point.y
+				x: shape.point.x*w,
+				y: shape.point.y*w
 			});
-
 
 			s.add(o).show(true);
 		}
@@ -107,12 +192,12 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 		this.getSurface().items.each(
 			function(i){
 				var a = Ext.clone(i.attr),
-					bb = i.getBBox(), x, y;
+					bb = i.getBBox(), x, y, w = this.getWidth();
 
 				if(i.isNib || a.hidden || (!bb.width && !bb.height))return;
 
-				x = a.x + a.translation.x;
-				y = a.y + a.translation.y;
+				x = (a.x + a.translation.x)/w;
+				y = (a.y + a.translation.y)/w;
 
 				if(a.rotation.degrees)
 					a.rotation	= a.rotation.degrees;
@@ -127,7 +212,7 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 
 				a["Class"]		= Ext.String.capitalize(i.type);
 				a["point"]		= { "Class":"Point", "x":x, "y":y };
-				a["length"]		= a.size || a.radius || Math.sqrt((x*x)+(y*y));
+				a["length"]		= (a.size || a.radius || a.width)/w;
 
 				shapes.push(a);
 			},
@@ -142,37 +227,5 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 			"Class":"Canvas",
 			"shapeList": shapes
 		};
-	},
-
-
-
-	addShape: function(shape, x,y, color){
-		var sp = this.getSurface().add(
-				Ext.apply(
-						{
-							draggable: true,
-							type: shape,
-						},
-						this.toolDefaults(shape, color, x, y)
-				));
-
-		sp.show(true);
-
-		this.relay(sp,'click');
-		this.relay(sp,'dblclick');
-
-		return sp;
-
-	},
-
-	relay: function(sprite, event){
-		sprite.el.on(
-				event,
-				function(e){
-					e.stopPropagation();
-					e.preventDefault();
-					this.fireEvent('sprite-'+event,sprite)
-				},
-				this);
 	}
 });

@@ -9,71 +9,93 @@ Ext.define('NextThought.controller.Whiteboard', {
 
 	refs: [
 		{ ref: 'whiteboard', selector: 'whiteboard' },
-		{ ref: 'colorPicker', selector: 'whiteboard toolbar button[action=pick-color]'}
+		{ ref: 'colorPickerStroke', selector: 'whiteboard toolbar button[action=pick-stroke-color]'},
+		{ ref: 'colorPickerFill', selector: 'whiteboard toolbar button[action=pick-fill-color]'},
+		{ ref: 'strokeWidthField', selector: 'whiteboard toolbar numberfield[name=stroke-width]'},
+		{ ref: 'polygonSidesField', selector: 'whiteboard toolbar numberfield[name=sides]'}
 	],
 
 
-	windowConfig: {
-		maximizable:true,
-		closeAction: 'hide',
-		title: 'Whiteboard Test',
-		width: 800, height: 600,
-		layout: 'fit',
-		items: {xtype: 'whiteboard'}
-	},
-
-
 	init: function() {
+		this.selectedColor = {};
 
 		this.spriteModifier = {
-			rect	: this.modifyRect,
+			polygon	: this.modifyPolygon,
+			ellipse	: this.modifyEllipse,
 			path	: this.modifyPath,
 			line	: this.modifyLine,
-			text	: this.modifyText,
-			circle	: this.modifyCircle
+			text	: null
 		};
 
 		this.control({
 			'leftColumn button[showWB]': {
-				'click': function(btn, e, o) {
-					if (!this.win)
-						this.win = Ext.create('Ext.Window', this.windowConfig);
-					this.win.show();
-					this.colorChanged(null, '000000');
-				}
+				'click': this.showWhiteboardWindow
 			},
 
-			'whiteboard toolbar button[action=pick-color]': {
-				'click': this.pickColorClicked
+			'whiteboard toolbar button[action=pick-stroke-color] colormenu': {
+				'select': this.colorChangedStroke
+			},
+			'whiteboard toolbar button[action=pick-fill-color] colormenu': {
+				'select': this.colorChangedFill
 			},
 
 			'whiteboard draw':{
-				'click': function() {this.getWhiteboard().select();},
+				'click': this.surfaceClicked,
 				'mousedown': this.surfaceMouseDown,
 				'mousemove': this.surfaceMouseMove,
 				'mouseup'	: this.surfaceMouseUp
+			},
+
+			'whiteboard button[action=delete]':{
+				'click': this.removeSelectedSprite
 			},
 
 			'whiteboard': {
 				'sprite-click': this.selectSprite,
 				'sprite-dblclick': this.editSprite
 			}
-		});
+
+		},{});
 	},
 
-	pickColorClicked: function(btn){
-		this.picker = this.picker || Ext.create('Ext.menu.ColorPicker',
-				{listeners: {scope: this, select: this.colorChanged}});
+	showWhiteboardWindow: function(btn, e, o){
+		if (!this.win)
+			this.win = Ext.create('Ext.Window', {
+					maximizable:true,
+					closeAction: 'hide',
+					title: 'Whiteboard Test',
+					width: 800, height: 600,
+					layout: 'fit',
+					items: {xtype: 'whiteboard'}
+				});
 
-		this.picker.showBy(btn);
+		this.win.show();
+		this.setColor('fill', '000000');
+		this.setColor('stroke', '000000');
 	},
 
 
-	colorChanged: function(picker, color){
-		this.selectedColor = '#'+color;
-		this.getColorPicker().getEl().down('.x-btn-icon').setStyle({background: this.selectedColor});
+	colorChangedFill: function(picker, color){
+		this.setColor('fill', color);
 	},
 
+
+	colorChangedStroke: function(picker, color){
+		this.setColor('stroke', color);
+	},
+	
+
+	setColor: function(c, color){
+		c = c.toLowerCase();
+		this.selectedColor[c] = '#'+color;
+		this['getColorPicker'+Ext.String.capitalize(c)].call(this).getEl()
+				.down('.x-btn-icon').setStyle({background: this.selectedColor[c]});
+	},
+
+
+	removeSelectedSprite:function(){
+		this.getWhiteboard().removeSelection();
+	},
 
 
 	selectSprite: function(sprite){
@@ -96,10 +118,15 @@ Ext.define('NextThought.controller.Whiteboard', {
 	getActiveTool: function(){
 		var t = this.getWhiteboard().down('toolbar button[pressed]');
 		if(t){
+			t.toggle(false);
 			t = t.shape;
 		}
 
 		return t;
+	},
+
+	surfaceClicked: function() {//remove selection
+		this.getWhiteboard().select();
 	},
 
 	surfaceMouseUp: function(e){
@@ -108,8 +135,8 @@ Ext.define('NextThought.controller.Whiteboard', {
 
 		//clean up
 		if(this.sprite){
-			var bb = this.sprite.getBBox();
-			if(!bb.width && !bb.height)this.sprite.destroy();
+//			var bb = this.sprite.getBBox();
+//			if(!bb.width && !bb.height)this.sprite.destroy();
 			delete this.sprite;
 		}
 		if(this.surfacePosition) delete this.surfacePosition;
@@ -117,83 +144,63 @@ Ext.define('NextThought.controller.Whiteboard', {
 
 	surfaceMouseMove: function(e){
 		if(!this.sprite)return;
-		var dt = this.relativizeXY(e.getXY());
-		dt.push(this.sprite.initalPoint);
+		var op = this.sprite.initalPoint,
+			dt = this.relativizeXY(e.getXY()),
+			p = op.concat(dt);
 
-		var m = this.spriteModifier[this.sprite.type];
+		dt.push(op, length.apply(this,p), degrees.apply(this,p));
 
+		var m = this.spriteModifier[this.sprite.getShape()];
 		if(!m){
 			return;
 		}
 
+		m.apply(this, dt);
 
-		m.call(this, dt);
+
+		function degrees(x0,y0, x1,y1){
+			var dx	= (x1-x0),
+				dy	= (y1-y0),
+				a	= (dx<0? 180: dy<0? 360: 0);
+			return ((180/Math.PI)*Math.atan(dy/dx)) + a;
+		}
+
+		function length(x,y,x1,y1){
+			return Math.sqrt(Math.pow(x-x1,2)+Math.pow(y-y1,2));
+		}
 	},
 
 	surfaceMouseDown: function(e){
 		var t = this.getActiveTool(),
-				xy = this.relativizeXY(e.getXY());
+			xy = this.relativizeXY(e.getXY()),
+			sw = this.getStrokeWidthField().getValue(),
+			sd = this.getPolygonSidesField().getValue();
 		if(t) {
-			this.sprite = this.getWhiteboard().addShape(t, xy[0],xy[1],this.selectedColor);
+			this.sprite = this.getWhiteboard().addShape(t, xy[0],xy[1], sw, sd, this.selectedColor);
 			this.sprite.initalPoint = xy;
 		}
 	},
 
 
-	modifyRect: function(dt){
-		var w = width.apply(this,dt),
-			h = height.apply(this,dt),
-			o = dt[2],
-			ox = o[0],
-			oy = o[1];
-
-		this.sprite.setAttributes({
-			width: Math.abs(w),
-			height: Math.abs(h),
-			x: w<0 ? ox+w : ox,
-			y: h<0 ? oy+h : oy
-		},true);
-
-		function width(x,y,o){
-			return x - o[0];
-		}
-		function height(x,y,o){
-			return y - o[1];
-		}
+	modifyPolygon: function(x,y,o,m,d){
+		this.sprite.setAttributes({ scale: { x: m, y: m }, rotate: { degrees: d } },true);
 	},
 
 
-	modifyPath: function(dt){
-
-		var p = this.sprite.attr.path || [['M', dt[2][0], dt[2][1]]];
-
-		p.push(['L', dt[0], dt[1]]);
-
-		this.sprite.setAttributes({path: p}, true);
-
-	},
-
-
-	modifyLine: function(dt){
-		var p = [['M', dt[2][0], dt[2][1]]];
-
-		p.push(['M', dt[0], dt[1]]);
-		p.push(['Z']);
-
+	modifyPath: function(x,y,o){
+		var p = this.sprite.attr.path || [['M', o[0], o[1]]];
+		p.push(['S', x,y, x,y]);
 		this.sprite.setAttributes({path: p}, true);
 	},
 
 
-	modifyText: function(dt){},
+	modifyLine: function(x,y,o){
+		this.sprite.setAttributes({path: [['M', o[0], o[1]],['L', x, y]]}, true);
+	},
 
 
-	modifyCircle: function(dt){
-
-		this.sprite.setAttributes({radius: len.apply(this, dt)},true);
-
-		function len(x,y,o){
-			return Math.sqrt((x -= o[0]) * x + (y -= o[1]) * y);
-		}
+	modifyEllipse: function(x,y,o,m,d){
+		this.sprite.setAttributes({radius: m},true);
 	}
 
 });
