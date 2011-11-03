@@ -63,9 +63,9 @@ Ext.define('NextThought.view.widgets.draw.Resizer', {
 			s	= this.nibSize,
 			s2	= s/2,
 			x2	= x+w,
-			x2m	= x+(w/2)-s2,
+			x2m	= x+(w/2),
 			y2	= y+h,
-			y2m	= y+(h/2)-s2;
+			y2m	= y+(h/2);
 
 		try{
 			g['x'].setAttributes({x: x-s2});
