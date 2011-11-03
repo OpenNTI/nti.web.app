@@ -50,7 +50,7 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 				width: 100,
 				labelWidth: 40,
 				value: 1,
-				minValue: 1
+				minValue: 0
 			},{
 				action: 'pick-stroke-color',
 				iconCls: 'color', tooltip: 'Stroke Color',

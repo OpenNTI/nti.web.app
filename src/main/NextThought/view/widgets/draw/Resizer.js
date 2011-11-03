@@ -19,95 +19,67 @@ Ext.define('NextThought.view.widgets.draw.Resizer', {
 	},
 
 	attributeModifiers: {
-		'x': function(dx, dy, tx, ty) { return this.updateSpriteXY(dx,0,tx,0); },
-		'y': function(dx, dy, tx, ty) { return this.updateSpriteXY(0,dy,0,ty); },
-		'x-y': function(dx, dy, tx, ty) { return this.updateSpriteXY(dx,dy,tx,ty); },
-		'width': function(dx, dy, tx, ty) { return this.updateSpriteWH(dx,0,tx,0); },
-		'height': function(dx, dy, tx, ty) { return this.updateSpriteWH(0,dy,0,ty); },
-		'width-height': function(dx, dy, tx, ty) { return this.updateSpriteWH(dx,dy,tx,ty); },
-		'y-width': function(dx, dy, tx, ty) { return this.updateSpriteYW(dx,dy,tx,ty); },
-		'x-height': function(dx, dy, tx, ty) { return this.updateSpriteXH(dx,dy,tx,ty); }
+		'x': function(dx, dy, tx, ty) { return this.updateSprite(dx,0,tx,0, -1, -1); },
+		'y': function(dx, dy, tx, ty) { return this.updateSprite(0,dy,0,ty, -1, -1); },
+		'x-y': function(dx, dy, tx, ty) { return this.updateSprite(dx,dy,tx,ty, -1, -1); },
+		'width': function(dx, dy, tx, ty) { return this.updateSprite(dx,0,tx,0,1,1); },
+		'height': function(dx, dy, tx, ty) { return this.updateSprite(0,dy,0,ty,1,1); },
+		'width-height': function(dx, dy, tx, ty) { return this.updateSprite(dx,dy,tx,ty,1,1); },
+		'y-width': function(dx, dy, tx, ty) { return this.updateSprite(dx,dy,tx,ty,1,-1); },
+		'x-height': function(dx, dy, tx, ty) { return this.updateSprite(dx,dy,tx,ty,-1,1); }
 	},
 
-	updateSpriteXY: function(dx, dy, tx, ty) {
+	updateSprite: function(dx, dy, tx, ty, sx, sy) {
 		var a = this.sprite.attr,
-			t = a.translation;
+			t = a.translation,
+			s = a.scaling;
 
 		this.sprite.setAttributes( {
-				x:a.x+t.x+dx,
-				y:a.y+t.y+dy,
-				height: Math.abs( a.height - dy ),
-				width: Math.abs( a.width - dx ),
-				translation:{x:0,y:0}
+			scale:{
+				y: s.y+(sy*dy),
+				x: s.x+(sx*dx)
 			},
-			true);
+			translate:{
+				x: t.x+dx/2,
+				y: t.y+dy/2
+			}
+		},true);
 
-		this.updateNibs(tx,ty, 'x','y');
-
-		return {x:tx ,y:ty};
-	},
-
-
-	updateSpriteWH: function(dx, dy, tx, ty) {
-		var a = this.sprite.attr,
-			t = a.translation;
-
-		this.sprite.setAttributes( {
-			x:a.x+t.x,
-			y:a.y+t.y,
-			height: Math.abs( a.height + dy ),
-			width: Math.abs( a.width + dx ),
-			translation:{x:0,y:0}
-		}, true);
-
-		this.updateNibs(tx,ty, 'width','height');
+		this.updateNibs();
 
 		return {x:tx ,y:ty};
 	},
 
 
-	updateSpriteXH: function(dx, dy, tx, ty) {
-		var a = this.sprite.attr,
-			t = a.translation;
+	updateNibs: function(){
+		var g	= this.groups,
+			b	= this.sprite.getBBox(),
 
-		this.sprite.setAttributes( {
-			x:a.x+t.x+dx,
-			y:a.y+t.y,
-			height: Math.abs( a.height + dy ),
-			width: Math.abs( a.width - dx ),
-			translation:{x:0,y:0}
-		}, true);
+			x	= b.x,
+			y	= b.y,
+			w	= b.width,
+			h	= b.height,
 
-		this.updateNibs(tx,ty, 'x','height');
+			s	= this.nibSize,
+			s2	= s/2,
+			x2	= x+w,
+			x2m	= x+(w/2)-s2,
+			y2	= y+h,
+			y2m	= y+(h/2)-s2;
 
-		return {x:tx ,y:ty};
-	},
+		try{
+			g['x'].setAttributes({x: x-s2});
+			g['y'].setAttributes({y: y-s2});
 
+			g['width'].setAttributes({x: x2});
+			g['height'].setAttributes({y: y2+s2});
 
-	updateSpriteYW: function(dx, dy, tx, ty) {
-		var a = this.sprite.attr,
-			t = a.translation;
-
-		this.sprite.setAttributes( {
-			x:a.x+t.x,
-			y:a.y+t.y+dy,
-			height: Math.abs( a.height - dy ),
-			width: Math.abs( a.width + dx ),
-			translation:{x:0,y:0}
-		}, true);
-
-		this.updateNibs(tx,ty, 'width','y');
-
-		return {x:tx ,y:ty};
-	},
-
-	updateNibs: function(tx,ty, g1, g2){
-		var g = this.groups;
-		if(tx) g[g1].setAttributes({ translate:{x:tx} });
-		if(ty) g[g2].setAttributes({ translate:{y:ty} });
-
-		if(tx && g.mX) g.mX.setAttributes({ translate:{x:(tx/2)} });
-		if(ty && g.mY) g.mY.setAttributes({ translate:{y:(ty/2)} });
+			g['mX'].setAttributes({x: x2m});
+			g['mY'].setAttributes({y: y2m});
+		}
+		catch(e){
+			console.error(e.stack);
+		}
 
 		this.redraw();
 	},
@@ -124,33 +96,25 @@ Ext.define('NextThought.view.widgets.draw.Resizer', {
 	},
 
 	drawNibs: function(sprite){
-		this.groups = {};
-
 		this.reset();
 
-		var b	= sprite.getBBox(),
-			x	= b.x,
-			y	= b.y,
-			w	= b.width,
-			h	= b.height,
-			s	= this.nibSize,
-			x2	= x+w,
-			x2m	= x+(w/2)-(s/2),
-			y2	= y+h,
-			y2m	= y+(h/2)-(s/2);
+		var types = ['tl','t','tr','r','br','b','bl','l'];
 
-		this.addNib({x: x-s,		y: y-s},	'tl');
-		this.addNib({x: x2m,		y: y-s},	't'	);
-		this.addNib({x: x2,			y: y-s},	'tr');
-		this.addNib({x: x2,			y: y2m},	'r'	);
-		this.addNib({x: x2,			y: y2},		'br');
-		this.addNib({x: x2m,		y: y2},		'b'	);
-		this.addNib({x: x-s,		y: y2},		'bl');
-		this.addNib({x: x-s,		y: y2m},	'l'	);
+		Ext.each(types, this.addNib, this);
+
+		//debug:
+//		var b = sprite.getBBox();
+//		if(b.path) {
+//			this.add(Ext.create('Ext.draw.Sprite',{
+//				type: 'path',
+//				path: b.path,
+//				stroke: 'blue',
+//				'stroke-width:': 3
+//			}));
+//		}
+
+		this.updateNibs();
 	},
-
-
-
 
 	hookDrag: function(sprite){
 		var me = this;
@@ -186,9 +150,9 @@ Ext.define('NextThought.view.widgets.draw.Resizer', {
 		this.callParent(arguments);
 	},
 
-	addNib: function(cfg, type){
+	addNib: function(type){
 		var me= this,
-			r = me.add(Ext.create('widget.sprite-resizer-nib', Ext.apply(cfg,{nibSize:this.nibSize}))),
+			r = me.add(Ext.widget('sprite-resizer-nib', {nibSize:this.nibSize})),
 			p = me.propertyMap[type];
 
 		r.setStyle(p.style);
@@ -196,7 +160,7 @@ Ext.define('NextThought.view.widgets.draw.Resizer', {
 		r.dd.onDrag = function(e){
 			var xy = e.getXY(),
 				sprite = this.sprite,
-				attr = sprite.attr, dx, dy, tx, ty,
+				attr = Ext.clone(sprite.attr), dx, dy, tx, ty,
 				m = me.attributeModifiers[p.attrs];
 
 			xy = this.sprite.surface.transformToViewBox(xy[0], xy[1]);
@@ -204,7 +168,8 @@ Ext.define('NextThought.view.widgets.draw.Resizer', {
 			dy = xy[1] - this.prev[1];
 			tx = attr.translation.x + dx;
 			ty = attr.translation.y + dy;
-			sprite.setAttributes({ translate: m.call(me,dx,dy,tx,ty) }, true);
+			sprite.setAttributes({ x: attr.x, y: attr.y,
+				translate: m.call(me,dx,dy,tx,ty) }, true);
 			this.prev = xy;
 		};
 
@@ -235,7 +200,6 @@ Ext.define('NextThought.view.widgets.draw.Resizer', {
 	add: function(c){
 		var r = this.surface.add(c);
 		this.callParent(arguments);
-		r.show(true);
 		return r;
 	},
 
@@ -243,6 +207,8 @@ Ext.define('NextThought.view.widgets.draw.Resizer', {
 		var me = this,
 			surface = me.getSurface(),
 			item;
+
+		this.groups = {};
 
 		if (surface) {
 			while (me.getCount() > 0) {

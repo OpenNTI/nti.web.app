@@ -349,6 +349,7 @@ Ext.define('Ext.draw.Draw', {
                     }
                     Ext.Array.erase(points, i, 1);
                     ln = points.length;
+					i--;//forloop will double increment this if we don't roll it back...
                 }
             seg = points[i];
             segLn = seg.length;

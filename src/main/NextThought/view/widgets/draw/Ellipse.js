@@ -12,10 +12,14 @@ Ext.define('NextThought.view.widgets.draw.Ellipse', {
 
 	constructor: function(config){
 
-		this.callParent([Ext.apply(config,{ type: 'circle' })]);
+		var ry,rx=ry=0.5;
+		this.callParent([Ext.apply(config,{ type: 'circle', radius: rx,
+			path: Ext.draw.Draw.parsePathString(
+							Ext.String.format("M0,-{1}A{0},{1},0,1,1,0,{1}A{0},{1},0,1,1,0,-{1}z",rx, ry)) })]);
 	},
 
 	getShape: function(){
 		return 'ellipse';
 	}
+
 });

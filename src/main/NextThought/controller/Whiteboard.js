@@ -200,7 +200,7 @@ Ext.define('NextThought.controller.Whiteboard', {
 
 
 	modifyEllipse: function(x,y,o,m,d){
-		this.sprite.setAttributes({radius: m},true);
+		this.sprite.setAttributes({ scale: { x: m, y: m }},true);
 	}
 
 });
