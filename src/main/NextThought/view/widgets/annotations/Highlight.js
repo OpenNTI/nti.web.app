@@ -1,5 +1,8 @@
 Ext.define('NextThought.view.widgets.annotations.Highlight', {
 	extend:'NextThought.view.widgets.annotations.Annotation',
+	requires:[
+		'NextThought.util.Color'
+	],
 
 
 	constructor: function(selection, record, container, component){
@@ -109,35 +112,11 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 	},
 
 	_menuItemHook: function(o,item, menu){
-		item.on('afterrender',Ext.bind(this.updateMenuIcon, item, [o._colorToRGB(o.getColor())]));
+		item.on('afterrender',Ext.bind(this.updateMenuIcon, item, [o.getColor().toString()]));
 	},
 
     getColor: function(){
 		return this.self.getColor(this._userId);
-    },
-
-    _colorToRGBA: function(color, alpha) {
-        var r = color.r, g = color.g, b = color.b;
-
-        if (typeof color == 'string') {
-            if(!/^[0-9A-F]+$/i.text(color))
-                color = 'FFFF00';
-
-            r = parseInt(color.substring(0, 2), 16);
-            g = parseInt(color.substring(2, 4), 16);
-            b = parseInt(color.substring(4), 16);
-        }
-
-        return Ext.String.format('rgba({0},{1},{2},{3})', r,g,b,alpha||'.3');
-    },
-
-
-    _colorToRGB: function(color){
-        var r = color.r,
-            g = color.g,
-            b = color.b;
-
-        return Ext.String.format('rgb({0},{1},{2})', r,g,b);
     },
 
 
@@ -202,8 +181,8 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
             l = s.length,
             cXY = Ext.get(c).getXY(),
             color = this.getColor(),
-            rgba = this._colorToRGBA(color),
-            rgb = this._colorToRGB(color);
+            rgba = Color.toRGBA(color),
+            rgb = color.toString();
 
         if(!r){
             return;
@@ -260,88 +239,8 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
             }
         },
 
-        getColorIndex: function(userId){
-            return Ext.Array.indexOf(this._sources,userId);
-        },
-
-        /**
-         * http://ridiculousfish.com/blog/posts/colors.html
-         * @param idx
-         */
-        hue: function(idx) {
-           /*
-            * Here we use 31 bit numbers because JavaScript doesn't have a 32 bit
-            * unsigned type, and so the conversion to float would produce a negative
-            * value.
-            */
-           var bitcount = 31;
-
-           /* Reverse the bits of idx into ridx */
-           var ridx = 0, i = 0;
-           for (i=0; i < bitcount; i++) {
-              ridx = (ridx << 1) | (idx & 1);
-              idx >>>= 1;
-           }
-
-           /* Divide by 2**bitcount */
-           var hue = ridx / Math.pow(2, bitcount);
-
-           /* Start at .6 (216 degrees) */
-           return (hue + .166) % 1;
-        },
-
-        getColor: function(idx){
-			if(typeof idx == 'string'){
-				idx = this.getColorIndex(idx);
-			}
-
-            var degrees = Math.round(this.hue(idx) * 360);
-            //console.debug('degrees', degrees);
-            return hsl2rgb(degrees, 100, 50);
-
-            /*
-            HSL to RGB function sourced from:
-            http://www.codingforums.com/showpost.php?s=acaa80143f9fa9f2bb768131c14bfa3b&p=54172&postcount=2
-             */
-            function hsl2rgb(h, s, l) {
-            	var m1, m2, hue;
-            	var r, g, b
-            	s /=100;
-            	l /= 100;
-            	if (s == 0)
-            		r = g = b = (l * 255);
-            	else {
-            		if (l <= 0.5)
-            			m2 = l * (s + 1);
-            		else
-            			m2 = l + s - l * s;
-            		m1 = l * 2 - m2;
-            		hue = h / 360;
-            		r = HueToRgb(m1, m2, hue + 1/3);
-            		g = HueToRgb(m1, m2, hue);
-            		b = HueToRgb(m1, m2, hue - 1/3);
-            	}
-            	return {r: r, g: g, b: b};
-            }
-
-            function HueToRgb(m1, m2, hue) {
-            	var v;
-            	if (hue < 0)
-            		hue += 1;
-            	else if (hue > 1)
-            		hue -= 1;
-
-            	if (6 * hue < 1)
-            		v = m1 + (m2 - m1) * hue * 6;
-            	else if (2 * hue < 1)
-            		v = m2;
-            	else if (3 * hue < 2)
-            		v = m1 + (m2 - m1) * (2/3 - hue) * 6;
-            	else
-            		v = m1;
-
-            	return Math.round(255 * v);
-            }
+        getColor: function(userId){
+            return Color.getColor( Ext.Array.indexOf(this._sources,userId) );
         }
     }
 
