@@ -13,9 +13,6 @@ Ext.define('NextThought.view.widgets.draw.Shape', {
 		this.setAttributes({'clip-rect': {x:-0.55, y:-0.55, width: 1.1, height: 1.1}});
 	},
 
-	getShape: function(){
-		return this.type;
-	},
 
 	destroy: function(){
 		if(this.clip){
@@ -25,10 +22,38 @@ Ext.define('NextThought.view.widgets.draw.Shape', {
 		this.callParent(arguments);
 	},
 
-	inBBox: function(xy){
-		var b = this.getBBox(), x=xy[0], y=xy[1];
 
-		return (b.x <= x && (b.x+b.width) >=x )
-			&& (b.y <= y && (b.y+b.height) >= y);
+	getJSONType: function(){
+		return Ext.String.capitalize(this.getShape().toLowerCase());
+	},
+
+
+	getShape: function(){
+		return this.type;
+	},
+
+
+	toJSON: function(){
+		var m = this.matrix,
+			additionalProps = {},
+			matrix = {
+				'Class': 'CanvasAffineTransform',
+				a : m.get(0,0),
+				b : m.get(1,0),
+				c : m.get(0,1),
+				d : m.get(1,1),
+				tx: m.get(0,2),
+				ty: m.get(1,2)
+			};
+		
+		Ext.copyTo(additionalProps, this, 'sides');
+
+		return Ext.apply(
+				{
+					'Class': Ext.String.format('Canvas{0}Shape',this.getJSONType()),
+					transform: matrix
+				},
+				additionalProps);
+
 	}
 });

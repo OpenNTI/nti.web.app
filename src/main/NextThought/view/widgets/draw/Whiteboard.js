@@ -237,40 +237,26 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 			function(i){
 				var a = Ext.clone(i.attr),
 					bb = i.getBBox(), x, y,
-					w = this.getScaleFactor();
+					w = this.getScaleFactor(),
+					o, k;
 
 				if(i.isNib || a.hidden || (!bb.width && !bb.height))return;
 
-				x = (a.x + a.translation.x)/w;
-				y = (a.y + a.translation.y)/w;
+				o = i.toJSON();
+				//scale down the matrix
+				for(k in o.transform){
+					if(typeof o.transform[k] == 'number')
+						o.transform[k] /= w;
+				}
 
-				if(a.rotation.degrees)
-					a.rotation	= a.rotation.degrees;
-				else
-					delete a.rotation;
-
-				delete a.hidden;
-				delete a.translation;
-				delete a.scaling;
-				delete a.x;
-				delete a.y;
-
-				a["Class"]		= Ext.String.capitalize(i.type);
-				a["point"]		= { "Class":"Point", "x":x, "y":y };
-				a["length"]		= (a.size || a.radius || a.width)/w;
-
-				shapes.push(a);
+				shapes.push(o);
 			},
 			this
 		);
 
-
-
-		console.log(shapes);
-
-		return {
+		return JSON.stringify({
 			"Class":"Canvas",
 			"shapeList": shapes
-		};
+		});
 	}
 });

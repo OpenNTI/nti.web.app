@@ -18,6 +18,10 @@ Ext.define('NextThought.view.widgets.draw.Ellipse', {
 							Ext.String.format("M0,-{1}A{0},{1},0,1,1,0,{1}A{0},{1},0,1,1,0,-{1}z",rx, ry)) })]);
 	},
 
+	getJSONType: function(){
+		return 'Circle';
+	},
+
 	getShape: function(){
 		return 'ellipse';
 	}
