@@ -17,6 +17,14 @@ Ext.define('NextThought.view.widgets.draw.Shape', {
 		return this.type;
 	},
 
+	destroy: function(){
+		if(this.clip){
+			Ext.get(this.clip).parent().remove();
+		}
+
+		this.callParent(arguments);
+	},
+
 	inBBox: function(xy){
 		var b = this.getBBox(), x=xy[0], y=xy[1];
 
