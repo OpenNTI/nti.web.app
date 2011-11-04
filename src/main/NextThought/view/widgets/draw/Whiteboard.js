@@ -175,10 +175,16 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 	},
 
 
+	getScaleFactor: function(){
+		var m = this, k = 'scaleFactor';
+		return (m[k] = m[k] || this.getWidth());
+	},
+
+
 	loadScene: function(canvasJSON){
 		var shapes = canvasJSON.shapeList,
 			s = this.getSurface(),
-			w = this.getWidth(),
+			w = this.getScaleFactor(),
 			m = {
 				'CanvasPolygonShape': 'sprite-polygon',
 				'CanvasCircleShape': 'sprite-ellipse'
@@ -230,7 +236,8 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 		this.getSurface().items.each(
 			function(i){
 				var a = Ext.clone(i.attr),
-					bb = i.getBBox(), x, y, w = this.getWidth();
+					bb = i.getBBox(), x, y,
+					w = this.getScaleFactor();
 
 				if(i.isNib || a.hidden || (!bb.width && !bb.height))return;
 
