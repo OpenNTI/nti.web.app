@@ -56,6 +56,13 @@ Ext.define('NextThought.controller.Whiteboard', {
 			}
 
 		},{});
+		wb = this;
+	},
+
+	test: function(){
+		this.showWhiteboardWindow();
+		this.win.maximize();
+		this.win.down('whiteboard').loadFrom('test.json');
 	},
 
 	showWhiteboardWindow: function(btn, e, o){

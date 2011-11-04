@@ -6,7 +6,8 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 		'Ext.menu.ColorPicker',
 		'NextThought.view.widgets.draw.Resizer',
 		'NextThought.view.widgets.draw.Polygon',
-		'NextThought.view.widgets.draw.Ellipse'
+		'NextThought.view.widgets.draw.Ellipse',
+		'NextThought.util.Color'
 	],
 
 	cls: 'whiteboard',
@@ -162,25 +163,62 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 	},
 
 
+	/* for testing... */
+	loadFrom: function(url){
+		Ext.Ajax.request({
+			url: url,
+			scope: this,
+			callback: function(o,success,r){
+				this.loadScene( Ext.decode(r.responseText) );
+			}
+		});
+	},
 
 
-	loadScene: function(canvasJSON,n){
+	loadScene: function(canvasJSON){
 		var shapes = canvasJSON.shapeList,
 			s = this.getSurface(),
-			w = this.getWidth();
+			w = this.getWidth(),
+			m = {
+				'CanvasPolygonShape': 'sprite-polygon',
+				'CanvasCircleShape': 'sprite-ellipse'
+			};
 
-		Ext.each(shapes, itr, this);
+		Ext.each(shapes, function(shape, i){
 
-		function itr(shape){
-			var o = Ext.apply(shape,{
-				draggable: true,
-				type: shape['Class'].toLowerCase(),
-				x: shape.point.x*w,
-				y: shape.point.y*w
+			var c = Color.getColor(i),
+				p = c.getDarker(),
+				t = shape.transform,
+				o, k;
+
+			//scale up the matrix
+			for(k in t) t[k] *= w;
+
+			t = Ext.create('Ext.draw.Matrix',t.a,t.b,t.c,t.d,t.tx,t.ty).split();
+
+			o = Ext.widget(m[shape['Class']],{
+				sides: shape.sides,
+				'stroke-width': 3,
+				stroke: p.toString(),
+				fill: c.toString(),
+				translate: {
+					x: t.translateX,
+					y: t.translateY
+				},
+				scale:{
+					x: t.scaleX,
+					y: t.scaleY
+				},
+				rotate: {
+					degrees: t.rotate
+				}
 			});
 
 			s.add(o).show(true);
-		}
+			this.relay(o,'click');
+			this.relay(o,'dblclick');
+
+		}, this);
 	},
 
 

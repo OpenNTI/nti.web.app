@@ -3,7 +3,7 @@ Ext.define('NextThought.view.widgets.draw.Polygon', {
 	alias: 'widget.sprite-polygon',
 
 	constructor: function(config){
-		if(!config || !config.sides || config.sides < 3)
+		if(!config || !config.sides)
 			Ext.Error.raise('must have sides defined & be >2');
 
 		var x = 0,
@@ -14,6 +14,8 @@ Ext.define('NextThought.view.widgets.draw.Polygon', {
 			r = .5,
 			n = c.sides,
 			path = [];
+
+		if(n<2) n=2;
 
 		for (i; i < n; i++) {
 			path.push([
