@@ -15,7 +15,7 @@ Ext.define('NextThought.model.Note', {
         { name: 'anchorType', type: 'string', defaultValue: 'previousPreviousName'},
         { name: 'left', type: 'int' },
         { name: 'top', type: 'int' },
-        { name: 'text', type: 'string' },
+		{ name: 'body', type: 'auto' },
         { name: 'color', type: 'string', defaultValue: 'yellow' },
        	{ name: 'Last Modified', type: 'date', dateFormat: 'timestamp' },
        	{ name: 'Creator', type: 'string'},

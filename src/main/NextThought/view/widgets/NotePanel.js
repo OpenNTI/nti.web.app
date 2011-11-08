@@ -164,7 +164,7 @@ Ext.define('NextThought.view.widgets.NotePanel',{
 
         me.renderData['time'] = Ext.Date.format(m.get('Last Modified') || new Date(), 'g:i:sa M j, Y');
         me.renderData['name'] = 'resolving...';
-        me.renderData['body'] = m.get('text');
+        me.renderData['body'] = m.get('body')[0];
         me.renderData['owner'] = owner ? 'owner' : '';
 
         if(this.rendered){

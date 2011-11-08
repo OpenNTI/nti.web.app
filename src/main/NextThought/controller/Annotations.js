@@ -130,7 +130,11 @@ Ext.define('NextThought.controller.Annotations', {
 
 		if(!btn.isCancel){
 			win.el.mask('Saving...');
-			win.record.set('text',cmp.getValue().replace(/\u200b/g,''));
+			var body = win.record.get('body') || [];
+
+			body[0] = cmp.getValue().replace(/\u200b/g,'');
+
+			win.record.set('body',body);
 			win.record.save({
 				scope: this,
 				success:function(newRecord,operation){
