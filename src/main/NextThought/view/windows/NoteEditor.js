@@ -10,14 +10,16 @@ Ext.define('NextThought.view.windows.NoteEditor', {
 	border: false,
 	layout: 'fit',
 	title: 'Edit Note',
-	bbar: ['->',
-  		{ xtype: 'button', text: 'Save' },
-  		{ xtype: 'button', text: 'Cancel', isCancel: true }
+	bbar: [
+		{ xtype: 'button', text: 'Whiteboard', action:'whiteboard', enableToggle: true },
+		'->',
+  		{ xtype: 'button', text: 'Save',	action: 'save' },
+  		{ xtype: 'button', text: 'Cancel',	action: 'cancel' }
 	],
 	
 	initComponent: function(){
 		this.callParent(arguments);
-		this.add({ xtype: 'htmleditor', enableAlignments: false, value: this.record.get('text') });
+		this.add({ xtype: 'htmleditor', enableAlignments: false, value: this.record.get('body')[0] });
 	},
 
     show: function(){

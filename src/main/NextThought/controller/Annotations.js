@@ -46,9 +46,9 @@ Ext.define('NextThought.controller.Annotations', {
                 'load-transcript': this.onLoadTranscript
             },
 
-    	 	'noteeditor button':{
-				'click': this.onNoteEditorButton
-    	 	},
+    	 	'noteeditor button[action=save]':{ 'click': this.onSaveNote },
+    	 	'noteeditor button[action=cancel]':{ 'click': this.onCancelNote },
+    	 	'noteeditor button[action=whiteboard]':{ 'click': this.toggleWhiteboardForNote },
 
             'sharewithwindow button':{
     	 		'click': this.shareWithButton
@@ -124,33 +124,42 @@ Ext.define('NextThought.controller.Annotations', {
     },
 
 
-    onNoteEditorButton: function(btn, event){
+	onCancelNote: function(btn, event){
+		btn.up('window').close();
+	},
+
+
+    onSaveNote: function(btn, event){
     	var win = btn.up('window'),
     		cmp = win.down('htmleditor');
 
-		if(!btn.isCancel){
-			win.el.mask('Saving...');
-			var body = win.record.get('body') || [];
+		win.el.mask('Saving...');
+		var body = win.record.get('body') || [];
 
-			body[0] = cmp.getValue().replace(/\u200b/g,'');
+		body[0] = cmp.getValue().replace(/\u200b/g,'');
 
-			win.record.set('body',body);
-			win.record.save({
-				scope: this,
-				success:function(newRecord,operation){
-					win.close();
-					win.record.fireEvent('updated',newRecord);
-                    this.attemptToAddWidget(newRecord);
-				},
-                failure:function(){
-                    console.error('failed to save note');
-                }
-			});
-		}
-    	else {
-	    	win.close();
-    	}
+		win.record.set('body',body);
+		win.record.save({
+			scope: this,
+			success:function(newRecord,operation){
+				win.close();
+				win.record.fireEvent('updated',newRecord);
+				this.attemptToAddWidget(newRecord);
+			},
+			failure:function(){
+				console.error('failed to save note');
+			}
+		});
     },
+
+
+	toggleWhiteboardForNote: function(btn, event){
+		var win = btn.up('window');
+
+		alert('!!')
+
+	},
+
 
     attemptToAddWidget: function(record){
         //check to see if reply is already there, if so, don't do anything...
