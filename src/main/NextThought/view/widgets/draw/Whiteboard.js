@@ -43,6 +43,7 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 			'-',
 
 			{	iconCls: 'tool delete',		tooltip: 'delete',		action: 'delete', text: 'remove selection', toggleGroup: null, enableToggle: false },
+			{	iconCls: 'tool clear',		tooltip: 'clear',		action: 'clear', text: 'clear', toggleGroup: null, enableToggle: false },
 
 			'->',
 			{
@@ -76,6 +77,16 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 		path: 'base',
 		polygon: 'polygon',
 		text: 'base'
+	},
+
+	initComponent: function(){
+		this.callParent(arguments);
+		if(this.value){
+			this.on('afterrender', function(){
+				this.loadScene(this.value);
+				delete this.value;
+			}, this);
+		}
 	},
 
 
@@ -140,6 +151,11 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 
 		this.selection.destroy();
 		delete this.selection;
+	},
+
+
+	removeAll: function(){
+		this.getSurface().removeAll(true);
 	},
 
 
@@ -231,9 +247,6 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 		}, this);
 	},
 
-
-
-
 	saveScene: function(){
 		var shapes = [];
 
@@ -258,9 +271,8 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 			this
 		);
 
-		return JSON.stringify({
-			"Class":"Canvas",
-			"shapeList": shapes
-		});
+		return shapes.length==0
+				?	undefined
+				:	{ "Class":"Canvas", "shapeList": shapes };
 	}
 });

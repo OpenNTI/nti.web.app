@@ -46,9 +46,8 @@ Ext.define('NextThought.controller.Whiteboard', {
 				'mouseup'	: this.surfaceMouseUp
 			},
 
-			'whiteboard button[action=delete]':{
-				'click': this.removeSelectedSprite
-			},
+			'whiteboard button[action=delete]':{ 'click': this.removeSelectedSprite },
+			'whiteboard button[action=clear]':{ 'click': this.clearWhiteboard },
 
 			'whiteboard': {
 				'sprite-click': this.selectSprite,
@@ -100,9 +99,9 @@ Ext.define('NextThought.controller.Whiteboard', {
 	},
 
 
-	removeSelectedSprite:function(){
-		this.getWhiteboard().removeSelection();
-	},
+	removeSelectedSprite:function(){ this.getWhiteboard().removeSelection(); },
+
+	clearWhiteboard:function(){ this.getWhiteboard().removeAll(); },
 
 
 	selectSprite: function(sprite){

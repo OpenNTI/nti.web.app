@@ -48,7 +48,7 @@ Ext.define('NextThought.controller.Annotations', {
 
     	 	'noteeditor button[action=save]':{ 'click': this.onSaveNote },
     	 	'noteeditor button[action=cancel]':{ 'click': this.onCancelNote },
-    	 	'noteeditor button[action=whiteboard]':{ 'click': this.toggleWhiteboardForNote },
+    	 	'noteeditor button[action=whiteboard]':{ 'toggle': this.toggleWhiteboardForNote },
 
             'sharewithwindow button':{
     	 		'click': this.shareWithButton
@@ -131,14 +131,16 @@ Ext.define('NextThought.controller.Annotations', {
 
     onSaveNote: function(btn, event){
     	var win = btn.up('window'),
-    		cmp = win.down('htmleditor');
+    		cmp = win.down('htmleditor'),
+			wbc = win.down('whiteboard'),
+			body = win.record.get('body') || [];
 
 		win.el.mask('Saving...');
-		var body = win.record.get('body') || [];
 
 		body[0] = cmp.getValue().replace(/\u200b/g,'');
+		body[1] = wbc.saveScene();
 
-		win.record.set('body',body);
+		win.record.set('body',Ext.Array.clean(body));
 		win.record.save({
 			scope: this,
 			success:function(newRecord,operation){
@@ -153,11 +155,8 @@ Ext.define('NextThought.controller.Annotations', {
     },
 
 
-	toggleWhiteboardForNote: function(btn, event){
-		var win = btn.up('window');
-
-		alert('!!')
-
+	toggleWhiteboardForNote: function(btn, pressed, event){
+		btn.up('window').toggleWhiteboard(pressed);
 	},
 
 
