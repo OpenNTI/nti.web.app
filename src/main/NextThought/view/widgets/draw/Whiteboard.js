@@ -5,6 +5,7 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 		'Ext.draw.Component',
 		'Ext.menu.ColorPicker',
 		'NextThought.view.widgets.draw.Resizer',
+		'NextThought.view.widgets.draw.Rotater',
 		'NextThought.view.widgets.draw.Polygon',
 		'NextThought.view.widgets.draw.Ellipse',
 		'NextThought.util.Color'
@@ -143,14 +144,17 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 
 
 	select: function(sprite){
-		if(this.selection){
-			this.selection.destroy();
+		var s = this.selection,
+			prev = s ? s.sprite : null;
+
+		if(s){
+			s.destroy();
 			delete this.selection;
 		}
 
 		if(!sprite) return;
 
-		this.selection = Ext.create('NextThought.view.widgets.draw.Resizer',this,sprite);
+		this.selection = Ext.widget((prev === sprite)? 'sprite-rotater':'sprite-resizer',this,sprite);
 		this.selection.show(true);
 	},
 

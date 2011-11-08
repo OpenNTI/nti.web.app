@@ -1,5 +1,6 @@
 Ext.define('NextThought.view.widgets.draw.Resizer', {
 	extend: 'Ext.draw.CompositeSprite',
+	alias: 'widget.sprite-resizer',
 	requires: [
 		'NextThought.view.widgets.draw.ResizerNib'
 	],
@@ -21,13 +22,61 @@ Ext.define('NextThought.view.widgets.draw.Resizer', {
 	attributeModifiers: {
 		'x': function(dx, dy, tx, ty) { return this.updateSprite(dx,0,tx,0, -1, -1); },
 		'y': function(dx, dy, tx, ty) { return this.updateSprite(0,dy,0,ty, -1, -1); },
+
 		'x-y': function(dx, dy, tx, ty) { return this.updateSprite(dx,dy,tx,ty, -1, -1); },
+
 		'width': function(dx, dy, tx, ty) { return this.updateSprite(dx,0,tx,0,1,1); },
 		'height': function(dx, dy, tx, ty) { return this.updateSprite(0,dy,0,ty,1,1); },
+
 		'width-height': function(dx, dy, tx, ty) { return this.updateSprite(dx,dy,tx,ty,1,1); },
+
 		'y-width': function(dx, dy, tx, ty) { return this.updateSprite(dx,dy,tx,ty,1,-1); },
 		'x-height': function(dx, dy, tx, ty) { return this.updateSprite(dx,dy,tx,ty,-1,1); }
 	},
+
+
+	constructor: function(whiteboard,sprite){
+		this.callParent([{surface: whiteboard.getSurface()}]);
+
+		var s = this.surface,
+			degrees = sprite.attr.rotation.degrees,
+			group = s.createSvgElement ? s.createSvgElement('g') : s.createNode('group');
+
+		s.el.appendChild(group);
+
+		this.group = Ext.get(group);
+		this.whiteboard = whiteboard;
+		this.sprite = sprite;
+		this.drawNibs(sprite);
+		this.hookDrag(sprite);
+
+		//haven't worked out the kinks yet for rotating the resize nibs...
+//		if(degrees){
+//			var c = this.getCenter();
+//			group.setAttribute('transform',
+//					Ext.String.format('rotate({0},{1},{2})', degrees, c.x, c.y));
+//		}
+
+		return this;
+	},
+
+
+	destroy: function(){
+		this.sprite.dd.startDrag = Ext.draw.SpriteDD.prototype.startDrag;
+		this.sprite.dd.onDrag = Ext.draw.SpriteDD.prototype.onDrag;
+		this.callParent(arguments);
+		this.group.remove();
+	},
+
+
+	getCenter: function(){
+		var b = this.sprite.getBBox(),
+			x = b.x + b.width/2,
+			y = b.y + b.height/2;
+
+		return {x: x, y: y};
+	},
+
 
 	updateSprite: function(dx, dy, tx, ty, sx, sy) {
 		var a = this.sprite.attr,
@@ -84,16 +133,6 @@ Ext.define('NextThought.view.widgets.draw.Resizer', {
 		this.redraw();
 	},
 
-	constructor: function(whiteboard,sprite){
-		this.callParent([{surface: whiteboard.getSurface()}]);
-
-		this.whiteboard = whiteboard;
-		this.sprite = sprite;
-		this.drawNibs(sprite);
-		this.hookDrag(sprite);
-
-		return this;
-	},
 
 	drawNibs: function(sprite){
 		this.reset();
@@ -144,11 +183,6 @@ Ext.define('NextThought.view.widgets.draw.Resizer', {
 		};
 	},
 
-	destroy: function(){
-		this.sprite.dd.startDrag = Ext.draw.SpriteDD.prototype.startDrag;
-		this.sprite.dd.onDrag = Ext.draw.SpriteDD.prototype.onDrag;
-		this.callParent(arguments);
-	},
 
 	addNib: function(type){
 		var me= this,
@@ -200,6 +234,7 @@ Ext.define('NextThought.view.widgets.draw.Resizer', {
 	add: function(c){
 		var r = this.surface.add(c);
 		this.callParent(arguments);
+		this.group.appendChild(r.el);
 		return r;
 	},
 
