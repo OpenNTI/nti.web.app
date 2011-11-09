@@ -197,7 +197,12 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 
 	getScaleFactor: function(){
 		var m = this, k = 'scaleFactor';
-		return (m[k] = m[k] || this.getWidth());
+		try{
+			return (m[k] = m[k] || this.getWidth());
+		}
+		catch(e){
+			return 1;
+		}
 	},
 
 
