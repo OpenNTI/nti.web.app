@@ -21,7 +21,6 @@ Ext.define('NextThought.view.widgets.main.LeftColumn', {
 		cls: 'x-docked-noborder-top',
 		items: [
             '->',
-            { showWB: true, iconCls: 'wb' },
             { showChat: true, iconCls: 'chat' },
             { objectExplorer: true, iconCls: 'object-explorer' } ]
 	},
