@@ -206,6 +206,31 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 	},
 
 
+	/**
+	 * Clone the svg in normalized form. (viewBox of 0,0, 1,1)
+	 */
+	getThumbnail: function(){
+		var id = guidGenerator(),
+			div = document.createElement('div'),
+			el = Ext.get(div),
+			svg, w;
+
+		//This is a little dirty, but it gets the job done.
+		div.setAttribute('id',id);
+		div.setAttribute('style','display:none');
+		document.body.appendChild(div);
+
+		w = Ext.widget('whiteboard', {scaleFactor: 1, value: this.saveScene(), renderTo: id});
+		svg = el.down('svg').dom.parentNode.innerHTML;
+
+		w.destroy();
+		el.remove();
+
+		return svg.replace(/style=".*?"/ig,'')
+					.replace(/<\/*svg[\s"\/\-=0-9a-z:\.;]*>/gi, '');
+	},
+
+
 	loadScene: function(canvasJSON){
 		var shapes = canvasJSON.shapeList,
 			s = this.getSurface(),

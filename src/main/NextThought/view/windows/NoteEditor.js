@@ -6,10 +6,8 @@ Ext.define('NextThought.view.windows.NoteEditor', {
 		'NextThought.view.widgets.draw.Whiteboard'
     ],
 
-	strTpl:	'<div id="{0}" style="text-align: center; margin: 10px; border-top: 1px solid black; border-bottom: 1px solid black;">' +
-				'<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="150" height="100" style="width: 150px; hieght: 100px;"' +
-			' preserveAspectRatio="xMidYMin slice" viewBox="0, 0, {1}, {1}"' +
-			'>{2}</svg>' +
+	strTpl:	'<div id="{0}" class="body-divider" style="text-align: left; margin: 10px; padding: 5px;">' +
+				'<svg style="border: 1px solid gray" onclick="{2}" xmlns="http://www.w3.org/2000/svg" version="1.1" width="25%" preserveAspectRatio="xMidYMin slice" viewBox="0, 0, 1, 1">{1}</svg>' +
 			'</div>\u200b',
 
 	width: '60%',
@@ -37,18 +35,24 @@ Ext.define('NextThought.view.windows.NoteEditor', {
 			i,o, id;
 
 		for(i in body) {
+			if(!body.hasOwnProperty(i)) continue;
 			o = body[i];
 
 			if(typeof(o) != 'string'){
 				id = guidGenerator();
 
 				var win = this.getWhiteboardEditor(o, id),
-					svg = win.el.down('svg'),
-					w = svg.getWidth();
+					svg = win.down('whiteboard');
 
-				svg = svg.dom.parentNode.innerHTML.replace(/<\/*svg[\s\"\/\-=0-9a-z\:\.\;]*>/gi, '');
-				svg = svg.replace(/style=".*?/i, '');
-			 	text.push(Ext.String.format(this.strTpl,id,w,svg));
+				svg.on('save', this.updateWhiteboard, this);
+
+				text.push(
+						Ext.String.format(this.strTpl,
+								id,
+								svg.getThumbnail(),
+								'window.top.Ext.getCmp(\''+Ext.String.trim(this.getId())+'\').fireEvent(\'thumbnail-clicked\',\''+id+'\')'
+					)
+				);
 
 			}
 			else
@@ -58,12 +62,14 @@ Ext.define('NextThought.view.windows.NoteEditor', {
 
 		this.add({ xtype: 'htmleditor', anchor: '100% 100%',	enableAlignments: false,	value: text.join('') });
 
+		this.on('thumbnail-clicked',this.showWhiteboardEditor, this);
 	},
 
 
 	destroy: function(){
 
 		for(var i in this.editors){
+			if(!this.editors.hasOwnProperty(i)) continue;
 			this.editors[i].destroy();
 			delete this.editors[i];
 		}
@@ -74,16 +80,33 @@ Ext.define('NextThought.view.windows.NoteEditor', {
 	},
 
 
+	showWhiteboardEditor: function(id){
+		try{
+			this.editors[id].show();
+		}
+		catch(e){
+			console.error(e.message,e.stack,e);
+		}
+	},
+
 	getWhiteboardEditor: function(canvas, id){
 
 		var win = this.editors[id] = this.editors[id] || Ext.create('Ext.Window', {
 			maximizable:true,
 			closeAction: 'hide',
-			title: 'Whiteboard Test',
+			closable: false,
+			title: 'Whiteboard',
 			width: 500, height: 500,
 			modal: true,
 			layout: 'fit',
-			items: {xtype: 'whiteboard', value: canvas}
+			items: {
+				xtype: 'whiteboard', value: Ext.clone(canvas),
+				bbar: [
+					'->',
+					{ xtype: 'button', text: 'Save',	action: 'save' },
+					{ xtype: 'button', text: 'Cancel',	action: 'cancel' }
+				]
+			}
 		});
 
 		win.show();

@@ -28,16 +28,9 @@ Ext.define('NextThought.controller.Whiteboard', {
 		};
 
 		this.control({
-			'leftColumn button[showWB]': {
-				'click': this.showWhiteboardWindow
-			},
 
-			'whiteboard toolbar button[action=pick-stroke-color] colormenu': {
-				'select': this.colorChangedStroke
-			},
-			'whiteboard toolbar button[action=pick-fill-color] colormenu': {
-				'select': this.colorChangedFill
-			},
+			'whiteboard button[action=pick-stroke-color] colormenu': { 'select': this.colorChangedStroke },
+			'whiteboard button[action=pick-fill-color] colormenu': { 'select': this.colorChangedFill },
 
 			'whiteboard draw':{
 				'click': this.surfaceClicked,
@@ -48,6 +41,9 @@ Ext.define('NextThought.controller.Whiteboard', {
 
 			'whiteboard button[action=delete]':{ 'click': this.removeSelectedSprite },
 			'whiteboard button[action=clear]':{ 'click': this.clearWhiteboard },
+
+			'whiteboard button[action=save]':{ 'click': function(){} },
+			'whiteboard button[action=cancel]':{ 'click': function(){} },
 
 			'whiteboard': {
 				'sprite-click': this.selectSprite,
@@ -64,7 +60,7 @@ Ext.define('NextThought.controller.Whiteboard', {
 		this.win.down('whiteboard').loadFrom('test.json');
 	},
 
-	showWhiteboardWindow: function(btn, e, o){
+	showWhiteboardWindow: function(){
 		if (!this.win)
 			this.win = Ext.create('Ext.Window', {
 					maximizable:true,
