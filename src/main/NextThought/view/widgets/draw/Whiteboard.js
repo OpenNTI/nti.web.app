@@ -81,6 +81,7 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 
 	initComponent: function(){
 		this.callParent(arguments);
+		this.selectedColor = {};
 		if(this.value){
 			this.on('afterrender', function(){
 				this.loadScene(this.value);
@@ -90,7 +91,27 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 	},
 
 
-	toolDefaults: function(shape, color, x, y, strokeWidth, sides){
+	afterRender: function(){
+		this.callParent(arguments);
+
+		this.setColor('fill', '000000');
+		this.setColor('stroke', '000000');
+	},
+
+
+	setColor: function(c, color){
+		c = c.toLowerCase();
+		this.selectedColor[c] = '#'+color;
+
+		this.down(Ext.String.format('button[action=pick-{0}-color]',c))
+				.getEl()
+				.down('.x-btn-icon')
+				.setStyle({background: this.selectedColor[c]});
+	},
+
+
+
+	toolDefaults: function(shape, x, y, strokeWidth, sides){
 		strokeWidth = strokeWidth||2;
 		sides = sides || 4;
 
@@ -109,18 +130,18 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 		var cfg = {
 			translate: {x:x,y:y},
 			'stroke-width': strokeWidth,
-			stroke: color.stroke,
-			fill: color.fill
+			stroke: this.selectedColor.stroke,
+			fill: this.selectedColor.fill
 		};
 
 		return Ext.apply(cfg,d[shape]);
 	},
 
 
-	addShape: function(shape, x,y, strokeWidth, sides, color){
+	addShape: function(shape, x,y, strokeWidth, sides){
 
 		var sp = Ext.widget('sprite-'+this.shapeTypeMap[shape],
-				this.toolDefaults(shape, color, x, y, strokeWidth, sides));
+				this.toolDefaults(shape, x, y, strokeWidth, sides));
 
 		this.getSurface().add(sp).show(true);
 

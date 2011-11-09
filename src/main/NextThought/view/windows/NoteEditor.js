@@ -10,8 +10,8 @@ Ext.define('NextThought.view.windows.NoteEditor', {
 				'<svg style="border: 1px solid gray" onclick="{2}" xmlns="http://www.w3.org/2000/svg" version="1.1" width="25%" preserveAspectRatio="xMidYMin slice" viewBox="0, 0, 1, 1">{1}</svg>' +
 			'</div>\u200b',
 
-	width: '60%',
-	height: '40%',
+	width: '600',
+	height: '450',
 	minWidth: 600,
 	minHeight: 500,
 

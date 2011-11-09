@@ -9,15 +9,13 @@ Ext.define('NextThought.controller.Whiteboard', {
 
 	refs: [
 		{ ref: 'whiteboard', selector: 'whiteboard' },
-		{ ref: 'colorPickerStroke', selector: 'whiteboard toolbar button[action=pick-stroke-color]'},
-		{ ref: 'colorPickerFill', selector: 'whiteboard toolbar button[action=pick-fill-color]'},
 		{ ref: 'strokeWidthField', selector: 'whiteboard toolbar numberfield[name=stroke-width]'},
 		{ ref: 'polygonSidesField', selector: 'whiteboard toolbar numberfield[name=sides]'}
 	],
 
 
 	init: function() {
-		this.selectedColor = {};
+
 
 		this.spriteModifier = {
 			polygon	: this.modifyPolygon,
@@ -72,28 +70,17 @@ Ext.define('NextThought.controller.Whiteboard', {
 				});
 
 		this.win.show();
-		this.setColor('fill', '000000');
-		this.setColor('stroke', '000000');
 	},
 
 
 	colorChangedFill: function(picker, color){
-		this.setColor('fill', color);
+		this.getWhiteboard().setColor('fill', color);
 	},
 
 
 	colorChangedStroke: function(picker, color){
-		this.setColor('stroke', color);
+		this.getWhiteboard().setColor('stroke', color);
 	},
-	
-
-	setColor: function(c, color){
-		c = c.toLowerCase();
-		this.selectedColor[c] = '#'+color;
-		this['getColorPicker'+Ext.String.capitalize(c)].call(this).getEl()
-				.down('.x-btn-icon').setStyle({background: this.selectedColor[c]});
-	},
-
 
 	removeSelectedSprite:function(){ this.getWhiteboard().removeSelection(); },
 
@@ -178,7 +165,7 @@ Ext.define('NextThought.controller.Whiteboard', {
 			sw = this.getStrokeWidthField().getValue(),
 			sd = this.getPolygonSidesField().getValue();
 		if(t) {
-			this.sprite = this.getWhiteboard().addShape(t, xy[0],xy[1], sw, sd, this.selectedColor);
+			this.sprite = this.getWhiteboard().addShape(t, xy[0],xy[1], sw, sd);
 			this.sprite.initalPoint = xy;
 		}
 	},
