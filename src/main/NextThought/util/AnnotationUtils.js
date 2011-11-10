@@ -6,6 +6,15 @@ Ext.define('NextThought.util.AnnotationUtils',{
 	alternateClassName: 'AnnotationUtils',
 	statics: {
 
+		/** @constant */
+		NOTE_BODY_DIVIDER: '<div id="{0}" class="body-divider" style="text-align: left; margin: 10px; padding: 5px;">{1}</div>\u200b',
+
+		/** @constant */
+		WHITEBOARD_THUMBNAIL: '<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="250" height="200" ' +
+									 'preserveAspectRatio="xMidYMin slice" viewBox="0, 0, 1, 1" ' +
+									 'style="border: 1px solid gray" {1}>{0}</svg>',
+
+
 		/**
 		 * Build the body text with the various components mixed in.
 		 *
@@ -19,12 +28,7 @@ Ext.define('NextThought.util.AnnotationUtils',{
 		 */
 		compileBodyContent: function(record, callbacks){
 
-			var tpl='<div id="{0}" class="body-divider" style="text-align: left; margin: 10px; padding: 5px;">' +
-						'<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="250" height="200" ' +
-							 'preserveAspectRatio="xMidYMin slice" viewBox="0, 0, 1, 1" ' +
-							 'style="border: 1px solid gray" {2}>{1}</svg>' +
-					'</div>\u200b',
-				body = record.get('body'),
+			var body = record.get('body'),
 				text = [],
 				i,o,id,
 				cb = callbacks || {
@@ -45,11 +49,11 @@ Ext.define('NextThought.util.AnnotationUtils',{
 				id = guidGenerator();
 
 				text.push(
-						Ext.String.format(tpl,
-								id,
-								cb.getThumbnail.call(cb.scope, o, id),
-								cb.getClickHandler.call(cb.scope,id)
-					)
+						Ext.String.format(this.NOTE_BODY_DIVIDER, id,
+								Ext.String.format(this.WHITEBOARD_THUMBNAIL,
+										cb.getThumbnail.call(cb.scope, o, id),
+										cb.getClickHandler.call(cb.scope,id)
+					))
 				);
 			}
 
