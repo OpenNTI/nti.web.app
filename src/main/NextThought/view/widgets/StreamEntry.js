@@ -2,6 +2,10 @@ Ext.define('NextThought.view.widgets.StreamEntry', {
     extend: 'Ext.panel.Panel',
     alias: 'widget.streamEntry',
 
+    requires: [
+        'NextThought.util.AnnotationUtils'
+    ],
+
     cls: 'x-stream-entry',
     defaults: {border: false},
     layout: {type: 'hbox', align: 'top'},
@@ -55,19 +59,19 @@ Ext.define('NextThought.view.widgets.StreamEntry', {
     },
 
     getCreatedNoteInfo: function(i) {
-        var noteText = this.cleanText(i.get('body'));
+        var noteText = AnnotationUtils.compileBodyContent(i);
 
         return 'created a new note: "<i>' + noteText + '</i>"';
     },
 
     getSharedNoteInfo: function(i) {
-        var noteText = this.cleanText(i.get('body'));
+        var noteText = AnnotationUtils.compileBodyContent(i);
 
         return 'shared a note: "<i>' + noteText + '</i>"';
     },
 
     getModifiedNoteInfo: function(i) {
-        var noteText = this.cleanText(i.get('body'));
+        var noteText = AnnotationUtils.compileBodyContent(i);
 
         return 'modified a note: "<i>' + noteText + '</i>"';
     },
@@ -89,18 +93,7 @@ Ext.define('NextThought.view.widgets.StreamEntry', {
         return {xtype: 'box', autoEl: {width: 48, height: 48, src: url, tag: 'img'}};
     },
 
-    cleanText: function(body) {
-        var text = [],
-            o;
-
-        for (var i in body) {
-            if(!body.hasOwnProperty(i)) continue;
-           	o = body[i];
-           	if(typeof(o) == 'string'){
-           		text.push(o.replace(/<.*?>/g, ''));
-            }
-        }
-
-        return Ext.String.ellipsis(Ext.String.trim(text.join('')), 256, true);
+    cleanText: function(t) {
+        return Ext.String.ellipsis(Ext.String.trim(t.replace(/<.*?>/g, '')), 256, true);
     }
 });
