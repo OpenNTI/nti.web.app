@@ -2,7 +2,8 @@ Ext.define('NextThought.view.widgets.NotePanel',{
     extend: 'Ext.container.Container',
     alias: 'widget.note-entry',
     requires: [
-        'NextThought.cache.UserRepository'
+        'NextThought.cache.UserRepository',
+        'NextThought.util.AnnotationUtils'
     ],
 
     renderTpl: new Ext.XTemplate(
@@ -158,13 +159,14 @@ Ext.define('NextThought.view.widgets.NotePanel',{
     updateModel: function(m){
         var me = this,
             s = m.get('Creator'),
-            owner = _AppConfig.server.username == s;
+            owner = _AppConfig.server.username == s,
+            t = AnnotationUtils.compileBodyContent(m);
 
         me._record = m;
 
         me.renderData['time'] = Ext.Date.format(m.get('Last Modified') || new Date(), 'g:i:sa M j, Y');
         me.renderData['name'] = 'resolving...';
-        me.renderData['body'] = m.get('body')[0];
+        me.renderData['body'] = t;
         me.renderData['owner'] = owner ? 'owner' : '';
 
         if(this.rendered){

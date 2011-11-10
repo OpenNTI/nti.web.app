@@ -1,7 +1,8 @@
 Ext.define('NextThought.util.AnnotationUtils',{
 	requires: [
 		'NextThought.model.Highlight',
-		'NextThought.model.Note'
+		'NextThought.model.Note',
+        'NextThought.view.widgets.draw.Whiteboard'
 	],
 	alternateClassName: 'AnnotationUtils',
 	statics: {
@@ -21,6 +22,10 @@ Ext.define('NextThought.util.AnnotationUtils',{
 		 * The callbacks need to define the scope and the two callback methods:
 		 * 		getThumbnail(canvas, guid)
 		 * 		getClickHandler(guid)
+         *
+         * 	If no callbacks are passed in, default behaviour will take place, which is to
+         * 	generate a thumbnail and no click handler.  Pass in callbacks if you want to
+         * 	do something like preserve the canvas for use later.
 		 *
 		 * @param record (Must have a body[] field)
 		 * @param callbacks
@@ -32,9 +37,9 @@ Ext.define('NextThought.util.AnnotationUtils',{
 				text = [],
 				i,o,id,
 				cb = callbacks || {
-					scope:{},
-					getClickHandler:Ext.emptyFn,
-					getThumbnail: Ext.emptyFn
+					scope:this,
+					getClickHandler: function(){return '';},
+					getThumbnail: this.generateThumbnail
 				};
 
 			for(i in body) {
@@ -60,6 +65,18 @@ Ext.define('NextThought.util.AnnotationUtils',{
 			return text.join('');
 		},
 
+        /**
+         * Generate a thumbnail SVG from a canvas object.
+         *
+         * @param canvas - the canvas object
+         */
+        generateThumbnail: function(canvas) {
+            var wb = Ext.widget('whiteboard', {value:canvas}),
+                tn = wb.getThumbnail();
+
+            wb.destroy();
+            return tn;
+        },
 
 		getPathTo: function(element) {
 			var nodeName = element.nodeName;

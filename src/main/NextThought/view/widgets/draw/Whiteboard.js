@@ -241,6 +241,7 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 		var id = guidGenerator(),
 			div = document.createElement('div'),
 			el = Ext.get(div),
+            v = this.rendered ? this.saveScene() : this.value,
 			svg, w;
 
 		//This is a little dirty, but it gets the job done.
@@ -248,7 +249,7 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 		div.setAttribute('style','display:none');
 		document.body.appendChild(div);
 
-		w = Ext.widget('whiteboard', {scaleFactor: 1, value: this.saveScene(), renderTo: id});
+		w = Ext.widget('whiteboard', {scaleFactor: 1, value: v, renderTo: id});
 		svg = el.down('svg').dom.parentNode.innerHTML;
 
 		w.destroy();
