@@ -55,24 +55,31 @@ Ext.define('NextThought.view.windows.NoteEditor', {
 
 	getWhiteboardThumbnail: function(canvas, id){
 
-		var svg = this.getWhiteboardEditor(canvas, id).down('whiteboard');
+		var whiteboard = this.getWhiteboardEditor(canvas, id).down('whiteboard');
 
-		svg.on('save', this.updateWhiteboardThumbnail, this);
+		whiteboard.on('save', this.updateWhiteboardThumbnail, this);
+		whiteboard.__id = id;
 
-		return svg.getThumbnail();
+		return whiteboard.getThumbnail();
 	},
 
 
-	getWhiteboardThumbnailClickHandler: function(guid){
+	getWhiteboardThumbnailClickHandler: function(id){
 		return Ext.String.format(
 			'onClick="window.top.Ext.getCmp(\'{0}\').fireEvent(\'thumbnail-clicked\',\'{1}\')"',
-				Ext.String.trim(this.getId()),
-				guid);
+				Ext.String.trim(this.getId()), id);
 	},
 
 
-	updateWhiteboardThumbnail: function(){
-		console.log(arguments);
+	updateWhiteboardThumbnail: function(whiteboard){
+		var id = whiteboard.__id,
+			//the getDoc() is non-public api
+			iFrameDoc = this.down('htmleditor').getDoc();
+
+		iFrameDoc.getElementById(id).innerHTML = Ext.String.format(
+				AnnotationUtils.WHITEBOARD_THUMBNAIL,
+				whiteboard.getThumbnail(),
+				this.getWhiteboardThumbnailClickHandler(id));
 	},
 
 
@@ -102,6 +109,8 @@ Ext.define('NextThought.view.windows.NoteEditor', {
 		win.show();
 		win.hide();
 
+		win.saveScene = function(){return this.down('whiteboard').saveScene();};
+
 		return win;
 	},
 
@@ -127,10 +136,16 @@ Ext.define('NextThought.view.windows.NoteEditor', {
 
 
 	getValue: function(){
-		var body = [];
+		var me = this,
+			e = this.down('htmleditor'),
+			val = e.getValue().replace(/\u200b/g,''),
+			body = val.split(/(<div.*?class="body-divider".*?<\/div>)/ig);
 
-		var text = this.down('htmleditor').replace(/\u200b/g,'');
-
+		Ext.each(body,function(v,i,a){
+			if(v.indexOf('class="body-divider"')<0)return;
+			var id = /<div.*?id="(.+?)".*?div>/i.exec(v)[1];
+			a[i]=me.editors[id].saveScene();
+		});
 
 		return body;
 	},
