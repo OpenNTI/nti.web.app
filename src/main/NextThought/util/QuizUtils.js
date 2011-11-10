@@ -142,7 +142,11 @@ Ext.define('NextThought.util.QuizUtils', {
         }
 
     }
-});
+},
+		function(){
+			window.QuizUtils = this;
+		}
+);
 
 
 /*********************************************************

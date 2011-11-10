@@ -595,4 +595,7 @@ Ext.define('NextThought.util.AnnotationUtils',{
 			return last;
 		}
 	}
-});
+},
+		function(){
+			window.AnnotationUtils = this;
+		});

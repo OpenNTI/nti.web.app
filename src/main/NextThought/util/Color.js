@@ -50,4 +50,8 @@ Ext.define('NextThought.util.Color',{
 			return Ext.draw.Color.fromHSL(Math.round(this.hue(idx) * 360), 100, 50);
 		}
 	}
-});
+},
+		function(){
+			window.Color = this;
+		}
+);

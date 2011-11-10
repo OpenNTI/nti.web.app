@@ -122,4 +122,8 @@ Ext.define('NextThought.util.ParseUtils',{
             return result;
         }
     }
-});
+},
+		function(){
+			window.ParseUtils = this;
+		}
+);

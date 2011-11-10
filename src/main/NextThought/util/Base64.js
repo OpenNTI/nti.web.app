@@ -147,4 +147,8 @@ Ext.define('NextThought.util.Base64',
     }
 
 
-});
+},
+		function(){
+			window.Base64 = this;
+		}
+);
