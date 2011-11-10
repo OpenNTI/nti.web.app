@@ -6,17 +6,32 @@ Ext.define('NextThought.util.AnnotationUtils',{
 	alternateClassName: 'AnnotationUtils',
 	statics: {
 
-		compileBodyContent: function(record, ){
+		/**
+		 * Build the body text with the various components mixed in.
+		 *
+		 * The callbacks need to define the scope and the two callback methods:
+		 * 		getThumbnail(canvas, guid)
+		 * 		getClickHandler(guid)
+		 *
+		 * @param record (Must have a body[] field)
+		 * @param callbacks
+		 * @return String
+		 */
+		compileBodyContent: function(record, callbacks){
 
 			var tpl='<div id="{0}" class="body-divider" style="text-align: left; margin: 10px; padding: 5px;">' +
 						'<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="250" height="200" ' +
 							 'preserveAspectRatio="xMidYMin slice" viewBox="0, 0, 1, 1" ' +
 							 'style="border: 1px solid gray" {2}>{1}</svg>' +
-					'</div>\u200b';
-
-			var body = record.get('body'),
+					'</div>\u200b',
+				body = record.get('body'),
 				text = [],
-				i,o,id;
+				i,o,id,
+				cb = callbacks || {
+					scope:{},
+					getClickHandler:Ext.emptyFn,
+					getThumbnail: Ext.emptyFn
+				};
 
 			for(i in body) {
 				if(!body.hasOwnProperty(i)) continue;
@@ -29,19 +44,11 @@ Ext.define('NextThought.util.AnnotationUtils',{
 
 				id = guidGenerator();
 
-				var win = this.getWhiteboardEditor(o, id),
-					svg = win.down('whiteboard');
-
-				svg.on('save', this.updateWhiteboard, this);
-
 				text.push(
 						Ext.String.format(tpl,
 								id,
-								svg.getThumbnail(),
-								Ext.String.format(
-									'onClick="window.top.Ext.getCmp(\'{0}\').fireEvent(\'thumbnail-clicked\',\'{1}\')"',
-										Ext.String.trim(this.getId()),
-										id)
+								cb.getThumbnail.call(cb.scope, o, id),
+								cb.getClickHandler.call(cb.scope,id)
 					)
 				);
 			}
