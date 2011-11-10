@@ -52,9 +52,9 @@ Ext.define('NextThought.view.widgets.MiniStreamEntry', {
         }
     },
 
-    getToolTipText: function(text, body)
+    getToolTipText: function(txt, body)
     {
-        if (text) return text;
+        if (txt) return txt;
 
         var o, text = [];
 

@@ -62,7 +62,7 @@ Ext.define('NextThought.controller.Reader', {
     navigateToItem: function(i) {
         var c = i.get('Class'),
             oid = i.get('OID'),
-            id = c.toLowerCase()+'-'+oid;
+            id = 'cmp-'+oid;
 
         //right now, only handle notes and highlights, not sure what to do with users etc...
         if (c != 'Note' && c != 'Highlight') return;
@@ -71,7 +71,7 @@ Ext.define('NextThought.controller.Reader', {
             bookInfo = Library.findLocation(containerId),
             book = bookInfo.book,
             href = bookInfo.location.getAttribute('href');
-        this.navigate(book, book.get('root') + href, {oid: id});
+        this.navigate(book, book.get('root') + href, {oid: id}); q
     },
 
     buttonClicked: function(button) {
