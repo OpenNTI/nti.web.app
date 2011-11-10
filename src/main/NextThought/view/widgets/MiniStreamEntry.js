@@ -41,12 +41,30 @@ Ext.define('NextThought.view.widgets.MiniStreamEntry', {
         //lets put some popovers on this to show the contents?  Maybe this should be inline so as to see it at a
         //glance w/o having to navigate to it?
         var e = this.getEl(),
-            t = this.change.get('Item').get('text');
+            txt = this.change.get('Item').get('text'),
+            bdy = this.change.get('Item').get('body');
+            t = this.getToolTipText(txt, bdy);
         if (t) {
             Ext.create('Ext.tip.ToolTip', {
                 target: e,
                 html: t
             });
         }
+    },
+
+    getToolTipText: function(text, body)
+    {
+        if (text) return text;
+
+        var o, text = [];
+
+        for (var i in body) {
+            if(!body.hasOwnProperty(i)) continue;
+            o = body[i];
+            if(typeof(o) == 'string'){
+                text.push(o.replace(/<.*?>/g, ''));
+            }
+        }
+        return text.join('');
     }
 });
