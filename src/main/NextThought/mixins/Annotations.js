@@ -268,6 +268,7 @@ Ext.define('NextThought.mixins.Annotations', {
 			me.bufferedDelayedRelayout();
 
 		me.fireEvent('publish-contributors',contributors);
+        me.fireEvent('resize');
 	},
 
 
