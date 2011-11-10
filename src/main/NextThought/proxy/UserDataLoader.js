@@ -190,4 +190,8 @@ Ext.define('NextThought.proxy.UserDataLoader',{
             });
         }
     }
-});
+},
+		function(){
+			window.UserDataLoader = this;
+		}
+);
