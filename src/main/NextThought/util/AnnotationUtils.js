@@ -6,6 +6,50 @@ Ext.define('NextThought.util.AnnotationUtils',{
 	alternateClassName: 'AnnotationUtils',
 	statics: {
 
+		compileBodyContent: function(record, ){
+
+			var tpl='<div id="{0}" class="body-divider" style="text-align: left; margin: 10px; padding: 5px;">' +
+						'<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="250" height="200" ' +
+							 'preserveAspectRatio="xMidYMin slice" viewBox="0, 0, 1, 1" ' +
+							 'style="border: 1px solid gray" {2}>{1}</svg>' +
+					'</div>\u200b';
+
+			var body = record.get('body'),
+				text = [],
+				i,o,id;
+
+			for(i in body) {
+				if(!body.hasOwnProperty(i)) continue;
+				o = body[i];
+
+				if(typeof(o) == 'string'){
+					text.push(o);
+					continue;
+				}
+
+				id = guidGenerator();
+
+				var win = this.getWhiteboardEditor(o, id),
+					svg = win.down('whiteboard');
+
+				svg.on('save', this.updateWhiteboard, this);
+
+				text.push(
+						Ext.String.format(tpl,
+								id,
+								svg.getThumbnail(),
+								Ext.String.format(
+									'onClick="window.top.Ext.getCmp(\'{0}\').fireEvent(\'thumbnail-clicked\',\'{1}\')"',
+										Ext.String.trim(this.getId()),
+										id)
+					)
+				);
+			}
+
+			return text.join('');
+		},
+
+
 		getPathTo: function(element) {
 			var nodeName = element.nodeName;
 
@@ -32,6 +76,7 @@ Ext.define('NextThought.util.AnnotationUtils',{
 			}
 		},
 
+
 		/**
 		 * From a note, build its reply
 		 * @param {NextThought.model.Note} note
@@ -53,6 +98,7 @@ Ext.define('NextThought.util.AnnotationUtils',{
 
 			return reply;
 		},
+
 
 		/**
 		 * From a reply, build its absent parent
@@ -86,6 +132,7 @@ Ext.define('NextThought.util.AnnotationUtils',{
 			return holder;
 		},
 
+
 		selectionToNote: function(range) {
 			var note = Ext.create('NextThought.model.Note');
 			var node = range.startContainer || range.endContainer;
@@ -101,6 +148,7 @@ Ext.define('NextThought.util.AnnotationUtils',{
 			return note;
 		},
 
+
 		getNextAnchorInDOM: function(node) {
 			var anchor = null;
 			Ext.each(Ext.query('A[name]'), function(a){
@@ -111,6 +159,7 @@ Ext.define('NextThought.util.AnnotationUtils',{
 			});
 			return anchor;
 		},
+
 
 		findBlockParent: function(n) {
 			var c = n;
@@ -128,6 +177,7 @@ Ext.define('NextThought.util.AnnotationUtils',{
 			return (e && d.test(e.getStyle('display')) && p.test(e.getStyle('position')));
 		},
 
+
 		getNodeFromXPath: function(xpath) {
 			try {
 				return document.evaluate(xpath, document, null, XPathResult.ANY_TYPE, null).iterateNext();
@@ -137,6 +187,7 @@ Ext.define('NextThought.util.AnnotationUtils',{
 				return null;
 			}
 		},
+
 
 		buildRangeFromRecord: function(r) {
 			var endElement = this.getNodeFromXPath(r.get('endXpath'));
@@ -157,9 +208,11 @@ Ext.define('NextThought.util.AnnotationUtils',{
 			return this.rangeFromAnchors(r);
 		},
 
+
 		getAnchor: function(a) {
 			return Ext.query('a[name=' + a +']')[0];
 		},
+
 
 		getNextAnchor: function(a) {
 			var all = Ext.query('a[name]'),
@@ -175,6 +228,7 @@ Ext.define('NextThought.util.AnnotationUtils',{
 
 			return result;
 		},
+
 
 		rangeFromAnchors: function(r) {
 			//TODO: this still isn't qorking quite right, if the start/end anchor are the same but have diff text nodes.
@@ -229,6 +283,7 @@ Ext.define('NextThought.util.AnnotationUtils',{
 			return null;
 		},
 
+
 		selectionToHighlight: function(range) {
 			if(range.collapsed){
 				return;
@@ -261,6 +316,7 @@ Ext.define('NextThought.util.AnnotationUtils',{
 			this._fixHighlightEndpoints(endNode, startNode, highlight);
 			return highlight;
 		},
+
 
 		_fixHighlightEndpoints: function(endNode, startNode, highlight) {
 			if (!this.isTextNode(endNode) && !this.isMathNode(endNode) && !this.isImageNode(endNode)) {
@@ -306,6 +362,7 @@ Ext.define('NextThought.util.AnnotationUtils',{
 								: highlight.get('endHighlightedFullText'));
 			}
 		},
+
 
 		ascendToAnchor: function(textNode) {
 			var parentNode = textNode;
@@ -391,7 +448,6 @@ Ext.define('NextThought.util.AnnotationUtils',{
 		},
 
 
-
 		isMathNode: function(node) {
 			if (!node || !node.getAttribute) return false;
 
@@ -404,6 +460,7 @@ Ext.define('NextThought.util.AnnotationUtils',{
 		isTextNode: function(node) {
 			return (node && node.nodeValue != null);
 		},
+
 
 		isImageNode: function(node) {
 			return (node && node.nodeName == "IMG");
@@ -530,6 +587,5 @@ Ext.define('NextThought.util.AnnotationUtils',{
 
 			return last;
 		}
-
 	}
 });
