@@ -11,7 +11,7 @@ Ext.define('NextThought.controller.Modes', {
             'modeswitcher button': {
                 toggle: this.switchModes
             }
-        });
+        },{});
     },
     
     

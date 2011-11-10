@@ -97,7 +97,7 @@ Ext.define('NextThought.controller.Chat', {
                 'reply-whisper': this.replyWhisper
             }
 
-        });
+        },{});
     },
 
     /* UTILITY METHODS */

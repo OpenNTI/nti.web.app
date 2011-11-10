@@ -52,7 +52,7 @@ Ext.define('NextThought.controller.Reader', {
             'reader-mode-container filter-control':{
                 'filter-changed': this.readerFilterChanged
             }
-        });
+        },{});
     },
 
     clearSearch: function() {

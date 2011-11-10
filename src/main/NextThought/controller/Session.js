@@ -141,7 +141,7 @@ Ext.define('NextThought.controller.Session', {
                     this.self.setupAuth.apply(this.self, arguments);
                 }
             }
-        });
+        },{});
     },
 
     handleLogout: function() {

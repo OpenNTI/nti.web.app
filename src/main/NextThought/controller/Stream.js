@@ -51,7 +51,7 @@ Ext.define('NextThought.controller.Stream', {
               'stream-mode-container filter-control':{
                 'filter-changed': this.streamFilterChanged
             }
-        });
+        },{});
     },
 
     incomingChange: function(change) {

@@ -29,7 +29,7 @@ Ext.define('NextThought.controller.State', {
             'panel[cls=x-application-mode-pane]': {
                 'activate-mode': me.trackMode
             }
-        });
+        },{});
 
         window.onpopstate = function(e){
             me.isPoppingHistory = true;

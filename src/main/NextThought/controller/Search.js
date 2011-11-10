@@ -37,7 +37,7 @@ Ext.define('NextThought.controller.Search', {
             'search-results-popover': {
                  'goto': this.searchResultClicked
             }
-        });
+        },{});
     },
 
     lostFocus: function(searchBox){

@@ -31,7 +31,7 @@ Ext.define('NextThought.controller.Account', {
                 'account': this.showAccount,
                 'notification': this.popoverNotifications
             }
-        });
+        },{});
     },
 
 

@@ -37,7 +37,7 @@ Ext.define('NextThought.controller.ObjectExplorer', {
                  'annotation-destroyed': this.removeAnnotation
              }
 
-    	 });
+    	 },{});
     },
 
     removeAnnotation: function(oid){

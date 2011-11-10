@@ -49,7 +49,7 @@ Ext.define('NextThought.controller.Groups', {
             'group-editor button':{
                 'click': this.groupEditorButtonClicked
             }
-        });
+        },{});
     },
 
     reloadGroups: function(){

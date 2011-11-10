@@ -44,7 +44,7 @@ Ext.define('NextThought.controller.FilterControl', {
     		'filter-control checkboxfield[model]':{
     			change:this.typeSelectionChanged
     		}
-    	});
+    	},{});
     },
     
     

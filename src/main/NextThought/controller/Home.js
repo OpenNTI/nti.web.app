@@ -34,6 +34,6 @@ Ext.define('NextThought.controller.Home', {
                 },
                 'selectionchange': function(a, sel){}
             }
-        });
+        },{});
     }
 });
