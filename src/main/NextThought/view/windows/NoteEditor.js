@@ -7,7 +7,9 @@ Ext.define('NextThought.view.windows.NoteEditor', {
     ],
 
 	strTpl:	'<div id="{0}" class="body-divider" style="text-align: left; margin: 10px; padding: 5px;">' +
-				'<svg style="border: 1px solid gray" onclick="{2}" xmlns="http://www.w3.org/2000/svg" version="1.1" width="25%" preserveAspectRatio="xMidYMin slice" viewBox="0, 0, 1, 1">{1}</svg>' +
+				'<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="250" height="200" ' +
+					 'preserveAspectRatio="xMidYMin slice" viewBox="0, 0, 1, 1" ' +
+					 'style="border: 1px solid gray" {2}>{1}</svg>' +
 			'</div>\u200b',
 
 	width: '600',
@@ -32,7 +34,7 @@ Ext.define('NextThought.view.windows.NoteEditor', {
 
 		var body = this.record.get('body'),
 			text = [],
-			i,o, id;
+			i,o,id;
 
 		for(i in body) {
 			if(!body.hasOwnProperty(i)) continue;
@@ -50,7 +52,10 @@ Ext.define('NextThought.view.windows.NoteEditor', {
 						Ext.String.format(this.strTpl,
 								id,
 								svg.getThumbnail(),
-								'window.top.Ext.getCmp(\''+Ext.String.trim(this.getId())+'\').fireEvent(\'thumbnail-clicked\',\''+id+'\')'
+								Ext.String.format(
+									'onClick="window.top.Ext.getCmp(\'{0}\').fireEvent(\'thumbnail-clicked\',\'{1}\')"',
+										Ext.String.trim(this.getId()),
+										id)
 					)
 				);
 
@@ -130,7 +135,4 @@ Ext.define('NextThought.view.windows.NoteEditor', {
         var e = this.down('htmleditor');
         setTimeout(function(){e.focus();}, 500);
     }
-
-
-	//<div style="border:1px solid black"><svg width="100%"></svg></div>
 });

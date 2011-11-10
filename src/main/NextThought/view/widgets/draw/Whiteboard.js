@@ -83,7 +83,7 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 		this.callParent(arguments);
 		this.selectedColor = {};
 		if(this.value){
-			this.on('afterrender', function(){
+			this.on('afterRender', function(){
 				this.loadScene(this.value);
 				delete this.value;
 			}, this);
@@ -146,7 +146,7 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 		this.getSurface().add(sp).show(true);
 
 		this.relay(sp,'click');
-		this.relay(sp,'dblclick');
+		this.relay(sp,'dblClick');
 
 		return sp;
 
@@ -269,7 +269,7 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 				o, k;
 
 			//scale up the matrix
-			for(k in t) t[k] *= w;
+			for(k in t) if(t.hasOwnProperty(k)) t[k] *= w;
 
 			t = Ext.create('Ext.draw.Matrix',t.a,t.b,t.c,t.d,t.tx,t.ty).split();
 
@@ -293,7 +293,7 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 
 			s.add(o).show(true);
 			this.relay(o,'click');
-			this.relay(o,'dblclick');
+			this.relay(o,'dblClick');
 
 		}, this);
 	},
@@ -304,7 +304,7 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 		this.getSurface().items.each(
 			function(i){
 				var a = Ext.clone(i.attr),
-					bb = i.getBBox(), x, y,
+					bb = i.getBBox(),
 					w = this.getScaleFactor(),
 					o, k;
 
@@ -313,6 +313,7 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 				o = i.toJSON();
 				//scale down the matrix
 				for(k in o.transform){
+					if(!o.transform.hasOwnProperty(k))continue;
 					if(typeof o.transform[k] == 'number')
 						o.transform[k] /= w;
 				}
