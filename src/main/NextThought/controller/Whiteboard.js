@@ -40,9 +40,6 @@ Ext.define('NextThought.controller.Whiteboard', {
 			'whiteboard button[action=delete]':{ 'click': this.removeSelectedSprite },
 			'whiteboard button[action=clear]':{ 'click': this.clearWhiteboard },
 
-			'whiteboard button[action=save]':{ 'click': function(){} },
-			'whiteboard button[action=cancel]':{ 'click': function(){} },
-
 			'whiteboard': {
 				'sprite-click': this.selectSprite,
 				'sprite-dblclick': this.editSprite

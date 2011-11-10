@@ -53,11 +53,11 @@ Ext.define('NextThought.view.windows.NoteEditor', {
 	},
 
 
-	getWhiteboardThumbnail: function(canvas, guid){
+	getWhiteboardThumbnail: function(canvas, id){
 
-		var svg = this.getWhiteboardEditor(canvas, guid).down('whiteboard');
+		var svg = this.getWhiteboardEditor(canvas, id).down('whiteboard');
 
-		svg.on('save', this.updateWhiteboard, this);
+		svg.on('save', this.updateWhiteboardThumbnail, this);
 
 		return svg.getThumbnail();
 	},
@@ -68,6 +68,11 @@ Ext.define('NextThought.view.windows.NoteEditor', {
 			'onClick="window.top.Ext.getCmp(\'{0}\').fireEvent(\'thumbnail-clicked\',\'{1}\')"',
 				Ext.String.trim(this.getId()),
 				guid);
+	},
+
+
+	updateWhiteboardThumbnail: function(){
+		console.log(arguments);
 	},
 
 
@@ -82,7 +87,7 @@ Ext.define('NextThought.view.windows.NoteEditor', {
 
 	getWhiteboardEditor: function(canvas, id){
 
-		var win = this.editors[id] = this.editors[id] || Ext.create('Ext.Window', {
+		var win = this.editors[id] = this.editors[id] || Ext.widget('window', {
 			maximizable:true,
 			closeAction: 'hide',
 			closable: false,
@@ -90,20 +95,34 @@ Ext.define('NextThought.view.windows.NoteEditor', {
 			width: 500, height: 500,
 			modal: true,
 			layout: 'fit',
-			items: {
-				xtype: 'whiteboard', value: Ext.clone(canvas),
-				bbar: [
-					'->',
-					{ xtype: 'button', text: 'Save',	action: 'save' },
-					{ xtype: 'button', text: 'Cancel',	action: 'cancel' }
-				]
-			}
+			items: { xtype: 'whiteboard', value: Ext.clone(canvas) },
+			bbar: this.getWhiteboardBottomToolbar()
 		});
 
 		win.show();
 		win.hide();
 
 		return win;
+	},
+
+
+	getWhiteboardBottomToolbar: function(){
+		var me = this;
+		return [
+			'->',
+			{ xtype: 'button', text: 'Save',
+				handler: function(btn){
+					var win = btn.up('window').hide(), wb = win.down('whiteboard');
+					wb.fireEvent('save',wb);
+				}
+			},
+			{ xtype: 'button', text: 'Cancel',
+				handler: function(btn){
+					var win = btn.up('window').hide();
+					win.down('whiteboard').reset();
+				}
+			}
+		];
 	},
 
 

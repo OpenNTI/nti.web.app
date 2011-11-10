@@ -82,20 +82,27 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 	initComponent: function(){
 		this.callParent(arguments);
 		this.selectedColor = {};
-		if(this.value){
-			this.on('afterRender', function(){
-				this.loadScene(this.value);
-				delete this.value;
-			}, this);
-		}
 	},
 
 
 	afterRender: function(){
 		this.callParent(arguments);
 
+		if(this.value){
+			this.loadScene(this.value);
+			delete this.value;
+		}
+
 		this.setColor('fill', '000000');
 		this.setColor('stroke', '000000');
+	},
+
+
+	reset: function(){
+		this.removeAll();
+		if(this.initialConfig.value){
+			this.loadScene(this.initialConfig.value);
+		}
 	},
 
 
@@ -253,7 +260,7 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 
 
 	loadScene: function(canvasJSON){
-		var shapes = canvasJSON.shapeList,
+		var shapes = Ext.clone( canvasJSON.shapeList ),
 			s = this.getSurface(),
 			w = this.getScaleFactor(),
 			m = {
@@ -264,7 +271,7 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 		Ext.each(shapes, function(shape, i){
 
 			var c = Color.getColor(i),
-				p = c.getDarker(),
+				p = c.getDarker(0.2),
 				t = shape.transform,
 				o, k;
 
