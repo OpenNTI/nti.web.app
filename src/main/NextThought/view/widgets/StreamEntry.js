@@ -55,19 +55,19 @@ Ext.define('NextThought.view.widgets.StreamEntry', {
     },
 
     getCreatedNoteInfo: function(i) {
-        var noteText = this.cleanText(i.get('text'));
+        var noteText = this.cleanText(i.get('body'));
 
         return 'created a new note: "<i>' + noteText + '</i>"';
     },
 
     getSharedNoteInfo: function(i) {
-        var noteText = this.cleanText(i.get('text'));
+        var noteText = this.cleanText(i.get('body'));
 
         return 'shared a note: "<i>' + noteText + '</i>"';
     },
 
     getModifiedNoteInfo: function(i) {
-        var noteText = this.cleanText(i.get('text'));
+        var noteText = this.cleanText(i.get('body'));
 
         return 'modified a note: "<i>' + noteText + '</i>"';
     },
@@ -89,8 +89,18 @@ Ext.define('NextThought.view.widgets.StreamEntry', {
         return {xtype: 'box', autoEl: {width: 48, height: 48, src: url, tag: 'img'}};
     },
 
-    cleanText: function(t) {
-        var noNewLines = t.replace(/<.*?>/g, '');
-        return Ext.String.ellipsis(Ext.String.trim(noNewLines), 256, true);
+    cleanText: function(body) {
+        var text = [],
+            o;
+
+        for (var i in body) {
+            if(!body.hasOwnProperty(i)) continue;
+           	o = body[i];
+           	if(typeof(o) == 'string'){
+           		text.push(o.replace(/<.*?>/g, ''));
+            }
+        }
+
+        return Ext.String.ellipsis(Ext.String.trim(text.join('')), 256, true);
     }
 });
