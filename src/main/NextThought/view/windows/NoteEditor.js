@@ -3,14 +3,9 @@ Ext.define('NextThought.view.windows.NoteEditor', {
 	alias : 'widget.noteeditor',
     requires: [
         'Ext.form.field.HtmlEditor',
+		'NextThought.util.AnnotationUtils',
 		'NextThought.view.widgets.draw.Whiteboard'
     ],
-
-	strTpl:	'<div id="{0}" class="body-divider" style="text-align: left; margin: 10px; padding: 5px;">' +
-				'<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="250" height="200" ' +
-					 'preserveAspectRatio="xMidYMin slice" viewBox="0, 0, 1, 1" ' +
-					 'style="border: 1px solid gray" {2}>{1}</svg>' +
-			'</div>\u200b',
 
 	width: '600',
 	height: '450',
@@ -32,40 +27,13 @@ Ext.define('NextThought.view.windows.NoteEditor', {
 		this.editors = {};
 		this.callParent(arguments);
 
-		var body = this.record.get('body'),
-			text = [],
-			i,o,id;
+		var text = AnnotationUtils.compileBodyContent(this.record, {
+			scope: this,
+			getThumbnail: this.getWhiteboardThumbnail,
+			getClickHandler: this.getWhiteboardThumbnailClickHandler
+		});
 
-		for(i in body) {
-			if(!body.hasOwnProperty(i)) continue;
-			o = body[i];
-
-			if(typeof(o) != 'string'){
-				id = guidGenerator();
-
-				var win = this.getWhiteboardEditor(o, id),
-					svg = win.down('whiteboard');
-
-				svg.on('save', this.updateWhiteboard, this);
-
-				text.push(
-						Ext.String.format(this.strTpl,
-								id,
-								svg.getThumbnail(),
-								Ext.String.format(
-									'onClick="window.top.Ext.getCmp(\'{0}\').fireEvent(\'thumbnail-clicked\',\'{1}\')"',
-										Ext.String.trim(this.getId()),
-										id)
-					)
-				);
-
-			}
-			else
-				text.push(o);
-		}
-
-
-		this.add({ xtype: 'htmleditor', anchor: '100% 100%',	enableAlignments: false,	value: text.join('') });
+		this.add({ xtype: 'htmleditor', anchor: '100% 100%',	enableAlignments: false,	value: text });
 
 		this.on('thumbnail-clicked',this.showWhiteboardEditor, this);
 	},
@@ -82,6 +50,24 @@ Ext.define('NextThought.view.windows.NoteEditor', {
 		delete this.editors;
 
 		this.callParent(arguments);
+	},
+
+
+	getWhiteboardThumbnail: function(canvas, guid){
+
+		var svg = this.getWhiteboardEditor(canvas, guid).down('whiteboard');
+
+		svg.on('save', this.updateWhiteboard, this);
+
+		return svg.getThumbnail();
+	},
+
+
+	getWhiteboardThumbnailClickHandler: function(guid){
+		return Ext.String.format(
+			'onClick="window.top.Ext.getCmp(\'{0}\').fireEvent(\'thumbnail-clicked\',\'{1}\')"',
+				Ext.String.trim(this.getId()),
+				guid);
 	},
 
 
