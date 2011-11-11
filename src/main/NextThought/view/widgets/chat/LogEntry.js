@@ -3,6 +3,7 @@ Ext.define('NextThought.view.widgets.chat.LogEntry', {
     alias: 'widget.chat-log-entry',
 
     requires: [
+		'NextThought.util.AnnotationUtils',
         'NextThought.view.widgets.chat.ReplyTo'
     ],
 
@@ -57,7 +58,7 @@ Ext.define('NextThought.view.widgets.chat.LogEntry', {
 
         me.renderData['time'] = Ext.Date.format(m.get('Last Modified'), 'g:i:sa');
         me.renderData['name'] = 'resolving...';
-        me.renderData['body'] = m.get('Body');
+        me.renderData['body'] = AnnotationUtils.compileBodyContent(m);
 
         if(this.rendered){
            me.text.update(me.renderData.body);
