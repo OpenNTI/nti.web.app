@@ -33,9 +33,22 @@ Ext.define('NextThought.view.windows.NoteEditor', {
 			getClickHandler: this.getWhiteboardThumbnailClickHandler
 		});
 
-		this.add({ xtype: 'htmleditor', anchor: '100% 100%',	enableAlignments: false,	value: text });
+		this.add({ xtype: 'htmleditor', anchor: '100% 100%', enableAlignments: false, value: text });
 
 		this.on('thumbnail-clicked',this.showWhiteboardEditor, this);
+	},
+
+
+	afterRender: function(){
+		var me = this,
+			editor = me.down('htmleditor');
+
+		me.callParent(arguments);
+
+		editor.getToolbar().add('-',{
+			text: 'WB',
+			handler: function(){me.insertWhiteboard()}}
+		);
 	},
 
 
@@ -83,6 +96,25 @@ Ext.define('NextThought.view.windows.NoteEditor', {
 	},
 
 
+	insertWhiteboard: function(){
+		var id = guidGenerator(),
+			win = this.getWhiteboardEditor(null, id),
+			whiteboard = win.down('whiteboard'),
+			//the getDoc() is non-public api
+			iFrameDoc = this.down('htmleditor').getDoc(),
+			body = iFrameDoc.body;
+
+		whiteboard.__id = id;
+		whiteboard.on('save', this.updateWhiteboardThumbnail, this);
+
+		body.innerHTML += Ext.String.format(AnnotationUtils.NOTE_BODY_DIVIDER, id,
+										Ext.String.format(AnnotationUtils.WHITEBOARD_THUMBNAIL,'',
+												this.getWhiteboardThumbnailClickHandler(id)));
+
+		win.show();
+	},
+
+
 	showWhiteboardEditor: function(id){
 		try{
 			this.editors[id].show();
@@ -91,6 +123,7 @@ Ext.define('NextThought.view.windows.NoteEditor', {
 			console.error(e.message,e.stack,e);
 		}
 	},
+
 
 	getWhiteboardEditor: function(canvas, id){
 
