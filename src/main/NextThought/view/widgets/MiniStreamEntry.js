@@ -28,7 +28,9 @@ Ext.define('NextThought.view.widgets.MiniStreamEntry', {
         this.renderData['cls'] = this.cls || '';
         this.renderData['avatarURL'] = u.get('avatarURL');
         this.renderData['name'] = u.get('alias')||u.get('realname');
-        this.renderData['text'] = [this.change.get('ChangeType'),' a ',this.change.get('Item').raw.Class].join('');
+        this.renderData['text'] = this.change.get('Item')
+			? [this.change.get('ChangeType'),' a ',this.change.get('Item').raw.Class].join('')
+			: 'deleted something';
     },
 
     afterRender: function() {
