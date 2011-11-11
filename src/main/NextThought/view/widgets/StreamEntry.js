@@ -18,21 +18,23 @@ Ext.define('NextThought.view.widgets.StreamEntry', {
 
         var c = this.change.get('Creator'),
             u = NextThought.cache.UserRepository.getUser(c),
-            i = this.change.get('Item');
+            i = this.change.get('Item'),
+            text = this.getInfoPanel(u.get('realname'));
         //Add avatar:
         this.add(this.getAvatarImage(u));
 
         //Add content
-        this.add(this.getInfoPanel(u.get('realname')));
+        if (text) this.add(text);
     },
 
     getInfoPanel: function(creator) {
         var ct = this.change.get('ChangeType'),
             i = this.change.get('Item'),
-            it = i.raw.Class,
+            it = (i) ? i.raw.Class : null,
             name = '<div class="stream-username">'+creator+'</div>',
             info;
 
+        if (!i) return null;
 
         if (ct == 'Circled' && it == 'User') info = this.getCircledInfo(i);
         else if (ct == 'Shared' && it == 'Note') info = this.getSharedNoteInfo(i);
