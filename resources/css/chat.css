@@ -145,13 +145,17 @@
 .reply-to-button .x-btn-icon{
     width: inherit;
     height: inherit;
-    background-image: url("../images/chat/submit-22.png");
-    background-position: center;
+    background: url("../images/chat/submit-22.png") center;
+}
+
+.compose-msg-button .x-btn-icon{
+	width: inherit;
+	height: inherit;
+	background: url("../images/chat/compose-message.png") center no-repeat;
 }
 
 .reply-to-line .chat-entry .x-form-item-body {
-    background-image: url('../../ext-4.0.7/resources/themes/images/gray/form/text-bg.gif');
-    background-repeat: repeat-x;
+    background: url('../../ext-4.0.7/resources/themes/images/gray/form/text-bg.gif') repeat-x;
     height: 30px !important;
 }
 

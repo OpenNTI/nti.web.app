@@ -10,6 +10,13 @@ Ext.define('NextThought.view.widgets.chat.ReplyTo', {
     height: 32,
 
     items:[
+		{
+			cls: 'compose-msg-button',
+			xtype: 'button',
+			iconCls: 'compose',
+			tooltop: 'Compose Message',
+			scale: 'medium'
+		},
         {
             cls: 'chat-entry',
             xtype: 'textfield',
