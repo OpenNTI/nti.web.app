@@ -5,7 +5,7 @@ describe("ExtJS Path Verification", function() {
 		//Jira Issue Tag: EXTJSIV-4399
 		//Forum post: http://www.sencha.com/forum/showthread.php?153418-bug-in-path-conversion-Ext.draw.Draw.path2curve()-(as-of-4.0.7)
 
-		var pathStr = Ext.String.format("M0,-{1}A{0},{1},0,1,1,0,{1}A{0},{1},0,1,1,0,-{1}z",1, 1);
+		var pathStr = "M0,-1A1,1,0,1,1,0,1A1,1,0,1,1,0,-1z";
 		var path = Ext.draw.Draw.parsePathString(pathStr);
 
 		expect(path.length).toBe(4);
