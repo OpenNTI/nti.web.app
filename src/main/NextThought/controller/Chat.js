@@ -193,6 +193,8 @@ Ext.define('NextThought.controller.Chat', {
 			win = Ext.widget('noteeditor',{
 				record: record,
 				room: room,
+				closable: true,
+				closeAction: 'destroy',
 				title: 'Compose Message',
 				modal: true,
 				bbar: [
@@ -217,6 +219,8 @@ Ext.define('NextThought.controller.Chat', {
 				rec.get('inReplyTo'),
 				rec.get('channel'),
 				rec.get('recipients'));
+
+		win.close();
 	},
 
 
