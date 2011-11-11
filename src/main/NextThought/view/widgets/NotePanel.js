@@ -196,6 +196,7 @@ Ext.define('NextThought.view.widgets.NotePanel',{
             this.convertToPlaceHolder();
         }
         this.el.on('click', this.click, this);
+		this.sizeChanged();
     },
 
     click: function(event, target, eOpts){

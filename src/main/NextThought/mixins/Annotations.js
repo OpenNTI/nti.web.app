@@ -258,9 +258,9 @@ Ext.define('NextThought.mixins.Annotations', {
 		}
 
 
-		Ext.apply(contributors, this.buildSimpleAnnotation(bins.Highlight));
 		Ext.apply(contributors, this.buildAnnotationTree(bins.Note, tree));
 		Ext.apply(contributors, this.buildAnnotationTree(bins.TranscriptSummary, tree));
+		Ext.apply(contributors, this.buildSimpleAnnotation(bins.Highlight));
 
 		this.buildTreedAnnotations(tree);
 
