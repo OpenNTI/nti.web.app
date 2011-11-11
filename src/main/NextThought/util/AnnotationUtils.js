@@ -12,7 +12,7 @@ Ext.define('NextThought.util.AnnotationUtils',{
 
 		/** @constant */
 		WHITEBOARD_THUMBNAIL: '<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="250" height="200" ' +
-									 'preserveAspectRatio="xMidYMin slice" viewBox="0, 0, 1, 1" ' +
+									 'preserveAspectRatio="xMinYMin" viewBox="0, 0, 1, 1" ' +
 									 'style="border: 1px solid gray" {1}>{0}</svg>',
 
 
