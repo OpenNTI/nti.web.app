@@ -104,7 +104,6 @@ Ext.define('NextThought.controller.Whiteboard', {
 	getActiveTool: function(){
 		var t = this.getWhiteboard().down('toolbar button[pressed]');
 		if(t){
-			t.toggle(false);
 			t = t.shape;
 		}
 
