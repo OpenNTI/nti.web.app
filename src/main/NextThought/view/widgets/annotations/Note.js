@@ -107,6 +107,7 @@ Ext.define( 'NextThought.view.widgets.annotations.Note', {
             }
         }
         this.onResize();
+		this.fireEvent('resize');
     },
 
     onResize : function(){
