@@ -71,7 +71,7 @@ Ext.define('NextThought.controller.Reader', {
             bookInfo = Library.findLocation(containerId),
             book = bookInfo.book,
             href = bookInfo.location.getAttribute('href');
-        this.navigate(book, book.get('root') + href, {oid: id}); q
+        this.navigate(book, book.get('root') + href, {oid: id});
     },
 
     buttonClicked: function(button) {
