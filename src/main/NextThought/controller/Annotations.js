@@ -182,7 +182,7 @@ Ext.define('NextThought.controller.Annotations', {
     },
 
     editNote: function(record){
-		Ext.create('NextThought.view.windows.NoteEditor',{record: record}).show();
+		Ext.widget('noteeditor',{record: record}).show();
  	},
 
     addNote: function(range){

@@ -14,7 +14,7 @@ Ext.define('NextThought.view.widgets.chat.ReplyTo', {
 			cls: 'compose-msg-button',
 			xtype: 'button',
 			iconCls: 'compose',
-			tooltop: 'Compose Message',
+			tooltip: 'Compose Message',
 			scale: 'medium'
 		},
         {
@@ -27,7 +27,7 @@ Ext.define('NextThought.view.widgets.chat.ReplyTo', {
             cls: 'reply-to-button',
             xtype: 'button',
             iconCls: 'send',
-            tooltop: 'enter/send'
+            tooltip: 'enter/send'
         }
     ],
 
@@ -35,7 +35,8 @@ Ext.define('NextThought.view.widgets.chat.ReplyTo', {
         this.callParent(arguments);
         this.addCls('reply-to-line');
         var me = this,
-            b = me.down('button'),
+            b = me.down('button[iconCls=send]'),
+            c = me.down('button[iconCls=compose]'),
             f = me.down('textfield');
 
         me.addEvents('send');
@@ -49,6 +50,10 @@ Ext.define('NextThought.view.widgets.chat.ReplyTo', {
 
         b.on('click', function(){
             me.fireEvent('send', f, me.replyTo, me.channel, me.recipients);
+        });
+
+		c.on('click', function(){
+            me.fireEvent('compose', f, me.replyTo, me.channel, me.recipients);
         });
 
     },

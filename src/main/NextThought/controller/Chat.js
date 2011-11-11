@@ -16,7 +16,8 @@ Ext.define('NextThought.controller.Chat', {
         'widgets.chat.View',
         'widgets.chat.Log',
         'widgets.chat.Friends',
-        'widgets.chat.FriendEntry'
+        'widgets.chat.FriendEntry',
+		'windows.NoteEditor'
     ],
 
     refs: [
@@ -82,8 +83,10 @@ Ext.define('NextThought.controller.Chat', {
             'chat-log-view button[action]':{'click': this.toolClicked},
             'chat-log-view tool[action]':{'click': this.toolClicked},
 
+			'noteeditor button[action=send]':{ 'click': this.sendComposed },
             'chat-view chat-reply-to' : {
-                'send' : this.send
+				'compose': this.compose,
+                'send': this.send
             },
             'chat-occupants-list tool[action=moderate]' : {
                 'click' : this.moderateClicked
@@ -118,7 +121,11 @@ Ext.define('NextThought.controller.Chat', {
     },
 
     postMessage: function(room, message, replyTo, channel, recipients) {
-        var m = {ContainerId: room.getId(), Body: message, Class: 'MessageInfo'};
+
+		if(typeof message == 'string')
+			message = [message];
+
+        var m = {ContainerId: room.getId(), body: message, Class: 'MessageInfo'};
 
         if (replyTo) m.inReplyTo = replyTo;
         if (channel) m.channel = channel;
@@ -175,6 +182,43 @@ Ext.define('NextThought.controller.Chat', {
     },
 
     /* CLIENT EVENTS */
+
+	compose: function(textField, replyToId, channel, recipients){
+		var room = textField.up('chat-view').roomInfo,
+			record = Ext.create('NextThought.model.MessageInfo',{
+			inReplyTo: replyToId,
+			channel: channel,
+			recipients: recipients
+		}),
+			win = Ext.widget('noteeditor',{
+				record: record,
+				room: room,
+				title: 'Compose Message',
+				modal: true,
+				bbar: [
+						'->',
+				  		{ xtype: 'button', text: 'Send',	action: 'send' },
+				  		{ xtype: 'button', text: 'Cancel',	action: 'cancel' }
+					]});
+
+		win.show();
+
+	},
+
+
+	sendComposed: function(btn){
+		var win = btn.up('window'),
+			rec = win.record,
+			room = win.room;
+
+		this.postMessage(
+				room,
+				win.getValue(),
+				rec.get('inReplyTo'),
+				rec.get('channel'),
+				rec.get('recipients'));
+	},
+
 
     send: function(f, mid, channel, recipients) {
         var room = f.up('chat-view').roomInfo,
