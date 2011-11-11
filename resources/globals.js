@@ -72,8 +72,7 @@ function hooksForIE(){
 }
 
 
-function beforeRequest(connection,options)
-{
+function beforeRequest(connection,options) {
     if(options&&options.async===false){
         var loc = '';
         try { loc = printStackTrace().splice(7); }
@@ -83,7 +82,7 @@ function beforeRequest(connection,options)
 }
 
 
-function resizeBlocker(w, h, e){
+function resizeBlocker(w){
     var i = !!(w<MIN_WIDTH), b = Ext.getBody(), m = b.isMasked();
     if(i && !m) b.mask("Your browser window is too narrow","body-mask");
     else if(!i && m) b.unmask();

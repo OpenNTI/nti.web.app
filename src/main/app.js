@@ -32,7 +32,7 @@ Ext.application({
 			var i = setInterval(function(){
 				if(g.isReady()){
 					clearInterval(i);
-					start()
+					start();
 				}
 			},100);
 		}
