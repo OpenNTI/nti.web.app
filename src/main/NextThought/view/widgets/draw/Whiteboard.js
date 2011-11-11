@@ -146,8 +146,7 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 
 
 	addShape: function(shape, x,y, strokeWidth, sides){
-
-		var sp = Ext.widget('sprite-'+this.shapeTypeMap[shape],
+        var sp = Ext.widget('sprite-'+this.shapeTypeMap[shape],
 				this.toolDefaults(shape, x, y, strokeWidth, sides));
 
 		this.getSurface().add(sp).show(true);
