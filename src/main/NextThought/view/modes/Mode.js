@@ -24,6 +24,10 @@ Ext.define( 'NextThought.view.modes.Mode', {
     	this.toggleButton = modeSwitcher.addMode(id+' mode label',id+'-mode-icon');
     	this.toggleButton.modeReference = this;
     },
+
+	getEmptyToolbar: function(){
+		return { xtype:'toolbar', cls:'x-docked-noborder-top', items:{focusable:false, disabled:true,text:'&nbsp;'}};
+	},
     
     activate: function(){
     	var ct = this.ownerCt,
