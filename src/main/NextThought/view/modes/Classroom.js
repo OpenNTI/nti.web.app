@@ -6,36 +6,20 @@ Ext.define( 'NextThought.view.modes.Classroom', {
 	requires: [],
 	
     initComponent: function(){
-    	var bb= { xtype: 'toolbar', cls: 'x-docked-noborder-top', items: {focusable: false, disabled:true,text:'&nbsp;'}};
+    	var bb= { xtype:'toolbar', cls:'x-docked-noborder-top', items:{focusable:false, disabled:true,text:'&nbsp;'}};
     	
    		this.callParent(arguments);
-   		
-   		this.add({ /*xtype:'tbspacer',*/ flex:1, focusable: false, dockedItems: bb });
-   		this.add({ region: 'west', id: 'west-class', xtype: 'leftColumn', columnWidget: {} });
 
 		this.add({
-			cls: 'x-focus-pane',
-            region: 'center',
-			//width: CENTER_WIDTH,
-            flex: 6,
-            minWidth: CENTER_WIDTH/3,
-	    	dockedItems: [{
-					xtype: 'toolbar',
-					cls: 'x-docked-noborder-top',
-					items: ['Classroom','->',
-						{
-							text: '&nbsp;',
-							xtype: 'button',
-							focusable: false,
-							disabled: true
-						}
-					]
-				}]
-	    	
-	    	});
+				cls:'x-focus-pane', flex:1, dockedItems:Ext.clone(bb)
+				,
 
-		this.add({ region: 'east', id:'east-class', xtype: 'rightColumn', columnWidget: {} });
-   		this.add({ /*xtype:'tbspacer',*/ flex:1, focusable: false, dockedItems: bb });
+				layout: '',
+				items: [
+
+				]
+
+		});
     }
     
 });
