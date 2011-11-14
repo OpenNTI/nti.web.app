@@ -10,6 +10,7 @@ Ext.define('NextThought.view.windows.NoteEditor', {
 	width: '600',
 	height: '450',
 
+	constrain: true,
 	closable: false,
 	maximizable:true,
 	border: false,

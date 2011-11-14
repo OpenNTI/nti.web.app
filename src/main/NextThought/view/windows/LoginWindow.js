@@ -158,7 +158,7 @@ Ext.define('NextThought.view.windows.LoginWindow', {
             el.remove();
         }
 
-		this.destroy = this.close = function(){};
+		this['destroy'] = this.close = function(){};
     },
 
 

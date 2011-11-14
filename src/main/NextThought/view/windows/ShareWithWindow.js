@@ -6,6 +6,7 @@ Ext.define( 'NextThought.view.windows.ShareWithWindow', {
 	alias : 'widget.sharewithwindow',
 	
 	closable: false,
+	constrain: true,
 	maximizable:false,
 	border: false,
 	width: 450,

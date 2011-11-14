@@ -9,7 +9,7 @@ Ext.define('NextThought.view.windows.GroupEditorWindow', {
 			'NextThought.model.User',
 			'NextThought.view.form.fields.UserSearchInputField'
 	],
-	
+	constrain: true,
 	title: 'Edit Group',
 	width: 450, 
 	height: 500, 

@@ -12,6 +12,7 @@ Ext.define('NextThought.view.windows.ChatWindow', {
     height: 350,
     closeAction: 'hide',
     maximizable:true,
+	constrain: true,
     title: 'Chat',
     layout: 'border',
     cls: 'chat-window',

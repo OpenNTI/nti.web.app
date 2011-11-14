@@ -21,7 +21,8 @@ Ext.define('NextThought.view.windows.VideoWindow', {
         ]
      */
 
-    maximizable:true,
+	constrain: true,
+	maximizable:true,
 
     constructor: function(config){
         if(!config || !config.src || !Ext.isArray(config.src)){
