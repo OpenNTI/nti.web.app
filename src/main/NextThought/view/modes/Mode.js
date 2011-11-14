@@ -48,6 +48,12 @@ Ext.define( 'NextThought.view.modes.Mode', {
             if(!this.toggleButton.pressed){
                 this.toggleButton.toggle(true);
             }
+			try{
+				ct.getLayout().getActiveItem().deactivate();
+			}
+			catch(e){
+				console.log('Could not call deactivate on active "mode"',e.stack||e.stacktrace,e);
+			}
             ct.getLayout().setActiveItem(item);
             this.getMainComponent().relayout();
         }
@@ -55,6 +61,8 @@ Ext.define( 'NextThought.view.modes.Mode', {
             console.error('Activating Mode: ', e.message, e.stack||e.stacktrace, e);
         }
     },
+
+	deactivate: function(){},
 
     relayout: function(){
     	this.ownerCt.doComponentLayout();
