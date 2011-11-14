@@ -16,17 +16,19 @@ Ext.define('NextThought.view.widgets.draw.Rotater', {
 
 		s.el.appendChild(group);
 
+		console.dir(sprite.attr.rotation);
+
 		this.group = Ext.get(group);
 		this.whiteboard = whiteboard;
 		this.sprite = sprite;
 		this.drawNibs();
 		this.hookDrag(sprite);
 
-		if(degrees){
-			var c = this.getCenter();
-			group.setAttribute('transform',
-					Ext.String.format('rotate({0},{1},{2})', degrees, c.x, c.y));
-		}
+//		if(degrees){
+//			var c = this.getCenter();
+//			group.setAttribute('transform',
+//					Ext.String.format('rotate({0},{1},{2})', degrees, c.x, c.y));
+//		}
 
 		return this;
 	},
@@ -41,7 +43,8 @@ Ext.define('NextThought.view.widgets.draw.Rotater', {
 
 
 	degrees: function(dx,dy){
-		return Ext.draw.Draw.degrees( Math.atan(dy/dx));
+		var a = (dx<0? 180: dy<0? 360: 0);
+		return ((180/Math.PI)*Math.atan(dy/dx)) + a;
 	},
 
 	getCenter: function(){
