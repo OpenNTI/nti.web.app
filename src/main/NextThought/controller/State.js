@@ -26,7 +26,7 @@ Ext.define('NextThought.controller.State', {
             'master-view':{
                 'restore': me.restoreState
             },
-            'panel[cls=x-application-mode-pane]': {
+            'modeContainer': {
                 'activate-mode': me.trackMode
             }
         },{});

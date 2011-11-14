@@ -21,7 +21,7 @@ Ext.define( 'NextThought.view.modes.Mode', {
     	var id = this.id,
             modeSwitcher = Ext.ComponentQuery.query('modeswitcher')[0];
 
-    	this.toggleButton = modeSwitcher.addMode(id+' mode label',id+'-mode-icon')
+    	this.toggleButton = modeSwitcher.addMode(id+' mode label',id+'-mode-icon');
     	this.toggleButton.modeReference = this;
     },
     
@@ -35,14 +35,15 @@ Ext.define( 'NextThought.view.modes.Mode', {
     		return;
     	}
 
-        this.fireEvent('activate-mode', this.getId());
+        ct.fireEvent('activate-mode', this.getId());
     	
-    	ct.items.each(function(o,i,l){
+    	ct.items.each(function(o,i){
     		if(o==me) {
                 item = i;
                 return false;
             }
-    	});
+    	},this);
+
     	try{
             if(!this.toggleButton.pressed){
                 this.toggleButton.toggle(true);
