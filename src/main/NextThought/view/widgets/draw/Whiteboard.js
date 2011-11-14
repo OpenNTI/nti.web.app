@@ -294,7 +294,7 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 					y: t.scaleY
 				},
 				rotate: {
-					degrees: t.rotate
+					degrees: Ext.draw.Draw.degrees(t.rotate)
 				}
 			});
 
