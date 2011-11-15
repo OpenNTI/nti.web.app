@@ -8,9 +8,11 @@ window.onerror = function(message, location, line){
 		document.body.innerHTML = '';
 		Ext.getBody().mask("Ooops, now this is embarrasing...<br/>there was an unexpected error, please try again.","body-mask");
 	}
+    /*
 	else{
 		console.error("Error:", message);
 	}
+	*/
 };
 
 

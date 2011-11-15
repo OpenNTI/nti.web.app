@@ -12,6 +12,7 @@ Ext.define('NextThought.controller.Chat', {
     ],
 
     views: [
+        'content.Classroom',
         'windows.ChatWindow',
         'widgets.chat.View',
         'widgets.chat.Log',
@@ -21,11 +22,13 @@ Ext.define('NextThought.controller.Chat', {
     ],
 
     refs: [
-        { ref: 'chatWindow', selector: 'chat-window'}
+        { ref: 'chatWindow', selector: 'chat-window'},
+        { ref: 'classroom', selector: 'classroom-content'}
     ],
 
     activeRooms: {},
 
+    classroomActive: false,
 
     init: function() {
         var me = this;
@@ -98,6 +101,13 @@ Ext.define('NextThought.controller.Chat', {
             'chat-log-entry-moderated' : {
                 'reply-public': this.replyPublic,
                 'reply-whisper': this.replyWhisper
+            },
+            'classroom-content' : {
+                'isactive': function(){
+                    console.log('entering a DUMMY room');
+                    this.enterRoom(['troy.daley@nextthought.com'], null);
+                    this.classroomActive = true;
+                }
             }
 
         },{});
@@ -382,8 +392,14 @@ Ext.define('NextThought.controller.Chat', {
     },
 
     onMessage: function(msg) {
-        var win = this.getChatWindow();
-        if(win)win.onMessage(ParseUtils.parseItems([msg])[0],{});
+        var m = ParseUtils.parseItems([msg])[0];
+        if (this.classroomActive) {
+            this.getClassroom().onMessage(m, {});
+        }
+        else {
+            var win = this.getChatWindow();
+            if(win)win.onMessage(m,{});
+        }
     },
 
     onModeratedMessage: function(msg) {
@@ -393,6 +409,12 @@ Ext.define('NextThought.controller.Chat', {
 
     onEnteredRoom: function(msg) {
         var roomInfo = msg && msg.isModel? msg : ParseUtils.parseItems([msg])[0];
+
+        if (this.classroomActive) {
+            console.log("onEnteredRoom, no need to pop anything up since classroom is active");
+            this.getClassroom().classroomStart(roomInfo);
+            return;
+        }
 
         if (roomInfo.getId() in this.activeRooms) {
             console.warn('room already exists, all rooms/roominfo', this.activeRooms, roomInfo);
