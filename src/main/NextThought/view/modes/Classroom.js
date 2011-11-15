@@ -18,11 +18,15 @@ Ext.define( 'NextThought.view.modes.Classroom', {
     },
 
 	showClassChooser: function(){
-		this.mainArea.add(Ext.widget('classroom-chooser')).show().center();
+		this.chooser = this.mainArea.add(Ext.widget('classroom.chooser')).show().center();
 	},
 
 	hideClassChooser: function(){
-		Ext.each(Ext.ComponentQuery.query('classroom-chooser'),function(v){v.close();});
+		if(!this.chooser)return;
+
+
+		this.chooser.close();
+		delete this.chooser;
 	},
 
 	activate: function(){

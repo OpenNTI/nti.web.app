@@ -1,0 +1,58 @@
+
+
+.classroom-chooser a:link,
+.classroom-chooser a:visited,
+.classroom-chooser a:active,
+.classroom-chooser a {
+	color: #222;
+	text-decoration: underline;
+	cursor: pointer;
+}
+
+.classroom-chooser h2 {
+	font-size: 150%;
+}
+
+.classroom-chooser hr {
+	border: 1px solid #000;
+	border-bottom: none;
+}
+
+.classroom-browser {}
+.classroom-browser .item-wrap {}
+
+.classroom-browser .x-item-over .item{
+    border:1px solid #dddddd;
+    background: #efefef url(../images/over.gif) repeat-x left top;
+    padding: 4px;
+}
+
+.classroom-browser .x-item-selected .item{
+    background: #eff5fb url(../images/selected.gif) no-repeat right bottom;
+    border:1px solid #99bbe8;
+    padding: 4px;
+}
+
+.classroom-browser .x-item-over .item .selector{
+	display: block;
+}
+
+.classroom-browser .item .selector{
+	display: none;
+	float: right;
+	padding-top: 3px;
+}
+
+.classroom-browser .item span{
+	font-size: 150%;
+}
+
+.classroom-browser .item {
+	position: relative;
+	overflow: hidden;
+	padding: 5px;
+	cursor: pointer;
+}
+
+.classroom-browser .item img {float: left;}
+.classroom-browser .item div {margin-left: 30px;}
