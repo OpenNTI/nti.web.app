@@ -29,6 +29,7 @@ Ext.define('NextThought.view.widgets.draw.Shape', {
 
 
 	getJSONType: function(){
+        console.log('this shape', this);
 		return Ext.String.capitalize(this.getShape().toLowerCase());
 	},
 

@@ -29,11 +29,17 @@ Ext.define( 'NextThought.view.modes.Classroom', {
 		delete this.chooser;
 	},
 
+    showTeacherClassroom: function() {
+        this.mainArea.add(Ext.widget('classroom-content')).show()
+    },
+
 	activate: function(){
 		this.callParent(arguments);
 
-		if(!this.activeClass)
-			this.showClassChooser();
+		// if(!this.activeClass)
+		//	this.showClassChooser();
+        //else
+            this.showTeacherClassroom();
 	},
 
 	deactivate: function(){

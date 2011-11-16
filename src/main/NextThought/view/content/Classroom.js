@@ -40,11 +40,11 @@ Ext.define('NextThought.view.content.Classroom', {
             moderated = !!('moderated' in opts);
 
 
-        var tab = this.down('chat-view'),
-            mlog = tab ? tab.down('chat-log-view[moderated=true]') : null;
+        var v = this.down('chat-view'),
+            mlog = v ? v.down('chat-log-view[moderated=true]') : null;
 
         //tab.down('chat-log-view[moderated='+moderated+']').addMessage(msg);
-        tab.down('chat-log-view').addMessage(msg);
+        v.down('chat-log-view').addMessage(msg);
 
         if(!moderated && mlog) {
             mlog.removeMessage(msg);

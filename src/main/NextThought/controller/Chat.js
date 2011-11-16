@@ -105,7 +105,7 @@ Ext.define('NextThought.controller.Chat', {
             'classroom-content' : {
                 'isactive': function(){
                     console.log('entering a DUMMY room');
-                    this.enterRoom(['troy.daley@nextthought.com'], null);
+                    this.enterRoom(['troy.daley@nextthought.com', 'carlos.sanchez@nextthought.com', 'jonathan.grimes@nextthought.com'], null);
                     this.classroomActive = true;
                 }
             }
@@ -392,6 +392,7 @@ Ext.define('NextThought.controller.Chat', {
     },
 
     onMessage: function(msg) {
+        console.log('message received', msg);
         var m = ParseUtils.parseItems([msg])[0];
         if (this.classroomActive) {
             this.getClassroom().onMessage(m, {});
@@ -403,8 +404,17 @@ Ext.define('NextThought.controller.Chat', {
     },
 
     onModeratedMessage: function(msg) {
+        var m = ParseUtils.parseItems([msg])[0],
+            o = {moderated:true};
+
+        if (this.classroomActive) {
+            console.log("onEnteredRoom, no need to pop anything up since classroom is active");
+            this.getClassroom().onMessage(m, o);
+            return;
+        }
+
         var win = this.getChatWindow();
-        if(win)win.onMessage(ParseUtils.parseItems([msg])[0],{moderated:true});
+        if(win)win.onMessage(m,o);
     },
 
     onEnteredRoom: function(msg) {

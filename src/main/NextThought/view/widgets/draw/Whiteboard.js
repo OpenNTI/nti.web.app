@@ -7,6 +7,7 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 		'NextThought.view.widgets.draw.Resizer',
 		'NextThought.view.widgets.draw.Rotater',
 		'NextThought.view.widgets.draw.Polygon',
+        'NextThought.view.widgets.draw.Line',
 		'NextThought.view.widgets.draw.Ellipse',
 		'NextThought.util.Color'
 	],
@@ -73,7 +74,7 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 
 	shapeTypeMap: {
 		ellipse: 'ellipse',
-		line: 'base',
+		line: 'line',
 		path: 'base',
 		polygon: 'polygon',
 		text: 'base'
@@ -258,15 +259,24 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 					.replace(/<\/*svg[\s"\/\-=0-9a-z:\.;]*>/gi, '');
 	},
 
+    getSpriteClass: function(c, sides)
+    {
+        var m = {
+      	    'CanvasPolygonShape': 'sprite-polygon',
+      		'CanvasCircleShape': 'sprite-ellipse'
+      	},
+        s = m[c];
+
+        //special case for lines
+        if (s == m['CanvasPolygonShape'] && sides == 1)
+            return 'sprite-line';
+        return s;
+    },
 
 	loadScene: function(canvasJSON){
 		var shapes = Ext.clone( canvasJSON.shapeList ),
 			s = this.getSurface(),
-			w = this.getScaleFactor(),
-			m = {
-				'CanvasPolygonShape': 'sprite-polygon',
-				'CanvasCircleShape': 'sprite-ellipse'
-			};
+			w = this.getScaleFactor();
 
 		Ext.each(shapes, function(shape, i){
 
@@ -280,7 +290,7 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 
 			t = Ext.create('Ext.draw.Matrix',t.a,t.b,t.c,t.d,t.tx,t.ty).split();
 
-			o = Ext.widget(m[shape['Class']],{
+			o = Ext.widget(this.getSpriteClass(shape['Class'], shape.sides),{
 				sides: shape.sides,
 				'stroke-width': 3,
 				stroke: p.toString(),
