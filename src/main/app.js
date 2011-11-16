@@ -9,6 +9,7 @@ Ext.application({
         'Annotations',
         'Application',
         'Chat',
+		'Classroom',
         'FilterControl',
         'Google',
         'Groups',

@@ -1,6 +1,6 @@
 Ext.define('NextThought.view.windows.ClassRoomChooser', {
 	extend: 'Ext.panel.Panel',
-	alias : 'widget.classroom.chooser',
+	alias : 'widget.classroom-chooser',
 
 	requires:[
 		'NextThought.view.widgets.classroom.Browser'
@@ -26,7 +26,7 @@ Ext.define('NextThought.view.windows.ClassRoomChooser', {
 		defaultType: 'component',
 		items: [
 			{html: '<h2>Host a class<h2>'},
-			{xtype:'classroom.browser', anchor: '100% -55'},
+			{xtype:'classroom-browser', anchor: '100% -55'},
 			{html: '<hr/><a href="#">Create a class</a>'}
 		]
 	},

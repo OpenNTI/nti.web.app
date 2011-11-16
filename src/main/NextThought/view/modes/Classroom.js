@@ -18,7 +18,7 @@ Ext.define( 'NextThought.view.modes.Classroom', {
     },
 
 	showClassChooser: function(){
-		this.chooser = this.mainArea.add(Ext.widget('classroom.chooser')).show().center();
+		this.chooser = this.mainArea.add(Ext.widget('classroom-chooser')).show().center();
 	},
 
 	hideClassChooser: function(){

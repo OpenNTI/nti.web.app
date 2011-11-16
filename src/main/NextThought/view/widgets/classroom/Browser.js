@@ -4,7 +4,7 @@
  */
 Ext.define('NextThought.view.widgets.classroom.Browser', {
     extend: 'Ext.view.View',
-    alias: 'widget.classroom.browser',
+    alias: 'widget.classroom-browser',
 
 	singleSelect: true,
 	autoScroll  : true,
@@ -27,8 +27,39 @@ Ext.define('NextThought.view.widgets.classroom.Browser', {
     ],
 
     initComponent: function() {
+		this.addEvents('selected');
         this.store = UserDataLoader.getFriendsListsStore();
         this.callParent(arguments);
-        //this.store.sort();
-    }
+		this.on('itemdblclick',this.fireSelected,this);
+    },
+
+
+	refresh: function(){
+		this.callParent(arguments);
+		Ext.each(
+				this.getEl().query('.selector a'),
+				function(dom){Ext.fly(dom).on('click',this.clickSelect, this)},
+				this);
+	},
+
+
+	clickSelect: function(evt, dom){
+		evt.preventDefault();
+		evt.stopPropagation();
+
+		var r = this.getRecord(Ext.fly(dom).up(this.itemSelector, this.getEl()));
+
+		this.getSelectionModel().select(r);
+		this.fireSelected();
+	},
+
+
+	fireSelected: function() {
+		var selected = this.selModel.getSelection()[0];
+		if (selected) {
+			this.fireEvent('selected', selected);
+		}
+	}
+
+
 });

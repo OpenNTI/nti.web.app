@@ -1,18 +1,30 @@
 Ext.define('NextThought.controller.Classroom', {
     extend: 'Ext.app.Controller',
-    requires: [
-    ],
 
-    models: [
-    ],
 
     views: [
         'content.Classroom',
+        'widgets.classroom.Browser',
         'widgets.classroom.LiveDisplay',
         'widgets.classroom.Management',
-        'widgets.classroom.Moderation'
-    ]
+        'widgets.classroom.Moderation',
+        'windows.ClassRoomChooser'
+    ],
 
+
+	init: function(){
+		this.control({
+			'classroom-browser':{
+				'selected': this.selectedClassRoom
+			}
+
+		},{});
+	},
+
+
+	selectedClassRoom: function(){
+		console.log(arguments);
+	}
 
 
 });
