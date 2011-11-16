@@ -28,6 +28,10 @@ Ext.define( 'NextThought.view.modes.Mode', {
 	getEmptyToolbar: function(){
 		return { xtype:'toolbar', cls:'x-docked-noborder-top', items:{focusable:false, disabled:true,text:'&nbsp;'}};
 	},
+
+	getSpacerColumn: function(){
+		return { /*xtype:'tbspacer',*/ flex:1, focusable: false, dockedItems: this.getEmptyToolbar() };
+	},
     
     activate: function(){
     	var ct = this.ownerCt,

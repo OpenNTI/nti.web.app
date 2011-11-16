@@ -23,6 +23,8 @@ Ext.define('NextThought.mixins.Annotations', {
 			_searchAnnotations: null
 		});
 
+		if(!this.getDocumentEl) console.error('Class must implement getDocumentEl');
+
 		this.addEvents('share-with','create-note');
 
 		this.on('afterrender',
@@ -376,15 +378,21 @@ Ext.define('NextThought.mixins.Annotations', {
 
 
 	getSelection: function() {
+		var e = this.getDocumentEl(), range, selection;
 		if (window.getSelection) {	// all browsers, except IE before version 9
-			var selection = window.getSelection();
+			selection = window.getSelection();
 			if (selection.rangeCount > 0) {
-				return selection.getRangeAt(0);
+				range = selection.getRangeAt(0);
+
+				if(!e.contains(range.startContainer) || !e.contains(range.endContainer))
+					return null;
+
+				return range;
 			}
 		}
 		else {
 			if (document.selection) {	// Internet Explorer 8 and below
-				var range = document.selection.createRange();
+				range = document.selection.createRange();
 				return range.getBookmark();
 			}
 		}

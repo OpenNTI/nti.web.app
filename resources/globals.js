@@ -33,11 +33,19 @@ function applyHooks(){
 
 	Ext.JSON.encodeDate = function(d){return Ext.Date.format(d, 'U');};
 
-	hooksForIE();
-
 	Ext.Ajax.timeout==10000;
 	Ext.Ajax.on('beforerequest', beforeRequest);
 	Ext.EventManager.onWindowResize(resizeBlocker);
+
+	//disable selection everywhere except places we specifically enable it.
+	Ext.getBody().unselectable();
+	Ext.panel.Panel.override({
+		render: function(){
+			this.callOverridden(arguments);
+			if(!this.enableSelect){this.el.unselectable();}
+			else{this.el.selectable();}
+		}
+	});
 }
 
 
@@ -57,20 +65,6 @@ function ensureConsole(){
 	if(!console.error){
 		console.error = Ext.Function.alias(console, 'log');
 	}
-}
-
-
-function hooksForIE(){
-    if(!Ext.isIE) return;
-
-    Ext.panel.Panel.override({
-        render: function(){
-            this.callOverridden(arguments);
-            var d=this.el.dom;
-            d.firstChild.unselectable = true;
-            d.unselectable = true;
-        }
-    });
 }
 
 

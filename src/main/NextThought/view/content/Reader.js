@@ -10,7 +10,7 @@ Ext.define('NextThought.view.content.Reader', {
     },
     cls: 'x-reader-pane',
 
-    items: [{cls:'x-panel-reset', margin: '0 0 0 50px'}],
+    items: [{cls:'x-panel-reset', margin: '0 0 0 50px', enableSelect: true}],
 
     _tracker: null,
 
@@ -22,6 +22,12 @@ Ext.define('NextThought.view.content.Reader', {
         this.callParent(arguments);
         this.initAnnotations();
     },
+
+
+	getDocumentEl: function(){
+		return this.items.get(0).getEl().down('.x-panel-body').first();
+	},
+
 
     scrollToId: function(id) {
         var n = Ext.getCmp(id);
@@ -59,16 +65,11 @@ Ext.define('NextThought.view.content.Reader', {
     render: function(){
         this.callParent(arguments);
 
-        var d=this.el.dom;
-
-        if(Ext.isIE){
-            d.unselectable = false;
-            d.firstChild.unselectable = false;
-        }
-
-        if(!this._tracker)
+        if(!this._tracker){
+			var d = this.el.dom;
             this._tracker = Ext.create(
                 'NextThought.view.widgets.Tracker', this, d, d.firstChild);
+		}
     },
 
 
