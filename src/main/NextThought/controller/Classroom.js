@@ -19,22 +19,25 @@ Ext.define('NextThought.controller.Classroom', {
 
 
 	init: function(){
+		this.rooms = {};
+
 		this.control({
 			'classroom-browser':{
 				'selected': this.selectedClassRoom
 			},
 
 			'classroom-mode-container toolbar button[action=leave]':{
-				'click': function(){ this.getClassroomContainer().leaveClassroom(); }
+				'click': this.leaveRoom
 			}
 
 		},{});
 	},
 
 
-	isClassroom: function(roomInfo){
-		console.dir(roomInfo);
-		return true;
+	isClassroom: function(roomOrMessageInfo){
+		if(!roomOrMessageInfo)return false;
+		var c = roomOrMessageInfo.get('ContainerId');
+		return (c in this.rooms || (/:/i.test(c) && /meetingroom/i.test(c)));
 	},
 
 
@@ -44,17 +47,26 @@ Ext.define('NextThought.controller.Classroom', {
 
 
 	onEnteredRoom: function(roomInfo){
-		//
+		this.rooms[roomInfo.getId()] = roomInfo;
 		this.getClassroomContainer().showClassroom(roomInfo);
 	},
 
 
+	leaveRoom: function(){
+		var room = this.getClassroom().roomInfo,
+			id = room.getId();
+		delete this.rooms[id];
+		this.getClassroomContainer().leaveClassroom();
+		this.getController('Chat').leaveRoom(room);
+	},
+
+
 	selectedClassRoom: function(model){
-		var n = model.get('realname').toLowerCase().replace(/\s/g,'');
+		var n = model.get('NTIID');
 
-		console.log(n);
+		console.log(n, model);
 
-		this.getController('Chat').enterRoom([],{ID: n});
+		this.getController('Chat').enterRoom([],{ContainerId: n});
 		this.getClassroomContainer().hideClassChooser();
 	}
 
