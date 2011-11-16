@@ -11,7 +11,7 @@ Ext.define('NextThought.view.windows.ClassRoomChooser', {
 	frame: true,
 	floating: true,
 	width: 450,
-	height: 250,
+	height: 310,
 	closable: false,
 	constrain: true,
 	layout: 'fit',

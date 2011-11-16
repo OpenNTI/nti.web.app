@@ -46,6 +46,26 @@ function applyHooks(){
 			else{this.el.selectable();}
 		}
 	});
+
+
+	Ext.apply(Ext.Element.prototype,{
+
+		isInView: function(){
+			var p = Ext.get(arguments[0]) || this.parent(),
+				scroll = p.getScroll(),
+				size = p.getSize(),
+				y1 = scroll.top,
+				y2 = y1 + size.height,
+
+				top = this.getTop()-p.getTop(),
+				bottom = top+this.getHeight();
+
+			return y1 <= top	&& top <= y2
+				&& bottom<=y2	&& bottom>=y1;
+
+		}
+
+	});
 }
 
 

@@ -31,7 +31,18 @@ Ext.define('NextThought.view.widgets.classroom.Browser', {
         this.store = UserDataLoader.getFriendsListsStore();
         this.callParent(arguments);
 		this.on('itemdblclick',this.fireSelected,this);
+		this.on('selectionChange',this.selectionChangedScrollIntoFView,this);
     },
+
+
+	selectionChangedScrollIntoFView: function(me, selections){
+		var sel = selections[0], node;
+		if( sel ){
+			node = Ext.get(this.getNode(sel));
+			if(!node.isInView(this.getEl()))
+				node.scrollIntoView(this.getEl());
+		}
+	},
 
 
 	refresh: function(){
@@ -49,7 +60,7 @@ Ext.define('NextThought.view.widgets.classroom.Browser', {
 
 		var r = this.getRecord(Ext.fly(dom).up(this.itemSelector, this.getEl()));
 
-		this.getSelectionModel().select(r);
+		this.getSelectionModel().select([r]);
 		this.fireSelected();
 	},
 
