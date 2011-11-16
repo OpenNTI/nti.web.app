@@ -25,7 +25,7 @@ Ext.define('NextThought.view.content.Reader', {
 
 
 	getDocumentEl: function(){
-		return this.items.get(0).getEl().down('.x-panel-body').first();
+		return this.items.get(0).getEl().down('.x-panel-body');
 	},
 
 
@@ -69,6 +69,11 @@ Ext.define('NextThought.view.content.Reader', {
 			var d = this.el.dom;
             this._tracker = Ext.create(
                 'NextThought.view.widgets.Tracker', this, d, d.firstChild);
+		}
+
+		if(this.deferredRestore){
+			this.restore(this.deferredRestore);
+			delete this.deferredRestore;
 		}
     },
 
@@ -244,6 +249,11 @@ Ext.define('NextThought.view.content.Reader', {
             console.warn("WARNING: Ignoring restored state data, missing state for reader");
             return;
         }
+
+		if(!this.rendered){
+			this.deferredRestore = state;
+			return;
+		}
 
         var b = Library.getTitle(state.reader.index);
         if(b){
