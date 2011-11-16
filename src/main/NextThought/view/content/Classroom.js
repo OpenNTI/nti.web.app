@@ -26,13 +26,14 @@ Ext.define('NextThought.view.content.Classroom', {
         }
     ],
 
-    //vars
-    roomInfo: null,
 
-    initComponent: function()
-    {
+    initComponent: function() {
+    	//vars
+    	//this.roomInfo = null;
         this.callParent(arguments);
+		this.down('chat-view').changed(this.roomInfo);
     },
+
 
     onMessage: function(msg, opts) {
         console.log('message', msg);
@@ -43,21 +44,10 @@ Ext.define('NextThought.view.content.Classroom', {
         var v = this.down('chat-view'),
             mlog = v ? v.down('chat-log-view[moderated=true]') : null;
 
-        //tab.down('chat-log-view[moderated='+moderated+']').addMessage(msg);
         v.down('chat-log-view').addMessage(msg);
 
         if(!moderated && mlog) {
             mlog.removeMessage(msg);
         }
-    },
-
-    classroomStart: function(roomInfo) {
-        this.roomInfo = roomInfo;
-        this.down('chat-view').changed(roomInfo);
-    },
-
-    afterRender: function() {
-        console.log('log after render happens...');
-        this.fireEvent('isactive');
     }
 });

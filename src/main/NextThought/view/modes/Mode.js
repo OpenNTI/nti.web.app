@@ -25,8 +25,14 @@ Ext.define( 'NextThought.view.modes.Mode', {
     	this.toggleButton.modeReference = this;
     },
 
+
+	getPlaceHolder: function(){
+		return {focusable:false, disabled:true,text:'&nbsp;'};
+	},
+
+
 	getEmptyToolbar: function(){
-		return { xtype:'toolbar', cls:'x-docked-noborder-top', items:{focusable:false, disabled:true,text:'&nbsp;'}};
+		return { xtype:'toolbar', cls:'x-docked-noborder-top', items:this.getPlaceHolder()};
 	},
 
 	getSpacerColumn: function(){

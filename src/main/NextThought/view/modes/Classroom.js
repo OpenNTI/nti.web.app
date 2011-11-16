@@ -23,23 +23,34 @@ Ext.define( 'NextThought.view.modes.Classroom', {
 
 	hideClassChooser: function(){
 		if(!this.chooser)return;
-
-
 		this.chooser.close();
 		delete this.chooser;
 	},
 
-    showTeacherClassroom: function() {
-        this.mainArea.add(Ext.widget('classroom-content')).show()
+    showClassroom: function(roomInfo) {
+		var tb = this.down('toolbar');
+		tb.removeAll();
+		tb.add({text:'Leave Class', action: 'leave'});
+        this.mainArea.add(Ext.widget('classroom-content',{roomInfo: roomInfo}));
     },
+
+
+	leaveClassroom: function(){
+		var tb = this.down('toolbar');
+		tb.removeAll();
+		tb.add(this.getPlaceHolder());
+
+		this.mainArea.removeAll(true);
+
+		this.showClassChooser();
+	},
+
 
 	activate: function(){
 		this.callParent(arguments);
 
-		// if(!this.activeClass)
-		//	this.showClassChooser();
-        //else
-            this.showTeacherClassroom();
+		if(!this.down('classroom-content'))
+			this.showClassChooser();
 	},
 
 	deactivate: function(){

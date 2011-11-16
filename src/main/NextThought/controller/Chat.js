@@ -22,15 +22,13 @@ Ext.define('NextThought.controller.Chat', {
     ],
 
     refs: [
-        { ref: 'chatWindow', selector: 'chat-window'},
-        { ref: 'classroom', selector: 'classroom-content'}
+        { ref: 'chatWindow', selector: 'chat-window'}
     ],
 
-    activeRooms: {},
-
-    classroomActive: false,
 
     init: function() {
+    	this.activeRooms = {};
+
         var me = this;
 
         Socket.register({
@@ -101,23 +99,24 @@ Ext.define('NextThought.controller.Chat', {
             'chat-log-entry-moderated' : {
                 'reply-public': this.replyPublic,
                 'reply-whisper': this.replyWhisper
-            },
-            'classroom-content' : {
-                'isactive': function(){
-                    console.log('entering a DUMMY room');
-                    this.enterRoom(['troy.daley@nextthought.com', 'carlos.sanchez@nextthought.com', 'jonathan.grimes@nextthought.com'], null);
-                    this.classroomActive = true;
-                }
             }
 
         },{});
     },
 
     /* UTILITY METHODS */
+	getClassroom: function(){
+		return this.getController('Classroom');
+	},
 
-    existingRoom: function(users) {
+
+    existingRoom: function(users, options) {
         //Add ourselves to this list
         var allUsers = Ext.Array.unique(users.slice().concat(_AppConfig.userObject.getId()));
+
+		if(options){
+			return null;
+		}
 
         //Check to see if a room with these users already exists, and use that.
         for (var key in this.activeRooms) {
@@ -149,6 +148,7 @@ Ext.define('NextThought.controller.Chat', {
     },
 
     enterRoom: function(users, options) {
+		options = options || {};
         if (!Ext.isArray(users)) users = [users];
 
         users = Ext.Array.clone(users);
@@ -170,11 +170,18 @@ Ext.define('NextThought.controller.Chat', {
 
         users = Ext.Array.clean(users);
 
-        var ri = this.existingRoom(users);
+        var ri = this.existingRoom(users,options);
         if (ri)
             this.onEnteredRoom(ri);
-        else //If we get here, there were no existing rooms, so create a new one.
-            Socket.emit('chat_enterRoom', Ext.apply({'Occupants': users}, options));
+        else{ //If we get here, there were no existing rooms, so create a new one.
+			var roomCfg = {'Occupants': users};
+
+			if(options.ContainerId){
+				roomCfg.Occupants = [];
+			}
+
+            Socket.emit('chat_enterRoom', Ext.apply(roomCfg, options));
+		}
     },
 
     showMessage: function(msgCmp) {
@@ -394,24 +401,24 @@ Ext.define('NextThought.controller.Chat', {
     onMessage: function(msg) {
         console.log('message received', msg);
         var m = ParseUtils.parseItems([msg])[0];
-        if (this.classroomActive) {
-            this.getClassroom().onMessage(m, {});
+
+        if (this.getClassroom().isClassroom(m)) {
+			this.getClassroom().onMessage(m, {});
+			return;
         }
-        else {
-            var win = this.getChatWindow();
-            if(win)win.onMessage(m,{});
-        }
+
+		var win = this.getChatWindow();
+		if(win)win.onMessage(m,{});
     },
 
     onModeratedMessage: function(msg) {
         var m = ParseUtils.parseItems([msg])[0],
             o = {moderated:true};
 
-        if (this.classroomActive) {
-            console.log("onEnteredRoom, no need to pop anything up since classroom is active");
-            this.getClassroom().onMessage(m, o);
-            return;
-        }
+		if (this.getClassroom().isClassroom(m)) {
+			this.getClassroom().onMessage(m, o);
+			return;
+		}
 
         var win = this.getChatWindow();
         if(win)win.onMessage(m,o);
@@ -420,11 +427,10 @@ Ext.define('NextThought.controller.Chat', {
     onEnteredRoom: function(msg) {
         var roomInfo = msg && msg.isModel? msg : ParseUtils.parseItems([msg])[0];
 
-        if (this.classroomActive) {
-            console.log("onEnteredRoom, no need to pop anything up since classroom is active");
-            this.getClassroom().classroomStart(roomInfo);
-            return;
-        }
+		if (this.getClassroom().isClassroom(roomInfo)) {
+			this.getClassroom().onEnteredRoom(roomInfo);
+			return;
+		}
 
         if (roomInfo.getId() in this.activeRooms) {
             console.warn('room already exists, all rooms/roominfo', this.activeRooms, roomInfo);
