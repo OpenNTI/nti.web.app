@@ -33,6 +33,8 @@ Ext.define('NextThought.view.widgets.chat.ReplyTo', {
 
     showClassroomButton: function()
     {
+        if (this.down('button[iconCls=classroom]')) return;
+
         var me = this,
             f = me.down('textfield'),
             b = this.insert(0, {

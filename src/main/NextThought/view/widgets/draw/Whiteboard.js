@@ -343,5 +343,10 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 		return shapes.length==0
 				?	undefined
 				:	{ "Class":"Canvas", "shapeList": shapes };
-	}
+	},
+
+    getNumberOfShapes: function()
+    {
+        return this.getSurface().items.length;
+    }
 });
