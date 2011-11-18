@@ -151,7 +151,10 @@ Ext.define('NextThought.view.content.Reader', {
 
         containerId = this.el.select('meta[name=NTIID]').first().getAttribute('content');
 
-        this.loadContentAnnotations(containerId);
+        //TODO: fix no annotations in classroom at the moment
+        if (!this.belongsTo)
+            this.loadContentAnnotations(containerId);
+
         this.fireEvent('location-changed', containerId);
 
         if( callback ){
