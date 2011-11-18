@@ -3,7 +3,8 @@ Ext.define('NextThought.controller.Chat', {
     requires: [
         'NextThought.util.ParseUtils',
         'NextThought.proxy.Socket',
-        'NextThought.view.modes.Classroom'
+        'NextThought.view.modes.Classroom',
+        'NextThought.util.Classroom'
     ],
 
     models: [
@@ -187,7 +188,8 @@ Ext.define('NextThought.controller.Chat', {
         else{ //If we get here, there were no existing rooms, so create a new one.
 			var roomCfg = {'Occupants': users};
 
-			if(options.ContainerId){
+            //no occupants required if there's a container id and it's a class/study room etc.
+			if(options.ContainerId && ClassroomUtils.isClassroomId(options.ContainerId)){
 				roomCfg.Occupants = [];
 			}
 

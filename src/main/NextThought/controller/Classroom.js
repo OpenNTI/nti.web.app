@@ -10,6 +10,7 @@ Ext.define('NextThought.controller.Classroom', {
         'widgets.classroom.Management',
         'widgets.classroom.Moderation',
         'windows.ClassRoomChooser',
+        'NextThought.util.Classroom',
         'Viewport'
     ],
 
@@ -48,7 +49,7 @@ Ext.define('NextThought.controller.Classroom', {
 	isClassroom: function(roomOrMessageInfo){
 		if(!roomOrMessageInfo)return false;
 		var c = roomOrMessageInfo.get('ContainerId');
-		return (c in this.rooms || (/:/i.test(c) && /meetingroom/i.test(c)));
+		return (c in this.rooms || (/:/i.test(c) && ClassroomUtils.isClassroomId(c)));
 	},
 
 

@@ -5,7 +5,8 @@ Ext.define('NextThought.view.widgets.chat.View', {
     requires: [
         'NextThought.view.widgets.chat.Log',
         'NextThought.view.widgets.chat.OccupantsList',
-        'NextThought.view.widgets.chat.ReplyTo'
+        'NextThought.view.widgets.chat.ReplyTo',
+        'NextThought.util.Classroom'
     ],
 
     layout: 'border',
@@ -64,8 +65,7 @@ Ext.define('NextThought.view.widgets.chat.View', {
         this.down('chat-occupants-list').setOccupants(this.roomInfo.get('Occupants'), this.roomId);
 
         //upon the roominfo appearing, see if we should show the classroom button or not
-        //TODO: There should prolly be some util for this, there's something similar in the classroom controller.
-        if (!!!this.up('classroom-content') && /meetingroom/i.test(ri.get('ContainerId'))) {
+        if (!!!this.up('classroom-content') && ClassroomUtils.isClassroomId(ri.get('ContainerId'))) {
             this.down('chat-reply-to').showClassroomButton();
         }
     },
