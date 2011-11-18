@@ -429,7 +429,6 @@ Ext.define('NextThought.controller.Chat', {
     },
 
     onMessage: function(msg) {
-        console.log('message received', msg);
         var m = ParseUtils.parseItems([msg])[0];
 
         if (this.getClassroom().isClassroom(m)) {
@@ -455,8 +454,6 @@ Ext.define('NextThought.controller.Chat', {
     },
 
     onEnteredRoom: function(msg) {
-        console.log('i got entered into a room', msg);
-
         var roomInfo = msg && msg.isModel? msg : ParseUtils.parseItems([msg])[0];
 
         if (this.getClassroom().isActive()) {

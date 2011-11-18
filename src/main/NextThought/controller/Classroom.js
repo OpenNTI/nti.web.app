@@ -38,7 +38,7 @@ Ext.define('NextThought.controller.Classroom', {
     loadContent: function()
     {
         //TEMP init some data into the live display
-        //Jonathan? This puts some default data into the content display, by virtue of the belongsTo iVar on the reader,
+        //TODO: This puts some default data into the content display, by virtue of the belongsTo iVar on the reader,
         //          the tracker is ommitted.  Not sure if that's right or not, but it is for now.  There's still a left side gap though
         //          and I don't know how to get rid of it.
         var b = Library.getTitle('/prealgebra/eclipse-toc.xml');
@@ -58,7 +58,6 @@ Ext.define('NextThought.controller.Classroom', {
 
 
 	onEnteredRoom: function(roomInfo){
-        console.log('on entered room...');
 		this.rooms[roomInfo.getId()] = roomInfo;
 		this.getClassroomContainer().showClassroom(roomInfo);
 
@@ -78,8 +77,6 @@ Ext.define('NextThought.controller.Classroom', {
 
 	selectedClassRoom: function(model){
 		var n = model.get('NTIID');
-
-        console.log('selected classroom', n);
 
 		this.getController('Chat').enterRoom([],{ContainerId: n});
 		this.getClassroomContainer().hideClassChooser();
