@@ -154,6 +154,12 @@
 	background: url("../images/chat/compose-message.png") center no-repeat;
 }
 
+.classroom-button .x-btn-icon{
+	width: inherit;
+	height: inherit;
+	background: url("../images/chat/classroom-22.png") center no-repeat;
+}
+
 .reply-to-line .chat-entry .x-form-item-body {
     background: url('../../ext-4.0.7/resources/themes/images/gray/form/text-bg.gif') repeat-x;
     height: 30px !important;

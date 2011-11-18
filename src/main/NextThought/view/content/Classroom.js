@@ -12,6 +12,7 @@ Ext.define('NextThought.view.content.Classroom', {
         type: 'hbox',
         align: 'stretch'
     },
+    /*
     items: [
        {
            xtype: 'chat-view',
@@ -21,17 +22,22 @@ Ext.define('NextThought.view.content.Classroom', {
         {
            xtype: 'classroom-management',
            border: true,
+           roomInfo: this.roomInfo,
            width: 500
 
         }
     ],
-
+    */
 
     initComponent: function() {
     	//vars
     	//this.roomInfo = null;
         this.callParent(arguments);
-		this.down('chat-view').changed(this.roomInfo);
+
+        this.add({xtype: 'chat-view', border: true, flex:1});
+        this.add(Ext.widget('classroom-management', {border: true, roomInfo: this.roomInfo, width: 500}));
+
+        this.down('chat-view').changed(this.roomInfo);
     },
 
 

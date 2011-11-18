@@ -10,6 +10,13 @@ Ext.define('NextThought.view.widgets.chat.ReplyTo', {
     height: 32,
 
     items:[
+        {
+            cls: 'classroom-button',
+            xtype: 'button',
+            iconCls: 'classroom',
+            tooltip: 'Classroom',
+            scale: 'medium'
+        },
 		{
 			cls: 'compose-msg-button',
 			xtype: 'button',
@@ -37,6 +44,7 @@ Ext.define('NextThought.view.widgets.chat.ReplyTo', {
         var me = this,
             b = me.down('button[iconCls=send]'),
             c = me.down('button[iconCls=compose]'),
+            cls = me.down('button[iconCls=classroom]'),
             f = me.down('textfield');
 
         me.addEvents('send');
@@ -47,6 +55,11 @@ Ext.define('NextThought.view.widgets.chat.ReplyTo', {
         });
 
         f.on('focus', this.hideReplies, this);
+
+
+        cls.on('click', function(){
+            me.fireEvent('classroom', f, me.replyTo, me.channel, me.recipients);
+        });
 
         b.on('click', function(){
             me.fireEvent('send', f, me.replyTo, me.channel, me.recipients);

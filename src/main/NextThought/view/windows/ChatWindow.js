@@ -74,7 +74,6 @@ Ext.define('NextThought.view.windows.ChatWindow', {
 
     addNewChat: function(roomInfo) {
         var id = roomInfo.getId(),
-            ocs = roomInfo.get('Occupants'),
             tab = this.down('chat-view[roomId='+id+']');
 
         if (!tab) {
@@ -88,13 +87,22 @@ Ext.define('NextThought.view.windows.ChatWindow', {
                 }
             );
         }
-        
+
         if (tab) {
             this.down('tabpanel').setActiveTab(tab);
         }
-
     },
 
+
+    closeChat: function(roomInfo, disableExitRoom) {
+        var id = roomInfo.getId(),
+            tab = this.down('chat-view[roomId='+id+']');
+
+        if (tab) {
+            tab.disableExitRoom = disableExitRoom;
+            tab.destroy(); //TODO: This causes the room to be left this receiving no more messages, we want to remove the tab, but not leave the room in this case (switch to classroom)
+        }
+    },
 
     _generateTabName: function(roomInfo) {
         var occs = roomInfo.get('Occupants'),

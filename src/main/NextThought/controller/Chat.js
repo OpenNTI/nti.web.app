@@ -2,7 +2,8 @@ Ext.define('NextThought.controller.Chat', {
     extend: 'Ext.app.Controller',
     requires: [
         'NextThought.util.ParseUtils',
-        'NextThought.proxy.Socket'
+        'NextThought.proxy.Socket',
+        'NextThought.view.modes.Classroom'
     ],
 
     models: [
@@ -12,6 +13,7 @@ Ext.define('NextThought.controller.Chat', {
     ],
 
     views: [
+        'modes.Classroom',
         'content.Classroom',
         'windows.ChatWindow',
         'widgets.chat.View',
@@ -22,7 +24,8 @@ Ext.define('NextThought.controller.Chat', {
     ],
 
     refs: [
-        { ref: 'chatWindow', selector: 'chat-window'}
+        { ref: 'chatWindow', selector: 'chat-window'},
+        { ref: 'classroomMode', selector: 'classroom-mode-container'}
     ],
 
 
@@ -76,7 +79,8 @@ Ext.define('NextThought.controller.Chat', {
 
             'chat-view':{
                 'beforedestroy': function(cmp){
-                    this.leaveRoom(cmp.roomInfo);
+                    if (!cmp.disableExitRoom)
+                        this.leaveRoom(cmp.roomInfo);
                 }
             },
 
@@ -87,7 +91,8 @@ Ext.define('NextThought.controller.Chat', {
 			'noteeditor button[action=send]':{ 'click': this.sendComposed },
             'chat-view chat-reply-to' : {
 				'compose': this.compose,
-                'send': this.send
+                'send': this.send,
+                'classroom': this.classroom
             },
             'chat-occupants-list tool[action=moderate]' : {
                 'click' : this.moderateClicked
@@ -147,9 +152,15 @@ Ext.define('NextThought.controller.Chat', {
         Socket.emit('chat_approveMessages', messageIds);
     },
 
-    enterRoom: function(users, options) {
+    enterRoom: function(usersOrList, options) {
 		options = options || {};
-        if (!Ext.isArray(users)) users = [users];
+        var users = [];
+
+        if (usersOrList.get && usersOrList.get('friends')) {
+            options['ContainerId'] = usersOrList.get('NTIID');
+        }
+        else if (!Ext.isArray(usersOrList)) users = [usersOrList];
+        else users = usersOrList;
 
         users = Ext.Array.clone(users);
         
@@ -254,6 +265,25 @@ Ext.define('NextThought.controller.Chat', {
         f.focus();
     },
 
+    classroom: function(f, mid, channel, recipients) {
+        var room = f.up('chat-view').roomInfo;
+
+        if (!this.getClassroom().isClassroom(room)) {
+            console.log('not a chat room that can turn into a classroom, sorry, figure out how to disable this button or hide it');
+            return;
+        }
+
+        //close this tab, hide window
+        this.getChatWindow().closeChat(room, true);
+        this.getChatWindow().hide();
+
+        //mode to classroom, call showClassroom on Classroom mode?
+        this.getClassroomMode().activate();
+        this.getClassroomMode().hideClassChooser();
+        this.getClassroom().onEnteredRoom(room);
+
+     },
+
     flaggedMenuItemClicked: function(mi) {
         this.showMessage(mi.relatedCmp);
     },
@@ -305,7 +335,7 @@ Ext.define('NextThought.controller.Chat', {
      },
 
     groupEntryClicked: function(group){
-        this.enterRoom(group.get('friends'));
+        this.enterRoom(group);
     },
 
     leaveRoom: function(room){
@@ -425,9 +455,12 @@ Ext.define('NextThought.controller.Chat', {
     },
 
     onEnteredRoom: function(msg) {
+        console.log('i got entered into a room', msg);
+
         var roomInfo = msg && msg.isModel? msg : ParseUtils.parseItems([msg])[0];
 
-		if (this.getClassroom().isClassroom(roomInfo)) {
+        if (this.getClassroom().isActive()) {
+//		if (this.getClassroom().isClassroom(roomInfo)) {
 			this.getClassroom().onEnteredRoom(roomInfo);
 			return;
 		}

@@ -18,6 +18,9 @@ Ext.define('NextThought.view.content.Reader', {
     instantiation_time: Ext.Date.now(),
 
     initComponent: function(){
+        //iVars
+        //this.belongsTo = undefined; //reader panels can embed, so this identifies who it belongs to, undefined means it's the main panel
+
         this.addEvents('publish-contributors','location-changed');
         this.callParent(arguments);
         this.initAnnotations();
@@ -65,7 +68,7 @@ Ext.define('NextThought.view.content.Reader', {
     render: function(){
         this.callParent(arguments);
 
-        if(!this._tracker){
+        if(!this._tracker && !this.belongsTo){
 			var d = this.el.dom;
             this._tracker = Ext.create(
                 'NextThought.view.widgets.Tracker', this, d, d.firstChild);

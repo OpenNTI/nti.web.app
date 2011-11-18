@@ -9,14 +9,16 @@ Ext.define('NextThought.controller.Classroom', {
         'widgets.classroom.LiveDisplay',
         'widgets.classroom.Management',
         'widgets.classroom.Moderation',
-        'windows.ClassRoomChooser'
+        'windows.ClassRoomChooser',
+        'Viewport'
     ],
 
 	refs:[
 		{ref: 'classroomContainer', selector: 'classroom-mode-container'},
-		{ref: 'classroom', selector: 'classroom-content'}
+		{ref: 'classroom', selector: 'classroom-content'},
+        {ref: 'liveDisplay', selector: 'live-display'},
+        { ref: 'viewport', selector: 'master-view' }
 	],
-
 
 	init: function(){
 		this.rooms = {};
@@ -31,8 +33,17 @@ Ext.define('NextThought.controller.Classroom', {
 			}
 
 		},{});
-	},
+    },
 
+    loadContent: function()
+    {
+        //TEMP init some data into the live display
+        //Jonathan? This puts some default data into the content display, by virtue of the belongsTo iVar on the reader,
+        //          the tracker is ommitted.  Not sure if that's right or not, but it is for now.  There's still a left side gap though
+        //          and I don't know how to get rid of it.
+        var b = Library.getTitle('/prealgebra/eclipse-toc.xml');
+        this.getLiveDisplay().getReaderPanel().setActive(b, '/prealgebra/sect0001.html', true);
+    },
 
 	isClassroom: function(roomOrMessageInfo){
 		if(!roomOrMessageInfo)return false;
@@ -47,8 +58,12 @@ Ext.define('NextThought.controller.Classroom', {
 
 
 	onEnteredRoom: function(roomInfo){
+        console.log('on entered room...');
 		this.rooms[roomInfo.getId()] = roomInfo;
 		this.getClassroomContainer().showClassroom(roomInfo);
+
+        //load content into live display:
+        this.loadContent();
 	},
 
 
@@ -64,11 +79,16 @@ Ext.define('NextThought.controller.Classroom', {
 	selectedClassRoom: function(model){
 		var n = model.get('NTIID');
 
-		console.log(n, model);
+        console.log('selected classroom', n);
 
 		this.getController('Chat').enterRoom([],{ContainerId: n});
 		this.getClassroomContainer().hideClassChooser();
-	}
+	},
+
+    isActive: function()
+    {
+        return /classroom-mode-container/i.test(this.getViewport().getActive().xtype);
+    }
 
 
 });
