@@ -134,7 +134,25 @@ Ext.define('NextThought.controller.Annotations', {
 
 		win.el.mask('Saving...');
 		win.record.set('body',Ext.Array.clean(win.getValue()));
-		win.record.save({
+
+        if (win.record.data.body.length == 0) {
+            //note has no data, we need to just remove it
+            win.record.destroy({
+                scope: this,
+                success: function(){
+                    win.record.fireEvent('updated',win.record);
+                    win.close();
+                },
+                failure: function(){
+                    console.error('failed to delete empty note');
+                    win.close();
+                }
+            });
+            return;
+        }
+
+        //If we are here, save it.
+   		win.record.save({
 			scope: this,
 			success:function(newRecord,operation){
 				win.close();
