@@ -62,6 +62,14 @@ Ext.define('NextThought.view.widgets.NotePanel',{
 
         m.id = 'cmp-'+(r.get('OID') || r.get('RoomInfo').get('OID'));
 
+        //TODO: WTF does this happen for?  Once a page is loaded, the component gets registered.
+        //      and on reload of the page, the component is already registered.
+        var cmp = Ext.getCmp(m.id);
+        if (cmp) {
+            console.log('TODO: See why this is happening... Bypassing bad situation');
+            Ext.ComponentManager.unregister(cmp);
+        }
+
         if(/TranscriptSummary/i.test(r.getModelName())){
             m.renderTpl = m.transcriptSummaryRenderTpl;
             m.updateModel = m.updateTranscriptSummaryModel;
