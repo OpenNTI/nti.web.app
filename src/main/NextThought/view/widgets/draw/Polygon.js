@@ -29,7 +29,8 @@ Ext.define('NextThought.view.widgets.draw.Polygon', {
 
 		path.push(['Z']);
 
-		this.callParent([Ext.apply(c,{ type: 'path', path: path })]);
+        this.callParent([Ext.apply(config,{ type: 'path',
+       			path: path})]);
 	},
 
 	getShape: function(){
