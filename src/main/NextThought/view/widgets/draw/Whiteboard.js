@@ -39,7 +39,8 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 			{	iconCls: 'tool circle',		tooltip: 'circle',		shape: 'ellipse' },
 			{	iconCls: 'tool line',		tooltip: 'line',		shape: 'line'},
 			{	iconCls: 'tool path',		tooltip: 'path',		shape: 'path'},
-			{	iconCls: 'tool text',		tooltip: 'text box',	shape: 'text'},
+            //TODO - disable text for demo until it works
+			{	iconCls: 'tool text',		tooltip: 'text box',	shape: 'text',   disabled: true },
 
 			'-',
 
