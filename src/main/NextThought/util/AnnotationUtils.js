@@ -16,6 +16,24 @@ Ext.define('NextThought.util.AnnotationUtils',{
 			'style="border: 1px solid gray" {1}>{0}</svg>',
 
 
+    getBodyTextOnly: function(obj) {
+        var txt = obj.get('text'),
+            bdy = obj.get('body'),
+            o,
+            text = [];
+
+        if (txt) return txt;
+
+        for (var i in bdy) {
+            if(!bdy.hasOwnProperty(i)) continue;
+            o = bdy[i];
+            if(typeof(o) == 'string'){
+                text.push(o.replace(/<.*?>/g, ''));
+            }
+        }
+        return text.join('');
+    },
+
 	/**
 	 * Build the body text with the various components mixed in.
 	 *

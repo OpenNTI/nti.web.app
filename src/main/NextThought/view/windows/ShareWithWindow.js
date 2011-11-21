@@ -1,7 +1,8 @@
 Ext.define( 'NextThought.view.windows.ShareWithWindow', {
 	extend: 'Ext.window.Window',
 	requires: [
-        'NextThought.view.form.fields.ShareWithField'
+        'NextThought.view.form.fields.ShareWithField',
+        'NextThought.util.AnnotationUtils'
     ],
 	alias : 'widget.sharewithwindow',
 	
@@ -25,7 +26,7 @@ Ext.define( 'NextThought.view.windows.ShareWithWindow', {
 			n = u.get('realname'),
 			t = m.record.getModelName(),
             sw= m.record.get('sharedWith'),
-			content = m.record.get('text') || 'This item does not have text';
+			content = AnnotationUtils.getBodyTextOnly(m.record) || 'This item does not have text';
 			
 		m.callParent(arguments);
 		m.add({

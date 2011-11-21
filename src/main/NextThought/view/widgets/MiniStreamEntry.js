@@ -2,6 +2,10 @@ Ext.define('NextThought.view.widgets.MiniStreamEntry', {
     extend: 'Ext.Component',
     alias: 'widget.miniStreamEntry',
 
+    requires: [
+        'NextThought.util.AnnotationUtils'
+    ],
+
     renderTpl: new Ext.XTemplate(
           '<div class="x-mini-stream-entry {cls}">',
               '<img src="{avatarURL}" width=16 height=16"/>',
@@ -34,39 +38,22 @@ Ext.define('NextThought.view.widgets.MiniStreamEntry', {
     },
 
     afterRender: function() {
-        var me=this;
+        var me=this,
+            itm = me.change.get('Item');
         me.callParent(arguments);
         me.box.on('click', function(){
-            VIEWPORT.fireEvent('stream-item-clicked', me.change.get('Item'));
+            VIEWPORT.fireEvent('stream-item-clicked', itm);
         });
 
         //lets put some popovers on this to show the contents?  Maybe this should be inline so as to see it at a
         //glance w/o having to navigate to it?
         var e = this.getEl(),
-            txt = this.change.get('Item').get('text'),
-            bdy = this.change.get('Item').get('body');
-            t = this.getToolTipText(txt, bdy);
+            t = AnnotationUtils.getBodyTextOnly(itm);
         if (t) {
             Ext.create('Ext.tip.ToolTip', {
                 target: e,
                 html: t
             });
         }
-    },
-
-    getToolTipText: function(txt, body)
-    {
-        if (txt) return txt;
-
-        var o, text = [];
-
-        for (var i in body) {
-            if(!body.hasOwnProperty(i)) continue;
-            o = body[i];
-            if(typeof(o) == 'string'){
-                text.push(o.replace(/<.*?>/g, ''));
-            }
-        }
-        return text.join('');
     }
 });
