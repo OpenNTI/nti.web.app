@@ -329,7 +329,7 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 				if(i.isNib || a.hidden || (!bb.width && !bb.height))return;
 
 				o = i.toJSON();
-                console.log('toJSON', o);
+
 				//scale down the matrix
 				for(k in o.transform){
 					if(!o.transform.hasOwnProperty(k))continue;
