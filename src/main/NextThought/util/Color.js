@@ -19,6 +19,25 @@ Ext.define('NextThought.util.Color',{
 			);
 		},
 
+        //TODO : SVGs would not render with floating point values, I had to truncate the decimal.  This seems dumb?
+        cleanRGB: function(rgbString) {
+            if (!rgbString) return null;
+            return rgbString.replace(/\.0/gi, '');
+        },
+
+        toRGB: function(color) {
+       			if (typeof color == 'string') {
+       				if(!(color = Ext.draw.Color.fromString(color)))
+       					return '#FFFF00';
+       			}
+
+       			return Ext.String.format('rgb({0},{1},{2})',
+       					color.getRed(),
+       					color.getGreen(),
+       					color.getBlue()
+       			);
+       		},
+
 
 		/**
 		 * http://ridiculousfish.com/blog/posts/colors.html

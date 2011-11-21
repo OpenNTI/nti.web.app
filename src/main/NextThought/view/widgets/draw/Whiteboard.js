@@ -127,8 +127,8 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 		var d = {
 			circle: {},
 			polygon: { sides: sides },
-			path: { type: 'path', fill: 'none', translate: {} },
-			line: { type: 'path', fill: 'none', translate: {}, getShape:function(){return 'line'} },
+			path: { type: 'path', fill: '#000000', translate: {} },
+			line: { type: 'path', fill: '#000000', translate: {}, getShape:function(){return 'line'} },
 			text: {
 				type: 'text',
 				text: 'Place holder text',
@@ -239,7 +239,7 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 	 * Clone the svg in normalized form. (viewBox of 0,0, 1,1)
 	 */
 	getThumbnail: function(){
-		var id = guidGenerator(),
+        var id = guidGenerator(),
 			div = document.createElement('div'),
 			el = Ext.get(div),
             v = this.rendered ? this.saveScene() : this.value,
@@ -281,8 +281,8 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 
 		Ext.each(shapes, function(shape, i){
 
-			var c = Color.getColor(i),
-				p = c.getDarker(0.2),
+			var c = Color.cleanRGB(shape.fillColor) || Color.getColor(i),
+				p =  Color.cleanRGB(shape.strokeColor) || c.getDarker(0.2),
 				t = shape.transform,
 				o, k;
 
@@ -293,7 +293,7 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 
 			o = Ext.widget(this.getSpriteClass(shape['Class'], shape.sides),{
 				sides: shape.sides,
-				'stroke-width': 3,
+				'stroke-width': shape.strokeWidth || 3,
 				stroke: p.toString(),
 				fill: c.toString(),
 				translate: {
@@ -329,6 +329,7 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 				if(i.isNib || a.hidden || (!bb.width && !bb.height))return;
 
 				o = i.toJSON();
+                console.log('toJSON', o);
 				//scale down the matrix
 				for(k in o.transform){
 					if(!o.transform.hasOwnProperty(k))continue;

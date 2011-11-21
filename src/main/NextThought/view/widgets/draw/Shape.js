@@ -2,6 +2,10 @@ Ext.define('NextThought.view.widgets.draw.Shape', {
 	extend: 'Ext.draw.Sprite',
 	alias: 'widget.sprite-base',
 
+    requires: [
+        'NextThought.util.Color'
+    ],
+
 	constructor: function(config){
         var c = {
         			draggable: true, x:0, y:0, width: 1, height: 1,
@@ -41,7 +45,11 @@ Ext.define('NextThought.view.widgets.draw.Shape', {
 
 	toJSON: function(){
 		var m = this.matrix,
-			additionalProps = {},
+			additionalProps = {
+                'strokeColor': Color.toRGB(this.stroke),
+                'fillColor': Color.toRGB(this.fill),
+                'strokeWidth': this['stroke-width']
+            },
 			matrix = {
 				'Class': 'CanvasAffineTransform',
 				a : m.get(0,0),

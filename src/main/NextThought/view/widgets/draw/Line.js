@@ -58,7 +58,13 @@ Ext.define('NextThought.view.widgets.draw.Line', {
    					'Class' : 'CanvasPolygonShape',
    					transform: Ext.clone(matrix)
    				},
-               {sides: 1});
+               {
+                   sides: 1,
+                   'strokeColor': Color.toRGB(this.stroke),
+                   'fillColor': Color.toRGB(this.fill),
+                   'strokeWidth': this['stroke-width']
+               }
+           );
 
 
         function degrees(x0,y0, x1,y1){
