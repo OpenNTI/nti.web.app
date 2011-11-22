@@ -197,6 +197,7 @@ Ext.define('NextThought.mixins.Annotations', {
 
 
 	onNotification: function(change){
+        console.log('onNotification');
 		var item = change && change.get? change.get('Item') : null,
 			oid = item? item.get('oid') : null,
 			cid = item? item.get('ContainerId') : null;
@@ -368,7 +369,7 @@ Ext.define('NextThought.mixins.Annotations', {
 		try{
 			e.preventDefault();
 			var range = this.getSelection();
-			if( range && !range.collapsed ) {
+          	if( range && !range.collapsed ) {
 				this.addHighlight(range, e.getXY());
 			}
 		}
@@ -379,13 +380,16 @@ Ext.define('NextThought.mixins.Annotations', {
 
 	getSelection: function() {
 		var e = this.getDocumentEl(), range, selection;
+
 		if (window.getSelection) {	// all browsers, except IE before version 9
 			selection = window.getSelection();
-			if (selection.rangeCount > 0) {
+            if (selection.rangeCount > 0) {
 				range = selection.getRangeAt(0);
 
-				if(!e.contains(range.startContainer) || !e.contains(range.endContainer))
-					return null;
+                //TODO: This ONLY works in Chrome beta, for Safari and Crome regular, contains returns false.  Commenting this out for time being.
+				//if(!e.contains(range.startContainer) || !e.contains(range.endContainer))
+                //  console.log('could not find start container', range.startContainer, ' or end container', range.endContainer, 'in', e);
+				//return null;
 
 				return range;
 			}

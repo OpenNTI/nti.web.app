@@ -342,9 +342,12 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 			this
 		);
 
+        var s = { "Class":"Canvas", "shapeList": shapes };
+        console.log('save scene', s);
+
 		return shapes.length==0
 				?	undefined
-				:	{ "Class":"Canvas", "shapeList": shapes };
+				:	s;
 	},
 
     getNumberOfShapes: function()
