@@ -57,13 +57,16 @@ Ext.define('NextThought.controller.State', {
         if(!NextThought.isInitialised || this.isHangout){
             return;
         }
+
         var s = e?e.state:null,
             v = this.getViewport();
         if(!v){
             console.error('no viewport');
             return;
         }
-        v.fireEvent('restore', s || BASE_STATE);
+        //TODO : this logic needs to be re-evaluated.  In the case of an in page submit in the reader, (mathcounts),
+        //the state is null and the app renders the default page, mathcounts data then needs to be renavigated to.
+        //v.fireEvent('restore', s || BASE_STATE);
     },
 
 
