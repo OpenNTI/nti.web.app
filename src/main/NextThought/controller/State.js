@@ -67,6 +67,7 @@ Ext.define('NextThought.controller.State', {
         //TODO : this logic needs to be re-evaluated.  In the case of an in page submit in the reader, (mathcounts),
         //the state is null and the app renders the default page, mathcounts data then needs to be renavigated to.
         //v.fireEvent('restore', s || BASE_STATE);
+        if (s) v.fireEvent('restore', s);
     },
 
 
