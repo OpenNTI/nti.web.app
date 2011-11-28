@@ -43,6 +43,7 @@ Ext.define('NextThought.view.content.Classroom', {
 
     onMessage: function(msg, opts) {
         console.log('message', msg);
+
         var r = msg.get('ContainerId'),
             moderated = !!('moderated' in opts);
 

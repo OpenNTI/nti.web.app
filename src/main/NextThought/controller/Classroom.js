@@ -53,8 +53,8 @@ Ext.define('NextThought.controller.Classroom', {
 	},
 
 
-	onMessage: function(message, options){
-		this.getClassroom().onMessage(message,options);
+	onMessage: function(msg, opts){
+		this.getClassroom().onMessage(msg,opts);
 	},
 
 

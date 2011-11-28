@@ -308,9 +308,16 @@ Ext.define('NextThought.controller.Chat', {
     },
 
     moderateClicked: function(cmp){
-        var chatView = cmp.up('chat-view');
+        var chatView;
 
-        chatView.openModerationPanel();
+        if (this.getClassroom().isActive()) {
+            chatView = cmp.up('classroom-content').down('chat-view');
+        }
+        else {
+            chatView = cmp.up('chat-view');
+            chatView.openModerationPanel();
+        }
+
         this.moderateChat(chatView.roomInfo);
     },
 
@@ -457,7 +464,6 @@ Ext.define('NextThought.controller.Chat', {
 
     onEnteredRoom: function(msg) {
         var roomInfo = msg && msg.isModel? msg : ParseUtils.parseItems([msg])[0];
-
         if (this.getClassroom().isActive()) {
 //		if (this.getClassroom().isClassroom(roomInfo)) {
 			this.getClassroom().onEnteredRoom(roomInfo);
