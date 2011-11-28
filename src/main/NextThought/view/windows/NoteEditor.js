@@ -32,7 +32,7 @@ Ext.define('NextThought.view.windows.NoteEditor', {
 			getClickHandler: this.getWhiteboardThumbnailClickHandler
 		});
 
-		this.add({ xtype: 'htmleditor', anchor: '100% 100%', enableAlignments: false, value: text });
+		this.add({ xtype: 'htmleditor', anchor: '100% 100%', enableLists: false, enableAlignments: false, value: text });
 
 		this.on('thumbnail-clicked',this.showWhiteboardEditor, this);
 	},
