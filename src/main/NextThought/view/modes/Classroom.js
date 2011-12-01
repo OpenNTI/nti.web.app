@@ -45,12 +45,15 @@ Ext.define( 'NextThought.view.modes.Classroom', {
 		this.showClassChooser();
 	},
 
-
 	activate: function(){
 		this.callParent(arguments);
 
+        //make sure activate makes it to live display if the classroom is up, if its not up, show chooser
 		if(!this.down('classroom-content'))
-			this.showClassChooser();
+            this.showClassChooser();
+        else this.down('live-display').activate();
+
+
 	},
 
 	deactivate: function(){

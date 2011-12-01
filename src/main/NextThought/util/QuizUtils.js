@@ -169,7 +169,7 @@ function NTISubmitAnswers(){
         QuizUtils.resetQuiz();
         return;
     }
-
+debugger;
     QuizUtils.submitAnswers();
 }
 

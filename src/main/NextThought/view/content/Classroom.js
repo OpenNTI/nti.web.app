@@ -35,23 +35,27 @@ Ext.define('NextThought.view.content.Classroom', {
         this.callParent(arguments);
 
         this.add({xtype: 'chat-view', border: true, flex:1});
-        this.add(Ext.widget('classroom-management', {border: true, roomInfo: this.roomInfo, width: 500}));
+        this.add({xtype: 'classroom-management', border: true, roomInfo: this.roomInfo, width: 500});
 
         this.down('chat-view').changed(this.roomInfo);
     },
 
 
     onMessage: function(msg, opts) {
-        console.log('message', msg);
-
+        console.log('classroom message', msg);
         var r = msg.get('ContainerId'),
             moderated = !!('moderated' in opts);
 
 
         var v = this.down('chat-view'),
-            mlog = v ? v.down('chat-log-view[moderated=true]') : null;
+            mlog = this.down('classroom-moderation').down('chat-log-view');
 
-        v.down('chat-log-view').addMessage(msg);
+        if (moderated) {
+            mlog.addMessage(msg);
+        }
+        else {
+            v.down('chat-log-view').addMessage(msg);
+        }
 
         if(!moderated && mlog) {
             mlog.removeMessage(msg);

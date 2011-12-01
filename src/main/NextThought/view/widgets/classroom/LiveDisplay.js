@@ -31,12 +31,19 @@ Ext.define('NextThought.view.widgets.classroom.LiveDisplay', {
     {
         this.callParent(arguments);
 
-        this.add(Ext.widget('reader-panel', {title: 'Content', belongsTo: this.roomInfo.get('ContainerId'), tabConfig:{tooltip: 'Live Content'}}));
+       // this.add(Ext.widget('reader-panel', {title: 'Content', belongsTo: this.roomInfo.get('ContainerId'), tabConfig:{tooltip: 'Live Content'}}));
         this.add({title:'Whiteboard', tabConfig:{tooltip: 'Live Whiteboard'}});
+        this.activate();
     },
 
-    getReaderPanel: function()
-    {
-        return this.down('reader-panel');
+    getReaderPanel: function() {
+        return Ext.getCmp('readerPanel');
+    },
+
+    activate: function() {
+        if (this.items.get(0) !== this.getReaderPanel()) {
+            this.insert(0, this.getReaderPanel());
+            this.setActiveTab(0);
+        }
     }
 });

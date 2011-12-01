@@ -12,21 +12,7 @@ Ext.define('NextThought.view.widgets.classroom.Management', {
         type: 'vbox',
         align: 'stretch'
     },
-    /*
-    items: [
-       {
-           xtype: 'live-display',
-           height: 400,
-           roomInfo: this.roomInfo
 
-       },
-        {
-           xtype: 'classroom-moderation',
-           flex: 1,
-           border: true
-        }
-    ],
-    */
 
     initComponent: function()
     {
@@ -35,7 +21,7 @@ Ext.define('NextThought.view.widgets.classroom.Management', {
 
         this.callParent(arguments);
 
-        this.add(Ext.widget('live-display', {height: 400, roomInfo: this.roomInfo}));
-        this.add(Ext.widget('classroom-moderation', {flex:1, border: true}));
+        this.add({xtype: 'live-display', height: 400, roomInfo: this.roomInfo});
+        this.add({xtype: 'classroom-moderation', flex:1, border: true});
     }
 });

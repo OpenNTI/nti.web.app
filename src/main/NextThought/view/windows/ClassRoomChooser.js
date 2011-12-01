@@ -53,6 +53,10 @@ Ext.define('NextThought.view.windows.ClassRoomChooser', {
 		return me;
 	},
 
+    close: function() {
+        this.getOwner().un('resize',this.center,this);
+        this.callParent(arguments);
+    },
 
 	getBubbleTarget: function(){
 		return this.getOwner();

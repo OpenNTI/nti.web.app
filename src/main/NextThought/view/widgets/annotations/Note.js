@@ -35,7 +35,7 @@ Ext.define( 'NextThought.view.widgets.annotations.Note', {
         me.noteDiv = me.createElement('div',c.dom,'x-note-panel',(me._isVisible?'':'display:none;'));
         me.noteDiv._annotation = me;
 
-        me.noteCmp = Ext.create('widget.note-entry',{ renderTo: me.noteDiv, _annotation: me, _owner: component });
+        me.noteCmp = Ext.widget('note-entry',{ renderTo: me.noteDiv, _annotation: me, _owner: component });
         me.noteUpdated(record, -1);
         me.noteCmp.doLayout();
 
@@ -90,13 +90,17 @@ Ext.define( 'NextThought.view.widgets.annotations.Note', {
         return Ext.get(n);
     },
 
-    cleanup: function(){
+    cleanup: function(removeAll){
         this.callParent(arguments);
+
+        var hasReplies = this.noteCmp.hasReplies();
+
         this._cmp.un('afterlayout', this.onResize, this);
-        if(this.noteCmp.hasReplies()){
-            this.noteCmp.cleanupReply();
+        if(hasReplies){
+            this.noteCmp.cleanupReply(removeAll);
         }
-        else {
+
+        if (!hasReplies || removeAll) {
             this.noteCmp.destroy();
             delete this.noteCmp;
             Ext.get(this.noteDiv).remove();
@@ -119,7 +123,7 @@ Ext.define( 'NextThought.view.widgets.annotations.Note', {
                 c = me._noteContainer,
                 a = me._anchorNode,
                 i = me._originalPadding,
-                w = Ext.get(Ext.query('#nticontent .page-contents')[0]).getWidth(),
+                w = Ext.get(this._cmp.getEl().query('#nticontent .page-contents')[0]).getWidth(),
                 h = 0,
                 extra= 0,
                 adjust=0,

@@ -35,8 +35,9 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
         me.onResize = b;
 	},
 
-	getBubbleParent: function(){ return this._cmp; },
-	getBubbleTarget: function(){ return this._cmp; },
+
+	getBubbleParent: function(){return this._cmp; },
+	getBubbleTarget: function(){return this._cmp; },
 
     getCmp: function(){
         return this._cmp;

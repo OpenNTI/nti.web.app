@@ -64,12 +64,13 @@ Ext.define('NextThought.view.widgets.NotePanel',{
 
         //TODO: WTF does this happen for?  Once a page is loaded, the component gets registered.
         //      and on reload of the page, the component is already registered.
+        /*
         var cmp = Ext.getCmp(m.id);
         if (cmp) {
             console.log('TODO: See why this is happening... Bypassing bad situation');
             Ext.ComponentManager.unregister(cmp);
         }
-
+        */
         if(/TranscriptSummary/i.test(r.getModelName())){
             m.renderTpl = m.transcriptSummaryRenderTpl;
             m.updateModel = m.updateTranscriptSummaryModel;
@@ -319,13 +320,19 @@ Ext.define('NextThought.view.widgets.NotePanel',{
         return this.query('note-entry[placeHolder]').length != this.query('note-entry').length;
     },
 
-    cleanupReply: function(){
+    cleanupReply: function(removeAll){
         var m = this,
             children = m._record.children,
             parent = m._record._parent;
 
-
-        if(m.hasReplies()) {
+        if (removeAll) {
+            m.items.each(function(i){
+                m.remove(i, false);
+                i.cleanupReply(true);
+            });
+            m.destroy();
+        }
+        else if(m.hasReplies()) {
             m.convertToPlaceHolder();
         }
         else m.destroy();

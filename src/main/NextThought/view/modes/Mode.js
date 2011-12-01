@@ -43,11 +43,15 @@ Ext.define( 'NextThought.view.modes.Mode', {
     	var ct = this.ownerCt,
     		me = this,
     		item = 0;
-    		
-    	if(!ct){
+
+       	if(!ct){
             console.error('No container??');
-    		return;
+    		return false;
     	}
+
+        if (ct.getLayout().getActiveItem() === me) {
+            return false;
+        }
 
         ct.fireEvent('activate-mode', this.getId());
     	
@@ -69,14 +73,19 @@ Ext.define( 'NextThought.view.modes.Mode', {
 				console.log('Could not call deactivate on active "mode"',e.stack||e.stacktrace,e);
 			}
             ct.getLayout().setActiveItem(item);
+            this.getMainComponent().fireEvent('mode-activated');
             this.getMainComponent().relayout();
         }
         catch(e){
             console.error('Activating Mode: ', e.message, e.stack||e.stacktrace, e);
+            return false;
         }
+        return true;
     },
 
-	deactivate: function(){},
+	deactivate: function(){
+        this.getMainComponent().fireEvent('mode-deactivated');
+    },
 
     relayout: function(){
     	this.ownerCt.doComponentLayout();

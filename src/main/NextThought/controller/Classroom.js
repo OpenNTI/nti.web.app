@@ -1,6 +1,9 @@
 Ext.define('NextThought.controller.Classroom', {
     extend: 'Ext.app.Controller',
 
+    requires: [
+        'NextThought.util.Classroom'
+    ],
 
     views: [
         'content.Classroom',
@@ -10,7 +13,6 @@ Ext.define('NextThought.controller.Classroom', {
         'widgets.classroom.Management',
         'widgets.classroom.Moderation',
         'windows.ClassRoomChooser',
-        'NextThought.util.Classroom',
         'Viewport'
     ],
 

@@ -18,7 +18,7 @@ Ext.define( 'NextThought.view.modes.Reader', {
 		this.add(this.getSpacerColumn());
 		this.add({ region: 'west', id: 'west-book', xtype: 'leftColumn', columnWidget: {xtype:'filter-control'} });
 
-		this.add({
+		this._center = this.add({
 			cls: 'x-focus-pane',
 			region: 'center',
 			flex: 6,
@@ -43,6 +43,14 @@ Ext.define( 'NextThought.view.modes.Reader', {
 		this._reader.restore(state);
 	},
 
+    activate: function() {
+        this.callParent(arguments);
+        if (!this._center.items.getCount()) {
+            this._center.add(this._reader);
+            this._reader.show();
+            this._reader.bufferedDelayedRelayout();
+        }
+    },
 
 	getMainComponent: function(){
 		return this._reader;

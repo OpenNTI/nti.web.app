@@ -145,13 +145,13 @@ Ext.define('NextThought.view.widgets.chat.Log', {
         }
 
         //we are going to add then scroll to
-        this.scroll(
-            m.add({
-                xtype: this.entryType,
-                message: msg,
-                messageId: msg.getId()
-            })
-        );
+        var o = m.add({
+                        xtype: this.entryType,
+                        message: msg,
+                        messageId: msg.getId()
+                    });
+        console.log('added item to log', o);
+       // this.scroll(o);
     },
 
     scroll: function(entry) {
@@ -159,7 +159,8 @@ Ext.define('NextThought.view.widgets.chat.Log', {
 
         entry = input? input : entry;
 
-        entry.el.scrollIntoView(this.el.first('.x-panel-body'));
+        if (entry.el)
+            entry.el.scrollIntoView(this.el.first('.x-panel-body'));
     },
 
     addNews: function(msg) {

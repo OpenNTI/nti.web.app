@@ -32,7 +32,10 @@ Ext.define('NextThought.mixins.Annotations', {
 				this.el.on('mouseup', this.onContextMenuHandler, this);
 			},
 			this);
-
+/*
+        this.on('mode-deactivated',this.onDeactivated, this);
+        this.on('mode-activated',this.onActivated, this);
+*/
 		this.widgetBuilder = {
 			'Highlight' : this.createHighlightWidget,
 			'Note': this.createNoteWidget,
@@ -79,15 +82,23 @@ Ext.define('NextThought.mixins.Annotations', {
 			delete this._annotations[oid];
 		}
 	},
+/*
+    onActivated: function() {
+        if (this._containerId) this.loadObjects();
+    },
 
-
+    onDeactivated: function() {
+        console.log('mode deactivated, clearing annotations...');
+        this.clearAnnotations();
+    },
+*/
 	clearAnnotations: function(){
 		for(var oid in this._annotations){
 			if(!this._annotations.hasOwnProperty(oid)) continue;
 
 			var v = this._annotations[oid];
 			if (!v) continue;
-			v.cleanup();
+			v.cleanup(true);
 		}
 
 		this._annotations = {};

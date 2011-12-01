@@ -10,7 +10,9 @@ Ext.define('NextThought.view.content.Reader', {
     },
     cls: 'x-reader-pane',
 
-    items: [{cls:'x-panel-reset', margin: '0 0 0 50px', enableSelect: true}],
+    //props for when it's in a classroom
+    title: 'Content',
+    tabConfig:{tooltip: 'Live Content'},
 
     _tracker: null,
 
@@ -23,10 +25,28 @@ Ext.define('NextThought.view.content.Reader', {
 
         this.addEvents('publish-contributors','location-changed');
         this.callParent(arguments);
+
+        this.add({cls:'x-panel-reset', margin: this.belongsTo ? 0 : '0 0 0 50px', enableSelect: true});
+/*
+        this.on('mode-deactivated', this.onReaderDeactivate, this);
+        this.on('mode-activated', this.onReaderActivate, this);
+*/
         this.initAnnotations();
     },
 
+/*
+    onReaderDeactivate: function() {
+        this.items.get(0).update('');
+    },
 
+    onReaderActivate: function() {
+        var bc = Ext.getCmp('breadcrumb'),
+            l = bc.getLocation();
+
+        if (l && !this._request) this.setActive(l.book, l.book.get('root') + l.location.getAttribute('href'), true);
+
+    },
+*/
 	getDocumentEl: function(){
 		return this.items.get(0).getEl().down('.x-panel-body');
 	},
@@ -82,6 +102,7 @@ Ext.define('NextThought.view.content.Reader', {
 
 
     setActive: function(book, path, skipHistory, callback) {
+        console.log(arguments);
         var b = this._resolveBase(this._getPathPart(path)),
             f = this._getFilename(path),
             pc = path.split('#'),
@@ -108,7 +129,7 @@ Ext.define('NextThought.view.content.Reader', {
         vp.mask('Loading...');
         Ext.getCmp('breadcrumb').setActive(book, f);
 
-        Ext.Ajax.request({
+        this._request = Ext.Ajax.request({
             url: b+f,
             scope: this,
             disableCaching: true,
@@ -120,6 +141,7 @@ Ext.define('NextThought.view.content.Reader', {
             },
             success: this._setReaderContent,
             callback: function(req,success,res){
+                delete this._request;
                 vp.unmask();
                 if(!success) {
                     console.error('There was an error getting content', b+f, res);
@@ -152,8 +174,8 @@ Ext.define('NextThought.view.content.Reader', {
         containerId = this.el.select('meta[name=NTIID]').first().getAttribute('content');
 
         //TODO: fix no annotations in classroom at the moment
-        if (!this.belongsTo)
-            this.loadContentAnnotations(containerId);
+        //if (!this.belongsTo)
+        this.loadContentAnnotations(containerId);
 
         this.fireEvent('location-changed', containerId);
 
@@ -220,6 +242,7 @@ Ext.define('NextThought.view.content.Reader', {
 
 
     _onClick: function(e, el, o){
+        debugger;
         e.preventDefault();
         var m = this,
             r = el.href,

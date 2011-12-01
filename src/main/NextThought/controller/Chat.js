@@ -208,6 +208,7 @@ Ext.define('NextThought.controller.Chat', {
 
 
     moderateChat: function(roomInfo) {
+        console.log('moderate clicked', arguments);
         Socket.emit('chat_makeModerated', roomInfo.getId(), true);
     },
 
