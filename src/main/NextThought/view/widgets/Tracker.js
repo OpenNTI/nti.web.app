@@ -1,6 +1,5 @@
-
-
 Ext.define('NextThought.view.widgets.Tracker', {
+	alias: 'widget.tracker',
 
     toolTipTpl: new Ext.XTemplate(
         '<div class="tracker-tip">',
@@ -66,6 +65,36 @@ Ext.define('NextThought.view.widgets.Tracker', {
 		this._locationProvider.on('change',this._onChangeLocation, this);
 		Ext.EventManager.onWindowResize(this._onResize, this);
 		return this;
+	},
+
+
+	destroy: function(){
+		this.toolTip.destroy();
+		delete this.toolTip;
+
+		var b = Ext.get(this._body),
+			c = Ext.get(this._canvas),
+			h = this.hoverHandler;
+
+		delete this._body;
+		delete this._parent;
+		delete this._canvas;
+
+		c.un('click', this.clickHandler, this);
+		c.un('mousemove', h, this);
+
+		b.un('mousemove', h, this);
+		b.un('mouseover', h, this);
+		b.un('mouseout', h, this);
+		b.un('scroll', h, this);
+
+		this._cmp.un('resize', this._onResize, this);
+		this._locationProvider.un('change',this._onChangeLocation, this);
+		Ext.EventManager.removeResizeListener(this._onResize, this);
+
+		delete this._cmp;
+		delete this._locationProvider;
+		c.remove();
 	},
 	
 	

@@ -3,7 +3,8 @@ Ext.define('NextThought.view.content.Reader', {
     extend:'NextThought.view.content.Panel',
     alias: 'widget.reader-panel',
     requires: [
-        'NextThought.util.QuizUtils'
+        'NextThought.util.QuizUtils',
+		'NextThought.view.widgets.Tracker'
     ],
     mixins:{
         annotations: 'NextThought.mixins.Annotations'
@@ -11,8 +12,7 @@ Ext.define('NextThought.view.content.Reader', {
     cls: 'x-reader-pane',
 
     //props for when it's in a classroom
-    title: 'Content',
-    tabConfig:{tooltip: 'Live Content'},
+    tabConfig:{title: 'Content',tooltip: 'Live Content'},
 
     _tracker: null,
 
@@ -20,9 +20,6 @@ Ext.define('NextThought.view.content.Reader', {
     instantiation_time: Ext.Date.now(),
 
     initComponent: function(){
-        //iVars
-        //this.belongsTo = undefined; //reader panels can embed, so this identifies who it belongs to, undefined means it's the main panel
-
         this.addEvents('publish-contributors','location-changed');
         this.callParent(arguments);
 
@@ -67,7 +64,7 @@ Ext.define('NextThought.view.content.Reader', {
 
 
     scrollToNode: function(n) {
-        while(n && n.nodeType == 3) {
+        while(n && n.nodeType == 3) {//3 = ??
             n = n.parentNode;
         }
 
@@ -76,7 +73,6 @@ Ext.define('NextThought.view.content.Reader', {
             t = e.dom.scrollTop;
 
         this.scrollTo(t+Ext.get(n).getTop()-h);
-        //Ext.get(n).scrollIntoView(this.el.first());
     },
 
 
@@ -88,11 +84,15 @@ Ext.define('NextThought.view.content.Reader', {
     render: function(){
         this.callParent(arguments);
 
-        if(!this._tracker && !this.belongsTo){
-			var d = this.el.dom;
-            this._tracker = Ext.create(
-                'NextThought.view.widgets.Tracker', this, d, d.firstChild);
+        if(this._tracker){
+			this._tracker.destroy();
+			delete this._tracker;
+			console.log('clearing old tracker...');
 		}
+
+		var d = this.el.dom;
+		this._tracker = Ext.widget('tracker', this, d, d.firstChild);
+		console.log('rendering reader...');
 
 		if(this.deferredRestore){
 			this.restore(this.deferredRestore);
