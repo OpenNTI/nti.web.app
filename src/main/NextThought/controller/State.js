@@ -125,8 +125,8 @@ Ext.define('NextThought.controller.State', {
 
         //TODO: save/read state to/from browser/server
         return history.state || {
-            active: 'classroom',
-//            active: 'reader',
+//            active: 'classroom',
+            active: 'reader',
             reader:{
                 page: '/prealgebra/sect0001.html',
                 index: '/prealgebra/eclipse-toc.xml'

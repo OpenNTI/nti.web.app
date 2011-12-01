@@ -116,7 +116,6 @@ Ext.define('NextThought.view.widgets.chat.Log', {
             rid = msg.get('inReplyTo'),
             m = id ? this.down(this.getMessageQuery(id)) : null,
             mStat = msg.get('Status');
-
         if (!id) console.warn('This message has no OID, cannot be targeted!', msg);
 
         if (m){
@@ -150,8 +149,6 @@ Ext.define('NextThought.view.widgets.chat.Log', {
                         message: msg,
                         messageId: msg.getId()
                     });
-        console.log('added item to log', o);
-       // this.scroll(o);
     },
 
     scroll: function(entry) {

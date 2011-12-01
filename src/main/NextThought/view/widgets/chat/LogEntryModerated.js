@@ -34,7 +34,8 @@ Ext.define('NextThought.view.widgets.chat.LogEntryModerated', {
             '</div>',
         '</div>',
         '<div class="x-chat-replies"></div>',
-        '<div class="{errorMsgCls}" style="display:none"></div>',
+//        '<div class="{errorMsgCls}" style="display:none"></div>',
+        '<div id="{id}-errorEl" class="{errorMsgCls} errorEl" style="display:none"></div>',
         '<div class="{clearCls}" role="presentation"><!-- --></div>',
         {
             compiled: true,
@@ -48,7 +49,9 @@ Ext.define('NextThought.view.widgets.chat.LogEntryModerated', {
         text: 'span.body-text',
         time: 'div.timestamp',
         icon: 'img',
-        frameBody: 'div.x-chat-replies'
+        frameBody: 'div.x-chat-replies',
+        errorEl: 'div.errorEl',
+        bodyEl: 'div.x-chat-log-entry'
     },
 
     initComponent: function(){
