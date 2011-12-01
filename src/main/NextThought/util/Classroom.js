@@ -13,5 +13,5 @@ Ext.define('NextThought.util.Classroom',{
 
 },
 function(){
-    window.ClassroomUtils = NextThought.util.Classroom;
+    window.ClassroomUtils = this;
 });
