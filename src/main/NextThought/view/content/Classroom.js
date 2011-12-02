@@ -12,27 +12,20 @@ Ext.define('NextThought.view.content.Classroom', {
         type: 'hbox',
         align: 'stretch'
     },
-    /*
-    items: [
-       {
-           xtype: 'chat-view',
-           border: true,
-           flex: 1
-       },
-        {
-           xtype: 'classroom-management',
-           border: true,
-           roomInfo: this.roomInfo,
-           width: 500
-
-        }
-    ],
-    */
 
     initComponent: function() {
     	//vars
     	//this.roomInfo = null;
         this.callParent(arguments);
+
+        //table of behavious based on channel
+        this._channelMap = {
+            'CONTENT': this.onContent,
+            'POLL': this.onPoll,
+            'META': this.onMeta,
+            'DEFAULT': this.onDefault,
+            'WHISPER' : this.onDefault
+        };
 
         this.add({xtype: 'chat-view', border: true, flex:1});
         this.add({xtype: 'classroom-management', border: true, roomInfo: this.roomInfo, width: 500});
@@ -40,12 +33,30 @@ Ext.define('NextThought.view.content.Classroom', {
         this.down('chat-view').changed(this.roomInfo);
     },
 
+    onContent: function(msg, opts) {
+        console.log('CONTENT channel message not supported yet');
+        var ntiid = msg.get('body')['ntiid'];
 
-    onMessage: function(msg, opts) {
-        console.log('classroom message', msg);
+        //content must have ntiid
+        if (!ntiid) {
+            console.error('Message of type CONTENT has no ntiid', msg);
+            return;
+        }
+
+        this.fireEvent('navigate', ntiid);
+    },
+
+    onPoll: function(msg, opts) {
+        console.log('POLLS not supported yet');
+    },
+
+    onMeta: function(msg, opts) {
+        console.log('META channel messages not supported yet');
+    },
+
+    onDefault: function(msg, opts) {
         var r = msg.get('ContainerId'),
             moderated = !!('moderated' in opts);
-
 
         var v = this.down('chat-view'),
             mlog = this.down('classroom-moderation').down('chat-log-view');
@@ -60,5 +71,11 @@ Ext.define('NextThought.view.content.Classroom', {
         if(!moderated && mlog) {
             mlog.removeMessage(msg);
         }
+    },
+
+    onMessage: function(msg, opts) {
+        console.log('classroom message', msg);
+        var channel = msg.get('channel');
+        this._channelMap[channel].apply(this, arguments);
     }
 });

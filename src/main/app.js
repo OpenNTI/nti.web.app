@@ -25,6 +25,7 @@ Ext.application({
     ],
 
     launch: function(){
+        window.app = this;
 		var g = this.getController('Google');
 
 		if(g.isHangout() && !g.isReady()){

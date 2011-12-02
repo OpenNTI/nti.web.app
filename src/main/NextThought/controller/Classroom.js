@@ -20,7 +20,8 @@ Ext.define('NextThought.controller.Classroom', {
 		{ref: 'classroomContainer', selector: 'classroom-mode-container'},
 		{ref: 'classroom', selector: 'classroom-content'},
         {ref: 'liveDisplay', selector: 'live-display'},
-        { ref: 'viewport', selector: 'master-view' }
+        { ref: 'viewport', selector: 'master-view' },
+        { ref: 'reader', selector: 'classroom-mode-container reader-panel' },
 	],
 
 	init: function(){
@@ -33,7 +34,11 @@ Ext.define('NextThought.controller.Classroom', {
 
 			'classroom-mode-container toolbar button[action=leave]':{
 				'click': this.leaveRoom
-			}
+			},
+
+            'classroom-mode-container classroom-content' : {
+                'navigate': this.navigate
+            }
 
 		},{});
     },
@@ -54,6 +59,14 @@ Ext.define('NextThought.controller.Classroom', {
 		return (c in this.rooms || (/:/i.test(c) && ClassroomUtils.isClassroomId(c)));
 	},
 
+    navigate: function(ntiid) {
+        var o = Library.findLocation(ntiid),
+            book = o.book,
+            href = o.location.getAttribute('href');
+
+        //pass in boolean to skip adding this to history since classroom is synced
+        this.getReader().setActive(book, book.get('root')+href, true);
+    },
 
 	onMessage: function(msg, opts){
 		this.getClassroom().onMessage(msg,opts);
@@ -88,7 +101,19 @@ Ext.define('NextThought.controller.Classroom', {
     isActive: function()
     {
         return /classroom-mode-container/i.test(this.getViewport().getActive().xtype);
-    }
+    },
+
+    test: function() {
+        var ri = this.getClassroom().roomInfo;
+
+        this.getController('Chat').postMessage(ri, {'ntiid': 'tag:nextthought.com,2011-07-14:AOPS-HTML-prealgebra-5'}, null, 'CONTENT');
+    },
+
+    testPinning: function(mid) {
+         var ri = this.getClassroom().roomInfo;
+
+         this.getController('Chat').postMessage(ri, {'channel': 'DEFAULT', 'action': 'pin', 'ntiid': mid}, null, 'META');
+     }
 
 
 });
