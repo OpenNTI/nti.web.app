@@ -24,26 +24,9 @@ Ext.define('NextThought.view.content.Reader', {
         this.callParent(arguments);
 
         this.add({cls:'x-panel-reset', margin: this.belongsTo ? 0 : '0 0 0 50px', enableSelect: true});
-/*
-        this.on('mode-deactivated', this.onReaderDeactivate, this);
-        this.on('mode-activated', this.onReaderActivate, this);
-*/
         this.initAnnotations();
     },
 
-/*
-    onReaderDeactivate: function() {
-        this.items.get(0).update('');
-    },
-
-    onReaderActivate: function() {
-        var bc = Ext.getCmp('breadcrumb'),
-            l = bc.getLocation();
-
-        if (l && !this._request) this.setActive(l.book, l.book.get('root') + l.location.getAttribute('href'), true);
-
-    },
-*/
 	getDocumentEl: function(){
 		return this.items.get(0).getEl().down('.x-panel-body');
 	},

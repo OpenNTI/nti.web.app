@@ -21,7 +21,7 @@ Ext.define('NextThought.view.content.Panel', {
     },
     
     relayout: function(){
-    	this.ownerCt.doComponentLayout();
+    	if (this.ownerCt) this.ownerCt.doComponentLayout();
     	this.doComponentLayout();
     	this.doLayout();
         this.fireEvent('relayedout', this);

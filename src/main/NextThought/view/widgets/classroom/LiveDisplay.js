@@ -45,5 +45,13 @@ Ext.define('NextThought.view.widgets.classroom.LiveDisplay', {
             this.insert(0, this.getReaderPanel());
             this.setActiveTab(0);
         }
+    },
+
+    destroy: function() {
+        //remove reader so it is not destroyed
+        this.remove(this.getReaderPanel(), false);
+
+        //do this last
+        this.callParent(arguments);
     }
 });
