@@ -1,6 +1,10 @@
 Ext.define('NextThought.controller.Reader', {
     extend: 'Ext.app.Controller',
 
+    requires: [
+        'NextThought.cache.IdCache'
+    ],
+
     views: [
         'modes.Container',
         'modes.Reader',
@@ -61,8 +65,7 @@ Ext.define('NextThought.controller.Reader', {
 
     navigateToItem: function(i) {
         var c = i.get('Class'),
-            oid = i.get('OID'),
-            id = 'cmp-'+oid;
+            id = IdCache.getComponentId(i);
 
         //right now, only handle notes and highlights, not sure what to do with users etc...
         if (c != 'Note' && c != 'Highlight') return;

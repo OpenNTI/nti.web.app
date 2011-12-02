@@ -3,6 +3,7 @@ Ext.define('NextThought.view.widgets.NotePanel',{
     alias: 'widget.note-entry',
     requires: [
         'NextThought.cache.UserRepository',
+        'NextThought.cache.IdCache',
         'NextThought.util.AnnotationUtils'
     ],
 
@@ -60,7 +61,7 @@ Ext.define('NextThought.view.widgets.NotePanel',{
             r = m._record = m._record || a._record,
             c = r.get('Creator') || _AppConfig.server.username;
 
-        m.id = 'cmp-'+(r.get('OID') || r.get('RoomInfo').get('OID'));
+        m.id = this.getCmpId(r);
 
         //TODO: WTF does this happen for?  Once a page is loaded, the component gets registered.
         //      and on reload of the page, the component is already registered.
@@ -80,6 +81,10 @@ Ext.define('NextThought.view.widgets.NotePanel',{
 
         m.updateModel(r);
         m.buildThread(r);
+    },
+
+    getCmpId: function(r) {
+        return IdCache.getComponentId(r, 'RoomInfo');
     },
 
     buildThread: function(record){
@@ -294,8 +299,8 @@ Ext.define('NextThought.view.widgets.NotePanel',{
         if (record.children && record.children.length > 0) {
             Ext.each(record.children, function(rec){
                 this._claimChild(abandonedChildren, rec);
-                var oid = rec.get('OID') || rec.get('RoomInfo').get('OID'),
-                    reply = this.getComponent('cmp-'+oid);
+                var id = this.getCmpId(rec),
+                    reply = this.getComponent(id);
 
                 if (reply)
                     reply.updateFromRecord(rec);
@@ -306,8 +311,9 @@ Ext.define('NextThought.view.widgets.NotePanel',{
         }
         //console.debug('abandoned', abandonedChildren.length);
         for (var a in abandonedChildren) {
-            var oid = abandonedChildren[a].get('OID'),
-                panel = Ext.getCmp('cmp-'+oid);
+            if (!abandonedChildren.hasOwnProperty(a)) continue;
+            var id = this.getCmpId(abandonedChildren[a]),
+                panel = Ext.getCmp(id);
             panel.cleanupReply();
         }
 

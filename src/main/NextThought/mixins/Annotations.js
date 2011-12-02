@@ -8,7 +8,8 @@ Ext.define('NextThought.mixins.Annotations', {
 		'NextThought.util.QuizUtils',
 		'NextThought.view.widgets.annotations.SelectionHighlight',
 		'NextThought.view.widgets.annotations.Highlight',
-		'NextThought.view.widgets.annotations.Note'
+		'NextThought.view.widgets.annotations.Note',
+        'NextThought.cache.IdCache'
 	],
 
 	GETTERS : {
@@ -229,7 +230,7 @@ Ext.define('NextThought.mixins.Annotations', {
 				result = builder ? builder.call(this, item) : null;
 
 			if (/Note/i.test(cls) && result === false && replyTo) {
-				replyTo = Ext.getCmp('cmp-'+replyTo);
+				replyTo = Ext.getCmp(IdCache.getComponentId(replyTo));
 				replyTo.addReply(item);
 			}
 			else {

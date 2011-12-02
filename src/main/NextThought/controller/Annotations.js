@@ -1,6 +1,10 @@
 Ext.define('NextThought.controller.Annotations', {
     extend: 'Ext.app.Controller',
 
+    required: [
+        'NextThought.cache.IdCache'
+    ],
+
     models: [
         'Highlight',
         'Note',
@@ -168,11 +172,11 @@ Ext.define('NextThought.controller.Annotations', {
 
     attemptToAddWidget: function(record){
         //check to see if reply is already there, if so, don't do anything...
-        if (Ext.get('cmp-' + record.get('OID'))) return;
+        if (Ext.get(IdCache.getComponentId(record))) return;
 
         var parent = record.get('inReplyTo');
         if(parent){
-            parent = Ext.getCmp('cmp-'+parent);
+            parent = Ext.getCmp(IdCache.getComponentId(parent));
             parent.addReply(record);
         }
         else
