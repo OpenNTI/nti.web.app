@@ -4,7 +4,10 @@ Ext.define('NextThought.controller.Chat', {
         'NextThought.util.ParseUtils',
         'NextThought.proxy.Socket',
         'NextThought.view.modes.Classroom',
-        'NextThought.util.Classroom'
+        'NextThought.util.Classroom',
+        'NextThought.cache.IdCache',
+        'NextThought.cache.IdCache',
+        'NextThought.util.AnnotationUtils'
     ],
 
     models: [
@@ -369,7 +372,7 @@ Ext.define('NextThought.controller.Chat', {
         recipients.add(_AppConfig.userObject.getId(), 1);
 
         while(w && message && message.get('inReplyTo')){
-            var r = message.get('inReplyTo'),
+            var r = IdCache.getIdentifier('inReplyTo'),
                 m = w.down(Ext.String.format('*[messageId={1}]', r));
 
             if(!m || !m.message)break;
@@ -390,7 +393,7 @@ Ext.define('NextThought.controller.Chat', {
             return;
         }
 
-        var m = w.query('[messageId='+mid+']')[0],
+        var m = w.query('[messageId='+IdCache.getIdentifier(mid)+']')[0],
             msg = m ? m.message : null,
             u = msg ? UserRepository.getUser(msg.get('Creator')) : null,
             name = u ? u.get('alias') || u.get('realname') : null,
@@ -410,7 +413,7 @@ Ext.define('NextThought.controller.Chat', {
         m.addCls('flagged');
 
         b.menu.add({
-            text:Ext.String.format('<b>{0}</b> - {1}', name, Ext.String.ellipsis(msg.get('Body'), 15)),
+            text:Ext.String.format('<b>{0}</b> - {1}', name, Ext.String.ellipsis(AnnotationUtils.getBodyTextOnly(msg), 15)),
             icon: i,
             relatedCmp: m
         });

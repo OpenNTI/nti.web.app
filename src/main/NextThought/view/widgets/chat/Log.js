@@ -3,7 +3,8 @@ Ext.define('NextThought.view.widgets.chat.Log', {
     alias: 'widget.chat-log-view',
     requires: [
         'NextThought.view.widgets.chat.LogEntry',
-        'NextThought.view.widgets.chat.LogEntryModerated'
+        'NextThought.view.widgets.chat.LogEntryModerated',
+        'NextThought.cache.IdCache'
     ],
 
     cls: 'chat-log-view',
@@ -13,7 +14,7 @@ Ext.define('NextThought.view.widgets.chat.Log', {
     defaults: {border: false},
 
     getMessageQuery: function(id){
-        return Ext.String.format('{0}[messageId={1}]', this.entryType, id);
+        return Ext.String.format('{0}[messageId={1}]', this.entryType, IdCache.getIdentifier(id));
     },
 
     initComponent:function() {
@@ -133,7 +134,7 @@ Ext.define('NextThought.view.widgets.chat.Log', {
                 m = this.add({
                     xtype: this.entryType,
                     message: Ext.create('NextThought.model.MessageInfo'),
-                    messageId: rid
+                    messageId: IdCache.getIdentifier(rid)
                 });
             }
         }
@@ -147,7 +148,7 @@ Ext.define('NextThought.view.widgets.chat.Log', {
         var o = m.add({
                         xtype: this.entryType,
                         message: msg,
-                        messageId: msg.getId()
+                        messageId: IdCache.getIdentifier(msg.getId())
                     });
     },
 

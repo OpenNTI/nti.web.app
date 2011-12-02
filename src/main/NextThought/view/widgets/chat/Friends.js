@@ -3,7 +3,8 @@ Ext.define('NextThought.view.widgets.chat.Friends', {
     alias: 'widget.chat-friends-view',
 
     requires: [
-        'NextThought.view.widgets.chat.FriendEntry'
+        'NextThought.view.widgets.chat.FriendEntry',
+        'NextThought.cache.IdCache'
     ],
 
     autoScroll: true,
@@ -32,7 +33,7 @@ Ext.define('NextThought.view.widgets.chat.Friends', {
         groups.each(function(g){
             if(/everyone/i.test(g.get('id'))) return; //skip everyone group
 
-            var gid = g.getId(),
+            var gid = IdCache.getIdentifier(g.getId()),
                 groupPanel = me.down('panel[groupId='+gid+']');
 
             if(!groupPanel){
