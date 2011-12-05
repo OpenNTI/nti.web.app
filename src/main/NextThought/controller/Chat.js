@@ -22,6 +22,8 @@ Ext.define('NextThought.controller.Chat', {
         'windows.ChatWindow',
         'widgets.chat.View',
         'widgets.chat.Log',
+        'widgets.chat.LogEntryPinned',
+        'widgets.chat.PinnedMessageView',
         'widgets.chat.Friends',
         'widgets.chat.FriendEntry',
 		'windows.NoteEditor'
@@ -38,6 +40,15 @@ Ext.define('NextThought.controller.Chat', {
 
         var me = this;
 
+        //table of behavious based on channel
+        this._channelMap = {
+            'CONTENT': this.onMessageContentChannel,
+            'POLL': this.onMessagePollChannel,
+            'META': this.onMessageMetaChannel,
+            'DEFAULT': this.onMessageDefaultChannel,
+            'WHISPER' : this.onMessageDefaultChannel
+        };
+
         Socket.register({
             'disconnect': function(){me.onSocketDisconnect.apply(me, arguments)},
             'serverkill': function(){me.onSocketDisconnect.apply(me, arguments)},
@@ -51,7 +62,6 @@ Ext.define('NextThought.controller.Chat', {
             'chat_recvMessageForShadow' : function(){me.onMessage.apply(me, arguments);
             }
         });
-
 
         this.control({
             'chat-window splitbutton menuitem': {
@@ -118,6 +128,9 @@ Ext.define('NextThought.controller.Chat', {
 		return this.getController('Classroom');
 	},
 
+    getChatView: function(roomInfo) {
+        return Ext.ComponentQuery.query('chat-view[roomId='+roomInfo.getId()+']')[0];
+    },
 
     existingRoom: function(users, options) {
         //Add ourselves to this list
@@ -208,7 +221,6 @@ Ext.define('NextThought.controller.Chat', {
         tabpanel.setActiveTab(tab);
         log.scroll(msgCmp);
     },
-
 
     moderateChat: function(roomInfo) {
         console.log('moderate clicked', arguments);
@@ -386,6 +398,26 @@ Ext.define('NextThought.controller.Chat', {
 
     /* SERVER EVENT HANDLERS*/
 
+    onSocketDisconnect: function(){
+       this.activeRooms = {};
+    },
+
+    onMembershipChanged: function(msg) {
+        var roomInfo = ParseUtils.parseItems([msg])[0];
+
+        if (roomInfo.getId() in this.activeRooms)
+            this.activeRooms[roomInfo.getId()].fireEvent('changed', roomInfo);
+
+        this.activeRooms[roomInfo.getId()] = roomInfo;
+    },
+
+    onExitedRoom: function(room) {
+        if (room.ID in this.activeRooms) {
+            this.activeRooms[room.ID].fireEvent('left-room');
+            delete this.activeRooms[room.ID];
+        }
+    },
+
     onMessageForAttention: function(mid) {
         var w = this.getChatWindow();
         if (!w) {
@@ -421,36 +453,72 @@ Ext.define('NextThought.controller.Chat', {
 
     },
 
-    onSocketDisconnect: function(){
-       this.activeRooms = {};
-    },
-
-    onMembershipChanged: function(msg) {
-        var roomInfo = ParseUtils.parseItems([msg])[0];
-
-        if (roomInfo.getId() in this.activeRooms)
-            this.activeRooms[roomInfo.getId()].fireEvent('changed', roomInfo);
-
-        this.activeRooms[roomInfo.getId()] = roomInfo;
-    },
-
-    onExitedRoom: function(room) {
-        if (room.ID in this.activeRooms) {
-            this.activeRooms[room.ID].fireEvent('left-room');
-            delete this.activeRooms[room.ID];
-        }
-    },
-
-    onMessage: function(msg) {
+    onMessage: function(msg, opts) {
         var m = ParseUtils.parseItems([msg])[0];
 
-        if (this.getClassroom().isClassroom(m)) {
-			this.getClassroom().onMessage(m, {});
+        if (this.getClassroom().isClassroom(m) &&
+		    this.getClassroom().onMessage(m, {})){
 			return;
         }
 
-		var win = this.getChatWindow();
-		if(win)win.onMessage(m,{});
+        var channel = m.get('channel');
+        this._channelMap[channel].call(this, m, opts||{});
+    },
+
+    onMessageDefaultChannel: function(msg, opts) {
+		var win = this.getChatWindow(),
+            r = msg.get('ContainerId'),
+		    moderated = !!('moderated' in opts);
+
+		if(!win)return;
+
+        var tab = win.down('chat-view[roomId=' + r + ']'),
+            mlog = tab ? tab.down('chat-log-view[moderated=true]') : null;
+
+        if(!tab) {
+            console.warn('message received for tab which no longer exists', msg, r, win.items);
+            return;
+        }
+
+        win.down('tabpanel').setActiveTab(tab);
+        tab.down('chat-log-view[moderated='+moderated+']').addMessage(msg);
+
+        if(!moderated && mlog) {
+            mlog.removeMessage(msg);
+        }
+    },
+
+    onMessageContentChannel: function(msg) {
+        console.error('CONTENT channel messages not expected outside of classroom.  for now.');
+    },
+
+    onMessageMetaChannel: function(msg) {
+        var b = msg.get('body') || {},
+            a = b.action,
+            i = b.ntiid,
+            r = this.activeRooms[msg.get('ContainerId')],
+            cv = this.getChatView(r);
+
+        if ('clearPinned' == a) {
+            cv.getPinnedMessageView().destroy();
+        }
+        else if('pin' == a ) {
+            var e = cv.down('[messageId='+IdCache.getIdentifier(i)+']');
+
+            if (!e) {
+                console.warn('Could not find existing message with ID', i);
+                return;
+            }
+
+            cv.getPinnedMessageView().add(
+                { xtype:'chat-log-entry-pinned', message: e.message}
+            );
+
+        }
+    },
+
+    onMessagePollChannel: function(msg) {
+        console.log('POLL channel message not supported yet');
     },
 
     onModeratedMessage: function(msg) {
@@ -462,18 +530,11 @@ Ext.define('NextThought.controller.Chat', {
 			return;
 		}
 
-        var win = this.getChatWindow();
-        if(win)win.onMessage(m,o);
+        this.onMessageDefaultChannel(m, o);
     },
 
     onEnteredRoom: function(msg) {
         var roomInfo = msg && msg.isModel? msg : ParseUtils.parseItems([msg])[0];
-        if (this.getClassroom().isActive()) {
-//		if (this.getClassroom().isClassroom(roomInfo)) {
-			this.getClassroom().onEnteredRoom(roomInfo);
-			return;
-		}
-
         if (roomInfo.getId() in this.activeRooms) {
             console.warn('room already exists, all rooms/roominfo', this.activeRooms, roomInfo);
         }
@@ -485,9 +546,14 @@ Ext.define('NextThought.controller.Chat', {
         }
 
         this.activeRooms[roomInfo.getId()] = roomInfo;
-        
-        this.openChatWindow();
-        this.getChatWindow().addNewChat(roomInfo);
+
+        if (this.getClassroom().isClassroom(roomInfo)) {
+            this.getClassroom().onEnteredRoom(roomInfo);
+        }
+        else{
+            this.openChatWindow();
+            this.getChatWindow().addNewChat(roomInfo);
+        }
     }
 
 });

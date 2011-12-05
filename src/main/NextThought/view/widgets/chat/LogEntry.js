@@ -4,7 +4,8 @@ Ext.define('NextThought.view.widgets.chat.LogEntry', {
 
     requires: [
 		'NextThought.util.AnnotationUtils',
-        'NextThought.view.widgets.chat.ReplyTo'
+        'NextThought.view.widgets.chat.ReplyTo',
+        'NextThought.cache.IdCache'
     ],
 
     renderTpl: new Ext.XTemplate(
@@ -55,6 +56,7 @@ Ext.define('NextThought.view.widgets.chat.LogEntry', {
             s = m.get('Creator');
 
         me.message = m;
+        me.messageId = IdCache.getIdentifier(m.getId());
 
         me.renderData['time'] = Ext.Date.format(m.get('Last Modified'), 'g:i:sa');
         me.renderData['name'] = 'resolving...';

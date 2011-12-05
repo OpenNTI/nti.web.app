@@ -75,7 +75,6 @@ Ext.define('NextThought.view.content.Reader', {
 
 		var d = this.el.dom;
 		this._tracker = Ext.widget('tracker', this, d, d.firstChild);
-		console.log('rendering reader...');
 
 		if(this.deferredRestore){
 			this.restore(this.deferredRestore);
@@ -85,7 +84,6 @@ Ext.define('NextThought.view.content.Reader', {
 
 
     setActive: function(book, path, skipHistory, callback) {
-        console.log(arguments);
         var b = this._resolveBase(this._getPathPart(path)),
             f = this._getFilename(path),
             pc = path.split('#'),

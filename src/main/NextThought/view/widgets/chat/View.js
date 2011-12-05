@@ -6,6 +6,7 @@ Ext.define('NextThought.view.widgets.chat.View', {
         'NextThought.view.widgets.chat.Log',
         'NextThought.view.widgets.chat.OccupantsList',
         'NextThought.view.widgets.chat.ReplyTo',
+        'NextThought.view.widgets.chat.PinnedMessageView',
         'NextThought.util.Classroom'
     ],
 
@@ -93,5 +94,15 @@ Ext.define('NextThought.view.widgets.chat.View', {
         cmp.show();
 
         this.down('textfield[chatentry]').focus();
+    },
+
+    getPinnedMessageView: function() {
+        var v = this.down('chat-pinned-message-view');
+
+        if (!v) {
+            v = this.down('[region=center]').insert(0, {xtype: 'chat-pinned-message-view'});
+        }
+
+        return v;
     }
 }); 

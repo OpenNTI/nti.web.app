@@ -44,14 +44,16 @@ Ext.define('NextThought.view.content.Classroom', {
         }
 
         this.fireEvent('navigate', ntiid);
+        return true;
     },
 
     onPoll: function(msg, opts) {
         console.log('POLLS not supported yet');
+        return false;
     },
 
     onMeta: function(msg, opts) {
-        console.log('META channel messages not supported yet');
+        return false;
     },
 
     onDefault: function(msg, opts) {
@@ -71,11 +73,11 @@ Ext.define('NextThought.view.content.Classroom', {
         if(!moderated && mlog) {
             mlog.removeMessage(msg);
         }
+        return true;
     },
 
     onMessage: function(msg, opts) {
-        console.log('classroom message', msg);
         var channel = msg.get('channel');
-        this._channelMap[channel].apply(this, arguments);
+        return this._channelMap[channel].apply(this, arguments);
     }
 });

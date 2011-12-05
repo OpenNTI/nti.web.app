@@ -6,7 +6,8 @@ Ext.define('NextThought.view.widgets.chat.LogEntryModerated', {
         contains: 'Ext.container.Container'
     },
     requires: [
-		'NextThought.util.AnnotationUtils'
+		'NextThought.util.AnnotationUtils',
+        'NextThought.cache.IdCache'
     ],
 
     preventMark:true,
@@ -82,6 +83,7 @@ Ext.define('NextThought.view.widgets.chat.LogEntryModerated', {
             s = m.get('Creator');
 
         me.message = m;
+        me.messageId = IdCache.getIdentifier(m.getId());
 
         me.renderData['time'] = Ext.Date.format(m.get('Last Modified'), 'g:i:sa');
         me.renderData['name'] = 'resolving...';

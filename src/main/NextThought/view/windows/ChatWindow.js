@@ -51,26 +51,6 @@ Ext.define('NextThought.view.windows.ChatWindow', {
         }
 ],
 
-    onMessage: function(msg, opts) {
-        var r = msg.get('ContainerId'),
-            moderated = !!('moderated' in opts);
-
-
-        var tab = this.down('chat-view[roomId=' + r + ']'),
-            mlog = tab ? tab.down('chat-log-view[moderated=true]') : null;
-
-        if(!tab) {
-            console.warn('message received for tab which no longer exists', msg, r, this.items);
-            return;
-        }
-
-        this.down('tabpanel').setActiveTab(tab);
-        tab.down('chat-log-view[moderated='+moderated+']').addMessage(msg);
-
-        if(!moderated && mlog) {
-            mlog.removeMessage(msg);
-        }
-    },
 
     addNewChat: function(roomInfo) {
         var id = roomInfo.getId(),
