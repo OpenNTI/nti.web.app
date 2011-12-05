@@ -78,7 +78,17 @@
 .x-chat-log-entry span.reply-whisper {
     background: url("../images/chat/re-16.png");
 }
+.x-chat-log-entry span.pin{
+    width:22px;
+    height:22px;
+    background-size:22px 22px;
+    background: url("../images/chat/chat-pin-64.png");
+    display: none;
+}
 
+.moderator .x-chat-log-entry span.pin{
+    display: inline-block;
+}
 
 .x-chat-log-entry:hover span.reply {
     display: block;
@@ -168,4 +178,32 @@
 .reply-to-line .chat-entry .x-form-item-body input.x-form-text {
     padding-left: 10px;
     height: 30px !important;
+}
+
+
+.x-chat-log-entry-pinned {
+    position: relative;
+    padding: 10px;
+    overflow: hidden;
+}
+
+.x-chat-log-entry-pinned div.icon {
+    float: left;
+    width: 32px;
+    overflow: hidden;
+    text-align: center;
+}
+
+.x-chat-log-entry-pinned div.icon img {
+    display: block;
+}
+
+.x-chat-log-entry-pinned div.icon .name {
+    font-size: 0.8em;
+}
+
+.x-chat-log-entry-pinned div.body {
+    margin-left: 50px;
+    font-size: 1.5em;
+    font-family: georgia,serif;
 }

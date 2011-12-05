@@ -25,6 +25,7 @@ Ext.define('NextThought.view.widgets.chat.LogEntryModerated', {
             '<span class="reply">',
                 '<span class="reply-whisper"></span>',
                 '<span class="reply-public"></span>',
+                '<span class="pin"></span>',
             '</span>',
             '<div class="timestamp">{time}</div>',
             '{subTplMarkup}',
@@ -134,6 +135,9 @@ Ext.define('NextThought.view.widgets.chat.LogEntryModerated', {
         else if(inBox && target.hasCls('reply-whisper')){
             this.fireEvent('reply-whisper', this);
         }
+        else if(inBox && target.hasCls('pin')){
+              this.fireEvent('pin', this);
+          }
         else if(!/input/i.test(tag))
             this.setValue(!this.getValue());
     },

@@ -16,8 +16,13 @@ Ext.define('NextThought.view.widgets.Breadcrumb', {
     
     initComponent: function(){
    		this.callParent(arguments);
-        this.add({ text: 'Loading...' });
-        Library.on('loaded',function(){ if(!this._current.location) this.reset(); }, this);
+        if (!Library.loaded) {
+            this.add({ text: 'Loading...' });
+            Library.on('loaded',function(){ if(!this._current.location) this.reset(); }, this);
+        }
+        else {
+            this.reset();
+        }
     },
 
 	reset: function(book){

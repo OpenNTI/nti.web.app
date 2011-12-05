@@ -18,7 +18,7 @@ Ext.define('NextThought.controller.Reader', {
 
     refs: [
         { ref: 'viewport', selector: 'master-view' },
-        { ref: 'reader', selector: 'reader-mode-container reader-panel' },
+        { ref: 'reader', selector: 'reader-panel' },
         { ref: 'readerBreadcrumb', selector: 'reader-mode-container breadcrumbbar' },
         { ref: 'readerPeople', selector: 'reader-mode-container people-list' },
         { ref: 'readerRelated', selector: 'reader-mode-container related-items' },
@@ -52,6 +52,10 @@ Ext.define('NextThought.controller.Reader', {
             'reader-mode-container related-items':{
                 'navigate': this.navigate
             },
+            
+            'reader-mode-container reader-panel': {
+                'mode-activate': this.restoreState
+            },
 
             'reader-mode-container filter-control':{
                 'filter-changed': this.readerFilterChanged
@@ -61,6 +65,13 @@ Ext.define('NextThought.controller.Reader', {
 
     clearSearch: function() {
         this.getReader().clearSearchRanges();
+    },
+    
+    restoreState: function() {
+        var sc = this.getController('State'),
+            s = sc.getState().reader;
+
+        this.getReader().restore(s);
     },
 
     navigateToItem: function(i) {
@@ -80,15 +91,18 @@ Ext.define('NextThought.controller.Reader', {
     buttonClicked: function(button) {
         if (!button || !button.book || !button.location) return;
 
+        var tb = button.up('toolbar'),
+            skip = tb ? tb.skipHistory : false;
+
         var book = button.book,
             loc = button.location;
         
-        this.navigate(book, loc);
+        this.navigate(book, loc, null, skip);
     },
 
-    navigate: function(book, ref, options){
-        this.getReaderMode().activate();
-        this.getReader().setActive(book, ref, null,
+    navigate: function(book, ref, options, skipHistory){
+ //       this.getReaderMode().activate();
+        this.getReader().setActive(book, ref, skipHistory,
             options
                 ? typeof(options)=='function'
                     ? options

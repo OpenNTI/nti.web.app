@@ -13,6 +13,7 @@ Ext.define('NextThought.view.widgets.chat.LogEntry', {
             '<span class="reply">',
                 '<span class="reply-whisper"></span>',
                 '<span class="reply-public"></span>',
+                '<span class="pin"></span>',
             '</span>',
             '<div class="timestamp">{time}</div>',
             '<img src="{icon}" width=16 height=16"/>',
@@ -99,6 +100,9 @@ Ext.define('NextThought.view.widgets.chat.LogEntry', {
         }
         else if(inBox && target.hasCls('reply-whisper')){
             this.fireEvent('reply-whisper', this);
+        }
+        else if(inBox && target.hasCls('pin')){
+            this.fireEvent('pin', this);
         }
     },
 

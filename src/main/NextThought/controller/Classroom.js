@@ -21,7 +21,7 @@ Ext.define('NextThought.controller.Classroom', {
 		{ref: 'classroom', selector: 'classroom-content'},
         {ref: 'liveDisplay', selector: 'live-display'},
         { ref: 'viewport', selector: 'master-view' },
-        { ref: 'reader', selector: 'classroom-mode-container reader-panel' }
+        { ref: 'reader', selector: 'reader-panel' }
 	],
 
 	init: function(){
@@ -75,6 +75,7 @@ Ext.define('NextThought.controller.Classroom', {
 
 	onEnteredRoom: function(roomInfo){
 		this.rooms[roomInfo.getId()] = roomInfo;
+        this.getClassroomContainer().hideClassChooser();
 		this.getClassroomContainer().showClassroom(roomInfo);
 
         //load content into live display:
@@ -107,13 +108,5 @@ Ext.define('NextThought.controller.Classroom', {
         var ri = this.getClassroom().roomInfo;
 
         this.getController('Chat').postMessage(ri, {'ntiid': 'tag:nextthought.com,2011-07-14:AOPS-HTML-prealgebra-5'}, null, 'CONTENT');
-    },
-
-    testPinning: function(mid) {
-         var ri = this.getClassroom().roomInfo;
-
-         this.getController('Chat').postMessage(ri, {'channel': 'DEFAULT', 'action': 'pin', 'ntiid': mid}, null, 'META');
-     }
-
-
+    }
 });

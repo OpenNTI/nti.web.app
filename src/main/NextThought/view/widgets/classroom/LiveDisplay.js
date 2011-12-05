@@ -8,25 +8,6 @@ Ext.define('NextThought.view.widgets.classroom.LiveDisplay', {
  	cls: 'nti-live-display',
     tabPosition: 'bottom',
 
-    /*
-    items: [
-        {
-            title: 'Content',
-            xtype: 'reader-panel',
-            belongsTo: this.roomInfo ? this.roomInfo.get('ContentId') : null,
-            tabConfig: {
-                tooltip: 'Show content'
-            }
-        },
-       {
-           title: 'Whiteboard',
-           tabConfig: {
-               tooltip: 'Show classroom whiteboard'
-           }
-       }
-    ],
-    */
-
     initComponent: function()
     {
         this.callParent(arguments);
@@ -42,13 +23,19 @@ Ext.define('NextThought.view.widgets.classroom.LiveDisplay', {
 
     activate: function() {
         if (this.items.get(0) !== this.getReaderPanel()) {
-            this.insert(0, this.getReaderPanel());
+            if (!this.down('breadcrumbar')) {
+                this.insert(0, this.getReaderPanel());
+                this.getReaderPanel().addDocked(
+                    {dock:'bottom', xtype: 'breadcrumbbar', skipHistory: true}
+                );
+            }
             this.setActiveTab(0);
         }
     },
 
     destroy: function() {
         //remove reader so it is not destroyed
+        this.getReaderPanel().removeDocked(0);
         this.remove(this.getReaderPanel(), false);
 
         //do this last

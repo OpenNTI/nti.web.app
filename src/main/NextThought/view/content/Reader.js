@@ -88,7 +88,8 @@ Ext.define('NextThought.view.content.Reader', {
             f = this._getFilename(path),
             pc = path.split('#'),
             target = pc.length>1? pc[1] : null,
-            vp= VIEWPORT.getEl();
+            vp= VIEWPORT.getEl(),
+            bc = this.down('breadcrumbbar') || Ext.getCmp('breadcrumb');
 
         if(this.active == pc[0]){
             if( callback ){
@@ -108,7 +109,7 @@ Ext.define('NextThought.view.content.Reader', {
             this._appendHistory(book, path);
 
         vp.mask('Loading...');
-        Ext.getCmp('breadcrumb').setActive(book, f);
+        if (bc) bc.setActive(book, f);
 
         this._request = Ext.Ajax.request({
             url: b+f,

@@ -100,7 +100,7 @@ Ext.define('NextThought.view.widgets.chat.View', {
         var v = this.down('chat-pinned-message-view');
 
         if (!v) {
-            v = this.down('[region=center]').insert(0, {xtype: 'chat-pinned-message-view'});
+            v = this.down('[region=center]').insert(0, {xtype: 'chat-pinned-message-view', showClear: this.el.hasCls('moderator')});
         }
 
         return v;

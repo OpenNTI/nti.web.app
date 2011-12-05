@@ -8,9 +8,11 @@ Ext.define('NextThought.view.widgets.chat.LogEntryPinned', {
 
     renderTpl: new Ext.XTemplate(
         '<div class="x-chat-log-entry-pinned">',
-            '<img src="{icon}" width=16 height=16"/>',
-            '<div>',
-                '<span class="name">{name}</span> ',
+            '<div class="icon">',
+                '<img src="{icon}" width=32 height=32"/>',
+                '<span class="name">{name}</span>',
+            '</div>',
+            '<div class="body">',
                 '<span class="body-text">{body}</span> ',
             '</div>',
         '</div>'

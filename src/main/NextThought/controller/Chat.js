@@ -113,11 +113,16 @@ Ext.define('NextThought.controller.Chat', {
             },
             'chat-log-entry' : {
                 'reply-public': this.replyPublic,
-                'reply-whisper': this.replyWhisper
+                'reply-whisper': this.replyWhisper,
+                'pin': this.pinMessage
             },
             'chat-log-entry-moderated' : {
                 'reply-public': this.replyPublic,
-                'reply-whisper': this.replyWhisper
+                'reply-whisper': this.replyWhisper,
+                'pin': this.pinMessage
+            },
+            'chat-pinned-message-view toolbar button' : {
+                'click': this.clearPinnedMessages
             }
 
         },{});
@@ -324,17 +329,16 @@ Ext.define('NextThought.controller.Chat', {
     },
 
     moderateClicked: function(cmp){
-        var chatView;
+        var chatView = cmp.up('chat-view');
 
-        if (this.getClassroom().isActive()) {
-            chatView = cmp.up('classroom-content').down('chat-view');
-        }
-        else {
-            chatView = cmp.up('chat-view');
+
+        if (chatView)
             chatView.openModerationPanel();
-        }
+        else
+            chatView = cmp.up('classroom-content').down('chat-view');
 
         this.moderateChat(chatView.roomInfo);
+        chatView.addCls('moderator');
     },
 
     flagMessagesTo: function(user, dropData){
@@ -394,6 +398,17 @@ Ext.define('NextThought.controller.Chat', {
         }
 
         msgCmp.showReplyToComponent().setChannel('WHISPER', recipients.getKeys());
+    },
+
+    pinMessage: function(msgCmp) {
+        var m = msgCmp.message,
+            ri = this.activeRooms[m.get('ContainerId')];
+        this.postMessage(ri, {'channel': m.get('channel'), 'action': 'pin', 'ntiid': m.getId()}, null, 'META');
+    },
+
+    clearPinnedMessages: function(btnCmp) {
+        var ri = btnCmp.up('chat-view').roomInfo;
+        this.postMessage(ri, {'channel': 'DEFAULT', 'action': 'clearPinned'}, null, 'META');
     },
 
     /* SERVER EVENT HANDLERS*/
