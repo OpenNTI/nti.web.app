@@ -21,7 +21,7 @@ Ext.define('NextThought.controller.Classroom', {
 		{ref: 'classroom', selector: 'classroom-content'},
         {ref: 'liveDisplay', selector: 'live-display'},
         { ref: 'viewport', selector: 'master-view' },
-        { ref: 'reader', selector: 'classroom-mode-container reader-panel' },
+        { ref: 'reader', selector: 'classroom-mode-container reader-panel' }
 	],
 
 	init: function(){
