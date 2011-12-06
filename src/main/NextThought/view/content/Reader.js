@@ -65,6 +65,7 @@ Ext.define('NextThought.view.content.Reader', {
 
 
     render: function(){
+        console.log('rendering reader');
         this.callParent(arguments);
 
         if(this._tracker){
@@ -155,8 +156,6 @@ Ext.define('NextThought.view.content.Reader', {
 
         containerId = this.el.select('meta[name=NTIID]').first().getAttribute('content');
 
-        //TODO: fix no annotations in classroom at the moment
-        //if (!this.belongsTo)
         this.loadContentAnnotations(containerId);
 
         this.fireEvent('location-changed', containerId);
@@ -224,7 +223,6 @@ Ext.define('NextThought.view.content.Reader', {
 
 
     _onClick: function(e, el, o){
-        debugger;
         e.preventDefault();
         var m = this,
             r = el.href,

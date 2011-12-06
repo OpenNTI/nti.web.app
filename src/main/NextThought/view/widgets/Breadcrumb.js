@@ -66,7 +66,7 @@ Ext.define('NextThought.view.widgets.Breadcrumb', {
 		
 		var loc = this.getLocation();
         try{
-		    this.renderBredcrumb(book, loc.toc, loc.location, this);
+		    this.renderBreadcrumb(book, loc.toc, loc.location, this);
         }
         catch(e){
             console.error('Could not render the breadcrumb', e, e.message, e.stack);
@@ -81,7 +81,7 @@ Ext.define('NextThought.view.widgets.Breadcrumb', {
         return node? node.parentNode : null;
     },
 	
-	renderBredcrumb: function(book, xml, currentLocation, container) {
+	renderBreadcrumb: function(book, xml, currentLocation, container) {
 	    if(!xml){
 	        return;
 	    }
@@ -212,7 +212,8 @@ Ext.define('NextThought.view.widgets.Breadcrumb', {
         var leaf = {
         	text: labelText,
             book: book,
-            location: book.get('root')+href
+            location: book.get('root')+href,
+            skipHistory: this.skipHistory
         };
             
         if(selected){

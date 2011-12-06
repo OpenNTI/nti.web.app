@@ -23,8 +23,8 @@ Ext.define('NextThought.view.widgets.classroom.LiveDisplay', {
 
     activate: function() {
         if (this.items.get(0) !== this.getReaderPanel()) {
-            if (!this.down('breadcrumbar')) {
-                this.insert(0, this.getReaderPanel());
+            this.insert(0, this.getReaderPanel());
+            if (!this.getReaderPanel().getDockedItems()[0]) {
                 this.getReaderPanel().addDocked(
                     {dock:'bottom', xtype: 'breadcrumbbar', skipHistory: true}
                 );

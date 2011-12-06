@@ -47,6 +47,8 @@ Ext.define( 'NextThought.view.modes.Reader', {
         this.callParent(arguments);
         if (!this._center.items.getCount()) {
             this._center.add(this._reader);
+            var bc = this._reader.getDockedComponent(0);
+            if (bc) this._reader.removeDocked(bc);
             this._reader.show();
             this._reader.bufferedDelayedRelayout();
         }

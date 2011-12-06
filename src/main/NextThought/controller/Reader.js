@@ -53,8 +53,8 @@ Ext.define('NextThought.controller.Reader', {
                 'navigate': this.navigate
             },
             
-            'reader-mode-container reader-panel': {
-                'mode-activate': this.restoreState
+            'reader-mode-container': {
+                'mode-activated': this.restoreState
             },
 
             'reader-mode-container filter-control':{
@@ -68,10 +68,9 @@ Ext.define('NextThought.controller.Reader', {
     },
     
     restoreState: function() {
-        var sc = this.getController('State'),
-            s = sc.getState().reader;
+        var sc = this.getController('State');
 
-        this.getReader().restore(s);
+        this.getReader().restore(sc.getState());
     },
 
     navigateToItem: function(i) {
@@ -91,8 +90,8 @@ Ext.define('NextThought.controller.Reader', {
     buttonClicked: function(button) {
         if (!button || !button.book || !button.location) return;
 
-        var tb = button.up('toolbar'),
-            skip = tb ? tb.skipHistory : false;
+        //TODO - this does not currently work...
+        var skip = button.skipHistory;
 
         var book = button.book,
             loc = button.location;

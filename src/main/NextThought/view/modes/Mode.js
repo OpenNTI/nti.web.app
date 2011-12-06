@@ -73,7 +73,7 @@ Ext.define( 'NextThought.view.modes.Mode', {
 				console.log('Could not call deactivate on active "mode"',e.stack||e.stacktrace,e);
 			}
             ct.getLayout().setActiveItem(item);
-            this.getMainComponent().fireEvent('mode-activated');
+            this.fireEvent('mode-activated');
             this.getMainComponent().relayout();
         }
         catch(e){
@@ -84,7 +84,7 @@ Ext.define( 'NextThought.view.modes.Mode', {
     },
 
 	deactivate: function(){
-        this.getMainComponent().fireEvent('mode-deactivated');
+        this.fireEvent('mode-deactivated');
     },
 
     relayout: function(){
