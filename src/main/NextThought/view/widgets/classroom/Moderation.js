@@ -17,7 +17,8 @@ Ext.define('NextThought.view.widgets.classroom.Moderation', {
            xtype: 'chat-occupants-list',
            width: 150,
            region: 'west',
-           split: true
+           split: true,
+           autoHide: false
        },
        {
            xtype: 'chat-log-view',

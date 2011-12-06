@@ -19,6 +19,8 @@ Ext.define('NextThought.view.widgets.chat.OccupantsList', {
     initComponent:function() {
         var me = this;
 
+        if (this.autoHide !== false) this.autoHide = true;
+
         me.tools = [{
             type: 'gear',
             tooltip: 'become moderator',
@@ -62,7 +64,8 @@ Ext.define('NextThought.view.widgets.chat.OccupantsList', {
         function finish() {
             if (numberOccupants <= 1) {
                 //just me and someone else here
-                me.hide();
+                if (me.autoHide)
+                    me.hide();
             }
             else if(!me.isVisible()) {
                 me.show();
