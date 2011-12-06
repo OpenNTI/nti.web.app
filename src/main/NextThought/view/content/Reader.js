@@ -63,6 +63,9 @@ Ext.define('NextThought.view.content.Reader', {
         this.el.first().scrollTo('top', top, animate!==false);
     },
 
+    getContainerId: function() {
+        return this.el.select('meta[name=NTIID]').first().getAttribute('content');
+    },
 
     render: function(){
         console.log('rendering reader');
@@ -90,7 +93,7 @@ Ext.define('NextThought.view.content.Reader', {
             pc = path.split('#'),
             target = pc.length>1? pc[1] : null,
             vp= VIEWPORT.getEl(),
-            bc = this.down('breadcrumbbar') || Ext.getCmp('breadcrumb');
+            bc = this.ownerCt.getDockedComponent(0) || Ext.getCmp('breadcrumb');
 
         if(this.active == pc[0]){
             if( callback ){
@@ -108,6 +111,8 @@ Ext.define('NextThought.view.content.Reader', {
         this.active = pc[0];
         if(!skipHistory)
             this._appendHistory(book, path);
+        else if(skipHistory != 'no-record')
+            this.fireEvent('unrecorded-history', book, path);
 
         vp.mask('Loading...');
         if (bc) bc.setActive(book, f);
@@ -154,7 +159,7 @@ Ext.define('NextThought.view.content.Reader', {
             'click', this._onClick, this,
             {book: s.book, scope:this, stopEvent:true});
 
-        containerId = this.el.select('meta[name=NTIID]').first().getAttribute('content');
+        containerId = this.getContainerId();
 
         this.loadContentAnnotations(containerId);
 
@@ -266,7 +271,7 @@ Ext.define('NextThought.view.content.Reader', {
 
         var b = Library.getTitle(state.reader.index);
         if(b){
-            this.setActive(b, state.reader.page, true);
+            this.setActive(b, state.reader.page, 'no-record');
         }
         else{
             console.error(state.reader, 'The restored state object points to a resource that is no longer available');

@@ -37,20 +37,20 @@ Ext.define('NextThought.controller.Classroom', {
 			},
 
             'classroom-mode-container classroom-content' : {
-                'navigate': this.navigate
+                'content-message-received': this.onMessageContentNavigate
+            },
+
+            'classroom-mode-container' : {
+                'mode-activated' : this.classroomActivated
+            },
+
+            'classroom-mode-container reader-panel' : {
+                'unrecorded-history' : this.recordState
             }
 
-		},{});
-    },
 
-    loadContent: function()
-    {
-        //TEMP init some data into the live display
-        //TODO: This puts some default data into the content display, by virtue of the belongsTo iVar on the reader,
-        //          the tracker is ommitted.  Not sure if that's right or not, but it is for now.  There's still a left side gap though
-        //          and I don't know how to get rid of it.
-        var b = Library.getTitle('/prealgebra/eclipse-toc.xml');
-        this.getLiveDisplay().getReaderPanel().setActive(b, '/prealgebra/sect0001.html', true);
+
+		},{});
     },
 
 	isClassroom: function(roomOrMessageInfo){
@@ -59,17 +59,21 @@ Ext.define('NextThought.controller.Classroom', {
 		return (c in this.rooms || (/:/i.test(c) && ClassroomUtils.isClassroomId(c)));
 	},
 
-    navigate: function(ntiid) {
+    onMessageContentNavigate: function(ntiid) {
         var o = Library.findLocation(ntiid),
             book = o.book,
-            href = o.location.getAttribute('href');
+            href = o.location.getAttribute('href'),
+            path = book.get('root')+href;
+
+        //update classroom's state
+        this.recordState(book, path, null, true);
 
         //pass in boolean to skip adding this to history since classroom is synced
-        this.getReader().setActive(book, book.get('root')+href, true);
+        this.getReader().restore({reader: {book:book, page:path}});
     },
 
 	onMessage: function(msg, opts){
-		this.getClassroom().onMessage(msg,opts);
+		return this.getClassroom().onMessage(msg,opts);
 	},
 
 
@@ -77,11 +81,26 @@ Ext.define('NextThought.controller.Classroom', {
 		this.rooms[roomInfo.getId()] = roomInfo;
         this.getClassroomContainer().hideClassChooser();
 		this.getClassroomContainer().showClassroom(roomInfo);
+        this.getClassroomContainer().activate();
 
         //load content into live display:
-        this.loadContent();
+        this.classroomActivated();
 	},
 
+    recordState: function(book, path, eopts, viaSocket) {
+        console.log('path', path, 'stack', printStackTrace().join('\n'));
+        history.updateState({classroom: {reader: { index: book.get('index'), page: path}}});
+
+        //If this navigate event came from somewhere other than the socket, we need to issue
+        //a CONTENT message to the room.
+        //TODO - this only works if you are a mod, how should this work?
+        if (viaSocket !== true) {
+            console.log('requesting content update on all pages');
+            var ri = this.getClassroom().roomInfo,
+                id = this.getReader().getContainerId();
+            this.getController('Chat').postMessage(ri, {'ntiid': id}, null, 'CONTENT');
+        }
+    },
 
 	leaveRoom: function(){
 		var room = this.getClassroom().roomInfo,
@@ -99,14 +118,18 @@ Ext.define('NextThought.controller.Classroom', {
 		this.getClassroomContainer().hideClassChooser();
 	},
 
-    isActive: function()
-    {
-        return /classroom-mode-container/i.test(this.getViewport().getActive().xtype);
-    },
+    classroomActivated: function() {
+        var c = this.getClassroomContainer(),
+            ld = this.getLiveDisplay();
 
-    test: function() {
-        var ri = this.getClassroom().roomInfo;
-
-        this.getController('Chat').postMessage(ri, {'ntiid': 'tag:nextthought.com,2011-07-14:AOPS-HTML-prealgebra-5'}, null, 'CONTENT');
+        //make sure activate makes it to live display if the classroom is up, if its not up, show chooser
+		if(!c.down('classroom-content'))
+            c.showClassChooser();
+        else {
+            if (ld._content.items.first() !== ld.getReaderPanel()) {
+                ld._content.add(ld.getReaderPanel());
+                ld.getReaderPanel().restore(this.getController('State').getState().classroom);
+            }
+        }
     }
 });

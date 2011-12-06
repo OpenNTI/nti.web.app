@@ -68,6 +68,8 @@ Ext.define('NextThought.controller.Reader', {
     },
     
     restoreState: function() {
+        this.getReaderMode().restoreReader();
+
         var sc = this.getController('State');
 
         this.getReader().restore(sc.getState());
@@ -90,12 +92,13 @@ Ext.define('NextThought.controller.Reader', {
     buttonClicked: function(button) {
         if (!button || !button.book || !button.location) return;
 
-        //TODO - this does not currently work...
-        var skip = button.skipHistory;
+        var skip = button.skipHistory,
+            ntiid = button.ntiid;
 
         var book = button.book,
             loc = button.location;
-        
+
+        //TODO - we got the ntiid from the breadcrumbbar and need to pass it off so the reader goes where it ought to.
         this.navigate(book, loc, null, skip);
     },
 
@@ -129,7 +132,6 @@ Ext.define('NextThought.controller.Reader', {
         else if (testNode.compareDocumentPosition) {
             resultArray.sort(function (a,b) {
                     return 3 - (a.compareDocumentPosition(b) & 6);
-            });
         }
         return resultArray;
     },

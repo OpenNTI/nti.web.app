@@ -12,31 +12,17 @@ Ext.define('NextThought.view.widgets.classroom.LiveDisplay', {
     {
         this.callParent(arguments);
 
-       // this.add(Ext.widget('reader-panel', {title: 'Content', belongsTo: this.roomInfo.get('ContainerId'), tabConfig:{tooltip: 'Live Content'}}));
-        this.add({title:'Whiteboard', tabConfig:{tooltip: 'Live Whiteboard'}});
-        this.activate();
+        this._content = this.add({autoScroll: true, tabConfig:{title: 'Content', tooltip: 'Live Content'}, dockedItems: {dock:'bottom', xtype: 'breadcrumbbar', skipHistory: true}});
+        this._whiteboard = this.add({tabConfig:{title:'Whiteboard', tooltip: 'Live Whiteboard'}});
     },
 
     getReaderPanel: function() {
         return Ext.getCmp('readerPanel');
     },
 
-    activate: function() {
-        if (this.items.get(0) !== this.getReaderPanel()) {
-            this.insert(0, this.getReaderPanel());
-            if (!this.getReaderPanel().getDockedItems()[0]) {
-                this.getReaderPanel().addDocked(
-                    {dock:'bottom', xtype: 'breadcrumbbar', skipHistory: true}
-                );
-            }
-            this.setActiveTab(0);
-        }
-    },
-
     destroy: function() {
         //remove reader so it is not destroyed
-        this.getReaderPanel().removeDocked(0);
-        this.remove(this.getReaderPanel(), false);
+        this._content.remove(this.getReaderPanel(), false);
 
         //do this last
         this.callParent(arguments);

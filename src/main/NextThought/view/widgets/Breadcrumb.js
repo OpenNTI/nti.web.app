@@ -188,7 +188,8 @@ Ext.define('NextThought.view.widgets.Breadcrumb', {
         
         var label = topicNode.getAttribute("label"),
             href = topicNode.getAttribute("href"),
-            leaf = this._renderLeaf(book, label, href, selected);
+            ntiid = topicNode.getAttribute('ntiid'),
+            leaf = this._renderLeaf(book, label, href, ntiid, selected);
     
         if(leaf && topicNode.childNodes.length > 0){
             var list = [];
@@ -204,7 +205,7 @@ Ext.define('NextThought.view.widgets.Breadcrumb', {
     
     
     
-    _renderLeaf: function(book, labelText, href, selected) {
+    _renderLeaf: function(book, labelText, href, ntiid, selected) {
         if(!href || !labelText || !book){
             return null;
         }
@@ -213,6 +214,7 @@ Ext.define('NextThought.view.widgets.Breadcrumb', {
         	text: labelText,
             book: book,
             location: book.get('root')+href,
+            ntiid: ntiid,
             skipHistory: this.skipHistory
         };
             

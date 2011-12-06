@@ -34,7 +34,6 @@ Ext.define('NextThought.view.content.Classroom', {
     },
 
     onContent: function(msg, opts) {
-        console.log('CONTENT channel message not supported yet');
         var ntiid = msg.get('body')['ntiid'];
 
         //content must have ntiid
@@ -43,7 +42,7 @@ Ext.define('NextThought.view.content.Classroom', {
             return;
         }
 
-        this.fireEvent('navigate', ntiid);
+        this.fireEvent('content-message-received', ntiid);
         return true;
     },
 
