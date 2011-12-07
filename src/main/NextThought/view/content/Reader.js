@@ -87,7 +87,7 @@ Ext.define('NextThought.view.content.Reader', {
     },
 
 
-    setActive: function(book, path, skipHistory, callback) {
+    setActive: function(book, path, skipHistory, callback, ntiid) {
         var b = this._resolveBase(this._getPathPart(path)),
             f = this._getFilename(path),
             pc = path.split('#'),
@@ -112,7 +112,7 @@ Ext.define('NextThought.view.content.Reader', {
         if(!skipHistory)
             this._appendHistory(book, path);
         else if(skipHistory != 'no-record')
-            this.fireEvent('unrecorded-history', book, path);
+            this.fireEvent('unrecorded-history', book, path, ntiid);
 
         vp.mask('Loading...');
         if (bc) bc.setActive(book, f);

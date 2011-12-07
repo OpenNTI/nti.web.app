@@ -98,18 +98,17 @@ Ext.define('NextThought.controller.Reader', {
         var book = button.book,
             loc = button.location;
 
-        //TODO - we got the ntiid from the breadcrumbbar and need to pass it off so the reader goes where it ought to.
-        this.navigate(book, loc, null, skip);
+        this.navigate(book, loc, null, skip, ntiid);
     },
 
-    navigate: function(book, ref, options, skipHistory){
+    navigate: function(book, ref, options, skipHistory, ntiid){
  //       this.getReaderMode().activate();
         this.getReader().setActive(book, ref, skipHistory,
             options
                 ? typeof(options)=='function'
                     ? options
                     : Ext.bind(this.scrollToText, this, [options.text, options.oid])
-                : undefined);
+                : undefined, ntiid);
     },
 
     getElementsByTagNames: function(list,obj) {
@@ -132,6 +131,7 @@ Ext.define('NextThought.controller.Reader', {
         else if (testNode.compareDocumentPosition) {
             resultArray.sort(function (a,b) {
                     return 3 - (a.compareDocumentPosition(b) & 6);
+            });
         }
         return resultArray;
     },

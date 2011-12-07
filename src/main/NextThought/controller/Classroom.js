@@ -66,7 +66,7 @@ Ext.define('NextThought.controller.Classroom', {
             path = book.get('root')+href;
 
         //update classroom's state
-        this.recordState(book, path, null, true);
+        this.recordState(book, path, ntiid, null, true);
 
         //pass in boolean to skip adding this to history since classroom is synced
         this.getReader().restore({reader: {book:book, page:path}});
@@ -87,7 +87,7 @@ Ext.define('NextThought.controller.Classroom', {
         this.classroomActivated();
 	},
 
-    recordState: function(book, path, eopts, viaSocket) {
+    recordState: function(book, path, ntiid, eopts, viaSocket) {
         console.log('path', path, 'stack', printStackTrace().join('\n'));
         history.updateState({classroom: {reader: { index: book.get('index'), page: path}}});
 
@@ -97,7 +97,9 @@ Ext.define('NextThought.controller.Classroom', {
         if (viaSocket !== true) {
             console.log('requesting content update on all pages');
             var ri = this.getClassroom().roomInfo,
-                id = this.getReader().getContainerId();
+                id = !ntiid ? this.getReader().getContainerId() : ntiid;
+
+            debugger;
             this.getController('Chat').postMessage(ri, {'ntiid': id}, null, 'CONTENT');
         }
     },
