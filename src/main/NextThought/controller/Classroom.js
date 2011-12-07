@@ -69,7 +69,7 @@ Ext.define('NextThought.controller.Classroom', {
         this.recordState(book, path, ntiid, null, true);
 
         //pass in boolean to skip adding this to history since classroom is synced
-        this.getReader().restore({reader: {book:book, page:path}});
+        this.getReader().restore({reader: { index: book.get('index'), page: path}});
     },
 
 	onMessage: function(msg, opts){
@@ -99,7 +99,6 @@ Ext.define('NextThought.controller.Classroom', {
             var ri = this.getClassroom().roomInfo,
                 id = !ntiid ? this.getReader().getContainerId() : ntiid;
 
-            debugger;
             this.getController('Chat').postMessage(ri, {'ntiid': id}, null, 'CONTENT');
         }
     },
