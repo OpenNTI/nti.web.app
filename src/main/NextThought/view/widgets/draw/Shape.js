@@ -46,7 +46,9 @@ Ext.define('NextThought.view.widgets.draw.Shape', {
 		var m = this.matrix,
 			additionalProps = {
                 'strokeColor': Color.toRGB(this.stroke),
+                'strokeOpacity' : 1, //TODO: once we have tools to adjust this, set
                 'fillColor': Color.toRGB(this.fill),
+                'fillOpacity': 1, //TODO: once we have tools to adjust this, set
                 'strokeWidth': this['stroke-width']
             },
 			matrix = {

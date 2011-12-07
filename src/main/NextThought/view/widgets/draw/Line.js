@@ -61,7 +61,9 @@ Ext.define('NextThought.view.widgets.draw.Line', {
                {
                    sides: 1,
                    'strokeColor': Color.toRGB(this.stroke),
+                   'strokeOpacity' : 1, //TODO: once we have tools to adjust this, set
                    'fillColor': Color.toRGB(this.fill),
+                   'fillOpacity': 1, //TODO: once we have tools to adjust this, set
                    'strokeWidth': this['stroke-width']
                }
            );
