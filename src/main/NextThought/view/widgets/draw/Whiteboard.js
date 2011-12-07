@@ -344,7 +344,7 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 		);
 
         var s = { "Class":"Canvas", "shapeList": shapes };
-        console.log('save scene', s);
+        console.log('save scene', JSON.stringify(s));
 
 		return shapes.length==0
 				?	undefined
