@@ -276,14 +276,14 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
     },
 
 	loadScene: function(canvasJSON){
-        console.log('JSON canvas to load', canvasJSON);
+        console.log('JSON canvas to load', JSON.stringify(canvasJSON));
 
 		var shapes = Ext.clone( canvasJSON.shapeList ),
 			s = this.getSurface(),
 			w = this.getScaleFactor();
 
 		Ext.each(shapes, function(shape, i){
-
+            //TODO : opacity for fill and stroke are available, hook them up.
 			var c = Color.cleanRGB(shape.fillColor) || Color.getColor(i),
 				p =  Color.cleanRGB(shape.strokeColor) || c.getDarker(0.2),
 				t = shape.transform,
