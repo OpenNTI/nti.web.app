@@ -2,18 +2,17 @@
 CENTER_WIDTH = 768;
 MIN_SIDE_WIDTH = 175;
 MIN_WIDTH = 768;
-
+/*
 window.onerror = function(message, location, line){
 	if(!NextThought.isReady){
 		document.body.innerHTML = '';
 		Ext.getBody().mask("Ooops, now this is embarrasing...<br/>there was an unexpected error, please try again.","body-mask");
 	}
-    /*
 	else{
 		console.error("Error:", message);
 	}
-	*/
 };
+*/
 
 
 function removeLoaderSplash(){
