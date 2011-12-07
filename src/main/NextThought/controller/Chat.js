@@ -36,7 +36,7 @@ Ext.define('NextThought.controller.Chat', {
 
 
     init: function() {
-    	this.activeRooms = {};
+		this.activeRooms = {};
 
         var me = this;
 
@@ -50,17 +50,16 @@ Ext.define('NextThought.controller.Chat', {
         };
 
         Socket.register({
-            'disconnect': function(){me.onSocketDisconnect.apply(me, arguments)},
-            'serverkill': function(){me.onSocketDisconnect.apply(me, arguments)},
-            'chat_enteredRoom': function(){me.onEnteredRoom.apply(me, arguments)},
-            'chat_exitedRoom' : function(){me.onExitedRoom.apply(me, arguments)},
-            'chat_roomMembershipChanged' : function(){me.onMembershipChanged.apply(me, arguments)},
+            'disconnect': function(){me.onSocketDisconnect.apply(me, arguments);},
+            'serverkill': function(){me.onSocketDisconnect.apply(me, arguments);},
+            'chat_enteredRoom': function(){me.onEnteredRoom.apply(me, arguments);},
+            'chat_exitedRoom' : function(){me.onExitedRoom.apply(me, arguments);},
+            'chat_roomMembershipChanged' : function(){me.onMembershipChanged.apply(me, arguments);},
             'chat_presenceOfUserChangedTo' : function(user, presence){UserRepository._presenceChanged(user, presence);},
-            'chat_recvMessage': function(){me.onMessage.apply(me, arguments)},
+            'chat_recvMessage': function(){me.onMessage.apply(me, arguments);},
             'chat_recvMessageForAttention' : function(){me.onMessageForAttention.apply(me, arguments);},
             'chat_recvMessageForModeration' : function(){me.onModeratedMessage.apply(me, arguments);},
-            'chat_recvMessageForShadow' : function(){me.onMessage.apply(me, arguments);
-            }
+            'chat_recvMessageForShadow' : function(){me.onMessage.apply(me, arguments);}
         });
 
         this.control({
@@ -68,14 +67,7 @@ Ext.define('NextThought.controller.Chat', {
                 'click': this.flaggedMenuItemClicked
             },
             'chat-window splitbutton[action=flagged]': {
-                'click' : function(btn){
-                    var i = btn.menu.items,
-                        c = (btn.lastAction+1) % i.getCount();
-
-                    btn.lastAction = isNaN(c) ? 0 : c;
-
-                    this.flaggedMenuItemClicked(i.getAt(btn.lastAction));
-                }
+                'click' : this.flaggedButtonClicked
             },
             'leftColumn button[showChat]':{
                 'click': this.openChatWindow
@@ -98,7 +90,7 @@ Ext.define('NextThought.controller.Chat', {
                 }
             },
 
-            'chat-log-view':{'approve': function(ids){this.approveMessages(ids)}},
+            'chat-log-view':{'approve': function(ids){this.approveMessages(ids);}},
             'chat-log-view button[action]':{'click': this.toolClicked},
             'chat-log-view tool[action]':{'click': this.toolClicked},
 
@@ -139,17 +131,18 @@ Ext.define('NextThought.controller.Chat', {
 
     existingRoom: function(users, options) {
         //Add ourselves to this list
-        var allUsers = Ext.Array.unique(users.slice().concat(_AppConfig.userObject.getId()));
+        var key, ri,
+			allUsers = Ext.Array.unique(users.slice().concat(_AppConfig.userObject.getId()));
 
 		if(options){
 			return null;
 		}
 
         //Check to see if a room with these users already exists, and use that.
-        for (var key in this.activeRooms) {
+        for (key in this.activeRooms) {
             if (!this.activeRooms.hasOwnProperty(key)) continue;
 
-            var ri = this.activeRooms[key];
+            ri = this.activeRooms[key];
             if (arrayEquals(ri.get('Occupants'), allUsers)) {
                 return ri;
             }
@@ -176,17 +169,18 @@ Ext.define('NextThought.controller.Chat', {
 
     enterRoom: function(usersOrList, options) {
 		options = options || {};
-        var users = [];
+        var users = [], k, ri, roomCfg;
 
         if (usersOrList.get && usersOrList.get('friends')) {
-            options['ContainerId'] = usersOrList.get('NTIID');
+            options.ContainerId = usersOrList.get('NTIID');
         }
         else if (!Ext.isArray(usersOrList)) users = [usersOrList];
         else users = usersOrList;
 
         users = Ext.Array.clone(users);
         
-        for (var k in users) {
+        for (k in users) {
+			if(!users.hasOwnProperty(k))continue;
             if (typeof(users[k]) != 'string') {
                 if (users[k].getId) {
                     users[k] = users[k].getId();
@@ -203,11 +197,11 @@ Ext.define('NextThought.controller.Chat', {
 
         users = Ext.Array.clean(users);
 
-        var ri = this.existingRoom(users,options);
+        ri = this.existingRoom(users,options);
         if (ri)
             this.onEnteredRoom(ri);
         else{ //If we get here, there were no existing rooms, so create a new one.
-			var roomCfg = {'Occupants': users};
+			roomCfg = {'Occupants': users};
 
             //no occupants required if there's a container id and it's a class/study room etc.
 			if(options.ContainerId && ClassroomUtils.isClassroomId(options.ContainerId)){
@@ -249,10 +243,10 @@ Ext.define('NextThought.controller.Chat', {
 				title: 'Compose Message',
 				modal: true,
 				bbar: [
-						'->',
-				  		{ xtype: 'button', text: 'Send',	action: 'send' },
-				  		{ xtype: 'button', text: 'Cancel',	action: 'cancel' }
-					]});
+					'->',
+					{ xtype: 'button', text: 'Send',	action: 'send' },
+					{ xtype: 'button', text: 'Cancel',	action: 'cancel' }
+				]});
 
 		win.show();
 
@@ -310,6 +304,15 @@ Ext.define('NextThought.controller.Chat', {
     flaggedMenuItemClicked: function(mi) {
         this.showMessage(mi.relatedCmp);
     },
+
+	flaggedButtonClicked: function(btn){
+		var i = btn.menu.items,
+			c = (btn.lastAction+1) % i.getCount();
+
+		btn.lastAction = isNaN(c) ? 0 : c;
+
+		this.flaggedMenuItemClicked(i.getAt(btn.lastAction));
+	},
 
     toolClicked: function(field) {
         var a = field.action.toLowerCase(),
@@ -382,14 +385,15 @@ Ext.define('NextThought.controller.Chat', {
     replyWhisper: function(msgCmp) {
         var message = msgCmp.message,
             w = msgCmp.up('chat-window'),
-            recipients = new Ext.util.HashMap();
+            recipients = new Ext.util.HashMap(),
+			r,m;
 
         recipients.add(message.get('Creator'), 1);
         recipients.add(_AppConfig.userObject.getId(), 1);
 
         while(w && message && message.get('inReplyTo')){
-            var r = IdCache.getIdentifier('inReplyTo'),
-                m = w.down(Ext.String.format('*[messageId={1}]', r));
+            r = IdCache.getIdentifier('inReplyTo');
+            m = w.down(Ext.String.format('*[messageId={1}]', r));
 
             if(!m || !m.message)break;
 
@@ -434,33 +438,34 @@ Ext.define('NextThought.controller.Chat', {
     },
 
     onMessageForAttention: function(mid) {
-        var w = this.getChatWindow();
-        if (!w) {
+        if (!this.getChatWindow()) {
             console.warn('chat window is not open');
             return;
         }
 
-        var m = w.query('[messageId='+IdCache.getIdentifier(mid)+']')[0],
+        var w = this.getChatWindow(),
+			m = w.query('[messageId='+IdCache.getIdentifier(mid)+']')[0],
             msg = m ? m.message : null,
             u = msg ? UserRepository.getUser(msg.get('Creator')) : null,
             name = u ? u.get('alias') || u.get('realname') : null,
             i = u ? u.get('avatarURL'): null,
             b = w.query('button[action=flagged]')[0],
-            self = this;
+            self = this, c;
 
         if (!m || !msg) {
-            console.error('can not find messages')
+            console.error('can not find messages');
             return;
         }
 
         b.enable();
-        var c = parseInt(b.getText(), 10);
+        c = parseInt(b.getText(), 10);
         b.setText(isNaN(c) ? 1 : c+1);
 
         m.addCls('flagged');
 
         b.menu.add({
-            text:Ext.String.format('<b>{0}</b> - {1}', name, Ext.String.ellipsis(AnnotationUtils.getBodyTextOnly(msg), 15)),
+            text:Ext.String.format('<b>{0}</b> - {1}', name,
+					Ext.String.ellipsis(AnnotationUtils.getBodyTextOnly(msg), 15)),
             icon: i,
             relatedCmp: m
         });
@@ -469,26 +474,28 @@ Ext.define('NextThought.controller.Chat', {
     },
 
     onMessage: function(msg, opts) {
-        var m = ParseUtils.parseItems([msg])[0];
+        var m = ParseUtils.parseItems([msg])[0],
+			channel = m.get('channel');
 
         if (this.getClassroom().isClassroom(m) &&
 		    this.getClassroom().onMessage(m, {})){
 			return;
         }
 
-        var channel = m.get('channel');
         this._channelMap[channel].call(this, m, opts||{});
     },
 
     onMessageDefaultChannel: function(msg, opts) {
 		var win = this.getChatWindow(),
             r = msg.get('ContainerId'),
-		    moderated = !!('moderated' in opts);
+		    moderated = !!('moderated' in opts),
+			tab,
+			log;
 
 		if(!win)return;
 
-        var tab = win.down('chat-view[roomId=' + r + ']'),
-            mlog = tab ? tab.down('chat-log-view[moderated=true]') : null;
+        tab = win.down('chat-view[roomId=' + r + ']');
+        log = tab ? tab.down('chat-log-view[moderated=true]') : null;
 
         if(!tab) {
             console.warn('message received for tab which no longer exists', msg, r, win.items);
@@ -498,8 +505,8 @@ Ext.define('NextThought.controller.Chat', {
         win.down('tabpanel').setActiveTab(tab);
         tab.down('chat-log-view[moderated='+moderated+']').addMessage(msg);
 
-        if(!moderated && mlog) {
-            mlog.removeMessage(msg);
+        if(!moderated && log) {
+            log.removeMessage(msg);
         }
     },
 
@@ -511,6 +518,7 @@ Ext.define('NextThought.controller.Chat', {
         var b = msg.get('body') || {},
             a = b.action,
             i = b.ntiid,
+			e,
             r = this.activeRooms[msg.get('ContainerId')],
             cv = this.getChatView(r);
 
@@ -518,9 +526,8 @@ Ext.define('NextThought.controller.Chat', {
             cv.getPinnedMessageView().destroy();
         }
         else if('pin' == a ) {
-            var e = cv.down('[messageId='+IdCache.getIdentifier(i)+']');
-
-            if (!e) {
+            e = cv.down('[messageId='+IdCache.getIdentifier(i)+']');
+			if (!e) {
                 console.warn('Could not find existing message with ID', i);
                 return;
             }
@@ -549,15 +556,16 @@ Ext.define('NextThought.controller.Chat', {
     },
 
     onEnteredRoom: function(msg) {
-        var roomInfo = msg && msg.isModel? msg : ParseUtils.parseItems([msg])[0];
+        var roomInfo = msg && msg.isModel? msg : ParseUtils.parseItems([msg])[0],
+			existingRoom;
         if (roomInfo.getId() in this.activeRooms) {
-            console.warn('room already exists, all rooms/roominfo', this.activeRooms, roomInfo);
+            console.warn('room already exists, all rooms/roomInfo', this.activeRooms, roomInfo);
         }
 
-        var eri = this.existingRoom(roomInfo.get('Occupants'));
-        if (eri) {
-            eri.fireEvent('changed', roomInfo);
-            this.leaveRoom(eri);
+		existingRoom = this.existingRoom(roomInfo.get('Occupants'));
+        if (existingRoom) {
+			existingRoom.fireEvent('changed', roomInfo);
+            this.leaveRoom(existingRoom);
         }
 
         this.activeRooms[roomInfo.getId()] = roomInfo;

@@ -73,21 +73,21 @@ Ext.define('NextThought.Library', {
     },
 
     getToc: function(index){
-    	if(index && !this._tocs[index]){
-    		this._loadToc(index);
-    	}
-    	
-    	return this._tocs[index];
+		if(index && !this._tocs[index]){
+			this._loadToc(index);
+		}
+
+		return this._tocs[index];
     },
-    
-    
+
+
 	load: function(){
         this.loaded = false;
         this.store.on('load', this._onLoad, this );
         this.store.load();
     },
 
-    _onLoad: function(store, records, success, operation, opts) {
+    _onLoad: function(store, records, success) {
 
         if(success){
             this._libraryLoaded(Ext.bind(go,this));
@@ -117,7 +117,7 @@ Ext.define('NextThought.Library', {
 			if(!o.get||!o.get('index')){ return; }
 			me._loadToc(o.get('index'), function(){
 				stack.pop();
-				if(stack.length==0 && callback){
+				if(stack.length===0 && callback){
 					callback.call(this);
 				}
 			});
@@ -135,7 +135,7 @@ Ext.define('NextThought.Library', {
                 failure: function() {
                     console.error('There was an error loading library', url, arguments);
                 },
-                success: function(r,o) {
+                success: function(r) {
                     this._tocs[index] = r.responseXML? r.responseXML : this._parseXML(r.responseText);
                     if(!this._tocs[index]){
                         console.warn('no data for index: '+url);
@@ -200,13 +200,12 @@ Ext.define('NextThought.Library', {
 
         var child = this.findLocation(potentialChild),
             l = child ? child.location : null,
-            found = false;
+            found = false,
+			id;
 
         while(l && !found) {
-            var id = l.getAttribute? l.getAttribute('ntiid') : null;
-
+            id = l.getAttribute? l.getAttribute('ntiid') : null;
             if (parentId == id) found = true;
-
             l = l.parentNode;
         }
 
@@ -222,14 +221,14 @@ Ext.define('NextThought.Library', {
     },
 
     _recursiveResolveBookLocation: function( book, containerId, elt ) {
-        var elts = elt.getElementsByTagName( 'topic' );
-        for( var ix = 0; ix < elts.length; ix++ ) {
-            var child = elts.item(ix);
+        var elts = elt.getElementsByTagName( 'topic' ), ix, child, cr;
+        for( ix = 0; ix < elts.length; ix++ ) {
+            child = elts.item(ix);
             if( !child ) { continue; }
             if( child.getAttribute( 'ntiid' ) == containerId ) {
                 return {book: book, location: child };
             }
-            var cr = this._recursiveResolveBookLocation( book, containerId, child );
+            cr = this._recursiveResolveBookLocation( book, containerId, child );
             if( cr ) {
                 return cr;
             }
