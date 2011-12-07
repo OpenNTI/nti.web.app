@@ -12,7 +12,7 @@ Ext.define('NextThought.view.widgets.draw.Ellipse', {
 
 	constructor: function(config){
 
-		var ry,rx=ry=0.5;
+		var ry=0.5,rx=0.5;
         this.applyClipRect = true;
 		this.callParent([Ext.apply(config,{ type: 'circle', radius: rx,
 			path: Ext.draw.Draw.parsePathString(
