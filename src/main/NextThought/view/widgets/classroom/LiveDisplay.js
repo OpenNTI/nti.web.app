@@ -5,14 +5,26 @@ Ext.define('NextThought.view.widgets.classroom.LiveDisplay', {
         'NextThought.view.content.Reader'
     ],
 
- 	cls: 'nti-live-display',
+	cls: 'nti-live-display',
     tabPosition: 'bottom',
+	border: false,
+	defaults: {
+		border: false,
+		defaults: {
+			border: false
+		}
+	},
 
     initComponent: function()
     {
         this.callParent(arguments);
 
-        this._content = this.add({autoScroll: true, tabConfig:{title: 'Content', tooltip: 'Live Content'}, dockedItems: {dock:'bottom', xtype: 'breadcrumbbar', skipHistory: true}});
+        this._content = this.add({
+			layout: 'fit',
+			tabConfig:{title: 'Content', tooltip: 'Live Content'},
+			dockedItems: {dock:'bottom', xtype: 'breadcrumbbar', skipHistory: true}
+		});
+
         this._whiteboard = this.add({tabConfig:{title:'Whiteboard', tooltip: 'Live Whiteboard'}});
     },
 

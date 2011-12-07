@@ -2,15 +2,23 @@
 
 Ext.define( 'NextThought.view.modes.Classroom', {
 	extend: 'NextThought.view.modes.Mode',
-	alias: 	'widget.classroom-mode-container',
+	alias:	'widget.classroom-mode-container',
 	requires: [
 			'NextThought.view.windows.ClassRoomChooser'
 	],
+
+	border: false,
+	defaults: {
+		border: false,
+		defaults: {
+			border: false
+		}
+	},
 	
     initComponent: function(){
-   		this.callParent(arguments);
+		this.callParent(arguments);
 		this.mainArea = this.add({
-			cls:'x-focus-pane',
+			border: false,
 			flex:1,
 			layout: 'fit',
 			dockedItems:this.getEmptyToolbar()
@@ -18,7 +26,7 @@ Ext.define( 'NextThought.view.modes.Classroom', {
     },
 
 	showClassChooser: function(){
-		this.chooser = this.mainArea.add(Ext.widget('classroom-chooser')).show().center();
+		this.chooser = this.mainArea.add({xtype:'classroom-chooser'}).show().center();
 	},
 
 	hideClassChooser: function(){
@@ -31,7 +39,7 @@ Ext.define( 'NextThought.view.modes.Classroom', {
 		var tb = this.down('toolbar');
 		tb.removeAll();
 		tb.add({text:'Leave Class', action: 'leave'});
-        this.mainArea.add(Ext.widget('classroom-content',{roomInfo: roomInfo}));
+        this.mainArea.add({xtype: 'classroom-content', roomInfo: roomInfo});
     },
 
 

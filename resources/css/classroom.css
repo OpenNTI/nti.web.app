@@ -1,4 +1,9 @@
-
+.nti-classroom-management .x-panel-body{
+	border-left-width: 2px !important;
+}
+.nti-classroom-management .x-panel-body .x-panel-body{
+	border-left-width: inherit !important;
+}
 
 .classroom-chooser a:link,
 .classroom-chooser a:visited,

@@ -11,11 +11,18 @@ Ext.define('NextThought.view.content.Classroom', {
     layout: {
         type: 'hbox',
         align: 'stretch'
-    },
+	},
+	border: false,
+	defaults: {
+		border: false,
+		defaults: {
+			border: false
+		}
+	},
 
     initComponent: function() {
-    	//vars
-    	//this.roomInfo = null;
+		//vars
+		//this.roomInfo = null;
         this.callParent(arguments);
 
         //table of behavious based on channel
@@ -27,14 +34,14 @@ Ext.define('NextThought.view.content.Classroom', {
             'WHISPER' : this.onDefault
         };
 
-        this.add({xtype: 'chat-view', border: true, flex:1});
-        this.add({xtype: 'classroom-management', border: true, roomInfo: this.roomInfo, width: 500});
+        this.add({xtype: 'chat-view', flex:1});
+        this.add({xtype: 'classroom-management', roomInfo: this.roomInfo, width: 500});
 
         this.down('chat-view').changed(this.roomInfo);
     },
 
     onContent: function(msg, opts) {
-        var ntiid = msg.get('body')['ntiid'];
+        var ntiid = msg.get('body').ntiid;
 
         //content must have ntiid
         if (!ntiid) {
@@ -57,9 +64,8 @@ Ext.define('NextThought.view.content.Classroom', {
 
     onDefault: function(msg, opts) {
         var r = msg.get('ContainerId'),
-            moderated = !!('moderated' in opts);
-
-        var v = this.down('chat-view'),
+            moderated = !!('moderated' in opts),
+			v = this.down('chat-view'),
             mlog = this.down('classroom-moderation').down('chat-log-view');
 
         if (moderated) {

@@ -9,6 +9,8 @@ Ext.define('NextThought.view.widgets.classroom.Moderation', {
 	cls: 'nti-classroom-moderation',
 
     layout: 'border',
+	border: false,
+	defaults: {border: false},
 
     items: [
        {
