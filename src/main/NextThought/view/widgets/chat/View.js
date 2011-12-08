@@ -65,12 +65,12 @@ Ext.define('NextThought.view.widgets.chat.View', {
         this.roomInfo.on('left-room', this.left, this);
 
         //upon the roominfo appearing, see if we should show the classroom button or not
-        if (!!!this.up('classroom-content') && ClassroomUtils.isClassroomId(ri.get('ContainerId'))) {
+        if (!this.up('classroom-content') && ClassroomUtils.isClassroomId(ri.get('ContainerId'))) {
             this.down('chat-reply-to').showClassroomButton();
         }
 
         //stuff the occupants where they belong
-        if (!!this.up('classroom-content')) {
+        if (this.up('classroom-content')) {
             this.up('classroom-content').down('classroom-moderation').down('chat-occupants-list').setOccupants(this.roomInfo.get('Occupants'), this.roomId);
             this.down('chat-occupants-list').hide();
         }

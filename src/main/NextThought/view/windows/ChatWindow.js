@@ -80,7 +80,8 @@ Ext.define('NextThought.view.windows.ChatWindow', {
 
         if (tab) {
             tab.disableExitRoom = disableExitRoom;
-            tab.destroy(); //TODO: This causes the room to be left this receiving no more messages, we want to remove the tab, but not leave the room in this case (switch to classroom)
+            tab.destroy(); //TODO: This causes the room to be left this receiving no more messages, we want to remove
+            // the tab, but not leave the room in this case (switch to classroom)
         }
     },
 
@@ -88,16 +89,18 @@ Ext.define('NextThought.view.windows.ChatWindow', {
         var occs = roomInfo.get('Occupants'),
             numOccs = occs.length,
             result = [],
-            max = 2;
+            max = 2,
+			left,
+			i,u;
 
-        for (var i = 0; result.length<max && i < occs.length; i++) {
-            var u =  NextThought.cache.UserRepository.getUser(occs[i]);
+        for (i = 0; result.length<max && i < numOccs; i++) {
+            u =  NextThought.cache.UserRepository.getUser(occs[i]);
 
             if (u.getId() == _AppConfig.userObject.getId()) continue;
 
             result.push(u.get('alias') || u.get('Username'));
         }
-        var left = occs.length - result.length - 1;
+        left = occs.length - result.length - 1;
 
         return result.join(',')+(left ? '...' : '');
     }
