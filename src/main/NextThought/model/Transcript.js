@@ -3,7 +3,7 @@ Ext.define('NextThought.model.Transcript', {
     requires: [
         'NextThought.proxy.Rest'
     ],
-    //idProperty: 'OID',
+	mimeType: 'application/vnd.nextthought.transcript',
     fields: [
         { name: 'Class', type: 'string', defaultValue: 'Transcript'},
         { name: 'RoomInfo', type: 'singleItem' },

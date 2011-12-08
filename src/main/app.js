@@ -44,7 +44,7 @@ Ext.application({
 		function start() {
 			applyHooks();
 			removeLoaderSplash();
-		    NextThought.controller.Session.login();
+		    NextThought.controller.Session.login(app);
 			NextThought.isReady = true;
 		}
 	}

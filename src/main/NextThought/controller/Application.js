@@ -10,6 +10,8 @@ Ext.define('NextThought.controller.Application', {
 
     statics: {
         launch: function(){
+
+
 			Ext.create('NextThought.view.Viewport');
             try{
                 Library.load();

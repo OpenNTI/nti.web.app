@@ -4,6 +4,7 @@ Ext.define('NextThought.model.FriendsList', {
 		'NextThought.proxy.Rest'
 	],
 	idProperty: 'OID',
+	mimeType: 'application/vnd.nextthought.friendslist',
 	fields: [
 		{ name: 'Last Modified', type: 'date', dateFormat: 'timestamp' },
 		{ name: 'id', mapping: 'ID', type: 'string' },
@@ -18,12 +19,7 @@ Ext.define('NextThought.model.FriendsList', {
 		{ name: 'ContainerId', type: 'string'},
 		{ name: 'friends', type: 'UserList' }
 	],
-	proxy: {
-		type: 'nti',
-		collectionName: 'FriendsLists',
-		reader: { type: 'nti', hasContainerId: true, root: false },
-		model: 'NextThought.model.FriendsList'
-	},
+
 	getModelName: function() {
 		return 'Group';
     },

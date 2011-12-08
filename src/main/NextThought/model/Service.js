@@ -84,6 +84,33 @@ Ext.define('NextThought.model.Service', {
 
 	getMainLibrary: function(){
 		return this.getLibrary('Main') || {};
+	},
+
+
+	/**
+	 *
+	 * @param mimeType
+	 * @param title
+	 */
+	getCollectionFor: function(mimeType, title){
+		var workspace = this.getWorkspace(_AppConfig.username) || {},
+			items = workspace.Items || [],
+			i, item, collection = null;
+
+		for(i in items){
+			if(!items.hasOwnProperty(i))continue;
+			item = items[i];
+
+			if(Ext.Array.contains(item.accepts,mimeType)){
+				if(title && item.Title != title) continue;
+
+				collection = item;
+				break;
+			}
+
+		}
+
+		return collection;
 	}
 
 });

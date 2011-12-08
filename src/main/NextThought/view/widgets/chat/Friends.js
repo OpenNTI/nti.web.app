@@ -13,18 +13,16 @@ Ext.define('NextThought.view.widgets.chat.Friends', {
     defaults: {border: false, defaults: {border: false}},
 
     initComponent:function() {
+		this._groups = {};
+		this.store = Ext.StoreManager.get('FriendsList');
         this.callParent(arguments);
         this.setGroups();
-        UserDataLoader.getFriendsListsStore().on('load', this.reload, this);
-    },
-
-    reload: function(store, groups, success, ops) {
-        this.setGroups();
+        this.store.on('load', this.setGroups, this);
     },
 
     setGroups: function() {
         var me = this,
-            groups = UserDataLoader.getFriendsListsStore(),
+            groups = me.store,
             prevGroups = me._groups || {},
             newGroups = {};
 
@@ -34,7 +32,9 @@ Ext.define('NextThought.view.widgets.chat.Friends', {
             if(/everyone/i.test(g.get('id'))) return; //skip everyone group
 
             var gid = IdCache.getIdentifier(g.getId()),
-                groupPanel = me.down('panel[groupId='+gid+']');
+                groupPanel = me.down('panel[groupId='+gid+']'),
+				prevFriends,
+				newFriends = {};
 
             if(!groupPanel){
                 groupPanel = me.add({
@@ -47,7 +47,7 @@ Ext.define('NextThought.view.widgets.chat.Friends', {
                         {
                             type: 'gear',
                             tooltip: 'open chat for this group',
-                            handler: function(){me.fireEvent('group-click', g)}
+                            handler: function(){me.fireEvent('group-click', g);}
                         }
                     ]
                 });
@@ -56,12 +56,12 @@ Ext.define('NextThought.view.widgets.chat.Friends', {
             newGroups[gid] = groupPanel;
             delete prevGroups[gid];
 
-            var prevFriends = groupPanel.friends, newFriends = {};
+            prevFriends = groupPanel.friends;
 
             Ext.each(g.get('friends'), function(uid){
-                var friend = UserRepository.getUser(uid);
+                var friend = UserRepository.getUser(uid),
+					item = groupPanel.down('chat-friend-entry[userId='+uid+']');
 
-                var item = groupPanel.down('chat-friend-entry[userId='+uid+']');
                 if(item){
                     item.update(friend);
                 }
@@ -85,9 +85,10 @@ Ext.define('NextThought.view.widgets.chat.Friends', {
         clean(prevGroups, newGroups, me, '_groups');
 
 
-        function clean(dirty, clean, obj, key){
-            obj[key] = clean;
+        function clean(dirty, _clean, obj, key){
+            obj[key] = _clean;
             for(var k in dirty){
+				if(!dirty.hasOwnProperty(k))continue;
                 obj.remove(dirty[k]);
                 delete dirty[k];
             }

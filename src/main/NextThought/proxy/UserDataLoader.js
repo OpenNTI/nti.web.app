@@ -84,32 +84,6 @@ Ext.define('NextThought.proxy.UserDataLoader',{
 	},
 
 
-	getFriendsListsStore: function(){
-
-		if(!this._friendsListsStore) {
-			this._friendsListsStore = Ext.create('Ext.data.Store', {
-				model: 'NextThought.model.FriendsList',
-				autoLoad: true,
-				sorters: [
-					{
-						sorterFn: function(o1, o2){
-							var a = /@/.test(o1.get('Username')),
-								b = /@/.test(o2.get('Username'));
-							return a==b ? 0 : a ? -1 : 1;
-						}
-					},{
-						property : 'realname',
-						direction: 'ASC'
-					}
-				]
-			});
-		}
-
-		return this._friendsListsStore;
-
-	},
-
-
 	getStreamStore: function(){
 		if(!this._streamStore) {
 			this._streamStore = Ext.create('Ext.data.Store', {

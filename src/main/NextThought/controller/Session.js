@@ -21,7 +21,7 @@ Ext.define('NextThought.controller.Session', {
     ],
 
     statics: {
-        login: function(){
+        login: function(app){
             var win = null;
             if (Ext.util.Cookies.get(COOKIE))
                 this.attemptLogin(null,success,showLogin);
@@ -36,6 +36,9 @@ Ext.define('NextThought.controller.Session', {
                 if(win){
                     win.close();
                 }
+
+				app.fireEvent('session-ready');
+
                 NextThought.controller.Application.launch();
             }
         },
@@ -84,9 +87,9 @@ Ext.define('NextThought.controller.Session', {
 							failureCallback.call(m);
 							return;
 						}
-						s.data = s.data.replace(/\d/g, '');
+
 						_AppConfig.service = Ext.create('NextThought.model.Service', Ext.decode(r.responseText));
-						console.debug('DEBUG: Login success, resolving user.');
+
 						m.attemptLoginCallback(values, successCallback, failureCallback);
 					}
                 });
@@ -106,12 +109,10 @@ Ext.define('NextThought.controller.Session', {
 			UserRepository.prefetchUser(form.username, function(users){
 				var user = users[0];
 				if(user){
-					console.debug('DEBUG: User resolved, continue loading.');
 					_AppConfig.userObject = user;
 					successCallback.call(me);
 				}
 				else{
-					console.warn('WARN(NF):');
 					failureCallback.call(me);
 				}
 			});

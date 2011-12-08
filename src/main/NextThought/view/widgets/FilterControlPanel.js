@@ -22,7 +22,7 @@ Ext.define('NextThought.view.widgets.FilterControlPanel', {
 	initComponent: function(){
    		this.callParent(arguments);
    		this.setWidth(MIN_SIDE_WIDTH);
-        this.store = UserDataLoader.getFriendsListsStore();
+        this.store = Ext.StoreManager.get('FriendsList');
         this.store.on('load', this.reload, this);
 	},
 	

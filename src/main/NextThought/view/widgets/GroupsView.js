@@ -24,7 +24,7 @@ Ext.define('NextThought.view.widgets.GroupsView', {
     itemSelector: 'div.item-wrap',
 
     initComponent: function(){
-        this.store = UserDataLoader.getFriendsListsStore();
+        this.store = Ext.StoreManager.get('FriendsList');
         this.callParent(arguments);
     }
 });

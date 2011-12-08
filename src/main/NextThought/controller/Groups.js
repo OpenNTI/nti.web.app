@@ -6,12 +6,18 @@ Ext.define('NextThought.controller.Groups', {
         'FriendsList'
     ],
 
+	stores: [
+		'FriendsList'
+	],
+
     views: [
         'modes.Groups',
         'windows.GroupEditorWindow'
     ],
 
     init: function() {
+		this.application.on('session-ready', this.loadGroups, this);
+
         this.control({
             'groups-mode-container toolbar button[createItem]':{
                 'click':function(){
@@ -52,8 +58,18 @@ Ext.define('NextThought.controller.Groups', {
         },{});
     },
 
+
+	loadGroups: function(){
+		var store = this.getFriendsListStore(),
+			mime = store.model.prototype.mimeType,
+			coll = _AppConfig.service.getCollectionFor(mime,'FriendsLists') || {};
+		store.proxy.url = coll.href;
+		store.load();
+	},
+
+
     reloadGroups: function(){
-        UserDataLoader.getFriendsListsStore().load();
+        this.getFriendsListStore().load();
     },
 
 
