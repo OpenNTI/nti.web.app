@@ -59,7 +59,7 @@ Ext.define('NextThought.view.widgets.NotePanel',{
         var m = this,
             a = m._annotation,
             r = m._record = m._record || a._record,
-            c = r.get('Creator') || _AppConfig.server.username;
+            c = r.get('Creator') || _AppConfig.username;
 
         m.id = this.getCmpId(r);
 
@@ -173,7 +173,7 @@ Ext.define('NextThought.view.widgets.NotePanel',{
     updateModel: function(m){
         var me = this,
             s = m.get('Creator'),
-            owner = _AppConfig.server.username == s,
+            owner = _AppConfig.username == s,
             t = AnnotationUtils.compileBodyContent(m);
 
         me._record = m;
@@ -232,7 +232,7 @@ Ext.define('NextThought.view.widgets.NotePanel',{
     fillInUser: function(u) {
         var name = u.get('alias') || u.get('Username'),
             i = u.get('avatarURL'),
-            owner = u.get('Username')==_AppConfig.server.username;
+            owner = u.get('Username')==_AppConfig.username;
 
         if(this.rendered){
             this.icon.set({src: i});

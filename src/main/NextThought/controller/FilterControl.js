@@ -134,7 +134,7 @@ Ext.define('NextThought.controller.FilterControl', {
             allGroups = this.getAllGroupsButton(id).getValue(),
 			groups = this.getGroups(id),
 			types = this.getTypes(id),
-			u = _AppConfig.server.username;
+			u = _AppConfig.username;
 
         if(allGroups) filter.groups = 'all';
         else {

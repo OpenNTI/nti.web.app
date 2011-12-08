@@ -35,13 +35,13 @@ Ext.define('NextThought.controller.Groups', {
 
             'groups-mode-container dataview':{
                 'itemdblclick':function(a, rec){
-                    //if(rec.get('Creator')==_AppConfig.server.username)
+                    //if(rec.get('Creator')==_AppConfig.username)
                         Ext.create('NextThought.view.windows.GroupEditorWindow',{record: rec}).show();
                 },
                 'selectionchange': function(a, sel){
                     var q = 'groups-mode-container toolbar button[deleteItem]';
                     Ext.each(Ext.ComponentQuery.query(q),function(v){
-                        sel.length ? v.enable() : v.disable();
+                        if(sel.length) v.enable(); else v.disable();
                     });
                 }
             },
@@ -61,7 +61,9 @@ Ext.define('NextThought.controller.Groups', {
         var win = btn.up('window'),
             frm = win.down('form'),
             str = win._store,
-            rec = win.record;
+            rec = win.record,
+			names = [],
+			values, n;
 
 
         if(btn.actionName == 'save') {
@@ -70,13 +72,12 @@ Ext.define('NextThought.controller.Groups', {
             }
 
             win.el.mask('Saving...');
-            var names = [],
-                values = frm.getValues();
+            values = frm.getValues();
             Ext.each(str.data.items, function(u){ names.push(u.get('Username')); });
 
             if(rec.phantom){
-                var n = values.name;
-                n = n.replace(/[^0-9A-Za-z\-\@]/g, '.');
+                n = values.name;
+                n = n.replace(/[^0-9A-Za-z\-@]/g, '.');
                 n = n.replace(/^[\.\-_]+/g, '');
                 rec.set('Username',n+'@nextthought.com');
             }
@@ -84,7 +85,7 @@ Ext.define('NextThought.controller.Groups', {
             rec.set('friends', names);
             rec.save({
                 scope: this,
-                success: function(newRecord){
+                success: function(){
                     this.reloadGroups();
                     win.close();
                 },

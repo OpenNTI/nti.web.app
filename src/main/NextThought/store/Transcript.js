@@ -16,16 +16,16 @@ Ext.define('NextThought.store.Transcript',{
         model: 'NextThought.model.TranscriptSummary'
     },
 
-    constructor: function() {
-        var h = _AppConfig.server.host,
-            d = _AppConfig.server.data,
-            u = _AppConfig.server.username;
-
-        this.proxy.url = h+d+'users/'+u+'/Transcripts/';
-
-        this.callParent(arguments);
-
-    },
+//    constructor: function() {
+//        var h = _AppConfig.server.host,
+//            d = _AppConfig.server.data,
+//            u = _AppConfig.username;
+//
+//        this.proxy.url = h+d+'users/'+u+'/Transcripts/';
+//
+//        this.callParent(arguments);
+//
+//    },
 
     /**
      * a utility method to get 

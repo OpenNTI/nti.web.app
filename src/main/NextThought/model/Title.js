@@ -1,14 +1,6 @@
 Ext.define('NextThought.model.Title', {
     extend: 'NextThought.model.Base',
     idProperty: 'index',
-    proxy: {
-        type: 'ajax',
-        url : _AppConfig.server.host + _AppConfig.server.library,
-        reader: {
-            type: 'json',
-            root: 'titles'
-        }
-    },
     fields: [
         { name: 'Archive Last Modified', type: 'date', dateFormat: 'timestamp' },
         { name: 'archive', type: 'string' },

@@ -10,7 +10,7 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
             _cmp: component,
             _menu: null,
             _record: record,
-            _isMine: record.get('Creator') == _AppConfig.server.username || record.phantom
+            _isMine: record.get('Creator') == _AppConfig.username || record.phantom
         });
 
 		var me = this,

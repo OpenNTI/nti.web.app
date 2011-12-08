@@ -1,7 +1,7 @@
 Ext.define(	'NextThought.model.UserSearch', {
     extend: 'NextThought.model.Base',
     requires: [
-    		'NextThought.proxy.UserSearch',
+		'NextThought.proxy.UserSearch'
     ],
     idProperty: 'Username',
 

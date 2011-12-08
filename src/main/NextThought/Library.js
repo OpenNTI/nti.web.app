@@ -9,8 +9,7 @@ Ext.define('NextThought.Library', {
 
 	
     constructor: function(config) {
-        this._tocs = [];
-        this.store = Ext.create('Ext.data.Store',{model: 'NextThought.model.Title'});
+		this._tocs = [];
         this.addEvents({
             loaded : true
         });
@@ -21,11 +20,28 @@ Ext.define('NextThought.Library', {
     },
 
     getStore: function(){
-        return this.store;
+		if(!this._store){
+			var server = _AppConfig.server,
+				service = _AppConfig.service,
+				host = server.host;
+
+			this._store = Ext.create('Ext.data.Store',{
+				model: 'NextThought.model.Title',
+				proxy: {
+					type: 'ajax',
+					url : host + service.getMainLibrary().href,
+					reader: {
+						type: 'json',
+						root: 'titles'
+					}
+				}
+			});
+		}
+        return this._store;
     },
 
     each: function(callback, scope){
-        this.store.data.each(callback,scope||this);
+        this.getStore().data.each(callback,scope||this);
     },
 
     //TODO-consider caching the nav infos for some period of time to avoid extra work...
@@ -83,8 +99,8 @@ Ext.define('NextThought.Library', {
 
 	load: function(){
         this.loaded = false;
-        this.store.on('load', this._onLoad, this );
-        this.store.load();
+        this.getStore().on('load', this._onLoad, this );
+        this.getStore().load();
     },
 
     _onLoad: function(store, records, success) {

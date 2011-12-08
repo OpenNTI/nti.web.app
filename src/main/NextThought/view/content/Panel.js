@@ -21,45 +21,45 @@ Ext.define('NextThought.view.content.Panel', {
     },
     
     relayout: function(){
-    	if (this.ownerCt) this.ownerCt.doComponentLayout();
-    	this.doComponentLayout();
-    	this.doLayout();
-        this.fireEvent('relayedout', this);
-    },
+		if (this.ownerCt) this.ownerCt.doComponentLayout();
+		this.doComponentLayout();
+		this.doLayout();
+		this.fireEvent('relayedout', this);
+	},
 
 
     
-    _getPathPart: function(path) {
-    	if(!path){
-    		return path;
-    	}
-    	return path.substring(0, path.lastIndexOf('/')+1);
+	_getPathPart: function(path) {
+		if(!path){
+			return path;
+		}
+		return path.substring(0, path.lastIndexOf('/')+1);
 	},
 	
 	
 	
 	
-    _getFilename: function(path) {
-    	if(!path){
-    		return path;
-    	}
-    	var b = path.split('/');
-    	return b[b.length-1];
+	_getFilename: function(path) {
+		if(!path){
+			return path;
+		}
+		var b = path.split('/');
+		return b[b.length-1];
 	},
 	
 	
 	
-    _getCurrentPath: function() {
-    	return this._getPathPart(window.location.pathname);
+	_getCurrentPath: function() {
+		return this._getPathPart(window.location.pathname);
 	},
 
 
 	_resolveBase: function(base) {   
-	    //relative path
-	    if(base && base!="" && (base == '.' || base[0]!='/') && base.indexOf(':')<0) {
+		//relative path
+	    if(base && base!=="" && (base == '.' || base[0]!='/') && base.indexOf(':')<0) {
 	        var b = this._getCurrentPath();
 	        
-	        if(base.indexOf(b)!=0) {
+	        if(base.indexOf(b)!==0) {
 	            base = b+'/'+(base=='.'?'':base);
 	        }
 	        

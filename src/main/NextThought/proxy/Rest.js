@@ -8,11 +8,11 @@ Ext.define('NextThought.proxy.Rest', {
 
     constructor: function(config) {
         this.url = '';
-        this.appendId = true,
+        this.appendId = true;
         this.reader = {type: 'nti'};
         this.writer = {type: 'nti'};
         Ext.copyTo(this.reader, config, 'model');
-    	this.callParent(arguments);
+		this.callParent(arguments);
         this.on('exception', this._exception, this);
     },
 
@@ -20,13 +20,14 @@ Ext.define('NextThought.proxy.Rest', {
         this.callParent(arguments);
 
         //fire an event to Viewport in case anyone cares
-        Ext.ComponentQuery.query('master-view')[0].fireEvent('object-changed');
+        VIEWPORT.fireEvent('object-changed');
     },
 
     buildUrl: function(request) {
         var me = this,
             appendId = me.appentId,
-            action = request.operation.action;
+            action = request.operation.action,
+			result;
 
         if (action!='update' && action!='destroy')
             me.buildUrlForGeneralUse(request);
@@ -34,31 +35,31 @@ Ext.define('NextThought.proxy.Rest', {
             me.buildUrlForModify(request);
 
         me.appendId = false;
-    	var result = me.callParent(arguments);
-    	me.appendId = appendId;
+		result = me.callParent(arguments);
+		me.appendId = appendId;
 
         return result;
     },
 
     buildUrlForGeneralUse: function(request){
- 	    var me 		  = this,
+		var me		  = this,
 	        operation = request.operation,
 	        records   = operation.records || [],
-	        record    = records[0],
-	        url       = _AppConfig.server.host + _AppConfig.server.data + 'users/' + _AppConfig.server.username +'/' + me.collectionName,
+	        record    = records[0],//find a place for this record from the service object
+	        url       = _AppConfig.server.host + _AppConfig.server.data + 'users/' + _AppConfig.username +'/' + me.collectionName,
 	        containerId	  = record ? record.get('ContainerId') : me.containerId ? me.containerId : undefined,
-	        appendId  = me.appendId,
+//	        appendId  = me.appendId,
 	        id        = record ? record.get('id') : operation.id;
-	        
+
 		if (!me.collectionName) {
 			Ext.Error.raise('No collectionName given');
 		}
 
- 		if (containerId) {
+		if (containerId) {
             if (!url.match(/\/$/)) {
                 url += '/';
             }
-      
+
             url += containerId;
         }
 
@@ -68,13 +69,13 @@ Ext.define('NextThought.proxy.Rest', {
             }
             url += id;
         }
-        
+
         request.url = url;
 
-    	//set up some directions about how to read the data in the reader:
-    	me.reader.hasContainerId = me.reader.hasContainerId || !!containerId;
-    	me.reader.hasId = me.appendId && id!==undefined;
-    	
+		//set up some directions about how to read the data in the reader:
+		me.reader.hasContainerId = me.reader.hasContainerId || !!containerId;
+		me.reader.hasId = me.appendId && id!==undefined;
+
 //		console.debug(
 //			'appendId:', me.appendId,
 //			'id:',id,
@@ -85,7 +86,7 @@ Ext.define('NextThought.proxy.Rest', {
     },
 
     buildUrlForModify: function(request) {
-        var me 		  = this,
+        var me		  = this,
 	        operation = request.operation,
 	        records   = operation.records || [],
 	        record    = records[0],

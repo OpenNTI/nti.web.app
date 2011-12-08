@@ -151,14 +151,15 @@ Ext.define('NextThought.view.windows.LoginWindow', {
 
 
     destroy: function(){
-		var el = this.getEl().down('.x-box-inner');
+		var me = this,
+			el = this.getEl().down('.x-box-inner');
         Ext.EventManager.removeResizeListener(this.fireResize, this);
-        this.callParent(arguments);
+        me.callParent(arguments);
         if(el){
             el.remove();
         }
 
-		this['destroy'] = this.close = function(){};
+		me.destroy = this.close = function(){};
     },
 
 
@@ -182,6 +183,10 @@ Ext.define('NextThought.view.windows.LoginWindow', {
         this._username.originalValue = name;
     },
 
+	/**
+	 *
+	 * @param flag
+	 */
     setRemember: function(flag){
         this._remember.setValue(flag!==false);
         this._remember.originalValue = flag!==false;

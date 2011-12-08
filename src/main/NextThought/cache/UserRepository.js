@@ -128,14 +128,10 @@ Ext.define('NextThought.cache.UserRepository', {
 
 
     _makeRequest: function(username, callbacks) {
-        var h = _AppConfig.server.host,
-            d = _AppConfig.server.data,
-            u = _AppConfig.server.username,
-            url = h+d+'UserSearch/'+username,
-            result = null;
+        var result = null, u;
 
         Ext.Ajax.request({
-            url: url,
+            url: _AppConfig.service.getUserSearchURL(username),
             scope: this,
             async: !!callbacks,
             callback: function userRepository_makeRequestCallback(o,success,r)
@@ -151,7 +147,7 @@ Ext.define('NextThought.cache.UserRepository', {
                     list = bins ? bins.User || bins.Community : [];
 
                 if(list && list.length>1){
-                    console.warn('many matching users: "', userId, '"', list);
+                    console.warn('many matching users: "', username, '"', list);
                 }
 
                 result = list ? list[0] : null;

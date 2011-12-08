@@ -88,36 +88,37 @@ Ext.define('NextThought.view.content.Reader', {
 
 
     setActive: function(book, path, skipHistory, callback, ntiid) {
-        var b = this._resolveBase(this._getPathPart(path)),
-            f = this._getFilename(path),
+        var me = this,
+			b = me._resolveBase(me._getPathPart(path)),
+            f = me._getFilename(path),
             pc = path.split('#'),
             target = pc.length>1? pc[1] : null,
             vp= VIEWPORT.getEl(),
-            bc = this.ownerCt.getDockedComponent(0) || Ext.getCmp('breadcrumb');
+            bc = me.ownerCt.getDockedComponent(0) || Ext.getCmp('breadcrumb');
 
-        if(this.active == pc[0]){
+        if(me.active == pc[0]){
             if( callback ){
                 callback();
             }
 
             if(target)
-                this.scrollToTarget(target);
+                me.scrollToTarget(target);
 
             return;
         }
 
-        this.clearAnnotations();
-        this.relayout();
-        this.active = pc[0];
+        me.clearAnnotations();
+        me.relayout();
+        me.active = pc[0];
         if(!skipHistory)
-            this._appendHistory(book, path);
+            me._appendHistory(book, path);
         else if(skipHistory != 'no-record')
-            this.fireEvent('unrecorded-history', book, path, ntiid);
+            me.fireEvent('unrecorded-history', book, path, ntiid);
 
         vp.mask('Loading...');
         if (bc) bc.setActive(book, f);
 
-        this._request = Ext.Ajax.request({
+        me._request = Ext.Ajax.request({
             url: b+f,
             scope: this,
             disableCaching: true,
@@ -127,9 +128,9 @@ Ext.define('NextThought.view.content.Reader', {
                 target: target,
                 callback: callback
             },
-            success: this._setReaderContent,
+            success: me._setReaderContent,
             callback: function(req,success,res){
-                delete this._request;
+                delete me._request;
                 vp.unmask();
                 if(!success) {
                     console.error('There was an error getting content', b+f, res);
@@ -184,20 +185,18 @@ Ext.define('NextThought.view.content.Reader', {
 
     _cleanHTML: function(html, basePath){
         var c = html,
-            b = basePath,
             rf= c.toLowerCase(),
             start = rf.indexOf(">", rf.indexOf("<body"))+1,
             end = rf.indexOf("</body"),
             head = c.substring(0,start),
             body = c.substring(start, end),
-            css = /\<link.*href="(.*\.css)".*\>/gi,
-            meta = /\<meta.*\>/gi,
-            containerId;
+            css, meta;
 
-        css = head.match(css);
-        meta = head.match(meta);
+        css = head.match(/<link.*href="(.*\.css)".*>/gi);
+        meta = head.match(/<meta.*>/gi);
         //cache bust css
-        css = css?css.join('').replace(/\.css/gi, '.css?dc='+this.instantiation_time):'';
+        css = css ? css.join('') : '';
+		css = css.replace(/\.css/gi, '.css?dc='+this.instantiation_time);
         meta = meta?meta.join(''):'';
 
         meta = meta.replace(/<meta[^<]+?viewport.+?\/>/ig,'');
@@ -211,18 +210,17 @@ Ext.define('NextThought.view.content.Reader', {
 
     __fixReferences: function(string, basePath){
 
-        return string.replace(/(src|href|poster)=\"(.*?)\"/igm, fixReferences);
-
         function fixReferences(original,tag,url) {
             var firstChar = url.charAt(0),
                 absolute = firstChar =='/',
                 anchor = firstChar == '#',
                 host = absolute?_AppConfig.server.host:basePath;
 
-            return anchor || /^data\:/i.test(url)//inline
-                ? original
-                : tag+'="'+host+url+'"';
+            //inline
+            return anchor || /^data:/i.test(url) ? original : tag+'="'+host+url+'"';
         }
+
+        return string.replace(/(src|href|poster)="(.*?)"/igm, fixReferences);
     },
 
 
@@ -236,7 +234,7 @@ Ext.define('NextThought.view.content.Reader', {
 
         if(hash.length>1){
 
-            if(hash[1].length==0){
+            if(hash[1].length===0){
                 console.debug('empty hash',el);
                 return;
             }

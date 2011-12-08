@@ -11,7 +11,8 @@ Ext.define('NextThought.controller.Session', {
     ],
 
     models: [
-        'User'
+        'User',
+		'Service'
     ],
 
     views: [
@@ -46,7 +47,7 @@ Ext.define('NextThought.controller.Session', {
 
             //Auto inject all future request with the auth string
             Ext.Ajax.defaultHeaders = Ext.Ajax.defaultHeaders || {};
-            Ext.Ajax.defaultHeaders['Authorization']= a;
+            Ext.Ajax.defaultHeaders.Authorization= a;
             Ext.Ajax.username = encodeURIComponent(username);
             Ext.Ajax.password = password;
 
@@ -65,8 +66,7 @@ Ext.define('NextThought.controller.Session', {
             var m = this,
                 s = _AppConfig.server,
                 c = Ext.JSON.decode(Ext.util.Cookies.get(COOKIE)),
-                a = (!values)
-                    ? c.a
+                a = (!values) ? c.a
                     : Base64.basicAuthString( values.username, values.password );
 
             if (!values) {
@@ -76,38 +76,46 @@ Ext.define('NextThought.controller.Session', {
 
             try{
                 Ext.Ajax.request({
-                    url: s.host + s.data + 'users/' + values.username,
+                    url: s.host + s.data,
                     headers:{ "Authorization": a},
                     scope: this,
                     callback: function(q,success,r){
-                        if(success){
-
-                            Ext.copyTo(s, values, 'username');
-                            this.setupAuth(values.username, values.password,!!values.remember);
-                            Socket.setup(values.username, values.password);
-
-                            UserRepository.prefetchUser(values.username, function(users){
-                                var user = users[0];
-
-                                if(user){
-                                    _AppConfig.userObject = user;
-                                    successCallback.call(m);
-                                }
-                                else{
-                                    failureCallback.call(m);
-                                }
-                            });
-                        }
-                        else
-                            failureCallback.call(m);
-
-                    }
+						if(!success){
+							failureCallback.call(m);
+							return;
+						}
+						s.data = s.data.replace(/\d/g, '');
+						_AppConfig.service = Ext.create('NextThought.model.Service', Ext.decode(r.responseText));
+						console.debug('DEBUG: Login success, resolving user.');
+						m.attemptLoginCallback(values, successCallback, failureCallback);
+					}
                 });
             }
             catch(e){
                 console.error('AttemptLogin Exception: ', e.message, '\n', e.stack);
             }
-        }
+        },
+
+		attemptLoginCallback: function(form,successCallback, failureCallback){
+			var me = this;
+			Ext.copyTo(_AppConfig, form, 'username');
+
+			me.setupAuth(form.username, form.password,!!form.remember);
+			Socket.setup(form.username, form.password);
+
+			UserRepository.prefetchUser(form.username, function(users){
+				var user = users[0];
+				if(user){
+					console.debug('DEBUG: User resolved, continue loading.');
+					_AppConfig.userObject = user;
+					successCallback.call(me);
+				}
+				else{
+					console.warn('WARN(NF):');
+					failureCallback.call(me);
+				}
+			});
+		}
     },
 
     init: function() {
@@ -118,7 +126,7 @@ Ext.define('NextThought.controller.Session', {
                         try{
                             var c = Ext.JSON.decode(Ext.util.Cookies.get(COOKIE));
                             win.setUsername(c.u);
-                            win.setRemember();
+                            win.setRemember(true);
                         }
                         catch(e){
                             console.error('Session init',e, e.message);

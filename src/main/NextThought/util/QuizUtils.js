@@ -31,13 +31,10 @@ Ext.define('NextThought.util.QuizUtils', {
         },
 
         submitAnswers: function(){
-            var s = _AppConfig.server,
-                h = s.host,
-                d = s.data,
-                problems = {},
-                data = {},
-                ntiid = Ext.query('meta[name=NTIID]')[0].getAttribute('content'),
-                url = h+d+'users/'+s.username+'/quizresults/'+ntiid,
+            var ntiid = Ext.query('meta[name=NTIID]')[0].getAttribute('content'),
+				url = _AppConfig.service.getQuizSubmitURL(ntiid),
+				problems = {},
+				data = {},
                 vp = VIEWPORT.getEl();
 
             vp.mask('Grading...');

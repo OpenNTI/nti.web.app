@@ -1,7 +1,7 @@
 Ext.define(	'NextThought.model.User', {
     extend: 'NextThought.model.Base',
     requires: [
-    		'NextThought.proxy.Rest'
+		'NextThought.proxy.Rest'
 	],
     idProperty: 'Username',
 
@@ -23,8 +23,8 @@ Ext.define(	'NextThought.model.User', {
         { name: 'Communities', type: 'UserList' }
     ],
     proxy: {
-    	type: 'nti',
-    	model: 'NextThought.model.User'
+		type: 'nti',
+		model: 'NextThought.model.User'
     },
 
     constructor: function() {
