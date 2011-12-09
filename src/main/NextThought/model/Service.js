@@ -110,7 +110,27 @@ Ext.define('NextThought.model.Service', {
 
 		}
 
-		return collection;
-	}
+		return Ext.clone(collection);
+	},
+
+
+	getCollection: function(title){
+			var workspace = this.getWorkspace(_AppConfig.username) || {},
+				items = workspace.Items || [],
+				i, item, collection = null;
+
+			for(i in items){
+				if(!items.hasOwnProperty(i))continue;
+				item = items[i];
+
+				if(item.Title == title){
+					collection = item;
+					break;
+				}
+
+			}
+
+			return Ext.clone( collection );
+		}
 
 });

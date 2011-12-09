@@ -5,6 +5,14 @@ Ext.define('NextThought.controller.Reader', {
         'NextThought.cache.IdCache'
     ],
 
+	models: [
+		'Page'
+	],
+
+	stores: [
+		'Page'
+	],
+
     views: [
         'modes.Container',
         'modes.Reader',
@@ -28,6 +36,7 @@ Ext.define('NextThought.controller.Reader', {
     ],
 
     init: function() {
+		this.application.on('session-ready', this.onSessionReady, this);
         this.control({
             'master-view':{
                 'navigate': this.navigate,
@@ -62,6 +71,11 @@ Ext.define('NextThought.controller.Reader', {
             }
         },{});
     },
+
+	onSessionReady: function(){
+		this.getPageStore().load();
+	},
+
 
     clearSearch: function() {
         this.getReader().clearSearchRanges();

@@ -1,4 +1,3 @@
-
 Ext.define('NextThought.model.Note', {
     extend: 'NextThought.model.Base',
 	requires: [
