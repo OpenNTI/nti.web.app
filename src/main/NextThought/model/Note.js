@@ -11,7 +11,7 @@ Ext.define('NextThought.model.Note', {
 		{ name: 'OID', type: 'string' },
 		{ name: 'inReplyTo', type: 'string' },
 		{ name: 'references', type: 'auto', defaultValue: [] },
-		{ name: 'Class', type: 'string' },
+		{ name: 'Class', type: 'string', defaultValue: 'Note' },
 		{ name: 'anchorPoint', type: 'string' },
 		{ name: 'anchorType', type: 'string', defaultValue: 'previousPreviousName'},
 		{ name: 'left', type: 'int' },

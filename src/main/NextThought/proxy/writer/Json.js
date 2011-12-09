@@ -11,10 +11,13 @@ Ext.define('NextThought.proxy.writer.Json', {
             output = {},
             key;
 
+		//filter out falsy values
         for (key in defaults) {
             if (!defaults.hasOwnProperty(key) || !defaults[key]) continue;
             output[key] = defaults[key];
         }
+
+		delete output.Class;
 
         //console.debug('defaults = ', defaults, 'output = ', output);
         return output;

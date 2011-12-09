@@ -8,7 +8,7 @@ Ext.define('NextThought.model.QuizResult', {
 	fields: [
 		{ name: 'id', mapping: 'ID', type: 'int' },
 		{ name: 'OID', type: 'string' },
-		{ name: 'Class', type: 'string' },
+		{ name: 'Class', type: 'string', defaultValue: 'QuizResult' },
 		{ name: 'QuizID', type: 'string' },
 		{ name: 'ContainerId', type: 'string' },
 		{ name: 'Last Modified', type: 'date', dateFormat: 'timestamp' },

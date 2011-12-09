@@ -9,7 +9,7 @@ Ext.define('NextThought.model.Highlight', {
 	fields: [
 		{ name: 'id', mapping: 'ID', type: 'int' },
 		{ name: 'OID', type: 'string' },
-		{ name: 'Class', type: 'string' },
+		{ name: 'Class', type: 'string', defaultValue: 'Highlight' },
 		{ name: 'startXpath', type: 'string' },
 		{ name: 'startAnchor', type: 'string' },
 		{ name: 'startHighlightedFullText', type: 'string' },

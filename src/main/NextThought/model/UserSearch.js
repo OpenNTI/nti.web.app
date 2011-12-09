@@ -7,7 +7,7 @@ Ext.define(	'NextThought.model.UserSearch', {
 
     fields: [
         { name: 'Last Modified', type: 'date', dateFormat: 'timestamp' },
-        { name: 'Class', type: 'string' },
+        { name: 'Class', type: 'string', defaultValue: 'User' },
         { name: 'Username', type: 'string' },
         { name: 'alias', type: 'string' },
         { name: 'realname', type: 'string' },

@@ -10,6 +10,9 @@ Ext.define('NextThought.proxy.RestMimeAware', {
 //		type: 'nti-collection',
 //		root: 'Items'
 //	},
+	writer: {
+		type: 'nti'
+	},
 
 
     constructor: function(config) {
@@ -30,15 +33,18 @@ Ext.define('NextThought.proxy.RestMimeAware', {
         var host = _AppConfig.server.host,
             action = request.operation.action,
 			record = request.records[0],
-			mimeType = record.mimeType || record.get('MimeType'),
-			collection = _AppConfig.service.getCollectionFor(mimeType,null) || {},
-			href = record.get('href');
+			href = record.get('href'),
+			mimeType, collection;
 
         if (action!='update' && action!='destroy'){
-			this.headers = { 'Content-Type': mimeType+'+json' };
+			mimeType = record.mimeType || record.get('MimeType');
+			collection = _AppConfig.service.getCollectionFor(mimeType,null) || {};
+
 			href = collection.href.split('/');
 			href.pop();
 			href = href.join('/');
+
+			this.headers = { 'Content-Type': mimeType+'+json' };
 		}
 
         return host + href;

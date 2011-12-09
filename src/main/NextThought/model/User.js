@@ -11,7 +11,7 @@ Ext.define(	'NextThought.model.User', {
         { name: 'NotificationCount', type: 'int' },
         { name: 'id', mapping: 'ID', type: 'string' },
         { name: 'OID', type: 'string' },
-        { name: 'Class', type: 'string' },
+        { name: 'Class', type: 'string', defaultValue: 'User' },
         { name: 'Username', type: 'string' },
         { name: 'Presence', type: 'string' },
         { name: 'alias', type: 'string' },
