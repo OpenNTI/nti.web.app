@@ -1,7 +1,7 @@
 Ext.define('NextThought.model.Transcript', {
     extend: 'NextThought.model.Base',
     requires: [
-        'NextThought.proxy.Rest'
+        'NextThought.proxy.RestMimeAware'
     ],
 	mimeType: 'application/vnd.nextthought.transcript',
     fields: [
@@ -14,7 +14,7 @@ Ext.define('NextThought.model.Transcript', {
         { name: 'Last Modified', type: 'date', dateFormat: 'timestamp', defaultValue: new Date() }
     ],
     proxy: {
-        type: 'nti',
+        type: 'nti-mimetype',
         collectionName: 'Transcripts'
     },
     getModelName: function() {

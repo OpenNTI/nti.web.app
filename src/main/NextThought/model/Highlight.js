@@ -28,8 +28,7 @@ Ext.define('NextThought.model.Highlight', {
 		{ name: 'sharedWith', type: 'UserList'}
 	],
 	proxy: {
-		type: 'nti',
-		collectionName: 'Highlights',
+		type: 'nti-mimetype',
 		model: 'NextThought.model.Highlight'
 	},
 	getModelName: function() {
