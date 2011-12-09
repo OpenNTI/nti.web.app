@@ -1,12 +1,10 @@
 // Config stubbing
 var _AppConfig = {
     userObject: null,//construct this mock user on launch
+	username: 'test@nextthought.com',
     server: {
         host: './src/test/mock',
-        data: '/dataserver/',
-        library: '/library/library.json',
-        username: 'test@nextthought.com',
-        password: 'irrelevant'
+        data: '/dataserver/'
     }
 };
 
@@ -22,6 +20,26 @@ var io = {
         }
     }}
 };
+
+
+var mockService = {
+	"Items": [
+		{
+			"Items": [
+				{
+					"href": "/Library/library.json",
+					"accepts": [],
+					"Class": "Collection",
+					"Title": "Main"
+				}
+			],
+			"Class": "Workspace",
+			"Title": "Library"
+		}
+	],
+	"Class": "Service"
+};
+
 
 Ext.application({
     name: 'NextThought',
@@ -47,6 +65,8 @@ Ext.application({
 
     launch: function() {
         NextThought.phantomRender = true;
+
+		_AppConfig.service = Ext.create('NextThought.model.Service', mockService);
 
 		applyHooks();
 
