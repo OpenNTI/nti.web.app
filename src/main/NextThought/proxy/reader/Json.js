@@ -1,7 +1,7 @@
 Ext.define('NextThought.proxy.reader.Json', {
     extend: 'Ext.data.reader.Json',
     alias : 'reader.nti',
- 	initialConfig: {root: 'Items'},
+	initialConfig: {root: 'Items'},
 
 	constructor: function() {
 		this.callParent(arguments);
@@ -13,8 +13,11 @@ Ext.define('NextThought.proxy.reader.Json', {
             Ext.Error.raise('The model is undefined. Did we forget to require it somewhere?');
         }
 
-        var me = this, mName = me.model.$className,
-            records = [], i = me.root===false? data : data.Items;
+
+        var me = this,
+			//mName = me.model.$className,
+            records = [], i = me.root===false? data : data.Items,
+			key;
 
 		// console.debug('read records:',mName,
 		// 'this:', me,
@@ -35,7 +38,7 @@ Ext.define('NextThought.proxy.reader.Json', {
 			records = this.getNestedRecords(i);
 		}
 		else {
-			for (var key in i) {
+			for (key in i) {
 				if (!i.hasOwnProperty(key)) continue;
 				records = records.concat(this.getNestedRecords(i[key]));
 			}
@@ -57,11 +60,10 @@ Ext.define('NextThought.proxy.reader.Json', {
 	},
 	
 	getNestedRecords: function(collection) {
-		var result = [];
-		for (var key in collection) {
-			var o = collection[key];
-			if (!collection.hasOwnProperty(key) || typeof(o) != 'object') continue;
-			result.push(o);					
+		var result = [], key;
+		for (key in collection) {
+			if (!collection.hasOwnProperty(key) || typeof(collection[key]) != 'object') continue;
+			result.push(collection[key]);
 		}
 		return result;
 	}

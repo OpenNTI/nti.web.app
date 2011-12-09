@@ -29,6 +29,10 @@ Ext.define('NextThought.Library', {
 				model: 'NextThought.model.Title',
 				proxy: {
 					type: 'ajax',
+					headers: {
+						'Accept': 'application/vnd.nextthought.collection+json',
+						'Content-Type': 'application/json'
+					},
 					url : host + service.getMainLibrary().href,
 					reader: {
 						type: 'json',

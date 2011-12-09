@@ -63,7 +63,7 @@ Ext.define('NextThought.controller.Groups', {
 		var store = this.getFriendsListStore(),
 			mime = store.model.prototype.mimeType,
 			coll = _AppConfig.service.getCollectionFor(mime,'FriendsLists') || {};
-		store.proxy.url = coll.href;
+		store.proxy.url = _AppConfig.server.host+coll.href;
 		store.load();
 	},
 
