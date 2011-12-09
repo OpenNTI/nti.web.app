@@ -11,6 +11,7 @@ Ext.define('NextThought.model.FriendsList', {
 		{ name: 'CreatedTime', type: 'date', dateFormat: 'timestamp' },
 		{ name: 'Creator', type: 'string' },
 		{ name: 'ID', type: 'string' },
+        { name: 'NTIID', type: 'string' },
 		{ name: 'Last Modified', type: 'date', dateFormat: 'timestamp' },
 		{ name: 'MimeType', type: 'string' },
 		{ name: 'OID', type: 'string' },
