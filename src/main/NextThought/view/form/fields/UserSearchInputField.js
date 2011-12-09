@@ -31,7 +31,7 @@ Ext.define( 'NextThought.view.form.fields.UserSearchInputField', {
 	enableKeyEvents: true,
 	
 	constructor: function(){
-		this.store = UserDataLoader.getUserSearchStore();
+		this.store = Ext.StoreManager.get('UserSearch');
 		this.callParent(arguments);
 	},
 	

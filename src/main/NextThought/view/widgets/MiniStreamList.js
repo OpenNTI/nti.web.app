@@ -28,7 +28,7 @@ Ext.define('NextThought.view.widgets.MiniStreamList', {
 	initComponent: function(){
 		this.callParent(arguments);
         this.setContainer(this._containerId);
-        this._store = UserDataLoader.getStreamStore();
+        this._store = Ext.StoreManager.get('Stream');
         this._store.on('add', this.onAdd, this);
         this._store.on('load', this.onLoad, this);
 	},

@@ -8,6 +8,10 @@ Ext.define('NextThought.controller.Search', {
         'UserSearch'
     ],
 
+	stores: [
+		'UserSearch'
+	],
+
 	views: [
         'Viewport',
         'windows.SearchResultsPopover'

@@ -33,7 +33,7 @@ Ext.define('NextThought.view.windows.NotificationsPopover', {
         el.on('mouseleave', me.closePopover, me);
         el.on('click', me.itemClicked, me);
 
-        this.updateContents(UserDataLoader.getStreamStore());
+        this.updateContents();
     },
 
     cancelClose: function() {
@@ -52,25 +52,26 @@ Ext.define('NextThought.view.windows.NotificationsPopover', {
         this.close();
     },
 
-    updateContents: function(store) {
-        var k, len, change,
-            readCount = 0;
-        p = this.items.get(0);
+    updateContents: function() {
+        var i, unread, change,
+			store = Ext.StoreManager.get('Stream'),
+            readCount = 0,
+			p = this.items.get(0);
 
-        for(var i = store.getCount() - 1; readCount < 2 && i >= 0; i--) {
-            var change = store.getAt(i);
+        for(i = store.getCount() - 1; readCount < 2 && i >= 0; i--) {
+            change = store.getAt(i);
             if (!change.get) {
                 //dead change, probably deleted...
                 return;
             }
             
-            var unread = (change.get('Last Modified') > this._lastLoginTime);
+            unread = (change.get('Last Modified') > this._lastLoginTime);
             p.add({xtype: 'miniStreamEntry', change: change, cls: unread ? 'unread' : 'read'});
             if (!unread) readCount++;
         }
 
 
-        if(p.items.length == 0) {
+        if(p.items.length === 0) {
             p.add({
                 html: '<b>No new updates</b>',
                 border: false,
@@ -83,10 +84,10 @@ Ext.define('NextThought.view.windows.NotificationsPopover', {
     },
 
     fixHeight: function(){
+		var me = this, e, max;
         try{
-            var me = this,
-                e = me.bindTo,
-                max = (VIEWPORT.getHeight() - e.getPosition()[1] - e.getHeight() - 10);
+            e = me.bindTo;
+			max = (VIEWPORT.getHeight() - e.getPosition()[1] - e.getHeight() - 10);
             me.height = undefined;
             me.doLayout();
             if(me.getHeight()> max)

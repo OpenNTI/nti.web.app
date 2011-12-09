@@ -27,7 +27,7 @@ Ext.define('NextThought.view.content.Stream', {
 
     initComponent: function(){
    		this.callParent(arguments);
-        this._store = UserDataLoader.getStreamStore();
+        this._store = Ext.StoreManager.get('Stream');
         this._store.on('add', this.onAdd, this);
         this._store.on('load', this.onLoad, this);
 	},

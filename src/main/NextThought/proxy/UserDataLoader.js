@@ -67,50 +67,6 @@ Ext.define('NextThought.proxy.UserDataLoader',{
 	},
 
 
-	getUserSearchStore: function(){
-
-		if(!this._userSearchStore) {
-			this._userSearchStore = Ext.create('Ext.data.Store', {
-				model: 'NextThought.model.UserSearch',
-				proxy: {
-					type: 'usersearch',
-					model: 'NextThought.model.UserSearch'
-				}
-			});
-		}
-
-		return this._userSearchStore;
-
-	},
-
-
-	getStreamStore: function(){
-		if(!this._streamStore) {
-			this._streamStore = Ext.create('Ext.data.Store', {
-				model: 'NextThought.model.Change',
-				autoLoad: true,
-				proxy: {
-					type: 'rest',
-					url: _AppConfig.service.getStreamURL(),
-					reader: {
-						type: 'json',
-						root: 'Items'
-					},
-					model: 'NextThought.model.Change'
-				},
-				sorters: [
-					{
-						property : 'Last Modified',
-						direction: 'ASC'
-					}
-				]
-			});
-		}
-
-		return this._streamStore;
-	},
-
-
 	getPageItems: function(pageId, callbacks){
 		return this.getItems(callbacks, '/Pages/'+pageId+'/UserGeneratedData');
 	},

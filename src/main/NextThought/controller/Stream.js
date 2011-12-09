@@ -6,6 +6,10 @@ Ext.define('NextThought.controller.Stream', {
         'NextThought.util.ParseUtils'
     ],
 
+	stores: [
+		'Stream'
+	],
+
     models: [
         'Change'
     ],
@@ -43,20 +47,30 @@ Ext.define('NextThought.controller.Stream', {
     init: function() {
         var me = this;
 
+		this.application.on('session-ready', this.sessionReady, this);
+
         Socket.register({
-            'data_noticeIncomingChange': function(){me.incomingChange.apply(me, arguments)}
+            'data_noticeIncomingChange': function(){me.incomingChange.apply(me, arguments);}
         });
 
         this.control({
-              'stream-mode-container filter-control':{
-                'filter-changed': this.streamFilterChanged
+			'stream-mode-container filter-control':{
+				'filter-changed': this.streamFilterChanged
             }
         },{});
     },
 
+
+	sessionReady: function(){
+		var store = this.getStreamStore();
+		store.proxy.url = _AppConfig.service.getStreamURL();
+		store.load();
+	},
+
+
     incomingChange: function(change) {
         change = ParseUtils.parseItems([change])[0];
-        UserDataLoader.getStreamStore().add(change);
+        this.getStreamStore().add(change);
 
         this.self.fireChange(change);
     },
