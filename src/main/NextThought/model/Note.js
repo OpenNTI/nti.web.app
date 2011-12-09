@@ -20,7 +20,8 @@ Ext.define('NextThought.model.Note', {
 		{ name: 'Last Modified', type: 'date', dateFormat: 'timestamp' },
 		{ name: 'Creator', type: 'string'},
 		{ name: 'ContainerId', type: 'string'},
-		{ name: 'sharedWith', type: 'UserList' }
+		{ name: 'sharedWith', type: 'UserList' },
+		{ name: 'Links', type: 'links', defaultValue: [] }
 	],
 	proxy: {
 		type: 'nti-mimetype',

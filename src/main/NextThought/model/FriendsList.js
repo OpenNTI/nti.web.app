@@ -20,7 +20,8 @@ Ext.define('NextThought.model.FriendsList', {
 		{ name: 'avatarURL', type: 'string' },
 		{ name: 'friends', type: 'UserList' },
 		{ name: 'href', type: 'string' },
-		{ name: 'realname', type: 'string' }
+		{ name: 'realname', type: 'string' },
+		{ name: 'Links', type: 'links', defaultValue: [] }
 	],
 	proxy: {
 		type: 'nti-mimetype',

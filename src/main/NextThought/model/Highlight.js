@@ -25,7 +25,8 @@ Ext.define('NextThought.model.Highlight', {
 		{ name: 'Last Modified', type: 'date', dateFormat: 'timestamp' },
 		{ name: 'ContainerId', type: 'string'},
 		{ name: 'text', type: 'string' },
-		{ name: 'sharedWith', type: 'UserList'}
+		{ name: 'sharedWith', type: 'UserList'},
+		{ name: 'Links', type: 'links', defaultValue: [] }
 	],
 	proxy: {
 		type: 'nti-mimetype',

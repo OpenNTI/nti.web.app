@@ -13,7 +13,8 @@ Ext.define('NextThought.model.QuizResult', {
 		{ name: 'ContainerId', type: 'string' },
 		{ name: 'Last Modified', type: 'date', dateFormat: 'timestamp' },
 		{ name: 'Creator', type: 'string' },
-		{ name: 'Items', type: 'arrayItem' }
+		{ name: 'Items', type: 'arrayItem' },
+		{ name: 'Links', type: 'links', defaultValue: [] }
 	],
 	proxy: {
 		type: 'nti-mimetype',

@@ -8,7 +8,8 @@ Ext.define('NextThought.model.Change', {
         { name: 'ChangeType', type: 'string' },
         { name: 'Last Modified', type: 'date', dateFormat: 'timestamp' },
         { name: 'Creator', type: 'string' },
-        { name: 'Item', type: 'singleItem' }
+        { name: 'Item', type: 'singleItem' },
+		{ name: 'Links', type: 'links', defaultValue: [] }
     ],
     getModelName: function() {
         return 'Change';

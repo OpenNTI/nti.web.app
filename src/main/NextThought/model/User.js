@@ -20,7 +20,8 @@ Ext.define(	'NextThought.model.User', {
         { name: 'accepting', type: 'UserList' },
         { name: 'ignoring', type: 'UserList' },
         { name: 'following', type: 'UserList' },
-        { name: 'Communities', type: 'UserList' }
+        { name: 'Communities', type: 'UserList' },
+		{ name: 'Links', type: 'links', defaultValue: [] }
     ],
     proxy: {
 		type: 'nti',
