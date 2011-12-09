@@ -78,7 +78,7 @@ Ext.define('NextThought.util.QuizUtils', {
                 quizResult.get('Items'),
                 function(qqr){
                     var q = qqr.get('Question'),
-                        id = q.get('id'),
+                        id = q.getId(),
                         p = problems[id],
                         r = p.next('.result');
 

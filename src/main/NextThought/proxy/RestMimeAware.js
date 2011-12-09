@@ -47,6 +47,13 @@ Ext.define('NextThought.proxy.RestMimeAware', {
 			this.headers = { 'Content-Type': mimeType+'+json' };
 		}
 
+		if(!href) Ext.Error.raise({
+			msg:'The URL is undefined!',
+			action: action,
+			record: record,
+			mimeType: mimeType
+		});
+
         return host + href;
     },
 

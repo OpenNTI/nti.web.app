@@ -52,7 +52,7 @@ Ext.define('NextThought.proxy.Rest', {
 	        url       = _AppConfig.server.host + _AppConfig.server.data + 'users/' + _AppConfig.username +'/' + me.collectionName,
 	        containerId	  = record ? record.get('ContainerId') : me.containerId ? me.containerId : undefined,
 //	        appendId  = me.appendId,
-	        id        = record ? record.get('id') : operation.id;
+	        id        = record ? record.getId() : operation.id;
 
 		if (!me.collectionName) {
 			Ext.Error.raise('No collectionName given');

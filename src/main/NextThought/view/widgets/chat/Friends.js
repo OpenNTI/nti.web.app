@@ -29,7 +29,7 @@ Ext.define('NextThought.view.widgets.chat.Friends', {
 
 
         groups.each(function(g){
-            if(/everyone/i.test(g.get('id'))) return; //skip everyone group
+            if(/everyone/i.test(g.getId())) return; //skip everyone group
 
             var gid = IdCache.getIdentifier(g.getId()),
                 groupPanel = me.down('panel[groupId='+gid+']'),

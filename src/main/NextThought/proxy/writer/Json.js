@@ -19,7 +19,8 @@ Ext.define('NextThought.proxy.writer.Json', {
 
 		delete output.Class;
 
-        //console.debug('defaults = ', defaults, 'output = ', output);
+        console.debug('Output:',output);
+		console.debug('Trimed Keys:',Ext.Array.difference(Object.keys(defaults),Object.keys(output)));
         return output;
     }
 });
