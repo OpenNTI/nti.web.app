@@ -4,6 +4,6 @@ Ext.define('NextThought.model.Page', {
 	fields: [
 		{ name: 'ID', type: 'string' },
 		{ name: 'href', type: 'string' },
-		{ name: 'Links', type: 'auto' }
+		{ name: 'Links', type: 'links', defaultValue: [] }
 	]
 });
