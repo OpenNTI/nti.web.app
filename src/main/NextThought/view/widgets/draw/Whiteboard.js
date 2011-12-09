@@ -124,11 +124,12 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 		strokeWidth = strokeWidth||2;
 		sides = sides || 4;
 
-		var d = {
+		var cfg,
+            d = {
 			circle: {},
 			polygon: { sides: sides },
 			path: { type: 'path', fill: '#000000', translate: {} },
-			line: { type: 'path', fill: '#000000', translate: {}, getShape:function(){return 'line'} },
+			line: { type: 'path', fill: '#000000', translate: {}, getShape:function(){return 'line';}},
 			text: {
 				type: 'text',
 				text: 'Place holder text',
@@ -136,7 +137,7 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 			}
 		};
 
-		var cfg = {
+		cfg = {
 			translate: {x:x,y:y},
 			'stroke-width': strokeWidth,
 			stroke: this.selectedColor.stroke,
@@ -167,7 +168,7 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 				function(e){
 					e.stopPropagation();
 					e.preventDefault();
-					this.fireEvent('sprite-'+event,sprite)
+					this.fireEvent('sprite-'+event,sprite);
 				},
 				this);
 	},
@@ -264,19 +265,19 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
     getSpriteClass: function(c, sides)
     {
         var m = {
-      	    'CanvasPolygonShape': 'sprite-polygon',
-      		'CanvasCircleShape': 'sprite-ellipse'
-      	},
+            'CanvasPolygonShape': 'sprite-polygon',
+            'CanvasCircleShape': 'sprite-ellipse'
+        },
         s = m[c];
 
         //special case for lines
-        if (s == m['CanvasPolygonShape'] && sides == 1)
+        if (s == m.CanvasPolygonShape && sides == 1)
             return 'sprite-line';
         return s;
     },
 
 	loadScene: function(canvasJSON){
-        console.log('JSON canvas to load', JSON.stringify(canvasJSON));
+        //console.log('JSON canvas to load', JSON.stringify(canvasJSON));
 
 		var shapes = Ext.clone( canvasJSON.shapeList ),
 			s = this.getSurface(),
@@ -294,7 +295,7 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 
 			t = Ext.create('Ext.draw.Matrix',t.a,t.b,t.c,t.d,t.tx,t.ty).split();
 
-			o = Ext.widget(this.getSpriteClass(shape['Class'], shape.sides),{
+			o = Ext.widget(this.getSpriteClass(shape.Class, shape.sides),{
 				sides: shape.sides,
 				'stroke-width': shape.strokeWidth || 3,
 				stroke: p.toString(),
@@ -320,7 +321,7 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 	},
 
 	saveScene: function(){
-		var shapes = [];
+		var shapes = [], s;
 
 		this.getSurface().items.each(
 			function(i){
@@ -345,12 +346,10 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 			this
 		);
 
-        var s = { "Class":"Canvas", "shapeList": shapes };
-        console.log('save scene', JSON.stringify(s));
+        s = { "Class":"Canvas", "shapeList": shapes };
+        //console.log('save scene', JSON.stringify(s));
 
-		return shapes.length==0
-				?	undefined
-				:	s;
+		return shapes.length===0 ? undefined : s;
 	},
 
     getNumberOfShapes: function()
