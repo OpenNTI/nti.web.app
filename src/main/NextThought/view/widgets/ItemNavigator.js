@@ -9,7 +9,7 @@ Ext.define('NextThought.view.widgets.ItemNavigator', {
         'Ext.grid.column.Date',
         'Ext.grid.column.Template',
         'Ext.grid.feature.Grouping',
-        'NextThought.proxy.UserDataLoader'
+        'NextThought.proxy.Search'
     ],
     alias: 'widget.item-navigator',
 	frame: false,
@@ -35,7 +35,7 @@ Ext.define('NextThought.view.widgets.ItemNavigator', {
     },
 
     initComponent: function(){
-        var me = this,
+        var me = this, trigger,
             gotoActionColumn = {
                 xtype: 'actioncolumn',
                 width: 20,
@@ -65,130 +65,88 @@ Ext.define('NextThought.view.widgets.ItemNavigator', {
                             r = s.getAt(rowIndex);
 
                         s.removeAt(rowIndex);
-                        me.fireEvent('annotation-destroyed', r.get('OID'));
-                        r.destroy();
+                        me.fireEvent('annotation-destroyed', r.get('TargetOID'), r.get('ContainerId'));
                     }
                 }]
             };
 
-   		me.callParent(arguments);
-        //me.el.mask('loading...');
-        me._store = Ext.create('Ext.data.Store',{
-            id: 'mystuff',//make it accessible for debugging in the browser console by putting an id on it, so we can perform this: var a = Ext.StoreManager.get('mystuff')
-            model: 'NextThought.model.GenericObject',
-            groupField: 'Class',
-			proxy: 'memory'
-
+		me.callParent(arguments);
+		//me.el.mask('loading...');
+		me._store = Ext.create('Ext.data.Store',{
+			storeId: 'nav',
+			model: 'NextThought.model.Hit',
+			groupField: 'Type',
+			autoLoad: true,
+			remoteFilter: true,
+			remoteGroup: false,
+			remoteSort: false,
+			proxy: {
+				type: 'search',
+				url: _AppConfig.service.getUserDataSearchURL(),
+				reader: 'nti-pageitem'
+			}
 		});
 
-        setTimeout(function(){
-            me.ownerCt.on('beforeshow', me._onshow, me);
-            me.reload();
-        }, 0);
+		me.add({
+			xtype: 'grid',
+			store: me._store,
+			anchor: '100% 100%',
+			enableColumnHide: false,
+			features: [{
+				ftype:'grouping',
+				enableGroupingMenu: false,
+				groupHeaderTpl: '{name}s ({rows.length})'
+			}],
+			columns: [
+				gotoActionColumn,
+				{
+					text     : 'Text',
+					flex     : 2,
+					sortable : true,
+					dataIndex: 'Snippet',
+					xtype    : 'templatecolumn',
+					tpl      : '{[values.text?values.text.replace(/<.*?>/ig, "") : "" ]}'
 
-        me.add({
-            xtype: 'grid',
-            store: me._store,
-            anchor: '100% 100%',
-            enableColumnHide: false,
-            features: [{
-                ftype:'grouping',
-                enableGroupingMenu: false,
-                groupHeaderTpl: '{name}s ({rows.length})'
-            }],
-            columns: [
-                gotoActionColumn,
-                {
-                    text     : 'Text',
-                    flex     : 2,
-                    sortable : true,
-                    dataIndex: 'text',
-                    xtype    : 'templatecolumn',
-                    tpl      : '{[values.text?values.text.replace(/\<.*?\>/ig,""):""]}'
+				},
+				{
+					text     : 'Container',
+					flex     : 1,
+					sortable : true,
+					//xtype    : 'gridcolumn',
+					xtype    : 'templatecolumn',
+					dataIndex: 'ContainerId',
+					tpl      : '{[Library.findLocationTitle(values.ContainerId)]}'
+				},
+				{
+					text     : 'Last Modified',
+					width    : 130,
+					sortable : true,
+					xtype    : 'datecolumn',
+					format   : 'D M d, Y h:i',
+					dataIndex: 'Last Modified'
+				},
+				deleteActionColumn
 
-                },
-                {
-                    text     : 'Container',
-                    flex     : 1,
-                    sortable : true,
-                    //xtype    : 'gridcolumn',
-                    xtype    : 'templatecolumn',
-                    dataIndex: 'ContainerId',
-                    tpl      : '{[Library.findLocationTitle(values.ContainerId)]}'
-                },
-                {
-                    text     : 'Last Modified',
-                    width    : 130,
-                    sortable : true,
-                    xtype    : 'datecolumn',
-                    format   : 'D M d, Y h:i',
-                    dataIndex: 'Last Modified'
-                },
-                deleteActionColumn
+			],
+			viewConfig: {
+				stripeRows: true
+			}
+		});
 
-            ],
-            viewConfig: {
-                stripeRows: true
-            }
-        });
-
-        var trigger = me.query('triggerfield')[0]
-        trigger.on('keypress',me._filter, me);
-        trigger.on('specialkey',me._filter, me);
-   	},
+		trigger = me.query('triggerfield')[0];
+		trigger.on('keypress',me._filter, me);
+		trigger.on('specialkey',me._filter, me);
+	},
 
 
-    _filter: function(t){
-        this._store.clearFilter();
-        this._store.filter('text',
-            new RegExp(Ext.String.escapeRegex(t.getValue()),'i'))
-    },
+	_filter: function(t){
+		this._store.filters.clear();
+		this._store.filter('search',t.getValue());
+	},
 
 
-    _onshow: function() {
-        this.reload();
-    },
+	reload: function() {
+		this._store.load();
+	}
 
-    reload: function() {
-       //this._store.removeAll(false);
-       UserDataLoader.getItems({
-            scope: this,
-            success: this.itemsLoaded
-        });
-    },
-
-    itemsLoaded: function(bins) {
-        var me = this,
-            OIDs = {},
-            id = null,
-            s = this._store,
-            key;
-
-        for (key in bins) {
-            if (!bins.hasOwnProperty(key)) continue;
-
-            Ext.each( bins[key], function(r) {
-                if (!r.get('ContainerId')){ console.warn('Ignoring unacceptable value:', r);
-                    return;
-                }
-
-                id = r.get('OID');
-
-                if (!id) return;
-
-                OIDs[id]=true;
-
-                if(s.indexOfId(id)<0)
-                    s.add(r);
-            },
-            me);
-        }
-        //remove records
-        s.each(function(r){
-            if(!OIDs[r.get('OID')]) s.remove(r);
-        });
-
-        if (me.el.isMasked())
-            me.el.unmask();
-    }
 });

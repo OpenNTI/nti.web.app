@@ -10,46 +10,36 @@ Ext.define('NextThought.controller.ObjectExplorer', {
 	],
 	
 	refs: [
-        {
-            ref: 'viewport',
-            selector: 'master-view'
-        },{
-            ref: 'reader',
-            selector: 'reader-mode-container reader-panel'
-        }
+        { ref: 'viewport', selector: 'master-view' },
+		{ ref: 'reader', selector: 'reader-mode-container reader-panel' }
     ],
 
-    init: function() {
-    	 this.control({
-             'leftColumn button[objectExplorer]': {
-                 'click': this.objectExplorerClicked
-             },
+	init: function() {
+		this.control({
+			'leftColumn button[objectExplorer]': {
+				'click': this.objectExplorerClicked
+			},
 
-             'master-view':{
-                 'object-changed' : this.objectChanged
-             },
 
-             'item-navigator gridpanel': {
-                 'itemdblclick': this.itemNavigatorItemActivated
-             },
+			'item-navigator gridpanel': {
+				'itemdblclick': this.itemNavigatorItemActivated
+			},
 
-             'item-navigator': {
-                 'annotation-destroyed': this.removeAnnotation
-             }
 
-    	 },{});
-    },
+			'item-navigator': {
+				'annotation-destroyed': this.removeAnnotation
+			}
 
-    removeAnnotation: function(oid){
-        this.getReader().removeAnnotation(oid);
-    },
+		},{});
+	},
 
-    objectChanged: function() {
-        if (!this.objectExplorer || !this.objectExplorer.isVisible()) return;
-        Ext.ComponentQuery.query('window item-navigator')[0].reload();
-    },
 
-    itemNavigatorItemActivated: function(control, record, dom, index) {
+	removeAnnotation: function(oid, containerId){
+		this.getController('Reader').onRemoveAnnotation(oid,containerId);
+	},
+
+
+	itemNavigatorItemActivated: function(control, record, dom, index) {
         var containerId = record.get('ContainerId'),
             bookInfo = Library.findLocation(containerId),
             book = bookInfo.book,
@@ -60,7 +50,7 @@ Ext.define('NextThought.controller.ObjectExplorer', {
 
     objectExplorerClicked: function(btn, e, o) {
         if (!this.objectExplorer) {
-            this.objectExplorer = 	Ext.create('Ext.Window', {
+            this.objectExplorer = Ext.create('Ext.Window', {
 				id:'object-explorer',
 				title: 'My Stuff',
 				x:100,

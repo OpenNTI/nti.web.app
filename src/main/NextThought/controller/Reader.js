@@ -80,26 +80,35 @@ Ext.define('NextThought.controller.Reader', {
 		this.getPageStore().load();
 	},
 
+
     onAnnotationsLoad: function(containerId) {
+		var ps = this.getStoreForPageItems(containerId);
+		if( ps )
+			ps.load();
+    },
+
+
+	getStoreForPageItems: function(containerId){
 		var store = this.getPageStore(),
 			page = store.getById(containerId),
 			link = page ? page.getLink('UserGeneratedData') : null,
 			ps = this.pageStores[containerId];
 
-		if(!link) return;
+		if(!link) return null;
 
 		if(!ps){
-			ps = this.pageStores[containerId] = Ext.create(
+			ps = Ext.create(
 					'NextThought.store.PageItem',
 					{ storeId:'store:'+containerId }
 			);
 
 			ps.on('load', this.onAnnotationStoreLoadComplete, this);
-		}
 
+			this.pageStores[containerId] = ps;
+		}
 		ps.proxy.url = link;
-		ps.load();
-    },
+		return ps;
+	},
 
 
 	onAnnotationStoreLoadComplete: function(store){
@@ -107,9 +116,28 @@ Ext.define('NextThought.controller.Reader', {
 			containerId = reader.getContainerId();
 
 		if(store.storeId == ('store:'+containerId)){
-			console.log('safe to continue...');
 			reader.objectsLoaded(store.getBins());
 		}
+	},
+
+
+	onRemoveAnnotation: function(oid, containerId){
+		function clean(){
+			var o = ps.getById(oid);
+			if(o) o.destroy();
+			me.getReader().removeAnnotation(oid);
+		}
+
+		var me=this,
+			ps = this.getStoreForPageItems(containerId);
+		if(!ps) return;
+
+		if(ps.isLoading() || ps.getCount()===0){
+			console.log('store not ready, loading... then deleting item.');
+			ps.on('load', clean, this, {single: true});
+			ps.load();
+		}
+		else clean();
 	},
 
 
@@ -127,15 +155,16 @@ Ext.define('NextThought.controller.Reader', {
 
     navigateToItem: function(i) {
         var c = i.get('Class'),
-            id = IdCache.getComponentId(i);
+            id = IdCache.getComponentId(i),
+			containerId, bookInfo, book, href;
 
         //right now, only handle notes and highlights, not sure what to do with users etc...
         if (c != 'Note' && c != 'Highlight') return;
 
-        var containerId = i.get('ContainerId'),
-            bookInfo = Library.findLocation(containerId),
-            book = bookInfo.book,
-            href = bookInfo.location.getAttribute('href');
+        containerId = i.get('ContainerId');
+		bookInfo = Library.findLocation(containerId);
+		book = bookInfo.book;
+		href = bookInfo.location.getAttribute('href');
         this.navigate(book, book.get('root') + href, {oid: id});
     },
 
@@ -143,9 +172,9 @@ Ext.define('NextThought.controller.Reader', {
         if (!button || !button.book || !button.location) return;
 
         var skip = button.skipHistory,
-            ntiid = button.ntiid;
+            ntiid = button.ntiid,
 
-        var book = button.book,
+			book = button.book,
             loc = button.location;
 
         this.navigate(book, loc, null, skip, ntiid);
@@ -154,24 +183,26 @@ Ext.define('NextThought.controller.Reader', {
     navigate: function(book, ref, options, skipHistory, ntiid){
  //       this.getReaderMode().activate();
         this.getReader().setActive(book, ref, skipHistory,
-            options
-                ? typeof(options)=='function'
-                    ? options
+            options ? typeof(options)=='function' ? options
                     : Ext.bind(this.scrollToText, this, [options.text, options.oid])
                 : undefined, ntiid);
     },
 
     getElementsByTagNames: function(list,obj) {
-        if (!obj) var obj = document;
-        var tagNames = list.split(',');
-        var resultArray = new Array();
-        for (var i=0;i<tagNames.length;i++) {
-            var tags = obj.getElementsByTagName(tagNames[i]);
-            for (var j=0;j<tags.length;j++) {
+		if (!obj) obj = document;
+
+		var tagNames = list.split(','),
+				resultArray = [],
+				i=0, tags, j, testNode;
+
+        for (;i<tagNames.length;i++) {
+            tags = obj.getElementsByTagName(tagNames[i]);
+            for (j=0;j<tags.length;j++) {
                 resultArray.push(tags[j]);
             }
         }
-        var testNode = resultArray[0];
+
+		testNode = resultArray[0];
         if (!testNode) return [];
         if (testNode.sourceIndex) {
             resultArray.sort(function (a,b) {

@@ -25,13 +25,6 @@ Ext.define('NextThought.model.Service', {
 	},
 
 
-	getPageItemURL: function(postFix){
-		var h = _AppConfig.server.host,
-			u = _AppConfig.username;
-		return h+'/dataserver/users/'+u;
-	},
-
-
 	getStreamURL: function(){
 		var h = _AppConfig.server.host,
 			u = _AppConfig.username,

@@ -42,7 +42,7 @@ Ext.define('NextThought.controller.Annotations', {
         this.control({
             'reader-panel':{
 				'create-note'   : this.addNote,
-                'share-with'    : this.actionMap['share']
+                'share-with'    : this.actionMap.share
 			},
 
             'note-entry':{
@@ -50,13 +50,13 @@ Ext.define('NextThought.controller.Annotations', {
                 'load-transcript': this.onLoadTranscript
             },
 
-    	 	'noteeditor button[action=save]':{ 'click': this.onSaveNote },
-    	 	'noteeditor button[action=cancel]':{ 'click': this.onCancelNote },
+			'noteeditor button[action=save]':{ 'click': this.onSaveNote },
+			'noteeditor button[action=cancel]':{ 'click': this.onCancelNote },
 
-            'sharewithwindow button':{
-    	 		'click': this.shareWithButton
-    	 	}
-        },{});
+			'sharewithwindow button':{
+				'click': this.shareWithButton
+			}
+		},{});
     },
 
     getContext: function(){
@@ -96,23 +96,21 @@ Ext.define('NextThought.controller.Annotations', {
 	},
 
     onNoteAction: function(action, note, event){
-    	var p = note,
-    		e = action,
-    		r = p._owner,
-            a = p._annotation,
-    		rec = a.getRecord();
+		var r = note._owner,
+			a = note._annotation,
+			rec = a.getRecord();
 
-    	if(/delete/i.test(e)){
-    		a.remove();
-    	}
-    	else if(e in this.actionMap){
-	    	this.actionMap[e].call(this, rec);
-    	}
-    },
+		if(/delete/i.test(action)){
+			a.remove();
+		}
+		else if(action in this.actionMap){
+			this.actionMap[action].call(this, rec);
+		}
+	},
 
 
-    onLoadTranscript: function(record, cmp, elm, eOpts) {
-        var id = record.get('RoomInfo').getId();
+	onLoadTranscript: function(record, cmp, elm, eOpts) {
+		var id = record.get('RoomInfo').getId();
 
         this.getModel('Transcript').load(id,{
             scope: this,
@@ -133,13 +131,13 @@ Ext.define('NextThought.controller.Annotations', {
 
 
     onSaveNote: function(btn, event){
-    	var win = btn.up('window'),
-    		cmp = win.down('htmleditor');
+		var win = btn.up('window'),
+			cmp = win.down('htmleditor');
 
 		win.el.mask('Saving...');
 		win.record.set('body',Ext.Array.clean(win.getValue()));
 
-        if (win.record.data.body.length == 0) {
+        if (win.record.data.body.length === 0) {
             //note has no data, we need to just remove it
             win.record.destroy({
                 scope: this,
@@ -156,7 +154,7 @@ Ext.define('NextThought.controller.Annotations', {
         }
 
         //If we are here, save it.
-   		win.record.save({
+		win.record.save({
 			scope: this,
 			success:function(newRecord,operation){
 				win.close();
@@ -167,54 +165,54 @@ Ext.define('NextThought.controller.Annotations', {
 				console.error('failed to save note');
 			}
 		});
-    },
+	},
 
 
-    attemptToAddWidget: function(record){
-        //check to see if reply is already there, if so, don't do anything...
-        if (Ext.get(IdCache.getComponentId(record))) return;
+	attemptToAddWidget: function(record){
+		//check to see if reply is already there, if so, don't do anything...
+		if (Ext.get(IdCache.getComponentId(record))) return;
 
-        var parent = record.get('inReplyTo');
-        if(parent){
-            parent = Ext.getCmp(IdCache.getComponentId(parent));
-            parent.addReply(record);
-        }
-        else
-            this.getContext().createNoteWidget(record);
+		var parent = record.get('inReplyTo');
+		if(parent){
+			parent = Ext.getCmp(IdCache.getComponentId(parent));
+			parent.addReply(record);
+		}
+		else
+			this.getContext().createNoteWidget(record);
 
-        this.getContext().fireEvent('resize');
-    },
+		this.getContext().fireEvent('resize');
+	},
 
-    replyAsChat: function(record) {
-        var reply = AnnotationUtils.noteToReply(record),
-            people = Ext.Array.unique([record.get('Creator')].concat(record.get('sharedWith'))),
-            cId = record.get('ContainerId'),
-            parent = reply.get('inReplyTo'),
-            refs = reply.get('references');
+	replyAsChat: function(record) {
+		var reply = AnnotationUtils.noteToReply(record),
+				people = Ext.Array.unique([record.get('Creator')].concat(record.get('sharedWith'))),
+				cId = record.get('ContainerId'),
+				parent = reply.get('inReplyTo'),
+				refs = reply.get('references');
 
-        this.getController('Chat').enterRoom(people, {ContainerId: cId, references: refs, inReplyTo: parent});
-    },
+		this.getController('Chat').enterRoom(people, {ContainerId: cId, references: refs, inReplyTo: parent});
+	},
 
-    replyToNote: function(record){
-        this.editNote(AnnotationUtils.noteToReply(record));
-    },
+	replyToNote: function(record){
+		this.editNote(AnnotationUtils.noteToReply(record));
+	},
 
-    shareWith: function(record){
-    	Ext.create('NextThought.view.windows.ShareWithWindow',{record: record}).show();
-    },
+	shareWith: function(record){
+		Ext.create('NextThought.view.windows.ShareWithWindow',{record: record}).show();
+	},
 
-    editNote: function(record){
+	editNote: function(record){
 		Ext.widget('noteeditor',{record: record}).show();
- 	},
+	},
 
-    addNote: function(range){
-        if(!range) {
+	addNote: function(range){
+		if(!range) {
 			return;
 		}
 
 		var note = AnnotationUtils.selectionToNote(range);
 		note.set('ContainerId', this.getContainerId());
 
-        this.editNote(note);
-    }
+		this.editNote(note);
+	}
 });
