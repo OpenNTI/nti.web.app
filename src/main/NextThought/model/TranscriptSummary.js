@@ -7,9 +7,7 @@ Ext.define('NextThought.model.TranscriptSummary', {
         { name: 'RoomInfo', type: 'singleItem'},
         { name: 'NTIID', type: 'string' },
         { name: 'ContainerId', type: 'string' },
-        { name: 'Contributors', type: 'auto' },
-        { name: 'Last Modified', type: 'date', dateFormat: 'timestamp', defaultValue: new Date() },
-		{ name: 'Links', type: 'links', defaultValue: [] }
+        { name: 'Contributors', type: 'auto' }
     ],
     getModelName: function() {
         return 'TranscriptSummary';

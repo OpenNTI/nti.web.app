@@ -10,9 +10,7 @@ Ext.define('NextThought.model.Transcript', {
         { name: 'Messages', type: 'arrayItem' },
         { name: 'NTIID', type: 'string' },
         { name: 'ContainerId', type: 'string' },
-        { name: 'Contributors', type: 'auto' },
-        { name: 'Last Modified', type: 'date', dateFormat: 'timestamp', defaultValue: new Date() },
-		{ name: 'Links', type: 'links', defaultValue: [] }
+        { name: 'Contributors', type: 'auto' }
     ],
     proxy: {
         type: 'nti-mimetype',

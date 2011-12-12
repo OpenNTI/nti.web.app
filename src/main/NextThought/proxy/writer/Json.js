@@ -18,9 +18,10 @@ Ext.define('NextThought.proxy.writer.Json', {
         }
 
 		delete output.Class;
+		delete output.Links;
 
-        console.debug('Output:',output);
-		console.debug('Trimed Keys:',Ext.Array.difference(Object.keys(defaults),Object.keys(output)));
+        //console.debug('Output:',output);
+		//console.debug('Trimed Keys:',Ext.Array.difference(Object.keys(defaults),Object.keys(output)));
         return output;
     }
 });

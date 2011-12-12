@@ -1,5 +1,44 @@
+Ext.data.Types.LINKS = {
+	type: 'links',
+	sortType: function(){ return ''; },
+
+	convert: function(v){
+		return {
+			links: v,
+			getRelHref: function(rel){
+				var i, c = this.links,len = c.length;
+				if(typeof(c) === 'object'){
+					for(i=len-1; i>=0; i--){
+						if(c[i].rel == rel)
+							return c[i].href;
+					}
+				}
+				else {
+					console.warn('bad Links value: "', c, '" it is a', typeof(c), 'instead of an array');
+				}
+
+				return null;
+			}
+		};
+	}
+};
+
+
 Ext.define('NextThought.model.Base', {
     extend: 'Ext.data.Model',
+	idProperty: 'OID',
+	fields: [
+		{ name: 'ID', type: 'string' },
+		{ name: 'OID', type: 'string' },
+		{ name: 'Last Modified', type: 'date', dateFormat: 'timestamp', defaultValue: new Date() },
+		{ name: 'Links', type: 'links', defaultValue: [] }
+	],
+
+
+	getLink: function(rel){
+		return _AppConfig.server.host + this.get('Links').getRelHref(rel);
+	},
+
 
     equal: function(b) {
         var a = this,
@@ -32,30 +71,7 @@ Ext.define('NextThought.model.Base', {
 });
 
 
-Ext.data.Types.LINKS = {
-	type: 'links',
-	sortType: function(){ return ''; },
 
-	convert: function(v){
-		return {
-			links: v,
-			getLink: function(rel){
-				var i, c = this.links,len = c.length;
-				if(typeof(c) === 'object'){
-					for(i=len-1; i>=0; i--){
-						if(c[i].rel == rel)
-							return c[i].href;
-					}
-				}
-				else {
-					console.warn('bad Links value: "', c, '" it is a', typeof(c), 'instead of an array');
-				}
-
-				return null;
-			}
-		};
-	}
-};
 
 /* converters for models which reference other models*/
 Ext.data.Types.SINGLEITEM = {

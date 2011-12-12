@@ -64,46 +64,8 @@ Ext.define('NextThought.proxy.UserDataLoader',{
 				callback(bins.Hit);
 			}
 		});
-	},
-
-
-	getPageItems: function(pageId, callbacks){
-		return this.getItems(callbacks, '/Pages/'+pageId+'/UserGeneratedData');
-	},
-
-
-	getItems: function(callbacks, postFix){
-		var url = _AppConfig.service.getPageItemURL(postFix),
-			request = '_requestOf:'+url;
-
-		if (request in this){
-			console.debug('canceling request ' + request);
-			Ext.Ajax.abort(this[request]);
-		}
-
-		this[request] = Ext.Ajax.request({
-			url: url,
-			scope: this,
-			callback: function() {
-				delete this[request];
-			},
-			failure: function() {
-				console.error('There was an error getting data', 'Will attempt to call failure callback', arguments);
-				if(callbacks && callbacks.failure) {
-					callbacks.failure.apply(callbacks.scope || this, arguments);
-				}
-			},
-			success: function(r) {
-				var json = Ext.decode(r.responseText),
-					bins = ParseUtils.iterateAndCollect(json);
-
-				if(callbacks && callbacks.success){
-					callbacks.success.call(callbacks.scope || this, bins);
-				}
-				else console.warn('no success callback');
-			}
-		});
 	}
+
 },
 	function(){
 		window.UserDataLoader = this;

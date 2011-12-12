@@ -4,11 +4,8 @@ Ext.define('NextThought.model.Highlight', {
     requires: [
 		'NextThought.proxy.Rest'
 	],
-	idProperty: 'OID',
 	mimeType: 'application/vnd.nextthought.highlight',
 	fields: [
-		{ name: 'id', mapping: 'ID', type: 'int' },
-		{ name: 'OID', type: 'string' },
 		{ name: 'Class', type: 'string', defaultValue: 'Highlight' },
 		{ name: 'startXpath', type: 'string' },
 		{ name: 'startAnchor', type: 'string' },
@@ -22,11 +19,9 @@ Ext.define('NextThought.model.Highlight', {
 		{ name: 'endOffset', type: 'int' },
 		{ name: 'Creator', type: 'string'},
 		{ name: 'color', type: 'string', defaultValue: 'yellow' },
-		{ name: 'Last Modified', type: 'date', dateFormat: 'timestamp' },
 		{ name: 'ContainerId', type: 'string'},
 		{ name: 'text', type: 'string' },
-		{ name: 'sharedWith', type: 'UserList'},
-		{ name: 'Links', type: 'links', defaultValue: [] }
+		{ name: 'sharedWith', type: 'UserList'}
 	],
 	proxy: {
 		type: 'nti-mimetype',

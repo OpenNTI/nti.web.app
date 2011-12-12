@@ -3,11 +3,9 @@ Ext.define('NextThought.model.Note', {
 	requires: [
 		'NextThought.proxy.RestMimeAware'
 	],
-	idProperty: 'OID',
 	mimeType: 'application/vnd.nextthought.note',
 	fields: [
-		{ name: 'id', mapping: 'ID', type: 'int' },
-		{ name: 'OID', type: 'string' },
+
 		{ name: 'inReplyTo', type: 'string' },
 		{ name: 'references', type: 'auto', defaultValue: [] },
 		{ name: 'Class', type: 'string', defaultValue: 'Note' },
@@ -17,11 +15,9 @@ Ext.define('NextThought.model.Note', {
 		{ name: 'top', type: 'int' },
 		{ name: 'body', type: 'auto' },
 		{ name: 'color', type: 'string', defaultValue: 'yellow' },
-		{ name: 'Last Modified', type: 'date', dateFormat: 'timestamp' },
 		{ name: 'Creator', type: 'string'},
 		{ name: 'ContainerId', type: 'string'},
-		{ name: 'sharedWith', type: 'UserList' },
-		{ name: 'Links', type: 'links', defaultValue: [] }
+		{ name: 'sharedWith', type: 'UserList' }
 	],
 	proxy: {
 		type: 'nti-mimetype',

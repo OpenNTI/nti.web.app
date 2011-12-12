@@ -10,7 +10,8 @@ Ext.define('NextThought.controller.Reader', {
 	],
 
 	stores: [
-		'Page'
+		'Page',
+		'PageItem'
 	],
 
     views: [
@@ -36,7 +37,9 @@ Ext.define('NextThought.controller.Reader', {
     ],
 
     init: function() {
+		this.pageStores = {};
 		this.application.on('session-ready', this.onSessionReady, this);
+
         this.control({
             'master-view':{
                 'navigate': this.navigate,
@@ -77,9 +80,38 @@ Ext.define('NextThought.controller.Reader', {
 		this.getPageStore().load();
 	},
 
-    onAnnotationsLoad: function() {
-        console.log('annotation load event');
+    onAnnotationsLoad: function(containerId) {
+		var store = this.getPageStore(),
+			page = store.getById(containerId),
+			link = page ? page.getLink('UserGeneratedData') : null,
+			ps = this.pageStores[containerId];
+
+		if(!link) return;
+
+		if(!ps){
+			ps = this.pageStores[containerId] = Ext.create(
+					'NextThought.store.PageItem',
+					{ storeId:'store:'+containerId }
+			);
+
+			ps.on('load', this.onAnnotationStoreLoadComplete, this);
+		}
+
+		ps.proxy.url = link;
+		ps.load();
     },
+
+
+	onAnnotationStoreLoadComplete: function(store){
+		var reader = this.getReader(),
+			containerId = reader.getContainerId();
+
+		if(store.storeId == ('store:'+containerId)){
+			console.log('safe to continue...');
+			reader.objectsLoaded(store.getBins());
+		}
+	},
+
 
     clearSearch: function() {
         this.getReader().clearSearchRanges();

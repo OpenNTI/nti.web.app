@@ -6,11 +6,8 @@ Ext.define(	'NextThought.model.User', {
     idProperty: 'Username',
 
     fields: [
-        { name: 'Last Modified', type: 'date', dateFormat: 'timestamp' },
         { name: 'lastLoginTime', type: 'date', dateFormat: 'timestamp' },
         { name: 'NotificationCount', type: 'int' },
-        { name: 'id', mapping: 'ID', type: 'string' },
-        { name: 'OID', type: 'string' },
         { name: 'Class', type: 'string', defaultValue: 'User' },
         { name: 'Username', type: 'string' },
         { name: 'Presence', type: 'string' },
@@ -20,8 +17,7 @@ Ext.define(	'NextThought.model.User', {
         { name: 'accepting', type: 'UserList' },
         { name: 'ignoring', type: 'UserList' },
         { name: 'following', type: 'UserList' },
-        { name: 'Communities', type: 'UserList' },
-		{ name: 'Links', type: 'links', defaultValue: [] }
+        { name: 'Communities', type: 'UserList' }
     ],
     proxy: {
 		type: 'nti',

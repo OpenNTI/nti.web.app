@@ -6,7 +6,6 @@ Ext.define('NextThought.model.Hit', {
 	fields: [
 		{ name: 'Class', type: 'string' },
 		{ name: 'ContainerId', type: 'string'},
-		{ name: 'Last Modified', type: 'date', dateFormat: 'timestamp' },
 		{ name: 'Snippet', type: 'string' },
 		{ name: 'TargetOID', type: 'string' },
 		{ name: 'Title', type: 'string' },

@@ -34,22 +34,17 @@ Ext.define('NextThought.proxy.RestMimeAware', {
             action = request.operation.action,
 			record = request.records[0],
 			href = record.get('href'),
-			mimeType, collection,
-			links;
+			mimeType = record.mimeType || record.get('MimeType'),
+			collection;
 
 		this.headers = { 'Content-Type': mimeType+'+json' };
 
         if (action!='update' && action!='destroy'){
-			mimeType = record.mimeType || record.get('MimeType');
 			collection = _AppConfig.service.getCollectionFor(mimeType,null) || {};
-
-			href = collection.href.split('/');
-			href.pop();
-			href = href.join('/');
+			href = host + collection.href;
 		}
 		else if(!href){
-			links = record.get('Links') || {};
-			href = links.getLink('edit');
+			href = record.getLink('edit');
 		}
 
 		if(!href) Ext.Error.raise({
@@ -59,7 +54,7 @@ Ext.define('NextThought.proxy.RestMimeAware', {
 			mimeType: mimeType
 		});
 
-        return host + href;
+        return href;
     },
 
     _exception: function(proxy, response, operation, eOpts) {
