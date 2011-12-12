@@ -237,6 +237,8 @@ Ext.define('NextThought.mixins.Annotations', {
 
 
 	loadObjects: function() {
+        this.fireEvent('annotations-load');
+
 		this.clearAnnotations();
 		UserDataLoader.getPageItems(this._containerId, {
 			scope:this,

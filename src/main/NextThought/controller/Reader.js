@@ -55,7 +55,8 @@ Ext.define('NextThought.controller.Reader', {
             'reader-panel':{
                 'navigate': this.navigate,
                 'location-changed': this.readerLocationChanged,
-                'publish-contributors': this.readerPublishedContributors
+                'publish-contributors': this.readerPublishedContributors,
+                'annotations-load': this.onAnnotationsLoad
             },
 
             'reader-mode-container related-items':{
@@ -76,6 +77,9 @@ Ext.define('NextThought.controller.Reader', {
 		this.getPageStore().load();
 	},
 
+    onAnnotationsLoad: function() {
+        console.log('annotation load event');
+    },
 
     clearSearch: function() {
         this.getReader().clearSearchRanges();
@@ -162,15 +166,16 @@ Ext.define('NextThought.controller.Reader', {
         var me = this,
             textElements = me.getElementsByTagNames('p,div,blockquote,ul,li,ol', me.getReader().getEl().dom),
             ranges = [],
-            created = {};
+            created = {},
+            e;
 
 
-        for (var e in textElements)
+        for (e in textElements)
         {
             var c = textElements[e],
                 i = c.innerText,
                 regex = new RegExp(Ext.String.escapeRegex(text), 'i'),
-                index, node, texts;
+                index, node, texts, nv, r;
 
             //if it's not here, move to the next block
             if (!i.match(regex)) continue;
@@ -178,12 +183,12 @@ Ext.define('NextThought.controller.Reader', {
             texts = document.evaluate('.//text()', c,
                             null, XPathResult.ORDERED_NODE_ITERATOR_TYPE, null);
 
-            while(node = texts.iterateNext()){
-                var nv = node.nodeValue.toLowerCase();
+            while(node == texts.iterateNext()){
+                nv = node.nodeValue.toLowerCase();
 
                 index = nv.indexOf(text);
                 while(index >= 0) {
-                    var r = document.createRange();
+                    r = document.createRange();
                     r.setStart(node, index);
                     r.setEnd(node, index + text.length);
 
