@@ -4,7 +4,6 @@ Ext.define('NextThought.proxy.reader.JsonCollection', {
 	initialConfig: {root: 'Items'},
 
 	readRecords: function(data) {
-
 		var records = [], key, items = data.Items || {};
 
 		for(key in items){

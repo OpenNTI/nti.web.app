@@ -8,5 +8,12 @@ Ext.define('NextThought.model.Change', {
     ],
     getModelName: function() {
         return 'Change';
+    },
+    getItemValue: function(field) {
+        var i = this.get('Item');
+
+        if (!i) return null;
+
+        return i.get(field);
     }
 });

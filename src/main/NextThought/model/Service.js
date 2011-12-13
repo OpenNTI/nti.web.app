@@ -25,15 +25,6 @@ Ext.define('NextThought.model.Service', {
 	},
 
 
-	getStreamURL: function(){
-		var h = _AppConfig.server.host,
-			u = _AppConfig.username,
-			containerId = 'aops-prealgebra-129';
-
-		return  h+'/dataserver/users/'+u+'/Pages/' + containerId + '/RecursiveStream/';
-	},
-
-
 	getQuizSubmitURL: function(ntiid){
 		var h = _AppConfig.server.host,
 			u = _AppConfig.username;

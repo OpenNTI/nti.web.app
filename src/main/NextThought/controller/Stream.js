@@ -47,7 +47,7 @@ Ext.define('NextThought.controller.Stream', {
     init: function() {
         var me = this;
 
-		this.application.on('session-ready', this.sessionReady, this);
+        this.streamStores = {};
 
         Socket.register({
             'data_noticeIncomingChange': function(){me.incomingChange.apply(me, arguments);}
@@ -60,25 +60,54 @@ Ext.define('NextThought.controller.Stream', {
         },{});
     },
 
+    containerIdChanged: function(containerId) {
+        var ss = this.getStoreForStream(containerId);
+        if (ss)
+            ss.load();
+    },
 
-	sessionReady: function(){
-		var store = this.getStreamStore();
-		store.proxy.url = _AppConfig.service.getStreamURL();
-		store.load();
-	},
+    getStoreForStream: function(containerId) {
+        var store = this.getController('Reader').getPageStore(),
+            page = store.getById(containerId),
+            link = page ? page.getLink('RecursiveStream') : null,
+            ps = this.streamStores[containerId];
 
+        if(!link) return null;
+
+        if(!ps){
+            ps = Ext.create(
+                'NextThought.store.Stream',
+                { storeId:'stream-store:'+containerId }
+            );
+
+            ps.on('load', this.onStreamLoadComplete, this);
+
+            this.streamStores[containerId] = ps;
+        }
+
+        ps.proxy.url = link;
+        return ps;
+    },
+
+    onStreamLoadComplete: function(store)
+    {
+        this.getMiniStream().updateStream(store.data.items);
+    },
 
     incomingChange: function(change) {
         change = ParseUtils.parseItems([change])[0];
-        this.getStreamStore().add(change);
+        var s = this.getStoreForStream(change.getItemValue('ContainerId'));
 
+        s.add(change);
+        this.onStreamLoadComplete(s);
         this.self.fireChange(change);
     },
 
     streamFilterChanged: function(newFilter){
         var o = [
             this.getStream(),
-            this.getStreamPeople()
+            this.getStreamPeople(),
+            this.getMiniStream()
         ];
 
         Ext.each(o,function(i){i.applyFilter(newFilter);});

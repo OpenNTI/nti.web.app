@@ -21,7 +21,7 @@ Ext.define('NextThought.controller.Reader', {
         'widgets.Breadcrumb',
         'widgets.PeopleList',
         'widgets.RelatedItemsList',
-        'widgets.MiniStreamList',
+       // 'widgets.MiniStreamList',
         'widgets.Tracker'
     ],
 
@@ -31,13 +31,14 @@ Ext.define('NextThought.controller.Reader', {
         { ref: 'readerBreadcrumb', selector: 'reader-mode-container breadcrumbbar' },
         { ref: 'readerPeople', selector: 'reader-mode-container people-list' },
         { ref: 'readerRelated', selector: 'reader-mode-container related-items' },
-        { ref: 'readerStream', selector: 'reader-mode-container mini-stream' },
+       // { ref: 'readerStream', selector: 'reader-mode-container mini-stream' },
 
         { ref: 'readerMode', selector: 'reader-mode-container' }
     ],
 
     init: function() {
 		this.pageStores = {};
+
 		this.application.on('session-ready', this.onSessionReady, this);
 
         this.control({
@@ -80,11 +81,15 @@ Ext.define('NextThought.controller.Reader', {
 		this.getPageStore().load();
 	},
 
-
     onAnnotationsLoad: function(containerId) {
 		var ps = this.getStoreForPageItems(containerId);
+
 		if( ps )
 			ps.load();
+
+        //When the reader changes, we need to tell the stream controller so he knows to
+        //update his data
+        this.getController('Stream').containerIdChanged(containerId);
     },
 
 
@@ -99,7 +104,7 @@ Ext.define('NextThought.controller.Reader', {
 		if(!ps){
 			ps = Ext.create(
 					'NextThought.store.PageItem',
-					{ storeId:'store:'+containerId }
+					{ storeId:'page-store:'+containerId }
 			);
 
 			ps.on('load', this.onAnnotationStoreLoadComplete, this);
@@ -115,7 +120,7 @@ Ext.define('NextThought.controller.Reader', {
 		var reader = this.getReader(),
 			containerId = reader.getContainerId();
 
-		if(store.storeId == ('store:'+containerId)){
+		if(store.storeId == ('page-store:'+containerId)){
 			reader.objectsLoaded(store.getBins());
 		}
 	},
@@ -276,7 +281,7 @@ Ext.define('NextThought.controller.Reader', {
     },
 
     readerLocationChanged: function(id){
-        this.getReaderStream().setContainer(id);
+        this.getController('Stream').containerIdChanged(id);
         this.getReaderRelated().setLocation(
             this.getReaderBreadcrumb().getLocation());
     },
@@ -289,8 +294,8 @@ Ext.define('NextThought.controller.Reader', {
         var o = [
             this.getReader(),
             this.getReaderPeople(),
-            this.getReaderRelated(),
-            this.getReaderStream()
+            this.getReaderRelated()
+        //    this.getReaderStream()
         ];
 
         Ext.each(o,function(i){i.applyFilter(newFilter);});
