@@ -3,9 +3,8 @@ Ext.define('NextThought.view.widgets.FilterControlPanel', {
 	extend: 'Ext.panel.Panel',
 	alias: 'widget.filter-control',
 	requires: [
-			'Ext.form.field.Checkbox',
-            'NextThought.proxy.UserDataLoader'
-			],
+		'Ext.form.field.Checkbox'
+	],
 
 	width: MIN_SIDE_WIDTH,
 	border: false,

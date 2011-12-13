@@ -1,6 +1,9 @@
 Ext.define('NextThought.view.windows.SearchResultsPopover', {
     extend: 'Ext.panel.Panel',
     alias: 'widget.search-results-popover',
+	requires: [
+		'NextThought.proxy.Search'
+	],
 
     autoScroll: true,
     floating: true,
@@ -16,6 +19,7 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
 
     initComponent: function(config) {
         var me = this,
+			s = _AppConfig.service,
             field = me.bindTo;
 
         //values that change should not be defined on the prototype/class, but the instance.
@@ -30,9 +34,37 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
         me.addEvents('goto');
         me.callParent(arguments);
 
-        me.updateWithContentHits = Ext.bind(me.updateContents, me, [0], true);
-        me.updateWithUserGenHits = Ext.bind(me.updateContents, me, [1], true);
+		me.stores = [
+			me.getStoreFor(
+				s.getSearchURL(),
+				Ext.bind(me.updateContents, me, [0], true)),
+
+			me.getStoreFor(
+				s.getUserDataSearchURL(),
+				Ext.bind(me.updateContents, me, [1], true))
+		];
+
     },
+
+
+	getStoreFor: function(url, onLoad){
+		console.debug(url);
+		return Ext.create('Ext.data.Store', {
+			autoLoad: false,
+			remoteFilter: true,
+			model: 'NextThought.model.Hit',
+			proxy: { url: url, type: 'search', reader: 'nti-pageitem' },
+			listeners: { scope: this, load: onLoad }
+		});
+	},
+
+
+
+	destroy: function(){
+		delete this.stores;
+		this.callParent(arguments);
+	},
+
 
     reset: function(){
         this.removeAll();
@@ -43,12 +75,11 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
         );
     },
 
-    performSearch: function(searchValue) {
+    performSearch: function(value) {
         this.reset();
-        this._searchVal = searchValue;
+        this._searchVal = value;
         this._updateCount = 2;
-        UserDataLoader.searchContent(null, searchValue, this.updateWithContentHits);
-        UserDataLoader.searchUserData(null, searchValue, this.updateWithUserGenHits);
+		Ext.each(this.stores, function(s){s.filters.clear();s.filter('search',value);});
     },
 
     render: function() {
@@ -99,7 +130,7 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
         }
     },
 
-    updateContents: function(hits, panelIndex) {
+    updateContents: function(store, hits, success, opts, panelIndex) {
         if(!this){
             console.debug('"this" has been deleted');
             return;
@@ -145,10 +176,10 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
 
 
     fixHeight: function(){
+		var me = this, e, max;
         try{
-            var me = this,
-                e = me.bindTo,
-                max = (VIEWPORT.getHeight() - e.getPosition()[1] - e.getHeight() - 10);
+			e = me.bindTo;
+			max = (VIEWPORT.getHeight() - e.getPosition()[1] - e.getHeight() - 10);
             me.height = undefined;
             me.doLayout();
             if(me.getHeight()> max)
@@ -171,9 +202,7 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
             CLASS = 'search-result-selection';
 
         this.el.select('.'+CLASS).removeCls(CLASS);
-
         this.itemSelected = Ext.Array.indexOf(p,c);
-
         this.scroll(c.addCls(CLASS));
     },
 
@@ -181,14 +210,5 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
     searchResultClicked: function(event, dom, opts) {
         this.fireEvent('goto', opts.hit, this._searchVal);
         this.close();
-
-    },
-
-    doComponentLayout: function(w,h,s,c){
-        this.callParent(arguments);
-
     }
-
-
-
 });

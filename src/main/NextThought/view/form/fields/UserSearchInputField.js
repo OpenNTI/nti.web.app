@@ -1,9 +1,6 @@
 Ext.define( 'NextThought.view.form.fields.UserSearchInputField', {
 	// extend: 'Ext.form.field.Text',
 	extend: 'Ext.form.field.ComboBox',
-	requires: [
-			'NextThought.proxy.UserDataLoader'
-	],
 	alias : 'widget.usersearchinput',
 	
 	allowBlank: false,

@@ -40,7 +40,6 @@ Ext.define('NextThought.controller.State', {
         window.history.updateState = function(s){
             if(!me.isPoppingHistory && push){
 				me._currentState = Ext.Object.merge(me._currentState, s);
-
                 return me.fireEvent('stateChange',s);
             }
             return false;
@@ -73,8 +72,6 @@ Ext.define('NextThought.controller.State', {
             console.error('no viewport');
             return;
         }
-        //TODO : this logic needs to be re-evaluated.  In the case of an in page submit in the reader, (mathcounts),
-        //the state is null and the app renders the default page, mathcounts data then needs to be renavigated to.
         //v.fireEvent('restore', s || BASE_STATE);
         if (s) v.fireEvent('restore', s);
     },
@@ -90,24 +87,30 @@ Ext.define('NextThought.controller.State', {
 
 
     restoreState: function(stateObject){
-        var replaceState = false;
-        if(stateObject == PREVIOUS_STATE){
+		if(this.restoringState){
+			console.warn('Restoring state while one is already restoring...');
+			return;
+		}
+		this.restoringState = true;
+        var replaceState = false, c, key, stateScoped;
+
+        if(stateObject === PREVIOUS_STATE){
             replaceState = true;
             stateObject = this.loadState();
         }
 
-        var c = Ext.getCmp(stateObject.active);
+        c = Ext.getCmp(stateObject.active);
         if(c){
             this._currentState.active = stateObject.active;
             c.activate();
         }
 
-        for(var key in stateObject){
+        for(key in stateObject){
             if(!stateObject.hasOwnProperty(key) || !/object/i.test(typeof(stateObject[key]))) continue;
             c = Ext.getCmp(key);
             if(c && c.restore){
                 try{
-                    var stateScoped = {};
+                    stateScoped = {};
                     this._currentState[key] = stateScoped[key] = stateObject[key];
                     c.restore(stateScoped);
                 }
@@ -122,6 +125,8 @@ Ext.define('NextThought.controller.State', {
 
         if(replaceState)
             history.replaceState(this._currentState,'Title');
+
+		this.restoringState = false;
     },
 
 

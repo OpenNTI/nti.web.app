@@ -2,9 +2,8 @@ Ext.define('NextThought.view.widgets.MiniStreamList', {
 	extend: 'Ext.panel.Panel',
 	alias: 'widget.mini-stream',
 	requires: [
-			'NextThought.proxy.UserDataLoader',
-            'NextThought.view.widgets.MiniStreamEntry'
-			],
+		'NextThought.view.widgets.MiniStreamEntry'
+	],
 	
 	border: false,
 	margin: '15px auto',

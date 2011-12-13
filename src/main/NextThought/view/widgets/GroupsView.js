@@ -1,9 +1,6 @@
 Ext.define('NextThought.view.widgets.GroupsView', {
     extend: 'Ext.view.View',
     alias: 'widget.groups-view',
-    requires:[
-        'NextThought.proxy.UserDataLoader'
-    ],
 
     cls: 'x-groupview-panel',
     emptyText: 'No groups available',

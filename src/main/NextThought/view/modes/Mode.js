@@ -17,12 +17,12 @@ Ext.define( 'NextThought.view.modes.Mode', {
 
     initComponent: function(){
         this.addEvents('activate-mode');
-    	this.callParent(arguments);
-    	var id = this.id,
-            modeSwitcher = Ext.ComponentQuery.query('modeswitcher')[0];
+		this.callParent(arguments);
+		var id = this.id,
+			modeSwitcher = Ext.ComponentQuery.query('modeswitcher')[0];
 
-    	this.toggleButton = modeSwitcher.addMode(id+' mode label',id+'-mode-icon');
-    	this.toggleButton.modeReference = this;
+		this.toggleButton = modeSwitcher.addMode(id+' mode label',id+'-mode-icon');
+		this.toggleButton.modeReference = this;
     },
 
 
@@ -40,32 +40,32 @@ Ext.define( 'NextThought.view.modes.Mode', {
 	},
     
     activate: function(){
-    	var ct = this.ownerCt,
-    		me = this,
-    		item = 0;
+		var ct = this.ownerCt,
+			me = this,
+			item = 0;
 
-       	if(!ct){
-            console.error('No container??');
-    		return false;
-    	}
+		if(!ct){
+			console.error('No container??');
+			return false;
+		}
 
-        if (ct.getLayout().getActiveItem() === me) {
-            return false;
-        }
+		if (ct.getLayout().getActiveItem() === me) {
+			return false;
+		}
 
-        ct.fireEvent('activate-mode', this.getId());
-    	
-    	ct.items.each(function(o,i){
-    		if(o==me) {
-                item = i;
-                return false;
-            }
-    	},this);
+		ct.fireEvent('activate-mode', this.getId());
 
-    	try{
-            if(!this.toggleButton.pressed){
-                this.toggleButton.toggle(true);
-            }
+		ct.items.each(function(o,i){
+			if(o==me) {
+				item = i;
+				return false;
+			}
+		},this);
+
+		try{
+			if(!this.toggleButton.pressed){
+				this.toggleButton.toggle(true);
+			}
 			try{
 				ct.getLayout().getActiveItem().deactivate();
 			}
@@ -88,10 +88,10 @@ Ext.define( 'NextThought.view.modes.Mode', {
     },
 
     relayout: function(){
-    	this.ownerCt.doComponentLayout();
-    	this.doComponentLayout();
-    	this.doLayout();
-    },
+		this.ownerCt.doComponentLayout();
+		this.doComponentLayout();
+		this.doLayout();
+	},
 
     getMainComponent: function(){
         //implement me in subclasses!

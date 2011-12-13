@@ -3,7 +3,6 @@ Ext.define('NextThought.view.content.Stream', {
 	extend:'NextThought.view.content.Panel',
     alias:'widget.stream-panel',
 	requires: [
-        'NextThought.proxy.UserDataLoader',
         'NextThought.view.widgets.StreamEntry'
     ],
 	cls: 'x-stream-home',
@@ -26,7 +25,7 @@ Ext.define('NextThought.view.content.Stream', {
 	},
 
     initComponent: function(){
-   		this.callParent(arguments);
+		this.callParent(arguments);
         this._store = Ext.StoreManager.get('Stream');
         this._store.on('add', this.onAdd, this);
         this._store.on('load', this.onLoad, this);
@@ -45,10 +44,10 @@ Ext.define('NextThought.view.content.Stream', {
         if (!changeSet) return;
 
         if (!Ext.isArray(changeSet)) changeSet = [changeSet];
-
-        for (var key in changeSet) {
+		var key, c;
+        for (key in changeSet) {
             if (!changeSet.hasOwnProperty(key)) continue;
-            var c = changeSet[key];
+            c = changeSet[key];
 
             this._stream = this._stream || [];
             this._stream.unshift(c);
@@ -63,7 +62,7 @@ Ext.define('NextThought.view.content.Stream', {
 	},
 
 	updateStream: function(){
-		var k, change,
+		var k, change, u,
 			p = this.items.get(0),
 			f = this._filter;
 
@@ -80,7 +79,7 @@ Ext.define('NextThought.view.content.Stream', {
                 continue;
             }
 
-			var u = change.get('Creator');
+			u = change.get('Creator');
 
 			if(/all/i.test(f.groups) || f.shareTargets[ u ] || (f.includeMe && f.includeMe==u)){
                 p.add({change: change, xtype: 'streamEntry'});

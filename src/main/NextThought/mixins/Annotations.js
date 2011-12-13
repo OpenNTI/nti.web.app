@@ -2,7 +2,6 @@ Ext.define('NextThought.mixins.Annotations', {
 	requires: [
 		'NextThought.model.Highlight',
 		'NextThought.model.Note',
-		'NextThought.proxy.UserDataLoader',
 		'NextThought.util.ParseUtils',
 		'NextThought.util.AnnotationUtils',
 		'NextThought.util.QuizUtils',

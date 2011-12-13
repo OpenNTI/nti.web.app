@@ -68,7 +68,6 @@ Ext.define('NextThought.view.content.Reader', {
     },
 
     render: function(){
-        console.log('rendering reader');
         this.callParent(arguments);
 
         if(this._tracker){
