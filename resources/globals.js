@@ -1,3 +1,8 @@
+/* DATASERVER 2 Constants*/
+RECURSIVE_STREAM = 'RecursiveStream';
+USER_GENERATED_DATA = 'UserGeneratedData';
+
+
 
 CENTER_WIDTH = 768;
 MIN_SIDE_WIDTH = 175;

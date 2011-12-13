@@ -47,6 +47,8 @@ Ext.define('NextThought.controller.Stream', {
     init: function() {
         var me = this;
 
+        this.application.on('session-ready', this.onSessionReady, this);
+
         this.streamStores = {};
 
         Socket.register({
@@ -60,6 +62,23 @@ Ext.define('NextThought.controller.Stream', {
         },{});
     },
 
+    onSessionReady: function(){
+        var s = this.getStreamStore(),
+            ps = Ext.StoreManager.get('Page');
+
+        function load() {
+            s.proxy.url = ps.getById('tag:nextthought.com,2011-10:Root').getLink(RECURSIVE_STREAM);
+            s.load();
+        }
+
+        if (ps.isLoading()) {
+            ps.on('load', load, this, {single: true});
+        }
+        else {
+            load();
+        }
+    },
+
     containerIdChanged: function(containerId) {
         var ss = this.getStoreForStream(containerId);
         if (ss)
@@ -69,7 +88,7 @@ Ext.define('NextThought.controller.Stream', {
     getStoreForStream: function(containerId) {
         var store = this.getController('Reader').getPageStore(),
             page = store.getById(containerId),
-            link = page ? page.getLink('RecursiveStream') : null,
+            link = page ? page.getLink(RECURSIVE_STREAM) : null,
             ps = this.streamStores[containerId];
 
         if(!link) return null;
@@ -80,7 +99,7 @@ Ext.define('NextThought.controller.Stream', {
                 { storeId:'stream-store:'+containerId }
             );
 
-            ps.on('load', this.onStreamLoadComplete, this);
+            ps.on('load', this.onSpecificStreamLoadComplete, this);
 
             this.streamStores[containerId] = ps;
         }
@@ -89,7 +108,7 @@ Ext.define('NextThought.controller.Stream', {
         return ps;
     },
 
-    onStreamLoadComplete: function(store)
+    onSpecificStreamLoadComplete: function(store)
     {
         this.getMiniStream().updateStream(store.data.items);
     },

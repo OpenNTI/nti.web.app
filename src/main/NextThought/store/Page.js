@@ -15,8 +15,8 @@ Ext.define('NextThought.store.Page',{
 	},
 
 	load: function(){
-		var collection = _AppConfig.service.getCollection('Pages');
-		this.proxy.url = _AppConfig.server.host + collection.href;
-		return this.callParent(arguments);
-	}
+			var collection = _AppConfig.service.getCollection('Pages');
+			this.proxy.url = _AppConfig.server.host + collection.href;
+			return this.callParent(arguments);
+		}
 });

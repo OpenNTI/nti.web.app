@@ -96,7 +96,7 @@ Ext.define('NextThought.controller.Reader', {
 	getStoreForPageItems: function(containerId){
 		var store = this.getPageStore(),
 			page = store.getById(containerId),
-			link = page ? page.getLink('UserGeneratedData') : null,
+			link = page ? page.getLink(USER_GENERATED_DATA) : null,
 			ps = this.pageStores[containerId];
 
 		if(!link) return null;

@@ -5,7 +5,6 @@ Ext.define('NextThought.model.Service', {
         { name: 'Class', type: 'string', defaultValue: 'Service'}
     ],
 
-
 	getUserSearchURL: function(username){
 		return _AppConfig.server.host + '/dataserver/UserSearch/'+(username||'');
 	},
