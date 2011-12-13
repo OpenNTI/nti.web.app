@@ -48,7 +48,6 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
 
 
 	getStoreFor: function(url, onLoad){
-		console.debug(url);
 		return Ext.create('Ext.data.Store', {
 			autoLoad: false,
 			remoteFilter: true,
