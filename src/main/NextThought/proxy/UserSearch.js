@@ -22,7 +22,13 @@ Ext.define('NextThought.proxy.UserSearch', {
 		return this.callParent(arguments);
 	},
 
-	_exception: function() {
+	_exception: function(proxy, resp, operation) {
+		try{
+			Ext.callback(operation.failed, operation.scope, [operation.records, operation]);
+		}
+		catch(e){
+			console.error(e.message, e);
+		}
 		console.error('Error searching for users, try again later', arguments);
     }
 	

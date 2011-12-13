@@ -1,7 +1,7 @@
 Ext.define('NextThought.model.Note', {
     extend: 'NextThought.model.Base',
 	requires: [
-		'NextThought.proxy.RestMimeAware'
+		'NextThought.proxy.Rest'
 	],
 	mimeType: 'application/vnd.nextthought.note',
 	fields: [
@@ -20,7 +20,7 @@ Ext.define('NextThought.model.Note', {
 		{ name: 'sharedWith', type: 'UserList' }
 	],
 	proxy: {
-		type: 'nti-mimetype',
+		type: 'nti',
 		model: 'NextThought.model.Note'
 	},
 	getModelName: function() {

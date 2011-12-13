@@ -1,7 +1,7 @@
 Ext.define('NextThought.model.QuizResult', {
     extend: 'NextThought.model.Base',
 	requires: [
-		'NextThought.proxy.RestMimeAware',
+		'NextThought.proxy.Rest',
 		'NextThought.model.QuizQuestionResponse'
 	],
 	fields: [
@@ -12,7 +12,7 @@ Ext.define('NextThought.model.QuizResult', {
 		{ name: 'Items', type: 'arrayItem' }
 	],
 	proxy: {
-		type: 'nti-mimetype',
+		type: 'nti',
 		model: 'NextThought.model.QuizResult'
 	},
 	getModelName: function() {

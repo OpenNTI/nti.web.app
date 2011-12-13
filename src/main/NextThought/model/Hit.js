@@ -12,7 +12,7 @@ Ext.define('NextThought.model.Hit', {
 		{ name: 'Type', type: 'string' }
 	],
 	proxy: {
-		type: 'nti-mimetype',
+		type: 'nti',
 		model: 'NextThought.model.Hit'
 	},
 	getModelName: function() {

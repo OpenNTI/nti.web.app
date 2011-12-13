@@ -9,7 +9,7 @@ Ext.define('NextThought.proxy.Search', {
 	],
 
 	appendId: false, //default
-    reader: {type: 'nti-mimetype'},
+    reader: {type: 'nti'},
     constructor: function(config) {
 		Ext.copyTo(this.reader, config, 'model');
 		this.callParent(arguments);
@@ -24,7 +24,13 @@ Ext.define('NextThought.proxy.Search', {
 		return this.callParent(arguments);
 	},
 
-	_exception: function() {
+	_exception: function(proxy, resp, operation) {
+		try{
+			Ext.callback(operation.failed, operation.scope, [operation.records, operation]);
+		}
+		catch(e){
+			console.error(e.message, e);
+		}
 		console.error('Error searching, try again later', arguments);
     }
 	

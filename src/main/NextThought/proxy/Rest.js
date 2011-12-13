@@ -2,112 +2,68 @@ Ext.define('NextThought.proxy.Rest', {
     extend: 'Ext.data.proxy.Rest',
     alias: 'proxy.nti',
     requires: [
-		'NextThought.proxy.reader.Json',
 		'NextThought.proxy.reader.JsonCollection',
 		'NextThought.proxy.writer.Json'
 	],
 
+//	reader: {
+//		type: 'nti-collection',
+//		root: 'Items'
+//	},
+	writer: {
+		type: 'nti'
+	},
 
 
     constructor: function(config) {
-        this.url = '';
-        this.appendId = true;
-        this.reader = {type: 'nti'};
-        this.writer = {type: 'nti'};
-        Ext.copyTo(this.reader, config, 'model');
 		this.callParent(arguments);
         this.on('exception', this._exception, this);
     },
 
     doRequest: function(){
         this.callParent(arguments);
-
+		if(this.headers){
+			delete this.headers;
+		}
         //fire an event to Viewport in case anyone cares
         VIEWPORT.fireEvent('object-changed');
     },
 
     buildUrl: function(request) {
-        var me = this,
-            appendId = me.appentId,
+        var host = _AppConfig.server.host,
             action = request.operation.action,
-			result;
+			record = request.records[0],
+			href = record.get('href'),
+			mimeType = record.mimeType || record.get('MimeType'),
+			collection;
 
-        if (action!='update' && action!='destroy')
-            me.buildUrlForGeneralUse(request);
-        else
-            me.buildUrlForModify(request);
+		this.headers = { 'Content-Type': mimeType+'+json' };
 
-        me.appendId = false;
-		result = me.callParent(arguments);
-		me.appendId = appendId;
-
-        return result;
-    },
-
-    buildUrlForGeneralUse: function(request){
-		var me		  = this,
-	        operation = request.operation,
-	        records   = operation.records || [],
-	        record    = records[0],//find a place for this record from the service object
-	        url       = _AppConfig.server.host + _AppConfig.server.data + 'users/' + _AppConfig.username +'/' + me.collectionName,
-	        containerId	  = record ? record.get('ContainerId') : me.containerId ? me.containerId : undefined,
-//	        appendId  = me.appendId,
-	        id        = record ? record.getId() : operation.id;
-
-		if (!me.collectionName) {
-			Ext.Error.raise('No collectionName given');
+        if (action!='update' && action!='destroy'){
+			collection = _AppConfig.service.getCollectionFor(mimeType,null) || {};
+			href = host + collection.href;
+		}
+		else if(!href){
+			href = record.getLink('edit');
 		}
 
-		if (containerId) {
-            if (!url.match(/\/$/)) {
-                url += '/';
-            }
+		if(!href) Ext.Error.raise({
+			msg:'The URL is undefined!',
+			action: action,
+			record: record,
+			mimeType: mimeType
+		});
 
-            url += containerId;
-        }
-
-        if  ( id) {
-            if (!url.match(/\/$/)) {
-                url += '/';
-            }
-            url += id;
-        }
-
-        request.url = url;
-
-		//set up some directions about how to read the data in the reader:
-		me.reader.hasContainerId = me.reader.hasContainerId || !!containerId;
-		me.reader.hasId = me.appendId && id!==undefined;
-
-//		console.debug(
-//			'appendId:', me.appendId,
-//			'id:',id,
-//			'hasId:',me.reader.hasId,
-//			'record:',record,
-//			'url:',url
-//			);
-    },
-
-    buildUrlForModify: function(request) {
-        var me		  = this,
-	        operation = request.operation,
-	        records   = operation.records || [],
-	        record    = records[0],
-	        url       = _AppConfig.server.host + _AppConfig.server.data + 'Objects',
-	        id        = record.get('OID');
-
-
-        //always append OID
-        if (!url.match(/\/$/)) {
-            url += '/';
-        }
-        url += id;
-
-        request.url = url;
-        me.reader.hasId = true;
+        return href;
     },
 
     _exception: function(proxy, response, operation, eOpts) {
-        console.error('Error getting data:', arguments, '\n', printStackTrace().join('\n'));
+		try{
+			Ext.callback(operation.failed, operation.scope, [operation.records, operation]);
+		}
+		catch(e){
+			console.error(e.message, e);
+		}
+        console.error('Error getting data:', arguments);
     }
 });

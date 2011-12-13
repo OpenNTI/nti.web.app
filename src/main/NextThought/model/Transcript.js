@@ -1,7 +1,7 @@
 Ext.define('NextThought.model.Transcript', {
     extend: 'NextThought.model.Base',
     requires: [
-        'NextThought.proxy.RestMimeAware'
+        'NextThought.proxy.Rest'
     ],
 	mimeType: 'application/vnd.nextthought.transcript',
     fields: [
@@ -13,8 +13,7 @@ Ext.define('NextThought.model.Transcript', {
         { name: 'Contributors', type: 'auto' }
     ],
     proxy: {
-        type: 'nti-mimetype',
-        collectionName: 'Transcripts'
+        type: 'nti'
     },
     getModelName: function() {
         return 'Transcript';
