@@ -190,7 +190,6 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 
 
 	select: function(sprite){
-        console.log('sprite selected', arguments);
 		var s = this.selection,
 			prev = s ? s.sprite : null;
 
