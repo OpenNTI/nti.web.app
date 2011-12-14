@@ -117,6 +117,7 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 
     getMenu: function(){
         var m = this._buildMenu();
+		//bad!!! clean up somewhere else
         m.on('hide', function(){
             m.destroy();
         });

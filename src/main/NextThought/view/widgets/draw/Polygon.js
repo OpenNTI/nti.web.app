@@ -11,10 +11,9 @@ Ext.define('NextThought.view.widgets.draw.Polygon', {
 		var x = 0,
 			y = 0,
 
-			c = Ext.clone(config),
 			i = 0,
-			r = .5,
-			n = c.sides,
+			r = 0.5,
+			n = config.sides,
 			path = [];
 
 		if(n<2) n=2;
@@ -28,9 +27,9 @@ Ext.define('NextThought.view.widgets.draw.Polygon', {
 		}
 
 		path.push(['Z']);
+		delete config.sides;
 
-        this.callParent([Ext.apply(c,{ type: 'path',
-       			path: path})]);
+        this.callParent([Ext.apply(config,{ type: 'path', path: path})]);
 	},
 
 	getShape: function(){
