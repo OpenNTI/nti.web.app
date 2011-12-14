@@ -277,7 +277,7 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
     },
 
 	loadScene: function(canvasJSON){
-        console.log('JSON canvas to load', JSON.stringify(canvasJSON));
+        //console.log('JSON canvas to load', JSON.stringify(canvasJSON));
 
 		var shapes = Ext.clone( canvasJSON.shapeList ),
 			s = this.getSurface(),
@@ -347,7 +347,7 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 		);
 
         s = { "Class":"Canvas", "shapeList": shapes };
-        console.log('save scene', JSON.stringify(s));
+        //console.log('save scene', JSON.stringify(s));
 
 		return shapes.length===0 ? undefined : s;
 	},

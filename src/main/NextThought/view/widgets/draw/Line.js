@@ -29,8 +29,20 @@ Ext.define('NextThought.view.widgets.draw.Line', {
     },
 
     toJSON: function(){
+        function flipIfNeeded(x0, y0, x1, y1) {
+            var c = {x0: x0, y0:y0, x1:x1, y1:y1};
+            if (x0 > x1) {
+                c.x0 = x1;
+                c.x1 = x0;
+                c.y0 = y1;
+                c.y1 = y0;
+            }
+
+            return c;
+        }
+
         function degrees(x0,y0, x1,y1){
-            var dx	= (x1-x0),
+            var dx = (x1-x0),
                 dy	= (y1-y0),
                 a	= (dx<0? 180: dy<0? 360: 0);
             return ((180/Math.PI)*Math.atan(dy/dx)) + a;
@@ -41,17 +53,18 @@ Ext.define('NextThought.view.widgets.draw.Line', {
         }
 
         var path = this.attr.path,
-            x1 = path[0][1],
-            y1 = path[0][2],
-            x2 = path[1][1],
-            y2 = path[1][2],
-            r = length(x1, y1, x2, y2),
-            a = degrees(x1, y1, x2, y2),
+            x0 = path[0][1],
+            y0 = path[0][2],
+            x1 = path[1][1],
+            y1 = path[1][2],
+            c = flipIfNeeded(x0, y0, x1, y1),
+            r = length(c.x0, c.y0, c.x1, c.y1),
+            a = degrees(c.x0, c.y0, c.x1, c.y1),
             m = this.matrix.clone(),
             matrix;
 
         //apply rotation and scaling back into transform:
-        m.translate(x1, y1);
+        m.translate(c.x0, c.y0);
         m.rotate(a, 0, 0);
         m.scale(r, r, 0, 0);
 
