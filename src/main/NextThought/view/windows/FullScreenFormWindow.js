@@ -6,6 +6,7 @@ Ext.define('NextThought.view.windows.FullScreenFormWindow', {
     height: '100%',
 
     floating: true,
+	constrain: true,
     frame: true,
     modal: true,
     layout: 'fit',

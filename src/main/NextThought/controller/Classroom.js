@@ -12,7 +12,7 @@ Ext.define('NextThought.controller.Classroom', {
         'widgets.classroom.LiveDisplay',
         'widgets.classroom.Management',
         'widgets.classroom.Moderation',
-        'windows.ClassRoomChooser',
+        'windows.ClassroomChooser',
         'Viewport'
     ],
 

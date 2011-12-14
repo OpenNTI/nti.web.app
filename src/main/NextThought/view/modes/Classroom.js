@@ -4,7 +4,7 @@ Ext.define( 'NextThought.view.modes.Classroom', {
 	extend: 'NextThought.view.modes.Mode',
 	alias:	'widget.classroom-mode-container',
 	requires: [
-			'NextThought.view.windows.ClassRoomChooser'
+			'NextThought.view.windows.ClassroomChooser'
 	],
 
 	border: false,
