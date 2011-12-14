@@ -146,7 +146,6 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 	},
 	
 	onClick: function(e) {
-        console.log('annotation onClick');
 		e.preventDefault();
 		this.clearListeners();
 		

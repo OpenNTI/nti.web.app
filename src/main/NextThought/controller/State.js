@@ -47,7 +47,6 @@ Ext.define('NextThought.controller.State', {
 
         window.history.pushState = function(s){
             if (this.updateState(s)) {
-                console.log('pushState');
                 push.apply(history, arguments);
             }
         };
