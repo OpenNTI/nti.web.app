@@ -6,6 +6,7 @@ Ext.define('NextThought.view.widgets.chat.View', {
         'NextThought.view.widgets.chat.Log',
         'NextThought.view.widgets.chat.OccupantsList',
         'NextThought.view.widgets.chat.ReplyTo',
+        'NextThought.view.widgets.chat.OnDeck',
         'NextThought.view.widgets.chat.PinnedMessageView',
         'NextThought.util.Classroom'
     ],
@@ -67,6 +68,9 @@ Ext.define('NextThought.view.widgets.chat.View', {
         //upon the roominfo appearing, see if we should show the classroom button or not
         if (!this.up('classroom-content') && ClassroomUtils.isClassroomId(ri.get('ContainerId'))) {
             this.down('chat-reply-to').showClassroomButton();
+        }
+        else {
+            this.down('[region=center]').add({xtype:'on-deck-view'});
         }
 
         //stuff the occupants where they belong

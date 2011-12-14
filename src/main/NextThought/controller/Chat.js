@@ -26,6 +26,7 @@ Ext.define('NextThought.controller.Chat', {
         'widgets.chat.PinnedMessageView',
         'widgets.chat.Friends',
         'widgets.chat.FriendEntry',
+        'widgets.chat.OnDeck',
 		'windows.NoteEditor'
     ],
 
@@ -115,6 +116,9 @@ Ext.define('NextThought.controller.Chat', {
             },
             'chat-pinned-message-view toolbar button' : {
                 'click': this.clearPinnedMessages
+            },
+            'on-deck-view' : {
+                'advance-next': function(){console.log('next message from script', arguments);}
             }
 
         },{});
