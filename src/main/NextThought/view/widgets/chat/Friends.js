@@ -14,7 +14,7 @@ Ext.define('NextThought.view.widgets.chat.Friends', {
 
     initComponent:function() {
 		this._groups = {};
-		this.store = Ext.StoreManager.get('FriendsList');
+		this.store = Ext.getStore('FriendsList');
         this.callParent(arguments);
         this.setGroups();
         this.store.on('load', this.setGroups, this);

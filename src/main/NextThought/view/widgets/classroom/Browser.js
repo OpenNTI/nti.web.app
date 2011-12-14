@@ -28,7 +28,7 @@ Ext.define('NextThought.view.widgets.classroom.Browser', {
 
     initComponent: function() {
 		this.addEvents('selected');
-        this.store = Ext.StoreManager.get('FriendsList');
+        this.store = Ext.getStore('FriendsList');
         this.callParent(arguments);
 		this.on('itemdblclick',this.fireSelected,this);
 		this.on('selectionChange',this.selectionChangedScrollIntoFView,this);

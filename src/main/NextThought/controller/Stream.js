@@ -64,7 +64,7 @@ Ext.define('NextThought.controller.Stream', {
 
     onSessionReady: function(){
         var s = this.getStreamStore(),
-            ps = Ext.StoreManager.get('Page');
+            ps = Ext.getStore('Page');
 
         function load() {
             s.proxy.url = ps.getById('tag:nextthought.com,2011-10:Root').getLink(RECURSIVE_STREAM);

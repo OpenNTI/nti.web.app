@@ -54,7 +54,7 @@ Ext.define('NextThought.view.windows.NotificationsPopover', {
 
     updateContents: function() {
         var i, unread, change,
-			store = Ext.StoreManager.get('Stream'),
+			store = Ext.getStore('Stream'),
             readCount = 0,
 			p = this.items.get(0);
 
