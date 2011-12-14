@@ -51,6 +51,7 @@ Ext.define('NextThought.controller.Session', {
             //Auto inject all future request with the auth string
             Ext.Ajax.defaultHeaders = Ext.Ajax.defaultHeaders || {};
             Ext.Ajax.defaultHeaders.Authorization= a;
+            Ext.Ajax.defaultHeaders.Accept= '*/*';
             Ext.Ajax.username = encodeURIComponent(username);
             Ext.Ajax.password = password;
 
@@ -80,7 +81,10 @@ Ext.define('NextThought.controller.Session', {
             try{
                 Ext.Ajax.request({
                     url: s.host + s.data,
-                    headers:{ "Authorization": a},
+                    headers:{
+                        'Authorization': a,
+                        'Accept': 'application/vnd.nextthought.workspace+json'
+                    },
                     scope: this,
                     callback: function(q,success,r){
 						if(!success){
