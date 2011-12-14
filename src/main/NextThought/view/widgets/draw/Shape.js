@@ -6,21 +6,21 @@ Ext.define('NextThought.view.widgets.draw.Shape', {
         'NextThought.util.Color'
     ],
 
-	constructor: function(config){
+    constructor: function(config){
         var c = {
-        			draggable: true, x:0, y:0, width: 1, height: 1,
-                    //for some strange reason, even though we tell the browser not to scale the stroke, it still makes the bonding
-                    // clickible element the size of the shape as if it did scale the stroke... so we Clip it. (the clip gets scaled
-                    // too.
-                    'clip-rect': this.applyClipRect ? {x:-0.55, y:-0.55, width: 1.1, height: 1.1} : undefined
-        		};
+            draggable: true, x:0, y:0, width: 1, height: 1,
+            //for some strange reason, even though we tell the browser not to scale the stroke, it still makes the bonding
+            // clickible element the size of the shape as if it did scale the stroke... so we Clip it. (the clip gets scaled
+            // too.
+            'clip-rect': this.applyClipRect ? {x:-0.55, y:-0.55, width: 1.1, height: 1.1} : undefined
+        };
 
-		this.callParent([Ext.apply(config,c)]);
+        this.callParent([Ext.apply(config,c)]);
 
-		this.on('render', function(s){
-			s.el.dom.setAttribute('vector-effect','non-scaling-stroke');
-		});
-	},
+        this.on('render', function(s){
+            s.el.dom.setAttribute('vector-effect','non-scaling-stroke');
+        });
+    },
 
 
 	destroy: function(){

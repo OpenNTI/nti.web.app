@@ -35,7 +35,7 @@ Ext.define('NextThought.view.widgets.draw.Line', {
                 a	= (dx<0? 180: dy<0? 360: 0);
             return ((180/Math.PI)*Math.atan(dy/dx)) + a;
         }
-        
+
         function length(x,y,x1,y1){
             return Math.sqrt(Math.pow(x-x1,2)+Math.pow(y-y1,2));
         }
