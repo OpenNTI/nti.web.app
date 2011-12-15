@@ -80,6 +80,7 @@ Ext.define('NextThought.controller.Stream', {
     },
 
     containerIdChanged: function(containerId) {
+		this.getMiniStream().updateStream([]); //make sure stream doesn't contain old stuff.
         var ss = this.getStoreForStream(containerId);
         if (ss)
             ss.load();
@@ -92,7 +93,6 @@ Ext.define('NextThought.controller.Stream', {
             ps = this.streamStores[containerId];
 
         if(!link) {
-            this.getMiniStream().updateStream([]); //make sure stream doesn't contain old stuff.
             return null;
         }
 
