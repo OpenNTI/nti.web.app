@@ -92,7 +92,6 @@ Ext.define('NextThought.controller.Stream', {
             ps = this.streamStores[containerId];
 
         if(!link) return null;
-
         if(!ps){
             ps = Ext.create(
                 'NextThought.store.Stream',
@@ -118,7 +117,6 @@ Ext.define('NextThought.controller.Stream', {
         var s = this.getStoreForStream(change.getItemValue('ContainerId'));
 
         s.add(change);
-        this.onStreamLoadComplete(s);
         this.self.fireChange(change);
     },
 
