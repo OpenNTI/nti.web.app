@@ -91,7 +91,11 @@ Ext.define('NextThought.controller.Stream', {
             link = page ? page.getLink(RECURSIVE_STREAM) : null,
             ps = this.streamStores[containerId];
 
-        if(!link) return null;
+        if(!link) {
+            this.getMiniStream().updateStream([]); //make sure stream doesn't contain old stuff.
+            return null;
+        }
+
         if(!ps){
             ps = Ext.create(
                 'NextThought.store.Stream',

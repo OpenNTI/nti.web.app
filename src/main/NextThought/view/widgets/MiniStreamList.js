@@ -21,7 +21,7 @@ Ext.define('NextThought.view.widgets.MiniStreamList', {
 		var k, change, c=0, u,
 			p = this.items.get(1),
 			f = this._filter;
-			
+
 		p.removeAll();
 
 		for(k in changes){
