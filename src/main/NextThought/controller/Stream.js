@@ -67,7 +67,7 @@ Ext.define('NextThought.controller.Stream', {
             ps = Ext.getStore('Page');
 
         function load() {
-            s.proxy.url = ps.getById('tag:nextthought.com,2011-10:Root').getLink(RECURSIVE_STREAM);
+            s.getProxy().url = ps.getById('tag:nextthought.com,2011-10:Root').getLink(RECURSIVE_STREAM);
             s.load();
         }
 
@@ -80,7 +80,10 @@ Ext.define('NextThought.controller.Stream', {
     },
 
     containerIdChanged: function(containerId) {
-		this.getMiniStream().updateStream([]); //make sure stream doesn't contain old stuff.
+		var widget = this.getMiniStream();
+		//make sure stream doesn't contain old stuff.
+		widget.updateStream([]);
+		widget._containerId = containerId;
         var ss = this.getStoreForStream(containerId);
         if (ss)
             ss.load();
@@ -104,7 +107,7 @@ Ext.define('NextThought.controller.Stream', {
 				return false;
 			}
 
-			ps = Ext.create('NextThought.store.Stream', { storeId:'stream-store:'+containerId });
+			ps = Ext.create('NextThought.store.Stream', { storeId:'stream-store:'+containerId, _containerId: containerId });
 			ps.getProxy().url = link;
 			ps.on('load', me.onSpecificStreamLoadComplete, me);
 			stores[containerId] = ps;
@@ -127,8 +130,12 @@ Ext.define('NextThought.controller.Stream', {
 
     onSpecificStreamLoadComplete: function(store)
     {
-		//if(containerId match)
-        this.getMiniStream().updateStream(store.data.items);
+		var k = '_containerId',
+			w = this.getMiniStream();
+
+		if( w[k]==store[k] ) {
+			w.updateStream(store.data.items);
+		}
     },
 
     incomingChange: function(change) {
