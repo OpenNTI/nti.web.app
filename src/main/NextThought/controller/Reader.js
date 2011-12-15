@@ -261,7 +261,7 @@ Ext.define('NextThought.controller.Reader', {
 					if (!created[nv] || !created[nv][index]) {
 						created[nv] = created[nv] || {} ;
 						created[nv][index] = true;
-						ranges.push(r)
+						ranges.push(r);
 					}
 					index = nv.indexOf(text, index + 1);
 				}
