@@ -1,40 +1,76 @@
-Ext.define('NextThought.view.windows.NoteEditor', {
+Ext.define('NextThought.view.windows.ClassroomEditor', {
 	extend: 'Ext.window.Window',
-	alias : 'widget.noteeditor',
+	alias : 'widget.class-editor',
     requires: [
         'Ext.form.field.HtmlEditor',
 		'NextThought.util.AnnotationUtils',
 		'NextThought.view.widgets.draw.Whiteboard'
     ],
 
-	width: '600',
-	height: '450',
-
 	constrain: true,
 	closable: false,
 	maximizable:true,
 	border: false,
-	layout: 'anchor',
-	title: 'Edit Note',
+	modal: true,
+	layout: 'border',
+	title: 'Classroom Editor',
+	defaults: {
+		border: false, frame: false,
+		defaults: {
+			border: false, frame: false
+		}
+	},
 	bbar: [
 		'->',
 		{ xtype: 'button', text: 'Save',	action: 'save' },
 		{ xtype: 'button', text: 'Cancel',	action: 'cancel' }
 	],
+	items: [
+		{
+			region: 'north',
+			html: '<h2>Class Title & Header controls</h2>',
+			height: 100
+		},
+		{
+			region: 'center',
+			title: 'Class Script',
+			layout: 'anchor',
+			frame: true,
+			items: {
+				xtype: 'htmleditor',
+				anchor: '100% 100%',
+				enableLists: false,
+				enableLinks: false,
+				enableAlignments: false
+			}
+		},
+		{
+			region: 'east',
+			title: 'Attached Resources',
+			collapsible: true,
+			split: true,
+			border: true,
+			frame: true,
+			width: 250
+		}
+	],
 	
 	initComponent: function(){
+
 		this.editors = {};
 		this.callParent(arguments);
 
-		var text = AnnotationUtils.compileBodyContent(this.record, {
-			scope: this,
-			getThumbnail: this.getWhiteboardThumbnail,
-			getClickHandler: this.getWhiteboardThumbnailClickHandler
-		});
 
-		this.add({ xtype: 'htmleditor', anchor: '100% 100%', enableLists: false, enableAlignments: false, value: text });
+//		var text = AnnotationUtils.compileBodyContent(this.record, {
+//			scope: this,
+//			getThumbnail: this.getWhiteboardThumbnail,
+//			getClickHandler: this.getWhiteboardThumbnailClickHandler
+//		});
+
 
 		this.on('thumbnail-clicked',this.showWhiteboardEditor, this);
+		this.setHeight(Ext.getBody().getHeight()*0.9);
+		this.setWidth(Ext.getBody().getWidth()*0.9);
 	},
 
 
@@ -46,7 +82,7 @@ Ext.define('NextThought.view.windows.NoteEditor', {
 
 		editor.getToolbar().add('-',{
 			text: 'WB',
-			handler: function(){me.insertWhiteboard()}}
+			handler: function(){me.insertWhiteboard(guidGenerator());}}
 		);
 	},
 
@@ -94,13 +130,13 @@ Ext.define('NextThought.view.windows.NoteEditor', {
         //if there's no placeholder, add one:
         if (!div) {
             body.innerHTML += Ext.String.format(AnnotationUtils.NOTE_BODY_DIVIDER, id,
-      										Ext.String.format(AnnotationUtils.WHITEBOARD_THUMBNAIL,'',
-      												this.getWhiteboardThumbnailClickHandler(id)));
-            div = iFrameDoc.getElementById(id)
+					Ext.String.format(AnnotationUtils.WHITEBOARD_THUMBNAIL,'',
+							this.getWhiteboardThumbnailClickHandler(id)));
+			div = iFrameDoc.getElementById(id);
         }
 
         //If WB now has 0 elements, just remove it from the editor, otherwise, update thumbnail.
-        if (numShapes == 0)
+        if (numShapes === 0)
             div.parentNode.removeChild(div);
         else
             div.innerHTML = Ext.String.format(
@@ -109,13 +145,9 @@ Ext.define('NextThought.view.windows.NoteEditor', {
                     this.getWhiteboardThumbnailClickHandler(id));
 	},
 
-	insertWhiteboard: function(){
-		var id = guidGenerator(),
-			win = this.getWhiteboardEditor(null, id),
-			whiteboard = win.down('whiteboard'),
-			//the getDoc() is non-public api
-			iFrameDoc = this.down('htmleditor').getDoc(),
-			body = iFrameDoc.body;
+	insertWhiteboard: function(id){
+		var win = this.getWhiteboardEditor(null, id),
+			whiteboard = win.down('whiteboard');
 
 		whiteboard.__id = id;
 		whiteboard.on('save', this.updateOrCreateWhiteboardThumbnail, this);
@@ -128,15 +160,15 @@ Ext.define('NextThought.view.windows.NoteEditor', {
 			this.editors[id].show();
 		}
 		catch(e){
-			console.error(e.message,e.stack,e);
+			console.error(e.stack,e);
 		}
 	},
 
 
 	getWhiteboardEditor: function(canvas, id){
 
-		var h = Ext.getBody().getHeight()*0.5,
-			w = Ext.getBody().getWidth()*0.5,
+		var h = Ext.getBody().getHeight()*0.6,
+			w = Ext.getBody().getWidth()*0.6,
 			win = this.editors[id] = this.editors[id] || Ext.widget('window', {
 			maximizable:true,
 			closeAction: 'hide',
@@ -160,7 +192,6 @@ Ext.define('NextThought.view.windows.NoteEditor', {
 
 
 	getWhiteboardBottomToolbar: function(){
-		var me = this;
 		return [
 			'->',
 			{ xtype: 'button', text: 'Save',

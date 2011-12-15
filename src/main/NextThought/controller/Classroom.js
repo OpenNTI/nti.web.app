@@ -13,13 +13,14 @@ Ext.define('NextThought.controller.Classroom', {
         'widgets.classroom.Management',
         'widgets.classroom.Moderation',
         'windows.ClassroomChooser',
+        'windows.ClassroomEditor',
         'Viewport'
     ],
 
 	refs:[
-		{ref: 'classroomContainer', selector: 'classroom-mode-container'},
-		{ref: 'classroom', selector: 'classroom-content'},
-        {ref: 'liveDisplay', selector: 'live-display'},
+		{ ref: 'classroomContainer', selector: 'classroom-mode-container' },
+		{ ref: 'classroom', selector: 'classroom-content' },
+        { ref: 'liveDisplay', selector: 'live-display' },
         { ref: 'viewport', selector: 'master-view' },
         { ref: 'reader', selector: 'reader-panel' }
 	],
@@ -30,6 +31,10 @@ Ext.define('NextThought.controller.Classroom', {
 		this.control({
 			'classroom-browser':{
 				'selected': this.selectedClassRoom
+			},
+
+			'classroom-chooser link':{
+				'click': this.createClassClicked
 			},
 
 			'classroom-mode-container toolbar button[action=leave]':{
@@ -118,6 +123,14 @@ Ext.define('NextThought.controller.Classroom', {
 		this.getController('Chat').enterRoom([],{ContainerId: n});
 		this.getClassroomContainer().hideClassChooser();
 	},
+
+
+	createClassClicked: function(btn){
+//		var c = this.getClassroomContainer();
+//		c.hideClassChooser();
+		Ext.widget('class-editor').show();
+	},
+
 
     classroomActivated: function() {
         var c = this.getClassroomContainer(),

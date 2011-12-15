@@ -3,7 +3,6 @@ Ext.define('NextThought.view.windows.FullScreenFormWindow', {
     alias : 'widget.fullscreen-window',
 
     width: 600,
-    height: '100%',
 
     floating: true,
 	constrain: true,
@@ -23,6 +22,7 @@ Ext.define('NextThought.view.windows.FullScreenFormWindow', {
         });
 
         Ext.EventManager.onWindowResize(this.doResize,this);
+		this.setHeight(Ext.getBody().getHeight());
     },
 
     destroy: function(){
