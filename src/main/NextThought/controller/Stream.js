@@ -87,40 +87,56 @@ Ext.define('NextThought.controller.Stream', {
     },
 
     getStoreForStream: function(containerId) {
-        var store = this.getController('Reader').getPageStore(),
-            page = store.getById(containerId),
-            link = page ? page.getLink(RECURSIVE_STREAM) : null,
-            ps = this.streamStores[containerId];
+		var me = this,
+			store = me.getController('Reader').getPageStore(),
+			stores = me.streamStores,
+			ps = stores[containerId];
 
-        if(!link) {
-            return null;
-        }
+		function buildStore(){
+			var ps,
+				link = store.getLink(containerId,RECURSIVE_STREAM);
 
-        if(!ps){
-            ps = Ext.create(
-                'NextThought.store.Stream',
-                { storeId:'stream-store:'+containerId }
-            );
+			if(link===null) return null;
 
-            ps.on('load', this.onSpecificStreamLoadComplete, this);
+			if(link===false) {
+				store.on('load', onReload, me, {single: true});
+				store.load();
+				return false;
+			}
 
-            this.streamStores[containerId] = ps;
-        }
+			ps = Ext.create('NextThought.store.Stream', { storeId:'stream-store:'+containerId });
+			ps.getProxy().url = link;
+			ps.on('load', me.onSpecificStreamLoadComplete, me);
+			stores[containerId] = ps;
+			return ps;
+		}
 
-        ps.proxy.url = link;
-        return ps;
+		function onReload(){
+			var link = store.getLink(containerId,RECURSIVE_STREAM),
+				s;
+			if(!link){
+				console.warn('Could not find page:', containerId);
+				return;
+			}
+			s = buildStore();
+			s.load();
+		}
+
+		return ps? ps : buildStore();
     },
 
     onSpecificStreamLoadComplete: function(store)
     {
+		//if(containerId match)
         this.getMiniStream().updateStream(store.data.items);
     },
 
     incomingChange: function(change) {
         change = ParseUtils.parseItems([change])[0];
         var s = this.getStoreForStream(change.getItemValue('ContainerId'));
-
-        s.add(change);
+		if(s){
+			s.add(change);
+		}
         this.self.fireChange(change);
     },
 

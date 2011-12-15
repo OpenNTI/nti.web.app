@@ -13,7 +13,11 @@ Ext.define('NextThought.model.Transcript', {
         { name: 'Contributors', type: 'auto' }
     ],
     proxy: {
-        type: 'nti'
+		reader: 'nti',
+        type: 'rest',
+		appendId: false,
+		headers: { 'Accept': 'application/vnd.nextthought.transcript+json' },
+		url: ''//pupulated by caller
     },
     getModelName: function() {
         return 'Transcript';

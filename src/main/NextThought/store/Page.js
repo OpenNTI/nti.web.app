@@ -15,8 +15,21 @@ Ext.define('NextThought.store.Page',{
 	},
 
 	load: function(){
-			var collection = _AppConfig.service.getCollection('Pages');
-			this.proxy.url = _AppConfig.server.host + collection.href;
-			return this.callParent(arguments);
-		}
+		var collection = _AppConfig.service.getCollection('Pages');
+		this.proxy.url = _AppConfig.server.host + collection.href;
+		return this.callParent(arguments);
+	},
+
+
+	/**
+	 *
+	 * @param containerId
+	 * @param linkRel
+	 *
+	 * @return {String/Boolean} A string of the URI, or false if the containerId was not in the store yet.
+	 */
+	getLink: function(containerId, linkRel){
+		var page = this.getById(containerId);
+		return page ? page.getLink(linkRel) : false;
+	}
 });

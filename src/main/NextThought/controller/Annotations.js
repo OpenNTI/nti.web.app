@@ -110,14 +110,17 @@ Ext.define('NextThought.controller.Annotations', {
 
 
 	onLoadTranscript: function(record, cmp, elm, eOpts) {
-		var id = record.get('RoomInfo').getId();
+		var model = this.getModel('Transcript'),
+			id = record.get('RoomInfo').getId();
 
-        this.getModel('Transcript').load(id,{
+		model.proxy.url = record.getLink('transcript');
+
+        model.load(id,{
             scope: this,
-            failure: function(record, operation) {
+            failure: function() {
                 elm.animate({listeners: { beforeanimate: function(){ elm.show(true); } }});
             },
-            success: function(record, operation) {
+            success: function(record) {
                 //elm.remove();
                 cmp.insertTranscript(record);
             }
