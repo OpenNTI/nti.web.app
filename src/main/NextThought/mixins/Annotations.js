@@ -197,10 +197,11 @@ Ext.define('NextThought.mixins.Annotations', {
 
 
 	onNotification: function(change){
-        console.log('onNotification');
+        console.log('onNotification', change);
 		var item = change && change.get? change.get('Item') : null,
 			oid = item? item.get('oid') : null,
 			cid = item? item.get('ContainerId') : null,
+			type = item? item.get('ChangeType') : null,
 			cls, replyTo, builder, result;
 
 		if (!item || !this._containerId || this._containerId != cid) {
@@ -209,21 +210,29 @@ Ext.define('NextThought.mixins.Annotations', {
 
 		//if exists, update
 		if( oid in this._annotations){
-			this._annotations[oid].getRecord().fireEvent('updated',item);
+			if(/deleted/i.test(type)){
+				this._annotations[oid].cleanup();
+				delete this._annotations[oid];
+			}
+			else {
+				this._annotations[oid].getRecord().fireEvent('updated',item);
+			}
 		}
 		//if not exists, add
-		else{
+		else if(/deleted/i.test(type)){
 			cls = item.get('Class');
 			replyTo = item.get('inReplyTo');
 			builder = this.widgetBuilder[cls];
-			result = builder ? builder.call(this, item) : null;
+			result = builder ? builder.call(this, item) : false;
 
-			if (/Note/i.test(cls) && result === false && replyTo) {
-				replyTo = Ext.getCmp(IdCache.getComponentId(replyTo));
-				replyTo.addReply(item);
-			}
-			else {
-				console.error('ERROR: Do not know what to do with this item', Ext.encode(item));
+			if(result === false){
+				if (/Note/i.test(cls) && replyTo) {
+					replyTo = Ext.getCmp(IdCache.getComponentId(replyTo));
+					replyTo.addReply(item);
+				}
+				else {
+					console.error('ERROR: Do not know what to do with this item',item);
+				}
 			}
 		}
 
