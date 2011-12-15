@@ -10,7 +10,6 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
             userId= record.get('Creator') || _AppConfig.userObject.getId();
 
         me.callParent([record, container, component,'resources/images/charms/highlight-white.png']);
-
         Ext.apply(me,{
             _sel: selection,
             _canvas: me._createCanvas(),
@@ -217,8 +216,10 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 
         render: function(){
             var	c = Ext.query('#canvas-highlight-container canvas')[0],
-                ctx = c.getContext("2d");
+                ctx = c ? c.getContext("2d") : null;
             //reset the context
+
+            if (!ctx) return;
 
             c.width = c.width;
 
