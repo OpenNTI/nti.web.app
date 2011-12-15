@@ -27,7 +27,6 @@ Ext.define('NextThought.view.widgets.draw.Polygon', {
 		}
 
 		path.push(['Z']);
-		delete config.sides;
 
         this.callParent([Ext.apply(config,{ type: 'path', path: path})]);
 	},
