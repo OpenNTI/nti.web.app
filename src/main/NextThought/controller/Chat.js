@@ -215,7 +215,6 @@ Ext.define('NextThought.controller.Chat', {
 			if(options.ContainerId && ClassroomUtils.isClassroomId(options.ContainerId)){
 				roomCfg.Occupants = [];
 			}
-debugger;
             Socket.emit('chat_enterRoom', Ext.apply(roomCfg, options));
 		}
     },

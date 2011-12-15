@@ -301,7 +301,6 @@ Ext.define('NextThought.mixins.Annotations', {
 						return a.getAttribute('name');
 					}
 			);
-		console.dir(anchors);
 
 		function _(v){
 			var r = me.GETTERS[v.getModelName()](v);
@@ -327,8 +326,7 @@ Ext.define('NextThought.mixins.Annotations', {
 			function(r){
 				try{
 					Ext.apply(contributors, me.getContributors(r));
-					if(me.widgetBuilder[r.getModelName()].call(me,r))
-						console.log(r, r.getId(), r.getAnchorForSort? r.getAnchorForSort():null);
+					me.widgetBuilder[r.getModelName()].call(me,r);
 				}
 				catch(e){console.error('Could not build '+r.getModelName()+' from record:', r, 'because: ', e, e.stack); }
 			}, this
