@@ -173,11 +173,12 @@ Ext.define('NextThought.controller.Chat', {
     },
 
     enterRoom: function(usersOrList, options) {
+        debugger;
 		options = options || {};
         var users = [], k, ri, roomCfg;
 
         //chat rooms need a containerId, make sure we add these, let them get overridden later if it's a persistant room
-        options.ContainerId = this.getController('Reader').getReader().getContainerId();
+        options.ContainerId = options.ContainerId || this.getController('Reader').getReader().getContainerId();
 
         if (usersOrList.get && usersOrList.get('friends')) {
             options.ContainerId = usersOrList.get('NTIID');
