@@ -150,6 +150,8 @@ Ext.define('NextThought.view.widgets.chat.Log', {
                         message: msg,
                         messageId: IdCache.getIdentifier(msg.getId())
                     });
+
+        o.el.scrollIntoView(this.el.first());
     },
 
     scroll: function(entry) {
