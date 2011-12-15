@@ -173,7 +173,6 @@ Ext.define('NextThought.controller.Chat', {
     },
 
     enterRoom: function(usersOrList, options) {
-        debugger;
 		options = options || {};
         var users = [], k, ri, roomCfg;
 
