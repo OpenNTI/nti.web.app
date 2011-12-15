@@ -56,7 +56,6 @@ Ext.define('NextThought.view.windows.ChatWindow', {
     addNewChat: function(roomInfo) {
         var id = IdCache.getIdentifier(roomInfo.getId()),
             tab = this.down('chat-view[roomId='+id+']');
-console.log('add new chat, id = ' + id, 'found tab ' + tab);
         if (!tab) {
             tab = this.down('tabpanel').add(
                 {
@@ -68,7 +67,6 @@ console.log('add new chat, id = ' + id, 'found tab ' + tab);
                 }
             );
         }
-console.log('tab created', tab);
         if (tab) {
             this.down('tabpanel').setActiveTab(tab);
         }
