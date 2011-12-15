@@ -121,7 +121,7 @@ Ext.define('NextThought.view.widgets.NotePanel',{
             log = panel.add({ xtype: 'chat-log-view' }),
             msgs = m.get('Messages');
 
-        msg = Ext.Array.sort( msgs || [], SortModelsBy('Last Modified', true));
+        msg = Ext.Array.sort( msgs || [], SortModelsBy('Last Modified', ASCENDING));
 
         Ext.each(msgs, function(i){ log.addMessage(i); });
 

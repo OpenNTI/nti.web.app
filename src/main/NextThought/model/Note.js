@@ -23,8 +23,12 @@ Ext.define('NextThought.model.Note', {
 		type: 'nti',
 		model: 'NextThought.model.Note'
 	},
+
 	getModelName: function() {
 		return 'Note';
-	}
+	},
 
+	getAnchorForSort: function(){
+		return this.get('anchorPoint');
+	}
 });

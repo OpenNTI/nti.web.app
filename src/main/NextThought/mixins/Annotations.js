@@ -12,6 +12,7 @@ Ext.define('NextThought.mixins.Annotations', {
 	],
 
 	GETTERS : {
+		'Highlight': function(r){return r;},
 		'Note': function(r){return r;},
 		'TranscriptSummary': function(r){return r.get('RoomInfo');}
 	},
@@ -151,6 +152,8 @@ Ext.define('NextThought.mixins.Annotations', {
 				range, record,
 				this.items.get(0).el.dom.firstChild,
 				this);
+		if( this.bufferedDelayedRelayout )
+			this.bufferedDelayedRelayout();
 
 		if (!oid) {
 			oid = 'Highlight-' + new Date().getTime();
@@ -184,6 +187,8 @@ Ext.define('NextThought.mixins.Annotations', {
 					record,
 					this.items.get(0).el.dom.firstChild,
 					this);
+			if( this.bufferedDelayedRelayout )
+				this.bufferedDelayedRelayout();
 			return true;
 		}
 		catch(e){ console.error('Error notes:',e, e.toString(), e.stack); }
@@ -197,13 +202,16 @@ Ext.define('NextThought.mixins.Annotations', {
 
 
 	onNotification: function(change){
-        console.log('onNotification', change);
-		var item = change && change.get? change.get('Item') : null,
-			oid = item? item.get('oid') : null,
+		if(!change || !change.get)
+			return;//abandon ship!!
+
+		var item = change.get('Item'),
+			type = change.get('ChangeType'),
+			oid = item? item.getId() : null,
 			cid = item? item.get('ContainerId') : null,
-			type = item? item.get('ChangeType') : null,
 			cls, replyTo, builder, result;
 
+        console.log('onNotification', change, type);
 		if (!item || !this._containerId || this._containerId != cid) {
 			return;
 		}
@@ -219,7 +227,7 @@ Ext.define('NextThought.mixins.Annotations', {
 			}
 		}
 		//if not exists, add
-		else if(/deleted/i.test(type)){
+		else if(!/deleted/i.test(type)){
 			cls = item.get('Class');
 			replyTo = item.get('inReplyTo');
 			builder = this.widgetBuilder[cls];
@@ -251,25 +259,25 @@ Ext.define('NextThought.mixins.Annotations', {
 		var me = this,
 			contributors = {},
 			k = 'Last Modified',
-			tree = {}, b;
+			tree = {}, b,
+			sortedItems;
 
 		if (!this._containerId) return;
 
 		//sort bins
 		for(b in bins){
 			if(bins.hasOwnProperty(b))
-			bins[b] = Ext.Array.sort(bins[b]||[],SortModelsBy(k,true,me.GETTERS[b]));
+			bins[b] = Ext.Array.sort(bins[b]||[],SortModelsBy(k,ASCENDING,me.GETTERS[b]));
 		}
 
+		this.buildAnnotationTree(bins.Note, tree);
+		this.buildAnnotationTree(bins.TranscriptSummary, tree);
 
-		Ext.apply(contributors, this.buildAnnotationTree(bins.Note, tree));
-		Ext.apply(contributors, this.buildAnnotationTree(bins.TranscriptSummary, tree));
-		Ext.apply(contributors, this.buildSimpleAnnotation(bins.Highlight));
+		sortedItems = Ext.Object.getValues(tree).concat(bins.Highlight);
+		//sort
+		Ext.Array.sort(sortedItems,this.buildAnchorSorter());
 
-		this.buildTreedAnnotations(tree);
-
-		if( me.bufferedDelayedRelayout)
-			me.bufferedDelayedRelayout();
+		contributors = this.buildAnnotations(sortedItems);
 
 		me.fireEvent('publish-contributors',contributors);
         me.fireEvent('resize');
@@ -284,15 +292,45 @@ Ext.define('NextThought.mixins.Annotations', {
 	},
 
 
-	buildSimpleAnnotation: function(list){
+	buildAnchorSorter: function(){
+		var me = this,
+			m = 'getAnchorForSort',
+			anchors = Ext.Array.map(
+					Ext.DomQuery.select('#NTIContent a[name]'),
+					function(a){
+						return a.getAttribute('name');
+					}
+			);
+		console.dir(anchors);
+
+		function _(v){
+			var r = me.GETTERS[v.getModelName()](v);
+			return  r[m]? Ext.Array.indexOf(anchors,r[m]()) : 0;
+		}
+
+		return function(a,b){
+			var _a = _(a),
+				_b = _(b),
+				c = 0;
+
+			if( _a != _b ){
+				c = _a < _b ? -1:1;
+			}
+			return c;
+		}
+	},
+
+
+	buildAnnotations: function(list){
 		var me = this, contributors = {};
 		Ext.each(list,
 			function(r){
 				try{
-					me.widgetBuilder[r.getModelName()].call(me,r);
 					Ext.apply(contributors, me.getContributors(r));
+					if(me.widgetBuilder[r.getModelName()].call(me,r))
+						console.log(r, r.getId(), r.getAnchorForSort? r.getAnchorForSort():null);
 				}
-				catch(e){console.error('Could not build '+r.getModelName()+' from record:', r, 'because: ', e.stack); }
+				catch(e){console.error('Could not build '+r.getModelName()+' from record:', r, 'because: ', e, e.stack); }
 			}, this
 		);
 
@@ -301,8 +339,7 @@ Ext.define('NextThought.mixins.Annotations', {
 
 
 	buildAnnotationTree: function(list, tree){
-		var me = this,
-			contributors = {};
+		var me = this;
 
 		Ext.each(list, function buildTree(r){
 			var g = me.GETTERS[r.getModelName()](r),
@@ -329,8 +366,6 @@ Ext.define('NextThought.mixins.Annotations', {
 
 				r._parent = parent;
 			}
-
-			Ext.apply(contributors, me.getContributors(g));
 		});
 
 		function getOID(id) {
@@ -348,19 +383,6 @@ Ext.define('NextThought.mixins.Annotations', {
 				Ext.each(tree,f);
 			}
 			return r;
-		}
-
-		return contributors;
-	},
-
-
-	buildTreedAnnotations: function(tree){
-		var oid, o, b;
-		for(oid in tree){
-			if(!tree.hasOwnProperty(oid)) continue;
-			o = tree[oid];
-			b = this.widgetBuilder[o.getModelName()];
-			if(b) b.call(this,o);
 		}
 	},
 

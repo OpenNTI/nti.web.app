@@ -68,18 +68,18 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 
 
     savePhantom: function(){
-        if(!this._record.phantom)return;
-        this.isSaving = true;
-        this._record.save({
-            scope: this,
+		var me = this;
+        if(!me._record.phantom)return;
+        me.isSaving = true;
+        me._record.save({
+            scope: me,
             failure:function(){
-                console.error('Failed to save highlight', this, this._record);
-                this.cleanup();
-                delete this;
+                console.error('Failed to save highlight', me, me._record);
+                me.cleanup();
             },
             success:function(newRecord){
-                this._record.fireEvent('updated', newRecord);
-                this._record = newRecord;
+                me._record.fireEvent('updated', newRecord);
+                me._record = newRecord;
             }
         });
     },

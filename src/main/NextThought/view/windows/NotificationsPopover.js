@@ -12,7 +12,6 @@ Ext.define('NextThought.view.windows.NotificationsPopover', {
     frame: false,
     width: 350,
     height: 50,
-    renderTo: Ext.getBody(),
     items:[{margin: 3}],
     defaults: {border: false,
         defaults: {border: false}},
@@ -45,7 +44,10 @@ Ext.define('NextThought.view.windows.NotificationsPopover', {
         this.cancelClose();
 
         var me = this;
-        this.leaveTimer = window.setTimeout(function(){me.close();}, 750);
+        this.leaveTimer = window.setTimeout(function(){
+			VIEWPORT.un('resize',me.fixHeight,me);
+			me.close();
+		}, 750);
     },
 
     itemClicked: function() {
@@ -98,7 +100,7 @@ Ext.define('NextThought.view.windows.NotificationsPopover', {
         }
         catch(err){
             if(me){
-                console.error('NotificationPopover Height-adjustment', err, err.message, err.stack);
+                console.warn('NotificationPopover Height-adjustment', err,err.stack);
             }
         }
     }

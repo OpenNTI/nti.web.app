@@ -29,5 +29,9 @@ Ext.define('NextThought.model.Highlight', {
 	},
 	getModelName: function() {
         return 'Highlight';
-    }
+    },
+
+	getAnchorForSort: function(){
+		return this.get('startAnchor');
+	}
 });

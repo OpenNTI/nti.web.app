@@ -14,7 +14,8 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
         });
 
 		var me = this,
-            b = Ext.Function.createBuffered(me.onResize,100,me,['buffered']);
+            b = Ext.Function.createBuffered(me.onResize,100,me,['buffered']),
+			d;
 
 		me.addEvents('resize');
 		me.enableBubble('resize');
@@ -23,7 +24,7 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 		me._cmp.on('resize', b, me);
 		Ext.EventManager.onWindowResize(b, me);
 		
-		var d = Ext.query('.document-nibs',container);
+		d = Ext.query('.document-nibs',container);
 		me._div = d.length>0? d[0] : me.createElement('div',container,'document-nibs unselectable');
 		me._img = me.createImage(icon?icon:Ext.BLANK_IMAGE_URL,me._div,
 				'action',
@@ -56,10 +57,10 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 	},
 	
 	testFilter: function(filter){
-        if(	!filter
-		 || !filter.types
-		 || !filter.groups
-		 || filter.types.toString().indexOf(this.$className)<0)
+        if(	!filter			||
+			!filter.types	||
+			!filter.groups	||
+			filter.types.toString().indexOf(this.$className)<0)
 			return false;
 
         if(/all/i.test(filter.groups)){
@@ -95,10 +96,10 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 	visibilityChanged: function(show){
 		// console.debug('vis change');
 		var i = Ext.get(this._img);
-		show? i.show() : i.hide();
+		if(show) i.show(); else i.hide();
 	},
 	
-	onResize : function(e){
+	onResize : function(){
 		console.warn('WANRING: handle resizing yourself!');
 	},
 
@@ -149,9 +150,9 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 		e.preventDefault();
 		this.clearListeners();
 		
-		var annotations = this._multiAnnotation();
+		var menu, annotations = this._multiAnnotation();
 		if (annotations && annotations.length > 1) {
-			var menu = Ext.create('Ext.menu.Menu');
+			menu = Ext.create('Ext.menu.Menu');
 			Ext.each(annotations, function(o, i){
 				if (!o.getMenu) return;
 				o.clearListeners();
@@ -176,8 +177,7 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 		this.getMenu().showBy(Ext.get(this._img), 'bl');
 	},
 	
-	_menuItemHook: function(o,item, menu){
-	},
+	_menuItemHook: Ext.emptyFn,
 	
 	_multiAnnotation: function() {
 		var result = [],

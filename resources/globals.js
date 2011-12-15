@@ -2,7 +2,8 @@
 RECURSIVE_STREAM = 'RecursiveStream';
 USER_GENERATED_DATA = 'UserGeneratedData';
 
-
+ASCENDING = {};
+DESCENDING = {};
 
 CENTER_WIDTH = 768;
 MIN_SIDE_WIDTH = 175;
@@ -116,20 +117,24 @@ function arrayEquals(a, b) {
 
 
 function SortModelsBy(key,dir,getter){
-    var g = getter;
-    if(g){
-        return function(a,b){
-            return dir
-                ? g(a).get(key) > g(b).get(key)
-                : g(a).get(key) < g(b).get(key);
-        };
-    }
+    var g = getter,
+		less = dir===ASCENDING? -1 : 1,
+		more = dir===ASCENDING? 1 : -1;
 
-    return function(a,b){
-        return dir
-            ? a.get(key) > b.get(key)
-            : a.get(key) < b.get(key);
-    };
+	function _(v){
+		return (g? g(v) : v).get(key);
+	}
+
+	return function(a,b){
+		var c = 0, _a = _(a), _b = _(b);
+
+		if(_a != _b){
+			c = _a < _b? less : more;
+		}
+
+		return c;
+
+	};
 }
 
 
