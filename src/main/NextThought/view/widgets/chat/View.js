@@ -8,7 +8,8 @@ Ext.define('NextThought.view.widgets.chat.View', {
         'NextThought.view.widgets.chat.ReplyTo',
         'NextThought.view.widgets.chat.OnDeck',
         'NextThought.view.widgets.chat.PinnedMessageView',
-        'NextThought.util.Classroom'
+        'NextThought.util.Classroom',
+        'NextThought.cache.IdCache'
     ],
 
     layout: 'border',
@@ -60,7 +61,7 @@ Ext.define('NextThought.view.widgets.chat.View', {
     changed: function(ri) {
         if (!ri) return;
 
-        this.roomId = ri.getId();
+        this.roomId = IdCache.getIdentifier(ri.getId());
         this.roomInfo = ri;
         this.roomInfo.on('changed', this.changed, this);
         this.roomInfo.on('left-room', this.left, this);
@@ -69,7 +70,7 @@ Ext.define('NextThought.view.widgets.chat.View', {
         if (!this.up('classroom-content') && ClassroomUtils.isClassroomId(ri.get('ContainerId'))) {
             this.down('chat-reply-to').showClassroomButton();
         }
-        else {
+        else if (ClassroomUtils.isClassroomId(ri.get('ContainerId'))){
             this.down('[region=center]').add({xtype:'on-deck-view'});
         }
 

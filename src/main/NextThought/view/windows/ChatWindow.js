@@ -5,7 +5,8 @@ Ext.define('NextThought.view.windows.ChatWindow', {
         'Ext.button.Split',
         'Ext.tab.Panel',
         'NextThought.view.widgets.chat.View',
-        'NextThought.view.widgets.chat.Friends'
+        'NextThought.view.widgets.chat.Friends',
+        'NextThought.cache.IdCache'
     ],
 
     width: 700,
@@ -53,9 +54,9 @@ Ext.define('NextThought.view.windows.ChatWindow', {
 
 
     addNewChat: function(roomInfo) {
-        var id = roomInfo.getId(),
+        var id = IdCache.getIdentifier(roomInfo.getId()),
             tab = this.down('chat-view[roomId='+id+']');
-
+console.log('add new chat, id = ' + id, 'found tab ' + tab);
         if (!tab) {
             tab = this.down('tabpanel').add(
                 {
@@ -67,7 +68,7 @@ Ext.define('NextThought.view.windows.ChatWindow', {
                 }
             );
         }
-
+console.log('tab created', tab);
         if (tab) {
             this.down('tabpanel').setActiveTab(tab);
         }

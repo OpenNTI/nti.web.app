@@ -130,7 +130,8 @@ Ext.define('NextThought.controller.Chat', {
 	},
 
     getChatView: function(roomInfo) {
-        return Ext.ComponentQuery.query('chat-view[roomId='+roomInfo.getId()+']')[0];
+        var id = IdCache.getIdentifier(roomInfo.getId());
+        return Ext.ComponentQuery.query('chat-view[roomId='+id+']')[0];
     },
 
     existingRoom: function(users, options) {
@@ -491,7 +492,7 @@ Ext.define('NextThought.controller.Chat', {
 
     onMessageDefaultChannel: function(msg, opts) {
 		var win = this.getChatWindow(),
-            r = msg.get('ContainerId'),
+            r = IdCache.getIdentifier(msg.get('ContainerId')),
 		    moderated = !!('moderated' in opts),
 			tab,
 			log;
