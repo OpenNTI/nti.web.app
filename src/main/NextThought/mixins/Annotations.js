@@ -274,7 +274,8 @@ Ext.define('NextThought.mixins.Annotations', {
 			contributors = {},
 			k = 'Last Modified',
 			tree = {}, b,
-			sortedItems;
+			sortedItems,
+            foundBins = false;
 
 		if (!this._containerId) return;
 
@@ -282,7 +283,10 @@ Ext.define('NextThought.mixins.Annotations', {
 		for(b in bins){
 			if(bins.hasOwnProperty(b))
 			bins[b] = Ext.Array.sort(bins[b]||[],SortModelsBy(k,ASCENDING,me.GETTERS[b]));
+            foundBins = true;
 		}
+
+        if (!foundBins) return;
 
 		this.buildAnnotationTree(bins.Note, tree);
 		this.buildAnnotationTree(bins.TranscriptSummary, tree);

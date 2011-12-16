@@ -61,7 +61,7 @@ Ext.define('NextThought.controller.Classroom', {
 	isClassroom: function(roomOrMessageInfo){
 		if(!roomOrMessageInfo)return false;
 		var c = roomOrMessageInfo.get('ContainerId');
-		return (c in this.rooms || (/:/i.test(c) && ClassroomUtils.isClassroomId(c)));
+		return (c in this.rooms);
 	},
 
     onMessageContentNavigate: function(ntiid) {

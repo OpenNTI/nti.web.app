@@ -60,7 +60,7 @@ Ext.define('NextThought.controller.Annotations', {
     },
 
     getContext: function(){
-         return this.getViewport().getActive().getMainComponent();
+        return this.getController('Reader').getReader();
     },
 
     getContainerId: function(){

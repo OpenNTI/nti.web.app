@@ -292,7 +292,7 @@ Ext.define('NextThought.controller.Chat', {
     classroom: function(f, mid, channel, recipients) {
         var room = f.up('chat-view').roomInfo;
 
-        if (!this.getClassroom().isClassroom(room)) {
+        if (!ClassroomUtils.isClassroomId(room.get('ContainerId'))) {
             console.log('not a chat room that can turn into a classroom, sorry, figure out how to disable this button or hide it');
             return;
         }

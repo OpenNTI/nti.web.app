@@ -74,7 +74,7 @@ Ext.define('NextThought.view.windows.ChatWindow', {
 
 
     closeChat: function(roomInfo, disableExitRoom) {
-        var id = roomInfo.getId(),
+        var id = IdCache.getIdentifier(roomInfo.getId()),
             tab = this.down('chat-view[roomId='+id+']');
 
         if (tab) {
