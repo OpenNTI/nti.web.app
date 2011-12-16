@@ -181,10 +181,10 @@ Ext.define('NextThought.view.widgets.NotePanel',{
 
         me._record = m;
 
-        me.renderData['time'] = Ext.Date.format(m.get('Last Modified') || new Date(), 'g:i:sa M j, Y');
-        me.renderData['name'] = 'resolving...';
-        me.renderData['body'] = t;
-        me.renderData['owner'] = owner ? 'owner' : '';
+        me.renderData.time = Ext.Date.format(m.get('Last Modified') || new Date(), 'g:i:sa M j, Y');
+        me.renderData.name = 'resolving...';
+        me.renderData.body = t;
+        me.renderData.owner = owner ? 'owner' : '';
 
         if(this.rendered){
            me.text.update(me.renderData.body);
@@ -243,7 +243,7 @@ Ext.define('NextThought.view.widgets.NotePanel',{
     },
 
 
-    click: function(event, target, eOpts){
+    click: function(event, target){
         target = Ext.get(target);
         event.preventDefault();
 		event.stopPropagation();
@@ -278,9 +278,9 @@ Ext.define('NextThought.view.widgets.NotePanel',{
             if(owner)this.box.addCls('owner');
         }
         else {
-            this.renderData['name'] = name;
-            this.renderData['icon'] = i;
-            this.renderData['owner'] = owner ? 'owner' : '';
+            this.renderData.name = name;
+            this.renderData.icon = i;
+            this.renderData.owner = owner ? 'owner' : '';
         }
     },
 
@@ -301,8 +301,9 @@ Ext.define('NextThought.view.widgets.NotePanel',{
                 _owner: m,
                 _annotation: {
                     _parentAnnotation: p,
-                    getRecord: function(){return record},
-                    remove: function(){ r.removeReply(); }
+                    getRecord: function(){return record;},
+                    remove: function(){ r.removeReply();},
+                    cleanup: function(){ r.cleanupReply();}
                 }
             });
 
@@ -316,10 +317,11 @@ Ext.define('NextThought.view.widgets.NotePanel',{
     },
 
     _claimChild: function(children, child) {
-        var cOid = child.get('OID');
-        for(var i in children) {
+        var cOid = child.get('OID'),
+            i, o;
+        for(i in children) {
             if (!children.hasOwnProperty(i)) continue;
-            var o = children[i].get('OID');
+            o = children[i].get('OID');
 
             if (o == cOid) {
                 Ext.Array.erase(children, i, 1);
@@ -328,7 +330,8 @@ Ext.define('NextThought.view.widgets.NotePanel',{
     },
 
     updateFromRecord: function(record) {
-        var abandonedChildren = Ext.Array.clone(this._record.children || []);
+        var abandonedChildren = Ext.Array.clone(this._record.children || []),
+            a, id, panel;
 
         this.updateModel(record);
 
@@ -347,10 +350,10 @@ Ext.define('NextThought.view.widgets.NotePanel',{
             }, this);
         }
         //console.debug('abandoned', abandonedChildren.length);
-        for (var a in abandonedChildren) {
+        for (a in abandonedChildren) {
             if (!abandonedChildren.hasOwnProperty(a)) continue;
-            var id = this.getCmpId(abandonedChildren[a]),
-                panel = Ext.getCmp(id);
+            id = this.getCmpId(abandonedChildren[a]);
+            panel = Ext.getCmp(id);
             panel.cleanupReply();
         }
 
@@ -364,10 +367,11 @@ Ext.define('NextThought.view.widgets.NotePanel',{
     },
 
     cleanupReply: function(removeAll){
-        var m = this,
-            children = m._record.children,
-            parent = m._record._parent;
-
+        var m = this;
+        /*,
+        children = m._record.children,
+        parent = m._record._parent;
+        */
         if (removeAll) {
             m.items.each(function(i){
                 m.remove(i, false);

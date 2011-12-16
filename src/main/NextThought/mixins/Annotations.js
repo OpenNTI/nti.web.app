@@ -209,6 +209,8 @@ Ext.define('NextThought.mixins.Annotations', {
 			type = change.get('ChangeType'),
 			oid = item? item.getId() : null,
 			cid = item? item.get('ContainerId') : null,
+            delAction = /deleted/i.test(type),
+            cmp = Ext.getCmp(IdCache.getComponentId(oid)),
 			cls, replyTo, builder, result;
 
         console.log('onNotification', change, type);
@@ -218,7 +220,7 @@ Ext.define('NextThought.mixins.Annotations', {
 
 		//if exists, update
 		if( oid in this._annotations){
-			if(/deleted/i.test(type)){
+			if(delAction){
 				this._annotations[oid].cleanup();
 				delete this._annotations[oid];
 			}
@@ -226,8 +228,20 @@ Ext.define('NextThought.mixins.Annotations', {
 				this._annotations[oid].getRecord().fireEvent('updated',item);
 			}
 		}
+        //found the component, it's not top level
+        else if (cmp) {
+            //delete it
+            if (delAction) {
+                cmp._annotation.cleanup();
+            }
+            //update it
+            else {
+                cmp._annotation.getRecord().fireEvent('updated',item);
+            }
+
+        }
 		//if not exists, add
-		else if(!/deleted/i.test(type)){
+		else if(!delAction){
 			cls = item.get('Class');
 			replyTo = item.get('inReplyTo');
 			builder = this.widgetBuilder[cls];
