@@ -155,7 +155,7 @@ Ext.define('NextThought.view.content.Reader', {
 
         this.el.select('#NTIContent .navigation').remove();
         this.el.select('#NTIContent .breadcrumbs').remove();
-        this.el.select('.x-reader-pane a[href]').on(
+        this.el.select('#NTIContent a[href]').on(
             'click', this._onClick, this,
             {book: s.book, scope:this, stopEvent:true});
 

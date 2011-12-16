@@ -22,7 +22,7 @@ Ext.define('NextThought.util.QuizUtils', {
                     problems[id] = el.up('.problem');
 
                     if(iterationCallback){
-                        iterationCallback.call(scope||this, id, el, problems[id]);
+                        iterationCallback.call(scope||window, id, el, problems[id]);
                     }
                 },
                 this);
@@ -31,27 +31,27 @@ Ext.define('NextThought.util.QuizUtils', {
         },
 
         submitAnswers: function(){
-            var ntiid = Ext.query('meta[name=NTIID]')[0].getAttribute('content'),
+            var me = this,
+				ntiid = Ext.query('meta[name=NTIID]')[0].getAttribute('content'),
 				url = _AppConfig.service.getQuizSubmitURL(ntiid),
-				problems = {},
+				problems,
 				data = {},
                 vp = VIEWPORT.getEl();
 
+			function iter(id,v,c){
+				data[id] = v.getValue();
+				v.hide();
+			}
+
             vp.mask('Grading...');
 
-            problems = this.getProblemElementMap(
-                function(id,v,c){
-                    data[id] = v.getValue();
-                    v.hide();
-                },
-                this);
-
+            problems = me.getProblemElementMap(iter,me);
 
             Ext.Ajax.request({
                 url: url,
                 jsonData: Ext.JSON.encode(data),
                 method: 'POST',
-                scope: this,
+                scope: me,
                 callback: function(){ vp.unmask(); },
                 failure: function(){
                     //TODO: hook up to error handling
@@ -59,14 +59,14 @@ Ext.define('NextThought.util.QuizUtils', {
                 },
                 success: function(r,req){
                     var quizResults = ParseUtils.parseItems([ Ext.JSON.decode(r.responseText) ]);
-                    this.showQuizResult(quizResults[0], problems);
+                    me.showQuizResult(quizResults[0], problems);
                 }
             });
         },
 
 
         showQuizResult: function(quizResult, problemsElementMap) {
-            var mathCls = 'mathjax tex2jax_process ',
+			var mathCls = 'mathjax tex2jax_process ',
                 ntiid = Ext.query('meta[name=NTIID]')[0].getAttribute('content'),
                 problems = problemsElementMap || this.getProblemElementMap();
 
@@ -77,10 +77,11 @@ Ext.define('NextThought.util.QuizUtils', {
             Ext.each(
                 quizResult.get('Items'),
                 function(qqr){
-                    var q = qqr.get('Question'),
-                        id = q.getId(),
-                        p = problems[id],
-                        r = p.next('.result');
+                    var q,p,r,id;
+					q = qqr.get('Question');
+					id = q.get('ID');
+					p = problems[id];
+					r = p.next('.result');
 
                     r.removeCls('hidden');
                     r.addCls((qqr.get('Assessment')?'':'in')+'correct');
