@@ -117,10 +117,11 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 
 
     getMenu: function(){
-        var m = this._buildMenu();
-		//bad!!! clean up somewhere else
+        var m = this._buildMenu(),
+			isLeaf = arguments.length>0;
+
         m.on('hide', function(){
-            m.destroy();
+            if(!isLeaf)m.destroy();
         });
 
         return m;
@@ -158,7 +159,7 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 				o.clearListeners();
 				var item = Ext.create('Ext.menu.Item', {
 						text: 'Annotation '+(i+1),
-						menu: o.getMenu()
+						menu: o.getMenu({/*this argument will tell it to not destroy itself*/})
 				});
 				
 				this._menuItemHook(o,item, menu);
@@ -166,6 +167,7 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 				menu.add(item);
 			},
 			this);
+
 			menu.on('hide', function(){
 				menu.destroy();
 			});
