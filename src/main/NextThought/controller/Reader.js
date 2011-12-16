@@ -126,16 +126,15 @@ Ext.define('NextThought.controller.Reader', {
 	onRemoveAnnotation: function(oid, containerId){
 		function clean(){
 			var o = ps.getById(oid);
-			if(o) o.destroy();
+			if(o) o.destroy({});
 			me.getReader().removeAnnotation(oid);
 		}
 
 		var me=this,
-				ps = this.getStoreForPageItems(containerId);
+			ps = this.getStoreForPageItems(containerId);
 		if(!ps) return;
 
 		if(ps.isLoading() || ps.getCount()===0){
-			console.log('store not ready, loading... then deleting item.');
 			ps.on('load', clean, this, {single: true});
 			ps.load();
 		}
@@ -232,30 +231,28 @@ Ext.define('NextThought.controller.Reader', {
 			textElements = me.getElementsByTagNames('p,div,blockquote,ul,li,ol', me.getReader().getEl().dom),
 			ranges = [],
 			created = {},
-			e;
+			textLength = text.length;
 
-
-		for (e in textElements)
-		{
-			var c = textElements[e],
-				i = c.innerText,
-				regex = new RegExp(Ext.String.escapeRegex(text), 'i'),
-				index, node, texts, nv, r;
+		Ext.Object.each(textElements, function(e, c){
+			var i = c.innerText,
+				index, node, texts, nv, r,
+				regex = new RegExp(Ext.String.escapeRegex(text), 'i');
 
 			//if it's not here, move to the next block
-			if (!i.match(regex)) continue;
+			if (!i.match(regex)) return;
 
 			texts = document.evaluate('.//text()', c,
-					null, XPathResult.ORDERED_NODE_ITERATOR_TYPE, null);
+					null, XPathResult.ORDERED_NODE_ITERATOR_TYPE,
+					null);
 
-			while(node == texts.iterateNext()){
+			while((node = texts.iterateNext())){
 				nv = node.nodeValue.toLowerCase();
 
 				index = nv.indexOf(text);
 				while(index >= 0) {
 					r = document.createRange();
 					r.setStart(node, index);
-					r.setEnd(node, index + text.length);
+					r.setEnd(node, index + textLength);
 
 
 					if (!created[nv] || !created[nv][index]) {
@@ -266,7 +263,7 @@ Ext.define('NextThought.controller.Reader', {
 					index = nv.indexOf(text, index + 1);
 				}
 			}
-		}
+		});
 
 		setTimeout(function(){
 			me.getReader().showRanges(ranges);
