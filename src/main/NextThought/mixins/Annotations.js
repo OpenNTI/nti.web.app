@@ -173,7 +173,7 @@ Ext.define('NextThought.mixins.Annotations', {
 
 	createNoteWidget: function(record){
 		try{
-			if(record.get('inReplyTo') || record._parent){
+			if(!record._pruned && (record.get('inReplyTo') || record._parent)){
 				return false;
 			}
 			else if (this.annotationExists(record)) {
@@ -287,6 +287,8 @@ Ext.define('NextThought.mixins.Annotations', {
 		this.buildAnnotationTree(bins.Note, tree);
 		this.buildAnnotationTree(bins.TranscriptSummary, tree);
 
+		this.prunePlaceholders(tree);
+
 		sortedItems = Ext.Object.getValues(tree).concat(bins.Highlight);
 		//sort
 		Ext.Array.sort(sortedItems,this.buildAnchorSorter());
@@ -338,6 +340,7 @@ Ext.define('NextThought.mixins.Annotations', {
 		var me = this, contributors = {};
 		Ext.each(list,
 			function(r){
+				if(!r)return;
 				try{
 					Ext.apply(contributors, me.getContributors(r));
 					me.widgetBuilder[r.getModelName()].call(me,r);
@@ -395,6 +398,46 @@ Ext.define('NextThought.mixins.Annotations', {
 				Ext.each(tree,f);
 			}
 			return r;
+		}
+	},
+
+
+	prunePlaceholders: function(tree){
+
+		function arePlaceHolders(list){
+			var k;
+			for(k in list){
+				if(list.hasOwnProperty(k) && !list[k].placeHolder)
+					return false;
+			}
+			return true;
+		}
+
+		function canPrune(o){
+			return o!==null && !o._parent && o.placeHolder && arePlaceHolders(o.children||[]);
+		}
+
+		function needsPruning(){
+			var k;
+			for(k in tree){
+				if(!tree.hasOwnProperty(k))continue;
+				if(canPrune(tree[k]))
+					return true;
+			}
+			return false;
+		}
+
+		function prune(k,o){
+			if(!canPrune(o)) return;
+			delete tree[k];
+			Ext.each(o.children, function(c){
+				delete c._parent;
+				c._pruned = true;
+			});
+		}
+
+		while(needsPruning()){
+			Ext.Object.each(tree, prune);
 		}
 	},
 
