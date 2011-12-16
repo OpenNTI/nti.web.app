@@ -37,7 +37,8 @@ Ext.define('NextThought.view.widgets.MiniStreamList', {
 		var c=0, u,
 			s = this._store || {each:Ext.emptyFn},
 			p = this.items.get(1),
-			f = this._filter;
+			f = this._filter,
+			overflow = false;
 
 		p.removeAll(true);
 
@@ -53,6 +54,13 @@ Ext.define('NextThought.view.widgets.MiniStreamList', {
 			if( /all/i.test(f.groups) || f.shareTargets && f.shareTargets[ u ] || (f.includeMe && f.includeMe==u)){
 				c++;
                 p.add({change: change, xtype: 'miniStreamEntry'});
+			}
+
+			if(c > 5 && !overflow){
+				overflow = true;
+				p.add({xtype: 'button', text: 'More', margin: 5}).on('click',
+						function(s){s.hide().next().show();});
+				p = p.add({hidden:true, defaults:{border:false}});
 			}
 		});
 

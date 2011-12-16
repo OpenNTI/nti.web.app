@@ -22,7 +22,7 @@ Ext.define('NextThought.store.Stream',{
 	sorters: [
 		{
 			property : 'Last Modified',
-			direction: 'ASC'
+			direction: 'DESC'
 		}
 	]
 });

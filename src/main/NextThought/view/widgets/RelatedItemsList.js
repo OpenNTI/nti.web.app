@@ -11,30 +11,23 @@ Ext.define('NextThought.view.widgets.RelatedItemsList', {
 
 	_filter: {},
 	
-	constructor: function(){
-		this.addEvents('navigate');
-		this.callParent(arguments);
-		return this;
-	},
-	
 	initComponent: function(){
+		this.addEvents('navigate');
 		this.callParent(arguments);
 	},
 
 
 
 	setLocation: function(loc){
-		var map = this.getRelatedItems(loc),
-			id,
-			me = this,
+		var me = this,
+			map = me.getRelatedItems(loc),
 			m,
-			p = this.items.get(1);
+			p = me.items.get(1),
+			c = 0, overflow = false;
 		
-		p.removeAll();
-		for(id in map){
-			if(!map.hasOwnProperty(id))continue;
-			
-			m  = map[id];
+		p.removeAll(true);
+
+		Ext.Object.each(map,function(id,m){
 
             var listeners = { 'afterrender': function(c) { c.el.on('click', me.clicked, me, {entry:m}); } },
                 label = {
@@ -58,10 +51,16 @@ Ext.define('NextThought.view.widgets.RelatedItemsList', {
                 items: [icon, label]
 			});
 
-            //TODO: limit the number of items and add a 'more' link to show them all
+			c++;
 
+			if(c > 5 && !overflow){
+				overflow = true;
+				p.add({xtype: 'button', text: 'More', margin: '5px 0px'}).on('click',
+						function(s){s.hide().next().show();});
 
-		}
+				p = p.add({hidden:true, defaults:{border:false}});
+			}
+		});
 		
 	},
 
@@ -125,7 +124,7 @@ Ext.define('NextThought.view.widgets.RelatedItemsList', {
                     };
                 }
             }
-            while(r = r.nextSibling);
+            while((r = r.nextSibling));
 			
         },this);
 		
