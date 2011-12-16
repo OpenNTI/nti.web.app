@@ -133,10 +133,11 @@ Ext.define('NextThought.controller.Stream', {
     incomingChange: function(change) {
         change = ParseUtils.parseItems([change])[0];
         var cid = change.getItemValue('ContainerId'),
-            lineage = Library.getLineage(cid);
+            lineage = Library.getLineage(cid),
+			me = this;
 
 		Ext.each(lineage,function(cid){
-			var s = this.getStoreForStream(cid);
+			var s = me.getStoreForStream(cid);
 			if( s ) s.add(change);
 		});
 

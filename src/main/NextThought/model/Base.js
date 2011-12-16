@@ -57,7 +57,7 @@ Ext.define('NextThought.model.Base', {
 
 
 	isModifiable: function(){
-		return this.getLink('edit')!==null;
+		return this.phantom||this.getLink('edit')!==null;
 	},
 
 

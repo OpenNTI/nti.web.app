@@ -4,24 +4,31 @@ Ext.define('NextThought.proxy.reader.Json', {
 	initialConfig: {root: 'Items'},
 
 	readRecords: function(data) {
-		var records = [], key, items = data.Items || {}, item,
+		var records = [], key,
+			items = data.Items || {}, item,
+			mimeType = data.MimeType,
 			result, i, record, modelName;
 
-		for(key in items){
-			if(!items.hasOwnProperty(key))continue;
-			item = items[key];
+		if(mimeType === 'application/vnd.nextthought.collection' || (mimeType===undefined && items)) {
+			for(key in items){
+				if(!items.hasOwnProperty(key))continue;
+				item = items[key];
 
-			if(typeof(item)==='string'){
-				console.warn('IGNORING: Received string item at key:', key, item);
-				continue;
+				if(typeof(item)==='string'){
+					console.warn('IGNORING: Received string item at key:', key, item);
+					continue;
+				}
+
+				if(!item.Class || !(item.Class in NextThought.model)){
+					console.warn('IGNORING: Received object that does not match a model');
+					continue;
+				}
+
+				records.push(items[key]);
 			}
-
-			if(!item.Class || !(item.Class in NextThought.model)){
-				console.warn('IGNORING: Received object that does not match a model');
-				continue;
-			}
-
-			records.push(items[key]);
+		}
+		else {
+			records.push(data);
 		}
 
 		try {
