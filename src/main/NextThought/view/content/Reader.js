@@ -1,4 +1,3 @@
-
 Ext.define('NextThought.view.content.Reader', {
     extend:'NextThought.view.content.Panel',
     alias: 'widget.reader-panel',
@@ -211,25 +210,38 @@ Ext.define('NextThought.view.content.Reader', {
 
         function fixReferences(original,tag,url) {
             var firstChar = url.charAt(0),
-                absolute = firstChar =='/',
-                anchor = firstChar == '#',
+                absolute = firstChar ==='/',
+                anchor = firstChar === '#',
+				external = me.externalUriRegex.test(url),
                 host = absolute?_AppConfig.server.host:basePath;
 
             //inline
-            return anchor || /^data:/i.test(url) ? original : tag+'="'+host+url+'"';
+            return (anchor || external || /^data:/i.test(url)) ?
+					original : tag+'="'+host+url+'"';
         }
+
+		var me = this;
 
         return string.replace(/(src|href|poster)="(.*?)"/igm, fixReferences);
     },
 
 
+	externalUriRegex : /^([a-z][a-z0-9\+\-\.]*):/i,
+
 
     _onClick: function(e, el, o){
+        e.stopPropagation();
         e.preventDefault();
         var m = this,
             r = el.href,
             p = r.substring(_AppConfig.server.host.length),
             hash = p.split('#');
+
+		if(m.externalUriRegex.test(r)){
+			//popup a leaving platform notice here...
+			window.open(r, guidGenerator());
+			return;
+		}
 
         if(hash.length>1){
 
