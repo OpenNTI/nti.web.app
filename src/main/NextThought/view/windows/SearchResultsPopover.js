@@ -28,7 +28,7 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
 
         //values that change should not be defined on the prototype/class, but the instance.
         Ext.apply(me,{
-            itemSelected: -1,
+            itemSelected: null,
             _searchVal: null,
             _filledBoxes: {},
             width: me.minWidth,
@@ -75,6 +75,8 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
 			b = i.get(1);
 		this._filledBoxes = {};
 
+        this.itemSelected = null;
+
 		a.removeAll();
 		b.removeAll();
 		i.each(function(o){o.hide();}, this);
@@ -102,7 +104,7 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
 
     chooseSelection: function() {
         var p = this.query('panel[hit]'),
-            i = p[this.itemSelected],
+            i = this.itemSelected,
             h = i? i.hit : null;
 
         if(i)
@@ -115,25 +117,54 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
     },
 
     select: function(up) {
-        var p = this.query('panel[hit]'),
-            i = p[this.itemSelected],
+        var me = this,
+            q = 'panel[hit]',
+            i = me.itemSelected,
             CLASS = 'search-result-selection';
+
+        function last(cmp) {
+
+            var step = cmp? function(i){ return i.next(q);} : function(i){ return next(i);},
+                f = first(), c = cmp || f, n;
+
+            while((n = step(c)) !== f && n !== null) { c = n; }
+            return c;
+        }
+
+        function first(){
+            return me.down(q);
+        }
+
+        function next(cmp) {
+            if(!cmp) return first();
+            var x = cmp.nextSibling(q),
+                s;
+            if (!x) {
+                s = cmp.up('panel').nextSibling('panel[title]');
+                x = s ? s.down(q) : first();
+            }
+            return x;
+        }
+
+        function prev(cmp) {
+            if(!cmp) return last();
+            var x = cmp.previousSibling(q),
+                s;
+            if (!x) {
+                s = cmp.up('panel').previousSibling('panel[title]');
+                x = s ? last(s.down(q)) : last();
+            }
+            return x;
+        }
 
         //remove current selection
         if (i) i.removeCls(CLASS);
 
         //increment to next
-        this.itemSelected += (up) ? -1 : 1;
-        i = p[this.itemSelected];
-
-        //if next is off the edge, wrap
-        if (!i) {
-            this.itemSelected = (up) ? p.length-1 : 0;
-            i = p[this.itemSelected];
-        }
+        i = me.itemSelected = (up) ? prev(i) : next(i);
 
         if(i){
-            this.scroll(i.addCls(CLASS));
+            me.scroll(i.addCls(CLASS));
         }
     },
 
@@ -219,7 +250,7 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
             CLASS = 'search-result-selection';
 
         this.el.select('.'+CLASS).removeCls(CLASS);
-        this.itemSelected = Ext.Array.indexOf(p,c);
+        this.itemSelected = c;
         this.scroll(c.addCls(CLASS));
     },
 
