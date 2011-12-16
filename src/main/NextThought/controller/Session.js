@@ -44,9 +44,31 @@ Ext.define('NextThought.controller.Session', {
         },
 
 
+		clearAuth: function(){
+			function clearCookie(name, domain){
+				document.cookie = name+'=; expires=Thu, 01-Jan-70 00:00:01 GMT; path=/'+
+						(domain? ('; domain='+domain): '');
+			}
+
+			if(Ext.Ajax.defaultHeaders)
+				delete Ext.Ajax.defaultHeaders.Authorization;
+
+			delete Ext.Ajax.username;
+			delete Ext.Ajax.password;
+
+			var domain = _AppConfig.server.domain;
+
+			clearCookie(COOKIE, null);
+			clearCookie('auth_tkt',domain);
+			clearCookie('auth_tkt','.'+domain);
+		},
+
+
         setupAuth: function(username, password, remember){
             var r = !!(remember || this.shouldRemember()),
                 a = Base64.basicAuthString( username, password );
+
+			this.clearAuth();
 
             //Auto inject all future request with the auth string
             Ext.Ajax.defaultHeaders = Ext.Ajax.defaultHeaders || {};
@@ -91,10 +113,17 @@ Ext.define('NextThought.controller.Session', {
 							failureCallback.call(m);
 							return;
 						}
+						try{
+							_AppConfig.service = Ext.create(
+									'NextThought.model.Service',
+									Ext.decode(r.responseText),
+									values.username);
 
-						_AppConfig.service = Ext.create('NextThought.model.Service', Ext.decode(r.responseText));
-
-						m.attemptLoginCallback(values, successCallback, failureCallback);
+							m.attemptLoginCallback(values, successCallback, failureCallback);
+						}
+						catch(e){
+							failureCallback.call(m);
+						}
 					}
                 });
             }
@@ -158,10 +187,17 @@ Ext.define('NextThought.controller.Session', {
     },
 
     handleLogout: function() {
-        var dt = Ext.Date.add(new Date(), Ext.Date.MONTH, -1);
-        Ext.util.Cookies.set(COOKIE, '', dt);
-        Socket.tearDownSocket();
-        window.location.reload();
+        var s = _AppConfig.server,
+			me = this;
+
+		Socket.tearDownSocket();
+		Ext.Ajax.request({
+			url: s.host + s.data + 'logout',
+			callback: function(){
+				me.self.clearAuth();
+				window.location.reload();
+			}
+		});
     },
 
     loginClicked: function(button) {

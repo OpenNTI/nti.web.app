@@ -5,6 +5,17 @@ Ext.define('NextThought.model.Service', {
         { name: 'Class', type: 'string', defaultValue: 'Service'}
     ],
 
+	constructor: function(doc, user){
+		var r = this.callParent([doc]);
+
+		if(!this.getWorkspace(user)){
+			console.error('Could not locate workspace for:', user);
+			Ext.Error.raise('bad service doc');
+		}
+
+		return r;
+	},
+
 	getUserSearchURL: function(username){
 		return _AppConfig.server.host + '/dataserver/UserSearch/'+(username||'');
 	},
