@@ -24,15 +24,14 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
 
     initComponent: function(config) {
         var me = this,
-			s = _AppConfig.service,
-            field = me.bindTo;
+			s = _AppConfig.service;
 
         //values that change should not be defined on the prototype/class, but the instance.
         Ext.apply(me,{
             itemSelected: -1,
             _searchVal: null,
             _filledBoxes: {},
-            width: Ext.Number.constrain(field.getWidth(), me.minWidth, me.maxWidth),
+            width: me.minWidth,
             height: 50
         });
 
@@ -94,16 +93,12 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
 		});
     },
 
-    render: function() {
+    show: function() {
         this.callParent(arguments);
-
-        var me = this,
-            el = me.el,
-            lastLogin = _AppConfig.userObject.get('lastLoginTime');
-        me.alignTo(me.bindTo);
-
-        el.mask("Searching");
+		this.handleResize();
+        this.el.mask("Searching");
     },
+
 
     chooseSelection: function() {
         var p = this.query('panel[hit]'),
@@ -160,8 +155,8 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
             this._filledBoxes[panelIndex] = true;
             Ext.each( hits,
                 function(h){
-                    var s = h.get('Snippet')    || 'blank snippet',
-                        t = h.get('Title')      || 'User Generated Content',
+                    var s = h.get('Snippet')    || '?blank snippet?',
+                        t = h.get('Title')      || h.get('Type') || 'User Generated Content',
                         content,
                         el;
 
@@ -182,7 +177,7 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
         var fb = this._filledBoxes;
         this._updateCount--;
         if (this._updateCount <= 0){
-            this.fixHeight();
+            this.handleResize();
 
             this.el.unmask();
             if(!fb[0] && !fb[1])
@@ -193,18 +188,22 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
     },
 
 
-    fixHeight: function(){
+    handleResize: function(){
 		var me = this, e, max;
         try{
 			e = me.bindTo;
 			max = (VIEWPORT.getHeight() - e.getPosition()[1] - e.getHeight() - 10);
             me.height = undefined;
+			
+			me.setWidth(Ext.Number.constrain(e.getWidth(), me.minWidth, me.maxWidth));
+			
             me.doLayout();
             if(me.getHeight()> max)
                 me.setHeight(max);
 
-            //console.debug(max, me.getHeight());
-            VIEWPORT.on('resize',me.fixHeight,me, {single: true});
+			me.alignTo(e);
+
+            VIEWPORT.on('resize',me.handleResize,me, {single: true});
         }
         catch(err){
             if(me){
