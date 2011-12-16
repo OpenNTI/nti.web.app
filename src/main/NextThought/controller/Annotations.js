@@ -142,17 +142,20 @@ Ext.define('NextThought.controller.Annotations', {
 
         if (win.record.data.body.length === 0) {
             //note has no data, we need to just remove it
-            win.record.destroy({
-                scope: this,
-                success: function(){
-                    win.record.fireEvent('updated',win.record);
-                    win.close();
-                },
-                failure: function(){
-                    console.error('failed to delete empty note');
-                    win.close();
-                }
-            });
+			if(!win.record.phantom){
+				win.record.destroy({
+					scope: this,
+					success: function(){
+						win.record.fireEvent('updated',win.record);
+						win.close();
+					},
+					failure: function(){
+						console.error('failed to delete empty note');
+						win.close();
+					}
+				});
+			}
+			else win.close();
             return;
         }
 
