@@ -73,7 +73,7 @@ Ext.define('NextThought.controller.Session', {
             //Auto inject all future request with the auth string
             Ext.Ajax.defaultHeaders = Ext.Ajax.defaultHeaders || {};
             Ext.Ajax.defaultHeaders.Authorization= a;
-            Ext.Ajax.defaultHeaders.Accept= '*/*';
+            Ext.Ajax.defaultHeaders.Accept= 'application/vnd.nextthought+json';
             Ext.Ajax.username = encodeURIComponent(username);
             Ext.Ajax.password = password;
 
