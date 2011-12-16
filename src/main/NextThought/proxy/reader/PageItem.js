@@ -17,12 +17,18 @@ Ext.define('NextThought.proxy.reader.PageItem', {
 			i = result.records.length-1;
 			for(; i>=0; i--){
 				record = result.records[i];
+				try{
 				result.records[i] = Ext.create(
 						'NextThought.model.'+record.get('Class'),
 						Ext.clone(record.raw),
 						record.getId(),
 						record.raw
 				);
+				}
+				catch(e1){
+					console.error(record, 'No model for record?');
+					throw e1;
+				}
 			}
 
 			return result;
