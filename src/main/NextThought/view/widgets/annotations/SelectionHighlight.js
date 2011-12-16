@@ -3,6 +3,7 @@ Ext.define('NextThought.view.widgets.annotations.SelectionHighlight', {
     alias: 'annotations.SelectionHighlight',
 
 	constructor: function(selections, container, component){
+        this.callParent();
         Ext.apply(this, {
             _sels: selections || [],
             _canvas: null
@@ -10,6 +11,7 @@ Ext.define('NextThought.view.widgets.annotations.SelectionHighlight', {
 
 		var me = this;
 
+        me._cnt = container;
         me._color = 'FFFF00';
         me._canvas =  me.createElement('canvas',container,'search-highlight-object unselectable','position: absolute; pointer-events: none;');
         me.render = Ext.Function.createBuffered(me.render,100,me,[true]);
@@ -23,7 +25,7 @@ Ext.define('NextThought.view.widgets.annotations.SelectionHighlight', {
 		delete this._sels;
 	},
 
-	onResize : function(e){
+	onResize : function(){
         var c = Ext.get(this._canvas),
             cont = Ext.get(this._cnt),
             pos = cont.getXY(),
@@ -40,56 +42,51 @@ Ext.define('NextThought.view.widgets.annotations.SelectionHighlight', {
 			return;
 		}
 
-        this._canvas.width = this._canvas.width;
+        this._canvas.width = (this._canvas.width);
         var c = this._canvas,
-            canvasXY = Ext.get(c).getXY();
-            ctx = c.getContext("2d"),
-            color = this._hexToRGBA(this._color);
+            canvasXY = Ext.get(c).getXY(),
+            ctx = c.getContext("2d");
 
-        ctx.fillStyle = color;
+        ctx.fillStyle = this._hexToRGBA(this._color);
 
         Ext.each(this._sels, function(sel){
 
             var s = sel.getClientRects(),
-                l = s.length;
+                l = s.length,
+                i = 0,
+                ac;
 
-            for(var i=0; i<l; i++){
-                var ac = this.adjustCoordinates(s[i], canvasXY);
+            for(; i<l; i++){
+                ac = this.adjustCoordinates(s[i], canvasXY);
                 this.drawRect(ctx,ac);
             }
         }, this);
 	},
-
-    rectEquals: function(a, b) {
-        return (a.width == b.width && a.height == b.height && a.left == b.left && a.top == b.top);
-    },
 
 	_hexToRGBA: function(hex) {
 		if ('yellow' == hex) {
 			hex = 'FFFF00';
 		}
 
-		var red = hex.substring(0, 2);
-		var green = hex.substring(2, 4);
-		var blue = hex.substring(4);
+		var red = hex.substring(0, 2),
+		    green = hex.substring(2, 4),
+		    blue = hex.substring(4);
 
 		return 'rgba(' + parseInt(red, 16) + ',' + parseInt(green, 16) + ',' + parseInt(blue, 16) +',.3)';
 	},
 
 	adjustCoordinates: function(rect,offsetToTrim){
-		var r = rect,
-			o = offsetToTrim,
-            x = o[0],
-            y = o[1];
+		var x = offsetToTrim[0],
+            y = offsetToTrim[1];
 
-		r.top -= y; r.left -= x;
+		rect.top -= y; rect.left -= x;
 		return {
-			top: r.top-y,
-			left: r.left-x,
-			width: r.width,
-			height: r.height,
-			right: r.left-x+r.width,
-			bottom: r.top-y+r.height
+			top: rect.top-y,
+			left: rect.left-x,
+			width: rect.width,
+			height: rect.height,
+			right: rect.left-x+rect.width,
+			bottom: rect.top-y+rect.height
 		};
 	},
 	
