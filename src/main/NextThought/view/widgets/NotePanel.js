@@ -217,8 +217,10 @@ Ext.define('NextThought.view.widgets.NotePanel',{
 		if(!this.isTranscriptSummary()){
 			this.frameBody.unselectable();
 			this.box.unselectable();
-			this.name.unselectable();
-			this.text.selectable();
+            if (!this.placeHolder) {
+			    this.name.unselectable();
+			    this.text.selectable();
+            }
 		}
 
 
