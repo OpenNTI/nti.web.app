@@ -82,11 +82,10 @@ Ext.define('NextThought.controller.Stream', {
     containerIdChanged: function(containerId) {
 		var widget = this.getMiniStream(),ss;
 		//make sure stream doesn't contain old stuff.
-		widget.updateStream([]);
-		widget._containerId = containerId;
         ss = this.getStoreForStream(containerId);
-        if (ss)
-            ss.load();
+		widget.setStore(ss);
+		if( ss.getProxy().url && !ss.isLoading() )
+			ss.load();
     },
 
     getStoreForStream: function(containerId) {
@@ -99,17 +98,19 @@ Ext.define('NextThought.controller.Stream', {
 			var ps,
 				link = store.getLink(containerId,RECURSIVE_STREAM);
 
+			//page exists, no link
 			if(link===null) return null;
 
+			//we don't know... reload page store
 			if(link===false) {
 				store.on('load', onReload, me, {single: true});
 				store.load();
-				return false;
 			}
 
-			ps = Ext.create('NextThought.store.Stream', { storeId:'stream-store:'+containerId, _containerId: containerId });
+			ps = stores[containerId] || Ext.create('NextThought.store.Stream',
+					{ storeId:'stream-store:'+containerId, _containerId: containerId });
+
 			ps.getProxy().url = link;
-			ps.on('load', me.onSpecificStreamLoadComplete, me);
 			stores[containerId] = ps;
 			return ps;
 		}
@@ -128,28 +129,18 @@ Ext.define('NextThought.controller.Stream', {
 		return ps? ps : buildStore();
     },
 
-    onSpecificStreamLoadComplete: function(store)
-    {
-		var k = '_containerId',
-			w = this.getMiniStream();
-
-		if( w[k]==store[k] ) {
-			w.updateStream(store.data.items);
-		}
-    },
 
     incomingChange: function(change) {
         change = ParseUtils.parseItems([change])[0];
-
         var cid = change.getItemValue('ContainerId'),
-            s = this.getStoreForStream(cid),
-            k = '_containerId',
-            w = this.getMiniStream();
+            lineage = Library.getLineage(cid);
 
-		if(s){
-			s.add(change);
-            if (w[k]==cid) w.addChange(change);
-		}
+		Ext.each(lineage,function(cid){
+			var s = this.getStoreForStream(cid);
+			if( s ) s.add(change);
+		});
+
+		this.getStreamStore().add(change);
         this.self.fireChange(change);
     },
 

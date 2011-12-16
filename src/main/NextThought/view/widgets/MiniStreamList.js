@@ -17,29 +17,35 @@ Ext.define('NextThought.view.widgets.MiniStreamList', {
 		this.updateStream();
 	},
 
-    addChange: function(change) {
-        var p = this.items.get(1);
-        if (!change.get) {
-            //dead change, probably deleted...
-            return;
-        }
-        p.add({change: change, xtype: 'miniStreamEntry'});
-    },
 
-	updateStream: function(changes){
-		var k, change, c=0, u,
+	setStore: function(newStore){
+		if( this._store ){
+			this._store.un('add', this.updateStream, this);
+			this._store.un('load', this.updateStream, this);
+		}
+
+		this._store = newStore;
+		this._store.on({
+			scope: this,
+			'add': this.updateStream,
+			'load': this.updateStream
+		});
+	},
+
+
+	updateStream: function(){
+		var c=0, u,
+			s = this._store || {each:Ext.emptyFn},
 			p = this.items.get(1),
 			f = this._filter;
 
-		p.removeAll();
+		p.removeAll(true);
 
-		for(k in changes){
-			if(!changes.hasOwnProperty(k))continue;
-			change = changes[k];
+		s.each(function(change){
 
             if (!change.get) {
-                //dead change, probably deleted...
-                continue;
+				console.debug('do we still get this?');
+                return;
             }
 
             u = change.get('Creator');
@@ -48,7 +54,7 @@ Ext.define('NextThought.view.widgets.MiniStreamList', {
 				c++;
                 p.add({change: change, xtype: 'miniStreamEntry'});
 			}
-		}
+		});
 
         if (!c) p.add({html: 'No recent activity to show'});
 	}

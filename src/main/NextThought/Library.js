@@ -232,6 +232,24 @@ Ext.define('NextThought.Library', {
         return found;
     },
 
+
+	getLineage: function(containerId){
+		var leaf = this.findLocation(containerId) || {},
+			node = leaf.location,
+			lineage = [],
+			id;
+
+		while(node){
+			id = node.getAttribute? node.getAttribute('ntiid') : null;
+			if( id )
+				lineage.push(id);
+			node = node.parentNode;
+		}
+
+		return lineage;
+	},
+
+
     _resolveBookLocation: function(book, containerId) {
         var toc = this.getToc( book.get( 'index' ) );
         if( toc.documentElement.getAttribute( 'ntiid' ) == containerId ) {
