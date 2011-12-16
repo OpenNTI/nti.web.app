@@ -122,7 +122,13 @@ Ext.define('NextThought.controller.Session', {
 							m.attemptLoginCallback(values, successCallback, failureCallback);
 						}
 						catch(e){
-							failureCallback.call(m);
+							Ext.Ajax.request({
+								url: s.host + s.data + 'logout',
+								callback: function(){
+									failureCallback.call(m);
+								}
+							});
+
 						}
 					}
                 });
