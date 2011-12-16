@@ -13,7 +13,6 @@ Ext.define('NextThought.view.content.Stream', {
 	items:[{autoScroll:true, padding: 5}],
 
 	_filter: {},
-	_stream: null,
 
 	constructor: function(){
 		this.callParent(arguments);
@@ -27,34 +26,9 @@ Ext.define('NextThought.view.content.Stream', {
     initComponent: function(){
 		this.callParent(arguments);
         this._store = Ext.getStore('Stream');
-        this._store.on('add', this.onAdd, this);
-        this._store.on('load', this.onLoad, this);
+        this._store.on('add', this.updateStream, this);
+        this._store.on('load', this.updateStream, this);
 	},
-
-    onLoad: function(store, changes) {
-        var changeSet = [];
-
-        if(Ext.isArray(changes)) changeSet = changes;
-        else store.each(function(c){changeSet.push(c);}, this);
-
-        this.onAdd(store, changeSet);
-    },
-
-    onAdd: function(store, changeSet) {
-        if (!changeSet) return;
-
-        if (!Ext.isArray(changeSet)) changeSet = [changeSet];
-		var key, c;
-        for (key in changeSet) {
-            if (!changeSet.hasOwnProperty(key)) continue;
-            c = changeSet[key];
-
-            this._stream = this._stream || [];
-            this._stream.unshift(c);
-        }
-
-        this.updateStream();
-    },
 
 	applyFilter: function(filter){
 		this._filter = filter;
@@ -62,28 +36,19 @@ Ext.define('NextThought.view.content.Stream', {
 	},
 
 	updateStream: function(){
-		var k, change, u,
-			p = this.items.get(0),
+		var p = this.items.get(0),
 			f = this._filter;
 
-		p.removeAll();
+		p.removeAll(true);
 
-		if(!this._stream || !f.shareTargets)return;
+		if(!f.shareTargets)return;
 
-		for(k in this._stream){
-			if(!this._stream.hasOwnProperty(k))continue;
-			change = this._stream[k];
-
-            if (!change.get) {
-                //dead change, probably deleted...
-                continue;
-            }
-
-			u = change.get('Creator');
+		this._store.each(function(change){
+			var u = change.get('Creator');
 
 			if(/all/i.test(f.groups) || f.shareTargets[ u ] || (f.includeMe && f.includeMe==u)){
                 p.add({change: change, xtype: 'streamEntry'});
 			}
-		}
+		});
 	}
 });
