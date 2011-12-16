@@ -58,20 +58,10 @@ Ext.define('NextThought.view.widgets.NotePanel',{
     initComponent: function(){
         var m = this,
             a = m._annotation,
-            r = m._record = m._record || a._record,
-            c = r.get('Creator') || _AppConfig.username;
+            r = m._record = m._record || a._record;
 
         m.id = this.getCmpId(r);
 
-        //TODO: WTF does this happen for?  Once a page is loaded, the component gets registered.
-        //      and on reload of the page, the component is already registered.
-        /*
-        var cmp = Ext.getCmp(m.id);
-        if (cmp) {
-            console.log('TODO: See why this is happening... Bypassing bad situation');
-            Ext.ComponentManager.unregister(cmp);
-        }
-        */
         if(/TranscriptSummary/i.test(r.getModelName())){
             m.renderTpl = m.transcriptSummaryRenderTpl;
             m.updateModel = m.updateTranscriptSummaryModel;
@@ -116,14 +106,27 @@ Ext.define('NextThought.view.widgets.NotePanel',{
     insertTranscript: function(m){
         this.frameBody.hide();
 
+		this.removeAll(true);
+
         var date = Ext.Date.format(m.get('Last Modified') || new Date(), 'M j, Y'),
-            panel = this.add({title: Ext.String.format('Chat Transcript | {0}',date)}),
+            panel = this.add({title: Ext.String.format('Chat Transcript | {0}',date), closable: true}),
             log = panel.add({ xtype: 'chat-log-view' }),
             msgs = m.get('Messages');
 
-        msg = Ext.Array.sort( msgs || [], SortModelsBy('Last Modified', ASCENDING));
+        msgs = Ext.Array.sort( msgs || [], SortModelsBy('Last Modified', ASCENDING));
 
         Ext.each(msgs, function(i){ log.addMessage(i); });
+
+		panel.on('beforeclose', function(){
+			this.box.show();
+		}, this);
+
+		panel.down('header').on('click', function(e){
+			e.preventDefault();
+			e.stopPropagation();
+			panel.close();
+			this.box.show();
+		}, this);
 
         this.frameBody.show({
             listeners: {
@@ -161,7 +164,7 @@ Ext.define('NextThought.view.widgets.NotePanel',{
                     };
 
                 me.renderData.contributors.push(o);
-                if(this.rendered){
+                if(me.rendered){
                     me.box.select('img[avatarFor='+u.getId()+']').set(o);
                 }
             });
@@ -205,17 +208,45 @@ Ext.define('NextThought.view.widgets.NotePanel',{
 
 
     afterRender: function(){
-        this.callParent(arguments);
-        if(this._record.placeHolder){
-            this.convertToPlaceHolder();
+		var me = this;
+        me.callParent(arguments);
+        if(me._record.placeHolder){
+            me.convertToPlaceHolder();
         }
-        this.el.on('click', this.click, this);
-		this.sizeChanged();
+
+		if(!this.isTranscriptSummary()){
+			this.frameBody.unselectable();
+			this.box.unselectable();
+			this.name.unselectable();
+			this.text.selectable();
+		}
+
+
+        me.el.on({
+			scope: this,
+			'click': me.click,
+			'dblclick': function(e){
+				e.preventDefault();
+				e.stopPropagation();
+
+				if(me._record.getLink('edit'))
+					me.fireEvent('action', 'edit', me);
+				return false;
+			},
+			'mouseup': function(e){
+				e.preventDefault();
+				e.stopPropagation();
+				return false;
+			}
+		});
+		me.sizeChanged();
     },
+
 
     click: function(event, target, eOpts){
         target = Ext.get(target);
         event.preventDefault();
+		event.stopPropagation();
 
         var inBox = target && this.controls && this.controls.contains(target),
             action = inBox && target.getAttribute('className');
@@ -223,10 +254,16 @@ Ext.define('NextThought.view.widgets.NotePanel',{
         if(action){
             this.fireEvent('action', action, this);
         }
-        else if(this.box.isDisplayed() && /TranscriptSummary/i.test(this._record.getModelName())){
+        else if(this.box.isDisplayed() && this.isTranscriptSummary()){
             this.fireEvent('load-transcript', this._record, this, this.box.setDisplayed(false));
         }
+		return false;
     },
+
+
+	isTranscriptSummary: function(){
+		return (/TranscriptSummary/i).test(this._record.getModelName());
+	},
 
 
     fillInUser: function(u) {
@@ -335,7 +372,8 @@ Ext.define('NextThought.view.widgets.NotePanel',{
             m.items.each(function(i){
                 m.remove(i, false);
                 i.cleanupReply(true);
-            });
+            },m);
+
             m.destroy();
         }
         else if(m.hasReplies()) {
@@ -379,7 +417,7 @@ Ext.define('NextThought.view.widgets.NotePanel',{
     sizeChanged: function(){
         var a = this._annotation;
 		try{
-        	a = (a._parentAnnotation || a);
+			a = (a._parentAnnotation || a);
 			a.fireEvent('resize');
 		}
 		catch(e){
