@@ -296,7 +296,7 @@ Ext.define('NextThought.mixins.Annotations', {
 		sortedItems = Ext.Object.getValues(tree);
 		//sort
 		sortedItems =	Ext.Array.sort(sortedItems,sorter)
-			.concat(	Ext.Array.sort(bins.Highlight,sorter));
+			.concat(	Ext.Array.sort(bins.Highlight||[],sorter));
 
 
 		contributors = this.buildAnnotations(sortedItems);
