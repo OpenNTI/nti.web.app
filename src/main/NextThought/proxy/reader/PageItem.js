@@ -28,7 +28,7 @@ Ext.define('NextThought.proxy.reader.PageItem', {
 			return result;
 		}
 		catch (e) {
-			console.error(e.stack, records);
+			console.error(e.stack||e, records);
 			return Ext.create('Ext.data.ResultSet', {
 				total  : 0,
 				count  : 0,
