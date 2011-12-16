@@ -140,9 +140,15 @@ Ext.define('NextThought.controller.Stream', {
 
     incomingChange: function(change) {
         change = ParseUtils.parseItems([change])[0];
-        var s = this.getStoreForStream(change.getItemValue('ContainerId'));
+
+        var cid = change.getItemValue('ContainerId'),
+            s = this.getStoreForStream(cid),
+            k = '_containerId',
+            w = this.getMiniStream();
+
 		if(s){
 			s.add(change);
+            if (w[k]==cid) w.addChange(change);
 		}
         this.self.fireChange(change);
     },

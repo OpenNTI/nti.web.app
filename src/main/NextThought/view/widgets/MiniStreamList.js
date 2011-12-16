@@ -17,6 +17,15 @@ Ext.define('NextThought.view.widgets.MiniStreamList', {
 		this.updateStream();
 	},
 
+    addChange: function(change) {
+        var p = this.items.get(1);
+        if (!change.get) {
+            //dead change, probably deleted...
+            return;
+        }
+        p.add({change: change, xtype: 'miniStreamEntry'});
+    },
+
 	updateStream: function(changes){
 		var k, change, c=0, u,
 			p = this.items.get(1),
