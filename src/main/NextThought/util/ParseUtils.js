@@ -1,129 +1,59 @@
 Ext.define('NextThought.util.ParseUtils',{
     alternateClassName: 'ParseUtils',
-    requires: [
-        //NextThought.model.* <- Models should be listed in controller's "models" block.
-    ],
-    statics:{
+	singleton: true,
 
-        parseItems: function(items){
-            return this.flattenBins(this.binAndParseItems(items));
-        },
+	parseItems: function(items){
+		var key, item, reader, results = [], suppl = arguments[1];
+		for(key in items){
+			if(!items.hasOwnProperty(key)) continue;
+			item = items[key] || {};
 
-        getReaderForModel: function(modelClass) {
-            this._readers = this._readers || [];
+			reader = this.getReaderForModel(item.Class);
+			if(!reader) {
+				console.error('No reader for item: ', item);
+				continue;
+			}
 
-            if (!NextThought.model.hasOwnProperty(modelClass)){
-                console.error('no model for NextThought.model.' + modelClass);
-                return;
-            }
+			if(suppl){
+				Ext.applyIf(item, suppl);
+			}
 
-            if (!this._readers[modelClass]) {
-                this._readers[modelClass] = Ext.create('NextThought.proxy.reader.Json',{
-                    model: 'NextThought.model.'+modelClass, proxy: 'nti'
-                });
-            }
-
-            return this._readers[modelClass];
-
-        },
-
-
-        iterateAndCollect: function(json) {
-            var bins = {},
-                me = this;
-
-            if (Ext.isArray(json)) {
-                Ext.each(json, function(o, key){
-                        collect(o, key);
-                    },
-                    me);
-            }
-            else {
-                for (var key in json) {
-                    if (!json.hasOwnProperty(key)) continue;
-                    collect(json[key], key);
-                }
-            }
-
-            me.binAndParseItems([], bins);
-            return bins;
-
-            function collect(o, key) {
-                if (/FriendsLists/i.test(key) || typeof(o) != 'object') return;
-                me.binItems(o, bins)
-            }
-        },
-
-
-        binItems: function(items, existingBins, applySuppl){
-            var bins = existingBins || {};
-            if (Ext.isArray(items)) {
-                Ext.each(items, function(o){
-                        addToBin(o);
-                    },
-                    this);
-            }
-            else {
-                for (var key in items) {
-                    if (!items.hasOwnProperty(key)) continue;
-                    addToBin(items[key]);
-                }
-            }
-            return bins;
-
-
-            function addToBin(o) {
-                if(!o || !o.Class) return;
-                if(!bins[o.Class]){
-                    bins[o.Class] = [];
-                }
-
-                if(applySuppl){
-                    o = Ext.applyIf(o, applySuppl);
-                }
-
-                bins[o.Class].push(o);
-            }
-        },
-
-
-        binAndParseItems: function(items, existingBins, applySuppl){
-            var bins = this.binItems(items, existingBins, applySuppl), key;
-            for(key in bins){
-                if(!bins.hasOwnProperty(key)) continue;
-
-                var reader = this.getReaderForModel(key);
-                if(!reader) {
-                    console.error('No reader for key', key, 'objects: ', bins[key]);
-                    continue;
-                }
-
-                try{
-                    bins[key] = reader.read(bins[key]).records;
-                }
-                catch(e){
-                    if(/user/i.test(key))
-                        bins[key] = UserRepository.getUser(bins[key].Username);
-                    else
-                        throw e;
-                }
-
-            }
-            return bins;
-        },
-
-
-        flattenBins: function(bins){
-            var result = [], key;
-            for(key in bins){
-                if(!bins.hasOwnProperty(key)) continue;
-                result = result.concat(bins[key]);
-            }
-            return result;
-        }
-    }
-},
-		function(){
-			window.ParseUtils = this;
+			try{
+				results.push( reader.read(item).records[0] );
+			}
+			catch(e){
+				console.error(e.stack);
+				if(/user/i.test(item.Class))
+					results.push( UserRepository.getUser(item.Username) );
+				else
+					throw e;
+			}
 		}
+
+		return results;
+	},
+
+	getReaderForModel: function(modelName) {
+		this._readers = this._readers || [];
+
+		if (!NextThought.model.hasOwnProperty(modelName)){
+			console.error('no model for NextThought.model.' + modelName);
+			return;
+		}
+
+		if (!this._readers[modelName]) {
+			this._readers[modelName] = Ext.create('reader.json',{
+				model: 'NextThought.model.'+modelName, proxy: 'nti'
+			});
+		}
+
+		return this._readers[modelName];
+
+	}
+
+
+},
+	function(){
+		window.ParseUtils = this;
+	}
 );

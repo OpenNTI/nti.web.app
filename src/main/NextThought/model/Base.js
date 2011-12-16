@@ -26,6 +26,9 @@ Ext.data.Types.LINKS = {
 
 Ext.define('NextThought.model.Base', {
     extend: 'Ext.data.Model',
+	requires: [
+		'NextThought.util.ParseUtils'
+	],
 	idProperty: 'OID',
 	fields: [
 		{ name: 'ID', type: 'string' },
@@ -35,9 +38,26 @@ Ext.define('NextThought.model.Base', {
 	],
 
 
+	constructor: function(){
+		var c = this.callParent(arguments);
+
+		if(!this.isModifiable()){
+			this.destroy = Ext.emptyFn();
+			this.save = Ext.emptyFn();
+		}
+
+		return c;
+	},
+
+
 	getLink: function(rel){
 		var ref = this.get('Links').getRelHref(rel);
 		return ref? _AppConfig.server.host + ref : null;
+	},
+
+
+	isModifiable: function(){
+		return this.getLink('edit')!==null;
 	},
 
 

@@ -2,14 +2,13 @@ Ext.define('NextThought.proxy.Rest', {
     extend: 'Ext.data.proxy.Rest',
     alias: 'proxy.nti',
     requires: [
-		'NextThought.proxy.reader.JsonCollection',
 		'NextThought.proxy.writer.Json'
 	],
 
-//	reader: {
-//		type: 'nti-collection',
-//		root: 'Items'
-//	},
+	reader: {
+		type: 'nti',
+		root: 'Items'
+	},
 	writer: {
 		type: 'nti'
 	},

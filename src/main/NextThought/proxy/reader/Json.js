@@ -3,68 +3,60 @@ Ext.define('NextThought.proxy.reader.Json', {
     alias : 'reader.nti',
 	initialConfig: {root: 'Items'},
 
-	constructor: function() {
-		this.callParent(arguments);
-	},
-	
-	
 	readRecords: function(data) {
-        if(!this.model){
-            Ext.Error.raise('The model is undefined. Did we forget to require it somewhere?');
-        }
+		var records = [], key, items = data.Items || {}, item,
+			result, i, record, modelName;
 
+		for(key in items){
+			if(!items.hasOwnProperty(key))continue;
+			item = items[key];
 
-        var me = this,
-			//mName = me.model.$className,
-            records = [], i = me.root===false? data : data.Items,
-			key;
-
-		// console.debug('read records:',mName,
-		// 'this:', me,
-		// 'root:', me.root,
-		// 'i', i,
-		// 'args:',arguments);
-
-		
-		if(Ext.isArray(data) || me.hasId){
-			return this.callParent(arguments);
-		}
-		//special case where data returns to us after saving without an array
-		else if (!i) {
-			return this.callParent([data]);
-		}
-		
-		if (me.hasContainerId){
-			records = this.getNestedRecords(i);
-		}
-		else {
-			for (key in i) {
-				if (!i.hasOwnProperty(key)) continue;
-				records = records.concat(this.getNestedRecords(i[key]));
+			if(typeof(item)==='string'){
+				console.warn('IGNORING: Received string item at key:', key, item);
+				continue;
 			}
-		}	
-		
-//		console.debug('read records result:',mName, records);
 
-        try {
-		    return this.callParent([records]);
-        }
-        catch (err) {
-            return Ext.create('Ext.data.ResultSet', {
-                total  : 0,
-                count  : 0,
-                records: [],
-                success: true
-            });
-        }
-	},
-	
-	getNestedRecords: function(collection) {
-		var result = [], key;
-		for (key in collection) {
-			if (!collection.hasOwnProperty(key) || typeof(collection[key]) != 'object') continue;
-			result.push(collection[key]);
+			if(!item.Class || !(item.Class in NextThought.model)){
+				console.warn('IGNORING: Received object that does not match a model');
+				continue;
+			}
+
+			records.push(items[key]);
 		}
-		return result;
+
+		try {
+			result = this.callParent([records]);
+
+			i = result.records.length-1;
+			for(; i>=0; i--){
+				record = result.records[i];
+				try{
+					modelName = 'NextThought.model.'+record.get('Class');
+					if(record.modelName != modelName){
+//						console.debug('converting model:',modelName, 'from:', record.modelName);
+						result.records[i] = Ext.create(
+								modelName,
+								Ext.clone(record.raw),
+								record.getId(),
+								record.raw
+						);
+					}
+				}
+				catch(e1){
+					console.error(record, 'No model for record?');
+				}
+			}
+
+			return result;
+		}
+		catch (e) {
+			console.error(e.stack||e, records);
+			return Ext.create('Ext.data.ResultSet', {
+				total  : 0,
+				count  : 0,
+				records: [],
+				success: false
+			});
+		}
 	}
  });

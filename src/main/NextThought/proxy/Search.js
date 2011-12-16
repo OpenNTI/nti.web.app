@@ -3,8 +3,6 @@ Ext.define('NextThought.proxy.Search', {
     alias: 'proxy.search',
 	requires: [
 		'NextThought.proxy.reader.Json',
-		'NextThought.proxy.reader.JsonCollection',
-		'NextThought.proxy.reader.PageItem',
 		'NextThought.proxy.writer.Json'
 	],
 

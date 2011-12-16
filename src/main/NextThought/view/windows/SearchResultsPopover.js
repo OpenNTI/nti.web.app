@@ -56,7 +56,7 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
 			autoLoad: false,
 			remoteFilter: true,
 			model: 'NextThought.model.Hit',
-			proxy: { url: url, type: 'search', reader: 'nti-pageitem' },
+			proxy: { url: url, type: 'search', reader: 'nti' },
 			listeners: { scope: this, load: onLoad }
 		});
 	},

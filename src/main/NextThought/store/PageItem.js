@@ -1,7 +1,7 @@
 Ext.define('NextThought.store.PageItem',{
     extend: 'Ext.data.Store',
 	requires: [
-		'NextThought.proxy.reader.PageItem'
+		'NextThought.proxy.reader.Json'
 	],
 	model: 'NextThought.model.GenericObject',
 	autoLoad: false,
@@ -10,7 +10,7 @@ Ext.define('NextThought.store.PageItem',{
 	proxy: {
 		type: 'rest',
 		reader: {
-			type: 'nti-pageitem',
+			type: 'nti',
 			root: 'Items'
 		},
 		headers: {

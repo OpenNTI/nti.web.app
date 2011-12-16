@@ -83,7 +83,7 @@ Ext.define('NextThought.view.widgets.ItemNavigator', {
 			proxy: {
 				type: 'search',
 				url: _AppConfig.service.getUserDataSearchURL(),
-				reader: 'nti-pageitem'
+				reader: 'nti'
 			}
 		});
 

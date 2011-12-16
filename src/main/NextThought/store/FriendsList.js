@@ -1,8 +1,5 @@
 Ext.define('NextThought.store.FriendsList',{
     extend: 'Ext.data.Store',
-	requires: [
-		'NextThought.proxy.reader.JsonCollection'
-	],
 
     model: 'NextThought.model.FriendsList',
 
@@ -15,7 +12,7 @@ Ext.define('NextThought.store.FriendsList',{
     proxy: {
         type: 'rest',
         reader: {
-            type: 'nti-collection',
+            type: 'nti',
             root: 'Items'
         },
 		headers: {

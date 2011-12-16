@@ -7,12 +7,7 @@ Ext.define('NextThought.cache.UserRepository', {
 
     constructor: function() {
         Ext.apply(this,{
-            _store: null,
-            _task: {
-                scope: this,
-                run: this.refresh,
-                interval: 1200000
-            }
+            _store: null
         });
     },
 
@@ -44,7 +39,7 @@ Ext.define('NextThought.cache.UserRepository', {
         //console.debug('updateUser',ignoreNewInstance, refreshedUser.getId(), u, refreshedUser);
 
         if (u && (!ignoreNewInstance || !u.equal(refreshedUser))) {
-            if (u.getId() == _AppConfig.userObject.getId() ){
+            if (_AppConfig.userObject && u.getId() == _AppConfig.userObject.getId() ){
                 if(u !== _AppConfig.userObject)
                     _AppConfig.userObject.fireEvent('changed', refreshedUser);
                 _AppConfig.userObject = refreshedUser;
@@ -84,14 +79,14 @@ Ext.define('NextThought.cache.UserRepository', {
                     scope: this,
                     failure: function(){
                         l--; //dec length so we still hit our finish state when a failure occurs.
-                        if (l == 0) finish();
+                        if (l === 0) finish();
                     },
                     success: function(u){
                         //s.add(u); not necessary since the user model calls update
                         result.push(u);
 
                         //our list of results is as expected, finish
-                        if (result.length = l) {
+                        if (result.length == l) {
                             finish();
                         }
                     }
@@ -128,10 +123,11 @@ Ext.define('NextThought.cache.UserRepository', {
 
 
     _makeRequest: function(username, callbacks) {
-        var result = null, u;
+        var result = null,
+			url = _AppConfig.service.getUserSearchURL(username);
 
         Ext.Ajax.request({
-            url: _AppConfig.service.getUserSearchURL(username),
+            url: url,
             scope: this,
             async: !!callbacks,
             callback: function userRepository_makeRequestCallback(o,success,r)
@@ -143,8 +139,7 @@ Ext.define('NextThought.cache.UserRepository', {
                 }
 
                 var json = Ext.decode(r.responseText),
-                    bins = ParseUtils.binAndParseItems(json.Items, undefined, {ignoreIfExists: true}),
-                    list = bins ? bins.User || bins.Community : [];
+                    list = ParseUtils.parseItems(json.Items, {ignoreIfExists: true});
 
                 if(list && list.length>1){
                     console.warn('many matching users: "', username, '"', list);
@@ -158,7 +153,7 @@ Ext.define('NextThought.cache.UserRepository', {
 
                 if (!result) {
                     if (callbacks && callbacks.failure) callbacks.failure.call(callbacks.scope || this);
-                    console.error('result is null', username, bins, url, json);
+                    console.error('result is null', username, list, url, json);
                 }
             }
         });
