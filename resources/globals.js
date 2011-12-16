@@ -1,6 +1,8 @@
 /* DATASERVER 2 Constants*/
 RECURSIVE_STREAM = 'RecursiveStream';
 USER_GENERATED_DATA = 'UserGeneratedData';
+USER_SEARCH_REL = 'UserSearch';
+USER_GENERATED_DATA_SEARCH_REL = 'UGDSearch';
 
 ASCENDING = {};
 DESCENDING = {};

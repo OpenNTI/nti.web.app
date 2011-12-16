@@ -17,14 +17,23 @@ Ext.define('NextThought.model.Service', {
 	},
 
 	getUserSearchURL: function(username){
-		return _AppConfig.server.host + '/dataserver/UserSearch/'+(username||'');
+		var w = this.getWorkspace('Global') || {},
+			l = this.getLinkFrom(w.Links||[], USER_SEARCH_REL);
+		if(!l)
+			return null;
+
+		return _AppConfig.server.host + this._forceTrailingSlash(l) + (username?username:'');
 	},
 
 
 	getUserDataSearchURL: function(){
-		var h = _AppConfig.server.host,
-			u = _AppConfig.username;
-		return h+'/dataserver/users/' +u+ '/Search/RecursiveUserGeneratedData/';
+		var w = this.getCollection('Pages') || {},
+			l = this.getLinkFrom(w.Links||[], USER_GENERATED_DATA_SEARCH_REL);
+
+		if(!l)
+			return null;
+
+		return _AppConfig.server.host + this._forceTrailingSlash(l);
 	},
 
 
@@ -40,6 +49,26 @@ Ext.define('NextThought.model.Service', {
 			u = _AppConfig.username;
 
 		return  h+'/dataserver/users/'+u+'/quizresults/'+ntiid;
+	},
+
+
+	_forceTrailingSlash: function(uri){
+		if(uri.charAt(uri.length-1)==='/')
+			return uri;
+
+		return uri + '/';
+	},
+
+
+	getLinkFrom: function(links, rel){
+		var i=links.length-1, o;
+		for(;i>=0; i--){
+			o = links[i] || {};
+			if(o.rel == rel)
+				return o.href;
+		}
+
+		return null;
 	},
 
 
