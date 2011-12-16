@@ -274,6 +274,7 @@ Ext.define('NextThought.mixins.Annotations', {
 			k = 'Last Modified',
 			tree = {}, b,
 			sortedItems,
+			sorter = this.buildAnchorSorter(),
             foundBins = false;
 
 		if (!this._containerId) return;
@@ -292,9 +293,11 @@ Ext.define('NextThought.mixins.Annotations', {
 
 		this.prunePlaceholders(tree);
 
-		sortedItems = Ext.Object.getValues(tree).concat(bins.Highlight);
+		sortedItems = Ext.Object.getValues(tree);
 		//sort
-		Ext.Array.sort(sortedItems,this.buildAnchorSorter());
+		sortedItems =	Ext.Array.sort(sortedItems,sorter)
+			.concat(	Ext.Array.sort(bins.Highlight,sorter));
+
 
 		contributors = this.buildAnnotations(sortedItems);
 
