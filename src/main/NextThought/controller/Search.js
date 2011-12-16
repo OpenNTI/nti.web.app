@@ -61,7 +61,7 @@ Ext.define('NextThought.controller.Search', {
 
 	selectDown: function(field) {
 		var popover = this.getSearchPopover();
-		if(popover){
+		if(popover && popover.isVisible()){
 			popover.select(false);
 		}
 		else{
@@ -77,14 +77,14 @@ Ext.define('NextThought.controller.Search', {
 	chooseSelection: function() {
 		var popover = this.getSearchPopover();
 
-		if(popover) popover.chooseSelection();
+		if(popover && popover.isVisible()) popover.chooseSelection();
 	},
 
 	clearSearch: function(){
 		var popover = this.getSearchPopover();
 
 		if(popover){
-			popover.destroy();
+			popover.hide().reset();
 		}
 
 		this.getViewport().fireEvent('cleared-search');

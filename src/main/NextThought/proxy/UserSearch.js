@@ -29,7 +29,8 @@ Ext.define('NextThought.proxy.UserSearch', {
 		catch(e){
 			console.error(e.message, e);
 		}
-		console.error('Error searching for users, try again later', arguments);
+		if(resp.status != 404)
+			console.error('Error searching for users, try again later', arguments);
     }
 	
 });

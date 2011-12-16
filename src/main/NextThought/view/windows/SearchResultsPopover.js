@@ -16,6 +16,11 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
         border: false,
         defaults: {border: false}
     },
+	items: [
+		{hidden: true, title: 'Content'},
+		{hidden: true, title: 'User Generated'},
+		{hidden: true, html: '<b>No search results</b>', border: false, margin: 10}
+	],
 
     initComponent: function(config) {
         var me = this,
@@ -66,19 +71,27 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
 
 
     reset: function(){
-        this.removeAll();
-        this.add(
-            {hidden: true, title: 'Content'},
-            {hidden: true, title: 'User Generated'},
-            {hidden: true, html: '<b>No search results</b>', border: false, margin: 10}
-        );
+        var i = this.items,
+			a = i.get(0),
+			b = i.get(1);
+		this._filledBoxes = {};
+
+		a.removeAll();
+		b.removeAll();
+		i.each(function(o){o.hide();}, this);
     },
 
     performSearch: function(value) {
+		var token = {};
         this.reset();
         this._searchVal = value;
+		this._searchToken = token;
         this._updateCount = 2;
-		Ext.each(this.stores, function(s){s.filters.clear();s.filter('search',value);});
+		Ext.each(this.stores, function(s){
+			s.filters.clear();
+			s.filter('search',value);
+			s._searchToken = token;
+		});
     },
 
     render: function() {
@@ -130,6 +143,12 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
     },
 
     updateContents: function(store, hits, success, opts, panelIndex) {
+
+		if(store._searchToken !== this._searchToken){
+			console.log('previous search completed after another already started');
+			return;
+		}
+
         if(!this){
             console.debug('"this" has been deleted');
             return;

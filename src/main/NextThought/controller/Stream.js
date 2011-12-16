@@ -80,11 +80,11 @@ Ext.define('NextThought.controller.Stream', {
     },
 
     containerIdChanged: function(containerId) {
-		var widget = this.getMiniStream();
+		var widget = this.getMiniStream(),ss;
 		//make sure stream doesn't contain old stuff.
 		widget.updateStream([]);
 		widget._containerId = containerId;
-        var ss = this.getStoreForStream(containerId);
+        ss = this.getStoreForStream(containerId);
         if (ss)
             ss.load();
     },

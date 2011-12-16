@@ -64,6 +64,7 @@ Ext.define('NextThought.proxy.Rest', {
 		catch(e){
 			console.error(e.message, e);
 		}
-        console.error('Error getting data:', arguments);
+		if(response.status != 404)
+			console.error('Error getting data:', arguments);
     }
 });
