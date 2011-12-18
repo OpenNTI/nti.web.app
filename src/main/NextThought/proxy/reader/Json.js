@@ -5,7 +5,7 @@ Ext.define('NextThought.proxy.reader.Json', {
 
 	readRecords: function(data) {
 		var records = [], key,
-			items = data.Items || {}, item,
+			items = data.Items, item,
 			mimeType = data.MimeType,
 			result, i, record, modelName;
 

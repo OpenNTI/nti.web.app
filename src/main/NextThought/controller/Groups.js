@@ -41,7 +41,7 @@ Ext.define('NextThought.controller.Groups', {
 
             'groups-mode-container dataview':{
                 'itemdblclick':function(a, rec){
-                    //if(rec.get('Creator')==_AppConfig.username)
+                    if(rec.isModifiable())
                         Ext.create('NextThought.view.windows.GroupEditorWindow',{record: rec}).show();
                 },
                 'selectionchange': function(a, sel){

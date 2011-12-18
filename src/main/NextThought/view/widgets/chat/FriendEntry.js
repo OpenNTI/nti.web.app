@@ -52,8 +52,7 @@ Ext.define('NextThought.view.widgets.chat.FriendEntry', {
 
     _setupMenu: function() {
         //Only do this the entry is not me
-        if (_AppConfig.userObject.getId() == this.user.getId()
-            || this.noMenu) return;
+        if (_AppConfig.userObject.getId() == this.user.getId() || this.noMenu) return;
 
         this._menu = Ext.create('Ext.menu.Menu', {items: this._buildMenu()});
 

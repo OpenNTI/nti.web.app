@@ -176,7 +176,7 @@ Ext.define('NextThought.view.widgets.NotePanel',{
     updateModel: function(m){
         var me = this,
             s = m.get('Creator'),
-            owner = _AppConfig.username == s,
+            owner = m.isModifiable(),
             t = AnnotationUtils.compileBodyContent(m);
 
         me._record = m;
@@ -231,7 +231,7 @@ Ext.define('NextThought.view.widgets.NotePanel',{
 				e.preventDefault();
 				e.stopPropagation();
 
-				if(me._record.getLink('edit'))
+				if(me._record.isModifiable())
 					me.fireEvent('action', 'edit', me);
 				return false;
 			},
@@ -271,7 +271,7 @@ Ext.define('NextThought.view.widgets.NotePanel',{
     fillInUser: function(u) {
         var name = u.get('alias') || u.get('Username'),
             i = u.get('avatarURL'),
-            owner = u.get('Username')==_AppConfig.username;
+            owner = u.isModifiable();
 
         if(this.rendered){
             this.icon.set({src: i});

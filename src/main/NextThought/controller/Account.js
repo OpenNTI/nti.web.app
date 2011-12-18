@@ -36,9 +36,24 @@ Ext.define('NextThought.controller.Account', {
 
 
     accountActionButton: function(btn){
-        var win = btn.up('fullscreen-window'),
+        var me = this,
+			win = btn.up('fullscreen-window'),
             form= win.down('account-form'),
-            values = form.getForm().getFieldValues();
+            values = form.getForm().getFieldValues(false),
+			u = _AppConfig.userObject,
+			fire = false,
+			key;
+
+		function callback(record, op){
+			win.close();
+			if(!op.success){
+				console.error('FAILURE:',arguments);
+			}
+			else if(fire){
+				me.getSessionInfo().fireEvent('password-changed',
+						u.get('Username'),values.password);
+			}
+		}
 
         if(btn.actionName!='save'){
             win.close();
@@ -49,9 +64,6 @@ Ext.define('NextThought.controller.Account', {
             return;
         }
 
-        var fire = false,
-            key,
-            u = _AppConfig.userObject;
         if(values.password){
             fire = true;
             u.fields.add(new Ext.data.Field({name: 'password', type:'string'}));
@@ -60,18 +72,7 @@ Ext.define('NextThought.controller.Account', {
             if(!values.hasOwnProperty(key)) continue;
             u.set(key, values[key]);
         }
-        u.save({
-            scope: this,
-            failure: function(){
-                console.error('FAILURE:',arguments);
-            },
-			success:function(newRecord,operation){
-                win.close();
-                if(fire){
-                    this.getSessionInfo().fireEvent('password-changed', u.get('Username'),values.password);
-                }
-            }
-        });
+        u.save({callback: callback});
     },
 
 
@@ -81,7 +82,13 @@ Ext.define('NextThought.controller.Account', {
         popover.show();
 
         u.set('lastLoginTime', new Date());
-        u.save();
+        u.save({
+			callback: function(newRecord, op){
+				if(!op.success){
+					console.warn('FAILED: Saving user', op);
+				}
+			}
+		});
     },
 
 

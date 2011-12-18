@@ -10,7 +10,7 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
             _cmp: component,
             _menu: null,
             _record: record,
-            _isMine: record.get('Creator') == _AppConfig.username || record.phantom
+            _isMine: record.isModifiable()
         });
 
 		var me = this,
@@ -129,19 +129,15 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 	
 	
 	_buildMenu: function(items) {
-		//if(!this._isMine)return null;
 		var m = this;
 
 		if(items){
 			if(items.length) items.push('-');
 			items.push({
-				text: 'Share With',
+				text: m._isMine? 'Share With' : 'Get Info',
 				handler: function(){
 					m.getCmp().fireEvent('share-with',m._record);
 				}
-//			},{
-//				text: 'Get Shared Info',
-//				handler: function(){}
 			});
 		}
 		return Ext.create('Ext.menu.Menu',{items: items});

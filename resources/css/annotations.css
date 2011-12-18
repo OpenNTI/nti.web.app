@@ -50,11 +50,9 @@
 .x-nti-note span.controls span:hover{ opacity: 1; }
 
 .x-nti-note .controls span.edit,
-.x-nti-note .controls span.share,
 .x-nti-note .controls span.delete { display: none; }
 
 .x-nti-note.owner .controls span.edit,
-.x-nti-note.owner .controls span.share,
 .x-nti-note.owner .controls span.delete { display: inline-block; }
 
 .x-nti-note-replies { clear: both; padding-left: 15px; }
