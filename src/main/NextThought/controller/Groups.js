@@ -16,7 +16,7 @@ Ext.define('NextThought.controller.Groups', {
     ],
 
     init: function() {
-		this.application.on('session-ready', this.loadGroups, this);
+		this.application.on('session-ready', this.onSessionReady, this);
 
         this.control({
             'groups-mode-container toolbar button[createItem]':{
@@ -59,10 +59,10 @@ Ext.define('NextThought.controller.Groups', {
     },
 
 
-	loadGroups: function(){
+	onSessionReady: function(){
 		var store = this.getFriendsListStore(),
 			mime = (new store.model()).mimeType,
-			coll = _AppConfig.service.getCollectionFor(mime,'FriendsLists') || {};
+			coll = _AppConfig.service.getCollectionFor(mime,'FriendsLists');
 		store.proxy.url = _AppConfig.server.host+coll.href;
 		store.load();
 	},

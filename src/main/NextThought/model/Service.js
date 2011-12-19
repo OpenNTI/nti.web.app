@@ -139,23 +139,23 @@ Ext.define('NextThought.model.Service', {
 	},
 
 
-	getCollection: function(title){
-			var workspace = this.getWorkspace(_AppConfig.username) || {},
-				items = workspace.Items || [],
-				i, item, collection = null;
+	getCollection: function(title, workspaceName){
+		var workspace = this.getWorkspace(workspaceName || _AppConfig.username) || {},
+			items = workspace.Items || [],
+			i, item, collection = null;
 
-			for(i in items){
-				if(!items.hasOwnProperty(i))continue;
-				item = items[i];
+		for(i in items){
+			if(!items.hasOwnProperty(i))continue;
+			item = items[i];
 
-				if(item.Title == title){
-					collection = item;
-					break;
-				}
-
+			if(item.Title == title){
+				collection = item;
+				break;
 			}
 
-			return Ext.clone( collection );
 		}
+
+		return Ext.clone( collection );
+	}
 
 });

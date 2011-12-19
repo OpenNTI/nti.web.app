@@ -23,6 +23,10 @@ Ext.define('NextThought.controller.Classroom', {
 		'InstructorInfo'
 	],
 
+	stores: [
+		'Providers'
+	],
+
 	refs:[
 		{ ref: 'classroomContainer', selector: 'classroom-mode-container' },
 		{ ref: 'classroom', selector: 'classroom-content' },
@@ -33,6 +37,8 @@ Ext.define('NextThought.controller.Classroom', {
 
 	init: function(){
 		this.rooms = {};
+
+		this.application.on('session-ready', this.onSessionReady, this);
 
 		this.control({
 			'classroom-browser':{
@@ -63,6 +69,13 @@ Ext.define('NextThought.controller.Classroom', {
 
 		},{});
     },
+
+	onSessionReady: function(){
+		var store = this.getProvidersStore(),
+			coll = _AppConfig.service.getCollection('Classes','OU');
+		store.proxy.url = _AppConfig.server.host+coll.href;
+		store.load();
+	},
 
 	isClassroom: function(roomOrMessageInfo){
 		if(!roomOrMessageInfo)return false;
