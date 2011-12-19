@@ -94,7 +94,7 @@ Ext.define('NextThought.view.widgets.NotePanel',{
 
     convertToPlaceHolder: function(){
         this.placeHolder = true;
-        this.text.update(arguments[0]||'Place holder for deleted note');
+        this.text.update('');//'Place holder for deleted note');
         this.time.remove();
         this.name.remove();
         this.icon.remove();
