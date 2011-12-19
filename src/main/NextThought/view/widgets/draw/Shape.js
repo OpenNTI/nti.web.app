@@ -16,9 +16,6 @@ Ext.define('NextThought.view.widgets.draw.Shape', {
         };
 
         this.callParent([Ext.apply(config,c)]);
-        this.on('render', function(s){
-            s.el.dom.setAttribute('vector-effect','non-scaling-stroke');
-        });
     },
 
 

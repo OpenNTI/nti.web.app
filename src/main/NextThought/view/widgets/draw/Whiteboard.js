@@ -294,9 +294,11 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 
 			t = Ext.create('Ext.draw.Matrix',t.a,t.b,t.c,t.d,t.tx,t.ty).split();
 
+			shape.strokeWidth = (shape.strokeWidth*w) || 3;
+
 			o = Ext.widget(this.getSpriteClass(shape.Class, shape.sides),{
 				sides: shape.sides,
-				'stroke-width': shape.strokeWidth || 3,
+				'stroke-width': shape.strokeWidth,
 				stroke: p.toString(),
 				fill: c.toString(),
 				translate: {
@@ -338,6 +340,10 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 					if(!o.transform.hasOwnProperty(k))continue;
 					if(typeof o.transform[k] == 'number')
 						o.transform[k] /= w;
+				}
+
+				if('strokeWidth' in o){
+					o.strokeWidth /= w;
 				}
 
 				shapes.push(o);
