@@ -1,4 +1,3 @@
-
 Ext.define('NextThought.model.QuizQuestion', {
     extend: 'NextThought.model.Base',
     fields: [
@@ -8,8 +7,5 @@ Ext.define('NextThought.model.QuizQuestion', {
     ],
     proxy: {
         type: 'memory'
-    },
-    getModelName: function() {
-        return 'QuizQuestion';
     }
 });

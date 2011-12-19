@@ -5,8 +5,5 @@ Ext.define('NextThought.model.UnresolvedFriend', {
     fields: [
         { name: 'Username', type: 'string' },
         { name: 'avatarURL', type: 'string' }
-    ],
-    getModelName: function() {
-        return 'Unresolved Friend';
-    }
+    ]
 });

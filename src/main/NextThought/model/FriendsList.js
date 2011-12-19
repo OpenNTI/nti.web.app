@@ -3,14 +3,7 @@ Ext.define('NextThought.model.FriendsList', {
 	requires: [
 		'NextThought.proxy.Rest'
 	],
-	mimeType: 'application/vnd.nextthought.friendslist',
 	fields: [
-		{ name: 'Class', type: 'string', defaultValue: 'FriendsList' },
-		{ name: 'ContainerId', type: 'string', defaultValue: 'FriendsLists'},
-		{ name: 'CreatedTime', type: 'date', dateFormat: 'timestamp' },
-		{ name: 'Creator', type: 'string' },
-        { name: 'NTIID', type: 'string' },
-		{ name: 'MimeType', type: 'string' },
 		{ name: 'Username', type: 'string' },
 		{ name: 'alias', type: 'string' },
 		{ name: 'avatarURL', type: 'string' },
@@ -22,10 +15,6 @@ Ext.define('NextThought.model.FriendsList', {
 		type: 'nti',
 		model: 'NextThought.model.FriendsList'
 	},
-
-	getModelName: function() {
-		return 'Group';
-    },
 
     destroy: function() {
         this.set('friends', []);

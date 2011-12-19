@@ -8,7 +8,6 @@ Ext.define(	'NextThought.model.User', {
     fields: [
         { name: 'lastLoginTime', type: 'date', dateFormat: 'timestamp' },
         { name: 'NotificationCount', type: 'int' },
-        { name: 'Class', type: 'string', defaultValue: 'User' },
         { name: 'Username', type: 'string' },
         { name: 'Presence', type: 'string' },
         { name: 'alias', type: 'string' },
@@ -27,9 +26,5 @@ Ext.define(	'NextThought.model.User', {
     constructor: function() {
         this.callParent(arguments);
         UserRepository.updateUser(this);
-    },
-
-    getModelName: function() {
-        return 'User';
     }
 });

@@ -4,8 +4,6 @@ Ext.define('NextThought.model.Hit', {
 		'NextThought.proxy.Rest'
 	],
 	fields: [
-		{ name: 'Class', type: 'string', defaultValue: 'Hit' },
-		{ name: 'ContainerId', type: 'string'},
 		{ name: 'Snippet', type: 'string' },
 		{ name: 'TargetOID', type: 'string' },
 		{ name: 'Title', type: 'string' },
@@ -14,8 +12,5 @@ Ext.define('NextThought.model.Hit', {
 	proxy: {
 		type: 'nti',
 		model: 'NextThought.model.Hit'
-	},
-	getModelName: function() {
-		return 'Hit';
 	}
 });

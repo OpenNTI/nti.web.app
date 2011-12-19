@@ -30,16 +30,40 @@ Ext.define('NextThought.model.Base', {
 		'NextThought.util.ParseUtils'
 	],
 	idProperty: 'OID',
+	mimeType: 'application/vnd.nextthought',
 	fields: [
+		{ name: 'Class', type: 'string' },
+		{ name: 'ContainerId', type: 'string' },
+		{ name: 'CreatedTime', type: 'date', dateFormat: 'timestamp', defaultValue: new Date() },
+		{ name: 'Creator', type: 'string' },
 		{ name: 'ID', type: 'string' },
 		{ name: 'OID', type: 'string' },
 		{ name: 'Last Modified', type: 'date', dateFormat: 'timestamp', defaultValue: new Date() },
-		{ name: 'Links', type: 'links', defaultValue: [] }
+		{ name: 'Links', type: 'links', defaultValue: [] },
+		{ name: 'MimeType', type: 'string' },
+		{ name: 'NTIID', type: 'string' }
 	],
 
 
 	constructor: function(){
-		var c = this.callParent(arguments);
+		var c, f = this.fields,
+			cName = this.self.getName().split('.').pop(),
+			cField = f.getByKey('Class');
+
+		if(!cField.defaultValue)
+			cField.defaultValue = cName;
+
+		if(!(new RegExp(cName,'i')).test(this.mimeType)){
+			this.mimeType += '.'+cName.toLowerCase();
+		}
+		else{
+			console.warn('using self declared mimeTime:', this.mimeType);
+		}
+
+		f.getByKey('MimeType').defaultValue = this.mimeType;
+
+
+		c = this.callParent(arguments);
 
 		if(!this.isModifiable()){
 			this.destroy = Ext.emptyFn();
@@ -47,6 +71,11 @@ Ext.define('NextThought.model.Base', {
 		}
 
 		return c;
+	},
+
+
+	getModelName: function() {
+		return this.fields.getByKey('Class').defaultValue;
 	},
 
 
@@ -126,13 +155,10 @@ Ext.data.Types.USERLIST = {
 
             if(v) Ext.each(v, function(o){
                 var p =
-                    typeof(o)=='string'
-                        ? o
-                        : o.get
-                            ? o.get('Username')
-                            : o.Username
-                                ? o.Username
-                                : null;
+                    typeof(o)=='string' ?
+						o : o.get ?
+							o.get('Username') : o.Username ?
+								o.Username : null;
                 if(!p)
                     console.warn("WARNING: Could not handle Object: ", o, a);
                 else  {
