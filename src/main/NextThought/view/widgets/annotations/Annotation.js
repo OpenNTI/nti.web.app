@@ -26,13 +26,14 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 		
 		d = Ext.query('.document-nibs',container);
 		me._div = d.length>0? d[0] : me.createElement('div',container,'document-nibs unselectable');
-		me._img = me.createImage(icon?icon:Ext.BLANK_IMAGE_URL,me._div,
-				'action',
-				'width: 17px; background: yellow; height: 17px; position: absolute;'+(me._isVisible?'':'visibility:hidden;'));
-		me._img._annotation = me;
-		//me._menu = me._buildMenu();
-		Ext.get(me._img).on('click', me.onClick, me);
 
+		if(icon){
+			me._img = me.createImage(icon,me._div,
+						'action',
+						'width: 17px; background: yellow; height: 17px; position: absolute;'+(me._isVisible?'':'visibility:hidden;'));
+			me._img._annotation = me;
+			Ext.get(me._img).on('click', me.onClick, me);
+		}
         me.onResize = b;
 	},
 
@@ -48,7 +49,8 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 		var me = this;
 		me._cmp.un('resize', me.onResize, me);
 		Ext.EventManager.removeResizeListener(me.onResize, me);
-		Ext.get(me._img).remove();
+		if(me._img)
+			Ext.get(me._img).remove();
 		if(me._menu){
 			me._menu.destroy();
 			delete me._menu;
@@ -94,9 +96,11 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 	},
 	
 	visibilityChanged: function(show){
-		// console.debug('vis change');
 		var i = Ext.get(this._img);
-		if(show) i.show(); else i.hide();
+		if(i){
+			if(show) i.show();
+			else i.hide();
+		}
 	},
 	
 	onResize : function(){

@@ -174,6 +174,7 @@ Ext.define('NextThought.util.AnnotationUtils',{
 		holder.set('Last Modified', note.get('Last Modified'));
 
 		holder.placeHolder = true;
+		delete holder.phantom;
 
 		return holder;
 	},

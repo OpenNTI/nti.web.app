@@ -11,7 +11,9 @@ Ext.define( 'NextThought.view.widgets.annotations.Note', {
             _originalPadding: 0
         });
 
-        this.callParent([record, container, component,'resources/images/charms/note-white.png']);
+        this.callParent([record, container, component,
+			record.isModifiable()?
+					'resources/images/charms/note-white.png' : null]);
 
         var me = this,
             a = Ext.get(Ext.query('a[name=' + record.get('anchorPoint') + ']')[0]),
@@ -25,9 +27,9 @@ Ext.define( 'NextThought.view.widgets.annotations.Note', {
 
         me._anchorNode = a;
         me._noteContainer = c;
-        me._originalPadding = a.dom.originalPadding!==undefined
-            ? a.dom.originalPadding
-            : a.getPadding('b');
+        me._originalPadding =
+				a.dom.originalPadding!==undefined ?
+						a.dom.originalPadding : a.getPadding('b');
         a.dom.originalPadding = me._originalPadding;
 
         // console.debug('original padding:',me._originalPadding);
@@ -45,7 +47,7 @@ Ext.define( 'NextThought.view.widgets.annotations.Note', {
     visibilityChanged: function(show){
         var me = this, c = Ext.get(me.noteDiv);
         me.callParent(arguments);
-        show? c.show() : c.hide();
+        if(show) c.show(); else c.hide();
         if(me.noteCmp)
             me.noteCmp.doLayout();
         // me.onResize();
