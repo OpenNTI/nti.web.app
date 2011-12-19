@@ -1,8 +1,6 @@
 Ext.define('NextThought.model.Highlight', {
     extend: 'NextThought.model.Base',
-    requires: [
-		'NextThought.proxy.Rest'
-	],
+
 	fields: [
 		{ name: 'startXpath', type: 'string' },
 		{ name: 'startAnchor', type: 'string' },
@@ -17,10 +15,6 @@ Ext.define('NextThought.model.Highlight', {
 		{ name: 'text', type: 'string' },
 		{ name: 'sharedWith', type: 'UserList'}
 	],
-	proxy: {
-		type: 'nti',
-		model: 'NextThought.model.Highlight'
-	},
 
 	getAnchorForSort: function(){
 		return this.get('startAnchor');

@@ -1,8 +1,6 @@
 Ext.define('NextThought.model.Note', {
     extend: 'NextThought.model.Base',
-	requires: [
-		'NextThought.proxy.Rest'
-	],
+
 	fields: [
 		{ name: 'inReplyTo', type: 'string' },
 		{ name: 'references', type: 'auto', defaultValue: [] },
@@ -13,10 +11,6 @@ Ext.define('NextThought.model.Note', {
 		{ name: 'body', type: 'auto' },
 		{ name: 'sharedWith', type: 'UserList' }
 	],
-	proxy: {
-		type: 'nti',
-		model: 'NextThought.model.Note'
-	},
 
 	getAnchorForSort: function(){
 		return this.get('anchorPoint');

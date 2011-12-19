@@ -27,10 +27,12 @@ Ext.data.Types.LINKS = {
 Ext.define('NextThought.model.Base', {
     extend: 'Ext.data.Model',
 	requires: [
-		'NextThought.util.ParseUtils'
+		'NextThought.util.ParseUtils',
+		'NextThought.proxy.Rest'
 	],
 	idProperty: 'OID',
 	mimeType: 'application/vnd.nextthought',
+	proxy: { type: 'nti' },
 	fields: [
 		{ name: 'Class', type: 'string' },
 		{ name: 'ContainerId', type: 'string' },
@@ -47,7 +49,7 @@ Ext.define('NextThought.model.Base', {
 
 
 	constructor: function(){
-		var c, f = this.fields,
+		var c, p, f = this.fields,
 			cName = this.self.getName().split('.').pop(),
 			cField = f.getByKey('Class');
 
@@ -62,7 +64,6 @@ Ext.define('NextThought.model.Base', {
 		}
 
 		f.getByKey('MimeType').defaultValue = this.mimeType;
-
 
 		c = this.callParent(arguments);
 

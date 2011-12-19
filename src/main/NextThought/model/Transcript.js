@@ -1,9 +1,7 @@
 Ext.define('NextThought.model.Transcript', {
     extend: 'NextThought.model.Base',
-    requires: [
-        'NextThought.proxy.Rest'
-    ],
-    fields: [
+
+	fields: [
         { name: 'RoomInfo', type: 'singleItem' },
         { name: 'Messages', type: 'arrayItem' },
         { name: 'Contributors', type: 'auto' }

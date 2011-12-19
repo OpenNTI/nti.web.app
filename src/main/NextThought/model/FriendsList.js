@@ -1,8 +1,6 @@
 Ext.define('NextThought.model.FriendsList', {
     extend: 'NextThought.model.Base',
-	requires: [
-		'NextThought.proxy.Rest'
-	],
+
 	fields: [
 		{ name: 'Username', type: 'string' },
 		{ name: 'alias', type: 'string' },
@@ -11,10 +9,6 @@ Ext.define('NextThought.model.FriendsList', {
 		{ name: 'href', type: 'string' },
 		{ name: 'realname', type: 'string' }
 	],
-	proxy: {
-		type: 'nti',
-		model: 'NextThought.model.FriendsList'
-	},
 
     destroy: function() {
         this.set('friends', []);

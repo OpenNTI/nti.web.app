@@ -1,9 +1,11 @@
 Ext.define('NextThought.model.Service', {
     extend: 'NextThought.model.Base',
+	idProperty: 'Class',
     fields: [
         { name: 'Items', type: 'auto', defaultValue: {Items:[]}},
         { name: 'Class', type: 'string', defaultValue: 'Service'}
     ],
+
 
 	constructor: function(doc, user){
 		var r = this.callParent([doc]);

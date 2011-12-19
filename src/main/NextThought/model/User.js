@@ -1,10 +1,6 @@
 Ext.define(	'NextThought.model.User', {
     extend: 'NextThought.model.Base',
-    requires: [
-		'NextThought.proxy.Rest'
-	],
     idProperty: 'Username',
-
     fields: [
         { name: 'lastLoginTime', type: 'date', dateFormat: 'timestamp' },
         { name: 'NotificationCount', type: 'int' },
@@ -18,10 +14,6 @@ Ext.define(	'NextThought.model.User', {
         { name: 'following', type: 'UserList' },
         { name: 'Communities', type: 'UserList' }
     ],
-    proxy: {
-		type: 'nti',
-		model: 'NextThought.model.User'
-    },
 
     constructor: function() {
         this.callParent(arguments);
