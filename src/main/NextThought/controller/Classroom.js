@@ -73,6 +73,10 @@ Ext.define('NextThought.controller.Classroom', {
 	onSessionReady: function(){
 		var store = this.getProvidersStore(),
 			coll = _AppConfig.service.getCollection('Classes','OU');
+		if(!coll){
+			console.warn('NO classroom workspace!');
+			return;
+		}
 		store.proxy.url = _AppConfig.server.host+coll.href;
 		store.load();
 	},
