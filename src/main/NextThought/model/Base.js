@@ -41,7 +41,8 @@ Ext.define('NextThought.model.Base', {
 		{ name: 'Last Modified', type: 'date', dateFormat: 'timestamp', defaultValue: new Date() },
 		{ name: 'Links', type: 'links', defaultValue: [] },
 		{ name: 'MimeType', type: 'string' },
-		{ name: 'NTIID', type: 'string' }
+		{ name: 'NTIID', type: 'string' },
+		{ name: 'accepts', type: 'auto', defaultValue: [] }
 	],
 
 

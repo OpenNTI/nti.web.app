@@ -17,6 +17,12 @@ Ext.define('NextThought.controller.Classroom', {
         'Viewport'
     ],
 
+	models: [
+		'ClassInfo',
+		'SectionInfo',
+		'InstructorInfo'
+	],
+
 	refs:[
 		{ ref: 'classroomContainer', selector: 'classroom-mode-container' },
 		{ ref: 'classroom', selector: 'classroom-content' },
