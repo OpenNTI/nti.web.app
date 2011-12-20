@@ -456,8 +456,11 @@ Ext.define('NextThought.mixins.Annotations', {
 			if( range && !range.collapsed ) {
 				this.addHighlight(range, e.getXY());
 			}
+			this.clearSelection();
 		}
-		catch(er){ this.clearSelection(); }
+		catch(er){
+			console.warn(er, er.stack);
+		}
 	},
 
 

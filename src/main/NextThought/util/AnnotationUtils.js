@@ -541,7 +541,7 @@ Ext.define('NextThought.util.AnnotationUtils',{
 
 
 	getDOMTreeId: function(node) {
-		var parentNode = node,
+		var parentNode = node||null,
 			previousSibling,
 			parents = 0,
 			sibs = 0;
