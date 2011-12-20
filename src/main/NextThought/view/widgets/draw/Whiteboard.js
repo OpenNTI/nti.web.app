@@ -15,63 +15,6 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 	cls: 'whiteboard',
 	layout:'fit',
 	items: { xtype: 'draw', viewBox: false},
-	dockedItems: [{
-		dock: 'top',
-		xtype: 'toolbar',
-		cls: 'whiteboard-toolbar',
-		defaults: {enableToggle: true, toggleGroup:'draw'},
-		items: [
-			{	iconCls: 'tool rect',		tooltip: 'polygon',		shape: 'polygon',
-				menu: {
-				items: {
-					xtype: 'buttongroup',
-					title: 'polygon options',
-					columns: 1,
-					items:[ {
-						xtype: 'numberfield',
-						fieldLabel: 'Sides',
-						name: 'sides',
-						value: 4,
-						minValue: 3
-					} ]
-			} } },
-
-			{	iconCls: 'tool circle',		tooltip: 'circle',		shape: 'ellipse' },
-			{	iconCls: 'tool line',		tooltip: 'line',		shape: 'line'},
-			{	iconCls: 'tool path',		tooltip: 'path',		shape: 'path'},
-            //TODO - disable text for demo until it works
-			{	iconCls: 'tool text',		tooltip: 'text box',	shape: 'text',   disabled: true },
-
-			'-',
-
-			{	iconCls: 'tool delete',		tooltip: 'delete',		action: 'delete', text: 'remove selection', toggleGroup: null, enableToggle: false },
-			{	iconCls: 'tool clear',		tooltip: 'clear',		action: 'clear', text: 'clear', toggleGroup: null, enableToggle: false },
-
-			'->',
-			{
-				xtype: 'numberfield',
-				fieldLabel: 'Stroke',
-				name: 'stroke-width',
-				width: 100,
-				labelWidth: 40,
-				value: 1,
-				minValue: 0
-			},{
-				action: 'pick-stroke-color',
-				iconCls: 'color', tooltip: 'Stroke Color',
-				enableToggle: false,
-				toggleGroup: null,
-				menu: {xtype: 'colormenu', colorFor: 'stoke'}
-			},'-',{
-				text: 'Fill',
-				action: 'pick-fill-color',
-				iconCls: 'color', tooltip: 'Fill Color',
-				enableToggle: false,
-				toggleGroup: null,
-				menu: {xtype: 'colormenu', colorFor: 'fill'}
-			}
-		]
-	}],
 
 	shapeTypeMap: {
 		ellipse: 'ellipse',
@@ -84,7 +27,65 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 	initComponent: function(){
 		this.callParent(arguments);
 		this.selectedColor = {};
-	},
+
+        this.addDocked(
+            {
+                dock: 'top',
+                xtype: 'toolbar',
+                cls: 'whiteboard-toolbar',
+                items: [
+                    {	iconCls: 'tool hand',		tooltip: 'hand', enableToggle: true, toggleGroup:'draw', pressed: true, allowDepress: false },
+                    {	iconCls: 'tool rect',		tooltip: 'polygon',		shape: 'polygon', enableToggle: true, toggleGroup:'draw', allowDepress: false,
+                        menu: {
+                            items: {
+                                xtype: 'buttongroup',
+                                title: 'polygon options',
+                                columns: 1,
+                                items:[ {
+                                    xtype: 'numberfield',
+                                    fieldLabel: 'Sides',
+                                    name: 'sides',
+                                    value: 4,
+                                    minValue: 3
+                                } ]
+                            } } },
+
+                    {	iconCls: 'tool circle',		tooltip: 'circle',		shape: 'ellipse', enableToggle: true, toggleGroup:'draw', allowDepress: false},
+                    {	iconCls: 'tool line',		tooltip: 'line',		shape: 'line', enableToggle: true, toggleGroup:'draw', allowDepress: false},
+                    {	iconCls: 'tool path',		tooltip: 'path',		shape: 'path', enableToggle: true, toggleGroup:'draw', allowDepress: false},
+                    {	iconCls: 'tool text',		tooltip: 'text box',	shape: 'text', disabled: true, enableToggle: true, toggleGroup:'draw', allowDepress: false},
+
+                    '-',
+
+                    {	iconCls: 'tool delete',		tooltip: 'delete',		action: 'delete', text: 'remove selection', whiteboardRef: this },
+                    {	iconCls: 'tool clear',		tooltip: 'clear',		action: 'clear', text: 'clear', whiteboardRef: this },
+
+                    '->',
+                    {
+                        xtype: 'numberfield',
+                        fieldLabel: 'Stroke',
+                        name: 'stroke-width',
+                        width: 100,
+                        whiteboardRef: this,
+                        labelWidth: 40,
+                        value: 1,
+                        minValue: 0
+                    },{
+                        action: 'pick-stroke-color',
+                        whiteboardRef: this,
+                        iconCls: 'color', tooltip: 'Stroke Color',
+                        menu: {xtype: 'colormenu', colorFor: 'stoke'}
+                    },'-',{
+                        text: 'Fill',
+                        action: 'pick-fill-color',
+                        whiteboardRef: this,
+                        iconCls: 'color', tooltip: 'Fill Color',
+                        menu: {xtype: 'colormenu', colorFor: 'fill'}
+                    }
+                ]
+            }
+        );
+    },
 
 
 	afterRender: function(){
@@ -151,7 +152,7 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 	addShape: function(shape, x,y, strokeWidth, sides){
         var sp = Ext.widget('sprite-'+this.shapeTypeMap[shape],
 				this.toolDefaults(shape, x, y, strokeWidth, sides));
-
+        sp.whiteboardRef = this;
 		this.getSurface().add(sp).show(true);
 
 		this.relay(sp,'click');
@@ -168,7 +169,7 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 				function(e){
 					e.stopPropagation();
 					e.preventDefault();
-					this.fireEvent('sprite-'+event,sprite);
+					this.fireEvent('sprite-'+event,sprite, this);
 				},
 				this);
 	},

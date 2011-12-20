@@ -7,13 +7,6 @@ Ext.define('NextThought.controller.Whiteboard', {
 		'widgets.draw.Whiteboard'
 	],
 
-	refs: [
-		{ ref: 'whiteboard', selector: 'whiteboard' },
-		{ ref: 'strokeWidthField', selector: 'whiteboard toolbar numberfield[name=stroke-width]'},
-		{ ref: 'polygonSidesField', selector: 'whiteboard toolbar numberfield[name=sides]'}
-	],
-
-
 	init: function() {
 
 
@@ -39,19 +32,18 @@ Ext.define('NextThought.controller.Whiteboard', {
 
 			'whiteboard button[action=delete]':{ 'click': this.removeSelectedSprite },
 			'whiteboard button[action=clear]':{ 'click': this.clearWhiteboard },
-
+/*
             'whiteboard toolbar numberfield':
             {
                 'change': this.polygonSidesChanged
             },
-
+*/
 			'whiteboard': {
 				'sprite-click': this.selectSprite,
 				'sprite-dblclick': this.editSprite
 			}
 
 		},{});
-		wb = this;
 	},
 
 	test: function(){
@@ -59,6 +51,11 @@ Ext.define('NextThought.controller.Whiteboard', {
 		this.win.maximize();
 		this.win.down('whiteboard').loadFrom('test.json');
 	},
+
+
+    getWhiteboardFrom: function(event) {
+        return Ext.getCmp(event.getTarget('div.whiteboard', null, true).id);
+    },
 
 	showWhiteboardWindow: function(){
 		if (!this.win)
@@ -76,21 +73,25 @@ Ext.define('NextThought.controller.Whiteboard', {
 
 
 	colorChangedFill: function(picker, color){
-		this.getWhiteboard().setColor('fill', color);
+        picker.whiteboardRef.setColor('fill', color);
 	},
 
 
 	colorChangedStroke: function(picker, color){
-		this.getWhiteboard().setColor('stroke', color);
+		picker.whiteboardRef.setColor('stroke', color);
 	},
 
-	removeSelectedSprite:function(){ this.getWhiteboard().removeSelection(); },
+	removeSelectedSprite:function(btn){
+        btn.whiteboardRef.removeSelection();
+    },
 
-	clearWhiteboard:function(){ this.getWhiteboard().removeAll(); },
+	clearWhiteboard:function(btn){
+        btn.whiteboardRef.removeAll();
+    },
 
 
-	selectSprite: function(sprite){
-		this.getWhiteboard().select(sprite);
+	selectSprite: function(sprite, wb){
+		wb.select(sprite);
 	},
 
 	editSprite: function(sprite){
@@ -98,22 +99,22 @@ Ext.define('NextThought.controller.Whiteboard', {
 	},
 
 
-	relativizeXY: function(xy){
-		this.surfacePosition = this.surfacePosition || this.getWhiteboard().down('draw').getPosition();
-		var p = this.surfacePosition;
+	relativizeXY: function(xy, wb){
+		var p = wb.down('draw').getPosition();
+
 		xy[0]-=p[0];
 		xy[1]-=p[1];
 		return xy;
 	},
-
-    polygonSidesChanged: function() {
+/*
+    polygonSidesChanged: function(btn) {
         //TODO: Jonathan, please check this out.  Changing the numberfield causes the button to become
         //unpressed, so subsequent shapes won't be drawn.  ExtJS weirdness?  I reset it here.
-        this.getWhiteboard().down('toolbar button[shape=polygon]').pressed = true;
+        btn.up('whiteboard').down('toolbar button[shape=polygon]').pressed = true;
     },
-
-	getActiveTool: function(){
-		var t = this.getWhiteboard().down('toolbar button[pressed]');
+*/
+	getActiveTool: function(wb){
+		var t = wb.down('toolbar button[pressed]');
 		if(t){
 			t = t.shape;
 		}
@@ -121,8 +122,9 @@ Ext.define('NextThought.controller.Whiteboard', {
 		return t;
 	},
 
-	surfaceClicked: function() {//remove selection
-		this.getWhiteboard().select();
+	surfaceClicked: function(e) {//remove selection
+
+		this.getWhiteboardFrom(e).select();
 	},
 
 	surfaceMouseUp: function(e){
@@ -140,13 +142,16 @@ Ext.define('NextThought.controller.Whiteboard', {
 
 	surfaceMouseMove: function(e){
 		if(!this.sprite)return;
-		var op = this.sprite.initalPoint,
-			dt = this.relativizeXY(e.getXY()),
-			p = op.concat(dt);
+
+		var wb = this.getWhiteboardFrom(e),
+            op = this.sprite.initalPoint,
+			dt = this.relativizeXY(e.getXY(), wb),
+			p = op.concat(dt),
+            m;
 
 		dt.push(op, length.apply(this,p), degrees.apply(this,p));
 
-		var m = this.spriteModifier[this.sprite.getShape()];
+		m = this.spriteModifier[this.sprite.getShape()];
 		if(!m){
 			return;
 		}
@@ -167,13 +172,14 @@ Ext.define('NextThought.controller.Whiteboard', {
 	},
 
 	surfaceMouseDown: function(e){
-		var t = this.getActiveTool(),
-			xy = this.relativizeXY(e.getXY()),
-			sw = this.getStrokeWidthField().getValue(),
-			sd = this.getPolygonSidesField().getValue();
+        var wb = this.getWhiteboardFrom(e),
+		    t = this.getActiveTool(wb),
+			xy = this.relativizeXY(e.getXY(), wb),
+			sw = wb.down('numberfield[name=stroke-width]').getValue(),
+			sd = wb.down('numberfield[name=sides]').getValue();
 
 		if(t) {
-			this.sprite = this.getWhiteboard().addShape(t, xy[0],xy[1], sw, sd);
+			this.sprite = wb.addShape(t, xy[0],xy[1], sw, sd);
 			this.sprite.initalPoint = xy;
 		}
 	},
@@ -196,7 +202,7 @@ Ext.define('NextThought.controller.Whiteboard', {
 	},
 
 
-	modifyEllipse: function(x,y,o,m,d){
+	modifyEllipse: function(x,y,o,m){
 		this.sprite.setAttributes({ scale: { x: m, y: m }},true);
 	}
 
