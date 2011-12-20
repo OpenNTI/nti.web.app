@@ -271,12 +271,12 @@ Ext.define('NextThought.mixins.Annotations', {
 
 	objectsLoaded: function(bins) {
 		var me = this,
-			contributors = {},
+			contributors,
 			k = 'Last Modified',
 			tree = {}, b,
 			sortedItems,
 			sorter = this.buildAnchorSorter(),
-            foundBins = false;
+            foundBins;
 
 		if (!this._containerId) return;
 
@@ -339,7 +339,7 @@ Ext.define('NextThought.mixins.Annotations', {
 				c = _a < _b ? -1:1;
 			}
 			return c;
-		}
+		};
 	},
 
 

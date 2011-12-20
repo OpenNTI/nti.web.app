@@ -19,12 +19,12 @@ Ext.define('NextThought.util.AnnotationUtils',{
     getBodyTextOnly: function(obj) {
         var txt = obj.get('text'),
             bdy = obj.get('body'),
-            o,
+            o, i,
             text = [];
 
         if (txt) return txt;
 
-        for (var i in bdy) {
+        for (i in bdy) {
             if(!bdy.hasOwnProperty(i)) continue;
             o = bdy[i];
             if(typeof(o) == 'string'){
@@ -38,12 +38,12 @@ Ext.define('NextThought.util.AnnotationUtils',{
 	 * Build the body text with the various components mixed in.
 	 *
 	 * The callbacks need to define the scope and the two callback methods:
-	 * 		getThumbnail(canvas, guid)
-	 * 		getClickHandler(guid)
+	 *		getThumbnail(canvas, guid)
+	 *		getClickHandler(guid)
 	 *
-	 * 	If no callbacks are passed in, default behaviour will take place, which is to
-	 * 	generate a thumbnail and no click handler.  Pass in callbacks if you want to
-	 * 	do something like preserve the canvas for use later.
+	 *	If no callbacks are passed in, default behaviour will take place, which is to
+	 *	generate a thumbnail and no click handler.  Pass in callbacks if you want to
+	 *	do something like preserve the canvas for use later.
 	 *
 	 * @param record (Must have a body[] field)
 	 * @param callbacks
@@ -97,7 +97,7 @@ Ext.define('NextThought.util.AnnotationUtils',{
 	},
 
 	getPathTo: function(element) {
-		var nodeName = element.nodeName;
+		var nodeName = element.nodeName, siblings, sibling, len, i=0, ix=0;
 
 		if (element.id && !/ext\-|a\d+|math/i.test(element.id))
 			return 'id("'+element.id+'")';
@@ -108,17 +108,17 @@ Ext.define('NextThought.util.AnnotationUtils',{
 			nodeName = 'text()';
 		}
 
-		var i=0,
-				ix= 0,
-				siblings= element.parentNode.childNodes,
-				len = siblings.length;
+
+		siblings= element.parentNode.childNodes;
+		len = siblings.length;
 
 		for (; i<len; i++) {
-			var sibling = siblings[i];
-			if (sibling===element)
-				return this.getPathTo(element.parentNode)+'/'+nodeName+'['+(ix+1)+']';
+			sibling = siblings[i];
 			if (sibling.nodeName==element.nodeName)
-				ix++;
+				ix = ix+1;
+
+			if (sibling===element)
+				return this.getPathTo(element.parentNode)+'/'+nodeName+'['+ix+']';
 		}
 	},
 
@@ -153,7 +153,7 @@ Ext.define('NextThought.util.AnnotationUtils',{
 	 */
 	replyToPlaceHolder: function(note){
 		var holder = Ext.create('NextThought.model.Note'),
-				refs = note.get('references') || [];
+			refs = note.get('references') || [];
 
 		if(refs.length){
 			refs = Ext.Array.clone(refs);
@@ -170,7 +170,6 @@ Ext.define('NextThought.util.AnnotationUtils',{
 		holder.set('ContainerId', note.get('ContainerId'));
 		holder.set('OID', note.get('inReplyTo'));
 		holder.set('references', refs);
-		holder.set('text','Place Holder for deleted note');
 		holder.set('Last Modified', note.get('Last Modified'));
 
 		holder.placeHolder = true;
@@ -181,14 +180,16 @@ Ext.define('NextThought.util.AnnotationUtils',{
 
 
 	selectionToNote: function(range) {
-		var note = Ext.create('NextThought.model.Note');
-		var node = range.startContainer || range.endContainer;
-		var blockNode = this.findBlockParent(node);
+		var note = Ext.create('NextThought.model.Note'),
+			node = range.startContainer || range.endContainer,
+			blockNode = this.findBlockParent(node),
+			anchorNode, pageOffsets;
 
 		if (!blockNode) throw 'No block node found.';
 
-		var anchorNode = this.getNextAnchorInDOM(blockNode);
-		var pageOffsets = Ext.get(anchorNode).getOffsetsTo(Ext.get('NTIContent'));
+		anchorNode = this.getNextAnchorInDOM(blockNode);
+		pageOffsets = Ext.get(anchorNode).getOffsetsTo(Ext.get('NTIContent'));
+
 		note.set('anchorPoint', anchorNode.getAttribute('name'));
 		note.set('top', pageOffsets[0]);
 		note.set('left', pageOffsets[1]);
@@ -199,7 +200,7 @@ Ext.define('NextThought.util.AnnotationUtils',{
 	getNextAnchorInDOM: function(node) {
 		var anchor = null;
 		Ext.each(Ext.query('A[name]'), function(a){
-			if (a.compareDocumentPosition(node) == 2) { //2 == precedes
+			if (a.compareDocumentPosition(node) === 2) { //2 == precedes
 				anchor = a;
 				return false;
 			}
@@ -237,10 +238,9 @@ Ext.define('NextThought.util.AnnotationUtils',{
 
 
 	buildRangeFromRecord: function(r) {
-		var endElement = this.getNodeFromXPath(r.get('endXpath'));
-		var startElement = this.getNodeFromXPath(r.get('startXpath'));
-
-		var range = document.createRange();
+		var endElement = this.getNodeFromXPath(r.get('endXpath')),
+			startElement = this.getNodeFromXPath(r.get('startXpath')),
+			range = document.createRange();
 
 		try {
 			range.setEnd(endElement ? endElement : startElement, r.get('endOffset'));
@@ -263,8 +263,7 @@ Ext.define('NextThought.util.AnnotationUtils',{
 
 	getNextAnchor: function(a) {
 		var all = Ext.query('a[name]'),
-				result = null,
-				anchor = a;
+			result = null;
 
 		Ext.each(all, function(e, i){
 			if (e==a) {
@@ -280,22 +279,24 @@ Ext.define('NextThought.util.AnnotationUtils',{
 	rangeFromAnchors: function(r) {
 		//TODO: this still isn't qorking quite right, if the start/end anchor are the same but have diff text nodes.
 		var startAnchor = r.get('startAnchor'),
-				endAnchor = r.get('endAnchor'),
-				startHighlightedFullText = r.get('startHighlightedFullText'),
-				endHighlightedFullText = r.get('endHighlightedFullText'),
-				resultRange = document.createRange(),
-				container = null;
+			endAnchor = r.get('endAnchor'),
+			startHighlightedFullText = r.get('startHighlightedFullText'),
+			endHighlightedFullText = r.get('endHighlightedFullText'),
+			resultRange = document.createRange(),
+			container,
+			text, texts,
+			tempRange;
 
 		if(!endHighlightedFullText) {
 			endHighlightedFullText = startHighlightedFullText;
 		}
 
 		//resolve anchors to their actual DOM nodes
-		startAnchor = this.getAnchor(startAnchor)
+		startAnchor = this.getAnchor(startAnchor);
 		endAnchor = endAnchor ? this.getAnchor(endAnchor) : this.getNextAnchor(startAnchor);
 
 		try {
-			var tempRange = document.createRange();
+			tempRange = document.createRange();
 			tempRange.setStart(startAnchor, 0);
 			tempRange.setEnd(endAnchor, 0);
 			container = tempRange.commonAncestorContainer;
@@ -305,9 +306,8 @@ Ext.define('NextThought.util.AnnotationUtils',{
 			container = Ext.get(startAnchor).up('.page-contents').dom;
 		}
 
-		var text,
-				texts = document.evaluate(  './/text()', container,
-						null, XPathResult.ORDERED_NODE_ITERATOR_TYPE, null);
+		texts = document.evaluate( './/text()',
+				container, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE, null);
 
 		while(resultRange.collapsed && (text = texts.iterateNext())){
 			if (text.nodeValue==startHighlightedFullText) {
@@ -337,10 +337,10 @@ Ext.define('NextThought.util.AnnotationUtils',{
 		}
 
 		var highlight = Ext.create('NextThought.model.Highlight'),
-				startNode = range.startContainer,
-				endNode = range.endContainer,
-				startAnchor = this.ascendToAnchor(startNode),
-				endAnchor = this.ascendToAnchor(endNode);
+			startNode = range.startContainer,
+			endNode = range.endContainer,
+			startAnchor = this.ascendToAnchor(startNode),
+			endAnchor = this.ascendToAnchor(endNode);
 
 		highlight.set('text', range.toString());
 
@@ -364,11 +364,11 @@ Ext.define('NextThought.util.AnnotationUtils',{
 
 
 	_fixHighlightEndpoints: function(endNode, startNode, highlight) {
+		var end = null,
+			workingNode = endNode,
+			fullText, endOffset, startOffset;
+
 		if (!this.isTextNode(endNode) && !this.isMathNode(endNode) && !this.isImageNode(endNode)) {
-
-			var end = null;
-			var workingNode = endNode;
-
 			while(!end) {
 				workingNode = (workingNode.previousSibling) ? workingNode.previousSibling : workingNode.parentNode;
 				end = this.findLastHighlightableNodeFromChildren(workingNode, endNode);
@@ -383,9 +383,9 @@ Ext.define('NextThought.util.AnnotationUtils',{
 		}
 
 		//now we have our start and end, let's see if we span anchors
-		var fullText = this.getNodeTextValue(startNode),
-				endOffset = highlight.get('endOffset'),
-				startOffset = highlight.get('startOffset');
+		fullText = this.getNodeTextValue(startNode);
+		endOffset = highlight.get('endOffset');
+		startOffset = highlight.get('startOffset');
 
 		if (!highlight.get('endAnchor')) {
 			//same anchor, this effects our snippets, there is no end snippet
@@ -400,44 +400,47 @@ Ext.define('NextThought.util.AnnotationUtils',{
 
 			fullText = this.getNodeTextValue(endNode);
 			highlight.set('endHighlightedText',
-					(endOffset != 0 && endNode.nodeValue != null)
-							? (fullText != endNode.nodeValue)
-							? fullText
-							: endNode.nodeValue.substring(0, endOffset)
+					(endOffset !== 0 && endNode.nodeValue !== null) ?
+							(fullText != endNode.nodeValue) ?
+									fullText : endNode.nodeValue.substring(0, endOffset)
 							: highlight.get('endHighlightedFullText'));
 		}
 	},
 
 
 	ascendToAnchor: function(textNode) {
-		var parentNode = textNode;
+		var parentNode = textNode,
+			previousSibling,
+			name,
+			anchorFromChildrenOrNull;
+
 		if (this.isTextNode(textNode)) {
-			textNode = textNode.parentNode;
+			parentNode = textNode.parentNode;
 		}
 
-		while (parentNode != null) {
+		while (parentNode !== null) {
 			if (parentNode.nodeName == 'A') {
-				var name = this.anchorNameOrNull(parentNode);
-				if (name != null) {
+				name = this.anchorNameOrNull(parentNode);
+				if (name !== null) {
 					//if we found a name, return it, otherwise allow this to continue.
 					return name;
 				}
 			}
 
 			//Look at all prior siblings at this level looking for an anchor
-			var previousSibling = parentNode.previousSibling;
-			while(previousSibling != null) {
+			previousSibling = parentNode.previousSibling;
+			while(previousSibling !== null) {
 				if (previousSibling.nodeName == 'A') {
 					name = this.anchorNameOrNull(previousSibling);
-					if (name != null) {
+					if (name !== null) {
 						//if we found a name, return it, otherwise allow this to continue.
 						return name;
 					}
 
 				}
 				//look into the children of this previous node
-				var anchorFromChildrenOrNull = this.findLastAnchorFromChildren(previousSibling);
-				if (anchorFromChildrenOrNull == null) {
+				anchorFromChildrenOrNull = this.findLastAnchorFromChildren(previousSibling);
+				if (anchorFromChildrenOrNull === null) {
 					previousSibling = previousSibling.previousSibling;
 				}
 				else {
@@ -453,7 +456,7 @@ Ext.define('NextThought.util.AnnotationUtils',{
 
 
 	anchorNameOrNull: function(node) {
-		if (node.name != null && node.name.trim().length > 0) {
+		if (node.name !== null && node.name.trim().length > 0) {
 			return node.name;
 		}
 		else {
@@ -463,25 +466,27 @@ Ext.define('NextThought.util.AnnotationUtils',{
 
 
 	findLastAnchorFromChildren: function(node) {
-		var children = node.childNodes;
-		var anchorFound = null;
+		var children = node.childNodes,
+			anchorFound = null,
+			i=0, y=0, child, grandchildren,
+			grandchild, newAnchorFound;
 
-		if (node.nodeName == 'A') {
+		if (node.nodeName === 'A') {
 			anchorFound = this.anchorNameOrNull(node);
 		}
 
-		if (children != null) {
-			for(var i = 0; i < children.length; i++) {
-				var child = children[i];
+		if (children !== null) {
+			for(; i < children.length; i++) {
+				child = children[i];
 				if (child.nodeName == 'A') {
 					anchorFound = this.anchorNameOrNull(child);
 				}
-				var grandchildren = child.childNodes;
-				if (grandchildren != null) {
-					for (var y = 0; y < grandchildren.length; y++) {
-						var grandchild = grandchildren[y];
-						var newAnchorFound = this.findLastAnchorFromChildren(grandchild);
-						if (newAnchorFound != null) {
+				grandchildren = child.childNodes;
+				if (grandchildren !== null) {
+					for (; y < grandchildren.length; y++) {
+						grandchild = grandchildren[y];
+						newAnchorFound = this.findLastAnchorFromChildren(grandchild);
+						if (newAnchorFound !== null) {
 							anchorFound = newAnchorFound;
 						}
 					}
@@ -503,24 +508,25 @@ Ext.define('NextThought.util.AnnotationUtils',{
 
 
 	isTextNode: function(node) {
-		return (node && node.nodeValue != null);
+		return (node && node.nodeValue !== null);
 	},
 
 
 	isImageNode: function(node) {
-		return (node && node.nodeName == "IMG");
+		return (node && node.nodeName === 'IMG');
 	},
 
 
 	getNodeTextValue: function(node) {
-		var math = this.climbToMathNode(node);
-		var img = this.digForImageNode(node);
-		if (math != null) {
+		var math = this.climbToMathNode(node),
+			img = this.digForImageNode(node);
+
+		if (math !== null) {
 			//we have a math parent node
 			//TODO - using the id here is fragile because changing content can break this when saved
 			return this.getDOMTreeId(math);
 		}
-		else if (img != null) {
+		else if (img !== null) {
 			return this.getDOMTreeId(img);
 		}
 		else if (this.isTextNode(node)) {
@@ -535,16 +541,17 @@ Ext.define('NextThought.util.AnnotationUtils',{
 
 
 	getDOMTreeId: function(node) {
-		var parentNode = node;
-		var parents = 0;
-		var sibs = 0;
+		var parentNode = node,
+			previousSibling,
+			parents = 0,
+			sibs = 0;
 
-		while (parentNode != null) {
+		while (parentNode !== null) {
 			parents++;
 
 			//Look at all prior siblings at this level looking for an anchor
-			var previousSibling = parentNode.previousSibling;
-			while(previousSibling != null) {
+			previousSibling = parentNode.previousSibling;
+			while(previousSibling !== null) {
 				sibs++;
 
 				previousSibling = previousSibling.previousSibling;
@@ -562,13 +569,14 @@ Ext.define('NextThought.util.AnnotationUtils',{
 			return n;
 		}
 
-		var child = n.firstChild;
+		var child = n.firstChild, next;
+
 		while (child) {
 			if (this.isImageNode(child)) {
 				return child;
 			}
-			var next = child.nextSibling;
-			if (next == null) {
+			next = child.nextSibling;
+			if (next === null) {
 				child = child.firstChild;
 			}
 			else {
@@ -579,14 +587,15 @@ Ext.define('NextThought.util.AnnotationUtils',{
 
 
 	climbToMathNode: function(node) {
-		var topMathNode = null;
+		var topMathNode = null,
+			parent;
 
 		if (this.isMathNode(node)) {
 			topMathNode = node;
 		}
 
-		var parent = node.parentNode;
-		while (parent != null) {
+		parent = node.parentNode;
+		while (parent !== null) {
 			if (this.isMathNode(parent)) {
 				topMathNode = parent;
 			}
@@ -598,32 +607,33 @@ Ext.define('NextThought.util.AnnotationUtils',{
 
 
 	findLastHighlightableNodeFromChildren: function(node, stopNode) {
-		var children = node.childNodes;
-		var last = null;
+		var children = node.childNodes,
+			last = null, child, grandchildren, grandchild, x,
+			i = 0, y = 0;
 
-		if ((this.isTextNode(node) && node.nodeValue.trim() != "") || this.isMathNode(node) || this.isImageNode(node)) {
+		if ((this.isTextNode(node) && node.nodeValue.trim() !== '') || this.isMathNode(node) || this.isImageNode(node)) {
 			last = node;
 		}
 
-		if (children != null) {
-			for(var i = 0; i < children.length; i++) {
-				var child = children[i];
+		if (children !== null) {
+			for(; i < children.length; i++) {
+				child = children[i];
 
 				if (child == stopNode) {
 					return last;
 				}
 
-				if ((this.isTextNode(child) && child.nodeValue.trim() != "") || this.isMathNode(child) || this.isImageNode(child)) {
+				if ((this.isTextNode(child) && child.nodeValue.trim() !== '') || this.isMathNode(child) || this.isImageNode(child)) {
 					last = child;
 				}
-				var grandchildren = child.childNodes;
-				if (grandchildren != null) {
-					for (var y = 0; y < grandchildren.length; y++) {
-						var grandchild = grandchildren[y];
+				grandchildren = child.childNodes;
+				if (grandchildren !== null) {
+					for (; y < grandchildren.length; y++) {
+						grandchild = grandchildren[y];
 						if (grandchild == stopNode) {
 							return last;
 						}
-						var x = this.findLastHighlightableNodeFromChildren(grandchild, stopNode);
+						x = this.findLastHighlightableNodeFromChildren(grandchild, stopNode);
 						if (x) { last = x;}
 					}
 				}
