@@ -18,7 +18,7 @@ var io = {
         socket: {
             disconnectSync: function(){}
         }
-    }}
+    };}
 };
 
 
