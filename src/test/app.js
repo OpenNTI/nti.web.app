@@ -25,6 +25,10 @@ var io = {
 var mockService = {
 	"Items": [
 		{
+			"Items": [],
+			"Title": "test@nextthought.com"
+		},
+		{
 			"Items": [
 				{
 					"href": "/Library/library.json",
@@ -66,7 +70,7 @@ Ext.application({
     launch: function() {
         NextThought.phantomRender = true;
 
-		_AppConfig.service = Ext.create('NextThought.model.Service', mockService);
+		_AppConfig.service = Ext.create('NextThought.model.Service', mockService, _AppConfig.username);
 
 		applyHooks();
 
