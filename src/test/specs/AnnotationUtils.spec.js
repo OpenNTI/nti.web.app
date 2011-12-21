@@ -212,6 +212,7 @@ describe("Annotation Utils", function() {
 
 		Ext.each(anchors,function(a,i,c){
 			expect(c[i+1]).toBe(AnnotationUtils.getNextAnchor(a));
+			expect(AnnotationUtils.getAnchor(a.getAttribute('name'))).toBe(a);
 		});
 
 		//no anchor found returns null...add it to the list of possible anchors.
@@ -276,19 +277,48 @@ describe("Annotation Utils", function() {
 
 
 	it("should find a node for an xpath", function(){
+
+		var tags = {};
 		function doTest(el){
 			var path = AnnotationUtils.getPathTo(el);
 			expect(path).toBeTruthy();
 			expect(AnnotationUtils.getNodeFromXPath(path)).toBe(el);
+
+			if(el.nodeName in tags)
+				tags[el.nodeName] ++;
+			else
+				tags[el.nodeName] = 1;
 		}
 
 		var c=0,el, all = document.evaluate('id("NTIContent")//*', document, null, XPathResult.ANY_TYPE, null);
 		while((el = all.iterateNext())) doTest(el);
+
+		console.dir(tags);
 	});
 
 
+	it("should identify nodes: text, math and image", function(){
+
+		var mathNode = Ext.select('*[class*=math]').first().dom,
+			textNode = document.createTextNode('test'),
+			imageNode = Ext.select('img').first().dom;
+
+		expect(AnnotationUtils.isMathNode(mathNode)).toBeTruthy();
+		expect(AnnotationUtils.isMathNode(textNode)).toBeFalsy();
+		expect(AnnotationUtils.isMathNode(imageNode)).toBeFalsy();
+
+		expect(AnnotationUtils.isTextNode(textNode)).toBeTruthy();
+		expect(AnnotationUtils.isTextNode(mathNode)).toBeFalsy();
+		expect(AnnotationUtils.isTextNode(imageNode)).toBeFalsy();
+
+		expect(AnnotationUtils.isImageNode(imageNode)).toBeTruthy();
+		expect(AnnotationUtils.isImageNode(mathNode)).toBeFalsy();
+		expect(AnnotationUtils.isImageNode(textNode)).toBeFalsy();
+
+	});
+
 	//this needs to remain the last spec in this suite
-	it("should cleanup",function(){
+	xit("should cleanup",function(){
 		document.body.removeChild(div);
 		div = null;
 	});

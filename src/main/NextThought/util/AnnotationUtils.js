@@ -15,7 +15,7 @@ Ext.define('NextThought.util.AnnotationUtils',{
 			'preserveAspectRatio="xMinYMin" viewBox="0, 0, 1, 1" ' +
 			'style="border: 1px solid gray" {1}>{0}</svg>',
 
-
+//tested
     getBodyTextOnly: function(obj) {
         var bdy = obj.get('body'), o, i, text = [];
         for (i in bdy) {
@@ -28,6 +28,7 @@ Ext.define('NextThought.util.AnnotationUtils',{
         return text.join('');
     },
 
+//tested
 	/**
 	 * Build the body text with the various components mixed in.
 	 *
@@ -74,6 +75,7 @@ Ext.define('NextThought.util.AnnotationUtils',{
 		return text.join('');
 	},
 
+//tested
 	/**
 	 * Generate a thumbnail SVG from a canvas object.
 	 *
@@ -87,6 +89,7 @@ Ext.define('NextThought.util.AnnotationUtils',{
 		return tn;
 	},
 
+//tested
 	getPathTo: function(element) {
 		var nodeName = element.nodeName, siblings, sibling, len, i=0, ix=0;
 
@@ -113,7 +116,7 @@ Ext.define('NextThought.util.AnnotationUtils',{
 		}
 	},
 
-
+//tested
 	/**
 	 * From a note, build its reply
 	 * @param {NextThought.model.Note} note
@@ -136,7 +139,7 @@ Ext.define('NextThought.util.AnnotationUtils',{
 		return reply;
 	},
 
-
+//tested
 	/**
 	 * From a reply, build its absent parent
 	 * @param {NextThought.model.Note} note
@@ -169,7 +172,7 @@ Ext.define('NextThought.util.AnnotationUtils',{
 		return holder;
 	},
 
-
+//tested
 	selectionToNote: function(range) {
 		var note = Ext.create('NextThought.model.Note'),
 			node = range.startContainer || range.endContainer,
@@ -192,7 +195,7 @@ Ext.define('NextThought.util.AnnotationUtils',{
 		return note;
 	},
 
-
+//tested
 	getNextAnchorInDOM: function(node) {
 		var anchor = null, pos;
 		Ext.each(Ext.query('A[name]'), function(a){
@@ -206,7 +209,7 @@ Ext.define('NextThought.util.AnnotationUtils',{
 		return anchor;
 	},
 
-
+//tested
 	isBlockNode: function(n) {
 		var e = Ext.get(n),
 				p = /static|^$/i,
@@ -214,7 +217,7 @@ Ext.define('NextThought.util.AnnotationUtils',{
 		return (e && d.test(e.getStyle('display')) && p.test(e.getStyle('position')));
 	},
 
-
+//tested
 	getNodeFromXPath: function(xpath) {
 		try {
 			return document.evaluate(xpath, document, null, XPathResult.ANY_TYPE, null).iterateNext();
@@ -244,12 +247,12 @@ Ext.define('NextThought.util.AnnotationUtils',{
 		return this.rangeFromAnchors(r);
 	},
 
-
+//tested
 	getAnchor: function(a) {
 		return Ext.query('a[name=' + a +']')[0];
 	},
 
-
+//tested
 	getNextAnchor: function(a) {
 		var all = Ext.Array.unique(Ext.query('a[name]')),
 			result = null;
@@ -486,7 +489,7 @@ Ext.define('NextThought.util.AnnotationUtils',{
 		return anchorFound;
 	},
 
-
+//tested
 	isMathNode: function(node) {
 		if (!node || !node.getAttribute) return false;
 
@@ -495,12 +498,12 @@ Ext.define('NextThought.util.AnnotationUtils',{
 		return (cls && cls.indexOf('math') >= 0);
 	},
 
-
+//tested
 	isTextNode: function(node) {
-		return (node && node.nodeValue !== null);
+		return (node && node.nodeType === Node.TEXT_NODE);
 	},
 
-
+//tested
 	isImageNode: function(node) {
 		return (node && node.nodeName === 'IMG');
 	},
