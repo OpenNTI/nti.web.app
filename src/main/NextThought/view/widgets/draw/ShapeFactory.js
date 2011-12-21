@@ -88,11 +88,12 @@ Ext.define('NextThought.view.widgets.draw.ShapeFactory',
     },
 
     //TODO : opacity for fill and stroke are available, hook them up.
-    restoreShape: function(shape, scaleFactor){
+    restoreShape: function m(shape, scaleFactor){
         var t = shape.transform,
-            c = Color.cleanRGB(shape.fillColor) || Color.getColor(i),
+            c = Color.cleanRGB(shape.fillColor) || Color.getColor(m.i=(m.i||-1)+1),
             p = Color.cleanRGB(shape.strokeColor) || c.getDarker(0.2),
             s;
+
 
         //scale up the matrix
         this.scaleJson(scaleFactor, shape);

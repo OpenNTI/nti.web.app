@@ -198,7 +198,7 @@ Ext.define('NextThought.util.AnnotationUtils',{
 		Ext.each(Ext.query('A[name]'), function(a){
 			pos = a.compareDocumentPosition(node);
 			//node precedes the anchor
-			if ((pos & a.DOCUMENT_POSITION_PRECEDING) === a.DOCUMENT_POSITION_PRECEDING) {
+			if (pos & a.DOCUMENT_POSITION_PRECEDING) {
 				anchor = a;
 				return false;
 			}
@@ -207,18 +207,9 @@ Ext.define('NextThought.util.AnnotationUtils',{
 	},
 
 
-	findBlockParent: function(n) {
-		var c = n;
-		while(c && !this.isBlockNode(c)) {
-			c = c.parentNode;
-		}
-		return c;
-	},
-
-
 	isBlockNode: function(n) {
 		var e = Ext.get(n),
-				p = /static/i,
+				p = /static|^$/i,
 				d = /block|box/i;
 		return (e && d.test(e.getStyle('display')) && p.test(e.getStyle('position')));
 	},
@@ -260,11 +251,11 @@ Ext.define('NextThought.util.AnnotationUtils',{
 
 
 	getNextAnchor: function(a) {
-		var all = Ext.query('a[name]'),
+		var all = Ext.Array.unique(Ext.query('a[name]')),
 			result = null;
 
 		Ext.each(all, function(e, i){
-			if (e==a) {
+			if (e===a) {
 				result = all[i+1];
 				return false;
 			}

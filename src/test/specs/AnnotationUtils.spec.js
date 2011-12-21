@@ -163,7 +163,7 @@ describe("Annotation Utils", function() {
 		}) );
 
 		expect(note.get('references').length).toBe(2);
-		expect(note.get('inReplyTo')).toBe('test-note-oid-2')
+		expect(note.get('inReplyTo')).toBe('test-note-oid-2');
 
 	});
 
@@ -180,24 +180,111 @@ describe("Annotation Utils", function() {
 
 		expect(note.getId()).toBe('test-note-oid-2.2');
 		expect(note.get('references').length).toBe(2);
-		expect(note.get('inReplyTo')).toBe('test-note-oid-2.1')
+		expect(note.get('inReplyTo')).toBe('test-note-oid-2.1');
 	});
 
 
 	it("should build a new note from any element in the content", function(){
 
-		var allEls = document.querySelectorAll('#NTIContent *'),
-			i = allEls.length-1,
-			note, el;
+		var i, el, all;
 
-		for(; i>=0; i--){
-			el = allEls[i];
-			note = AnnotationUtils.selectionToNote({startContainer: el});
+		function doTest(el){
+			var note = AnnotationUtils.selectionToNote({startContainer: el});
 
 			expect(note).toBeTruthy();//todo: continue fleshing this out...
+			expect(note.get('anchorPoint')).toBeTruthy();
 		}
+
+		//test all non-text nodes
+		all = Ext.toArray(document.querySelectorAll('#NTIContent *'));
+		for(i=all.length-1; i>=0; i--) doTest(all[i]);
+
+		//Test all text nodes
+		all = document.evaluate('id("NTIContent")//text()', document, null, XPathResult.ANY_TYPE, null);
+		while((el = all.iterateNext())) doTest(el);
 	});
 
+
+	it("should find the next anchor", function(){
+
+		var anchors = Ext.Array.unique(Ext.toArray(document.querySelectorAll('#NTIContent A[name]'))),
+			all = Ext.Array.unique(Ext.toArray(document.querySelectorAll('#NTIContent *')));
+
+		Ext.each(anchors,function(a,i,c){
+			expect(c[i+1]).toBe(AnnotationUtils.getNextAnchor(a));
+		});
+
+		//no anchor found returns null...add it to the list of possible anchors.
+		anchors.push(null);
+
+		Ext.each(all, function(el){
+			var nextAnchor = AnnotationUtils.getNextAnchorInDOM(el),
+				x = Ext.Array.indexOf(anchors, nextAnchor),
+				w = x-1,
+				a, b,
+				prevAnchor = anchors[w]||null;
+
+			expect(x).toBeGreaterThan(-1);
+
+			if(nextAnchor !== null){
+				a = el.compareDocumentPosition(nextAnchor);
+				expect(a & el.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+			}
+			else {
+				expect(prevAnchor).toBeTruthy();
+			}
+
+			if(prevAnchor !== null ){
+				b = el.compareDocumentPosition(prevAnchor);
+				if(b === 0){
+					expect(el).toBe(prevAnchor);
+				}
+				else if(b === el.DOCUMENT_POSITION_FOLLOWING){
+					expect(nextAnchor).toBeTruthy();
+
+					a = prevAnchor.compareDocumentPosition(nextAnchor);
+					expect(a & el.DOCUMENT_POSITION_PRECEDING).toBeTruthy();
+				}
+				else{
+					expect(b & (el.DOCUMENT_POSITION_PRECEDING | el.DOCUMENT_POSITION_CONTAINED_BY)).toBeTruthy();
+				}
+			}
+			else {
+				expect(nextAnchor).toBeTruthy();
+			}
+		});
+	});
+
+
+	it("should be able to identify a block node",function(){
+		function makeIt(tag, blocky){
+			var q = blocky? ':any({display*=block}|{display=box})' : '{display=inline}',
+				e = Ext.select(tag+q).first().dom;
+
+			return [e,blocky];
+		}
+
+		var a = [
+			makeIt('div',true),
+			makeIt('span',false)
+		];
+
+		a.forEach(function(o){
+			expect(AnnotationUtils.isBlockNode(o[0])).toBe(o[1]);
+		});
+	});
+
+
+	it("should find a node for an xpath", function(){
+		function doTest(el){
+			var path = AnnotationUtils.getPathTo(el);
+			expect(path).toBeTruthy();
+			expect(AnnotationUtils.getNodeFromXPath(path)).toBe(el);
+		}
+
+		var c=0,el, all = document.evaluate('id("NTIContent")//*', document, null, XPathResult.ANY_TYPE, null);
+		while((el = all.iterateNext())) doTest(el);
+	});
 
 
 	//this needs to remain the last spec in this suite
