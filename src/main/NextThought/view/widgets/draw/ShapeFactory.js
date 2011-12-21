@@ -61,7 +61,7 @@ Ext.define('NextThought.view.widgets.draw.ShapeFactory',
         var k;
 
         if (this.strokeScalingRequired(json)) {
-            json.strokeWidth *= factor;
+            json.strokeWidth = parseFloat(json.strokeWidth) * factor;
         }
 
         for(k in json.transform){
