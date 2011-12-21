@@ -6,23 +6,15 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 		'Ext.menu.ColorPicker',
 		'NextThought.view.widgets.draw.Resizer',
 		'NextThought.view.widgets.draw.Rotater',
-		'NextThought.view.widgets.draw.Polygon',
-        'NextThought.view.widgets.draw.Line',
-		'NextThought.view.widgets.draw.Ellipse',
-		'NextThought.util.Color'
+		'NextThought.util.Color',
+        'NextThought.view.widgets.draw.ShapeFactory'
 	],
 
 	cls: 'whiteboard',
 	layout:'fit',
 	items: { xtype: 'draw', viewBox: false},
 
-	shapeTypeMap: {
-		ellipse: 'ellipse',
-		line: 'line',
-		path: 'base',
-		polygon: 'polygon',
-		text: 'base'
-	},
+
 
 	initComponent: function(){
 		this.callParent(arguments);
@@ -120,58 +112,10 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 	},
 
 
-
-	toolDefaults: function(shape, x, y, strokeWidth, sides){
-		strokeWidth = strokeWidth||2;
-		sides = sides || 4;
-
-		var cfg,
-            d = {
-			circle: {},
-			polygon: { sides: sides },
-			path: { type: 'path', fill: '#000000', translate: {} },
-			line: { type: 'path', fill: '#000000', translate: {}, getShape:function(){return 'line';}},
-			text: {
-				type: 'text',
-				text: 'Place holder text',
-				font: '18px Arial'
-			}
-		};
-
-		cfg = {
-			translate: {x:x,y:y},
-			'stroke-width': strokeWidth,
-			stroke: this.selectedColor.stroke,
-			fill: this.selectedColor.fill
-		};
-
-		return Ext.apply(cfg,d[shape]);
-	},
-
-
 	addShape: function(shape, x,y, strokeWidth, sides){
-        var sp = Ext.widget('sprite-'+this.shapeTypeMap[shape],
-				this.toolDefaults(shape, x, y, strokeWidth, sides));
-        sp.whiteboardRef = this;
-		this.getSurface().add(sp).show(true);
-
-		this.relay(sp,'click');
-		this.relay(sp,'dblClick');
-
+        var sp = ShapeFactory.createShape(this, shape, x, y, sides, this.selectedColor, strokeWidth);
+        this.getSurface().add(sp).show(true);
 		return sp;
-
-	},
-
-
-	relay: function(sprite, event){
-		sprite.el.on(
-				event,
-				function(e){
-					e.stopPropagation();
-					e.preventDefault();
-					this.fireEvent('sprite-'+event,sprite, this);
-				},
-				this);
 	},
 
 
@@ -262,64 +206,16 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 					.replace(/<\/*svg[\s"\/\-=0-9a-z:\.;]*>/gi, '');
 	},
 
-    getSpriteClass: function(c, sides)
-    {
-        var m = {
-            'CanvasPolygonShape': 'sprite-polygon',
-            'CanvasCircleShape': 'sprite-ellipse'
-        },
-        s = m[c];
-
-        //special case for lines
-        if (s == m.CanvasPolygonShape && sides == 1)
-            return 'sprite-line';
-        return s;
-    },
-
 	loadScene: function(canvasJSON){
- //       console.log('JSON canvas to load', JSON.stringify(canvasJSON));
+        console.log('JSON canvas to load', JSON.stringify(canvasJSON));
 
 		var shapes = Ext.clone( canvasJSON.shapeList ),
 			s = this.getSurface(),
 			w = this.getScaleFactor();
 
-		Ext.each(shapes, function(shape, i){
-            //TODO : opacity for fill and stroke are available, hook them up.
-			var c = Color.cleanRGB(shape.fillColor) || Color.getColor(i),
-				p =  Color.cleanRGB(shape.strokeColor) || c.getDarker(0.2),
-				t = shape.transform,
-				o, k;
-
-			//scale up the matrix
-			for(k in t) if(t.hasOwnProperty(k)) t[k] *= w;
-
-			t = Ext.create('Ext.draw.Matrix',t.a,t.b,t.c,t.d,t.tx,t.ty).split();
-
-            //TODO = something special here for stroke width and lines...
-
-			o = Ext.widget(this.getSpriteClass(shape.Class, shape.sides),{
-				sides: shape.sides,
-				'stroke-width': shape.strokeWidth,
-				stroke: p.toString(),
-				fill: c.toString(),
-				translate: {
-					x: t.translateX,
-					y: t.translateY
-				},
-				scale:{
-					x: t.scaleX,
-					y: t.scaleY
-				},
-				rotate: {
-					degrees: Ext.draw.Draw.degrees(t.rotate)
-				}
-			});
-
-			s.add(o).show(true);
-			this.relay(o,'click');
-			this.relay(o,'dblClick');
-
-		}, this);
+		Ext.each(shapes, function(shape){
+			s.add(ShapeFactory.restoreShape(shape, w)).show(true);
+		});
 	},
 
 	saveScene: function(){
@@ -330,28 +226,19 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 				var a = Ext.clone(i.attr),
 					bb = i.getBBox(),
 					w = this.getScaleFactor(),
-                    ssw = i.attr['stroke-width'],
-					o, k;
+					o;
 
 				if(i.isNib || a.hidden || (!bb.width && !bb.height))return;
 
-				o = i.toJSON();
+                o = ShapeFactory.scaleJson(1/w, i.toJSON());
 
-				//scale down the matrix
-				for(k in o.transform){
-					if(!o.transform.hasOwnProperty(k))continue;
-					if(typeof o.transform[k] == 'number')
-						o.transform[k] /= w;
-				}
-
-                o.strokeWidth = ssw;
 				shapes.push(o);
 			},
 			this
 		);
 
         s = { "Class":"Canvas", "shapeList": shapes };
-        //console.log('save scene', JSON.stringify(s));
+        console.log('save scene', JSON.stringify(s));
 
 		return shapes.length===0 ? undefined : s;
 	},

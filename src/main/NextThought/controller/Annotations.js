@@ -82,6 +82,8 @@ Ext.define('NextThought.controller.Annotations', {
 			return false;
 		}
 
+        win.el.mask('Sharing...');
+
         rec.set('sharedWith',shbx.getValue());
 		rec.save({
 			scope: this,
@@ -91,6 +93,7 @@ Ext.define('NextThought.controller.Annotations', {
 			},
             failure:function(){
                 console.error('Failed to save object');
+                win.el.unmask();
             }
 		});
 	},
@@ -151,7 +154,7 @@ Ext.define('NextThought.controller.Annotations', {
 					},
 					failure: function(){
 						console.error('failed to delete empty note');
-						win.close();
+                        win.el.unmask();
 					}
 				});
 			}
@@ -169,6 +172,7 @@ Ext.define('NextThought.controller.Annotations', {
 			},
 			failure:function(){
 				console.error('failed to save note');
+                win.el.unmask();
 			}
 		});
 	},

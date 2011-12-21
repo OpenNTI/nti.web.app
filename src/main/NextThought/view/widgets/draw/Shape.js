@@ -8,7 +8,7 @@ Ext.define('NextThought.view.widgets.draw.Shape', {
 
     constructor: function(config){
         var c = {
-            draggable: true, x:0, y:0, width: 1, height: 1,
+            draggable: true, x:0, y:0, width: 1, height: 1
             //for some strange reason, even though we tell the browser not to scale the stroke, it still makes the bonding
             // clickible element the size of the shape as if it did scale the stroke... so we Clip it. (the clip gets scaled
             // too.
@@ -45,7 +45,7 @@ Ext.define('NextThought.view.widgets.draw.Shape', {
                 'strokeOpacity' : 1, //TODO: once we have tools to adjust this, set
                 'fillColor': Color.toRGB(this.fill),
                 'fillOpacity': 1, //TODO: once we have tools to adjust this, set
-                'strokeWidth': this['stroke-width']
+                'strokeWidth': this['stroke-width'] + '%'
             },
 			matrix = {
 				'Class': 'CanvasAffineTransform',
