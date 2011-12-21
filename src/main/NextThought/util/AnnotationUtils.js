@@ -175,6 +175,10 @@ Ext.define('NextThought.util.AnnotationUtils',{
 			node = range.startContainer || range.endContainer,
 			anchorNode, pageOffsets;
 
+		if(node.nodeType === Node.TEXT_NODE){
+			node = node.parentNode;
+		}
+
 		anchorNode = Ext.get(node).is('A[name]')? node: this.getNextAnchorInDOM(node);
 		if(!anchorNode){
 			anchorNode = Ext.query('A[name]').pop();
@@ -193,7 +197,8 @@ Ext.define('NextThought.util.AnnotationUtils',{
 		var anchor = null, pos;
 		Ext.each(Ext.query('A[name]'), function(a){
 			pos = a.compareDocumentPosition(node);
-			if ((pos & 2) === 2) { //2 == precedes (node precedes the anchor)
+			//node precedes the anchor
+			if ((pos & a.DOCUMENT_POSITION_PRECEDING) === a.DOCUMENT_POSITION_PRECEDING) {
 				anchor = a;
 				return false;
 			}
