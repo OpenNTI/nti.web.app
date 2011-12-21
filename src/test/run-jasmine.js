@@ -82,7 +82,7 @@ if(page){
 
 								specName = spec.querySelector('.description').innerText;
 								passOrFail = passed ? 'Passed' : "Failed!";
-								console.log('\t'+specName+'\t'+passOrFail);
+								console.log('\t'+passOrFail+'\t'+specName);
 
 								if(!passed){
 									console.log('\t\t-> Message: '+spec.querySelector('.resultMessage.fail').innerText);

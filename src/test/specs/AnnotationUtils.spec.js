@@ -317,8 +317,9 @@ describe("Annotation Utils", function() {
 
 	});
 
+
 	//this needs to remain the last spec in this suite
-	xit("should cleanup",function(){
+	it("should cleanup",function(){
 		document.body.removeChild(div);
 		div = null;
 	});
