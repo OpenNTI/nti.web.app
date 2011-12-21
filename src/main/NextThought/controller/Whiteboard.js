@@ -146,7 +146,7 @@ Ext.define('NextThought.controller.Whiteboard', {
 		var wb = this.getWhiteboardFrom(e),
             op = this.sprite.initalPoint,
 			dt = this.relativizeXY(e.getXY(), wb),
-            sw = wb.down('numberfield[name=stroke-width]').getValue(),
+            sw = this.sprite['stroke-width'],
 			p = op.concat(dt),
             m;
 
@@ -189,7 +189,7 @@ Ext.define('NextThought.controller.Whiteboard', {
 	modifyPolygon: function(x,y,o,m,d,sw){
         var ssw = sw / m;
 		this.sprite.setAttributes({'stroke-width': ssw, scale: { x: m, y: m }, rotate: { degrees: d } },true);
-	},
+    },
 
 
 	modifyPath: function(x,y,o, m, d, sw){

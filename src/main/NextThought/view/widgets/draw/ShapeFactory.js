@@ -88,7 +88,7 @@ Ext.define('NextThought.view.widgets.draw.ShapeFactory',
     },
 
     //TODO : opacity for fill and stroke are available, hook them up.
-    restoreShape: function m(shape, scaleFactor){
+    restoreShape: function m(whiteboard, shape, scaleFactor){
         var t = shape.transform,
             c = Color.cleanRGB(shape.fillColor) || Color.getColor(m.i=(m.i||-1)+1),
             p = Color.cleanRGB(shape.strokeColor) || c.getDarker(0.2),
@@ -118,8 +118,8 @@ Ext.define('NextThought.view.widgets.draw.ShapeFactory',
             }
         });
 
-        this.relay(s, 'click');
-        this.relay(s, 'dblClick');
+        this.relay(whiteboard, s, 'click');
+        this.relay(whiteboard, s, 'dblClick');
 
         return s;
     },
@@ -129,13 +129,13 @@ Ext.define('NextThought.view.widgets.draw.ShapeFactory',
         var sp = Ext.widget('sprite-'+this.shapeTypeMap[shapeName],
 				this.toolDefaults(shapeName, x, y, strokeWidth, sides, selectedColors));
         sp.whiteboardRef = whiteboard;
-        this.relay(sp, 'click');
-        this.relay(sp, 'dblClick');
+        this.relay(whiteboard, sp, 'click');
+        this.relay(whiteboard, sp, 'dblClick');
         return sp;
     },
 
 
-    relay: function(sprite, event){
+    relay: function(whiteboard, sprite, event){
         if (!sprite.el) {
             sprite.on('render', Ext.bind(this.relay, this, Ext.toArray(arguments)), {single: true});
             return;
@@ -146,9 +146,8 @@ Ext.define('NextThought.view.widgets.draw.ShapeFactory',
             function(e){
                 e.stopPropagation();
                 e.preventDefault();
-                this.fireEvent('sprite-'+event,sprite, this);
-            },
-            this);
+                whiteboard.fireEvent('sprite-'+event,sprite, whiteboard);
+            });
     }
 
 }, function(){

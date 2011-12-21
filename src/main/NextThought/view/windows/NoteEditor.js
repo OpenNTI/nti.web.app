@@ -94,13 +94,13 @@ Ext.define('NextThought.view.windows.NoteEditor', {
         //if there's no placeholder, add one:
         if (!div) {
             body.innerHTML += Ext.String.format(AnnotationUtils.NOTE_BODY_DIVIDER, id,
-      										Ext.String.format(AnnotationUtils.WHITEBOARD_THUMBNAIL,'',
-      												this.getWhiteboardThumbnailClickHandler(id)));
+                Ext.String.format(AnnotationUtils.WHITEBOARD_THUMBNAIL,'',
+                    this.getWhiteboardThumbnailClickHandler(id)));
             div = iFrameDoc.getElementById(id)
         }
 
         //If WB now has 0 elements, just remove it from the editor, otherwise, update thumbnail.
-        if (numShapes == 0)
+        if (numShapes === 0)
             div.parentNode.removeChild(div);
         else
             div.innerHTML = Ext.String.format(

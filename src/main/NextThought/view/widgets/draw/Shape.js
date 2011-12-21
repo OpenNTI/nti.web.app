@@ -45,7 +45,7 @@ Ext.define('NextThought.view.widgets.draw.Shape', {
                 'strokeOpacity' : 1, //TODO: once we have tools to adjust this, set
                 'fillColor': Color.toRGB(this.fill),
                 'fillOpacity': 1, //TODO: once we have tools to adjust this, set
-                'strokeWidth': this['stroke-width'] + '%'
+                'strokeWidth': this.attr['stroke-width'] + '%'
             },
 			matrix = {
 				'Class': 'CanvasAffineTransform',
