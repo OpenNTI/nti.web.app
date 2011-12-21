@@ -3,7 +3,7 @@ Ext.define('NextThought.view.widgets.draw.Line', {
     alias: 'widget.sprite-line',
 
     constructor: function(config){
-        this.applyClipRect = false;
+       // this.applyClipRect = false;
 
         var x1 = 0,
             y1 = 0,

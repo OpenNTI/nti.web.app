@@ -277,7 +277,7 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
     },
 
 	loadScene: function(canvasJSON){
-        //console.log('JSON canvas to load', JSON.stringify(canvasJSON));
+ //       console.log('JSON canvas to load', JSON.stringify(canvasJSON));
 
 		var shapes = Ext.clone( canvasJSON.shapeList ),
 			s = this.getSurface(),
@@ -295,7 +295,7 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 
 			t = Ext.create('Ext.draw.Matrix',t.a,t.b,t.c,t.d,t.tx,t.ty).split();
 
-			shape.strokeWidth = (shape.strokeWidth*w) || 3;
+            //TODO = something special here for stroke width and lines...
 
 			o = Ext.widget(this.getSpriteClass(shape.Class, shape.sides),{
 				sides: shape.sides,
@@ -330,6 +330,7 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 				var a = Ext.clone(i.attr),
 					bb = i.getBBox(),
 					w = this.getScaleFactor(),
+                    ssw = i.attr['stroke-width'],
 					o, k;
 
 				if(i.isNib || a.hidden || (!bb.width && !bb.height))return;
@@ -343,10 +344,7 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 						o.transform[k] /= w;
 				}
 
-				if('strokeWidth' in o){
-					o.strokeWidth /= w;
-				}
-
+                o.strokeWidth = ssw;
 				shapes.push(o);
 			},
 			this
