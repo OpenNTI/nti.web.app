@@ -17,13 +17,7 @@ Ext.define('NextThought.util.AnnotationUtils',{
 
 
     getBodyTextOnly: function(obj) {
-        var txt = obj.get('text'),
-            bdy = obj.get('body'),
-            o, i,
-            text = [];
-
-        if (txt) return txt;
-
+        var bdy = obj.get('body'), o, i, text = [];
         for (i in bdy) {
             if(!bdy.hasOwnProperty(i)) continue;
             o = bdy[i];
@@ -46,39 +40,36 @@ Ext.define('NextThought.util.AnnotationUtils',{
 	 *	do something like preserve the canvas for use later.
 	 *
 	 * @param record (Must have a body[] field)
-	 * @param callbacks
+	 * @param [callbacks]
 	 * @return String
 	 */
 	compileBodyContent: function(record, callbacks){
 
-		var body = record.get('body'),
-				text = [],
-				i,o,id,
-				cb = callbacks || {
-					scope:this,
-					getClickHandler: function(){return '';},
-					getThumbnail: this.generateThumbnail
-				};
+		var me = this,
+			body = record.get('body'),
+			text = [],
+			cb = callbacks || {
+				scope:me,
+				getClickHandler: function(){return '';},
+				getThumbnail: me.generateThumbnail
+			};
 
-		for(i in body) {
-			if(!body.hasOwnProperty(i)) continue;
-			o = body[i];
-
+		Ext.Object.each(body, function(i,o){
 			if(typeof(o) == 'string'){
 				text.push(o);
-				continue;
+				return;
 			}
 
-			id = guidGenerator();
+			var id = guidGenerator();
 
 			text.push(
-					Ext.String.format(this.NOTE_BODY_DIVIDER, id,
-							Ext.String.format(this.WHITEBOARD_THUMBNAIL,
+					Ext.String.format(me.NOTE_BODY_DIVIDER, id,
+							Ext.String.format(me.WHITEBOARD_THUMBNAIL,
 									cb.getThumbnail.call(cb.scope, o, id),
 									cb.getClickHandler.call(cb.scope,id)
 							))
 			);
-		}
+		});
 
 		return text.join('');
 	},
@@ -90,7 +81,7 @@ Ext.define('NextThought.util.AnnotationUtils',{
 	 */
 	generateThumbnail: function(canvas) {
 		var wb = Ext.widget('whiteboard', {value:canvas}),
-				tn = wb.getThumbnail();
+			tn = wb.getThumbnail();
 
 		wb.destroy();
 		return tn;
@@ -182,12 +173,13 @@ Ext.define('NextThought.util.AnnotationUtils',{
 	selectionToNote: function(range) {
 		var note = Ext.create('NextThought.model.Note'),
 			node = range.startContainer || range.endContainer,
-			blockNode = this.findBlockParent(node),
 			anchorNode, pageOffsets;
 
-		if (!blockNode) throw 'No block node found.';
+		anchorNode = Ext.get(node).is('A[name]')? node: this.getNextAnchorInDOM(node);
+		if(!anchorNode){
+			anchorNode = Ext.query('A[name]').pop();
+		}
 
-		anchorNode = this.getNextAnchorInDOM(blockNode);
 		pageOffsets = Ext.get(anchorNode).getOffsetsTo(Ext.get('NTIContent'));
 
 		note.set('anchorPoint', anchorNode.getAttribute('name'));
@@ -198,9 +190,10 @@ Ext.define('NextThought.util.AnnotationUtils',{
 
 
 	getNextAnchorInDOM: function(node) {
-		var anchor = null;
+		var anchor = null, pos;
 		Ext.each(Ext.query('A[name]'), function(a){
-			if (a.compareDocumentPosition(node) === 2) { //2 == precedes
+			pos = a.compareDocumentPosition(node);
+			if ((pos & 2) === 2) { //2 == precedes (node precedes the anchor)
 				anchor = a;
 				return false;
 			}
