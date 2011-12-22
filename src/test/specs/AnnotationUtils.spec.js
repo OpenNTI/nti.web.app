@@ -317,6 +317,29 @@ describe("Annotation Utils", function() {
 
 	});
 
+    it("should dig through nodes and return the first image node encountered", function(){
+        var imageNode = Ext.select('img').first().dom,
+            divNode = document.createElement('div'),
+            spanNode = document.createElement('span'),
+            pNode = document.createElement('p'),
+            textNode = document.createTextNode('this is some text'),
+            image2Node = Ext.select('img').last().dom,
+            divNodeWithoutImage = document.createElement('div'),
+            result;
+
+        //build up a tree, with several image nodes
+        divNode.appendChild(imageNode);
+        pNode.appendChild(textNode);
+        spanNode.appendChild(pNode);
+        spanNode.appendChild(image2Node);
+        spanNode.appendChild(divNode);
+
+        expect(AnnotationUtils.digForImageNode(imageNode)).toBe(imageNode);
+        expect(AnnotationUtils.digForImageNode(divNode)).toBe(imageNode);
+        expect(AnnotationUtils.digForImageNode(spanNode)).toBe(image2Node);
+        expect(AnnotationUtils.digForImageNode(divNodeWithoutImage)).toBeNull();
+    });
+
 
 	//this needs to remain the last spec in this suite
 	it("should cleanup",function(){

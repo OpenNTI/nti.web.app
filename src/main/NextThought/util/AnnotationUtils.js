@@ -556,6 +556,7 @@ Ext.define('NextThought.util.AnnotationUtils',{
 	},
 
 
+//tested
 	digForImageNode: function(n) {
 		if (this.isImageNode(n)) {
 			return n;
@@ -575,6 +576,9 @@ Ext.define('NextThought.util.AnnotationUtils',{
 				child = next;
 			}
 		}
+
+        //get here and found nothing? return null:
+        return null;
 	},
 
 
