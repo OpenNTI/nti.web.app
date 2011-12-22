@@ -83,6 +83,18 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 	afterRender: function(){
 		this.callParent(arguments);
 
+		if(!this.readOnly){
+			this.artBoard = this.getSurface().add({
+				type: 'rect',
+				width: this.getScaleFactor(),
+				height: this.getScaleFactor()*0.92,
+				'stroke-width': 1,
+				stroke: '#cccccc'
+			});
+
+			this.artBoard.show(true);
+		}
+
 		if(this.value){
 			this.loadScene(this.value);
 			delete this.value;
@@ -196,7 +208,7 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 		div.setAttribute('style','display:none');
 		document.body.appendChild(div);
 
-		w = Ext.widget('whiteboard', {scaleFactor: 1, value: v, renderTo: id});
+		w = Ext.widget('whiteboard', {readOnly:true,scaleFactor: 1, value: v, renderTo: id});
 		svg = el.down('svg').dom.parentNode.innerHTML;
 
 		w.destroy();
@@ -220,7 +232,7 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 	},
 
 	saveScene: function(){
-		var shapes = [], s;
+		var shapes = [], s, ab = this.artBoard;
 
 		this.getSurface().items.each(
 			function(i){
@@ -229,7 +241,7 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 					w = this.getScaleFactor(),
 					o;
 
-				if(i.isNib || a.hidden || (!bb.width && !bb.height))return;
+				if(i===ab || i.isNib || a.hidden || (!bb.width && !bb.height))return;
 
                 o = ShapeFactory.scaleJson(1/w, i.toJSON());
 

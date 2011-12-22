@@ -11,8 +11,8 @@ Ext.define('NextThought.util.AnnotationUtils',{
 	NOTE_BODY_DIVIDER: '\u200b<div id="{0}" class="body-divider" style="text-align: left; margin: 10px; padding: 5px;">{1}</div>\u200b',
 
 	/** @constant */
-	WHITEBOARD_THUMBNAIL: '<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="250" height="200" ' +
-			'preserveAspectRatio="xMinYMin" viewBox="0, 0, 1, 1" ' +
+	WHITEBOARD_THUMBNAIL: '<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="250" height="230" ' +
+			'preserveAspectRatio="xMinYMin slice" viewBox="0, 0, 1, 1" ' +
 			'style="border: 1px solid gray" {1}>{0}</svg>',
 
 //tested
