@@ -20,12 +20,12 @@ Ext.define('NextThought.view.widgets.draw.Resizer', {
 	},
 
 	attributeModifiers: {
-		'x': function(dx, dy, tx, ty) { return this.updateSprite(dx,0,tx,0, -1, -1); },
+		'x': function(dx, dy, tx) { return this.updateSprite(dx,0,tx,0, -1, -1); },
 		'y': function(dx, dy, tx, ty) { return this.updateSprite(0,dy,0,ty, -1, -1); },
 
 		'x-y': function(dx, dy, tx, ty) { return this.updateSprite(dx,dy,tx,ty, -1, -1); },
 
-		'width': function(dx, dy, tx, ty) { return this.updateSprite(dx,0,tx,0,1,1); },
+		'width': function(dx, dy, tx) { return this.updateSprite(dx,0,tx,0,1,1); },
 		'height': function(dx, dy, tx, ty) { return this.updateSprite(0,dy,0,ty,1,1); },
 
 		'width-height': function(dx, dy, tx, ty) { return this.updateSprite(dx,dy,tx,ty,1,1); },
@@ -39,7 +39,7 @@ Ext.define('NextThought.view.widgets.draw.Resizer', {
 		this.callParent([{surface: whiteboard.getSurface()}]);
 
 		var s = this.surface,
-			degrees = sprite.attr.rotation.degrees,
+//			degrees = sprite.attr.rotation.degrees,
 			group = s.createSvgElement ? s.createSvgElement('g') : s.createNode('group');
 
 		s.el.appendChild(group);
@@ -62,10 +62,25 @@ Ext.define('NextThought.view.widgets.draw.Resizer', {
 
 
 	destroy: function(){
+		var s = this.surface;
 		this.sprite.dd.startDrag = Ext.draw.SpriteDD.prototype.startDrag;
 		this.sprite.dd.onDrag = Ext.draw.SpriteDD.prototype.onDrag;
-		this.callParent(arguments);
+		Ext.Object.each(this.groups, function(k,o){
+			o.removeAll();
+			o.destroy();
+		});
+
+		this.hide(true);
+
+		//un-group the nibs from the <g> element we created
+		this.each(function(o){ s.el.appendChild(o.el); },this);
+		while(this.group.first()){
+			s.el.appendChild(this.group.first().dom);
+			console.error('Group node had extra elements in it!? reparenting before we remove it. destroy selection before adding new shapes to the canvas.');
+		}
 		this.group.remove();
+
+		this.callParent(arguments);
 	},
 
 
@@ -117,14 +132,14 @@ Ext.define('NextThought.view.widgets.draw.Resizer', {
 			y2m	= y+(h/2);
 
 		try{
-			g['x'].setAttributes({x: x-s2});
-			g['y'].setAttributes({y: y-s2});
+			g.x.setAttributes({x: x-s2});
+			g.y.setAttributes({y: y-s2});
 
-			g['width'].setAttributes({x: x2});
-			g['height'].setAttributes({y: y2+s2});
+			g.width.setAttributes({x: x2});
+			g.height.setAttributes({y: y2+s2});
 
-			g['mX'].setAttributes({x: x2m});
-			g['mY'].setAttributes({y: y2m});
+			g.mX.setAttributes({x: x2m});
+			g.mY.setAttributes({y: y2m});
 		}
 		catch(e){
 			console.error(e.stack);
