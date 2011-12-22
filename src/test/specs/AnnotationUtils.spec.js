@@ -324,8 +324,7 @@ describe("Annotation Utils", function() {
             pNode = document.createElement('p'),
             textNode = document.createTextNode('this is some text'),
             image2Node = Ext.select('img').last().dom,
-            divNodeWithoutImage = document.createElement('div'),
-            result;
+            divNodeWithoutImage = document.createElement('div');
 
         //build up a tree, with several image nodes
         divNode.appendChild(imageNode);
