@@ -38,74 +38,100 @@ if (phantom.args.length === 0 || phantom.args.length > 2) {
     phantom.exit();
 }
 
-var page = typeof require!=='undefined'? require('webpage').create() : typeof WebPage!=='undefined' ? new WebPage() : null;
+var r={},page = typeof require!=='undefined'? require('webpage').create() : typeof WebPage!=='undefined' ? new WebPage() : null;
 
-if(page){
-    // Route "console.log()" calls from within the Page context to the main Phantom context (i.e. current "this")
-    page.onConsoleMessage = function(msg, line, source) {
-        console.log(msg+"\t\t"+source+":"+line);
-    };
+if(!page){
+	    console.log('Could not create WebPage');
+	    phantom.exit();
+}
 
-    page.open(phantom.args[0], function(status){
-        if (status !== "success") {
-            console.log("Unable to access network");
-            phantom.exit();
-        }
-        else {
-            waitFor(
-                function(){//waiting for this to return true
-                    return page.evaluate(function(){
-						var runner = document.body.querySelector('.runner');
-						if(!runner){
-							return !!runner;
-						}
-                        return !!runner.querySelector('.description');
-                    });
-                },
-                function(){
-                    page.evaluate( function() {
-						var suites = document.body.querySelectorAll('.suite'),
-							i, j, suite, suiteName, specName, passOrFail,
-							specs, spec, passed, trace, runner;
+page.onAlert = function(msg){
+	console.log('ALERT: '+msg);
+};
 
-						for (i = 0; i < suites.length; i++){
-							suite = suites[i];
+page.onConsoleMessage = function(msg, line, source) {
+	if(source)
+		console.log(msg+"\t\t"+source+":"+line);
+	else
+		console.log(msg);
+};
 
-							suiteName = suite.querySelector('.description').innerText;
-							passOrFail = suite.className.indexOf('passed') != -1 ? "Passed" : "Failed!";
-							console.log('Suite: '+suiteName+'\t'+passOrFail);
-							console.log('--------------------------------------------------------');
-							specs = suite.querySelectorAll('.spec');
-							for (j = 0; j < specs.length; j++){
-								spec = specs[j];
-								passed = spec.className.indexOf('passed') != -1;
+page.onLoadStarted = function(){
+	console.log("Loading...");
+};
 
-								specName = spec.querySelector('.description').innerText;
-								passOrFail = passed ? 'Passed' : "Failed!";
-								console.log('\t'+passOrFail+'\t'+specName);
+page.onResourceRequested = function(request){
+//	console.log('required:\t'+request.url);
+	r[request.url] = true;
+};
 
-								if(!passed){
-									console.log('\t\t-> Message: '+spec.querySelector('.resultMessage.fail').innerText);
-									trace = spec.querySelector('.stackTrace');
-									console.log('\t\t-> Stack: '+(trace!==null ? trace.innerText : 'not supported by phantomJS yet'));
-								}
-							}
-							console.log('');
-						}
+page.onResourceReceived = function(request){
+	delete r[request.url];
+};
 
-						runner = document.body.querySelector('.runner');
+
+page.open(phantom.args[0], function(status){
+	console.log('\nInitial Load finished, executing...\n');
+	if (status !== "success") {
+		console.log("Unable to access network");
+		phantom.exit();
+	}
+	else {
+		waitFor(
+			function(){//waiting for this to return true
+				return page.evaluate(function(){
+					var runner = document.body.querySelector('.runner');
+					if(!runner){ return !!runner; }
+					return !!runner.querySelector('.description');
+				});
+			},
+			function(){
+				console.log('\n\nEvaluating results:\n');
+
+				page.evaluate( function() {
+					var suites = document.body.querySelectorAll('.suite'),
+						i, j, suite, suiteName, specName, passOrFail,
+						specs, spec, passed, trace, runner, passedAll = true;
+
+					for (i = 0; i < suites.length; i++){
+						suite = suites[i];
+
+						suiteName = suite.querySelector('.description').innerText;
+						passOrFail = suite.className.indexOf('passed') != -1 ? "Passed" : "Failed";
+						console.log(passOrFail+':\t'+'Suite: '+suiteName);
 						console.log('--------------------------------------------------------');
-                        console.log('Finished: '+runner.querySelector('.description').innerText);
-                    });
-                    console.log('');
-                    phantom.exit();
-                },
-                300001
-            );
-        }
-    });
-}
-else {
-    console.log('Could not create WebPage');
-    phantom.exit();
-}
+						specs = suite.querySelectorAll('.spec');
+						for (j = 0; j < specs.length; j++){
+							spec = specs[j];
+							passed = spec.className.indexOf('passed') != -1;
+
+							specName = spec.querySelector('.description').innerText;
+							passOrFail = passed ? 'Passed' : "Failed";
+							console.log('\t'+passOrFail+':\t'+specName);
+
+							if(!passed){
+								passedAll = false;
+								console.log('\t\t-> Message: '+spec.querySelector('.resultMessage.fail').innerText);
+								trace = spec.querySelector('.stackTrace');
+								console.log('\t\t-> Stack: '+(trace!==null ? trace.innerText : 'not supported by phantomJS yet'));
+							}
+						}
+						console.log('');
+					}
+
+					runner = document.body.querySelector('.runner');
+					console.log('--------------------------------------------------------');
+					console.log('Finished: '+runner.querySelector('.description').innerText);
+					console.log('\nStatus: '+(passedAll? 'Good!':'There were failures!'));
+				});
+				console.log('\n');
+
+				r = Object.keys(r);
+				if(r.length>0)
+					console.log("Unresolved resources: "+r.join('\n'));
+				phantom.exit();
+			},
+			300001
+		);
+	}
+});
