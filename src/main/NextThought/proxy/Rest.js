@@ -38,13 +38,16 @@ Ext.define('NextThought.proxy.Rest', {
 
 		this.headers = { 'Content-Type': mimeType+'+json' };
 
-        if (action!='update' && action!='destroy'){
+		//creation goes here
+        if (action!=='update' && action!=='destroy'){
 			collection = _AppConfig.service.getCollectionFor(mimeType,null) || {};
 			href = host + collection.href;
 		}
+		//edit here
 		else if(!href){
 			href = record.getLink('edit');
 		}
+
 
 		if(!href) Ext.Error.raise({
 			msg:'The URL is undefined!',
@@ -63,7 +66,7 @@ Ext.define('NextThought.proxy.Rest', {
 		catch(e){
 			console.error(e.message, e);
 		}
-		if(response.status != 404)
+		if(response.status !== 404)
 			console.error('Error getting data:', arguments);
     }
 });

@@ -106,8 +106,7 @@ Ext.define('NextThought.controller.Groups', {
                     win.close();
                 },
                 failed: function(){
-                    this.reloadGroups();
-                    win.close();
+                    win.el.unmask();
                 }
             });
             return;

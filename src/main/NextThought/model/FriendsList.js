@@ -6,7 +6,7 @@ Ext.define('NextThought.model.FriendsList', {
 		{ name: 'alias', type: 'string' },
 		{ name: 'avatarURL', type: 'string' },
 		{ name: 'friends', type: 'UserList' },
-		{ name: 'href', type: 'string' },
+//		{ name: 'href', type: 'string' },
 		{ name: 'realname', type: 'string' }
 	],
 
