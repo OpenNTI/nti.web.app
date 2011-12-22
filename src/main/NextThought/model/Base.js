@@ -166,7 +166,7 @@ Ext.data.Types.USERLIST = {
                 else  {
                     u.push(p);
                     //asynchronously resolve this user so its cached and ready
-                    UserRepository.prefetchUser(p);
+                    UserRepository.prefetchUser(o);
                 }
             });
 

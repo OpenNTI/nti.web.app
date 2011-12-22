@@ -1,3 +1,8 @@
+/**
+ * See UserRepository#prefetchUser() on how these are resolved.
+ *
+ * DO NOT let these be queried for by the user search/ UserRepository resolver methods. (Bad things will happen)
+ */
 Ext.define('NextThought.model.Community', {
     extend: 'NextThought.model.Base',
     idProperty: 'Username',

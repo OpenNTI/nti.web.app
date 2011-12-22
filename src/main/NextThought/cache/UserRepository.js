@@ -58,7 +58,9 @@ Ext.define('NextThought.cache.UserRepository', {
     },
 
     prefetchUser: function(username, callback, scope) {
-        if (typeof(username) == 'string') username = [username];
+        if (!Ext.isArray(username)) username = [username];
+
+
 
         var s = this.getStore(),
             result = [],
@@ -67,12 +69,42 @@ Ext.define('NextThought.cache.UserRepository', {
 
         Ext.each(
             username,
-            function(name){
-                var r = s.getById(name);
-                if (r){
+            function(o){
+
+
+                var name,
+					r;
+
+				if(typeof(o)==='string'){
+					name = o;
+				}
+				else if(o.getId){
+					console.trace('This is not good');
+					name = o.getId();
+				}
+				else {
+					//JSON representation of User
+					r = ParseUtils.parseItems([o], {ignoreIfExists: true})[0];
+					if(!r || !r.getModelName){
+						Ext.Error.raise({message: 'Unknown result', object: r});
+					}
+
+					//Users models are very tightly coupled to this repository and add/update themselves, however,
+					// community models while still resolved like users (because they are user-like) are not auto-magically
+					// added to the repo, so we add them here.
+					if(r.getModelName() === 'Community'){
+						s.add(r);
+					}
+
+					name = r.getId();
+				}
+
+				r = s.getById(name);
+				if (r){
                     result.push(r);
                     return;
                 }
+
                 //must make a request, finish in callback so set async flag
                 async = true;
                 this._makeRequest(name, {
