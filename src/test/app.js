@@ -8,6 +8,44 @@ var _AppConfig = {
     }
 };
 
+var mockUser = {
+	"Class": "User",
+	"Links": [
+		{
+			"href": "fill-this-in",
+			"Class": "Link",
+			"rel": "edit"
+		}
+	],
+	"OID": "oid-2",
+	"Presence": "Online",
+	"Username": "test@nextthought.com",
+
+	"alias": "John",
+	"realname": "John Doe",
+
+	"Communities": [
+		{
+			"alias": "Public",
+			"Class": "Community",
+			"Username": "Everyone",
+			"ID": "Everyone",
+			"OID": "oid-0"
+		}
+	],
+	"accepting": [],
+	"following": [
+		{
+			"alias": "NTI",
+			"Class": "Community",
+			"Username": "NextThought",
+			"ID": "NextThought",
+			"OID": "oid-1"
+		}
+	],
+	"ignoring": []
+};
+
 //mock socketio
 var io = {
     connect: function(){ return {
@@ -71,6 +109,8 @@ Ext.application({
         NextThought.phantomRender = true;
 
 		_AppConfig.service = Ext.create('NextThought.model.Service', mockService, _AppConfig.username);
+
+		_AppConfig.userObject = Ext.create('NextThought.model.User', mockUser, _AppConfig.username, mockUser);
 
 		applyHooks();
 
