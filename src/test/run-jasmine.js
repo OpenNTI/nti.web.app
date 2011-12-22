@@ -42,8 +42,8 @@ var page = typeof require!=='undefined'? require('webpage').create() : typeof We
 
 if(page){
     // Route "console.log()" calls from within the Page context to the main Phantom context (i.e. current "this")
-    page.onConsoleMessage = function(msg) {
-        console.log(msg);
+    page.onConsoleMessage = function(msg, line, source) {
+        console.log(msg+"\t\t"+source+":"+line);
     };
 
     page.open(phantom.args[0], function(status){
