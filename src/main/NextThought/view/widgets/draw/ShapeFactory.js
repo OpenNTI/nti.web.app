@@ -90,16 +90,9 @@ Ext.define('NextThought.view.widgets.draw.ShapeFactory',
 	//TODO : opacity for fill and stroke are available, hook them up.
 	restoreShape: function m(whiteboard, shape, scaleFactor){
 		var t = shape.transform,
-			c = Color.cleanRGB(shape.fillColor) || Color.getColor(m.i=(m.i||-1)+1),
-			p = Color.cleanRGB(shape.strokeColor) || c.getDarker(0.2),
+			c = Color.parseColor(shape.fillColor,shape.fillOpacity) || Color.getColor(m.i=(m.i||-1)+1),
+			p = Color.parseColor(shape.strokeColor) || c.getDarker(0.2),
 			s;
-
-		//CMU:	Since we dont honor opacity yet, fake an
-		//opacity of 0.0 by setting the color to white.
-		//Should be removed once opacity is setup
-		if (shape.fillOpacity == 0.0){
-			c = Color.cleanRGB("rgb(255,255,255)");
-		}
 
 		//scale up the matrix
 		this.scaleJson(scaleFactor, shape);

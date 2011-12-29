@@ -86,7 +86,7 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 
 
     updateMenuIcon: function(color) {
-        var img = this.el.select('img.x-menu-item-icon').first()
+        var img = this.el.select('img.x-menu-item-icon').first();
         if(img){
             img.setStyle('background', color);
         }
@@ -110,7 +110,7 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 		return this.callParent([items]);
 	},
 
-	_menuItemHook: function(o,item, menu){
+	_menuItemHook: function(o,item /*, menu*/){
 		item.on('afterrender',Ext.bind(this.updateMenuIcon, item, [o.getColor().toString()]));
 	},
 
@@ -133,25 +133,23 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 	},
 
 
-	onResize : function(e){
+	onResize : function(){
         this.requestRender();
 	},
 
 
     adjustCoordinates: function(rect,offsetToTrim){
-        var r = rect,
-            o = offsetToTrim,
-            x = o[0] ? o[0] : o.left,
-            y = o[1] ? o[1] : o.top;
+        var x = offsetToTrim[0] ? offsetToTrim[0] : offsetToTrim.left,
+            y = offsetToTrim[1] ? offsetToTrim[1] : offsetToTrim.top;
 
-        r.top -= y; r.left -= x;
+        rect.top -= y; rect.left -= x;
         return {
-            top: r.top-y,
-            left: r.left-x,
-            width: r.width,
-            height: r.height,
-            right: r.left-x+r.width,
-            bottom: r.top-y+r.height
+            top: rect.top-y,
+            left: rect.left-x,
+            width: rect.width,
+            height: rect.height,
+            right: rect.left-x+rect.width,
+            bottom: rect.top-y+rect.height
         };
     },
 
@@ -160,7 +158,7 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
         return function(ctx){
             ctx.fillStyle = fill;
 		    ctx.fillRect(rect.left, rect.top, rect.width, rect.height);
-        }
+        };
 	},
 
 
@@ -178,6 +176,8 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
             c = this._canvas,
             p = this._parent ? this._parent : (this._parent = Ext.get(this._div.parentNode)),
             l = s.length,
+			i = l-1,
+			avgH = 0,
             cXY = Ext.get(c).getXY(),
             color = this.getColor(),
             rgba = Color.toRGBA(color),
@@ -192,12 +192,16 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
         nib.setStyle('background', rgb);
 
         //stage draw
-        var avgH = 0;
         Ext.each(s,function(v){ avgH += v.height; });
         avgH /= l;
 
-        for(var i=0; i<l; i++){
+        for(; i>=0; i--){
+			//attempt to skip drawing rects that are probably not just the line
             if(s[i].right == r.right && s[i].height>avgH) continue;
+
+			//TODO: keep track of where we've drawn for this highlight, and don't redraw over it if there are more than
+			// one rect over a space.
+
             this.self.enqueue(this.drawRect(this.adjustCoordinates(s[i],cXY), rgba));
         }
 
@@ -216,12 +220,13 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 
         render: function(){
             var	c = Ext.query('#canvas-highlight-container canvas')[0],
-                ctx = c ? c.getContext("2d") : null;
-            //reset the context
+                ctx = c ? c.getContext("2d") : null,
+				w = c ? c.width : 0;
 
             if (!ctx) return;
 
-            c.width = c.width;
+            //reset the context
+            c.width = w;
 
             while(this._queue.length){
                 (this._queue.pop())(ctx);
