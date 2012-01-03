@@ -581,7 +581,7 @@ Ext.define('NextThought.util.AnnotationUtils',{
         return null;
 	},
 
-
+//tested
 	climbToMathNode: function(node) {
 		var topMathNode = null,
 			parent;

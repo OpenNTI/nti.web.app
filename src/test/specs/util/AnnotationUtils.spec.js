@@ -8,6 +8,8 @@ describe("Annotation Utils", function() {
 				{
 					"Class":"CanvasPolygonShape",
 					"sides":4,
+                    "fillColor": '#000000',
+                    "strokeColor": '#000000',
 					"transform":{
 						"Class":"CanvasAffineTransform",
 						"a":0.151,
@@ -20,6 +22,8 @@ describe("Annotation Utils", function() {
 				},
 				{
 					"Class":"CanvasCircleShape",
+                    "fillColor": '#000000',
+                    "strokeColor": '#000000',
 					"transform":{
 						"Class":"CanvasAffineTransform",
 						"a":0.151,
@@ -33,6 +37,8 @@ describe("Annotation Utils", function() {
 				{
 					"Class":"CanvasPolygonShape",
 					"sides":1,
+                    "fillColor": '#000000',
+                    "strokeColor": '#000000',
 					"transform":{
 						"Class":"CanvasAffineTransform",
 						"a":0.15,
@@ -337,6 +343,19 @@ describe("Annotation Utils", function() {
         expect(AnnotationUtils.digForImageNode(divNode)).toBe(imageNode);
         expect(AnnotationUtils.digForImageNode(spanNode)).toBe(image2Node);
         expect(AnnotationUtils.digForImageNode(divNodeWithoutImage)).toBeNull();
+    });
+
+    it("should climb to a math node if the given node is a child of a math node", function(){
+
+        var mathNode = Ext.select('*[class*=mathjax]').elements[44], //a more complicated math node with lots of kids
+            textNode = document.createTextNode('test'),
+            imageNode = Ext.select('img').first().dom,
+            insideMathNode = mathNode.children[1].children[0].children[0].children[0].children[0];
+
+        expect(AnnotationUtils.climbToMathNode(mathNode)).toBe(mathNode);
+        expect(AnnotationUtils.climbToMathNode(insideMathNode)).toBe(mathNode);
+        expect(AnnotationUtils.climbToMathNode(textNode)).toBeNull();
+        expect(AnnotationUtils.climbToMathNode(imageNode)).toBeNull();
     });
 
 
