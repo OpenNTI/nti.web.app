@@ -264,7 +264,7 @@ Ext.define('NextThought.view.widgets.draw.Resizer', {
 			while (me.getCount() > 0) {
 				item = me.first();
 				me.remove(item);
-				surface.remove(item);
+				surface.remove(item,false);
 			}
 		}
 	}

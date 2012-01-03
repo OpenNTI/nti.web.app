@@ -16,7 +16,7 @@ Ext.define('NextThought.view.widgets.draw.Rotater', {
 
 		s.el.appendChild(group);
 
-		console.dir(sprite.attr.rotation);
+//		console.dir(sprite.attr.rotation);
 
 		this.group = Ext.get(group);
 		this.whiteboard = whiteboard;
@@ -24,20 +24,29 @@ Ext.define('NextThought.view.widgets.draw.Rotater', {
 		this.drawNibs();
 		this.hookDrag(sprite);
 
-//		if(degrees){
-//			var c = this.getCenter();
-//			group.setAttribute('transform',
-//					Ext.String.format('rotate({0},{1},{2})', degrees, c.x, c.y));
-//		}
+		if(degrees){
+			var c = this.getCenter();
+			group.setAttribute('transform',
+					Ext.String.format('rotate({0},{1},{2})', degrees, c.x, c.y));
+		}
 
 		return this;
 	},
 
 
 	destroy: function(){
+		var s = this.surface;
 		this.sprite.dd.startDrag = Ext.draw.SpriteDD.prototype.startDrag;
 		this.sprite.dd.onDrag = Ext.draw.SpriteDD.prototype.onDrag;
-		this.callParent(arguments);
+
+		this.hide(true);
+
+		//un-group the nibs from the <g> element we created
+		this.each(function(o){ s.el.appendChild(o.el); },this);
+		while(this.group.first()){
+			s.el.appendChild(this.group.first().dom);
+			console.error('Group node had extra elements in it!? reparenting before we remove it. destroy selection before adding new shapes to the canvas.');
+		}
 		this.group.remove();
 	},
 
@@ -158,7 +167,7 @@ Ext.define('NextThought.view.widgets.draw.Rotater', {
 			while (me.getCount() > 0) {
 				item = me.first();
 				me.remove(item);
-				surface.remove(item);
+				surface.remove(item,false);
 			}
 		}
 	}

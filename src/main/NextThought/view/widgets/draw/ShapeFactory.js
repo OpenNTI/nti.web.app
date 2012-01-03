@@ -166,8 +166,8 @@ function(){
 				x1,y1,x2,y2,
 				p;
 
-			if(!isNaN(r.x)){
-				console.error('SpriteDD.getRegion() override unnecessary');
+			if(r && !isNaN(r.x) && isFinite(r.x)){
+				//console.warn('SpriteDD.getRegion() override unnecessary?', r);
 				return r;
 			}
 
