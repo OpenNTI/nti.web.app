@@ -141,16 +141,14 @@ Ext.define('NextThought.view.widgets.draw.ShapeFactory',
 		}
 
 		function refire(sp,event){
-			console.log(sp, event);
 			sp.el.on(event, function(e){
-				console.log('relayed',event, sp, whiteboard);
 				e.stopPropagation();
 				e.preventDefault();
 				whiteboard.fireEvent('sprite-'+event, sp, whiteboard);
 			});
 		}
 
-		for(var i=events.length;i<=0; i--){
+		for(var i=events.length;i>=0; i--){
 			refire(sprite,events[i]);
 		}
 	}
