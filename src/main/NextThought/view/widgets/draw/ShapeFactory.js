@@ -119,8 +119,7 @@ Ext.define('NextThought.view.widgets.draw.ShapeFactory',
 			}
 		});
 
-		this.relay(whiteboard, s, 'click');
-		this.relay(whiteboard, s, 'dblClick');
+		this.relay(whiteboard, s, ['click','dblClick']);
 
 		return s;
 	},
@@ -130,28 +129,56 @@ Ext.define('NextThought.view.widgets.draw.ShapeFactory',
 		var sp = Ext.widget('sprite-'+this.shapeTypeMap[shapeName],
 				this.toolDefaults(shapeName, x, y, strokeWidth, sides, selectedColors));
 		sp.whiteboardRef = whiteboard;
-		this.relay(whiteboard, sp, 'click');
-		this.relay(whiteboard, sp, 'dblClick');
+		this.relay(whiteboard, sp, ['click','dblClick']);
 		return sp;
 	},
 
 
-	relay: function(whiteboard, sprite, event){
+	relay: function(whiteboard, sprite, events){
 		if (!sprite.el) {
 			sprite.on('render', Ext.bind(this.relay, this, Ext.toArray(arguments)), {single: true});
 			return;
 		}
 
-		sprite.el.on(
-			event,
-			function(e){
+		function refire(sp,event){
+			console.log(sp, event);
+			sp.el.on(event, function(e){
+				console.log('relayed',event, sp, whiteboard);
 				e.stopPropagation();
 				e.preventDefault();
-				whiteboard.fireEvent('sprite-'+event,sprite, whiteboard);
+				whiteboard.fireEvent('sprite-'+event, sp, whiteboard);
 			});
+		}
+
+		for(var i=events.length;i<=0; i--){
+			refire(sprite,events[i]);
+		}
 	}
 
-}, function(){
-		window.ShapeFactory = this;
-	}
-);
+},
+function(){
+	window.ShapeFactory = this;
+
+	//Fix Sprite dragging for ExtJS 4.0.7
+	Ext.draw.SpriteDD.override({
+		getRegion: function() {
+			var r = this.callOverridden(arguments),
+				s = this.sprite,
+				bbox = s.getBBox(),
+				x1,y1,x2,y2,
+				p;
+
+			if(!isNaN(r.x)){
+				console.error('SpriteDD.getRegion() override unnecessary');
+				return r;
+			}
+
+			p = s.surface.getRegion();
+			x1 = bbox.x + p.left;
+			y1 = bbox.y + p.top;
+			x2 = x1 + bbox.width;
+			y2 = y1 + bbox.height;
+			return Ext.create('Ext.util.Region', y1, x2, y2, x1);
+		}
+	});
+});
