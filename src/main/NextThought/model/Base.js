@@ -49,7 +49,7 @@ Ext.define('NextThought.model.Base', {
 
 
 	constructor: function(){
-		var c, p, f = this.fields,
+		var c, f = this.fields,
 			cName = this.self.getName().split('.').pop(),
 			cField = f.getByKey('Class');
 
@@ -88,7 +88,13 @@ Ext.define('NextThought.model.Base', {
 
 
 	isModifiable: function(){
-		return this.phantom||this.getLink('edit')!==null;
+		try{
+			return this.phantom||this.getLink('edit')!==null;
+		}
+		catch(e){
+			console.warn('No getLink()!');
+		}
+		return false;
 	},
 
 
