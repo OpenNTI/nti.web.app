@@ -160,15 +160,20 @@ function(){
 	//Fix Sprite dragging for ExtJS 4.0.7
 	Ext.draw.SpriteDD.override({
 		getRegion: function() {
-			var r = this.callOverridden(arguments),
-				s = this.sprite,
+			var r, s = this.sprite,
 				bbox = s.getBBox(),
 				x1,y1,x2,y2,
 				p;
 
-			if(r && !isNaN(r.x) && isFinite(r.x)){
-				//console.warn('SpriteDD.getRegion() override unnecessary?', r);
-				return r;
+			try{
+				r = this.callOverridden(arguments);
+				if(r && !isNaN(r.x) && isFinite(r.x)){
+					//console.warn('SpriteDD.getRegion() override unnecessary?', r);
+					return r;
+				}
+			}
+			catch(e){
+				//ignore... perform override
 			}
 
 			p = s.surface.getRegion();
