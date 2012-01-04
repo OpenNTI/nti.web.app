@@ -40,7 +40,7 @@ Ext.define('NextThought.view.widgets.draw.RotaterNib', {
 			radius: config.nibSize/2,
 			width: config.nibSize,
 			height: config.nibSize,
-			fill: '#cccccc',
+			fill: '#dddddd',
 			stroke: '#0000ff',
 			'stroke-width': 1.5,
 			group: 'resize'

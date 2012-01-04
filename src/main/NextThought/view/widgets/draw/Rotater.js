@@ -10,11 +10,11 @@ Ext.define('NextThought.view.widgets.draw.Rotater', {
 	constructor: function(whiteboard,sprite){
 		this.callParent([{surface: whiteboard.getSurface()}]);
 
-		var c,
-			m = Ext.create('Ext.draw.Matrix'),
+		var c,m = Ext.create('Ext.draw.Matrix'),
 			s = this.surface,
 			degrees = sprite.attr.rotation.degrees,
-			group = s.createSvgElement ? s.createSvgElement('g') : s.createNode('group');
+			group = s.createSvgElement ? s.createSvgElement('g') : s.createNode('group'),
+			bb = sprite.getBBox();
 
 		s.el.appendChild(group);
 
@@ -24,9 +24,9 @@ Ext.define('NextThought.view.widgets.draw.Rotater', {
 		this.drawNibs();
 		this.hookDrag(sprite);
 
-			c = this.getCenter();
-			m.rotate(degrees, c.x, c.y);
-			group.setAttribute('transform',m.toSvg());
+		c = this.getCenter();
+		m.rotate(degrees, c.x, c.y);
+		group.setAttribute('transform',m.toSvg());
 
 
 		this.matrix = m;
@@ -50,11 +50,6 @@ Ext.define('NextThought.view.widgets.draw.Rotater', {
 	},
 
 
-	degrees: function(dx,dy){
-		var a = (dx<0? 180: dy<0? 360: 0);
-		return ((180/Math.PI)*Math.atan(dy/dx)) + a;
-	},
-
 	getCenter: function(){
 		var b = this.sprite.getBBox(),
 			x = b.x + b.width/2,
@@ -70,24 +65,14 @@ Ext.define('NextThought.view.widgets.draw.Rotater', {
 		}
 
 		var b	= this.sprite.getBBox(),
-			x	= b.x,
-			y	= b.y,
-			x2	= x+b.width,
-			xc	= x+b.width/2,
-			yc	= y+b.height/2,
+			xc	= b.width/2,
+			yc	= b.height/2,
+			r = length( xc, yc, 0, 0),
+			c = { x: b.x + xc+r, y: b.y + yc };
 
-			r = length(xc,yc,x2,y);
+		this.nib = this.nib || this.addNib({});
 
-		this.addNib({
-//			translate:{
-				x: xc+r,
-				y: yc
-//			},
-//			rotate: {
-//				degrees: 135
-//			}
-		});
-
+		this.nib.setAttributes(c, true);
 
 	},
 
@@ -109,7 +94,6 @@ Ext.define('NextThought.view.widgets.draw.Rotater', {
 
 			me.matrix.translate(tx,ty);
 			me.group.setAttribute('transform', me.matrix.toSvg());
-
 			me.prev = xy;
 
 		};
@@ -123,6 +107,8 @@ Ext.define('NextThought.view.widgets.draw.Rotater', {
 
 	addNib: function(cfg){
 		var me= this,
+			s = me.surface,
+			rel = s.transformToViewBox,
 			r = Ext.widget('sprite-rotater-nib', Ext.apply({nibSize:this.nibSize},cfg));
 
 		me.add(r);
@@ -130,28 +116,41 @@ Ext.define('NextThought.view.widgets.draw.Rotater', {
 		r.dd.afterRepair = function(){};//we don't need to repair
 		r.dd.onDrag = function(e){
 
-			var c;//xy = e.getXY(), dx, dy, c;
-			//xy = this.sprite.surface.transformToViewBox(xy[0], xy[1]);
-			//dx = xy[0] - this.prev[0];
-			//dy = xy[1] - this.prev[1];
+			var c, d,
+				points = [me.center.x,me.center.y],
+				m = me.matrixSplit;
 
+			points.push.apply(points, me.whiteboard.relativizeXY(rel.apply(s,e.getXY())));
 
-			c = {rotate:{degrees:0}};
-			me.sprite.setAttributes(c,true);
+			function degrees(x0,y0, x1,y1){
+				var dx	= (x1-x0),
+					dy	= (y1-y0),
+					a	= (dx<0? 180: dy<0? 360: 0);
+				return ((180/Math.PI)*Math.atan(dy/dx)) + a;
+			}
 
-			Ext.draw.SpriteDD.prototype.onDrag.apply(this, arguments);
-			//this.prev = xy;
+			d = degrees.apply(s,points);
+
+			c = me.center;
+			me.sprite.setAttributes({rotate:{degrees: d } },true);
+
+			me.matrix = Ext.create('Ext.draw.Matrix');
+			me.matrix.rotate(d, c.x, c.y);
+
+			me.group.setAttribute('transform', me.matrix.toSvg());
+			me.drawNibs();
+			//Ext.draw.SpriteDD.prototype.onDrag.apply(this, arguments);
 		};
 
 		r.dd.startDrag = function(x, y) {
-			Ext.draw.SpriteDD.prototype.startDrag.apply(this, arguments);
-
+//			Ext.draw.SpriteDD.prototype.startDrag.apply(this, arguments);
+			me.center = me.getCenter();
+			me.matrixSplit = me.matrix.split();
 		};
 
-		r.dd.endDrag = function(){
-			Ext.draw.SpriteDD.prototype.endDrag.apply(this, arguments);
-			//me.drawNibs();
-		};
+//		r.dd.endDrag = function(){
+//			Ext.draw.SpriteDD.prototype.endDrag.apply(this, arguments);
+//		};
 
 		return r;
 	},

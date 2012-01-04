@@ -167,8 +167,6 @@ function(){
 				//ignore... perform override
 			}
 
-			console.log(s.surface, s.surface.id);
-
 			bbox = s.getBBox();
 			p = s.surface.getRegion();
 			x1 = bbox.x + p.left;

@@ -14,11 +14,6 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 	layout:'fit',
 	items: { xtype: 'draw', viewBox: false },
 
-	constructor: function(){
-		console.log('new whiteboard');
-		this.callParent(arguments);
-	},
-
 
 	initComponent: function(){
 		this.callParent(arguments);
@@ -97,8 +92,6 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 			this.loadScene(this.value);
 			delete this.value;
 		}
-
-		console.log(this.getSurface().el, this.getSurface(), this.getSurface().id);
 
 		this.setColor('fill', '000000');
 		this.setColor('stroke', '000000');
@@ -245,8 +238,6 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 			s = surface || this.getSurface(),
 			w = scale || this.getScaleFactor(),
             me = context || this;
-
-		console.log('Loading for Surface id:',s.id);
 
 		Ext.each(shapes, function(shape){
 			s.add(ShapeFactory.restoreShape(me, shape, w)).show(true);
