@@ -16,12 +16,12 @@ Ext.define('NextThought.view.widgets.draw.ShapeFactory',
 		polygon: 'polygon',
 		text: 'base'
 	},
-
+/*
 	strokeScalingRequired: function(j){
 		//right now, only need to scale strokes for lines, which is a poly with 1 side
 		return (j.Class === 'CanvasPolygonShape' && j.sides ===1);
 	},
-
+*/
 	toolDefaults: function(shape, x, y, strokeWidth, sides, selectedColor){
 		strokeWidth = strokeWidth||2;
 		sides = sides || 4;
@@ -58,11 +58,9 @@ Ext.define('NextThought.view.widgets.draw.ShapeFactory',
 	 * @returns modified json, or modifies passed in json if supplied
 	 */
 	scaleJson: function(factor, json) {
-		var k;
+		var k, sw = json.strokeWidth || json.strokeWidthTarget;
 
-		if (this.strokeScalingRequired(json)) {
-			json.strokeWidth = parseFloat(json.strokeWidth) * factor;
-		}
+        json.strokeWidthTarget = ((typeof sw === 'string') ? parseFloat(sw) : sw) * factor;
 
 		for(k in json.transform){
 			if(!json.transform.hasOwnProperty(k))continue;
@@ -88,22 +86,20 @@ Ext.define('NextThought.view.widgets.draw.ShapeFactory',
 	},
 
 	//TODO : opacity for fill and stroke are available, hook them up.
-	restoreShape: function m(whiteboard, shape, scaleFactor){
-		var t = shape.transform,
-			c = Color.parseColor(shape.fillColor,shape.fillOpacity) || Color.getColor(m.i=(m.i||-1)+1),
-			p = Color.parseColor(shape.strokeColor) || c.getDarker(0.2),
-			s;
+    restoreShape: function m(whiteboard, shape, scaleFactor){
+        var t = shape.transform,
+            c = Color.parseColor(shape.fillColor,shape.fillOpacity) || Color.getColor(m.i=(m.i||-1)+1),
+            p = Color.parseColor(shape.strokeColor) || c.getDarker(0.2),
+            s;
 
-		//scale up the matrix
-		this.scaleJson(scaleFactor, shape);
+        //scale up the matrix
+        this.scaleJson(scaleFactor, shape);
 
-		t = Ext.create('Ext.draw.Matrix',t.a,t.b,t.c,t.d,t.tx,t.ty).split();
+        t = Ext.create('Ext.draw.Matrix',t.a,t.b,t.c,t.d,t.tx,t.ty).split();
 
-		s = Ext.widget(this.getSpriteClass(shape.Class, shape.sides),{
-			sides: shape.sides,
-			//CMU: The scaling of the stroke is all messed up still.
-			//Hardcode a stroke width that looks ok on the browser...
-			'stroke-width': 0.005,//parseFloat(shape.strokeWidth),
+        s = Ext.widget(this.getSpriteClass(shape.Class, shape.sides),{
+            sides: shape.sides,
+            'stroke-width': shape.strokeWidthTarget,
 			stroke: p.toString(),
 			fill: c.toString(),
 			translate: {
@@ -160,6 +156,7 @@ function(){
 	//Fix Sprite dragging for ExtJS 4.0.7
 	Ext.draw.SpriteDD.override({
 		getRegion: function() {
+          //  debugger;
 			var r, s = this.sprite,
 				bbox = s.getBBox(),
 				x1,y1,x2,y2,

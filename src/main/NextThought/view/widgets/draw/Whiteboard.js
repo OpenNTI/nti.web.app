@@ -199,28 +199,29 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 	getThumbnail: function(){
         var id = guidGenerator(),
 			div = document.createElement('div'),
-			el = Ext.get(div),
-            v = this.rendered ? this.saveScene() : this.value,
-			svg, w;
+            el = Ext.get(div),
+            //v = this.rendered ? this.saveScene() : this.value,
+            v = this.rendered ? this.initialConfig.value : this.value,
+            svg, w;
 
-		//This is a little dirty, but it gets the job done.
-		div.setAttribute('id',id);
-		div.setAttribute('style','display:none');
-		document.body.appendChild(div);
+        //This is a little dirty, but it gets the job done.
+        div.setAttribute('id',id);
+        div.setAttribute('style','display:none');
+        document.body.appendChild(div);
 
-		w = Ext.widget('whiteboard', {readOnly:true,scaleFactor: 1, value: v, renderTo: id});
-		svg = el.down('svg').dom.parentNode.innerHTML;
+        w = Ext.widget('whiteboard', {readOnly:true,scaleFactor: 1, value: v, renderTo: id});
+        svg = el.down('svg').dom.parentNode.innerHTML;
 
-		w.destroy();
-		el.remove();
+        w.destroy();
+        el.remove();
 
 		return svg.replace(/style=".*?"/ig,'')
 					.replace(/<\/*svg[\s"\/\-=0-9a-z:\.;]*>/gi, '');
+
 	},
 
 	loadScene: function(canvasJSON){
         //console.log('JSON canvas to load', JSON.stringify(canvasJSON));
-
 		var shapes = Ext.clone( canvasJSON.shapeList ),
 			s = this.getSurface(),
 			w = this.getScaleFactor(),
@@ -244,6 +245,8 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 				if(i===ab || i.isNib || a.hidden || (!bb.width && !bb.height))return;
 
                 o = ShapeFactory.scaleJson(1/w, i.toJSON());
+                o.strokeWidth = o.strokeWidthTarget + '%';
+                delete o.strokeWidthTarget;
 
 				shapes.push(o);
 			},
@@ -251,8 +254,8 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 		);
 
         s = { "Class":"Canvas", "shapeList": shapes };
-        //console.log('save scene', JSON.stringify(s));
 
+        //console.log('save scene', JSON.stringify(s));
 		return shapes.length===0 ? undefined : s;
 	},
 

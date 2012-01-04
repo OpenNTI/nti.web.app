@@ -8,12 +8,13 @@ Ext.define('NextThought.view.widgets.draw.Shape', {
 
     constructor: function(config){
         var c = {
-            draggable: true, x:0, y:0, width: 1, height: 1
-            //for some strange reason, even though we tell the browser not to scale the stroke, it still makes the bonding
-            // clickible element the size of the shape as if it did scale the stroke... so we Clip it. (the clip gets scaled
-            // too.
-            //'clip-rect': this.applyClipRect ? {x:-0.55, y:-0.55, width: 1.1, height: 1.1} : undefined
+            draggable: true, x:0, y:0, width: 1, height: 1//,
+            //'stroke-width': config['stroke-width'] / ((config.scale.x + config.scale.y)/2)
         };
+        if (config.scale) {
+         //   console.log('stroke-width changing from', config['stroke-width'], 'to',  config['stroke-width'] / ((config.scale.x + config.scale.y)/2), printStackTrace().join('\n'));
+            c['stroke-width'] = config['stroke-width'] / ((config.scale.x + config.scale.y)/2)
+        }
 
         this.callParent([Ext.apply(config,c)]);
     },
@@ -40,12 +41,14 @@ Ext.define('NextThought.view.widgets.draw.Shape', {
 
 	toJSON: function(){
 		var m = this.matrix,
+            spl = m.split(),
+            sf = (spl.scaleX + spl.scaleY) / 2,
 			additionalProps = {
                 'strokeColor': Color.toRGB(this.stroke),
                 'strokeOpacity' : 1, //TODO: once we have tools to adjust this, set
                 'fillColor': Color.toRGB(this.fill),
                 'fillOpacity': 1, //TODO: once we have tools to adjust this, set
-                'strokeWidth': this['stroke-width'] +'pt'
+                'strokeWidthTarget': this.attr['stroke-width'] * sf
             },
 			matrix = {
 				'Class': 'CanvasAffineTransform',

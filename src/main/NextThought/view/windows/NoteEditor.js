@@ -46,7 +46,7 @@ Ext.define('NextThought.view.windows.NoteEditor', {
 
 		editor.getToolbar().add('-',{
 			text: 'WB',
-			handler: function(){me.insertWhiteboard()}}
+			handler: function(){me.insertWhiteboard();}}
 		);
 	},
 
@@ -153,7 +153,9 @@ Ext.define('NextThought.view.windows.NoteEditor', {
 		win.show();
 		win.hide();
 
-		win.saveScene = function(){return this.down('whiteboard').saveScene();};
+		win.saveScene = function(){
+            return this.down('whiteboard').saveScene();
+        };
 
 		return win;
 	},
@@ -167,6 +169,7 @@ Ext.define('NextThought.view.windows.NoteEditor', {
 				handler: function(btn){
 					var win = btn.up('window').hide(),
                         wb = win.down('whiteboard');
+                    wb.initialConfig.value = wb.saveScene();
 					wb.fireEvent('save',wb);
 				}
 			},

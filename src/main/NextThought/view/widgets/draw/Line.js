@@ -12,7 +12,8 @@ Ext.define('NextThought.view.widgets.draw.Line', {
             x2 = s * Math.cos(d),
             y2 = s * Math.sin(d),
             c = Ext.clone(config),
-            path = [];
+            path = [],
+            sw = config['stroke-width'];
 
         //delete rotate and scale since we've done this already, let system do translate
         delete c.rotate;
@@ -22,6 +23,8 @@ Ext.define('NextThought.view.widgets.draw.Line', {
         path.push(['L', x2, y2]);
 
         this.callParent([Ext.apply(c,{ type: 'path', path: path })]);
+
+        this.setAttributes({'stroke-width': sw});
     },
 
     getShape: function(){
@@ -89,7 +92,7 @@ Ext.define('NextThought.view.widgets.draw.Line', {
                 'strokeOpacity' : 1, //TODO: once we have tools to adjust this, set
                 'fillColor': Color.toRGB(this.fill),
                 'fillOpacity': 1, //TODO: once we have tools to adjust this, set
-                'strokeWidth': this['stroke-width'] + 'pt'
+                'strokeWidthTarget': this['stroke-width']
             }
         );
     }
