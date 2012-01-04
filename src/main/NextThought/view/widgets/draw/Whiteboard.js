@@ -84,6 +84,12 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
     },
 
 
+	destroy: function(){
+		this.getSurface().removeAll(true);
+		this.callParent(arguments);
+	},
+
+
 	afterRender: function(){
 		this.callParent(arguments);
 
