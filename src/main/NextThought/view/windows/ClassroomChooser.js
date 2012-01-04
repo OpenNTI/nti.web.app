@@ -4,6 +4,7 @@ Ext.define('NextThought.view.windows.ClassroomChooser', {
 
 	requires:[
 		'NextThought.view.widgets.classroom.Browser',
+		'NextThought.view.widgets.classroom.BrowserStudyGroups',
 		'NextThought.view.widgets.LinkButton'
 	],
 
@@ -12,23 +13,52 @@ Ext.define('NextThought.view.windows.ClassroomChooser', {
 	frame: true,
 	floating: true,
 	width: 450,
-	height: 310,
+	height: 425,
 	closable: false,
 	constrain: true,
 	layout: 'fit',
 	modal: true,
 	items: {
-		layout: 'anchor',
+		layout: {
+			type: 'vbox',
+			align: 'stretch'
+		},
 		border: false,
 		padding: 5,
 		defaults:{
+			layout: {
+				type: 'vbox',
+				align: 'stretch'
+			},
+			defaultType: 'component',
+			border: false,
 			margin: 5
 		},
-		defaultType: 'component',
 		items: [
-			{html: '<h2>Host a class<h2>'},
-			{xtype: 'classroom-browser', anchor: '100% -55'},
-			{xtype: 'link', text: 'Create a class', htmlPrefix: '<hr/>'}
+			{
+				flex: 1,
+				items:[
+					{html: '<h2>Study groups:<h2>'},
+					{xtype: 'classroom-browser-study-groups', flex: 1}
+				]
+
+			},{
+				flex: 3,
+				items:[
+					{html: '<h2>Classes:<h2>'},
+					{xtype: 'classroom-browser', flex: 1}
+				]
+			}
+//			,
+//			{xtype: 'link', text: 'Create a class', htmlPrefix: '<hr/>'}
+		]
+	},
+	dockedItems: {
+		dock: 'bottom',
+		xtype: 'toolbar',
+		items: [
+			{text: 'Create'},
+			{text: 'Edit Resources', disabled: true}
 		]
 	},
 

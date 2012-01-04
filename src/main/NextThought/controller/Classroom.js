@@ -44,6 +44,13 @@ Ext.define('NextThought.controller.Classroom', {
 			'classroom-browser':{
 				'selected': this.selectedClassRoom
 			},
+			'classroom-browser-study-groups':{
+				'selected': this.selectedClassRoom
+			},
+
+			'classroom-chooser dataview':{
+				'selectionchange': this.onClassroomChooserSelectionChange
+			},
 
 			'classroom-chooser link':{
 				'click': this.createClassClicked
@@ -80,6 +87,24 @@ Ext.define('NextThought.controller.Classroom', {
 		store.proxy.url = _AppConfig.server.host+coll.href;
 		store.load();
 	},
+
+
+	onClassroomChooserSelectionChange: function(evt,sel){
+		if(this.selectionClearing){
+			return;
+		}
+
+		this.selectionClearing = true;
+
+		Ext.each(evt.view.up('classroom-chooser').query('dataview'),function(v){
+			if(evt.view !== v ){
+				v.getSelectionModel().deselectAll(true);
+			}
+		});
+
+		delete this.selectionClearing;
+	},
+
 
 	isClassroom: function(roomOrMessageInfo){
 		if(!roomOrMessageInfo)return false;
