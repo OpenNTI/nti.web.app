@@ -6,7 +6,7 @@ Ext.define('NextThought.view.form.util.Token', {
     cls: this.clsPrefix+'-wrapper',
 
     renderTpl: new Ext.XTemplate(
-        '<span class="{prefix} {prefix}-{[this.getType(values)]}" tabindex="-1">',
+        '<span class="{prefix} {prefix}-{[this.getType(values)]}">',
             '<span class="{prefix}-body">',
                 '<span class="{prefix}-nib-{[this.getType(values)]} {prefix}-nib"></span> ',
                 '<span class="{prefix}-label">{text}</span>&nbsp;',
@@ -20,11 +20,8 @@ Ext.define('NextThought.view.form.util.Token', {
                     u = model.get('Username').toLowerCase();
 
 
-                return /public|everyone/i.test(u)
-                    ? 'public'
-                    : /friendslist|community|group/i.test(m)||!/@/.test(u)
-                        ? 'group'
-                        : 'person';
+                return (/public|everyone/i).test(u) ? 'public' :
+                    /friendslist|community|group/i.test(m)||!/@/.test(u) ? 'group' : 'person';
             }
         }
     ),
@@ -38,9 +35,9 @@ Ext.define('NextThought.view.form.util.Token', {
         this.addEvents('click');
         this.callParent(arguments);
 
-        this.renderData['text'] = this.text;
-        this.renderData['model'] = this.model;
-        this.renderData['prefix'] = this.clsPrefix;
+        this.renderData.text = this.text;
+        this.renderData.model = this.model;
+        this.renderData.prefix = this.clsPrefix;
 
         this.cls = this.clsPrefix+'-wrapper';
     },
