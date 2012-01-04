@@ -82,11 +82,8 @@ Ext.define('NextThought.util.AnnotationUtils',{
 	 * @param canvas - the canvas object
 	 */
 	generateThumbnail: function(canvas) {
-		var wb = Ext.widget('whiteboard', {value:canvas}),
-			tn = wb.getThumbnail();
-
-		wb.destroy();
-		return tn;
+		Ext.require('NextThought.view.widgets.draw.Whiteboard');
+		return NextThought.view.widgets.draw.Whiteboard.getThumbnail(canvas);
 	},
 
 //tested

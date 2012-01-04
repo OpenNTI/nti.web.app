@@ -98,14 +98,6 @@ Ext.define('NextThought.controller.Whiteboard', {
 		console.debug('edit',arguments);
 	},
 
-
-	relativizeXY: function(xy, wb){
-		var p = wb.down('draw').getPosition();
-
-		xy[0]-=p[0];
-		xy[1]-=p[1];
-		return xy;
-	},
 /*
     polygonSidesChanged: function(btn) {
         //TODO: Jonathan, please check this out.  Changing the numberfield causes the button to become
@@ -145,7 +137,7 @@ Ext.define('NextThought.controller.Whiteboard', {
 
 		var wb = this.getWhiteboardFrom(e),
             op = this.sprite.initalPoint,
-			dt = this.relativizeXY(e.getXY(), wb),
+			dt = wb.relativizeXY(e.getXY()),
             sw = this.sprite['stroke-width'],
 			p = op.concat(dt),
             m;
@@ -175,7 +167,7 @@ Ext.define('NextThought.controller.Whiteboard', {
 	surfaceMouseDown: function(e){
         var wb = this.getWhiteboardFrom(e),
 		    t = this.getActiveTool(wb),
-			xy = this.relativizeXY(e.getXY(), wb),
+			xy = wb.relativizeXY(e.getXY()),
 			sw = wb.down('numberfield[name=stroke-width]').getValue(),
 			sd = wb.down('numberfield[name=sides]').getValue();
 

@@ -112,10 +112,10 @@ Ext.define('NextThought.view.windows.NoteEditor', {
 	insertWhiteboard: function(){
 		var id = guidGenerator(),
 			win = this.getWhiteboardEditor(null, id),
-			whiteboard = win.down('whiteboard'),
+			whiteboard = win.down('whiteboard');
 			//the getDoc() is non-public api
-			iFrameDoc = this.down('htmleditor').getDoc(),
-			body = iFrameDoc.body;
+			//iFrameDoc = this.down('htmleditor').getDoc(),
+			//body = iFrameDoc.body;
 
 		whiteboard.__id = id;
 		whiteboard.on('save', this.updateOrCreateWhiteboardThumbnail, this);
@@ -149,9 +149,6 @@ Ext.define('NextThought.view.windows.NoteEditor', {
 			items: { xtype: 'whiteboard', value: Ext.clone(canvas) },
 			bbar: this.getWhiteboardBottomToolbar()
 		});
-
-		win.show();
-		win.hide();
 
 		win.saveScene = function(){
             return this.down('whiteboard').saveScene();

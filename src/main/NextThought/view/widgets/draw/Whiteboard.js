@@ -12,8 +12,12 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 
 	cls: 'whiteboard',
 	layout:'fit',
-	items: { xtype: 'draw', viewBox: false},
+	items: { xtype: 'draw', viewBox: false },
 
+	constructor: function(){
+		console.log('new whiteboard');
+		this.callParent(arguments);
+	},
 
 
 	initComponent: function(){
@@ -83,22 +87,12 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 	afterRender: function(){
 		this.callParent(arguments);
 
-		if(!this.readOnly){
-			this.artBoard = this.getSurface().add({
-				type: 'rect',
-				width: this.getScaleFactor(),
-				height: this.getScaleFactor()*0.92,
-				'stroke-width': 1,
-				stroke: '#cccccc'
-			});
-
-			this.artBoard.show(true);
-		}
-
 		if(this.value){
 			this.loadScene(this.value);
 			delete this.value;
 		}
+
+		console.log(this.getSurface().el, this.getSurface(), this.getSurface().id);
 
 		this.setColor('fill', '000000');
 		this.setColor('stroke', '000000');
@@ -110,6 +104,15 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 		if(this.initialConfig.value){
 			this.loadScene(this.initialConfig.value);
 		}
+	},
+
+
+	relativizeXY: function(xy){
+		var p = this.down('draw').getPosition();
+
+		xy[0]-=p[0];
+		xy[1]-=p[1];
+		return xy;
 	},
 
 
@@ -163,10 +166,7 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 
 
 	getSurface: function(){
-		if(!this._surf){
-			this._surf = this.down('draw').surface;
-		}
-		return this._surf;
+		return this.down('draw').surface;
 	},
 
 
@@ -194,14 +194,14 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 
 
 	/**
-	 * Clone the svg in normalized form. (viewBox of 0,0, 1,1)
+	 *
+	 * @param [value]
 	 */
-	getThumbnail: function(){
+	getThumbnail: function(value){
         var id = guidGenerator(),
 			div = document.createElement('div'),
             el = Ext.get(div),
-            //v = this.rendered ? this.saveScene() : this.value,
-            v = this.rendered ? this.initialConfig.value : this.value,
+            v = value || this.value || this.initialConfig.value,
             svg, w;
 
         //This is a little dirty, but it gets the job done.
@@ -209,23 +209,38 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
         div.setAttribute('style','display:none');
         document.body.appendChild(div);
 
-        w = Ext.widget('whiteboard', {readOnly:true,scaleFactor: 1, value: v, renderTo: id});
+        w = Ext.widget('draw', {renderTo: id, id: id+'-thumbnail-surface',width: 1, height:1});
+		this.loadScene.call(w, v,w.surface,1,w);
         svg = el.down('svg').dom.parentNode.innerHTML;
 
+		w.surface.removeAll(true);
         w.destroy();
         el.remove();
 
 		return svg.replace(/style=".*?"/ig,'')
-					.replace(/<\/*svg[\s"\/\-=0-9a-z:\.;]*>/gi, '');
+				.replace(/id="ext\-.*?"/ig,'')
+				.replace(/<defs><\/defs>/gi, '')
+				.replace(/<rect(.+?)"100%"(.+?)"100%"(.*?)><\/rect>/gi, '')
+				.replace(/<\/*svg[\s"\/\-=0-9a-z:\.;]*>/gi, '');
 
 	},
 
-	loadScene: function(canvasJSON){
+
+	/**
+	 *
+	 * @param canvasJSON
+	 * @param [surface]
+	 * @param [scale]
+	 * @param [context]
+	 */
+	loadScene: function(canvasJSON, surface, scale, context){
         //console.log('JSON canvas to load', JSON.stringify(canvasJSON));
 		var shapes = Ext.clone( canvasJSON.shapeList ),
-			s = this.getSurface(),
-			w = this.getScaleFactor(),
-            me = this;
+			s = surface || this.getSurface(),
+			w = scale || this.getScaleFactor(),
+            me = context || this;
+
+		console.log('Loading for Surface id:',s.id);
 
 		Ext.each(shapes, function(shape){
 			s.add(ShapeFactory.restoreShape(me, shape, w)).show(true);
@@ -259,8 +274,12 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 		return shapes.length===0 ? undefined : s;
 	},
 
-    getNumberOfShapes: function()
-    {
+    getNumberOfShapes: function() {
         return this.getSurface().items.length;
     }
+},
+function(){
+	//make these functions stactically available
+	this.loadScene = this.prototype.loadScene;
+	this.getThumbnail = this.prototype.getThumbnail;
 });

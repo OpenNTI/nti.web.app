@@ -16,20 +16,16 @@ Ext.define('NextThought.view.widgets.draw.ShapeFactory',
 		polygon: 'polygon',
 		text: 'base'
 	},
-/*
-	strokeScalingRequired: function(j){
-		//right now, only need to scale strokes for lines, which is a poly with 1 side
-		return (j.Class === 'CanvasPolygonShape' && j.sides ===1);
-	},
-*/
+
+
 	toolDefaults: function(shape, x, y, strokeWidth, sides, selectedColor){
 		strokeWidth = strokeWidth||2;
 		sides = sides || 4;
 
 		var cfg,
 			d = {
-			circle: {},
-			polygon: { sides: sides },
+			circle: { scale:{ x: 10, y: 10} },
+			polygon: { sides: sides, scale:{ x: 10, y: 10} },
 			path: { type: 'path', fill: '#000000', translate: {} },
 			line: { type: 'path', fill: '#000000', translate: {}, getShape:function(){return 'line';}},
 			text: {
@@ -85,7 +81,7 @@ Ext.define('NextThought.view.widgets.draw.ShapeFactory',
 		return s;
 	},
 
-	//TODO : opacity for fill and stroke are available, hook them up.
+
     restoreShape: function m(whiteboard, shape, scaleFactor){
         var t = shape.transform,
             c = Color.parseColor(shape.fillColor,shape.fillOpacity) || Color.getColor(m.i=(m.i||-1)+1),
@@ -115,6 +111,7 @@ Ext.define('NextThought.view.widgets.draw.ShapeFactory',
 			}
 		});
 
+		s.whiteboardRef = whiteboard;
 		this.relay(whiteboard, s, ['click','dblClick']);
 
 		return s;
@@ -156,11 +153,8 @@ function(){
 	//Fix Sprite dragging for ExtJS 4.0.7
 	Ext.draw.SpriteDD.override({
 		getRegion: function() {
-          //  debugger;
 			var r, s = this.sprite,
-				bbox = s.getBBox(),
-				x1,y1,x2,y2,
-				p;
+				bbox, x1,y1,x2,y2, p;
 
 			try{
 				r = this.callOverridden(arguments);
@@ -173,6 +167,9 @@ function(){
 				//ignore... perform override
 			}
 
+			console.log(s.surface, s.surface.id);
+
+			bbox = s.getBBox();
 			p = s.surface.getRegion();
 			x1 = bbox.x + p.left;
 			y1 = bbox.y + p.top;
