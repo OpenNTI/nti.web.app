@@ -165,8 +165,6 @@ Ext.define('NextThought.view.form.AccountForm', {
 
         this.down('panel[changeAvatar]').update(this.gravatarTpl.apply(this.account.data));
 
-        Ext.each(this.query('fieldset'), this.__setupAccordion, this);
-
     },
 
 
@@ -179,14 +177,6 @@ Ext.define('NextThought.view.form.AccountForm', {
          Ext.each(this.query('textfield[inputType=password]'),function(f){f.enable();});
      },
 
-
-    __setupAccordion: function(g,i,groups){
-        g.oldSetExpanded = g.setExpanded;
-        g.setExpanded = function(exp){
-            if(exp)Ext.each(groups, function(g){g.collapse()});
-            this.oldSetExpanded(exp);
-        };
-    },
 
     setFieldValue: function(fieldName){
         var rn = this.down('*[name='+fieldName+']');
