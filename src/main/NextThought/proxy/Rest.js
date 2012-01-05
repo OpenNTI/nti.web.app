@@ -32,20 +32,28 @@ Ext.define('NextThought.proxy.Rest', {
         var host = _AppConfig.server.host,
             action = request.operation.action,
 			record = request.records[0],
-			href = record.get('href'),
 			mimeType = record.mimeType || record.get('MimeType'),
+			href,
 			collection;
 
 		this.headers = { 'Content-Type': mimeType+'+json' };
 
-		//creation goes here
-        if (action!=='update' && action!=='destroy'){
+        if (action==='update' || action==='destroy'){
+			href = record.getLink('edit');
+		}
+		else if(action === 'create'){
 			collection = _AppConfig.service.getCollectionFor(mimeType,null) || {};
 			href = host + collection.href;
 		}
-		//edit here
-		else if(!href){
-			href = record.getLink('edit');
+		else if(action === 'read') {
+			href = record.get('href');
+		}
+		else {
+			Ext.Error.raise({
+				msg: 'Unexpected action, no defined path for: "'+action+'"',
+				request: request,
+				action: action
+			});
 		}
 
 
