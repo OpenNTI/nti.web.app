@@ -100,7 +100,7 @@ Ext.define('NextThought.view.form.fields.ShareWithField', {
     },
 
     _select: function(ctrl, selected) {
-    	ctrl.collapse();
+        ctrl.collapse();
         ctrl.setValue('');
         this.addSelection(selected[0]);
     },

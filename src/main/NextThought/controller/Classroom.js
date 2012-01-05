@@ -12,8 +12,9 @@ Ext.define('NextThought.controller.Classroom', {
         'widgets.classroom.LiveDisplay',
         'widgets.classroom.Management',
         'widgets.classroom.Moderation',
+        'windows.ClassCreateEditWindow',
         'windows.ClassroomChooser',
-        'windows.ClassroomEditor',
+        'windows.ClassScriptEditor',
         'Viewport'
     ],
 
@@ -44,6 +45,7 @@ Ext.define('NextThought.controller.Classroom', {
 			'classroom-browser':{
 				'selected': this.selectedClassRoom
 			},
+
 			'classroom-browser-study-groups':{
 				'selected': this.selectedClassRoom
 			},
@@ -52,7 +54,7 @@ Ext.define('NextThought.controller.Classroom', {
 				'selectionchange': this.onClassroomChooserSelectionChange
 			},
 
-			'classroom-chooser link':{
+			'classroom-chooser button[create]':{
 				'click': this.createClassClicked
 			},
 
@@ -172,11 +174,14 @@ Ext.define('NextThought.controller.Classroom', {
 		this.getClassroomContainer().hideClassChooser();
 	},
 
+    createClassClicked: function(btn) {
+        Ext.widget('class-create-edit-window').show();
+    },
 
-	createClassClicked: function(btn){
+	createClassScriptClicked: function(btn){
 //		var c = this.getClassroomContainer();
 //		c.hideClassChooser();
-		Ext.widget('class-editor').show();
+		Ext.widget('class-script-editor').show();
 	},
 
 

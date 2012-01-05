@@ -57,8 +57,8 @@ Ext.define('NextThought.view.windows.ClassroomChooser', {
 		dock: 'bottom',
 		xtype: 'toolbar',
 		items: [
-			{text: 'Create'},
-			{text: 'Edit Resources', disabled: true}
+			{text: 'Create', create:true},
+			{text: 'Edit Resources', disabled: true, edit:true}
 		]
 	},
 
