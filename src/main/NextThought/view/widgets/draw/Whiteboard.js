@@ -93,7 +93,7 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 			delete this.value;
 		}
 
-		this.setColor('fill', '000000');
+		this.setColor('fill', 'FFFFFF');
 		this.setColor('stroke', '000000');
 	},
 
