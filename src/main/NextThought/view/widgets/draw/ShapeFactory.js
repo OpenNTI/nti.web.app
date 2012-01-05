@@ -24,8 +24,8 @@ Ext.define('NextThought.view.widgets.draw.ShapeFactory',
 
 		var cfg,
 			d = {
-			circle: { scale:{ x: 10, y: 10} },
-			polygon: { sides: sides, scale:{ x: 10, y: 10} },
+			circle: {},
+			polygon: { sides: sides },
 			path: { type: 'path', fill: '#000000', translate: {} },
 			line: { type: 'path', fill: '#000000', translate: {}, getShape:function(){return 'line';}},
 			text: {
