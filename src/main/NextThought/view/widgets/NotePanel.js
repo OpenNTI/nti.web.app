@@ -424,7 +424,7 @@ Ext.define('NextThought.view.widgets.NotePanel',{
         var a = this._annotation;
 		try{
 			a = (a._parentAnnotation || a);
-			a.fireEvent('resize');
+			a.requestRender();
 		}
 		catch(e){
 			console.error(e.stack);

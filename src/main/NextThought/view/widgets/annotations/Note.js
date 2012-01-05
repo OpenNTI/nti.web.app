@@ -8,7 +8,8 @@ Ext.define( 'NextThought.view.widgets.annotations.Note', {
         Ext.apply(this, {
             _anchorNode : null,
             _noteContainer: null,
-            _originalPadding: 0
+            _originalPadding: 0,
+			_renderPriority: 0
         });
 
         this.callParent([record, container, component,
@@ -18,8 +19,6 @@ Ext.define( 'NextThought.view.widgets.annotations.Note', {
         var me = this,
             a = Ext.get(Ext.query('a[name=' + record.get('anchorPoint') + ']')[0]),
             c;
-
-        me._cmp.on('afterlayout', me.onResize, me);
 
         a = a ? a : Ext.get(Ext.query('#nticontent a[name]')[0]);
         c = me._createNoteContainer(a.dom.getAttribute('name'));
@@ -38,43 +37,51 @@ Ext.define( 'NextThought.view.widgets.annotations.Note', {
         me.noteDiv._annotation = me;
 
         me.noteCmp = Ext.widget('note-entry',{ renderTo: me.noteDiv, _annotation: me, _owner: component });
-        me.noteUpdated(record, -1);
-        me.noteCmp.doLayout();
+
+        me.attachRecord(record);
 
         return me;
     },
 
+
+	attachRecord: function(record){
+		var children = this._record.children,
+			parent = this._record._parent,
+			old = this._record;
+
+		this._record = record;
+
+		record.on('updated',this.noteUpdated, this);
+		record.children = record.children || children;
+		record._parent = record._parent || parent;
+
+		if(old !== record)
+			old.un('updated', this.noteUpdated, this);
+	},
+
+
     visibilityChanged: function(show){
-        var me = this, c = Ext.get(me.noteDiv);
-        me.callParent(arguments);
-        if(show) c.show(); else c.hide();
-        if(me.noteCmp)
+        var me = this,
+			c = Ext.get(me.noteDiv);
+
+		if(show) c.show(); else c.hide();
+
+		if(me.noteCmp)
             me.noteCmp.doLayout();
-        // me.onResize();
-        setTimeout(function(){
-            console.debug('note visability changed, firing resize');
-            me.getCmp().fireEvent('resize');
-        },100);
+
+		me.callParent(arguments);
     },
 
-    noteUpdated: function(record, initCode){
-        // console.debug('noteUpdated');
-        var children = this._record.children,
-            parent = this._record._parent;
 
-        record.on('updated',this.noteUpdated, this);
-        record.children = record.children || children;
-        record._parent = record._parent || parent;
-
-        this._record = record;
-        if(initCode != -1){
-            this.noteCmp.updateFromRecord(record);
-            this.onResize();
-        }
-		this.getCmp().fireEvent('resize');
+	noteUpdated: function(record){
+        this.attachRecord(record);
+		this.noteCmp.updateFromRecord(record);
+		this.noteCmp.doLayout();
+		this.requestRender();
     },
 
-    _buildMenu: function(){
+
+	_buildMenu: function(){
         var items = [];
 
         if(this._isMine)
@@ -85,19 +92,17 @@ Ext.define( 'NextThought.view.widgets.annotations.Note', {
         return this.callParent([items]);
     },
 
-    _createNoteContainer: function(id){
+
+	_createNoteContainer: function(id){
         var e = Ext.get(id),
             n = e ? e.dom : this.createElement('div',this._cnt,'document-notes');
         n.setAttribute('id',id);
         return Ext.get(n);
     },
 
-    cleanup: function(removeAll){
-        this.callParent(arguments);
 
+	cleanup: function(removeAll){
         var hasReplies = this.noteCmp.hasReplies();
-
-        this._cmp.un('afterlayout', this.onResize, this);
         if(hasReplies){
             this.noteCmp.cleanupReply(removeAll);
         }
@@ -112,11 +117,12 @@ Ext.define( 'NextThought.view.widgets.annotations.Note', {
                 this._anchorNode.setStyle('padding-bottom',this._originalPadding+'px');
             }
         }
-        this.onResize();
-		this.fireEvent('resize');
+
+        this.callParent(arguments);
     },
 
-    onResize : function(){
+
+    render: function(){
         try{
             if(!this.noteCmp) return;
 

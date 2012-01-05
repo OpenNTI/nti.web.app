@@ -274,8 +274,7 @@ Ext.define('NextThought.mixins.Annotations', {
 			contributors,
 			k = 'Last Modified',
 			tree = {}, b,
-			sortedItems,
-			sorter = this.buildAnchorSorter(),
+			items,
             foundBins;
 
 		if (!this._containerId) return;
@@ -294,13 +293,9 @@ Ext.define('NextThought.mixins.Annotations', {
 
 		this.prunePlaceholders(tree);
 
-		sortedItems = Ext.Object.getValues(tree);
-		//sort
-		sortedItems =	Ext.Array.sort(sortedItems,sorter)
-			.concat(	Ext.Array.sort(bins.Highlight||[],sorter));
+		items = Ext.Object.getValues(tree).concat(bins.Highlight||[]);
 
-
-		contributors = this.buildAnnotations(sortedItems);
+		contributors = this.buildAnnotations(items);
 
 		me.fireEvent('publish-contributors',contributors);
         me.fireEvent('resize');
@@ -312,34 +307,6 @@ Ext.define('NextThought.mixins.Annotations', {
 		if(!Ext.isArray(c)) c = [c];
 		Ext.each(c, function(i){ if(i && Ext.String.trim(i) !== '')cont[i] = true; });
 		return cont;
-	},
-
-
-	buildAnchorSorter: function(){
-		var me = this,
-			m = 'getAnchorForSort',
-			anchors = Ext.Array.map(
-					Ext.DomQuery.select('#NTIContent a[name]'),
-					function(a){
-						return a.getAttribute('name');
-					}
-			);
-
-		function _(v){
-			var r = me.GETTERS[v.getModelName()](v);
-			return  r[m]? Ext.Array.indexOf(anchors,r[m]()) : 0;
-		}
-
-		return function(a,b){
-			var _a = _(a),
-				_b = _(b),
-				c = 0;
-
-			if( _a != _b ){
-				c = _a < _b ? -1:1;
-			}
-			return c;
-		};
 	},
 
 

@@ -10,19 +10,19 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
             userId= record.get('Creator') || _AppConfig.userObject.getId();
 
         me.callParent([record, container, component,'resources/images/charms/highlight-white.png']);
+
         Ext.apply(me,{
             _sel: selection,
             _canvas: me._createCanvas(),
-            _userId: userId
+            _userId: userId,
+			_renderPriority: 1
         });
 
 
-		me.requestRender = Ext.Function.createDelayed(me.requestRender, 10, me);
-        me.self.addSource(userId);
-        me.self._eventRouter.on('render',me.requestRender, me);
-        me.self._eventRouter.fireEvent('render');
+		me.self.addSource(userId);
         return me;
 	},
+
 
 	_createCanvasContainer: function(id){
 		var e = Ext.get(id),
@@ -32,6 +32,7 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 		p.appendChild(n);
 		return Ext.get(n);
 	},
+
 
     _createCanvas: function(){
         var cont = this._createCanvasContainer('canvas-highlight-container'),
@@ -48,6 +49,7 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
         return c;
     },
 
+
     canvasResize: function(){
         var c = Ext.get(this._canvas || Ext.query('#canvas-highlight-container canvas')[0]),
             cont = Ext.get(this._cnt),
@@ -60,11 +62,6 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
             height: size.height
         });
     },
-
-	visibilityChanged: function(show){
-		this.callParent(arguments);
-		this.self._eventRouter.fireEvent('render');
-	},
 
 
     savePhantom: function(){
@@ -110,9 +107,11 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 		return this.callParent([items]);
 	},
 
+
 	_menuItemHook: function(o,item /*, menu*/){
 		item.on('afterrender',Ext.bind(this.updateMenuIcon, item, [o.getColor().toString()]));
 	},
+
 
     getColor: function(){
 		return this.self.getColor(this._userId);
@@ -126,15 +125,8 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 
 
 	cleanup: function(){
-		this.callParent(arguments);
 		delete this._sel;
-        this.self._eventRouter.un('render',this.requestRender, this);
-        this.self._eventRouter.fireEvent('render');
-	},
-
-
-	onResize : function(){
-        this.requestRender();
+		this.callParent(arguments);
 	},
 
 
@@ -162,13 +154,29 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 	},
 
 
-    requestRender: function(){
+	clearCanvas: function(){
+		var w = this._canvas.width;
+		this._canvas.width = w || 0;
+	},
+
+
+    render: function(){
+
+		this.clearCanvas();
+
         if(!this._sel){
             this.cleanup();
             return;
         }
 
 		if(!this._isVisible)return;
+
+		if(this.rendering){
+			console.warn('duplicate call');
+			return;
+		}
+
+		this.rendering = true;
 
         var nib = Ext.get(this._img),
             r = this._sel.getBoundingClientRect(),
@@ -181,7 +189,8 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
             cXY = Ext.get(c).getXY(),
             color = this.getColor(),
             rgba = Color.toRGBA(color),
-            rgb = color.toString();
+            rgb = color.toString(),
+			me = this;
 
         if(!r){
             return;
@@ -204,21 +213,21 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 
             this.self.enqueue(this.drawRect(this.adjustCoordinates(s[i],cXY), rgba));
         }
-
-        this.self.render();//buffered
+		this.self.enqueue(function(){ delete me.rendering; });
+        this.self.renderCanvas();//buffered
+		this.callParent();
     },
 
 
     statics : {
         _sources : [],
-        _eventRouter: new Ext.util.Observable(),
         _queue : [],
 
         enqueue: function(op){
             this._queue.push(op);
         },
 
-        render: function(){
+        renderCanvas: function(){
             var	c = Ext.query('#canvas-highlight-container canvas')[0],
                 ctx = c ? c.getContext("2d") : null,
 				w = c ? c.width : 0;
@@ -252,6 +261,5 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 
 },
 function(){
-    this.render = Ext.Function.createBuffered(this.render,5,this);
-	this._eventRouter.on('render', this.render, this);
+    this.renderCanvas = Ext.Function.createBuffered(this.renderCanvas,5,this);
 });
