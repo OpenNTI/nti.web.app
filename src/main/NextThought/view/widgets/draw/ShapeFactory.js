@@ -6,6 +6,7 @@ Ext.define('NextThought.view.widgets.draw.ShapeFactory',
 		'NextThought.view.widgets.draw.Polygon',
 		'NextThought.view.widgets.draw.Line',
 		'NextThought.view.widgets.draw.Ellipse',
+		'NextThought.view.widgets.draw.Text',
 		'NextThought.util.Color'
 	],
 
@@ -14,7 +15,7 @@ Ext.define('NextThought.view.widgets.draw.ShapeFactory',
 		line: 'line',
 		path: 'base',
 		polygon: 'polygon',
-		text: 'base'
+		text: 'text'
 	},
 
 
@@ -71,12 +72,13 @@ Ext.define('NextThought.view.widgets.draw.ShapeFactory',
 	{
 		var m = {
 			'CanvasPolygonShape': 'sprite-polygon',
-			'CanvasCircleShape': 'sprite-ellipse'
+			'CanvasCircleShape': 'sprite-ellipse',
+			'CanvasTextShape': 'sprite-text'
 		},
 			s = m[c];
 
 		//special case for lines
-		if (s == m.CanvasPolygonShape && sides == 1)
+		if (s === m.CanvasPolygonShape && sides == 1)
 			return 'sprite-line';
 		return s;
 	},
@@ -96,6 +98,7 @@ Ext.define('NextThought.view.widgets.draw.ShapeFactory',
         s = Ext.widget(this.getSpriteClass(shape.Class, shape.sides),{
             sides: shape.sides,
             'stroke-width': shape.strokeWidthTarget,
+			text: shape.text,
 			stroke: p.toString(),
 			fill: c.toString(),
 			translate: {

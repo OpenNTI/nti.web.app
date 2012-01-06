@@ -81,9 +81,11 @@ Ext.define('NextThought.controller.Whiteboard', {
         picker.up('menu[floatParent]').floatParent.whiteboardRef.setColor('stroke', color);
 	},
 
+
 	removeSelectedSprite:function(btn){
         btn.whiteboardRef.removeSelection();
     },
+
 
 	clearWhiteboard:function(btn){
         btn.whiteboardRef.removeAll();
@@ -94,17 +96,12 @@ Ext.define('NextThought.controller.Whiteboard', {
 		wb.select(sprite);
 	},
 
+
 	editSprite: function(sprite){
 		console.debug('edit',arguments);
 	},
 
-/*
-    polygonSidesChanged: function(btn) {
-        //TODO: Jonathan, please check this out.  Changing the numberfield causes the button to become
-        //unpressed, so subsequent shapes won't be drawn.  ExtJS weirdness?  I reset it here.
-        btn.up('whiteboard').down('toolbar button[shape=polygon]').pressed = true;
-    },
-*/
+
 	getActiveTool: function(wb){
 		var t = wb.down('toolbar button[pressed]');
 		if(t){
