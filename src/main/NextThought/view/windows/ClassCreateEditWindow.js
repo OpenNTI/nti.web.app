@@ -1,6 +1,6 @@
 Ext.define('NextThought.view.windows.ClassCreateEditWindow', {
-	extend: 'Ext.window.Window',
-	alias : 'widget.class-create-edit-window',
+    extend: 'Ext.window.Window',
+    alias : 'widget.class-create-edit-window',
 
     requires: [
         'NextThought.view.form.ClassInfoForm'
@@ -8,32 +8,26 @@ Ext.define('NextThought.view.windows.ClassCreateEditWindow', {
 
     width: 700,
     height: 350,
+    modal: true,
     maximizable:true,
     constrain: true,
     autoScroll: true,
     title: 'Class Editor',
     cls: 'class-create-edit-window',
-
+/*
     items:
     {
         xtype: 'class-info-form'
     },
-
+*/
     dockedItems: {
         dock: 'bottom',
         xtype: 'toolbar',
         items: [
-            {text: 'Add Section'}
+            '->',
+            {text: 'Save', action:'save'},
+            {text: 'Cancel', action:'cancel'}
         ]
-    },
-
-    afterRender: function() {
-        this.callParent(arguments);
-
-        //Add event to handle adding a new section.
-        this.down('button').on('click', function(){
-            this.down('class-info-form').addEmptySection();
-        }, this);
     },
 
     /**
@@ -42,7 +36,14 @@ Ext.define('NextThought.view.windows.ClassCreateEditWindow', {
      * @param v - a classinfo
      */
     setValue: function(v) {
-        this.down('class-info-form').setValue(v);
+
+        var m = v.isModifiable();
+
+        this.add({xtype: 'class-info-form', value: v});
+
+        if (!m) {
+            this.down('button[action=save]').disable();
+        }
     }
 
 });

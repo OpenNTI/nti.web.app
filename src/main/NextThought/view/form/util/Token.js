@@ -50,9 +50,11 @@ Ext.define('NextThought.view.form.util.Token', {
 
     setReadOnly: function(readOnly){
         this.readOnly = readOnly;
-        if(readOnly)
-            this.closer.hide();
-        else
-            this.closer.show();
+        if(this.closer){
+            if(readOnly)
+                this.closer.hide();
+            else
+                this.closer.show();
+        }
     }
 });

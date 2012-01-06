@@ -82,8 +82,36 @@ Ext.define('NextThought.view.form.SectionInfoForm', {
 
     afterRender: function() {
         this.callParent(arguments);
+
+        if (!this.readOnly) {
+            this.legend.insert(0, this.createRemoveTool());
+        }
+
         this.initValue();
     },
+
+
+
+    createRemoveTool: function() {
+        var me = this,
+            cmp;
+
+        cmp = Ext.create('Ext.panel.Tool', {
+            getElConfig: function() {
+                return {
+                    tag: Ext.isGecko3 ? 'span' : 'div',
+                    id: cmp.id,
+                    cls: cmp.cls
+                };
+            },
+            type: 'minus',
+            handler: function(){me.destroy();},
+            scope: me
+        });
+        this.removeTool = cmp;
+        return cmp;
+    },
+
 
 
     setValue: function(v) {
@@ -109,7 +137,6 @@ Ext.define('NextThought.view.form.SectionInfoForm', {
 
     initValue: function() {
         if (!this.value) return;
-
         this.setFieldValue('Description');
         this.setFieldValue('OpenDate');
         this.setFieldValue('CloseDate');

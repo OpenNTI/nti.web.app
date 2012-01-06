@@ -24,6 +24,7 @@ Ext.define('NextThought.view.form.fields.ShareWithField', {
 
     initComponent: function(){
         this.callParent(arguments);
+        this.xtypes.push('field');
         this._selections = [];
         this._inputField = this.add({
             xtype: 'usersearchinput',

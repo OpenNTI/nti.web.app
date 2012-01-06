@@ -12,7 +12,7 @@ Ext.define('NextThought.view.windows.ClassroomChooser', {
 
 	frame: true,
 	floating: true,
-	width: 450,
+	width: 650,
 	height: 425,
 	closable: false,
 	constrain: true,
@@ -20,7 +20,7 @@ Ext.define('NextThought.view.windows.ClassroomChooser', {
 	modal: true,
 	items: {
 		layout: {
-			type: 'vbox',
+			type: 'hbox',
 			align: 'stretch'
 		},
 		border: false,
@@ -33,33 +33,36 @@ Ext.define('NextThought.view.windows.ClassroomChooser', {
 			defaultType: 'component',
 			border: false,
 			margin: 5
-		},
-		items: [
-			{
-				flex: 1,
-				items:[
-					{html: '<h2>Study groups:<h2>'},
-					{xtype: 'classroom-browser-study-groups', flex: 1}
-				]
+        },
+        items: [
+            {
+                flex: 1,
+                items:[
+                    {html: '<h2>Classes:<h2>'},
+                    {xtype: 'classroom-browser', flex: 1}
+                ]
+            },
 
-			},{
-				flex: 3,
-				items:[
-					{html: '<h2>Classes:<h2>'},
-					{xtype: 'classroom-browser', flex: 1}
-				]
-			}
+            {border: true, width: 1},
+            {
+                flex: 1,
+                items:[
+                    {html: '<h2>Study groups:<h2>'},
+                    {xtype: 'classroom-browser-study-groups', flex: 1}
+                ]
+
+            }
 //			,
 //			{xtype: 'link', text: 'Create a class', htmlPrefix: '<hr/>'}
-		]
+        ]
 	},
 	dockedItems: {
 		dock: 'bottom',
 		xtype: 'toolbar',
 		items: [
-			{text: 'Create', create:true},
+			{text: 'Create Class', create:true},
             //TODO - only enable when a class is highlighted
-			{text: 'Edit Resources', edit:true}
+			{text: 'Edit Class', edit:true, disabled: true}
 		]
 	},
 

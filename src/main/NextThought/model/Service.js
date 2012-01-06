@@ -115,25 +115,28 @@ Ext.define('NextThought.model.Service', {
 	/**
 	 *
 	 * @param mimeType
-	 * @param title
+	 * @param [title]
 	 */
 	getCollectionFor: function(mimeType, title){
-		var workspace = this.getWorkspace(_AppConfig.username) || {},
-			items = workspace.Items || [],
-			i, item, collection = null;
+        var collection = null;
 
-		for(i in items){
-			if(!items.hasOwnProperty(i))continue;
-			item = items[i];
+        Ext.each(this.get('Items') || [], function(workspace){
+            var items = workspace.Items || [],
+                i, item;
 
-			if(Ext.Array.contains(item.accepts,mimeType)){
-				if(title && item.Title != title) continue;
+            for(i in items){
+                if(!items.hasOwnProperty(i))continue;
+                item = items[i];
 
-				collection = item;
-				break;
-			}
+                if(Ext.Array.contains(item.accepts,mimeType)){
+                    if(title && item.Title != title) continue;
 
-		}
+                    collection = item;
+                    break;
+                }
+            }
+            if (collection) return false;
+        });
 
 		return Ext.clone(collection);
 	},

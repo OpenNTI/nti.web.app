@@ -30,18 +30,44 @@ Ext.define('NextThought.view.form.ClassInfoForm', {
             width: '100%',
             margin: '10px 10px 10px 0px'
         },
+
         {
-            xtype: 'section-info-form',
-            name: 'Sections'
+            xtype: 'fieldset',
+            title: 'Sections',
+            sections: true
         }
     ],
 
 
     afterRender: function() {
         this.callParent(arguments);
+
+        //add plus button to the sections fieldset for adding new sections
+        this.down('fieldset[sections]').legend.insert(0, this.createAddSectionTool());
+
         this.initValue();
     },
 
+
+    createAddSectionTool: function() {
+        var me = this,
+            cmp;
+
+        cmp = Ext.create('Ext.panel.Tool', {
+            getElConfig: function() {
+                return {
+                    tag: Ext.isGecko3 ? 'span' : 'div',
+                    id: cmp.id,
+                    cls: cmp.cls
+                };
+            },
+            type: 'plus',
+            handler: function(){me.addSection();},
+            scope: me
+        });
+        me.addSectionTool = cmp;
+        return cmp;
+    },
 
     setValue: function(v) {
         this.value = v;
@@ -50,7 +76,8 @@ Ext.define('NextThought.view.form.ClassInfoForm', {
 
 
     getValue: function() {
-        var r, sections = [];
+        var r, sections = [],
+            v = this.value ? this.value.toJSON() : undefined;
 
         //Turn all section values into their json objects
         Ext.each(this.getSections(), function(s){
@@ -58,7 +85,7 @@ Ext.define('NextThought.view.form.ClassInfoForm', {
         }, this);
 
 
-        r = Ext.create('NextThought.model.ClassInfo', this.value.toJSON());
+        r = Ext.create('NextThought.model.ClassInfo', v);
         r.set('Description', this.down('textfield[name=Description]').getValue());
         r.set('Sections', sections);
         return r;
@@ -71,22 +98,31 @@ Ext.define('NextThought.view.form.ClassInfoForm', {
         this.loadRecord(this.value);
 
         var ci = this.value,
-            sections = ci.get('Sections') || [],
-            existingSections = this.getSections();
+            sections = ci.get('Sections') || [];
 
         //populate the section infos, after first clearing any previously existing ones
-        Ext.each(existingSections, function(s){this.remove(s);}, this);
+        this.down('fieldset[sections]').removeAll(true);
         Ext.each(sections, function(si){
-            this.add({xtype: 'section-info-form', value:si});
+            this.addSection(si, !this.value.isModifiable());
         }, this);
+
+        if (!this.value.isModifiable()) {
+            Ext.each(this.query('field'), function(f){f.setReadOnly(true);});
+            this.addSectionTool.hide();
+        }
     },
 
-    addEmptySection: function() {
-        this.add({xtype: 'section-info-form'});
+    /**
+     *
+     * @param [v], a value if you want the section populated
+     * @param [readOnly] tell the sections to be read only
+     */
+    addSection: function(v, readOnly) {
+        this.down('fieldset[sections]').add({xtype: 'section-info-form', value:v, readOnly:readOnly});
     },
 
     getSections: function() {
-        return Ext.ComponentQuery.query('section-info-form');
+        return this.query('section-info-form');
     }
 
 });

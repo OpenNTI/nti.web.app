@@ -76,6 +76,10 @@ Ext.define('NextThought.controller.Classroom', {
 
             'classroom-mode-container reader-panel' : {
                 'unrecorded-history' : this.recordState
+            },
+
+            'class-create-edit-window toolbar button[action]' : {
+                'click' : this.onClassroomEditorAction
             }
 
 		},{});
@@ -105,6 +109,11 @@ Ext.define('NextThought.controller.Classroom', {
 				v.getSelectionModel().deselectAll(true);
 			}
 		});
+
+        var button = Ext.ComponentQuery.query('classroom-chooser button[edit]')[0];
+        if (sel[0].get('Class') === 'ClassInfo') button.enable();
+        else button.disable();
+
 
 		delete this.selectionClearing;
 	},
@@ -149,6 +158,34 @@ Ext.define('NextThought.controller.Classroom', {
         this.classroomActivated();
 	},
 
+
+    onClassroomEditorAction: function(btn) {
+        var win = btn.up('window'),
+            value;
+
+        if (btn.action === 'cancel') {
+            win.close();
+            return;
+        }
+        if (btn.action !== 'save') return;
+
+        value = win.down('class-info-form').getValue();
+
+        console.log('save this', value);
+
+        win.el.mask('Saving...');
+        value.save({
+            success:
+                function(){
+                    win.close();
+                    this.getProvidersStore().load();
+                },
+            failure:
+                function(){win.el.unmask();}
+        });
+    },
+
+
     recordState: function(book, path, ntiid, eopts, viaSocket) {
         history.updateState({classroom: {reader: { index: book.get('index'), page: path}}});
 
@@ -190,10 +227,9 @@ Ext.define('NextThought.controller.Classroom', {
     //TODO - merge with above?  In this case we just grab the first class, we need to get the selected class...
     editClassClicked: function(btn) {
         var w = Ext.widget('class-create-edit-window'),
-            store = this.getProvidersStore(),
-            first = store.first();
+            d = Ext.ComponentQuery.query('classroom-browser')[0];
 
-        w.setValue(first);
+        w.setValue(d.getSelectionModel().getSelection()[0]);
         w.show();
     },
 

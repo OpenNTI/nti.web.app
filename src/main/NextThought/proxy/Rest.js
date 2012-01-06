@@ -43,6 +43,9 @@ Ext.define('NextThought.proxy.Rest', {
 		}
 		else if(action === 'create'){
 			collection = _AppConfig.service.getCollectionFor(mimeType,null) || {};
+            if (!collection.href) {
+                Ext.Error.raise('No HREF found for mimetype ' + mimeType);
+            }
 			href = host + collection.href;
 		}
 		else if(action === 'read') {
