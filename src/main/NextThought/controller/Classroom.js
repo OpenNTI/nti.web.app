@@ -113,7 +113,12 @@ Ext.define('NextThought.controller.Classroom', {
 	isClassroom: function(roomOrMessageInfo){
 		if(!roomOrMessageInfo)return false;
 		var c = roomOrMessageInfo.get('ContainerId');
-		return (c in this.rooms);
+
+        if (c in this.rooms) {
+            this.rooms[c] = roomOrMessageInfo;
+            return true;
+        }
+		return false;
 	},
 
     onMessageContentNavigate: function(ntiid) {
@@ -145,14 +150,12 @@ Ext.define('NextThought.controller.Classroom', {
 	},
 
     recordState: function(book, path, ntiid, eopts, viaSocket) {
-        console.log('path', path, 'stack', printStackTrace().join('\n'));
         history.updateState({classroom: {reader: { index: book.get('index'), page: path}}});
 
         //If this navigate event came from somewhere other than the socket, we need to issue
         //a CONTENT message to the room.
         //TODO - this only works if you are a mod, how should this work?
         if (viaSocket !== true) {
-            console.log('requesting content update on all pages');
             var ri = this.getClassroom().roomInfo,
                 id = !ntiid ? this.getReader().getContainerId() : ntiid;
 
@@ -163,6 +166,7 @@ Ext.define('NextThought.controller.Classroom', {
 	leaveRoom: function(){
 		var room = this.getClassroom().roomInfo,
 			id = room.getId();
+
 		delete this.rooms[id];
 		this.getClassroomContainer().leaveClassroom();
 		this.getController('Chat').leaveRoom(room);
@@ -171,6 +175,8 @@ Ext.define('NextThought.controller.Classroom', {
 
 	selectedClassRoom: function(model){
 		var n = model.get('NTIID');
+
+        this.rooms[n] = true;
 
 		this.getController('Chat').enterRoom([],{ContainerId: n});
 		this.getClassroomContainer().hideClassChooser();

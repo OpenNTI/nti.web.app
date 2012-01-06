@@ -293,7 +293,7 @@ Ext.define('NextThought.controller.Chat', {
         var room = f.up('chat-view').roomInfo;
 
         if (!ClassroomUtils.isClassroomId(room.get('ContainerId'))) {
-            console.log('not a chat room that can turn into a classroom, sorry, figure out how to disable this button or hide it');
+            console.warn('not a chat room that can turn into a classroom, sorry, figure out how to disable this button or hide it');
             return;
         }
 
@@ -563,6 +563,7 @@ Ext.define('NextThought.controller.Chat', {
     },
 
     onEnteredRoom: function(msg) {
+
         var roomInfo = msg && msg.isModel? msg : ParseUtils.parseItems([msg])[0],
 			existingRoom;
         if (roomInfo.getId() in this.activeRooms) {
