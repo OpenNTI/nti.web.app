@@ -298,8 +298,6 @@ describe("Annotation Utils", function() {
 
 		var c=0,el, all = document.evaluate('id("NTIContent")//*', document, null, XPathResult.ANY_TYPE, null);
 		while((el = all.iterateNext())) doTest(el);
-
-		console.dir(tags);
 	});
 
 
