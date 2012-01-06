@@ -2,8 +2,24 @@
 set -m
 set -e
 PORT=45674
+SENCHA_TOOLS=`which sencha | sed -e 's/command\/sencha//g'`
+PHANTOMJS=`which phantomjs`
 EXT='ext-4.0.7'
 REVISION=`svn info | grep '^Revision:' | awk '{print $2}'`
+
+if [ -z "$SENCHA_TOOLS" ]; then
+    echo "Sencha Tools are required"
+    exit 1
+fi
+
+if [ -z "$PHANTOMJS" ]; then
+    echo "PhantomJS not found..."
+fi
+
+if [[ "$PHANTOMJS" != $SENCHA_TOOLS* ]] ;
+then
+	PATH=$SENCHA_TOOLS:$PATH
+fi
 
 #clean out old files
 rm -rf build
