@@ -80,6 +80,10 @@ Ext.define('NextThought.controller.Classroom', {
 
             'class-create-edit-window toolbar button[action]' : {
                 'click' : this.onClassroomEditorAction
+            },
+
+            'classroom-content chat-occupants-list tool[action=moderate]' : {
+                'click' : this.onModerateClicked
             }
 
 		},{});
@@ -186,6 +190,15 @@ Ext.define('NextThought.controller.Classroom', {
     },
 
 
+    onModerateClicked: function(btn) {
+        var content = btn.up('classroom-content'),
+            mod = content.down('chat-log-view[moderated]'),
+            ondeck = content.down('on-deck-view');
+
+        mod.show();
+        ondeck.show();
+    },
+
     recordState: function(book, path, ntiid, eopts, viaSocket) {
         history.updateState({classroom: {reader: { index: book.get('index'), page: path}}});
 
@@ -212,6 +225,10 @@ Ext.define('NextThought.controller.Classroom', {
 
 	selectedClassRoom: function(model){
 		var n = model.get('NTIID');
+        if (model.get('Class') === 'ClassInfo'){
+            n = model.get('Sections')[0].get('NTIID');
+            console.warn('entering first section for now.');
+        }
 
         this.rooms[n] = true;
 

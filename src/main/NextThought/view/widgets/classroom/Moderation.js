@@ -15,26 +15,31 @@ Ext.define('NextThought.view.widgets.classroom.Moderation', {
 
     items: [
         {
-            title: 'Occupants',
-            xtype: 'chat-occupants-list',
-            width: 150,
-            region: 'west',
-            split: true,
-            autoHide: false
-        },
-        {
-            xtype: 'chat-log-view',
-            title: 'moderation',
-            moderated: true,
+            layout: {
+                type: 'hbox',
+                align: 'stretch'
+            },
             region: 'center',
-            flex:3
+            items: [
+            {
+                title: 'Occupants',
+                xtype: 'chat-occupants-list',
+                flex: 1,
+                autoHide: false
+            },
+            {
+                xtype: 'chat-log-view',
+                title: 'moderation',
+                flex: 2,
+                moderated: true,
+                hidden: true
+            }]
         },
         {
             xtype: 'classroom-attachments-view',
             title: 'attachments',
             region: 'south',
-            split: true,
-            flex:2
+            split: true
         }
     ]
 });

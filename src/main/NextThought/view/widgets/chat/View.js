@@ -71,7 +71,7 @@ Ext.define('NextThought.view.widgets.chat.View', {
             this.down('chat-reply-to').showClassroomButton();
         }
         else if (ClassroomUtils.isClassroomId(ri.get('ContainerId'))){
-            this.down('[region=center]').add({xtype:'on-deck-view'});
+            this.down('[region=center]').add({xtype:'on-deck-view', hidden:true});
         }
 
         //stuff the occupants where they belong
