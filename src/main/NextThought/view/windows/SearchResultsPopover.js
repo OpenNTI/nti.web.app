@@ -51,6 +51,31 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
     },
 
 
+	afterRender: function(){
+		this.callParent(arguments);
+		this.el.on('mouseover', this.stopClose, this);
+		this.el.on('mouseout', this.startClose, this);
+	},
+
+
+	hide: function(){
+		this.stopClose();
+		this.callParent(arguments);
+	},
+
+
+	stopClose: function(){
+		clearTimeout(this.closeTimeout);
+	},
+
+
+	startClose: function(){
+		var me = this;
+		me.stopClose();
+		me.closeTimeout = setTimeout(function(){ me.close(); },1000);
+	},
+
+
 	getStoreFor: function(url, onLoad){
 		return Ext.create('Ext.data.Store', {
 			autoLoad: false,
@@ -77,8 +102,8 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
 
         this.itemSelected = null;
 
-		a.removeAll();
-		b.removeAll();
+		a.removeAll(true);
+		b.removeAll(true);
 		i.each(function(o){o.hide();}, this);
     },
 
@@ -96,15 +121,20 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
     },
 
     show: function() {
+		this.stopClose();
         this.callParent(arguments);
 		this.handleResize();
-        this.el.mask("Searching");
+
+		if( this.searchBox ){
+			this.searchBox.destroy();
+			delete this.searchBox;
+		}
+        this.searchBox = this.add({html:'Searching...'});
     },
 
 
     chooseSelection: function() {
-        var p = this.query('panel[hit]'),
-            i = this.itemSelected,
+        var i = this.itemSelected,
             h = i? i.hit : null;
 
         if(i)
@@ -210,7 +240,10 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
         if (this._updateCount <= 0){
             this.handleResize();
 
-            this.el.unmask();
+			if( this.searchBox ){
+				this.searchBox.destroy();
+				delete this.searchBox;
+			}
             if(!fb[0] && !fb[1])
                 this.items.get(2).show();
 
@@ -257,6 +290,5 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
 
     searchResultClicked: function(event, dom, opts) {
         this.fireEvent('goto', opts.hit, this._searchVal);
-        this.close();
     }
 });

@@ -32,8 +32,11 @@ Ext.define('NextThought.view.content.Reader', {
 
 
     scrollToId: function(id) {
-        var n = Ext.getCmp(id);
-        this.scrollToNode(n.getEl());
+		var n = Ext.getCmp(id);
+		if(n) {
+			this.scrollToNode(n.getEl());
+		}
+		else console.warn('Could not find Component with id: ',id, "\n",printStackTrace().slice(3).join("\n"));
     },
 
     scrollToTarget: function(target){

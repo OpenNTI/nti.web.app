@@ -46,17 +46,25 @@ Ext.define('NextThought.controller.Search', {
 
 	lostFocus: function(searchBox){
 		var popover = this.getSearchPopover();
-		if(popover) popover.close();
+		if(popover && popover.isVisible()){
+			popover.startClose();
+
+		}
 	},
 
 	searchResultClicked: function(hit, searchValue) {
 		var oid = hit.get('TargetOID'),
+			popover = this.getSearchPopover(),
 			target = oid ? (hit.get('Type').toLowerCase() + '-' + oid) : null,
 			containerId = hit.get('ContainerId'),
 			bookInfo = Library.findLocation(containerId),
 			book = bookInfo.book,
 			href = bookInfo.location.getAttribute('href');
+
 		this.getViewport().fireEvent('navigate', book, book.get('root') + href, {text: searchValue, oid: oid});
+		if(popover && popover.isVisible()){
+			popover.startClose();
+		}
 	},
 
 	selectDown: function(field) {
@@ -84,7 +92,7 @@ Ext.define('NextThought.controller.Search', {
 		var popover = this.getSearchPopover();
 
 		if(popover){
-			popover.hide().reset();
+			popover.close().reset();
 		}
 
 		this.getViewport().fireEvent('cleared-search');
