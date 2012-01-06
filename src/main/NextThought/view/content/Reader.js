@@ -233,11 +233,15 @@ Ext.define('NextThought.view.content.Reader', {
         e.stopPropagation();
         e.preventDefault();
         var m = this,
+			h = _AppConfig.server.host,
+			l = window.location.href.split("#")[0],
             r = el.href,
-            p = r.substring(_AppConfig.server.host.length),
+            p = r.substring(h.length),
+			b = r.split('#')[0] == l,
             hash = p.split('#');
 
-		if(m.externalUriRegex.test(r)){
+		//pop out links that point to external resources
+		if(m.externalUriRegex.test(r) && r.indexOf(h) !== 0 && !b){
 			//popup a leaving platform notice here...
 			window.open(r, guidGenerator());
 			return;
