@@ -25,7 +25,7 @@ cp $EXT/ext.js build/$EXT
 # clean out .svn directories and hidden files
 find build -name .\* | xargs rm -rf
 
-cp resources/hangout-app.xml build
+mv build/resources/hangout-app.xml build
 cp index.html build
 cp config-example.js build/config.js
 
