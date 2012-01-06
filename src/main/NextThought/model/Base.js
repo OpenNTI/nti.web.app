@@ -125,6 +125,29 @@ Ext.define('NextThought.model.Base', {
         );
 
         return r;
+    },
+
+    toJSON: function() {
+        var data = {},
+            me = this;
+
+        this.fields.each(
+            function(f){
+                var x = me.get(f.name);
+                if (Ext.isDate(x)) {
+                    x = x.getTime()/1000;
+                }
+                else if (x && x.toJSON) x = x.toJSON();
+                else if(x && Ext.isArray(x)) {
+                    Ext.each(x, function(o, i){
+                        x[i] = o.toJSON ? o.toJSON() : o;
+                    });
+                }
+
+                data[f.name] = Ext.clone(x);
+            }
+        );
+        return data;
     }
 });
 
@@ -135,7 +158,7 @@ Ext.define('NextThought.model.Base', {
 Ext.data.Types.SINGLEITEM = {
     type: 'singleItem',
     convert: function(v) {
-        return ParseUtils.parseItems([v])[0];
+        return !v ? null : ParseUtils.parseItems([v])[0];
     },
     sortType: function(v) {
         console.warn('sort by Item:',arguments);

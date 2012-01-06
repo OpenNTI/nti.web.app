@@ -1,5 +1,5 @@
 Ext.define('NextThought.view.form.SectionInfoForm', {
-	extend:'Ext.form.Panel',
+	extend:'Ext.form.FieldSet',
     alias: 'widget.section-info-form',
 
     requires: [
@@ -12,43 +12,70 @@ Ext.define('NextThought.view.form.SectionInfoForm', {
     border: false,
     collapsible: true,
     collapsed: true,
+    layout: 'anchor',
+    title: 'Section',
 
     defaults: {
-        padding: 5
+        padding: 5,
+        anchor: '100%',
+        border: false
     },
 
     items: [
         {
-            xtype: 'textfield',
-            emptyText: 'Section Description',
-            allowBlank: false,
-            name: 'description',
-            width: '100%',
-            margin: '10px 10px 10px 0px'
+            xtype: 'panel',
+            layout: 'hbox',
+            items: [
+            {
+                xtype: 'textfield',
+                emptyText: 'Section Description',
+                allowBlank: false,
+                name: 'Description',
+                flex: 1
+            },
+            {
+                xtype: 'datefield',
+                fieldLabel: 'Open',
+                labelAlign: 'left',
+                labelWidth: 40,
+                width: 150,
+                name: 'OpenDate'
+            },
+            {
+                xtype: 'datefield',
+                fieldLabel: 'Closed',
+                labelAlign: 'left',
+                labelWidth: 40,
+                width: 150,
+                name: 'CloseDate'
+            }]
         },
         {
-            xtype: 'datefield',
-            fieldLabel: 'Section Open',
-            name: 'openDate'
-        },
-        {
-            xtype: 'datefield',
-            fieldLabel: 'Section Closed',
-            name: 'closeDate'
-        },
-        {
-            margin: '10px 5px',
-            allowBlank: false,
-            emptyText: 'Instructors...',
-            xtype: 'sharewith',
-            name: 'instructors'
-        },
-        {
-            margin: '10px 5px',
-            allowBlank: false,
-            emptyText: 'Enrolled...',
-            xtype: 'sharewith',
-            name: 'enrolled'
+            border: false,
+            margin: '10px 0px',
+            defaults: {
+                padding: 0,
+                margin: '10px 0px',
+                anchor: '100%',
+                layout: 'anchor',
+                xtype:'fieldset',
+                collapsible: true,
+                collapsed: false,
+                border: false,
+                defaults: {
+                    padding: 0,
+                    margin: '10px 5px',
+                    anchor: '100%',
+                    layout: 'anchor',
+                    border: false,
+                    allowBlank: false,
+                    xtype: 'sharewith'
+                }
+            },
+            items:[
+                { title: 'Instructors',   items: { emptyText: 'Instructors...', name: 'Instructors' }},
+                { title: 'Enrolled', items: { emptyText: 'Enrolled...', name: 'Enrolled' }}
+            ]
         }
     ],
 
@@ -66,24 +93,35 @@ Ext.define('NextThought.view.form.SectionInfoForm', {
 
 
     getValue: function() {
-        return this.value;
+        var r,
+            a = this.down('sharewith[name=Instructors]').getValue(),
+            o = this.value ? this.value.toJSON() : undefined;
+
+        r = Ext.create('NextThought.model.SectionInfo', o);
+        r.set('Description', this.down('textfield[name=Description]').getValue());
+        r.set('OpenDate', this.down('datefield[name=OpenDate]').getValue());
+        r.set('CloseDate', this.down('datefield[name=CloseDate]').getValue());
+        r.set('Enrolled', this.down('sharewith[name=Enrolled]').getValue());
+        r.set('InstructorInfo',  {'Class': 'InstructorInfo', 'Instructors': a});
+        return r;
     },
 
 
     initValue: function() {
         if (!this.value) return;
-        var si = this.value,
-            od = si.get('OpenDate'),
-            cd = si.get('CloseDate'),
-            d = si.get('Description'),
-            e = si.get('Enrolled'),
-            i = si.get('InstructorInfo').get('Instructors'),
-            p = si.get('Provider');
 
-        this.down('textfield[name=description]').setValue(d);
-        this.down('datefield[name=openDate]').setValue(od);
-        this.down('datefield[name=closeDate]').setValue(cd);
-        this.down('sharewith[name=enrolled]').setValue(e);
-        this.down('sharewith[name=instructors]').setValue(i);
-    }
+        this.setFieldValue('Description');
+        this.setFieldValue('OpenDate');
+        this.setFieldValue('CloseDate');
+        this.setFieldValue('Enrolled');
+
+        var i = this.value.get('InstructorInfo').get('Instructors');
+        this.down('sharewith[name=Instructors]').setValue(i);
+    },
+
+    setFieldValue: function(fieldName){
+         var rn = this.down('*[name='+fieldName+']');
+         rn.setValue(this.value.get(fieldName));
+         rn.resetOriginalValue();
+     }
 });

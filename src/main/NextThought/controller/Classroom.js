@@ -58,6 +58,10 @@ Ext.define('NextThought.controller.Classroom', {
 				'click': this.createClassClicked
 			},
 
+            'classroom-chooser button[edit]':{
+                'click': this.editClassClicked
+            },
+
 			'classroom-mode-container toolbar button[action=leave]':{
 				'click': this.leaveRoom
 			},
@@ -73,8 +77,6 @@ Ext.define('NextThought.controller.Classroom', {
             'classroom-mode-container reader-panel' : {
                 'unrecorded-history' : this.recordState
             }
-
-
 
 		},{});
     },
@@ -177,6 +179,18 @@ Ext.define('NextThought.controller.Classroom', {
     createClassClicked: function(btn) {
         Ext.widget('class-create-edit-window').show();
     },
+
+
+    //TODO - merge with above?  In this case we just grab the first class, we need to get the selected class...
+    editClassClicked: function(btn) {
+        var w = Ext.widget('class-create-edit-window'),
+            store = this.getProvidersStore(),
+            first = store.first();
+
+        w.setValue(first);
+        w.show();
+    },
+
 
 	createClassScriptClicked: function(btn){
 //		var c = this.getClassroomContainer();

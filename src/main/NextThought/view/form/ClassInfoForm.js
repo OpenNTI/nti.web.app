@@ -25,25 +25,15 @@ Ext.define('NextThought.view.form.ClassInfoForm', {
             xtype: 'textfield',
             emptyText: 'Class Description',
             allowBlank: false,
-            name: 'description',
+            name: 'Description',
             padding: 5,
             width: '100%',
             margin: '10px 10px 10px 0px'
         },
         {
-            xtype: 'textfield',
-            emptyText: 'Provider',
-            allowBlank: false,
-            name: 'provider',
-            padding: 5,
-            width: '100%',
-            margin: '10px 10px 10px 0px'
+            xtype: 'section-info-form',
+            name: 'Sections'
         }
-        /*
-        {
-            xtype: 'section-info-form'
-        }
-        */
     ],
 
 
@@ -60,21 +50,43 @@ Ext.define('NextThought.view.form.ClassInfoForm', {
 
 
     getValue: function() {
-        return this.value;
+        var r, sections = [];
+
+        //Turn all section values into their json objects
+        Ext.each(this.getSections(), function(s){
+            sections.push(s.getValue().toJSON());
+        }, this);
+
+
+        r = Ext.create('NextThought.model.ClassInfo', this.value.toJSON());
+        r.set('Description', this.down('textfield[name=Description]').getValue());
+        r.set('Sections', sections);
+        return r;
     },
-  
+
 
     initValue: function() {
         if (!this.value) return;
 
-        var ci = this.value,
-            sections = ci.get('Sections');
+        this.loadRecord(this.value);
 
-        this.down('textfield[name=description]').setValue(ci.get('Description'));
-        this.down('textfield[name=provider]').setValue('OU');
+        var ci = this.value,
+            sections = ci.get('Sections') || [],
+            existingSections = this.getSections();
+
+        //populate the section infos, after first clearing any previously existing ones
+        Ext.each(existingSections, function(s){this.remove(s);}, this);
         Ext.each(sections, function(si){
             this.add({xtype: 'section-info-form', value:si});
         }, this);
+    },
+
+    addEmptySection: function() {
+        this.add({xtype: 'section-info-form'});
+    },
+
+    getSections: function() {
+        return Ext.ComponentQuery.query('section-info-form');
     }
 
 });
