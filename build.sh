@@ -2,10 +2,37 @@
 set -m
 set -e
 PORT=45674
-SENCHA_TOOLS=`which sencha | sed -e 's/command\/sencha//g'`
-PHANTOMJS=`which phantomjs`
-EXT='ext-4.0.7'
-REVISION=`svn info | grep '^Revision:' | awk '{print $2}'`
+ZIP="false"
+
+while getopts "z" flag
+	do
+		case "$flag" in
+			'z')
+				ZIP="true"
+			;;
+		esac
+	done
+
+# Add some other locations to search
+for p in {~/bin,/opt/nti}/senchatools/ {~/bin,/opt/nti}/senchatools/{command,appbuilder,jsbuilder}; do
+	PATH=$PATH:$p
+done
+
+# Account for system diffs in sed commands
+case `uname` in
+	'Darwin')
+		# Must use macports GNU sed, the BSD
+		# version handles inplace editing badly
+		SED='gsed --in-place -e'
+		;;
+	'Linux')
+		SED='sed --in-place -e'
+		;;
+esac
+
+
+SENCHA_TOOLS=${SENCHA_TOOLS:-`which sencha | sed -e 's/command\/sencha//g'`}
+PHANTOMJS=${PHANTOMJS:-`which phantomjs`}
 
 if [ -z "$SENCHA_TOOLS" ]; then
     echo "Sencha Tools are required"
@@ -16,17 +43,19 @@ if [ -z "$PHANTOMJS" ]; then
     echo "PhantomJS not found..."
 fi
 
-if [[ "$PHANTOMJS" != $SENCHA_TOOLS* ]] ;
-then
+if [[ "$PHANTOMJS" != $SENCHA_TOOLS* ]] ; then
 	PATH=$SENCHA_TOOLS:$PATH
 fi
 
-#clean out old files
+EXT='ext-4.0.7'
+REVISION=`svn info | grep '^Revision:' | awk '{print $2}'`
+
+# clean out old files
 rm -rf build
 rm -f app.jsb3
 rm -f app-all.js
 
-#build stanging dest
+# build stanging dest
 mkdir build
 mkdir build/$EXT
 mkdir build/$EXT/resources
@@ -39,49 +68,52 @@ cp -R $EXT/resources/themes/images build/$EXT/resources/themes
 cp $EXT/ext.js build/$EXT
 
 # clean out .svn directories and hidden files
-find build -name .\* | xargs rm -rf
+cd build
+find . -depth -name ".svn" -exec rm -rf \{\} \;
+cd ..
 
 mv build/resources/hangout-app.xml build
 cp index.html build
 cp config-example.js build/config.js
 
-#change the index.html to point to build resources.
-sed -i "" 's/\"src\/main\/app\.js\"/\"app\.js\"/g' build/index.html
-sed -i "" 's/ext-debug\.js\"/ext\.js\"/g' build/index.html
+# change the index.html to point to build resources.
+$SED 's/\"src\/main\/app\.js\"/\"app\.js\"/g' build/index.html
+$SED 's/ext-debug\.js\"/ext\.js\"/g' build/index.html
 
 
 # fire up an http server in the background
 echo "Starting SimpleHTTP Server"
 python -m SimpleHTTPServer $PORT >/dev/null 2>&1 &
 
-#generate project file
+# generate project file
 sencha create jsb -a http://localhost:$PORT/index.html -p app.jsb3
 
-#kill the http server
+# kill the http server
 echo "Stopping Simple HTTP Server"
 HPID=`jobs -l 1 | awk '{print $2}'`
 kill -9 $HPID
 
 
-#modify project file with values instead of 'placeholders'
-sed -i "" 's/\"Project Name\"/\"Application\"/g' app.jsb3
-sed -i "" 's/Company Name\"/NextThought LLC\"/g' app.jsb3
-sed -i "" 's/\"app.js\"/\"src\/main\/app\.js\"/g' app.jsb3
+# modify project file with values instead of 'placeholders'
+$SED 's/\"Project Name\"/\"Application\"/g' app.jsb3
+$SED 's/Company Name\"/NextThought LLC\"/g' app.jsb3
+$SED 's/\"app.js\"/\"src\/main\/app\.js\"/g' app.jsb3
 
-#perform build
+# perform build
 sencha build -p app.jsb3 -d .
 
-#clean out artifact files not needed anymore
+# clean out artifact files not needed anymore
 rm -f app.jsb3
 rm -f all-classes.js
 
-#move resultant minified code into build dest
+# move resultant minified code into build dest
 mv app-all.js build/app.js
 
 # package build
-cd build
-zip -r ../build-r$REVISION.zip . >/dev/null
+if [ "$ZIP" = "true" ]; then
+	cd build
+	zip -r ../build-r$REVISION.zip . >/dev/null
+fi
 
-#final cleanup
-cd ..
-rm -rf build
+# Leave the build directory around so
+# that we can serve directly from it
