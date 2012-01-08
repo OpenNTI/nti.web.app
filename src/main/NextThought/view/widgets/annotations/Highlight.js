@@ -126,6 +126,7 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 
 	cleanup: function(){
 		delete this._sel;
+		this.self.renderCanvas();//buffered
 		this.callParent(arguments);
 	},
 

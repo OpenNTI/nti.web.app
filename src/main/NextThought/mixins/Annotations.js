@@ -81,6 +81,7 @@ Ext.define('NextThought.mixins.Annotations', {
 		}
 	},
 
+
 	clearAnnotations: function(){
 		var v, oid;
 		for(oid in this._annotations){
@@ -418,6 +419,7 @@ Ext.define('NextThought.mixins.Annotations', {
 
 	onContextMenuHandler: function(e) {
 		try{
+			e.stopPropagation();
 			e.preventDefault();
 			var range = this.getSelection();
 			if( range && !range.collapsed ) {
@@ -429,7 +431,6 @@ Ext.define('NextThought.mixins.Annotations', {
 			console.warn(er, er.stack);
 		}
 	},
-
 
 
 	getSelection: function() {

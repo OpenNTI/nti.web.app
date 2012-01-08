@@ -273,13 +273,13 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 
 			Ext.Array.sort(this.registry, this.sorter);
 
-			Ext.each(this.registry, function(o){
+			Ext.each(Ext.Array.clone(this.registry), function(o){
 				try {
 //					console.log(o.$className);
 					o.render();
 				}
 				catch(e){
-					console.error(e.stack);
+					console.error(o.$className,e.stack);
 				}
 			});
 
