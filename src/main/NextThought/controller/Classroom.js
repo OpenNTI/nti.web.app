@@ -8,7 +8,11 @@ Ext.define('NextThought.controller.Classroom', {
     views: [
         'content.Classroom',
 		'modes.Classroom',
+        'form.ClassInfoForm',
+        'form.SectionInfoForm',
         'widgets.classroom.Browser',
+        'widgets.classroom.BrowserStudyGroups',
+        'widgets.LinkButton',
         'widgets.classroom.LiveDisplay',
         'widgets.classroom.Management',
         'widgets.classroom.Moderation',
