@@ -8,8 +8,7 @@ Ext.define('NextThought.view.widgets.draw.Shape', {
 
     constructor: function(config){
         var c = {
-            draggable: true, x:0, y:0, width: 1, height: 1//,
-            //'stroke-width': config['stroke-width'] / ((config.scale.x + config.scale.y)/2)
+            draggable: true, x:0, y:0, width: 1, height: 1
         };
         if (config.scale) {
          //   console.log('stroke-width changing from', config['stroke-width'], 'to',  config['stroke-width'] / ((config.scale.x + config.scale.y)/2), printStackTrace().join('\n'));
@@ -43,12 +42,14 @@ Ext.define('NextThought.view.widgets.draw.Shape', {
 		var m = this.matrix,
             spl = m.split(),
             sf = (spl.scaleX + spl.scaleY) / 2,
+            osw = this.attr['stroke-width'],
+            sw = (isNaN(osw) || !isFinite(osw)) ? 1 : osw, //sanitize stroke width
 			additionalProps = {
                 'strokeColor': Color.toRGB(this.stroke),
                 'strokeOpacity' : 1, //TODO: once we have tools to adjust this, set
                 'fillColor': Color.toRGB(this.fill),
                 'fillOpacity': 1, //TODO: once we have tools to adjust this, set
-                'strokeWidthTarget': this.attr['stroke-width'] * sf
+                'strokeWidthTarget': sw * sf
             },
 			matrix = {
 				'Class': 'CanvasAffineTransform',
@@ -59,7 +60,7 @@ Ext.define('NextThought.view.widgets.draw.Shape', {
 				tx: m.get(0,2),
 				ty: m.get(1,2)
 			};
-		
+
 		Ext.copyTo(additionalProps, this, 'sides');
 
 		return Ext.apply(
