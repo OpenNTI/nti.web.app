@@ -52,7 +52,9 @@ Ext.define('NextThought.view.form.fields.ShareWithField', {
         else
             this._inputField.show();
 
-        this.items.get(0).items.each(function(token){token.setReadOnly(readOnly);});
+        this.items.get(0).items.each(function(token){
+			token.setReadOnly(readOnly);
+		}, this);
     },
 
 
@@ -93,12 +95,9 @@ Ext.define('NextThought.view.form.fields.ShareWithField', {
         return r;
     },
 
-    _blur: function(ctrl) {
-    },
+    _blur: function(/*ctrl*/) {},
 
-    _focus: function(ctrl) {
-        //TODO: Add Group selections somewhere in this field
-    },
+    _focus: function(/*ctrl*/) {},
 
     _select: function(ctrl, selected) {
         ctrl.collapse();

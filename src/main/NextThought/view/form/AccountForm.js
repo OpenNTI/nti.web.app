@@ -101,7 +101,7 @@ Ext.define('NextThought.view.form.AccountForm', {
                                     margin: '5px 0px 5px 5px',
                                     validator: function(value) {
                                         var password = this.previousSibling('[name=password]').getValue();
-                                        return (value === password) ? true : 'Passwords do not match.'
+                                        return (value === password) ? true : 'Passwords do not match.';
                                     }
                                 }
                             ]
