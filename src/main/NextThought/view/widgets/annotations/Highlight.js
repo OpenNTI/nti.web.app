@@ -160,6 +160,12 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 	},
 
 
+	requestRender: function(){
+		this.callParent(arguments);
+		this.self.renderCanvas();//ensure the canvas is redrawn
+	},
+
+
     render: function(){
 
 //		this.clearCanvas();
