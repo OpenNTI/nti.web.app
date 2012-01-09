@@ -5,6 +5,7 @@ Ext.define('NextThought.view.form.SectionInfoForm', {
     requires: [
         'NextThought.model.SectionInfo',
         'Ext.form.field.Text',
+        'Ext.form.field.Date',
         'Ext.form.FieldSet',
         'NextThought.view.form.fields.ShareWithField'
     ],
