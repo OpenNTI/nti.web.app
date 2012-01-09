@@ -19,6 +19,7 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
         });
 
 
+		me.self._highlightEvents.on('render',me.render, me);
 		me.self.addSource(userId);
         return me;
 	},
@@ -125,9 +126,13 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 
 
 	cleanup: function(){
+		if(!this._sel){
+			return;
+		}
 		delete this._sel;
-		this.self.renderCanvas();//buffered
 		this.callParent(arguments);
+		this.self._highlightEvents.fireEvent('render');//make all highlights redraw...
+		this.self.renderCanvas();//this buffered function will only fire after the last invocation. This is to ensure we clear the canvas.
 	},
 
 
@@ -155,15 +160,9 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 	},
 
 
-	clearCanvas: function(){
-		var w = this._canvas.width;
-		this._canvas.width = w || 0;
-	},
-
-
     render: function(){
 
-		this.clearCanvas();
+//		this.clearCanvas();
 
         if(!this._sel){
             this.cleanup();
@@ -221,6 +220,7 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 
 
     statics : {
+		_highlightEvents: new Ext.util.Observable(),
         _sources : [],
         _queue : [],
 
@@ -231,16 +231,17 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
         renderCanvas: function(){
             var	c = Ext.query('#canvas-highlight-container canvas')[0],
                 ctx = c ? c.getContext("2d") : null,
-				w = c ? c.width : 0;
+				w = c ? c.width : 0,
+				q = Ext.clone(this._queue);
+			this._queue = [];
 
             if (!ctx) return;
 
             //reset the context
             c.width = w;
 
-            while(this._queue.length){
-                (this._queue.pop())(ctx);
-            }
+            while(q.length){ (q.pop())(ctx); }
+
         },
 
         addSource: function(userId){
