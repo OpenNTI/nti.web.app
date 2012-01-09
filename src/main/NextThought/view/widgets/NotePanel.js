@@ -128,6 +128,12 @@ Ext.define('NextThought.view.widgets.NotePanel',{
 			this.box.show();
 		}, this);
 
+        //insert a cleanupreply here to guarentee cleanup when transcript is removed.
+        panel.cleanupReply = function(b){
+            if (!b) return;
+            panel.removeAll(true);
+        };
+
         this.frameBody.show({
             listeners: {
                 scope: this,
