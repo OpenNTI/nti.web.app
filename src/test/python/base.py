@@ -1,11 +1,11 @@
-import unittest, time, re, webtest
+import unittest, time, os, re, webtest
 
-class TestWebAppBase(unittest.TestCase):
+class WebAppTestBase(unittest.TestCase):
     
     @classmethod
     def setUpClass(cls):
-        cls.port = 80
-        cls.url = 'http://localhost:%s/~jgrimes/Workspace/WebApp/index.html'%cls.port
+        cls.port = os.environ.get('PORT',8181)
+        cls.url = 'http://localhost:%s/index.html'%cls.port
         cls.app = webtest.SeleniumApp(url=cls.url)
     
     @classmethod
