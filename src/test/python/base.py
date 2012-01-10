@@ -1,4 +1,4 @@
-import unittest, time, os, re, webtest
+import os, time, unittest, webtest
 
 class WebAppTestBase(unittest.TestCase):
     
@@ -13,7 +13,10 @@ class WebAppTestBase(unittest.TestCase):
         cls.app.close()
     
     def setUp(self):
-        self.resp = self.app.get(self.url)
+        try:
+            self.resp = self.app.get(self.url)
+        except Exception, e:
+            self.fail(str(e))
 
 
     def login(self):
