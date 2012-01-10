@@ -21,6 +21,7 @@ nosetests-2.7 -v -d -w ./src/test/python/
 # kill the http server
 echo "Stopping Simple HTTP Server"
 HPID=`jobs -l 1 | awk '{print $2}'`
+kill -9 $HPID
 
 
 
