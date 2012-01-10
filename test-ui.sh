@@ -9,8 +9,18 @@ export SELENIUM_DRIVER=*googlechrome
 
 export SELENIUM_JAR=~/Applications/bin/selenium-server-standalone-2.16.1.jar
 
-python ./src/test/python/base.py
+#port for the simpleserver
+export PORT=8181
 
-#nosetests-2.7 -v -d
+# fire up an http server in the background
+echo "Starting SimpleHTTP Server"
+python -m SimpleHTTPServer $PORT >/dev/null 2>&1 &
+
+nosetests-2.7 -v -d -w ./src/test/python/
+
+# kill the http server
+echo "Stopping Simple HTTP Server"
+HPID=`jobs -l 1 | awk '{print $2}'`
+
 
 
