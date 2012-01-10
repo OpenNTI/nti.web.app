@@ -107,6 +107,7 @@ Ext.define('NextThought.view.windows.LoginWindow', {
                                                     {
                                                         margin: 15,
                                                         xtype: 'button',
+														id: 'loginButton',
                                                         width: 80,
                                                         text: 'Login',
                                                         actionName: 'login'
