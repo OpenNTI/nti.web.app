@@ -7,22 +7,25 @@ Ext.define( 'NextThought.view.modes.Classroom', {
 			'NextThought.view.windows.ClassroomChooser'
 	],
 
+    cls: 'classroom-mode',
+
 	border: false,
 	defaults: {
 		border: false,
 		defaults: {
 			border: false
 		}
-	},
+    },
 	
     initComponent: function(){
-		this.callParent(arguments);
-		this.mainArea = this.add({
-			border: false,
-			flex:1,
-			layout: 'fit',
-			dockedItems:this.getEmptyToolbar()
-		});
+        this.callParent(arguments);
+
+        this.mainArea = this.add({
+            border: false,
+            flex:1,
+            layout: 'fit',
+            dockedItems:this.getEmptyToolbar()
+        });
     },
 
 	showClassChooser: function(){
@@ -38,8 +41,18 @@ Ext.define( 'NextThought.view.modes.Classroom', {
     showClassroom: function(roomInfo) {
 		var tb = this.down('toolbar');
 		tb.removeAll();
-		tb.add({text:'Leave Class', action: 'leave'});
+		tb.insert(0, {text:'Leave Class', action: 'leave'});
         this.mainArea.add({xtype: 'classroom-content', roomInfo: roomInfo});
+
+        //insert flagged messages button
+        tb.add({
+            iconCls: 'flag',
+            disabled: true,
+            menu: [],
+            action: 'flagged',
+            xtype: 'splitbutton',
+            tooltip:'flagged messages'
+        });
     },
 
 

@@ -444,39 +444,42 @@ Ext.define('NextThought.controller.Chat', {
     },
 
     onMessageForAttention: function(mid) {
-        if (!this.getChatWindow()) {
-            console.warn('chat window is not open');
-            return;
-        }
-
-        var w = this.getChatWindow(),
-			m = w.query('[messageId='+IdCache.getIdentifier(mid)+']')[0],
-            msg = m ? m.message : null,
+        var id = IdCache.getIdentifier(mid),
+            cmp = Ext.ComponentQuery.query('[messageId=' + id + ']')[0],
+            win = cmp ? cmp.up('window') : null,
+            msg = cmp ? cmp.message : null,
             u = msg ? UserRepository.getUser(msg.get('Creator')) : null,
             name = u ? u.get('alias') || u.get('realname') : null,
             i = u ? u.get('avatarURL'): null,
-            b = w.query('button[action=flagged]')[0],
-            self = this, c;
+            b, c;
 
-        if (!m || !msg) {
+
+        if (!cmp || !msg) {
             console.error('can not find messages');
             return;
+        }
+
+        //apply flagged class to message wherever it is.
+        if (cmp) cmp.addCls('flagged');
+
+        if (!win) {
+            b = this.getController('Classroom').getFlaggedMessagesButton();
+        }
+        else {
+            //If we are here then we have a chat window, setup button there
+            b = win.query('button[action=flagged]')[0];
         }
 
         b.enable();
         c = parseInt(b.getText(), 10);
         b.setText(isNaN(c) ? 1 : c+1);
 
-        m.addCls('flagged');
-
         b.menu.add({
             text:Ext.String.format('<b>{0}</b> - {1}', name,
 					Ext.String.ellipsis(AnnotationUtils.getBodyTextOnly(msg), 15)),
             icon: i,
-            relatedCmp: m
+            relatedCmp: cmp
         });
-
-
     },
 
     onMessage: function(msg, opts) {

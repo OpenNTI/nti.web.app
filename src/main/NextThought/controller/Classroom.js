@@ -82,6 +82,14 @@ Ext.define('NextThought.controller.Classroom', {
                 'unrecorded-history' : this.recordState
             },
 
+            'classroom-mode-container splitbutton menuitem': {
+                'click': this.flaggedMenuItemClicked
+            },
+
+            'classroom-mode-container splitbutton[action=flagged]': {
+                'click' : this.flaggedButtonClicked
+            },
+
             'class-create-edit-window toolbar button[action]' : {
                 'click' : this.onClassroomEditorAction
             },
@@ -89,8 +97,20 @@ Ext.define('NextThought.controller.Classroom', {
             'classroom-content chat-occupants-list tool[action=moderate]' : {
                 'click' : this.onModerateClicked
             }
-
 		},{});
+    },
+
+    flaggedMenuItemClicked: function(mi) {
+        this.showMessage(mi.relatedCmp);
+    },
+
+    flaggedButtonClicked: function(btn){
+        var i = btn.menu.items,
+            c = (btn.lastAction+1) % i.getCount();
+
+        btn.lastAction = isNaN(c) ? 0 : c;
+
+        this.flaggedMenuItemClicked(i.getAt(btn.lastAction));
     },
 
 	onSessionReady: function(){
@@ -275,5 +295,15 @@ Ext.define('NextThought.controller.Classroom', {
                 ld.getReaderPanel().restore(this.getController('State').getState().classroom);
             }
         }
+    },
+
+
+    getFlaggedMessagesButton: function() {
+        return this.getClassroomContainer().down('button[action=flagged]');
+    },
+
+    showMessage: function(msgCmp) {
+        msgCmp.up('chat-log-view').scroll(msgCmp);
     }
 });
+

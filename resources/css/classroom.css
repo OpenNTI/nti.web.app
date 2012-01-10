@@ -5,6 +5,14 @@
 	border-left-width: inherit !important;
 }
 
+.classroom-mode .flag {
+    background: url('../images/chat/flag-16.png');
+}
+
+.classroom-mode .x-disabled .flag {
+    background: url('../images/chat/flag-16-disabled.png');
+}
+
 .classroom-chooser a:link,
 .classroom-chooser a:visited,
 .classroom-chooser a:active,
