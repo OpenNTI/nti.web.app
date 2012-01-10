@@ -16,12 +16,6 @@ class WebAppTestBase(unittest.TestCase):
         self.resp = self.app.get(self.url)
 
 
-    def test_basic(self):
-        self.login()
-        self.logout()
-
-
-
     def login(self):
         resp = self.resp
         self.wait_for_text("Username:","//label")
