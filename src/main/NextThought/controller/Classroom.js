@@ -176,7 +176,12 @@ Ext.define('NextThought.controller.Classroom', {
 	},
 
 
-	onEnteredRoom: function(roomInfo){
+    /**
+     *
+     * @param roomInfo
+     * @param [moderated]
+     */
+	onEnteredRoom: function(roomInfo, moderated) {
 		this.rooms[roomInfo.getId()] = roomInfo;
         this.getClassroomContainer().hideClassChooser();
 		this.getClassroomContainer().showClassroom(roomInfo);
@@ -184,6 +189,10 @@ Ext.define('NextThought.controller.Classroom', {
 
         //load content into live display:
         this.classroomActivated();
+
+        if (moderated) {
+            this.onModerateClicked();
+        }
 	},
 
 
@@ -215,7 +224,7 @@ Ext.define('NextThought.controller.Classroom', {
 
 
     onModerateClicked: function(btn) {
-        var content = btn.up('classroom-content'),
+        var content = btn ? btn.up('classroom-content') : this.getClassroom(),
             mod = content.down('chat-log-view[moderated]'),
             ondeck = content.down('on-deck-view');
 
