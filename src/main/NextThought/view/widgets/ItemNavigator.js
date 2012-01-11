@@ -2,73 +2,73 @@
 
 Ext.define('NextThought.view.widgets.ItemNavigator', {
 	extend:'Ext.panel.Panel',
-    requires: [
-        'Ext.form.field.Trigger',
-        'Ext.grid.Panel',
-        'Ext.grid.column.Action',
-        'Ext.grid.column.Date',
-        'Ext.grid.column.Template',
-        'Ext.grid.feature.Grouping',
-        'NextThought.proxy.Search'
-    ],
-    alias: 'widget.item-navigator',
+	requires: [
+		'Ext.form.field.Trigger',
+		'Ext.grid.Panel',
+		'Ext.grid.column.Action',
+		'Ext.grid.column.Date',
+		'Ext.grid.column.Template',
+		'Ext.grid.feature.Grouping',
+		'NextThought.proxy.Search'
+	],
+	alias: 'widget.item-navigator',
 	frame: false,
 	border: false,
 	defaults: {frame: false, border: false},
-    layout: 'anchor',
+	layout: 'anchor',
 
-    dockedItems:{
-        xtype: 'toolbar',
-        items: [// '->',
-            {
-                xtype: 'triggerfield',
-                emptyText: 'Search...',
-                enableKeyEvents: true,
-                trigger1Cls: 'x-form-clear-trigger',
-                trigger2Cls: 'x-form-search-trigger',
-                //width: 150,
-                flex: 1,
-                onTrigger1Click:function(){this.reset();this.onTrigger2Click();},
-                onTrigger2Click:function(){this.fireEvent('keypress',this);}
-            }
-        ]
-    },
+	dockedItems:{
+		xtype: 'toolbar',
+		items: [// '->',
+			{
+				xtype: 'triggerfield',
+				emptyText: 'Search...',
+				enableKeyEvents: true,
+				trigger1Cls: 'x-form-clear-trigger',
+				trigger2Cls: 'x-form-search-trigger',
+				//width: 150,
+				flex: 1,
+				onTrigger1Click:function(){this.reset();this.onTrigger2Click();},
+				onTrigger2Click:function(){this.fireEvent('keypress',this);}
+			}
+		]
+	},
 
-    initComponent: function(){
-        var me = this, trigger,
-            gotoActionColumn = {
-                xtype: 'actioncolumn',
-                width: 20,
-                hideable: false,
-                sortable: false,
-                items: [{
-                    icon   : 'ext-4.0.7/examples/shared/icons/fam/application_go.png',  // Use a URL in the icon config
-                    tooltip: 'Go to',
-                    scope: me,
-                    handler: function(grid, rowIndex, colIndex) {
-                        var r = me._store.getAt(rowIndex);
-                        grid.fireEvent('itemdblclick', grid, r, null, rowIndex);
-                    }
-                }]
-            },
-            deleteActionColumn = {
-                xtype: 'actioncolumn',
-                width: 20,
-                hideable: false,
-                sortable: false,
-                items: [{
-                    icon   : 'ext-4.0.7/examples/shared/icons/fam/delete.gif',  // Use a URL in the icon config
-                    tooltip: 'Remove',
-                    scope: me,
-                    handler: function(grid, rowIndex, colIndex) {
-                        var s = me._store,
-                            r = s.getAt(rowIndex);
+	initComponent: function(){
+		var me = this, trigger,
+			gotoActionColumn = {
+				xtype: 'actioncolumn',
+				width: 20,
+				hideable: false,
+				sortable: false,
+				items: [{
+					icon   : 'ext-4.0.7/examples/shared/icons/fam/application_go.png',  // Use a URL in the icon config
+					tooltip: 'Go to',
+					scope: me,
+					handler: function(grid, rowIndex, colIndex) {
+						var r = me._store.getAt(rowIndex);
+						grid.fireEvent('itemdblclick', grid, r, null, rowIndex);
+					}
+				}]
+			},
+			deleteActionColumn = {
+				xtype: 'actioncolumn',
+				width: 20,
+				hideable: false,
+				sortable: false,
+				items: [{
+					icon   : 'ext-4.0.7/examples/shared/icons/fam/delete.gif',  // Use a URL in the icon config
+					tooltip: 'Remove',
+					scope: me,
+					handler: function(grid, rowIndex, colIndex) {
+						var s = me._store,
+							r = s.getAt(rowIndex);
 
-                        s.removeAt(rowIndex);
-                        me.fireEvent('annotation-destroyed', r.get('TargetOID'), r.get('ContainerId'));
-                    }
-                }]
-            };
+						s.removeAt(rowIndex);
+						me.fireEvent('annotation-destroyed', r.get('TargetOID'), r.get('ContainerId'));
+					}
+				}]
+			};
 
 		me.callParent(arguments);
 		//me.el.mask('loading...');
@@ -100,28 +100,28 @@ Ext.define('NextThought.view.widgets.ItemNavigator', {
 			columns: [
 				gotoActionColumn,
 				{
-					text     : 'Text',
-					flex     : 2,
+					text	 : 'Text',
+					flex	 : 2,
 					sortable : true,
 					dataIndex: 'Snippet',
-					xtype    : 'templatecolumn',
-					tpl      : '{[values.text?values.text.replace(/<.*?>/ig, "") : "" ]}'
+					xtype	: 'templatecolumn',
+					tpl	  : '{[values.text?values.text.replace(/<.*?>/ig, "") : "" ]}'
 
 				},
 				{
-					text     : 'Container',
-					flex     : 1,
+					text	 : 'Container',
+					flex	 : 1,
 					sortable : true,
-					//xtype    : 'gridcolumn',
-					xtype    : 'templatecolumn',
+					//xtype	: 'gridcolumn',
+					xtype	: 'templatecolumn',
 					dataIndex: 'ContainerId',
-					tpl      : '{[Library.findLocationTitle(values.ContainerId)]}'
+					tpl	  : '{[Library.findLocationTitle(values.ContainerId)]}'
 				},
 				{
-					text     : 'Last Modified',
-					width    : 130,
+					text	 : 'Last Modified',
+					width	: 130,
 					sortable : true,
-					xtype    : 'datecolumn',
+					xtype	: 'datecolumn',
 					format   : 'D M d, Y h:i',
 					dataIndex: 'Last Modified'
 				},

@@ -182,7 +182,7 @@ Ext.define('NextThought.controller.Reader', {
 	},
 
 	navigate: function(book, ref, options, skipHistory, ntiid){
-		//       this.getReaderMode().activate();
+		//	   this.getReaderMode().activate();
 		this.getReader().setActive(book, ref, skipHistory,
 				options ? typeof(options)=='function' ? options
 						: Ext.bind(this.scrollToText, this, [options.text, options.oid])
@@ -289,7 +289,7 @@ Ext.define('NextThought.controller.Reader', {
 			this.getReader(),
 			this.getReaderPeople(),
 			this.getReaderRelated()
-			//    this.getReaderStream()
+			//	this.getReaderStream()
 		];
 
 		Ext.each(o,function(i){i.applyFilter(newFilter);});

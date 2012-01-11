@@ -1,17 +1,17 @@
 Ext.define('NextThought.util.Classroom',{
-    alternateClassName: 'ClassroomUtils',
+	alternateClassName: 'ClassroomUtils',
 
-    singleton: true,
+	singleton: true,
 
 	requires: [
 	],
 
-    isClassroomId: function(id)
-    {
-        return /meetingroom/i.test(id);
-    }
+	isClassroomId: function(id)
+	{
+		return /meetingroom/i.test(id);
+	}
 
 },
 function(){
-    window.ClassroomUtils = this;
+	window.ClassroomUtils = this;
 });

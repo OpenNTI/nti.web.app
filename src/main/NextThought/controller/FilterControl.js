@@ -1,7 +1,7 @@
 
 
 Ext.define('NextThought.controller.FilterControl', {
-    extend: 'Ext.app.Controller',
+	extend: 'Ext.app.Controller',
 
 	views: [
 		'widgets.FilterControlPanel'
@@ -14,81 +14,81 @@ Ext.define('NextThought.controller.FilterControl', {
 	getAllTypesButton: function(id){
 		return this._query('filter-control checkboxfield[name="alltypesbutton"]',id)[0];
 	},
-    
-    getAllGroupsButton: function(id){
-    	return this._query('filter-control checkboxfield[name="allgroupsbutton"]',id)[0];
-    },
-    
-    getGroups: function(id){
-    	return this._query('filter-control checkboxfield[usergroup]',id);
-    },
-    
-    getTypes: function(id){
-    	return this._query('filter-control checkboxfield[model]',id);
-    },
-    
+	
+	getAllGroupsButton: function(id){
+		return this._query('filter-control checkboxfield[name="allgroupsbutton"]',id)[0];
+	},
+	
+	getGroups: function(id){
+		return this._query('filter-control checkboxfield[usergroup]',id);
+	},
+	
+	getTypes: function(id){
+		return this._query('filter-control checkboxfield[model]',id);
+	},
+	
 	init: function() {
-    	this.control({
-    		'filter-control':{
-    			'filter-control-loaded': this.setState
-    		},
-    		'filter-control checkboxfield[name="allgroupsbutton"]': {
-    			change: this.allGroupsSelected
-    		},
-    		'filter-control checkboxfield[usergroup]':{
-    			change:this.groupSelectionChanged
-    		},
-    		'filter-control checkboxfield[name="alltypesbutton"]': {
-    			change: this.allTypesSelected
-    		},
-    		'filter-control checkboxfield[model]':{
-    			change:this.typeSelectionChanged
-    		}
-    	},{});
-    },
-    
-    
-    
-    beginChanges: function(id){
-    	if(this.beginChanges[id])
-    		return false;
-    		
-    	this.beginChanges[id] = true;
-    	
-    	return true;
-    },
-    
-    
-    setState: function(id){
-    	if(!this.beginChanges(id))
-    		return;
+		this.control({
+			'filter-control':{
+				'filter-control-loaded': this.setState
+			},
+			'filter-control checkboxfield[name="allgroupsbutton"]': {
+				change: this.allGroupsSelected
+			},
+			'filter-control checkboxfield[usergroup]':{
+				change:this.groupSelectionChanged
+			},
+			'filter-control checkboxfield[name="alltypesbutton"]': {
+				change: this.allTypesSelected
+			},
+			'filter-control checkboxfield[model]':{
+				change:this.typeSelectionChanged
+			}
+		},{});
+	},
+	
+	
+	
+	beginChanges: function(id){
+		if(this.beginChanges[id])
+			return false;
+			
+		this.beginChanges[id] = true;
+		
+		return true;
+	},
+	
+	
+	setState: function(id){
+		if(!this.beginChanges(id))
+			return;
 		
 		//TODO: rebuild saved state
 		
 		this.getAllGroupsButton(id).setValue(true);
-    	this.getAllTypesButton(id).setValue(true);
+		this.getAllTypesButton(id).setValue(true);
 		Ext.each(this.getGroups(id), function(c){ c.setValue(true); },this);
 		Ext.each(this.getTypes(id), function(c){ c.setValue(true); },this);
 		
 		this.rebuildFilter(id);
-    },
-    
-    
-    allGroupsSelected: function(me, nv, ov, opts){
+	},
+	
+	
+	allGroupsSelected: function(me, nv, ov, opts){
 		var id = me.up('filter-control').getId();
-    	if(!this.beginChanges(id))
-    		return;
-    		
+		if(!this.beginChanges(id))
+			return;
+			
 		Ext.each(this.getGroups(id), function(c){ c.setValue(nv); },this);
 		this.rebuildFilter(id);
 	},
-    
-    groupSelectionChanged: function(me, nv, ov, opts){
+	
+	groupSelectionChanged: function(me, nv, ov, opts){
 		var id = me.up('filter-control').getId();
 		if(!this.beginChanges(id))
-    		return;
-    	
-    	this.getAllGroupsButton(id).setValue(false);
+			return;
+		
+		this.getAllGroupsButton(id).setValue(false);
 		this.rebuildFilter(id);
 	},
 	
@@ -99,17 +99,17 @@ Ext.define('NextThought.controller.FilterControl', {
 	allTypesSelected: function(me, nv, ov, opts){
 		var id = me.up('filter-control').getId();
 		if(!this.beginChanges(id))
-    		return;
-    		
+			return;
+			
 		Ext.each(this.getTypes(id), function(c){ c.setValue(nv); },this);
 		this.rebuildFilter(id);
 	},
-    
-    typeSelectionChanged: function(me, nv, ov, opts){
-    	var id = me.up('filter-control').getId();
-    	if(!this.beginChanges(id))
-    		return;
-    	
+	
+	typeSelectionChanged: function(me, nv, ov, opts){
+		var id = me.up('filter-control').getId();
+		if(!this.beginChanges(id))
+			return;
+		
 		this.getAllTypesButton(id).setValue(false);
 		this.rebuildFilter(id);
 	},
@@ -131,29 +131,29 @@ Ext.define('NextThought.controller.FilterControl', {
 		var isUnknown = /unresolved/i,
 			filter = {groups:{},types:[], shareTargets:{}}, 
 			cmp = Ext.getCmp(id),
-            allGroups = this.getAllGroupsButton(id).getValue(),
+			allGroups = this.getAllGroupsButton(id).getValue(),
 			groups = this.getGroups(id),
 			types = this.getTypes(id),
 			u = _AppConfig.username;
 
-        if(allGroups) filter.groups = 'all';
-        else {
-            Ext.each( groups,
-                function(g) {
-                    if(!g.getValue()) return;
-                    if(g.isMe){
-                        filter.includeMe = true;
-                        return;
-                    }
+		if(allGroups) filter.groups = 'all';
+		else {
+			Ext.each( groups,
+				function(g) {
+					if(!g.getValue()) return;
+					if(g.isMe){
+						filter.includeMe = true;
+						return;
+					}
 
-                    Ext.each(g.record.get('friends'),function(f){
-                        filter.shareTargets[f]=true;
-                    });
+					Ext.each(g.record.get('friends'),function(f){
+						filter.shareTargets[f]=true;
+					});
 
-                    filter.groups[g.record.get('Username')] = g.record;
-                },
-                this);
-        }
+					filter.groups[g.record.get('Username')] = g.record;
+				},
+				this);
+		}
 
 		
 		if(filter.includeMe){

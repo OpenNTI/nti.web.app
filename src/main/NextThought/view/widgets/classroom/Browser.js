@@ -3,34 +3,34 @@
  * @extends Ext.view.View
  */
 Ext.define('NextThought.view.widgets.classroom.Browser', {
-    extend: 'Ext.view.View',
-    alias: 'widget.classroom-browser',
+	extend: 'Ext.view.View',
+	alias: 'widget.classroom-browser',
 
 	singleSelect: true,
 	autoScroll  : true,
-    overItemCls: 'x-item-over',
-    itemSelector: 'div.item-wrap',
-    tpl: [
-        '<div class="classroom-browser">',
-            '<tpl for=".">',
-                '<div class="item-wrap">',
-                    '<div class="item">',
+	overItemCls: 'x-item-over',
+	itemSelector: 'div.item-wrap',
+	tpl: [
+		'<div class="classroom-browser">',
+			'<tpl for=".">',
+				'<div class="item-wrap">',
+					'<div class="item">',
 						'<div class="selector"><a href="#">Select</a></div>',
 						'<span class="name">{Description}</span>',
-                    '</div>',
-                '</div>',
-            '</tpl>',
-        '</div>'
-    ],
+					'</div>',
+				'</div>',
+			'</tpl>',
+		'</div>'
+	],
 
 
-    initComponent: function() {
+	initComponent: function() {
 		this.addEvents('selected');
-        this.store = Ext.getStore('Providers');
-        this.callParent(arguments);
+		this.store = Ext.getStore('Providers');
+		this.callParent(arguments);
 		this.on('itemdblclick',this.fireSelected,this);
 		this.on('selectionChange',this.selectionChangedScrollIntoFView,this);
-    },
+	},
 
 
 	selectionChangedScrollIntoFView: function(me, selections){

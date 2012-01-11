@@ -25,7 +25,7 @@ Ext.data.Types.LINKS = {
 
 
 Ext.define('NextThought.model.Base', {
-    extend: 'Ext.data.Model',
+	extend: 'Ext.data.Model',
 	requires: [
 		'NextThought.util.ParseUtils',
 		'NextThought.proxy.Rest'
@@ -98,57 +98,57 @@ Ext.define('NextThought.model.Base', {
 	},
 
 
-    equal: function(b) {
-        var a = this,
-            r = true;
+	equal: function(b) {
+		var a = this,
+			r = true;
 
-        a.fields.each(
-            function(f){
-                var fa = a.get(f.name),
-                    fb = b.get(f.name);
+		a.fields.each(
+			function(f){
+				var fa = a.get(f.name),
+					fb = b.get(f.name);
 
-                if (fa !== fb){
+				if (fa !== fb){
 
-                    if(Ext.isArray(fa) && Ext.isArray(fb) && arrayEquals(fa, fb)){
-                        return;
-                    }
+					if(Ext.isArray(fa) && Ext.isArray(fb) && arrayEquals(fa, fb)){
+						return;
+					}
 
-                    if(Ext.isDate(fa) && Ext.isDate(fb) && fa+0 == fb+0){
-                        return;
-                    }
+					if(Ext.isDate(fa) && Ext.isDate(fb) && fa+0 == fb+0){
+						return;
+					}
 
 
-                    r=false;
-                    return false;
-                }
-            }
-        );
+					r=false;
+					return false;
+				}
+			}
+		);
 
-        return r;
-    },
+		return r;
+	},
 
-    toJSON: function() {
-        var data = {},
-            me = this;
+	toJSON: function() {
+		var data = {},
+			me = this;
 
-        this.fields.each(
-            function(f){
-                var x = me.get(f.name);
-                if (Ext.isDate(x)) {
-                    x = x.getTime()/1000;
-                }
-                else if (x && x.toJSON) x = x.toJSON();
-                else if(x && Ext.isArray(x)) {
-                    Ext.each(x, function(o, i){
-                        x[i] = o.toJSON ? o.toJSON() : o;
-                    });
-                }
+		this.fields.each(
+			function(f){
+				var x = me.get(f.name);
+				if (Ext.isDate(x)) {
+					x = x.getTime()/1000;
+				}
+				else if (x && x.toJSON) x = x.toJSON();
+				else if(x && Ext.isArray(x)) {
+					Ext.each(x, function(o, i){
+						x[i] = o.toJSON ? o.toJSON() : o;
+					});
+				}
 
-                data[f.name] = Ext.clone(x);
-            }
-        );
-        return data;
-    }
+				data[f.name] = Ext.clone(x);
+			}
+		);
+		return data;
+	}
 });
 
 
@@ -156,58 +156,58 @@ Ext.define('NextThought.model.Base', {
 
 /* converters for models which reference other models*/
 Ext.data.Types.SINGLEITEM = {
-    type: 'singleItem',
-    convert: function(v) {
-        return !v ? null : ParseUtils.parseItems([v])[0];
-    },
-    sortType: function(v) {
-        console.warn('sort by Item:',arguments);
-        return '';
-    }
+	type: 'singleItem',
+	convert: function(v) {
+		return !v ? null : ParseUtils.parseItems([v])[0];
+	},
+	sortType: function(v) {
+		console.warn('sort by Item:',arguments);
+		return '';
+	}
 };
 
 Ext.data.Types.ARRAYITEM = {
-    type: 'arrayItem',
-    convert: function(v) {
-        return ParseUtils.parseItems(v);
-    },
-    sortType: function(v) {
-        console.warn('sort by Item:',arguments);
-        return '';
-    }
+	type: 'arrayItem',
+	convert: function(v) {
+		return ParseUtils.parseItems(v);
+	},
+	sortType: function(v) {
+		console.warn('sort by Item:',arguments);
+		return '';
+	}
 };
 
 Ext.data.Types.USERLIST = {
 	type: 'UserList',
-    convert: function(v) {
-        try {
-            var a = arguments,
-                u = [];
+	convert: function(v) {
+		try {
+			var a = arguments,
+				u = [];
 
-            if(v) Ext.each(v, function(o){
-                var p =
-                    typeof(o)=='string' ?
+			if(v) Ext.each(v, function(o){
+				var p =
+					typeof(o)=='string' ?
 						o : o.get ?
 							o.get('Username') : o.Username ?
 								o.Username : null;
-                if(!p)
-                    console.warn("WARNING: Could not handle Object: ", o, a);
-                else  {
-                    u.push(p);
-                    //asynchronously resolve this user so its cached and ready
-                    UserRepository.prefetchUser(o);
-                }
-            });
+				if(!p)
+					console.warn("WARNING: Could not handle Object: ", o, a);
+				else  {
+					u.push(p);
+					//asynchronously resolve this user so its cached and ready
+					UserRepository.prefetchUser(o);
+				}
+			});
 
-            return u;
-        }
-        catch (e) {
-            console.error('USERLIST: Parsing Error: ',e.message, e.stack);
-            return v;
-        }
-    },
-    sortType: function(v) {
+			return u;
+		}
+		catch (e) {
+			console.error('USERLIST: Parsing Error: ',e.message, e.stack);
+			return v;
+		}
+	},
+	sortType: function(v) {
 		console.warn('sort by UserList:',arguments);
-        return '';
-    }
+		return '';
+	}
 };

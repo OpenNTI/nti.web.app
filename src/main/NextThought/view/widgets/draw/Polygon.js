@@ -3,7 +3,7 @@ Ext.define('NextThought.view.widgets.draw.Polygon', {
 	alias: 'widget.sprite-polygon',
 
 	constructor: function(config){
-       // this.applyClipRect = true;
+	   // this.applyClipRect = true;
 
 		if(!config || !config.sides)
 			Ext.Error.raise('must have sides defined & be >2');
@@ -28,7 +28,7 @@ Ext.define('NextThought.view.widgets.draw.Polygon', {
 
 		path.push(['Z']);
 
-        this.callParent([Ext.apply(config,{ type: 'path', path: path})]);
+		this.callParent([Ext.apply(config,{ type: 'path', path: path})]);
 	},
 
 	getShape: function(){

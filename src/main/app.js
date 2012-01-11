@@ -1,30 +1,30 @@
 document.write('<script	src="'+_AppConfig.server.host+'/socket.io/static/socket.io.js"></script>');
 
 Ext.application({
-    name: 'NextThought',
-    appFolder: 'src/main/NextThought',
+	name: 'NextThought',
+	appFolder: 'src/main/NextThought',
 
-    controllers: [
-        'Account',
-        'Annotations',
-        'Application',
-        'Chat',
+	controllers: [
+		'Account',
+		'Annotations',
+		'Application',
+		'Chat',
 		'Classroom',
-        'FilterControl',
-        'Google',
-        'Groups',
-        'Home',
-        'Modes',
-        'ObjectExplorer',
-        'Reader',
-        'Search',
-        'Session',
-        'State',
-        'Stream',
+		'FilterControl',
+		'Google',
+		'Groups',
+		'Home',
+		'Modes',
+		'ObjectExplorer',
+		'Reader',
+		'Search',
+		'Session',
+		'State',
+		'Stream',
 		'Whiteboard'
-    ],
+	],
 
-    launch: function(){
+	launch: function(){
 
 		if(!HOST_PATTERN.test(_AppConfig.server.host)){
 			console.error('Bad Server Config, your host does not validate the pattern:',HOST_PATTERN);
@@ -62,7 +62,7 @@ Ext.application({
 		function start() {
 			applyHooks();
 			removeLoaderSplash();
-		    NextThought.controller.Session.login(app);
+			NextThought.controller.Session.login(app);
 			NextThought.isReady = true;
 		}
 	}

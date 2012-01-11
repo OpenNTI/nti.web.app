@@ -1,11 +1,11 @@
 Ext.define('NextThought.view.windows.NoteEditor', {
 	extend: 'Ext.window.Window',
 	alias : 'widget.noteeditor',
-    requires: [
-        'Ext.form.field.HtmlEditor',
+	requires: [
+		'Ext.form.field.HtmlEditor',
 		'NextThought.util.AnnotationUtils',
 		'NextThought.view.widgets.draw.Whiteboard'
-    ],
+	],
 
 	width: '600',
 	height: '450',
@@ -84,29 +84,29 @@ Ext.define('NextThought.view.windows.NoteEditor', {
 
 
 	updateOrCreateWhiteboardThumbnail: function(whiteboard){
-        //the getDoc() is non-public api
-        var id = whiteboard.__id,
-            iFrameDoc = this.down('htmleditor').getDoc(),
-            body = iFrameDoc.body,
-            numShapes = whiteboard.getNumberOfShapes(),
-            div = iFrameDoc.getElementById(id);
+		//the getDoc() is non-public api
+		var id = whiteboard.__id,
+			iFrameDoc = this.down('htmleditor').getDoc(),
+			body = iFrameDoc.body,
+			numShapes = whiteboard.getNumberOfShapes(),
+			div = iFrameDoc.getElementById(id);
 
-        //if there's no placeholder, add one:
-        if (!div) {
-            body.innerHTML += Ext.String.format(AnnotationUtils.NOTE_BODY_DIVIDER, id,
-                Ext.String.format(AnnotationUtils.WHITEBOARD_THUMBNAIL,'',
-                    this.getWhiteboardThumbnailClickHandler(id)));
-            div = iFrameDoc.getElementById(id)
-        }
+		//if there's no placeholder, add one:
+		if (!div) {
+			body.innerHTML += Ext.String.format(AnnotationUtils.NOTE_BODY_DIVIDER, id,
+				Ext.String.format(AnnotationUtils.WHITEBOARD_THUMBNAIL,'',
+					this.getWhiteboardThumbnailClickHandler(id)));
+			div = iFrameDoc.getElementById(id)
+		}
 
-        //If WB now has 0 elements, just remove it from the editor, otherwise, update thumbnail.
-        if (numShapes === 0)
-            div.parentNode.removeChild(div);
-        else
-            div.innerHTML = Ext.String.format(
-                    AnnotationUtils.WHITEBOARD_THUMBNAIL,
-                    whiteboard.getThumbnail(),
-                    this.getWhiteboardThumbnailClickHandler(id));
+		//If WB now has 0 elements, just remove it from the editor, otherwise, update thumbnail.
+		if (numShapes === 0)
+			div.parentNode.removeChild(div);
+		else
+			div.innerHTML = Ext.String.format(
+					AnnotationUtils.WHITEBOARD_THUMBNAIL,
+					whiteboard.getThumbnail(),
+					this.getWhiteboardThumbnailClickHandler(id));
 	},
 
 	insertWhiteboard: function(){
@@ -151,8 +151,8 @@ Ext.define('NextThought.view.windows.NoteEditor', {
 		});
 
 		win.saveScene = function(){
-            return this.down('whiteboard').saveScene();
-        };
+			return this.down('whiteboard').saveScene();
+		};
 
 		return win;
 	},
@@ -165,17 +165,17 @@ Ext.define('NextThought.view.windows.NoteEditor', {
 			{ xtype: 'button', text: 'Save',
 				handler: function(btn){
 					var win = btn.up('window').hide(),
-                        wb = win.down('whiteboard');
-                    wb.initialConfig.value = wb.saveScene();
+						wb = win.down('whiteboard');
+					wb.initialConfig.value = wb.saveScene();
 					wb.fireEvent('save',wb);
 				}
 			},
 			{ xtype: 'button', text: 'Cancel',
 				handler: function(btn){
 					var win = btn.up('window').hide(),
-                        wb = win.down('whiteboard');
+						wb = win.down('whiteboard');
 					wb.reset();
-                    wb.fireEvent('cancel',wb);
+					wb.fireEvent('cancel',wb);
 				}
 			}
 		];
@@ -197,9 +197,9 @@ Ext.define('NextThought.view.windows.NoteEditor', {
 		return body;
 	},
 
-    show: function(){
-        this.callParent(arguments);
-        var e = this.down('htmleditor');
-        setTimeout(function(){e.focus();}, 500);
-    }
+	show: function(){
+		this.callParent(arguments);
+		var e = this.down('htmleditor');
+		setTimeout(function(){e.focus();}, 500);
+	}
 });

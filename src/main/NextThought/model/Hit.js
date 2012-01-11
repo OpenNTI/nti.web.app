@@ -1,5 +1,5 @@
 Ext.define('NextThought.model.Hit', {
-    extend: 'NextThought.model.Base',
+	extend: 'NextThought.model.Base',
 
 	fields: [
 		{ name: 'Snippet', type: 'string' },

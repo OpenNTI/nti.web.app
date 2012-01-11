@@ -3,16 +3,16 @@ Ext.define('NextThought.view.widgets.Breadcrumb', {
 	alias: 'widget.breadcrumbbar',
 	
 	cls: 'x-breadcrumbs-bar',
-    border: false,
-    
+	border: false,
+	
 
-    constructor: function(){
+	constructor: function(){
 		this.addEvents({'change': true, 'navigate': true});
 		this.callParent(arguments);
 		this._current = {};
 		return this;
 	},
-    
+	
 	initComponent: function(){
 		this.callParent(arguments);
 		if (!Library.loaded) {
@@ -97,7 +97,7 @@ Ext.define('NextThought.view.widgets.Breadcrumb', {
 			navInfo;
 
 		while(level && level.parentNode){
-	        
+			
 			leafs = [];
 			branches = {
 				cls: first? 'x-breadcrumb-end': '',
@@ -106,27 +106,27 @@ Ext.define('NextThought.view.widgets.Breadcrumb', {
 
 			};
 
-	        
+			
 			this._renderBranch(book, leafs, level, selectedBranch);
-	        
+			
 			if(leafs.length>0){
 				branches.menu = leafs;
 			}
-	        
-	        
+			
+			
 			nodes.push(branches);
-	        
+			
 			//back up the tree...all the way to the root.
 			selectedBranch = level;
 			level = level.parentNode;
 			first = false;
 		}
-	    
+		
 		container.add({
 			text: toc.getAttribute('label'),
 			menu: this._getLibraryMenu(book)
 		});
-	    
+		
 		nodes.reverse();
 		container.add(nodes);
 
@@ -189,13 +189,13 @@ Ext.define('NextThought.view.widgets.Breadcrumb', {
    
    
 	_renderLeafFromTopic: function(book, topicNode, selected) {
-        
+		
 		var label = topicNode.getAttribute("label"),
 				href = topicNode.getAttribute("href"),
 				ntiid = topicNode.getAttribute('ntiid'),
 				leaf = this._renderLeaf(book, label, href, ntiid, selected),
 				list;
-    
+	
 		if(leaf && topicNode.childNodes.length > 0){
 			list = [];
 			leaf.menu = list;
@@ -204,12 +204,12 @@ Ext.define('NextThought.view.widgets.Breadcrumb', {
 				leaf.menu = undefined;
 			}
 		}
-        
+		
 		return leaf;
 	},
-    
-    
-    
+	
+	
+	
 	_renderLeaf: function(book, labelText, href, ntiid, selected) {
 		if(!href || !labelText || !book){
 			return null;
@@ -222,13 +222,13 @@ Ext.define('NextThought.view.widgets.Breadcrumb', {
 			ntiid: ntiid,
 			skipHistory: this.skipHistory
 		};
-            
+			
 		if(selected){
 			leaf.checked = true;
 		}
-        
-        
-        
+		
+		
+		
 		return leaf;
 	}
 

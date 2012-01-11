@@ -1,23 +1,23 @@
 Ext.define('NextThought.store.Stream',{
-    extend: 'Ext.data.Store',
-    requires:[
-        'NextThought.proxy.reader.Json'
-    ],
+	extend: 'Ext.data.Store',
+	requires:[
+		'NextThought.proxy.reader.Json'
+	],
 
 	model: 'NextThought.model.Change',
 
 	autoLoad: false,
 
-    proxy: {
+	proxy: {
 		type: 'rest',
 		reader: {
 			type: 'json',
 			root: 'Items'
 		},
-        headers: {
-            'Accept': 'application/vnd.nextthought.collection+json'
-        },
-        model: 'NextThought.model.Change'
+		headers: {
+			'Accept': 'application/vnd.nextthought.collection+json'
+		},
+		model: 'NextThought.model.Change'
 	},
 	sorters: [
 		{

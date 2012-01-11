@@ -1,7 +1,7 @@
 Ext.define('NextThought.store.FriendsList',{
-    extend: 'Ext.data.Store',
+	extend: 'Ext.data.Store',
 
-    model: 'NextThought.model.FriendsList',
+	model: 'NextThought.model.FriendsList',
 
 	autoLoad: false,
 
@@ -9,18 +9,18 @@ Ext.define('NextThought.store.FriendsList',{
 	remoteFilter: false,
 	remoteGroup: false,
 
-    proxy: {
-        type: 'rest',
-        reader: {
-            type: 'nti',
-            root: 'Items'
-        },
+	proxy: {
+		type: 'rest',
+		reader: {
+			type: 'nti',
+			root: 'Items'
+		},
 		headers: {
 			'Accept': 'application/vnd.nextthought.collection+json',
 			'Content-Type': 'application/vnd.nextthought.friendslist+json'
 		},
-        model: 'NextThought.model.FriendsList'
-    },
+		model: 'NextThought.model.FriendsList'
+	},
 
 	sorters: [
 		{

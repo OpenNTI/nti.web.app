@@ -6,32 +6,32 @@
 .filter-controls .type-filter .x-form-item-body,
 .filter-controls .user-group .x-form-item-body,
 .filter-controls .system-group .x-form-item-body {
-    padding-left: 22px;
-    padding-top: 1px;
-    height: 17px;
-    /*background: url("../images/filters/all.png") no-repeat left center;*/
-    background: url("../images/filters/WhoIcons.png") no-repeat 1px 1px;
+	padding-left: 22px;
+	padding-top: 1px;
+	height: 17px;
+	/*background: url("../images/filters/all.png") no-repeat left center;*/
+	background: url("../images/filters/WhoIcons.png") no-repeat 1px 1px;
 }
 
 .filter-controls .type-filter .x-form-item-body{
-    background: url("../images/filters/unkown.png") no-repeat left center;
+	background: url("../images/filters/unkown.png") no-repeat left center;
 }
 .filter-controls .type-filter.note .x-form-item-body{
-    background: url("../images/filters/note-type.png") no-repeat left center;
+	background: url("../images/filters/note-type.png") no-repeat left center;
 }
 .filter-controls .type-filter.highlight .x-form-item-body{
-    background: url("../images/filters/highlight-type.png") no-repeat left center;
+	background: url("../images/filters/highlight-type.png") no-repeat left center;
 }
 
 
 .filter-controls .user-filter .x-form-item-body{
-    background: url("../images/filters/WhoIcons.png") no-repeat 1px -17px;
+	background: url("../images/filters/WhoIcons.png") no-repeat 1px -17px;
 }
 
 .filter-controls .user-group .x-form-item-body{
-    background: url("../images/filters/WhoIcons.png") no-repeat 1px -35px;
+	background: url("../images/filters/WhoIcons.png") no-repeat 1px -35px;
 }
 
 .filter-controls .system-group .x-form-item-body {
-    background: url("../images/filters/WhoIcons.png") no-repeat 1px -53px;
+	background: url("../images/filters/WhoIcons.png") no-repeat 1px -53px;
 }

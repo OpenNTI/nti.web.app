@@ -1,5 +1,5 @@
 Ext.define('NextThought.model.Note', {
-    extend: 'NextThought.model.Base',
+	extend: 'NextThought.model.Base',
 
 	fields: [
 		{ name: 'inReplyTo', type: 'string' },

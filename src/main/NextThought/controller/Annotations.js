@@ -1,54 +1,54 @@
 Ext.define('NextThought.controller.Annotations', {
-    extend: 'Ext.app.Controller',
+	extend: 'Ext.app.Controller',
 
-    required: [
-        'NextThought.cache.IdCache'
-    ],
+	required: [
+		'NextThought.cache.IdCache'
+	],
 
-    models: [
-        'Highlight',
-        'Note',
-        'QuizQuestion',
-        'QuizQuestionResponse',
-        'QuizResult',
-        'TranscriptSummary',
-        'Transcript'
-    ],
+	models: [
+		'Highlight',
+		'Note',
+		'QuizQuestion',
+		'QuizQuestionResponse',
+		'QuizResult',
+		'TranscriptSummary',
+		'Transcript'
+	],
 
 	views: [
-        'Viewport',
-        'windows.ChatWindow',
-        'widgets.annotations.Highlight',
+		'Viewport',
+		'windows.ChatWindow',
+		'widgets.annotations.Highlight',
 		'widgets.annotations.Note',
 		'windows.NoteEditor',
-        'windows.ShareWithWindow'
-    ],
+		'windows.ShareWithWindow'
+	],
 
-    refs: [
-        {ref: 'viewport', selector: 'master-view'},
-        {ref: 'chatWindow', selector: 'chat-window'}
-    ],
+	refs: [
+		{ref: 'viewport', selector: 'master-view'},
+		{ref: 'chatWindow', selector: 'chat-window'}
+	],
 
-    init: function() {
+	init: function() {
 
-        this.actionMap = {
-            'chat'  : this.replyAsChat,
-            'edit'  : this.editNote,
-            'reply' : this.replyToNote,
-            'share' : this.shareWith
-        };
+		this.actionMap = {
+			'chat'  : this.replyAsChat,
+			'edit'  : this.editNote,
+			'reply' : this.replyToNote,
+			'share' : this.shareWith
+		};
 
 
-        this.control({
-            'reader-panel':{
+		this.control({
+			'reader-panel':{
 				'create-note'   : this.addNote,
-                'share-with'    : this.actionMap.share
+				'share-with'	: this.actionMap.share
 			},
 
-            'note-entry':{
-                'action': this.onNoteAction,
-                'load-transcript': this.onLoadTranscript
-            },
+			'note-entry':{
+				'action': this.onNoteAction,
+				'load-transcript': this.onLoadTranscript
+			},
 
 			'noteeditor button[action=save]':{ 'click': this.onSaveNote },
 			'noteeditor button[action=cancel]':{ 'click': this.onCancelNote },
@@ -57,17 +57,17 @@ Ext.define('NextThought.controller.Annotations', {
 				'click': this.shareWithButton
 			}
 		},{});
-    },
+	},
 
-    getContext: function(){
-        return this.getController('Reader').getReader();
-    },
+	getContext: function(){
+		return this.getController('Reader').getReader();
+	},
 
-    getContainerId: function(){
-        return this.getContext().getContainerId();
-    },
+	getContainerId: function(){
+		return this.getContext().getContainerId();
+	},
 
-    shareWithButton: function(btn){
+	shareWithButton: function(btn){
 		var win = btn.up('window'),
 			form= win.down('form'),
 			shbx= win.down('sharewith'),
@@ -75,30 +75,30 @@ Ext.define('NextThought.controller.Annotations', {
 
 		if(btn.isCancel){
 			win.close();
-            return;
+			return;
 		}
 
 		if(!form.getForm().isValid()){
 			return false;
 		}
 
-        win.el.mask('Sharing...');
+		win.el.mask('Sharing...');
 
-        rec.set('sharedWith',shbx.getValue());
+		rec.set('sharedWith',shbx.getValue());
 		rec.save({
 			scope: this,
 			success:function(newRecord,operation){
 				win.close();
 				rec.fireEvent('updated',newRecord);
 			},
-            failure:function(){
-                console.error('Failed to save object');
-                win.el.unmask();
-            }
+			failure:function(){
+				console.error('Failed to save object');
+				win.el.unmask();
+			}
 		});
 	},
 
-    onNoteAction: function(action, note, event){
+	onNoteAction: function(action, note, event){
 		var r = note._owner,
 			a = note._annotation,
 			rec = a.getRecord();
@@ -118,17 +118,17 @@ Ext.define('NextThought.controller.Annotations', {
 
 		model.proxy.url = record.getLink('transcript');
 
-        model.load(id,{
-            scope: this,
-            failure: function() {
-                elm.animate({listeners: { beforeanimate: function(){ elm.show(true); } }});
-            },
-            success: function(record) {
-                //elm.remove();
-                cmp.insertTranscript(record);
-            }
-        });
-    },
+		model.load(id,{
+			scope: this,
+			failure: function() {
+				elm.animate({listeners: { beforeanimate: function(){ elm.show(true); } }});
+			},
+			success: function(record) {
+				//elm.remove();
+				cmp.insertTranscript(record);
+			}
+		});
+	},
 
 
 	onCancelNote: function(btn, event){
@@ -136,15 +136,15 @@ Ext.define('NextThought.controller.Annotations', {
 	},
 
 
-    onSaveNote: function(btn, event){
+	onSaveNote: function(btn, event){
 		var win = btn.up('window'),
 			cmp = win.down('htmleditor');
 
 		win.el.mask('Saving...');
 		win.record.set('body',Ext.Array.clean(win.getValue()));
 
-        if (win.record.data.body.length === 0) {
-            //note has no data, we need to just remove it
+		if (win.record.data.body.length === 0) {
+			//note has no data, we need to just remove it
 			if(!win.record.phantom){
 				win.record.destroy({
 					scope: this,
@@ -154,15 +154,15 @@ Ext.define('NextThought.controller.Annotations', {
 					},
 					failure: function(){
 						console.error('failed to delete empty note');
-                        win.el.unmask();
+						win.el.unmask();
 					}
 				});
 			}
 			else win.close();
-            return;
-        }
+			return;
+		}
 
-        //If we are here, save it.
+		//If we are here, save it.
 		win.record.save({
 			scope: this,
 			success:function(newRecord,operation){
@@ -172,7 +172,7 @@ Ext.define('NextThought.controller.Annotations', {
 			},
 			failure:function(){
 				console.error('failed to save note');
-                win.el.unmask();
+				win.el.unmask();
 			}
 		});
 	},

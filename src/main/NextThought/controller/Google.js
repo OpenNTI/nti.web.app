@@ -1,7 +1,7 @@
 Ext.define('NextThought.controller.Google', {
-    extend: 'Ext.app.Controller',
+	extend: 'Ext.app.Controller',
 
-    init: function() {
+	init: function() {
 		try{
 			this.stateCtlr = this.getController('State');
 
@@ -15,7 +15,7 @@ Ext.define('NextThought.controller.Google', {
 		catch(e){
 			console.error('Could not establish hangout events: ', e.stack);
 		}
-    },
+	},
 
 	isHangout: function(){
 		return typeof gapi != 'undefined' && gapi.hangout;

@@ -1,161 +1,161 @@
 
 .chat {
-    background: url('../images/chat/speachbubble.png');
+	background: url('../images/chat/speachbubble.png');
 }
 
 .chat-entry .x-form-item-body input {
-    padding-top: 5px;
-    border: none;
+	padding-top: 5px;
+	border: none;
 }
 
 .chat-entry {
-    float: none !important;
+	float: none !important;
 }
 
 .chat-window .flag {
-    background: url('../images/chat/flag-16.png');
+	background: url('../images/chat/flag-16.png');
 }
 
 .chat-window .x-disabled .flag {
-    background: url('../images/chat/flag-16-disabled.png');
+	background: url('../images/chat/flag-16-disabled.png');
 }
 
 .x-chat-log-entry:hover,
 .x-chat-log-entry.selected,
 .x-chat-friend-entry:hover,
 .x-chat-friend-entry.drag-hover {
-    background-color: #7889A3 !important;
-    color: white;
+	background-color: #7889A3 !important;
+	color: white;
 }
 
 .x-chat-log-entry:hover .name,
 .x-chat-log-entry.selected .name {
-    color: black;
+	color: black;
 }
 
 .flagged .x-chat-log-entry.selected,
 .flagged .x-chat-log-entry:hover {
-    background-color: #fa8072 !important;
+	background-color: #fa8072 !important;
 }
 
 .flagged .x-chat-log-entry {
-    background-color: #ffdddd;
-    color: black;
+	background-color: #ffdddd;
+	color: black;
 }
 
 .shadow-menu{
-    background-image: url("../images/chat/shadow-user-16.png");
+	background-image: url("../images/chat/shadow-user-16.png");
 }
 .chat-menu{
-    background-image: url("../images/chat/chat-16.png");
+	background-image: url("../images/chat/chat-16.png");
 }
 
 .shadowed .x-chat-log-entry.selected,
 .shadowed .x-chat-log-entry:hover {
-    background-color: #cecece !important;
+	background-color: #cecece !important;
 }
 
 .shadowed .x-chat-log-entry {
-    background-color: #f2eeee;
-    color: black;
+	background-color: #f2eeee;
+	color: black;
 }
 
 .x-chat-log-entry span.reply {
-    position: absolute;
-    display: none;
-    right: 5px; top: 5px;
-    height: 24px;
-    cursor: pointer;
-    overflow: hidden;
+	position: absolute;
+	display: none;
+	right: 5px; top: 5px;
+	height: 24px;
+	cursor: pointer;
+	overflow: hidden;
 }
 
 .x-chat-log-entry .reply span{width:16px;height:16px;margin:2px;display: inline-block;vertical-align:middle;oopacity:0.4;}
 .x-chat-log-entry .reply span:hover{opacity: 1;}
 
 .x-chat-log-entry span.reply-public{width:22px;height:22px;background-size:22px 22px;
-    background: url("../images/chat/re-32.png");
+	background: url("../images/chat/re-32.png");
 }
 .x-chat-log-entry span.reply-whisper {
-    background: url("../images/chat/re-16.png");
+	background: url("../images/chat/re-16.png");
 }
 .x-chat-log-entry span.pin{
-    width:22px;
-    height:22px;
-    background-size:22px 22px;
-    background: url("../images/chat/chat-pin-64.png");
-    display: none;
+	width:22px;
+	height:22px;
+	background-size:22px 22px;
+	background: url("../images/chat/chat-pin-64.png");
+	display: none;
 }
 
 .moderator .x-chat-log-entry span.pin{
-    display: inline-block;
+	display: inline-block;
 }
 
 .x-chat-log-entry:hover span.reply {
-    display: block;
+	display: block;
 }
 
 .x-chat-log-entry .timestamp { color: #7a7a7a; float: right; font-size: 9px; padding:  0 0 5px 10px; }
 .x-chat-log-entry:hover .timestamp { visibility: hidden; }
 
 .x-form-cb-checked .x-chat-replies .x-form-cb-checked .x-form-checkbox {
-    background-position: 0 -13px;
+	background-position: 0 -13px;
 }
 .x-form-cb-checked .x-chat-replies .x-form-checkbox {
-    background-position: 0 0;
+	background-position: 0 0;
 }
 
 .x-chat-replies {
-    clear: both;
-    padding-left: 15px;
+	clear: both;
+	padding-left: 15px;
 }
 
 .x-chat-friend-entry,
 .x-chat-log-entry {
-    position: relative;
-    overflow: hidden;
-    padding: 10px 5px;
-    cursor: pointer;
+	position: relative;
+	overflow: hidden;
+	padding: 10px 5px;
+	cursor: pointer;
 }
 
 .x-chat-friend-entry {
-    padding: 5px 5px 5px 25px;
-    background: url(../images/core/offline.png) no-repeat 5px center;
+	padding: 5px 5px 5px 25px;
+	background: url(../images/core/offline.png) no-repeat 5px center;
 }
 
 .x-chat-friend-entry.Online {
-    background: url(../images/core/online.png) no-repeat 5px center;
+	background: url(../images/core/online.png) no-repeat 5px center;
 }
 
 .x-chat-log-entry div,
 .x-chat-friend-entry div {
-    margin-left: 22px;
+	margin-left: 22px;
 }
 
 .x-chat-log-entry.moderated div {
-    margin-left: 37px;
+	margin-left: 37px;
 }
 
 .x-chat-log-entry img,
 .x-chat-log-entry input,
 .x-chat-friend-entry img {
-    float: left;
+	float: left;
 }
 
 .x-chat-log-entry input {
-    margin:  0;
+	margin:  0;
 }
 
 .x-chat-log-entry .name {
-    font-weight: bold;
-    color: #7889A3;
+	font-weight: bold;
+	color: #7889A3;
 }
 .reply-to-button button{
-    width: 32px !important;
+	width: 32px !important;
 }
 .reply-to-button .x-btn-icon{
-    width: inherit;
-    height: inherit;
-    background: url("../images/chat/submit-22.png") center;
+	width: inherit;
+	height: inherit;
+	background: url("../images/chat/submit-22.png") center;
 }
 
 .compose-msg-button .x-btn-icon{
@@ -171,39 +171,39 @@
 }
 
 .reply-to-line .chat-entry .x-form-item-body {
-    background: url('../../ext-4.0.7/resources/themes/images/gray/form/text-bg.gif') repeat-x;
-    height: 30px !important;
+	background: url('../../ext-4.0.7/resources/themes/images/gray/form/text-bg.gif') repeat-x;
+	height: 30px !important;
 }
 
 .reply-to-line .chat-entry .x-form-item-body input.x-form-text {
-    padding-left: 10px;
-    height: 30px !important;
+	padding-left: 10px;
+	height: 30px !important;
 }
 
 
 .x-chat-log-entry-pinned {
-    position: relative;
-    padding: 10px;
-    overflow: hidden;
+	position: relative;
+	padding: 10px;
+	overflow: hidden;
 }
 
 .x-chat-log-entry-pinned div.icon {
-    float: left;
-    width: 32px;
-    overflow: hidden;
-    text-align: center;
+	float: left;
+	width: 32px;
+	overflow: hidden;
+	text-align: center;
 }
 
 .x-chat-log-entry-pinned div.icon img {
-    display: block;
+	display: block;
 }
 
 .x-chat-log-entry-pinned div.icon .name {
-    font-size: 0.8em;
+	font-size: 0.8em;
 }
 
 .x-chat-log-entry-pinned div.body {
-    margin-left: 50px;
-    font-size: 1.5em;
-    font-family: georgia,serif;
+	margin-left: 50px;
+	font-size: 1.5em;
+	font-family: georgia,serif;
 }

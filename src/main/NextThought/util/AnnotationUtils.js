@@ -16,17 +16,17 @@ Ext.define('NextThought.util.AnnotationUtils',{
 			'style="border: 1px solid gray" {1}>{0}</svg>',
 
 //tested
-    getBodyTextOnly: function(obj) {
-        var bdy = obj.get('body'), o, i, text = [];
-        for (i in bdy) {
-            if(!bdy.hasOwnProperty(i)) continue;
-            o = bdy[i];
-            if(typeof(o) == 'string'){
-                text.push(o.replace(/<.*?>/g, ''));
-            }
-        }
-        return text.join('');
-    },
+	getBodyTextOnly: function(obj) {
+		var bdy = obj.get('body'), o, i, text = [];
+		for (i in bdy) {
+			if(!bdy.hasOwnProperty(i)) continue;
+			o = bdy[i];
+			if(typeof(o) == 'string'){
+				text.push(o.replace(/<.*?>/g, ''));
+			}
+		}
+		return text.join('');
+	},
 
 //tested
 	/**
@@ -574,8 +574,8 @@ Ext.define('NextThought.util.AnnotationUtils',{
 			}
 		}
 
-        //get here and found nothing? return null:
-        return null;
+		//get here and found nothing? return null:
+		return null;
 	},
 
 //tested

@@ -7,7 +7,7 @@ Ext.define( 'NextThought.view.modes.Classroom', {
 			'NextThought.view.windows.ClassroomChooser'
 	],
 
-    cls: 'classroom-mode',
+	cls: 'classroom-mode',
 
 	border: false,
 	defaults: {
@@ -15,18 +15,18 @@ Ext.define( 'NextThought.view.modes.Classroom', {
 		defaults: {
 			border: false
 		}
-    },
+	},
 	
-    initComponent: function(){
-        this.callParent(arguments);
+	initComponent: function(){
+		this.callParent(arguments);
 
-        this.mainArea = this.add({
-            border: false,
-            flex:1,
-            layout: 'fit',
-            dockedItems:this.getEmptyToolbar()
-        });
-    },
+		this.mainArea = this.add({
+			border: false,
+			flex:1,
+			layout: 'fit',
+			dockedItems:this.getEmptyToolbar()
+		});
+	},
 
 	showClassChooser: function(){
 		this.chooser = this.mainArea.add({xtype:'classroom-chooser'}).show().center();
@@ -38,22 +38,22 @@ Ext.define( 'NextThought.view.modes.Classroom', {
 		delete this.chooser;
 	},
 
-    showClassroom: function(roomInfo) {
+	showClassroom: function(roomInfo) {
 		var tb = this.down('toolbar');
 		tb.removeAll();
 		tb.insert(0, {text:'Leave Class', action: 'leave'});
-        this.mainArea.add({xtype: 'classroom-content', roomInfo: roomInfo});
+		this.mainArea.add({xtype: 'classroom-content', roomInfo: roomInfo});
 
-        //insert flagged messages button
-        tb.add({
-            iconCls: 'flag',
-            disabled: true,
-            menu: [],
-            action: 'flagged',
-            xtype: 'splitbutton',
-            tooltip:'flagged messages'
-        });
-    },
+		//insert flagged messages button
+		tb.add({
+			iconCls: 'flag',
+			disabled: true,
+			menu: [],
+			action: 'flagged',
+			xtype: 'splitbutton',
+			tooltip:'flagged messages'
+		});
+	},
 
 
 	leaveClassroom: function(){
@@ -70,5 +70,5 @@ Ext.define( 'NextThought.view.modes.Classroom', {
 		this.callParent(arguments);
 		this.hideClassChooser();
 	}
-    
+	
 });

@@ -1,8 +1,8 @@
 .x-nti-note {
-    border-top: 1px solid #ccc;
-    position: relative;
-    overflow: hidden;
-    padding: 10px 5px;
+	border-top: 1px solid #ccc;
+	position: relative;
+	overflow: hidden;
+	padding: 10px 5px;
 }
 
 .x-nti-note div { margin-left: 22px; }
@@ -31,21 +31,21 @@
 .x-nti-note.placeholder div { margin: 0px; }
 
 .x-nti-note span.controls {
-    position: absolute;
-    display: none;
-    right: 5px; top: 5px;
-    height: 24px;
-    cursor: pointer;
-    overflow: hidden;
+	position: absolute;
+	display: none;
+	right: 5px; top: 5px;
+	height: 24px;
+	cursor: pointer;
+	overflow: hidden;
 }
 
 .x-nti-note span.controls span {
-    width: 16px;
-    height: 16px;
-    margin: 2px;
-    display: inline-block;
-    background: #ccc;
-    opacity: 0.4;
+	width: 16px;
+	height: 16px;
+	margin: 2px;
+	display: inline-block;
+	background: #ccc;
+	opacity: 0.4;
 }
 .x-nti-note span.controls span:hover{ opacity: 1; }
 
@@ -59,18 +59,18 @@
 
 
 .x-nti-note .controls .chat {
-    background: url("../images/chat/chat-16.png");
+	background: url("../images/chat/chat-16.png");
 }
 .x-nti-note .controls .delete {
-    background: url("../images/chat/delete-16.png");
+	background: url("../images/chat/delete-16.png");
 }
 .x-nti-note .controls .edit {
-    background: url("../images/chat/edit-16.png");
-    background-size: 16px 16px;
+	background: url("../images/chat/edit-16.png");
+	background-size: 16px 16px;
 }
 .x-nti-note .controls .reply {
-    background: url("../images/chat/re-16.png");
+	background: url("../images/chat/re-16.png");
 }
 .x-nti-note .controls .share {
-    background: url("../images/chat/share-16.png");
+	background: url("../images/chat/share-16.png");
 }

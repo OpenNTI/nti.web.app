@@ -1,5 +1,5 @@
 Ext.define('NextThought.store.PageItem',{
-    extend: 'Ext.data.Store',
+	extend: 'Ext.data.Store',
 	requires: [
 		'NextThought.proxy.reader.Json'
 	],

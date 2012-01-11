@@ -1,5 +1,5 @@
 Ext.define('NextThought.model.Highlight', {
-    extend: 'NextThought.model.Base',
+	extend: 'NextThought.model.Base',
 
 	fields: [
 		{ name: 'startXpath', type: 'string' },

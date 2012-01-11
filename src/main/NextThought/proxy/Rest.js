@@ -1,7 +1,7 @@
 Ext.define('NextThought.proxy.Rest', {
-    extend: 'Ext.data.proxy.Rest',
-    alias: 'proxy.nti',
-    requires: [
+	extend: 'Ext.data.proxy.Rest',
+	alias: 'proxy.nti',
+	requires: [
 		'NextThought.proxy.writer.Json'
 	],
 
@@ -14,23 +14,23 @@ Ext.define('NextThought.proxy.Rest', {
 	},
 
 
-    constructor: function(config) {
+	constructor: function(config) {
 		this.callParent(arguments);
-        this.on('exception', this._exception, this);
-    },
+		this.on('exception', this._exception, this);
+	},
 
-    doRequest: function(){
-        this.callParent(arguments);
+	doRequest: function(){
+		this.callParent(arguments);
 		if(this.headers){
 			delete this.headers;
 		}
-        //fire an event to Viewport in case anyone cares
-        VIEWPORT.fireEvent('object-changed');
-    },
+		//fire an event to Viewport in case anyone cares
+		VIEWPORT.fireEvent('object-changed');
+	},
 
-    buildUrl: function(request) {
-        var host = _AppConfig.server.host,
-            action = request.operation.action,
+	buildUrl: function(request) {
+		var host = _AppConfig.server.host,
+			action = request.operation.action,
 			record = request.records[0],
 			mimeType = record.mimeType || record.get('MimeType'),
 			href,
@@ -38,14 +38,14 @@ Ext.define('NextThought.proxy.Rest', {
 
 		this.headers = { 'Content-Type': mimeType+'+json' };
 
-        if (action==='update' || action==='destroy'){
+		if (action==='update' || action==='destroy'){
 			href = record.getLink('edit');
 		}
 		else if(action === 'create'){
 			collection = _AppConfig.service.getCollectionFor(mimeType,null) || {};
-            if (!collection.href) {
-                Ext.Error.raise('No HREF found for mimetype ' + mimeType);
-            }
+			if (!collection.href) {
+				Ext.Error.raise('No HREF found for mimetype ' + mimeType);
+			}
 			href = host + collection.href;
 		}
 		else if(action === 'read') {
@@ -67,10 +67,10 @@ Ext.define('NextThought.proxy.Rest', {
 			mimeType: mimeType
 		});
 
-        return href;
-    },
+		return href;
+	},
 
-    _exception: function(proxy, response, operation, eOpts) {
+	_exception: function(proxy, response, operation, eOpts) {
 		try{
 			Ext.callback(operation.failed, operation.scope, [operation.records, operation]);
 		}
@@ -79,5 +79,5 @@ Ext.define('NextThought.proxy.Rest', {
 		}
 		if(response.status !== 404)
 			console.error('Error getting data:', arguments);
-    }
+	}
 });

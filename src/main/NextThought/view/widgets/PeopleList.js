@@ -3,8 +3,8 @@ Ext.define('NextThought.view.widgets.PeopleList', {
 	alias: 'widget.people-list',
 
 	mixins:{
-        avatars: 'NextThought.mixins.AvatarInformation'
-    },
+		avatars: 'NextThought.mixins.AvatarInformation'
+	},
 
 	border: false,
 	defaults: {border: false},
@@ -37,13 +37,13 @@ Ext.define('NextThought.view.widgets.PeopleList', {
 
 	updateList: function(){
 		var k, c = 0,
-            me = this,
-            p = me.items.get(1),
-            f = me._filter;
+			me = this,
+			p = me.items.get(1),
+			f = me._filter;
 
-        p.removeAll();
+		p.removeAll();
 
-        for(k in me._contributors){
+		for(k in me._contributors){
 			me._contributors.hasOwnProperty(k);
 			if(c>=10){
 				p.add({xtype: 'button', text:'More'});
@@ -53,12 +53,12 @@ Ext.define('NextThought.view.widgets.PeopleList', {
 			if(/all/i.test(f.groups) || f.shareTargets && f.shareTargets[k]){
 				c++;
 				UserRepository.prefetchUser(k, function(users){
-                    var f = users[0],
-					    c = p.add({	xtype: 'image',
-							    src: (f? f.get('avatarURL') : Ext.BLANK_IMAGE_URL),
-							    height: 36, width: 36});
+					var f = users[0],
+						c = p.add({	xtype: 'image',
+								src: (f? f.get('avatarURL') : Ext.BLANK_IMAGE_URL),
+								height: 36, width: 36});
 
-                        me.setupAvatarDetailToolTip(c, f);
+						me.setupAvatarDetailToolTip(c, f);
 				});
 			}
 		}

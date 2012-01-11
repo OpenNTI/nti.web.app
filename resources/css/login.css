@@ -1,54 +1,54 @@
 .x-login-form-box{
-    border-left: 1px solid #000 !important;
-    border-right: 1px solid #000 !important;
+	border-left: 1px solid #000 !important;
+	border-right: 1px solid #000 !important;
 }
 
 .x-login-message-box {
-    padding: 15px 15px 15px 48px;
-    background: #000 url(../images/info.png) no-repeat 10px center;
+	padding: 15px 15px 15px 48px;
+	background: #000 url(../images/info.png) no-repeat 10px center;
 }
 
 .x-login-message-box,
 .x-login-message-box .x-panel-body{
-    border: 1px solid #000;
-    background-color: #000;
-    color: #fff;
-    font-size: 12pt;
+	border: 1px solid #000;
+	background-color: #000;
+	color: #fff;
+	font-size: 12pt;
 
 }
 
 .x-login-message-box.error{
-    background: #800000 url(../images/minus-white.png) no-repeat 10px center;
+	background: #800000 url(../images/minus-white.png) no-repeat 10px center;
 }
 
 .x-login-message-box.error,
 .x-login-message-box.error .x-panel-body{
-    border-color: #800000;
-    color: #ffb6c1;
-    background-color: #cd5c5c !important;
+	border-color: #800000;
+	color: #ffb6c1;
+	background-color: #cd5c5c !important;
 }
 
 .x-login-form-username label,
 .x-login-form-username input{
-    font-size: 14pt;
+	font-size: 14pt;
 }
 
 .x-login-form-username input.x-form-text{
-    padding: 10px;
-    height: 46px;
+	padding: 10px;
+	height: 46px;
 }
 
 .x-login-form-password label,
 .x-login-form-password input{
-    font-size: 12pt;
+	font-size: 12pt;
 }
 
 .x-login-form-password input.x-form-text{
-    padding: 5px;
-    height: 32px;
+	padding: 5px;
+	height: 32px;
 }
 
 .login-icon {
-    background: transparent url("../images/user.png") no-repeat 0 0;
-    margin: 15px 0 0 10px;
+	background: transparent url("../images/user.png") no-repeat 0 0;
+	margin: 15px 0 0 10px;
 }

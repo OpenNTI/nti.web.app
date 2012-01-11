@@ -1,29 +1,29 @@
 .x-left-column div.sidebar-content,
 .x-left-column div.sidebar-header {
-    margin: auto 5px auto auto;
+	margin: auto 5px auto auto;
 }
 
 .x-right-column div.sidebar-content,
 .x-right-column div.sidebar-header {
-    margin: auto auto auto 5px;
+	margin: auto auto auto 5px;
 }
 
 div.sidebar-header .x-panel-body {
-    padding-bottom: 15px;
-    padding-top: 15px;
-    font-weight: bold;
+	padding-bottom: 15px;
+	padding-top: 15px;
+	font-weight: bold;
 }
 
 .related-item {
-    margin-bottom: 5px;
+	margin-bottom: 5px;
 }
 .related-item img{
-    width: 18px !important;
-    margin-right: 5px;
+	width: 18px !important;
+	margin-right: 5px;
 }
 .x-note-panel{
-    width: 100%;
+	width: 100%;
 }
 .document-notes {
-    position: absolute;
+	position: absolute;
 }

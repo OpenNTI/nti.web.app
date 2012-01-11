@@ -44,16 +44,16 @@ Ext.define('NextThought.view.widgets.MiniStreamList', {
 
 		s.each(function(change){
 
-            if (!change.get) {
+			if (!change.get) {
 				console.debug('do we still get this?');
-                return;
-            }
+				return;
+			}
 
-            u = change.get('Creator');
+			u = change.get('Creator');
 
 			if( /all/i.test(f.groups) || f.shareTargets && f.shareTargets[ u ] || (f.includeMe && f.includeMe==u)){
 				c++;
-                p.add({change: change, xtype: 'miniStreamEntry'});
+				p.add({change: change, xtype: 'miniStreamEntry'});
 			}
 
 			if(c > 5 && !overflow){
@@ -64,6 +64,6 @@ Ext.define('NextThought.view.widgets.MiniStreamList', {
 			}
 		});
 
-        if (!c) p.add({html: 'No recent activity to show'});
+		if (!c) p.add({html: 'No recent activity to show'});
 	}
 });

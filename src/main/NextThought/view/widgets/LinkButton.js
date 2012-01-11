@@ -5,8 +5,8 @@ Ext.define('NextThought.view.widgets.LinkButton', {
 	renderTpl: new Ext.XTemplate( '{htmlPrefix}<a class="{cls} link-button" href="#">{text}</a>{htmlPostfix}' ),
 
 	renderSelectors: {
-        linkEl: 'a.link-button'
-    },
+		linkEl: 'a.link-button'
+	},
 
 	constructor: function(config){
 		config = Ext.applyIf(config, {

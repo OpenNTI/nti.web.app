@@ -7,7 +7,7 @@ Ext.define('NextThought.mixins.Annotations', {
 		'NextThought.view.widgets.annotations.SelectionHighlight',
 		'NextThought.view.widgets.annotations.Highlight',
 		'NextThought.view.widgets.annotations.Note',
-        'NextThought.cache.IdCache'
+		'NextThought.cache.IdCache'
 	],
 
 	GETTERS : {
@@ -210,11 +210,11 @@ Ext.define('NextThought.mixins.Annotations', {
 			type = change.get('ChangeType'),
 			oid = item? item.getId() : null,
 			cid = item? item.get('ContainerId') : null,
-            delAction = /deleted/i.test(type),
-            cmp = Ext.getCmp(IdCache.getComponentId(oid)),
+			delAction = /deleted/i.test(type),
+			cmp = Ext.getCmp(IdCache.getComponentId(oid)),
 			cls, replyTo, builder, result;
 
-        console.log('onNotification', change, type);
+		console.log('onNotification', change, type);
 		if (!item || !this._containerId || this._containerId != cid) {
 			return;
 		}
@@ -229,18 +229,18 @@ Ext.define('NextThought.mixins.Annotations', {
 				this._annotations[oid].getRecord().fireEvent('updated',item);
 			}
 		}
-        //found the component, it's not top level
-        else if (cmp) {
-            //delete it
-            if (delAction) {
-                cmp._annotation.cleanup();
-            }
-            //update it
-            else {
-                cmp._annotation.getRecord().fireEvent('updated',item);
-            }
+		//found the component, it's not top level
+		else if (cmp) {
+			//delete it
+			if (delAction) {
+				cmp._annotation.cleanup();
+			}
+			//update it
+			else {
+				cmp._annotation.getRecord().fireEvent('updated',item);
+			}
 
-        }
+		}
 		//if not exists, add
 		else if(!delAction){
 			cls = item.get('Class');
@@ -276,7 +276,7 @@ Ext.define('NextThought.mixins.Annotations', {
 			k = 'Last Modified',
 			tree = {}, b,
 			items,
-            foundBins;
+			foundBins;
 
 		if (!this._containerId) return;
 
@@ -284,10 +284,10 @@ Ext.define('NextThought.mixins.Annotations', {
 		for(b in bins){
 			if(bins.hasOwnProperty(b))
 			bins[b] = Ext.Array.sort(bins[b]||[],SortModelsBy(k,ASCENDING,me.GETTERS[b]));
-            foundBins = true;
+			foundBins = true;
 		}
 
-        if (!foundBins) return;
+		if (!foundBins) return;
 
 		this.buildAnnotationTree(bins.Note, tree);
 		this.buildAnnotationTree(bins.TranscriptSummary, tree);
@@ -299,7 +299,7 @@ Ext.define('NextThought.mixins.Annotations', {
 		contributors = this.buildAnnotations(items);
 
 		me.fireEvent('publish-contributors',contributors);
-        me.fireEvent('resize');
+		me.fireEvent('resize');
 	},
 
 
@@ -439,12 +439,12 @@ Ext.define('NextThought.mixins.Annotations', {
 
 		if (window.getSelection) {	// all browsers, except IE before version 9
 			selection = window.getSelection();
-            if (selection.rangeCount > 0) {
+			if (selection.rangeCount > 0) {
 				range = selection.getRangeAt(0);
 
-                //TODO: This ONLY works in Chrome beta, for Safari and Crome regular, contains returns false.  Commenting this out for time being.
+				//TODO: This ONLY works in Chrome beta, for Safari and Crome regular, contains returns false.  Commenting this out for time being.
 				//if(!e.contains(range.startContainer) || !e.contains(range.endContainer))
-                //  console.log('could not find start container', range.startContainer, ' or end container', range.endContainer, 'in', e);
+				//  console.log('could not find start container', range.startContainer, ' or end container', range.endContainer, 'in', e);
 				//return null;
 
 				return range;

@@ -9,126 +9,126 @@
  */
 
 Ext.define('NextThought.view.widgets.main.SessionInfo', {
-    extend: 'Ext.panel.Panel',
-    alias: 'widget.session-info',
-    requires: [
-        'NextThought.view.widgets.main.Identity'
-    ],
+	extend: 'Ext.panel.Panel',
+	alias: 'widget.session-info',
+	requires: [
+		'NextThought.view.widgets.main.Identity'
+	],
 
-    cls: 'x-session-controls',
+	cls: 'x-session-controls',
 
-    width: MIN_SIDE_WIDTH,
-    height: 25,
-    border: false,
-    layout: {type:'hbox', pack: 'end'},
-    defaults: {
-        height: 25,
-        border: false
-    },
-    _stream: [],
+	width: MIN_SIDE_WIDTH,
+	height: 25,
+	border: false,
+	layout: {type:'hbox', pack: 'end'},
+	defaults: {
+		height: 25,
+		border: false
+	},
+	_stream: [],
 
-    initComponent: function() {
-        this.callParent(arguments);
-        this._identity = this.add({xtype: 'identity-panel'});
-        this._notifier = this.add({html: '<span class="notification-box-widget"></span>'});
-    },
+	initComponent: function() {
+		this.callParent(arguments);
+		this._identity = this.add({xtype: 'identity-panel'});
+		this._notifier = this.add({html: '<span class="notification-box-widget"></span>'});
+	},
 
 
-    userUpdated: function(newUser) {
-        newUser.on('changed', this.userUpdated, this);
-        this.update(newUser.get('NotificationCount'));
-    },
+	userUpdated: function(newUser) {
+		newUser.on('changed', this.userUpdated, this);
+		this.update(newUser.get('NotificationCount'));
+	},
 
-    update: function(c) {
-        var e = this._notifier.el.down('span');
-        e.dom.innerHTML = c > 99||isNaN(c) ? '++' : c;
-        (c?e.addCls:e.removeCls).call(e, 'unread');
-    },
+	update: function(c) {
+		var e = this._notifier.el.down('span');
+		e.dom.innerHTML = c > 99||isNaN(c) ? '++' : c;
+		(c?e.addCls:e.removeCls).call(e, 'unread');
+	},
 
-    onNotification: function(){
-        var count = this._notifier.el.down('span').dom.innerHTML;
-        this.update((parseInt(count,10)+1));
-    },
+	onNotification: function(){
+		var count = this._notifier.el.down('span').dom.innerHTML;
+		this.update((parseInt(count,10)+1));
+	},
 
-    clearNotifications: function() {
-        var e = this._notifier.el.down('span');
-        e.removeCls('unread');
-        e.dom.innerHTML = 0;
-    },
+	clearNotifications: function() {
+		var e = this._notifier.el.down('span');
+		e.removeCls('unread');
+		e.dom.innerHTML = 0;
+	},
 
-    render: function(){
-        var me = this;
-        me.callParent(arguments);
-        me.userUpdated(_AppConfig.userObject);
-        me._notifier.el.on('click', me._notifications, me);
+	render: function(){
+		var me = this;
+		me.callParent(arguments);
+		me.userUpdated(_AppConfig.userObject);
+		me._notifier.el.on('click', me._notifications, me);
 
-        me._menu = Ext.create('Ext.menu.Menu', {items: me._buildMenu()});
+		me._menu = Ext.create('Ext.menu.Menu', {items: me._buildMenu()});
 
-        me._menu.on({
-            mouseleave: me._hideMenu,
-            mouseover: me._showMenu,
-            scope: me
-        });
+		me._menu.on({
+			mouseleave: me._hideMenu,
+			mouseover: me._showMenu,
+			scope: me
+		});
 
-        me._identity.el.on({
-            mouseleave: me._hideMenu,
-            mousemove: me._showMenu,
-            mouseover: me._showMenu,
-            click: me._showMenu,
-            scope: me
-        });
+		me._identity.el.on({
+			mouseleave: me._hideMenu,
+			mousemove: me._showMenu,
+			mouseover: me._showMenu,
+			click: me._showMenu,
+			scope: me
+		});
 
-        NextThought.controller.Stream.registerChangeListener(me.onNotification, me);
-        me._showMenu();
-        me._hideMenu();
-    },
+		NextThought.controller.Stream.registerChangeListener(me.onNotification, me);
+		me._showMenu();
+		me._hideMenu();
+	},
 
-    _buildMenu: function(){
-        return [
-            {
-                text: 'Account',
-                iconCls: 'session-myacount',
-                scope: this,
-                handler: this._account
-            },{
-                text: 'Settings',
-                iconCls: 'settings-gear',
-                scope: this,
-                handler: this._settings
-            },'-',
-            {
-                text: 'Logout',
-                iconCls: 'session-logout',
-                scope: this,
-                handler: this._logout
-            }
-        ];
-    },
+	_buildMenu: function(){
+		return [
+			{
+				text: 'Account',
+				iconCls: 'session-myacount',
+				scope: this,
+				handler: this._account
+			},{
+				text: 'Settings',
+				iconCls: 'settings-gear',
+				scope: this,
+				handler: this._settings
+			},'-',
+			{
+				text: 'Logout',
+				iconCls: 'session-logout',
+				scope: this,
+				handler: this._logout
+			}
+		];
+	},
 
-    _hideMenu: function(){
-        var m = this._menu;
-        this._hideMenuTimout = setTimeout(function(){m.hide()},100);
-    },
+	_hideMenu: function(){
+		var m = this._menu;
+		this._hideMenuTimout = setTimeout(function(){m.hide()},100);
+	},
 
-    _showMenu: function(){
-        clearTimeout(this._hideMenuTimout);
-        this._menu.showBy(this._identity.el, 'tr-br?');
-    },
+	_showMenu: function(){
+		clearTimeout(this._hideMenuTimout);
+		this._menu.showBy(this._identity.el, 'tr-br?');
+	},
 
-    _account: function(){
-        this.fireEvent('account');
-    },
+	_account: function(){
+		this.fireEvent('account');
+	},
 
-    _logout: function(){
-        this.fireEvent('logout');
-    },
+	_logout: function(){
+		this.fireEvent('logout');
+	},
 
-    _notifications: function() {
-        this.clearNotifications();
-        this.fireEvent('notification');
-    },
+	_notifications: function() {
+		this.clearNotifications();
+		this.fireEvent('notification');
+	},
 
-    _settings: function(){
-        this.fireEvent('settings');
-    }
+	_settings: function(){
+		this.fireEvent('settings');
+	}
 });

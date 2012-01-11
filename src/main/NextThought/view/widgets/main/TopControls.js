@@ -1,13 +1,13 @@
 
 Ext.define('NextThought.view.widgets.main.TopControls', {
 	extend: 'Ext.panel.Panel',
-    alias: 'widget.top-controls',
-    requires: [
-        'Ext.toolbar.Spacer',
-        'NextThought.view.form.fields.SearchField',
-        'NextThought.view.widgets.main.ModeSwitcher',
-        'NextThought.view.widgets.main.SessionInfo'
-    ],
+	alias: 'widget.top-controls',
+	requires: [
+		'Ext.toolbar.Spacer',
+		'NextThought.view.form.fields.SearchField',
+		'NextThought.view.widgets.main.ModeSwitcher',
+		'NextThought.view.widgets.main.SessionInfo'
+	],
 	
 	cls: 'x-brand-and-search-bar',
 	frame: false,
@@ -18,42 +18,42 @@ Ext.define('NextThought.view.widgets.main.TopControls', {
 		type: 'hbox',
 		align: 'middle'
 	},
-    items: [],
+	items: [],
 
-    initComponent: function(){
-        this.callParent(arguments);
-        this.add({
-            layout:{
-                type: 'hbox',
-                pack: 'start',
-                align: 'stretchmax'
-            },
-            flex: 1,
-            minWidth: (MIN_SIDE_WIDTH+165),
-            items: [
-                {
-                    html: Ext.String.format(
-                        '<img src="{0}" class="header-logo" alt="banner" width="180" height="60" />',
-                        Ext.BLANK_IMAGE_URL),
-                    border: false,
-                    width: MIN_SIDE_WIDTH,
-                    height: 60
-                },
-                { xtype: 'modeswitcher' },
-                { xtype:'tbspacer', flex:1 }
-            ]
-        });
+	initComponent: function(){
+		this.callParent(arguments);
+		this.add({
+			layout:{
+				type: 'hbox',
+				pack: 'start',
+				align: 'stretchmax'
+			},
+			flex: 1,
+			minWidth: (MIN_SIDE_WIDTH+165),
+			items: [
+				{
+					html: Ext.String.format(
+						'<img src="{0}" class="header-logo" alt="banner" width="180" height="60" />',
+						Ext.BLANK_IMAGE_URL),
+					border: false,
+					width: MIN_SIDE_WIDTH,
+					height: 60
+				},
+				{ xtype: 'modeswitcher' },
+				{ xtype:'tbspacer', flex:1 }
+			]
+		});
 
-        this.add({ xtype: 'searchfield', margin: 5, emptyText:'Search...', flex: 1, id: 'searchBox'});
+		this.add({ xtype: 'searchfield', margin: 5, emptyText:'Search...', flex: 1, id: 'searchBox'});
 
-        this.add({
-            layout: 'hbox',
-            flex: 1,
-            minWidth: MIN_SIDE_WIDTH,
-            items: [
-                { xtype:'tbspacer', flex:1 } ,
-                { xtype: 'session-info' }
-            ]
-        });
-    }
+		this.add({
+			layout: 'hbox',
+			flex: 1,
+			minWidth: MIN_SIDE_WIDTH,
+			items: [
+				{ xtype:'tbspacer', flex:1 } ,
+				{ xtype: 'session-info' }
+			]
+		});
+	}
 });

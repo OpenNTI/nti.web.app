@@ -1,5 +1,5 @@
 Ext.define('NextThought.model.FriendsList', {
-    extend: 'NextThought.model.Base',
+	extend: 'NextThought.model.Base',
 
 	fields: [
 		{ name: 'Username', type: 'string' },
@@ -10,9 +10,9 @@ Ext.define('NextThought.model.FriendsList', {
 		{ name: 'realname', type: 'string' }
 	],
 
-    destroy: function() {
-        this.set('friends', []);
-        this.callParent(arguments);
-    }
+	destroy: function() {
+		this.set('friends', []);
+		this.callParent(arguments);
+	}
 
 });

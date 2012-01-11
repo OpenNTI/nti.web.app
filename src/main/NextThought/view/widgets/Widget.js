@@ -26,14 +26,14 @@ Ext.define('NextThought.view.widgets.Widget', {
 	},
 	
 	getNodeFromXPath: function(xpath) {
-        try {
-            return document.evaluate(xpath, document, null, XPathResult.ANY_TYPE, null).iterateNext();
-        }
-        catch(e) {
-            console.error('getNodeFromXPath: ',xpath, e.stack);
-            return null;
-        }
-    },
+		try {
+			return document.evaluate(xpath, document, null, XPathResult.ANY_TYPE, null).iterateNext();
+		}
+		catch(e) {
+			console.error('getNodeFromXPath: ',xpath, e.stack);
+			return null;
+		}
+	},
 	
 	cleanup: function(){
 		throw 'Must override';

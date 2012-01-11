@@ -7,20 +7,20 @@ Ext.define('NextThought.view.content.Panel', {
 	border: false,
 	defaults: {frame: false, border: false},
 
-    initComponent: function(){
-        this.addEvents('relayedout');
-        this.callParent(arguments);
+	initComponent: function(){
+		this.addEvents('relayedout');
+		this.callParent(arguments);
 
-        this.bufferedDelayedRelayout = Ext.Function.createBuffered(
-            Ext.Function.createDelayed(this.relayout, 100, this),
-            100, this);
-    },
+		this.bufferedDelayedRelayout = Ext.Function.createBuffered(
+			Ext.Function.createDelayed(this.relayout, 100, this),
+			100, this);
+	},
 
-    getContainerId: function(){
-        return this._containerId;
-    },
-    
-    relayout: function(){
+	getContainerId: function(){
+		return this._containerId;
+	},
+	
+	relayout: function(){
 		if (this.ownerCt) this.ownerCt.doComponentLayout();
 		this.doComponentLayout();
 		this.doLayout();
@@ -28,7 +28,7 @@ Ext.define('NextThought.view.content.Panel', {
 	},
 
 
-    
+	
 	_getPathPart: function(path) {
 		if(!path){
 			return path;
@@ -56,26 +56,26 @@ Ext.define('NextThought.view.content.Panel', {
 
 	_resolveBase: function(base) {   
 		//relative path
-	    if(base && base!=="" && (base == '.' || base[0]!='/') && base.indexOf(':')<0) {
-	        var b = this._getCurrentPath();
-	        
-	        if(base.indexOf(b)!==0) {
-	            base = b+'/'+(base=='.'?'':base);
-	        }
-	        
-	    }
-	    //absolute paths (book content)
-	    else {
-	        base = _AppConfig.server.host + base;
-	    }
-	    
-	    //make sure this ends in a slash
-	    if(base && base[base.length-1] != '/'){
-	        base = base + '/';
-	    }
-	    
-	    return base;
+		if(base && base!=="" && (base == '.' || base[0]!='/') && base.indexOf(':')<0) {
+			var b = this._getCurrentPath();
+			
+			if(base.indexOf(b)!==0) {
+				base = b+'/'+(base=='.'?'':base);
+			}
+			
+		}
+		//absolute paths (book content)
+		else {
+			base = _AppConfig.server.host + base;
+		}
+		
+		//make sure this ends in a slash
+		if(base && base[base.length-1] != '/'){
+			base = base + '/';
+		}
+		
+		return base;
 	}
 
-    
+	
 });

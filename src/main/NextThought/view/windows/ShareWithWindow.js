@@ -1,9 +1,9 @@
 Ext.define( 'NextThought.view.windows.ShareWithWindow', {
 	extend: 'Ext.window.Window',
 	requires: [
-        'NextThought.view.form.fields.ShareWithField',
-        'NextThought.util.AnnotationUtils'
-    ],
+		'NextThought.view.form.fields.ShareWithField',
+		'NextThought.util.AnnotationUtils'
+	],
 	alias : 'widget.sharewithwindow',
 	
 	closable: false,
@@ -25,7 +25,7 @@ Ext.define( 'NextThought.view.windows.ShareWithWindow', {
 			a = u.get('avatarURL'),
 			n = u.get('realname'),
 			t = m.record.getModelName(),
-            sw= m.record.get('sharedWith'),
+			sw= m.record.get('sharedWith'),
 			readOnly = !m.record.isModifiable(),
 			title = readOnly? 'Item Info' : 'Share this...',
 			content = AnnotationUtils.getBodyTextOnly(m.record) || 'This item does not have text';
@@ -48,9 +48,9 @@ Ext.define( 'NextThought.view.windows.ShareWithWindow', {
 		}
 	},
 
-    show: function(){
-        this.callParent(arguments);
-//        var e = this.down('sharewith');
-//        setTimeout(function(){e.focus();}, 500);
-    }
+	show: function(){
+		this.callParent(arguments);
+//		var e = this.down('sharewith');
+//		setTimeout(function(){e.focus();}, 500);
+	}
 });

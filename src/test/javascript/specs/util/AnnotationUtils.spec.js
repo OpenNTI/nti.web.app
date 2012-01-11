@@ -8,8 +8,8 @@ describe("Annotation Utils", function() {
 				{
 					"Class":"CanvasPolygonShape",
 					"sides":4,
-                    "fillColor": '#000000',
-                    "strokeColor": '#000000',
+					"fillColor": '#000000',
+					"strokeColor": '#000000',
 					"transform":{
 						"Class":"CanvasAffineTransform",
 						"a":0.151,
@@ -22,8 +22,8 @@ describe("Annotation Utils", function() {
 				},
 				{
 					"Class":"CanvasCircleShape",
-                    "fillColor": '#000000',
-                    "strokeColor": '#000000',
+					"fillColor": '#000000',
+					"strokeColor": '#000000',
 					"transform":{
 						"Class":"CanvasAffineTransform",
 						"a":0.151,
@@ -37,8 +37,8 @@ describe("Annotation Utils", function() {
 				{
 					"Class":"CanvasPolygonShape",
 					"sides":1,
-                    "fillColor": '#000000',
-                    "strokeColor": '#000000',
+					"fillColor": '#000000',
+					"strokeColor": '#000000',
 					"transform":{
 						"Class":"CanvasAffineTransform",
 						"a":0.15,
@@ -321,40 +321,40 @@ describe("Annotation Utils", function() {
 
 	});
 
-    it("should dig through nodes and return the first image node encountered", function(){
-        var imageNode = Ext.select('img').first().dom,
-            divNode = document.createElement('div'),
-            spanNode = document.createElement('span'),
-            pNode = document.createElement('p'),
-            textNode = document.createTextNode('this is some text'),
-            image2Node = Ext.select('img').last().dom,
-            divNodeWithoutImage = document.createElement('div');
+	it("should dig through nodes and return the first image node encountered", function(){
+		var imageNode = Ext.select('img').first().dom,
+			divNode = document.createElement('div'),
+			spanNode = document.createElement('span'),
+			pNode = document.createElement('p'),
+			textNode = document.createTextNode('this is some text'),
+			image2Node = Ext.select('img').last().dom,
+			divNodeWithoutImage = document.createElement('div');
 
-        //build up a tree, with several image nodes
-        divNode.appendChild(imageNode);
-        pNode.appendChild(textNode);
-        spanNode.appendChild(pNode);
-        spanNode.appendChild(image2Node);
-        spanNode.appendChild(divNode);
+		//build up a tree, with several image nodes
+		divNode.appendChild(imageNode);
+		pNode.appendChild(textNode);
+		spanNode.appendChild(pNode);
+		spanNode.appendChild(image2Node);
+		spanNode.appendChild(divNode);
 
-        expect(AnnotationUtils.digForImageNode(imageNode)).toBe(imageNode);
-        expect(AnnotationUtils.digForImageNode(divNode)).toBe(imageNode);
-        expect(AnnotationUtils.digForImageNode(spanNode)).toBe(image2Node);
-        expect(AnnotationUtils.digForImageNode(divNodeWithoutImage)).toBeNull();
-    });
+		expect(AnnotationUtils.digForImageNode(imageNode)).toBe(imageNode);
+		expect(AnnotationUtils.digForImageNode(divNode)).toBe(imageNode);
+		expect(AnnotationUtils.digForImageNode(spanNode)).toBe(image2Node);
+		expect(AnnotationUtils.digForImageNode(divNodeWithoutImage)).toBeNull();
+	});
 
-    it("should climb to a math node if the given node is a child of a math node", function(){
+	it("should climb to a math node if the given node is a child of a math node", function(){
 
-        var mathNode = Ext.select('*[class*=mathjax]').elements[44], //a more complicated math node with lots of kids
-            textNode = document.createTextNode('test'),
-            imageNode = Ext.select('img').first().dom,
-            insideMathNode = mathNode.children[1].children[0].children[0].children[0].children[0];
+		var mathNode = Ext.select('*[class*=mathjax]').elements[44], //a more complicated math node with lots of kids
+			textNode = document.createTextNode('test'),
+			imageNode = Ext.select('img').first().dom,
+			insideMathNode = mathNode.children[1].children[0].children[0].children[0].children[0];
 
-        expect(AnnotationUtils.climbToMathNode(mathNode)).toBe(mathNode);
-        expect(AnnotationUtils.climbToMathNode(insideMathNode)).toBe(mathNode);
-        expect(AnnotationUtils.climbToMathNode(textNode)).toBeNull();
-        expect(AnnotationUtils.climbToMathNode(imageNode)).toBeNull();
-    });
+		expect(AnnotationUtils.climbToMathNode(mathNode)).toBe(mathNode);
+		expect(AnnotationUtils.climbToMathNode(insideMathNode)).toBe(mathNode);
+		expect(AnnotationUtils.climbToMathNode(textNode)).toBeNull();
+		expect(AnnotationUtils.climbToMathNode(imageNode)).toBeNull();
+	});
 
 
 	//this needs to remain the last spec in this suite

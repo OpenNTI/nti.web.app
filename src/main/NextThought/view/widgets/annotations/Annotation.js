@@ -6,20 +6,20 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 		var me = this,
 			d = Ext.query('.document-nibs',container);
 
-        Ext.apply(me, {
+		Ext.apply(me, {
 			_div: d.length>0? d[0] : me.createElement('div',container,'document-nibs unselectable'),
-            _img: null,
-            _cnt: container,
-            _cmp: component,
-            _menu: null,
-            _record: record,
-            _isMine: record.isModifiable(),
+			_img: null,
+			_cnt: container,
+			_cmp: component,
+			_menu: null,
+			_record: record,
+			_isMine: record.isModifiable(),
 			_isVisible: record.phantom || me.testFilter(component._filter),
 
 			_renderPriority: -1,
 
 			requestRender: Ext.Function.createDelayed(me.requestRender, 10, me)
-        });
+		});
 
 		me._cmp.on('afterlayout',me.onResize, me);
 		Ext.EventManager.onWindowResize(me.onResize, me);
@@ -68,15 +68,15 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 	
 
 	testFilter: function(filter){
-        if(	!filter			||
+		if(	!filter			||
 			!filter.types	||
 			!filter.groups	||
 			filter.types.toString().indexOf(this.$className)<0)
 			return false;
 
-        if(/all/i.test(filter.groups)){
-            return true;
-        }
+		if(/all/i.test(filter.groups)){
+			return true;
+		}
 
 		var p = this._record.get('Creator'),
 			targets = filter.shareTargets,
@@ -138,20 +138,20 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 	remove: function() {
 		this._record.destroy();
 		this.cleanup();
-        this.cleanup = function(){};
+		this.cleanup = function(){};
 	},
 
 
-    getMenu: function(){
-        var m = this._buildMenu(),
+	getMenu: function(){
+		var m = this._buildMenu(),
 			isLeaf = arguments.length>0;
 
-        m.on('hide', function(){
-            if(!isLeaf)m.destroy();
-        });
+		m.on('hide', function(){
+			if(!isLeaf)m.destroy();
+		});
 
-        return m;
-    },
+		return m;
+	},
 	
 	
 	_buildMenu: function(items) {

@@ -4,7 +4,7 @@ describe("Whiteboard Functionality",function(){
 		//expect(false).toBeTruthy();
 	});
 
-    it('json should be scaled down, then back up and match', function(){
+	it('json should be scaled down, then back up and match', function(){
 
 		function eq(a,b){
 			var _ap = Object.keys(a),
@@ -41,15 +41,15 @@ describe("Whiteboard Functionality",function(){
 		}
 
 		//this tests the fields that scale...doesn't have to be a fully qualified canvas/shape
-        var json = {"transform":{"a":147,"b":-3,"c":3,"d":147,"tx":80,"ty":101},"strokeWidth":"0.001206273%", "strokeWidthTarget": 1},
-            scaleFactor = 829,//if you change this, change strokeWidth to 1/scaleFactor
-            down = ShapeFactory.scaleJson(1/scaleFactor, Ext.clone(json)),
-            up = ShapeFactory.scaleJson(scaleFactor, Ext.clone(down));
+		var json = {"transform":{"a":147,"b":-3,"c":3,"d":147,"tx":80,"ty":101},"strokeWidth":"0.001206273%", "strokeWidthTarget": 1},
+			scaleFactor = 829,//if you change this, change strokeWidth to 1/scaleFactor
+			down = ShapeFactory.scaleJson(1/scaleFactor, Ext.clone(json)),
+			up = ShapeFactory.scaleJson(scaleFactor, Ext.clone(down));
 
 		expect(eq(json,up)).toBeTruthy();
 
 
 
-    });
+	});
 
 });

@@ -1,94 +1,94 @@
 Ext.define('NextThought.controller.Stream', {
-    extend: 'Ext.app.Controller',
+	extend: 'Ext.app.Controller',
 
-    requires: [
-        'NextThought.proxy.Socket',
-        'NextThought.util.ParseUtils'
-    ],
+	requires: [
+		'NextThought.proxy.Socket',
+		'NextThought.util.ParseUtils'
+	],
 
 	stores: [
 		'Stream'
 	],
 
-    models: [
-        'Change'
-    ],
+	models: [
+		'Change'
+	],
 
 	views: [
-        'modes.Stream',
-        'content.Stream'
-    ],
+		'modes.Stream',
+		'content.Stream'
+	],
 
-    refs: [
-        { ref: 'viewport', selector: 'master-view' },
-        { ref: 'streamPeople', selector: 'stream-mode-container people-list' },
-        { ref: 'stream', selector: 'stream-mode-container stream-panel' },
-        { ref: 'miniStream', selector: 'mini-stream' }
-    ],
+	refs: [
+		{ ref: 'viewport', selector: 'master-view' },
+		{ ref: 'streamPeople', selector: 'stream-mode-container people-list' },
+		{ ref: 'stream', selector: 'stream-mode-container stream-panel' },
+		{ ref: 'miniStream', selector: 'mini-stream' }
+	],
 
-    statics:{
-        eventName: 'changed',
-        evtRouter: Ext.create('Ext.util.Observable'),
+	statics:{
+		eventName: 'changed',
+		evtRouter: Ext.create('Ext.util.Observable'),
 
-        registerChangeListener: function(callback, scope){
-            this.evtRouter.on(this.eventName, callback, scope||window);
-        },
+		registerChangeListener: function(callback, scope){
+			this.evtRouter.on(this.eventName, callback, scope||window);
+		},
 
-        removeChangeListener: function(callback, scope){
-            this.evtRouter.un(this.eventName, callback, scope||window);
-        },
+		removeChangeListener: function(callback, scope){
+			this.evtRouter.un(this.eventName, callback, scope||window);
+		},
 
-        fireChange: function(change){
-            this.evtRouter.fireEvent(this.eventName, change);
-        }
+		fireChange: function(change){
+			this.evtRouter.fireEvent(this.eventName, change);
+		}
 
-    },
+	},
 
-    init: function() {
-        var me = this;
+	init: function() {
+		var me = this;
 
-        this.application.on('session-ready', this.onSessionReady, this);
+		this.application.on('session-ready', this.onSessionReady, this);
 
-        this.streamStores = {};
+		this.streamStores = {};
 
-        Socket.register({
-            'data_noticeIncomingChange': function(){me.incomingChange.apply(me, arguments);}
-        });
+		Socket.register({
+			'data_noticeIncomingChange': function(){me.incomingChange.apply(me, arguments);}
+		});
 
-        this.control({
+		this.control({
 			'stream-mode-container filter-control':{
 				'filter-changed': this.streamFilterChanged
-            }
-        },{});
-    },
+			}
+		},{});
+	},
 
-    onSessionReady: function(){
-        var s = this.getStreamStore(),
-            ps = Ext.getStore('Page');
+	onSessionReady: function(){
+		var s = this.getStreamStore(),
+			ps = Ext.getStore('Page');
 
-        function load() {
-            s.getProxy().url = ps.getById('tag:nextthought.com,2011-10:Root').getLink(RECURSIVE_STREAM);
-            s.load();
-        }
+		function load() {
+			s.getProxy().url = ps.getById('tag:nextthought.com,2011-10:Root').getLink(RECURSIVE_STREAM);
+			s.load();
+		}
 
-        if (ps.isLoading()) {
-            ps.on('load', load, this, {single: true});
-        }
-        else {
-            load();
-        }
-    },
+		if (ps.isLoading()) {
+			ps.on('load', load, this, {single: true});
+		}
+		else {
+			load();
+		}
+	},
 
-    containerIdChanged: function(containerId) {
+	containerIdChanged: function(containerId) {
 		var widget = this.getMiniStream(),ss;
 		//make sure stream doesn't contain old stuff.
-        ss = this.getStoreForStream(containerId);
+		ss = this.getStoreForStream(containerId);
 		widget.setStore(ss);
 		if( ss.getProxy().url && !ss.isLoading() )
 			ss.load();
-    },
+	},
 
-    getStoreForStream: function(containerId) {
+	getStoreForStream: function(containerId) {
 		var me = this,
 			store = me.getController('Reader').getPageStore(),
 			stores = me.streamStores,
@@ -127,13 +127,13 @@ Ext.define('NextThought.controller.Stream', {
 		}
 
 		return ps? ps : buildStore();
-    },
+	},
 
 
-    incomingChange: function(change) {
-        change = ParseUtils.parseItems([change])[0];
-        var cid = change.getItemValue('ContainerId'),
-            lineage = Library.getLineage(cid),
+	incomingChange: function(change) {
+		change = ParseUtils.parseItems([change])[0];
+		var cid = change.getItemValue('ContainerId'),
+			lineage = Library.getLineage(cid),
 			me = this;
 
 		Ext.each(lineage,function(cid){
@@ -142,17 +142,17 @@ Ext.define('NextThought.controller.Stream', {
 		});
 
 		this.getStreamStore().add(change);
-        this.self.fireChange(change);
-    },
+		this.self.fireChange(change);
+	},
 
-    streamFilterChanged: function(newFilter){
-        var o = [
-            this.getStream(),
-            this.getStreamPeople(),
-            this.getMiniStream()
-        ];
+	streamFilterChanged: function(newFilter){
+		var o = [
+			this.getStream(),
+			this.getStreamPeople(),
+			this.getMiniStream()
+		];
 
-        Ext.each(o,function(i){i.applyFilter(newFilter);});
-    }
+		Ext.each(o,function(i){i.applyFilter(newFilter);});
+	}
 
 });

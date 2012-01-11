@@ -1,5 +1,5 @@
 Ext.define('NextThought.model.GenericObject', {
-    extend: 'NextThought.model.Base',
+	extend: 'NextThought.model.Base',
 
 	fields: [
 		{ name: 'text', type: 'string' },

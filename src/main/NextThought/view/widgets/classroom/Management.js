@@ -1,17 +1,17 @@
 Ext.define('NextThought.view.widgets.classroom.Management', {
 	extend:'NextThought.view.content.Panel',
-    alias: 'widget.classroom-management',
-    requires: [
-        'NextThought.view.widgets.classroom.LiveDisplay',
-        'NextThought.view.widgets.classroom.Moderation'
-    ],
+	alias: 'widget.classroom-management',
+	requires: [
+		'NextThought.view.widgets.classroom.LiveDisplay',
+		'NextThought.view.widgets.classroom.Moderation'
+	],
 
 	cls: 'nti-classroom-management',
 
-    layout: {
-        type: 'vbox',
-        align: 'stretch'
-    },
+	layout: {
+		type: 'vbox',
+		align: 'stretch'
+	},
 	border: false,
 	defaults: {
 		border: false,
@@ -21,10 +21,10 @@ Ext.define('NextThought.view.widgets.classroom.Management', {
 	},
 
 
-    initComponent: function() {
-        this.callParent(arguments);
+	initComponent: function() {
+		this.callParent(arguments);
 
-        this.add({xtype: 'live-display', height: 400, roomInfo: this.roomInfo});
-        this.add({xtype: 'classroom-moderation', flex:1});
-    }
+		this.add({xtype: 'live-display', height: 400, roomInfo: this.roomInfo});
+		this.add({xtype: 'classroom-moderation', flex:1});
+	}
 });

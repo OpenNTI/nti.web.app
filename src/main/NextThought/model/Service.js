@@ -1,10 +1,10 @@
 Ext.define('NextThought.model.Service', {
-    extend: 'NextThought.model.Base',
+	extend: 'NextThought.model.Base',
 	idProperty: 'Class',
-    fields: [
-        { name: 'Items', type: 'auto', defaultValue: {Items:[]}},
-        { name: 'Class', type: 'string', defaultValue: 'Service'}
-    ],
+	fields: [
+		{ name: 'Items', type: 'auto', defaultValue: {Items:[]}},
+		{ name: 'Class', type: 'string', defaultValue: 'Service'}
+	],
 
 
 	constructor: function(doc, user){
@@ -118,25 +118,25 @@ Ext.define('NextThought.model.Service', {
 	 * @param [title]
 	 */
 	getCollectionFor: function(mimeType, title){
-        var collection = null;
+		var collection = null;
 
-        Ext.each(this.get('Items') || [], function(workspace){
-            var items = workspace.Items || [],
-                i, item;
+		Ext.each(this.get('Items') || [], function(workspace){
+			var items = workspace.Items || [],
+				i, item;
 
-            for(i in items){
-                if(!items.hasOwnProperty(i))continue;
-                item = items[i];
+			for(i in items){
+				if(!items.hasOwnProperty(i))continue;
+				item = items[i];
 
-                if(Ext.Array.contains(item.accepts,mimeType)){
-                    if(title && item.Title != title) continue;
+				if(Ext.Array.contains(item.accepts,mimeType)){
+					if(title && item.Title != title) continue;
 
-                    collection = item;
-                    break;
-                }
-            }
-            if (collection) return false;
-        });
+					collection = item;
+					break;
+				}
+			}
+			if (collection) return false;
+		});
 
 		return Ext.clone(collection);
 	},

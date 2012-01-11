@@ -1,36 +1,36 @@
 Ext.define('NextThought.view.widgets.Tracker', {
 	alias: 'widget.tracker',
 
-    toolTipTpl: new Ext.XTemplate(
-        '<div class="tracker-tip">',
-            '<img src="{icon}" width=32 height=32"/>',
-            '<div>',
-                '<span class="tracker-tip-title">{title}</span> ',
-                '<span class="tracker-tip-label">{label}</span>',
-            '</div>',
-        '</div>',
-        {
-            compile:true
-        }),
+	toolTipTpl: new Ext.XTemplate(
+		'<div class="tracker-tip">',
+			'<img src="{icon}" width=32 height=32"/>',
+			'<div>',
+				'<span class="tracker-tip-title">{title}</span> ',
+				'<span class="tracker-tip-label">{label}</span>',
+			'</div>',
+		'</div>',
+		{
+			compile:true
+		}),
 
-    constructor: function(cmp,container, body){
-        Ext.apply(this,{
-            width: 45,
-            _base: "",
-            _numberOfDots: 50,
-            _height: 0,
-            _sectionHeights: [],
-            _diameter: 0,
-            _radius: 0,
-            _gap: 0,
-            _regions: [],
-            _offsetX: 0,
-            _offsetY: 0,
-            _cmp: cmp
-        });
+	constructor: function(cmp,container, body){
+		Ext.apply(this,{
+			width: 45,
+			_base: "",
+			_numberOfDots: 50,
+			_height: 0,
+			_sectionHeights: [],
+			_diameter: 0,
+			_radius: 0,
+			_gap: 0,
+			_regions: [],
+			_offsetX: 0,
+			_offsetY: 0,
+			_cmp: cmp
+		});
 
 
-        this._locationProvider = Ext.getCmp('breadcrumb');
+		this._locationProvider = Ext.getCmp('breadcrumb');
 		this._parent = container;
 		this._body	 = body;
 		this._canvas = document.createElement('canvas');
@@ -51,14 +51,14 @@ Ext.define('NextThought.view.widgets.Tracker', {
 		b.on('mouseover', h, this);
 		b.on('mouseout', h, this);
 
-        //add tooltip
-        this.toolTip = Ext.create('Ext.tip.ToolTip', {
-            cls: 'tracker-tip-container',
-            target: c,
-            trackMouse: true,
-            html: '',
-            dismissDelay: 0
-        });
+		//add tooltip
+		this.toolTip = Ext.create('Ext.tip.ToolTip', {
+			cls: 'tracker-tip-container',
+			target: c,
+			trackMouse: true,
+			html: '',
+			dismissDelay: 0
+		});
 
 		cmp.on('resize', this._onResize, this);
 		
@@ -135,70 +135,70 @@ Ext.define('NextThought.view.widgets.Tracker', {
 			current.location,
 			region?region.rect:undefined);
 
-        if (!region) return;
-        
-        //set current node in tooltip if it has changed
-        try{
-            this.renderToolTip(region.node);
-        }
-        catch (err) {
-            console.error('error', err.message, err.stack);
-        }
+		if (!region) return;
+		
+		//set current node in tooltip if it has changed
+		try{
+			this.renderToolTip(region.node);
+		}
+		catch (err) {
+			console.error('error', err.message, err.stack);
+		}
 
 	},
 
-    renderToolTip: function(node) {
-        if ((!this.tipRendered && !node) || this.toolTip.currentNode == node) return;
+	renderToolTip: function(node) {
+		if ((!this.tipRendered && !node) || this.toolTip.currentNode == node) return;
 
-        var current = this._locationProvider.getLocation(),
-            book = current.book,
-            host = _AppConfig.server.host,
-            root = book.get('root'),
-            bookIcon = book.get('icon'),
-            data = {
-                title: book.get('title'),
-                label: node ? node.getAttribute('label') : '',
-                icon: this.findChapterIcon(node)
-            };
+		var current = this._locationProvider.getLocation(),
+			book = current.book,
+			host = _AppConfig.server.host,
+			root = book.get('root'),
+			bookIcon = book.get('icon'),
+			data = {
+				title: book.get('title'),
+				label: node ? node.getAttribute('label') : '',
+				icon: this.findChapterIcon(node)
+			};
 
-        if (data.icon) data.icon = host + root + data.icon;
-        else data.icon = host + bookIcon;
+		if (data.icon) data.icon = host + root + data.icon;
+		else data.icon = host + bookIcon;
 
-        this.toolTip.currentNode = node;
-        this.toolTip.update(this.toolTipTpl.apply(data));
+		this.toolTip.currentNode = node;
+		this.toolTip.update(this.toolTipTpl.apply(data));
 
-        this.tipRendered = true;
-    },
+		this.tipRendered = true;
+	},
 
-    findChapterIcon: function(node) {
-        var nodeIcon = node ? node.getAttribute('icon') : null;
+	findChapterIcon: function(node) {
+		var nodeIcon = node ? node.getAttribute('icon') : null;
 
-        if (!nodeIcon && node && node.parentNode)
-            return this.findChapterIcon(node.parentNode);
+		if (!nodeIcon && node && node.parentNode)
+			return this.findChapterIcon(node.parentNode);
 
-        return nodeIcon;
-    },
+		return nodeIcon;
+	},
 	
 	clickHandler: function(e){
 		var self = this,
-            region = this.getRegion(e),
+			region = this.getRegion(e),
 			current = this._locationProvider.getLocation(),
 			book = current.book,
 			ctx = this._canvas.getContext("2d");
 			
 		if(region) {
-            if(region.active) {
+			if(region.active) {
 				this.scrollToPercent(region.first? 0:region.position);
 			}
 			else {
 				var n = region.node.getAttribute('href'),
 					f = region.first;
 
-                VIEWPORT.fireEvent('navigate',book, book.get('root')+n, scrollTo);
+				VIEWPORT.fireEvent('navigate',book, book.get('root')+n, scrollTo);
 
-                function scrollTo(){
-                    self.scrollToPercent(f?0:region.position);
-                }
+				function scrollTo(){
+					self.scrollToPercent(f?0:region.position);
+				}
 				 
 			}
 		}
@@ -247,7 +247,7 @@ Ext.define('NextThought.view.widgets.Tracker', {
 		this._canvas.height = this._height;
 	
 		var halfWidth = Math.ceil(this.width/2),
-            padding = 30,
+			padding = 30,
 			info = this.getSectionCount(current),
 			sum = this._sum(info,'height'),
 			dots = this._numberOfDots,
@@ -264,12 +264,12 @@ Ext.define('NextThought.view.widgets.Tracker', {
 			total += v;
 		});
 
-        var d = (this._height-padding)/(total+lines);
+		var d = (this._height-padding)/(total+lines);
 
 		this._diameter = Math.ceil( d );
 
 		this._radius = this._diameter/2;
-        this._radius = this._radius < 4.5 ? 4.5 : this._radius;
+		this._radius = this._radius < 4.5 ? 4.5 : this._radius;
 
 		this._gap = Math.floor(this._radius/2);
 		this._gap = this._gap > 1 ? this._gap : 1;

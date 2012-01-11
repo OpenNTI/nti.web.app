@@ -12,18 +12,18 @@ Ext.define( 'NextThought.view.modes.Mode', {
 	frame: false,
 	defaults:{ border: false, frame: false },
 	layout: { type:'hbox', align: 'stretch'},
-    cls: 'x-application-mode-pane',
-    items: [],
+	cls: 'x-application-mode-pane',
+	items: [],
 
-    initComponent: function(){
-        this.addEvents('activate-mode');
+	initComponent: function(){
+		this.addEvents('activate-mode');
 		this.callParent(arguments);
 		var id = this.id,
 			modeSwitcher = Ext.ComponentQuery.query('modeswitcher')[0];
 
 		this.toggleButton = modeSwitcher.addMode(id+' mode label',id+'-mode-icon');
 		this.toggleButton.modeReference = this;
-    },
+	},
 
 
 	getPlaceHolder: function(){
@@ -38,8 +38,8 @@ Ext.define( 'NextThought.view.modes.Mode', {
 	getSpacerColumn: function(){
 		return { /*xtype:'tbspacer',*/ flex:1, focusable: false, dockedItems: this.getEmptyToolbar() };
 	},
-    
-    activate: function(){
+	
+	activate: function(){
 		var ct = this.ownerCt,
 			me = this,
 			item = 0;
@@ -72,30 +72,30 @@ Ext.define( 'NextThought.view.modes.Mode', {
 			catch(e){
 				console.log('Could not call deactivate on active "mode"',e.stack||e.stacktrace,e);
 			}
-            ct.getLayout().setActiveItem(item);
-            this.fireEvent('mode-activated');
-            this.getMainComponent().relayout();
-        }
-        catch(e){
-            console.error('Activating Mode: ', e.message, e.stack||e.stacktrace, e);
-            return false;
-        }
-        return true;
-    },
+			ct.getLayout().setActiveItem(item);
+			this.fireEvent('mode-activated');
+			this.getMainComponent().relayout();
+		}
+		catch(e){
+			console.error('Activating Mode: ', e.message, e.stack||e.stacktrace, e);
+			return false;
+		}
+		return true;
+	},
 
 	deactivate: function(){
-        this.fireEvent('mode-deactivated');
-    },
+		this.fireEvent('mode-deactivated');
+	},
 
-    relayout: function(){
+	relayout: function(){
 		this.ownerCt.doComponentLayout();
 		this.doComponentLayout();
 		this.doLayout();
 	},
 
-    getMainComponent: function(){
-        //implement me in subclasses!
-        return this;
-    }
-    
+	getMainComponent: function(){
+		//implement me in subclasses!
+		return this;
+	}
+	
 });

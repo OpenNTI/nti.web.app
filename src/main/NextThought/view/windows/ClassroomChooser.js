@@ -33,35 +33,35 @@ Ext.define('NextThought.view.windows.ClassroomChooser', {
 			defaultType: 'component',
 			border: false,
 			margin: 5
-        },
-        items: [
-            {
-                flex: 1,
-                items:[
-                    {html: '<h2>Classes:<h2>'},
-                    {xtype: 'classroom-browser', flex: 1}
-                ]
-            },
+		},
+		items: [
+			{
+				flex: 1,
+				items:[
+					{html: '<h2>Classes:<h2>'},
+					{xtype: 'classroom-browser', flex: 1}
+				]
+			},
 
-            {border: true, width: 1},
-            {
-                flex: 1,
-                items:[
-                    {html: '<h2>Study groups:<h2>'},
-                    {xtype: 'classroom-browser-study-groups', flex: 1}
-                ]
+			{border: true, width: 1},
+			{
+				flex: 1,
+				items:[
+					{html: '<h2>Study groups:<h2>'},
+					{xtype: 'classroom-browser-study-groups', flex: 1}
+				]
 
-            }
+			}
 //			,
 //			{xtype: 'link', text: 'Create a class', htmlPrefix: '<hr/>'}
-        ]
+		]
 	},
 	dockedItems: {
 		dock: 'bottom',
 		xtype: 'toolbar',
 		items: [
 			{text: 'Create Class', create:true},
-            //TODO - only enable when a class is highlighted
+			//TODO - only enable when a class is highlighted
 			{text: 'Edit Class', edit:true, disabled: true}
 		]
 	},
@@ -88,10 +88,10 @@ Ext.define('NextThought.view.windows.ClassroomChooser', {
 		return me;
 	},
 
-    close: function() {
-        this.getOwner().un('resize',this.center,this);
-        this.callParent(arguments);
-    },
+	close: function() {
+		this.getOwner().un('resize',this.center,this);
+		this.callParent(arguments);
+	},
 
 	getBubbleTarget: function(){
 		return this.getOwner();

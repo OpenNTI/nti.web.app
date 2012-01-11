@@ -1,5 +1,5 @@
 Ext.define('NextThought.store.Page',{
-    extend: 'Ext.data.Store',
+	extend: 'Ext.data.Store',
 	model: 'NextThought.model.Page',
 	proxy: {
 		type: 'rest',

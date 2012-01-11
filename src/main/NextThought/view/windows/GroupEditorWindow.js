@@ -54,21 +54,21 @@ Ext.define('NextThought.view.windows.GroupEditorWindow', {
 						store: this._store,
 						columns: [
 							{
-								text     : '',
-								width    : 30,
+								text	 : '',
+								width	: 30,
 								sortable : false,
 								xtype	 : 'templatecolumn',
 								tpl		 : '<img src="{avatarURL}" width=24 height=24/>'
 							},
 							{
-								text     : 'Name',
-								flex     : 1,
+								text	 : 'Name',
+								flex	 : 1,
 								sortable : true,
 								dataIndex: 'realname'
 							},
 							{
-								text     : 'id',
-								flex     : 1,
+								text	 : 'id',
+								flex	 : 1,
 								sortable : true,
 								dataIndex: 'Username'
 							},

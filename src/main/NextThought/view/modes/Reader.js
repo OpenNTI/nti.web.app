@@ -43,12 +43,12 @@ Ext.define( 'NextThought.view.modes.Reader', {
 		this._reader.restore(state);
 	},
 
-    restoreReader: function() {
-        if (!this._center.items.getCount()) {
-            this._center.add(this._reader);
-            this._reader.bufferedDelayedRelayout();
-        }
-    },
+	restoreReader: function() {
+		if (!this._center.items.getCount()) {
+			this._center.add(this._reader);
+			this._reader.bufferedDelayedRelayout();
+		}
+	},
 
 	getMainComponent: function(){
 		return this._reader;

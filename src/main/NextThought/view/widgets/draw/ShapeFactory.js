@@ -57,7 +57,7 @@ Ext.define('NextThought.view.widgets.draw.ShapeFactory',
 	scaleJson: function(factor, json) {
 		var k, sw = json.strokeWidth || json.strokeWidthTarget;
 
-        json.strokeWidthTarget = ((typeof sw === 'string') ? parseFloat(sw) : sw) * factor;
+		json.strokeWidthTarget = ((typeof sw === 'string') ? parseFloat(sw) : sw) * factor;
 
 		for(k in json.transform){
 			if(!json.transform.hasOwnProperty(k))continue;
@@ -84,20 +84,20 @@ Ext.define('NextThought.view.widgets.draw.ShapeFactory',
 	},
 
 
-    restoreShape: function m(whiteboard, shape, scaleFactor){
-        var t = shape.transform,
-            c = Color.parseColor(shape.fillColor,shape.fillOpacity) || Color.getColor(m.i=(m.i||-1)+1),
-            p = Color.parseColor(shape.strokeColor) || c.getDarker(0.2),
-            s;
+	restoreShape: function m(whiteboard, shape, scaleFactor){
+		var t = shape.transform,
+			c = Color.parseColor(shape.fillColor,shape.fillOpacity) || Color.getColor(m.i=(m.i||-1)+1),
+			p = Color.parseColor(shape.strokeColor) || c.getDarker(0.2),
+			s;
 
-        //scale up the matrix
-        this.scaleJson(scaleFactor, shape);
+		//scale up the matrix
+		this.scaleJson(scaleFactor, shape);
 
-        t = Ext.create('Ext.draw.Matrix',t.a,t.b,t.c,t.d,t.tx,t.ty).split();
+		t = Ext.create('Ext.draw.Matrix',t.a,t.b,t.c,t.d,t.tx,t.ty).split();
 
-        s = Ext.widget(this.getSpriteClass(shape.Class, shape.sides),{
-            sides: shape.sides,
-            'stroke-width': shape.strokeWidthTarget,
+		s = Ext.widget(this.getSpriteClass(shape.Class, shape.sides),{
+			sides: shape.sides,
+			'stroke-width': shape.strokeWidthTarget,
 			text: shape.text,
 			stroke: p.toString(),
 			fill: c.toString(),

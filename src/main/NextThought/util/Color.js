@@ -28,7 +28,7 @@ Ext.define('NextThought.util.Color',{
 	 */
 	parseColor: function(string, alpha){
 
-//       if (!string) return;
+//	   if (!string) return;
 
 		var hex16 = /^#?([0-9a-f][0-9a-f])([0-9a-f][0-9a-f])([0-9a-f][0-9a-f])$/i,
 			hex8 = /^#?([0-9a-f])([0-9a-f])([0-9a-f])$/i,

@@ -1,5 +1,5 @@
 Ext.define('NextThought.util.ParseUtils',{
-    alternateClassName: 'ParseUtils',
+	alternateClassName: 'ParseUtils',
 	singleton: true,
 
 	parseItems: function(items){

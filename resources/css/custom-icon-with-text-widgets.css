@@ -1,85 +1,85 @@
 .notification-popover .x-stream-entry > .x-panel-body {
-    padding: 10px;
+	padding: 10px;
 }
 
 .x-real-name-field input.x-form-text{
-    padding: 0.2em .5em; /*1em;*/
-    font-size: 2em;
-    height: 55px;
+	padding: 0.2em .5em; /*1em;*/
+	font-size: 2em;
+	height: 55px;
 }
 
 .object-explorer {
-    background: url('../images/objects16.png');
+	background: url('../images/objects16.png');
 }
 
 
 .x-mini-stream-entry:hover {
-    background-color: #7889A3 !important;
-    color: white;
+	background-color: #7889A3 !important;
+	color: white;
 }
 
 .tracker-tip .tracker-tip-title {
-    display: block;
-    font-weight: bold;
+	display: block;
+	font-weight: bold;
 }
 
 .tracker-tip .tracker-tip-label {
-    display: block;
+	display: block;
 }
 
 .tracker-tip-container,
 .tracker-tip {
-    background: #ffffff;
+	background: #ffffff;
 }
 
 .tracker-top-container .x-tip-body .tracker-tip{
-    padding: 0;
+	padding: 0;
 }
 
 .tracker-tip,
 .x-mini-stream-entry {
-    position: relative;
-    overflow: hidden;
-    padding: 10px 5px;
-    cursor: pointer;
+	position: relative;
+	overflow: hidden;
+	padding: 10px 5px;
+	cursor: pointer;
 }
 
 .tracker-tip div {
-    margin-left: 40px;
+	margin-left: 40px;
 }
 
 .x-mini-stream-entry div {
-    margin-left: 22px;
+	margin-left: 22px;
 }
 
 .tracker-tip img,
 .x-mini-stream-entry img {
-    float: left;
+	float: left;
 }
 
 .x-mini-stream-entry.read {
-    background-color: #D8D8D8;
-    margin: 0;
+	background-color: #D8D8D8;
+	margin: 0;
 }
 .x-mini-stream-entry.unread {
-    background-color: white;
-    font-weight: bold;
+	background-color: white;
+	font-weight: bold;
 }
 .x-stream-entry {
-    margin-bottom: 5px;
+	margin-bottom: 5px;
 }
 
 .x-stream-entry img {
-    margin-right: 5px;
+	margin-right: 5px;
 }
 
 .x-stream-entry .stream-text{
-    font-size: 1.2em;
-    line-height: 1.5em;
+	font-size: 1.2em;
+	line-height: 1.5em;
 }
 
 .x-stream-entry .stream-username,
 .x-stream-entry .stream-username .x-panel-body-default {
-    font-weight: bold;
-    color: #7889A3;
+	font-weight: bold;
+	color: #7889A3;
 }

@@ -1,6 +1,6 @@
 describe("ExtJS Path Verification", function() {
 
-    it("has fixed path conversion", function() {
+	it("has fixed path conversion", function() {
 		//Ext.draw.Draw.path2curve()
 		//Jira Issue Tag: EXTJSIV-4399
 		//Forum post: http://www.sencha.com/forum/showthread.php?153418-bug-in-path-conversion-Ext.draw.Draw.path2curve()-(as-of-4.0.7)
@@ -20,6 +20,6 @@ describe("ExtJS Path Verification", function() {
 			expect(curve[i].length).toBe(7);
 		}
 
-    });
+	});
 
 });

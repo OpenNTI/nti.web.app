@@ -1,6 +1,6 @@
 Ext.define('NextThought.proxy.reader.Json', {
-    extend: 'Ext.data.reader.Json',
-    alias : 'reader.nti',
+	extend: 'Ext.data.reader.Json',
+	alias : 'reader.nti',
 	initialConfig: {root: 'Items'},
 
 	readRecords: function(data) {

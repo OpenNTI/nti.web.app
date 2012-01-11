@@ -33,10 +33,10 @@ Ext.define('NextThought.controller.Whiteboard', {
 			'whiteboard button[action=delete]':{ 'click': this.removeSelectedSprite },
 			'whiteboard button[action=clear]':{ 'click': this.clearWhiteboard },
 /*
-            'whiteboard toolbar numberfield':
-            {
-                'change': this.polygonSidesChanged
-            },
+			'whiteboard toolbar numberfield':
+			{
+				'change': this.polygonSidesChanged
+			},
 */
 			'whiteboard': {
 				'sprite-click': this.selectSprite,
@@ -53,9 +53,9 @@ Ext.define('NextThought.controller.Whiteboard', {
 	},
 
 
-    getWhiteboardFrom: function(event) {
-        return Ext.getCmp(event.getTarget('div.whiteboard', null, true).id);
-    },
+	getWhiteboardFrom: function(event) {
+		return Ext.getCmp(event.getTarget('div.whiteboard', null, true).id);
+	},
 
 	showWhiteboardWindow: function(){
 		if (!this.win)
@@ -73,23 +73,23 @@ Ext.define('NextThought.controller.Whiteboard', {
 
 
 	colorChangedFill: function(picker, color){
-        picker.up('menu[floatParent]').floatParent.whiteboardRef.setColor('fill', color);
+		picker.up('menu[floatParent]').floatParent.whiteboardRef.setColor('fill', color);
 	},
 
 
 	colorChangedStroke: function(picker, color){
-        picker.up('menu[floatParent]').floatParent.whiteboardRef.setColor('stroke', color);
+		picker.up('menu[floatParent]').floatParent.whiteboardRef.setColor('stroke', color);
 	},
 
 
 	removeSelectedSprite:function(btn){
-        btn.whiteboardRef.removeSelection();
-    },
+		btn.whiteboardRef.removeSelection();
+	},
 
 
 	clearWhiteboard:function(btn){
-        btn.whiteboardRef.removeAll();
-    },
+		btn.whiteboardRef.removeAll();
+	},
 
 
 	selectSprite: function(sprite, wb){
@@ -133,11 +133,11 @@ Ext.define('NextThought.controller.Whiteboard', {
 		if(!this.sprite)return;
 
 		var wb = this.getWhiteboardFrom(e),
-            op = this.sprite.initalPoint,
+			op = this.sprite.initalPoint,
 			dt = wb.relativizeXY(e.getXY()),
-            sw = this.sprite['stroke-width'],
+			sw = this.sprite['stroke-width'],
 			p = op.concat(dt),
-            m;
+			m;
 
 		dt.push(op, length.apply(this,p), degrees.apply(this,p), sw);
 
@@ -162,8 +162,8 @@ Ext.define('NextThought.controller.Whiteboard', {
 	},
 
 	surfaceMouseDown: function(e){
-        var wb = this.getWhiteboardFrom(e),
-		    t = this.getActiveTool(wb),
+		var wb = this.getWhiteboardFrom(e),
+			t = this.getActiveTool(wb),
 			xy = wb.relativizeXY(e.getXY()),
 			sw = wb.down('numberfield[name=stroke-width]').getValue(),
 			sd = wb.down('numberfield[name=sides]').getValue();
@@ -176,9 +176,9 @@ Ext.define('NextThought.controller.Whiteboard', {
 
 
 	modifyPolygon: function(x,y,o,m,d,sw){
-        var ssw = sw / m;
+		var ssw = sw / m;
 		this.sprite.setAttributes({'stroke-width': ssw, scale: { x: m, y: m }, rotate: { degrees: d } },true);
-    },
+	},
 
 
 	modifyPath: function(x,y,o, m, d, sw){
@@ -194,8 +194,8 @@ Ext.define('NextThought.controller.Whiteboard', {
 
 
 	modifyEllipse: function(x,y,o,m, d, sw){
-        var ssw = sw / m;
-        this.sprite.setAttributes({ 'stroke-width': ssw, scale: { x: m, y: m }},true);
+		var ssw = sw / m;
+		this.sprite.setAttributes({ 'stroke-width': ssw, scale: { x: m, y: m }},true);
 	}
 
 });

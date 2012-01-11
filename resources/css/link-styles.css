@@ -8,10 +8,10 @@ a.internal-link:active,
 a.internal-link:hover,
 a.internal-link:visited
 {
-    color: #7889A3;
-    text-decoration: none;
-    cursor: pointer;
-    line-height: 1.5em;
+	color: #7889A3;
+	text-decoration: none;
+	cursor: pointer;
+	line-height: 1.5em;
 }
 
 /* Fix strange CSS behavior ...menu item links' style were not correctly applying...this seems to fix it.*/
