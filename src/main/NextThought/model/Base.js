@@ -109,7 +109,7 @@ Ext.define('NextThought.model.Base', {
 
 				if (fa !== fb){
 
-					if(Ext.isArray(fa) && Ext.isArray(fb) && arrayEquals(fa, fb)){
+					if(Ext.isArray(fa) && Ext.isArray(fb) && Globals.arrayEquals(fa, fb)){
 						return;
 					}
 

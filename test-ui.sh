@@ -9,19 +9,36 @@ export SELENIUM_DRIVER=*googlechrome
 
 export SELENIUM_JAR=~/Applications/bin/selenium-server-standalone-2.16.1.jar
 
-#port for the simpleserver
 export PORT=8181
 
-# fire up an http server in the background
-echo "Starting SimpleHTTP Server"
-python -m SimpleHTTPServer $PORT >/dev/null 2>&1 &
+if [[ ! -z $FLAGGED ]] ; then
+	export TEST_URL=http://localhost/index.html
+	#do dataserver setup...
 
+else #just launch assuming everything is running
+	echo "Starting SimpleHTTP Server"
+
+	python -m SimpleHTTPServer $PORT >/dev/null 2>&1 &
+
+	HPID=`jobs -l 1 | awk '{print $2}'`
+	export TEST_URL=http://localhost:$PORT/index.html
+fi
+
+
+echo "Running tests at $TEST_URL"
+
+#run tests
 nosetests-2.7 -v -d -w ./src/test/python/
 
-# kill the http server
-echo "Stopping Simple HTTP Server"
-HPID=`jobs -l 1 | awk '{print $2}'`
-kill -9 $HPID
+
+
+#shutdown/cleanup
+
+if [[ ! -z $HPID ]] ; then
+	# kill the http server
+	echo "Stopping SimpleHTTP Server"
+	kill -9 $HPID
+fi
 
 
 

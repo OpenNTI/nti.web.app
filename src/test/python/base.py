@@ -4,8 +4,7 @@ class WebAppTestBase(unittest.TestCase):
 	
 	@classmethod
 	def setUpClass(cls):
-		cls.port = os.environ.get('PORT',8181)
-		cls.url = 'http://localhost:%s/index.html'%cls.port
+		cls.url = os.environ.get('TEST_URL',None)
 		cls.app = webtest.SeleniumApp(url=cls.url)
 	
 	@classmethod

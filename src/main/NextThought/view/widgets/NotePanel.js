@@ -82,7 +82,7 @@ Ext.define('NextThought.view.widgets.NotePanel',{
 			l = (record.children||[]).length;
 
 		Ext.each(
-			Ext.Array.sort( record.children || [], SortModelsBy('Last Modified', true)),
+			Ext.Array.sort( record.children || [], Globals.SortModelsBy('Last Modified', true)),
 			function(rec){
 				m.add(m.buildReply(rec));
 			}
@@ -113,7 +113,7 @@ Ext.define('NextThought.view.widgets.NotePanel',{
 			log = panel.add({ xtype: 'chat-log-view' }),
 			msgs = m.get('Messages');
 
-		msgs = Ext.Array.sort( msgs || [], SortModelsBy('Last Modified', ASCENDING));
+		msgs = Ext.Array.sort( msgs || [], Globals.SortModelsBy('Last Modified', ASCENDING));
 
 		Ext.each(msgs, function(i){ log.addMessage(i); });
 

@@ -87,6 +87,12 @@ Ext.application({
 	name: 'NextThought',
 	appFolder: 'src/main/NextThought',
 
+	requires: [
+		'NextThought.util.StacktraceUtils',
+		'NextThought.util.MD5',
+		'NextThought.util.Globals'
+	],
+
 	controllers: [
 		'State',
 		'Chat',
@@ -112,7 +118,7 @@ Ext.application({
 
 		_AppConfig.userObject = Ext.create('NextThought.model.User', mockUser, _AppConfig.username, mockUser);
 
-		applyHooks();
+		Globals.applyHooks();
 
 		//include the tests in the test.html head
 		jasmine.getEnv().addReporter(new jasmine.TrivialReporter());

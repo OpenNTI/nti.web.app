@@ -283,7 +283,7 @@ Ext.define('NextThought.mixins.Annotations', {
 		//sort bins
 		for(b in bins){
 			if(bins.hasOwnProperty(b))
-			bins[b] = Ext.Array.sort(bins[b]||[],SortModelsBy(k,ASCENDING,me.GETTERS[b]));
+			bins[b] = Ext.Array.sort(bins[b]||[],Globals.SortModelsBy(k,ASCENDING,me.GETTERS[b]));
 			foundBins = true;
 		}
 

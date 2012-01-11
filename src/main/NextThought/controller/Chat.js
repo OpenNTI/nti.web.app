@@ -148,7 +148,7 @@ Ext.define('NextThought.controller.Chat', {
 			if (!this.activeRooms.hasOwnProperty(key)) continue;
 
 			ri = this.activeRooms[key];
-			if (arrayEquals(ri.get('Occupants'), allUsers)) {
+			if (Globals.arrayEquals(ri.get('Occupants'), allUsers)) {
 				return ri;
 			}
 		}

@@ -1,8 +1,12 @@
-document.write('<script	src="'+_AppConfig.server.host+'/socket.io/static/socket.io.js"></script>');
-
 Ext.application({
 	name: 'NextThought',
 	appFolder: 'src/main/NextThought',
+
+	requires: [
+		'NextThought.util.StacktraceUtils',
+		'NextThought.util.MD5',
+		'NextThought.util.Globals'
+	],
 
 	controllers: [
 		'Account',
@@ -26,6 +30,12 @@ Ext.application({
 
 	launch: function(){
 
+		Globals.loadScript(_AppConfig.server.host+'/socket.io/static/socket.io.js');
+		Globals.loadScript(_AppConfig.server.host+'/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML', function(){
+			Globals.loadScript('./resources/mathjaxconfig.js');
+		});
+
+
 		if(!HOST_PATTERN.test(_AppConfig.server.host)){
 			console.error('Bad Server Config, your host does not validate the pattern:',HOST_PATTERN);
 			return;
@@ -38,6 +48,7 @@ Ext.application({
 
 		window.app = this;
 		var g = this.getController('Google'),
+			i,
 			hostInfo = HOST_PATTERN.exec(_AppConfig.server.host);
 
 		Ext.apply(_AppConfig.server,{
@@ -49,7 +60,7 @@ Ext.application({
 		if(g.isHangout() && !g.isReady()){
 
 			//the onApiReady thing seems to not work...so, brute-force for now.
-			var i = setInterval(function(){
+			i = setInterval(function(){
 				if(g.isReady()){
 					clearInterval(i);
 					start();
@@ -60,8 +71,8 @@ Ext.application({
 
 
 		function start() {
-			applyHooks();
-			removeLoaderSplash();
+			Globals.applyHooks();
+			Globals.removeLoaderSplash();
 			NextThought.controller.Session.login(app);
 			NextThought.isReady = true;
 		}
