@@ -118,7 +118,8 @@ Ext.define('NextThought.controller.Chat', {
 				'click': this.clearPinnedMessages
 			},
 			'on-deck-view' : {
-				'advance-next': function(){console.log('next message from script', arguments);}
+				'advance-next': this.send
+		//function(){console.log('next message from script', arguments);}
 			}
 
 		},{});
@@ -148,7 +149,7 @@ Ext.define('NextThought.controller.Chat', {
 			if (!this.activeRooms.hasOwnProperty(key)) continue;
 
 			ri = this.activeRooms[key];
-			if (Globals.arrayEquals(ri.get('Occupants'), allUsers)) {
+			if (arrayEquals(ri.get('Occupants'), allUsers)) {
 				return ri;
 			}
 		}
@@ -186,7 +187,7 @@ Ext.define('NextThought.controller.Chat', {
 		else users = usersOrList;
 
 		users = Ext.Array.clone(users);
-		
+
 		for (k in users) {
 			if(!users.hasOwnProperty(k))continue;
 			if (typeof(users[k]) != 'string') {
@@ -280,7 +281,7 @@ Ext.define('NextThought.controller.Chat', {
 			val = f.getValue();
 
 		if (Ext.isEmpty(val)) return;
-		
+
 		this.postMessage(room, val, mid, channel, recipients);
 
 
@@ -381,7 +382,7 @@ Ext.define('NextThought.controller.Chat', {
 
 	leaveRoom: function(room){
 		if (!room) return;
-		
+
 		delete this.activeRooms[room.getId()];
 
 		Socket.emit('chat_exitRoom', room.getId());

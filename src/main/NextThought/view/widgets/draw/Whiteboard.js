@@ -7,7 +7,7 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 		'NextThought.view.widgets.draw.Resizer',
 		'NextThought.view.widgets.draw.Rotater',
 		'NextThought.util.Color',
-		'NextThought.view.widgets.draw.ShapeFactory'
+        'NextThought.view.widgets.draw.ShapeFactory'
 	],
 
 	cls: 'whiteboard',
@@ -19,64 +19,64 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 		this.callParent(arguments);
 		this.selectedColor = {};
 
-		this.addDocked(
-			{
-				dock: 'top',
-				xtype: 'toolbar',
-				cls: 'whiteboard-toolbar',
-				items: [
-					{	iconCls: 'tool hand',		tooltip: 'hand', enableToggle: true, toggleGroup:'draw', pressed: true, allowDepress: false },
-					{	iconCls: 'tool rect',		tooltip: 'polygon',		shape: 'polygon', enableToggle: true, toggleGroup:'draw', allowDepress: false,
-						menu: {
-							items: {
-								xtype: 'buttongroup',
-								title: 'polygon options',
-								columns: 1,
-								items:[ {
-									xtype: 'numberfield',
-									fieldLabel: 'Sides',
-									name: 'sides',
-									value: 4,
-									minValue: 3
-								} ]
-							} } },
+        this.addDocked(
+            {
+                dock: 'top',
+                xtype: 'toolbar',
+                cls: 'whiteboard-toolbar',
+                items: [
+                    {	iconCls: 'tool hand',		tooltip: 'hand', enableToggle: true, toggleGroup:'draw', pressed: true, allowDepress: false },
+                    {	iconCls: 'tool rect',		tooltip: 'polygon',		shape: 'polygon', enableToggle: true, toggleGroup:'draw', allowDepress: false,
+                        menu: {
+                            items: {
+                                xtype: 'buttongroup',
+                                title: 'polygon options',
+                                columns: 1,
+                                items:[ {
+                                    xtype: 'numberfield',
+                                    fieldLabel: 'Sides',
+                                    name: 'sides',
+                                    value: 4,
+                                    minValue: 3
+                                } ]
+                            } } },
 
-					{	iconCls: 'tool circle',		tooltip: 'circle',		shape: 'ellipse', enableToggle: true, toggleGroup:'draw', allowDepress: false},
-					{	iconCls: 'tool line',		tooltip: 'line',		shape: 'line', enableToggle: true, toggleGroup:'draw', allowDepress: false},
-					{	iconCls: 'tool path',		tooltip: 'path',		shape: 'path', enableToggle: true, toggleGroup:'draw', allowDepress: false},
-					{	iconCls: 'tool text',		tooltip: 'text box',	shape: 'text', disabled: true, enableToggle: true, toggleGroup:'draw', allowDepress: false},
+                    {	iconCls: 'tool circle',		tooltip: 'circle',		shape: 'ellipse', enableToggle: true, toggleGroup:'draw', allowDepress: false},
+                    {	iconCls: 'tool line',		tooltip: 'line',		shape: 'line', enableToggle: true, toggleGroup:'draw', allowDepress: false},
+                    {	iconCls: 'tool path',		tooltip: 'path',		shape: 'path', enableToggle: true, toggleGroup:'draw', allowDepress: false},
+                    {	iconCls: 'tool text',		tooltip: 'text box',	shape: 'text', disabled: true, enableToggle: true, toggleGroup:'draw', allowDepress: false},
 
-					'-',
+                    '-',
 
-					{	iconCls: 'tool delete',		tooltip: 'delete',		action: 'delete', text: 'remove selection', whiteboardRef: this },
-					{	iconCls: 'tool clear',		tooltip: 'clear',		action: 'clear', text: 'clear', whiteboardRef: this },
+                    {	iconCls: 'tool delete',		tooltip: 'delete',		action: 'delete', text: 'remove selection', whiteboardRef: this },
+                    {	iconCls: 'tool clear',		tooltip: 'clear',		action: 'clear', text: 'clear', whiteboardRef: this },
 
-					'->',
-					{
-						xtype: 'numberfield',
-						fieldLabel: 'Stroke',
-						name: 'stroke-width',
-						width: 100,
-						whiteboardRef: this,
-						labelWidth: 40,
-						value: 1,
-						minValue: 0
-					},{
-						action: 'pick-stroke-color',
-						whiteboardRef: this,
-						iconCls: 'color', tooltip: 'Stroke Color',
-						menu: {xtype: 'colormenu', colorFor: 'stoke'}
-					},'-',{
-						text: 'Fill',
-						action: 'pick-fill-color',
-						whiteboardRef: this,
-						iconCls: 'color', tooltip: 'Fill Color',
-						menu: {xtype: 'colormenu', colorFor: 'fill'}
-					}
-				]
-			}
-		);
-	},
+                    '->',
+                    {
+                        xtype: 'numberfield',
+                        fieldLabel: 'Stroke',
+                        name: 'stroke-width',
+                        width: 100,
+                        whiteboardRef: this,
+                        labelWidth: 40,
+                        value: 1,
+                        minValue: 0
+                    },{
+                        action: 'pick-stroke-color',
+                        whiteboardRef: this,
+                        iconCls: 'color', tooltip: 'Stroke Color',
+                        menu: {xtype: 'colormenu', colorFor: 'stoke'}
+                    },'-',{
+                        text: 'Fill',
+                        action: 'pick-fill-color',
+                        whiteboardRef: this,
+                        iconCls: 'color', tooltip: 'Fill Color',
+                        menu: {xtype: 'colormenu', colorFor: 'fill'}
+                    }
+                ]
+            }
+        );
+    },
 
 
 	destroy: function(){
@@ -127,8 +127,8 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 
 
 	addShape: function(shape, x,y, strokeWidth, sides){
-		var sp = ShapeFactory.createShape(this, shape, x, y, sides, this.selectedColor, strokeWidth);
-		this.getSurface().add(sp).show(true);
+        var sp = ShapeFactory.createShape(this, shape, x, y, sides, this.selectedColor, strokeWidth);
+        this.getSurface().add(sp).show(true);
 		return sp;
 	},
 
@@ -197,24 +197,24 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 	 * @param [value]
 	 */
 	getThumbnail: function(value){
-		var id = guidGenerator(),
+        var id = guidGenerator(),
 			div = document.createElement('div'),
-			el = Ext.get(div),
-			v = value || this.value || this.initialConfig.value,
-			svg, w;
+            el = Ext.get(div),
+            v = value || this.value || this.initialConfig.value,
+            svg, w;
 
-		//This is a little dirty, but it gets the job done.
-		div.setAttribute('id',id);
-		div.setAttribute('style','display:none');
-		document.body.appendChild(div);
+        //This is a little dirty, but it gets the job done.
+        div.setAttribute('id',id);
+        div.setAttribute('style','display:none');
+        document.body.appendChild(div);
 
-		w = Ext.widget('draw', {renderTo: id, id: id+'-thumbnail-surface',width: 1, height:1});
+        w = Ext.widget('draw', {renderTo: id, id: id+'-thumbnail-surface',width: 1, height:1});
 		this.loadScene.call(w, v,w.surface,1,w);
-		svg = el.down('svg').dom.parentNode.innerHTML;
+        svg = el.down('svg').dom.parentNode.innerHTML;
 
 		w.surface.removeAll(true);
-		w.destroy();
-		el.remove();
+        w.destroy();
+        el.remove();
 
 		return svg.replace(/style=".*?"/ig,'')
 				.replace(/id="ext\-.*?"/ig,'')
@@ -233,11 +233,11 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 	 * @param [context]
 	 */
 	loadScene: function(canvasJSON, surface, scale, context){
-		//console.log('JSON canvas to load', JSON.stringify(canvasJSON));
+        //console.log('JSON canvas to load', JSON.stringify(canvasJSON));
 		var shapes = Ext.clone( canvasJSON.shapeList ),
 			s = surface || this.getSurface(),
 			w = scale || this.getScaleFactor(),
-			me = context || this;
+            me = context || this;
 
 		Ext.each(shapes, function(shape){
 			s.add(ShapeFactory.restoreShape(me, shape, w)).show(true);
@@ -256,24 +256,24 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 
 				if(i===ab || i.isNib || a.hidden || (!bb.width && !bb.height))return;
 
-				o = ShapeFactory.scaleJson(1/w, i.toJSON());
-				o.strokeWidth = o.strokeWidthTarget + '%';
-				delete o.strokeWidthTarget;
+                o = ShapeFactory.scaleJson(1/w, i.toJSON());
+                o.strokeWidth = o.strokeWidthTarget + '%';
+                delete o.strokeWidthTarget;
 
 				shapes.push(o);
 			},
 			this
 		);
 
-		s = { "Class":"Canvas", "shapeList": shapes };
+        s = { "Class":"Canvas", "shapeList": shapes };
 
-		//console.log('save scene', JSON.stringify(s));
+        //console.log('save scene', JSON.stringify(s));
 		return shapes.length===0 ? undefined : s;
 	},
 
-	getNumberOfShapes: function() {
-		return this.getSurface().items.length;
-	}
+    getNumberOfShapes: function() {
+        return this.getSurface().items.length;
+    }
 },
 function(){
 	//make these functions stactically available
