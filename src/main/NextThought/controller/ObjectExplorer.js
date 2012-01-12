@@ -60,6 +60,7 @@ Ext.define('NextThought.controller.ObjectExplorer', {
 				maximizable:true,
 				layout: 'fit',
 				closeAction: 'hide',
+				hideMode: 'display',
 				items: {xtype: 'item-navigator'}
 			});
 		}
