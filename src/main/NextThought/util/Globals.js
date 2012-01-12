@@ -120,6 +120,30 @@ Ext.define('NextThought.util.Globals',
 			}
 
 		});
+
+
+		Ext.data.proxy.Server.override({noCache: false});
+		Ext.Ajax.disableCaching = false;
+		Ext.data.Connection.override({
+			disableCaching: false,
+
+			setOptions: function(options, scope){
+				var i, badParams = ['_dc', 'id', 'page', 'start', 'limit', 'group', 'sort'],
+					params = options.params || {};
+
+				if (Ext.isFunction(params)) {
+					console.warn('Params were a function!');
+					options.params = (params = params.call(scope, options));
+				}
+
+				for(i in badParams){
+					if(!badParams.hasOwnProperty(i))continue;
+					delete params[badParams[i]];
+				}
+
+				return this.callOverridden(arguments);
+			}
+		});
 	},
 
 
