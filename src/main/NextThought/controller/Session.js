@@ -74,6 +74,7 @@ Ext.define('NextThought.controller.Session', {
 			Ext.Ajax.defaultHeaders = Ext.Ajax.defaultHeaders || {};
 			Ext.Ajax.defaultHeaders.Authorization= a;
 			Ext.Ajax.defaultHeaders.Accept= 'application/vnd.nextthought+json';
+			Ext.Ajax.cors = true;
 			Ext.Ajax.username = encodeURIComponent(username);
 			Ext.Ajax.password = password;
 
