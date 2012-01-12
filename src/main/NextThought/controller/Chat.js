@@ -149,7 +149,7 @@ Ext.define('NextThought.controller.Chat', {
 			if (!this.activeRooms.hasOwnProperty(key)) continue;
 
 			ri = this.activeRooms[key];
-			if (arrayEquals(ri.get('Occupants'), allUsers)) {
+			if (Globals.arrayEquals(ri.get('Occupants'), allUsers)) {
 				return ri;
 			}
 		}
@@ -308,7 +308,6 @@ Ext.define('NextThought.controller.Chat', {
 		this.getClassroomMode().activate();
 		this.getClassroomMode().hideClassChooser();
 		this.getClassroom().onEnteredRoom(room, moderated);
-
 	 },
 
 	flaggedMenuItemClicked: function(mi) {
@@ -344,11 +343,13 @@ Ext.define('NextThought.controller.Chat', {
 	moderateClicked: function(cmp){
 		var chatView = cmp.up('chat-view');
 
-
-		if (chatView)
+		if (chatView) {
 			chatView.openModerationPanel();
-		else
+		}
+		else {
 			chatView = cmp.up('classroom-content').down('chat-view');
+			chatView.initOccupants(true);
+		}
 
 		this.moderateChat(chatView.roomInfo);
 		chatView.addCls('moderator');

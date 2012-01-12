@@ -72,19 +72,25 @@ Ext.define('NextThought.view.widgets.chat.FriendEntry', {
 	},
 
 	_buildMenu: function(){
-		return [
-			{
+		var m =  [];
+
+		if (this.isModerator) {
+			m.push({
 				text: 'Shadow',
 				iconCls: 'shadow-menu',
 				scope: this,
 				handler: this._shadow
-			},{
+			});
+		}
+
+		m.push({
 				text: 'Chat',
 				iconCls: 'chat-menu',
 				scope: this,
 				handler: this._chat
-			}
-		];
+			});
+
+		return m;
 	},
 
 	_chat: function(){

@@ -74,15 +74,21 @@ Ext.define('NextThought.view.widgets.chat.View', {
             this.down('[region=center]').add({xtype:'on-deck-view', hidden:true});
         }
 
-        //stuff the occupants where they belong
-        if (this.up('classroom-content')) {
-            this.up('classroom-content').down('classroom-moderation').down('chat-occupants-list').setOccupants(this.roomInfo.get('Occupants'), this.roomId);
-            this.down('chat-occupants-list').hide();
-        }
-        else {
-            this.down('chat-occupants-list').setOccupants(this.roomInfo.get('Occupants'), this.roomId);
-        }
+		this.initOccupants();
     },
+
+
+	initOccupants: function(moderated) {
+		//stuff the occupants where they belong
+		if (this.up('classroom-content')) {
+			this.up('classroom-content').down('classroom-moderation').down('chat-occupants-list').setOccupants(this.roomInfo.get('Occupants'), this.roomId, moderated);
+			this.down('chat-occupants-list').hide();
+		}
+		else {
+			this.down('chat-occupants-list').setOccupants(this.roomInfo.get('Occupants'), this.roomId, moderated);
+		}
+	},
+
 
     left: function() {
         this.down('textfield').destroy();
@@ -99,6 +105,8 @@ Ext.define('NextThought.view.widgets.chat.View', {
         cmp.show();
 
         this.down('textfield[chatentry]').focus();
+
+		this.initOccupants(true);
     },
 
     getPinnedMessageView: function() {
