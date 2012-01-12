@@ -35,7 +35,7 @@ Ext.define('NextThought.view.widgets.chat.OccupantsList', {
 			total = a.length,
 			numberOccupants = 0;
 
-		me.removeAll();
+		me.removeAll(true);
 		
 		Ext.each(a,
 			function(username){
