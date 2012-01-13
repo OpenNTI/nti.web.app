@@ -96,6 +96,11 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 
 		this.setColor('fill', 'FFFFFF');
 		this.setColor('stroke', '000000');
+
+		//pre-cache so that the value is known after the window is hidden and & immeasurable. (display: none makes all
+		//measurements return 0, and we need display none so that the invisible window doesn't interfere with content
+		//below it)
+		this.getScaleFactor();
 	},
 
 
