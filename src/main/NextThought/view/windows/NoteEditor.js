@@ -13,6 +13,7 @@ Ext.define('NextThought.view.windows.NoteEditor', {
 	constrain: true,
 	closable: false,
 	maximizable:true,
+	modal: true,
 	border: false,
 	layout: 'anchor',
 	title: 'Edit Note',
@@ -146,12 +147,13 @@ Ext.define('NextThought.view.windows.NoteEditor', {
 			width: w, height: h,
 			modal: true,
 			layout: 'fit',
+			hideMode: 'display',
 			items: { xtype: 'whiteboard', value: Ext.clone(canvas) },
 			bbar: this.getWhiteboardBottomToolbar()
 		});
 
 		win.saveScene = function(){
-			return this.down('whiteboard').saveScene();
+			return !win.rendered? canvas : this.down('whiteboard').saveScene();
 		};
 
 		return win;

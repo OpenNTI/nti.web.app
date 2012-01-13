@@ -80,7 +80,8 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 
 
 	destroy: function(){
-		this.getSurface().removeAll(true);
+		var s = this.getSurface();
+		if(s)s.removeAll(true);
 		this.callParent(arguments);
 	},
 
@@ -118,6 +119,13 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 	setColor: function(c, color){
 		c = c.toLowerCase();
 		this.selectedColor[c] = '#'+color;
+
+		if(this.selection){
+			var s = {};
+			s[c] = color;
+			this.selection.sprite[c] = '#'+color;
+			this.selection.sprite.setAttributes(s,true);
+		}
 
 		this.down(Ext.String.format('button[action=pick-{0}-color]',c))
 				.getEl()

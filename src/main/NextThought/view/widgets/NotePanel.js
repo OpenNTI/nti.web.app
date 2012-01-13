@@ -233,14 +233,6 @@ Ext.define('NextThought.view.widgets.NotePanel',{
 		me.el.on({
 			scope: this,
 			'click': me.click,
-			'dblclick': function(e){
-				e.preventDefault();
-				e.stopPropagation();
-
-				if(me._record.isModifiable())
-					me.fireEvent('action', 'edit', me);
-				return false;
-			},
 			'mouseup': function(e){
 				e.preventDefault();
 				e.stopPropagation();
@@ -256,15 +248,34 @@ Ext.define('NextThought.view.widgets.NotePanel',{
 		event.preventDefault();
 		event.stopPropagation();
 
-		var inBox = target && this.controls && this.controls.contains(target),
+		var me = this,
+			inBox = target && me.controls && me.controls.contains(target),
 			action = inBox && target.getAttribute('className');
 
 		if(action){
-			this.fireEvent('action', action, this);
+			me.fireEvent('action', action, me);
 		}
-		else if(this.box.isDisplayed() && this.isTranscriptSummary()){
-			this.fireEvent('load-transcript', this._record, this, this.box.setDisplayed(false));
+		else if(me.box.isDisplayed() && me.isTranscriptSummary()){
+			me.fireEvent('load-transcript', me._record, me, me.box.setDisplayed(false));
 		}
+		else{
+			me.box.fadeOut({
+			    opacity: 0,
+			    easing: 'easeOut',
+			    duration: 50,
+			    remove: false,
+			    useDisplay: false
+			}).fadeIn({
+			    opacity: 1,
+			    easing: 'easeOut',
+			    duration: 50,
+				callback: function(){
+					if(me._record.isModifiable())
+						me.fireEvent('action', 'edit', me);
+				}
+			});
+		}
+
 		return false;
 	},
 
