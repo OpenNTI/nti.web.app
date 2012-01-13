@@ -32,12 +32,11 @@ Ext.define('NextThought.controller.Whiteboard', {
 
 			'whiteboard button[action=delete]':{ 'click': this.removeSelectedSprite },
 			'whiteboard button[action=clear]':{ 'click': this.clearWhiteboard },
-/*
-			'whiteboard toolbar numberfield':
-			{
-				'change': this.polygonSidesChanged
+
+			'whiteboard toolbar numberfield[name=stroke-width]': {
+				'change': this.strokeWidthChanged
 			},
-*/
+
 			'whiteboard': {
 				'sprite-click': this.selectSprite,
 				'sprite-dblclick': this.editSprite
@@ -79,6 +78,26 @@ Ext.define('NextThought.controller.Whiteboard', {
 
 	colorChangedStroke: function(picker, color){
 		picker.up('menu[floatParent]').floatParent.whiteboardRef.setColor('stroke', color);
+	},
+
+
+	strokeWidthChanged: function(ctrl,n){
+		var ref = ctrl.whiteboardRef,
+			sel = ref.getSelected(),
+			oldTarget,
+			oldActual,a;
+		if(!sel) return;
+
+		oldTarget = sel['stroke-width'];
+		oldActual = sel.attr['stroke-width'];
+
+		sel['stroke-width'] = n;
+
+		a = n/(oldTarget/oldActual);//scale down the new stroke to the same scale as the old
+
+		sel.setAttributes({
+			'stroke-width': a
+		},true);
 	},
 
 

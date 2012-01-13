@@ -114,6 +114,9 @@ Ext.define('NextThought.view.widgets.draw.ShapeFactory',
 			}
 		});
 
+		//the above constructor uses a calculated value, this is the raw value from the server, and is needed to know what the intended stroke width is supposed to be.
+		s['stroke-width'] = parseFloat(shape.strokeWidth) * scaleFactor;
+
 		s.whiteboardRef = whiteboard;
 		this.relay(whiteboard, s, ['click','dblClick']);
 

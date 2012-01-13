@@ -141,6 +141,12 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 	},
 
 
+	getSelected: function(){
+		var s = this.selection;
+		return s ? s.sprite : null;
+	},
+
+
 	removeSelection: function(){
 		if(!this.selection)return;
 
