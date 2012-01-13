@@ -88,10 +88,10 @@ Ext.define('NextThought.controller.Whiteboard', {
 			oldActual,a;
 		if(!sel) return;
 
-		oldTarget = sel['stroke-width'];
+		oldTarget = sel.strokeWidthTarget;
 		oldActual = sel.attr['stroke-width'];
 
-		sel['stroke-width'] = n;
+		sel.strokeWidthTarget = n;
 
 		a = n/(oldTarget/oldActual);//scale down the new stroke to the same scale as the old
 

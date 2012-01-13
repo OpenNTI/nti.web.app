@@ -9,12 +9,14 @@ Ext.define('NextThought.view.widgets.draw.Shape', {
 	constructor: function(config){
 		var c = {
 			draggable: true, x:0, y:0, width: 1, height: 1
-		};
+		},
+			swt = config['stroke-width'];
 		if (config.scale) {
 		 //   console.log('stroke-width changing from', config['stroke-width'], 'to',  config['stroke-width'] / ((config.scale.x + config.scale.y)/2), printStackTrace().join('\n'));
-			c['stroke-width'] = config['stroke-width'] / ((config.scale.x + config.scale.y)/2);
+			c['stroke-width'] = swt / ((config.scale.x + config.scale.y)/2);
 		}
 
+		this.strokeWidthTarget = swt;
 		this.callParent([Ext.apply(config,c)]);
 	},
 
@@ -63,8 +65,7 @@ Ext.define('NextThought.view.widgets.draw.Shape', {
 
 		Ext.copyTo(additionalProps, this, 'sides');
 
-		return Ext.apply(
-				{
+		return Ext.apply( {
 					'Class': Ext.String.format('Canvas{0}Shape',this.getJSONType()),
 					transform: matrix
 				},
