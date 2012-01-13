@@ -49,7 +49,7 @@ Ext.define('NextThought.util.Globals',
 		}
 
 		script.type = 'text/javascript';
-		script.src = url;
+		script.src = Ext.urlAppend(url, Ext.String.format('_dc={0}',Ext.Date.now()));
 		script.onload = onLoadFn;
 		script.onerror = onErrorFn;
 

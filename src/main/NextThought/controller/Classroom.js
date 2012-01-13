@@ -280,9 +280,12 @@ Ext.define('NextThought.controller.Classroom', {
 	//TODO - merge with above?  In this case we just grab the first class, we need to get the selected class...
 	editClassClicked: function(btn) {
 		var w = Ext.widget('class-create-edit-window'),
-			d = Ext.ComponentQuery.query('classroom-browser')[0];
+			d = Ext.ComponentQuery.query('classroom-browser')[0],
+			c = d.getSelectionModel().getSelection()[0];
 
-		w.setValue(d.getSelectionModel().getSelection()[0]);
+		c.resolve();
+
+		w.setValue(c);
 		w.show();
 	},
 

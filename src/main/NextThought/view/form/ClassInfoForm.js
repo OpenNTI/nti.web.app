@@ -85,7 +85,7 @@ Ext.define('NextThought.view.form.ClassInfoForm', {
 		}, this);
 
 
-		r = Ext.create('NextThought.model.ClassInfo', v);
+		r = Ext.create('NextThought.model.ClassInfo', v, v.OID, v);
 		r.set('Description', this.down('textfield[name=Description]').getValue());
 		r.set('Sections', sections);
 		return r;

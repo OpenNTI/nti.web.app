@@ -5,6 +5,7 @@ Ext.data.Types.LINKS = {
 	convert: function(v){
 		return {
 			links: v,
+			toJSON: function(){return v;},
 			getRelHref: function(rel){
 				var i, c = this.links,len = c.length;
 				if(typeof(c) === 'object'){
@@ -44,7 +45,8 @@ Ext.define('NextThought.model.Base', {
 		{ name: 'Links', type: 'links', defaultValue: [] },
 		{ name: 'MimeType', type: 'string' },
 		{ name: 'NTIID', type: 'string' },
-		{ name: 'accepts', type: 'auto', defaultValue: [] }
+		{ name: 'accepts', type: 'auto', defaultValue: [] },
+		{ name: 'href', type: 'string' }
 	],
 
 
@@ -67,12 +69,21 @@ Ext.define('NextThought.model.Base', {
 
 		c = this.callParent(arguments);
 
+		this._enforceMutability();
+
+		return c;
+	},
+
+
+	_enforceMutability: function(){
 		if(!this.isModifiable()){
 			this.destroy = Ext.emptyFn();
 			this.save = Ext.emptyFn();
 		}
-
-		return c;
+		else if(this.hasOwnProperty('destroy')){
+			this.destroy = this.self.prototype.destroy;
+			this.save = this.self.prototype.save;
+		}
 	},
 
 
@@ -95,6 +106,36 @@ Ext.define('NextThought.model.Base', {
 			console.warn('No getLink()!');
 		}
 		return false;
+	},
+
+
+	/**
+	 * Calls the href and fills in the values missing.
+	 */
+	resolve: function(){
+		var me = this,
+			href = this.get('href');
+
+		if(!href){
+			Ext.Error.raise('No HREF!');
+		}
+
+		Ext.Ajax.request({
+			url: _AppConfig.server.host + href,
+			async: false,
+			callback: function(req, success, resp){
+				if(!success){
+					console.error('Resolving model failed');
+					return;
+				}
+				me.set(Ext.JSON.decode(resp.responseText));
+				me._enforceMutability();
+				me.dirty = false;
+				me.modified = {};
+			}
+		});
+
+
 	},
 
 
@@ -126,6 +167,7 @@ Ext.define('NextThought.model.Base', {
 
 		return r;
 	},
+
 
 	toJSON: function() {
 		var data = {},

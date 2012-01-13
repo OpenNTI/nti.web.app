@@ -3,8 +3,6 @@ Ext.define('NextThought.model.ClassInfo', {
 	fields: [
 		{ name: 'ContainerId', type: 'string', defaultValue: 'Classes' },
 		{ name: 'Description', type: 'string' },
-		{ name: 'Sections', type: 'arrayItem' },
-		{ name: 'accepts', type: 'auto', defaultValue: []},
-		{ name: 'href', type: 'string' }
+		{ name: 'Sections', type: 'arrayItem' }
 	]
 });
