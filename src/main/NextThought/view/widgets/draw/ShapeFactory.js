@@ -27,8 +27,8 @@ Ext.define('NextThought.view.widgets.draw.ShapeFactory',
 			d = {
 			circle: {},
 			polygon: { sides: sides },
-			path: { type: 'path', fill: '#000000', translate: {} },
-			line: { type: 'path', fill: '#000000', translate: {}, getShape:function(){return 'line';}},
+			path: { type: 'path', fill: 'None', translate: {} },
+			line: { type: 'path', fill: 'None', translate: {}, getShape:function(){return 'line';}},
 			text: {
 				type: 'text',
 				text: 'Place holder text',

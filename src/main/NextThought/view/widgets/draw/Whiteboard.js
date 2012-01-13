@@ -149,18 +149,35 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 
 
 	select: function(sprite){
-		var s = this.selection,
-			prev = s ? s.sprite : null;
+		var me = this,
+			s = me.selection,
+			prev = s ? s.sprite : null,
+			xtype = s ? s.xtype : null;
+
+		function next(){
+			if(prev !== sprite){
+				xtype = '';
+			}
+
+			switch(xtype){
+				case '': return Ext.widget('sprite-resizer',me,sprite);
+				case 'sprite-resizer': return Ext.widget('sprite-rotater',me,sprite);
+				case 'sprite-rotater': break;
+			}
+
+			return null;
+		}
 
 		if(s){
 			s.destroy();
-			delete this.selection;
+			delete me.selection;
 		}
 
 		if(!sprite) return;
 
-		this.selection = Ext.widget((prev === sprite)? 'sprite-rotater':'sprite-resizer',this,sprite);
-		this.selection.show(true);
+		s = next();
+		if(s) s.show(true);
+		me.selection = s;
 	},
 
 
