@@ -12,7 +12,7 @@ Ext.define('NextThought.view.widgets.draw.Shape', {
 		};
 		if (config.scale) {
 		 //   console.log('stroke-width changing from', config['stroke-width'], 'to',  config['stroke-width'] / ((config.scale.x + config.scale.y)/2), printStackTrace().join('\n'));
-			c['stroke-width'] = config['stroke-width'] / ((config.scale.x + config.scale.y)/2)
+			c['stroke-width'] = config['stroke-width'] / ((config.scale.x + config.scale.y)/2);
 		}
 
 		this.callParent([Ext.apply(config,c)]);
