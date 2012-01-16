@@ -25,6 +25,7 @@ Ext.define('NextThought.view.windows.NoteEditor', {
 	
 	initComponent: function(){
 		this.editors = {};
+		this.thumbs = [];
 		this.callParent(arguments);
 
 		var text = AnnotationUtils.compileBodyContent(this.record, {
@@ -36,6 +37,8 @@ Ext.define('NextThought.view.windows.NoteEditor', {
 		this.add({ xtype: 'htmleditor', anchor: '100% 100%', enableLists: false, enableAlignments: false, value: text });
 
 		this.on('thumbnail-clicked',this.showWhiteboardEditor, this);
+
+		this.down('htmleditor').on('initialize',this.attachClickHandlers, this);
 	},
 
 
@@ -43,12 +46,46 @@ Ext.define('NextThought.view.windows.NoteEditor', {
 		var me = this,
 			editor = me.down('htmleditor');
 
+
 		me.callParent(arguments);
 
 		editor.getToolbar().add('-',{
 			text: 'WB',
 			handler: function(){me.insertWhiteboard();}}
 		);
+	},
+
+
+	attachClickHandlers: function(){
+		var me = this,
+			editor = me.down('htmleditor'),
+			iFrameDoc = editor.getDoc(),
+			id, el;
+
+		function buildCallback(id){
+			return function(){ me.fireEvent('thumbnail-clicked',id); };
+		}
+
+		function buildHover(css){
+			return function(e,el){
+				var sel = 'div.body-divider',
+					x = Ext.fly(el).is(sel)? Ext.get(el) : Ext.fly(el).up(sel);
+				x.setStyle(css);
+			};
+		}
+
+
+		while( (id = this.thumbs.pop()) ) {
+			el = iFrameDoc.getElementById(id);
+			if(!el){
+				console.warn('no el for id:', id);
+				continue;
+			}
+			Ext.fly(el).on('click', buildCallback(id));
+			Ext.fly(el).setStyle({cursor:'pointer'});
+			Ext.fly(el).on('mouseover',buildHover({ background: '#eeeeee' }));
+			Ext.fly(el).on('mouseout', buildHover({ background: 'None' }));
+		}
 	},
 
 
@@ -78,9 +115,8 @@ Ext.define('NextThought.view.windows.NoteEditor', {
 
 
 	getWhiteboardThumbnailClickHandler: function(id){
-		return Ext.String.format(
-			'onClick="window.top.Ext.getCmp(\'{0}\').fireEvent(\'thumbnail-clicked\',\'{1}\')"',
-				Ext.String.trim(this.getId()), id);
+		this.thumbs.push(id);
+		return '';
 	},
 
 
@@ -97,7 +133,8 @@ Ext.define('NextThought.view.windows.NoteEditor', {
 			body.innerHTML += Ext.String.format(AnnotationUtils.NOTE_BODY_DIVIDER, id,
 				Ext.String.format(AnnotationUtils.WHITEBOARD_THUMBNAIL,'',
 					this.getWhiteboardThumbnailClickHandler(id)));
-			div = iFrameDoc.getElementById(id)
+			div = iFrameDoc.getElementById(id);
+			this.attachClickHandlers();
 		}
 
 		//If WB now has 0 elements, just remove it from the editor, otherwise, update thumbnail.
@@ -107,16 +144,17 @@ Ext.define('NextThought.view.windows.NoteEditor', {
 			div.innerHTML = Ext.String.format(
 					AnnotationUtils.WHITEBOARD_THUMBNAIL,
 					whiteboard.getThumbnail(),
-					this.getWhiteboardThumbnailClickHandler(id));
+					function(){return '';});//updating the thumb
 	},
 
-	insertWhiteboard: function(){
-		var id = guidGenerator(),
-			win = this.getWhiteboardEditor(null, id),
-			whiteboard = win.down('whiteboard');
-			//the getDoc() is non-public api
-			//iFrameDoc = this.down('htmleditor').getDoc(),
-			//body = iFrameDoc.body;
+	insertWhiteboard: function() {
+		var id, win, whiteboard;
+		id = guidGenerator();
+		win = this.getWhiteboardEditor(null, id);
+		whiteboard = win.down('whiteboard');
+		//the getDoc() is non-public api
+		//iFrameDoc = this.down('htmleditor').getDoc(),
+		//body = iFrameDoc.body;
 
 		whiteboard.__id = id;
 		whiteboard.on('save', this.updateOrCreateWhiteboardThumbnail, this);
@@ -160,24 +198,23 @@ Ext.define('NextThought.view.windows.NoteEditor', {
 	},
 
 
-	getWhiteboardBottomToolbar: function(){
-		var me = this;
+	getWhiteboardBottomToolbar: function() {
 		return [
 			'->',
-			{ xtype: 'button', text: 'Save',
-				handler: function(btn){
+			{ xtype:'button', text:'Save',
+				handler:function (btn) {
 					var win = btn.up('window').hide(),
-						wb = win.down('whiteboard');
+							wb = win.down('whiteboard');
 					wb.initialConfig.value = wb.saveScene();
-					wb.fireEvent('save',wb);
+					wb.fireEvent('save', wb);
 				}
 			},
-			{ xtype: 'button', text: 'Cancel',
-				handler: function(btn){
+			{ xtype:'button', text:'Cancel',
+				handler:function (btn) {
 					var win = btn.up('window').hide(),
-						wb = win.down('whiteboard');
+							wb = win.down('whiteboard');
 					wb.reset();
-					wb.fireEvent('cancel',wb);
+					wb.fireEvent('cancel', wb);
 				}
 			}
 		];
