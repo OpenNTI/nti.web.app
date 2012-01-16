@@ -200,7 +200,12 @@ Ext.define('NextThought.model.Base', {
 Ext.data.Types.SINGLEITEM = {
 	type: 'singleItem',
 	convert: function(v) {
-		return !v ? null : ParseUtils.parseItems([v])[0];
+		if (v instanceof Object)
+			return !v ? null : ParseUtils.parseItems([v])[0];
+		else {
+			console.warn('unexpected value', v);
+			return null
+		}
 	},
 	sortType: function(v) {
 		console.warn('sort by Item:',arguments);
@@ -211,7 +216,34 @@ Ext.data.Types.SINGLEITEM = {
 Ext.data.Types.ARRAYITEM = {
 	type: 'arrayItem',
 	convert: function(v) {
-		return ParseUtils.parseItems(v);
+		if (Ext.isArray(v))
+			return ParseUtils.parseItems(v);
+		else {
+			console.warn('unexpected value', v);
+			return null
+		}
+	},
+	sortType: function(v) {
+		console.warn('sort by Item:',arguments);
+		return '';
+	}
+};
+
+Ext.data.Types.COLLECTIONITEM = {
+	type: 'collectionItem',
+	convert: function(v) {
+		var values = [], key;
+		if (v instanceof Object) {
+			for(key in v) {
+				if (v.hasOwnProperty(key) && v[key] instanceof Object)
+					values.push(v[key]);
+			}
+			return ParseUtils.parseItems(values) ;
+		}
+		else {
+			console.warn('unexpected value', v);
+			return null
+		}
 	},
 	sortType: function(v) {
 		console.warn('sort by Item:',arguments);

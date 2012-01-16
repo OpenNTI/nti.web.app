@@ -8,6 +8,11 @@ Ext.define('NextThought.util.ParseUtils',{
 			if(!items.hasOwnProperty(key)) continue;
 			item = items[key] || {};
 
+			if (item instanceof Ext.data.Model) {
+				results.push(item);
+				continue;
+			}
+
 			reader = this.getReaderForModel(item.Class);
 			if(!reader) {
 				console.error('No reader for item: ', item);
@@ -22,6 +27,7 @@ Ext.define('NextThought.util.ParseUtils',{
 				results.push( reader.read(item).records[0] );
 			}
 			catch(e){
+				debugger;
 				console.error(e.stack);
 				if(/user/i.test(item.Class))
 					results.push( UserRepository.getUser(item.Username) );
@@ -34,6 +40,7 @@ Ext.define('NextThought.util.ParseUtils',{
 	},
 
 	getReaderForModel: function(modelName) {
+		if (!modelName){debugger;}
 		this._readers = this._readers || [];
 
 		if (!NextThought.model.hasOwnProperty(modelName)){

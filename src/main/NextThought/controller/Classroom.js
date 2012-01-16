@@ -25,7 +25,8 @@ Ext.define('NextThought.controller.Classroom', {
 	models: [
 		'ClassInfo',
 		'SectionInfo',
-		'InstructorInfo'
+		'InstructorInfo',
+		'Provider'
 	],
 
 	stores: [
@@ -126,7 +127,7 @@ Ext.define('NextThought.controller.Classroom', {
 
 
 	onClassroomChooserSelectionChange: function(evt,sel){
-		if(this.selectionClearing){
+		if(this.selectionClearing || sel.length == 0){
 			return;
 		}
 
@@ -198,7 +199,8 @@ Ext.define('NextThought.controller.Classroom', {
 
 	onClassroomEditorAction: function(btn) {
 		var win = btn.up('window'),
-			value;
+			value,
+			me = this;
 
 		if (btn.action === 'cancel') {
 			win.close();
@@ -208,14 +210,14 @@ Ext.define('NextThought.controller.Classroom', {
 
 		value = win.down('class-info-form').getValue();
 
-		console.log('save this', value);
+		console.log('save this', value.toJSON());
 
 		win.el.mask('Saving...');
 		value.save({
 			success:
 				function(){
 					win.close();
-					this.getProvidersStore().load();
+					me.getProvidersStore().load();
 				},
 			failure:
 				function(){win.el.unmask();}
@@ -283,7 +285,7 @@ Ext.define('NextThought.controller.Classroom', {
 			d = Ext.ComponentQuery.query('classroom-browser')[0],
 			c = d.getSelectionModel().getSelection()[0];
 
-		c.resolve();
+	//	c.resolve();
 
 		w.setValue(c);
 		w.show();

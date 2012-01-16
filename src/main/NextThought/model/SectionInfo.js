@@ -6,7 +6,7 @@ Ext.define('NextThought.model.SectionInfo', {
 		{ name: 'Description', type: 'string' },
 		{ name: 'Enrolled', type: 'UserList' },
 		{ name: 'InstructorInfo', type: 'singleItem', defaultValue: null },
-		{ name: 'Provider', type: 'string' },
+		{ name: 'Provider', type: 'singleItem' },
 		{ name: 'Sessions', type: 'auto' }
 	]
 });

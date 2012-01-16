@@ -27,29 +27,41 @@ Ext.define('NextThought.view.form.SectionInfoForm', {
 			xtype: 'panel',
 			layout: 'hbox',
 			items: [
-			{
-				xtype: 'textfield',
-				emptyText: 'Section Description',
-				allowBlank: false,
-				name: 'Description',
-				flex: 1
-			},
-			{
-				xtype: 'datefield',
-				fieldLabel: 'Open',
-				labelAlign: 'left',
-				labelWidth: 40,
-				width: 150,
-				name: 'OpenDate'
-			},
-			{
-				xtype: 'datefield',
-				fieldLabel: 'Closed',
-				labelAlign: 'left',
-				labelWidth: 40,
-				width: 150,
-				name: 'CloseDate'
-			}]
+				{
+					xtype: 'textfield',
+					fieldLabel: 'ID',
+					emptyText: 'ID',
+					labelWidth: 40,
+					labelAlign: 'left',
+					allowBlank: false,
+					name: 'ID',
+					flex: 1
+				},
+				{width: 5},
+				{
+					xtype: 'datefield',
+					fieldLabel: 'Open',
+					labelAlign: 'left',
+					labelWidth: 40,
+					width: 150,
+					name: 'OpenDate'
+				},
+				{width: 5},
+				{
+					xtype: 'datefield',
+					fieldLabel: 'Closed',
+					labelAlign: 'left',
+					labelWidth: 40,
+					width: 150,
+					name: 'CloseDate'
+				}]
+		},
+		{
+			xtype: 'textarea',
+			fieldLabel: 'Description',
+			emptyText: 'Section Description',
+			allowBlank: false,
+			name: 'Description'
 		},
 		{
 			border: false,
@@ -124,15 +136,19 @@ Ext.define('NextThought.view.form.SectionInfoForm', {
 	getValue: function() {
 		var r,
 			a = this.down('sharewith[name=Instructors]').getValue(),
-			o = this.value ? this.value.toJSON() : undefined;
+			o = this.value ? this.value.toJSON() : {};
 
-		r = Ext.create('NextThought.model.SectionInfo', o);
-		r.set('Description', this.down('textfield[name=Description]').getValue());
-		r.set('OpenDate', this.down('datefield[name=OpenDate]').getValue());
-		r.set('CloseDate', this.down('datefield[name=CloseDate]').getValue());
-		r.set('Enrolled', this.down('sharewith[name=Enrolled]').getValue());
-		r.set('InstructorInfo',  {'Class': 'InstructorInfo', 'Instructors': a});
-		return r;
+		o.ID = this.down('textfield[name=ID]').getValue();
+		o.Description = this.down('textarea[name=Description]').getValue();
+		o.OpenDate = this.down('datefield[name=OpenDate]').getValue();
+		o.CloseDate = this.down('datefield[name=CloseDate]').getValue();
+		o.Enrolled = this.down('sharewith[name=Enrolled]').getValue();
+		o.InstructorInfo =  {'Class': 'InstructorInfo', 'Instructors': a};
+
+		//o.Provider = (o.Provider && o.Provider.ID) ? o.Provider.ID : null;
+		delete o.Provider;
+
+		return Ext.create('NextThought.model.SectionInfo', o, o.OID, o);
 	},
 
 
@@ -142,14 +158,15 @@ Ext.define('NextThought.view.form.SectionInfoForm', {
 		this.setFieldValue('OpenDate');
 		this.setFieldValue('CloseDate');
 		this.setFieldValue('Enrolled');
+		this.setFieldValue('ID');
 
 		var i = this.value.get('InstructorInfo').get('Instructors');
 		this.down('sharewith[name=Instructors]').setValue(i);
 	},
 
 	setFieldValue: function(fieldName){
-		 var rn = this.down('*[name='+fieldName+']');
-		 rn.setValue(this.value.get(fieldName));
-		 rn.resetOriginalValue();
-	 }
+		var rn = this.down('*[name='+fieldName+']');
+		rn.setValue(this.value.get(fieldName));
+		rn.resetOriginalValue();
+	}
 });

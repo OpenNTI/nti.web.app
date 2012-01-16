@@ -13,6 +13,11 @@ Ext.define('NextThought.view.form.ClassInfoForm', {
 
 	border: false,
 	autoScroll: true,
+	layout: 'anchor',
+
+	defaults: {
+		anchor: '100%'
+	},
 
 	fieldDefaults: {
 		labelAlign: 'top',
@@ -23,11 +28,21 @@ Ext.define('NextThought.view.form.ClassInfoForm', {
 	items: [
 		{
 			xtype: 'textfield',
+			emptyText: 'Class ID',
+			fieldLabel: 'ID',
+			allowBlank: false,
+			name: 'ID',
+			padding: 5,
+			width: '100%',
+			margin: '10px 10px 10px 0px'
+		},
+		{
+			xtype: 'textarea',
 			emptyText: 'Class Description',
+			fieldLabel: 'Description',
 			allowBlank: false,
 			name: 'Description',
 			padding: 5,
-			width: '100%',
 			margin: '10px 10px 10px 0px'
 		},
 
@@ -77,18 +92,18 @@ Ext.define('NextThought.view.form.ClassInfoForm', {
 
 	getValue: function() {
 		var r, sections = [],
-			v = this.value ? this.value.toJSON() : undefined;
+			v = this.value ? this.value.toJSON() : {};
 
 		//Turn all section values into their json objects
 		Ext.each(this.getSections(), function(s){
 			sections.push(s.getValue().toJSON());
 		}, this);
 
+		v.Sections = sections;
+		v.Description = this.down('textarea[name=Description]').getValue()
+		v.ID = this.down('textfield[name=ID]').getValue();
+		return Ext.create('NextThought.model.ClassInfo', v, v.OID, v);
 
-		r = Ext.create('NextThought.model.ClassInfo', v, v.OID, v);
-		r.set('Description', this.down('textfield[name=Description]').getValue());
-		r.set('Sections', sections);
-		return r;
 	},
 
 
