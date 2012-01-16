@@ -65,6 +65,45 @@ Ext.define('NextThought.util.Globals',
 	},
 
 
+	/**
+	 * Load a stylesheet file (.css) into the DOM.
+	 *
+	 * @param url
+	 * @param [onLoad]
+	 * @param [onFail]
+	 * @param [scope] Context object to execute the onLoad/onFail callbacks
+	 */
+	loadStyleSheet: function(url, onLoad, onFail, scope){
+		var t, i=0,
+			head = typeof document !== 'undefined' &&
+				(document.head || document.getElementsByTagName('head')[0]),
+			link = document.createElement('link'),
+			call = function(cb){
+				clearInterval(t);
+				if(cb) cb.call(scope||window,link);
+			},
+			check = function (){
+				i++;
+				//30 seconds, if each interval is 10ms
+				if( i>3000 ) call(onFail);
+				else if( link.style ) call(onLoad);
+			};
+
+		link.rel='stylesheet';
+		link.type = 'text/css';
+		link.href = url;
+
+		head.appendChild(link);
+
+		if(onLoad || onFail)
+			t = setInterval(check,10);
+
+		return link;
+	},
+
+
+
+
 	removeLoaderSplash: function(){
 		var me = this;
 		setTimeout(
