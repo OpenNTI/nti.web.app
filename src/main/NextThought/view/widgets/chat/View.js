@@ -6,7 +6,6 @@ Ext.define('NextThought.view.widgets.chat.View', {
         'NextThought.view.widgets.chat.Log',
         'NextThought.view.widgets.chat.OccupantsList',
         'NextThought.view.widgets.chat.ReplyTo',
-        'NextThought.view.widgets.chat.OnDeck',
         'NextThought.view.widgets.chat.PinnedMessageView',
         'NextThought.util.Classroom',
         'NextThought.cache.IdCache'
@@ -70,10 +69,11 @@ Ext.define('NextThought.view.widgets.chat.View', {
         if (!this.up('classroom-content') && ClassroomUtils.isClassroomId(ri.get('ContainerId'))) {
             this.down('chat-reply-to').showClassroomButton();
         }
+		/*
         else if (ClassroomUtils.isClassroomId(ri.get('ContainerId'))){
             this.down('[region=center]').add({xtype:'on-deck-view', hidden:true});
         }
-
+		*/
 		this.initOccupants();
     },
 

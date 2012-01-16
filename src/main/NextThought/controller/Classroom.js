@@ -228,12 +228,10 @@ Ext.define('NextThought.controller.Classroom', {
 	onModerateClicked: function(btn) {
 		var content = btn ? btn.up('classroom-content') : this.getClassroom(),
 			mod = content.down('chat-log-view[moderated]'),
-			ondeck = content.down('on-deck-view'),
 			view = content.down('chat-view');
 
-
+		content.showOnDeck();
 		mod.show();
-		ondeck.show();
 		view.initOccupants(true);
 	},
 

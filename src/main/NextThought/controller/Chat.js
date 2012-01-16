@@ -26,7 +26,8 @@ Ext.define('NextThought.controller.Chat', {
 		'widgets.chat.PinnedMessageView',
 		'widgets.chat.Friends',
 		'widgets.chat.FriendEntry',
-		'widgets.chat.OnDeck',
+		'widgets.chat.OnDeckEntry',
+		'widgets.chat.OnDeckLog',
 		'windows.NoteEditor'
 	],
 
@@ -117,9 +118,8 @@ Ext.define('NextThought.controller.Chat', {
 			'chat-pinned-message-view toolbar button' : {
 				'click': this.clearPinnedMessages
 			},
-			'on-deck-view' : {
-				'advance-next': this.send
-		//function(){console.log('next message from script', arguments);}
+			'on-deck-log-entry' : {
+				'script-to-chat': this.send
 			}
 
 		},{});
@@ -277,7 +277,7 @@ Ext.define('NextThought.controller.Chat', {
 
 
 	send: function(f, mid, channel, recipients) {
-		var room = f.up('chat-view').roomInfo,
+		var room = f.roomInfo || f.up('chat-view').roomInfo,
 			val = f.getValue();
 
 		if (Ext.isEmpty(val)) return;

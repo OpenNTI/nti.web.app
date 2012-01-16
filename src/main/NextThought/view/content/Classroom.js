@@ -3,7 +3,8 @@ Ext.define('NextThought.view.content.Classroom', {
 	alias: 'widget.classroom-content',
 	requires: [
 		'NextThought.view.widgets.chat.View',
-		'NextThought.view.widgets.classroom.Management'
+		'NextThought.view.widgets.classroom.Management',
+		'NextThought.view.widgets.chat.OnDeckLog'
 	],
 
 	cls: 'x-classroom-panel',
@@ -34,11 +35,17 @@ Ext.define('NextThought.view.content.Classroom', {
 			'WHISPER' : this.onDefault
 		};
 
-		this.add({xtype: 'chat-view', flex:1});
+		this.add({xtype: 'chat-view', flex:2});
 		this.add({xtype: 'classroom-management', roomInfo: this.roomInfo, width: 500});
 
 		this.down('chat-view').changed(this.roomInfo);
 	},
+
+
+	showOnDeck: function() {
+		this.insert(0, {xtype: 'chat-on-deck-log-view', flex: 1, roomInfo: this.roomInfo});
+	},
+
 
 	onContent: function(msg, opts) {
 		var ntiid = msg.get('body').ntiid;
