@@ -21,7 +21,6 @@
 }
 
 .x-on-deck-log-entry:hover,
-.x-on-deck-log-entry.selected,
 .x-chat-log-entry:hover,
 .x-chat-log-entry.selected,
 .x-chat-friend-entry:hover,
@@ -52,6 +51,10 @@
 	background-image: url("../images/chat/chat-16.png");
 }
 
+.promoted .x-on-deck-log-entry {
+	background-color: #cecece !important;
+}
+
 .shadowed .x-chat-log-entry.selected,
 .shadowed .x-chat-log-entry:hover {
 	background-color: #cecece !important;
@@ -66,7 +69,8 @@
 .x-chat-log-entry span.reply {
 	position: absolute;
 	display: none;
-	right: 5px; top: 5px;
+	right: 5px;
+	top: 5px;
 	height: 24px;
 	cursor: pointer;
 	overflow: hidden;
@@ -93,7 +97,7 @@
 	background: url("../images/chat/re-16.png");
 }
 .x-on-deck-log-entry span.script-to-chat {
-	background: url("../images/chat/re-16.png");
+	background: url("../images/chat/script-promote-16.png");
 }
 .x-chat-log-entry span.pin{
 	width:22px;

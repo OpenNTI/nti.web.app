@@ -72,5 +72,15 @@ Ext.define('NextThought.view.widgets.chat.OnDeckLog', {
 
 		this.script = Ext.clone(s);
 		this.addMessage(s.get('body'));
+	},
+
+	scrollToFirstNonPromotedEntry: function() {
+		var entries = this.query('on-deck-log-entry[promoted=false]'),
+			o = entries[0] ? entries[0] : null;
+
+		if (!o) return;
+
+		o.el.scrollIntoView(this.el.first('.x-panel-body'));
+
 	}
 });

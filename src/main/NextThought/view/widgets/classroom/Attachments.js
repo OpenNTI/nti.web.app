@@ -5,10 +5,9 @@ Ext.define('NextThought.view.widgets.classroom.Attachments', {
 	],
 
 	cls: 'classroom-attachments-view',
-	border: true,
 	defaults: {border: false},
 	title: 'Attachments',
-
+	border: true,
 	layout: 'vbox',
 
 	items: [

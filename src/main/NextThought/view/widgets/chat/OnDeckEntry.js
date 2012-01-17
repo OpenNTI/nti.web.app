@@ -18,6 +18,8 @@ Ext.define('NextThought.view.widgets.chat.OnDeckEntry', {
 		'</div>'
 		),
 
+	promoted: false,
+
 	renderSelectors: {
 		box: 'div.x-on-deck-log-entry',
 		text: 'span.body-text'
@@ -53,13 +55,14 @@ Ext.define('NextThought.view.widgets.chat.OnDeckEntry', {
 	},
 
 	click: function(event, target, eOpts){
-		console.log('somebody clicked dis!');
-
 		if (!this.box) return; //happens when a WB is clicked...
 
 		target = Ext.get(target);
 		var inBox = target && this.box.contains(target);
-		if(inBox && target.hasCls('promote')){
+		if(inBox && target.hasCls('script-to-chat')){
+			console.log('applying promoted class to entry here instead of when the msg comes back because script is currently dummied up, move once scripts are savable');
+			this.addCls('promoted');
+			this.promoted = true;
 			this.fireEvent('script-to-chat', this, null, null, null);
 		}
 	},

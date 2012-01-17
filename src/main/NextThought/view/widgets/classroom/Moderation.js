@@ -11,7 +11,7 @@ Ext.define('NextThought.view.widgets.classroom.Moderation', {
 
 	layout: {type: 'hbox', align: 'stretch'},
 	border: false,
-	defaults: {border: false},
+	//defaults: {border: false},
 
 	items: [
 		{
