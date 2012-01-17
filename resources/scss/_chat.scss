@@ -62,7 +62,7 @@
 	color: black;
 }
 
-.x-on-deck-log-entry span.buttons
+.x-on-deck-log-entry span.buttons,
 .x-chat-log-entry span.reply {
 	position: absolute;
 	display: none;
@@ -72,7 +72,7 @@
 	overflow: hidden;
 }
 
-.x-on-deck-log-entry .buttons span
+.x-on-deck-log-entry .buttons span,
 .x-chat-log-entry .reply span {
     width:16px;
     height:16px;

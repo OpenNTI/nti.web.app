@@ -117,10 +117,11 @@ rm -f all-classes.js
 
 # concat all code together
 cat $EXT/ext.js > build/full.js
+echo "" >> build/full.js
 cat app-all.js >> build/full.js
 
 #minify code
-slimit -m build/full.js > build/app.js
+slimit build/full.js > build/app.js
 
 #remove temp
 rm build/full.js
