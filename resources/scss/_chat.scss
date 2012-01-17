@@ -20,6 +20,8 @@
 	background: url('../images/chat/flag-16-disabled.png');
 }
 
+.x-on-deck-log-entry:hover,
+.x-on-deck-log-entry.selected,
 .x-chat-log-entry:hover,
 .x-chat-log-entry.selected,
 .x-chat-friend-entry:hover,
@@ -60,6 +62,7 @@
 	color: black;
 }
 
+.x-on-deck-log-entry span.buttons
 .x-chat-log-entry span.reply {
 	position: absolute;
 	display: none;
@@ -69,13 +72,27 @@
 	overflow: hidden;
 }
 
-.x-chat-log-entry .reply span{width:16px;height:16px;margin:2px;display: inline-block;vertical-align:middle;oopacity:0.4;}
-.x-chat-log-entry .reply span:hover{opacity: 1;}
+.x-on-deck-log-entry .buttons span
+.x-chat-log-entry .reply span {
+    width:16px;
+    height:16px;
+    margin:2px;
+    display: inline-block;
+    vertical-align:middle;
+    opacity:0.4;
+}
+.x-on-deck-log-entry .buttons span:hover,
+.x-chat-log-entry .reply span:hover {
+    opacity: 1;
+}
 
 .x-chat-log-entry span.reply-public{width:22px;height:22px;background-size:22px 22px;
 	background: url("../images/chat/re-32.png");
 }
 .x-chat-log-entry span.reply-whisper {
+	background: url("../images/chat/re-16.png");
+}
+.x-on-deck-log-entry span.script-to-chat {
 	background: url("../images/chat/re-16.png");
 }
 .x-chat-log-entry span.pin{
@@ -90,6 +107,7 @@
 	display: inline-block;
 }
 
+.x-on-deck-log-entry:hover span.buttons,
 .x-chat-log-entry:hover span.reply {
 	display: block;
 }
@@ -110,7 +128,8 @@
 }
 
 .x-chat-friend-entry,
-.x-chat-log-entry {
+.x-chat-log-entry,
+.x-on-deck-log-entry {
 	position: relative;
 	overflow: hidden;
 	padding: 10px 5px;
@@ -127,6 +146,7 @@
 }
 
 .x-chat-log-entry div,
+.x-on-deck-log-entry div,
 .x-chat-friend-entry div {
 	margin-left: 22px;
 }

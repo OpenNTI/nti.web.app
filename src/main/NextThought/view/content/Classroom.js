@@ -47,6 +47,16 @@ Ext.define('NextThought.view.content.Classroom', {
 	},
 
 
+	showMod: function() {
+		this.insert(0,{
+			xtype: 'chat-log-view',
+			title: 'moderation',
+			flex: 1,
+			moderated: true
+		});
+	},
+
+
 	onContent: function(msg, opts) {
 		var ntiid = msg.get('body').ntiid;
 
@@ -73,7 +83,7 @@ Ext.define('NextThought.view.content.Classroom', {
 		var r = msg.get('ContainerId'),
 			moderated = !!('moderated' in opts),
 			v = this.down('chat-view'),
-			mlog = this.down('classroom-moderation').down('chat-log-view');
+			mlog = this.down('chat-log-view');
 
 		if (moderated) {
 			mlog.addMessage(msg);

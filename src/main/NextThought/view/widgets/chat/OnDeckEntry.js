@@ -9,6 +9,9 @@ Ext.define('NextThought.view.widgets.chat.OnDeckEntry', {
 
 	renderTpl: new Ext.XTemplate(
 		'<div class="x-on-deck-log-entry">',
+			'<span class="buttons">',
+				'<span class="script-to-chat"></span>',
+			'</span>',
 			'<div>',
 				'<span class="body-text">{body}</span> ',
 			'</div>',
@@ -17,7 +20,6 @@ Ext.define('NextThought.view.widgets.chat.OnDeckEntry', {
 
 	renderSelectors: {
 		box: 'div.x-on-deck-log-entry',
-		name: '.x-chat-log-entry span.name',
 		text: 'span.body-text'
 	},
 
@@ -26,12 +28,10 @@ Ext.define('NextThought.view.widgets.chat.OnDeckEntry', {
 		this.update(this.message);
 	},
 
-	afterRender: function() {
-		this.el.on('dblclick', this.sendToChat, this);
-	},
 
-	sendToChat: function() {
-		this.fireEvent('script-to-chat', this, null, null, null);
+	afterRender: function(){
+		this.callParent(arguments);
+		this.el.on('click', this.click, this);
 	},
 
 	update: function(m){
@@ -49,6 +49,18 @@ Ext.define('NextThought.view.widgets.chat.OnDeckEntry', {
 
 		if(this.rendered){
 		   me.text.update(me.renderData.body);
+		}
+	},
+
+	click: function(event, target, eOpts){
+		console.log('somebody clicked dis!');
+
+		if (!this.box) return; //happens when a WB is clicked...
+
+		target = Ext.get(target);
+		var inBox = target && this.box.contains(target);
+		if(inBox && target.hasCls('promote')){
+			this.fireEvent('script-to-chat', this, null, null, null);
 		}
 	},
 

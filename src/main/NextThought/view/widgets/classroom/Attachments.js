@@ -14,7 +14,7 @@ Ext.define('NextThought.view.widgets.classroom.Attachments', {
 	items: [
 		{html: 'Monet.jpg'},
 		{html: 'NYC-Arts.ppt'},
-		{html: 'Leonardo DiVinchi.pdf'},
+		{html: 'Leonardo.pdf'},
 		{html: 'Some other attachment.xls'}
 	]
 });

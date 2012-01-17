@@ -9,37 +9,21 @@ Ext.define('NextThought.view.widgets.classroom.Moderation', {
 
 	cls: 'nti-classroom-moderation',
 
-	layout: 'border',
+	layout: {type: 'hbox', align: 'stretch'},
 	border: false,
 	defaults: {border: false},
 
 	items: [
 		{
-			layout: {
-				type: 'hbox',
-				align: 'stretch'
-			},
-			region: 'center',
-			items: [
-			{
-				title: 'Occupants',
-				xtype: 'chat-occupants-list',
-				flex: 1,
-				autoHide: false
-			},
-			{
-				xtype: 'chat-log-view',
-				title: 'moderation',
-				flex: 2,
-				moderated: true,
-				hidden: true
-			}]
+			title: 'Occupants',
+			xtype: 'chat-occupants-list',
+			flex: 1,
+			autoHide: false
 		},
 		{
 			xtype: 'classroom-attachments-view',
 			title: 'attachments',
-			region: 'south',
-			split: true
+			flex: 1
 		}
 	]
 });
