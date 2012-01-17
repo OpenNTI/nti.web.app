@@ -85,7 +85,9 @@ $SED 's/<script.\+\?ext-debug.\+\?\/script>//g' build/index.html
 
 #add revision cache busting param (so updates are guaranteed to be requested)
 $SED "s/\.css/\.css\?v=$REVISION/g" build/index.html
+$SED "s/\.css/\.css\?v=$REVISION/g" build/hangout-app.xml
 $SED "s/\.js/\.js\?v=$REVISION/g" build/index.html
+$SED "s/\.js/\.js\?v=$REVISION/g" build/hangout-app.xml
 
 # fire up an http server in the background
 echo "Starting SimpleHTTP Server"
@@ -121,7 +123,7 @@ cat app-all.js >> build/full.js
 slimit -m build/full.js > build/app.js
 
 #remove temp
-rm full.js
+rm build/full.js
 rm app-all.js
 
 # package build
