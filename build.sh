@@ -61,6 +61,10 @@ mkdir build/$EXT
 mkdir build/$EXT/resources
 mkdir build/$EXT/resources/themes
 
+#TODO: change to python-scss command
+#Compile SCSS to CSS
+sass resources/scss/main.scss:resources/css/main.css
+
 # copy files into build dest
 cp -R resources build
 cp -R $EXT/resources/css build/$EXT/resources
