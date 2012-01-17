@@ -10,7 +10,6 @@
     <base href="http://alpha.nextthought.com/NextThoughtWebApp/">
     <script src="//hangoutsapi.appspot.com/static/hangout.js"></script>
     <link rel="stylesheet" type="text/css" href="http://alpha.nextthought.com/NextThoughtWebApp/ext-4.0.7/resources/css/ext-all-gray.css">
-    <link rel="stylesheet" type="text/css" href="http://alpha.nextthought.com/NextThoughtWebApp/resources/css/panel-reset.css">
     <link rel="stylesheet" type="text/css" href="http://alpha.nextthought.com/NextThoughtWebApp/resources/css/main.css">
 
     <div id="loading-mask"></div><div id="loading"><div class="loading-indicator">Loading...</div></div>
