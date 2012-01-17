@@ -1,21 +1,22 @@
+@import url("../../ext-4.0.7/resources/css/ext-all-gray.css");
 //For the reader panel, this must be first
-@import "panel-reset";
+@import url("panel-reset");
 
-@import "loading-masks";
-@import "nti-override";
-@import "profile-library";
-@import "libraryview";
-@import "groupsview";
-@import "filter-control";
-@import "login";
-@import "header";
-@import "custom-icon-with-text-widgets";
-@import "token";
-@import "breadcrumb";
-@import "chat";
-@import "annotations";
-@import "column-widgets";
-@import "link-styles";
-@import "whiteboard";
-@import "classroom";
+@import url("loading-masks");
+@import url("nti-override");
+@import url("profile-library");
+@import url("libraryview");
+@import url("groupsview");
+@import url("filter-control");
+@import url("login");
+@import url("header");
+@import url("custom-icon-with-text-widgets");
+@import url("token");
+@import url("breadcrumb");
+@import url("chat");
+@import url("annotations");
+@import url("column-widgets");
+@import url("link-styles");
+@import url("whiteboard");
+@import url("classroom");
 

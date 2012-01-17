@@ -63,13 +63,12 @@ mkdir build/$EXT/resources/themes
 
 #TODO: change to python-scss command
 #Compile SCSS to CSS
-sass resources/scss/main.scss:resources/css/main.css
+gencss.sh
 
 # copy files into build dest
 cp -R resources build
 cp -R $EXT/resources/css build/$EXT/resources
 cp -R $EXT/resources/themes/images build/$EXT/resources/themes
-cp $EXT/ext.js build/$EXT
 
 # clean out .svn directories and hidden files
 cd build
@@ -82,8 +81,11 @@ cp config-example.js build/config.js
 
 # change the index.html to point to build resources.
 $SED 's/\"src\/main\/app\.js\"/\"app\.js\"/g' build/index.html
-$SED 's/ext-debug\.js\"/ext\.js\"/g' build/index.html
+$SED 's/<script.\+\?ext-debug.\+\?\/script>//g' build/index.html
 
+#add revision cache busting param (so updates are guaranteed to be requested)
+$SED "s/\.css/\.css\?v=$REVISION/g" build/index.html
+$SED "s/\.js/\.js\?v=$REVISION/g" build/index.html
 
 # fire up an http server in the background
 echo "Starting SimpleHTTP Server"
@@ -97,11 +99,12 @@ echo "Stopping Simple HTTP Server"
 HPID=`jobs -l 1 | awk '{print $2}'`
 kill -9 $HPID
 
-
 # modify project file with values instead of 'placeholders'
 $SED 's/\"Project Name\"/\"Application\"/g' app.jsb3
 $SED 's/Company Name\"/NextThought LLC\"/g' app.jsb3
 $SED 's/\"app.js\"/\"src\/main\/app\.js\"/g' app.jsb3
+#don't let sencha command do the compression...
+$SED 's/\"compress\"\: true,/\"compress\"\: false,/g' app.jsb3
 
 # perform build
 sencha build -p app.jsb3 -d .
@@ -110,8 +113,16 @@ sencha build -p app.jsb3 -d .
 rm -f app.jsb3
 rm -f all-classes.js
 
-# move resultant minified code into build dest
-mv app-all.js build/app.js
+# concat all code together
+cat $EXT/ext.js > build/full.js
+cat app-all.js >> build/full.js
+
+#minify code
+slimit -m build/full.js > build/app.js
+
+#remove temp
+rm full.js
+rm app-all.js
 
 # package build
 if [ "$ZIP" = "true" ]; then
