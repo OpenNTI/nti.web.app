@@ -79,11 +79,12 @@ Ext.define('NextThought.view.windows.ClassroomChooser', {
 			x = xy[0],
 			y = xy[1];
 
-		if(x < 0) x = 0;
-		if(y < 0) y = 0;
+		if(x < 0){x = 0;}
+		if(y < 0){y = 0;}
 
-		if(!x || !y)//only setPosition if x or y are 0
+		if(!x || !y) {//only setPosition if x or y are 0
 			me.setPosition(x,y);
+		}
 
 		return me;
 	},

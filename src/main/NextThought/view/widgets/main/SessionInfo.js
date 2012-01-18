@@ -107,7 +107,7 @@ Ext.define('NextThought.view.widgets.main.SessionInfo', {
 
 	_hideMenu: function(){
 		var m = this._menu;
-		this._hideMenuTimout = setTimeout(function(){m.hide()},100);
+		this._hideMenuTimout = setTimeout(function(){m.hide();},100);
 	},
 
 	_showMenu: function(){

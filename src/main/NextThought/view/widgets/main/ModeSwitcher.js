@@ -31,7 +31,8 @@ Ext.define('NextThought.view.widgets.main.ModeSwitcher', {
 
 	afterRender: function(){
 		this.callParent(arguments);
-		if(this.items.length)
+		if(this.items.length){
 			this.setWidth(this.items.get(0).getWidth()*this.items.length);
+		}
 	}
 });
