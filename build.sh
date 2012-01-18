@@ -44,12 +44,12 @@ SENCHA_TOOLS=${SENCHA_TOOLS:-`which sencha | sed -e 's/command\/sencha//g'`}
 PHANTOMJS=${PHANTOMJS:-`which phantomjs`}
 
 if [ -z "$SENCHA_TOOLS" ]; then
-    echo "Sencha Tools are required"
-    exit 1
+	echo "Sencha Tools are required"
+	exit 1
 fi
 
 if [ -z "$PHANTOMJS" ]; then
-    echo "PhantomJS not found..."
+	echo "PhantomJS not found..."
 fi
 
 if [[ "$PHANTOMJS" != $SENCHA_TOOLS* ]] ; then

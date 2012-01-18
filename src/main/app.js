@@ -29,6 +29,12 @@ Ext.application({
 	],
 
 	launch: function(){
+		function start() {
+			Globals.applyHooks();
+			Globals.removeLoaderSplash();
+			NextThought.controller.Session.login(app);
+			NextThought.isReady = true;
+		}
 
 		Globals.loadScript(_AppConfig.server.host+'/socket.io/static/socket.io.js');
 		Globals.loadScript(_AppConfig.server.host+'/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML', function(){
@@ -67,14 +73,8 @@ Ext.application({
 				}
 			},100);
 		}
-		else start();
-
-
-		function start() {
-			Globals.applyHooks();
-			Globals.removeLoaderSplash();
-			NextThought.controller.Session.login(app);
-			NextThought.isReady = true;
+		else {
+			start();
 		}
 	}
 });

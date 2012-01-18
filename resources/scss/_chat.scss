@@ -1,3 +1,4 @@
+$ext-text-entry: '#{$exttheme}/form/text-bg.gif';
 
 .chat {
 	background: url('../images/chat/speachbubble.png');
@@ -78,16 +79,16 @@
 
 .x-on-deck-log-entry .buttons span,
 .x-chat-log-entry .reply span {
-    width:16px;
-    height:16px;
-    margin:2px;
-    display: inline-block;
-    vertical-align:middle;
-    opacity:0.4;
+	width:16px;
+	height:16px;
+	margin:2px;
+	display: inline-block;
+	vertical-align:middle;
+	opacity:0.4;
 }
 .x-on-deck-log-entry .buttons span:hover,
 .x-chat-log-entry .reply span:hover {
-    opacity: 1;
+	opacity: 1;
 }
 
 .x-chat-log-entry span.reply-public{width:22px;height:22px;background-size:22px 22px;
@@ -195,7 +196,7 @@
 }
 
 .reply-to-line .chat-entry .x-form-item-body {
-	background: url('../../ext-4.0.7/resources/themes/images/gray/form/text-bg.gif') repeat-x;
+	background: url($ext-text-entry) repeat-x;
 	height: 30px !important;
 }
 

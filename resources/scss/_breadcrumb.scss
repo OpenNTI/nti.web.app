@@ -1,26 +1,35 @@
+$arrow-right: '#{$exttheme}/menu/menu-parent.gif';
+$next-arrow-disabled: '../images/page-next-disabled.gif';
+$prev-arrow-disabled: '../images/page-prev-disabled.gif';
+$next-arrow: '../images/page-next.gif';
+$prev-arrow: '../images/page-prev.gif';
 
 .x-breadcrumbs-bar {
 	.x-btn-arrow {
-		background-image: url('../../ext-4.0.7/resources/themes/images/gray/menu/menu-parent.gif');
+		background-image: url($arrow-right);
 		padding-right: 20px;
 	}
 
-	.x-breadcrumb-end .x-btn-arrow {
-		background-image: none;
-		padding-right: 5px;
+	.x-breadcrumb-end {
+		.x-btn-arrow {
+			background-image: none;
+			padding-right: 5px;
+		}
 	}
 
-	.x-item-disabled .breadcrumb-next {
-		background: url(../images/page-next-disabled.gif);
+	.x-item-disabled {
+		.breadcrumb-next {
+			background: url($next-arrow-disabled);
+		}
+		.breadcrumb-prev {
+			background: url($prev-arrow-disabled);
+		}
 	}
 
 	.breadcrumb-next{
-		background: url(../images/page-next.gif);
-	}
-	.x-item-disabled .breadcrumb-prev{
-		background: url(../images/page-prev-disabled.gif);
+		background: url($next-arrow);
 	}
 	.breadcrumb-prev{
-		background: url(../images/page-prev.gif);
+		background: url($prev-arrow);
 	}
 }

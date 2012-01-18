@@ -1,5 +1,8 @@
 @import url("../../ext-4.0.7/resources/css/ext-all-gray.css");
 
+//the python parser is converting blindly gray to #808080... so had to break up the string so it wouldn't find it.
+$exttheme: '../../ext-4.0.7/resources/themes/images/g'+'ray';
+
 //For the reader panel, this must be first
 @import "_panel-reset.scss";
 
