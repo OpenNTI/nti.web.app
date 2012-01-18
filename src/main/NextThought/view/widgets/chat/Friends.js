@@ -29,7 +29,19 @@ Ext.define('NextThought.view.widgets.chat.Friends', {
 
 
 		groups.each(function(g){
-			if(/everyone/i.test(g.getId())) return; //skip everyone group
+
+			function clean(dirty, _clean, obj, key){
+				var k;
+				obj[key] = _clean;
+				for(k in dirty){
+					if(dirty.hasOwnProperty(k)){
+						obj.remove(dirty[k]);
+						delete dirty[k];
+					}
+				}
+			}
+
+			if(/everyone/i.test(g.getId())){return;} //skip everyone group
 
 			var gid = IdCache.getIdentifier(g.getId()),
 				groupPanel = me.down('panel[groupId='+gid+']'),
@@ -83,15 +95,5 @@ Ext.define('NextThought.view.widgets.chat.Friends', {
 		});
 
 		clean(prevGroups, newGroups, me, '_groups');
-
-
-		function clean(dirty, _clean, obj, key){
-			obj[key] = _clean;
-			for(var k in dirty){
-				if(!dirty.hasOwnProperty(k))continue;
-				obj.remove(dirty[k]);
-				delete dirty[k];
-			}
-		}
 	}
 });

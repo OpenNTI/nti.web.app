@@ -26,7 +26,7 @@ Ext.define('NextThought.view.widgets.chat.FriendEntry', {
 
 		this.update(this.user);
 
-		this.renderData['cls'] = this.cls || '';
+		this.renderData.cls = this.cls || '';
 	},
 
 	render: function() {
@@ -52,7 +52,7 @@ Ext.define('NextThought.view.widgets.chat.FriendEntry', {
 
 	_setupMenu: function() {
 		//Only do this the entry is not me
-		if (_AppConfig.userObject.getId() == this.user.getId() || this.noMenu) return;
+		if (_AppConfig.userObject.getId() === this.user.getId() || this.noMenu){return;}
 
 		this._menu = Ext.create('Ext.menu.Menu', {items: this._buildMenu()});
 
@@ -112,9 +112,9 @@ Ext.define('NextThought.view.widgets.chat.FriendEntry', {
 			this.name.update( user.get('alias')||u.get('realname') );
 		}
 		else {
-			this.renderData['Presence'] = status.toLowerCase();
-			this.renderData['avatarURL'] = user.get('avatarURL');
-			this.renderData['name'] = user.get('alias')||user.get('realname');
+			this.renderData.Presence = status.toLowerCase();
+			this.renderData.avatarURL = user.get('avatarURL');
+			this.renderData.name = user.get('alias')||user.get('realname');
 		}
 
 		user.on('changed', this.update, this);
@@ -122,7 +122,7 @@ Ext.define('NextThought.view.widgets.chat.FriendEntry', {
 
 	_hideMenu: function(){
 		var m = this._menu;
-		this._hideMenuTimout = setTimeout(function(){m.hide()},100);
+		this._hideMenuTimout = setTimeout(function(){m.hide();},100);
 	},
 
 	_showMenu: function(){

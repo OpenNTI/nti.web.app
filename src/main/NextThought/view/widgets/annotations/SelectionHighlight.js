@@ -38,14 +38,17 @@ Ext.define('NextThought.view.widgets.annotations.SelectionHighlight', {
 	},
 
 	render: function(){
+		var w = this._canvas.width,
+			c, canvasXY, ctx;
+
 		if(!this._sels){
 			return;
 		}
 
-		this._canvas.width = (this._canvas.width);
-		var c = this._canvas,
-			canvasXY = Ext.get(c).getXY(),
-			ctx = c.getContext("2d");
+		this._canvas.width = w;
+		c = this._canvas;
+		canvasXY = Ext.get(c).getXY();
+		ctx = c.getContext("2d");
 
 		ctx.fillStyle = this._hexToRGBA(this._color);
 
@@ -64,7 +67,7 @@ Ext.define('NextThought.view.widgets.annotations.SelectionHighlight', {
 	},
 
 	_hexToRGBA: function(hex) {
-		if ('yellow' == hex) {
+		if ('yellow' === hex) {
 			hex = 'FFFF00';
 		}
 

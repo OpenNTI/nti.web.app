@@ -55,8 +55,9 @@ Ext.define( 'NextThought.view.widgets.annotations.Note', {
 		record.children = record.children || children;
 		record._parent = record._parent || parent;
 
-		if(old !== record)
+		if(old !== record){
 			old.un('updated', this.noteUpdated, this);
+		}
 	},
 
 
@@ -64,10 +65,12 @@ Ext.define( 'NextThought.view.widgets.annotations.Note', {
 		var me = this,
 			c = Ext.get(me.noteDiv);
 
-		if(show) c.show(); else c.hide();
+		if(show){c.show();}
+		else{c.hide();}
 
-		if(me.noteCmp)
+		if(me.noteCmp){
 			me.noteCmp.doLayout();
+		}
 
 		me.callParent(arguments);
 	},
@@ -84,11 +87,12 @@ Ext.define( 'NextThought.view.widgets.annotations.Note', {
 	_buildMenu: function(){
 		var items = [];
 
-		if(this._isMine)
+		if(this._isMine){
 			items.push({
 				text : 'Remove Note',
 				handler: Ext.bind(this.remove, this)
 			});
+		}
 		return this.callParent([items]);
 	},
 
@@ -124,7 +128,7 @@ Ext.define( 'NextThought.view.widgets.annotations.Note', {
 
 	render: function(){
 		try{
-			if(!this.noteCmp) return;
+			if(!this.noteCmp){return;}
 
 			var me= this,
 				p = Ext.get(me._cnt),
@@ -153,15 +157,18 @@ Ext.define( 'NextThought.view.widgets.annotations.Note', {
 			// c.alignTo(a, 'tl-bl?',[0,-h]);
 			c.moveTo(p.getLeft()+p.getPadding('l'),a.getTop()+(adjust?0:extra));
 			//move the nib to the top-aligning corner of the note container
-			if (me._img)
+			if (me._img){
 				Ext.get(me._img).moveTo(p.getLeft(), c.down('.x-nti-note img').getTop());
+			}
 
 			//always move to the end
-			if(c.dom.nextSibling)
+			if(c.dom.nextSibling){
 				me._cnt.appendChild(c.dom);
+			}
 
-			if (me.noteCmp)
+			if (me.noteCmp){
 				me.noteCmp.doLayout();
+			}
 
 		}
 		catch(e){

@@ -67,7 +67,7 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 
 	savePhantom: function(){
 		var me = this;
-		if(!me._record.phantom)return;
+		if(!me._record.phantom){return;}
 		me.isSaving = true;
 		me._record.save({
 			scope: me,
@@ -175,7 +175,7 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 			return;
 		}
 
-		if(!this._isVisible)return;
+		if(!this._isVisible){return;}
 
 		if(this.rendering){
 			console.warn('duplicate call');
@@ -212,7 +212,7 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 
 		for(; i>=0; i--){
 			//attempt to skip drawing rects that are probably not just the line
-			if(s[i].right == r.right && s[i].height>avgH) continue;
+			if(s[i].right === r.right && s[i].height>avgH){continue;}
 
 			//TODO: keep track of where we've drawn for this highlight, and don't redraw over it if there are more than
 			// one rect over a space.
@@ -225,8 +225,8 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 	},
 
 
-	statics : {
-		_highlightEvents: new Ext.util.Observable(),
+	statics: {
+		_highlightEvents: Ext.create('Ext.util.Observable'),
 		_sources : [],
 		_queue : [],
 
@@ -234,20 +234,20 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 			this._queue.push(op);
 		},
 
-		renderCanvas: function(){
-			var	c = Ext.query('#canvas-highlight-container canvas')[0],
+		renderCanvas: function() {
+			var c = Ext.query('#canvas-highlight-container canvas')[0],
 				ctx = c ? c.getContext("2d") : null,
 				w = c ? c.width : 0,
 				q = Ext.clone(this._queue);
+
 			this._queue = [];
 
-			if (!ctx) return;
+			if (!ctx){return;}
 
 			//reset the context
 			c.width = w;
 
 			while(q.length){ (q.pop())(ctx); }
-
 		},
 
 		addSource: function(userId){

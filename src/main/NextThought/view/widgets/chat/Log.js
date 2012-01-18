@@ -97,7 +97,7 @@ Ext.define('NextThought.view.widgets.chat.Log', {
 
 	reject: function() {
 		Ext.each(this.query(this.entryType), function(f){
-			if(f.getValue()) this.remove(f);
+			if(f.getValue()){this.remove(f);}
 		},this);
 	},
 
@@ -107,7 +107,7 @@ Ext.define('NextThought.view.widgets.chat.Log', {
 			c = m.ownerCt;
 			c.remove(m);
 //			console.debug('c=', c);
-			if(c.xtype != 'chat-log-view' && c.items.getCount() == 0) c.destroy();
+			if(c.xtype !== 'chat-log-view' && c.items.getCount() === 0){c.destroy();}
 		}
 
 	},
@@ -117,7 +117,7 @@ Ext.define('NextThought.view.widgets.chat.Log', {
 			rid = msg.get('inReplyTo'),
 			m = id ? this.down(this.getMessageQuery(id)) : null,
 			mStat = msg.get('Status');
-		if (!id) console.warn('This message has no OID, cannot be targeted!', msg);
+		if (!id){console.warn('This message has no OID, cannot be targeted!', msg);}
 
 		if (m){
 			m.update(msg);
@@ -139,7 +139,7 @@ Ext.define('NextThought.view.widgets.chat.Log', {
 			}
 		}
 
-		if (mStat == 'st_SHADOWED') {
+		if (mStat === 'st_SHADOWED') {
 			//this is a shadowed message, make sure to add a class to it
 			m.addCls('shadowed');
 		}
@@ -159,8 +159,9 @@ Ext.define('NextThought.view.widgets.chat.Log', {
 
 		entry = input? input : entry;
 
-		if (entry.el)
+		if (entry.el){
 			entry.el.scrollIntoView(this.el.first('.x-panel-body'));
+		}
 	},
 
 	addNews: function(msg) {

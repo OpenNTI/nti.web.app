@@ -59,9 +59,9 @@ Ext.define('NextThought.view.widgets.chat.LogEntry', {
 		me.message = m;
 		me.messageId = IdCache.getIdentifier(m.getId());
 
-		me.renderData['time'] = Ext.Date.format(m.get('Last Modified'), 'g:i:sa');
-		me.renderData['name'] = 'resolving...';
-		me.renderData['body'] = AnnotationUtils.compileBodyContent(m);
+		me.renderData.time = Ext.Date.format(m.get('Last Modified'), 'g:i:sa');
+		me.renderData.name = 'resolving...';
+		me.renderData.body = AnnotationUtils.compileBodyContent(m);
 
 		if(this.rendered){
 		   me.text.update(me.renderData.body);
@@ -115,8 +115,8 @@ Ext.define('NextThought.view.widgets.chat.LogEntry', {
 			this.name.update(name);
 		}
 		else {
-			this.renderData['name'] = name;
-			this.renderData['icon'] = i;
+			this.renderData.name = name;
+			this.renderData.icon = i;
 		}
 
 	},
@@ -129,12 +129,13 @@ Ext.define('NextThought.view.widgets.chat.LogEntry', {
 				if (sourceEl) {
 					d = sourceEl.cloneNode(true);
 					d.id = Ext.id();
-					return v.dragData = {
+					v.dragData = {
 						sourceEl: sourceEl,
 						repairXY: Ext.fly(sourceEl).getXY(),
 						ddel: d,
 						data: v.message.data
 					};
+					return v.dragData;
 				}
 			},
 
