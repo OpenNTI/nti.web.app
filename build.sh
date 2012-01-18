@@ -63,7 +63,7 @@ fi
 
 echo -n "Validating javascript..."
 # error code not being friendly, just capture the output and string compare :/
-if [[ "`validatejs.sh`" != "" ]]; then
+if [[ "`./validatejs.sh`" != "" ]]; then
 	echo "errors, javascript compression will not work until these are fixed"
 	exit 1
 else
@@ -88,7 +88,7 @@ mkdir $DEST/$EXT/resources/themes
 
 #TODO: change to python-scss command
 #Compile SCSS to CSS
-gencss.sh
+./gencss.sh
 
 # copy files into build dest
 cp -R resources $DEST
