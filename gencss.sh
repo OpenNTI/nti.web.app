@@ -2,22 +2,22 @@
 FILE=resources/scss/main.scss
 PATH=$PATH:/opt/local/Library/Frameworks/Python.framework/Versions/2.7/bin
 
-if [ -n `which zeta` ]; then
-	set -e
-	# Errors in the source prevent compression from working, so -c
-	if [ -e resources/scss/_main.scss ]; then
-		rm resources/scss/_main.scss
-	fi
-	cd resources/scss
-	zeta pack main.scss &>/dev/null
-	cd ../..
-	mv resources/scss/_main.scss resources/css/main.css
-	exit 0
+if [ -z `which zeta` ]; then
+	echo "Sass for Python is not installed"
+	echo "run this command:"
+	echo ""
+	echo "    sudo easy_install zetalibrary"
+	echo ""
+	exit 1
 fi
 
-echo "Sass for Python is not installed"
-echo "run this command:"
-echo ""
-echo "    sudo easy_install zetalibrary"
-echo ""
-exit 1
+set -e
+# Errors in the source prevent compression from working, so -c
+if [ -e resources/scss/_main.scss ]; then
+	rm resources/scss/_main.scss
+fi
+cd resources/scss
+zeta pack main.scss &>/dev/null
+cd ../..
+mv resources/scss/_main.scss resources/css/main.css
+echo "Done."
