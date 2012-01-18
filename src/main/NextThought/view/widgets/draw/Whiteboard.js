@@ -81,7 +81,7 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 
 	destroy: function(){
 		var s = this.getSurface();
-		if(s)s.removeAll(true);
+		if(s){s.removeAll(true);}
 		this.callParent(arguments);
 	},
 
@@ -153,7 +153,7 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 
 
 	removeSelection: function(){
-		if(!this.selection)return;
+		if(!this.selection){return;}
 
 		this.selection.sprite.destroy();
 
@@ -192,10 +192,10 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 			delete me.selection;
 		}
 
-		if(!sprite) return;
+		if(!sprite){return;}
 
 		s = next();
-		if(s) s.show(true);
+		if(s){s.show(true);}
 		me.selection = s;
 	},
 
@@ -290,7 +290,7 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 					w = this.getScaleFactor(),
 					o;
 
-				if(i===ab || i.isNib || a.hidden || (!bb.width && !bb.height))return;
+				if(i===ab || i.isNib || a.hidden || (!bb.width && !bb.height)){return;}
 
                 o = ShapeFactory.scaleJson(1/w, i.toJSON());
                 o.strokeWidth = o.strokeWidthTarget + '%';

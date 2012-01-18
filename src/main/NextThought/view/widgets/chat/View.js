@@ -58,7 +58,7 @@ Ext.define('NextThought.view.widgets.chat.View', {
     },
 
     changed: function(ri) {
-        if (!ri) return;
+        if (!ri){return;}
 
         this.roomId = IdCache.getIdentifier(ri.getId());
         this.roomInfo = ri;

@@ -33,7 +33,7 @@ Ext.define('NextThought.view.widgets.chat.ReplyTo', {
 
 	showClassroomButton: function()
 	{
-		if (this.down('button[iconCls=classroom]')) return;
+		if (this.down('button[iconCls=classroom]')){return;}
 
 		var me = this,
 			f = me.down('textfield'),
@@ -65,7 +65,7 @@ Ext.define('NextThought.view.widgets.chat.ReplyTo', {
 		me.addEvents('send');
 
 		f.on('specialkey', function(x, e){
-			if (e.getKey() != e.ENTER) return;
+			if (e.getKey() !== e.ENTER){return;}
 			b.fireEvent('click', b);
 		});
 
@@ -89,9 +89,10 @@ Ext.define('NextThought.view.widgets.chat.ReplyTo', {
 	hideReplies : function(){
 		var me = this;
 		Ext.each(this.up('chat-view').query('chat-reply-to[replyTo]'),function(r){
-			if(r!==me)
+			if(r!==me) {
 				r.close();
 				//r.destroy()
+			}
 		});
 	},
 

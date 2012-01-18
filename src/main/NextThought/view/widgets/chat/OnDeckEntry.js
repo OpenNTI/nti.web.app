@@ -47,7 +47,7 @@ Ext.define('NextThought.view.widgets.chat.OnDeckEntry', {
 			a = Ext.isArray(m) ? m : [m];
 			me.message = Ext.create('NextThought.model.MessageInfo', {body: a});
 		}
-		me.renderData['body'] = AnnotationUtils.compileBodyContent(m);
+		me.renderData.body = AnnotationUtils.compileBodyContent(m);
 
 		if(this.rendered){
 		   me.text.update(me.renderData.body);
@@ -55,7 +55,7 @@ Ext.define('NextThought.view.widgets.chat.OnDeckEntry', {
 	},
 
 	click: function(event, target, eOpts){
-		if (!this.box) return; //happens when a WB is clicked...
+		if (!this.box){return;} //happens when a WB is clicked...
 
 		target = Ext.get(target);
 		var inBox = target && this.box.contains(target);

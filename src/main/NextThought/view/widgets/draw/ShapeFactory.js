@@ -60,9 +60,9 @@ Ext.define('NextThought.view.widgets.draw.ShapeFactory',
 		json.strokeWidthTarget = ((typeof sw === 'string') ? parseFloat(sw) : sw) * factor;
 
 		for(k in json.transform){
-			if(!json.transform.hasOwnProperty(k))continue;
-			if(typeof json.transform[k] === 'number')
+			if(json.transform.hasOwnProperty(k) && typeof json.transform[k] === 'number') {
 				json.transform[k] *= factor;
+			}
 		}
 
 		return json;
@@ -78,8 +78,9 @@ Ext.define('NextThought.view.widgets.draw.ShapeFactory',
 			s = m[c];
 
 		//special case for lines
-		if (s === m.CanvasPolygonShape && sides == 1)
+		if (s === m.CanvasPolygonShape && sides === 1){
 			return 'sprite-line';
+		}
 		return s;
 	},
 
@@ -131,6 +132,7 @@ Ext.define('NextThought.view.widgets.draw.ShapeFactory',
 
 
 	relay: function(whiteboard, sprite, events){
+		var i;
 		if (!sprite.el) {
 			sprite.on('render', Ext.bind(this.relay, this, Ext.toArray(arguments)), {single: true});
 			return;
@@ -144,7 +146,7 @@ Ext.define('NextThought.view.widgets.draw.ShapeFactory',
 			});
 		}
 
-		for(var i=events.length;i>=0; i--){
+		for(i=events.length;i>=0; i--){
 			refire(sprite,events[i]);
 		}
 	}

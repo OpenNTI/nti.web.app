@@ -237,11 +237,12 @@ Ext.define('NextThought.view.widgets.draw.Resizer', {
 	},
 
 	addToGroup: function(group, nib){
-		if(!group) return;
+		if(!group){return;}
 
 		var g = this.groups;
-		if(!(group in g))
+		if(!(g.hasOwnProperty(group))){
 			g[group] = Ext.create('Ext.draw.CompositeSprite', {surface: this.surface});
+		}
 
 		g[group].add(nib);
 	},

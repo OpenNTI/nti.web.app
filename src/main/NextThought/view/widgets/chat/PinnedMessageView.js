@@ -10,7 +10,7 @@ Ext.define('NextThought.view.widgets.chat.PinnedMessageView', {
 		this.callParent(arguments);
 
 		//check to see if we are a mod or not, display clear button, or not.
-		if (this.showClear)
+		if (this.showClear){
 			this.addDocked(
 				{
 					xtype: 'toolbar',
@@ -20,6 +20,7 @@ Ext.define('NextThought.view.widgets.chat.PinnedMessageView', {
 					}
 				}
 			);
+		}
 	}
 
 });

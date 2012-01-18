@@ -39,8 +39,9 @@ Ext.define('NextThought.view.widgets.classroom.BrowserStudyGroups', {
 		var sel = selections[0], node;
 		if( sel ){
 			node = Ext.get(this.getNode(sel));
-			if(!node.isInView(this.getEl()))
+			if(!node.isInView(this.getEl())){
 				node.scrollIntoView(this.getEl());
+			}
 		}
 	},
 

@@ -34,8 +34,8 @@ Ext.define('NextThought.view.widgets.chat.LogEntryPinned', {
 
 		delete me.message;
 
-		me.renderData['name'] = 'resolving...';
-		me.renderData['body'] = AnnotationUtils.compileBodyContent(m);
+		me.renderData.name = 'resolving...';
+		me.renderData.body = AnnotationUtils.compileBodyContent(m);
 
 		if(this.rendered){
 		   me.text.update(me.renderData.body);
@@ -65,8 +65,8 @@ Ext.define('NextThought.view.widgets.chat.LogEntryPinned', {
 			this.name.update(name);
 		}
 		else {
-			this.renderData['name'] = name;
-			this.renderData['icon'] = i;
+			this.renderData.name = name;
+			this.renderData.icon = i;
 		}
 
 	}

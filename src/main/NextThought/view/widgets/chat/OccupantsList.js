@@ -19,7 +19,7 @@ Ext.define('NextThought.view.widgets.chat.OccupantsList', {
 	initComponent:function() {
 		var me = this;
 
-		if (this.autoHide !== false) this.autoHide = true;
+		if (this.autoHide !== false){this.autoHide = true;}
 
 		me.tools = [{
 			type: 'gear',
@@ -54,19 +54,21 @@ Ext.define('NextThought.view.widgets.chat.OccupantsList', {
 						});
 					}
 
-					if (!u || u.getId() != _AppConfig.userObject.getId())
+					if (!u || u.getId() !== _AppConfig.userObject.getId()){
 						numberOccupants++;
+					}
 
 					total--;
-					if (total <= 0) finish();
+					if (total <= 0){finish();}
 				});
 			});
 
 		function finish() {
 			if (numberOccupants <= 1) {
 				//just me and someone else here
-				if (me.autoHide)
+				if (me.autoHide) {
 					me.hide();
+				}
 			}
 			else if(!me.isVisible()) {
 				me.show();

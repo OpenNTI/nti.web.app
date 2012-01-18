@@ -29,19 +29,20 @@ Ext.define('NextThought.view.widgets.chat.OnDeckLog', {
 	addMessage: function(bodies) {
 		var b,m;
 
-		if (!Ext.isArray(bodies)) bodies = [bodies];
+		if (!Ext.isArray(bodies)){bodies = [bodies];}
 
 		for (b in bodies) {
-			if (!bodies.hasOwnProperty(b)) continue;
-			if (!Ext.isArray(b)) b = [b];
-			m = Ext.create('NextThought.model.MessageInfo', {body : bodies[b]});
-			this.add(
-				{
-					xtype: 'on-deck-log-entry',
-					message: m,
-					roomInfo: this.roomInfo
-				}
-			);
+			if (bodies.hasOwnProperty(b)){
+				if (!Ext.isArray(b)){b = [b];}
+				m = Ext.create('NextThought.model.MessageInfo', {body : bodies[b]});
+				this.add(
+					{
+						xtype: 'on-deck-log-entry',
+						message: m,
+						roomInfo: this.roomInfo
+					}
+				);
+			}
 		}
 	},
 
@@ -78,7 +79,7 @@ Ext.define('NextThought.view.widgets.chat.OnDeckLog', {
 		var entries = this.query('on-deck-log-entry[promoted=false]'),
 			o = entries[0] ? entries[0] : null;
 
-		if (!o) return;
+		if (!o){return;}
 
 		o.el.scrollIntoView(this.el.first('.x-panel-body'));
 

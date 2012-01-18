@@ -5,8 +5,9 @@ Ext.define('NextThought.view.widgets.draw.Polygon', {
 	constructor: function(config){
 	   // this.applyClipRect = true;
 
-		if(!config || !config.sides)
+		if(!config || !config.sides){
 			Ext.Error.raise('must have sides defined & be >2');
+		}
 
 		var x = 0,
 			y = 0,
@@ -16,7 +17,7 @@ Ext.define('NextThought.view.widgets.draw.Polygon', {
 			n = config.sides,
 			path = [];
 
-		if(n<2) n=2;
+		if(n<2){n=2;}
 
 		for (i; i < n; i++) {
 			path.push([

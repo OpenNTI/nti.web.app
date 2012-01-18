@@ -86,9 +86,9 @@ Ext.define('NextThought.view.widgets.chat.LogEntryModerated', {
 		me.message = m;
 		me.messageId = IdCache.getIdentifier(m.getId());
 
-		me.renderData['time'] = Ext.Date.format(m.get('Last Modified'), 'g:i:sa');
-		me.renderData['name'] = 'resolving...';
-		me.renderData['body'] = AnnotationUtils.compileBodyContent(m);
+		me.renderData.time = Ext.Date.format(m.get('Last Modified'), 'g:i:sa');
+		me.renderData.name = 'resolving...';
+		me.renderData.body = AnnotationUtils.compileBodyContent(m);
 
 		if(this.rendered){
 		   me.text.update(me.renderData.body);
@@ -118,7 +118,7 @@ Ext.define('NextThought.view.widgets.chat.LogEntryModerated', {
 
 		this.on('change', function(cmp, state){
 			this.box.removeCls('selected');
-			if(state) this.box.addCls('selected');
+			if(state){ this.box.addCls('selected');}
 		});
 
 		this.box.on('click', this.click, this);
@@ -137,9 +137,10 @@ Ext.define('NextThought.view.widgets.chat.LogEntryModerated', {
 		}
 		else if(inBox && target.hasCls('pin')){
 			  this.fireEvent('pin', this);
-		  }
-		else if(!/input/i.test(tag))
+		}
+		else if(!/input/i.test(tag)){
 			this.setValue(!this.getValue());
+		}
 	},
 
 	fillInUser: function(u) {
@@ -151,8 +152,8 @@ Ext.define('NextThought.view.widgets.chat.LogEntryModerated', {
 			this.name.update(name);
 		}
 		else {
-			this.renderData['name'] = name;
-			this.renderData['icon'] = i;
+			this.renderData.name = name;
+			this.renderData.icon = i;
 		}
 	},
 
@@ -164,12 +165,13 @@ Ext.define('NextThought.view.widgets.chat.LogEntryModerated', {
 				if (sourceEl) {
 					d = sourceEl.cloneNode(true);
 					d.id = Ext.id();
-					return v.dragData = {
+					v.dragData = {
 						sourceEl: sourceEl,
 						repairXY: Ext.fly(sourceEl).getXY(),
 						ddel: d,
 						data: v.message.data
 					};
+					return v.dragData;
 				}
 			},
 
