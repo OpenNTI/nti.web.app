@@ -30,7 +30,8 @@ Ext.define('NextThought.controller.Classroom', {
 	],
 
 	stores: [
-		'Providers'
+		'Providers',
+		'Sections'
 	],
 
 	refs:[
@@ -101,6 +102,26 @@ Ext.define('NextThought.controller.Classroom', {
 		},{});
 	},
 
+	onSessionReady: function(){
+		debugger;
+		var pStore = this.getProvidersStore(),
+			pColl = _AppConfig.service.getCollection('OU', 'providers'),
+			sStore = this.getSectionsStore(),
+			sColl = _AppConfig.service.getCollection('EnrolledClassSections');
+
+		if(pColl) {
+			pStore.proxy.url = _AppConfig.server.host+pColl.href;
+			pStore.load();
+		}
+		else console.warn('NO providers workspace!');
+
+		if(sColl) {
+			sStore.proxy.url = _AppConfig.server.host+sColl.href;
+			sStore.load();
+		}
+		else console.warn('NO providers workspace!');
+	},
+
 	flaggedMenuItemClicked: function(mi) {
 		this.showMessage(mi.relatedCmp);
 	},
@@ -112,17 +133,6 @@ Ext.define('NextThought.controller.Classroom', {
 		btn.lastAction = isNaN(c) ? 0 : c;
 
 		this.flaggedMenuItemClicked(i.getAt(btn.lastAction));
-	},
-
-	onSessionReady: function(){
-		var store = this.getProvidersStore(),
-			coll = _AppConfig.service.getCollection('Classes','OU');
-		if(!coll){
-			console.warn('NO classroom workspace!');
-			return;
-		}
-		store.proxy.url = _AppConfig.server.host+coll.href;
-		store.load();
 	},
 
 
@@ -140,6 +150,7 @@ Ext.define('NextThought.controller.Classroom', {
 		});
 
 		var button = Ext.ComponentQuery.query('classroom-chooser button[edit]')[0];
+		debugger;
 		if (sel[0].get('Class') === 'ClassInfo') button.enable();
 		else button.disable();
 
@@ -217,7 +228,7 @@ Ext.define('NextThought.controller.Classroom', {
 			success:
 				function(){
 					win.close();
-					me.getProvidersStore().load();
+					me.getSectionsStore().load();
 				},
 			failure:
 				function(){win.el.unmask();}
