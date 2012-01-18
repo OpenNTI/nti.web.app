@@ -103,7 +103,6 @@ Ext.define('NextThought.controller.Classroom', {
 	},
 
 	onSessionReady: function(){
-		debugger;
 		var pStore = this.getProvidersStore(),
 			pColl = _AppConfig.service.getCollection('OU', 'providers'),
 			sStore = this.getSectionsStore(),
@@ -150,7 +149,6 @@ Ext.define('NextThought.controller.Classroom', {
 		});
 
 		var button = Ext.ComponentQuery.query('classroom-chooser button[edit]')[0];
-		debugger;
 		if (sel[0].get('Class') === 'ClassInfo') button.enable();
 		else button.disable();
 
