@@ -1,5 +1,7 @@
 #!/bin/bash
 PRINT_DOTS="true"
+PRINT_JUST_NAMES="false"
+JUST_THE_NEXT="false"
 
 #do fancy stuff when no args present
 if [ -z "$1" ]; then
@@ -33,16 +35,25 @@ unparam=true	vars=false		white=false		widget=false	window=false
 POSIBLE_FLAGS
 
 LINT_OPTS='continue devel fragment sloppy unparam'
-FILES=`find src/main -name \*.js`
+FILES=`find src/main -name \*.js | sort -u`
 ERRORS=false
 
 if [ "$1" != "" ] ; then
-	if [ -f $1 ] ; then
-		FILES=$1
+	if [ "$1" ==  "-ls" ] ; then
+		PRINT_JUST_NAMES="true"
+		PRINT_DOTS="false"
+	elif [ "$1" ==  "-next" ] ; then
+		PRINT_JUST_NAMES="true"
+		JUST_THE_NEXT="true"
 		PRINT_DOTS="false"
 	else
-		echo " $1 does not exist"
-		exit 1
+		if [ -f $1 ] ; then
+			FILES=$1
+			PRINT_DOTS="false"
+		else
+			echo " $1 does not exist"
+			exit 1
+		fi
 	fi
 fi
 
@@ -51,15 +62,23 @@ do
 	OUTPUT=`jslint "$f" $LINT_OPTS`
 	if [[ "$OUTPUT" != "No error found" ]] ; then
 		ERRORS=true
-		if [ "$PRINT_DOTS" = "true" ]; then
+
+		if [ "$PRINT_JUST_NAMES" = "true" ]; then
+			echo "$f"
+			if [ "$JUST_THE_NEXT" = "true" ] ; then
+				exit
+			fi
+		else
+			if [ "$PRINT_DOTS" = "true" ]; then
+				echo "" >&2
+				echo "Has errors: $f:" >&2
+			fi
+			echo "$OUTPUT" >&2
 			echo "" >&2
-			echo "Processing: $f:" >&2
-		fi
-		echo "$OUTPUT" >&2
-		echo "" >&2
-		echo "" >&2
-		if [ "$PRINT_DOTS" = "true" ]; then
-			echo -n "x"
+			echo "" >&2
+			if [ "$PRINT_DOTS" = "true" ]; then
+				echo -n "x"
+			fi
 		fi
 	else
 		if [ "$PRINT_DOTS" = "true" ]; then
