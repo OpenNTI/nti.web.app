@@ -36,8 +36,9 @@ Ext.define('NextThought.view.windows.NotificationsPopover', {
 	},
 
 	cancelClose: function() {
-		if (this.leaveTimer)
+		if (this.leaveTimer){
 			window.clearTimeout(this.leaveTimer);
+		}
 	},
 
 	closePopover: function() {
@@ -69,7 +70,7 @@ Ext.define('NextThought.view.windows.NotificationsPopover', {
 			
 			unread = (change.get('Last Modified') > this._lastLoginTime);
 			p.add({xtype: 'miniStreamEntry', change: change, cls: unread ? 'unread' : 'read'});
-			if (!unread) readCount++;
+			if (!unread) {readCount++;}
 		}
 
 
@@ -92,8 +93,7 @@ Ext.define('NextThought.view.windows.NotificationsPopover', {
 			max = (VIEWPORT.getHeight() - e.getPosition()[1] - e.getHeight() - 10);
 			me.height = undefined;
 			me.doLayout();
-			if(me.getHeight()> max)
-				me.setHeight(max);
+			if(me.getHeight()> max) {me.setHeight(max);}
 
 			//console.debug(max, me.getHeight());
 			VIEWPORT.on('resize',me.fixHeight,me, {single: true});

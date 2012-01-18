@@ -137,8 +137,9 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
 		var i = this.itemSelected,
 			h = i? i.hit : null;
 
-		if(i)
+		if(i) {
 			this.searchResultClicked(null, null, {hit: h, searchValue: this._searchVal});
+		}
 	},
 
 
@@ -166,7 +167,7 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
 		}
 
 		function next(cmp) {
-			if(!cmp) return first();
+			if(!cmp) {return first();}
 			var x = cmp.nextSibling(q),
 				s;
 			if (!x) {
@@ -177,7 +178,7 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
 		}
 
 		function prev(cmp) {
-			if(!cmp) return last();
+			if(!cmp) {return last();}
 			var x = cmp.previousSibling(q),
 				s;
 			if (!x) {
@@ -188,7 +189,7 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
 		}
 
 		//remove current selection
-		if (i) i.removeCls(CLASS);
+		if (i) {i.removeCls(CLASS);}
 
 		//increment to next
 		i = me.itemSelected = (up) ? prev(i) : next(i);
@@ -244,10 +245,9 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
 				this.searchBox.destroy();
 				delete this.searchBox;
 			}
-			if(!fb[0] && !fb[1])
+			if(!fb[0] && !fb[1]){
 				this.items.get(2).show();
-
-
+			}
 		}
 	},
 
@@ -262,8 +262,7 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
 			me.setWidth(Ext.Number.constrain(e.getWidth(), me.minWidth, me.maxWidth));
 			
 			me.doLayout();
-			if(me.getHeight()> max)
-				me.setHeight(max);
+			if(me.getHeight()> max) {me.setHeight(max);}
 
 			me.alignTo(e);
 

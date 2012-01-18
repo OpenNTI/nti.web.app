@@ -89,7 +89,7 @@ Ext.define('NextThought.view.windows.LoginWindow', {
 												//margin: '15px 15px 15px 140px',
 												listeners: {
 													specialkey: function(field, e){
-														if (e.getKey() == e.ENTER) {
+														if (e.getKey() === e.ENTER) {
 															var btn = field.up('loginwindow').down('button[actionName=login]');
 															btn.fireEvent('click', btn, e);
 														}
@@ -174,8 +174,8 @@ Ext.define('NextThought.view.windows.LoginWindow', {
 			pw = this._password;
 
 
-		if(un.getValue()) pw.focus();
-		else un.focus();
+		if(un.getValue()) {pw.focus();}
+		else {un.focus();}
 	},
 
 
