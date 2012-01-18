@@ -75,7 +75,7 @@ Ext.define('NextThought.view.windows.NoteEditor', {
 		}
 
 
-		while( (id === this.thumbs.pop()) ) {
+		while(!!(id = this.thumbs.pop()) ) {
 			el = iFrameDoc.getElementById(id);
 			if(!el){
 				console.warn('no el for id:', id);
