@@ -88,11 +88,12 @@ Ext.define('NextThought.view.windows.ClassroomEditor', {
 
 
 	destroy: function(){
-
-		for(var i in this.editors){
-			if(!this.editors.hasOwnProperty(i)) continue;
-			this.editors[i].destroy();
-			delete this.editors[i];
+		var i;
+		for(i in this.editors){
+			if(this.editors.hasOwnProperty(i)){
+				this.editors[i].destroy();
+				delete this.editors[i];
+			}
 		}
 
 		delete this.editors;
@@ -136,13 +137,15 @@ Ext.define('NextThought.view.windows.ClassroomEditor', {
 		}
 
 		//If WB now has 0 elements, just remove it from the editor, otherwise, update thumbnail.
-		if (numShapes === 0)
+		if (numShapes === 0) {
 			div.parentNode.removeChild(div);
-		else
+		}
+		else {
 			div.innerHTML = Ext.String.format(
 					AnnotationUtils.WHITEBOARD_THUMBNAIL,
 					whiteboard.getThumbnail(),
 					this.getWhiteboardThumbnailClickHandler(id));
+		}
 	},
 
 	insertWhiteboard: function(id){
@@ -220,7 +223,7 @@ Ext.define('NextThought.view.windows.ClassroomEditor', {
 			body = val.split(/(<div.*?class="body-divider".*?<\/div>)/ig);
 
 		Ext.each(body,function(v,i,a){
-			if(v.indexOf('class="body-divider"')<0)return;
+			if(v.indexOf('class="body-divider"')<0){return;}
 			var id = /<div.*?id="(.+?)".*?div>/i.exec(v)[1];
 			a[i]=me.editors[id].saveScene();
 		});
