@@ -1,6 +1,16 @@
 #!/bin/bash
 rm -f jslint.log
-exec 2> jslint.log
+
+#if we're not being pipped send to log
+if [ -t 1 -a -t 2 ] ; then
+	#this is only going to happen if stdout and stderr point to the terminal
+	exec 2> jslint.log
+else
+	#one of them streams is not pointing to the terminal...
+	if [ -t 2 ] ; then #if the invoker wants stderr to go to a particular pace, let them...otherwise we want "our error output" to go to stdout
+		exec 2>&1
+	fi
+fi
 
 <<POSIBLE_FLAGS
 adsafe=false	bitwise=false	browser=false	cap=false		confusion=false
@@ -26,13 +36,17 @@ do
 		echo "$OUTPUT" >&2
 		echo "" >&2
 		echo "" >&2
-		echo -n "x"
+		if [ -t 1 ] ; then
+			echo -n "x"
+		fi
 	else
-		echo -n "."
+		if [ -t 1 ] ; then
+			echo -n "."
+		fi
 	fi
 done
 
-if [ "$ERRORS" = "true" ]; then
+if [ "$ERRORS" = "true" -a -t 1 ]; then
 	echo ""
 	echo "There were problems"
 	exit 1
