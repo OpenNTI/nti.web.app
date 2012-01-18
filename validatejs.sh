@@ -1,5 +1,4 @@
 #!/bin/bash
-rm -f jslint.log
 PRINT_DOTS="true"
 
 #do fancy stuff when no args present
@@ -7,6 +6,7 @@ if [ -z "$1" ]; then
 	#if we're not being pipped send to log
 	if [ -t 1 -a -t 2 ] ; then
 		#this is only going to happen if stdout and stderr point to the terminal
+		rm -f jslint.log
 		exec 2> jslint.log
 	else
 		#one of them streams is not pointing to the terminal...

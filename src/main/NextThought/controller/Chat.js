@@ -87,8 +87,9 @@ Ext.define('NextThought.controller.Chat', {
 
 			'chat-view':{
 				'beforedestroy': function(cmp){
-					if (!cmp.disableExitRoom)
+					if (!cmp.disableExitRoom) {
 						this.leaveRoom(cmp.roomInfo);
+					}
 				}
 			},
 
@@ -146,25 +147,32 @@ Ext.define('NextThought.controller.Chat', {
 
 		//Check to see if a room with these users already exists, and use that.
 		for (key in this.activeRooms) {
-			if (!this.activeRooms.hasOwnProperty(key)) continue;
-
-			ri = this.activeRooms[key];
-			if (Globals.arrayEquals(ri.get('Occupants'), allUsers)) {
-				return ri;
+			if (this.activeRooms.hasOwnProperty(key)) {
+				ri = this.activeRooms[key];
+				if (Globals.arrayEquals(ri.get('Occupants'), allUsers)) {
+					return ri;
+				}
 			}
 		}
 	},
 
 	postMessage: function(room, message, replyTo, channel, recipients) {
 
-		if(typeof message == 'string')
+		if(typeof message === 'string') {
 			message = [message];
+		}
 
 		var m = {ContainerId: room.getId(), body: message, Class: 'MessageInfo'};
 
-		if (replyTo) m.inReplyTo = replyTo;
-		if (channel) m.channel = channel;
-		if (recipients) m.recipients = recipients;
+		if (replyTo) {
+			m.inReplyTo = replyTo;
+		}
+		if (channel) {
+			m.channel = channel;
+		}
+		if (recipients) {
+			m.recipients = recipients;
+		}
 
 		Socket.emit('chat_postMessage', m);
 	},
@@ -183,33 +191,41 @@ Ext.define('NextThought.controller.Chat', {
 		if (usersOrList.get && usersOrList.get('friends')) {
 			options.ContainerId = usersOrList.get('NTIID');
 		}
-		else if (!Ext.isArray(usersOrList)) users = [usersOrList];
-		else users = usersOrList;
+		else if (!Ext.isArray(usersOrList)) {
+			users = [usersOrList];
+		}
+		else {
+			users = usersOrList;
+		}
 
 		users = Ext.Array.clone(users);
 
 		for (k in users) {
-			if(!users.hasOwnProperty(k))continue;
-			if (typeof(users[k]) != 'string') {
-				if (users[k].getId) {
-					users[k] = users[k].getId();
+			if(users.hasOwnProperty(k)) {
+				if (typeof(users[k]) !== 'string') {
+					if (users[k].getId) {
+						users[k] = users[k].getId();
+					}
+					else {
+						console.error('ERROR: found something other than a user/username string in occupants list', users[k]);
+						delete users[k];
+						continue;
+					}
 				}
-				else {
-					console.error('ERROR: found something other than a user/username string in occupants list', users[k]);
+
+				if(!UserRepository.isOnline(users[k])) {
 					delete users[k];
-					continue;
 				}
 			}
-
-			if(!UserRepository.isOnline(users[k])) delete users[k];
 		}
 
 		users = Ext.Array.clean(users);
 
 		ri = this.existingRoom(users,options);
-		if (ri)
+		if (ri) {
 			this.onEnteredRoom(ri);
-		else{ //If we get here, there were no existing rooms, so create a new one.
+		}
+		else { //If we get here, there were no existing rooms, so create a new one.
 			roomCfg = {'Occupants': users};
 
 			//no occupants required if there's a container id and it's a class/study room etc.
@@ -280,7 +296,9 @@ Ext.define('NextThought.controller.Chat', {
 		var room = f.roomInfo || f.up('chat-view').roomInfo,
 			val = f.getValue();
 
-		if (Ext.isEmpty(val)) return;
+		if (Ext.isEmpty(val)) {
+			return;
+		}
 
 		this.postMessage(room, val, mid, channel, recipients);
 
@@ -332,7 +350,7 @@ Ext.define('NextThought.controller.Chat', {
 			return;
 		}
 
-		if(a in b){
+		if(b.hasOwnProperty(a)){
 			b[a].call(b);
 		}
 		else {
@@ -382,7 +400,9 @@ Ext.define('NextThought.controller.Chat', {
 	},
 
 	leaveRoom: function(room){
-		if (!room) return;
+		if (!room) {
+			return;
+		}
 
 		delete this.activeRooms[room.getId()];
 
@@ -406,7 +426,9 @@ Ext.define('NextThought.controller.Chat', {
 			r = IdCache.getIdentifier('inReplyTo');
 			m = w.down(Ext.String.format('*[messageId={1}]', r));
 
-			if(!m || !m.message)break;
+			if(!m || !m.message) {
+				break;
+			}
 
 			message = m.message;
 			recipients.add(message.get('Creator'), 1);
@@ -435,14 +457,15 @@ Ext.define('NextThought.controller.Chat', {
 	onMembershipChanged: function(msg) {
 		var roomInfo = ParseUtils.parseItems([msg])[0];
 
-		if (roomInfo.getId() in this.activeRooms)
+		if (this.activeRooms.hasOwnProperty(roomInfo.getId())) {
 			this.activeRooms[roomInfo.getId()].fireEvent('changed', roomInfo);
+		}
 
 		this.activeRooms[roomInfo.getId()] = roomInfo;
 	},
 
 	onExitedRoom: function(room) {
-		if (room.ID in this.activeRooms) {
+		if (this.activeRooms.hasOwnProperty(room.ID)) {
 			this.activeRooms[room.ID].fireEvent('left-room');
 			delete this.activeRooms[room.ID];
 		}
@@ -465,7 +488,9 @@ Ext.define('NextThought.controller.Chat', {
 		}
 
 		//apply flagged class to message wherever it is.
-		if (cmp) cmp.addCls('flagged');
+		if (cmp) {
+			cmp.addCls('flagged');
+		}
 
 		if (!win) {
 			b = this.getController('Classroom').getFlaggedMessagesButton();
@@ -502,11 +527,13 @@ Ext.define('NextThought.controller.Chat', {
 	onMessageDefaultChannel: function(msg, opts) {
 		var win = this.getChatWindow(),
 			r = IdCache.getIdentifier(msg.get('ContainerId')),
-			moderated = !!('moderated' in opts),
+			moderated = opts && opts.hasOwnProperty('moderated'),
 			tab,
 			log;
 
-		if(!win)return;
+		if(!win) {
+			return;
+		}
 
 		tab = win.down('chat-view[roomId=' + r + ']');
 		log = tab ? tab.down('chat-log-view[moderated=true]') : null;
@@ -536,10 +563,10 @@ Ext.define('NextThought.controller.Chat', {
 			r = this.activeRooms[msg.get('ContainerId')],
 			cv = this.getChatView(r);
 
-		if ('clearPinned' == a) {
+		if ('clearPinned' === a) {
 			cv.getPinnedMessageView().destroy();
 		}
-		else if('pin' == a ) {
+		else if('pin' === a ) {
 			e = cv.down('[messageId='+IdCache.getIdentifier(i)+']');
 			if (!e) {
 				console.warn('Could not find existing message with ID', i);
@@ -573,7 +600,7 @@ Ext.define('NextThought.controller.Chat', {
 
 		var roomInfo = msg && msg.isModel? msg : ParseUtils.parseItems([msg])[0],
 			existingRoom;
-		if (roomInfo.getId() in this.activeRooms) {
+		if (this.activeRooms.hasOwnProperty(roomInfo.getId())) {
 			console.warn('room already exists, all rooms/roomInfo', this.activeRooms, roomInfo);
 		}
 

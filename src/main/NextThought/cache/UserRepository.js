@@ -12,12 +12,14 @@ Ext.define('NextThought.cache.UserRepository', {
 	},
 
 	getStore: function() {
-		return this._store || (this._store = Ext.create('Ext.data.Store', {model: 'NextThought.model.User'}));
+		return (this._store = this._store || Ext.create('Ext.data.Store', {model: 'NextThought.model.User'}));
 	},
 
 	refresh: function() {
 		var s = this._store;
-		if (!s) return;
+		if (!s) {
+			return;
+		}
 
 		s.each(function(u){
 			this._makeRequest(u.getId(), {
@@ -34,14 +36,15 @@ Ext.define('NextThought.cache.UserRepository', {
 	updateUser: function(refreshedUser) {
 		var s = this.getStore(),
 			u = s.getById(refreshedUser.getId()),
-			ignoreNewInstance = (refreshedUser.raw && 'ignoreIfExists' in refreshedUser.raw);
+			ignoreNewInstance = (refreshedUser.raw && refreshedUser.raw.hasOwnProperty('ignoreIfExists'));
 
 		//console.debug('updateUser',ignoreNewInstance, refreshedUser.getId(), u, refreshedUser);
 
 		if (u && (!ignoreNewInstance || !u.equal(refreshedUser))) {
-			if (_AppConfig.userObject && u.getId() == _AppConfig.userObject.getId() ){
-				if(u !== _AppConfig.userObject)
+			if (_AppConfig.userObject && u.getId() === _AppConfig.userObject.getId() ){
+				if(u !== _AppConfig.userObject) {
 					_AppConfig.userObject.fireEvent('changed', refreshedUser);
+				}
 				_AppConfig.userObject = refreshedUser;
 			}
 
@@ -58,27 +61,32 @@ Ext.define('NextThought.cache.UserRepository', {
 	},
 
 	prefetchUser: function(username, callback, scope) {
-		if (!Ext.isArray(username)) username = [username];
-
-
+		if (!Ext.isArray(username)) {
+			username = [username];
+		}
 
 		var s = this.getStore(),
 			result = [],
 			l = username.length,
 			async = false;
 
+		function finish() {
+			if (callback) {
+				callback.call(scope || window, result);
+			}
+		}
+
 		Ext.each(
 			username,
 			function(o){
 
-
 				var name,
 					r;
 
-				if(typeof(o)==='string'){
+				if(typeof(o) === 'string') {
 					name = o;
 				}
-				else if(o.getId){
+				else if(typeof(o.getId)!== 'undefined'){
 					console.trace('This is not good');
 					name = o.getId();
 				}
@@ -111,14 +119,16 @@ Ext.define('NextThought.cache.UserRepository', {
 					scope: this,
 					failure: function(){
 						l--; //dec length so we still hit our finish state when a failure occurs.
-						if (l === 0) finish();
+						if (l === 0) {
+							finish();
+						}
 					},
 					success: function(u){
 						//s.add(u); not necessary since the user model calls update
 						result.push(u);
 
 						//our list of results is as expected, finish
-						if (result.length == l) {
+						if (result.length === l) {
 							finish();
 						}
 					}
@@ -130,10 +140,6 @@ Ext.define('NextThought.cache.UserRepository', {
 			finish();//we finish linerally, everything is in the store already
 		}
 
-
-		function finish() {
-			if (callback) callback.call(scope || window, result);
-		}
 	},
 
 
@@ -145,9 +151,10 @@ Ext.define('NextThought.cache.UserRepository', {
 			//user's constructor adds the user to the repo, so do the following only if the user is different somehow,
 			//this is more of an assertion.  The reason we have to do this is because things are listening to events
 			//on user instances in this repository so we cant just replace them.
-			if (user && user !== this.getStore().getById(username))
+			if (user && user !== this.getStore().getById(username)) {
 				console.warn('user does not equal user in store', user, this.getStore().getById(username));
 				//this.getStore().add(user);
+			}
 		}
 
 		return user;
@@ -166,7 +173,9 @@ Ext.define('NextThought.cache.UserRepository', {
 			{
 				if(!success){
 					console.warn('There was an error resolving user:', username, arguments);
-					if (callbacks && callbacks.failure) callbacks.failure.call(callbacks.scope || this);
+					if (callbacks && callbacks.failure) {
+						callbacks.failure.call(callbacks.scope || this);
+					}
 					return;
 				}
 
@@ -184,7 +193,9 @@ Ext.define('NextThought.cache.UserRepository', {
 				}
 
 				if (!result) {
-					if (callbacks && callbacks.failure) callbacks.failure.call(callbacks.scope || this);
+					if (callbacks && callbacks.failure) {
+						callbacks.failure.call(callbacks.scope || this);
+					}
 					console.error('result is null', username, list, url, json);
 				}
 			}

@@ -106,7 +106,7 @@ Ext.define('NextThought.controller.Annotations', {
 		if(/delete/i.test(action)){
 			a.remove();
 		}
-		else if(action in this.actionMap){
+		else if(this.actionMap.hasOwnProperty(action)){
 			this.actionMap[action].call(this, rec);
 		}
 	},
@@ -158,7 +158,9 @@ Ext.define('NextThought.controller.Annotations', {
 					}
 				});
 			}
-			else win.close();
+			else {
+				win.close();
+			}
 			return;
 		}
 
@@ -180,15 +182,18 @@ Ext.define('NextThought.controller.Annotations', {
 
 	attemptToAddWidget: function(record){
 		//check to see if reply is already there, if so, don't do anything...
-		if (Ext.get(IdCache.getComponentId(record))) return;
+		if (Ext.get(IdCache.getComponentId(record))) {
+			return;
+		}
 
 		var parent = record.get('inReplyTo');
 		if(parent){
 			parent = Ext.getCmp(IdCache.getComponentId(parent));
 			parent.addReply(record);
 		}
-		else
+		else {
 			this.getContext().createNoteWidget(record);
+		}
 
 		this.getContext().fireEvent('resize');
 	},

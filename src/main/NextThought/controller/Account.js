@@ -55,7 +55,7 @@ Ext.define('NextThought.controller.Account', {
 			}
 		}
 
-		if(btn.actionName!='save'){
+		if(btn.actionName !== 'save'){
 			win.close();
 			return;
 		}
@@ -69,8 +69,9 @@ Ext.define('NextThought.controller.Account', {
 			u.fields.add(new Ext.data.Field({name: 'password', type:'string'}));
 		}
 		for(key in values){
-			if(!values.hasOwnProperty(key)) continue;
-			u.set(key, values[key]);
+			if(values.hasOwnProperty(key)) {
+				u.set(key, values[key]);
+			}
 		}
 		u.save({callback: callback});
 	},
