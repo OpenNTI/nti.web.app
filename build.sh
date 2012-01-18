@@ -4,6 +4,15 @@ set -e
 PORT=45674
 ZIP="false"
 
+echo -n "Validating javascript..."
+# error code not being friendly, just capture the output and string compare :/
+if [[ "`validatejs.sh`" == *x* ]]; then
+	echo "errors, javascript compression will not work until these are fixed"
+	exit
+else
+	echo "passed"
+fi
+
 while getopts "z" flag
 	do
 		case "$flag" in
@@ -105,6 +114,7 @@ kill -9 $HPID
 $SED 's/\"Project Name\"/\"Application\"/g' app.jsb3
 $SED 's/Company Name\"/NextThought LLC\"/g' app.jsb3
 $SED 's/\"app.js\"/\"src\/main\/app\.js\"/g' app.jsb3
+
 #don't let sencha command do the compression...
 $SED 's/\"compress\"\: true,/\"compress\"\: false,/g' app.jsb3
 
@@ -115,17 +125,21 @@ sencha build -p app.jsb3 -d .
 rm -f app.jsb3
 rm -f all-classes.js
 
-# concat all code together
-cat $EXT/ext.js > build/full.js
-echo "" >> build/full.js
-cat app-all.js >> build/full.js
-
-#minify code
-slimit build/full.js > build/app.js
+# concat all code together (ext and app code)
+cat $EXT/ext.js > build/app.js
+echo "/*break*/" >> build/app.js
+cat app-all.js >> build/app.js
+echo "" >> build/app.js
 
 #remove temp
-rm build/full.js
 rm app-all.js
+
+#minify
+#zeta -c build/app.js
+#slimit -m build/app.js > build/app.min.js
+#rm build/app.js
+#mv build/app.min.js build/app.js
+
 
 # package build
 if [ "$ZIP" = "true" ]; then
