@@ -13,23 +13,25 @@ Ext.define('NextThought.cache.IdCache', {
 
 	getIdentifier: function(id)
 	{
-		if (!(id in this._ids))
+		if (id && !this._ids.hasOwnProperty(id)) {
 			this._ids[id] = guidGenerator();
+		}
 		return this._ids[id];
 	},
 
 	getComponentId: function (rec, subRecordField) {
-		var i = (typeof(rec) == 'string') ? rec : rec.get('OID');
+		var i = (typeof(rec) === 'string') ? rec : rec.get('OID');
 
 		if (!i && subRecordField) {
 			i = rec.get(subRecordField).get('OID');
 		}
 
-		if (!i) Ext.Error.raise({
-			msg:'Could not find OID in record',
-			record: rec,
-			subRecordField: subRecordField
-		});
+		if (!i) {
+			Ext.Error.raise({
+				msg:'Could not find OID in record',
+				args: arguments
+			});
+		}
 
 		return 'cmp-' + this.getIdentifier(i);
 	}
