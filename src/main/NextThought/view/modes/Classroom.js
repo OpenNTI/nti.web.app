@@ -24,9 +24,22 @@ Ext.define( 'NextThought.view.modes.Classroom', {
 			border: false,
 			flex:1,
 			layout: 'fit',
-			dockedItems:this.getEmptyToolbar()
+			dockedItems: this.getDefaultToolbar()
 		});
 	},
+
+
+	getDefaultToolbar: function() {
+		return {
+			xtype:'toolbar',
+			cls:'x-docked-noborder-top',
+			items: {
+				xtype: 'splitbutton',
+				text: 'Manage Classes'
+			}
+		};
+	},
+
 
 	showClassChooser: function(){
 		this.chooser = this.mainArea.add({xtype:'classroom-chooser'}).show().center();
