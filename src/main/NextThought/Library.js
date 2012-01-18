@@ -1,5 +1,3 @@
-
-
 Ext.define('NextThought.Library', {
 	singleton: true,
 	mixins: { observable: 'Ext.util.Observable' },
@@ -65,7 +63,7 @@ Ext.define('NextThought.Library', {
 				continue;
 			}
 
-			if(list[i].getAttribute('ntiid') == ntiid) {
+			if(list[i].getAttribute('ntiid') === ntiid) {
 				info.hasPrevious = !!(info.previous = list[i - 1]);
 				info.hasNext = !!(info.next = list[i + 1]);
 				info.nextHref = info.hasNext ? root + info.next.getAttribute('href') : null;
@@ -83,7 +81,7 @@ Ext.define('NextThought.Library', {
 		var title = null;
 
 		this.each(function(t){
-			if(t && t.get && t.get('index') == index) {
+			if(t && t.get && t.get('index') === index) {
 				title = t;
 				return false;
 			}
@@ -108,17 +106,16 @@ Ext.define('NextThought.Library', {
 	},
 
 	_onLoad: function(store, records, success) {
+		function go(){
+			this.loaded = true;
+			this.fireEvent('loaded',this);
+		}
 
 		if(success){
 			this._libraryLoaded(Ext.bind(go,this));
 		}
 		else {
 			console.error('FAILED: load library');
-		}
-
-		function go(){
-			this.loaded = true;
-			this.fireEvent('loaded',this);
 		}
 	},
 	
@@ -163,10 +160,12 @@ Ext.define('NextThought.Library', {
 
 					var toRemove = Ext.DomQuery.select('topic:not([ntiid])', this._tocs[index]);
 					Ext.each(toRemove, function(e){
-						if (e.parentNode)
+						if (e.parentNode) {
 							e.parentNode.removeChild(e);
-						else
+						}
+						else {
 							console.error('no parent node?', e);
+						}
 					});
 
 					if( callback ){
@@ -209,14 +208,18 @@ Ext.define('NextThought.Library', {
 
 		this.each(function(o){
 			result = this._resolveBookLocation(o, containerId);
-			if (result) return false;
+			if (result) {
+				return false;
+			}
 		}, this);
 
 		return result;
 	},
 
 	isOrDecendantOf: function(parentId, potentialChild) {
-		if (parentId == potentialChild) return true;
+		if (parentId === potentialChild) {
+			return true;
+		}
 
 		var child = this.findLocation(potentialChild),
 			l = child ? child.location : null,
@@ -225,7 +228,9 @@ Ext.define('NextThought.Library', {
 
 		while(l && !found) {
 			id = l.getAttribute? l.getAttribute('ntiid') : null;
-			if (parentId == id) found = true;
+			if (parentId === id){
+				found = true;
+			}
 			l = l.parentNode;
 		}
 
@@ -241,8 +246,9 @@ Ext.define('NextThought.Library', {
 
 		while(node){
 			id = node.getAttribute? node.getAttribute('ntiid') : null;
-			if( id )
+			if( id ) {
 				lineage.push(id);
+			}
 			node = node.parentNode;
 		}
 
@@ -252,7 +258,7 @@ Ext.define('NextThought.Library', {
 
 	_resolveBookLocation: function(book, containerId) {
 		var toc = this.getToc( book.get( 'index' ) );
-		if( toc.documentElement.getAttribute( 'ntiid' ) == containerId ) {
+		if( toc.documentElement.getAttribute( 'ntiid' ) === containerId ) {
 			return {book:book, location:toc};
 		}
 		return this._recursiveResolveBookLocation( book, containerId, toc );
@@ -263,7 +269,7 @@ Ext.define('NextThought.Library', {
 		for( ix = 0; ix < elts.length; ix++ ) {
 			child = elts.item(ix);
 			if( !child ) { continue; }
-			if( child.getAttribute( 'ntiid' ) == containerId ) {
+			if( child.getAttribute( 'ntiid' ) === containerId ) {
 				return {book: book, location: child };
 			}
 			cr = this._recursiveResolveBookLocation( book, containerId, child );

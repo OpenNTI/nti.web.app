@@ -1,5 +1,3 @@
-
-
 Ext.define('NextThought.controller.Search', {
 	extend: 'Ext.app.Controller',
 
@@ -79,13 +77,17 @@ Ext.define('NextThought.controller.Search', {
 
 	selectUp: function() {
 		var popover = this.getSearchPopover();
-		if(popover) popover.select(true);
+		if(popover) {
+			popover.select(true);
+		}
 	},
 
 	chooseSelection: function() {
 		var popover = this.getSearchPopover();
 
-		if(popover && popover.isVisible()) popover.chooseSelection();
+		if(popover && popover.isVisible()) {
+			popover.chooseSelection();
+		}
 	},
 
 	clearSearch: function(){

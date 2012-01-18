@@ -41,13 +41,18 @@ Ext.define('NextThought.controller.Groups', {
 
 			'groups-mode-container dataview':{
 				'itemdblclick':function(a, rec){
-					if(rec.isModifiable())
+					if(rec.isModifiable()) {
 						Ext.create('NextThought.view.windows.GroupEditorWindow',{record: rec}).show();
+					}
 				},
 				'selectionchange': function(a, sel){
 					var q = 'groups-mode-container toolbar button[deleteItem]';
 					Ext.each(Ext.ComponentQuery.query(q),function(v){
-						if(sel.length) v.enable(); else v.disable();
+						if(sel.length) {
+							v.enable();
+						} else {
+							v.disable();
+						}
 					});
 				}
 			},
@@ -82,7 +87,7 @@ Ext.define('NextThought.controller.Groups', {
 			values, n;
 
 
-		if(btn.actionName == 'save') {
+		if(btn.actionName === 'save') {
 			if(!frm.getForm().isValid()){
 				return;
 			}

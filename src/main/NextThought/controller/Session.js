@@ -23,23 +23,24 @@ Ext.define('NextThought.controller.Session', {
 	statics: {
 		login: function(app){
 			var win = null;
-			if (Ext.util.Cookies.get(COOKIE))
-				this.attemptLogin(null,success,showLogin);
-			else
-				showLogin();
-
-			function showLogin(){
-				win = Ext.create('NextThought.view.windows.LoginWindow',{callback: success});
-			}
 
 			function success(){
 				if(win){
 					win.close();
 				}
-
 				app.fireEvent('session-ready');
-
 				NextThought.controller.Application.launch();
+			}
+
+			function showLogin(){
+				win = Ext.create('NextThought.view.windows.LoginWindow',{callback: success});
+			}
+
+			if (Ext.util.Cookies.get(COOKIE)) {
+				this.attemptLogin(null,success,showLogin);
+			}
+			else {
+				showLogin();
 			}
 		},
 
@@ -50,8 +51,9 @@ Ext.define('NextThought.controller.Session', {
 						(domain? ('; domain='+domain): '');
 			}
 
-			if(Ext.Ajax.defaultHeaders)
+			if(Ext.Ajax.defaultHeaders) {
 				delete Ext.Ajax.defaultHeaders.Authorization;
+			}
 
 			delete Ext.Ajax.username;
 			delete Ext.Ajax.password;
@@ -212,17 +214,6 @@ Ext.define('NextThought.controller.Session', {
 			values = form.getValues(),
 			m	  = form.down('panel[name=login-message]');
 
-
-		win.el.mask('Please Wait...');
-		win.doLayout();
-
-		if(!form.getForm().isValid()) {
-			tryAgain();
-			return;
-		}
-
-		this.self.attemptLogin(values, success, tryAgain);
-
 		function success(){
 			win.close();
 			win.callback();
@@ -236,5 +227,16 @@ Ext.define('NextThought.controller.Session', {
 			win.doLayout();
 			win.el.unmask();
 		}
+
+
+		win.el.mask('Please Wait...');
+		win.doLayout();
+
+		if(!form.getForm().isValid()) {
+			tryAgain();
+			return;
+		}
+
+		this.self.attemptLogin(values, success, tryAgain);
 	}
 });

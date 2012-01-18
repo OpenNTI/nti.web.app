@@ -35,7 +35,7 @@ unparam=true	vars=false		white=false		widget=false	window=false
 POSIBLE_FLAGS
 
 LINT_OPTS='continue devel fragment sloppy unparam'
-FILES=`find src/main -name \*.js | sort -u -r`
+FILES=`find src/main -name \*.js | sort -u`
 ERRORS=false
 
 if [ "$1" != "" ] ; then
@@ -48,6 +48,9 @@ if [ "$1" != "" ] ; then
 		PRINT_DOTS="false"
 	else
 		if [ -f $1 ] ; then
+			clear
+			echo "Checking $1..."
+			echo ""
 			FILES=$1
 			PRINT_DOTS="false"
 		else

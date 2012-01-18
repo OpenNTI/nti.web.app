@@ -112,13 +112,17 @@ Ext.define('NextThought.controller.Classroom', {
 			pStore.proxy.url = _AppConfig.server.host+pColl.href;
 			pStore.load();
 		}
-		else console.warn('NO providers workspace!');
+		else {
+			console.warn('NO providers workspace!');
+		}
 
 		if(sColl) {
 			sStore.proxy.url = _AppConfig.server.host+sColl.href;
 			sStore.load();
 		}
-		else console.warn('NO providers workspace!');
+		else {
+			console.warn('NO providers workspace!');
+		}
 	},
 
 	flaggedMenuItemClicked: function(mi) {
@@ -136,7 +140,7 @@ Ext.define('NextThought.controller.Classroom', {
 
 
 	onClassroomChooserSelectionChange: function(evt,sel){
-		if(this.selectionClearing || sel.length == 0){
+		if(this.selectionClearing || sel.length === 0){
 			return;
 		}
 
@@ -149,19 +153,24 @@ Ext.define('NextThought.controller.Classroom', {
 		});
 
 		var button = Ext.ComponentQuery.query('classroom-chooser button[edit]')[0];
-		if (sel[0].get('Class') === 'ClassInfo') button.enable();
-		else button.disable();
-
+		if (sel[0].get('Class') === 'ClassInfo') {
+			button.enable();
+		}
+		else {
+			button.disable();
+		}
 
 		delete this.selectionClearing;
 	},
 
 
 	isClassroom: function(roomOrMessageInfo){
-		if(!roomOrMessageInfo)return false;
+		if(!roomOrMessageInfo) {
+			return false;
+		}
 		var c = roomOrMessageInfo.get('ContainerId');
 
-		if (c in this.rooms) {
+		if (this.rooms.hasOwnProperty(c)) {
 			this.rooms[c] = roomOrMessageInfo;
 			return true;
 		}
@@ -215,7 +224,9 @@ Ext.define('NextThought.controller.Classroom', {
 			win.close();
 			return;
 		}
-		if (btn.action !== 'save') return;
+		if (btn.action !== 'save') {
+			return;
+		}
 
 		value = win.down('class-info-form').getValue();
 
@@ -312,8 +323,9 @@ Ext.define('NextThought.controller.Classroom', {
 			ld = this.getLiveDisplay();
 
 		//make sure activate makes it to live display if the classroom is up, if its not up, show chooser
-		if(!c.down('classroom-content'))
+		if(!c.down('classroom-content')) {
 			c.showClassChooser();
+		}
 		else {
 			if (ld._content.items.first() !== ld.getReaderPanel()) {
 				ld._content.add(ld.getReaderPanel());

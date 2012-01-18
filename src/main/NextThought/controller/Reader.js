@@ -81,8 +81,9 @@ Ext.define('NextThought.controller.Reader', {
 	onAnnotationsLoad: function(containerId) {
 		var ps = this.getStoreForPageItems(containerId);
 
-		if( ps )
+		if( ps ) {
 			ps.load();
+		}
 
 		//When the reader changes, we need to tell the stream controller so he knows to
 		//update his data
@@ -96,7 +97,9 @@ Ext.define('NextThought.controller.Reader', {
 			link = page ? page.getLink(USER_GENERATED_DATA) : null,
 			ps = this.pageStores[containerId];
 
-		if(!link) return null;
+		if(!link) {
+			return null;
+		}
 
 		if(!ps){
 			ps = Ext.create(
@@ -117,7 +120,7 @@ Ext.define('NextThought.controller.Reader', {
 		var reader = this.getReader(),
 			containerId = reader.getContainerId();
 
-		if(store.storeId == ('page-store:'+containerId)){
+		if(store.storeId === ('page-store:'+containerId)){
 			reader.objectsLoaded(store.getBins());
 		}
 	},
@@ -126,19 +129,25 @@ Ext.define('NextThought.controller.Reader', {
 	onRemoveAnnotation: function(oid, containerId){
 		function clean(){
 			var o = ps.getById(oid);
-			if(o) o.destroy({});
+			if(o) {
+				o.destroy({});
+			}
 			me.getReader().removeAnnotation(oid);
 		}
 
 		var me=this,
 			ps = this.getStoreForPageItems(containerId);
-		if(!ps) return;
+		if(!ps) {
+			return;
+		}
 
 		if(ps.isLoading() || ps.getCount()===0){
 			ps.on('load', clean, this, {single: true});
 			ps.load();
 		}
-		else clean();
+		else {
+			clean();
+		}
 	},
 
 
@@ -150,8 +159,9 @@ Ext.define('NextThought.controller.Reader', {
 		this.getReaderMode().restoreReader();
 
 		var sc = this.getController('State');
-		if(NextThought.isInitialised)
+		if(NextThought.isInitialised) {
 			this.getReader().restore(sc.getState());
+		}
 	},
 
 	navigateToItem: function(i) {
@@ -160,7 +170,9 @@ Ext.define('NextThought.controller.Reader', {
 				containerId, bookInfo, book, href;
 
 		//right now, only handle notes and highlights, not sure what to do with users etc...
-		if (c != 'Note' && c != 'Highlight') return;
+		if (c !== 'Note' && c !== 'Highlight') {
+			return;
+		}
 
 		containerId = i.get('ContainerId');
 		bookInfo = Library.findLocation(containerId);
@@ -170,7 +182,9 @@ Ext.define('NextThought.controller.Reader', {
 	},
 
 	buttonClicked: function(button) {
-		if (!button || !button.book || !button.location) return;
+		if (!button || !button.book || !button.location) {
+			return;
+		}
 
 		var skip = button.skipHistory,
 				ntiid = button.ntiid,
@@ -184,13 +198,15 @@ Ext.define('NextThought.controller.Reader', {
 	navigate: function(book, ref, options, skipHistory, ntiid){
 		//	   this.getReaderMode().activate();
 		this.getReader().setActive(book, ref, skipHistory,
-				options ? typeof(options)=='function' ? options
+				options ? typeof(options)==='function' ? options
 						: Ext.bind(this.scrollToText, this, [options.text, options.oid])
 						: undefined, ntiid);
 	},
 
 	getElementsByTagNames: function(list,obj) {
-		if (!obj) obj = document;
+		if (!obj) {
+			obj = document;
+		}
 
 		var tagNames = list.split(','),
 			resultArray = [],
@@ -204,7 +220,9 @@ Ext.define('NextThought.controller.Reader', {
 		}
 
 		testNode = resultArray[0];
-		if (!testNode) return [];
+		if (!testNode) {
+			return [];
+		}
 		if (testNode.sourceIndex) {
 			resultArray.sort(function (a,b) {
 				return a.sourceIndex - b.sourceIndex;
@@ -223,7 +241,9 @@ Ext.define('NextThought.controller.Reader', {
 			this.getReader().scrollToId(oid);
 			return;
 		}
-		else if (!text) return;
+		else if (!text) {
+			return;
+		}
 
 		text = text.toLowerCase();
 
@@ -239,13 +259,15 @@ Ext.define('NextThought.controller.Reader', {
 				regex = new RegExp(Ext.String.escapeRegex(text), 'i');
 
 			//if it's not here, move to the next block
-			if (!i.match(regex)) return;
+			if (!i.match(regex)) {
+				return;
+			}
 
 			texts = document.evaluate('.//text()', c,
 					null, XPathResult.ORDERED_NODE_ITERATOR_TYPE,
 					null);
 
-			while((node = texts.iterateNext())){
+			while(!!(node = texts.iterateNext())){
 				nv = node.nodeValue.toLowerCase();
 
 				index = nv.indexOf(text);
@@ -267,10 +289,12 @@ Ext.define('NextThought.controller.Reader', {
 
 		setTimeout(function(){
 			me.getReader().showRanges(ranges);
-			if (oid)
+			if (oid) {
 				me.getReader().scrollToId(oid);
-			else
+			}
+			else {
 				me.getReader().scrollTo(ranges[0].getClientRects()[0].top - 150);
+			}
 		}, 500);
 	},
 

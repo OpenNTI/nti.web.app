@@ -1,5 +1,3 @@
-
-
 Ext.define('NextThought.controller.Whiteboard', {
 	extend: 'Ext.app.Controller',
 
@@ -57,7 +55,7 @@ Ext.define('NextThought.controller.Whiteboard', {
 	},
 
 	showWhiteboardWindow: function(){
-		if (!this.win)
+		if (!this.win) {
 			this.win = Ext.create('Ext.Window', {
 					maximizable:true,
 					closeAction: 'hide',
@@ -66,6 +64,7 @@ Ext.define('NextThought.controller.Whiteboard', {
 					layout: 'fit',
 					items: {xtype: 'whiteboard'}
 				});
+		}
 
 		this.win.show();
 	},
@@ -86,7 +85,9 @@ Ext.define('NextThought.controller.Whiteboard', {
 			sel = ref.getSelected(),
 			oldTarget,
 			oldActual,a;
-		if(!sel) return;
+		if(!sel) {
+			return;
+		}
 
 		oldTarget = sel.strokeWidthTarget;
 		oldActual = sel.attr['stroke-width'];
@@ -145,11 +146,15 @@ Ext.define('NextThought.controller.Whiteboard', {
 //			if(!bb.width && !bb.height)this.sprite.destroy();
 			delete this.sprite;
 		}
-		if(this.surfacePosition) delete this.surfacePosition;
+		if(this.surfacePosition) {
+			delete this.surfacePosition;
+		}
 	},
 
 	surfaceMouseMove: function(e){
-		if(!this.sprite)return;
+		if(!this.sprite) {
+			return;
+		}
 
 		var wb = this.getWhiteboardFrom(e),
 			op = this.sprite.initalPoint,
@@ -157,16 +162,6 @@ Ext.define('NextThought.controller.Whiteboard', {
 			sw = this.sprite['stroke-width'],
 			p = op.concat(dt),
 			m;
-
-		dt.push(op, length.apply(this,p), degrees.apply(this,p), sw);
-
-		m = this.spriteModifier[this.sprite.getShape()];
-		if(!m){
-			return;
-		}
-
-		m.apply(this, dt);
-
 
 		function degrees(x0,y0, x1,y1){
 			var dx	= (x1-x0),
@@ -178,6 +173,15 @@ Ext.define('NextThought.controller.Whiteboard', {
 		function length(x,y,x1,y1){
 			return Math.sqrt(Math.pow(x-x1,2)+Math.pow(y-y1,2));
 		}
+
+		dt.push(op, length.apply(this,p), degrees.apply(this,p), sw);
+
+		m = this.spriteModifier[this.sprite.getShape()];
+		if(!m){
+			return;
+		}
+
+		m.apply(this, dt);
 	},
 
 	surfaceMouseDown: function(e){

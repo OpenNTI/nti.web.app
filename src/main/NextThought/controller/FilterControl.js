@@ -1,5 +1,3 @@
-
-
 Ext.define('NextThought.controller.FilterControl', {
 	extend: 'Ext.app.Controller',
 
@@ -50,8 +48,9 @@ Ext.define('NextThought.controller.FilterControl', {
 	
 	
 	beginChanges: function(id){
-		if(this.beginChanges[id])
+		if(this.beginChanges[id]) {
 			return false;
+		}
 			
 		this.beginChanges[id] = true;
 		
@@ -60,8 +59,9 @@ Ext.define('NextThought.controller.FilterControl', {
 	
 	
 	setState: function(id){
-		if(!this.beginChanges(id))
+		if(!this.beginChanges(id)) {
 			return;
+		}
 		
 		//TODO: rebuild saved state
 		
@@ -76,8 +76,9 @@ Ext.define('NextThought.controller.FilterControl', {
 	
 	allGroupsSelected: function(me, nv, ov, opts){
 		var id = me.up('filter-control').getId();
-		if(!this.beginChanges(id))
+		if(!this.beginChanges(id)) {
 			return;
+		}
 			
 		Ext.each(this.getGroups(id), function(c){ c.setValue(nv); },this);
 		this.rebuildFilter(id);
@@ -85,8 +86,9 @@ Ext.define('NextThought.controller.FilterControl', {
 	
 	groupSelectionChanged: function(me, nv, ov, opts){
 		var id = me.up('filter-control').getId();
-		if(!this.beginChanges(id))
+		if(!this.beginChanges(id)) {
 			return;
+		}
 		
 		this.getAllGroupsButton(id).setValue(false);
 		this.rebuildFilter(id);
@@ -98,8 +100,9 @@ Ext.define('NextThought.controller.FilterControl', {
 	
 	allTypesSelected: function(me, nv, ov, opts){
 		var id = me.up('filter-control').getId();
-		if(!this.beginChanges(id))
+		if(!this.beginChanges(id)) {
 			return;
+		}
 			
 		Ext.each(this.getTypes(id), function(c){ c.setValue(nv); },this);
 		this.rebuildFilter(id);
@@ -107,8 +110,9 @@ Ext.define('NextThought.controller.FilterControl', {
 	
 	typeSelectionChanged: function(me, nv, ov, opts){
 		var id = me.up('filter-control').getId();
-		if(!this.beginChanges(id))
+		if(!this.beginChanges(id)) {
 			return;
+		}
 		
 		this.getAllTypesButton(id).setValue(false);
 		this.rebuildFilter(id);
@@ -124,7 +128,7 @@ Ext.define('NextThought.controller.FilterControl', {
 			f = Ext.Function.createBuffered(this.rebuildFilterBuffered,50,this,[id]);
 			this.rebuildFilter[id] = f; 
 		}
-		f.call();
+		f.call(window);
 	},
 	
 	rebuildFilterBuffered: function(id){
@@ -136,11 +140,15 @@ Ext.define('NextThought.controller.FilterControl', {
 			types = this.getTypes(id),
 			u = _AppConfig.username;
 
-		if(allGroups) filter.groups = 'all';
+		if(allGroups) {
+			filter.groups = 'all';
+		}
 		else {
 			Ext.each( groups,
 				function(g) {
-					if(!g.getValue()) return;
+					if(!g.getValue()) {
+						return;
+					}
 					if(g.isMe){
 						filter.includeMe = true;
 						return;
@@ -162,7 +170,9 @@ Ext.define('NextThought.controller.FilterControl', {
 		}
 		
 		Ext.each(types,function(t){
-			if(!t.getValue()) return;
+			if(!t.getValue()) {
+				return;
+			}
 			filter.types.push(t.model);
 		},
 		this);

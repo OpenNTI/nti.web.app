@@ -84,8 +84,9 @@ Ext.define('NextThought.controller.Stream', {
 		//make sure stream doesn't contain old stuff.
 		ss = this.getStoreForStream(containerId);
 		widget.setStore(ss);
-		if( ss.getProxy().url && !ss.isLoading() )
+		if( ss.getProxy().url && !ss.isLoading() ) {
 			ss.load();
+		}
 	},
 
 	getStoreForStream: function(containerId) {
@@ -99,7 +100,9 @@ Ext.define('NextThought.controller.Stream', {
 				link = store.getLink(containerId,RECURSIVE_STREAM);
 
 			//page exists, no link
-			if(link===null) return null;
+			if(link===null) {
+				return null;
+			}
 
 			//we don't know... reload page store
 			if(link===false) {
@@ -138,7 +141,9 @@ Ext.define('NextThought.controller.Stream', {
 
 		Ext.each(lineage,function(cid){
 			var s = me.getStoreForStream(cid);
-			if( s ) s.add(change);
+			if( s ) {
+				s.add(change);
+			}
 		});
 
 		this.getStreamStore().add(change);

@@ -72,12 +72,14 @@ Ext.define('NextThought.controller.State', {
 			return;
 		}
 		//v.fireEvent('restore', s || BASE_STATE);
-		if (s) v.fireEvent('restore', s);
+		if (s) {
+			v.fireEvent('restore', s);
+		}
 	},
 
 
 	trackMode: function(modeId){
-		if(this._currentState.active != modeId && NextThought.isInitialised){
+		if(this._currentState.active !== modeId && NextThought.isInitialised){
 			//console.debug(this._currentState.active, modeId);
 			this._currentState.active = modeId;
 			history.pushState(this._currentState, 'Title Goes Here');
@@ -105,25 +107,27 @@ Ext.define('NextThought.controller.State', {
 		}
 
 		for(key in stateObject){
-			if(!stateObject.hasOwnProperty(key) || !/object/i.test(typeof(stateObject[key]))) continue;
-			c = Ext.getCmp(key);
-			if(c && c.restore){
-				try{
-					stateScoped = {};
-					this._currentState[key] = stateScoped[key] = stateObject[key];
-					c.restore(stateScoped);
+			if(stateObject.hasOwnProperty(key) && /object/i.test(typeof(stateObject[key]))) {
+				c = Ext.getCmp(key);
+				if(c && c.restore){
+					try{
+						stateScoped = {};
+						this._currentState[key] = stateScoped[key] = stateObject[key];
+						c.restore(stateScoped);
+					}
+					catch(e){
+						console.error('Setting state: ', e, e.message, e.stack);
+					}
 				}
-				catch(e){
-					console.error('Setting state: ', e, e.message, e.stack);
+				else {
+					console.warn('The key', key, 'did not point to a component with a restore method:', c);
 				}
-			}
-			else {
-				console.warn('The key', key, 'did not point to a component with a restore method:', c);
 			}
 		}
 
-		if(replaceState)
+		if(replaceState) {
 			history.replaceState(this._currentState,'Title');
+		}
 
 		this.restoringState = false;
 	},
