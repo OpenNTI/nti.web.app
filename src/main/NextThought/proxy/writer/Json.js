@@ -13,8 +13,9 @@ Ext.define('NextThought.proxy.writer.Json', {
 
 		//filter out falsy values
 		for (key in defaults) {
-			if (!defaults.hasOwnProperty(key) || !defaults[key]) continue;
-			output[key] = defaults[key];
+			if (defaults.hasOwnProperty(key) && defaults[key]) {
+				output[key] = defaults[key];
+			}
 		}
 
 		delete output.Class;

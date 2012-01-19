@@ -36,20 +36,24 @@ Ext.define('NextThought.view.content.Reader', {
 		if(n) {
 			this.scrollToNode(n.getEl());
 		}
-		else console.warn('Could not find Component with id: ',id, "\n",printStackTrace().slice(3).join("\n"));
+		else {
+			console.warn('Could not find Component with id: ',id, "\n",printStackTrace().slice(3).join("\n"));
+		}
 	},
 
 	scrollToTarget: function(target){
 		var e = this.el.query('*[name='+target+']');
-		if(!e || !e.length)
+		if(!e || !e.length) {
 			console.warn('scrollToTarget: no target found: ',target);
-		else
+		}
+		else {
 			this.scrollToNode(e[0]);
+		}
 	},
 
 
 	scrollToNode: function(n) {
-		while(n && n.nodeType == 3) {//3 = ??
+		while(n && n.nodeType === 3) {//3 = ??
 			n = n.parentNode;
 		}
 
@@ -97,13 +101,14 @@ Ext.define('NextThought.view.content.Reader', {
 			vp= VIEWPORT.getEl(),
 			bc = me.ownerCt.getDockedComponent(0) || Ext.getCmp('breadcrumb');
 
-		if(me.active == pc[0]){
+		if(me.active === pc[0]){
 			if( callback ){
 				callback();
 			}
 
-			if(target)
+			if(target) {
 				me.scrollToTarget(target);
+			}
 
 			return;
 		}
@@ -111,13 +116,17 @@ Ext.define('NextThought.view.content.Reader', {
 		me.clearAnnotations();
 		me.relayout();
 		me.active = pc[0];
-		if(!skipHistory)
+		if(!skipHistory){
 			me._appendHistory(book, path);
-		else if(skipHistory != 'no-record')
+		}
+		else if(skipHistory !== 'no-record') {
 			me.fireEvent('unrecorded-history', book, path, ntiid);
+		}
 
 		vp.mask('Loading...');
-		if (bc) bc.setActive(book, f);
+		if (bc) {
+			bc.setActive(book, f);
+		}
 
 		me._request = Ext.Ajax.request({
 			url: b+f,
@@ -240,7 +249,7 @@ Ext.define('NextThought.view.content.Reader', {
 			l = window.location.href.split("#")[0],
 			r = el.href,
 			p = r.substring(h.length),
-			b = r.split('#')[0] == l,
+			b = r.split('#')[0] === l,
 			hash = p.split('#');
 
 		//pop out links that point to external resources

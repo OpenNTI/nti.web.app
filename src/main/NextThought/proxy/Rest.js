@@ -60,12 +60,14 @@ Ext.define('NextThought.proxy.Rest', {
 		}
 
 
-		if(!href) Ext.Error.raise({
-			msg:'The URL is undefined!',
-			action: action,
-			record: record,
-			mimeType: mimeType
-		});
+		if(!href) {
+			Ext.Error.raise({
+				msg:'The URL is undefined!',
+				action: action,
+				record: record,
+				mimeType: mimeType
+			});
+		}
 
 		return href;
 	},
@@ -77,7 +79,8 @@ Ext.define('NextThought.proxy.Rest', {
 		catch(e){
 			console.error(e.message, e);
 		}
-		if(response.status !== 404)
+		if(response.status !== 404) {
 			console.error('Error getting data:', arguments);
+		}
 	}
 });

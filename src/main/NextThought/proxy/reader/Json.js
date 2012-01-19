@@ -11,20 +11,21 @@ Ext.define('NextThought.proxy.reader.Json', {
 
 		if(mimeType === 'application/vnd.nextthought.collection' || (mimeType===undefined && items)) {
 			for(key in items){
-				if(!items.hasOwnProperty(key))continue;
-				item = items[key];
+				if(items.hasOwnProperty(key)){
+					item = items[key];
 
-				if(typeof(item)==='string'){
-					console.warn('IGNORING: Received string item at key:', key, item);
-					continue;
+					if(typeof(item)==='string'){
+						console.warn('IGNORING: Received string item at key:', key, item);
+						continue;
+					}
+
+					if(!item.Class || !NextThought.model.hasOwnProperty(item.Class)){
+						console.warn('IGNORING: Received object that does not match a model');
+						continue;
+					}
+
+					records.push(items[key]);
 				}
-
-				if(!item.Class || !(item.Class in NextThought.model)){
-					console.warn('IGNORING: Received object that does not match a model');
-					continue;
-				}
-
-				records.push(items[key]);
 			}
 		}
 		else {
@@ -39,7 +40,7 @@ Ext.define('NextThought.proxy.reader.Json', {
 				record = result.records[i];
 				try{
 					modelName = 'NextThought.model.'+record.get('Class');
-					if(record.modelName != modelName){
+					if(record.modelName !== modelName){
 //						console.debug('converting model:',modelName, 'from:', record.modelName);
 						result.records[i] = Ext.create(
 								modelName,

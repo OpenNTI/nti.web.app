@@ -10,8 +10,9 @@ Ext.data.Types.LINKS = {
 				var i, c = this.links,len = c.length;
 				if(typeof(c) === 'object'){
 					for(i=len-1; i>=0; i--){
-						if(c[i].rel == rel)
+						if(c[i].rel === rel) {
 							return c[i].href;
+						}
 					}
 				}
 				else {
@@ -55,8 +56,9 @@ Ext.define('NextThought.model.Base', {
 			cName = this.self.getName().split('.').pop(),
 			cField = f.getByKey('Class');
 
-		if(!cField.defaultValue)
+		if(!cField.defaultValue) {
 			cField.defaultValue = cName;
+		}
 
 		if(!(new RegExp(cName,'i')).test(this.mimeType)){
 			this.mimeType += '.'+cName.toLowerCase();
@@ -154,7 +156,7 @@ Ext.define('NextThought.model.Base', {
 						return;
 					}
 
-					if(Ext.isDate(fa) && Ext.isDate(fb) && fa+0 == fb+0){
+					if(Ext.isDate(fa) && Ext.isDate(fb) && (+fa) === (+fb)){
 						return;
 					}
 
@@ -179,7 +181,9 @@ Ext.define('NextThought.model.Base', {
 				if (Ext.isDate(x)) {
 					x = x.getTime()/1000;
 				}
-				else if (x && x.toJSON) x = x.toJSON();
+				else if (x && x.toJSON) {
+					x = x.toJSON();
+				}
 				else if(x && Ext.isArray(x)) {
 					Ext.each(x, function(o, i){
 						x[i] = o.toJSON ? o.toJSON() : o;
@@ -200,11 +204,12 @@ Ext.define('NextThought.model.Base', {
 Ext.data.Types.SINGLEITEM = {
 	type: 'singleItem',
 	convert: function(v) {
-		if (v instanceof Object)
+		if (v instanceof Object) {
 			return !v ? null : ParseUtils.parseItems([v])[0];
+		}
 		else {
 			console.warn('unexpected value', v);
-			return null
+			return null;
 		}
 	},
 	sortType: function(v) {
@@ -216,11 +221,12 @@ Ext.data.Types.SINGLEITEM = {
 Ext.data.Types.ARRAYITEM = {
 	type: 'arrayItem',
 	convert: function(v) {
-		if (Ext.isArray(v))
+		if (Ext.isArray(v)) {
 			return ParseUtils.parseItems(v);
+		}
 		else {
 			console.warn('unexpected value', v);
-			return null
+			return null;
 		}
 	},
 	sortType: function(v) {
@@ -235,14 +241,15 @@ Ext.data.Types.COLLECTIONITEM = {
 		var values = [], key;
 		if (v instanceof Object) {
 			for(key in v) {
-				if (v.hasOwnProperty(key) && v[key] instanceof Object)
+				if (v.hasOwnProperty(key) && v[key] instanceof Object) {
 					values.push(v[key]);
+				}
 			}
 			return ParseUtils.parseItems(values) ;
 		}
 		else {
 			console.warn('unexpected value', v);
-			return null
+			return null;
 		}
 	},
 	sortType: function(v) {
@@ -258,20 +265,23 @@ Ext.data.Types.USERLIST = {
 			var a = arguments,
 				u = [];
 
-			if(v) Ext.each(v, function(o){
-				var p =
-					typeof(o)=='string' ?
-						o : o.get ?
-							o.get('Username') : o.Username ?
-								o.Username : null;
-				if(!p)
-					console.warn("WARNING: Could not handle Object: ", o, a);
-				else  {
-					u.push(p);
-					//asynchronously resolve this user so its cached and ready
-					UserRepository.prefetchUser(o);
-				}
-			});
+			if(v) {
+				Ext.each(v, function(o){
+					var p =
+						typeof(o)==='string' ?
+							o : o.get ?
+								o.get('Username') : o.Username ?
+									o.Username : null;
+					if(!p) {
+						console.warn("WARNING: Could not handle Object: ", o, a);
+					}
+					else  {
+						u.push(p);
+						//asynchronously resolve this user so its cached and ready
+						UserRepository.prefetchUser(o);
+					}
+				});
+			}
 
 			return u;
 		}

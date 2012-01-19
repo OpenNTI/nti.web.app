@@ -35,9 +35,10 @@ Ext.define('NextThought.util.StacktraceUtils',
 				ex = ex || this.createException();
 				// Do not use the stored mode: different exceptions in Chrome
 				// may or may not have arguments or stack
-				var mode = this.mode(ex);
+				var a,mode = this.mode(ex);
 				if (mode === 'other') {
-					return this.other(arguments.callee);
+					a = arguments;
+					return this.other(a.callee);
 				} else {
 					return this[mode](ex);
 				}
@@ -240,7 +241,7 @@ Ext.define('NextThought.util.StacktraceUtils',
 			 * @return Array Array of source code lines
 			 */
 			getSource: function(url) {
-				if (!(url in this.sourceCache)) {
+				if (!this.sourceCache.hasOwnProperty(url)) {
 					this.sourceCache[url] = this.ajax(url).split('\n');
 				}
 				return this.sourceCache[url];

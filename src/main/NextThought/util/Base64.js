@@ -7,7 +7,10 @@ Ext.define('NextThought.util.Base64',
 			return this.prefix + Ext.create('NextThought.util.Base64').encode( encodeURIComponent(username) + ":" + password );
 		},
 		getAuthInfo: function(s) {
-			if (!s || s.indexOf(this.prefix) != 0) return null; //not an auth string
+			if (!s || s.indexOf(this.prefix) !== 0) {
+				//not an auth string
+				return null;
+			}
 
 			var c = s.substring(this.prefix.length),
 				d = Ext.create('NextThought.util.Base64').decode(c),
@@ -20,11 +23,9 @@ Ext.define('NextThought.util.Base64',
 	_keyStr : 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=',
 
 	encode: function(stringToEncode) {
-		var output = "";
-		var chr1, chr2, chr3, enc1, enc2, enc3, enc4;
-		var i = 0;
+		var output = "", chr1, chr2, chr3, enc1, enc2, enc3, enc4, i = 0, input;
 
-		var input = this._utf8_encode(stringToEncode);
+		input = this._utf8_encode(stringToEncode);
 
 		while (i < input.length) {
 
@@ -53,12 +54,12 @@ Ext.define('NextThought.util.Base64',
 	},
 
 	decode : function (input) {
-		var output = "";
-		var chr1, chr2, chr3;
-		var enc1, enc2, enc3, enc4;
-		var i = 0;
+		var output = "",
+			chr1, chr2, chr3,
+			enc1, enc2, enc3, enc4,
+			i = 0;
 
-		input = input.replace(/[^A-Za-z0-9\+\/\=]/g, "");
+		input = input.replace(/[^A-Za-z0-9\+\/=]/g, "");
 
 		while (i < input.length) {
 
@@ -73,10 +74,10 @@ Ext.define('NextThought.util.Base64',
 
 			output = output + String.fromCharCode(chr1);
 
-			if (enc3 != 64) {
+			if (enc3 !== 64) {
 				output = output + String.fromCharCode(chr2);
 			}
-			if (enc4 != 64) {
+			if (enc4 !== 64) {
 				output = output + String.fromCharCode(chr3);
 			}
 
@@ -92,11 +93,11 @@ Ext.define('NextThought.util.Base64',
 	// private method for UTF-8 encoding
 	_utf8_encode : function (string) {
 		string = string.replace(/\r\n/g,"\n");
-		var utftext = "";
+		var utftext = "", n, c;
 
-		for (var n = 0; n < string.length; n++) {
+		for (n = 0; n < string.length; n++) {
 
-			var c = string.charCodeAt(n);
+			c = string.charCodeAt(n);
 
 			if (c < 128) {
 				utftext += String.fromCharCode(c);
@@ -117,9 +118,7 @@ Ext.define('NextThought.util.Base64',
 	},
 
 	_utf8_decode : function (utftext) {
-		var string = "";
-		var i = 0;
-		var c = c1 = c2 = 0;
+		var string = "", i = 0, c = 0, c2 = 0, c3=0;
 
 		while ( i < utftext.length ) {
 

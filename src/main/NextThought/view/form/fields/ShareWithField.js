@@ -47,10 +47,12 @@ Ext.define('NextThought.view.form.fields.ShareWithField', {
 
 	setReadOnly: function(readOnly){
 		this.readOnly = readOnly;
-		if(readOnly)
+		if(readOnly) {
 			this._inputField.hide();
-		else
+		}
+		else {
 			this._inputField.show();
+		}
 
 		this.items.get(0).items.each(function(token){
 			token.setReadOnly(readOnly);
@@ -76,7 +78,9 @@ Ext.define('NextThought.view.form.fields.ShareWithField', {
 		var m = this;
 		Ext.each(m.value, function(o){
 			var u = NextThought.cache.UserRepository.getUser(o);
-			if(u)m.addSelection(u);
+			if(u) {
+				m.addSelection(u);
+			}
 			else{
 				m.addSelection(Ext.create('model.unresolved-user',{Username: o}));
 			}
@@ -110,7 +114,7 @@ Ext.define('NextThought.view.form.fields.ShareWithField', {
 		Ext.each(
 			this._selections,
 			function(o){
-				return !(found=(o.getId()==id));
+				return !(found=(o.getId()===id));
 			},
 			this
 		);
@@ -124,7 +128,9 @@ Ext.define('NextThought.view.form.fields.ShareWithField', {
 			s = [];
 
 		Ext.each(this._selections, function(o){
-			if(o.getId()==id) return;
+			if(o.getId()===id) {
+				return;
+			}
 
 			s.push(o);
 		});
@@ -143,7 +149,9 @@ Ext.define('NextThought.view.form.fields.ShareWithField', {
 
 	addSelection: function(user){
 		var m = this;
-		if(m.__contains(user)) return;
+		if(m.__contains(user)) {
+			return;
+		}
 
 		m._selections.push(user);
 		m._addToken(user);

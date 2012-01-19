@@ -81,7 +81,7 @@ Ext.define('NextThought.view.content.Classroom', {
 
 	onDefault: function(msg, opts) {
 		var r = msg.get('ContainerId'),
-			moderated = !!('moderated' in opts),
+			moderated =  opts.hasOwnProperty('moderated'),
 			v = this.down('chat-view'),
 			mlog = this.down('chat-log-view');
 
@@ -112,7 +112,9 @@ Ext.define('NextThought.view.content.Classroom', {
 		var script = this.down('chat-on-deck-log-view'),
 			id = IdCache.getIdentifier(msg.getId());
 
-		if (!script) return;
+		if (!script) {
+			return;
+		}
 
 		//TODO: consequently, only do this id we end up marking something as promoted:
 		script.scrollToFirstNonPromotedEntry();

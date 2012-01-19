@@ -29,17 +29,17 @@ Ext.define('NextThought.view.widgets.MiniStreamEntry', {
 		var c = this.change.get('Creator'),
 			u = NextThought.cache.UserRepository.getUser(c);
 
-		this.renderData['cls'] = this.cls || '';
-		this.renderData['avatarURL'] = u.get('avatarURL');
-		this.renderData['name'] = u.get('alias')||u.get('realname');
-		this.renderData['text'] = this.change.get('Item')
-			? [this.change.get('ChangeType'),' a ',this.change.get('Item').raw.Class].join('')
+		this.renderData.cls = this.cls || '';
+		this.renderData.avatarURL = u.get('avatarURL');
+		this.renderData.name = u.get('alias')||u.get('realname');
+		this.renderData.text = this.change.get('Item') ?
+				[this.change.get('ChangeType'),' a ',this.change.get('Item').raw.Class].join('')
 			: 'deleted something';
 	},
 
 	afterRender: function() {
 		var me=this,
-			itm = me.change.get('Item');
+			itm = me.change.get('Item'), e, t;
 		me.callParent(arguments);
 		me.box.on('click', function(){
 			VIEWPORT.fireEvent('stream-item-clicked', itm);
@@ -47,8 +47,8 @@ Ext.define('NextThought.view.widgets.MiniStreamEntry', {
 
 		//lets put some popovers on this to show the contents?  Maybe this should be inline so as to see it at a
 		//glance w/o having to navigate to it?
-		var e = this.getEl(),
-			t = AnnotationUtils.getBodyTextOnly(itm);
+		e = this.getEl();
+		t = AnnotationUtils.getBodyTextOnly(itm);
 		if (t) {
 			Ext.create('Ext.tip.ToolTip', {
 				target: e,

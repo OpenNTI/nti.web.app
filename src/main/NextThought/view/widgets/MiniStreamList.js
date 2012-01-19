@@ -51,7 +51,7 @@ Ext.define('NextThought.view.widgets.MiniStreamList', {
 
 			u = change.get('Creator');
 
-			if( /all/i.test(f.groups) || f.shareTargets && f.shareTargets[ u ] || (f.includeMe && f.includeMe==u)){
+			if( (/all/i).test(f.groups) || (f.shareTargets && f.shareTargets[ u ]) || (f.includeMe && f.includeMe===u)){
 				c++;
 				p.add({change: change, xtype: 'miniStreamEntry'});
 			}
@@ -64,6 +64,8 @@ Ext.define('NextThought.view.widgets.MiniStreamList', {
 			}
 		});
 
-		if (!c) p.add({html: 'No recent activity to show'});
+		if (!c) {
+			p.add({html: 'No recent activity to show'});
+		}
 	}
 });

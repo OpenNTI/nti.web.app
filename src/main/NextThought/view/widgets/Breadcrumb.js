@@ -17,7 +17,7 @@ Ext.define('NextThought.view.widgets.Breadcrumb', {
 		this.callParent(arguments);
 		if (!Library.loaded) {
 			this.add({ text: 'Loading...' });
-			Library.on('loaded',function(){ if(!this._current.location) this.reset(); }, this);
+			Library.on('loaded',function(){ if(!this._current.location) {this.reset(); } }, this);
 		}
 		else {
 			this.reset();
@@ -154,7 +154,7 @@ Ext.define('NextThought.view.widgets.Breadcrumb', {
 				h   = o.get('href'),
 				m	= {
 					text: o.get('title'),
-					checked: book && o.get('index')==book.get('index'),
+					checked: book && o.get('index')===book.get('index'),
 					group: 'library',
 					book: o,
 					location: h
@@ -177,12 +177,14 @@ Ext.define('NextThought.view.widgets.Breadcrumb', {
 	
 	
 	_renderBranch: function(book, leafs, node, selectedNode) {
-		if(!node)return;
+		if(!node) {
+			return;
+		}
 		Ext.each(node.childNodes,function(v){
-			if(v.nodeName=="#text"||!v.hasAttribute("label")){
+			if(v.nodeName==="#text"||!v.hasAttribute("label")){
 				return;
 			}
-			leafs.push(this._renderLeafFromTopic(book, v, v==selectedNode)||{});
+			leafs.push(this._renderLeafFromTopic(book, v, v===selectedNode)||{});
 		}, this);
 	},
    

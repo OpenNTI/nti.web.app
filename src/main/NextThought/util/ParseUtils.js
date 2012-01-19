@@ -2,37 +2,43 @@ Ext.define('NextThought.util.ParseUtils',{
 	alternateClassName: 'ParseUtils',
 	singleton: true,
 
-	parseItems: function(items){
-		var key, item, reader, results = [], suppl = arguments[1];
+	/**
+	 * @param items
+	 * @param [supplemental] Properties to add to the parsed items (such as flags)
+	 */
+	parseItems: function(items, supplemental){
+		var key, item, reader, results = [];
 		for(key in items){
-			if(!items.hasOwnProperty(key)) continue;
-			item = items[key] || {};
+			if(items.hasOwnProperty(key)) {
+				item = items[key] || {};
 
-			if (item instanceof Ext.data.Model) {
-				results.push(item);
-				continue;
-			}
+				if (item instanceof Ext.data.Model) {
+					results.push(item);
+					continue;
+				}
 
-			reader = this.getReaderForModel(item.Class);
-			if(!reader) {
-				console.error('No reader for item: ', item);
-				continue;
-			}
+				reader = this.getReaderForModel(item.Class);
+				if(!reader) {
+					console.error('No reader for item: ', item);
+					continue;
+				}
 
-			if(suppl){
-				Ext.applyIf(item, suppl);
-			}
+				if(supplemental){
+					Ext.applyIf(item, supplemental);
+				}
 
-			try{
-				results.push( reader.read(item).records[0] );
-			}
-			catch(e){
-				debugger;
-				console.error(e.stack);
-				if(/user/i.test(item.Class))
-					results.push( UserRepository.getUser(item.Username) );
-				else
-					throw e;
+				try{
+					results.push( reader.read(item).records[0] );
+				}
+				catch(e){
+					console.error(e.stack);
+					if(/user/i.test(item.Class)) {
+						results.push( UserRepository.getUser(item.Username) );
+					}
+					else {
+						throw e;
+					}
+				}
 			}
 		}
 
@@ -40,7 +46,6 @@ Ext.define('NextThought.util.ParseUtils',{
 	},
 
 	getReaderForModel: function(modelName) {
-		if (!modelName){debugger;}
 		this._readers = this._readers || [];
 
 		if (!NextThought.model.hasOwnProperty(modelName)){

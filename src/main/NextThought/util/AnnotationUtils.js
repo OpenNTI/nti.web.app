@@ -19,10 +19,11 @@ Ext.define('NextThought.util.AnnotationUtils',{
 	getBodyTextOnly: function(obj) {
 		var bdy = obj.get('body'), o, i, text = [];
 		for (i in bdy) {
-			if(!bdy.hasOwnProperty(i)) continue;
-			o = bdy[i];
-			if(typeof(o) == 'string'){
-				text.push(o.replace(/<.*?>/g, ''));
+			if(bdy.hasOwnProperty(i)) {
+				o = bdy[i];
+				if(typeof(o) === 'string'){
+					text.push(o.replace(/<.*?>/g, ''));
+				}
 			}
 		}
 		return text.join('');
@@ -56,7 +57,7 @@ Ext.define('NextThought.util.AnnotationUtils',{
 			};
 
 		Ext.Object.each(body, function(i,o){
-			if(typeof(o) == 'string'){
+			if(typeof(o) === 'string'){
 				text.push(o);
 				return;
 			}
@@ -90,12 +91,14 @@ Ext.define('NextThought.util.AnnotationUtils',{
 	getPathTo: function(element) {
 		var nodeName = element.nodeName, siblings, sibling, len, i=0, ix=0;
 
-		if (element.id && !/ext\-|a\d+|math/i.test(element.id))
+		if (element.id && !/ext\-|a\d+|math/i.test(element.id)) {
 			return 'id("'+element.id+'")';
-		if (element===document.body)
+		}
+		if (element===document.body) {
 			throw 'too far!';
+		}
 
-		if (nodeName == '#text') {
+		if (nodeName === '#text') {
 			nodeName = 'text()';
 		}
 
@@ -105,11 +108,13 @@ Ext.define('NextThought.util.AnnotationUtils',{
 
 		for (; i<len; i++) {
 			sibling = siblings[i];
-			if (sibling.nodeName==element.nodeName)
+			if (sibling.nodeName===element.nodeName) {
 				ix = ix+1;
+			}
 
-			if (sibling===element)
+			if (sibling===element) {
 				return this.getPathTo(element.parentNode)+'/'+nodeName+'['+ix+']';
+			}
 		}
 	},
 
@@ -151,8 +156,9 @@ Ext.define('NextThought.util.AnnotationUtils',{
 			refs.pop();
 		}
 
-		if(refs.length)
+		if(refs.length) {
 			holder.set('inReplyTo', refs[refs.length-1]);
+		}
 
 		holder.set('Creator', null);
 		holder.set('anchorPoint', note.get('anchorPoint'));
@@ -234,9 +240,9 @@ Ext.define('NextThought.util.AnnotationUtils',{
 		try {
 			range.setEnd(endElement ? endElement : startElement, r.get('endOffset'));
 			range.setStart(startElement, r.get('startOffset'));
-			if (startElement && !range.collapsed)
+			if (startElement && !range.collapsed) {
 				return range;
-
+			}
 		}
 		catch(e) { console.warn('bad range', r, e, e.toString()); }
 
@@ -298,11 +304,11 @@ Ext.define('NextThought.util.AnnotationUtils',{
 		texts = document.evaluate( './/text()',
 				container, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE, null);
 
-		while(resultRange.collapsed && (text = texts.iterateNext())){
-			if (text.nodeValue==startHighlightedFullText) {
+		while(resultRange.collapsed && !!(text = texts.iterateNext())){
+			if (text.nodeValue===startHighlightedFullText) {
 				resultRange.setStart(text, r.get('startOffset'));
 			}
-			if (text.nodeValue==endHighlightedFullText) {
+			if (text.nodeValue===endHighlightedFullText) {
 				resultRange.setEnd(text, r.get('endOffset'));
 			}
 		}
@@ -339,7 +345,9 @@ Ext.define('NextThought.util.AnnotationUtils',{
 		highlight.set('startOffset', range.startOffset);
 		//end information
 		highlight.set('endXpath', this.getPathTo(endNode));
-		if (startAnchor != endAnchor) highlight.set('endAnchor', endAnchor);
+		if (startAnchor !== endAnchor) {
+			highlight.set('endAnchor', endAnchor);
+		}
 		highlight.set('endOffset', range.endOffset);
 
 		//special case when the end node is a div containing an img.
@@ -379,18 +387,20 @@ Ext.define('NextThought.util.AnnotationUtils',{
 		if (!highlight.get('endAnchor')) {
 			//same anchor, this effects our snippets, there is no end snippet
 			highlight.set('startHighlightedFullText', fullText);
-			highlight.set('startHighlightedText', (fullText != startNode.nodeValue) ? fullText : startNode.nodeValue.substring(startOffset, endOffset));
+			highlight.set('startHighlightedText', (fullText !== startNode.nodeValue) ?
+					fullText : startNode.nodeValue.substring(startOffset, endOffset));
 		}
 		else {
 			//different anchors, we'll have 2 snippets
 			highlight.set('startHighlightedFullText', fullText);
-			highlight.set('startHighlightedText', (fullText != startNode.nodeValue) ? fullText : startNode.nodeValue.substring(startOffset));
+			highlight.set('startHighlightedText', (fullText !== startNode.nodeValue) ?
+					fullText : startNode.nodeValue.substring(startOffset));
 			highlight.set('endHighlightedFullText', this.getNodeTextValue(endNode));
 
 			fullText = this.getNodeTextValue(endNode);
 			highlight.set('endHighlightedText',
 					(endOffset !== 0 && endNode.nodeValue !== null) ?
-							(fullText != endNode.nodeValue) ?
+							(fullText !== endNode.nodeValue) ?
 									fullText : endNode.nodeValue.substring(0, endOffset)
 							: highlight.get('endHighlightedFullText'));
 		}
@@ -408,7 +418,7 @@ Ext.define('NextThought.util.AnnotationUtils',{
 		}
 
 		while (parentNode !== null) {
-			if (parentNode.nodeName == 'A') {
+			if (parentNode.nodeName === 'A') {
 				name = this.anchorNameOrNull(parentNode);
 				if (name !== null) {
 					//if we found a name, return it, otherwise allow this to continue.
@@ -419,7 +429,7 @@ Ext.define('NextThought.util.AnnotationUtils',{
 			//Look at all prior siblings at this level looking for an anchor
 			previousSibling = parentNode.previousSibling;
 			while(previousSibling !== null) {
-				if (previousSibling.nodeName == 'A') {
+				if (previousSibling.nodeName === 'A') {
 					name = this.anchorNameOrNull(previousSibling);
 					if (name !== null) {
 						//if we found a name, return it, otherwise allow this to continue.
@@ -467,7 +477,7 @@ Ext.define('NextThought.util.AnnotationUtils',{
 		if (children !== null) {
 			for(; i < children.length; i++) {
 				child = children[i];
-				if (child.nodeName == 'A') {
+				if (child.nodeName === 'A') {
 					anchorFound = this.anchorNameOrNull(child);
 				}
 				grandchildren = child.childNodes;
@@ -488,7 +498,9 @@ Ext.define('NextThought.util.AnnotationUtils',{
 
 //tested
 	isMathNode: function(node) {
-		if (!node || !node.getAttribute) return false;
+		if (!node || !node.getAttribute) {
+			return false;
+		}
 
 		var cls = node.getAttribute('className') || node.getAttribute('class');
 
@@ -612,7 +624,7 @@ Ext.define('NextThought.util.AnnotationUtils',{
 			for(; i < children.length; i++) {
 				child = children[i];
 
-				if (child == stopNode) {
+				if (child === stopNode) {
 					return last;
 				}
 
@@ -623,7 +635,7 @@ Ext.define('NextThought.util.AnnotationUtils',{
 				if (grandchildren !== null) {
 					for (; y < grandchildren.length; y++) {
 						grandchild = grandchildren[y];
-						if (grandchild == stopNode) {
+						if (grandchild === stopNode) {
 							return last;
 						}
 						x = this.findLastHighlightableNodeFromChildren(grandchild, stopNode);

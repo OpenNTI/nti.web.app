@@ -1,5 +1,3 @@
-
-
 Ext.define( 'NextThought.view.modes.Classroom', {
 	extend: 'NextThought.view.modes.Mode',
 	alias:	'widget.classroom-mode-container',
@@ -46,7 +44,9 @@ Ext.define( 'NextThought.view.modes.Classroom', {
 	},
 
 	hideClassChooser: function(){
-		if(!this.chooser)return;
+		if(!this.chooser) {
+			return;
+		}
 		this.chooser.close();
 		delete this.chooser;
 	},

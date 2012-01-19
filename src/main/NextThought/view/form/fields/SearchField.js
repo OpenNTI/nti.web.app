@@ -15,19 +15,19 @@ Ext.define('NextThought.view.form.fields.SearchField', {
 		this.on('specialkey', function(f, e){
 			//trigger search if enter is pressed, or if down is pressed and there isn't already a search
 			//console.debug('key=', e, ' hasSearch=', this.hasSearch);
-			if(e.getKey() == e.ESC){
+			if(e.getKey() === e.ESC){
 				this.onTrigger1Click();
 			}
-			else if(!this.hasSearch && (e.getKey() == e.ENTER || e.getKey() == e.DOWN)){
+			else if(!this.hasSearch && (e.getKey() === e.ENTER || e.getKey() === e.DOWN)){
 				this.onTrigger2Click();
 			}
-			else if (e.getKey() == e.DOWN) {
+			else if (e.getKey() === e.DOWN) {
 				this.onSelectDown();
 			}
-			else if (e.getKey() == e.UP) {
+			else if (e.getKey() === e.UP) {
 				this.onSelectUp();
 			}
-			else if (e.getKey() == e.ENTER || e.getKey() == e.RIGHT) {
+			else if (e.getKey() === e.ENTER || e.getKey() === e.RIGHT) {
 				//someone pressed enter when the search is visable, means navigate to selection
 				this.onChooseSelection();
 			}

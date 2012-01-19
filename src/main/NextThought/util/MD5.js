@@ -3,9 +3,8 @@ Ext.define('NextThought.util.MD5',
 	alternateClassName: 'MD5',
 	singleton: true,
 
-
-	get: function (string) {
-		var	m = this,
+	hash: function hash(string) {
+		var m = this,
 			x, temp,
 			k, AA,BB,CC,DD,
 			a = 0x67452301, b = 0xEFCDAB89, c = 0x98BADCFE, d = 0x10325476,
@@ -24,7 +23,7 @@ Ext.define('NextThought.util.MD5',
 
 		for (k=0;k<x.length;k+=16) {
 			AA=a; BB=b; CC=c; DD=d;
-			a=FF(a,b,c,d,x[k+0], S11,0xD76AA478);
+			a=FF(a,b,c,d,x[k],   S11,0xD76AA478);
 			d=FF(d,a,b,c,x[k+1], S12,0xE8C7B756);
 			c=FF(c,d,a,b,x[k+2], S13,0x242070DB);
 			b=FF(b,c,d,a,x[k+3], S14,0xC1BDCEEE);
@@ -43,7 +42,7 @@ Ext.define('NextThought.util.MD5',
 			a=GG(a,b,c,d,x[k+1], S21,0xF61E2562);
 			d=GG(d,a,b,c,x[k+6], S22,0xC040B340);
 			c=GG(c,d,a,b,x[k+11],S23,0x265E5A51);
-			b=GG(b,c,d,a,x[k+0], S24,0xE9B6C7AA);
+			b=GG(b,c,d,a,x[k],   S24,0xE9B6C7AA);
 			a=GG(a,b,c,d,x[k+5], S21,0xD62F105D);
 			d=GG(d,a,b,c,x[k+10],S22,0x2441453);
 			c=GG(c,d,a,b,x[k+15],S23,0xD8A1E681);
@@ -65,14 +64,14 @@ Ext.define('NextThought.util.MD5',
 			c=HH(c,d,a,b,x[k+7], S33,0xF6BB4B60);
 			b=HH(b,c,d,a,x[k+10],S34,0xBEBFBC70);
 			a=HH(a,b,c,d,x[k+13],S31,0x289B7EC6);
-			d=HH(d,a,b,c,x[k+0], S32,0xEAA127FA);
+			d=HH(d,a,b,c,x[k],   S32,0xEAA127FA);
 			c=HH(c,d,a,b,x[k+3], S33,0xD4EF3085);
 			b=HH(b,c,d,a,x[k+6], S34,0x4881D05);
 			a=HH(a,b,c,d,x[k+9], S31,0xD9D4D039);
 			d=HH(d,a,b,c,x[k+12],S32,0xE6DB99E5);
 			c=HH(c,d,a,b,x[k+15],S33,0x1FA27CF8);
 			b=HH(b,c,d,a,x[k+2], S34,0xC4AC5665);
-			a=II(a,b,c,d,x[k+0], S41,0xF4292244);
+			a=II(a,b,c,d,x[k],   S41,0xF4292244);
 			d=II(d,a,b,c,x[k+7], S42,0x432AFF97);
 			c=II(c,d,a,b,x[k+14],S43,0xAB9423A7);
 			b=II(b,c,d,a,x[k+5], S44,0xFC93A039);

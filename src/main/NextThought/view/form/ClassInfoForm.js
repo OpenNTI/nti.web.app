@@ -100,7 +100,7 @@ Ext.define('NextThought.view.form.ClassInfoForm', {
 		}, this);
 
 		v.Sections = sections;
-		v.Description = this.down('textarea[name=Description]').getValue()
+		v.Description = this.down('textarea[name=Description]').getValue();
 		v.ID = this.down('textfield[name=ID]').getValue();
 		return Ext.create('NextThought.model.ClassInfo', v, v.OID, v);
 
@@ -108,7 +108,9 @@ Ext.define('NextThought.view.form.ClassInfoForm', {
 
 
 	initValue: function() {
-		if (!this.value) return;
+		if (!this.value) {
+			return;
+		}
 
 		this.loadRecord(this.value);
 

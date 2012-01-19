@@ -153,7 +153,9 @@ Ext.define('NextThought.view.form.SectionInfoForm', {
 
 
 	initValue: function() {
-		if (!this.value) return;
+		if (!this.value) {
+			return;
+		}
 		this.setFieldValue('Description');
 		this.setFieldValue('OpenDate');
 		this.setFieldValue('CloseDate');

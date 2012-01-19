@@ -1,5 +1,3 @@
-
-
 Ext.define( 'NextThought.view.modes.Groups', {
 	extend: 'NextThought.view.modes.Mode',
 	alias:	'widget.groups-mode-container',
@@ -14,8 +12,8 @@ Ext.define( 'NextThought.view.modes.Groups', {
 
 		this.add({ flex:1, focusable: false, dockedItems: bb });
 		this.add({ region: 'west', id: 'west-groups', xtype: 'leftColumn', columnWidget: {} });
-   		
-   		this.add({
+
+		this.add({
 			cls: 'x-focus-pane',
 			flex: 6,
 			minWidth: CENTER_WIDTH/3,

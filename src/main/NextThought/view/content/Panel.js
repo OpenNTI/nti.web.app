@@ -1,4 +1,3 @@
-
 Ext.define('NextThought.view.content.Panel', {
 	extend: 'Ext.panel.Panel',
 	
@@ -21,7 +20,9 @@ Ext.define('NextThought.view.content.Panel', {
 	},
 	
 	relayout: function(){
-		if (this.ownerCt) this.ownerCt.doComponentLayout();
+		if (this.ownerCt) {
+			this.ownerCt.doComponentLayout();
+		}
 		this.doComponentLayout();
 		this.doLayout();
 		this.fireEvent('relayedout', this);
@@ -56,11 +57,11 @@ Ext.define('NextThought.view.content.Panel', {
 
 	_resolveBase: function(base) {   
 		//relative path
-		if(base && base!=="" && (base == '.' || base[0]!='/') && base.indexOf(':')<0) {
+		if(base && base!=="" && (base === '.' || base[0]!=='/') && base.indexOf(':')<0) {
 			var b = this._getCurrentPath();
 			
 			if(base.indexOf(b)!==0) {
-				base = b+'/'+(base=='.'?'':base);
+				base = b+'/'+(base==='.'?'':base);
 			}
 			
 		}
@@ -70,7 +71,7 @@ Ext.define('NextThought.view.content.Panel', {
 		}
 		
 		//make sure this ends in a slash
-		if(base && base[base.length-1] != '/'){
+		if(base && base[base.length-1] !== '/'){
 			base = base + '/';
 		}
 		

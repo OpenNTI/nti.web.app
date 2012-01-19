@@ -7,9 +7,10 @@ Ext.define('NextThought.util.Color',{
 
 
 	toRGBA: function(color, alpha) {
-		if (typeof color == 'string') {
-			if(!(color = Ext.draw.Color.fromString(color)))
+		if (typeof color === 'string') {
+			if(!(color = Ext.draw.Color.fromString(color))) {
 				return '#FFFF00';
+			}
 		}
 
 		return Ext.String.format('rgba({0},{1},{2},{3})',
@@ -49,13 +50,13 @@ Ext.define('NextThought.util.Color',{
 			return [r,g,b];
 		}
 
-		if((m = rgba.exec(string))){
+		if(!!(m = rgba.exec(string))){
 			m = m[1].split(',');
 		}
-		else if((m = hex16.exec(string))){
+		else if(!!(m = hex16.exec(string))){
 			m = parseHex(m,false);
 		}
-		else if((m = hex8.exec(string))){
+		else if(!!(m = hex8.exec(string))){
 			m = parseHex(m,true);
 		}
 		else {
@@ -81,9 +82,10 @@ Ext.define('NextThought.util.Color',{
 
 
 	toRGB: function(color) {
-		if (typeof color == 'string') {
-			if(!(color = Ext.draw.Color.fromString(color)))
+		if (typeof color === 'string') {
+			if(!(color = Ext.draw.Color.fromString(color))) {
 				return '#FFFF00';
+			}
 		}
 		//color.toString() may return hex or rgba(see parseColor above)...so, just do this:
 		return Ext.String.format('rgb({0},{1},{2})',

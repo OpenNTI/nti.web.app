@@ -8,7 +8,7 @@ Ext.define('NextThought.util.Classroom',{
 
 	isClassroomId: function(id)
 	{
-		return /meetingroom/i.test(id);
+		return (/meetingroom/i).test(id);
 	}
 
 },

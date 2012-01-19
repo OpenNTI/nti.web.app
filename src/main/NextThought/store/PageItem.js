@@ -26,8 +26,9 @@ Ext.define('NextThought.store.PageItem',{
 			k;
 
 		for(k in groups){
-			if(!groups.hasOwnProperty(k))continue;
-			bins[groups[k].name] = groups[k].children;
+			if(groups.hasOwnProperty(k)) {
+				bins[groups[k].name] = groups[k].children;
+			}
 		}
 
 		return bins;

@@ -29,31 +29,33 @@ Ext.define('NextThought.proxy.Socket', {
 	 * @param password
 	 */
 	ensureSocketAvailable: function(username, password) {
-		var _task = {
+		var task;
+
+		task = {
 			run: function(){
 				if (io) {
 					this.setup(username, password);
-					Ext.TaskManager.stop(_task);
+					Ext.TaskManager.stop(task);
 				}
 			},
 			scope: this,
 			interval: 1000
 		};
 
-		Ext.TaskManager.start(_task);
+		Ext.TaskManager.start(task);
 	},
 
 	register: function(control) {
-		for (var k in control) {
-			if (!control.hasOwnProperty(k)) continue;
+		var k, x;
+		for (k in control) {
+			if (control.hasOwnProperty(k)) {
+				//if there's already a callback registered, sequence it.
+				x = this.control[k];
+				this.control[k] = x ? Ext.Function.createSequence(x, control[k]) : control[k];
 
-
-			//if there's already a callback registered, sequence it.
-			var x = this.control[k];
-			this.control[k] = x ? Ext.Function.createSequence(x, control[k]) : control[k];
-
-			if(this.socket) {
-				this.socket.on(k, control[k]);
+				if(this.socket) {
+					this.socket.on(k, control[k]);
+				}
 			}
 		}
 	},
@@ -75,9 +77,10 @@ Ext.define('NextThought.proxy.Socket', {
 
 		this.auth = Array.prototype.slice.call(arguments,0);
 
-		var opts =  this.disconnectStats.reconfigure ? {transports: ["xhr-polling"], 'force new connection':true} : undefined,
+		var opts =  this.disconnectStats.reconfigure ?
+				{transports: ["xhr-polling"], 'force new connection':true} : undefined,
 			socket = io.connect(_AppConfig.server.host, opts),
-			me = this;
+			k;
 
 		if(opts && this.isDebug){
 			console.debug('Connect called with options:', opts);
@@ -86,26 +89,28 @@ Ext.define('NextThought.proxy.Socket', {
 		if(this.isDebug){
 			socket.emit = Ext.Function.createSequence(
 				socket.emit,
-				function(){console.debug('socket.emit:',arguments)}
+				function(){console.debug('socket.emit:',arguments);}
 			);
 
 			socket.onPacket = Ext.Function.createSequence(
-				function(){console.debug('socket.onPacket',arguments)},
+				function(){console.debug('socket.onPacket',arguments);},
 				socket.onPacket
 			);
 		}
 
 		for (k in this.control) {
-			if(this.control.hasOwnProperty(k))
+			if(this.control.hasOwnProperty(k)) {
 				socket.on(k, this.control[k]);
+			}
 		}
 
 		this.socket = socket;
 	},
 
 	emit: function() {
-		if (this.socket)
+		if (this.socket) {
 			this.socket.emit.apply(this.socket, arguments);
+		}
 		else if(this.isDebug) {
 			console.debug('dropping emit, socket is down');
 		}
@@ -116,11 +121,16 @@ Ext.define('NextThought.proxy.Socket', {
 	 */
 	tearDownSocket: function(){
 		var s = this.socket,
-			m = this;
+			m = this,
+			e;
 
-		if(s){
+		if(s) {
 			delete this.socket;
-			for(var e in s.$events){ s.removeAllListeners(e); }
+			for(e in s.$events){
+				if(s.$events.hasOwnProperty(e)) {
+					s.removeAllListeners(e);
+				}
+			}
 
 			s.disconnect();
 
@@ -137,7 +147,18 @@ Ext.define('NextThought.proxy.Socket', {
 
 
 	maybeReconfigureSocket: function() {
-		var ds = this.disconnectStats;
+		var ds = this.disconnectStats,
+			me = this;
+
+		function reset(){
+			if(me.isDebug) {
+				console.debug('reset disconnect counter');
+			}
+			clearTimeout(ds.timer);
+			ds.count = 0;
+			ds.timer = null;
+			delete ds.reconfigure;
+		}
 
 		ds.count ++;
 		ds.reconfigure = true;
@@ -153,16 +174,6 @@ Ext.define('NextThought.proxy.Socket', {
 			this.tearDownSocket();
 			this.setup.apply(this, this.auth);
 			reset();
-		}
-
-		function reset(){
-			if(this.isDebug) {
-				console.debug('reset disconnect counter');
-			}
-			clearTimeout(ds.timer);
-			ds.count = 0;
-			ds.timer = null;
-			delete ds.reconfigure;
 		}
 	},
 

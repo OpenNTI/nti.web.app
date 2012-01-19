@@ -1,5 +1,3 @@
-
-
 Ext.define( 'NextThought.view.modes.Stream', {
 	extend: 'NextThought.view.modes.Mode',
 	alias:	'widget.stream-mode-container',
@@ -7,13 +5,13 @@ Ext.define( 'NextThought.view.modes.Stream', {
 	
 	initComponent: function(){
 		var bb= { xtype: 'toolbar', cls: 'x-docked-noborder-top', items: {focusable: false, disabled:true,text:'&nbsp;',xtype:'button'}};
-   		this.callParent(arguments);
+		this.callParent(arguments);
 
 		this.add({ /*xtype:'tbspacer',*/ flex:1, focusable: false, dockedItems: bb });
 		// this.add({ region: 'west', id: 'west-stream', xtype: 'leftColumn' });
 		this.add({ region: 'west', id: 'west-stream', xtype: 'leftColumn', columnWidget: {xtype:'filter-control'} });
-   		
-   		this.add({
+
+		this.add({
 			xtype: 'stream-panel',
 			cls: 'x-focus-pane',
 			region: 'center',

@@ -21,8 +21,9 @@ Ext.define('NextThought.model.Service', {
 	getUserSearchURL: function(username){
 		var w = this.getWorkspace('Global') || {},
 			l = this.getLinkFrom(w.Links||[], USER_SEARCH_REL);
-		if(!l)
+		if(!l) {
 			return null;
+		}
 
 		return _AppConfig.server.host + this._forceTrailingSlash(l) + (username?username:'');
 	},
@@ -32,8 +33,9 @@ Ext.define('NextThought.model.Service', {
 		var w = this.getCollection('Pages') || {},
 			l = this.getLinkFrom(w.Links||[], USER_GENERATED_DATA_SEARCH_REL);
 
-		if(!l)
+		if(!l) {
 			return null;
+		}
 
 		return _AppConfig.server.host + this._forceTrailingSlash(l);
 	},
@@ -55,8 +57,9 @@ Ext.define('NextThought.model.Service', {
 
 
 	_forceTrailingSlash: function(uri){
-		if(uri.charAt(uri.length-1)==='/')
+		if(uri.charAt(uri.length-1)==='/') {
 			return uri;
+		}
 
 		return uri + '/';
 	},
@@ -66,8 +69,9 @@ Ext.define('NextThought.model.Service', {
 		var i=links.length-1, o;
 		for(;i>=0; i--){
 			o = links[i] || {};
-			if(o.rel == rel)
+			if(o.rel === rel) {
 				return o.href;
+			}
 		}
 
 		return null;
@@ -79,10 +83,11 @@ Ext.define('NextThought.model.Service', {
 			i, workspace = null;
 
 		for(i in items){
-			if(!items.hasOwnProperty(i))continue;
-			if(items[i].Title == name){
-				workspace = items[i];
-				break;
+			if(items.hasOwnProperty(i)) {
+				if(items[i].Title === name){
+					workspace = items[i];
+					break;
+				}
 			}
 		}
 
@@ -96,10 +101,11 @@ Ext.define('NextThought.model.Service', {
 			i, library = null;
 
 		for(i in items){
-			if(!items.hasOwnProperty(i))continue;
-			if(items[i].Title == name){
-				library = items[i];
-				break;
+			if(items.hasOwnProperty(i)) {
+				if(items[i].Title === name){
+					library = items[i];
+					break;
+				}
 			}
 		}
 
@@ -125,17 +131,20 @@ Ext.define('NextThought.model.Service', {
 				i, item;
 
 			for(i in items){
-				if(!items.hasOwnProperty(i))continue;
-				item = items[i];
+				if(items.hasOwnProperty(i)) {
+					item = items[i];
 
-				if(Ext.Array.contains(item.accepts,mimeType)){
-					if(title && item.Title != title) continue;
+					if(Ext.Array.contains(item.accepts,mimeType)){
+						if(title && item.Title !== title) { continue; }
 
-					collection = item;
-					break;
+						collection = item;
+						break;
+					}
 				}
 			}
-			if (collection) return false;
+			if (collection) {
+				return false;
+			}
 		});
 
 		return Ext.clone(collection);
@@ -148,12 +157,13 @@ Ext.define('NextThought.model.Service', {
 			i, item, collection = null;
 
 		for(i in items){
-			if(!items.hasOwnProperty(i))continue;
-			item = items[i];
+			if(items.hasOwnProperty(i)) {
+				item = items[i];
 
-			if(item.Title == title){
-				collection = item;
-				break;
+				if(item.Title === title){
+					collection = item;
+					break;
+				}
 			}
 
 		}

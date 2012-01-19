@@ -8,7 +8,9 @@ Ext.define('NextThought.model.Change', {
 	getItemValue: function(field) {
 		var i = this.get('Item');
 
-		if (!i) return null;
+		if (!i) {
+			return null;
+		}
 
 		return i.get(field);
 	}

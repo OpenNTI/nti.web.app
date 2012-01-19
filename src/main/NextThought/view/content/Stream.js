@@ -1,4 +1,3 @@
-
 Ext.define('NextThought.view.content.Stream', {
 	extend:'NextThought.view.content.Panel',
 	alias:'widget.stream-panel',
@@ -41,12 +40,14 @@ Ext.define('NextThought.view.content.Stream', {
 
 		p.removeAll(true);
 
-		if(!f.shareTargets)return;
+		if(!f.shareTargets) {
+			return;
+		}
 
 		this._store.each(function(change){
 			var u = change.get('Creator');
 
-			if(/all/i.test(f.groups) || f.shareTargets[ u ] || (f.includeMe && f.includeMe==u)){
+			if(/all/i.test(f.groups) || f.shareTargets[ u ] || (f.includeMe && f.includeMe===u)){
 				p.add({change: change, xtype: 'streamEntry'});
 			}
 		});

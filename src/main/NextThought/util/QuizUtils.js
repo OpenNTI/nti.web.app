@@ -1,4 +1,3 @@
-
 Ext.define('NextThought.util.QuizUtils', {
 	requires: [
 		'NextThought.util.ParseUtils'
@@ -38,7 +37,7 @@ Ext.define('NextThought.util.QuizUtils', {
 				data = {},
 				vp = VIEWPORT.getEl();
 
-			function iter(id,v,c){
+			function iter(id,v){
 				data[id] = v.getValue();
 				v.hide();
 			}
@@ -57,7 +56,7 @@ Ext.define('NextThought.util.QuizUtils', {
 					//TODO: hook up to error handling
 					console.error('FAIL', arguments);
 				},
-				success: function(r,req){
+				success: function(r){
 					var quizResults = ParseUtils.parseItems([ Ext.JSON.decode(r.responseText) ]);
 					me.showQuizResult(quizResults[0], problems);
 				}
@@ -70,7 +69,7 @@ Ext.define('NextThought.util.QuizUtils', {
 				ntiid = Ext.query('meta[name=NTIID]')[0].getAttribute('content'),
 				problems = problemsElementMap || this.getProblemElementMap();
 
-			if(ntiid != quizResult.get('ContainerId')){
+			if(ntiid !== quizResult.get('ContainerId')){
 				Ext.Error.raise('Result does not match the page!');
 			}
 

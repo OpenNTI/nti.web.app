@@ -32,21 +32,23 @@ Ext.define('NextThought.util.Globals',
 	 * @param [scope]
 	 */
 	loadScript: function(url, onLoad, onError, scope){
-		var head = typeof document !== 'undefined' && (document.head || document.getElementsByTagName('head')[0]),
-			script = document.createElement('script'),
-			onLoadFn = buildCallback(onLoad,scope),
-			onErrorFn = buildCallback(onError,scope);
-
 		function buildCallback(cb,scope){
 			return function () {
 				script.onload = null;
 				script.onreadystatechange = null;
 				script.onerror = null;
 
-				if(cb && cb.call)
+				if(cb && cb.call) {
 					cb.call(scope||window);
+				}
 			};
 		}
+
+		var head = typeof document !== 'undefined' && (document.head || document.getElementsByTagName('head')[0]),
+			script = document.createElement('script'),
+			onLoadFn = buildCallback(onLoad,scope),
+			onErrorFn = buildCallback(onError,scope);
+
 
 		script.type = 'text/javascript';
 		script.src = Ext.urlAppend(url, Ext.String.format('_dc={0}',Ext.Date.now()));
@@ -80,13 +82,19 @@ Ext.define('NextThought.util.Globals',
 			link = document.createElement('link'),
 			call = function(cb){
 				clearInterval(t);
-				if(cb) cb.call(scope||window,link);
+				if(cb) {
+					cb.call(scope||window,link);
+				}
 			},
 			check = function (){
 				i++;
 				//30 seconds, if each interval is 10ms
-				if( i>3000 ) call(onFail);
-				else if( link.style ) call(onLoad);
+				if( i>3000 ) {
+					call(onFail);
+				}
+				else if( link.style ) {
+					call(onLoad);
+				}
 			};
 
 		link.rel='stylesheet';
@@ -95,8 +103,9 @@ Ext.define('NextThought.util.Globals',
 
 		head.appendChild(link);
 
-		if(onLoad || onFail)
+		if(onLoad || onFail) {
 			t = setInterval(check,10);
+		}
 
 		return link;
 	},
@@ -141,10 +150,11 @@ Ext.define('NextThought.util.Globals',
 		Ext.apply(Ext.Element.prototype,{
 
 			/**
+			 * @param el
 			 * @returns True if the element is within view of the container, False otherwise
 			 */
-			isInView: function(){
-				var p = Ext.get(arguments[0]) || this.parent(),
+			isInView: function(el){
+				var p = Ext.get(el) || this.parent(),
 					scroll = p.getScroll(),
 					size = p.getSize(),
 					y1 = scroll.top,
@@ -153,8 +163,8 @@ Ext.define('NextThought.util.Globals',
 					top = this.getTop()-p.getTop(),
 					bottom = top+this.getHeight();
 
-				return y1 <= top	&& top <= y2
-					&& bottom<=y2	&& bottom>=y1;
+				return y1 <= top	&& top <= y2	&&
+						bottom<=y2	&& bottom>=y1;
 
 			}
 
@@ -177,8 +187,9 @@ Ext.define('NextThought.util.Globals',
 				}
 
 				for(i in badParams){
-					if(!badParams.hasOwnProperty(i))continue;
-					delete params[badParams[i]];
+					if(badParams.hasOwnProperty(i)){
+						delete params[badParams[i]];
+					}
 				}
 
 				return this.callOverridden(arguments);
@@ -235,7 +246,7 @@ Ext.define('NextThought.util.Globals',
 
 	beforeRequest: function(connection,options) {
 		if(options&&options.async===false){
-			var loc = '';
+			var loc;
 			try { loc = printStackTrace().splice(7); }
 			catch (e) { loc = e.stack || e.stacktrace; }
 			console.warn( 'Synchronous Call in: ', loc, ' Options:', options );
@@ -244,21 +255,32 @@ Ext.define('NextThought.util.Globals',
 
 
 	resizeBlocker: function(w){
-		var i = !!(w<MIN_WIDTH), b = Ext.getBody(), m = b.isMasked();
-		if(i && !m) b.mask("Your browser window is too narrow","body-mask");
-		else if(!i && m) b.unmask();
+		var i = Boolean(w<MIN_WIDTH),
+			b = Ext.getBody(),
+			m = b.isMasked();
+
+		if(i && !m) { b.mask("Your browser window is too narrow","body-mask"); }
+		else if(!i && m) { b.unmask(); }
 	},
 
 
 	arrayEquals: function(a, b) {
-		if (a.length != b.length) return false;
-		return Ext.Array.merge(a, b).length == a.length;
+		var l = a.length;
+		if (l !== b.length) {
+			return false;
+		}
+		return Ext.Array.merge(a, b).length === l;
 	},
 
 
-	SortModelsBy: function(key,dir,getter){
-		var g = getter,
-			less = dir===ASCENDING? -1 : 1,
+	/**
+	 *
+	 * @param key
+	 * @param dir
+	 * @param g Getter function
+	 */
+	SortModelsBy: function(key,dir,g){
+		var less = dir===ASCENDING? -1 : 1,
 			more = dir===ASCENDING? 1 : -1;
 
 		function _(v){
@@ -268,7 +290,7 @@ Ext.define('NextThought.util.Globals',
 		return function(a,b){
 			var c = 0, _a = _(a), _b = _(b);
 
-			if(_a != _b){
+			if(_a !== _b){
 				c = _a < _b? less : more;
 			}
 
@@ -288,6 +310,7 @@ Ext.define('NextThought.util.Globals',
 	}
 },
 function(){
+	document.head = document.head || document.getElementsByTagName('head')[0];
 	window.Globals = this;
 	window.guidGenerator = this.guidGenerator;
 });

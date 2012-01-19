@@ -1,5 +1,3 @@
-
-
 Ext.define( 'NextThought.view.modes.Mode', {
 	extend: 'Ext.panel.Panel',
 	requires: [
@@ -56,7 +54,7 @@ Ext.define( 'NextThought.view.modes.Mode', {
 		ct.fireEvent('activate-mode', this.getId());
 
 		ct.items.each(function(o,i){
-			if(o==me) {
+			if(o===me) {
 				item = i;
 				return false;
 			}
@@ -76,8 +74,8 @@ Ext.define( 'NextThought.view.modes.Mode', {
 			this.fireEvent('mode-activated');
 			this.getMainComponent().relayout();
 		}
-		catch(e){
-			console.error('Activating Mode: ', e.message, e.stack||e.stacktrace, e);
+		catch(er){
+			console.error('Activating Mode: ', er.message, er.stack||er.stacktrace, er);
 			return false;
 		}
 		return true;

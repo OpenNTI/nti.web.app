@@ -23,7 +23,9 @@ Ext.define('NextThought.mixins.Annotations', {
 			_searchAnnotations: null
 		});
 
-		if(!this.getDocumentEl) console.error('Class must implement getDocumentEl');
+		if(!this.getDocumentEl) {
+			console.error('Class must implement getDocumentEl');
+		}
 
 		this.addEvents('share-with','create-note');
 
@@ -49,11 +51,12 @@ Ext.define('NextThought.mixins.Annotations', {
 
 		this._filter = newFilter;
 		for(a in _a) {
-			try {
-				if(!_a.hasOwnProperty(a) || !_a[a]) continue;
-				_a[a].updateFilterState(this._filter);
+			if(_a.hasOwnProperty(a) && _a[a]) {
+				try {
+					_a[a].updateFilterState(this._filter);
+				}
+				catch(e) { console.error('Annotation Filter Error: ', _a, a, newFilter); }
 			}
-			catch(e) { console.error('Annotation Filter Error: ', _a, a, newFilter); }
 		}
 	},
 
@@ -65,7 +68,9 @@ Ext.define('NextThought.mixins.Annotations', {
 
 
 	clearSearchRanges: function() {
-		if (!this._searchAnnotations) return;
+		if (!this._searchAnnotations) {
+			return;
+		}
 
 		this._searchAnnotations.cleanup();
 		this._searchAnnotations = null;
@@ -85,11 +90,13 @@ Ext.define('NextThought.mixins.Annotations', {
 	clearAnnotations: function(){
 		var v, oid;
 		for(oid in this._annotations){
-			if(!this._annotations.hasOwnProperty(oid)) continue;
-
-			v = this._annotations[oid];
-			if (!v) continue;
-			v.cleanup(true);
+			if(this._annotations.hasOwnProperty(oid)) {
+				v = this._annotations[oid];
+				if (!v) {
+					continue;
+				}
+				v.cleanup(true);
+			}
 		}
 
 		this._annotations = {};
@@ -116,7 +123,9 @@ Ext.define('NextThought.mixins.Annotations', {
 			menu,
 			w;
 
-		if(!highlight) return;
+		if(!highlight) {
+			return;
+		}
 
 		w = this.widgetBuilder.Highlight.call(this,highlight,range);
 
@@ -140,7 +149,9 @@ Ext.define('NextThought.mixins.Annotations', {
 			oid = record.get('OID'),
 			w;
 
-		if (!range) Ext.Error.raise('could not create range');
+		if (!range) {
+			Ext.Error.raise('could not create range');
+		}
 
 		if (this.annotationExists(record)) {
 			this._annotations[record.get('OID')].getRecord().fireEvent('updated',record);
@@ -153,8 +164,9 @@ Ext.define('NextThought.mixins.Annotations', {
 				range, record,
 				this.items.get(0).el.dom.firstChild,
 				this);
-		if( this.bufferedDelayedRelayout )
+		if( this.bufferedDelayedRelayout ) {
 			this.bufferedDelayedRelayout();
+		}
 
 		if (!oid) {
 			oid = 'Highlight-' + new Date().getTime();
@@ -188,8 +200,9 @@ Ext.define('NextThought.mixins.Annotations', {
 					record,
 					this.items.get(0).el.dom.firstChild,
 					this);
-			if( this.bufferedDelayedRelayout )
+			if( this.bufferedDelayedRelayout ) {
 				this.bufferedDelayedRelayout();
+			}
 			return true;
 		}
 		catch(e){ console.error('Error notes:',e, e.toString(), e.stack); }
@@ -203,8 +216,9 @@ Ext.define('NextThought.mixins.Annotations', {
 
 
 	onNotification: function(change){
-		if(!change || !change.get)
+		if(!change || !change.get) {
 			return;//abandon ship!!
+		}
 
 		var item = change.get('Item'),
 			type = change.get('ChangeType'),
@@ -215,12 +229,12 @@ Ext.define('NextThought.mixins.Annotations', {
 			cls, replyTo, builder, result;
 
 		console.log('onNotification', change, type);
-		if (!item || !this._containerId || this._containerId != cid) {
+		if (!item || !this._containerId || this._containerId !== cid) {
 			return;
 		}
 
 		//if exists, update
-		if( oid in this._annotations){
+		if(this._annotations.hasOwnProperty(oid)) {
 			if(delAction){
 				this._annotations[oid].cleanup();
 				delete this._annotations[oid];
@@ -229,6 +243,7 @@ Ext.define('NextThought.mixins.Annotations', {
 				this._annotations[oid].getRecord().fireEvent('updated',item);
 			}
 		}
+
 		//found the component, it's not top level
 		else if (cmp) {
 			//delete it
@@ -278,16 +293,21 @@ Ext.define('NextThought.mixins.Annotations', {
 			items,
 			foundBins;
 
-		if (!this._containerId) return;
+		if (!this._containerId) {
+			return;
+		}
 
 		//sort bins
 		for(b in bins){
-			if(bins.hasOwnProperty(b))
-			bins[b] = Ext.Array.sort(bins[b]||[],Globals.SortModelsBy(k,ASCENDING,me.GETTERS[b]));
-			foundBins = true;
+			if(bins.hasOwnProperty(b)){
+				bins[b] = Ext.Array.sort(bins[b]||[],Globals.SortModelsBy(k,ASCENDING,me.GETTERS[b]));
+				foundBins = true;
+			}
 		}
 
-		if (!foundBins) return;
+		if (!foundBins) {
+			return;
+		}
 
 		this.buildAnnotationTree(bins.Note, tree);
 		this.buildAnnotationTree(bins.TranscriptSummary, tree);
@@ -305,8 +325,10 @@ Ext.define('NextThought.mixins.Annotations', {
 
 	getContributors: function(record){
 		var cont = {}, c = record.get('Creator') || record.get('Contributors');
-		if(!Ext.isArray(c)) c = [c];
-		Ext.each(c, function(i){ if(i && Ext.String.trim(i) !== '')cont[i] = true; });
+		if(!Ext.isArray(c)) {
+			c = [c];
+		}
+		Ext.each(c, function(i){ if(i && Ext.String.trim(i) !== '') { cont[i] = true; } });
 		return cont;
 	},
 
@@ -315,12 +337,16 @@ Ext.define('NextThought.mixins.Annotations', {
 		var me = this, contributors = {};
 		Ext.each(list,
 			function(r){
-				if(!r)return;
+				if(!r) {
+					return;
+				}
 				try{
 					Ext.apply(contributors, me.getContributors(r));
 					me.widgetBuilder[r.getModelName()].call(me,r);
 				}
-				catch(e){console.error('Could not build '+r.getModelName()+' from record:', r, 'because: ', e, e.stack); }
+				catch(e) {
+					console.error('Could not build '+r.getModelName()+' from record:', r, 'because: ', e, e.stack);
+				}
 			}, this
 		);
 
@@ -340,12 +366,15 @@ Ext.define('NextThought.mixins.Annotations', {
 
 			r.children = r.children || [];
 
-			if(!(oid in tree))
+			if(!tree.hasOwnProperty(oid)) {
 				tree[oid] = r;
+			}
 
 			if(parent){
 				p = tree[parent];
-				if(!p) p = (tree[parent] = getOID(parent));
+				if(!p) {
+					p = (tree[parent] = getOID(parent));
+				}
 				if(!p){
 					p = (tree[parent] = AnnotationUtils.replyToPlaceHolder(g));
 					buildTree(p);
@@ -362,7 +391,7 @@ Ext.define('NextThought.mixins.Annotations', {
 			var r = null,
 				f = function(o)
 					{
-						if( o && o.get && o.get('OID') == id ) {
+						if( o && o.get && o.get('OID') === id ) {
 							r = o;
 							return false;
 						}
@@ -382,8 +411,9 @@ Ext.define('NextThought.mixins.Annotations', {
 		function arePlaceHolders(list){
 			var k;
 			for(k in list){
-				if(list.hasOwnProperty(k) && !list[k].placeHolder)
+				if(list.hasOwnProperty(k) && !list[k].placeHolder) {
 					return false;
+				}
 			}
 			return true;
 		}
@@ -395,15 +425,17 @@ Ext.define('NextThought.mixins.Annotations', {
 		function needsPruning(){
 			var k;
 			for(k in tree){
-				if(!tree.hasOwnProperty(k))continue;
-				if(canPrune(tree[k]))
+				if(tree.hasOwnProperty(k) && canPrune(tree[k])) {
 					return true;
+				}
 			}
 			return false;
 		}
 
 		function prune(k,o){
-			if(!canPrune(o)) return;
+			if(!canPrune(o)) {
+				return;
+			}
 			delete tree[k];
 			Ext.each(o.children, function(c){
 				delete c._parent;
@@ -467,8 +499,9 @@ Ext.define('NextThought.mixins.Annotations', {
 				window.getSelection().removeAllRanges();
 			}
 
-			if(document.selection)
+			if(document.selection) {
 				document.selection.clear();
+			}
 		}
 		catch(e){ console.warn(e.stack); }
 	}

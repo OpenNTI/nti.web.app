@@ -1,4 +1,3 @@
-
 Ext.define('NextThought.view.content.Home', {
 	extend:'NextThought.view.content.Panel',
 	alias: 'widget.home-content-panel',
@@ -10,7 +9,7 @@ Ext.define('NextThought.view.content.Home', {
 	cls: 'x-home-panel',
 
 	initComponent: function(){
-   		this.callParent(arguments);
+		this.callParent(arguments);
 
 		var g = 'home-library-view-style';
 

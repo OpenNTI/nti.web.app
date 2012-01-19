@@ -16,7 +16,7 @@ Ext.define('NextThought.view.form.util.Token', {
 		{
 			getType: function(values){
 				var model = values.model,
-					m = (model.raw && model.raw.Class || model.getModelName()).toLowerCase(),
+					m = ((model.raw && model.raw.Class) || model.getModelName()).toLowerCase(),
 					u = model.get('Username').toLowerCase();
 
 
@@ -51,10 +51,12 @@ Ext.define('NextThought.view.form.util.Token', {
 	setReadOnly: function(readOnly){
 		this.readOnly = readOnly;
 		if(this.closer){
-			if(readOnly)
+			if(readOnly) {
 				this.closer.hide();
-			else
+			}
+			else {
 				this.closer.show();
+			}
 		}
 	}
 });
