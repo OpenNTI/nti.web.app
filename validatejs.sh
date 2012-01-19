@@ -90,8 +90,10 @@ do
 	fi
 done
 
-if [ "$ERRORS" = "true" -a "$PRINT_DOTS" = "true" ]; then
+if [ "$PRINT_DOTS" = "true" ]; then
 	echo ""
-	echo "There are problems"
-	exit 1
+	if [ "$ERRORS" = "true" ] ; then
+		echo "There are problems"
+		exit 1
+	fi
 fi

@@ -41,25 +41,29 @@ Ext.define('NextThought.view.widgets.PeopleList', {
 			p = me.items.get(1),
 			f = me._filter;
 
+		function userLoaded(users){
+			var f = users[0],
+				c = p.add({	xtype: 'image',
+						src: (f? f.get('avatarURL') : Ext.BLANK_IMAGE_URL),
+						height: 36, width: 36});
+
+				me.setupAvatarDetailToolTip(c, f);
+		}
+
+
 		p.removeAll();
 
 		for(k in me._contributors){
-			me._contributors.hasOwnProperty(k);
-			if(c>=10){
-				p.add({xtype: 'button', text:'More'});
-				break;
-			}
-				
-			if(/all/i.test(f.groups) || f.shareTargets && f.shareTargets[k]){
-				c++;
-				UserRepository.prefetchUser(k, function(users){
-					var f = users[0],
-						c = p.add({	xtype: 'image',
-								src: (f? f.get('avatarURL') : Ext.BLANK_IMAGE_URL),
-								height: 36, width: 36});
+			if(me._contributors.hasOwnProperty(k)) {
+				if(c>=10){
+					p.add({xtype: 'button', text:'More'});
+					break;
+				}
 
-						me.setupAvatarDetailToolTip(c, f);
-				});
+				if((/all/i).test(f.groups) || (f.shareTargets && f.shareTargets[k])){
+					c++;
+					UserRepository.prefetchUser(k, userLoaded);
+				}
 			}
 		}
 

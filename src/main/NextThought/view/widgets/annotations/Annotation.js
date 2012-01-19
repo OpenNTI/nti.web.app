@@ -1,4 +1,3 @@
-
 Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 	extend: 'NextThought.view.widgets.Widget',
 
@@ -39,7 +38,7 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 	getSortValue: function(){
 		var m = 'getAnchorForSort',
 			r = this._record;
-		return m in r ? r[m]() : undefined;
+		return r.hasOwnProperty(m) ? r[m]() : undefined;
 	},
 
 
@@ -55,8 +54,9 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 		me._cmp.un('afterlayout', this.onResize, me);
 		Ext.EventManager.removeResizeListener(me.onResize, me);
 
-		if(me._img)
+		if(me._img) {
 			Ext.get(me._img).remove();
+		}
 
 		if(me._menu){
 			me._menu.destroy();
@@ -71,10 +71,11 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 		if(	!filter			||
 			!filter.types	||
 			!filter.groups	||
-			filter.types.toString().indexOf(this.$className)<0)
+			filter.types.toString().indexOf(this.$className)<0) {
 			return false;
+		}
 
-		if(/all/i.test(filter.groups)){
+		if((/all/i).test(filter.groups)) {
 			return true;
 		}
 
@@ -82,13 +83,13 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 			targets = filter.shareTargets,
 			pass = !!targets[p];
 			
-		if(filter.includeMe == p){
+		if(filter.includeMe === p){
 			return true;
 		}
 		
 		Ext.each(this._record.get('sharedWith'), function(f){
-			if(pass)return false;
-			if(targets[f]) pass = true;
+			if(pass) { return false; }
+			if(targets[f]) { pass = true; }
 		},
 		this);
 		
@@ -99,7 +100,7 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 
 	updateFilterState: function(newFilter){
 		var v = this.testFilter(newFilter);
-		if(v != this._isVisible){
+		if(v !== this._isVisible){
 			this._isVisible = !!v;
 			this.visibilityChanged(v);
 		}
@@ -109,8 +110,8 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 	visibilityChanged: function(show){
 		var i = Ext.get(this._img);
 		if(i){
-			if(show) i.show();
-			else i.hide();
+			if(show) { i.show(); }
+			else { i.hide(); }
 		}
 
 		this.requestRender();
@@ -147,7 +148,7 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 			isLeaf = arguments.length>0;
 
 		m.on('hide', function(){
-			if(!isLeaf)m.destroy();
+			if(!isLeaf) { m.destroy(); }
 		});
 
 		return m;
@@ -158,7 +159,7 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 		var m = this;
 
 		if(items){
-			if(items.length) items.push('-');
+			if(items.length) { items.push('-'); }
 			items.push({
 				text: m._isMine? 'Share With' : 'Get Info',
 				handler: function(){
@@ -177,7 +178,7 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 		if (annotations && annotations.length > 1) {
 			menu = Ext.create('Ext.menu.Menu');
 			Ext.each(annotations, function(o, i){
-				if (!o.getMenu) return;
+				if (!o.getMenu) { return; }
 				o.clearListeners();
 				var item = Ext.create('Ext.menu.Item', {
 						text: 'Annotation '+(i+1),
@@ -207,8 +208,9 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 		var result = [],
 			top = this._img.style.top;
 		Ext.each(this._div.childNodes, function(o){
-			if (o._annotation && top == o.style.top) 
+			if (o._annotation && top === o.style.top) {
 				result.push(o._annotation);
+			}
 		});
 		
 		return result;
@@ -254,11 +256,11 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 					_b = _(b),
 					c = 0;
 
-				if(a[k] != b[k]){
+				if(a[k] !== b[k]){
 					c = a[k] < b[k]? -1 : 1;
 				}
 
-				if( c === 0 && _a != _b ){
+				if( c === 0 && _a !== _b ){
 					c = _a < _b ? -1:1;
 				}
 				return c;

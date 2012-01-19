@@ -68,10 +68,11 @@ Ext.define('NextThought.view.widgets.RelatedItemsList', {
 		var m = opts.entry;
 		e.preventDefault();
 
-		if(m.type=='index'||m.type=='link')
+		if(m.type==='index'||m.type==='link') {
 			this.fireEvent('navigate', m.book, m.book.get('root')+m.href);
+		}
 
-		else if(m.type=='video'){
+		else if(m.type==='video'){
 			Ext.create('widget.video-window', {
 				title: m.label,
 				src:[{
@@ -81,7 +82,9 @@ Ext.define('NextThought.view.widgets.RelatedItemsList', {
 			}).show();
 
 		}
-		else console.error('No handler for type:',m.type, m);
+		else {
+			console.error('No handler for type:',m.type, m);
+		}
 	},
 	
 	applyFilter: function(filter){
@@ -90,21 +93,25 @@ Ext.define('NextThought.view.widgets.RelatedItemsList', {
 	
 	
 	getRelatedItems: function(loc){
-		if(!loc.location) return {};
+		if(!loc.location) {
+			return {};
+		}
 		var related = loc.location.getElementsByTagName('Related'),
 			map = {};
 		
 		Ext.each(related, function(r){
 			r = r.firstChild;
 			do{
-				if(!r.getAttribute)continue;
+				if(!r.getAttribute) {
+					continue;
+				}
 
 				var tag= r.tagName,
 					id = r.getAttribute('ntiid'),
 					type = r.getAttribute('type'),
 					qual = r.getAttribute('qualifier'),
 
-					target = tag=='page' ? Library.findLocation(id) : null,
+					target = tag==='page' ? Library.findLocation(id) : null,
 					location = target? target.location : null,
 					book = target? target.book : loc.book,
 
@@ -124,7 +131,7 @@ Ext.define('NextThought.view.widgets.RelatedItemsList', {
 					};
 				}
 			}
-			while((r = r.nextSibling));
+			while(!!(r = r.nextSibling));
 			
 		},this);
 		
@@ -134,7 +141,9 @@ Ext.define('NextThought.view.widgets.RelatedItemsList', {
 	findIcon: function(node) {
 		var nodeIcon = node.getAttribute('icon');
 
-		if (!nodeIcon && node.parentNode) return this.findIcon(node.parentNode);
+		if (!nodeIcon && node.parentNode) {
+			return this.findIcon(node.parentNode);
+		}
 
 		return nodeIcon;
 	}

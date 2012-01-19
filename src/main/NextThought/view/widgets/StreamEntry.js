@@ -24,7 +24,9 @@ Ext.define('NextThought.view.widgets.StreamEntry', {
 		this.add(this.getAvatarImage(u));
 
 		//Add content
-		if (text) this.add(text);
+		if (text) {
+			this.add(text);
+		}
 	},
 
 	getInfoPanel: function(creator) {
@@ -34,14 +36,16 @@ Ext.define('NextThought.view.widgets.StreamEntry', {
 			name = '<div class="stream-username">'+creator+'</div>',
 			info;
 
-		if (!i) return null;
+		if (!i) {
+			return null;
+		}
 
-		if (ct == 'Circled' && it == 'User') info = this.getCircledInfo(i);
-		else if (ct == 'Shared' && it == 'Note') info = this.getSharedNoteInfo(i);
-		else if (ct == 'Created' && it == 'Note') info = this.getCreatedNoteInfo(i);
-		else if (ct == 'Modified' && it == 'Note') info = this.getModifiedNoteInfo(i);
-		else if (ct == 'Shared' && it == 'Highlight') info = this.getSharedHighlightInfo(i);
-		else if (ct == 'Modified' && it == 'Highlight') info = this.getModifiedHighlightInfo(i);
+		if (ct === 'Circled' && it === 'User') { info = this.getCircledInfo(i); }
+		else if (ct === 'Shared' && it === 'Note') { info = this.getSharedNoteInfo(i); }
+		else if (ct === 'Created' && it === 'Note') { info = this.getCreatedNoteInfo(i); }
+		else if (ct === 'Modified' && it === 'Note') { info = this.getModifiedNoteInfo(i); }
+		else if (ct === 'Shared' && it === 'Highlight') { info = this.getSharedHighlightInfo(i); }
+		else if (ct === 'Modified' && it === 'Highlight') { info = this.getModifiedHighlightInfo(i); }
 		else {
 			//if we made it here, we don't know what to do with...
 			console.warn('Not sure what to do with this in the stream!', this.change);

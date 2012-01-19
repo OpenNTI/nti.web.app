@@ -88,8 +88,9 @@ Ext.define('NextThought.view.widgets.NotePanel',{
 			}
 		);
 
-		if(l != this.items.getCount())
+		if(l !== this.items.getCount()) {
 			console.warn('Lengths are wrong!', l, this.items.getCount(), this);
+		}
 	},
 
 	convertToPlaceHolder: function(){
@@ -130,7 +131,9 @@ Ext.define('NextThought.view.widgets.NotePanel',{
 
 		//insert a cleanupreply here to guarentee cleanup when transcript is removed.
 		panel.cleanupReply = function(b){
-			if (!b) return;
+			if (!b) {
+				return;
+			}
 			panel.removeAll(true);
 		};
 
@@ -156,8 +159,9 @@ Ext.define('NextThought.view.widgets.NotePanel',{
 		});
 
 		UserRepository.prefetchUser(c, function(users){
-			if(!this.rendered)
+			if(!this.rendered) {
 				this.renderData.contributors = [];
+			}
 
 			Ext.each(users, function(u){
 				if (!u) { console.warn('unresolved user!'); return; }
@@ -270,8 +274,9 @@ Ext.define('NextThought.view.widgets.NotePanel',{
 			    easing: 'easeOut',
 			    duration: 50,
 				callback: function(){
-					if(me._record.isModifiable())
+					if(me._record.isModifiable()) {
 						me.fireEvent('action', 'edit', me);
+					}
 				}
 			});
 		}
@@ -294,7 +299,9 @@ Ext.define('NextThought.view.widgets.NotePanel',{
 			this.icon.set({src: i});
 			this.name.update(name);
 			this.box.removeCls('owner');
-			if(owner)this.box.addCls('owner');
+			if(owner) {
+				this.box.addCls('owner');
+			}
 		}
 		else {
 			this.renderData.name = name;
@@ -315,6 +322,7 @@ Ext.define('NextThought.view.widgets.NotePanel',{
 		var m = this,
 			a = m._annotation,
 			p = a._parentAnnotation? a._parentAnnotation : a,
+			r;
 			r = Ext.create('widget.note-entry',{
 				_record: record,
 				_owner: m,
@@ -339,11 +347,12 @@ Ext.define('NextThought.view.widgets.NotePanel',{
 		var cOid = child.get('OID'),
 			i, o;
 		for(i in children) {
-			if (!children.hasOwnProperty(i)) continue;
-			o = children[i].get('OID');
+			if (children.hasOwnProperty(i)) {
+				o = children[i].get('OID');
 
-			if (o == cOid) {
-				Ext.Array.erase(children, i, 1);
+				if (o === cOid) {
+					Ext.Array.erase(children, i, 1);
+				}
 			}
 		}
 	},
@@ -361,19 +370,21 @@ Ext.define('NextThought.view.widgets.NotePanel',{
 				var id = this.getCmpId(rec),
 					reply = this.getComponent(id);
 
-				if (reply)
+				if (reply) {
 					reply.updateFromRecord(rec);
-				else
+				}
+				else {
 					this.addReply(rec);
-
+				}
 			}, this);
 		}
 		//console.debug('abandoned', abandonedChildren.length);
 		for (a in abandonedChildren) {
-			if (!abandonedChildren.hasOwnProperty(a)) continue;
-			id = this.getCmpId(abandonedChildren[a]);
-			panel = Ext.getCmp(id);
-			panel.cleanupReply();
+			if (abandonedChildren.hasOwnProperty(a)) {
+				id = this.getCmpId(abandonedChildren[a]);
+				panel = Ext.getCmp(id);
+				panel.cleanupReply();
+			}
 		}
 
 		//set the record to the new record.
@@ -382,7 +393,7 @@ Ext.define('NextThought.view.widgets.NotePanel',{
 
 
 	hasReplies: function(){
-		return this.query('note-entry[placeHolder]').length != this.query('note-entry').length;
+		return this.query('note-entry[placeHolder]').length !== this.query('note-entry').length;
 	},
 
 	cleanupReply: function(removeAll){
@@ -402,7 +413,9 @@ Ext.define('NextThought.view.widgets.NotePanel',{
 		else if(m.hasReplies()) {
 			m.convertToPlaceHolder();
 		}
-		else m.destroy();
+		else {
+			m.destroy();
+		}
 
 		m.sizeChanged();
 	},

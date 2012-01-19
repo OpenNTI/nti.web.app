@@ -21,8 +21,9 @@ Ext.define('NextThought.view.widgets.VideoPanel', {
 				this.video = null;
 			},
 			resize   : function(panel, width, height) {
-				if (this.video)
+				if (this.video) {
 					this.video.setSize(width, height);
+				}
 			}
 		});
 	},
@@ -30,7 +31,7 @@ Ext.define('NextThought.view.widgets.VideoPanel', {
 	_render: function() {
 		var fallback = '',
 			size = this.getSize(),
-			cfg;
+			cfg, i;
 
 		if (this.fallbackHTML) {
 			fallback = this.fallbackHTML;
@@ -61,14 +62,14 @@ Ext.define('NextThought.view.widgets.VideoPanel', {
 			this, 'poster,start,loopstart,loopend,playcount,autobuffer,loop');
 
 		/* just having the params exist enables them */
-		if (this.autoplay) cfg.autoplay = 1;
-		if (this.controls) cfg.controls = 1;
+		if (this.autoplay) { cfg.autoplay = 1; }
+		if (this.controls) { cfg.controls = 1; }
 
 		/* handle multiple sources */
 		if (Ext.isArray(this.src)) {
 			cfg.children = [];
 
-			for (var i = 0, len = this.src.length; i < len; i++) {
+			for (i = 0, len = this.src.length; i < len; i++) {
 				if (!Ext.isObject(this.src[i])) {
 					throw "source list passed to video panel must be an array of objects";
 				}

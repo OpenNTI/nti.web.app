@@ -10,8 +10,8 @@ Ext.define('NextThought.view.widgets.Widget', {
 	
 	createElement: function(tag,parent,cls,css){
 		var el = document.createElement(tag);
-		if(cls)Ext.get(el).addCls(cls);
-		if(css)el.setAttribute('style',css);
+		if(cls) { Ext.get(el).addCls(cls); }
+		if(css) { el.setAttribute('style',css); }
 		parent.appendChild(el);
 		return el;
 	},
@@ -19,8 +19,8 @@ Ext.define('NextThought.view.widgets.Widget', {
 	createImage: function(src,parent,cls,css){
 		var el = document.createElement('img');
 		el.setAttribute('src',src);
-		if(cls)Ext.get(el).addCls(cls);
-		if(css)el.setAttribute('style',css);
+		if(cls) { Ext.get(el).addCls(cls); }
+		if(css) { el.setAttribute('style',css); }
 		parent.appendChild(el);
 		return el;
 	},
