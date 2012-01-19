@@ -59,11 +59,7 @@ Ext.define('NextThought.view.windows.ClassroomChooser', {
 	dockedItems: {
 		dock: 'bottom',
 		xtype: 'toolbar',
-		items: [
-			{text: 'Create Class', create:true},
-			//TODO - only enable when a class is highlighted
-			{text: 'Edit Class', edit:true, disabled: true}
-		]
+		items: []
 	},
 
 

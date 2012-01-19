@@ -15,7 +15,7 @@ Ext.define( 'NextThought.view.modes.Classroom', {
 		}
 	},
 	
-	initComponent: function(){
+	afterRender: function(){
 		this.callParent(arguments);
 
 		this.mainArea = this.add({
@@ -31,10 +31,36 @@ Ext.define( 'NextThought.view.modes.Classroom', {
 		return {
 			xtype:'toolbar',
 			cls:'x-docked-noborder-top',
-			items: {
-				xtype: 'splitbutton',
-				text: 'Manage Classes'
-			}
+			items: this.getClassItemsSplitButton()
+		};
+	},
+
+
+	getClassItemsSplitButton: function() {
+		var items = [],
+			s = Ext.StoreManager.get('Providers'),
+			ci, i,
+			me = this,
+			menu;
+
+		for (i = 0; i < s.getTotalCount(); i++) {
+			ci = s.getAt(i);
+			items.push({text: ci.get('ID'), classInfo:ci});
+		}
+
+		//always an add new
+		items.push('-');
+		items.push({text: 'create class', create:true});
+
+		menu = Ext.create('Ext.menu.Menu', {
+			items: items
+		});
+
+		return {
+			xtype: 'splitbutton',
+			text: 'Manage Classes',
+			action: 'manageclass',
+			menu: menu
 		};
 	},
 
@@ -71,12 +97,11 @@ Ext.define( 'NextThought.view.modes.Classroom', {
 
 	leaveClassroom: function(){
 		var tb = this.down('toolbar');
-		tb.removeAll();
-		tb.add(this.getPlaceHolder());
-
 		this.mainArea.removeAll(true);
-
 		this.showClassChooser();
+
+		tb.removeAll();
+		tb.add(this.getClassItemsSplitButton());
 	},
 
 	deactivate: function(){

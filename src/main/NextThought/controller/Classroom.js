@@ -56,18 +56,6 @@ Ext.define('NextThought.controller.Classroom', {
 				'selected': this.selectedClassRoom
 			},
 
-			'classroom-chooser dataview':{
-				'selectionchange': this.onClassroomChooserSelectionChange
-			},
-
-			'classroom-chooser button[create]':{
-				'click': this.createClassClicked
-			},
-
-			'classroom-chooser button[edit]':{
-				'click': this.editClassClicked
-			},
-
 			'classroom-mode-container toolbar button[action=leave]':{
 				'click': this.leaveRoom
 			},
@@ -84,8 +72,12 @@ Ext.define('NextThought.controller.Classroom', {
 				'unrecorded-history' : this.recordState
 			},
 
-			'classroom-mode-container splitbutton menuitem': {
+			'classroom-mode-container splitbutton[action=flagged] menuitem': {
 				'click': this.flaggedMenuItemClicked
+			},
+
+			'classroom-mode-container splitbutton[action=manageclass] menuitem': {
+				'click': this.manageClassMenuItemClicked
 			},
 
 			'classroom-mode-container splitbutton[action=flagged]': {
@@ -129,6 +121,20 @@ Ext.define('NextThought.controller.Classroom', {
 		this.showMessage(mi.relatedCmp);
 	},
 
+
+	manageClassMenuItemClicked: function(cmp) {
+		var w = Ext.widget('class-create-edit-window'),
+			ci = cmp.classInfo,
+			createNew = (cmp.create);
+
+		if (!ci && !createNew ){return;}
+		else if (!createNew){
+			w.setValue(ci);
+		}
+		w.show();
+	},
+
+
 	flaggedButtonClicked: function(btn){
 		var i = btn.menu.items,
 			c = (btn.lastAction+1) % i.getCount();
@@ -136,31 +142,6 @@ Ext.define('NextThought.controller.Classroom', {
 		btn.lastAction = isNaN(c) ? 0 : c;
 
 		this.flaggedMenuItemClicked(i.getAt(btn.lastAction));
-	},
-
-
-	onClassroomChooserSelectionChange: function(evt,sel){
-		if(this.selectionClearing || sel.length === 0){
-			return;
-		}
-
-		this.selectionClearing = true;
-
-		Ext.each(evt.view.up('classroom-chooser').query('dataview'),function(v){
-			if(evt.view !== v ){
-				v.getSelectionModel().deselectAll(true);
-			}
-		});
-
-		var button = Ext.ComponentQuery.query('classroom-chooser button[edit]')[0];
-		if (sel[0].get('Class') === 'ClassInfo') {
-			button.enable();
-		}
-		else {
-			button.disable();
-		}
-
-		delete this.selectionClearing;
 	},
 
 
@@ -291,23 +272,6 @@ Ext.define('NextThought.controller.Classroom', {
 
 		this.getController('Chat').enterRoom([],{ContainerId: n});
 		this.getClassroomContainer().hideClassChooser();
-	},
-
-	createClassClicked: function(btn) {
-		Ext.widget('class-create-edit-window').show();
-	},
-
-
-	//TODO - merge with above?  In this case we just grab the first class, we need to get the selected class...
-	editClassClicked: function(btn) {
-		var w = Ext.widget('class-create-edit-window'),
-			d = Ext.ComponentQuery.query('classroom-browser')[0],
-			c = d.getSelectionModel().getSelection()[0];
-
-	//	c.resolve();
-
-		w.setValue(c);
-		w.show();
 	},
 
 
