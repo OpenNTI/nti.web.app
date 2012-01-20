@@ -76,12 +76,12 @@ Ext.define('NextThought.controller.Classroom', {
 				'click': this.flaggedMenuItemClicked
 			},
 
-			'classroom-mode-container splitbutton[action=manageclass] menuitem': {
-				'click': this.manageClassMenuItemClicked
-			},
-
 			'classroom-mode-container splitbutton[action=flagged]': {
 				'click' : this.flaggedButtonClicked
+			},
+
+			'classroom-mode-container button[action=manageclass] menuitem': {
+				'click': this.manageClassMenuItemClicked
 			},
 
 			'class-create-edit-window toolbar button[action]' : {

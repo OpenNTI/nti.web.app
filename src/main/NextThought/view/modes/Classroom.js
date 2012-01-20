@@ -37,30 +37,40 @@ Ext.define( 'NextThought.view.modes.Classroom', {
 
 
 	getClassItemsSplitButton: function() {
-		var items = [],
-			s = Ext.StoreManager.get('Providers'),
-			ci, i,
-			me = this,
-			menu;
+		var s = Ext.StoreManager.get('Providers'),
+			btn;
 
-		for (i = 0; i < s.getTotalCount(); i++) {
-			ci = s.getAt(i);
-			items.push({text: ci.get('ID'), classInfoId: ci.getId()});
+		function loaded(){
+			var ci, i, items=[];
+			for (i = 0; i < s.getTotalCount(); i++) {
+				ci = s.getAt(i);
+				items.push({text: ci.get('ID'), classInfoId: ci.getId()});
+			}
+
+			//always an add new
+			items.push('-');
+			items.push({text: 'create class', create:true});
+
+			if (btn) {
+				console.log('removing and adding');
+				btn.menu.removeAll(true);
+				btn.menu.add(items);
+				return null;
+			}
+
+			console.log('returning', items);
+			return items;
 		}
 
-		//always an add new
-		items.push('-');
-		items.push({text: 'create class', create:true});
-
-		menu = Ext.create('Ext.menu.Menu', {
-			items: items
-		});
-
 		return {
-			xtype: 'splitbutton',
+			xtype: 'button',
 			text: 'Manage Classes',
 			action: 'manageclass',
-			menu: menu
+			menu: loaded(),
+			listeners: {
+				beforedestroy: function (){ s.un('load', loaded, this); },
+				added: function (c){ console.log('adding'); s.on('load', loaded, this); btn = c; }
+			}
 		};
 	},
 
