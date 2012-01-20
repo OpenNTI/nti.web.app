@@ -1,8 +1,8 @@
 @import "_variables.scss";
 @import "_common-mixins.scss";
 
-
-@import url("#{$ext}/resources/css/ext-all-gray.css");
+//Zeta doesn't support variables in @import statements...
+@import url(../../ext-4.0.7/resources/css/ext-all-gray.css);
 
 //For the reader panel, this must be first
 @import "_panel-reset.scss";

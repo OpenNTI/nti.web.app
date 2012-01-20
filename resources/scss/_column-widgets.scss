@@ -1,9 +1,6 @@
-.x-left-column { margin: auto 5px auto auto; }
-.x-right-column { margin: auto auto auto 5px;}
-
 div.sidebar-content {
-	.x-left-column & { @extend .x-left-column; }
-	.x-right-column & { @extend .x-right-column; }
+	.x-left-column & { margin: auto 5px auto auto; }
+    .x-right-column & { margin: auto auto auto 5px;}
 }
 
 div.sidebar-header {
