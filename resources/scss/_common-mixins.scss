@@ -4,6 +4,19 @@
 	padding-left: $dist !important;
 }
 
+@mixin system-link-def {
+	color: $ui-link-color;
+	text-decoration: underline;
+	cursor: pointer;
+}
+
+@mixin content-link-def{
+	color: $external-link-color;
+	text-decoration: none;
+	cursor: pointer;
+	line-height: 1.5em;
+}
+
 @mixin action-buttons {
 	position: absolute;
 	display: none;

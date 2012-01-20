@@ -43,6 +43,11 @@
 	border-bottom: 2px black solid;
 }
 
+@mixin section-button-def {
+	width: 11px !important;
+	height: 11px;
+}
+
 .library-section {
     .label {
        	@include section-label-body;
@@ -54,15 +59,14 @@
 			margin-left: 2px;
 
 			button {
-				width: 11px !important;
-				height: 11px;
+				@include section-button-def;
 			}
 			.view_style_list{
-				@extend button;
+				@include section-button-def;
 				background-image: url("../images/list.gif");
 			}
 			.view_style_grid {
-			    @extend button;
+				@include section-button-def;
 			    background-image: url("../images/icon.gif");
 			}
 		}

@@ -1,17 +1,10 @@
 a{
     &.internal-link {
-		color: $external-link-color;
-		text-decoration: none;
-		cursor: pointer;
-		line-height: 1.5em;
-
-		&:active { @extend .internal-link; }
-		&:hover { @extend .internal-link; }
-		&:visited { @extend .internal-link; }
+		@include content-link-def;
+		&:active, &:hover, &:visited { @include content-link-def; }
 	}
-	#NTIContent &{ @extend a.internal-link; }
+	#NTIContent &{ @include content-link-def; }
 }
-
 
 /* Fix strange CSS behavior ...menu item links' style were not correctly applying...this seems to fix it.*/
 .x-menu-item-link,

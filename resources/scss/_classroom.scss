@@ -8,16 +8,13 @@
 	}
 }
 
-
 .classroom-chooser {
 	a {
-		color: $ui-link-color;
-		text-decoration: underline;
-		cursor: pointer;
+		@include system-link-def;
 		&:link,
         &:visited,
         &:active {
-            @extend a;
+            @include system-link-def;
         }
 	}
 

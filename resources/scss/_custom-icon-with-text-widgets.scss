@@ -57,9 +57,9 @@
 		line-height: 1.5em;
 	}
 
+	.stream-username .x-panel-body-default,
 	.stream-username  {
 		font-weight: bold;
 		color: $name-label-color;
-		.x-panel-body-default { @extend .stream-username; }
 	}
 }

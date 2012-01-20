@@ -21,6 +21,13 @@ button {
 
 }
 
+@mixin chat-button-def {
+	$size: 22px;
+	width: $size;
+	height: $size;
+	background-size:$size $size;
+}
+
 .x-chat-log-entry {
 	@include list-entry;
 	span.reply {
@@ -31,14 +38,11 @@ button {
 
 			&.reply-whisper { background: url($chat-reply-whisper); }
 			&.reply-public{
-			    $size: 22px;
-				width: $size;
-				height: $size;
-				background-size:$size $size;
+			    @include chat-button-def;
 				background: url($chat-reply-public);
 			}
 			&.pin{
-				@extend .reply-public;
+				@include chat-button-def;
 				background: url($chat-pin);
 				display: none;
 				.moderator & {display: inline-block;}
