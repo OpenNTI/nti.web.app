@@ -2,77 +2,73 @@
  * Profile header widget css
  */
 
-.x-component .x-profile-header {
-	position: relative;
-	overflow: hidden;
-	clear: both;
-	padding: 10px 0px;
+.x-profile-header {
+
+    .x-component & {
+    	position: relative;
+    	overflow: hidden;
+    	clear: both;
+    	padding: 10px 0px;
+    }
+
+	img { float: left; margin: 10px 0px; }
+	div { margin: 10px 0px 10px 138px; }
+	span{
+		&.name { font-size: 3em; }
+		&.bio { font-size: 1.5em; white-space: normal; }
+		&.edit {
+			position: absolute;
+			display: none;
+			right: 0px; top: 10px;
+			width: 32px;
+			height: 32px;
+			background: url("../images/edit.png");
+			cursor: pointer;
+			.hover & { display: block; }
+		}
+	}
+
 }
 
-.x-profile-header span.edit {
-	position: absolute;
-	display: none;
-	right: 0px; top: 10px;
-	width: 32px;
-	height: 32px;
-	background: url("../images/edit.png");
-	cursor: pointer;
-}
 
-.hover .x-profile-header span.edit {
-	display: block;
-}
-
-.x-profile-header img {
-	float: left;
-	margin: 10px 0px;
-}
-
-.x-profile-header div {
-	margin: 10px 0px 10px 138px;
-}
-
-.x-profile-header span.name {
-	font-size: 3em;
-}
-
-.x-profile-header span.bio {
-	font-size: 1.5em;
-	white-space: normal;
-}
 
 
 /*
  * Library section
  */
+.library-section {
+    .label-body {
+        font-size: 1.2em;
+		font-weight: bold;
+		padding: 5px 0px;
+		border-bottom: 2px black solid;
+	}
 
-.mystuff-section .label,
-.mystuff-section .label .x-panel-body,
-.library-section .label,
-.library-section .label .x-panel-body {
-	font-size: 1.2em;
-	font-weight: bold;
-	padding: 5px 0px;
-	border-bottom: 2px black solid;
+    .label {
+       	@extend .label-body;
+		.x-panel-body { @extend .label-body; }
+
+		div.x-btn {
+		    float: right;
+			padding: 3px !important;
+			margin-left: 2px;
+
+			button {
+				width: 11px !important;
+				height: 11px;
+			}
+			.view_style_list{
+				@extend button;
+				background-image: url("../images/list.gif");
+			}
+			.view_style_grid {
+			    @extend button;
+			    background-image: url("../images/icon.gif");
+			}
+		}
+    }
 }
 
-.library-section .label div.x-btn button {
-	width: 11px !important;
-	height: 11px;
-}
-
-.library-section .label div.x-btn .view_style_icon,
-.library-section .label div.x-btn .view_style_grid {
-	width: 11px; height: 11px;
-	background-image: url("../images/icon.gif");
-}
-
-.library-section .label div.x-btn .view_style_grid{
-	background-image: url("../images/list.gif");
-}
-
-.library-section .label div.x-btn{
-	float: right;
-	padding: 3px !important;
-	margin-left: 2px;
+.mystuff-section{
+	@extend .library-section;
 }

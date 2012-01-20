@@ -1,37 +1,39 @@
 
-.filter-controls {}
+.filter-controls {
 
-.filter-controls .no-filter .x-form-item-body,
-.filter-controls .user-filter .x-form-item-body,
-.filter-controls .type-filter .x-form-item-body,
-.filter-controls .user-group .x-form-item-body,
-.filter-controls .system-group .x-form-item-body {
-	padding-left: 22px;
-	padding-top: 1px;
-	height: 17px;
-	/*background: url("../images/filters/all.png") no-repeat left center;*/
-	background: url("../images/filters/WhoIcons.png") no-repeat 1px 1px;
-}
+	.the-who {
+		padding-left: 22px;
+		padding-top: 1px;
+		height: 17px;
+		background: url($filter-who-icon-sprite) no-repeat 1px 1px;
+	}
 
-.filter-controls .type-filter .x-form-item-body{
-	background: url("../images/filters/unkown.png") no-repeat left center;
-}
-.filter-controls .type-filter.note .x-form-item-body{
-	background: url("../images/filters/note-type.png") no-repeat left center;
-}
-.filter-controls .type-filter.highlight .x-form-item-body{
-	background: url("../images/filters/highlight-type.png") no-repeat left center;
-}
+	.x-form-item-body {
+		.no-filter & {
+			@extend .the-who;
+		}
+		.user-filter & {
+			@extend .the-who;
+			background-position: 1px -17px;
+		}
+		.user-group & {
+			@extend .the-who;
+			background-position: 1px -35px;
+		}
+		.system-group & {
+			@extend .the-who;
+			background-position: 1px -53px;
+		}
 
-
-.filter-controls .user-filter .x-form-item-body{
-	background: url("../images/filters/WhoIcons.png") no-repeat 1px -17px;
-}
-
-.filter-controls .user-group .x-form-item-body{
-	background: url("../images/filters/WhoIcons.png") no-repeat 1px -35px;
-}
-
-.filter-controls .system-group .x-form-item-body {
-	background: url("../images/filters/WhoIcons.png") no-repeat 1px -53px;
+		.type-filter & {
+			@extend .the-who;
+			background: url($filter-type-unknown-icon) no-repeat left center;
+		}
+		.type-filter.note &{
+			background: url($filter-type-note-icon) no-repeat left center;
+		}
+		.type-filter.highlight &{
+			background: url($filter-type-highlight-icon) no-repeat left center;
+		}
+	}
 }

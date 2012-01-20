@@ -1,21 +1,20 @@
+a{
+    &.internal-link {
+		color: $external-link-color;
+		text-decoration: none;
+		cursor: pointer;
+		line-height: 1.5em;
 
-#NTIContent a,
-#NTIContent a:active,
-#NTIContent a:hover,
-#NTIContent a:visited,
-#NTIContent a.internal-link,
-a.internal-link:active,
-a.internal-link:hover,
-a.internal-link:visited
-{
-	color: #7889A3;
-	text-decoration: none;
-	cursor: pointer;
-	line-height: 1.5em;
+		&:active { @extend .internal-link; }
+		&:hover { @extend .internal-link; }
+		&:visited { @extend .internal-link; }
+	}
+	#NTIContent &{ @extend a.internal-link; }
 }
+
 
 /* Fix strange CSS behavior ...menu item links' style were not correctly applying...this seems to fix it.*/
 .x-menu-item-link,
 .x-menu-item-text {
-	color: #222;
+	color: $ui-link-color;
 }

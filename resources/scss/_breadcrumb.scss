@@ -1,9 +1,3 @@
-$arrow-right: '#{$exttheme}/menu/menu-parent.gif';
-$next-arrow-disabled: '../images/page-next-disabled.gif';
-$prev-arrow-disabled: '../images/page-prev-disabled.gif';
-$next-arrow: '../images/page-next.gif';
-$prev-arrow: '../images/page-prev.gif';
-
 .x-breadcrumbs-bar {
 	.x-btn-arrow {
 		background-image: url($arrow-right);
@@ -18,18 +12,10 @@ $prev-arrow: '../images/page-prev.gif';
 	}
 
 	.x-item-disabled {
-		.breadcrumb-next {
-			background: url($next-arrow-disabled);
-		}
-		.breadcrumb-prev {
-			background: url($prev-arrow-disabled);
-		}
+		.breadcrumb-next { background: url($next-arrow-disabled); }
+		.breadcrumb-prev { background: url($prev-arrow-disabled); }
 	}
 
-	.breadcrumb-next{
-		background: url($next-arrow);
-	}
-	.breadcrumb-prev{
-		background: url($prev-arrow);
-	}
+	.breadcrumb-next{ background: url($next-arrow); }
+	.breadcrumb-prev{ background: url($prev-arrow); }
 }

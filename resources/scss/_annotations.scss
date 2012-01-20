@@ -1,10 +1,8 @@
-@mixin clearfix_left($dist) {
-	clear: both;
-	padding-left: $dist !important;
-}
+
+
 
 .x-nti-note {
-	border-top: 1px solid #ccc;
+	border-top: 1px solid $border-color;
 	position: relative;
 	overflow: hidden;
 	padding: 10px 5px;
@@ -19,11 +17,11 @@
 	}
 	.name {
 		font-weight: bold;
-		color: #7889A3;
+		color: $name-label-color;
 		padding: 0 10px 0 0;
 	}
 	.timestamp {
-		color: #7a7a7a;
+		color: $timestamp-color;
 		float: right;
 		font-size: 9px;
 		padding: 0 0 5px 10px;
@@ -52,7 +50,7 @@
 			text-decoration: none !important;
 			font-weight: bold;
 			font-size: 10px;
-			color: #444;
+			color: $transcript-placeholder-text-color;
 		}
 	}
 }
@@ -94,7 +92,7 @@
 			height: 16px;
 			margin: 2px;
 			display: inline-block;
-			background: #ccc;
+			background: $border-color;
 			opacity: 0.4;
 			&:hover{ opacity: 1; }
 		}
@@ -104,14 +102,14 @@
 		span.edit { display: none; }
 		span.delete { display: none; }
 
-		.chat { background: url("../images/chat/chat-16.png"); }
-		.delete { background: url("../images/chat/delete-16.png"); }
+		.chat { background: url($note-action-chat-icon); }
+		.delete { background: url($note-action-delete-icon); }
 		.edit {
-			background: url("../images/chat/edit-16.png");
+			background: url($note-action-edit-icon);
 			background-size: 16px 16px;
 		}
-		.reply { background: url("../images/chat/re-16.png"); }
-		.share { background: url("../images/chat/share-16.png"); }
+		.reply { background: url($note-action-reply-icon); }
+		.share { background: url($note-action-share-icon); }
 	}
 }
 

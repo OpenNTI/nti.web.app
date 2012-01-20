@@ -1,0 +1,73 @@
+$ext: '../../ext-4.0.7';
+
+//the python parser is converting blindly gray to #808080... so had to break up the string so it wouldn't find it.
+$exttheme: '#{$ext}/resources/themes/images/g'+'ray';
+
+
+//icons
+$filter-who-icon-sprite:	'../images/filters/WhoIcons.png';
+$filter-type-unknown-icon:	'../images/filters/unkown.png';
+$filter-type-note-icon:		'../images/filters/note-type.png';
+$filter-type-highlight-icon:'../images/filters/highlight-type.png';
+$note-action-chat-icon:		'../images/chat/chat-16.png';
+$note-action-delete-icon:	'../images/chat/delete-16.png';
+$note-action-edit-icon:		'../images/chat/edit-16.png';
+$note-action-reply-icon:	'../images/chat/re-16.png';
+$note-action-share-icon:	'../images/chat/share-16.png';
+
+$arrow-right:				'#{$exttheme}/menu/menu-parent.gif';
+$next-arrow-disabled:		'../images/page-next-disabled.gif';
+$prev-arrow-disabled:		'../images/page-prev-disabled.gif';
+$next-arrow:				'../images/page-next.gif';
+$prev-arrow:				'../images/page-prev.gif';
+
+$ext-text-entry:			'#{$exttheme}/form/text-bg.gif';
+$script-entry-promot-icon:	'../images/chat/script-promote-16.png';
+$chat-icon:					'../images/chat/speachbubble.png';
+$chat-menu-icon:			'../images/chat/chat-16.png';
+$chat-pin:					'../images/chat/chat-pin-64.png';
+$chat-reply-public:			'../images/chat/re-32.png';
+$chat-reply-whisper:		'../images/chat/re-16.png';
+$flag-icon:					'../images/chat/flag-16.png';
+$flag-icon-disabled:		'../images/chat/flag-16-disabled.png';
+$presences-offline:			'../images/core/offline.png';
+$presences-online:			'../images/core/online.png';
+$shadow-menu-icon:			'../images/chat/shadow-user-16.png';
+$reply-to-button-icon:		'../images/chat/submit-22.png';
+$compose-message-icon:		'../images/chat/compose-message.png';
+$switch-to-classroom-icon:	'../images/chat/classroom-22.png';
+$object-explorer-icon:		'../images/objects16.png';
+
+
+
+
+//colors
+$ui-link-color: #222;
+$external-link-color:  #7889A3;
+$border-color: #ccc;
+$hover-background-color: #7889A3;
+$hover-foreground-color: white;
+
+$read-background-color: #D8D8D8;
+$read-foreground-color: inherit;
+$unread-background-color: white;
+$unread-foreground-color: inherit;
+
+$tracker-tip-background: white;
+
+$shadowed-background-color: #f2eeee;
+$shadowed-foreground-color: white;
+$shadowed-hover-background-color: #cecece;
+$shadowed-hover-foreground-color: black;
+
+$promoted-background-color: #cecece;
+$promoted-foreground-color: inherit;
+
+$flagged-background-color: #ffdddd;
+$flagged-foreground-color: black;
+$flagged-hover-background-color: #fa8072;
+$flagged-hover-foreground-color: black;
+
+$timestamp-color: #7a7a7a;
+$name-label-color: #7889A3;
+$transcript-placeholder-text-color:#444;

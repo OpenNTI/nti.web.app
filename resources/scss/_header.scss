@@ -1,75 +1,54 @@
 .header-logo {
 	background: transparent url("../images/ntbanner.png") no-repeat 0 0;
 }
+.mode-switcher {
+	.x-panel-body{
+		padding-top: 4px;
+	}
 
-.mode-switcher .x-panel-body{
-	padding-top: 4px;
-}
+	.mode-button-def {
+		border: none;
+		margin: 0;
+		padding: 0;
+		background: none;
+		width: 32px !important;
+		height: 32px;
+	}
 
-.mode-switcher .mode-button,
-.mode-switcher .mode-button button
-{
-	border: none;
-	margin: 0;
-	padding: 0;
-	background: none;
-	width: 32px !important;
-	height: 32px;
-}
-.mode-switcher .mode-button.x-pressed{
-	/*background: white;*/
-}
+	.mode-button button { @extend .mode-button-def; }
 
-.x-gecko .mode-switcher .mode-button .x-btn-icon{
-	top: -6px;
-}
+	.mode-button {
+		@extend .mode-button-def;
 
-.mode-switcher .mode-button .x-btn-icon{
-	background-image: url('../images/nti-pc-icons-masthead.png');
-	width: 30px;
-	height: 30px
-}
+		.x-btn-icon{
+			background-image: url('../images/nti-pc-icons-masthead.png');
+			width: 30px;
+			height: 30px;
 
-.mode-switcher .home-mode-icon{
-	background-position: -5px -3px;
-}
-.mode-switcher .x-pressed .home-mode-icon{
-	background-position: -5px -39px;
-}
+			.x-gecko & { top: -6px; }
 
-.mode-switcher .reader-mode-icon{
-	background-position: -41px -4px;
-}
-.mode-switcher .x-pressed .reader-mode-icon{
-	background-position: -40px -40px;
-}
+			&.home-mode-icon{ background-position: -5px -3px; }
+			&.reader-mode-icon{ background-position: -41px -4px; }
+			&.stream-mode-icon{ background-position: -74px -5px; }
+			&.groups-mode-icon{ background-position: -109px -5px; }
+			&.classroom-mode-icon{ background-position: -144px -6px; }
+		}
+		&.x-pressed{
+    		.home-mode-icon { background-position: -5px -39px; }
+    		.reader-mode-icon { background-position: -40px -40px; }
+      		.stream-mode-icon { background-position: -74px -40px; }
+      		.groups-mode-icon{ background-position: -109px -41px; }
+      		.classroom-mode-icon{ background-position: -144px -41px; }
+    	}
+    }
 
-.mode-switcher .stream-mode-icon{
-	background-position: -74px -5px;
 }
-.mode-switcher .x-pressed .stream-mode-icon{
-	background-position: -74px -40px;
-}
-
-.mode-switcher .groups-mode-icon{
-	background-position: -109px -5px;
-}
-.mode-switcher .x-pressed .groups-mode-icon{
-	background-position: -109px -41px;
-}
-
-.mode-switcher .classroom-mode-icon{
-	background-position: -144px -6px;
-}
-.mode-switcher .x-pressed .classroom-mode-icon{
-	background-position: -144px -41px;
-}
-
 .search-result-selection,
 .search-result-selection .x-panel-body,
 .search-result-selection .x-panel-body-default {
 	background: #7889A3;
 }
+
 .x-brand-and-search-bar,
 .x-brand-and-search-bar .x-panel-body,
 .x-brand-and-search-bar .x-panel-body-default {
@@ -92,26 +71,29 @@
 	border-right: 1px solid #D0D0D0 !important;
 }
 
-.x-session-controls .x-panel {
-	margin: auto 2px!important;
-}
+.x-session-controls {
+	.x-panel {
+		margin: auto 2px!important;
+	}
 
-.x-session-controls .x-username *{
-	color: white;
-	cursor: pointer;
-	white-space: nowrap;
-}
+	.x-username {
+		*{
+			color: white;
+			cursor: pointer;
+			white-space: nowrap;
+		}
+		span{
+			padding: 6px 8px 5px 5px;
+			font-size: 12px;
+			vertical-align: middle;
+			white-space: nowrap;
+		}
+	}
 
-.x-session-controls .x-username span{
-	padding: 6px 8px 5px 5px;
-	font-size: 12px;
-	vertical-align: middle;
-	white-space: nowrap;
-}
-
-.x-session-controls * {
-	vertical-align: middle;
-	cursor: pointer;
+	* {
+		vertical-align: middle;
+		cursor: pointer;
+	}
 }
 
 span.notification-box-widget {
@@ -125,12 +107,13 @@ span.notification-box-widget {
 	margin-top: 2px;
 	margin-right: 10px;
 	background: url(../images/notify.png) no-repeat -22px 0px;
+
+	&.unread {
+		color: white;
+		background-position: 4px 0px;
+	}
 }
 
-span.notification-box-widget.unread {
-	color: white;
-	background-position: 4px 0px;
-}
 
 .notification-popover .x-stream-entry > .x-panel-body {
 	padding: 10px;
