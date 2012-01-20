@@ -68,7 +68,7 @@ Ext.define('NextThought.proxy.Socket', {
 	 * @param password
 	 */
 	setup: function(username, password) {
-		if (!io) {//if no io, then call ensure to wait until io is available
+		if (!window.io) {//if no io, then call ensure to wait until io is available
 			this.ensureSocketAvailable(username, password);
 			return;
 		}
