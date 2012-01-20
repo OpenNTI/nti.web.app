@@ -131,6 +131,9 @@ Ext.define('NextThought.controller.Classroom', {
 		else if (!createNew){
 			w.setValue(ci);
 		}
+		else {
+			w.setValue(null);
+		}
 		w.show();
 	},
 

@@ -30,6 +30,7 @@ Ext.define('NextThought.view.windows.ClassCreateEditWindow', {
 		]
 	},
 
+
 	/**
 	 * Just pass along the value to the form
 	 *
@@ -37,7 +38,7 @@ Ext.define('NextThought.view.windows.ClassCreateEditWindow', {
 	 */
 	setValue: function(v) {
 
-		var m = v.isModifiable();
+		var m = v ? v.isModifiable() : true;
 
 		this.add({xtype: 'class-info-form', value: v});
 
