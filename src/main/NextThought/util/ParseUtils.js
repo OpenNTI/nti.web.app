@@ -8,6 +8,9 @@ Ext.define('NextThought.util.ParseUtils',{
 	 */
 	parseItems: function(items, supplemental){
 		var key, item, reader, results = [];
+
+		if (!Ext.isArray(items)) {items = [items];}
+
 		for(key in items){
 			if(items.hasOwnProperty(key)) {
 				item = items[key] || {};

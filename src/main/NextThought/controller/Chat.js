@@ -61,7 +61,8 @@ Ext.define('NextThought.controller.Chat', {
 			'chat_recvMessage': function(){me.onMessage.apply(me, arguments);},
 			'chat_recvMessageForAttention' : function(){me.onMessageForAttention.apply(me, arguments);},
 			'chat_recvMessageForModeration' : function(){me.onModeratedMessage.apply(me, arguments);},
-			'chat_recvMessageForShadow' : function(){me.onMessage.apply(me, arguments);}
+			'chat_recvMessageForShadow' : function(){me.onMessage.apply(me, arguments);},
+			'chat_failedToEnterRoom' : function(){me.onFailedToEnterRoom.apply(me, arguments);}
 		});
 
 		this.control({
@@ -450,6 +451,12 @@ Ext.define('NextThought.controller.Chat', {
 
 	/* SERVER EVENT HANDLERS*/
 
+	onFailedToEnterRoom: function(ri){
+		if (this.getClassroom().isClassroom(ri)) {
+			this.getClassroom().onFailedToEnterRoom(ri);
+		}
+	},
+
 	onSocketDisconnect: function(){
 	   this.activeRooms = {};
 	},
@@ -597,7 +604,6 @@ Ext.define('NextThought.controller.Chat', {
 	},
 
 	onEnteredRoom: function(msg) {
-
 		var roomInfo = msg && msg.isModel? msg : ParseUtils.parseItems([msg])[0],
 			existingRoom;
 		if (this.activeRooms.hasOwnProperty(roomInfo.getId())) {

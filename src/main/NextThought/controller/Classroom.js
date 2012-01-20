@@ -149,14 +149,14 @@ Ext.define('NextThought.controller.Classroom', {
 	},
 
 
-	isClassroom: function(roomOrMessageInfo){
-		if(!roomOrMessageInfo) {
+	isClassroom: function(info){
+		if(!info) {
 			return false;
 		}
-		var c = roomOrMessageInfo.get('ContainerId');
+		var c = Ext.isFunction(info.get) ? info.get('ContainerId') : info.ContainerId;
 
 		if (this.rooms.hasOwnProperty(c)) {
-			this.rooms[c] = roomOrMessageInfo;
+			this.rooms[c] = info;
 			return true;
 		}
 		return false;
@@ -197,6 +197,26 @@ Ext.define('NextThought.controller.Classroom', {
 		if (moderated) {
 			this.onModerateClicked();
 		}
+	},
+
+
+	/**
+	 *
+	 * @param ri - raw response from the server, not a Record
+	 */
+	onFailedToEnterRoom: function(ri) {
+		var ci = ri.ContainerId,
+			s = this.getSectionsStore(),
+			r = s.getById(ci),
+			chooser = this.getClassroomContainer().chooser;
+
+		delete this.rooms[ci];
+
+		if (chooser){
+			chooser.notify('something');
+		}
+
+		console.log('onFail', ri, r);
 	},
 
 
@@ -276,7 +296,6 @@ Ext.define('NextThought.controller.Classroom', {
 		this.rooms[n] = true;
 
 		this.getController('Chat').enterRoom([],{ContainerId: n});
-		this.getClassroomContainer().hideClassChooser();
 	},
 
 

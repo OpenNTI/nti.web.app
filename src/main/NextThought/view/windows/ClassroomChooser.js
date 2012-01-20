@@ -16,13 +16,17 @@ Ext.define('NextThought.view.windows.ClassroomChooser', {
 	height: 425,
 	closable: false,
 	constrain: true,
-	layout: 'fit',
+	layout: {
+		type: 'vbox',
+		align: 'stretch'
+	},
 	modal: true,
 	items: {
 		layout: {
 			type: 'hbox',
 			align: 'stretch'
 		},
+		flex: 1,
 		border: false,
 		padding: 5,
 		defaults:{
@@ -97,5 +101,40 @@ Ext.define('NextThought.view.windows.ClassroomChooser', {
 
 	getOwner: function(){
 		return this.ownerCt || this.floatParent;
+	},
+
+	notify: function(msg){
+		var n = this.items.getAt(0),
+			remove = Ext.bind(this.remove, this);
+		if (n && n.is('[notify]')) { this.remove(n); }
+		n = this.insert(0,{
+			cls: 'notify',
+			notify: true,
+			border: false,
+			height: 50,
+			padding: 5,
+			defaults: {
+				border:false
+			},
+			layout: {
+				type: 'hbox',
+				align: 'stretch'
+			},
+			items: [
+				{html: msg, cls: 'message', flex:1},
+				{xtype: 'tool', type:'close', handler:function(e,d,p){
+					n = null;
+					p.destroy();
+				}}
+			]
+		});
+
+		setTimeout(function(){
+			if (n) {
+				remove(n);
+			}
+		}, 30000);
+
+		return n;
 	}
 });
