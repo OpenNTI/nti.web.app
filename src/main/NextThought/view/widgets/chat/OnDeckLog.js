@@ -21,7 +21,7 @@ Ext.define('NextThought.view.widgets.chat.OnDeckLog', {
 
 		//set border so it doesn't get overridden...
 		this.on('beforerender', function(){
-			this.border = '0 4 0 4';
+			this.border = '0 2px 0 2px';
 		}, this);
 	},
 

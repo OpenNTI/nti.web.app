@@ -350,7 +350,7 @@ Ext.define('NextThought.controller.Chat', {
 			return;
 		}
 
-		if(b.hasOwnProperty(a)){
+		if(Ext.isFunction(b[a])){
 			b[a].call(b);
 		}
 		else {
