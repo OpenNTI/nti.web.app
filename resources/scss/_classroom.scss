@@ -8,15 +8,6 @@
 	}
 }
 
-.classroom-mode {
-	.flag {
-		background: url($flag-icon);
-		.x-disabled & {
-  			background: url($flag-icon-disabled);
-  		}
-	}
-}
-
 
 .classroom-chooser {
 	a {
