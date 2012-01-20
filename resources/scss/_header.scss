@@ -1,24 +1,25 @@
 .header-logo {
 	background: transparent url("../images/ntbanner.png") no-repeat 0 0;
 }
+
+@mixin mode-button-def {
+	border: none;
+	margin: 0;
+	padding: 0;
+	background: none;
+	width: 32px !important;
+	height: 32px;
+}
+
 .mode-switcher {
 	.x-panel-body{
 		padding-top: 4px;
 	}
 
-	.mode-button-def {
-		border: none;
-		margin: 0;
-		padding: 0;
-		background: none;
-		width: 32px !important;
-		height: 32px;
-	}
-
-	.mode-button button { @extend .mode-button-def; }
+	.mode-button button { @include mode-button-def; }
 
 	.mode-button {
-		@extend .mode-button-def;
+		@include mode-button-def;
 
 		.x-btn-icon{
 			background-image: url('../images/nti-pc-icons-masthead.png');
@@ -43,6 +44,7 @@
     }
 
 }
+
 .search-result-selection,
 .search-result-selection .x-panel-body,
 .search-result-selection .x-panel-body-default {

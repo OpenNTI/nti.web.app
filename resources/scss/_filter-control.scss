@@ -1,39 +1,22 @@
-
 .filter-controls {
-
-	.the-who {
+	.x-form-item-body {
 		padding-left: 22px;
 		padding-top: 1px;
 		height: 17px;
 		background: url($filter-who-icon-sprite) no-repeat 1px 1px;
+
 	}
 
-	.x-form-item-body {
-		.no-filter & {
-			@extend .the-who;
-		}
-		.user-filter & {
-			@extend .the-who;
-			background-position: 1px -17px;
-		}
-		.user-group & {
-			@extend .the-who;
-			background-position: 1px -35px;
-		}
-		.system-group & {
-			@extend .the-who;
-			background-position: 1px -53px;
-		}
-
-		.type-filter & {
-			@extend .the-who;
-			background: url($filter-type-unknown-icon) no-repeat left center;
-		}
-		.type-filter.note &{
-			background: url($filter-type-note-icon) no-repeat left center;
-		}
-		.type-filter.highlight &{
-			background: url($filter-type-highlight-icon) no-repeat left center;
-		}
+	.type-filter {
+		.x-form-item-body { background: url($filter-type-unknown-icon) no-repeat left center; }
+		&.note .x-form-item-body { background: url($filter-type-note-icon) no-repeat left center; }
+		&.highlight .x-form-item-body { background: url($filter-type-highlight-icon) no-repeat left center; }
 	}
+}
+
+.x-form-item-body {
+	.no-filter & {}
+	.user-filter & { background-position: 1px -17px; }
+	.user-group & { background-position: 1px -35px; }
+	.system-group & { background-position: 1px -53px; }
 }

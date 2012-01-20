@@ -36,17 +36,17 @@
 /*
  * Library section
  */
-.library-section {
-    .label-body {
-        font-size: 1.2em;
-		font-weight: bold;
-		padding: 5px 0px;
-		border-bottom: 2px black solid;
-	}
+@mixin section-label-body {
+	font-size: 1.2em;
+	font-weight: bold;
+	padding: 5px 0px;
+	border-bottom: 2px black solid;
+}
 
+.library-section {
     .label {
-       	@extend .label-body;
-		.x-panel-body { @extend .label-body; }
+       	@include section-label-body;
+		.x-panel-body { @include section-label-body; }
 
 		div.x-btn {
 		    float: right;
