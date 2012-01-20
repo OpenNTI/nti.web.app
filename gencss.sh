@@ -17,7 +17,7 @@ if [ -e resources/scss/_main.scss ]; then
 	rm resources/scss/_main.scss
 fi
 cd resources/scss
-zeta pack main.scss # &>/dev/null
+echo $(zeta pack main.scss 2>&1 >/dev/null)
 cd ../..
 mv resources/scss/_main.scss resources/css/main.css
 echo "Done."
