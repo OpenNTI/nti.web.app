@@ -45,7 +45,7 @@ Ext.define( 'NextThought.view.modes.Classroom', {
 
 		for (i = 0; i < s.getTotalCount(); i++) {
 			ci = s.getAt(i);
-			items.push({text: ci.get('ID'), classInfo:ci});
+			items.push({text: ci.get('ID'), classInfoId: ci.getId()});
 		}
 
 		//always an add new

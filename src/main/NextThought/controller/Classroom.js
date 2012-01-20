@@ -124,7 +124,8 @@ Ext.define('NextThought.controller.Classroom', {
 
 	manageClassMenuItemClicked: function(cmp) {
 		var w = Ext.widget('class-create-edit-window'),
-			ci = cmp.classInfo,
+			s = this.getProvidersStore(),
+			ci = s.getById(cmp.classInfoId),
 			createNew = (cmp.create);
 
 		if (!ci && !createNew ){return;}
@@ -213,14 +214,13 @@ Ext.define('NextThought.controller.Classroom', {
 		}
 
 		value = win.down('class-info-form').getValue();
-
-		console.log('save this', value.toJSON());
-
 		win.el.mask('Saving...');
+
 		value.save({
 			success:
 				function(){
 					win.close();
+					me.getProvidersStore().load();
 					me.getSectionsStore().load();
 				},
 			failure:

@@ -136,7 +136,7 @@ Ext.define('NextThought.view.form.SectionInfoForm', {
 	getValue: function() {
 		var r,
 			a = this.down('sharewith[name=Instructors]').getValue(),
-			o = this.value ? this.value.toJSON() : {};
+			o = this.value ? this.value.asJSON() : {};
 
 		o.ID = this.down('textfield[name=ID]').getValue();
 		o.Description = this.down('textarea[name=Description]').getValue();

@@ -5,7 +5,7 @@ Ext.data.Types.LINKS = {
 	convert: function(v){
 		return {
 			links: v,
-			toJSON: function(){return v;},
+			asJSON: function(){return v;},
 			getRelHref: function(rel){
 				var i, c = this.links,len = c.length;
 				if(typeof(c) === 'object'){
@@ -171,7 +171,7 @@ Ext.define('NextThought.model.Base', {
 	},
 
 
-	toJSON: function() {
+	asJSON: function() {
 		var data = {},
 			me = this;
 
@@ -181,12 +181,13 @@ Ext.define('NextThought.model.Base', {
 				if (Ext.isDate(x)) {
 					x = x.getTime()/1000;
 				}
-				else if (x && x.toJSON) {
-					x = x.toJSON();
+				else if (x && x.asJSON) {
+					x = x.asJSON();
 				}
 				else if(x && Ext.isArray(x)) {
+					x = x.slice();
 					Ext.each(x, function(o, i){
-						x[i] = o.toJSON ? o.toJSON() : o;
+						x[i] = o.asJSON ? o.asJSON() : o;
 					});
 				}
 

@@ -92,11 +92,11 @@ Ext.define('NextThought.view.form.ClassInfoForm', {
 
 	getValue: function() {
 		var r, sections = [],
-			v = this.value ? this.value.toJSON() : {};
+			v = this.value ? this.value.asJSON() : {};
 
 		//Turn all section values into their json objects
 		Ext.each(this.getSections(), function(s){
-			sections.push(s.getValue().toJSON());
+			sections.push(s.getValue().asJSON());
 		}, this);
 
 		v.Sections = sections;
