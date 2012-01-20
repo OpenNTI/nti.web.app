@@ -40,16 +40,28 @@ Ext.define( 'NextThought.view.modes.Classroom', {
 		var s = Ext.StoreManager.get('Providers'),
 			btn;
 
+		function edit(e){
+			var i = e.parentMenu.parentItem;
+			i.fireEvent('click',i);
+		}
+
 		function loaded(){
 			var ci, i, items=[];
 			for (i = 0; i < s.getTotalCount(); i++) {
 				ci = s.getAt(i);
-				items.push({text: ci.get('ID'), classInfoId: ci.getId()});
+				items.push({
+					text: ci.get('ID'),
+					classInfoId: ci.getId(),
+					menu: [
+						{text:'<b>Edit...</b>', cls:'default', handler: edit},
+						{text:'Delete', disabled: true}
+					]
+				});
 			}
 
 			//always an add new
 			items.push('-');
-			items.push({text: 'create class', create:true});
+			items.push({text: 'Create a Class...', create:true});
 
 			if (btn) {
 				console.log('removing and adding');
