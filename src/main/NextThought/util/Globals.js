@@ -299,6 +299,19 @@ Ext.define('NextThought.util.Globals',
 		};
 	},
 
+	ensureSlash: function(s, atBeginning) {
+		if (!s){return;}
+
+		var index = atBeginning ? 0 : (s.length - 1),
+			c = s[index];
+
+		if (c !=='/'){
+			if (atBeginning) {return '/'+s;}
+			else {return s + '/';}
+		}
+		return s;
+	},
+
 	/**
 	 * @see http://stackoverflow.com/questions/105034/how-to-create-a-guid-uuid-in-javascript
 	 */

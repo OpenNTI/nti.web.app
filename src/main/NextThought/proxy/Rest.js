@@ -46,7 +46,7 @@ Ext.define('NextThought.proxy.Rest', {
 			if (!collection.href) {
 				Ext.Error.raise('No HREF found for mimetype ' + mimeType);
 			}
-			href = host + collection.href;
+			href = host + Globals.ensureSlash(collection.href, true);
 		}
 		else if(action === 'read') {
 			href = record.get('href');

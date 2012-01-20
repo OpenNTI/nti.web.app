@@ -96,7 +96,7 @@ Ext.define('NextThought.model.Base', {
 
 	getLink: function(rel){
 		var ref = this.get('Links').getRelHref(rel);
-		return ref? _AppConfig.server.host + ref : null;
+		return ref? _AppConfig.server.host + Globals.ensureSlash(ref, true) : null;
 	},
 
 
