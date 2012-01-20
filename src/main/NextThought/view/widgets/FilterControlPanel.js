@@ -25,14 +25,14 @@ Ext.define('NextThought.view.widgets.FilterControlPanel', {
 		this.store.on('load', this.reload, this);
 	},
 	
-	reload: function(store, groups, success, ops){
-		this.addGroups(groups);
+	reload: function(){
+		this.addGroups();
 	},
 	
 	
 	addGroups : function(){
 		var form = this.items.get(0);
-		form.removeAll();
+		form.removeAll(true);
 
 		form.add({ border: false,html:'Who:', cls: 'sidebar-header'});
 
@@ -55,11 +55,9 @@ Ext.define('NextThought.view.widgets.FilterControlPanel', {
 
 		this.store.each(
 			function(v){
-				var hasAt = /@/.test(v.get('Username'));
-
 				form.add({
 					border: false,
-					cls: hasAt? 'user-group' : 'system-group',
+					cls: v.isModifiable()? 'user-group' : 'system-group',
 					usergroup: true,
 					xtype:'checkboxfield',
 					boxLabel: v.get('realname'),	
