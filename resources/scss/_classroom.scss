@@ -16,6 +16,24 @@
 	}
 }
 
+.notify {
+	$color:#dc322f;
+	background-color: $color;
+	border-color: $color;
+
+	.x-panel-body {
+		background-color: $color + #909090;
+		color: $color;
+		font-size: 1.1em;
+		padding: 4px;
+	}
+
+	.message .x-panel-body {
+		padding: 0.5em;
+		height:auto !important;
+	}
+}
+
 .classroom-chooser {
 	a {
 		@include system-link-def;

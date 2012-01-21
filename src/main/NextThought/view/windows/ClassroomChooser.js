@@ -16,17 +16,13 @@ Ext.define('NextThought.view.windows.ClassroomChooser', {
 	height: 425,
 	closable: false,
 	constrain: true,
-	layout: {
-		type: 'vbox',
-		align: 'stretch'
-	},
+	layout: 'fit',
 	modal: true,
 	items: {
 		layout: {
 			type: 'hbox',
 			align: 'stretch'
 		},
-		flex: 1,
 		border: false,
 		padding: 5,
 		defaults:{
@@ -63,7 +59,9 @@ Ext.define('NextThought.view.windows.ClassroomChooser', {
 	dockedItems: {
 		dock: 'bottom',
 		xtype: 'toolbar',
-		items: []
+		items: [{
+			text: ' '
+		}]
 	},
 
 
@@ -103,35 +101,38 @@ Ext.define('NextThought.view.windows.ClassroomChooser', {
 		return this.ownerCt || this.floatParent;
 	},
 
-	notify: function(msg){
-		var n = this.items.getAt(0),
-			remove = Ext.bind(this.remove, this);
-		if (n && n.is('[notify]')) { this.remove(n); }
-		n = this.insert(0,{
+	notify: function f(msg){
+
+		var n = f.current;
+		if (n) { n.destroy(); }
+
+		f.current = n = this.add({
 			cls: 'notify',
+			floating: true,
 			notify: true,
-			border: false,
-			height: 50,
-			padding: 5,
+			border: true,
+			header: false,
+			frame: true,
+			width: 600,
 			defaults: {
 				border:false
 			},
-			layout: {
-				type: 'hbox',
-				align: 'stretch'
-			},
+			layout: 'hbox',
+
 			items: [
 				{html: msg, cls: 'message', flex:1},
 				{xtype: 'tool', type:'close', handler:function(e,d,p){
-					n = null;
+					f.current = n = null;
 					p.destroy();
 				}}
 			]
 		});
 
+		n.show().alignTo(this,'t-t').doLayout();
+
 		setTimeout(function(){
 			if (n) {
-				remove(n);
+			//	n.destroy();
 			}
 		}, 30000);
 
