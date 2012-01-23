@@ -81,7 +81,8 @@ Ext.define('NextThought.controller.Classroom', {
 			},
 
 			'classroom-mode-container button[action=manageclass] menuitem': {
-				'click': this.manageClassMenuItemClicked
+				'click': this.manageClassMenuItemClicked,
+				'manageScripts' : this.manageClassScriptsClicked
 			},
 
 			'class-create-edit-window toolbar button[action]' : {
@@ -135,6 +136,16 @@ Ext.define('NextThought.controller.Classroom', {
 		else {
 			w.setValue(null);
 		}
+		w.show();
+	},
+
+
+	manageClassScriptsClicked: function(cmp) {
+		var classId = cmp.classInfoId,
+			w = Ext.widget('class-script-editor');
+
+		if (!classId) return;
+
 		w.show();
 	},
 

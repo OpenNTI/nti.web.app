@@ -45,8 +45,15 @@ Ext.define( 'NextThought.view.modes.Classroom', {
 			i.fireEvent('click',i);
 		}
 
+		function manageScripts(e) {
+			var i = e.parentMenu.parentItem;
+			i.fireEvent('manageScripts',i);
+
+		}
+
 		function loaded(){
 			var ci, i, items=[];
+
 			for (i = 0; i < s.getTotalCount(); i++) {
 				ci = s.getAt(i);
 				items.push({
@@ -54,7 +61,9 @@ Ext.define( 'NextThought.view.modes.Classroom', {
 					classInfoId: ci.getId(),
 					menu: [
 						{text:'<b>Edit...</b>', cls:'default', handler: edit},
-						{text:'Delete', disabled: true}
+						{text:'Delete', disabled: true},
+						'-',
+						{text:'Manage Scripts', handler: manageScripts}
 					]
 				});
 			}
