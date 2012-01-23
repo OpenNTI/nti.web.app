@@ -20,6 +20,21 @@ Ext.data.Types.LINKS = {
 				}
 
 				return null;
+			},
+			getLinksForRel: function(rel) {
+				var i, c = this.links,len = c.length, results = [];
+				if(typeof(c) === 'object'){
+
+					for(i=len-1; i>=0; i--){
+						if(c[i].rel === rel) {
+							results.push(c[i]);
+						}
+					}
+				}
+				else {
+					console.warn('bad Links value: "', c, '" it is a', typeof(c), 'instead of an array');
+				}
+				return results;
 			}
 		};
 	}
@@ -97,6 +112,11 @@ Ext.define('NextThought.model.Base', {
 	getLink: function(rel){
 		var ref = this.get('Links').getRelHref(rel);
 		return ref? _AppConfig.server.host + Globals.ensureSlash(ref, true) : null;
+	},
+
+
+	getLinks: function(rel){
+		return this.get('Links').getLinksForRel(rel);
 	},
 
 

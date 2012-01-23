@@ -142,10 +142,11 @@ Ext.define('NextThought.controller.Classroom', {
 
 	manageClassScriptsClicked: function(cmp) {
 		var classId = cmp.classInfoId,
-			w = Ext.widget('class-script-editor');
+			w;
 
-		if (!classId) return;
+		if (!classId) {return;}
 
+		w = Ext.widget('class-script-editor', {classInfo: this.getProvidersStore().getById(classId)});
 		w.show();
 	},
 
