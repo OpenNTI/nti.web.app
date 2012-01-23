@@ -103,7 +103,18 @@ Ext.define('NextThought.view.windows.ClassroomChooser', {
 
 	notify: function f(msg){
 
-		var n = f.current;
+		var me = this,
+			n = f.current;
+
+		function recenter() {
+			if(n) { n.alignTo(me,'t-t').doLayout(); }
+		}
+
+		function cleanup() {
+			me.getOwner().un('resize',recenter);
+			if(n) { n.destroy(); }
+		}
+
 		if (n) { n.destroy(); }
 
 		f.current = n = this.add({
@@ -111,14 +122,13 @@ Ext.define('NextThought.view.windows.ClassroomChooser', {
 			floating: true,
 			notify: true,
 			border: true,
-			header: false,
 			frame: true,
+			header: false,
 			width: 600,
 			defaults: {
 				border:false
 			},
 			layout: 'hbox',
-
 			items: [
 				{html: msg, cls: 'message', flex:1},
 				{xtype: 'tool', type:'close', handler:function(e,d,p){
@@ -126,15 +136,13 @@ Ext.define('NextThought.view.windows.ClassroomChooser', {
 					p.destroy();
 				}}
 			]
-		});
+		}).show();
 
-		n.show().alignTo(this,'t-t').doLayout();
+		this.getOwner().on('resize',recenter);
+		recenter();
 
-		setTimeout(function(){
-			if (n) {
-			//	n.destroy();
-			}
-		}, 30000);
+		this.on('destroy',cleanup);
+		setTimeout(cleanup, 30000);
 
 		return n;
 	}
