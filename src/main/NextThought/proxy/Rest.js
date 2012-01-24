@@ -20,22 +20,32 @@ Ext.define('NextThought.proxy.Rest', {
 		this.on('exception', this._exception, this);
 	},
 
-	doRequest: function(){
+	doRequest: function(operation, callback, scope){
+		operation.retryArgs = {callback: callback, scope: scope};
+
 		this.callParent(arguments);
 		if(this.headers){
 			delete this.headers;
 		}
 		//fire an event to Viewport in case anyone cares
-		VIEWPORT.fireEvent('object-changed');
+		if(window.VIEWPORT){
+			VIEWPORT.fireEvent('object-changed');
+		}
 	},
 
 	buildUrl: function(request) {
 		var host = _AppConfig.server.host,
 			action = request.operation.action,
-			record = request.records[0],
-			mimeType = record.mimeType || record.get('MimeType'),
+			records= request.records,
+			record = records? records[0] : null,
+			mimeType = record? record.mimeType || record.get('MimeType') : null,
 			href,
 			collection;
+
+		if(!record){
+			console.log('URL:',this.url || request.url || request.operation.url);
+			return this.url || request.url || request.operation.url;
+		}
 
 		this.headers = { 'Content-Type': mimeType+'+json' };
 
@@ -74,14 +84,27 @@ Ext.define('NextThought.proxy.Rest', {
 	},
 
 	_exception: function(proxy, response, operation, eOpts) {
+		var retryArgs = operation.retryArgs;
+		if(response.status === 0) {
+			//Um, probably a 302 on CORS
+			console.warn('CORS 302??, retrying... w/ known redirects...', arguments);
+
+			if(retryArgs && operation.action === 'read'){
+				operation.url += '/Classes';
+				this.read(operation, retryArgs.callback,retryArgs.scope);
+			}
+
+			return;
+		}
+		else if(response.status !== 404) {
+			console.error('Error getting data:', arguments);
+		}
+
 		try{
 			Ext.callback(operation.failed, operation.scope, [operation.records, operation]);
 		}
 		catch(e){
 			console.error(e.message, e);
-		}
-		if(response.status !== 404) {
-			console.error('Error getting data:', arguments);
 		}
 	}
 });

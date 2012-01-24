@@ -6,7 +6,7 @@ Ext.define('NextThought.store.Providers',{
 	model: 'NextThought.model.ClassInfo',
 	autoLoad: false,
 	proxy: {
-		type: 'rest',
+		type: 'nti',
 		reader: {
 			type: 'nti',
 			root: 'Items'

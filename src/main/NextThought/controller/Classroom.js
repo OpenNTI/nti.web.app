@@ -96,22 +96,20 @@ Ext.define('NextThought.controller.Classroom', {
 	},
 
 	onSessionReady: function(){
-		var pStore = this.getProvidersStore(),
-			pColl = _AppConfig.service.getCollection('OU', 'providers'),
-			sStore = this.getSectionsStore(),
-			sColl = _AppConfig.service.getCollection('EnrolledClassSections');
+		var s = _AppConfig.service,
+			host = _AppConfig.server.host,
+			pColl = s.getCollection('OU', 'providers'),
+			sColl = s.getCollection('EnrolledClassSections');
 
 		if(pColl) {
-			pStore.proxy.url = _AppConfig.server.host+pColl.href;
-			pStore.load();
+			this.getProvidersStore().load({url:host+pColl.href});
 		}
 		else {
 			console.warn('NO providers workspace!');
 		}
 
 		if(sColl) {
-			sStore.proxy.url = _AppConfig.server.host+sColl.href;
-			sStore.load();
+			this.getSectionsStore().load({url: host+sColl.href});
 		}
 		else {
 			console.warn('NO providers workspace!');
