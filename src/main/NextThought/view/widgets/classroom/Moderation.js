@@ -4,14 +4,13 @@ Ext.define('NextThought.view.widgets.classroom.Moderation', {
 	requires: [
 		'NextThought.view.widgets.chat.OccupantsList',
 		'NextThought.view.widgets.chat.Log',
-		'NextThought.view.widgets.classroom.Attachments'
+		'NextThought.view.widgets.classroom.ResourceView'
 	],
 
 	cls: 'nti-classroom-moderation',
 
 	layout: {type: 'hbox', align: 'stretch'},
 	border: false,
-	//defaults: {border: false},
 
 	items: [
 		{
@@ -21,9 +20,14 @@ Ext.define('NextThought.view.widgets.classroom.Moderation', {
 			autoHide: false
 		},
 		{
-			xtype: 'classroom-attachments-view',
-			title: 'attachments',
-			flex: 1
+			title: 'Resources',
+			flex: 1,
+			items: [
+				{
+					xtype: 'classroom-resource-view',
+					emptyText: 'No Resources'
+				}
+			]
 		}
 	]
 });
