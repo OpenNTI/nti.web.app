@@ -64,7 +64,8 @@ Ext.define('NextThought.view.windows.ClassScriptEditor', {
 		//populate the combo box
 		var ci = this.classInfo,
 			sel,
-			store = Ext.create('Ext.data.Store', {fields: ['ID', 'record']});
+			store = Ext.create('Ext.data.Store', {fields: ['ID', 'record']}),
+			tool;
 
 		sel = store.add({'ID': ci.get('ID'), 'record': ci});
 
@@ -72,7 +73,7 @@ Ext.define('NextThought.view.windows.ClassScriptEditor', {
 			store.add({'ID': ' -> ' + s.get('ID'), 'record': s});
 		});
 
-		this.addTool({
+		tool = {
 			xtype:'combobox',
 			fieldLabel: 'Target',
 			labelWidth: 40,
@@ -84,9 +85,9 @@ Ext.define('NextThought.view.windows.ClassScriptEditor', {
 			store: store,
 			value: sel,
 			queryMode: 'local'
-		});
+		};
 
-
+		this.addTool(tool);
 		this.callParent();
 	}
 

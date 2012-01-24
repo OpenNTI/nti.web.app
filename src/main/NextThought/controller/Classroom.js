@@ -36,6 +36,7 @@ Ext.define('NextThought.controller.Classroom', {
 
 	refs:[
 		{ ref: 'classroomContainer', selector: 'classroom-mode-container' },
+		{ ref: 'classScriptEditor', selector: 'class-script-editor' },
 		{ ref: 'classroom', selector: 'classroom-content' },
 		{ ref: 'liveDisplay', selector: 'live-display' },
 		{ ref: 'viewport', selector: 'master-view' },
@@ -91,6 +92,10 @@ Ext.define('NextThought.controller.Classroom', {
 
 			'classroom-content chat-occupants-list tool[action=moderate]' : {
 				'click' : this.onModerateClicked
+			},
+
+			'class-script-editor combobox' : {
+				'change': this.onClassScriptComboBoxChange
 			}
 		},{});
 	},
@@ -270,6 +275,10 @@ Ext.define('NextThought.controller.Classroom', {
 		content.showMod();
 		//mod.show();
 		view.initOccupants(true);
+	},
+
+	onClassScriptComboBoxChange: function(cb) {
+		this.getClassScriptEditor().down('classroom-resource-view').setRecord(cb.value);
 	},
 
 	recordState: function(book, path, ntiid, eopts, viaSocket) {
