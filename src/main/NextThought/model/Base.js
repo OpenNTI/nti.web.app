@@ -281,7 +281,7 @@ Ext.data.Types.COLLECTIONITEM = {
 
 Ext.data.Types.USERLIST = {
 	type: 'UserList',
-	convert: function(v) {
+	convert: function(v,record) {
 		try {
 			var a = arguments,
 				u = [];
@@ -298,6 +298,9 @@ Ext.data.Types.USERLIST = {
 					}
 					else  {
 						u.push(p);
+						if(typeof(o) === 'string') {
+							console.warn("Will resolve UserId because we don't have an object to parse:", record.get('Class'), '@', record.getId(), o);
+						}
 						//asynchronously resolve this user so its cached and ready
 						UserRepository.prefetchUser(o);
 					}
