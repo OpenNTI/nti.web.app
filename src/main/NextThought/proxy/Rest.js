@@ -43,7 +43,6 @@ Ext.define('NextThought.proxy.Rest', {
 			collection;
 
 		if(!record){
-			console.log('URL:',this.url || request.url || request.operation.url);
 			return this.url || request.url || request.operation.url;
 		}
 
@@ -85,15 +84,20 @@ Ext.define('NextThought.proxy.Rest', {
 
 	_exception: function(proxy, response, operation, eOpts) {
 		var retryArgs = operation.retryArgs;
+
 		if(response.status === 0) {
 			//Um, probably a 302 on CORS
-			console.warn('CORS 302??, retrying... w/ known redirects...', arguments);
+			console.warn('CORS 302? Retrying w/ known redirects.',
+					{
+						Proxy:proxy,
+						Response:response,
+						Operation: operation
+					});
 
 			if(retryArgs && operation.action === 'read'){
 				operation.url += '/Classes';
 				this.read(operation, retryArgs.callback,retryArgs.scope);
 			}
-
 			return;
 		}
 		else if(response.status !== 404) {
