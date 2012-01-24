@@ -74,9 +74,9 @@ Ext.define('NextThought.view.widgets.chat.View', {
 
 
 	initOccupants: function(moderated) {
-		//stuff the occupants where they belong
+		//stuff the occupants where they
 		if (this.up('classroom-content')) {
-			this.up('classroom-content').down('classroom-moderation').down('chat-occupants-list').setOccupants(this.roomInfo.get('Occupants'), this.roomId, moderated);
+			this.up('classroom-content').down('classroom-management').down('chat-occupants-list').setOccupants(this.roomInfo.get('Occupants'), this.roomId, moderated);
 			this.down('chat-occupants-list').hide();
 		}
 		else {

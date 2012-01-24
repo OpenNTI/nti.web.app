@@ -16,7 +16,6 @@ Ext.define('NextThought.controller.Classroom', {
 		'widgets.LinkButton',
 		'widgets.classroom.LiveDisplay',
 		'widgets.classroom.Management',
-		'widgets.classroom.Moderation',
 		'widgets.chat.ScriptLog',
 		'windows.ClassCreateEditWindow',
 		'windows.ClassroomChooser',

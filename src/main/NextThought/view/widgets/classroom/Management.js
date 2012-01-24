@@ -3,7 +3,8 @@ Ext.define('NextThought.view.widgets.classroom.Management', {
 	alias: 'widget.classroom-management',
 	requires: [
 		'NextThought.view.widgets.classroom.LiveDisplay',
-		'NextThought.view.widgets.classroom.Moderation'
+		'NextThought.view.widgets.chat.OccupantsList',
+		'NextThought.view.widgets.classroom.ResourceView'
 	],
 
 	cls: 'nti-classroom-management',
@@ -25,6 +26,28 @@ Ext.define('NextThought.view.widgets.classroom.Management', {
 		this.callParent(arguments);
 
 		this.add({xtype: 'live-display', height: 400, roomInfo: this.roomInfo});
-		this.add({xtype: 'classroom-moderation', flex:1});
+		this.add({
+				flex: 1,
+				layout: {type: 'hbox', align: 'stretch'},
+				border: false,
+				items: [
+					{
+						title: 'Occupants',
+						xtype: 'chat-occupants-list',
+						flex: 1,
+						autoHide: false
+					},
+					{
+						title: 'Resources',
+						flex: 1,
+						items: [
+							{
+								xtype: 'classroom-resource-view',
+								emptyText: 'No Resources'
+							}
+						]
+					}
+				]}
+			);
 	}
 });
