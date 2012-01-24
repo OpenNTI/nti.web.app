@@ -69,11 +69,6 @@ Ext.define('NextThought.view.widgets.chat.View', {
         if (!this.up('classroom-content') && ClassroomUtils.isClassroomId(ri.get('ContainerId'))) {
             this.down('chat-reply-to').showClassroomButton();
         }
-		/*
-        else if (ClassroomUtils.isClassroomId(ri.get('ContainerId'))){
-            this.down('[region=center]').add({xtype:'on-deck-view', hidden:true});
-        }
-		*/
 		this.initOccupants();
     },
 

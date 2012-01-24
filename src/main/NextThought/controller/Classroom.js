@@ -12,10 +12,12 @@ Ext.define('NextThought.controller.Classroom', {
 		'form.SectionInfoForm',
 		'widgets.classroom.Browser',
 		'widgets.classroom.BrowserStudyGroups',
+		'widgets.classroom.ResourceView',
 		'widgets.LinkButton',
 		'widgets.classroom.LiveDisplay',
 		'widgets.classroom.Management',
 		'widgets.classroom.Moderation',
+		'widgets.chat.ScriptLog',
 		'windows.ClassCreateEditWindow',
 		'windows.ClassroomChooser',
 		'windows.ClassScriptEditor',
@@ -40,7 +42,9 @@ Ext.define('NextThought.controller.Classroom', {
 		{ ref: 'classroom', selector: 'classroom-content' },
 		{ ref: 'liveDisplay', selector: 'live-display' },
 		{ ref: 'viewport', selector: 'master-view' },
-		{ ref: 'reader', selector: 'reader-panel' }
+		{ ref: 'reader', selector: 'reader-panel' },
+		{ ref: 'scriptView', selector: 'script-log-view' },
+		{ ref: 'resourceView', selector: 'classroom-resource-view' }
 	],
 
 	init: function(){
@@ -212,6 +216,8 @@ Ext.define('NextThought.controller.Classroom', {
 		if (moderated) {
 			this.onModerateClicked();
 		}
+
+		this.compileResources(roomInfo.get('ContainerId'));
 	},
 
 
@@ -271,7 +277,7 @@ Ext.define('NextThought.controller.Classroom', {
 
 		if (mod){return;} //already moderated
 
-		content.showOnDeck();
+		content.showScriptView();
 		content.showMod();
 		//mod.show();
 		view.initOccupants(true);
@@ -348,6 +354,21 @@ Ext.define('NextThought.controller.Classroom', {
 
 	showMessage: function(msgCmp) {
 		msgCmp.up('chat-log-view').scroll(msgCmp);
+	},
+
+	/*
+	Find the section and pass it to the resource view to load
+	NOTE: The containerId of a RoomInfo should match the NTIID of a section info if
+		the room was spawned from a section, otherwise it won't match.
+	 */
+	compileResources: function(cid) {
+		var sStore = this.getSectionsStore(),
+			secIndex = sStore.find('NTIID', cid),
+			sec = secIndex > -1 ? sStore.getAt(secIndex) : null;
+
+		if (sec) {
+			this.getResourceView().setRecord(sec, true);
+		}
 	}
 });
 

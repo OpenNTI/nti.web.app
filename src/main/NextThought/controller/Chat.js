@@ -26,8 +26,8 @@ Ext.define('NextThought.controller.Chat', {
 		'widgets.chat.PinnedMessageView',
 		'widgets.chat.Friends',
 		'widgets.chat.FriendEntry',
-		'widgets.chat.OnDeckEntry',
-		'widgets.chat.OnDeckLog',
+		'widgets.chat.ScriptEntry',
+		'widgets.chat.ScriptLog',
 		'windows.NoteEditor'
 	],
 
@@ -120,7 +120,7 @@ Ext.define('NextThought.controller.Chat', {
 			'chat-pinned-message-view toolbar button' : {
 				'click': this.clearPinnedMessages
 			},
-			'on-deck-log-entry' : {
+			'script-entry' : {
 				'script-to-chat': this.send
 			}
 

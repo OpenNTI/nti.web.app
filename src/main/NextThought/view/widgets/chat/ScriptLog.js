@@ -1,19 +1,21 @@
-Ext.define('NextThought.view.widgets.chat.OnDeckLog', {
+Ext.define('NextThought.view.widgets.chat.ScriptLog', {
 	extend:'Ext.panel.Panel',
-	alias: 'widget.chat-on-deck-log-view',
+	alias: 'widget.script-log-view',
 	requires: [
-		'NextThought.view.widgets.chat.OnDeckEntry',
+		'NextThought.view.widgets.chat.ScriptEntry',
 		'NextThought.cache.IdCache',
 		'NextThought.model.ClassScript'
 	],
 
-	cls: 'chat-on-deck-log-view',
+	cls: 'script-log-view',
 	autoScroll: true,
 	layout: 'anchor',
 	split: true,
 	title: 'Class Script',
 	defaults: {border: false},
-	dockedItems: {dock: 'bottom', xtype: 'toolbar', items:[{text: 'something'}]},
+	dockedItems: {dock: 'bottom', xtype: 'toolbar', items:[
+		{text: 'something'}
+	]},
 
 
 	initComponent: function(config) {
@@ -37,7 +39,7 @@ Ext.define('NextThought.view.widgets.chat.OnDeckLog', {
 				m = Ext.create('NextThought.model.MessageInfo', {body : bodies[b]});
 				this.add(
 					{
-						xtype: 'on-deck-log-entry',
+						xtype: 'script-entry',
 						message: m,
 						roomInfo: this.roomInfo
 					}
@@ -76,7 +78,7 @@ Ext.define('NextThought.view.widgets.chat.OnDeckLog', {
 	},
 
 	scrollToFirstNonPromotedEntry: function() {
-		var entries = this.query('on-deck-log-entry[promoted=false]'),
+		var entries = this.query('script-entry[promoted=false]'),
 			o = entries[0] ? entries[0] : null;
 
 		if (!o){return;}

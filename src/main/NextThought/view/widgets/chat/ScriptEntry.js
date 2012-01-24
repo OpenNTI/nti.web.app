@@ -1,6 +1,6 @@
-Ext.define('NextThought.view.widgets.chat.OnDeckEntry', {
+Ext.define('NextThought.view.widgets.chat.ScriptEntry', {
 	extend: 'Ext.container.Container',
-	alias: 'widget.on-deck-log-entry',
+	alias: 'widget.script-entry',
 
 	requires: [
 		'NextThought.util.AnnotationUtils',
@@ -8,7 +8,7 @@ Ext.define('NextThought.view.widgets.chat.OnDeckEntry', {
 	],
 
 	renderTpl: new Ext.XTemplate(
-		'<div class="x-on-deck-log-entry">',
+		'<div class="x-script-entry">',
 			'<span class="buttons">',
 				'<span class="script-to-chat"></span>',
 			'</span>',
@@ -21,7 +21,7 @@ Ext.define('NextThought.view.widgets.chat.OnDeckEntry', {
 	promoted: false,
 
 	renderSelectors: {
-		box: 'div.x-on-deck-log-entry',
+		box: 'div.x-script-entry',
 		text: 'span.body-text'
 	},
 

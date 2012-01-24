@@ -4,7 +4,7 @@ Ext.define('NextThought.view.content.Classroom', {
 	requires: [
 		'NextThought.view.widgets.chat.View',
 		'NextThought.view.widgets.classroom.Management',
-		'NextThought.view.widgets.chat.OnDeckLog'
+		'NextThought.view.widgets.chat.ScriptLog'
 	],
 
 	cls: 'x-classroom-panel',
@@ -42,8 +42,8 @@ Ext.define('NextThought.view.content.Classroom', {
 	},
 
 
-	showOnDeck: function() {
-		this.insert(0, {xtype: 'chat-on-deck-log-view', flex: 1, roomInfo: this.roomInfo});
+	showScriptView: function() {
+		this.insert(0, {xtype: 'script-log-view', flex: 1, roomInfo: this.roomInfo});
 	},
 
 
@@ -109,7 +109,7 @@ Ext.define('NextThought.view.content.Classroom', {
 
 	onScriptMessage: function(msg) {
 		console.log('once scripts are saved, we should move script element selection here b/c we will be able to find the message by id at that point');
-		var script = this.down('chat-on-deck-log-view'),
+		var script = this.down('script-log-view'),
 			id = IdCache.getIdentifier(msg.getId());
 
 		if (!script) {
@@ -118,6 +118,5 @@ Ext.define('NextThought.view.content.Classroom', {
 
 		//TODO: consequently, only do this id we end up marking something as promoted:
 		script.scrollToFirstNonPromotedEntry();
-		//script.query('on-deck-log-entry[messageId=' + id +']' );
 	}
 });
