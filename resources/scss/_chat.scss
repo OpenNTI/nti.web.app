@@ -1,5 +1,5 @@
 
-.chat { background: url($chat-icon); }
+.chat { background: $chat-icon; }
 
 .chat-entry {
 	float: none !important;
@@ -13,9 +13,9 @@
 
 button {
 	.flag {
-		background: url($flag-icon);
+		background: $flag-icon;
 		.x-disabled & {
-			background: url($flag-icon-disabled);
+			background: $flag-icon-disabled;
 		}
 	}
 
@@ -36,14 +36,14 @@ button {
 	 	    @include action-buttons-item;
 			&:hover { opacity: 1; }
 
-			&.reply-whisper { background: url($chat-reply-whisper); }
+			&.reply-whisper { background: $chat-reply-whisper; }
 			&.reply-public{
 			    @include chat-button-def;
-				background: url($chat-reply-public);
+				background: $chat-reply-public;
 			}
 			&.pin{
 				@include chat-button-def;
-				background: url($chat-pin);
+				background: $chat-pin;
 				display: none;
 				.moderator & {display: inline-block;}
 			}
@@ -79,8 +79,8 @@ button {
 .x-chat-friend-entry {
     @include list-entry;
     padding: 5px 5px 5px 25px;
-	background: url($presences-offline) no-repeat 5px center;
-	&.Online { background: url($presences-online) no-repeat 5px center; }
+	background: $presences-offline no-repeat 5px center;
+	&.Online { background: $presences-online no-repeat 5px center; }
     &.drag-hover { @include hover-state-props; }
 
     .name {
@@ -106,7 +106,7 @@ button {
 		}
 	}
 
-	span.script-to-chat { background: url($script-entry-promot-icon); }
+	span.script-to-chat { background: $script-entry-promot-icon; }
 }
 
 .x-chat-replies {
@@ -126,24 +126,24 @@ button {
 	.x-btn-icon{
 		width: inherit;
 		height: inherit;
-		background: url($reply-to-button-icon) center;
+		background: $reply-to-button-icon center;
 	}
 }
 
 .compose-msg-button .x-btn-icon{
 	width: inherit;
 	height: inherit;
-	background: url($compose-message-icon) center no-repeat;
+	background: $compose-message-icon center no-repeat;
 }
 
 .classroom-button .x-btn-icon{
 	width: inherit;
 	height: inherit;
-	background: url($switch-to-classroom-icon) center no-repeat;
+	background: $switch-to-classroom-icon center no-repeat;
 }
 
 .reply-to-line .chat-entry .x-form-item-body {
-	background: url($ext-text-entry) repeat-x;
+	background: $ext-text-entry repeat-x;
 	height: 30px !important;
 
 	input.x-form-text {
@@ -174,5 +174,5 @@ button {
 	}
 }
 
-.shadow-menu { background-image: url($shadow-menu-icon); }
-.chat-menu { background-image: url($chat-menu-icon); }
+.shadow-menu { background-image: $shadow-menu-icon; }
+.chat-menu { background-image: $chat-menu-icon; }

@@ -222,7 +222,7 @@ Ext.define('NextThought.controller.Session', {
 
 		function tryAgain(){
 			form.getForm().reset();
-			m.addCls('error');
+			win.addCls('error');
 			m.update('Could not login, please try again');
 			win.doLayout();
 			win.el.unmask();

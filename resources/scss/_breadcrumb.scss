@@ -1,6 +1,6 @@
 .x-breadcrumbs-bar {
 	.x-btn-arrow {
-		background-image: url($arrow-right);
+		background-image: $arrow-right;
 		padding-right: 20px;
 	}
 
@@ -12,10 +12,10 @@
 	}
 
 	.x-item-disabled {
-		.breadcrumb-next { background: url($next-arrow-disabled); }
-		.breadcrumb-prev { background: url($prev-arrow-disabled); }
+		.breadcrumb-next { background: $next-arrow-disabled; }
+		.breadcrumb-prev { background: $prev-arrow-disabled; }
 	}
 
-	.breadcrumb-next{ background: url($next-arrow); }
-	.breadcrumb-prev{ background: url($prev-arrow); }
+	.breadcrumb-next{ background: $next-arrow; }
+	.breadcrumb-prev{ background: $prev-arrow; }
 }

@@ -6,7 +6,8 @@ Ext.define('NextThought.view.widgets.classroom.ResourceView', {
 	],
 
 	cls: 'x-class-resourceview-panel',
-	emptyText: 'No resources available',
+	deferEmptyText: false,
+	emptyText: '<div class="empty">&nbsp;</div>',
 
 	dataTypeToIcon: {
 		'application/vnd.nextthought.classscipt' : 'resource-script'

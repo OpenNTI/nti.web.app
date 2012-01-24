@@ -1,54 +1,58 @@
+
 .x-login-form-box{
-	border-left: 1px solid #000 !important;
-	border-right: 1px solid #000 !important;
-}
+	border-left: 1px solid $login-message-background-color;
+	border-right: 1px solid $login-message-background-color;
 
-.x-login-message-box {
-	padding: 15px 15px 15px 48px;
-	background: #000 url(../images/info.png) no-repeat 10px center;
-}
+	.error & {
+		border-left: 1px solid $login-error-border-color !important;
+		border-right: 1px solid $login-error-border-color !important;
+		.x-login-message-box{
+			background: transparent $login-error-badge no-repeat 10px center;
+			&, .x-panel-body{
+				border-color: $login-error-border-color;
+				color: $login-error-foreground-color;
+				background-color: $login-error-background-color !important;
+			}
+		}
+	}
 
-.x-login-message-box,
-.x-login-message-box .x-panel-body{
-	border: 1px solid #000;
-	background-color: #000;
-	color: #fff;
-	font-size: 12pt;
+	.x-login-message-box {
+		padding: 15px 15px 15px 48px;
+		background: transparent $login-info-badge no-repeat 10px center;
 
-}
+		&, .x-panel-body{
+			border: 1px solid $login-message-background-color;
+			border-left-width: 0 !important;
+			border-right-width: 0 !important;
+			background-color: $login-message-background-color;
+			color: $login-message-foreground-color;
+			font-size: 12pt;
 
-.x-login-message-box.error{
-	background: #800000 url(../images/minus-white.png) no-repeat 10px center;
-}
+		}
+	}
 
-.x-login-message-box.error,
-.x-login-message-box.error .x-panel-body{
-	border-color: #800000;
-	color: #ffb6c1;
-	background-color: #cd5c5c !important;
-}
+	.x-login-form-username{
+		label,input{
+			font-size: 14pt;
+			&.x-form-text{
+				padding: 10px;
+				height: 46px;
+			}
+		}
+	}
 
-.x-login-form-username label,
-.x-login-form-username input{
-	font-size: 14pt;
-}
+	.x-login-form-password {
+		label,input{
+			font-size: 12pt;
+			&.x-form-text{
+				padding: 5px;
+				height: 32px;
+			}
+		}
+	}
 
-.x-login-form-username input.x-form-text{
-	padding: 10px;
-	height: 46px;
-}
-
-.x-login-form-password label,
-.x-login-form-password input{
-	font-size: 12pt;
-}
-
-.x-login-form-password input.x-form-text{
-	padding: 5px;
-	height: 32px;
-}
-
-.login-icon {
-	background: transparent url("../images/user.png") no-repeat 0 0;
-	margin: 15px 0 0 10px;
+	.login-icon {
+		background: transparent $login-welcome-icon no-repeat 0 0;
+		margin: 15px 0 0 10px;
+	}
 }

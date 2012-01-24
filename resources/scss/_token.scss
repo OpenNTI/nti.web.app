@@ -39,7 +39,7 @@ div.nt-token-wrapper{
 			.nt-token-label { vertical-align: middle; }
 
 			.nt-token-nib {
-				background-image: url(../images/googleplus-icons.png);
+				background-image: $tokens-sprite;
 				background-repeat: no-repeat;
 				display: inline-block;
 				height: 13px;

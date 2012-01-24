@@ -17,7 +17,7 @@
 	margin: -35px 0 0 -30px;
 
 	.loading-indicator {
-		background: url(../images/loading.gif) no-repeat;
+		background: $loading-indicator no-repeat;
 		color: #555;
 		font: bold 11px tahoma, arial, helvetica;
 		padding: 0px 25px;
@@ -39,7 +39,7 @@
 		}
 	}
 	div {
-		background-image: url(../images/loading.gif) !important;
+		background-image: $loading-indicator !important;
 		background-color: transparent;
 		background-position: 10px center;
 		padding: 10px 15px 10px 30px;

@@ -124,12 +124,12 @@
 
 	.x-item-over{
 		border:1px solid #dddddd;
-		background: #efefef url(../images/over.gif) repeat-x left top;
+		background: #efefef $data-view-over-bg repeat-x left top;
 		padding: 4px;
 	}
 
 	.x-item-selected{
-		background: #eff5fb url(../images/selected.gif) repeat-x right bottom;
+		background: #eff5fb $data-view-selected-bg repeat-x right bottom;
 		border:1px solid #99bbe8;
 		padding: 4px;
 

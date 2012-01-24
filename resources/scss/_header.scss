@@ -1,5 +1,5 @@
 .header-logo {
-	background: transparent url("../images/ntbanner.png") no-repeat 0 0;
+	background: transparent $header-logo no-repeat 0 0;
 }
 
 @mixin mode-button-def {
@@ -22,7 +22,7 @@
 		@include mode-button-def;
 
 		.x-btn-icon{
-			background-image: url('../images/nti-pc-icons-masthead.png');
+			background-image: $mode-button-sprite;
 			width: 30px;
 			height: 30px;
 
@@ -58,13 +58,13 @@
 }
 
 .session-myacount{
-	background-image: url('../images/user_silhouette.gif');
+	background-image: $session-my-account-icon;
 }
 .session-logout{
-	background-image: url('../images/sign-in.gif');
+	background-image: $session-logout-icon;
 }
 .settings-gear{
-	background-image: url('../images/gear.png');
+	background-image: $session-settings-icon;
 	background-size: 24px 24px;
 }
 
@@ -108,7 +108,7 @@ span.notification-box-widget {
 	vertical-align: middle;
 	margin-top: 2px;
 	margin-right: 10px;
-	background: url(../images/notify.png) no-repeat -22px 0px;
+	background: $session-notice-box no-repeat -22px 0px;
 
 	&.unread {
 		color: white;

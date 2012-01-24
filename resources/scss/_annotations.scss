@@ -102,14 +102,14 @@
 		span.edit { display: none; }
 		span.delete { display: none; }
 
-		.chat { background: url($note-action-chat-icon); }
-		.delete { background: url($note-action-delete-icon); }
+		.chat { background: $note-action-chat-icon; }
+		.delete { background: $note-action-delete-icon; }
 		.edit {
-			background: url($note-action-edit-icon);
+			background: $note-action-edit-icon;
 			background-size: 16px 16px;
 		}
-		.reply { background: url($note-action-reply-icon); }
-		.share { background: url($note-action-share-icon); }
+		.reply { background: $note-action-reply-icon; }
+		.share { background: $note-action-share-icon; }
 	}
 }
 

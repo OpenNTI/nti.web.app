@@ -3,14 +3,14 @@
 		padding-left: 22px;
 		padding-top: 1px;
 		height: 17px;
-		background: url($filter-who-icon-sprite) no-repeat 1px 1px;
+		background: $filter-who-icon-sprite no-repeat 1px 1px;
 
 	}
 
 	.type-filter {
-		.x-form-item-body { background: url($filter-type-unknown-icon) no-repeat left center; }
-		&.note .x-form-item-body { background: url($filter-type-note-icon) no-repeat left center; }
-		&.highlight .x-form-item-body { background: url($filter-type-highlight-icon) no-repeat left center; }
+		.x-form-item-body { background: $filter-type-unknown-icon no-repeat left center; }
+		&.note .x-form-item-body { background: $filter-type-note-icon no-repeat left center; }
+		&.highlight .x-form-item-body { background: $filter-type-highlight-icon no-repeat left center; }
 	}
 }
 
