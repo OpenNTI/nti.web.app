@@ -1,5 +1,3 @@
-
-
 Ext.define('NextThought.view.widgets.classroom.ResourceView', {
 	extend: 'Ext.view.View',
 	alias: 'widget.classroom-resource-view',
@@ -14,37 +12,42 @@ Ext.define('NextThought.view.widgets.classroom.ResourceView', {
 		'application/vnd.nextthought.classscipt' : 'resource-script'
 	},
 
-	tplGrid: new Ext.XTemplate([
+	tplGrid: new Ext.XTemplate(
 		'<tpl for=".">',
 			'<div class="item-wrap">',
 				'<div class="item">',
-					'<img src="{[Ext.BLANK_IMAGE_URL]}" title="{this.getName(href)}"></div>',
-				'<span>{this.getName(href)}</span></div>',
-		'</tpl>',
-		'<div class="x-clear"></div>'
-	]),
-
-	tplDetails: new Ext.XTemplate([
-		'<tpl for=".">',
-			'<div class="item-wrap details">',
-				'<div class="item">', //row
-					'<img src="{[Ext.BLANK_IMAGE_URL]}" title="{this.getName(href)}">',
-					'<span>{this.getName(href)}</span>',
-					'<span>{mimetype}</span>',
+					'<img src="{[Ext.BLANK_IMAGE_URL]}" title="{[this.getName(values,xindex)]}">',
+					'<span>{[this.getName(values,xindex)]}</span>',
+				'</div>',
 			'</div>',
-			'</div>',
-
 		'</tpl>',
 		'<div class="x-clear"></div>',
 		{
 			compile: true,
-			// member functions:
-			getName: function(href){
-				var a = href.split('?')[0].split('/');
-				return a.pop();
+			getName: function(values,x) {
+				return values.href.split('?')[0].split('/').pop();
 			}
 		}
-	]),
+	),
+
+	tplDetails: new Ext.XTemplate(
+		'<tpl for=".">',
+			'<div class="item-wrap details">',
+				'<div class="item">', //row
+					'<img src="{[Ext.BLANK_IMAGE_URL]}" title="{[this.getName(values,xindex)]}">',
+					'<span>{[this.getName(values,xindex)]}</span>',
+					'<span>{type}</span>',
+				'</div>',
+			'</div>',
+		'</tpl>',
+		'<div class="x-clear"></div>',
+		{
+			compile: true,
+			getName: function(values,x) {
+				return values.href.split('?')[0].split('/').pop();
+			}
+		}
+	),
 
 
 	multiSelect: false,

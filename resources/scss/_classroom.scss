@@ -34,6 +34,41 @@
 	}
 }
 
+.x-class-resourceview-panel {
+	@include data-view;
+
+	.item-wrap.details {
+		float: none;
+		margin: 4px;
+		//max-width: 600px;
+		white-space: nowrap;
+		overflow: hidden;
+
+		span {
+			display: inline-block;
+			text-align: left;
+			white-space: inherit;
+			overflow: inherit;
+			width: 200px;
+		}
+
+		.item {
+			background: transparent;
+
+			img{
+				height: 24px;
+				width: 24px;
+				vertical-align: middle;
+			}
+
+			.x-quirks & {
+				padding-bottom: 3px;
+				text-align: left;
+			}
+		}
+	}
+}
+
 .classroom-chooser {
 	a {
 		@include system-link-def;
@@ -53,36 +88,43 @@
 }
 
 .classroom-browser {
-	.item-wrap {}
+	//@include data-view;
 
-	.item {
+	.item-wrap {
+		margin: 4px;
+		white-space: nowrap;
+		overflow: hidden;
 		position: relative;
 		overflow: hidden;
 		padding: 5px;
 		cursor: pointer;
 
-		img {float: left;}
-		div {margin-left: 30px;}
-		span{ font-size: 150%; }
+		.item {
+		    background: transparent;
 
-		.selector{
-			display: none;
-			float: right;
-			padding-top: 3px;
+			img {float: left; width: 24px; height: 24px;}
+			div {margin-left: 30px;}
+			span{ font-size: 150%; }
 
-			.x-item-over & {
+			.selector{
+				display: none;
+				float: right;
+				padding-top: 3px;
+			}
+		}
+
+		&.x-item-over{
+			border:1px solid #dddddd;
+			background: #efefef url(../images/over.gif) repeat-x left top;
+			padding: 4px;
+
+			.item .selector{
 				display: block;
 			}
 		}
 
-		.x-item-over &{
-			border:1px solid #dddddd;
-			background: #efefef url(../images/over.gif) repeat-x left top;
-			padding: 4px;
-		}
-
-		.x-item-selected & {
-			background: #eff5fb url(../images/selected.gif) no-repeat right bottom;
+		&.x-item-selected{
+			background: #eff5fb url(../images/selected.gif) repeat-x right bottom;
 			border:1px solid #99bbe8;
 			padding: 4px;
 		}

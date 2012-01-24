@@ -90,29 +90,9 @@
 
 
 @mixin data-view {
-	.x-panel-body {
-		background: white;
-		font: 11px Arial, Helvetica, sans-serif;
-	}
-
-	.item {
-		background: #dddddd;
-		padding: 3px;
-		padding-bottom: 0;
-
-		img{
-			height: 80px;
-			width: 80px;
-		}
-
-
-		.x-quirks & {
-		    padding-bottom: 3px;
-			text-align: center;
-	    }
-	}
-
-	.item-wrap{
+	background: $panel-background;
+	font: 11px Arial, Helvetica, sans-serif;
+	.item-wrap {
 		float: left;
 		margin: 4px;
 		margin-right: 0;
@@ -124,8 +104,23 @@
 			text-align: center;
 			width: 86px; // for ie to ensure that the text is centered
 		}
-	}
 
+		.item {
+			background: #dddddd;
+			padding: 3px;
+			padding-bottom: 0;
+
+			img{
+				height: 80px;
+				width: 80px;
+			}
+
+			.x-quirks & {
+				padding-bottom: 3px;
+				text-align: center;
+			}
+		}
+	}
 
 	.x-item-over{
 		border:1px solid #dddddd;
@@ -134,7 +129,7 @@
 	}
 
 	.x-item-selected{
-		background: #eff5fb url(../images/selected.gif) no-repeat right bottom;
+		background: #eff5fb url(../images/selected.gif) repeat-x right bottom;
 		border:1px solid #99bbe8;
 		padding: 4px;
 

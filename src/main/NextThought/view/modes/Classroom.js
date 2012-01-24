@@ -69,17 +69,17 @@ Ext.define( 'NextThought.view.modes.Classroom', {
 			}
 
 			//always an add new
-			items.push('-');
+			if(items.length>0) {
+				items.push('-');
+			}
 			items.push({text: 'Create a Class...', create:true});
 
 			if (btn) {
-				console.log('removing and adding');
 				btn.menu.removeAll(true);
 				btn.menu.add(items);
 				return null;
 			}
 
-			console.log('returning', items);
 			return items;
 		}
 
@@ -90,7 +90,7 @@ Ext.define( 'NextThought.view.modes.Classroom', {
 			menu: loaded(),
 			listeners: {
 				beforedestroy: function (){ s.un('load', loaded, this); },
-				added: function (c){ console.log('adding'); s.on('load', loaded, this); btn = c; }
+				added: function (c){ s.on('load', loaded, this); btn = c; }
 			}
 		};
 	},
