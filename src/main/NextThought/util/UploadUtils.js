@@ -111,9 +111,11 @@ Ext.define('NextThought.util.UploadUtils',{
 				cb.call(scope||window, file, message.progress);
 			}
 		}
+		/*
 		else if(msg === 'load'){
 			//don't care
 		}
+		*/
 		else if(msg === 'complete'){
 			cb = request.complete;
 			bar.updateProgress(1);
