@@ -11,62 +11,60 @@ Ext.define('NextThought.view.widgets.classroom.ResourceView', {
 	emptyText: '<div class="empty">&nbsp;</div>',
 	autoScroll: true,
 
-	dataTypeToIcon: {
-		'application/vnd.nextthought.classscipt' : 'resource-script'
+
+
+	templateFunctions: {
+		compile: true,
+
+		dataTypeToIcon: {
+			'vnd.nextthought.classscipt' : 'resource-script'
+		},
+
+		getName: function(values) {
+			return values.href.split('?')[0].split('/').pop();
+		},
+
+		getClass: function(values){
+			var t = values.type,
+				ext = values.href.split('.').pop(),
+				charRe= /[\._\\]/ig,
+				appRe = /^application\//ig,
+				imgRe = /^image/ig,
+				parRe = /\+.*/ig;
+
+			if(imgRe.test(t)){
+				return 'image';
+			}
+
+			t = t.replace(appRe,'')
+					.replace(parRe,'')
+					.replace(charRe,'-');
+
+			t = this.dataTypeToIcon[t] || t;
+
+			if(t==='octet-stream'){
+				t = ext;
+			}
+
+			return t;
+		},
+
+		imgURL: function(values){
+			if((/image/i).test(values.type)){
+				return this.getLink(values.href);
+			}
+
+			return Ext.BLANK_IMAGE_URL;
+		},
+
+		getLink: function(ref){
+			if(!(/^http:/i).test(ref)){
+				//_AppConfig.service.getCollection(??, 'providers');
+				return _AppConfig.server.host + "/dataserver2/providers/"+ ref;
+			}
+			return ref;
+		}
 	},
-
-	tplGrid: new Ext.XTemplate(
-		'<tpl for=".">',
-			'<div class="item-wrap">',
-				'<div class="item">',
-					'<img src="{[Ext.BLANK_IMAGE_URL]}" title="{[this.getName(values)]}">',
-					'<span>{[this.getName(values)]}</span>',
-				'</div>',
-			'</div>',
-		'</tpl>',
-		'<div class="x-clear"></div>',
-		{
-			compile: true,
-			getName: function(values) {
-				return values.href.split('?')[0].split('/').pop();
-			}
-		}
-	),
-
-	tplDetails: new Ext.XTemplate(
-		'<tpl for=".">',
-			'<div class="item-wrap details">',
-				'<div class="item">', //row
-					'<img src="{[this.imgURL(values)]}" title="{[this.getName(values)]}">',
-					'<span><a href="{[this.getLink(values.href)]}">{[this.getName(values)]}</a></span>',
-					'<span>{type}</span>',
-				'</div>',
-			'</div>',
-		'</tpl>',
-		'<div class="x-clear"></div>',
-		{
-			compile: true,
-			getName: function(values) {
-				return values.href.split('?')[0].split('/').pop();
-			},
-			imgURL: function(values){
-//				console.log(values.type);
-				if((/image/i).test(values.type)){
-					return this.getLink(values.href);
-				}
-
-				return Ext.BLANK_IMAGE_URL;
-			},
-			getLink: function(ref){
-				if(!(/^http:/i).test(ref)){
-//				_AppConfig.service.getCollection(??, 'providers');
-					return _AppConfig.server.host + "/dataserver2/providers/"+ ref;
-				}
-				return ref;
-			}
-		}
-	),
-
 
 	multiSelect: false,
 	singleSelect: true,
@@ -86,10 +84,27 @@ Ext.define('NextThought.view.widgets.classroom.ResourceView', {
 		this.tpl = this.tplDetails;
 
 		this.callParent(arguments);
+		this.on('itemdblclick',this.fireSelected,this);
 
 		this.accepts = [];
 		this.postURL = null;
 	},
+
+
+
+//	switchView: function(){
+//		this.tpl = this.tplGrid;
+//		this.refresh();
+//	},
+
+
+	fireSelected: function() {
+		var selected = this.selModel.getSelection()[0];
+		if (selected) {
+			this.fireEvent('selected', selected);
+		}
+	},
+
 
 	setRecord: function (r, includeParent) {
 		this.accepts = r.get('accepts');
@@ -97,7 +112,10 @@ Ext.define('NextThought.view.widgets.classroom.ResourceView', {
 		this.store.loadRawData(r.getLinks('enclosure'), false);
 
 		if(includeParent){
+			//r.getParent()=> should be implemented on Base
 
+				//r.get('ContainerId')
+				//r.getLink('parent')
 		}
 	},
 
@@ -165,5 +183,42 @@ Ext.define('NextThought.view.widgets.classroom.ResourceView', {
 		}
 		this.store.loadRawData([{href: href, type: file.type}],true);
 	}
+
+}, function(){
+	var proto = this.prototype;
+	proto.tplGrid = new Ext.XTemplate(
+		'<tpl for=".">',
+			'<div class="item-wrap">',
+				'<div class="item">',
+					'<img src="{[this.imgURL(values)]}" class="{[this.getClass(values)]}" title="{[this.getName(values)]}">',
+					'<span>{[this.getName(values)]}</span>',
+				'</div>',
+			'</div>',
+		'</tpl>',
+		'<div class="x-clear"></div>',
+		proto.templateFunctions
+	);
+
+	proto.tplDetails = new Ext.XTemplate(
+		'<div class="details header">',
+			'<div>', //row
+				'<img src="{[Ext.BLANK_IMAGE_URL]}">',
+				'<span>Name</span>',
+				'<span>Type</span>',
+			'</div>',
+		'</div>',
+
+		'<tpl for=".">',
+			'<div class="item-wrap details">',
+				'<div class="item">', //row
+					'<img src="{[this.imgURL(values)]}" class="{[this.getClass(values)]}" title="{[this.getName(values)]}">',
+					'<span>{[this.getName(values)]}</span>',
+					'<span>{type}</span>',
+				'</div>',
+			'</div>',
+		'</tpl>',
+		'<div class="x-clear"></div>',
+		proto.templateFunctions
+	);
 
 });

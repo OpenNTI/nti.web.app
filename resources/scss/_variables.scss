@@ -5,6 +5,18 @@ $exttheme: '#{$ext}/resources/themes/images/g'+'ray';
 
 
 //icons
+$uploading-file-icon-generic: url(../images/upload.png);
+$file-type-unknown:			url(../images/file-types/unknown.png);
+$file-type-unknown-large:	url(../images/file-types/unknown-64.png);
+$file-type-ai:				url(../images/file-types/ai.png);
+$file-type-doc:				url(../images/file-types/doc.png);
+$file-type-pdf:				url(../images/file-types/pdf.png);
+$file-type-pps:				url(../images/file-types/pps.png);
+$file-type-ppt:				url(../images/file-types/ppt.png);
+$file-type-swf:				url(../images/file-types/swf.png);
+$file-type-xls:				url(../images/file-types/xls.png);
+$file-type-zip:				url(../images/file-types/zip.png);
+
 $loading-indicator:			url(../images/loading.gif);
 $tokens-sprite:				url(../images/googleplus-icons.png);
 
