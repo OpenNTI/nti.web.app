@@ -1,0 +1,14 @@
+$uploading-file-icon-generic: url('../images/upload.png');
+
+
+.file-upload-manager {
+	.x-panel-body-default{
+		background-color: transparent;
+	}
+
+	.upload-icon{
+	    width: 32px;
+	 	height: 32px;
+		background-image: $uploading-file-icon-generic;
+	}
+}

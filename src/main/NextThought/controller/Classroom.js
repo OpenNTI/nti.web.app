@@ -110,6 +110,7 @@ Ext.define('NextThought.controller.Classroom', {
 			sColl = s.getCollection('EnrolledClassSections');
 
 		if(pColl) {
+			this.getProvidersStore().proxy.url = host+pColl.href;
 			this.getProvidersStore().load({url:host+pColl.href});
 		}
 		else {
@@ -117,6 +118,7 @@ Ext.define('NextThought.controller.Classroom', {
 		}
 
 		if(sColl) {
+			this.getSectionsStore().proxy.url = host+sColl.href;
 			this.getSectionsStore().load({url: host+sColl.href});
 		}
 		else {

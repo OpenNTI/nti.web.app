@@ -37,38 +37,50 @@
 .x-class-resourceview-panel {
 	@include data-view;
 
+	&.drop-over {
+		background: #ccffcc;
+	}
+
 	.empty {
     	height: 100%;
     	background: $empty-class-resources-bg center no-repeat;
 	}
+	
+	.item-wrap {
+//		position: relative;
 
-	.item-wrap.details {
-		float: none;
-		margin: 4px;
-		//max-width: 600px;
-		white-space: nowrap;
-		overflow: hidden;
+		&.details {
+			float: none;
+			margin: 4px;
+			//max-width: 600px;
+			white-space: nowrap;
+			overflow: hidden;
 
-		span {
-			display: inline-block;
-			text-align: left;
-			white-space: inherit;
-			overflow: inherit;
-			width: 200px;
-		}
-
-		.item {
-			background: transparent;
-
-			img{
-				height: 24px;
-				width: 24px;
-				vertical-align: middle;
+			span {
+				display: inline-block;
+				text-align: left;
+				white-space: nowrap;
+				overflow: hidden;
+				width: 200px;
 			}
 
-			.x-quirks & {
-				padding-bottom: 3px;
-				text-align: left;
+			.item {
+				background: transparent;
+
+				span {
+					margin-right: 5px;
+				}
+				img {
+					height: 24px;
+					width: 24px;
+					vertical-align: middle;
+					margin-right: 5px;
+				}
+
+				.x-quirks & {
+					padding-bottom: 3px;
+					text-align: left;
+				}
 			}
 		}
 	}

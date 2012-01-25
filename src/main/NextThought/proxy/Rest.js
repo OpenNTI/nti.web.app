@@ -43,7 +43,7 @@ Ext.define('NextThought.proxy.Rest', {
 			collection;
 
 		if(!record){
-			return this.url || request.url || request.operation.url;
+			return request.operation.url || request.url || this.url;
 		}
 
 		this.headers = { 'Content-Type': mimeType+'+json' };
