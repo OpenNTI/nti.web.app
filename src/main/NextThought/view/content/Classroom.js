@@ -4,7 +4,7 @@ Ext.define('NextThought.view.content.Classroom', {
 	requires: [
 		'NextThought.view.widgets.chat.View',
 		'NextThought.view.widgets.classroom.Management',
-		'NextThought.view.widgets.chat.ScriptLog'
+		'NextThought.view.widgets.classroom.ScriptLog'
 	],
 
 	cls: 'x-classroom-panel',

@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.widgets.chat.ScriptEntry', {
+Ext.define('NextThought.view.widgets.classroom.ScriptEntry', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.script-entry',
 

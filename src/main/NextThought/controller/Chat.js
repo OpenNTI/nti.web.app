@@ -26,8 +26,8 @@ Ext.define('NextThought.controller.Chat', {
 		'widgets.chat.PinnedMessageView',
 		'widgets.chat.Friends',
 		'widgets.chat.FriendEntry',
-		'widgets.chat.ScriptEntry',
-		'widgets.chat.ScriptLog',
+		'widgets.classroom.ScriptEntry',
+		'widgets.classroom.ScriptLog',
 		'windows.NoteEditor'
 	],
 

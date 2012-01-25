@@ -1,8 +1,8 @@
-Ext.define('NextThought.view.widgets.chat.ScriptLog', {
+Ext.define('NextThought.view.widgets.classroom.ScriptLog', {
 	extend:'Ext.panel.Panel',
 	alias: 'widget.script-log-view',
 	requires: [
-		'NextThought.view.widgets.chat.ScriptEntry',
+		'NextThought.view.widgets.classroom.ScriptEntry',
 		'NextThought.cache.IdCache',
 		'NextThought.model.ClassScript'
 	],
