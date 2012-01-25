@@ -11,6 +11,24 @@ if [ -z `which zeta` ]; then
 	exit 1
 fi
 
+
+if [[ "$1" == "-w" ]] ; then
+
+	if [ -z `which sass` ]; then
+		echo "Sass is not installed, see: http://sass-lang.com"
+		echo "run this command:"
+		echo ""
+		echo "    sudo gem install sass"
+		echo ""
+		exit 1
+	fi
+
+	sass --scss --watch resources/scss:resources/css
+	exit
+fi
+
+
+
 set -e
 # Errors in the source prevent compression from working, so -c
 if [ -e resources/scss/_main.scss ]; then
