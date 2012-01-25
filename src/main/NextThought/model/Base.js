@@ -161,6 +161,33 @@ Ext.define('NextThought.model.Base', {
 	},
 
 
+	getParent: function(callback, scope) {
+		var href = this.getLink('parent');
+
+		if (!callback) {
+			Ext.Error.raise('this method requires a callback');
+		}
+
+		if(!href){
+			//Ext.Error.raise('No parent HREF!');
+			callback.call(scope || window, null);
+			return;
+		}
+
+		Ext.Ajax.request({
+			url: href,
+			callback: function(req, success, resp){
+				if(!success){
+					console.error('Resolving parent model failed');
+					return;
+				}
+				callback.call(scope || window, ParseUtils.parseItems(Ext.JSON.decode(resp.responseText))[0]);
+			}
+		});
+
+	},
+
+
 	equal: function(b) {
 		var a = this,
 			r = true;

@@ -48,6 +48,7 @@ Ext.define('NextThought.controller.Classroom', {
 
 	init: function(){
 		this.rooms = {};
+		this.promotedScriptEntries = [];
 
 		this.application.on('session-ready', this.onSessionReady, this);
 
@@ -99,6 +100,10 @@ Ext.define('NextThought.controller.Classroom', {
 
 			'class-script-editor combobox' : {
 				'change': this.onClassScriptComboBoxChange
+			},
+
+			'classroom-resource-view' : {
+				'select': this.onResourceSelected
 			}
 		},{});
 	},
@@ -196,6 +201,7 @@ Ext.define('NextThought.controller.Classroom', {
 	},
 
 	onMessage: function(msg, opts){
+		this.markScriptEntryAsSent(msg.getId());
 		return this.getClassroom().onMessage(msg,opts);
 	},
 
@@ -278,7 +284,7 @@ Ext.define('NextThought.controller.Classroom', {
 
 		if (mod){return;} //already moderated
 
-		content.showScriptView();
+		content.addScriptView();
 		content.showMod();
 		//mod.show();
 		view.initOccupants(true);
@@ -287,6 +293,12 @@ Ext.define('NextThought.controller.Classroom', {
 	onClassScriptComboBoxChange: function(cb) {
 		this.getClassScriptEditor().down('classroom-resource-view').setRecord(cb.value);
 	},
+
+
+	onResourceSelected: function() {
+		console.log('resource selected', arguments);
+	},
+
 
 	recordState: function(book, path, ntiid, eopts, viaSocket) {
 		history.updateState({classroom: {reader: { index: book.get('index'), page: path}}});
@@ -370,6 +382,20 @@ Ext.define('NextThought.controller.Classroom', {
 		if (sec) {
 			this.getResourceView().setRecord(sec, true);
 		}
+	},
+
+	markScriptEntryAsSent: function(id) {
+		console.log('debug me...');
+		var genId = IdCache.getIdentifier(id),
+			qResults = this.getScriptView().query('script-entry[messageId='+genId+']'),
+			entry = (qResults && qResults.length === 0) ? qResults[0] : null;
+
+			//There may be no script entry, that's fine, just quit now
+			if (!entry) {return;}
+
+			//set the flag so it'll be styled appropriatly:
+			entry.setPromoted();
+			this.promotedScriptEntries.push(id);
 	}
 });
 

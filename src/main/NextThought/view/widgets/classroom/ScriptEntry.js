@@ -61,11 +61,17 @@ Ext.define('NextThought.view.widgets.classroom.ScriptEntry', {
 		var inBox = target && this.box.contains(target);
 		if(inBox && target.hasCls('script-to-chat')){
 			console.log('applying promoted class to entry here instead of when the msg comes back because script is currently dummied up, move once scripts are savable');
-			this.addCls('promoted');
-			this.promoted = true;
+			this.setPromoted();
 			this.fireEvent('script-to-chat', this, null, null, null);
 		}
 	},
+
+
+	setPromoted: function() {
+		this.addCls('promoted');
+		this.promoted = true;
+	},
+
 
 	getValue: function() {
 		return this.message.get('body');

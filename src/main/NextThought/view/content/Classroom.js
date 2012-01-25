@@ -42,8 +42,23 @@ Ext.define('NextThought.view.content.Classroom', {
 	},
 
 
-	showScriptView: function() {
-		this.insert(0, {xtype: 'script-log-view', flex: 1, roomInfo: this.roomInfo});
+	addScriptView: function() {
+		var tPanel = this.down('tabpanel[scriptlog]');
+
+		if (!tPanel) {
+			this.insert(0,{
+					xtype: 'tabpanel',
+					scriptlog: true,
+					flex: 1,
+					items: [
+						{xtype: 'script-log-view', roomInfo: this.roomInfo}
+					]
+				}
+			);
+		}
+		else {
+			tPanel.add({xtype: 'script-log-view'});
+		}
 	},
 
 

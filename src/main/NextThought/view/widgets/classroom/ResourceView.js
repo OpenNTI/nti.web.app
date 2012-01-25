@@ -107,15 +107,23 @@ Ext.define('NextThought.view.widgets.classroom.ResourceView', {
 
 
 	setRecord: function (r, includeParent) {
+		var enclosureLinks = r.getLinks('enclosure') || [],
+			parentClassInfo;
+
 		this.accepts = r.get('accepts');
 		this.postURL = r.get('href');
-		this.store.loadRawData(r.getLinks('enclosure'), false);
 
-		if(includeParent){
-			//r.getParent()=> should be implemented on Base
-
-				//r.get('ContainerId')
-				//r.getLink('parent')
+		if (includeParent) {
+			r.getParent(function(ci){
+				if (ci) {
+					Ext.Array.insert(enclosureLinks, 0, ci.getLinks('enclosure'));
+				}
+				//load the store
+				this.store.loadRawData(enclosureLinks, false);
+			}, this);
+		}
+		else {
+			this.store.loadRawData(enclosureLinks, false);
 		}
 	},
 
