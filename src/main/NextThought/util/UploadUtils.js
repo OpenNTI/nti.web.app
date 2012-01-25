@@ -175,16 +175,6 @@ Ext.define('NextThought.util.UploadUtils',{
 		}
 
 		function buildXHR(){
-			//because this is getting coppied into a Worker...i define this here. (I normally would put it in the
-			// callback defined at the end of the class...
-			if(!XMLHttpRequest.prototype.sendAsBinary){
-				XMLHttpRequest.prototype.sendAsBinary = function(datastr) {
-					var ui8a = new Uint8Array(
-							Array.prototype.map.call(datastr,
-									function(x){return x.charCodeAt(0) & 0xff;}));
-					this.send(ui8a.buffer);
-				};
-			}
 			var xhr = new XMLHttpRequest();
 			xhr.withCredentials = true;
 			xhr.upload.addEventListener("progress", progress, false);
@@ -205,11 +195,9 @@ Ext.define('NextThought.util.UploadUtils',{
 			return xhr;
 		}
 
-		var reader = new FileReader(),
-			me = self.UploadUtils? this : self;
+		var me = self.UploadUtils? this : self;
 
-		reader.onload = function(e) { buildXHR().sendAsBinary(e.target.result); };
-		reader.readAsBinaryString(file);
+		buildXHR().send(file);
 	},
 
 	//private
