@@ -21,8 +21,7 @@ Ext.define('NextThought.view.windows.ClassScriptEditor', {
 	},
 	bbar: [
 		'->',
-		{ xtype: 'button', text: 'Save',	action: 'save' },
-		{ xtype: 'button', text: 'Cancel',	action: 'cancel', handler: function(btn){btn.up('window').close();}}
+		{ xtype: 'button', text: 'Close',	action: 'close', handler: function(btn){btn.up('window').close();}}
 	],
 	items: [
 //		{
@@ -65,7 +64,7 @@ Ext.define('NextThought.view.windows.ClassScriptEditor', {
 		var ci = this.classInfo,
 			sel,
 			store = Ext.create('Ext.data.Store', {fields: ['ID', 'record']}),
-			tool;
+			tool, button;
 
 		sel = store.add({'ID': ci.get('ID'), 'record': ci});
 
@@ -87,8 +86,23 @@ Ext.define('NextThought.view.windows.ClassScriptEditor', {
 			queryMode: 'local'
 		};
 
+		button = {
+			xtype:'button',
+			text:'Add...',
+			menu:[
+				{text: 'Script...', handler:this.clickAddScript},
+				{text: 'File...'}
+			]
+		};
+
+		this.addTool(button);
 		this.addTool(tool);
 		this.callParent();
+	},
+
+
+	clickAddScript: function() {
+		console.log('click add script');
 	}
 
 });
