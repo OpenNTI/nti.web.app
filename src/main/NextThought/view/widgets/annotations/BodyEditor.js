@@ -24,6 +24,12 @@ Ext.define('NextThought.view.widgets.annotations.BodyEditor', {
 			getClickHandler: this.getWhiteboardThumbnailClickHandler
 		});
 
+		if (this.showButtons) {
+			this.addDocked([
+				{ xtype: 'button', dock: 'bottom', savescript:true, text: 'Save' },
+				{ xtype: 'button', dock: 'bottom', text: 'Cancel' }],0);
+		}
+
 		this.add({ xtype: 'htmleditor', anchor: '100% 100%', enableLists: false, enableAlignments: false, value: text });
 
 		this.on('thumbnail-clicked',this.showWhiteboardEditor, this);
@@ -238,11 +244,15 @@ Ext.define('NextThought.view.widgets.annotations.BodyEditor', {
 			body = val.split(/(<div.*?class="body-divider".*?<\/div>)/ig);
 
 		Ext.each(body,function(v,i,a){
-			if(v.indexOf('class="body-divider"')<0 || v.indexOf('id="NOID"') !== -1){return;}
+			if(v.indexOf('class="body-divider"')<0){return;}
+			if (v.indexOf('id="NOID"') !== -1) {
+				a[i]=undefined;
+				return;
+			}
 			var id = /<div.*?id="(.+?)".*?div>/i.exec(v)[1];
 			a[i]=me.editors[id].saveScene();
 		});
 
-		return body;
+		return Ext.Array.clean(body);
 	}
 });

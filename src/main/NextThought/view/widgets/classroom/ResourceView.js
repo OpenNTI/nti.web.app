@@ -125,6 +125,7 @@ Ext.define('NextThought.view.widgets.classroom.ResourceView', {
 		else {
 			this.store.loadRawData(enclosureLinks, false);
 		}
+		this.record = r;
 	},
 
 

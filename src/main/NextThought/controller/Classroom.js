@@ -98,12 +98,20 @@ Ext.define('NextThought.controller.Classroom', {
 				'click' : this.onModerateClicked
 			},
 
+			'class-script-editor menuitem[addscript]': {
+				'click': this.onAddNewScriptClicked
+			},
+
 			'class-script-editor combobox' : {
 				'change': this.onClassScriptComboBoxChange
 			},
 
 			'classroom-resource-view' : {
 				'select': this.onResourceSelected
+			},
+
+			'body-editor button[savescript]' : {
+				'click': this.onScriptSave
 			}
 		},{});
 	},
@@ -290,8 +298,34 @@ Ext.define('NextThought.controller.Classroom', {
 		view.initOccupants(true);
 	},
 
+
 	onClassScriptComboBoxChange: function(cb) {
 		this.getClassScriptEditor().down('classroom-resource-view').setRecord(cb.value);
+	},
+
+
+	onAddNewScriptClicked: function() {
+		var reg = this.getClassScriptEditor().down('[region=east]'),
+			editor = { xtype: 'body-editor', showButtons: true, record:Ext.create('NextThought.model.ClassScript')};
+
+		reg.add(editor);
+	},
+
+
+	onScriptSave: function() {
+		var ed = this.getClassScriptEditor(),
+			v = ed.down('body-editor').getValue(),
+			cid = ed.down('classroom-resource-view').record.getId(),
+			cs;
+
+		console.log('script to save:', v);
+
+		if (v && v.length > 0) {
+			cs = Ext.create('NextThought.model.ClassScript', {body: v, ContainerId: cid});
+			cs.save();
+			console.log('cs', cs);
+		}
+
 	},
 
 

@@ -40,7 +40,6 @@ Ext.define('NextThought.view.windows.ClassScriptEditor', {
 		},
 		{
 			region: 'east',
-			html: 'whatever editor makes sense',
 			collapsed: true
 		}
 	],
@@ -90,7 +89,7 @@ Ext.define('NextThought.view.windows.ClassScriptEditor', {
 			xtype:'button',
 			text:'Add...',
 			menu:[
-				{text: 'Script...', handler:this.clickAddScript},
+				{text: 'Script...', addscript: true},
 				{text: 'File...'}
 			]
 		};
@@ -98,11 +97,5 @@ Ext.define('NextThought.view.windows.ClassScriptEditor', {
 		this.addTool(button);
 		this.addTool(tool);
 		this.callParent();
-	},
-
-
-	clickAddScript: function() {
-		console.log('click add script');
 	}
-
 });
