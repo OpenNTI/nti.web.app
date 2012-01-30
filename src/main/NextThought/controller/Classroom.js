@@ -315,14 +315,15 @@ Ext.define('NextThought.controller.Classroom', {
 	onScriptSave: function() {
 		var ed = this.getClassScriptEditor(),
 			v = ed.down('body-editor').getValue(),
-			cid = ed.down('classroom-resource-view').record.getId(),
+			href = _AppConfig.server.host + ed.down('classroom-resource-view').record.get('href'),
 			cs;
 
+		debugger;
 		console.log('script to save:', v);
 
 		if (v && v.length > 0) {
-			cs = Ext.create('NextThought.model.ClassScript', {body: v, ContainerId: cid});
-			cs.save();
+			cs = Ext.create('NextThought.model.ClassScript', {body: v, ContainerId:ed.down('classroom-resource-view').record.getId()});
+			cs.save({url: href});
 			console.log('cs', cs);
 		}
 

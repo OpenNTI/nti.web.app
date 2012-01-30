@@ -48,6 +48,11 @@ Ext.define('NextThought.proxy.Rest', {
 
 		this.headers = { 'Content-Type': mimeType+'+json' };
 
+		if (request.operation.url || request.url) {
+			console.log('returning set url. not generating a new one', 'operation url', this.operation ? this.operation.url: 'NA', 'request url', request.url);
+			return request.operation.url || request.url;
+		}
+		
 		if (action==='update' || action==='destroy'){
 			href = record.getLink('edit');
 		}
