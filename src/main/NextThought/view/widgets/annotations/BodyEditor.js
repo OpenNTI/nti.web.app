@@ -25,9 +25,14 @@ Ext.define('NextThought.view.widgets.annotations.BodyEditor', {
 		});
 
 		if (this.showButtons) {
-			this.addDocked([
-				{ xtype: 'button', dock: 'bottom', savescript:true, text: 'Save' },
-				{ xtype: 'button', dock: 'bottom', text: 'Cancel' }],0);
+			this.addDocked([{
+				dock: 'bottom',
+				xtype: 'toolbar',
+				items: [
+					{ text: 'Save', action: 'save' },
+					{ text: 'Cancel', action: 'cancel' }
+				]
+			}], 0);
 		}
 
 		this.add({ xtype: 'htmleditor', anchor: '100% 100%', enableLists: false, enableAlignments: false, value: text });

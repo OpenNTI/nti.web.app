@@ -12,6 +12,7 @@ Ext.define('NextThought.view.windows.ClassScriptEditor', {
 	modal: true,
 	layout: 'border',
 	title: 'Script Editor',
+	cls: 'class-resource-editor',
 
 	defaults: {
 		border: false, frame: false,
@@ -40,7 +41,12 @@ Ext.define('NextThought.view.windows.ClassScriptEditor', {
 		},
 		{
 			region: 'east',
-			collapsed: true
+			layout: 'fit',
+			collapsed: true,
+			split: true,
+			listeners: {
+				'collapse': function(p){p.removeAll(true);}
+			}
 		}
 	],
 

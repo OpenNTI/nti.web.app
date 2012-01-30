@@ -129,6 +129,26 @@ Ext.define('NextThought.view.widgets.classroom.ResourceView', {
 	},
 
 
+	reload: function() {
+		if (!this.record || this.record.phantom) {
+			Ext.Error.raise('Cannot reload record');
+		}
+
+		var me = this,
+			id = this.record.getId(),
+			href = _AppConfig.server.host + this.record.get('href');
+
+		this.record.self.load(id, {url:href, callback:function(r, o){
+			if (o.success) {
+				me.setRecord(r);
+			}
+			else {
+				me.store.removeAll(false);
+			}
+		}});
+	},
+
+
 	afterRender: function(){
 		this.callParent();
 

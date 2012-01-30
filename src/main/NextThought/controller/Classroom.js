@@ -110,8 +110,12 @@ Ext.define('NextThought.controller.Classroom', {
 				'select': this.onResourceSelected
 			},
 
-			'body-editor button[savescript]' : {
+			'body-editor button[action=save]' : {
 				'click': this.onScriptSave
+			},
+
+			'body-editor button[action=cancel]' : {
+				'click': this.onScriptCancel
 			}
 		},{});
 	},
@@ -305,28 +309,46 @@ Ext.define('NextThought.controller.Classroom', {
 
 
 	onAddNewScriptClicked: function() {
-		var reg = this.getClassScriptEditor().down('[region=east]'),
+		var w = this.getClassScriptEditor(),
+			reg = w.down('[region=east]'),
 			editor = { xtype: 'body-editor', showButtons: true, record:Ext.create('NextThought.model.ClassScript')};
 
 		reg.add(editor);
+		reg.expand(true);
+		w.doLayout();
 	},
 
 
-	onScriptSave: function() {
-		var ed = this.getClassScriptEditor(),
+	onScriptSave: function(btn) {
+		var ed = btn.up('window'),
+			reg = ed.down('[region=east]'),
 			v = ed.down('body-editor').getValue(),
 			href = _AppConfig.server.host + ed.down('classroom-resource-view').record.get('href'),
 			cs;
 
-		debugger;
-		console.log('script to save:', v);
+		ed.el.mask('Saving...');
 
 		if (v && v.length > 0) {
 			cs = Ext.create('NextThought.model.ClassScript', {body: v, ContainerId:ed.down('classroom-resource-view').record.getId()});
-			cs.save({url: href});
-			console.log('cs', cs);
+			cs.save({url: href,
+				success:function(){
+					ed.el.unmask();
+					reg.collapse(Ext.Component.DIRECTION_RIGHT, true);
+					ed.down('classroom-resource-view').reload();
+				},
+				failure: function() {
+					ed.el.unmask();
+					v.el.mask('Problem saving script');
+					setTimeout(function(){v.el.unmask();}, 10000);
+					console.error('Failed to save classscript', arguments);
+				}});
 		}
 
+	},
+
+	onScriptCancel: function(btn) {
+		var r = btn.up('[region=east]');
+		r.collapse(Ext.Component.DIRECTION_RIGHT, true);
 	},
 
 

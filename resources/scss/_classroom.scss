@@ -34,6 +34,14 @@
 	}
 }
 
+.class-resource-editor {
+	.x-panel-header {
+		&.x-panel-collapsed-placeholder {
+    		display: none;
+    	}
+	}
+}
+
 .x-class-resourceview-panel {
 	@include data-view;
 
