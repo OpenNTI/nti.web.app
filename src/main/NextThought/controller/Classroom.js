@@ -19,7 +19,7 @@ Ext.define('NextThought.controller.Classroom', {
 		'widgets.classroom.ScriptLog',
 		'windows.ClassCreateEditWindow',
 		'windows.ClassroomChooser',
-		'windows.ClassScriptEditor',
+		'windows.ClassResourceEditor',
 		'Viewport'
 	],
 
@@ -37,7 +37,7 @@ Ext.define('NextThought.controller.Classroom', {
 
 	refs:[
 		{ ref: 'classroomContainer', selector: 'classroom-mode-container' },
-		{ ref: 'classScriptEditor', selector: 'class-script-editor' },
+		{ ref: 'classResourceEditor', selector: 'class-resource-editor' },
 		{ ref: 'classroom', selector: 'classroom-content' },
 		{ ref: 'liveDisplay', selector: 'live-display' },
 		{ ref: 'viewport', selector: 'master-view' },
@@ -98,16 +98,16 @@ Ext.define('NextThought.controller.Classroom', {
 				'click' : this.onModerateClicked
 			},
 
-			'class-script-editor menuitem[addscript]': {
+			'class-resource-editor menuitem[addscript]': {
 				'click': this.onAddNewScriptClicked
 			},
 
-			'class-script-editor combobox' : {
+			'class-resource-editor combobox' : {
 				'change': this.onClassScriptComboBoxChange
 			},
 
-			'classroom-resource-view' : {
-				'select': this.onResourceSelected
+			'class-resource-editor classroom-resource-view' : {
+				'selected': this.onResourceSelected
 			},
 
 			'body-editor button[action=save]' : {
@@ -171,7 +171,7 @@ Ext.define('NextThought.controller.Classroom', {
 
 		if (!classId) {return;}
 
-		w = Ext.widget('class-script-editor', {classInfo: this.getProvidersStore().getById(classId)});
+		w = Ext.widget('class-resource-editor', {classInfo: this.getProvidersStore().getById(classId)});
 		w.show();
 	},
 
@@ -304,12 +304,12 @@ Ext.define('NextThought.controller.Classroom', {
 
 
 	onClassScriptComboBoxChange: function(cb) {
-		this.getClassScriptEditor().down('classroom-resource-view').setRecord(cb.value);
+		this.getClassResourceEditor().down('classroom-resource-view').setRecord(cb.value);
 	},
 
 
 	onAddNewScriptClicked: function() {
-		var w = this.getClassScriptEditor(),
+		var w = this.getClassResourceEditor(),
 			reg = w.down('[region=east]'),
 			editor = { xtype: 'body-editor', showButtons: true, record:Ext.create('NextThought.model.ClassScript')};
 
@@ -321,15 +321,19 @@ Ext.define('NextThought.controller.Classroom', {
 
 	onScriptSave: function(btn) {
 		var ed = btn.up('window'),
+			html = ed.down('body-editor'),
 			reg = ed.down('[region=east]'),
-			v = ed.down('body-editor').getValue(),
-			href = _AppConfig.server.host + ed.down('classroom-resource-view').record.get('href'),
+			v = html.getValue(),
+			r = html.record,
+			href = (!r || r.phantom) ? _AppConfig.server.host + ed.down('classroom-resource-view').record.get('href') : null,
 			cs;
 
 		ed.el.mask('Saving...');
+		debugger;
 
 		if (v && v.length > 0) {
-			cs = Ext.create('NextThought.model.ClassScript', {body: v, ContainerId:ed.down('classroom-resource-view').record.getId()});
+			cs = r || Ext.create('NextThought.model.ClassScript', {ContainerId:ed.down('classroom-resource-view').record.getId()});
+			cs.set('body', v);
 			cs.save({url: href,
 				success:function(){
 					ed.el.unmask();
@@ -338,8 +342,8 @@ Ext.define('NextThought.controller.Classroom', {
 				},
 				failure: function() {
 					ed.el.unmask();
-					v.el.mask('Problem saving script');
-					setTimeout(function(){v.el.unmask();}, 10000);
+					reg.el.mask('Problem saving script');
+					setTimeout(function(){reg.el.unmask();}, 10000);
 					console.error('Failed to save classscript', arguments);
 				}});
 		}
@@ -352,8 +356,21 @@ Ext.define('NextThought.controller.Classroom', {
 	},
 
 
-	onResourceSelected: function() {
-		console.log('resource selected', arguments);
+	onResourceSelected: function(r) {
+		var href = _AppConfig.server.host + '/dataserver2/providers/' + r.get('href'),
+			w = this.getClassResourceEditor(),
+			reg = w.down('[region=east]'),
+			editor;
+
+		console.warn('WARNING, hardcoded dataserver2/providers href here, needs to go away once DS is fixed');
+
+		NextThought.model.ClassScript.load(href, {url: href, callback: function(r, o){
+			editor = { xtype: 'body-editor', showButtons: true, record:r};
+			reg.removeAll(true);
+			reg.add(editor);
+			reg.expand(true);
+			w.doLayout();
+		}});
 	},
 
 
@@ -397,7 +414,7 @@ Ext.define('NextThought.controller.Classroom', {
 	createClassScriptClicked: function(btn){
 //		var c = this.getClassroomContainer();
 //		c.hideClassChooser();
-		Ext.widget('class-script-editor').show();
+		Ext.widget('class-resource-editor').show();
 	},
 
 

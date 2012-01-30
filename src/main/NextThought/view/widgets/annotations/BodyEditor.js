@@ -179,7 +179,7 @@ Ext.define('NextThought.view.widgets.annotations.BodyEditor', {
 		var iFrameDoc = this.down('htmleditor').getDoc(),
 			body = iFrameDoc.body;
 
-		body.innerHTML += Ext.String.format(AnnotationUtils.NOTE_BODY_DIVIDER, 'NOID', '<hr/>');
+		body.innerHTML += AnnotationUtils.SEPERATOR;
 	},
 
 
@@ -250,12 +250,9 @@ Ext.define('NextThought.view.widgets.annotations.BodyEditor', {
 
 		Ext.each(body,function(v,i,a){
 			if(v.indexOf('class="body-divider"')<0){return;}
-			if (v.indexOf('id="NOID"') !== -1) {
-				a[i]=undefined;
-				return;
-			}
-			var id = /<div.*?id="(.+?)".*?div>/i.exec(v)[1];
-			a[i]=me.editors[id].saveScene();
+			var id = /<div.*?id="(.*?)".*?div>/i.exec(v)[1];
+			if (id) {a[i]=me.editors[id].saveScene();}
+			else {a[i]='undefined';}
 		});
 
 		return Ext.Array.clean(body);

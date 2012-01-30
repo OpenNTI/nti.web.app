@@ -15,6 +15,9 @@ Ext.define('NextThought.util.AnnotationUtils',{
 			'preserveAspectRatio="xMinYMin slice" viewBox="0, 0, 1, 1" ' +
 			'style="border: 1px solid gray" {1}>{0}</svg>',
 
+	SEPERATOR: null,
+	DIVIDER_REGEX: null,
+
 //tested
 	getBodyTextOnly: function(obj) {
 		var bdy = obj.get('body'), o, i, text = [];
@@ -54,7 +57,8 @@ Ext.define('NextThought.util.AnnotationUtils',{
 				scope:me,
 				getClickHandler: function(){return '';},
 				getThumbnail: me.generateThumbnail
-			};
+			},
+			result;
 
 		Ext.Object.each(body, function(i,o){
 			if(typeof(o) === 'string'){
@@ -73,7 +77,16 @@ Ext.define('NextThought.util.AnnotationUtils',{
 			);
 		});
 
-		return text.join('');
+		result = text.join(me.SEPERATOR);
+
+
+		result.replace(me.DIVIDER_REGEX, function(){
+			console.dir(arguments);
+		});
+
+		result = result.replace(me.DIVIDER_REGEX, "$2");
+		console.log(result);
+		return result;
 	},
 
 //tested
@@ -650,4 +663,17 @@ Ext.define('NextThought.util.AnnotationUtils',{
 },
 function(){
 	window.AnnotationUtils = this;
+	this.SEPERATOR = Ext.String.format(this.NOTE_BODY_DIVIDER, '', '<hr/>');
+
+	function escapeRegExp(str) {
+	  return str.replace(/[-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
+	}
+
+
+	var part = escapeRegExp(this.SEPERATOR),
+		svg = escapeRegExp(this.NOTE_BODY_DIVIDER)
+				.replace(/\\\{0\\\}/, '[a-z0-9\\-]+?')
+				.replace(/\\\{1\\\}/, '.*?svg.*?');
+
+	this.DIVIDER_REGEX = new RegExp( '('+part+')?('+svg+')('+part+')?', 'gi');
 });

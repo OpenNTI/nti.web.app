@@ -1,6 +1,6 @@
-Ext.define('NextThought.view.windows.ClassScriptEditor', {
+Ext.define('NextThought.view.windows.ClassResourceEditor', {
 	extend: 'Ext.window.Window',
-	alias : 'widget.class-script-editor',
+	alias : 'widget.class-resource-editor',
 	requires: [
 		'NextThought.view.widgets.classroom.ResourceView'
 	],

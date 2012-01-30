@@ -63,7 +63,7 @@ Ext.define( 'NextThought.view.modes.Classroom', {
 						{text:'<b>Edit...</b>', cls:'default', handler: edit},
 						{text:'Delete', disabled: true},
 						'-',
-						{text:'Manage Scripts', handler: manageScripts}
+						{text:'Manage Resources', handler: manageScripts}
 					]
 				});
 			}
