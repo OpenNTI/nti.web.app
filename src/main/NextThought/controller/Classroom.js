@@ -375,8 +375,13 @@ Ext.define('NextThought.controller.Classroom', {
 	},
 
 
-	onResourceSelectedInClassroom: function() {
-		console.log('resource selected in classroom', arguments);
+	onResourceSelectedInClassroom: function(r) {
+		var href = _AppConfig.server.host + r.get('href'),
+					classroom = this.getClassroom();
+
+		NextThought.model.ClassScript.load(href, {url: href, callback: function(r, o){
+				classroom.addScriptView(r);
+			}});
 	},
 
 

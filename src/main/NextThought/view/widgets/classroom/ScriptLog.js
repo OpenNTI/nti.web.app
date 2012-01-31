@@ -36,7 +36,7 @@ Ext.define('NextThought.view.widgets.classroom.ScriptLog', {
 		for (b in bodies) {
 			if (bodies.hasOwnProperty(b)){
 				if (!Ext.isArray(b)){b = [b];}
-				m = Ext.create('NextThought.model.MessageInfo', {body : bodies[b]});
+				m = Ext.create('NextThought.model.MessageInfo', {body : [bodies[b]]});
 				this.add(
 					{
 						xtype: 'script-entry',
@@ -50,11 +50,14 @@ Ext.define('NextThought.view.widgets.classroom.ScriptLog', {
 
 	afterRender: function() {
 		this.callParent(arguments);
-		this.setClassScript(); //just create something to start with, for demo purposes.
+		if (this.script) {
+			this.setClassScript();
+		}
 	},
 
 
 	setClassScript: function(s) {
+		/*
 		if (!s) {
 			console.log('there is no script, so im making one up');
 			var b = [
@@ -72,9 +75,10 @@ Ext.define('NextThought.view.widgets.classroom.ScriptLog', {
 			s = Ext.create('NextThought.model.ClassScript');
 			s.set('body', b);
 		}
-
-		this.script = Ext.clone(s);
-		this.addMessage(s.get('body'));
+		*/
+		if (this.script) {
+			this.addMessage(this.script.get('body'));
+		}
 	},
 
 	scrollToFirstNonPromotedEntry: function() {

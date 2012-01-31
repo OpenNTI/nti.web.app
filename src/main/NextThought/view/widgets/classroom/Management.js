@@ -40,6 +40,7 @@ Ext.define('NextThought.view.widgets.classroom.Management', {
 					{
 						title: 'Resources',
 						flex: 1,
+						autoScroll: true,
 						items: [
 							{
 								xtype: 'classroom-resource-view',

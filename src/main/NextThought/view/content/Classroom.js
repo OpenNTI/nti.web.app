@@ -42,23 +42,25 @@ Ext.define('NextThought.view.content.Classroom', {
 	},
 
 
-	addScriptView: function() {
-		var tPanel = this.down('tabpanel[scriptlog]');
+	addScriptView: function(script) {
+		console.log('adding cript to view', script);
+
+		var tPanel = this.down('tabpanel[scriptlog]'),
+			saneId = script ? IdCache.getIdentifier(script.getId()) : null,
+			tab = tPanel ? tPanel.down('script-log-view[classscriptid='+saneId+']') : null;
 
 		if (!tPanel) {
-			this.insert(0,{
+			tPanel = this.insert(0,{
 					xtype: 'tabpanel',
 					scriptlog: true,
-					flex: 1,
-					items: [
-						{xtype: 'script-log-view', roomInfo: this.roomInfo}
-					]
-				}
+					flex: 1}
 			);
 		}
-		else {
-			tPanel.add({xtype: 'script-log-view'});
+
+		if (!tab && script) {
+			tPanel.add({xtype: 'script-log-view', classscriptid: saneId, roomInfo: this.roomInfo, script: script});
 		}
+
 	},
 
 
