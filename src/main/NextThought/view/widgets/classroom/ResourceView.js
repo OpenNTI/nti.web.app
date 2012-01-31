@@ -59,9 +59,7 @@ Ext.define('NextThought.view.widgets.classroom.ResourceView', {
 
 		getLink: function(ref){
 			if(!(/^http:/i).test(ref)){
-				//_AppConfig.service.getCollection(??, 'providers');
-				console.warn('WARNING, hardcoded dataserver2/providers href here, needs to go away once DS is fixed');
-				return _AppConfig.server.host + "/dataserver2/providers/"+ ref;
+				return _AppConfig.server.host + ref;
 			}
 			return ref;
 		}

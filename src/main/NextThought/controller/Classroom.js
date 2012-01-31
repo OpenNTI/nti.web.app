@@ -110,6 +110,10 @@ Ext.define('NextThought.controller.Classroom', {
 				'selected': this.onResourceSelected
 			},
 
+			'classroom-management classroom-resource-view' : {
+				'selected': this.onResourceSelectedInClassroom
+			},
+
 			'body-editor button[action=save]' : {
 				'click': this.onScriptSave
 			},
@@ -329,7 +333,6 @@ Ext.define('NextThought.controller.Classroom', {
 			cs;
 
 		ed.el.mask('Saving...');
-		debugger;
 
 		if (v && v.length > 0) {
 			cs = r || Ext.create('NextThought.model.ClassScript', {ContainerId:ed.down('classroom-resource-view').record.getId()});
@@ -357,12 +360,10 @@ Ext.define('NextThought.controller.Classroom', {
 
 
 	onResourceSelected: function(r) {
-		var href = _AppConfig.server.host + '/dataserver2/providers/' + r.get('href'),
+		var href = _AppConfig.server.host + r.get('href'),
 			w = this.getClassResourceEditor(),
 			reg = w.down('[region=east]'),
 			editor;
-
-		console.warn('WARNING, hardcoded dataserver2/providers href here, needs to go away once DS is fixed');
 
 		NextThought.model.ClassScript.load(href, {url: href, callback: function(r, o){
 			editor = { xtype: 'body-editor', showButtons: true, record:r};
@@ -371,6 +372,11 @@ Ext.define('NextThought.controller.Classroom', {
 			reg.expand(true);
 			w.doLayout();
 		}});
+	},
+
+
+	onResourceSelectedInClassroom: function() {
+		console.log('resource selected in classroom', arguments);
 	},
 
 
