@@ -6,12 +6,12 @@ Ext.define('NextThought.view.windows.ClassResourceEditor', {
 	],
 
 	constrain: true,
-	closable: false,
+	closable: true,
 	maximizable:true,
 	border: false,
 	modal: true,
 	layout: 'border',
-	title: 'Script Editor',
+	title: 'Resources',
 	cls: 'class-resource-editor',
 
 	defaults: {
@@ -20,10 +20,6 @@ Ext.define('NextThought.view.windows.ClassResourceEditor', {
 			border: false, frame: false
 		}
 	},
-	bbar: [
-		'->',
-		{ xtype: 'button', text: 'Close',	action: 'close', handler: function(btn){btn.up('window').close();}}
-	],
 	items: [
 //		{
 //			region: 'north',
@@ -42,6 +38,7 @@ Ext.define('NextThought.view.windows.ClassResourceEditor', {
 		{
 			region: 'east',
 			layout: 'fit',
+			minWidth: 500,
 			collapsed: true,
 			split: true,
 			listeners: {

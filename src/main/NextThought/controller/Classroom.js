@@ -313,12 +313,24 @@ Ext.define('NextThought.controller.Classroom', {
 
 
 	onAddNewScriptClicked: function() {
+		this.showResourceEditor(Ext.create('NextThought.model.ClassScript'));
+	},
+
+
+	onResourceSelected: function(r) {
+		var href = _AppConfig.server.host + r.get('href');
+
+		NextThought.model.ClassScript.load(href, {url: href, callback: this.showResourceEditor, scope: this});
+	},
+
+	showResourceEditor: function(r) {
 		var w = this.getClassResourceEditor(),
 			reg = w.down('[region=east]'),
-			editor = { xtype: 'body-editor', showButtons: true, record:Ext.create('NextThought.model.ClassScript')};
+			editor = { xtype: 'body-editor', showButtons: true, record:r};
 
+		reg.removeAll(true);
 		reg.add(editor);
-		reg.expand(true);
+		reg.expand();
 		w.doLayout();
 	},
 
@@ -356,22 +368,6 @@ Ext.define('NextThought.controller.Classroom', {
 	onScriptCancel: function(btn) {
 		var r = btn.up('[region=east]');
 		r.collapse(Ext.Component.DIRECTION_RIGHT, true);
-	},
-
-
-	onResourceSelected: function(r) {
-		var href = _AppConfig.server.host + r.get('href'),
-			w = this.getClassResourceEditor(),
-			reg = w.down('[region=east]'),
-			editor;
-
-		NextThought.model.ClassScript.load(href, {url: href, callback: function(r, o){
-			editor = { xtype: 'body-editor', showButtons: true, record:r};
-			reg.removeAll(true);
-			reg.add(editor);
-			reg.expand(true);
-			w.doLayout();
-		}});
 	},
 
 
