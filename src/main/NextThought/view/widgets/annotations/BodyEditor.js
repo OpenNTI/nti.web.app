@@ -253,7 +253,7 @@ Ext.define('NextThought.view.widgets.annotations.BodyEditor', {
 			if(v.indexOf('class="body-divider"')<0){return;}
 			var id = /<div.*?id="(.*?)".*?div>/i.exec(v)[1];
 			if (id) {a[i]=me.editors[id].saveScene();}
-			else {a[i]='undefined';}
+			else {a[i]=undefined;}
 		});
 
 		return Ext.Array.clean(body);
