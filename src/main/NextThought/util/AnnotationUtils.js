@@ -57,8 +57,7 @@ Ext.define('NextThought.util.AnnotationUtils',{
 				scope:me,
 				getClickHandler: function(){return '';},
 				getThumbnail: me.generateThumbnail
-			},
-			result;
+			};
 
 		Ext.Object.each(body, function(i,o){
 			if(typeof(o) === 'string'){
@@ -77,16 +76,8 @@ Ext.define('NextThought.util.AnnotationUtils',{
 			);
 		});
 
-		result = text.join(me.SEPERATOR);
 
-
-		result.replace(me.DIVIDER_REGEX, function(){
-			console.dir(arguments);
-		});
-
-		result = result.replace(me.DIVIDER_REGEX, "$2");
-		console.log(result);
-		return result;
+		return text.join(me.SEPERATOR).replace(me.DIVIDER_REGEX, "$2");
 	},
 
 //tested
@@ -666,7 +657,7 @@ function(){
 	this.SEPERATOR = Ext.String.format(this.NOTE_BODY_DIVIDER, '', '<hr/>');
 
 	function escapeRegExp(str) {
-	  return str.replace(/[-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
+	  return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
 	}
 
 

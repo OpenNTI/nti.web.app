@@ -36,7 +36,7 @@ Ext.define('NextThought.util.UploadUtils',{
 			worker.postMessage();
 		}
 		else {
-			console.error("Not able to use Workers...uploads will make UI jerky");
+			console.error("Not able to use Workers...uploads might make UI jerky");
 			this.worker = {
 				postMessage: function(data){
 					me.dispatch(data);
