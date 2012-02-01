@@ -38,6 +38,10 @@ Ext.define('NextThought.view.windows.ClassResourceEditor', {
 		}
 	],
 
+	ghostTools: function(){
+		return {type: 'placeholder'};
+	},
+
 
 	initComponent: function() {
 		if (!this.classInfo) {

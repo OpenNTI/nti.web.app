@@ -3,6 +3,7 @@ Ext.define('NextThought.view.widgets.menu.FileBrowserItem',{
 	cls: 'file-browser-menu',
 	alias: 'widget.file-browser-menu-item',
 	text: 'Browse...',
+	iconCls: 'upload',
 
 	initComponent: function(){
 		delete this.menu;
@@ -32,7 +33,7 @@ Ext.define('NextThought.view.widgets.menu.FileBrowserItem',{
 			type: 'file',
 			size: 1,
 			multiple: true
-		}).on('change', me.onFileChange, me);
+		}).on('change', me.onFileChange, me, {single: true});
 	},
 
 
@@ -42,7 +43,8 @@ Ext.define('NextThought.view.widgets.menu.FileBrowserItem',{
 		}
 
 		this.target.doUpload(e.target.files);
-		console.log(arguments);
+		this.fileInputEl.remove();
+		this.createFileInput();
 	}
 
 });
