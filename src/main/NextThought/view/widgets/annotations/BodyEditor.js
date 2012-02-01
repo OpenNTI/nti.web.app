@@ -29,6 +29,7 @@ Ext.define('NextThought.view.widgets.annotations.BodyEditor', {
 				dock: 'bottom',
 				xtype: 'toolbar',
 				items: [
+					{ xtype: 'textfield', flex:1, value: this.scriptName},
 					{ text: 'Save', action: 'save' },
 					{ text: 'Cancel', action: 'cancel' }
 				]

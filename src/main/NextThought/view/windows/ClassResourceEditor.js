@@ -61,6 +61,7 @@ Ext.define('NextThought.view.windows.ClassResourceEditor', {
 		this.down('classroom-resource-view').setRecord(this.classInfo);
 	},
 
+
 	addTools: function(){
 		//populate the combo box
 		var ci = this.classInfo,

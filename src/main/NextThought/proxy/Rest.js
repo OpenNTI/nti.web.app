@@ -38,15 +38,20 @@ Ext.define('NextThought.proxy.Rest', {
 			action = request.operation.action,
 			records= request.records,
 			record = records? records[0] : null,
-			mimeType = record? record.mimeType || record.get('MimeType') : null,
+			mimeType = record? record.mimeType || record.get('MimeType') : 'application/vnd.nextthought',
 			href,
 			collection;
+
+		this.headers = {};
+
+		//making sure headers propagate
+		Ext.apply(this.headers, request.headers || {});
+		Ext.apply(this.headers, request.operation.headers || {});
+		Ext.apply(this.headers,  { 'Content-Type': mimeType+'+json' });
 
 		if(!record){
 			return request.operation.url || request.url || this.url;
 		}
-
-		this.headers = { 'Content-Type': mimeType+'+json' };
 
 		if (request.operation.url || request.url) {
 			console.log('returning set url. not generating a new one', 'operation url', this.operation ? this.operation.url: 'NA', 'request url', request.url);

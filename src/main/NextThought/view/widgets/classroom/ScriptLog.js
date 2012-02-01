@@ -11,7 +11,6 @@ Ext.define('NextThought.view.widgets.classroom.ScriptLog', {
 	autoScroll: true,
 	layout: 'anchor',
 	split: true,
-	title: 'Class Script',
 	defaults: {border: false},
 	dockedItems: {dock: 'bottom', xtype: 'toolbar', items:[
 		{text: 'something'}

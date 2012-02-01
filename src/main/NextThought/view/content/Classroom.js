@@ -42,9 +42,7 @@ Ext.define('NextThought.view.content.Classroom', {
 	},
 
 
-	addScriptView: function(script) {
-		console.log('adding cript to view', script);
-
+	addScriptView: function(script, name) {
 		var tPanel = this.down('tabpanel[scriptlog]'),
 			saneId = script ? IdCache.getIdentifier(script.getId()) : null,
 			tab = tPanel ? tPanel.down('script-log-view[classscriptid='+saneId+']') : null;
@@ -58,7 +56,7 @@ Ext.define('NextThought.view.content.Classroom', {
 		}
 
 		if (!tab && script) {
-			tPanel.add({xtype: 'script-log-view', classscriptid: saneId, roomInfo: this.roomInfo, script: script});
+			tPanel.add({xtype: 'script-log-view', classscriptid: saneId, roomInfo: this.roomInfo, script: script, title:name});
 		}
 
 	},

@@ -124,6 +124,7 @@ Ext.define('NextThought.controller.Classroom', {
 		},{});
 	},
 
+
 	onSessionReady: function(){
 		var s = _AppConfig.service,
 			host = _AppConfig.server.host,
@@ -146,6 +147,7 @@ Ext.define('NextThought.controller.Classroom', {
 			console.warn('NO providers workspace!');
 		}
 	},
+
 
 	flaggedMenuItemClicked: function(mi) {
 		this.showMessage(mi.relatedCmp);
@@ -203,6 +205,7 @@ Ext.define('NextThought.controller.Classroom', {
 		return false;
 	},
 
+
 	onMessageContentNavigate: function(ntiid) {
 		var o = Library.findLocation(ntiid),
 			book = o.book,
@@ -215,6 +218,7 @@ Ext.define('NextThought.controller.Classroom', {
 		//pass in boolean to skip adding this to history since classroom is synced
 		this.getReader().restore({reader: { index: book.get('index'), page: path}});
 	},
+
 
 	onMessage: function(msg, opts){
 		this.markScriptEntryAsSent(msg.getId());
@@ -308,6 +312,15 @@ Ext.define('NextThought.controller.Classroom', {
 
 
 	onClassScriptComboBoxChange: function(cb) {
+		var w = this.getClassResourceEditor(),
+			reg = w.down('[region=east]');
+
+		//If the editor region is open, collase it when we change
+		if (reg) {
+			reg.collapse();
+			reg.removeAll(true);
+		}
+
 		this.getClassResourceEditor().down('classroom-resource-view').setRecord(cb.value);
 	},
 
@@ -323,10 +336,14 @@ Ext.define('NextThought.controller.Classroom', {
 		NextThought.model.ClassScript.load(href, {url: href, callback: this.showResourceEditor, scope: this});
 	},
 
+
 	showResourceEditor: function(r) {
 		var w = this.getClassResourceEditor(),
+			className = w.classInfo.get('ID'),
+			sectionName = w.down('classroom-resource-view').record.get('ID'),
+			name = this.sanitizeClassScriptName(className, sectionName),
 			reg = w.down('[region=east]'),
-			editor = { xtype: 'body-editor', showButtons: true, record:r};
+			editor = { xtype: 'body-editor', showButtons: true, record:r, scriptName: name};
 
 		reg.removeAll(true);
 		reg.add(editor);
@@ -335,10 +352,21 @@ Ext.define('NextThought.controller.Classroom', {
 	},
 
 
+	sanitizeClassScriptName: function(className, sectionName) {
+		var isClass = (className === sectionName),
+			result = isClass ? className : className + '-' + sectionName;
+
+		result += '_script';
+
+		return result;
+	},
+
+
 	onScriptSave: function(btn) {
 		var ed = btn.up('window'),
 			html = ed.down('body-editor'),
 			reg = ed.down('[region=east]'),
+			scriptName = reg.down('textfield').value,
 			v = html.getValue(),
 			r = html.record,
 			href = (!r || r.phantom) ? _AppConfig.server.host + ed.down('classroom-resource-view').record.get('href') : null,
@@ -349,7 +377,9 @@ Ext.define('NextThought.controller.Classroom', {
 		if (v && v.length > 0) {
 			cs = r || Ext.create('NextThought.model.ClassScript', {ContainerId:ed.down('classroom-resource-view').record.getId()});
 			cs.set('body', v);
-			cs.save({url: href,
+			cs.save({
+				headers: {'slug': scriptName},
+				url: href,
 				success:function(){
 					ed.el.unmask();
 					reg.collapse(Ext.Component.DIRECTION_RIGHT, true);
@@ -362,8 +392,8 @@ Ext.define('NextThought.controller.Classroom', {
 					console.error('Failed to save classscript', arguments);
 				}});
 		}
-
 	},
+
 
 	onScriptCancel: function(btn) {
 		var r = btn.up('[region=east]');
@@ -372,11 +402,16 @@ Ext.define('NextThought.controller.Classroom', {
 
 
 	onResourceSelectedInClassroom: function(r) {
+		function getName(href) {
+			return href.split('?')[0].split('/').pop();
+		}
+
 		var href = _AppConfig.server.host + r.get('href'),
-					classroom = this.getClassroom();
+			name = getName(href),
+			classroom = this.getClassroom();
 
 		NextThought.model.ClassScript.load(href, {url: href, callback: function(r, o){
-				classroom.addScriptView(r);
+				classroom.addScriptView(r, name);
 			}});
 	},
 
@@ -394,6 +429,7 @@ Ext.define('NextThought.controller.Classroom', {
 			this.getController('Chat').postMessage(ri, {'ntiid': id}, null, 'CONTENT');
 		}
 	},
+
 
 	leaveRoom: function(){
 		var room = this.getClassroom().roomInfo,
@@ -446,9 +482,11 @@ Ext.define('NextThought.controller.Classroom', {
 		return this.getClassroomContainer().down('button[action=flagged]');
 	},
 
+
 	showMessage: function(msgCmp) {
 		msgCmp.up('chat-log-view').scroll(msgCmp);
 	},
+
 
 	/*
 	Find the section and pass it to the resource view to load
@@ -464,6 +502,7 @@ Ext.define('NextThought.controller.Classroom', {
 			this.getResourceView().setRecord(sec, true);
 		}
 	},
+
 
 	markScriptEntryAsSent: function(id) {
 		console.log('debug me...');
