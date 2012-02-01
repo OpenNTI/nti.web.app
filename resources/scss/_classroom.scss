@@ -40,6 +40,37 @@
     		display: none;
     	}
 	}
+
+	.x-window-header{
+	    .x-btn,
+	 	.x-field,
+		.x-tool{
+			margin-left: 10px;
+		}
+
+		.x-tool {
+		    height: 22px;
+
+     		img {
+     		    background: url(../images/tools/sprite.png);
+     			width: 22px;
+     			height: 22px;
+
+				&.x-tool-close {
+				    background-position:  0px 0px;
+					&:hover { background-position:  0px -27px; }
+				}
+
+				&.x-tool-restore,
+				&.x-tool-maximize {
+				    background-position:  0px -54px;
+					&:hover { background-position:  0px -81px; }
+				}
+
+
+     		}
+     	}
+	}
 }
 
 .x-class-resourceview-panel {

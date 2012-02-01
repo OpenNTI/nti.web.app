@@ -173,7 +173,6 @@ Ext.define('NextThought.view.widgets.classroom.ResourceView', {
 		});
 	},
 
-
 	onDrop: function(e){
 		if(!this.postURL) {
 			e.stopPropagation();
@@ -181,23 +180,22 @@ Ext.define('NextThought.view.widgets.classroom.ResourceView', {
 			console.warn('Blocked uploading...no url');
 			return;
 		}
-
-		var i = 0,
-			data = e.browserEvent.dataTransfer;
-
-		for (i; i < data.files.length; i++) {
-			this.doUpload(data.files[i]);
-		}
-
 		e.stopPropagation();
+		this.doUpload(e.browserEvent.dataTransfer.files);
 	},
 
-	doUpload: function(file){
-		UploadUtils.postFile( file,
-				_AppConfig.server.host+this.postURL,
-				this.onProgress,
-				this.onFinish,
-				this);
+	doUpload: function(files){
+		var i = 0, file;
+
+		for (i; i < files.length; i++) {
+			file = files[i];
+
+			UploadUtils.postFile( file,
+					_AppConfig.server.host+this.postURL,
+					this.onProgress,
+					this.onFinish,
+					this);
+		}
 	},
 
 	onProgress: function(file, progress){

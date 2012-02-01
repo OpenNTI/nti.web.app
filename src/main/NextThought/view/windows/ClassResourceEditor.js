@@ -2,7 +2,8 @@ Ext.define('NextThought.view.windows.ClassResourceEditor', {
 	extend: 'Ext.window.Window',
 	alias : 'widget.class-resource-editor',
 	requires: [
-		'NextThought.view.widgets.classroom.ResourceView'
+		'NextThought.view.widgets.classroom.ResourceView',
+		'NextThought.view.widgets.menu.FileBrowserItem'
 	],
 
 	constrain: true,
@@ -21,16 +22,6 @@ Ext.define('NextThought.view.windows.ClassResourceEditor', {
 		}
 	},
 	items: [
-//		{
-//			region: 'north',
-//			layout: {
-//				type: 'hbox',
-//				pack: 'start'
-//			},
-//			items: [
-//				{html: 'class title goes here', classInfoName: true, flex: 1}
-//			]
-//		},
 		{
 			region: 'center',
 			xtype: 'classroom-resource-view'
@@ -91,15 +82,15 @@ Ext.define('NextThought.view.windows.ClassResourceEditor', {
 
 		button = {
 			xtype:'button',
-			text:'Add...',
+			text:'Add',
 			menu:[
-				{text: 'Script...', addscript: true},
-				{text: 'File...'}
+				{ text: 'Script...', addscript: true },
+				{ xtype: 'file-browser-menu-item', target: this.down('classroom-resource-view') }
 			]
 		};
 
-		this.addTool(button);
 		this.addTool(tool);
+		this.addTool(button);
 		this.callParent();
 	}
 });

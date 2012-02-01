@@ -1,0 +1,17 @@
+.file-browser-menu {
+	position: relative !important;
+	overflow: hidden;
+
+	.file-input {
+		display: block;
+		position: absolute;
+		top: -4px;
+		right: -2px;
+		height: 30px;
+		filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+		opacity: 0;
+		font-size: 200px;
+		cursor: pointer;
+	}
+
+}
