@@ -37,5 +37,7 @@ fi
 cd resources/scss
 echo $(zeta pack main.scss 2>&1 >/dev/null) >&2
 cd ../..
+rm -rf resources/css
+mkdir resources/css
 mv resources/scss/_main.scss resources/css/main.css
 echo "Done."
