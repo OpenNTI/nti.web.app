@@ -33,7 +33,7 @@ Ext.define('NextThought.util.UploadUtils',{
 			};
 
 			this.worker = worker;
-			worker.postMessage();
+			worker.postMessage('');
 		}
 		else {
 			console.error("Not able to use Workers...uploads might make UI jerky");
