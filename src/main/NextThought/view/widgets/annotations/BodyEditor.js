@@ -4,8 +4,6 @@ Ext.define('NextThought.view.widgets.annotations.BodyEditor', {
 
 
 	layout: 'anchor',
-	enableLists: false,
-	enableAlignments: false,
 
 	requires: [
 		'Ext.form.field.HtmlEditor',
@@ -16,16 +14,13 @@ Ext.define('NextThought.view.widgets.annotations.BodyEditor', {
 	initComponent: function(){
 		this.editors = {};
 		this.thumbs = [];
+
 		this.callParent(arguments);
 
-		var text = AnnotationUtils.compileBodyContent(this.record, {
-			scope: this,
-			getThumbnail: this.getWhiteboardThumbnail,
-			getClickHandler: this.getWhiteboardThumbnailClickHandler
-		});
+		var anchor = '100% 100%';
 
 		if (this.showButtons) {
-			this.addDocked([{
+			this.addDocked({
 				dock: 'bottom',
 				xtype: 'toolbar',
 				items: [
@@ -33,39 +28,38 @@ Ext.define('NextThought.view.widgets.annotations.BodyEditor', {
 					{ text: 'Save', action: 'save' },
 					{ text: 'Cancel', action: 'cancel' }
 				]
-			}], 0);
+			});
+
+			anchor = '100% -26px';
 		}
 
-		this.add({ xtype: 'htmleditor', anchor: '100% 100%', enableLists: false, enableAlignments: false, value: text });
+		this.add({
+			xtype: 'htmleditor',
+			anchor: anchor,
+			enableLists: false,
+			enableAlignments: false,
+			value: AnnotationUtils.compileBodyContent(this.record, {
+				scope: this,
+				getThumbnail: this.getWhiteboardThumbnail,
+				getClickHandler: this.getWhiteboardThumbnailClickHandler
+			}),
+			listeners: {
+				scope: this,
+				initialize:this.hookHtmlEditor
+			}
+		});
 
 		this.on('thumbnail-clicked',this.showWhiteboardEditor, this);
-
-		this.down('htmleditor').on('initialize',this.attachClickHandlers, this);
 	},
 
 
 
-	afterRender: function(){
-		var me = this,
-			editor = me.down('htmleditor');
+//	afterRender: function(){
+//		this.callParent(arguments);
+//	},
 
 
-		me.callParent(arguments);
-
-		editor.getToolbar().add('-',
-			{
-				text: 'WB',
-				handler: function(){me.insertWhiteboard();}
-			},
-			{
-				text: 'SEP',
-				handler: function(){me.insertSeperator();}
-			}
-		);
-	},
-
-
-	attachClickHandlers: function(){
+	hookHtmlEditor: function(){
 		var me = this,
 			editor = me.down('htmleditor'),
 			iFrameDoc = editor.getDoc(),
@@ -83,6 +77,10 @@ Ext.define('NextThought.view.widgets.annotations.BodyEditor', {
 			};
 		}
 
+		editor.getToolbar().add('-',
+			{ text: 'WB', handler: function(){me.insertWhiteboard();} },
+			{ text: 'SEP', handler: function(){me.insertSeperator();} }
+		);
 
 		while(!!(id = this.thumbs.pop()) ) {
 			el = iFrameDoc.getElementById(id);
