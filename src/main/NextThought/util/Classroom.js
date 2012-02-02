@@ -9,6 +9,10 @@ Ext.define('NextThought.util.Classroom',{
 	isClassroomId: function(id)
 	{
 		return (/meetingroom/i).test(id);
+	},
+
+	getNameFromHref: function(href) {
+		return href.split('?')[0].split('/').pop();
 	}
 
 },

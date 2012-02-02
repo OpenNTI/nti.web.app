@@ -331,19 +331,26 @@ Ext.define('NextThought.controller.Classroom', {
 
 
 	onResourceSelected: function(r) {
-		var href = _AppConfig.server.host + r.get('href');
+		var href = _AppConfig.server.host + r.get('href'),
+			name = ClassroomUtils.getNameFromHref(href);
 
-		NextThought.model.ClassScript.load(href, {url: href, callback: this.showResourceEditor, scope: this});
+		NextThought.model.ClassScript.load(href,
+			{
+				url: href,
+				callback: Ext.bind(this.showResourceEditor, this, [name], true),
+				scope: this
+			});
 	},
 
 
-	showResourceEditor: function(r) {
+	showResourceEditor: function(r, e, n) {
 		var w = this.getClassResourceEditor(),
+			disableNameField = n ? true : false,
 			className = w.classInfo.get('ID'),
 			sectionName = w.down('classroom-resource-view').record.get('ID'),
-			name = this.sanitizeClassScriptName(className, sectionName),
+			name = n || this.sanitizeClassScriptName(className, sectionName),
 			reg = w.down('[region=east]'),
-			editor = { xtype: 'body-editor', showButtons: true, record:r, scriptName: name};
+			editor = { xtype: 'body-editor', showButtons: true, record:r, scriptName: name, disabledNameField: disableNameField};
 
 		reg.removeAll(true);
 		reg.add(editor);
@@ -402,12 +409,8 @@ Ext.define('NextThought.controller.Classroom', {
 
 
 	onResourceSelectedInClassroom: function(r) {
-		function getName(href) {
-			return href.split('?')[0].split('/').pop();
-		}
-
 		var href = _AppConfig.server.host + r.get('href'),
-			name = getName(href),
+			name = ClassroomUtils.getNameFromHref(href),
 			classroom = this.getClassroom();
 
 		NextThought.model.ClassScript.load(href, {url: href, callback: function(r, o){

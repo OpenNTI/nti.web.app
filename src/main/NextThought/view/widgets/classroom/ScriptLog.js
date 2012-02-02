@@ -49,13 +49,11 @@ Ext.define('NextThought.view.widgets.classroom.ScriptLog', {
 
 	afterRender: function() {
 		this.callParent(arguments);
-		if (this.script) {
-			this.setClassScript();
-		}
+		this.setClassScript();
 	},
 
 
-	setClassScript: function(s) {
+	setClassScript: function() {
 		if (this.script) {
 			this.addMessage(this.script.get('body'));
 		}
