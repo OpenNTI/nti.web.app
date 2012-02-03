@@ -79,6 +79,23 @@ Ext.define('NextThought.view.widgets.classroom.ResourceView', {
 			proxy: 'memory'
 		});
 
+		//Dirty Haxx
+		var r = this.store.loadRawData;
+		this.store.loadRawData = function(data){
+			var m = '/dataserver2/',
+				i = data.length-1;
+
+			for(i;i>=0;i-=1){
+				if(!(/^\/dataserver2\//i).test(data[i].href)) {
+					data[i].href = m + data[i].href;
+					console.log(data[i].href);
+				}
+			}
+
+			r.apply(this,arguments);
+		};
+		//Dirty End
+
 		//use details tmpl at default
 		this.tpl = this.viewGrid ? this.tplGrid : this.tplDetails;
 
@@ -188,9 +205,10 @@ Ext.define('NextThought.view.widgets.classroom.ResourceView', {
 		Ext.Ajax.request({
 			url: _AppConfig.server.host + r.get('href'),
 			method: 'DELETE',
-			callback: function(){
-				console.log(arguments);
-				store.remove(r);
+			callback: function(req,success){
+				if(success){
+					store.remove(r);
+				}
 			}
 		});
 
@@ -256,6 +274,9 @@ Ext.define('NextThought.view.widgets.classroom.ResourceView', {
 		if(href.charAt(href.length-1)==='/'){
 			href = href.substring(0,href.length-1);
 		}
+
+		href = href.replace(HOST_PREFIX_PATTERN,'');
+
 		this.store.loadRawData([{href: href, type: file.type}],true);
 	}
 

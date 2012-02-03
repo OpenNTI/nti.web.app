@@ -95,7 +95,7 @@ Ext.define('NextThought.proxy.Rest', {
 	_exception: function(proxy, response, operation, eOpts) {
 		var retryArgs = operation.retryArgs;
 
-		if(response.status === 0) {
+		if(response.status === 0 && response.responseText==='') {
 			//Um, probably a 302 on CORS
 			console.warn('CORS 302? Retrying w/ known redirects.',
 					{

@@ -7,6 +7,7 @@ USER_GENERATED_DATA_SEARCH_REL = 'UGDSearch';
 ASCENDING = {};
 DESCENDING = {};
 
+HOST_PREFIX_PATTERN = /^(http(s)?):\/\/([a-z.\-_0-9]+)(:(\d+))?/i;
 HOST_PATTERN = /^(http(s)?):\/\/([a-z.\-_0-9]+)(:(\d+))?$/i;
 HOST_PATTERN_PROTOCOL_MATCH_GROUP = 1;
 HOST_PATTERN_DOMAIN_MATCH_GROUP = 3;
