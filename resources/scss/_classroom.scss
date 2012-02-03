@@ -99,7 +99,6 @@
 	.header{
 	    border-bottom: 1px solid black;
 	 	margin: 4px;
-	 	margin-right: 0;
 	 	padding: 5px;
 
 	    * { margin-right: 5px; }
@@ -184,21 +183,8 @@
 					width: 24px;
 					vertical-align: middle;
 
-
 					//default icons
-					&[src^="data:image"] {
-					    background-size: 24px 24px;
-					    background: $file-type-unknown;
-
-						&.ai { background: $file-type-ai; }
-						&.doc { background: $file-type-doc; }
-						&.pdf { background: $file-type-pdf; }
-						&.pps { background: $file-type-pps; }
-						&.ppt { background: $file-type-ppt; }
-						&.swf { background: $file-type-swf; }
-						&.xls { background: $file-type-xls; }
-						&.zip { background: $file-type-zip; }
-					}
+					&[src^="data:image"] { background-size: 24px 24px; }
 
 					//thumbnail icon.
 					&[src*="://"]{}
@@ -209,6 +195,26 @@
 					text-align: left;
 				}
 			}
+		}
+
+		.item img {
+			//default icons
+			&[src^="data:image"] {
+				background-size: 80px 80px;
+				background: $file-type-unknown;
+
+				&.ai { background: $file-type-ai; }
+				&.doc { background: $file-type-doc; }
+				&.pdf { background: $file-type-pdf; }
+				&.pps { background: $file-type-pps; }
+				&.ppt { background: $file-type-ppt; }
+				&.swf { background: $file-type-swf; }
+				&.xls { background: $file-type-xls; }
+				&.zip { background: $file-type-zip; }
+			}
+
+			//thumbnail icon.
+			&[src*="://"]{}
 		}
 	}
 }
