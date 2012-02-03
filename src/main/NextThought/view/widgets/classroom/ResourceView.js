@@ -171,6 +171,8 @@ Ext.define('NextThought.view.widgets.classroom.ResourceView', {
 
 
 	refresh: function(){
+		this.tpl.readOnly = Boolean(this.readOnly);
+
 		this.callParent(arguments);
 		Ext.each(
 				this.getEl().query('.actions .edit'),
@@ -288,7 +290,9 @@ Ext.define('NextThought.view.widgets.classroom.ResourceView', {
 				'<div class="item">',
 					'<div class="actions">',
 						'<span class="edit"></span>',
-						'<span class="delete"></span>',
+						'<tpl if="false === this.readOnly">',
+							'<span class="delete"></span>',
+						'</tpl>',
 					'</div>',
 					'<img src="{[this.imgURL(values)]}" class="{[this.getClass(values)]}" title="{[this.getName(values)]}">',
 					'<span>{[this.getName(values)]}</span>',
@@ -313,7 +317,9 @@ Ext.define('NextThought.view.widgets.classroom.ResourceView', {
 				'<div class="item">', //row
 					'<div class="actions">',
 						'<span class="edit"></span>',
-						'<span class="delete"></span>',
+						'<tpl if="false == this.readOnly">',
+							'<span class="delete"></span>',
+						'</tpl>',
 					'</div>',
 					'<img src="{[this.imgURL(values)]}" class="{[this.getClass(values)]}" title="{[this.getName(values)]}">',
 					'<span>{[this.getName(values)]}</span>',
