@@ -20,8 +20,14 @@ Ext.define('NextThought.view.widgets.classroom.ResourceView', {
 			'vnd.nextthought.classscipt' : 'resource-script'
 		},
 
-		getName: function(values) {
-			return values.href.split('?')[0].split('/').pop();
+		getName: function(values,elips) {
+			var name = values.href.split('?')[0].split('/').pop();
+
+			if(elips) {
+				name = Ext.String.ellipsis(name,15);
+				console.log(name);
+			}
+			return name;
 		},
 
 		getClass: function(values){
@@ -295,7 +301,7 @@ Ext.define('NextThought.view.widgets.classroom.ResourceView', {
 						'</tpl>',
 					'</div>',
 					'<img src="{[this.imgURL(values)]}" class="{[this.getClass(values)]}" title="{[this.getName(values)]}">',
-					'<span>{[this.getName(values)]}</span>',
+					'<span>{[this.getName(values,true)]}</span>',
 				'</div>',
 			'</div>',
 		'</tpl>',
