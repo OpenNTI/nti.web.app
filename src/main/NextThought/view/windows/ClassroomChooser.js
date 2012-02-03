@@ -56,13 +56,13 @@ Ext.define('NextThought.view.windows.ClassroomChooser', {
 //			{xtype: 'link', text: 'Create a class', htmlPrefix: '<hr/>'}
 		]
 	},
-	dockedItems: {
-		dock: 'bottom',
-		xtype: 'toolbar',
-		items: [{
-			text: ' '
-		}]
-	},
+//	dockedItems: {
+//		dock: 'bottom',
+//		xtype: 'toolbar',
+//		items: [{
+//			text: ' '
+//		}]
+//	},
 
 
 	afterRender: function(){
