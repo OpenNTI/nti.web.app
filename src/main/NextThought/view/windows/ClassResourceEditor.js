@@ -11,7 +11,10 @@ Ext.define('NextThought.view.windows.ClassResourceEditor', {
 	maximizable:true,
 	border: false,
 	modal: true,
-	layout: 'border',
+	layout: {
+		type:'hbox',
+		align: 'stretch'
+	},
 	title: 'Resources',
 	cls: 'class-resource-editor',
 
@@ -23,17 +26,30 @@ Ext.define('NextThought.view.windows.ClassResourceEditor', {
 	},
 	items: [
 		{
-			region: 'center',
+			flex: 1,
+			maintainFlex: true,
 			xtype: 'classroom-resource-view'
 		},
 		{
+			xtype: 'splitter',
+			hidden: true
+		},
+		{
+			header: false,
+			hideCollapseTool: true,
 			region: 'east',
 			layout: 'fit',
 			minWidth: 500,
 			collapsed: true,
 			split: true,
 			listeners: {
-				'collapse': function(p){p.removeAll(true);}
+				'collapse': function(p){
+					p.previousSibling('splitter').hide();
+					p.removeAll(true);
+				},
+				'expand': function(p){
+					p.previousSibling('splitter').show();
+				}
 			}
 		}
 	],
