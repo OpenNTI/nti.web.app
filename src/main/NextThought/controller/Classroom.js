@@ -373,7 +373,7 @@ Ext.define('NextThought.controller.Classroom', {
 
 	sendImageAsContent: function(href, name, classroom) {
 		console.log('this isnt working yet...  I should send this image as content', href);
-		this.getController('Chat').postMessage(this.getClassroom().roomInfo, {'ntiid': this.getClassroom().roomInfo.getId(), 'href': href}, null, 'CONTENT');
+		this.getController('Chat').postMessage(this.getClassroom().roomInfo, {'ntiid': this.getClassroom().roomInfo.getId(), 'imageHref': href}, null, 'CONTENT');
 	},
 
 
