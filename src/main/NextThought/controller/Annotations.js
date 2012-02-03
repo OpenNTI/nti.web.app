@@ -240,10 +240,10 @@ Ext.define('NextThought.controller.Annotations', {
 		this.editNote(AnnotationUtils.noteToReply(record));
 	},
 
-	shareWith: function(record, brandAsDiscuss){
+	shareWith: function(record){
 		var options = {};
 
-		if (brandAsDiscuss) {
+		if (arguments[arguments.length-1] === true) {
 			options = {
 				btnLabel : 'Discuss',
 				titleLabel : 'Discuss This...'
