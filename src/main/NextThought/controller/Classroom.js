@@ -268,7 +268,7 @@ Ext.define('NextThought.controller.Classroom', {
 		delete this.rooms[ci];
 
 		if (chooser){
-			chooser.notify('something');
+			chooser.notify('Failed to enter room.');
 		}
 
 		console.log('onFail', ri, r);
