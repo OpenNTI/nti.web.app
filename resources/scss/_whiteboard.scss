@@ -1,17 +1,35 @@
 
 .whiteboard-toolbar {
-	.x-btn-icon{
-		&.tool{
-			background: $whiteboard-tools-sprite;
-			width: 20px !important;
+    .x-btn {
+        &.x-btn-default-toolbar-small-icon button {
+			width: 24px !important;
+        }
 
-			&.rect {	background-position: -78px -2px;/*-5px -2px*/ }
-			&.circle {	background-position: -55px -2px; }
-			&.line {	background-position: -154px -2px; }
-			&.path {	background-position: -179px -2px; }
-			&.text {	background-position: -129px -2px; }
-			&.delete {	}
-			&.hand {		}
+        button{
+			height: 24px !important;
+
+			.x-btn-icon{
+			    width: 24px !important;
+				height: 24px !important;
+
+				&.tool{
+					background: $whiteboard-tools-sprite;
+					width: 24px !important;
+					height: 24px !important;
+
+					&.circle { background-position:  -5px -5px; }
+					&.line { background-position:  -5px -34px; }
+					&.hand { background-position:  -34px -5px; }
+					&.path { background-position:  -34px -34px; }
+					&.rect { background-position:  -63px -5px; }
+					&.text { background-position:  -63px -34px; }
+
+					&.clear,
+					&.delete {
+					    background: none;
+					}
+				}
+			}
 		}
 	}
 }
