@@ -8,6 +8,8 @@ Ext.define( 'NextThought.view.windows.ShareWithWindow', {
 	
 	closable: false,
 	constrain: true,
+	preventHeader: true,
+	frame: false,
 	maximizable:false,
 	border: false,
 	width: 450,
