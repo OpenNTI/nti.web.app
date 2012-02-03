@@ -3,41 +3,42 @@ Ext.define('NextThought.view.widgets.annotations.BodyEditor', {
 	alias: 'widget.body-editor',
 
 
-	layout: 'anchor',
+	layout: 'fit',
 
 	requires: [
 		'Ext.form.field.HtmlEditor',
 		'NextThought.util.AnnotationUtils',
 		'NextThought.view.widgets.draw.Whiteboard'
 	],
+	items: [{
+		xtype: 'htmleditor',
+		enableLists: false,
+		enableAlignments: false
+	}],
+	dockedItems: [
+		{
+			dock: 'bottom',
+			xtype: 'toolbar',
+			items: [
+				{ xtype: 'textfield', flex:1},
+				{ text: 'Save', action: 'save' },
+				{ text: 'Cancel', action: 'cancel' }
+			]
+		}
+	],
 
 	initComponent: function(){
 		this.editors = {};
 		this.thumbs = [];
 
-		this.callParent(arguments);
+		Ext.apply( this.dockedItems[0].items[0],
+			{ value: this.scriptName, disabled: this.disabledNameField } );
 
-		var anchor = '100% 100%';
-
-		if (this.showButtons) {
-			this.addDocked({
-				dock: 'bottom',
-				xtype: 'toolbar',
-				items: [
-					{ xtype: 'textfield', flex:1, value: this.scriptName, disabled: this.disabledNameField},
-					{ text: 'Save', action: 'save' },
-					{ text: 'Cancel', action: 'cancel' }
-				]
-			});
-
-			anchor = '100% -26px';
+		if (!this.showButtons) {
+			delete this.dockedItems;
 		}
 
-		this.add({
-			xtype: 'htmleditor',
-			anchor: anchor,
-			enableLists: false,
-			enableAlignments: false,
+		Ext.apply(this.items[0],{
 			value: AnnotationUtils.compileBodyContent(this.record, {
 				scope: this,
 				getThumbnail: this.getWhiteboardThumbnail,
@@ -49,17 +50,21 @@ Ext.define('NextThought.view.widgets.annotations.BodyEditor', {
 			}
 		});
 
+		this.callParent(arguments);
 		this.on('thumbnail-clicked',this.showWhiteboardEditor, this);
 	},
 
-
-
-//	afterRender: function(){
-//		this.callParent(arguments);
-//	},
+	afterRender: function(){
+		var e = this.down('htmleditor');
+		e.doComponentLayout();
+		this.doLayout();
+	},
 
 
 	hookHtmlEditor: function(){
+		this.doComponentLayout();
+		this.doLayout();
+
 		var me = this,
 			editor = me.down('htmleditor'),
 			iFrameDoc = editor.getDoc(),

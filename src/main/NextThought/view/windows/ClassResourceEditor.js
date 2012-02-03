@@ -40,6 +40,8 @@ Ext.define('NextThought.view.windows.ClassResourceEditor', {
 			region: 'east',
 			layout: 'fit',
 			minWidth: 500,
+			width: 500,//needed to properly init size values...render correctly.
+			hidden: true,//needed so it doesn't render a blank space
 			collapsed: true,
 			split: true,
 			listeners: {
@@ -49,6 +51,7 @@ Ext.define('NextThought.view.windows.ClassResourceEditor', {
 				},
 				'expand': function(p){
 					p.previousSibling('splitter').show();
+					p.show();//initially hidden...
 				}
 			}
 		}
@@ -64,14 +67,13 @@ Ext.define('NextThought.view.windows.ClassResourceEditor', {
 			Ext.Error.raise('Must create script editor with a class info object');
 		}
 
-		this.setSize(Ext.getBody().getWidth()*0.7, Ext.getBody().getHeight()*0.7);
-
 		this.callParent(arguments);
+
+		this.setSize(Ext.getBody().getWidth()*0.7, Ext.getBody().getHeight()*0.7);
 
 		//tell the resource view about it's classinfo
 		this.down('classroom-resource-view').setRecord(this.classInfo);
 	},
-
 
 	addTools: function(){
 		//populate the combo box
