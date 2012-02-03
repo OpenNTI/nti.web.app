@@ -27,9 +27,13 @@ Ext.define( 'NextThought.view.windows.ShareWithWindow', {
 			t = m.record.getModelName(),
 			sw= m.record.get('sharedWith'),
 			readOnly = !m.record.isModifiable(),
-			title = readOnly? 'Item Info' : 'Share this...',
+			title = this.titleLabel ? this.titleLabel : readOnly ? 'Item Info' : 'Share this...',
 			content = AnnotationUtils.getBodyTextOnly(m.record) || 'This item does not have text';
-			
+
+		if (this.btnLabel) {
+			this.bbar[1].text = this.btnLabel;
+		}
+
 		m.callParent(arguments);
 		m.add({
 			xtype: 'form',
@@ -50,7 +54,5 @@ Ext.define( 'NextThought.view.windows.ShareWithWindow', {
 
 	show: function(){
 		this.callParent(arguments);
-//		var e = this.down('sharewith');
-//		setTimeout(function(){e.focus();}, 500);
 	}
 });

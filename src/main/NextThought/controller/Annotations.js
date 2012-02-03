@@ -51,6 +51,7 @@ Ext.define('NextThought.controller.Annotations', {
 			},
 
 			'noteeditor button[action=save]':{ 'click': this.onSaveNote },
+			'noteeditor button[action=discuss]':{ 'click': this.onDiscussNote },
 			'noteeditor button[action=cancel]':{ 'click': this.onCancelNote },
 
 			'sharewithwindow button':{
@@ -136,6 +137,33 @@ Ext.define('NextThought.controller.Annotations', {
 	},
 
 
+	onDiscussNote: function(btn, event){
+		var win = btn.up('window'),
+			record = win.record,
+			me = this;
+
+		record.on('updated', function(r){
+				r.on('updated', function(r){
+						me.replyAsChat(r);
+					},
+					this,
+					{single:true});
+
+				me.shareWith(r, true);
+			},
+			this,
+			{single: true});
+
+		//start the process
+		this.onSaveNote(btn, event);
+
+
+		//1) present sharewith selector
+		//2) save note
+		//3) open chat with saved with group
+	},
+
+
 	onSaveNote: function(btn, event){
 		var win = btn.up('window'),
 			cmp = win.down('htmleditor');
@@ -212,8 +240,17 @@ Ext.define('NextThought.controller.Annotations', {
 		this.editNote(AnnotationUtils.noteToReply(record));
 	},
 
-	shareWith: function(record){
-		Ext.create('NextThought.view.windows.ShareWithWindow',{record: record}).show();
+	shareWith: function(record, brandAsDiscuss){
+		var options = {};
+
+		if (brandAsDiscuss) {
+			options = {
+				btnLabel : 'Discuss',
+				titleLabel : 'Discuss This...'
+			};
+		}
+
+		Ext.create('NextThought.view.windows.ShareWithWindow',Ext.apply({record: record}, options)).show();
 	},
 
 	editNote: function(record){

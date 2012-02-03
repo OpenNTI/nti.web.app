@@ -17,6 +17,7 @@ Ext.define('NextThought.view.windows.NoteEditor', {
 	title: 'Edit Note',
 	bbar: [
 		'->',
+		{ xtype: 'button', text: 'Discuss',	action: 'discuss' },
 		{ xtype: 'button', text: 'Save',	action: 'save' },
 		{ xtype: 'button', text: 'Cancel',	action: 'cancel' }
 	],

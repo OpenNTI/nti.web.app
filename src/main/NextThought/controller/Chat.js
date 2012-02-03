@@ -624,6 +624,7 @@ Ext.define('NextThought.controller.Chat', {
 		else{
 			this.openChatWindow();
 			this.getChatWindow().addNewChat(roomInfo);
+			this.getChatWindow().doComponentLayout();
 		}
 	}
 
