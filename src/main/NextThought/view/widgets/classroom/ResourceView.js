@@ -30,7 +30,7 @@ Ext.define('NextThought.view.widgets.classroom.ResourceView', {
 				charRe= /[\._\\]/ig,
 				appRe = /^application\//ig,
 				imgRe = /^image/ig,
-				parRe = /\+.*/ig;
+				parRe = (/\+.*/ig);
 
 			if(imgRe.test(t)){
 				return 'image';
@@ -80,7 +80,7 @@ Ext.define('NextThought.view.widgets.classroom.ResourceView', {
 		});
 
 		//use details tmpl at default
-		this.tpl = this.tplDetails;
+		this.tpl = this.viewGrid ? this.tplGrid : this.tplDetails;
 
 		this.callParent(arguments);
 		this.on('itemdblclick',this.fireSelected,this);
@@ -90,11 +90,16 @@ Ext.define('NextThought.view.widgets.classroom.ResourceView', {
 	},
 
 
+	setViewToDetails: function(){
+		this.tpl = this.tplDetails;
+		this.refresh();
+	},
 
-//	switchView: function(){
-//		this.tpl = this.tplGrid;
-//		this.refresh();
-//	},
+
+	setViewToGrid: function(){
+		this.tpl = this.tplGrid;
+		this.refresh();
+	},
 
 
 	fireSelected: function() {
@@ -148,6 +153,50 @@ Ext.define('NextThought.view.widgets.classroom.ResourceView', {
 	},
 
 
+	refresh: function(){
+		this.callParent(arguments);
+		Ext.each(
+				this.getEl().query('.actions .edit'),
+				function(dom){Ext.fly(dom).on('click',this.clickSelect, this);},
+				this);
+
+		Ext.each(
+				this.getEl().query('.actions .delete'),
+				function(dom){Ext.fly(dom).on('click',this.clickDelete, this);},
+				this);
+	},
+
+
+	clickSelect: function(evt, dom){
+		evt.preventDefault();
+		evt.stopPropagation();
+
+		var r = this.getRecord(Ext.fly(dom).up(this.itemSelector, this.getEl()));
+
+		this.getSelectionModel().select([r]);
+		this.fireSelected();
+	},
+
+
+	clickDelete: function(evt, dom){
+		evt.preventDefault();
+		evt.stopPropagation();
+
+		var store = this.store,
+			r = this.getRecord(Ext.fly(dom).up(this.itemSelector, this.getEl()));
+
+		Ext.Ajax.request({
+			url: _AppConfig.server.host + r.get('href'),
+			method: 'DELETE',
+			callback: function(){
+				console.log(arguments);
+				store.remove(r);
+			}
+		});
+
+	},
+
+
 	afterRender: function(){
 		this.callParent();
 
@@ -187,7 +236,7 @@ Ext.define('NextThought.view.widgets.classroom.ResourceView', {
 	doUpload: function(files){
 		var i = 0, file;
 
-		for (i; i < files.length; i++) {
+		for (i; i < files.length; i+=1) {
 			file = files[i];
 
 			UploadUtils.postFile( file,
@@ -216,6 +265,10 @@ Ext.define('NextThought.view.widgets.classroom.ResourceView', {
 		'<tpl for=".">',
 			'<div class="item-wrap">',
 				'<div class="item">',
+					'<div class="actions">',
+						'<span class="edit"></span>',
+						'<span class="delete"></span>',
+					'</div>',
 					'<img src="{[this.imgURL(values)]}" class="{[this.getClass(values)]}" title="{[this.getName(values)]}">',
 					'<span>{[this.getName(values)]}</span>',
 				'</div>',
@@ -237,6 +290,10 @@ Ext.define('NextThought.view.widgets.classroom.ResourceView', {
 		'<tpl for=".">',
 			'<div class="item-wrap details">',
 				'<div class="item">', //row
+					'<div class="actions">',
+						'<span class="edit"></span>',
+						'<span class="delete"></span>',
+					'</div>',
 					'<img src="{[this.imgURL(values)]}" class="{[this.getClass(values)]}" title="{[this.getName(values)]}">',
 					'<span>{[this.getName(values)]}</span>',
 					'<span>{type}</span>',

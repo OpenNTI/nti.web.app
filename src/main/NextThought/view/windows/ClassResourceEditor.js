@@ -60,9 +60,23 @@ Ext.define('NextThought.view.windows.ClassResourceEditor', {
 	addTools: function(){
 		//populate the combo box
 		var ci = this.classInfo,
+			me = this,
 			sel,
 			store = Ext.create('Ext.data.Store', {fields: ['ID', 'record']}),
-			tool, button;
+			tool, button,
+			baseCfg = {
+				xtype: 'button',
+				allowDepress: false,
+				enableToggle: true,
+				tooltip: 'Switch View Mode',
+				toggleGroup: Globals.guidGenerator()+'resourceView',
+				handler: function(btn){
+					var view = btn.iconCls,
+						o = me.down('classroom-resource-view');
+
+					o['setViewTo'+view].call(o);
+				}
+			};
 
 		sel = store.add({'ID': ci.get('ID'), 'record': ci});
 
@@ -95,6 +109,8 @@ Ext.define('NextThought.view.windows.ClassResourceEditor', {
 
 		this.addTool(tool);
 		this.addTool(button);
+		this.addTool(Ext.apply({ iconCls: 'Details', pressed: true}, baseCfg));
+		this.addTool(Ext.apply({ iconCls: 'Grid'}, baseCfg));
 		this.callParent();
 	}
 });
