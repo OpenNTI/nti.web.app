@@ -47,6 +47,13 @@ Ext.define('NextThought.controller.Classroom', {
 	],
 
 	init: function(){
+		this.resourceEditorMap = {
+			'application/vnd.nextthought.classscript' : this.resolveAndOpenClassScriptEditor,
+			'classroom:application/vnd.nextthought.classscript' : this.resolveAndOpenClassScriptLog,
+			'image/jpeg': this.openImageViewer,
+			'classroom:image/jpeg': this.sendImageAsContent
+		};
+
 		this.rooms = {};
 		this.promotedScriptEntries = [];
 
@@ -304,9 +311,7 @@ Ext.define('NextThought.controller.Classroom', {
 
 		if (mod){return;} //already moderated
 
-		content.addScriptView();
 		content.showMod();
-		//mod.show();
 		view.initOccupants(true);
 	},
 
@@ -330,10 +335,26 @@ Ext.define('NextThought.controller.Classroom', {
 	},
 
 
+
+	onResourceSelectedInClassroom: function(r) {
+		var href = _AppConfig.server.host + r.get('href'),
+			name = ClassroomUtils.getNameFromHref(href),
+			mime = r.get('type');
+
+		return this.resourceEditorMap['classroom:'+mime].call(this, href, name, this.getClassroom());
+	},
+
+
+
 	onResourceSelected: function(r) {
 		var href = _AppConfig.server.host + r.get('href'),
+			mime = r.get('type'),
 			name = ClassroomUtils.getNameFromHref(href);
 
+		return this.resourceEditorMap[mime].call(this, href, name);
+	},
+
+	resolveAndOpenClassScriptEditor: function(href, name) {
 		NextThought.model.ClassScript.load(href,
 			{
 				url: href,
@@ -342,6 +363,30 @@ Ext.define('NextThought.controller.Classroom', {
 			});
 	},
 
+
+	resolveAndOpenClassScriptLog: function(href, name, classroom) {
+		NextThought.model.ClassScript.load(href, {url: href, callback: function(r, o){
+						classroom.addScriptView(r, name);
+			}});
+	},
+
+
+	sendImageAsContent: function(href, name, classroom) {
+		console.log('this isnt working yet...  I should send this image as content', href);
+		this.getController('Chat').postMessage(this.getClassroom().roomInfo, {'ntiid': this.getClassroom().roomInfo.getId(), 'href': href}, null, 'CONTENT');
+	},
+
+
+	openImageViewer: function(href, name) {
+		var w = this.getClassResourceEditor(),
+			reg = w.down('[region=east]'),
+			v = { xtype: 'image', src: href};
+
+		reg.removeAll(true);
+		reg.add(v);
+		reg.expand();
+		w.doLayout();
+	},
 
 	showResourceEditor: function(r, e, n) {
 		var w = this.getClassResourceEditor(),
@@ -405,17 +450,6 @@ Ext.define('NextThought.controller.Classroom', {
 	onScriptCancel: function(btn) {
 		var r = btn.up('[region=east]');
 		r.collapse(Ext.Component.DIRECTION_RIGHT, true);
-	},
-
-
-	onResourceSelectedInClassroom: function(r) {
-		var href = _AppConfig.server.host + r.get('href'),
-			name = ClassroomUtils.getNameFromHref(href),
-			classroom = this.getClassroom();
-
-		NextThought.model.ClassScript.load(href, {url: href, callback: function(r, o){
-				classroom.addScriptView(r, name);
-			}});
 	},
 
 
@@ -510,7 +544,8 @@ Ext.define('NextThought.controller.Classroom', {
 	markScriptEntryAsSent: function(id) {
 		console.log('debug me...');
 		var genId = IdCache.getIdentifier(id),
-			qResults = this.getScriptView().query('script-entry[messageId='+genId+']'),
+			sView = this.getScriptView(),
+			qResults = sView ? sView.query('script-entry[messageId='+genId+']') : null,
 			entry = (qResults && qResults.length === 0) ? qResults[0] : null;
 
 			//There may be no script entry, that's fine, just quit now

@@ -44,7 +44,9 @@ Ext.define('NextThought.view.widgets.classroom.Management', {
 						items: [
 							{
 								xtype: 'classroom-resource-view',
-								emptyText: 'No Resources'
+								emptyText: 'No Resources',
+								viewGrid: true,
+								readOnly: true
 							}
 						]
 					}

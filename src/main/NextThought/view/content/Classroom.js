@@ -43,12 +43,14 @@ Ext.define('NextThought.view.content.Classroom', {
 
 
 	addScriptView: function(script, name) {
-		var tPanel = this.down('tabpanel[scriptlog]'),
+		var chat = this.down('chat-view'),
+			insertIndex = this.items.indexOf(chat),
+			tPanel = this.down('tabpanel[scriptlog]'),
 			saneId = script ? IdCache.getIdentifier(script.getId()) : null,
 			tab = tPanel ? tPanel.down('script-log-view[classscriptid='+saneId+']') : null;
 
 		if (!tPanel) {
-			tPanel = this.insert(0,{
+			tPanel = this.insert(insertIndex,{
 					xtype: 'tabpanel',
 					scriptlog: true,
 					flex: 1}
@@ -58,7 +60,6 @@ Ext.define('NextThought.view.content.Classroom', {
 		if (!tab && script) {
 			tPanel.add({xtype: 'script-log-view', classscriptid: saneId, roomInfo: this.roomInfo, script: script, title:name});
 		}
-
 	},
 
 
@@ -73,6 +74,7 @@ Ext.define('NextThought.view.content.Classroom', {
 
 
 	onContent: function(msg, opts) {
+		console.log('content for display received', msg, opts);
 		var ntiid = msg.get('body').ntiid;
 
 		//content must have ntiid
@@ -98,7 +100,7 @@ Ext.define('NextThought.view.content.Classroom', {
 		var r = msg.get('ContainerId'),
 			moderated =  opts.hasOwnProperty('moderated'),
 			v = this.down('chat-view'),
-			mlog = this.down('chat-log-view');
+			mlog = this.down('chat-log-view[moderated]');
 
 		if (moderated) {
 			mlog.addMessage(msg);
