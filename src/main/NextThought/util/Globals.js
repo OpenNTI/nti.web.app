@@ -120,7 +120,7 @@ Ext.define('NextThought.util.Globals',
 			function clearMask(){
 				Ext.get('loading').remove();
 				Ext.get('loading-mask').fadeOut({remove:true});
-				me.resizeBlocker(Ext.Element.getViewWidth());
+//				me.resizeBlocker(Ext.Element.getViewWidth());
 			},
 			100);
 
@@ -135,7 +135,7 @@ Ext.define('NextThought.util.Globals',
 
 		Ext.Ajax.timeout=10000;//10sec timeout
 		Ext.Ajax.on('beforerequest', this.beforeRequest);
-		Ext.EventManager.onWindowResize(this.resizeBlocker);
+//		Ext.EventManager.onWindowResize(this.resizeBlocker);
 
 		//disable selection everywhere except places we specifically enable it.
 		this.disableSelection();
@@ -255,14 +255,14 @@ Ext.define('NextThought.util.Globals',
 	},
 
 
-	resizeBlocker: function(w){
-		var i = Boolean(w<MIN_WIDTH),
-			b = Ext.getBody(),
-			m = b.isMasked();
-
-		if(i && !m) { b.mask("Your browser window is too narrow","body-mask"); }
-		else if(!i && m) { b.unmask(); }
-	},
+//	resizeBlocker: function(w){
+//		var i = Boolean(w<MIN_WIDTH),
+//			b = Ext.getBody(),
+//			m = b.isMasked();
+//
+//		if(i && !m) { b.mask("Your browser window is too narrow","body-mask"); }
+//		else if(!i && m) { b.unmask(); }
+//	},
 
 
 	arrayEquals: function(a, b) {
