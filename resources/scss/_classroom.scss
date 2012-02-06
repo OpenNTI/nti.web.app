@@ -84,6 +84,12 @@
 	}
 }
 
+.x-classroom-panel {
+	.x-splitter {
+		background-color: #E0E0E0;
+	}
+}
+
 .x-class-resourceview-panel {
 	@include data-view;
 

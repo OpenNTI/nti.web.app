@@ -35,8 +35,10 @@ Ext.define('NextThought.view.widgets.classroom.Management', {
 						title: 'Occupants',
 						xtype: 'chat-occupants-list',
 						flex: 1,
-						autoHide: false
+						autoHide: false,
+						maintainFlex: true
 					},
+					{xtype: 'splitter'},
 					{
 						title: 'Resources',
 						flex: 1,

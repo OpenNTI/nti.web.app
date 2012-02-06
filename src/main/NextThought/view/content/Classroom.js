@@ -53,6 +53,8 @@ Ext.define('NextThought.view.content.Classroom', {
 			tPanel = this.insert(insertIndex,{
 					xtype: 'tabpanel',
 					scriptlog: true,
+					maintainFlex: true,
+					minWidth: 250,
 					flex: 1}
 			);
 		}
@@ -60,16 +62,42 @@ Ext.define('NextThought.view.content.Classroom', {
 		if (!tab && script) {
 			tPanel.add({xtype: 'script-log-view', classscriptid: saneId, roomInfo: this.roomInfo, script: script, title:name});
 		}
+
+		this.addOrUpdateSplitters();
 	},
 
+	addOrUpdateSplitters: function() {
+		var index;
+
+		//remove all splitters that currently exist:
+		this.items.each(function(i){
+				if (i instanceof Ext.resizer.Splitter) {
+					this.remove(i, true);
+				}
+			},
+			this);
+
+		//add splitters between each component
+		this.items.each(function(i){
+				index = this.items.indexOf(i);
+				if (index < (this.items.getCount() - 1)){
+					this.insert(this.items.indexOf(i) + 1,
+						{xtype:'splitter'}
+					);
+				}
+			},
+			this);
+	},
 
 	showMod: function() {
 		this.insert(0,{
 			xtype: 'chat-log-view',
 			title: 'moderation',
 			flex: 1,
-			moderated: true
+			moderated: true,
+			minWidth: 250
 		});
+		this.addOrUpdateSplitters();
 	},
 
 
