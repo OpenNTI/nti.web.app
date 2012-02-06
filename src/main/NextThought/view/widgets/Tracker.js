@@ -137,7 +137,7 @@ Ext.define('NextThought.view.widgets.Tracker', {
 		if (!region) {
 			return;
 		}
-		
+
 		//set current node in tooltip if it has changed
 		try{
 			this.renderToolTip(region.node);
@@ -212,14 +212,14 @@ Ext.define('NextThought.view.widgets.Tracker', {
 	getRegion: function(e){
 		var i, c, r, x, y, region;
 
-		if(!this._offsetX){
-			c = Ext.get(this._canvas);
-			this._offsetX = c.getLeft();
-			this._offsetY = c.getTop();
-		}
+		c = Ext.get(this._canvas);
+		this._offsetX = c.getLeft();
+		this._offsetY = c.getTop();
+
 		if(!e){
 			return null;
 		}
+
 		x = e.getX? e.getX()-this._offsetX : -1;
 		y = e.getY? e.getY()-this._offsetY : -1;
 
@@ -227,10 +227,9 @@ Ext.define('NextThought.view.widgets.Tracker', {
 			r = this._regions[i].rect;
 			if(x>=r.x && x<=(r.x+r.w) && y>=r.y && y<=(r.y+r.h)){
 				region = this._regions[i];
-				return false;
+				break;
 			}
 		}
-
 		return region;
 	},
 	
@@ -381,6 +380,8 @@ Ext.define('NextThought.view.widgets.Tracker', {
 					position: p,
 					node: s.node
 				});
+
+				//console.log(self._regions[self._regions.length - 1].rect);
 			}
 			
 			y += (g+r);
