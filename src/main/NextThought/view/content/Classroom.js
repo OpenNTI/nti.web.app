@@ -153,7 +153,6 @@ Ext.define('NextThought.view.content.Classroom', {
 	},
 
 	onScriptMessage: function(msg) {
-		console.log('once scripts are saved, we should move script element selection here b/c we will be able to find the message by id at that point');
 		var script = this.down('script-log-view'),
 			id = IdCache.getIdentifier(msg.getId());
 

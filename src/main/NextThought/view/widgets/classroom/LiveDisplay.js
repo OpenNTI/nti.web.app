@@ -51,7 +51,7 @@ Ext.define('NextThought.view.widgets.classroom.LiveDisplay', {
 		else {
 			c.setSrc(href);
 		}
-		c.setActive(true);
+
 		this.setActiveTab(c);
 	},
 
