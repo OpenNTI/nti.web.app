@@ -38,8 +38,6 @@ Ext.define( 'NextThought.view.widgets.annotations.Note', {
 
 		me.noteCmp = Ext.widget('note-entry',{ renderTo: me.noteDiv, _annotation: me, _owner: component });
 
-		me.attachRecord(record);
-
 		return me;
 	},
 

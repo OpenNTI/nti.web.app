@@ -31,7 +31,25 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 			Ext.get(me._img).on('click', me.onClick, me);
 		}
 
+		me.attachRecord(record);
+
 		NextThought.view.widgets.annotations.Annotation.register(me);
+	},
+
+
+	attachRecord: function(record){
+		var old = this._record;
+		this._record = record;
+
+		record.on('updated',this.attachRecord, this, {single: true});
+
+		if(old.getId() !== record.getId()){
+			console.warn('Annotation:',old, '!==', record);
+		}
+
+		if(old !== record) {
+			old.un('updated', this.attachRecord, this);
+		}
 	},
 
 
