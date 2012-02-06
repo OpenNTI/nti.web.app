@@ -7,8 +7,13 @@ Ext.define('NextThought.cache.UserRepository', {
 
 	constructor: function() {
 		Ext.apply(this,{
-			_store: null
+			_store: null,
+			activeRequests: {}
 		});
+	},
+
+	has: function(username){
+		return !!this.getStore().getById(username);
 	},
 
 	getStore: function() {
@@ -161,44 +166,75 @@ Ext.define('NextThought.cache.UserRepository', {
 	},
 
 
+	/**
+	 * Once called, if the user is not in the cache, a placeholder object will be injected. If something requests that
+	 * user while its still resolving, the record will not have a 'raw' property and it will have 'placeholder' set true
+	 * in the 'data' property.
+	 *
+	 * @param username
+	 * @param callbacks
+	 */
 	_makeRequest: function(username, callbacks) {
-		var result = null,
-			url = _AppConfig.service.getUserSearchURL(username);
+		var me = this,
+			result = null,
+			s = me.getStore(),
+			url = _AppConfig.service.getUserSearchURL(username),
+			options;
 
-		Ext.Ajax.request({
-			url: url,
-			scope: this,
-			async: !!callbacks,
-			callback: function userRepository_makeRequestCallback(o,success,r)
-			{
-				if(!success){
-					console.warn('There was an error resolving user:', username, arguments);
-					if (callbacks && callbacks.failure) {
-						callbacks.failure.call(callbacks.scope || this);
-					}
-					return;
+		function callback(o,success,r) {
+			delete me.activeRequests[username];
+
+			if(!success){
+				console.warn('There was an error resolving user:', username, arguments);
+				if (callbacks && callbacks.failure) {
+					callbacks.failure.call(callbacks.scope || this);
 				}
-
-				var json = Ext.decode(r.responseText),
-					list = ParseUtils.parseItems(json.Items, {ignoreIfExists: true});
-
-				if(list && list.length>1){
-					console.warn('many matching users: "', username, '"', list);
-				}
-
-				result = list ? list[0] : null;
-
-				if(result && callbacks && callbacks.success){
-					callbacks.success.call(callbacks.scope || this, result);
-				}
-
-				if (!result) {
-					if (callbacks && callbacks.failure) {
-						callbacks.failure.call(callbacks.scope || this);
-					}
-					console.error('result is null', username, list, url, json);
-				}
+				return;
 			}
+
+			var json = Ext.decode(r.responseText),
+				list = ParseUtils.parseItems(json.Items, {ignoreIfExists: true});
+
+			if(list && list.length>1){
+				console.warn('many matching users: "', username, '"', list);
+			}
+
+			result = list ? list[0] : null;
+
+			if(result && callbacks && callbacks.success){
+				callbacks.success.call(callbacks.scope || this, result);
+			}
+
+			if (!result) {
+				if (callbacks && callbacks.failure) {
+					callbacks.failure.call(callbacks.scope || this);
+				}
+				console.error('result is null', username, list, url, json);
+			}
+		}
+
+
+		if(this.activeRequests[username]){
+			options = this.activeRequests[username].options;
+			options.callback = Ext.Function.createSequence(
+					options.callback,
+					function(){
+						callback.apply(me,arguments);
+					}, me);
+			return;
+		}
+
+		if(this.has(username)){
+			console.error('um...why are we requesting a resolve for something we already have??');
+			return;
+		}
+
+		s.add({Username:username, placeholder: true});//make this.has return return true now...
+		this.activeRequests[username] = Ext.Ajax.request({
+			url: url,
+			scope: me,
+			async: !!callbacks,
+			callback: callback
 		});
 
 		return result;
