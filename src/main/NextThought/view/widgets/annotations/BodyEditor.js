@@ -15,28 +15,32 @@ Ext.define('NextThought.view.widgets.annotations.BodyEditor', {
 		enableLists: false,
 		enableAlignments: false
 	}],
-	dockedItems: [
-		{
-			dock: 'bottom',
-			xtype: 'toolbar',
-			items: [
-				{ xtype: 'textfield', flex:1},
-				{ text: 'Save', action: 'save' },
-				{ text: 'Cancel', action: 'cancel' }
-			]
-		}
-	],
 
-	initComponent: function(){
+	constructor: function(config){
 		this.editors = {};
 		this.thumbs = [];
 
-		Ext.apply( this.dockedItems[0].items[0],
-			{ value: this.scriptName, disabled: this.disabledNameField } );
+		config = config || {};
 
-		if (!this.showButtons) {
-			delete this.dockedItems;
+		if (config.showButtons === true) {
+			this.dockedItems= {
+				dock: 'bottom',
+				xtype: 'toolbar',
+				items: [
+					{ xtype: 'textfield', flex:1,
+						value: config.scriptName,
+						disabled: config.disabledNameField
+					},
+					{ text: 'Save', action: 'save' },
+					{ text: 'Cancel', action: 'cancel' }
+				]
+			};
 		}
+
+		this.callParent(arguments);
+	},
+
+	initComponent: function(){
 
 		Ext.apply(this.items[0],{
 			value: AnnotationUtils.compileBodyContent(this.record, {
@@ -54,17 +58,8 @@ Ext.define('NextThought.view.widgets.annotations.BodyEditor', {
 		this.on('thumbnail-clicked',this.showWhiteboardEditor, this);
 	},
 
-	afterRender: function(){
-		var e = this.down('htmleditor');
-		e.doComponentLayout();
-		this.doLayout();
-	},
-
 
 	hookHtmlEditor: function(){
-		this.doComponentLayout();
-		this.doLayout();
-
 		var me = this,
 			editor = me.down('htmleditor'),
 			iFrameDoc = editor.getDoc(),
@@ -82,8 +77,8 @@ Ext.define('NextThought.view.widgets.annotations.BodyEditor', {
 			};
 		}
 
-		editor.getToolbar().add('-',
-			{ text: 'WB', handler: function(){me.insertWhiteboard();} },
+		editor.getToolbar().add('-');//the layout doesn't work initially with this in one call
+		editor.getToolbar().add({ text: 'WB', handler: function(){me.insertWhiteboard();} },
 			{ text: 'SEP', handler: function(){me.insertSeperator();} }
 		);
 
@@ -98,6 +93,9 @@ Ext.define('NextThought.view.widgets.annotations.BodyEditor', {
 			Ext.fly(el).on('mouseover',buildHover({ background: '#eeeeee' }));
 			Ext.fly(el).on('mouseout', buildHover({ background: 'None' }));
 		}
+
+		this.doLayout();
+		this.doComponentLayout();
 	},
 
 
