@@ -21,7 +21,7 @@ Ext.define('NextThought.view.widgets.classroom.LiveDisplay', {
 
 		this._content = this.add({
 			layout: 'fit',
-			tabConfig:{title: 'Content', tooltip: 'Live Content'},
+			tabConfig:{title: 'Content', content:true, tooltip: 'Live Content'},
 			dockedItems: {dock:'bottom', xtype: 'breadcrumbbar', skipHistory: true}
 		});
 
@@ -31,6 +31,30 @@ Ext.define('NextThought.view.widgets.classroom.LiveDisplay', {
 	getReaderPanel: function() {
 		return Ext.getCmp('readerPanel');
 	},
+
+
+	addContent: function(href) {
+		var c = this.down('image');
+
+		//If no content tab, create one
+		if (!c) {
+			c = this.add(
+				{
+					xtype: 'image',
+					src: href,
+					tabConfig: {
+						title: 'Image'
+					}
+				}
+			);
+		}
+		else {
+			c.setSrc(href);
+		}
+		c.setActive(true);
+		this.setActiveTab(c);
+	},
+
 
 	destroy: function() {
 		//remove reader so it is not destroyed

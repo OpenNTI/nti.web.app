@@ -81,7 +81,7 @@ Ext.define('NextThought.view.widgets.classroom.ResourceView', {
 	initComponent: function(){
 		//create dynamic store:
 		this.store = Ext.create('Ext.data.Store', {
-			fields: ['href','type'],
+			fields: ['href','type', 'ntiid'],
 			proxy: 'memory'
 		});
 

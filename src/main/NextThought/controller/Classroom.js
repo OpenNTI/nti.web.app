@@ -214,16 +214,25 @@ Ext.define('NextThought.controller.Classroom', {
 
 
 	onMessageContentNavigate: function(ntiid) {
-		var o = Library.findLocation(ntiid),
-			book = o.book,
-			href = o.location.getAttribute('href'),
-			path = book.get('root')+href;
+		var s = _AppConfig.service,
+			o = Library.findLocation(ntiid),
+			book = o ? o.book : null,
+			href = o ? o.location.getAttribute('href') : null,
+			path = (book && href) ? book.get('root')+href : null,
+			nonBookHref = null;
 
-		//update classroom's state
-		this.recordState(book, path, ntiid, null, true);
+		if (book && path) {
+			//update classroom's state
+			this.recordState(book, path, ntiid, null, true);
 
-		//pass in boolean to skip adding this to history since classroom is synced
-		this.getReader().restore({reader: { index: book.get('index'), page: path}});
+			//pass in boolean to skip adding this to history since classroom is synced
+			this.getReader().restore({reader: { index: book.get('index'), page: path}});
+		}
+		else {
+			//we must have some other non-book related object, get it and display
+			nonBookHref = _AppConfig.server.host + _AppConfig.service.getCollection('Objects', 'Global').href + '/' + ntiid;
+			this.getLiveDisplay().addContent(nonBookHref);
+		}
 	},
 
 
@@ -339,9 +348,10 @@ Ext.define('NextThought.controller.Classroom', {
 	onResourceSelectedInClassroom: function(r) {
 		var href = _AppConfig.server.host + r.get('href'),
 			name = ClassroomUtils.getNameFromHref(href),
-			mime = r.get('type');
+			mime = r.get('type'),
+			ntiid = r.get('ntiid');
 
-		return this.resourceEditorMap['classroom:'+mime].call(this, href, name, this.getClassroom());
+		return this.resourceEditorMap['classroom:'+mime].call(this, href, name, this.getClassroom(), ntiid);
 	},
 
 
@@ -371,9 +381,9 @@ Ext.define('NextThought.controller.Classroom', {
 	},
 
 
-	sendImageAsContent: function(href, name, classroom) {
+	sendImageAsContent: function(href, name, classroom, ntiid) {
 		console.log('this isnt working yet...  I should send this image as content', href);
-		this.getController('Chat').postMessage(this.getClassroom().roomInfo, {'ntiid': this.getClassroom().roomInfo.getId(), 'imageHref': href}, null, 'CONTENT');
+		this.getController('Chat').postMessage(this.getClassroom().roomInfo, {'ntiid': ntiid}, null, 'CONTENT');
 	},
 
 
