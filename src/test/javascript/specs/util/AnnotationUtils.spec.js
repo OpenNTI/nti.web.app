@@ -218,10 +218,7 @@ describe("Annotation Utils", function() {
 
 		Ext.each(anchors,function(a,i,c){
 			var n = AnnotationUtils.getNextAnchor(a);
-			console.log(c[i+1]===n);
-
 			expect(c[i+1]).toBe(n);
-
 			expect(AnnotationUtils.getAnchor(a.getAttribute('name'))).toBe(a);
 		});
 
