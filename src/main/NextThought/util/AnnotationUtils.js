@@ -220,7 +220,7 @@ Ext.define('NextThought.util.AnnotationUtils',{
 //tested
 	getPreviousAnchorInDOM: function(node) {
 		var anchor = null, pos;
-		Ext.each(this.getAnchors().slice().reverse(), function(a){
+		Ext.each(this.getAnchors().reverse(), function(a){
 			pos = a.compareDocumentPosition(node);
 			//node precedes the anchor
 			if (pos & a.DOCUMENT_POSITION_FOLLOWING) {
@@ -277,7 +277,7 @@ Ext.define('NextThought.util.AnnotationUtils',{
 			me._anchorCache = Ext.Array.unique(Ext.query('#NTIContent A[name]'));
 		}
 		me._anchorCacheLife = setTimeout(function(){ delete me._anchorCache; },500);
-		return me._anchorCache;
+		return me._anchorCache.slice();
 	},
 
 

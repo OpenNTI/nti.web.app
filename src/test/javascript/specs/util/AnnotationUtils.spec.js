@@ -213,7 +213,7 @@ describe("Annotation Utils", function() {
 
 	it("should find the next anchor", function(){
 
-		var anchors = AnnotationUtils.getAnchors().slice(),
+		var anchors = AnnotationUtils.getAnchors(),
 			all = Ext.Array.unique(Ext.toArray(document.querySelectorAll('#NTIContent *')));
 
 		Ext.each(anchors,function(a,i,c){
@@ -268,7 +268,7 @@ describe("Annotation Utils", function() {
 
 	it("should find the previous anchor", function(){
 
-			var anchors = AnnotationUtils.getAnchors().slice(),
+			var anchors = AnnotationUtils.getAnchors(),
 				all = Ext.Array.unique(Ext.toArray(document.querySelectorAll('#NTIContent *')));
 
 			//no anchor found returns null...add it to the list of possible anchors.
