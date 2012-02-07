@@ -1,53 +1,132 @@
-/**
- * Wait until the test condition is true or a timeout occurs. Useful for waiting
- * on a server response or for a ui change (fadeIn, etc.) to occur.
- *
- * @param testFx javascript condition that evaluates to a boolean,
- * it can be passed in as a string (e.g.: "1 == 1" or "$('#bar').is(':visible')" or
- * as a callback function.
- * @param onReady what to do when testFx condition is fulfilled,
- * it can be passed in as a string (e.g.: "1 == 1" or "$('#bar').is(':visible')" or
- * as a callback function.
- * @param timeOutMillis the max amount of time to wait. If not specified, 3 sec is used.
- */
+var r={},
+	page;
+	//port = 8084,
+	//worker,
+	//bb
+
+
+
 function waitFor(testFx, onReady, timeOutMillis) {
-	var maxtimeOutMillis = timeOutMillis ? timeOutMillis : 3001, //< Default Max Timeout is 3s
+	var maxtimeOutMillis = timeOutMillis ? timeOutMillis : 3001,
 		start = new Date().getTime(),
 		condition = false,
 		interval = setInterval(function() {
 			if ( (new Date().getTime() - start < maxtimeOutMillis) && !condition ) {
-				// If not time-out yet and condition not yet fulfilled
-				condition = (testFx()); //< defensive code
+				condition = (testFx());
 			} else {
 				if(!condition) {
-					// If condition still not fulfilled (timeout but condition is 'false')
 					console.log("'waitFor()' timeout");
+
+					page.render('./out.png');
+
 					phantom.exit(1);
 				} else {
-					// Condition fulfilled (timeout and/or condition is 'true')
-					//console.log("'waitFor()' finished in " + (new Date().getTime() - start) + "ms.");
-					onReady(); //< Do what it's supposed to do once the condition is fulfilled
-					clearInterval(interval); //< Stop this interval
+					onReady();
+					clearInterval(interval);
 				}
 			}
 		}, 100); //< repeat check every 100ms
 }
 
-if (phantom.args.length === 0 || phantom.args.length > 2) {
-	console.log('Usage: run-jasmine.js URL');
-	phantom.exit();
-}
 
-var r={},page = typeof require!=='undefined'? require('webpage').create() : typeof WebPage!=='undefined' ? new WebPage() : null;
+//function ServerThread() {
+//	var fs = require('fs'),
+//		server = require('webserver').create(),
+//		service, path,
+//		s = fs.separator,
+//		cache = {};
+//
+//	path = phantom.libraryPath.split(s);
+//	while( !fs.exists(path.join(s)+s+'test.html') && path ){ path.pop(); }
+//	if(!path){ console.log('test.html not found'); phantom.exit(); }
+//
+//	path = path.join(s);
+//	fs.changeWorkingDirectory( path );
+//	console.log("Serving from: "+fs.workingDirectory);
+//
+//	function mime(extention){
+//
+//		var map = {
+//			js: 'text/javascript',
+//			css: 'text/css',
+//			html: 'text/html',
+//			ico: 'image/ico',
+//			gif: 'image/gif',
+//			jpeg: 'image/jpeg',
+//			jpg: 'image/jpeg',
+//			png: 'image/png'
+//		};
+//
+//		return map[extention] || 'text/plain';
+//	}
+//
+//
+//	function serve (request, response) {
+//	//	console.log(JSON.stringify(request, null, 4));
+//		var p = path+decodeURIComponent(request.url.split("?")[0]),
+//			e = fs.isFile(p),
+////			file,
+//			extention = p.split('.').pop();
+//
+//		try {
+//			if(!e){
+//				response.statusCode = 404;
+//				console.log(p);
+//			}
+//			else{
+//				response.statusCode = 200;
+//				response.headers = {
+//					'Cache': 'no-cache',
+//					'Content-Type': mime(extention)
+//				};
+//
+//				if(!cache[p]){
+//					cache[p] = fs.read(p);
+//				}
+//
+//				response.write(cache[p]);
+//			}
+//		} catch(e) {
+//			response.statusCode = 500;
+//			console.log(p);
+//			console.log(JSON.stringify(e, null, 4));
+//		}
+//	}
+//
+//
+//	service = server.listen(port, serve);
+//	if (!service) {
+//		console.log('Error: Could not create web server listening on port ' + port);
+//		phantom.exit();
+//	}
+//}
+//
+//
+//Run server in a seporate thread...
+//bb = new WebKitBlobBuilder();
+//bb.append('(');
+//bb.append(ServerThread.toString());
+//bb.append(')();');
+//worker = new Worker(webkitURL.createObjectURL(bb.getBlob()));
+//console.log('Worker Created');
+//worker.onerror = worker.onerror = function(e) { console.log("Error in file: "+JSON.stringify(e,null,4)); };
+//worker.postMessage('');
 
+//Or in this thread:
+//ServerThread(); (causes tests to hang when they make XHRs)
+
+
+page = require('webpage').create();
 if(!page){
 		console.log('Could not create WebPage');
 		phantom.exit();
 }
 
+
 page.onAlert = function(msg){
 	console.log('ALERT: '+msg);
 };
+
 
 page.onConsoleMessage = function(msg, line, source) {
 	if(source)
@@ -56,24 +135,27 @@ page.onConsoleMessage = function(msg, line, source) {
 		console.log(msg);
 };
 
+
 page.onLoadStarted = function(){
 	console.log("Loading...");
 };
+
 
 page.onResourceRequested = function(request){
 //	console.log('required:\t'+request.url);
 	r[request.url] = true;
 };
 
+
 page.onResourceReceived = function(request){
 	delete r[request.url];
 };
 
-
+//page.open("http://localhost:"+port+"/test.html", function(status){
 page.open(phantom.args[0], function(status){
 	console.log('\nInitial Load finished, executing...\n');
 	if (status !== "success") {
-		console.log("Unable to access network");
+		console.log("Unable to access network\n\n"+JSON.stringify(status, null, 4));
 		phantom.exit();
 	}
 	else {
@@ -131,7 +213,7 @@ page.open(phantom.args[0], function(status){
 					console.log("Unresolved resources: "+r.join('\n'));
 				phantom.exit();
 			},
-			300001
+			600001
 		);
 	}
 });

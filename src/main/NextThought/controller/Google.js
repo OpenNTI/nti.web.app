@@ -6,7 +6,7 @@ Ext.define('NextThought.controller.Google', {
 
 	init: function() {
 		try{
-			var hangout = this.hangout = gapi===undefined ? null : gapi.hangout;
+			var hangout = this.hangout = window.gapi===undefined ? null : gapi.hangout;
 			this.stateCtlr = this.getController('State');
 
 

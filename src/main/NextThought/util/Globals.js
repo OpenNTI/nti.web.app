@@ -250,9 +250,8 @@ Ext.define('NextThought.util.Globals',
 
 		if(dev && dev.ignoreWarns){
 			console._warn = console.warn;
-			console.warn = function(){
-				var msg = arguments[0],
-					ignore = Ext.Array.contains(dev.ignoreWarns, msg);
+			console.warn = function(msg){
+				var ignore = Ext.Array.contains(dev.ignoreWarns, msg);
 
 				if(!ignore) {
 					this._warn.apply(this,arguments);
