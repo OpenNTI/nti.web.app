@@ -42,7 +42,10 @@ Ext.define('NextThought.controller.Annotations', {
 		this.control({
 			'reader-panel':{
 				'create-note'   : this.addNote,
-				'share-with'	: this.actionMap.share
+				'share-with'	: this.actionMap.share,
+				'define': function(){
+					console.log('Define:',arguments);
+				}
 			},
 
 			'note-entry':{

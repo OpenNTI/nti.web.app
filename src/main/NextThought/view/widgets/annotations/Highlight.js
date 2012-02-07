@@ -83,26 +83,32 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 	},
 
 
-	updateMenuIcon: function(color) {
-		var img = this.el.select('img.x-menu-item-icon').first();
-		if(img){
-			img.setStyle('background', color);
-		}
-	},
-
-
 	_buildMenu: function(){
-		var items = [],r = this._record;
+		var me = this,
+			items = [],
+			r = me._record,
+			text = r.get('text');
+
 		if(this._isMine) {
 			items.push({
 					text : (r.phantom?'Save':'Remove')+' Highlight',
-					handler: Ext.bind(r.phantom? this.savePhantom : this.remove, this)
+					handler: Ext.bind(r.phantom? me.savePhantom : me.remove, me)
 				});
+		}
+
+		if(/^\w+$/i.test(text)){//is it a word
+			items.push({
+				text: 'Define...',
+				handler:function(){ me.getCmp().fireEvent('define', text ); }
+			});
 		}
 
 		items.push({
 			text : 'Add a Note',
-			handler: Ext.bind(this._addNote, this)
+			handler: function(){
+				me.savePhantom();
+				me.getCmp().fireEvent('create-note',me._sel);
+			}
 		});
 
 		return this.callParent([items]);
@@ -110,18 +116,16 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 
 
 	_menuItemHook: function(o,item /*, menu*/){
-		item.on('afterrender',Ext.bind(this.updateMenuIcon, item, [o.getColor().toString()]));
+		var color = this.getColor();
+		item.on('afterrender',function() {
+			var img = item.el.select('img.x-menu-item-icon').first();
+			if(img){ img.setStyle('background', color); }
+		});
 	},
 
 
 	getColor: function(){
 		return this.self.getColor(this._userId);
-	},
-
-
-	_addNote: function(){
-		this.savePhantom();
-		this.getCmp().fireEvent('create-note',this._sel);
 	},
 
 
