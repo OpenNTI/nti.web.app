@@ -56,7 +56,7 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 	getSortValue: function(){
 		var m = 'getAnchorForSort',
 			r = this._record;
-		return r.hasOwnProperty(m) ? r[m]() : undefined;
+		return r[m] ? r[m]() : undefined;
 	},
 
 
@@ -266,7 +266,7 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 
 			function _(v){
 				var r = v.getSortValue();
-				return  r? Ext.Array.indexOf(anchors,r) : 0;
+				return  r? Ext.Array.indexOf(anchors,r) : -1;
 			}
 
 			return function(a,b){

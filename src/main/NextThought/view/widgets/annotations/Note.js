@@ -111,9 +111,10 @@ Ext.define( 'NextThought.view.widgets.annotations.Note', {
 
 
 	_createNoteContainer: function(id){
-		var e = Ext.get(id),
+		var i = 'note-container-'+id,
+			e = Ext.get(i),
 			n = e ? e.dom : this.createElement('div',this._cnt,'document-notes');
-		n.setAttribute('id','note-container-'+id);
+		n.setAttribute('id',i);
 		return Ext.get(n);
 	},
 
