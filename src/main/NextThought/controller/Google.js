@@ -1,13 +1,38 @@
+/**
+ * https://developers.google.com/+/hangouts/reference
+ */
 Ext.define('NextThought.controller.Google', {
 	extend: 'Ext.app.Controller',
 
 	init: function() {
 		try{
+			var hangout = this.hangout = gapi===undefined ? null : gapi.hangout;
 			this.stateCtlr = this.getController('State');
 
+
 			if(this.isHangout()){
-				gapi.hangout.data.addStateChangeListener(Ext.bind(this.stateChangeListener,this));
-				gapi.hangout.addParticipantsListener(Ext.bind(this.participantsListener,this));
+				gapi.hangout.data.onStateChanged.add(Ext.bind(this.stateChangeListener,this));
+//				gapi.hangout.onAppVisible.add()
+//				gapi.hangout.onDisplayedParticipantChanged.add()
+//				gapi.hangout.onEnabledParticipantsChanged.add()
+//				gapi.hangout.onParticipantsAdded.add()
+//				gapi.hangout.onParticipantsChanged.add()
+//				gapi.hangout.onParticipantsDisabled.add()
+//				gapi.hangout.onParticipantsEnabled.add()
+//				gapi.hangout.onParticipantsRemoved.add()
+
+				//log events
+				Ext.each( [
+					'onAppVisible',
+					'onDisplayedParticipantChanged','onEnabledParticipantsChanged',
+					'onParticipantsAdded','onParticipantsChanged','onParticipantsDisabled',
+					'onParticipantsEnabled','onParticipantsRemoved'
+				], function (event){
+					hangout[event].add(function(){
+						console.debug(event, arguments);
+					});
+				});
+
 				this.stateCtlr.on('stateChange', this.broadcastState, this);
 				history.replaceState = function(){};
 			}
@@ -21,13 +46,14 @@ Ext.define('NextThought.controller.Google', {
 		return typeof gapi !== 'undefined' && gapi.hangout;
 	},
 
-	isReady: function(){
-		return this.isHangout() && gapi.hangout.isApiReady();
-	},
 
 	onHangoutReady: function(fn){
 		console.info("Starting app in Hangout Mode");
-		gapi.hangout.addApiReadyListener(fn);
+		gapi.hangout.addApiReady.add(function(e) {
+			if (e.isApiReady) {
+				fn();
+			}
+		});
 	},
 
 	broadcastState: function(delta) {
@@ -48,13 +74,12 @@ Ext.define('NextThought.controller.Google', {
 		return false;
 	},
 
-	participantsListener: function(){
-		console.debug("Participants Listener: ",arguments);
-	},
 
-	stateChangeListener: function(adds, removes, state, metadata){
+	stateChangeListener: function(stateChangedEvent){
 		console.debug("State Change Listener: ",arguments);
-		var s = {}, k;
+		var state=stateChangedEvent.state,
+			s = {}, k;
+
 		for(k in state) {
 			if(state.hasOwnProperty(k)) {
 				s[k] = Ext.JSON.decode(state[k]);

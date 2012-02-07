@@ -54,7 +54,6 @@ Ext.application({
 
 		window.app = this;
 		var g = this.getController('Google'),
-			i,
 			hostInfo = HOST_PATTERN.exec(_AppConfig.server.host);
 
 		Ext.apply(_AppConfig.server,{
@@ -63,15 +62,8 @@ Ext.application({
 			port: parseInt(hostInfo[HOST_PATTERN_PORT_MATCH_GROUP],10)
 		});
 
-		if(g.isHangout() && !g.isReady()){
-
-			//the onApiReady thing seems to not work...so, brute-force for now.
-			i = setInterval(function(){
-				if(g.isReady()){
-					clearInterval(i);
-					start();
-				}
-			},100);
+		if(g.isHangout()){
+			g.onHangoutReady(start);
 		}
 		else {
 			start();
