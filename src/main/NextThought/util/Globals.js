@@ -147,6 +147,10 @@ Ext.define('NextThought.util.Globals',
 
 	applyInjections: function(){
 
+		if(Array.prototype.peek === undefined) {
+			Array.prototype.peek = function peek(){ return this[this.length-1]; };
+		}
+
 		//inject a new function into Ext.Element
 		Ext.apply(Ext.Element.prototype,{
 
@@ -225,7 +229,8 @@ Ext.define('NextThought.util.Globals',
 
 
 	ensureConsole: function(){
-		var console = window.console;
+		var dev = _AppConfig.dev,
+			console = window.console;
 		if(!console){
 			console = {log: function(){}};
 			window.console = console;
@@ -241,6 +246,18 @@ Ext.define('NextThought.util.Globals',
 		}
 		if(!console.error){
 			console.error = Ext.Function.alias(console, 'log');
+		}
+
+		if(dev && dev.ignoreWarns){
+			console._warn = console.warn;
+			console.warn = function(){
+				var msg = arguments[0],
+					ignore = Ext.Array.contains(dev.ignoreWarns, msg);
+
+				if(!ignore) {
+					this._warn.apply(this,arguments);
+				}
+			};
 		}
 	},
 

@@ -17,11 +17,26 @@ Ext.define( 'NextThought.view.widgets.annotations.Note', {
 					'resources/images/charms/note-white.png' : null]);
 
 		var me = this,
-			a = Ext.get(Ext.query('a[name=' + record.get('anchorPoint') + ']')[0]),
-			c;
+			a = Ext.query('a[name=' + record.get('anchorPoint') + ']')[0],
+			c,
+			root = Ext.get('NTIContent'),
+			inBox;
 
-		a = a ? a : Ext.get(Ext.query('#nticontent a[name]')[0]);
+		if(!a) {
+			a = Ext.get(Ext.query('#nticontent a[name]')[0]);
+		}
+		else {
+			a = Ext.get( AnnotationUtils.getNextAnchorInDOM(a) );
+		}
+
+
 		c = me._createNoteContainer(a.dom.getAttribute('name'));
+
+		inBox = a.up('div', root.down('.page-contents'));
+		if(inBox){
+			a = inBox;
+		}
+
 		a.setStyle('display', 'block');
 
 		me._anchorNode = a;
@@ -98,7 +113,7 @@ Ext.define( 'NextThought.view.widgets.annotations.Note', {
 	_createNoteContainer: function(id){
 		var e = Ext.get(id),
 			n = e ? e.dom : this.createElement('div',this._cnt,'document-notes');
-		n.setAttribute('id',id);
+		n.setAttribute('id','note-container-'+id);
 		return Ext.get(n);
 	},
 
@@ -133,7 +148,8 @@ Ext.define( 'NextThought.view.widgets.annotations.Note', {
 				c = me._noteContainer,
 				a = me._anchorNode,
 				i = me._originalPadding,
-				w = Ext.get(this._cmp.getEl().query('#nticontent .page-contents')[0]).getWidth(),
+				box = !a.is('a'),
+				w = (box? a : Ext.get(this._cmp.getEl().query('#nticontent .page-contents')[0])).getWidth(),
 				h = 0,
 				extra= 0,
 				adjust=0,
@@ -141,7 +157,6 @@ Ext.define( 'NextThought.view.widgets.annotations.Note', {
 				pr= a.prev();
 
 			c.setWidth(w);
-			//a.setStyle('border', '1px solid green');
 
 			if(me._isVisible){
 				adjust += pr?(pr.getPadding('b')+pr.getMargin('b')):0;
@@ -152,8 +167,13 @@ Ext.define( 'NextThought.view.widgets.annotations.Note', {
 
 			a.setStyle('padding-bottom',(i+h+extra)+'px');
 
-			// c.alignTo(a, 'tl-bl?',[0,-h]);
-			c.moveTo(p.getLeft()+p.getPadding('l'),a.getTop()+(adjust?0:extra));
+			if(box){
+				c.moveTo( a.getLeft(), a.getBottom()-h);
+			}
+			else {
+				c.moveTo( p.getLeft()+p.getPadding('l'), a.getTop()+(adjust?0:extra));
+			}
+
 			//move the nib to the top-aligning corner of the note container
 			if (me._img){
 				Ext.get(me._img).moveTo(p.getLeft(), c.down('.x-nti-note img').getTop());
@@ -164,9 +184,9 @@ Ext.define( 'NextThought.view.widgets.annotations.Note', {
 				me._cnt.appendChild(c.dom);
 			}
 
-			if (me.noteCmp){
-				me.noteCmp.doLayout();
-			}
+//			if (me.noteCmp){
+//				me.noteCmp.doLayout();
+//			}
 
 		}
 		catch(e){

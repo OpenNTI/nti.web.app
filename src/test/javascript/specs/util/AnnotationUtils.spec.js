@@ -213,11 +213,15 @@ describe("Annotation Utils", function() {
 
 	it("should find the next anchor", function(){
 
-		var anchors = Ext.Array.unique(Ext.toArray(document.querySelectorAll('#NTIContent A[name]'))),
+		var anchors = AnnotationUtils.getAnchors().slice(),
 			all = Ext.Array.unique(Ext.toArray(document.querySelectorAll('#NTIContent *')));
 
 		Ext.each(anchors,function(a,i,c){
-			expect(c[i+1]).toBe(AnnotationUtils.getNextAnchor(a));
+			var n = AnnotationUtils.getNextAnchor(a);
+			console.log(c[i+1]===n);
+
+			expect(c[i+1]).toBe(n);
+
 			expect(AnnotationUtils.getAnchor(a.getAttribute('name'))).toBe(a);
 		});
 
@@ -261,6 +265,62 @@ describe("Annotation Utils", function() {
 			}
 		});
 	});
+
+	it("should find the previous anchor", function(){
+
+			var anchors = AnnotationUtils.getAnchors().slice(),
+				all = Ext.Array.unique(Ext.toArray(document.querySelectorAll('#NTIContent *')));
+
+			//no anchor found returns null...add it to the list of possible anchors.
+			anchors.unshift(null);
+
+			Ext.each(anchors,function(a,i,c){
+				if(a===null){ return; }
+
+				var p = AnnotationUtils.getPreviousAnchorInDOM(a);
+
+				expect(c[i-1]).toBe(p);
+				expect(AnnotationUtils.getAnchor(a.getAttribute('name'))).toBe(a);
+			});
+
+
+			Ext.each(all, function(el){
+				var prevAnchor = AnnotationUtils.getPreviousAnchorInDOM(el),
+					x = Ext.Array.indexOf(anchors, prevAnchor),
+					w = x+1,
+					a, b,
+					nextAnchor = anchors[w]||null;
+
+				expect(x).toBeGreaterThan(-1);
+
+				if(prevAnchor !== null){
+					a = el.compareDocumentPosition(prevAnchor);
+					expect(a & el.DOCUMENT_POSITION_PRECEDING).toBeTruthy();
+				}
+				else {
+					expect(nextAnchor).toBeTruthy();
+				}
+
+				if(nextAnchor !== null ){
+					b = el.compareDocumentPosition(nextAnchor);
+					if(b === 0){
+						expect(el).toBe(nextAnchor);
+					}
+					else if(b === el.DOCUMENT_POSITION_PRECEDING){
+						expect(prevAnchor).toBeTruthy();
+
+						a = nextAnchor.compareDocumentPosition(prevAnchor);
+						expect(a & el.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+					}
+					else{
+						expect(b & (el.DOCUMENT_POSITION_FOLLOWING | el.DOCUMENT_POSITION_CONTAINED_BY)).toBeTruthy();
+					}
+				}
+				else {
+					expect(prevAnchor).toBeTruthy();
+				}
+			});
+		});
 
 
 	it("should be able to identify a block node",function(){

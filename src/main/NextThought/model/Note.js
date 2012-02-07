@@ -5,7 +5,7 @@ Ext.define('NextThought.model.Note', {
 		{ name: 'inReplyTo', type: 'string' },
 		{ name: 'references', type: 'auto', defaultValue: [] },
 		{ name: 'anchorPoint', type: 'string' },
-		{ name: 'anchorType', type: 'string', defaultValue: 'previousPreviousName'},
+		{ name: 'anchorType', type: 'string', defaultValue: 'previousSiblingAnchorName'},
 		{ name: 'left', type: 'int' },
 		{ name: 'top', type: 'int' },
 		{ name: 'body', type: 'auto' },

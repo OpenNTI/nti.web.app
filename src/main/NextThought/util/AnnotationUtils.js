@@ -189,9 +189,9 @@ Ext.define('NextThought.util.AnnotationUtils',{
 			node = node.parentNode;
 		}
 
-		anchorNode = Ext.get(node).is('A[name]')? node: this.getNextAnchorInDOM(node);
+		anchorNode = Ext.fly(node).is('A[name]')? node: this.getPreviousAnchorInDOM(node);
 		if(!anchorNode){
-			anchorNode = Ext.query('A[name]').pop();
+			anchorNode = this.getAnchors().peek();
 		}
 
 		pageOffsets = Ext.get(anchorNode).getOffsetsTo(Ext.get('NTIContent'));
@@ -202,13 +202,28 @@ Ext.define('NextThought.util.AnnotationUtils',{
 		return note;
 	},
 
+
 //tested
 	getNextAnchorInDOM: function(node) {
 		var anchor = null, pos;
-		Ext.each(Ext.query('A[name]'), function(a){
+		Ext.each(this.getAnchors(), function(a){
 			pos = a.compareDocumentPosition(node);
 			//node precedes the anchor
 			if (pos & a.DOCUMENT_POSITION_PRECEDING) {
+				anchor = a;
+				return false;
+			}
+		});
+		return anchor;
+	},
+
+//tested
+	getPreviousAnchorInDOM: function(node) {
+		var anchor = null, pos;
+		Ext.each(this.getAnchors().slice().reverse(), function(a){
+			pos = a.compareDocumentPosition(node);
+			//node precedes the anchor
+			if (pos & a.DOCUMENT_POSITION_FOLLOWING) {
 				anchor = a;
 				return false;
 			}
@@ -254,6 +269,18 @@ Ext.define('NextThought.util.AnnotationUtils',{
 		return this.rangeFromAnchors(r);
 	},
 
+
+	getAnchors: function(){
+		var me = this;
+		clearTimeout(me._anchorCacheLife);
+		if(!me._anchorCache) {
+			me._anchorCache = Ext.Array.unique(Ext.query('#NTIContent A[name]'));
+		}
+		me._anchorCacheLife = setTimeout(function(){ delete me._anchorCache; },500);
+		return me._anchorCache;
+	},
+
+
 //tested
 	getAnchor: function(a) {
 		return Ext.query('a[name=' + a +']')[0];
@@ -261,7 +288,7 @@ Ext.define('NextThought.util.AnnotationUtils',{
 
 //tested
 	getNextAnchor: function(a) {
-		var all = Ext.Array.unique(Ext.query('a[name]')),
+		var all = this.getAnchors(),
 			result = null;
 
 		Ext.each(all, function(e, i){
