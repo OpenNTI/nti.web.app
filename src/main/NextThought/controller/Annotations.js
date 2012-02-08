@@ -43,9 +43,7 @@ Ext.define('NextThought.controller.Annotations', {
 			'reader-panel':{
 				'create-note'   : this.addNote,
 				'share-with'	: this.actionMap.share,
-				'define': function(){
-					console.log('Define:',arguments);
-				}
+				'define'		: this.define
 			},
 
 			'note-entry':{
@@ -70,6 +68,35 @@ Ext.define('NextThought.controller.Annotations', {
 	getContainerId: function(){
 		return this.getContext().getContainerId();
 	},
+
+
+	define: function(term){
+		var url = _AppConfig.server.host + '/dictionary/' + encodeURIComponent(term);
+
+		if(this.definition){
+			this.definition.close();
+			delete this.definition;
+		}
+
+		this.definition = Ext.widget('window',{
+			title: 'Define: '+term,
+			closeAction: 'destroy',
+			width: 300,
+			height: 400,
+			layout: 'fit',
+			items: {
+				xtype: 'component',
+				autoEl: {
+					tag: 'iframe',
+					src: url,
+					frameBorder: 0,
+					marginWidth: 0,
+					marginHeight: 0
+				}
+			}
+		}).show().center();
+	},
+
 
 	shareWithButton: function(btn){
 		var win = btn.up('window'),
