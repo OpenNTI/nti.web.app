@@ -15,6 +15,8 @@ Ext.define('NextThought.util.ParseUtils',{
 			if(items.hasOwnProperty(key)) {
 				item = items[key] || {};
 
+				if (typeof(item) === 'string'){item = Ext.JSON.decode(item);}
+
 				if (item instanceof Ext.data.Model) {
 					results.push(item);
 					continue;
