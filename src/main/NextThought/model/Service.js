@@ -169,6 +169,22 @@ Ext.define('NextThought.model.Service', {
 		}
 
 		return Ext.clone( collection );
+	},
+
+	getObject: function (ntiid, success, failure, scope){
+		var host = _AppConfig.server.host,
+			url = host + this.getCollection('Objects', 'Global').href + '/' + ntiid;
+
+		Ext.Ajax.request({
+			url: url,
+			callback: function(req, s, resp){
+				if(!s){
+					Globals.callback(failure,scope, [req,resp]);
+					return;
+				}
+				Globals.callback(success, scope, ParseUtils.parseItems(resp.responseText));
+			}
+		});
 	}
 
 });

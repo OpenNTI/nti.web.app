@@ -193,16 +193,25 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 		this.clearListeners();
 		
 		var menu, annotations = this._multiAnnotation();
+
+
 		if (annotations && annotations.length > 1) {
 			menu = Ext.create('Ext.menu.Menu');
 			Ext.each(annotations, function(o, i){
+				var subMenu, item;
+
 				if (!o.getMenu) { return; }
-				o.clearListeners();
-				var item = Ext.create('Ext.menu.Item', {
-						text: 'Annotation '+(i+1),
-						menu: o.getMenu({/*this argument will tell it to not destroy itself*/})
-				});
-				
+				//o.clearListeners();
+				subMenu = o.getMenu({/*this argument will tell it to not destroy itself*/});
+				if (subMenu.items.getCount()===1){
+					item = subMenu.items.first();
+				}
+				else {
+					item = Ext.create('Ext.menu.Item', {
+						text: this.getRecord().getModelName()+' '+(i+1),
+						menu: subMenu
+					});
+				}
 				this._menuItemHook(o,item, menu);
 				
 				menu.add(item);

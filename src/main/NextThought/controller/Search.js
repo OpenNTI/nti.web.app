@@ -50,19 +50,65 @@ Ext.define('NextThought.controller.Search', {
 		}
 	},
 
-	searchResultClicked: function(hit, searchValue) {
-		var oid = hit.get('TargetOID'),
-			popover = this.getSearchPopover(),
-			target = oid ? (hit.get('Type').toLowerCase() + '-' + oid) : null,
-			containerId = hit.get('ContainerId'),
-			bookInfo = Library.findLocation(containerId),
-			book = bookInfo.book,
-			href = bookInfo.location.getAttribute('href');
 
-		this.getViewport().fireEvent('navigate', book, book.get('root') + href, {text: searchValue, oid: oid});
-		if(popover && popover.isVisible()){
-			popover.startClose();
+	resolveTopContainer: function(containerId, success, failure){
+
+		var service = _AppConfig.service,
+			bookInfo = Library.findLocation(containerId);
+
+		function s(container){
+			var cid = container.get('ContainerId');
+
+			bookInfo = Library.findLocation(cid);
+			if(bookInfo){
+				return Globals.callback(success,null,[bookInfo]);
+			}
+
+			return this.resolveTopContainer(cid, success, failure);
 		}
+
+		if(bookInfo){
+			return Globals.callback(success,null,[bookInfo]);
+		}
+
+		service.getObject(containerId, s, failure);
+	},
+
+
+	searchResultClicked: function(hit, searchValue) {
+		var me = this,
+			oid = hit.get('TargetOID'),
+			containerId = hit.get('ContainerId');
+
+		function success(bookInfo) {
+			if(!bookInfo){
+				alert("bad things");
+				return;
+			}
+
+			var book = bookInfo.book,
+				href = bookInfo.location.getAttribute('href'),
+				popover = me.getSearchPopover();
+
+			me.getViewport().fireEvent(
+				'navigate',
+				book,
+				book.get('root') + href,
+				{
+					text: searchValue,
+					oid: oid
+				});
+
+			if(popover && popover.isVisible()){
+				popover.startClose();
+			}
+		}
+
+		function failure(){
+			alert("Ooops","Me no say");
+		}
+
+		me.resolveTopContainer(containerId, success, failure);
 	},
 
 	selectDown: function(field) {

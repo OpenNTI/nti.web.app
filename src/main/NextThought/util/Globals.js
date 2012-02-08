@@ -131,6 +131,11 @@ Ext.define('NextThought.util.Globals',
 		this.ensureConsole();
 		this.ensureNodePrototypes();
 
+		window.alert = function(msg){
+			var title = arguments.length > 1 ? arguments[0] : undefined;
+			Ext.MessageBox.alert('Alert' || title, msg );
+		};
+
 		Ext.JSON.encodeDate = function(d){return Ext.Date.format(d, 'U');};
 
 		Ext.Ajax.timeout=10000;//10sec timeout
@@ -328,6 +333,25 @@ Ext.define('NextThought.util.Globals',
 		}
 		return s;
 	},
+
+
+	/**
+	 * Call a function and return its value
+	 *
+	 * Will ignore non-functions.
+	 *
+	 * @param fn - function to call
+	 * @param scope - scope of the function's invocation
+	 * @param args - arguments array
+	 */
+	callback: function(fn, scope, args){
+		if(!Ext.isFunction(fn)){
+			return false;
+		}
+
+		return fn.apply(scope||window, args);
+	},
+
 
 	/**
 	 * @see http://stackoverflow.com/questions/105034/how-to-create-a-guid-uuid-in-javascript

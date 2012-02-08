@@ -103,14 +103,18 @@ Ext.define('NextThought.view.widgets.NotePanel',{
 		this.box.addCls('placeholder');
 	},
 
+	failedToLoadTranscript: function() {
+		var elm = this.box;
+		elm.animate({listeners: { beforeanimate: function(){ elm.show(true); } }});
+	},
 
-	insertTranscript: function(m){
-		this.frameBody.hide();
+	insertTranscript: function(m, alternateParent){
+		if (!alternateParent){this.frameBody.hide();}
 
 		this.removeAll(true);
 
 		var date = Ext.Date.format(m.get('Last Modified') || new Date(), 'M j, Y'),
-			panel = this.add({title: Ext.String.format('Chat Transcript | {0}',date), closable: true}),
+			panel = alternateParent || this.add({title: Ext.String.format('Chat Transcript | {0}',date), closable: true}),
 			log = panel.add({ xtype: 'chat-log-view' }),
 			msgs = m.get('Messages');
 
@@ -118,33 +122,35 @@ Ext.define('NextThought.view.widgets.NotePanel',{
 
 		Ext.each(msgs, function(i){ log.addMessage(i); });
 
-		panel.on('beforeclose', function(){
-			this.box.show();
-		}, this);
+		if (!alternateParent) {
+			panel.on('beforeclose', function(){
+				this.box.show();
+			}, this);
 
-		panel.down('header').on('click', function(e){
-			e.preventDefault();
-			e.stopPropagation();
-			panel.close();
-			this.box.show();
-		}, this);
+			panel.down('header').on('click', function(e){
+				e.preventDefault();
+				e.stopPropagation();
+				panel.close();
+				this.box.show();
+			}, this);
 
-		//insert a cleanupreply here to guarentee cleanup when transcript is removed.
-		panel.cleanupReply = function(b){
-			if (!b) {
-				return;
-			}
-			panel.removeAll(true);
-		};
-
-		this.frameBody.show({
-			listeners: {
-				scope: this,
-				afteranimate: function(){
-					this.sizeChanged();
+			//insert a cleanupreply here to guarentee cleanup when transcript is removed.
+			panel.cleanupReply = function(b){
+				if (!b) {
+					return;
 				}
-			}
-		});
+				panel.removeAll(true);
+			};
+
+			this.frameBody.show({
+				listeners: {
+					scope: this,
+					afteranimate: function(){
+						this.sizeChanged();
+					}
+				}
+			});
+		}
 	},
 
 
@@ -260,7 +266,8 @@ Ext.define('NextThought.view.widgets.NotePanel',{
 			me.fireEvent('action', action, me);
 		}
 		else if(me.box.isDisplayed() && me.isTranscriptSummary()){
-			me.fireEvent('load-transcript', me._record, me, me.box.setDisplayed(false));
+			me.box.setDisplayed(false);
+			me.fireEvent('load-transcript', me._record, me);
 		}
 		else{
 			me.box.fadeOut({

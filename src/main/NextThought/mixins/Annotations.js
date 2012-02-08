@@ -7,6 +7,7 @@ Ext.define('NextThought.mixins.Annotations', {
 		'NextThought.view.widgets.annotations.SelectionHighlight',
 		'NextThought.view.widgets.annotations.Highlight',
 		'NextThought.view.widgets.annotations.Note',
+		'NextThought.view.widgets.annotations.Transcript',
 		'NextThought.cache.IdCache'
 	],
 
@@ -211,7 +212,22 @@ Ext.define('NextThought.mixins.Annotations', {
 	},
 
 
-	createTranscriptSummaryWidget: function(/*record*/) {
+	createTranscriptSummaryWidget: function(record) {
+		//only display non-parent'ed results, those with parents will be inlined.
+		if (record._parent) {return;}
+
+		console.log('transcript summary should be rendered?', record);
+
+		this._annotations[record.get('OID')] =
+			Ext.create(
+				'NextThought.view.widgets.annotations.Transcript',
+				record,
+				this.items.get(0).el.dom.firstChild,
+				this);
+		if( this.bufferedDelayedRelayout ) {
+			this.bufferedDelayedRelayout();
+		}
+		return true;
 	},
 
 
@@ -342,6 +358,7 @@ Ext.define('NextThought.mixins.Annotations', {
 				}
 				try{
 					Ext.apply(contributors, me.getContributors(r));
+					console.log('model', r.getModelName());
 					me.widgetBuilder[r.getModelName()].call(me,r);
 				}
 				catch(e) {

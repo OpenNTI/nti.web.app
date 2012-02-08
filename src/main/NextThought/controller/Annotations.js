@@ -143,7 +143,7 @@ Ext.define('NextThought.controller.Annotations', {
 	},
 
 
-	onLoadTranscript: function(record, cmp, elm, eOpts) {
+	onLoadTranscript: function(record, cmp, eOpts) {
 		var model = this.getModel('Transcript'),
 			id = record.get('RoomInfo').getId();
 
@@ -152,10 +152,9 @@ Ext.define('NextThought.controller.Annotations', {
 		model.load(id,{
 			scope: this,
 			failure: function() {
-				elm.animate({listeners: { beforeanimate: function(){ elm.show(true); } }});
+				cmp.failedToLoadTranscript();
 			},
 			success: function(record) {
-				//elm.remove();
 				cmp.insertTranscript(record);
 			}
 		});
