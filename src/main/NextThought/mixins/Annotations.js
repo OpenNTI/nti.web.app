@@ -300,7 +300,7 @@ Ext.define('NextThought.mixins.Annotations', {
 
 	objectsLoaded: function(bins, callback) {
 		var me = this,
-			contributors,
+			contributors = [],
 			k = 'Last Modified',
 			tree = {}, b,
 			items,
@@ -318,18 +318,16 @@ Ext.define('NextThought.mixins.Annotations', {
 			}
 		}
 
-		if (!foundBins) {
-			return;
+		if (foundBins) {
+			this.buildAnnotationTree(bins.Note, tree);
+			this.buildAnnotationTree(bins.TranscriptSummary, tree);
+
+			this.prunePlaceholders(tree);
+
+			items = Ext.Object.getValues(tree).concat(bins.Highlight||[]);
+
+			contributors = this.buildAnnotations(items);
 		}
-
-		this.buildAnnotationTree(bins.Note, tree);
-		this.buildAnnotationTree(bins.TranscriptSummary, tree);
-
-		this.prunePlaceholders(tree);
-
-		items = Ext.Object.getValues(tree).concat(bins.Highlight||[]);
-
-		contributors = this.buildAnnotations(items);
 
 		me.fireEvent('publish-contributors',contributors);
 		me.fireEvent('resize');

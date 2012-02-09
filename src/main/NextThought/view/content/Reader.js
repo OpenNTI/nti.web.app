@@ -19,7 +19,8 @@ Ext.define('NextThought.view.content.Reader', {
 	instantiation_time: Ext.Date.now(),
 
 	initComponent: function(){
-		this.addEvents('publish-contributors','location-changed','finished-navigation');
+		this.addEvents('publish-contributors','location-changed','finished-navigation','finished-restore');
+		this.enableBubble('publish-contributors','location-changed','finished-navigation','finished-restore');
 		this.callParent(arguments);
 
 		this.add({cls:'x-panel-reset', margin: this.belongsTo ? 0 : '0 0 0 50px', enableSelect: true});
@@ -93,7 +94,6 @@ Ext.define('NextThought.view.content.Reader', {
 
 
 	setActive: function(book, path, skipHistory, callback, ntiid) {
-//		console.group('Navigate to', path);
 		var me = this,
 			b = me._resolveBase(me._getPathPart(path)),
 			f = me._getFilename(path),
@@ -120,7 +120,7 @@ Ext.define('NextThought.view.content.Reader', {
 		if(!skipHistory){
 			me._appendHistory(book, path);
 		}
-		else if(skipHistory !== 'no-record') {
+		else if(skipHistory !== 'do-restore') {
 			me.fireEvent('unrecorded-history', book, path, ntiid);
 		}
 
@@ -137,7 +137,8 @@ Ext.define('NextThought.view.content.Reader', {
 				book: book,
 				basePath: b,
 				target: target,
-				callback: callback
+				callback: callback,
+				fireFinishRestore: skipHistory === 'do-restore'
 			},
 			success: me._setReaderContent,
 			callback: function(req,success,res){
@@ -178,7 +179,9 @@ Ext.define('NextThought.view.content.Reader', {
 
 			me.bufferedDelayedRelayout();
 			me.fireEvent('finished-navigation');
-			console.groupEnd();
+			if(s.fireFinishRestore) {
+				me.fireEvent('finished-restore');
+			}
 		}
 
 		me.items.get(0).update('<div id="NTIContent">'+c+'</div>');
@@ -189,8 +192,9 @@ Ext.define('NextThought.view.content.Reader', {
 		me.el.select('#NTIContent .navigation').remove();
 		me.el.select('#NTIContent .breadcrumbs').remove();
 		me.el.select('#NTIContent a[href]').on(
-			'click', me._onClick, me,
-			{book: s.book, scope:me, stopEvent:true});
+			'click', me._onClick, me, {
+				book: s.book, scope: me, stopEvent: true
+			});
 
 		containerId = me.getContainerId();
 
@@ -302,7 +306,7 @@ Ext.define('NextThought.view.content.Reader', {
 
 		var b = Library.getTitle(state.reader.index);
 		if(b){
-			this.setActive(b, state.reader.page, 'no-record');
+			this.setActive(b, state.reader.page, 'do-restore');
 		}
 		else{
 			console.error(state.reader, 'The restored state object points to a resource that is no longer available');

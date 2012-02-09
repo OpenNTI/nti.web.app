@@ -26,16 +26,15 @@ Ext.define('NextThought.controller.Session', {
 			var win = null;
 
 			function success(){
-				if(win){
-					win.close();
-				}
+				if(win){ win.close(); }
+
 				app.fireEvent('session-ready');
 				console.groupEnd();
 				NextThought.controller.Application.launch();
 			}
 
 			function showLogin(){
-				win = Ext.create('NextThought.view.windows.LoginWindow',{callback: success});
+				win = Ext.widget('loginwindow',{callback: success});
 			}
 
 			if (Ext.util.Cookies.get(COOKIE)) {

@@ -9,6 +9,8 @@ Ext.define('NextThought.controller.Application', {
 	refs: [{ ref: 'viewport', selector: 'master-view' }],
 
 	statics: {
+		launchToken: {},
+
 		launch: function(){
 			console.groupCollapsed('Launch');
 
@@ -21,7 +23,12 @@ Ext.define('NextThought.controller.Application', {
 	},
 
 	init: function() {
-	   Library.on('loaded', this.restore, this);
+		this.application.registerInitializeTask(this.self.launchToken);
+
+		Library.on('loaded', this.restore, this);
+		this.application.on('finished-loading', function(){
+			console.groupEnd();
+		});
 	},
 
 	restore: function(){
@@ -33,7 +40,7 @@ Ext.define('NextThought.controller.Application', {
 			Ext.getCmp('home').activate();
 		}
 
-		console.groupEnd();
+		this.application.finishInitializeTask(this.self.launchToken);
 		NextThought.isInitialised = true;
 	}
 });

@@ -309,10 +309,9 @@ Ext.data.Types.COLLECTIONITEM = {
 Ext.data.Types.USERLIST = {
 	type: 'UserList',
 	convert: function(v,record) {
+		var a = arguments,
+			u = [];
 		try {
-			var a = arguments,
-				u = [];
-
 			if(v) {
 				Ext.each(v, function(o){
 					var p =

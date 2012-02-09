@@ -183,6 +183,21 @@ Ext.define('NextThought.util.Globals',
 
 		});
 
+		Ext.apply(Ext.app.Application.prototype,{
+
+			registerInitializeTask: function(task) {
+				this.initTasks = this.initTasks || [];
+				this.initTasks.push(task);
+			},
+
+			finishInitializeTask: function(task){
+				Ext.Array.remove(this.initTasks,task);
+				if(!this.initTasks.length) {
+					this.registerInitializeTask = this.finishInitializeTask = Ext.emptyFn;
+					this.fireEvent('finished-loading');
+				}
+			}
+		});
 
 		Ext.Ajax.cors = true;
 		Ext.Ajax.disableCaching = false;
@@ -237,24 +252,26 @@ Ext.define('NextThought.util.Globals',
 
 
 	ensureConsole: function(){
-		var dev = _AppConfig.dev,
-			console = window.console;
-		if(!console){
-			console = {log: function(){}};
-			window.console = console;
-		}
-		if(!console.debug){
-			console.debug = Ext.Function.alias(console, 'log');
-		}
-		if(!console.info){
-			console.info = Ext.Function.alias(console, 'log');
-		}
-		if(!console.warn){
-			console.warn = Ext.Function.alias(console, 'log');
-		}
-		if(!console.error){
-			console.error = Ext.Function.alias(console, 'log');
-		}
+		var log;
+
+		Ext.applyIf(window,{
+			console:{
+				log: function(){}
+			}
+		});
+
+		log = Ext.Function.alias(console, 'log');
+
+		Ext.applyIf(window.console,{
+			debug: log,
+			info: log,
+			warn: log,
+			error: log,
+			group: Ext.emptyFn,
+			groupCollapsed: Ext.emptyFn,
+			groupEnd: Ext.emptyFn
+		});
+
 	},
 
 
@@ -348,5 +365,8 @@ Ext.define('NextThought.util.Globals',
 function(){
 	document.head = document.head || document.getElementsByTagName('head')[0];
 	window.Globals = this;
+
+	this.applyHooks();
+
 	window.guidGenerator = this.guidGenerator;
 });

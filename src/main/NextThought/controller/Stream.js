@@ -63,8 +63,13 @@ Ext.define('NextThought.controller.Stream', {
 	},
 
 	onSessionReady: function(){
-		var s = this.getStreamStore(),
-			ps = Ext.getStore('Page');
+		var app = this.application,
+			s = this.getStreamStore(),
+			ps = Ext.getStore('Page'),
+			token = {};
+
+		app.registerInitializeTask(token);
+		s.on('load', function(s){ app.finishInitializeTask(token); }, this, {single: true});
 
 		function load() {
 			s.getProxy().url = ps.getById('tag:nextthought.com,2011-10:Root').getLink(RECURSIVE_STREAM);

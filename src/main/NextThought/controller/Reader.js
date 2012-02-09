@@ -75,7 +75,13 @@ Ext.define('NextThought.controller.Reader', {
 	},
 
 	onSessionReady: function(){
-		this.getPageStore().load();
+		var app = this.application,
+			store = this.getPageStore(),
+			token = {};
+
+		app.registerInitializeTask(token);
+		store.on('load', function(s){ app.finishInitializeTask(token); }, this, {single: true});
+		store.load();
 	},
 
 	onAnnotationsLoad: function(containerId, callback) {

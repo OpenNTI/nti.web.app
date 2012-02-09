@@ -93,7 +93,14 @@ Ext.define('NextThought.controller.State', {
 			return;
 		}
 		this.restoringState = true;
-		var replaceState = false, c, key, stateScoped;
+		var app = this.application,
+			replaceState = false, c, key, stateScoped;
+
+		function fin(cmp){
+			var token = {};
+			app.registerInitializeTask(token);
+			cmp.on('finished-restore',function(){ app.finishInitializeTask(token); },this,{ single: true });
+		}
 
 		if(stateObject === PREVIOUS_STATE){
 			replaceState = true;
@@ -113,6 +120,7 @@ Ext.define('NextThought.controller.State', {
 					try{
 						stateScoped = {};
 						this._currentState[key] = stateScoped[key] = stateObject[key];
+						fin(c);
 						c.restore(stateScoped);
 					}
 					catch(e){

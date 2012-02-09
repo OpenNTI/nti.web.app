@@ -120,8 +120,6 @@ Ext.application({
 
 		_AppConfig.userObject = Ext.create('NextThought.model.User', mockUser, _AppConfig.username, mockUser);
 
-		Globals.applyHooks();
-
 		//include the tests in the test.html head
 		jasmine.getEnv().addReporter(new jasmine.TrivialReporter());
 		jasmine.getEnv().execute();
