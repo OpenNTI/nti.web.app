@@ -5,7 +5,7 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 		var me = this,
 			d = Ext.query('.document-nibs',container);
 
-		Ext.apply(me, {
+		Ext.applyIf(me, {
 			_div: d.length>0? d[0] : me.createElement('div',container,'document-nibs unselectable'),
 			_img: null,
 			_cnt: container,
@@ -15,6 +15,7 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 			_isMine: record.isModifiable(),
 			_isVisible: record.phantom || me.testFilter(component._filter),
 
+			isSingleAction: false,
 			_renderPriority: -1,
 
 			requestRender: Ext.Function.createDelayed(me.requestRender, 10, me)
@@ -225,7 +226,12 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 		}
 		
 		//single annotation
-		this.getMenu().showBy(Ext.get(this._img), 'bl');
+		menu = this.getMenu();
+		if(this.isSingleAction){
+			menu.items.first().handler.call(menu);
+			return;
+		}
+		menu.showBy(Ext.get(this._img), 'bl');
 	},
 	
 	_menuItemHook: Ext.emptyFn,

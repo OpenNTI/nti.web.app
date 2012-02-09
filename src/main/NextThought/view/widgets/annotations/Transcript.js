@@ -9,7 +9,8 @@ Ext.define( 'NextThought.view.widgets.annotations.Transcript', {
 			id: IdCache.getComponentId(record.getId()),
 			_anchorNode : null,
 			_renderPriority: 0,
-			_win: null
+			_win: null,
+			isSingleAction: true
 		});
 
 
