@@ -71,7 +71,7 @@ Ext.define('NextThought.controller.Annotations', {
 
 
 	define: function(term){
-		var url = _AppConfig.server.host + '/dictionary/' + encodeURIComponent(term);
+		var url = $AppConfig.server.host + '/dictionary/' + encodeURIComponent(term);
 
 		if(this.definition){
 			this.definition.close();
@@ -130,8 +130,8 @@ Ext.define('NextThought.controller.Annotations', {
 	},
 
 	onNoteAction: function(action, note, event){
-		var r = note._owner,
-			a = note._annotation,
+		var r = note.owner,
+			a = note.annotation,
 			rec = a.getRecord();
 
 		if(/delete/i.test(action)){

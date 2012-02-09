@@ -5,15 +5,15 @@ Ext.define('NextThought.view.widgets.annotations.SelectionHighlight', {
 	constructor: function(selections, container, component){
 		this.callParent();
 		Ext.apply(this, {
-			_sels: selections || [],
-			_canvas: null
+			selections: selections || [],
+			canvas: null
 		});
 
 		var me = this;
 
-		me._cnt = container;
-		me._color = 'FFFF00';
-		me._canvas =  me.createElement('canvas',container,'search-highlight-object unselectable','position: absolute; pointer-events: none;');
+		me.container = container;
+		me.color = 'FFFF00';
+		me.canvas =  me.createElement('canvas',container,'search-highlight-object unselectable','position: absolute; pointer-events: none;');
 		me.render = Ext.Function.createBuffered(me.render,100,me,[true]);
 		component.on('resize', me.onResize, me);
 		me.onResize();
@@ -21,38 +21,38 @@ Ext.define('NextThought.view.widgets.annotations.SelectionHighlight', {
 	},
 
 	cleanup: function(){
-		Ext.get(this._canvas).remove();
-		delete this._sels;
+		Ext.get(this.canvas).remove();
+		delete this.selections;
 	},
 
 	onResize : function(){
-		var c = Ext.get(this._canvas),
-			cont = Ext.get(this._cnt),
+		var c = Ext.get(this.canvas),
+			cont = Ext.get(this.container),
 			pos = cont.getXY(),
 			size = cont.getSize();
 		c.moveTo(pos[0], pos[1]);
 		c.setSize(size.width, size.height);
-		this._canvas.width = size.width;
-		this._canvas.height = size.height;
+		this.canvas.width = size.width;
+		this.canvas.height = size.height;
 		this.render();
 	},
 
 	render: function(){
-		var w = this._canvas.width,
+		var w = this.canvas.width,
 			c, canvasXY, ctx;
 
-		if(!this._sels){
+		if(!this.selections){
 			return;
 		}
 
-		this._canvas.width = w;
-		c = this._canvas;
+		this.canvas.width = w;
+		c = this.canvas;
 		canvasXY = Ext.get(c).getXY();
 		ctx = c.getContext("2d");
 
-		ctx.fillStyle = this._hexToRGBA(this._color);
+		ctx.fillStyle = this.hexToRGBA(this.color);
 
-		Ext.each(this._sels, function(sel){
+		Ext.each(this.selections, function(sel){
 
 			var s = sel.getClientRects(),
 				l = s.length,
@@ -66,7 +66,7 @@ Ext.define('NextThought.view.widgets.annotations.SelectionHighlight', {
 		}, this);
 	},
 
-	_hexToRGBA: function(hex) {
+	hexToRGBA: function(hex) {
 		if ('yellow' === hex) {
 			hex = 'FFFF00';
 		}

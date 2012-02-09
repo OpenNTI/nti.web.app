@@ -68,12 +68,12 @@ Ext.define('NextThought.controller.Groups', {
 		var app = this.application,
 			store = this.getFriendsListStore(),
 			mime = (new store.model()).mimeType,
-			coll = _AppConfig.service.getCollectionFor(mime,'FriendsLists'),
+			coll = $AppConfig.service.getCollectionFor(mime,'FriendsLists'),
 			token = {};
 
 		app.registerInitializeTask(token);
 		store.on('load', function(s){ app.finishInitializeTask(token); }, this, {single: true});
-		store.proxy.url = _AppConfig.server.host+coll.href;
+		store.proxy.url = $AppConfig.server.host+coll.href;
 		store.load();
 	},
 
@@ -86,7 +86,7 @@ Ext.define('NextThought.controller.Groups', {
 	groupEditorButtonClicked: function(btn){
 		var win = btn.up('window'),
 			frm = win.down('form'),
-			str = win._store,
+			str = win.store,
 			rec = win.record,
 			names = [],
 			values, n;

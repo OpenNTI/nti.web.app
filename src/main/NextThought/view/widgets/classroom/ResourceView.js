@@ -65,7 +65,7 @@ Ext.define('NextThought.view.widgets.classroom.ResourceView', {
 
 		getLink: function(ref){
 			if(!(/^http:/i).test(ref)){
-				return _AppConfig.server.host + ref;
+				return $AppConfig.server.host + ref;
 			}
 			return ref;
 		}
@@ -163,7 +163,7 @@ Ext.define('NextThought.view.widgets.classroom.ResourceView', {
 
 		var me = this,
 			id = this.record.getId(),
-			href = _AppConfig.server.host + this.record.get('href');
+			href = $AppConfig.server.host + this.record.get('href');
 
 		this.record.self.load(id, {url:href, callback:function(r, o){
 			if (o.success) {
@@ -211,7 +211,7 @@ Ext.define('NextThought.view.widgets.classroom.ResourceView', {
 			r = this.getRecord(Ext.fly(dom).up(this.itemSelector, this.getEl()));
 
 		Ext.Ajax.request({
-			url: _AppConfig.server.host + r.get('href'),
+			url: $AppConfig.server.host + r.get('href'),
 			method: 'DELETE',
 			callback: function(req,success){
 				if(success){
@@ -266,7 +266,7 @@ Ext.define('NextThought.view.widgets.classroom.ResourceView', {
 			file = files[i];
 
 			UploadUtils.postFile( file,
-					_AppConfig.server.host+this.postURL,
+					$AppConfig.server.host+this.postURL,
 					this.onProgress,
 					this.onFinish,
 					this);

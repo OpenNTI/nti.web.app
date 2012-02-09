@@ -9,8 +9,8 @@ Ext.define('NextThought.view.widgets.PeopleList', {
 	border: false,
 	defaults: {border: false},
 	items:[{html:'People:', cls: 'sidebar-header'},{cls: 'sidebar-content'}],
-	_filter: {},
-	_contributors: {},
+	filter: {},
+	contributors: {},
 	
 	constructor: function(){
 		this.callParent(arguments);
@@ -26,12 +26,12 @@ Ext.define('NextThought.view.widgets.PeopleList', {
 	},
 	
 	setContributors: function(contributors){
-		this._contributors = contributors;
+		this.contributors = contributors;
 		this.updateList();
 	},
 	
 	applyFilter: function(filter){
-		this._filter = filter;
+		this.filter = filter;
 		this.updateList();
 	},
 
@@ -39,7 +39,7 @@ Ext.define('NextThought.view.widgets.PeopleList', {
 		var k, c = 0,
 			me = this,
 			p = me.items.get(1),
-			f = me._filter;
+			f = me.filter;
 
 		function userLoaded(users){
 			var f = users[0],
@@ -53,8 +53,8 @@ Ext.define('NextThought.view.widgets.PeopleList', {
 
 		p.removeAll();
 
-		for(k in me._contributors){
-			if(me._contributors.hasOwnProperty(k)) {
+		for(k in me.contributors){
+			if(me.contributors.hasOwnProperty(k)) {
 				if(c>=10){
 					p.add({xtype: 'button', text:'More'});
 					break;

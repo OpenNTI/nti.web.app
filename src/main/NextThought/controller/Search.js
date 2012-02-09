@@ -53,7 +53,7 @@ Ext.define('NextThought.controller.Search', {
 
 	resolveTopContainer: function resolve(containerId, success, failure, oid){
 
-		var service = _AppConfig.service,
+		var service = $AppConfig.service,
 			bookInfo = Library.findLocation(containerId);
 
 		oid = oid || null;

@@ -154,7 +154,7 @@ Ext.define('NextThought.view.form.AccountForm', {
 	afterRender: function(){
 		this.callParent(arguments);
 		this.down('component[avatar]').el.dom.src = this.account.get('avatarURL').replace(/s=\d+/i, 's=128');
-		this.down('component[changePassword]').el.on('click',this._revealPassword,this);
+		this.down('component[changePassword]').el.on('click',this.revealPassword,this);
 
 		this.setFieldValue('realname');
 		this.setFieldValue('alias');
@@ -168,7 +168,7 @@ Ext.define('NextThought.view.form.AccountForm', {
 	},
 
 
-	 _revealPassword: function(e){
+	 revealPassword: function(e){
 		 e.preventDefault();
 
 		 this.down('component[changePassword]').hide();

@@ -54,7 +54,7 @@ Ext.define('NextThought.view.widgets.chat.OccupantsList', {
 						});
 					}
 
-					if (!u || u.getId() !== _AppConfig.userObject.getId()){
+					if (!u || u.getId() !== $AppConfig.userObject.getId()){
 						numberOccupants++;
 					}
 

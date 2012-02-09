@@ -9,20 +9,20 @@ Ext.define('NextThought.proxy.UserSearch', {
 	constructor: function(config) {
 		Ext.copyTo(this.reader, config, 'model');
 		this.callParent(arguments);
-		this.on('exception', this._exception, this);
+		this.on('exception', this.exception, this);
 	},
 
 	buildUrl: function(request){
 		var me		= this,
 			qs		= request.params.query.split(','),
 			q		= Ext.String.trim(qs[qs.length-1]);
-		request.url = _AppConfig.service.getUserSearchURL(q);
+		request.url = $AppConfig.service.getUserSearchURL(q);
 		request.params = undefined;
 		me.reader.hasContainerId = true;
 		return this.callParent(arguments);
 	},
 
-	_exception: function(proxy, resp, operation) {
+	exception: function(proxy, resp, operation) {
 		try{
 			Ext.callback(operation.failed, operation.scope, [operation.records, operation]);
 		}

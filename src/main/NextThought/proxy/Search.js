@@ -11,7 +11,7 @@ Ext.define('NextThought.proxy.Search', {
 	constructor: function(config) {
 		Ext.copyTo(this.reader, config, 'model');
 		this.callParent(arguments);
-		this.on('exception', this._exception, this);
+		this.on('exception', this.exception, this);
 	},
 
 	buildUrl: function(request){
@@ -22,7 +22,7 @@ Ext.define('NextThought.proxy.Search', {
 		return this.callParent(arguments);
 	},
 
-	_exception: function(proxy, resp, operation) {
+	exception: function(proxy, resp, operation) {
 		try{
 			Ext.callback(operation.failed, operation.scope, [operation.records, operation]);
 		}

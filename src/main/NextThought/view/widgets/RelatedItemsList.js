@@ -9,7 +9,7 @@ Ext.define('NextThought.view.widgets.RelatedItemsList', {
 	defaults: {border: false, defaults: {border: false}},
 	items:[{html:'Related Items:', cls: 'sidebar-header'},{cls: 'sidebar-content'}],
 
-	_filter: {},
+	filter: {},
 	
 	initComponent: function(){
 		this.addEvents('navigate');
@@ -37,7 +37,7 @@ Ext.define('NextThought.view.widgets.RelatedItemsList', {
 				},
 				icon = {
 					xtype: 'box',
-					autoEl: {tag: 'img', src: _AppConfig.server.host+m.icon},
+					autoEl: {tag: 'img', src: $AppConfig.server.host+m.icon},
 					listeners: listeners
 				};
 
@@ -76,7 +76,7 @@ Ext.define('NextThought.view.widgets.RelatedItemsList', {
 			Ext.create('widget.video-window', {
 				title: m.label,
 				src:[{
-					src: _AppConfig.server.host+m.book.get('root')+m.href,
+					src: $AppConfig.server.host+m.book.get('root')+m.href,
 					type: 'video/mp4'
 				}]
 			}).show();
@@ -88,7 +88,7 @@ Ext.define('NextThought.view.widgets.RelatedItemsList', {
 	},
 	
 	applyFilter: function(filter){
-		this._filter = filter;
+		this.filter = filter;
 	},
 	
 	

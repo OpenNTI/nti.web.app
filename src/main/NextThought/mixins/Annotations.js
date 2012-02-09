@@ -19,9 +19,9 @@ Ext.define('NextThought.mixins.Annotations', {
 
 	initAnnotations: function(){
 		Ext.apply(this,{
-			_annotations: {},
-			_filter: null,
-			_searchAnnotations: null
+			annotations: {},
+			filter: null,
+			searchAnnotations: null
 		});
 
 		if(!this.getDocumentEl) {
@@ -48,51 +48,51 @@ Ext.define('NextThought.mixins.Annotations', {
 
 	applyFilter: function(newFilter){
 		// console.debug('applyFilter:', newFilter);
-		var _a = this._annotations, a;
+		var $a = this.annotations, a;
 
-		this._filter = newFilter;
-		for(a in _a) {
-			if(_a.hasOwnProperty(a) && _a[a]) {
+		this.filter = newFilter;
+		for(a in $a) {
+			if($a.hasOwnProperty(a) && $a[a]) {
 				try {
-					_a[a].updateFilterState(this._filter);
+					$a[a].updateFilterState(this.filter);
 				}
-				catch(e) { console.error('Annotation Filter Error: ', _a, a, newFilter); }
+				catch(e) { console.error('Annotation Filter Error: ', $a, a, newFilter); }
 			}
 		}
 	},
 
 
 	showRanges: function(ranges) {
-		this._searchAnnotations = Ext.create('annotations.SelectionHighlight', ranges,
+		this.searchAnnotations = Ext.create('annotations.SelectionHighlight', ranges,
 				this.items.get(0).el.dom.firstChild, this);
 	},
 
 
 	clearSearchRanges: function() {
-		if (!this._searchAnnotations) {
+		if (!this.searchAnnotations) {
 			return;
 		}
 
-		this._searchAnnotations.cleanup();
-		this._searchAnnotations = null;
+		this.searchAnnotations.cleanup();
+		this.searchAnnotations = null;
 	},
 
 
 	removeAnnotation: function(oid) {
-		var v = this._annotations[oid];
+		var v = this.annotations[oid];
 		if (v) {
 			v.cleanup();
-			this._annotations[oid] = undefined;
-			delete this._annotations[oid];
+			this.annotations[oid] = undefined;
+			delete this.annotations[oid];
 		}
 	},
 
 
 	clearAnnotations: function(){
 		var v, oid;
-		for(oid in this._annotations){
-			if(this._annotations.hasOwnProperty(oid)) {
-				v = this._annotations[oid];
+		for(oid in this.annotations){
+			if(this.annotations.hasOwnProperty(oid)) {
+				v = this.annotations[oid];
 				if (!v) {
 					continue;
 				}
@@ -100,7 +100,7 @@ Ext.define('NextThought.mixins.Annotations', {
 			}
 		}
 
-		this._annotations = {};
+		this.annotations = {};
 		this.clearSearchRanges();
 	},
 
@@ -111,7 +111,7 @@ Ext.define('NextThought.mixins.Annotations', {
 			return false;
 		}
 
-		return !!this._annotations[oid];
+		return !!this.annotations[oid];
 	},
 
 
@@ -130,13 +130,13 @@ Ext.define('NextThought.mixins.Annotations', {
 
 		w = this.widgetBuilder.Highlight.call(this,highlight,range);
 
-		highlight.set('ContainerId', this._containerId);
+		highlight.set('ContainerId', this.containerId);
 
 		menu = w.getMenu();
 		menu.on('hide', function(){
 				if(!w.isSaving){
 					w.cleanup();
-					delete this._annotations[w.tempID]; //remove the key from the object
+					delete this.annotations[w.tempID]; //remove the key from the object
 				}
 			},
 			this);
@@ -147,7 +147,7 @@ Ext.define('NextThought.mixins.Annotations', {
 
 	createHighlightWidget: function(record, r){
 		var range = r || AnnotationUtils.buildRangeFromRecord(record),
-			oid = record.get('NTIID'),
+			oid = record.getId(),
 			w;
 
 		if (!range) {
@@ -155,7 +155,7 @@ Ext.define('NextThought.mixins.Annotations', {
 		}
 
 		if (this.annotationExists(record)) {
-			this._annotations[record.get('NTIID')].getRecord().fireEvent('updated',record);
+			this.annotations[record.getId()].getRecord().fireEvent('updated',record);
 			return null;
 		}
 
@@ -165,6 +165,7 @@ Ext.define('NextThought.mixins.Annotations', {
 				range, record,
 				this.items.get(0).el.dom.firstChild,
 				this);
+
 		if( this.bufferedDelayedRelayout ) {
 			this.bufferedDelayedRelayout();
 		}
@@ -173,34 +174,35 @@ Ext.define('NextThought.mixins.Annotations', {
 			oid = 'Highlight-' + new Date().getTime();
 			w.tempID = oid;
 			record.on('updated',function(r){
-				this._annotations[r.get('NTIID')] = this._annotations[oid];
-				this._annotations[oid] = undefined;
-				delete this._annotations[oid];
+				this.annotations[r.get('NTIID')] = this.annotations[oid];
+				this.annotations[oid] = undefined;
+				delete this.annotations[oid];
 				delete w.tempID;
 			}, this);
 		}
 
-		this._annotations[oid] = w;
+		this.annotations[oid] = w;
 		return w;
 	},
 
 
 	createNoteWidget: function(record){
 		try{
-			if(!record._pruned && (record.get('inReplyTo') || record._parent)){
+			if(!record.pruned && (record.get('inReplyTo') || record.parent)){
 				return false;
 			}
 			else if (this.annotationExists(record)) {
-				this._annotations[record.get('NTIID')].getRecord().fireEvent('updated',record);
+				this.annotations[record.getId()].getRecord().fireEvent('updated',record);
 				return true;
 			}
 
-			this._annotations[record.get('NTIID')] =
+			this.annotations[record.getId()] =
 				Ext.create(
 					'NextThought.view.widgets.annotations.Note',
 					record,
 					this.items.get(0).el.dom.firstChild,
 					this);
+
 			if( this.bufferedDelayedRelayout ) {
 				this.bufferedDelayedRelayout();
 			}
@@ -213,13 +215,14 @@ Ext.define('NextThought.mixins.Annotations', {
 
 
 	createTranscriptSummaryWidget: function(record) {
-		if (record._parent) {return;}
-		this._annotations[record.get('NTIID')] =
+		if (record.parent) {return;}
+		this.annotations[record.getId()] =
 			Ext.create(
 				'NextThought.view.widgets.annotations.Transcript',
 				record,
 				this.items.get(0).el.dom.firstChild,
 				this);
+
 		if( this.bufferedDelayedRelayout ) {
 			this.bufferedDelayedRelayout();
 		}
@@ -241,18 +244,18 @@ Ext.define('NextThought.mixins.Annotations', {
 			cls, replyTo, builder, result;
 
 		console.log('onNotification', change, type);
-		if (!item || !this._containerId || this._containerId !== cid) {
+		if (!item || !this.containerId || this.containerId !== cid) {
 			return;
 		}
 
 		//if exists, update
-		if(this._annotations.hasOwnProperty(oid)) {
+		if(this.annotations.hasOwnProperty(oid)) {
 			if(delAction){
-				this._annotations[oid].cleanup();
-				delete this._annotations[oid];
+				this.annotations[oid].cleanup();
+				delete this.annotations[oid];
 			}
 			else {
-				this._annotations[oid].getRecord().fireEvent('updated',item);
+				this.annotations[oid].getRecord().fireEvent('updated',item);
 			}
 		}
 
@@ -260,11 +263,11 @@ Ext.define('NextThought.mixins.Annotations', {
 		else if (cmp) {
 			//delete it
 			if (delAction) {
-				cmp._annotation.cleanup();
+				cmp.annotation.cleanup();
 			}
 			//update it
 			else {
-				cmp._annotation.getRecord().fireEvent('updated',item);
+				cmp.annotation.getRecord().fireEvent('updated',item);
 			}
 
 		}
@@ -291,7 +294,7 @@ Ext.define('NextThought.mixins.Annotations', {
 
 
 	loadContentAnnotations: function(containerId, callback){
-		this._containerId = containerId;
+		this.containerId = containerId;
 		this.clearAnnotations();
 		this.fireEvent('annotations-load', containerId, callback);
 	},
@@ -305,7 +308,7 @@ Ext.define('NextThought.mixins.Annotations', {
 			items,
 			foundBins;
 
-		if (!this._containerId) {
+		if (!this.containerId) {
 			return;
 		}
 
@@ -395,7 +398,7 @@ Ext.define('NextThought.mixins.Annotations', {
 				p.children = p.children || [];
 				p.children.push(r);
 
-				r._parent = parent;
+				r.parent = parent;
 			}
 		});
 
@@ -403,7 +406,7 @@ Ext.define('NextThought.mixins.Annotations', {
 			var r = null,
 				f = function(o)
 					{
-						if( o && o.get && o.get('NTIID') === id ) {
+						if( o && o.get && o.getId() === id ) {
 							r = o;
 							return false;
 						}
@@ -431,7 +434,7 @@ Ext.define('NextThought.mixins.Annotations', {
 		}
 
 		function canPrune(o){
-			return o!==null && !o._parent && o.placeHolder && arePlaceHolders(o.children||[]);
+			return o!==null && !o.parent && o.placeHolder && arePlaceHolders(o.children||[]);
 		}
 
 		function needsPruning(){
@@ -450,8 +453,8 @@ Ext.define('NextThought.mixins.Annotations', {
 			}
 			delete tree[k];
 			Ext.each(o.children, function(c){
-				delete c._parent;
-				c._pruned = true;
+				delete c.parent;
+				c.pruned = true;
 			});
 		}
 

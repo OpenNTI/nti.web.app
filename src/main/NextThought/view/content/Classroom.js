@@ -27,7 +27,7 @@ Ext.define('NextThought.view.content.Classroom', {
 		this.callParent(arguments);
 
 		//table of behavious based on channel
-		this._channelMap = {
+		this.channelMap = {
 			'CONTENT': this.onContent,
 			'POLL': this.onPoll,
 			'META': this.onMeta,
@@ -149,7 +149,7 @@ Ext.define('NextThought.view.content.Classroom', {
 		//if this is from a script, pass it along to do something there...
 		this.onScriptMessage(msg);
 
-		return this._channelMap[channel].apply(this, arguments);
+		return this.channelMap[channel].apply(this, arguments);
 	},
 
 	onScriptMessage: function(msg) {

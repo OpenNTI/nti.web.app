@@ -12,14 +12,14 @@ Ext.define('NextThought.util.MD5',
 			S21=5, S22=9 , S23=14, S24=20,
 			S31=4, S32=11, S33=16, S34=23,
 			S41=6, S42=10, S43=15, S44=21,
-			FF = m._makeOp(function F(x,y,z) { return (x & y) | ((~x) & z); }),
-			GG = m._makeOp(function G(x,y,z) { return (x & z) | (y & (~z)); }),
-			HH = m._makeOp(function H(x,y,z) { return (x ^ y ^ z); }),
-			II = m._makeOp(function I(x,y,z) { return (y ^ (x | (~z))); });
+			FF = m.makeOp(function F(x,y,z) { return (x & y) | ((~x) & z); }),
+			GG = m.makeOp(function G(x,y,z) { return (x & z) | (y & (~z)); }),
+			HH = m.makeOp(function H(x,y,z) { return (x ^ y ^ z); }),
+			II = m.makeOp(function I(x,y,z) { return (y ^ (x | (~z))); });
 
-		string = this._utf8Encode(string);
+		string = this.utf8Encode(string);
 
-		x = this._convertToWordArray(string);
+		x = this.convertToWordArray(string);
 
 		for (k=0;k<x.length;k+=16) {
 			AA=a; BB=b; CC=c; DD=d;
@@ -87,36 +87,36 @@ Ext.define('NextThought.util.MD5',
 			d=II(d,a,b,c,x[k+11],S42,0xBD3AF235);
 			c=II(c,d,a,b,x[k+2], S43,0x2AD7D2BB);
 			b=II(b,c,d,a,x[k+9], S44,0xEB86D391);
-			a=this._addUnsigned(a,AA);
-			b=this._addUnsigned(b,BB);
-			c=this._addUnsigned(c,CC);
-			d=this._addUnsigned(d,DD);
+			a=this.addUnsigned(a,AA);
+			b=this.addUnsigned(b,BB);
+			c=this.addUnsigned(c,CC);
+			d=this.addUnsigned(d,DD);
 		}
 
-		temp = this._wordToHex(a) +
-				this._wordToHex(b) +
-				this._wordToHex(c) +
-				this._wordToHex(d);
+		temp = this.wordToHex(a) +
+				this.wordToHex(b) +
+				this.wordToHex(c) +
+				this.wordToHex(d);
 
 		return temp.toLowerCase();
 	},
 
 
-	_makeOp: function(op){
+	makeOp: function(op){
 		var m = this;
 		return function FF(a,b,c,d,x,s,ac) {
-			a = m._addUnsigned(a, m._addUnsigned(m._addUnsigned(op(b, c, d), x), ac));
-			return m._addUnsigned(m._rotateLeft(a, s), b);
+			a = m.addUnsigned(a, m.addUnsigned(m.addUnsigned(op(b, c, d), x), ac));
+			return m.addUnsigned(m.rotateLeft(a, s), b);
 		};
 	},
 
 
-	_rotateLeft: function(lValue, iShiftBits) {
+	rotateLeft: function(lValue, iShiftBits) {
 		return (lValue<<iShiftBits) | (lValue>>>(32-iShiftBits));
 	},
 	
 	
-	_addUnsigned: function(lX,lY) {
+	addUnsigned: function(lX,lY) {
 		var lX4,lY4,lX8,lY8,lResult;
 		lX8 = (lX & 0x80000000);
 		lY8 = (lY & 0x80000000);
@@ -138,7 +138,7 @@ Ext.define('NextThought.util.MD5',
 	},
 
 
-	_convertToWordArray: function(string) {
+	convertToWordArray: function(string) {
 		var lWordCount,
 			lMessageLength = string.length,
 			lNumberOfWords_temp1=lMessageLength + 8,
@@ -163,7 +163,7 @@ Ext.define('NextThought.util.MD5',
 	},
 
 
-	_wordToHex: function(lValue) {
+	wordToHex: function(lValue) {
 		var WordToHexValue="",WordToHexValue_temp="",lByte,lCount;
 		for (lCount = 0;lCount<=3;lCount++) {
 			lByte = (lValue>>>(lCount*8)) & 255;
@@ -174,7 +174,7 @@ Ext.define('NextThought.util.MD5',
 	},
 
 
-	_utf8Encode: function(string) {
+	utf8Encode: function(string) {
 		string = string.replace(/\r\n/g,"\n");
 		var utftext = "", n, c;
 

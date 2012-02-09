@@ -79,7 +79,7 @@ Ext.define('NextThought.proxy.Socket', {
 
 		var opts =  this.disconnectStats.reconfigure ?
 				{transports: ["xhr-polling"], 'force new connection':true} : undefined,
-			socket = io.connect(_AppConfig.server.host, opts),
+			socket = io.connect($AppConfig.server.host, opts),
 			k;
 
 		if(opts && this.isDebug){

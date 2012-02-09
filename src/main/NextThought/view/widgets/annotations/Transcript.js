@@ -7,9 +7,9 @@ Ext.define( 'NextThought.view.widgets.annotations.Transcript', {
 	constructor: function(record, container, component){
 		Ext.apply(this, {
 			id: IdCache.getComponentId(record.getId()),
-			_anchorNode : null,
-			_renderPriority: 0,
-			_win: null,
+			anchorNode : null,
+			renderPriority: 0,
+			win: null,
 			isSingleAction: true
 		});
 
@@ -17,14 +17,14 @@ Ext.define( 'NextThought.view.widgets.annotations.Transcript', {
 		this.callParent([record, container, component,
 			'resources/images/charms/note-white.png']);
 
-		this._anchorNode = Ext.get(Ext.query('#nticontent a[name]')[0]);
+		this.anchorNode = Ext.get(Ext.query('#nticontent a[name]')[0]);
 
 		Ext.ComponentManager.register(this);
 	},
 
 	getItemId: function(){return this.id; },
 	isXType: function(){return false;},
-	getEl: function(){return this._anchorNode;},
+	getEl: function(){return this.anchorNode;},
 
 	cleanup: function(){
 		Ext.ComponentManager.unregister(this);
@@ -32,10 +32,10 @@ Ext.define( 'NextThought.view.widgets.annotations.Transcript', {
 	},
 
 	attachRecord: function(record){
-		this._record = record;
+		this.record = record;
 	},
 
-	_buildMenu: function(){
+	buildMenu: function(){
 		var items = [];
 
 		items.push({
@@ -46,25 +46,17 @@ Ext.define( 'NextThought.view.widgets.annotations.Transcript', {
 		return Ext.create('Ext.menu.Menu',{items: items});
 	},
 
-	_createNoteContainer: function(id){
-		var i = 'note-container-'+id,
-			e = Ext.get(i),
-			n = e ? e.dom : this.createElement('div',this._cnt,'document-notes');
-		n.setAttribute('id',i);
-		return Ext.get(n);
-	},
-
 	getTitle: function(){
-		var d = Ext.Date.format(this._record.get('Last Modified'), 'M j, Y');
+		var d = Ext.Date.format(this.record.get('Last Modified'), 'M j, Y');
 
 		return  Ext.String.format('Chat Transcript | {0}',d);
 	},
 
 	openTranscript: function() {
-		if (this._win){this._win.close();}
+		if (this.win){this.win.close();}
 
 		var np, it,
-			win = this._win = Ext.create('Ext.window.Window', {
+			win = this.win = Ext.create('Ext.window.Window', {
 			title: this.getTitle(),
 			constrain: true,
 			autoScroll: true,
@@ -73,7 +65,7 @@ Ext.define( 'NextThought.view.widgets.annotations.Transcript', {
 			modal: true
 		});
 
-		np = Ext.widget('note-entry',{  _annotation: this, component: this._cmp });
+		np = Ext.widget('note-entry',{  annotation: this, component: this.ownerCmp });
 		np.failedToLoadTranscript = function(){
 			win.close();
 			alert('Could not load transcript');
@@ -86,18 +78,18 @@ Ext.define( 'NextThought.view.widgets.annotations.Transcript', {
 		};
 
 		win.on('destroy', function(){np.destroy();});
-		np.fireEvent('load-transcript', this._record, np);
+		np.fireEvent('load-transcript', this.record, np);
 	},
 
 	render: function(){
 		try{
 			var me= this,
-				p = Ext.get(me._cnt),
-				a = me._anchorNode;
+				p = Ext.get(me.container),
+				a = me.anchorNode;
 
 			//move the nib to the top-aligning corner of the note container
-			if (me._img){
-				Ext.get(me._img).moveTo(p.getLeft(), a.getTop());
+			if (me.img){
+				Ext.get(me.img).moveTo(p.getLeft(), a.getTop());
 			}
 		}
 		catch(e){

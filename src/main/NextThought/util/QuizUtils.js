@@ -32,7 +32,7 @@ Ext.define('NextThought.util.QuizUtils', {
 		submitAnswers: function(){
 			var me = this,
 				ntiid = Ext.query('meta[name=NTIID]')[0].getAttribute('content'),
-				url = _AppConfig.service.getQuizSubmitURL(ntiid),
+				url = $AppConfig.service.getQuizSubmitURL(ntiid),
 				problems,
 				data = {},
 				vp = VIEWPORT.getEl();

@@ -34,7 +34,7 @@ unparam=true	vars=false		white=false		widget=false	window=false
 
 POSIBLE_FLAGS
 
-LINT_OPTS='continue devel fragment sloppy unparam'
+LINT_OPTS='continue devel fragment sloppy unparam nomen'
 FILES=`find src/main -name \*.js | sort -u`
 ERRORS=false
 

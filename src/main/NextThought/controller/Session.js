@@ -59,7 +59,7 @@ Ext.define('NextThought.controller.Session', {
 			delete Ext.Ajax.username;
 			delete Ext.Ajax.password;
 
-			var domain = _AppConfig.server.domain;
+			var domain = $AppConfig.server.domain;
 
 			clearCookie(COOKIE, null);
 			clearCookie('auth_tkt',domain);
@@ -93,7 +93,7 @@ Ext.define('NextThought.controller.Session', {
 
 		attemptLogin: function(values, successCallback, failureCallback){
 			var m = this,
-				s = _AppConfig.server,
+				s = $AppConfig.server,
 				c = Ext.JSON.decode(Ext.util.Cookies.get(COOKIE)),
 				a = (!values) ? c.a
 					: Base64.basicAuthString( values.username, values.password );
@@ -117,7 +117,7 @@ Ext.define('NextThought.controller.Session', {
 							return;
 						}
 						try{
-							_AppConfig.service = Ext.create(
+							$AppConfig.service = Ext.create(
 									'NextThought.model.Service',
 									Ext.decode(r.responseText),
 									values.username);
@@ -143,7 +143,7 @@ Ext.define('NextThought.controller.Session', {
 
 		attemptLoginCallback: function(form,successCallback, failureCallback){
 			var me = this;
-			Ext.copyTo(_AppConfig, form, 'username');
+			Ext.copyTo($AppConfig, form, 'username');
 
 			me.setupAuth(form.username, form.password,!!form.remember);
 			Socket.setup(form.username, form.password);
@@ -151,7 +151,7 @@ Ext.define('NextThought.controller.Session', {
 			UserRepository.prefetchUser(form.username, function(users){
 				var user = users[0];
 				if(user){
-					_AppConfig.userObject = user;
+					$AppConfig.userObject = user;
 					successCallback.call(me);
 				}
 				else{
@@ -196,7 +196,7 @@ Ext.define('NextThought.controller.Session', {
 	},
 
 	handleLogout: function() {
-		var s = _AppConfig.server,
+		var s = $AppConfig.server,
 			me = this;
 
 		Socket.tearDownSocket();

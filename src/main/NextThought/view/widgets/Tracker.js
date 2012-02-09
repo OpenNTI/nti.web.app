@@ -15,41 +15,34 @@ Ext.define('NextThought.view.widgets.Tracker', {
 
 	constructor: function(cmp,container, body){
 		Ext.apply(this,{
+			locationProvider: Ext.getCmp('breadcrumb'),
+			parent: container,
+			ownerCmp: cmp,
+			body: body,
 			width: 45,
-//			_base: "",
-			_numberOfDots: 50,
-			_height: 0,
-//			_sectionHeights: [],
-			_diameter: 0,
-			_radius: 0,
-			_gap: 0,
-			_regions: [],
-			_offsetX: 0,
-			_offsetY: 0,
-			_cmp: cmp
+//			base: "",
+			numberOfDots: 50,
+			height: 0,
+//			sectionHeights: [],
+			diameter: 0,
+			radius: 0,
+			gap: 0,
+			regions: [],
+			offsetX: 0,
+			offsetY: 0,
+			canvas: (function(){
+				var c = document.createElement('canvas');
+				Ext.fly(c).set({ width: 45, height: 0, style: 'position: absolute; top: 0px; left: 0px;'});
+				container.appendChild(c);
+				return c;
+			}())
 		});
-
-
-		this._locationProvider = Ext.getCmp('breadcrumb');
-		this._parent = container;
-		this._body	 = body;
-		this._canvas = document.createElement('canvas');
-		this._canvas.setAttribute('width', this.width);
-		this._canvas.setAttribute('height', this._height);
-		this._canvas.setAttribute('style','position: absolute; top: 0px; left: 0px;');
-		container.appendChild(this._canvas);
 		
-		var c = Ext.get(this._canvas),
-//			e = Ext.get(container),
-			b = Ext.get(body),
+		var c = Ext.get(this.canvas),
 			h = this.hoverHandler;
 
-		b.on('scroll', h, this);
-		c.on('click', this.clickHandler,this);
-		c.on('mousemove', h, this);
-		b.on('mousemove', h, this);
-		b.on('mouseover', h, this);
-		b.on('mouseout', h, this);
+		c.on({ scope: this, click: this.clickHandler, mousemove: h });
+		Ext.fly(body).on({scope:this, scroll:h, mousemove:h, mouseover:h, mouseout:h});
 
 		//add tooltip
 		this.toolTip = Ext.create('Ext.tip.ToolTip', {
@@ -60,10 +53,10 @@ Ext.define('NextThought.view.widgets.Tracker', {
 			dismissDelay: 0
 		});
 
-		cmp.on('resize', this._onResize, this);
+		cmp.on('resize', this.onResize, this);
 		
-		this._locationProvider.on('change',this._onChangeLocation, this);
-		Ext.EventManager.onWindowResize(this._onResize, this);
+		this.locationProvider.on('change',this.onChangeLocation, this);
+		Ext.EventManager.onWindowResize(this.onResize, this);
 		return this;
 	},
 
@@ -72,41 +65,36 @@ Ext.define('NextThought.view.widgets.Tracker', {
 		this.toolTip.destroy();
 		delete this.toolTip;
 
-		var b = Ext.get(this._body),
-			c = Ext.get(this._canvas),
+		var b = Ext.get(this.body),
+			c = Ext.get(this.canvas),
 			h = this.hoverHandler;
 
-		delete this._body;
-		delete this._parent;
-		delete this._canvas;
+		delete this.body;
+		delete this.parent;
+		delete this.canvas;
 
-		c.un('click', this.clickHandler, this);
-		c.un('mousemove', h, this);
+		c.un({scope:this, click:this.clickHandler, mousemove:h});
+		b.un({scope:this, mousemove:h, mouseover:h, mouseout:h,scroll:h});
 
-		b.un('mousemove', h, this);
-		b.un('mouseover', h, this);
-		b.un('mouseout', h, this);
-		b.un('scroll', h, this);
+		this.ownerCmp.un('resize', this.onResize, this);
+		this.locationProvider.un('change',this.onChangeLocation, this);
+		Ext.EventManager.removeResizeListener(this.onResize, this);
 
-		this._cmp.un('resize', this._onResize, this);
-		this._locationProvider.un('change',this._onChangeLocation, this);
-		Ext.EventManager.removeResizeListener(this._onResize, this);
-
-		delete this._cmp;
-		delete this._locationProvider;
+		delete this.ownerCmp;
+		delete this.locationProvider;
 		c.remove();
 	},
 	
 	
-	_onResize : function(e){
-		this._offsetX = undefined;//reset
+	onResize : function(e){
+		this.offsetX = undefined;//reset
 		this.hoverHandler(e);
 	},
 
 
-	_onChangeLocation : function(loc){
+	onChangeLocation : function(loc){
 		try{
-			var c = this._canvas;
+			var c = this.canvas;
 			c.width = c.height = 0;
 			this.render(loc.toc, loc.location);
 		}
@@ -118,17 +106,17 @@ Ext.define('NextThought.view.widgets.Tracker', {
 	
 	scrollToPercent: function(toYPercent){
 		
-		var m = Ext.get(this._body).getHeight(),
-			//t = this._body.scrollTop,
-			h = this._body.scrollHeight-m;
+		var m = Ext.get(this.body).getHeight(),
+			//t = this.body.scrollTop,
+			h = this.body.scrollHeight-m;
 		
-		this._body.scrollTop = (h*toYPercent);
+		this.body.scrollTop = (h*toYPercent);
 	},
 	
 	
 	hoverHandler: function(e){
 		var region = this.getRegion(e),
-			current = this._locationProvider.getLocation();
+			current = this.locationProvider.getLocation();
 		this.render(
 			current.toc,
 			current.location,
@@ -153,9 +141,9 @@ Ext.define('NextThought.view.widgets.Tracker', {
 			return;
 		}
 
-		var current = this._locationProvider.getLocation(),
+		var current = this.locationProvider.getLocation(),
 			book = current.book,
-			host = _AppConfig.server.host,
+			host = $AppConfig.server.host,
 			root = book.get('root'),
 			bookIcon = book.get('icon'),
 			data = {
@@ -190,7 +178,7 @@ Ext.define('NextThought.view.widgets.Tracker', {
 	clickHandler: function(e){
 		var self = this,
 			region = this.getRegion(e),
-			current = this._locationProvider.getLocation(),
+			current = this.locationProvider.getLocation(),
 			book = current.book,
 			n, f = region ? region.first : null;
 
@@ -212,21 +200,21 @@ Ext.define('NextThought.view.widgets.Tracker', {
 	getRegion: function(e){
 		var i, c, r, x, y, region;
 
-		c = Ext.get(this._canvas);
-		this._offsetX = c.getLeft();
-		this._offsetY = c.getTop();
+		c = Ext.get(this.canvas);
+		this.offsetX = c.getLeft();
+		this.offsetY = c.getTop();
 
 		if(!e){
 			return null;
 		}
 
-		x = e.getX? e.getX()-this._offsetX : -1;
-		y = e.getY? e.getY()-this._offsetY : -1;
+		x = e.getX? e.getX()-this.offsetX : -1;
+		y = e.getY? e.getY()-this.offsetY : -1;
 
-		for( i = this._regions.length-1; i>=0; i--){
-			r = this._regions[i].rect;
+		for( i = this.regions.length-1; i>=0; i--){
+			r = this.regions[i].rect;
 			if(x>=r.x && x<=(r.x+r.w) && y>=r.y && y<=(r.y+r.h)){
-				region = this._regions[i];
+				region = this.regions[i];
 				break;
 			}
 		}
@@ -234,7 +222,7 @@ Ext.define('NextThought.view.widgets.Tracker', {
 	},
 	
 	
-	_sum: function(a,f){
+	sum: function(a,f){
 		var s=0,i=0,l=a.length;
 		if(f) { for(i;i<l;i++){ s+=a[i][f]; } }
 		else  { for(i;i<l;i++){ s+=a[i]; } }
@@ -244,23 +232,23 @@ Ext.define('NextThought.view.widgets.Tracker', {
 	
 
 	calculateSizes: function(current){
-		this._height = Ext.get(this._parent).getHeight(true);
+		this.height = Ext.get(this.parent).getHeight(true);
 
-		this._canvas.width = this.width;
-		this._canvas.height = this._height;
+		this.canvas.width = this.width;
+		this.canvas.height = this.height;
 	
 		var d,
 			guessedHeight,
 //			halfWidth = Math.ceil(this.width/2),
 			padding = 30,
 			info = this.getSectionCount(current),
-			sum = this._sum(info,'height'),
-			dots = this._numberOfDots,
+			sum = this.sum(info,'height'),
+			dots = this.numberOfDots,
 			dotv = sum/dots,
 			total = 0,
 			lines = info.length+1;//top and bottom lines
 			
-		this._sections = info;
+		this.sections = info;
 	
 		Ext.each(info, function(s,i){
 			var v = s.height/dotv;
@@ -269,24 +257,24 @@ Ext.define('NextThought.view.widgets.Tracker', {
 			total += v;
 		});
 
-		d = (this._height-padding)/(total+lines);
+		d = (this.height-padding)/(total+lines);
 
-		this._diameter = Math.ceil( d );
+		this.diameter = Math.ceil( d );
 
-		this._radius = this._diameter/2;
-		this._radius = this._radius < 4.5 ? 4.5 : this._radius;
+		this.radius = this.diameter/2;
+		this.radius = this.radius < 4.5 ? 4.5 : this.radius;
 
-		this._gap = Math.floor(this._radius/2);
-		this._gap = this._gap > 1 ? this._gap : 1;
+		this.gap = Math.floor(this.radius/2);
+		this.gap = this.gap > 1 ? this.gap : 1;
 		
-		this._radius -= this._gap;
-		this._diameter = this._radius * 2;
+		this.radius -= this.gap;
+		this.diameter = this.radius * 2;
 
-		guessedHeight = (total*(this._gap + this._diameter)) +
-						(lines*(this._gap + this._radius + 3));
+		guessedHeight = (total*(this.gap + this.diameter)) +
+						(lines*(this.gap + this.radius + 3));
 		
-		this._top = Math.floor(this._height/2)-Math.floor(guessedHeight/2);
-		this._top = this._top<5 ? 5 : this._top;
+		this.top = Math.floor(this.height/2)-Math.floor(guessedHeight/2);
+		this.top = this.top<5 ? 5 : this.top;
 	},
 	
 	
@@ -315,16 +303,16 @@ Ext.define('NextThought.view.widgets.Tracker', {
 		}
 		
 		if(!r.length){
-			r.push({height:this._numberOfDots});
+			r.push({height:this.numberOfDots});
 		}
 		return r;
 	},
 	
 	
 	calculateCurrentPosition: function(){
-		var m = Ext.get(this._body).getHeight(),
-			t = this._body.scrollTop,
-			h = this._body.scrollHeight-m,
+		var m = Ext.get(this.body).getHeight(),
+			t = this.body.scrollTop,
+			h = this.body.scrollHeight-m,
 			v = t/h;
 		return isNaN(v)? 0 : v>1 ? 1 : v;
 	},
@@ -338,17 +326,17 @@ Ext.define('NextThought.view.widgets.Tracker', {
 			return;
 		}
 		this.calculateSizes(current);
-		if(this._regions){
-			delete this._regions;
+		if(this.regions){
+			delete this.regions;
 		}
-		this._regions = [];//reset regions
+		this.regions = [];//reset regions
 		
 		var self = this,
-			ctx = this._canvas.getContext("2d"),
-			r = this._radius,
-			x = r*2 + this._gap,
-			g = r + this._gap,
-			y = this._top,
+			ctx = this.canvas.getContext("2d"),
+			r = this.radius,
+			x = r*2 + this.gap,
+			g = r + this.gap,
+			y = this.top,
 			pos = this.calculateCurrentPosition(),
 			normalColor = "rgba(127,127,127,.5)",
 			scrollColor = "rgba(0,0,245,.5)",
@@ -357,7 +345,7 @@ Ext.define('NextThought.view.widgets.Tracker', {
 		ctx.fillStyle = normalColor;
 		ctx.strokeStyle = normalColor;
 		
-		Ext.each(this._sections,function(s){
+		Ext.each(this.sections,function(s){
 			var v = s.height,
 				isCurentSection = current===s.node,
 				i = 0,
@@ -373,7 +361,7 @@ Ext.define('NextThought.view.widgets.Tracker', {
 
 				ctx.fillStyle = isHover ? hoverColor : isScroll ? scrollColor : normalColor;
 					
-				self._regions.push({
+				self.regions.push({
 					first: i===0,
 					rect: self.renderDotAt(ctx, x, y),
 					active: isCurentSection,
@@ -381,7 +369,7 @@ Ext.define('NextThought.view.widgets.Tracker', {
 					node: s.node
 				});
 
-				//console.log(self._regions[self._regions.length - 1].rect);
+				//console.log(self.regions[self.regions.length - 1].rect);
 			}
 			
 			y += (g+r);
@@ -394,7 +382,7 @@ Ext.define('NextThought.view.widgets.Tracker', {
 	
 	
 	clear: function(){
-		var c = this._canvas, w = 'width';
+		var c = this.canvas, w = 'width';
 		//reassign the same value to cause the canvas to clear and do it in a way that JSLint doesn't think you're crazy
 		c[w] = c.width;
 	},
@@ -403,7 +391,7 @@ Ext.define('NextThought.view.widgets.Tracker', {
 	renderLineAt: function(ctx, x, y){
 		ctx.beginPath();
 		ctx.moveTo(x, y);
-		ctx.lineTo(this._diameter*3, y);
+		ctx.lineTo(this.diameter*3, y);
 		ctx.closePath();
 		ctx.stroke();
 	},
@@ -411,9 +399,9 @@ Ext.define('NextThought.view.widgets.Tracker', {
 	renderDotAt: function(ctx, x, y){
 		var r = {
 			x: 0, 
-			y: y-this._radius-(this._gap/2), 
+			y: y-this.radius-(this.gap/2), 
 			w: this.width, 
-			h: this._diameter+(this._gap),
+			h: this.diameter+(this.gap),
 			cx: x,
 			cy: y
 		};
@@ -424,7 +412,7 @@ Ext.define('NextThought.view.widgets.Tracker', {
 		// ctx.fill();
 		
 		ctx.beginPath();
-		ctx.arc((this._diameter*3)-this._radius-this._gap, y, this._radius, 0, Math.PI*2, true);
+		ctx.arc((this.diameter*3)-this.radius-this.gap, y, this.radius, 0, Math.PI*2, true);
 		ctx.closePath();
 		ctx.fill();
 		

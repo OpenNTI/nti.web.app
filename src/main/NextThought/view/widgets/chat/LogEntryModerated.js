@@ -61,11 +61,11 @@ Ext.define('NextThought.view.widgets.chat.LogEntryModerated', {
 		this.callParent(arguments);
 		this.update(this.message);
 
-		this._add = this.add;
+		this.$add = this.add;
 
 		//work around a mixin issue... we're mixing in a class that wasn't written as a mixin...
 		this.add = function(){
-			var r = this._add.apply(this,arguments);
+			var r = this.$add.apply(this,arguments);
 				reply = this.down('chat-reply-to');
 			//console.debug('r', r);
 

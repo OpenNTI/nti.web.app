@@ -25,8 +25,8 @@ Ext.define('NextThought.view.form.fields.ShareWithField', {
 	initComponent: function(){
 		this.callParent(arguments);
 		this.xtypes.push('field');
-		this._selections = [];
-		this._inputField = this.add({
+		this.selections = [];
+		this.inputField = this.add({
 			xtype: 'usersearchinput',
 			emptyText: this.emptyText,
 			allowBlank: true,
@@ -37,10 +37,10 @@ Ext.define('NextThought.view.form.fields.ShareWithField', {
 		this.setReadOnly(!!this.readOnly);
 
 		this.initField();
-		var b = this._inputField;
-		b.on('select', this._select, this);
-		b.on('focus', this._focus, this);
-		b.on('blur', this._blur, this);
+		var b = this.inputField;
+		b.on('select', this.select, this);
+		b.on('focus', this.doFocus, this);
+		b.on('blur', this.doBlur, this);
 	},
 
 
@@ -48,10 +48,10 @@ Ext.define('NextThought.view.form.fields.ShareWithField', {
 	setReadOnly: function(readOnly){
 		this.readOnly = readOnly;
 		if(readOnly) {
-			this._inputField.hide();
+			this.inputField.hide();
 		}
 		else {
-			this._inputField.show();
+			this.inputField.show();
 		}
 
 		this.items.get(0).items.each(function(token){
@@ -88,31 +88,31 @@ Ext.define('NextThought.view.form.fields.ShareWithField', {
 	},
 
 	isValid: function() {
-		return this.allowBlank || this._selections.length>0;
+		return this.allowBlank || this.selections.length>0;
 	},
 
 	getValue: function(){
 		var m = this, r = [];
-		Ext.each(m._selections, function(u){
+		Ext.each(m.selections, function(u){
 			r.push(u.get('Username'));
 		});
 		return r;
 	},
 
-	_blur: function(/*ctrl*/) {},
+	doBlur: function(/*ctrl*/) {},
 
-	_focus: function(/*ctrl*/) {},
+	doFocus: function(/*ctrl*/) {},
 
-	_select: function(ctrl, selected) {
+	select: function(ctrl, selected) {
 		ctrl.collapse();
 		ctrl.setValue('');
 		this.addSelection(selected[0]);
 	},
 
-	__contains: function(model){
+	containsToken: function(model){
 		var id = model.getId(), found = false;
 		Ext.each(
-			this._selections,
+			this.selections,
 			function(o){
 				return !(found=(o.getId()===id));
 			},
@@ -121,13 +121,13 @@ Ext.define('NextThought.view.form.fields.ShareWithField', {
 		return found;
 	},
 
-	__remove: function(token, model){
+	removeToken: function(token, model){
 		token.destroy();
 
 		var id = model.getId(),
 			s = [];
 
-		Ext.each(this._selections, function(o){
+		Ext.each(this.selections, function(o){
 			if(o.getId()===id) {
 				return;
 			}
@@ -135,25 +135,25 @@ Ext.define('NextThought.view.form.fields.ShareWithField', {
 			s.push(o);
 		});
 
-		this._selections = s;
+		this.selections = s;
 		this.doComponentLayout();
 	},
 
-	_addToken: function(model){
+	addToken: function(model){
 		var c = this.items.get(0),
 			text = model.get('realname') || model.get('Username');
 
 		c.add({ xtype: 'token', readOnly: this.readOnly, model: model, text: text,
-				listeners: {scope: this, click: this.__remove}});
+				listeners: {scope: this, click: this.removeToken}});
 	},
 
 	addSelection: function(user){
 		var m = this;
-		if(m.__contains(user)) {
+		if(m.containsToken(user)) {
 			return;
 		}
 
-		m._selections.push(user);
-		m._addToken(user);
+		m.selections.push(user);
+		m.addToken(user);
 	}
 });

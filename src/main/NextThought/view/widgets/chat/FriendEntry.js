@@ -47,31 +47,31 @@ Ext.define('NextThought.view.widgets.chat.FriendEntry', {
 			});
 		}
 
-		this._setupMenu();
+		this.setupMenu();
 	},
 
-	_setupMenu: function() {
+	setupMenu: function() {
 		//Only do this the entry is not me
-		if (_AppConfig.userObject.getId() === this.user.getId() || this.noMenu){return;}
+		if ($AppConfig.userObject.getId() === this.user.getId() || this.noMenu){return;}
 
-		this._menu = Ext.create('Ext.menu.Menu', {items: this._buildMenu()});
+		this.menu = Ext.create('Ext.menu.Menu', {items: this.buildMenu()});
 
-		this._menu.on({
-			mouseleave: this._hideMenu,
-			mouseover: this._showMenu,
+		this.menu.on({
+			mouseleave: this.hideMenu,
+			mouseover: this.showMenu,
 			scope: this
 		});
 
 		this.el.on({
-			mouseleave: this._hideMenu,
-			mousemove: this._showMenu,
-			mouseover: this._showMenu,
-			click: this._showMenu,
+			mouseleave: this.hideMenu,
+			mousemove: this.showMenu,
+			mouseover: this.showMenu,
+			click: this.showMenu,
 			scope: this
 		});
 	},
 
-	_buildMenu: function(){
+	buildMenu: function(){
 		var m =  [];
 
 		if (this.isModerator) {
@@ -79,7 +79,7 @@ Ext.define('NextThought.view.widgets.chat.FriendEntry', {
 				text: 'Shadow',
 				iconCls: 'shadow-menu',
 				scope: this,
-				handler: this._shadow
+				handler: this.shadow
 			});
 		}
 
@@ -87,17 +87,17 @@ Ext.define('NextThought.view.widgets.chat.FriendEntry', {
 				text: 'Chat',
 				iconCls: 'chat-menu',
 				scope: this,
-				handler: this._chat
+				handler: this.chat
 			});
 
 		return m;
 	},
 
-	_chat: function(){
+	chat: function(){
 		this.fireEvent('click', this.user);
 	},
 
-	_shadow: function(){
+	shadow: function(){
 		this.fireEvent('shadow', this.roomId, this.user);
 	},
 
@@ -120,14 +120,14 @@ Ext.define('NextThought.view.widgets.chat.FriendEntry', {
 		user.on('changed', this.update, this);
 	},
 
-	_hideMenu: function(){
-		var m = this._menu;
-		this._hideMenuTimout = setTimeout(function(){m.hide();},100);
+	hideMenu: function(){
+		var m = this.menu;
+		this.hideMenuTimout = setTimeout(function(){m.hide();},100);
 	},
 
-	_showMenu: function(){
-		clearTimeout(this._hideMenuTimout);
-		this._menu.showBy(this.el, 'tr-br?');
+	showMenu: function(){
+		clearTimeout(this.hideMenuTimout);
+		this.menu.showBy(this.el, 'tr-br?');
 	},
 
 	initializeDropZone: function(v) {

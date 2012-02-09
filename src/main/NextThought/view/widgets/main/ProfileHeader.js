@@ -28,7 +28,7 @@ Ext.define('NextThought.view.widgets.main.ProfileHeader', {
 
 	initComponent: function(){
 		this.callParent(arguments);
-		this.updated(_AppConfig.userObject);
+		this.updated($AppConfig.userObject);
 	},
 
 	afterRender: function(){

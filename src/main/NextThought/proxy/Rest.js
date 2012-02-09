@@ -17,7 +17,7 @@ Ext.define('NextThought.proxy.Rest', {
 
 	constructor: function(config) {
 		this.callParent(arguments);
-		this.on('exception', this._exception, this);
+		this.on('exception', this.exception, this);
 	},
 
 	doRequest: function(operation, callback, scope){
@@ -34,7 +34,7 @@ Ext.define('NextThought.proxy.Rest', {
 	},
 
 	buildUrl: function(request) {
-		var host = _AppConfig.server.host,
+		var host = $AppConfig.server.host,
 			action = request.operation.action,
 			records= request.records,
 			record = records? records[0] : null,
@@ -62,7 +62,7 @@ Ext.define('NextThought.proxy.Rest', {
 			href = record.getLink('edit');
 		}
 		else if(action === 'create'){
-			collection = _AppConfig.service.getCollectionFor(mimeType,null) || {};
+			collection = $AppConfig.service.getCollectionFor(mimeType,null) || {};
 			if (!collection.href) {
 				Ext.Error.raise('No HREF found for mimetype ' + mimeType);
 			}
@@ -92,7 +92,7 @@ Ext.define('NextThought.proxy.Rest', {
 		return href;
 	},
 
-	_exception: function(proxy, response, operation, eOpts) {
+	exception: function(proxy, response, operation, eOpts) {
 		var retryArgs = operation.retryArgs;
 
 		if(response.status === 0 && response.responseText==='') {

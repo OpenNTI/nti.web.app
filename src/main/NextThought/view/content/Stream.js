@@ -11,7 +11,7 @@ Ext.define('NextThought.view.content.Stream', {
 	defaults: {border: false},
 	items:[{autoScroll:true, padding: 5}],
 
-	_filter: {},
+	filter: {},
 
 	constructor: function(){
 		this.callParent(arguments);
@@ -24,19 +24,19 @@ Ext.define('NextThought.view.content.Stream', {
 
 	initComponent: function(){
 		this.callParent(arguments);
-		this._store = Ext.getStore('Stream');
-		this._store.on('add', this.updateStream, this);
-		this._store.on('load', this.updateStream, this);
+		this.store = Ext.getStore('Stream');
+		this.store.on('add', this.updateStream, this);
+		this.store.on('load', this.updateStream, this);
 	},
 
 	applyFilter: function(filter){
-		this._filter = filter;
+		this.filter = filter;
 		this.updateStream();
 	},
 
 	updateStream: function(){
 		var p = this.items.get(0),
-			f = this._filter;
+			f = this.filter;
 
 		p.removeAll(true);
 
@@ -44,7 +44,7 @@ Ext.define('NextThought.view.content.Stream', {
 			return;
 		}
 
-		this._store.each(function(change){
+		this.store.each(function(change){
 			var u = change.get('Creator');
 
 			if(/all/i.test(f.groups) || f.shareTargets[ u ] || (f.includeMe && f.includeMe===u)){

@@ -6,10 +6,10 @@ Ext.define( 'NextThought.view.widgets.annotations.Note', {
 
 	constructor: function(record, container, component){
 		Ext.apply(this, {
-			_anchorNode : null,
-			_noteContainer: null,
-			_originalPadding: 0,
-			_renderPriority: 0
+			anchorNode : null,
+			noteContainer: null,
+			originalPadding: 0,
+			renderPriority: 0
 		});
 
 		this.callParent([record, container, component,
@@ -30,7 +30,7 @@ Ext.define( 'NextThought.view.widgets.annotations.Note', {
 		}
 
 
-		c = me._createNoteContainer(a.dom.getAttribute('name'));
+		c = me.createNoteContainer(a.dom.getAttribute('name'));
 
 		inBox = a.up('div', root.down('.page-contents'));
 		if(inBox){
@@ -39,34 +39,34 @@ Ext.define( 'NextThought.view.widgets.annotations.Note', {
 
 		a.setStyle('display', 'block');
 
-		me._anchorNode = a;
-		me._noteContainer = c;
-		me._originalPadding =
+		me.anchorNode = a;
+		me.noteContainer = c;
+		me.originalPadding =
 				a.dom.originalPadding!==undefined ?
 						a.dom.originalPadding : a.getPadding('b');
-		a.dom.originalPadding = me._originalPadding;
+		a.dom.originalPadding = me.originalPadding;
 
-		// console.debug('original padding:',me._originalPadding);
+		// console.debug('original padding:',me.originalPadding);
 
-		me.noteDiv = me.createElement('div',c.dom,'x-note-panel',(me._isVisible?'':'display:none;'));
-		me.noteDiv._annotation = me;
+		me.noteDiv = me.createElement('div',c.dom,'x-note-panel',(me.isVisible?'':'display:none;'));
+		me.noteDiv.annotation = me;
 
-		me.noteCmp = Ext.widget('note-entry',{ renderTo: me.noteDiv, _annotation: me, _owner: component });
+		me.noteCmp = Ext.widget('note-entry',{ renderTo: me.noteDiv, annotation: me, owner: component });
 
 		return me;
 	},
 
 
 	attachRecord: function(record){
-		var children = this._record.children,
-			parent = this._record._parent,
-			old = this._record;
+		var children = this.record.children,
+			parent = this.record.parent,
+			old = this.record;
 
-		this._record = record;
+		this.record = record;
 
 		record.on('updated',this.noteUpdated, this);
 		record.children = record.children || children;
-		record._parent = record._parent || parent;
+		record.parent = record.parent || parent;
 
 		if(old !== record){
 			old.un('updated', this.noteUpdated, this);
@@ -97,10 +97,10 @@ Ext.define( 'NextThought.view.widgets.annotations.Note', {
 	},
 
 
-	_buildMenu: function(){
+	buildMenu: function(){
 		var items = [];
 
-		if(this._isMine){
+		if(this.isModifiable){
 			items.push({
 				text : 'Remove Note',
 				handler: Ext.bind(this.remove, this)
@@ -110,10 +110,10 @@ Ext.define( 'NextThought.view.widgets.annotations.Note', {
 	},
 
 
-	_createNoteContainer: function(id){
+	createNoteContainer: function(id){
 		var i = 'note-container-'+id,
 			e = Ext.get(i),
-			n = e ? e.dom : this.createElement('div',this._cnt,'document-notes');
+			n = e ? e.dom : this.createElement('div',this.container,'document-notes');
 		n.setAttribute('id',i);
 		return Ext.get(n);
 	},
@@ -130,9 +130,9 @@ Ext.define( 'NextThought.view.widgets.annotations.Note', {
 			delete this.noteCmp;
 			Ext.get(this.noteDiv).remove();
 
-			if(!this._noteContainer.first()){
-				this._noteContainer.remove();
-				this._anchorNode.setStyle('padding-bottom',this._originalPadding+'px');
+			if(!this.noteContainer.first()){
+				this.noteContainer.remove();
+				this.anchorNode.setStyle('padding-bottom',this.originalPadding+'px');
 			}
 		}
 
@@ -145,12 +145,12 @@ Ext.define( 'NextThought.view.widgets.annotations.Note', {
 			if(!this.noteCmp){return;}
 
 			var me= this,
-				p = Ext.get(me._cnt),
-				c = me._noteContainer,
-				a = me._anchorNode,
-				i = me._originalPadding,
+				p = Ext.get(me.container),
+				c = me.noteContainer,
+				a = me.anchorNode,
+				i = me.originalPadding,
 				box = !a.is('a'),
-				w = (box? a : Ext.get(this._cmp.getEl().query('#nticontent .page-contents')[0])).getWidth(),
+				w = (box? a : Ext.get(this.ownerCmp.getEl().query('#nticontent .page-contents')[0])).getWidth(),
 				h = 0,
 				extra= 0,
 				adjust=0,
@@ -159,7 +159,7 @@ Ext.define( 'NextThought.view.widgets.annotations.Note', {
 
 			c.setWidth(w);
 
-			if(me._isVisible){
+			if(me.isVisible){
 				adjust += pr?(pr.getPadding('b')+pr.getMargin('b')):0;
 				extra += (nx?(nx.getPadding('t')+nx.getMargin('t')):0) + adjust;
 
@@ -176,13 +176,13 @@ Ext.define( 'NextThought.view.widgets.annotations.Note', {
 			}
 
 			//move the nib to the top-aligning corner of the note container
-			if (me._img){
-				Ext.get(me._img).moveTo(p.getLeft(), c.down('.x-nti-note img').getTop());
+			if (me.img){
+				Ext.get(me.img).moveTo(p.getLeft(), c.down('.x-nti-note img').getTop());
 			}
 
 			//always move to the end
 			if(c.dom.nextSibling){
-				me._cnt.appendChild(c.dom);
+				me.container.appendChild(c.dom);
 			}
 
 //			if (me.noteCmp){

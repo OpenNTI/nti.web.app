@@ -40,7 +40,7 @@ Ext.define('NextThought.controller.Account', {
 			win = btn.up('fullscreen-window'),
 			form= win.down('account-form'),
 			values = form.getForm().getFieldValues(false),
-			u = _AppConfig.userObject,
+			u = $AppConfig.userObject,
 			fire = false,
 			key;
 
@@ -78,7 +78,7 @@ Ext.define('NextThought.controller.Account', {
 
 
 	popoverNotifications: function() {
-		var u = _AppConfig.userObject,
+		var u = $AppConfig.userObject,
 			popover = Ext.create('window.notifications-popover', {bindTo: this.getSessionInfo()});
 		popover.show();
 
@@ -99,7 +99,7 @@ Ext.define('NextThought.controller.Account', {
 				id: 'account-window',
 				items: {
 					xtype: 'account-form',
-					account: _AppConfig.userObject
+					account: $AppConfig.userObject
 				}
 			}
 		).show();

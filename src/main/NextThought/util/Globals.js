@@ -304,15 +304,15 @@ Ext.define('NextThought.util.Globals',
 		var less = dir===ASCENDING? -1 : 1,
 			more = dir===ASCENDING? 1 : -1;
 
-		function _(v){
+		function $(v){
 			return (g? g(v) : v).get(key);
 		}
 
 		return function(a,b){
-			var c = 0, _a = _(a), _b = _(b);
+			var c = 0, $a = $(a), $b = $(b);
 
-			if(_a !== _b){
-				c = _a < _b? less : more;
+			if($a !== $b){
+				c = $a < $b? less : more;
 			}
 
 			return c;

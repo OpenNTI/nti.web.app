@@ -16,7 +16,7 @@ Ext.define('NextThought.view.widgets.VideoPanel', {
 
 		this.on({
 			scope		: this,
-			render	   : this._render,
+			render	   : this.videoRender,
 			beforedestroy: function() {
 				this.video = null;
 			},
@@ -28,7 +28,7 @@ Ext.define('NextThought.view.widgets.VideoPanel', {
 		});
 	},
 
-	_render: function() {
+	videoRender: function() {
 		var fallback = '',
 			size = this.getSize(),
 			cfg, i;

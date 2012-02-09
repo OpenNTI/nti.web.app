@@ -272,12 +272,12 @@ Ext.define('NextThought.util.AnnotationUtils',{
 
 	getAnchors: function(){
 		var me = this;
-		clearTimeout(me._anchorCacheLife);
-		if(!me._anchorCache) {
-			me._anchorCache = Ext.Array.unique(Ext.query('#NTIContent A[name]'));
+		clearTimeout(me.anchorCacheLife);
+		if(!me.anchorCache) {
+			me.anchorCache = Ext.Array.unique(Ext.query('#NTIContent A[name]'));
 		}
-		me._anchorCacheLife = setTimeout(function(){ delete me._anchorCache; },500);
-		return me._anchorCache.slice();
+		me.anchorCacheLife = setTimeout(function(){ delete me.anchorCache; },500);
+		return me.anchorCache.slice();
 	},
 
 
@@ -386,12 +386,12 @@ Ext.define('NextThought.util.AnnotationUtils',{
 			endNode = endNode.firstChild;
 		}
 
-		this._fixHighlightEndpoints(endNode, startNode, highlight);
+		this.fixHighlightEndpoints(endNode, startNode, highlight);
 		return highlight;
 	},
 
 
-	_fixHighlightEndpoints: function(endNode, startNode, highlight) {
+	fixHighlightEndpoints: function(endNode, startNode, highlight) {
 		var end = null,
 			workingNode = endNode,
 			fullText, endOffset, startOffset;

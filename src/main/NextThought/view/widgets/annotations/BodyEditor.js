@@ -120,7 +120,7 @@ Ext.define('NextThought.view.widgets.annotations.BodyEditor', {
 		var whiteboard = this.getWhiteboardEditor(canvas, id).down('whiteboard');
 
 		whiteboard.on('save', this.updateOrCreateWhiteboardThumbnail, this);
-		whiteboard.__id = id;
+		whiteboard.$id = id;
 
 		return whiteboard.getThumbnail();
 	},
@@ -134,7 +134,7 @@ Ext.define('NextThought.view.widgets.annotations.BodyEditor', {
 
 	updateOrCreateWhiteboardThumbnail: function(whiteboard){
 		//the getDoc() is non-public api
-		var id = whiteboard.__id,
+		var id = whiteboard.$id,
 			iFrameDoc = this.down('htmleditor').getDoc(),
 			body = iFrameDoc.body,
 			numShapes = whiteboard.getNumberOfShapes(),
@@ -170,7 +170,7 @@ Ext.define('NextThought.view.widgets.annotations.BodyEditor', {
 		//iFrameDoc = this.down('htmleditor').getDoc(),
 		//body = iFrameDoc.body;
 
-		whiteboard.__id = id;
+		whiteboard.$id = id;
 		whiteboard.on('save', this.updateOrCreateWhiteboardThumbnail, this);
 		win.show();
 	},

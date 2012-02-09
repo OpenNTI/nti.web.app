@@ -16,7 +16,7 @@ Ext.define('NextThought.view.content.Panel', {
 	},
 
 	getContainerId: function(){
-		return this._containerId;
+		return this.containerId;
 	},
 	
 	relayout: function(){
@@ -30,7 +30,7 @@ Ext.define('NextThought.view.content.Panel', {
 
 
 	
-	_getPathPart: function(path) {
+	getPathPart: function(path) {
 		if(!path){
 			return path;
 		}
@@ -40,7 +40,7 @@ Ext.define('NextThought.view.content.Panel', {
 	
 	
 	
-	_getFilename: function(path) {
+	getFilename: function(path) {
 		if(!path){
 			return path;
 		}
@@ -50,15 +50,15 @@ Ext.define('NextThought.view.content.Panel', {
 	
 	
 	
-	_getCurrentPath: function() {
-		return this._getPathPart(window.location.pathname);
+	getCurrentPath: function() {
+		return this.getPathPart(window.location.pathname);
 	},
 
 
-	_resolveBase: function(base) {   
+	resolveBase: function(base) {
 		//relative path
 		if(base && base!=="" && (base === '.' || base[0]!=='/') && base.indexOf(':')<0) {
-			var b = this._getCurrentPath();
+			var b = this.getCurrentPath();
 			
 			if(base.indexOf(b)!==0) {
 				base = b+'/'+(base==='.'?'':base);
@@ -67,7 +67,7 @@ Ext.define('NextThought.view.content.Panel', {
 		}
 		//absolute paths (book content)
 		else {
-			base = _AppConfig.server.host + base;
+			base = $AppConfig.server.host + base;
 		}
 		
 		//make sure this ends in a slash

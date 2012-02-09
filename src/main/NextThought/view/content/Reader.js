@@ -13,10 +13,10 @@ Ext.define('NextThought.view.content.Reader', {
 	//props for when it's in a classroom
 	tabConfig:{title: 'Content',tooltip: 'Live Content'},
 
-	_tracker: null,
+	tracker: null,
 
 	//used to bust caches between sessions
-	instantiation_time: Ext.Date.now(),
+	instantiationtime: Ext.Date.now(),
 
 	initComponent: function(){
 		this.addEvents('publish-contributors','location-changed','finished-navigation','finished-restore');
@@ -85,14 +85,14 @@ Ext.define('NextThought.view.content.Reader', {
 	render: function(){
 		this.callParent(arguments);
 
-		if(this._tracker){
-			this._tracker.destroy();
-			delete this._tracker;
+		if(this.tracker){
+			this.tracker.destroy();
+			delete this.tracker;
 			console.log('clearing old tracker...');
 		}
 
 		var d = this.el.dom;
-		this._tracker = Ext.widget('tracker', this, d, d.firstChild);
+		this.tracker = Ext.widget('tracker', this, d, d.firstChild);
 
 		if(this.deferredRestore){
 			this.restore(this.deferredRestore);
@@ -103,8 +103,8 @@ Ext.define('NextThought.view.content.Reader', {
 
 	setActive: function(book, path, skipHistory, callback, ntiid) {
 		var me = this,
-			b = me._resolveBase(me._getPathPart(path)),
-			f = me._getFilename(path),
+			b = me.resolveBase(me.getPathPart(path)),
+			f = me.getFilename(path),
 			pc = path.split('#'),
 			target = pc.length>1? pc[1] : null,
 			vp= VIEWPORT.getEl(),
@@ -126,7 +126,7 @@ Ext.define('NextThought.view.content.Reader', {
 		me.relayout();
 		me.active = pc[0];
 		if(!skipHistory){
-			me._appendHistory(book, path);
+			me.appendHistory(book, path);
 		}
 		else if(skipHistory !== 'do-restore') {
 			me.fireEvent('unrecorded-history', book, path, ntiid);
@@ -137,7 +137,7 @@ Ext.define('NextThought.view.content.Reader', {
 			bc.setActive(book, f);
 		}
 
-		me._request = Ext.Ajax.request({
+		me.request = Ext.Ajax.request({
 			url: b+f,
 			scope: this,
 			disableCaching: true,
@@ -148,9 +148,9 @@ Ext.define('NextThought.view.content.Reader', {
 				callback: callback,
 				fireFinishRestore: skipHistory === 'do-restore'
 			},
-			success: me._setReaderContent,
+			success: me.setReaderContent,
 			callback: function(req,success,res){
-				delete me._request;
+				delete me.request;
 				vp.unmask();
 				if(!success) {
 					console.error('There was an error getting content', b+f, res);
@@ -162,10 +162,10 @@ Ext.define('NextThought.view.content.Reader', {
 
 
 
-	_setReaderContent: function(data, req){
+	setReaderContent: function(data, req){
 		var me = this,
 			s = req.scopeVars,
-			c = me._cleanHTML(data.responseText, s.basePath),
+			c = me.cleanHTML(data.responseText, s.basePath),
 			target = s.target,
 			callback = s.callback,
 			containerId;
@@ -193,14 +193,14 @@ Ext.define('NextThought.view.content.Reader', {
 		}
 
 		me.items.get(0).update('<div id="NTIContent">'+c+'</div>');
-		me._containerId = null;
+		me.containerId = null;
 
 		me.scrollTo(0, false);
 
 		me.el.select('#NTIContent .navigation').remove();
 		me.el.select('#NTIContent .breadcrumbs').remove();
 		me.el.select('#NTIContent a[href]').on(
-			'click', me._onClick, me, {
+			'click', me.onClick, me, {
 				book: s.book, scope: me, stopEvent: true
 			});
 
@@ -211,7 +211,7 @@ Ext.define('NextThought.view.content.Reader', {
 
 
 
-	_cleanHTML: function(html, basePath){
+	cleanHTML: function(html, basePath){
 		var c = html,
 			rf= c.toLowerCase(),
 			start = rf.indexOf(">", rf.indexOf("<body"))+1,
@@ -224,26 +224,26 @@ Ext.define('NextThought.view.content.Reader', {
 		meta = head.match(/<meta.*>/gi);
 		//cache bust css
 		css = css ? css.join('') : '';
-		css = css.replace(/\.css/gi, '.css?dc='+this.instantiation_time);
+		css = css.replace(/\.css/gi, '.css?dc='+this.instantiationtime);
 		meta = meta?meta.join(''):'';
 
 		meta = meta.replace(/<meta[^<]+?viewport.+?\/>/ig,'');
 
-		c = this.__fixReferences(meta.concat(css).concat(body),basePath);
+		c = this.fixReferences(meta.concat(css).concat(body),basePath);
 
 		return c;
 	},
 
 
 
-	__fixReferences: function(string, basePath){
+	fixReferences: function(string, basePath){
 
 		function fixReferences(original,tag,url) {
 			var firstChar = url.charAt(0),
 				absolute = firstChar ==='/',
 				anchor = firstChar === '#',
 				external = me.externalUriRegex.test(url),
-				host = absolute?_AppConfig.server.host:basePath;
+				host = absolute?$AppConfig.server.host:basePath;
 
 			//inline
 			return (anchor || external || /^data:/i.test(url)) ?
@@ -259,11 +259,11 @@ Ext.define('NextThought.view.content.Reader', {
 	externalUriRegex : /^([a-z][a-z0-9\+\-\.]*):/i,
 
 
-	_onClick: function(e, el, o){
+	onClick: function(e, el, o){
 		e.stopPropagation();
 		e.preventDefault();
 		var m = this,
-			h = _AppConfig.server.host,
+			h = $AppConfig.server.host,
 			l = window.location.href.split("#")[0],
 			r = el.href,
 			p = r.substring(h.length),
@@ -290,7 +290,7 @@ Ext.define('NextThought.view.content.Reader', {
 
 
 
-	_appendHistory: function(book, path) {
+	appendHistory: function(book, path) {
 		var state = { reader:{ index: book.get('index'), page: path } };
 		try{
 			history.pushState(state,"TODO: resolve title");

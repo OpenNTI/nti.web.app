@@ -43,7 +43,7 @@ Ext.define('NextThought.controller.Chat', {
 		var me = this;
 
 		//table of behavious based on channel
-		this._channelMap = {
+		this.channelMap = {
 			'CONTENT': this.onMessageContentChannel,
 			'POLL': this.onMessagePollChannel,
 			'META': this.onMessageMetaChannel,
@@ -57,7 +57,7 @@ Ext.define('NextThought.controller.Chat', {
 			'chat_enteredRoom': function(){me.onEnteredRoom.apply(me, arguments);},
 			'chat_exitedRoom' : function(){me.onExitedRoom.apply(me, arguments);},
 			'chat_roomMembershipChanged' : function(){me.onMembershipChanged.apply(me, arguments);},
-			'chat_presenceOfUserChangedTo' : function(user, presence){UserRepository._presenceChanged(user, presence);},
+			'chat_presenceOfUserChangedTo' : function(user, presence){UserRepository.presenceChanged(user, presence);},
 			'chat_recvMessage': function(){me.onMessage.apply(me, arguments);},
 			'chat_recvMessageForAttention' : function(){me.onMessageForAttention.apply(me, arguments);},
 			'chat_recvMessageForModeration' : function(){me.onModeratedMessage.apply(me, arguments);},
@@ -140,7 +140,7 @@ Ext.define('NextThought.controller.Chat', {
 	existingRoom: function(users, options) {
 		//Add ourselves to this list
 		var key, ri,
-			allUsers = Ext.Array.unique(users.slice().concat(_AppConfig.userObject.getId()));
+			allUsers = Ext.Array.unique(users.slice().concat($AppConfig.userObject.getId()));
 
 		if(options){
 			return null;
@@ -421,7 +421,7 @@ Ext.define('NextThought.controller.Chat', {
 			r,m;
 
 		recipients.add(message.get('Creator'), 1);
-		recipients.add(_AppConfig.userObject.getId(), 1);
+		recipients.add($AppConfig.userObject.getId(), 1);
 
 		while(w && message && message.get('inReplyTo')){
 			r = IdCache.getIdentifier('inReplyTo');
@@ -528,7 +528,7 @@ Ext.define('NextThought.controller.Chat', {
 			return;
 		}
 
-		this._channelMap[channel].call(this, m, opts||{});
+		this.channelMap[channel].call(this, m, opts||{});
 	},
 
 	onMessageDefaultChannel: function(msg, opts) {

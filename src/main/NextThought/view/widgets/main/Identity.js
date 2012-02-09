@@ -21,7 +21,7 @@ Ext.define('NextThought.view.widgets.main.Identity', {
 
 	afterRender: function(){
 		this.callParent(arguments);
-		this.update(_AppConfig.userObject);
+		this.update($AppConfig.userObject);
 	},
 
 	update: function(user){

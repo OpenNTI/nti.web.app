@@ -7,7 +7,7 @@ Ext.define('NextThought.Library', {
 
 	
 	constructor: function(config) {
-		this._tocs = [];
+		this.tocs = [];
 		this.addEvents({
 			loaded : true
 		});
@@ -18,12 +18,12 @@ Ext.define('NextThought.Library', {
 	},
 
 	getStore: function(){
-		if(!this._store){
-			var server = _AppConfig.server,
-				service = _AppConfig.service,
+		if(!this.store){
+			var server = $AppConfig.server,
+				service = $AppConfig.service,
 				host = server.host;
 
-			this._store = Ext.create('Ext.data.Store',{
+			this.store = Ext.create('Ext.data.Store',{
 				model: 'NextThought.model.Title',
 				proxy: {
 					type: 'ajax',
@@ -39,7 +39,7 @@ Ext.define('NextThought.Library', {
 				}
 			});
 		}
-		return this._store;
+		return this.store;
 	},
 
 	each: function(callback, scope){
@@ -91,28 +91,28 @@ Ext.define('NextThought.Library', {
 	},
 
 	getToc: function(index){
-		if(index && !this._tocs[index]){
-			this._loadToc(index);
+		if(index && !this.tocs[index]){
+			this.loadToc(index);
 		}
 
-		return this._tocs[index];
+		return this.tocs[index];
 	},
 
 
 	load: function(){
 		this.loaded = false;
-		this.getStore().on('load', this._onLoad, this );
+		this.getStore().on('load', this.onLoad, this );
 		this.getStore().load();
 	},
 
-	_onLoad: function(store, records, success) {
+	onLoad: function(store, records, success) {
 		function go(){
 			this.loaded = true;
 			this.fireEvent('loaded',this);
 		}
 
 		if(success){
-			this._libraryLoaded(Ext.bind(go,this));
+			this.libraryLoaded(Ext.bind(go,this));
 		}
 		else {
 			console.error('FAILED: load library');
@@ -121,7 +121,7 @@ Ext.define('NextThought.Library', {
 	
 	
 	
-	_libraryLoaded: function(callback){
+	libraryLoaded: function(callback){
 		var me = this, stack = [];
 		//The reason for iteration 1 is to load the stack with the number of TOCs I'm going to load
 		this.each(function(o){
@@ -132,7 +132,7 @@ Ext.define('NextThought.Library', {
 		//Iteration 2 loads TOC async, so once the last one loads, callback if available
 		this.each(function(o){
 			if(!o.get||!o.get('index')){ return; }
-			me._loadToc(o.get('index'), function(){
+			me.loadToc(o.get('index'), function(){
 				stack.pop();
 				if(stack.length===0 && callback){
 					callback.call(this);
@@ -142,9 +142,9 @@ Ext.define('NextThought.Library', {
 	},
 	
 	
-	_loadToc: function(index, callback){
+	loadToc: function(index, callback){
 		try{
-			var url = _AppConfig.server.host+index;
+			var url = $AppConfig.server.host+index;
 			Ext.Ajax.request({
 				url: url,
 				async: !!callback,
@@ -153,12 +153,12 @@ Ext.define('NextThought.Library', {
 					console.error('There was an error loading library', url, arguments);
 				},
 				success: function(r) {
-					this._tocs[index] = r.responseXML? r.responseXML : this._parseXML(r.responseText);
-					if(!this._tocs[index]){
+					this.tocs[index] = r.responseXML? r.responseXML : this.parseXML(r.responseText);
+					if(!this.tocs[index]){
 						console.warn('no data for index: '+url);
 					}
 
-					var toRemove = Ext.DomQuery.select('topic:not([ntiid])', this._tocs[index]);
+					var toRemove = Ext.DomQuery.select('topic:not([ntiid])', this.tocs[index]);
 					Ext.each(toRemove, function(e){
 						if (e.parentNode) {
 							e.parentNode.removeChild(e);
@@ -179,7 +179,7 @@ Ext.define('NextThought.Library', {
 		}
 	},
 	
-	_parseXML: function(txt) {
+	parseXML: function(txt) {
 		try{
 			if (window.DOMParser) {
 				return new DOMParser().parseFromString(txt,"text/xml");
@@ -207,7 +207,7 @@ Ext.define('NextThought.Library', {
 		var result = null;
 
 		this.each(function(o){
-			result = this._resolveBookLocation(o, containerId);
+			result = this.resolveBookLocation(o, containerId);
 			if (result) {
 				return false;
 			}
@@ -256,15 +256,15 @@ Ext.define('NextThought.Library', {
 	},
 
 
-	_resolveBookLocation: function(book, containerId) {
+	resolveBookLocation: function(book, containerId) {
 		var toc = this.getToc( book.get( 'index' ) );
 		if( toc.documentElement.getAttribute( 'ntiid' ) === containerId ) {
 			return {book:book, location:toc};
 		}
-		return this._recursiveResolveBookLocation( book, containerId, toc );
+		return this.recursiveResolveBookLocation( book, containerId, toc );
 	},
 
-	_recursiveResolveBookLocation: function( book, containerId, elt ) {
+	recursiveResolveBookLocation: function( book, containerId, elt ) {
 		var elts = elt.getElementsByTagName( 'topic' ), ix, child, cr;
 		for( ix = 0; ix < elts.length; ix++ ) {
 			child = elts.item(ix);
@@ -272,7 +272,7 @@ Ext.define('NextThought.Library', {
 			if( child.getAttribute( 'ntiid' ) === containerId ) {
 				return {book: book, location: child };
 			}
-			cr = this._recursiveResolveBookLocation( book, containerId, child );
+			cr = this.recursiveResolveBookLocation( book, containerId, child );
 			if( cr ) {
 				return cr;
 			}

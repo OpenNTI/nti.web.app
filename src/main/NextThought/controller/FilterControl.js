@@ -5,24 +5,24 @@ Ext.define('NextThought.controller.FilterControl', {
 		'widgets.FilterControlPanel'
 		],
 
-	_query: function(q,id){
+	query: function(q,id){
 		return Ext.ComponentQuery.query(q.replace('filter-control','#'+id));
 	},
 
 	getAllTypesButton: function(id){
-		return this._query('filter-control checkboxfield[name="alltypesbutton"]',id)[0];
+		return this.query('filter-control checkboxfield[name="alltypesbutton"]',id)[0];
 	},
 	
 	getAllGroupsButton: function(id){
-		return this._query('filter-control checkboxfield[name="allgroupsbutton"]',id)[0];
+		return this.query('filter-control checkboxfield[name="allgroupsbutton"]',id)[0];
 	},
 	
 	getGroups: function(id){
-		return this._query('filter-control checkboxfield[usergroup]',id);
+		return this.query('filter-control checkboxfield[usergroup]',id);
 	},
 	
 	getTypes: function(id){
-		return this._query('filter-control checkboxfield[model]',id);
+		return this.query('filter-control checkboxfield[model]',id);
 	},
 	
 	init: function() {
@@ -138,7 +138,7 @@ Ext.define('NextThought.controller.FilterControl', {
 			allGroups = this.getAllGroupsButton(id).getValue(),
 			groups = this.getGroups(id),
 			types = this.getTypes(id),
-			u = _AppConfig.username;
+			u = $AppConfig.username;
 
 		if(allGroups) {
 			filter.groups = 'all';

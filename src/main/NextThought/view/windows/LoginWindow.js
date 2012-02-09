@@ -138,16 +138,16 @@ Ext.define('NextThought.view.windows.LoginWindow', {
 
 	initComponent: function(){
 		this.callParent(arguments);
-		this._username = this.down('textfield[name=username]');
-		this._password = this.down('textfield[name=password]');
-		this._remember = this.down('checkboxfield');
+		this.username = this.down('textfield[name=username]');
+		this.password = this.down('textfield[name=password]');
+		this.remember = this.down('checkboxfield');
 		this.fireEvent('initialized', this);
 	},
 
 	render: function(){
 		this.callParent(arguments);
-		this._username.inputEl.dom.autocomplete = 'on';
-		this._password.inputEl.dom.autocomplete = 'on';
+		this.username.inputEl.dom.autocomplete = 'on';
+		this.password.inputEl.dom.autocomplete = 'on';
 	},
 
 
@@ -170,8 +170,8 @@ Ext.define('NextThought.view.windows.LoginWindow', {
 
 	show: function(){
 		this.callParent(arguments);
-		var un = this._username,
-			pw = this._password;
+		var un = this.username,
+			pw = this.password;
 
 
 		if(un.getValue()) {pw.focus();}
@@ -180,8 +180,8 @@ Ext.define('NextThought.view.windows.LoginWindow', {
 
 
 	setUsername: function(name){
-		this._username.setValue(name);
-		this._username.originalValue = name;
+		this.username.setValue(name);
+		this.username.originalValue = name;
 	},
 
 	/**
@@ -189,8 +189,8 @@ Ext.define('NextThought.view.windows.LoginWindow', {
 	 * @param flag
 	 */
 	setRemember: function(flag){
-		this._remember.setValue(flag!==false);
-		this._remember.originalValue = flag!==false;
+		this.remember.setValue(flag!==false);
+		this.remember.originalValue = flag!==false;
 	}
 
 });

@@ -13,7 +13,7 @@ Ext.define('NextThought.view.widgets.chat.Friends', {
 	defaults: {border: false, defaults: {border: false}},
 
 	initComponent:function() {
-		this._groups = {};
+		this.groups = {};
 		this.store = Ext.getStore('FriendsList');
 		this.callParent(arguments);
 		this.setGroups();
@@ -21,9 +21,9 @@ Ext.define('NextThought.view.widgets.chat.Friends', {
 	},
 
 	setGroups: function() {
-		function clean(dirty, _clean, obj, key){
+		function cleanSet(dirty, clean, obj, key){
 			var k;
-			obj[key] = _clean;
+			obj[key] = clean;
 			for(k in dirty){
 				if(dirty.hasOwnProperty(k)){
 					obj.remove(dirty[k]);
@@ -34,7 +34,7 @@ Ext.define('NextThought.view.widgets.chat.Friends', {
 
 		var me = this,
 			groups = me.store,
-			prevGroups = me._groups || {},
+			prevGroups = me.groups || {},
 			newGroups = {};
 
 		groups.each(function(g){
@@ -87,10 +87,10 @@ Ext.define('NextThought.view.widgets.chat.Friends', {
 				delete prevFriends[uid];
 			});
 
-			clean(prevFriends, newFriends, groupPanel, 'friends');
+			cleanSet(prevFriends, newFriends, groupPanel, 'friends');
 
 		});
 
-		clean(prevGroups, newGroups, me, '_groups');
+		cleanSet(prevGroups, newGroups, me, 'groups');
 	}
 });

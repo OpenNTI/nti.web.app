@@ -7,7 +7,7 @@ Ext.define('NextThought.cache.UserRepository', {
 
 	constructor: function() {
 		Ext.apply(this,{
-			_store: null,
+			store: null,
 			activeRequests: {}
 		});
 	},
@@ -26,17 +26,17 @@ Ext.define('NextThought.cache.UserRepository', {
 	},
 
 	getStore: function() {
-		return (this._store = this._store || Ext.create('Ext.data.Store', {model: 'NextThought.model.User'}));
+		return (this.store = this.store || Ext.create('Ext.data.Store', {model: 'NextThought.model.User'}));
 	},
 
 	refresh: function() {
-		var s = this._store;
+		var s = this.store;
 		if (!s) {
 			return;
 		}
 
 		s.each(function(u){
-			this._makeRequest(u.getId(), {
+			this.makeRequest(u.getId(), {
 				scope:this,
 				success: Ext.emptyFn, //loading into the store happens automatically because of the User model constructor.
 				failure: function(){
@@ -55,11 +55,11 @@ Ext.define('NextThought.cache.UserRepository', {
 		//console.debug('updateUser',ignoreNewInstance, refreshedUser.getId(), u, refreshedUser);
 
 		if (u && (!ignoreNewInstance || !u.equal(refreshedUser))) {
-			if (_AppConfig.userObject && u.getId() === _AppConfig.userObject.getId() ){
-				if(u !== _AppConfig.userObject) {
-					_AppConfig.userObject.fireEvent('changed', refreshedUser);
+			if ($AppConfig.userObject && u.getId() === $AppConfig.userObject.getId() ){
+				if(u !== $AppConfig.userObject) {
+					$AppConfig.userObject.fireEvent('changed', refreshedUser);
 				}
-				_AppConfig.userObject = refreshedUser;
+				$AppConfig.userObject = refreshedUser;
 			}
 
 			u.fireEvent('changed', refreshedUser);
@@ -127,7 +127,7 @@ Ext.define('NextThought.cache.UserRepository', {
 
 				//must make a request, finish in callback so set async flag
 				async = true;
-				this._makeRequest(name, {
+				this.makeRequest(name, {
 					scope: this,
 					failure: function(){
 						l--; //dec length so we still hit our finish state when a failure occurs.
@@ -159,7 +159,7 @@ Ext.define('NextThought.cache.UserRepository', {
 		var user = this.getStore().getById(username);
 
 		if (!user) {
-			user = raw? ParseUtils.parseItems([raw])[0] : this._makeRequest(username);
+			user = raw? ParseUtils.parseItems([raw])[0] : this.makeRequest(username);
 			//user's constructor adds the user to the repo, so do the following only if the user is different somehow,
 			//this is more of an assertion.  The reason we have to do this is because things are listening to events
 			//on user instances in this repository so we cant just replace them.
@@ -181,11 +181,11 @@ Ext.define('NextThought.cache.UserRepository', {
 	 * @param username
 	 * @param callbacks
 	 */
-	_makeRequest: function(username, callbacks) {
+	makeRequest: function(username, callbacks) {
 		var me = this,
 			result = null,
 			s = me.getStore(),
-			url = _AppConfig.service.getUserSearchURL(username),
+			url = $AppConfig.service.getUserSearchURL(username),
 			options;
 
 		function callback(o,success,r) {
@@ -247,7 +247,7 @@ Ext.define('NextThought.cache.UserRepository', {
 		return result;
 	},
 
-	_presenceChanged: function(username, presence) {
+	presenceChanged: function(username, presence) {
 		var u = this.getStore().getById(username);
 		if (u) {
 			u.set('Presence', presence);

@@ -7,16 +7,16 @@ Ext.define('NextThought.cache.IdCache', {
 
 	constructor: function() {
 		Ext.apply(this,{
-			_ids: {}
+			ids: {}
 		});
 	},
 
 	getIdentifier: function(id)
 	{
-		if (id && !this._ids.hasOwnProperty(id)) {
-			this._ids[id] = guidGenerator();
+		if (id && !this.ids.hasOwnProperty(id)) {
+			this.ids[id] = guidGenerator();
 		}
-		return this._ids[id];
+		return this.ids[id];
 	},
 
 	getComponentId: function (rec, subRecordField) {

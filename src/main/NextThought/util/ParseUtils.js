@@ -51,20 +51,20 @@ Ext.define('NextThought.util.ParseUtils',{
 	},
 
 	getReaderForModel: function(modelName) {
-		this._readers = this._readers || [];
+		this.readers = this.readers || [];
 
 		if (!NextThought.model.hasOwnProperty(modelName)){
 			console.error('no model for NextThought.model.' + modelName);
 			return;
 		}
 
-		if (!this._readers[modelName]) {
-			this._readers[modelName] = Ext.create('reader.json',{
+		if (!this.readers[modelName]) {
+			this.readers[modelName] = Ext.create('reader.json',{
 				model: 'NextThought.model.'+modelName, proxy: 'nti'
 			});
 		}
 
-		return this._readers[modelName];
+		return this.readers[modelName];
 
 	}
 

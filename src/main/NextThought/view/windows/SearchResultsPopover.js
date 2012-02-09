@@ -24,13 +24,13 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
 
 	initComponent: function(config) {
 		var me = this,
-			s = _AppConfig.service;
+			s = $AppConfig.service;
 
 		//values that change should not be defined on the prototype/class, but the instance.
 		Ext.apply(me,{
 			itemSelected: null,
-			_searchVal: null,
-			_filledBoxes: {},
+			searchVal: null,
+			filledBoxes: {},
 			width: me.minWidth,
 			height: 50
 		});
@@ -99,7 +99,7 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
 		var i = this.items,
 			a = i.get(0),
 			b = i.get(1);
-		this._filledBoxes = {};
+		this.filledBoxes = {};
 
 		this.itemSelected = null;
 
@@ -111,13 +111,13 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
 	performSearch: function(value) {
 		var token = {};
 		this.reset();
-		this._searchVal = value;
-		this._searchToken = token;
-		this._updateCount = 2;
+		this.searchVal = value;
+		this.searchToken = token;
+		this.updateCount = 2;
 		Ext.each(this.stores, function(s){
 			s.filters.clear();
 			s.filter('search',value);
-			s._searchToken = token;
+			s.searchToken = token;
 		});
 	},
 
@@ -139,7 +139,7 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
 			h = i? i.hit : null;
 
 		if(i) {
-			this.searchResultClicked(null, null, {hit: h, searchValue: this._searchVal});
+			this.searchResultClicked(null, null, {hit: h, searchValue: this.searchVal});
 		}
 	},
 
@@ -202,7 +202,7 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
 
 	updateContents: function(store, hits, success, opts, panelIndex) {
 
-		if(store._searchToken !== this._searchToken){
+		if(store.searchToken !== this.searchToken){
 			console.log('previous search completed after another already started');
 			return;
 		}
@@ -215,7 +215,7 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
 		var p = this.items.get(panelIndex);
 		if(hits && hits.length > 0) {
 			p.show();
-			this._filledBoxes[panelIndex] = true;
+			this.filledBoxes[panelIndex] = true;
 			Ext.each( hits,
 				function(h){
 					var s = h.get('Snippet')	|| '?blank snippet?',
@@ -237,9 +237,9 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
 	},
 
 	afterUpdate: function() {
-		var fb = this._filledBoxes;
-		this._updateCount--;
-		if (this._updateCount <= 0){
+		var fb = this.filledBoxes;
+		this.updateCount--;
+		if (this.updateCount <= 0){
 			this.handleResize();
 
 			if( this.searchBox ){
@@ -289,6 +289,6 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
 
 
 	searchResultClicked: function(event, dom, opts) {
-		this.fireEvent('goto', opts.hit, this._searchVal);
+		this.fireEvent('goto', opts.hit, this.searchVal);
 	}
 });

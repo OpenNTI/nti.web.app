@@ -10,22 +10,22 @@ Ext.define('NextThought.view.widgets.MiniStreamList', {
 	defaults: {border: false},
 	items:[{html:'Recent Items:', cls:'sidebar-header'},{defaults:{border: false}}],
 	
-	_filter: {},
+	filter: {},
 
 	applyFilter: function(filter){
-		this._filter = filter;
+		this.filter = filter;
 		this.updateStream();
 	},
 
 
 	setStore: function(newStore){
-		if( this._store ){
-			this._store.un('add', this.updateStream, this);
-			this._store.un('load', this.updateStream, this);
+		if( this.store ){
+			this.store.un('add', this.updateStream, this);
+			this.store.un('load', this.updateStream, this);
 		}
 
-		this._store = newStore;
-		this._store.on({
+		this.store = newStore;
+		this.store.on({
 			scope: this,
 			'add': this.updateStream,
 			'load': this.updateStream
@@ -35,9 +35,9 @@ Ext.define('NextThought.view.widgets.MiniStreamList', {
 
 	updateStream: function(){
 		var c=0, u,
-			s = this._store || {each:Ext.emptyFn},
+			s = this.store || {each:Ext.emptyFn},
 			p = this.items.get(1),
-			f = this._filter,
+			f = this.filter,
 			overflow = false;
 
 		p.removeAll(true);

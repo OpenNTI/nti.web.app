@@ -116,7 +116,7 @@ Ext.define('NextThought.controller.Stream', {
 			}
 
 			ps = stores[containerId] || Ext.create('NextThought.store.Stream',
-					{ storeId:'stream-store:'+containerId, _containerId: containerId });
+					{ storeId:'stream-store:'+containerId, containerId: containerId });
 
 			ps.getProxy().url = link;
 			stores[containerId] = ps;

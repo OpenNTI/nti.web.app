@@ -1,35 +1,37 @@
 Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 	extend: 'NextThought.view.widgets.Widget',
+	requires: [
+//		'Ext.ux.Spotlight'
+	],
 
 	constructor: function(record, container, component, icon) {
 		var me = this,
 			d = Ext.query('.document-nibs',container);
 
 		Ext.applyIf(me, {
-			_div: d.length>0? d[0] : me.createElement('div',container,'document-nibs unselectable'),
-			_img: null,
-			_cnt: container,
-			_cmp: component,
-			_menu: null,
-			_record: record,
-			_isMine: record.isModifiable(),
-			_isVisible: record.phantom || me.testFilter(component._filter),
+			div: d.length>0? d[0] : me.createElement('div',container,'document-nibs unselectable'),
+			img: null,
+			container: container,
+			ownerCmp: component,
+			record: record,
+			isModifiable: record.isModifiable(),
+			isVisible: record.phantom || me.testFilter(component.filter),
 
 			isSingleAction: false,
-			_renderPriority: -1,
+			renderPriority: -1,
 
 			requestRender: Ext.Function.createDelayed(me.requestRender, 10, me)
 		});
 
-		me._cmp.on('afterlayout',me.onResize, me);
+		me.ownerCmp.on('afterlayout',me.onResize, me);
 		Ext.EventManager.onWindowResize(me.onResize, me);
 		
 		if(icon){
-			me._img = me.createImage(icon,me._div,
+			me.img = me.createImage(icon,me.div,
 						'action',
-						'width: 17px; background: yellow; height: 17px; position: absolute;'+(me._isVisible?'':'visibility:hidden;'));
-			me._img._annotation = me;
-			Ext.get(me._img).on('click', me.onClick, me);
+						'width: 17px; background: yellow; height: 17px; position: absolute;'+(me.isVisible?'':'visibility:hidden;'));
+			me.img.annotation = me;
+			Ext.get(me.img).on('click', me.onClick, me);
 		}
 
 		me.attachRecord(record);
@@ -39,8 +41,8 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 
 
 	attachRecord: function(record){
-		var old = this._record;
-		this._record = record;
+		var old = this.record;
+		this.record = record;
 
 		record.on('updated',this.attachRecord, this, {single: true});
 
@@ -56,32 +58,30 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 
 	getSortValue: function(){
 		var m = 'getAnchorForSort',
-			r = this._record;
+			r = this.record;
 		return r[m] ? r[m]() : undefined;
 	},
 
 
-	getBubbleParent: function(){return this._cmp; },
-	getBubbleTarget: function(){return this._cmp; },
-	getCmp: function(){ return this._cmp; },
+	getBubbleParent: function(){return this.ownerCmp; },
+	getBubbleTarget: function(){return this.ownerCmp; },
 
-	
+
+	getCmp: null,//implement in subclasses
+
+
 	cleanup: function(){
 		var me = this;
 		NextThought.view.widgets.annotations.Annotation.unregister(me);
 
-		me._cmp.un('afterlayout', this.onResize, me);
+		me.ownerCmp.un('afterlayout', this.onResize, me);
 		Ext.EventManager.removeResizeListener(me.onResize, me);
 
-		if(me._img) {
-			Ext.get(me._img).remove();
+		if(me.img) {
+			Ext.get(me.img).remove();
 		}
 
-		if(me._menu){
-			me._menu.destroy();
-			delete me._menu;
-		}
-		delete me._record;
+		delete me.record;
 		me.requestRender();
 	},
 	
@@ -98,7 +98,7 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 			return true;
 		}
 
-		var p = this._record.get('Creator'),
+		var p = this.record.get('Creator'),
 			targets = filter.shareTargets,
 			pass = !!targets[p];
 			
@@ -106,7 +106,7 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 			return true;
 		}
 		
-		Ext.each(this._record.get('sharedWith'), function(f){
+		Ext.each(this.record.get('sharedWith'), function(f){
 			if(pass) { return false; }
 			if(targets[f]) { pass = true; }
 		},
@@ -119,15 +119,15 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 
 	updateFilterState: function(newFilter){
 		var v = this.testFilter(newFilter);
-		if(v !== this._isVisible){
-			this._isVisible = !!v;
+		if(v !== this.isVisible){
+			this.isVisible = !!v;
 			this.visibilityChanged(v);
 		}
 	},
 	
 
 	visibilityChanged: function(show){
-		var i = Ext.get(this._img);
+		var i = Ext.get(this.img);
 		if(i){
 			if(show) { i.show(); }
 			else { i.hide(); }
@@ -151,19 +151,19 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 
 	
 	getRecord: function(){
-		return this._record;
+		return this.record;
 	},
 	
 	
 	remove: function() {
-		this._record.destroy();
+		this.record.destroy();
 		this.cleanup();
 		this.cleanup = function(){};
 	},
 
 
 	getMenu: function(isLeaf){
-		var m = this._buildMenu();
+		var m = this.buildMenu();
 
 		m.on('hide', function(){
 			if(!isLeaf) { m.destroy(); }
@@ -173,15 +173,15 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 	},
 	
 	
-	_buildMenu: function(items) {
+	buildMenu: function(items) {
 		var m = this;
 
 		if(items){
 			if(items.length) { items.push('-'); }
 			items.push({
-				text: m._isMine? 'Share With' : 'Get Info',
+				text: m.isModifiable? 'Share With' : 'Get Info',
 				handler: function(){
-					m.getCmp().fireEvent('share-with',m._record);
+					m.ownerCmp.fireEvent('share-with',m.record);
 				}
 			});
 		}
@@ -191,10 +191,12 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 	onClick: function(e) {
 		e.preventDefault();
 		
-		var menu, annotations = this._multiAnnotation();
+		var spot, menu, annotations = this.multiAnnotation();
 
 
 		if (annotations && annotations.length > 1) {
+//			spot = Ext.create('Ext.ux.Spotlight', {});
+
 			menu = Ext.create('Ext.menu.Menu');
 			Ext.each(annotations, function(o, i){
 				var subMenu, item;
@@ -212,8 +214,12 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 						menu: subMenu
 					});
 				}
-				this._menuItemHook(o,item, menu);
-				
+				this.menuItemHook(o,item, menu);
+
+				item.on('mouseover', function(){
+
+				});
+
 				menu.add(item);
 			},
 			this);
@@ -221,7 +227,7 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 			menu.on('hide', function(){
 				menu.destroy();
 			});
-			menu.showBy(Ext.get(this._img), 'bl');
+			menu.showBy(Ext.get(this.img), 'bl');
 			return;
 		}
 		
@@ -231,18 +237,18 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 			menu.items.first().handler.call(menu);
 			return;
 		}
-		menu.showBy(Ext.get(this._img), 'bl');
+		menu.showBy(Ext.get(this.img), 'bl');
 	},
 	
-	_menuItemHook: Ext.emptyFn,
+	menuItemHook: Ext.emptyFn,
 	
-	_multiAnnotation: function() {
+	multiAnnotation: function() {
 		var result = [],
-			top = this._img.style.top;
+			top = this.img.style.top;
 
-		Ext.each(this._div.childNodes, function(o){
-			if (o._annotation && top === o.style.top) {
-				result.push(o._annotation);
+		Ext.each(this.div.childNodes, function(o){
+			if (o.annotation && top === o.style.top) {
+				result.push(o.annotation);
 			}
 		});
 		
@@ -251,7 +257,7 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 
 
 	statics: {
-		_annotationEvents: new Ext.util.Observable(),
+//		annotationEvents: new Ext.util.Observable(),
 		registry: [],
 		sorter: null,
 
@@ -277,24 +283,24 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 						return a.getAttribute('name');
 					}
 				),
-				k = '_renderPriority';
+				k = 'renderPriority';
 
-			function _(v){
+			function $(v){
 				var r = v.getSortValue();
 				return  r? Ext.Array.indexOf(anchors,r) : -1;
 			}
 
 			return function(a,b){
-				var _a = _(a),
-					_b = _(b),
+				var $a = $(a),
+					$b = $(b),
 					c = 0;
 
 				if(a[k] !== b[k]){
 					c = a[k] < b[k]? -1 : 1;
 				}
 
-				if( c === 0 && _a !== _b ){
-					c = _a < _b ? -1:1;
+				if( c === 0 && $a !== $b ){
+					c = $a < $b ? -1:1;
 				}
 				return c;
 			};

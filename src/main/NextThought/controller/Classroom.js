@@ -134,8 +134,8 @@ Ext.define('NextThought.controller.Classroom', {
 
 	onSessionReady: function(){
 		var app = this.application,
-			s = _AppConfig.service,
-			host = _AppConfig.server.host,
+			s = $AppConfig.service,
+			host = $AppConfig.server.host,
 			pStore = this.getProvidersStore(),
 			sStore = this.getSectionsStore(),
 			pColl = s.getCollection('OU', 'providers'),
@@ -223,7 +223,7 @@ Ext.define('NextThought.controller.Classroom', {
 
 
 	onMessageContentNavigate: function(ntiid) {
-		var s = _AppConfig.service,
+		var s = $AppConfig.service,
 			o = Library.findLocation(ntiid),
 			book = o ? o.book : null,
 			href = o ? o.location.getAttribute('href') : null,
@@ -239,7 +239,7 @@ Ext.define('NextThought.controller.Classroom', {
 		}
 		else {
 			//we must have some other non-book related object, get it and display
-			nonBookHref = _AppConfig.server.host + _AppConfig.service.getCollection('Objects', 'Global').href + '/' + ntiid;
+			nonBookHref = $AppConfig.server.host + $AppConfig.service.getCollection('Objects', 'Global').href + '/' + ntiid;
 			this.getLiveDisplay().addContent(nonBookHref);
 		}
 	},
@@ -355,7 +355,7 @@ Ext.define('NextThought.controller.Classroom', {
 
 
 	onResourceSelectedInClassroom: function(r) {
-		var href = _AppConfig.server.host + r.get('href'),
+		var href = $AppConfig.server.host + r.get('href'),
 			name = ClassroomUtils.getNameFromHref(href),
 			mime = r.get('type'),
 			ntiid = r.get('ntiid');
@@ -366,7 +366,7 @@ Ext.define('NextThought.controller.Classroom', {
 
 
 	onResourceSelected: function(r) {
-		var href = _AppConfig.server.host + r.get('href'),
+		var href = $AppConfig.server.host + r.get('href'),
 			mime = r.get('type'),
 			name = ClassroomUtils.getNameFromHref(href);
 
@@ -440,7 +440,7 @@ Ext.define('NextThought.controller.Classroom', {
 			scriptName = reg.down('textfield').value,
 			v = html.getValue(),
 			r = html.record,
-			href = (!r || r.phantom) ? _AppConfig.server.host + ed.down('classroom-resource-view').record.get('href') : null,
+			href = (!r || r.phantom) ? $AppConfig.server.host + ed.down('classroom-resource-view').record.get('href') : null,
 			cs;
 
 		ed.el.mask('Saving...');
@@ -526,8 +526,8 @@ Ext.define('NextThought.controller.Classroom', {
 			c.showClassChooser();
 		}
 		else {
-			if (ld._content.items.first() !== ld.getReaderPanel()) {
-				ld._content.add(ld.getReaderPanel());
+			if (ld.content.items.first() !== ld.getReaderPanel()) {
+				ld.content.add(ld.getReaderPanel());
 				ld.getReaderPanel().restore(this.getController('State').getState().classroom);
 			}
 		}

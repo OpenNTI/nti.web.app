@@ -20,7 +20,7 @@ Ext.define('NextThought.view.windows.GroupEditorWindow', {
 			n, s;
 		me.callParent(arguments);
 		me.removeAll();
-		me._store = Ext.create('Ext.data.Store',{
+		me.store = Ext.create('Ext.data.Store',{
 			model: 'NextThought.model.User',
 			proxy: 'memory'
 		});
@@ -28,7 +28,7 @@ Ext.define('NextThought.view.windows.GroupEditorWindow', {
 		if(!me.record.phantom){
 			Ext.each(me.record.get('friends'),
 				function(f){
-					me._store.add(UserRepository.getUser(f));
+					me.store.add(UserRepository.getUser(f));
 				});
 
 			n = me.record.get('realname');
@@ -51,7 +51,7 @@ Ext.define('NextThought.view.windows.GroupEditorWindow', {
 					},{
 						anchor: '100% -72',
 						xtype: 'grid',
-						store: this._store,
+						store: this.store,
 						columns: [
 							{
 								text	 : '',
@@ -79,7 +79,7 @@ Ext.define('NextThought.view.windows.GroupEditorWindow', {
 									icon   : 'ext-4.0.7/examples/shared/icons/fam/delete.gif',  // Use a URL in the icon config
 									tooltip: 'Remove',
 									handler: function(grid, rowIndex) {
-										me._store.removeAt(rowIndex);
+										me.store.removeAt(rowIndex);
 									}
 								}]
 							}
@@ -95,7 +95,7 @@ Ext.define('NextThought.view.windows.GroupEditorWindow', {
 				});
 
 		s = me.down('usersearchinput');
-		s.on('select', me._selectSearch, me);
+		s.on('select', me.selectSearch, me);
 	},
 
 	show: function(){
@@ -104,8 +104,8 @@ Ext.define('NextThought.view.windows.GroupEditorWindow', {
 		setTimeout(function(){e.focus();}, 500);
 	},
 
-	_selectSearch: function(sel, items) {
-		this._store.add(items);
+	selectSearch: function(sel, items) {
+		this.store.add(items);
 		sel.setValue('');
 		sel.clearInvalid();
 		sel.collapse();

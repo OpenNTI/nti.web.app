@@ -1,4 +1,4 @@
-var _AppConfig = {
+var $AppConfig = {
 	"server" : {
         "host": "http://localhost:8080",
         //"host": "http://alpha.nextthought.com",

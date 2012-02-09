@@ -100,14 +100,14 @@ Ext.define('NextThought.model.Base', {
 			console.group("Model", cName, id || data ? data[this.idProperty] : 'new');
 		}
 		c = this.callParent(arguments);
-		this._enforceMutability();
+		this.enforceMutability();
 
 		if(openedGroup){ console.groupEnd(); }
 		return c;
 	},
 
 
-	_enforceMutability: function(){
+	enforceMutability: function(){
 		if(!this.isModifiable()){
 			this.destroy = Ext.emptyFn();
 			this.save = Ext.emptyFn();
@@ -126,7 +126,7 @@ Ext.define('NextThought.model.Base', {
 
 	getLink: function(rel){
 		var ref = this.get('Links').getRelHref(rel);
-		return ref? _AppConfig.server.host + Globals.ensureSlash(ref, true) : null;
+		return ref? $AppConfig.server.host + Globals.ensureSlash(ref, true) : null;
 	},
 
 
@@ -158,7 +158,7 @@ Ext.define('NextThought.model.Base', {
 		}
 
 		Ext.Ajax.request({
-			url: _AppConfig.server.host + href,
+			url: $AppConfig.server.host + href,
 			async: false,
 			callback: function(req, success, resp){
 				if(!success){
@@ -166,7 +166,7 @@ Ext.define('NextThought.model.Base', {
 					return;
 				}
 				me.set(Ext.JSON.decode(resp.responseText));
-				me._enforceMutability();
+				me.enforceMutability();
 				me.dirty = false;
 				me.modified = {};
 			}

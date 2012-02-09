@@ -46,7 +46,7 @@ Ext.define('NextThought.view.widgets.ItemNavigator', {
 					tooltip: 'Go to',
 					scope: me,
 					handler: function(grid, rowIndex, colIndex) {
-						var r = me._store.getAt(rowIndex);
+						var r = me.store.getAt(rowIndex);
 						grid.fireEvent('itemdblclick', grid, r, null, rowIndex);
 					}
 				}]
@@ -61,7 +61,7 @@ Ext.define('NextThought.view.widgets.ItemNavigator', {
 					tooltip: 'Remove',
 					scope: me,
 					handler: function(grid, rowIndex, colIndex) {
-						var s = me._store,
+						var s = me.store,
 							r = s.getAt(rowIndex);
 
 						s.removeAt(rowIndex);
@@ -72,7 +72,7 @@ Ext.define('NextThought.view.widgets.ItemNavigator', {
 
 		me.callParent(arguments);
 		//me.el.mask('loading...');
-		me._store = Ext.create('Ext.data.Store',{
+		me.store = Ext.create('Ext.data.Store',{
 			storeId: 'nav',
 			model: 'NextThought.model.Hit',
 			groupField: 'Type',
@@ -82,14 +82,14 @@ Ext.define('NextThought.view.widgets.ItemNavigator', {
 			remoteSort: false,
 			proxy: {
 				type: 'search',
-				url: _AppConfig.service.getUserDataSearchURL(),
+				url: $AppConfig.service.getUserDataSearchURL(),
 				reader: 'nti'
 			}
 		});
 
 		me.add({
 			xtype: 'grid',
-			store: me._store,
+			store: me.store,
 			anchor: '100% 100%',
 			enableColumnHide: false,
 			features: [{
@@ -134,19 +134,19 @@ Ext.define('NextThought.view.widgets.ItemNavigator', {
 		});
 
 		trigger = me.query('triggerfield')[0];
-		trigger.on('keypress',me._filter, me);
-		trigger.on('specialkey',me._filter, me);
+		trigger.on('keypress',me.filter, me);
+		trigger.on('specialkey',me.filter, me);
 	},
 
 
-	_filter: function(t){
-		this._store.filters.clear();
-		this._store.filter('search',t.getValue());
+	filter: function(t){
+		this.store.filters.clear();
+		this.store.filter('search',t.getValue());
 	},
 
 
 	reload: function() {
-		this._store.load();
+		this.store.load();
 	}
 
 });

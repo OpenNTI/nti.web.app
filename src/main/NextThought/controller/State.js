@@ -18,7 +18,7 @@ Ext.define('NextThought.controller.State', {
 		var me = this,
 			push = window.history.pushState;
 
-		me._currentState = {};
+		me.currentState = {};
 
 		me.isHangout = this.getController('Google').isHangout();
 
@@ -39,7 +39,7 @@ Ext.define('NextThought.controller.State', {
 
 		window.history.updateState = function(s){
 			if(!me.isPoppingHistory && push){
-				me._currentState = Ext.Object.merge(me._currentState, s);
+				me.currentState = Ext.Object.merge(me.currentState, s);
 				return me.fireEvent('stateChange',s);
 			}
 			return false;
@@ -56,7 +56,7 @@ Ext.define('NextThought.controller.State', {
 
 
 	getState: function(){
-		return Ext.clone(this._currentState);
+		return Ext.clone(this.currentState);
 	},
 
 
@@ -79,10 +79,10 @@ Ext.define('NextThought.controller.State', {
 
 
 	trackMode: function(modeId){
-		if(this._currentState.active !== modeId && NextThought.isInitialised){
-			//console.debug(this._currentState.active, modeId);
-			this._currentState.active = modeId;
-			history.pushState(this._currentState, 'Title Goes Here');
+		if(this.currentState.active !== modeId && NextThought.isInitialised){
+			//console.debug(this.currentState.active, modeId);
+			this.currentState.active = modeId;
+			history.pushState(this.currentState, 'Title Goes Here');
 		}
 	},
 
@@ -109,7 +109,7 @@ Ext.define('NextThought.controller.State', {
 
 		c = Ext.getCmp(stateObject.active);
 		if(c){
-			this._currentState.active = stateObject.active;
+			this.currentState.active = stateObject.active;
 			c.activate();
 		}
 
@@ -119,7 +119,7 @@ Ext.define('NextThought.controller.State', {
 				if(c && c.restore){
 					try{
 						stateScoped = {};
-						this._currentState[key] = stateScoped[key] = stateObject[key];
+						this.currentState[key] = stateScoped[key] = stateObject[key];
 						fin(c);
 						c.restore(stateScoped);
 					}
@@ -134,7 +134,7 @@ Ext.define('NextThought.controller.State', {
 		}
 
 		if(replaceState) {
-			history.replaceState(this._currentState,'Title');
+			history.replaceState(this.currentState,'Title');
 		}
 
 		this.restoringState = false;

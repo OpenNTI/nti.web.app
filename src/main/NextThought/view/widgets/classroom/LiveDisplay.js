@@ -19,13 +19,13 @@ Ext.define('NextThought.view.widgets.classroom.LiveDisplay', {
 	{
 		this.callParent(arguments);
 
-		this._content = this.add({
+		this.content = this.add({
 			layout: 'fit',
 			tabConfig:{title: 'Content', content:true, tooltip: 'Live Content'},
 			dockedItems: {dock:'bottom', xtype: 'breadcrumbbar', skipHistory: true}
 		});
 
-		this._whiteboard = this.add({tabConfig:{title:'Whiteboard', tooltip: 'Live Whiteboard'}});
+		this.whiteboard = this.add({tabConfig:{title:'Whiteboard', tooltip: 'Live Whiteboard'}});
 	},
 
 	getReaderPanel: function() {
@@ -58,7 +58,7 @@ Ext.define('NextThought.view.widgets.classroom.LiveDisplay', {
 
 	destroy: function() {
 		//remove reader so it is not destroyed
-		this._content.remove(this.getReaderPanel(), false);
+		this.content.remove(this.getReaderPanel(), false);
 
 		//do this last
 		this.callParent(arguments);

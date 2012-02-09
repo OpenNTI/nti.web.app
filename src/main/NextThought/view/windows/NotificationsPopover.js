@@ -17,7 +17,7 @@ Ext.define('NextThought.view.windows.NotificationsPopover', {
 		defaults: {border: false}},
 
 	initComponent: function() {
-		this._lastLoginTime = _AppConfig.userObject.get('lastLoginTime');
+		this.lastLoginTime = $AppConfig.userObject.get('lastLoginTime');
 		this.callParent(arguments);
 	},
 
@@ -68,7 +68,7 @@ Ext.define('NextThought.view.windows.NotificationsPopover', {
 				return;
 			}
 			
-			unread = (change.get('Last Modified') > this._lastLoginTime);
+			unread = (change.get('Last Modified') > this.lastLoginTime);
 			p.add({xtype: 'miniStreamEntry', change: change, cls: unread ? 'unread' : 'read'});
 			if (!unread) {readCount++;}
 		}

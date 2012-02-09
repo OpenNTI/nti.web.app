@@ -35,9 +35,9 @@ Ext.define('NextThought.view.Viewport', {
 	},
 
 	getActive: function(){
-		if(!this._container) {
-			this._container = this.down('modeContainer');
+		if(!this.container) {
+			this.container = this.down('modeContainer');
 		}
-		return this._container.getActive();
+		return this.container.getActive();
 	}
 });

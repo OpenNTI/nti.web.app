@@ -59,7 +59,7 @@ Ext.define('NextThought.view.windows.ChatWindow', {
 		if (!tab) {
 			tab = this.down('tabpanel').add(
 				{
-					title: this._generateTabName(roomInfo),
+					title: this.generateTabName(roomInfo),
 					xtype: 'chat-view',
 					roomId: id,
 					closable: true,
@@ -84,7 +84,7 @@ Ext.define('NextThought.view.windows.ChatWindow', {
 		}
 	},
 
-	_generateTabName: function(roomInfo) {
+	generateTabName: function(roomInfo) {
 		var occs = roomInfo.get('Occupants'),
 			numOccs = occs.length,
 			result = [],
@@ -95,7 +95,7 @@ Ext.define('NextThought.view.windows.ChatWindow', {
 		for (i = 0; result.length<max && i < numOccs; i++) {
 			u =  NextThought.cache.UserRepository.getUser(occs[i]);
 
-			if (u.getId() === _AppConfig.userObject.getId()){continue;}
+			if (u.getId() === $AppConfig.userObject.getId()){continue;}
 
 			result.push(u.get('alias') || u.get('Username'));
 		}

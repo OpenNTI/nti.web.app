@@ -20,12 +20,12 @@ Ext.define('NextThought.util.Base64',
 		}
 	},
 	
-	_keyStr : 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=',
+	keyStr : 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=',
 
 	encode: function(stringToEncode) {
 		var output = "", chr1, chr2, chr3, enc1, enc2, enc3, enc4, i = 0, input;
 
-		input = this._utf8_encode(stringToEncode);
+		input = this.utf8_encode(stringToEncode);
 
 		while (i < input.length) {
 
@@ -45,8 +45,8 @@ Ext.define('NextThought.util.Base64',
 			}
 
 			output = output +
-			this._keyStr.charAt(enc1) + this._keyStr.charAt(enc2) +
-			this._keyStr.charAt(enc3) + this._keyStr.charAt(enc4);
+			this.keyStr.charAt(enc1) + this.keyStr.charAt(enc2) +
+			this.keyStr.charAt(enc3) + this.keyStr.charAt(enc4);
 
 		}
 
@@ -63,10 +63,10 @@ Ext.define('NextThought.util.Base64',
 
 		while (i < input.length) {
 
-			enc1 = this._keyStr.indexOf(input.charAt(i++));
-			enc2 = this._keyStr.indexOf(input.charAt(i++));
-			enc3 = this._keyStr.indexOf(input.charAt(i++));
-			enc4 = this._keyStr.indexOf(input.charAt(i++));
+			enc1 = this.keyStr.indexOf(input.charAt(i++));
+			enc2 = this.keyStr.indexOf(input.charAt(i++));
+			enc3 = this.keyStr.indexOf(input.charAt(i++));
+			enc4 = this.keyStr.indexOf(input.charAt(i++));
 
 			chr1 = (enc1 << 2) | (enc2 >> 4);
 			chr2 = ((enc2 & 15) << 4) | (enc3 >> 2);
@@ -83,7 +83,7 @@ Ext.define('NextThought.util.Base64',
 
 		}
 
-		output = this._utf8_decode(output);
+		output = this.utf8_decode(output);
 
 		return output;
 
@@ -91,7 +91,7 @@ Ext.define('NextThought.util.Base64',
 
 	
 	// private method for UTF-8 encoding
-	_utf8_encode : function (string) {
+	utf8_encode : function (string) {
 		string = string.replace(/\r\n/g,"\n");
 		var utftext = "", n, c;
 
@@ -117,7 +117,7 @@ Ext.define('NextThought.util.Base64',
 		return utftext;
 	},
 
-	_utf8_decode : function (utftext) {
+	utf8_decode : function (utftext) {
 		var string = "", i = 0, c = 0, c2 = 0, c3=0;
 
 		while ( i < utftext.length ) {

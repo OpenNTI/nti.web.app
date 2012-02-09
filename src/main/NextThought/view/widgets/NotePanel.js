@@ -57,8 +57,8 @@ Ext.define('NextThought.view.widgets.NotePanel',{
 
 	initComponent: function(){
 		var m = this,
-			a = m._annotation,
-			r = m._record = m._record || a._record;
+			a = m.annotation,
+			r = m.record = m.record || a.record;
 
 		m.id = this.getCmpId(r);
 
@@ -195,7 +195,7 @@ Ext.define('NextThought.view.widgets.NotePanel',{
 			owner = m.isModifiable(),
 			t = AnnotationUtils.compileBodyContent(m);
 
-		me._record = m;
+		me.record = m;
 
 		me.renderData.time = Ext.Date.format(m.get('Last Modified') || new Date(), 'g:i:sa M j, Y');
 		me.renderData.name = 'resolving...';
@@ -226,7 +226,7 @@ Ext.define('NextThought.view.widgets.NotePanel',{
 	afterRender: function(){
 		var me = this;
 		me.callParent(arguments);
-		if(me._record.placeHolder){
+		if(me.record.placeHolder){
 			me.convertToPlaceHolder();
 		}
 
@@ -267,7 +267,7 @@ Ext.define('NextThought.view.widgets.NotePanel',{
 		}
 		else if(me.box.isDisplayed() && me.isTranscriptSummary()){
 			me.box.setDisplayed(false);
-			me.fireEvent('load-transcript', me._record, me);
+			me.fireEvent('load-transcript', me.record, me);
 		}
 		else{
 			me.box.fadeOut({
@@ -281,7 +281,7 @@ Ext.define('NextThought.view.widgets.NotePanel',{
 			    easing: 'easeOut',
 			    duration: 50,
 				callback: function(){
-					if(me._record.isModifiable()) {
+					if(me.record.isModifiable()) {
 						me.fireEvent('action', 'edit', me);
 					}
 				}
@@ -293,7 +293,7 @@ Ext.define('NextThought.view.widgets.NotePanel',{
 
 
 	isTranscriptSummary: function(){
-		return (/TranscriptSummary/i).test(this._record.getModelName());
+		return (/TranscriptSummary/i).test(this.record.getModelName());
 	},
 
 
@@ -327,14 +327,14 @@ Ext.define('NextThought.view.widgets.NotePanel',{
 	buildReply: function(record){
 		try {
 		var m = this,
-			a = m._annotation,
-			p = a._parentAnnotation? a._parentAnnotation : a,
+			a = m.annotation,
+			p = a.parentAnnotation? a.parentAnnotation : a,
 			r;
 			r = Ext.create('widget.note-entry',{
-				_record: record,
-				_owner: m,
-				_annotation: {
-					_parentAnnotation: p,
+				record: record,
+				owner: m,
+				annotation: {
+					parentAnnotation: p,
 					getRecord: function(){return record;},
 					remove: function(){ r.removeReply();},
 					cleanup: function(){ r.cleanupReply();}
@@ -350,7 +350,7 @@ Ext.define('NextThought.view.widgets.NotePanel',{
 		}
 	},
 
-	_claimChild: function(children, child) {
+	claimChild: function(children, child) {
 		var cOid = child.get('NTIID'),
 			i, o;
 		for(i in children) {
@@ -365,7 +365,7 @@ Ext.define('NextThought.view.widgets.NotePanel',{
 	},
 
 	updateFromRecord: function(record) {
-		var abandonedChildren = Ext.Array.clone(this._record.children || []),
+		var abandonedChildren = Ext.Array.clone(this.record.children || []),
 			a, id, panel;
 
 		this.updateModel(record);
@@ -373,7 +373,7 @@ Ext.define('NextThought.view.widgets.NotePanel',{
 
 		if (record.children && record.children.length > 0) {
 			Ext.each(record.children, function(rec){
-				this._claimChild(abandonedChildren, rec);
+				this.claimChild(abandonedChildren, rec);
 				var id = this.getCmpId(rec),
 					reply = this.getComponent(id);
 
@@ -395,7 +395,7 @@ Ext.define('NextThought.view.widgets.NotePanel',{
 		}
 
 		//set the record to the new record.
-		this._record = record;
+		this.record = record;
 	},
 
 
@@ -406,8 +406,8 @@ Ext.define('NextThought.view.widgets.NotePanel',{
 	cleanupReply: function(removeAll){
 		var m = this;
 		/*,
-		children = m._record.children,
-		parent = m._record._parent;
+		children = m.record.children,
+		parent = m.record.parent;
 		*/
 		if (removeAll) {
 			m.items.each(function(i){
@@ -438,29 +438,29 @@ Ext.define('NextThought.view.widgets.NotePanel',{
 
 	removeReply: function(){
 		this.cleanupReply();
-		this._record.destroy();
+		this.record.destroy();
 	},
 
 
 	replyUpdated: function(record){
 		var m = this,
-			children = m._record.children,
-			parent = m._record._parent;
+			children = m.record.children,
+			parent = m.record.parent;
 
 		record.on('updated',m.replyUpdated, m);
 		record.children = children;
-		record._parent = parent;
+		record.parent = parent;
 
-		m._record = record;
+		m.record = record;
 		m.updateModel(record);
 		m.sizeChanged();
 	},
 
 
 	sizeChanged: function(){
-		var a = this._annotation;
+		var a = this.annotation;
 		try{
-			a = (a._parentAnnotation || a);
+			a = (a.parentAnnotation || a);
 			a.requestRender();
 		}
 		catch(e){

@@ -25,7 +25,7 @@ Ext.define('NextThought.model.Service', {
 			return null;
 		}
 
-		return _AppConfig.server.host + this._forceTrailingSlash(l) + (username?username:'');
+		return $AppConfig.server.host + this.forceTrailingSlash(l) + (username?username:'');
 	},
 
 
@@ -37,26 +37,26 @@ Ext.define('NextThought.model.Service', {
 			return null;
 		}
 
-		return _AppConfig.server.host + this._forceTrailingSlash(l);
+		return $AppConfig.server.host + this.forceTrailingSlash(l);
 	},
 
 
 	getSearchURL : function(containerId){
-		var h = _AppConfig.server.host,
+		var h = $AppConfig.server.host,
 			c = containerId ? containerId : 'prealgebra';
 		return h+'/'+c+'/Search/';
 	},
 
 
 	getQuizSubmitURL: function(ntiid){
-		var h = _AppConfig.server.host,
-			u = _AppConfig.username;
+		var h = $AppConfig.server.host,
+			u = $AppConfig.username;
 
 		return  h+'/dataserver/users/'+u+'/quizresults/'+ntiid;
 	},
 
 
-	_forceTrailingSlash: function(uri){
+	forceTrailingSlash: function(uri){
 		if(uri.charAt(uri.length-1)==='/') {
 			return uri;
 		}
@@ -152,7 +152,7 @@ Ext.define('NextThought.model.Service', {
 
 
 	getCollection: function(title, workspaceName){
-		var workspace = this.getWorkspace(workspaceName || _AppConfig.username) || {},
+		var workspace = this.getWorkspace(workspaceName || $AppConfig.username) || {},
 			items = workspace.Items || [],
 			i, item, collection = null;
 
@@ -172,7 +172,7 @@ Ext.define('NextThought.model.Service', {
 	},
 
 	getObject: function (ntiid, success, failure, scope){
-		var host = _AppConfig.server.host,
+		var host = $AppConfig.server.host,
 			url = host + this.getCollection('Objects', 'Global').href + '/' + ntiid;
 
 		Ext.Ajax.request({
