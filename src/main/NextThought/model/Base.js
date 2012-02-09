@@ -69,7 +69,8 @@ Ext.define('NextThought.model.Base', {
 	constructor: function(data,id,raw){
 		var c, f = this.fields,
 			cName = this.self.getName().split('.').pop(),
-			cField = f.getByKey('Class');
+			cField = f.getByKey('Class'),
+			openedGroup = false;
 
 
 		if(!cField.defaultValue) {
@@ -93,11 +94,15 @@ Ext.define('NextThought.model.Base', {
 		}
 
 		f.getByKey('MimeType').defaultValue = this.mimeType;
-		console.groupCollapsed("Model", cName, id || data ? data[this.idProperty] : 'new');
+
+		if(!window.stopTrackingModelConstruction){
+			openedGroup = true;
+			console.group("Model", cName, id || data ? data[this.idProperty] : 'new');
+		}
 		c = this.callParent(arguments);
-		console.groupEnd();
 		this._enforceMutability();
 
+		if(openedGroup){ console.groupEnd(); }
 		return c;
 	},
 

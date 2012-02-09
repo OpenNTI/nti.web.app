@@ -28,6 +28,7 @@ Ext.define('NextThought.controller.Application', {
 		Library.on('loaded', this.restore, this);
 		this.application.on('finished-loading', function(){
 			console.groupEnd();
+			window.stopTrackingModelConstruction = true;
 		});
 	},
 
