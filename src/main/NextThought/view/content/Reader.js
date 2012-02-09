@@ -33,9 +33,17 @@ Ext.define('NextThought.view.content.Reader', {
 
 
 	scrollToId: function(id) {
-		var n = Ext.getCmp(id);
+		var n = Ext.getCmp(id),
+			m;
 		if(n) {
 			this.scrollToNode(n.getEl());
+			if (n.getMenu) {
+				m = n.getMenu();
+				if (m && m.items.getCount() === 1) {
+					//a single menu item, might as well click it for them
+					m.items.first().handler.call(window);
+				}
+			}
 		}
 		else {
 			console.error('Could not find Component with id: ',id);

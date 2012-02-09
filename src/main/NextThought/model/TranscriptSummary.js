@@ -1,6 +1,5 @@
 Ext.define('NextThought.model.TranscriptSummary', {
 	extend: 'NextThought.model.Base',
-	idProperty: 'RoomInfo.NTIID',//wish this worked...
 	fields: [
 		{ name: 'RoomInfo', type: 'singleItem'},
 		{ name: 'Contributors', type: 'auto' }

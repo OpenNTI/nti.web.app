@@ -93,7 +93,7 @@ Ext.define('NextThought.model.Base', {
 		}
 
 		f.getByKey('MimeType').defaultValue = this.mimeType;
-		console.group("Model",cName,id || data? data[this.idProperty] : 'new?');
+		console.group("Model",cName,id || data ? data[this.idProperty] : 'new?');
 		c = this.callParent(arguments);
 		console.groupEnd();
 		this._enforceMutability();
