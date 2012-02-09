@@ -143,7 +143,8 @@ Ext.define('NextThought.controller.Search', {
 		var popover = this.getSearchPopover();
 
 		if(popover){
-			popover.close().reset();
+			popover.reset();
+			popover.close();
 		}
 
 		this.getViewport().fireEvent('cleared-search');
