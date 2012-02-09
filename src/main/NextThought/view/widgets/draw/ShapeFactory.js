@@ -5,6 +5,7 @@ Ext.define('NextThought.view.widgets.draw.ShapeFactory',
 	requires: [
 		'NextThought.view.widgets.draw.Polygon',
 		'NextThought.view.widgets.draw.Line',
+		'NextThought.view.widgets.draw.Path',
 		'NextThought.view.widgets.draw.Ellipse',
 		'NextThought.view.widgets.draw.Text',
 		'NextThought.util.Color'
@@ -13,7 +14,7 @@ Ext.define('NextThought.view.widgets.draw.ShapeFactory',
 	shapeTypeMap: {
 		ellipse: 'ellipse',
 		line: 'line',
-		path: 'base',
+		path: 'path',
 		polygon: 'polygon',
 		text: 'text'
 	},
@@ -65,6 +66,14 @@ Ext.define('NextThought.view.widgets.draw.ShapeFactory',
 			}
 		}
 
+		if (json.path) {
+			for (k in json.path) {
+				if(json.path.hasOwnProperty(k) && typeof json.path[k] === 'number') {
+					json.path[k] *= factor;
+				}
+			}
+		}
+
 		return json;
 	},
 
@@ -73,7 +82,8 @@ Ext.define('NextThought.view.widgets.draw.ShapeFactory',
 		var m = {
 			'CanvasPolygonShape': 'sprite-polygon',
 			'CanvasCircleShape': 'sprite-ellipse',
-			'CanvasTextShape': 'sprite-text'
+			'CanvasTextShape': 'sprite-text',
+			'CanvasPathShape': 'sprite-path'
 		},
 			s = m[c];
 
@@ -95,11 +105,11 @@ Ext.define('NextThought.view.widgets.draw.ShapeFactory',
 		this.scaleJson(scaleFactor, shape);
 
 		t = Ext.create('Ext.draw.Matrix',t.a,t.b,t.c,t.d,t.tx,t.ty).split();
-
 		s = Ext.widget(this.getSpriteClass(shape.Class, shape.sides),{
 			sides: shape.sides,
 			'stroke-width': shape.strokeWidthTarget,
 			text: shape.text,
+			path: shape.path || undefined,
 			stroke: p.toString(),
 			fill: c.toString(),
 			translate: {

@@ -293,6 +293,7 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 				if(i===ab || i.isNib || a.hidden || (!bb.width && !bb.height)){return;}
 
                 o = ShapeFactory.scaleJson(1/w, i.toJSON());
+
                 o.strokeWidth = o.strokeWidthTarget + '%';
                 delete o.strokeWidthTarget;
 

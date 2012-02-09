@@ -56,6 +56,9 @@ Ext.define('NextThought.view.widgets.annotations.BodyEditor', {
 
 		this.callParent(arguments);
 		this.on('thumbnail-clicked',this.showWhiteboardEditor, this);
+
+		this.on('thumbnail-clicked',this.showWhiteboardEditor, this);
+		this.down('htmleditor').on('initialize',this.attachClickHandlers, this);
 	},
 
 
@@ -96,6 +99,38 @@ Ext.define('NextThought.view.widgets.annotations.BodyEditor', {
 
 		this.doLayout();
 		this.doComponentLayout();
+	},
+
+	attachClickHandlers: function(){
+		var me = this,
+			editor = me.down('htmleditor'),
+			iFrameDoc = editor.getDoc(),
+			id, el;
+
+		function buildCallback(id){
+			return function(){ me.fireEvent('thumbnail-clicked',id); };
+		}
+
+		function buildHover(css){
+			return function(e,el){
+				var sel = 'div.body-divider',
+					x = Ext.fly(el).is(sel)? Ext.get(el) : Ext.fly(el).up(sel);
+				x.setStyle(css);
+			};
+		}
+
+
+		while(!!(id = this.thumbs.pop()) ) {
+			el = iFrameDoc.getElementById(id);
+			if(!el){
+				console.warn('no el for id:', id);
+				continue;
+			}
+			Ext.fly(el).on('click', buildCallback(id));
+			Ext.fly(el).setStyle({cursor:'pointer'});
+			Ext.fly(el).on('mouseover',buildHover({ background: '#eeeeee' }));
+			Ext.fly(el).on('mouseout', buildHover({ background: 'None' }));
+		}
 	},
 
 
