@@ -116,6 +116,7 @@ Ext.define('NextThought.util.Globals',
 
 	removeLoaderSplash: function(){
 		var me = this;
+		me.removeLoaderSplash = Ext.emptyFn;
 		setTimeout(
 			function clearMask(){
 				Ext.get('loading').remove();
@@ -131,6 +132,7 @@ Ext.define('NextThought.util.Globals',
 		this.ensureNodePrototypes();
 
 		window.alert = function(title, msg){
+			Globals.removeLoaderSplash();
 			if(arguments.length===1){
 				msg = title;
 				title = null;

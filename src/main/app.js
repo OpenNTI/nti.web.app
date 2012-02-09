@@ -41,21 +41,26 @@ Ext.application({
 			NextThought.isReady = true;
 		}
 
+		if(typeof $AppConfig === 'undefined' || typeof $AppConfig.server === 'undefined'){
+			alert("Bad or no configuation.");
+			return;
+		}
+
+		if(!HOST_PATTERN.test($AppConfig.server.host)){
+			alert('Bad Server Config, your host does not validate the pattern:'+HOST_PATTERN);
+			return;
+		}
+
+		if(!/^\/.+\/$/.test($AppConfig.server.data)){
+			alert('Bad Server Config, your data path does not validate the pattern: /.+/');
+			return;
+		}
+
 		Globals.loadScript($AppConfig.server.host+'/socket.io/static/socket.io.js');
 		Globals.loadScript($AppConfig.server.host+'/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML', function(){
 			Globals.loadScript('./resources/mathjaxconfig.js');
 		});
 
-
-		if(!HOST_PATTERN.test($AppConfig.server.host)){
-			console.error('Bad Server Config, your host does not validate the pattern:',HOST_PATTERN);
-			return;
-		}
-
-		if(!/^\/.+\/$/.test($AppConfig.server.data)){
-			console.error('Bad Server Config, your data path does not validate the pattern: /.+/');
-			return;
-		}
 
 		window.app = this;
 		var g = this.getController('Google'),
