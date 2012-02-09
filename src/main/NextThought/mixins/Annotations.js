@@ -214,7 +214,6 @@ Ext.define('NextThought.mixins.Annotations', {
 
 	createTranscriptSummaryWidget: function(record) {
 		if (record._parent) {return;}
-
 		this._annotations[record.get('NTIID')] =
 			Ext.create(
 				'NextThought.view.widgets.annotations.Transcript',
@@ -372,7 +371,7 @@ Ext.define('NextThought.mixins.Annotations', {
 
 		Ext.each(list, function buildTree(r){
 			var g = me.GETTERS[r.getModelName()](r),
-				oid = g.get('NTIID'),
+				oid = g.getId(),
 				parent = g.get('inReplyTo'),
 				p;
 
