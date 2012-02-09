@@ -93,7 +93,7 @@ Ext.define('NextThought.model.Base', {
 		}
 
 		f.getByKey('MimeType').defaultValue = this.mimeType;
-		console.group("Model",cName,id || data ? data[this.idProperty] : 'new?');
+		console.groupCollapsed("Model", cName, id || data ? data[this.idProperty] : 'new');
 		c = this.callParent(arguments);
 		console.groupEnd();
 		this._enforceMutability();
@@ -334,11 +334,14 @@ Ext.data.Types.USERLIST = {
 					}
 					else  {
 						u.push(p);
-						if(typeof(o) === 'string' && !UserRepository.has(o)) {
-							console.warn("Will resolve UserId because we don't have an object to parse:", record.get('Class'), '@', record.getId(), o);
+						if(!UserRepository.has(o)){
+							if(typeof(o) === 'string') {
+								console.warn("Will resolve UserId because we don't have an object to parse:",
+										record.get('Class'), '@', record.getId(), o);
+							}
+							//asynchronously resolve this user so its cached and ready
+							UserRepository.prefetchUser(o);
 						}
-						//asynchronously resolve this user so its cached and ready
-						UserRepository.prefetchUser(o);
 					}
 				});
 			}

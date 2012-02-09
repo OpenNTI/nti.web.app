@@ -13,6 +13,15 @@ Ext.define('NextThought.cache.UserRepository', {
 	},
 
 	has: function(username){
+		if(typeof username === 'object'){
+			if( username instanceof Ext.data.Model){
+				username = username.getId();
+			}
+			else {
+				username = username.Username;
+			}
+		}
+
 		return !!this.getStore().getById(username);
 	},
 
@@ -76,9 +85,7 @@ Ext.define('NextThought.cache.UserRepository', {
 			async = false;
 
 		function finish() {
-			if (callback) {
-				callback.call(scope || window, result);
-			}
+			Globals.callback(callback,scope, [result]);
 		}
 
 		Ext.each(
@@ -97,7 +104,7 @@ Ext.define('NextThought.cache.UserRepository', {
 				}
 				else {
 					//JSON representation of User
-					r = ParseUtils.parseItems([o], {ignoreIfExists: true})[0];
+					r = ParseUtils.parseItems(o, {ignoreIfExists: true})[0];
 					if(!r || !r.getModelName){
 						Ext.Error.raise({message: 'Unknown result', object: r});
 					}
