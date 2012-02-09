@@ -60,6 +60,7 @@ Ext.define('NextThought.model.Base', {
 		{ name: 'Links', type: 'links', defaultValue: [] },
 		{ name: 'MimeType', type: 'string' },
 		{ name: 'NTIID', type: 'string' },
+		{ name: 'OID', type: 'string' },
 		{ name: 'accepts', type: 'auto', defaultValue: [] },
 		{ name: 'href', type: 'string' }
 	],
@@ -80,6 +81,15 @@ Ext.define('NextThought.model.Base', {
 		}
 		else{
 			console.warn('using self declared mimeTime:', this.mimeType);
+		}
+
+		//Workaround for objects that don't have an NTIID yet.
+		if (data && this.idProperty==='NTIID') {
+			if (!data.NTIID){
+				if (data.ID){this.idProperty='ID';}
+				else if (data.OID){this.idProperty='OID';}
+				else {console.error('Model has no id field');}
+			}
 		}
 
 		f.getByKey('MimeType').defaultValue = this.mimeType;
