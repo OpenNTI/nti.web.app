@@ -20,15 +20,17 @@ Ext.define('NextThought.cache.IdCache', {
 	},
 
 	getComponentId: function (rec, subRecordField) {
-		var i = (typeof(rec) === 'string') ? rec : rec.get('OID');
+		if(!rec){ return null; }
+
+		var i = (typeof(rec) === 'string') ? rec : rec.get('NTIID');
 
 		if (!i && subRecordField) {
-			i = rec.get(subRecordField).get('OID');
+			i = rec.get(subRecordField).get('NTIID');
 		}
 
 		if (!i) {
 			Ext.Error.raise({
-				msg:'Could not find OID in record',
+				msg:'Could not find NTIID in record',
 				args: arguments
 			});
 		}

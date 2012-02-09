@@ -106,7 +106,7 @@ Ext.define('NextThought.mixins.Annotations', {
 
 
 	annotationExists: function(record){
-		var oid = record.get('OID');
+		var oid = record.get('NTIID');
 		if(!oid){
 			return false;
 		}
@@ -136,7 +136,7 @@ Ext.define('NextThought.mixins.Annotations', {
 		menu.on('hide', function(){
 				if(!w.isSaving){
 					w.cleanup();
-					delete this._annotations[w.tempOID]; //remove the key from the object
+					delete this._annotations[w.tempID]; //remove the key from the object
 				}
 			},
 			this);
@@ -147,7 +147,7 @@ Ext.define('NextThought.mixins.Annotations', {
 
 	createHighlightWidget: function(record, r){
 		var range = r || AnnotationUtils.buildRangeFromRecord(record),
-			oid = record.get('OID'),
+			oid = record.get('NTIID'),
 			w;
 
 		if (!range) {
@@ -155,7 +155,7 @@ Ext.define('NextThought.mixins.Annotations', {
 		}
 
 		if (this.annotationExists(record)) {
-			this._annotations[record.get('OID')].getRecord().fireEvent('updated',record);
+			this._annotations[record.get('NTIID')].getRecord().fireEvent('updated',record);
 			return null;
 		}
 
@@ -171,12 +171,12 @@ Ext.define('NextThought.mixins.Annotations', {
 
 		if (!oid) {
 			oid = 'Highlight-' + new Date().getTime();
-			w.tempOID = oid;
+			w.tempID = oid;
 			record.on('updated',function(r){
-				this._annotations[r.get('OID')] = this._annotations[oid];
+				this._annotations[r.get('NTIID')] = this._annotations[oid];
 				this._annotations[oid] = undefined;
 				delete this._annotations[oid];
-				delete w.tempOID;
+				delete w.tempID;
 			}, this);
 		}
 
@@ -191,11 +191,11 @@ Ext.define('NextThought.mixins.Annotations', {
 				return false;
 			}
 			else if (this.annotationExists(record)) {
-				this._annotations[record.get('OID')].getRecord().fireEvent('updated',record);
+				this._annotations[record.get('NTIID')].getRecord().fireEvent('updated',record);
 				return true;
 			}
 
-			this._annotations[record.get('OID')] =
+			this._annotations[record.get('NTIID')] =
 				Ext.create(
 					'NextThought.view.widgets.annotations.Note',
 					record,
@@ -213,12 +213,9 @@ Ext.define('NextThought.mixins.Annotations', {
 
 
 	createTranscriptSummaryWidget: function(record) {
-		//only display non-parent'ed results, those with parents will be inlined.
 		if (record._parent) {return;}
 
-		console.log('transcript summary should be rendered?', record);
-
-		this._annotations[record.get('OID')] =
+		this._annotations[record.get('NTIID')] =
 			Ext.create(
 				'NextThought.view.widgets.annotations.Transcript',
 				record,
@@ -294,14 +291,14 @@ Ext.define('NextThought.mixins.Annotations', {
 	},
 
 
-	loadContentAnnotations: function(containerId){
+	loadContentAnnotations: function(containerId, callback){
 		this._containerId = containerId;
 		this.clearAnnotations();
-		this.fireEvent('annotations-load', containerId);
+		this.fireEvent('annotations-load', containerId, callback);
 	},
 
 
-	objectsLoaded: function(bins) {
+	objectsLoaded: function(bins, callback) {
 		var me = this,
 			contributors,
 			k = 'Last Modified',
@@ -336,6 +333,8 @@ Ext.define('NextThought.mixins.Annotations', {
 
 		me.fireEvent('publish-contributors',contributors);
 		me.fireEvent('resize');
+
+		Globals.callback(callback);
 	},
 
 
@@ -358,7 +357,6 @@ Ext.define('NextThought.mixins.Annotations', {
 				}
 				try{
 					Ext.apply(contributors, me.getContributors(r));
-					console.log('model', r.getModelName());
 					me.widgetBuilder[r.getModelName()].call(me,r);
 				}
 				catch(e) {
@@ -376,7 +374,7 @@ Ext.define('NextThought.mixins.Annotations', {
 
 		Ext.each(list, function buildTree(r){
 			var g = me.GETTERS[r.getModelName()](r),
-				oid = g.get('OID'),
+				oid = g.get('NTIID'),
 				parent = g.get('inReplyTo'),
 				p;
 
@@ -390,7 +388,7 @@ Ext.define('NextThought.mixins.Annotations', {
 			if(parent){
 				p = tree[parent];
 				if(!p) {
-					p = (tree[parent] = getOID(parent));
+					p = (tree[parent] = getID(parent));
 				}
 				if(!p){
 					p = (tree[parent] = AnnotationUtils.replyToPlaceHolder(g));
@@ -404,11 +402,11 @@ Ext.define('NextThought.mixins.Annotations', {
 			}
 		});
 
-		function getOID(id) {
+		function getID(id) {
 			var r = null,
 				f = function(o)
 					{
-						if( o && o.get && o.get('OID') === id ) {
+						if( o && o.get && o.get('NTIID') === id ) {
 							r = o;
 							return false;
 						}

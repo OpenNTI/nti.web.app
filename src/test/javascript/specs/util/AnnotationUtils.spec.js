@@ -160,7 +160,7 @@ describe("Annotation Utils", function() {
 	it("should construct a reply",function(){
 
 		var note = AnnotationUtils.noteToReply( Ext.create('NextThought.model.Note',{
-			OID: 'test-note-oid-2',
+			NTIID: 'test-note-oid-2',
 			ID: 'test-2',
 			inReplyTo: 'test-note-oid-1',
 			references: ['test-note-oid-1'],
@@ -176,7 +176,7 @@ describe("Annotation Utils", function() {
 
 	it("should create a placeholder for a note", function(){
 		var note = AnnotationUtils.replyToPlaceHolder( Ext.create('NextThought.model.Note',{
-			OID: 'test-note-oid-2.3',
+			NTIID: 'test-note-oid-2.3',
 			ID: 'test-2.3',
 			inReplyTo: 'test-note-oid-2.2',
 			references: ['test-note-oid-1','test-note-oid-2.1','test-note-oid-2.2'],

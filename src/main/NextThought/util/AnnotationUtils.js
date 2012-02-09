@@ -130,7 +130,7 @@ Ext.define('NextThought.util.AnnotationUtils',{
 	 */
 	noteToReply: function(note){
 		var reply = Ext.create('NextThought.model.Note'),
-				parent = note.get('OID'),
+				parent = note.get('NTIID'),
 				refs = Ext.Array.clone(note.get('references') || []);
 
 		refs.push(parent);
@@ -169,7 +169,7 @@ Ext.define('NextThought.util.AnnotationUtils',{
 		holder.set('top', note.get('top'));
 		holder.set('left', note.get('left'));
 		holder.set('ContainerId', note.get('ContainerId'));
-		holder.set('OID', note.get('inReplyTo'));
+		holder.set('NTIID', note.get('inReplyTo'));
 		holder.set('references', refs);
 		holder.set('Last Modified', note.get('Last Modified'));
 

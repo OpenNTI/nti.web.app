@@ -22,6 +22,7 @@ Ext.define('NextThought.controller.Session', {
 
 	statics: {
 		login: function(app){
+			console.groupCollapsed('Session Setup');
 			var win = null;
 
 			function success(){
@@ -29,6 +30,7 @@ Ext.define('NextThought.controller.Session', {
 					win.close();
 				}
 				app.fireEvent('session-ready');
+				console.groupEnd();
 				NextThought.controller.Application.launch();
 			}
 

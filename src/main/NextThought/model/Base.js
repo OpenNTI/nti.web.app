@@ -47,7 +47,7 @@ Ext.define('NextThought.model.Base', {
 		'NextThought.util.ParseUtils',
 		'NextThought.proxy.Rest'
 	],
-	idProperty: 'OID',
+	idProperty: 'NTIID',
 	mimeType: 'application/vnd.nextthought',
 	proxy: { type: 'nti' },
 	fields: [
@@ -56,7 +56,6 @@ Ext.define('NextThought.model.Base', {
 		{ name: 'CreatedTime', type: 'date', dateFormat: 'timestamp', defaultValue: new Date() },
 		{ name: 'Creator', type: 'string' },
 		{ name: 'ID', type: 'string' },
-		{ name: 'OID', type: 'string' },
 		{ name: 'Last Modified', type: 'date', dateFormat: 'timestamp', defaultValue: new Date() },
 		{ name: 'Links', type: 'links', defaultValue: [] },
 		{ name: 'MimeType', type: 'string' },
@@ -66,10 +65,11 @@ Ext.define('NextThought.model.Base', {
 	],
 
 
-	constructor: function(){
+	constructor: function(data,id,raw){
 		var c, f = this.fields,
 			cName = this.self.getName().split('.').pop(),
 			cField = f.getByKey('Class');
+
 
 		if(!cField.defaultValue) {
 			cField.defaultValue = cName;
@@ -83,9 +83,9 @@ Ext.define('NextThought.model.Base', {
 		}
 
 		f.getByKey('MimeType').defaultValue = this.mimeType;
-
+		console.group("Model",cName,id || data? data[this.idProperty] : 'new?');
 		c = this.callParent(arguments);
-
+		console.groupEnd();
 		this._enforceMutability();
 
 		return c;
@@ -333,13 +333,13 @@ Ext.data.Types.USERLIST = {
 					}
 				});
 			}
-
-			return u;
 		}
 		catch (e) {
 			console.error('USERLIST: Parsing Error: ',e.message, e.stack);
-			return v;
+			u = v;
 		}
+
+		return u;
 	},
 	sortType: function(v) {
 		console.warn('sort by UserList:',arguments);

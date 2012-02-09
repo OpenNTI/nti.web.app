@@ -90,6 +90,7 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
 
 	destroy: function(){
 		delete this.stores;
+		VIEWPORT.un('resize',this.handleResize,this);
 		this.callParent(arguments);
 	},
 

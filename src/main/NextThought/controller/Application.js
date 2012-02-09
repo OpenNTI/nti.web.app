@@ -10,7 +10,7 @@ Ext.define('NextThought.controller.Application', {
 
 	statics: {
 		launch: function(){
-
+			console.groupCollapsed('Launch');
 
 			Ext.create('NextThought.view.Viewport');
 			try{
@@ -33,6 +33,7 @@ Ext.define('NextThought.controller.Application', {
 			Ext.getCmp('home').activate();
 		}
 
+		console.groupEnd();
 		NextThought.isInitialised = true;
 	}
 });

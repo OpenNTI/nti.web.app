@@ -117,7 +117,7 @@ Ext.define('NextThought.view.widgets.chat.Log', {
 			rid = msg.get('inReplyTo'),
 			m = id ? this.down(this.getMessageQuery(id)) : null,
 			mStat = msg.get('Status');
-		if (!id){console.warn('This message has no OID, cannot be targeted!', msg);}
+		if (!id){console.warn('This message has no NTIID, cannot be targeted!', msg);}
 
 		if (m){
 			m.update(msg);

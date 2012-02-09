@@ -19,7 +19,7 @@ Ext.define('NextThought.view.content.Reader', {
 	instantiation_time: Ext.Date.now(),
 
 	initComponent: function(){
-		this.addEvents('publish-contributors','location-changed');
+		this.addEvents('publish-contributors','location-changed','finished-navigation');
 		this.callParent(arguments);
 
 		this.add({cls:'x-panel-reset', margin: this.belongsTo ? 0 : '0 0 0 50px', enableSelect: true});
@@ -37,7 +37,7 @@ Ext.define('NextThought.view.content.Reader', {
 			this.scrollToNode(n.getEl());
 		}
 		else {
-			console.warn('Could not find Component with id: ',id, "\n",printStackTrace().slice(3).join("\n"));
+			console.error('Could not find Component with id: ',id);
 		}
 	},
 
@@ -93,6 +93,7 @@ Ext.define('NextThought.view.content.Reader', {
 
 
 	setActive: function(book, path, skipHistory, callback, ntiid) {
+//		console.group('Navigate to', path);
 		var me = this,
 			b = me._resolveBase(me._getPathPart(path)),
 			f = me._getFilename(path),
@@ -153,42 +154,47 @@ Ext.define('NextThought.view.content.Reader', {
 
 
 	_setReaderContent: function(data, req){
-		var s = req.scopeVars,
-			c = this._cleanHTML(data.responseText, s.basePath),
+		var me = this,
+			s = req.scopeVars,
+			c = me._cleanHTML(data.responseText, s.basePath),
 			target = s.target,
 			callback = s.callback,
 			containerId;
 
-		this.items.get(0).update('<div id="NTIContent">'+c+'</div>');
-		this._containerId = null;
+		function onFinishLoading() {
+			me.fireEvent('location-changed', containerId);
 
-		this.scrollTo(0, false);
+			if( callback ){
+				me.on('relayedout', callback, me, {single: true});
+			}
 
-		this.el.select('#NTIContent .navigation').remove();
-		this.el.select('#NTIContent .breadcrumbs').remove();
-		this.el.select('#NTIContent a[href]').on(
-			'click', this._onClick, this,
-			{book: s.book, scope:this, stopEvent:true});
+			if(target){
+				me.on('relayedout',
+					function(){
+						me.scrollToTarget(target);
+					},
+					me, {single: true});
+			}
 
-		containerId = this.getContainerId();
-
-		this.loadContentAnnotations(containerId);
-
-		this.fireEvent('location-changed', containerId);
-
-		if( callback ){
-			this.on('relayedout', callback, this, {single: true});
+			me.bufferedDelayedRelayout();
+			me.fireEvent('finished-navigation');
+			console.groupEnd();
 		}
 
-		if(target){
-			this.on('relayedout',
-				function(){
-					this.scrollToTarget(target);
-				},
-				this, {single: true});
-		}
+		me.items.get(0).update('<div id="NTIContent">'+c+'</div>');
+		me._containerId = null;
 
-		this.bufferedDelayedRelayout();
+		me.scrollTo(0, false);
+
+		me.el.select('#NTIContent .navigation').remove();
+		me.el.select('#NTIContent .breadcrumbs').remove();
+		me.el.select('#NTIContent a[href]').on(
+			'click', me._onClick, me,
+			{book: s.book, scope:me, stopEvent:true});
+
+		containerId = me.getContainerId();
+
+		me.loadContentAnnotations(containerId, onFinishLoading);
 	},
 
 

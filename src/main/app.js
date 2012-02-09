@@ -1,3 +1,8 @@
+if(window.console && console.groupCollapsed){
+	console.groupCollapsed("Initialization");
+}
+
+
 Ext.application({
 	name: 'NextThought',
 	appFolder: 'src/main/NextThought',
@@ -32,6 +37,7 @@ Ext.application({
 		function start() {
 			Globals.applyHooks();
 			Globals.removeLoaderSplash();
+			console.groupEnd();
 			NextThought.controller.Session.login(app);
 			NextThought.isReady = true;
 		}

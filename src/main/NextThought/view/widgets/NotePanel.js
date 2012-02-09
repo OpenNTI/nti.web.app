@@ -351,11 +351,11 @@ Ext.define('NextThought.view.widgets.NotePanel',{
 	},
 
 	_claimChild: function(children, child) {
-		var cOid = child.get('OID'),
+		var cOid = child.get('NTIID'),
 			i, o;
 		for(i in children) {
 			if (children.hasOwnProperty(i)) {
-				o = children[i].get('OID');
+				o = children[i].get('NTIID');
 
 				if (o === cOid) {
 					Ext.Array.erase(children, i, 1);

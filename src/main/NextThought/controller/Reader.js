@@ -78,10 +78,11 @@ Ext.define('NextThought.controller.Reader', {
 		this.getPageStore().load();
 	},
 
-	onAnnotationsLoad: function(containerId) {
+	onAnnotationsLoad: function(containerId, callback) {
 		var ps = this.getStoreForPageItems(containerId);
 
 		if( ps ) {
+			ps.onAnnotationsLoadCallback = callback;
 			ps.load();
 		}
 
@@ -121,7 +122,7 @@ Ext.define('NextThought.controller.Reader', {
 			containerId = reader.getContainerId();
 
 		if(store.storeId === ('page-store:'+containerId)){
-			reader.objectsLoaded(store.getBins());
+			reader.objectsLoaded(store.getBins(), store.onAnnotationsLoadCallback);
 		}
 	},
 
@@ -197,10 +198,15 @@ Ext.define('NextThought.controller.Reader', {
 
 	navigate: function(book, ref, options, skipHistory, ntiid){
 		//	   this.getReaderMode().activate();
-		this.getReader().setActive(book, ref, skipHistory,
-				options ? typeof(options)==='function' ? options
-						: Ext.bind(this.scrollToText, this, [options.text, options.oid])
-						: undefined, ntiid);
+		this.getReader().setActive(
+				book,
+				ref,
+				skipHistory,
+				options ? typeof(options)==='function'
+							? options
+							: Ext.bind(this.scrollToText, this, [options.text, options.oid])
+						: undefined,
+				ntiid);
 	},
 
 	getElementsByTagNames: function(list,obj) {
@@ -238,7 +244,7 @@ Ext.define('NextThought.controller.Reader', {
 
 	scrollToText: function(text, oid) {
 		if (oid && !text) {
-			this.getReader().scrollToId(oid);
+			this.getReader().scrollToId(IdCache.getComponentId(oid));
 			return;
 		}
 		else if (!text) {
@@ -287,15 +293,15 @@ Ext.define('NextThought.controller.Reader', {
 			}
 		});
 
-		setTimeout(function(){
+//		setTimeout(function(){
 			me.getReader().showRanges(ranges);
 			if (oid) {
-				me.getReader().scrollToId(oid);
+				me.getReader().scrollToId(IdCache.getComponentId(oid));
 			}
 			else {
 				me.getReader().scrollTo(ranges[0].getClientRects()[0].top - 150);
 			}
-		}, 500);
+//		}, 500);
 	},
 
 	readerLocationChanged: function(id){

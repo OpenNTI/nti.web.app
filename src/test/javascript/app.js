@@ -17,7 +17,7 @@ var mockUser = {
 			"rel": "edit"
 		}
 	],
-	"OID": "oid-2",
+	"NTIID": "oid-2",
 	"Presence": "Online",
 	"Username": "test@nextthought.com",
 
@@ -30,7 +30,7 @@ var mockUser = {
 			"Class": "Community",
 			"Username": "Everyone",
 			"ID": "Everyone",
-			"OID": "oid-0"
+			"NTIID": "oid-0"
 		}
 	],
 	"accepting": [],
@@ -40,7 +40,7 @@ var mockUser = {
 			"Class": "Community",
 			"Username": "NextThought",
 			"ID": "NextThought",
-			"OID": "oid-1"
+			"NTIID": "oid-1"
 		}
 	],
 	"ignoring": []

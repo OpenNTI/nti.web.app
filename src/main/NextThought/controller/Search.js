@@ -51,27 +51,27 @@ Ext.define('NextThought.controller.Search', {
 	},
 
 
-	resolveTopContainer: function(containerId, success, failure){
+	resolveTopContainer: function resolve(containerId, success, failure, oid){
 
 		var service = _AppConfig.service,
 			bookInfo = Library.findLocation(containerId);
 
-		function s(container){
-			var cid = container.get('ContainerId');
+		oid = oid || null;
 
-			bookInfo = Library.findLocation(cid);
-			if(bookInfo){
-				return Globals.callback(success,null,[bookInfo]);
-			}
-
-			return this.resolveTopContainer(cid, success, failure);
+		function step(container){
+			oid = container.getId();
+			return resolve(
+					container.get('ContainerId'),
+					success,
+					failure,
+					oid);
 		}
 
 		if(bookInfo){
-			return Globals.callback(success,null,[bookInfo]);
+			return Globals.callback(success,null,[bookInfo,oid]);
 		}
 
-		service.getObject(containerId, s, failure);
+		service.getObject(containerId, step, failure);
 	},
 
 
@@ -80,7 +80,8 @@ Ext.define('NextThought.controller.Search', {
 			oid = hit.get('TargetOID'),
 			containerId = hit.get('ContainerId');
 
-		function success(bookInfo) {
+		function success(bookInfo,newOid) {
+			Ext.getBody().unmask();
 			if(!bookInfo){
 				alert("bad things");
 				return;
@@ -96,7 +97,7 @@ Ext.define('NextThought.controller.Search', {
 				book.get('root') + href,
 				{
 					text: searchValue,
-					oid: oid
+					oid: newOid || oid
 				});
 
 			if(popover && popover.isVisible()){
@@ -105,9 +106,11 @@ Ext.define('NextThought.controller.Search', {
 		}
 
 		function failure(){
+			Ext.getBody().unmask();
 			alert("Ooops","Me no say");
 		}
 
+		Ext.getBody().mask("Loading...");
 		me.resolveTopContainer(containerId, success, failure);
 	},
 

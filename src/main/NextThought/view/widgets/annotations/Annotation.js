@@ -161,9 +161,8 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 	},
 
 
-	getMenu: function(){
-		var m = this._buildMenu(),
-			isLeaf = arguments.length>0;
+	getMenu: function(isLeaf){
+		var m = this._buildMenu();
 
 		m.on('hide', function(){
 			if(!isLeaf) { m.destroy(); }
@@ -190,7 +189,6 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 	
 	onClick: function(e) {
 		e.preventDefault();
-		this.clearListeners();
 		
 		var menu, annotations = this._multiAnnotation();
 
@@ -201,8 +199,9 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 				var subMenu, item;
 
 				if (!o.getMenu) { return; }
-				//o.clearListeners();
-				subMenu = o.getMenu({/*this argument will tell it to not destroy itself*/});
+
+				subMenu = o.getMenu(true);
+
 				if (subMenu.items.getCount()===1){
 					item = subMenu.items.first();
 				}
@@ -234,6 +233,7 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 	_multiAnnotation: function() {
 		var result = [],
 			top = this._img.style.top;
+
 		Ext.each(this._div.childNodes, function(o){
 			if (o._annotation && top === o.style.top) {
 				result.push(o._annotation);

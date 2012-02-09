@@ -120,7 +120,6 @@ Ext.define('NextThought.util.Globals',
 			function clearMask(){
 				Ext.get('loading').remove();
 				Ext.get('loading-mask').fadeOut({remove:true});
-//				me.resizeBlocker(Ext.Element.getViewWidth());
 			},
 			100);
 
@@ -131,16 +130,18 @@ Ext.define('NextThought.util.Globals',
 		this.ensureConsole();
 		this.ensureNodePrototypes();
 
-		window.alert = function(msg){
-			var title = arguments.length > 1 ? arguments[0] : undefined;
-			Ext.MessageBox.alert('Alert' || title, msg );
+		window.alert = function(title, msg){
+			if(arguments.length===1){
+				msg = title;
+				title = null;
+			}
+			Ext.MessageBox.alert(title||'Alert', msg );
 		};
 
 		Ext.JSON.encodeDate = function(d){return Ext.Date.format(d, 'U');};
 
 		Ext.Ajax.timeout=10000;//10sec timeout
 		Ext.Ajax.on('beforerequest', this.beforeRequest);
-//		Ext.EventManager.onWindowResize(this.resizeBlocker);
 
 		//disable selection everywhere except places we specifically enable it.
 		this.disableSelection();
@@ -152,9 +153,11 @@ Ext.define('NextThought.util.Globals',
 
 	applyInjections: function(){
 
-		if(Array.prototype.peek === undefined) {
-			Array.prototype.peek = function peek(){ return this[this.length-1]; };
-		}
+		Ext.applyIf(Array.prototype,{
+			first: function peek(){ return this[0]; },
+			last: function peek(){ return this[this.length-1]; },
+			peek: function peek(){ return this[this.length-1]; }
+		});
 
 		//inject a new function into Ext.Element
 		Ext.apply(Ext.Element.prototype,{
@@ -252,17 +255,6 @@ Ext.define('NextThought.util.Globals',
 		if(!console.error){
 			console.error = Ext.Function.alias(console, 'log');
 		}
-
-		if(dev && dev.ignoreWarns){
-			console._warn = console.warn;
-			console.warn = function(msg){
-				var ignore = Ext.Array.contains(dev.ignoreWarns, msg);
-
-				if(!ignore) {
-					this._warn.apply(this,arguments);
-				}
-			};
-		}
 	},
 
 
@@ -274,16 +266,6 @@ Ext.define('NextThought.util.Globals',
 			console.warn( 'Synchronous Call in: ', loc, ' Options:', options );
 		}
 	},
-
-
-//	resizeBlocker: function(w){
-//		var i = Boolean(w<MIN_WIDTH),
-//			b = Ext.getBody(),
-//			m = b.isMasked();
-//
-//		if(i && !m) { b.mask("Your browser window is too narrow","body-mask"); }
-//		else if(!i && m) { b.unmask(); }
-//	},
 
 
 	arrayEquals: function(a, b) {

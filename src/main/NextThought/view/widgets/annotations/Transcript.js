@@ -1,20 +1,33 @@
 Ext.define( 'NextThought.view.widgets.annotations.Transcript', {
-	//extend: 'NextThought.view.widgets.annotations.Note',
 	extend: 'NextThought.view.widgets.annotations.Annotation',
 	requires:[
+		'NextThought.cache.IdCache'
 	],
 
 	constructor: function(record, container, component){
 		Ext.apply(this, {
+			id: IdCache.getComponentId(record.getId()),
 			_anchorNode : null,
 			_renderPriority: 0,
 			_win: null
 		});
 
+
 		this.callParent([record, container, component,
 			'resources/images/charms/note-white.png']);
 
 		this._anchorNode = Ext.get(Ext.query('#nticontent a[name]')[0]);
+
+		Ext.ComponentManager.register(this);
+	},
+
+	getItemId: function(){return this.id; },
+	isXType: function(){return false;},
+	getEl: function(){return this._anchorNode;},
+
+	cleanup: function(){
+		Ext.ComponentManager.unregister(this);
+		return this.callParent(arguments);
 	},
 
 	attachRecord: function(record){
@@ -22,15 +35,13 @@ Ext.define( 'NextThought.view.widgets.annotations.Transcript', {
 	},
 
 	_buildMenu: function(){
-		var items = [],
-			me = this;
+		var items = [];
 
-		if(this._isMine){
-			items.push({
-				text : this.getTitle(),
-				handler: Ext.bind(this.openTranscript, this)
-			});
-		}
+		items.push({
+			text : this.getTitle(),
+			handler: Ext.bind(this.openTranscript, this)
+		});
+
 		return Ext.create('Ext.menu.Menu',{items: items});
 	},
 
