@@ -85,7 +85,7 @@ Ext.define('NextThought.model.Base', {
 		}
 
 		//Workaround for objects that don't have an NTIID yet.
-		if (data && this.idProperty==='NTIID') {
+		if (data && this.idProperty==='NTIID' && raw) {
 			if (!data.NTIID){
 				if (data.ID){this.idProperty='ID';}
 				else if (data.OID){this.idProperty='OID';}
