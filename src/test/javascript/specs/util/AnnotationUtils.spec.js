@@ -1,6 +1,6 @@
 describe("Annotation Utils", function() {
 
-	var div,
+	var div = false,
 		testWhiteboard =
 		{
 			"Class":"Canvas",
@@ -53,7 +53,9 @@ describe("Annotation Utils", function() {
 		};
 
 	function setup(){
-		if(div)return;
+		if(div) {
+			return;
+		}
 
 		var req = new XMLHttpRequest(),
 			txt, rf, start, end;
@@ -64,6 +66,7 @@ describe("Annotation Utils", function() {
 		expect(req.status).toBe(200);
 
 		txt = req.responseText;
+
 		rf= txt.toLowerCase();
 
 		start = rf.indexOf(">", rf.indexOf("<body"))+1;

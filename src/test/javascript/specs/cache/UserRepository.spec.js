@@ -19,13 +19,13 @@ describe("User Repository/Store/Cache Behavior", function(){
 
 	it("should use what is given", function()
 	{
-		spyOn(UserRepository, '_makeRequest');
+		spyOn(UserRepository, 'makeRequest');
 		UserRepository.prefetchUser({"Class": 'Community', Username: 'TestersAnnon'});
 
-		expect(UserRepository._makeRequest).not.toHaveBeenCalled();
+		expect(UserRepository.makeRequest).not.toHaveBeenCalled();
 
 		UserRepository.prefetchUser('jonathan.grimes@foo');
-		expect(UserRepository._makeRequest).toHaveBeenCalled();
+		expect(UserRepository.makeRequest).toHaveBeenCalled();
 	});
 
 

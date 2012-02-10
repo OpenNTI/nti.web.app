@@ -141,16 +141,6 @@ page.onLoadStarted = function(){
 };
 
 
-page.onResourceRequested = function(request){
-//	console.log('required:\t'+request.url);
-	r[request.url] = true;
-};
-
-
-page.onResourceReceived = function(request){
-	delete r[request.url];
-};
-
 //page.open("http://localhost:"+port+"/test.html", function(status){
 page.open(phantom.args[0], function(status){
 	console.log('\nInitial Load finished, executing...\n');
@@ -208,9 +198,6 @@ page.open(phantom.args[0], function(status){
 				});
 				console.log('\n');
 
-				r = Object.keys(r);
-				if(r.length>0)
-					console.log("Unresolved resources: "+r.join('\n'));
 				phantom.exit();
 			},
 			600001
