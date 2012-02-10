@@ -1,4 +1,17 @@
+.x-spotlight {
+	background-color: #ccc;
 
+	z-index: 8999;
+	position: absolute;
+	top: 0;
+	left: 0;
+	-moz-opacity: 0.2;
+	opacity: .20;
+	filter: alpha(opacity=20);
+	width: 0;
+	height: 0;
+	zoom: 1;
+}
 
 
 .x-nti-note {

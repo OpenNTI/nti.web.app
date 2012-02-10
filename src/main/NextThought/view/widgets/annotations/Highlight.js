@@ -24,6 +24,27 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 		return me;
 	},
 
+	getCmp: function(){
+		var r = this.selection.getBoundingClientRect(),
+			x,y;
+
+		if(!r) { return; }
+
+		x = r.left;
+		y = r.top;
+
+		return {
+			getEl: function(){
+				return {
+					isComposite: true,
+					getBox: function(){
+						return Ext.apply({ x: x, y: y }, r);
+					}
+				};
+			}
+		};
+	},
+
 
 	createCanvasContainer: function(id){
 		var e = Ext.get(id),

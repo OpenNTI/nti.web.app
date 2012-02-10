@@ -1,7 +1,7 @@
 Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 	extend: 'NextThought.view.widgets.Widget',
 	requires: [
-//		'Ext.ux.Spotlight'
+		'Ext.ux.Spotlight'
 	],
 
 	constructor: function(record, container, component, icon) {
@@ -27,9 +27,13 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 		Ext.EventManager.onWindowResize(me.onResize, me);
 		
 		if(icon){
-			me.img = me.createImage(icon,me.div,
-						'action',
-						'width: 17px; background: yellow; height: 17px; position: absolute;'+(me.isVisible?'':'visibility:hidden;'));
+			me.img = me.createImage(
+					icon,
+					me.div,
+					'action',
+					'width: 17px; background: yellow; height: 17px; position: absolute;' +
+							(me.isVisible?'':'visibility:hidden;'));
+
 			me.img.annotation = me;
 			Ext.get(me.img).on('click', me.onClick, me);
 		}
@@ -195,7 +199,8 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 
 
 		if (annotations && annotations.length > 1) {
-//			spot = Ext.create('Ext.ux.Spotlight', {});
+			spot = Ext.create('Ext.ux.Spotlight');
+			spot.animate = false;
 
 			menu = Ext.create('Ext.menu.Menu');
 			Ext.each(annotations, function(o, i){
@@ -211,14 +216,18 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 				else {
 					item = Ext.create('Ext.menu.Item', {
 						text: this.getRecord().getModelName()+' '+(i+1),
-						menu: subMenu
+						menu: subMenu,
+						listeners: {
+							'activate': function(){
+								var c = o.getCmp();
+								if(c){
+									spot.show(c.getEl());
+								}
+							}
+						}
 					});
 				}
 				this.menuItemHook(o,item, menu);
-
-				item.on('mouseover', function(){
-
-				});
 
 				menu.add(item);
 			},
@@ -226,6 +235,7 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 
 			menu.on('hide', function(){
 				menu.destroy();
+				spot.destroy();
 			});
 			menu.showBy(Ext.get(this.img), 'bl');
 			return;

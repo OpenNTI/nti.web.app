@@ -368,6 +368,12 @@ function(){
 	document.head = document.head || document.getElementsByTagName('head')[0];
 	window.Globals = this;
 
+	Ext.Loader.setPath('Ext.ux', (function(){
+		var path = Ext.Loader.getPath('Ext').split('/');
+		path.splice(-1, 1, 'examples/ux');
+		return path.join('/');
+	}()));
+
 	this.applyHooks();
 
 	window.guidGenerator = this.guidGenerator;

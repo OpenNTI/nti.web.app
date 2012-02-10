@@ -74,6 +74,11 @@ Ext.define( 'NextThought.view.widgets.annotations.Note', {
 	},
 
 
+	getCmp: function(){
+		return this.noteCmp;
+	},
+
+
 	visibilityChanged: function(show){
 		var me = this,
 			c = Ext.get(me.noteDiv);
