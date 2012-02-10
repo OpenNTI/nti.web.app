@@ -58,7 +58,7 @@ describe("Annotation Utils", function() {
 		var req = new XMLHttpRequest(),
 			txt, rf, start, end;
 
-		req.open('GET',_AppConfig.server.host+'/annotation-test.html',false);
+		req.open('GET',$AppConfig.server.host+'/annotation-test.html',false);
 		req.send('');
 
 		expect(req.status).toBe(200);
