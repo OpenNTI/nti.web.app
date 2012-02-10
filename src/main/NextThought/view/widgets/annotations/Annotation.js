@@ -195,7 +195,7 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 	onClick: function(e) {
 		e.preventDefault();
 		
-		var spot, menu, annotations = this.multiAnnotation();
+		var spot, text, menu, annotations = this.multiAnnotation();
 
 
 		if (annotations && annotations.length > 1) {
@@ -214,8 +214,9 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 					item = subMenu.items.first();
 				}
 				else {
+					text = AnnotationUtils.getBodyTextOnly(o.record);
 					item = Ext.create('Ext.menu.Item', {
-						text: this.getRecord().getModelName()+' '+(i+1),
+						text: o.record.getModelName()+' '+Ext.String.ellipsis(text,15,true),
 						menu: subMenu,
 						listeners: {
 							'activate': function(){

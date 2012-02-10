@@ -29,7 +29,7 @@ Ext.define('NextThought.util.AnnotationUtils',{
 				}
 			}
 		}
-		return text.join('');
+		return text.join('') || obj.get('startHighlightedText');
 	},
 
 //tested
