@@ -10,16 +10,13 @@
  * where:
  *
  * Rect {
- * 		left, top, right, bottom, width, height
+ *     left, top, right, bottom, width, height
  * }
  */
 Ext.define('NextThought.ux.Spotlight',{
 	requires: [
 		'NextThought.util.RectUtils'
 	],
-
-//	svgNS: 'http:/'+'/www.w3.org/2000/svg',
-//	xhtmlNS: 'http:/'+'/www.w3.org/1999/xhtml',
 
 	constructor: function(){
 		this.id = 'spotlight-'+Globals.guidGenerator();
@@ -54,57 +51,20 @@ Ext.define('NextThought.ux.Spotlight',{
 
 	/** @private */
 	createElements: function(){
-	/*
-		<svg xmlns="http://www.w3.org/2000/svg" xmlns:xhtml="http://www.w3.org/1999/xhtml">
-			<defs>
-				<filter id="blur-guid" x="0%" y="0%" width="100%" height="100%">
-					<feGaussianBlur in="SourceGraphic" stdDeviation="8" />
-				</filter>
-			</defs>
-			<foreignObject width="100px" height="100px" style="filter:url(#gaussian_blur-guid)>
-				<xhtml:canvas width="100px" height="100px" ></xhtml:canvas>
-			</foreignObject>
-		</svg>
-	*/
-
 		var curtain = Ext.getBody().createChild({id:this.id+'-curtain', cls:'spotlight'}).dom,
 			canvas = this.dom.createElement('canvas');
-//			canvas = this.dom.createElementNS(this.xhtmlNS,'canvas'),
-//			svg = this.dom.createElementNS(this.svgNS, 'svg'),
-//			fo = this.dom.createElementNS(this.svgNS, 'foreignObject'),
-//			defs = this.dom.createElementNS(this.svgNS, 'defs'),
-//			filter = this.dom.createElementNS(this.svgNS, 'filter'),
-//			fx = this.dom.createElementNS(this.svgNS, 'feGaussianBlur'),
-//			fxId = this.id+'-blur';
 
 		this.set(curtain,{style:'display:none; position:absolute; top:0; left:0; z-index:8999; overflow:hidden;'});
-//		this.set(svg, {id:this.id+'-svg',version:'1.1'});
-//		this.set(filter, {id: fxId, x:"0%", y:"0%", width:"100%", height:"100%"},false);
-//		this.set(fx, {'stdDeviation':'8'});
-//		this.set(fo, {filter:'url(#'+fxId+')'});
 		this.set(canvas, {width:0, height:0});
 
 		if(!canvas){
 			Ext.Error.raise('No canvas support');
 		}
 
-//		if(svg){
-//			filter.appendChild(fx);
-//			defs.appendChild(filter);
-//			svg.appendChild(defs);
-//			fo.appendChild(canvas);
-//			svg.appendChild(fo);
-//			curtain.appendChild(svg);
-//		}
-//		else {
-//			svg = fo = defs = filter = fx = null;
-			curtain.appendChild(canvas);
-//		}
+		curtain.appendChild(canvas);
 
 		this.curtain = curtain;
 		this.canvas = canvas;
-//		this.svg = svg;
-//		this.elements = [curtain,canvas,svg,fo];
 		this.elements = [curtain,canvas];
 		this.syncSize();
 	},
@@ -116,8 +76,7 @@ Ext.define('NextThought.ux.Spotlight',{
 		Ext.destroy(Ext.get(this.canvas),Ext.get(this.svg),Ext.get(this.curtain));
 		delete this.curtain;
 		delete this.canvas;
-		delete this.svg;
-		delete this.elements
+		delete this.elements;
 	},
 
 	show: function(spotlightableComponent){
@@ -141,7 +100,6 @@ Ext.define('NextThought.ux.Spotlight',{
 				h = c.height,
 				ctx = c.getContext("2d"),
 				rects = Array.prototype.slice.call(this.cmp.getRects()),
-//				gco = ctx.globalCompositeOperation,
 				rect, x,y;
 
 			rects = RectUtils.merge(rects, h);
