@@ -2,7 +2,8 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 	extend: 'NextThought.view.widgets.Widget',
 	requires: [
 //		'Ext.ux.Spotlight'
-		'NextThought.ux.Spotlight'
+		'NextThought.ux.Spotlight',
+		'Ext.String'
 	],
 
 	constructor: function(record, container, component, icon) {

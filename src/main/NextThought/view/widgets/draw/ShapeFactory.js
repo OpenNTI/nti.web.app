@@ -56,24 +56,26 @@ Ext.define('NextThought.view.widgets.draw.ShapeFactory',
 	 * @returns modified json, or modifies passed in json if supplied
 	 */
 	scaleJson: function(factor, json) {
-		var k, sw = json.strokeWidth || json.strokeWidthTarget;
+		var k, v, sw = json.strokeWidth || json.strokeWidthTarget;
 
 		json.strokeWidthTarget = ((typeof sw === 'string') ? parseFloat(sw) : sw) * factor;
 
 		for(k in json.transform){
-			if(json.transform.hasOwnProperty(k) && typeof json.transform[k] === 'number') {
-				json.transform[k] *= factor;
-			}
-		}
-
-		if (json.path) {
-			for (k in json.path) {
-				if(json.path.hasOwnProperty(k) && typeof json.path[k] === 'number') {
-					json.path[k] *= factor;
+			if (json.transform.hasOwnProperty(k)){
+				v = json.transform[k];
+				if( typeof v === 'number' && v !== 1) {
+					v *= factor;
 				}
 			}
 		}
-
+		if (json.points) {
+			for (k in json.points) {
+				if(json.points.hasOwnProperty(k) && typeof json.points[k] === 'number') {
+					json.points[k] *= factor;
+				}
+			}
+		}
+		//console.log('json scaled by ' + factor, json);
 		return json;
 	},
 
@@ -97,21 +99,22 @@ Ext.define('NextThought.view.widgets.draw.ShapeFactory',
 
 	restoreShape: function m(whiteboard, shape, scaleFactor){
 		var t = shape.transform,
-			c = Color.parseColor(shape.fillColor,shape.fillOpacity) || Color.getColor(m.i=(m.i||-1)+1),
+			fc = (shape.fillColor && shape.fillColor === 'None')
+				? shape.fillColor
+				: Color.parseColor(shape.fillColor,shape.fillOpacity) || Color.getColor(m.i=(m.i||-1)+1),
 			p = Color.parseColor(shape.strokeColor) || c.getDarker(0.2),
 			s;
 
 		//scale up the matrix
 		this.scaleJson(scaleFactor, shape);
-
 		t = Ext.create('Ext.draw.Matrix',t.a,t.b,t.c,t.d,t.tx,t.ty).split();
 		s = Ext.widget(this.getSpriteClass(shape.Class, shape.sides),{
 			sides: shape.sides,
 			'stroke-width': shape.strokeWidthTarget,
 			text: shape.text,
-			path: shape.path || undefined,
+			points: shape.points,
 			stroke: p.toString(),
-			fill: c.toString(),
+			fill: fc.toString(),
 			translate: {
 				x: t.translateX,
 				y: t.translateY

@@ -22,10 +22,10 @@ Ext.define('NextThought.cache.IdCache', {
 	getComponentId: function (rec, subRecordField) {
 		if(!rec){ return null; }
 
-		var i = (typeof(rec) === 'string') ? rec : rec.get('NTIID');
+		var i = (typeof(rec) === 'string') ? rec : rec.getId();
 
 		if (!i && subRecordField) {
-			i = rec.get(subRecordField).get('NTIID');
+			i = rec.get(subRecordField).getId();
 		}
 
 		if (!i) {

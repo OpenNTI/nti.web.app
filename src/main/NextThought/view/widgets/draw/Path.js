@@ -4,15 +4,19 @@ Ext.define('NextThought.view.widgets.draw.Path', {
 
 	constructor: function(config){
 		//fix path because it'll be NTI format
-		/*
-		[
-			['L', 1, 2]
-			...
-			['L', N, Y]
-		]
-		*/
+		var p = config.points;
+
+		if (p){
+			var i, newPath = [];
+			for (i = 0; i < p.length; i+=2){
+				newPath.push([newPath.length ? 'L' : 'M',p[i], p[i+1]]);
+			}
+			config.path = newPath;
+		}
 
 		this.callParent([Ext.apply(config,{ type: 'path'})]);
+
+		this.setAttributes({'stroke-width': config['stroke-width']});
 	},
 
 	getShape: function(){
@@ -28,42 +32,27 @@ Ext.define('NextThought.view.widgets.draw.Path', {
 		}
 
 		var i, p, t, x, y,
-			mx = 0, my = 0,
+			w = this.getBBox().width,
 			x0 = 0, y0 = 0,
 			path = this.attr.path,
+			ntiPathArray;
+
+		if (!this.points){
 			ntiPathArray = [];
-
-		for (i in path) {
-			if (!path.hasOwnProperty(i)){continue;}
-			p = path[i];
-			t = p[0];
-			x = p[1];
-			y = p[2];
-
-			if (t === 'M'){
-				x0 = x;
-				y0 = y;
-			}
-			else if (t === 'S' && x0 && y0){
-				ntiPathArray.push(x - x0);
-				ntiPathArray.push(y - y0);
-				//remember max
-				if (x > mx){mx = x;}
-				if (y > my){my = y;}
-			}
-			else {
-				console.error('Not sure what to do with this part of the path', p);
+			for (i in path) {
+				if (path.hasOwnProperty(i)){
+					p = path[i];
+					t = p[0];
+					x = p[1];
+					y = p[2];
+					ntiPathArray.push(x);
+					ntiPathArray.push(y);
+				}
 			}
 		}
 
-		var //a = degrees(c.x0, c.y0, c.x1, c.y1),
-			m = this.matrix.clone(),
+		var m = this.matrix.clone(),
 			matrix;
-
-		//apply rotation and scaling back into transform:
-		m.translate(ntiPathArray[0], ntiPathArray[1]);
-		//m.rotate(a, 0, 0);
-		m.scale(mx, my, 0, 0);
 
 		matrix = {
 			'Class': 'CanvasAffineTransform',
@@ -80,12 +69,12 @@ Ext.define('NextThought.view.widgets.draw.Path', {
 				'Class': 'CanvasPathShape',
 				'transform': Ext.clone(matrix),
 				'closed': false,
-				'path': ntiPathArray
+				'points': this.points || ntiPathArray
 			},
 			{
 				'strokeColor': Color.toRGB(this.stroke),
 				'strokeOpacity' : 1, //TODO: once we have tools to adjust this, set
-				'fillColor': Color.toRGB(this.fill),
+				'fillColor': (this.fill && (typeof this.fill === 'string') && (this.fill === 'None')) ? 'None' : Color.toRGB(this.fill),
 				'fillOpacity': 1, //TODO: once we have tools to adjust this, set
 				'strokeWidthTarget': this['stroke-width']
 			}
