@@ -202,13 +202,13 @@ Ext.define('NextThought.util.Globals',
 		});
 
 		Ext.Ajax.cors = true;
-		Ext.Ajax.disableCaching = false;
-		Ext.data.proxy.Server.override({noCache: false});
+		Ext.Ajax.disableCaching = true;
+		Ext.data.proxy.Server.override({noCache: true});
 		Ext.data.Connection.override({
-			disableCaching: false,
+			disableCaching: true,
 
 			setOptions: function(options, scope){
-				var i, badParams = ['_dc', 'id', 'page', 'start', 'limit', 'group', 'sort'],
+				var i, badParams = [/*'_dc',*/ 'id', 'page', 'start', 'limit', 'group', 'sort'],
 					params = options.params || {};
 
 				if (Ext.isFunction(params)) {
