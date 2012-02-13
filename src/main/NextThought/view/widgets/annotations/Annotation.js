@@ -1,7 +1,8 @@
 Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 	extend: 'NextThought.view.widgets.Widget',
 	requires: [
-		'Ext.ux.Spotlight'
+//		'Ext.ux.Spotlight'
+		'NextThought.ux.Spotlight'
 	],
 
 	constructor: function(record, container, component, icon) {
@@ -70,9 +71,7 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 	getBubbleParent: function(){return this.ownerCmp; },
 	getBubbleTarget: function(){return this.ownerCmp; },
 
-
-	getCmp: null,//implement in subclasses
-
+	getRects: null,//implement in subclasses
 
 	cleanup: function(){
 		var me = this;
@@ -197,10 +196,9 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 		
 		var spot, text, menu, annotations = this.multiAnnotation();
 
+		spot = Ext.create('NextThought.ux.Spotlight');
 
 		if (annotations && annotations.length > 1) {
-			spot = Ext.create('Ext.ux.Spotlight');
-			spot.animate = false;
 
 			menu = Ext.create('Ext.menu.Menu');
 			Ext.each(annotations, function(o, i){
@@ -219,12 +217,7 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 						text: o.record.getModelName()+' '+Ext.String.ellipsis(text,15,true),
 						menu: subMenu,
 						listeners: {
-							'activate': function(){
-								var c = o.getCmp();
-								if(c){
-									spot.show(c.getEl());
-								}
-							}
+							'activate': function(){ spot.show(o); }
 						}
 					});
 				}
@@ -248,6 +241,10 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 			menu.items.first().handler.call(menu);
 			return;
 		}
+
+		spot.show(this);
+
+		menu.on('hide', function(){ spot.destroy(); }, this, {single: true});
 		menu.showBy(Ext.get(this.img), 'bl');
 	},
 	

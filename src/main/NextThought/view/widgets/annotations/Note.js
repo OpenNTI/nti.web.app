@@ -74,8 +74,8 @@ Ext.define( 'NextThought.view.widgets.annotations.Note', {
 	},
 
 
-	getCmp: function(){
-		return this.noteCmp;
+	getRects: function(){
+		return [this.noteCmp.getEl().getBox()];
 	},
 
 

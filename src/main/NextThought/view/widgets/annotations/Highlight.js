@@ -1,7 +1,8 @@
 Ext.define('NextThought.view.widgets.annotations.Highlight', {
 	extend:'NextThought.view.widgets.annotations.Annotation',
 	requires:[
-		'NextThought.util.Color'
+		'NextThought.util.Color',
+		'NextThought.util.RectUtils'
 	],
 
 
@@ -24,25 +25,8 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 		return me;
 	},
 
-	getCmp: function(){
-		var r = this.selection.getBoundingClientRect(),
-			x,y;
-
-		if(!r) { return; }
-
-		x = r.left;
-		y = r.top;
-
-		return {
-			getEl: function(){
-				return {
-					isComposite: true,
-					getBox: function(){
-						return Ext.apply({ x: x, y: y }, r);
-					}
-				};
-			}
-		};
+	getRects: function(){
+		return this.selection.getClientRects();
 	},
 
 
@@ -165,7 +149,7 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 		var x = offsetToTrim[0] ? offsetToTrim[0] : offsetToTrim.left,
 			y = offsetToTrim[1] ? offsetToTrim[1] : offsetToTrim.top;
 
-		rect.top -= y; rect.left -= x;
+//		rect.top -= y; rect.left -= x;
 		return {
 			top: rect.top-y,
 			left: rect.left-x,
@@ -210,13 +194,12 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 		this.rendering = true;
 
 		var nib = Ext.get(this.img),
-			r = this.selection.getBoundingClientRect(),
-			s = this.selection.getClientRects(),
-			c = this.canvas,
 			p = this.parent ? this.parent : (this.parent = Ext.get(this.div.parentNode)),
+			c = this.canvas,
+			r = this.selection.getBoundingClientRect(),
+			s = RectUtils.merge(this.selection.getClientRects(),c.height),
 			l = s.length,
 			i = l-1,
-			avgH = 0,
 			cXY = Ext.get(c).getXY(),
 			color = this.getColor(),
 			rgba = Color.toRGBA(color),
@@ -232,16 +215,7 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 		nib.setStyle('background', rgb);
 
 		//stage draw
-		Ext.each(s,function(v){ avgH += v.height; });
-		avgH /= l;
-
 		for(; i>=0; i--){
-			//attempt to skip drawing rects that are probably not just the line
-			if(s[i].right === r.right && s[i].height>avgH){continue;}
-
-			//TODO: keep track of where we've drawn for this highlight, and don't redraw over it if there are more than
-			// one rect over a space.
-
 			this.self.enqueue(this.drawRect(this.adjustCoordinates(s[i],cXY), rgba));
 		}
 		this.self.enqueue(function(){ delete me.rendering; });
