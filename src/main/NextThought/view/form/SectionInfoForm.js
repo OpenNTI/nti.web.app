@@ -148,7 +148,7 @@ Ext.define('NextThought.view.form.SectionInfoForm', {
 		//o.Provider = (o.Provider && o.Provider.ID) ? o.Provider.ID : null;
 		delete o.Provider;
 
-		return Ext.create('NextThought.model.SectionInfo', o, o.NTIID, o);
+		return Ext.create('NextThought.model.SectionInfo', o, o.NTIID);
 	},
 
 
