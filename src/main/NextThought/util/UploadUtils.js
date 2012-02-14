@@ -178,11 +178,11 @@ Ext.define('NextThought.util.UploadUtils',{
 
 		function buildXHR(){
 			var xhr = new XMLHttpRequest();
-			xhr.withCredentials = true;
 			xhr.upload.addEventListener("progress", progress, false);
 			xhr.upload.addEventListener("load", progress, false);
 
 			xhr.open("POST", url, true);
+			xhr.withCredentials = true;
 			xhr.setRequestHeader('Authorization',auth);
 			xhr.setRequestHeader('Slug', file.fileName);
 			xhr.setRequestHeader('Content-Type', file.type);
