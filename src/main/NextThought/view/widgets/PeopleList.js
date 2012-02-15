@@ -1,6 +1,9 @@
 Ext.define('NextThought.view.widgets.PeopleList', {
 	extend: 'Ext.panel.Panel',
 	alias: 'widget.people-list',
+	requires: [
+		'NextThought.providers.Contributors'
+	],
 
 	mixins:{
 		avatars: 'NextThought.mixins.AvatarInformation'
@@ -14,15 +17,14 @@ Ext.define('NextThought.view.widgets.PeopleList', {
 	
 	constructor: function(){
 		this.callParent(arguments);
-		
+		this.mixins.avatars.constructor.call(this);
 		//make a buffered function out of our updater
 		this.updateList = Ext.Function.createBuffered(this.updateList,100,this);
-		
-		return this;
 	},
 	
 	initComponent: function(){
 		this.callParent(arguments);
+		ContributorsProvider.on('change',this.setContributors,this);
 	},
 	
 	setContributors: function(contributors){

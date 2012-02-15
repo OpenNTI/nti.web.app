@@ -1,5 +1,8 @@
 Ext.define('NextThought.view.widgets.Tracker', {
 	alias: 'widget.tracker',
+	requires: [
+		'NextThought.providers.Location'
+	],
 
 	toolTipTpl: new Ext.XTemplate(
 		'<div class="tracker-tip">',
@@ -15,7 +18,6 @@ Ext.define('NextThought.view.widgets.Tracker', {
 
 	constructor: function(cmp,container, body){
 		Ext.apply(this,{
-			locationProvider: Ext.getCmp('breadcrumb'),
 			parent: container,
 			ownerCmp: cmp,
 			body: body,
@@ -55,7 +57,7 @@ Ext.define('NextThought.view.widgets.Tracker', {
 
 		cmp.on('resize', this.onResize, this);
 		
-		this.locationProvider.on('change',this.onChangeLocation, this);
+		LocationProvider.on('change',this.onChangeLocation, this);
 		Ext.EventManager.onWindowResize(this.onResize, this);
 		return this;
 	},
@@ -77,11 +79,10 @@ Ext.define('NextThought.view.widgets.Tracker', {
 		b.un({scope:this, mousemove:h, mouseover:h, mouseout:h,scroll:h});
 
 		this.ownerCmp.un('resize', this.onResize, this);
-		this.locationProvider.un('change',this.onChangeLocation, this);
+		LocationProvider.un('change',this.onChangeLocation, this);
 		Ext.EventManager.removeResizeListener(this.onResize, this);
 
 		delete this.ownerCmp;
-		delete this.locationProvider;
 		c.remove();
 	},
 	
@@ -94,9 +95,10 @@ Ext.define('NextThought.view.widgets.Tracker', {
 
 	onChangeLocation : function(loc){
 		try{
-			var c = this.canvas;
+			var c = this.canvas,
+				l = LocationProvider.getLocation(loc);
 			c.width = c.height = 0;
-			this.render(loc.toc, loc.location);
+			this.render(l.toc, l.location);
 		}
 		catch(e){
 			console.error('Change Location Error:',e, arguments);
@@ -116,7 +118,7 @@ Ext.define('NextThought.view.widgets.Tracker', {
 	
 	hoverHandler: function(e){
 		var region = this.getRegion(e),
-			current = this.locationProvider.getLocation();
+			current = LocationProvider.getLocation();
 		this.render(
 			current.toc,
 			current.location,
@@ -136,27 +138,34 @@ Ext.define('NextThought.view.widgets.Tracker', {
 
 	},
 
+
 	renderToolTip: function(node) {
+		function findIcon(n) {
+			var i = n ? n.getAttribute('icon') : null;
+			if (!i && n && n.parentNode) {
+				return findIcon(n.parentNode);
+			}
+			return i;
+		}
+
 		if ((!this.tipRendered && !node) || this.toolTip.currentNode === node) {
 			return;
 		}
 
-		var current = this.locationProvider.getLocation(),
-			book = current.book,
+		var current = LocationProvider.getLocation(),
 			host = $AppConfig.server.host,
-			root = book.get('root'),
-			bookIcon = book.get('icon'),
+			root = current.root,
 			data = {
-				title: book.get('title'),
+				title: current.title,
 				label: node ? node.getAttribute('label') : '',
-				icon: this.findChapterIcon(node)
+				icon: findIcon(node)
 			};
 
 		if (data.icon) {
 			data.icon = host + root + data.icon;
 		}
 		else {
-			data.icon = host + bookIcon;
+			data.icon = host + root + current.icon;
 		}
 
 		this.toolTip.currentNode = node;
@@ -165,21 +174,10 @@ Ext.define('NextThought.view.widgets.Tracker', {
 		this.tipRendered = true;
 	},
 
-	findChapterIcon: function(node) {
-		var nodeIcon = node ? node.getAttribute('icon') : null;
 
-		if (!nodeIcon && node && node.parentNode) {
-			return this.findChapterIcon(node.parentNode);
-		}
-
-		return nodeIcon;
-	},
-	
 	clickHandler: function(e){
 		var self = this,
 			region = this.getRegion(e),
-			current = this.locationProvider.getLocation(),
-			book = current.book,
 			n, f = region ? region.first : null;
 
 		function scrollTo(){ self.scrollToPercent(f?0:region.position); }
@@ -189,13 +187,12 @@ Ext.define('NextThought.view.widgets.Tracker', {
 				this.scrollToPercent(region.first? 0:region.position);
 			}
 			else {
-				n = region.node.getAttribute('href');
-				VIEWPORT.fireEvent('navigate',book, book.get('root')+n, scrollTo);
+				n = region.node.getAttribute('ntiid');
+				LocationProvider.setLocation(n,scrollTo);
 			}
 		}
 	},
-	
-	
+
 	
 	getRegion: function(e){
 		var i, c, r, x, y, region;
@@ -228,7 +225,6 @@ Ext.define('NextThought.view.widgets.Tracker', {
 		else  { for(i;i<l;i++){ s+=a[i]; } }
 		return s;
 	},
-	
 	
 
 	calculateSizes: function(current){
@@ -277,11 +273,7 @@ Ext.define('NextThought.view.widgets.Tracker', {
 		this.top = this.top<5 ? 5 : this.top;
 	},
 	
-	
-	
-	
-	
-	
+
 	getSectionCount : function(n){
 		var r=[],
 			p=n? n.parentNode : null,
@@ -316,8 +308,6 @@ Ext.define('NextThought.view.widgets.Tracker', {
 			v = t/h;
 		return isNaN(v)? 0 : v>1 ? 1 : v;
 	},
-	
-	
 	
 	
 	render: function(toc,current,activeRegion){
@@ -377,10 +367,7 @@ Ext.define('NextThought.view.widgets.Tracker', {
 		this.renderLineAt(ctx, r, y);
 	},
 	
-	
-	
-	
-	
+
 	clear: function(){
 		var c = this.canvas, w = 'width';
 		//reassign the same value to cause the canvas to clear and do it in a way that JSLint doesn't think you're crazy
@@ -395,7 +382,8 @@ Ext.define('NextThought.view.widgets.Tracker', {
 		ctx.closePath();
 		ctx.stroke();
 	},
-	
+
+
 	renderDotAt: function(ctx, x, y){
 		var r = {
 			x: 0, 

@@ -4,15 +4,18 @@ BASE_STATE = { active: 'home' };
 Ext.define('NextThought.controller.State', {
 	extend: 'Ext.app.Controller',
 
-	views: [
-		'Viewport'
+	requires: [
+		'NextThought.providers.Location'
 	],
 
-	refs: [
-		{ ref: 'viewport', selector: 'master-view' },
-		{ ref: 'readerMode', selector: 'reader-mode-container' },
-		{ ref: 'readerPanel', selector: 'reader-mode-container reader-panel' }
-	],
+	constructor: function(){
+		var m = this.callParent(arguments);
+
+		this.addEvents('restore');
+		this.on('restore',this.restoreState,this);
+
+		return m;
+	},
 
 	init: function() {
 		var me = this,
@@ -23,9 +26,6 @@ Ext.define('NextThought.controller.State', {
 		me.isHangout = this.getController('Google').isHangout();
 
 		me.control({
-			'master-view':{
-				'restore': me.restoreState
-			},
 			'modeContainer': {
 				'activate-mode': me.trackMode
 			}
@@ -65,15 +65,9 @@ Ext.define('NextThought.controller.State', {
 			return;
 		}
 
-		var s = e?e.state:null,
-			v = this.getViewport();
-		if(!v){
-			console.error('no viewport');
-			return;
-		}
-		//v.fireEvent('restore', s || BASE_STATE);
+		var s = e?e.state:null;
 		if (s) {
-			v.fireEvent('restore', s);
+			this.fireEvent('restore', s);
 		}
 	},
 
@@ -133,6 +127,10 @@ Ext.define('NextThought.controller.State', {
 			}
 		}
 
+		if(stateObject.location){
+			LocationProvider.setLocation(stateObject.location);
+		}
+
 		if(replaceState) {
 			history.replaceState(this.currentState,'Title');
 		}
@@ -149,13 +147,10 @@ Ext.define('NextThought.controller.State', {
 		}
 
 		//TODO: save/read state to/from browser/server
-		return history.state || {
-//			active: 'classroom',
-			active: 'reader',
-			reader:{
-				page: '/prealgebra/sect0001.html',
-				index: '/prealgebra/eclipse-toc.xml'
-			}
+//		return history.state || {
+		return {
+			location: 'tag:nextthought.com,2011-10:AOPS-HTML-prealgebra.0',
+			active: 'reader'
 			/* home:{} ... */
 		};
 	}

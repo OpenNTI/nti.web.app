@@ -16,7 +16,7 @@ Ext.define( 'NextThought.view.modes.Reader', {
 		var reader = Ext.widget('reader-panel',{id:'readerPanel'});
 
 		this.add(this.getSpacerColumn());
-		this.add({ region: 'west', id: 'west-book', xtype: 'leftColumn', columnWidget: {xtype:'filter-control'} });
+		this.add({ region: 'west', id: 'west-reader', xtype: 'leftColumn', columnWidget: {xtype:'filter-control'} });
 
 		this.center = this.add({
 			cls: 'x-focus-pane',
@@ -32,7 +32,7 @@ Ext.define( 'NextThought.view.modes.Reader', {
 			items: reader
 		});
 
-		this.add({ region: 'east', id:'east-book', xtype: 'rightColumn', columnWidget: {xtype:'reader-items'} });
+		this.add({ region: 'east', id:'east-reader', xtype: 'rightColumn', columnWidget: {xtype:'reader-items'} });
 		this.add(this.getSpacerColumn());
 
 		this.reader = reader;

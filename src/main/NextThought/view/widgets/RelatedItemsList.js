@@ -2,7 +2,8 @@ Ext.define('NextThought.view.widgets.RelatedItemsList', {
 	extend: 'Ext.panel.Panel',
 	alias: 'widget.related-items',
 	requires: [
-		'NextThought.view.windows.VideoWindow'
+		'NextThought.view.windows.VideoWindow',
+		'NextThought.providers.Location'
 	],
 
 	border: false,
@@ -12,15 +13,15 @@ Ext.define('NextThought.view.widgets.RelatedItemsList', {
 	filter: {},
 	
 	initComponent: function(){
-		this.addEvents('navigate');
 		this.callParent(arguments);
+		LocationProvider.on('change',this.setLocation,this);
 	},
 
 
 
-	setLocation: function(loc){
+	setLocation: function(ntiid){
 		var me = this,
-			map = me.getRelatedItems(loc),
+			map = me.getRelatedItems(LocationProvider.getLocation(ntiid)),
 			m,
 			p = me.items.get(1),
 			c = 0, overflow = false;
@@ -37,7 +38,7 @@ Ext.define('NextThought.view.widgets.RelatedItemsList', {
 				},
 				icon = {
 					xtype: 'box',
-					autoEl: {tag: 'img', src: $AppConfig.server.host+m.icon},
+					autoEl: {tag: 'img', src: $AppConfig.server.host+m.root+m.icon},
 					listeners: listeners
 				};
 
@@ -69,14 +70,14 @@ Ext.define('NextThought.view.widgets.RelatedItemsList', {
 		e.preventDefault();
 
 		if(m.type==='index'||m.type==='link') {
-			this.fireEvent('navigate', m.book, m.book.get('root')+m.href);
+			LocationProvider.setLocation(m.id);
 		}
 
 		else if(m.type==='video'){
 			Ext.create('widget.video-window', {
 				title: m.label,
 				src:[{
-					src: $AppConfig.server.host+m.book.get('root')+m.href,
+					src: $AppConfig.server.host+m.root+m.href,
 					type: 'video/mp4'
 				}]
 			}).show();
@@ -113,21 +114,19 @@ Ext.define('NextThought.view.widgets.RelatedItemsList', {
 
 					target = tag==='page' ? Library.findLocation(id) : null,
 					location = target? target.location : null,
-					book = target? target.book : loc.book,
 
 					label = location? location.getAttribute('label') : r.getAttribute('title'),
-					href = (location? location : r ).getAttribute('href'),
-					icon = this.findIcon(r);
+					href = (location? location : r ).getAttribute('href');
 
 				if(!map[id]){
 					map[id] = {
-						book: book,
 						id: id,
 						type: type,
 						label: label,
 						href: href,
 						qualifier: qual,
-						icon: icon? book.get('root')+icon : book.get('icon')
+						root: loc.root,
+						icon: this.findIcon(r)
 					};
 				}
 			}
@@ -145,7 +144,7 @@ Ext.define('NextThought.view.widgets.RelatedItemsList', {
 			return this.findIcon(node.parentNode);
 		}
 
-		return nodeIcon;
+		return nodeIcon || 'missing-icon.gif';
 	}
 
 });

@@ -46,7 +46,7 @@ Ext.define('NextThought.view.windows.NotificationsPopover', {
 
 		var me = this;
 		this.leaveTimer = window.setTimeout(function(){
-			VIEWPORT.un('resize',me.fixHeight,me);
+			Ext.EventManager.removeResizeListener(me.fixHeight,me);
 			me.close();
 		}, 750);
 	},
@@ -90,13 +90,13 @@ Ext.define('NextThought.view.windows.NotificationsPopover', {
 		var me = this, e, max;
 		try{
 			e = me.bindTo;
-			max = (VIEWPORT.getHeight() - e.getPosition()[1] - e.getHeight() - 10);
+			max = (Ext.getBody().getHeight() - e.getPosition()[1] - e.getHeight() - 10);
 			me.height = undefined;
 			me.doLayout();
 			if(me.getHeight()> max) {me.setHeight(max);}
 
 			//console.debug(max, me.getHeight());
-			VIEWPORT.on('resize',me.fixHeight,me, {single: true});
+			Ext.EventManager.onWindowResize(me.fixHeight,me, {single: true});
 		}
 		catch(err){
 			if(me){

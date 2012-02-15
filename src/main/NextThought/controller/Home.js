@@ -1,6 +1,10 @@
 Ext.define('NextThought.controller.Home', {
 	extend: 'Ext.app.Controller',
 
+	requires: [
+		'NextThought.providers.Location'
+	],
+
 	models: [
 		'Highlight',
 		'Note',
@@ -30,7 +34,7 @@ Ext.define('NextThought.controller.Home', {
 			},
 			'home-mode-container library-view':{
 				'itemdblclick':function(a, rec){
-					VIEWPORT.fireEvent('navigate', rec, rec.get('href'));
+					LocationProvider.setLocation(rec);
 				},
 				'selectionchange': function(a, sel){}
 			}

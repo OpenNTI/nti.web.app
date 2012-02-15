@@ -1,6 +1,7 @@
 Ext.define('NextThought.util.QuizUtils', {
 	requires: [
-		'NextThought.util.ParseUtils'
+		'NextThought.util.ParseUtils',
+		'NextThought.providers.Location'
 	],
 	alternateClassName: 'QuizUtils',
 	statics: {
@@ -35,7 +36,7 @@ Ext.define('NextThought.util.QuizUtils', {
 				url = $AppConfig.service.getQuizSubmitURL(ntiid),
 				problems,
 				data = {},
-				vp = VIEWPORT.getEl();
+				vp = Ext.getBody();
 
 			function iter(id,v){
 				data[id] = v.getValue();
@@ -136,15 +137,7 @@ Ext.define('NextThought.util.QuizUtils', {
 			var p = Ext.getCmp('readerPanel');
 			p.relayout();
 			p.scrollTo(0);
-		},
-
-		navigateToHint: function(href) {
-			var bookInfo = Library.findLocation('tag:nextthought.com,2011-07-14:AOPS-HTML-prealgebra-3'),
-					book = bookInfo.book;
-
-			VIEWPORT.fireEvent('navigate', book, book.get('root')+href);
 		}
-
 	}
 },
 		function(){
@@ -157,8 +150,8 @@ Ext.define('NextThought.util.QuizUtils', {
  * Global functions called by content in the Reader panel
  */
 
-function NTIHintNavigation(href) {
-	QuizUtils.navigateToHint(href);
+function NTIHintNavigation(ntiid) {
+	LocationProvider.setLocation(ntiid);
 }
 
 function NTISubmitAnswers(){

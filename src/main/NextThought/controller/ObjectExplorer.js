@@ -3,6 +3,10 @@
 Ext.define('NextThought.controller.ObjectExplorer', {
 	extend: 'Ext.app.Controller',
 
+	requires: [
+		'NextThought.providers.Location'
+	],
+
 	views: [
 		'Viewport',
 		'widgets.main.LeftColumn',
@@ -40,12 +44,8 @@ Ext.define('NextThought.controller.ObjectExplorer', {
 
 
 	itemNavigatorItemActivated: function(control, record, dom, index) {
-		var containerId = record.get('ContainerId'),
-			bookInfo = Library.findLocation(containerId),
-			book = bookInfo.book,
-			href = bookInfo.location.getAttribute('href');
-
-		this.navigate(book, book.get('root') + href);
+		var containerId = record.get('ContainerId');
+		LocationProvider.setLocation(containerId);
 	},
 
 	objectExplorerClicked: function(btn, e, o) {
@@ -66,10 +66,5 @@ Ext.define('NextThought.controller.ObjectExplorer', {
 		}
 
 		this.objectExplorer.show();
-	},
-
-	navigate: function(book, ref){
-		this.getViewport().fireEvent('navigate', book, ref);
 	}
-	
 });

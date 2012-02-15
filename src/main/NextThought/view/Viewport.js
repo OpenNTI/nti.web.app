@@ -20,21 +20,15 @@ Ext.define('NextThought.view.Viewport', {
 		{xtype: 'modeContainer', region: 'center', id: 'mode-ctr'}
 	],
 
-	constructor: function(){
-		if(NextThought.phantomRender){
-			this.hidden = true;
-		}
 
+	constructor: function(){
+		this.hidden = Boolean(NextThought.phantomRender);
 		this.callParent(arguments);
 	},
-	
-	initComponent: function(){
-		window.VIEWPORT = this;
-		this.addEvents('clear-search', 'navigate');
-		this.callParent(arguments);
-	},
+
 
 	getActive: function(){
+		console.trace('stop it');
 		if(!this.container) {
 			this.container = this.down('modeContainer');
 		}

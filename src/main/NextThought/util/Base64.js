@@ -22,7 +22,7 @@ Ext.define('NextThought.util.Base64',
 	
 	keyStr : 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=',
 
-	encode: function(stringToEncode) {
+	encode: window.btoa? function(s){return btoa(s); }: function(stringToEncode) {
 		var output = "", chr1, chr2, chr3, enc1, enc2, enc3, enc4, i = 0, input;
 
 		input = this.utf8_encode(stringToEncode);
@@ -53,7 +53,7 @@ Ext.define('NextThought.util.Base64',
 		return output;
 	},
 
-	decode : function (input) {
+	decode: window.atob? function(s){ return atob(s); }: function (input) {
 		var output = "",
 			chr1, chr2, chr3,
 			enc1, enc2, enc3, enc4,

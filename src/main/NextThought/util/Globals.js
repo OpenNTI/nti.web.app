@@ -161,6 +161,15 @@ Ext.define('NextThought.util.Globals',
 			peek: function peek(){ return this[this.length-1]; }
 		});
 
+		Ext.applyIf(RegExp,{
+			escape:function me(text) {
+				if(!me.Re){
+					me.Re = /[-[\]{}()*+?.,\\^$|#\s]/g;
+				}
+			    return text.replace(me.Re, "\\$&");
+			}
+		});
+
 		//inject a new function into Ext.Element
 		Ext.apply(Ext.Element.prototype,{
 

@@ -2,6 +2,7 @@ Ext.define('NextThought.view.content.Reader', {
 	extend:'NextThought.view.content.Panel',
 	alias: 'widget.reader-panel',
 	requires: [
+		'NextThought.providers.Location',
 		'NextThought.util.QuizUtils',
 		'NextThought.view.widgets.Tracker'
 	],
@@ -15,17 +16,22 @@ Ext.define('NextThought.view.content.Reader', {
 
 	tracker: null,
 
-	//used to bust caches between sessions
-	instantiationtime: Ext.Date.now(),
-
-	initComponent: function(){
-		this.addEvents('publish-contributors','location-changed','finished-navigation','finished-restore');
-		this.enableBubble('publish-contributors','location-changed','finished-navigation','finished-restore');
+	initComponent: function() {
+		this.loadedResources = {};
+		this.addEvents('loaded','finished-restore');
+		this.enableBubble('loaded','finished-restore');
 		this.callParent(arguments);
 
 		this.add({cls:'x-panel-reset', margin: this.belongsTo ? 0 : '0 0 0 50px', enableSelect: true});
 		this.initAnnotations();
+
+		this.meta = {};
+		this.css = {};
+		this.nav = {};
+
+		LocationProvider.on('navigate',this.loadPage,this);
 	},
+
 
 	getDocumentEl: function(){
 		return this.items.get(0).getEl().down('.x-panel-body');
@@ -49,6 +55,7 @@ Ext.define('NextThought.view.content.Reader', {
 			console.error('Could not find Component with id: ',id);
 		}
 	},
+
 
 	scrollToTarget: function(target){
 		var e = this.el.query('*[name='+target+']');
@@ -78,9 +85,11 @@ Ext.define('NextThought.view.content.Reader', {
 		this.el.first().scrollTo('top', top, animate!==false);
 	},
 
+
 	getContainerId: function() {
-		return this.el.select('meta[name=NTIID]').first().getAttribute('content');
+		return this.meta.NTIID;
 	},
+
 
 	render: function(){
 		this.callParent(arguments);
@@ -93,103 +102,38 @@ Ext.define('NextThought.view.content.Reader', {
 
 		var d = this.el.dom;
 		this.tracker = Ext.widget('tracker', this, d, d.firstChild);
-
-		if(this.deferredRestore){
-			this.restore(this.deferredRestore);
-			delete this.deferredRestore;
-		}
 	},
 
 
-	setActive: function(book, path, skipHistory, callback, ntiid) {
+	loadPage: function(ntiid, callback) {
 		var me = this,
-			b = me.resolveBase(me.getPathPart(path)),
-			f = me.getFilename(path),
-			pc = path.split('#'),
-			target = pc.length>1? pc[1] : null,
-			vp= VIEWPORT.getEl(),
-			bc = me.ownerCt.getDockedComponent(0) || Ext.getCmp('breadcrumb');
-
-		if(me.active === pc[0]){
-			if( callback ){
-				callback();
-			}
-
-			if(target) {
-				me.scrollToTarget(target);
-			}
-
-			return;
-		}
+			service = $AppConfig.service;
 
 		me.clearAnnotations();
-		me.relayout();
-		me.active = pc[0];
-		if(!skipHistory){
-			me.appendHistory(book, path);
-		}
-		else if(skipHistory !== 'do-restore') {
-			me.fireEvent('unrecorded-history', book, path, ntiid);
+
+		function success(resp){
+			this.setReaderContent(resp, callback);
 		}
 
-		vp.mask('Loading...');
-		if (bc) {
-			bc.setActive(book, f);
+		function failure(){
+			console.error(arguments);
 		}
 
-		me.request = Ext.Ajax.request({
-			url: b+f,
-			scope: this,
-			disableCaching: true,
-			scopeVars:{
-				book: book,
-				basePath: b,
-				target: target,
-				callback: callback,
-				fireFinishRestore: skipHistory === 'do-restore'
-			},
-			success: me.setReaderContent,
-			callback: function(req,success,res){
-				delete me.request;
-				vp.unmask();
-				if(!success) {
-					console.error('There was an error getting content', b+f, res);
-				}
-			}
-		});
+		me.request = service.getObjectRaw(ntiid, success, failure, me);
+
+		return true;
 	},
 
 
-
-
-	setReaderContent: function(data, req){
+	setReaderContent: function(resp, callback){
 		var me = this,
-			s = req.scopeVars,
-			c = me.cleanHTML(data.responseText, s.basePath),
-			target = s.target,
-			callback = s.callback,
+			c = me.parseHTML(resp),
 			containerId;
 
 		function onFinishLoading() {
-			me.fireEvent('location-changed', containerId);
-
-			if( callback ){
-				me.on('relayedout', callback, me, {single: true});
-			}
-
-			if(target){
-				me.on('relayedout',
-					function(){
-						me.scrollToTarget(target);
-					},
-					me, {single: true});
-			}
-
-			me.bufferedDelayedRelayout();
-			me.fireEvent('finished-navigation');
-			if(s.fireFinishRestore) {
-				me.fireEvent('finished-restore');
-			}
+			me.relayout();
+			Globals.callback(callback,null,[this]);
+			me.fireEvent('loaded', containerId);
 		}
 
 		me.items.get(0).update('<div id="NTIContent">'+c+'</div>');
@@ -200,9 +144,7 @@ Ext.define('NextThought.view.content.Reader', {
 		me.el.select('#NTIContent .navigation').remove();
 		me.el.select('#NTIContent .breadcrumbs').remove();
 		me.el.select('#NTIContent a[href]').on(
-			'click', me.onClick, me, {
-				book: s.book, scope: me, stopEvent: true
-			});
+			'click', me.onClick, me, { scope: me, stopEvent: true });
 
 		containerId = me.getContainerId();
 
@@ -210,28 +152,62 @@ Ext.define('NextThought.view.content.Reader', {
 	},
 
 
+	parseHTML: function(request){
+		function path(s){
+			var p = s.split('/'); p.splice(-1,1,'');
+			return p.join('/');
+		}
 
-	cleanHTML: function(html, basePath){
-		var c = html,
+		function toObj(a,k,v){
+			var i=a.length-1, o = {};
+			for(; i>=0; i--){ o[k.exec(a[i])[2]] = v.exec(a[i])[1]; }
+			return o;
+		}
+
+		function metaObj(m){
+			return toObj(m, /(name|http\-equiv)="([^"]+)"/i, /content="([^"]+)"/i);
+		}
+
+		function navObj(m){
+			return toObj(m, /rel="([^"]+)"/i, /href="([^"]+)"/i);
+		}
+
+		function cssObj(m){
+			var i = m.length-1, k=/href="([^"]*)"/i, o, c = {};
+			for(; i>=0; i--){
+				o = basePath + k.exec(m[i])[1];
+				c[o] = {};
+				if(!rc[o]) {
+					rc[o] = c[o] = Globals.loadStyleSheet(o);
+				}
+			}
+			//remove resources not used anymore...
+			Ext.Object.each(rc,function(k,v,o){
+				if(!c[k]){
+					Ext.fly(v).remove();
+					delete o[k];
+				}
+			});
+			return c;
+		}
+
+		var basePath = path(request.responseLocation),
+			rc = this.loadedResources,
+
+			c = request.responseText,
 			rf= c.toLowerCase(),
+
 			start = rf.indexOf(">", rf.indexOf("<body"))+1,
 			end = rf.indexOf("</body"),
-			head = c.substring(0,start),
-			body = c.substring(start, end),
-			css, meta;
 
-		css = head.match(/<link.*href="(.*\.css)".*>/gi);
-		meta = head.match(/<meta.*>/gi);
-		//cache bust css
-		css = css ? css.join('') : '';
-		css = css.replace(/\.css/gi, '.css?dc='+this.instantiationtime);
-		meta = meta?meta.join(''):'';
+			head = c.substring(0,start).replace(/[\t\r\n\s]+/g,' '),
+			body = c.substring(start, end);
 
-		meta = meta.replace(/<meta[^<]+?viewport.+?\/>/ig,'');
+		this.meta = metaObj( head.match(/<meta[^>]*>/gi) );
+		this.nav = navObj( head.match( /<link[^<>]+rel="(?!stylesheet)([^"]*)"[^<>]*>/ig) );
+		this.css = cssObj( head.match(/<link[^<>]*?href="([^"]*css)"[^<>]*>/ig) );
 
-		c = this.fixReferences(meta.concat(css).concat(body),basePath);
-
-		return c;
+		return this.fixReferences(body,basePath);
 	},
 
 
@@ -258,7 +234,7 @@ Ext.define('NextThought.view.content.Reader', {
 
 	externalUriRegex : /^([a-z][a-z0-9\+\-\.]*):/i,
 
-
+//TODO: rewrite this to use NTIID
 	onClick: function(e, el, o){
 		e.stopPropagation();
 		e.preventDefault();
@@ -285,40 +261,7 @@ Ext.define('NextThought.view.content.Reader', {
 			}
 		}
 
-		m.setActive(o.book, p);
-	},
-
-
-
-	appendHistory: function(book, path) {
-		var state = { reader:{ index: book.get('index'), page: path } };
-		try{
-			history.pushState(state,"TODO: resolve title");
-		}
-		catch(e){
-			console.error('Error recording history:', e, e.message, e.stack, 'state:', state);
-		}
-	},
-
-
-	restore: function(state) {
-		if(!state || !state.reader) {
-			console.warn("WARNING: Ignoring restored state data, missing state for reader");
-			return;
-		}
-
-		if(!this.rendered){
-			this.deferredRestore = state;
-			return;
-		}
-
-		var b = Library.getTitle(state.reader.index);
-		if(b){
-			this.setActive(b, state.reader.page, 'do-restore');
-		}
-		else{
-			console.error(state.reader, 'The restored state object points to a resource that is no longer available');
-		}
+		m.loadPage(p);
 	}
 
 });

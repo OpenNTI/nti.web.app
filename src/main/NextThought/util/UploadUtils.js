@@ -82,7 +82,7 @@ Ext.define('NextThought.util.UploadUtils',{
 			console.debug('worker beat');
 		}
 		else if(message.message === 'started'){
-			console.debug('Upload Worker started.');
+			//gtg
 		}
 
 
@@ -260,7 +260,7 @@ Ext.define('NextThought.util.UploadUtils',{
 				}
 			});
 			this.manager.show();
-			this.manager.alignTo(VIEWPORT, 'br-br', [-10,-10]);
+			this.manager.alignTo(Ext.getBody(), 'br-br', [-10,-10]);
 		}
 
 		this.manager.toFront(true);

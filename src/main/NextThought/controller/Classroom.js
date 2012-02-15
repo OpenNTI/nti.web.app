@@ -224,23 +224,20 @@ Ext.define('NextThought.controller.Classroom', {
 
 	onMessageContentNavigate: function(ntiid) {
 		var s = $AppConfig.service,
-			o = Library.findLocation(ntiid),
-			book = o ? o.book : null,
-			href = o ? o.location.getAttribute('href') : null,
-			path = (book && href) ? book.get('root')+href : null,
-			nonBookHref = null;
+			l = LocationProvider.getLocation(ntiid),
+			href = null;
 
-		if (book && path) {
+		if (l) {
 			//update classroom's state
-			this.recordState(book, path, ntiid, null, true);
-
-			//pass in boolean to skip adding this to history since classroom is synced
-			this.getReader().restore({reader: { index: book.get('index'), page: path}});
+			LocationProvider.setLocation(ntiid);
+			//???
+			//this.recordState(ntiid, null, true);
 		}
 		else {
-			//we must have some other non-book related object, get it and display
-			nonBookHref = $AppConfig.server.host + $AppConfig.service.getCollection('Objects', 'Global').href + '/' + ntiid;
-			this.getLiveDisplay().addContent(nonBookHref);
+			//we must have some other related object, get it and display
+			href = $AppConfig.server.host +
+					s.getCollection('Objects', 'Global').href + '/' + ntiid;
+			this.getLiveDisplay().addContent(href);
 		}
 	},
 
@@ -472,8 +469,9 @@ Ext.define('NextThought.controller.Classroom', {
 	},
 
 
-	recordState: function(book, path, ntiid, eopts, viaSocket) {
-		history.updateState({classroom: {reader: { index: book.get('index'), page: path}}});
+	recordState: function(ntiid, eopts, viaSocket) {
+		//??
+		//history.updateState({classroom: {reader: { }}});
 
 		//If this navigate event came from somewhere other than the socket, we need to issue
 		//a CONTENT message to the room.

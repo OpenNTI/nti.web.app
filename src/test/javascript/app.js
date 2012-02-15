@@ -82,6 +82,7 @@ var mockService = {
 	"Class": "Service"
 };
 
+console.group = console.groupEnd = console.groupCollapsed = function(){};
 
 Ext.application({
 	name: 'NextThought',

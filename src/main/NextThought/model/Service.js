@@ -1,5 +1,8 @@
 Ext.define('NextThought.model.Service', {
 	extend: 'NextThought.model.Base',
+	requires: [
+		'Ext.String'
+	],
 	idProperty: 'Class',
 	fields: [
 		{ name: 'Items', type: 'auto', defaultValue: {Items:[]}},
@@ -171,20 +174,60 @@ Ext.define('NextThought.model.Service', {
 		return Ext.clone( collection );
 	},
 
-	getObject: function (ntiid, success, failure, scope){
+	getObjectRaw: function (ntiid, success, failure, scope){
 		var host = $AppConfig.server.host,
-			url = host + this.getCollection('Objects', 'Global').href + '/' + ntiid;
+			url = Ext.String.format("{0}{1}/{2}",
+				host,
+				this.getCollection('Objects', 'Global').href,
+				encodeURIComponent(ntiid)
+			),
+			q = {};
 
-		Ext.Ajax.request({
-			url: url,
-			callback: function(req, s, resp){
-				if(!s){
-					Globals.callback(failure,scope, [req,resp]);
-					return;
+		function continueRequest(resolvedUrl){
+			q.request = Ext.Ajax.request({
+				url: resolvedUrl,
+				callback: function(req, s, resp){
+					if(s){
+						resp.responseLocation = resolvedUrl;
+						Globals.callback(success, scope, [resp]);
+					} else {
+						Globals.callback(failure,scope, [req,resp]);
+					}
 				}
-				Globals.callback(success, scope, ParseUtils.parseItems(resp.responseText));
+			});
+		}
+
+		//lookup step
+		q.request = Ext.Ajax.request({
+			url: url,
+			headers: {
+				Accept: 'application/vnd.nextthought.link+json'
+			},
+			callback: function(req,s,resp){
+				var href;
+				if(s){
+					href = Ext.JSON.decode(resp.responseText).href;
+					continueRequest(host+href);
+				} else {
+					Globals.callback(failure,scope, [req,resp]);
+				}
 			}
 		});
+
+		return q;
+	},
+
+
+	getObject: function (ntiid, success, failure, scope){
+		return this.getObjectRaw(ntiid,
+				function(resp){
+					Globals.callback(success, scope, ParseUtils.parseItems(resp.responseText));
+				},
+				function(req,resp){
+					Globals.callback(failure,scope, [req,resp]);
+				},
+				this
+		);
 	}
 
 });

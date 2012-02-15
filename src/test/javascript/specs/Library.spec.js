@@ -1,10 +1,5 @@
 describe('Library Store', function(){
 
-	function isBook(v){
-		expect(v).toBeTruthy();
-		expect(v.isModel).toBeTruthy();
-		expect(v.modelName).toBe('NextThought.model.Title');
-	}
 
 	function isTopicElement(v){
 		expect(v).toBeTruthy();
@@ -43,7 +38,15 @@ describe('Library Store', function(){
 	it('can find the section', function(){
 		var l = Library.findLocation('book2-1-1');
 		expect(l).toBeTruthy();
-		isBook(l.book);
+		expect(l.toc).toBeTruthy();
+		expect(l.NTIID).toBeTruthy();
+		expect(l.ContentNTIID).toBeTruthy();
+		expect(typeof l.NTIID === 'string').toBeTruthy();
+		expect(typeof l.ContentNTIID === 'string').toBeTruthy();
+
+		expect(Object.prototype.toString.call(l.toc)).toBe('[object Document]');
+		expect(Object.prototype.toString.call(l.location)).toBe('[object Element]');
+
 		isTopicElement(l.location);
 	});
 
@@ -58,7 +61,6 @@ describe('Library Store', function(){
 
 	it('can find the title of the book', function(){
 		var t = Library.getTitle('/book2/eclipse-toc.xml');
-		isBook(t);
 		expect(t.get('title')).toBe('book2');
 	});
 
@@ -78,7 +80,6 @@ describe('Library Store', function(){
 		var n = Library.getNavigationInfo('book2-1-1');
 
 		expect(n).toBeTruthy();
-		isBook(n.book);
 		isTopicElement(n.current);
 		isTopicElement(n.next);
 		isTopicElement(n.previous);
@@ -86,8 +87,8 @@ describe('Library Store', function(){
 		expect(n.hasNext).toBeTruthy();
 		expect(n.hasPrevious).toBeTruthy();
 
-		expect(n.nextHref).toBeTruthy();
-		expect(n.previousHref).toBeTruthy();
+		expect(n.nextRef).toBeTruthy();
+		expect(n.previousRef).toBeTruthy();
 
 
 	});

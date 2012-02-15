@@ -1,6 +1,10 @@
 Ext.define('NextThought.controller.Search', {
 	extend: 'Ext.app.Controller',
 
+	requires: [
+		'NextThought.providers.Location'
+	],
+
 	models: [
 		'Hit',
 		'UserSearch'
@@ -51,24 +55,20 @@ Ext.define('NextThought.controller.Search', {
 	},
 
 
-	resolveTopContainer: function resolve(containerId, success, failure, oid){
+	resolveTopContainer: function resolve(containerId, success, failure){
 
 		var service = $AppConfig.service,
-			bookInfo = Library.findLocation(containerId);
-
-		oid = oid || null;
+			o = Library.findLocation(containerId);
 
 		function step(container){
-			oid = container.getId();
 			return resolve(
 					container.get('ContainerId'),
 					success,
-					failure,
-					oid);
+					failure);
 		}
 
-		if(bookInfo){
-			return Globals.callback(success,null,[bookInfo,oid]);
+		if(o){
+			return Globals.callback(success,null,[o]);
 		}
 
 		service.getObject(containerId, step, failure);
@@ -77,29 +77,20 @@ Ext.define('NextThought.controller.Search', {
 
 	searchResultClicked: function(hit, searchValue) {
 		var me = this,
-			oid = hit.get('TargetOID'),
 			containerId = hit.get('ContainerId');
 
-		function success(bookInfo,newOid) {
+		function success(o) {
 			Ext.getBody().unmask();
-			if(!bookInfo){
+			if(!o){
 				alert("bad things");
 				return;
 			}
 
-			var book = bookInfo.book,
-				href = bookInfo.location.getAttribute('href'),
-				popover = me.getSearchPopover();
+			LocationProvider.setLocation(o.NTIID, function(){
+				//do scrolling/selecting here
+			});
 
-			me.getViewport().fireEvent(
-				'navigate',
-				book,
-				book.get('root') + href,
-				{
-					text: searchValue,
-					oid: newOid || oid
-				});
-
+			var popover = me.getSearchPopover();
 			if(popover && popover.isVisible()){
 				popover.startClose();
 			}

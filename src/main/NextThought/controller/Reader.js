@@ -2,7 +2,8 @@ Ext.define('NextThought.controller.Reader', {
 	extend: 'Ext.app.Controller',
 
 	requires: [
-		'NextThought.cache.IdCache'
+		'NextThought.cache.IdCache',
+		'NextThought.providers.Location'
 	],
 
 	models: [
@@ -39,29 +40,12 @@ Ext.define('NextThought.controller.Reader', {
 		this.application.on('session-ready', this.onSessionReady, this);
 
 		this.control({
-			'master-view':{
-				'navigate': this.navigate,
-				'stream-item-clicked': this.navigateToItem,
-				'cleared-search': this.clearSearch
-			},
-
-			'breadcrumbbar':{
-				'navigate': this.navigate
-			},
-
-			'breadcrumbbar *[location]' : {
+			'breadcrumbbar *[ntiid]' : {
 				'click' : this.buttonClicked
 			},
 
 			'reader-panel':{
-				'navigate': this.navigate,
-				'location-changed': this.readerLocationChanged,
-				'publish-contributors': this.readerPublishedContributors,
 				'annotations-load': this.onAnnotationsLoad
-			},
-
-			'reader-mode-container related-items':{
-				'navigate': this.navigate
 			},
 
 			'reader-mode-container': {
@@ -90,6 +74,9 @@ Ext.define('NextThought.controller.Reader', {
 		if( ps ) {
 			ps.onAnnotationsLoadCallback = callback;
 			ps.load();
+		}
+		else {
+			Globals.callback(callback);
 		}
 
 		//When the reader changes, we need to tell the stream controller so he knows to
@@ -173,8 +160,7 @@ Ext.define('NextThought.controller.Reader', {
 
 	navigateToItem: function(i) {
 		var c = i.get('Class'),
-				id = IdCache.getComponentId(i),
-				containerId, bookInfo, book, href;
+				containerId;
 
 		//right now, only handle notes and highlights, not sure what to do with users etc...
 		if (c !== 'Note' && c !== 'Highlight') {
@@ -182,38 +168,18 @@ Ext.define('NextThought.controller.Reader', {
 		}
 
 		containerId = i.get('ContainerId');
-		bookInfo = Library.findLocation(containerId);
-		book = bookInfo.book;
-		href = bookInfo.location.getAttribute('href');
-		this.navigate(book, book.get('root') + href, {oid: id});
+		LocationProvider.setLocation(containerId, function(scrollableHighlightableAPI){
+			var id = IdCache.getComponentId(i);
+			//scoll to
+		});
 	},
 
 	buttonClicked: function(button) {
-		if (!button || !button.book || !button.location) {
-			return;
+		if(button) {
+			LocationProvider.setLocation(button.ntiid);
 		}
-
-		var skip = button.skipHistory,
-				ntiid = button.ntiid,
-
-				book = button.book,
-				loc = button.location;
-
-		this.navigate(book, loc, null, skip, ntiid);
 	},
 
-	navigate: function(book, ref, options, skipHistory, ntiid){
-		//	   this.getReaderMode().activate();
-		this.getReader().setActive(
-				book,
-				ref,
-				skipHistory,
-				options ? typeof(options)==='function'
-							? options
-							: Ext.bind(this.scrollToText, this, [options.text, options.oid])
-						: undefined,
-				ntiid);
-	},
 
 	getElementsByTagNames: function(list,obj) {
 		if (!obj) {
@@ -299,26 +265,15 @@ Ext.define('NextThought.controller.Reader', {
 			}
 		});
 
-//		setTimeout(function(){
-			me.getReader().showRanges(ranges);
-			if (oid) {
-				me.getReader().scrollToId(IdCache.getComponentId(oid));
-			}
-			else {
-				me.getReader().scrollTo(ranges[0].getClientRects()[0].top - 150);
-			}
-//		}, 500);
+		me.getReader().showRanges(ranges);
+		if (oid) {
+			me.getReader().scrollToId(IdCache.getComponentId(oid));
+		}
+		else {
+			me.getReader().scrollTo(ranges[0].getClientRects()[0].top - 150);
+		}
 	},
 
-	readerLocationChanged: function(id){
-		this.getController('Stream').containerIdChanged(id);
-		this.getReaderRelated().setLocation(
-				this.getReaderBreadcrumb().getLocation());
-	},
-
-	readerPublishedContributors: function(c){
-		this.getReaderPeople().setContributors(c);
-	},
 
 	readerFilterChanged: function(newFilter){
 		var o = [

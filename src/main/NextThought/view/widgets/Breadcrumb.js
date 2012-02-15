@@ -1,97 +1,82 @@
 Ext.define('NextThought.view.widgets.Breadcrumb', {
 	extend: 'Ext.toolbar.Toolbar',
 	alias: 'widget.breadcrumbbar',
+	requires: [
+		'NextThought.Library',
+		'NextThought.providers.Location'
+	],
 	
 	cls: 'x-breadcrumbs-bar',
 	border: false,
-	
 
-	constructor: function(){
-		this.addEvents({'change': true, 'navigate': true});
-		this.callParent(arguments);
-		this.current = {};
-		return this;
-	},
 	
 	initComponent: function(){
 		this.callParent(arguments);
-		if (!Library.loaded) {
-			this.add({ text: 'Loading...' });
-			Library.on('loaded',function(){ if(!this.current.location) {this.reset(); } }, this);
-		}
-		else {
+		this.add({ text: 'Loading...' });
+		LocationProvider.on('change',this.updateLocation,this);
+		Library.on('loaded',this.loaded,this,{single:true});
+	},
+
+
+	/** @private */
+	loaded: function(){
+		if(this.items.getAt(0).text === 'Loading...'){
 			this.reset();
 		}
 	},
 
-	reset: function(book){
+
+	/** @private */
+	reset: function(hasLocation){
 		this.current = {};
 		this.removeAll(true);
 
-		if(!book){
+		if(!hasLocation){
 			this.add({
 				text: 'Select item...',
 				menu: this.getLibraryMenu()
 			});
 		}
-
-		this.fireEvent('change',this.current);
 	},
-	
-	
-	
-	getLocation : function(){
-		var b = this.current.book, q, l, xml;
-		if(!b){
-			return {};
+
+
+	/** @private */
+	updateLocation: function(ntiid){
+		if(!Library.loaded){
+			Ext.Error.raise("Should not happen");
 		}
-		
-		xml = Library.getToc(b.get('index'));
-		q = "topic[href^="+this.current.location.replace('.','\\.')+"]";
-		l = Ext.DomQuery.selectNode(q,xml);
+		this.reset(!!ntiid);
 
-		return {
-			book: b,
-			toc: xml,
-			location: l 
-		};
-	},
-
-	
-	setActive: function(book, location){
-		this.reset(!!book);
-		
-		this.current.book = book;
-		this.current.location = location;
-		
-		var loc = this.getLocation();
 		try{
-			this.renderBreadcrumb(book, loc.toc, loc.location, this);
+			this.renderBreadcrumb(LocationProvider.getLocation(ntiid), this);
 		}
 		catch(e){
 			console.error('Could not render the breadcrumb', e, e.message, e.stack);
 			this.reset();
 		}
-		this.fireEvent('change',loc);
 	},
 
 
+	/** @private */
 	selectNodeParent: function(query, dom){
 		var node = Ext.DomQuery.selectNode(query,dom);
 		return node? node.parentNode : null;
 	},
 	
-	renderBreadcrumb: function(book, xml, currentLocation, container) {
-		if(!xml){
+
+	/** @private */
+	renderBreadcrumb: function(location, container) {
+		if(!location || !location.toc){
 			return;
 		}
 		var me = this,
+			xml = location.toc,
 			toc = me.selectNodeParent('topic',xml),
-			location = (currentLocation ? currentLocation:toc),
+			curNode = (location.location ? location.location:toc),
+			selectedBranch = location.location,
+			level = selectedBranch ? selectedBranch.parentNode : me.selectNodeParent("topic[href]",xml),
 			nodes = [],
 			first = true,
-			selectedBranch = currentLocation,
-			level = selectedBranch ? selectedBranch.parentNode : me.selectNodeParent("topic[href]",xml),
 			leafs,
 			branches,
 			navInfo;
@@ -107,7 +92,7 @@ Ext.define('NextThought.view.widgets.Breadcrumb', {
 			};
 
 			
-			this.renderBranch(book, leafs, level, selectedBranch);
+			this.renderBranch(leafs, level, selectedBranch);
 			
 			if(leafs.length>0){
 				branches.menu = leafs;
@@ -124,45 +109,42 @@ Ext.define('NextThought.view.widgets.Breadcrumb', {
 		
 		container.add({
 			text: toc.getAttribute('label'),
-			menu: this.getLibraryMenu(book)
+			menu: this.getLibraryMenu(location.ContentNTIID)
 		});
 		
 		nodes.reverse();
 		container.add(nodes);
 
 		//add prev and next buttons
-		if (location) {
-			navInfo = Library.getNavigationInfo(location.getAttribute('ntiid')) || {};
+		if (curNode) {
+			navInfo = Library.getNavigationInfo(curNode.getAttribute('ntiid')) || {};
 			container.add(
 					'->',
-					{iconCls: 'breadcrumb-prev', disabled: !navInfo.hasPrevious, location: navInfo.previousHref, book: navInfo.book},
-					{iconCls: 'breadcrumb-next', disabled: !navInfo.hasNext, location: navInfo.nextHref, book: navInfo.book}
+					{iconCls: 'breadcrumb-prev', disabled: !navInfo.hasPrevious, ntiid: navInfo.previousRef},
+					{iconCls: 'breadcrumb-next', disabled: !navInfo.hasNext, ntiid: navInfo.nextRef}
 			);
 		}
 	},
 	
-	
-	
-	
-	getLibraryMenu: function(book){
+
+	/** @private */
+	getLibraryMenu: function(id){
 		var list = [];
 		
 		Library.each(function(o){
 			var root,
-				xml = Library.getToc(o.get('index')),
+				xml = Library.getToc(o),
 				b	= [],
-				h   = o.get('href'),
 				m	= {
 					text: o.get('title'),
-					checked: book && o.get('index')===book.get('index'),
+					checked: o.get('NTIID')===id,
 					group: 'library',
-					book: o,
-					location: h
+					ntiid: o.get('ntiid')
 				};
 
 			if(xml){
 				root = this.selectNodeParent("topic[href]",xml);
-				this.renderBranch(o, b, root);
+				this.renderBranch(b, root);
 				if(b.length){
 					m.menu = b;
 				}
@@ -175,8 +157,8 @@ Ext.define('NextThought.view.widgets.Breadcrumb', {
 	},
 	
 	
-	
-	renderBranch: function(book, leafs, node, selectedNode) {
+	/** @private */
+	renderBranch: function(leafs, node, selectedNode) {
 		if(!node) {
 			return;
 		}
@@ -184,24 +166,24 @@ Ext.define('NextThought.view.widgets.Breadcrumb', {
 			if(v.nodeName==="#text"||!v.hasAttribute("label")){
 				return;
 			}
-			leafs.push(this.renderLeafFromTopic(book, v, v===selectedNode)||{});
+			leafs.push(this.renderLeafFromTopic(v, v===selectedNode)||{});
 		}, this);
 	},
    
    
-   
-	renderLeafFromTopic: function(book, topicNode, selected) {
+	/** @private */
+	renderLeafFromTopic: function(topicNode, selected) {
 		
 		var label = topicNode.getAttribute("label"),
 				href = topicNode.getAttribute("href"),
 				ntiid = topicNode.getAttribute('ntiid'),
-				leaf = this.renderLeaf(book, label, href, ntiid, selected),
+				leaf = this.renderLeaf(label, href, ntiid, selected),
 				list;
 	
 		if(leaf && topicNode.childNodes.length > 0){
 			list = [];
 			leaf.menu = list;
-			this.renderBranch(book,list,topicNode);
+			this.renderBranch(list,topicNode);
 			if(!leaf.menu.length){
 				leaf.menu = undefined;
 			}
@@ -211,26 +193,21 @@ Ext.define('NextThought.view.widgets.Breadcrumb', {
 	},
 	
 	
-	
-	renderLeaf: function(book, labelText, href, ntiid, selected) {
-		if(!href || !labelText || !book){
+	/** @private */
+	renderLeaf: function(labelText, href, ntiid, selected) {
+		if(!href || !labelText){
 			return null;
 		}
 
 		var leaf = {
 			text: labelText,
-			book: book,
-			location: book.get('root')+href,
-			ntiid: ntiid,
-			skipHistory: this.skipHistory
+			ntiid: ntiid
 		};
 			
 		if(selected){
 			leaf.checked = true;
 		}
-		
-		
-		
+
 		return leaf;
 	}
 

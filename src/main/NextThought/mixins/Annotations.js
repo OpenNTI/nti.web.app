@@ -8,7 +8,8 @@ Ext.define('NextThought.mixins.Annotations', {
 		'NextThought.view.widgets.annotations.Highlight',
 		'NextThought.view.widgets.annotations.Note',
 		'NextThought.view.widgets.annotations.Transcript',
-		'NextThought.cache.IdCache'
+		'NextThought.cache.IdCache',
+		'NextThought.providers.Contributors'
 	],
 
 	GETTERS : {
@@ -331,7 +332,7 @@ Ext.define('NextThought.mixins.Annotations', {
 			contributors = this.buildAnnotations(items);
 		}
 
-		me.fireEvent('publish-contributors',contributors);
+		ContributorsProvider.set(contributors);
 		me.fireEvent('resize');
 
 		Globals.callback(callback);

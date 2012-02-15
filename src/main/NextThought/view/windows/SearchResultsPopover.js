@@ -90,7 +90,7 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
 
 	destroy: function(){
 		delete this.stores;
-		VIEWPORT.un('resize',this.handleResize,this);
+		Ext.EventManager.removeResizeListener(this.fixHeight,this);
 		this.callParent(arguments);
 	},
 
@@ -257,7 +257,7 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
 		var me = this, e, max;
 		try{
 			e = me.bindTo;
-			max = (VIEWPORT.getHeight() - e.getPosition()[1] - e.getHeight() - 10);
+			max = (Ext.getBody().getHeight() - e.getPosition()[1] - e.getHeight() - 10);
 			me.height = undefined;
 			
 			me.setWidth(Ext.Number.constrain(e.getWidth(), me.minWidth, me.maxWidth));
@@ -267,7 +267,7 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
 
 			me.alignTo(e);
 
-			VIEWPORT.on('resize',me.handleResize,me, {single: true});
+			Ext.EventManager.onWindowResize(me.fixHeight,me, {single: true});
 		}
 		catch(err){
 			if(me){

@@ -106,6 +106,9 @@ Ext.define('NextThought.controller.Session', {
 			try{
 				Ext.Ajax.request({
 					url: s.host + s.data,
+					timeout: 20000,
+					username: values.username,
+					password: values.password,
 					headers:{
 						'Authorization': a,
 						'Accept': 'application/vnd.nextthought.workspace+json'

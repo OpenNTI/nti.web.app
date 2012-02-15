@@ -6,8 +6,6 @@ Ext.define('NextThought.controller.Application', {
 	
 	views: ['Viewport'],
 
-	refs: [{ ref: 'viewport', selector: 'master-view' }],
-
 	statics: {
 		launchToken: {},
 
@@ -29,19 +27,19 @@ Ext.define('NextThought.controller.Application', {
 		this.application.on('finished-loading', function(){
 			console.groupEnd();
 			window.stopTrackingModelConstruction = true;
+			NextThought.isInitialised = true;
 		});
 	},
 
 	restore: function(){
 		try{
-			this.getViewport().fireEvent('restore',PREVIOUS_STATE);
+			this.getController('State').fireEvent('restore',PREVIOUS_STATE);
 		}
 		catch(e){//restoring state
 			console.error('Restoring State: ', e, e.message, e.stack);
 			Ext.getCmp('home').activate();
 		}
-
 		this.application.finishInitializeTask(this.self.launchToken);
-		NextThought.isInitialised = true;
+
 	}
 });

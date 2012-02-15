@@ -27,10 +27,7 @@ Ext.define('NextThought.proxy.Rest', {
 		if(this.headers){
 			delete this.headers;
 		}
-		//fire an event to Viewport in case anyone cares
-		if(window.VIEWPORT){
-			VIEWPORT.fireEvent('object-changed');
-		}
+		//TODO: fire an event in case anyone cares
 	},
 
 	buildUrl: function(request) {

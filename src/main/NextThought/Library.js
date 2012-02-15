@@ -7,7 +7,7 @@ Ext.define('NextThought.Library', {
 
 	
 	constructor: function(config) {
-		this.tocs = [];
+		this.tocs = {};
 		this.addEvents({
 			loaded : true
 		});
@@ -16,6 +16,7 @@ Ext.define('NextThought.Library', {
 		this.mixins.observable.constructor.call(this);
 		return this;
 	},
+
 
 	getStore: function(){
 		if(!this.store){
@@ -42,16 +43,15 @@ Ext.define('NextThought.Library', {
 		return this.store;
 	},
 
+
 	each: function(callback, scope){
 		this.getStore().data.each(callback,scope||this);
 	},
 
-	//TODO-consider caching the nav infos for some period of time to avoid extra work...
+
 	getNavigationInfo: function(ntiid) {
 		var loc = this.findLocation(ntiid),
-			book = loc ? loc.book : null,
-			root = book ? book.get('root') : '',
-			toc = book ? this.getToc(book.get('index')) : null,
+			toc = loc? loc.toc : null,
 			list = toc ? Ext.DomQuery.select('toc,topic' ,toc): [],
 			i = 0,
 			len = list.length,
@@ -59,23 +59,23 @@ Ext.define('NextThought.Library', {
 
 		for (i; i < len; i++) {
 			if (!list[i] || !list[i].getAttribute) {
-				console.error('error in loop', ntiid, loc, book, toc, list, i, len);
+				console.error('error in loop', ntiid, loc, list, i, len);
 				continue;
 			}
 
 			if(list[i].getAttribute('ntiid') === ntiid) {
-				info.hasPrevious = !!(info.previous = list[i - 1]);
+				info.hasPrevious = Boolean(info.previous = list[i - 1]);
 				info.hasNext = !!(info.next = list[i + 1]);
-				info.nextHref = info.hasNext ? root + info.next.getAttribute('href') : null;
-				info.previousHref = info.hasPrevious ? root + info.previous.getAttribute('href') : null;
+				info.nextRef = info.hasNext ? info.next.getAttribute('ntiid') : null;
+				info.previousRef = info.hasPrevious ? info.previous.getAttribute('ntiid') : null;
 				info.current = list[i];
-				info.book = book;
 				break;
 			}
 		}
 
 		return info;
 	},
+
 
 	getTitle: function(index){
 		var title = null;
@@ -90,7 +90,11 @@ Ext.define('NextThought.Library', {
 		return title;
 	},
 
+
 	getToc: function(index){
+		if(index instanceof Ext.data.Model){
+			index = index.getId();
+		}
 		if(index && !this.tocs[index]){
 			this.loadToc(index);
 		}
@@ -104,6 +108,7 @@ Ext.define('NextThought.Library', {
 		this.getStore().on('load', this.onLoad, this );
 		this.getStore().load();
 	},
+
 
 	onLoad: function(store, records, success) {
 		function go(){
@@ -120,7 +125,6 @@ Ext.define('NextThought.Library', {
 	},
 	
 	
-	
 	libraryLoaded: function(callback){
 		var me = this, stack = [];
 		//The reason for iteration 1 is to load the stack with the number of TOCs I'm going to load
@@ -132,8 +136,13 @@ Ext.define('NextThought.Library', {
 		//Iteration 2 loads TOC async, so once the last one loads, callback if available
 		this.each(function(o){
 			if(!o.get||!o.get('index')){ return; }
-			me.loadToc(o.get('index'), function(){
+			me.loadToc(o.get('index'), function(toc){
 				stack.pop();
+				var d = toc.documentElement;
+				o.set('NTIID',d.getAttribute('ntiid'));
+				d.setAttribute('base', o.get('root'));
+				d.setAttribute('icon', o.get('icon'));
+				d.setAttribute('title', o.get('title'));
 				if(stack.length===0 && callback){
 					callback.call(this);
 				}
@@ -169,7 +178,7 @@ Ext.define('NextThought.Library', {
 					});
 
 					if( callback ){
-						callback();
+						callback(this.tocs[index]);
 					}
 				}
 			});
@@ -179,16 +188,17 @@ Ext.define('NextThought.Library', {
 		}
 	},
 	
-	parseXML: function(txt) {
+
+	parseXML: function(xml) {
 		try{
 			if (window.DOMParser) {
-				return new DOMParser().parseFromString(txt,"text/xml");
+				return new DOMParser().parseFromString(xml,"text/xml");
 			}
 
 			// Internet Explorer
 			var x = new ActiveXObject("Microsoft.XMLDOM");
 			x.async="false";
-			x.loadXML(txt);
+			x.loadXML(xml);
 			return x;
 		}
 		catch(e){
@@ -198,16 +208,18 @@ Ext.define('NextThought.Library', {
 		return undefined;
 	},
 
+
 	findLocationTitle: function(containerId){
 		var l = this.findLocation(containerId);
 		return l? l.location.getAttribute('label') : 'Not found';
 	},
 
+
 	findLocation: function(containerId) {
 		var result = null;
 
 		this.each(function(o){
-			result = this.resolveBookLocation(o, containerId);
+			result = this.resolveLocation(this.getToc( o ), containerId);
 			if (result) {
 				return false;
 			}
@@ -215,6 +227,7 @@ Ext.define('NextThought.Library', {
 
 		return result;
 	},
+
 
 	isOrDecendantOf: function(parentId, potentialChild) {
 		if (parentId === potentialChild) {
@@ -256,23 +269,29 @@ Ext.define('NextThought.Library', {
 	},
 
 
-	resolveBookLocation: function(book, containerId) {
-		var toc = this.getToc( book.get( 'index' ) );
+	resolveLocation: function(toc, containerId) {
 		if( toc.documentElement.getAttribute( 'ntiid' ) === containerId ) {
-			return {book:book, location:toc};
+			return {toc:toc, location:toc, NTIID: containerId, ContentNTIID: containerId};
 		}
-		return this.recursiveResolveBookLocation( book, containerId, toc );
+		return this.recursiveResolveLocation( containerId, toc );
 	},
 
-	recursiveResolveBookLocation: function( book, containerId, elt ) {
+
+	recursiveResolveLocation: function recurse( containerId, elt ) {
 		var elts = elt.getElementsByTagName( 'topic' ), ix, child, cr;
 		for( ix = 0; ix < elts.length; ix++ ) {
 			child = elts.item(ix);
 			if( !child ) { continue; }
 			if( child.getAttribute( 'ntiid' ) === containerId ) {
-				return {book: book, location: child };
+				return {
+					toc: child.ownerDocument,
+					location: child,
+					NTIID: containerId,
+					ContentNTIID: child.ownerDocument.documentElement.getAttribute('ntiid')
+				};
 			}
-			cr = this.recursiveResolveBookLocation( book, containerId, child );
+
+			cr = recurse( containerId, child );
 			if( cr ) {
 				return cr;
 			}
