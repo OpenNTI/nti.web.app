@@ -40,7 +40,7 @@ Ext.define('NextThought.util.Globals',
 				script.onerror = null;
 
 				if(cb && cb.call) {
-					cb.call(scope||window);
+					cb.call(scope||window,script);
 				}
 			};
 		}
@@ -67,25 +67,25 @@ Ext.define('NextThought.util.Globals',
 		return script;
 	},
 
-	loadScripts: function(urls, onLoad, onError, scope){
-		var u, stack = [];
+	loadScripts: function(urls, onLoad, scope){
+		var u, stack = [], errors = false;
+		function tick(){
+			stack.pop();
+			if(stack.length === 0) {
+				Globals.callback(onLoad, scope,[errors]);
+			}
+		}
+
+		function fail(s){
+			errors = true;
+			console.error('Problem with: '+s.src);
+			tick();
+		}
+
 		for(u in urls) {
 			if (urls.hasOwnProperty(u)){
 				stack.push(u);
-				Globals.loadScript(urls[u],
-					//success
-					function(){
-						stack.pop();
-						if(stack.length === 0) {
-							Globals.callback(onLoad, scope);
-						}
-					},
-					//fail
-					function(){
-						stack.pop();
-						Globals.callback(onError, scope);
-					},
-					this);
+				Globals.loadScript(urls[u], tick, fail, this);
 			}
 		}
 	},
@@ -181,7 +181,7 @@ Ext.define('NextThought.util.Globals',
 		Ext.applyIf(RegExp,{
 			escape:function me(text) {
 				if(!me.Re){
-					me.Re = /[-[\]{}()*+?.,\\^$|#\s]/g;
+					me.Re = /[\-\[\]{}()*+?.,\\\^$|#\s]/g;
 				}
 			    return text.replace(me.Re, "\\$&");
 			}

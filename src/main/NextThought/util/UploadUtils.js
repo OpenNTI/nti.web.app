@@ -83,6 +83,7 @@ Ext.define('NextThought.util.UploadUtils',{
 		}
 		else if(message.message === 'started'){
 			//gtg
+			return;
 		}
 
 
