@@ -29,11 +29,25 @@ Ext.define('NextThought.providers.Location', {
 	 * @param [callback]
 	 */
 	setLocation: function(ntiid, callback){
-		if(!this.fireEvent('navigate',ntiid, callback)){
-			return false;
+		var me = this,e = Ext.getCmp('viewport').getEl();
+
+		function finish(){
+			console.timeEnd('navigation');
+			e.unmask();
+			Globals.callback(callback,null,arguments);
 		}
-		this.currentNTIID = ntiid;
-		this.fireEvent('change', ntiid);
+
+		e.mask('Loading...');
+		//make this happen out of this function's flow, so that the mask shows immediately.
+		setTimeout(function(){
+			console.time('navigation');
+			if(!me.fireEvent('navigate',ntiid,finish)){
+				e.unmask();
+				return false;
+			}
+			me.currentNTIID = ntiid;
+			me.fireEvent('change', ntiid);
+		},1);
 	},
 
 	/**

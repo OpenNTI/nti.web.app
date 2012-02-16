@@ -19,11 +19,17 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 			renderPriority: 1
 		});
 
-
 		me.self.highlightEvents.on('render',me.render, me);
 		me.self.addSource(userId);
 		return me;
 	},
+
+	getLineHeight: function(){
+		var s = this.selection,
+			n = s.commonAncestorContainer.parentNode;
+		return parseInt(Ext.fly(n).getStyle('line-height'),10);
+	},
+
 
 	getRects: function(){
 		return this.selection.getClientRects();
@@ -197,7 +203,7 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 			p = this.parent ? this.parent : (this.parent = Ext.get(this.div.parentNode)),
 			c = this.canvas,
 			r = this.selection.getBoundingClientRect(),
-			s = RectUtils.merge(this.selection.getClientRects(),c.height),
+			s = RectUtils.merge(this.getRects(),this.getLineHeight()),
 			l = s.length,
 			i = l-1,
 			cXY = Ext.get(c).getXY(),

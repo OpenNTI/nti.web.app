@@ -48,10 +48,6 @@ Ext.define('NextThought.controller.Reader', {
 				'annotations-load': this.onAnnotationsLoad
 			},
 
-			'reader-mode-container': {
-				'mode-activated': this.restoreState
-			},
-
 			'reader-mode-container filter-control':{
 				'filter-changed': this.readerFilterChanged
 			}
@@ -149,14 +145,6 @@ Ext.define('NextThought.controller.Reader', {
 		this.getReader().clearSearchRanges();
 	},
 
-	restoreState: function() {
-		this.getReaderMode().restoreReader();
-
-		var sc = this.getController('State');
-		if(NextThought.isInitialised) {
-			this.getReader().restore(sc.getState());
-		}
-	},
 
 	navigateToItem: function(i) {
 		var c = i.get('Class'),

@@ -35,7 +35,6 @@ Ext.application({
 
 	launch: function(){
 		function start() {
-			Globals.removeLoaderSplash();
 			console.groupEnd();
 			NextThought.controller.Session.login(app);
 			NextThought.isReady = true;

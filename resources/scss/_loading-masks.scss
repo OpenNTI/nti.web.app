@@ -9,45 +9,52 @@
 }
 #loading {
 	position: absolute;
-	left: 50%;
-	top: 50%;
+	left: 0;
+	top: 0;
 	padding: 2px;
 	z-index: 20001;
 	height: auto;
-	margin: -35px 0 0 -30px;
-
-	.loading-indicator {
-		background: $loading-indicator no-repeat;
-		color: #555;
-		font: bold 11px tahoma, arial, helvetica;
-		padding: 0px 25px;
-		margin: 0;
-		text-align: center;
-		height: auto;
+	margin: 0;
+	div{
+	    padding: 1em 1.5em 1em 1em;
+		background-position: right center;
 	}
 }
+
 .x-mask-msg{
-	background: white;
+    border: none !important;
+	background: transparent;
 	color: #555;
 	&.body-mask {
 		div{
 			border: none !important;
-			background: white !important;
-			font-size: 2.4em;
-			padding: 4em !important;
+			background: transparent !important;
 			text-align: center;
+			font-size: 2.4em;
 		}
 	}
+
 	div {
-		background-image: $loading-indicator !important;
-		background-color: transparent;
-		background-position: 10px center;
-		padding: 10px 15px 10px 30px;
+	    border: none;
+		padding: 1em 0 1.5em 1em;
+		font-size: 1.5em;
+		background: {
+			image: $loading-indicator !important;
+			color: transparent;
+			position: center bottom;
+		};
 	}
 }
+
 .body-mask {
 	width: 100%;
 	height: 100%;
 	padding: 0 !important;
 
+}
+
+.x-mask {
+    filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=95);
+    opacity: 0.97;
+	background: #fff;
 }

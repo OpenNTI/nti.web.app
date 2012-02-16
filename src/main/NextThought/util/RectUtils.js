@@ -2,7 +2,7 @@ Ext.define('NextThought.util.RectUtils',{
 	singleton: true,
 
 
-	merge: function(rects,s){
+	merge: function(rects,lineHeight){
 		rects = this.trimOutliers(rects);
 		var r=[], ri,
 			x,xx,y,yy, w,h,
@@ -21,7 +21,7 @@ Ext.define('NextThought.util.RectUtils',{
 			xx = ri.right || (x + ri.height);
 			yy = ri.bottom || (y + ri.width);
 
-			b = Math.floor((y/s)*100);
+			b = Math.floor((y/lineHeight));
 
 			if(!bins[b]){
 				r.push( { left:x, top:y, right:xx, bottom:yy, width:w, height:h } );

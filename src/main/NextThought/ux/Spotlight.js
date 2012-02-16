@@ -1,5 +1,5 @@
 /**
- * Creates a canvas element that is filled with a slightly transparent grey, then cuts out a transparent area to spotlight. An SVG blur will be added for those browsers that support it.
+ * Creates a canvas element that spotlights a selected component.
  *
  * Modeled after Ext.ux.Spotlight, but defers in that we only care about he rects that we want to highlight. So the api will be different, instead of asking for an id, Ext.Element, or DOM Element, we will ask for an object that we will call a spotlightableComponent, which just means it provides a method to retrieve an array of rects to spotlight.
  *
@@ -73,7 +73,7 @@ Ext.define('NextThought.ux.Spotlight',{
 		this.hide();
 		Ext.EventManager.removeResizeListener(this.syncSize, this);
 
-		Ext.destroy(Ext.get(this.canvas),Ext.get(this.svg),Ext.get(this.curtain));
+		Ext.destroy(Ext.get(this.canvas),Ext.get(this.curtain));
 		delete this.curtain;
 		delete this.canvas;
 		delete this.elements;
@@ -82,7 +82,6 @@ Ext.define('NextThought.ux.Spotlight',{
 	show: function(spotlightableComponent){
 		Ext.fly(this.curtain).show();
 		this.cmp = spotlightableComponent;
-//		this.syncSize();
 		this.render();
 	},
 
@@ -97,7 +96,7 @@ Ext.define('NextThought.ux.Spotlight',{
 			var i,
 				c = this.canvas,
 				w = c.width,
-				h = c.height,
+				h = this.cmp.getLineHeight(),
 				ctx = c.getContext("2d"),
 				rects = Array.prototype.slice.call(this.cmp.getRects()),
 				rect, x,y;

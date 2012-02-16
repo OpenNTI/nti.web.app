@@ -27,13 +27,14 @@ Ext.define('NextThought.controller.Session', {
 
 			function success(){
 				if(win){ win.close(); }
-
+				Globals.removeLoaderSplash();
 				app.fireEvent('session-ready');
 				console.groupEnd();
 				NextThought.controller.Application.launch();
 			}
 
 			function showLogin(){
+				Globals.removeLoaderSplash();
 				win = Ext.widget('loginwindow',{callback: success});
 			}
 
