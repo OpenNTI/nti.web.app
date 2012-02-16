@@ -5,6 +5,7 @@ Ext.define('NextThought.view.Viewport', {
 
 	requires: [
 		'Ext.layout.container.Border',
+		'Ext.layout.container.VBox',
 		'NextThought.view.widgets.main.Header',
 		'NextThought.view.modes.Container'
 	],
@@ -12,12 +13,15 @@ Ext.define('NextThought.view.Viewport', {
 	border: false, 
 	frame: false,
 	defaults:{ border: false, frame: false },
-	layout: 'border',
+	layout: {
+		type: 'vbox',
+		align: 'stretch'
+	},
 	id: 'viewport',
 
 	items:[
 		{xtype: 'master-header', region: 'north'},
-		{xtype: 'modeContainer', region: 'center', id: 'mode-ctr'}
+		{xtype: 'modeContainer', region: 'center', id: 'mode-ctr', flex: 1}
 	],
 
 
