@@ -1,4 +1,19 @@
 describe("Whiteboard Functionality",function(){
+	var div = null;
+
+	beforeEach(function(){
+		div = document.createElement('div');
+		expect(div).toBeTruthy();
+
+		div.setAttribute('id','NTIContent');
+
+		//div.setAttribute('style','display: none');
+		document.body.appendChild(div);
+	});
+
+	afterEach(function(){
+		document.body.removeChild(div);
+	});
 
 	it("should work!", function(){
 		//expect(false).toBeTruthy();

@@ -67,6 +67,29 @@ Ext.define('NextThought.util.Globals',
 		return script;
 	},
 
+	loadScripts: function(urls, onLoad, onError, scope){
+		var u, stack = [];
+		for(u in urls) {
+			if (urls.hasOwnProperty(u)){
+				stack.push(u);
+				Globals.loadScript(urls[u],
+					//success
+					function(){
+						stack.pop();
+						if(stack.length === 0) {
+							Globals.callback(onLoad, scope);
+						}
+					},
+					//fail
+					function(){
+						stack.pop();
+						Globals.callback(onError, scope);
+					},
+					this);
+			}
+		}
+	},
+
 
 	/**
 	 * Load a stylesheet file (.css) into the DOM.

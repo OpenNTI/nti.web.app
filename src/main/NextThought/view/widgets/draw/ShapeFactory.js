@@ -55,27 +55,56 @@ Ext.define('NextThought.view.widgets.draw.ShapeFactory',
 	 * @param json
 	 * @returns modified json, or modifies passed in json if supplied
 	 */
+	//TODO - if all toJSON methods take scaleFactor like path, then we can probably move transform scaling there and delete this...
 	scaleJson: function(factor, json) {
-		var k, v, sw = json.strokeWidth || json.strokeWidthTarget;
+		var k, sw = json.strokeWidthTarget || json.strokeWidth;
 
 		json.strokeWidthTarget = ((typeof sw === 'string') ? parseFloat(sw) : sw) * factor;
 
 		for(k in json.transform){
 			if (json.transform.hasOwnProperty(k)){
-				v = json.transform[k];
-				if( typeof v === 'number' && v !== 1) {
-					v *= factor;
+				if( typeof json.transform[k] === 'number') {
+					json.transform[k] *= factor;
 				}
 			}
 		}
-		if (json.points) {
+
+		//Scale points array, only scale down, points are not allowed to change once they are unitized
+		if (json.points && json.createdObject) {
 			for (k in json.points) {
-				if(json.points.hasOwnProperty(k) && typeof json.points[k] === 'number') {
+				if(json.points.hasOwnProperty(k)) {
 					json.points[k] *= factor;
 				}
 			}
+			delete json.path;
 		}
-		//console.log('json scaled by ' + factor, json);
+		delete json.createdObject;
+/*
+		//adjust transform if necessary
+		//TODO - really this needs to happen the first time only. because the adjusted matrix is set correctly by the canvas.
+		// however, really, probably, we need to do it every time and unadjust it on save to make it right for the pad.
+		// this is a hack, BBox wouldn't work for me.
+		if (factor > 1){
+			//TODO - testing
+			var modX, modY, i, maxX = 0, minX = 0, minY = 0, maxY = 0;
+			if (json.points) {
+				for (i = 0; i < json.points.length; i+=2) {
+					var x = json.points[i] * factor;
+					var y = json.points[i+1] * factor;
+					if (x > maxX) maxX = x;
+					if (x < minX) minX = x;
+					if (y > maxY) maxY = y;
+					if (y < minY) minY = y;
+				}
+				modX = (maxX - minX) / 2;
+				modY = (maxY - minY) / 2;
+				//json.transform.tx += modX;
+				//json.transform.ty += modY;
+			}
+
+		}
+*/
+
 		return json;
 	},
 
@@ -139,6 +168,7 @@ Ext.define('NextThought.view.widgets.draw.ShapeFactory',
 		var sp = Ext.widget('sprite-'+this.shapeTypeMap[shapeName],
 				this.toolDefaults(shapeName, x, y, strokeWidth, sides, selectedColors));
 		sp.whiteboardRef = whiteboard;
+		sp.createdObject = true;
 		this.relay(whiteboard, sp, ['click','dblClick']);
 		return sp;
 	},

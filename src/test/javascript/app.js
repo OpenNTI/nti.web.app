@@ -82,7 +82,7 @@ var mockService = {
 	"Class": "Service"
 };
 
-console.group = console.groupEnd = console.groupCollapsed = function(){};
+console.group = console.groupCollapsed = console.groupEnd = function(){};
 
 Ext.application({
 	name: 'NextThought',
@@ -115,14 +115,24 @@ Ext.application({
 	],
 
 	launch: function() {
+		function go(){
+			$AppConfig.service = Ext.create('NextThought.model.Service', mockService, $AppConfig.username);
+			$AppConfig.userObject = Ext.create('NextThought.model.User', mockUser, $AppConfig.username, mockUser);
+
+			jasmine.getEnv().addReporter(new jasmine.TrivialReporter());
+			jasmine.getEnv().execute();
+		}
+
 		NextThought.phantomRender = true;
 
-		$AppConfig.service = Ext.create('NextThought.model.Service', mockService, $AppConfig.username);
 
-		$AppConfig.userObject = Ext.create('NextThought.model.User', mockUser, $AppConfig.username, mockUser);
-
-		//include the tests in the test.html head
-		jasmine.getEnv().addReporter(new jasmine.TrivialReporter());
-		jasmine.getEnv().execute();
+		Globals.loadScripts(['src/test/javascript/specs/example.spec.js',
+			'src/test/javascript/specs/Library.spec.js',
+			'src/test/javascript/specs/view/widgets/draw/Whiteboard.spec.js',
+			'src/test/javascript/specs/view/widgets/draw/Path.spec.js',
+			'src/test/javascript/specs/cache/UserRepository.spec.js',
+			'src/test/javascript/specs/util/AnnotationUtils.spec.js',
+			'src/test/javascript/specs/ext-draw.spec.js'],
+		go);
 	}
 });

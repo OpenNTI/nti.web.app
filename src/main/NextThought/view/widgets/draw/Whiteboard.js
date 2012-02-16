@@ -294,7 +294,7 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 
 				if(i===ab || i.isNib || a.hidden || (!bb.width && !bb.height)){return;}
 
-                o = ShapeFactory.scaleJson(1/w, i.toJSON());
+                o = ShapeFactory.scaleJson(1/w, i.toJSON(w));
 
                 o.strokeWidth = o.strokeWidthTarget + '%';
                 delete o.strokeWidthTarget;
@@ -306,7 +306,7 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 
         s = { "Class":"Canvas", "shapeList": shapes };
 
-        console.log('save scene', JSON.stringify(s));
+        //console.log('save scene', JSON.stringify(s));
 		return shapes.length===0 ? undefined : s;
 	},
 

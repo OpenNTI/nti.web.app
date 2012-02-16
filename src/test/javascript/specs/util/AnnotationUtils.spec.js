@@ -1,6 +1,6 @@
 describe("Annotation Utils", function() {
 
-	var div = false,
+	var div = null,
 		testWhiteboard =
 		{
 			"Class":"Canvas",
