@@ -17,7 +17,6 @@ Ext.define('NextThought.view.windows.ClassroomChooser', {
 	closable: false,
 	constrain: true,
 	layout: 'fit',
-	modal: true,
 	items: {
 		layout: {
 			type: 'hbox',

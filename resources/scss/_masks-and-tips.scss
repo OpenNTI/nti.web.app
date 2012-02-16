@@ -54,10 +54,16 @@
 
 }
 
+//.x-masked
 .x-mask {
     filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=95);
     opacity: 0.97;
 	background: #F8F8FF;
+}
+.x-body-masked .x-mask {
+	filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=40);
+	opacity: 0.4;
+	background: #FFFFFF;
 }
 
 
