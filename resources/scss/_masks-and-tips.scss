@@ -16,8 +16,9 @@
 	height: auto;
 	margin: 0;
 	div{
-	    padding: 1em 1.5em 1em 1em;
-		background-position: right center;
+	    padding: 1em 1em 1em 1.3em;
+        background-position: left center;
+        margin: 1em;
 	}
 }
 
@@ -56,5 +57,10 @@
 .x-mask {
     filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=95);
     opacity: 0.97;
-	background: #fff;
+	background: #F8F8FF;
+}
+
+
+.x-tip {
+	background-color: white;
 }
