@@ -24,11 +24,11 @@ Ext.define('NextThought.view.widgets.draw.Path', {
 	},
 
 	toJSON: function(scaleFactor){
-		function degrees(x0,y0, x1,y1){
-			var dx = (x1-x0),
-				dy	= (y1-y0),
-				a	= (dx<0? 180: dy<0? 360: 0);
-			return ((180/Math.PI)*Math.atan(dy/dx)) + a;
+		function addMatrixVals(n, c, x, y) {
+			var v = currentMatrix.get(x,y);
+			if (v !== 1) {
+				n.matrix[x][y] += v;
+			}
 		}
 
 		var i, p, t, x, y, k,
@@ -77,12 +77,12 @@ Ext.define('NextThought.view.widgets.draw.Path', {
 
 			//Now apply the existing transform
 			if (currentMatrix) {
-				newMatrix.matrix[0][0] += currentMatrix.get(0,0);
-				newMatrix.matrix[1][0] += currentMatrix.get(1,0);
-				newMatrix.matrix[0][1] += currentMatrix.get(0,1);
-				newMatrix.matrix[1][1] += currentMatrix.get(1,1);
-				newMatrix.matrix[0][2] += currentMatrix.get(0,2);
-				newMatrix.matrix[1][2] += currentMatrix.get(1,2);
+				addMatrixVals(newMatrix, currentMatrix, 0, 0);
+				addMatrixVals(newMatrix, currentMatrix, 1, 0);
+				addMatrixVals(newMatrix, currentMatrix, 0, 1);
+				addMatrixVals(newMatrix, currentMatrix, 1, 1);
+				addMatrixVals(newMatrix, currentMatrix, 0, 2);
+				addMatrixVals(newMatrix, currentMatrix, 1, 2);
 			}
 		}
 		else {

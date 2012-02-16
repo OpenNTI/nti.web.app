@@ -63,6 +63,7 @@ describe("Path Shape Functionality",function(){
 			expectedUnscaledPoints = [0, 0, 400, 400, 800, 0, 800, 800, 0, 800, 0, 0],
 			expectedUnscaledTransform = {'Class': 'CanvasAffineTransform', 'a':1000, 'b':0,'c':0,'d':1000,'tx':100,'ty':100},
 			jsonObj;
+		pathObj.matrix = Ext.create('Ext.draw.Matrix',1,0,0,1,0,0);
 		expect(pathObj).toBeTruthy();
 
 		//2) add some points to the path, same as drawing it around in whiteboard
