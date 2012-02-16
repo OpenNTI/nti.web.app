@@ -45,7 +45,7 @@ Ext.define('NextThought.view.widgets.draw.Path', {
 		if (!this.points){
 			ntiPathArray = [];
 			for (i in path) {
-				if (!path.hasOwnProperty(i)){
+				if (path.hasOwnProperty(i)){
 					p = path[i];
 					t = p[0];
 					x = p[1];
