@@ -15,7 +15,7 @@ Ext.define( 'NextThought.view.widgets.annotations.Transcript', {
 
 
 		this.callParent([record, container, component,
-			'resources/images/charms/chat-transcript-white.png']);
+			'resources/images/charms/chat-transcript.png']);
 
 		this.anchorNode = Ext.get(Ext.query('#nticontent a[name]')[0]);
 
@@ -65,7 +65,7 @@ Ext.define( 'NextThought.view.widgets.annotations.Transcript', {
 			modal: true
 		});
 
-		np = Ext.widget('note-entry',{  annotation: this, component: this.ownerCmp });
+		np = Ext.widget('note-entry',{  annotation: this, component: this.ownerCmp, idPrefix: 'win-' });
 		np.failedToLoadTranscript = function(){
 			win.close();
 			alert('Could not load transcript');

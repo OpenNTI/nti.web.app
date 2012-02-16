@@ -74,7 +74,7 @@ Ext.define('NextThought.view.widgets.NotePanel',{
 	},
 
 	getCmpId: function(r) {
-		return IdCache.getComponentId(r, 'RoomInfo');
+		return (this.idPrefix||'')+IdCache.getComponentId(r, 'RoomInfo');
 	},
 
 	buildThread: function(record){

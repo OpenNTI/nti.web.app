@@ -48,7 +48,7 @@ Ext.define('NextThought.view.widgets.MiniStreamEntry', {
 		//lets put some popovers on this to show the contents?  Maybe this should be inline so as to see it at a
 		//glance w/o having to navigate to it?
 		e = this.getEl();
-		t = AnnotationUtils.getBodyTextOnly(itm);
+		t = AnnotationUtils.getBodyTextOnly(item);
 		if (t) {
 			Ext.create('Ext.tip.ToolTip', {
 				target: e,
