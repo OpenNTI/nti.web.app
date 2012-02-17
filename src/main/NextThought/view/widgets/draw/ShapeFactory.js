@@ -132,8 +132,11 @@ Ext.define('NextThought.view.widgets.draw.ShapeFactory',
 				? shape.fillColor
 				: Color.parseColor(shape.fillColor,shape.fillOpacity) || Color.getColor(m.i=(m.i||-1)+1),
 			p = Color.parseColor(shape.strokeColor) || c.getDarker(0.2),
-			s;
+			s, centerScaleX, centerScaleY;
 
+		if(shape.Class === 'CanvasPathShape'){
+			centerScaleX = centerScaleY = 0;
+		}
 		//scale up the matrix
 		this.scaleJson(scaleFactor, shape);
 		t = Ext.create('Ext.draw.Matrix',t.a,t.b,t.c,t.d,t.tx,t.ty).split();
@@ -144,13 +147,16 @@ Ext.define('NextThought.view.widgets.draw.ShapeFactory',
 			points: shape.points,
 			stroke: p.toString(),
 			fill: fc.toString(),
+
 			translate: {
 				x: t.translateX,
 				y: t.translateY
 			},
 			scale:{
 				x: t.scaleX,
-				y: t.scaleY
+				y: t.scaleY,
+				centerX: centerScaleX,
+				centerY: centerScaleY
 			},
 			rotate: {
 				degrees: Ext.draw.Draw.degrees(t.rotate)
