@@ -45,6 +45,11 @@ Ext.application({
 			return;
 		}
 
+		if(typeof $AppConfig.server.login === 'undefined'){
+			alert("Bad or no login configuation.");
+			return;
+		}
+
 		if(!HOST_PATTERN.test($AppConfig.server.host)){
 			alert('Bad Server Config, your host does not validate the pattern:'+HOST_PATTERN);
 			return;
