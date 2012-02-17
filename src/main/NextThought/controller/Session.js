@@ -4,7 +4,9 @@ Ext.define('NextThought.controller.Session', {
 	requires:[
 		'NextThought.cache.UserRepository',
 		'NextThought.util.Base64',
-		'NextThought.proxy.Socket'
+		'NextThought.proxy.Socket',
+		'Ext.util.Cookies'
+
 	],
 
 	models: [
@@ -30,7 +32,6 @@ Ext.define('NextThought.controller.Session', {
 			function showLogin(){
 				var host = $AppConfig.server.host,
 					url = host + $AppConfig.server.login;
-				this.clearAuth();
 				location.replace( url +
 						"?return=" + encodeURIComponent(location.href) +
 						"&host=" + encodeURIComponent(host));
@@ -40,19 +41,52 @@ Ext.define('NextThought.controller.Session', {
 		},
 
 
-		clearAuth: function(){
-			function clearCookie(name, domain){
-				document.cookie = name+'=; expires=Thu, 01-Jan-70 00:00:01 GMT; path=/'+
-						(domain? ('; domain='+domain): '');
+		attemptLogin: function(successCallback, failureCallback){
+			var m = this,
+				s = $AppConfig.server,
+				h = s.host, d = s.data, ping = 'logon.ping',
+				u  = decodeURIComponent( Ext.util.Cookies.get('username') );
+			
+			function getLink(o, relName){
+				var l = (o||{}).Links || [],
+					i = l.length-1;
+				for(;i>=0; i--){
+					if(l[i].rel === relName){
+						return l[i].href;
+					}
+				}
+				return null;
 			}
 
-			var domain = $AppConfig.server.domain;
-			clearCookie('auth_tkt',domain);
-			clearCookie('auth_tkt','.'+domain);
+			Ext.Ajax.request({
+				url: h + d + ping,
+				callback: function(q,s,r){
+					var l;
+					try{ l= getLink(Ext.decode(r.responseText),'logon.handshake'); } catch(e){}
+					if(!s || !l){
+						return failureCallback.call(m);
+					}
+					Ext.Ajax.request({
+						method: 'POST',
+						url: h + l,
+						params : {
+							username: u
+						},
+						callback: function(q,s,r){
+							if(!s){
+								return failureCallback.call(m);
+							}
+
+							console.log(Ext.decode(r.responseText));
+							m.resolveService(successCallback,failureCallback);
+						}
+					});
+				}
+			});
 		},
 
 
-		attemptLogin: function(successCallback, failureCallback){
+		resolveService: function(successCallback, failureCallback){
 			var m = this,
 				s = $AppConfig.server;
 
@@ -125,13 +159,6 @@ Ext.define('NextThought.controller.Session', {
 			me = this;
 
 		Socket.tearDownSocket();
-		Ext.Ajax.request({
-			method: 'POST',
-			url: s.host + s.data,
-			callback: function(){
-				me.self.clearAuth();
-				window.location.reload();
-			}
-		});
+		//
 	}
 });
