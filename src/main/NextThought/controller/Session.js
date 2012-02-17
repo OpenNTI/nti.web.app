@@ -73,7 +73,8 @@ Ext.define('NextThought.controller.Session', {
 							username: u
 						},
 						callback: function(q,s,r){
-							if(!s){
+							try{ l= getLink(Ext.decode(r.responseText),'logon.continue'); } catch(e){}
+							if(!s || !l){
 								return failureCallback.call(m);
 							}
 
