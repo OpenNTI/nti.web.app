@@ -32,7 +32,7 @@ Ext.define('NextThought.util.QuizUtils', {
 
 		submitAnswers: function(){
 			var me = this,
-				ntiid = Ext.query('meta[name=NTIID]')[0].getAttribute('content'),
+				ntiid = LocationProvider.currentNTIID,
 				url = $AppConfig.service.getQuizSubmitURL(ntiid),
 				problems,
 				data = {},
@@ -67,7 +67,7 @@ Ext.define('NextThought.util.QuizUtils', {
 
 		showQuizResult: function(quizResult, problemsElementMap) {
 			var mathCls = 'mathjax tex2jax_process ',
-				ntiid = Ext.query('meta[name=NTIID]')[0].getAttribute('content'),
+				ntiid = LocationProvider.currentNTIID,
 				problems = problemsElementMap || this.getProblemElementMap();
 
 			if(ntiid !== quizResult.get('ContainerId')){
