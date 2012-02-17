@@ -28,8 +28,12 @@ Ext.define('NextThought.controller.Session', {
 			}
 
 			function showLogin(){
+				var host = $AppConfig.server.host,
+					url = host + $AppConfig.server.login;
 				this.clearAuth();
-				location.replace( $AppConfig.server.host + $AppConfig.server.login + "?return=" + encodeURIComponent(location.href));
+				location.replace( url +
+						"?return=" + encodeURIComponent(location.href) +
+						"&host=" + encodeURIComponent(host));
 			}
 
 			this.attemptLogin(success,showLogin);
@@ -54,7 +58,7 @@ Ext.define('NextThought.controller.Session', {
 
 			try{
 				Ext.Ajax.request({
-					url: Ext.urlAppend(s.host + s.data, Ext.String.format('_dc={0}',Ext.Date.now())),
+					url: s.host + s.data,
 					timeout: 20000,
 					headers:{
 						'Accept': 'application/vnd.nextthought.workspace+json'
