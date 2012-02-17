@@ -4,8 +4,7 @@ Ext.define('NextThought.controller.Session', {
 	requires:[
 		'NextThought.cache.UserRepository',
 		'NextThought.util.Base64',
-		'NextThought.proxy.Socket',
-		'Ext.util.Cookies'
+		'NextThought.proxy.Socket'
 	],
 
 	models: [
@@ -75,6 +74,7 @@ Ext.define('NextThought.controller.Session', {
 						}
 						catch(e){
 							Ext.Ajax.request({
+								method: 'POST',
 								url: s.host + s.data + 'logout',
 								callback: function(){
 									failureCallback.call(m);
@@ -122,7 +122,8 @@ Ext.define('NextThought.controller.Session', {
 
 		Socket.tearDownSocket();
 		Ext.Ajax.request({
-			url: s.host + s.data + 'logout',
+			method: 'POST',
+			url: s.host + s.data,
 			callback: function(){
 				me.self.clearAuth();
 				window.location.reload();
