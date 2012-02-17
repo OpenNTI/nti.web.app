@@ -28,13 +28,13 @@ Ext.define('NextThought.proxy.Socket', {
 	 * @param username
 	 * @param password
 	 */
-	ensureSocketAvailable: function(username, password) {
+	ensureSocketAvailable: function() {
 		var task;
 
 		task = {
 			run: function(){
 				if (io) {
-					this.setup(username, password);
+					this.setup();
 					Ext.TaskManager.stop(task);
 				}
 			},
@@ -67,15 +67,15 @@ Ext.define('NextThought.proxy.Socket', {
 	 * @param username
 	 * @param password
 	 */
-	setup: function(username, password) {
+	setup: function() {
 		if (!window.io) {//if no io, then call ensure to wait until io is available
-			this.ensureSocketAvailable(username, password);
+			this.ensureSocketAvailable();
 			return;
 		}
 
 		this.tearDownSocket();
 
-		this.auth = Array.prototype.slice.call(arguments,0);
+		this.auth = [$AppConfig.username];
 
 		var opts =  this.disconnectStats.reconfigure ?
 				{transports: ["xhr-polling"], 'force new connection':true} : undefined,

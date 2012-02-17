@@ -159,6 +159,8 @@ Ext.define('NextThought.util.Globals',
 
 		Ext.JSON.encodeDate = function(d){return Ext.Date.format(d, 'U');};
 
+		Ext.Ajax.defaultHeaders = Ext.Ajax.defaultHeaders || {};
+		Ext.Ajax.defaultHeaders.Accept= 'application/vnd.nextthought+json';
 		Ext.Ajax.timeout=10000;//10sec timeout
 		Ext.Ajax.on('beforerequest', this.beforeRequest);
 
