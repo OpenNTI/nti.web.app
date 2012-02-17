@@ -476,10 +476,18 @@ Ext.define('NextThought.mixins.Annotations', {
 
 	onContextMenuHandler: function(e) {
 		try{
+			var range = this.getSelection(),
+				target = e.getTarget();
+
+			if(target && /input/i.test(target.tagName)){
+				return;
+			}
+
 			e.stopPropagation();
 			e.preventDefault();
-			var range = this.getSelection();
+
 			if( range && !range.collapsed ) {
+
 				this.addHighlight(range, e.getXY());
 			}
 			this.clearSelection();
