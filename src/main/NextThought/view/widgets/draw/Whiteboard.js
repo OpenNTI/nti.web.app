@@ -269,7 +269,7 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 	 * @param [context]
 	 */
 	loadScene: function(canvasJSON, surface, scale, context){
-        console.log('JSON canvas to load', JSON.stringify(canvasJSON));
+       // console.log('JSON canvas to load', JSON.stringify(canvasJSON));
 		var shapes = Ext.clone( canvasJSON.shapeList ),
 			s = surface || this.getSurface(),
 			w = scale || this.getScaleFactor(),
