@@ -21,20 +21,24 @@ Ext.define('NextThought.controller.Session', {
 	statics: {
 		login: function(app){
 			console.groupCollapsed('Session Setup');
-
+			console.time('session restore');
 			function success(){
 				Globals.removeLoaderSplash();
 				app.fireEvent('session-ready');
+				console.timeEnd ('session restore');
 				console.groupEnd();
 				NextThought.controller.Application.launch();
 			}
 
 			function showLogin(){
 				var host = $AppConfig.server.host,
-					url = host + $AppConfig.server.login;
-				location.replace( url +
-						"?return=" + encodeURIComponent(location.href) +
-						"&host=" + encodeURIComponent(host));
+					url = Ext.String.urlAppend(
+							Ext.String.urlAppend(
+									host + $AppConfig.server.login,
+									"return=" + encodeURIComponent(location.href) ),
+							"host=" + encodeURIComponent(host));
+
+				location.replace( url );
 			}
 
 			this.attemptLogin(success,showLogin);
@@ -48,21 +52,18 @@ Ext.define('NextThought.controller.Session', {
 				u  = decodeURIComponent( Ext.util.Cookies.get('username') );
 			
 			function getLink(o, relName){
-				var l = (o||{}).Links || [],
-					i = l.length-1;
-				for(;i>=0; i--){
-					if(l[i].rel === relName){
-						return l[i].href;
-					}
-				}
+				o = o || {};
+				o = o.responseText || o;
+				if(typeof o === 'string') { o = Ext.decode(o); }
+				var l = o.Links || [], i = l.length-1;
+				for(;i>=0; i--){ if(l[i].rel === relName){ return l[i].href; } }
 				return null;
 			}
 
 			Ext.Ajax.request({
 				url: h + d + ping,
 				callback: function(q,s,r){
-					var l;
-					try{ l= getLink(Ext.decode(r.responseText),'logon.handshake'); } catch(e){}
+					var l = getLink(r,'logon.handshake');
 					if(!s || !l){
 						return failureCallback.call(m);
 					}
@@ -73,12 +74,11 @@ Ext.define('NextThought.controller.Session', {
 							username: u
 						},
 						callback: function(q,s,r){
-							try{ l= getLink(Ext.decode(r.responseText),'logon.continue'); } catch(e){}
+							l = getLink(r,'logon.continue');
 							if(!s || !l){
 								return failureCallback.call(m);
 							}
-
-							console.log(Ext.decode(r.responseText));
+							m.logoutURL = getLink(r,'logon.logout');
 							m.resolveService(successCallback,failureCallback);
 						}
 					});
@@ -157,9 +157,11 @@ Ext.define('NextThought.controller.Session', {
 
 	handleLogout: function() {
 		var s = $AppConfig.server,
-			me = this;
+			url = Ext.String.urlAppend(
+					s.host + this.self.logoutURL,
+					'success='+encodeURIComponent(location.href));
 
 		Socket.tearDownSocket();
-		//
+		location.replace(url);
 	}
 });
