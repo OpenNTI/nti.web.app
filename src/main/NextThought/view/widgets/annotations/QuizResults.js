@@ -1,18 +1,30 @@
 Ext.define( 'NextThought.view.widgets.annotations.QuizResults', {
 	extend: 'NextThought.view.widgets.annotations.Annotation',
 	requires:[
+		'NextThought.util.QuizUtils',
+		'NextThought.cache.IdCache'
 	],
 
 	constructor: function(record, container, component){
 		Ext.apply(this, {
+			id: IdCache.getComponentId(record.getId()),
 			anchorNode : null,
-			renderPriority: 0
+			renderPriority: 0,
+			win: null,
+			isSingleAction: true
 		});
 
 		this.callParent([record, container, component,
-			'resources/images/charms/note-white.png']);
+			'resources/images/charms/quiz-results.png']);
 
-		this.anchorNode = Ext.get(Ext.query('#nticontent a[name]')[0]);
+		this.anchorNode = Ext.get(Ext.query('#nticontent')[0]);
+
+		Ext.ComponentManager.register(this);
+	},
+
+	cleanup: function(){
+		Ext.ComponentManager.unregister(this);
+		return this.callParent(arguments);
 	},
 
 	attachRecord: function(record){
@@ -25,7 +37,7 @@ Ext.define( 'NextThought.view.widgets.annotations.QuizResults', {
 
 		if(this.isModifiable){
 			items.push({
-				text : 'Show Results',
+				text : this.getTitle(),
 				handler: Ext.bind(this.showResults, this)
 			});
 		}
@@ -35,6 +47,12 @@ Ext.define( 'NextThought.view.widgets.annotations.QuizResults', {
 
 	showResults: function() {
 		console.log('show results');
+		QuizUtils.showQuizResult(this.record);
+	},
+
+	getTitle: function(){
+		var d = Ext.Date.format(this.record.get('Last Modified'), 'M j, Y');
+		return  Ext.String.format('Quiz Result | {0}',d);
 	},
 
 	render: function(){

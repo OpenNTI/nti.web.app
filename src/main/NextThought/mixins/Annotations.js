@@ -15,8 +15,8 @@ Ext.define('NextThought.mixins.Annotations', {
 	GETTERS : {
 		'Highlight': function(r){return r;},
 		'Note': function(r){return r;},
-		'TranscriptSummary': function(r){return r.get('RoomInfo');}
-	},
+		'TranscriptSummary': function(r){return r.get('RoomInfo');},
+		'QuizResult': function(r){return r;}},
 
 	initAnnotations: function(){
 		Ext.apply(this,{
@@ -40,7 +40,8 @@ Ext.define('NextThought.mixins.Annotations', {
 		this.widgetBuilder = {
 			'Highlight' : this.createHighlightWidget,
 			'Note': this.createNoteWidget,
-			'TranscriptSummary': this.createTranscriptSummaryWidget
+			'TranscriptSummary': this.createTranscriptSummaryWidget,
+			'QuizResult': this.createQuizResultWidget
 		};
 
 		NextThought.controller.Stream.registerChangeListener(this.onNotification, this);
@@ -223,10 +224,17 @@ Ext.define('NextThought.mixins.Annotations', {
 				record,
 				this.items.get(0).el.dom.firstChild,
 				this);
+		return true;
+	},
 
-		if( this.bufferedDelayedRelayout ) {
-			this.bufferedDelayedRelayout();
-		}
+	createQuizResultWidget: function(record) {
+		if (record.parent) {return;}
+		this.annotations[record.getId()] =
+			Ext.create(
+				'NextThought.view.widgets.annotations.QuizResults',
+				record,
+				this.items.get(0).el.dom.firstChild,
+				this);
 		return true;
 	},
 
@@ -324,6 +332,7 @@ Ext.define('NextThought.mixins.Annotations', {
 		if (foundBins) {
 			this.buildAnnotationTree(bins.Note, tree);
 			this.buildAnnotationTree(bins.TranscriptSummary, tree);
+			this.buildAnnotationTree(bins.QuizResult, tree);
 
 			this.prunePlaceholders(tree);
 
