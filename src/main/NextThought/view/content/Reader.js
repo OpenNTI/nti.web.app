@@ -203,9 +203,9 @@ Ext.define('NextThought.view.content.Reader', {
 			head = c.substring(0,start).replace(/[\t\r\n\s]+/g,' '),
 			body = c.substring(start, end);
 
-		this.meta = metaObj( head.match(/<meta[^>]*>/gi) );
-		this.nav = navObj( head.match( /<link[^<>]+rel="(?!stylesheet)([^"]*)"[^<>]*>/ig) );
-		this.css = cssObj( head.match(/<link[^<>]*?href="([^"]*css)"[^<>]*>/ig) );
+		this.meta = metaObj( head.match(/<meta[^>]*>/gi) || [] );
+		this.nav = navObj( head.match( /<link[^<>]+rel="(?!stylesheet)([^"]*)"[^<>]*>/ig) || []);
+		this.css = cssObj( head.match(/<link[^<>]*?href="([^"]*css)"[^<>]*>/ig) || []);
 
 		return this.fixReferences(body,basePath);
 	},
