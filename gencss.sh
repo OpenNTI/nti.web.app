@@ -1,6 +1,7 @@
 #!/bin/bash
 FILE=resources/scss/main.scss
 PATH=$PATH:/opt/local/Library/Frameworks/Python.framework/Versions/2.7/bin
+RESOURCES=./src/main/resources
 
 if [ -z `which zeta` ]; then
 	echo "Sass for Python is not installed"
@@ -23,7 +24,7 @@ if [[ "$1" == "-w" ]] ; then
 		exit 1
 	fi
 
-	sass --scss --watch resources/scss:resources/css
+	sass --scss --watch $RESOURCES/scss:$RESOURCES/css
 	exit
 fi
 
@@ -31,13 +32,13 @@ fi
 
 set -e
 # Errors in the source prevent compression from working, so -c
-if [ -e resources/scss/_main.scss ]; then
-	rm resources/scss/_main.scss
+if [ -e $RESOURCES/scss/_main.scss ]; then
+	rm $RESOURCES/scss/_main.scss
 fi
-cd resources/scss
+cd $RESOURCES/scss
 echo $(zeta pack main.scss 2>&1 >/dev/null) >&2
 cd ../..
-rm -rf resources/css
-mkdir resources/css
-mv resources/scss/_main.scss resources/css/main.css
+rm -rf $RESOURCES/css
+mkdir $RESOURCES/css
+mv $RESOURCES/scss/_main.scss resources/css/main.css
 echo "Done."

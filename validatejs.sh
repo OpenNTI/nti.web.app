@@ -35,7 +35,7 @@ unparam=true	vars=false		white=false		widget=false	window=false
 POSIBLE_FLAGS
 
 LINT_OPTS='continue devel fragment sloppy unparam nomen'
-FILES=`find src/main -name \*.js | sort -u`
+FILES=`find src/main/javascript -name \*.js | sort -u`
 ERRORS=false
 
 if [ "$1" != "" ] ; then
