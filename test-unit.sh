@@ -2,7 +2,7 @@
 PORT=45670
 
 # make sure correct phantomjs is used
-PHANTOMJS_VER=`phantomjs --version` > /dev/null
+PHANTOMJS_VER=`phantomjs --version 2> /dev/null`
 if [[ "$PHANTOMJS_VER" != 1.* ]] ; then
 	echo 'wrong version of phantomjs, check path'
 	exit 1
