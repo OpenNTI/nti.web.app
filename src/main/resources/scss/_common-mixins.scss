@@ -1,0 +1,141 @@
+
+@mixin clearfix_left($dist) {
+	clear: both;
+	padding-left: $dist !important;
+}
+
+@mixin system-link-def {
+	color: $ui-link-color;
+	text-decoration: underline;
+	cursor: pointer;
+}
+
+@mixin content-link-def{
+	color: $external-link-color;
+	text-decoration: none;
+	cursor: pointer;
+	line-height: 1.5em;
+}
+
+@mixin action-buttons {
+	position: absolute;
+	display: none;
+	right: 5px;
+	top: 5px;
+	height: 24px;
+	cursor: pointer;
+	overflow: hidden;
+}
+
+@mixin action-buttons-item {
+	width:16px;
+	height:16px;
+	margin:2px;
+	display: inline-block;
+	vertical-align:middle;
+	opacity:0.4;
+}
+
+@mixin hover-state-props {
+	background-color: $hover-background-color !important;
+	color: $hover-foreground-color;
+	.timestamp { visibility: hidden; }
+	.name {
+		color: $hover-foreground-color;
+	}
+}
+
+@mixin list-entry {
+	position: relative;
+	overflow: hidden;
+	padding: 10px 5px;
+	cursor: pointer;
+
+	div {
+	    margin-left: 22px;
+		.moderated & { margin-left: 37px; }
+	}
+
+	img { float: left; }
+
+ 	input { float: left; margin:  0; }
+
+ 	.timestamp {
+ 	    color: $timestamp-color;
+ 	    float: right;
+ 	    font-size: 9px;
+ 	    padding:  0 0 5px 10px;
+	}
+  	.name {
+  	    font-weight: bold;
+  	    color: $name-label-color;
+  	}
+
+  	&:hover,
+	&.selected {
+		@include hover-state-props;
+	}
+}
+
+
+@mixin list-entry-simple {
+	position: relative;
+	overflow: hidden;
+	padding: 10px 5px;
+	cursor: pointer;
+
+	div { margin-left: 40px; }
+	img{ float: left; }
+}
+
+
+@mixin data-view {
+	background: $panel-background;
+	font: 11px Arial, Helvetica, sans-serif;
+	.item-wrap {
+		float: left;
+		margin: 4px;
+		margin-right: 0;
+		padding: 5px;
+		overflow: hidden;
+		white-space: nowrap;
+		text-overflow: ellipsis;
+
+		span {
+			display: block;
+			overflow: hidden;
+			text-align: center;
+			width: 86px; // for ie to ensure that the text is centered
+		}
+
+		.item {
+			background: #dddddd;
+			padding: 3px;
+			padding-bottom: 0;
+
+			img{
+				height: 80px;
+				width: 80px;
+			}
+
+			.x-quirks & {
+				padding-bottom: 3px;
+				text-align: center;
+			}
+		}
+	}
+
+	.x-item-over{
+		border:1px solid #dddddd;
+		background: #efefef $data-view-over-bg repeat-x left top;
+		padding: 4px;
+	}
+
+	.x-item-selected{
+		background: #eff5fb $data-view-selected-bg repeat-x right bottom;
+		border:1px solid #99bbe8;
+		padding: 4px;
+
+		.item { background: transparent; }
+	}
+}

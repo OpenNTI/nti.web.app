@@ -1,0 +1,24 @@
+.filter-controls {
+	.x-form-item-body {
+		padding-left: 22px;
+		padding-top: 1px;
+		height: 17px;
+		background: $filter-who-icon-sprite no-repeat 1px 1px;
+
+	}
+
+	.type-filter {
+		.x-form-item-body { background: $filter-type-unknown-icon no-repeat left center; }
+		&.note .x-form-item-body { background: $filter-type-note-icon no-repeat left center; }
+		&.transcript .x-form-item-body { background: $filter-type-note-icon no-repeat left center; }
+		&.quizresult .x-form-item-body { background: $filter-type-note-icon no-repeat left center; }
+		&.highlight .x-form-item-body { background: $filter-type-highlight-icon no-repeat left center; }
+	}
+}
+
+.x-form-item-body {
+	.no-filter & {}
+	.user-filter & { background-position: 1px -17px; }
+	.user-group & { background-position: 1px -35px; }
+	.system-group & { background-position: 1px -53px; }
+}

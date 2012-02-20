@@ -1,0 +1,178 @@
+
+.chat { background: $chat-icon; }
+
+.chat-entry {
+	float: none !important;
+	.x-form-item-body {
+	    input {
+			padding-top: 5px;
+			border: none;
+		}
+    }
+}
+
+button {
+	.flag {
+		background: $flag-icon;
+		.x-disabled & {
+			background: $flag-icon-disabled;
+		}
+	}
+
+}
+
+@mixin chat-button-def {
+	$size: 22px;
+	width: $size;
+	height: $size;
+	background-size:$size $size;
+}
+
+.x-chat-log-entry {
+	@include list-entry;
+	span.reply {
+	    @include action-buttons;
+	 	span {
+	 	    @include action-buttons-item;
+			&:hover { opacity: 1; }
+
+			&.reply-whisper { background: $chat-reply-whisper; }
+			&.reply-public{
+			    @include chat-button-def;
+				background: $chat-reply-public;
+			}
+			&.pin{
+				@include chat-button-def;
+				background: $chat-pin;
+				display: none;
+				.moderator & {display: inline-block;}
+			}
+	 	}
+	}
+
+	&:hover,
+	&.selected {
+	 	span.reply { display: block; }
+	}
+
+	.flagged & {
+		background-color: $flagged-background-color;
+		color: $flagged-foreground-color;
+		&.selected,
+		&:hover {
+			background-color: $flagged-hover-background-color !important;
+			color: $flagged-hover-foreground-color !important;
+		}
+	}
+
+	.shadowed & {
+    	background-color: $shadowed-background-color;
+    	color: $shadowed-foreground-color;
+		&.selected,
+		&:hover {
+			background-color: $shadowed-hover-background-color !important;
+			color: $shadowed-hover-foreground-color !important;
+		}
+    }
+}
+
+.x-chat-friend-entry {
+    @include list-entry;
+    padding: 5px 5px 5px 25px;
+	background: $presences-offline no-repeat 5px center;
+	&.Online { background: $presences-online no-repeat 5px center; }
+    &.drag-hover { @include hover-state-props; }
+
+    .name {
+		font-weight: normal;
+		color: inherit;
+	}
+}
+
+.x-script-entry {
+    @include list-entry;
+
+    .promoted & {
+        background-color: $promoted-background-color !important;
+        color: $promoted-foreground-color !important;
+	}
+
+	&:hover span.buttons { display: block; }
+	span.buttons {
+		@include action-buttons;
+		span{
+			@include action-buttons-item;
+			&:hover { opacity: 1; }
+		}
+	}
+
+	span.script-to-chat { background: $script-entry-promot-icon; }
+}
+
+.x-chat-replies {
+	clear: both;
+	padding-left: 15px;
+
+	.x-form-cb-checked & {
+		.x-form-checkbox {
+			background-position: 0 0;
+			.x-form-cb-checked & { background-position: 0 -13px; }
+		}
+	}
+}
+
+.reply-to-button {
+	button { width: 32px !important; }
+	.x-btn-icon{
+		width: inherit;
+		height: inherit;
+		background: $reply-to-button-icon center;
+	}
+}
+
+.compose-msg-button .x-btn-icon{
+	width: inherit;
+	height: inherit;
+	background: $compose-message-icon center no-repeat;
+}
+
+.classroom-button .x-btn-icon{
+	width: inherit;
+	height: inherit;
+	background: $switch-to-classroom-icon center no-repeat;
+}
+
+.reply-to-line .chat-entry .x-form-item-body {
+	background: $ext-text-entry repeat-x;
+	height: 30px !important;
+
+	input.x-form-text {
+		padding-left: 10px;
+		height: 30px !important;
+	}
+}
+
+.x-chat-log-entry-pinned {
+	position: relative;
+	padding: 10px;
+	overflow: hidden;
+
+	div.icon {
+		float: left;
+		width: 32px;
+		overflow: hidden;
+		text-align: center;
+
+		img { display: block; }
+		.name { font-size: 0.8em; }
+	}
+
+	div.body {
+		margin-left: 50px;
+		font-size: 1.5em;
+		font-family: georgia,serif;
+	}
+}
+
+.shadow-menu { background-image: $shadow-menu-icon; }
+.chat-menu { background-image: $chat-menu-icon; }

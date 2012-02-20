@@ -1,0 +1,72 @@
+#loading-mask {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 20000;
+	background-color: white;
+}
+#loading {
+	position: absolute;
+	left: 0;
+	top: 0;
+	padding: 2px;
+	z-index: 20001;
+	height: auto;
+	margin: 0;
+	div{
+	    padding: 1em 1em 1em 1.3em;
+        background-position: left center;
+        margin: 1em;
+	}
+}
+
+.x-mask-msg{
+    border: none !important;
+	background: transparent;
+	color: #555;
+	&.body-mask {
+		div{
+			border: none !important;
+			background: transparent !important;
+			text-align: center;
+			font-size: 2.4em;
+		}
+	}
+
+	div {
+	    border: none;
+		padding: 1em 0 1.5em 1em;
+		font-size: 1.5em;
+		background: {
+			image: $loading-indicator !important;
+			color: transparent;
+			position: center bottom;
+		};
+	}
+}
+
+.body-mask {
+	width: 100%;
+	height: 100%;
+	padding: 0 !important;
+
+}
+
+//.x-masked
+.x-mask {
+    filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=70);
+    opacity: 0.7;
+	background: #F8F8FF;
+}
+.x-body-masked .x-mask {
+	filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=40);
+	opacity: 0.4;
+	background: #FFFFFF;
+}
+
+
+.x-tip {
+	background-color: white;
+}

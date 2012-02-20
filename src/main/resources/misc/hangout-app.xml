@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Module>
+    <ModulePrefs title="NextThought App" height="400" width="800">
+        <Require feature="dynamic-height"/>
+        <Require feature="rpc"/>
+        <Require feature="views"/>
+    </ModulePrefs>
+    <Content type="html">
+    <![CDATA[
+    <base href="http://alpha.nextthought.com/NextThoughtWebApp/">
+    <script src="//hangoutsapi.appspot.com/static/hangout.js"></script>
+    <link rel="stylesheet" type="text/css" href="http://alpha.nextthought.com/NextThoughtWebApp/ext-4.0.7/resources/css/ext-all-gray.css">
+    <link rel="stylesheet" type="text/css" href="http://alpha.nextthought.com/NextThoughtWebApp/resources/css/main.css">
+
+    <div id="loading-mask"></div><div id="loading"><div class="loading-indicator">Loading...</div></div>
+
+    <script type="text/javascript" src="ext-4.0.7/ext.js"></script>
+    <script type="text/javascript" src="config.js"></script>
+    <script type="text/javascript" src="app.js"></script>
+    ]]>
+    </Content>
+</Module>

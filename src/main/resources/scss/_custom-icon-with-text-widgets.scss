@@ -1,0 +1,65 @@
+
+//used on Account Form?
+.x-real-name-field input.x-form-text{
+	padding: 0.2em .5em; /*1em;*/
+	font-size: 2em;
+	height: 55px;
+}
+
+.object-explorer { background: $object-explorer-icon; }
+
+
+
+.tracker-tip {
+    @include list-entry-simple;
+    background: $tracker-tip-background;
+	padding: 0 !important;//.tracker-top-container .x-tip-body &
+
+	.tracker-tip-container & { background: $tracker-tip-background; }
+
+	.tracker-tip-title {
+		display: block;
+		font-weight: bold;
+	}
+
+	.tracker-tip-label {
+		display: block;
+	}
+
+}
+
+.x-mini-stream-entry {
+	@include list-entry-simple;
+
+	&:hover {
+     	background-color: $hover-background-color !important;
+     	color: $hover-foreground-color;
+	}
+
+	.read {
+		background-color: $read-background-color;
+		color: $read-foreground-color;
+		margin: 0;
+	}
+	.unread {
+     	background-color: $unread-background-color;
+     	font-weight: $unread-foreground-color;
+    }
+}
+
+.x-stream-entry {
+	margin-bottom: 5px;
+
+	img { margin-right: 5px; }
+
+	.stream-text{
+		font-size: 1.2em;
+		line-height: 1.5em;
+	}
+
+	.stream-username .x-panel-body-default,
+	.stream-username  {
+		font-weight: bold;
+		color: $name-label-color;
+	}
+}

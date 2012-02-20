@@ -3,7 +3,7 @@ var $AppConfig = {
 	userObject: null,//construct this mock user on launch
 	username: 'test@nextthought.com',
 	server: {
-		host: './src/test/mock',
+		host: 'mock',
 		data: '/dataserver/'
 	}
 };
@@ -86,7 +86,7 @@ console.group = console.groupCollapsed = console.groupEnd = function(){};
 
 Ext.application({
 	name: 'NextThought',
-	appFolder: 'src/main/NextThought',
+	appFolder: 'assets/js/NextThought',
 
 	requires: [
 		'NextThought.util.StacktraceUtils',
@@ -126,13 +126,13 @@ Ext.application({
 		NextThought.phantomRender = true;
 
 
-		Globals.loadScripts(['src/test/javascript/specs/example.spec.js',
-			'src/test/javascript/specs/Library.spec.js',
-			'src/test/javascript/specs/view/widgets/draw/Whiteboard.spec.js',
-			'src/test/javascript/specs/view/widgets/draw/Path.spec.js',
-			'src/test/javascript/specs/cache/UserRepository.spec.js',
-			'src/test/javascript/specs/util/AnnotationUtils.spec.js',
-			'src/test/javascript/specs/ext-draw.spec.js'],
+		Globals.loadScripts(['assets/js-test/specs/example.spec.js',
+			'assets/js-test/specs/Library.spec.js',
+			'assets/js-test/specs/view/widgets/draw/Whiteboard.spec.js',
+			'assets/js-test/specs/view/widgets/draw/Path.spec.js',
+			'assets/js-test/specs/cache/UserRepository.spec.js',
+			'assets/js-test/specs/util/AnnotationUtils.spec.js',
+			'assets/js-test/specs/ext-draw.spec.js'],
 		go);
 	}
 });

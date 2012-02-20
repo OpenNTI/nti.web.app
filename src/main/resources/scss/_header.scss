@@ -1,0 +1,123 @@
+.header-logo {
+	background: transparent $header-logo no-repeat 0 0;
+}
+
+@mixin mode-button-def {
+	border: none;
+	margin: 0;
+	padding: 0;
+	background: none;
+	width: 32px !important;
+	height: 32px;
+}
+
+.mode-switcher {
+	.x-panel-body{
+		padding-top: 4px;
+	}
+
+	.mode-button button { @include mode-button-def; }
+
+	.mode-button {
+		@include mode-button-def;
+
+		.x-btn-icon{
+			background-image: $mode-button-sprite;
+			width: 30px;
+			height: 30px;
+
+			.x-gecko & { top: -6px; }
+
+			&.home-mode-icon{ background-position: -5px -3px; }
+			&.reader-mode-icon{ background-position: -41px -4px; }
+			&.stream-mode-icon{ background-position: -74px -5px; }
+			&.groups-mode-icon{ background-position: -109px -5px; }
+			&.classroom-mode-icon{ background-position: -144px -6px; }
+		}
+		&.x-pressed{
+    		.home-mode-icon { background-position: -5px -39px; }
+    		.reader-mode-icon { background-position: -40px -40px; }
+      		.stream-mode-icon { background-position: -74px -40px; }
+      		.groups-mode-icon{ background-position: -109px -41px; }
+      		.classroom-mode-icon{ background-position: -144px -41px; }
+    	}
+    }
+
+}
+
+.search-result-selection,
+.search-result-selection .x-panel-body,
+.search-result-selection .x-panel-body-default {
+	background: #7889A3;
+}
+
+.x-brand-and-search-bar,
+.x-brand-and-search-bar .x-panel-body,
+.x-brand-and-search-bar .x-panel-body-default {
+	background: #7889A3;
+}
+
+.session-myacount{
+	background-image: $session-my-account-icon;
+}
+.session-logout{
+	background-image: $session-logout-icon;
+}
+.settings-gear{
+	background-image: $session-settings-icon;
+	background-size: 24px 24px;
+}
+
+.x-application-mode-pane .x-focus-pane {
+	border-left: 1px solid #D0D0D0 !important;
+	border-right: 1px solid #D0D0D0 !important;
+}
+
+.x-session-controls {
+	.x-panel {
+		margin: auto 2px!important;
+	}
+
+	.x-username {
+		*{
+			color: white;
+			cursor: pointer;
+			white-space: nowrap;
+		}
+		span{
+			padding: 6px 8px 5px 5px;
+			font-size: 12px;
+			vertical-align: middle;
+			white-space: nowrap;
+		}
+	}
+
+	* {
+		vertical-align: middle;
+		cursor: pointer;
+	}
+}
+
+span.notification-box-widget {
+	width: 30px;
+	height: 23px;
+	padding-top: 2px;
+	display: inline-block;
+	text-align: center;
+	cursor: pointer;
+	vertical-align: middle;
+	margin-top: 2px;
+	margin-right: 10px;
+	background: $session-notice-box no-repeat -22px 0px;
+
+	&.unread {
+		color: white;
+		background-position: 4px 0px;
+	}
+}
+
+
+.notification-popover .x-stream-entry > .x-panel-body {
+	padding: 10px;
+}
+

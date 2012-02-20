@@ -1,0 +1,29 @@
+div.sidebar-content {
+	.x-left-column & { margin: auto 5px auto auto; }
+    .x-right-column & { margin: auto auto auto 5px;}
+}
+
+div.sidebar-header {
+    @extend div.sidebar-content;
+	.x-panel-body {
+    	padding-bottom: 15px;
+    	padding-top: 15px;
+    	font-weight: bold;
+    }
+}
+
+.related-item {
+	margin-bottom: 5px;
+	img{
+		width: 18px !important;
+		margin-right: 5px;
+	}
+}
+
+.x-note-panel{
+	width: 100%;
+}
+
+.document-notes {
+	position: absolute;
+}
