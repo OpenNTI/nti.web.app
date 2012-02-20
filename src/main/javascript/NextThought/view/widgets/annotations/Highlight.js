@@ -10,7 +10,7 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 		var me = this,
 			userId= record.get('Creator') || $AppConfig.userObject.getId();
 
-		me.callParent([record, container, component,'resources/images/charms/highlight-white.png']);
+		me.callParent([record, container, component,'assets/images/charms/highlight-white.png']);
 
 		Ext.apply(me,{
 			selection: selection,

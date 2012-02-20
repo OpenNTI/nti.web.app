@@ -15,7 +15,7 @@ Ext.define( 'NextThought.view.widgets.annotations.Transcript', {
 
 
 		this.callParent([record, container, component,
-			'resources/images/charms/chat-transcript.png']);
+			'assets/images/charms/chat-transcript.png']);
 
 		this.anchorNode = Ext.get(Ext.query('#nticontent a[name]')[0]);
 

@@ -15,7 +15,7 @@ Ext.define( 'NextThought.view.widgets.annotations.QuizResults', {
 		});
 
 		this.callParent([record, container, component,
-			'resources/images/charms/quiz-results.png']);
+			'assets/images/charms/quiz-results.png']);
 
 		this.anchorNode = Ext.get(Ext.query('#nticontent')[0]);
 
