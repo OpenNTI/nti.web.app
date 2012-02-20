@@ -87,24 +87,26 @@ mkdir $DEST/assets/lib
 mkdir $DEST/assets/lib/$EXT
 mkdir $DEST/assets/lib/$EXT/resources
 mkdir $DEST/assets/lib/$EXT/resources/themes
+mkdir $DEST/assets/js
 
-#TODO: change to python-scss command
 #Compile SCSS to CSS
-./gencss.sh
+./gencss.sh > /dev/null
 
 # copy files into build dest
-cp -R src/main/resources/* $DEST/assets
+cp -R src/main/resources/css $DEST/assets
+cp -R src/main/resources/images $DEST/assets
+cp -R src/main/resources/misc $DEST/assets
 cp -R lib/$EXT/resources/css $DEST/assets/lib/$EXT/resources
 cp -R lib/$EXT/resources/themes/images $DEST/assets/lib/$EXT/resources/themes
 
 if [ "$DEBUG" = "true" ]; then
-	mkdir $DEST/assets/js
 	cp -R src/main/javascript $DEST/assets/js
 fi
 
 # clean out .svn directories and hidden files
 cd $DEST
 find . -depth -name ".svn" -exec rm -rf \{\} \;
+find . -depth -name ".sass-cache" -exec rm -rf \{\} \;
 cd ..
 
 mv $DEST/assets/misc/hangout-app.xml $DEST
@@ -138,6 +140,8 @@ if [ "$DEBUG" != "true" ]; then
 	# modify project file with values instead of 'placeholders'
 	$SED 's/\"Project Name\"/\"Application\"/g' app.jsb3
 	$SED 's/Company Name\"/NextThought LLC\"/g' app.jsb3
+	$SED 's/assets\/lib/lib/g' app.jsb3
+	$SED 's/assets\/js/src\/main\/javascript/g' app.jsb3
 	$SED 's/\"app.js\"/\"src\/main\/javascript\/app\.js\"/g' app.jsb3
 	#don't let sencha command do the compression...
 	$SED 's/\"compress\"\: true,/\"compress\"\: false,/g' app.jsb3

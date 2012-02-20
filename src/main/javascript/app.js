@@ -62,7 +62,7 @@ Ext.application({
 
 		Globals.loadScript($AppConfig.server.host+'/socket.io/static/socket.io.js');
 		Globals.loadScript($AppConfig.server.host+'/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML', function(){
-			Globals.loadScript('./resources/mathjaxconfig.js');
+			Globals.loadScript('./assets/misc/mathjaxconfig.js');
 		});
 
 
