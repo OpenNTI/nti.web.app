@@ -132,6 +132,7 @@ Ext.application({
 			'assets/js-test/specs/view/widgets/draw/Path.spec.js',
 			'assets/js-test/specs/cache/UserRepository.spec.js',
 			'assets/js-test/specs/util/AnnotationUtils.spec.js',
+			'assets/js-test/specs/util/Color.spec.js',
 			'assets/js-test/specs/ext-draw.spec.js'],
 		go);
 	}
