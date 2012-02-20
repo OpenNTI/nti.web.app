@@ -82,21 +82,24 @@ rm -f all-classes.js
 
 # build stanging dest
 mkdir $DEST
-mkdir $DEST/$EXT
-mkdir $DEST/$EXT/resources
-mkdir $DEST/$EXT/resources/themes
+mkdir $DEST/assets
+mkdir $DEST/assets/lib
+mkdir $DEST/assets/lib/$EXT
+mkdir $DEST/assets/lib/$EXT/resources
+mkdir $DEST/assets/lib/$EXT/resources/themes
 
 #TODO: change to python-scss command
 #Compile SCSS to CSS
 ./gencss.sh
 
 # copy files into build dest
-cp -R resources $DEST
-cp -R $EXT/resources/css $DEST/$EXT/resources
-cp -R $EXT/resources/themes/images $DEST/$EXT/resources/themes
+cp -R src/main/resources/* $DEST/assets
+cp -R lib/$EXT/resources/css $DEST/assets/lib/$EXT/resources
+cp -R lib/$EXT/resources/themes/images $DEST/assets/lib/$EXT/resources/themes
+
 if [ "$DEBUG" = "true" ]; then
-	mkdir $DEST/src
-	cp -R src/main $DEST/src
+	mkdir $DEST/assets/js
+	cp -R src/main/javascript $DEST/assets/js
 fi
 
 # clean out .svn directories and hidden files
@@ -104,13 +107,12 @@ cd $DEST
 find . -depth -name ".svn" -exec rm -rf \{\} \;
 cd ..
 
-mv $DEST/resources/hangout-app.xml $DEST
-cp index.html $DEST
-cp config-example.js $DEST/config.js
+mv $DEST/assets/misc/hangout-app.xml $DEST
+cp src/main/WebApp/index.html $DEST
+cp src/main/WebApp/config-example.js $DEST/config.js
 
 if [ "$DEBUG" != "true" ]; then
 	# change the index.html to point to build resources.
-	$SED 's/\"src\/main\/app\.js\"/\"app\.js\"/g' $DEST/index.html
 	$SED 's/<script.\+\?ext-debug.\+\?\/script>//g' $DEST/index.html
 fi
 
@@ -126,17 +128,17 @@ if [ "$DEBUG" != "true" ]; then
 	python -m SimpleHTTPServer $PORT >/dev/null 2>&1 &
 
 	# generate project file
-	sencha create jsb -a http://localhost:$PORT/index.html -p app.jsb3
+	sencha create jsb -a http://localhost:$PORT/src/main/WebApp/index.html -p app.jsb3
 
 	# kill the http server
 	echo "Stopping Simple HTTP Server"
 	HPID=`jobs -l 1 | awk '{print $2}'`
-	kill -9 $HPID
+	kill -9 $HPID &> /dev/null
 
 	# modify project file with values instead of 'placeholders'
 	$SED 's/\"Project Name\"/\"Application\"/g' app.jsb3
 	$SED 's/Company Name\"/NextThought LLC\"/g' app.jsb3
-	$SED 's/\"app.js\"/\"src\/main\/app\.js\"/g' app.jsb3
+	$SED 's/\"app.js\"/\"src\/main\/javascript\/app\.js\"/g' app.jsb3
 	#don't let sencha command do the compression...
 	$SED 's/\"compress\"\: true,/\"compress\"\: false,/g' app.jsb3
 
@@ -148,19 +150,19 @@ if [ "$DEBUG" != "true" ]; then
 	rm -f all-classes.js
 
 	# concat all code together (ext and app code)
-	cat $EXT/ext.js > $DEST/app.js
-	echo "/*break*/" >> $DEST/app.js
-	cat app-all.js >> $DEST/app.js
-	echo "" >> $DEST/app.js
+	cat lib/$EXT/ext.js > $DEST/assets/js/app.js
+	echo "/*break*/" >> $DEST/assets/js/app.js
+	cat app-all.js >> $DEST/assets/js/app.js
+	echo "" >> $DEST/assets/js/app.js
 
 	#remove temp
 	rm app-all.js
 
 	#minify
-	#zeta -c $DEST/app.js
-	#slimit -m $DEST/app.js > $DEST/app.min.js
-	#rm $DEST/app.js
-	#mv $DEST/app.min.js $DEST/app.js
+	#zeta -c $DEST/assets/js/app.js
+	#slimit -m $DEST/assets/js/app.js > $DEST/assets/js/app.min.js
+	#rm $DEST/assets/js/app.js
+	#mv $DEST/assets/js/app.min.js $DEST/assets/js/app.js
 fi
 
 # package build

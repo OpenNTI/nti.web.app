@@ -1,7 +1,8 @@
 #!/bin/bash
 FILE=resources/scss/main.scss
 PATH=$PATH:/opt/local/Library/Frameworks/Python.framework/Versions/2.7/bin
-RESOURCES=./src/main/resources
+HOME=`pwd`
+RESOURCES=$HOME/src/main/resources
 
 if [ -z `which zeta` ]; then
 	echo "Sass for Python is not installed"
@@ -37,8 +38,9 @@ if [ -e $RESOURCES/scss/_main.scss ]; then
 fi
 cd $RESOURCES/scss
 echo $(zeta pack main.scss 2>&1 >/dev/null) >&2
-cd ../..
+cd $HOME
+
 rm -rf $RESOURCES/css
 mkdir $RESOURCES/css
-mv $RESOURCES/scss/_main.scss resources/css/main.css
+mv $RESOURCES/scss/_main.scss $RESOURCES/css/main.css
 echo "Done."
