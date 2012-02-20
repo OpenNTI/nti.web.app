@@ -140,3 +140,22 @@
 .x-nti-note-replies {
 	@include clearfix_left(15px);
 }
+
+//charms
+img.action {
+    width: 17px;
+    height: 17px;
+    position: absolute;
+	&.note {
+		background-image: $charm-note-icon;
+	}
+	&.highlight {
+        background-image: $charm-highlight-icon;
+    }
+	&.quizresults {
+    	background-image: $charm-quizresult-icon;
+    }
+	&.transcript {
+	    background-image: $charm-chattranscript-icon;
+    }
+}

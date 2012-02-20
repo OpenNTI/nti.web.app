@@ -69,5 +69,6 @@ Ext.define( 'NextThought.view.widgets.annotations.QuizResults', {
 		catch(e){
 			console.error('QuizResult onResize: ',e,e.message, e.stack);
 		}
+		this.callParent();
 	}
 });

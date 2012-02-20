@@ -6,9 +6,11 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 		'Ext.String'
 	],
 
-	constructor: function(record, container, component, icon) {
+	constructor: function(record, container, component) {
 		var me = this,
-			d = Ext.query('.document-nibs',container);
+			userId= record.get('Creator') || $AppConfig.userObject.getId(),
+			d = Ext.query('.document-nibs',container),
+			cName = this.self.getName().split('.').pop().toLowerCase();
 
 		Ext.applyIf(me, {
 			div: d.length>0? d[0] : me.createElement('div',container,'document-nibs unselectable'),
@@ -16,6 +18,7 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 			container: container,
 			ownerCmp: component,
 			record: record,
+			userId: userId,
 			isModifiable: record.isModifiable(),
 			isVisible: record.phantom || me.testFilter(component.filter),
 
@@ -28,17 +31,16 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 		me.ownerCmp.on('afterlayout',me.onResize, me);
 		Ext.EventManager.onWindowResize(me.onResize, me);
 		
-		if(icon){
-			me.img = me.createImage(
-					icon,
-					me.div,
-					'action',
-					'width: 17px; background: yellow; height: 17px; position: absolute;' +
-							(me.isVisible?'':'visibility:hidden;'));
 
-			me.img.annotation = me;
-			Ext.get(me.img).on('click', me.onClick, me);
-		}
+		me.img = me.createImage(
+			Ext.BLANK_IMAGE_URL,
+			me.div,
+			'action',
+			cName,
+			(me.isVisible?'':'visibility:hidden;'));
+
+		me.img.annotation = me;
+		Ext.get(me.img).on('click', me.onClick, me);
 
 		me.attachRecord(record);
 
@@ -151,7 +153,9 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 	},
 
 
-	render: function(){},
+	render: function(){
+		Ext.fly(this.img).setStyle('background', this.getColor().toString());
+	},
 
 	
 	getRecord: function(){
@@ -248,9 +252,21 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 		menu.on('hide', function(){ spot.destroy(); }, this, {single: true});
 		menu.showBy(Ext.get(this.img), 'bl');
 	},
-	
-	menuItemHook: Ext.emptyFn,
-	
+
+
+	getColor: function(){
+		return Color.getColor(this.userId);
+	},
+
+
+	menuItemHook: function(o,item /*, menu*/){
+		var color = this.getColor();
+		item.on('afterrender',function() {
+			var img = item.el.select('img.x-menu-item-icon').first();
+			if(img){ img.setStyle('background', color); }
+		});
+	},
+
 	multiAnnotation: function() {
 		var result = [],
 			top = this.img.style.top;

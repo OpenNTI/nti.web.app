@@ -95,5 +95,6 @@ Ext.define( 'NextThought.view.widgets.annotations.Transcript', {
 		catch(e){
 			console.error('Non-Chat Anchored Transcript onResize: ',e,e.message, e.stack);
 		}
+		this.callParent();
 	}
 });

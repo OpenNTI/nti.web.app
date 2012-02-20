@@ -7,20 +7,17 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 
 
 	constructor: function(selection, record, container, component){
-		var me = this,
-			userId= record.get('Creator') || $AppConfig.userObject.getId();
+		var me = this;
 
 		me.callParent([record, container, component,'assets/images/charms/highlight-white.png']);
 
 		Ext.apply(me,{
 			selection: selection,
 			canvas: me.createCanvas(),
-			userId: userId,
 			renderPriority: 1
 		});
 
 		me.self.highlightEvents.on('render',me.render, me);
-		me.self.addSource(userId);
 		return me;
 	},
 
@@ -126,20 +123,6 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 	},
 
 
-	menuItemHook: function(o,item /*, menu*/){
-		var color = this.getColor();
-		item.on('afterrender',function() {
-			var img = item.el.select('img.x-menu-item-icon').first();
-			if(img){ img.setStyle('background', color); }
-		});
-	},
-
-
-	getColor: function(){
-		return this.self.getColor(this.userId);
-	},
-
-
 	cleanup: function(){
 		if(!this.selection){
 			return;
@@ -209,7 +192,6 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 			cXY = Ext.get(c).getXY(),
 			color = this.getColor(),
 			rgba = Color.toRGBA(color),
-			rgb = color.toString(),
 			me = this;
 
 		if(!r){
@@ -218,7 +200,6 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 
 		//move nib
 		nib.moveTo(p.getLeft(), r.top);
-		nib.setStyle('background', rgb);
 
 		//stage draw
 		for(; i>=0; i--){
@@ -232,7 +213,6 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 
 	statics: {
 		highlightEvents: Ext.create('Ext.util.Observable'),
-		sources : [],
 		queue : [],
 
 		enqueue: function(op){
@@ -253,22 +233,6 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 			c.width = w;
 
 			while(q.length){ (q.pop())(ctx); }
-		},
-
-		addSource: function(userId){
-			if(userId && !Ext.Array.contains(this.sources, userId)){
-				this.sources.push(userId);
-				Ext.Array.sort(this.sources);
-
-				//keep the logged in user at index 0
-				var id = $AppConfig.userObject.getId();
-				Ext.Array.remove(this.sources,id);
-				this.sources.unshift(id);
-			}
-		},
-
-		getColor: function(userId){
-			return Color.getColor( Ext.Array.indexOf(this.sources,userId) );
 		}
 	}
 

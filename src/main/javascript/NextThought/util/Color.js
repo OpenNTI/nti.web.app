@@ -5,6 +5,7 @@ Ext.define('NextThought.util.Color',{
 		'Ext.draw.Color'
 	],
 
+	sources : [],
 
 	toRGBA: function(color, alpha) {
 		if (typeof color === 'string') {
@@ -124,13 +125,32 @@ Ext.define('NextThought.util.Color',{
 		return (hue + 0.6) % 1;
 	},
 
-
+	/**
+	 *
+	 * @param idx - either the known index (a number) or a username with which to look up the index for
+	 */
 	getColor: function(idx){
-		return Ext.draw.Color.fromHSL(Math.round(this.hue(idx) * 360), 100, 50);
-	}
-
-},
-		function(){
-			window.Color = this;
+		if (typeof idx === 'string') {
+			this.addSource(idx);
+			idx = Ext.Array.indexOf(this.sources,idx);
 		}
+
+		return Ext.draw.Color.fromHSL(Math.round(this.hue(idx) * 360), 100, 50);
+	},
+
+	addSource: function(userId){
+		if(userId && !Ext.Array.contains(this.sources, userId)){
+			this.sources.push(userId);
+			Ext.Array.sort(this.sources);
+
+			//keep the logged in user at index 0
+			var id = $AppConfig.userObject.getId();
+			Ext.Array.remove(this.sources,id);
+			this.sources.unshift(id);
+		}
+	}
+},
+function(){
+	window.Color = this;
+}
 );
