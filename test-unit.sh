@@ -1,6 +1,13 @@
 #!/bin/bash
 PORT=45670
 
+# make sure correct phantomjs is used
+PHANTOMJS_VER=`phantomjs --version` > /dev/null
+if [[ "$PHANTOMJS_VER" != 1.* ]] ; then
+	echo 'wrong version of phantomjs, check path'
+	exit 1
+fi
+
 cd src/test/WebApp
 # fire up an http server in the background
 echo "Starting SimpleHTTP Server"
