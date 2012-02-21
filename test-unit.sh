@@ -13,7 +13,7 @@ cd src/test/WebApp
 echo "Starting SimpleHTTP Server"
 python -m SimpleHTTPServer $PORT >/dev/null 2>&1 &
 
-phantomjs ../javascript/run-jasmine.js http://localhost:$PORT/test.html
+phantomjs ../javascript/run-jasmine.js http://localhost:$PORT
 
 # kill the http server
 echo "Stopping Simple HTTP Server"
