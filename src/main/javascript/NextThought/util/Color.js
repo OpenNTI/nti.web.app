@@ -70,7 +70,7 @@ Ext.define('NextThought.util.Color',{
 			console.debug('replacing toString() on color', m, alpha);
 			color.toString = function(){
 				var a = alpha;
-				if (m[3]!== undefined && m[3] != null){a = m[3];}
+				if (m[3]!== undefined && m[3] !== null){a = m[3];}
 
 				return Ext.String.format(
 						'rgba({0},{1},{2},{3})',
