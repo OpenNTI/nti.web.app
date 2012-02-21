@@ -205,8 +205,42 @@ Ext.define('NextThought.controller.Whiteboard', {
 
 
 	modifyPath: function(x,y,o, m, d, sw){
-		var p = this.sprite.attr.path || [['M', o[0], o[1]]];
+		var p = this.sprite.attr.path,
+			firstX, firstY, close = false;
+
+		//remove close if necessary
+		if (p && p.last()[0].toLowerCase() === 'z') {
+			p.pop();
+		}
+
+		//set p if this is the first point
+		if (!p) {
+			p = [['M', o[0], o[1]]];
+		}
+		//otherwise decide if we need to close the path
+		else {
+			firstX = p.first()[1];
+			firstY = p.first()[2];
+			close = WhiteboardUtils.shouldClosePathBetweenPoint(firstX, firstY, x, y);
+		}
+
+		//push the new point onto the pile
 		p.push(['S', x,y, x,y]);
+
+		//if we need to close, add that, and fill only if closed...
+		if (close){
+			p.push(['Z']);
+			if (this.sprite.fillIfClosed) {
+				this.sprite.setAttributes({fill: this.sprite.fillIfClosed}, true);
+				this.sprite.fill = this.sprite.fillIfClosed;
+			}
+		}
+		else {
+			this.sprite.setAttributes({fill: 'None'}, true);
+			this.sprite.fill = 'None';
+		}
+
+
 		this.sprite.setAttributes({path: p}, true);
 	},
 

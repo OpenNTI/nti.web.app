@@ -28,7 +28,7 @@ Ext.define('NextThought.view.widgets.draw.ShapeFactory',
 			d = {
 			circle: {},
 			polygon: { sides: sides },
-			path: { type: 'path', fill: 'None', translate: {} },
+			path: { type: 'path', fill: 'None', fillIfClosed: selectedColor.fill, translate: {} },
 			line: { type: 'path', fill: 'None', translate: {}, getShape:function(){return 'line';}},
 			text: {
 				type: 'text',
@@ -145,6 +145,7 @@ Ext.define('NextThought.view.widgets.draw.ShapeFactory',
 			'stroke-width': shape.strokeWidthTarget,
 			text: shape.text,
 			points: shape.points,
+			closed: shape.closed,
 			stroke: p.toString(),
 			fill: fc.toString(),
 

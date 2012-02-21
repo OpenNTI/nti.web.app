@@ -161,4 +161,94 @@ describe("Path Shape Functionality",function(){
 		expect(jsonObj.points).toEqual(expectedScaledPoints); //once points are in unit shape, they shouldn't change
 		expect(jsonObj.transform).toEqual(expectedUnscaledTransform);
 	});
+
+
+	it("checking that path is closed when it should be", function(){
+		//NOTE: if it comes form the WB, it has a path but no points
+		//1) create the object the same way that the wb does
+		var pathObj = ShapeFactory.createShape(div, 'path', 100, 100, null, {stroke: '#000000', fill: '#000000'}, 1),
+			p,
+			json;
+
+		//2) add some points to the path, same as drawing it around in whiteboard
+		p = [
+			['M',100,100],
+			['L',500,500],
+			['L',900,100],
+			['L',900,900],
+			['L',100,900],
+			['L',105,105]
+		];
+		pathObj.setAttributes({path: p}, true);
+		json = pathObj.toJSON();
+		expect(json.closed).toBeTruthy();
+	});
+
+
+	it("checking that path is closed when it should be 2", function(){
+		//NOTE: if it comes form the WB, it has a path but no points
+		//1) create the object the same way that the wb does
+		var pathObj = ShapeFactory.createShape(div, 'path', 100, 100, null, {stroke: '#000000', fill: '#000000'}, 1),
+			p,
+			json;
+
+		//2) add some points to the path, same as drawing it around in whiteboard
+		p = [
+			['M',100,100],
+			['L',500,500],
+			['L',900,100],
+			['L',900,900],
+			['L',100,900],
+			['L',105,105],
+			['Z']
+		];
+		pathObj.setAttributes({path: p}, true);
+		json = pathObj.toJSON();
+		expect(json.closed).toBeTruthy();
+	});
+
+
+	it("checking that path is NOT closed when it should'NT be", function(){
+		//NOTE: if it comes form the WB, it has a path but no points
+		//1) create the object the same way that the wb does
+		var pathObj = ShapeFactory.createShape(div, 'path', 100, 100, null, {stroke: '#000000', fill: '#000000'}, 1),
+			p,
+			json;
+
+		//2) add some points to the path, same as drawing it around in whiteboard
+		p = [
+			['M',100,100],
+			['L',500,500],
+			['L',900,100],
+			['L',900,900],
+			['L',100,900]
+		];
+		pathObj.setAttributes({path: p}, true);
+		json = pathObj.toJSON();
+		expect(json.closed).not.toBeTruthy();
+	});
+
+	it("create a path as if it came from the dataserver with closed set", function(){
+		//NOTE: if it comes from the dataserver, it has points but no path
+		var json = {"MimeType":"application/vnd.nextthought.canvaspathshape",
+			"transform":{"a":1,"c":0,"b":0,"d":1,"tx":0.16612377850162868,"ty":0.04343105320304018,"Class":"CanvasAffineTransform"},
+			"strokeOpacity":1,
+			"NTIID":"tag:nextthought.com,2011-10:zope.security.management.system_user-OID-0x05fd:5573657273",
+			"points":[0.1,0.1,0.5,0.5,0.9,0.1,0.9,0.9,0.1,0.9],
+			"closed": true,
+			"fillColor":"rgb(255.0,255.0,255.0)",
+			"strokeColor":"rgb(0.0,0.0,0.0)",
+			"Class":"CanvasPathShape",
+			"strokeWidth":"0.001%",
+			"fillOpacity":1,
+			"strokeRGBAColor":"0.000 0.000 0.000",
+			"fillRGBAColor":"0.000 0.000 0.000"
+		},
+			pathObj = ShapeFactory.restoreShape(div, json, 1),
+			backToJson;
+
+
+		//verify the last part of the SVG is a closepath: Z
+		expect(pathObj.attr.path.last()[0]).toBe('Z');
+	});
 });

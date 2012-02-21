@@ -2,6 +2,10 @@ Ext.define('NextThought.view.widgets.draw.Path', {
 	extend: 'NextThought.view.widgets.draw.Shape',
 	alias: 'widget.sprite-path',
 
+	requires: [
+		'NextThought.util.WhiteboardUtils'
+	],
+
 	constructor: function(config){
 		//fix path because it'll be NTI format
 		var p = config.points;
@@ -10,6 +14,10 @@ Ext.define('NextThought.view.widgets.draw.Path', {
 			var i, newPath = [];
 			for (i = 0; i < p.length; i+=2){
 				newPath.push([newPath.length ? 'L' : 'M',p[i], p[i+1]]);
+			}
+			//if the path is closed, make sure that gets set on path
+			if (config.closed) {
+				newPath.push(['Z']);
 			}
 			config.path = newPath;
 		}
@@ -37,7 +45,9 @@ Ext.define('NextThought.view.widgets.draw.Path', {
 			ntiPathArray,
 			currentMatrix = this.matrix ? this.matrix.clone() : undefined,
 			newMatrix = Ext.create('Ext.draw.Matrix'),
-			affineTransform;
+			affineTransform,
+			closed = false,
+			c;
 
 		//make sure scalefactor is valid, if not, set to 1 (no scale)
 		if (!scaleFactor){scaleFactor = 1;}
@@ -63,6 +73,9 @@ Ext.define('NextThought.view.widgets.draw.Path', {
 						ntiPathArray.push(x);
 						ntiPathArray.push(y);
 					}
+					else if (t.toLowerCase() === 'z') {
+						closed = true;
+					}
 					else {
 						console.error('Not sure what to do with this part of the path', p);
 					}
@@ -84,6 +97,8 @@ Ext.define('NextThought.view.widgets.draw.Path', {
 				addMatrixVals(newMatrix, currentMatrix, 0, 2);
 				addMatrixVals(newMatrix, currentMatrix, 1, 2);
 			}
+
+			//this.points = ntiPathArray;
 		}
 		else {
 			newMatrix = currentMatrix || newMatrix;
@@ -99,11 +114,17 @@ Ext.define('NextThought.view.widgets.draw.Path', {
 			ty: newMatrix.get(1,2)
 		};
 
+		//verify closed status:
+		c = this.points || ntiPathArray;
+		closed = WhiteboardUtils.shouldClosePathBetweenPoint(
+			c[0], c[1],
+			c[c.length - 2], c.last());
+
 		return Ext.apply(
 			{
 				'Class': 'CanvasPathShape',
 				'transform': Ext.clone(affineTransform),
-				'closed': false,
+				'closed': closed,// || WhiteboardUtils.shouldClosePathBetweenPoint(this.points[0], this.points[1], this.points[this.points.length - 2], this.points.last()),
 				'points': this.points || ntiPathArray,
 				'createdObject': this.createdObject || undefined
 			},
