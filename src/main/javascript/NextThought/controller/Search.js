@@ -86,8 +86,8 @@ Ext.define('NextThought.controller.Search', {
 				return;
 			}
 
-			LocationProvider.setLocation(o.NTIID, function(){
-				//do scrolling/selecting here
+			LocationProvider.setLocation(o.NTIID, function(a){
+				a.scrollToId(IdCache.getComponentId(hit.getId()));
 			});
 
 			var popover = me.getSearchPopover();
@@ -98,7 +98,7 @@ Ext.define('NextThought.controller.Search', {
 
 		function failure(){
 			Ext.getBody().unmask();
-			alert("Ooops","Me no say");
+			console.error('error resolving container', Ext.encode(hit.data));
 		}
 
 		Ext.getBody().mask("Loading...");

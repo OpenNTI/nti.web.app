@@ -12,7 +12,7 @@ Ext.define('NextThought.providers.Location', {
 		});
 
 		Ext.apply(this,{
-			currentNTIID: "",
+			currentNTIID: null,
 			timers: {},
 			cache: {}
 		});
@@ -33,16 +33,20 @@ Ext.define('NextThought.providers.Location', {
 
 		function finish(){
 			console.timeEnd('navigation');
-			e.unmask();
+			if(e.isMasked()){
+				e.unmask();
+			}
 			Globals.callback(callback,null,arguments);
 		}
 
-		e.mask('Loading...');
+		if(me.currentNTIID && ntiid !== me.currentNTIID){
+			e.mask('Loading...');
+		}
+
 		//make this happen out of this function's flow, so that the mask shows immediately.
 		setTimeout(function(){
 			console.time('navigation');
 			if(!me.fireEvent('navigate',ntiid,finish)){
-				e.unmask();
 				return false;
 			}
 			me.currentNTIID = ntiid;

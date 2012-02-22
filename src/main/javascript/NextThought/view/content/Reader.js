@@ -39,10 +39,10 @@ Ext.define('NextThought.view.content.Reader', {
 
 
 	scrollToId: function(id) {
-		var n = Ext.getCmp(id),
-			m;
+		var n = Ext.getCmp(id), m;
+
 		if(n) {
-			this.scrollToNode(n.getEl());
+			this.scrollToNode(n.getEl().dom);
 			if (n.getMenu) {
 				m = n.getMenu();
 				if (m && m.items.getCount() === 1) {
@@ -69,20 +69,21 @@ Ext.define('NextThought.view.content.Reader', {
 
 
 	scrollToNode: function(n) {
-		while(n && n.nodeType === 3) {//3 = ??
+		while(n && n.nodeType === Node.TEXT_NODE) {
 			n = n.parentNode;
 		}
+		var c = Ext.get('readerPanel-body');
+		var o = (Ext.get(n).getOffsetsTo(c)[1]);
 
-		var e = this.el.first(),
-			h = e.getTop()+ 10,
-			t = e.dom.scrollTop;
 
-		this.scrollTo(t+Ext.get(n).getTop()-h);
+
+		console.log(o);
+		this.scrollTo( c.dom.scrollTop + o - 10);
 	},
 
 
 	scrollTo: function(top, animate) {
-		this.el.first().scrollTo('top', top, animate!==false);
+		Ext.fly('readerPanel-body').scrollTo('top', top, animate!==false);
 	},
 
 
@@ -109,6 +110,11 @@ Ext.define('NextThought.view.content.Reader', {
 		var me = this,
 			service = $AppConfig.service;
 
+		if(ntiid === me.getContainerId()){
+			Globals.callback(callback,null,[me]);
+			return false;
+		}
+
 		me.clearAnnotations();
 
 		function success(resp){
@@ -132,7 +138,7 @@ Ext.define('NextThought.view.content.Reader', {
 
 		function onFinishLoading() {
 			me.relayout();
-			Globals.callback(callback,null,[this]);
+			Globals.callback(callback,null,[me]);
 			me.fireEvent('loaded', containerId);
 		}
 
