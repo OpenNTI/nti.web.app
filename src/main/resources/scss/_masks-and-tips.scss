@@ -55,12 +55,13 @@
 }
 
 //.x-masked
+/*.x-mask {*/
+    /*filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=70);*/
+    /*opacity: 0.7;*/
+	/*background: #F8F8FF;*/
+/*}*/
+/*.x-body-masked */
 .x-mask {
-    filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=70);
-    opacity: 0.7;
-	background: #F8F8FF;
-}
-.x-body-masked .x-mask {
 	filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=40);
 	opacity: 0.4;
 	background: #FFFFFF;
