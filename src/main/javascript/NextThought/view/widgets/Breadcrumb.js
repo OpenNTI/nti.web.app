@@ -108,7 +108,7 @@ Ext.define('NextThought.view.widgets.Breadcrumb', {
 		}
 		
 		container.add({
-			text: toc.getAttribute('label'),
+			text: toc.getAttribute('title'),
 			menu: this.getLibraryMenu(location.ContentNTIID)
 		});
 		
