@@ -28,6 +28,7 @@ Ext.define('NextThought.controller.Application', {
 			console.groupEnd();
 			window.stopTrackingModelConstruction = true;
 			NextThought.isInitialised = true;
+			Globals.removeLoaderSplash();
 		});
 	},
 

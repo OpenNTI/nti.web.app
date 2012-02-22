@@ -23,7 +23,6 @@ Ext.define('NextThought.controller.Session', {
 			console.groupCollapsed('Session Setup');
 			console.time('session restore');
 			function success(){
-				Globals.removeLoaderSplash();
 				app.fireEvent('session-ready');
 				console.timeEnd ('session restore');
 				console.groupEnd();
