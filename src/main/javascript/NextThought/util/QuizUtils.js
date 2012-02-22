@@ -33,33 +33,35 @@ Ext.define('NextThought.util.QuizUtils', {
 	submitAnswers: function(){
 		var me = this,
 			ntiid = LocationProvider.currentNTIID,
-			url = $AppConfig.service.getQuizSubmitURL(ntiid),
 			problems,
-			data = {},
-			vp = Ext.getBody();
+			vp = Ext.getBody(),
+			quizResult = Ext.create('NextThought.model.QuizResult' ,{ContainerId: ntiid});
 
-		function iter(id,v){
-			data[id] = v.getValue();
-			v.hide();
+		function populateQuestionResponses(id,v){
+			var items = quizResult.get('Items') || [];
+
+			items.push(Ext.create('NextThought.model.QuizQuestionResponse', {
+				ID: id,
+				Question: Ext.create('NextThought.model.QuizQuestion', {ID: id}),
+				Response: v.getValue()
+			}));
+			quizResult.set('Items', items);
 		}
+
+		me.getProblemElementMap(populateQuestionResponses,me);
 
 		vp.mask('Grading...');
 
-		problems = me.getProblemElementMap(iter,me);
-
-		Ext.Ajax.request({
-			url: url,
-			jsonData: Ext.JSON.encode(data),
-			method: 'POST',
-			scope: me,
-			callback: function(){ vp.unmask(); },
-			failure: function(){
+		quizResult.save({
+			scope: this,
+			success:function(gradedResults,operation){
+				me.showQuizResult(gradedResults, problems);
+				vp.unmask();
+			},
+			failure:function(){
 				//TODO: hook up to error handling
 				console.error('FAIL', arguments);
-			},
-			success: function(r){
-				var quizResults = ParseUtils.parseItems([ Ext.JSON.decode(r.responseText) ]);
-				me.showQuizResult(quizResults[0], problems);
+				vp.unmask();
 			}
 		});
 	},
