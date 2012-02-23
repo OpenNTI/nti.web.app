@@ -100,7 +100,9 @@ Ext.define('NextThought.controller.Session', {
 					scope: this,
 					callback: function(q,success,r){
 						if(!success){
-							failureCallback.call(m);
+//							failureCallback.call(m);
+							alert('Could not resolve service document');
+							console.log('\nreq:',q,'\nresp:',r, '\n');
 							return;
 						}
 						try{
@@ -108,16 +110,17 @@ Ext.define('NextThought.controller.Session', {
 								user = doc.Items[0].Title;
 
 							$AppConfig.service = Ext.create('NextThought.model.Service', doc, user);
-							m.attemptLoginCallback(user,successCallback, failureCallback);
+							m.attemptLoginCallback(user,successCallback);
 						}
 						catch(e){
-							Ext.Ajax.request({
-								method: 'POST',
-								url: s.host + s.data + 'logout',
-								callback: function(){
-									failureCallback.call(m);
-								}
-							});
+							console.error(e);
+//							Ext.Ajax.request({
+//								method: 'POST',
+//								url: s.host + s.data + 'logout',
+//								callback: function(){
+//									failureCallback.call(m);
+//								}
+//							});
 
 						}
 					}
@@ -140,7 +143,9 @@ Ext.define('NextThought.controller.Session', {
 					successCallback.call(me);
 				}
 				else{
-					failureCallback.call(me);
+					alert('could not resolve user: '+user);
+					console.log('could not resolve user',user);
+//					failureCallback.call(me);
 				}
 			});
 		}
