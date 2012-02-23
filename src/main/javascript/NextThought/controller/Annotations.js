@@ -35,6 +35,7 @@ Ext.define('NextThought.controller.Annotations', {
 			'chat'  : this.replyAsChat,
 			'edit'  : this.editNote,
 			'reply' : this.replyToNote,
+			'mute' : this.toggleMuteConversation,
 			'share' : this.shareWith
 		};
 
@@ -48,7 +49,8 @@ Ext.define('NextThought.controller.Annotations', {
 
 			'note-entry':{
 				'action': this.onNoteAction,
-				'load-transcript': this.onLoadTranscript
+				'load-transcript': this.onLoadTranscript,
+				'unmute': this.toggleMuteConversation
 			},
 
 			'noteeditor button[action=save]':{ 'click': this.onSaveNote },
@@ -138,7 +140,7 @@ Ext.define('NextThought.controller.Annotations', {
 			a.remove();
 		}
 		else if(this.actionMap.hasOwnProperty(action)){
-			this.actionMap[action].call(this, rec);
+			this.actionMap[action].call(this, rec, note);
 		}
 	},
 
@@ -268,6 +270,41 @@ Ext.define('NextThought.controller.Annotations', {
 	replyToNote: function(record){
 		this.editNote(AnnotationUtils.noteToReply(record));
 	},
+
+
+	toggleMuteConversation: function(record, panel, unmute) {
+		var me = this,
+			data,
+			url = $AppConfig.userObject.getLink('edit');
+
+		if (unmute){
+			data = {unmute_conversation: record.get('OID')};
+		}
+		else {
+			data = {mute_conversation: record.get('OID')};
+		}
+
+		Ext.Ajax.request({
+			url: url,
+			jsonData: Ext.JSON.encode(data),
+			method: 'PUT',
+			scope: me,
+			callback: function(){ },
+			failure: function(){
+				console.error("mute fail", arguments);
+			},
+			success: function(r){
+				console.log('mute success', arguments);
+				if (unmute){
+					panel.enable();
+				}
+				else {
+					panel.disable();
+				}
+			}
+		});
+	},
+
 
 	shareWith: function(record){
 		var options = {};

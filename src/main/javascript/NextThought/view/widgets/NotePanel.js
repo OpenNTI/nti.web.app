@@ -14,6 +14,7 @@ Ext.define('NextThought.view.widgets.NotePanel',{
 				'<span class="chat"></span>',
 				'<span class="edit"></span>',
 				'<span class="share"></span>',
+				'<span class="mute"></span>',
 				'<span class="delete"></span>',
 			'</span>',
 			'<div class="timestamp">{time}</div>',
@@ -253,7 +254,39 @@ Ext.define('NextThought.view.widgets.NotePanel',{
 	},
 
 
+	disable: function() {
+		this.callParent([true]);
+		var me = this,
+			b = Ext.widget('button',
+			{
+				floating: true,
+				text: 'unmute',
+				constrain: true,
+				renderTo: this.container,
+				handler: function(){
+						me.fireEvent('unmute', me.record, me, true);
+				}
+			}
+		);
+
+		b.alignTo(this, 'c-c');
+		this.unmuteBtn = b;
+		b.doLayout();
+	},
+
+	enable: function(){
+		this.callParent(arguments);
+		if (this.unmuteBtn) {
+			this.unmuteBtn.destroy();
+			delete this.unmuteBtn;
+		}
+	},
+
 	click: function(event, target){
+		if (this.isDisabled()) {
+			return;
+		}
+
 		target = Ext.get(target);
 		event.preventDefault();
 		event.stopPropagation();
