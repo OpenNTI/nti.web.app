@@ -33,7 +33,7 @@ Ext.define('NextThought.proxy.Socket', {
 
 		task = {
 			run: function(){
-				if (io) {
+				if (window.io) {
 					this.setup();
 					Ext.TaskManager.stop(task);
 				}
