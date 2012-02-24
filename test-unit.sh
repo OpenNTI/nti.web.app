@@ -12,6 +12,7 @@ cd src/test/WebApp
 # fire up an http server in the background
 echo "Starting SimpleHTTP Server"
 python -m SimpleHTTPServer $PORT >/dev/null 2>&1 &
+sleep 5 # sleep is required to make sure server is running
 
 phantomjs ../javascript/run-jasmine.js http://localhost:$PORT
 
