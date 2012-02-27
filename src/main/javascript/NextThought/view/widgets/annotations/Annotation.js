@@ -180,7 +180,24 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 		return m;
 	},
 	
-	
+	savePhantom: function(){
+		var me = this;
+		if(!me.record.phantom){return;}
+		me.isSaving = true;
+		me.record.save({
+			scope: me,
+			failure:function(){
+				console.error('Failed to save record', me, me.record);
+				me.cleanup();
+			},
+			success:function(newRecord){
+				me.record.fireEvent('updated', newRecord);
+				me.record = newRecord;
+			}
+		});
+	},
+
+
 	buildMenu: function(items) {
 		var m = this;
 
@@ -189,7 +206,16 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 			items.push({
 				text: m.isModifiable? 'Share With' : 'Get Info',
 				handler: function(){
-					m.ownerCmp.fireEvent('share-with',m.record);
+					if (m.record.phantom) {
+						m.record.on('updated', function(){
+							m.ownerCmp.fireEvent('share-with',m.record);
+						},
+						{single: true});
+						m.savePhantom();
+					}
+					else{
+						m.ownerCmp.fireEvent('share-with',m.record);
+					}
 				}
 			});
 		}

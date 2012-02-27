@@ -73,24 +73,6 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 	},
 
 
-	savePhantom: function(){
-		var me = this;
-		if(!me.record.phantom){return;}
-		me.isSaving = true;
-		me.record.save({
-			scope: me,
-			failure:function(){
-				console.error('Failed to save highlight', me, me.record);
-				me.cleanup();
-			},
-			success:function(newRecord){
-				me.record.fireEvent('updated', newRecord);
-				me.record = newRecord;
-			}
-		});
-	},
-
-
 	buildMenu: function(){
 		var me = this,
 			items = [],
