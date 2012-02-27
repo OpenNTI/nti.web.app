@@ -33,7 +33,8 @@ Ext.define('NextThought.view.widgets.draw.Path', {
 
 	toJSON: function(scaleFactor){
 		function addMatrixVals(n, c, x, y) {
-			var v = currentMatrix.get(x,y);
+			if (!c) {return;}
+			var v = c.get(x,y);
 			if (v !== 1) {
 				n.matrix[x][y] += v;
 			}
@@ -97,8 +98,6 @@ Ext.define('NextThought.view.widgets.draw.Path', {
 				addMatrixVals(newMatrix, currentMatrix, 0, 2);
 				addMatrixVals(newMatrix, currentMatrix, 1, 2);
 			}
-
-			//this.points = ntiPathArray;
 		}
 		else {
 			newMatrix = currentMatrix || newMatrix;
