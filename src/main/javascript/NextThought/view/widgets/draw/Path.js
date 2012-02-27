@@ -102,6 +102,8 @@ Ext.define('NextThought.view.widgets.draw.Path', {
 		}
 		else {
 			newMatrix = currentMatrix || newMatrix;
+			newMatrix.matrix[0][2] = this.attr.translation.x;
+			newMatrix.matrix[1][2] = this.attr.translation.y;
 		}
 
 		affineTransform = {
