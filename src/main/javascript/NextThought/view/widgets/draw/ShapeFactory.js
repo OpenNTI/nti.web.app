@@ -206,6 +206,7 @@ function(){
 	window.ShapeFactory = this;
 
 	//Fix Sprite dragging for ExtJS 4.0.7
+	/*
 	Ext.draw.SpriteDD.override({
 		getRegion: function() {
 			var r, s = this.sprite,
@@ -231,4 +232,5 @@ function(){
 			return Ext.create('Ext.util.Region', y1, x2, y2, x1);
 		}
 	});
+	*/
 });
