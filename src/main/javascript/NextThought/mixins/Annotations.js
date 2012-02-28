@@ -342,9 +342,7 @@ Ext.define('NextThought.mixins.Annotations', {
 		}
 
 		ContributorsProvider.set(contributors);
-		me.fireEvent('resize');
-
-		Globals.callback(callback);
+		AnnotationUtils.callbackAfterRender(callback,this);
 	},
 
 

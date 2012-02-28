@@ -74,10 +74,6 @@ Ext.define('NextThought.view.content.Reader', {
 		}
 		var c = Ext.get('readerPanel-body');
 		var o = (Ext.get(n).getOffsetsTo(c)[1]);
-
-
-
-		console.log(o);
 		this.scrollTo( c.dom.scrollTop + o - 10);
 	},
 

@@ -25,7 +25,7 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 			isSingleAction: false,
 			renderPriority: -1,
 
-			requestRender: Ext.Function.createDelayed(me.requestRender, 10, me)
+			requestRender: Ext.Function.createBuffered(me.requestRender, 10, me)
 		});
 
 		me.ownerCmp.on('afterlayout',me.onResize, me);
@@ -308,7 +308,7 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 
 
 	statics: {
-//		annotationEvents: new Ext.util.Observable(),
+		events: new Ext.util.Observable(),
 		registry: [],
 		sorter: null,
 
@@ -359,7 +359,15 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 
 
 		render: function(){
-//			console.log('Rendering...');
+			if(this.rendering){
+				this.events.on('finish',this.render,this,{single:true});
+				console.warn('Render called while rendering...');
+				return;
+			}
+			this.aboutToRender = false;
+//			console.time('Rendering');
+			this.rendering = true;
+			this.events.fireEvent('rendering');
 			this.sorter = this.sorter || this.buildSorter();
 			this.registry = Ext.Array.unique(this.registry);
 
@@ -375,11 +383,25 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 				}
 			});
 
-//			console.log('Rendering ended...');
+			this.rendering = false;
+			this.events.fireEvent('finish');
+//			console.timeEnd('Rendering');
 		}
 
 	}
 },
 function(){
-	this.render = Ext.Function.createBuffered(this.render,50,this);
+	var me = this, fn = this.render, timerId;
+
+	this.render = function() {
+			return function() {
+				me.aboutToRender = true;
+				if (timerId) {
+					clearTimeout(timerId);
+					timerId = null;
+				}
+				timerId = setTimeout(function(){fn.call(me);}, 100);
+			};
+
+		}();
 });

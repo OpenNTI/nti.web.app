@@ -18,6 +18,23 @@ Ext.define('NextThought.util.AnnotationUtils',{
 	SEPERATOR: null,
 	DIVIDER_REGEX: null,
 
+
+	callbackAfterRender: function(fn,scope){
+		var a = NextThought.view.widgets.annotations.Annotation;
+
+		function cb(){
+			Globals.callback(fn,scope);
+		}
+
+		if(a.rendering || a.aboutToRender){
+			a.events.on('finish',cb,null,{single: true});
+			return;
+		}
+		console.log('wasn\'t rendering');
+		cb();
+	},
+
+
 //tested
 	getBodyTextOnly: function(obj) {
 		var bdy = obj.get('body'), o, i, text = [];

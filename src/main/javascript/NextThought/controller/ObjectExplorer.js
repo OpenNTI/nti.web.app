@@ -45,7 +45,10 @@ Ext.define('NextThought.controller.ObjectExplorer', {
 
 	itemNavigatorItemActivated: function(control, record, dom, index) {
 		var containerId = record.get('ContainerId');
-		LocationProvider.setLocation(containerId);
+		LocationProvider.setLocation(containerId, function(target){
+			target.scrollToId(
+					IdCache.getComponentId(record.getId()));
+		});
 	},
 
 	objectExplorerClicked: function(btn, e, o) {

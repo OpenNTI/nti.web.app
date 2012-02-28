@@ -1,6 +1,7 @@
 Ext.define('NextThought.view.widgets.annotations.Highlight', {
 	extend:'NextThought.view.widgets.annotations.Annotation',
 	requires:[
+		'NextThought.cache.IdCache',
 		'NextThought.util.Color',
 		'NextThought.util.RectUtils'
 	],
@@ -12,14 +13,21 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 		me.callParent([record, container, component,'assets/images/charms/highlight-white.png']);
 
 		Ext.apply(me,{
+			id: IdCache.getComponentId(record.getId()),
 			selection: selection,
 			canvas: me.createCanvas(),
 			renderPriority: 1
 		});
 
 		me.self.highlightEvents.on('render',me.render, me);
+		Ext.ComponentManager.register(me);
 		return me;
 	},
+
+	getItemId: function(){return this.id; },
+	isXType: function(){return false;},
+	getEl: function(){return Ext.get(this.img);},
+
 
 	getLineHeight: function(){
 		var s = this.selection,
@@ -109,6 +117,7 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 		if(!this.selection){
 			return;
 		}
+		Ext.ComponentManager.unregister(this);
 		delete this.selection;
 		this.callParent(arguments);
 		this.self.highlightEvents.fireEvent('render');//make all highlights redraw...
