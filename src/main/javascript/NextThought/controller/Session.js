@@ -34,7 +34,7 @@ Ext.define('NextThought.controller.Session', {
 					url = Ext.String.urlAppend(
 							Ext.String.urlAppend(
 									host + $AppConfig.server.login,
-									"return=" + encodeURIComponent(location.href) ),
+									"return=" + encodeURIComponent(location.pathname) ),
 							"host=" + encodeURIComponent(host));
 
 				location.replace( url );
