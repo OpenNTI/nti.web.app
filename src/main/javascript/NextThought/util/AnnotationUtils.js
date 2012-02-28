@@ -414,27 +414,17 @@ Ext.define('NextThought.util.AnnotationUtils',{
 		fullText = this.getNodeTextValue(startNode);
 		endOffset = highlight.get('endOffset');
 		startOffset = highlight.get('startOffset');
+		highlight.set('startHighlightedFullText', fullText);
+		highlight.set('startHighlightedText', (fullText !== startNode.nodeValue) ?
+			fullText : startNode.nodeValue.substring(startOffset));
+		highlight.set('endHighlightedFullText', this.getNodeTextValue(endNode));
 
-		if (!highlight.get('endAnchor')) {
-			//same anchor, this effects our snippets, there is no end snippet
-			highlight.set('startHighlightedFullText', fullText);
-			highlight.set('startHighlightedText', (fullText !== startNode.nodeValue) ?
-					fullText : startNode.nodeValue.substring(startOffset, endOffset));
-		}
-		else {
-			//different anchors, we'll have 2 snippets
-			highlight.set('startHighlightedFullText', fullText);
-			highlight.set('startHighlightedText', (fullText !== startNode.nodeValue) ?
-					fullText : startNode.nodeValue.substring(startOffset));
-			highlight.set('endHighlightedFullText', this.getNodeTextValue(endNode));
-
-			fullText = this.getNodeTextValue(endNode);
-			highlight.set('endHighlightedText',
-					(endOffset !== 0 && endNode.nodeValue !== null) ?
-							(fullText !== endNode.nodeValue) ?
-									fullText : endNode.nodeValue.substring(0, endOffset)
-							: highlight.get('endHighlightedFullText'));
-		}
+		fullText = this.getNodeTextValue(endNode);
+		highlight.set('endHighlightedText',
+			(endOffset !== 0 && endNode.nodeValue !== null) ?
+				(fullText !== endNode.nodeValue) ?
+					fullText : endNode.nodeValue.substring(0, endOffset)
+				: highlight.get('endHighlightedFullText'));
 	},
 
 
