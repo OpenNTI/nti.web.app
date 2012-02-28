@@ -42,7 +42,7 @@ Ext.define('NextThought.view.widgets.ItemNavigator', {
 				hideable: false,
 				sortable: false,
 				items: [{
-					icon   : 'ext-4.0.7/examples/shared/icons/fam/application_go.png',  // Use a URL in the icon config
+					iconCls: 'go-to',
 					tooltip: 'Go to',
 					scope: me,
 					handler: function(grid, rowIndex, colIndex) {
@@ -57,7 +57,7 @@ Ext.define('NextThought.view.widgets.ItemNavigator', {
 				hideable: false,
 				sortable: false,
 				items: [{
-					icon   : 'ext-4.0.7/examples/shared/icons/fam/delete.gif',  // Use a URL in the icon config
+					iconCls: 'delete-action',
 					tooltip: 'Remove',
 					scope: me,
 					handler: function(grid, rowIndex, colIndex) {

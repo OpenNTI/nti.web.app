@@ -1,0 +1,17 @@
+
+
+
+.x-grid-cell {
+
+	.delete-action {
+		background: $delete-action;
+		width: 16px;
+		height: 16px;
+	}
+
+	.go-to {
+		background: $app-goto;
+		width: 16px;
+		height: 16px;
+	}
+}

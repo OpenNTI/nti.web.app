@@ -58,7 +58,7 @@ Ext.define('NextThought.view.windows.GroupEditorWindow', {
 								width	: 30,
 								sortable : false,
 								xtype	 : 'templatecolumn',
-								tpl		 : '<img src="{avatarURL}" width=24 height=24/>'
+								tpl		 : '<img src="{avatarURL}" width="16" height="16"/>'
 							},
 							{
 								text	 : 'Name',
@@ -76,7 +76,7 @@ Ext.define('NextThought.view.windows.GroupEditorWindow', {
 								xtype: 'actioncolumn',
 								width: 30,
 								items: [{
-									icon   : 'ext-4.0.7/examples/shared/icons/fam/delete.gif',  // Use a URL in the icon config
+									iconCls: 'delete-action',
 									tooltip: 'Remove',
 									handler: function(grid, rowIndex) {
 										me.store.removeAt(rowIndex);
