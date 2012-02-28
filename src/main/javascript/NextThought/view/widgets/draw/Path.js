@@ -32,14 +32,6 @@ Ext.define('NextThought.view.widgets.draw.Path', {
 	},
 
 	toJSON: function(scaleFactor){
-		function addMatrixVals(n, c, x, y) {
-			if (!c) {return;}
-			var v = c.get(x,y);
-			if (v !== 1) {
-				n.matrix[x][y] += v;
-			}
-		}
-
 		var i, p, t, x, y, k,
 			x0 = 0, y0 = 0,
 			path = this.attr.path,
@@ -89,15 +81,7 @@ Ext.define('NextThought.view.widgets.draw.Path', {
 			newMatrix.matrix[0][2] = x0;
 			newMatrix.matrix[1][2] = y0;
 
-			//Now apply the existing transform
-			if (currentMatrix) {
-				addMatrixVals(newMatrix, currentMatrix, 0, 0);
-				addMatrixVals(newMatrix, currentMatrix, 1, 0);
-				addMatrixVals(newMatrix, currentMatrix, 0, 1);
-				addMatrixVals(newMatrix, currentMatrix, 1, 1);
-				addMatrixVals(newMatrix, currentMatrix, 0, 2);
-				addMatrixVals(newMatrix, currentMatrix, 1, 2);
-			}
+			newMatrix = WhiteboardUtils.getTransform(newMatrix, this);
 		}
 		else {
 			newMatrix = currentMatrix || newMatrix;
