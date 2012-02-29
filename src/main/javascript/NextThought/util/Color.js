@@ -67,7 +67,6 @@ Ext.define('NextThought.util.Color',{
 		color = Ext.create('Ext.draw.Color',m[0],m[1],m[2]);
 
 		if((m[3] !== undefined && m[3] !== null) || (typeof alpha === 'number' && alpha<1)){
-			console.debug('replacing toString() on color', m, alpha);
 			color.toString = function(){
 				var a = alpha;
 				if (m[3]!== undefined && m[3] !== null){a = m[3];}
