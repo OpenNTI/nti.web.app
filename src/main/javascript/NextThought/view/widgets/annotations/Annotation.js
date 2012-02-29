@@ -393,7 +393,7 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 function(){
 	var me = this, fn = this.render, timerId;
 
-	this.render = function() {
+	this.render = (function() {
 			return function() {
 				me.aboutToRender = true;
 				if (timerId) {
@@ -403,5 +403,5 @@ function(){
 				timerId = setTimeout(function(){fn.call(me);}, 100);
 			};
 
-		}();
+		}());
 });
