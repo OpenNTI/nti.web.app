@@ -87,7 +87,14 @@ Ext.define('NextThought.controller.Search', {
 			}
 
 			LocationProvider.setLocation(o.NTIID, function(a){
-				a.scrollToId(IdCache.getComponentId(hit.getId()));
+				var cid = hit.get('ContainerId'),
+					id = IdCache.hasIdentifier(hit.getId())
+							? IdCache.getComponentId(hit.getId())
+							: IdCache.hasIdentifier(cid)
+								? IdCache.getComponentId(cid)
+								: null;
+
+				a.scrollToId(id);
 			});
 
 			var popover = me.getSearchPopover();

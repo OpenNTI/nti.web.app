@@ -19,6 +19,11 @@ Ext.define('NextThought.cache.IdCache', {
 		return this.ids[id];
 	},
 
+	hasIdentifier: function(id)
+	{
+		return (this.ids[id]);
+	},
+
 	getComponentId: function (rec, subRecordField) {
 		if(!rec){ return null; }
 
