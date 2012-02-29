@@ -86,7 +86,9 @@ mkdir $DEST/assets
 mkdir $DEST/assets/lib
 mkdir $DEST/assets/lib/$EXT
 mkdir $DEST/assets/lib/$EXT/resources
+mkdir $DEST/assets/lib/$EXT/resources/css
 mkdir $DEST/assets/lib/$EXT/resources/themes
+mkdir $DEST/assets/lib/$EXT/resources/themes/images
 mkdir $DEST/assets/js
 
 #Compile SCSS to CSS
@@ -96,8 +98,8 @@ mkdir $DEST/assets/js
 cp -R src/main/resources/css $DEST/assets
 cp -R src/main/resources/images $DEST/assets
 cp -R src/main/resources/misc $DEST/assets
-cp -R lib/$EXT/resources/css $DEST/assets/lib/$EXT/resources
-cp -R lib/$EXT/resources/themes/images $DEST/assets/lib/$EXT/resources/themes
+cp -R lib/$EXT/resources/css/ext-all-gray.css $DEST/assets/lib/$EXT/resources/css
+cp -R lib/$EXT/resources/themes/images/gray $DEST/assets/lib/$EXT/resources/themes/images
 
 if [ "$DEBUG" = "true" ]; then
 	cp -R src/main/javascript $DEST/assets/js
@@ -111,6 +113,7 @@ cd ..
 
 mv $DEST/assets/misc/hangout-app.xml $DEST
 cp src/main/WebApp/index.html $DEST
+cp src/main/WebApp/offline.json $DEST
 cp src/main/WebApp/config-example.js $DEST/config.js
 
 if [ "$DEBUG" != "true" ]; then
@@ -168,6 +171,9 @@ if [ "$DEBUG" != "true" ]; then
 	#rm $DEST/assets/js/app.js
 	#mv $DEST/assets/js/app.min.js $DEST/assets/js/app.js
 fi
+
+./genmanifest.sh -d
+
 
 # package build
 if [ "$ZIP" = "true" ]; then

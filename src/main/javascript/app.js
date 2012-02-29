@@ -1,8 +1,7 @@
 if(window.console && console.groupCollapsed){
 	console.groupCollapsed("Initialization");
 }
-
-
+Ext.Loader.setConfig('disableCaching',false);
 Ext.application({
 	name: 'NextThought',
 	appFolder: 'assets/js/NextThought',
