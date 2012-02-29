@@ -138,6 +138,8 @@ describe("Path Shape Functionality",function(){
 
 		//3) scale it down by 500px in each direction, move it to the right and down by 100px
 		pathObj.matrix = Ext.create('Ext.draw.Matrix',-500,0,0,-500,100,100);
+		pathObj.attr.scaling = {x: -500,y: -500};
+		pathObj.attr.translation = {x: 100, y: 100};
 
 		//4) validate changed matrix pre scale:
 		jsonObj = pathObj.toJSON(canvasWidth);
