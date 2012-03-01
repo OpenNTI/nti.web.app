@@ -121,9 +121,21 @@ Ext.define('NextThought.view.content.Reader', {
 			console.error(arguments);
 		}
 
-		me.request = service.getObjectRaw(ntiid, success, failure, me);
+		if(ntiid) {
+			me.request = service.getObjectRaw(ntiid, success, failure, me);
+		}
+		else {
+			this.setSplash();
+			Globals.callback(callback,null,[me]);
+		}
 
 		return true;
+	},
+
+
+	setSplash: function(){
+		this.scrollTo(0, false);
+		this.items.get(0).update('Nothing loaded');
 	},
 
 

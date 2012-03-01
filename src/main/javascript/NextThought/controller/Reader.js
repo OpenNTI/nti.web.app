@@ -163,8 +163,10 @@ Ext.define('NextThought.controller.Reader', {
 	},
 
 	buttonClicked: function(button) {
+		var target;
 		if(button) {
-			LocationProvider.setLocation(button.ntiid);
+			target = typeof button.ntiid === 'string' ? button.ntiid : null;
+			LocationProvider.setLocation( target );
 		}
 	},
 

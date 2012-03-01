@@ -46,6 +46,7 @@ Ext.define('NextThought.controller.State', {
 		};
 
 		window.history.pushState = function(s){
+			Ext.applyIf(s,{active: me.currentState.active});
 			if (this.updateState(s)) {
 				push.apply(history, arguments);
 			}
@@ -76,7 +77,7 @@ Ext.define('NextThought.controller.State', {
 		if(this.currentState.active !== modeId && NextThought.isInitialised){
 			//console.debug(this.currentState.active, modeId);
 			this.currentState.active = modeId;
-			history.pushState(this.currentState, 'Title Goes Here');
+			history.pushState(this.currentState, 'NextThought: '+modeId);
 		}
 	},
 
@@ -90,15 +91,16 @@ Ext.define('NextThought.controller.State', {
 		var app = this.application,
 			replaceState = false, c, key, stateScoped;
 
-		function fin(cmp){
+		function fin(){
 			var token = {};
 			app.registerInitializeTask(token);
-			cmp.on('finished-restore',function(){ app.finishInitializeTask(token); },this,{ single: true });
+			return function(){ app.finishInitializeTask(token); };
 		}
 
 		if(stateObject === PREVIOUS_STATE){
 			replaceState = true;
 			stateObject = this.loadState();
+			window.history.pushState(stateObject,'Initial');
 		}
 
 		c = Ext.getCmp(stateObject.active);
@@ -114,7 +116,7 @@ Ext.define('NextThought.controller.State', {
 					try{
 						stateScoped = {};
 						this.currentState[key] = stateScoped[key] = stateObject[key];
-						fin(c);
+						c.on('finished-restore',fin(),this,{ single: true });
 						c.restore(stateScoped);
 					}
 					catch(e){
@@ -127,8 +129,8 @@ Ext.define('NextThought.controller.State', {
 			}
 		}
 
-		if(stateObject.location){
-			LocationProvider.setLocation(stateObject.location);
+		if(typeof stateObject.location !== 'undefined'){
+			LocationProvider.setLocation(stateObject.location, fin(), true);
 		}
 
 		if(replaceState) {

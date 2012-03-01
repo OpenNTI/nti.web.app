@@ -28,7 +28,7 @@ Ext.define('NextThought.providers.Location', {
 	 * @param ntiid
 	 * @param [callback]
 	 */
-	setLocation: function(ntiid, callback){
+	setLocation: function(ntiid, callback, fromHistory){
 		var me = this,e = Ext.getCmp('viewport').getEl();
 
 		function finish(){
@@ -37,6 +37,10 @@ Ext.define('NextThought.providers.Location', {
 				e.unmask();
 			}
 			Globals.callback(callback,null,arguments);
+
+			if(fromHistory!==true){
+				window.history.pushState({location: ntiid}, "");
+			}
 		}
 
 		if(me.currentNTIID && ntiid !== me.currentNTIID){
