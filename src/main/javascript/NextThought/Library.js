@@ -271,7 +271,7 @@ Ext.define('NextThought.Library', {
 
 	resolveLocation: function(toc, containerId) {
 		if( toc.documentElement.getAttribute( 'ntiid' ) === containerId ) {
-			return {toc:toc, location:toc, NTIID: containerId, ContentNTIID: containerId};
+			return {toc:toc, location:toc.firstChild, NTIID: containerId, ContentNTIID: containerId};
 		}
 		return this.recursiveResolveLocation( containerId, toc );
 	},
