@@ -20,5 +20,6 @@ Ext.define('NextThought.view.content.Panel', {
 		}
 		this.doComponentLayout();
 		this.doLayout();
+		this.fireEvent('resize');
 	}
 });

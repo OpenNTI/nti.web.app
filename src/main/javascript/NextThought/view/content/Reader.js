@@ -241,29 +241,25 @@ Ext.define('NextThought.view.content.Reader', {
 		e.stopPropagation();
 		e.preventDefault();
 		var m = this,
-			h = $AppConfig.server.host,
-			l = window.location.href.split("#")[0],
 			r = el.href,
-			p = r.substring(h.length),
-			b = r.split('#')[0] === l,
-			hash = p.split('#');
+			hash = r.split('#'),
+			newLocation = hash[0],
+			target = hash[1];
+
+
 
 		//pop out links that point to external resources
-		if(m.externalUriRegex.test(r) && r.indexOf(h) !== 0 && !b){
+		if(!/tag:nextthought\.com/i.test(r) && m.externalUriRegex.test(r)){
 			//popup a leaving platform notice here...
 			window.open(r, guidGenerator());
 			return;
 		}
 
-		if(hash.length>1){
-
-			if(hash[1].length===0){
-				console.debug('empty hash',el);
-				return;
+		LocationProvider.setLocation(newLocation, function(me){
+			if(target) {
+				me.scrollToTarget(target);
 			}
-		}
-
-		m.loadPage(p);
+		});
 	}
 
 });
