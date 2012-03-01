@@ -11,7 +11,7 @@ Ext.define('NextThought.view.widgets.RelatedItemsList', {
 	items:[{html:'Related Items:', cls: 'sidebar-header'},{cls: 'sidebar-content'}],
 
 	filter: {},
-	
+
 	initComponent: function(){
 		this.callParent(arguments);
 		LocationProvider.on('change',this.setLocation,this);
@@ -73,6 +73,26 @@ Ext.define('NextThought.view.widgets.RelatedItemsList', {
 			LocationProvider.setLocation(m.id);
 		}
 
+		else if (/http...*/.test(m.href)){
+			Ext.widget('window',{
+				title: m.label,
+				closeAction: 'destroy',
+				width: 646,
+				height: 396,
+				layout: 'fit',
+				items: {
+					xtype: 'component',
+					autoEl: {
+						tag: 'iframe',
+						src: m.href,
+						frameBorder: 0,
+						marginWidth: 0,
+						marginHeight: 0,
+						allowfullscreen: true
+					}
+				}
+			}).show();
+		}
 		else if(m.type==='video'){
 			Ext.create('widget.video-window', {
 				title: m.label,
