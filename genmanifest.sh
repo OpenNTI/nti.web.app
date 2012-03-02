@@ -29,7 +29,7 @@ assets/misc/mathjaxconfig.js
 assets/images/favicon.ico
 
 FALLBACK:
-/ offline.json
+/ assets/misc/offline.json
 
 NETWORK:
 *

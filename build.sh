@@ -113,7 +113,6 @@ cd ..
 
 mv $DEST/assets/misc/hangout-app.xml $DEST
 cp src/main/WebApp/index.html $DEST
-cp src/main/WebApp/offline.json $DEST
 cp src/main/WebApp/config-example.js $DEST/config.js
 
 if [ "$DEBUG" != "true" ]; then
