@@ -16,7 +16,9 @@ Ext.define('NextThought.controller.Stream', {
 
 	views: [
 		'modes.Stream',
-		'content.Stream'
+		'content.Stream',
+		'widgets.MiniStreamEntry'
+
 	],
 
 	refs: [
@@ -58,6 +60,9 @@ Ext.define('NextThought.controller.Stream', {
 		this.control({
 			'stream-mode-container filter-control':{
 				'filter-changed': this.streamFilterChanged
+			},
+			'miniStreamEntry': {
+				'clicked' : this.onClick
 			}
 		},{});
 	},
@@ -82,6 +87,20 @@ Ext.define('NextThought.controller.Stream', {
 		else {
 			load();
 		}
+	},
+
+	onClick: function(item) {
+		var cid = item.get('ContainerId'),
+			ntiid = item.getId();
+
+		//ensure reader panel is up
+		Ext.ComponentQuery.query('reader-mode-container')[0].activate();
+
+		LocationProvider.setLocation(cid, function(a){
+			if (IdCache.hasIdentifier(ntiid)){
+				a.scrollToId(IdCache.getComponentId(ntiid));
+			}
+		});
 	},
 
 	containerIdChanged: function(containerId) {

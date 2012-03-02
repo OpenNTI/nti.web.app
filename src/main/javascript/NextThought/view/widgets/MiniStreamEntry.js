@@ -42,7 +42,7 @@ Ext.define('NextThought.view.widgets.MiniStreamEntry', {
 			item = me.change.get('Item'), e, t;
 		me.callParent(arguments);
 		me.box.on('click', function(){
-			me.fireEvent('stream-item-clicked', item);
+			me.fireEvent('clicked', item);
 		});
 
 		//lets put some popovers on this to show the contents?  Maybe this should be inline so as to see it at a
