@@ -72,6 +72,8 @@ Ext.define('NextThought.util.QuizUtils', {
 			ntiid = LocationProvider.currentNTIID,
 			problems = problemsElementMap || this.getProblemElementMap();
 
+		this.resetQuiz();
+
 		if(ntiid !== quizResult.get('ContainerId')){
 			Ext.Error.raise('Result does not match the page!');
 		}
@@ -119,13 +121,17 @@ Ext.define('NextThought.util.QuizUtils', {
 		this.getProblemElementMap(
 			function(id,v,c){
 				v.dom.value='';
-				var r = c.next('.result');
+				var r = c.next('.result'),
+					resp, ans;
 
 				r.addCls('hidden');
 				r.removeCls(['correct','incorrect']);
 
-				r.down('.response').remove();
-				r.down('.answer').remove();
+				resp = r.down('.response');
+				ans = r.down('.answer');
+
+				if (resp){resp.remove();}
+				if (ans){ans.remove();}
 
 				v.show();
 			},
