@@ -91,7 +91,12 @@ Ext.define('NextThought.controller.Stream', {
 
 	onClick: function(item) {
 		var cid = item.get('ContainerId'),
-			ntiid = item.getId();
+			ntiid = item.getId(),
+			mType = item.getModelName();
+
+		if (mType !== 'Note' && mType !== 'Highlight') {
+			return;
+		}
 
 		//ensure reader panel is up
 		Ext.ComponentQuery.query('reader-mode-container')[0].activate();
