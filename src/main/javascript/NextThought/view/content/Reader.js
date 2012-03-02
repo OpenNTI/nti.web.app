@@ -228,16 +228,26 @@ Ext.define('NextThought.view.content.Reader', {
 
 	fixReferences: function(string, basePath){
 
-		function fixReferences(original,tag,url) {
+		function fixReferences(original,attr,url) {
 			var firstChar = url.charAt(0),
 				absolute = firstChar ==='/',
 				anchor = firstChar === '#',
 				external = me.externalUriRegex.test(url),
 				host = absolute?$AppConfig.server.host:basePath;
 
+			if(/src/i.test(attr) && /youtube/i.test(url)){
+//				return attr+'="'+url+(url.indexOf('?')<0?'?':'&')+'enablejsapi=0&origin='+encodeURIComponent(location.href)+'"';
+				url = url.match(/youtube\.com\/embed\/(.+?)\?/i);
+
+				return "src=assets/wrappers/youtube.html?host=" +
+						encodeURIComponent($AppConfig.server.host) +
+						'&videoId='+encodeURIComponent(url[1]) +
+						'&_dc='+Ext.Date.now();
+			}
+
 			//inline
 			return (anchor || external || /^data:/i.test(url)) ?
-					original : tag+'="'+host+url+'"';
+					original : attr+'="'+host+url+'"';
 		}
 
 		var me = this;
