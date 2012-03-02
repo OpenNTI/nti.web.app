@@ -241,7 +241,7 @@ Ext.define('NextThought.view.content.Reader', {
 				return "src=assets/wrappers/youtube.html?host=" +
 						encodeURIComponent($AppConfig.server.host) +
 						'&videoId='+encodeURIComponent(match[1]) +
-						'original='+encodeURIComponent(url) +
+						'&original='+encodeURIComponent(url) +
 						'&_dc='+Ext.Date.now();
 			}
 
