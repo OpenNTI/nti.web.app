@@ -9,6 +9,10 @@ Ext.define('NextThought.view.widgets.Breadcrumb', {
 	cls: 'x-breadcrumbs-bar',
 	border: false,
 
+	listeners: {
+		resize: function(){this.onResize();}
+	},
+
 	
 	initComponent: function(){
 		this.callParent(arguments);
@@ -79,16 +83,16 @@ Ext.define('NextThought.view.widgets.Breadcrumb', {
 			first = true,
 			leafs,
 			branches,
-			navInfo;
+			navInfo,
+			t;
 
 		while(level && level.parentNode){
-			
+			t = selectedBranch ? selectedBranch.getAttribute("label"): 'Select Chapter'
 			leafs = [];
 			branches = {
 				cls: first? 'x-breadcrumb-end': '',
-				text: selectedBranch ?
-						selectedBranch.getAttribute("label"): 'Select Chapter'
-
+				text: t,
+				originalText: t
 			};
 
 			
@@ -109,6 +113,7 @@ Ext.define('NextThought.view.widgets.Breadcrumb', {
 		
 		container.add({
 			text: toc.getAttribute('title'),
+			originalText: toc.getAttribute('title'),
 			menu: this.getLibraryMenu(location.ContentNTIID)
 		});
 		
@@ -125,6 +130,8 @@ Ext.define('NextThought.view.widgets.Breadcrumb', {
 					{iconCls: 'breadcrumb-next', disabled: !navInfo.hasNext, ntiid: navInfo.nextRef}
 			);
 		}
+
+		this.onResize();
 	},
 	
 
@@ -138,6 +145,7 @@ Ext.define('NextThought.view.widgets.Breadcrumb', {
 				b	= [],
 				m	= {
 					text: o.get('title'),
+					originalText: o.get('title'),
 					checked: o.get('NTIID')===id,
 					group: 'library',
 					ntiid: o.get('ntiid')
@@ -210,6 +218,27 @@ Ext.define('NextThought.view.widgets.Breadcrumb', {
 		}
 
 		return leaf;
-	}
+	},
 
+	onResize: function(){
+		var toolbarWidth = this.getSize().width,
+			btns = this.query('button[text]'),
+			noResizeBtns = this.query('button:not([text])'),
+			maxButtonLength,
+			nonResizableButtonsWidth = 0,
+			charWidth = 6;
+
+		Ext.each(noResizeBtns, function(b){
+			nonResizableButtonsWidth += b.getSize().width;
+		}, this);
+
+		maxButtonLength = (toolbarWidth - nonResizableButtonsWidth) / btns.length;
+
+		Ext.each(btns, function(b){
+				if (b.originalText) {
+					b.setText(Ext.String.ellipsis(b.originalText, maxButtonLength/charWidth, false));
+				}
+			}
+			, this);
+	}
 });
