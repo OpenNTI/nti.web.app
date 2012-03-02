@@ -258,7 +258,7 @@ Ext.define('NextThought.view.content.Reader', {
 
 	externalUriRegex : /^([a-z][a-z0-9\+\-\.]*):/i,
 
-//TODO: rewrite this to use NTIID
+
 	onClick: function(e, el, o){
 		e.stopPropagation();
 		e.preventDefault();
