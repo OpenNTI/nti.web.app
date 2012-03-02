@@ -22,6 +22,10 @@ Ext.define( 'NextThought.view.widgets.annotations.QuizResults', {
 		Ext.ComponentManager.register(this);
 	},
 
+	getItemId: function(){return this.id; },
+	isXType: function(){return false;},
+	getEl: function(){return this.anchorNode;},
+
 	cleanup: function(){
 		Ext.ComponentManager.unregister(this);
 		return this.callParent(arguments);
@@ -45,8 +49,7 @@ Ext.define( 'NextThought.view.widgets.annotations.QuizResults', {
 	},
 
 
-	showResults: function() {
-		console.log('show results');
+	showResults: function(cmp, e) {
 		QuizUtils.showQuizResult(this.record);
 	},
 

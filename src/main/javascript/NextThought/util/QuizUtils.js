@@ -160,13 +160,18 @@ function NTIHintNavigation(ntiid) {
 	LocationProvider.setLocation(ntiid);
 }
 
-function NTISubmitAnswers(){
+function NTISubmitAnswers(e){
+	e = e || event;
+	Ext.EventManager.stopPropagation(e);
+	Ext.EventManager.preventDefault(e);
+
 	if (!/submit/i.test(Ext.get('submit').dom.innerHTML)){
 		QuizUtils.resetQuiz();
-		return;
+		return false;
 	}
 
 	QuizUtils.submitAnswers();
+	return false;
 }
 
 

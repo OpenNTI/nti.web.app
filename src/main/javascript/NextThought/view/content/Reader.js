@@ -256,9 +256,12 @@ Ext.define('NextThought.view.content.Reader', {
 			r = el.href,
 			hash = r.split('#'),
 			newLocation = hash[0],
-			target = hash[1];
+			target = hash[1],
+			whref = window.location.href.split('#')[0];
 
-
+		if (whref+'#' === r) {
+			return;
+		}
 
 		//pop out links that point to external resources
 		if(!/tag:nextthought\.com/i.test(r) && m.externalUriRegex.test(r)){
