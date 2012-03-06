@@ -3,6 +3,7 @@ Ext.define('NextThought.util.RectUtils',{
 
 
 	merge: function(rects,lineHeight){
+
 		rects = this.trimOutliers(rects);
 		var r=[], ri,
 			x,xx,y,yy, w,h,

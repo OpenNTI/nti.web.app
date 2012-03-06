@@ -1,10 +1,11 @@
 Ext.define( 'NextThought.view.widgets.annotations.Note', {
 	extend: 'NextThought.view.widgets.annotations.Annotation',
+	alias: 'widget.note-annotation',
 	requires:[
 		'NextThought.view.widgets.NotePanel'
 	],
 
-	constructor: function(record, container, component){
+	constructor: function(record, component){
 		Ext.apply(this, {
 			anchorNode : null,
 			noteContainer: null,
@@ -12,18 +13,16 @@ Ext.define( 'NextThought.view.widgets.annotations.Note', {
 			renderPriority: 0
 		});
 
-		this.callParent([record, container, component,
-			record.isModifiable()?
-					'assets/images/charms/note-white.png' : null]);
+		this.callParent([record, component, record.isModifiable()? 'assets/images/charms/note-white.png' : null]);
 
 		var me = this,
-			a = Ext.query('a[name=' + record.get('anchorPoint') + ']')[0],
+			a = this.query('a[name=' + record.get('anchorPoint') + ']')[0],
 			c,
-			root = Ext.get('NTIContent'),
+			root = Ext.get(this.doc.getElementById('NTIContent')),
 			inBox;
 
 		if(!a) {
-			a = Ext.get(Ext.query('#nticontent a[name]')[0]);
+			a = AnnotationUtils.getAnchors(this.doc).first();
 		}
 		else {
 			a = Ext.get( AnnotationUtils.getNextAnchorInDOM(a) );
@@ -160,12 +159,17 @@ Ext.define( 'NextThought.view.widgets.annotations.Note', {
 				a = me.anchorNode,
 				i = me.originalPadding,
 				box = !a.is('a'),
-				w = (box? a : Ext.get(this.ownerCmp.getEl().query('#nticontent .page-contents')[0])).getWidth(),
+				w = (box? a : Ext.get(this.query('#nticontent .page-contents')[0])).getWidth(),
 				h = 0,
 				extra= 0,
 				adjust=0,
 				nx= a.next(),
-				pr= a.prev();
+				pr= a.prev(),
+
+				ox = me.offsets.left,
+				oy = me.offsets.top,
+
+				x,y;
 
 			c.setWidth(w);
 
@@ -178,16 +182,19 @@ Ext.define( 'NextThought.view.widgets.annotations.Note', {
 
 			a.setStyle('padding-bottom',(i+h+extra)+'px');
 
+			x = ox+a.getLeft();
 			if(box){
-				c.moveTo( a.getLeft(), a.getBottom()-h);
+				y = a.getBottom()-h;
 			}
 			else {
-				c.moveTo( p.getLeft()+p.getPadding('l'), a.getTop()+(adjust?0:extra));
+				y = a.getY()+( adjust? 0: extra);
 			}
+
+			c.setStyle({top: y+'px', left: x+'px'});
 
 			//move the nib to the top-aligning corner of the note container
 			if (me.img){
-				Ext.get(me.img).moveTo(p.getLeft(), c.down('.x-nti-note img').getTop());
+				Ext.get(me.img).moveTo(ox+p.getLeft(), c.down('.x-nti-note img').getTop());
 			}
 
 			//always move to the end

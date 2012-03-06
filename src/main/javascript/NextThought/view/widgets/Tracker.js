@@ -16,9 +16,9 @@ Ext.define('NextThought.view.widgets.Tracker', {
 			compile:true
 		}),
 
-	constructor: function(cmp,container, body){
+	constructor: function(cmp, body){
 		Ext.apply(this,{
-			parent: container,
+			parent: cmp.el.dom,
 			ownerCmp: cmp,
 			body: body,
 			width: 45,
@@ -35,7 +35,7 @@ Ext.define('NextThought.view.widgets.Tracker', {
 			canvas: (function(){
 				var c = document.createElement('canvas');
 				Ext.fly(c).set({ width: 45, height: 0, style: 'position: absolute; top: 0px; left: 0px;'});
-				container.appendChild(c);
+				cmp.el.dom.appendChild(c);
 				return c;
 			}())
 		});
@@ -44,7 +44,7 @@ Ext.define('NextThought.view.widgets.Tracker', {
 			h = this.hoverHandler;
 
 		c.on({ scope: this, click: this.clickHandler, mousemove: h });
-		Ext.fly(body).on({scope:this, scroll:h, mousemove:h, mouseover:h, mouseout:h});
+		cmp.body.on({scope:this, scroll:h, mousemove:h, mouseover:h, mouseout:h});
 
 		//add tooltip
 		this.toolTip = Ext.create('Ext.tip.ToolTip', {
@@ -67,7 +67,7 @@ Ext.define('NextThought.view.widgets.Tracker', {
 		this.toolTip.destroy();
 		delete this.toolTip;
 
-		var b = Ext.get(this.body),
+		var b = this.ownerCmp.body,
 			c = Ext.get(this.canvas),
 			h = this.hoverHandler;
 
@@ -108,7 +108,7 @@ Ext.define('NextThought.view.widgets.Tracker', {
 	
 	scrollToPercent: function(toYPercent){
 		
-		var m = Ext.get(this.body).getHeight(),
+		var m = Ext.fly(this.body).getHeight(),
 			//t = this.body.scrollTop,
 			h = this.body.scrollHeight-m;
 		
@@ -205,8 +205,8 @@ Ext.define('NextThought.view.widgets.Tracker', {
 			return null;
 		}
 
-		x = e.getX? e.getX()-this.offsetX : -1;
-		y = e.getY? e.getY()-this.offsetY : -1;
+		x = e.getX && !!e.getX() ? e.getX()-this.offsetX : -1;
+		y = e.getY && !!e.getY() ? e.getY()-this.offsetY : -1;
 
 		for( i = this.regions.length-1; i>=0; i--){
 			r = this.regions[i].rect;
@@ -302,10 +302,11 @@ Ext.define('NextThought.view.widgets.Tracker', {
 	
 	
 	calculateCurrentPosition: function(){
-		var m = Ext.get(this.body).getHeight(),
-			t = this.body.scrollTop,
-			h = this.body.scrollHeight-m,
+		var b = this.ownerCmp.body.dom,
+			t = b.scrollTop,
+			h = b.scrollHeight,
 			v = t/h;
+
 		return isNaN(v)? 0 : v>1 ? 1 : v;
 	},
 	

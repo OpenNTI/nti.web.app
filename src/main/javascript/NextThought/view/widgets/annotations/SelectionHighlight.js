@@ -2,7 +2,7 @@ Ext.define('NextThought.view.widgets.annotations.SelectionHighlight', {
 	extend: 'NextThought.view.widgets.Widget',
 	alias: 'annotations.SelectionHighlight',
 
-	constructor: function(selections, container, component){
+	constructor: function(selections, component){
 		this.callParent();
 		Ext.apply(this, {
 			selections: selections || [],
@@ -11,9 +11,9 @@ Ext.define('NextThought.view.widgets.annotations.SelectionHighlight', {
 
 		var me = this;
 
-		me.container = container;
+//		me.container = container;
 		me.color = 'FFFF00';
-		me.canvas =  me.createElement('canvas',container,'search-highlight-object unselectable','position: absolute; pointer-events: none;');
+//		me.canvas =  me.createElement('canvas',container,'search-highlight-object unselectable','position: absolute; pointer-events: none;');
 		me.render = Ext.Function.createBuffered(me.render,100,me,[true]);
 		component.on('resize', me.onResize, me);
 		me.onResize();

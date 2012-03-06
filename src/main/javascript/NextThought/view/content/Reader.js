@@ -11,18 +11,37 @@ Ext.define('NextThought.view.content.Reader', {
 	},
 	cls: 'x-reader-pane',
 
-	//props for when it's in a classroom
-	tabConfig:{title: 'Content',tooltip: 'Live Content'},
-
+	layout: 'anchor',
 	tracker: null,
 
 	initComponent: function() {
+		var me = this;
 		this.loadedResources = {};
 		this.addEvents('loaded','finished-restore');
 		this.enableBubble('loaded','finished-restore');
 		this.callParent(arguments);
 
-		this.add({cls:'x-panel-reset', margin: this.belongsTo ? 0 : '0 0 0 50px', enableSelect: true});
+		this.add({
+			xtype: 'box',
+			anchor: '100%',
+			cls:'x-panel-reset',
+			margin: '0 0 0 50px',
+			autoEl: {
+				tag: 'iframe',
+				name: guidGenerator()+'-content',
+				src: Ext.SSL_SECURE_URL,
+				frameBorder: 0,
+				marginWidth: 0,
+				marginHeight: 0,
+				transparent: true,
+				scrolling: 'no',
+				style: 'overflow: hidden'
+			}
+		});
+
+
+		this.on('resize', this.syncFrame, this);
+
 		this.initAnnotations();
 
 		this.meta = {};
@@ -33,8 +52,82 @@ Ext.define('NextThought.view.content.Reader', {
 	},
 
 
-	getDocumentEl: function(){
-		return this.items.get(0).getEl().down('.x-panel-body');
+	getAnnotationOffsets: function(){
+		return {
+			top: this.getIframe().getTop(),
+			left: this.getIframe().getMargin('l')
+		};
+	},
+
+	onContextMenuHandler: function(){
+		console.log('mouse up, menu show?', arguments);
+		return this.mixins.annotations.onContextMenuHandler.apply(this,arguments);
+	},
+
+	syncFrame: function(){
+		var doc = this.getDocumentElement(),
+			b = Ext.get(doc.body || doc.documentElement),
+			i = this.getIframe();
+		i.setHeight(this.el.getHeight()-100);
+		i.setHeight(b.getHeight()+100);
+	},
+
+	getIframe: function(){
+		return this.items.first().el;
+	},
+
+
+	setContent: function(html) {
+
+
+		var me = this,
+			doc = this.getDocumentElement(),
+			base = location.pathname,
+			b = Ext.get(doc.body || doc.documentElement),
+			main = this.mainCss || false,
+			task;
+
+		if(main === false) {
+			doc.firstChild.setAttribute('class','x-panel-reset');
+			doc.body.setAttribute('class','x-panel-body');
+			main = Globals.loadStyleSheet({
+				url: base+document.getElementById('main-stylesheet').getAttribute('href'),
+				document: doc });
+			this.mainCss = main;
+		}
+
+		b.update(html);
+		console.log(doc.readyState);
+
+		task = { // must defer to wait for browser to be ready
+			run: function() {
+				var doc = me.getDocumentElement();
+				if (doc.body || doc.readyState === 'complete') {
+					Ext.TaskManager.stop(task);
+					me.syncFrame();
+
+					doc.addEventListener('mouseup',function(e){ me.onContextMenuHandler(Ext.EventObject.setEvent(e||event)); });
+					doc.addEventListener('mousedown',function(){
+						console.log('mouse down?',arguments);
+						Ext.menu.Manager.hideAll(); });
+				}
+			},
+			interval : 10,
+			duration:10000,
+			scope: me
+		};
+		Ext.TaskManager.start(task);
+
+	},
+
+	getDocumentElement: function(){
+		var iframe = this.getIframe().dom,
+			win = (Ext.isIE ? iframe.contentWindow : window.frames[iframe.name]),
+			doc = (!Ext.isIE && iframe.contentDocument) || win.document;
+
+		doc.ownerWindow = win;
+
+		return doc;
 	},
 
 
@@ -79,7 +172,7 @@ Ext.define('NextThought.view.content.Reader', {
 
 
 	scrollTo: function(top, animate) {
-		Ext.fly('readerPanel-body').scrollTo('top', top, animate!==false);
+		this.body.scrollTo('top', top, animate!==false);
 	},
 
 
@@ -97,10 +190,8 @@ Ext.define('NextThought.view.content.Reader', {
 			console.log('clearing old tracker...');
 		}
 
-		var d = this.el.dom;
-		this.tracker = Ext.widget('tracker', this, d, d.firstChild);
+		this.tracker = Ext.widget('tracker', this, this.getIframe().dom);
 	},
-
 
 	loadPage: function(ntiid, callback) {
 		var me = this,
@@ -135,7 +226,7 @@ Ext.define('NextThought.view.content.Reader', {
 
 	setSplash: function(){
 		this.scrollTo(0, false);
-		this.items.get(0).update('Nothing loaded');
+		this.setContent('Nothing loaded');
 	},
 
 
@@ -150,7 +241,7 @@ Ext.define('NextThought.view.content.Reader', {
 			me.fireEvent('loaded', containerId);
 		}
 
-		me.items.get(0).update('<div id="NTIContent">'+c+'</div>');
+		me.setContent('<div id="NTIContent">'+c+'</div>');
 		me.containerId = null;
 
 		me.scrollTo(0, false);
@@ -192,7 +283,10 @@ Ext.define('NextThought.view.content.Reader', {
 				o = basePath + k.exec(m[i])[1];
 				c[o] = {};
 				if(!rc[o]) {
-					rc[o] = c[o] = Globals.loadStyleSheet(o);
+					rc[o] = c[o] = Globals.loadStyleSheet({
+						url:o,
+						document: me.getDocumentElement()
+					});
 				}
 			}
 			//remove resources not used anymore...
@@ -205,8 +299,9 @@ Ext.define('NextThought.view.content.Reader', {
 			return c;
 		}
 
-		var basePath = path(request.responseLocation),
-			rc = this.loadedResources,
+		var me = this,
+			basePath = path(request.responseLocation),
+			rc = me.loadedResources,
 
 			c = request.responseText,
 			rf= c.toLowerCase(),

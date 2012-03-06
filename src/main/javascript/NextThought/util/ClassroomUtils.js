@@ -1,4 +1,4 @@
-Ext.define('NextThought.util.Classroom',{
+Ext.define('NextThought.util.ClassroomUtils',{
 	alternateClassName: 'ClassroomUtils',
 
 	singleton: true,

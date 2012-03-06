@@ -4,7 +4,7 @@ Ext.define('NextThought.controller.Chat', {
 		'NextThought.util.ParseUtils',
 		'NextThought.proxy.Socket',
 		'NextThought.view.modes.Classroom',
-		'NextThought.util.Classroom',
+		'NextThought.util.ClassroomUtils',
 		'NextThought.cache.IdCache',
 		'NextThought.cache.IdCache',
 		'NextThought.util.AnnotationUtils'

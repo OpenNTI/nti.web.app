@@ -106,7 +106,6 @@ Ext.define('NextThought.ux.Spotlight',{
 			//reset the context
 			c.width = w; //faster than fill
 
-
 			ctx.strokeStyle = "rgba(0,0,0,0.8)";
 			ctx.fillStyle = "rgba(120,125,120,0.1)";
 

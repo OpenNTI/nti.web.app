@@ -43,13 +43,6 @@ Ext.define( 'NextThought.view.modes.Reader', {
 		this.reader.restore(state);
 	},
 
-	restoreReader: function() {
-		if (!this.center.items.getCount()) {
-			this.center.add(this.reader);
-			this.reader.bufferedDelayedRelayout();
-		}
-	},
-
 	getMainComponent: function(){
 		return this.reader;
 	}
