@@ -87,7 +87,7 @@ Ext.define('NextThought.view.widgets.Breadcrumb', {
 			t;
 
 		while(level && level.parentNode){
-			t = selectedBranch ? selectedBranch.getAttribute("label"): 'Select Chapter'
+			t = selectedBranch ? selectedBranch.getAttribute("label"): 'Select Chapter';
 			leafs = [];
 			branches = {
 				cls: first? 'x-breadcrumb-end': '',
