@@ -93,6 +93,17 @@ Ext.define('NextThought.view.content.Reader', {
 			main = Globals.loadStyleSheet({
 				url: base+document.getElementById('main-stylesheet').getAttribute('href'),
 				document: doc });
+
+				Globals.loadScript({
+					url: $AppConfig.server.host+'/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML',
+					document: doc
+				}, function(){
+					Globals.loadScript({
+						url: base+'assets/misc/mathjaxconfig.js',
+						document: doc
+					});
+				});
+
 			this.mainCss = main;
 		}
 

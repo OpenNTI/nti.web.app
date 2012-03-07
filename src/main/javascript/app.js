@@ -1,7 +1,10 @@
 if(window.console && console.groupCollapsed){
 	console.groupCollapsed("Initialization");
 }
-//Ext.Loader.setConfig('disableCaching',false);
+//disable script cache-busting _dc=... get string args if we're using the manifest
+Ext.Loader.setConfig('disableCaching',Boolean(window.applicationCache && applicationCache.status));
+console.log("Application is Caching: ",Ext.Loader.getConfig('disableCaching'));
+
 Ext.application({
 	name: 'NextThought',
 	appFolder: 'assets/js/NextThought',
@@ -60,10 +63,6 @@ Ext.application({
 		}
 
 		Globals.loadScript($AppConfig.server.host+'/socket.io/static/socket.io.js');
-		Globals.loadScript($AppConfig.server.host+'/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML', function(){
-			Globals.loadScript('./assets/misc/mathjaxconfig.js');
-		});
-
 
 		window.app = this;
 		var g = this.getController('Google'),
