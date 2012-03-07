@@ -22,6 +22,7 @@ Ext.define('NextThought.view.widgets.Tracker', {
 			ownerCmp: cmp,
 			body: body,
 			width: 45,
+			viewHeight: 0,
 //			base: "",
 			numberOfDots: 50,
 			height: 0,
@@ -39,7 +40,7 @@ Ext.define('NextThought.view.widgets.Tracker', {
 				return c;
 			}())
 		});
-		
+
 		var c = Ext.get(this.canvas),
 			h = this.hoverHandler;
 
@@ -89,6 +90,7 @@ Ext.define('NextThought.view.widgets.Tracker', {
 	
 	onResize : function(e){
 		this.offsetX = undefined;//reset
+		this.viewHeight = this.ownerCmp.getHeight();
 		this.hoverHandler(e);
 	},
 
@@ -107,12 +109,8 @@ Ext.define('NextThought.view.widgets.Tracker', {
 	
 	
 	scrollToPercent: function(toYPercent){
-		
-		var m = Ext.fly(this.body).getHeight(),
-			//t = this.body.scrollTop,
-			h = this.body.scrollHeight-m;
-		
-		this.body.scrollTop = (h*toYPercent);
+		var h = this.ownerCmp.body.dom.scrollHeight - this.viewHeight;
+		this.ownerCmp.scrollTo(h*toYPercent);
 	},
 	
 	
@@ -304,9 +302,8 @@ Ext.define('NextThought.view.widgets.Tracker', {
 	calculateCurrentPosition: function(){
 		var b = this.ownerCmp.body.dom,
 			t = b.scrollTop,
-			h = b.scrollHeight,
+			h = b.scrollHeight - this.viewHeight,
 			v = t/h;
-
 		return isNaN(v)? 0 : v>1 ? 1 : v;
 	},
 	

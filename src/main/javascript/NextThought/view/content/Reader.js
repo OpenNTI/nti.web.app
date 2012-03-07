@@ -40,12 +40,23 @@ Ext.define('NextThought.view.content.Reader', {
 			},
 			listeners: {
 				scope: this,
-				afterRender: this.initFrame
+				afterRender: function(){
+					var task = { // must defer to wait for browser to be ready
+						run: function() {
+							var doc = me.getDocumentElement();
+							if (doc.body || doc.readyState === 'complete') {
+								Ext.TaskManager.stop(task);
+								me.initContentFrame();
+							}
+						},
+						interval : 10,
+						duration:10000,
+						scope: me
+					};
+					Ext.TaskManager.start(task);
+				}
 			}
 		});
-
-
-		this.on('resize', this.syncFrame, this);
 
 		this.initAnnotations();
 
@@ -58,10 +69,11 @@ Ext.define('NextThought.view.content.Reader', {
 
 
 
-	initFrame: function(){
-		var task, me = this,
+	initContentFrame: function(){
+		var me = this,
 			base = location.pathname,
-			host = $AppConfig.server.host;
+			host = $AppConfig.server.host,
+			doc = me.getDocumentElement();
 
 		function on(dom,event,fn){
 			if(dom.addEventListener) {
@@ -72,66 +84,50 @@ Ext.define('NextThought.view.content.Reader', {
 			}
 		}
 
-		task = { // must defer to wait for browser to be ready
-			run: function() {
-				var doc = me.getDocumentElement();
-				if (doc.body || doc.readyState === 'complete') {
-					Ext.TaskManager.stop(task);
+		doc.firstChild.setAttribute('class','x-panel-reset');
+		doc.body.setAttribute('class','x-panel-body');
 
-					doc.firstChild.setAttribute('class','x-panel-reset');
-					doc.body.setAttribute('class','x-panel-body');
+		Globals.loadStyleSheet({
+			url: base+document.getElementById('main-stylesheet').getAttribute('href'),
+			document: doc });
 
-					Globals.loadStyleSheet({
-						url: base+document.getElementById('main-stylesheet').getAttribute('href'),
-						document: doc });
+		Globals.loadScript(
+			{ url: host+'/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML', document: doc },
+			function(){
+				Globals.loadScript({ url: base+'assets/misc/mathjaxconfig.js', document: doc });
+			}
+		);
 
-					Globals.loadScript({ url: host+'/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML', document: doc },
-							function(){
-								Globals.loadScript({ url: base+'assets/misc/mathjaxconfig.js', document: doc });
-								me.syncFrame();
-							}
-					);
-
-					on(doc,'contextmenu',function(e){
-						e = Ext.EventObject.setEvent(e||event);
-						e.stopPropagation();
-						e.preventDefault();
-						return false;
-					});
-
-					on(doc,'click',function(e){
-						var evt = Ext.EventObject.setEvent(e||event), target = evt.getTarget();
-						while(target && target.tagName !== 'A'){ target = target.parentNode; }
-						if(target){ me.onClick(evt, target); }
-					});
-
-					on(doc,'mouseup',function(e){
-						var fakeEvent = Ext.EventObject.setEvent(e||event),
-							t = me.body.getScroll().top;
-						me.onContextMenuHandler({
-							getTarget: function(){ return fakeEvent.getTarget(); },
-							preventDefault: function(){ fakeEvent.preventDefault(); },
-							stopPropagation: function(){ fakeEvent.stopPropagation(); },
-							getXY: function(){
-								var xy = fakeEvent.getXY();
-								xy[1] -= t;
-								return xy;
-							}
-						});
-					});
-
-					on(doc,'mousedown',function(){ Ext.menu.Manager.hideAll(); });
-
-
-					ContentAPIRegistry.on('update',me.applyContentAPI,me);
-					me.applyContentAPI();
+		on(doc,'mousedown',function(){ Ext.menu.Manager.hideAll(); });
+		on(doc,'contextmenu',function(e){
+			e = Ext.EventObject.setEvent(e||event);
+			e.stopPropagation();
+			e.preventDefault();
+			return false;
+		});
+		on(doc,'click',function(e){
+			var evt = Ext.EventObject.setEvent(e||event), target = evt.getTarget();
+			while(target && target.tagName !== 'A'){ target = target.parentNode; }
+			if(target){ me.onClick(evt, target); }
+		});
+		on(doc,'mouseup',function(e){
+			var fakeEvent = Ext.EventObject.setEvent(e||event),
+				t = me.body.getScroll().top;
+			me.onContextMenuHandler({
+				getTarget: function(){ return fakeEvent.getTarget(); },
+				preventDefault: function(){ fakeEvent.preventDefault(); },
+				stopPropagation: function(){ fakeEvent.stopPropagation(); },
+				getXY: function(){
+					var xy = fakeEvent.getXY();
+					xy[1] -= t;
+					return xy;
 				}
-			},
-			interval : 10,
-			duration:10000,
-			scope: me
-		};
-		Ext.TaskManager.start(task);
+			});
+		});
+
+		ContentAPIRegistry.on('update',me.applyContentAPI,me);
+		me.applyContentAPI();
+		setInterval( function(){ me.checkFrame(); }, 250 );
 	},
 
 
@@ -157,12 +153,26 @@ Ext.define('NextThought.view.content.Reader', {
 		return this.mixins.annotations.onContextMenuHandler.apply(this,arguments);
 	},
 
+
+	checkFrame: function(){
+		var doc = this.getDocumentElement(),
+			body = doc.body, h;
+		if (body) {
+			h = Ext.get(body).getHeight();
+			if(h !== this.lastHeight){
+				this.lastHeight = h;
+				this.syncFrame();
+			}
+		}
+	},
+
 	syncFrame: function(){
 		var doc = this.getDocumentElement(),
 			b = Ext.get(doc.body || doc.documentElement),
 			i = this.getIframe();
 		i.setHeight(this.el.getHeight()-100);
 		i.setHeight(b.getHeight()+100);
+		this.doLayout();
 	},
 
 	getIframe: function(){
@@ -173,16 +183,21 @@ Ext.define('NextThought.view.content.Reader', {
 	/** @private */
 	setContent: function(html) {
 		var doc = this.getDocumentElement();
+		this.getIframe().setHeight(0);
 		Ext.get(doc.body || doc.documentElement).update(html);
-		this.syncFrame();
 	},
 
 	getDocumentElement: function(){
-		var iframe = this.getIframe().dom,
-			win = (Ext.isIE ? iframe.contentWindow : window.frames[iframe.name]),
-			doc = (!Ext.isIE && iframe.contentDocument) || win.document;
+		var iframe, win, doc = this.contentDocumentElement;
 
-		doc.ownerWindow = win;
+		if(!doc){
+			iframe = this.getIframe().dom;
+			win = (Ext.isIE ? iframe.contentWindow : window.frames[iframe.name]);
+			doc = (!Ext.isIE && iframe.contentDocument) || win.document;
+			doc.ownerWindow = win;
+
+			this.contentDocumentElement = doc;
+		}
 
 		return doc;
 	},
