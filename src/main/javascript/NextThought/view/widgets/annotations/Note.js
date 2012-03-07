@@ -73,11 +73,6 @@ Ext.define( 'NextThought.view.widgets.annotations.Note', {
 	},
 
 
-	getLineHeight: function(){
-		return NaN;
-	},
-
-
 	getRects: function(){
 		return [ this.noteCmp.getEl().getBox() ];
 	},

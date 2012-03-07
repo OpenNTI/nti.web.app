@@ -31,9 +31,15 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 	getEl: function(){return Ext.get(this.img);},
 
 
+	getBlockWidth: function() {
+		var s = this.selection,
+			n = s.commonAncestorContainer;
+		return Ext.fly(n).getWidth();
+	},
+
 	getLineHeight: function(){
 		var s = this.selection,
-			n = s.commonAncestorContainer.parentNode,
+			n = s.commonAncestorContainer,
 			m = new Ext.util.TextMetrics(n);
 		return m.getHeight("TEST");
 	},
@@ -186,7 +192,7 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 			p = this.parent ? this.parent : (this.parent = Ext.get(this.div.parentNode)),
 			c = this.canvas,
 			r = this.selection.getBoundingClientRect(),
-			s = RectUtils.merge(this.selection.getClientRects(),this.getLineHeight()),
+			s = RectUtils.merge(this.selection.getClientRects(),this.getLineHeight(),this.getBlockWidth()),
 			l = s.length,
 			i = l-1,
 			color = this.getColor(),

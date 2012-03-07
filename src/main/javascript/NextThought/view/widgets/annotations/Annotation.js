@@ -61,6 +61,15 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 	},
 
 
+	getLineHeight: function(){
+		return NaN;
+	},
+
+	getBlockWidth: function(){
+		return NaN;
+	},
+
+
 	attachRecord: function(record){
 		var old = this.record;
 		this.record = record;
