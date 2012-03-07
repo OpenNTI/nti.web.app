@@ -1,6 +1,7 @@
 Ext.define('NextThought.util.QuizUtils', {
 	singleton: true,
 	requires: [
+		'NextThought.ContentAPIRegistry',
 		'NextThought.util.ParseUtils',
 		'NextThought.providers.Location'
 	],
@@ -10,10 +11,10 @@ Ext.define('NextThought.util.QuizUtils', {
 	 *
 	 * @param iterationCallback Optional - a function that takes three arguments: function(id, inputEl, containerEl)
 	 */
-	getProblemElementMap: function(iterationCallback,scope){
+	getProblemElementMap: function(doc,iterationCallback,scope){
 		var problems = {};
 		 Ext.each(
-			Ext.query('.worksheet-problems input'),
+			Ext.query('.worksheet-problems input',doc),
 			function(v){
 				var id = v.getAttribute('id'),
 					el = Ext.get(v);
@@ -30,7 +31,7 @@ Ext.define('NextThought.util.QuizUtils', {
 		return problems;
 	},
 
-	submitAnswers: function(){
+	submitAnswers: function(doc){
 		var me = this,
 			ntiid = LocationProvider.currentNTIID,
 			problems,
@@ -48,14 +49,14 @@ Ext.define('NextThought.util.QuizUtils', {
 			quizResult.set('Items', items);
 		}
 
-		me.getProblemElementMap(populateQuestionResponses,me);
+		me.getProblemElementMap(doc,populateQuestionResponses,me);
 
 		vp.mask('Grading...');
 
 		quizResult.save({
 			scope: this,
 			success:function(gradedResults,operation){
-				me.showQuizResult(gradedResults, problems);
+				me.showQuizResult(doc,gradedResults, problems);
 				vp.unmask();
 			},
 			failure:function(){
@@ -67,12 +68,12 @@ Ext.define('NextThought.util.QuizUtils', {
 	},
 
 
-	showQuizResult: function(quizResult, problemsElementMap) {
+	showQuizResult: function(doc,quizResult, problemsElementMap) {
 		var mathCls = 'mathjax tex2jax_process ',
 			ntiid = LocationProvider.currentNTIID,
-			problems = problemsElementMap || this.getProblemElementMap();
+			problems = problemsElementMap || this.getProblemElementMap(doc);
 
-		this.resetQuiz();
+		this.resetQuiz(doc);
 
 		if(ntiid !== quizResult.get('ContainerId')){
 			Ext.Error.raise('Result does not match the page!');
@@ -103,22 +104,16 @@ Ext.define('NextThought.util.QuizUtils', {
 				});
 			});
 
-		try {
-			MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
-		}
-		catch(e){
-			console.warn('No MathJax? ',e);
-		}
+		doc.ownerWindow.postMessage('MathJax.reRender()',location.href);
 
+		Ext.get(doc.getElementById('submit')).update('Reset');
 		this.scrollUp();
-
-		Ext.get('submit').update('Reset');
 	},
 
-	resetQuiz: function() {
-		Ext.get('submit').update('Submit');
+	resetQuiz: function(doc) {
+		Ext.get(doc.getElementById('submit')).update('Submit');
 
-		this.getProblemElementMap(
+		this.getProblemElementMap(doc,
 			function(id,v,c){
 				v.dom.value='';
 				var r = c.next('.result'),
@@ -145,37 +140,33 @@ Ext.define('NextThought.util.QuizUtils', {
 		var p = Ext.getCmp('readerPanel');
 		p.relayout();
 		p.scrollTo(0);
-	}
-
-}, function(){
-	window.QuizUtils = this;
-});
+	},
 
 
-/*********************************************************
- * Global functions called by content in the Reader panel
- */
+	submitAnswersHandler: function(e){
+		e = Ext.EventObject.setEvent(e||event);
+		e.stopPropagation();
+		e.preventDefault();
 
-function NTIHintNavigation(ntiid) {
-	LocationProvider.setLocation(ntiid);
-}
+		var doc = e.getTarget().ownerDocument;
 
-function NTISubmitAnswers(e){
-	e = e || event;
-	Ext.EventManager.stopPropagation(e);
-	Ext.EventManager.preventDefault(e);
+		if (!/submit/i.test(e.getTarget().innerHTML)){
+			this.resetQuiz(doc);
+			return false;
+		}
 
-	if (!/submit/i.test(Ext.get('submit').dom.innerHTML)){
-		QuizUtils.resetQuiz();
+		this.submitAnswers(doc);
 		return false;
 	}
 
-	QuizUtils.submitAnswers();
-	return false;
-}
 
-
-function togglehint(event) {
-	Ext.get(event.target.nextSibling).toggleCls("hidden");
-	return false;
-}
+}, function(){
+	window.QuizUtils = this;
+	ContentAPIRegistry.register('NTIHintNavigation',LocationProvider.setLocation,LocationProvider);
+	ContentAPIRegistry.register('NTISubmitAnswers',this.submitAnswersHandler,this);
+	ContentAPIRegistry.register('togglehint',function(e) {
+		e = Ext.EventObject.setEvent(e||event);
+		Ext.get(e.getTarget().nextSibling).toggleCls("hidden");
+		return false;
+	});
+});

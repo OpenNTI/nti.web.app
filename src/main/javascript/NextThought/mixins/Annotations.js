@@ -2,12 +2,15 @@ Ext.define('NextThought.mixins.Annotations', {
 	requires: [
 		'NextThought.model.Highlight',
 		'NextThought.model.Note',
+		'NextThought.model.TranscriptSummary',
+		'NextThought.model.QuizResult',
 		'NextThought.util.AnnotationUtils',
 		'NextThought.util.QuizUtils',
 		'NextThought.view.widgets.annotations.SelectionHighlight',
 		'NextThought.view.widgets.annotations.Highlight',
 		'NextThought.view.widgets.annotations.Note',
 		'NextThought.view.widgets.annotations.Transcript',
+		'NextThought.view.widgets.annotations.QuizResults',
 		'NextThought.cache.IdCache',
 		'NextThought.providers.Contributors'
 	],
@@ -135,7 +138,6 @@ Ext.define('NextThought.mixins.Annotations', {
 			this);
 
 		offset = this.el.getXY();
-
 		xy[0] += offset[0];
 		xy[1] += offset[1];
 
@@ -204,7 +206,7 @@ Ext.define('NextThought.mixins.Annotations', {
 
 	createQuizResultWidget: function(record) {
 		if (record.parent) { return; }
-		this.annotations[record.getId()] = Ext.create( 'quiz-results-annotation', record, this);
+		this.annotations[record.getId()] = Ext.widget( 'quiz-result-annotation', record, this);
 		return true;
 	},
 

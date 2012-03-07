@@ -34,13 +34,20 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 	getBlockWidth: function() {
 		var s = this.selection,
 			n = s.commonAncestorContainer;
+		if(n.nodeType===n.TEXT_NODE){
+			n = n.parentNode;
+		}
 		return Ext.fly(n).getWidth();
 	},
 
 	getLineHeight: function(){
-		var s = this.selection,
-			n = s.commonAncestorContainer,
-			m = new Ext.util.TextMetrics(n);
+		var s = this.selection, m,
+			n = s.commonAncestorContainer;
+
+		if(n.nodeType===n.TEXT_NODE){
+			n = n.parentNode;
+		}
+		m = new Ext.util.TextMetrics(n);
 		return m.getHeight("TEST");
 	},
 

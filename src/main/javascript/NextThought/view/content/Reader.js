@@ -2,6 +2,7 @@ Ext.define('NextThought.view.content.Reader', {
 	extend:'NextThought.view.content.Panel',
 	alias: 'widget.reader-panel',
 	requires: [
+		'NextThought.ContentAPIRegistry',
 		'NextThought.providers.Location',
 		'NextThought.util.QuizUtils',
 		'NextThought.view.widgets.Tracker'
@@ -36,6 +37,10 @@ Ext.define('NextThought.view.content.Reader', {
 				transparent: true,
 				scrolling: 'no',
 				style: 'overflow: hidden'
+			},
+			listeners: {
+				scope: this,
+				afterRender: this.initFrame
 			}
 		});
 
@@ -52,6 +57,95 @@ Ext.define('NextThought.view.content.Reader', {
 	},
 
 
+
+	initFrame: function(){
+		var task, me = this,
+			base = location.pathname,
+			host = $AppConfig.server.host;
+
+		function on(dom,event,fn){
+			if(dom.addEventListener) {
+				dom.addEventListener(event,fn,false);
+			}
+			else if(dom.attachEvent) {
+				dom.attachEvent(event,fn);
+			}
+		}
+
+		task = { // must defer to wait for browser to be ready
+			run: function() {
+				var doc = me.getDocumentElement();
+				if (doc.body || doc.readyState === 'complete') {
+					Ext.TaskManager.stop(task);
+
+					doc.firstChild.setAttribute('class','x-panel-reset');
+					doc.body.setAttribute('class','x-panel-body');
+
+					Globals.loadStyleSheet({
+						url: base+document.getElementById('main-stylesheet').getAttribute('href'),
+						document: doc });
+
+					Globals.loadScript({ url: host+'/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML', document: doc },
+							function(){
+								Globals.loadScript({ url: base+'assets/misc/mathjaxconfig.js', document: doc });
+								me.syncFrame();
+							}
+					);
+
+					on(doc,'contextmenu',function(e){
+						e = Ext.EventObject.setEvent(e||event);
+						e.stopPropagation();
+						e.preventDefault();
+						return false;
+					});
+
+					on(doc,'click',function(e){
+						var evt = Ext.EventObject.setEvent(e||event), target = evt.getTarget();
+						while(target && target.tagName !== 'A'){ target = target.parentNode; }
+						if(target){ me.onClick(evt, target); }
+					});
+
+					on(doc,'mouseup',function(e){
+						var fakeEvent = Ext.EventObject.setEvent(e||event),
+							t = me.body.getScroll().top;
+						me.onContextMenuHandler({
+							getTarget: function(){ return fakeEvent.getTarget(); },
+							preventDefault: function(){ fakeEvent.preventDefault(); },
+							stopPropagation: function(){ fakeEvent.stopPropagation(); },
+							getXY: function(){
+								var xy = fakeEvent.getXY();
+								xy[1] -= t;
+								return xy;
+							}
+						});
+					});
+
+					on(doc,'mousedown',function(){ Ext.menu.Manager.hideAll(); });
+
+
+					ContentAPIRegistry.on('update',me.applyContentAPI,me);
+					me.applyContentAPI();
+				}
+			},
+			interval : 10,
+			duration:10000,
+			scope: me
+		};
+		Ext.TaskManager.start(task);
+	},
+
+
+	applyContentAPI: function(){
+		var doc = this.getDocumentElement(),
+			win = doc.ownerWindow;
+
+		Ext.Object.each(ContentAPIRegistry.getAPI(),function(f,n){
+			win[f] = n;
+		});
+
+	},
+
+
 	getAnnotationOffsets: function(){
 		return {
 			top: this.getIframe().getTop(),
@@ -60,7 +154,6 @@ Ext.define('NextThought.view.content.Reader', {
 	},
 
 	onContextMenuHandler: function(){
-		console.log('mouse up, menu show?', arguments);
 		return this.mixins.annotations.onContextMenuHandler.apply(this,arguments);
 	},
 
@@ -77,58 +170,11 @@ Ext.define('NextThought.view.content.Reader', {
 	},
 
 
+	/** @private */
 	setContent: function(html) {
-
-
-		var me = this,
-			doc = this.getDocumentElement(),
-			base = location.pathname,
-			b = Ext.get(doc.body || doc.documentElement),
-			main = this.mainCss || false,
-			task;
-
-		if(main === false) {
-			doc.firstChild.setAttribute('class','x-panel-reset');
-			doc.body.setAttribute('class','x-panel-body');
-			main = Globals.loadStyleSheet({
-				url: base+document.getElementById('main-stylesheet').getAttribute('href'),
-				document: doc });
-
-				Globals.loadScript({
-					url: $AppConfig.server.host+'/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML',
-					document: doc
-				}, function(){
-					Globals.loadScript({
-						url: base+'assets/misc/mathjaxconfig.js',
-						document: doc
-					});
-				});
-
-			this.mainCss = main;
-		}
-
-		b.update(html);
-		console.log(doc.readyState);
-
-		task = { // must defer to wait for browser to be ready
-			run: function() {
-				var doc = me.getDocumentElement();
-				if (doc.body || doc.readyState === 'complete') {
-					Ext.TaskManager.stop(task);
-					me.syncFrame();
-
-					doc.addEventListener('mouseup',function(e){ me.onContextMenuHandler(Ext.EventObject.setEvent(e||event)); });
-					doc.addEventListener('mousedown',function(){
-						console.log('mouse down?',arguments);
-						Ext.menu.Manager.hideAll(); });
-				}
-			},
-			interval : 10,
-			duration:10000,
-			scope: me
-		};
-		Ext.TaskManager.start(task);
-
+		var doc = this.getDocumentElement();
+		Ext.get(doc.body || doc.documentElement).update(html);
+		this.syncFrame();
 	},
 
 	getDocumentElement: function(){
@@ -243,6 +289,7 @@ Ext.define('NextThought.view.content.Reader', {
 
 	setReaderContent: function(resp, callback){
 		var me = this,
+			doc = me.getDocumentElement(),
 			c = me.parseHTML(resp),
 			containerId;
 
@@ -254,13 +301,7 @@ Ext.define('NextThought.view.content.Reader', {
 
 		me.setContent('<div id="NTIContent">'+c+'</div>');
 		me.containerId = null;
-
 		me.scrollTo(0, false);
-
-		me.el.select('#NTIContent .navigation').remove();
-		me.el.select('#NTIContent .breadcrumbs').remove();
-		me.el.select('#NTIContent a[href]').on(
-			'click', me.onClick, me, { scope: me, stopEvent: true });
 
 		containerId = me.getContainerId();
 
@@ -365,7 +406,7 @@ Ext.define('NextThought.view.content.Reader', {
 	externalUriRegex : /^([a-z][a-z0-9\+\-\.]*):/i,
 
 
-	onClick: function(e, el, o){
+	onClick: function(e, el){
 		e.stopPropagation();
 		e.preventDefault();
 		var m = this,

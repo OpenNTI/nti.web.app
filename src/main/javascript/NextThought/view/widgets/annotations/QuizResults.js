@@ -18,7 +18,7 @@ Ext.define( 'NextThought.view.widgets.annotations.QuizResults', {
 		this.callParent([record, component,
 			'assets/images/charms/quiz-results.png']);
 
-		this.anchorNode = Ext.get(Ext.query('#nticontent')[0]);
+		this.anchorNode = Ext.get(this.query('#nticontent')[0]);
 
 		Ext.ComponentManager.register(this);
 	},
@@ -51,7 +51,7 @@ Ext.define( 'NextThought.view.widgets.annotations.QuizResults', {
 
 
 	showResults: function(cmp, e) {
-		QuizUtils.showQuizResult(this.record);
+		QuizUtils.showQuizResult(this.doc,this.record);
 	},
 
 	getTitle: function(){

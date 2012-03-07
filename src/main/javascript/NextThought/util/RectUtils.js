@@ -25,7 +25,6 @@ Ext.define('NextThought.util.RectUtils',{
 			yy = ri.bottom || (y + ri.width);
 
 			b = Math.floor((y/lh2));
-			console.log('pseudo line:',b, y, lh2);
 
 			if(!bins[b]){
 				r.push( { left:x, top:y, right:xx, bottom:yy, width:w, height:h } );

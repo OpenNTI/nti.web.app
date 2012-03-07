@@ -3,6 +3,16 @@
  **/
 if(window['MathJax']){
 
+	window.addEventListener("message", function(e){
+		if(e.data === 'MathJax.reRender()') {
+			MathJax.reRender();
+		}
+	}, false);
+
+	MathJax.reRender = function(){
+		MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+	};
+
 //config MathJax
     MathJax.Hub.Config({
         showProcessingMessages : true,
