@@ -3,6 +3,9 @@ Ext.define('NextThought.util.RectUtils',{
 
 
 	merge: function(rects,lineHeight){
+		if(!lineHeight){
+			Ext.Error.raise("Invalid Line Height");
+		}
 
 		rects = this.trimOutliers(rects);
 		var r=[], ri,

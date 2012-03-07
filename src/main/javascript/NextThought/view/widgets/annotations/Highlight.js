@@ -4,7 +4,8 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 	requires:[
 		'NextThought.cache.IdCache',
 		'NextThought.util.Color',
-		'NextThought.util.RectUtils'
+		'NextThought.util.RectUtils',
+		'Ext.util.TextMetrics'
 	],
 
 
@@ -32,8 +33,9 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 
 	getLineHeight: function(){
 		var s = this.selection,
-			n = s.commonAncestorContainer.parentNode;
-		return parseInt(Ext.fly(n).getStyle('line-height'),10);
+			n = s.commonAncestorContainer.parentNode,
+			m = new Ext.util.TextMetrics(n);
+		return m.getHeight("TEST");
 	},
 
 
