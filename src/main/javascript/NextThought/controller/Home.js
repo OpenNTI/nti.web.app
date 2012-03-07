@@ -34,7 +34,8 @@ Ext.define('NextThought.controller.Home', {
 			},
 			'home-mode-container library-view':{
 				'itemdblclick':function(a, rec){
-					LocationProvider.setLocation(rec);
+					Ext.getCmp('reader').activate();
+					LocationProvider.setLocation(rec.get('NTIID'));
 				},
 				'selectionchange': function(a, sel){}
 			}
