@@ -41,17 +41,14 @@ Ext.define('NextThought.view.content.Reader', {
 			listeners: {
 				scope: this,
 				afterRender: function(){
-					var task = { // must defer to wait for browser to be ready
-						run: function() {
-							var doc = me.getDocumentElement();
-							if (doc.body || doc.readyState === 'complete') {
-								Ext.TaskManager.stop(task);
-								me.initContentFrame();
-							}
-						},
-						interval : 10,
-						duration:10000,
-						scope: me
+					// must defer to wait for browser to be ready
+					var task = { interval : 10 };
+					task.run = function() {
+						var doc = me.getDocumentElement();
+						if (doc.body || doc.readyState === 'complete') {
+							Ext.TaskManager.stop(task);
+							me.initContentFrame();
+						}
 					};
 					Ext.TaskManager.start(task);
 				}
