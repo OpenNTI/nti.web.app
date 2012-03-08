@@ -2,7 +2,7 @@ Ext.define('NextThought.controller.Classroom', {
 	extend: 'Ext.app.Controller',
 
 	requires: [
-		'NextThought.util.Classroom'
+		'NextThought.util.ClassroomUtils'
 	],
 
 	views: [
@@ -516,18 +516,10 @@ Ext.define('NextThought.controller.Classroom', {
 
 
 	classroomActivated: function() {
-		var c = this.getClassroomContainer(),
-			ld = this.getLiveDisplay();
+		var c = this.getClassroomContainer();
 
-		//make sure activate makes it to live display if the classroom is up, if its not up, show chooser
 		if(!c.down('classroom-content')) {
 			c.showClassChooser();
-		}
-		else {
-			if (ld.content.items.first() !== ld.getReaderPanel()) {
-				ld.content.add(ld.getReaderPanel());
-				ld.getReaderPanel().restore(this.getController('State').getState().classroom);
-			}
 		}
 	},
 

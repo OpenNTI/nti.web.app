@@ -4,7 +4,6 @@ Ext.define('NextThought.view.widgets.classroom.LiveDisplay', {
 	requires: [
 		'NextThought.view.content.Reader'
 	],
-
 	cls: 'nti-live-display',
 	tabPosition: 'bottom',
 	border: false,
@@ -19,17 +18,25 @@ Ext.define('NextThought.view.widgets.classroom.LiveDisplay', {
 	{
 		this.callParent(arguments);
 
-		this.content = this.add({
-			layout: 'fit',
-			tabConfig:{title: 'Content', content:true, tooltip: 'Live Content'},
-			dockedItems: {dock:'bottom', xtype: 'breadcrumbbar', skipHistory: true}
-		});
+//		this.content = this.add({
+//			xtype: 'shim',
+//			layout: 'fit',
+//			tabConfig:{
+//				title: 'Content',
+//				content: true,
+//				tooltip: 'Live Content'
+//			},
+//			//dockedItems: {dock:'bottom', xtype: 'breadcrumbbar', skipHistory: true},
+//			item:{
+//				xtype: 'reader-panel'
+//			}
+//		});
 
 		this.whiteboard = this.add({tabConfig:{title:'Whiteboard', tooltip: 'Live Whiteboard'}});
 	},
 
 	getReaderPanel: function() {
-		return Ext.getCmp('readerPanel');
+		throw 'Fix me';
 	},
 
 
@@ -53,14 +60,5 @@ Ext.define('NextThought.view.widgets.classroom.LiveDisplay', {
 		}
 
 		this.setActiveTab(c);
-	},
-
-
-	destroy: function() {
-		//remove reader so it is not destroyed
-		this.content.remove(this.getReaderPanel(), false);
-
-		//do this last
-		this.callParent(arguments);
 	}
 });

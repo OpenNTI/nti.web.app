@@ -2,14 +2,17 @@ Ext.define('NextThought.util.RectUtils',{
 	singleton: true,
 
 
-	merge: function(rects,lineHeight){
-		rects = this.trimOutliers(rects);
+	merge: function(rects,lineHeight,clientWidth){
+		if(!lineHeight){
+			Ext.Error.raise("Invalid Line Height");
+		}
+
+		rects = this.trimCrazies(rects, lineHeight, clientWidth);
 		var r=[], ri,
 			x,xx,y,yy, w,h,
 			b, bins={},
-			i = rects.length-1;
-
-//		console.log(rects);
+			i = rects.length-1,
+			lh2 = lineHeight*2;
 
 		for(; i>=0; i--){
 			ri = rects[i];
@@ -21,7 +24,7 @@ Ext.define('NextThought.util.RectUtils',{
 			xx = ri.right || (x + ri.height);
 			yy = ri.bottom || (y + ri.width);
 
-			b = Math.floor((y/lineHeight));
+			b = Math.floor((y/lh2));
 
 			if(!bins[b]){
 				r.push( { left:x, top:y, right:xx, bottom:yy, width:w, height:h } );
@@ -44,49 +47,26 @@ Ext.define('NextThought.util.RectUtils',{
 	},
 
 
-	trimOutliers: function(rects){
-		function gh(r){ return r.height||(r.bottom-r.top); }
-		function sortFn(a,b){ return gh(a)>gh(b) ? 1 : -1; }
-		function binSortFn(a,b){ return h[a] > h[b] ? -1 : 1; }
-		function flip(a,i){ a[i]=Ext.apply({},a[i]); }
+	trimCrazies: function(rects, lineHeight, clientWidth){
+		function flip(a,i){ return Ext.apply({},a[i]); }
 
-		//iteration :( at least its short
-		var rs = Array.prototype.slice.call(rects).sort(sortFn),
-			i = rs.length-1,
-			h = {}, r, s, bins;
+		var rs = Array.prototype.slice.call(rects),
+				i = rs.length-1, out = [], o, h, w,
+				lh2 = lineHeight*2;
 
-		//there is only one item...
-		if(!i){ return rects; }
+		if(!i) { return rects; }
 
-		//iteration :( ...ugh
-		for(; i>=0; i--){
-			s = gh(rs[i]);
-			h[s] = h[s] === undefined? 1 : (h[s]+1);
-			flip(rs,i);
-		}
-
-		//iteration :(
-		bins = Object.keys(h).sort(binSortFn);
-
-		//all the same height
-		if(bins.length===1){ return rects; }
-
-		//there is probably a more accurate way to trim the outliers, the first few should be the dominant heights.
-		bins.splice(Math.ceil(bins.length*0.3));
-
-		for(i=bins.length-1; i>=0; i--){ h[bins[i]]=true; }
-
-		for(i=rs.length-1; i>=0; i--){
-			try{
-				if(h[gh(rs[i])]!==true){
-					rs.splice(-1);
-				}
+		for(;i>=0;i--){
+			o = flip(rs,i);
+			h = o.height;
+			w = o.width;
+			if( h > 0 && h < lh2 && w < clientWidth) {
+				out.push(o);
 			}
-			catch(e){}
 		}
-		return rs;
-	}
 
+		return out;
+	}
 
 },function(){
 	window.RectUtils = this;

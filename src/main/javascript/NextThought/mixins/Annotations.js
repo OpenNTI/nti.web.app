@@ -2,12 +2,15 @@ Ext.define('NextThought.mixins.Annotations', {
 	requires: [
 		'NextThought.model.Highlight',
 		'NextThought.model.Note',
+		'NextThought.model.TranscriptSummary',
+		'NextThought.model.QuizResult',
 		'NextThought.util.AnnotationUtils',
 		'NextThought.util.QuizUtils',
 		'NextThought.view.widgets.annotations.SelectionHighlight',
 		'NextThought.view.widgets.annotations.Highlight',
 		'NextThought.view.widgets.annotations.Note',
 		'NextThought.view.widgets.annotations.Transcript',
+		'NextThought.view.widgets.annotations.QuizResults',
 		'NextThought.cache.IdCache',
 		'NextThought.providers.Contributors'
 	],
@@ -25,17 +28,7 @@ Ext.define('NextThought.mixins.Annotations', {
 			searchAnnotations: null
 		});
 
-		if(!this.getDocumentEl) {
-			console.error('Class must implement getDocumentEl');
-		}
-
 		this.addEvents('share-with','create-note');
-
-		this.on('afterrender',
-			function(){
-				this.el.on('mouseup', this.onContextMenuHandler, this);
-			},
-			this);
 
 		this.widgetBuilder = {
 			'Highlight' : this.createHighlightWidget,
@@ -119,12 +112,13 @@ Ext.define('NextThought.mixins.Annotations', {
 
 	addHighlight: function(range, xy){
 		if(!range) {
+			console.warn('bad range');
 			return;
 		}
 
 		var highlight = AnnotationUtils.selectionToHighlight(range),
 			menu,
-			w;
+			w,offset;
 
 		if(!highlight) {
 			return;
@@ -142,13 +136,17 @@ Ext.define('NextThought.mixins.Annotations', {
 				}
 			},
 			this);
-		menu.showAt(xy);
 
+		offset = this.el.getXY();
+		xy[0] += offset[0];
+		xy[1] += offset[1];
+
+		menu.showAt(xy);
 	},
 
 
 	createHighlightWidget: function(record, r){
-		var range = r || AnnotationUtils.buildRangeFromRecord(record),
+		var range = r || AnnotationUtils.buildRangeFromRecord(record, this.getDocumentElement()),
 			oid = record.getId(),
 			w;
 
@@ -162,15 +160,7 @@ Ext.define('NextThought.mixins.Annotations', {
 		}
 
 
-		w = Ext.create(
-				'NextThought.view.widgets.annotations.Highlight',
-				range, record,
-				this.items.get(0).el.dom.firstChild,
-				this);
-
-		if( this.bufferedDelayedRelayout ) {
-			this.bufferedDelayedRelayout();
-		}
+		w = Ext.widget( 'highlight-annotation', range, record, this);
 
 		if (!oid) {
 			oid = 'Highlight-' + new Date().getTime();
@@ -198,16 +188,8 @@ Ext.define('NextThought.mixins.Annotations', {
 				return true;
 			}
 
-			this.annotations[record.getId()] =
-				Ext.create(
-					'NextThought.view.widgets.annotations.Note',
-					record,
-					this.items.get(0).el.dom.firstChild,
-					this);
+			this.annotations[record.getId()] = Ext.widget( 'note-annotation', record, this);
 
-			if( this.bufferedDelayedRelayout ) {
-				this.bufferedDelayedRelayout();
-			}
 			return true;
 		}
 		catch(e){ console.error('Error notes:',e, e.toString(), e.stack); }
@@ -217,24 +199,14 @@ Ext.define('NextThought.mixins.Annotations', {
 
 
 	createTranscriptSummaryWidget: function(record) {
-		if (record.parent) {return;}
-		this.annotations[record.getId()] =
-			Ext.create(
-				'NextThought.view.widgets.annotations.Transcript',
-				record,
-				this.items.get(0).el.dom.firstChild,
-				this);
+		if (record.parent) { return; }
+		this.annotations[record.getId()] = Ext.widget( 'transcript-annotation', record, this);
 		return true;
 	},
 
 	createQuizResultWidget: function(record) {
-		if (record.parent) {return;}
-		this.annotations[record.getId()] =
-			Ext.create(
-				'NextThought.view.widgets.annotations.QuizResults',
-				record,
-				this.items.get(0).el.dom.firstChild,
-				this);
+		if (record.parent) { return; }
+		this.annotations[record.getId()] = Ext.widget( 'quiz-result-annotation', record, this);
 		return true;
 	},
 
@@ -478,6 +450,7 @@ Ext.define('NextThought.mixins.Annotations', {
 				target = e.getTarget();
 
 			if(target && /input/i.test(target.tagName)){
+				console.log('short-circuit');
 				return;
 			}
 
@@ -497,25 +470,22 @@ Ext.define('NextThought.mixins.Annotations', {
 
 
 	getSelection: function() {
-		var //e = this.getDocumentEl(),
+		var doc = this.getDocumentElement(),
+			win = doc.ownerWindow,
 			range, selection;
 
-		if (window.getSelection) {	// all browsers, except IE before version 9
-			selection = window.getSelection();
+		if (win.getSelection) {	// all browsers, except IE before version 9
+			selection = win.getSelection();
 			if (selection.rangeCount > 0) {
 				range = selection.getRangeAt(0);
 
-				//TODO: This ONLY works in Chrome beta, for Safari and Crome regular, contains returns false.  Commenting this out for time being.
-				//if(!e.contains(range.startContainer) || !e.contains(range.endContainer))
-				//  console.log('could not find start container', range.startContainer, ' or end container', range.endContainer, 'in', e);
-				//return null;
-
 				return range;
 			}
+			console.warn('skipping getSelection() no ranges', selection);
 		}
 		else {
-			if (document.selection) {	// Internet Explorer 8 and below
-				range = document.selection.createRange();
+			if (doc.selection) {	// Internet Explorer 8 and below
+				range = doc.selection.createRange();
 				return range.getBookmark();
 			}
 		}
@@ -525,13 +495,15 @@ Ext.define('NextThought.mixins.Annotations', {
 
 
 	clearSelection: function(){
+		var doc = this.getDocumentElement(),
+			win = doc.ownerWindow;
 		try {
-			if (window.getSelection) {
-				window.getSelection().removeAllRanges();
+			if (win.getSelection) {
+				win.getSelection().removeAllRanges();
 			}
 
-			if(document.selection) {
-				document.selection.clear();
+			if(doc.selection) {
+				doc.selection.clear();
 			}
 		}
 		catch(e){ console.warn(e.stack); }

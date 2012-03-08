@@ -1,16 +1,18 @@
 Ext.define('NextThought.view.widgets.annotations.Highlight', {
 	extend:'NextThought.view.widgets.annotations.Annotation',
+	alias: 'widget.highlight-annotation',
 	requires:[
 		'NextThought.cache.IdCache',
 		'NextThought.util.Color',
-		'NextThought.util.RectUtils'
+		'NextThought.util.RectUtils',
+		'Ext.util.TextMetrics'
 	],
 
 
-	constructor: function(selection, record, container, component){
+	constructor: function(selection, record, component){
 		var me = this;
 
-		me.callParent([record, container, component,'assets/images/charms/highlight-white.png']);
+		me.callParent([record, component,'assets/images/charms/highlight-white.png']);
 
 		Ext.apply(me,{
 			id: IdCache.getComponentId(record.getId()),
@@ -29,15 +31,51 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 	getEl: function(){return Ext.get(this.img);},
 
 
-	getLineHeight: function(){
+	getBlockWidth: function() {
 		var s = this.selection,
-			n = s.commonAncestorContainer.parentNode;
-		return parseInt(Ext.fly(n).getStyle('line-height'),10);
+			n = s.commonAncestorContainer;
+		if(n.nodeType===n.TEXT_NODE){
+			n = n.parentNode;
+		}
+		return Ext.fly(n).getWidth();
+	},
+
+	getLineHeight: function(){
+		var s = this.selection, m,
+			n = s.commonAncestorContainer;
+
+		if(n.nodeType===n.TEXT_NODE){
+			n = n.parentNode;
+		}
+		m = new Ext.util.TextMetrics(n);
+		return m.getHeight("TEST");
+	},
+
+
+	adjustCoordinates: function(rect,offsetToTrim){
+		var x = offsetToTrim[0]!==undefined ? offsetToTrim[0] : offsetToTrim.left,
+			y = offsetToTrim[1]!==undefined ? offsetToTrim[1] : offsetToTrim.top;
+
+		return {
+			top: rect.top+y,
+			left: rect.left+x,
+			width: rect.width,
+			height: rect.height,
+			right: rect.left+x+rect.width,
+			bottom: rect.top+y+rect.height
+		};
 	},
 
 
 	getRects: function(){
-		return this.selection.getClientRects();
+		var rects = [],
+			list = this.selection.getClientRects(),
+			i=list.length-1,
+			xy = Ext.fly(this.canvas).getXY();
+
+		for(;i>=0; i--){ rects.push( this.adjustCoordinates(list[i],xy) ); }
+
+		return rects.reverse();
 	},
 
 
@@ -59,7 +97,7 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 			c = this.createElement(
 				'canvas',
 				cont.dom,
-				'highlight-object','position: absolute; pointer-events: none;');
+				'highlight-object','position: absolute; pointer-events: none');
 			this.ownerCmp.on('resize', this.canvasResize, this);
 			this.canvasResize();
 		}
@@ -69,7 +107,7 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 
 	canvasResize: function(){
 		var c = Ext.get(this.canvas || Ext.query('#canvas-highlight-container canvas')[0]),
-			cont = Ext.get(this.container),
+			cont = Ext.get(this.ownerCmp.getIframe()),
 			pos = cont.getXY(),
 			size = cont.getSize();
 		c.moveTo(pos[0], pos[1]);
@@ -125,21 +163,6 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 	},
 
 
-	adjustCoordinates: function(rect,offsetToTrim){
-		var x = offsetToTrim[0] ? offsetToTrim[0] : offsetToTrim.left,
-			y = offsetToTrim[1] ? offsetToTrim[1] : offsetToTrim.top;
-
-//		rect.top -= y; rect.left -= x;
-		return {
-			top: rect.top-y,
-			left: rect.left-x,
-			width: rect.width,
-			height: rect.height,
-			right: rect.left-x+rect.width,
-			bottom: rect.top-y+rect.height
-		};
-	},
-
 
 	drawRect: function(rect, fill){
 		return function(ctx){
@@ -158,7 +181,6 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 	render: function(){
 
 //		this.clearCanvas();
-
 		if(!this.selection){
 			this.cleanup();
 			return;
@@ -177,24 +199,27 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 			p = this.parent ? this.parent : (this.parent = Ext.get(this.div.parentNode)),
 			c = this.canvas,
 			r = this.selection.getBoundingClientRect(),
-			s = RectUtils.merge(this.getRects(),this.getLineHeight()),
+			s = RectUtils.merge(this.selection.getClientRects(),this.getLineHeight(),this.getBlockWidth()),
 			l = s.length,
 			i = l-1,
-			cXY = Ext.get(c).getXY(),
 			color = this.getColor(),
 			rgba = Color.toRGBA(color),
-			me = this;
+			me = this,
+			ox = me.offsets.left;
 
 		if(!r){
 			return;
 		}
 
 		//move nib
-		nib.moveTo(p.getLeft(), r.top);
+		nib.setStyle({
+			left: ox+'px',
+			top: r.top +'px'
+		});
 
 		//stage draw
 		for(; i>=0; i--){
-			this.self.enqueue(this.drawRect(this.adjustCoordinates(s[i],cXY), rgba));
+			this.self.enqueue(this.drawRect(s[i], rgba));
 		}
 		this.self.enqueue(function(){ delete me.rendering; });
 		this.self.renderCanvas();//buffered

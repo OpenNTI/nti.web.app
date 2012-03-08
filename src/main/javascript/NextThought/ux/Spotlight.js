@@ -97,15 +97,18 @@ Ext.define('NextThought.ux.Spotlight',{
 				c = this.canvas,
 				w = c.width,
 				h = this.cmp.getLineHeight(),
+				cw= this.cmp.getBlockWidth(),
 				ctx = c.getContext("2d"),
 				rects = Array.prototype.slice.call(this.cmp.getRects()),
 				rect, x,y;
 
-			rects = RectUtils.merge(rects, h);
+			if(rects.length>1 || (!isNaN(h) && !isNaN(cw))){
+				console.debug('hit');
+				rects = RectUtils.merge(rects, h,cw);
+			}
 
 			//reset the context
 			c.width = w; //faster than fill
-
 
 			ctx.strokeStyle = "rgba(0,0,0,0.8)";
 			ctx.fillStyle = "rgba(120,125,120,0.1)";

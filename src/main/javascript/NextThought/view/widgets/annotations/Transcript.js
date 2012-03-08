@@ -1,10 +1,11 @@
 Ext.define( 'NextThought.view.widgets.annotations.Transcript', {
 	extend: 'NextThought.view.widgets.annotations.Annotation',
+	alias: 'widget.transcript-annotation',
 	requires:[
 		'NextThought.cache.IdCache'
 	],
 
-	constructor: function(record, container, component){
+	constructor: function(record, component){
 		Ext.apply(this, {
 			id: IdCache.getComponentId(record.getId()),
 			anchorNode : null,
@@ -14,7 +15,7 @@ Ext.define( 'NextThought.view.widgets.annotations.Transcript', {
 		});
 
 
-		this.callParent([record, container, component,
+		this.callParent([record, component,
 			'assets/images/charms/chat-transcript.png']);
 
 		this.anchorNode = Ext.get(Ext.query('#nticontent a[name]')[0]);
@@ -84,12 +85,11 @@ Ext.define( 'NextThought.view.widgets.annotations.Transcript', {
 	render: function(){
 		try{
 			var me= this,
-				p = Ext.get(me.container),
-				a = me.anchorNode;
+				a = me.anchorNode,
+				ox = me.offsets.left;
 
-			//move the nib to the top-aligning corner of the note container
 			if (me.img){
-				Ext.get(me.img).moveTo(p.getLeft(), a.getTop());
+				Ext.get(me.img).setStyle({left: ox+'px', top: a.getTop()+'px'});
 			}
 		}
 		catch(e){

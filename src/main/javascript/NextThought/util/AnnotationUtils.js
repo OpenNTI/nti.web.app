@@ -115,7 +115,7 @@ Ext.define('NextThought.util.AnnotationUtils',{
 		if (element.id && !/ext\-|a\d+|math/i.test(element.id)) {
 			return 'id("'+element.id+'")';
 		}
-		if (element===document.body) {
+		if (element.tagName==='BODY') {
 			throw 'too far!';
 		}
 
@@ -208,10 +208,10 @@ Ext.define('NextThought.util.AnnotationUtils',{
 
 		anchorNode = Ext.fly(node).is('A[name]')? node: this.getPreviousAnchorInDOM(node);
 		if(!anchorNode){
-			anchorNode = this.getAnchors().peek();
+			anchorNode = this.getAnchors(node.ownerDocument).peek();
 		}
 
-		pageOffsets = Ext.get(anchorNode).getOffsetsTo(Ext.get('NTIContent'));
+		pageOffsets = Ext.fly(anchorNode).getOffsetsTo(anchorNode.ownerDocument.getElementById('NTIContent'));
 
 		note.set('anchorPoint', anchorNode.getAttribute('name'));
 		note.set('top', pageOffsets[0]);
@@ -223,7 +223,7 @@ Ext.define('NextThought.util.AnnotationUtils',{
 //tested
 	getNextAnchorInDOM: function(node) {
 		var anchor = null, pos;
-		Ext.each(this.getAnchors(), function(a){
+		Ext.each(this.getAnchors(node.ownerDocument), function(a){
 			pos = a.compareDocumentPosition(node);
 			//node precedes the anchor
 			if (pos & a.DOCUMENT_POSITION_PRECEDING) {
@@ -237,7 +237,7 @@ Ext.define('NextThought.util.AnnotationUtils',{
 //tested
 	getPreviousAnchorInDOM: function(node) {
 		var anchor = null, pos;
-		Ext.each(this.getAnchors().reverse(), function(a){
+		Ext.each(this.getAnchors(node.ownerDocument).reverse(), function(a){
 			pos = a.compareDocumentPosition(node);
 			//node precedes the anchor
 			if (pos & a.DOCUMENT_POSITION_FOLLOWING) {
@@ -257,9 +257,9 @@ Ext.define('NextThought.util.AnnotationUtils',{
 	},
 
 //tested
-	getNodeFromXPath: function(xpath) {
+	getNodeFromXPath: function(xpath, root) {
 		try {
-			return document.evaluate(xpath, document, null, XPathResult.ANY_TYPE, null).iterateNext();
+			return document.evaluate(xpath, root||document, null, XPathResult.ANY_TYPE, null).iterateNext();
 		}
 		catch(e) { //getNodeFromXPath
 			console.error('xpath:', xpath, 'error:', e, e.stack);
@@ -268,10 +268,10 @@ Ext.define('NextThought.util.AnnotationUtils',{
 	},
 
 
-	buildRangeFromRecord: function(r) {
-		var endElement = this.getNodeFromXPath(r.get('endXpath')),
-			startElement = this.getNodeFromXPath(r.get('startXpath')),
-			range = document.createRange();
+	buildRangeFromRecord: function(r, root) {
+		var endElement = this.getNodeFromXPath(r.get('endXpath'),root),
+			startElement = this.getNodeFromXPath(r.get('startXpath'), root),
+			range = (root||document).createRange();
 
 		try {
 			range.setEnd(endElement ? endElement : startElement, r.get('endOffset'));
@@ -283,15 +283,15 @@ Ext.define('NextThought.util.AnnotationUtils',{
 		catch(e) { console.warn('bad range', r, e, e.toString()); }
 
 		//if we make it this far, there's something wrong with the range, we'll try to reconstruct from anchors
-		return this.rangeFromAnchors(r);
+		return this.rangeFromAnchors(r,root);
 	},
 
 
-	getAnchors: function(){
+	getAnchors: function(root){
 		var me = this;
 		clearTimeout(me.anchorCacheLife);
 		if(!me.anchorCache) {
-			me.anchorCache = Ext.Array.unique(Ext.query('#NTIContent A[name]'));
+			me.anchorCache = Ext.Array.unique(Ext.query('#NTIContent A[name]',root));
 		}
 		me.anchorCacheLife = setTimeout(function(){ delete me.anchorCache; },500);
 		return me.anchorCache.slice();
@@ -299,13 +299,13 @@ Ext.define('NextThought.util.AnnotationUtils',{
 
 
 //tested
-	getAnchor: function(a) {
-		return Ext.query('a[name=' + a +']')[0];
+	getAnchor: function(a,root) {
+		return Ext.query('a[name=' + a +']',root)[0];
 	},
 
 //tested
 	getNextAnchor: function(a) {
-		var all = this.getAnchors(),
+		var all = this.getAnchors(a.ownerDocument),
 			result = null;
 
 		Ext.each(all, function(e, i){
@@ -319,7 +319,7 @@ Ext.define('NextThought.util.AnnotationUtils',{
 	},
 
 
-	rangeFromAnchors: function(r) {
+	rangeFromAnchors: function(r,root) {
 		//TODO: this still isn't qorking quite right, if the start/end anchor are the same but have diff text nodes.
 		var startAnchor = r.get('startAnchor'),
 			endAnchor = r.get('endAnchor'),
@@ -335,8 +335,8 @@ Ext.define('NextThought.util.AnnotationUtils',{
 		}
 
 		//resolve anchors to their actual DOM nodes
-		startAnchor = this.getAnchor(startAnchor);
-		endAnchor = endAnchor ? this.getAnchor(endAnchor) : this.getNextAnchor(startAnchor);
+		startAnchor = this.getAnchor(startAnchor,root);
+		endAnchor = endAnchor ? this.getAnchor(endAnchor,root) : this.getNextAnchor(startAnchor);
 
 		try {
 			tempRange = document.createRange();

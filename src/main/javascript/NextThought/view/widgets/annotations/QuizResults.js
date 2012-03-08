@@ -1,11 +1,12 @@
 Ext.define( 'NextThought.view.widgets.annotations.QuizResults', {
 	extend: 'NextThought.view.widgets.annotations.Annotation',
+	alias: 'widget.quiz-result-annotation',
 	requires:[
 		'NextThought.util.QuizUtils',
 		'NextThought.cache.IdCache'
 	],
 
-	constructor: function(record, container, component){
+	constructor: function(record, component){
 		Ext.apply(this, {
 			id: IdCache.getComponentId(record.getId()),
 			anchorNode : null,
@@ -14,10 +15,10 @@ Ext.define( 'NextThought.view.widgets.annotations.QuizResults', {
 			isSingleAction: true
 		});
 
-		this.callParent([record, container, component,
+		this.callParent([record, component,
 			'assets/images/charms/quiz-results.png']);
 
-		this.anchorNode = Ext.get(Ext.query('#nticontent')[0]);
+		this.anchorNode = Ext.get(this.query('#nticontent')[0]);
 
 		Ext.ComponentManager.register(this);
 	},
@@ -50,7 +51,7 @@ Ext.define( 'NextThought.view.widgets.annotations.QuizResults', {
 
 
 	showResults: function(cmp, e) {
-		QuizUtils.showQuizResult(this.record);
+		QuizUtils.showQuizResult(this.doc,this.record);
 	},
 
 	getTitle: function(){
@@ -61,12 +62,11 @@ Ext.define( 'NextThought.view.widgets.annotations.QuizResults', {
 	render: function(){
 		try{
 			var me= this,
-				p = Ext.get(me.container),
-				a = me.anchorNode;
+				a = me.anchorNode,
+				ox = me.offsets.left;
 
-			//move the nib to the top-aligning corner of the note container
 			if (me.img){
-				Ext.get(me.img).moveTo(p.getLeft(), a.getTop());
+				Ext.get(me.img).setStyle({left: ox+'px', top: a.getTop()+'px'});
 			}
 		}
 		catch(e){

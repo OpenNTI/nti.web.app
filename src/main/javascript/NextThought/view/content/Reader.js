@@ -2,6 +2,7 @@ Ext.define('NextThought.view.content.Reader', {
 	extend:'NextThought.view.content.Panel',
 	alias: 'widget.reader-panel',
 	requires: [
+		'NextThought.ContentAPIRegistry',
 		'NextThought.providers.Location',
 		'NextThought.util.QuizUtils',
 		'NextThought.view.widgets.Tracker'
@@ -11,18 +12,52 @@ Ext.define('NextThought.view.content.Reader', {
 	},
 	cls: 'x-reader-pane',
 
-	//props for when it's in a classroom
-	tabConfig:{title: 'Content',tooltip: 'Live Content'},
-
+	layout: 'anchor',
 	tracker: null,
 
 	initComponent: function() {
+		var me = this;
 		this.loadedResources = {};
 		this.addEvents('loaded','finished-restore');
 		this.enableBubble('loaded','finished-restore');
 		this.callParent(arguments);
 
-		this.add({cls:'x-panel-reset', margin: this.belongsTo ? 0 : '0 0 0 50px', enableSelect: true});
+		this.add({
+			xtype: 'box',
+			anchor: '100%',
+			cls:'x-panel-reset',
+			margin: '0 0 0 50px',
+			autoEl: {
+				tag: 'iframe',
+				name: guidGenerator()+'-content',
+				src: Ext.SSL_SECURE_URL,
+				frameBorder: 0,
+				marginWidth: 0,
+				marginHeight: 0,
+				transparent: true,
+				scrolling: 'no',
+				style: 'overflow: hidden'
+			},
+			listeners: {
+				scope: this,
+				afterRender: function(){
+					var task = { // must defer to wait for browser to be ready
+						run: function() {
+							var doc = me.getDocumentElement();
+							if (doc.body || doc.readyState === 'complete') {
+								Ext.TaskManager.stop(task);
+								me.initContentFrame();
+							}
+						},
+						interval : 10,
+						duration:10000,
+						scope: me
+					};
+					Ext.TaskManager.start(task);
+				}
+			}
+		});
+
 		this.initAnnotations();
 
 		this.meta = {};
@@ -33,8 +68,138 @@ Ext.define('NextThought.view.content.Reader', {
 	},
 
 
-	getDocumentEl: function(){
-		return this.items.get(0).getEl().down('.x-panel-body');
+
+	initContentFrame: function(){
+		var me = this,
+			base = location.pathname,
+			host = $AppConfig.server.host,
+			doc = me.getDocumentElement();
+
+		function on(dom,event,fn){
+			if(dom.addEventListener) {
+				dom.addEventListener(event,fn,false);
+			}
+			else if(dom.attachEvent) {
+				dom.attachEvent(event,fn);
+			}
+		}
+
+		doc.firstChild.setAttribute('class','x-panel-reset');
+		doc.body.setAttribute('class','x-panel-body');
+
+		Globals.loadStyleSheet({
+			url: base+document.getElementById('main-stylesheet').getAttribute('href'),
+			document: doc });
+
+		Globals.loadScript(
+			{ url: host+'/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML', document: doc },
+			function(){
+				Globals.loadScript({ url: base+'assets/misc/mathjaxconfig.js', document: doc });
+			}
+		);
+
+		on(doc,'mousedown',function(){ Ext.menu.Manager.hideAll(); });
+		on(doc,'contextmenu',function(e){
+			e = Ext.EventObject.setEvent(e||event);
+			e.stopPropagation();
+			e.preventDefault();
+			return false;
+		});
+		on(doc,'click',function(e){
+			var evt = Ext.EventObject.setEvent(e||event), target = evt.getTarget();
+			while(target && target.tagName !== 'A'){ target = target.parentNode; }
+			if(target){ me.onClick(evt, target); }
+		});
+		on(doc,'mouseup',function(e){
+			var fakeEvent = Ext.EventObject.setEvent(e||event),
+				t = me.body.getScroll().top;
+			me.onContextMenuHandler({
+				getTarget: function(){ return fakeEvent.getTarget(); },
+				preventDefault: function(){ fakeEvent.preventDefault(); },
+				stopPropagation: function(){ fakeEvent.stopPropagation(); },
+				getXY: function(){
+					var xy = fakeEvent.getXY();
+					xy[1] -= t;
+					return xy;
+				}
+			});
+		});
+
+		ContentAPIRegistry.on('update',me.applyContentAPI,me);
+		me.applyContentAPI();
+		setInterval( function(){ me.checkFrame(); }, 250 );
+	},
+
+
+	applyContentAPI: function(){
+		var doc = this.getDocumentElement(),
+			win = doc.ownerWindow;
+
+		Ext.Object.each(ContentAPIRegistry.getAPI(),function(f,n){
+			win[f] = n;
+		});
+
+	},
+
+
+	getAnnotationOffsets: function(){
+		return {
+			top: this.getIframe().getTop(),
+			left: this.getIframe().getMargin('l')
+		};
+	},
+
+	onContextMenuHandler: function(){
+		return this.mixins.annotations.onContextMenuHandler.apply(this,arguments);
+	},
+
+
+	checkFrame: function(){
+		var doc = this.getDocumentElement(),
+			body = doc.body, h;
+		if (body) {
+			h = Ext.get(body).getHeight();
+			if(h !== this.lastHeight){
+				this.lastHeight = h;
+				this.syncFrame();
+			}
+		}
+	},
+
+	syncFrame: function(){
+		var doc = this.getDocumentElement(),
+			b = Ext.get(doc.body || doc.documentElement),
+			i = this.getIframe();
+		i.setHeight(this.el.getHeight()-100);
+		i.setHeight(b.getHeight()+100);
+		this.doLayout();
+	},
+
+	getIframe: function(){
+		return this.items.first().el;
+	},
+
+
+	/** @private */
+	setContent: function(html) {
+		var doc = this.getDocumentElement();
+		this.getIframe().setHeight(0);
+		Ext.get(doc.body || doc.documentElement).update(html);
+	},
+
+	getDocumentElement: function(){
+		var iframe, win, doc = this.contentDocumentElement;
+
+		if(!doc){
+			iframe = this.getIframe().dom;
+			win = (Ext.isIE ? iframe.contentWindow : window.frames[iframe.name]);
+			doc = (!Ext.isIE && iframe.contentDocument) || win.document;
+			doc.ownerWindow = win;
+
+			this.contentDocumentElement = doc;
+		}
+
+		return doc;
 	},
 
 
@@ -79,7 +244,7 @@ Ext.define('NextThought.view.content.Reader', {
 
 
 	scrollTo: function(top, animate) {
-		Ext.fly('readerPanel-body').scrollTo('top', top, animate!==false);
+		this.body.scrollTo('top', top, animate!==false);
 	},
 
 
@@ -97,10 +262,8 @@ Ext.define('NextThought.view.content.Reader', {
 			console.log('clearing old tracker...');
 		}
 
-		var d = this.el.dom;
-		this.tracker = Ext.widget('tracker', this, d, d.firstChild);
+		this.tracker = Ext.widget('tracker', this, this.getIframe().dom);
 	},
-
 
 	loadPage: function(ntiid, callback) {
 		var me = this,
@@ -135,12 +298,13 @@ Ext.define('NextThought.view.content.Reader', {
 
 	setSplash: function(){
 		this.scrollTo(0, false);
-		this.items.get(0).update('Nothing loaded');
+		this.setContent('Nothing loaded');
 	},
 
 
 	setReaderContent: function(resp, callback){
 		var me = this,
+			doc = me.getDocumentElement(),
 			c = me.parseHTML(resp),
 			containerId;
 
@@ -150,15 +314,9 @@ Ext.define('NextThought.view.content.Reader', {
 			me.fireEvent('loaded', containerId);
 		}
 
-		me.items.get(0).update('<div id="NTIContent">'+c+'</div>');
+		me.setContent('<div id="NTIContent">'+c+'</div>');
 		me.containerId = null;
-
 		me.scrollTo(0, false);
-
-		me.el.select('#NTIContent .navigation').remove();
-		me.el.select('#NTIContent .breadcrumbs').remove();
-		me.el.select('#NTIContent a[href]').on(
-			'click', me.onClick, me, { scope: me, stopEvent: true });
 
 		containerId = me.getContainerId();
 
@@ -192,7 +350,10 @@ Ext.define('NextThought.view.content.Reader', {
 				o = basePath + k.exec(m[i])[1];
 				c[o] = {};
 				if(!rc[o]) {
-					rc[o] = c[o] = Globals.loadStyleSheet(o);
+					rc[o] = c[o] = Globals.loadStyleSheet({
+						url:o,
+						document: me.getDocumentElement()
+					});
 				}
 			}
 			//remove resources not used anymore...
@@ -205,8 +366,9 @@ Ext.define('NextThought.view.content.Reader', {
 			return c;
 		}
 
-		var basePath = path(request.responseLocation),
-			rc = this.loadedResources,
+		var me = this,
+			basePath = path(request.responseLocation),
+			rc = me.loadedResources,
 
 			c = request.responseText,
 			rf= c.toLowerCase(),
@@ -259,7 +421,7 @@ Ext.define('NextThought.view.content.Reader', {
 	externalUriRegex : /^([a-z][a-z0-9\+\-\.]*):/i,
 
 
-	onClick: function(e, el, o){
+	onClick: function(e, el){
 		e.stopPropagation();
 		e.preventDefault();
 		var m = this,

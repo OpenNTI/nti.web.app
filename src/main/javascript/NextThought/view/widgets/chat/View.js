@@ -7,7 +7,7 @@ Ext.define('NextThought.view.widgets.chat.View', {
         'NextThought.view.widgets.chat.OccupantsList',
         'NextThought.view.widgets.chat.ReplyTo',
         'NextThought.view.widgets.chat.PinnedMessageView',
-        'NextThought.util.Classroom',
+        'NextThought.util.ClassroomUtils',
         'NextThought.cache.IdCache'
     ],
 

@@ -36,6 +36,9 @@ Ext.define('NextThought.util.Globals',
 	 * @param [scope]
 	 */
 	loadScript: function(url, onLoad, onError, scope){
+		var head, doc = document,
+			script, onLoadFn, onErrorFn;
+
 		function buildCallback(cb,scope){
 			return function () {
 				script.onload = null;
@@ -48,10 +51,15 @@ Ext.define('NextThought.util.Globals',
 			};
 		}
 
-		var head = typeof document !== 'undefined' && (document.head || document.getElementsByTagName('head')[0]),
-			script = document.createElement('script'),
-			onLoadFn = buildCallback(onLoad,scope),
-			onErrorFn = buildCallback(onError,scope);
+		if(typeof url === 'object'){
+			doc = url.document;
+			url = url.url;
+		}
+
+		head = typeof doc !== 'undefined' && (doc.head || doc.getElementsByTagName('head')[0]);
+		script = doc.createElement('script');
+		onLoadFn = buildCallback(onLoad,scope);
+		onErrorFn = buildCallback(onError,scope);
 
 
 		script.type = 'text/javascript';
@@ -104,26 +112,32 @@ Ext.define('NextThought.util.Globals',
 	 * @param [scope] Context object to execute the onLoad/onFail callbacks
 	 */
 	loadStyleSheet: function(url, onLoad, onFail, scope){
-		var t, i=0,
-			head = typeof document !== 'undefined' &&
-				(document.head || document.getElementsByTagName('head')[0]),
-			link = document.createElement('link'),
-			call = function(cb){
-				clearInterval(t);
-				if(cb) {
-					cb.call(scope||window,link);
-				}
-			},
-			check = function (){
-				i++;
-				//30 seconds, if each interval is 10ms
-				if( i>3000 ) {
-					call(onFail);
-				}
-				else if( link.style ) {
-					call(onLoad);
-				}
-			};
+		var t,i=0, doc=document, head, link, call, check;
+
+		if(typeof url === 'object'){
+			doc = url.document;
+			url = url.url;
+		}
+
+		head = typeof doc !== 'undefined' &&
+				(doc.head || doc.getElementsByTagName('head')[0]);
+		link = doc.createElement('link');
+		call = function(cb){
+			clearInterval(t);
+			if(cb) {
+				cb.call(scope||window,link);
+			}
+		};
+		check = function (){
+			i++;
+			//30 seconds, if each interval is 10ms
+			if( i>3000 ) {
+				call(onFail);
+			}
+			else if( link.style ) {
+				call(onLoad);
+			}
+		};
 
 		link.rel='stylesheet';
 		link.type = 'text/css';
@@ -136,6 +150,24 @@ Ext.define('NextThought.util.Globals',
 		}
 
 		return link;
+	},
+
+
+	handleCache: function(){
+		var ac = window.applicationCache;
+		if(!ac) { return; }
+
+		ac.addEventListener('updateready', function(e) {
+			if (ac.status == ac.UPDATEREADY) {
+				ac.swapCache();
+				Ext.Msg.confirm('Update Available', 'A new version of this site is available. Load it now?',
+						function(btn){
+				    		if (btn === 'ok'){ window.location.reload(); }
+						});
+			} else {
+				// Manifest didn't changed. Nothing new to do.
+			}
+		}, false);
 	},
 
 
@@ -440,16 +472,8 @@ Ext.define('NextThought.util.Globals',
 	}
 },
 function(){
-	document.head = document.head || document.getElementsByTagName('head')[0];
 	window.Globals = this;
-
-	Ext.Loader.setPath('Ext.ux', (function(){
-		var path = Ext.Loader.getPath('Ext').split('/');
-		path.splice(-1, 1, 'examples/ux');
-		return path.join('/');
-	}()));
-
-	this.applyHooks();
-
 	window.guidGenerator = this.guidGenerator;
+	this.handleCache();
+	this.applyHooks();
 });

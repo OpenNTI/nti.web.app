@@ -6,8 +6,9 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 		'Ext.String'
 	],
 
-	constructor: function(record, container, component) {
+	constructor: function(record, component) {
 		var me = this,
+			container = component.body.dom,
 			userId= record.get('Creator') || $AppConfig.userObject.getId(),
 			d = Ext.query('.document-nibs',container),
 			cName = this.self.getName().split('.').pop().toLowerCase();
@@ -17,6 +18,7 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 			img: null,
 			container: container,
 			ownerCmp: component,
+			doc: component.getDocumentElement(),
 			record: record,
 			userId: userId,
 			isModifiable: record.isModifiable(),
@@ -24,6 +26,8 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 
 			isSingleAction: false,
 			renderPriority: -1,
+
+			offsets: component.getAnnotationOffsets(),
 
 			requestRender: Ext.Function.createBuffered(me.requestRender, 10, me)
 		});
@@ -45,6 +49,24 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 		me.attachRecord(record);
 
 		NextThought.view.widgets.annotations.Annotation.register(me);
+	},
+
+
+	/**
+	 * Query inside the reader frame
+	 * @param selector
+	 */
+	query: function(selector){
+		return Ext.query(selector,this.doc);
+	},
+
+
+	getLineHeight: function(){
+		return NaN;
+	},
+
+	getBlockWidth: function(){
+		return NaN;
 	},
 
 
