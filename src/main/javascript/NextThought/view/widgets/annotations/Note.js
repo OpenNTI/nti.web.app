@@ -22,12 +22,11 @@ Ext.define( 'NextThought.view.widgets.annotations.Note', {
 			inBox;
 
 		if(!a) {
-			a = AnnotationUtils.getAnchors(this.doc).first();
+			a = Ext.get(AnnotationUtils.getAnchors(this.doc).first());
 		}
 		else {
 			a = Ext.get( AnnotationUtils.getNextAnchorInDOM(a) );
 		}
-
 
 		c = me.createNoteContainer(a.dom.getAttribute('name'));
 
@@ -115,7 +114,7 @@ Ext.define( 'NextThought.view.widgets.annotations.Note', {
 
 
 	createNoteContainer: function(id){
-		var i = 'note-container-'+id,
+		var i = 'note-container-'+this.prefix+'-'+id,
 			e = Ext.get(i),
 			n = e ? e.dom : this.createElement('div',this.container,'document-notes');
 		n.setAttribute('id',i);

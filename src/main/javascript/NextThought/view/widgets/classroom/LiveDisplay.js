@@ -18,19 +18,17 @@ Ext.define('NextThought.view.widgets.classroom.LiveDisplay', {
 	{
 		this.callParent(arguments);
 
-//		this.content = this.add({
-//			xtype: 'shim',
-//			layout: 'fit',
-//			tabConfig:{
-//				title: 'Content',
-//				content: true,
-//				tooltip: 'Live Content'
-//			},
-//			//dockedItems: {dock:'bottom', xtype: 'breadcrumbbar', skipHistory: true},
-//			item:{
-//				xtype: 'reader-panel'
-//			}
-//		});
+		this.content = this.add({
+			xtype: 'reader-panel',
+			tracker: false,
+			prefix: guidGenerator(),
+			tabConfig:{
+				title: 'Content',
+				content: true,
+				tooltip: 'Live Content'
+			}
+			//dockedItems: {dock:'bottom', xtype: 'breadcrumbbar', skipHistory: true},
+		});
 
 		this.whiteboard = this.add({tabConfig:{title:'Whiteboard', tooltip: 'Live Whiteboard'}});
 	},

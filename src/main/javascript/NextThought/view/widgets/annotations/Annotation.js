@@ -14,6 +14,7 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 			cName = this.self.getName().split('.').pop().toLowerCase();
 
 		Ext.applyIf(me, {
+			id: IdCache.getComponentId(record.getId(), null, component.prefix),
 			div: d.length>0? d[0] : me.createElement('div',container,'document-nibs unselectable'),
 			img: null,
 			container: container,
@@ -28,6 +29,8 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 			renderPriority: -1,
 
 			offsets: component.getAnnotationOffsets(),
+
+			prefix: component.prefix || 'default',
 
 			requestRender: Ext.Function.createBuffered(me.requestRender, 10, me)
 		});

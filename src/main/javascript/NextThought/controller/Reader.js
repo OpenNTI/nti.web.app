@@ -27,7 +27,6 @@ Ext.define('NextThought.controller.Reader', {
 
 	refs: [
 		{ ref: 'viewport', selector: 'master-view' },
-		{ ref: 'reader', selector: 'reader-panel' },
 		{ ref: 'readerBreadcrumb', selector: 'reader-mode-container breadcrumbbar' },
 		{ ref: 'readerPeople', selector: 'reader-mode-container people-list' },
 		{ ref: 'readerRelated', selector: 'reader-mode-container related-items' },
@@ -64,17 +63,16 @@ Ext.define('NextThought.controller.Reader', {
 		store.load();
 	},
 
-	onAnnotationsLoad: function(containerId, callback) {
+	onAnnotationsLoad: function(cmp, containerId, callback) {
 		var ps = this.getStoreForPageItems(containerId);
 
 		if( ps ) {
-			ps.onAnnotationsLoadCallback = callback;
+			ps.onAnnotationsLoadCallback = {callback: callback, cmp: cmp};
 			ps.load();
 		}
 		else {
 			Globals.callback(callback);
 		}
-
 		//When the reader changes, we need to tell the stream controller so he knows to
 		//update his data
 		this.getController('Stream').containerIdChanged(containerId);
@@ -97,7 +95,7 @@ Ext.define('NextThought.controller.Reader', {
 				{ storeId:'page-store:'+containerId }
 			);
 
-			ps.on('load', this.onAnnotationStoreLoadComplete, this);
+			ps.on('load', this.onAnnotationStoreLoadComplete, this, {containerId: containerId});
 
 			this.pageStores[containerId] = ps;
 		}
@@ -106,12 +104,12 @@ Ext.define('NextThought.controller.Reader', {
 	},
 
 
-	onAnnotationStoreLoadComplete: function(store){
-		var reader = this.getReader(),
+	onAnnotationStoreLoadComplete: function(store, opts){
+		var reader = store.onAnnotationsLoadCallback.cmp,
 			containerId = reader.getContainerId();
 
 		if(store.storeId === ('page-store:'+containerId)){
-			reader.objectsLoaded(store.getBins(), store.onAnnotationsLoadCallback);
+			reader.objectsLoaded(store.getBins(), store.onAnnotationsLoadCallback.callback);
 		}
 	},
 

@@ -15,11 +15,13 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 		me.callParent([record, component,'assets/images/charms/highlight-white.png']);
 
 		Ext.apply(me,{
-			id: IdCache.getComponentId(record.getId()),
 			selection: selection,
-			canvas: me.createCanvas(),
-			renderPriority: 1
+			renderPriority: 1,
+			canvasContainerId: component.prefix + '-canvas-highlight-container'
 		});
+
+
+		me.canvas = me.createCanvas();
 
 		me.self.highlightEvents.on('render',me.render, me);
 		Ext.ComponentManager.register(me);
@@ -90,7 +92,7 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 
 
 	createCanvas: function(){
-		var cont = this.createCanvasContainer('canvas-highlight-container'),
+		var cont = this.createCanvasContainer(this.canvasContainerId),
 			c = cont.query('canvas')[0];
 
 		if(!c){
@@ -106,7 +108,7 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 
 
 	canvasResize: function(){
-		var c = Ext.get(this.canvas || Ext.query('#canvas-highlight-container canvas')[0]),
+		var c = Ext.get(this.canvas || Ext.query('#'+ this.canvasContainerId +' canvas')[0]),
 			cont = Ext.get(this.ownerCmp.getIframe()),
 			pos = cont.getXY(),
 			size = cont.getSize();
@@ -159,7 +161,7 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 		delete this.selection;
 		this.callParent(arguments);
 		this.self.highlightEvents.fireEvent('render');//make all highlights redraw...
-		this.self.renderCanvas();//this buffered function will only fire after the last invocation. This is to ensure we clear the canvas.
+		this.self.renderCanvas(this.prefix);//this buffered function will only fire after the last invocation. This is to ensure we clear the canvas.
 	},
 
 
@@ -174,7 +176,7 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 
 	requestRender: function(){
 		this.callParent(arguments);
-		this.self.renderCanvas();//ensure the canvas is redrawn
+		this.self.renderCanvas(this.prefix);//ensure the canvas is redrawn
 	},
 
 
@@ -219,29 +221,38 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 
 		//stage draw
 		for(; i>=0; i--){
-			this.self.enqueue(this.drawRect(s[i], rgba));
+			this.self.enqueue(this, this.drawRect(s[i], rgba));
 		}
-		this.self.enqueue(function(){ delete me.rendering; });
-		this.self.renderCanvas();//buffered
+		this.self.enqueue(this, function(){ delete me.rendering; });
+		this.self.renderCanvas(this.prefix);//buffered
 		this.callParent();
 	},
 
 
 	statics: {
 		highlightEvents: Ext.create('Ext.util.Observable'),
-		queue : [],
+		queue : {},
 
-		enqueue: function(op){
-			this.queue.push(op);
+		enqueue: function(annotation, op){
+			var p = annotation.prefix;
+
+			if (!this.queue[p]) {
+				this.queue[p] = {
+					queue: [],
+					canvas: annotation.canvas
+				};
+
+			}
+			this.queue[p].queue.push(op);
 		},
 
-		renderCanvas: function() {
-			var c = Ext.query('#canvas-highlight-container canvas')[0],
+		renderCanvas: function(prefix) {
+			var c = this.queue[prefix].canvas,
 				ctx = c ? c.getContext("2d") : null,
 				w = c ? c.width : 0,
-				q = Ext.clone(this.queue);
+				q = Ext.clone(this.queue[prefix].queue);
 
-			this.queue = [];
+			this.queue[prefix].queue = [];
 
 			if (!ctx){return;}
 
@@ -254,5 +265,18 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 
 },
 function(){
-	this.renderCanvas = Ext.Function.createBuffered(this.renderCanvas,5,this);
+	var me = this,
+		fn = this.renderCanvas,
+		timerId = {};
+
+	this.renderCanvas = (function() {
+			return function(prefix) {
+				if (timerId[prefix]) {
+					clearTimeout(timerId[prefix]);
+					timerId[prefix] = null;
+				}
+				timerId[prefix] = setTimeout(function(){fn.call(me, prefix);}, 100);
+			};
+
+		}());
 });

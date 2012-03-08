@@ -24,7 +24,8 @@ Ext.define('NextThought.cache.IdCache', {
 		return (this.ids[id]);
 	},
 
-	getComponentId: function (rec, subRecordField) {
+	getComponentId: function (rec, subRecordField, prefix) {
+		prefix = prefix || '';
 		if(!rec){ return null; }
 
 		var i = (typeof(rec) === 'string') ? rec : rec.getId();
@@ -40,7 +41,7 @@ Ext.define('NextThought.cache.IdCache', {
 			});
 		}
 
-		return 'cmp-' + this.getIdentifier(i);
+		return 'cmp-' + prefix + '-' + this.getIdentifier(i);
 	}
 },
 function(){

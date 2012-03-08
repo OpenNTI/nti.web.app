@@ -277,7 +277,7 @@ Ext.define('NextThought.mixins.Annotations', {
 	loadContentAnnotations: function(containerId, callback){
 		this.containerId = containerId;
 		this.clearAnnotations();
-		this.fireEvent('annotations-load', containerId, callback);
+		this.fireEvent('annotations-load', this, containerId, callback);
 	},
 
 

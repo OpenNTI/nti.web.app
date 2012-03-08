@@ -6,8 +6,8 @@ Ext.define( 'NextThought.view.widgets.annotations.Transcript', {
 	],
 
 	constructor: function(record, component){
+		debugger;
 		Ext.apply(this, {
-			id: IdCache.getComponentId(record.getId()),
 			anchorNode : null,
 			renderPriority: 0,
 			win: null,
@@ -18,7 +18,7 @@ Ext.define( 'NextThought.view.widgets.annotations.Transcript', {
 		this.callParent([record, component,
 			'assets/images/charms/chat-transcript.png']);
 
-		this.anchorNode = Ext.get(Ext.query('#nticontent a[name]')[0]);
+		this.anchorNode = Ext.get(this.query('#nticontent a[name]')[0]);
 
 		Ext.ComponentManager.register(this);
 	},

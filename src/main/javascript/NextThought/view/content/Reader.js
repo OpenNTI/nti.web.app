@@ -13,7 +13,6 @@ Ext.define('NextThought.view.content.Reader', {
 	cls: 'x-reader-pane',
 
 	layout: 'anchor',
-	tracker: null,
 
 	initComponent: function() {
 		var me = this;
@@ -21,12 +20,16 @@ Ext.define('NextThought.view.content.Reader', {
 		this.addEvents('loaded','finished-restore');
 		this.enableBubble('loaded','finished-restore');
 		this.callParent(arguments);
+		Ext.applyIf(me, {
+			tracker: null,
+			prefix: 'default'
+		});
 
 		this.add({
 			xtype: 'box',
 			anchor: '100%',
 			cls:'x-panel-reset',
-			margin: '0 0 0 50px',
+			margin: this.tracker === false ? 0 : '0 0 0 50px',
 			autoEl: {
 				tag: 'iframe',
 				name: guidGenerator()+'-content',
@@ -60,8 +63,6 @@ Ext.define('NextThought.view.content.Reader', {
 		this.meta = {};
 		this.css = {};
 		this.nav = {};
-
-		LocationProvider.on('navigate',this.loadPage,this);
 	},
 
 
@@ -253,13 +254,15 @@ Ext.define('NextThought.view.content.Reader', {
 	render: function(){
 		this.callParent(arguments);
 
-		if(this.tracker){
-			this.tracker.destroy();
-			delete this.tracker;
-			console.log('clearing old tracker...');
-		}
+		if (this.tracker !== false) {
+			if(this.tracker){
+				this.tracker.destroy();
+				delete this.tracker;
+				console.log('clearing old tracker...');
+			}
 
-		this.tracker = Ext.widget('tracker', this, this.getIframe().dom);
+			this.tracker = Ext.widget('tracker', this, this.getIframe().dom);
+		}
 	},
 
 	loadPage: function(ntiid, callback) {

@@ -8,7 +8,6 @@ Ext.define( 'NextThought.view.widgets.annotations.QuizResults', {
 
 	constructor: function(record, component){
 		Ext.apply(this, {
-			id: IdCache.getComponentId(record.getId()),
 			anchorNode : null,
 			renderPriority: 0,
 			win: null,

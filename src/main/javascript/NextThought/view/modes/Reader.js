@@ -36,6 +36,7 @@ Ext.define( 'NextThought.view.modes.Reader', {
 		this.add(this.getSpacerColumn());
 
 		this.reader = reader;
+		LocationProvider.on('navigate',reader.loadPage,reader);
 	},
 
 
