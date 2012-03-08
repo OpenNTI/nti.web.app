@@ -7,6 +7,8 @@ else
 	cd src/main/WebApp
 fi
 
+rm -f manifest.appcache
+
 OUTPUT="CACHE MANIFEST\n#$NOW r$REVISION\n"
 
 FILES=`find -L . -not \( -name ".svn" -a -prune \) -a -type f \( ! -iname ".*" \)`
@@ -15,7 +17,16 @@ do
 	OUTPUT="$OUTPUT\n${f##./}"
 done
 
-OUTPUT="$OUTPUT\n\nFALLBACK:\n/ offline.html\n\nNETWORK:\n*"
+OUTPUT="$OUTPUT\n\nFALLBACK:\n/ assets/misc/offline.json"
+
+for f in $FILES
+do
+#	if [[ "$f" == *.js ]] ; then
+		OUTPUT="$OUTPUT\n${f##./}* ${f##./}"
+#	fi
+done
+
+OUTPUT="$OUTPUT\n\nNETWORK:\n*"
 
 echo -e $OUTPUT > manifest.appcache
 

@@ -160,9 +160,13 @@ Ext.define('NextThought.util.Globals',
 		ac.addEventListener('updateready', function(e) {
 			if (ac.status === ac.UPDATEREADY) {
 				ac.swapCache();
-				Ext.Msg.confirm('Update Available', 'A new version of this site is available. Load it now?',
+				Ext.MessageBox.confirm(
+						'Update Available',
+						'A new version of this site is available. Load it now?',
 						function(btn){
-							if (btn === 'ok'){ window.location.reload(); }});
+							if (btn === 'yes'){ window.location.reload(); }
+						}
+				);
 			}
 			//else: Manifest didn't changed. Nothing new to do.
 		}, false);

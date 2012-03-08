@@ -1,9 +1,16 @@
 if(window.console && console.groupCollapsed){
 	console.groupCollapsed("Initialization");
 }
+
 //disable script cache-busting _dc=... get string args if we're using the manifest
-Ext.Loader.setConfig('disableCaching',Boolean(window.applicationCache && applicationCache.status));
-console.log("Application is Caching: ",Ext.Loader.getConfig('disableCaching'));
+
+(function(){
+	var cache,
+		c = window.applicationCache;
+	cache = Boolean(c && c.status);
+	Ext.Loader.setConfig('disableCaching', !cache);
+	console.log("Application is Caching: ",cache);
+}());
 
 Ext.application({
 	name: 'NextThought',
