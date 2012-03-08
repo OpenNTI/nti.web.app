@@ -247,6 +247,8 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 		},
 
 		renderCanvas: function(prefix) {
+			if (!this.queue[prefix]){return;}
+			
 			var c = this.queue[prefix].canvas,
 				ctx = c ? c.getContext("2d") : null,
 				w = c ? c.width : 0,
