@@ -148,12 +148,14 @@ Ext.define('NextThought.controller.State', {
 			return {};
 		}
 
-		//TODO: save/read state to/from browser/server
-//		return history.state || {
+		return {
+			active: 'home'
+		};
+		/*
 		return {
 			location: 'tag:nextthought.com,2011-10:AOPS-HTML-prealgebra.0',
 			active: 'reader'
-			/* home:{} ... */
 		};
+		 */
 	}
 });
