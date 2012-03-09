@@ -31,14 +31,14 @@ Ext.define('NextThought.providers.Location', {
 	setLocation: function(ntiid, callback, fromHistory){
 		var me = this,e = Ext.getCmp('viewport').getEl();
 
-		function finish(scrollableTarget){
+		function finish(){
 			console.timeEnd('navigation');
 			if(e.isMasked()){
 				e.unmask();
 			}
 			Globals.callback(callback,null,arguments);
 
-			if(scrollableTarget && fromHistory!==true){
+			if(fromHistory!==true){
 				window.history.pushState({location: ntiid}, "");
 			}
 		}
