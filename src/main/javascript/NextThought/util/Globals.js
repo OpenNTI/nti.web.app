@@ -272,10 +272,10 @@ Ext.define('NextThought.util.Globals',
 		Ext.Ajax.disableCaching = true;
 		Ext.data.proxy.Server.override({noCache: true});
 		Ext.data.Connection.override({
-			disableCaching: true,
+			disableCaching: false,
 
 			setOptions: function(options, scope){
-				var i, badParams = [/*'_dc',*/ 'id', 'page', 'start', 'limit', 'group', 'sort'],
+				var i, badParams = ['_dc', 'id', 'page', 'start', 'limit', 'group', 'sort'],
 					params = options.params || {};
 
 				if (Ext.isFunction(params)) {
@@ -376,15 +376,15 @@ Ext.define('NextThought.util.Globals',
 		log = Ext.Function.alias(console, 'log');
 
 		Ext.applyIf(window.console,{
-			time: function(){},
-			timeEnd: function(){},
 			debug: log,
 			info: log,
 			warn: log,
 			error: log,
 			group: Ext.emptyFn,
 			groupCollapsed: Ext.emptyFn,
-			groupEnd: Ext.emptyFn
+			groupEnd: Ext.emptyFn,
+			time: log,
+			timeEnd: log
 		});
 
 	},
