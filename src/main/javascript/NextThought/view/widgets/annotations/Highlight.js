@@ -191,7 +191,6 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 		if(!this.isVisible){return;}
 
 		if(this.rendering){
-			console.warn('duplicate call');
 			return;
 		}
 
@@ -275,9 +274,8 @@ function(){
 			return function(prefix) {
 				if (timerId[prefix]) {
 					clearTimeout(timerId[prefix]);
-					timerId[prefix] = null;
 				}
-				timerId[prefix] = setTimeout(function(){fn.call(me, prefix);}, 100);
+				timerId[prefix] = setTimeout(function(){ fn.call(me, prefix); }, 100);
 			};
 
 		}());

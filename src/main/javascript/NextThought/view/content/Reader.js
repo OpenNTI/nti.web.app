@@ -60,6 +60,8 @@ Ext.define('NextThought.view.content.Reader', {
 
 		this.mixins.annotations.initAnnotations.call(this);
 
+		this.checkFrame = Ext.bind(this.checkFrame,this);
+
 		this.meta = {};
 		this.css = {};
 		this.nav = {};
@@ -125,7 +127,7 @@ Ext.define('NextThought.view.content.Reader', {
 
 		ContentAPIRegistry.on('update',me.applyContentAPI,me);
 		me.applyContentAPI();
-		setInterval( function(){ me.checkFrame(); }, 250 );
+		me.syncInterval = setInterval( me.checkFrame, 50 );
 	},
 
 
@@ -161,6 +163,10 @@ Ext.define('NextThought.view.content.Reader', {
 				this.lastHeight = h;
 				this.syncFrame();
 			}
+			if(Ext.Date.now()-this.lastFrameSync > 500){
+				clearInterval(this.syncInterval);
+				this.syncInterval = setInterval(this.checkFrame,500);
+			}
 		}
 	},
 
@@ -168,10 +174,14 @@ Ext.define('NextThought.view.content.Reader', {
 		var doc = this.getDocumentElement(),
 			b = Ext.get(doc.body || doc.documentElement),
 			i = this.getIframe();
+
 		i.setHeight(this.el.getHeight()-100);
 		i.setHeight(b.getHeight()+100);
+
 		this.fireEvent('resize');
 		this.doLayout();
+
+		this.lastFrameSync = Ext.Date.now();
 	},
 
 	getIframe: function(){
@@ -184,6 +194,8 @@ Ext.define('NextThought.view.content.Reader', {
 		var doc = this.getDocumentElement();
 		this.getIframe().setHeight(0);
 		Ext.get(doc.body || doc.documentElement).update(html);
+		clearInterval(this.syncInterval);
+		this.syncInterval = setInterval(this.checkFrame,50);
 	},
 
 	getDocumentElement: function(){

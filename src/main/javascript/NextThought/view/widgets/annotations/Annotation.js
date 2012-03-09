@@ -154,7 +154,7 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 
 
 	requestRender: function(){
-		NextThought.view.widgets.annotations.Annotation.render();
+		NextThought.view.widgets.annotations.Annotation.render(this.prefix);
 	},
 
 
@@ -314,27 +314,37 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 
 	statics: {
 		events: new Ext.util.Observable(),
-		registry: [],
-		sorter: null,
+		registry: {},
+		sorter: {},
 
 
 		register: function(o){
-			this.registry.push(o);
+			var p = o.prefix;
+			if(!this.registry[p]){
+				this.registry[p] = [];
+			}
+			this.registry[p].push(o);
 			o.requestRender();
 		},
 
 
 		unregister: function(o){
-			this.registry = Ext.Array.remove(this.registry,o);
-			if(this.registry.legend===0){
-				this.sorter = null;
+			var p = o.prefix, r;
+			r = this.registry[p];
+			if(r){
+				this.registry[p] = Ext.Array.remove(r,o);
+				if(this.registry[p].legend===0){
+					this.sorter[p] = null;
+				}
 			}
 		},
 
 
-		buildSorter: function(){
-			var anchors = Ext.Array.map(
-					Ext.DomQuery.select('#NTIContent a[name]'),
+		buildSorter: function(prefix){
+
+			var p = Ext.ComponentQuery.query('reader-panel[prefix='+prefix+']')[0].getDocumentElement(),
+				anchors = Ext.Array.map(
+					Ext.DomQuery.select('#NTIContent a[name]',p),
 					function(a){
 						return a.getAttribute('name');
 					}
@@ -363,7 +373,7 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 		},
 
 
-		render: function(){
+		render: function(prefix){
 			if(this.rendering){
 				this.events.on('finish',this.render,this,{single:true});
 				console.warn('Render called while rendering...');
@@ -373,14 +383,13 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 //			console.time('Rendering');
 			this.rendering = true;
 			this.events.fireEvent('rendering');
-			this.sorter = this.sorter || this.buildSorter();
-			this.registry = Ext.Array.unique(this.registry);
+			this.sorter[prefix] = this.sorter[prefix] || this.buildSorter(prefix);
+			this.registry[prefix] = Ext.Array.unique(this.registry[prefix]);
 
-			Ext.Array.sort(this.registry, this.sorter);
+			Ext.Array.sort(this.registry[prefix], this.sorter[prefix]);
 
-			Ext.each(Ext.Array.clone(this.registry), function(o){
+			Ext.each(Ext.Array.clone(this.registry[prefix]), function(o){
 				try {
-//					console.log(o.$className);
 					o.render();
 				}
 				catch(e){
@@ -396,16 +405,16 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 	}
 },
 function(){
-	var me = this, fn = this.render, timerId;
+	var me = this,
+		fn = this.render,
+		timerId = {};
 
 	this.render = (function() {
-			return function() {
-				me.aboutToRender = true;
-				if (timerId) {
-					clearTimeout(timerId);
-					timerId = null;
+			return function(prefix) {
+				if (timerId[prefix]) {
+					clearTimeout(timerId[prefix]);
 				}
-				timerId = setTimeout(function(){fn.call(me);}, 100);
+				timerId[prefix] = setTimeout(function(){ fn.call(me, prefix); }, 100);
 			};
 
 		}());
