@@ -323,6 +323,7 @@ Ext.define('NextThought.view.content.Reader', {
 
 	loadPage: function(ntiid, callback) {
 		var me = this,
+			prevNTIID = LocationProvider.currentNTIID,
 			service = $AppConfig.service;
 
 		if(ntiid === me.getContainerId()){
@@ -333,12 +334,15 @@ Ext.define('NextThought.view.content.Reader', {
 		me.clearAnnotations();
 
 		function success(resp){
-			this.splash.hide();
-			this.setReaderContent(resp, callback);
+			me.splash.hide();
+			me.setReaderContent(resp, callback);
 		}
 
 		function failure(){
 			console.error(arguments);
+			me.setSplash();
+			me.relayout();
+			LocationProvider.setLocation(prevNTIID);
 		}
 
 		if(ntiid) {
