@@ -170,6 +170,7 @@ Ext.define('NextThought.view.content.Reader', {
 			i = this.getIframe();
 		i.setHeight(this.el.getHeight()-100);
 		i.setHeight(b.getHeight()+100);
+		this.fireEvent('resize');
 		this.doLayout();
 	},
 
