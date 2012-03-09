@@ -219,7 +219,7 @@ Ext.define('NextThought.mixins.Annotations', {
 
 	onNoteCreated: function(record){
 		//check to see if reply is already there, if so, don't do anything...
-		if (Ext.get(IdCache.getComponentId(record,null,this.prefix))) {
+		if (Ext.getCmp(IdCache.getComponentId(record,null,this.prefix))) {
 			return;
 		}
 

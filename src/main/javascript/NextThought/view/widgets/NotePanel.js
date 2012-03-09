@@ -75,7 +75,7 @@ Ext.define('NextThought.view.widgets.NotePanel',{
 	},
 
 	getCmpId: function(r) {
-		return (this.idPrefix||'')+IdCache.getComponentId(r, 'RoomInfo');
+		return (this.idPrefix||'')+IdCache.getComponentId(r, 'RoomInfo', this.annotation.prefix);
 	},
 
 	buildThread: function(record){
@@ -367,6 +367,7 @@ Ext.define('NextThought.view.widgets.NotePanel',{
 				record: record,
 				owner: m,
 				annotation: {
+					prefix: a.prefix,
 					parentAnnotation: p,
 					getRecord: function(){return record;},
 					remove: function(){ r.removeReply();},
