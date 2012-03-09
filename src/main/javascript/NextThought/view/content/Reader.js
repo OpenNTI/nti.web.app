@@ -308,6 +308,7 @@ Ext.define('NextThought.view.content.Reader', {
 
 	render: function(){
 		this.callParent(arguments);
+		this.splash = this.body.insertHtml('beforeEnd','<div class="no-content-splash"></div>',true);
 
 		if (this.tracker !== false) {
 			if(this.tracker){
@@ -332,6 +333,7 @@ Ext.define('NextThought.view.content.Reader', {
 		me.clearAnnotations();
 
 		function success(resp){
+			this.splash.hide();
 			this.setReaderContent(resp, callback);
 		}
 
@@ -344,6 +346,7 @@ Ext.define('NextThought.view.content.Reader', {
 		}
 		else {
 			this.setSplash();
+			this.relayout();
 			Globals.callback(callback,null,[me]);
 		}
 
@@ -353,13 +356,14 @@ Ext.define('NextThought.view.content.Reader', {
 
 	setSplash: function(){
 		this.scrollTo(0, false);
-		this.setContent('<div class="no-content-splash"></div>');
+		this.setContent('');
+		this.splash.dom.parentNode.appendChild(this.splash.dom);
+		this.splash.show();
 	},
 
 
 	setReaderContent: function(resp, callback){
 		var me = this,
-			doc = me.getDocumentElement(),
 			c = me.parseHTML(resp),
 			containerId;
 
