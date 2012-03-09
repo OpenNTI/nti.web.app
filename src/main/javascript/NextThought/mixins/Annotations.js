@@ -168,7 +168,11 @@ Ext.define('NextThought.mixins.Annotations', {
 		w = Ext.widget( 'highlight-annotation', range, record, this);
 
 		if (!oid) {
-			oid = 'Highlight-' + new Date().getTime();
+			oid = 'Highlight-TEMP-OID';
+			if (this.annotations[oid]){
+				this.annotations[oid].cleanup();
+				delete this.annotations[oid];
+			}
 			w.tempID = oid;
 			record.on('updated',function(r){
 				this.annotations[r.get('NTIID')] = this.annotations[oid];

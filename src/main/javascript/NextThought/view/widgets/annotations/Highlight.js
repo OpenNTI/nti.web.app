@@ -24,13 +24,25 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 		me.canvas = me.createCanvas();
 
 		me.self.highlightEvents.on('render',me.render, me);
-		Ext.ComponentManager.register(me);
+
 		return me;
 	},
 
 	getItemId: function(){return this.id; },
 	isXType: function(){return false;},
 	getEl: function(){return Ext.get(this.img);},
+
+
+	attachRecord: function(record){
+		var me = this;
+
+		me.callParent(arguments);
+
+		if (!record.phantom) {
+			me.id = IdCache.getComponentId(me.record.getId(), null, me.prefix);
+			Ext.ComponentManager.register(me);
+		}
+	},
 
 
 	getBlockWidth: function() {
@@ -157,7 +169,7 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 		if(!this.selection){
 			return;
 		}
-		Ext.ComponentManager.unregister(this);
+		if (!this.record.phantom){Ext.ComponentManager.unregister(this);}
 		delete this.selection;
 		this.callParent(arguments);
 		this.self.highlightEvents.fireEvent('render');//make all highlights redraw...
