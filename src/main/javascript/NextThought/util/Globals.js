@@ -350,7 +350,9 @@ Ext.define('NextThought.util.Globals',
 
 
 	ensureNodePrototypes: function(){
-		Ext.applyIf(Node.prototype, {
+		window.Node = window.Node || function(){};
+		
+		Ext.applyIf(window.Node.prototype, {
 			DOCUMENT_POSITION_DISCONNECTED: 1,
 			DOCUMENT_POSITION_PRECEDING: 2,
 			DOCUMENT_POSITION_FOLLOWING: 4,
@@ -374,6 +376,8 @@ Ext.define('NextThought.util.Globals',
 		log = Ext.Function.alias(console, 'log');
 
 		Ext.applyIf(window.console,{
+			time: function(){},
+			timeEnd: function(){},
 			debug: log,
 			info: log,
 			warn: log,

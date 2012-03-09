@@ -58,6 +58,7 @@ Ext.define('NextThought.controller.Session', {
 				for(;i>=0; i--){ if(l[i].rel === relName){ return l[i].href; } }
 				return null;
 			}
+			try{
 
 			Ext.Ajax.request({
 				url: h + d + ping,
@@ -83,6 +84,10 @@ Ext.define('NextThought.controller.Session', {
 					});
 				}
 			});
+			}
+			catch(err){
+				alert(err.message);
+			}
 		},
 
 
