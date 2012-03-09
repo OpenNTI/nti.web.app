@@ -6,10 +6,6 @@ Ext.define('NextThought.view.content.Panel', {
 	border: false,
 	defaults: {frame: false, border: false},
 
-	initComponent: function(){
-		this.callParent(arguments);
-	},
-
 	getContainerId: function(){
 		return this.containerId;
 	},

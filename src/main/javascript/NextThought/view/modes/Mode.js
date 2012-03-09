@@ -1,5 +1,6 @@
 Ext.define( 'NextThought.view.modes.Mode', {
 	extend: 'Ext.panel.Panel',
+	alias: 'widget.mode-container',
 	requires: [
 			'NextThought.view.widgets.main.LeftColumn',
 			'NextThought.view.widgets.main.RightColumn'

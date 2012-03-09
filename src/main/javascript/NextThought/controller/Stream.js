@@ -58,9 +58,6 @@ Ext.define('NextThought.controller.Stream', {
 		});
 
 		this.control({
-			'stream-mode-container filter-control':{
-				'filter-changed': this.streamFilterChanged
-			},
 			'miniStreamEntry': {
 				'clicked' : this.onClick
 			}
@@ -177,16 +174,5 @@ Ext.define('NextThought.controller.Stream', {
 
 		this.getStreamStore().add(change);
 		this.self.fireChange(change);
-	},
-
-	streamFilterChanged: function(newFilter){
-		var o = [
-			this.getStream(),
-			this.getStreamPeople(),
-			this.getMiniStream()
-		];
-
-		Ext.each(o,function(i){i.applyFilter(newFilter);});
 	}
-
 });

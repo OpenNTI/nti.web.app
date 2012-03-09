@@ -69,8 +69,8 @@ Ext.define('NextThought.model.Base', {
 	constructor: function(data,id,raw){
 		var c, f = this.fields,
 			cName = this.self.getName().split('.').pop(),
-			cField = f.getByKey('Class'),
-			openedGroup = false;
+			cField = f.getByKey('Class');
+//			openedGroup = false;
 
 
 		if(!cField.defaultValue) {
@@ -95,26 +95,30 @@ Ext.define('NextThought.model.Base', {
 
 		f.getByKey('MimeType').defaultValue = this.mimeType;
 
-		if(!window.stopTrackingModelConstruction){
-			openedGroup = true;
-			console.group("Model", cName, id || data ? data[this.idProperty] : 'new');
-		}
+//		if(!window.stopTrackingModelConstruction){
+//			openedGroup = true;
+//			console.group("Model", cName, id || data ? data[this.idProperty] : 'new');
+//		}
 		c = this.callParent(arguments);
 		this.enforceMutability();
 
-		if(openedGroup){ console.groupEnd(); }
+		//if(openedGroup){ console.groupEnd(); }
 		return c;
+	},
+
+
+	destroy: function(){
+		this.fireEvent('destroy', this);
+		return this.callParent(arguments);
 	},
 
 
 	enforceMutability: function(){
 		if(!this.isModifiable()){
-			this.destroy = Ext.emptyFn();
-			this.save = Ext.emptyFn();
-		}
-		else if(this.hasOwnProperty('destroy')){
-			this.destroy = this.self.prototype.destroy;
-			this.save = this.self.prototype.save;
+			Ext.apply(this,{
+				destroy: Ext.emptyFn(),
+				save: Ext.emptyFn()
+			});
 		}
 	},
 
@@ -150,6 +154,7 @@ Ext.define('NextThought.model.Base', {
 	 * Calls the href and fills in the values missing.
 	 */
 	resolve: function(){
+		console.error("still called?");
 		var me = this,
 			href = this.get('href');
 
@@ -166,7 +171,7 @@ Ext.define('NextThought.model.Base', {
 					return;
 				}
 				me.set(Ext.JSON.decode(resp.responseText));
-				me.enforceMutability();
+//				me.enforceMutability();
 				me.dirty = false;
 				me.modified = {};
 			}
@@ -340,10 +345,10 @@ Ext.data.Types.USERLIST = {
 					else  {
 						u.push(p);
 						if(!UserRepository.has(o)){
-							if(typeof(o) === 'string') {
-								console.warn("Will resolve UserId because we don't have an object to parse:",
-										record.get('Class'), '@', record.getId(), o);
-							}
+//							if(typeof(o) === 'string') {
+//								console.warn("Will resolve UserId because we don't have an object to parse:",
+//										record.get('Class'), '@', record.getId(), o);
+//							}
 							//asynchronously resolve this user so its cached and ready
 							UserRepository.prefetchUser(o);
 						}

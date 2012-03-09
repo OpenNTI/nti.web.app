@@ -10,8 +10,6 @@ Ext.define('NextThought.view.widgets.RelatedItemsList', {
 	defaults: {border: false, defaults: {border: false}},
 	items:[{html:'Related Items:', cls: 'sidebar-header'},{cls: 'sidebar-content'}],
 
-	filter: {},
-
 	initComponent: function(){
 		this.callParent(arguments);
 		LocationProvider.on('change',this.setLocation,this);
@@ -108,11 +106,7 @@ Ext.define('NextThought.view.widgets.RelatedItemsList', {
 		}
 	},
 	
-	applyFilter: function(filter){
-		this.filter = filter;
-	},
-	
-	
+
 	getRelatedItems: function(loc){
 		if(!loc.location) {
 			return {};

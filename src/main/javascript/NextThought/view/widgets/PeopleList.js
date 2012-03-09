@@ -12,21 +12,26 @@ Ext.define('NextThought.view.widgets.PeopleList', {
 	border: false,
 	defaults: {border: false},
 	items:[{html:'People:', cls: 'sidebar-header'},{cls: 'sidebar-content'}],
-	filter: {},
-	contributors: {},
-	
+
 	constructor: function(){
+		this.contributors = {};
 		this.callParent(arguments);
 		this.mixins.avatars.constructor.call(this);
 		//make a buffered function out of our updater
 		this.updateList = Ext.Function.createBuffered(this.updateList,100,this);
 	},
-	
+
+
 	initComponent: function(){
-		this.callParent(arguments);
-		ContributorsProvider.on('change',this.setContributors,this);
+		var me = this;
+		me.callParent(arguments);
+		ContributorsProvider.on('change',me.setContributors,me);
+		me.on('added',function(){
+			FilterManager.registerFilterListener(me, me.applyFilter,me);
+		});
 	},
-	
+
+
 	setContributors: function(contributors){
 		this.contributors = contributors;
 		this.updateList();
@@ -44,12 +49,12 @@ Ext.define('NextThought.view.widgets.PeopleList', {
 			f = me.filter;
 
 		function userLoaded(users){
-			var f = users[0],
+			var u = users[0],
 				c = p.add({	xtype: 'image',
-						src: (f? f.get('avatarURL') : Ext.BLANK_IMAGE_URL),
+						src: (u? u.get('avatarURL') : Ext.BLANK_IMAGE_URL),
 						height: 36, width: 36});
 
-				me.setupAvatarDetailToolTip(c, f);
+				me.setupAvatarDetailToolTip(c, u);
 		}
 
 
@@ -62,7 +67,7 @@ Ext.define('NextThought.view.widgets.PeopleList', {
 					break;
 				}
 
-				if((/all/i).test(f.groups) || (f.shareTargets && f.shareTargets[k])){
+				if(!f || f.test({'Creator':k,'$className':'String'})){
 					c++;
 					UserRepository.prefetchUser(k, userLoaded);
 				}

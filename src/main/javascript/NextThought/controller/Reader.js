@@ -45,10 +45,6 @@ Ext.define('NextThought.controller.Reader', {
 
 			'reader-panel':{
 				'annotations-load': this.onAnnotationsLoad
-			},
-
-			'reader-mode-container filter-control':{
-				'filter-changed': this.readerFilterChanged
 			}
 		},{});
 	},
@@ -120,7 +116,6 @@ Ext.define('NextThought.controller.Reader', {
 			if(o) {
 				o.destroy({});
 			}
-			me.getReader().removeAnnotation(oid);
 		}
 
 		var me=this,
@@ -139,138 +134,11 @@ Ext.define('NextThought.controller.Reader', {
 	},
 
 
-	clearSearch: function() {
-		this.getReader().clearSearchRanges();
-	},
-
-
-	navigateToItem: function(i) {
-		var c = i.get('Class'),
-				containerId;
-
-		//right now, only handle notes and highlights, not sure what to do with users etc...
-		if (c !== 'Note' && c !== 'Highlight') {
-			return;
-		}
-
-		containerId = i.get('ContainerId');
-		LocationProvider.setLocation(containerId, function(scrollableHighlightableAPI){
-			var id = IdCache.getComponentId(i);
-			//scoll to
-		});
-	},
-
 	buttonClicked: function(button) {
 		var target;
 		if(button) {
 			target = typeof button.ntiid === 'string' ? button.ntiid : null;
 			LocationProvider.setLocation( target );
 		}
-	},
-
-
-	getElementsByTagNames: function(list,obj) {
-		if (!obj) {
-			obj = document;
-		}
-
-		var tagNames = list.split(','),
-			resultArray = [],
-			i=0, tags, j, testNode;
-
-		for (;i<tagNames.length;i++) {
-			tags = obj.getElementsByTagName(tagNames[i]);
-			for (j=0;j<tags.length;j++) {
-				resultArray.push(tags[j]);
-			}
-		}
-
-		testNode = resultArray[0];
-		if (!testNode) {
-			return [];
-		}
-		if (testNode.sourceIndex) {
-			resultArray.sort(function (a,b) {
-				return a.sourceIndex - b.sourceIndex;
-			});
-		}
-		else if (testNode.compareDocumentPosition) {
-			resultArray.sort(function (a,b) {
-				return 3 - (a.compareDocumentPosition(b) & 6);
-			});
-		}
-		return resultArray;
-	},
-
-	scrollToText: function(text, oid) {
-		if (oid && !text) {
-			this.getReader().scrollToId(IdCache.getComponentId(oid));
-			return;
-		}
-		else if (!text) {
-			return;
-		}
-
-		text = text.toLowerCase();
-
-		var me = this,
-			textElements = me.getElementsByTagNames('p,div,blockquote,ul,li,ol', me.getReader().getEl().dom),
-			ranges = [],
-			created = {},
-			textLength = text.length;
-
-		Ext.Object.each(textElements, function(e, c){
-			var i = c.innerText,
-				index, node, texts, nv, r,
-				regex = new RegExp(Ext.String.escapeRegex(text), 'i');
-
-			//if it's not here, move to the next block
-			if (!i.match(regex)) {
-				return;
-			}
-
-			texts = document.evaluate('.//text()', c,
-					null, XPathResult.ORDERED_NODE_ITERATOR_TYPE,
-					null);
-
-			while(!!(node = texts.iterateNext())){
-				nv = node.nodeValue.toLowerCase();
-
-				index = nv.indexOf(text);
-				while(index >= 0) {
-					r = document.createRange();
-					r.setStart(node, index);
-					r.setEnd(node, index + textLength);
-
-
-					if (!created[nv] || !created[nv][index]) {
-						created[nv] = created[nv] || {} ;
-						created[nv][index] = true;
-						ranges.push(r);
-					}
-					index = nv.indexOf(text, index + 1);
-				}
-			}
-		});
-
-		me.getReader().showRanges(ranges);
-		if (oid) {
-			me.getReader().scrollToId(IdCache.getComponentId(oid));
-		}
-		else {
-			me.getReader().scrollTo(ranges[0].getClientRects()[0].top - 150);
-		}
-	},
-
-
-	readerFilterChanged: function(newFilter){
-		var o = [
-			this.getReader(),
-			this.getReaderPeople(),
-			this.getReaderRelated()
-			//	this.getReaderStream()
-		];
-
-		Ext.each(o,function(i){i.applyFilter(newFilter);});
 	}
 });

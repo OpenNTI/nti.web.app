@@ -14,7 +14,7 @@ Ext.define('NextThought.view.widgets.FilterControlPanel', {
 	}],
 
 	constructor: function(){
-		this.addEvents('filter-changed','filter-control-loaded');
+		this.addEvents('filter-control-loaded');
 		this.callParent(arguments);
 	},
 
@@ -77,12 +77,13 @@ Ext.define('NextThought.view.widgets.FilterControlPanel', {
 			boxLabel: 'All'
 		});
 		
-		form.add({ xtype:'checkbox', cls: 'type-filter highlight', boxLabel: 'Highlights', model: 'NextThought.view.widgets.annotations.Highlight' });
-		form.add({ xtype:'checkbox', cls: 'type-filter note', boxLabel: 'Notes', model: 'NextThought.view.widgets.annotations.Note' });
-		form.add({ xtype:'checkbox', cls: 'type-filter transcript', boxLabel: 'Transcripts', model: 'NextThought.view.widgets.annotations.Transcript' });
-		form.add({ xtype:'checkbox', cls: 'type-filter quizresult', boxLabel: 'Quiz Results', model: 'NextThought.view.widgets.annotations.QuizResults' });
+		form.add({ xtype:'checkbox', cls: 'type-filter highlight', boxLabel: 'Highlights', model: 'NextThought.model.Highlight' });
+		form.add({ xtype:'checkbox', cls: 'type-filter note', boxLabel: 'Notes', model: 'NextThought.model.Note' });
+		form.add({ xtype:'checkbox', cls: 'type-filter transcript', boxLabel: 'Transcripts', model: 'NextThought.model.Transcript' });
+		form.add({ xtype:'checkbox', cls: 'type-filter quizresult', boxLabel: 'Quiz Results', model: 'NextThought.model.QuizResults' });
 
-		this.fireEvent('filter-control-loaded',this.getId());
+		this.fireEvent('filter-control-loaded',this);
+
 		this.doComponentLayout();
 		this.doLayout();
 	}

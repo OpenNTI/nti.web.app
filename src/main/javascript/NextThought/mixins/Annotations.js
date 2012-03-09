@@ -22,22 +22,27 @@ Ext.define('NextThought.mixins.Annotations', {
 		'QuizResult': function(r){return r;}},
 
 	initAnnotations: function(){
-		Ext.apply(this,{
+		var me = this;
+		Ext.apply(me,{
 			annotations: {},
 			filter: null,
 			searchAnnotations: null
 		});
 
-		this.addEvents('share-with','create-note');
+		me.addEvents('share-with','create-note');
 
-		this.widgetBuilder = {
-			'Highlight' : this.createHighlightWidget,
-			'Note': this.createNoteWidget,
-			'TranscriptSummary': this.createTranscriptSummaryWidget,
-			'QuizResult': this.createQuizResultWidget
+		me.widgetBuilder = {
+			'Highlight': me.createHighlightWidget,
+			'Note': me.createNoteWidget,
+			'TranscriptSummary': me.createTranscriptSummaryWidget,
+			'QuizResult': me.createQuizResultWidget
 		};
 
-		NextThought.controller.Stream.registerChangeListener(this.onNotification, this);
+		NextThought.controller.Annotations.events.on('new-note',this.onNoteCreated,this);
+		NextThought.controller.Stream.registerChangeListener(me.onNotification, me);
+		me.on('added',function(){
+			FilterManager.registerFilterListener(me, me.applyFilter,me);
+		});
 	},
 
 
@@ -76,9 +81,9 @@ Ext.define('NextThought.mixins.Annotations', {
 	removeAnnotation: function(oid) {
 		var v = this.annotations[oid];
 		if (v) {
-			v.cleanup();
 			this.annotations[oid] = undefined;
 			delete this.annotations[oid];
+			v.cleanup();
 		}
 	},
 
@@ -101,7 +106,7 @@ Ext.define('NextThought.mixins.Annotations', {
 
 
 	annotationExists: function(record){
-		var oid = record.get('NTIID');
+		var oid = record.getId();
 		if(!oid){
 			return false;
 		}
@@ -209,6 +214,29 @@ Ext.define('NextThought.mixins.Annotations', {
 		this.annotations[record.getId()] = Ext.widget( 'quiz-result-annotation', record, this);
 		return true;
 	},
+
+
+
+	onNoteCreated: function(record){
+		//check to see if reply is already there, if so, don't do anything...
+		if (Ext.get(IdCache.getComponentId(record,null,this.prefix))) {
+			return;
+		}
+
+		var parent = record.get('inReplyTo');
+		if(parent){
+			parent = Ext.getCmp(IdCache.getComponentId(parent,null,this.prefix));
+			parent.addReply(record);
+		}
+
+
+		else {
+			this.createNoteWidget(record);
+		}
+
+		this.fireEvent('resize');
+	},
+
 
 
 	onNotification: function(change){

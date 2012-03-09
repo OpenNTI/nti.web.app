@@ -123,6 +123,7 @@ Ext.define( 'NextThought.view.widgets.annotations.Note', {
 
 
 	cleanup: function(removeAll){
+		if(!this.noteCmp){ return; }
 		var hasReplies = this.noteCmp.hasReplies();
 		if(hasReplies){
 			this.noteCmp.cleanupReply(removeAll);

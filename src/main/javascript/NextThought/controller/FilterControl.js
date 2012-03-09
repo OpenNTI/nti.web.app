@@ -1,28 +1,30 @@
 Ext.define('NextThought.controller.FilterControl', {
 	extend: 'Ext.app.Controller',
 
+	requires: [
+		'NextThought.filter.FilterManager',
+		'NextThought.filter.FilterGroup',
+		'NextThought.filter.Filter'
+	],
+
 	views: [
 		'widgets.FilterControlPanel'
-		],
+	],
 
-	query: function(q,id){
-		return Ext.ComponentQuery.query(q.replace('filter-control','#'+id));
-	},
-
-	getAllTypesButton: function(id){
-		return this.query('filter-control checkboxfield[name="alltypesbutton"]',id)[0];
+	getAllTypesButton: function(cmp){
+		return cmp.down('checkboxfield[name="alltypesbutton"]');
 	},
 	
-	getAllGroupsButton: function(id){
-		return this.query('filter-control checkboxfield[name="allgroupsbutton"]',id)[0];
+	getAllGroupsButton: function(cmp){
+		return cmp.down('checkboxfield[name="allgroupsbutton"]');
 	},
 	
-	getGroups: function(id){
-		return this.query('filter-control checkboxfield[usergroup]',id);
+	getGroups: function(cmp){
+		return cmp.query('checkboxfield[usergroup]');
 	},
 	
-	getTypes: function(id){
-		return this.query('filter-control checkboxfield[model]',id);
+	getTypes: function(cmp){
+		return cmp.query('checkboxfield[model]');
 	},
 	
 	init: function() {
@@ -44,141 +46,133 @@ Ext.define('NextThought.controller.FilterControl', {
 			}
 		},{});
 	},
-	
-	
+
 	
 	beginChanges: function(id){
-		if(this.beginChanges[id]) {
-			return false;
-		}
-			
-		this.beginChanges[id] = true;
-		
-		return true;
+		if(this.beginChanges[id]) { return false; }
+		return this.beginChanges[id] = true;
 	},
 	
 	
-	setState: function(id){
-		if(!this.beginChanges(id)) {
+	setState: function(cmp){
+		if(!this.beginChanges(cmp.getId())) {
 			return;
 		}
-		
 		//TODO: rebuild saved state
 		
-		this.getAllGroupsButton(id).setValue(true);
-		this.getAllTypesButton(id).setValue(true);
-		Ext.each(this.getGroups(id), function(c){ c.setValue(true); },this);
-		Ext.each(this.getTypes(id), function(c){ c.setValue(true); },this);
+		this.getAllGroupsButton(cmp).setValue(true);
+		this.getAllTypesButton(cmp).setValue(true);
+		Ext.each(this.getGroups(cmp), function(c){ c.setValue(true); },this);
+		Ext.each(this.getTypes(cmp), function(c){ c.setValue(true); },this);
 		
-		this.rebuildFilter(id);
+		this.rebuildFilter(cmp);
 	},
 	
 	
-	allGroupsSelected: function(me, nv, ov, opts){
-		var id = me.up('filter-control').getId();
+	allGroupsSelected: function(me, nv){
+		var cmp = me.up('filter-control'),
+			id = cmp.getId();
+
 		if(!this.beginChanges(id)) {
 			return;
 		}
 			
-		Ext.each(this.getGroups(id), function(c){ c.setValue(nv); },this);
-		this.rebuildFilter(id);
+		Ext.each(this.getGroups(cmp), function(c){ c.setValue(nv); },this);
+		this.rebuildFilter(cmp);
 	},
 	
-	groupSelectionChanged: function(me, nv, ov, opts){
-		var id = me.up('filter-control').getId();
+	groupSelectionChanged: function(me){
+		var cmp = me.up('filter-control'),
+			id = cmp.getId();
 		if(!this.beginChanges(id)) {
 			return;
 		}
 		
-		this.getAllGroupsButton(id).setValue(false);
-		this.rebuildFilter(id);
+		this.getAllGroupsButton(cmp).setValue(false);
+		this.rebuildFilter(cmp);
 	},
 	
 	
 	
 	
 	
-	allTypesSelected: function(me, nv, ov, opts){
-		var id = me.up('filter-control').getId();
+	allTypesSelected: function(me, nv){
+		var cmp = me.up('filter-control'),
+			id = cmp.getId();
 		if(!this.beginChanges(id)) {
 			return;
 		}
 			
-		Ext.each(this.getTypes(id), function(c){ c.setValue(nv); },this);
-		this.rebuildFilter(id);
+		Ext.each(this.getTypes(cmp), function(c){ c.setValue(nv); },this);
+		this.rebuildFilter(cmp);
 	},
 	
-	typeSelectionChanged: function(me, nv, ov, opts){
-		var id = me.up('filter-control').getId();
+	typeSelectionChanged: function(me){
+		var cmp = me.up('filter-control'),
+			id = cmp.getId();
 		if(!this.beginChanges(id)) {
 			return;
 		}
 		
-		this.getAllTypesButton(id).setValue(false);
-		this.rebuildFilter(id);
+		this.getAllTypesButton(cmp).setValue(false);
+		this.rebuildFilter(cmp);
 	},
 	
 	
 	
 	
 	
-	rebuildFilter: function(id){
-		var f = this.rebuildFilter[id];
+	rebuildFilter: function(cmp){
+		var f = this.rebuildFilter[cmp.getId()];
 		if(!f){
-			f = Ext.Function.createBuffered(this.rebuildFilterBuffered,50,this,[id]);
-			this.rebuildFilter[id] = f; 
+			f = Ext.Function.createBuffered(this.rebuildFilterBuffered,50,this,[cmp]);
+			this.rebuildFilter[cmp.getId()] = f;
 		}
 		f.call(window);
 	},
 	
-	rebuildFilterBuffered: function(id){
-		var isUnknown = /unresolved/i,
-			filter = {groups:{},types:[], shareTargets:{}}, 
-			cmp = Ext.getCmp(id),
-			allGroups = this.getAllGroupsButton(id).getValue(),
-			groups = this.getGroups(id),
-			types = this.getTypes(id),
-			u = $AppConfig.username;
+	rebuildFilterBuffered: function(cmp){
+		var id = cmp.getId(),
+			allGroups = this.getAllGroupsButton(cmp).getValue(),
+			groups = this.getGroups(cmp),
+			types = this.getTypes(cmp),
+			Filter = NextThought.Filter,
+			group = new NextThought.FilterGroup(id,NextThought.FilterGroup.OPERATION_INTERSECTION),
+			people = new NextThought.FilterGroup(id,NextThought.FilterGroup.OPERATION_UNION),
+			models = new NextThought.FilterGroup(id,NextThought.FilterGroup.OPERATION_UNION);
 
-		if(allGroups) {
-			filter.groups = 'all';
-		}
-		else {
-			Ext.each( groups,
-				function(g) {
-					if(!g.getValue()) {
-						return;
-					}
-					if(g.isMe){
-						filter.includeMe = true;
-						return;
-					}
+		group.addFilter(people);
+		group.addFilter(models);
 
-					Ext.each(g.record.get('friends'),function(f){
-						filter.shareTargets[f]=true;
-					});
+		Ext.each( groups,
+			function(g) {
+				if(!g.getValue()) { return; }
 
-					filter.groups[g.record.get('Username')] = g.record;
-				},
-				this);
-		}
+				if(g.isMe){
+					people.addFilter(new Filter('Creator',Filter.OPERATION_INCLUDE, $AppConfig.username));
+					return;
+				}
 
-		
-		if(filter.includeMe){
-			filter.includeMe = u;
-			// filter.shareTargets[u] = true;
-		}
-		
+				Ext.each(g.record.get('friends'),function(f){
+					people.addFilter(new Filter('Creator',Filter.OPERATION_INCLUDE, f));
+				});
+			},
+			this);
+
 		Ext.each(types,function(t){
 			if(!t.getValue()) {
 				return;
 			}
-			filter.types.push(t.model);
+			models.addFilter(new Filter('$className',Filter.OPERATION_INCLUDE, t.model));
 		},
 		this);
-		
-		//console.debug('new filter:',filter);
-		cmp.fireEvent('filter-changed', filter);
+
+		//auto passthrough
+		models.addFilter(new Filter('$className',Filter.OPERATION_INCLUDE, 'NextThought.model.Change'));
+		models.addFilter(new Filter('$className',Filter.OPERATION_INCLUDE, 'NextThought.model.Hit'));
+		models.addFilter(new Filter('$className',Filter.OPERATION_INCLUDE, 'String'));
+
+		FilterManager.setFilter(id,group);
 		this.beginChanges[id] = undefined;
 	}
 });

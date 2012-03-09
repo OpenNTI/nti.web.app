@@ -10,7 +10,7 @@ Ext.define('NextThought.controller.Application', {
 		launchToken: {},
 
 		launch: function(){
-			console.groupCollapsed('Launch');
+			//console.groupCollapsed('Launch');
 
 			Ext.create('NextThought.view.Viewport');
 			try{
@@ -25,7 +25,7 @@ Ext.define('NextThought.controller.Application', {
 
 		Library.on('loaded', this.restore, this);
 		this.application.on('finished-loading', function(){
-			console.groupEnd();
+			//console.groupEnd();
 			window.stopTrackingModelConstruction = true;
 			NextThought.isInitialised = true;
 			Globals.removeLoaderSplash();

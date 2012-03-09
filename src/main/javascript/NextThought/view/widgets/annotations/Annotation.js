@@ -23,7 +23,7 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 			record: record,
 			userId: userId,
 			isModifiable: record.isModifiable(),
-			isVisible: record.phantom || me.testFilter(component.filter),
+			isVisible: record.phantom || component.filter.test(record),
 
 			isSingleAction: false,
 			renderPriority: -1,
@@ -78,6 +78,7 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 		this.record = record;
 
 		record.on('updated',this.attachRecord, this, {single: true});
+		record.on('destroy',this.cleanup, this, {single:true});
 
 		if(old.getId() !== record.getId()){
 			console.warn('Annotation:',old, '!==', record);
@@ -85,6 +86,7 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 
 		if(old !== record) {
 			old.un('updated', this.attachRecord, this);
+			old.un('destroy',this.cleanup, this);
 		}
 	},
 
@@ -102,14 +104,23 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 	getRects: null,//implement in subclasses
 
 	cleanup: function(){
-		var me = this;
+		var me = this,
+			r = me.record,
+			id = r.getId(),
+			c = me.ownerCmp;
+
 		NextThought.view.widgets.annotations.Annotation.unregister(me);
 
-		me.ownerCmp.un('afterlayout', this.onResize, me);
+		c.un('afterlayout', this.onResize, me);
 		Ext.EventManager.removeResizeListener(me.onResize, me);
 
 		if(me.img) {
 			Ext.get(me.img).remove();
+		}
+
+		//
+		if( c.annotationExists(r)){
+			c.removeAnnotation(id);
 		}
 
 		delete me.record;
@@ -117,39 +128,8 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 	},
 	
 
-	testFilter: function(filter){
-		if(	!filter			||
-			!filter.types	||
-			!filter.groups	||
-			filter.types.toString().indexOf(this.$className)<0) {
-			return false;
-		}
-
-		if((/all/i).test(filter.groups)) {
-			return true;
-		}
-
-		var p = this.record.get('Creator'),
-			targets = filter.shareTargets,
-			pass = !!targets[p];
-			
-		if(filter.includeMe === p){
-			return true;
-		}
-		
-		Ext.each(this.record.get('sharedWith'), function(f){
-			if(pass) { return false; }
-			if(targets[f]) { pass = true; }
-		},
-		this);
-		
-		
-		return pass;
-	},
-	
-
 	updateFilterState: function(newFilter){
-		var v = this.testFilter(newFilter);
+		var v = newFilter.test(this.record);
 		if(v !== this.isVisible){
 			this.isVisible = !!v;
 			this.visibilityChanged(v);

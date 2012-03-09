@@ -31,14 +31,14 @@ Ext.define('NextThought.controller.ObjectExplorer', {
 
 
 			'item-navigator': {
-				'annotation-destroyed': this.removeAnnotation
+				'annotation-destroyed': this.onRemoveAnnotation
 			}
 
 		},{});
 	},
 
 
-	removeAnnotation: function(oid, containerId){
+	onRemoveAnnotation: function(oid, containerId){
 		this.getController('Reader').onRemoveAnnotation(oid,containerId);
 	},
 

@@ -1,9 +1,8 @@
-if(window.console && console.groupCollapsed){
-	console.groupCollapsed("Initialization");
-}
+//if(window.console && console.groupCollapsed){
+//	console.groupCollapsed("Initialization");
+//}
 
 //disable script cache-busting _dc=... get string args if we're using the manifest
-
 (function(){
 	var cache,
 		c = window.applicationCache;

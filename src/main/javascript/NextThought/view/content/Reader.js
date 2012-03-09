@@ -58,7 +58,7 @@ Ext.define('NextThought.view.content.Reader', {
 			}
 		});
 
-		this.initAnnotations();
+		this.mixins.annotations.initAnnotations.call(this);
 
 		this.meta = {};
 		this.css = {};
@@ -243,6 +243,47 @@ Ext.define('NextThought.view.content.Reader', {
 
 	scrollTo: function(top, animate) {
 		this.body.scrollTo('top', top, animate!==false);
+	},
+
+
+	scrollToText: function(text) {
+		if (!text) {
+			return;
+		}
+
+		text = text.toLowerCase();
+
+		var me = this,
+			doc = me.getDocumentElement(),
+			ranges = [],
+			created = {},
+			texts, node, nv, r, index,
+			textLength = text.length;
+
+		texts = doc.evaluate('.//text()', doc,
+				null, XPathResult.ORDERED_NODE_ITERATOR_TYPE,
+				null);
+
+		while(!!(node = texts.iterateNext())){
+			nv = node.nodeValue.toLowerCase();
+
+			index = nv.indexOf(text);
+			while(index >= 0) {
+				r = doc.createRange();
+				r.setStart(node, index);
+				r.setEnd(node, index + textLength);
+
+				if (!created[nv] || !created[nv][index]) {
+					created[nv] = created[nv] || {} ;
+					created[nv][index] = true;
+					ranges.push(r);
+				}
+				index = nv.indexOf(text, index + 1);
+			}
+		}
+
+		me.showRanges(ranges);
+		me.scrollTo(ranges[0].getClientRects()[0].top - 150);
 	},
 
 

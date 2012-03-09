@@ -2,7 +2,8 @@ Ext.define('NextThought.view.content.Stream', {
 	extend:'NextThought.view.content.Panel',
 	alias:'widget.stream-panel',
 	requires: [
-		'NextThought.view.widgets.StreamEntry'
+		'NextThought.view.widgets.StreamEntry',
+		'NextThought.filter.FilterManager'
 	],
 	cls: 'x-stream-home',
 
@@ -10,8 +11,6 @@ Ext.define('NextThought.view.content.Stream', {
 	border: false,
 	defaults: {border: false},
 	items:[{autoScroll:true, padding: 5}],
-
-	filter: {},
 
 	constructor: function(){
 		this.callParent(arguments);
@@ -23,10 +22,14 @@ Ext.define('NextThought.view.content.Stream', {
 	},
 
 	initComponent: function(){
-		this.callParent(arguments);
-		this.store = Ext.getStore('Stream');
-		this.store.on('add', this.updateStream, this);
-		this.store.on('load', this.updateStream, this);
+		var me = this, s;
+		me.callParent(arguments);
+		s = me.store = Ext.getStore('Stream');
+		s.on('add', me.updateStream, me);
+		s.on('load', me.updateStream, me);
+		me.on('added',function(){
+			FilterManager.registerFilterListener(me, me.applyFilter,me);
+		});
 	},
 
 	applyFilter: function(filter){
@@ -39,15 +42,8 @@ Ext.define('NextThought.view.content.Stream', {
 			f = this.filter;
 
 		p.removeAll(true);
-
-		if(!f.shareTargets) {
-			return;
-		}
-
 		this.store.each(function(change){
-			var u = change.get('Creator');
-
-			if(/all/i.test(f.groups) || f.shareTargets[ u ] || (f.includeMe && f.includeMe===u)){
+			if(!f || f.test(change)){
 				p.add({change: change, xtype: 'streamEntry'});
 			}
 		});

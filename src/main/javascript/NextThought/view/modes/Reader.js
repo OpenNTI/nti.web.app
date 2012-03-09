@@ -13,12 +13,11 @@ Ext.define( 'NextThought.view.modes.Reader', {
 	initComponent: function(){
 		this.callParent(arguments);
 
-		var reader = Ext.widget('reader-panel',{id:'readerPanel'});
 
 		this.add(this.getSpacerColumn());
 		this.add({ region: 'west', id: 'west-reader', xtype: 'leftColumn', columnWidget: {xtype:'filter-control'} });
 
-		this.center = this.add({
+		this.add({
 			cls: 'x-focus-pane',
 			region: 'center',
 			flex: 6,
@@ -29,14 +28,18 @@ Ext.define( 'NextThought.view.modes.Reader', {
 			layout: 'fit',
 			defaults: {border: false, frame: false},
 			dockedItems: {id:'breadcrumb',dock:'top', xtype: 'breadcrumbbar'},
-			items: reader
+			items: {
+				xtype: 'reader-panel',
+				id: 'readerPanel'
+			}
 		});
 
 		this.add({ region: 'east', id:'east-reader', xtype: 'rightColumn', columnWidget: {xtype:'reader-items'} });
 		this.add(this.getSpacerColumn());
 
-		this.reader = reader;
-		LocationProvider.on('navigate',reader.loadPage,reader);
+
+		this.reader = Ext.getCmp('readerPanel');
+		LocationProvider.on('navigate',this.reader.loadPage,this.reader);
 	},
 
 

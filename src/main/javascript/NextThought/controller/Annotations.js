@@ -29,6 +29,10 @@ Ext.define('NextThought.controller.Annotations', {
 		{ref: 'chatWindow', selector: 'chat-window'}
 	],
 
+	statics: {
+		events: new Ext.util.Observable()
+	},
+
 	init: function() {
 
 		this.actionMap = {
@@ -62,15 +66,6 @@ Ext.define('NextThought.controller.Annotations', {
 			}
 		},{});
 	},
-
-	getContext: function(){
-		return this.getController('Reader').getReader();
-	},
-
-	getContainerId: function(){
-		return this.getContext().getContainerId();
-	},
-
 
 	define: function(term){
 		var url = $AppConfig.server.host + '/dictionary/' + encodeURIComponent(term);
@@ -229,32 +224,13 @@ Ext.define('NextThought.controller.Annotations', {
 			success:function(newRecord,operation){
 				win.close();
 				win.record.fireEvent('updated',newRecord);
-				this.attemptToAddWidget(newRecord);
+				this.self.events.fireEvent('new-note',newRecord);
 			},
 			failure:function(){
 				console.error('failed to save note');
 				win.el.unmask();
 			}
 		});
-	},
-
-
-	attemptToAddWidget: function(record){
-		//check to see if reply is already there, if so, don't do anything...
-		if (Ext.get(IdCache.getComponentId(record))) {
-			return;
-		}
-
-		var parent = record.get('inReplyTo');
-		if(parent){
-			parent = Ext.getCmp(IdCache.getComponentId(parent));
-			parent.addReply(record);
-		}
-		else {
-			this.getContext().createNoteWidget(record);
-		}
-
-		this.getContext().fireEvent('resize');
 	},
 
 	replyAsChat: function(record) {
@@ -329,7 +305,7 @@ Ext.define('NextThought.controller.Annotations', {
 		}
 
 		var note = AnnotationUtils.selectionToNote(range);
-		note.set('ContainerId', this.getContainerId());
+		note.set('ContainerId', LocationProvider.currentNTIID);
 
 		this.editNote(note);
 	}

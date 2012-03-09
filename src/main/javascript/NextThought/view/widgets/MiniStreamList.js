@@ -9,8 +9,16 @@ Ext.define('NextThought.view.widgets.MiniStreamList', {
 	margin: '15px auto',
 	defaults: {border: false},
 	items:[{html:'Recent Items:', cls:'sidebar-header'},{defaults:{border: false}}],
+
+
+	initComponent: function(){
+		var me = this;
+		me.callParent(arguments);
+		me.on('added',function(){
+			FilterManager.registerFilterListener(me, me.applyFilter,me);
+		});
+	},
 	
-	filter: {},
 
 	applyFilter: function(filter){
 		this.filter = filter;
@@ -34,7 +42,7 @@ Ext.define('NextThought.view.widgets.MiniStreamList', {
 
 
 	updateStream: function(){
-		var c=0, u,
+		var c=0,
 			s = this.store || {each:Ext.emptyFn},
 			p = this.items.get(1),
 			f = this.filter,
@@ -44,14 +52,7 @@ Ext.define('NextThought.view.widgets.MiniStreamList', {
 
 		s.each(function(change){
 
-			if (!change.get) {
-				console.debug('do we still get this?');
-				return;
-			}
-
-			u = change.get('Creator');
-
-			if( (/all/i).test(f.groups) || (f.shareTargets && f.shareTargets[ u ]) || (f.includeMe && f.includeMe===u)){
+			if( !f || f.test(change) ){
 				c++;
 				p.add({change: change, xtype: 'miniStreamEntry'});
 			}
