@@ -15,12 +15,11 @@ Ext.define('NextThought.view.content.Reader', {
 	layout: 'anchor',
 
 	initComponent: function() {
-		var me = this;
 		this.loadedResources = {};
 		this.addEvents('loaded','finished-restore');
 		this.enableBubble('loaded','finished-restore');
 		this.callParent(arguments);
-		Ext.applyIf(me, {
+		Ext.applyIf(this, {
 			tracker: null,
 			prefix: 'default'
 		});
@@ -43,18 +42,7 @@ Ext.define('NextThought.view.content.Reader', {
 			},
 			listeners: {
 				scope: this,
-				afterRender: function(){
-					// must defer to wait for browser to be ready
-					var task = { interval : 10 };
-					task.run = function() {
-						var doc = me.getDocumentElement();
-						if (doc.body || doc.readyState === 'complete') {
-							Ext.TaskManager.stop(task);
-							me.initContentFrame();
-						}
-					};
-					Ext.TaskManager.start(task);
-				}
+				afterRender: this.resetFrame
 			}
 		});
 
@@ -66,6 +54,28 @@ Ext.define('NextThought.view.content.Reader', {
 		this.css = {};
 		this.nav = {};
 	},
+
+
+
+	resetFrame: function(){
+		console.log('resetFrame');
+
+		// must defer to wait for browser to be ready
+		var me = this,
+			task = { interval : 10 };
+
+		me.getIframe().win.location.replace(Ext.SSL_SECURE_URL);
+
+		task.run = function() {
+			var doc = me.getDocumentElement();
+			if (doc.body || doc.readyState === 'complete') {
+				Ext.TaskManager.stop(task);
+				me.initContentFrame();
+			}
+		};
+		Ext.TaskManager.start(task);
+	},
+
 
 
 
@@ -186,7 +196,11 @@ Ext.define('NextThought.view.content.Reader', {
 	},
 
 	getIframe: function(){
-		return this.items.first().el;
+		var el = this.items.first().el,
+			iframe = el.dom;
+
+		el.win = (Ext.isIE ? iframe.contentWindow : window.frames[iframe.name]);
+		return el;
 	},
 
 
@@ -200,12 +214,14 @@ Ext.define('NextThought.view.content.Reader', {
 	},
 
 	getDocumentElement: function(){
-		var iframe, win, doc = this.contentDocumentElement;
+		var iframe, win, dom, doc = this.contentDocumentElement;
 
 		if(!doc){
-			iframe = this.getIframe().dom;
-			win = (Ext.isIE ? iframe.contentWindow : window.frames[iframe.name]);
-			doc = (!Ext.isIE && iframe.contentDocument) || win.document;
+			iframe = this.getIframe();
+			dom = iframe.dom;
+			win = iframe.win;
+
+			doc = (!Ext.isIE && dom.contentDocument) || win.document;
 			doc.ownerWindow = win;
 
 			this.contentDocumentElement = doc;
