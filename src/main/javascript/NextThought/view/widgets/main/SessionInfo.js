@@ -90,12 +90,12 @@ Ext.define('NextThought.view.widgets.main.SessionInfo', {
 				iconCls: 'session-myacount',
 				scope: this,
 				handler: this.account
-			},{
+			},/*{
 				text: 'Settings',
 				iconCls: 'settings-gear',
 				scope: this,
 				handler: this.settings
-			},'-',
+			},*/'-',
 			{
 				text: 'Logout',
 				iconCls: 'session-logout',
