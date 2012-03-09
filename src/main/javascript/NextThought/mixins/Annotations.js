@@ -249,7 +249,7 @@ Ext.define('NextThought.mixins.Annotations', {
 			oid = item? item.getId() : null,
 			cid = item? item.get('ContainerId') : null,
 			delAction = /deleted/i.test(type),
-			cmp = Ext.getCmp(IdCache.getComponentId(oid)),
+			cmp = Ext.getCmp(IdCache.getComponentId(oid, null, this.prefix)),
 			cls, replyTo, builder, result;
 
 		console.log('onNotification', change, type);
@@ -289,7 +289,7 @@ Ext.define('NextThought.mixins.Annotations', {
 
 			if(result === false){
 				if (/Note/i.test(cls) && replyTo) {
-					replyTo = Ext.getCmp(IdCache.getComponentId(replyTo));
+					replyTo = Ext.getCmp(IdCache.getComponentId(replyTo, null, this.prefix));
 					replyTo.addReply(item);
 				}
 				else {
