@@ -127,6 +127,7 @@ Ext.define('NextThought.view.content.Reader', {
 
 		ContentAPIRegistry.on('update',me.applyContentAPI,me);
 		me.applyContentAPI();
+		me.setSplash();
 		me.syncInterval = setInterval( me.checkFrame, 50 );
 	},
 
@@ -352,7 +353,7 @@ Ext.define('NextThought.view.content.Reader', {
 
 	setSplash: function(){
 		this.scrollTo(0, false);
-		this.setContent('Nothing loaded');
+		this.setContent('<div class="no-content-splash"></div>');
 	},
 
 

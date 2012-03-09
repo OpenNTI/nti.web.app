@@ -18,4 +18,13 @@
 
 	.breadcrumb-next{ background: $next-arrow; }
 	.breadcrumb-prev{ background: $prev-arrow; }
+	.breadcrumb-close {
+	    background: {
+	    	image: $note-action-delete-icon;
+	  		position: center center;
+	    	repeat: no-repeat;
+	  		size: 8px;
+	    };
+
+	}
 }

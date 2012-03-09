@@ -125,9 +125,9 @@ Ext.define('NextThought.view.widgets.Breadcrumb', {
 			navInfo = Library.getNavigationInfo(curNode.getAttribute('ntiid')) || {};
 			container.add(
 					'->',
-					{iconCls: 'breadcrumb-close', ntiid: true },
-					{iconCls: 'breadcrumb-prev', disabled: !navInfo.hasPrevious, ntiid: navInfo.previousRef},
-					{iconCls: 'breadcrumb-next', disabled: !navInfo.hasNext, ntiid: navInfo.nextRef}
+					{iconCls: 'breadcrumb-close', ntiid: true, tooltip:'Close Content' },
+					{iconCls: 'breadcrumb-prev', disabled: !navInfo.hasPrevious, ntiid: navInfo.previousRef, tooltip:'Previous Content'},
+					{iconCls: 'breadcrumb-next', disabled: !navInfo.hasNext, ntiid: navInfo.nextRef, tooltip:'Next Content'}
 			);
 		}
 
