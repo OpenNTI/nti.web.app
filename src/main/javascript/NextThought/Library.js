@@ -58,7 +58,7 @@ Ext.define('NextThought.Library', {
 			info = {};
 
 		for (i; i < len; i++) {
-			if (!list[i] || !list[i].getAttribute) {
+			if (!list[i] || !list[i].tagName) {
 				console.error('error in loop', ntiid, loc, list, i, len);
 				continue;
 			}

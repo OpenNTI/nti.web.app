@@ -117,7 +117,7 @@ Ext.define('NextThought.view.widgets.RelatedItemsList', {
 		Ext.each(related, function(r){
 			r = r.firstChild;
 			do{
-				if(!r.getAttribute) {
+				if(!r.tagName) {
 					continue;
 				}
 

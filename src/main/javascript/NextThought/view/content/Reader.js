@@ -83,7 +83,8 @@ Ext.define('NextThought.view.content.Reader', {
 		var me = this,
 			base = location.pathname,
 			host = $AppConfig.server.host,
-			doc = me.getDocumentElement();
+			doc = me.getDocumentElement(),
+			meta;
 
 		function on(dom,event,fn){
 			if(dom.addEventListener) {
@@ -96,6 +97,12 @@ Ext.define('NextThought.view.content.Reader', {
 
 		doc.firstChild.setAttribute('class','x-panel-reset');
 		doc.body.setAttribute('class','x-panel-body');
+
+		meta = doc.createElement('meta');
+		//<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		meta.setAttribute('http-equiv','X-UA-Compatible');
+		meta.setAttribute('content','IE=edge');
+		doc.getElementsByTagName('head')[0].appendChild(meta);
 
 		Globals.loadStyleSheet({
 			url: base+document.getElementById('main-stylesheet').getAttribute('href'),

@@ -49,6 +49,7 @@
 }
 
 .library-section {
+    clear: both;
     .label {
        	@include section-label-body;
 		.x-panel-body { @include section-label-body; }

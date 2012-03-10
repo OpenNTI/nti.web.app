@@ -181,7 +181,6 @@ Ext.define('NextThought.util.Globals',
 
 
 	applyHooks:  function(){
-		this.ensureConsole();
 		this.ensureNodePrototypes();
 
 		window.alert = function(title, msg){
@@ -365,26 +364,21 @@ Ext.define('NextThought.util.Globals',
 
 
 	ensureConsole: function(){
-		var log;
-
 		Ext.applyIf(window,{
-			console:{
-				log: function(){}
-			}
+			console:{}
 		});
 
-		log = Ext.Function.alias(console, 'log');
-
 		Ext.applyIf(window.console,{
-			debug: log,
-			info: log,
-			warn: log,
-			error: log,
+			log: Ext.emptyFn,
+			debug: Ext.emptyFn,
+			info: Ext.emptyFn,
+			warn: Ext.emptyFn,
+			error: Ext.emptyFn,
 			group: Ext.emptyFn,
 			groupCollapsed: Ext.emptyFn,
 			groupEnd: Ext.emptyFn,
-			time: log,
-			timeEnd: log
+			time: Ext.emptyFn,
+			timeEnd: Ext.emptyFn
 		});
 
 	},
@@ -480,6 +474,8 @@ Ext.define('NextThought.util.Globals',
 function(){
 	window.Globals = this;
 	window.guidGenerator = this.guidGenerator;
+
+	this.ensureConsole();
 	this.handleCache();
 	this.applyHooks();
 });

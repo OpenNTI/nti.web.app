@@ -172,7 +172,7 @@ Ext.define('NextThought.view.widgets.Breadcrumb', {
 			return;
 		}
 		Ext.each(node.childNodes,function(v){
-			if(v.nodeName==="#text"||!v.hasAttribute("label")){
+			if(v.nodeName==="#text"||!v.getAttribute("label")){
 				return;
 			}
 			leafs.push(this.renderLeafFromTopic(v, v===selectedNode)||{});

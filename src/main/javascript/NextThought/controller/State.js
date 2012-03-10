@@ -19,7 +19,9 @@ Ext.define('NextThought.controller.State', {
 
 	init: function() {
 		var me = this,
-			push = window.history.pushState;
+			push = history.pushState || function(){};
+
+		history.replaceState = history.replaceState || function(){};
 
 		me.currentState = {};
 

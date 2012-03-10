@@ -281,7 +281,7 @@ Ext.define('NextThought.view.widgets.Tracker', {
 
 		if(n) {
 			Ext.each(p.childNodes,function(v){
-				if(v.nodeName==="#text"||!v.hasAttribute(a)) {
+				if(v.nodeName==="#text"||!v.getAttribute(a)) {
 					return;
 				}
 				
