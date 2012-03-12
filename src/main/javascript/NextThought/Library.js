@@ -133,6 +133,11 @@ Ext.define('NextThought.Library', {
 			stack.push(o.get('index'));
 		});
 
+		if(stack.length===0){
+			callback.call(this);
+			return;
+		}
+
 		//Iteration 2 loads TOC async, so once the last one loads, callback if available
 		this.each(function(o){
 			if(!o.get||!o.get('index')){ return; }
