@@ -122,7 +122,7 @@ Ext.define('NextThought.view.widgets.Breadcrumb', {
 
 		//add prev and next buttons
 		if (curNode) {
-			navInfo = Library.getNavigationInfo(curNode.getAttribute('ntiid')) || {};
+			navInfo = Library.getNavigationInfo(location.NTIID) || {};
 			container.add(
 					'->',
 					{iconCls: 'breadcrumb-close', ntiid: true, tooltip:'Close Content' },
@@ -172,10 +172,15 @@ Ext.define('NextThought.view.widgets.Breadcrumb', {
 			return;
 		}
 		Ext.each(node.childNodes,function(v){
-			if(v.nodeName==="#text"||!v.getAttribute("label")){
-				return;
+			try {
+				if(v.nodeName==="#text"||! v.nodeName ==='xml' ){
+					return;
+				}
+				leafs.push(this.renderLeafFromTopic(v, v===selectedNode)||{});
 			}
-			leafs.push(this.renderLeafFromTopic(v, v===selectedNode)||{});
+			catch(e){
+				console.warn('Breadcrumb: ',v, e.message);
+			}
 		}, this);
 	},
    

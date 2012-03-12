@@ -281,14 +281,19 @@ Ext.define('NextThought.view.widgets.Tracker', {
 
 		if(n) {
 			Ext.each(p.childNodes,function(v){
-				if(v.nodeName==="#text"||!v.getAttribute(a)) {
-					return;
-				}
+				try {
+					if(v.nodeName==="#text" || v.nodeName==='xml') {
+						return;
+					}
 				
-				r.push({
-					height: parseInt(v.getAttribute(a),10),
-					node: v
-				});
+					r.push({
+						height: parseInt(v.getAttribute(a),10),
+						node: v
+					});
+				}
+				catch(e){
+					console.warn('Tracker: ',e.message);
+				}
 			});
 		}
 		
