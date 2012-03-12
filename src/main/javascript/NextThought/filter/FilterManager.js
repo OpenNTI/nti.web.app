@@ -21,12 +21,13 @@ Ext.define('NextThought.filter.FilterManager',{
 
 
 	registerFilterListener: function retry(filterScope, fn, fnScope){
-		var me = this, o, p;
+		var me = this, o, p, fc;
 
 		if( filterScope && filterScope.isComponent){
 			p = filterScope.up('mode-container');
 			if(p){
-				filterScope = p.down('filter-control').getId();
+				fc = p.down('filter-control');
+				if (fc){filterScope = fc.getId();}
 			}
 			else {
 				setTimeout(function(){ retry.call(me,filterScope,fn,fnScope); },10);
