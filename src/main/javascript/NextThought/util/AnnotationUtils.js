@@ -258,29 +258,93 @@ Ext.define('NextThought.util.AnnotationUtils',{
 
 //tested
 	getNodeFromXPath: function(xpath, root) {
+		root = root || document;
+
 		try {
-			return document.evaluate(xpath, root||document, null, XPathResult.ANY_TYPE, null).iterateNext();
+			return this.resolveXPath(xpath,root);
 		}
 		catch(e) { //getNodeFromXPath
-			console.error('xpath:', xpath, 'error:', e, e.stack);
-			return null;
+			console.error('xpath: ', xpath, 'error:', e, e.stack);
 		}
+		return null;
+	},
+
+
+ 	resolveXPath: function resolveXPath(xpath, root){
+		var path, pc, node, child, m,
+			id = resolveXPath.id = resolveXPath.id || (/id\("(.+?)"\)/i),
+			text = resolveXPath.text = resolveXPath.text || (/text\(\)(\[(\d+)\])?/i),
+			tag = resolveXPath.tag || resolveXPath.tag || (/([A-Z]+)(\[(\d+)\])?/i);
+
+		path = xpath.split('/').reverse();
+
+		while( (pc = path.pop()) ){
+			m = pc.match(id);
+			if(m && !node){
+				node = root.getElementById(m[1]);
+			}
+			else {
+				m = pc.match(text);
+				if(m){
+					// m[2] //index
+					for (child = node.firstChild; child && m[2]; child = child.nextSibling) {
+						if(child.nodeType === 3){
+							m[2]--;
+							if(m[2]===0){
+								node = child;
+							}
+						}
+					}
+					if(m[2]>0 && !child){
+						throw pc+' Node not found';
+					}
+
+				}
+				else {
+					m = pc.match(tag);
+					// m[1] //tag
+					// m[3] //index
+					if(m){
+						for (child = node.firstChild; child && m[3]; child = child.nextSibling) {
+							if(child.tagName === m[1]){
+								m[3]--;
+								if(m[3]===0){
+									node = child;
+								}
+							}
+						}
+
+						if(m[3]>0 && !child){
+							throw pc+' Node not found';
+						}
+					}
+				}
+			}
+		}
+		return node;
 	},
 
 
 	buildRangeFromRecord: function(r, root) {
-		var endElement = this.getNodeFromXPath(r.get('endXpath'),root),
-			startElement = this.getNodeFromXPath(r.get('startXpath'), root),
-			range = (root||document).createRange();
-
 		try {
-			range.setEnd(endElement ? endElement : startElement, r.get('endOffset'));
-			range.setStart(startElement, r.get('startOffset'));
-			if (startElement && !range.collapsed) {
-				return range;
+			var endElement = this.getNodeFromXPath(r.get('endXpath'),root),
+				startElement = this.getNodeFromXPath(r.get('startXpath'), root),
+				range = (root||document).createRange();
+
+			try {
+				range.setEnd(endElement ? endElement : startElement, r.get('endOffset'));
+				range.setStart(startElement, r.get('startOffset'));
+				if (startElement && !range.collapsed) {
+					return range;
+				}
+			}
+			catch(e) { console.warn('bad range', r, e, e.toString()); }
+		}
+		catch(e){
+			if(!e.warn){
+				console.error(e);
 			}
 		}
-		catch(e) { console.warn('bad range', r, e, e.toString()); }
 
 		//if we make it this far, there's something wrong with the range, we'll try to reconstruct from anchors
 		return this.rangeFromAnchors(r,root);
@@ -349,8 +413,7 @@ Ext.define('NextThought.util.AnnotationUtils',{
 			container = Ext.get(startAnchor).up('.page-contents').dom;
 		}
 
-		texts = document.evaluate( './/text()',
-				container, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE, null);
+		texts = this.getTextNodes( container );
 
 		while(resultRange.collapsed && !!(text = texts.iterateNext())){
 			if (text.nodeValue===startHighlightedFullText) {
@@ -371,6 +434,23 @@ Ext.define('NextThought.util.AnnotationUtils',{
 		}
 
 		return null;
+	},
+
+
+	getTextNodes: function (root) {
+		var textNodes = [];
+		function getNodes(node) {
+			var child;
+
+			if (node.nodeType === 3) { textNodes.push(node); }
+			else if (node.nodeType === 1) {
+				for (child = node.firstChild; child; child = child.nextSibling) {
+					getNodes(child);
+				}
+			}
+		}
+		getNodes(root.body || root);
+		return textNodes;
 	},
 
 
