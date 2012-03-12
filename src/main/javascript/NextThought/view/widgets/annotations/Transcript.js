@@ -6,7 +6,6 @@ Ext.define( 'NextThought.view.widgets.annotations.Transcript', {
 	],
 
 	constructor: function(record, component){
-		debugger;
 		Ext.apply(this, {
 			anchorNode : null,
 			renderPriority: 0,
