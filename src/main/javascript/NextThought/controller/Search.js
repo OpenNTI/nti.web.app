@@ -80,23 +80,35 @@ Ext.define('NextThought.controller.Search', {
 			containerId = hit.get('ContainerId');
 
 		function success(o) {
+
+			function sc(a){
+				//these have to be resolved after navigation
+				var cid = hit.get('ContainerId'),
+					id = IdCache.hasIdentifier(hit.getId())
+							? IdCache.getComponentId(hit.getId(),null,'default')
+							: IdCache.hasIdentifier(cid)
+								? IdCache.getComponentId(cid,null,'default')
+								: null;
+				setTimeout(function(){ a.scrollToId(id); },500);
+			}
+
+			var r = Ext.getCmp('reader');
+
+
 			Ext.getBody().unmask();
 			if(!o){
 				alert("bad things");
 				return;
 			}
 
-			Ext.getCmp('reader').activate();
-			LocationProvider.setLocation(o.NTIID, function(a){
-				var cid = hit.get('ContainerId'),
-					id = IdCache.hasIdentifier(hit.getId())
-							? IdCache.getComponentId(hit.getId())
-							: IdCache.hasIdentifier(cid)
-								? IdCache.getComponentId(cid)
-								: null;
+			r.activate();
 
-				a.scrollToId(id);
-			});
+			if(LocationProvider.currentNTIID != o.NTIID){
+				LocationProvider.setLocation(o.NTIID, sc);
+			}
+			else {
+				sc(r.down('reader-panel'));
+			}
 
 			var popover = me.getSearchPopover();
 			if(popover && popover.isVisible()){
