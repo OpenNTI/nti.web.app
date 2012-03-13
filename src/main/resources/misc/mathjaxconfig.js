@@ -3,14 +3,26 @@
  **/
 if(window['MathJax']){
 
+	//We get loaded in an iframe that has already had
+	//its onload method called.  Mathjax relies on this
+	//to start processing things on the Hub queue so
+	//we trigger the onload call manually
+	MathJax.Hub.Startup.onload();
+
 	window.addEventListener("message", function(e){
 		if(e.data === 'MathJax.reRender()') {
 			MathJax.reRender();
 		}
 	}, false);
 
+
 	MathJax.reRender = function(){
-		MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+		try{
+		//Have mathjax display the new math that is in the content div
+			MathJax.Hub.Queue(["Typeset",MathJax.Hub, "NTIContent"]);
+		}catch( err ){
+			console.log(err);
+		}
 	};
 
 //config MathJax
