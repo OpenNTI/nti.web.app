@@ -89,18 +89,22 @@ Ext.define('NextThought.controller.Stream', {
 	onClick: function(item) {
 		var cid = item.get('ContainerId'),
 			ntiid = item.getId(),
-			mType = item.getModelName();
+			mType = item.getModelName(),
+			rp, p;
 
 		if (mType !== 'Note' && mType !== 'Highlight') {
 			return;
 		}
 
 		//ensure reader panel is up
-		Ext.ComponentQuery.query('reader-mode-container')[0].activate();
+		rp = Ext.ComponentQuery.query('reader-mode-container')[0];
+		rp.activate();
+		p = rp.down('reader-panel').prefix;
 
 		LocationProvider.setLocation(cid, function(a){
 			if (IdCache.hasIdentifier(ntiid)){
-				a.scrollToId(IdCache.getComponentId(ntiid));
+				//use default reader-panel prefix as we are always opening this in the reader panel
+				a.scrollToId(IdCache.getComponentId(ntiid, null, p));
 			}
 		});
 	},
