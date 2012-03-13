@@ -184,35 +184,45 @@ Ext.define('NextThought.model.Service', {
 			q = {};
 
 		function continueRequest(resolvedUrl){
+			try {
+				q.request = Ext.Ajax.request({
+					url: resolvedUrl,
+					callback: function(req, s, resp){
+						if(s){
+							resp.responseLocation = resolvedUrl;
+							Globals.callback(success, scope, [resp]);
+						} else {
+							Globals.callback(failure,scope, [req,resp]);
+						}
+					}
+				});
+			}
+			catch(e){
+				Globals.callback(failure,scope,[{},e]);
+			}
+		}
+
+		try{
+			//lookup step
 			q.request = Ext.Ajax.request({
-				url: resolvedUrl,
-				callback: function(req, s, resp){
+				url: url,
+				headers: {
+					Accept: 'application/vnd.nextthought.link+json'
+				},
+				callback: function(req,s,resp){
+					var href;
 					if(s){
-						resp.responseLocation = resolvedUrl;
-						Globals.callback(success, scope, [resp]);
+						href = Ext.JSON.decode(resp.responseText).href;
+						continueRequest(host+href);
 					} else {
 						Globals.callback(failure,scope, [req,resp]);
 					}
 				}
 			});
 		}
-
-		//lookup step
-		q.request = Ext.Ajax.request({
-			url: url,
-			headers: {
-				Accept: 'application/vnd.nextthought.link+json'
-			},
-			callback: function(req,s,resp){
-				var href;
-				if(s){
-					href = Ext.JSON.decode(resp.responseText).href;
-					continueRequest(host+href);
-				} else {
-					Globals.callback(failure,scope, [req,resp]);
-				}
-			}
-		});
+		catch(e){
+			Globals.callback(failure,scope,[{},e]);
+		}
 
 		return q;
 	},
