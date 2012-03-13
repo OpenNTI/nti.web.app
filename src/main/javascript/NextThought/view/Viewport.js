@@ -22,7 +22,7 @@ Ext.define('NextThought.view.Viewport', {
 
 	items:[
 		{xtype: 'master-header', region: 'north'},
-		{xtype: 'panel', id: 'browser-warning', cls: 'browser-warning', html: 'Your browser is unsupported at this time. See a list of supported browsers <a href="supported.html">here</a>'},
+		{xtype: 'panel', id: 'browser-warning', cls: 'browser-warning', html: 'Your browser does not support these features: {0}.<br/>Here is a list of <a href="supported.html">Supported browsers</a>.'},
 		{xtype: 'modeContainer', region: 'center', id: 'mode-ctr', flex: 1}
 	],
 
@@ -41,15 +41,22 @@ Ext.define('NextThought.view.Viewport', {
 		return this.container.getActive();
 	}
 }, function(){
-	if(	!Ext.features.has('SVG')		||
-		!Ext.features.has('Canvas')		||
-		!Ext.features.has('History')	||
-		!Ext.features.has('Video')		||
-		!Ext.features.has('CSSTransforms')		||
-		!Ext.features.has('CSSTransitions')		||
-		!Ext.features.has('CSSAnimations')) {
-		return;
+	var features = ['Canvas','CSSAnimations','CSSTransforms','CSSTransitions','History','SVG','Video'],f,
+		unsupported = [];
+
+
+	while(!!(f = features.pop())){
+		if(!Ext.features.has(f)) {
+			unsupported.push(f);
+		}
 	}
 
-	Ext.Array.erase(this.prototype.items, 1,1);
+	if(unsupported.length===0){
+		Ext.Array.erase(this.prototype.items, 1,1);
+	}
+	else {
+		unsupported.reverse();
+		f = this.prototype.items[1];
+		f.html = Ext.String.format(f.html, unsupported.join(', ') );
+	}
 });
