@@ -173,10 +173,14 @@ Ext.define('NextThought.view.widgets.Breadcrumb', {
 		}
 		Ext.each(node.childNodes,function(v){
 			try {
-				if(v.nodeName==="#text"||! v.nodeName ==='xml' ){
+				var leaf;
+				if(v.nodeName==="#text" || v.nodeName==='xml' || !v.getAttribute('ntiid') ) {
 					return;
 				}
-				leafs.push(this.renderLeafFromTopic(v, v===selectedNode)||{});
+				leaf = this.renderLeafFromTopic(v, v===selectedNode);
+				if(leaf){
+					leafs.push(leaf);
+				}
 			}
 			catch(e){
 				console.warn('Breadcrumb: ',v, e.message);
@@ -198,8 +202,8 @@ Ext.define('NextThought.view.widgets.Breadcrumb', {
 			list = [];
 			leaf.menu = list;
 			this.renderBranch(list,topicNode);
-			if(!leaf.menu.length){
-				leaf.menu = undefined;
+			if(list.length===0){
+				delete leaf.menu;
 			}
 		}
 		
