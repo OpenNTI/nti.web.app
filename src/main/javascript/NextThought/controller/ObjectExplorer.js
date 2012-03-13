@@ -44,7 +44,7 @@ Ext.define('NextThought.controller.ObjectExplorer', {
 
 
 	itemNavigatorItemActivated: function(control, record, dom, index) {
-		//TODO - reroute through search controller who can resolve top level containers...
+		//reroute through search controller who can resolve top level containers...
 		this.getController('Search').searchResultClicked(record);
 	},
 
