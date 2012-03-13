@@ -13,7 +13,7 @@ Ext.define( 'NextThought.view.widgets.annotations.Note', {
 			renderPriority: 0
 		});
 
-		this.callParent([record, component, record.isModifiable()? 'assets/images/charms/note-white.png' : null]);
+		this.callParent([record, component]);
 
 		var me = this,
 			a = this.query('a[name=' + record.get('anchorPoint') + ']')[0],

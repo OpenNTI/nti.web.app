@@ -12,7 +12,7 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 	constructor: function(selection, record, component){
 		var me = this;
 
-		me.callParent([record, component,'assets/images/charms/highlight-white.png']);
+		me.callParent([record, component]);
 
 		Ext.apply(me,{
 			selection: selection,
