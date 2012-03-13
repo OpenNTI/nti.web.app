@@ -26,9 +26,9 @@ Ext.define('NextThought.view.widgets.Widget', {
 		el.setAttribute('style',css);
 		parent.appendChild(el);
 
-		s = e.getStyle('background-image');
+		s = e.getStyle('background-image').replace(/url\((.*?)\)/i, '$1');
 		e.removeCls(type);
-		el.setAttribute('src', s.replace(/url\((.*?)\)/i, '$1'));
+		el.setAttribute('src', s.replace(/^["']|['"]$/ig,''));
 
 		return el;
 	},
