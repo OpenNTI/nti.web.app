@@ -27,7 +27,7 @@ Ext.define( 'NextThought.view.modes.Reader', {
 			frame: false,
 			layout: 'fit',
 			defaults: {border: false, frame: false},
-			dockedItems: {id:'breadcrumb',dock:'top', xtype: 'breadcrumbbar'},
+			dockedItems: {id:'breadcrumb', dock:'top', xtype: 'reader-breadcrumbbar'},
 			items: {
 				xtype: 'reader-panel',
 				id: 'readerPanel'

@@ -2,7 +2,8 @@ Ext.define('NextThought.view.widgets.classroom.LiveDisplay', {
 	extend:'Ext.tab.Panel',
 	alias: 'widget.live-display',
 	requires: [
-		'NextThought.view.content.Reader'
+		'NextThought.view.content.Reader',
+		'NextThought.view.widgets.ClassroomBreadcrumb'
 	],
 	cls: 'nti-live-display',
 	tabPosition: 'bottom',
@@ -18,16 +19,17 @@ Ext.define('NextThought.view.widgets.classroom.LiveDisplay', {
 	{
 		this.callParent(arguments);
 
+		var prefix = guidGenerator();
 		this.content = this.add({
 			xtype: 'reader-panel',
 			tracker: false,
-			prefix: guidGenerator(),
+			prefix: prefix,
 			tabConfig:{
 				title: 'Content',
 				content: true,
 				tooltip: 'Live Content'
-			}
-			//dockedItems: {dock:'bottom', xtype: 'breadcrumbbar', skipHistory: true},
+			},
+			dockedItems: {dock:'bottom', xtype: 'classroom-breadcrumbbar', prefix: prefix, skipHistory: true}
 		});
 
 		this.whiteboard = this.add({tabConfig:{title:'Whiteboard', tooltip: 'Live Whiteboard'}});

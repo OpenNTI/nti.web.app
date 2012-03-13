@@ -30,7 +30,7 @@ Ext.define('NextThought.mixins.Annotations', {
 		});
 
 		me.addEvents('share-with','create-note');
-
+console.log('init annotations with prefix', this.prefix);
 		me.widgetBuilder = {
 			'Highlight': me.createHighlightWidget,
 			'Note': me.createNoteWidget,
@@ -188,6 +188,7 @@ Ext.define('NextThought.mixins.Annotations', {
 
 
 	createNoteWidget: function(record){
+		console.log('create note widget prefix', this.prefix);
 		try{
 			if(!record.pruned && (record.get('inReplyTo') || record.parent)){
 				return false;
@@ -222,6 +223,7 @@ Ext.define('NextThought.mixins.Annotations', {
 
 
 	onNoteCreated: function(record){
+		console.log('on note created', this.prefix);
 		//check to see if reply is already there, if so, don't do anything...
 		if (Ext.getCmp(IdCache.getComponentId(record,null,this.prefix))) {
 			return;

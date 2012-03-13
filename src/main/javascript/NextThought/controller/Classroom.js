@@ -10,6 +10,7 @@ Ext.define('NextThought.controller.Classroom', {
 		'modes.Classroom',
 		'form.ClassInfoForm',
 		'form.SectionInfoForm',
+		'widgets.ClassroomBreadcrumb',
 		'widgets.classroom.Browser',
 		'widgets.classroom.BrowserStudyGroups',
 		'widgets.classroom.ResourceView',
@@ -41,7 +42,6 @@ Ext.define('NextThought.controller.Classroom', {
 		{ ref: 'classroom', selector: 'classroom-content' },
 		{ ref: 'liveDisplay', selector: 'live-display' },
 		{ ref: 'viewport', selector: 'master-view' },
-		{ ref: 'reader', selector: 'reader-panel' },
 		{ ref: 'scriptView', selector: 'script-log-view' },
 		{ ref: 'resourceView', selector: 'classroom-resource-view' }
 	],
@@ -127,6 +127,10 @@ Ext.define('NextThought.controller.Classroom', {
 
 			'body-editor button[action=cancel]' : {
 				'click': this.onScriptCancel
+			},
+
+			'classroom-breadcrumbbar *[ntiid]' : {
+				'click' : this.onClassroomNavigate
 			}
 		},{});
 	},
@@ -219,6 +223,16 @@ Ext.define('NextThought.controller.Classroom', {
 			return true;
 		}
 		return false;
+	},
+
+
+	onClassroomNavigate: function(btn, evt, opts){
+		var ld = this.getLiveDisplay(),
+			n = btn.ntiid;
+
+		ld.down('reader-panel').loadPage(n);
+		ld.down('classroom-breadcrumbbar').updateLocation(n);
+		this.recordState(n);
 	},
 
 
@@ -547,6 +561,11 @@ Ext.define('NextThought.controller.Classroom', {
 		if (sec) {
 			this.getResourceView().setRecord(sec, true);
 		}
+	},
+
+
+	getReader: function() {
+		return this.getLiveDisplahy().down('reader-panel');
 	},
 
 

@@ -23,7 +23,7 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 			record: record,
 			userId: userId,
 			isModifiable: record.isModifiable(),
-			isVisible: record.phantom || component.filter.test(record),
+			isVisible: !!(record.phantom || (!component.filter ?  true : component.filter.test(record))),
 
 			isSingleAction: false,
 			renderPriority: -1,
@@ -380,7 +380,7 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 				return;
 			}
 			this.aboutToRender = false;
-//			console.time('Rendering');
+			console.time('Rendering');
 			this.rendering = true;
 			this.events.fireEvent('rendering');
 			this.sorter[prefix] = this.sorter[prefix] || this.buildSorter(prefix);
@@ -399,7 +399,7 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 
 			this.rendering = false;
 			this.events.fireEvent('finish');
-//			console.timeEnd('Rendering');
+			console.timeEnd('Rendering');
 		}
 
 	}

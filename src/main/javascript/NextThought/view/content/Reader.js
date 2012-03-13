@@ -406,7 +406,6 @@ Ext.define('NextThought.view.content.Reader', {
 		me.scrollTo(0, false);
 
 		containerId = me.getContainerId();
-
 		me.loadContentAnnotations(containerId, onFinishLoading);
 	},
 
