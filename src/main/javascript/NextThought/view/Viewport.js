@@ -4,6 +4,7 @@ Ext.define('NextThought.view.Viewport', {
 	alias: 'widget.master-view',
 
 	requires: [
+		'Ext.env.FeatureDetector',
 		'Ext.layout.container.Border',
 		'Ext.layout.container.VBox',
 		'NextThought.view.widgets.main.Header',
@@ -21,6 +22,7 @@ Ext.define('NextThought.view.Viewport', {
 
 	items:[
 		{xtype: 'master-header', region: 'north'},
+		{xtype: 'panel', id: 'browser-warning', cls: 'browser-warning', html: 'Your browser is unsupported at this time. See a list of supported browsers <a href="supported.html">here</a>'},
 		{xtype: 'modeContainer', region: 'center', id: 'mode-ctr', flex: 1}
 	],
 
@@ -38,4 +40,16 @@ Ext.define('NextThought.view.Viewport', {
 		}
 		return this.container.getActive();
 	}
+}, function(){
+	if(	!Ext.features.has('SVG')		||
+		!Ext.features.has('Canvas')		||
+		!Ext.features.has('History')	||
+		!Ext.features.has('Video')		||
+		!Ext.features.has('CSSTransforms')		||
+		!Ext.features.has('CSSTransitions')		||
+		!Ext.features.has('CSSAnimations')) {
+		return;
+	}
+
+	Ext.Array.erase(this.prototype.items, 1,1);
 });
