@@ -50,9 +50,10 @@ Ext.define('NextThought.controller.FilterControl', {
 	
 	beginChanges: function(id){
 		if(this.beginChanges[id]) { return false; }
-		return this.beginChanges[id] = true;
+		this.beginChanges[id] = true;
+		return true;
 	},
-	
+
 	
 	setState: function(cmp){
 		if(!this.beginChanges(cmp.getId())) {
