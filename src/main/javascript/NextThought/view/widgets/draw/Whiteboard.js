@@ -122,20 +122,26 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 
 
 	setColor: function(c, color){
+
+		var none = /none/i.test(color),
+			icon = this.down(Ext.String.format('button[action=pick-{0}-color]',c)).getEl().down('.x-btn-icon');
+
 		c = c.toLowerCase();
-		this.selectedColor[c] = '#'+color;
+		this.selectedColor[c] = none? 'None': '#'+color;
 
 		if(this.selection){
 			var s = {};
-			s[c] = color;
-			this.selection.sprite[c] = '#'+color;
+			s[c] = none ? 'None' : color;
+			this.selection.sprite[c] = this.selectedColor[c];
 			this.selection.sprite.setAttributes(s,true);
 		}
 
-		this.down(Ext.String.format('button[action=pick-{0}-color]',c))
-				.getEl()
-				.down('.x-btn-icon')
-				.setStyle({background: this.selectedColor[c]});
+
+		icon.setStyle({background: none? null: this.selectedColor[c]});
+		icon.removeCls('color-none');
+		if(none) {
+			icon.addCls('color-none');
+		}
 	},
 
 

@@ -21,7 +21,8 @@ MIN_WIDTH = 768;
 Ext.define('NextThought.util.Globals',
 {
 	requires: [
-		'Ext.draw.Draw'//for fixing the path2curve function
+		'Ext.draw.Draw',//for fixing the path2curve function
+		'Ext.picker.Color'//for adding a "none" color
 	],
 	alternateClassName: 'Globals',
 	singleton: true,
@@ -291,6 +292,21 @@ Ext.define('NextThought.util.Globals',
 				return this.callOverridden(arguments);
 			}
 		});
+
+
+
+		Ext.picker.Color.prototype.colors.push('None');
+		Ext.picker.Color.prototype.colorRe = /(?:^|\s)color-([^ ]*)(?:\s|$)/;
+		Ext.picker.Color.prototype.renderTpl = [
+			'<tpl for="colors">',
+				'<a href="#" class="color-{.}" hidefocus="on" title="{.}">',
+					'<em><span style="background:#{.}" unselectable="on">&#160;</span></em>',
+				'</a>',
+			'</tpl>'
+		];
+
+
+
 	},
 
 
