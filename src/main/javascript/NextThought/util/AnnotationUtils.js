@@ -270,15 +270,15 @@ Ext.define('NextThought.util.AnnotationUtils',{
 	},
 
 
- 	resolveXPath: function resolveXPath(xpath, root){
+	resolveXPath: function resolveXPath(xpath, root){
 		var path, pc, node, child, m,
-			id = resolveXPath.id = resolveXPath.id || (/id\("(.+?)"\)/i),
-			text = resolveXPath.text = resolveXPath.text || (/text\(\)(\[(\d+)\])?/i),
-			tag = resolveXPath.tag || resolveXPath.tag || (/([A-Z]+)(\[(\d+)\])?/i);
+			id = resolveXPath.id = (resolveXPath.id || /id\("(.+?)"\)/i),
+			text = resolveXPath.text = (resolveXPath.text || /text\(\)(\[(\d+)\])?/i),
+			tag = resolveXPath.tag || (resolveXPath.tag || /([A-Z]+)(\[(\d+)\])?/i);
 
 		path = xpath.split('/').reverse();
 
-		while( (pc = path.pop()) ){
+		while( (pc = path.pop()) !== undefined ){
 			m = pc.match(id);
 			if(m && !node){
 				node = root.getElementById(m[1]);
@@ -340,9 +340,9 @@ Ext.define('NextThought.util.AnnotationUtils',{
 			}
 			catch(e) { console.warn('bad range', r, e, e.toString()); }
 		}
-		catch(e){
-			if(!e.warn){
-				console.error(e);
+		catch(er){
+			if(!er.warn){
+				console.error(er);
 			}
 		}
 
