@@ -108,13 +108,13 @@ Ext.define('NextThought.view.content.Reader', {
 			url: base+document.getElementById('main-stylesheet').getAttribute('href'),
 			document: doc });
 
-		/*
+
 		Globals.loadScript(
 			{ url: host+'/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML', document: doc },
 			function(){
 				Globals.loadScript({ url: base+'assets/misc/mathjaxconfig.js', document: doc });
 			}
-		);*/
+		);
 
 		on(doc,'mousedown',function(){ Ext.menu.Manager.hideAll(); });
 		on(doc,'contextmenu',function(e){

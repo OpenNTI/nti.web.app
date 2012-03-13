@@ -86,6 +86,7 @@ Ext.define('NextThought.controller.Search', {
 				return;
 			}
 
+			Ext.getCmp('reader').activate();
 			LocationProvider.setLocation(o.NTIID, function(a){
 				var cid = hit.get('ContainerId'),
 					id = IdCache.hasIdentifier(hit.getId())
