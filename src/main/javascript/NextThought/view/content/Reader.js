@@ -110,7 +110,7 @@ Ext.define('NextThought.view.content.Reader', {
 
 
 		Globals.loadScript(
-			{ url: host+'/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML', document: doc },
+			{ url: 'http://cdn.mathjax.org/mathjax/1.1-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML', document: doc },
 			function(){
 				Globals.loadScript({ url: base+'assets/misc/mathjaxconfig.js', document: doc });
 			}
