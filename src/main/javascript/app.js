@@ -52,6 +52,8 @@ Ext.application({
 			return;
 		}
 
+		$AppConfig.server.host = location.protocol + '//' + location.host;
+
 		if(!HOST_PATTERN.test($AppConfig.server.host)){
 			alert('Bad Server Config, your host does not validate the pattern:'+HOST_PATTERN);
 			return;
