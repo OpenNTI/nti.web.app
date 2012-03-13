@@ -44,12 +44,10 @@ Ext.define('NextThought.controller.ObjectExplorer', {
 
 
 	itemNavigatorItemActivated: function(control, record, dom, index) {
-		var containerId = record.get('ContainerId');
-		LocationProvider.setLocation(containerId, function(target){
-			target.scrollToId(
-					IdCache.getComponentId(record.getId()));
-		});
+		//TODO - reroute through search controller who can resolve top level containers...
+		this.getController('Search').searchResultClicked(record);
 	},
+
 
 	objectExplorerClicked: function(btn, e, o) {
 		if (!this.objectExplorer) {
