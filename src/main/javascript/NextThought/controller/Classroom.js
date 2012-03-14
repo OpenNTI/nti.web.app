@@ -307,6 +307,7 @@ Ext.define('NextThought.controller.Classroom', {
 	onClassroomEditorAction: function(btn) {
 		var win = btn.up('window'),
 			value,
+			ci,
 			me = this;
 
 		if (btn.action === 'cancel') {
@@ -317,7 +318,12 @@ Ext.define('NextThought.controller.Classroom', {
 			return;
 		}
 
-		value = win.down('class-info-form').getValue();
+		ci = win.down('class-info-form');
+		if(!ci.getForm().isValid()){
+			return;
+		}
+
+		value = ci.getValue();
 		win.el.mask('Saving...');
 
 		value.save({
