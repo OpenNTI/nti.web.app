@@ -36,21 +36,6 @@ Ext.define('NextThought.view.widgets.ItemNavigator', {
 
 	initComponent: function(){
 		var me = this, trigger,
-			gotoActionColumn = {
-				xtype: 'actioncolumn',
-				width: 20,
-				hideable: false,
-				sortable: false,
-				items: [{
-					iconCls: 'go-to',
-					tooltip: 'Go to',
-					scope: me,
-					handler: function(grid, rowIndex, colIndex) {
-						var r = me.store.getAt(rowIndex);
-						grid.fireEvent('itemdblclick', grid, r, null, rowIndex);
-					}
-				}]
-			},
 			deleteActionColumn = {
 				xtype: 'actioncolumn',
 				width: 20,
@@ -98,15 +83,30 @@ Ext.define('NextThought.view.widgets.ItemNavigator', {
 				groupHeaderTpl: '{name}s ({rows.length})'
 			}],
 			columns: [
-				gotoActionColumn,
+				{
+					xtype: 'actioncolumn',
+					width: 20,
+					hideable: false,
+					sortable: false,
+					items: [{
+						iconCls: 'go-to',
+						tooltip: 'Go to',
+						scope: me,
+						handler: function(grid, rowIndex, colIndex) {
+							var r = me.store.getAt(rowIndex);
+							grid.fireEvent('itemdblclick', grid, r, null, rowIndex);
+							me.up('window').hide();
+						}
+					}]
+				},
 				{
 					text	 : 'Text',
 					flex	 : 2,
 					sortable : true,
 					dataIndex: 'Snippet',
 					xtype	: 'templatecolumn',
-					tpl	  : '{[values.text?values.text.replace(/<.*?>/ig, "") : "" ]}'
-
+					//tpl	  : '{[values.text?values.text.replace(/<.*?>/ig, "") : "" ]}'
+					tpl	  : '{[values.Snippet]}'
 				},
 				{
 					text	 : 'Container',
