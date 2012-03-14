@@ -5,8 +5,6 @@ Ext.define( 'NextThought.view.widgets.annotations.Note', {
 		'NextThought.view.widgets.NotePanel'
 	],
 
-	extIdRe: /ext\-gen.+/i,
-
 	constructor: function(record, component){
 		Ext.apply(this, {
 			anchorNode : null,
@@ -31,11 +29,6 @@ Ext.define( 'NextThought.view.widgets.annotations.Note', {
 		}
 
 		c = me.createNoteContainer(a.dom.getAttribute('name'));
-
-		inBox = a.up('div', root.down('.page-contents'));
-		if(inBox && !me.extIdRe.test(inBox.id) ){
-			a = inBox;
-		}
 
 		a.setStyle('display', 'block');
 
@@ -155,8 +148,8 @@ Ext.define( 'NextThought.view.widgets.annotations.Note', {
 				c = me.noteContainer,
 				a = me.anchorNode,
 				i = me.originalPadding,
-				box = !a.is('a'),
-				w = (box? a : Ext.get(this.query('#nticontent .page-contents')[0])).getWidth(),
+				ifc = Ext.get(this.query('#nticontent .page-contents')[0]),
+				w = ifc.getWidth(),
 				h = 0,
 				extra= 0,
 				adjust=0,
@@ -179,13 +172,8 @@ Ext.define( 'NextThought.view.widgets.annotations.Note', {
 
 			a.setStyle('padding-bottom',(i+h+extra)+'px');
 
-			x = ox+a.getLeft();
-			if(box){
-				y = a.getBottom()-h;
-			}
-			else {
-				y = a.getY()+( adjust? 0: extra);
-			}
+			x = ox+ifc.getLeft();
+			y = a.getY()+( adjust? 0: extra);
 
 			c.setStyle({top: y+'px', left: x+'px'});
 
