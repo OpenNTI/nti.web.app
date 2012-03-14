@@ -81,6 +81,20 @@ Ext.define('NextThought.view.widgets.ItemNavigator', {
 			}
 		});
 
+		me.store.getGroupsOld = me.store.getGroups;
+		me.store.getGroups = function(){
+			var r = this.getGroupsOld.apply(this,arguments),
+				i = r.length-1;
+
+			for(;i>=0;i--){
+				if(r[i].name==='MessageInfo'){
+					r[i].name = 'Chat Entry';
+				}
+			}
+
+			return r;
+		};
+
 		me.add({
 			xtype: 'grid',
 			store: me.store,
