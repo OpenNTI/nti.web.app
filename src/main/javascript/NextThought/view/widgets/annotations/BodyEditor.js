@@ -81,8 +81,8 @@ Ext.define('NextThought.view.widgets.annotations.BodyEditor', {
 		}
 
 		editor.getToolbar().add('-');//the layout doesn't work initially with this in one call
-		editor.getToolbar().add({ text: 'WB', handler: function(){me.insertWhiteboard();} },
-			{ text: 'SEP', handler: function(){me.insertSeperator();} }
+		editor.getToolbar().add({ text: 'WB', tooltip: 'Add Whiteboard', handler: function(){me.insertWhiteboard();} },
+			{ text: 'SEP', tooltip: 'Add a Seperator', handler: function(){me.insertSeperator();} }
 		);
 
 		while(!!(id = this.thumbs.pop()) ) {
