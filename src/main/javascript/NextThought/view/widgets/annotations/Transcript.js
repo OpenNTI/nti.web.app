@@ -82,11 +82,12 @@ Ext.define( 'NextThought.view.widgets.annotations.Transcript', {
 
 	render: function(){
 		try{
-			var me= this,
+			var me = this,
 				a = me.anchorNode,
 				ox = me.offsets.left;
 
-			if (me.img){
+			if ( me.img && a ) {
+				// If the page is empty of content, there may not be an anchor node
 				Ext.get(me.img).setStyle({left: ox+'px', top: a.getTop()+'px'});
 			}
 		}
