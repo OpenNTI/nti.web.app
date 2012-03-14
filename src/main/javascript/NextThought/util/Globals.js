@@ -269,8 +269,8 @@ Ext.define('NextThought.util.Globals',
 		});
 
 		Ext.Ajax.cors = true;
-		Ext.Ajax.disableCaching = true;
-		Ext.data.proxy.Server.override({noCache: true});
+		Ext.Ajax.disableCaching = false;
+		Ext.data.proxy.Server.override({noCache: false});
 		Ext.data.Connection.override({
 			disableCaching: false,
 
