@@ -287,7 +287,7 @@ Ext.define('NextThought.view.widgets.Tracker', {
 					}
 				
 					r.push({
-						height: parseInt(v.getAttribute(a),10),
+						height: parseInt(v.getAttribute(a),10) || 0,
 						node: v
 					});
 				}
@@ -337,7 +337,7 @@ Ext.define('NextThought.view.widgets.Tracker', {
 	
 		ctx.fillStyle = normalColor;
 		ctx.strokeStyle = normalColor;
-		
+
 		Ext.each(this.sections,function(s){
 			var v = s.height,
 				isCurentSection = current===s.node,
