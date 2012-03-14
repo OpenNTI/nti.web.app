@@ -5,6 +5,8 @@ Ext.define( 'NextThought.view.widgets.annotations.Note', {
 		'NextThought.view.widgets.NotePanel'
 	],
 
+	extIdRe: /ext\-gen.+/i,
+
 	constructor: function(record, component){
 		Ext.apply(this, {
 			anchorNode : null,
@@ -31,7 +33,7 @@ Ext.define( 'NextThought.view.widgets.annotations.Note', {
 		c = me.createNoteContainer(a.dom.getAttribute('name'));
 
 		inBox = a.up('div', root.down('.page-contents'));
-		if(inBox){
+		if(inBox && !me.extIdRe.test(inBox.id) ){
 			a = inBox;
 		}
 
