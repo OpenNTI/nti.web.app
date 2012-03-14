@@ -1,7 +1,7 @@
 #!/bin/bash
 FILE=resources/scss/main.scss
 PATH=$PATH:/opt/local/Library/Frameworks/Python.framework/Versions/2.7/bin
-HOME=`pwd`
+HOME=$(cd "$(dirname "$0")"; pwd)
 RESOURCES=$HOME/src/main/resources
 
 if [ -z `which zeta` ]; then
