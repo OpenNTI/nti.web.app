@@ -9,23 +9,28 @@ Ext.define('NextThought.util.QuizUtils', {
 
 
 	setupQuiz: function(doc){
-		var inputs = doc.querySelectorAll('input[type=number]'),
-			quiz = inputs.length>0,
-			w = doc.ownerWindow;
+		try{
+			var inputs = doc.querySelectorAll('input[type=number]'),
+				quiz = inputs.length>0,
+				w = doc.ownerWindow;
 
-		if(!quiz){
-			return;
+			if(!quiz){
+				return;
+			}
+
+			console.debug('Current page is a quiz');
+
+			//the frame has jQuery & MathQuill
+			w.$('input[type=number]').replaceWith(function(){
+				var id = w.$(this).attr('id');
+				return '<input id="'+id+'" type="hidden"/><span class="quiz-input"></span>'
+			});
+
+			w.$( 'span.quiz-input').mathquill('editable');
 		}
-
-		console.debug('Current page is a quiz');
-
-		//the frame has jQuery & MathQuill
-		w.$('input[type=number]').replaceWith(function(){
-			var id = w.$(this).attr('id');
-			return '<input id="'+id+'" type="hidden"/><span class="quiz-input"></span>'
-		});
-
-		w.$('span.quiz-input').mathquill('editable');
+		catch(e){
+			console.error('unable to setup quiz ',e.stack);
+		}
 	},
 
 	pullMathQuillValues: function(doc){

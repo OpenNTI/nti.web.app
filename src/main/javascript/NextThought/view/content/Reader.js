@@ -81,7 +81,7 @@ Ext.define('NextThought.view.content.Reader', {
 
 	initContentFrame: function(){
 		var me = this,
-			base = location.pathname,
+			base = location.pathname.replace('index.html',''),
 			host = $AppConfig.server.host,
 			doc = me.getDocumentElement(),
 			meta, g = Globals;
