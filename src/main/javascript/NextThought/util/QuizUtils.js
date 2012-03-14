@@ -63,6 +63,7 @@ Ext.define('NextThought.util.QuizUtils', {
 				//TODO: hook up to error handling
 				console.error('FAIL', arguments);
 				vp.unmask();
+				alert('There was a problem grading your quiz');
 			}
 		});
 	},
