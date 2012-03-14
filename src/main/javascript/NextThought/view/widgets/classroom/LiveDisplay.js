@@ -31,8 +31,6 @@ Ext.define('NextThought.view.widgets.classroom.LiveDisplay', {
 			},
 			dockedItems: {dock:'bottom', xtype: 'classroom-breadcrumbbar', prefix: prefix, skipHistory: true}
 		});
-
-		this.whiteboard = this.add({tabConfig:{title:'Whiteboard', tooltip: 'Live Whiteboard'}});
 	},
 
 	getReaderPanel: function() {
