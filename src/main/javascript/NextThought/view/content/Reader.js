@@ -116,7 +116,7 @@ Ext.define('NextThought.view.content.Reader', {
 
 		//Quiz Dependencies: Load MathJax
 		g.loadScript(
-			{ url: 'http://cdn.mathjax.org/mathjax/1.1-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML', document: doc },
+			{ url: 'https://d3eoax9i5htok0.cloudfront.net/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML', document: doc },
 			function(){ g.loadScript({ url: base+'assets/misc/mathjaxconfig.js', document: doc }); });
 
 
