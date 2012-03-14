@@ -84,7 +84,7 @@ Ext.define('NextThought.view.content.Reader', {
 			base = location.pathname,
 			host = $AppConfig.server.host,
 			doc = me.getDocumentElement(),
-			meta;
+			meta, g = Globals;
 
 		function on(dom,event,fn){
 			if(dom.addEventListener) {
@@ -104,17 +104,21 @@ Ext.define('NextThought.view.content.Reader', {
 		meta.setAttribute('content','IE=edge');
 		doc.getElementsByTagName('head')[0].appendChild(meta);
 
-		Globals.loadStyleSheet({
+		g.loadStyleSheet({
 			url: base+document.getElementById('main-stylesheet').getAttribute('href'),
 			document: doc });
 
 
-		Globals.loadScript(
+		//Quiz Dependencies: Load MathQuill
+		g.loadStyleSheet({ url: base+'assets/lib/mathquill/mathquill.css', document: doc });
+		g.loadScript({url: 'https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js', document: doc},
+			function(){ g.loadScript({ url: base+'assets/lib/mathquill/mathquill.min.js', document: doc }); });
+
+		//Quiz Dependencies: Load MathJax
+		g.loadScript(
 			{ url: 'http://cdn.mathjax.org/mathjax/1.1-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML', document: doc },
-			function(){
-				Globals.loadScript({ url: base+'assets/misc/mathjaxconfig.js', document: doc });
-			}
-		);
+			function(){ g.loadScript({ url: base+'assets/misc/mathjaxconfig.js', document: doc }); });
+
 
 		on(doc,'mousedown',function(){ Ext.menu.Manager.hideAll(); });
 		on(doc,'contextmenu',function(e){
@@ -217,6 +221,7 @@ Ext.define('NextThought.view.content.Reader', {
 		var doc = this.getDocumentElement();
 		this.getIframe().setHeight(0);
 		Ext.get(doc.body || doc.documentElement).update(html);
+
 		clearInterval(this.syncInterval);
 		this.syncInterval = setInterval(this.checkFrame,50);
 	},
@@ -338,8 +343,12 @@ Ext.define('NextThought.view.content.Reader', {
 				delete this.tracker;
 				console.log('clearing old tracker...');
 			}
-
-			this.tracker = Ext.widget('tracker', this, this.getIframe().dom);
+			try{
+				this.tracker = Ext.widget('tracker', this, this.getIframe().dom);
+			}
+			catch(e){
+				console.error(e.stack);
+			}
 		}
 	},
 
@@ -402,8 +411,9 @@ Ext.define('NextThought.view.content.Reader', {
 		}
 
 		me.setContent('<div id="NTIContent">'+c+'</div>');
-		me.containerId = null;
 		me.scrollTo(0, false);
+
+		QuizUtils.setupQuiz(me.getDocumentElement());
 
 		containerId = me.getContainerId();
 		me.loadContentAnnotations(containerId, onFinishLoading);

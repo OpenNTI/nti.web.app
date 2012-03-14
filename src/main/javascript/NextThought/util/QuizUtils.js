@@ -7,6 +7,41 @@ Ext.define('NextThought.util.QuizUtils', {
 	],
 	alternateClassName: 'QuizUtils',
 
+
+	setupQuiz: function(doc){
+		var inputs = doc.querySelectorAll('input[type=number]'),
+			quiz = inputs.length>0,
+			w = doc.ownerWindow;
+
+		if(!quiz){
+			return;
+		}
+
+		console.debug('Current page is a quiz');
+
+		//the frame has jQuery & MathQuill
+		w.$('input[type=number]').replaceWith(function(){
+			var id = w.$(this).attr('id');
+			return '<input id="'+id+'" type="hidden"/><span class="quiz-input"></span>'
+		});
+
+		w.$('span.quiz-input').mathquill('editable');
+	},
+
+	pullMathQuillValues: function(doc){
+		var w = doc.ownerWindow,
+			inputs = doc.querySelectorAll('span.quiz-input'),
+			i = inputs.length-1,
+			o,latex;
+
+		for(;i>=0;i--){
+			o = inputs[i];
+			latex = w.$(o).mathquill('latex');
+			o.previousSibling.value = latex;
+		}
+	},
+
+
 	/**
 	 *
 	 * @param iterationCallback Optional - a function that takes three arguments: function(id, inputEl, containerEl)
@@ -36,6 +71,7 @@ Ext.define('NextThought.util.QuizUtils', {
 			ntiid = LocationProvider.currentNTIID,
 			problems,
 			vp = Ext.getBody(),
+			w = doc.ownerWindow,
 			quizResult = Ext.create('NextThought.model.QuizResult' ,{ContainerId: ntiid});
 
 		function populateQuestionResponses(id,v){
@@ -48,6 +84,9 @@ Ext.define('NextThought.util.QuizUtils', {
 			}));
 			quizResult.set('Items', items);
 		}
+
+
+		me.pullMathQuillValues(doc);
 
 		me.getProblemElementMap(doc,populateQuestionResponses,me);
 
@@ -112,11 +151,15 @@ Ext.define('NextThought.util.QuizUtils', {
 	},
 
 	resetQuiz: function(doc) {
+		var w = doc.ownerWindow;
 		Ext.get(doc.getElementById('submit')).update('Submit');
 
 		this.getProblemElementMap(doc,
 			function(id,v,c){
 				v.dom.value='';
+				w.$('span.quiz-input').replaceWith('<span class="quiz-input"></span>');
+				w.$('span.quiz-input').mathquill('editable');
+
 				var r = c.next('.result'),
 					resp, ans;
 

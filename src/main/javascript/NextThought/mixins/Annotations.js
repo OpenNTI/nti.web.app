@@ -480,22 +480,14 @@ console.log('init annotations with prefix', this.prefix);
 
 	onContextMenuHandler: function(e) {
 		try{
-			var range = this.getSelection(),
-				target = e.getTarget();
-
-			if(target && /input/i.test(target.tagName)){
-				console.log('short-circuit');
-				return;
-			}
-
-			e.stopPropagation();
-			e.preventDefault();
+			var range = this.getSelection();
 
 			if( range && !range.collapsed ) {
-
+				e.stopPropagation();
+				e.preventDefault();
 				this.addHighlight(range, e.getXY());
+				this.clearSelection();
 			}
-			this.clearSelection();
 		}
 		catch(er){
 			console.warn(er, er.stack);
