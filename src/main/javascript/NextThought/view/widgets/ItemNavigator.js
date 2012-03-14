@@ -36,6 +36,15 @@ Ext.define('NextThought.view.widgets.ItemNavigator', {
 
 	initComponent: function(){
 		var me = this, trigger,
+			iconTpl = new Ext.XTemplate(
+					'<span title="go to {[this.getClass(values)]}" class="go-to-icon-default go-to-icon-{[this.getClass(values)]}">&nbsp;</span>',
+					{
+						compiled: true,
+						disableFormats: true,
+						getClass: function(values){
+							return values ? values.Type : '';
+						}
+					}),
 			deleteActionColumn = {
 				xtype: 'actioncolumn',
 				width: 20,
@@ -84,20 +93,13 @@ Ext.define('NextThought.view.widgets.ItemNavigator', {
 			}],
 			columns: [
 				{
-					xtype: 'actioncolumn',
-					width: 20,
+					xtype: 'templatecolumn',
+					width: 25,
 					hideable: false,
 					sortable: false,
-					items: [{
-						iconCls: 'go-to',
-						tooltip: 'Go to',
-						scope: me,
-						handler: function(grid, rowIndex, colIndex) {
-							var r = me.store.getAt(rowIndex);
-							grid.fireEvent('itemdblclick', grid, r, null, rowIndex);
-							me.up('window').hide();
-						}
-					}]
+					fixed: true,
+					resizable: false,
+					tpl: iconTpl
 				},
 				{
 					text	 : 'Text',

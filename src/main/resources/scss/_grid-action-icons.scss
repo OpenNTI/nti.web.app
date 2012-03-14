@@ -1,5 +1,9 @@
 
-
+@mixin go-to-icon {
+   display: inline-block;
+   width: 16px;
+   height: 16px;
+}
 
 .x-grid-cell {
 
@@ -9,9 +13,19 @@
 		height: 16px;
 	}
 
-	.go-to {
+	.go-to-icon-default {
+	    @include go-to-icon;
 		background: $app-goto;
-		width: 16px;
-		height: 16px;
+		&.go-to-icon-highlight {
+   			background: $charm-highlight-icon;
+   		}
+   		&.go-to-icon-note {
+        	background: $charm-note-icon;
+        }
+        &.go-to-icon-messageinfo {
+         	background: $charm-chattranscript-icon;
+        }
 	}
+
+
 }
