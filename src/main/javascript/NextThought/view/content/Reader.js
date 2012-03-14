@@ -62,9 +62,11 @@ Ext.define('NextThought.view.content.Reader', {
 
 		// must defer to wait for browser to be ready
 		var me = this,
-			task = { interval : 10 };
+			task = { interval : 10 },
+			doc = me.getDocumentElement();
 
-		me.getIframe().win.location.replace(Ext.SSL_SECURE_URL);
+		doc.open();
+		doc.close();
 
 		task.run = function() {
 			var doc = me.getDocumentElement();
@@ -73,7 +75,7 @@ Ext.define('NextThought.view.content.Reader', {
 				me.initContentFrame();
 			}
 		};
-		Ext.TaskManager.start(task);
+		setTimeout(function(){Ext.TaskManager.start(task);},100);
 	},
 
 
@@ -81,7 +83,7 @@ Ext.define('NextThought.view.content.Reader', {
 
 	initContentFrame: function(){
 		var me = this,
-			base = location.pathname.replace('index.html',''),
+			base = location.pathname.toString().replace('index.html',''),
 			host = $AppConfig.server.host,
 			doc = me.getDocumentElement(),
 			meta, g = Globals;
