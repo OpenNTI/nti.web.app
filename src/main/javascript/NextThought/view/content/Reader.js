@@ -32,7 +32,7 @@ Ext.define('NextThought.view.content.Reader', {
 			autoEl: {
 				tag: 'iframe',
 				name: guidGenerator()+'-content',
-				src: Ext.SSL_SECURE_URL,
+				src: 'javascript:',
 				frameBorder: 0,
 				marginWidth: 0,
 				marginHeight: 0,
@@ -113,13 +113,15 @@ Ext.define('NextThought.view.content.Reader', {
 
 		//Quiz Dependencies: Load MathQuill
 		g.loadStyleSheet({ url: base+'assets/lib/mathquill/mathquill.css', document: doc });
-		g.loadScript({url: 'https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js', document: doc},
-			function(){ g.loadScript({ url: base+'assets/lib/mathquill/mathquill.min.js', document: doc }); });
+		g.loadScript({url: '//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js', document: doc},
+			function(){  });
+		g.loadScript({ url: base+'assets/lib/mathquill/mathquill.min.js', document: doc });
 
 		//Quiz Dependencies: Load MathJax
 		g.loadScript(
 			{ url: 'https://d3eoax9i5htok0.cloudfront.net/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML', document: doc },
-			function(){ g.loadScript({ url: base+'assets/misc/mathjaxconfig.js', document: doc }); });
+			function(){});
+		g.loadScript({ url: base+'assets/misc/mathjaxconfig.js', document: doc });
 
 
 		on(doc,'mousedown',function(){ Ext.menu.Manager.hideAll(); });
