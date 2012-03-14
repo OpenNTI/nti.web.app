@@ -179,9 +179,10 @@ Ext.define('NextThought.view.content.Reader', {
 
 	checkFrame: function(){
 		var doc = this.getDocumentElement(),
-			body = doc.body, h;
+			body = Ext.get(doc.getElementById('NTIContent')),
+			h;
 		if (body) {
-			h = Ext.get(body).getHeight();
+			h = body.getHeight();
 			if(h !== this.lastHeight){
 				this.lastHeight = h;
 				this.syncFrame();
@@ -195,11 +196,14 @@ Ext.define('NextThought.view.content.Reader', {
 
 	syncFrame: function(){
 		var doc = this.getDocumentElement(),
-			b = Ext.get(doc.body || doc.documentElement),
+			b = Ext.get(doc.getElementById('NTIContent')),
 			i = this.getIframe();
 
+		b = b? b.getHeight()+100: 100;
+
+		console.log('Sync Height: '+b);
 		i.setHeight(this.el.getHeight()-100);
-		i.setHeight(b.getHeight()+100);
+		i.setHeight(b);
 
 		this.fireEvent('resize');
 		this.doLayout();
