@@ -174,6 +174,26 @@ Ext.define('NextThought.model.Service', {
 		return Ext.clone( collection );
 	},
 
+
+	resolveTopContainer: function resolve(containerId, success, failure){
+
+		var o = Library.findLocation(containerId);
+
+		function step(container){
+			return resolve(
+					container.get('ContainerId'),
+					success,
+					failure);
+		}
+
+		if(o){
+			return Globals.callback(success,null,[o]);
+		}
+
+		this.getObject(containerId, step, failure, null);
+	},
+
+
 	getObjectRaw: function (ntiid, success, failure, scope){
 		var host = $AppConfig.server.host,
 			url = Ext.String.format("{0}{1}/{2}",

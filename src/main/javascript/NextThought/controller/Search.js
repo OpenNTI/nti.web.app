@@ -55,28 +55,9 @@ Ext.define('NextThought.controller.Search', {
 	},
 
 
-	resolveTopContainer: function resolve(containerId, success, failure){
-
-		var service = $AppConfig.service,
-			o = Library.findLocation(containerId);
-
-		function step(container){
-			return resolve(
-					container.get('ContainerId'),
-					success,
-					failure);
-		}
-
-		if(o){
-			return Globals.callback(success,null,[o]);
-		}
-
-		service.getObject(containerId, step, failure);
-	},
-
-
 	searchResultClicked: function(hit, searchValue) {
 		var me = this,
+			service = $AppConfig.service,
 			containerId = hit.get('ContainerId');
 
 		function success(o) {
@@ -122,7 +103,7 @@ Ext.define('NextThought.controller.Search', {
 		}
 
 		Ext.getBody().mask("Loading...");
-		me.resolveTopContainer(containerId, success, failure);
+		service.resolveTopContainer(containerId, success, failure);
 	},
 
 	selectDown: function(field) {

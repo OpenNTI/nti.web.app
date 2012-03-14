@@ -45,6 +45,30 @@ Ext.define('NextThought.view.widgets.ItemNavigator', {
 							return values ? values.Type : '';
 						}
 					}),
+			snippetTpl = new Ext.XTemplate(
+					'{[this.getTemplate(values)]}',
+					{
+						compiled: true,
+						disableFormats: true,
+						getTemplate: function(values){
+							if (values.Type === 'MessageInfo'){
+								return 'Transcript';
+							}
+							return values.Snippet;
+						}
+					}),
+			containerTpl = new Ext.XTemplate(
+					'{[this.getTemplate(values)]}',
+					{
+						compiled: true,
+						disableFormats: true,
+						getTemplate: function(values){
+							if (values.Type === 'MessageInfo'){
+								return 'transcript';
+							}
+							return Library.findLocationTitle(values.ContainerId);
+						}
+					}),
 			deleteActionColumn = {
 				xtype: 'actioncolumn',
 				width: 20,
@@ -84,11 +108,26 @@ Ext.define('NextThought.view.widgets.ItemNavigator', {
 		me.store.getGroupsOld = me.store.getGroups;
 		me.store.getGroups = function(){
 			var r = this.getGroupsOld.apply(this,arguments),
-				i = r.length-1;
+				i = r.length-1,
+				seenMessageInfos = {},
+				x, c, cid;
 
 			for(;i>=0;i--){
 				if(r[i].name==='MessageInfo'){
-					r[i].name = 'Chat Entry';
+					//remove chats all together
+					//r.splice(i, 1);
+
+					//make chats 1 entry per container
+					r[i].name = 'Chat';
+					c = r[i].children;
+					x = c.length-1;
+					for (;x >= 0; x--){
+						cid = c[x].get('ContainerId');
+						if (seenMessageInfos.hasOwnProperty(cid)){
+							c.splice(x, 1);
+						}
+						seenMessageInfos[cid] = true;
+					}
 				}
 			}
 
@@ -121,8 +160,7 @@ Ext.define('NextThought.view.widgets.ItemNavigator', {
 					sortable : true,
 					dataIndex: 'Snippet',
 					xtype	: 'templatecolumn',
-					//tpl	  : '{[values.text?values.text.replace(/<.*?>/ig, "") : "" ]}'
-					tpl	  : '{[values.Snippet]}'
+					tpl	  : snippetTpl
 				},
 				{
 					text	 : 'Container',
@@ -131,7 +169,7 @@ Ext.define('NextThought.view.widgets.ItemNavigator', {
 					//xtype	: 'gridcolumn',
 					xtype	: 'templatecolumn',
 					dataIndex: 'ContainerId',
-					tpl	  : '{[Library.findLocationTitle(values.ContainerId)]}'
+					tpl	  : containerTpl
 				},
 				{
 					text	 : 'Last Modified',
