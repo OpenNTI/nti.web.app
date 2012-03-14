@@ -33,7 +33,9 @@ a.color-none {
 
         button{
 			height: 24px !important;
-
+			.x-btn-inner {
+				padding-left: 30px !important;
+			}
 			.x-btn-icon{
 			    width: 24px !important;
 				height: 24px !important;
