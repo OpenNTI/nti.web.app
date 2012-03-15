@@ -1,6 +1,9 @@
 Ext.define('NextThought.view.widgets.main.LeftColumn', {
 	extend: 'Ext.panel.Panel',
 	alias: 'widget.leftColumn',
+	requires: [
+		'NextThought.util.Globals'
+	],
 
 	cls: 'x-column x-left-column',
 	frame: false,

@@ -3,6 +3,7 @@ Ext.define('NextThought.view.widgets.FilterControlPanel', {
 	extend: 'Ext.panel.Panel',
 	alias: 'widget.filter-control',
 	requires: [
+		'NextThought.util.Globals',
 		'Ext.form.field.Checkbox'
 	],
 

@@ -12,6 +12,7 @@ Ext.define('NextThought.view.widgets.main.SessionInfo', {
 	extend: 'Ext.panel.Panel',
 	alias: 'widget.session-info',
 	requires: [
+		'NextThought.util.Globals',
 		'NextThought.view.widgets.main.Identity'
 	],
 

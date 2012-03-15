@@ -7,16 +7,10 @@ USER_GENERATED_DATA_SEARCH_REL = 'UGDSearch';
 ASCENDING = {};
 DESCENDING = {};
 
-HOST_PREFIX_PATTERN = /^(http(s)?):\/\/([a-z.\-_0-9]+)(:(\d+))?/i;
-HOST_PATTERN = /^(http(s)?):\/\/([a-z.\-_0-9]+)(:(\d+))?$/i;
-HOST_PATTERN_PROTOCOL_MATCH_GROUP = 1;
-HOST_PATTERN_DOMAIN_MATCH_GROUP = 3;
-HOST_PATTERN_PORT_MATCH_GROUP = 5;
-
 CENTER_WIDTH = 768;
 MIN_SIDE_WIDTH = 175;
-MIN_WIDTH = 768;
 
+HOST_PREFIX_PATTERN = /^(http(s)?):\/\/([a-z.\-_0-9]+)(:(\d+))?/i;
 
 Ext.define('NextThought.util.Globals',
 {
@@ -26,6 +20,45 @@ Ext.define('NextThought.util.Globals',
 	],
 	alternateClassName: 'Globals',
 	singleton: true,
+
+
+	validateConfig: function(){
+		var HOST_PATTERN = /^(http(s)?):\/\/([a-z.\-_0-9]+)(:(\d+))?$/i,
+			HOST_PATTERN_PROTOCOL_MATCH_GROUP = 1,
+			HOST_PATTERN_DOMAIN_MATCH_GROUP = 3,
+			HOST_PATTERN_PORT_MATCH_GROUP = 5;
+
+		if(typeof $AppConfig === 'undefined' || typeof $AppConfig.server === 'undefined'){
+			alert("Bad or no configuation.");
+			return false;
+		}
+
+		if(typeof $AppConfig.server.login === 'undefined'){
+			alert("Bad or no login configuation.");
+			return false;
+		}
+
+
+		if(!HOST_PATTERN.test($AppConfig.server.host)){
+			alert('Bad Server Config, your host does not validate the pattern:'+HOST_PATTERN);
+			return false;
+		}
+
+		if(!/^\/.+\/$/.test($AppConfig.server.data)){
+			alert('Bad Server Config, your data path does not validate the pattern: /.+/');
+			return false;
+		}
+
+		var hostInfo = HOST_PATTERN.exec($AppConfig.server.host);
+
+		Ext.apply($AppConfig.server,{
+			protocol: hostInfo[HOST_PATTERN_PROTOCOL_MATCH_GROUP],
+			domain: hostInfo[HOST_PATTERN_DOMAIN_MATCH_GROUP],
+			port: parseInt(hostInfo[HOST_PATTERN_PORT_MATCH_GROUP],10)
+		});
+
+		return true;
+	},
 
 
 	/**

@@ -43,39 +43,16 @@ Ext.application({
 			NextThought.isReady = true;
 		}
 
-		if(typeof $AppConfig === 'undefined' || typeof $AppConfig.server === 'undefined'){
-			alert("Bad or no configuation.");
-			return;
-		}
-
-		if(typeof $AppConfig.server.login === 'undefined'){
-			alert("Bad or no login configuation.");
-			return;
-		}
-
 		$AppConfig.server.host = location.protocol + '//' + location.host;
 
-		if(!HOST_PATTERN.test($AppConfig.server.host)){
-			alert('Bad Server Config, your host does not validate the pattern:'+HOST_PATTERN);
+		if(!Globals.validateConfig()){
 			return;
 		}
-
-		if(!/^\/.+\/$/.test($AppConfig.server.data)){
-			alert('Bad Server Config, your data path does not validate the pattern: /.+/');
-			return;
-		}
-
 		Globals.loadScript($AppConfig.server.host+'/socket.io/static/socket.io.js');
 
 		window.app = this;
-		var g = this.getController('Google'),
-			hostInfo = HOST_PATTERN.exec($AppConfig.server.host);
+		var g = this.getController('Google');
 
-		Ext.apply($AppConfig.server,{
-			protocol: hostInfo[HOST_PATTERN_PROTOCOL_MATCH_GROUP],
-			domain: hostInfo[HOST_PATTERN_DOMAIN_MATCH_GROUP],
-			port: parseInt(hostInfo[HOST_PATTERN_PORT_MATCH_GROUP],10)
-		});
 
 		if(g.isHangout()){
 			g.onHangoutReady(start);
