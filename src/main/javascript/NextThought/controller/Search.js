@@ -96,15 +96,12 @@ Ext.define('NextThought.controller.Search', {
 
 		function failure(){
 			Ext.getBody().unmask();
-			console.warn('error resolving container', Ext.encode(hit.data));
 			service.getObject(hit.getId(),
-				function(o){
-					//success
-					ViewUtils.displayModel(o);
-				},
-				function(){
-					//fail
-					console.error('fail after fail', arguments);
+				function success(o){ ViewUtils.displayModel(o); },
+				function fail(){
+					console.error(
+							'error resolving container ', Ext.encode(hit.data),
+							'Error resolving object: ', arguments);
 				},
 				this);
 		}

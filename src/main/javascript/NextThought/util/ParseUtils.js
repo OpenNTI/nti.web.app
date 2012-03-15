@@ -71,15 +71,19 @@ Ext.define('NextThought.util.ParseUtils',{
 	/**
 	 * Parses an id and returns an object containing the split portions
 	 *
-	 * @param idString
+	 * @param id
 	 * @returns - an object containing the components of the id
 	 */
-	parseNtiid: function(idString) {
-		var parts = idString.split(':'),
+	parseNtiid: function(id) {
+		var parts = (typeof id !== 'string' ? (id||'').toString() : id ).split(':'),
 			authority = (parts[1] || '').split(','),
 			specific = (parts[2] || '').split('-'),
-
 			result = {};
+
+		if(parts.length !== 4){
+			console.warn('"'+id+'" is not an NTIID');
+			return null;
+		}
 
 		result.authority = {
 			name: authority[0],
@@ -93,6 +97,7 @@ Ext.define('NextThought.util.ParseUtils',{
 		};
 
 		result.identifier = parts[3];
+
 
 		result.toString = function() {
 			var m = this,
@@ -108,6 +113,7 @@ Ext.define('NextThought.util.ParseUtils',{
 			if (!m.specific.provider) {
 				s.splice(0, 1);
 			}
+
 			return ['tag', a.join(','), s.join('-'), m.identifier].join(':');
 		};
 

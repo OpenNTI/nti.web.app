@@ -88,7 +88,7 @@ Ext.define('NextThought.view.widgets.chat.LogEntry', {
 
 	afterRender: function(){
 		this.callParent(arguments);
-		if (!this.up('note-entry')) {
+		if (!this.up('[disableDragDrop]')) {
 			this.initializeDragZone(this);
 		}
 		this.el.on('click', this.click, this);

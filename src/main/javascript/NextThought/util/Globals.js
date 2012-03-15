@@ -457,7 +457,7 @@ Ext.define('NextThought.util.Globals',
 	 *
 	 * @param key
 	 * @param dir
-	 * @param g Getter function
+	 * @param [g] Getter function
 	 */
 	SortModelsBy: function(key,dir,g){
 		var less = dir===ASCENDING? -1 : 1,

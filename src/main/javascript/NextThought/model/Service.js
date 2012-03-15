@@ -205,6 +205,11 @@ Ext.define('NextThought.model.Service', {
 			),
 			q = {};
 
+		if(!ParseUtils.parseNtiid(ntiid)){
+			Globals.callback(failure,scope, ['']);
+			return;
+		}
+
 		function continueRequest(resolvedUrl){
 			try {
 				q.request = Ext.Ajax.request({

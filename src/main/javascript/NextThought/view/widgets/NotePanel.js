@@ -115,7 +115,7 @@ Ext.define('NextThought.view.widgets.NotePanel',{
 		this.removeAll(true);
 
 		var date = Ext.Date.format(m.get('Last Modified') || new Date(), 'M j, Y'),
-			panel = alternateParent || this.add({title: Ext.String.format('Chat Transcript | {0}',date), closable: true}),
+			panel = alternateParent || this.add({title: Ext.String.format('Chat Transcript | {0}',date), disableDragDrop: true, closable: true}),
 			log = panel.add({ xtype: 'chat-log-view' }),
 			msgs = m.get('Messages');
 
