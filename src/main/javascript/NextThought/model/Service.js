@@ -175,22 +175,24 @@ Ext.define('NextThought.model.Service', {
 	},
 
 
-	resolveTopContainer: function resolve(containerId, success, failure){
+	resolveTopContainer: function resolve(containerId, success, failure, scope){
 
-		var o = Library.findLocation(containerId);
+		var o = Library.findLocation(containerId),
+			me = scope || this;
 
 		function step(container){
 			return resolve(
 					container.get('ContainerId'),
 					success,
-					failure);
+					failure,
+					scope || me);
 		}
 
 		if(o){
 			return Globals.callback(success,null,[o]);
 		}
 
-		this.getObject(containerId, step, failure, null);
+		me.getObject(containerId, step, failure, scope);
 	},
 
 
@@ -207,6 +209,7 @@ Ext.define('NextThought.model.Service', {
 			try {
 				q.request = Ext.Ajax.request({
 					url: resolvedUrl,
+					scope: scope,
 					callback: function(req, s, resp){
 						if(s){
 							resp.responseLocation = resolvedUrl;
@@ -226,6 +229,7 @@ Ext.define('NextThought.model.Service', {
 			//lookup step
 			q.request = Ext.Ajax.request({
 				url: url,
+				scope: scope,
 				headers: {
 					Accept: 'application/vnd.nextthought.link+json'
 				},
