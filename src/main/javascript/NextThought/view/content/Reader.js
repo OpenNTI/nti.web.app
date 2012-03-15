@@ -116,9 +116,9 @@ Ext.define('NextThought.view.content.Reader', {
 		g.loadScript({url: '//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js', document: doc},
 			function(){ g.loadScript({ url: base+'assets/lib/mathquill/mathquill.min.js', document: doc }); });
 
-		//Quiz Dependencies: Load MathJax
+		//Quiz Dependencies: Load MathJax 1.1 (2.0 buggy)
 		g.loadScript(
-			{ url: 'https://d3eoax9i5htok0.cloudfront.net/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML', document: doc },
+			{ url: 'https://d3eoax9i5htok0.cloudfront.net/mathjax/1.1-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML', document: doc },
 			function(){ g.loadScript({ url: base+'assets/misc/mathjaxconfig.js', document: doc }); });
 
 
