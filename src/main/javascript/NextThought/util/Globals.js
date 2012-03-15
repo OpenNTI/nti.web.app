@@ -525,6 +525,10 @@ function(){
 	window.Globals = this;
 	window.guidGenerator = this.guidGenerator;
 
+	window.onerror = function(){
+		Ext.getBody().unmask();
+	};
+
 	this.ensureConsole();
 	this.handleCache();
 	this.applyHooks();
