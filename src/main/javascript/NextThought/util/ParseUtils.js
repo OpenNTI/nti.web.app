@@ -80,7 +80,7 @@ Ext.define('NextThought.util.ParseUtils',{
 			specific = (parts[2] || '').split('-'),
 			result = {};
 
-		if(parts.length !== 4){
+		if(parts.length < 3){
 			console.warn('"'+id+'" is not an NTIID');
 			return null;
 		}
