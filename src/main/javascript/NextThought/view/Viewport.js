@@ -22,7 +22,7 @@ Ext.define('NextThought.view.Viewport', {
 
 	items:[
 		{xtype: 'master-header', region: 'north'},
-		{xtype: 'panel', id: 'browser-warning', cls: 'browser-warning', html: 'Your browser does not support these features: {0}.<br/>Here is a list of <a href="supported.html">Supported browsers</a>.'},
+		{xtype: 'panel', id: 'browser-warning', cls: 'browser-warning', html: 'Your browser does not support these features: {0}.<br/>Here is a list of <a href="https://docs.google.com/document/pub?id=1dUvxe-n1VBuGpFV5CrBrVeaGJ_hH4kzPRiaGN2cWxsg">Supported browsers</a>.'},
 		{xtype: 'modeContainer', region: 'center', id: 'mode-ctr', flex: 1}
 	],
 
