@@ -34,12 +34,13 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 
 
 	attachRecord: function(record){
-		var me = this;
+		var me = this,
+			i = record.getId();
 
 		me.callParent(arguments);
 
-		if (!record.phantom) {
-			me.id = IdCache.getComponentId(me.record.getId(), null, me.prefix);
+		if (!record.phantom && !IdCache.hasIdentifier(i)) {
+			me.id = IdCache.getComponentId(i, null, me.prefix);
 			Ext.ComponentManager.register(me);
 		}
 	},
