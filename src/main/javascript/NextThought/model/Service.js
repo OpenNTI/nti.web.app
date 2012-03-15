@@ -185,14 +185,14 @@ Ext.define('NextThought.model.Service', {
 					container.get('ContainerId'),
 					success,
 					failure,
-					scope || me);
+					me);
 		}
 
 		if(o){
 			return Globals.callback(success,null,[o]);
 		}
 
-		me.getObject(containerId, step, failure, scope);
+		me.getObject(containerId, step, failure, me);
 	},
 
 

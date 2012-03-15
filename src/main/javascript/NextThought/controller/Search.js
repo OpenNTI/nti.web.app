@@ -2,7 +2,8 @@ Ext.define('NextThought.controller.Search', {
 	extend: 'Ext.app.Controller',
 
 	requires: [
-		'NextThought.providers.Location'
+		'NextThought.providers.Location',
+		'NextThought.util.ViewUtils'
 	],
 
 	models: [
@@ -58,7 +59,8 @@ Ext.define('NextThought.controller.Search', {
 	searchResultClicked: function(hit, searchValue) {
 		var me = this,
 			service = $AppConfig.service,
-			containerId = hit.get('ContainerId');
+			containerId = hit.get('ContainerId'),
+			popover = me.getSearchPopover();
 
 		function success(o) {
 
@@ -90,20 +92,28 @@ Ext.define('NextThought.controller.Search', {
 			else {
 				sc(r.down('reader-panel'));
 			}
-
-			var popover = me.getSearchPopover();
-			if(popover && popover.isVisible()){
-				popover.startClose();
-			}
 		}
 
 		function failure(){
 			Ext.getBody().unmask();
-			console.error('error resolving container', Ext.encode(hit.data));
+			console.warn('error resolving container', Ext.encode(hit.data));
+			service.getObject(hit.getId(),
+				function(o){
+					//success
+					ViewUtils.displayModel(o);
+				},
+				function(){
+					//fail
+					console.error('fail after fail', arguments);
+				},
+				this);
 		}
 
 		Ext.getBody().mask("Loading...");
 		service.resolveTopContainer(containerId, success, failure);
+		if(popover && popover.isVisible()){
+			popover.startClose();
+		}
 	},
 
 	selectDown: function(field) {

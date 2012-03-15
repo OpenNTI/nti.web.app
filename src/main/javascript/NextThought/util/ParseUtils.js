@@ -66,9 +66,53 @@ Ext.define('NextThought.util.ParseUtils',{
 
 		return this.readers[modelName];
 
+	},
+
+	/**
+	 * Parses an id and returns an object containing the split portions
+	 *
+	 * @param idString
+	 * @returns - an object containing the components of the id
+	 */
+	parseNtiid: function(idString) {
+		var parts = idString.split(':'),
+			authority = (parts[1] || '').split(','),
+			specific = (parts[2] || '').split('-'),
+
+			result = {};
+
+		result.authority = {
+			name: authority[0],
+			date: authority[1]
+		};
+
+		result.specific = {
+			provider: specific.length === 3 ? specific[0] : null,
+			type: specific.length === 3 ? specific[1] : specific[0],
+			typeSpecific: specific.length === 3 ? specific[2] : specific[1]
+		};
+
+		result.identifier = parts[3];
+
+		result.toString = function() {
+			var m = this,
+				a = [
+					m.authority.name,
+					m.authority.date
+				],
+				s = [
+					m.specific.provider,
+					m.specific.type,
+					m.specific.typeSpecific
+				];
+			if (!m.specific.provider) {
+				s.splice(0, 1);
+			}
+			return ['tag', a.join(','), s.join('-'), m.identifier].join(':');
+		};
+
+		return result;
 	}
-
-
 },
 	function(){
 		window.ParseUtils = this;
