@@ -60,7 +60,7 @@ Ext.define('NextThought.util.RectUtils',{
 			o = flip(rs,i);
 			h = o.height;
 			w = o.width;
-			if( h > 0 && h < lh2 && w < clientWidth) {
+			if( h > 0 && h < lh2 && w <= clientWidth) {
 				out.push(o);
 			}
 		}
