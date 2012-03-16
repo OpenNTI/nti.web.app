@@ -59,9 +59,7 @@ Ext.define('NextThought.view.widgets.StreamEntry', {
 	},
 
 	getCircledInfo: function(i) {
-		var circledUser = i.get('realname');
-
-		return 'added <i>' + circledUser + '</i> to a group.';
+		return 'added you to a group.';
 	},
 
 	getCreatedNoteInfo: function(i) {
