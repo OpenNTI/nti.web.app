@@ -107,6 +107,7 @@ Ext.define('NextThought.view.widgets.ItemNavigator', {
 
 		me.store.on('load',function(){
 			me.store.remoteFilter = false;
+			me.store.filters.clear();
 			me.store.filter([{
 				filterFn: (function(){
 					var seen = {};
