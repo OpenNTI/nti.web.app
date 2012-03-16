@@ -103,7 +103,6 @@ Ext.define('NextThought.ux.Spotlight',{
 				rect, x,y;
 
 			if(rects.length>1 || (!isNaN(h) && !isNaN(cw))){
-				console.debug('hit');
 				rects = RectUtils.merge(rects, h,cw);
 			}
 
