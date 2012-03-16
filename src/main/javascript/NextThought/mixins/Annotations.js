@@ -434,18 +434,8 @@ Ext.define('NextThought.mixins.Annotations', {
 
 	prunePlaceholders: function(tree){
 
-		function arePlaceHolders(list){
-			var k;
-			for(k in list){
-				if(list.hasOwnProperty(k) && !list[k].placeHolder) {
-					return false;
-				}
-			}
-			return true;
-		}
-
 		function canPrune(o){
-			return o!==null && !o.parent && o.placeHolder && arePlaceHolders(o.children||[]);
+			return o!==null && !o.parent && o.placeHolder;
 		}
 
 		function needsPruning(){
