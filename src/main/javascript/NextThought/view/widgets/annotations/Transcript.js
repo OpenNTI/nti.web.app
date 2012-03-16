@@ -55,8 +55,10 @@ Ext.define( 'NextThought.view.widgets.annotations.Transcript', {
 		if (this.win){this.win.close();}
 
 		var np, it,
-			win = this.win = Ext.create('Ext.window.Window', {
+			win = this.win = Ext.widget('window', {
 			title: this.getTitle(),
+			cls: 'chat-transcript',
+			disableDragDrop: true,
 			constrain: true,
 			autoScroll: true,
 			width: 400,
