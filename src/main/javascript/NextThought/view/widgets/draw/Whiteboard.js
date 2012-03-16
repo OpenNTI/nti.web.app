@@ -185,9 +185,9 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 			}
 
 			switch(xtype){
-				case '': return Ext.widget('sprite-resizer',me,sprite);
+				case '': return Ext.create('widget.sprite-resizer',me,sprite);
 				case 'sprite-resizer': break;
-				//case 'sprite-resizer': return Ext.widget('sprite-rotater',me,sprite);
+				//case 'sprite-resizer': return Ext.create('widget.sprite-rotater',me,sprite);
 				//case 'sprite-rotater': break;
 			}
 

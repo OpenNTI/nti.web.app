@@ -18,17 +18,18 @@ Ext.define('NextThought.view.content.Reader', {
 		this.loadedResources = {};
 		this.addEvents('loaded','finished-restore');
 		this.enableBubble('loaded','finished-restore');
+		this.on('afterrender',this.postRender,this);
+
 		this.callParent(arguments);
 		Ext.applyIf(this, {
 			tracker: null,
-			prefix: 'default'
+			prefix: 'default',
+			padding: this.tracker === false ? 0 : '0 0 0 50px'
 		});
 
 		this.add({
 			xtype: 'box',
 			anchor: '100%',
-			cls:'x-panel-reset',
-			margin: this.tracker === false ? 0 : '0 0 0 50px',
 			autoEl: {
 				tag: 'iframe',
 				name: guidGenerator()+'-content',
@@ -339,8 +340,8 @@ Ext.define('NextThought.view.content.Reader', {
 	},
 
 
-	render: function(){
-		this.callParent(arguments);
+	postRender: function(){
+
 		this.splash = this.body.insertHtml('beforeEnd','<div class="no-content-splash"></div>',true);
 
 		if (this.tracker !== false) {
@@ -350,7 +351,7 @@ Ext.define('NextThought.view.content.Reader', {
 				console.log('clearing old tracker...');
 			}
 			try{
-				this.tracker = Ext.widget('tracker', this, this.getIframe().dom);
+				this.tracker = Ext.create('widget.tracker', this, this.getIframe().dom);
 			}
 			catch(e){
 				console.error(e.stack);

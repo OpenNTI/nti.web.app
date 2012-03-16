@@ -164,7 +164,7 @@ Ext.define('NextThought.mixins.Annotations', {
 		}
 
 
-		w = Ext.widget( 'highlight-annotation', range, record, this);
+		w = Ext.create( 'widget.highlight-annotation', range, record, this);
 
 		if (!oid) {
 			oid = 'Highlight-TEMP-OID';
@@ -197,7 +197,7 @@ Ext.define('NextThought.mixins.Annotations', {
 				return true;
 			}
 
-			this.annotations[record.getId()] = Ext.widget( 'note-annotation', record, this);
+			this.annotations[record.getId()] = Ext.create( 'widget.note-annotation', record, this);
 
 			return true;
 		}
@@ -209,13 +209,13 @@ Ext.define('NextThought.mixins.Annotations', {
 
 	createTranscriptSummaryWidget: function(record) {
 		if (record.parent) { return; }
-		this.annotations[record.getId()] = Ext.widget( 'transcript-annotation', record, this);
+		this.annotations[record.getId()] = Ext.create( 'widget.transcript-annotation', record, this);
 		return true;
 	},
 
 	createQuizResultWidget: function(record) {
 		if (record.parent) { return; }
-		this.annotations[record.getId()] = Ext.widget( 'quiz-result-annotation', record, this);
+		this.annotations[record.getId()] = Ext.create( 'widget.quiz-result-annotation', record, this);
 		return true;
 	},
 
