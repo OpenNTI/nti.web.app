@@ -210,8 +210,6 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 		this.rendering = true;
 
 		var nib = Ext.get(this.img),
-			p = this.parent ? this.parent : (this.parent = Ext.get(this.div.parentNode)),
-			c = this.canvas,
 			r = this.selection.getBoundingClientRect(),
 			s = RectUtils.merge(this.selection.getClientRects(),this.getLineHeight(),this.getBlockWidth()),
 			l = s.length,
@@ -271,7 +269,7 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 			if (!ctx){return;}
 
 			//reset the context
-			c.width = w;
+			c.width = 1; c.width = w;
 
 			while(q.length){ (q.pop())(ctx); }
 		}
