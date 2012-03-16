@@ -101,6 +101,7 @@ Ext.define('NextThought.controller.Reader', {
 
 
 	onAnnotationStoreLoadComplete: function(store, opts){
+		if (!store.onAnnotationsLoadCallback) {return;}
 		var reader = store.onAnnotationsLoadCallback.cmp,
 			containerId = reader.getContainerId();
 

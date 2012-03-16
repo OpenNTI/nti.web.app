@@ -70,22 +70,32 @@ Ext.define('NextThought.view.widgets.ItemNavigator', {
 						}
 					}),
 			deleteActionColumn = {
-				xtype: 'actioncolumn',
-				width: 20,
+				xtype: 'templatecolumn',
+				width: 25,
 				hideable: false,
 				sortable: false,
-				items: [{
-					iconCls: 'delete-action',
-					tooltip: 'Remove',
-					scope: me,
-					handler: function(grid, rowIndex, colIndex) {
-						var s = me.store,
-							r = s.getAt(rowIndex);
+				tpl: new Ext.XTemplate(
+					'<img alt="Remove" src="{[Ext.BLANK_IMAGE_URL]}" class="x-action-col-icon {[this.getClass(values)]}" data-qtip="Remove">',
+					{
+						compiled: true,
+						disableFormats: true,
+						getClass: function(values){
+							if(/MessageInfo/i.test(values.Type)){
+								return '';
+							}
+							return 'delete-action';
+						}
+					}),
+				processEvent : function(type, view, cell, recordIndex, cellIndex, e){
+					var match = e.getTarget().className.match(/delete/i), r, s = me.store;
 
-						s.removeAt(rowIndex);
+					if(match && type==='click'){
+						r = s.getAt(recordIndex);
+						s.removeAt(recordIndex);
 						me.fireEvent('annotation-destroyed', r.get('TargetOID'), r.get('ContainerId'));
 					}
-				}]
+					return Ext.grid.column.Template.prototype.processEvent.apply(this,arguments);
+				}
 			};
 
 		me.callParent(arguments);
