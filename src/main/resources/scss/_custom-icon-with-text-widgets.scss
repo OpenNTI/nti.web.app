@@ -49,16 +49,23 @@
 
 .x-stream-entry {
 	margin-bottom: 5px;
+	position: relative;
+	overflow: hidden;
 
-	img { margin-right: 5px; }
+	img {
+	    margin-right: 5px;
+	 	float: left;
+	 }
 
 	.stream-text{
 		font-size: 1.2em;
 		line-height: 1.5em;
+		margin-left: 55px;
 	}
 
-	.stream-username .x-panel-body-default,
-	.stream-username  {
+	.name  {
+	    display: block;
+	 	margin-left: 55px;
 		font-weight: bold;
 		color: $name-label-color;
 	}

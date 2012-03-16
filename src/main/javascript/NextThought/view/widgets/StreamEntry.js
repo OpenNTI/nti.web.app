@@ -1,43 +1,49 @@
 Ext.define('NextThought.view.widgets.StreamEntry', {
-	extend: 'Ext.panel.Panel',
+	extend: 'Ext.Component',
 	alias: 'widget.streamEntry',
 
 	requires: [
 		'NextThought.util.AnnotationUtils'
 	],
 
-	cls: 'x-stream-entry',
-	defaults: {border: false},
-	layout: {type: 'hbox', align: 'top'},
-	border: false,
-	width: '100%',
+	renderTpl: new Ext.XTemplate(
+			  '<div class="x-stream-entry {cls}">',
+				  '<img src="{avatarURL}" width=48 height=48"/>',
+				  '<div>',
+						'<span class="name">{name}</span> ',
+						'<div class="stream-text">{text}</div>',
+				  '</div>',
+			  '</div>'
+			  ),
+
+   renderSelectors: {
+		box: 'div.x-stream-entry',
+		name: '.x-stream-entry span.name',
+		text: '.x-stream-entry span.text',
+		icon: 'img'
+	},
+
+
 	change: null,
 
 	initComponent: function(){
-		this.callParent(arguments);
-
 		var c = this.change.get('Creator'),
 			u = NextThought.cache.UserRepository.getUser(c),
-			i = this.change.get('Item'),
-			text = this.getInfoPanel(u.get('realname'));
-		//Add avatar:
-		this.add(this.getAvatarImage(u));
+			data = this.getInfoPanel(u.get('realname'));
 
-		//Add content
-		if (text) {
-			this.add(text);
-		}
+		data.avatarURL = u.get('avatarURL');
+		this.renderData = data;
+		this.callParent(arguments);
 	},
 
 	getInfoPanel: function(creator) {
 		var ct = this.change.get('ChangeType'),
 			i = this.change.get('Item'),
 			it = (i) ? i.raw.Class : null,
-			name = '<div class="stream-username">'+creator+'</div>',
 			info;
 
 		if (!i) {
-			return null;
+			return {};
 		}
 
 		if (ct === 'Circled' && it === 'User') { info = this.getCircledInfo(i); }
@@ -52,8 +58,8 @@ Ext.define('NextThought.view.widgets.StreamEntry', {
 		}
 
 		return {
-			flex: 1,
-			html: name + '<div class="stream-text">'+info+'</div>'
+			name: creator,
+			text: info
 		};
 
 	},
@@ -90,11 +96,6 @@ Ext.define('NextThought.view.widgets.StreamEntry', {
 		var hlText = this.cleanText(i.get('text'));
 
 		return 'modified a highlight: "<i>' + hlText + '</i>"';
-	},
-
-	getAvatarImage: function(u) {
-		var url = u.get('avatarURL');
-		return {xtype: 'box', autoEl: {width: 48, height: 48, src: url, tag: 'img'}};
 	},
 
 	cleanText: function(t) {

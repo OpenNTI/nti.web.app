@@ -10,7 +10,9 @@ Ext.define('NextThought.view.content.Stream', {
 	autoScroll: false,
 	border: false,
 	defaults: {border: false},
-	items:[{autoScroll:true, padding: 5}],
+	items:[{autoScroll:true,
+		layout: '',
+		padding: 5}],
 
 	constructor: function(){
 		this.callParent(arguments);
@@ -30,6 +32,7 @@ Ext.define('NextThought.view.content.Stream', {
 		me.on('added',function(){
 			FilterManager.registerFilterListener(me, me.applyFilter,me);
 		});
+		me.items.get(0).on('afterrender', me.updateStream, me);
 	},
 
 	applyFilter: function(filter){
@@ -41,11 +44,18 @@ Ext.define('NextThought.view.content.Stream', {
 		var p = this.items.get(0),
 			f = this.filter;
 
+		if (!p.rendered){
+			return;
+		}
 		p.removeAll(true);
+		p.suspendLayout = true;
 		this.store.each(function(change){
 			if(!f || f.test(change)){
 				p.add({change: change, xtype: 'streamEntry'});
 			}
 		});
+		p.suspendLayout = false;
+		p.doComponentLayout();
+		p.doLayout();
 	}
 });
