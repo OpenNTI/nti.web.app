@@ -91,6 +91,26 @@ Ext.define('NextThought.view.widgets.main.SessionInfo', {
 				iconCls: 'session-myacount',
 				scope: this,
 				handler: this.account
+			},{
+				text: 'About',
+				href: 'http://nextthought.com',
+				hrefTarget: '_blank'
+			},{
+				text: 'Help',
+				href: 'mailto:alpha-support@nextthought.com',
+				hrefTarget: '_blank'
+			},{
+				text: 'Release Notes',
+				href: 'https://docs.google.com/document/pub?id=1dUvxe-n1VBuGpFV5CrBrVeaGJ_hH4kzPRiaGN2cWxsg',
+				hrefTarget: '_blank'
+			},{
+				text: 'Terms',
+				href: 'https://docs.google.com/document/pub?id=1Qow6gTT8Kxuw7_oD2TJH7tn1HN8u1VkKW6PehgF2dZc',
+				hrefTarget: '_blank'
+			},{
+				text: 'Privacy',
+				href: 'https://docs.google.com/document/pub?id=1W9R8s1jIHWTp38gvacXOStsfmUz5TjyDYYy3CVJ2SmM',
+				hrefTarget: '_blank'
 			},/*{
 				text: 'Settings',
 				iconCls: 'settings-gear',
