@@ -166,11 +166,15 @@ Ext.define('NextThought.view.widgets.chat.Log', {
 		}
 	},
 
-	addNews: function(msg) {
-		var o = this.add({
-			html: msg
+
+	getMessages: function(){
+		var entryWidgets = this.query(this.entryType),
+			entries = [];
+
+		Ext.each(entryWidgets, function(o){
+			entries.push(o.message);
 		});
 
-		o.el.scrollIntoView(this.el.first());
+		return entries;
 	}
 });

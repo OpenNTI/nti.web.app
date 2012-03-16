@@ -257,6 +257,13 @@ Ext.define('NextThought.controller.Classroom', {
 
 
 	onMessage: function(msg, opts){
+		if (Ext.isArray(msg)){
+			Ext.each(msg, function(o){
+				this.getClassroom().onMessage(o, {});
+			}, this);
+
+			return;
+		}
 		this.markScriptEntryAsSent(msg.getId());
 		return this.getClassroom().onMessage(msg,opts);
 	},
@@ -576,7 +583,6 @@ Ext.define('NextThought.controller.Classroom', {
 
 
 	markScriptEntryAsSent: function(id) {
-		console.log('debug me...');
 		var genId = IdCache.getIdentifier(id),
 			sView = this.getScriptView(),
 			qResults = sView ? sView.query('script-entry[messageId='+genId+']') : null,

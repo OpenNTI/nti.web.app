@@ -316,7 +316,10 @@ Ext.define('NextThought.controller.Chat', {
 		var cv = f.up('chat-view'),
 			room = cv.roomInfo,
 			mlog = cv.down('chat-log-view[moderated=true]'),
-			moderated = mlog ? true : false;
+			log = cv.down('chat-log-view[moderated=false]'),
+			messages = log.getMessages(),
+			moderated = mlog ? true : false,
+			c = this.getClassroom();
 
 		if (!ClassroomUtils.isClassroomId(room.get('ContainerId'))) {
 			console.warn('not a chat room that can turn into a classroom, sorry, figure out how to disable this button or hide it');
@@ -330,7 +333,8 @@ Ext.define('NextThought.controller.Chat', {
 		//mode to classroom, call showClassroom on Classroom mode?
 		this.getClassroomMode().activate();
 		this.getClassroomMode().hideClassChooser();
-		this.getClassroom().onEnteredRoom(room, moderated);
+		c.onEnteredRoom(room, moderated);
+		c.onMessage(messages);
 	 },
 
 	flaggedMenuItemClicked: function(mi) {
