@@ -15,7 +15,7 @@ Ext.define('NextThought.view.widgets.main.ProfileHeader', {
 				'<span class="name">{realname}</span> ',
 			'</div>',
 			'<div>',
-				'<span class="bio">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum lorem eros, sollicitudin sit amet congue id, laoreet eget felis. Praesent?</span> ',
+				'<span class="bio"></span> ',
 			'</div>',
 		'</div>',
 		{
