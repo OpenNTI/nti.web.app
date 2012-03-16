@@ -350,7 +350,7 @@ Ext.data.Types.USERLIST = {
 //										record.get('Class'), '@', record.getId(), o);
 //							}
 							//asynchronously resolve this user so its cached and ready
-							UserRepository.prefetchUser(o);
+							//UserRepository.prefetchUser(o);
 						}
 					}
 				});
