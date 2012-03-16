@@ -105,32 +105,35 @@ Ext.define('NextThought.view.widgets.ItemNavigator', {
 			}
 		});
 
+		me.store.on('load',function(){
+			me.store.remoteFilter = false;
+			me.store.filter([{
+				filterFn: (function(){
+					var seen = {};
+					return function(item) {
+						if(item.get('Type')==='MessageInfo'){
+							var cid = item.get('ContainerId');
+							if(seen.hasOwnProperty(cid)){
+								return false;
+							}
+							seen[cid] = 1;
+						}
+						return true;
+					}
+				}())
+			}],null);
+			me.store.remoteFilter = true;
+		},me);
+
 		me.store.getGroupsOld = me.store.getGroups;
 		me.store.getGroups = function(){
 			var r = this.getGroupsOld.apply(this,arguments),
-				i = r.length-1,
-				seenMessageInfos = {},
-				x, c, cid;
-
+				i = r.length-1;
 			for(;i>=0;i--){
 				if(r[i].name==='MessageInfo'){
-					//remove chats all together
-					//r.splice(i, 1);
-
-					//make chats 1 entry per container
 					r[i].name = 'Chat';
-					c = r[i].children;
-					x = c.length-1;
-					for (;x >= 0; x--){
-						cid = c[x].get('ContainerId');
-						if (seenMessageInfos.hasOwnProperty(cid)){
-							c.splice(x, 1);
-						}
-						seenMessageInfos[cid] = true;
-					}
 				}
 			}
-
 			return r;
 		};
 
