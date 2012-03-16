@@ -4,7 +4,6 @@
 
 //disable script cache-busting _dc=... get string args
 Ext.Loader.setConfig('disableCaching', false);
-Ext.Loader.setPath('Ext.env', Ext.Loader.getPath('Ext')+'/core/src/env');
 
 Ext.application({
 	name: 'NextThought',

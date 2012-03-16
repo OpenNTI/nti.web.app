@@ -1,3 +1,4 @@
+Ext.Loader.setPath('Ext.env', Ext.Loader.getPath('Ext')+'/core/src/env');
 
 Ext.define('NextThought.view.Viewport', {
 	extend: 'Ext.container.Viewport',
