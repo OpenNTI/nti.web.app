@@ -51,6 +51,7 @@ Ext.define('NextThought.view.windows.GroupEditorWindow', {
 					},{
 						anchor: '100% -72',
 						xtype: 'grid',
+						enableColumnHide: false,
 						store: this.store,
 						columns: [
 							{
@@ -74,6 +75,7 @@ Ext.define('NextThought.view.windows.GroupEditorWindow', {
 							},
 							{
 								xtype: 'actioncolumn',
+								sortable: false,
 								width: 30,
 								items: [{
 									iconCls: 'delete-action',
