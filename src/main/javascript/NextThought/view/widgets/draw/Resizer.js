@@ -97,7 +97,7 @@ Ext.define('NextThought.view.widgets.draw.Resizer', {
 		var a = this.sprite.attr,
 			t = a.translation,
 			s = a.scaling;
-
+/*
 		this.sprite.setAttributes( {
 			scale:{
 				y: s.y+(sy*dy),
@@ -108,7 +108,7 @@ Ext.define('NextThought.view.widgets.draw.Resizer', {
 				y: t.y+dy/2
 			}
 		},true);
-
+*/
 		this.updateNibs();
 
 		return {x:tx ,y:ty};

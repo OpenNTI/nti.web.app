@@ -221,7 +221,8 @@ Ext.define('NextThought.controller.Whiteboard', {
 		else {
 			firstX = p.first()[1];
 			firstY = p.first()[2];
-			close = WhiteboardUtils.shouldClosePathBetweenPoint(firstX, firstY, x, y);
+			//TODO - close path disabled for alpha, nobody likes it.
+			//close = WhiteboardUtils.shouldClosePathBetweenPoint(firstX, firstY, x, y);
 		}
 
 		//push the new point onto the pile

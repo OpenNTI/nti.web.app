@@ -26,7 +26,7 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
                 cls: 'whiteboard-toolbar',
                 items: [
                     {	iconCls: 'tool hand',		tooltip: 'hand', enableToggle: true, toggleGroup:'draw', pressed: true, allowDepress: false },
-                    {	iconCls: 'tool rect',		tooltip: 'polygon',		shape: 'polygon', enableToggle: true, toggleGroup:'draw', allowDepress: false,
+                    {	iconCls: 'tool rect',		tooltip: 'polygon',		disabled: true, shape: 'polygon', enableToggle: true, toggleGroup:'draw', allowDepress: false,
                         menu: {
                             items: {
                                 xtype: 'buttongroup',
@@ -41,8 +41,8 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
                                 } ]
                             } } },
 
-                    {	iconCls: 'tool circle',		tooltip: 'circle',		shape: 'ellipse', enableToggle: true, toggleGroup:'draw', allowDepress: false},
-                    {	iconCls: 'tool line',		tooltip: 'line',		shape: 'line', enableToggle: true, toggleGroup:'draw', allowDepress: false},
+                    {	iconCls: 'tool circle',		tooltip: 'circle',		shape: 'ellipse', disabled: true, enableToggle: true, toggleGroup:'draw', allowDepress: false},
+                    {	iconCls: 'tool line',		tooltip: 'line',		shape: 'line', disabled: true, enableToggle: true, toggleGroup:'draw', allowDepress: false},
                     {	iconCls: 'tool path',		tooltip: 'path',		shape: 'path', enableToggle: true, toggleGroup:'draw', allowDepress: false},
                     {	iconCls: 'tool text',		tooltip: 'text box',	shape: 'text', disabled: true, enableToggle: true, toggleGroup:'draw', allowDepress: false},
 
@@ -59,7 +59,7 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
                         width: 100,
                         whiteboardRef: this,
                         labelWidth: 40,
-                        value: 1,
+                        value: 4,
                         minValue: 0
                     },{
                         action: 'pick-stroke-color',
@@ -94,7 +94,7 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 			delete this.value;
 		}
 
-		this.setColor('fill', 'FFFFFF');
+		this.setColor('fill', 'None');
 		this.setColor('stroke', '000000');
 
 		//pre-cache so that the value is known after the window is hidden and & immeasurable. (display: none makes all
@@ -186,8 +186,9 @@ Ext.define('NextThought.view.widgets.draw.Whiteboard', {
 
 			switch(xtype){
 				case '': return Ext.widget('sprite-resizer',me,sprite);
-				case 'sprite-resizer': return Ext.widget('sprite-rotater',me,sprite);
-				case 'sprite-rotater': break;
+				case 'sprite-resizer': break;
+				//case 'sprite-resizer': return Ext.widget('sprite-rotater',me,sprite);
+				//case 'sprite-rotater': break;
 			}
 
 			return null;
