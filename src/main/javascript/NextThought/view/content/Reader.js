@@ -497,9 +497,10 @@ Ext.define('NextThought.view.content.Reader', {
 				absolute = firstChar ==='/',
 				anchor = firstChar === '#',
 				external = me.externalUriRegex.test(url),
-				host = absolute?$AppConfig.server.host:basePath,
-				match;
+				host = absolute?$AppConfig.server.host:basePath;
 
+/*
+turn off html5 player
 			if(/src/i.test(attr) && /youtube/i.test(url)){
 				match = url.match(/youtube.com\/embed\/([^\?&#]+)/i);
 				return "src=assets/wrappers/youtube.html?host=" +
@@ -508,7 +509,7 @@ Ext.define('NextThought.view.content.Reader', {
 						'&original='+encodeURIComponent(url) +
 						'&_dc='+Ext.Date.now();
 			}
-
+*/
 			//inline
 			return (anchor || external || /^data:/i.test(url)) ?
 					original : attr+'="'+host+url+'"';
