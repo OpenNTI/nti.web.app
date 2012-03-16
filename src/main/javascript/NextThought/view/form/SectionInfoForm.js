@@ -35,7 +35,9 @@ Ext.define('NextThought.view.form.SectionInfoForm', {
 					labelAlign: 'left',
 					allowBlank: false,
 					name: 'ID',
-					flex: 1
+					flex: 1,
+					regex: /^[^\/\\";=?<>#%'\{\}\|\^\[\]]+$/,
+					regexText: 'Invalid characters'
 				},
 				{width: 5},
 				{

@@ -34,7 +34,9 @@ Ext.define('NextThought.view.form.ClassInfoForm', {
 			name: 'ID',
 			padding: 5,
 			width: '100%',
-			margin: '10px 10px 10px 0px'
+			margin: '10px 10px 10px 0px',
+			regex: /^[^\/\\";=?<>#%'\{\}\|\^\[\]]+$/,
+			regexText: 'Invalid characters'
 		},
 		{
 			xtype: 'textarea',
