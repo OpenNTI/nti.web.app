@@ -91,14 +91,13 @@ Ext.define('NextThought.view.widgets.main.SessionInfo', {
 				iconCls: 'session-myacount',
 				scope: this,
 				handler: this.account
-			},{
+			},'-',{
 				text: 'About',
 				href: 'http://nextthought.com',
 				hrefTarget: '_blank'
 			},{
 				text: 'Help',
-				href: 'mailto:alpha-support@nextthought.com',
-				hrefTarget: '_blank'
+				href: 'mailto:alpha-support@nextthought.com'
 			},{
 				text: 'Release Notes',
 				href: 'https://docs.google.com/document/pub?id=1dUvxe-n1VBuGpFV5CrBrVeaGJ_hH4kzPRiaGN2cWxsg',
