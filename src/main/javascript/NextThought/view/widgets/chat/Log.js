@@ -4,6 +4,7 @@ Ext.define('NextThought.view.widgets.chat.Log', {
 	requires: [
 		'NextThought.view.widgets.chat.LogEntry',
 		'NextThought.view.widgets.chat.LogEntryModerated',
+		'NextThought.view.widgets.chat.InfoLogEntry',
 		'NextThought.cache.IdCache'
 	],
 
@@ -111,6 +112,26 @@ Ext.define('NextThought.view.widgets.chat.Log', {
 		}
 
 	},
+
+
+	occupantsChanged: function(peopleWhoLeft, peopleWhoArrived) {
+		Ext.each(peopleWhoLeft, function(peep){
+			this.add({
+				xtype: 'chat-info-log-entry',
+				message: 'has left the room',
+				person: peep
+			});
+		}, this);
+		Ext.each(peopleWhoArrived, function(peep){
+			this.add({
+				xtype: 'chat-info-log-entry',
+				message: 'has entered the room',
+				person: peep
+			});
+		}, this);
+
+	},
+
 
 	addMessage: function(msg) {
 		var id = msg.getId(),

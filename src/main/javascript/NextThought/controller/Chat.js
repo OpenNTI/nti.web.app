@@ -389,6 +389,17 @@ Ext.define('NextThought.controller.Chat', {
 		Socket.emit('chat_flagMessagesToUsers', m, u);
 	},
 
+
+	sendChangeMessages: function(oldRoomInfo, newRoomInfo) {
+		var oldOccupants = oldRoomInfo.get('Occupants'),
+			newOccupants = newRoomInfo.get('Occupants'),
+			left = Ext.Array.difference(oldOccupants, newOccupants),
+			added = Ext.Array.difference(newOccupants, oldOccupants);
+
+		this.onOccupantsChanged(newRoomInfo.getId(), left, added);
+	},
+
+
 	openChatWindow: function(){
 		(this.getChatWindow() || Ext.create('widget.chat-window')).show();
 	},
@@ -473,7 +484,9 @@ Ext.define('NextThought.controller.Chat', {
 		var roomInfo = ParseUtils.parseItems([msg])[0];
 
 		if (this.activeRooms.hasOwnProperty(roomInfo.getId())) {
+			//this room has changed, pass down the new roominfo, but also send any interesting messages
 			this.activeRooms[roomInfo.getId()].fireEvent('changed', roomInfo);
+			this.sendChangeMessages(this.activeRooms[roomInfo.getId()], roomInfo);
 		}
 
 		this.activeRooms[roomInfo.getId()] = roomInfo;
@@ -565,6 +578,21 @@ Ext.define('NextThought.controller.Chat', {
 			log.removeMessage(msg);
 		}
 	},
+
+
+	onOccupantsChanged: function(roomId, peopleWhoLeft, peopleWhoArrived) {
+		var win = this.getChatWindow(),
+			r = IdCache.getIdentifier(roomId),
+			tab;
+
+		if(!win) {
+			return;
+		}
+
+		tab = win.down('chat-view[roomId=' + r + ']');
+		tab.down('chat-log-view').occupantsChanged(peopleWhoLeft, peopleWhoArrived);
+	},
+
 
 	onMessageContentChannel: function(msg) {
 		console.error('CONTENT channel messages not expected outside of classroom.  for now.');

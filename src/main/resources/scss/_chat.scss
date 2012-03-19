@@ -28,6 +28,28 @@ button {
 	background-size:$size $size;
 }
 
+
+.x-chat-info-log-entry {
+	@include list-entry;
+
+ 	img { float: left; }
+
+	span.body-text {
+		color: #a9a9a9;
+	}
+
+   	.name {
+   	    font-weight: normal;
+   	    color: #a9a9a9;
+   	}
+
+   	&:hover,
+ 	&.selected {
+
+ 	}
+}
+
+
 .x-chat-log-entry {
 	@include list-entry;
 	span.reply {
