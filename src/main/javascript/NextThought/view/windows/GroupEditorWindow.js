@@ -47,6 +47,17 @@ Ext.define('NextThought.view.windows.GroupEditorWindow', {
 						emptyText: 'Group Name',
 						allowBlank: false,
 						name: 'name',
+						validator: function(s){
+							console.log('validator', arguments);
+							s = s.trim();
+							var l = s.length,
+								m =	/^[^\/\\";=?<>#%'\{\}\|\^\[\]-]+$/.test(s);
+
+							if (l > 4 && m) {
+								return true;
+							}
+							return 'Group names must be at least 5 characters, and not contain any symbols';
+						},
 						value: n
 					},{
 						anchor: '100% -72',
