@@ -31,6 +31,6 @@ describe("User Repository/Store/Cache Behavior", function(){
 
 	it("should maintain user/communty model instances", function()
 	{
-		expect(UserRepository.getStore().getCount()).toBeGreaterThan(3);//The configured test user, the Community 'TestersAnnon', and the test@foo
+		expect(UserRepository.getStore().getCount()).toBe(3);//The configured test user, the Community 'TestersAnnon', and the test@foo
 	});
 });

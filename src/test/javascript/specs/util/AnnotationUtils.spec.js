@@ -106,6 +106,36 @@ describe("Annotation Utils", function() {
 		expect(text).toBe('test bold text');
 	});
 
+	it("highlight body text should be some form of highlighted text", function(){
+
+		var highlight = Ext.create('NextThought.model.Highlight',{
+			startHighlightedFullText: 'In the beginning',
+			startHighlightedText: 'beginning',
+			endHighlightedFullText: ' was the command line',
+			endHighlightedText: ' was',
+			text: ''
+		}),
+		highlight2 = Ext.create('NextThought.model.Highlight',{
+			startHighlightedFullText: 'DOMTreeID:10,47',
+			startHighlightedText: 'DOMTreeID:10,47',
+			endHighlightedFullText: ' was the command line',
+			endHighlightedText: ' was',
+			text: ''
+		}),
+		highlight3 = Ext.create('NextThought.model.Highlight',{
+			startHighlightedFullText: 'DOMTreeID:10,47',
+			startHighlightedText: 'DOMTreeID:10,47',
+			endHighlightedFullText: 'DOMTreeID:10,49',
+			endHighlightedText: 'DOMTreeID:10,49',
+			text: ''
+		});
+
+
+		expect(AnnotationUtils.getBodyTextOnly(highlight)).toBe('beginning');
+		expect(AnnotationUtils.getBodyTextOnly(highlight2)).toBe('was');
+		expect(AnnotationUtils.getBodyTextOnly(highlight3)).toBe('content');
+	});
+
 
 	it("should be a note with whiteboard",function(){
 

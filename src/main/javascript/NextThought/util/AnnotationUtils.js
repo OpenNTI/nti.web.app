@@ -37,7 +37,9 @@ Ext.define('NextThought.util.AnnotationUtils',{
 
 //tested
 	getBodyTextOnly: function(obj) {
-		var bdy = obj.get('body'), o, i, text = [];
+		var bdy = obj.get('body'), o, i, text = [],
+			hlStart = obj.get('startHighlightedText'), //Highlight only
+			hlEnd = obj.get('endHighlightedText'); //Highlight only
 		for (i in bdy) {
 			if(bdy.hasOwnProperty(i)) {
 				o = bdy[i];
@@ -46,7 +48,20 @@ Ext.define('NextThought.util.AnnotationUtils',{
 				}
 			}
 		}
-		return text.join('') || obj.get('startHighlightedText');
+
+		//Do some checking of highlight start end end values to eliminate some weirdness...
+		//that can occur when highlighting non text items.
+		if (hlStart && hlStart.indexOf('DOMTreeID') !== -1) {
+			hlStart = null;
+		}
+		else if (hlStart) { hlStart = hlStart.trim();}
+		if (hlEnd && hlEnd.indexOf('DOMTreeID') !== -1) {
+			hlEnd = null;
+		}
+		else if (hlEnd) { hlEnd = hlEnd.trim();}
+
+
+		return text.join('') || hlStart || hlEnd || 'content';
 	},
 
 //tested
