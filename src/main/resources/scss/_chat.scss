@@ -36,7 +36,7 @@ button {
 	 	    @include action-buttons-item;
 			&:hover { opacity: 1; }
 
-			&.reply-whisper { background: $chat-reply-whisper; }
+			&.reply-whisper.enable-whisper { background: $chat-reply-whisper; }
 			&.reply-public{
 			    @include chat-button-def;
 				background: $chat-reply-public;

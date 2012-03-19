@@ -11,7 +11,7 @@ Ext.define('NextThought.view.widgets.chat.LogEntry', {
 	renderTpl: new Ext.XTemplate(
 		'<div class="x-chat-log-entry">',
 			'<span class="reply">',
-				'<span class="reply-whisper"></span>',
+				'<span class="reply-whisper {enablewhisper}"></span>',
 				'<span class="reply-public"></span>',
 				'<span class="pin"></span>',
 			'</span>',
@@ -31,7 +31,8 @@ Ext.define('NextThought.view.widgets.chat.LogEntry', {
 		text: 'span.body-text',
 		time: 'div.timestamp',
 		icon: 'img',
-		frameBody: 'div.x-chat-replies'
+		frameBody: 'div.x-chat-replies',
+		enablewhisper: '.x-chat-log-entry span.nowhisper'
 	},
 
 	initComponent: function(){
@@ -62,6 +63,11 @@ Ext.define('NextThought.view.widgets.chat.LogEntry', {
 		me.renderData.time = Ext.Date.format(m.get('Last Modified'), 'g:i:sa');
 		me.renderData.name = 'resolving...';
 		me.renderData.body = AnnotationUtils.compileBodyContent(m);
+
+		if (s !== $AppConfig.username) {
+			//This entry is created by you, so don't show the reply whisper option
+			me.renderData.enablewhisper = 'enable-whisper';
+		}
 
 		if(this.rendered){
 		   me.text.update(me.renderData.body);
