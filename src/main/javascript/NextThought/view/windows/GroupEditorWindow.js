@@ -48,7 +48,6 @@ Ext.define('NextThought.view.windows.GroupEditorWindow', {
 						allowBlank: false,
 						name: 'name',
 						validator: function(s){
-							console.log('validator', arguments);
 							s = s.trim();
 							var l = s.length,
 								m =	/^[^\/\\";=?<>#%'\{\}\|\^\[\]-]+$/.test(s);
