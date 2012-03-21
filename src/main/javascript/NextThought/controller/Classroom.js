@@ -388,6 +388,12 @@ Ext.define('NextThought.controller.Classroom', {
 	},
 
 
+	onOccupantsChanged: function(peopleWhoLeft, peopleWhoArrived) {
+		var classroom = this.getClassroom();
+		if(!classroom) {return;}
+		classroom.down('chat-log-view').occupantsChanged(peopleWhoLeft, peopleWhoArrived);
+	},
+
 
 	onResourceSelected: function(r) {
 		var href = $AppConfig.server.host + r.get('href'),

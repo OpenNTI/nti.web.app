@@ -585,6 +585,11 @@ Ext.define('NextThought.controller.Chat', {
 			r = IdCache.getIdentifier(roomId),
 			tab;
 
+		if (this.getClassroom().isClassroom({ContainerId: roomId})) {
+			this.getClassroom().onOccupantsChanged(peopleWhoLeft, peopleWhoArrived);
+			return;
+		}
+
 		if(!win) {
 			return;
 		}
