@@ -86,7 +86,7 @@ Ext.define('NextThought.controller.Search', {
 
 			r.activate();
 
-			if(LocationProvider.currentNTIID != o.NTIID){
+			if(LocationProvider.currentNTIID !== o.NTIID){
 				LocationProvider.setLocation(o.NTIID, sc);
 			}
 			else {

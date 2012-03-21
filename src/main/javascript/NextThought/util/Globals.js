@@ -12,6 +12,8 @@ MIN_SIDE_WIDTH = 175;
 
 HOST_PREFIX_PATTERN = /^(http(s)?):\/\/([a-z.\-_0-9]+)(:(\d+))?/i;
 
+INVALID_CHARACTERS_PATTERN = /^[^\/\\";=?<>#%'\{\}\|\^\[\]\-]+$/;
+
 Ext.define('NextThought.util.Globals',
 {
 	requires: [

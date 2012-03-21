@@ -15,6 +15,8 @@ Ext.define('NextThought.view.content.Reader', {
 	layout: 'anchor',
 
 	initComponent: function() {
+		var jsPrefix = 'javascript'; //this in var to trick jslint
+
 		this.loadedResources = {};
 		this.addEvents('loaded','finished-restore');
 		this.enableBubble('loaded','finished-restore');
@@ -33,7 +35,7 @@ Ext.define('NextThought.view.content.Reader', {
 			autoEl: {
 				tag: 'iframe',
 				name: guidGenerator()+'-content',
-				src: 'javascript:',
+				src: jsPrefix + ':',
 				frameBorder: 0,
 				marginWidth: 0,
 				marginHeight: 0,

@@ -130,7 +130,7 @@ Ext.define('NextThought.view.widgets.ItemNavigator', {
 							seen[cid] = 1;
 						}
 						return true;
-					}
+					};
 				}())
 			}],null);
 			me.store.remoteFilter = true;

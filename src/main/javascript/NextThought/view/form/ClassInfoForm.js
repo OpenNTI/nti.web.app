@@ -35,7 +35,7 @@ Ext.define('NextThought.view.form.ClassInfoForm', {
 			padding: 5,
 			width: '100%',
 			margin: '10px 10px 10px 0px',
-			regex: /^[^\/\\";=?<>#%'\{\}\|\^\[\]-]+$/,
+			regex: INVALID_CHARACTERS_PATTERN,
 			regexText: 'Invalid characters'
 		},
 		{
