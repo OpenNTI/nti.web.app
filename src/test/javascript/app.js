@@ -110,8 +110,7 @@ Ext.application({
 		'Search',
 		'Session',
 		'State',
-		'Stream',
-		'Whiteboard'
+		'Stream'
 	],
 
 	launch: function() {
@@ -129,7 +128,6 @@ Ext.application({
 		Globals.loadScripts(['assets/js-test/specs/example.spec.js',
 			'assets/js-test/specs/Library.spec.js',
 			'assets/js-test/specs/view/widgets/draw/Whiteboard.spec.js',
-			'assets/js-test/specs/view/widgets/draw/Path.spec.js',
 			'assets/js-test/specs/cache/UserRepository.spec.js',
 			'assets/js-test/specs/util/AnnotationUtils.spec.js',
 			'assets/js-test/specs/util/Color.spec.js',

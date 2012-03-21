@@ -1,7 +1,8 @@
 Ext.define('NextThought.util.AnnotationUtils',{
 	requires: [
 		'NextThought.model.Highlight',
-		'NextThought.model.Note'
+		'NextThought.model.Note',
+		'NextThought.view.whiteboard.Canvas'
 	],
 	singleton: true,
 	alternateClassName: 'AnnotationUtils',
@@ -10,7 +11,7 @@ Ext.define('NextThought.util.AnnotationUtils',{
 	NOTE_BODY_DIVIDER: '\u200b<div id="{0}" class="body-divider" style="text-align: left; margin: 10px; padding: 5px;">{1}</div>\u200b',
 
 	/** @constant */
-	WHITEBOARD_THUMBNAIL: '',
+	WHITEBOARD_THUMBNAIL: '<img src="{0}" width="100" class="whiteboard-thumbnail" alt="Whiteboard Thumbnail" border="0" onclick="{1}"/>',
 
 	SEPERATOR: null,
 	DIVIDER_REGEX: null,
@@ -111,14 +112,13 @@ Ext.define('NextThought.util.AnnotationUtils',{
 
 //tested
 	/**
-	 * Generate a thumbnail SVG from a canvas object.
+	 * Generate a thumbnail from a canvas object.
 	 *
 	 * @param canvas - the canvas object
 	 */
 	generateThumbnail: function(canvas) {
-//		Ext.require('NextThought.view.widgets.draw.Whiteboard');
-//		return NextThought.view.widgets.draw.Whiteboard.getThumbnail(canvas);
-		return '';
+		Ext.require('NextThought.view.whiteboard.Canvas');
+		return NextThought.view.whiteboard.Canvas.getThumbnail(canvas);
 	},
 
 //tested

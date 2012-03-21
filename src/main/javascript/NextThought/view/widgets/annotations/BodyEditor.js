@@ -8,7 +8,7 @@ Ext.define('NextThought.view.widgets.annotations.BodyEditor', {
 	requires: [
 		'Ext.form.field.HtmlEditor',
 		'NextThought.util.AnnotationUtils',
-		'NextThought.view.widgets.draw.Whiteboard'
+		'NextThought.view.whiteboard.Editor'
 	],
 	items: [{
 		xtype: 'htmleditor',
@@ -152,7 +152,7 @@ Ext.define('NextThought.view.widgets.annotations.BodyEditor', {
 
 	getWhiteboardThumbnail: function(canvas, id){
 
-		var whiteboard = this.getWhiteboardEditor(canvas, id).down('whiteboard');
+		var whiteboard = this.getWhiteboardEditor(canvas, id).down('whiteboard-editor');
 
 		whiteboard.on('save', this.updateOrCreateWhiteboardThumbnail, this);
 		whiteboard.$id = id;
@@ -172,7 +172,7 @@ Ext.define('NextThought.view.widgets.annotations.BodyEditor', {
 		var id = whiteboard.$id,
 			iFrameDoc = this.down('htmleditor').getDoc(),
 			body = iFrameDoc.body,
-			numShapes = whiteboard.getNumberOfShapes(),
+			val = whiteboard.getValue(),
 			div = iFrameDoc.getElementById(id);
 
 		//if there's no placeholder, add one:
@@ -185,7 +185,7 @@ Ext.define('NextThought.view.widgets.annotations.BodyEditor', {
 		}
 
 		//If WB now has 0 elements, just remove it from the editor, otherwise, update thumbnail.
-		if (numShapes === 0) {
+		if (!val || val.shapeList.length === 0) {
 			div.parentNode.removeChild(div);
 		}
 		else{
@@ -200,10 +200,7 @@ Ext.define('NextThought.view.widgets.annotations.BodyEditor', {
 		var id, win, whiteboard;
 		id = guidGenerator();
 		win = this.getWhiteboardEditor(null, id);
-		whiteboard = win.down('whiteboard');
-		//the getDoc() is non-public api
-		//iFrameDoc = this.down('htmleditor').getDoc(),
-		//body = iFrameDoc.body;
+		whiteboard = win.down('whiteboard-editor');
 
 		whiteboard.$id = id;
 		whiteboard.on('save', this.updateOrCreateWhiteboardThumbnail, this);
@@ -244,12 +241,12 @@ Ext.define('NextThought.view.widgets.annotations.BodyEditor', {
 				modal: true,
 				layout: 'fit',
 				hideMode: 'display',
-				items: { xtype: 'whiteboard', value: Ext.clone(canvas) },
+				items: { xtype: 'whiteboard-editor', value: Ext.clone(canvas) },
 				bbar: this.getWhiteboardBottomToolbar()
 			});
 
 		win.saveScene = function(){
-			return !win.rendered? canvas : this.down('whiteboard').saveScene();
+			return !win.rendered? canvas : this.down('whiteboard-editor').saveScene();
 		};
 
 		return win;
@@ -262,17 +259,15 @@ Ext.define('NextThought.view.widgets.annotations.BodyEditor', {
 			{ xtype:'button', text:'Save',
 				handler:function (btn) {
 					var win = btn.up('window').hide(),
-						wb = win.down('whiteboard');
-					wb.initialConfig.value = wb.saveScene();
+						wb = win.down('whiteboard-editor');
+					wb.initialConfig.value = wb.getValue();
 					wb.fireEvent('save', wb);
 				}
 			},
 			{ xtype:'button', text:'Cancel',
 				handler:function (btn) {
-					var win = btn.up('window').hide(),
-						wb = win.down('whiteboard');
-					wb.reset();
-					wb.fireEvent('cancel', wb);
+					var win = btn.up('window').hide();
+					win.down('whiteboard-editor').reset();
 				}
 			}
 		];

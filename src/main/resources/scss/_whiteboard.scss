@@ -27,18 +27,11 @@ a.color-none {
 
 .whiteboard-toolbar {
     .x-btn {
-        &.x-btn-default-toolbar-small-icon button {
-			width: 24px !important;
-        }
-
         button{
-			height: 24px !important;
 			.x-btn-inner {
 				padding-left: 30px !important;
 			}
 			.x-btn-icon{
-			    width: 24px !important;
-				height: 24px !important;
 
 				&.tool{
 					background: $whiteboard-tools-sprite;
