@@ -1,6 +1,6 @@
 Ext.define('NextThought.proxy.Socket', {
 	singleton: true,
-	isDebug: false,
+	isDebug: true,
 	mixins: { observable: 'Ext.util.Observable' },
 
 	constructor: function() {
@@ -13,7 +13,7 @@ Ext.define('NextThought.proxy.Socket', {
 			},
 			socket: null,
 			control: {
-				'connect': function(){me.onConnect.apply(me, arguments);},
+				//'connect': function(){me.onConnect.apply(me, arguments);},
 				'serverkill': function() {me.onKill.apply(me, arguments);},
 				'error': function() {me.onError.apply(me, arguments);},
 				'disconnect': function() {me.onDisconnect.apply(me, arguments);}
@@ -74,8 +74,6 @@ Ext.define('NextThought.proxy.Socket', {
 		}
 
 		this.tearDownSocket();
-
-		this.auth = [$AppConfig.username];
 
 		var opts =  this.disconnectStats.reconfigure ?
 				{transports: ["xhr-polling"], 'force new connection':true} : undefined,
@@ -172,21 +170,21 @@ Ext.define('NextThought.proxy.Socket', {
 
 		if (ds.count > 3){
 			this.tearDownSocket();
-			this.setup.apply(this, this.auth);
+			this.setup.apply(this);
 			reset();
 		}
 	},
-
+/*
 	onConnect: function() {
 		if(this.isDebug) {
 			var msg = printStackTrace().slice(3);
 			msg.unshift('connect event');
 			console.debug(msg.join(('\n\t')));
 		}
-		var args = ['message'].concat(this.auth);
-		this.emit.apply(this, args);
+		//var args = ['message'];
+		//this.emit.apply(this, args);
 	},
-
+*/
 	onError: function() {
 		if(this.isDebug) {
 			console.error('socket error',arguments);
