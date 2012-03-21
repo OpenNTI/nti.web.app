@@ -19,13 +19,17 @@ Ext.define( 'NextThought.view.widgets.annotations.Note', {
 			a = this.query('a[name=' + record.get('anchorPoint') + ']')[0],
 			c,
 			root = Ext.get(this.doc.getElementById('NTIContent')),
-			inBox;
+			inBox,
+			nextA;
 
 		if(!a) {
 			a = Ext.get(AnnotationUtils.getAnchors(this.doc).first());
 		}
 		else {
-			a = Ext.get( AnnotationUtils.getNextAnchorInDOM(a) );
+			nextA = Ext.get( AnnotationUtils.getNextAnchorInDOM(a) );
+			if (nextA) {
+				a = nextA;
+			}
 		}
 
 		c = me.createNoteContainer(a.dom.getAttribute('name'));
