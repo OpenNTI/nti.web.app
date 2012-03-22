@@ -375,6 +375,8 @@ Ext.define('NextThought.view.content.Reader', {
 		function success(resp){
 			me.splash.hide();
 			me.setReaderContent(resp, callback);
+			//apply any styles that may be on the content's bory, to the NTIContent div:
+			this.applyBodyStyles(this.parseBodyTag(resp.responseText), this.buildPath(resp.responseLocation));
 		}
 
 		function failure(q,r){
@@ -429,12 +431,18 @@ Ext.define('NextThought.view.content.Reader', {
 	},
 
 
-	parseHTML: function(request){
-		function path(s){
-			var p = s.split('/'); p.splice(-1,1,'');
-			return p.join('/');
-		}
+	buildPath: function(s){
+		var p = s.split('/'); p.splice(-1,1,'');
+		return p.join('/');
+	},
 
+
+	parseBodyTag: function (c) {
+		return c.match(/<body([^>]*)>/i);
+	},
+
+
+	parseHTML: function(request){
 		function toObj(a,k,v){
 			var i=a.length-1, o = {};
 			for(; i>=0; i--){ o[k.exec(a[i])[2]] = v.exec(a[i])[1]; }
@@ -472,7 +480,7 @@ Ext.define('NextThought.view.content.Reader', {
 		}
 
 		var me = this,
-			basePath = path(request.responseLocation),
+			basePath = this.buildPath(request.responseLocation),
 			rc = me.loadedResources,
 
 			c = request.responseText,
@@ -491,6 +499,33 @@ Ext.define('NextThought.view.content.Reader', {
 		return this.fixReferences(body,basePath);
 	},
 
+
+	applyBodyStyles: function(bodyTag, basePath){
+		var styleMatches = bodyTag[1] ? bodyTag[1].match(/style="([^"]+)"/i) : null,
+			bodyStyles = styleMatches ? styleMatches[1]: null,
+			body = Ext.get(this.getDocumentElement().getElementById('NTIContent')),
+			bodyStylesObj = {};
+
+		//Create an object with our styles split out
+		if (bodyStyles) {
+			Ext.each(bodyStyles.split(';'), function(s){
+				var keyVal = s.split(':'),
+					key = keyVal[0].trim(),
+					val = keyVal[1].trim(),
+					url;
+
+				//make any url adjustments:
+				if (key === 'background-image') {
+					val = val.replace(/['|"]/g , '').replace('"', '');
+					url = val.match(/url\(([^\)]*)/i)[1];
+					val = 'url(' + basePath + url + ')';
+				}
+
+				bodyStylesObj[key] = val;
+			});
+		}
+		body.setStyle(bodyStylesObj);
+	},
 
 
 	fixReferences: function(string, basePath){
