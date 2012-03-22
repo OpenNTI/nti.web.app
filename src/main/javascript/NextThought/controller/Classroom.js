@@ -100,11 +100,11 @@ Ext.define('NextThought.controller.Classroom', {
 			'class-create-edit-window toolbar button[action]' : {
 				'click' : this.onClassroomEditorAction
 			},
-
+/*
 			'classroom-content chat-occupants-list tool[action=moderate]' : {
 				'click' : this.onModerateClicked
 			},
-
+*/
 			'class-resource-editor menuitem[addscript]': {
 				'click': this.onAddNewScriptClicked
 			},

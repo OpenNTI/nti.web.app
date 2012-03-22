@@ -250,8 +250,26 @@ Ext.define('NextThought.controller.Chat', {
 		log.scroll(msgCmp);
 	},
 
-	moderateChat: function(roomInfo) {
-		Socket.emit('chat_makeModerated', roomInfo.getId(), true);
+
+	/**
+	 *
+	 * @param roomInfo
+	 * @param [success] - if you ask for moderation, and the server makes you one, this method
+	 *                    will be called.
+	 */
+	moderateChat: function(roomInfo, success) {
+		var me = this;
+		//fired from both classroom and regular chat window
+		Socket.emit('chat_makeModerated', roomInfo.getId(), true,
+			function(ri){
+				var obj = ParseUtils.parseItems(ri)[0];
+				if(success && Ext.Array.contains(obj.get('Moderators'), $AppConfig.username)){
+					//user is in moderators list, do something
+					success.call(this);
+				}
+				me.updateRoomInfo(obj);
+			}
+		);
 	},
 
 	/* CLIENT EVENTS */
@@ -368,18 +386,28 @@ Ext.define('NextThought.controller.Chat', {
 	},
 
 	moderateClicked: function(cmp){
-		var chatView = cmp.up('chat-view');
+		var me=this,
+			chatViewFromWin = cmp.up('chat-view'),
+			classroom = cmp.up('classroom-content'),
+			chatViewFromClass = classroom ? classroom.down('chat-view') : null,
+			roomInfo = chatViewFromWin ? chatViewFromWin.roomInfo :
+							chatViewFromClass ? chatViewFromClass.roomInfo : null;
 
-		if (chatView) {
-			chatView.openModerationPanel();
-		}
-		else {
-			chatView = cmp.up('classroom-content').down('chat-view');
-			chatView.initOccupants(true);
-		}
 
-		this.moderateChat(chatView.roomInfo);
-		chatView.addCls('moderator');
+		this.moderateChat(roomInfo, function(){
+			if (chatViewFromWin) {
+				chatViewFromWin.openModerationPanel();
+			}
+			else {
+				chatViewFromClass.initOccupants(true);
+			}
+
+			if (chatViewFromWin){chatViewFromWin.addCls('moderator');}
+			if (chatViewFromClass){
+				me.getClassroom().onModerateClicked(cmp); //pass along so class can do something
+				chatViewFromClass.addCls('moderator');
+			}
+		});
 	},
 
 	flagMessagesTo: function(user, dropData){
@@ -389,6 +417,15 @@ Ext.define('NextThought.controller.Chat', {
 		Socket.emit('chat_flagMessagesToUsers', m, u);
 	},
 
+
+	updateRoomInfo: function(ri) {
+		console.log('room info updated, old', this.activeRooms[ri.getId()], 'new', ri);
+		if (this.activeRooms.hasOwnProperty(ri.getId())) {
+			this.activeRooms[ri.getId()].fireEvent('changed', ri);
+		}
+
+		this.activeRooms[ri.getId()] = ri;
+	},
 
 	sendChangeMessages: function(oldRoomInfo, newRoomInfo) {
 		var oldOccupants = oldRoomInfo.get('Occupants'),
@@ -481,15 +518,10 @@ Ext.define('NextThought.controller.Chat', {
 	},
 
 	onMembershipChanged: function(msg) {
-		var roomInfo = ParseUtils.parseItems([msg])[0];
-
-		if (this.activeRooms.hasOwnProperty(roomInfo.getId())) {
-			//this room has changed, pass down the new roominfo, but also send any interesting messages
-			this.activeRooms[roomInfo.getId()].fireEvent('changed', roomInfo);
-			this.sendChangeMessages(this.activeRooms[roomInfo.getId()], roomInfo);
-		}
-
-		this.activeRooms[roomInfo.getId()] = roomInfo;
+		var newRoomInfo = ParseUtils.parseItems([msg])[0];
+		var oldRoomInfo = this.activeRooms[newRoomInfo.getId()];
+		this.updateRoomInfo(newRoomInfo);
+		this.sendChangeMessages(oldRoomInfo, newRoomInfo);
 	},
 
 	onExitedRoom: function(room) {
