@@ -72,7 +72,14 @@ Ext.define('NextThought.controller.Search', {
 							: IdCache.hasIdentifier(cid)
 								? IdCache.getComponentId(cid,null,'default')
 								: null;
-				setTimeout(function(){ a.scrollToId(id); },500);
+				//there's no id, meaning it's probably not user generated
+				if (!id) {
+					setTimeout(function(){ a.scrollToText(searchValue); },500);
+				}
+				else {
+					setTimeout(function(){ a.scrollToId(id); },500);
+				}
+
 			}
 
 			var r = Ext.getCmp('reader');

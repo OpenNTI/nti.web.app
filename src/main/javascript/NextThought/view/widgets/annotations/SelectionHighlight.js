@@ -15,8 +15,8 @@ Ext.define('NextThought.view.widgets.annotations.SelectionHighlight', {
 		me.color = 'FFFF00';
 //		me.canvas =  me.createElement('canvas',container,'search-highlight-object unselectable','position: absolute; pointer-events: none;');
 		me.render = Ext.Function.createBuffered(me.render,100,me,[true]);
-		component.on('resize', me.onResize, me);
-		me.onResize();
+		//component.on('resize', me.onResize, me);
+		//me.onResize();
 		return me;
 	},
 

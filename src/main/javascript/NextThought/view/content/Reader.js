@@ -309,28 +309,30 @@ Ext.define('NextThought.view.content.Reader', {
 			doc = me.getDocumentElement(),
 			ranges = [],
 			created = {},
-			texts, node, nv, r, index,
+			texts,
 			textLength = text.length;
 
 		texts = AnnotationUtils.getTextNodes(doc);
 
-		while(!!(node = texts.iterateNext())){
-			nv = node.nodeValue.toLowerCase();
+		Ext.each(texts, function(node) {
+				var nv = node.nodeValue.toLowerCase(),
+					index = nv.indexOf(text),
+					r;
 
-			index = nv.indexOf(text);
-			while(index >= 0) {
-				r = doc.createRange();
-				r.setStart(node, index);
-				r.setEnd(node, index + textLength);
+				while(index >= 0) {
+					r = doc.createRange();
+					r.setStart(node, index);
+					r.setEnd(node, index + textLength);
 
-				if (!created[nv] || !created[nv][index]) {
-					created[nv] = created[nv] || {} ;
-					created[nv][index] = true;
-					ranges.push(r);
+					if (!created[nv] || !created[nv][index]) {
+						created[nv] = created[nv] || {} ;
+						created[nv][index] = true;
+						ranges.push(r);
+					}
+					index = nv.indexOf(text, index + 1);
 				}
-				index = nv.indexOf(text, index + 1);
-			}
-		}
+			},
+			this);
 
 		me.showRanges(ranges);
 		me.scrollTo(ranges[0].getClientRects()[0].top - 150);

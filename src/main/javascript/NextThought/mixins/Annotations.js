@@ -63,7 +63,7 @@ Ext.define('NextThought.mixins.Annotations', {
 
 	showRanges: function(ranges) {
 		this.searchAnnotations = Ext.create('annotations.SelectionHighlight', ranges,
-				this.items.get(0).el.dom.firstChild, this);
+			this.getDocumentElement(), this);
 	},
 
 

@@ -38,9 +38,19 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
 		me.addEvents('goto');
 		me.callParent(arguments);
 
+		//hacking away
+		var loc = Library.findLocation(LocationProvider.currentNTIID),
+			baseURI = (loc && loc.toc) ? loc.toc.baseURI : null,
+			lastSlash = baseURI ? baseURI.lastIndexOf('/') : null,
+			url = s.getSearchURL(); //last resort, ask service, it pretends to know...
+
+		if (lastSlash && lastSlash !== -1){
+			url = baseURI.substring(0, lastSlash) + '/Search/';
+		}
+
 		me.stores = [
 			me.getStoreFor(
-				s.getSearchURL(),
+				url,
 				Ext.bind(me.updateContents, me, [0], true)),
 
 			me.getStoreFor(
