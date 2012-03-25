@@ -150,13 +150,13 @@ Ext.define('NextThought.controller.State', {
 			return {};
 		}
 
-//		return {
-//			active: 'home'
-//		};
-
 		return {
-			location: 'tag:nextthought.com,2011-10:AOPS-HTML-prealgebra.0',
-			active: 'reader'
+			active: 'home'
 		};
+
+//		return {
+//			location: 'tag:nextthought.com,2011-10:AOPS-HTML-prealgebra.0',
+//			active: 'reader'
+//		};
 	}
 });
