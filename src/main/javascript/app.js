@@ -31,8 +31,7 @@ Ext.application({
 		'Search',
 		'Session',
 		'State',
-		'Stream',
-		'Whiteboard'
+		'Stream'
 	],
 
 	launch: function(){

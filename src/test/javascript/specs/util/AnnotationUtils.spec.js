@@ -144,13 +144,7 @@ describe("Annotation Utils", function() {
 				//be carefull editing this pattern, spaces will become the pattern: .*?
 			reg = 'test ' +//plain text part —
 					'<div.+?class=".*?body-divider.*?".+?> ' +
-						'<svg.+?> ' +
-							'<defs> ' +
-								//'( <clipPath.+?> <rect.+?> </rect> </clipPath>)+ ' +
-							'</defs> ' +
-							'<rect.+?> </rect> ' +
-								'( <path.+?> </path>)+ ?' +
-						'</svg> ' +
+						'<img.+?src="data:image/png;.+?".*?> '+
 					'</div>';
 
 		expect(new RegExp(reg.replace(/\S+/g,'.*?'),'i').test(text)).toBeTruthy();
