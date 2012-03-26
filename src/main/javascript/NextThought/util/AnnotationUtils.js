@@ -430,7 +430,7 @@ Ext.define('NextThought.util.AnnotationUtils',{
 
 		texts = this.getTextNodes( container );
 
-		while(resultRange.collapsed && !!(text = texts.iterateNext())){
+		while(resultRange.collapsed && !!(text = texts.shift())){
 			if (text.nodeValue===startHighlightedFullText) {
 				resultRange.setStart(text, r.get('startOffset'));
 			}

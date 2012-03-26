@@ -81,7 +81,7 @@ Ext.define('NextThought.view.widgets.FilterControlPanel', {
 		form.add({ xtype:'checkbox', cls: 'type-filter highlight', boxLabel: 'Highlights', model: 'NextThought.model.Highlight' });
 		form.add({ xtype:'checkbox', cls: 'type-filter note', boxLabel: 'Notes', model: 'NextThought.model.Note' });
 		form.add({ xtype:'checkbox', cls: 'type-filter transcript', boxLabel: 'Transcripts', model: 'NextThought.model.TranscriptSummary' });
-		form.add({ xtype:'checkbox', cls: 'type-filter quizresult', boxLabel: 'Quiz Results', model: 'NextThought.model.QuizResults' });
+		form.add({ xtype:'checkbox', cls: 'type-filter quizresult', boxLabel: 'Quiz Results', model: 'NextThought.model.QuizResult' });
 
 		this.fireEvent('filter-control-loaded',this);
 
