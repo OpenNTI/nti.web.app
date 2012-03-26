@@ -69,7 +69,7 @@ Ext.define(	'NextThought.view.whiteboard.Canvas',{
 
 		data.shapeList	= [];
 		data.MimeType	= "application/vnd.nextthought.canvas";
-		data['Class']	= 'Canvas';
+		data.Class		= 'Canvas';
 
 		var shapes = this.drawData.shapeList,
 			i = shapes.length -1;

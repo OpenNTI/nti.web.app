@@ -5,7 +5,7 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Ellipse', {
 		this.callParent(arguments);
 
 		ctx.beginPath();
-		ctx.arc(0, 0, .5, 0, Math.PI*2, true);
+		ctx.arc(0, 0, 0.5, 0, Math.PI*2, true);
 		ctx.closePath();
 
 		this.bbox = {

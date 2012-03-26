@@ -61,15 +61,15 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Base', {
 
 
 	getJSON: function(){
-		var data = Ext.clone(this);
+		var data = Ext.clone(this),
+			keys = ['bbox','selected','nibData','fillRGBACache','strokeRGBACache'],
+			i = keys.length-1;
 
-		delete data.bbox;
-		delete data.selected;
-		delete data.nibData;
-		delete data.fillRGBACache;
-		delete data.strokeRGBACache;
+		for(; i>=0; i--){
+			delete data[keys[i]];
+		}
 
-		data.MimeType = 'application/vnd.nextthought.'+(data['Class'].toLowerCase());
+		data.MimeType = 'application/vnd.nextthought.'+(data.Class.toLowerCase());
 
 		return data;
 	},
@@ -313,8 +313,8 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Base', {
 
 		for (; i<sides; i++)
 		{
-			if ((polyY[i]< y && polyY[j]>=y
-			||   polyY[j]< y && polyY[i]>=y)
+			if(((polyY[i]< y && polyY[j]>=y)
+			||  (polyY[j]< y && polyY[i]>=y))
 			&&  (polyX[i]<=x || polyX[j]<=x))
 			{
 				oddNodes^=(polyX[i]+(y-polyY[i])/(polyY[j]-polyY[i])*(polyX[j]-polyX[i]) < x);

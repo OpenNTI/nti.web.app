@@ -31,7 +31,7 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 		this.addDocked(this.buildToolbar());
 
 		if(this.value){
-		 	this.initialConfig.value = this.value;
+			this.initialConfig.value = this.value;
 		}
 
 		this.currentTool = 'Hand';
@@ -43,11 +43,11 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 
 
 		this.mouseMoveHandlerMap = {
-			'Hand': 	this.doMove,
-			'Path': 	this.doPath,
-			'Line': 	this.doLine,
+			'Hand':		this.doMove,
+			'Path':		this.doPath,
+			'Line':		this.doLine,
 			'Text':		this.doText,
-			'Circle': 	this.doShape,
+			'Circle':	this.doShape,
 			'Polygon':	this.doShape
 		};
 	},
@@ -355,7 +355,7 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 			t,xy,w,p;
 
 		if(!this.mouseDown){ return; }
-		if(!s || s['Class'] !== 'CanvasPathShape' || !s.isNew){
+		if(!s || s.Class !== 'CanvasPathShape' || !s.isNew){
 			w = this.canvas.el.getWidth();
 			this.selected = s = this.addShape('path');
 			s.strokeWidth = this.strokeWidthField.getValue()/w;
@@ -384,7 +384,7 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 			t,xy,w,p,m;
 
 		if(!this.mouseDown){ return; }
-		if(!s || s['Class'] !== 'CanvasPolygonShape' || s.sides !== 1 || !s.isNew){
+		if(!s || s.Class !== 'CanvasPolygonShape' || s.sides !== 1 || !s.isNew){
 			w = this.canvas.el.getWidth();
 			this.selected = s = this.addShape('line');
 			s.strokeWidth = this.strokeWidthField.getValue()/w;
@@ -421,7 +421,7 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 			x = p[0],
 			y = p[1];
 
-		if(!s || s['Class'] !== 'Canvas'+tool+'Shape' || !s.isNew){
+		if(!s || s.Class !== 'Canvas'+tool+'Shape' || !s.isNew){
 			this.selected = this.addShape(tool);
 			return;
 		}
@@ -464,8 +464,8 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 			stroke = this.strokeWidthField.getValue()/(this.canvas.el.getWidth()),
 			defs = {
 				'Class': 'Canvas'+Ext.String.capitalize(shape.toLowerCase())+'Shape',
-				'fillColor': this.selectedColor['fill'],
-				'strokeColor': this.selectedColor['stroke'],
+				'fillColor': this.selectedColor.fill,
+				'strokeColor': this.selectedColor.stroke,
 				'strokeWidth': stroke,
 				'transform':{
 					'Class':'CanvasAffineTransform',
@@ -484,7 +484,7 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 		}
 		else if(/line/i.test(shape)){
 			defs.sides = 1;
-			defs['Class'] = 'CanvasPolygonShape';
+			defs.Class = 'CanvasPolygonShape';
 		}
 		else if(/text/i.test(shape)){
 			defs.text = 'Text Label';

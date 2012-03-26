@@ -48,7 +48,7 @@ Ext.define('NextThought.view.whiteboard.Matrix', {
 
 
 	translate: function(x, y) {
-		this.multiply({m:[1,0,0,1,x,y]})
+		this.multiply({m:[1,0,0,1,x,y]});
 	},
 
 
@@ -59,7 +59,8 @@ Ext.define('NextThought.view.whiteboard.Matrix', {
 
 
 	scaleAll: function(scale){
-		for(var i = this.m.length-1; i>=0; i--){
+		var i= this.m.length-1;
+		for(; i>=0; i--){
 			this.m[i] *= scale;
 		}
 	},
@@ -120,7 +121,7 @@ Ext.define('NextThought.view.whiteboard.Matrix', {
 			'd': this.m[3],
 			'tx': this.m[4],
 			'ty': this.m[5]
-		}
+		};
 	}
 },function(){
 	window.NTMatrix = this;
