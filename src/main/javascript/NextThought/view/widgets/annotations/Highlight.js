@@ -215,7 +215,7 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 			l = s.length,
 			i = l-1,
 			color = this.getColor(),
-			rgba = Color.toRGBA(color),
+			rgba = Color.toRGBA(color, 0.3),
 			me = this,
 			ox = me.offsets.left;
 

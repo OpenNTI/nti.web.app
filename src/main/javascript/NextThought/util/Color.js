@@ -18,7 +18,7 @@ Ext.define('NextThought.util.Color',{
 				color.getRed(),
 				color.getGreen(),
 				color.getBlue(),
-				alpha || '0.3'
+				alpha || '1'
 		);
 	},
 

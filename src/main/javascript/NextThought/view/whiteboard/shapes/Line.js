@@ -15,7 +15,7 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Line', {
 		ctx.lineTo(xy[0],xy[1]);
 		ctx.closePath();
 
-		delete this.fillRGBA;//parent class will attempt to fill if this value exists, lines don't have fills.
+		delete this.fillRGBACache;//parent class will attempt to fill if this value exists, lines don't have fills.
 		this.bbox = {
 			x: 0,	w: 1,
 			y: -ctx.lineWidth*3,	h: ctx.lineWidth*6

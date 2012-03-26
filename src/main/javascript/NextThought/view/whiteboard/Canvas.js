@@ -67,16 +67,15 @@ Ext.define(	'NextThought.view.whiteboard.Canvas',{
 
 		var data = Ext.clone(this.drawData);
 
-		//maintain z-order since we're looping backwards (for speed)
-		data.shapeList.reverse();
+		data.shapeList	= [];
+		data.MimeType	= "application/vnd.nextthought.canvas";
+		data['Class']	= 'Canvas';
 
-		var shapes = data.shapeList,
-			i = shapes.length -1,
-			p = '__proto__';
+		var shapes = this.drawData.shapeList,
+			i = shapes.length -1;
 
 		for(; i>=0; i--){
-			//reparent shapes
-			shapes[i][p] = Object.prototype;
+			data.shapeList.push(shapes[i].getJSON());
 		}
 
 		return data;

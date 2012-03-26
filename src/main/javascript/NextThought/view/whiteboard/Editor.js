@@ -73,7 +73,9 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 
 
 	destroy: function(){
-		this.canvas.el.removeAllListeners();
+		if(this.canvas.el) {
+			this.canvas.el.removeAllListeners();
+		}
 		this.callParent(arguments);
 	},
 

@@ -17,17 +17,9 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Base', {
 
 		ctx.setTransform.apply(ctx,m.m);
 
-		if(!this.fillRGBA){
-			this.fillRGBA = !this.fillColor || this.fillColor === 'None'
-				? null
-				: Color.parseColor(this.fillColor,this.fillOpacity).toString();
-		}
 
-		if(!this.strokeRGBA){
-			this.strokeRGBA = !this.strokeColor || this.strokeColor === 'None'
-				? null
-				: Color.parseColor(this.strokeColor,this.strokeOpacity).toString()
-		}
+		this.cacheColor('fill');
+		this.cacheColor('stroke');
 
 		if(this.selected){
 			ctx.shadowOffsetX = 0;
@@ -40,16 +32,52 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Base', {
 			delete this.nibData;
 		}
 
-		ctx.fillStyle = this.fillRGBA;
-		ctx.strokeStyle = this.strokeRGBA;
+		ctx.fillStyle = this.fillRGBACache;
+		ctx.strokeStyle = this.strokeRGBACache;
 
 		ctx.lineWidth = (parseFloat(this.strokeWidth)*w)/scale;
 	},
 
 
+	cacheColor: function(name){
+		var cacheKey = name+'RGBACache',
+			valueKey = name+'Color',
+			opacity = this[name+'Opacity'] || 1,
+			cache = this[cacheKey],
+			value = this[valueKey],
+			c;
+
+		if(cache){ return; }
+
+		if(!value || value === 'None'){
+			this[cacheKey] = null;
+			return;
+		}
+
+		c = Color.parseColor(value);
+		this[valueKey] = Color.toRGB(c);
+		this[cacheKey] = Color.toRGBA(c,opacity);
+	},
+
+
+	getJSON: function(){
+		var data = Ext.clone(this);
+
+		delete data.bbox;
+		delete data.selected;
+		delete data.nibData;
+		delete data.fillRGBACache;
+		delete data.strokeRGBACache;
+
+		data.MimeType = 'application/vnd.nextthought.'+(data['Class'].toLowerCase());
+
+		return data;
+	},
+
+
 	performFillAndStroke: function(ctx){
-		if(this.fillRGBA) { ctx.fill(); }
-		if(this.strokeRGBA){ ctx.stroke(); }
+		if(this.fillRGBACache) { ctx.fill(); }
+		if(this.strokeRGBACache){ ctx.stroke(); }
 
 		if(this.selected){
 			this.showNibs(ctx);
@@ -188,8 +216,8 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Base', {
 	},
 
 	changed: function(){
-		delete this.fillRGBA;
-		delete this.strokeRGBA;
+		delete this.fillRGBACache;
+		delete this.strokeRGBACache;
 	},
 
 
