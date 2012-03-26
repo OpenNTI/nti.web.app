@@ -75,7 +75,8 @@ Ext.define('NextThought.proxy.Socket', {
 
 		this.tearDownSocket();
 
-		var opts =  this.disconnectStats.reconfigure ?
+		var me = this,
+			opts =  this.disconnectStats.reconfigure ?
 				{transports: ["xhr-polling"], 'force new connection':true} : undefined,
 			socket = io.connect($AppConfig.server.host, opts),
 			k;
@@ -103,6 +104,10 @@ Ext.define('NextThought.proxy.Socket', {
 		}
 
 		this.socket = socket;
+
+		window.onbeforeunload = Ext.Function.createSequence(
+				window.onbeforeunload || function(){},
+				function(){ me.tearDownSocket(); });
 	},
 
 	emit: function() {
