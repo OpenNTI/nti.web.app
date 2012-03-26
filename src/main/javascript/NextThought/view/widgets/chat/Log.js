@@ -133,6 +133,25 @@ Ext.define('NextThought.view.widgets.chat.Log', {
 	},
 
 
+	modsChanged: function(modsLeft, modsAdded) {
+		Ext.each(modsLeft, function(peep){
+			this.add({
+				xtype: 'chat-info-log-entry',
+				message: 'is no longer a moderator',
+				person: peep
+			});
+		}, this);
+		Ext.each(modsAdded, function(peep){
+			this.add({
+				xtype: 'chat-info-log-entry',
+				message: 'has become a moderator',
+				person: peep
+			});
+		}, this);
+
+	},
+
+
 	addMessage: function(msg) {
 		var id = msg.getId(),
 			rid = msg.get('inReplyTo'),

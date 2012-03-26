@@ -59,7 +59,7 @@ Ext.define('NextThought.view.windows.ChatWindow', {
 		if (!tab) {
 			tab = this.down('tabpanel').add(
 				{
-					title: this.generateTabName(roomInfo),
+					title: ClassroomUtils.generateOccupantsString(roomInfo),
 					xtype: 'chat-view',
 					roomId: id,
 					closable: true,
@@ -82,26 +82,5 @@ Ext.define('NextThought.view.windows.ChatWindow', {
 			tab.destroy(); //TODO: This causes the room to be left this receiving no more messages, we want to remove
 			// the tab, but not leave the room in this case (switch to classroom)
 		}
-	},
-
-	generateTabName: function(roomInfo) {
-		var occs = roomInfo.get('Occupants'),
-			numOccs = occs.length,
-			result = [],
-			max = 2,
-			left,
-			i,u;
-
-		for (i = 0; result.length<max && i < numOccs; i++) {
-			u =  NextThought.cache.UserRepository.getUser(occs[i]);
-
-			if (u.getId() === $AppConfig.userObject.getId()){continue;}
-
-			result.push(u.get('alias') || u.get('Username'));
-		}
-		left = occs.length - result.length - 1;
-
-		return result.join(',')+(left ? '...' : '');
 	}
-
 });

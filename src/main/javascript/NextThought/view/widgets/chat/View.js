@@ -75,6 +75,12 @@ Ext.define('NextThought.view.widgets.chat.View', {
     },
 
 
+	disableChat: function(){
+		this.down('chat-log-view').setDisabled(true);
+		this.down('chat-reply-to').setDisabled(true);
+	},
+
+
 	initOccupants: function(moderated) {
 		var classContent = this.up('classroom-content'),
 			occList = this.down('chat-occupants-list');

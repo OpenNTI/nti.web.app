@@ -395,6 +395,15 @@ Ext.define('NextThought.controller.Classroom', {
 	},
 
 
+	onModsChanged: function(left, added) {
+		var classroom = this.getClassroom();
+		if(!classroom) {return;}
+		classroom.down('chat-log-view').modsChanged(left, added);
+
+		//TODO - maybe check if I'm mod here and do stuff...
+	},
+
+
 	onResourceSelected: function(r) {
 		var href = $AppConfig.server.host + r.get('href'),
 			mime = r.get('type'),

@@ -56,7 +56,8 @@ Ext.define('NextThought.controller.Chat', {
 			'serverkill': function(){me.onSocketDisconnect.apply(me, arguments);},
 			'chat_enteredRoom': function(){me.onEnteredRoom.apply(me, arguments);},
 			'chat_exitedRoom' : function(){me.onExitedRoom.apply(me, arguments);},
-			'chat_roomMembershipChanged' : function(){me.onMembershipChanged.apply(me, arguments);},
+			'chat_roomMembershipChanged' : function(){me.onMembershipOrModerationChanged.apply(me, arguments);},
+			'chat_roomModerationChanged' : function(){me.onMembershipOrModerationChanged.apply(me, arguments);},
 			'chat_presenceOfUserChangedTo' : function(user, presence){UserRepository.presenceChanged(user, presence);},
 			'chat_recvMessage': function(){me.onMessage.apply(me, arguments);},
 			'chat_recvMessageForAttention' : function(){me.onMessageForAttention.apply(me, arguments);},
@@ -430,10 +431,14 @@ Ext.define('NextThought.controller.Chat', {
 	sendChangeMessages: function(oldRoomInfo, newRoomInfo) {
 		var oldOccupants = oldRoomInfo.get('Occupants'),
 			newOccupants = newRoomInfo.get('Occupants'),
+			oldMods = oldRoomInfo.get('Moderators'),
+			newMods = newRoomInfo.get('Moderators'),
 			left = Ext.Array.difference(oldOccupants, newOccupants),
-			added = Ext.Array.difference(newOccupants, oldOccupants);
+			added = Ext.Array.difference(newOccupants, oldOccupants),
+			leftMods = Ext.Array.difference(oldMods, newMods),
+			addedMods = Ext.Array.difference(newMods, oldMods);
 
-		this.onOccupantsChanged(newRoomInfo.getId(), left, added);
+		this.onOccupantsChanged(newRoomInfo, left, added, leftMods, addedMods);
 	},
 
 
@@ -517,12 +522,12 @@ Ext.define('NextThought.controller.Chat', {
 	   this.activeRooms = {};
 	},
 
-	onMembershipChanged: function(msg) {
+	onMembershipOrModerationChanged: function(msg) {
 		var newRoomInfo = ParseUtils.parseItems([msg])[0];
 		var oldRoomInfo = this.activeRooms[newRoomInfo.getId()];
-		this.updateRoomInfo(newRoomInfo);
 		this.sendChangeMessages(oldRoomInfo, newRoomInfo);
-	},
+		this.updateRoomInfo(newRoomInfo);	},
+
 
 	onExitedRoom: function(room) {
 		if (this.activeRooms.hasOwnProperty(room.ID)) {
@@ -612,13 +617,15 @@ Ext.define('NextThought.controller.Chat', {
 	},
 
 
-	onOccupantsChanged: function(roomId, peopleWhoLeft, peopleWhoArrived) {
+	onOccupantsChanged: function(newRoomInfo, peopleWhoLeft, peopleWhoArrived, modsLeft, modsAdded) {
 		var win = this.getChatWindow(),
-			r = IdCache.getIdentifier(roomId),
-			tab;
+			id = newRoomInfo.getId(),
+			r = IdCache.getIdentifier(id),
+			tab, view;
 
-		if (this.getClassroom().isClassroom({ContainerId: roomId})) {
+		if (this.getClassroom().isClassroom({ContainerId: id})) {
 			this.getClassroom().onOccupantsChanged(peopleWhoLeft, peopleWhoArrived);
+			this.getClassroom().onModsChanged(modsLeft, modsAdded);
 			return;
 		}
 
@@ -627,7 +634,13 @@ Ext.define('NextThought.controller.Chat', {
 		}
 
 		tab = win.down('chat-view[roomId=' + r + ']');
-		tab.down('chat-log-view').occupantsChanged(peopleWhoLeft, peopleWhoArrived);
+		tab.setTitle(ClassroomUtils.generateOccupantsString(newRoomInfo));
+		if (ClassroomUtils.isRoomEmpty(newRoomInfo)) {
+			tab.disableChat();
+		}
+		view = tab.down('chat-log-view');
+		view.occupantsChanged(peopleWhoLeft, peopleWhoArrived);
+		view.modsChanged(modsLeft, modsAdded);
 	},
 
 
