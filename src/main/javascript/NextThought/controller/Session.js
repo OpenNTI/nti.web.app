@@ -148,8 +148,8 @@ Ext.define('NextThought.controller.Session', {
 					successCallback.call(me);
 				}
 				else{
-					alert('could not resolve user: '+user);
-					console.log('could not resolve user',user);
+					alert('could not resolve user: '+username);
+					console.log('could not resolve user',username, arguments);
 //					failureCallback.call(me);
 				}
 			});
