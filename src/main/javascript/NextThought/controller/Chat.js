@@ -692,6 +692,15 @@ Ext.define('NextThought.controller.Chat', {
 	onEnteredRoom: function(msg) {
 		var roomInfo = msg && msg.isModel? msg : ParseUtils.parseItems([msg])[0],
 			existingRoom;
+
+		//double check the roominfo.  if it's empty, we probably shouldn't have gotten this far...
+		//...but just in case, make sure we don't confuse the user and open tabs/etc
+		if (ClassroomUtils.isRoomEmpty(roomInfo)) {
+			console.warn('chat room ' + roomInfo.getId()+ ' entered but is empty, exiting room', roomInfo);
+			this.leaveRoom(roomInfo);
+			return;
+		}
+
 		if (this.activeRooms.hasOwnProperty(roomInfo.getId())) {
 			console.warn('room already exists, all rooms/roomInfo', this.activeRooms, roomInfo);
 		}
