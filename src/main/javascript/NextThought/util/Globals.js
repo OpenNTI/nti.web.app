@@ -261,9 +261,6 @@ Ext.define('NextThought.util.Globals',
 			}
 		});
 
-		//
-		this.fixSvgPath2CurveMethod();
-
 		//inject a new function into Ext.Element
 		Ext.apply(Ext.Element.prototype,{
 
@@ -343,48 +340,6 @@ Ext.define('NextThought.util.Globals',
 
 
 
-	},
-
-
-	fixSvgPath2CurveMethod: function(){
-		if(Ext.versions.extjs.isGreaterThan('4.0.7')) {
-			return;
-		}
-
-		Ext.apply(Ext.draw.Draw,{
-			/**
-			 * Fix the frameworks implementation of this method.
-			 * @param path
-			 */
-			path2curve: function (path) {
-				var me = this,
-					points = me.pathToAbsolute(path),
-					ln = points.length,
-					attrs = {x: 0, y: 0, bx: 0, by: 0, X: 0, Y: 0, qx: null, qy: null},
-					i, seg, segLn, point;
-
-				for (i = 0; i < ln; i++) {
-					points[i] = me.command2curve(points[i], attrs);
-					if (points[i].length > 7) {
-							points[i].shift();
-							point = points[i];
-							while (point.length) {
-								Ext.Array.splice(points, i++, 0, ["C"].concat(Ext.Array.splice(point, 0, 6)));
-							}
-							Ext.Array.erase(points, i, 1);
-							ln = points.length;
-							i--;//forloop will double increment this if we don't roll it back...
-						}
-					seg = points[i];
-					segLn = seg.length;
-					attrs.x = seg[segLn - 2];
-					attrs.y = seg[segLn - 1];
-					attrs.bx = parseFloat(seg[segLn - 4]) || attrs.x;
-					attrs.by = parseFloat(seg[segLn - 3]) || attrs.y;
-				}
-				return points;
-			}
-		});
 	},
 
 
