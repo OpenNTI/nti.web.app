@@ -81,16 +81,10 @@ Ext.define('NextThought.view.whiteboard.Matrix', {
 
 
 	getRotation: function(){
-		var m = this.m, a = m[0], b = m[1],
-			c = m[2], d = m[3];
-
-//		return a.toFixed(9)==='0.000000000'
-//			? Math.atan2(Infinity,Infinity)
-//			: Math.atan2(a,c||b);
+		var m = this.m, a = m[0], b = m[1];
+//			c = m[2], d = m[3];
 
 		return Math.atan( -b/a );
-
-//		return Math.atan( c/d );
 	},
 
 

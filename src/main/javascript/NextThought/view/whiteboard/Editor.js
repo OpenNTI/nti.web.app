@@ -4,6 +4,7 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 	requires: [
 		'NextThought.view.whiteboard.Canvas',
 		'NextThought.view.whiteboard.Matrix',
+		'NextThought.view.whiteboard.Utils',
 		'Ext.slider.Slider'
 	],
 
@@ -13,61 +14,12 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 
 	statics: {
 		test: function(){
-			
-			var test = {
-				"shapeList": [
-					{
-						"transform": {"a": 0.004010695032775402, "c": -0.2927807569503784, "b": 0.2927797734737396, "d": 0.004010708536952734, "tx": 0.37299466133117676, "ty": 0.2245989292860031, "Class": "CanvasAffineTransform"},
-						"strokeOpacity": 1.0,
-						"sides": 1,
-						"strokeWidth": "0.003%",
-						"fillColor": "rgb(0.0,0.0,0.0)",
-						"strokeColor": "rgb(0.0,0.0,0.0)",
-						"Class": "CanvasPolygonShape",
-						"fillOpacity": 0.0
-					},
-					{
-						"transform": {"a": 0.5855615139007568, "c": 0.008021390065550804, "b": -0.008021390065550804, "d": 0.5855615139007568, "tx": 0.10828877240419388, "ty": 0.5347593426704407, "Class": "CanvasAffineTransform"},
-						"strokeOpacity": 1.0,
-						"sides": 1,
-						"strokeWidth": "0.003%",
-						"fillColor": "rgb(0.0,0.0,0.0)",
-						"strokeColor": "rgb(0.0,0.0,0.0)",
-						"Class": "CanvasPolygonShape",
-						"fillOpacity": 0.0
-					},
-					{
-						"transform": {"a": -0.3008021414279938, "c": -0.3395721912384033, "b": 0.33957213163375854, "d": -0.30080220103263855, "tx": 0.7098930478096008, "ty": 0.1818181872367859, "Class": "CanvasAffineTransform"},
-						"strokeOpacity": 1.0,
-						"sides": 1,
-						"strokeWidth": "0.003%",
-						"fillColor": "rgb(0.0,0.0,0.0)",
-						"strokeColor": "rgb(0.0,0.0,0.0)",
-						"Class": "CanvasPolygonShape",
-						"fillOpacity": 0.0
-					},
-					{
-						"transform": {"a": 0.28877007961273193, "c": -0.3275400996208191, "b": 0.32754015922546387, "d": 0.28877002000808716, "tx": 0.04545454680919647, "ty": 0.17914438247680664, "Class": "CanvasAffineTransform"},
-						"strokeOpacity": 1.0,
-						"sides": 1,
-						"strokeWidth": "0.003%",
-						"fillColor": "rgb(0.0,0.0,0.0)",
-						"strokeColor": "rgb(0.0,0.0,0.0)",
-						"Class": "CanvasPolygonShape",
-						"fillOpacity": 0.0
-					}
-				],
-				"CreatedTime": 1332466969.555841,
-				"Class": "Canvas"
-			};
-
-
 			Ext.widget('window',{
 				closeAction: 'destroy',
 				maximized: true,
 				maximizable: true,
 				layout: 'fit',
-				items: {xtype: 'whiteboard-editor', value: test}
+				items: {xtype: 'whiteboard-editor'}
 			}).show();
 		}
 	},
@@ -125,48 +77,30 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 		this.callParent(arguments);
 	},
 
-//
-//	getSlope: function(x0,y0, x1,y1){
-//		return (y1-y0) / (x1-x0);
-//	},
-//
-
-	getAngle: function (x0,y0, x1,y1){
-		return Math.atan((y1-y0)/(x1-x0));
-	},
-
-
-	getDegrees: function(x0,y0, x1,y1){
-		var dx	= x1-x0,
-			dy	= y1-y0,
-			a	= dx<0? 180: dy<0? 360: 0,
-			rad = Math.atan(dy/dx);
-
-		return ((180/Math.PI)*rad) + a;
-	},
-
-
-	getDistance: function(x1, y1, x2, y2) {
-		var dx = x2 - x1,
-			dy = y2 - y1;
-		return Math.sqrt(dx*dx + dy*dy);
-	},
-
 
 	getRelativeXY: function(e, scaled){
 		var x = e.getXY().slice(),
-			c = this.canvas.el.getXY(),
-			w = this.canvas.el.getWidth();
+			c = this.canvas.el.getXY();
 
 		x[0] -= c[0];
 		x[1] -= c[1];
 
 		if(scaled){
-			x[0] /= w;
-			x[1] /= w;
+			x = this.scalePoint(x);
 		}
 
 		return x;
+	},
+
+
+	scalePoint: function(xy){
+		var w = this.canvas.el.getWidth();
+
+		xy = xy.slice();
+		xy[0] /= w;
+		xy[1] /= w;
+
+		return xy;
 	},
 
 
@@ -289,7 +223,8 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 		var c = this.canvas,
 			s = null,
 			cs = this.selected,
-			p = this.getRelativeXY(e,true);
+			p = this.getRelativeXY(e),
+			sp = this.scalePoint(p);
 
 		if(cs && cs.isPointInNib.apply(s,p)){
 			return;
@@ -298,7 +233,7 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 		Ext.each(
 				c.drawData.shapeList,
 				function(o){
-					if(!s && o.isPointInShape(p[0],p[1])){
+					if(!s && o.isPointInShape(sp[0],sp[1])){
 						s = o; o.selected = this.currentTool || true;
 					}
 					else { delete o.selected; }
@@ -323,10 +258,7 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 		this.mouseInitialPoint = this.getRelativeXY(e);
 		if(this.selected){
 			var xy = this.mouseInitialPoint.slice(),
-				s = this.selected,
-				w = this.canvas.el.getWidth();
-			xy[0] /= w;
-			xy[1] /= w;
+				s = this.selected;
 			this.clickedNib = s.isPointInNib.apply(s,xy);
 		}
 	},
@@ -445,7 +377,36 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 	},
 
 
-	doLine: function(e){},
+	doLine: function(e){
+		var s = this.selected,
+			t,xy,w,p,m;
+
+		if(!this.mouseDown){ return; }
+		if(!s || s['Class'] !== 'CanvasPolygonShape' || s.sides !== 1 || !s.isNew){
+			w = this.canvas.el.getWidth();
+			this.selected = s = this.addShape('line');
+			s.strokeWidth = this.strokeWidthField.getValue()/w;
+
+			xy = this.getRelativeXY(e,true);
+			t = s.transform;
+			t.tx = xy[0];
+			t.ty = xy[1];
+			return;
+		}
+
+
+		xy = this.getRelativeXY(e,true);
+		t = s.transform;
+		m = new NTMatrix();
+		p = [t.tx, t.ty];
+		p.push(xy[0],xy[1]);
+		m.translate(t.tx,t.ty);
+		m.scale(WBUtils.getDistance(p));
+		m.rotate(WBUtils.toRadians(WBUtils.getDegrees(p)));
+
+		s.transform = m.toTransform();
+		this.canvas.drawScene();
+	},
 
 
 	doShape: function(e){
@@ -454,7 +415,7 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 		var tool = this.currentTool,
 			s = this.selected, w = this.canvas.el.getWidth(),
 			p = this.mouseInitialPoint.slice(),
-			m, scale,
+			m,
 			x = p[0],
 			y = p[1];
 
@@ -464,12 +425,11 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 		}
 
 		p.push.apply(p,this.getRelativeXY(e));
-		scale = this.getDistance.apply(this, p)*2;
 
 		m = new NTMatrix();
 		m.translate(x,y);
-		m.scale(scale);
-		m.rotate(this.getAngle.apply(this,p));
+		m.scale(WBUtils.getDistance(p)*2);
+		m.rotate(WBUtils.getAngle(p));
 
 		m.scaleAll(1/w);//do this after
 		s.transform = m.toTransform();
@@ -522,7 +482,6 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 		}
 		else if(/line/i.test(shape)){
 			defs.sides = 1;
-			defs.transform.tx = 0.3;
 			defs['Class'] = 'CanvasPolygonShape';
 		}
 		else if(/text/i.test(shape)){

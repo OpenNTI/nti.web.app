@@ -1,7 +1,8 @@
 Ext.define(	'NextThought.view.whiteboard.shapes.Base', {
 	requires: [
 		'NextThought.util.Color',
-		'NextThought.view.whiteboard.Matrix'
+		'NextThought.view.whiteboard.Matrix',
+		'NextThought.view.whiteboard.Utils'
 	],
 
 	IDENTITY: { 'Class':'CanvasAffineTransform', 'a':1, 'b':0, 'c':0, 'd':1, 'tx':0, 'ty':0 },
@@ -77,11 +78,10 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Base', {
 				't-r': function(dx, dy) { return update(dx,dy,1,-1); },
 				'b-l': function(dx, dy) { return update(dx,dy,-1,1); },
 				'rot': function(){
-
 					m = new NTMatrix();
 					m.translate(t[0],t[1]);
 					m.scale(s[0],s[1]);
-					m.rotate(Math.atan( (t[1]-y1)/(t[0]-x1) ));
+					m.rotate(WBUtils.getAngle(t[0],t[1], x1,y1));
 
 					return m.toTransform();
 				}
@@ -98,6 +98,9 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Base', {
 
 
 		try{
+			if(nib === 'rot1' || nib === 'rot2') {
+				nib = 'rot';
+			}
 			this.transform = map[nib].call(this,dx/2,dy/2);
 		}
 		catch(e){
@@ -106,50 +109,61 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Base', {
 	},
 
 
+	drawNib: function(ctx,r,x,y, m, name, s, a){
+
+		s = s || 0;
+		a = a || Math.PI*2;
+
+		var xy = m.transformPoint(x,y);
+		if(name!=='rot1' && name !== 'rot2'){ctx.moveTo(xy[0]+r,xy[1]);}
+		ctx.arc(xy[0], xy[1], r, s,a, name!=='rot2');
+
+		//if nibData is there, fill it in, otherwise, throw away the data
+		(this.nibData||{})[name] = {
+			x: xy[0],
+			y: xy[1],
+			r: r
+		};
+	},
+
+
 	showNibs: function(ctx){
 		if(!this.bbox){
 			return;
 		}
 
-		function drawNib(x,y, name){
-			if(name!=='rot'){ctx.moveTo(x+r,y);}
-			ctx.arc(x, y, r, s,a, true);
-
-			var xy = m.transformPoint(x, y);
-			//if nibData is there, fill it in, otherwise, throw away the data
-			(this.nibData||{})[name] = {
-				x: xy[0],
-				y: xy[1],
-				r: r/2
-			};
-		}
-
 		ctx.save();
 
 		var b = this.bbox,
-			m = new NTMatrix(this.transform), scale, r, s=0, a=Math.PI*2;
+			m = new NTMatrix(this.transform),
+			r, rot;
 
-		scale = m.getScale(true)*ctx.canvas.width;
+		//scale the normal values to the current size of the canvas
+		m.scaleAll(ctx.canvas.width);
 
-		r = 7/scale;
+		rot = -m.getRotation();
+
+		ctx.setTransform(1,0,0,1,0,0);
+
+		r = 7;
 
 		b.mx = (b.w/2)+b.x;
 		b.my = (b.h/2)+b.y;
 		b.xx = b.x + b.w;
 		b.yy = b.y + b.h;
 
-		ctx.lineWidth = 2/scale;
+		ctx.lineWidth = 2;
 		ctx.beginPath();
-		drawNib.call(this, b.x,  b.y, 't-l');
-		drawNib.call(this, b.mx, b.y, 't');
-		drawNib.call(this, b.xx, b.y, 't-r');
+		this.drawNib(ctx, r, b.x,  b.y, m, 't-l');
+		this.drawNib(ctx, r, b.mx, b.y, m, 't');
+		this.drawNib(ctx, r, b.xx, b.y, m, 't-r');
 
-		drawNib.call(this, b.x,  b.my, 'l');
-		drawNib.call(this, b.xx, b.my, 'r');
+		this.drawNib(ctx, r, b.x,  b.my, m, 'l');
+		this.drawNib(ctx, r, b.xx, b.my, m, 'r');
 
-		drawNib.call(this, b.x,  b.yy, 'b-l');
-		drawNib.call(this, b.mx, b.yy, 'b');
-		drawNib.call(this, b.xx, b.yy, 'b-r');
+		this.drawNib(ctx, r, b.x,  b.yy, m, 'b-l');
+		this.drawNib(ctx, r, b.mx, b.yy, m, 'b');
+		this.drawNib(ctx, r, b.xx, b.yy, m, 'b-r');
 
 		ctx.closePath();
 		ctx.shadowColor = 'None';
@@ -158,17 +172,17 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Base', {
 		ctx.fill();
 		ctx.stroke();
 
-		s=Math.PI/3;
-		a=-Math.PI/4;
-		r*=2;
-
-		ctx.beginPath();
-		drawNib.call(this, b.xx+(r*4), b.my, 'rot');
 		ctx.lineCap = 'round';
 		ctx.lineWidth *= 2;
+
+		ctx.beginPath();
+		this.drawNib(ctx, r*2, b.xx+((r)/m.getScale(true)), b.my, m, 'rot1', (rot+(Math.PI/3)), (rot-(Math.PI/4)));
 		ctx.stroke();
 
-//		ctx.strokeRect(b.x,b.y,b.w,b.h);
+		ctx.beginPath();
+		this.drawNib(ctx, r*2, b.x-((r)/m.getScale(true)), b.my, m, 'rot2', rot+(2*Math.PI/3), rot-(3*Math.PI/4));
+		ctx.stroke();
+
 		ctx.restore();
 
 	},
@@ -181,8 +195,8 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Base', {
 
 	/**
 	 *
-	 * @param x - unit coordinate space
-	 * @param y - unit coordinate space
+	 * @param x - canvas coordinate space
+	 * @param y - canvas coordinate space
 	 *
 	 * @returns truthy, with the name of the nib if true, false if not within a nib.
 	 */
@@ -197,8 +211,11 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Base', {
 				dy = nib.y - y;
 				d = Math.sqrt(dx*dx + dy*dy);
 				if(d <= nib.r){
-					console.log(n, d, nib.r, nib.x,nib.y, x,y);
 					return n;
+//				} else {
+//					console.log(n, 'distance:', d, 'radius:', nib.r,
+//							'nib xy: (', nib.x,
+//							nib.y,') point: (', x,y, ')');
 				}
 			}
 		}

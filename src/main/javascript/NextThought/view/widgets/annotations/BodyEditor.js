@@ -245,8 +245,8 @@ Ext.define('NextThought.view.widgets.annotations.BodyEditor', {
 				bbar: this.getWhiteboardBottomToolbar()
 			});
 
-		win.saveScene = function(){
-			return !win.rendered? canvas : this.down('whiteboard-editor').saveScene();
+		win.getValue = function(){
+			return !win.rendered? canvas : this.down('whiteboard-editor').getValue();
 		};
 
 		return win;
@@ -283,7 +283,7 @@ Ext.define('NextThought.view.widgets.annotations.BodyEditor', {
 		Ext.each(body,function(v,i,a){
 			if(v.indexOf('class="body-divider"')<0){return;}
 			var id = /<div.*?id="(.*?)".*?div>/i.exec(v)[1];
-			if (id) {a[i]=me.editors[id].saveScene();}
+			if (id) {a[i]=me.editors[id].getValue();}
 			else {a[i]=undefined;}
 		});
 
