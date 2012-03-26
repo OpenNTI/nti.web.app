@@ -221,7 +221,7 @@ Ext.define('NextThought.util.AnnotationUtils',{
 
 		anchorNode = Ext.fly(node).is('A[name]')? node: this.getPreviousAnchorInDOM(node);
 		if(!anchorNode){
-			anchorNode = this.getAnchors(node.ownerDocument).peek();
+			anchorNode = this.getAnchors(node.ownerDocument).first();
 		}
 
 		pageOffsets = Ext.fly(anchorNode).getOffsetsTo(anchorNode.ownerDocument.getElementById('NTIContent'));
