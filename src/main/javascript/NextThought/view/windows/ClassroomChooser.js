@@ -97,6 +97,7 @@ Ext.define('NextThought.view.windows.ClassroomChooser', {
 
 
 	getOwner: function(){
+		debugger;
 		return this.ownerCt || this.floatParent;
 	},
 
@@ -110,7 +111,8 @@ Ext.define('NextThought.view.windows.ClassroomChooser', {
 		}
 
 		function cleanup() {
-			me.getOwner().un('resize',recenter);
+			var o = me.getOwner();
+			if (o) {o.un('resize',recenter);}
 			if(n) { n.destroy(); }
 		}
 
