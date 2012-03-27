@@ -42,7 +42,8 @@ Ext.define('NextThought.view.Viewport', {
 		return this.container.getActive();
 	}
 }, function(){
-	var features = ['Canvas','CSSAnimations','CSSTransforms','CSSTransitions','History','SVG','Video'],f,
+	//'CSSTransitions','CSSAnimations',
+	var features = ['Canvas','CSSTransforms','SVG','Video'],f,
 		unsupported = [];
 
 
@@ -57,7 +58,6 @@ Ext.define('NextThought.view.Viewport', {
 	}
 	else {
 		unsupported.reverse();
-		f = this.prototype.items[1];
-		f.html = Ext.String.format(f.html, unsupported.join(', ') );
+		console.warn("Unsupported features: "+unsupported.join(', '));
 	}
 });

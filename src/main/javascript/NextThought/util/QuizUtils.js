@@ -12,7 +12,7 @@ Ext.define('NextThought.util.QuizUtils', {
 		try{
 			var inputs = doc.querySelectorAll('input[type=number]'),
 				quiz = inputs.length>0,
-				w = doc.ownerWindow;
+				w = doc.parentWindow;
 
 			if(!quiz){
 				return;
@@ -29,7 +29,7 @@ Ext.define('NextThought.util.QuizUtils', {
 			w.$( 'span.quiz-input').mathquill('editable');
 		}
 		catch(e){
-			console.error('unable to setup quiz ',e.stack);
+			console.error('unable to setup quiz ',e.stack||e.toString());
 		}
 	},
 
