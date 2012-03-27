@@ -18,7 +18,7 @@ Ext.define('NextThought.util.Color',{
 				color.getRed(),
 				color.getGreen(),
 				color.getBlue(),
-				alpha || '1'
+				typeof alpha === 'number' ? alpha : 1
 		);
 	},
 
