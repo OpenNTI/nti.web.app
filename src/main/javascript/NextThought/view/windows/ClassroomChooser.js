@@ -97,7 +97,6 @@ Ext.define('NextThought.view.windows.ClassroomChooser', {
 
 
 	getOwner: function(){
-		debugger;
 		return this.ownerCt || this.floatParent;
 	},
 
