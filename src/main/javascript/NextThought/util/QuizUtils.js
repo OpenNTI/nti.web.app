@@ -34,7 +34,7 @@ Ext.define('NextThought.util.QuizUtils', {
 	},
 
 	pullMathQuillValues: function(doc){
-		var w = doc.ownerWindow,
+		var w = doc.parentWindow,
 			inputs = doc.querySelectorAll('span.quiz-input'),
 			i = inputs.length-1,
 			o,latex;
@@ -76,7 +76,7 @@ Ext.define('NextThought.util.QuizUtils', {
 			ntiid = LocationProvider.currentNTIID,
 			problems,
 			vp = Ext.getBody(),
-			w = doc.ownerWindow,
+			w = doc.parentWindow,
 			quizResult = Ext.create('NextThought.model.QuizResult' ,{ContainerId: ntiid});
 
 		function populateQuestionResponses(id,v){
@@ -149,14 +149,14 @@ Ext.define('NextThought.util.QuizUtils', {
 				});
 			});
 
-		doc.ownerWindow.postMessage('MathJax.reRender()',location.href);
+		doc.parentWindow.postMessage('MathJax.reRender()',location.href);
 
 		Ext.get(doc.getElementById('submit')).update('Reset');
 		this.scrollUp();
 	},
 
 	resetQuiz: function(doc) {
-		var w = doc.ownerWindow;
+		var w = doc.parentWindow;
 		Ext.get(doc.getElementById('submit')).update('Submit');
 
 		this.getProblemElementMap(doc,
