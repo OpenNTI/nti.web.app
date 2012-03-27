@@ -420,7 +420,7 @@ Ext.define('NextThought.util.AnnotationUtils',{
 			endAnchor = r.get('endAnchor'),
 			startHighlightedFullText = r.get('startHighlightedFullText'),
 			endHighlightedFullText = r.get('endHighlightedFullText'),
-			resultRange = document.createRange(),
+			resultRange = root.createRange(),
 			container,
 			text, texts,
 			tempRange;
@@ -434,7 +434,7 @@ Ext.define('NextThought.util.AnnotationUtils',{
 		endAnchor = endAnchor ? this.getAnchor(endAnchor,root) : this.getNextAnchor(startAnchor);
 
 		try {
-			tempRange = document.createRange();
+			tempRange = root.createRange();
 			tempRange.setStart(startAnchor, 0);
 			tempRange.setEnd(endAnchor, 0);
 			container = tempRange.commonAncestorContainer;
