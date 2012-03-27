@@ -484,24 +484,16 @@ Ext.define('NextThought.mixins.Annotations', {
 
 	getSelection: function() {
 		var doc = this.getDocumentElement(),
-			win = doc.ownerWindow,
+			win = doc.parentWindow,
 			range, selection;
 
-		if (win.getSelection) {	// all browsers, except IE before version 9
-			selection = win.getSelection();
-			if (selection.rangeCount > 0) {
-				range = selection.getRangeAt(0);
+		selection = win.getSelection();
+		if (selection.rangeCount > 0) {
+			range = selection.getRangeAt(0);
 
-				return range;
-			}
-			console.warn('skipping getSelection() no ranges', selection);
+			return range;
 		}
-		else {
-			if (doc.selection) {	// Internet Explorer 8 and below
-				range = doc.selection.createRange();
-				return range.getBookmark();
-			}
-		}
+		console.warn('skipping getSelection() no ranges', selection);
 
 		return null;
 	},
@@ -509,17 +501,11 @@ Ext.define('NextThought.mixins.Annotations', {
 
 	clearSelection: function(){
 		var doc = this.getDocumentElement(),
-			win = doc.ownerWindow;
+			win = doc.parentWindow;
 		try {
-			if (win.getSelection) {
 				win.getSelection().removeAllRanges();
-			}
-
-			if(doc.selection) {
-				doc.selection.clear();
-			}
 		}
-		catch(e){ console.warn(e.stack); }
+		catch(e){console.warn(e.stack||e.toString());}
 	}
 
 
