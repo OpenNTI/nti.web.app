@@ -169,7 +169,8 @@ Ext.define('NextThought.controller.Session', {
 			url = Ext.String.urlAppend(
 					s.host + this.self.logoutURL,
 					'success='+encodeURIComponent(location.href));
-
+		//Log here to help address #550.
+		console.log('logout, redirect to ' + url);
 		Socket.tearDownSocket();
 		location.replace(url);
 	}
