@@ -7,6 +7,12 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Base', {
 
 	IDENTITY: { 'Class':'CanvasAffineTransform', 'a':1, 'b':0, 'c':0, 'd':1, 'tx':0, 'ty':0 },
 
+	constructor: function(config){
+		Ext.apply(this,config);
+		return this;
+	},
+
+
 	draw: function(ctx){
 		var m = new NTMatrix(Ext.clone(this.transform)),
 			w = ctx.canvas.width,

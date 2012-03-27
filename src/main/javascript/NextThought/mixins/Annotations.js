@@ -201,7 +201,7 @@ Ext.define('NextThought.mixins.Annotations', {
 
 			return true;
 		}
-		catch(e){ console.error('Error notes:',e, e.toString(), e.stack); }
+		catch(e){ console.error('Error notes: ',e.toString(), e.stack); }
 
 		return false;
 	},

@@ -2,7 +2,7 @@ Ext.define(	'NextThought.view.whiteboard.Canvas',{
 	extend: 'Ext.Component',
 	alias:	'widget.whiteboard-canvas',
 	requires: [
-		'NextThought.view.whiteboard.shapes.Ellipse',
+		'NextThought.view.whiteboard.shapes.Circle',
 		'NextThought.view.whiteboard.shapes.Line',
 		'NextThought.view.whiteboard.shapes.Path',
 		'NextThought.view.whiteboard.shapes.Polygon',
@@ -15,15 +15,6 @@ Ext.define(	'NextThought.view.whiteboard.Canvas',{
 
 	initComponent: function(){
 		this.callParent(arguments);
-		var shapes = NextThought.view.whiteboard.shapes;
-
-		this.objectMap = {
-			'Circle'	: shapes.Ellipse.prototype,
-			'Line'		: shapes.Line.prototype,
-			'Path'		: shapes.Path.prototype,
-			'Polygon'	: shapes.Polygon.prototype,
-			'Text'		: shapes.Text.prototype
-		};
 		this.updateData(this.drawData);
 	},
 
@@ -41,7 +32,7 @@ Ext.define(	'NextThought.view.whiteboard.Canvas',{
 
 		var shapes = this.drawData.shapeList,
 			i = shapes.length -1,
-			p = '__proto__',
+			p = 'NextThought.view.whiteboard.shapes.',
 			c;
 
 		for(; i>=0; i--){
@@ -55,7 +46,7 @@ Ext.define(	'NextThought.view.whiteboard.Canvas',{
 			if(c[1]==='Polygon' && shapes[i].sides<=2){
 				c[1]='Line';
 			}
-			shapes[i][p] = this.objectMap[c[1]] || Object.prototype;
+			shapes[i] = Ext.create(p+c[1],shapes[i]);
 		}
 	},
 
@@ -95,7 +86,6 @@ Ext.define(	'NextThought.view.whiteboard.Canvas',{
 		if(!this.drawData){
 			return;
 		}
-
 		var me = this,
 			c = me.el.dom,
 			w = me.el.getWidth(),

@@ -1,4 +1,4 @@
-Ext.define(	'NextThought.view.whiteboard.shapes.Ellipse', {
+Ext.define(	'NextThought.view.whiteboard.shapes.Circle', {
 	extend: 'NextThought.view.whiteboard.shapes.Base',
 
 	draw: function(ctx){

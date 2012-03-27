@@ -372,15 +372,14 @@ Ext.define('NextThought.util.Globals',
 
 	ensureConsole: function(){
 		Ext.applyIf(window,{
-			console:{}
+			console:{ log: Ext.emptyFn }
 		});
 
 		Ext.applyIf(window.console,{
-			log: Ext.emptyFn,
-			debug: Ext.emptyFn,
-			info: Ext.emptyFn,
-			warn: Ext.emptyFn,
-			error: Ext.emptyFn,
+			debug: console.log,
+			info: console.log,
+			warn: console.log,
+			error: console.log,
 			group: Ext.emptyFn,
 			groupCollapsed: Ext.emptyFn,
 			groupEnd: Ext.emptyFn,

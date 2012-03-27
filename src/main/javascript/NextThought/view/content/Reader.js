@@ -71,6 +71,9 @@ Ext.define('NextThought.view.content.Reader', {
 		doc.open();
 		doc.close();
 
+
+		delete this.contentDocumentElement;
+
 		task.run = function() {
 			var doc = me.getDocumentElement();
 			if (doc.body || doc.readyState === 'complete') {
@@ -85,6 +88,7 @@ Ext.define('NextThought.view.content.Reader', {
 
 
 	initContentFrame: function(){
+		console.log('frame initialized, setting up...');
 		var me = this,
 			base = location.pathname.toString().replace('index.html',''),
 			host = $AppConfig.server.host,
@@ -161,7 +165,7 @@ Ext.define('NextThought.view.content.Reader', {
 
 	applyContentAPI: function(){
 		var doc = this.getDocumentElement(),
-			win = doc.ownerWindow;
+			win = doc.parentWindow;
 
 		Ext.Object.each(ContentAPIRegistry.getAPI(),function(f,n){
 			win[f] = n;
@@ -219,7 +223,6 @@ Ext.define('NextThought.view.content.Reader', {
 	getIframe: function(){
 		var el = this.items.first().el,
 			iframe = el.dom;
-
 		el.win = (Ext.isIE ? iframe.contentWindow : window.frames[iframe.name]);
 		return el;
 	},
@@ -244,7 +247,6 @@ Ext.define('NextThought.view.content.Reader', {
 			win = iframe.win;
 
 			doc = (!Ext.isIE && dom.contentDocument) || win.document;
-			doc.ownerWindow = win;
 
 			this.contentDocumentElement = doc;
 		}
