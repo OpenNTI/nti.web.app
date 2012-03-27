@@ -456,11 +456,12 @@ Ext.define('NextThought.util.AnnotationUtils',{
 		}
 
 		//add xpaths here for simplicity next time
-		if (!resultRange.collapsed) {
-			r.set('startXpath', this.getPathTo(resultRange.startContainer));
-			r.set('endXpath', this.getPathTo(resultRange.endContainer));
-			r.save();
-
+		if (!resultRange.collapsed){
+			if (r.isModifiable()) {
+				r.set('startXpath', this.getPathTo(resultRange.startContainer));
+				r.set('endXpath', this.getPathTo(resultRange.endContainer));
+				r.save();
+			}
 			return resultRange;
 		}
 
