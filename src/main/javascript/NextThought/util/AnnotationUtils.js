@@ -11,7 +11,7 @@ Ext.define('NextThought.util.AnnotationUtils',{
 	NOTE_BODY_DIVIDER: '\u200b<div id="{0}" class="body-divider" style="text-align: left; margin: 10px; padding: 5px;">{1}</div>\u200b',
 
 	/** @constant */
-	WHITEBOARD_THUMBNAIL: '<img src="{0}" width="100" class="whiteboard-thumbnail" alt="Whiteboard Thumbnail" border="0" onclick="{1}"/>',
+	WHITEBOARD_THUMBNAIL: '<a class="whiteboard-magnifier"></a><img src="{0}" {2} onclick="{1}" class="whiteboard-thumbnail" alt="Whiteboard Thumbnail" border="0" />',
 
 	SEPERATOR: null,
 	DIVIDER_REGEX: null,
@@ -62,6 +62,21 @@ Ext.define('NextThought.util.AnnotationUtils',{
 		return text.join('') || hlStart || hlEnd || 'content';
 	},
 
+
+	objectToAttributeString: function(obj){
+		if(!obj) {
+			return '';
+		}
+
+		var a = [];
+
+		Ext.Object.each(obj,function(i,o){
+			if(o){ a.push([i,'="',o,'"'].join('')); }
+		});
+
+		return a.join(' ')
+	},
+
 //tested
 	/**
 	 * Build the body text with the various components mixed in.
@@ -78,7 +93,7 @@ Ext.define('NextThought.util.AnnotationUtils',{
 	 * @param [callbacks]
 	 * @return String
 	 */
-	compileBodyContent: function(record, callbacks){
+	compileBodyContent: function(record, callbacks, whiteboardAttrs){
 
 		var me = this,
 			body = record.get('body'),
@@ -87,7 +102,9 @@ Ext.define('NextThought.util.AnnotationUtils',{
 				scope:me,
 				getClickHandler: function(){return '';},
 				getThumbnail: me.generateThumbnail
-			};
+			},
+			attrs = this.objectToAttributeString(whiteboardAttrs);
+
 
 		Ext.Object.each(body, function(i,o){
 			if(typeof(o) === 'string'){
@@ -101,7 +118,8 @@ Ext.define('NextThought.util.AnnotationUtils',{
 					Ext.String.format(me.NOTE_BODY_DIVIDER, id,
 							Ext.String.format(me.WHITEBOARD_THUMBNAIL,
 									cb.getThumbnail.call(cb.scope, o, id),
-									cb.getClickHandler.call(cb.scope,id)
+									cb.getClickHandler.call(cb.scope,id),
+									attrs
 							))
 			);
 		});

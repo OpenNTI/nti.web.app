@@ -129,14 +129,24 @@ Ext.define('NextThought.view.widgets.chat.LogEntryModerated', {
 		var inBox = target && this.box.contains(target),
 			tag = target? target.tagName : '';
 
-		if(inBox && target.hasCls('reply-public')){
-			this.fireEvent('reply-public', this);
+		if(inBox){
+			if(target.hasCls('reply-public')){
+				this.fireEvent('reply-public', this);
+			}
+			else if(target.hasCls('reply-whisper')){
+				this.fireEvent('reply-whisper', this);
+			}
+			else if(target.hasCls('pin')){
+				  this.fireEvent('pin', this);
+			}
 		}
-		else if(inBox && target.hasCls('reply-whisper')){
-			this.fireEvent('reply-whisper', this);
-		}
-		else if(inBox && target.hasCls('pin')){
-			  this.fireEvent('pin', this);
+		else if(/whiteboard/i.test(target.getAttribute('class'))){
+			//do lightbox/zoom of whiteboard image
+			if(!target.is('img')){
+				target = target.parent().first('img');
+			}
+
+			alert('TODO: lightbox ');
 		}
 		else if(!/input/i.test(tag)){
 			this.setValue(!this.getValue());

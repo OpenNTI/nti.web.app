@@ -298,6 +298,14 @@ Ext.define('NextThought.view.widgets.NotePanel',{
 		if(action){
 			me.fireEvent('action', action, me);
 		}
+		else if(/whiteboard/i.test(target.getAttribute('class'))){
+			//do lightbox/zoom of whiteboard image
+			if(!target.is('img')){
+				target = target.parent().first('img');
+			}
+
+			alert('TODO: lightbox ');
+		}
 		else if(me.box.isDisplayed() && me.isTranscriptSummary()){
 			me.box.setDisplayed(false);
 			me.fireEvent('load-transcript', me.record, me);

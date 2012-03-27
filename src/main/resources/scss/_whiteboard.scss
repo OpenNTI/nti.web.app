@@ -59,8 +59,34 @@ a.color-none {
 	cursor: crosshair;
 }
 
+.body-divider {
+	position: relative;
 
-img.whiteboard-thumbnail {
-	width: 150px !important;
-	height: 150px !important;
+	img.whiteboard-thumbnail {
+		width: 150px;
+		height: auto !important;
+		.x-chat-log-entry &{
+			width: 90%;
+        }
+	}
+
+	a.whiteboard-magnifier {
+		display: none;
+		background: $magnifying-glass;
+  		width: 24px;
+  		height: 24px;
+  		position: absolute;
+  		top: 0;
+  		left: 125px;
+	}
+
+	&:hover {
+	    a.whiteboard-magnifier {
+			display: block;
+			.x-chat-log-entry &{
+				display: none;
+			}
+		}
+	}
 }
+

@@ -47,6 +47,9 @@ Ext.define('NextThought.view.widgets.annotations.BodyEditor', {
 				scope: this,
 				getThumbnail: this.getWhiteboardThumbnail,
 				getClickHandler: this.getWhiteboardThumbnailClickHandler
+			},{
+				width: 250,
+				onmouseover: null
 			}),
 			listeners: {
 				scope: this,
@@ -177,9 +180,16 @@ Ext.define('NextThought.view.widgets.annotations.BodyEditor', {
 
 		//if there's no placeholder, add one:
 		if (!div) {
-			body.innerHTML += Ext.String.format(AnnotationUtils.NOTE_BODY_DIVIDER, id,
-				Ext.String.format(AnnotationUtils.WHITEBOARD_THUMBNAIL,'',
-					this.getWhiteboardThumbnailClickHandler(id)));
+			body.innerHTML += Ext.String.format(
+					AnnotationUtils.NOTE_BODY_DIVIDER,
+					id,
+					Ext.String.format(
+							AnnotationUtils.WHITEBOARD_THUMBNAIL,
+							'',//no onclick
+							this.getWhiteboardThumbnailClickHandler(id),
+							'width="250"'
+					)
+			);
 			div = iFrameDoc.getElementById(id);
 			this.attachClickHandlers();
 		}
@@ -189,10 +199,8 @@ Ext.define('NextThought.view.widgets.annotations.BodyEditor', {
 			div.parentNode.removeChild(div);
 		}
 		else{
-			div.innerHTML = Ext.String.format(
-				AnnotationUtils.WHITEBOARD_THUMBNAIL,
-				whiteboard.getThumbnail(),
-				function(){return '';});//updating the thumb
+			div.getElementsByTagName('img')[0].setAttribute(
+					'src', whiteboard.getThumbnail());//updating the thumb
 		}
 	},
 
