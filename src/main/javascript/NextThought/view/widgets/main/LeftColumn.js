@@ -10,9 +10,6 @@ Ext.define('NextThought.view.widgets.main.LeftColumn', {
 	border: false,
 	defaults: {frame: false, border: false},
 
-	width: MIN_SIDE_WIDTH,
-//	height: '100%',
-
 	layout:{
 		type:'hbox',
 		align: 'stretch'

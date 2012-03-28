@@ -18,7 +18,6 @@ Ext.define('NextThought.view.widgets.main.SessionInfo', {
 
 	cls: 'x-session-controls',
 
-	width: MIN_SIDE_WIDTH,
 	height: 25,
 	border: false,
 	layout: {type:'hbox', pack: 'end'},

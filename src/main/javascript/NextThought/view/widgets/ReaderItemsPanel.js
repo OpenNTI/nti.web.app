@@ -8,7 +8,6 @@ Ext.define('NextThought.view.widgets.ReaderItemsPanel', {
 		'NextThought.view.widgets.MiniStreamList'
 	],
 			
-	width: MIN_SIDE_WIDTH,
 	autoScroll: true,
 
 	defaults: {

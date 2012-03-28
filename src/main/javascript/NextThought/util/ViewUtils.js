@@ -39,7 +39,7 @@ Ext.define('NextThought.util.ViewUtils',{
 				log = win.add({ xtype: 'chat-log-view' }),
 				msgs = m.get('Messages');
 
-			msgs = Ext.Array.sort( msgs || [], Globals.SortModelsBy('Last Modified', ASCENDING));
+			msgs = Ext.Array.sort( msgs || [], Globals.SortModelsBy('Last Modified'));
 
 			Ext.each(msgs, function(i){ log.addMessage(i); });
 			win.show();

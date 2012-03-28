@@ -13,15 +13,21 @@ Ext.define( 'NextThought.view.modes.Reader', {
 	initComponent: function(){
 		this.callParent(arguments);
 
+		var sideWidth = Globals.MIN_SIDE_WIDTH;
 
 		this.add(this.getSpacerColumn());
-		this.add({ region: 'west', id: 'west-reader', xtype: 'leftColumn', columnWidget: {xtype:'filter-control'} });
+		this.add({
+			id: 'west-reader',
+			xtype: 'leftColumn',
+			width: sideWidth,
+			columnWidget: {xtype:'filter-control',width: sideWidth}
+		});
 
 		this.add({
 			cls: 'x-focus-pane',
 			region: 'center',
 			flex: 6,
-			minWidth: CENTER_WIDTH/3,
+			minWidth: this.CENTER_MIN_WIDTH,
 
 			border: false,
 			frame: false,
@@ -34,7 +40,12 @@ Ext.define( 'NextThought.view.modes.Reader', {
 			}
 		});
 
-		this.add({ region: 'east', id:'east-reader', xtype: 'rightColumn', columnWidget: {xtype:'reader-items'} });
+		this.add({
+			id:'east-reader',
+			xtype: 'rightColumn',
+			width: sideWidth,
+			columnWidget: {xtype:'reader-items',width: sideWidth}
+		});
 		this.add(this.getSpacerColumn());
 
 

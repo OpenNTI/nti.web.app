@@ -283,7 +283,7 @@ Ext.define('NextThought.view.widgets.classroom.ResourceView', {
 			href = href.substring(0,href.length-1);
 		}
 
-		href = href.replace(HOST_PREFIX_PATTERN,'');
+		href = href.replace(Globals.HOST_PREFIX_PATTERN,'');
 
 		this.store.loadRawData([{href: href, type: file.type}],true);
 	}

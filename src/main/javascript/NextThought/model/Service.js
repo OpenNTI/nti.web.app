@@ -23,7 +23,7 @@ Ext.define('NextThought.model.Service', {
 
 	getUserSearchURL: function(username){
 		var w = this.getWorkspace('Global') || {},
-			l = this.getLinkFrom(w.Links||[], USER_SEARCH_REL);
+			l = this.getLinkFrom(w.Links||[], Globals.USER_SEARCH_REL);
 		if(!l) {
 			return null;
 		}
@@ -34,7 +34,7 @@ Ext.define('NextThought.model.Service', {
 
 	getUserDataSearchURL: function(){
 		var w = this.getCollection('Pages') || {},
-			l = this.getLinkFrom(w.Links||[], USER_GENERATED_DATA_SEARCH_REL);
+			l = this.getLinkFrom(w.Links||[], Globals.USER_GENERATED_DATA_SEARCH_REL);
 
 		if(!l) {
 			return null;

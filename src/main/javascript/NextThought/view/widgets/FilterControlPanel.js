@@ -7,7 +7,6 @@ Ext.define('NextThought.view.widgets.FilterControlPanel', {
 		'Ext.form.field.Checkbox'
 	],
 
-	width: MIN_SIDE_WIDTH,
 	border: false,
 	items: [{
 		xtype: 'form', layout: 'anchor', cls: 'filter-controls',
@@ -21,7 +20,6 @@ Ext.define('NextThought.view.widgets.FilterControlPanel', {
 
 	initComponent: function(){
 		this.callParent(arguments);
-		this.setWidth(MIN_SIDE_WIDTH);
 		this.store = Ext.getStore('FriendsList');
 		this.store.on('load', this.reload, this);
 	},

@@ -50,7 +50,7 @@ Ext.define('NextThought.view.windows.GroupEditorWindow', {
 						validator: function(s){
 							s = s.trim();
 							var l = s.length,
-								m =	INVALID_CHARACTERS_PATTERN.test(s);
+								m =	Globals.INVALID_CHARACTERS_PATTERN.test(s);
 
 							if (l > 4 && m) {
 								return true;

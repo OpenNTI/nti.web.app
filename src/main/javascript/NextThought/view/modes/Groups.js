@@ -8,15 +8,16 @@ Ext.define( 'NextThought.view.modes.Groups', {
 	initComponent: function(){
 		this.callParent(arguments);
 
-		var bb ={ xtype: 'toolbar', cls: 'x-docked-noborder-top', items: {focusable: false, disabled:true,text:'&nbsp;',xtype:'button'}};
+		var bb ={ xtype: 'toolbar', cls: 'x-docked-noborder-top', items: {focusable: false, disabled:true,text:'&nbsp;',xtype:'button'}},
+			sideWidth = Globals.MIN_SIDE_WIDTH;
 
 		this.add({ flex:1, focusable: false, dockedItems: bb });
-		this.add({ region: 'west', id: 'west-groups', xtype: 'leftColumn', columnWidget: {} });
+		this.add({ id: 'west-groups', xtype: 'leftColumn', width: sideWidth, columnWidget: {} });
 
 		this.add({
 			cls: 'x-focus-pane',
 			flex: 6,
-			minWidth: CENTER_WIDTH/3,
+			minWidth: this.CENTER_MIN_WIDTH,
 			
 			border: false,
 			frame: false,
@@ -37,7 +38,7 @@ Ext.define( 'NextThought.view.modes.Groups', {
 			items: {xtype: 'groups-view'}
 		});
 		
-		this.add({ region: 'east', id:'east-groups', xtype: 'rightColumn', columnWidget: {} }); 
+		this.add({ region: 'east', id:'east-groups', xtype: 'rightColumn',width: sideWidth, columnWidget: {} });
 		this.add({ flex:1, focusable: false, dockedItems: bb });
 	}
 	

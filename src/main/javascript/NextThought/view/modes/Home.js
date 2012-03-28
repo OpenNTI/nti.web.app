@@ -21,8 +21,8 @@ Ext.define( 'NextThought.view.modes.Home', {
 //			cls: 'x-focus-pane',
 			region: 'center',
 			flex: 6,
-			minWidth: CENTER_WIDTH/3,
-			maxWidth: CENTER_WIDTH,
+			minWidth: this.CENTER_MIN_WIDTH,
+			maxWidth: this.CENTER_MIN_WIDTH*3,
 			dockedItems: bb
 		});
 		this.add({ flex:1, focusable: false, dockedItems: bb });

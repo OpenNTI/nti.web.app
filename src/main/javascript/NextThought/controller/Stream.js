@@ -74,7 +74,7 @@ Ext.define('NextThought.controller.Stream', {
 		s.on('load', function(s){ app.finishInitializeTask(token); }, this, {single: true});
 
 		function load() {
-			s.getProxy().url = ps.getById('tag:nextthought.com,2011-10:Root').getLink(RECURSIVE_STREAM);
+			s.getProxy().url = ps.getById('tag:nextthought.com,2011-10:Root').getLink(Globals.RECURSIVE_STREAM);
 			s.load();
 		}
 
@@ -127,7 +127,7 @@ Ext.define('NextThought.controller.Stream', {
 
 		function buildStore(){
 			var ps,
-				link = store.getLink(containerId,RECURSIVE_STREAM);
+				link = store.getLink(containerId,Globals.RECURSIVE_STREAM);
 
 			//page exists, no link
 			if(link===null) {
@@ -149,7 +149,7 @@ Ext.define('NextThought.controller.Stream', {
 		}
 
 		function onReload(){
-			var link = store.getLink(containerId,RECURSIVE_STREAM),
+			var link = store.getLink(containerId,Globals.RECURSIVE_STREAM),
 				s;
 			if(!link){
 				console.warn('Could not find page:', containerId);

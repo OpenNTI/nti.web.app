@@ -22,6 +22,8 @@ Ext.define('NextThought.view.widgets.main.TopControls', {
 	items: [],
 
 	initComponent: function(){
+		var w = Globals.MIN_SIDE_WIDTH || 175;
+
 		this.callParent(arguments);
 		this.add({
 			layout:{
@@ -30,14 +32,12 @@ Ext.define('NextThought.view.widgets.main.TopControls', {
 				align: 'stretchmax'
 			},
 			flex: 1,
-			minWidth: (MIN_SIDE_WIDTH+165),
+			minWidth: (w+165),
 			items: [
 				{
-					html: Ext.String.format(
-						'<img src="{0}" class="header-logo" alt="banner" width="180" height="60" />',
-						Ext.BLANK_IMAGE_URL),
+					html: '<img src="'+Ext.BLANK_IMAGE_URL+'" class="header-logo" alt="banner" width="180" height="60" />',
 					border: false,
-					width: MIN_SIDE_WIDTH,
+					width: w,
 					height: 60
 				},
 				{ xtype: 'modeswitcher' },
@@ -50,10 +50,10 @@ Ext.define('NextThought.view.widgets.main.TopControls', {
 		this.add({
 			layout: 'hbox',
 			flex: 1,
-			minWidth: MIN_SIDE_WIDTH,
+			minWidth: w,
 			items: [
 				{ xtype:'tbspacer', flex:1 } ,
-				{ xtype: 'session-info' }
+				{ xtype: 'session-info', width: w }
 			]
 		});
 	}

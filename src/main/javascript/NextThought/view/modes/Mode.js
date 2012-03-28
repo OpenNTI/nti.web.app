@@ -6,6 +6,8 @@ Ext.define( 'NextThought.view.modes.Mode', {
 			'NextThought.view.widgets.main.RightColumn'
 			],
 
+	CENTER_MIN_WIDTH: 256,
+
 	autoScroll: false,
 	border: false, 
 	frame: false,

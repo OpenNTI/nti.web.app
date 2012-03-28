@@ -1,19 +1,3 @@
-/* DATASERVER 2 Constants*/
-RECURSIVE_STREAM = 'RecursiveStream';
-USER_GENERATED_DATA = 'UserGeneratedData';
-USER_SEARCH_REL = 'UserSearch';
-USER_GENERATED_DATA_SEARCH_REL = 'UGDSearch';
-
-ASCENDING = {};
-DESCENDING = {};
-
-CENTER_WIDTH = 768;
-MIN_SIDE_WIDTH = 175;
-
-HOST_PREFIX_PATTERN = /^(http(s)?):\/\/([a-z.\-_0-9]+)(:(\d+))?/i;
-
-INVALID_CHARACTERS_PATTERN = /^[^\/\\";=?<>#%'\{\}\|\^\[\]\-]+$/;
-
 Ext.define('NextThought.util.Globals',
 {
 	requires: [
@@ -22,6 +6,18 @@ Ext.define('NextThought.util.Globals',
 	],
 	alternateClassName: 'Globals',
 	singleton: true,
+
+
+	/* DATASERVER 2 Constants*/
+	RECURSIVE_STREAM: 'RecursiveStream',
+	USER_GENERATED_DATA: 'UserGeneratedData',
+	USER_SEARCH_REL: 'UserSearch',
+	USER_GENERATED_DATA_SEARCH_REL: 'UGDSearch',
+
+	HOST_PREFIX_PATTERN: /^(http(s)?):\/\/([a-z.\-_0-9]+)(:(\d+))?/i,
+	INVALID_CHARACTERS_PATTERN: /^[^\/\\";=?<>#%'\{\}\|\^\[\]\-]+$/,
+
+	MIN_SIDE_WIDTH: 175,
 
 
 	validateConfig: function(){
@@ -416,9 +412,6 @@ Ext.define('NextThought.util.Globals',
 	 * @param [g] Getter function
 	 */
 	SortModelsBy: function(key,dir,g){
-		var less = dir===ASCENDING? -1 : 1,
-			more = dir===ASCENDING? 1 : -1;
-
 		function $(v){
 			return (g? g(v) : v).get(key);
 		}
@@ -427,7 +420,7 @@ Ext.define('NextThought.util.Globals',
 			var c = 0, $a = $(a), $b = $(b);
 
 			if($a !== $b){
-				c = $a < $b? less : more;
+				c = $a < $b? -1 : 1;
 			}
 
 			return c;
