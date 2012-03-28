@@ -36,6 +36,12 @@ Ext.define('NextThought.view.widgets.StreamEntry', {
 		this.callParent(arguments);
 	},
 
+
+	afterRender: function(){
+		this.callParent(arguments);
+		this.el.on('dblclick', function(){this.fireEvent('dblclick', this.change.get('Item'));}, this);
+	},
+
 	getInfoPanel: function(creator) {
 		var ct = this.change.get('ChangeType'),
 			i = this.change.get('Item'),

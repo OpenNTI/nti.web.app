@@ -60,6 +60,9 @@ Ext.define('NextThought.controller.Stream', {
 		this.control({
 			'miniStreamEntry': {
 				'clicked' : this.onClick
+			},
+			'streamEntry': {
+				'dblclick': this.onClick
 			}
 		},{});
 	},
@@ -85,6 +88,7 @@ Ext.define('NextThought.controller.Stream', {
 			load();
 		}
 	},
+
 
 	onClick: function(item) {
 		var cid = item.get('ContainerId'),
