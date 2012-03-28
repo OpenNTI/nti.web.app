@@ -28,6 +28,9 @@ a.color-none {
 .whiteboard-toolbar {
     .x-btn {
         button{
+            .x-ie & {
+            	overflow: hidden;
+            }
 			.x-btn-inner {
 				padding-left: 30px !important;
 			}

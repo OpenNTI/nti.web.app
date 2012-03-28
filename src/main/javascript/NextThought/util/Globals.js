@@ -328,7 +328,10 @@ Ext.define('NextThought.util.Globals',
 		Ext.picker.Color.prototype.colorRe = /(?:^|\s)color-([^ ]*)(?:\s|$)/;
 		Ext.picker.Color.prototype.renderTpl = [
 			'<tpl for="colors">',
-				'<a href="#" class="color-{.}" hidefocus="on" title="{.}">',
+				'<a href="#" class="color-',
+					'<tpl if="values==\'None\'">NONE</tpl>',
+					'<tpl if="values!=\'None\'">{.}</tpl>',
+					'" hidefocus="on" title="{.}">',
 					'<em><span style="background:#{.}" unselectable="on">&#160;</span></em>',
 				'</a>',
 			'</tpl>'
