@@ -5,9 +5,6 @@ Ext.define('NextThought.view.windows.NoteEditor', {
 		'NextThought.view.widgets.annotations.BodyEditor'
 	],
 
-	width: '600',
-	height: '450',
-
 	constrain: true,
 	closable: false,
 	maximizable:true,
@@ -24,8 +21,9 @@ Ext.define('NextThought.view.windows.NoteEditor', {
 	
 	initComponent: function(){
 		this.callParent(arguments);
+		this.setSize(600,450);
 		this.add({ xtype: 'body-editor',  anchor: '100% 100%', record: this.record });
-},
+	},
 
 
 	getValue: function(){

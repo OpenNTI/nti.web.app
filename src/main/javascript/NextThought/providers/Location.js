@@ -67,7 +67,7 @@ Ext.define('NextThought.providers.Location', {
 			var i=0, v;
 			for (i; i < elements.length; i++) {
 				v = elements[i];
-				v = v && v.getAttribute ? v.getAttribute(attr) : null;
+				v = v && 'getAttribute' in v ? v.getAttribute(attr) : null;
 				if (v) {return v;}
 			}
 			return null;
