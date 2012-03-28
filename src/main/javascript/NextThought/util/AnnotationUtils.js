@@ -74,7 +74,7 @@ Ext.define('NextThought.util.AnnotationUtils',{
 			if(o){ a.push([i,'="',o,'"'].join('')); }
 		});
 
-		return a.join(' ')
+		return a.join(' ');
 	},
 
 //tested

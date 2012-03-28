@@ -50,6 +50,31 @@ button {
 }
 
 
+.x-chat-content-log-entry {
+	@include list-entry;
+
+	img.contentimage {
+	    float: none;
+	 	display: block;
+	}
+ 	img { float: left; }
+
+	span.body-text {
+		color: #a9a9a9;
+	}
+
+   	.name {
+   	    font-weight: normal;
+   	    color: #a9a9a9;
+   	}
+
+   	&:hover,
+ 	&.selected {
+
+ 	}
+}
+
+
 .x-chat-log-entry {
 	@include list-entry;
 	span.reply {

@@ -260,7 +260,7 @@ Ext.define('NextThought.view.content.Reader', {
 
 			// use IE's document property name across every where for the iframe's window reference.
 			// WebKit & Gecko don't natively have this, so we're populating it
- 			if(!doc.parentWindow){
+			if(!doc.parentWindow){
 				doc.parentWindow = win;
 			}
 			this.contentDocumentElement = doc;

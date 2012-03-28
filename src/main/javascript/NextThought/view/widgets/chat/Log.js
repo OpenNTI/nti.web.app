@@ -4,6 +4,7 @@ Ext.define('NextThought.view.widgets.chat.Log', {
 	requires: [
 		'NextThought.view.widgets.chat.LogEntry',
 		'NextThought.view.widgets.chat.LogEntryModerated',
+		'NextThought.view.widgets.chat.ContentLogEntry',
 		'NextThought.view.widgets.chat.InfoLogEntry',
 		'NextThought.cache.IdCache'
 	],
@@ -149,6 +150,15 @@ Ext.define('NextThought.view.widgets.chat.Log', {
 			});
 		}, this);
 
+	},
+
+
+	addContentMessage: function(msg) {
+		this.add({
+			xtype: 'chat-content-log-entry',
+			message: msg,
+			person: 'troy.daley@nextthought.com'
+		});
 	},
 
 

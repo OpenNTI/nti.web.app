@@ -113,6 +113,9 @@ Ext.define('NextThought.controller.Chat', {
 				'reply-whisper': this.replyWhisper,
 				'pin': this.pinMessage
 			},
+			'chat-content-log-entry' : {
+				'click': this.contentEntryClicked
+			},
 			'chat-log-entry-moderated' : {
 				'reply-public': this.replyPublic,
 				'reply-whisper': this.replyWhisper,
@@ -386,6 +389,17 @@ Ext.define('NextThought.controller.Chat', {
 		}
 	},
 
+
+	contentEntryClicked: function(entry) {
+		var loc = entry.location;
+
+		if (!loc){return;}
+
+		Ext.getCmp('reader').activate();
+		LocationProvider.setLocation(loc.NTIID);
+	},
+
+
 	moderateClicked: function(cmp){
 		var me=this,
 			chatViewFromWin = cmp.up('chat-view'),
@@ -589,33 +603,6 @@ Ext.define('NextThought.controller.Chat', {
 		this.channelMap[channel].call(this, m, opts||{});
 	},
 
-	onMessageDefaultChannel: function(msg, opts) {
-		var win = this.getChatWindow(),
-			r = IdCache.getIdentifier(msg.get('ContainerId')),
-			moderated = opts && opts.hasOwnProperty('moderated'),
-			tab,
-			log;
-
-		if(!win) {
-			return;
-		}
-
-		tab = win.down('chat-view[roomId=' + r + ']');
-		log = tab ? tab.down('chat-log-view[moderated=true]') : null;
-
-		if(!tab) {
-			console.warn('message received for tab which no longer exists', msg, r, win.items);
-			return;
-		}
-
-		win.down('tabpanel').setActiveTab(tab);
-		tab.down('chat-log-view[moderated='+moderated+']').addMessage(msg);
-
-		if(!moderated && log) {
-			log.removeMessage(msg);
-		}
-	},
-
 
 	onOccupantsChanged: function(newRoomInfo, peopleWhoLeft, peopleWhoArrived, modsLeft, modsAdded) {
 		var win = this.getChatWindow(),
@@ -644,9 +631,60 @@ Ext.define('NextThought.controller.Chat', {
 	},
 
 
-	onMessageContentChannel: function(msg) {
-		console.error('CONTENT channel messages not expected outside of classroom.  for now.');
+	onMessageDefaultChannel: function(msg, opts) {
+		var win = this.getChatWindow(),
+			r = IdCache.getIdentifier(msg.get('ContainerId')),
+			moderated = opts && opts.hasOwnProperty('moderated'),
+			tab,
+			log;
+
+		if(!win) {
+			return;
+		}
+
+		tab = win.down('chat-view[roomId=' + r + ']');
+		log = tab ? tab.down('chat-log-view[moderated=true]') : null;
+
+		if(!tab) {
+			console.warn('message received for tab which no longer exists', msg, r, win.items);
+			return;
+		}
+
+		win.down('tabpanel').setActiveTab(tab);
+		tab.down('chat-log-view[moderated='+moderated+']').addMessage(msg);
+
+		if(!moderated && log) {
+			log.removeMessage(msg);
+		}
 	},
+
+
+	onMessageContentChannel: function(msg, opts) {
+		console.log('got some content data', arguments);
+
+
+		var win = this.getChatWindow(),
+			r = IdCache.getIdentifier(msg.get('ContainerId')),
+			moderated = opts && opts.hasOwnProperty('moderated'),
+			tab,
+			log;
+
+		//if there's no window, then quit, classroom can take care of itself
+		if(!win) {
+			return;
+		}
+
+		tab = win.down('chat-view[roomId=' + r + ']');
+
+		if(!tab) {
+			console.warn('message received for tab which no longer exists', msg, r, win.items);
+			return;
+		}
+
+		win.down('tabpanel').setActiveTab(tab);
+		tab.down('chat-log-view[moderated='+moderated+']').addContentMessage(msg);
+	},
+
 
 	onMessageMetaChannel: function(msg) {
 		var b = msg.get('body') || {},
@@ -672,6 +710,7 @@ Ext.define('NextThought.controller.Chat', {
 
 		}
 	},
+
 
 	onMessagePollChannel: function(msg) {
 		console.log('POLL channel message not supported yet');

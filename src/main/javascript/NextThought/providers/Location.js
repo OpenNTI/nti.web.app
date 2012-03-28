@@ -63,7 +63,17 @@ Ext.define('NextThought.providers.Location', {
 	 * @param [id]
 	 */
 	getLocation : function(id){
-		var me = this, r, d, i = id || me.currentNTIID;
+		function getAttribute(elements, attr){
+			var i=0, v;
+			for (i; i < elements.length; i++) {
+				v = elements[i];
+				v = v && v.getAttribute ? v.getAttribute(attr) : null;
+				if (v) {return v;}
+			}
+			return null;
+		}
+
+		var me = this, r, l, d, i = id || me.currentNTIID;
 		if(!i){
 			return {};
 		}
@@ -71,12 +81,19 @@ Ext.define('NextThought.providers.Location', {
 		r = me.cache[i];
 		if( !r ) {
 			r = Library.findLocation(i);
+
+			//If still not r, it's not locational content...
+			if (!r) {return null;}
+
 			d = r.toc.documentElement;
+			l = r.location;
 			r = Ext.apply({
 					NTIID: i,
-					icon: d.getAttribute('icon'),
-					root: d.getAttribute('base'),
-					title: d.getAttribute('title')
+					icon: getAttribute([l,d],'icon'),
+					root: getAttribute([l,d],'base'),
+					title: getAttribute([l,d],'title'),
+					label: getAttribute([l,d],'label'),
+					thumbnail: getAttribute([l,d],'thumbnail')
 				},r);
 		}
 
