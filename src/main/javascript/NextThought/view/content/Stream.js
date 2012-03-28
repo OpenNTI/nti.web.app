@@ -49,6 +49,7 @@ Ext.define('NextThought.view.content.Stream', {
 		}
 		p.removeAll(true);
 		p.suspendLayout = true;
+		this.store.sort('Last Modified', 'DESC');
 		this.store.each(function(change){
 			if(!f || f.test(change)){
 				p.add({change: change, xtype: 'streamEntry'});
