@@ -27,8 +27,9 @@ if(window['MathJax']){
 
 //config MathJax
     MathJax.Hub.Config({
-        showProcessingMessages : true,
+        showProcessingMessages : false,
         messageStyle : "none",
+		styles: { "#MathJax_Message": { display: "none" }},
         "HTML-CSS": {
             preferredFont: "STIX",
             availableFonts: ["STIX"],
@@ -154,30 +155,4 @@ if(window['MathJax']){
 
         });
     });
-
-    /*function textFromMJMML(MJMML)
-     {
-     console.log('constructing text');
-     console.log(MJMML);
-     if(MJMML.__proto__.type === 'mo')
-     {
-     return MJMML.data[0].data[0].toString();
-     }
-     if(MJMML.__proto__.type === 'texatom')
-     {
-     return textFromMJMML(data[0]);
-     }
-     if(MJMML.__proto__.type === 'mrow')
-     {
-     var text='';
-     for(var i=0;i<MJMML.data.length;i++)
-     {
-     text+=textFromMJMML(MJMML.data[i]);
-     }
-     return text;
-     }
-
-     return MJMML.toString();
-
-     }*/
 }

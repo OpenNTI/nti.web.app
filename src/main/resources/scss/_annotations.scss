@@ -15,14 +15,14 @@
 
 
 .editor-whiteboard {
-	background: $note-whiteboard-icon;
-	background-size: 16px 16px;
+	background: $whiteboard-tools-sprite;
+	background-position: 0 -208px;
 }
 
 
 .editor-seperator {
-	background: $note-seperator-icon;
-	background-size: 16px 16px;
+	background: $whiteboard-tools-sprite;
+	background-position:  0 -168px;
 }
 
 .x-nti-note {

@@ -132,7 +132,7 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 						{ iconCls: 'tool circle',	tooltip: 'Circle',		shape: 'Circle' },
 						{ iconCls: 'tool line',		tooltip: 'line',		shape: 'Line' },
 						{ iconCls: 'tool text',		tooltip: 'Text',		shape: 'Text' },
-						{ iconCls: 'tool rect',		tooltip: 'polygon',		shape: 'Polygon',
+						{ iconCls: 'tool poly',		tooltip: 'polygon',		shape: 'Polygon',
 							xtype: 'splitbutton',
 							menu: [{
 								xtype: 'buttongroup',
