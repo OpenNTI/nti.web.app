@@ -22,77 +22,80 @@ Ext.define('NextThought.view.form.SectionInfoForm', {
 		border: false
 	},
 
-	items: [
-		{
-			xtype: 'panel',
-			layout: 'hbox',
-			items: [
-				{
-					xtype: 'textfield',
-					fieldLabel: 'ID',
-					emptyText: 'ID',
-					labelWidth: 40,
-					labelAlign: 'left',
-					allowBlank: false,
-					name: 'ID',
-					flex: 1,
-					regex: Globals.INVALID_CHARACTERS_PATTERN,
-					regexText: 'Invalid characters'
-				},
-				{width: 5},
-				{
-					xtype: 'datefield',
-					fieldLabel: 'Open',
-					labelAlign: 'left',
-					labelWidth: 40,
-					width: 150,
-					name: 'OpenDate'
-				},
-				{width: 5},
-				{
-					xtype: 'datefield',
-					fieldLabel: 'Closed',
-					labelAlign: 'left',
-					labelWidth: 40,
-					width: 150,
-					name: 'CloseDate'
-				}]
-		},
-		{
-			xtype: 'textarea',
-			fieldLabel: 'Description',
-			emptyText: 'Section Description',
-			allowBlank: false,
-			name: 'Description'
-		},
-		{
-			border: false,
-			margin: '10px 0px',
-			defaults: {
-				padding: 0,
-				margin: '10px 0px',
-				anchor: '100%',
-				layout: 'anchor',
-				xtype:'fieldset',
-				collapsible: true,
-				collapsed: false,
+	initComponent: function(){
+		this.callParent(arguments);
+		this.add(
+			{
+				xtype: 'panel',
+				layout: 'hbox',
+				items: [
+					{
+						xtype: 'textfield',
+						fieldLabel: 'ID',
+						emptyText: 'ID',
+						labelWidth: 40,
+						labelAlign: 'left',
+						allowBlank: false,
+						name: 'ID',
+						flex: 1,
+						regex: Globals.INVALID_CHARACTERS_PATTERN,
+						regexText: 'Invalid characters'
+					},
+					{width: 5},
+					{
+						xtype: 'datefield',
+						fieldLabel: 'Open',
+						labelAlign: 'left',
+						labelWidth: 40,
+						width: 150,
+						name: 'OpenDate'
+					},
+					{width: 5},
+					{
+						xtype: 'datefield',
+						fieldLabel: 'Closed',
+						labelAlign: 'left',
+						labelWidth: 40,
+						width: 150,
+						name: 'CloseDate'
+					}]
+			},
+			{
+				xtype: 'textarea',
+				fieldLabel: 'Description',
+				emptyText: 'Section Description',
+				allowBlank: false,
+				name: 'Description'
+			},
+			{
 				border: false,
+				margin: '10px 0px',
 				defaults: {
 					padding: 0,
-					margin: '10px 5px',
+					margin: '10px 0px',
 					anchor: '100%',
 					layout: 'anchor',
+					xtype:'fieldset',
+					collapsible: true,
+					collapsed: false,
 					border: false,
-					allowBlank: false,
-					xtype: 'sharewith'
-				}
-			},
-			items:[
-				{ title: 'Instructors',   items: { emptyText: 'Instructors...', name: 'Instructors' }},
-				{ title: 'Enrolled', items: { emptyText: 'Enrolled...', name: 'Enrolled' }}
-			]
-		}
-	],
+					defaults: {
+						padding: 0,
+						margin: '10px 5px',
+						anchor: '100%',
+						layout: 'anchor',
+						border: false,
+						allowBlank: false,
+						xtype: 'sharewith'
+					}
+				},
+				items:[
+					{ title: 'Instructors',   items: { emptyText: 'Instructors...', name: 'Instructors' }},
+					{ title: 'Enrolled', items: { emptyText: 'Enrolled...', name: 'Enrolled' }}
+				]
+			}
+		);
+	},
 
 
 	afterRender: function() {

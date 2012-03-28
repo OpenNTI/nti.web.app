@@ -25,35 +25,38 @@ Ext.define('NextThought.view.form.ClassInfoForm', {
 		allowBlank: false
 	},
 
-	items: [
-		{
-			xtype: 'textfield',
-			emptyText: 'Class ID',
-			fieldLabel: 'ID',
-			allowBlank: false,
-			name: 'ID',
-			padding: 5,
-			width: '100%',
-			margin: '10px 10px 10px 0px',
-			regex: Globals.INVALID_CHARACTERS_PATTERN,
-			regexText: 'Invalid characters'
-		},
-		{
-			xtype: 'textarea',
-			emptyText: 'Class Description',
-			fieldLabel: 'Description',
-			allowBlank: false,
-			name: 'Description',
-			padding: 5,
-			margin: '10px 10px 10px 0px'
-		},
+	initComponent: function(){
+		this.callParent(arguments);
+		this.add(
+			{
+				xtype: 'textfield',
+				emptyText: 'Class ID',
+				fieldLabel: 'ID',
+				allowBlank: false,
+				name: 'ID',
+				padding: 5,
+				width: '100%',
+				margin: '10px 10px 10px 0px',
+				regex: Globals.INVALID_CHARACTERS_PATTERN,
+				regexText: 'Invalid characters'
+			},
+			{
+				xtype: 'textarea',
+				emptyText: 'Class Description',
+				fieldLabel: 'Description',
+				allowBlank: false,
+				name: 'Description',
+				padding: 5,
+				margin: '10px 10px 10px 0px'
+			},
 
-		{
-			xtype: 'fieldset',
-			title: 'Sections',
-			sections: true
-		}
-	],
+			{
+				xtype: 'fieldset',
+				title: 'Sections',
+				sections: true
+			}
+		);
+	},
 
 
 	afterRender: function() {
