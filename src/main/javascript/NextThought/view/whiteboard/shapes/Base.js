@@ -52,7 +52,9 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Base', {
 		if(cache){ return cache; }
 
 		if(!value || value === 'None'){
-			return this[cacheKey] = this[valueKey] = null;
+			this[valueKey] = null;
+			this[cacheKey] = null;
+			return null;
 		}
 
 		if (typeof opacity !== 'number') {
@@ -61,7 +63,8 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Base', {
 
 		c = Color.parseColor(value);
 		this[valueKey] = Color.toRGB(c);
-		return this[cacheKey] = Color.toRGBA(c,opacity);
+		this[cacheKey] = Color.toRGBA(c,opacity);
+		return this[cacheKey];
 	},
 
 
