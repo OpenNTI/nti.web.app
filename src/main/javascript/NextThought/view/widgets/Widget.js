@@ -8,10 +8,11 @@ Ext.define('NextThought.view.widgets.Widget', {
 		this.mixins.observable.constructor.call(this);
 	},
 	
-	createElement: function(tag,parent,cls,css){
+	createElement: function(tag,parent,cls,css,id){
 		var el = document.createElement(tag);
 		if(cls) { Ext.get(el).addCls(cls); }
 		if(css) { el.setAttribute('style',css); }
+		if(id){el.setAttribute('id',id);}
 		parent.appendChild(el);
 		return el;
 	},

@@ -37,14 +37,14 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 
 		me.ownerCmp.on('afterlayout',me.onResize, me);
 		Ext.EventManager.onWindowResize(me.onResize, me);
-		
 
 		me.img = me.createImage(
 			Ext.BLANK_IMAGE_URL,
 			me.div,
 			'action',
 			cName,
-			(me.isVisible?'':'visibility:hidden;'));
+			(Ext.isIE9?'z-index:1;':'')+(me.isVisible?'':'visibility:hidden;')
+		);
 
 		me.img.annotation = me;
 		Ext.get(me.img).on('click', me.onClick, me);

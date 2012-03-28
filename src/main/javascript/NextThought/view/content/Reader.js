@@ -39,8 +39,10 @@ Ext.define('NextThought.view.content.Reader', {
 				frameBorder: 0,
 				marginWidth: 0,
 				marginHeight: 0,
-				transparent: true,
 				scrolling: 'no',
+				seamless: true,
+				transparent: true,
+				allowTransparency: true,
 				style: 'overflow: hidden'
 			},
 			listeners: {
@@ -58,8 +60,6 @@ Ext.define('NextThought.view.content.Reader', {
 		this.nav = {};
 	},
 
-
-
 	resetFrame: function(){
 		console.log('resetFrame');
 
@@ -70,6 +70,13 @@ Ext.define('NextThought.view.content.Reader', {
 
 		doc.open();
 		doc.close();
+
+		if(Ext.isIE9){
+			this.getIframe().setStyle({
+				'position': 'relative',
+				'z-index': '1'
+			});
+		}
 
 
 		delete this.contentDocumentElement;
@@ -230,9 +237,12 @@ Ext.define('NextThought.view.content.Reader', {
 
 	/** @private */
 	setContent: function(html) {
-		var doc = this.getDocumentElement();
+		var doc = this.getDocumentElement(),
+			body = Ext.get(doc.body || doc.documentElement);
 		this.getIframe().setHeight(0);
-		Ext.get(doc.body || doc.documentElement).update(html);
+
+		body.update(html);
+		body.setStyle('background','transparent');
 
 		clearInterval(this.syncInterval);
 		this.syncInterval = setInterval(this.checkFrame,50);
@@ -246,7 +256,7 @@ Ext.define('NextThought.view.content.Reader', {
 			dom = iframe.dom;
 			win = iframe.win;
 
-			doc = (!Ext.isIE && dom.contentDocument) || win.document;
+			doc = dom.contentDocument || win.document;
 
 			// use IE's document property name across every where for the iframe's window reference.
 			// WebKit & Gecko don't natively have this, so we're populating it
@@ -384,8 +394,6 @@ Ext.define('NextThought.view.content.Reader', {
 		function success(resp){
 			me.splash.hide();
 			me.setReaderContent(resp, callback);
-			//apply any styles that may be on the content's bory, to the NTIContent div:
-			this.applyBodyStyles(this.parseBodyTag(resp.responseText), this.buildPath(resp.responseLocation));
 		}
 
 		function failure(q,r){
@@ -433,6 +441,13 @@ Ext.define('NextThought.view.content.Reader', {
 		me.setContent('<div id="NTIContent">'+c+'</div>');
 		me.scrollTo(0, false);
 
+
+		//apply any styles that may be on the content's bory, to the NTIContent div:
+		this.applyBodyStyles(
+				resp.responseText.match(/<body([^>]*)>/i),
+				this.buildPath(resp.responseLocation));
+
+
 		QuizUtils.setupQuiz(me.getDocumentElement());
 
 		containerId = me.getContainerId();
@@ -443,11 +458,6 @@ Ext.define('NextThought.view.content.Reader', {
 	buildPath: function(s){
 		var p = s.split('/'); p.splice(-1,1,'');
 		return p.join('/');
-	},
-
-
-	parseBodyTag: function (c) {
-		return c.match(/<body([^>]*)>/i);
 	},
 
 

@@ -17,7 +17,7 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 		Ext.apply(me,{
 			selection: selection,
 			renderPriority: 1,
-			canvasContainerId: component.prefix + '-canvas-highlight-container'
+			canvasId: component.prefix + '-highlight-canvas'
 		});
 
 
@@ -94,25 +94,16 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 	},
 
 
-	createCanvasContainer: function(id){
-		var e = Ext.get(id),
-			n = e ? e.dom : this.createElement('div',this.container,'document-highlights'),
-			p = n.parentNode;
-		n.setAttribute('id',id);
-		p.appendChild(n);
-		return Ext.get(n);
-	},
-
-
 	createCanvas: function(){
-		var cont = this.createCanvasContainer(this.canvasContainerId),
-			c = cont.query('canvas')[0];
+		var c = document.getElementById(this.canvasId);
 
 		if(!c){
 			c = this.createElement(
 				'canvas',
-				cont.dom,
-				'highlight-object','position: absolute; pointer-events: none');
+				this.ownerCmp.body.dom,
+				'highlight-object','position: absolute; pointer-events: none',
+				this.canvasId
+				);
 			this.ownerCmp.on('resize', this.canvasResize, this);
 			this.canvasResize();
 		}
@@ -121,7 +112,7 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 
 
 	canvasResize: function(){
-		var c = Ext.get(this.canvas || Ext.query('#'+ this.canvasContainerId +' canvas')[0]),
+		var c = Ext.get(this.canvas || this.canvasId),
 			cont = Ext.get(this.ownerCmp.getIframe()),
 			pos = cont.getXY(),
 			size = cont.getSize();
