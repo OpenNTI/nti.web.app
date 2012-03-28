@@ -23,10 +23,6 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Base', {
 
 		ctx.setTransform.apply(ctx,m.m);
 
-
-		this.cacheColor('fill');
-		this.cacheColor('stroke');
-
 		if(this.selected){
 			ctx.shadowOffsetX = 0;
 			ctx.shadowOffsetY = 0;
@@ -38,8 +34,8 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Base', {
 			delete this.nibData;
 		}
 
-		ctx.fillStyle = this.fillRGBACache;
-		ctx.strokeStyle = this.strokeRGBACache;
+		ctx.fillStyle = this.cacheColor('fill');
+		ctx.strokeStyle = this.cacheColor('stroke');
 
 		ctx.lineWidth = (parseFloat(this.strokeWidth)*w)/scale;
 	},
@@ -53,12 +49,10 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Base', {
 			value = this[valueKey],
 			c;
 
-		if(cache){ return; }
+		if(cache){ return cache; }
 
 		if(!value || value === 'None'){
-			this[valueKey] = null;
-			this[cacheKey] = null;
-			return;
+			return this[cacheKey] = this[valueKey] = null;
 		}
 
 		if (typeof opacity !== 'number') {
@@ -67,28 +61,33 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Base', {
 
 		c = Color.parseColor(value);
 		this[valueKey] = Color.toRGB(c);
-		this[cacheKey] = Color.toRGBA(c,opacity);
+		return this[cacheKey] = Color.toRGBA(c,opacity);
 	},
 
 
 	getJSON: function(){
-		var data = Ext.clone(this),
+		var data = {},
 			keys = ['bbox','selected','nibData','fillRGBACache','strokeRGBACache'],
-			i = keys.length-1;
+			i;
 
-		for(; i>=0; i--){
-			delete data[keys[i]];
+		data.MimeType = 'application/vnd.nextthought.'+(this.Class.toLowerCase());
+
+		for(i in this){
+			if(this.hasOwnProperty(i)){
+				if( !Ext.isFunction(this[i]) && !Ext.Array.contains(keys,i)){
+					data[i] = this[i];
+				}
+			}
 		}
 
-		data.MimeType = 'application/vnd.nextthought.'+(data.Class.toLowerCase());
 
 		return data;
 	},
 
 
 	performFillAndStroke: function(ctx){
-		if(this.fillRGBACache) { ctx.fill(); }
-		if(this.strokeRGBACache){ ctx.stroke(); }
+		if(ctx.fillStyle) { ctx.fill(); }
+		if(ctx.strokeStyle) { ctx.stroke(); }
 
 		if(this.selected){
 			this.showNibs(ctx);

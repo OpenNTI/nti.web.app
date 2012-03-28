@@ -56,7 +56,7 @@ Ext.define(	'NextThought.view.whiteboard.Canvas',{
 			return null;
 		}
 
-		var data = Ext.clone(this.drawData);
+		var data = {};
 
 		data.shapeList	= [];
 		data.MimeType	= "application/vnd.nextthought.canvas";
