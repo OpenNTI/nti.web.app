@@ -120,7 +120,7 @@ Ext.define('NextThought.view.widgets.chat.LogEntry', {
 				target = target.parent().first('img');
 			}
 
-			alert('TODO: lightbox ');
+			NextThought.view.whiteboard.Utils.display(target.getAttribute('src'));
 		}
 	},
 

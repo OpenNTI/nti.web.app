@@ -119,7 +119,7 @@ Ext.define('NextThought.view.widgets.NotePanel',{
 			log = panel.add({ xtype: 'chat-log-view' }),
 			msgs = m.get('Messages');
 
-		msgs = Ext.Array.sort( msgs || [], Globals.SortModelsBy('Last Modified', ASCENDING));
+		msgs = Ext.Array.sort( msgs || [], Globals.SortModelsBy('Last Modified'));
 
 		Ext.each(msgs, function(i){ log.addMessage(i); });
 
@@ -304,7 +304,7 @@ Ext.define('NextThought.view.widgets.NotePanel',{
 				target = target.parent().first('img');
 			}
 
-			alert('TODO: lightbox ');
+			NextThought.view.whiteboard.Utils.display(target.getAttribute('src'));
 		}
 		else if(me.box.isDisplayed() && me.isTranscriptSummary()){
 			me.box.setDisplayed(false);

@@ -65,7 +65,8 @@ a.color-none {
 	img.whiteboard-thumbnail {
 		width: 150px;
 		height: auto !important;
-		.x-chat-log-entry &{
+		.x-chat-log-entry &,
+		.x-chat-log-entry-pinnded & {
 			width: 90%;
         }
 	}
@@ -83,7 +84,8 @@ a.color-none {
 	&:hover {
 	    a.whiteboard-magnifier {
 			display: block;
-			.x-chat-log-entry &{
+			.x-chat-log-entry &,
+			.x-chat-log-entry-pinnded &	{
 				display: none;
 			}
 		}
