@@ -33,6 +33,13 @@ Ext.define('NextThought.util.QuizUtils', {
 		}
 	},
 
+
+	hideMathQuillValues: function(doc){
+		doc.parentWindow.$('span.quiz-input').hide();
+	},
+
+
+
 	pullMathQuillValues: function(doc){
 		var w = doc.parentWindow,
 			inputs = doc.querySelectorAll('span.quiz-input'),
@@ -76,7 +83,6 @@ Ext.define('NextThought.util.QuizUtils', {
 			ntiid = LocationProvider.currentNTIID,
 			problems,
 			vp = Ext.getBody(),
-			w = doc.parentWindow,
 			quizResult = Ext.create('NextThought.model.QuizResult' ,{ContainerId: ntiid});
 
 		function populateQuestionResponses(id,v){
@@ -99,7 +105,7 @@ Ext.define('NextThought.util.QuizUtils', {
 
 		quizResult.save({
 			scope: this,
-			success:function(gradedResults,operation){
+			success:function(gradedResults){
 				me.showQuizResult(doc,gradedResults, problems);
 				vp.unmask();
 			},
@@ -119,6 +125,7 @@ Ext.define('NextThought.util.QuizUtils', {
 			problems = problemsElementMap || this.getProblemElementMap(doc);
 
 		this.resetQuiz(doc);
+		this.hideMathQuillValues(doc);
 
 		if(ntiid !== quizResult.get('ContainerId')){
 			Ext.Error.raise('Result does not match the page!');
