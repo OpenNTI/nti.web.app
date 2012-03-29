@@ -239,19 +239,19 @@ Ext.define('NextThought.controller.Classroom', {
 	onMessageContentNavigate: function(ntiid) {
 		var s = $AppConfig.service,
 			l = LocationProvider.getLocation(ntiid),
+			ld = this.getLiveDisplay(),
 			href = null;
 
 		if (l) {
-			//update classroom's state
-			LocationProvider.setLocation(ntiid);
-			//???
-			//this.recordState(ntiid, null, true);
+			ld.down('reader-panel').loadPage(ntiid);
+			ld.down('classroom-breadcrumbbar').updateLocation(ntiid);
+			this.recordState(ntiid, null, true);
 		}
 		else {
 			//we must have some other related object, get it and display
 			href = $AppConfig.server.host +
 					s.getCollection('Objects', 'Global').href + '/' + ntiid;
-			this.getLiveDisplay().addContent(href);
+			ld.addContent(href);
 		}
 	},
 
@@ -430,7 +430,6 @@ Ext.define('NextThought.controller.Classroom', {
 
 
 	sendImageAsContent: function(href, name, classroom, ntiid) {
-		console.log('this isnt working yet...  I should send this image as content', href);
 		this.getController('Chat').postMessage(this.getClassroom().roomInfo, {'ntiid': ntiid}, null, 'CONTENT');
 	},
 
