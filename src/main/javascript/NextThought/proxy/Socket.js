@@ -76,14 +76,8 @@ Ext.define('NextThought.proxy.Socket', {
 		this.tearDownSocket();
 
 		var me = this,
-			opts =  this.disconnectStats.reconfigure ?
-				{transports: ["xhr-polling"], 'force new connection':true} : undefined,
-			socket = io.connect($AppConfig.server.host, opts),
+			socket = io.connect($AppConfig.server.host),
 			k;
-
-		if(opts && this.isDebug){
-			console.debug('Connect called with options:', opts);
-		}
 
 		if(this.isDebug){
 			socket.emit = Ext.Function.createSequence(
@@ -92,7 +86,7 @@ Ext.define('NextThought.proxy.Socket', {
 			);
 
 			socket.onPacket = Ext.Function.createSequence(
-				function(){console.debug('socket.onPacket',arguments);},
+				function(){ console.debug('socket.onPacket: args:'+JSON.stringify(arguments)); },
 				socket.onPacket
 			);
 		}
@@ -150,18 +144,7 @@ Ext.define('NextThought.proxy.Socket', {
 
 
 	maybeReconfigureSocket: function() {
-		var ds = this.disconnectStats,
-			me = this;
-
-		function reset(){
-			if(me.isDebug) {
-				console.debug('reset disconnect counter');
-			}
-			clearTimeout(ds.timer);
-			ds.count = 0;
-			ds.timer = null;
-			delete ds.reconfigure;
-		}
+		var ds = this.disconnectStats;
 
 		ds.count ++;
 		ds.reconfigure = true;
@@ -170,13 +153,8 @@ Ext.define('NextThought.proxy.Socket', {
 			console.debug('maybeReconfigureSocket',ds.count);
 		}
 
-		clearTimeout(ds.timer);
-		ds.timer = setTimeout(reset,30000);
-
 		if (ds.count > 3){
-			this.tearDownSocket();
 			this.setup.apply(this);
-			reset();
 		}
 	},
 /*
@@ -205,9 +183,7 @@ Ext.define('NextThought.proxy.Socket', {
 
 	onDisconnect: function() {
 		if(this.isDebug) {
-			var msg = printStackTrace().slice(3);
-			msg.unshift('disconnect event');
-			console.debug(msg.join(('\n\t')));
+			console.debug('Disconnected '+Array.prototype.join.call(arguments,', '));
 		}
 		this.maybeReconfigureSocket();
 	}
