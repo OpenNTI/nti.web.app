@@ -315,6 +315,7 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 
 		if(this.selected){
 			this.selected[c+'Color'] = this.selectedColor[c];
+			this.selected[c+'Opacity'] = 1;
 			this.selected.changed();
 			this.canvas.drawScene();
 		}
@@ -466,7 +467,9 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 			defs = {
 				'Class': 'Canvas'+Ext.String.capitalize(shape.toLowerCase())+'Shape',
 				'fillColor': this.selectedColor.fill,
+				'fillOpacity': 1,
 				'strokeColor': this.selectedColor.stroke,
+				'strokeOpacity': 1,
 				'strokeWidth': stroke,
 				'transform':{
 					'Class':'CanvasAffineTransform',
