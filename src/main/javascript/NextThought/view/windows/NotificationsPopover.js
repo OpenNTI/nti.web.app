@@ -89,14 +89,16 @@ Ext.define('NextThought.view.windows.NotificationsPopover', {
 	fixHeight: function(){
 		var me = this, e, max;
 		try{
-			e = me.bindTo;
-			max = (Ext.getBody().getHeight() - e.getPosition()[1] - e.getHeight() - 10);
-			me.height = undefined;
-			me.doLayout();
-			if(me.getHeight()> max) {me.setHeight(max);}
-
-			//console.debug(max, me.getHeight());
-			Ext.EventManager.onWindowResize(me.fixHeight,me, {single: true});
+			if (me.el && !me.isDestroyed){
+				e = me.bindTo;
+				max = (Ext.getBody().getHeight() - e.getPosition()[1] - e.getHeight() - 10);
+				me.height = undefined;
+				me.doLayout();
+				if(me.getHeight()> max) {
+					me.setHeight(max);
+				}
+				Ext.EventManager.onWindowResize(me.fixHeight,me, {single: true});
+			}
 		}
 		catch(err){
 			if(me){

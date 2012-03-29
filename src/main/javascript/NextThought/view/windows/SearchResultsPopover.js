@@ -266,18 +266,20 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
 	handleResize: function(){
 		var me = this, e, max;
 		try{
-			e = me.bindTo;
-			max = (Ext.getBody().getHeight() - e.getPosition()[1] - e.getHeight() - 10);
-			me.height = undefined;
-			
-			me.setWidth(Ext.Number.constrain(e.getWidth(), me.minWidth, me.maxWidth));
-			
-			me.doLayout();
-			if(me.getHeight()> max) {me.setHeight(max);}
+			if (me.el && !me.isDestroyed){
+				e = me.bindTo;
+				max = (Ext.getBody().getHeight() - e.getPosition()[1] - e.getHeight() - 10);
+				me.height = undefined;
 
-			me.alignTo(e);
+				me.setWidth(Ext.Number.constrain(e.getWidth(), me.minWidth, me.maxWidth));
 
-			Ext.EventManager.onWindowResize(me.fixHeight,me, {single: true});
+				me.doLayout();
+				if(me.getHeight()> max) {me.setHeight(max);}
+
+				me.alignTo(e);
+
+				Ext.EventManager.onWindowResize(me.fixHeight,me, {single: true});
+			}
 		}
 		catch(err){
 			if(me){
