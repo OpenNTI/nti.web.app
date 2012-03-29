@@ -360,6 +360,7 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 			this.selected = s = this.addShape('path');
 			s.strokeWidth = this.strokeWidthField.getValue()/w;
 			s.points = [];
+			s.closed = false;
 
 			xy = this.getRelativeXY(e,true);
 			t = s.transform;

@@ -52,9 +52,9 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Base', {
 		if(cache){ return cache; }
 
 		if(!value || value === 'None'){
-			this[valueKey] = null;
-			this[cacheKey] = null;
-			return null;
+			delete this[valueKey];
+			delete this[cacheKey];
+			return 'None';
 		}
 
 		if (typeof opacity !== 'number') {
