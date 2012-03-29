@@ -58,7 +58,21 @@ Ext.define('NextThought.view.content.Reader', {
 		this.meta = {};
 		this.css = {};
 		this.nav = {};
+
+		this.self.classEvents.on('window-drag-start',this.mask,this);
+		this.self.classEvents.on('window-drag-end',this.unmask,this);
 	},
+
+
+	destroy: function(){
+		this.self.classEvents.un('window-drag-start',this.mask,this);
+		this.self.classEvents.un('window-drag-end',this.unmask,this);
+		this.callParent(arguments);
+	},
+
+
+	mask: function(){var e=this.el;if(e){e.mask();}},
+	unmask: function(){var e=this.el;if(e){e.unmask();}},
 
 	resetFrame: function(){
 		console.log('resetFrame');
@@ -608,6 +622,27 @@ turn off html5 player
 			}
 		});
 	}
+
+}, function(){
+	var o = this.classEvents = new Ext.util.Observable();
+
+	function a(){
+		return function(){
+			o.fireEvent('window-drag-start');
+			return this.callOverridden(arguments);
+		}
+	}
+
+	function b(){
+		return function(){
+			o.fireEvent('window-drag-end');
+			return this.callOverridden(arguments);
+		}
+	}
+
+	Ext.util.ComponentDragger.override({ onStart: a(), onEnd: b() });
+	Ext.resizer.ResizeTracker.override({ onMouseDown: a(), onEnd: b() });
+
 
 });
 
