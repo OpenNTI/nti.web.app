@@ -39,6 +39,22 @@ Ext.define('NextThought.proxy.writer.Json', {
 		//console.debug('Trimed Keys:',Ext.Array.difference(Object.keys(defaults),Object.keys(output)));
 
 		return output;
+	},
+
+	writeRecords: function(request, data) {
+		request = this.callParent(arguments);
+
+		//Because of ExtJS bug where jsonData is sent on delete, check to see if we
+		//are making a DELETE request (aka destroy) and remove jsonData.  Also check
+		//to see when the bug is fixed and log it so we remove this extra step when possible.
+		if (request.action === 'destroy') {
+			if (!request.jsonData || request.jsonData.length === 0) {
+				console.warn('SAFE TO REMOVE EXTJS BUG WORKAROUND, request to delete has no jsonData', request);
+			}
+			delete request.jsonData;
+		}
+
+		return request;
 	}
 });
 
