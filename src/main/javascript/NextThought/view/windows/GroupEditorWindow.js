@@ -52,9 +52,14 @@ Ext.define('NextThought.view.windows.GroupEditorWindow', {
 							var l = s.length,
 								m =	Globals.INVALID_CHARACTERS_PATTERN.test(s);
 
+							if (me.groupExists(s)) {
+								return 'Group named ' + s + ' already exists.';
+							}
+
 							if (l > 0 && m) {
 								return true;
 							}
+
 							return 'Group names must be at least 1 character, and not contain any symbols';
 						},
 						value: n
@@ -121,5 +126,20 @@ Ext.define('NextThought.view.windows.GroupEditorWindow', {
 		sel.setValue('');
 		sel.clearInvalid();
 		sel.collapse();
+	},
+
+	groupExists: function(proposedName) {
+		var s = Ext.getStore('FriendsList'),
+			r = s.getRange(),
+			i=0, m;
+
+		for (i; i < r.length; i++) {
+			m = r[i];
+			if (m.get('realname').toLowerCase() === proposedName.toLowerCase()) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 });
