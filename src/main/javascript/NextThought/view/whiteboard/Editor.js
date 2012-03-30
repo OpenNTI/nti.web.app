@@ -129,9 +129,9 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 					items: [
 						{ iconCls: 'tool hand',		tooltip: 'Hand',		shape: 'Hand',	pressed: true },
 						{ iconCls: 'tool path',		tooltip: 'Free Hand',	shape: 'Path' },
-						{ iconCls: 'tool circle',	tooltip: 'Circle',		shape: 'Circle' },
 						{ iconCls: 'tool line',		tooltip: 'line',		shape: 'Line' },
 						{ iconCls: 'tool text',		tooltip: 'Text',		shape: 'Text' },
+						{ iconCls: 'tool circle',	tooltip: 'Circle',		shape: 'Circle' },
 						{ iconCls: 'tool poly',		tooltip: 'polygon',		shape: 'Polygon',
 							xtype: 'splitbutton',
 							menu: [{
