@@ -52,10 +52,10 @@ Ext.define('NextThought.view.windows.GroupEditorWindow', {
 							var l = s.length,
 								m =	Globals.INVALID_CHARACTERS_PATTERN.test(s);
 
-							if (l > 4 && m) {
+							if (l > 0 && m) {
 								return true;
 							}
-							return 'Group names must be at least 5 characters, and not contain any symbols';
+							return 'Group names must be at least 1 character, and not contain any symbols';
 						},
 						value: n
 					},{
