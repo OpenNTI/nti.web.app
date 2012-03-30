@@ -29,12 +29,14 @@ Ext.define('NextThought.view.widgets.ItemNavigator', {
 				//width: 150,
 				flex: 1,
 				onTrigger1Click:function(){this.reset();this.onTrigger2Click();},
-				onTrigger2Click:function(){this.fireEvent('keypress',this);}
+				onTrigger2Click:function(){this.fireEvent('keyup',this);}
 			}
 		]
 	},
 
 	initComponent: function(){
+		this.store = Ext.getStore('MyStuff');
+
 		var me = this, trigger,
 			iconTpl = new Ext.XTemplate(
 					'<span title="go to {[this.getClass(values)]}" class="go-to-icon-default go-to-icon-{[this.getClass(values)]}">&nbsp;</span>',
@@ -92,6 +94,7 @@ Ext.define('NextThought.view.widgets.ItemNavigator', {
 					if(match && type==='click'){
 						r = s.getAt(recordIndex);
 						s.removeAt(recordIndex);
+
 						me.fireEvent('annotation-destroyed', r.get('TargetOID'), r.get('ContainerId'));
 					}
 					return Ext.grid.column.Template.prototype.processEvent.apply(this,arguments);
@@ -99,54 +102,6 @@ Ext.define('NextThought.view.widgets.ItemNavigator', {
 			};
 
 		me.callParent(arguments);
-		//me.el.mask('loading...');
-		me.store = Ext.create('Ext.data.Store',{
-			storeId: 'nav',
-			model: 'NextThought.model.Hit',
-			groupField: 'Type',
-			autoLoad: true,
-			remoteFilter: true,
-			remoteGroup: false,
-			remoteSort: false,
-			proxy: {
-				type: 'search',
-				url: $AppConfig.service.getUserDataSearchURL(),
-				reader: 'nti'
-			}
-		});
-
-		me.store.on('load',function(){
-			me.store.remoteFilter = false;
-			me.store.filters.clear();
-			me.store.filter([{
-				filterFn: (function(){
-					var seen = {};
-					return function(item) {
-						if(item.get('Type')==='MessageInfo'){
-							var cid = item.get('ContainerId');
-							if(seen.hasOwnProperty(cid)){
-								return false;
-							}
-							seen[cid] = 1;
-						}
-						return true;
-					};
-				}())
-			}],null);
-			me.store.remoteFilter = true;
-		},me);
-
-		me.store.getGroupsOld = me.store.getGroups;
-		me.store.getGroups = function(){
-			var r = this.getGroupsOld.apply(this,arguments),
-				i = r.length-1;
-			for(;i>=0;i--){
-				if(r[i].name==='MessageInfo'){
-					r[i].name = 'Chat';
-				}
-			}
-			return r;
-		};
 
 		me.add({
 			xtype: 'grid',
@@ -202,7 +157,7 @@ Ext.define('NextThought.view.widgets.ItemNavigator', {
 		});
 
 		trigger = me.query('triggerfield')[0];
-		trigger.on('keypress',me.filter, me);
+		trigger.on('keyup',me.filter, me);
 		trigger.on('specialkey',me.filter, me);
 	},
 

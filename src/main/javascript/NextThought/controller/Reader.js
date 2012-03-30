@@ -111,27 +111,26 @@ Ext.define('NextThought.controller.Reader', {
 	},
 
 
+
 	onRemoveAnnotation: function(oid, containerId){
-		function clean(){
-			var o = ps.getById(oid);
-			if(o) {
-				o.destroy({});
+		$AppConfig.service.getObject(oid,
+			function(o){
+				if (o && o.isModifiable()){
+					o.destroy();
+				}
+				else {
+					console.error('cannot destroy', o);
+				}
+			},
+			function(){
+				console.error('Unable to destroy ', r);
 			}
-		}
+		);
 
-		var me=this,
-			ps = this.getStoreForPageItems(containerId);
-		if(!ps) {
-			return;
-		}
-
-		if(ps.isLoading() || ps.getCount()===0){
-			ps.on('load', clean, this, {single: true});
-			ps.load();
-		}
-		else {
-			clean();
-		}
+		Ext.each(Ext.ComponentQuery.query('reader-panel'),
+			function(p){
+				p.removeAnnotation(oid);
+			});
 	},
 
 

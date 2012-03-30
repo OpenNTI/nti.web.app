@@ -12,7 +12,11 @@ Ext.define('NextThought.controller.ObjectExplorer', {
 		'widgets.main.LeftColumn',
 		'widgets.ItemNavigator'
 	],
-	
+
+	stores: [
+		'MyStuff'
+	],
+
 	refs: [
 		{ ref: 'viewport', selector: 'master-view' },
 		{ ref: 'reader', selector: 'reader-mode-container reader-panel' }

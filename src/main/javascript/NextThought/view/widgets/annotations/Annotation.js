@@ -172,6 +172,9 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 		this.record.destroy();
 		this.cleanup();
 		this.cleanup = function(){};
+
+		//reload mystuff store, it needs to refresh since we removed something underneath it.
+		Ext.getStore('MyStuff').load();
 	},
 
 
