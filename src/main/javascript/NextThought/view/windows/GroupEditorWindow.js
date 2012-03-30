@@ -131,11 +131,12 @@ Ext.define('NextThought.view.windows.GroupEditorWindow', {
 	groupExists: function(proposedName) {
 		var s = Ext.getStore('FriendsList'),
 			r = s.getRange(),
-			i=0, m;
+			i=0, m,
+			n = proposedName.toLowerCase();
 
 		for (i; i < r.length; i++) {
 			m = r[i];
-			if (m.get('realname').toLowerCase() === proposedName.toLowerCase()) {
+			if (m.get('realname').toLowerCase() === n) {
 				return true;
 			}
 		}
