@@ -628,14 +628,18 @@ turn off html5 player
 
 	function a(){
 		return function(){
-			o.fireEvent('window-drag-start');
+			if(!this.modal){
+				o.fireEvent('window-drag-start');
+			}
 			return this.callOverridden(arguments);
 		}
 	}
 
 	function b(){
 		return function(){
-			o.fireEvent('window-drag-end');
+			if(!this.modal){
+				o.fireEvent('window-drag-end');
+			}
 			return this.callOverridden(arguments);
 		}
 	}
