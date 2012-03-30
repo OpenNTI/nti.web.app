@@ -144,6 +144,7 @@ Ext.define('NextThought.controller.Session', {
 			UserRepository.prefetchUser(username, function(users){
 				var user = users[0];
 				if(user){
+					user.data.Presence = 'Online';
 					$AppConfig.userObject = user;
 					successCallback.call(me);
 				}
