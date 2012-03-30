@@ -605,12 +605,12 @@ turn off html5 player
 			target = hash[1],
 			whref = window.location.href.split('#')[0];
 
-		if (whref+'#' === r) {
+		if (!r || whref+'#' === r) {
 			return;
 		}
 
 		//pop out links that point to external resources
-		if(!/tag:nextthought\.com/i.test(r) && m.externalUriRegex.test(r)){
+		if(!ParseUtils.parseNtiid(r) && m.externalUriRegex.test(r)){
 			//popup a leaving platform notice here...
 			window.open(r, guidGenerator());
 			return;
