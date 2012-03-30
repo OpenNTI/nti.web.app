@@ -6,94 +6,81 @@ Ext.define('NextThought.view.widgets.annotations.SelectionHighlight', {
 		this.callParent();
 		Ext.apply(this, {
 			selections: selections || [],
-			canvas: null
+			ownerCmp: component,
+			container: component.body.dom,
+			canvas: null,
+			canvasId: 'search-highlight-'+guidGenerator()
 		});
 
 		var me = this;
 
-//		me.container = container;
-		me.color = 'FFFF00';
-//		me.canvas =  me.createElement('canvas',container,'search-highlight-object unselectable','position: absolute; pointer-events: none;');
+		me.color = 'rgba(255,255,0,0.3)';
+		me.canvas =  me.createCanvas();
 		me.render = Ext.Function.createBuffered(me.render,100,me,[true]);
-		//component.on('resize', me.onResize, me);
-		//me.onResize();
+
+		component.on('resize', me.canvasResize, me);
+		me.canvasResize();
 		return me;
 	},
 
 	cleanup: function(){
-		Ext.get(this.canvas).remove();
+		try{
+			Ext.get(this.canvas).remove();
+		}
+		catch(e){
+			console.error(e);
+		}
 		delete this.selections;
 	},
 
-	onResize : function(){
-		var c = Ext.get(this.canvas),
-			cont = Ext.get(this.container),
+	createCanvas: function(){
+		return this.createElement(
+			'canvas',
+			this.container,
+			'search-highlight-object unselectable','position: absolute; pointer-events: none',
+			this.canvasId
+			);
+	},
+
+
+	canvasResize: function(){
+		var c = Ext.get(this.canvas || this.canvasId),
+			cont = Ext.get(this.ownerCmp.getIframe()),
 			pos = cont.getXY(),
 			size = cont.getSize();
 		c.moveTo(pos[0], pos[1]);
 		c.setSize(size.width, size.height);
-		this.canvas.width = size.width;
-		this.canvas.height = size.height;
+		c.set({
+			width: size.width,
+			height: size.height
+		});
 		this.render();
 	},
 
 	render: function(){
-		var w = this.canvas.width,
-			c, canvasXY, ctx;
-
-		if(!this.selections){
+		if(!this.selections || !this.canvas){
 			return;
 		}
 
-		this.canvas.width = w;
-		c = this.canvas;
-		canvasXY = Ext.get(c).getXY();
-		ctx = c.getContext("2d");
+		var c = this.canvas,
+			w = 'width',
+			ctx = c.getContext("2d");
 
-		ctx.fillStyle = this.hexToRGBA(this.color);
+		c.width = c[w];
+
+		ctx.fillStyle = this.color;
 
 		Ext.each(this.selections, function(sel){
 
 			var s = sel.getClientRects(),
-				l = s.length,
-				i = 0,
-				ac;
+				i = s.length-1;
 
-			for(; i<l; i++){
-				ac = this.adjustCoordinates(s[i], canvasXY);
-				this.drawRect(ctx,ac);
+			for(; i>=0; i--){
+				this.drawRect(ctx,s[i]);
 			}
 		}, this);
 	},
 
-	hexToRGBA: function(hex) {
-		if ('yellow' === hex) {
-			hex = 'FFFF00';
-		}
-
-		var red = hex.substring(0, 2),
-			green = hex.substring(2, 4),
-			blue = hex.substring(4);
-
-		return 'rgba(' + parseInt(red, 16) + ',' + parseInt(green, 16) + ',' + parseInt(blue, 16) +',.3)';
-	},
-
-	adjustCoordinates: function(rect,offsetToTrim){
-		var x = offsetToTrim[0],
-			y = offsetToTrim[1];
-
-		rect.top -= y; rect.left -= x;
-		return {
-			top: rect.top-y,
-			left: rect.left-x,
-			width: rect.width,
-			height: rect.height,
-			right: rect.left-x+rect.width,
-			bottom: rect.top-y+rect.height
-		};
-	},
-	
-	
 	drawRect: function(ctx, rect){
 		ctx.fillRect(rect.left, rect.top, rect.width, rect.height);
 	}
