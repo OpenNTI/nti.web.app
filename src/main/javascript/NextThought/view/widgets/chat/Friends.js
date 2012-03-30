@@ -38,7 +38,7 @@ Ext.define('NextThought.view.widgets.chat.Friends', {
 			newGroups = {};
 
 		groups.each(function(g){
-			if(/everyone/i.test(g.getId())){return;} //skip everyone group
+			if(!/MeetingRoom:Group/i.test(g.getId())){return;} //skip system groups
 
 			var gid = IdCache.getIdentifier(g.getId()),
 				groupPanel = me.down('panel[groupId='+gid+']'),
@@ -58,7 +58,12 @@ Ext.define('NextThought.view.widgets.chat.Friends', {
 							tooltip: 'open chat for this group',
 							handler: function(){me.fireEvent('group-click', g);}
 						}
-					]
+					],
+					listeners:{
+						collapse: function(){
+							me.doLayout();
+						}
+					}
 				});
 			}
 
