@@ -182,6 +182,7 @@ Ext.define( 'NextThought.view.widgets.annotations.Note', {
 				h = c.getHeight();
 			}
 
+			console.log('setting note anchor padding to (i+h+extra)', i+h+extra, 'orig pad', i, 'height', h, 'extra', extra);
 			a.setStyle('padding-bottom',(i+h+extra)+'px');
 
 			x = ox+ifc.getLeft();
@@ -198,11 +199,6 @@ Ext.define( 'NextThought.view.widgets.annotations.Note', {
 			if(c.dom.nextSibling){
 				me.container.appendChild(c.dom);
 			}
-
-//			if (me.noteCmp){
-//				me.noteCmp.doLayout();
-//			}
-
 		}
 		catch(e){
 			console.error('Note onResize: ',e,e.message, e.stack);
