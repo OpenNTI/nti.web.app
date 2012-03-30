@@ -251,6 +251,23 @@ Ext.define('NextThought.util.AnnotationUtils',{
 	},
 
 
+	getNextAnchorInBlock: function(node) {
+		var anchor = null, block, pos;
+
+		block = this.getBlockParent(node);
+
+		Ext.each(this.getAnchors(block), function(a){
+			pos = a.compareDocumentPosition(node);
+			//node precedes the anchor
+			if (pos & a.DOCUMENT_POSITION_PRECEDING) {
+				anchor = a;
+				return false;
+			}
+		});
+		return anchor;
+	},
+
+
 //tested
 	getNextAnchorInDOM: function(node) {
 		var anchor = null, pos;
@@ -279,12 +296,21 @@ Ext.define('NextThought.util.AnnotationUtils',{
 		return anchor;
 	},
 
+
+	getBlockParent: function(node){
+		if(!node || this.isBlockNode(node)){
+			return node;
+		}
+		return this.getBlockParent(node.parentNode);
+	},
+
+
 //tested
 	isBlockNode: function(n) {
 		var e = Ext.get(n),
-				p = /static|^$/i,
+				p = /static|relative|^$/i,
 				d = /block|box/i;
-		return (e && d.test(e.getStyle('display')) && p.test(e.getStyle('position')));
+		return (n && n.tagName === 'BODY') || (e && d.test(e.getStyle('display')) && p.test(e.getStyle('position')));
 	},
 
 //tested

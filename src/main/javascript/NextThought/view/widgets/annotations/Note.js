@@ -15,26 +15,31 @@ Ext.define( 'NextThought.view.widgets.annotations.Note', {
 
 		this.callParent([record, component]);
 
-		var me = this,
+		var me = this, c, nextA,
 			a = this.query('a[name=' + record.get('anchorPoint') + ']')[0],
-			c,
-			root = Ext.get(this.doc.getElementById('NTIContent')),
-			inBox,
-			nextA;
+			name = a? a.getAttribute('name') : 'top';
 
 		if(!a) {
-			a = Ext.get(AnnotationUtils.getAnchors(this.doc).first());
+			a = AnnotationUtils.getAnchors(this.doc).first();
 		}
 		else {
-			nextA = Ext.get( AnnotationUtils.getNextAnchorInDOM(a) );
-			if (nextA) {
-				a = nextA;
+			nextA = AnnotationUtils.getNextAnchorInBlock(a);
+			if (!nextA) {
+				nextA = this.doc.createElement('a');
+				nextA.setAttribute('name','generated-anchor-'+guidGenerator());
+				AnnotationUtils.getBlockParent(a).appendChild(nextA);
 			}
+			a = nextA;
 		}
 
-		c = me.createNoteContainer(a.dom.getAttribute('name'));
+		a = Ext.get(a);
 
-		a.setStyle('display', 'block');
+		c = me.createNoteContainer(name);
+
+		a.setStyle({
+			display: 'block',
+			clear: 'both'
+		});
 
 		me.anchorNode = a;
 		me.noteContainer = c;
