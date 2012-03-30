@@ -251,7 +251,7 @@ Ext.define('NextThought.util.AnnotationUtils',{
 	},
 
 
-	getNextAnchorInBlock: function(node) {
+	getNextAnchorInBlock: function(node,createIfNotFound) {
 		var anchor = null, block, pos;
 
 		block = this.getBlockParent(node);
@@ -264,6 +264,13 @@ Ext.define('NextThought.util.AnnotationUtils',{
 				return false;
 			}
 		});
+
+		if(!anchor && createIfNotFound){
+			anchor = block.ownerDocument.createElement('a');
+			anchor.setAttribute('name','generated-anchor-'+guidGenerator());
+			block.appendChild(anchor);
+		}
+
 		return anchor;
 	},
 
@@ -408,14 +415,20 @@ Ext.define('NextThought.util.AnnotationUtils',{
 	},
 
 
-	getAnchors: function(root){
-		var me = this;
-		clearTimeout(me.anchorCacheLife);
-		if(!me.anchorCache) {
-			me.anchorCache = Ext.Array.unique(Ext.query('#NTIContent A[name]',root));
-		}
-		me.anchorCacheLife = setTimeout(function(){ delete me.anchorCache; },500);
-		return me.anchorCache.slice();
+	getAnchors: function getAnchors(root){
+//		var id = root&&root.tagName? Ext.get(root).id : 'null',
+//			f = this.getAnchors,
+//			c = (f.cache = f.cache || {}),
+//			t = (f.timers = f.timers || {});
+
+//		clearTimeout(t[id]);
+
+//		if(!c[id]) {
+//			c[id] = Ext.Array.unique(Ext.query('#NTIContent A[name]',root));
+			return Ext.Array.unique(Ext.query('#NTIContent A[name]',root));
+//		}
+//		t[id] = setTimeout(function(){ delete c[id]; },500);
+//		return c[id].slice();
 	},
 
 

@@ -15,7 +15,7 @@ Ext.define( 'NextThought.view.widgets.annotations.Note', {
 
 		this.callParent([record, component]);
 
-		var me = this, c, nextA,
+		var me = this, c,
 			a = this.query('a[name=' + record.get('anchorPoint') + ']')[0],
 			name = a? a.getAttribute('name') : 'top';
 
@@ -23,13 +23,7 @@ Ext.define( 'NextThought.view.widgets.annotations.Note', {
 			a = AnnotationUtils.getAnchors(this.doc).first();
 		}
 		else {
-			nextA = AnnotationUtils.getNextAnchorInBlock(a);
-			if (!nextA) {
-				nextA = this.doc.createElement('a');
-				nextA.setAttribute('name','generated-anchor-'+guidGenerator());
-				AnnotationUtils.getBlockParent(a).appendChild(nextA);
-			}
-			a = nextA;
+			a = AnnotationUtils.getNextAnchorInBlock(a,true);
 		}
 
 		a = Ext.get(a);
@@ -182,7 +176,6 @@ Ext.define( 'NextThought.view.widgets.annotations.Note', {
 				h = c.getHeight();
 			}
 
-			console.log('setting note anchor padding to (i+h+extra)', i+h+extra, 'orig pad', i, 'height', h, 'extra', extra);
 			a.setStyle('padding-bottom',(i+h+extra)+'px');
 
 			x = ox+ifc.getLeft();
