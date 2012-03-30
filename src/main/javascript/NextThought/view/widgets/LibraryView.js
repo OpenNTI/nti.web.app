@@ -18,18 +18,6 @@ Ext.define('NextThought.view.widgets.LibraryView', {
 		'<div class="x-clear"></div>'
 	],
 
-	/*
-	'Archive Last Modified', type: 'date', dateFormat: 'timestamp' },
-	'archive'
-	'href'
-	'icon'
-	'index'
-	'installable'
-	'root'
-	'title'
-	'version'
-	*/
-
 	multiSelect: false,
 	singleSelect: true,
 	trackOver: true,

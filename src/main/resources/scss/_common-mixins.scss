@@ -104,6 +104,7 @@
 		span {
 			display: block;
 			overflow: hidden;
+			text-overflow: ellipsis;
 			text-align: center;
 			width: 86px; // for ie to ensure that the text is centered
 		}
