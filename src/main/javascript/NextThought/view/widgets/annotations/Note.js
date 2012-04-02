@@ -16,8 +16,7 @@ Ext.define( 'NextThought.view.widgets.annotations.Note', {
 		this.callParent([record, component]);
 
 		var me = this, c,
-			a = this.query('a[name=' + record.get('anchorPoint') + ']')[0],
-			name = a? a.getAttribute('name') : 'top';
+			a = this.query('a[name=' + record.get('anchorPoint') + ']')[0];
 
 		if(!a) {
 			a = AnnotationUtils.getAnchors(this.doc).first();
@@ -28,7 +27,7 @@ Ext.define( 'NextThought.view.widgets.annotations.Note', {
 
 		a = Ext.get(a);
 
-		c = me.createNoteContainer(name);
+		c = me.createNoteContainer(a.getAttribute('name'));
 
 		a.setStyle({
 			display: 'block',

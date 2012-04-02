@@ -317,7 +317,17 @@ Ext.define('NextThought.util.AnnotationUtils',{
 		var e = Ext.get(n),
 				p = /static|relative|^$/i,
 				d = /block|box/i;
-		return (n && n.tagName === 'BODY') || (e && d.test(e.getStyle('display')) && p.test(e.getStyle('position')));
+
+		if (n) {
+			if (n.tagName === 'A') {
+				return false;
+			}
+			else if (n.tagName === 'BODY') {
+				return true;
+			}
+		}
+
+		return (e && d.test(e.getStyle('display')) && p.test(e.getStyle('position')));
 	},
 
 //tested
