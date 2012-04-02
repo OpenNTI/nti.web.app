@@ -14,6 +14,7 @@ Ext.define('NextThought.view.widgets.classroom.Management', {
 		align: 'stretch'
 	},
 	border: false,
+	maintainFlex: true,
 	defaults: {
 		border: false,
 		defaults: {

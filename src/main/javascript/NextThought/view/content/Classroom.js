@@ -36,9 +36,10 @@ Ext.define('NextThought.view.content.Classroom', {
 		};
 
 		this.add({xtype: 'chat-view', flex:2, title: 'Class Chat'});
-		this.add({xtype: 'classroom-management', roomInfo: this.roomInfo, width: 500});
+		this.add({xtype: 'classroom-management', roomInfo: this.roomInfo, width: 500, flex: 1});
 
 		this.down('chat-view').changed(this.roomInfo);
+		this.addOrUpdateSplitters();
 	},
 
 
