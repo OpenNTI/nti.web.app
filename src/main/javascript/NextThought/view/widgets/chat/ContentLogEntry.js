@@ -91,7 +91,6 @@ Ext.define('NextThought.view.widgets.chat.ContentLogEntry', {
 
 
 	fillInUser: function(u) {
-		debugger;
 		var name = u.get('alias') || u.get('Username'),
 			i = u.get('avatarURL');
 
