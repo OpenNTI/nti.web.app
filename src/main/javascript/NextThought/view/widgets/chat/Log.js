@@ -156,8 +156,7 @@ Ext.define('NextThought.view.widgets.chat.Log', {
 	addContentMessage: function(msg) {
 		this.add({
 			xtype: 'chat-content-log-entry',
-			message: msg,
-			person: 'troy.daley@nextthought.com'
+			message: msg
 		});
 	},
 

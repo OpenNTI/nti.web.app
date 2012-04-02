@@ -39,10 +39,10 @@ Ext.define('NextThought.view.widgets.chat.ContentLogEntry', {
 		this.location = LocationProvider.getLocation(this.ntiid);
 		this.clickable = this.location ? true : false;
 
-		this.update(this.person);
+		this.update();
 	},
 
-	update: function(person){
+	update: function(){
 		var me = this,
 			href = $AppConfig.server.host,
 			icon, root;
@@ -69,7 +69,7 @@ Ext.define('NextThought.view.widgets.chat.ContentLogEntry', {
 		me.renderData.body = this.location ? this.location.label || this.location.title : '';
 		me.renderData.locationicon = href;
 
-		UserRepository.prefetchUser(person, function(users){
+		UserRepository.prefetchUser(this.message.get('Creator'), function(users){
 			var u = users[0];
 			if (!u) {
 				console.error('failed to resolve user', person, m);
@@ -91,6 +91,7 @@ Ext.define('NextThought.view.widgets.chat.ContentLogEntry', {
 
 
 	fillInUser: function(u) {
+		debugger;
 		var name = u.get('alias') || u.get('Username'),
 			i = u.get('avatarURL');
 
