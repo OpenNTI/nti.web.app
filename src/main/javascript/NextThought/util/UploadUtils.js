@@ -62,8 +62,7 @@ Ext.define('NextThought.util.UploadUtils',{
 		req = this.requests[id] = {
 			id: id,
 			file: file,
-			url: url,
-			auth: Ext.Ajax.defaultHeaders.Authorization
+			url: url
 		};
 
 		this.worker.postMessage(Ext.apply({message: 'add'},req));
@@ -137,7 +136,7 @@ Ext.define('NextThought.util.UploadUtils',{
 
 		var me = self.UploadUtils? this : self;
 		if(data.message==='add') {
-			me.upload(data.id, data.file, data.url, data.autl);
+			me.upload(data.id, data.file, data.url);
 		}
 		else if(data.message==='abort'){
 			me.abort(data.id);
@@ -161,7 +160,7 @@ Ext.define('NextThought.util.UploadUtils',{
 	},
 
 	//private
-	upload: function upload(id, file, url, auth) {
+	upload: function upload(id, file, url) {
 
 		function progress(e){
 			var p = e.loaded;
@@ -184,8 +183,7 @@ Ext.define('NextThought.util.UploadUtils',{
 
 			xhr.open("POST", url, true);
 			xhr.withCredentials = true;
-			xhr.setRequestHeader('Authorization',auth);
-			xhr.setRequestHeader('Slug', file.fileName);
+			xhr.setRequestHeader('Slug', file.name || file.fileName);
 			xhr.setRequestHeader('Content-Type', file.type);
 			xhr.onreadystatechange = function(){readyStateChange(xhr);};
 			xhr.overrideMimeType(file.type);

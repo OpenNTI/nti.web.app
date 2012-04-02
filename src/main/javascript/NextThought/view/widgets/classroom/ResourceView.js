@@ -283,6 +283,34 @@ Ext.define('NextThought.view.widgets.classroom.ResourceView', {
 		}
 	},
 
+
+	doLegacyUpload: function(fileInput){
+		var me = this,
+			form = Ext.create('Ext.form.Basic',Ext.create('Ext.panel.Panel'),{}),
+			fieldCacheKey = '_fields',
+			fields;
+
+		fields = form[fieldCacheKey] = Ext.create('Ext.util.MixedCollection');
+		fields.add(fileInput);
+
+		if(form.isValid()){
+			form.submit({
+				url: $AppConfig.server.host+this.postURL,
+				waitMsg: 'Uploading your file...',
+				success: function() {
+					me.reload();
+				},
+				failure: function(){
+					console.log('failed to upload');
+				}
+			});
+		}
+		else {
+			fileInput.extractFileInput();
+		}
+	},
+
+
 	onProgress: function(file, progress){
 		//
 	},

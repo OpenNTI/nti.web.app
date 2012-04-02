@@ -32,7 +32,7 @@ Ext.define('NextThought.view.widgets.menu.FileBrowserItem',{
 			tag: 'input',
 			type: 'file',
 			size: 1,
-			multiple: true
+			multiple: !Ext.isIE9 //enable multi-select on FileAPI enabled browsers. (Clue: not IE9)
 		}).on('change', me.onFileChange, me, {single: true});
 	},
 
@@ -42,9 +42,27 @@ Ext.define('NextThought.view.widgets.menu.FileBrowserItem',{
 			console.error('no target set!');
 		}
 
-		this.target.doUpload(e.target.files);
+		if(!e.target.files){
+			this.target.doLegacyUpload(this);
+		}
+		else {
+			this.target.doUpload(this.extractFileInput().files);
+		}
+	},
+
+
+	//for Legacy
+	isDirty: function(){ return true; },
+	isFormField: true,
+	isFileUpload: function() { return true; },
+	getSubmitData: function(){ return null; },
+	validate: function(){ return Boolean(this.fileInputEl.dom.value); },
+
+	extractFileInput: function() {
+		var fileInput = this.fileInputEl.dom;
 		this.fileInputEl.remove();
 		this.createFileInput();
+		return fileInput;
 	}
 
 });
