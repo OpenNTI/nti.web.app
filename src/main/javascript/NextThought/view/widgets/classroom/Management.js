@@ -27,6 +27,7 @@ Ext.define('NextThought.view.widgets.classroom.Management', {
 		this.callParent(arguments);
 
 		this.add({xtype: 'live-display', height: 400, roomInfo: this.roomInfo});
+		this.add({xtype: 'splitter'});
 		this.add({
 				flex: 1,
 				layout: {type: 'hbox', align: 'stretch'},
