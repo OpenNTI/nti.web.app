@@ -45,6 +45,11 @@ Ext.define( 'NextThought.view.modes.Classroom', {
 			i.fireEvent('click',i);
 		}
 
+		function deleteItem(e){
+			var i = e.parentMenu.parentItem;
+			i.fireEvent('delete-clicked',i);
+		}
+
 		function manageScripts(e) {
 			var i = e.parentMenu.parentItem;
 			i.fireEvent('manageScripts',i);
@@ -52,16 +57,17 @@ Ext.define( 'NextThought.view.modes.Classroom', {
 		}
 
 		function loaded(){
-			var ci, i, items=[];
+			var ci, i, items=[], d;
 
 			for (i = 0; i < s.getTotalCount(); i++) {
 				ci = s.getAt(i);
+				d = !(ci.isModifiable());
 				items.push({
 					text: ci.get('ID'),
 					classInfoId: ci.getId(),
 					menu: [
-						{text:'<b>Edit...</b>', cls:'default', handler: edit},
-						{text:'Delete', disabled: true},
+						{text:'<b>Edit...</b>', cls:'default', handler: edit, disabled: d},
+						{text:'Delete', handler: deleteItem, disabled: d},
 						'-',
 						{text:'Manage Resources', handler: manageScripts}
 					]

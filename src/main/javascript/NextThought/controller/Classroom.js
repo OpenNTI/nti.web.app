@@ -94,6 +94,7 @@ Ext.define('NextThought.controller.Classroom', {
 
 			'classroom-mode-container button[action=manageclass] menuitem': {
 				'click': this.manageClassMenuItemClicked,
+				'delete-clicked' : this.deleteClassClicked,
 				'manageScripts' : this.manageClassScriptsClicked
 			},
 
@@ -171,6 +172,21 @@ Ext.define('NextThought.controller.Classroom', {
 
 	flaggedMenuItemClicked: function(mi) {
 		this.showMessage(mi.relatedCmp);
+	},
+
+
+	deleteClassClicked: function(cmp) {
+		var s = this.getProvidersStore(),
+			ci = s.getById(cmp.classInfoId);
+
+		if (ci && ci.isModifiable()) {
+			ci.destroy();
+			this.getProvidersStore().load();
+			this.getSectionsStore().load();
+		}
+		else {
+			console.error('Copuld not delete class', ci, 'it is either null or not modifiable.');
+		}
 	},
 
 
