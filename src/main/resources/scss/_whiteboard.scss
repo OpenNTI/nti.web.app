@@ -4,23 +4,15 @@
 }
 
 
-@mixin color-none{
-	background: -moz-linear-gradient(-45deg,  rgba(255,255,255,1) 40%, rgba(255,0,0,1) 50%, rgba(255,255,255,1) 60%); /* FF3.6+ */
-	background: -webkit-gradient(linear, left top, right bottom, color-stop(40%,rgba(255,255,255,1)), color-stop(50%,rgba(255,0,0,1)), color-stop(60%,rgba(255,255,255,1))); /* Chrome,Safari4+ */
-	background: -webkit-linear-gradient(-45deg,  rgba(255,255,255,1) 40%,rgba(255,0,0,1) 50%,rgba(255,255,255,1) 60%); /* Chrome10+,Safari5.1+ */
-	background: -o-linear-gradient(-45deg,  rgba(255,255,255,1) 40%,rgba(255,0,0,1) 50%,rgba(255,255,255,1) 60%); /* Opera 11.10+ */
-	background: -ms-linear-gradient(-45deg,  rgba(255,255,255,1) 40%,rgba(255,0,0,1) 50%,rgba(255,255,255,1) 60%); /* IE10+ */
-	background: linear-gradient(-45deg,  rgba(255,255,255,1) 40%,rgba(255,0,0,1) 50%,rgba(255,255,255,1) 60%); /* W3C */
-}
 
 .x-btn-icon.color-none {
-	@include color-none;
+	background: #ffffff $whiteboard-color-none no-repeat 0 0;
 }
 
 a.color-none {
 	em {
 		span {
-			@include color-none;
+			background: #ffffff $whiteboard-color-none-sm no-repeat 0 0;
 		}
 	}
 }
