@@ -33,7 +33,11 @@ Ext.define('NextThought.view.windows.NoteEditor', {
 
 	show: function(){
 		this.callParent(arguments);
-		var e = this.down('htmleditor');
-		setTimeout(function(){e.focus();}, 500);
+		var e = this.down('htmleditor'),
+			me = this;
+		setTimeout(function(){
+			e.focus();
+			me.down('toolbar').doComponentLayout();
+		}, 500);
 	}
 });
