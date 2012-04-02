@@ -238,6 +238,7 @@ Ext.define('NextThought.view.widgets.classroom.ResourceView', {
 				clearTimeout(t);
 			}
 			t = setTimeout(function(){el.removeCls('drop-over');}, 100);
+			return false; //for IE
 		}
 
 		el.on({
@@ -256,7 +257,16 @@ Ext.define('NextThought.view.widgets.classroom.ResourceView', {
 			return;
 		}
 		e.stopPropagation();
-		this.doUpload(e.browserEvent.dataTransfer.files);
+
+		var dt = e.browserEvent.dataTransfer;
+
+		if(!dt){
+			alert('Please use the add file menu, your browser does not support drag & drop file uploads.');
+		}
+		else {
+			this.doUpload(dt.files);
+		}
+		return false; //for IE
 	},
 
 	doUpload: function(files){
