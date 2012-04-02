@@ -36,12 +36,12 @@
      	color: $hover-foreground-color;
 	}
 
-	.read {
+	&.read {
 		background-color: $read-background-color;
 		color: $read-foreground-color;
 		margin: 0;
 	}
-	.unread {
+	&.unread {
      	background-color: $unread-background-color;
      	font-weight: $unread-foreground-color;
     }

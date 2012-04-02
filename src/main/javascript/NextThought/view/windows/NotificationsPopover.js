@@ -51,29 +51,62 @@ Ext.define('NextThought.view.windows.NotificationsPopover', {
 		}, 750);
 	},
 
-	itemClicked: function() {
-		this.close();
+	itemClicked: function(e) {
+		e.stopPropagation();
+		e.preventDefault();
+
+
+		if (Ext.fly(e.getTarget()).parent('div[id^=miniStreamEntry]')) {
+			this.close();
+		}
 	},
 
-	updateContents: function() {
-		var i, unread, change,
+	updateContents: function(showAll) {
+		var unread,
 			store = Ext.getStore('Stream'),
-			readCount = 0,
-			p = this.items.get(0);
+			p = this.items.get(0),
+			c = 0,
+			me = this;
 
-		for(i = store.getCount() - 1; readCount < 2 && i >= 0; i--) {
-			change = store.getAt(i);
-			if (!change.get) {
-				//dead change, probably deleted...
-				return;
+		//clear any existing stuff
+		p.removeAll();
+
+		//sort the store so newest stuff is on top
+		store.sort('Last Modified', 'DESC');
+
+		//put stuff into the list
+		Ext.each(store.getRange(), function(m){
+			//check to see if we should add a button instead of more entries
+			if (c > 5 && !showAll) {
+				p.add(
+					{
+						xtype: 'container',
+						layout: {
+							type: 'hbox',
+							pack: 'center'
+						},
+						items: {
+							xtype: 'button',
+							text: 'Show All',
+							margin: '5px 0px',
+							listeners: {
+								'click' : function(cmp, e){me.updateContents(true);}
+							}
+						}
+					}
+				);
+				return false;
 			}
-			
-			unread = (change.get('Last Modified') > this.lastLoginTime);
-			p.add({xtype: 'miniStreamEntry', change: change, cls: unread ? 'unread' : 'read'});
-			if (!unread) {readCount++;}
-		}
 
+			if (m.get) {
+				unread = (m.get('Last Modified') > me.lastLoginTime);
+				console.log('unread', unread);
+				p.add({xtype: 'miniStreamEntry', change: m, cls: unread ? 'unread' : 'read'});
+				c++; //get it?
+			}
+		});
 
+		//WOAH!  Nothing there, let them know.
 		if(p.items.length === 0) {
 			p.add({
 				html: '<b>No new updates</b>',
@@ -82,8 +115,9 @@ Ext.define('NextThought.view.windows.NotificationsPopover', {
 			});
 		}
 
-		this.fixHeight();
-		this.el.unmask();
+		//unmask and make sure it's the right size.
+		me.fixHeight();
+		me.el.unmask();
 	},
 
 	fixHeight: function(){
