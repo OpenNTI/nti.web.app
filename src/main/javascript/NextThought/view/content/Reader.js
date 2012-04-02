@@ -632,7 +632,7 @@ turn off html5 player
 				o.fireEvent('window-drag-start');
 			}
 			return this.callOverridden(arguments);
-		}
+		};
 	}
 
 	function b(){
@@ -641,7 +641,7 @@ turn off html5 player
 				o.fireEvent('window-drag-end');
 			}
 			return this.callOverridden(arguments);
-		}
+		};
 	}
 
 	Ext.util.ComponentDragger.override({ onStart: a(), onEnd: b() });
