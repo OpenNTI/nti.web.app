@@ -470,7 +470,7 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 				'fillOpacity': 1,
 				'strokeColor': this.selectedColor.stroke,
 				'strokeOpacity': 1,
-				'strokeWidth': stroke,
+				'strokeWidth': isFinite(stroke)? stroke : 0,
 				'transform':{
 					'Class':'CanvasAffineTransform',
 					'a':1,
