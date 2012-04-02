@@ -52,7 +52,7 @@ Ext.define('NextThought.view.windows.GroupEditorWindow', {
 							var l = s.length,
 								m =	Globals.INVALID_CHARACTERS_PATTERN.test(s);
 
-							if (me.groupExists(s)) {
+							if (s !==n && me.groupExists(s)) {
 								return 'Group named ' + s + ' already exists.';
 							}
 
