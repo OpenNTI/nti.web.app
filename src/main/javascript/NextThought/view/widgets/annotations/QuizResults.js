@@ -9,7 +9,7 @@ Ext.define( 'NextThought.view.widgets.annotations.QuizResults', {
 	constructor: function(record, component){
 		Ext.apply(this, {
 			anchorNode : null,
-			renderPriority: 0,
+			renderPriority: 2,
 			win: null,
 			isSingleAction: true
 		});

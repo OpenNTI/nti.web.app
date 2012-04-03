@@ -78,6 +78,8 @@ Ext.define( 'NextThought.view.widgets.annotations.Note', {
 		var me = this,
 			c = Ext.get(me.noteDiv);
 
+		c.setVisibilityMode(Ext.Element.DISPLAY);
+
 		if(show){c.show();}
 		else{c.hide();}
 
@@ -144,9 +146,13 @@ Ext.define( 'NextThought.view.widgets.annotations.Note', {
 	},
 
 
-	render: function(){
+	render: function(isLastOfAnchor){
 		try{
 			if(!this.noteCmp){return;}
+
+			this.callParent(arguments);
+
+			if(!isLastOfAnchor){ return; }
 
 			var me= this,
 				p = Ext.get(me.container),
@@ -155,24 +161,19 @@ Ext.define( 'NextThought.view.widgets.annotations.Note', {
 				i = me.originalPadding,
 				ifc = Ext.get(this.query('#nticontent .page-contents')[0]),
 				w = ifc.getWidth(),
-				h = 0,
-				extra= 0,
-				adjust=0,
+				extra = 0,
+				adjust = 0,
 				nx= a.next(),
 				pr= a.prev(),
-
 				ox = me.offsets.left,
-				oy = me.offsets.top,
-
-				x,y;
+				h,x,y;
 
 			c.setWidth(w);
 
-			if(me.isVisible){
+			h = c.getHeight();
+			if(h){
 				adjust += pr?(pr.getPadding('b')+pr.getMargin('b')):0;
 				extra += (nx?(nx.getPadding('t')+nx.getMargin('t')):0) + adjust;
-
-				h = c.getHeight();
 			}
 
 			a.setStyle('padding-bottom',(i+h+extra)+'px');
@@ -181,7 +182,6 @@ Ext.define( 'NextThought.view.widgets.annotations.Note', {
 			y = a.getY()+( adjust? 0: extra);
 
 			c.setStyle({top: y+'px', left: x+'px'});
-
 			//move the nib to the top-aligning corner of the note container
 			if (me.img){
 				Ext.get(me.img).moveTo(ox+p.getLeft(), c.down('.x-nti-note img').getTop());
@@ -195,7 +195,5 @@ Ext.define( 'NextThought.view.widgets.annotations.Note', {
 		catch(e){
 			console.error('Note onResize: ',e,e.message, e.stack);
 		}
-
-		this.callParent();
 	}
 });

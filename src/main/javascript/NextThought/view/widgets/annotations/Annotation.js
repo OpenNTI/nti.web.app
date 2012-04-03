@@ -1,7 +1,6 @@
 Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 	extend: 'NextThought.view.widgets.Widget',
 	requires: [
-//		'Ext.ux.Spotlight'
 		'NextThought.ux.Spotlight',
 		'Ext.String'
 	],
@@ -158,7 +157,7 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 	},
 
 
-	render: function(){
+	render: function(isLastOfAnchor){
 		Ext.fly(this.img).setStyle('background', this.getColor().toString());
 	},
 
@@ -391,9 +390,13 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 
 			Ext.Array.sort(this.registry[prefix], this.sorter[prefix]);
 
-			Ext.each(Ext.Array.clone(this.registry[prefix]), function(o){
+			Ext.each(Ext.Array.clone(this.registry[prefix]), function(o,i,a){
 				try {
-					o.render();
+					var n = a[i+1],
+						p = 'renderPriority',
+						isLastOfAnchor = !n || o[p] !== n[p] || o.getSortValue()!==n.getSortValue() ;
+
+					o.render(isLastOfAnchor);
 				}
 				catch(e){
 					console.error(o.$className,e.stack);

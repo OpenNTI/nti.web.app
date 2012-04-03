@@ -8,7 +8,7 @@ Ext.define( 'NextThought.view.widgets.annotations.Transcript', {
 	constructor: function(record, component){
 		Ext.apply(this, {
 			anchorNode : null,
-			renderPriority: 0,
+			renderPriority: 3,
 			win: null,
 			isSingleAction: true
 		});
