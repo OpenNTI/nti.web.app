@@ -1,6 +1,8 @@
 .chat {
-    background: $chat-icon;
-    .attention &{
+    background: $chat-icon no-repeat;
+    background-position: 0 0;
+    .attention & {
+        background-position: -18px 0;
     	@include animation(pulse, 1.5s, infinite);
     }
 }

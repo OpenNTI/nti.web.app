@@ -3,9 +3,12 @@
 
 //Zeta doesn't support variables in @import statements...
 @import url(../lib/ext-4.0.7/resources/css/ext-all-gray.css);
-/*@import url(../lib/ext-4.1.0-rc1/resources/css/ext-neptune.css);*/
+
+//@import url(../lib/ext-4.1.0-rc1/resources/css/ext-neptune.css);
 //@import url(../lib/ext-4.1.0-rc1/resources/css/ext-all-gray.css);
 
+//Sass doesn't like the syntax of @keyframes { from{} ... to{} }, so we will handwrite it in a css file
+@import url(animations.css);
 //For the reader panel, this must be first
 @import "_panel-reset.scss";
 @import "_reader-content.scss";
