@@ -304,12 +304,14 @@ Ext.define('NextThought.view.content.Reader', {
 
 
 	scrollToTarget: function(target){
-		var e = this.el.query('*[name='+target+']');
-		if(!e || !e.length) {
+		var de = this.getDocumentElement(),
+			e = de.getElementById(target) || Ext.fly(de).query('*[name='+target+']')[0];
+
+		if(!e) {
 			console.warn('scrollToTarget: no target found: ',target);
 		}
 		else {
-			this.scrollToNode(e[0]);
+			this.scrollToNode(e);
 		}
 	},
 
@@ -318,9 +320,10 @@ Ext.define('NextThought.view.content.Reader', {
 		while(n && n.nodeType === Node.TEXT_NODE) {
 			n = n.parentNode;
 		}
-		var c = Ext.get('readerPanel-body');
-		var o = (Ext.get(n).getOffsetsTo(c)[1]);
-		this.scrollTo( c.dom.scrollTop + o - 10);
+		var c = Ext.get('readerPanel-body'),
+			o = Ext.fly(n).getTop();
+
+		this.scrollTo(o - 10);
 	},
 
 
@@ -610,17 +613,22 @@ turn off html5 player
 		}
 
 		//pop out links that point to external resources
-		if(!ParseUtils.parseNtiid(r) && m.externalUriRegex.test(r)){
+		if(!ParseUtils.parseNtiid(r) && m.externalUriRegex.test(r) && r.indexOf(whref) < 0 ){
 			//popup a leaving platform notice here...
 			window.open(r, guidGenerator());
 			return;
 		}
 
-		LocationProvider.setLocation(newLocation, function(me){
-			if(target) {
-				me.scrollToTarget(target);
-			}
-		});
+		if (newLocation.toLowerCase() === whref.toLowerCase() && target) {
+			this.scrollToTarget(target);
+		}
+		else {
+			LocationProvider.setLocation(newLocation, function(me){
+				if(target) {
+					me.scrollToTarget(target);
+				}
+			});
+		}
 	}
 
 }, function(){

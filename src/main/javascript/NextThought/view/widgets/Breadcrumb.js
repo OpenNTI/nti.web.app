@@ -75,7 +75,7 @@ Ext.define('NextThought.view.widgets.Breadcrumb', {
 		}
 		var me = this,
 			xml = location.toc,
-			toc = me.selectNodeParent('topic',xml),
+			toc = me.selectNodeParent('topic',xml) || xml.firstChild,
 			curNode = (location.location ? location.location:toc),
 			selectedBranch = location.location,
 			level = selectedBranch ? selectedBranch.parentNode : me.selectNodeParent("topic[href]",xml),
