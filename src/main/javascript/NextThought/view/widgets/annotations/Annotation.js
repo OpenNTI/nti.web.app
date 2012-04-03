@@ -246,7 +246,7 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 
 				subMenu = o.getMenu(true);
 
-				if (subMenu.items.getCount()===1){
+				if (subMenu.items.getCount()===1 && o.isSingleAction){
 					item = subMenu.items.first();
 				}
 				else {
@@ -259,7 +259,7 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 						}
 					});
 				}
-				this.menuItemHook(o,item, menu);
+				o.menuItemHook(item);
 
 				menu.add(item);
 			},
@@ -292,11 +292,16 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 	},
 
 
-	menuItemHook: function(o,item /*, menu*/){
-		var color = this.getColor();
+	menuItemHook: function(item){
+		var color = this.getColor(),
+			src = this.img.getAttribute('src');
+
 		item.on('afterrender',function() {
 			var img = item.el.select('img.x-menu-item-icon').first();
-			if(img){ img.setStyle('background', color); }
+			if(img){
+				img.setStyle({'background': color,'border-radius': '2px'});
+				img.set({'src':src});
+			}
 		});
 	},
 

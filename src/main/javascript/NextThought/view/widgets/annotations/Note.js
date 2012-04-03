@@ -29,6 +29,8 @@ Ext.define( 'NextThought.view.widgets.annotations.Note', {
 
 		c = me.createNoteContainer(a.getAttribute('name'));
 
+		c.nib.add(me.img);
+
 		a.setStyle({
 			display: 'block',
 			clear: 'both'
@@ -120,7 +122,14 @@ Ext.define( 'NextThought.view.widgets.annotations.Note', {
 		if(Ext.isIE9){
 			Ext.get(n).setStyle('z-index','2');
 		}
-		return Ext.get(n);
+
+		n = Ext.get(n);
+
+		if(!n.nib){
+			n.nib = Ext.create('Ext.CompositeElement');
+		}
+
+		return n;
 	},
 
 
@@ -138,6 +147,9 @@ Ext.define( 'NextThought.view.widgets.annotations.Note', {
 
 			if(!this.noteContainer.first()){
 				this.noteContainer.remove();
+				this.noteContainer.nib.clear();
+				delete this.noteContainer.nib;
+				delete this.noteContainer;
 				this.anchorNode.setStyle('padding-bottom',this.originalPadding+'px');
 			}
 		}
@@ -182,10 +194,9 @@ Ext.define( 'NextThought.view.widgets.annotations.Note', {
 			y = a.getY()+( adjust? 0: extra);
 
 			c.setStyle({top: y+'px', left: x+'px'});
+
 			//move the nib to the top-aligning corner of the note container
-			if (me.img){
-				Ext.get(me.img).moveTo(ox+p.getLeft(), c.down('.x-nti-note img').getTop());
-			}
+			c.nib.moveTo(ox+p.getLeft(), c.down('.x-nti-note img').getTop());
 
 			//always move to the end
 			if(c.dom.nextSibling){
