@@ -458,6 +458,8 @@ Ext.define('NextThought.controller.Chat', {
 
 	openChatWindow: function(){
 		(this.getChatWindow() || Ext.create('widget.chat-window')).show();
+		//turn off any notifications
+		this.setChatNotification(false);
 	},
 
 	friendEntryClicked: function(u) {
@@ -593,7 +595,8 @@ Ext.define('NextThought.controller.Chat', {
 
 	onMessage: function(msg, opts) {
 		var m = ParseUtils.parseItems([msg])[0],
-			channel = m.get('channel');
+			channel = m.get('channel'),
+			w;
 
 		if (this.getClassroom().isClassroom(m) &&
 			this.getClassroom().onMessage(m, {})){
@@ -601,6 +604,27 @@ Ext.define('NextThought.controller.Chat', {
 		}
 
 		this.channelMap[channel].call(this, m, opts||{});
+
+		//notify if window is closed:
+		w = this.getChatWindow();
+		if (!w.isVisible()) {
+			this.setChatNotification(true);
+		}
+	},
+
+
+	setChatNotification: function(on) {
+		var cols = Ext.ComponentQuery.query('leftColumn'),
+			b,
+			cls = 'attention';
+
+		Ext.each(cols, function(c){
+			b = c.down('button[showChat]');
+			if (b) {
+				if (on){b.addCls(cls);}
+				else{b.removeCls(cls);}
+			}
+		});
 	},
 
 

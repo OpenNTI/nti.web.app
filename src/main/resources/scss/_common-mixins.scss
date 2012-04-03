@@ -1,4 +1,39 @@
 
+@mixin pulse {
+	from {opacity: 0.50;}
+	50% {opacity: 1.0;}
+	to {opacity: 0.50;}
+}
+
+@mixin animation ($name, $duration, $count) {
+    -webkit-animation:{
+    	name: #{$name};
+    	duration: $duration;
+    	iteration-count: $count;
+    };
+    -moz-animation:{
+        name: #{$name};
+		duration: $duration;
+		iteration-count: $count;
+	}
+	-ms-animation:{
+		name: #{$name};
+		duration: $duration;
+		iteration-count: $count;
+	}
+	animation:{
+		name: #{$name};
+ 		duration: $duration;
+ 		iteration-count: $count;
+ 	}
+}
+
+@-webkit-keyframes pulse {@include pulse;}
+@-moz-keyframes pulse {@include pulse;}
+@-ms-keyframes pulse {@include pulse;}
+@keyframes pulse {@include pulse;}
+
+
 @mixin clearfix_left($dist) {
 	clear: both;
 	padding-left: $dist !important;
@@ -140,3 +175,4 @@
 		.item { background: transparent; }
 	}
 }
+

@@ -1,5 +1,9 @@
-
-.chat { background: $chat-icon; }
+.chat {
+    background: $chat-icon;
+    .attention &{
+    	@include animation(pulse, 1.5s, infinite);
+    }
+}
 
 .chat-entry {
 	float: none !important;
