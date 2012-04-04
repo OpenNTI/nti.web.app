@@ -5,6 +5,7 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Base', {
 		'NextThought.view.whiteboard.Utils'
 	],
 
+	STOP_NIB: {},
 	IDENTITY: { 'Class':'CanvasAffineTransform', 'a':1, 'b':0, 'c':0, 'd':1, 'tx':0, 'ty':0 },
 
 	constructor: function(config){
@@ -105,46 +106,73 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Base', {
 	},
 
 
-	modify: function(nib,	x1,y1,	x2,y2,	dx,dy){
-		var m = new NTMatrix(this.transform),
-			t = m.getTranslation(),
-			s = m.getScale(),
-			map = {
-				'l': function(dx) { return update(dx,0, -1, -1); },
-				't': function(dx, dy) { return update(0,dy, -1, -1); },
-				't-l': function(dx, dy) { return update(dx,dy, -1, -1); },
-				'r': function(dx) { return update(dx,0,1,1); },
-				'b': function(dx, dy) { return update(0,dy,1,1); },
-				'b-r': function(dx, dy) { return update(dx,dy,1,1); },
-				't-r': function(dx, dy) { return update(dx,dy,1,-1); },
-				'b-l': function(dx, dy) { return update(dx,dy,-1,1); },
-				'rot': function(){
-					m = new NTMatrix();
-					m.translate(t[0],t[1]);
-					m.scale(s[0],s[1]);
-					m.rotate(WBUtils.getAngle(t[0],t[1], x1,y1));
+	/**
+	 *
+	 * @param m - the current matrix
+	 * @param x - the mouse's X cordinate on the canvas
+	 * @param y - the mouse's Y cordinate on the canvas
+	 * @param dx - the mouse's change in X (magnitude)
+	 * @param dy - the mouse's change in Y (magnitude)
+	 * @param sx - the sign of dx
+	 * @param sy - the sign of dy
+	 */
+	nibUpdate: function(m, x,y, dx,dy, sx,sy){
+		var s = m.getScale(),
+			w = this.bbox.w/2,
+			h = this.bbox.h/2;
 
-					return m.toTransform();
-				}
-			};
+		sx = s[0]+((sx*dx)/w);
+		sy = s[1]+((sy*dy)/h);
 
-		function update(dx, dy, sx, sy) {
+		if(sx >= 0 && sy >= 0){
 			m.scale( 1/s[0], 1/s[1] );
-			m.scale( s[0]+(sx*dx), s[1]+(sy*dy) );
-
-			m.translate(-t[0],-t[1]);
-			m.translate( t[0]+dx/2, t[1]+dy/2);
-			return m.toTransform();
+			m.scale( sx, sy );
+		}
+		else {
+			throw this.STOP_NIB;
 		}
 
+		return m.toTransform();
+	},
+
+
+	nibRotate: function(m, x,y){
+		var t = m.getTranslation(),
+			s = m.getScale();
+
+		m = new NTMatrix();
+		m.translate(t[0],t[1]);
+		m.scale(s[0],s[1]);
+		m.rotate(WBUtils.getAngle(t[0],t[1], x,y));
+
+		return m.toTransform();
+	},
+
+
+	modify: function(nib,	x1,y1,	x2,y2,	dx,dy){
+		var m = new NTMatrix(this.transform),
+			map = {
+				'l'		: function() { return this.nibUpdate(m, x1,y1, dx, 0, -1,-1); },
+				't'		: function() { return this.nibUpdate(m, x1,y1, 0, dy, -1,-1); },
+				't-l'	: function() { return this.nibUpdate(m, x1,y1, dx,dy, -1,-1); },
+				'r'		: function() { return this.nibUpdate(m, x1,y1, dx, 0,  1, 1); },
+				'b'		: function() { return this.nibUpdate(m, x1,y1, 0, dy,  1, 1); },
+				'b-r'	: function() { return this.nibUpdate(m, x1,y1, dx,dy,  1, 1); },
+				't-r'	: function() { return this.nibUpdate(m, x1,y1, dx,dy,  1,-1); },
+				'b-l'	: function() { return this.nibUpdate(m, x1,y1, dx,dy, -1, 1); },
+				'rot'	: function() { return this.nibRotate(m, x1,y1 ); }
+			};
 
 		try{
 			if(nib === 'rot1' || nib === 'rot2') {
 				nib = 'rot';
 			}
-			this.transform = map[nib].call(this,dx/2,dy/2);
+			this.transform = map[nib].call(this);
 		}
 		catch(e){
+			if(e===this.STOP_NIB){
+				throw 'stop';
+			}
 			console.error('No modifier for ',nib);
 		}
 	},

@@ -343,10 +343,18 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 		dx = (xy[0]-m[0])/w;
 		dy = (xy[1]-m[1])/w;
 
-		if(nib){ s.modify(nib,	xy[0]/w,xy[1]/w,	m[0]/w,m[1]/w,	dx,dy); }
-		else { s.translate(dx,dy); }
+		try{
+			if(nib){ s.modify(nib,	xy[0]/w,xy[1]/w,	m[0]/w,m[1]/w,	dx,dy); }
+			else { s.translate(dx,dy); }
 
-		this.mouseDown = xy;
+			this.mouseDown = xy;
+		}
+		catch(e){
+			if(e!=='stop'){
+				console.error(e);
+			}
+		}
+
 		this.canvas.drawScene();
 	},
 
@@ -442,7 +450,33 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 	},
 
 
-	doText: function(e){},
+	doText: function(e){
+		if(!this.mouseDown){ return; }
+
+		var tool = this.currentTool,
+			s = this.selected,
+			w = this.canvas.el.getWidth(),
+			p = this.mouseInitialPoint.slice(), m,
+			x = p[0],
+			y = p[1];
+
+		if(!s || s.Class !== 'Canvas'+tool+'Shape' || !s.isNew){
+			this.selected = this.addShape(tool);
+			return;
+		}
+
+		p.push.apply(p,this.getRelativeXY(e));
+
+		m = new NTMatrix();
+		m.translate(x,y);
+		m.scale(WBUtils.getDistance(p)*2);
+		//m.rotate(WBUtils.getAngle(p));
+
+		m.scaleAll(1/w);//do this after
+		s.transform = m.toTransform();
+
+		this.canvas.drawScene();
+	},
 
 
 	clear: function(){
@@ -491,7 +525,8 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 			defs.Class = 'CanvasPolygonShape';
 		}
 		else if(/text/i.test(shape)){
-			defs.text = 'Text Label';
+			defs.text = 'Text Label gj,f';
+			defs['font-face'] = 'Calibri';
 		}
 
 		data.shapeList.push(defs);

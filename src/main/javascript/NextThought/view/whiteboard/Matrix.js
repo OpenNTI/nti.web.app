@@ -113,6 +113,9 @@ Ext.define('NextThought.view.whiteboard.Matrix', {
 
 
 	toTransform: function(){
+		var i = this.m.length-1;
+		for(;i>=0;i--){ if(isNaN(this.m[i])){ throw "NaN in matrix at index: "+i; } }
+
 		return {
 			'Class':'CanvasAffineTransform',
 			'a': this.m[0],
