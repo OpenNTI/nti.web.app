@@ -632,29 +632,66 @@ turn off html5 player
 	}
 
 }, function(){
-	var o = this.classEvents = new Ext.util.Observable();
+	var o = this.classEvents = new Ext.util.Observable(),
+		timeoutMillis = 5000;
+
+	function startTimer(){
+		return function() {
+			var me = this;
+			o.fireEvent('window-drag-start');
+			me.NTImaskRemovalTimer = setTimeout(function(){
+				me.NTIEndTimer();
+			},
+			timeoutMillis);
+		}
+	}
+
+	function postponeTimer(){
+		return function(){
+			var me = this;
+			if (!me.NTImaskRemovalTimer){
+				me.NTIstartTimer();
+				return;
+			}
+
+			clearTimeout(me.NTImaskRemovalTimer);
+			me.NTImaskRemovalTimer = setTimeout(function(){
+				me.NTIEndTimer();
+			},
+			timeoutMillis);
+		}
+	}
+
+	function endTimer() {
+		return function(){
+			clearTimeout(this.NTImaskRemovalTimer);
+			delete this.NTImaskRemovalTimer;
+			o.fireEvent('window-drag-end');
+		}
+	}
 
 	function a(){
 		return function(){
-			if(!this.modal){
-				o.fireEvent('window-drag-start');
-			}
+			this.NTIstartTimer();
 			return this.callOverridden(arguments);
 		};
 	}
 
 	function b(){
 		return function(){
-			if(!this.modal){
-				o.fireEvent('window-drag-end');
-			}
+			this.NTIEndTimer();
 			return this.callOverridden(arguments);
 		};
 	}
 
-	Ext.util.ComponentDragger.override({ onStart: a(), onEnd: b() });
-	Ext.resizer.ResizeTracker.override({ onMouseDown: a(), onEnd: b() });
+	function c() {
+		return function(){
+			this.NTIPostponeTimer();
+			return this.callOverridden(arguments);
+		}
+	}
 
-
+	Ext.util.ComponentDragger.override({ NTIstartTimer: startTimer(), NTIEndTimer: endTimer(), NTIPostponeTimer: postponeTimer(), onStart: a(), onEnd: b(), onDrag: c()});
+	Ext.resizer.ResizeTracker.override({ NTIstartTimer: startTimer(), NTIEndTimer: endTimer(), NTIPostponeTimer: postponeTimer(), onMouseDown: a(), onEnd: b(), onDrag: c()});
 });
 
