@@ -227,13 +227,11 @@ Ext.define('NextThought.controller.Classroom', {
 		if(!info) {
 			return false;
 		}
-		var c = Ext.isFunction(info.get) ? info.get('ContainerId') : info.ContainerId;
+		var isModel = Ext.isFunction(info.getId),
+			c = isModel ? info.getId() : (info.Id || info),
+			cid = isModel ? info.get('ContainerId') : (info.ContainerId || info);
 
-		if (this.rooms.hasOwnProperty(c)) {
-			this.rooms[c] = info;
-			return true;
-		}
-		return false;
+		return (this.rooms.hasOwnProperty(c) || this.rooms.hasOwnProperty(cid));
 	},
 
 
@@ -286,7 +284,7 @@ Ext.define('NextThought.controller.Classroom', {
 	 * @param [moderated]
 	 */
 	onEnteredRoom: function(roomInfo, moderated) {
-		this.rooms[roomInfo.getId()] = roomInfo;
+		this.rooms[roomInfo.getId()] = true;
 		this.getClassroomContainer().hideClassChooser();
 		this.getClassroomContainer().showClassroom(roomInfo);
 		this.getClassroomContainer().activate();
@@ -307,12 +305,13 @@ Ext.define('NextThought.controller.Classroom', {
 	 * @param ri - raw response from the server, not a Record
 	 */
 	onFailedToEnterRoom: function(ri) {
-		var ci = ri.ContainerId,
+		var cid = ri.ContainerId,
+			id = ri.NTIID,
 			s = this.getSectionsStore(),
-			r = s.getById(ci),
+			r = s.getById(cid),
 			chooser = this.getClassroomContainer().chooser;
 
-		delete this.rooms[ci];
+		delete this.rooms[id];
 
 		if (chooser){
 			chooser.notify('Failed to enter room.');
@@ -549,9 +548,9 @@ Ext.define('NextThought.controller.Classroom', {
 
 	leaveRoom: function(){
 		var room = this.getClassroom().roomInfo,
-			id = room.getId();
+			cid = room.get('ContainerId');
 
-		delete this.rooms[id];
+		delete this.rooms[room.getId()];
 		this.getClassroomContainer().leaveClassroom();
 		this.getController('Chat').leaveRoom(room);
 	},

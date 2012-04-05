@@ -664,10 +664,11 @@ Ext.define('NextThought.controller.Chat', {
 
 	onOccupantsChanged: function(newRoomInfo, peopleWhoLeft, peopleWhoArrived, modsLeft, modsAdded) {
 		var win = this.getChatWindow(),
+			cid = newRoomInfo.get('ContainerId'),
 			id = newRoomInfo.getId(),
 			tab, view;
 
-		if (this.getClassroom().isClassroom({ContainerId: id})) {
+		if (this.getClassroom().isClassroom({Id: id})) {
 			this.getClassroom().onOccupantsChanged(peopleWhoLeft, peopleWhoArrived);
 			this.getClassroom().onModsChanged(modsLeft, modsAdded);
 			return;
@@ -779,7 +780,7 @@ Ext.define('NextThought.controller.Chat', {
 		var m = ParseUtils.parseItems([msg])[0],
 			o = {moderated:true};
 
-		if (this.getClassroom().isClassroom(m)) {
+		if (this.getClassroom().isClassroom(m.get('ContainerId'))) {
 			this.getClassroom().onMessage(m, o);
 			return;
 		}

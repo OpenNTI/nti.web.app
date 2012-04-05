@@ -37,12 +37,6 @@ Ext.define('NextThought.view.widgets.chat.View', {
 
             ]
         }
-		/*,
-        {
-			flex: 1,
-            xtype: 'chat-occupants-list'
-        }
-        */
     ],
 
 
