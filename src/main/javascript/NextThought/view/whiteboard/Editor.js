@@ -458,7 +458,8 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 			w = this.canvas.el.getWidth(),
 			p = this.mouseInitialPoint.slice(), m,
 			x = p[0],
-			y = p[1];
+			y = p[1],
+			shapeBaseScale = s&&s.bbox? s.bbox.w : 1;
 
 		if(!s || s.Class !== 'Canvas'+tool+'Shape' || !s.isNew){
 			this.selected = this.addShape(tool);
@@ -467,10 +468,11 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 
 		p.push.apply(p,this.getRelativeXY(e));
 
+
 		m = new NTMatrix();
 		m.translate(x,y);
-		m.scale(WBUtils.getDistance(p)*2);
-		//m.rotate(WBUtils.getAngle(p));
+		m.scale(WBUtils.getDistance(p)*2/shapeBaseScale);
+		m.rotate(WBUtils.getAngle(p));
 
 		m.scaleAll(1/w);//do this after
 		s.transform = m.toTransform();
@@ -525,7 +527,7 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 			defs.Class = 'CanvasPolygonShape';
 		}
 		else if(/text/i.test(shape)){
-			defs.text = 'Text Label gj,f';
+			defs.text = 'Text Label';
 			defs['font-face'] = 'Calibri';
 		}
 
