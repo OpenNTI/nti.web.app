@@ -9,8 +9,11 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Text', {
 	draw: function(ctx){
 		this.callParent(arguments);
 
-		ctx.font = this.cache.font || (this.cache.font = '1px ' + this['font-face']);
-//		ctx.fontAlign = 'center';
+		if(!this.cache.font){
+			this.cache.font = '1px ' + this['font-face'];
+		}
+
+		ctx.font = this.cache.font;
 		ctx.textAlign = 'left';
 		ctx.textBaseline = 'top';
 
