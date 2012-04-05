@@ -643,7 +643,7 @@ turn off html5 player
 				me.NTIEndTimer();
 			},
 			timeoutMillis);
-		}
+		};
 	}
 
 	function postponeTimer(){
@@ -659,7 +659,7 @@ turn off html5 player
 				me.NTIEndTimer();
 			},
 			timeoutMillis);
-		}
+		};
 	}
 
 	function endTimer() {
@@ -667,7 +667,7 @@ turn off html5 player
 			clearTimeout(this.NTImaskRemovalTimer);
 			delete this.NTImaskRemovalTimer;
 			o.fireEvent('window-drag-end');
-		}
+		};
 	}
 
 	function a(){
@@ -688,7 +688,7 @@ turn off html5 player
 		return function(){
 			this.NTIPostponeTimer();
 			return this.callOverridden(arguments);
-		}
+		};
 	}
 
 	Ext.util.ComponentDragger.override({ NTIstartTimer: startTimer(), NTIEndTimer: endTimer(), NTIPostponeTimer: postponeTimer(), onStart: a(), onEnd: b(), onDrag: c()});
