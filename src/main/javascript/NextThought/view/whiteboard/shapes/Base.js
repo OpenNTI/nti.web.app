@@ -84,6 +84,9 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Base', {
 		ctx.strokeStyle = this.cacheColor('stroke');
 
 		ctx.lineWidth = (parseFloat(this.strokeWidth)*w)/scale;
+		if(!isFinite(ctx.lineWidth) || isNaN(ctx.lineWidth)){
+			ctx.lineWidth = 0;
+		}
 	},
 
 
@@ -143,7 +146,7 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Base', {
 
 	performFillAndStroke: function(ctx){
 		if(ctx.fillStyle) { ctx.fill(); }
-		if(ctx.strokeStyle) { ctx.stroke(); }
+		if(ctx.strokeStyle && ctx.lineWidth) { ctx.stroke(); }
 
 		if(this.selected === 'Hand'){
 			this.showNibs(ctx);

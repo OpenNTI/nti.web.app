@@ -24,8 +24,12 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Text', {
 			x = -w/2,
 			y = -h/2;
 
-		if(ctx.fillStyle)	{	ctx.fillText(  this.text,x,y);	}
-		if(ctx.strokeStyle)	{	ctx.strokeText(this.text,x,y);	}
+		if(ctx.fillStyle) {
+			ctx.fillText(  this.text,x,y);
+		}
+		if(ctx.strokeStyle && ctx.lineWidth) {
+			ctx.strokeText(this.text,x,y);
+		}
 
 		this.bbox = {
 			x: x,	w: w,

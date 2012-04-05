@@ -406,7 +406,7 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 		delete this.mouseInitialPoint;
 		if(this.selected){
 			delete this.selected.isNew;
-			this.selected.selected = this.currentTool || true
+			this.selected.selected = this.currentTool || true;
 			this.canvas.drawScene();
 		}
 	},
