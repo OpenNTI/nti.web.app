@@ -1,6 +1,7 @@
 Ext.define('NextThought.view.content.Classroom', {
 	extend:'NextThought.view.content.Panel',
 	alias: 'widget.classroom-content',
+	mixins:{ splitters: 'NextThought.mixins.SplitterMaintenance' },
 	requires: [
 		'NextThought.view.widgets.chat.View',
 		'NextThought.view.widgets.classroom.Management',
@@ -65,29 +66,6 @@ Ext.define('NextThought.view.content.Classroom', {
 		}
 
 		this.addOrUpdateSplitters();
-	},
-
-	addOrUpdateSplitters: function() {
-		var index;
-
-		//remove all splitters that currently exist:
-		this.items.each(function(i){
-				if (i instanceof Ext.resizer.Splitter) {
-					this.remove(i, true);
-				}
-			},
-			this);
-
-		//add splitters between each component
-		this.items.each(function(i){
-				index = this.items.indexOf(i);
-				if (index < (this.items.getCount() - 1)){
-					this.insert(this.items.indexOf(i) + 1,
-						{xtype:'splitter'}
-					);
-				}
-			},
-			this);
 	},
 
 
