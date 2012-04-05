@@ -295,7 +295,7 @@ Ext.define('NextThought.controller.Classroom', {
 		this.classroomActivated();
 
 		if (moderated) {
-			this.onModerateClicked();
+			this.openModerationPanel();
 		}
 
 		this.compileResources(roomInfo.get('ContainerId'));
@@ -357,14 +357,24 @@ Ext.define('NextThought.controller.Classroom', {
 	},
 
 
-	onModerateClicked: function(btn) {
-		var content = btn ? btn.up('classroom-content') : this.getClassroom(),
+	openModerationPanel: function() {
+		var content = this.getClassroom(),
 			mod = content.down('chat-log-view[moderated]'),
 			view = content.down('chat-view');
 
 		if (mod){return;} //already moderated
 
 		content.showMod();
+		view.initOccupants(true);
+	},
+
+
+	closeModerationPanel: function() {
+		var content = this.getClassroom(),
+			view = content.down('chat-view');
+
+		content.removeMod();
+
 		view.initOccupants(true);
 	},
 
@@ -402,7 +412,7 @@ Ext.define('NextThought.controller.Classroom', {
 	onOccupantsChanged: function(peopleWhoLeft, peopleWhoArrived) {
 		var classroom = this.getClassroom();
 		if(!classroom) {return;}
-		classroom.down('chat-log-view').occupantsChanged(peopleWhoLeft, peopleWhoArrived);
+		classroom.down('chat-log-view[moderated=false]').occupantsChanged(peopleWhoLeft, peopleWhoArrived);
 	},
 
 

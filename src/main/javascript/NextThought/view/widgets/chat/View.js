@@ -11,13 +11,15 @@ Ext.define('NextThought.view.widgets.chat.View', {
         'NextThought.cache.IdCache'
     ],
 
-    layout: 'border',
-    border: false,
-    defaults: {border: false, defaults: {border: false}},
+    layout: {
+		type: 'hbox',
+		align: 'stretch'
+	},
 
     items:[
         {
-            region: 'center',
+			chatlog: true,
+			flex: 2,
             layout: {
                 type: 'vbox',
                 align: 'stretch'
@@ -29,25 +31,18 @@ Ext.define('NextThought.view.widgets.chat.View', {
                 },
                 {
                     cls: 'chat-entry',
-                    border: false,
                     xtype: 'chat-reply-to',
                     mainEntry: true
                 }
 
             ]
-        },
-        {
-            region: 'east',border: true,
-            xtype: 'chat-occupants-list'
-        },
-        {
-            region: 'west',
-            minWidth: 250,
-            hidden: true,
-            split: true,
-            layout: 'fit'
-
         }
+		/*,
+        {
+			flex: 1,
+            xtype: 'chat-occupants-list'
+        }
+        */
     ],
 
 
@@ -55,6 +50,7 @@ Ext.define('NextThought.view.widgets.chat.View', {
     initComponent:function() {
         this.callParent(arguments);
         this.changed(this.roomInfo);
+		this.addOrUpdateSplitters();
     },
 
     changed: function(ri) {
@@ -83,16 +79,30 @@ Ext.define('NextThought.view.widgets.chat.View', {
 
 	initOccupants: function(moderated) {
 		var classContent = this.up('classroom-content'),
-			occList = this.down('chat-occupants-list');
+			occList = this.down('chat-occupants-list'),
+			occupants = this.roomInfo.get('Occupants');
 
-		//stuff the occupants where they
 		if (classContent) {
-			classContent.down('classroom-management').down('chat-occupants-list').setOccupants(this.roomInfo.get('Occupants'), this.roomId, moderated);
+			classContent.down('classroom-management').down('chat-occupants-list').setOccupants(occupants, this.roomId, moderated);
 			if (occList) {occList.hide();}
 		}
-		else if (occList){
+		else if (occupants.length <= 2 && occList) {
+			//in this case, we don't want to see it
+			this.remove(occList);
+		}
+		else if (occupants.length > 2 && !occList){
+			//we need to add one
+			occList = this.add({flex: 1, xtype: 'chat-occupants-list'});
+			occList.setOccupants(occupants, this.roomId, moderated);
+		}
+		else if (occupants.length > 2 && occList) {
+			//list already exists, just update
 			occList.setOccupants(this.roomInfo.get('Occupants'), this.roomId, moderated);
 		}
+		else {
+			console.error('some strange scenario I failed to plan for has occured', occupants, this);
+		}
+		this.addOrUpdateSplitters();
 	},
 
 
@@ -103,23 +113,61 @@ Ext.define('NextThought.view.widgets.chat.View', {
         delete this.roomInfo;
     },
 
-    openModerationPanel: function() {
-        var cmp = this.down('panel[region=west]');
-        cmp.add({ xtype: 'chat-log-view', moderated:  true, title: 'Moderated' });
-        cmp.setWidth(250);
+	toggleModerationButton: function(on) {
+		this.down('chat-occupants-list').toggleModerationButton(on);
+	},
 
-        cmp.show();
+    closeModerationPanel: function() {
+        var modLog = this.down('chat-log-view[moderated=true]');
 
-        this.down('textfield[chatentry]').focus();
+		if (modLog) {
+			this.remove(modLog, true);
+		}
 
 		this.initOccupants(true);
+		this.toggleModerationButton(false);
     },
+
+
+	openModerationPanel: function() {
+		this.insert(0,{ xtype: 'chat-log-view', moderated:  true, title: 'Moderated', flex: 1});
+
+		this.down('textfield[chatentry]').focus();
+
+		this.initOccupants(true);
+		this.toggleModerationButton(true);
+		this.addOrUpdateSplitters();
+	},
+
+
+	addOrUpdateSplitters: function() {
+		var index;
+
+		//remove all splitters that currently exist:
+		this.items.each(function(i){
+				if (i instanceof Ext.resizer.Splitter) {
+					this.remove(i, true);
+				}
+			},
+			this);
+
+		//add splitters between each component
+		this.items.each(function(i){
+				index = this.items.indexOf(i);
+				if (index < (this.items.getCount() - 1)){
+					this.insert(this.items.indexOf(i) + 1,
+						{xtype:'splitter'}
+					);
+				}
+			},
+			this);
+	},
 
     getPinnedMessageView: function() {
         var v = this.down('chat-pinned-message-view');
 
         if (!v) {
-            v = this.down('[region=center]').insert(0, {xtype: 'chat-pinned-message-view', showClear: this.el.hasCls('moderator')});
+            v = this.down('[chatlog=true]').insert(0, {xtype: 'chat-pinned-message-view', showClear: this.el.hasCls('moderator')});
         }
 
         return v;

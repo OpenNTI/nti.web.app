@@ -6,13 +6,15 @@ Ext.define('NextThought.view.widgets.chat.OccupantsList', {
 		'NextThought.view.widgets.chat.FriendEntry'
 	],
 
+	cls: 'chat-occupants-list',
 	width: 125,
-	collapsible: true,
-	collapseFirst: false,
 	autoScroll: true,
 	layout: 'anchor',
 	border: false,
 	title: 'Chat Room',
+
+	moderationOnMessage: 'Click to become moderator',
+	moderationOffMessage: 'Click to quit moderation',
 
 	defaults: {border: false, defaults: {border: false}},
 
@@ -21,22 +23,41 @@ Ext.define('NextThought.view.widgets.chat.OccupantsList', {
 
 		if (this.autoHide !== false){this.autoHide = true;}
 
-		me.tools = [{
-			type: 'gear',
-			tooltip: 'become moderator',
-			action: 'moderate'
-		}];
+		this.dockedItems = {
+		   xtype: 'toolbar',
+		   dock: 'bottom',
+		   items: [
+			   {
+				   cls: 'moderation-toggle',
+				   action: 'moderate',
+				   tooltip: this.moderationOnMessage
+			   }
+		   ]
+		};
+
 
 		me.callParent(arguments);
 	},
 
+	toggleModerationButton: function(moderated) {
+		var b = this.down('button[action=moderate]'),
+			cls = 'moderation-on';
+
+		if (b && moderated) {
+			b.addCls(cls);
+			b.setTooltip(this.moderationOffMessage);
+		}
+		else if (b){
+			b.removeCls(cls);
+			b.setTooltip(this.moderationOnMessage);
+		}
+	},
+
 	setOccupants: function(a, rid, isModerator) {
-		var me = this,
-			total = a.length,
-			numberOccupants = 0;
+		var me = this;
 
 		me.removeAll(true);
-		
+
 		Ext.each(a,
 			function(username){
 				NextThought.cache.UserRepository.prefetchUser(username, function(users){
@@ -53,27 +74,7 @@ Ext.define('NextThought.view.widgets.chat.OccupantsList', {
 							isModerator: isModerator
 						});
 					}
-
-					if (!u || u.getId() !== $AppConfig.userObject.getId()){
-						numberOccupants++;
-					}
-
-					total--;
-					if (total <= 0){finish();}
 				});
 			});
-
-		function finish() {
-			if (numberOccupants <= 1) {
-				//just me and someone else here
-				if (me.autoHide) {
-					me.hide();
-				}
-			}
-			else if(!me.isVisible()) {
-				me.show();
-			}
-		}
-
 	}
 });

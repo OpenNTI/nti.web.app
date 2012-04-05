@@ -13,6 +13,7 @@ Ext.define('NextThought.view.widgets.chat.Log', {
 	autoScroll: true,
 	layout: 'anchor',
 	border: false,
+	minWidth: 250,
 	defaults: {border: false},
 
 	getMessageQuery: function(id){

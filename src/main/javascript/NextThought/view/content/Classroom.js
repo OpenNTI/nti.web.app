@@ -90,14 +90,30 @@ Ext.define('NextThought.view.content.Classroom', {
 			this);
 	},
 
+
+	toggleModerationButton: function(on) {
+		this.down('classroom-management').down('chat-occupants-list').toggleModerationButton(on);
+	},
+
+
+	removeMod: function() {
+		var mod = this.down('chat-log-view[moderated=true]');
+		if (mod) {
+			this.remove(mod, true);
+		}
+		this.toggleModerationButton(false);
+		this.addOrUpdateSplitters();
+	},
+
+
 	showMod: function() {
 		this.insert(0,{
 			xtype: 'chat-log-view',
 			title: 'moderation',
 			flex: 1,
-			moderated: true,
-			minWidth: 250
+			moderated: true
 		});
+		this.toggleModerationButton(true);
 		this.addOrUpdateSplitters();
 	},
 
@@ -129,13 +145,13 @@ Ext.define('NextThought.view.content.Classroom', {
 		var r = msg.get('ContainerId'),
 			moderated =  opts.hasOwnProperty('moderated'),
 			v = this.down('chat-view'),
-			mlog = this.down('chat-log-view[moderated]');
+			mlog = this.down('chat-log-view[moderated = true]');
 
 		if (moderated) {
 			mlog.addMessage(msg);
 		}
 		else {
-			v.down('chat-log-view').addMessage(msg);
+			v.down('chat-log-view[moderated=false]').addMessage(msg);
 		}
 
 		if(!moderated && mlog) {

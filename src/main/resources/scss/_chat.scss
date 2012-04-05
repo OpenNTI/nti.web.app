@@ -27,6 +27,16 @@ button {
 
 }
 
+.chat-occupants-list {
+	.moderation-toggle {
+		background: $moderation-toggle center no-repeat;
+		background-position: 0 0;
+		&.moderation-on {
+			background-position: -16px 0;
+		}
+	}
+}
+
 @mixin chat-button-def {
 	$size: 22px;
 	width: $size;
