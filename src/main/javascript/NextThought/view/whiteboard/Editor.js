@@ -26,7 +26,12 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 
 	initComponent: function(){
 		this.callParent(arguments);
-		this.selectedColor = {};
+
+		this.selectedValues = {
+			strokeWidth: 2,
+			fillColor: 'None',
+			strokeColor: '000000'
+		};
 
 		this.addDocked(this.buildToolbar());
 
@@ -40,7 +45,7 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 		this.polygonSidesField = this.down('sliderfield[name=sides]');
 		this.textValueField = this.down('textfield[name=text]');
 		this.fontSelection = this.down('combobox[name=font-face]');
-		this.strokeWidthField = this.down('numberfield[name=stroke-width]');
+		this.strokeWidthField = this.down('numberfield[name=strokeWidth]');
 		this.deleteSelectedButton = this.down('button[action=delete]');
 
 		this.shapeTools = this.query('[toolGroup]');
@@ -73,8 +78,7 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 	afterRender: function(){
 		this.callParent(arguments);
 
-		this.setColor('fill', 'None');
-		this.setColor('stroke', '000000');
+		this.updateToolValues();
 
 		this.canvas.el.on({
 			'scope': this,
@@ -124,17 +128,25 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 
 	buildToolbar: function(){
 		var me = this, fonts = Ext.create('Ext.data.Store', {
-		    fields: ['font'],
+		    fields: ['font','label'],
 		    data : [
-		        {font:'Arial'},
-		        {font:'Calibri'},
-				{font:'Comic Sans MS'},
-		        {font:'Courior'},
-		        {font:'Georgia'},
-		        {font:'Helvetica'},
-				{font:'Tahoma'},
-				{font:'Times New Roman'},
-				{font:'Verdana'}
+		        {label: 'Arial',			font:'Arial, Helvetica, sans-serif'},
+		        {label: 'Arial Black',		font:'Arial Black, Gadget, sans-serif'},
+		        {label: 'Calibri',			font:'Calibri, Georgia, serif'},
+				{label: 'Comic Sans',		font:'Comic Sans MS, Comic Sans, cursive'},
+		        {label: 'Courier',			font:'Courier New, monospace'},
+		        {label: 'Georgia',			font:'Georgia, Calibri, serif'},
+				{label: 'Geneva',			font:'Geneva, MS Sans Serif, sans-serif'},
+		        {label: 'Helvetica',		font:'Helvetica, Arial, sans-serif'},
+		        {label: 'Impact',			font:'Impact, Charcoal, sans-serif'},
+		        {label: 'Lucida Console',	font:'Lucida Console, Monaco, monospace'},
+		        {label: 'Lucida Grande',	font:'Lucida Sans Unicode, Lucida Grande, sans-serif'},
+		        {label: 'New York',			font:'New York, MS Serif, serif'},
+		        {label: 'Palatino',			font:'Palatino Linotype, Book Antiqua, Palatino, serif'},
+				{label: 'Tahoma',			font:'Tahoma, Geneva, sans-serif'},
+				{label: 'Times',			font:'Times New Roman, Times, serif'},
+				{label: 'Trebuchet',		font:'Trebuchet MS, sans-serif'},
+				{label: 'Verdana',			font:'Verdana, Geneva, sans-serif'}
 		    ]
 		});
 
@@ -194,33 +206,33 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 				{
 					xtype: 'numberfield',
 					fieldLabel: 'Stroke Width',
-					name: 'stroke-width',
+					name: 'strokeWidth',
 					labelWidth: 75,
 					width: 180,
 					value: 4,
 					minValue: 0,
 					margin: 5,
 					colspan: 2,
-					listeners: {
-						scope: this,
-						change: function(cmp,value){this.setStrokeWidth(value);}
-					}
+					listeners: { change: function(c,v){me.setStrokeWidth(v);} }
 				},{
 					text: 'Stroke',
 					action: 'pick-stroke-color',
 					iconCls: 'color', tooltip: 'Stroke Color',
-					menu: {xtype: 'colormenu', colorFor: 'stoke', listeners: {
-						scope: this,
-						select: function(c, color){ this.setColor('stroke',color); }
-					}}
+					menu: {
+						xtype: 'colormenu',
+						allowReselect: true,
+						listeners: { select:function(c,v){me.setColor('stroke',v);} }
+//					},{
+					}
 				},{
 					text: 'Fill',
 					action: 'pick-fill-color',
 					iconCls: 'color', tooltip: 'Fill Color',
-					menu: {xtype: 'colormenu', colorFor: 'fill', listeners: {
-						scope: this,
-						select: function(c, color){ this.setColor('fill',color); }
-					}}
+					menu: {
+						xtype: 'colormenu',
+						allowReselect: true,
+						listeners: { select: function(c, v){ me.setColor('fill',v); } }
+					}
 				}]
 			},
 			{
@@ -236,10 +248,7 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 					increment: 1,
 					minValue: 3,
 					maxValue: 10,
-					listeners: {
-						scope: this,
-						change: function(cmp,value){this.setNumberOfSides(value);}
-					}
+					listeners: { change: function(c,v){me.setNumberOfSides(v);} }
 				}]
 			},
 			{
@@ -265,7 +274,7 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 					store: fonts,
 					editable: false,
 					queryMode: 'local',
-					displayField: 'font',
+					displayField: 'label',
 					valueField: 'font',
 					value: 'Calibri',
 					valueNotFoundText: 'Unknown Font',
@@ -279,16 +288,45 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 	},
 
 
+	updateToolValues: function(shape){
+		var me = this,
+			sv = me.selectedValues,
+			values = shape ? shape.getJSON() : Ext.clone(sv.original||sv),
+			colorRe = /(.+)Color/i,
+			opacityRe = /(.+)Opacity/i;
 
-	updateToolbarValues: function(shape){
-		var values = this.toolState || {};
-
-		if(shape instanceof NextThought.view.whiteboard.shapes.Base){
-
+		if(shape && !sv.original){
+			sv.original = Ext.apply({},sv);
+		}
+		else if(!shape ){
+			if(sv.original){
+				Ext.apply(sv, sv.original);
+				delete sv.original;
+			}
 		}
 
-	},
+		Ext.Object.each(values,function(k,v){
+			var c = me.down('[name='+k+']'),
+				color = colorRe.exec(k),
+				opacity = opacityRe.exec(k);
 
+
+			if(color){
+				me.setColor(color[1],v||'None');
+			}
+			else if(opacity){
+				me.setOpacity(opacity[1], v||1);
+			}
+			else if(c){
+				if(shape && k === 'strokeWidth'){
+					v = Math.floor( v*me.canvas.getWidth() );
+				}
+				c.setValue(v);
+			}
+		});
+
+
+	},
 
 
 	deselectShape: function(){
@@ -322,18 +360,20 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 					else { delete o.selected; }
 				},
 				this);
+
 		this.selected = s;
 
 		if(s){
 			delete s.isNew;
 			this.deleteSelectedButton.enable();
 			this.activateToolOptions(s.getShapeName());
-			this.updateToolbarValues(s);
 		}
 		else {
+			this.activateToolOptions(this.currentTool);
 			this.deleteSelectedButton.disable();
 		}
 
+		this.updateToolValues(s);
 		c.drawScene();
 	},
 
@@ -366,6 +406,8 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 		delete this.mouseInitialPoint;
 		if(this.selected){
 			delete this.selected.isNew;
+			this.selected.selected = this.currentTool || true
+			this.canvas.drawScene();
 		}
 	},
 
@@ -391,19 +433,21 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 	setColor: function(c, color){
 
 		var none = /none/i.test(color),
+			prop,
 			icon = this.down(Ext.String.format('button[action=pick-{0}-color]',c)).getEl().down('.x-btn-icon');
 
 		c = c.toLowerCase();
-		this.selectedColor[c] = none? 'None': '#'+color;
+		prop = c+'Color';
+		this.selectedValues[prop] = none? 'None': Color.parseColor(color).toString();
 
 		if(this.selected){
-			this.selected[c+'Color'] = this.selectedColor[c];
+			Ext.copyTo(this.selected, this.selectedValues, [prop]);
 			this.selected[c+'Opacity'] = 1;
 			this.canvas.drawScene();
 		}
 
 
-		icon.setStyle({background: none? null: this.selectedColor[c]});
+		icon.setStyle({background: none? null: this.selectedValues[prop]});
 		icon.removeCls('color-none');
 		if(none) {
 			icon.addCls('color-none');
@@ -411,39 +455,43 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 	},
 
 
+	setOpacity: function(c,opacity){
+
+	},
+
+
 	setStrokeWidth: function(stroke){
+		this.selectedValues.strokeWidth = stroke;
 		var s = this.selected, c = this.canvas;
 		if(!s){ return; }
-
 		stroke /= c.el.getWidth();
-
 		s.strokeWidth = isFinite(stroke)? stroke : 0;
 		c.drawScene();
 	},
 
 
 	setNumberOfSides: function(sides){
+		this.selectedValues.sides = sides;
 		var s = this.selected, c = this.canvas;
 		if(!s || s.sides===undefined){ return; }
-
 		s.sides = sides;
 		c.drawScene();
 	},
 
 
 	setShapeText: function(text){
+		this.selectedValues.text = text;
 		var s = this.selected, c = this.canvas;
 		if(!s || s.text === undefined) { return; }
-
 		s.text = text || '(Empty)';
 		c.drawScene();
 	},
 
 
 	setShapeFont: function(font){
+		this.selectedValues['font-face'] = font;
 		var s = this.selected, c = this.canvas;
 		if(!s || s['font-face'] === undefined) { return; }
-
 		s['font-face'] = font;
 		c.drawScene();
 	},
@@ -469,9 +517,9 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 
 			this.mouseDown = xy;
 		}
-		catch(e){
-			if(e!=='stop'){
-				console.error(e);
+		catch(ex){
+			if(ex!=='stop'){
+				console.error(ex);
 			}
 		}
 
@@ -619,13 +667,13 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 
 	addShape: function(shape){
 		var data = this.canvas.getData() || {'Class': 'Canvas','shapeList':[]},
-			stroke = this.strokeWidthField.getValue()/(this.canvas.el.getWidth()),
+			stroke = this.selectedValues.strokeWidth/(this.canvas.el.getWidth()),
 			defs = {
 				'Class': 'Canvas'+Ext.String.capitalize(shape.toLowerCase())+'Shape',
-				'fillColor': this.selectedColor.fill,
-				'fillOpacity': 1,
-				'strokeColor': this.selectedColor.stroke,
-				'strokeOpacity': 1,
+				'fillColor': this.selectedValues.fillColor,
+				'fillOpacity': this.selectedValues.fillOpacity || 1,
+				'strokeColor': this.selectedValues.strokeColor,
+				'strokeOpacity': this.selectedValues.strokeOpacity || 1,
 				'strokeWidth': isFinite(stroke)? stroke : 0,
 				'transform':{
 					'Class':'CanvasAffineTransform',

@@ -21,15 +21,17 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Base', {
 			defineSetter = '__defineSetter__',
 			defineGetter = '__defineGetter__',
 			hasDefineProp = Boolean(Object.defineProperty);
+
 		me.tracked = {};
 		me.cache = {};
+
 		if(hasDefineProp){
 			Object.defineProperty(me,'tracked',{enumerable: false});
 			Object.defineProperty(me,'cache',{enumerable: false});
 		}
 
 		Ext.each(this.calculatedAttributes,function(p){
-			function setter(newValue){this.tracked[p] = newValue; this.changed();}
+			function setter(newValue){this.tracked[p] = newValue; delete this.cache[p];}
 			function getter(){ return this.tracked[p]; }
 
 			if(hasDefineProp){
@@ -106,7 +108,13 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Base', {
 			opacity = 1;
 		}
 
-		c = Color.parseColor(value);
+		try{
+			c = Color.parseColor(value);
+		}
+		catch(er){
+			console.log(value);
+			return '#000000';
+		}
 		this[valueKey] = Color.toRGB(c);
 		this.cache[valueKey] = Color.toRGBA(c,opacity);
 		return this.cache[valueKey];
@@ -137,7 +145,7 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Base', {
 		if(ctx.fillStyle) { ctx.fill(); }
 		if(ctx.strokeStyle) { ctx.stroke(); }
 
-		if(this.selected){
+		if(this.selected === 'Hand'){
 			this.showNibs(ctx);
 		}
 	},
@@ -298,11 +306,6 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Base', {
 
 		ctx.restore();
 
-	},
-
-	changed: function(){
-		delete this.fillRGBACache;
-		delete this.strokeRGBACache;
 	},
 
 

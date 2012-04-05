@@ -9,11 +9,13 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Text', {
 	draw: function(ctx){
 		this.callParent(arguments);
 
-		if(!this.cache.font){
-			this.cache.font = '1px ' + this['font-face'];
+		if(!this.cache['font-face']){
+			this.cache['font-face'] = '1px ' + this['font-face'];
 		}
 
-		ctx.font = this.cache.font;
+		ctx.save();
+
+		ctx.font = this.cache['font-face'];
 		ctx.textAlign = 'left';
 		ctx.textBaseline = 'top';
 
@@ -30,15 +32,10 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Text', {
 			y: y,	h: h
 		};
 
-		if(this.selected){
+		ctx.restore();
+
+		if(this.selected === 'Hand'){
 			this.showNibs(ctx);
 		}
-	},
-
-
-	changed: function(){
-		delete this.cache.font;
-		return this.callParent(arguments);
 	}
-
 });
