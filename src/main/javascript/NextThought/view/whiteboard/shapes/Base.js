@@ -29,11 +29,10 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Base', {
 		}
 
 		Ext.each(this.calculatedAttributes,function(p){
-			function setter(newValue){console.log(p,'changed to', newValue);this.tracked[p] = newValue; this.changed();}
-			function getter(){ console.log('getting ',p);return this.tracked[p]; }
+			function setter(newValue){this.tracked[p] = newValue; this.changed();}
+			function getter(){ return this.tracked[p]; }
 
 			if(hasDefineProp){
-				console.log('new', p);
 				Object.defineProperty(me,p,{
 					enumerable: true,
 					set: setter,
