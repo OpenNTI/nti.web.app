@@ -6,7 +6,8 @@ Ext.define(	'NextThought.view.whiteboard.Canvas',{
 		'NextThought.view.whiteboard.shapes.Line',
 		'NextThought.view.whiteboard.shapes.Path',
 		'NextThought.view.whiteboard.shapes.Polygon',
-		'NextThought.view.whiteboard.shapes.Text'
+		'NextThought.view.whiteboard.shapes.Text',
+		'NextThought.view.whiteboard.shapes.Url'
 	],
 
 	autoEl: { tag: 'canvas' },
