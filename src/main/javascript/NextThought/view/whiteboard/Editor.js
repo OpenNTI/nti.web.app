@@ -38,9 +38,12 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 		this.canvas = this.down('whiteboard-canvas');
 		this.canvas.updateData(this.value);
 		this.polygonSidesField = this.down('sliderfield[name=sides]');
+		this.textValueField = this.down('textfield[name=text]');
+		this.fontSelection = this.down('combobox[name=font]');
 		this.strokeWidthField = this.down('numberfield[name=stroke-width]');
 		this.deleteSelectedButton = this.down('button[action=delete]');
 
+		this.shapeTools = this.query('[toolGroup]');
 
 		this.mouseMoveHandlerMap = {
 			'Hand':		this.doMove,
@@ -50,6 +53,20 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 			'Circle':	this.doShape,
 			'Polygon':	this.doShape
 		};
+
+		this.activateToolOptions('Hand');
+	},
+
+
+	activateToolOptions: function(tool){
+		Ext.each(this.shapeTools,function(g){
+			if(g.toolGroup===tool){
+				g.show();
+			}
+			else {
+				g.hide();
+			}
+		});
 	},
 
 
@@ -107,107 +124,135 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 
 
 	buildToolbar: function(){
-		var me = this;
+		var me = this, fonts = Ext.create('Ext.data.Store', {
+		    fields: ['font'],
+		    data : [
+		        {"font":"Calibri"}
+		    ]
+		});
+
 		return {
 			dock: 'top',
 			xtype: 'toolbar',
 			cls: 'whiteboard-toolbar',
 			layout: { overflowHandler: 'Scroller' },
-			items: [
-				{
-					cls: 'whiteboard-toolbar',
-					xtype: 'buttongroup',
-					defaults: {
-						scale: 'medium',
-						enableToggle: true,
-						allowDepress: false,
-						toggleGroup:'draw',
-						handler: function(btn, event){
-							me.setTool(btn.shape);
-						}
-					},
-					items: [
-						{ iconCls: 'tool hand',		tooltip: 'Hand',		shape: 'Hand',	pressed: true },
-						{ iconCls: 'tool path',		tooltip: 'Free Hand',	shape: 'Path' },
-						{ iconCls: 'tool line',		tooltip: 'line',		shape: 'Line' },
-						{ iconCls: 'tool text',		tooltip: 'Text',		shape: 'Text' },
-						{ iconCls: 'tool circle',	tooltip: 'Circle',		shape: 'Circle' },
-						{ iconCls: 'tool poly',		tooltip: 'polygon',		shape: 'Polygon',
-							xtype: 'splitbutton',
-							menu: [{
-								xtype: 'buttongroup',
-								title: 'Polygon Options',
-								items: [{
-									xtype: 'sliderfield',	fieldLabel: 'Sides',
-									labelWidth: 45,			width: 200,
-									name: 'sides',			margin: 5,
-									value: 4,
-									increment: 1,
-									minValue: 3,
-									maxValue: 10
-								}]
-							}]
-						}
-					]
+			items: [{
+				cls: 'whiteboard-toolbar',
+				xtype: 'buttongroup',
+				defaults: {
+					scale: 'medium',
+					enableToggle: true,
+					allowDepress: false,
+					toggleGroup:'draw',
+					handler: function(btn, event){
+						me.setTool(btn.shape);
+					}
 				},
-				{
-					xtype: 'buttongroup',
-					columns: 2,
-					cls: 'whiteboard-toolbar',
-					defaults: {
-						scale: 'medium',
-						width: 90
-					},
-					items: [
-						{
-							iconCls: 'tool delete',		tooltip: 'Remove Selected Item',
-							text: 'Remove',				disabled: true,
-							action: 'delete',			handler: function(){ me.deleteSelected(); }
-						},{
-							iconCls: 'tool clear',		tooltip: 'Clear the canvas',
-							text: 'Clear All',			handler: function(){me.clear();}
-						}
-					]
+				items: [
+					{ iconCls: 'tool hand',		tooltip: 'Hand',		shape: 'Hand',	pressed: true },
+					{ iconCls: 'tool path',		tooltip: 'Free Hand',	shape: 'Path' },
+					{ iconCls: 'tool line',		tooltip: 'line',		shape: 'Line' },
+					{ iconCls: 'tool text',		tooltip: 'Text',		shape: 'Text' },
+					{ iconCls: 'tool circle',	tooltip: 'Circle',		shape: 'Circle' },
+					{ iconCls: 'tool poly',		tooltip: 'polygon',		shape: 'Polygon' }
+				]
+			},
+			{
+				xtype: 'buttongroup',
+				columns: 2,
+				cls: 'whiteboard-toolbar',
+				defaults: {
+					scale: 'medium',
+					width: 90
 				},
-				{
-					xtype: 'buttongroup',
-					columns: 4,
-					defaults: {
-						scale: 'medium',
-						width: 90
-					},
-					items: [
+				items: [
 					{
-						xtype: 'numberfield',
-						fieldLabel: 'Stroke Width',
-						name: 'stroke-width',
-						labelWidth: 75,
-						width: 180,
-						value: 4,
-						minValue: 0,
-						margin: 5,
-						colspan: 2
+						iconCls: 'tool delete',		tooltip: 'Remove Selected Item',
+						text: 'Remove',				disabled: true,
+						action: 'delete',			handler: function(){ me.deleteSelected(); }
 					},{
-						text: 'Stroke',
-						action: 'pick-stroke-color',
-						iconCls: 'color', tooltip: 'Stroke Color',
-						menu: {xtype: 'colormenu', colorFor: 'stoke', listeners: {
-							scope: this,
-							select: function(c, color){ this.setColor('stroke',color); }
-						}}
-					},{
-						text: 'Fill',
-						action: 'pick-fill-color',
-						iconCls: 'color', tooltip: 'Fill Color',
-						menu: {xtype: 'colormenu', colorFor: 'fill', listeners: {
-							scope: this,
-							select: function(c, color){ this.setColor('fill',color); }
-						}}
+						iconCls: 'tool clear',		tooltip: 'Clear the canvas',
+						text: 'Clear All',			handler: function(){me.clear();}
 					}
 				]
+			},
+			{
+				xtype: 'buttongroup',
+				columns: 4,
+				defaults: {
+					scale: 'medium',
+					width: 90
+				},
+				items: [
+				{
+					xtype: 'numberfield',
+					fieldLabel: 'Stroke Width',
+					name: 'stroke-width',
+					labelWidth: 75,
+					width: 180,
+					value: 4,
+					minValue: 0,
+					margin: 5,
+					colspan: 2
+				},{
+					text: 'Stroke',
+					action: 'pick-stroke-color',
+					iconCls: 'color', tooltip: 'Stroke Color',
+					menu: {xtype: 'colormenu', colorFor: 'stoke', listeners: {
+						scope: this,
+						select: function(c, color){ this.setColor('stroke',color); }
+					}}
+				},{
+					text: 'Fill',
+					action: 'pick-fill-color',
+					iconCls: 'color', tooltip: 'Fill Color',
+					menu: {xtype: 'colormenu', colorFor: 'fill', listeners: {
+						scope: this,
+						select: function(c, color){ this.setColor('fill',color); }
+					}}
+				}]
+			},
+			{
+				toolGroup: 'Polygon',
+				xtype: 'buttongroup',
+				//title: 'Polygon Options',
+				items: [
+				{
+					xtype: 'sliderfield',	fieldLabel: 'Sides',
+					labelWidth: 45,			width: 125,
+					name: 'sides',			margin: 7,
+					value: 4,
+					increment: 1,
+					minValue: 3,
+					maxValue: 10
+				}]
+			},
+			{
+				toolGroup: 'Text',
+				xtype: 'buttongroup',
+				//title: 'Text Options',
+				defaults: {
+					labelWidth: 35,
+					margin: 5,
+					width: 150
+				},
+				items: [{
+					xtype: 'textfield',		fieldLabel: 'Text',
+					name: 'text',			value: 'Text Label'
+				},{
+					xtype: 'combobox',
+					fieldLabel: 'Font',
+					name: 'font',
+					store: fonts,
+					editable: false,
+					queryMode: 'local',
+					displayField: 'font',
+					valueField: 'font',
+					value: 'Calibri',
+					valueNotFoundText: 'Unknown Font'
+				}]
 			}
-		]
-		};
+		]};
 	},
 
 
@@ -527,8 +572,8 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 			defs.Class = 'CanvasPolygonShape';
 		}
 		else if(/text/i.test(shape)){
-			defs.text = 'Text Label';
-			defs['font-face'] = 'Calibri';
+			defs.text = this.textValueField.getValue();
+			defs['font-face'] = this.fontSelection.getValue();
 		}
 
 		data.shapeList.push(defs);
@@ -543,6 +588,7 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 		delete this.mouseDown;
 		this.currentTool = tool;
 		this.deselectShape();
+		this.activateToolOptions(tool);
 	},
 
 
