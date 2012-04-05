@@ -6,6 +6,7 @@ Ext.define('NextThought.model.RoomInfo', {
 		{ name: 'MessageCount', type: 'int' },
 		{ name: 'Occupants', type: 'UserList'},
 		{ name: 'Moderators', type: 'UserList'},
+		{ name: 'Moderated', type: 'bool'},
 		{ name: 'inReplyTo', type: 'string' },
 		{ name: 'references', type: 'auto', defaultValue: [] }
 	]

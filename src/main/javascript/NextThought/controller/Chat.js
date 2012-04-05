@@ -137,6 +137,8 @@ Ext.define('NextThought.controller.Chat', {
 	},
 
 	getChatView: function(r) {
+		if (!r){return null;}
+
 		var rIsString = (typeof(r) === 'string'),
 			id = IdCache.getIdentifier(rIsString ? r : r.getId());
 
@@ -534,6 +536,11 @@ Ext.define('NextThought.controller.Chat', {
 			classroom = this.getClassroom().getClassroom(),
 			chatViewFromClass = classroom ? classroom.down('chat-view') : null;
 
+		if(!newRoomInfo) {
+			return;
+		}
+
+
 		if (this.isModerator(newRoomInfo)){
 			if (!isClassroom && chatViewFromWin) {
 				chatViewFromWin.openModerationPanel();
@@ -563,8 +570,14 @@ Ext.define('NextThought.controller.Chat', {
 	},
 
 	onMembershipOrModerationChanged: function(msg) {
-		var newRoomInfo = ParseUtils.parseItems([msg])[0];
-		var oldRoomInfo = this.activeRooms[newRoomInfo.getId()];
+		var newRoomInfo = ParseUtils.parseItems([msg])[0],
+			oldRoomInfo = this.activeRooms[newRoomInfo.getId()];
+
+		if(newRoomInfo.get('Moderators').length === 0 && newRoomInfo.get('Moderated')) {
+			console.log('Transient moderation change encountered, ignoring', newRoomInfo);
+			return null;
+		}
+
 		this.sendChangeMessages(oldRoomInfo, newRoomInfo);
 		this.updateRoomInfo(newRoomInfo);
 		return newRoomInfo; //for convinience chaining
