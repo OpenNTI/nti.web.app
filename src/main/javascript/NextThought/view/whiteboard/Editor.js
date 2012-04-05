@@ -39,7 +39,7 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 		this.canvas.updateData(this.value);
 		this.polygonSidesField = this.down('sliderfield[name=sides]');
 		this.textValueField = this.down('textfield[name=text]');
-		this.fontSelection = this.down('combobox[name=font]');
+		this.fontSelection = this.down('combobox[name=font-face]');
 		this.strokeWidthField = this.down('numberfield[name=stroke-width]');
 		this.deleteSelectedButton = this.down('button[action=delete]');
 
@@ -75,7 +75,6 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 
 		this.setColor('fill', 'None');
 		this.setColor('stroke', '000000');
-
 
 		this.canvas.el.on({
 			'scope': this,
@@ -127,7 +126,15 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 		var me = this, fonts = Ext.create('Ext.data.Store', {
 		    fields: ['font'],
 		    data : [
-		        {"font":"Calibri"}
+		        {font:'Arial'},
+		        {font:'Calibri'},
+				{font:'Comic Sans MS'},
+		        {font:'Courior'},
+		        {font:'Georgia'},
+		        {font:'Helvetica'},
+				{font:'Tahoma'},
+				{font:'Times New Roman'},
+				{font:'Verdana'}
 		    ]
 		});
 
@@ -193,7 +200,11 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 					value: 4,
 					minValue: 0,
 					margin: 5,
-					colspan: 2
+					colspan: 2,
+					listeners: {
+						scope: this,
+						change: function(cmp,value){this.setStrokeWidth(value);}
+					}
 				},{
 					text: 'Stroke',
 					action: 'pick-stroke-color',
@@ -224,7 +235,11 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 					value: 4,
 					increment: 1,
 					minValue: 3,
-					maxValue: 10
+					maxValue: 10,
+					listeners: {
+						scope: this,
+						change: function(cmp,value){this.setNumberOfSides(value);}
+					}
 				}]
 			},
 			{
@@ -238,22 +253,42 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 				},
 				items: [{
 					xtype: 'textfield',		fieldLabel: 'Text',
-					name: 'text',			value: 'Text Label'
+					name: 'text',			value: 'Text Label',
+					listeners: {
+						scope: this,
+						change: function(cmp,value){this.setShapeText(value);}
+					}
 				},{
 					xtype: 'combobox',
 					fieldLabel: 'Font',
-					name: 'font',
+					name: 'font-face',
 					store: fonts,
 					editable: false,
 					queryMode: 'local',
 					displayField: 'font',
 					valueField: 'font',
 					value: 'Calibri',
-					valueNotFoundText: 'Unknown Font'
+					valueNotFoundText: 'Unknown Font',
+					listeners: {
+						scope: this,
+						change: function(cmp,value){this.setShapeFont(value);}
+					}
 				}]
 			}
 		]};
 	},
+
+
+
+	updateToolbarValues: function(shape){
+		var values = this.toolState || {};
+
+		if(shape instanceof NextThought.view.whiteboard.shapes.Base){
+
+		}
+
+	},
+
 
 
 	deselectShape: function(){
@@ -263,6 +298,7 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 		}
 		this.deleteSelectedButton.disable();
 		this.canvas.drawScene();
+		this.activateToolOptions(this.currentTool);
 	},
 
 
@@ -291,6 +327,8 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 		if(s){
 			delete s.isNew;
 			this.deleteSelectedButton.enable();
+			this.activateToolOptions(s.getShapeName());
+			this.updateToolbarValues(s);
 		}
 		else {
 			this.deleteSelectedButton.disable();
@@ -361,7 +399,6 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 		if(this.selected){
 			this.selected[c+'Color'] = this.selectedColor[c];
 			this.selected[c+'Opacity'] = 1;
-			this.selected.changed();
 			this.canvas.drawScene();
 		}
 
@@ -371,6 +408,44 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 		if(none) {
 			icon.addCls('color-none');
 		}
+	},
+
+
+	setStrokeWidth: function(stroke){
+		var s = this.selected, c = this.canvas;
+		if(!s){ return; }
+
+		stroke /= c.el.getWidth();
+
+		s.strokeWidth = isFinite(stroke)? stroke : 0;
+		c.drawScene();
+	},
+
+
+	setNumberOfSides: function(sides){
+		var s = this.selected, c = this.canvas;
+		if(!s || s.sides===undefined){ return; }
+
+		s.sides = sides;
+		c.drawScene();
+	},
+
+
+	setShapeText: function(text){
+		var s = this.selected, c = this.canvas;
+		if(!s || s.text === undefined) { return; }
+
+		s.text = text || '(Empty)';
+		c.drawScene();
+	},
+
+
+	setShapeFont: function(font){
+		var s = this.selected, c = this.canvas;
+		if(!s || s['font-face'] === undefined) { return; }
+
+		s['font-face'] = font;
+		c.drawScene();
 	},
 
 

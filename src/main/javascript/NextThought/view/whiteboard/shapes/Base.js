@@ -9,8 +9,52 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Base', {
 	IDENTITY: { 'Class':'CanvasAffineTransform', 'a':1, 'b':0, 'c':0, 'd':1, 'tx':0, 'ty':0 },
 
 	constructor: function(config){
+		this.calculatedAttributes = ['fillColor','fillOpacity','strokeColor','strokeOpacity'].concat(this.calculatedAttributes||[]);
+		this.defineCacheAttributes();
 		Ext.apply(this,config);
 		return this;
+	},
+
+
+	defineCacheAttributes: function(){
+		var me = this,
+			defineSetter = '__defineSetter__',
+			defineGetter = '__defineGetter__',
+			hasDefineProp = Boolean(Object.defineProperty);
+		me.tracked = {};
+		me.cache = {};
+		if(hasDefineProp){
+			Object.defineProperty(me,'tracked',{enumerable: false});
+			Object.defineProperty(me,'cache',{enumerable: false});
+		}
+
+		Ext.each(this.calculatedAttributes,function(p){
+			function setter(newValue){console.log(p,'changed to', newValue);this.tracked[p] = newValue; this.changed();}
+			function getter(){ console.log('getting ',p);return this.tracked[p]; }
+
+			if(hasDefineProp){
+				console.log('new', p);
+				Object.defineProperty(me,p,{
+					enumerable: true,
+					set: setter,
+					get: getter
+				});
+			}
+			else{
+				me[defineSetter](p,setter);
+				me[defineGetter](p,getter);
+			}
+		});
+	},
+
+
+	getShapeName: function(){
+		try{
+			return (/^Canvas(.+?)Shape$/i).exec(this.Class)[1];
+		}
+		catch(e){
+			return 'Unknown';
+		}
 	},
 
 
@@ -43,20 +87,21 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Base', {
 
 
 	cacheColor: function(name){
-		var cacheKey = name+'RGBACache',
-			valueKey = name+'Color',
-			opacity = this[name+'Opacity'],
-			cache = this[cacheKey],
-			value = this[valueKey],
-			c;
+		var valueKey = name+'Color',
+			cache = this.cache[valueKey],
+			opacity, value, c;
 
 		if(cache){ return cache; }
 
+		value = this[valueKey];
+
 		if(!value || value === 'None'){
-			delete this[valueKey];
-			delete this[cacheKey];
+			delete this.tracked[valueKey];
+			delete this.cache[valueKey];
 			return 'None';
 		}
+
+		opacity = this[name+'Opacity'];
 
 		if (typeof opacity !== 'number') {
 			opacity = 1;
@@ -64,14 +109,14 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Base', {
 
 		c = Color.parseColor(value);
 		this[valueKey] = Color.toRGB(c);
-		this[cacheKey] = Color.toRGBA(c,opacity);
-		return this[cacheKey];
+		this.cache[valueKey] = Color.toRGBA(c,opacity);
+		return this.cache[valueKey];
 	},
 
 
 	getJSON: function(){
 		var data = {},
-			keys = ['bbox','selected','nibData','fillRGBACache','strokeRGBACache'],
+			keys = ['bbox','selected','nibData','cache','tracked'],
 			i;
 
 		data.MimeType = 'application/vnd.nextthought.'+(this.Class.toLowerCase());

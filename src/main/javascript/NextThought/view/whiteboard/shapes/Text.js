@@ -1,10 +1,15 @@
 Ext.define(	'NextThought.view.whiteboard.shapes.Text', {
 	extend:	'NextThought.view.whiteboard.shapes.Base',
 
+	constructor: function(){
+		this.calculatedAttributes = ['font-face'];
+		return this.callParent(arguments);
+	},
+
 	draw: function(ctx){
 		this.callParent(arguments);
 
-		ctx.font= this.font || (this.font = '1px ' + this['font-face']);
+		ctx.font = this.cache.font || (this.cache.font = '1px ' + this['font-face']);
 //		ctx.fontAlign = 'center';
 		ctx.textAlign = 'left';
 		ctx.textBaseline = 'top';
@@ -29,7 +34,7 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Text', {
 
 
 	changed: function(){
-		delete this.font;
+		delete this.cache.font;
 		return this.callParent(arguments);
 	}
 

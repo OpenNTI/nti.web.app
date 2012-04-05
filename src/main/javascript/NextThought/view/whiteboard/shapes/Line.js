@@ -2,6 +2,11 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Line', {
 	extend:	'NextThought.view.whiteboard.shapes.Base',
 
 
+	getShapeName: function(){
+		return 'Line';
+	},
+
+
 	draw: function(ctx){
 		var t = this.transform,
 			xy = this.getEndPoint();
