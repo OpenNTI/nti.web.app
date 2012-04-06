@@ -40,6 +40,7 @@ Ext.define('NextThought.controller.State', {
 		};
 
 		window.history.updateState = function(s){
+			Ext.applyIf(s,{active: me.currentState.active});
 			if(!me.isPoppingHistory && push){
 				me.currentState = Ext.Object.merge(me.currentState, s);
 				return me.fireEvent('stateChange',s);
@@ -48,7 +49,7 @@ Ext.define('NextThought.controller.State', {
 		};
 
 		window.history.pushState = function(s){
-			Ext.applyIf(s,{active: me.currentState.active});
+			console.log('push state', arguments);
 			if (this.updateState(s)) {
 				push.apply(history, arguments);
 			}
@@ -102,7 +103,7 @@ Ext.define('NextThought.controller.State', {
 		if(stateObject === PREVIOUS_STATE){
 			replaceState = true;
 			stateObject = this.loadState();
-			window.history.pushState(stateObject,'Initial');
+			window.history.updateState(stateObject);
 		}
 
 		c = Ext.getCmp(stateObject.active);
