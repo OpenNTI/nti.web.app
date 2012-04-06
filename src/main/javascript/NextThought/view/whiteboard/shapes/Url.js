@@ -9,13 +9,16 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Url', {
 	draw: function(ctx){
 		this.callParent(arguments);
 
-		var image = this.cache.url || null,
+		var me = this,
+			image = this.cache.url || null,
 			x, y, w, h;
 
 		if(!image){
 			image = new Image();
+			image.onload = function(){ me.draw(ctx); };
 			image.src = this.url;
 			this.cache.url = image;
+			return;
 		}
 
 

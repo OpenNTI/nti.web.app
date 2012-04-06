@@ -18,6 +18,11 @@ a.color-NONE {
 }
 
 .whiteboard-toolbar {
+
+    .x-form-item {
+		margin: 0;
+    }
+
     .x-btn {
         button{
             .x-ie & {

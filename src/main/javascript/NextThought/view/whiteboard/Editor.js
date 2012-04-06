@@ -80,14 +80,29 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 
 		this.updateToolValues();
 
-		this.canvas.el.on({
+		var el = this.canvas.el, t;
+
+		function over(e) {
+			el.addCls('drop-over');
+			e.stopPropagation();
+			e.preventDefault();
+			if(t){ clearTimeout(t); }
+			t = setTimeout(function(){el.removeCls('drop-over');}, 100);
+			return false; //for IE
+		}
+
+		el.on({
 			'scope': this,
 			'mousedown': this.onMouseDown,
 			'mousemove': this.onMouseMove,
 			'mouseup': this.onMouseUp,
 			'click': this.onClick,
 			'dblclick': this.onDoubleClick,
-			'contextmenu': this.onContextMenu
+			'contextmenu': this.onContextMenu,
+
+			'drop': this.dropImage,
+			'dragenter': over,
+			'dragover': over
 		});
 	},
 
@@ -173,7 +188,24 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 					{ iconCls: 'tool line',		tooltip: 'line',		shape: 'Line' },
 					{ iconCls: 'tool text',		tooltip: 'Text',		shape: 'Text' },
 					{ iconCls: 'tool circle',	tooltip: 'Circle',		shape: 'Circle' },
-					{ iconCls: 'tool poly',		tooltip: 'polygon',		shape: 'Polygon' }
+					{ iconCls: 'tool poly',		tooltip: 'polygon',		shape: 'Polygon' },
+					{ tooltip: 'Insert Image',
+						xtype: 'filefield',
+						buttonConfig: {
+							iconCls: 'tool image',
+							scale: 'medium',
+							enableToggle: false,
+							toggleGroup: null,
+							hideLabel: true
+						},
+						buttonText: '',
+						enableToggle: false,
+						toggleGroup: null,
+						buttonOnly: true,
+						hideLabel: true,
+						size: 2,
+						listeners: { change: function(c){ me.selectImage(c); } }
+					}
 				]
 			},
 			{
@@ -494,6 +526,75 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 		if(!s || s['font-face'] === undefined) { return; }
 		s['font-face'] = font;
 		c.drawScene();
+	},
+
+
+	selectImage: function(inputField){
+		var hasFileApi = Boolean(inputField.fileInputEl.dom.files),
+			files = hasFileApi ? inputField.extractFileInput().files : [];
+		this.readFile(files);
+	},
+
+
+	dropImage: function(e){
+		e.stopPropagation();
+		e.preventDefault();
+
+		var dt = e.browserEvent.dataTransfer;
+
+		if(!dt){
+			alert('Please use the toolbar, your browser does not support drag & drop file uploads.');
+		}
+		else {
+			this.readFile(dt.files);
+		}
+		return false; //for IE
+
+	},
+
+
+	/** @private */
+	readFile: function(files){
+		var me = this,
+			file = files[0],
+			reader = new FileReader();
+
+		//file.size
+		if(!file || !(/image\/.*/i).test(file.type)){
+			console.log('selected file was invalid, or the browser does not support FileAPI');
+			return;
+		}
+
+		if(reader){
+			reader.onload = function(event) { me.insertImage(event.target.result); };
+			reader.readAsDataURL(file);
+		}
+	},
+
+
+	insertImage: function(dataUrl){
+		var image = new Image(),
+			me = this,
+			c = this.canvas;
+
+		image.onload = function(){
+			var m = new NTMatrix(),
+				w = c.getWidth(),
+				s = me.addShape('Url'),
+				max = Math.max(image.width,image.height),
+				scale = (max > w) ? (w*0.75)/max : 1;
+
+			s.url = dataUrl;
+			m.translate(w/2, (scale*image.height/2)+(w/10) );
+			m.scale(scale);
+
+			m.scaleAll(1/w);//do this after
+
+			s.transform = m.toTransform();
+
+			c.drawScene();
+		};
+		image.src = dataUrl;
 	},
 
 
