@@ -7,7 +7,7 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Line', {
 	},
 
 
-	draw: function(ctx){
+	draw: function(ctx,renderCallback){
 		var t = this.transform,
 			xy = this.getEndPoint();
 
@@ -20,13 +20,14 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Line', {
 		ctx.lineTo(xy[0],xy[1]);
 		ctx.closePath();
 
-		delete this.fillRGBACache;//parent class will attempt to fill if this value exists, lines don't have fills.
+		delete ctx.fillStyle;
 		this.bbox = {
 			x: 0,	w: 1,
 			y: -ctx.lineWidth*3,	h: ctx.lineWidth*6
 		};
 
 		this.performFillAndStroke(ctx);
+		renderCallback.call(this);
 	},
 
 

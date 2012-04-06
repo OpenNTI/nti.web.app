@@ -2,7 +2,7 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Polygon', {
 	extend:	'NextThought.view.whiteboard.shapes.Base',
 
 
-	draw: function(ctx){
+	draw: function(ctx,renderCallback){
 		this.callParent(arguments);
 
 		var x = 0,
@@ -35,5 +35,6 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Polygon', {
 		};
 
 		this.performFillAndStroke(ctx);
+		renderCallback.call(this);
 	}
 });

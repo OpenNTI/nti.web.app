@@ -42,20 +42,28 @@ Ext.define('NextThought.view.widgets.annotations.BodyEditor', {
 
 	initComponent: function(){
 
-		Ext.apply(this.items[0],{
-			value: AnnotationUtils.compileBodyContent(this.record, {
-				scope: this,
-				getThumbnail: this.getWhiteboardThumbnail,
-				getClickHandler: this.getWhiteboardThumbnailClickHandler
-			},{
-				width: 250,
-				onmouseover: null
-			}),
+		var editor = this.items[0];
+
+		Ext.apply(editor,{
 			listeners: {
 				scope: this,
 				initialize:this.hookHtmlEditor
 			}
 		});
+
+		AnnotationUtils.compileBodyContent(this.record,
+			{
+				scope: this,
+				getThumbnail: this.getWhiteboardThumbnail,
+				getClickHandler: this.getWhiteboardThumbnailClickHandler,
+				getResult: function(val){
+					if(editor.setValue) { editor.setValue(val); }
+					else { editor.value = val; }
+				}
+			},{
+				width: 250, onmouseover: null
+			}
+		);
 
 		this.callParent(arguments);
 		this.on('thumbnail-clicked',this.showWhiteboardEditor, this);
@@ -153,14 +161,14 @@ Ext.define('NextThought.view.widgets.annotations.BodyEditor', {
 	},
 
 
-	getWhiteboardThumbnail: function(canvas, id){
+	getWhiteboardThumbnail: function(canvas, id, callback){
 
 		var whiteboard = this.getWhiteboardEditor(canvas, id).down('whiteboard-editor');
 
 		whiteboard.on('save', this.updateOrCreateWhiteboardThumbnail, this);
 		whiteboard.$id = id;
 
-		return whiteboard.getThumbnail();
+		whiteboard.getThumbnail(callback);
 	},
 
 
@@ -199,8 +207,9 @@ Ext.define('NextThought.view.widgets.annotations.BodyEditor', {
 			div.parentNode.removeChild(div);
 		}
 		else{
-			div.getElementsByTagName('img')[0].setAttribute(
-					'src', whiteboard.getThumbnail());//updating the thumb
+			whiteboard.getThumbnail(function(data){
+				div.getElementsByTagName('img')[0].setAttribute('src', data);//updating the thumb
+			});
 		}
 	},
 

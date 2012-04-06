@@ -1,7 +1,7 @@
 Ext.define(	'NextThought.view.whiteboard.shapes.Circle', {
 	extend: 'NextThought.view.whiteboard.shapes.Base',
 
-	draw: function(ctx){
+	draw: function(ctx,renderCallback){
 		this.callParent(arguments);
 
 		ctx.beginPath();
@@ -13,5 +13,6 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Circle', {
 			y: -0.5,	h: 1
 		};
 		this.performFillAndStroke(ctx);
+		renderCallback.call(this);
 	}
 });

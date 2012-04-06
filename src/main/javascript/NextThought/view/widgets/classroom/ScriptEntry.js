@@ -47,11 +47,13 @@ Ext.define('NextThought.view.widgets.classroom.ScriptEntry', {
 			a = Ext.isArray(m) ? m : [m];
 			me.message = Ext.create('NextThought.model.MessageInfo', {body: a});
 		}
-		me.renderData.body = AnnotationUtils.compileBodyContent(m);
 
-		if(this.rendered){
-		   me.text.update(me.renderData.body);
-		}
+		AnnotationUtils.compileBodyContent(m,function(content){
+			me.renderData.body = content;
+			if(me.rendered){
+			   me.text.update(me.renderData.body);
+			}
+		});
 	},
 
 	click: function(event, target, eOpts){

@@ -1,7 +1,7 @@
 Ext.define(	'NextThought.view.whiteboard.shapes.Path', {
 	extend:	'NextThought.view.whiteboard.shapes.Base',
 
-	draw: function(ctx){
+	draw: function(ctx,renderCallback){
 		this.callParent(arguments);
 
 		var p = Ext.clone(this.points),
@@ -29,6 +29,7 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Path', {
 		};
 
 		this.performFillAndStroke(ctx);
+		renderCallback.call();
 	}
 
 });

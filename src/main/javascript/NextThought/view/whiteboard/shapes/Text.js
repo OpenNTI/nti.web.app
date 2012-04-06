@@ -6,7 +6,7 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Text', {
 		return this.callParent(arguments);
 	},
 
-	draw: function(ctx){
+	draw: function(ctx,renderCallback){
 		this.callParent(arguments);
 
 		if(!this.cache['font-face']){
@@ -46,5 +46,7 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Text', {
 		if(this.selected === 'Hand'){
 			this.showNibs(ctx);
 		}
+
+		renderCallback.call(this);
 	}
 });

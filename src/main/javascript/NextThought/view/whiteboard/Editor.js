@@ -579,16 +579,16 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 
 		image.onload = function(){
 			var m = new NTMatrix(),
-				w = c.getWidth(),
+				canvasWidth = c.getWidth(),
 				s = me.addShape('Url'),
 				max = Math.max(image.width,image.height),
-				scale = (max > w) ? (w*0.75)/max : 1;
+				scale = (max > canvasWidth) ? (canvasWidth*0.75)/max : 1;
 
 			s.url = dataUrl;
-			m.translate(w/2, (scale*image.height/2)+(w/10) );
+			m.translate(canvasWidth/2, (scale*image.height/2)+(canvasWidth/10) );
 			m.scale(scale);
 
-			m.scaleAll(1/w);//do this after
+			m.scaleAll(1/canvasWidth);//do this after
 
 			s.transform = m.toTransform();
 
@@ -827,7 +827,7 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 	},
 
 
-	getThumbnail: function(){
-		return NextThought.view.whiteboard.Canvas.getThumbnail(this.canvas.getData());
+	getThumbnail: function(callback){
+		return NextThought.view.whiteboard.Canvas.getThumbnail(this.canvas.getData(),callback);
 	}
 });

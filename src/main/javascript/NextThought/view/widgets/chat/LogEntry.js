@@ -62,17 +62,19 @@ Ext.define('NextThought.view.widgets.chat.LogEntry', {
 
 		me.renderData.time = Ext.Date.format(m.get('Last Modified'), 'g:i:sa');
 		me.renderData.name = 'resolving...';
-		me.renderData.body = AnnotationUtils.compileBodyContent(m);
 
 		if (s !== $AppConfig.username) {
 			//This entry is created by you, so don't show the reply whisper option
 			me.renderData.enablewhisper = 'enable-whisper';
 		}
 
-		if(this.rendered){
-		   me.text.update(me.renderData.body);
-		   me.time.update(me.renderData.time);
-		}
+		AnnotationUtils.compileBodyContent(m,function(content){
+			me.renderData.body = content;
+			if(me.rendered){
+			   me.text.update(me.renderData.body);
+			   me.time.update(me.renderData.time);
+			}
+		});
 
 		if(s){
 			UserRepository.prefetchUser(s, function(users){

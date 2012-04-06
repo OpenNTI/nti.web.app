@@ -83,10 +83,31 @@ Ext.define(	'NextThought.view.whiteboard.Canvas',{
 	},
 
 
-	drawScene: function(){
+	drawScene: function(finished){
 		if(!this.drawData){
 			return;
 		}
+
+		if(this.drawing){
+			console.log('called while drawing');
+			return;
+		}
+
+		function draw(x,cb){
+			if(x<0){
+				if(cb && cb.call){
+					cb.call(this);
+				}
+				delete me.drawing;
+				return;
+			}
+			ctx.save();
+			shapes[x].draw(ctx, function(){
+				ctx.restore();
+				draw(x-1,cb);
+			});
+		}
+
 		var me = this,
 			c = me.el.dom,
 			w = me.el.getWidth(),
@@ -109,32 +130,29 @@ Ext.define(	'NextThought.view.whiteboard.Canvas',{
 			ctx.restore();
 		}
 
-		for(; i>=0; i--){
-			ctx.save();
-			shapes[i].draw(ctx);
-			ctx.restore();
-		}
-
-
+		this.drawing = true;
+		draw(i,finished);
 	},
 
 	statics: {
-		getThumbnail: function(scene){
+		getThumbnail: function(scene, resultCallback){
 
-			var data, El = Ext.Element,
+			function finish(){
+				var data = c.el.dom.toDataURL("image/png");
+
+				c.destroy();
+				div.remove();
+
+				resultCallback.call(this,data);
+			}
+
+			var El = Ext.Element,
 				div = Ext.DomHelper.append(Ext.getBody(),{tag: 'div', style: 'visibility: hidden; position: absolute;'},true),
 				c, s = Math.floor( Math.min( El.getViewportHeight(), El.getViewportWidth() ) * 0.8 );
 
 			c = Ext.widget('whiteboard-canvas',{drawData: scene, renderTo: div, thumbnail: true});
 			c.setSize(s,s);
-			c.drawScene();
-
-			data = c.el.dom.toDataURL("image/png");
-
-			c.destroy();
-			div.remove();
-
-			return data;
+			c.drawScene(finish);
 		}
 	}
 });

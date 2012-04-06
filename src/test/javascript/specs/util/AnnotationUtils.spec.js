@@ -140,14 +140,15 @@ describe("Annotation Utils", function() {
 	it("should be a note with whiteboard",function(){
 
 		var note = Ext.create('NextThought.model.Note',{body:['test',Ext.clone(testWhiteboard)]}),
-			text = AnnotationUtils.compileBodyContent(note),
-				//be carefull editing this pattern, spaces will become the pattern: .*?
+			//be carefull editing this pattern, spaces will become the pattern: .*?
 			reg = 'test ' +//plain text part —
 					'<div.+?class=".*?body-divider.*?".+?> ' +
 						'<img.+?src="data:image/png;.+?".*?> '+
 					'</div>';
 
-		expect(new RegExp(reg.replace(/\S+/g,'.*?'),'i').test(text)).toBeTruthy();
+		AnnotationUtils.compileBodyContent(note,function(text){
+			expect(new RegExp(reg.replace(/\S+/g,'.*?'),'i').test(text)).toBeTruthy();
+		});
 
 	});
 
@@ -165,7 +166,10 @@ describe("Annotation Utils", function() {
 
 			AnnotationUtils.compileBodyContent(note,{
 				getClickHandler: clickHandler,
-				getThumbnail: thumbnailGen
+				getThumbnail: function(v,id,c){
+					thumbnailGen();
+					c('');
+				}
 			});
 
 			expect(clickHandler.callCount).toBe(2);

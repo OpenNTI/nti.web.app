@@ -90,42 +90,50 @@ Ext.define('NextThought.util.AnnotationUtils',{
 	 *	do something like preserve the canvas for use later.
 	 *
 	 * @param record (Must have a body[] field)
-	 * @param [callbacks]
-	 * @return String
+	 * @param callbacks - function or object getResult(string) callback defined
 	 */
 	compileBodyContent: function(record, callbacks, whiteboardAttrs){
 
+		callbacks = Ext.isFunction(callbacks) ? {getResult: callbacks} : callbacks;
+
 		var me = this,
-			body = record.get('body'),
+			body = (record.get('body')||[]).slice().reverse(),
 			text = [],
-			cb = callbacks || {
+			cb = Ext.applyIf(callbacks||{}, {
 				scope:me,
 				getClickHandler: function(){return '';},
-				getThumbnail: me.generateThumbnail
-			},
+				getThumbnail: me.generateThumbnail,
+				getResult: function(){console.log(arguments);}
+			}),
 			attrs = this.objectToAttributeString(whiteboardAttrs);
 
+		function render(i){
+			var o = body[i], id;
 
-		Ext.Object.each(body, function(i,o){
-			if(typeof(o) === 'string'){
-				text.push(o);
-				return;
+			if(i<0){
+				cb.getResult.call(cb.scope,text.join(me.SEPERATOR).replace(me.DIVIDER_REGEX, "$2"));
 			}
-
-			var id = guidGenerator();
-
-			text.push(
-					Ext.String.format(me.NOTE_BODY_DIVIDER, id,
+			else if(typeof(o) === 'string'){
+				text.push(o);
+				render(i-1);
+			}
+			else {
+				id = guidGenerator();
+				cb.getThumbnail.call(cb.scope, o, id, function(thumbnail){
+					text.push(
+						Ext.String.format(me.NOTE_BODY_DIVIDER, id,
 							Ext.String.format(me.WHITEBOARD_THUMBNAIL,
-									cb.getThumbnail.call(cb.scope, o, id),
+									thumbnail,
 									cb.getClickHandler.call(cb.scope,id),
 									attrs
 							))
-			);
-		});
+					);
+					render(i-1);
+				});
+			}
+		}
 
-
-		return text.join(me.SEPERATOR).replace(me.DIVIDER_REGEX, "$2");
+		render(body.length-1);
 	},
 
 //tested
@@ -134,9 +142,9 @@ Ext.define('NextThought.util.AnnotationUtils',{
 	 *
 	 * @param canvas - the canvas object
 	 */
-	generateThumbnail: function(canvas) {
+	generateThumbnail: function(canvas, id, callback) {
 		Ext.require('NextThought.view.whiteboard.Canvas');
-		return NextThought.view.whiteboard.Canvas.getThumbnail(canvas);
+		return NextThought.view.whiteboard.Canvas.getThumbnail(canvas, callback);
 	},
 
 //tested

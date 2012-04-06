@@ -193,20 +193,21 @@ Ext.define('NextThought.view.widgets.NotePanel',{
 	updateModel: function(m){
 		var me = this,
 			s = m.get('Creator'),
-			owner = m.isModifiable(),
-			t = AnnotationUtils.compileBodyContent(m);
+			owner = m.isModifiable();
 
 		me.record = m;
-
-		me.renderData.time = Ext.Date.format(m.get('Last Modified') || new Date(), 'g:i:sa M j, Y');
 		me.renderData.name = 'resolving...';
-		me.renderData.body = t;
 		me.renderData.owner = owner ? 'owner' : '';
+		me.renderData.time = Ext.Date.format(m.get('Last Modified') || new Date(), 'g:i:sa M j, Y');
 
-		if(this.rendered){
-		   me.text.update(me.renderData.body);
-		   me.time.update(me.renderData.time);
-		}
+		AnnotationUtils.compileBodyContent(m, function(content){
+			if(me.rendered || me.text){
+				me.text.update(content);
+				me.time.update(me.renderData.time);
+			} else {
+				me.renderData.body = content;
+			}
+		});
 
 		if(s){
 			UserRepository.prefetchUser(s,

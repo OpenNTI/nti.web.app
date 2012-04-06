@@ -59,14 +59,14 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Base', {
 	},
 
 
-	draw: function(ctx){
+	draw: function(ctx,renderCallback){
 		var m = new NTMatrix(Ext.clone(this.transform)),
 			w = ctx.canvas.width,
 			scale;
 		m.scaleAll(w);
 		scale = m.getScale(true);
 
-
+		ctx.shadowColor = null;
 		ctx.setTransform.apply(ctx,m.m);
 
 		if(this.selected){
