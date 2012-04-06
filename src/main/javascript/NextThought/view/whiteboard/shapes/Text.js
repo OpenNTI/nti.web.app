@@ -22,6 +22,14 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Text', {
 			x = -w/2,
 			y = -h/2;
 
+		//strange things happening with our selection shadow in IE9
+		if(Ext.isIE9){
+			ctx.shadowOffsetX= 0;
+			ctx.shadowOffsetY = 0;
+			ctx.shadowBlur = 0;
+			ctx.shadowColor = null;
+		}
+
 		if(this.cache.fillColor) {
 			ctx.fillText(this.text,x,y);
 		}

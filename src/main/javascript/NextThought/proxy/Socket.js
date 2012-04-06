@@ -1,6 +1,6 @@
 Ext.define('NextThought.proxy.Socket', {
 	singleton: true,
-	isDebug: true,
+	isDebug: false,
 	mixins: { observable: 'Ext.util.Observable' },
 
 	constructor: function() {
