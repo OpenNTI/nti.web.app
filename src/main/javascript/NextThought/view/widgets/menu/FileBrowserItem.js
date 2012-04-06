@@ -27,7 +27,7 @@ Ext.define('NextThought.view.widgets.menu.FileBrowserItem',{
 	createFileInput : function() {
 		var me = this;
 		me.fileInputEl = me.el.createChild({
-			name: Globals.guidGenerator(),
+			name: 'file1',
 			cls: 'file-input',
 			tag: 'input',
 			type: 'file',
