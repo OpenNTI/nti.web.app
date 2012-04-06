@@ -1,6 +1,7 @@
 Ext.define('NextThought.util.QuizUtils', {
 	singleton: true,
 	requires: [
+		'NextThought.view.widgets.menu.MathSymbolPanel',
 		'NextThought.ContentAPIRegistry',
 		'NextThought.util.ParseUtils',
 		'NextThought.providers.Location'
@@ -8,11 +9,30 @@ Ext.define('NextThought.util.QuizUtils', {
 	alternateClassName: 'QuizUtils',
 
 
+	sendLaTeXCommand: function(mq, tex, root) {
+		root = root || Ext.getCmp('reader').down('reader-panel').getDocumentElement();
+		var w = root.parentWindow;
+
+		if (mq) {
+			mq = w.$(mq);
+
+			if(!mq.is('.quiz-input')) {
+				mq = mq.parents('.quiz-input');
+			}
+
+			//write the latex, then refocus since it's probably been lost...
+			mq.mathquill('write', tex);
+			mq.trigger('focus');
+		}
+	},
+
+
 	setupQuiz: function(doc){
 		try{
 			var inputs = doc.querySelectorAll('input[type=number]'),
 				quiz = inputs.length>0,
-				w = doc.parentWindow;
+				w = doc.parentWindow,
+				q;
 
 			if(!quiz){
 				return;
@@ -26,7 +46,15 @@ Ext.define('NextThought.util.QuizUtils', {
 				return '<input id="'+id+'" type="hidden"/><span class="quiz-input"></span>';
 			});
 
-			w.$( 'span.quiz-input').mathquill('editable');
+			q = w.$( 'span.quiz-input').mathquill('editable');
+
+			//Add events for the math panel
+			/*
+			q.bind('click focusin', function(e){
+				console.log('click or focusin event, pass', e, 'to math panel');
+				MathSymbolPanel.showMathSymbolPanelFor(e.currentTarget, e.pageX, e.pageY);
+			});
+			*/
 		}
 		catch(e){
 			console.error('unable to setup quiz ',e.stack||e.toString());
@@ -222,6 +250,7 @@ Ext.define('NextThought.util.QuizUtils', {
 	ContentAPIRegistry.register('NTISubmitAnswers',this.submitAnswersHandler,this);
 	ContentAPIRegistry.register('togglehint',function(e) {
 		e = Ext.EventObject.setEvent(e||event);
+
 		Ext.get(e.getTarget().nextSibling).toggleCls("hidden");
 		return false;
 	});
