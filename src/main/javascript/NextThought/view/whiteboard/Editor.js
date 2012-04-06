@@ -351,7 +351,7 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 			}
 			else if(c){
 				if(shape && k === 'strokeWidth'){
-					v = Math.floor( v*me.canvas.getWidth() );
+					v = Math.floor( v*me.canvas.getWidth() ) || 1;
 				}
 				c.setValue(v);
 			}

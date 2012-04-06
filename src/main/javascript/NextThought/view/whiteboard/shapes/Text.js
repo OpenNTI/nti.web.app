@@ -13,8 +13,6 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Text', {
 			this.cache['font-face'] = '1px ' + this['font-face'];
 		}
 
-		ctx.save();
-
 		ctx.font = this.cache['font-face'];
 		ctx.textAlign = 'left';
 		ctx.textBaseline = 'top';
@@ -24,10 +22,11 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Text', {
 			x = -w/2,
 			y = -h/2;
 
-		if(ctx.fillStyle) {
-			ctx.fillText(  this.text,x,y);
+		if(this.cache.fillColor) {
+			ctx.fillText(this.text,x,y);
 		}
-		if(ctx.strokeStyle && ctx.lineWidth) {
+
+		if(this.cache.strokeColor && this.strokeWidth) {
 			ctx.strokeText(this.text,x,y);
 		}
 
@@ -35,8 +34,6 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Text', {
 			x: x,	w: w,
 			y: y,	h: h
 		};
-
-		ctx.restore();
 
 		if(this.selected === 'Hand'){
 			this.showNibs(ctx);
