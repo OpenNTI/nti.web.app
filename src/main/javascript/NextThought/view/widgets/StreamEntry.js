@@ -27,81 +27,48 @@ Ext.define('NextThought.view.widgets.StreamEntry', {
 	change: null,
 
 	initComponent: function(){
-		var c = this.change.get('Creator'),
+		var me = this,
+			c = me.change.get('Creator'),
+			ct = me.change.get('ChangeType'),
+			i = me.change.get('Item'),
 			u = NextThought.cache.UserRepository.getUser(c),
-			data = this.getInfoPanel(u.get('realname'));
+			it = (i) ? i.raw.Class : null
 
-		data.avatarURL = u.get('avatarURL');
-		this.renderData = data;
-		this.callParent(arguments);
+		//failsafe
+		if (!i) {
+			return {};
+		}
+
+		//set things that will remain the same regardless of change type:
+		me.renderData = {
+			avatarURL: u.get('avatarURL'),
+			creator: c
+		};
+
+		//type specific action, note that compileBody requires callback
+		if (it === 'Note'){
+			AnnotationUtils.compileBodyContent(i, function(noteText){
+				me.renderData.text = ct.toLowerCase() + ' a note: "<i>' + noteText + '</i>"';
+			});
+		}
+		else if (ct === 'Circled' && it === 'User') {
+			me.renderData.text = 'added you to a group.';
+		}
+		else if (it === 'Highlight') {
+			me.renderData.text = ct.toLowerCase() + ' a highlight: "<i>' + this.cleanText(i.get('text')) + '</i>"';
+		}
+		else {
+			//if we made it here, we don't know what to do with...
+			console.warn('Not sure what to do with this in the stream!', this.change);
+		}
+
+		me.callParent(arguments);
 	},
 
 
 	afterRender: function(){
 		this.callParent(arguments);
 		this.el.on('dblclick', function(){this.fireEvent('dblclick', this.change.get('Item'));}, this);
-	},
-
-	getInfoPanel: function(creator) {
-		var ct = this.change.get('ChangeType'),
-			i = this.change.get('Item'),
-			it = (i) ? i.raw.Class : null,
-			info;
-
-		if (!i) {
-			return {};
-		}
-
-		if (ct === 'Circled' && it === 'User') { info = this.getCircledInfo(i); }
-		else if (ct === 'Shared' && it === 'Note') { info = this.getSharedNoteInfo(i); }
-		else if (ct === 'Created' && it === 'Note') { info = this.getCreatedNoteInfo(i); }
-		else if (ct === 'Modified' && it === 'Note') { info = this.getModifiedNoteInfo(i); }
-		else if (ct === 'Shared' && it === 'Highlight') { info = this.getSharedHighlightInfo(i); }
-		else if (ct === 'Modified' && it === 'Highlight') { info = this.getModifiedHighlightInfo(i); }
-		else {
-			//if we made it here, we don't know what to do with...
-			console.warn('Not sure what to do with this in the stream!', this.change);
-		}
-
-		return {
-			name: creator,
-			text: info
-		};
-
-	},
-
-	getCircledInfo: function(i) {
-		return 'added you to a group.';
-	},
-
-	getCreatedNoteInfo: function(i) {
-		var noteText = AnnotationUtils.compileBodyContent(i);
-
-		return 'created a new note: "<i>' + noteText + '</i>"';
-	},
-
-	getSharedNoteInfo: function(i) {
-		var noteText = AnnotationUtils.compileBodyContent(i);
-
-		return 'shared a note: "<i>' + noteText + '</i>"';
-	},
-
-	getModifiedNoteInfo: function(i) {
-		var noteText = AnnotationUtils.compileBodyContent(i);
-
-		return 'modified a note: "<i>' + noteText + '</i>"';
-	},
-
-	getSharedHighlightInfo: function(i) {
-		var hlText = this.cleanText(i.get('text'));
-
-		return 'shared a highlight: "<i>' + hlText + '</i>"';
-	},
-
-	getModifiedHighlightInfo: function(i) {
-		var hlText = this.cleanText(i.get('text'));
-
-		return 'modified a highlight: "<i>' + hlText + '</i>"';
 	},
 
 	cleanText: function(t) {
