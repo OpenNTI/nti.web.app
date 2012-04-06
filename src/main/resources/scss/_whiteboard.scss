@@ -38,16 +38,17 @@ a.color-NONE {
 					width: 24px !important;
 					height: 24px !important;
 
-					&.circle { background-position: 0 -0px; }
-					&.clear { background-position:  0 -24px; }
-					&.delete { background-position:  0 -48px; }
-					&.line { background-position:  0 -72px; }
-					&.hand { background-position:  0 -96px; }
-					&.path { background-position:  0 -120px; }
-					&.poly { background-position:  0 -144px; }
-					&.text { background-position:  0 -184px; }
-					&.seperator_16 { background-position:  0 -168px; }
-					&.whiteboard_16 { background-position: 0 -208px; }
+					&.circle { background-position:  0 0;  }
+					&.clear { background-position:  0 -24px;  }
+					&.delete { background-position:  0 -48px;  }
+					&.image { background-position:  0 -72px;  }
+					&.line { background-position:  0 -96px;  }
+					&.hand { background-position:  0 -120px;  }
+					&.path { background-position:  0 -144px;  }
+					&.poly { background-position:  0 -168px;  }
+					&.text { background-position:  0 -208px;  }
+					&.seperator_16 { background-position:  0 -192px;  }
+					&.whiteboard_16 { background-position:  0 -232px;  }								
 
 				}
 			}
