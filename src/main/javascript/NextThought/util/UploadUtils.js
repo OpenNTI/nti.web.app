@@ -6,7 +6,7 @@ Ext.define('NextThought.util.UploadUtils',{
 	],
 
 	constructor: function(){
-		var bb, worker, me = this;
+		var bb, worker, dataUrl, me = this;
 		this.requests = {};
 
 		window.BlobBuilder = window.BlobBuilder || window.WebKitBlobBuilder || window.MozBlobBuilder;
@@ -26,7 +26,8 @@ Ext.define('NextThought.util.UploadUtils',{
 			this.abort = null;
 			this.dispatch = null;
 
-			worker = new Worker(URL.createObjectURL(bb.getBlob()));
+			dataUrl = URL.createObjectURL(bb.getBlob());
+			worker = new Worker(dataUrl);
 			worker.onmessage = function(e){me.onMessageFromWorker(e.data); };
 			worker.onerror = worker.onerror = function(e) {
 			    console.error("Error in file: "+e.filename+"\nline: "+e.lineno+"\nDescription: "+e.message);
@@ -34,6 +35,7 @@ Ext.define('NextThought.util.UploadUtils',{
 
 			this.worker = worker;
 			worker.postMessage('');
+			URL.revokeObjectURL(dataUrl);
 		}
 		else {
 			console.error("Not able to use Workers...uploads might make UI jerky");
