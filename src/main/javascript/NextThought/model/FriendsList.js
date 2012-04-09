@@ -14,7 +14,8 @@ Ext.define('NextThought.model.FriendsList', {
 		this.callParent(arguments);
 
 		var c = document.createElement('canvas'),
-			ctx = c.getContext('2d'),
+			div = Ext.DomHelper.append(Ext.getBody(),{tag: 'div', style: 'visibility: hidden; position: absolute;'},true),
+			ctx,
 			urls = this.get('CompositeGravatars').slice(),
 			stack = [],
 			grid = Math.ceil(Math.sqrt(urls.length)),
@@ -23,14 +24,22 @@ Ext.define('NextThought.model.FriendsList', {
 			imgSize = (avatarSize - ((grid+1)*padding))/grid,
 			offset = imgSize + padding;
 
+		div.appendChild(c);
 		c.width = c.height = avatarSize;
+		ctx = c.getContext('2d');
 		ctx.imageSmoothingEnabled = true;
 
 		function finish(){
 			stack.pop();
 			if(stack.length!==0){ return; }
 			//don't use this.set() that would mark this record as dirty
-			this.data.avatarURL = c.toDataURL("image/png");
+			try {
+				this.data.avatarURL = c.toDataURL("image/png");
+			}
+			catch(e){
+				console.warn('Composite Gravatars could not finish rendering because the browser is being a bully. :( CORS strikes again!');
+			}
+			div.remove();
 		}
 
 		Ext.each(urls,function(url,idx){
