@@ -7,7 +7,7 @@ Ext.define(	'NextThought.model.Provider', {
 		{ name: 'Username', type: 'string' },
 		{ name: 'accepting', type: 'UserList' },
 		{ name: 'alias', type: 'string' },
-		{ name: 'avatarURL', type: 'string' },
+		{ name: 'avatarURL', type: 'AvatarURL' },
 		{ name: 'following', type: 'UserList' },
 		{ name: 'ignoring', type: 'UserList' },
 		{ name: 'lastLoginTime', type: 'date', dateFormat: 'timestamp' },

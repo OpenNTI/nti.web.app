@@ -8,6 +8,6 @@ Ext.define(	'NextThought.model.UserSearch', {
 		{ name: 'Username', type: 'string' },
 		{ name: 'alias', type: 'string' },
 		{ name: 'realname', type: 'string' },
-		{ name: 'avatarURL', type: 'string' }
+		{ name: 'avatarURL', type: 'AvatarURL' }
 	]
 });
