@@ -33,7 +33,7 @@ Ext.define('NextThought.model.FriendsList', {
 			this.data.avatarURL = c.toDataURL("image/png");
 		}
 
-		urls.forEach(function(url,idx){
+		Ext.each(urls,function(url,idx){
 			var i = new Image(),
 				col = idx%grid * offset,
 				row = Math.floor(idx/grid) * offset;
