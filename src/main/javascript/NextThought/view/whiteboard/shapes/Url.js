@@ -13,12 +13,11 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Url', {
 
 		if(!image){
 			image = new Image();
- 	 		image.onload = function(){ me.draw(ctx,renderCallback); };
+			image.onload = function(){ me.draw(ctx,renderCallback); };
 			image.src = me.url;
 			me.cache.url = image;
 			return;
 		}
-
 
 		me.callParent(arguments);
 		w = image.width;

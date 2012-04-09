@@ -8,7 +8,7 @@ Ext.define('NextThought.view.widgets.menu.MathSymbolPanel',{
 		 * Static method called when we need to show the Math Panel.
 		 *
 		 * @param cmp - the current target component you want clicks of this
-		 * 				panel along to.
+		 *				panel along to.
 		 * @param x - x position for this window
 		 * @param y - y position for this window
 		 */
