@@ -35,12 +35,13 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 
 	attachRecord: function(record){
 		var me = this,
-			i = record.getId();
+			i = record.getId(),
+			id = IdCache.getComponentId(i, null, me.prefix);
 
 		me.callParent(arguments);
 
-		if (!record.phantom && !IdCache.hasIdentifier(i)) {
-			me.id = IdCache.getComponentId(i, null, me.prefix);
+		if (!record.phantom && !Ext.ComponentManager.get(id)) {
+			me.id = id;
 			Ext.ComponentManager.register(me);
 		}
 	},
@@ -249,7 +250,7 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 
 		renderCanvas: function(prefix) {
 			if (!this.queue[prefix]){return;}
-			
+
 			var c = this.queue[prefix].canvas,
 				ctx = c ? c.getContext("2d") : null,
 				w = c ? c.width : 0,
