@@ -22,6 +22,7 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Path', {
 			if(y > maxy) { maxy = y; }
 			if(y < miny) { miny = y; }
 		}
+//		ctx.closePath();
 
 		this.bbox = {
 			x: minx,	w: maxx-minx,
@@ -29,7 +30,7 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Path', {
 		};
 
 		this.performFillAndStroke(ctx);
-		renderCallback.call();
+		renderCallback.call(this);
 	}
 
 });

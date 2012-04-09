@@ -8,9 +8,10 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 		'Ext.slider.Slider'
 	],
 
+	autoScroll: true,
 	cls: 'whiteboard editor',
-	layout: 'fit',
-	items: [{xtype: 'whiteboard-canvas'}],
+	layout: 'anchor',
+	items: [{xtype: 'whiteboard-canvas', anchor: '100%'}],
 
 	statics: {
 		test: function(){

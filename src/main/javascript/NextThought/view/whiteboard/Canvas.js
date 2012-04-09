@@ -25,6 +25,12 @@ Ext.define(	'NextThought.view.whiteboard.Canvas',{
 	},
 
 
+	setSize: function(w){
+		if(!w){ return this; }//no setting the height directly...
+		return this.callParent([w,w]);
+	},
+
+
 	updateData: function(scene){
 		this.drawData = Ext.clone(scene || {shapeList:[]});
 
