@@ -20,7 +20,7 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Line', {
 		ctx.lineTo(xy[0],xy[1]);
 		ctx.closePath();
 
-		delete this.cache.fillColor;
+		delete this.cache.fill;
 		this.bbox = {
 			x: 0,	w: 1,
 			y: -ctx.lineWidth*3,	h: ctx.lineWidth*6

@@ -5,12 +5,16 @@ Ext.define('NextThought.util.Color',{
 		'Ext.draw.Color'
 	],
 
+	hex16Re: /^#?([0-9a-f][0-9a-f])([0-9a-f][0-9a-f])([0-9a-f][0-9a-f])$/i,
+	hex8Re: /^#?([0-9a-f])([0-9a-f])([0-9a-f])$/i,
+	rgbaRe: /^rgba?\((.+?)\)$/i,
+
 	sources : [],
 
 	toRGBA: function(color, alpha) {
 		if (typeof color === 'string') {
 			if(!(color = Ext.draw.Color.fromString(color))) {
-				return '#FFFF00';
+				return 'rgba(255,255,0,1)';
 			}
 		}
 
@@ -32,9 +36,7 @@ Ext.define('NextThought.util.Color',{
 
 //	   if (!string) return;
 
-		var hex16 = /^#?([0-9a-f][0-9a-f])([0-9a-f][0-9a-f])([0-9a-f][0-9a-f])$/i,
-			hex8 = /^#?([0-9a-f])([0-9a-f])([0-9a-f])$/i,
-			rgba = /^rgba?\((.+?)\)$/i,
+		var me = this,
 			color,
 			m;
 
@@ -51,13 +53,13 @@ Ext.define('NextThought.util.Color',{
 			return [r,g,b];
 		}
 
-		if(!!(m = rgba.exec(string))){
+		if(!!(m = me.rgbaRe.exec(string))){
 			m = m[1].split(',');
 		}
-		else if(!!(m = hex16.exec(string))){
+		else if(!!(m = me.hex16Re.exec(string))){
 			m = parseHex(m,false);
 		}
-		else if(!!(m = hex8.exec(string))){
+		else if(!!(m = me.hex8Re.exec(string))){
 			m = parseHex(m,true);
 		}
 		else {
@@ -65,37 +67,13 @@ Ext.define('NextThought.util.Color',{
 		}
 
 		color = Ext.create('Ext.draw.Color',m[0],m[1],m[2]);
-
-		if((m[3] !== undefined && m[3] !== null) || (typeof alpha === 'number' && alpha<1)){
-			color.toString = function(){
-				var a = alpha;
-				if (m[3]!== undefined && m[3] !== null){a = m[3];}
-
-				return Ext.String.format(
-						'rgba({0},{1},{2},{3})',
-						this.getRed(),
-						this.getGreen(),
-						this.getBlue(),
-						a);
-			};
-		}
+		color.toString = function(){
+			var a = typeof alpha === 'number'? alpha : 1;
+			if (typeof m[3] === 'number'){a = m[3];}
+			return me.toRGBA(this,a);
+		};
 
 		return color;
-	},
-
-
-	toRGB: function(color) {
-		if (typeof color === 'string') {
-			if(!(color = Ext.draw.Color.fromString(color))) {
-				return '#FFFF00';
-			}
-		}
-		//color.toString() may return hex or rgba(see parseColor above)...so, just do this:
-		return Ext.String.format('rgb({0},{1},{2})',
-				color.getRed(),
-				color.getGreen(),
-				color.getBlue()
-		);
 	},
 
 

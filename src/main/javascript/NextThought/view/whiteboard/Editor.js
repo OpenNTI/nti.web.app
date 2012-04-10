@@ -479,12 +479,11 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 			icon = this.down(Ext.String.format('button[action=pick-{0}-color]',c)).getEl().down('.x-btn-icon');
 
 		c = c.toLowerCase();
-		prop = c+'Color';
+		prop = c+'RGBAColor';
 		this.selectedValues[prop] = none? 'None': Color.parseColor(color).toString();
 
 		if(this.selected){
 			Ext.copyTo(this.selected, this.selectedValues, [prop]);
-			this.selected[c+'Opacity'] = 1;
 			this.canvas.drawScene();
 		}
 
@@ -782,10 +781,8 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 			stroke = this.selectedValues.strokeWidth/(this.canvas.el.getWidth()),
 			defs = {
 				'Class': 'Canvas'+Ext.String.capitalize(shape.toLowerCase())+'Shape',
-				'fillColor': this.selectedValues.fillColor,
-				'fillOpacity': this.selectedValues.fillOpacity || 1,
-				'strokeColor': this.selectedValues.strokeColor,
-				'strokeOpacity': this.selectedValues.strokeOpacity || 1,
+				'fillRGBAColor': this.selectedValues.fillRGBAColor,
+				'strokeRGBAColor': this.selectedValues.strokeRGBAColor,
 				'strokeWidth': isFinite(stroke)? stroke : 0,
 				'transform':{
 					initial: true,

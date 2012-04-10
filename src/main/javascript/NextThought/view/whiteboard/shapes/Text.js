@@ -30,11 +30,11 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Text', {
 			ctx.shadowColor = null;
 		}
 
-		if(this.cache.fillColor) {
+		if(this.cache.fill) {
 			ctx.fillText(this.text,x,y);
 		}
 
-		if(this.cache.strokeColor && this.strokeWidth) {
+		if(this.cache.stroke && this.strokeWidth) {
 			ctx.strokeText(this.text,x,y);
 		}
 

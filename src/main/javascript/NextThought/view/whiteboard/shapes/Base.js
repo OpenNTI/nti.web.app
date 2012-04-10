@@ -9,7 +9,7 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Base', {
 	IDENTITY: { 'Class':'CanvasAffineTransform', 'a':1, 'b':0, 'c':0, 'd':1, 'tx':0, 'ty':0 },
 
 	constructor: function(config){
-		this.calculatedAttributes = ['fillColor','fillOpacity','strokeColor','strokeOpacity'].concat(this.calculatedAttributes||[]);
+		this.calculatedAttributes = ['fillRGBAColor','strokeRGBAColor'].concat(this.calculatedAttributes||[]);
 		this.defineCacheAttributes();
 		Ext.apply(this,config);
 		return this;
@@ -91,9 +91,9 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Base', {
 
 
 	cacheColor: function(name){
-		var valueKey = name+'Color',
-			cache = this.cache[valueKey],
-			opacity, value, c;
+		var valueKey = name+'RGBAColor',
+			cache = this.cache[name],
+			value, c;
 
 		if(cache){ return cache; }
 
@@ -101,14 +101,8 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Base', {
 
 		if(!value || value === 'None'){
 			delete this.tracked[valueKey];
-			delete this.cache[valueKey];
+			delete this.cache[name];
 			return 'None';
-		}
-
-		opacity = this[name+'Opacity'];
-
-		if (typeof opacity !== 'number') {
-			opacity = 1;
 		}
 
 		try{
@@ -118,9 +112,9 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Base', {
 			console.log('error parsing color: ',value);
 			return '#000000';
 		}
-		this[valueKey] = Color.toRGB(c);
-		this.cache[valueKey] = Color.toRGBA(c,opacity);
-		return this.cache[valueKey];
+
+		this.cache[name] = this[valueKey] = Color.toRGBA(c);
+		return this.cache[name];
 	},
 
 
@@ -145,8 +139,8 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Base', {
 
 
 	performFillAndStroke: function(ctx){
-		if(this.cache.fillColor) { ctx.fill(); }
-		if(this.cache.strokeColor && ctx.lineWidth) { ctx.stroke(); }
+		if(this.cache.fill) { ctx.fill(); }
+		if(this.cache.stroke && ctx.lineWidth) { ctx.stroke(); }
 
 		if(this.selected === 'Hand'){
 			this.showNibs(ctx);
