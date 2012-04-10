@@ -445,6 +445,10 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 		if(this.selected){
 			delete this.selected.isNew;
 			this.selected.selected = this.currentTool || true;
+
+			if(this.selected.transform.initial){
+				this.deleteSelected();
+			}
 			this.canvas.drawScene();
 		}
 	},
@@ -784,6 +788,7 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 				'strokeOpacity': this.selectedValues.strokeOpacity || 1,
 				'strokeWidth': isFinite(stroke)? stroke : 0,
 				'transform':{
+					initial: true,
 					'Class':'CanvasAffineTransform',
 					'a':1,
 					'b':0,
