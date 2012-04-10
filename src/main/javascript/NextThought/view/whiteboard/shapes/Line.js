@@ -20,7 +20,7 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Line', {
 		ctx.lineTo(xy[0],xy[1]);
 		ctx.closePath();
 
-		delete ctx.fillStyle;
+		delete this.cache.fillColor;
 		this.bbox = {
 			x: 0,	w: 1,
 			y: -ctx.lineWidth*3,	h: ctx.lineWidth*6
@@ -39,13 +39,6 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Line', {
 			scale * Math.cos(rad),
 			scale * Math.sin(rad)
 		];
-	},
-
-
-	isPointInShape: function(){
-		var b = this.callParent(arguments);
-		console.log('pint in shape?', b);
-		return b;
 	},
 
 

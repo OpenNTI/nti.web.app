@@ -115,7 +115,7 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Base', {
 			c = Color.parseColor(value);
 		}
 		catch(er){
-			console.log(value);
+			console.log('error parsing color: ',value);
 			return '#000000';
 		}
 		this[valueKey] = Color.toRGB(c);
@@ -145,8 +145,8 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Base', {
 
 
 	performFillAndStroke: function(ctx){
-		if(ctx.fillStyle) { ctx.fill(); }
-		if(ctx.strokeStyle && ctx.lineWidth) { ctx.stroke(); }
+		if(this.cache.fillColor) { ctx.fill(); }
+		if(this.cache.strokeColor && ctx.lineWidth) { ctx.stroke(); }
 
 		if(this.selected === 'Hand'){
 			this.showNibs(ctx);
