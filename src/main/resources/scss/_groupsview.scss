@@ -2,6 +2,9 @@
     @include data-view;
 
 	.item-wrap {
+	    span {
+			width: 134px;
+		}
 	    .item {
 	        canvas {
 	            height: 128px;
