@@ -62,11 +62,11 @@ Ext.define('NextThought.view.widgets.menu.MathSymbolPanel',{
 
 	/** These are the math buttons*/
 	items: [
-		{xtype:'button', text: 'SQRT', latex: '\\sqrt' },
-		{xtype:'button', text: 'LOG', latex: '\\log' },
-		{xtype:'button', text: 'S2', latex: '/S2' },
-		{xtype:'button', text: 'S3', latex: '/S3' },
-		{xtype:'button', text: 'S4', latex: '/S4' },
+		{xtype:'button', text: '√', latex: '\\sqrt' },
+		{xtype:'button', text: 'x²', latex: 'x^2' },
+		{xtype:'button', text: '*', latex: '*' },
+		{xtype:'button', text: '÷', latex: '/' },
+		{xtype:'button', text: '()', latex: '()' },
 		{xtype:'button', text: 'S5', latex: '/S5' },
 		{xtype:'button', text: 'S6', latex: '/S6' },
 		{xtype:'button', text: 'S7', latex: '/S7' },

@@ -50,11 +50,27 @@ Ext.define('NextThought.util.QuizUtils', {
 
 			//Add events for the math panel
 			/*
-			q.bind('click focusin', function(e){
+			q.bind('mousedown click focusin', function(e){
 				console.log('click or focusin event, pass', e, 'to math panel');
-				MathSymbolPanel.showMathSymbolPanelFor(e.currentTarget, e.pageX, e.pageY);
+
+				var o = w.$(e.currentTarget).offset(),
+					p = w.$(e.currentTarget).position(),
+					x = o.left,
+					y = o.top;
+				console.log(x, y);
+				MathSymbolPanel.showMathSymbolPanelFor(e.currentTarget, x, y);
 			});
 			*/
+
+			//testing events in mathquill
+			/*
+			q.bind('blur focusout bind dblclick error die hover keydown keypress keyup live mousedown mouseenter mouseleave mouseup toggle ', function(e){
+				console.log('**** event', e.type);
+			});
+			*/
+
+
+			//end testing
 		}
 		catch(e){
 			console.error('unable to setup quiz ',e.stack||e.toString());
