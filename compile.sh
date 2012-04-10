@@ -15,7 +15,7 @@ files = [{'path':'lib/ext-4.0.7/', 'name':'ext.js'}]
 files.extend( data['builds'][0]['files'] );
 files.append( data['builds'][1]['files'][1] )
 
-if os.system('which java > /dev/null') == 1:
+if os.system('which java > /dev/null') == 0:
 	opts = ['java', '-jar lib/compiler.jar', '--compilation_level ADVANCED_OPTIMIZATIONS', '--create_source_map ./app.min.js.map', '--source_map_format=V3', '--js_output_file app.min.js']
 	for i in files:
 		opts.append('--js '+i['path']+i['name'])
