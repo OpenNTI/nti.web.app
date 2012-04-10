@@ -72,7 +72,11 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 			else {
 				g.hide();
 			}
+			g.ownerCt.doComponentLayout();
+			g.ownerCt.doLayout();
+			g.ownerCt.hide().show();
 		});
+
 	},
 
 
