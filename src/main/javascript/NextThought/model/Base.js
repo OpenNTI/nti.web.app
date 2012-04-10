@@ -386,6 +386,6 @@ Ext.data.Types.AVATAR_URL = {
 			else { Ext.each(v,c); }
 			return v;
 //		}
-		return v;
+//		return v;
 	}
 };
