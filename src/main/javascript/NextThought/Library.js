@@ -167,7 +167,7 @@ Ext.define('NextThought.Library', {
 					console.error('There was an error loading library', url, arguments);
 				},
 				success: function(r) {
-					this.tocs[index] = r.responseXML? r.responseXML : this.parseXML(r.responseText);
+					this.tocs[index] = this.parseXML(r.responseText);
 					if(!this.tocs[index]){
 						console.warn('no data for index: '+url);
 					}
@@ -196,15 +196,7 @@ Ext.define('NextThought.Library', {
 
 	parseXML: function(xml) {
 		try{
-			if (window.DOMParser) {
-				return new DOMParser().parseFromString(xml,"text/xml");
-			}
-
-			// Internet Explorer
-			var x = new ActiveXObject("Microsoft.XMLDOM");
-			x.async="false";
-			x.loadXML(xml);
-			return x;
+			return new DOMParser().parseFromString(xml,"text/xml");
 		}
 		catch(e){
 			console.error('Could not parse xml for TOC');
