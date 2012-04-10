@@ -10,55 +10,36 @@ Ext.define('NextThought.model.FriendsList', {
 		{ name: 'CompositeGravatars', type: 'AvatarURL' }
 	],
 
-	constructor: function(){
+	destroy: function() {
+		this.set('friends', []);
 		this.callParent(arguments);
+	},
 
-		var c = document.createElement('canvas'),
-			div = Ext.DomHelper.append(Ext.getBody(),{tag: 'div', style: 'visibility: hidden; position: absolute;'},true),
-			ctx,
+
+	drawIcon: function(canvas){
+
+		var ctx = canvas.getContext('2d'),
 			urls = this.get('CompositeGravatars').slice(),
-			stack = [],
 			grid = Math.ceil(Math.sqrt(urls.length)),
-			avatarSize = 128,
-			padding = 2,
-			imgSize = (avatarSize - ((grid+1)*padding))/grid,
+			avatarSize = canvas.width,
+			padding = grid>1 ? 2 : 0,
+			imgSize = (avatarSize - ((grid-1)*padding))/grid,
 			offset = imgSize + padding;
 
-		div.appendChild(c);
-		c.width = c.height = avatarSize;
-		ctx = c.getContext('2d');
 		ctx.imageSmoothingEnabled = true;
-
-		function finish(){
-			stack.pop();
-			if(stack.length!==0){ return; }
-			//don't use this.set() that would mark this record as dirty
-			try {
-				this.data.avatarURL = c.toDataURL("image/png");
-			}
-			catch(e){
-				console.warn('Composite Gravatars could not finish rendering because the browser is being a bully. :( CORS strikes again!');
-			}
-			div.remove();
-		}
 
 		Ext.each(urls,function(url,idx){
 			var i = new Image(),
 				col = idx%grid * offset,
 				row = Math.floor(idx/grid) * offset;
-
 			i.onload = function(){
-				ctx.drawImage(i,0,0,i.width,i.height, col,row,imgSize,imgSize);
-				finish();
+				ctx.drawImage(i,
+						0,	0,	i.width,i.height,	//source x,y,w,h
+						col,row,imgSize,imgSize		//dest   x,y,w,h
+				);
 			};
-			stack.push(url);
 			i.src = url;
 		});
-	},
-
-	destroy: function() {
-		this.set('friends', []);
-		this.callParent(arguments);
 	}
 
 });

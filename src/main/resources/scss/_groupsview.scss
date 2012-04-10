@@ -1,1 +1,12 @@
-.x-groupview-panel { @include data-view; }
+.x-groupview-panel {
+    @include data-view;
+
+	.item-wrap {
+	    .item {
+	        canvas {
+	            height: 128px;
+	            width: 128px;
+			}
+		}
+	}
+}
