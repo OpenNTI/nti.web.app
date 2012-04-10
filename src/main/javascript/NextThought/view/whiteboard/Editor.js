@@ -192,6 +192,7 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 					{ iconCls: 'tool poly',		tooltip: 'polygon',		shape: 'Polygon' },
 					{ tooltip: 'Insert Image',
 						xtype: 'filefield',
+						disabled: !window.FileReader,
 						buttonConfig: {
 							iconCls: 'tool image',
 							scale: 'medium',
@@ -558,7 +559,7 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 	readFile: function(files){
 		var me = this,
 			file = files[0],
-			reader = new FileReader();
+			reader;
 
 		//file.size
 		if(!file || !(/image\/.*/i).test(file.type)){
@@ -566,7 +567,8 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 			return;
 		}
 
-		if(reader){
+		if(window.FileReader){
+			reader = new FileReader();
 			reader.onload = function(event) { me.insertImage(event.target.result); };
 			reader.readAsDataURL(file);
 		}
