@@ -85,6 +85,10 @@ Ext.define('NextThought.view.widgets.chat.View', {
 			//in this case, we don't want to see it
 			this.remove(occList);
 		}
+		else if (occupants.length <= 2 && !occList) {
+			//In this case we dropped to below 2 users, but we didn't have a list in the first place, ignore it.
+			console.debug('occupants dropped to <2 but is not shown anyway');
+		}
 		else if (occupants.length > 2 && !occList){
 			//we need to add one
 			occList = this.add({flex: 1, xtype: 'chat-occupants-list'});
@@ -95,7 +99,7 @@ Ext.define('NextThought.view.widgets.chat.View', {
 			occList.setOccupants(this.roomInfo.get('Occupants'), this.roomId, moderated);
 		}
 		else {
-			console.error('some strange scenario I failed to plan for has occured', occupants, this);
+			console.error('Deciding to hide occupants list, a scenario I failed to plan for has occured', occupants, this);
 		}
 		this.addOrUpdateSplitters();
 	},
