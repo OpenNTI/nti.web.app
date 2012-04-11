@@ -8,6 +8,7 @@ Ext.define('NextThought.util.Color',{
 	hex16Re: /^#?([0-9a-f][0-9a-f])([0-9a-f][0-9a-f])([0-9a-f][0-9a-f])$/i,
 	hex8Re: /^#?([0-9a-f])([0-9a-f])([0-9a-f])$/i,
 	rgbaRe: /^rgba?\((.+?)\)$/i,
+	dsRGBARe: /^(\d+(\.\d+)?) (\d+(\.\d+)?) (\d+(\.\d+)?)( (\d+(\.\d+)?))?$/i,
 
 	sources : [],
 
@@ -32,7 +33,7 @@ Ext.define('NextThought.util.Color',{
 	 * @param string either a 8 or 16 bit hex color, or a CSS color function (rgb() or rgba()).
 	 * @param [alpha] If supplied, the float will override or add alpha to this color.
 	 */
-	parseColor: function(string, alpha){
+	parse: function(string, alpha){
 		var me = this,
 			color,
 			m;
@@ -50,8 +51,21 @@ Ext.define('NextThought.util.Color',{
 			return [r,g,b];
 		}
 
-		if(!!(m = me.rgbaRe.exec(string))){
-			m = m[1].split(',');
+		function parseRGBA(c){
+			for(var i=c.length-1;i>=0;i--){ c[i] = +c[i]; } //ensure they're numbers
+			return c;
+		}
+
+		if(!!(m = me.dsRGBARe.exec(string))){
+			m = [
+				+(parseFloat(m[1])*255).toFixed(0),
+				+(parseFloat(m[3])*255).toFixed(0),
+				+(parseFloat(m[5])*255).toFixed(0),
+				+m[8]
+			];
+		}
+		else if(!!(m = me.rgbaRe.exec(string))){
+			m = parseRGBA(m[1].split(','));
 		}
 		else if(!!(m = me.hex16Re.exec(string))){
 			m = parseHex(m,false);
@@ -67,7 +81,7 @@ Ext.define('NextThought.util.Color',{
 				m[0],m[1],m[2],
 				typeof alpha === 'number'
 						? alpha
-						: typeof m[3] === 'number'
+						: typeof m[3] === 'number' && !isNaN(m[3])
 							? m[3]
 							: 1
 		);

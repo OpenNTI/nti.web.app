@@ -30,8 +30,8 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 
 		this.selectedValues = {
 			strokeWidth: 2,
-			fillRGBAColor: 'None',
-			strokeRGBAColor: 'rgba(0,0,0,1)'
+			fill: 'None',
+			stroke: 'rgba(0,0,0,1)'
 		};
 
 		this.addDocked(this.buildToolbar());
@@ -330,7 +330,7 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 		var me = this,
 			sv = me.selectedValues,
 			values = shape ? shape.getJSON() : Ext.clone(sv.original||sv),
-			colorRe = /(.+)RGBAColor/i,
+			colorRe = /^(fill|stroke)$/i,
 			blockEvents = shape === me.selected;
 
 		if(blockEvents){
@@ -477,20 +477,18 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 	setColor: function(c, color){
 
 		var none = /none/i.test(color),
-			prop,
 			icon = this.down(Ext.String.format('button[action=pick-{0}-color]',c)).getEl().down('.x-btn-icon');
 
 		c = c.toLowerCase();
-		prop = c+'RGBAColor';
-		this.selectedValues[prop] = none? 'None': Color.parseColor(color);
+		this.selectedValues[c] = none? 'None': Color.parse(color);
 
 		if(this.selected){
-			Ext.copyTo(this.selected, this.selectedValues, [prop]);
+			Ext.copyTo(this.selected, this.selectedValues, [c]);
 			this.canvas.drawScene();
 		}
 
 
-		icon.setStyle({background: none? null: this.selectedValues[prop]});
+		icon.setStyle({background: none? null: this.selectedValues[c]});
 		icon.removeCls('color-none');
 		if(none) {
 			icon.addCls('color-none');
@@ -778,8 +776,8 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 			stroke = this.selectedValues.strokeWidth/(this.canvas.el.getWidth()),
 			defs = {
 				'Class': 'Canvas'+Ext.String.capitalize(shape.toLowerCase())+'Shape',
-				'fillRGBAColor': this.selectedValues.fillRGBAColor,
-				'strokeRGBAColor': this.selectedValues.strokeRGBAColor,
+				'fill': this.selectedValues.fill,
+				'stroke': this.selectedValues.stroke,
 				'strokeWidth': isFinite(stroke)? stroke : 0,
 				'transform':{
 					initial: true,

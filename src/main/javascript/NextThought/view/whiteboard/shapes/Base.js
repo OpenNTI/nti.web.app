@@ -9,9 +9,22 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Base', {
 	IDENTITY: { 'Class':'CanvasAffineTransform', 'a':1, 'b':0, 'c':0, 'd':1, 'tx':0, 'ty':0 },
 
 	constructor: function(config){
-		this.calculatedAttributes = ['fillRGBAColor','strokeRGBAColor'].concat(this.calculatedAttributes||[]);
+		this.calculatedAttributes = ['fill','stroke'].concat(this.calculatedAttributes||[]);
 		this.defineCacheAttributes();
+
 		Ext.apply(this,config);
+
+		//Convert DataServer color values to CSS color values
+		if(this.fillRGBAColor){
+			this.fill = Color.parse(this.fillRGBAColor);
+			delete this.fillRGBAColor;
+		}
+
+		if(this.strokeRGBAColor){
+			this.stroke = Color.parse(this.strokeRGBAColor);
+			delete this.strokeRGBAColor;
+		}
+
 		return this;
 	},
 
@@ -91,22 +104,21 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Base', {
 
 
 	cacheColor: function(name){
-		var valueKey = name+'RGBAColor',
-			cache = this.cache[name],
+		var cache = this.cache[name],
 			value;
 
 		if(cache){ return cache; }
 
-		value = this[valueKey];
+		value = this[name];
 
 		if(!value || value === 'None'){
-			delete this.tracked[valueKey];
+			delete this.tracked[name];
 			delete this.cache[name];
 			return 'None';
 		}
 
 		try{
-			this.cache[name] = this[valueKey] = Color.parseColor(value);
+			this.cache[name] = this[name] = Color.parse(value);
 			return this.cache[name];
 		}
 		catch(er){
@@ -118,15 +130,29 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Base', {
 
 	getJSON: function(){
 		var data = {},
+			colorRe = /rgba\((.+?),(.+?),(.+?),(.+?)\)/im,
 			keys = ['bbox','selected','nibData','cache','tracked'],
 			i;
 
 		data.MimeType = 'application/vnd.nextthought.'+(this.Class.toLowerCase());
 
+		function convertRGBA(s,r,g,b,a){
+			r = parseInt(r,10)/255;
+			g = parseInt(g,10)/255;
+			b = parseInt(b,10)/255;
+			a = parseFloat(a);
+			return [r.toFixed(4),g.toFixed(4),b.toFixed(4),a.toFixed(4)].join(' ');
+		}
+
 		for(i in this){
 			if(this.hasOwnProperty(i)){
 				if( !Ext.isFunction(this[i]) && !Ext.Array.contains(keys,i)){
 					data[i] = this[i];
+					if(typeof data[i] === 'string' && colorRe.test(data[i])){
+						//Convert our CSS color values to DataServer color values
+						data[i+'RGBAColor'] = data[i].replace(colorRe, convertRGBA);
+						delete data[i];
+					}
 				}
 			}
 		}
