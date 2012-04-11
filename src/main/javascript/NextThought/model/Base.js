@@ -4,6 +4,7 @@ Ext.data.Types.LINKS = {
 
 	convert: function(v){
 		if (v && v.getRelHref) {
+			console.trace('v already converted, figure out why...');
 			return v;
 		}
 		return {
