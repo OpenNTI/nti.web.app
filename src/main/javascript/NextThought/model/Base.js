@@ -3,6 +3,9 @@ Ext.data.Types.LINKS = {
 	sortType: function(){ return ''; },
 
 	convert: function(v){
+		if (v && v.getRelHref) {
+			return v;
+		}
 		return {
 			links: v,
 			asJSON: function(){return v;},

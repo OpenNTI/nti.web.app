@@ -478,6 +478,8 @@ Ext.define('NextThought.util.AnnotationUtils',{
 			endAnchor = r.get('endAnchor'),
 			startHighlightedFullText = r.get('startHighlightedFullText'),
 			endHighlightedFullText = r.get('endHighlightedFullText'),
+			sht = r.get('startHighlightedText'),
+			eht = r.get('endHighlightedText'),
 			resultRange = root.createRange(),
 			container,
 			text, texts,
@@ -496,6 +498,10 @@ Ext.define('NextThought.util.AnnotationUtils',{
 			tempRange.setStart(startAnchor, 0);
 			tempRange.setEnd(endAnchor, 0);
 			container = tempRange.commonAncestorContainer;
+			if(container === startAnchor) {
+				//If start and end anchors are the same, they are their own common ancestor, so go up one.
+				container = container.parentNode;
+			}
 		}
 		catch (e) {
 			console.warn('End Anchor is null', e, e.stack);
@@ -506,10 +512,10 @@ Ext.define('NextThought.util.AnnotationUtils',{
 
 		while(resultRange.collapsed && !!(text = texts.shift())){
 			if (text.nodeValue===startHighlightedFullText) {
-				resultRange.setStart(text, r.get('startOffset'));
+				resultRange.setStart(text, text.nodeValue.indexOf(sht));
 			}
 			if (text.nodeValue===endHighlightedFullText) {
-				resultRange.setEnd(text, r.get('endOffset'));
+				resultRange.setEnd(text, eht.length);
 			}
 		}
 
