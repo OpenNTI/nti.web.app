@@ -57,6 +57,7 @@ Ext.define('NextThought.util.Color',{
 		}
 
 		if(!!(m = me.dsRGBARe.exec(string))){
+			console.log('DataServer color value: ',string);
 			m = [
 				+(parseFloat(m[1])*255).toFixed(0),
 				+(parseFloat(m[3])*255).toFixed(0),
@@ -77,14 +78,22 @@ Ext.define('NextThought.util.Color',{
 			Ext.Error.raise({message: 'Could not parse color', color: string});
 		}
 
-		return Ext.String.format('rgba({0},{1},{2},{3})',
-				m[0],m[1],m[2],
-				typeof alpha === 'number'
-						? alpha
-						: typeof m[3] === 'number' && !isNaN(m[3])
-							? m[3]
-							: 1
-		);
+		m[3] = typeof alpha === 'number'
+			? alpha
+			: typeof m[3] === 'number' && !isNaN(m[3])
+				? m[3]
+				: 1;
+
+		color = Ext.String.format('rgba({0},{1},{2},{3})', m[0],m[1],m[2],m[3]);
+		if(m[3].toFixed(0)==='0'){
+			color = 'None';
+		}
+
+		return{ r: m[0],
+				g: m[1],
+				b: m[2],
+				a: m[3],
+				toString: function(){return color;}};
 	},
 
 

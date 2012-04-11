@@ -480,7 +480,7 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 			icon = this.down(Ext.String.format('button[action=pick-{0}-color]',c)).getEl().down('.x-btn-icon');
 
 		c = c.toLowerCase();
-		this.selectedValues[c] = none? 'None': Color.parse(color);
+		this.selectedValues[c] = none? 'None': Color.parse(color).toString();
 
 		if(this.selected){
 			Ext.copyTo(this.selected, this.selectedValues, [c]);

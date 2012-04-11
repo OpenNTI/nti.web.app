@@ -16,12 +16,12 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Base', {
 
 		//Convert DataServer color values to CSS color values
 		if(this.fillRGBAColor){
-			this.fill = Color.parse(this.fillRGBAColor);
+			this.fill = Color.parse(this.fillRGBAColor).toString();
 			delete this.fillRGBAColor;
 		}
 
 		if(this.strokeRGBAColor){
-			this.stroke = Color.parse(this.strokeRGBAColor);
+			this.stroke = Color.parse(this.strokeRGBAColor).toString();
 			delete this.strokeRGBAColor;
 		}
 
@@ -118,7 +118,7 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Base', {
 		}
 
 		try{
-			this.cache[name] = this[name] = Color.parse(value);
+			this.cache[name] = this[name] = Color.parse(value).toString();
 			return this.cache[name];
 		}
 		catch(er){
@@ -157,6 +157,8 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Base', {
 			}
 		}
 
+		if(!data.fillRGBAColor){ data.fillRGBAColor = '0 0 0 0'; }
+		if(!data.strokeRGBAColor){ data.strokeRGBAColor = '0 0 0 0'; }
 
 		return data;
 	},
