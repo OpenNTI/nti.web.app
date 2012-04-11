@@ -285,10 +285,21 @@ Ext.define('NextThought.view.content.Reader', {
 
 
 	scrollToId: function(id) {
-		var n = Ext.getCmp(id), m;
+		var n = Ext.getCmp(id),
+			m,
+			offset = this.getPosition(),
+			cPos,
+			sTop = this.body.getScroll().top;
+
 
 		if(n) {
-			this.scrollToNode(n.getEl().dom);
+
+
+			cPos = n.getPosition();
+			console.log('cmp pos', cPos, 'offset', offset, 'scrollTop', sTop);
+			this.scrollTo(cPos[1]-offset[1] - 10 + sTop);
+
+			//this.scrollToNode(n.getEl().dom);
 			if (n.getMenu) {
 				m = n.getMenu();
 				if (m && m.items.getCount() === 1) {
@@ -320,8 +331,8 @@ Ext.define('NextThought.view.content.Reader', {
 		while(n && n.nodeType === Node.TEXT_NODE) {
 			n = n.parentNode;
 		}
-		var c = Ext.get('readerPanel-body'),
-			o = Ext.fly(n).getTop();
+
+		var o = Ext.fly(n).getTop();
 
 		this.scrollTo(o - 10);
 	},

@@ -31,6 +31,9 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 	getItemId: function(){return this.id; },
 	isXType: function(){return false;},
 	getEl: function(){return Ext.get(this.img);},
+	getPosition: function(){
+		return Ext.fly(this.img).getXY();
+	},
 
 
 	attachRecord: function(record){

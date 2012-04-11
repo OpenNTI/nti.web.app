@@ -339,7 +339,7 @@ Ext.define('NextThought.mixins.Annotations', {
 			this.prunePlaceholders(tree);
 
 			items = Ext.Object.getValues(tree).concat(bins.Highlight||[]);
-
+			
 			contributors = this.buildAnnotations(items);
 		}
 
@@ -359,7 +359,8 @@ Ext.define('NextThought.mixins.Annotations', {
 
 
 	buildAnnotations: function(list){
-		var me = this, contributors = {};
+		var me = this, contributors = {},
+			a = NextThought.view.widgets.annotations.Annotation;
 		Ext.each(list,
 			function(r){
 				if(!r) {
@@ -368,6 +369,7 @@ Ext.define('NextThought.mixins.Annotations', {
 				try{
 					Ext.apply(contributors, me.getContributors(r));
 					me.widgetBuilder[r.getModelName()].call(me,r);
+					a.aboutToRender = true;
 				}
 				catch(e) {
 					console.error('Could not build '+r.getModelName()+' from record:', r, 'because: ', e, e.stack);
