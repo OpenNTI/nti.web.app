@@ -645,10 +645,12 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 			s.points = [];
 			s.closed = false;
 
+
 			xy = this.getRelativeXY(e,true);
 			t = s.transform;
 			t.tx = xy[0];
 			t.ty = xy[1];
+			delete t.initial;
 
 			return;
 		}
