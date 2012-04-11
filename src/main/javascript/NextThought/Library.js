@@ -80,6 +80,10 @@ Ext.define('NextThought.Library', {
 	getTitle: function(index){
 		var title = null;
 
+		if(index instanceof Ext.data.Model){
+			index = index.getId();
+		}
+
 		this.each(function(t){
 			if(t && t.get && t.get('index') === index) {
 				title = t;
@@ -214,9 +218,8 @@ Ext.define('NextThought.Library', {
 
 	findLocation: function(containerId) {
 		var result = null;
-
 		this.each(function(o){
-			result = this.resolveLocation(this.getToc( o ), containerId);
+			result = this.resolveLocation(this.getToc( o ), this.getTitle(o), containerId);
 			if (result) {
 				return false;
 			}
@@ -266,15 +269,15 @@ Ext.define('NextThought.Library', {
 	},
 
 
-	resolveLocation: function(toc, containerId) {
+	resolveLocation: function(toc, title, containerId) {
 		if( toc.documentElement.getAttribute( 'ntiid' ) === containerId ) {
-			return {toc:toc, location:toc.documentElement, NTIID: containerId, ContentNTIID: containerId};
+			return {toc:toc, location:toc.documentElement, NTIID: containerId, ContentNTIID: containerId, title: title};
 		}
-		return this.recursiveResolveLocation( containerId, toc );
+		return this.recursiveResolveLocation( containerId, toc, title);
 	},
 
 
-	recursiveResolveLocation: function recurse( containerId, elt ) {
+	recursiveResolveLocation: function recurse( containerId, elt, title ) {
 		var elts = elt.getElementsByTagName( 'topic' ), ix, child, cr;
 		for( ix = 0; ix < elts.length; ix++ ) {
 			child = elts.item(ix);
@@ -284,11 +287,12 @@ Ext.define('NextThought.Library', {
 					toc: child.ownerDocument,
 					location: child,
 					NTIID: containerId,
+					title: title,
 					ContentNTIID: child.ownerDocument.documentElement.getAttribute('ntiid')
 				};
 			}
 
-			cr = recurse( containerId, child );
+			cr = recurse( containerId, child, title );
 			if( cr ) {
 				return cr;
 			}
