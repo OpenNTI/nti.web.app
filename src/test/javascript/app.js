@@ -130,6 +130,7 @@ Ext.application({
 			'assets/js-test/specs/view/widgets/draw/Whiteboard.spec.js',
 			'assets/js-test/specs/cache/UserRepository.spec.js',
 			'assets/js-test/specs/util/AnnotationUtils.spec.js',
+			'assets/js-test/specs/util/ParseUtils.spec.js',
 			'assets/js-test/specs/util/Color.spec.js'],
 		go);
 	}

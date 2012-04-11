@@ -9,10 +9,9 @@ Ext.define('NextThought.view.widgets.menu.MathSymbolPanel',{
 		 *
 		 * @param cmp - the current target component you want clicks of this
 		 *				panel along to.
-		 * @param x - x position for this window
-		 * @param y - y position for this window
+		 * @param alignTo - a component this window should align it's top right corner to.
 		 */
-		showMathSymbolPanelFor: function(cmp, x, y) {
+		showMathSymbolPanelFor: function(cmp, alignTo) {
 			if(!cmp) {
 				console.error('must call math symbol panel with some component');
 				return;
@@ -20,19 +19,29 @@ Ext.define('NextThought.view.widgets.menu.MathSymbolPanel',{
 
 			if (!this.win) {
 				this.win = Ext.widget('window',{
+					title: 'Math Symbols',
 					closeAction: 'hide',
 					hidden: true,
 					layout: 'fit',
-					height: 196,
-					width: 175,
+					focusOnToFront: false,
 					items: {
 						xtype: 'math-symbol-panel'
 					}
 				});
 			}
-			this.win.setPosition(x, y);
-			this.win.down('math-symbol-panel').setTargetComponent(cmp);
 			this.win.show();
+			if (!this.win.keepPosition){this.win.alignTo(alignTo, 'tr-tl', [0, 10]);}
+			this.win.down('math-symbol-panel').setTargetComponent(cmp);
+			this.win.on({
+				'hide': function(){
+					delete this.keepPosition;
+				},
+				'move': function(){
+					this.keepPosition = true;
+				},
+				scope: this.win
+			});
+
 		},
 
 
@@ -49,25 +58,24 @@ Ext.define('NextThought.view.widgets.menu.MathSymbolPanel',{
 
 
 	/* settings for this panel*/
+	layout: {
+		type: 'table',
+		columns: 4
+	},
 	defaults: {
 		height: 40,
 		width: 40,
 		cls: 'math-symbol-button'
 	},
-	maxHeight: 162,
-	maxWidth: 162,
-	minHeight: 162,
-	minWidth: 162,
 
 
 	/** These are the math buttons*/
 	items: [
 		{xtype:'button', text: '&radic;', latex: '\\sqrt' },
 		{xtype:'button', text: 'x&sup2', latex: 'x^2' },
-		{xtype:'button', text: '*', latex: '*' },
-		{xtype:'button', text: '÷', latex: '/' },
-		{xtype:'button', text: '()', latex: '()' },
-		{xtype:'button', text: 'S5', latex: '/S5' },
+		{xtype:'button', text: '()', latex: '(x)' },
+		{xtype:'button', text: '&Pi;', latex: '\\pi' }
+		/*
 		{xtype:'button', text: 'S6', latex: '/S6' },
 		{xtype:'button', text: 'S7', latex: '/S7' },
 		{xtype:'button', text: 'S8', latex: '/S8' },
@@ -78,6 +86,7 @@ Ext.define('NextThought.view.widgets.menu.MathSymbolPanel',{
 		{xtype:'button', text: 'S13', latex: '/S13' },
 		{xtype:'button', text: 'S14', latex: '/S14' },
 		{xtype:'button', text: 'S15', latex: '/S15' }
+		*/
 	],
 
 

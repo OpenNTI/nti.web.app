@@ -22,7 +22,6 @@ Ext.define('NextThought.util.QuizUtils', {
 
 			//write the latex, then refocus since it's probably been lost...
 			mq.mathquill('write', tex);
-			mq.trigger('focus');
 		}
 	},
 
@@ -38,39 +37,20 @@ Ext.define('NextThought.util.QuizUtils', {
 				return;
 			}
 
-			console.debug('Current page is a quiz');
-
 			//the frame has jQuery & MathQuill
 			w.$('input[type=number]').replaceWith(function(){
 				var id = w.$(this).attr('id');
 				return '<input id="'+id+'" type="hidden"/><span class="quiz-input"></span>';
 			});
 
-			q = w.$( 'span.quiz-input').mathquill('editable');
+			q = w.$('span.quiz-input').mathquill('editable');
 
 			//Add events for the math panel
-			/*
 			q.bind('mousedown click focusin', function(e){
-				console.log('click or focusin event, pass', e, 'to math panel');
-
-				var o = w.$(e.currentTarget).offset(),
-					p = w.$(e.currentTarget).position(),
-					x = o.left,
-					y = o.top;
-				console.log(x, y);
-				MathSymbolPanel.showMathSymbolPanelFor(e.currentTarget, x, y);
+				var r = Ext.getCmp('reader').down('reader-panel');
+				r.scrollToNode(this);
+				MathSymbolPanel.showMathSymbolPanelFor(this, r.body);
 			});
-			*/
-
-			//testing events in mathquill
-			/*
-			q.bind('blur focusout bind dblclick error die hover keydown keypress keyup live mousedown mouseenter mouseleave mouseup toggle ', function(e){
-				console.log('**** event', e.type);
-			});
-			*/
-
-
-			//end testing
 		}
 		catch(e){
 			console.error('unable to setup quiz ',e.stack||e.toString());
