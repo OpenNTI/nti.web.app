@@ -33,9 +33,6 @@ Ext.define('NextThought.util.Color',{
 	 * @param [alpha] If supplied, the float will override or add alpha to this color.
 	 */
 	parseColor: function(string, alpha){
-
-//	   if (!string) return;
-
 		var me = this,
 			color,
 			m;
@@ -66,14 +63,14 @@ Ext.define('NextThought.util.Color',{
 			Ext.Error.raise({message: 'Could not parse color', color: string});
 		}
 
-		color = Ext.create('Ext.draw.Color',m[0],m[1],m[2]);
-		color.toString = function(){
-			var a = typeof alpha === 'number'? alpha : 1;
-			if (typeof m[3] === 'number'){a = m[3];}
-			return me.toRGBA(this,a);
-		};
-
-		return color;
+		return Ext.String.format('rgba({0},{1},{2},{3})',
+				m[0],m[1],m[2],
+				typeof alpha === 'number'
+						? alpha
+						: typeof m[3] === 'number'
+							? m[3]
+							: 1
+		);
 	},
 
 

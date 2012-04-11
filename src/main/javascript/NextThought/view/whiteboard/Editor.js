@@ -30,8 +30,8 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 
 		this.selectedValues = {
 			strokeWidth: 2,
-			fillColor: 'None',
-			strokeColor: '000000'
+			fillRGBAColor: 'None',
+			strokeRGBAColor: 'rgba(0,0,0,1)'
 		};
 
 		this.addDocked(this.buildToolbar());
@@ -330,8 +330,12 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 		var me = this,
 			sv = me.selectedValues,
 			values = shape ? shape.getJSON() : Ext.clone(sv.original||sv),
-			colorRe = /(.+)Color/i,
-			opacityRe = /(.+)Opacity/i;
+			colorRe = /(.+)RGBAColor/i,
+			blockEvents = shape === me.selected;
+
+		if(blockEvents){
+			delete me.selected;
+		}
 
 		if(shape && !sv.original){
 			sv.original = Ext.apply({},sv);
@@ -345,15 +349,11 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 
 		Ext.Object.each(values,function(k,v){
 			var c = me.down('[name='+k+']'),
-				color = colorRe.exec(k),
-				opacity = opacityRe.exec(k);
+				color = colorRe.exec(k);
 
 
 			if(color){
 				me.setColor(color[1],v||'None');
-			}
-			else if(opacity){
-				me.setOpacity(opacity[1], v||1);
 			}
 			else if(c){
 				if(shape && k === 'strokeWidth'){
@@ -363,7 +363,9 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 			}
 		});
 
-
+		if(blockEvents){
+			me.selected = shape;
+		}
 	},
 
 
@@ -480,7 +482,7 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 
 		c = c.toLowerCase();
 		prop = c+'RGBAColor';
-		this.selectedValues[prop] = none? 'None': Color.parseColor(color).toString();
+		this.selectedValues[prop] = none? 'None': Color.parseColor(color);
 
 		if(this.selected){
 			Ext.copyTo(this.selected, this.selectedValues, [prop]);
@@ -493,11 +495,6 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 		if(none) {
 			icon.addCls('color-none');
 		}
-	},
-
-
-	setOpacity: function(c,opacity){
-
 	},
 
 

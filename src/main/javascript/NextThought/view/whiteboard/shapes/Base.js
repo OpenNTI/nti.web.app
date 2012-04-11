@@ -93,7 +93,7 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Base', {
 	cacheColor: function(name){
 		var valueKey = name+'RGBAColor',
 			cache = this.cache[name],
-			value, c;
+			value;
 
 		if(cache){ return cache; }
 
@@ -106,15 +106,13 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Base', {
 		}
 
 		try{
-			c = Color.parseColor(value);
+			this.cache[name] = this[valueKey] = Color.parseColor(value);
+			return this.cache[name];
 		}
 		catch(er){
 			console.log('error parsing color: ',value);
-			return '#000000';
 		}
-
-		this.cache[name] = this[valueKey] = Color.toRGBA(c);
-		return this.cache[name];
+		return '#000000';
 	},
 
 
