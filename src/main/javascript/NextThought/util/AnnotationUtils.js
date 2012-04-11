@@ -414,8 +414,9 @@ Ext.define('NextThought.util.AnnotationUtils',{
 				range = (root||document).createRange();
 
 			try {
-				range.setEnd(endElement ? endElement : startElement, r.get('endOffset'));
-				range.setStart(startElement, r.get('startOffset'));
+				endElement = endElement ? endElement : startElement;
+				range.setEnd(endElement, this.sanitizeOffset(endElement, r.get('endOffset')));
+				range.setStart(startElement, this.sanitizeOffset(startElement,r.get('startOffset')));
 				if (startElement && !range.collapsed) {
 					return range;
 				}
@@ -542,6 +543,13 @@ Ext.define('NextThought.util.AnnotationUtils',{
 		return textNodes;
 	},
 
+	sanitizeOffset: function(node, offset) {
+		if (this.isTextNode(node)) {
+			return offset;
+		}
+		return 0;
+	},
+
 
 	selectionToHighlight: function(range) {
 		if(range.collapsed){
@@ -559,13 +567,14 @@ Ext.define('NextThought.util.AnnotationUtils',{
 		//start information
 		highlight.set('startXpath', this.getPathTo(startNode));
 		highlight.set('startAnchor', startAnchor);
-		highlight.set('startOffset', range.startOffset);
+		highlight.set('startOffset', this.sanitizeOffset(startNode, range.startOffset));
 		//end information
 		highlight.set('endXpath', this.getPathTo(endNode));
 		if (startAnchor !== endAnchor) {
 			highlight.set('endAnchor', endAnchor);
 		}
-		highlight.set('endOffset', range.endOffset);
+
+		highlight.set('endOffset', this.sanitizeOffset(endNode, range.endOffset));
 
 		//special case when the end node is a div containing an img.
 		if (this.isBlockNode(endNode) && this.isImageNode(endNode.firstChild)){
