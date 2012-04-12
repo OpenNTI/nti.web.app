@@ -242,24 +242,16 @@ Ext.define('NextThought.util.Globals',
 
 	applyInjections: function(){
 
-		Ext.XTemplate.override({
-			applySubTemplate: function(id, values, parent, xindex, xcount){
-				var me = this, subs = Ext.XTemplate.subs || {};
-				if(subs.hasOwnProperty(id)){
-					return subs[id].compiled.call(me, values, parent, xindex, xcount);
-				}
-				return this.callOverridden(arguments);
-			}
-		});
+		Ext.XTemplate.prototype.applySubtemplate = function(id, values){
+			return Ext.XTemplate.subs[id].apply(values);
+		};
 
-		Ext.XTemplate.registerSubTemplate = function(name,tpl){
+		Ext.XTemplate.registerSubtemplate = function(name,tpl){
 			Ext.XTemplate.subs = Ext.XTemplate.subs || {};
 			if(tpl && !(tpl instanceof Ext.XTemplate)){
 				tpl = new Ext.XTemplate(tpl);
 			}
-
 			Ext.XTemplate.subs[name] = tpl;
-
 			if(!tpl){
 				delete Ext.XTemplate.subs[name];
 			}

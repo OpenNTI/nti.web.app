@@ -37,7 +37,8 @@
 		overflow: hidden;
 		text-overflow: ellipsis;
 	}
-	img {
+	div.avatar {
+	    margin: 0 !important;
 		float: left;
 		width: 16px;
 		height: 16px;
@@ -66,9 +67,9 @@
 
 .x-nti-note.chat-transcript {
 	cursor: pointer;
-	img {
+	div.avatar {
 		float: right;
-		margin-right: 2px;
+		margin-right: 4px !important;
 	}
 	.transcript-placeholder {
 		margin: 0px;

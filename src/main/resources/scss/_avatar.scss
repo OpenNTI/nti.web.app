@@ -1,0 +1,27 @@
+
+div.avatar {
+    position: relative;
+    overflow: visible !important;
+    display: inline-block;
+
+    img {    
+        position: absolute;
+        right: 0;
+        bottom: 0;
+
+        &.presence {
+            bottom: -7px;
+            right: -7px;
+            display: none;
+            &.online{
+            	background: $presences-online 0 0 no-repeat;
+            }
+            &.offline{
+				background: $presences-offline 0 0 no-repeat;
+			}
+        }
+    }
+
+    &.online img.online,
+    &.offline img.offline { display: block; }
+}

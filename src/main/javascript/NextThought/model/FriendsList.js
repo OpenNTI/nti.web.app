@@ -16,6 +16,11 @@ Ext.define('NextThought.model.FriendsList', {
 	},
 
 
+	getName: function(){
+		return this.get('alias') || this.get('realname');
+	},
+
+
 	drawIcon: function(canvas){
 
 		var ctx = canvas.getContext('2d'),

@@ -1,20 +1,22 @@
 Ext.define('NextThought.view.widgets.MiniStreamEntry', {
 	extend: 'Ext.Component',
 	alias: 'widget.miniStreamEntry',
-
 	requires: [
 		'NextThought.util.AnnotationUtils'
 	],
+	mixins: {
+		avatar: 'NextThought.mixins.Avatar'
+	},
 
 	renderTpl: new Ext.XTemplate(
-		  '<div class="x-mini-stream-entry {cls}">',
-			  '<img src="{avatarURL}" width=16 height=16"/>',
-			  '<div>',
+			'<div class="x-mini-stream-entry {cls}">',
+				'{[this.applySubtemplate("Avatar",values)]}',
+				'<div>',
 					'<span class="name">{name}</span> ',
 					'<span class="text">{text:ellipsis(50)}</span>',
-			  '</div>',
-		  '</div>'
-		  ),
+				'</div>',
+			'</div>'
+	),
 
    renderSelectors: {
 		box: 'div.x-mini-stream-entry',
@@ -29,12 +31,12 @@ Ext.define('NextThought.view.widgets.MiniStreamEntry', {
 		var c = this.change.get('Creator'),
 			u = NextThought.cache.UserRepository.getUser(c);
 
+		this.initAvatar(u,24);
 		this.renderData.cls = this.cls || '';
-		this.renderData.avatarURL = u.get('avatarURL');
-		this.renderData.name = u.get('alias')||u.get('realname');
-		this.renderData.text = this.change.get('Item') ?
-				[this.change.get('ChangeType'),' a ',this.change.get('Item').raw.Class].join('')
-			: 'deleted something';
+		this.renderData.name = u.getName();
+		this.renderData.text = this.change.get('Item')
+				? [this.change.get('ChangeType'),' a ',this.change.get('Item').raw.Class].join('')
+				: 'deleted something';
 	},
 
 	afterRender: function() {

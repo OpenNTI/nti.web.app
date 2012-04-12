@@ -99,7 +99,6 @@ Ext.define('NextThought.cache.UserRepository', {
 					name = o;
 				}
 				else if(typeof(o.getId)!== 'undefined'){
-					console.trace('This is not good');
 					name = o.getId();
 				}
 				else {
@@ -120,7 +119,7 @@ Ext.define('NextThought.cache.UserRepository', {
 				}
 
 				r = s.getById(name);
-				if (r){
+				if (r && r.raw){
 					result.push(r);
 					return;
 				}

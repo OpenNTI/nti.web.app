@@ -141,9 +141,7 @@ button {
 
 .x-chat-friend-entry {
     @include list-entry;
-    padding: 5px 5px 5px 25px;
-	background: $presences-offline no-repeat 5px center;
-	&.Online { background: $presences-online no-repeat 5px center; }
+    padding: 5px;
     &.drag-hover { @include hover-state-props; }
 
     .name {

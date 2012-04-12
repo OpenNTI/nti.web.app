@@ -11,6 +11,7 @@
 @import url(animations.css);
 //For the reader panel, this must be first
 @import "_panel-reset.scss";
+@import "_avatar.scss";
 @import "_reader-content.scss";
 @import "_masks-and-tips.scss";
 @import "_file-uploader.scss";

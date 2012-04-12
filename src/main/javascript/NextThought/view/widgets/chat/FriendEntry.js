@@ -2,9 +2,13 @@ Ext.define('NextThought.view.widgets.chat.FriendEntry', {
 	extend: 'Ext.Component',
 	alias: 'widget.chat-friend-entry',
 
+	mixins: {
+		avatar: 'NextThought.mixins.Avatar'
+	},
+
 	renderTpl: new Ext.XTemplate(
-		'<div class="x-chat-friend-entry {Presence} {cls}">',
-			'<img src="{avatarURL}" width=16 height=16"/>',
+		'<div class="x-chat-friend-entry">',
+			'{[this.applySubtemplate("Avatar",values)]}',
 			'<div>',
 				'<span class="name">{name}</span> ',
 			'</div>',
@@ -16,24 +20,20 @@ Ext.define('NextThought.view.widgets.chat.FriendEntry', {
 
 	renderSelectors: {
 		box: 'div.x-chat-friend-entry',
-		name: '.x-chat-friend-entry span.name',
-		icon: 'img'
+		name: '.x-chat-friend-entry span.name'
 	},
+
 
 	initComponent: function(){
 		this.addEvents('click');
 		this.callParent(arguments);
 
+		this.initAvatar(this.user,16);
 		this.update(this.user);
 
 		this.renderData.cls = this.cls || '';
 	},
 
-	render: function() {
-		this.callParent(arguments);
-
-
-	},
 
 	afterRender: function() {
 		var me = this;
@@ -103,21 +103,17 @@ Ext.define('NextThought.view.widgets.chat.FriendEntry', {
 
 	update: function(user){
 		this.user = user;
-		var status = user.get('Presence') || 'offline';
 
 		if (this.rendered){
-			this.box.removeCls('offline online');
-			this.box.addCls(status.toLowerCase());
-			this.icon.set({src: user.get('avatarURL')});
-			this.name.update( user.get('alias')||u.get('realname') );
+			this.name.update( user.getName() );
 		}
 		else {
-			this.renderData.Presence = status.toLowerCase();
-			this.renderData.avatarURL = user.get('avatarURL');
-			this.renderData.name = user.get('alias')||user.get('realname');
+			this.renderData.user = user;
+			this.renderData.name = user.getName();
 		}
 
-		user.on('changed', this.update, this);
+		//updates the name
+		user.on('changed', this.update, this, {single: true});
 	},
 
 	hideMenu: function(){

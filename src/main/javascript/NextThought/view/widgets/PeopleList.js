@@ -6,7 +6,8 @@ Ext.define('NextThought.view.widgets.PeopleList', {
 	],
 
 	mixins:{
-		avatars: 'NextThought.mixins.AvatarInformation'
+		avatars: 'NextThought.mixins.AvatarInformation',
+		avatar: 'NextThought.mixins.Avatar'
 	},
 
 	border: false,
@@ -50,9 +51,7 @@ Ext.define('NextThought.view.widgets.PeopleList', {
 
 		function userLoaded(users){
 			var u = users[0],
-				c = p.add({	xtype: 'image',
-						src: (u? u.get('avatarURL') : Ext.BLANK_IMAGE_URL),
-						height: 36, width: 36});
+				c = p.add(me.getAvatarComponent(36,u));
 
 				me.setupAvatarDetailToolTip(c, u);
 		}

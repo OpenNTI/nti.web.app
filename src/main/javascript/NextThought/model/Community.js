@@ -16,5 +16,10 @@ Ext.define('NextThought.model.Community', {
 	constructor: function() {
 		this.callParent(arguments);
 		UserRepository.updateUser(this);
+	},
+
+
+	getName: function(){
+		return this.get('alias') || this.get('realname');
 	}
 });

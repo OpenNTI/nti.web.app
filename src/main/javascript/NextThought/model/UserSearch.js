@@ -9,5 +9,11 @@ Ext.define(	'NextThought.model.UserSearch', {
 		{ name: 'alias', type: 'string' },
 		{ name: 'realname', type: 'string' },
 		{ name: 'avatarURL', type: 'AvatarURL' }
-	]
+	],
+
+
+
+	getName: function(){
+		return this.get('alias') || this.get('realname');
+	}
 });

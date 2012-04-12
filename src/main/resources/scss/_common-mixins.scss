@@ -79,7 +79,9 @@
 		.moderated & { margin-left: 37px; }
 	}
 
-	img { float: left; }
+	img.icon,
+	div.avatar { margin: 0 !important; float: left; }
+
 
  	input { float: left; margin:  0; }
 
@@ -108,7 +110,7 @@
 	cursor: pointer;
 
 	div { margin-left: 40px; }
-	img{ float: left; }
+	div.avatar{ margin: 0 !important; float: left; }
 }
 
 

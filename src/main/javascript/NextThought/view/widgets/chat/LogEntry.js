@@ -16,7 +16,7 @@ Ext.define('NextThought.view.widgets.chat.LogEntry', {
 				'<span class="pin"></span>',
 			'</span>',
 			'<div class="timestamp">{time}</div>',
-			'<img src="{icon}" width=16 height=16"/>',
+			'<img class="icon" src="{icon}" width=16 height=16"/>',
 			'<div>',
 				'<span class="name">{name}</span> ',
 				'<span class="body-text">{body}</span> ',

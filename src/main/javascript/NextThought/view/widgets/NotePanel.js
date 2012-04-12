@@ -7,6 +7,10 @@ Ext.define('NextThought.view.widgets.NotePanel',{
 		'NextThought.util.AnnotationUtils'
 	],
 
+	mixins: {
+		avatar: 'NextThought.mixins.Avatar'
+	},
+
 	renderTpl: new Ext.XTemplate(
 		'<div class="x-nti-note {owner}">',
 			'<span class="controls">',
@@ -18,7 +22,7 @@ Ext.define('NextThought.view.widgets.NotePanel',{
 				'<span class="delete" title="Delete note"></span>',
 			'</span>',
 			'<div class="timestamp">{time}</div>',
-			'<img src="{icon}"/>',
+			'{[this.applySubtemplate("Avatar",values)]}',
 			'<div>',
 				'<span class="name">{name}</span> ',
 				'<span class="body-text selectable">{body}</span> ',
@@ -30,17 +34,15 @@ Ext.define('NextThought.view.widgets.NotePanel',{
 	transcriptSummaryRenderTpl: new Ext.XTemplate(
 		'<div class="x-nti-note chat-transcript">',
 			'<tpl for="contributors">',
-				'<tpl if="src">',
-					'<img avatarFor="{id}" src="{src}" alt="{alt}" title="{title}"/>',
-				'</tpl>',
-				'<tpl if="!src">',
-					'<img avatarFor="{.}"/>',
-				'</tpl>',
+				'{[this.contrib(values,parent)]}',
 			'</tpl>',
 			'<div class="transcript-placeholder"><a href="#">View Log</a> (Messages: {MessageCount})</div>',
 		'</div>',
-		'<div class="x-nti-note-replies chat-transcript"></div>'
-		),
+		'<div class="x-nti-note-replies chat-transcript"></div>',{
+			contrib: function(user,values){
+				return this.applySubtemplate("Avatar", Ext.applyIf({user:user},values));
+			}
+		}),
 
 	renderSelectors: {
 		frameBody:  '.x-nti-note-replies',
@@ -50,11 +52,11 @@ Ext.define('NextThought.view.widgets.NotePanel',{
 		name:	   '.x-nti-note .name',
 		text:	   '.body-text',
 		time:	   '.timestamp',
-		icon:	   'img',
 		controls:   '.x-nti-note .controls'
 
 		//For transcript summaries
 	},
+
 
 	initComponent: function(){
 		var m = this,
@@ -67,6 +69,8 @@ Ext.define('NextThought.view.widgets.NotePanel',{
 			m.renderTpl = m.transcriptSummaryRenderTpl;
 			m.updateModel = m.updateTranscriptSummaryModel;
 		}
+
+		m.initAvatar(r.get('Creator'));
 
 		m.callParent(arguments);
 
@@ -99,8 +103,8 @@ Ext.define('NextThought.view.widgets.NotePanel',{
 		this.text.update('');//'Place holder for deleted note');
 		this.time.remove();
 		this.name.remove();
-		this.icon.remove();
 		this.controls.remove();
+		this.removeAvatar();
 		this.box.addCls('placeholder');
 	},
 
@@ -156,37 +160,13 @@ Ext.define('NextThought.view.widgets.NotePanel',{
 
 
 	updateTranscriptSummaryModel: function(m){
-		var me = this,
-			c  = Ext.Array.clone(m.get('Contributors'));
+		var c  = Ext.Array.clone(m.get('Contributors'));
 
 
 		Ext.apply(this.renderData,{
 			contributors: Ext.Array.clone(c),
 			MessageCount: m.get('RoomInfo').get('MessageCount')
 		});
-
-		UserRepository.prefetchUser(c, function(users){
-			if(!this.rendered) {
-				this.renderData.contributors = [];
-			}
-
-			Ext.each(users, function(u){
-				if (!u) { console.warn('unresolved user!'); return; }
-				var name = u.get('alias') || u.get('Username'),
-					o = {
-						id: u.getId(),
-						src: u.get('avatarURL'),
-						alt: name,
-						title: name
-					};
-
-				me.renderData.contributors.push(o);
-				if(me.rendered){
-					me.box.select('img[avatarFor='+u.getId()+']').set(o);
-				}
-			});
-		}, this);
-
 	},
 
 
@@ -196,9 +176,11 @@ Ext.define('NextThought.view.widgets.NotePanel',{
 			owner = m.isModifiable();
 
 		me.record = m;
-		me.renderData.name = 'resolving...';
-		me.renderData.owner = owner ? 'owner' : '';
-		me.renderData.time = Ext.Date.format(m.get('Last Modified') || new Date(), 'g:i:sa M j, Y');
+		Ext.apply(me.renderData,{
+			name: 'resolving...',
+			owner: owner ? 'owner' : '',
+			time: Ext.Date.format(m.get('Last Modified') || new Date(), 'g:i:sa M j, Y')
+		});
 
 		AnnotationUtils.compileBodyContent(m, function(content){
 			if(me.rendered || me.text){
@@ -221,6 +203,25 @@ Ext.define('NextThought.view.widgets.NotePanel',{
 					me.fillInUser(u);
 				},
 				this);
+		}
+	},
+
+
+
+	fillInUser: function(u) {
+		var name = u.getName(),
+			owner = u.isModifiable();
+
+		if(this.rendered){
+			this.name.update(name);
+			this.box.removeCls('owner');
+			if(owner) {
+				this.box.addCls('owner');
+			}
+		}
+		else {
+			this.renderData.name = name;
+			this.renderData.owner = owner ? 'owner' : '';
 		}
 	},
 
@@ -275,6 +276,7 @@ Ext.define('NextThought.view.widgets.NotePanel',{
 		b.doLayout();
 	},
 
+
 	enable: function(){
 		this.callParent(arguments);
 		if (this.unmuteBtn) {
@@ -282,6 +284,7 @@ Ext.define('NextThought.view.widgets.NotePanel',{
 			delete this.unmuteBtn;
 		}
 	},
+
 
 	click: function(event, target){
 		if (this.isDisabled()) {
@@ -336,27 +339,6 @@ Ext.define('NextThought.view.widgets.NotePanel',{
 
 	isTranscriptSummary: function(){
 		return (/TranscriptSummary/i).test(this.record.getModelName());
-	},
-
-
-	fillInUser: function(u) {
-		var name = u.get('alias') || u.get('Username'),
-			i = u.get('avatarURL'),
-			owner = u.isModifiable();
-
-		if(this.rendered){
-			this.icon.set({src: i});
-			this.name.update(name);
-			this.box.removeCls('owner');
-			if(owner) {
-				this.box.addCls('owner');
-			}
-		}
-		else {
-			this.renderData.name = name;
-			this.renderData.icon = i;
-			this.renderData.owner = owner ? 'owner' : '';
-		}
 	},
 
 
