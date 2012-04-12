@@ -42,10 +42,14 @@ Ext.define( 'NextThought.view.modes.Stream', {
 
 		this.add({
 			border: false,
+			defaults: {border: false,defaults:{border: false}},
 			dockedItems: this.getRightToolbar(),
 			minWidth: sideWidth,
 			flex: 2,
-			items: {items: {xtype: 'people-list',width: sideWidth}}
+			items: {
+				margin: 'auto auto 15px 5px',
+				items: {xtype: 'people-list',width: sideWidth}
+			}
 		});
 	}
 	
