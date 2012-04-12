@@ -15,7 +15,7 @@ Ext.define('NextThought.view.widgets.classroom.BrowserStudyGroups', {
 			'<tpl for=".">',
 				'<div class="item-wrap">',
 					'<div class="item">',
-						'<img src="{avatarURL}" width=22 height=22"/>',
+						'<canvas title="{realname}"></canvas>',
 						'<div>',
 							'<div class="selector"><a href="#">Select</a></div>',
 							'<span class="name">{realname}</span>',
@@ -32,6 +32,21 @@ Ext.define('NextThought.view.widgets.classroom.BrowserStudyGroups', {
 		this.callParent(arguments);
 		this.on('itemdblclick',this.fireSelected,this);
 		this.on('selectionChange',this.selectionChangedScrollIntoFView,this);
+		this.on('refresh',this.onRefresh,this);
+	},
+
+	onRefresh: function(){
+		function process(node,index){
+			var record = this.getRecord(node),
+				canvas = Ext.DomQuery.selectNode('canvas',node),
+				width = Ext.fly(canvas).getWidth();
+
+			canvas.width = canvas.height = width;
+
+			record.drawIcon(canvas);
+		}
+
+		Ext.each(this.getNodes(), process,this);
 	},
 
 

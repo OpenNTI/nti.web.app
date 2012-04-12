@@ -257,12 +257,14 @@
 
 		.item {
 		    background: transparent;
+			overflow: hidden;
 
-			img {float: left; width: 24px; height: 24px;}
-			div {margin-left: 30px;}
+			canvas {float: left; width: 48px; height: 48px;}
+			div {margin: 10px 0 0 55px;}
 			span{ font-size: 150%; }
 
 			.selector{
+			    margin: 0;
 				display: none;
 				float: right;
 				padding-top: 3px;
