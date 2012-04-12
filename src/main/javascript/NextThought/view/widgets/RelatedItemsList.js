@@ -13,6 +13,14 @@ Ext.define('NextThought.view.widgets.RelatedItemsList', {
 	initComponent: function(){
 		this.callParent(arguments);
 		LocationProvider.on('change',this.setLocation,this);
+		this.template = new Ext.XTemplate(
+			'<div>',
+				'<a href="#" class="internal-link">',
+					'<img src="{src}" border="0" alt="{label}" title="{label}"/>',
+					'<span>{label}</span>',
+				'</a>',
+			'</div>'
+		);
 	},
 
 
@@ -20,7 +28,6 @@ Ext.define('NextThought.view.widgets.RelatedItemsList', {
 	setLocation: function(ntiid){
 		var me = this,
 			map = me.getRelatedItems(LocationProvider.getLocation(ntiid)),
-			m,
 			p = me.items.get(1),
 			c = 0, overflow = false;
 		
@@ -30,14 +37,7 @@ Ext.define('NextThought.view.widgets.RelatedItemsList', {
 			p.add({
 				xtype: 'box',
 				cls: 'related-item',
-				renderTpl: [
-					'<div>',
-						'<a href="#" class="internal-link">',
-							'<img src="{src}" border="0" alt="{label}" title="{label}"/>',
-							'<span>{label}</span>',
-						'</a>',
-					'</div>'
-				],
+				renderTpl: me.template,
 				renderData: {
 					src: $AppConfig.server.host+m.root+m.icon,
 					label: m.label
@@ -53,13 +53,13 @@ Ext.define('NextThought.view.widgets.RelatedItemsList', {
 
 			if(c > 5 && !overflow){
 				overflow = true;
-				p.add({xtype: 'button', text: 'More', margin: '5px 0px'}).on('click',
+				p.add({xtype: 'button', text: 'More', margin: '10px 5px'}).on('click',
 						function(s){s.hide().next().show();});
 
 				p = p.add({hidden:true, defaults:{border:false}});
 			}
 		});
-		
+
 	},
 
 	clicked : function(e,el,opts){
