@@ -26,8 +26,8 @@ Ext.define(	'NextThought.view.whiteboard.Canvas',{
 
 
 	doComponentLayout: function(width,height,isSetSize,callingContainer){
-		if(width){ arguments[1] = width; }//force height to be the same as width
-		return this.callParent(arguments);
+		if(width){ height = width; }//force height to be the same as width
+		return this.callParent([width,height,isSetSize,callingContainer]);
 	},
 
 

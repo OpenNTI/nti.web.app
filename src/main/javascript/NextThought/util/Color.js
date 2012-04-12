@@ -52,7 +52,8 @@ Ext.define('NextThought.util.Color',{
 		}
 
 		function parseRGBA(c){
-			for(var i=c.length-1;i>=0;i--){ c[i] = +c[i]; } //ensure they're numbers
+			var i=c.length-1;
+			for(;i>=0;i--){ c[i] = +c[i]; } //ensure they're numbers
 			return c;
 		}
 
