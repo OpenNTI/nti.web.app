@@ -73,7 +73,7 @@ Ext.define('NextThought.controller.Chat', {
 			'chat-window splitbutton[action=flagged]': {
 				'click' : this.flaggedButtonClicked
 			},
-			'leftColumn button[showChat]':{
+			'button[showChat]':{
 				'click': this.openChatWindow
 			},
 
@@ -661,16 +661,11 @@ Ext.define('NextThought.controller.Chat', {
 
 
 	setChatNotification: function(on) {
-		var cols = Ext.ComponentQuery.query('leftColumn'),
-			b,
-			cls = 'attention';
+		var cls = 'attention';
 
-		Ext.each(cols, function(c){
-			b = c.down('button[showChat]');
-			if (b) {
-				if (on){b.addCls(cls);}
-				else{b.removeCls(cls);}
-			}
+		Ext.each(Ext.ComponentQuery.query('button[showChat]'), function(b){
+			if (on){b.addCls(cls);}
+			else{b.removeCls(cls);}
 		});
 	},
 

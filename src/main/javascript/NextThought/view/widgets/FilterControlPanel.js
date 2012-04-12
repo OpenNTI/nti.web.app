@@ -1,17 +1,16 @@
 
 Ext.define('NextThought.view.widgets.FilterControlPanel', {
-	extend: 'Ext.panel.Panel',
+	extend: 'Ext.form.Panel',
 	alias: 'widget.filter-control',
 	requires: [
 		'NextThought.util.Globals',
 		'Ext.form.field.Checkbox'
 	],
 
+	layout: 'anchor',
+	cls: 'filter-controls',
 	border: false,
-	items: [{
-		xtype: 'form', layout: 'anchor', cls: 'filter-controls',
-		border: false, defaults:{border:false, anchor: '100%'}
-	}],
+	defaults:{border:false, anchor: '100%'},
 
 	constructor: function(){
 		this.addEvents('filter-control-loaded');
@@ -30,7 +29,7 @@ Ext.define('NextThought.view.widgets.FilterControlPanel', {
 	
 	
 	addGroups : function(){
-		var form = this.items.get(0);
+		var form = this;
 		form.removeAll(true);
 
 		form.add({ border: false,html:'Who:', cls: 'sidebar-header'});

@@ -4,17 +4,19 @@
 		padding-top: 1px;
 		height: 16px;
 		background: $filter-sprite no-repeat 0 0;
-
-		.no-filter & {}
-		.user-filter & { background-position:  0 -144px; }
-		.user-group & { background-position:  0 -128px; }
-		.system-group & { background-position:  0 -112px; }
-
-		.highlight & { background-position:  0 -16px; }
-		.note & { background-position:  0 -32px; }
-		.quizresult & { background-position:  0 -48px; }
-		.transcript & { background-position:  0 -64px; }
-		.unkown & { background-position:  0 -80px; }
-		.video & { background-position:  0 -96px; }
 	}
+}
+
+.x-form-item-body {
+	.no-filter & {}
+	.user-filter & { background-position:  0 -144px; }
+	.user-group & { background-position:  0 -128px; }
+	.system-group &{ background-position:  0 -112px; }
+
+	.highlight & { background-position:  0 -16px; }
+	.note & { background-position:  0 -32px; }
+	.quizresult & { background-position:  0 -48px; }
+	.transcript & { background-position:  0 -64px; }
+	.unkown & { background-position:  0 -80px; }
+	.video & { background-position:  0 -96px; }
 }

@@ -1,10 +1,6 @@
 Ext.define( 'NextThought.view.modes.Mode', {
 	extend: 'Ext.panel.Panel',
 	alias: 'widget.mode-container',
-	requires: [
-			'NextThought.view.widgets.main.LeftColumn',
-			'NextThought.view.widgets.main.RightColumn'
-			],
 
 	CENTER_MIN_WIDTH: 256,
 
@@ -27,19 +23,31 @@ Ext.define( 'NextThought.view.modes.Mode', {
 	},
 
 
+	getLeftToolbar: function(){
+		return {
+			xtype: 'toolbar',
+			cls: 'x-docked-noborder-top',
+			items: [
+				'->',
+				{ showChat: true, tooltip: 'Chat', iconCls: 'chat' },
+				{ objectExplorer: true, tooltip: 'My Stuff', iconCls: 'object-explorer' } ]
+		};
+	},
+
+
+	getRightToolbar: function(){
+		return {
+			xtype: 'toolbar',
+			cls: 'x-docked-noborder-top',
+			items: ['Community','->', {text: '&nbsp;',focusable: false, disabled:true}]
+		};
+	},
+
+
 	getPlaceHolder: function(){
 		return {focusable:false, disabled:true,text:'&nbsp;'};
 	},
 
-
-	getEmptyToolbar: function(){
-		return { xtype:'toolbar', cls:'x-docked-noborder-top', items:this.getPlaceHolder()};
-	},
-
-	getSpacerColumn: function(){
-		return { /*xtype:'tbspacer',*/ flex:1, focusable: false, dockedItems: this.getEmptyToolbar() };
-	},
-	
 	activate: function(){
 		var ct = this.ownerCt,
 			me = this,

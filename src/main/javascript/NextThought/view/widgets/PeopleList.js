@@ -12,7 +12,7 @@ Ext.define('NextThought.view.widgets.PeopleList', {
 
 	border: false,
 	defaults: {border: false},
-	items:[{html:'People:', cls: 'sidebar-header'},{cls: 'sidebar-content'}],
+	items:[{html:'People:', cls: 'sidebar-header'},{cls: 'sidebar-content', margin: '0 0 0 5px'}],
 
 	constructor: function(){
 		this.contributors = {};

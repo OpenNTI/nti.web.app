@@ -9,7 +9,6 @@ Ext.define('NextThought.controller.ObjectExplorer', {
 
 	views: [
 		'Viewport',
-		'widgets.main.LeftColumn',
 		'widgets.ItemNavigator'
 	],
 
@@ -24,7 +23,7 @@ Ext.define('NextThought.controller.ObjectExplorer', {
 
 	init: function() {
 		this.control({
-			'leftColumn button[objectExplorer]': {
+			'button[objectExplorer]': {
 				'click': this.objectExplorerClicked
 			},
 

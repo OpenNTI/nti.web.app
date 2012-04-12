@@ -27,27 +27,26 @@ Ext.define('NextThought.view.widgets.RelatedItemsList', {
 		p.removeAll(true);
 
 		Ext.Object.each(map,function(id,m){
-
-			var listeners = { 'afterrender': function(c) { c.el.on('click', me.clicked, me, {entry:m}); } },
-				label = {
-					xtype: 'box',
-					autoEl: {tag: 'a', href: '#', html: m.label, cls: 'internal-link', style: 'display: block'},
-					listeners: listeners
-				},
-				icon = {
-					xtype: 'box',
-					autoEl: {tag: 'img', src: $AppConfig.server.host+m.root+m.icon},
-					listeners: listeners
-				};
-
-
 			p.add({
+				xtype: 'box',
 				cls: 'related-item',
-				layout: {
-					type:'hbox',
-					align: 'middle'
+				renderTpl: [
+					'<div>',
+						'<a href="#" class="internal-link">',
+							'<img src="{src}" border="0" alt="{label}" title="{label}"/>',
+							'<span>{label}</span>',
+						'</a>',
+					'</div>'
+				],
+				renderData: {
+					src: $AppConfig.server.host+m.root+m.icon,
+					label: m.label
 				},
-				items: [icon, label]
+				listeners: {
+					'afterrender': function(c) {
+						c.el.on('click', me.clicked, me, {entry:m});
+					}
+				}
 			});
 
 			c++;

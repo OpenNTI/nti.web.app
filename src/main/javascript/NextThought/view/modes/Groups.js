@@ -8,11 +8,13 @@ Ext.define( 'NextThought.view.modes.Groups', {
 	initComponent: function(){
 		this.callParent(arguments);
 
-		var bb ={ xtype: 'toolbar', cls: 'x-docked-noborder-top', items: {focusable: false, disabled:true,text:'&nbsp;',xtype:'button'}},
-			sideWidth = Globals.MIN_SIDE_WIDTH;
+		var sideWidth = Globals.MIN_SIDE_WIDTH;
 
-		this.add({ flex:1, focusable: false, dockedItems: bb });
-		this.add({ id: 'west-groups', xtype: 'leftColumn', width: sideWidth, columnWidget: {} });
+		this.add({
+			dockedItems: this.getLeftToolbar(),
+			minWidth: sideWidth,
+			flex: 2
+		});
 
 		this.add({
 			cls: 'x-focus-pane',
@@ -38,8 +40,12 @@ Ext.define( 'NextThought.view.modes.Groups', {
 			items: {xtype: 'groups-view'}
 		});
 		
-		this.add({ region: 'east', id:'east-groups', xtype: 'rightColumn',width: sideWidth, columnWidget: {} });
-		this.add({ flex:1, focusable: false, dockedItems: bb });
+		this.add({
+			border: false,
+			dockedItems: this.getRightToolbar(),
+			minWidth: sideWidth,
+			flex: 2
+		});
 	}
 	
 });

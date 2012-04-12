@@ -15,12 +15,15 @@ Ext.define( 'NextThought.view.modes.Reader', {
 
 		var sideWidth = Globals.MIN_SIDE_WIDTH;
 
-		this.add(this.getSpacerColumn());
 		this.add({
-			id: 'west-reader',
-			xtype: 'leftColumn',
-			width: sideWidth,
-			columnWidget: {xtype:'filter-control',width: sideWidth}
+			dockedItems: this.getLeftToolbar(),
+			minWidth: sideWidth,
+			flex: 2,
+			layout: {
+				type:'hbox',
+				pack: 'end'
+			},
+			items: {xtype:'filter-control',width: sideWidth}
 		});
 
 		this.add({
@@ -41,12 +44,12 @@ Ext.define( 'NextThought.view.modes.Reader', {
 		});
 
 		this.add({
-			id:'east-reader',
-			xtype: 'rightColumn',
-			width: sideWidth,
-			columnWidget: {xtype:'reader-items',width: sideWidth}
+			border: false,
+			dockedItems: this.getRightToolbar(),
+			minWidth: sideWidth,
+			flex: 2,
+			items: {xtype:'reader-items'}
 		});
-		this.add(this.getSpacerColumn());
 
 
 		this.reader = Ext.getCmp('readerPanel');

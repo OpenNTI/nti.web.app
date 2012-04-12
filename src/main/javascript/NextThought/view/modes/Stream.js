@@ -4,17 +4,18 @@ Ext.define( 'NextThought.view.modes.Stream', {
 	requires: ['NextThought.view.content.Stream'],
 	
 	initComponent: function(){
-		var bb= { xtype: 'toolbar', cls: 'x-docked-noborder-top', items: {focusable: false, disabled:true,text:'&nbsp;',xtype:'button'}},
-			sideWidth = Globals.MIN_SIDE_WIDTH;
+		var sideWidth = Globals.MIN_SIDE_WIDTH;
 		this.callParent(arguments);
 
-		this.add({ /*xtype:'tbspacer',*/ flex:1, focusable: false, dockedItems: bb });
-		// this.add({ region: 'west', id: 'west-stream', xtype: 'leftColumn' });
 		this.add({
-			id: 'west-stream',
-			xtype: 'leftColumn',
-			width: sideWidth,
-			columnWidget: {xtype:'filter-control',width: sideWidth}
+			dockedItems: this.getLeftToolbar(),
+			minWidth: sideWidth,
+			flex: 2,
+			layout: {
+				type:'hbox',
+				pack: 'end'
+			},
+			items: {xtype:'filter-control',width: sideWidth}
 		});
 
 		this.add({
@@ -39,14 +40,13 @@ Ext.define( 'NextThought.view.modes.Stream', {
 		});
 
 
-
 		this.add({
-			id:'east-stream',
-			xtype: 'rightColumn',
-			width: sideWidth,
-			columnWidget: {items: {xtype: 'people-list',width: sideWidth}}
+			border: false,
+			dockedItems: this.getRightToolbar(),
+			minWidth: sideWidth,
+			flex: 2,
+			items: {items: {xtype: 'people-list',width: sideWidth}}
 		});
-		this.add({ /*xtype:'tbspacer',*/ flex:1, focusable: false, dockedItems: bb });
 	}
 	
 });

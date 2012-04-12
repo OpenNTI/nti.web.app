@@ -9,9 +9,10 @@ Ext.define('NextThought.view.widgets.ReaderItemsPanel', {
 	],
 			
 	autoScroll: true,
+	border: false,
 
 	defaults: {
-		margin: 'auto auto 15px auto'
+		margin: 'auto auto 15px 5px'
 	},
 
 	items: [
