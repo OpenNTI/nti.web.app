@@ -37,12 +37,10 @@
 	}
 
 	&.read {
-		background-color: $read-background-color;
-		color: $read-foreground-color;
 		margin: 0;
 	}
 	&.unread {
-     	background-color: $unread-background-color;
+	 	background: $new-notification-badge no-repeat 98% 50%;
      	font-weight: $unread-foreground-color;
     }
 }
