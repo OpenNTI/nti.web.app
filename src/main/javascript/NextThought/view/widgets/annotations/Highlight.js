@@ -209,8 +209,7 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 			s = RectUtils.merge(this.selection.getClientRects(),this.getLineHeight(),this.getBlockWidth()),
 			l = s.length,
 			i = l-1,
-			color = this.getColor(),
-			rgba = Color.toRGBA(color, 0.3),
+			rgba = Color.toRGBA(this.getColor()),
 			me = this,
 			ox = me.offsets.left;
 
@@ -265,6 +264,9 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 
 			//reset the context
 			c.width = 1; c.width = w;
+
+			ctx.globalCompositeOperation = 'xor';
+			ctx.globalAlpha = 0.3;
 
 			while(q.length){ (q.pop())(ctx); }
 		}
