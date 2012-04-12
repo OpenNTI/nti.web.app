@@ -17,6 +17,7 @@ Ext.define( 'NextThought.view.modes.Reader', {
 
 		this.add({
 			dockedItems: this.getLeftToolbar(),
+			autoScroll: true,
 			minWidth: sideWidth,
 			flex: 2,
 			layout: {
@@ -45,6 +46,7 @@ Ext.define( 'NextThought.view.modes.Reader', {
 
 		this.add({
 			border: false,
+			autoScroll: true,
 			dockedItems: this.getRightToolbar(),
 			minWidth: sideWidth,
 			flex: 2,
