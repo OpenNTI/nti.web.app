@@ -32,7 +32,7 @@ Ext.define('NextThought.view.widgets.FilterControlPanel', {
 		var form = this;
 		form.removeAll(true);
 
-		form.add({ border: false,html:'Who:', cls: 'sidebar-header'});
+		form.add({ border: false, html:'Who:', cls: 'sidebar-header'});
 
 		form.add({
 			border: false,
@@ -65,7 +65,7 @@ Ext.define('NextThought.view.widgets.FilterControlPanel', {
 			this
 		);
 		
-		form.add({ border: false,html:'What:', cls: 'sidebar-header'});
+		form.add({ border: false, html:'What:', cls: 'sidebar-header'});
 		
 		form.add({
 			border: false,

@@ -13,7 +13,11 @@ Ext.define('NextThought.view.widgets.annotations.BodyEditor', {
 	items: [{
 		xtype: 'htmleditor',
 		enableLists: false,
-		enableAlignments: false
+		enableAlignments: false,
+		enableLinks: false,
+		enableSourceEdit: false,
+		enableFont: false,
+		enableFontSize: false
 	}],
 
 	constructor: function(config){
