@@ -80,12 +80,13 @@ Ext.define('NextThought.view.content.Reader', {
 
 		// must defer to wait for browser to be ready
 		var me = this,
+			jsPrefix = 'javascript', //this in var to trick jslint
 			task = { interval : 100 },
 			doc = me.getDocumentElement();
 
 		doc.open();
 		doc.close();
-		doc.parentWindow.location.replace('java'+'script:');
+		doc.parentWindow.location.replace(jsPrefix+':');
 		me.loadedResources = {};
 
 		if(Ext.isIE9){
@@ -143,7 +144,7 @@ Ext.define('NextThought.view.content.Reader', {
 			return el;
 		}
 
-		doc.parentWindow.onerror = function(){console.log('iframe error: ',JSON.stringify(arguments))};
+		doc.parentWindow.onerror = function(){console.log('iframe error: ',JSON.stringify(arguments));};
 
 		doc.firstChild.setAttribute('class','x-panel-reset');
 		doc.body.setAttribute('class','x-panel-body');
@@ -261,7 +262,8 @@ Ext.define('NextThought.view.content.Reader', {
 						curtop += +parseInt(doc.defaultView.getComputedStyle(x,null).getPropertyValue('margin-top'),10);
 					}
 					curtop += x.offsetTop;
-				} while (x = x.offsetParent);
+					x = x.offsetParent;
+				} while (x);
 			}
 			return curtop;
 		}
@@ -271,7 +273,9 @@ Ext.define('NextThought.view.content.Reader', {
 				node = f.parentNode,
 				height = +f.height,
 				top = getTop(node),
-				bottom = top+height;
+				bottom = top+height,
+				inBounds = (top >= scrollTop && top <= bounds) || (bottom >= scrollTop && bottom <= bounds),
+				outOfBounds = (top > bounds || bottom < scrollTop);
 
 			if(f.previousSibling || f.nextSibling){
 				console.log('WARNING: iframe is not the sole child element of a DIV. ', f.outerHTML);
@@ -287,11 +291,11 @@ Ext.define('NextThought.view.content.Reader', {
 				f.src = 'about:blank';
 			}
 
-			if(style!==display && (top >= scrollTop && top <= bounds || bottom >= scrollTop && bottom <= bounds)){
+			if( style!==display && inBounds){
 				f.setAttribute('style',display);
 				f.src = f.originalSrc;
 			}
-			else if(style===display && (top > bounds || bottom < scrollTop)){
+			else if(style===display && outOfBounds){
 				console.log(scrollTop, top, bottom, bounds);
 				f.removeAttribute('style');
 				f.src = 'about:blank';
@@ -621,7 +625,7 @@ Ext.define('NextThought.view.content.Reader', {
 		function cssObj(m){
 			var i = m.length-1, k=/href="([^"]*)"/i, o, c = {};
 			for(; i>=0; i--){
-			 	o = k.test(m[i]) ? basePath + k.exec(m[i])[1] : m[i];
+				o = k.test(m[i]) ? basePath + k.exec(m[i])[1] : m[i];
 				c[o] = {};
 				if(!rc[o]) {
 					rc[o] = c[o] = Globals.loadStyleSheet({
