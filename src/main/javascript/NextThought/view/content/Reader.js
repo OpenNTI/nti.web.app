@@ -427,17 +427,17 @@ Ext.define('NextThought.view.content.Reader', {
 		me.clearAnnotations();
 
 		function success(resp){
-			function f(){
+//			function f(){
 				me.splash.hide();
 				me.setReaderContent(resp, callback);
-			}
-
-			if(Ext.isIE){
-				me.resetFrame(f);
-			}
-			else {
-				f();
-			}
+//			}
+//
+//			if(Ext.isIE){
+//				me.resetFrame(f);
+//			}
+//			else {
+//				f();
+//			}
 		}
 
 
