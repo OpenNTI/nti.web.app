@@ -74,7 +74,7 @@ Ext.define('NextThought.view.content.Reader', {
 	mask: function(){var e=this.el;if(e){e.mask();}},
 	unmask: function(){var e=this.el;if(e){e.unmask();}},
 
-	resetFrame: function(){
+	resetFrame: function(cb){
 		console.log('resetFrame');
 
 		// must defer to wait for browser to be ready
@@ -84,6 +84,8 @@ Ext.define('NextThought.view.content.Reader', {
 
 		doc.open();
 		doc.close();
+		doc.parentWindow.location.replace('about:blank');
+		me.loadedResources = {};
 
 		if(Ext.isIE9){
 			this.getIframe().setStyle({
@@ -100,6 +102,9 @@ Ext.define('NextThought.view.content.Reader', {
 			if (doc.body || doc.readyState === 'complete') {
 				Ext.TaskManager.stop(task);
 				me.initContentFrame();
+				if(cb){
+					Globals.callback(cb,me);
+				}
 			}
 		};
 		setTimeout(function(){Ext.TaskManager.start(task);},100);
@@ -112,7 +117,6 @@ Ext.define('NextThought.view.content.Reader', {
 		console.log('frame initialized, setting up...');
 		var me = this,
 			base = location.pathname.toString().replace('index.html',''),
-			host = $AppConfig.server.host,
 			doc = me.getDocumentElement(),
 			meta, g = Globals;
 
@@ -180,6 +184,9 @@ Ext.define('NextThought.view.content.Reader', {
 		ContentAPIRegistry.on('update',me.applyContentAPI,me);
 		me.applyContentAPI();
 		me.setSplash();
+		if(me.syncInterval){
+			clearInterval(me.syncInterval);
+		}
 		me.syncInterval = setInterval( me.checkFrame, 50 );
 	},
 
@@ -420,9 +427,19 @@ Ext.define('NextThought.view.content.Reader', {
 		me.clearAnnotations();
 
 		function success(resp){
-			me.splash.hide();
-			me.setReaderContent(resp, callback);
+			function f(){
+				me.splash.hide();
+				me.setReaderContent(resp, callback);
+			}
+
+			if(Ext.isIE){
+				me.resetFrame(f);
+			}
+			else {
+				f();
+			}
 		}
+
 
 		function failure(q,r){
 			console.error(arguments);
