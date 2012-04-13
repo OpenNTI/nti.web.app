@@ -28,10 +28,16 @@ Ext.define('NextThought.util.QuizUtils', {
 
 	setupQuiz: function(doc){
 		try{
-			var inputs = doc.querySelectorAll('input[type=number]'),
+			var me = this,
+				inputs = doc.querySelectorAll('input[type=number]'),
 				quiz = inputs.length>0,
 				w = doc.parentWindow,
 				q;
+
+			if(!w.$ || !w.$.fn.mathquill){
+				setTimeout(function(){me.setupQuiz(doc);},50);
+				return;
+			}
 
 			if(!quiz){
 				return;
