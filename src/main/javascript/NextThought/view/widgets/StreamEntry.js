@@ -10,7 +10,7 @@ Ext.define('NextThought.view.widgets.StreamEntry', {
 			  '<div class="x-stream-entry {cls}">',
 				  '<img src="{avatarURL}" width=48 height=48"/>',
 				  '<div>',
-						'<span class="name">{name}</span> ',
+						'<span class="name">{creator}</span> ',
 						'<div class="stream-text">{text}</div>',
 				  '</div>',
 			  '</div>'
@@ -42,7 +42,7 @@ Ext.define('NextThought.view.widgets.StreamEntry', {
 		//set things that will remain the same regardless of change type:
 		me.renderData = {
 			avatarURL: u.get('avatarURL'),
-			creator: c
+			creator: u.get('realname')
 		};
 
 		//type specific action, note that compileBody requires callback
