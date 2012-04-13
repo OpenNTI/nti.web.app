@@ -107,7 +107,7 @@ Ext.define('NextThought.view.content.Reader', {
 				}
 			}
 		};
-		setTimeout(function(){Ext.TaskManager.start(task);},100);
+		setTimeout(function(){Ext.TaskManager.start(task);},200);
 	},
 
 
@@ -187,7 +187,7 @@ Ext.define('NextThought.view.content.Reader', {
 		if(me.syncInterval){
 			clearInterval(me.syncInterval);
 		}
-		me.syncInterval = setInterval( me.checkFrame, 50 );
+		me.syncInterval = setInterval( me.checkFrame, Ext.isIE? 500 : 100 );
 	},
 
 
