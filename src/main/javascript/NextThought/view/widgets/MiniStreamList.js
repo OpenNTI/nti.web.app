@@ -13,12 +13,13 @@ Ext.define('NextThought.view.widgets.MiniStreamList', {
 
 	initComponent: function(){
 		var me = this;
+		this.readUnreads = {};
 		me.callParent(arguments);
 		me.on('added',function(){
 			FilterManager.registerFilterListener(me, me.applyFilter,me);
 		});
 	},
-	
+
 
 	applyFilter: function(filter){
 		this.filter = filter;
@@ -42,11 +43,17 @@ Ext.define('NextThought.view.widgets.MiniStreamList', {
 
 
 	updateStream: function(){
+		this.store.sort('Last Modified', 'DESC');
+
 		var c=0,
-			s = this.store || {each:Ext.emptyFn},
-			p = this.items.get(1),
-			f = this.filter,
-			overflow = false;
+			me = this,
+			s = me.store || {each:Ext.emptyFn},
+			p = me.items.get(1),
+			f = me.filter,
+			overflow = false,
+			lastLoginTime = $AppConfig.userObject.get('lastLoginTime'),
+			unread,
+			ntiid;
 
 		p.removeAll(true);
 
@@ -54,7 +61,17 @@ Ext.define('NextThought.view.widgets.MiniStreamList', {
 
 			if( !f || f.test(change) ){
 				c++;
-				p.add({change: change, xtype: 'miniStreamEntry'});
+				ntiid = change.getItemValue('NTIID');
+				unread = (change.get('Last Modified') > lastLoginTime);
+				if (unread && me.readUnreads[ntiid]) {
+					unread = false;
+				}
+				p.add({xtype: 'miniStreamEntry', change: change, cls: unread ? 'unread' : 'read', listeners: {
+					'clicked': function(item, cmp){
+						me.readUnreads[ntiid] = true;
+						cmp.markRead();
+					}
+				}});
 			}
 
 			if(c > 5 && !overflow){

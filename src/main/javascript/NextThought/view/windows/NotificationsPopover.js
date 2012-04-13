@@ -100,7 +100,6 @@ Ext.define('NextThought.view.windows.NotificationsPopover', {
 
 			if (m.get) {
 				unread = (m.get('Last Modified') > me.lastLoginTime);
-				console.log('unread', unread);
 				p.add({xtype: 'miniStreamEntry', change: m, cls: unread ? 'unread' : 'read'});
 				c++; //get it?
 			}
