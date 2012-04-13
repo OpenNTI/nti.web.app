@@ -522,9 +522,10 @@ Ext.define('NextThought.view.content.Reader', {
 		}
 
 		function cssObj(m){
+			m.push('./assets/test.css');//
 			var i = m.length-1, k=/href="([^"]*)"/i, o, c = {};
 			for(; i>=0; i--){
-				o = basePath + k.exec(m[i])[1];
+			 	o = k.test(m[i]) ? basePath + k.exec(m[i])[1] : m[i];
 				c[o] = {};
 				if(!rc[o]) {
 					rc[o] = c[o] = Globals.loadStyleSheet({
@@ -612,6 +613,8 @@ turn off html5 player
 						'&_dc='+Ext.Date.now();
 			}
 */
+
+
 			//inline
 			return (anchor || external || /^data:/i.test(url)) ?
 					original : attr+'="'+host+url+'"';
