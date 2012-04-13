@@ -237,7 +237,7 @@ Ext.define('NextThought.view.content.Reader', {
 			doc = me.getDocumentElement(),
 			view = me.body,
 			container = doc.getElementById('NTIContent'),
-			scrollTop = view.getScroll().top,
+			scrollTop = view.getScroll().top - 10,
 			viewHeight = view.getHeight(),
 			frames = doc.querySelectorAll('iframe'),
 			bounds = scrollTop + viewHeight,
@@ -250,11 +250,27 @@ Ext.define('NextThought.view.content.Reader', {
 			return;
 		}
 
+		function getTop(x) {
+			var curtop = 0;
+			if (x.offsetParent) {
+				do {
+					if (x.currentStyle) {
+						curtop += +parseInt(x.currentStyle['margin-top'],10);
+					}
+					else if (w.getComputedStyle) {
+						curtop += +parseInt(doc.defaultView.getComputedStyle(x,null).getPropertyValue('margin-top'),10);
+					}
+					curtop += x.offsetTop;
+				} while (x = x.offsetParent);
+			}
+			return curtop;
+		}
 
 		Ext.each(frames,function(f){
-			var node = f.parentNode,
+			var style = f.getAttribute('style'),
+				node = f.parentNode,
 				height = +f.height,
-				top = node.offsetTop,
+				top = getTop(node),
 				bottom = top+height;
 
 			if(f.previousSibling || f.nextSibling){
@@ -264,18 +280,19 @@ Ext.define('NextThought.view.content.Reader', {
 
 			w.$(node).height(height+10);
 
-			console.log('',scrollTop, top,height,f);
+			//console.log('scrollTop: ',scrollTop, 'frame top: ', top, 'frame height: ',height,f);
 
 			if(!f.originalSrc){
 				f.originalSrc = f.src;
 				f.src = 'about:blank';
 			}
 
-			if(top >= scrollTop && top <= bounds){
+			if(style!==display && (top >= scrollTop && top <= bounds || bottom >= scrollTop && bottom <= bounds)){
 				f.setAttribute('style',display);
-				f.src = Ext.urlAppend(f.originalSrc,'_dc'+Date.now());
+				f.src = f.originalSrc;
 			}
-			else if(f.getAttribute('style')===display && (top > bounds || bottom < scrollTop)){
+			else if(style===display && (top > bounds || bottom < scrollTop)){
+				console.log(scrollTop, top, bottom, bounds);
 				f.removeAttribute('style');
 				f.src = 'about:blank';
 //				height = contentHeight-container.clientHeight;
