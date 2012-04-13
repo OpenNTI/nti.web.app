@@ -14,8 +14,7 @@ Ext.define('NextThought.view.widgets.ItemNavigator', {
 	alias: 'widget.item-navigator',
 	frame: false,
 	border: false,
-	defaults: {frame: false, border: false},
-	layout: 'anchor',
+	layout: 'fit',
 
 	dockedItems:{
 		xtype: 'toolbar',
@@ -106,7 +105,11 @@ Ext.define('NextThought.view.widgets.ItemNavigator', {
 		me.add({
 			xtype: 'grid',
 			store: me.store,
-			anchor: '100% 100%',
+			scroll: false,
+			viewConfig: {
+				stripeRows: true,
+				style: { overflow: 'auto', overflowX: 'hidden'}
+			},
 			enableColumnHide: false,
 			features: [{
 				ftype:'grouping',
@@ -150,10 +153,7 @@ Ext.define('NextThought.view.widgets.ItemNavigator', {
 				},
 				deleteActionColumn
 
-			],
-			viewConfig: {
-				stripeRows: true
-			}
+			]
 		});
 
 		trigger = me.query('triggerfield')[0];
