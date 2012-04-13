@@ -54,6 +54,7 @@ Ext.define('NextThought.view.content.Reader', {
 		this.mixins.annotations.initAnnotations.call(this);
 
 		this.checkFrame = Ext.bind(this.checkFrame,this);
+		this.checkContentFrames = Ext.Function.createBuffered(this.checkContentFrames,100);
 
 		this.meta = {};
 		this.css = {};
@@ -79,12 +80,12 @@ Ext.define('NextThought.view.content.Reader', {
 
 		// must defer to wait for browser to be ready
 		var me = this,
-			task = { interval : 10 },
+			task = { interval : 100 },
 			doc = me.getDocumentElement();
 
 		doc.open();
 		doc.close();
-		doc.parentWindow.location.replace('about:blank');
+		doc.parentWindow.location.replace('java'+'script:');
 		me.loadedResources = {};
 
 		if(Ext.isIE9){
@@ -129,6 +130,21 @@ Ext.define('NextThought.view.content.Reader', {
 			}
 		}
 
+		function addCSS(cssStr){
+			var el= doc.createElement('style');
+
+			el.type= 'text/css';
+			el.media= 'screen';
+
+			if(el.styleSheet){ el.styleSheet.cssText= cssStr; }// IE method
+			else { el.appendChild(document.createTextNode(cssStr)); } // others
+
+			doc.getElementsByTagName('head')[0].appendChild(el);
+			return el;
+		}
+
+		doc.parentWindow.onerror = function(){console.log('iframe error: ',JSON.stringify(arguments))};
+
 		doc.firstChild.setAttribute('class','x-panel-reset');
 		doc.body.setAttribute('class','x-panel-body');
 
@@ -142,11 +158,14 @@ Ext.define('NextThought.view.content.Reader', {
 			url: base+document.getElementById('main-stylesheet').getAttribute('href'),
 			document: doc });
 
+		//hide all sub-iframes initially.
+		addCSS("iframe{display:none;}");
 
 		//Quiz Dependencies: Load MathQuill
 		g.loadStyleSheet({ url: base+'assets/lib/mathquill/mathquill.css', document: doc });
 		g.loadScript({url: '//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js', document: doc},
-			function(){ g.loadScript({ url: base+'assets/lib/mathquill/mathquill.min.js', document: doc }); });
+			function(){
+				g.loadScript({ url: base+'assets/lib/mathquill/mathquill.min.js', document: doc }); });
 
 		//Quiz Dependencies: Load MathJax 1.1 (2.0 buggy)
 		g.loadScript(
@@ -213,6 +232,64 @@ Ext.define('NextThought.view.content.Reader', {
 		return this.mixins.annotations.onContextMenuHandler.apply(this,arguments);
 	},
 
+	checkContentFrames: function(){
+		var me = this,
+			doc = me.getDocumentElement(),
+			view = me.body,
+			container = doc.getElementById('NTIContent'),
+			scrollTop = view.getScroll().top,
+			viewHeight = view.getHeight(),
+			frames = doc.querySelectorAll('iframe'),
+			bounds = scrollTop + viewHeight,
+			display = 'display:block;',
+//			contentHeight = container.clientHeight,
+			w = doc.parentWindow;
+
+		if(!w.$){
+			setTimeout(function(){me.checkContentFrames();},50);
+			return;
+		}
+
+
+		Ext.each(frames,function(f){
+			var node = f.parentNode,
+				height = +f.height,
+				top = node.offsetTop,
+				bottom = top+height;
+
+			if(f.previousSibling || f.nextSibling){
+				console.log('WARNING: iframe is not the sole child element of a DIV. ', f.outerHTML);
+				return;
+			}
+
+			w.$(node).height(height+10);
+
+			console.log('',scrollTop, top,height,f);
+
+			if(!f.originalSrc){
+				f.originalSrc = f.src;
+				f.src = 'about:blank';
+			}
+
+			if(top >= scrollTop && top <= bounds){
+				f.setAttribute('style',display);
+				f.src = Ext.urlAppend(f.originalSrc,'_dc'+Date.now());
+			}
+			else if(f.getAttribute('style')===display && (top > bounds || bottom < scrollTop)){
+				f.removeAttribute('style');
+				f.src = 'about:blank';
+//				height = contentHeight-container.clientHeight;
+//				contentHeight = container.clientHeight;
+//				if(top<scrollTop){
+//					scrollTop -= height;
+//					bounds -= height;
+//					view.scrollTo('top',scrollTop);
+//				}
+			}
+
+		});
+
+	},
 
 	checkFrame: function(){
 		var doc = this.getDocumentElement(),
@@ -264,9 +341,10 @@ Ext.define('NextThought.view.content.Reader', {
 
 		body.update(html);
 		body.setStyle('background','transparent');
+		this.checkContentFrames();
 
 		clearInterval(this.syncInterval);
-		this.syncInterval = setInterval(this.checkFrame,50);
+		this.syncInterval = setInterval(this.checkFrame,100);
 	},
 
 	getDocumentElement: function(){
@@ -399,6 +477,8 @@ Ext.define('NextThought.view.content.Reader', {
 	postRender: function(){
 
 		this.splash = this.body.insertHtml('beforeEnd','<div class="no-content-splash"></div>',true);
+
+		this.body.on('scroll',this.checkContentFrames,this);
 
 		if (this.tracker !== false) {
 			if(this.tracker){
