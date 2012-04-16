@@ -25,6 +25,16 @@ Ext.define('NextThought.filter.Filter',{
 		return Ext.String.format('{0} {1} {2}',this.fieldName, this.operation, this.value);
 	},
 
+	equals: function(o){
+		if(!o){
+			return false;
+		}
+		return (	this.fieldName	=== o.fieldName
+				&&	this.value		=== o.value
+				&&	this.operation	=== o.operation
+			);
+	},
+
 	test: function(obj){
 		var f = this.fieldName,
 			v = this.value,

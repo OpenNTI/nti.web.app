@@ -49,8 +49,13 @@ Ext.define('NextThought.controller.FilterControl', {
 
 	
 	beginChanges: function(id){
-		if(this.beginChanges[id]) { return false; }
-		this.beginChanges[id] = true;
+		var me = this;
+
+		if(me.beginChanges[id]) { return false; }
+
+		me.beginChanges[id] = true;
+		setTimeout(function(){ delete me.beginChanges[id]; },500);
+
 		return true;
 	},
 
@@ -129,7 +134,7 @@ Ext.define('NextThought.controller.FilterControl', {
 			f = Ext.Function.createBuffered(this.rebuildFilterBuffered,50,this,[cmp]);
 			this.rebuildFilter[cmp.getId()] = f;
 		}
-		f.call(window);
+		f.call(this);
 	},
 	
 	rebuildFilterBuffered: function(cmp){
@@ -174,6 +179,6 @@ Ext.define('NextThought.controller.FilterControl', {
 		models.addFilter(new Filter('$className',Filter.OPERATION_INCLUDE, 'String'));
 
 		FilterManager.setFilter(id,group);
-		this.beginChanges[id] = undefined;
+		delete this.beginChanges[id];
 	}
 });

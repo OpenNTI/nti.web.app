@@ -28,13 +28,48 @@ Ext.define('NextThought.filter.FilterGroup',{
 	},
 
 
+	equals: function(o){
+		if(!o){
+			return false;
+		}
+
+		function same(a,b){
+			if(!Ext.isArray(a) || !Ext.isArray(b) || a.length !== b.length){
+				return false;
+			}
+			var i = a.length-1;
+			for(;i>=0;i--){
+				if(!m.contains.call(b,a[i])){ return false; }
+			}
+			return true;
+		}
+
+		var m = this;
+		return (	same(m.value,o.value)
+				&&	m.operation	=== o.operation
+				&&	m.scope		=== o.scope
+			);
+	},
+
+
 	getScope: function(){
 		return this.scope;
 	},
 
 
+	contains: function(filter){
+		var v = this.value||this,//or 'this' allows us to call this on arrays.
+			i = v.length-1;
+		for(; i>=0; i--){
+			if(v[i].equals(filter)){ return true; }
+		}
+		return false;
+	},
+
+
 	addFilter: function(filter){
-		if(filter instanceof NextThought.filter.Filter){
+		if(filter instanceof NextThought.filter.Filter
+		&&(filter instanceof NextThought.filter.FilterGroup || !this.contains(filter))){
 			this.value.push(filter);
 			return true;
 		}
@@ -59,8 +94,7 @@ Ext.define('NextThought.filter.FilterGroup',{
 
 	testIntersection: function(obj){
 		var v = this.value,
-			i = v.length-1,
-			t;
+			i = v.length-1;
 		for(;i>=0;i--){
 			if(!v[i].test(obj)){
 				return false;
