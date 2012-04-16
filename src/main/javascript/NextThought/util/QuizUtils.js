@@ -54,7 +54,7 @@ Ext.define('NextThought.util.QuizUtils', {
 			//Add events for the math panel
 			q.bind('mousedown click focusin', function(e){
 				var r = Ext.getCmp('reader').down('reader-panel');
-				r.scrollToNode(this);
+				r.scrollToNode(this, true, 90);
 				MathSymbolPanel.showMathSymbolPanelFor(this, r.body);
 			});
 		}

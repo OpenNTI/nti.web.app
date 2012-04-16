@@ -433,12 +433,29 @@ Ext.define('NextThought.view.content.Reader', {
 	},
 
 
-	scrollToNode: function(n) {
+	/**
+	 * Scroll to some element, but allow options to decide whether or not to scroll.
+	 *
+	 * @param n - the node you want to scroll to
+	 * @param onlyIfNotVisible - pass true here if you want this function to decide if it should scroll or not,
+	 *                           based on its visibility on screen
+	 * @param bottomThreashold - if you want to scroll if the target is close to the bottom, specify a threashold.
+	 */
+	scrollToNode: function(n, onlyIfNotVisible, bottomThreashold) {
 		while(n && n.nodeType === Node.TEXT_NODE) {
 			n = n.parentNode;
 		}
 
-		var o = Ext.fly(n).getTop();
+		var o = Ext.fly(n).getTop(),
+			st = this.body.getScroll().top,
+			h = this.body.getHeight(),
+			b = st + h - (bottomThreashold || 0);
+
+		//logic to halt scrolling if conditions mentioned in function docs are met.
+		if (onlyIfNotVisible && o > st && o < b) {
+			console.debug('component is already visable, not scrolling.');
+			return;
+		}
 
 		this.scrollTo(o - 10);
 	},
