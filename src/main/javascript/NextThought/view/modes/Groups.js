@@ -30,8 +30,8 @@ Ext.define( 'NextThought.view.modes.Groups', {
 				xtype: 'toolbar',
 				cls: 'x-docked-noborder-top',
 				items: ['Groups:','-',
-					{ text: 'Create', createItem: true },
-					{ text: 'Delete', disabled: true, deleteItem: true },
+					{ text: 'Create', cls: 'create-button', createItem: true },
+					{ text: 'Delete', cls: 'delete-button', disabled: true, deleteItem: true },
 					'->',
 					{ text: '&nbsp;', focusable: false, disabled:true }
 				]
