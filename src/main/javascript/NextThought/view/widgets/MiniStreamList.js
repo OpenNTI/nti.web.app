@@ -43,20 +43,18 @@ Ext.define('NextThought.view.widgets.MiniStreamList', {
 
 
 	updateStream: function(){
-		this.store.sort('Last Modified', 'DESC');
-
 		var c=0,
 			me = this,
-			s = me.store || {each:Ext.emptyFn},
+			s = me.store || {each:Ext.emptyFn,sort:Ext.emptyFn},
 			p = me.items.get(1),
 			f = me.filter,
 			overflow = false,
 			lastLoginTime = $AppConfig.userObject.get('lastLoginTime'),
 			unread,
 			ntiid;
-
 		p.removeAll(true);
 
+		s.sort('Last Modified', 'DESC');
 		s.each(function(change){
 
 			if( !f || f.test(change) ){
