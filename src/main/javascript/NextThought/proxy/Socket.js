@@ -134,7 +134,7 @@ Ext.define('NextThought.proxy.Socket', {
 			//we were asked to shut down... if we reconnect, just shutdown again.
 			s.onPacket = function(){ try{
 				if(m.isDebug) {
-					console.debug('onPacket from a dead socket???',arguments, this);
+					console.debug('onPacket from a dead socket??? '+JSON.stringify(arguments));
 				}
 				s.disconnect();
 				s.socket.disconnectSync();
@@ -150,27 +150,18 @@ Ext.define('NextThought.proxy.Socket', {
 		ds.reconfigure = true;
 
 		if(this.isDebug) {
-			console.debug('maybeReconfigureSocket',ds.count);
+			console.debug('maybeReconfigureSocket: ',ds.count);
 		}
 
 		if (ds.count > 3){
 			this.setup.apply(this);
 		}
 	},
-/*
-	onConnect: function() {
-		if(this.isDebug) {
-			var msg = printStackTrace().slice(3);
-			msg.unshift('connect event');
-			console.debug(msg.join(('\n\t')));
-		}
-		//var args = ['message'];
-		//this.emit.apply(this, args);
-	},
-*/
+
+
 	onError: function() {
 		if(this.isDebug) {
-			console.error('socket error',arguments);
+			console.error('ERROR: socket error'+JSON.stringify(arguments));
 		}
 	},
 
@@ -183,7 +174,7 @@ Ext.define('NextThought.proxy.Socket', {
 
 	onDisconnect: function() {
 		if(this.isDebug) {
-			console.debug('Disconnected '+Array.prototype.join.call(arguments,', '));
+			console.debug('Disconnected '+JSON.stringify(arguments));
 		}
 		this.maybeReconfigureSocket();
 	}
