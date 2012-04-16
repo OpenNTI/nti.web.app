@@ -113,7 +113,8 @@ Ext.define('NextThought.view.widgets.chat.View', {
     },
 
 	toggleModerationButton: function(on) {
-		this.down('chat-occupants-list').toggleModerationButton(on);
+		var ol = this.down('chat-occupants-list');
+		if (ol){ol.toggleModerationButton(on);}
 	},
 
     closeModerationPanel: function() {
