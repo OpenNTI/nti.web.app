@@ -235,5 +235,24 @@ button {
 	}
 }
 
+.chat-friends-view {
+	.tool-open-group-chat {
+	    width: 22px;
+		height: 22px;
+	    img {
+			background: $start-group-chat center no-repeat;
+			width: 22px;
+			height: 22px;
+		}
+	}
+	.x-tool-collapse-top {
+		background: $chat-collapse-group center no-repeat;
+	}
+	.x-tool-expand-bottom {
+	    background: $chat-expand-group center no-repeat;
+	}
+}
+
+
 .shadow-menu { background-image: $shadow-menu-icon; }
 .chat-menu { background-image: $chat-menu-icon; }

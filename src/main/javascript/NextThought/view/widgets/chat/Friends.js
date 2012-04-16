@@ -7,6 +7,7 @@ Ext.define('NextThought.view.widgets.chat.Friends', {
 		'NextThought.cache.IdCache'
 	],
 
+	cls: 'chat-friends-view',
 	autoScroll: true,
 	layout: 'anchor',
 	border: false,
@@ -55,6 +56,7 @@ Ext.define('NextThought.view.widgets.chat.Friends', {
 					tools:[
 						{
 							type: 'gear',
+							cls: 'tool-open-group-chat',
 							tooltip: 'open chat for this group',
 							handler: function(){me.fireEvent('group-click', g);}
 						}
