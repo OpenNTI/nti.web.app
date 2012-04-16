@@ -28,6 +28,7 @@ Ext.define('NextThought.view.widgets.chat.View', {
             items: [
                 {
                     xtype: 'chat-log-view',
+					moderated: false,
                     flex:1
                 },
                 {

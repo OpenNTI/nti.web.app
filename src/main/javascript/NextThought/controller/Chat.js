@@ -728,9 +728,6 @@ Ext.define('NextThought.controller.Chat', {
 
 
 	onMessageContentChannel: function(msg, opts) {
-		console.log('got some content data', arguments);
-
-
 		var win = this.getChatWindow(),
 			cid = msg.get('ContainerId'),
 			moderated = opts && opts.hasOwnProperty('moderated'),

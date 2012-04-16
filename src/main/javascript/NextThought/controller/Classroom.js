@@ -256,12 +256,14 @@ Ext.define('NextThought.controller.Classroom', {
 			ld.down('classroom-breadcrumbbar').updateLocation(ntiid);
 			this.recordState(ntiid, null, true);
 		}
+		/*
 		else {
 			//we must have some other related object, get it and display
 			href = $AppConfig.server.host +
 					s.getCollection('Objects', 'Global').href + '/' + ntiid;
 			ld.addContent(href);
 		}
+		*/
 	},
 
 

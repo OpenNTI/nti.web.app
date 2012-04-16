@@ -98,7 +98,11 @@ Ext.define('NextThought.view.content.Classroom', {
 
 	onContent: function(msg, opts) {
 		console.log('content for display received', msg, opts);
-		var ntiid = msg.get('body').ntiid;
+		var ntiid = msg.get('body').ntiid,
+			l = LocationProvider.getLocation(ntiid),
+			moderated =  opts.hasOwnProperty('moderated'),
+			v = this.down('chat-view'),
+			mlog = this.down('chat-log-view[moderated=true]');
 
 		//content must have ntiid
 		if (!ntiid) {
@@ -106,7 +110,20 @@ Ext.define('NextThought.view.content.Classroom', {
 			return;
 		}
 
-		this.fireEvent('content-message-received', ntiid);
+		if (l){
+			this.fireEvent('content-message-received', ntiid);
+		}
+
+		if (moderated) {
+			mlog.addContentMessage(msg);
+		}
+		else {
+			v.down('chat-log-view[moderated=false]').addContentMessage(msg);
+		}
+
+		if(!moderated && mlog) {
+			mlog.removeMessage(msg);
+		}
 		return true;
 	},
 
@@ -123,7 +140,7 @@ Ext.define('NextThought.view.content.Classroom', {
 		var r = msg.get('ContainerId'),
 			moderated =  opts.hasOwnProperty('moderated'),
 			v = this.down('chat-view'),
-			mlog = this.down('chat-log-view[moderated = true]');
+			mlog = this.down('chat-log-view[moderated=true]');
 
 		if (moderated) {
 			mlog.addMessage(msg);

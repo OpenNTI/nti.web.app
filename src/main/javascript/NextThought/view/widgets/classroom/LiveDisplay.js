@@ -31,7 +31,9 @@ Ext.define('NextThought.view.widgets.classroom.LiveDisplay', {
 			},
 			dockedItems: {dock:'bottom', xtype: 'classroom-breadcrumbbar', prefix: prefix, skipHistory: true}
 		});
-	},
+	}
+	/*
+	Disabled because we dont send content like this any more
 
 	getReaderPanel: function() {
 		throw 'Fix me';
@@ -59,4 +61,5 @@ Ext.define('NextThought.view.widgets.classroom.LiveDisplay', {
 
 		this.setActiveTab(c);
 	}
+	*/
 });

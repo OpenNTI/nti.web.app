@@ -14,7 +14,7 @@ Ext.define('NextThought.view.widgets.chat.ContentLogEntry', {
 			'<div>',
 				'<span class="name">{name}</span> ',
 				'<span class="body-text">sent content {body}</span> ',
-				'<img src="{locationicon}" class="contentimage"/>',
+				'<img src="{locationicon}" class="contentimage" width=90%/>',
 			'</div>',
 		'</div>'
 		),
