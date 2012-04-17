@@ -399,7 +399,6 @@ Ext.define('NextThought.controller.Classroom', {
 	},
 
 
-
 	onResourceSelectedInClassroom: function(r) {
 		var href = $AppConfig.server.host + r.get('href'),
 			name = ClassroomUtils.getNameFromHref(href),
@@ -434,6 +433,7 @@ Ext.define('NextThought.controller.Classroom', {
 		return this.resourceEditorMap[mime].call(this, href, name);
 	},
 
+
 	resolveAndOpenClassScriptEditor: function(href, name) {
 		NextThought.model.ClassScript.load(href,
 			{
@@ -466,6 +466,7 @@ Ext.define('NextThought.controller.Classroom', {
 		reg.expand();
 		w.doLayout();
 	},
+
 
 	showResourceEditor: function(r, e, n) {
 		var w = this.getClassResourceEditor(),
@@ -568,13 +569,6 @@ Ext.define('NextThought.controller.Classroom', {
 		this.rooms[n] = true;
 
 		this.getController('Chat').enterRoom([],{ContainerId: n});
-	},
-
-
-	createClassScriptClicked: function(btn){
-//		var c = this.getClassroomContainer();
-//		c.hideClassChooser();
-		Ext.widget('class-resource-editor').show();
 	},
 
 
