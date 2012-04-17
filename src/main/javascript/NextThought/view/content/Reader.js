@@ -58,7 +58,7 @@ Ext.define('NextThought.view.content.Reader', {
 
 		this.meta = {};
 		this.css = {};
-		this.nav = {};
+//		this.nav = {};
 
 		this.self.classEvents.on('window-drag-start',this.mask,this);
 		this.self.classEvents.on('window-drag-end',this.unmask,this);
@@ -585,6 +585,7 @@ Ext.define('NextThought.view.content.Reader', {
 	setSplash: function(){
 		this.scrollTo(0, false);
 		this.setContent('');
+		this.meta = {};
 		this.splash.dom.parentNode.appendChild(this.splash.dom);
 		this.splash.show();
 	},
@@ -635,9 +636,9 @@ Ext.define('NextThought.view.content.Reader', {
 			return toObj(m, /(name|http\-equiv)="([^"]+)"/i, /content="([^"]+)"/i);
 		}
 
-		function navObj(m){
-			return toObj(m, /rel="([^"]+)"/i, /href="([^"]+)"/i);
-		}
+//		function navObj(m){
+//			return toObj(m, /rel="([^"]+)"/i, /href="([^"]+)"/i);
+//		}
 
 		function cssObj(m){
 			var i = m.length-1, k=/href="([^"]*)"/i, o, c = {};
@@ -675,7 +676,7 @@ Ext.define('NextThought.view.content.Reader', {
 			body = c.substring(start, end);
 
 		this.meta = metaObj( head.match(/<meta[^>]*>/gi) || [] );
-		this.nav = navObj( head.match( /<link[^<>]+rel="(?!stylesheet)([^"]*)"[^<>]*>/ig) || []);
+//		this.nav = navObj( head.match( /<link[^<>]+rel="(?!stylesheet)([^"]*)"[^<>]*>/ig) || []);
 		this.css = cssObj( head.match(/<link[^<>]*?href="([^"]*css)"[^<>]*>/ig) || []);
 
 		return this.fixReferences(body,basePath);
