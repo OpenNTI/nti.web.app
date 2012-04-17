@@ -487,6 +487,7 @@ Ext.define('NextThought.util.AnnotationUtils',{
 
 		if(!endHighlightedFullText) {
 			endHighlightedFullText = startHighlightedFullText;
+			eht = sht;
 		}
 
 		//resolve anchors to their actual DOM nodes
