@@ -2,6 +2,10 @@ Ext.define( 'NextThought.view.modes.Mode', {
 	extend: 'Ext.panel.Panel',
 	alias: 'widget.mode-container',
 
+	uses: [
+		'NextThought.view.widgets.main.ModeSwitcher'
+	],
+
 	CENTER_MIN_WIDTH: 256,
 
 	autoScroll: false,
@@ -15,11 +19,8 @@ Ext.define( 'NextThought.view.modes.Mode', {
 	initComponent: function(){
 		this.addEvents('activate-mode');
 		this.callParent(arguments);
-		var id = this.id,
-			modeSwitcher = Ext.ComponentQuery.query('modeswitcher')[0];
-
-		this.toggleButton = modeSwitcher.addMode(id+' mode label',id+'-mode-icon');
-		this.toggleButton.modeReference = this;
+		var id = this.id;
+		this.modeRef = ModeSwitcher.add(id+' mode label',id+'-mode-icon',this);
 	},
 
 
@@ -49,8 +50,9 @@ Ext.define( 'NextThought.view.modes.Mode', {
 	},
 
 	activate: function(){
-		var ct = this.ownerCt,
-			me = this,
+		var me = this,
+			ct = me.ownerCt,
+			button,
 			item = 0;
 
 		if(!ct){
@@ -62,7 +64,7 @@ Ext.define( 'NextThought.view.modes.Mode', {
 			return false;
 		}
 
-		ct.fireEvent('activate-mode', this.getId());
+		ct.fireEvent('activate-mode', me.getId());
 
 		ct.items.each(function(o,i){
 			if(o===me) {
@@ -72,18 +74,18 @@ Ext.define( 'NextThought.view.modes.Mode', {
 		},this);
 
 		try{
-			if(!this.toggleButton.pressed){
-				this.toggleButton.toggle(true);
-			}
+			ModeSwitcher.set(me.modeRef);
+
 			try{
 				ct.getLayout().getActiveItem().deactivate();
 			}
 			catch(e){
 				console.log('Could not call deactivate on active "mode"',e.stack||e.stacktrace,e);
 			}
+
 			ct.getLayout().setActiveItem(item);
-			this.fireEvent('mode-activated');
-			this.getMainComponent().relayout();
+			me.fireEvent('mode-activated');
+			me.getMainComponent().relayout();
 		}
 		catch(er){
 			console.error('Activating Mode: ', er.message, er.stack||er.stacktrace, er);

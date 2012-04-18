@@ -28,13 +28,6 @@ Ext.define( 'NextThought.view.modes.Container', {
 		{id: 'classroom', xtype: 'classroom-mode-container'}
 	],
 	
-	initComponent: function(){
-		var m = this;
-		m.callParent(arguments);
-		m.on('afterrender', function(){ m.items.first().toggleButton.toggle(true); });
-	},
-
-
 	getActive: function() {
 		return this.getLayout().getActiveItem();
 	}

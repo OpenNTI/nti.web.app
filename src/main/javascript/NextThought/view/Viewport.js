@@ -27,20 +27,11 @@ Ext.define('NextThought.view.Viewport', {
 		{xtype: 'modeContainer', region: 'center', id: 'mode-ctr', flex: 1}
 	],
 
-
 	constructor: function(){
 		this.hidden = Boolean(NextThought.phantomRender);
-		this.callParent(arguments);
-	},
-
-
-	getActive: function(){
-		console.trace('stop it');
-		if(!this.container) {
-			this.container = this.down('modeContainer');
-		}
-		return this.container.getActive();
+		return this.callParent(arguments);
 	}
+
 }, function(){
 	//'CSSTransitions','CSSAnimations',
 	var features = ['Canvas','CSSTransforms','SVG','Video'],f,

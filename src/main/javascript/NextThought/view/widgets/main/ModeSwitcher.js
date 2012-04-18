@@ -11,22 +11,10 @@ Ext.define('NextThought.view.widgets.main.ModeSwitcher', {
 		pack: 'start',
 		align: 'middle'
 	},
-	items: [],
-	modeReference: null,
 
-	addMode: function(label, cls){
-		var b = Ext.create('Ext.button.Button', {
-			cls: 'mode-button ',
-			iconCls: cls,
-			title: label,
-			allowDepress: false,
-			enableToggle: true,
-			tooltip: label,
-			toggleGroup: 'modeSwitcher'
-		});
-
-		this.add(b);
-		return b;
+	initComponent: function(){
+		this.self.instance = this;
+		return this.callParent(arguments);
 	},
 
 	afterRender: function(){
@@ -34,5 +22,30 @@ Ext.define('NextThought.view.widgets.main.ModeSwitcher', {
 		if(this.items.length){
 			this.setWidth(this.items.get(0).getWidth()*this.items.length);
 		}
+	},
+
+	statics: {
+		add: function(label, cls, ref){
+			var i = this.instance;
+			return i.add({
+				xtype: 'button',
+				cls: 'mode-button ',
+				iconCls: cls,
+				title: label,
+				pressed:i.items.length===0,
+				allowDepress: false,
+				enableToggle: true,
+				tooltip: label,
+				toggleGroup: 'modeSwitcher',
+				modeReference: ref
+			});
+		},
+
+		set: function(ref){
+			ref.toggle(true);
+		}
 	}
+
+},function(){
+	window.ModeSwitcher = this;
 });
