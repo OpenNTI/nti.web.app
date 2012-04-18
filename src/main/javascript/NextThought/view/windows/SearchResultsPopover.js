@@ -227,8 +227,6 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
 			h, s, t;
 
 		if(hits && hits.length > 0) {
-			console.log('hits: '+ hits.length);
-			console.time('search-render');
 			me.filledBoxes[panelIndex] = true;
 			for(; i>=0;i--){
 				h = hits[len-i];
@@ -252,7 +250,6 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
 			}
 			p.add(hits);
 			p.show();
-			console.timeEnd('search-render');
 		}
 
 		this.afterUpdate();
