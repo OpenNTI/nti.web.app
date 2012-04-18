@@ -219,25 +219,40 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
 			return;
 		}
 
-		var p = this.items.get(panelIndex);
+
+		var me = this,
+			p = me.items.get(panelIndex),
+			len = hits.length-1,
+			i = len,
+			h, s, t;
+
 		if(hits && hits.length > 0) {
+			console.log('hits: '+ hits.length);
+			console.time('search-render');
+			me.filledBoxes[panelIndex] = true;
+			for(; i>=0;i--){
+				h = hits[len-i];
+				s = h.get('Snippet')|| '?blank snippet?';
+				t = h.get('Title')	|| h.get('Type') || 'User Generated Content';
+				hits[len-i] = {
+					html		: Ext.String.format('<b>{0}</b> - {1}', t, s),
+					border		: false,
+					padding		: 10,
+					hit			: h,
+					listeners	: {
+						afterRender: function(){
+							var el = this.getEl();
+							el.on({
+								'click'		: { fn:me.searchResultClicked,	scope: me, hit: this.hit },
+								'mouseover'	: { fn:me.highlightItem,		scope: me, cmp: this }
+							});
+						}
+					}
+				};
+			}
+			p.add(hits);
 			p.show();
-			this.filledBoxes[panelIndex] = true;
-			Ext.each( hits,
-				function(h){
-					var s = h.get('Snippet')	|| '?blank snippet?',
-						t = h.get('Title')	  || h.get('Type') || 'User Generated Content',
-						content,
-						el;
-
-					content = p.add({html: '<b>'+t+'</b>'+' - '+s, border: false, padding: 10, hit: h});
-
-					el = content.getEl();
-					el.on('click', this.searchResultClicked, this, {hit: h});
-					el.on('mouseover', this.highlightItem, this, {cmp: content});
-				},
-				this
-			);
+			console.timeEnd('search-render');
 		}
 
 		this.afterUpdate();
@@ -287,8 +302,7 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
 
 
 	highlightItem: function(event, dom, opts) {
-		var p = this.query('panel[hit]'),
-			c = opts.cmp,
+		var c = opts.cmp,
 			CLASS = 'search-result-selection';
 
 		this.el.select('.'+CLASS).removeCls(CLASS);
