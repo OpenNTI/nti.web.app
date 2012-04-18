@@ -20,21 +20,18 @@ Ext.define( 'NextThought.view.modes.Container', {
 		deferredRender: true
 	},
 	activeItem: 0,
-	items:[],
+	items:[
+		{id: 'home',   xtype: 'home-mode-container'},
+		{id: 'reader', xtype: 'reader-mode-container'},
+		{id: 'stream', xtype: 'stream-mode-container'},
+		{id: 'groups', xtype: 'groups-mode-container'},
+		{id: 'classroom', xtype: 'classroom-mode-container'}
+	],
 	
-	// constructor: function(){
 	initComponent: function(){
-		this.callParent(arguments);
-		
 		var m = this;
-
-		this.add({id: 'home',   xtype: 'home-mode-container'});
-		this.add({id: 'reader', xtype: 'reader-mode-container'});
-		this.add({id: 'stream', xtype: 'stream-mode-container'});
-		this.add({id: 'groups', xtype: 'groups-mode-container'});
-		this.add({id: 'classroom', xtype: 'classroom-mode-container'});
-
-		this.on('afterrender', function(){ m.items.first().toggleButton.toggle(true); });
+		m.callParent(arguments);
+		m.on('afterrender', function(){ m.items.first().toggleButton.toggle(true); });
 	},
 
 
