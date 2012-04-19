@@ -219,6 +219,15 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
 			return;
 		}
 
+		function buildHandler(me, hit){
+			return function(){
+				var el = this.getEl();
+				el.on({
+					'click'		: { fn:me.searchResultClicked,	scope: me, hit: hit },
+					'mouseover'	: { fn:me.highlightItem,		scope: me, cmp: this }
+				});
+			}
+		}
 
 		var me = this,
 			p = me.items.get(panelIndex),
@@ -238,13 +247,7 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
 					padding		: 10,
 					hit			: h,
 					listeners	: {
-						afterRender: function(){
-							var el = this.getEl();
-							el.on({
-								'click'		: { fn:me.searchResultClicked,	scope: me, hit: this.hit },
-								'mouseover'	: { fn:me.highlightItem,		scope: me, cmp: this }
-							});
-						}
+						afterRender: buildHandler(me,h)
 					}
 				};
 			}
