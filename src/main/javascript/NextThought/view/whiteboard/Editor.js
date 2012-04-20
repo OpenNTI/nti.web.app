@@ -5,6 +5,7 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 		'NextThought.view.whiteboard.Canvas',
 		'NextThought.view.whiteboard.Matrix',
 		'NextThought.view.whiteboard.Utils',
+		'Ext.container.ButtonGroup',
 		'Ext.slider.Slider'
 	],
 
@@ -836,4 +837,15 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 	getThumbnail: function(callback){
 		return NextThought.view.whiteboard.Canvas.getThumbnail(this.canvas.getData(),callback);
 	}
+},function(){
+
+	Ext.container.ButtonGroup.override({
+		onBeforeAdd: function(cmp){
+			if(cmp.is('field')){
+				cmp.ui = cmp.ui + '-toolbar';
+			}
+			this.callOverridden(arguments);
+		}
+	});
+
 });
