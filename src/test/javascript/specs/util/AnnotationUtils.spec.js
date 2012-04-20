@@ -353,8 +353,8 @@ describe("Annotation Utils", function() {
 
 	it("should be able to identify a block node",function(){
 		function makeIt(tag, blocky){
-			var q = blocky? ':any({display*=block}|{display=box})' : '{display=inline}',
-				e = Ext.select(tag+q).first().dom;
+			var q = blocky? (':not({display=none}) > '+tag+':any({display*=block}|{display=box})') : (tag+'{display=inline}'),
+				e = Ext.select(q).first().dom;
 
 			return [e,blocky];
 		}

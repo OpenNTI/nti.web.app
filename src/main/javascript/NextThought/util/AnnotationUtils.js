@@ -259,10 +259,41 @@ Ext.define('NextThought.util.AnnotationUtils',{
 	},
 
 
-	getNextAnchorInBlock: function(node,createIfNotFound) {
-		var anchor = null, block, pos;
+	isDisplayed:function(a,root){
+		if(!a || a === root || a.nodeType === Node.DOCUMENT_NODE){
+			return true;
+		}
 
-		block = this.getBlockParent(node);
+		function check(a){
+			var e = Ext.get(a);
+			return e.getStyle('display')!=='none'
+				&& e.getAttribute('type')!=='hidden'
+				&& (e.getWidth(true)!==0 || e.getHeight(true)!==0)
+				&& !e.hasCls('hidden');
+		}
+
+		return this.isDisplayed(a.parentNode,root) && check(a);
+	},
+
+
+	getNextAnchorInBlock: function(node,createIfNotFound) {
+		var anchor = null, pos,
+			block = this.getBlockParent(node),
+			autoAnchor;
+
+		function sibling(a){
+			if(!a || a.parentNode === block){
+				return a;
+			}
+			return sibling(a.parentNode);
+		}
+
+		function makeAnchor(){
+			var a = block.ownerDocument.createElement('a');
+			a.setAttribute('name','generated-anchor-'+guidGenerator());
+			return a;
+		}
+
 
 		Ext.each(this.getAnchors(block), function(a){
 			pos = a.compareDocumentPosition(node);
@@ -273,10 +304,16 @@ Ext.define('NextThought.util.AnnotationUtils',{
 			}
 		});
 
-		if(!anchor && createIfNotFound){
-			anchor = block.ownerDocument.createElement('a');
-			anchor.setAttribute('name','generated-anchor-'+guidGenerator());
-			block.appendChild(anchor);
+		if(createIfNotFound){
+			if(!anchor){
+				anchor = makeAnchor();
+				block.appendChild(anchor);
+			}
+			else if(!this.isDisplayed(anchor)){
+				autoAnchor = makeAnchor();
+				block.insertBefore(autoAnchor,sibling(anchor));
+				return autoAnchor;
+			}
 		}
 
 		return anchor;
@@ -335,7 +372,10 @@ Ext.define('NextThought.util.AnnotationUtils',{
 			}
 		}
 
-		return (e && d.test(e.getStyle('display')) && p.test(e.getStyle('position')));
+		return this.isDisplayed(n)
+			&& e
+			&& d.test(e.getStyle('display'))
+			&& p.test(e.getStyle('position'));
 	},
 
 //tested
@@ -353,7 +393,7 @@ Ext.define('NextThought.util.AnnotationUtils',{
 
 
 	resolveXPath: function resolveXPath(xpath, root){
-		var path, pc, node, child, m,
+		var path, pc, node = null, child, m,
 			id = resolveXPath.id = (resolveXPath.id || /id\("(.+?)"\)/i),
 			text = resolveXPath.text = (resolveXPath.text || /text\(\)(\[(\d+)\])?/i),
 			tag = resolveXPath.tag || (resolveXPath.tag || /([A-Z]+)(\[(\d+)\])?/i);
