@@ -98,7 +98,8 @@ Ext.define('NextThought.util.ClassroomUtils',{
 				for (key in sections) {
 					if (sections.hasOwnProperty(key)){
 						section = sections[key];
-						if (section.getId() === roomInfo.get('ContainerId')){
+						console.log(section, section.getId(), roomInfo.get('ContainerId'));
+						if (section.get('NTIID') === roomInfo.get('ContainerId')){
 							name = r.get('ID') + ' - ' + section.get('ID');
 						}
 					}
@@ -111,7 +112,31 @@ Ext.define('NextThought.util.ClassroomUtils',{
 			if (friendslist){name = friendslist.get('realname');}
 		}
 		return name || nameIfNotFound;
+	},
+
+
+	getClassSectionNameFromSectionId: function(sectionOid) {
+		var name = null, friendslist;
+		Ext.getStore('Providers').findBy(
+			function(r){
+				var sections = r.get('Sections'),
+					section, key;
+				for (key in sections) {
+					if (sections.hasOwnProperty(key)){
+						section = sections[key];
+						if (section.getId() === sectionOid){
+							name = r.get('ID') + ' - ' + section.get('ID');
+						}
+					}
+				}
+			}
+		);
+
+		return name;
 	}
+
+
+
 
 },
 function(){

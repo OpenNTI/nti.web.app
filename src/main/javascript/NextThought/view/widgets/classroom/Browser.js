@@ -16,7 +16,7 @@ Ext.define('NextThought.view.widgets.classroom.Browser', {
 				'<div class="item-wrap">',
 					'<div class="item">',
 						'<div class="selector"><a href="#">Select</a></div>',
-						'<span class="name">{ID}</span>',
+						'<span class="name">{[ClassroomUtils.getClassSectionNameFromSectionId(values.OID)]}</span>',
 					'</div>',
 				'</div>',
 			'</tpl>',
