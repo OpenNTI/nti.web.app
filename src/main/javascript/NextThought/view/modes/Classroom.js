@@ -103,8 +103,8 @@ Ext.define( 'NextThought.view.modes.Classroom', {
 	},
 
 
-	showClassChooser: function(){
-		this.chooser = this.mainArea.add({xtype:'classroom-chooser'}).show().center();
+	showClassChooser: function(enableClose){
+		this.chooser = this.mainArea.add({xtype:'classroom-chooser', enableClose: enableClose}).show().center();
 	},
 
 	hideClassChooser: function(){
@@ -137,7 +137,7 @@ Ext.define( 'NextThought.view.modes.Classroom', {
 				text: 'Classes',
 				tooltip:'Open other classes',
 				handler: function(){
-					me.showClassChooser();			}
+					me.showClassChooser(true);			}
 			});
 		}
 

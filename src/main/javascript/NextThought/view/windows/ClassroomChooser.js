@@ -51,17 +51,32 @@ Ext.define('NextThought.view.windows.ClassroomChooser', {
 				]
 
 			}
-//			,
-//			{xtype: 'link', text: 'Create a class', htmlPrefix: '<hr/>'}
+			//{xtype: 'button', text: 'Close'}
 		]
 	},
-//	dockedItems: {
-//		dock: 'bottom',
-//		xtype: 'toolbar',
-//		items: [{
-//			text: ' '
-//		}]
-//	},
+
+
+	initComponent: function(){
+		this.callParent(arguments);
+		if (this.enableClose) {
+			this.addDocked(
+				{
+					dock: 'top',
+					xtype: 'toolbar',
+					items: [
+						'->',
+						{
+							xtype: 'button',
+							iconCls: 'close',
+							cls: 'close-button',
+							handler: function(){
+								this.up('classroom-chooser').hide();
+							}
+						}]
+				}
+			);
+		}
+	},
 
 
 	afterRender: function(){
