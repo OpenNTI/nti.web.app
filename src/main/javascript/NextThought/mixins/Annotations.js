@@ -250,9 +250,12 @@ Ext.define('NextThought.mixins.Annotations', {
 			type = change.get('ChangeType'),
 			oid = item? item.getId() : null,
 			cid = item? item.get('ContainerId') : null,
+			creator = item? item.get('Creator') : null,
 			delAction = /deleted/i.test(type),
 			cmp = Ext.getCmp(IdCache.getComponentId(oid, null, this.prefix)),
 			cls, replyTo, builder, result;
+
+		ContributorsProvider.add(creator);
 
 		console.log('onNotification', change, type);
 		if (!item || !this.containerId || this.containerId !== cid) {

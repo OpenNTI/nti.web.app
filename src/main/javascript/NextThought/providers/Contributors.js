@@ -14,7 +14,27 @@ Ext.define('NextThought.providers.Contributors', {
 
 	set: function(contributors){
 		this.contributors = contributors;
-		this.fireEvent('change', contributors);
+		this.fireEvent('change', this.contributors);
+	},
+
+
+	add: function(newbie) {
+		var name, alreadyThere = false;
+		for (name in this.contributors) {
+			if (this.contributors.hasOwnProperty(name) &&
+				newbie === name) {
+					alreadyThere = true;
+			}
+		}
+		if (!alreadyThere) {
+			this.contributors[newbie] = true;
+			this.fireEvent('change', this.contributors);
+		}
+	},
+
+	clearContributors: function(){
+		this.contributors = {};
+		this.fireEvent('change', {});
 	}
 
 }, function(){
