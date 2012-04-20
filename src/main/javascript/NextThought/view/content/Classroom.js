@@ -23,8 +23,6 @@ Ext.define('NextThought.view.content.Classroom', {
 	},
 
 	initComponent: function() {
-		//vars
-		//this.roomInfo = null;
 		this.callParent(arguments);
 
 		//table of behavious based on channel
@@ -37,10 +35,27 @@ Ext.define('NextThought.view.content.Classroom', {
 		};
 
 		this.add({xtype: 'chat-view', flex:2, title: 'Class Chat'});
-		this.add({xtype: 'classroom-management', roomInfo: this.roomInfo, width: 500, flex: 1});
-
+		this.add({xtype: 'classroom-management', width: 500, flex: 1});
 		this.down('chat-view').changed(this.roomInfo);
 		this.addOrUpdateSplitters();
+
+
+		//In the room info changes, do something perhaps?
+		this.roomInfo.on('changed', this.roomInfoChanged, this);
+	},
+
+
+	roomInfoChanged: function(roomInfo) {
+		//Just checking to see if we got the correct room info
+		if (roomInfo.getId() !== this.roomInfo.getId()) {
+			console.error('Got a RoomInfo change event for a RoomInfo that has a different ID, current', this.roomInfo, 'new', roomInfo);
+			return;
+		}
+
+		//stop listening on old room info, reassign and start listening again.
+		this.roomInfo.un('changed', this.roomInfoChanged, this);
+		this.roomInfo = roomInfo;
+		this.roomInfo.on('changed', this.roomInfoChanged, this);
 	},
 
 
@@ -62,7 +77,7 @@ Ext.define('NextThought.view.content.Classroom', {
 		}
 
 		if (!tab && script) {
-			tPanel.add({xtype: 'script-log-view', classscriptid: saneId, roomInfo: this.roomInfo, script: script, title:name});
+			tPanel.add({xtype: 'script-log-view', classscriptid: saneId, script: script, title:name});
 		}
 
 		this.addOrUpdateSplitters();
@@ -97,7 +112,6 @@ Ext.define('NextThought.view.content.Classroom', {
 
 
 	onContent: function(msg, opts) {
-		console.log('content for display received', msg, opts);
 		var ntiid = msg.get('body').ntiid,
 			l = LocationProvider.getLocation(ntiid),
 			moderated =  opts.hasOwnProperty('moderated'),
@@ -111,7 +125,8 @@ Ext.define('NextThought.view.content.Classroom', {
 		}
 
 		if (l){
-			this.fireEvent('content-message-received', ntiid);
+			this.fireEvent('content-message-received', ntiid, this.roomInfo.getId());
+			return; //it's navigatable, don't add to log
 		}
 
 		if (moderated) {

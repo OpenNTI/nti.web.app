@@ -38,12 +38,8 @@ Ext.define('NextThought.controller.Classroom', {
 
 	refs:[
 		{ ref: 'classroomContainer', selector: 'classroom-mode-container' },
-		{ ref: 'classResourceEditor', selector: 'class-resource-editor' },
-		{ ref: 'classroom', selector: 'classroom-content' },
-		{ ref: 'liveDisplay', selector: 'live-display' },
 		{ ref: 'viewport', selector: 'master-view' },
-		{ ref: 'scriptView', selector: 'script-log-view' },
-		{ ref: 'resourceView', selector: 'classroom-resource-view' }
+		{ ref: 'classResourceEditor', selector: 'class-resource-editor' }
 	],
 
 	init: function(){
@@ -78,10 +74,6 @@ Ext.define('NextThought.controller.Classroom', {
 
 			'classroom-mode-container' : {
 				'mode-activated' : this.classroomActivated
-			},
-
-			'classroom-mode-container reader-panel' : {
-				'unrecorded-history' : this.recordState
 			},
 
 			'classroom-mode-container splitbutton[action=flagged] menuitem': {
@@ -235,48 +227,49 @@ Ext.define('NextThought.controller.Classroom', {
 	},
 
 
-	onClassroomNavigate: function(btn, evt, opts){
-		var ld = this.getLiveDisplay(),
+	onClassroomNavigate: function(btn){
+		//trickery with up because menu's misbehave with up (only look at ownerCt)
+		var rid = ClassroomUtils.getRoomInfoIdFromComponent(btn),
+			ld = this.getClassroomDown(rid, 'live-display'),
 			n = btn.ntiid;
+
+		if (!rid || !n || !ld) {
+			console.error('Cannot execute classroom navigation request, btn', btn);
+			return;
+		}
 
 		ld.down('reader-panel').loadPage(n);
 		ld.down('classroom-breadcrumbbar').updateLocation(n);
-		this.recordState(n);
+		this.recordState(n, null, false, rid);
 	},
 
 
-	onMessageContentNavigate: function(ntiid) {
+	onMessageContentNavigate: function(ntiid, roomId) {
 		var s = $AppConfig.service,
 			l = LocationProvider.getLocation(ntiid),
-			ld = this.getLiveDisplay(),
+			ld = this.getClassroomDown(roomId, 'live-display'),
 			href = null;
 
 		if (l) {
 			ld.down('reader-panel').loadPage(ntiid);
 			ld.down('classroom-breadcrumbbar').updateLocation(ntiid);
-			this.recordState(ntiid, null, true);
+			this.recordState(ntiid, null, true, roomId);
 		}
-		/*
-		else {
-			//we must have some other related object, get it and display
-			href = $AppConfig.server.host +
-					s.getCollection('Objects', 'Global').href + '/' + ntiid;
-			ld.addContent(href);
-		}
-		*/
 	},
 
 
 	onMessage: function(msg, opts){
+		var cid;
 		if (Ext.isArray(msg)){
 			Ext.each(msg, function(o){
-				this.getClassroom().onMessage(o, {});
+				this.getClassroomDown(o.get('ContainerId'), 'classroom-content').onMessage(o, {});
 			}, this);
 
 			return;
 		}
-		this.markScriptEntryAsSent(msg.getId());
-		return this.getClassroom().onMessage(msg,opts);
+		cid = msg.get('ContainerId');
+		this.markScriptEntryAsSent(msg.getId(), cid);
+		return this.getClassroomDown(cid, 'classroom-content').onMessage(msg,opts) ;
 	},
 
 
@@ -286,7 +279,7 @@ Ext.define('NextThought.controller.Classroom', {
 	 * @param [moderated]
 	 */
 	onEnteredRoom: function(roomInfo, moderated) {
-		this.rooms[roomInfo.getId()] = true;
+		this.rooms[roomInfo.getId()] = roomInfo;
 		this.getClassroomContainer().hideClassChooser();
 		this.getClassroomContainer().showClassroom(roomInfo);
 		this.getClassroomContainer().activate();
@@ -295,10 +288,10 @@ Ext.define('NextThought.controller.Classroom', {
 		this.classroomActivated();
 
 		if (moderated) {
-			this.openModerationPanel();
+			this.openModerationPanel(roomInfo);
 		}
 
-		this.compileResources(roomInfo.get('ContainerId'));
+		this.compileResources(roomInfo.get('ContainerId'), roomInfo.getId());
 	},
 
 
@@ -358,25 +351,26 @@ Ext.define('NextThought.controller.Classroom', {
 	},
 
 
-	openModerationPanel: function() {
-		var content = this.getClassroom(),
+	openModerationPanel: function(roomInfo) {
+		var roomId = roomInfo.getId(),
+			content = this.getClassroomDown(roomId, 'classroom-content'),
 			mod = content.down('chat-log-view[moderated]'),
 			view = content.down('chat-view');
 
 		if (mod){return;} //already moderated
 
 		content.showMod();
-		view.initOccupants(true);
+		view.initOccupants(true, roomInfo);
 	},
 
 
-	closeModerationPanel: function() {
-		var content = this.getClassroom(),
+	closeModerationPanel: function(roomInfo) {
+		var roomId = roomInfo.getId(),
+			content = this.getClassroomDown(roomId, 'classroom-content'),
 			view = content.down('chat-view');
 
 		content.removeMod();
-
-		view.initOccupants(true);
+		view.initOccupants(true, roomInfo);
 	},
 
 
@@ -390,7 +384,7 @@ Ext.define('NextThought.controller.Classroom', {
 			reg.removeAll(true);
 		}
 
-		this.getClassResourceEditor().down('classroom-resource-view').setRecord(cb.value);
+		w.down('classroom-resource-view').setRecord(cb.value);
 	},
 
 
@@ -399,27 +393,33 @@ Ext.define('NextThought.controller.Classroom', {
 	},
 
 
-	onResourceSelectedInClassroom: function(r) {
+	onResourceSelectedInClassroom: function(r, cmp) {
 		var href = $AppConfig.server.host + r.get('href'),
 			name = ClassroomUtils.getNameFromHref(href),
 			mime = r.get('type'),
-			ntiid = r.get('ntiid');
+			ntiid = r.get('ntiid'),
+			rid = ClassroomUtils.getRoomInfoIdFromComponent(cmp);
 
-		return this.resourceEditorMap['classroom:'+mime].call(this, href, name, this.getClassroom(), ntiid);
+		if (!rid){
+			console.error('Cannot execute resource select, resource', r, 'component', cmp);
+			return;
+		}
+
+		return this.resourceEditorMap['classroom:'+mime].call(this, href, name, this.getClassroomDown(rid, 'classroom-content'), ntiid, rid);
 	},
 
 
-	onOccupantsChanged: function(peopleWhoLeft, peopleWhoArrived) {
-		var classroom = this.getClassroom();
+	onOccupantsChanged: function(roomId, peopleWhoLeft, peopleWhoArrived) {
+		var classroom = this.getClassroomDown(roomId, 'classroom-content');
 		if(!classroom) {return;}
 		classroom.down('chat-log-view[moderated=false]').occupantsChanged(peopleWhoLeft, peopleWhoArrived);
 	},
 
 
-	onModsChanged: function(left, added) {
-		var classroom = this.getClassroom();
+	onModsChanged: function(roomId, left, added) {
+		var classroom = this.getClassroomDown(roomId, 'classroom-content');
 		if(!classroom) {return;}
-		classroom.down('chat-log-view').modsChanged(left, added);
+		classroom.down('chat-log-view[moderated=false]').modsChanged(left, added);
 
 		//TODO - maybe check if I'm mod here and do stuff...
 	},
@@ -451,8 +451,8 @@ Ext.define('NextThought.controller.Classroom', {
 	},
 
 
-	sendImageAsContent: function(href, name, classroom, ntiid) {
-		this.getController('Chat').postMessage(this.getClassroom().roomInfo, {'ntiid': ntiid}, null, 'CONTENT');
+	sendImageAsContent: function(href, name, classroom, ntiid, roomId) {
+		this.getController('Chat').postMessage(this.getClassroomDown(roomId, 'classroom-content').roomInfo, {'ntiid': ntiid}, null, 'CONTENT');
 	},
 
 
@@ -533,29 +533,34 @@ Ext.define('NextThought.controller.Classroom', {
 	},
 
 
-	recordState: function(ntiid, eopts, viaSocket) {
-		//??
-		//history.updateState({classroom: {reader: { }}});
-
-		//If this navigate event came from somewhere other than the socket, we need to issue
-		//a CONTENT message to the room.
-		//TODO - this only works if you are a mod, how should this work?
+	recordState: function(ntiid, eopts, viaSocket, rid) {
 		if (viaSocket !== true) {
-			var ri = this.getClassroom().roomInfo,
-				id = !ntiid ? this.getReader().getContainerId() : ntiid;
+			var ri = this.getClassroomDown(rid, 'classroom-content').roomInfo,
+				id = !ntiid ? this.getReader(rid).getContainerId() : ntiid;
 
 			this.getController('Chat').postMessage(ri, {'ntiid': id}, null, 'CONTENT');
 		}
 	},
 
 
-	leaveRoom: function(){
-		var room = this.getClassroom().roomInfo,
-			cid = room.get('ContainerId');
+	leaveRoom: function(cmp, evt, opts){
+		//stop even propagation, class will now take care of itself
+		evt.stopPropagation();
+		evt.preventDefault();
 
-		delete this.rooms[room.getId()];
-		this.getClassroomContainer().leaveClassroom();
-		this.getController('Chat').leaveRoom(room);
+		var c = this.getClassroomContainer(),
+			ri = c.getCurrentRoom();
+
+		//we're handling cleanup, don't let anyone else worry about it.
+		ri.disableExitRoom=true;
+
+		//actually leave room on server
+		this.getController('Chat').leaveRoom(ri);
+
+		//tell the mode to leave the classroom
+		c.leaveClassroom();
+
+		delete this.rooms[ri.getId()];
 	},
 
 
@@ -575,7 +580,7 @@ Ext.define('NextThought.controller.Classroom', {
 	classroomActivated: function() {
 		var c = this.getClassroomContainer();
 
-		if(!c.down('classroom-content')) {
+		if(!c.hasActiveClassrooms()) {
 			c.showClassChooser();
 		}
 	},
@@ -596,25 +601,25 @@ Ext.define('NextThought.controller.Classroom', {
 	NOTE: The containerId of a RoomInfo should match the NTIID of a section info if
 		the room was spawned from a section, otherwise it won't match.
 	 */
-	compileResources: function(cid) {
+	compileResources: function(cid, roomId) {
 		var sStore = this.getSectionsStore(),
 			secIndex = sStore.find('NTIID', cid),
 			sec = secIndex > -1 ? sStore.getAt(secIndex) : null;
 
 		if (sec) {
-			this.getResourceView().setRecord(sec, true);
+			this.getClassroomDown(roomId, 'classroom-resource-view').setRecord(sec, true);
 		}
 	},
 
 
-	getReader: function() {
-		return this.getLiveDisplahy().down('reader-panel');
+	getReader: function(roomId) {
+		return this.getLiveDisplay(roomId).down('reader-panel');
 	},
 
 
-	markScriptEntryAsSent: function(id) {
+	markScriptEntryAsSent: function(id, roomId) {
 		var genId = IdCache.getIdentifier(id),
-			sView = this.getScriptView(),
+			sView = this.getClassroomDown(roomId, 'script-log-view'),
 			qResults = sView ? sView.query('script-entry[messageId='+genId+']') : null,
 			entry = (qResults && qResults.length === 0) ? qResults[0] : null;
 
@@ -624,6 +629,17 @@ Ext.define('NextThought.controller.Classroom', {
 			//set the flag so it'll be styled appropriatly:
 			entry.setPromoted();
 			this.promotedScriptEntries.push(id);
+	},
+
+
+	getClassroomDown: function(roomId, css) {
+		var i = this.getClassroomContainer().findItem(roomId);
+
+		if(i && i.is(css)){
+			return i;
+		}
+
+		return i ? i.down(css) : null;
 	}
 });
 

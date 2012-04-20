@@ -44,18 +44,36 @@ Ext.define('NextThought.view.widgets.chat.View', {
 
 
     initComponent:function() {
-        this.callParent(arguments);
-        this.changed(this.roomInfo);
+		this.callParent(arguments);
 		this.addOrUpdateSplitters();
-    },
+
+
+		//In some cases, there may be a roomInfo tagged here.  Like in a chat window,
+		//but not in a classroom.  At any rate, if it's there, listen for updates
+		if (this.roomInfo){
+			this.roomInfo.on('changed', this.roomInfoChanged, this);
+		}
+	},
+
+
+	roomInfoChanged: function(roomInfo) {
+		if (!this.roomInfo){return;}  //Only do this if it's there.
+
+		//Just checking to see if we got the correct room info
+		if (roomInfo.getId() !== this.roomInfo.getId()) {
+			console.error('Got a RoomInfo change event for a RoomInfo that has a different ID, current', this.roomInfo, 'new', roomInfo);
+			return;
+		}
+
+		//stop listening on old room info, reassign and start listening again.
+		this.roomInfo.un('changed', this.roomInfoChanged, this);
+		this.roomInfo = roomInfo;
+		this.roomInfo.on('changed', this.roomInfoChanged, this);
+	},
+
 
     changed: function(ri) {
         if (!ri){return;}
-
-        this.roomId = IdCache.getIdentifier(ri.getId());
-        this.roomInfo = ri;
-        this.roomInfo.on('changed', this.changed, this);
-        this.roomInfo.on('left-room', this.left, this);
 
         //upon the roominfo appearing, see if we should show the classroom button or not
         if (!this.up('classroom-content')
@@ -63,7 +81,7 @@ Ext.define('NextThought.view.widgets.chat.View', {
 			&& this.down('chat-reply-to')) {
             this.down('chat-reply-to').showClassroomButton();
         }
-		this.initOccupants();
+		this.initOccupants(false, ri);
     },
 
 
@@ -73,13 +91,13 @@ Ext.define('NextThought.view.widgets.chat.View', {
 	},
 
 
-	initOccupants: function(moderated) {
+	initOccupants: function(moderated, ri) {
 		var classContent = this.up('classroom-content'),
 			occList = this.down('chat-occupants-list'),
-			occupants = this.roomInfo.get('Occupants');
+			occupants = ri.get('Occupants');
 
 		if (classContent) {
-			classContent.down('classroom-management').down('chat-occupants-list').setOccupants(occupants, this.roomId, moderated);
+			classContent.down('classroom-management').down('chat-occupants-list').setOccupants(occupants, moderated);
 			if (occList) {occList.hide();}
 		}
 		else if (occupants.length <= 2 && occList) {
@@ -93,11 +111,11 @@ Ext.define('NextThought.view.widgets.chat.View', {
 		else if (occupants.length > 2 && !occList){
 			//we need to add one
 			occList = this.add({flex: 1, xtype: 'chat-occupants-list'});
-			occList.setOccupants(occupants, this.roomId, moderated);
+			occList.setOccupants(occupants, moderated);
 		}
 		else if (occupants.length > 2 && occList) {
 			//list already exists, just update
-			occList.setOccupants(this.roomInfo.get('Occupants'), this.roomId, moderated);
+			occList.setOccupants(occupants, moderated);
 		}
 		else {
 			console.error('Deciding to hide occupants list, a scenario I failed to plan for has occured', occupants, this);
@@ -109,8 +127,6 @@ Ext.define('NextThought.view.widgets.chat.View', {
     left: function() {
         this.down('textfield').destroy();
         this.down('chat-occupants-list').disable();
-        this.roomInfo.clearListeners();
-        delete this.roomInfo;
     },
 
 	toggleModerationButton: function(on) {
@@ -118,24 +134,24 @@ Ext.define('NextThought.view.widgets.chat.View', {
 		if (ol){ol.toggleModerationButton(on);}
 	},
 
-    closeModerationPanel: function() {
+    closeModerationPanel: function(roomInfo) {
         var modLog = this.down('chat-log-view[moderated=true]');
 
 		if (modLog) {
 			this.remove(modLog, true);
 		}
 
-		this.initOccupants(true);
+		this.initOccupants(true, roomInfo);
 		this.toggleModerationButton(false);
     },
 
 
-	openModerationPanel: function() {
+	openModerationPanel: function(roomInfo) {
 		this.insert(0,{ xtype: 'chat-log-view', moderated:  true, title: 'Moderated', flex: 1});
 
 		this.down('textfield[chatentry]').focus();
 
-		this.initOccupants(true);
+		this.initOccupants(true, roomInfo);
 		this.toggleModerationButton(true);
 		this.addOrUpdateSplitters();
 	},

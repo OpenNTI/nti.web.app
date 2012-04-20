@@ -39,8 +39,7 @@ Ext.define('NextThought.view.widgets.classroom.ScriptLog', {
 				this.add(
 					{
 						xtype: 'script-entry',
-						message: m,
-						roomInfo: this.roomInfo
+						message: m
 					}
 				);
 			}

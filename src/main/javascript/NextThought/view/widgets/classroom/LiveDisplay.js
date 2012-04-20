@@ -18,7 +18,6 @@ Ext.define('NextThought.view.widgets.classroom.LiveDisplay', {
 	initComponent: function()
 	{
 		this.callParent(arguments);
-
 		var prefix = guidGenerator();
 		this.content = this.add({
 			xtype: 'reader-panel',
@@ -29,6 +28,7 @@ Ext.define('NextThought.view.widgets.classroom.LiveDisplay', {
 				content: true,
 				tooltip: 'Live Content'
 			},
+
 			dockedItems: {dock:'bottom', xtype: 'classroom-breadcrumbbar', prefix: prefix, skipHistory: true}
 		});
 	}

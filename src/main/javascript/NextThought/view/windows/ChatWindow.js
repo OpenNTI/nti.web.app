@@ -55,17 +55,19 @@ Ext.define('NextThought.view.windows.ChatWindow', {
 
 	addNewChat: function(roomInfo) {
 		var id = IdCache.getIdentifier(roomInfo.getId()),
-			tab = this.down('chat-view[roomId='+id+']');
+			tab = this.down('chat-view[roomId='+id+']'),
+			v;
 		if (!tab) {
-			tab = this.down('tabpanel').add(
-				{
-					title: ClassroomUtils.generateOccupantsString(roomInfo),
-					xtype: 'chat-view',
-					roomId: id,
-					closable: true,
-					roomInfo: roomInfo
-				}
-			);
+			v = Ext.widget('chat-view', {
+				title: ClassroomUtils.generateOccupantsString(roomInfo),
+				xtype: 'chat-view',
+				roomId: id,
+				closable: true,
+				roomInfo: roomInfo
+			});
+			v.changed(roomInfo);
+
+			tab = this.down('tabpanel').add(v);
 		}
 		if (tab) {
 			this.down('tabpanel').setActiveTab(tab);

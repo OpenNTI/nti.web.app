@@ -90,7 +90,7 @@ Ext.define('NextThought.controller.Chat', {
 			'chat-view':{
 				'beforedestroy': function(cmp){
 					if (!cmp.disableExitRoom) {
-						this.leaveRoom(cmp.roomInfo);
+						this.leaveRoom(ClassroomUtils.getRoomInfoFromComponent(cmp));
 					}
 				}
 			},
@@ -150,24 +150,39 @@ Ext.define('NextThought.controller.Chat', {
 	},
 
 
-	existingRoom: function(users, options) {
+	/**
+	 * Check to see if a room already exists.  A room exists when any of the following conditions are met, in this order:
+	 *1) if there's a roomId sent.  there must be an existing roomId in the active rooms object.
+	 *2) if no roomId is sent, then look for a room with the same constituants, that room must not be a group/class.
+	 *
+	 * @param users - list of users
+	 * @param roomId - roomid
+	 * @param options - options
+	 * @return {*}
+	 */
+	existingRoom: function(users, roomId, options) {
 		//Add ourselves to this list
 		var key, ri,
 			allUsers = Ext.Array.unique(users.slice().concat($AppConfig.userObject.getId()));
 
-		if(options){
-			return null;
+		if(options && options.ContainerId && !roomId){
+			roomId = options.ContainerId;
 		}
 
 		//Check to see if a room with these users already exists, and use that.
 		for (key in this.activeRooms) {
 			if (this.activeRooms.hasOwnProperty(key)) {
 				ri = this.activeRooms[key];
-				if (Globals.arrayEquals(ri.get('Occupants'), allUsers)) {
+				if (roomId && roomId === ri.getId()){
+					return ri;
+				}
+				else if (!roomId && Globals.arrayEquals(ri.get('Occupants'), allUsers) && !ClassroomUtils.isClassroomId(ri.getId())) {
 					return ri;
 				}
 			}
 		}
+
+		return null;
 	},
 
 	postMessage: function(room, message, replyTo, channel, recipients) {
@@ -203,6 +218,7 @@ Ext.define('NextThought.controller.Chat', {
 		options.ContainerId = options.ContainerId || LocationProvider.currentNTIID;
 		if (!options.ContainerId){
 			//TODO: figure out what to do when there's no container ID?
+			delete options.ContainerId;
 			console.error('Chat room entered and no current location is set, this chat will not be visable as a transcript.');
 		}
 
@@ -239,7 +255,7 @@ Ext.define('NextThought.controller.Chat', {
 
 		users = Ext.Array.clean(users);
 
-		ri = this.existingRoom(users,options);
+		ri = this.existingRoom(users, options.ContainerId ? options.ContainerId : null, options);
 		if (ri) {
 			this.onEnteredRoom(ri);
 		}
@@ -307,15 +323,15 @@ Ext.define('NextThought.controller.Chat', {
 
 
 	send: function(f, mid, channel, recipients) {
-		var room = f.roomInfo || f.up('chat-view').roomInfo,
+		var room = ClassroomUtils.getRoomInfoFromComponent(f),
 			val = f.getValue();
 
-		if (Ext.isEmpty(val)) {
+		if (!room || Ext.isEmpty(val)) {
+			console.error('Cannot send message, room', room, 'values', val);
 			return;
 		}
 
 		this.postMessage(room, val, mid, channel, recipients);
-
 
 		f.setValue('');
 		f.focus();
@@ -394,11 +410,7 @@ Ext.define('NextThought.controller.Chat', {
 	 * @param cmp - the button
 	 */
 	moderateClicked: function(cmp){
-		var chatViewFromWin = cmp.up('chat-view'),
-			classroom = cmp.up('classroom-content'),
-			chatViewFromClass = classroom ? classroom.down('chat-view') : null,
-			roomInfo = chatViewFromWin ? chatViewFromWin.roomInfo :
-							chatViewFromClass ? chatViewFromClass.roomInfo : null,
+		var roomInfo = ClassroomUtils.getRoomInfoFromComponent(cmp),
 			shouldModerate = this.isModerator(roomInfo) ? false : true;
 
 
@@ -447,10 +459,17 @@ Ext.define('NextThought.controller.Chat', {
 		this.enterRoom(u);
 	},
 
-	shadowClicked: function(r,user) {
-		var u = [];
+	shadowClicked: function(cmp,user) {
+		var u = [],
+			rid = ClassroomUtils.getRoomInfoIdFromComponent(cmp);
+
+		if (!rid || !user) {
+			console.error('Cannot execute shadow request, cmp', cmp, 'user', user);
+			return;
+		}
+
 		u.push(user.getId());
-		Socket.emit('chat_shadowUsers',r, u);
+		Socket.emit('chat_shadowUsers',rid, u);
 	 },
 
 	groupEntryClicked: function(group){
@@ -533,7 +552,8 @@ Ext.define('NextThought.controller.Chat', {
 		var newRoomInfo = this.onMembershipOrModerationChanged(msg),
 			isClassroom = this.getClassroom().isClassroom(newRoomInfo),
 			chatViewFromWin = this.getChatView(newRoomInfo),
-			classroom = this.getClassroom().getClassroom(),
+			rid = newRoomInfo ? newRoomInfo.getId() : null,
+			classroom = this.getClassroom().getClassroomDown(rid, 'classroom-content'),
 			chatViewFromClass = classroom ? classroom.down('chat-view') : null;
 
 		if(!newRoomInfo) {
@@ -543,11 +563,11 @@ Ext.define('NextThought.controller.Chat', {
 
 		if (this.isModerator(newRoomInfo)){
 			if (!isClassroom && chatViewFromWin) {
-				chatViewFromWin.openModerationPanel();
+				chatViewFromWin.openModerationPanel(newRoomInfo);
 				chatViewFromWin.addCls('moderator');
 			}
 			else if (isClassroom && chatViewFromClass){
-				this.getClassroom().openModerationPanel(); //pass along so class can do something
+				this.getClassroom().openModerationPanel(newRoomInfo); //pass along so class can do something
 				chatViewFromClass.addCls('moderator');
 			}
 			else {
@@ -556,11 +576,11 @@ Ext.define('NextThought.controller.Chat', {
 		}
 		else {
 			if (!isClassroom && chatViewFromWin) {
-				chatViewFromWin.closeModerationPanel();
+				chatViewFromWin.closeModerationPanel(newRoomInfo);
 				chatViewFromWin.removeCls('moderator');
 			}
 			else if (isClassroom && chatViewFromClass){
-				this.getClassroom().closeModerationPanel(); //pass along so class can do something
+				this.getClassroom().closeModerationPanel(newRoomInfo); //pass along so class can do something
 				chatViewFromClass.removeCls('moderator');
 			}
 			else {
@@ -677,8 +697,8 @@ Ext.define('NextThought.controller.Chat', {
 			tab, view;
 
 		if (this.getClassroom().isClassroom({Id: id})) {
-			this.getClassroom().onOccupantsChanged(peopleWhoLeft, peopleWhoArrived);
-			this.getClassroom().onModsChanged(modsLeft, modsAdded);
+			this.getClassroom().onOccupantsChanged(id, peopleWhoLeft, peopleWhoArrived);
+			this.getClassroom().onModsChanged(id, modsLeft, modsAdded);
 			return;
 		}
 
@@ -809,10 +829,11 @@ Ext.define('NextThought.controller.Chat', {
 			console.warn('room already exists, all rooms/roomInfo', this.activeRooms, roomInfo);
 		}
 
-		existingRoom = this.existingRoom(roomInfo.get('Occupants'));
+		//TODO - this needs reworking...
+		existingRoom = this.existingRoom(roomInfo.get('Occupants'), roomInfo.getId(), null);
 		if (existingRoom) {
 			existingRoom.fireEvent('changed', roomInfo);
-			this.leaveRoom(existingRoom);
+			//this.leaveRoom(existingRoom);
 		}
 
 		this.activeRooms[roomInfo.getId()] = roomInfo;

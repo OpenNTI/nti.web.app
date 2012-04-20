@@ -98,7 +98,7 @@ Ext.define('NextThought.view.widgets.chat.FriendEntry', {
 	},
 
 	shadow: function(){
-		this.fireEvent('shadow', this.roomId, this.user);
+		this.fireEvent('shadow', this, this.user);
 	},
 
 	update: function(user){

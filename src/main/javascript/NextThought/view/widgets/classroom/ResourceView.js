@@ -128,7 +128,7 @@ Ext.define('NextThought.view.widgets.classroom.ResourceView', {
 	fireSelected: function() {
 		var selected = this.selModel.getSelection()[0];
 		if (selected) {
-			this.fireEvent('selected', selected);
+			this.fireEvent('selected', selected, this);
 		}
 	},
 

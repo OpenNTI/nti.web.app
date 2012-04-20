@@ -26,7 +26,7 @@ Ext.define('NextThought.view.widgets.classroom.Management', {
 	initComponent: function() {
 		this.callParent(arguments);
 
-		this.add({xtype: 'live-display', height: 400, roomInfo: this.roomInfo});
+		this.add({xtype: 'live-display', height: 400});
 		this.add({xtype: 'splitter'});
 		this.add({
 				flex: 1,

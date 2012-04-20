@@ -53,7 +53,7 @@ Ext.define('NextThought.view.widgets.chat.OccupantsList', {
 		}
 	},
 
-	setOccupants: function(a, rid, isModerator) {
+	setOccupants: function(a, isModerator) {
 		var me = this;
 
 		me.removeAll(true);
@@ -70,7 +70,6 @@ Ext.define('NextThought.view.widgets.chat.OccupantsList', {
 							xtype: 'chat-friend-entry',
 							user: u,
 							userId: u.getId(),
-							roomId: rid,
 							isModerator: isModerator
 						});
 					}
