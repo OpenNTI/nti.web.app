@@ -54,7 +54,7 @@ Ext.define('NextThought.util.RectUtils',{
 				i = rs.length-1, out = [], o, h, w,
 				lh2 = lineHeight*2;
 
-		if(!i) { return rects; }
+		if(!i || Ext.isIE) { return rects; }
 
 		for(;i>=0;i--){
 			o = flip(rs,i);

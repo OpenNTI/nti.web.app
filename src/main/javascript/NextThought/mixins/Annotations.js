@@ -478,7 +478,7 @@ Ext.define('NextThought.mixins.Annotations', {
 			}
 		}
 		catch(er){
-			console.warn(er, er.stack);
+			console.warn('onContextMenuHandler: '+er.message+' trace: ', er.stack);
 		}
 	},
 
