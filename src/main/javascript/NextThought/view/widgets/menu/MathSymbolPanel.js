@@ -74,7 +74,8 @@ Ext.define('NextThought.view.widgets.menu.MathSymbolPanel',{
 		{xtype:'button', text: '&radic;', latex: '\\sqrt' },
 		{xtype:'button', text: 'x&sup2', latex: 'x^2' },
 		{xtype:'button', text: '()', latex: '(x)' },
-		{xtype:'button', text: '&Pi;', latex: '\\pi' }
+		{xtype:'button', text: '&Pi;', latex: '\\pi' },
+		{xtype:'button', text: '&#8776;', latex: '\\approx' }
 		/*
 		{xtype:'button', text: 'S6', latex: '/S6' },
 		{xtype:'button', text: 'S7', latex: '/S7' },
