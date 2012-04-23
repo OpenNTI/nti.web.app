@@ -226,7 +226,7 @@ Ext.define('NextThought.view.windows.SearchResultsPopover', {
 					'click'		: { fn:me.searchResultClicked,	scope: me, hit: hit },
 					'mouseover'	: { fn:me.highlightItem,		scope: me, cmp: this }
 				});
-			}
+			};
 		}
 
 		var me = this,
