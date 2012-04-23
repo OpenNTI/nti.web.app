@@ -255,12 +255,18 @@ Ext.define('NextThought.mixins.Annotations', {
 			cmp = Ext.getCmp(IdCache.getComponentId(oid, null, this.prefix)),
 			cls, replyTo, builder, result;
 
-		ContributorsProvider.add(creator);
-
-		console.log('onNotification', change, type);
 		if (!item || !this.containerId || this.containerId !== cid) {
 			return;
 		}
+
+		//do some contributor updates
+		if (delAction) {
+			ContributorsProvider.remove(creator);
+		}
+		else {
+			ContributorsProvider.add(creator);
+		}
+
 
 		//if exists, update
 		if(this.annotations.hasOwnProperty(oid)) {
@@ -302,8 +308,6 @@ Ext.define('NextThought.mixins.Annotations', {
 				}
 			}
 		}
-
-		//do we get delete notices?
 	},
 
 
@@ -352,17 +356,18 @@ Ext.define('NextThought.mixins.Annotations', {
 
 
 	getContributors: function(record){
-		var cont = {}, c = record.get('Creator') || record.get('Contributors');
+		var cont = [],
+			c = record.get('Creator') || record.get('Contributors');
 		if(!Ext.isArray(c)) {
 			c = [c];
 		}
-		Ext.each(c, function(i){ if(i && Ext.String.trim(i) !== '') { cont[i] = true; } });
+		Ext.each(c, function(i){ if(i && Ext.String.trim(i) !== '') { cont.push(i); } });
 		return cont;
 	},
 
 
 	buildAnnotations: function(list){
-		var me = this, contributors = {},
+		var me = this, contributors = [],
 			a = NextThought.view.widgets.annotations.Annotation;
 		Ext.each(list,
 			function(r){
@@ -370,7 +375,7 @@ Ext.define('NextThought.mixins.Annotations', {
 					return;
 				}
 				try{
-					Ext.apply(contributors, me.getContributors(r));
+					Ext.Array.insert(contributors, 0, me.getContributors(r));
 					me.widgetBuilder[r.getModelName()].call(me,r);
 					a.aboutToRender = true;
 				}
