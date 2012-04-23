@@ -253,7 +253,8 @@ Ext.define('NextThought.mixins.Annotations', {
 			creator = item? item.get('Creator') : null,
 			delAction = /deleted/i.test(type),
 			cmp = Ext.getCmp(IdCache.getComponentId(oid, null, this.prefix)),
-			cls, replyTo, builder, result;
+			cls, replyTo, builder, result,
+			contribNS = Globals.getModeIdFromComponent(this);
 
 		if (!item || !this.containerId || this.containerId !== cid) {
 			return;
@@ -261,10 +262,10 @@ Ext.define('NextThought.mixins.Annotations', {
 
 		//do some contributor updates
 		if (delAction) {
-			ContributorsProvider.remove(creator);
+			ContributorsProvider.remove(creator, contribNS);
 		}
 		else {
-			ContributorsProvider.add(creator);
+			ContributorsProvider.add(creator, contribNS);
 		}
 
 
@@ -324,7 +325,8 @@ Ext.define('NextThought.mixins.Annotations', {
 			k = 'Last Modified',
 			tree = {}, b,
 			items,
-			foundBins;
+			foundBins,
+			contribNS = Globals.getModeIdFromComponent(this);
 
 		if (!this.containerId) {
 			return;
@@ -350,7 +352,7 @@ Ext.define('NextThought.mixins.Annotations', {
 			contributors = this.buildAnnotations(items);
 		}
 
-		ContributorsProvider.set(contributors);
+		ContributorsProvider.set(contributors, contribNS);
 		AnnotationUtils.callbackAfterRender(callback,this);
 	},
 

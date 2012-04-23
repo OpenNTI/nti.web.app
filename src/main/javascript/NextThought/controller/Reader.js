@@ -61,7 +61,7 @@ Ext.define('NextThought.controller.Reader', {
 
 	onAnnotationsLoad: function(cmp, containerId, callback) {
 		//clear the contributors for this page.  in case there are none.
-		ContributorsProvider.clearContributors();
+		ContributorsProvider.clearContributors(Globals.getModeIdFromComponent(cmp));
 		var ps = this.getStoreForPageItems(containerId);
 
 		if( ps ) {

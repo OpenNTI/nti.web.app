@@ -33,9 +33,13 @@ Ext.define('NextThought.view.widgets.PeopleList', {
 	},
 
 
-	setContributors: function(contributors){
-		this.contributors = contributors;
-		this.updateList();
+	setContributors: function(contributors, ns){
+		var myNS = Globals.getModeIdFromComponent(this);
+
+		if (ns === myNS) {
+			this.contributors = contributors;
+			this.updateList();
+		}
 	},
 	
 	applyFilter: function(filter){

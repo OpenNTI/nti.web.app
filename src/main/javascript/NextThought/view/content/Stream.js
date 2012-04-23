@@ -42,7 +42,11 @@ Ext.define('NextThought.view.content.Stream', {
 
 	updateStream: function(){
 		var p = this.items.get(0),
-			f = this.filter;
+			f = this.filter,
+			ns = Globals.getModeIdFromComponent(this),
+			contribs = [];
+
+		ContributorsProvider.clearContributors(ns);
 
 		if (!p.rendered){
 			return;
@@ -52,9 +56,14 @@ Ext.define('NextThought.view.content.Stream', {
 		this.store.sort('Last Modified', 'DESC');
 		this.store.each(function(change){
 			if(!f || f.test(change)){
+				contribs.push(change.get('Creator'));
 				p.add({change: change, xtype: 'streamEntry'});
 			}
 		});
+
+		//update contributors
+		ContributorsProvider.set(contribs, ns);
+
 		p.suspendLayout = false;
 		p.doComponentLayout();
 		p.doLayout();

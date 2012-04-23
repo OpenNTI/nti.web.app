@@ -15,6 +15,7 @@ Ext.define('NextThought.providers.Contributors', {
 			change : true
 		});
 
+		this.contributors = {};
 		this.callParent(arguments);
 		this.mixins.observable.constructor.call(this);
 	},
@@ -27,48 +28,61 @@ Ext.define('NextThought.providers.Contributors', {
 	 *
 	 * @param contributors - the array of contributors, e.g ['user1', 'user2', 'user1', 'user3']
 	 */
-	set: function(contributors){
+	set: function(contributors, namespace){
 		if (!contributors || contributors.length === 0){return;}
 
 		Ext.each(contributors, function(c){
-			this.add(c, true);
+			this.add(c, namespace, true);
 		}, this);
-		this.fireEvent('change', this.contributors);
+		this.fireEvent('change', this.contributors[namespace], namespace);
 	},
 
 
-	add: function(newbie, noEvent) {
-		if(this.contributors[newbie]) {
-			this.contributors[newbie]++;
+	add: function(newbie, namespace, noEvent) {
+		var c = this.getContributorsForNamespace(namespace);
+
+		if(c[newbie]) {
+			c[newbie]++;
 		}
 		//fire the change event in this case because the newbie was not there before.
 		else {
-			this.contributors[newbie] = 1;
-			if (!noEvent){this.fireEvent('change', this.contributors);}
+			c[newbie] = 1;
+			if (!noEvent){this.fireEvent('change', c, namespace);}
 		}
 	},
 
 
-	remove: function(newbie) {
+	remove: function(newbie, namespace) {
+		var c = this.getContributorsForNamespace(namespace);
+
 		//decrement if user is there (he should be, log a warn if he's not for debugging)
-		if(this.contributors[newbie]) {
-			this.contributors[newbie]--;
+		if(c[newbie]) {
+			c[newbie]--;
 		}
 		else {
 			console.warn('request to remove contributor who is not there, which is strange, investigate.');
 		}
 
 		//if the removal of newbie caused the newbie to fall below 0 annotations, need to fire updated event.
-		if (this.contributors[newbie] <= 0) {
-			delete this.contributors[newbie];
-			this.fireEvent('change', this.contributors);
+		if (c[newbie] <= 0) {
+			delete c[newbie];
+			this.fireEvent('change', c, namespace);
 		}
 	},
 
 
-	clearContributors: function(){
-		this.contributors = {};
-		this.fireEvent('change', {});
+	clearContributors: function(namespace){
+		var c = this.getContributorsForNamespace(namespace);
+		c = {};
+		this.fireEvent('change', {}, namespace);
+	},
+
+
+	getContributorsForNamespace: function(ns) {
+		if (!this.contributors[ns]) {
+			this.contributors[ns] = {};
+		}
+		return this.contributors[ns];
 	}
 
 }, function(){
