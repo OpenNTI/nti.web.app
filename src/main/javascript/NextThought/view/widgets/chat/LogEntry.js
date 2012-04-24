@@ -36,6 +36,8 @@ Ext.define('NextThought.view.widgets.chat.LogEntry', {
 	},
 
 	initComponent: function(){
+		this.addEvents('rendered-late');
+		this.enableBubble('rendered-late');
 		this.callParent(arguments);
 		this.update(this.message);
 	},
@@ -73,6 +75,7 @@ Ext.define('NextThought.view.widgets.chat.LogEntry', {
 			if(me.rendered){
 			   me.text.update(me.renderData.body);
 			   me.time.update(me.renderData.time);
+			   me.fireEvent('rendered-late');
 			}
 		});
 
