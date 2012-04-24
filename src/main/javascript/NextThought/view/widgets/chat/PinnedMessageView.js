@@ -4,7 +4,16 @@ Ext.define('NextThought.view.widgets.chat.PinnedMessageView', {
 	requires: [
 	],
 
-	layout: 'anchor',
+	autoScroll: true,
+
+
+	addMessage: function(m) {
+		var id = IdCache.getIdentifier(m.getId());
+		if (!this.down('[pinnedMessageId='+id+']')) {
+			this.add({ xtype:'chat-log-entry-pinned', message: m, 'pinnedMessageId':id});
+		}
+	},
+
 
 	initComponent: function() {
 		this.callParent(arguments);

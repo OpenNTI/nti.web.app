@@ -789,10 +789,8 @@ Ext.define('NextThought.controller.Chat', {
 				return;
 			}
 
-			cv.getPinnedMessageView().add(
-				{ xtype:'chat-log-entry-pinned', message: e.message}
-			);
 
+			cv.getPinnedMessageView().addMessage(e.message);
 		}
 	},
 
