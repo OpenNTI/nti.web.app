@@ -28,7 +28,7 @@ Ext.application({
 		'Home',
 		'Navigation',
 		'ObjectExplorer',
-		'Reader',
+		'Library',
 		'Search',
 		'Session',
 		'State',

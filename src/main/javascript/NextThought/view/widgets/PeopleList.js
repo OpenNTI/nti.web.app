@@ -34,7 +34,7 @@ Ext.define('NextThought.view.widgets.PeopleList', {
 
 
 	setContributors: function(contributors, ns){
-		var myNS = Globals.getModeIdFromComponent(this);
+		var myNS = Globals.getViewIdFromComponent(this);
 
 		if (ns === myNS) {
 			this.contributors = contributors;

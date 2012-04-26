@@ -1,12 +1,12 @@
-Ext.define('NextThought.view.frame.Navigation',{
+Ext.define('NextThought.view.Navigation',{
 	extend: 'Ext.container.Container',
 	alias: 'widget.main-navigation',
 	requires: [
-		'NextThought.view.frame.ModeSelect',
-		'NextThought.view.frame.menus.Home',
-		'NextThought.view.frame.menus.Library',
-		'NextThought.view.frame.menus.Classroom',
-		'NextThought.view.frame.menus.Search'
+		'NextThought.view.ViewSelect',
+		'NextThought.view.menus.Home',
+		'NextThought.view.menus.Library',
+		'NextThought.view.menus.Classroom',
+		'NextThought.view.menus.Search'
 	],
 
 	cls: 'main-navigation',
@@ -36,7 +36,7 @@ Ext.define('NextThought.view.frame.Navigation',{
 	},
 
 	items: [
-		{ xtype: 'mode-select' },
+		{ xtype: 'view-select' },
 		{
 			flex: 1,
 			id: 'navigation-menu-container',

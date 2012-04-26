@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.frame.menus.Flyout',{
+Ext.define('NextThought.view.menus.Flyout',{
 	extend: 'Ext.menu.Menu',
 	alias: 'widget.nav-flyout',
 	requires: [

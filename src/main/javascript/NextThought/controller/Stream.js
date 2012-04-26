@@ -15,16 +15,14 @@ Ext.define('NextThought.controller.Stream', {
 	],
 
 	views: [
-		'modes.Stream',
-		'content.Stream',
 		'widgets.MiniStreamEntry'
 
 	],
 
 	refs: [
 		{ ref: 'viewport', selector: 'master-view' },
-		{ ref: 'streamPeople', selector: 'stream-mode-container people-list' },
-		{ ref: 'stream', selector: 'stream-mode-container stream-panel' },
+		{ ref: 'streamPeople', selector: 'stream-view-container people-list' },
+		{ ref: 'stream', selector: 'stream-view-container stream-panel' },
 		{ ref: 'miniStream', selector: 'mini-stream' }
 	],
 
@@ -101,7 +99,7 @@ Ext.define('NextThought.controller.Stream', {
 		}
 
 		//ensure reader panel is up
-		rp = Ext.ComponentQuery.query('reader-mode-container')[0];
+		rp = Ext.ComponentQuery.query('library-view-container')[0];
 		rp.activate();
 		p = rp.down('reader-panel').prefix;
 
@@ -117,7 +115,7 @@ Ext.define('NextThought.controller.Stream', {
 		var widget = this.getMiniStream(),ss;
 		//make sure stream doesn't contain old stuff.
 		ss = this.getStoreForStream(containerId);
-		widget.setStore(ss);
+		//widget.setStore(ss);
 		if( ss.getProxy().url && !ss.isLoading() ) {
 			ss.load();
 		}
@@ -125,7 +123,7 @@ Ext.define('NextThought.controller.Stream', {
 
 	getStoreForStream: function(containerId) {
 		var me = this,
-			store = me.getController('Reader').getPageStore(),
+			store = me.getController('Library').getPageStore(),
 			stores = me.streamStores,
 			ps = stores[containerId];
 

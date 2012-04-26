@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.content.Panel', {
+Ext.define('NextThought.view.content.Base', {
 	extend: 'Ext.panel.Panel',
 	
 	autoScroll:true,
@@ -6,10 +6,6 @@ Ext.define('NextThought.view.content.Panel', {
 	border: false,
 	defaults: {frame: false, border: false},
 
-	getContainerId: function(){
-		return this.containerId;
-	},
-	
 	relayout: function(){
 		if (this.ownerCt) {
 			this.ownerCt.doComponentLayout();

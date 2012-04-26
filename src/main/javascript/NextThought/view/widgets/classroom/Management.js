@@ -1,5 +1,5 @@
 Ext.define('NextThought.view.widgets.classroom.Management', {
-	extend:'NextThought.view.content.Panel',
+	extend:'NextThought.view.content.Base',
 	alias: 'widget.classroom-management',
 	requires: [
 		'NextThought.view.widgets.classroom.LiveDisplay',

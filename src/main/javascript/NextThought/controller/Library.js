@@ -1,4 +1,4 @@
-Ext.define('NextThought.controller.Reader', {
+Ext.define('NextThought.controller.Library', {
 	extend: 'Ext.app.Controller',
 
 	requires: [
@@ -16,10 +16,9 @@ Ext.define('NextThought.controller.Reader', {
 	],
 
 	views: [
-		'modes.Container',
-		'modes.Reader',
+		'Views',
+		'views.Library',
 		'content.Reader',
-		'widgets.ReaderBreadcrumb',
 		'widgets.PeopleList',
 		'widgets.RelatedItemsList',
 		'widgets.Tracker'
@@ -27,10 +26,9 @@ Ext.define('NextThought.controller.Reader', {
 
 	refs: [
 		{ ref: 'viewport', selector: 'master-view' },
-		{ ref: 'readerBreadcrumb', selector: 'reader-mode-container reader-breadcrumbbar' },
-		{ ref: 'readerPeople', selector: 'reader-mode-container people-list' },
-		{ ref: 'readerRelated', selector: 'reader-mode-container related-items' },
-		{ ref: 'readerMode', selector: 'reader-mode-container' }
+		{ ref: 'readerPeople', selector: 'library-view-container people-list' },
+		{ ref: 'readerRelated', selector: 'library-view-container related-items' },
+		{ ref: 'readerMode', selector: 'library-view-container' }
 	],
 
 	init: function() {
@@ -39,10 +37,6 @@ Ext.define('NextThought.controller.Reader', {
 		this.application.on('session-ready', this.onSessionReady, this);
 
 		this.control({
-			'reader-breadcrumbbar *[ntiid]' : {
-				'click' : this.buttonClicked
-			},
-
 			'reader-panel':{
 				'annotations-load': this.onAnnotationsLoad
 			}
@@ -61,7 +55,7 @@ Ext.define('NextThought.controller.Reader', {
 
 	onAnnotationsLoad: function(cmp, containerId, callback) {
 		//clear the contributors for this page.  in case there are none.
-		ContributorsProvider.clearContributors(Globals.getModeIdFromComponent(cmp));
+		ContributorsProvider.clearContributors(Globals.getViewIdFromComponent(cmp));
 		var ps = this.getStoreForPageItems(containerId);
 
 		if( ps ) {

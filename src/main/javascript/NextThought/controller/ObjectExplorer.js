@@ -18,7 +18,7 @@ Ext.define('NextThought.controller.ObjectExplorer', {
 
 	refs: [
 		{ ref: 'viewport', selector: 'master-view' },
-		{ ref: 'reader', selector: 'reader-mode-container reader-panel' }
+		{ ref: 'reader', selector: 'library-view-container reader-panel' }
 	],
 
 	init: function() {
@@ -42,7 +42,7 @@ Ext.define('NextThought.controller.ObjectExplorer', {
 
 
 	onRemoveAnnotation: function(oid, containerId){
-		this.getController('Reader').onRemoveAnnotation(oid,containerId);
+		this.getController('Library').onRemoveAnnotation(oid,containerId);
 	},
 
 

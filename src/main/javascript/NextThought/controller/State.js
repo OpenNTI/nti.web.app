@@ -28,8 +28,8 @@ Ext.define('NextThought.controller.State', {
 		me.isHangout = this.getController('Google').isHangout();
 
 		me.control({
-			'modeContainer': {
-				'activate-mode': me.trackMode
+			'main-views': {
+				'activate-view': me.track
 			}
 		},{});
 
@@ -76,11 +76,11 @@ Ext.define('NextThought.controller.State', {
 	},
 
 
-	trackMode: function(modeId){
-		if(this.currentState.active !== modeId && NextThought.isInitialised){
+	track: function(viewId){
+		if(this.currentState.active !== viewId && NextThought.isInitialised){
 			//console.debug(this.currentState.active, modeId);
-			this.currentState.active = modeId;
-			history.pushState(this.currentState, 'NextThought: '+modeId);
+			this.currentState.active = viewId;
+			history.pushState(this.currentState, 'NextThought: '+viewId);
 		}
 	},
 

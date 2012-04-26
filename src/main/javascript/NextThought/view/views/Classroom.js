@@ -1,12 +1,12 @@
-Ext.define( 'NextThought.view.modes.Classroom', {
-	extend: 'NextThought.view.modes.Mode',
-	alias:	'widget.classroom-mode-container',
+Ext.define( 'NextThought.view.views.Classroom', {
+	extend: 'NextThought.view.views.Base',
+	alias:	'widget.classroom-view-container',
 	requires: [
 		'NextThought.view.windows.ClassroomChooser',
 		'NextThought.cache.IdCache'
 	],
 
-	cls: 'classroom-mode',
+	cls: 'classroom-view',
 
 	border: false,
 	defaults: {

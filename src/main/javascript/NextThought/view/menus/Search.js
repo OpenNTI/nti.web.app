@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.frame.menus.Search',{
+Ext.define('NextThought.view.menus.Search',{
 	extend: 'Ext.panel.Panel',
 	alias: 'widget.search-menu',
 

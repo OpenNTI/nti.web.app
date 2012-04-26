@@ -8,8 +8,8 @@ Ext.define('NextThought.view.Viewport', {
 		'Ext.env.FeatureDetector',
 		'Ext.layout.container.HBox',
 		'Ext.layout.container.VBox',
-		'NextThought.view.frame.Navigation',
-		'NextThought.view.modes.Container'
+		'NextThought.view.Navigation',
+		'NextThought.view.Views'
 	],
 	
 	border: false, 
@@ -23,7 +23,7 @@ Ext.define('NextThought.view.Viewport', {
 
 	items:[
 		{xtype: 'main-navigation', width: 279},
-		{xtype: 'modeContainer', region: 'center', id: 'mode-ctr', flex: 1}
+		{xtype: 'main-views', id: 'view-ctr', flex: 1}
 	],
 
 	constructor: function(){

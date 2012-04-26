@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.frame.menus.Home',{
+Ext.define('NextThought.view.menus.Home',{
 	extend: 'Ext.panel.Panel',
 	alias: 'widget.home-menu',
 

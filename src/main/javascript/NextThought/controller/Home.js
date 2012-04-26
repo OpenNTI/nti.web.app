@@ -16,7 +16,7 @@ Ext.define('NextThought.controller.Home', {
 
 	views: [
 		'content.Home',
-		'modes.Home',
+		'views.Home',
 		'widgets.main.ProfileHeader',
 		'widgets.LibraryView'
 	],
@@ -32,7 +32,7 @@ Ext.define('NextThought.controller.Home', {
 					this.getSessionInfo().fireEvent('account');
 				}
 			},
-			'home-mode-container library-view':{
+			'home-view-container library-view':{
 				'itemdblclick':function(a, rec){
 					Ext.getCmp('reader').activate();
 					LocationProvider.setLocation(rec.get('NTIID'));

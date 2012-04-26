@@ -1,9 +1,9 @@
 
-Ext.define('NextThought.view.frame.ModeSelect', {
+Ext.define('NextThought.view.ViewSelect', {
 	extend: 'Ext.panel.Panel',
-	alias : 'widget.mode-select',
+	alias : 'widget.view-select',
 
-	cls: 'mode-switcher',
+	cls: 'view-switcher',
 	layout: {
 		type: 'hbox',
 		pack: 'start'
@@ -12,12 +12,12 @@ Ext.define('NextThought.view.frame.ModeSelect', {
 	defaults: {
 		margin: '5px 0 5px 2px',
 		xtype: 'button',
-		ui: 'mode',
+		ui: 'view',
 		scale: 'large',
-		cls: 'mode-button',
+		cls: 'view-button',
 		allowDepress: false,
 		enableToggle: true,
-		toggleGroup: 'mode-select',
+		toggleGroup: 'view-select',
 		modeReference: null
 	},
 	items: [

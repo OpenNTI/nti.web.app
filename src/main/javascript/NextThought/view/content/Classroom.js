@@ -1,5 +1,5 @@
 Ext.define('NextThought.view.content.Classroom', {
-	extend:'NextThought.view.content.Panel',
+	extend:'NextThought.view.content.Base',
 	alias: 'widget.classroom-content',
 	mixins:{ splitters: 'NextThought.mixins.SplitterMaintenance' },
 	requires: [

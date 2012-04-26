@@ -24,7 +24,7 @@ Ext.define('NextThought.filter.FilterManager',{
 		var me = this, o, p, fc;
 
 		if( filterScope && filterScope.isComponent){
-			p = filterScope.up('mode-container');
+			p = filterScope.up('view-container');
 			if(p){
 				fc = p.down('filter-control');
 				if (fc){filterScope = fc.getId();}

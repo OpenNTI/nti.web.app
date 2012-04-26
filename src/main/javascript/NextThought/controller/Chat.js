@@ -3,7 +3,7 @@ Ext.define('NextThought.controller.Chat', {
 	requires: [
 		'NextThought.util.ParseUtils',
 		'NextThought.proxy.Socket',
-		'NextThought.view.modes.Classroom',
+		'NextThought.view.views.Classroom',
 		'NextThought.util.ClassroomUtils',
 		'NextThought.cache.IdCache',
 		'NextThought.cache.IdCache',
@@ -17,7 +17,7 @@ Ext.define('NextThought.controller.Chat', {
 	],
 
 	views: [
-		'modes.Classroom',
+		'views.Classroom',
 		'content.Classroom',
 		'windows.ChatWindow',
 		'widgets.chat.View',
@@ -33,7 +33,7 @@ Ext.define('NextThought.controller.Chat', {
 
 	refs: [
 		{ ref: 'chatWindow', selector: 'chat-window'},
-		{ ref: 'classroomMode', selector: 'classroom-mode-container'}
+		{ ref: 'classroomMode', selector: 'classroom-view-container'}
 	],
 
 
@@ -355,7 +355,7 @@ Ext.define('NextThought.controller.Chat', {
 		this.getChatWindow().closeChat(room, true);
 		this.getChatWindow().hide();
 
-		//mode to classroom, call showClassroom on Classroom mode?
+		//view to classroom, call showClassroom on Classroom view?
 		this.getClassroomMode().activate();
 		this.getClassroomMode().hideClassChooser();
 		c.onEnteredRoom(room, moderated);

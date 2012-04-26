@@ -1,7 +1,7 @@
-Ext.define('NextThought.view.frame.menus.Library',{
+Ext.define('NextThought.view.menus.Library',{
 	requires:[
 		'NextThought.Library',
-		'NextThought.view.frame.menus.Flyout'
+		'NextThought.view.menus.Flyout'
 	],
 //	extend: 'Ext.panel.Panel',
 	extend: 'Ext.view.View',

@@ -1,5 +1,5 @@
 
-@mixin mode-button-def {
+@mixin view-button-def {
 	background: none;
 	width: 64px !important;
 	height: 70px;
@@ -167,14 +167,14 @@
 		overflow: visible;
 	}
 
-	.mode-switcher {
+	.view-switcher {
 		.x-panel-body-default{
 			background: transparent;
 		}
 
-		.mode-button {
-			button { @include mode-button-def; }
-			@include mode-button-def;
+		.view-button {
+			button { @include view-button-def; }
+			@include view-button-def;
 
 			.x-btn-icon{
 				top: 0;

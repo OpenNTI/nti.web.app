@@ -254,7 +254,7 @@ Ext.define('NextThought.mixins.Annotations', {
 			delAction = /deleted/i.test(type),
 			cmp = Ext.getCmp(IdCache.getComponentId(oid, null, this.prefix)),
 			cls, replyTo, builder, result,
-			contribNS = Globals.getModeIdFromComponent(this);
+			contribNS = Globals.getViewIdFromComponent(this);
 
 		if (!item || !this.containerId || this.containerId !== cid) {
 			return;
@@ -326,7 +326,7 @@ Ext.define('NextThought.mixins.Annotations', {
 			tree = {}, b,
 			items,
 			foundBins,
-			contribNS = Globals.getModeIdFromComponent(this);
+			contribNS = Globals.getViewIdFromComponent(this);
 
 		if (!this.containerId) {
 			return;

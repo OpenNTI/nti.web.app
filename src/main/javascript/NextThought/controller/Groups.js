@@ -11,7 +11,6 @@ Ext.define('NextThought.controller.Groups', {
 	],
 
 	views: [
-		'modes.Groups',
 		'windows.GroupEditorWindow'
 	],
 
@@ -19,16 +18,16 @@ Ext.define('NextThought.controller.Groups', {
 		this.application.on('session-ready', this.onSessionReady, this);
 
 		this.control({
-			'groups-mode-container toolbar button[createItem]':{
+			'groups-view-container toolbar button[createItem]':{
 				'click':function(){
 					var rec = Ext.create('NextThought.model.FriendsList');
 					Ext.create('NextThought.view.windows.GroupEditorWindow',{record: rec}).show();
 				}
 			},
 
-			'groups-mode-container toolbar button[deleteItem]':{
+			'groups-view-container toolbar button[deleteItem]':{
 				'click':function(){
-					var q = 'groups-mode-container dataview';
+					var q = 'groups-view-container dataview';
 					Ext.each(Ext.ComponentQuery.query(q),function(v){
 						Ext.each(v.getSelectionModel().getSelection(), function(r){
 							r.destroy();
@@ -39,14 +38,14 @@ Ext.define('NextThought.controller.Groups', {
 				}
 			},
 
-			'groups-mode-container dataview':{
+			'groups-view-container dataview':{
 				'itemdblclick':function(a, rec){
 					if(rec.isModifiable()) {
 						Ext.create('NextThought.view.windows.GroupEditorWindow',{record: rec}).show();
 					}
 				},
 				'selectionchange': function(a, sel){
-					var q = 'groups-mode-container toolbar button[deleteItem]';
+					var q = 'groups-view-container toolbar button[deleteItem]';
 					Ext.each(Ext.ComponentQuery.query(q),function(v){
 						if(sel.length) {
 							v.enable();

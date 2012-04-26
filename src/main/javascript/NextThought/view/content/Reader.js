@@ -1,5 +1,5 @@
 Ext.define('NextThought.view.content.Reader', {
-	extend:'NextThought.view.content.Panel',
+	extend:'NextThought.view.content.Base',
 	alias: 'widget.reader-panel',
 	requires: [
 		'NextThought.ContentAPIRegistry',

@@ -300,8 +300,8 @@ Ext.define('NextThought.util.Globals',
 	},
 
 
-	getModeIdFromComponent: function(c) {
-		return c.up('mode-container').id;
+	getViewIdFromComponent: function(c) {
+		return c.up('view-container').id;
 	}
 },
 function(){

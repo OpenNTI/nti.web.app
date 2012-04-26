@@ -6,9 +6,9 @@ Ext.define('NextThought.controller.Navigation', {
 	],
 
 	views: [
-		'frame.menus.Flyout',
-		'frame.ModeSelect',
-		'modes.Container'
+		'menus.Flyout',
+		'ViewSelect',
+		'Views'
 	],
 
 	init: function() {
@@ -18,40 +18,39 @@ Ext.define('NextThought.controller.Navigation', {
 					LocationProvider.setLocation(ntiid);
 				}
 			},
-			'modeContainer': {
-				'activate-mode': this.trackMode
+			'main-views': {
+				'activate-view': this.track
 			},
-			'mode-select button': {
-				toggle: this.switchModes
+			'view-select button': {
+				toggle: this.switchViews
 			}
 		},{});
 	},
 
 
-	trackMode: function(mode){
-		var query = 'mode-select button[title='+Ext.String.capitalize(mode)+'], mode-select button[modeId='+mode+']',
+	track: function(view){
+		var query = 'view-select button[title='+Ext.String.capitalize(view)+'], view-select button[viewId='+view+']',
 			menus = Ext.getCmp('navigation-menu-container');
 		try {
 
 			Ext.ComponentQuery.query(query)[0].toggle(true);
-
-			menus.getLayout().setActiveItem(menus.down(mode+'-menu'));
+			menus.getLayout().setActiveItem(menus.down(view+'-menu'));
 
 		}
 		catch(e){
-			console.error('Looks like the "'+mode+'" button was not included or was typo\'ed');
+			console.error('Looks like the "'+view+'" button was not included or was typo\'ed', e.stack);
 		}
 	},
 
 
-	switchModes: function(button, state){
-		var id = button.modeId || button.title.toLowerCase();
+	switchViews: function(button, state){
+		var id = button.viewId || button.title.toLowerCase();
 		if(state){
 			try {
 				Ext.getCmp(id).activate();
 			}
 			catch(e){
-				console.log('Oops, a mode button was defined, but the related mode was not added: '+id);
+				console.log('Oops, a view button was defined, but the related view was not added: '+id);
 			}
 		}
 	}
