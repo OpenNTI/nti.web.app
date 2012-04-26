@@ -64,9 +64,15 @@ Ext.define('NextThought.view.frame.menus.Flyout',{
 
 
 	updatePath: function(path){
-		this.record.store.each(function(o){o.set('path','');});
+		var s = this.record.store,
+			e = Ext.get(this.view.getNode(this.record));
+		s.suspendEvents(false);
+		s.each(function(o){o.set('path','');});
 		this.record.set('path',path);
-		this.view.refresh();
+		s.resumeEvents();
+
+		Ext.get(e.up('.main-nav-menu').query('.path')).update('');
+		e.down('.path').update(path);
 	},
 
 
@@ -81,6 +87,7 @@ Ext.define('NextThought.view.frame.menus.Flyout',{
 
 	hide: function(){
 		Ext.fly(this.view.getNode(this.record)).removeCls('menu-open');
+		this.view.refresh();
 		return this.callParent(arguments);
 	}
 });
