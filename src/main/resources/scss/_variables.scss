@@ -1,11 +1,3 @@
-$ext: '../lib/ext-4.0.7';
-//$ext: '../lib/ext-4.1.0-rc1';
-
-//the python parser is converting blindly gray to #808080... so had to break up the string so it wouldn't find it.
-$exttheme: '#{$ext}/resources/themes/images/g'+'ray';
-$exticons: '#{$ext}/examples/shared/icons/fam';
-
-
 //icons
 $uploading-file-icon-generic: url(../images/upload.png);
 $file-type-unknown:			url(../images/file-types/unknown.png);
@@ -43,16 +35,8 @@ $empty-class-resources-bg:	url(../images/folder_web_upload.png);
 $data-view-over-bg:			url(../images/over.gif);
 $data-view-selected-bg:		url(../images/selected.gif);
 
-$delete-action:				url(#{$exticons}/delete.gif);
-$app-goto: 					url(#{$exticons}/application_go.png);
+$ext-text-entry:			url(../images/controls/text-bg.gif);
 
-$arrow-right:				url(#{$exttheme}/menu/menu-parent.gif);
-$next-arrow-disabled:		url(../images/page-next-disabled.gif);
-$prev-arrow-disabled:		url(../images/page-prev-disabled.gif);
-$next-arrow:				url(../images/page-next.gif);
-$prev-arrow:				url(../images/page-prev.gif);
-
-$ext-text-entry:			url(#{$exttheme}/form/text-bg.gif);
 $moderation-toggle:			url(../images/chat/moderator.png);
 $script-entry-promot-icon:	url(../images/chat/script-promote-16.png);
 $chat-icon:					url(../images/chat/speachbubble_sprite.png);

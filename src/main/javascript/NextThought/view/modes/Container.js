@@ -22,9 +22,7 @@ Ext.define( 'NextThought.view.modes.Container', {
 	activeItem: 0,
 	items:[
 		{id: 'home',   xtype: 'home-mode-container'},
-		{id: 'reader', xtype: 'reader-mode-container'},
-		{id: 'stream', xtype: 'stream-mode-container'},
-		{id: 'groups', xtype: 'groups-mode-container'},
+		{id: 'library', xtype: 'reader-mode-container'},
 		{id: 'classroom', xtype: 'classroom-mode-container'}
 	],
 	

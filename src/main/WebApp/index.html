@@ -1,11 +1,18 @@
-<html lang="en" manifest="manifest.appcache">
+<!--<html lang="en" manifest="manifest.appcache">-->
+<html lang="en">
 <head>
     <title>NextThought App</title>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
     <link rel="shortcut icon" href="assets/images/favicon.ico">
+	<link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+    <!--<link rel="stylesheet" id="ext-base" type="text/css" href="//cdn.sencha.io/ext-4.1.0-gpl/resources/css/ext-all-gray.css">-->
+    <link rel="stylesheet" id="ext-base" type="text/css" href="/extjs-4.1.0/resources/css/ext-all-gray.css">
     <link rel="stylesheet" id="main-stylesheet" type="text/css" href="assets/css/main.css">
-
-
+	<!--[if gte IE 9]>
+	  <style type="text/css">
+	    .gradient { filter: none; }
+	  </style>
+	<![endif]-->
 </head>
 <body>
 	<div id="loading-mask">
@@ -15,8 +22,8 @@
 
 	<script type="text/javascript" src="config.js"></script>
 
-	<script type="text/javascript" src="assets/lib/ext-4.0.7/ext-debug.js"></script>
-	<!--<script type="text/javascript" src="assets/lib/ext-4.1.0-rc1/ext-debug.js"></script>-->
+	<!--<script type="text/javascript" src="//cdn.sencha.io/ext-4.1.0-gpl/ext-debug.js"></script>-->
+	<script type="text/javascript" src="/extjs-4.1.0/ext-debug.js"></script>
 	<script type="text/javascript" src="assets/js/app.js"></script>
 	<!--<script type="text/javascript" src="assets/lib/ext-4.1.0-rc1/ext-neptune.js"></script>-->
 </body>

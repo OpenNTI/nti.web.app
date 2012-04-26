@@ -8,6 +8,7 @@ Ext.Loader.setConfig('disableCaching', false);
 Ext.application({
 	name: 'NextThought',
 	appFolder: 'assets/js/NextThought',
+	autoCreateViewport: false,
 
 	requires: [
 		'NextThought.util.StacktraceUtils',
@@ -25,7 +26,7 @@ Ext.application({
 		'Google',
 		'Groups',
 		'Home',
-		'Modes',
+		'Navigation',
 		'ObjectExplorer',
 		'Reader',
 		'Search',

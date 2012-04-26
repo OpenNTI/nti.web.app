@@ -1,8 +1,20 @@
 Ext.define('NextThought.util.Globals',
 {
 	requires: [
-		'Ext.draw.Draw',//for fixing the path2curve function
-		'Ext.picker.Color'//for adding a "none" color
+		'NextThought.overrides.app.Application',
+		'NextThought.overrides.builtins.Array',
+		'NextThought.overrides.builtins.Console',
+		'NextThought.overrides.builtins.Node',
+		'NextThought.overrides.builtins.RegExp',
+		'NextThought.overrides.data.proxy.Server',
+		'NextThought.overrides.data.Connection',
+		'NextThought.overrides.dom.Element',
+		'NextThought.overrides.panel.Panel',
+		'NextThought.overrides.picker.Color',
+		'NextThought.overrides.AbstractComponent',
+		'NextThought.overrides.JSON',
+		'NextThought.overrides.XTemplate'
+
 	],
 	alternateClassName: 'Globals',
 	singleton: true,
@@ -213,223 +225,6 @@ Ext.define('NextThought.util.Globals',
 	},
 
 
-	applyHooks:  function(){
-		this.ensureNodePrototypes();
-
-		window.alert = function(title, msg){
-			Globals.removeLoaderSplash();
-			if(arguments.length===1){
-				msg = title;
-				title = null;
-			}
-			Ext.MessageBox.alert(title||'Alert', msg );
-		};
-
-		Ext.JSON.encodeDate = function(d){return Ext.Date.format(d, 'U');};
-
-		Ext.Ajax.defaultHeaders = Ext.Ajax.defaultHeaders || {};
-		Ext.Ajax.defaultHeaders.Accept= 'application/vnd.nextthought+json';
-		Ext.Ajax.timeout=10000;//10sec timeout
-		Ext.Ajax.on('beforerequest', this.beforeRequest);
-
-		//disable selection everywhere except places we specifically enable it.
-		this.disableSelection();
-
-
-		this.applyInjections();
-	},
-
-
-	applyInjections: function(){
-
-		Ext.XTemplate.prototype.applySubtemplate = function(id, values){
-			return Ext.XTemplate.subs[id].apply(values);
-		};
-
-		Ext.XTemplate.registerSubtemplate = function(name,tpl){
-			Ext.XTemplate.subs = Ext.XTemplate.subs || {};
-			if(tpl && !(tpl instanceof Ext.XTemplate)){
-				tpl = new Ext.XTemplate(tpl);
-			}
-			Ext.XTemplate.subs[name] = tpl;
-			if(!tpl){
-				delete Ext.XTemplate.subs[name];
-			}
-		};
-
-		Ext.applyIf(Array.prototype,{
-			first: function peek(){ return this[0]; },
-			last: function peek(){ return this[this.length-1]; },
-			peek: function peek(){ return this[this.length-1]; }
-		});
-
-		Ext.applyIf(RegExp,{
-			escape:function me(text) {
-				if(!me.Re){
-					me.Re = /[\-\[\]{}()*+?.,\\\^$|#\s]/g;
-				}
-			    return text.replace(me.Re, "\\$&");
-			}
-		});
-
-		//inject a new function into Ext.Element
-		Ext.apply(Ext.Element.prototype,{
-
-			/**
-			 * @param el
-			 * @returns True if the element is within view of the container, False otherwise
-			 */
-			isInView: function(el){
-				var p = Ext.get(el) || this.parent(),
-					scroll = p.getScroll(),
-					size = p.getSize(),
-					y1 = scroll.top,
-					y2 = y1 + size.height,
-
-					top = this.getTop()-p.getTop(),
-					bottom = top+this.getHeight();
-
-				return y1 <= top	&& top <= y2	&&
-						bottom<=y2	&& bottom>=y1;
-
-			}
-
-		});
-
-		Ext.apply(Ext.app.Application.prototype,{
-
-			registerInitializeTask: function(task) {
-				this.initTasks = this.initTasks || [];
-				this.initTasks.push(task);
-			},
-
-			finishInitializeTask: function(task){
-				Ext.Array.remove(this.initTasks,task);
-				if(!this.initTasks.length) {
-					this.registerInitializeTask = this.finishInitializeTask = Ext.emptyFn;
-					this.fireEvent('finished-loading');
-				}
-			}
-		});
-
-
-		Ext.AbstractComponent.override({
-			up: function(selector) {
-				var result = this.ownerCt||this.floatParent;
-				if (selector) {
-					for (; result; result = result.ownerCt||result.floatParent) {
-						if (Ext.ComponentQuery.is(result, selector)) {
-							return result;
-						}
-					}
-				}
-				return result;
-			}
-		});
-
-		Ext.Ajax.cors = true;
-		Ext.Ajax.disableCaching = false;
-		Ext.data.proxy.Server.override({noCache: false});
-		Ext.data.Connection.override({
-			disableCaching: false,
-
-			setOptions: function(options, scope){
-				var i, badParams = ['_dc', 'id', 'page', 'start', 'limit', 'group', 'sort'],
-					params = options.params || {};
-
-				if (Ext.isFunction(params)) {
-					console.warn('Params were a function!');
-					options.params = (params = params.call(scope, options));
-				}
-
-				for(i in badParams){
-					if(badParams.hasOwnProperty(i)){
-						delete params[badParams[i]];
-					}
-				}
-
-				return this.callOverridden(arguments);
-			}
-		});
-
-
-
-		Ext.picker.Color.prototype.colors.push('None');
-		Ext.picker.Color.prototype.colorRe = /(?:^|\s)color-([^ ]*)(?:\s|$)/;
-		Ext.picker.Color.prototype.renderTpl = [
-			'<tpl for="colors">',
-				'<a href="#" class="color-',
-					'<tpl if="values==\'None\'">NONE</tpl>',
-					'<tpl if="values!=\'None\'">{.}</tpl>',
-					'" hidefocus="on" title="{.}">',
-					'<em><span style="background:#{.}" unselectable="on">&#160;</span></em>',
-				'</a>',
-			'</tpl>'
-		];
-
-
-
-	},
-
-
-	disableSelection: function(){
-		Ext.getBody().unselectable();
-		Ext.panel.Panel.override({
-			render: function(){
-				this.callOverridden(arguments);
-				if(!this.enableSelect){this.el.unselectable();}
-				else{this.el.selectable();}
-			}
-		});
-	},
-
-
-	ensureNodePrototypes: function(){
-		window.Node = window.Node || function(){};
-		
-		Ext.applyIf(window.Node.prototype, {
-			DOCUMENT_POSITION_DISCONNECTED: 1,
-			DOCUMENT_POSITION_PRECEDING: 2,
-			DOCUMENT_POSITION_FOLLOWING: 4,
-			DOCUMENT_POSITION_CONTAINS: 8,
-			DOCUMENT_POSITION_CONTAINED_BY: 16,
-			DOCUMENT_POSITION_IMPLEMENTATION_SPECIFIC: 32,
-			TEXT_NODE: 3
-		});
-	},
-
-
-	ensureConsole: function(){
-		Ext.applyIf(window,{
-			console:{ log: Ext.emptyFn }
-		});
-
-		Ext.applyIf(window.console,{
-			debug: console.log,
-			info: console.log,
-			warn: console.log,
-			error: console.log,
-			group: Ext.emptyFn,
-			trace: Ext.emptyFn,
-			groupCollapsed: Ext.emptyFn,
-			groupEnd: Ext.emptyFn,
-			time: Ext.emptyFn,
-			timeEnd: Ext.emptyFn
-		});
-
-	},
-
-
-	beforeRequest: function(connection,options) {
-		if(options&&options.async===false){
-			var loc;
-			try { loc = printStackTrace().splice(7); }
-			catch (e) { loc = e.stack || e.stacktrace; }
-			console.warn( 'Synchronous Call in: ', loc, ' Options:', options );
-		}
-	},
-
-
 	arrayEquals: function(a, b) {
 		var l = a.length;
 		if (l !== b.length) {
@@ -517,7 +312,14 @@ function(){
 		Ext.getBody().unmask();
 	};
 
-	this.ensureConsole();
 	this.handleCache();
-	this.applyHooks();
+
+	window.alert = function(title, msg){
+		Globals.removeLoaderSplash();
+		if(arguments.length===1){
+			msg = title;
+			title = null;
+		}
+		Ext.MessageBox.alert(title||'Alert', msg );
+	};
 });

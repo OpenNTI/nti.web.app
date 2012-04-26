@@ -6,9 +6,9 @@ Ext.define('NextThought.view.Viewport', {
 
 	requires: [
 		'Ext.env.FeatureDetector',
-		'Ext.layout.container.Border',
+		'Ext.layout.container.HBox',
 		'Ext.layout.container.VBox',
-		'NextThought.view.widgets.main.Header',
+		'NextThought.view.frame.Navigation',
 		'NextThought.view.modes.Container'
 	],
 	
@@ -16,14 +16,13 @@ Ext.define('NextThought.view.Viewport', {
 	frame: false,
 	defaults:{ border: false, frame: false },
 	layout: {
-		type: 'vbox',
+		type: 'hbox',
 		align: 'stretch'
 	},
 	id: 'viewport',
 
 	items:[
-		{xtype: 'master-header', region: 'north'},
-		{xtype: 'panel', id: 'browser-warning', cls: 'browser-warning', html: 'Your browser is not supported, here is a list of <a href="https://docs.google.com/document/pub?id=1dUvxe-n1VBuGpFV5CrBrVeaGJ_hH4kzPRiaGN2cWxsg">browsers we support</a>.'},
+		{xtype: 'main-navigation', width: 279},
 		{xtype: 'modeContainer', region: 'center', id: 'mode-ctr', flex: 1}
 	],
 
@@ -35,7 +34,9 @@ Ext.define('NextThought.view.Viewport', {
 }, function(){
 	//'CSSTransitions','CSSAnimations',
 	var features = ['Canvas','CSSTransforms','SVG','Video'],f,
-		unsupported = [];
+		unsupported = [],
+		proto = this.prototype,
+		old = {flex: 1};
 
 
 	while(!!(f = features.pop())){
@@ -44,10 +45,18 @@ Ext.define('NextThought.view.Viewport', {
 		}
 	}
 
-	if(unsupported.length===0){
-		Ext.Array.erase(this.prototype.items, 1,1);
-	}
-	else {
+	if(unsupported.length!==0){
+		Ext.copyTo(old,proto,'border,frame,defaults,layout,items',true);
+		proto.layout.type = 'vbox';
+		proto.items = [
+			{	xtype: 'panel',
+				id: 'browser-warning',
+				cls: 'browser-warning',
+				height: 50,
+				html: 'Your browser is not supported, here is a list of <a href="https://docs.google.com/document/pub?id=1dUvxe-n1VBuGpFV5CrBrVeaGJ_hH4kzPRiaGN2cWxsg">browsers we support</a>.'
+			},
+			old
+		];
 		unsupported.reverse();
 		console.warn("Unsupported features: "+unsupported.join(', '));
 	}

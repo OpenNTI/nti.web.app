@@ -5,7 +5,6 @@ Ext.define( 'NextThought.view.modes.Reader', {
 	alias: 'widget.reader-mode-container',
 	requires: [
 		'NextThought.view.content.Reader',
-		'NextThought.view.widgets.Breadcrumb',
 		'NextThought.view.widgets.FilterControlPanel',
 		'NextThought.view.widgets.ReaderItemsPanel'
 	],
@@ -14,18 +13,6 @@ Ext.define( 'NextThought.view.modes.Reader', {
 		this.callParent(arguments);
 
 		var sideWidth = Globals.MIN_SIDE_WIDTH;
-
-		this.add({
-			dockedItems: this.getLeftToolbar(),
-			autoScroll: true,
-			minWidth: sideWidth,
-			flex: 2,
-			layout: {
-				type:'hbox',
-				pack: 'end'
-			},
-			items: {xtype:'filter-control',width: sideWidth}
-		});
 
 		this.add({
 			cls: 'x-focus-pane',
@@ -37,7 +24,6 @@ Ext.define( 'NextThought.view.modes.Reader', {
 			frame: false,
 			layout: 'fit',
 			defaults: {border: false, frame: false},
-			dockedItems: {id:'breadcrumb', dock:'top', xtype: 'reader-breadcrumbbar'},
 			items: {
 				xtype: 'reader-panel',
 				id: 'readerPanel'
@@ -47,7 +33,6 @@ Ext.define( 'NextThought.view.modes.Reader', {
 		this.add({
 			border: false,
 			autoScroll: true,
-			dockedItems: this.getRightToolbar(),
 			minWidth: sideWidth,
 			flex: 2,
 			items: {xtype:'reader-items'}

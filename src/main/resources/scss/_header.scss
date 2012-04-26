@@ -1,124 +1,9 @@
-.header-logo {
-	background: transparent $header-logo no-repeat 0 0;
-}
 
 @mixin mode-button-def {
-	border: none;
-	margin: 0;
-	padding: 0;
 	background: none;
-	width: 32px !important;
-	height: 32px;
+	width: 64px !important;
+	height: 70px;
 }
-
-.mode-switcher {
-	.x-panel-body{
-		padding-top: 4px;
-	}
-
-	.mode-button button { @include mode-button-def; }
-
-	.mode-button {
-		@include mode-button-def;
-
-		.x-btn-icon{
-			background-image: $mode-button-sprite;
-			width: 30px;
-			height: 30px;
-
-			&.home-mode-icon{ background-position: -5px -3px; }
-			&.reader-mode-icon{ background-position: -41px -4px; }
-			&.stream-mode-icon{ background-position: -74px -5px; }
-			&.groups-mode-icon{ background-position: -109px -5px; }
-			&.classroom-mode-icon{ background-position: -144px -6px; }
-		}
-		&.x-pressed{
-    		.home-mode-icon { background-position: -5px -39px; }
-    		.reader-mode-icon { background-position: -40px -40px; }
-      		.stream-mode-icon { background-position: -74px -40px; }
-      		.groups-mode-icon{ background-position: -109px -41px; }
-      		.classroom-mode-icon{ background-position: -144px -41px; }
-    	}
-    }
-
-}
-
-.search-result-selection,
-.search-result-selection .x-panel-body,
-.search-result-selection .x-panel-body-default {
-	background: #7889A3;
-}
-
-.x-brand-and-search-bar,
-.x-brand-and-search-bar .x-panel-body,
-.x-brand-and-search-bar .x-panel-body-default {
-	background: #7889A3;
-}
-
-.session-myacount{
-	background-image: $session-my-account-icon;
-}
-.session-logout{
-	background-image: $session-logout-icon;
-}
-.settings-gear{
-	background-image: $session-settings-icon;
-	background-size: 24px 24px;
-}
-
-.x-application-mode-pane .x-focus-pane {
-	border-left: 1px solid #D0D0D0 !important;
-	border-right: 1px solid #D0D0D0 !important;
-}
-
-.x-session-controls {
-	.x-panel {
-		margin: auto 2px!important;
-	}
-
-	.x-username {
-		*{
-			color: white;
-			cursor: pointer;
-			white-space: nowrap;
-		}
-		span{
-			padding: 6px 8px 5px 5px;
-			font-size: 12px;
-			vertical-align: middle;
-			white-space: nowrap;
-		}
-	}
-
-	* {
-		vertical-align: middle;
-		cursor: pointer;
-	}
-}
-
-span.notification-box-widget {
-	width: 30px;
-	height: 23px;
-	padding-top: 2px;
-	display: inline-block;
-	text-align: center;
-	cursor: pointer;
-	vertical-align: middle;
-	margin-top: 2px;
-	margin-right: 10px;
-	background: $session-notice-box no-repeat -22px 0px;
-
-	&.unread {
-		color: white;
-		background-position: 4px 0px;
-	}
-}
-
-
-.notification-popover .x-stream-entry > .x-panel-body {
-	padding: 10px;
-}
-
 
 .browser-warning {
     .x-panel-body{
@@ -132,5 +17,237 @@ span.notification-box-widget {
 			color: #F9DD0A;
 		}
 		font-size: 2em;
+	}
+}
+
+.x-panel-nav-flyout {
+	@include animate(fadeIn);
+	.x-panel-body-nav-flyout{
+		background: rgba(60,60,60,0.98) !important;
+
+		table,tbody,tr {
+			overflow: hidden;
+			width: auto !important;
+		}
+
+		.x-grid-body,
+		.x-grid-view-flyout,
+		.x-grid-row .x-grid-cell,
+		.x-panel-body-default {
+			background: none;
+			border-width: 0 !important;
+		}
+
+		.x-grid-row {
+			.x-grid-cell {
+				font-family: 'Open Sans', serif !important;
+			}
+
+			.x-grid-cell-inner {
+				img {
+					&.x-tree-expander,
+					&.x-tree-icon,
+					&.x-tree-elbow-line,
+					&.x-tree-elbow-empty {
+						display: none;
+					}
+					&.x-tree-elbow,
+					&.x-tree-elbow-end
+					{
+						background: none;
+					}
+				}
+
+				width: 215px !important;
+				color: #ffffff;
+				font-size: 12pt;
+				font-weight: 300;
+				font-style: italic;
+				margin: 5px 10px;
+				padding: 10px 20px;
+				line-height: normal;
+				white-space: nowrap;
+				text-overflow: ellipsis;
+				overflow: hidden;
+				border-radius: 4px;
+			}
+
+			&.x-grid-tree-node-expanded *{
+				color: #a4d34b !important;
+			}
+
+			&.x-grid-tree-node-leaf {
+				.x-grid-cell-inner{
+					font-weight: 200;
+					font-size: 11pt;
+					color: #cdcdcd;
+				}
+			}
+		}
+
+
+
+		.x-grid-row-focused,
+		.x-grid-row-over,
+		.x-grid-row-selected {
+			.x-grid-cell,
+			.x-grid-rowwrap-div {
+				background: none !important;
+			}
+
+			.x-grid-cell-inner {
+				background: #9bc547 !important;
+				color: #ffffff !important;
+				font-weight: bolder;
+			}
+		}
+
+	}
+}
+.main-navigation {
+	background: #efefef;
+
+	.x-panel-body-default{
+		background: none;
+		border-width: 0;
+	}
+
+	.nav-item-wrap,
+	.x-panel-body-default,
+	.x-docked-noborder-bottom {
+		border-bottom-width: 1px !important;
+		border-bottom: 1px solid #f4f4f4 !important;
+		box-shadow: inset 0 -1px 0 0 #e3e3e3 !important;
+	}
+
+
+	div.main-navigation-bar {
+		a {
+			
+			// needs latest Compass, add '@import "compass"' to your scss
+			background-color: rgb(155,197,71); // Old browsers
+			@include filter-gradient(#9bc547, #82b83e, vertical); // IE6-8
+
+			// IE9 SVG, needs conditional override of 'filter' to 'none'
+			$experimental-support-for-svg: true;
+			@include background-image(linear-gradient(top, #9bc547 0%, #82b83e 100%));
+			color: white;
+
+			position: relative;
+			display: block;
+			margin: 0; padding: 0;
+			text-decoration: none;
+			text-decoration: none;
+			font: 30pt 'AW Conqueror Sans';
+			font-weight: 200;
+			text-align: center;
+
+			img {
+				background: url(../images/logotype.png);
+				width: 279px;
+				height: 79px;
+			}
+
+			span.logo-divider {
+				display: block;
+				height: 3px;
+				width: 100%;
+				z-index: 1;
+				position: absolute;
+				bottom: -2px;
+				left: 0;
+				background: url(../images/logotypediv.png) repeat-x;
+			}
+		}
+
+	}
+
+	.main-navigation-bar-body {
+		border-right: 1px solid #e2e2e2;
+		overflow: visible;
+	}
+
+	.mode-switcher {
+		.x-panel-body-default{
+			background: transparent;
+		}
+
+		.mode-button {
+			button { @include mode-button-def; }
+			@include mode-button-def;
+
+			.x-btn-icon{
+				top: 0;
+				background: url(../images/nav-sprite.png) no-repeat;
+				width: 64px;
+				height: 70px;
+
+				&.classroom { background-position:  -0px -0px; }
+				&.home { background-position:  -64px -0px; }
+				&.library { background-position:  -128px -0px; }
+				&.search { background-position:  -128px -70px; }
+			}
+			&.x-pressed{
+				.classroom { background-position:  -0px -70px; }
+				.home { background-position:  -64px -70px; }
+				.library { background-position:  -192px -0px; }
+				.search { background-position:  -192px -70px; }
+			}
+		}
+	}
+
+
+	.main-nav-menu {
+		.x-panel-body-default,
+		.nav-item-wrap {
+			position: relative;
+			overflow: visible;
+			.nib{
+				background: url(../images/nav-nib.png) no-repeat 0 50%;
+				width: 15px;
+				height: 100%;
+				position: absolute;
+				right: 0;
+				top: 0;
+				display: none;
+				z-index: 10;
+			}
+
+			&.selected,
+			&.over{
+				font-style: italic;
+				font-weight: 400;
+				color: #757474;
+			}
+			&.menu-open {
+				.nib {
+					@include animate(fadeIn);
+					display: block;
+				}
+			}
+
+			.item {
+				display: block;
+				color: #9d9d9d;
+				padding: 18px;
+				font-size: 18pt;
+				font-weight: 200;
+				text-overflow: ellipsis;
+				overflow: hidden;
+
+				.path {
+					//display: none;
+					font-size: 10pt;
+					font-style: italic;
+					font-weight: 600;
+					color: #9d9d9d;
+				}
+			}
+			&.selected {
+				.item .path {
+					//display: block;
+				}
+			}
+		}
 	}
 }

@@ -4,8 +4,7 @@ Ext.define('NextThought.view.content.Reader', {
 	requires: [
 		'NextThought.ContentAPIRegistry',
 		'NextThought.providers.Location',
-		'NextThought.util.QuizUtils',
-		'NextThought.view.widgets.Tracker'
+		'NextThought.util.QuizUtils'
 	],
 	mixins:{
 		annotations: 'NextThought.mixins.Annotations'
@@ -24,9 +23,8 @@ Ext.define('NextThought.view.content.Reader', {
 
 		this.callParent(arguments);
 		Ext.applyIf(this, {
-			tracker: null,
 			prefix: 'default',
-			padding: this.tracker === false ? 0 : '0 0 0 50px'
+			padding: 0
 		});
 
 		this.add({
@@ -513,24 +511,8 @@ Ext.define('NextThought.view.content.Reader', {
 
 
 	postRender: function(){
-
 		this.splash = this.body.insertHtml('beforeEnd','<div class="no-content-splash"></div>',true);
-
 		this.body.on('scroll',this.checkContentFrames,this);
-
-		if (this.tracker !== false) {
-			if(this.tracker){
-				this.tracker.destroy();
-				delete this.tracker;
-				console.log('clearing old tracker...');
-			}
-			try{
-				this.tracker = Ext.create('widget.tracker', this, this.getIframe().dom);
-			}
-			catch(e){
-				console.error(e.stack);
-			}
-		}
 	},
 
 	loadPage: function(ntiid, callback) {

@@ -104,7 +104,7 @@ Ext.application({
 		'Google',
 		'Groups',
 		'Home',
-		'Modes',
+		'Navigation',
 		'ObjectExplorer',
 		'Reader',
 		'Search',

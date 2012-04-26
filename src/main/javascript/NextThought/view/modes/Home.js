@@ -15,7 +15,6 @@ Ext.define( 'NextThought.view.modes.Home', {
 			items: {focusable: false, disabled:true,text:'&nbsp;'}
 		};
 
-		this.add({ flex:1, focusable: false, dockedItems: bb });
 		this.add({
 			xtype: 'home-content-panel',
 //			cls: 'x-focus-pane',
@@ -25,7 +24,6 @@ Ext.define( 'NextThought.view.modes.Home', {
 			maxWidth: this.CENTER_MIN_WIDTH*3,
 			dockedItems: bb
 		});
-		this.add({ flex:1, focusable: false, dockedItems: bb });
 	}
 	
 });

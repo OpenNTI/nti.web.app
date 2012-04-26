@@ -2,10 +2,6 @@ Ext.define( 'NextThought.view.modes.Mode', {
 	extend: 'Ext.panel.Panel',
 	alias: 'widget.mode-container',
 
-	uses: [
-		'NextThought.view.widgets.main.ModeSwitcher'
-	],
-
 	CENTER_MIN_WIDTH: 256,
 
 	autoScroll: false,
@@ -19,8 +15,6 @@ Ext.define( 'NextThought.view.modes.Mode', {
 	initComponent: function(){
 		this.addEvents('activate-mode');
 		this.callParent(arguments);
-		var id = this.id;
-		this.modeRef = ModeSwitcher.add(id+' mode label',id+'-mode-icon',this);
 	},
 
 
@@ -45,14 +39,9 @@ Ext.define( 'NextThought.view.modes.Mode', {
 	},
 
 
-	getPlaceHolder: function(){
-		return {focusable:false, disabled:true,text:'&nbsp;'};
-	},
-
 	activate: function(){
 		var me = this,
 			ct = me.ownerCt,
-			button,
 			item = 0;
 
 		if(!ct){
@@ -74,8 +63,6 @@ Ext.define( 'NextThought.view.modes.Mode', {
 		},this);
 
 		try{
-			ModeSwitcher.set(me.modeRef);
-
 			try{
 				ct.getLayout().getActiveItem().deactivate();
 			}
