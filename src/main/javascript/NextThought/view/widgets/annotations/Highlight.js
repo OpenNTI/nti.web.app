@@ -140,6 +140,7 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 					text : (r.phantom?'Save':'Remove')+' Highlight',
 					handler: Ext.bind(r.phantom? me.savePhantom : me.remove, me)
 				});
+			/*
 			if (r.phantom) {
 				items.push({
 						text : 'Redact Highlight',
@@ -153,6 +154,7 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 						}
 					});
 			}
+			*/
 		}
 
 		if(/^\w+$/i.test(text)){//is it a word
