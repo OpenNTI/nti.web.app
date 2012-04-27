@@ -22,12 +22,11 @@ Ext.define('NextThought.filter.FilterManager',{
 
 	registerFilterListener: function retry(filterScope, fn, fnScope){
 		var me = this, o, p, fc;
-
 		if( filterScope && filterScope.isComponent){
 			p = filterScope.up('view-container');
 			if(p){
-				fc = p.down('filter-control');
-				if (fc){filterScope = fc.getId();}
+				fc = p.down('content-filter');
+				if (fc){filterScope = fc.menu.getId();}
 			}
 			else {
 				setTimeout(function(){ retry.call(me,filterScope,fn,fnScope); },10);

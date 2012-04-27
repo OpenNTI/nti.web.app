@@ -2,8 +2,7 @@ Ext.define('NextThought.view.widgets.classroom.LiveDisplay', {
 	extend:'Ext.tab.Panel',
 	alias: 'widget.live-display',
 	requires: [
-		'NextThought.view.content.Reader',
-		'NextThought.view.widgets.ClassroomBreadcrumb'
+		'NextThought.view.content.Reader'
 	],
 	cls: 'nti-live-display',
 	tabPosition: 'bottom',

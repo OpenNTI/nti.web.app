@@ -4,6 +4,75 @@
 	border: none;
 }
 
+.x-component-content-filter {
+
+	div {
+		padding: 2px 4px;
+	}
+
+	&.active,
+	&.over {
+		.label { color: #585858; }
+		.menu { color: #767676; }
+	}
+
+	.label {
+		color: #8a8989;
+		font-size: 7.5pt;
+		text-transform: uppercase;
+		font-weight: 800;
+	}
+	.menu {
+		color: #b2b2b2;
+		font-size: 11pt;
+		font-weight: 400;
+		padding-right: 15px;
+		background: url(../images/menu-arrow-down-default.png) no-repeat 100% 50%;
+		text-overflow: ellipsis;
+		overflow: hidden;
+	}
+}
+
+
+.x-panel-filter {
+	box-shadow: 1px 1px 6px -3px #000000 !important;
+	.x-menu-body {
+		border: 1px solid #dcdcdc !important;
+		background: #ffffff !important;
+		padding: 0 0 20px 0;
+
+		.x-menu-item {
+			color: #767676 !important;
+			font-size: 11pt;
+			font-weight: 400;
+			background: none;
+			padding: 5px 5px 5px 10px;
+			margin: 2px 0 !important;
+
+			&.x-menu-item-checked {
+				background: transparent url(../images/menu-check.png) no-repeat 10px 50%;
+			}
+
+			&.x-menu-item-checked,
+			&.x-menu-item-unchecked{
+				padding: 5px 5px 5px 30px;
+			}
+
+			&.x-menu-item-active {
+				background-color: #efefef;
+				color: #3c3c3c !important;
+			}
+
+			&.x-menu-item-separator{
+				background: #dcdcdc !important;
+				height: 1px;
+				padding: 0 !important;
+				margin-top: 8px !important;
+				margin-bottom: 18px !important;
+			}
+		}
+	}
+}
 
 div.no-content-splash {
     position: absolute;

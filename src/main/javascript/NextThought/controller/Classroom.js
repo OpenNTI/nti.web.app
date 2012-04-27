@@ -10,7 +10,6 @@ Ext.define('NextThought.controller.Classroom', {
 		'views.Classroom',
 		'form.ClassInfoForm',
 		'form.SectionInfoForm',
-		'widgets.ClassroomBreadcrumb',
 		'widgets.classroom.Browser',
 		'widgets.classroom.BrowserStudyGroups',
 		'widgets.classroom.ResourceView',

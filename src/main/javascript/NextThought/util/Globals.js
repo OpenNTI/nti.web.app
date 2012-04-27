@@ -11,7 +11,6 @@ Ext.define('NextThought.util.Globals',
 		'NextThought.overrides.dom.Element',
 		'NextThought.overrides.panel.Panel',
 		'NextThought.overrides.picker.Color',
-		'NextThought.overrides.AbstractComponent',
 		'NextThought.overrides.JSON',
 		'NextThought.overrides.XTemplate'
 
