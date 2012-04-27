@@ -140,21 +140,25 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 					text : (r.phantom?'Save':'Remove')+' Highlight',
 					handler: Ext.bind(r.phantom? me.savePhantom : me.remove, me)
 				});
-			/*
-			if (r.phantom) {
-				items.push({
-						text : 'Redact Highlight',
-						handler: function(){
-							me.record.set('style', 'redaction');
-							me.savePhantom(function(){
-								var r = Ext.clone(me.record);
-								me.cleanup();
-								me.ownerCmp.fireEvent('redact', r);
-							});
-						}
-					});
+
+			//hack to allow redactions only in legal texts for now...
+			if (LocationProvider.currentNTIID.indexOf('Howes_converted') > 0 || LocationProvider.currentNTIID.indexOf('USvJones2012_converted') > 0 ) {
+
+				if (r.phantom) {
+					items.push({
+							text : 'Redact Highlight',
+							handler: function(){
+								me.record.set('style', 'redaction');
+								me.savePhantom(function(){
+									var r = Ext.clone(me.record);
+									me.cleanup();
+									me.ownerCmp.fireEvent('redact', r);
+								});
+							}
+						});
+				}
+
 			}
-			*/
 		}
 
 		if(/^\w+$/i.test(text)){//is it a word
