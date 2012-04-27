@@ -28,7 +28,9 @@ Ext.define('NextThought.view.widgets.NotePanel',{
 				'<span class="body-text selectable">{body}</span> ',
 			'</div>',
 		'</div>',
-		'<div class="x-nti-note-replies"></div>'
+		'<div class="x-nti-note-replies">',
+			'{%this.renderContainer(out,values);%}',
+		'</div>'
 		),
 
 	transcriptSummaryRenderTpl: new Ext.XTemplate(
@@ -38,7 +40,9 @@ Ext.define('NextThought.view.widgets.NotePanel',{
 			'</tpl>',
 			'<div class="transcript-placeholder"><a href="#">View Log</a> (Messages: {MessageCount})</div>',
 		'</div>',
-		'<div class="x-nti-note-replies chat-transcript"></div>',{
+		'<div class="x-nti-note-replies chat-transcript">',
+			'{%this.renderContainer(out,values);%}',
+		'</div>',{
 			contrib: function(user,values){
 				return this.applySubtemplate("Avatar", Ext.applyIf({user:user},values));
 			}

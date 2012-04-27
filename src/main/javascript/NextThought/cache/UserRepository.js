@@ -230,10 +230,10 @@ Ext.define('NextThought.cache.UserRepository', {
 			return;
 		}
 
-		if(this.has(username)){
-			console.error('um...why are we requesting a resolve for something we already have??');
-			return;
-		}
+//		if(this.has(username)){
+//			console.error('um...why are we requesting a resolve for something we already have??');
+//			return;
+//		}
 
 		s.add({Username:username, placeholder: true});//make this.has return return true now...
 		this.activeRequests[username] = Ext.Ajax.request({
