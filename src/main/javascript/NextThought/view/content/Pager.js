@@ -15,7 +15,7 @@ Ext.define('NextThought.view.content.Pager',{
 		xtype: 'button',
 		iconCls: 'page',
 		scale: 'large',
-		ui: 'content-pager',
+		ui: 'content-button',
 		handler: function(btn){ LocationProvider.setLocation(btn?btn.ntiid:null); }
 	},
 

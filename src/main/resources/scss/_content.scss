@@ -98,8 +98,7 @@
 }
 
 
-
-.x-btn-content-pager-large {
+.x-btn-content-button-large {
 	width: 38px;
 	height: 34px;
 	border: 1px solid #ebebeb;
@@ -119,6 +118,24 @@
 		}
 	}
 
+	&.font {
+		border-radius: 3px;
+		.x-btn-icon {
+			background-position: 6px 9px;
+			background-image: url(../images/page-font.png);
+		}
+	}
+
+	&.settings {
+		width: 48px;
+		border-radius: 3px;
+		.x-btn-icon {
+			width: 46px;
+			background-position: 10px 7px;
+			background-image: url(../images/page-settings.png);
+		}
+	}
+
 	&.prev {
 		border-radius: 3px 0 0 3px;
 		.x-btn-icon {
@@ -134,9 +151,6 @@
 		}
 	}
 }
-
-
-
 
 
 
