@@ -7,7 +7,7 @@ Ext.define('NextThought.view.menus.JumpTo',{
 	frame: false,
 	border: false,
 	hideMode: 'display',
-	minWidth: 300,
+	minWidth: 200,
 
 	defaults: {
 		ui: 'jumpto-menuitem',
@@ -17,5 +17,14 @@ Ext.define('NextThought.view.menus.JumpTo',{
 	initComponent: function(){
 		this.callParent(arguments);
 		this.on('click',this.handleClick,this);
+	},
+
+
+	handleClick: function(menu,item){
+		if(!item || !item.ntiid){
+			return;
+		}
+
+		LocationProvider.setLocation(item.ntiid);
 	}
 });
