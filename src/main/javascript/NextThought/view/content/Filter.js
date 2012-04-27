@@ -7,13 +7,16 @@ Ext.define('NextThought.view.content.Filter',{
 	ui: 'content-filter',
 
 	renderTpl: [
-		'<div class="label">Show Me</div>',
-		'<div class="menu">Everything from Everyone</div>'
+		'<div class="shrink-wrap">',
+			'<div class="label">Show Me</div>',
+			'<div><span class="menu">Everything from Everyone</span></div>',
+		'</div>'
 	],
 
 	renderSelectors: {
+		shrinkWrapEl: 'div.shrink-wrap',
 		labelEl: 'div.label',
-		menuEl: 'div.menu'
+		menuEl: 'span.menu'
 	},
 
 	initComponent: function(){
@@ -26,7 +29,10 @@ Ext.define('NextThought.view.content.Filter',{
 				changed:function(){
 					me.menuEl.update(me.menu.getDescription());
 					me.ownerCt.updateLayout();
-//					me.ownerCt.doLayout();
+				},
+				hide: function(){
+					var e = me.el;
+					if(e){ e.removeCls('active'); }
 				}
 			}
 		});
@@ -34,12 +40,14 @@ Ext.define('NextThought.view.content.Filter',{
 
 	afterRender: function(){
 		this.callParent();
-		this.el.addClsOnOver('over')
+		this.shrinkWrapEl.addClsOnOver('over')
 				.addClsOnFocus('active')
 				.on('click',this.clicked,this);
 	},
 
 	clicked: function(){
-		this.menu.showBy(this.el,'t-b?');
+		this.menu.showBy(this.menuEl,'tl-bl?',[-30,5]);
+		this.el.addCls('active');
+
 	}
 });

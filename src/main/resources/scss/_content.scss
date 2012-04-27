@@ -6,35 +6,44 @@
 
 .x-component-content-filter,
 .x-component-content-jumpbox{
-	div {
-		padding: 2px 4px;
-	}
+	margin-right: 25px;
 
-	&.active,
-	&.over {
-		&.jumpto .label{
-			background-image: url(../images/menu-arrow-down-active.png);
+	.shrink-wrap {
+		display: inline-block;
+		position: relative;
+		overflow: hidden;
+		div {
+			padding: 2px 4px;
 		}
 
-		.label { color: #585858; }
-		.menu {
-			color: #767676;
-			background-image: url(../images/menu-arrow-down-active.png);
+		&.active,
+		&.over {
+			&.jumpto .label{
+				background-image: url(../images/menu-arrow-down-active.png);
+			}
+
+			.label { color: #585858; }
+			.menu {
+				color: #767676;
+				background-image: url(../images/menu-arrow-down-active.png);
+			}
 		}
 	}
+
 
 	&.jumpto .label{
-		display: inline-block;
 		padding-right: 15px;
 		background: url(../images/menu-arrow-down-default.png) no-repeat 100% 50%;
 	}
 	.label {
+		display: inline-block;
 		color: #8a8989;
 		font-size: 7.5pt;
 		text-transform: uppercase;
 		font-weight: 800;
 	}
 	.menu {
+		display: inline-block;
 		color: #b2b2b2;
 		font-size: 11pt;
 		font-weight: 400;

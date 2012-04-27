@@ -8,33 +8,41 @@ Ext.define('NextThought.view.content.JumpBox',{
 	cls: 'jumpto',
 
 	renderTpl: [
-		'<div class="label">chapter</div>',
-		'<div class="menu">section</div>'
+		'<div class="shrink-wrap">',
+			'<div class="label">chapter</div>',
+			'<div><span class="menu">section</span></div>',
+		'</div>'
 	],
 
 	renderSelectors: {
+		shrinkWrapEl: 'div.shrink-wrap',
 		labelEl: 'div.label',
-		menuEl: 'div.menu'
+		menuEl: 'span.menu'
 	},
 
 	initComponent: function(){
-		this.callParent(arguments);
-		this.chapterMenu = Ext.widget('jump-menu',{
-			ownerButton: this
-		});
+		var me = this, cfg = {
+			ownerButton: me,
+			listeners: {
+				scope: me,
+				hide: function(){
+					var e = me.el;
+					if(e){ e.removeCls('active'); }
+				}
+			}
+		};
 
-		this.sectionMenu = Ext.widget('jump-menu',{
-			ownerButton: this
-		});
-
-		this.locationChanged();
-		LocationProvider.on('change',this.locationChanged,this);
+		me.callParent(arguments);
+		me.chapterMenu = Ext.widget('jump-menu',Ext.apply({},cfg));
+		me.sectionMenu = Ext.widget('jump-menu',Ext.apply({},cfg));
+		me.locationChanged();
+		LocationProvider.on('change',me.locationChanged,me);
 	},
 
 
 	afterRender: function(){
 		this.callParent();
-		this.el.addClsOnOver('over')
+		this.shrinkWrapEl.addClsOnOver('over')
 				.addClsOnFocus('active')
 				.on('click',this.clicked,this);
 	},
@@ -98,6 +106,7 @@ Ext.define('NextThought.view.content.JumpBox',{
 			m = this.chapterMenu;
 			e = this.labelEl;
 		}
-		m.showBy(e,'t-b?');
+		m.showBy(e,'tl-bl?', [-10,5]);
+		this.el.addCls('active');
 	}
 });

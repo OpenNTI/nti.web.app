@@ -10,13 +10,15 @@ Ext.define('NextThought.view.content.Toolbar',{
 
 
 	height: 79,
+	defaults: {
+		xtype: 'tbspacer'
+	},
 
 	items: [
-		' ',
-		{ xtype: 'content-filter'},
-		' ',
-		{ xtype: 'content-jumper'},
-		' ',
-		{ xtype: 'content-pager'}
+		{ width: 185 },
+		{ xtype: 'content-filter', flex: 1 },
+		{ xtype: 'content-jumper', flex: 1 },
+		{ xtype: 'content-pager'},
+		{ width:290 }
 	]
 });
