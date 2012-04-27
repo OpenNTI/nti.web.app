@@ -8,7 +8,7 @@ Ext.define('NextThought.view.content.Filter',{
 
 	renderTpl: [
 		'<div class="label">Show Me</div>',
-		'<div class="menu">Highlights and Notes from Everyone</div>'
+		'<div class="menu">Everything from Everyone</div>'
 	],
 
 	renderSelectors: {
@@ -17,10 +17,18 @@ Ext.define('NextThought.view.content.Filter',{
 	},
 
 	initComponent: function(){
-		this.callParent(arguments);
-		this.menu = Ext.widget('filter-menu',{ownerButton: this});
+		var me = this;
+		me.callParent(arguments);
+		me.menu = Ext.widget('filter-menu',{
+			ownerButton: me,
+			listeners: {
+				scope: me,
+				changed:function(){
+					me.menuEl.update(me.menu.getDescription());
+				}
+			}
+		});
 	},
-
 
 	afterRender: function(){
 		this.callParent();
@@ -32,5 +40,4 @@ Ext.define('NextThought.view.content.Filter',{
 	clicked: function(){
 		this.menu.showBy(this.el,'t-b?');
 	}
-
 });

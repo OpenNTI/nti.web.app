@@ -1,7 +1,8 @@
 Ext.define('NextThought.view.content.Toolbar',{
 	extend: 'Ext.toolbar.Toolbar',
 	requires: [
-		'NextThought.view.content.Filter'
+		'NextThought.view.content.Filter',
+		'NextThought.view.content.JumpBox'
 	],
 	alias: 'widget.content-toolbar',
 	ui: 'content',
@@ -10,7 +11,9 @@ Ext.define('NextThought.view.content.Toolbar',{
 	height: 79,
 
 	items: [
-//		'->',
-		{ xtype: 'content-filter'}
+		' ',
+		{ xtype: 'content-filter'},
+		' ',
+		{ xtype: 'content-jumper'}
 	]
 });
