@@ -6,7 +6,6 @@
 
 .x-component-content-filter,
 .x-component-content-jumpbox{
-
 	div {
 		padding: 2px 4px;
 	}
@@ -43,6 +42,7 @@
 		background: url(../images/menu-arrow-down-default.png) no-repeat 100% 50%;
 		text-overflow: ellipsis;
 		overflow: hidden;
+		margin-bottom: 6px;
 	}
 }
 
@@ -87,6 +87,49 @@
 		}
 	}
 }
+
+
+
+.x-btn-content-pager-large {
+	width: 38px;
+	height: 34px;
+	border: 1px solid #ebebeb;
+	margin-top: 5px;
+	.x-btn-icon {
+		top: 0; left: 0;
+		width: 36px;
+		height: 32px;
+		background-position: 11px 6px;
+		opacity: 0.3;
+
+	}
+
+	&.x-over {
+		.x-btn-icon{
+			opacity: 0.5;
+		}
+	}
+
+	&.prev {
+		border-radius: 3px 0 0 3px;
+		.x-btn-icon {
+			background-image: url(../images/page-prev.png);
+		}
+	}
+	&.next {
+		border-radius: 0 3px 3px 0;
+		border-left-width: 0 !important;
+		.x-btn-icon {
+			left: 1px;
+			background-image: url(../images/page-next.png);
+		}
+	}
+}
+
+
+
+
+
 
 div.no-content-splash {
     position: absolute;

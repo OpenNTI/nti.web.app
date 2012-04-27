@@ -88,6 +88,7 @@ Ext.define('NextThought.view.content.JumpBox',{
 
 		this.labelEl.update(currentChapter.getAttribute('label'));
 		this.menuEl.update(currentSection?currentSection.getAttribute('label'):'Chapter Index');
+		this.ownerCt.updateLayout();
 	},
 
 

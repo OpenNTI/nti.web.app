@@ -25,6 +25,8 @@ Ext.define('NextThought.view.content.Filter',{
 				scope: me,
 				changed:function(){
 					me.menuEl.update(me.menu.getDescription());
+					me.ownerCt.updateLayout();
+//					me.ownerCt.doLayout();
 				}
 			}
 		});

@@ -108,6 +108,35 @@ Ext.define('NextThought.providers.Location', {
 		me.timers[i] = setTimeout(function(){delete me.cache[i];},15000);
 
 		return r;
+	},
+
+
+
+	getNavigationInfo: function(ntiid) {
+		var loc = Library.findLocation(ntiid),
+			toc = loc? loc.toc : null,
+			list = toc ? Ext.DomQuery.select('toc,topic' ,toc): [],
+			i = 0,
+			len = list.length,
+			info = {};
+
+		for (i; i < len; i++) {
+			if (!list[i] || !list[i].tagName) {
+				console.error('error in loop', ntiid, loc, list, i, len);
+				continue;
+			}
+
+			if(list[i].getAttribute('ntiid') === ntiid) {
+				info.hasPrevious = Boolean(info.previous = list[i - 1]);
+				info.hasNext = !!(info.next = list[i + 1]);
+				info.nextRef = info.hasNext ? info.next.getAttribute('ntiid') : null;
+				info.previousRef = info.hasPrevious ? info.previous.getAttribute('ntiid') : null;
+				info.current = list[i];
+				break;
+			}
+		}
+
+		return info;
 	}
 
 
