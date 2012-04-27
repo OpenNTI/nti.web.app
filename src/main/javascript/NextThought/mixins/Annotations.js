@@ -7,6 +7,7 @@ Ext.define('NextThought.mixins.Annotations', {
 		'NextThought.util.AnnotationUtils',
 		'NextThought.util.QuizUtils',
 		'NextThought.view.widgets.annotations.SelectionHighlight',
+		'NextThought.view.widgets.annotations.RedactionHighlight',
 		'NextThought.view.widgets.annotations.Highlight',
 		'NextThought.view.widgets.annotations.Note',
 		'NextThought.view.widgets.annotations.Transcript',
@@ -38,6 +39,7 @@ Ext.define('NextThought.mixins.Annotations', {
 		};
 
 		NextThought.controller.Annotations.events.on('new-note',this.onNoteCreated,this);
+		NextThought.controller.Annotations.events.on('new-redaction',this.onRedactionCreated,this);
 		NextThought.controller.Stream.registerChangeListener(me.onNotification, me);
 		me.on('added',function(){
 			FilterManager.registerFilterListener(me, me.applyFilter,me);
@@ -151,6 +153,7 @@ Ext.define('NextThought.mixins.Annotations', {
 	createHighlightWidget: function(record, r){
 		var range = r || AnnotationUtils.buildRangeFromRecord(record, this.getDocumentElement()),
 			oid = record.getId(),
+			style = record.get('style'),
 			w;
 
 		if (!range) {
@@ -162,8 +165,14 @@ Ext.define('NextThought.mixins.Annotations', {
 			return null;
 		}
 
+		//special case, if it's a redaction, we must create a different annotation...
+		if (style === 'redaction'){
+			w = Ext.create( 'widget.redaction-highlight-annotation', range, record, this);
+		}
+		else {
+			w = Ext.create( 'widget.highlight-annotation', range, record, this);
+		}
 
-		w = Ext.create( 'widget.highlight-annotation', range, record, this);
 
 		if (!oid) {
 			oid = 'Highlight-TEMP-OID';
@@ -239,6 +248,11 @@ Ext.define('NextThought.mixins.Annotations', {
 		this.fireEvent('resize');
 	},
 
+
+	onRedactionCreated: function(record){
+		this.createHighlightWidget(record);
+		this.fireEvent('resize');
+	},
 
 
 	onNotification: function(change){

@@ -187,7 +187,7 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 		return m;
 	},
 	
-	savePhantom: function(){
+	savePhantom: function(callback){
 		var me = this;
 		if(!me.record.phantom){return;}
 		me.isSaving = true;
@@ -200,6 +200,9 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 			success:function(newRecord){
 				me.record.fireEvent('updated', newRecord);
 				me.record = newRecord;
+				if (callback) {
+					Globals.callback(callback);
+				}
 			}
 		});
 	},
@@ -394,7 +397,6 @@ Ext.define( 'NextThought.view.widgets.annotations.Annotation', {
 			this.registry[prefix] = Ext.Array.unique(this.registry[prefix]);
 
 			Ext.Array.sort(this.registry[prefix], this.sorter[prefix]);
-
 			Ext.each(Ext.Array.clone(this.registry[prefix]), function(o,i,a){
 				try {
 					var n = a[i+1],

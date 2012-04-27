@@ -523,7 +523,8 @@ Ext.define('NextThought.util.AnnotationUtils',{
 			resultRange = root.createRange(),
 			container,
 			text, texts,
-			tempRange;
+			tempRange,
+			i;
 
 		if(!endHighlightedFullText) {
 			endHighlightedFullText = startHighlightedFullText;
@@ -556,7 +557,10 @@ Ext.define('NextThought.util.AnnotationUtils',{
 				resultRange.setStart(text, text.nodeValue.indexOf(sht));
 			}
 			if (text.nodeValue===endHighlightedFullText) {
-				resultRange.setEnd(text, eht.length);
+				i = text.nodeValue.indexOf(eht);
+				if (i < 0){i =0;}
+
+				resultRange.setEnd(text, i + eht.length);
 			}
 		}
 
@@ -598,7 +602,7 @@ Ext.define('NextThought.util.AnnotationUtils',{
 	},
 
 
-	selectionToHighlight: function(range) {
+	selectionToHighlight: function(range, style) {
 		if(range.collapsed){
 			return;
 		}
@@ -627,6 +631,9 @@ Ext.define('NextThought.util.AnnotationUtils',{
 		if (this.isBlockNode(endNode) && this.isImageNode(endNode.firstChild)){
 			endNode = endNode.firstChild;
 		}
+
+		//if a style is sent, set it:
+		if (style){highlight.set('style', style);}
 
 		this.fixHighlightEndpoints(endNode, startNode, highlight);
 		return highlight;

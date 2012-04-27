@@ -177,4 +177,10 @@ img.action {
 	&.transcript {
 	    background-image: $charm-chattranscript-icon;
     }
+    &.redactionhighlight {
+ 	    background-image: $charm-collapsed-icon;
+     }
+    &.expanded {
+ 	    background-image: $charm-expanded-icon;
+     }
 }

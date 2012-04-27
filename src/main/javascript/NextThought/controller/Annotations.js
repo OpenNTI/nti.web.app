@@ -48,7 +48,8 @@ Ext.define('NextThought.controller.Annotations', {
 			'reader-panel':{
 				'create-note'   : this.addNote,
 				'share-with'	: this.actionMap.share,
-				'define'		: this.define
+				'define'		: this.define,
+				'redact'		: this.redact
 			},
 
 			'note-entry':{
@@ -308,5 +309,13 @@ Ext.define('NextThought.controller.Annotations', {
 		note.set('ContainerId', LocationProvider.currentNTIID);
 
 		this.editNote(note);
+	},
+
+	redact: function(record){
+		if(!record) {
+			return;
+		}
+		this.self.events.fireEvent('new-redaction',record);
 	}
+
 });

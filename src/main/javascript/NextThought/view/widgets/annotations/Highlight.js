@@ -99,7 +99,7 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 
 
 	createCanvas: function(){
-		var c = document.getElementById(this.canvasId);
+		var c = this.doc.getElementById(this.canvasId);
 
 		if(!c){
 			c = this.createElement(
@@ -140,6 +140,19 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 					text : (r.phantom?'Save':'Remove')+' Highlight',
 					handler: Ext.bind(r.phantom? me.savePhantom : me.remove, me)
 				});
+			if (r.phantom) {
+				items.push({
+						text : 'Redact Highlight',
+						handler: function(){
+							me.record.set('style', 'redaction');
+							me.savePhantom(function(){
+								var r = Ext.clone(me.record);
+								me.cleanup();
+								me.ownerCmp.fireEvent('redact', r);
+							});
+						}
+					});
+			}
 		}
 
 		if(/^\w+$/i.test(text)){//is it a word
@@ -174,7 +187,7 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 
 
 
-	drawRect: function(rect, fill){
+	 drawRect: function(rect, fill){
 		return function(ctx){
 			ctx.fillStyle = fill;
 			ctx.fillRect(rect.left, rect.top, rect.width, rect.height);
@@ -188,9 +201,7 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 	},
 
 
-	render: function(){
-
-//		this.clearCanvas();
+	render: function() {
 		if(!this.selection){
 			this.cleanup();
 			return;
@@ -223,12 +234,14 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 			top: r.top +'px'
 		});
 
+
 		//stage draw
 		for(; i>=0; i--){
 			this.self.enqueue(this, this.drawRect(s[i], rgba));
 		}
 		this.self.enqueue(this, function(){ delete me.rendering; });
 		this.self.renderCanvas(this.prefix);//buffered
+
 		this.callParent();
 	},
 
@@ -271,7 +284,6 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 			while(q.length){ (q.pop())(ctx); }
 		}
 	}
-
 },
 function(){
 	var me = this,
