@@ -170,6 +170,7 @@
 		position: absolute;
 		left: 0;
 		top: 0;
+		z-index: 10;
 	}
 
 	.view-switcher {
@@ -237,8 +238,8 @@
 				z-index: 10;
 			}
 
-			&.selected,
-			&.over{
+			&.selected {
+			//&.over{
 				//border-right: 1px solid #e2e2e2;
 				.item {
 					margin-right: 1px;
@@ -259,7 +260,7 @@
 				display: block;
 				color: #747474;
 				padding: 18px;
-				font-size: 17pt;
+				font-size: 14pt;
 				font-weight: 200;
 				//text-overflow: ellipsis;
 				overflow: hidden;

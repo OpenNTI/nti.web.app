@@ -6,6 +6,8 @@ Ext.define('NextThought.view.menus.Flyout',{
 		'NextThought.util.TocUtils'
 	],
 	ui: 'nav-flyout',
+	defaultAlign: 'r-l?',
+	ignoreParentClicks: true,
 	autoScroll: false,
 	plain: true,
 	shadow: false,
@@ -62,18 +64,19 @@ Ext.define('NextThought.view.menus.Flyout',{
 		Ext.EventManager.removeResizeListener(this.viewportMonitor,this);
 	},
 
-
-	updatePath: function(path){
-		var s = this.record.store,
-			e = Ext.get(this.view.getNode(this.record));
-		s.suspendEvents(false);
-		s.each(function(o){o.set('path','');});
-		this.record.set('path',path);
-		s.resumeEvents();
-
-		Ext.get(e.up('.main-nav-menu').query('.path')).update('');
-		e.down('.path').update(path);
-	},
+//
+//
+//	updatePath: function(path){
+//		var s = this.record.store,
+//			e = Ext.get(this.view.getNode(this.record));
+//		s.suspendEvents(false);
+//		s.each(function(o){o.set('path','');});
+//		this.record.set('path',path);
+//		s.resumeEvents();
+//
+//		Ext.get(e.up('.main-nav-menu').query('.path')).update('');
+//		e.down('.path').update(path);
+//	},
 
 
 	viewportMonitor: function(w,h){

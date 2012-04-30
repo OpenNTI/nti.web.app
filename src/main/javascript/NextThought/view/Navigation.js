@@ -56,7 +56,4 @@ Ext.define('NextThought.view.Navigation',{
 			]
 		}
 	]
-
-},function(){
-
 });

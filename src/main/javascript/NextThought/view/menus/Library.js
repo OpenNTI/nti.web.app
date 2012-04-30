@@ -39,7 +39,7 @@ Ext.define('NextThought.view.menus.Library',{
 
 		me.on({
 			scope: me,
-			'itemclick': me.handleMenu,
+			'ItemMouseUp': me.handleMenu,
 			'itemcontextmenu': function(a,b,c,d,e){
 				me.handleMenu.apply(me,arguments);
 				e.preventDefault();
@@ -50,8 +50,9 @@ Ext.define('NextThought.view.menus.Library',{
 	},
 
 
-	handleMenu: function(me,rec,el,ix,ev,opts){
-		this.menus[rec.getId()].showBy(el,'r-l?');
+	handleMenu: function(me,rec){
+		me.select(rec);
+		me.menus[rec.getId()].showBy(me.getNodeByRecord(rec));
 	},
 
 
