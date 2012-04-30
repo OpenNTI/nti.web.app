@@ -282,7 +282,7 @@ Ext.define('NextThought.controller.Chat', {
 
 	/* CLIENT EVENTS */
 	compose: function(textField, replyToId, channel, recipients){
-		var room = textField.up('chat-view').roomInfo,
+		var room = ClassroomUtils.getRoomInfoFromComponent(textField),
 			record = Ext.create('NextThought.model.MessageInfo',{
 			inReplyTo: replyToId,
 			channel: channel,
@@ -339,7 +339,7 @@ Ext.define('NextThought.controller.Chat', {
 
 	classroom: function(f, mid, channel, recipients) {
 		var cv = f.up('chat-view'),
-			room = cv.roomInfo,
+			room = ClassroomUtils.getRoomInfoFromComponent(f),
 			mlog = cv.down('chat-log-view[moderated=true]'),
 			log = cv.down('chat-log-view[moderated=false]'),
 			messages = log.getMessages(),
@@ -532,7 +532,7 @@ Ext.define('NextThought.controller.Chat', {
 	},
 
 	clearPinnedMessages: function(btnCmp) {
-		var ri = btnCmp.up('chat-view').roomInfo;
+		var ri = ClassroomUtils.getRoomInfoFromComponent(btnCmp);
 		this.postMessage(ri, {'channel': 'DEFAULT', 'action': 'clearPinned'}, null, 'META');
 	},
 
@@ -789,10 +789,8 @@ Ext.define('NextThought.controller.Chat', {
 				return;
 			}
 
-			cv.getPinnedMessageView().add(
-				{ xtype:'chat-log-entry-pinned', message: e.message}
-			);
 
+			cv.getPinnedMessageView().addMessage(e.message);
 		}
 	},
 

@@ -22,6 +22,7 @@ Ext.define('NextThought.util.QuizUtils', {
 
 			//write the latex, then refocus since it's probably been lost...
 			mq.mathquill('write', tex);
+			mq.trigger('focus');
 		}
 	},
 
@@ -52,15 +53,20 @@ Ext.define('NextThought.util.QuizUtils', {
 			q = w.$('span.quiz-input').mathquill('editable');
 
 			//Add events for the math panel
-			q.bind('mousedown click focusin', function(e){
-				var r = Ext.getCmp('reader').down('reader-panel');
-				r.scrollToNode(this, true, 90);
-				MathSymbolPanel.showMathSymbolPanelFor(this, r.body);
-			});
+			this.attachMathSymbolToMathquillObjects(q);
 		}
 		catch(e){
 			console.error('unable to setup quiz ',e.stack||e.toString());
 		}
+	},
+
+
+	attachMathSymbolToMathquillObjects: function(objectOrObjects) {
+		objectOrObjects.bind('mousedown click focusin', function(e){
+			var r = Ext.getCmp('reader').down('reader-panel');
+			r.scrollToNode(this, true, 90);
+			MathSymbolPanel.showMathSymbolPanelFor(this, r.body);
+		});
 	},
 
 
@@ -114,6 +120,9 @@ Ext.define('NextThought.util.QuizUtils', {
 			problems,
 			vp = Ext.getBody(),
 			quizResult = Ext.create('NextThought.model.QuizResult' ,{ContainerId: ntiid});
+
+		//ask the symbol panel to go away (does nothing if it's not up)
+		MathSymbolPanel.hideMathSymbolPanel();
 
 		function populateQuestionResponses(id,v){
 			var items = quizResult.get('Items') || [];
@@ -201,6 +210,8 @@ Ext.define('NextThought.util.QuizUtils', {
 				v.dom.value='';
 				w.$('span.quiz-input').replaceWith('<span class="quiz-input"></span>');
 				w.$('span.quiz-input').mathquill('editable');
+
+				this.attachMathSymbolToMathquillObjects(w.$('span.quiz-input'));
 
 				var r = c.next('.result'),
 					resp, ans;

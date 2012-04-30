@@ -13,6 +13,7 @@ Ext.define('NextThought.model.Highlight', {
 		{ name: 'endHighlightedText', type: 'string' },
 		{ name: 'endOffset', type: 'int' },
 		{ name: 'text', type: 'string' },
+		{ name: 'style', type: 'string' },
 		{ name: 'sharedWith', type: 'UserList'}
 	],
 

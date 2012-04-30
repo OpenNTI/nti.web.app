@@ -26,6 +26,8 @@ Ext.define('NextThought.view.widgets.classroom.ScriptEntry', {
 	},
 
 	initComponent: function(){
+		this.addEvents('rendered-late');
+		this.enableBubble('rendered-late');
 		this.callParent(arguments);
 		this.update(this.message);
 	},
@@ -51,7 +53,8 @@ Ext.define('NextThought.view.widgets.classroom.ScriptEntry', {
 		AnnotationUtils.compileBodyContent(m,function(content){
 			me.renderData.body = content;
 			if(me.rendered){
-			   me.text.update(me.renderData.body);
+				me.text.update(me.renderData.body);
+				me.fireEvent('rendered-late');
 			}
 		});
 	},

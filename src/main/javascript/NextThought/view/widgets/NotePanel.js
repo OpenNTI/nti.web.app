@@ -127,6 +127,14 @@ Ext.define('NextThought.view.widgets.NotePanel',{
 			log = panel.add({ xtype: 'chat-log-view' }),
 			msgs = m.get('Messages');
 
+		//This happens when a componment is rendering for a bit, likely after this has rendered.
+		//Like a large image in a whiteboard.
+		log.on('rendered-late', function(){
+			this.sizeChanged();
+			this.doComponentLayout();
+			this.doLayout();
+		}, this);
+
 		msgs = Ext.Array.sort( msgs || [], Globals.SortModelsBy('Last Modified'));
 
 		Ext.each(msgs, function(i){ log.addMessage(i); });
@@ -498,4 +506,8 @@ Ext.define('NextThought.view.widgets.NotePanel',{
 	}
 	
 	
-});
+},
+function(){
+	this.prototype.sizeChanged = Ext.Function.createBuffered(this.prototype.sizeChanged, 10);
+}
+);
