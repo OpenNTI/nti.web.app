@@ -25,22 +25,26 @@ Ext.define('NextThought.view.ViewSelect', {
 			pressed: true,
 			iconCls: 'home',
 			title: 'Home',
-			tooltip: 'Home/Profile'
+			tooltip: 'Home/Profile',
+			renderData: {text: '<span class="right cap"></span>'}
 		},
 		{
 			iconCls: 'library',
 			title: 'Library',
-			tooltip: 'Library'
+			tooltip: 'Library',
+			renderData: {text: '<span class="left cap"></span><span class="right cap"></span>'}
 		},
 		{
 			iconCls: 'classroom',
 			title: 'Classroom',
-			tooltip: 'Classroom'
+			tooltip: 'Classroom',
+			renderData: {text: '<span class="left cap"></span><span class="right cap"></span>'}
 		},
 		{
 			iconCls: 'search',
 			title: 'Search',
-			tooltip: 'Search'
+			tooltip: 'Search',
+			renderData: {text: '<span class="left cap"></span>'}
 		}
 	]
 });

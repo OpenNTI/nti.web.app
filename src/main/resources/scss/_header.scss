@@ -185,8 +185,23 @@
 		}
 
 		.view-button {
-			button { @include view-button-def; }
+			button { @include view-button-def; overflow: visible; }
 			@include view-button-def;
+			
+			.cap {
+				display: none;
+				position: absolute;
+				background: url(../images/nav-vertical-divider-right.png) 0 0 no-repeat;
+				width: 2px;
+				height: 70px;
+				top: 0;
+				&.left {
+					left: -2px;
+				}
+				&.right {
+					right: -2px;
+				}
+			}
 
 			.x-btn-icon{
 				top: 0;
@@ -200,6 +215,7 @@
 				&.search { background-position:  -128px -70px; }
 			}
 			&.x-pressed{
+				.cap { display: block; }
 				.classroom { background-position:  -0px -70px; }
 				.home { background-position:  -64px -70px; }
 				.library { background-position:  -192px -0px; }
