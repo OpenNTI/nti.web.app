@@ -46,7 +46,7 @@ Ext.define('NextThought.view.menus.Flyout',{
 					var path = node.getPath('text','\u200b').split('\u200b');
 					if(node.isLeaf()) {
 						this.fireEvent('navigation-selected',node.raw.ntiid);
-						this.updatePath(path.slice(2).join(' - '));
+//						this.updatePath(path.slice(2).join(' - '));
 					}
 					else if(node.isExpanded()) { node.collapse(); }
 					else { node.expand(); }

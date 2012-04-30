@@ -22,7 +22,7 @@ Ext.define('NextThought.view.Viewport', {
 	id: 'viewport',
 
 	items:[
-		{xtype: 'main-navigation', width: 279},
+		{xtype: 'main-navigation'},
 		{xtype: 'main-views', id: 'view-ctr', flex: 1}
 	],
 

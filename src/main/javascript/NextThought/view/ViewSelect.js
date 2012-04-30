@@ -10,7 +10,6 @@ Ext.define('NextThought.view.ViewSelect', {
 	},
 
 	defaults: {
-		margin: '5px 0 5px 2px',
 		xtype: 'button',
 		ui: 'view',
 		scale: 'large',

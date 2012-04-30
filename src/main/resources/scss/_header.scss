@@ -1,8 +1,8 @@
 
 @mixin view-button-def {
 	background: none;
-	width: 64px !important;
-	height: 70px;
+	width: 69px !important;
+	height: 78px;
 }
 
 .browser-warning {
@@ -133,20 +133,14 @@
 			// IE9 SVG, needs conditional override of 'filter' to 'none'
 			$experimental-support-for-svg: true;
 			@include background-image(linear-gradient(top, #9bc547 0%, #82b83e 100%));
-			color: white;
 
 			position: relative;
 			display: block;
 			margin: 0; padding: 0;
-			text-decoration: none;
-			text-decoration: none;
-			font: 30pt 'AW Conqueror Sans';
-			font-weight: 200;
-			text-align: center;
 
 			img {
-				background: url(../images/logotype.png) 0 0 no-repeat;
-				width: 278px;
+				background: url(../images/logotype.png) center center no-repeat;
+				width: 275px;
 				height: 79px;
 			}
 
@@ -171,7 +165,7 @@
 
 	.view-switcher-shadow {
 		background: url(../images/nav-view-switcher-shadow.png) -66px -9px no-repeat;
-		width: 279px;
+		width: 275px;
 		height: 10px;
 		position: absolute;
 		left: 0;
@@ -191,35 +185,35 @@
 			.cap {
 				display: none;
 				position: absolute;
-				background: url(../images/nav-vertical-divider-right.png) 0 0 no-repeat;
+				background: url(../images/nav-view-switcher-vertical-divider.png) 0 0 no-repeat;
 				width: 2px;
 				height: 70px;
-				top: 0;
+				top: 4px;
 				&.left {
-					left: -2px;
+					left: -1px;
 				}
 				&.right {
-					right: -2px;
+					right: -1px;
 				}
 			}
 
 			.x-btn-icon{
-				top: 0;
-				background: url(../images/nav-sprite.png) no-repeat;
-				width: 64px;
-				height: 70px;
+				top: 5px;
+				background: url(../images/nav-view-switcher-sprite.png) no-repeat;
+				width: 69px;
+				height: 73px;
 
-				&.classroom { background-position:  -0px -0px; }
-				&.home { background-position:  -64px -0px; }
-				&.library { background-position:  -128px -0px; }
-				&.search { background-position:  -128px -70px; }
+				&.classroom { background-position:  0 0; }
+				&.home { background-position:  -68px 0; }
+				&.library { background-position:  -136px 0; }
+				&.search { background-position:  -136px -70px; }
 			}
 			&.x-pressed{
 				.cap { display: block; }
-				.classroom { background-position:  -0px -70px; }
-				.home { background-position:  -64px -70px; }
-				.library { background-position:  -192px -0px; }
-				.search { background-position:  -192px -70px; }
+				.classroom { background-position:  0 -70px; }
+				.home { background-position:  -68px -70px; }
+				.library { background-position:  -204px 0; }
+				.search { background-position:  -204px -70px; }
 			}
 		}
 	}

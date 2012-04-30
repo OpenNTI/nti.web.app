@@ -12,7 +12,7 @@ Ext.define('NextThought.view.Navigation',{
 	cls: 'main-navigation',
 	layout: 'vbox',
 	defaults: {
-		width: 279,
+		width: 275,
 		frame: false,
 		border: false
 	},
