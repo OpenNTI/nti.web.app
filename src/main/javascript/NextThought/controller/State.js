@@ -152,7 +152,7 @@ Ext.define('NextThought.controller.State', {
 		}
 
 		return {
-			active: 'library'
+			active: 'search'
 		};
 
 //		return {

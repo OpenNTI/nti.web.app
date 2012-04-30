@@ -11,8 +11,9 @@ Ext.define('NextThought.view.Navigation',{
 
 	cls: 'main-navigation',
 	layout: 'vbox',
+	width: 276,
 	defaults: {
-		width: 275,
+		width: 276,
 		frame: false,
 		border: false
 	},
@@ -52,7 +53,7 @@ Ext.define('NextThought.view.Navigation',{
 				{ xtype: 'home-menu' },
 				{ xtype: 'library-menu' },
 				{ xtype: 'classroom-menu' },
-				{ xtype: 'search-menu' }
+				{ xtype: 'search-menu', id: 'search' }
 			]
 		}
 	]

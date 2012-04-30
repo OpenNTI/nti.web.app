@@ -1,83 +1,42 @@
 Ext.define('NextThought.view.form.fields.SearchField', {
-	extend: 'Ext.form.field.Trigger',
+	extend: 'Ext.Component',
 
 	alias: 'widget.searchfield',
 
-	trigger1Cls: Ext.baseCSSPrefix + 'form-clear-trigger',
+	renderTpl: [
+		'<div class="search-field-wrap">',
+			'<div class="search-field">',
+				'<input type="text">',
+				'<a href="#" class="trigger"></a>',
+			'</div>',
+		'</div>'
+	],
 
-	trigger2Cls: Ext.baseCSSPrefix + 'form-search-trigger',
+	menu: {
 
-	hasSearch : false,
+	},
 
-	initComponent: function(){
-		this.addEvents('search', 'cleared-search', 'select-down', 'select-up', 'choose-selection');
-		this.callParent(arguments);
-		this.on('specialkey', function(f, e){
-			//trigger search if enter is pressed, or if down is pressed and there isn't already a search
-			//console.debug('key=', e, ' hasSearch=', this.hasSearch);
-			if(e.getKey() === e.ESC){
-				this.onTrigger1Click();
-			}
-			else if(!this.hasSearch && (e.getKey() === e.ENTER || e.getKey() === e.DOWN)){
-				this.onTrigger2Click();
-			}
-			else if (e.getKey() === e.DOWN) {
-				this.onSelectDown();
-			}
-			else if (e.getKey() === e.UP) {
-				this.onSelectUp();
-			}
-			else if (e.getKey() === e.ENTER || e.getKey() === e.RIGHT) {
-				//someone pressed enter when the search is visable, means navigate to selection
-				this.onChooseSelection();
-			}
-		}, this);
-		this.on('change', function(f,n,o){
-			this.hasSearch = false;
-			this.fireEvent('cleared-search', this);
-		}, this);
+	renderSelectors: {
+		boxEl: 'div',
+		inputEl: 'input',
+		triggerEl: 'a'
 	},
 
 	afterRender: function(){
 		this.callParent(arguments);
-		this.triggerEl.item(0).setDisplayed('none');
+		this.triggerEl.on('click',this.triggerMenu,this);
+
 	},
 
-	onSelectDown: function() {
-		this.fireEvent('select-down',this);
-	},
 
-	onSelectUp: function() {
-		this.fireEvent('select-up', this);
-	},
+	triggerMenu: function(e,el){
+		e.stopPropagation();
+		e.preventDefault();
 
-	onChooseSelection: function() {
-		this.fireEvent('choose-selection', this);
-	},
+		//show menu
 
-	onTrigger1Click : function(){
-		var me = this;
-
-		if (me.hasSearch) {
-			me.setValue('');
-			me.hasSearch = false;
-			me.triggerEl.item(0).setDisplayed('none');
-			me.doComponentLayout();
-			me.fireEvent('cleared-search', this);
-		}
-	},
-
-	onTrigger2Click : function(){
-		var me = this,
-			value = me.getValue();
-
-		if (value.length < 1) {
-			me.onTrigger1Click();
-			return;
-		}
-		me.hasSearch = true;
-		me.triggerEl.item(0).setDisplayed('block');
-		me.doComponentLayout();
-		me.fireEvent('search', me);
+		//IE needs this
+		return false;
 	}
+
 });

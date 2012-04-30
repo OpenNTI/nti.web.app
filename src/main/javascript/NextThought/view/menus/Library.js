@@ -3,7 +3,6 @@ Ext.define('NextThought.view.menus.Library',{
 		'NextThought.Library',
 		'NextThought.view.menus.Flyout'
 	],
-//	extend: 'Ext.panel.Panel',
 	extend: 'Ext.view.View',
 	alias: 'widget.library-menu',
 

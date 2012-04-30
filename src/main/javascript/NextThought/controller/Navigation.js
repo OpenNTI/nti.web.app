@@ -47,6 +47,7 @@ Ext.define('NextThought.controller.Navigation', {
 		var id = button.viewId || button.title.toLowerCase();
 		if(state){
 			try {
+				this.track(id);//always switch the menus even if the view is already active
 				Ext.getCmp(id).activate();
 			}
 			catch(e){
