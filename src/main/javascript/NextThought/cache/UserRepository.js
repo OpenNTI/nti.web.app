@@ -22,7 +22,8 @@ Ext.define('NextThought.cache.UserRepository', {
 			}
 		}
 
-		return !!this.getStore().getById(username);
+		var user = this.getStore().getById(username);
+		return user && user.raw && !user.raw.hasOwnProperty('ignoreIfExists') && !user.raw.hasOwnProperty('childRecord');
 	},
 
 	getStore: function() {
@@ -49,12 +50,14 @@ Ext.define('NextThought.cache.UserRepository', {
 
 	updateUser: function(refreshedUser) {
 		var s = this.getStore(),
-			u = s.getById(refreshedUser.getId()),
-			ignoreNewInstance = (refreshedUser.raw && refreshedUser.raw.hasOwnProperty('ignoreIfExists'));
+			uid = refreshedUser.getId(),
+			u = s.getById(uid),
+			ignoreNewInstance = (refreshedUser.raw && (refreshedUser.raw.hasOwnProperty('ignoreIfExists') || refreshedUser.raw.hasOwnProperty('childRecord')));
 
-		//console.debug('updateUser',ignoreNewInstance, refreshedUser.getId(), u, refreshedUser);
 
-		if (u && (!ignoreNewInstance || !u.equal(refreshedUser))) {
+		console.debug('updateUser',ignoreNewInstance, refreshedUser.getId(), u, refreshedUser);
+
+		if (u && ((!ignoreNewInstance || !u.raw) || !u.equal(refreshedUser))) {
 			if ($AppConfig.userObject && u.getId() === $AppConfig.userObject.getId() ){
 				if(u !== $AppConfig.userObject) {
 					$AppConfig.userObject.fireEvent('changed', refreshedUser);
@@ -69,7 +72,10 @@ Ext.define('NextThought.cache.UserRepository', {
 		}
 
 		if(!u){
-			//console.debug('updateUser: adding...',refreshedUser.getId());
+			console.debug('updateUser: adding...',refreshedUser.getId());
+			if (ignoreNewInstance){
+				delete refreshedUser.raw;
+			}
 			s.add(refreshedUser);
 		}
 	},
@@ -232,7 +238,7 @@ Ext.define('NextThought.cache.UserRepository', {
 
 		if(this.has(username)){
 			console.error('um...why are we requesting a resolve for something we already have??');
-			return;
+			//return;
 		}
 
 		s.add({Username:username, placeholder: true});//make this.has return return true now...
