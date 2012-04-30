@@ -24,7 +24,7 @@ Ext.define('NextThought.view.content.Reader', {
 
 		this.callParent(arguments);
 		Ext.applyIf(this, {
-			tracker: null,
+			tracker: false,
 			prefix: 'default',
 			padding: this.tracker === false ? 0 : '0 0 0 50px'
 		});
