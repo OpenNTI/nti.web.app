@@ -43,6 +43,10 @@ Ext.define('NextThought.view.Navigation',{
 			ui: 'menu-wrapper',
 			xtype: 'container',
 			layout: 'card',
+			renderTpl: [
+				'<div class="view-switcher-shadow"></div>',
+				'{%this.renderContainer(out,values)%}'
+			],
 
 			items: [
 				{ xtype: 'home-menu' },

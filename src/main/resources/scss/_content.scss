@@ -41,6 +41,9 @@
 		font-size: 7.5pt;
 		text-transform: uppercase;
 		font-weight: 800;
+		white-space: nowrap;
+		text-overflow: ellipsis;
+		overflow: hidden;
 	}
 	.menu {
 		display: inline-block;
@@ -52,6 +55,7 @@
 		text-overflow: ellipsis;
 		overflow: hidden;
 		margin-bottom: 6px;
+		white-space: nowrap;
 	}
 }
 

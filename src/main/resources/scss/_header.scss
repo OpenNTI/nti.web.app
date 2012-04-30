@@ -112,9 +112,10 @@
 		border-width: 0;
 	}
 
-	.nav-item-wrap,
-	.x-panel-body-default,
-	.x-docked-noborder-bottom {
+	.nav-item-wrap
+	//.x-panel-body-default,
+	//.x-docked-noborder-bottom
+	{
 		border-bottom-width: 1px !important;
 		border-bottom: 1px solid #f4f4f4 !important;
 		box-shadow: inset 0 -1px 0 0 #e3e3e3 !important;
@@ -123,7 +124,8 @@
 
 	div.main-navigation-bar {
 		a {
-			
+			border-right: 1px solid rgba(176,176,176,0.2) !important;
+
 			// needs latest Compass, add '@import "compass"' to your scss
 			background-color: rgb(155,197,71); // Old browsers
 			@include filter-gradient(#9bc547, #82b83e, vertical); // IE6-8
@@ -143,8 +145,8 @@
 			text-align: center;
 
 			img {
-				background: url(../images/logotype.png);
-				width: 279px;
+				background: url(../images/logotype.png) 0 0 no-repeat;
+				width: 278px;
 				height: 79px;
 			}
 
@@ -167,9 +169,19 @@
 		overflow: visible;
 	}
 
+	.view-switcher-shadow {
+		background: url(../images/nav-view-switcher-shadow.png) -66px -9px no-repeat;
+		width: 279px;
+		height: 10px;
+		position: absolute;
+		left: 0;
+		top: 0;
+	}
+
 	.view-switcher {
 		.x-panel-body-default{
-			background: transparent;
+			background: #f7f7f7;
+			border-right: 1px solid rgba(176,176,176,0.2) !important;
 		}
 
 		.view-button {
@@ -198,6 +210,8 @@
 
 
 	.main-nav-menu {
+		overflow: scroll !important ;
+
 		.x-panel-body-default,
 		.nav-item-wrap {
 			position: relative;
@@ -215,9 +229,14 @@
 
 			&.selected,
 			&.over{
-				font-style: italic;
-				font-weight: 400;
-				color: #757474;
+				//border-right: 1px solid #e2e2e2;
+				.item {
+					margin-right: 1px;
+					border-right: 1px solid #efefef;
+					font-weight: 500;
+					color: #84b93d;
+					background: #fafafa url(../images/nav-selected-bg.png) 0 0 repeat-y;
+				}
 			}
 			&.menu-open {
 				.nib {
@@ -228,25 +247,12 @@
 
 			.item {
 				display: block;
-				color: #9d9d9d;
+				color: #747474;
 				padding: 18px;
-				font-size: 18pt;
+				font-size: 17pt;
 				font-weight: 200;
-				text-overflow: ellipsis;
+				//text-overflow: ellipsis;
 				overflow: hidden;
-
-				.path {
-					//display: none;
-					font-size: 10pt;
-					font-style: italic;
-					font-weight: 600;
-					color: #9d9d9d;
-				}
-			}
-			&.selected {
-				.item .path {
-					//display: block;
-				}
 			}
 		}
 	}

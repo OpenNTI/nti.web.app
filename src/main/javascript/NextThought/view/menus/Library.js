@@ -18,7 +18,6 @@ Ext.define('NextThought.view.menus.Library',{
 				'<div class="nib"></div>',
 				'<div class="item">',
 					'<div class="title">{title}</div>',
-					'<div class="path">{path}</div>',
 				'</div>',
 			'</div>',
 		'</tpl>'
