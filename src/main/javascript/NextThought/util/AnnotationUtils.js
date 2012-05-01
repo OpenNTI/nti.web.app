@@ -260,7 +260,7 @@ Ext.define('NextThought.util.AnnotationUtils',{
 
 
 	isDisplayed:function(a,root){
-		if(!a || a === root || Ext.get(a)===null){
+		if(!a || a === root || a.nodeType===Node.DOCUMENT_NODE || Ext.get(a)===null ){
 			return true;
 		}
 
