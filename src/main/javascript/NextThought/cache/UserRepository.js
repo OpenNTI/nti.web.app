@@ -113,14 +113,6 @@ Ext.define('NextThought.cache.UserRepository', {
 					if(!r || !r.getModelName){
 						Ext.Error.raise({message: 'Unknown result', object: r});
 					}
-
-					//Users models are very tightly coupled to this repository and add/update themselves, however,
-					// community models while still resolved like users (because they are user-like) are not auto-magically
-					// added to the repo, so we add them here.
-					if(r.getModelName() === 'Community'){
-						s.add(r);
-					}
-
 					name = r.getId();
 				}
 
