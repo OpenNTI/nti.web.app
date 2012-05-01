@@ -42,8 +42,8 @@
 		text-transform: uppercase;
 		font-weight: 800;
 		white-space: nowrap;
-		text-overflow: ellipsis;
 		overflow: hidden;
+		text-overflow: ellipsis;
 	}
 	.menu {
 		display: inline-block;
@@ -75,6 +75,16 @@
 			padding: 5px 10px;
 			margin: 2px 0 !important;
 
+			&.label{
+				color: #8a8989;
+				font-size: 7.5pt;
+				text-transform: uppercase;
+				font-weight: 800;
+				white-space: nowrap;
+				overflow: hidden;
+				padding: 15px 5px 5px 30px;
+			}
+
 			&.x-menu-item-checked {
 				background: transparent url(../images/menu-check.png) no-repeat 10px 50%;
 			}
@@ -96,6 +106,26 @@
 				padding: 0 !important;
 				margin-top: 8px !important;
 				margin-bottom: 18px !important;
+				overflow: visible;
+
+				.label {
+					background: none;
+					position: relative;
+					span {
+						color: #d0d0d0;
+						background: #ffffff;
+						top: -6px;
+						left: 25px;
+						padding: 0 5px;
+						position: absolute;
+						display: block;
+						font-size: 7.5pt;
+						text-transform: uppercase;
+						font-weight: 600;
+						white-space: nowrap;
+						overflow: hidden;
+					}
+				}
 			}
 		}
 	}
