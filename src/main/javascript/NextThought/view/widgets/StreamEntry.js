@@ -32,7 +32,7 @@ Ext.define('NextThought.view.widgets.StreamEntry', {
 			ct = me.change.get('ChangeType'),
 			i = me.change.get('Item'),
 			u = NextThought.cache.UserRepository.getUser(c),
-			it = (i) ? i.raw.Class : null;
+			it = (i && i.get) ? i.get('Class') : null;
 
 		//failsafe
 		if (!i) {

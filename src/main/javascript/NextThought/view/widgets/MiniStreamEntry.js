@@ -34,8 +34,9 @@ Ext.define('NextThought.view.widgets.MiniStreamEntry', {
 		this.initAvatar(u,24);
 		this.renderData.cls = this.cls || '';
 		this.renderData.name = u.getName();
+
 		this.renderData.text = this.change.get('Item')
-				? [this.change.get('ChangeType'),' a ',this.change.get('Item').raw.Class].join('')
+				? [this.change.get('ChangeType'),' a ',this.change.get('Item').get('Class')].join('')
 				: 'deleted something';
 	},
 

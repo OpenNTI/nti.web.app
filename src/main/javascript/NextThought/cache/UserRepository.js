@@ -225,11 +225,10 @@ Ext.define('NextThought.cache.UserRepository', {
 			}
 		}
 
-
 		if(this.activeRequests[username]){
-			options = this.activeRequests[username].options;
-			options.callback = Ext.Function.createSequence(
-					options.callback,
+			//options = this.activeRequests[username].options;
+			this.activeRequests[username] = Ext.Function.createSequence(
+					this.activeRequests[username],
 					function(){
 						callback.apply(me,arguments);
 					}, me);
@@ -242,7 +241,9 @@ Ext.define('NextThought.cache.UserRepository', {
 		}
 
 		s.add({Username:username, placeholder: true});//make this.has return return true now...
-		this.activeRequests[username] = Ext.Ajax.request({
+		this.activeRequests[username] = callback;
+
+		Ext.Ajax.request({
 			url: url,
 			scope: me,
 			async: !!callbacks,
