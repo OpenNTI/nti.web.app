@@ -45,7 +45,7 @@ $itemWidth: 275px;
 		}
 
 		.x-grid-view {
-			@include scrollbar(rgba(0,0,0,0), rgba(255,255,255,0.5));
+			@include scrollbar(rgba(60,60,60,0), rgba(255,255,255,0.5));
 		}
 
 		.hasScrollbar {
@@ -232,8 +232,12 @@ $itemWidth: 275px;
 		}
 	}
 
+	.detected-scrollbars .x-container-menu-wrapper {
+		padding-right: 2px !important;
+	}
+
 	.main-nav-menu {
-		@include scrollbar(rgba(0,0,0,0), rgba(0,0,0,0.5));
+		@include scrollbar(#EFEFEF, rgba(0,0,0,0.5));
 	}
 /* Home */
 /* Library */

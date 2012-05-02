@@ -188,7 +188,7 @@
 
 
 .x-reader-pane .x-panel-body-reader {
-	@include scrollbar(rgba(0,0,0,0), rgba(0,0,0,0.5));
+	@include scrollbar(#ffffff, rgba(0,0,0,0.5));
 };
 
 div.no-content-splash {

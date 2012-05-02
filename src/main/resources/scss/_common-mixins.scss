@@ -5,21 +5,23 @@
 		width: 8px; height: 8px;
 		background: $track;
 		z-index: 0;
+		margin: 5px 0;
 	}
 	.detected-scrollbars &::-webkit-scrollbar-thumb {
 		background: $nib;
-		border: 1px solid $track;
+		border: 1px solid opacify($track,1);
 		border-radius: 10px;
+
 	}
 
-	scrollbar-face-color: $nib;
-	scrollbar-highlight-color: $nib;
-	scrollbar-3dlight-color: $nib;
-	scrollbar-darkshadow-color: $nib;
-	scrollbar-shadow-color: $nib;
+	scrollbar-face-color: opacify($nib,1);
+	scrollbar-highlight-color: opacify($nib,1);
+	scrollbar-3dlight-color: opacify($nib,1);
+	scrollbar-darkshadow-color: opacify($nib,1);
+	scrollbar-shadow-color: opacify($nib,1);
 
-	scrollbar-arrow-color: $track;
-	scrollbar-track-color: $track;
+	scrollbar-arrow-color: opacify($track,1);
+	scrollbar-track-color: opacify($track,1);
 
 	/*
 
