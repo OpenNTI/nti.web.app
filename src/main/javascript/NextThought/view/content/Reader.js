@@ -713,6 +713,9 @@ turn off html5 player
 						'&_dc='+Ext.Date.now();
 			}
 */
+			if(/src/i.test(attr) && /youtube/i.test(url)){
+				return Ext.String.format('src="{0}&wmode={1}"',url.replace(/http:/i,'https:'), 'opaque');
+			}
 
 			if(url.indexOf('http:')===0){
 				console.log('WARNING: referencing external url via insecure protocol: '+url+' Assuming naive https string substitution.');
