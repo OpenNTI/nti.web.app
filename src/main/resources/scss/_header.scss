@@ -126,8 +126,7 @@ $itemWidth: 275px;
 		@include etched-bottom-border;
 	}
 
-
-	div.main-navigation-bar {
+	div.logo-head {
 		a {
 			border-right: 1px solid rgba(176,176,176,0.5) !important;
 
@@ -163,7 +162,7 @@ $itemWidth: 275px;
 
 	}
 
-	.main-navigation-bar-body {
+	.main-navigation-frameBody {
 		//border-right: 1px solid #e2e2e2;
 		border-right: 1px solid rgba(176,176,176,0.2) !important;
 		overflow: visible;
@@ -224,15 +223,20 @@ $itemWidth: 275px;
 			}
 		}
 	}
+
+	//.main-nav-menu {
+	//	overflow: {
+	//		x: hidden !important;
+	//		y: auto !important ;
+	//	}
+	//}
 /* Home */
 /* Library */
 
 	.library-menu {
-		overflow: scroll !important ;
-
 		//.x-panel-body-default,
 		.nav-item-wrap {
-			width: $itemWidth;
+			width: 100%;
 			position: relative;
 			overflow: visible;
 			.nib{

@@ -18,42 +18,48 @@ Ext.define('NextThought.view.Navigation',{
 		border: false
 	},
 
-	renderTpl: [
-		'<div class="main-navigation-bar">',
-			'<a href="#">',
-				'<img src="{[Ext.BLANK_IMAGE_URL]}" border="0"/>',
-				'<span class="logo-divider"></span>',
-			'</a>',
-		'</div>',
-		'<div class="main-navigation-bar-body">',
-			'{%this.renderContainer(out,values);%}',
-		'</div>'
-		],
-
-	renderSelectors: {
-		box: 'div.main-navigation-bar',
-		logo: 'div.main-navigation-bar a',
-		frameBody: 'div.main-navigation-bar-body'
-	},
-
 	items: [
-		{ xtype: 'view-select' },
 		{
-			flex: 1,
-			id: 'navigation-menu-container',
-			ui: 'menu-wrapper',
-			xtype: 'container',
-			layout: 'card',
+			xtype: 'component',
 			renderTpl: [
-				'<div class="view-switcher-shadow"></div>',
-				'{%this.renderContainer(out,values)%}'
-			],
-
+				'<div class="logo-head">',
+					'<a href="#">',
+						'<img src="{[Ext.BLANK_IMAGE_URL]}" border="0"/>',
+						'<span class="logo-divider"></span>',
+					'</a>',
+				'</div>'
+			]
+		},
+		{
+			xtype: 'container',
+			flex: 1,
+			cls: 'main-navigation-frameBody',
+			layout: 'vbox',
+			defaults:{
+				width: 276,
+				frame: false,
+				border: false
+			},
 			items: [
-				{ xtype: 'home-menu' },
-				{ xtype: 'library-menu' },
-				{ xtype: 'classroom-menu' },
-				{ xtype: 'search-menu', id: 'search' }
+				{ xtype: 'view-select' },
+				{
+					flex: 1,
+					id: 'navigation-menu-container',
+					ui: 'menu-wrapper',
+					xtype: 'container',
+					layout: 'card',
+					renderTpl: [
+						'<div class="view-switcher-shadow"></div>',
+						'{%this.renderContainer(out,values)%}'
+					],
+
+					items: [
+						{ xtype: 'home-menu' },
+						{ xtype: 'library-menu' },
+						{ xtype: 'classroom-menu' },
+						{ xtype: 'search-menu', id: 'search' }
+					]
+				}
 			]
 		}
 	]

@@ -22,6 +22,8 @@ Ext.define('NextThought.view.menus.Library',{
 		'</tpl>'
 	],
 
+	autoScroll: true,
+	overflowX: 'hidden',
 	multiSelect: false,
 	singleSelect: true,
 	trackOver: true,
