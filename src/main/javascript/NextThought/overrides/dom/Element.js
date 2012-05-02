@@ -18,5 +18,32 @@ Ext.define('NextThought.overrides.dom.Element',{
 		return y1 <= top	&& top <= y2	&&
 				bottom<=y2	&& bottom>=y1;
 
+	},
+
+
+	getQuery: function(){
+		if(window.$ === undefined){
+			console.log('WARNING: jQuery not loaded');
+			return null;
+		}
+		return $(this.dom);
 	}
+}, function(){
+
+	Ext.apply(Ext, {
+	    getQuery: function(el){
+	        return Ext.get(el).getQuery();
+	    }
+	});
+
+	if(window.$ === undefined){
+		console.log('WARNING: jQuery not loaded');
+		return;
+	}
+	jQuery.extend({
+		getExt:function(el){
+			return Ext.get($(el).get(0));
+		}
+	});
+
 });
