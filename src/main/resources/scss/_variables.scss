@@ -5,6 +5,7 @@ $ext: '../lib/ext-4.0.7';
 $exttheme: '#{$ext}/resources/themes/images/g'+'ray';
 $exticons: '#{$ext}/examples/shared/icons/fam';
 
+$transparent-image:         url(http://sencha.com/s.gif);//url(#{$dataurl-gif-prefix}base64,R0lGODlhAQABAID/AMDAwAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==);
 
 //icons
 $uploading-file-icon-generic: url(../images/upload.png);
