@@ -232,12 +232,9 @@ $itemWidth: 275px;
 		}
 	}
 
-	//.main-nav-menu {
-	//	overflow: {
-	//		x: hidden !important;
-	//		y: auto !important ;
-	//	}
-	//}
+	.main-nav-menu {
+		@include scrollbar(rgba(0,0,0,0), rgba(0,0,0,0.5));
+	}
 /* Home */
 /* Library */
 

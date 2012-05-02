@@ -54,6 +54,7 @@ Ext.define('NextThought.view.menus.Flyout',{
 					var fn = node.expand;
 					if(node.isLeaf()) {
 						this.fireEvent('navigation-selected',node.raw.ntiid);
+						this.hide();
 						return;
 					}
 

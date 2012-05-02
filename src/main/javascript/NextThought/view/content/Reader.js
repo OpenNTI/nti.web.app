@@ -11,6 +11,7 @@ Ext.define('NextThought.view.content.Reader', {
 	},
 	cls: 'x-reader-pane',
 
+	ui: 'reader',
 	layout: 'anchor',
 
 	initComponent: function() {
