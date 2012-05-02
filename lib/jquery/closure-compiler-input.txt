@@ -1,8 +1,0 @@
-// ==ClosureCompiler==
-// @compilation_level SIMPLE_OPTIMIZATIONS
-// @output_file_name jquery-with-plugins.min.js
-// @code_url http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.js
-// @code_url https://github.com/vitch/jScrollPane/raw/master/script/jquery.mousewheel.js
-// @code_url https://github.com/vitch/jScrollPane/raw/master/script/mwheelIntent.js
-// @code_url https://github.com/vitch/jScrollPane/raw/master/script/jquery.jscrollpane.js
-// ==/ClosureCompiler==
