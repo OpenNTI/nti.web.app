@@ -15,11 +15,11 @@ Ext.define('NextThought.view.menus.Flyout',{
 	border: false,
 	hideMode: 'display',
 	width: 240,
-	layout: {
-		type: 'fit'
-	},
+	maxWidth: 240,
+	layout: 'fit',
 
 	initComponent: function(){
+		var me = this;
 		this.callParent(arguments);
 		this.add({
 			xtype: 'treepanel',
@@ -27,6 +27,12 @@ Ext.define('NextThought.view.menus.Flyout',{
 				proxy: 'memory',
 				root: TocUtils.toJSONTreeData(this.toc)
 			}),
+			columns: [{
+				xtype		: 'treecolumn',
+				text		: 'Name',
+				dataIndex	: 'text'
+//				width		: 1000
+			}],
 			lines: false,
 			hideHeaders: true,
 			singleExpand: true,
@@ -37,7 +43,7 @@ Ext.define('NextThought.view.menus.Flyout',{
 			ui: 'flyout',
 			forceFit: true,
 			overflowX: 'hidden',
-			overflowY: 'scroll',
+			overflowY: 'auto',
 			scroll: 'vertical',
 			viewConfig: {
 				forceFit: true
@@ -45,13 +51,24 @@ Ext.define('NextThought.view.menus.Flyout',{
 			listeners: {
 				scope: this,
 				itemclick: function(view, node) {
-					var path = node.getPath('text','\u200b').split('\u200b');
+					var fn = node.expand;
 					if(node.isLeaf()) {
 						this.fireEvent('navigation-selected',node.raw.ntiid);
-//						this.updatePath(path.slice(2).join(' - '));
+						return;
 					}
-					else if(node.isExpanded()) { node.collapse(); }
-					else { node.expand(); }
+
+					if(node.isExpanded()) { fn = node.collapse; }
+					fn.call(node,false,function(){
+						setTimeout(function(){
+							var e = view.el.dom,
+								s = (e.clientWidth - e.scrollWidth)< 0,
+								c = 'hasScrollbar';
+
+							if(s){ view.el.addCls(c); }
+							else { view.el.removeCls(c); }
+							me.doLayout();
+						},250);
+					},me);
 				}
 			}
 		});

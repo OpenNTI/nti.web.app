@@ -1,25 +1,60 @@
-@mixin animation($name, $duration, $count) {
-    -webkit-animation:{
-    	name: #{$name};
-    	duration: $duration;
-    	iteration-count: $count;
-    };
-    -moz-animation:{
-        name: #{$name};
-		duration: $duration;
-		iteration-count: $count;
+
+@mixin scrollbar($track:white,$nib:rgba(0,0,0,0.5)){
+
+	&::-webkit-scrollbar,
+	&::-webkit-scrollbar-track {
+		width: 8px;
+		background: $track;
 	}
-	-ms-animation:{
-		name: #{$name};
-		duration: $duration;
-		iteration-count: $count;
+	&::-webkit-scrollbar-thumb {
+		background: $nib;
+		border: 1px solid $track;
+		border-radius: 10px;
 	}
-	animation:{
-		name: #{$name};
- 		duration: $duration;
- 		iteration-count: $count;
- 	}
+
+	scrollbar-face-color: $nib;
+	scrollbar-highlight-color: $nib;
+	scrollbar-3dlight-color: $nib;
+	scrollbar-darkshadow-color: $nib;
+	scrollbar-shadow-color: $nib;
+
+	scrollbar-arrow-color: $track;
+	scrollbar-track-color: $track;
+
+	/*
+
+	::-webkit-scrollbar
+	::-webkit-scrollbar-button
+	::-webkit-scrollbar-track
+	::-webkit-scrollbar-track-piece
+	::-webkit-scrollbar-thumb
+	::-webkit-scrollbar-corner
+	::-webkit-resizer
+
+
+	:horizontal
+	:vertical
+	:decrement
+	:increment
+	:start
+	:end
+	:double-button
+	:single-button
+	:no-button
+	:corner-present
+	:window-inactive
+
+//IE
+	scrollbar-face-color
+	scrollbar-highlight-color
+	scrollbar-3dlight-color
+	scrollbar-darkshadow-color
+	scrollbar-shadow-color
+	scrollbar-arrow-color
+	scrollbar-track-color
+	*/
 }
+
 
 
 @mixin clearfix_left($dist) {

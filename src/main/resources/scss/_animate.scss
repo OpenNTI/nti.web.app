@@ -1,7 +1,10 @@
 //Animate Mixin Plugin
 
-@mixin animate($name: fadeIn, $duration: 1s, $delay: 0.2s, $function: ease, $mode: both) {
-  @include experimental(animation, $name $duration $delay $function $mode); }
+@mixin animate($name: fadeIn, $duration: 1s, $delay: 0.2s, $function: ease, $mode: both, $iteration: 1) {
+  @include experimental(animation, $name $duration $delay $function $iteration $mode);
+}
+
+// http://daneden.me/animate/build/
 
 //KeyFrame Defaults (pre-made don't edit)
 @-webkit-keyframes pulse { 0% { opacity: 0.50;} 50% {opacity: 1.0;} 100% {opacity: 0.50;} }
