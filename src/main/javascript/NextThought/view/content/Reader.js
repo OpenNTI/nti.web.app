@@ -24,7 +24,7 @@ Ext.define('NextThought.view.content.Reader', {
 
 		this.callParent(arguments);
 		Ext.applyIf(this, {
-			tracker: false,
+			tracker: null,
 			prefix: 'default',
 			padding: this.tracker === false ? 0 : '0 0 0 50px'
 		});
@@ -731,6 +731,9 @@ turn off html5 player
 						'&_dc='+Ext.Date.now();
 			}
 */
+			if(/src/i.test(attr) && /youtube/i.test(url)){
+				return Ext.String.format('src="{0}&wmode={1}"',url.replace(/http:/i,'https:'), 'opaque');
+			}
 
 			if(url.indexOf('http:')===0){
 				console.log('WARNING: referencing external url via insecure protocol: '+url+' Assuming naive https string substitution.');
@@ -787,7 +790,7 @@ turn off html5 player
 
 }, function(){
 	var o = this.classEvents = new Ext.util.Observable(),
-		timeoutMillis = 5000;
+		timeoutMillis = 500;
 
 	function startTimer(){
 		return function() {
