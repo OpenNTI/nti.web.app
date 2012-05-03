@@ -7,60 +7,52 @@ Ext.define('NextThought.controller.Search', {
 	],
 
 	models: [
-		'Hit',
-		'UserSearch'
+		'Hit'
 	],
 
 	stores: [
-		'UserSearch'
+		'Hit'
 	],
 
 	views: [
 		'Viewport',
-		'windows.SearchResultsPopover'
+		'form.fields.SearchField',
+		'menus.Search'
 	],
 
 	refs: [
 		{
-			ref: 'searchPopover',
-			selector: 'search-results-popover'
-		},
-		{
 			ref: 'viewport',
 			selector: 'master-view'
+		},
+		{
+			ref: 'searchField',
+			selector: 'searchfield'
+		},
+		{
+			ref: 'searchMenu',
+			selector: 'search-menu'
 		}
 	],
 
 	init: function() {
 		this.control({
-			'#searchBox': {
-				'blur': this.lostFocus,
-				'search': this.search,
-				'cleared-search': this.clearSearch,
-				'select-down' : this.selectDown,
-				'select-up' : this.selectUp,
-				'choose-selection': this.chooseSelection
+			'searchfield': {
+				'search' : this.searchForValue,
+				'clear-search' : this.clearSearchResults
 			},
-			'search-results-popover': {
-				'goto': this.searchResultClicked
+			'search-result' : {
+				'click': this.fakeSearchResultClicked
 			}
 		},{});
 	},
 
-	lostFocus: function(searchBox){
-		var popover = this.getSearchPopover();
-		if(popover && popover.isVisible()){
-			popover.startClose();
 
-		}
-	},
-
-
+	//TODO - refactor for new code....
 	searchResultClicked: function(hit, searchValue) {
 		var me = this,
 			service = $AppConfig.service,
-			containerId = hit.get('ContainerId'),
-			popover = me.getSearchPopover();
+			containerId = hit.get('ContainerId');
 
 		function success(o) {
 
@@ -115,52 +107,81 @@ Ext.define('NextThought.controller.Search', {
 
 		Ext.getBody().mask("Loading...");
 		service.resolveTopContainer(containerId, success, failure);
-		if(popover && popover.isVisible()){
-			popover.startClose();
-		}
 	},
 
-	selectDown: function(field) {
-		var popover = this.getSearchPopover();
-		if(popover && popover.isVisible()){
-			popover.select(false);
+
+	storeLoad: function(store, records, success, opts){
+		if (!success) {
+			console.error('Store did not load correctly!, Do something, no results???');
+			return;
 		}
-		else{
-			this.search(field);
-		}
+
+		console.log('yay, store loaded, got', records);
 	},
 
-	selectUp: function() {
-		var popover = this.getSearchPopover();
-		if(popover) {
-			popover.select(true);
-		}
+
+	searchForValue: function(value) {
+		var s = this.getHitStore(),
+			url = $AppConfig.server.host + $AppConfig.server.data + 'Search/' + value;
+
+		console.log('search for', value);
+
+		this.clearSearchResults();
+		this.pretendToFindSomethingAndPopulateMenu();
+
+		/*
+		s.proxy.url = url;
+		s.on('load', this.storeLoad);
+		s.load();
+		*/
 	},
 
-	chooseSelection: function() {
-		var popover = this.getSearchPopover();
 
-		if(popover && popover.isVisible()) {
-			popover.chooseSelection();
-		}
+	clearSearchResults: function() {
+		this.getSearchMenu().query('[id=search-results]')[0].removeAll();
 	},
 
-	clearSearch: function(){
-		var popover = this.getSearchPopover();
 
-		if(popover){
-			popover.reset();
-			popover.close();
-		}
+	//someone clicked on a stupid fake result, just randomly navigate
+	fakeSearchResultClicked: function(){
+		var locations = [
+			'tag:nextthought.com,2011-10:AOPS-HTML-prealgebra.0',
+			'tag:nextthought.com,2011-10:AOPS-HTML-prealgebra.34',
+			'tag:nextthought.com,2011-10:MN-HTML-MiladyCosmetology.1'
+		];
 
-		this.getViewport().fireEvent('cleared-search');
+		Ext.ComponentQuery.query('library-view-container')[0].activate();
+		LocationProvider.setLocation( locations[Ext.Number.randomInt(0, 2)] );
 	},
 
-	search: function(field) {
-		var popover = this.getSearchPopover() || Ext.create('widget.search-results-popover',{bindTo: field});
 
-		popover.performSearch(field.getValue());
-		popover.show();
+	//pretend to get a search result and just stuff it into the results container for now
+	pretendToFindSomethingAndPopulateMenu: function() {
+		this.getSearchMenu().query('[id=search-results]')[0].add(
+			[
+				{ xtype: 'search-result-category',
+					category: 'Books',
+					items :[
+					{xtype: 'search-result', title: 'Pre Algebra', section: 'Number Theory', snippet: 'Prime <span>Factor</span>ization'},
+					{xtype: 'search-result', title: '2012 Math Counts School Handbook', section: 'Warm-Up 1', snippet: 'greatest prime <span>factor</span>...'},
+					{xtype: 'search-more'}
+				]},
+
+				{ xtype: 'search-result-category',
+					category: 'Notes',
+					items :[
+					{xtype: 'search-result', title: 'William Wallace', snippet: '&ldquo;When we <span>factor</span> an...&rdquo;'}
+				]},
+
+				{ xtype: 'search-result-category',
+					category: 'Highlights',
+					items :[
+					{xtype: 'search-result', title: 'Me', snippet: '&ldquo;the prime <span>factor</span>s of 12.&rdquo;'},
+					{xtype: 'search-result', title: 'Neil Armstrong', snippet: '&ldquo;<span>Factor</span> the following...&rdquo;'},
+					{xtype: 'search-result', title: 'Barbara Bush', snippet: '&ldquo;prime <span>factor</span>izations...&rdquo;'},
+					{xtype: 'search-more'}
+				]}
+			]
+		);
 	}
-
 });

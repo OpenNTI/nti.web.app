@@ -16,9 +16,14 @@ Ext.define('NextThought.view.menus.Search',{
 		anchor: '100%'
 	},
 
+
 	items: [
 		{ xtype: 'searchfield' },
-		{ xtype: 'container', id: 'search-results', items: [
+		{ xtype: 'container', id: 'search-results'
+			/*
+				These will be added as the result of a search, for now the example will remain here until search actually works!!!
+
+			, items: [
 
 			{ xtype: 'search-result-category',
 				category: 'Books',
@@ -42,8 +47,10 @@ Ext.define('NextThought.view.menus.Search',{
 				{xtype: 'search-result', title: 'Barbara Bush', snippet: '&ldquo;prime <span>factor</span>izations...&rdquo;'},
 				{xtype: 'search-more'}
 			]}
+		]
+			*/
 
-		] }
+		}
 	],
 
 	/**

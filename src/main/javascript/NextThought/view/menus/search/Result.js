@@ -11,5 +11,12 @@ Ext.define('NextThought.view.menus.search.Result',{
 	initComponent: function(){
 		this.callParent(arguments);
 		this.renderData = Ext.copyTo({},this,'title,section,snippet');
+	},
+
+	afterRender: function() {
+		this.callParent(arguments);
+		this.getEl().on('click', function(){
+			this.fireEvent('click', this);
+		}, this);
 	}
 });

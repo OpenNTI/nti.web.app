@@ -24,6 +24,37 @@ Ext.define('NextThought.view.form.fields.SearchField', {
 		this.callParent(arguments);
 		this.triggerEl.on('click',this.triggerMenu,this);
 		this.menu = Ext.widget('search-advanced-menu', {width: this.boxEl.getWidth()});
+		this.inputEl.on('keypress', this.keyPressed, this);
+		this.inputEl.on('keydown', this.keyDown, this); //keypress does not always fire for escape
+	},
+
+
+	keyDown: function(event) {
+		if (event.getKey() === event.ESC) {
+			this.inputEl.dom.value = '';
+			this.fireEvent('clear-search');
+		}
+	},
+
+
+	keyPressed: function(event){
+		var k = event.getKey();
+		if (k === event.ENTER) {
+			this.fireSearchEventNow();
+		}
+		else {
+			this.fireSearchEventBuffered()
+		}
+	},
+
+
+	fireSearchEventNow: function(){
+		this.fireEvent('search', this.inputEl.getValue());
+	},
+
+
+	fireSearchEventBuffered: function(){
+		this.fireEvent('search', this.inputEl.getValue());
 	},
 
 
@@ -38,4 +69,7 @@ Ext.define('NextThought.view.form.fields.SearchField', {
 		return false;
 	}
 
+},
+function(){
+	this.prototype.fireSearchEventBuffered = Ext.Function.createBuffered(this.prototype.fireSearchEventBuffered, 500);
 });
