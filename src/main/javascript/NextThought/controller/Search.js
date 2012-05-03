@@ -120,14 +120,18 @@ Ext.define('NextThought.controller.Search', {
 	},
 
 
-	searchForValue: function(value) {
+ 	searchForValue: function(value) {
+		if(!value || value.length < 4){return;}
+
 		var s = this.getHitStore(),
 			url = $AppConfig.server.host + $AppConfig.server.data + 'Search/' + value;
 
 		console.log('search for', value);
 
 		this.clearSearchResults();
-		this.pretendToFindSomethingAndPopulateMenu();
+		if(/factor/i.test(value)){
+			this.pretendToFindSomethingAndPopulateMenu();
+		}
 
 		/*
 		s.proxy.url = url;
@@ -138,7 +142,7 @@ Ext.define('NextThought.controller.Search', {
 
 
 	clearSearchResults: function() {
-		this.getSearchMenu().query('[id=search-results]')[0].removeAll();
+		Ext.getCmp('search-results').removeAll();
 	},
 
 
@@ -157,7 +161,9 @@ Ext.define('NextThought.controller.Search', {
 
 	//pretend to get a search result and just stuff it into the results container for now
 	pretendToFindSomethingAndPopulateMenu: function() {
-		this.getSearchMenu().query('[id=search-results]')[0].add(
+		var c = Ext.getCmp('search-results');
+		c.hide().show();
+		c.add(
 			[
 				{ xtype: 'search-result-category',
 					category: 'Books',

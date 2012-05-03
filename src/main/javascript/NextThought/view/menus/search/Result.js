@@ -15,8 +15,6 @@ Ext.define('NextThought.view.menus.search.Result',{
 
 	afterRender: function() {
 		this.callParent(arguments);
-		this.getEl().on('click', function(){
-			this.fireEvent('click', this);
-		}, this);
+		this.getEl().on('click', function(){ this.fireEvent('click', this); }, this);
 	}
 });

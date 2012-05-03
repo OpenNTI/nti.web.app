@@ -23,53 +23,75 @@ Ext.define('NextThought.view.form.fields.SearchField', {
 	afterRender: function(){
 		this.callParent(arguments);
 		this.triggerEl.on('click',this.triggerMenu,this);
+		this.triggerEl.addCls(Ext.baseCSSPrefix + 'menu');//make clicks on this not hide the menu
 		this.menu = Ext.widget('search-advanced-menu', {width: this.boxEl.getWidth()});
-		this.inputEl.on('keypress', this.keyPressed, this);
-		this.inputEl.on('keydown', this.keyDown, this); //keypress does not always fire for escape
+		this.inputEl.on({
+			scope: this,
+			keypress: this.keyPressed,
+			keydown: this.keyDown //keypress does not always fire for escape
+		});
+	},
+
+
+	specialKeys: {
+		27: true,	//Ext.EventObject.prototype.ESC
+		8: true,	//Ext.EventObject.prototype.BACKSPACE
+		46: true	//Ext.EventObject.prototype.DELETE
 	},
 
 
 	keyDown: function(event) {
-		if (event.getKey() === event.ESC) {
-			this.inputEl.dom.value = '';
-			this.fireEvent('clear-search');
+		var k = event.getKey();
+		if(this.specialKeys[k]){
+			if(k === event.ESC){
+				this.inputEl.dom.value = '';
+			}
+			event.stopPropagation();
+			this.keyPressed(event);
 		}
 	},
 
 
 	keyPressed: function(event){
 		var k = event.getKey();
-		if (k === event.ENTER) {
-			this.fireSearchEventNow();
+		if (k === event.ENTER || k === event.ESC) {
+			this.fireSearchEvent();
 		}
 		else {
-			this.fireSearchEventBuffered()
+			this.fireSearchEventBuffered();
 		}
 	},
 
 
-	fireSearchEventNow: function(){
-		this.fireEvent('search', this.inputEl.getValue());
+	fireSearchEvent: function(){
+		clearTimeout(this.searchEventDelayId);
+		var val = this.inputEl.getValue();
+		if(!val){
+			this.fireEvent('clear-search');
+		}
+		else if(val.length > 3) {
+			this.fireEvent('search', val);
+		}
 	},
-
 
 	fireSearchEventBuffered: function(){
-		this.fireEvent('search', this.inputEl.getValue());
+		var me = this;
+		clearTimeout(this.searchEventDelayId);
+		this.searchEventDelayId = setTimeout(function(){ me.fireSearchEvent(); }, 500);
 	},
-
 
 	triggerMenu: function(e,el){
 		e.stopPropagation();
 		e.preventDefault();
 
-		//show menu
-		this.menu.showBy(this.boxEl,'tl-bl?',[0,5]);
+		if(!this.menu.isVisible()){
+			this.menu.showBy(this.boxEl,'tl-bl?',[0,5]);
+		}
+		else {
+			this.menu.hide();
+		}
 
 		//IE needs this
 		return false;
 	}
-
-},
-function(){
-	this.prototype.fireSearchEventBuffered = Ext.Function.createBuffered(this.prototype.fireSearchEventBuffered, 500);
 });

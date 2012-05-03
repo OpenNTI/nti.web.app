@@ -238,6 +238,7 @@ $itemWidth: 275px;
 
 	.main-nav-menu {
 		@include scrollbar(#EFEFEF, rgba(0,0,0,0.5));
+		@include animate(fadeInLeftBig,0.5s);
 	}
 /* Home */
 /* Library */
@@ -382,4 +383,8 @@ $itemWidth: 275px;
 			}
 		}
 	}
+}
+
+#search-results {
+	@include animate(fadeInDown);
 }
