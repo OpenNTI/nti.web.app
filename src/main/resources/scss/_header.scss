@@ -28,7 +28,7 @@ $itemWidth: 275px;
 }
 
 .x-panel-nav-flyout {
-	@include animate(fadeIn);
+	@include animate(fadeIn,0.5s);
 	.x-panel-body-nav-flyout{
 		background: rgba(60,60,60,0.98) !important;
 
@@ -273,7 +273,7 @@ $itemWidth: 275px;
 			}
 			&.menu-open {
 				.nib {
-					@include animate(fadeIn);
+					@include animate(fadeIn,0.5s);
 					display: block;
 				}
 			}

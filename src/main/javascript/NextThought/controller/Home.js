@@ -14,31 +14,11 @@ Ext.define('NextThought.controller.Home', {
 		'Title'
 	],
 
-	views: [
-		'content.Home',
-		'views.Home',
-		'widgets.main.ProfileHeader',
-		'widgets.LibraryView'
-	],
+	views: [],
 
-	refs: [
-		{ ref: 'sessionInfo', selector: 'session-info' }
-	],
+	refs: [],
 
 	init: function() {
-		this.control({
-			'profile-header':{
-				'edit': function(){
-					this.getSessionInfo().fireEvent('account');
-				}
-			},
-			'home-view-container library-view':{
-				'itemdblclick':function(a, rec){
-					Ext.getCmp('reader').activate();
-					LocationProvider.setLocation(rec.get('NTIID'));
-				},
-				'selectionchange': function(a, sel){}
-			}
-		},{});
+//		this.control({},{});
 	}
 });

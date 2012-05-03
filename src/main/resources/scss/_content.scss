@@ -61,6 +61,7 @@
 
 
 .x-panel-nt {
+	@include animate(fadeIn,0.5s);
 	box-shadow: 1px 1px 6px -3px #000000 !important;
 	.x-menu-body {
 		border: 1px solid #dcdcdc !important;

@@ -14,9 +14,7 @@ Ext.define('NextThought.controller.Session', {
 		'Service'
 	],
 
-	views: [
-		'widgets.main.SessionInfo'
-	],
+	views: [],
 
 	statics: {
 		login: function(app){

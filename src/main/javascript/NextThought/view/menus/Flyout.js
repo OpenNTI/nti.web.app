@@ -82,21 +82,6 @@ Ext.define('NextThought.view.menus.Flyout',{
 		Ext.EventManager.removeResizeListener(this.viewportMonitor,this);
 	},
 
-//
-//
-//	updatePath: function(path){
-//		var s = this.record.store,
-//			e = Ext.get(this.view.getNode(this.record));
-//		s.suspendEvents(false);
-//		s.each(function(o){o.set('path','');});
-//		this.record.set('path',path);
-//		s.resumeEvents();
-//
-//		Ext.get(e.up('.main-nav-menu').query('.path')).update('');
-//		e.down('.path').update(path);
-//	},
-
-
 	viewportMonitor: function(w,h){
 		this.setHeight(h);
 	},
@@ -108,7 +93,6 @@ Ext.define('NextThought.view.menus.Flyout',{
 
 	hide: function(){
 		Ext.fly(this.view.getNode(this.record)).removeCls('menu-open');
-		this.view.refresh();
 		return this.callParent(arguments);
 	}
 });

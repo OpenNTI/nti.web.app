@@ -3,8 +3,7 @@ Ext.define( 'NextThought.view.views.Library', {
 	alias: 'widget.library-view-container',
 	requires: [
 		'NextThought.view.content.Reader',
-		'NextThought.view.content.Toolbar',
-		'NextThought.view.widgets.ReaderItemsPanel'
+		'NextThought.view.content.Toolbar'
 	],
 	layout: {
 		type: 'vbox',
@@ -25,7 +24,7 @@ Ext.define( 'NextThought.view.views.Library', {
 				xtype: 'reader-panel',
 				id: 'readerPanel'
 			},
-			margin: '0 290px 0 0'
+			margin: '0 100px 0 0'
 		}
 	],
 

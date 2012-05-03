@@ -20,7 +20,6 @@ Ext.define('NextThought.view.widgets.classroom.LiveDisplay', {
 		var prefix = guidGenerator();
 		this.content = this.add({
 			xtype: 'reader-panel',
-			tracker: false,
 			prefix: prefix,
 			tabConfig:{
 				title: 'Content',

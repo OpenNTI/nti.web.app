@@ -18,16 +18,11 @@ Ext.define('NextThought.controller.Library', {
 	views: [
 		'Views',
 		'views.Library',
-		'content.Reader',
-		'widgets.PeopleList',
-		'widgets.RelatedItemsList',
-		'widgets.Tracker'
+		'content.Reader'
 	],
 
 	refs: [
 		{ ref: 'viewport', selector: 'master-view' },
-		{ ref: 'readerPeople', selector: 'library-view-container people-list' },
-		{ ref: 'readerRelated', selector: 'library-view-container related-items' },
 		{ ref: 'readerMode', selector: 'library-view-container' }
 	],
 

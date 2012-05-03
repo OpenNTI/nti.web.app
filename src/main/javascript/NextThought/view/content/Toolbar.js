@@ -21,10 +21,6 @@ Ext.define('NextThought.view.content.Toolbar',{
 		{ xtype: 'content-filter', flex: 1 },
 		{ xtype: 'content-jumper', flex: 1 },
 		{ xtype: 'content-pager'},
-		{ width:10 },
-		{ xtype: 'content-font-chooser'},
-		{ width:10 },
-		{ xtype: 'content-settings'},
-		{ width:290 }
+		{ width:100 }
 	]
 });

@@ -27,7 +27,6 @@ Ext.application({
 		'Groups',
 		'Home',
 		'Navigation',
-		'ObjectExplorer',
 		'Library',
 		'Search',
 		'Session',

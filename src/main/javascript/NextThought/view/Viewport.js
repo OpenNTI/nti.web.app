@@ -9,6 +9,7 @@ Ext.define('NextThought.view.Viewport', {
 		'Ext.layout.container.HBox',
 		'Ext.layout.container.VBox',
 		'NextThought.view.Navigation',
+		'NextThought.view.SideBar',
 		'NextThought.view.Views'
 	],
 	
@@ -23,7 +24,8 @@ Ext.define('NextThought.view.Viewport', {
 
 	items:[
 		{xtype: 'main-navigation'},
-		{xtype: 'main-views', id: 'view-ctr', flex: 1}
+		{xtype: 'main-views', id: 'view-ctr', flex: 1},
+		{xtype: 'main-sidebar'}
 	],
 
 	constructor: function(){

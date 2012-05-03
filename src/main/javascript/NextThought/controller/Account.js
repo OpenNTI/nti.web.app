@@ -10,26 +10,15 @@ Ext.define('NextThought.controller.Account', {
 
 	views: [
 		'form.AccountForm',
-		'windows.FullScreenFormWindow',
-		'windows.NotificationsPopover',
-		'widgets.main.SessionInfo',
-		'widgets.main.Identity'
+		'windows.FullScreenFormWindow'
 	],
 
-	refs: [
-		{ ref: 'sessionInfo', selector: 'session-info' },
-		{ ref: 'identity', selector: 'identity-panel' }
-	],
+	refs: [],
 
 	init: function() {
 		this.control({
 			'#account-window button[actionName]':{
 				'click': this.accountActionButton
-			},
-
-			'session-info': {
-				'account': this.showAccount,
-				'notification': this.popoverNotifications
 			}
 		},{});
 	},
@@ -50,8 +39,7 @@ Ext.define('NextThought.controller.Account', {
 				console.error('FAILURE:',arguments);
 			}
 			else if(fire){
-				me.getSessionInfo().fireEvent('password-changed',
-						u.get('Username'),values.password);
+//				me.getSessionInfo().fireEvent('password-changed', u.get('Username'),values.password);
 			}
 		}
 
@@ -74,22 +62,6 @@ Ext.define('NextThought.controller.Account', {
 			}
 		}
 		u.save({callback: callback});
-	},
-
-
-	popoverNotifications: function() {
-		var u = $AppConfig.userObject,
-			popover = Ext.create('window.notifications-popover', {bindTo: this.getSessionInfo()});
-		popover.show();
-
-		u.set('lastLoginTime', new Date());
-		u.save({
-			callback: function(newRecord, op){
-				if(!op.success){
-					console.warn('FAILED: Saving user', op);
-				}
-			}
-		});
 	},
 
 

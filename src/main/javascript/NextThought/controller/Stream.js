@@ -14,17 +14,9 @@ Ext.define('NextThought.controller.Stream', {
 		'Change'
 	],
 
-	views: [
-		'widgets.MiniStreamEntry'
+	views: [],
 
-	],
-
-	refs: [
-		{ ref: 'viewport', selector: 'master-view' },
-		{ ref: 'streamPeople', selector: 'stream-view-container people-list' },
-		{ ref: 'stream', selector: 'stream-view-container stream-panel' },
-		{ ref: 'miniStream', selector: 'mini-stream' }
-	],
+	refs: [],
 
 	statics:{
 		eventName: 'changed',
@@ -55,14 +47,7 @@ Ext.define('NextThought.controller.Stream', {
 			'data_noticeIncomingChange': function(){me.incomingChange.apply(me, arguments);}
 		});
 
-		this.control({
-			'miniStreamEntry': {
-				'clicked' : this.onClick
-			},
-			'streamEntry': {
-				'dblclick': this.onClick
-			}
-		},{});
+//		this.control({},{});
 	},
 
 	onSessionReady: function(){
@@ -112,7 +97,8 @@ Ext.define('NextThought.controller.Stream', {
 	},
 
 	containerIdChanged: function(containerId) {
-		var widget = this.getMiniStream(),ss;
+		var //widget = this.getMiniStream(),
+			ss;
 		//make sure stream doesn't contain old stuff.
 		ss = this.getStoreForStream(containerId);
 		//widget.setStore(ss);
