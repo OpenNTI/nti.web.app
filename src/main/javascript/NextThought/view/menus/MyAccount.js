@@ -2,7 +2,7 @@ Ext.define('NextThought.view.menus.MyAccount',{
 	extend: 'Ext.menu.Menu',
 	alias: 'widget.my-account-menu',
 	requires: [
-		'NextThought.view.menus.Notifications'
+		'NextThought.view.menus.account.Notifications'
 	],
 	ui: 'nt',
 	cls: 'my-account-menu',

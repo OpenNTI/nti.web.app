@@ -3,7 +3,7 @@ Ext.define('NextThought.view.windows.ClassResourceEditor', {
 	alias : 'widget.class-resource-editor',
 	requires: [
 		'NextThought.view.widgets.classroom.ResourceView',
-		'NextThought.view.widgets.menu.FileBrowserItem'
+		'NextThought.view.menus.file.BrowserItem'
 	],
 
 	constrain: true,

@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.widgets.menu.MathSymbolPanel',{
+Ext.define('NextThought.view.math.symbols.Panel',{
 	extend: 'Ext.panel.Panel',
 	cls: 'math-symbol-panel',
 	alias: 'widget.math-symbol-panel',

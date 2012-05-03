@@ -1,7 +1,7 @@
 Ext.define('NextThought.util.QuizUtils', {
 	singleton: true,
 	requires: [
-		'NextThought.view.widgets.menu.MathSymbolPanel',
+		'NextThought.view.math.symbols.Panel',
 		'NextThought.ContentAPIRegistry',
 		'NextThought.util.ParseUtils',
 		'NextThought.providers.Location'

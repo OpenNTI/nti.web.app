@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.menus.Notifications',{
+Ext.define('NextThought.view.menus.account.Notifications',{
 	extend: 'Ext.menu.Item',
 	alias: 'widget.notifications-menuitem',
 	cls: 'notifications',

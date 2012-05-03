@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.widgets.menu.FileBrowserItem',{
+Ext.define('NextThought.view.menus.file.BrowserItem',{
 	extend: 'Ext.menu.Item',
 	cls: 'file-browser-menu',
 	alias: 'widget.file-browser-menu-item',

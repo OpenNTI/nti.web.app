@@ -13,7 +13,6 @@ Ext.define('NextThought.controller.Classroom', {
 		'widgets.classroom.Browser',
 		'widgets.classroom.BrowserStudyGroups',
 		'widgets.classroom.ResourceView',
-		'widgets.LinkButton',
 		'widgets.classroom.LiveDisplay',
 		'widgets.classroom.Management',
 		'widgets.classroom.ScriptLog',

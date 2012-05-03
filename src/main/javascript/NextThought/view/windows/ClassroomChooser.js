@@ -4,8 +4,7 @@ Ext.define('NextThought.view.windows.ClassroomChooser', {
 
 	requires:[
 		'NextThought.view.widgets.classroom.Browser',
-		'NextThought.view.widgets.classroom.BrowserStudyGroups',
-		'NextThought.view.widgets.LinkButton'
+		'NextThought.view.widgets.classroom.BrowserStudyGroups'
 	],
 
 	cls: 'classroom-chooser',
@@ -51,7 +50,6 @@ Ext.define('NextThought.view.windows.ClassroomChooser', {
 				]
 
 			}
-			//{xtype: 'button', text: 'Close'}
 		]
 	},
 
