@@ -17,5 +17,10 @@ Ext.define('NextThought.view.menus.search.ResultCategory',{
 	initComponent: function(){
 		this.callParent(arguments);
 		this.renderData = Ext.copyTo({},this,'category');
+	},
+
+
+	addResult: function(r) {
+		this.add(r);
 	}
 });

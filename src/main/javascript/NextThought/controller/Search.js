@@ -17,7 +17,9 @@ Ext.define('NextThought.controller.Search', {
 	views: [
 		'Viewport',
 		'form.fields.SearchField',
-		'menus.Search'
+		'menus.Search',
+		'menus.search.ResultCategory',
+		'menus.search.Result'
 	],
 
 	refs: [
@@ -35,6 +37,7 @@ Ext.define('NextThought.controller.Search', {
 		}
 	],
 
+
 	init: function() {
 		this.control({
 			'searchfield': {
@@ -42,81 +45,56 @@ Ext.define('NextThought.controller.Search', {
 				'clear-search' : this.clearSearchResults
 			},
 			'search-result' : {
-				'click': this.fakeSearchResultClicked
+				'click': this.searchResultClicked
 			}
 		},{});
 	},
 
 
-	//TODO - refactor for new code....
-	searchResultClicked: function(hit, searchValue) {
-		var me = this,
-			service = $AppConfig.service,
-			containerId = hit.get('ContainerId');
-
-		function success(o) {
-
-			function sc(a){
-				//these have to be resolved after navigation
-				var cid = hit.get('ContainerId'),
-					id = IdCache.hasIdentifier(hit.getId())
-							? IdCache.getComponentId(hit.getId(),null,'default')
-							: IdCache.hasIdentifier(cid)
-								? IdCache.getComponentId(cid,null,'default')
-								: null;
-				//there's no id, meaning it's probably not user generated
-				if (!id) {
-					setTimeout(function(){ a.scrollToText(searchValue); },500);
-				}
-				else {
-					setTimeout(function(){ a.scrollToId(id); },500);
-				}
-
-			}
-
-			var r = Ext.getCmp('reader');
-
-
-			Ext.getBody().unmask();
-			if(!o){
-				alert("bad things");
-				return;
-			}
-
-			r.activate();
-
-			if(LocationProvider.currentNTIID !== o.NTIID){
-				LocationProvider.setLocation(o.NTIID, sc);
-			}
-			else {
-				sc(r.down('reader-panel'));
-			}
-		}
-
-		function failure(){
-			Ext.getBody().unmask();
-			service.getObject(hit.getId(),
-				function success(o){ ViewUtils.displayModel(o); },
-				function fail(){
-					console.error(
-							'error resolving container ', Ext.encode(hit.data),
-							'Error resolving object: ', arguments);
-				},
-				this);
-		}
-
-		Ext.getBody().mask("Loading...");
-		service.resolveTopContainer(containerId, success, failure);
-	},
-
-
-	storeLoad: function(store, records, success, opts){
+	storeLoad: function(store, records, success, opts, searchVal){
 		if (!success) {
 			console.error('Store did not load correctly!, Do something, no results???');
 			return;
 		}
 
-		console.log('yay, store loaded, got', records);
+		//get the groups storted by type, cause the display to chunk them.
+		var resultGroups = store.getGroups(),
+			category, result, loc,
+			menu = Ext.getCmp('search-results');
+
+		Ext.each(resultGroups, function(group){
+			console.log('got a group for ' + group.name, 'with children', group.children);
+			category = Ext.widget('search-result-category', {category: this.sanitizeCategoryName(group.name)});
+			Ext.each(group.children, function(hit){
+				loc = LocationProvider.getLocation(hit.get('ContainerId'));
+				result = Ext.widget('search-result', {
+					title: loc.title.get('title'),
+					section: loc.label,
+					snippet: this.addSpansToSnippet(hit.get('Snippet'), searchVal),
+					containerId: hit.get('ContainerId')
+				});
+				category.addResult(result);
+			}, this);
+			menu.add(category);
+		}, this);
+
+		//show results...
+		menu.hide().show();
+	},
+
+
+	sanitizeCategoryName: function(n){
+		if (n.toLowerCase()==='content') {
+			return 'Books';
+		}
+		return n;
+	},
+
+
+	addSpansToSnippet: function(snippet, searchVal) {
+		var u = searchVal.toUpperCase(),
+			re = new RegExp(u, 'g');
+		return snippet.replace(re, '<span>'+u+'</span>');
 	},
 
 
@@ -124,41 +102,44 @@ Ext.define('NextThought.controller.Search', {
 		if(!value || value.length < 4){return;}
 
 		var s = this.getHitStore(),
-			url = $AppConfig.server.host + $AppConfig.server.data + 'Search/' + value;
+			rootUrl = $AppConfig.service.getUserUnifiedSearchURL(),
+			loc = LocationProvider.currentNTIID || 'noNTIID',
+			url = [
+				rootUrl,
+				loc,
+				'/',
+				value
+			];
 
-		console.log('search for', value);
-
+		//clear old results from both store and search results.
 		this.clearSearchResults();
-		if(/factor/i.test(value)){
-			this.pretendToFindSomethingAndPopulateMenu();
-		}
+		s.removeAll();
 
-		/*
-		s.proxy.url = url;
-		s.on('load', this.storeLoad);
+		s.proxy.url = url.join('');
+		s.on('load', Ext.bind(this.storeLoad, this, [value], true), this, {single: true});
 		s.load();
-		*/
 	},
 
 
 	clearSearchResults: function() {
-		Ext.getCmp('search-results').removeAll();
+		Ext.getCmp('search-results').removeAll(true);
 	},
 
 
-	//someone clicked on a stupid fake result, just randomly navigate
-	fakeSearchResultClicked: function(){
-		var locations = [
-			'tag:nextthought.com,2011-10:AOPS-HTML-prealgebra.0',
-			'tag:nextthought.com,2011-10:AOPS-HTML-prealgebra.34',
-			'tag:nextthought.com,2011-10:MN-HTML-MiladyCosmetology.1'
-		];
+	searchResultClicked: function(result){
+		var cid = result.containerId;
+
+		if (!cid) {
+			console.error('No container ID taged on search result, cannot navigate.');
+			return;
+		}
 
 		Ext.ComponentQuery.query('library-view-container')[0].activate();
-		LocationProvider.setLocation( locations[Ext.Number.randomInt(0, 2)] );
-	},
+		LocationProvider.setLocation( cid );
+	}
 
 
+	/*
 	//pretend to get a search result and just stuff it into the results container for now
 	pretendToFindSomethingAndPopulateMenu: function() {
 		var c = Ext.getCmp('search-results');
@@ -190,4 +171,5 @@ Ext.define('NextThought.controller.Search', {
 			]
 		);
 	}
+	*/
 });

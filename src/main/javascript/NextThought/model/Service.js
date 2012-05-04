@@ -44,6 +44,18 @@ Ext.define('NextThought.model.Service', {
 	},
 
 
+	getUserUnifiedSearchURL: function(){
+		var w = this.getCollection('Pages') || {},
+			l = this.getLinkFrom(w.Links||[], Globals.USER_UNIFIED_SEARCH_REL);
+
+		if(!l) {
+			return null;
+		}
+
+		return $AppConfig.server.host + this.forceTrailingSlash(l);
+	},
+
+
 	getSearchURL : function(containerId){
 		var h = $AppConfig.server.host,
 			c = containerId ? containerId : 'prealgebra';

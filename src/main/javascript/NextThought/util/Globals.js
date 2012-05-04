@@ -24,6 +24,7 @@ Ext.define('NextThought.util.Globals',
 	USER_GENERATED_DATA: 'UserGeneratedData',
 	USER_SEARCH_REL: 'UserSearch',
 	USER_GENERATED_DATA_SEARCH_REL: 'UGDSearch',
+	USER_UNIFIED_SEARCH_REL: 'UnifiedSearch',
 
 	HOST_PREFIX_PATTERN: /^(http(s)?):\/\/([a-z.\-_0-9]+)(:(\d+))?/i,
 	INVALID_CHARACTERS_PATTERN: /^[^\/\\";=?<>#%'\{\}\|\^\[\]\-]+$/,

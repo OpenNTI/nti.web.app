@@ -7,6 +7,7 @@ Ext.define('NextThought.store.Hit',{
 
 	model: 'NextThought.model.Hit',
 	autoLoad: false,
+	groupField: 'Type',
 	proxy: {
 		type: 'nti',
 		reader: {

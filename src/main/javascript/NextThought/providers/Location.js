@@ -72,7 +72,7 @@ Ext.define('NextThought.providers.Location', {
 					if (v) {return v;}
 				}
 				catch(e){
-					console.warn('element did not have getAttribut');
+					console.warn('element did not have getAttribute');
 				}
 			}
 			return null;
