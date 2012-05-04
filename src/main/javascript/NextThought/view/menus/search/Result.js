@@ -15,6 +15,21 @@ Ext.define('NextThought.view.menus.search.Result',{
 
 	afterRender: function() {
 		this.callParent(arguments);
-		this.getEl().on('click', function(){ this.fireEvent('click', this); }, this);
+		this.getEl().on({
+			scope: this,
+			animationend: this.animationEnd,
+			webkitAnimationEnd: this.animationEnd,
+			click: this.clicked
+		});
+	},
+
+
+	animationEnd: function(){
+		this.getEl().removeCls('pulse');
+	},
+
+	clicked: function(){
+		this.getEl().addCls('pulse');
+		this.fireEvent('click', this);
 	}
 });

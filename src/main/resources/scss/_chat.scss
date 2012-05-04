@@ -3,7 +3,7 @@
     background-position: 0 0;
     .attention & {
         background-position: -18px 0;
-    	@include animate(pulse, 1.5s, $iteration: infinite);
+    	@include animate(pulsate, 1.5s, $iteration: infinite);
     }
 }
 

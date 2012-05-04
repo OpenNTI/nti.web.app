@@ -52,8 +52,9 @@ Ext.define('NextThought.view.menus.Library',{
 
 
 	handleMenu: function(me,rec){
+		var node = me.getNodeByRecord(rec);
 		me.select(rec);
-		me.menus[rec.getId()].showBy(me.getNodeByRecord(rec));
+		me.menus[rec.getId()].showBy(node);
 	},
 
 
