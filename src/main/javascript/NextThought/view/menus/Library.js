@@ -13,7 +13,7 @@ Ext.define('NextThought.view.menus.Library',{
 
 	tpl: [
 		'<tpl for=".">',
-			'<div class="nav-item-wrap">',
+			'<div class="nav-item-wrap x-menu">',
 				'<div class="nib"></div>',
 				'<div class="item">',
 					'<div class="title">{title}</div>',
@@ -52,9 +52,11 @@ Ext.define('NextThought.view.menus.Library',{
 
 
 	handleMenu: function(me,rec){
-		var node = me.getNodeByRecord(rec);
+		var node = me.getNodeByRecord(rec),
+			menu = me.menus[rec.getId()];
 		me.select(rec);
-		me.menus[rec.getId()].showBy(node);
+		if(!menu.isVisible()){ menu.showBy(node); }
+		else { menu.hide(); }
 	},
 
 

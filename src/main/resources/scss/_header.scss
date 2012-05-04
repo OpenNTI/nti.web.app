@@ -76,7 +76,7 @@ $itemWidth: 275px;
 
 				color: #ffffff;
 				font-size: 12pt;
-				font-weight: 300;
+				font-weight: 500;
 				font-style: italic;
 				margin: 5px 10px;
 				padding: 10px 20px;
@@ -93,7 +93,7 @@ $itemWidth: 275px;
 
 			&.x-grid-tree-node-leaf {
 				.x-grid-cell-inner{
-					font-weight: 200;
+					font-weight: 400;
 					font-size: 11pt;
 					color: #cdcdcd;
 				}
@@ -273,7 +273,7 @@ $itemWidth: 275px;
 			}
 			&.menu-open {
 				.nib {
-					@include animate(fadeIn,0.5s);
+					@include animate(fadeInRight,0.5s);
 					display: block;
 				}
 			}

@@ -54,7 +54,6 @@ Ext.define('NextThought.view.menus.Flyout',{
 					var fn = node.expand;
 					if(node.isLeaf()) {
 						this.fireEvent('navigation-selected',node.raw.ntiid);
-						this.hide();
 						return;
 					}
 
@@ -76,6 +75,21 @@ Ext.define('NextThought.view.menus.Flyout',{
 
 		this.setHeight(Ext.Element.getViewportHeight());
 		Ext.EventManager.onWindowResize(this.viewportMonitor,this);
+
+		this.on({
+			scope: this,
+			mouseleave: this.startHiding,
+			mouseenter: this.stopHiding
+		});
+	},
+
+	startHiding: function(){
+		var me = this;
+		this.hideTimeout = setTimeout(function(){me.hide();}, 1000);
+	},
+	stopHiding: function(){
+		clearTimeout(this.hideTimeout);
+		this.show();
 	},
 
 	destroy: function(){
@@ -87,8 +101,9 @@ Ext.define('NextThought.view.menus.Flyout',{
 	},
 
 	show: function(){
+		this.callParent(arguments);
 		Ext.fly(this.view.getNode(this.record)).addCls('menu-open');
-		return this.callParent(arguments);
+		return this;
 	},
 
 	hide: function(){
