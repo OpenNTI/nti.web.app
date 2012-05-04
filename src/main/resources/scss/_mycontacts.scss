@@ -75,15 +75,14 @@
 		margin-left: 50px;
 	}
 
+
 	.name {
-		color: #747474;
-		font: { size: 10.5pt; weight: 500; }
-		.notifications {
-			margin: auto 5px;
-			color: #b3b3b3;
-			vertical-align: super;
-			font-style: italic;
-		}
+		font-size: 7.5pt;
+		font-weight: 800;
+		color: #3fb3f6;
+		text-transform: uppercase;
+		text-overflow: ellipsis;
+		overflow: hidden;
 	}
 	.status {
 		color: #b8b8b8;
