@@ -1,14 +1,37 @@
-.my-contacts-label{
-	border: none;
-	border-width: 0;
-	border-top: 1px solid #dcdcdc;
-	color: #c4c4c4;
-	font-size: 13.5pt;
-	font-weight: 200;
-	margin: 0 0 0 30px;
-	padding-top: 20px;
-	width: 215px;
 
+.my-contacts-tab-bar{
+	padding: 0 0 10px 30px;
+
+	.my-contacts-tab-bar-body{
+		padding-top: 20px !important;
+		border: none;
+		border-width: 0;
+		border-top: 1px solid #dcdcdc;
+		width: 215px;
+	}
+}
+
+.x-tab-my-contacts {
+	&.x-tab {
+		height: auto;
+
+		&.x-tab-top-active{
+			background: none;
+			button {
+				color: #7d7d7d;
+				border-color: #7d7d7d;
+			}
+		}
+		em { padding: 0; }
+		button {
+			color: #c4c4c4;
+			font-family: 'Open Sans', serif !important;
+			font-size: 13.5pt;
+			font-weight: 200;
+			padding-bottom: 5px;
+			border-bottom: 2px solid #c4c4c4;
+		}
+	}
 }
 
 
