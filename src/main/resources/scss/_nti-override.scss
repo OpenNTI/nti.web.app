@@ -63,11 +63,17 @@
 				padding: 0;
 			}
 			span.label {
+				font-size: inherit;
 				margin-left: 80px;
 				border: none !important;
 				padding: 0 !important;
 				display: block;
 			}
+		}
+
+		.titlepage .title {
+			position: static;
+			left: 0;
 		}
 
 		.subsection,
