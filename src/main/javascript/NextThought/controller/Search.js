@@ -19,7 +19,8 @@ Ext.define('NextThought.controller.Search', {
 		'form.fields.SearchField',
 		'menus.Search',
 		'menus.search.ResultCategory',
-		'menus.search.Result'
+		'menus.search.Result',
+		'menus.search.More'
 	],
 
 	refs: [
@@ -46,6 +47,9 @@ Ext.define('NextThought.controller.Search', {
 			},
 			'search-result' : {
 				'click': this.searchResultClicked
+			},
+			'search-more' : {
+				'click': this.showAllForCategoryClicked
 			}
 		},{});
 	},
@@ -136,6 +140,12 @@ Ext.define('NextThought.controller.Search', {
 
 		Ext.ComponentQuery.query('library-view-container')[0].activate();
 		LocationProvider.setLocation( cid );
+	},
+
+
+	showAllForCategoryClicked: function(more) {
+		var cat = more.up('search-result-category');
+		cat.showAll();
 	}
 
 
