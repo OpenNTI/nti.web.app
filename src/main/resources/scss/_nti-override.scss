@@ -69,5 +69,15 @@
 				display: block;
 			}
 		}
+
+		.subsection,
+		.subsubsection {
+			&.title {
+				display: block;
+			}
+		}
+		.subsubsection.title {
+			padding-left: 85px;
+		}
 	}
 }
