@@ -99,8 +99,7 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 
 
 	createCanvas: function(){
-		var c = this.doc.getElementById(this.canvasId);
-
+		var c = document.getElementById(this.canvasId);
 		if(!c){
 			c = this.createElement(
 				'canvas',
@@ -121,8 +120,7 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 			pos = cont.getXY(),
 			size = cont.getSize();
 		c.moveTo(pos[0], pos[1]);
-		c.setSize(size.width, size.height);
-		c.set({
+		Ext.apply(c.dom,{
 			width: size.width,
 			height: size.height
 		});
@@ -196,6 +194,7 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 	 drawRect: function(rect, fill){
 		return function(ctx){
 			ctx.fillStyle = fill;
+			console.log(ctx.fillStyle, fill);
 			ctx.fillRect(rect.left, rect.top, rect.width, rect.height);
 		};
 	},
