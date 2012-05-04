@@ -55,7 +55,7 @@ Ext.define('NextThought.cache.UserRepository', {
 			ignoreNewInstance = (refreshedUser.raw && (refreshedUser.raw.hasOwnProperty('ignoreIfExists') || refreshedUser.raw.hasOwnProperty('childRecord')));
 
 
-		console.debug('updateUser',ignoreNewInstance, refreshedUser.getId(), u, refreshedUser);
+//		console.debug('updateUser',ignoreNewInstance, refreshedUser.getId(), u, refreshedUser);
 
 		if (u && ((!ignoreNewInstance || !u.raw) || !u.equal(refreshedUser))) {
 			if ($AppConfig.userObject && u.getId() === $AppConfig.userObject.getId() ){
@@ -72,7 +72,7 @@ Ext.define('NextThought.cache.UserRepository', {
 		}
 
 		if(!u){
-			console.debug('updateUser: adding...',refreshedUser.getId());
+//			console.debug('updateUser: adding...',refreshedUser.getId());
 			if (ignoreNewInstance){
 				delete refreshedUser.raw;
 			}
@@ -219,7 +219,7 @@ Ext.define('NextThought.cache.UserRepository', {
 		}
 
 		if(this.activeRequests[username] && this.activeRequests[username].options){
-			console.log('active request detected for ' + username);
+//			console.log('active request detected for ' + username);
 			options = this.activeRequests[username].options;
 			options.callback = Ext.Function.createSequence(
 					options.callback,
@@ -234,7 +234,7 @@ Ext.define('NextThought.cache.UserRepository', {
 		}
 
 		s.add({Username:username, placeholder: true});//make this.has return return true now...
-		console.log('adding active request for ' + username);
+//		console.log('adding active request for ' + username);
 		this.activeRequests[username] = Ext.Ajax.request({
 			url: url,
 			scope: me,
