@@ -9,34 +9,31 @@
 	margin-right: 25px;
 
 	.shrink-wrap {
-		display: inline-block;
 		position: relative;
 		overflow: hidden;
-		div {
-			padding: 2px 4px;
-		}
 
 		&.active,
 		&.over {
-			&.jumpto .label{
+			&.jumpto .label span{
 				background-image: url(../images/menu-arrow-down-active.png);
 			}
 
 			.label { color: #585858; }
 			.menu {
 				color: #767676;
-				background-image: url(../images/menu-arrow-down-active.png);
+				span {
+					background-image: url(../images/menu-arrow-down-active.png);
+				}
 			}
 		}
 	}
 
-
-	&.jumpto .label{
+	&.jumpto .label span{
 		padding-right: 15px;
 		background: url(../images/menu-arrow-down-default.png) no-repeat 100% 50%;
 	}
+
 	.label {
-		display: inline-block;
 		color: #8a8989;
 		font-size: 7.5pt;
 		text-transform: uppercase;
@@ -46,16 +43,18 @@
 		text-overflow: ellipsis;
 	}
 	.menu {
-		display: inline-block;
+		max-width: 450px;
 		color: #b2b2b2;
 		font-size: 11pt;
 		font-weight: 400;
-		padding-right: 15px;
-		background: url(../images/menu-arrow-down-default.png) no-repeat 100% 50%;
-		text-overflow: ellipsis;
 		overflow: hidden;
+		text-overflow: ellipsis;
 		margin-bottom: 6px;
 		white-space: nowrap;
+		span {
+			padding-right: 15px !important;
+			background: url(../images/menu-arrow-down-default.png) no-repeat 100% 50%;
+		}
 	}
 }
 

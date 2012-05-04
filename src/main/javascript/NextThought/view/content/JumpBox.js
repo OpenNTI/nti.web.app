@@ -6,18 +6,20 @@ Ext.define('NextThought.view.content.JumpBox',{
 	],
 	ui: 'content-jumpbox',
 	cls: 'jumpto',
+	minWidth: 40,
+
 
 	renderTpl: [
 		'<div class="shrink-wrap">',
-			'<div class="label">chapter</div>',
-			'<div><span class="menu">section</span></div>',
+			'<div class="label"><span>chapter</span></div>',
+			'<div class="menu"><span>section</span></div>',
 		'</div>'
 	],
 
 	renderSelectors: {
-		shrinkWrapEl: 'div.shrink-wrap',
-		labelEl: 'div.label',
-		menuEl: 'span.menu'
+		shrinkWrapEl: '.shrink-wrap',
+		labelEl: '.label span',
+		menuEl: '.menu span'
 	},
 
 	initComponent: function(){
@@ -48,6 +50,14 @@ Ext.define('NextThought.view.content.JumpBox',{
 	},
 
 
+	show: function(){
+		if(this.canShow){
+			this.callParent();
+		}
+		return this;
+	},
+
+
 	locationChanged: function(ntiid){
 		var loc = LocationProvider.getLocation(ntiid),
 			currentNode = loc.location,
@@ -58,10 +68,12 @@ Ext.define('NextThought.view.content.JumpBox',{
 			currentChapter,
 			currentSection;
 		if(!loc || !loc.NTIID){
+			this.canShow = false;
 			this.hide();
 			return;
 		}
 		else if(this.isHidden()){
+			this.canShow = true;
 			this.show();
 		}
 

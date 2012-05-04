@@ -5,18 +5,19 @@ Ext.define('NextThought.view.content.Filter',{
 		'NextThought.view.menus.Filter'
 	],
 	ui: 'content-filter',
+	minWidth: 200,
 
 	renderTpl: [
 		'<div class="shrink-wrap">',
-			'<div class="label">Show Me</div>',
-			'<div><span class="menu">Everything from Everyone</span></div>',
+			'<div class="label"><span>Show Me</span></div>',
+			'<div class="menu"><span>Everything from Everyone</span></div>',
 		'</div>'
 	],
 
 	renderSelectors: {
-		shrinkWrapEl: 'div.shrink-wrap',
-		labelEl: 'div.label',
-		menuEl: 'span.menu'
+		shrinkWrapEl: '.shrink-wrap',
+		labelEl: '.label span',
+		menuEl: '.menu span'
 	},
 
 	initComponent: function(){

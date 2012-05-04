@@ -22,5 +22,19 @@ Ext.define('NextThought.view.content.Toolbar',{
 		{ xtype: 'content-jumper', flex: 1 },
 		{ xtype: 'content-pager'},
 		{ width:100 }
-	]
+	],
+
+	afterLayout: function(){
+		var result = this.callParent(arguments);
+
+		var jump = this.down('content-jumper');
+		if(this.getWidth()<=570){
+			jump.hide();
+		}
+		else if(!jump.isVisible()){
+			jump.show();
+		}
+
+		return result;
+	}
 });

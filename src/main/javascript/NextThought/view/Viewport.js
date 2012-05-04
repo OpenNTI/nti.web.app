@@ -19,6 +19,7 @@ Ext.define('NextThought.view.Viewport', {
 	layout: 'border',
 	id: 'viewport',
 	ui: 'nextthought',
+	minWidth: 1024,
 
 	items:[
 		{xtype: 'main-navigation', region: 'west'},
