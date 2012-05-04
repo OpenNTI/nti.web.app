@@ -84,12 +84,22 @@ Ext.define('NextThought.controller.Groups', {
 
 
 	publishFriends: function(){
-		this.getFriendsListStore().getFriends(function(friends){
+		var store = this.getFriendsListStore(),
+			groups = Ext.getCmp('my-groups');
 
+		store.getFriends(function(friends){
 			Ext.getCmp('offline-contacts').setUsers(friends.Offline);
 			Ext.getCmp('online-contacts').setUsers(friends.Online);
-
 		});
+
+		groups.removeAll(true);
+		store.each(function(group){
+			var name = group.getName();
+			UserRepository.prefetchUser(group.get('friends'),function(users){
+				groups.add({title: name}).setUsers(users);
+			});
+		});
+
 	},
 
 

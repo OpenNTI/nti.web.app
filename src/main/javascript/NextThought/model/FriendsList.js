@@ -18,7 +18,7 @@ Ext.define('NextThought.model.FriendsList', {
 
 
 	getName: function(){
-		return this.get('alias') || this.get('realname');
+		return this.get('realname') || this.get('alias');
 	},
 
 
