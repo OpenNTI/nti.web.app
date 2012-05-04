@@ -142,7 +142,9 @@ Ext.define('NextThought.view.widgets.annotations.Highlight', {
 				});
 
 			//hack to allow redactions only in legal texts for now...
-			if (LocationProvider.currentNTIID.indexOf('Howes_converted') > 0 || LocationProvider.currentNTIID.indexOf('USvJones2012_converted') > 0 ) {
+			if (LocationProvider.currentNTIID.indexOf('Howes_converted') > 0
+				|| LocationProvider.currentNTIID.indexOf('USvJones2012_converted') > 0
+				|| LocationProvider.currentNTIID.indexOf('USSC-HTML-Cohen') > 0) {
 
 				if (r.phantom) {
 					items.push({
