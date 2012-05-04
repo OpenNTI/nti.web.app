@@ -51,54 +51,36 @@ Ext.define('NextThought.controller.Stream', {
 	},
 
 	onSessionReady: function(){
-		var app = this.application,
-			s = this.getStreamStore(),
-			ps = Ext.getStore('Page'),
-			token = {};
-
-		app.registerInitializeTask(token);
-		s.on('load', function(s){ app.finishInitializeTask(token); }, this, {single: true});
-
-		function load() {
-			s.getProxy().url = ps.getById('tag:nextthought.com,2011-10:Root').getLink(Globals.RECURSIVE_STREAM);
-			s.load();
-		}
-
-		if (ps.isLoading()) {
-			ps.on('load', load, this, {single: true});
-		}
-		else {
-			load();
-		}
 	},
 
 
-	onClick: function(item) {
-		var cid = item.get('ContainerId'),
-			ntiid = item.getId(),
-			mType = item.getModelName(),
-			rp, p;
+//	onClick: function(item) {
+//		var cid = item.get('ContainerId'),
+//			ntiid = item.getId(),
+//			mType = item.getModelName(),
+//			rp, p;
+//
+//		if (mType !== 'Note' && mType !== 'Highlight') {
+//			return;
+//		}
+//
+//		//ensure reader panel is up
+//		rp = Ext.ComponentQuery.query('library-view-container')[0];
+//		rp.activate();
+//		p = rp.down('reader-panel').prefix;
+//
+//		LocationProvider.setLocation(cid, function(a){
+//			if (IdCache.hasIdentifier(ntiid)){
+//				//use default reader-panel prefix as we are always opening this in the reader panel
+//				a.scrollToId(IdCache.getComponentId(ntiid, null, p));
+//			}
+//		});
+//	},
 
-		if (mType !== 'Note' && mType !== 'Highlight') {
-			return;
-		}
 
-		//ensure reader panel is up
-		rp = Ext.ComponentQuery.query('library-view-container')[0];
-		rp.activate();
-		p = rp.down('reader-panel').prefix;
-
-		LocationProvider.setLocation(cid, function(a){
-			if (IdCache.hasIdentifier(ntiid)){
-				//use default reader-panel prefix as we are always opening this in the reader panel
-				a.scrollToId(IdCache.getComponentId(ntiid, null, p));
-			}
-		});
-	},
-
+	//called by the Library controller when navigation occurs
 	containerIdChanged: function(containerId) {
-		var //widget = this.getMiniStream(),
-			ss;
+		var ss;
 		//make sure stream doesn't contain old stuff.
 		ss = this.getStoreForStream(containerId);
 		//widget.setStore(ss);
@@ -107,7 +89,10 @@ Ext.define('NextThought.controller.Stream', {
 		}
 	},
 
+
 	getStoreForStream: function(containerId) {
+		//root all streams to the book...
+		containerId = Library.getLineage(containerId).last();
 		var me = this,
 			store = me.getController('Library').getPageStore(),
 			stores = me.streamStores,
@@ -154,17 +139,15 @@ Ext.define('NextThought.controller.Stream', {
 	incomingChange: function(change) {
 		change = ParseUtils.parseItems([change])[0];
 		var cid = change.getItemValue('ContainerId'),
-			lineage = Library.getLineage(cid),
 			me = this;
 
-		Ext.each(lineage,function(cid){
+		Ext.each(Library.getLineage(cid),function(cid){
 			var s = me.getStoreForStream(cid);
 			if( s ) {
 				s.add(change);
 			}
 		});
 
-		this.getStreamStore().add(change);
 		this.self.fireChange(change);
 	}
 });

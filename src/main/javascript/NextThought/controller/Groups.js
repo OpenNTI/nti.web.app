@@ -72,6 +72,7 @@ Ext.define('NextThought.controller.Groups', {
 
 		app.registerInitializeTask(token);
 		store.on('load', function(s){ app.finishInitializeTask(token); }, this, {single: true});
+		store.on('load', this.publishFriends, this);
 		store.proxy.url = $AppConfig.server.host+coll.href;
 		store.load();
 	},
@@ -79,6 +80,16 @@ Ext.define('NextThought.controller.Groups', {
 
 	reloadGroups: function(){
 		this.getFriendsListStore().load();
+	},
+
+
+	publishFriends: function(){
+		this.getFriendsListStore().getFriends(function(friends){
+
+			Ext.getCmp('offline-contacts').setUsers(friends.Offline);
+			Ext.getCmp('online-contacts').setUsers(friends.Online);
+
+		});
 	},
 
 

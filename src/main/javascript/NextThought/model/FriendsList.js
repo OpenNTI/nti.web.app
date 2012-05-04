@@ -1,5 +1,6 @@
 Ext.define('NextThought.model.FriendsList', {
 	extend: 'NextThought.model.Base',
+	resolveUsers: true,
 
 	fields: [
 		{ name: 'Username', type: 'string' },

@@ -14,6 +14,7 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 	border: false,
 	unstyled: true,
 	showCount: true,
+	defaultType: 'contact-card',
 
 	initComponent: function(){
 		this.callParent(arguments);
@@ -26,12 +27,28 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 		this.getHeader().on('click',this.toggleCollapse,this);
 	},
 
-
 	setTitle: function(title){
 		if(this.showCount){
 			title = Ext.String.format('{0} ({1})',title,this.items.getCount());
 		}
 
 		return this.callParent([title]);
+	},
+
+	updateTitle: function(){
+		this.setTitle(this.initialConfig.title);
+	},
+
+	setUsers: function(users){
+		var p = [];
+		if(Ext.isArray(users)){
+			Ext.each(users,function(u){ p.push({user: u}); });
+		}
+		else {
+			Ext.Object.each(users,function(n,u){ p.push({user: u}); });
+		}
+		this.removeAll(true);
+		this.add(p);
+		this.updateTitle();
 	}
 });

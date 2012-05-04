@@ -349,14 +349,14 @@ Ext.data.Types.USERLIST = {
 					}
 					else  {
 						u.push(p);
-//						if(!UserRepository.has(o)){
+						if(!UserRepository.has(o) && record.resolveUsers){
 //							if(typeof(o) === 'string') {
 //								console.warn("Will resolve UserId because we don't have an object to parse:",
 //										record.get('Class'), '@', record.getId(), o);
 //							}
 							//asynchronously resolve this user so its cached and ready
-							//UserRepository.prefetchUser(o);
-//						}
+							UserRepository.prefetchUser(o);
+						}
 					}
 				});
 			}

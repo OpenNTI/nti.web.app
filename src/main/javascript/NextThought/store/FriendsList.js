@@ -24,14 +24,27 @@ Ext.define('NextThought.store.FriendsList',{
 
 	sorters: [
 		{
-//			sorterFn: function(o1, o2){
-//				function f(o){ return (/@/).test(o.get('Username')); }
-//				var a = f(o1), b = f(o2);
-//				return a==b ? 0 : a ? -1 : 1;
-//			}
-//		},{
 			property : 'realname',
 			direction: 'ASC'
 		}
-	]
+	],
+
+
+	getFriends: function(callback){
+		var distinct = {};
+
+		this.each(function(group){
+			Ext.each(group.get('friends'),function(f){ distinct[f] = true; });
+		});
+
+		UserRepository.prefetchUser(Object.keys(distinct),function(u){
+			var friends = {Online: {}, Offline: {}};
+			Ext.each(u,function(user){
+				var p = user.get('Presence');
+				if(p){ friends[p][user.getId()] = user; }
+			});
+
+			Globals.callback(callback,null,[friends]);
+		});
+	}
 });

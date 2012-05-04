@@ -22,27 +22,18 @@ Ext.define('NextThought.view.account.MyContacts',{
 			},
 			items: [
 				{
-					title: 'Active in...',
-					defaults: {
-						items: [{type: 'comment',	message: 'Testing...'},
-								{type: 'highlight',	message: 'Testing...'},
-								{type: 'note',		message: 'Testing...'}]
-					},
-					items: [
-						{},{},{}
-					]
+					id: 'activity-stream',
+					title: 'Active in...'
 				},
 				{
-					title: 'Online',
-					items: [
-						{},{}
-					]
+					id: 'online-contacts',
+					title: 'Online'
 				},
 				{
+					id: 'offline-contacts',
 					collapsed: true,
 					showCount: false,
-					title: 'Offline',
-					items: []
+					title: 'Offline'
 				}
 			]
 		}

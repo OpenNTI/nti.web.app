@@ -2,11 +2,12 @@ Ext.define('NextThought.view.account.contacts.Card',{
 	extend: 'Ext.container.Container',
 	alias: 'widget.contact-card',
 	requires: [
+		'NextThought.layout.component.TemplatedContainer',
 		'NextThought.view.account.contacts.Activity'
 	],
 	cls: 'contact-card',
 	layout: 'auto',
-	componentLayout: 'body',
+	componentLayout: 'templated-container',
 	renderTpl: [
 		'<img src="{avatarURL}">',
 		'<div class="card-body">',
@@ -27,7 +28,10 @@ Ext.define('NextThought.view.account.contacts.Card',{
 
 	initComponent: function(){
 		this.callParent(arguments);
-		this.user = $AppConfig.userObject;
+		if(!this.user){
+			console.error('No user specified');
+			return;
+		}
 		this.renderData = Ext.apply(this.renderData||{},{
 			avatarURL: this.user.get('avatarURL'),
 			name: this.user.getName(),
