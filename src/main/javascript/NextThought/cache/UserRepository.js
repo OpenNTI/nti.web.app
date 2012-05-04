@@ -23,7 +23,7 @@ Ext.define('NextThought.cache.UserRepository', {
 		}
 
 		var user = this.getStore().getById(username);
-		return user && user.raw && !user.raw.hasOwnProperty('ignoreIfExists');
+		return user && user.raw && !user.raw.hasOwnProperty('ignoreIfExists') && !user.raw.hasOwnProperty('childRecord');
 	},
 
 	getStore: function() {
@@ -50,12 +50,14 @@ Ext.define('NextThought.cache.UserRepository', {
 
 	updateUser: function(refreshedUser) {
 		var s = this.getStore(),
-			u = s.getById(refreshedUser.getId()),
-			ignoreNewInstance = (refreshedUser.raw && refreshedUser.raw.hasOwnProperty('ignoreIfExists'));
+			uid = refreshedUser.getId(),
+			u = s.getById(uid),
+			ignoreNewInstance = (refreshedUser.raw && (refreshedUser.raw.hasOwnProperty('ignoreIfExists') || refreshedUser.raw.hasOwnProperty('childRecord')));
 
-		//console.debug('updateUser',ignoreNewInstance, refreshedUser.getId(), u, refreshedUser);
 
-		if (u && (!ignoreNewInstance || !u.equal(refreshedUser))) {
+		console.debug('updateUser',ignoreNewInstance, refreshedUser.getId(), u, refreshedUser);
+
+		if (u && ((!ignoreNewInstance || !u.raw) || !u.equal(refreshedUser))) {
 			if ($AppConfig.userObject && u.getId() === $AppConfig.userObject.getId() ){
 				if(u !== $AppConfig.userObject) {
 					$AppConfig.userObject.fireEvent('changed', refreshedUser);
@@ -70,7 +72,10 @@ Ext.define('NextThought.cache.UserRepository', {
 		}
 
 		if(!u){
-			//console.debug('updateUser: adding...',refreshedUser.getId());
+			console.debug('updateUser: adding...',refreshedUser.getId());
+			if (ignoreNewInstance){
+				delete refreshedUser.raw;
+			}
 			s.add(refreshedUser);
 		}
 	},
@@ -108,14 +113,6 @@ Ext.define('NextThought.cache.UserRepository', {
 					if(!r || !r.getModelName){
 						Ext.Error.raise({message: 'Unknown result', object: r});
 					}
-
-					//Users models are very tightly coupled to this repository and add/update themselves, however,
-					// community models while still resolved like users (because they are user-like) are not auto-magically
-					// added to the repo, so we add them here.
-					if(r.getModelName() === 'Community'){
-						s.add(r);
-					}
-
 					name = r.getId();
 				}
 
@@ -189,6 +186,7 @@ Ext.define('NextThought.cache.UserRepository', {
 			options;
 
 		function callback(o,success,r) {
+
 			delete me.activeRequests[username];
 
 			if(!success){
@@ -220,8 +218,8 @@ Ext.define('NextThought.cache.UserRepository', {
 			}
 		}
 
-
-		if(this.activeRequests[username]){
+		if(this.activeRequests[username] && this.activeRequests[username].options){
+			console.log('active request detected for ' + username);
 			options = this.activeRequests[username].options;
 			options.callback = Ext.Function.createSequence(
 					options.callback,
@@ -236,6 +234,7 @@ Ext.define('NextThought.cache.UserRepository', {
 		}
 
 		s.add({Username:username, placeholder: true});//make this.has return return true now...
+		console.log('adding active request for ' + username);
 		this.activeRequests[username] = Ext.Ajax.request({
 			url: url,
 			scope: me,

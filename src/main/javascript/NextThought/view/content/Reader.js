@@ -773,7 +773,7 @@ turn off html5 player
 
 }, function(){
 	var o = this.classEvents = new Ext.util.Observable(),
-		timeoutMillis = 5000;
+		timeoutMillis = 500;
 
 	function startTimer(){
 		return function() {

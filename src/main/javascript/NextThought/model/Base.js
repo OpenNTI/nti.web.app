@@ -278,7 +278,7 @@ Ext.data.Types.SINGLEITEM = {
 	type: 'singleItem',
 	convert: function(v) {
 		if (v instanceof Object) {
-			return !v ? null : ParseUtils.parseItems([v])[0];
+			return !v ? null : ParseUtils.parseItems([v], {childRecord: true})[0];
 		}
 		else {
 			console.warn('unexpected value', v);
@@ -295,7 +295,7 @@ Ext.data.Types.ARRAYITEM = {
 	type: 'arrayItem',
 	convert: function(v) {
 		if (Ext.isArray(v)) {
-			return ParseUtils.parseItems(v);
+			return ParseUtils.parseItems(v, {childRecord: true});
 		}
 		else {
 			console.warn('unexpected value', v);
@@ -318,7 +318,7 @@ Ext.data.Types.COLLECTIONITEM = {
 					values.push(v[key]);
 				}
 			}
-			return ParseUtils.parseItems(values) ;
+			return ParseUtils.parseItems(values, {childRecord: true}) ;
 		}
 		else {
 			console.warn('unexpected value', v);

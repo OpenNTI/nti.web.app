@@ -22,7 +22,9 @@ describe("User Repository/Store/Cache Behavior", function(){
 		spyOn(UserRepository, 'makeRequest');
 		UserRepository.prefetchUser({"Class": 'Community', Username: 'TestersAnnon'});
 
-		expect(UserRepository.makeRequest).not.toHaveBeenCalled();
+		//this used to check to make sure communities don't get requested, we no longer resolve
+		//users for friends lists so we don't need the workaround to not resolve communities.
+		expect(UserRepository.makeRequest).toHaveBeenCalled();
 
 		UserRepository.prefetchUser('jonathan.grimes@foo');
 		expect(UserRepository.makeRequest).toHaveBeenCalled();
