@@ -1,11 +1,11 @@
 
-@mixin scrollbar($track:white,$nib:rgba(0,0,0,0.5)){
+@mixin scrollbar($track:white,$nib:rgba(0,0,0,0.5),$margin:5px 0){
 	.detected-scrollbars &::-webkit-scrollbar,
 	.detected-scrollbars &::-webkit-scrollbar-track {
 		width: 8px; height: 8px;
 		background: $track;
 		z-index: 0;
-		margin: 5px 0;
+		margin: $margin;
 	}
 	.detected-scrollbars &::-webkit-scrollbar-thumb {
 		background: $nib;

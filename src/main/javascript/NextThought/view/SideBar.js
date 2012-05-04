@@ -3,7 +3,8 @@ Ext.define('NextThought.view.SideBar',{
 	alias: 'widget.main-sidebar',
 
 	requires: [
-		'NextThought.view.account.MyAccount'
+		'NextThought.view.account.MyAccount',
+		'NextThought.view.account.MyContacts'
 	],
 
 	width: 275,
@@ -11,6 +12,6 @@ Ext.define('NextThought.view.SideBar',{
 
 	items: [
 		{xtype: 'my-account'},
-		{flex: 1, border: false}
+		{xtype: 'my-contacts'}
 	]
 });

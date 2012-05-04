@@ -25,7 +25,7 @@ Ext.define('NextThought.view.content.Reader', {
 		this.callParent(arguments);
 		Ext.applyIf(this, {
 			prefix: 'default',
-			padding: 0
+			padding: '0 0 0 100px'
 		});
 
 		this.add({

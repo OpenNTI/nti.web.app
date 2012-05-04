@@ -9,6 +9,7 @@
 @import "_avatar.scss";
 @import "_content.scss";
 @import "_myaccount.scss";
+@import "_mycontacts.scss";
 @import "_sidebar.scss";
 @import "_masks-and-tips.scss";
 @import "_file-uploader.scss";
@@ -26,6 +27,7 @@
 @import "_classroom.scss";
 @import "_menu-items.scss";
 
+body.x-border-layout-ct { background: white; }
 
 .x-body {
 	font-family: 'Open Sans', serif !important;

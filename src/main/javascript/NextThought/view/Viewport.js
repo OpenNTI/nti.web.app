@@ -16,16 +16,14 @@ Ext.define('NextThought.view.Viewport', {
 	border: false, 
 	frame: false,
 	defaults:{ border: false, frame: false },
-	layout: {
-		type: 'hbox',
-		align: 'stretch'
-	},
+	layout: 'border',
 	id: 'viewport',
+	ui: 'nextthought',
 
 	items:[
-		{xtype: 'main-navigation'},
-		{xtype: 'main-views', id: 'view-ctr', flex: 1},
-		{xtype: 'main-sidebar'}
+		{xtype: 'main-navigation', region: 'west'},
+		{xtype: 'main-views', id: 'view-ctr', region: 'center'},
+		{xtype: 'main-sidebar', region: 'east'}
 	],
 
 	constructor: function(){
@@ -37,9 +35,7 @@ Ext.define('NextThought.view.Viewport', {
 	//'CSSTransitions','CSSAnimations',
 	var features = ['Canvas','CSSTransforms','SVG','Video'],f,
 		unsupported = [],
-		proto = this.prototype,
-		old = {flex: 1};
-
+		proto = this.prototype;
 
 	while(!!(f = features.pop())){
 		if(!Ext.features.has(f)) {
@@ -48,17 +44,15 @@ Ext.define('NextThought.view.Viewport', {
 	}
 
 	if(unsupported.length!==0){
-		Ext.copyTo(old,proto,'border,frame,defaults,layout,items',true);
-		proto.layout.type = 'vbox';
-		proto.items = [
-			{	xtype: 'panel',
+		proto.items.push(
+			{
+				region: 'north',
 				id: 'browser-warning',
 				cls: 'browser-warning',
 				height: 50,
 				html: 'Your browser is not supported, here is a list of <a href="https://docs.google.com/document/pub?id=1dUvxe-n1VBuGpFV5CrBrVeaGJ_hH4kzPRiaGN2cWxsg">browsers we support</a>.'
-			},
-			old
-		];
+			}
+		);
 		unsupported.reverse();
 		console.warn("Unsupported features: "+unsupported.join(', '));
 	}
