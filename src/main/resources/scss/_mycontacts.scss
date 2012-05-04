@@ -7,13 +7,16 @@
 		border: none;
 		border-width: 0;
 		border-top: 1px solid #dcdcdc;
-		width: 215px;
+		width: 215px !important;
+		margin-right: 30px;
+		background: url(../images/contact-under-divider.png) no-repeat 1px 49px;
 	}
 }
 
 .x-tab-my-contacts {
 	&.x-tab {
 		height: auto;
+		margin-right: 10px;
 
 		&.x-tab-top-active{
 			background: none;
@@ -29,7 +32,7 @@
 			font-size: 13.5pt;
 			font-weight: 200;
 			padding-bottom: 5px;
-			border-bottom: 2px solid #c4c4c4;
+			border-bottom: 2px solid #ebebeb;
 		}
 	}
 }

@@ -12,6 +12,6 @@ Ext.define('NextThought.view.SideBar',{
 
 	items: [
 		{xtype: 'my-account'},
-		{xtype: 'my-contacts'}
+		{xtype: 'my-contacts', flex:1}
 	]
 });

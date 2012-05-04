@@ -18,12 +18,14 @@ Ext.define('NextThought.view.account.MyContacts',{
 		}
 	},
 
+	width: 275,
 	defaults :{
 		autoScroll: true,
 		overflowX: 'hidden',
 		xtype: 'container',
 		defaults: {
-			width: 275,
+			layout: 'anchor',
+			anchor: '100%',
 			xtype: 'contacts-panel'
 		}
 	},
