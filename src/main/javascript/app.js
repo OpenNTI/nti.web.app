@@ -11,8 +11,6 @@ Ext.application({
 	autoCreateViewport: false,
 
 	requires: [
-		'NextThought.util.StacktraceUtils',
-		'NextThought.util.MD5',
 		'NextThought.util.Globals'
 	],
 

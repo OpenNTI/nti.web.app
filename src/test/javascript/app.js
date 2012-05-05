@@ -89,8 +89,6 @@ Ext.application({
 	appFolder: 'assets/js/NextThought',
 
 	requires: [
-		'NextThought.util.StacktraceUtils',
-		'NextThought.util.MD5',
 		'NextThought.util.Globals'
 	],
 

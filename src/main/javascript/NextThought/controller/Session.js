@@ -3,7 +3,6 @@ Ext.define('NextThought.controller.Session', {
 
 	requires:[
 		'NextThought.cache.UserRepository',
-		'NextThought.util.Base64',
 		'NextThought.proxy.Socket',
 		'Ext.util.Cookies'
 

@@ -28,8 +28,8 @@ Ext.define('NextThought.overrides.data.Connection',{
 	Ext.Ajax.timeout=10000;//10sec timeout
 	Ext.Ajax.on('beforerequest', function(connection,options) {
 		if(options&&options.async===false){
-			var loc;
-			try { loc = printStackTrace().splice(7); }
+			var loc = null;
+			try { loc.toString(); }//force an error
 			catch (e) { loc = e.stack || e.stacktrace; }
 			console.warn( 'Synchronous Call in: ', loc, ' Options: ', options );
 		}
