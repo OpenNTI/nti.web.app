@@ -1,5 +1,4 @@
 Ext.define('NextThought.view.annotations.SelectionHighlight', {
-	extend: 'NextThought.view.Widget',
 	alias: 'annotations.SelectionHighlight',
 
 	constructor: function(selections, component){
@@ -33,6 +32,15 @@ Ext.define('NextThought.view.annotations.SelectionHighlight', {
 		delete this.selections;
 	},
 
+	createElement: function(tag,parent,cls,css,id){
+		var el = document.createElement(tag);
+		if(cls) { Ext.get(el).addCls(cls); }
+		if(css) { el.setAttribute('style',css); }
+		if(id){el.setAttribute('id',id);}
+		parent.appendChild(el);
+		return el;
+	},
+
 	createCanvas: function(){
 		return this.createElement(
 			'canvas',
@@ -49,7 +57,6 @@ Ext.define('NextThought.view.annotations.SelectionHighlight', {
 			pos = cont.getXY(),
 			size = cont.getSize();
 		c.moveTo(pos[0], pos[1]);
-		c.setSize(size.width, size.height);
 		c.set({
 			width: size.width,
 			height: size.height

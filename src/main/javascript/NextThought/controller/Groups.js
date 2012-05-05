@@ -11,7 +11,7 @@ Ext.define('NextThought.controller.Groups', {
 	],
 
 	views: [
-		'widgets.GroupEditorWindow'
+		'account.GroupEditor'
 	],
 
 	init: function() {
@@ -21,7 +21,7 @@ Ext.define('NextThought.controller.Groups', {
 			'groups-view-container toolbar button[createItem]':{
 				'click':function(){
 					var rec = Ext.create('NextThought.model.FriendsList');
-					Ext.create('NextThought.view.widgets.GroupEditorWindow',{record: rec}).show();
+					Ext.widget({xtype: 'group-editor', record: rec}).show();
 				}
 			},
 
@@ -41,7 +41,7 @@ Ext.define('NextThought.controller.Groups', {
 			'groups-view-container dataview':{
 				'itemdblclick':function(a, rec){
 					if(rec.isModifiable()) {
-						Ext.create('NextThought.view.widgets.GroupEditorWindow',{record: rec}).show();
+						Ext.widget({xtype: 'group-editor', record: rec}).show();
 					}
 				},
 				'selectionchange': function(a, sel){
