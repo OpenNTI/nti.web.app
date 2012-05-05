@@ -37,7 +37,7 @@ Ext.define('NextThought.view.account.MyAccount',{
 		this.getEl().on({
 			scope: this,
 			click: this.showMenu
-		})
+		});
 	},
 
 	showMenu: function(e){

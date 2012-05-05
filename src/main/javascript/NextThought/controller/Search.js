@@ -102,7 +102,7 @@ Ext.define('NextThought.controller.Search', {
 	},
 
 
- 	searchForValue: function(value) {
+	searchForValue: function(value) {
 		if(!value || value.length < 4){return;}
 
 		var s = this.getHitStore(),

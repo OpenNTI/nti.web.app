@@ -24,7 +24,7 @@ Ext.define('NextThought.view.menus.account.Notifications',{
 				{'name': 'John Gutenberg',		'message': 'Created a Note in Pre-Algebra' },
 				{'name': 'Guillermo Montoya',	'message': 'Highlighted in Out Of The Rainforest' },
 				{'name': 'Sven Einhorn',		'message': 'Commented in Howes v. Fields.' },
-				{'name': 'Ben Stein', 			'message': 'Added you to &ldquo;Biology Studdy Group&rdquo;' }
+				{'name': 'Ben Stein',			'message': 'Added you to &ldquo;Biology Studdy Group&rdquo;' }
 			]
 		});
 	}

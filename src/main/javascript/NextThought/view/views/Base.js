@@ -61,5 +61,5 @@ Ext.define( 'NextThought.view.views.Base', {
 		this.ownerCt.doComponentLayout();
 		this.doComponentLayout();
 		this.doLayout();
-	},
+	}
 });

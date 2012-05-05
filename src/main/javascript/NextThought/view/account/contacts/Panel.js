@@ -62,13 +62,13 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 
 	addUser: function(user) {
 		if (!this.hasUser(user)) {
-		 	this.add({user: user});
+			this.add({user: user});
 			this.updateTitle();
 		}
 	},
 
 	hasUser: function(user) {
-		return (this.down('[username='+user.get('Username')+']'));
+		return !!(this.down('[username='+user.get('Username')+']'));
 	}
 
 

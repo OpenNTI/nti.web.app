@@ -38,9 +38,9 @@ Ext.define('NextThought.controller.Account', {
 			if(!op.success){
 				console.error('FAILURE:',arguments);
 			}
-			else if(fire){
+//			else if(fire){
 //				me.getSessionInfo().fireEvent('password-changed', u.get('Username'),values.password);
-			}
+//			}
 		}
 
 		if(btn.actionName !== 'save'){
