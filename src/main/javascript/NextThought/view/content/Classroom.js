@@ -3,9 +3,9 @@ Ext.define('NextThought.view.content.Classroom', {
 	alias: 'widget.classroom-content',
 	mixins:{ splitters: 'NextThought.mixins.SplitterMaintenance' },
 	requires: [
-		'NextThought.view.widgets.chat.View',
-		'NextThought.view.widgets.classroom.Management',
-		'NextThought.view.widgets.classroom.ScriptLog'
+		'NextThought.view.chat.View',
+		'NextThought.view.classroom.Management',
+		'NextThought.view.classroom.ScriptLog'
 	],
 
 	cls: 'x-classroom-panel',

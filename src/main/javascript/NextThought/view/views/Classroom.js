@@ -2,7 +2,7 @@ Ext.define( 'NextThought.view.views.Classroom', {
 	extend: 'NextThought.view.views.Base',
 	alias:	'widget.classroom-view-container',
 	requires: [
-		'NextThought.view.windows.ClassroomChooser',
+		'NextThought.view.classroom.ClassroomChooser',
 		'NextThought.cache.IdCache'
 	],
 

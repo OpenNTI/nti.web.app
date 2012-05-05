@@ -19,20 +19,17 @@ Ext.define('NextThought.controller.Chat', {
 	views: [
 		'views.Classroom',
 		'content.Classroom',
-		'windows.ChatWindow',
-		'widgets.chat.View',
-		'widgets.chat.Log',
-		'widgets.chat.LogEntryPinned',
-		'widgets.chat.PinnedMessageView',
-		'widgets.chat.Friends',
-		'widgets.chat.FriendEntry',
-		'widgets.classroom.ScriptEntry',
-		'widgets.classroom.ScriptLog',
-		'windows.NoteEditor'
+		'chat.View',
+		'chat.Log',
+		'chat.LogEntryPinned',
+		'chat.PinnedMessageView',
+		'chat.Friends',
+		'chat.FriendEntry',
+		'classroom.ScriptEntry',
+		'classroom.ScriptLog'
 	],
 
 	refs: [
-		{ ref: 'chatWindow', selector: 'chat-window'},
 		{ ref: 'classroomMode', selector: 'classroom-view-container'}
 	],
 

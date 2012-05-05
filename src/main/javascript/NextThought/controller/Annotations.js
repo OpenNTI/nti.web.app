@@ -17,16 +17,14 @@ Ext.define('NextThought.controller.Annotations', {
 
 	views: [
 		'Viewport',
-		'windows.ChatWindow',
-		'widgets.annotations.Highlight',
-		'widgets.annotations.Note',
-		'windows.NoteEditor',
-		'windows.ShareWithWindow'
+		'annotations.Highlight',
+		'annotations.Note',
+		'annotations.NoteEditor',
+		'widgets.ShareWithWindow'
 	],
 
 	refs: [
-		{ref: 'viewport', selector: 'master-view'},
-		{ref: 'chatWindow', selector: 'chat-window'}
+		{ref: 'viewport', selector: 'master-view'}
 	],
 
 	statics: {
@@ -293,7 +291,7 @@ Ext.define('NextThought.controller.Annotations', {
 			};
 		}
 
-		Ext.create('NextThought.view.windows.ShareWithWindow',Ext.apply({record: record}, options)).show();
+		Ext.create('NextThought.view.widgets.ShareWithWindow',Ext.apply({record: record}, options)).show();
 	},
 
 	editNote: function(record){

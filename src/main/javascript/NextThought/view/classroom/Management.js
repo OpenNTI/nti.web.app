@@ -1,0 +1,60 @@
+Ext.define('NextThought.view.classroom.Management', {
+	extend:'NextThought.view.content.Base',
+	alias: 'widget.classroom-management',
+	requires: [
+		'NextThought.view.classroom.LiveDisplay',
+		'NextThought.view.chat.OccupantsList',
+		'NextThought.view.classroom.ResourceView'
+	],
+
+	cls: 'nti-classroom-management',
+
+	layout: {
+		type: 'vbox',
+		align: 'stretch'
+	},
+	border: false,
+	maintainFlex: true,
+	defaults: {
+		border: false,
+		defaults: {
+			border: false
+		}
+	},
+
+
+	initComponent: function() {
+		this.callParent(arguments);
+
+		this.add({xtype: 'live-display', height: 400});
+		this.add({xtype: 'splitter'});
+		this.add({
+				flex: 1,
+				layout: {type: 'hbox', align: 'stretch'},
+				border: false,
+				items: [
+					{
+						title: 'Occupants',
+						xtype: 'chat-occupants-list',
+						flex: 1,
+						autoHide: false,
+						maintainFlex: true
+					},
+					{xtype: 'splitter'},
+					{
+						title: 'Resources',
+						flex: 1,
+						autoScroll: true,
+						items: [
+							{
+								xtype: 'classroom-resource-view',
+								emptyText: 'No Resources',
+								viewGrid: true,
+								readOnly: true
+							}
+						]
+					}
+				]}
+			);
+	}
+});
