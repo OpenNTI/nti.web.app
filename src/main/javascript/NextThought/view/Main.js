@@ -1,6 +1,6 @@
 Ext.Loader.setPath('Ext.env', Ext.Loader.getPath('Ext')+'/core/src/env');
 
-Ext.define('NextThought.view.Viewport', {
+Ext.define('NextThought.view.Main', {
 	extend: 'Ext.container.Viewport',
 	alias: 'widget.master-view',
 

@@ -4,7 +4,7 @@ Ext.define('NextThought.controller.Application', {
 		'NextThought.Library'
 	],
 	
-	views: ['Viewport'],
+	views: ['Main'],
 
 	statics: {
 		launchToken: {},
@@ -12,7 +12,7 @@ Ext.define('NextThought.controller.Application', {
 		launch: function(){
 			//console.groupCollapsed('Launch');
 
-			Ext.create('NextThought.view.Viewport');
+			Ext.widget({xtype: 'master-view'});
 			try{
 				Library.load();
 			}

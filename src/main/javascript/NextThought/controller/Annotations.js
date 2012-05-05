@@ -16,16 +16,13 @@ Ext.define('NextThought.controller.Annotations', {
 	],
 
 	views: [
-		'Viewport',
 		'annotations.Highlight',
 		'annotations.Note',
 		'annotations.NoteEditor',
 		'annotations.ShareWith'
 	],
 
-	refs: [
-		{ref: 'viewport', selector: 'master-view'}
-	],
+	refs: [],
 
 	statics: {
 		events: new Ext.util.Observable()

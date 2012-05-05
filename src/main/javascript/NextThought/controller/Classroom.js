@@ -18,8 +18,7 @@ Ext.define('NextThought.controller.Classroom', {
 		'classroom.ScriptLog',
 		'classroom.ClassCreateEditWindow',
 		'classroom.ClassroomChooser',
-		'classroom.ClassResourceEditor',
-		'Viewport'
+		'classroom.ClassResourceEditor'
 	],
 
 	models: [
@@ -36,7 +35,6 @@ Ext.define('NextThought.controller.Classroom', {
 
 	refs:[
 		{ ref: 'classroomContainer', selector: 'classroom-view-container' },
-		{ ref: 'viewport', selector: 'master-view' },
 		{ ref: 'classResourceEditor', selector: 'class-resource-editor' }
 	],
 

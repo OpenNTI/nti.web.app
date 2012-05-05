@@ -22,7 +22,6 @@ Ext.define('NextThought.controller.Library', {
 	],
 
 	refs: [
-		{ ref: 'viewport', selector: 'master-view' },
 		{ ref: 'readerMode', selector: 'library-view-container' }
 	],
 

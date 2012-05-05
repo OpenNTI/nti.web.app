@@ -15,7 +15,6 @@ Ext.define('NextThought.controller.Search', {
 	],
 
 	views: [
-		'Viewport',
 		'form.fields.SearchField',
 		'menus.Search',
 		'menus.search.ResultCategory',
@@ -24,10 +23,6 @@ Ext.define('NextThought.controller.Search', {
 	],
 
 	refs: [
-		{
-			ref: 'viewport',
-			selector: 'master-view'
-		},
 		{
 			ref: 'searchField',
 			selector: 'searchfield'
