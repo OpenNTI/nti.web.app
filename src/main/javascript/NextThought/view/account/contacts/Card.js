@@ -32,6 +32,10 @@ Ext.define('NextThought.view.account.contacts.Card',{
 			console.error('No user specified');
 			return;
 		}
+
+		//for querying later:
+		this.username = this.user.get('Username');
+
 		this.renderData = Ext.apply(this.renderData||{},{
 			avatarURL: this.user.get('avatarURL'),
 			name: this.user.getName(),

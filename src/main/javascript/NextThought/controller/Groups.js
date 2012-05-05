@@ -60,6 +60,12 @@ Ext.define('NextThought.controller.Groups', {
 				'click': this.groupEditorButtonClicked
 			}
 		},{});
+
+		//Listen for changes of presence to notify the online/offline lists
+		var me = this;
+		Socket.register({
+			'chat_presenceOfUserChangedTo': function(){me.incomingPresenceChange.apply(me, arguments);}
+		});
 	},
 
 
@@ -143,6 +149,28 @@ Ext.define('NextThought.controller.Groups', {
 		}
 
 		win.close();
+	},
+
+	incomingPresenceChange: function(name, presence){
+		var offline = Ext.getCmp('offline-contacts'),
+			online = Ext.getCmp('online-contacts'),
+			u;
+
+		UserRepository.prefetchUser(name, function(users) {
+			u = users[0];
+			if (presence.toLowerCase()==='online') {
+				//remove from offline, add to online
+				online.addUser(u);
+				offline.removeUser(u);
+			}
+			else if (presence.toLowerCase()==='offline') {
+				online.removeUser(u);
+				offline.addUser(u);
+			}
+			else {
+				console.error('Got a weird presence notification.', name, presence);
+			}
+		});
 	}
 
 });
