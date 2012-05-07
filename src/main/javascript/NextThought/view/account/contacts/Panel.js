@@ -60,15 +60,46 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 		}
 	},
 
-	addUser: function(user) {
+	addUser: function(user, changes) {
+		var widget, item, ct;
+
 		if (!this.hasUser(user)) {
-			this.add({user: user});
+			widget = Ext.widget('contact-card', {user: user});
+
+			if (!changes) {changes = [];}
+			Ext.each(changes, function(c){
+				ct = c.get('ChangeType');
+				item = c.get('Item');
+				if (ct !== 'Circled') {
+					widget.add({type: item.getModelName(), message: this.getMessage(c), ContainerId: item.get('ContainerId')});
+				}
+			}, this);
+
+			this.add(widget);
 			this.updateTitle();
 		}
 	},
 
 	hasUser: function(user) {
 		return !!(this.down('[username='+user.get('Username')+']'));
+	},
+
+
+	getMessage: function(change) {
+		var item = change.get('Item'), loc, bookTitle;
+		if (!item){return 'unknown';}
+
+		if (item.getModelName() === 'Highlight') {
+			loc = LocationProvider.getLocation(item.get('ContainerId'));
+			return loc ? loc.label : 'Unknown';
+		}
+		else if (item.getModelName() === 'Note'){
+			return AnnotationUtils.getBodyTextOnly(item);
+		}
+		else {
+			console.error('Not sure what activity text to use for ', item, change);
+			return 'Unknown';
+		}
 	}
 
 

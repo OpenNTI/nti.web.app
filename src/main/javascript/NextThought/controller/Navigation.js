@@ -24,6 +24,11 @@ Ext.define('NextThought.controller.Navigation', {
 					LocationProvider.setLocation(ntiid);
 				}
 			},
+			'contact-activity': {
+				'navigation-selected': function(ntiid){
+					LocationProvider.setLocation(ntiid);
+				}
+			},
 			'main-views': {
 				'activate-view': this.track
 			},

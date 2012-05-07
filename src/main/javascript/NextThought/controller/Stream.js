@@ -94,12 +94,55 @@ Ext.define('NextThought.controller.Stream', {
 
 	//called by the Library controller when navigation occurs
 	containerIdChanged: function(containerId) {
-		var ss;
-		//make sure stream doesn't contain old stuff.
-		ss = this.getStoreForStream(containerId);
-		if( ss.getProxy().url && !ss.isLoading() ) {
-			ss.load();
+		var as = Ext.getCmp('activity-stream'),
+			friendsToChangeMap = {},
+			masterId = Library.getLineage(containerId).last();
+
+		function addUsers(friendsToChangeMap, activityStream) {
+			for (var user in friendsToChangeMap) {
+				if (friendsToChangeMap.hasOwnProperty(user)){
+					UserRepository.prefetchUser(user, function(u){
+						activityStream.addUser(u[0], friendsToChangeMap[u[0].get('Username')]);
+					}, this);
+				}
+			}
 		}
+
+		function addToChangeMap(masterId, change, friendsToChangeMap) {
+			var itemContainerId = Library.getLineage(change.get('Item').get('ContainerId')).last(),
+				creator;
+			if (masterId !== itemContainerId) {
+				return;
+			}
+
+			creator = change.get('Creator');
+			if (!friendsToChangeMap[creator]){
+				friendsToChangeMap[creator] = [];
+			}
+			friendsToChangeMap[creator].push(change);
+		}
+
+
+		this.getStreamStore().each(
+			function(change) {
+				addToChangeMap(masterId, change, friendsToChangeMap);
+			}
+			,this);
+
+		addUsers(friendsToChangeMap, as);
+
+		//TODO - on addition to store, redo it all - NOT WORKING
+		this.getStreamStore().on('add', function(store){
+			console.log('store add is not working... wassup.');
+			store.each(
+				function(change) {
+					addToChangeMap(masterId, change, friendsToChangeMap);
+				}
+				,this);
+
+			addUsers(friendsToChangeMap, as);
+		}, this);
+
 	},
 
 
