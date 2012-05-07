@@ -8,12 +8,18 @@ Ext.define('NextThought.controller.Navigation', {
 	views: [
 		'menus.Flyout',
 		'ViewSelect',
-		'Views'
+		'Views',
+		'menus.account.Notifications'
 	],
 
 	init: function() {
 		this.control({
 			'nav-flyout': {
+				'navigation-selected': function(ntiid){
+					LocationProvider.setLocation(ntiid);
+				}
+			},
+			'notifications-menuitem': {
 				'navigation-selected': function(ntiid){
 					LocationProvider.setLocation(ntiid);
 				}

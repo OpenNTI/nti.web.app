@@ -7,7 +7,8 @@ Ext.define('NextThought.controller.Stream', {
 	],
 
 	stores: [
-		'Stream'
+		'Stream',
+		'Page'
 	],
 
 	models: [
@@ -51,6 +52,19 @@ Ext.define('NextThought.controller.Stream', {
 	},
 
 	onSessionReady: function(){
+		//Load page and root stream stores...
+		var ss = this.getStreamStore(),
+			ps = this.getPageStore();
+
+		ps.on('load', function(pageStore, records, success){
+			if (!success) {
+				console.error('Problem loading page store');
+				return;
+			}
+
+			ss.getProxy().url = ps.getById('tag:nextthought.com,2011-10:Root').getLink(Globals.RECURSIVE_STREAM);
+			ss.load();
+		},this, {single: true});
 	},
 
 
@@ -83,7 +97,6 @@ Ext.define('NextThought.controller.Stream', {
 		var ss;
 		//make sure stream doesn't contain old stuff.
 		ss = this.getStoreForStream(containerId);
-		//widget.setStore(ss);
 		if( ss.getProxy().url && !ss.isLoading() ) {
 			ss.load();
 		}
