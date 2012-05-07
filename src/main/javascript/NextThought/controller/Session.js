@@ -13,7 +13,9 @@ Ext.define('NextThought.controller.Session', {
 		'Service'
 	],
 
-	views: [],
+	views: [
+		'menus.MyAccount'
+	],
 
 	statics: {
 		login: function(app){
@@ -156,8 +158,8 @@ Ext.define('NextThought.controller.Session', {
 
 	init: function() {
 		this.control({
-			'session-info' : {
-				'logout': this.handleLogout
+			'my-account-menu' : {
+				'click': this.handleLogout
 			}
 		},{});
 	},
