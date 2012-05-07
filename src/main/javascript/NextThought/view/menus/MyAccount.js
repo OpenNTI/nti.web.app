@@ -26,7 +26,7 @@ Ext.define('NextThought.view.menus.MyAccount',{
 		{text: 'About'},
 		{text: 'Help'},
 		{xtype: 'menuseparator'},
-		{text: 'Sign out'}
+		{text: 'Sign out', action: 'logout'}
 	],
 
 	initComponent: function(){
