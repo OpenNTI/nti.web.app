@@ -33,6 +33,7 @@ Ext.define('NextThought.view.menus.account.Notifications',{
 		this.callParent(arguments);
 
 		Ext.getStore('Stream').on('load', this.setupRenderData, this);
+		Ext.getStore('Stream').on('add', this.setupRenderData, this);
 	},
 
 
@@ -63,7 +64,7 @@ Ext.define('NextThought.view.menus.account.Notifications',{
 			UserRepository.prefetchUser(change.get('Creator'), function(u){
 				this.notifications.push({'name' :u[0].get('realname'), 'message': m, 'guid': guid});
 				this.containers[guid] = item.get('ContainerId');
-				this.renderData.notificationcount = this.renderData.notifications.length;
+				this.renderData.notificationcount = this.notifications.length;
 				//only add this to actual render data if we have few enough
 				if (this.notifications.length <= this.NOTIFICATIONS_TO_SHOW_AT_FIRST) {
 					this.renderData.notifications.push(this.notifications.last());
