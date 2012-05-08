@@ -131,7 +131,8 @@ Ext.define('NextThought.controller.Stream', {
 
 		addUsers(friendsToChangeMap, as);
 
-		//TODO - do this without reloading the entire page, too flashy.
+		//TODO - Is there a see all per user?  Should be...
+		//TODO - ellipses the messages?
 		this.getStreamStore().on('add', function(store, records) {
 			Ext.each(records, function(r){
 				as.addActivity(r.get('Creator'), r);
