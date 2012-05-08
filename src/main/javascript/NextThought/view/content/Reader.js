@@ -356,11 +356,23 @@ Ext.define('NextThought.view.content.Reader', {
 	/** @private */
 	setContent: function(html) {
 		var doc = this.getDocumentElement(),
-			body = Ext.get(doc.body || doc.documentElement);
+			body = Ext.get(doc.body || doc.documentElement),
+			head = doc.getElementsByTagName('head')[0];
 		this.getIframe().setHeight(0);
 
 		body.update(html);
 		body.setStyle('background','transparent');
+
+
+		Ext.each(body.query('script'),function(s){
+			s.parentNode.removeChild(s);
+
+			var e = doc.createElement('script'); e.src = s.src;
+
+			head.appendChild(e);
+		});
+
+
 		this.checkContentFrames();
 
 		clearInterval(this.syncInterval);
