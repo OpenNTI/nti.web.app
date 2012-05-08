@@ -79,8 +79,8 @@
 				&::before{
 					left: initial;
 					top: initial;
-					bottom: 0;
-					right: -6px;
+					bottom: 2px;
+					right: -8px;
 					content: url(../images/my-bubble-tip.png);
 				}
 			}
@@ -126,9 +126,7 @@
 
 	.controls {
 		position: absolute; right: 0; top: 0;
-		border-radius: 5px;
-		box-shadow: 0 0 10px 10px rgba(255,255,255,0.7);
-		background: rgba(255,255,255,0.7);
+		background: url(../images/window_controls_bg.png) 0 0;
 
 		img.tool {
 			width: 8px; height: 8px;
