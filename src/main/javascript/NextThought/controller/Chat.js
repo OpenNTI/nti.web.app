@@ -57,14 +57,6 @@ Ext.define('NextThought.controller.Chat', {
 
 		this.control({
 
-			'chat-view':{
-				'beforedestroy': function(cmp){
-					if (!cmp.disableExitRoom) {
-						this.leaveRoom(ClassroomUtils.getRoomInfoFromComponent(cmp));
-					}
-				}
-			},
-
 			'noteeditor button[action=send]':{ 'click': this.sendComposed },
 
 			'chat-log-view':{'approve': function(ids){this.approveMessages(ids);}},
@@ -78,6 +70,12 @@ Ext.define('NextThought.controller.Chat', {
 			},
 
 			'chat-window': {
+				'beforedestroy': function(cmp){
+					if (!cmp.disableExitRoom) {
+						this.leaveRoom(ClassroomUtils.getRoomInfoFromComponent(cmp));
+					}
+				},
+
 				'add-people': function(cmp,people){
 					var ri = ClassroomUtils.getRoomInfoFromComponent(cmp),
 						o = ri.data.Occupants;
