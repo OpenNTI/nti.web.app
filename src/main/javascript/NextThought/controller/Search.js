@@ -67,8 +67,8 @@ Ext.define('NextThought.controller.Search', {
 			Ext.each(group.children, function(hit){
 				loc = LocationProvider.getLocation(hit.get('ContainerId'));
 				result = Ext.widget('search-result', {
-					title: loc.title.get('title'),
-					section: loc.label,
+					title: loc ? loc.title.get('title') : 'Untitled',
+					section: loc ? loc.label : 'Unlabeled',
 					snippet: this.addSpansToSnippet(hit.get('Snippet'), searchVal),
 					containerId: hit.get('ContainerId')
 				});
@@ -142,39 +142,4 @@ Ext.define('NextThought.controller.Search', {
 		var cat = more.up('search-result-category');
 		cat.showAll();
 	}
-
-
-	/*
-	//pretend to get a search result and just stuff it into the results container for now
-	pretendToFindSomethingAndPopulateMenu: function() {
-		var c = Ext.getCmp('search-results');
-		c.hide().show();
-		c.add(
-			[
-				{ xtype: 'search-result-category',
-					category: 'Books',
-					items :[
-					{xtype: 'search-result', title: 'Pre Algebra', section: 'Number Theory', snippet: 'Prime <span>Factor</span>ization'},
-					{xtype: 'search-result', title: '2012 Math Counts School Handbook', section: 'Warm-Up 1', snippet: 'greatest prime <span>factor</span>...'},
-					{xtype: 'search-more'}
-				]},
-
-				{ xtype: 'search-result-category',
-					category: 'Notes',
-					items :[
-					{xtype: 'search-result', title: 'William Wallace', snippet: '&ldquo;When we <span>factor</span> an...&rdquo;'}
-				]},
-
-				{ xtype: 'search-result-category',
-					category: 'Highlights',
-					items :[
-					{xtype: 'search-result', title: 'Me', snippet: '&ldquo;the prime <span>factor</span>s of 12.&rdquo;'},
-					{xtype: 'search-result', title: 'Neil Armstrong', snippet: '&ldquo;<span>Factor</span> the following...&rdquo;'},
-					{xtype: 'search-result', title: 'Barbara Bush', snippet: '&ldquo;prime <span>factor</span>izations...&rdquo;'},
-					{xtype: 'search-more'}
-				]}
-			]
-		);
-	}
-	*/
 });
