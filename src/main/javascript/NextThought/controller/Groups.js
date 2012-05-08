@@ -55,8 +55,17 @@ Ext.define('NextThought.controller.Groups', {
 
 		groups.removeAll(true);
 		store.each(function(group){
+			var id = ParseUtils.parseNtiid(group.getId()),
+				friends = group.get('friends');
+
+			if(friends.length === 1 && friends[0] === 'Everyone'
+			&& id.specific.provider === 'zope.security.management.system_user'){
+				return;
+			}
+
+
 			var name = group.getName();
-			UserRepository.prefetchUser(group.get('friends'),function(users){
+			UserRepository.prefetchUser(friends,function(users){
 				groups.add({title: name}).setUsers(users);
 			});
 		});
