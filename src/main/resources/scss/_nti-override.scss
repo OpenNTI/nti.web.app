@@ -1,4 +1,39 @@
 #NTIContent {
+    div.section-problems,
+    div.challenge-problems,
+    div.review-problems,
+    div.exercises{
+        &::before{
+            background: none !important;
+        }
+        & > span.headingtext {
+          position: static !important;
+          top: initial;
+          left: initial;
+      }
+    }
+    ol.section-problems,
+    ol.challenge-problems,
+    ol.review-problems {
+        margin: 0;
+        padding: 0;
+    }
+  
+   div.picdefns,
+   .xtra,
+   div.problem,
+   div.defn,
+   div.defns,
+   .bogus,
+   .importantdef,
+   .important,
+   .concept,
+   .warning,
+   .game,
+   .sidebar{
+      background-color: rgba(235, 235, 235, 0.3) !important;
+   }
+
 	.worksheet-problems {
 		li{
 			clear: both;
