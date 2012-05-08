@@ -120,7 +120,7 @@ Ext.define('NextThought.view.chat.log.Entry', {
 		v.dragZone = Ext.create('Ext.dd.DragZone', v.getEl(), {
 
 			getDragData: function(e) {
-				var sourceEl = v.box.dom, d;
+				var sourceEl = v.el.dom, d;
 				if (sourceEl) {
 					d = sourceEl.cloneNode(true);
 					d.id = Ext.id();
