@@ -51,21 +51,22 @@ Ext.define('NextThought.view.chat.Window',{
 	roomInfoChanged: function(roomInfo){
 		if (!this.roomInfo){return;}  //Only do this if it's there.
 
-		//Just checking to see if we got the correct room info
-		if (roomInfo.getId() !== this.roomInfo.getId()) {
-			console.error('Got a RoomInfo change event for a RoomInfo that has a different ID, current', this.roomInfo, 'new', roomInfo);
-			return;
-		}
-
-		roomInfo.on('changed', this.roomInfoChanged, this);
+//		//Just checking to see if we got the correct room info
+//		if (roomInfo.getId() !== this.roomInfo.getId()) {
+//			console.error('Got a RoomInfo change event for a RoomInfo that has a different ID, current', this.roomInfo, 'new', roomInfo);
+//			return;
+//		}
 		//stop listening on old room info, reassign and start listening again.
 		this.roomInfo.un('changed', this.roomInfoChanged, this);
 		this.roomInfo = roomInfo;
+		this.roomInfo.on('changed', this.roomInfoChanged, this);
+		this.roomInfoHash = IdCache.getIdentifier(roomInfo.getId());
 
 		var list = this.down('chat-gutter');
 
-		console.log(roomInfo.data);
+		console.log('RoomInfo',roomInfo.data);
 		UserRepository.prefetchUser(roomInfo.get('Occupants'),function(users){
+			console.log('RoomInfo Occupants',users);
 			list.updateList(users);
 		});
 	},

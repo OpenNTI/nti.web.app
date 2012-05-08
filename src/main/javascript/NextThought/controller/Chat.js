@@ -145,8 +145,11 @@ Ext.define('NextThought.controller.Chat', {
 				if (roomId && roomId === ri.getId()){
 					return ri;
 				}
-				else if (!roomId && Globals.arrayEquals(ri.get('Occupants'), allUsers) && !ClassroomUtils.isClassroomId(ri.getId())) {
-					return ri;
+				else if (!ClassroomUtils.isClassroomId(ri.getId())) {
+					if( Ext.Array.difference(ri.get('Occupants'),allUsers).length === 0
+					||	Ext.Array.difference(allUsers,ri.get('Occupants')).length === 0 ){
+						return ri;
+					}
 				}
 			}
 		}
@@ -431,7 +434,6 @@ Ext.define('NextThought.controller.Chat', {
 		if(!w){
 			w = Ext.widget({
 				xtype: 'chat-window',
-				roomInfoHash: IdCache.getIdentifier(roomInfo.getId()),
 				roomInfo: roomInfo
 			});
 		}
@@ -812,14 +814,18 @@ Ext.define('NextThought.controller.Chat', {
 			console.warn('room already exists, all rooms/roomInfo', this.activeRooms, roomInfo);
 		}
 
+
 		//TODO - this needs reworking...
 		existingRoom = this.existingRoom(roomInfo.get('Occupants'), roomInfo.getId(), null);
-		if (existingRoom) {
-			existingRoom.fireEvent('changed', roomInfo);
-			//this.leaveRoom(existingRoom);
-		}
 
 		this.activeRooms[roomInfo.getId()] = roomInfo;
+
+		if (existingRoom) {
+			existingRoom.fireEvent('changed', roomInfo);
+			this.leaveRoom(existingRoom);
+			return;
+		}
+
 
 		if (this.getClassroom().isClassroom(roomInfo)) {
 			this.getClassroom().onEnteredRoom(roomInfo);
