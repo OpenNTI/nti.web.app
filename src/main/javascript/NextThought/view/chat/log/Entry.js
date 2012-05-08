@@ -91,9 +91,9 @@ Ext.define('NextThought.view.chat.log.Entry', {
 
 	afterRender: function(){
 		this.callParent(arguments);
-		if (!this.up('[disableDragDrop]')) {
-			this.initializeDragZone(this);
-		}
+//		if (!this.up('[disableDragDrop]')) {
+//			this.initializeDragZone(this);
+//		}
 		this.el.on('click', this.click, this);
 	},
 
