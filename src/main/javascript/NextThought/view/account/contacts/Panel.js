@@ -64,7 +64,7 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 		var widget, item, ct;
 
 		if (!this.hasUser(user)) {
-			widget = Ext.widget('contact-card', {user: user});
+			widget = Ext.widget('contact-card', {user: user, username: user.get('Username')});
 
 			if (!changes) {changes = [];}
 			Ext.each(changes, function(c){
@@ -99,6 +99,26 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 		else {
 			console.error('Not sure what activity text to use for ', item, change);
 			return 'Unknown';
+		}
+	},
+
+
+	addActivity: function(username, change) {
+		var widget = this.down('[username='+username+']'),
+			item = change.get('Item'),
+			ct = change.get('ChangeType');
+
+		if (!widget) {
+			console.error('Cannot add activity, no user card exists for', username);
+			return;
+		}
+
+		if (ct!=='Circled'){
+			widget.add({
+				type: item.getModelName(),
+				message: this.getMessage(change),
+				ContainerId: item.get('ContainerId')
+			});
 		}
 	}
 
