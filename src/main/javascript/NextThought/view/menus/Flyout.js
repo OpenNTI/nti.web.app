@@ -88,7 +88,6 @@ Ext.define('NextThought.view.menus.Flyout',{
 		this.hideTimeout = setTimeout(function(){me.hide();}, 1000);
 	},
 	stopHiding: function(){
-		clearTimeout(this.hideTimeout);
 		this.show();
 	},
 
@@ -102,12 +101,26 @@ Ext.define('NextThought.view.menus.Flyout',{
 
 	show: function(){
 		this.callParent(arguments);
-		Ext.fly(this.view.getNode(this.record)).addCls('menu-open');
+		clearTimeout(this.hideTimeout);
+		var n = Ext.get(this.view.getNode(this.record));
+		n.addCls('menu-open');
+		n.removeCls('menu-closing');
+		this.removeCls('menu-closing');
 		return this;
 	},
 
 	hide: function(){
-		Ext.fly(this.view.getNode(this.record)).removeCls('menu-open');
-		return this.callParent(arguments);
+		var me = this,
+			e = Ext.get(this.view.getNode(this.record)),
+			c = 'menu-closing';
+
+		e.removeCls('menu-open');
+		e.addCls(c);
+		me.addCls(c);
+		this.hideTimout = setTimeout(function(){
+			Ext.menu.Menu.prototype.hide.call(me);
+			e.removeCls(c);
+			me.removeCls(c);
+		},1000);
 	}
 });

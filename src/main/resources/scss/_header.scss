@@ -29,6 +29,9 @@ $itemWidth: 275px;
 
 .x-panel-nav-flyout {
 	@include animate(fadeIn,0.5s);
+	&.menu-closing {
+		@include animate(fadeOut,0.5s);
+	}
 	.x-panel-body-nav-flyout{
 		background: rgba(60,60,60,0.98) !important;
 
@@ -271,11 +274,14 @@ $itemWidth: 275px;
 					background: #fafafa url(../images/nav-selected-bg.png) 0 0 repeat-y;
 				}
 			}
-			&.menu-open {
-				.nib {
-					@include animate(fadeInRight,0.5s);
-					display: block;
-				}
+			&.menu-open .nib {
+				@include animate(fadeInRight,0.5s);
+				display: block;
+			}
+
+			&.menu-closing .nib {
+				@include animate(fadeOutRight,0.5s);
+				display: block;
 			}
 
 			.item {
