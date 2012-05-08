@@ -1,17 +1,18 @@
 Ext.define( 'NextThought.view.form.fields.UserSearchInputField', {
-	// extend: 'Ext.form.field.Text',
 	extend: 'Ext.form.field.ComboBox',
 	alias : 'widget.usersearchinput',
 	
-	allowBlank: false,
+	anchor: '100%',
+	allowBlank: true,
 	displayField: 'realname',
 	typeAhead: false,
 	hideLabel: true,
 	hideTrigger:true,
-	anchor: '100%',
-	multiSelect:true,
+	multiSelect:false,
+	enableKeyEvents: true,
 	minChars: 1,
 	valueField: 'Username',
+	emptyText: 'Search...',
 
 	listConfig: {
 		loadingText: 'Searching...',
@@ -22,20 +23,13 @@ Ext.define( 'NextThought.view.form.fields.UserSearchInputField', {
 			'</div>';
 		}
 	},
-//	pageSize: 5,
-	
-	emptyText: 'Search...',
-	enableKeyEvents: true,
-	
+
 	constructor: function(){
 		this.store = Ext.getStore('UserSearch');
-		this.callParent(arguments);
+		return this.callParent(arguments);
 	},
-	
+
 	initComponent: function(){
 		this.callParent(arguments);
 	}
-	
-	
-	
 });

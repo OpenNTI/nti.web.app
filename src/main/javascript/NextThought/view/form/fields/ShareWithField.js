@@ -21,11 +21,11 @@ Ext.define('NextThought.view.form.fields.ShareWithField', {
 			border: false,
 			margin: '0 0 10px 0'
 		},{
-			xtype: 'usersearchinput',
-			emptyText: this.emptyText,
-			allowBlank: true,
-			multiSelect: false,
-			enableKeyEvents: true
+			xtype: 'usersearchinput'
+//			emptyText: this.emptyText,
+//			allowBlank: true,
+//			multiSelect: false,
+//			enableKeyEvents: true
 		}
 	],
 
@@ -38,22 +38,24 @@ Ext.define('NextThought.view.form.fields.ShareWithField', {
 		this.setReadOnly(!!this.readOnly);
 
 		this.initField();
-		var b = this.inputField;
-		b.on('select', this.select, this);
-		b.on('focus', this.doFocus, this);
-		b.on('blur', this.doBlur, this);
+		this.inputField.on({
+			scope: this,
+			'select': this.select,
+			'focus': this.doFocus,
+			'blur': this.doBlur
+		});
 	},
 
 
 
 	setReadOnly: function(readOnly){
 		this.readOnly = readOnly;
-		if(readOnly) {
-			this.inputField.hide();
-		}
-		else {
-			this.inputField.show();
-		}
+//		if(readOnly) {
+//			this.inputField.hide();
+//		}
+//		else {
+//			this.inputField.show();
+//		}
 
 		this.items.get(0).items.each(function(token){
 			token.setReadOnly(readOnly);
