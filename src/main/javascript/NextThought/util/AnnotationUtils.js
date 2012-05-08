@@ -448,6 +448,7 @@ Ext.define('NextThought.util.AnnotationUtils',{
 
 
 	buildRangeFromRecord: function(r, root) {
+
 		try {
 			var endElement = this.getNodeFromXPath(r.get('endXpath'),root),
 				startElement = this.getNodeFromXPath(r.get('startXpath'), root),
@@ -475,25 +476,17 @@ Ext.define('NextThought.util.AnnotationUtils',{
 
 
 	getAnchors: function getAnchors(root){
-//		var id = root&&root.tagName? Ext.get(root).id : 'null',
-//			f = this.getAnchors,
-//			c = (f.cache = f.cache || {}),
-//			t = (f.timers = f.timers || {});
-
-//		clearTimeout(t[id]);
-
-//		if(!c[id]) {
-//			c[id] = Ext.Array.unique(Ext.query('#NTIContent A[name]',root));
-			return Ext.Array.unique(Ext.query('#NTIContent A[name]',root));
-//		}
-//		t[id] = setTimeout(function(){ delete c[id]; },500);
-//		return c[id].slice();
+		return Ext.Array.unique(Ext.query('#NTIContent A[name], #NTIContent [id]',root));
 	},
 
 
 //tested
 	getAnchor: function(a,root) {
-		return Ext.query('a[name=' + a +']',root)[0];
+		var anchor = Ext.query('A[name=' + a +']',root)[0];
+		if (!anchor) {
+			anchor = Ext.query('[id=' + a +']',root)[0];
+		}
+		return anchor;
 	},
 
 //tested
