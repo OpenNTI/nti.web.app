@@ -1,18 +1,24 @@
 
 .chat-window {
-	box-shadow: 3px 3px 10px -3px #666666;
-	border-radius: 3px;
+	box-shadow: 3px 3px 6px -3px #cccccc;
+	border-radius: 5px;
 	background: white;
 	border: 1px solid #dbdbdb;
+	overflow: hidden;
 
 	.x-window-body {
+		border-radius: 5px;
 		border: none !important;
 		border-width: 0 !important;
 	}
 
 	.gutter {
+		& > img:first-child {
+			border-radius: 5px 0 0 0;
+		}
 		overflow: hidden;
 		background: #eeeeee;
+		border-radius: 5px 0 0 5px;
 
 		.x-btn {
 			position: relative;
@@ -40,7 +46,8 @@
 	}
 
 	.chat-view {
-		box-shadow: 15px 0 20px 10px black;
+		border-radius: 0 5px 5px 0;
+		box-shadow: -2px 0px 9px -5px #333333;
 
 		.x-box-inner{
 			border: 1px solid #cfcfcf;
@@ -74,7 +81,6 @@
 				.name {display: none;}
 				.body-text {
 					color: #757474;
-					font-size: larger;
 				}
 				&::before{
 					left: initial;
@@ -101,10 +107,13 @@
 	}
 
 	.chat-log-view {
+		border-radius: 0 5px 0 0;
 		border-bottom: 1px solid #cfcfcf !important;
+		background: #fbfbfb;
 	}
 
 	.chat-entry {
+		border-radius: 0 0 5px 0;
 		background: #f7f7f7;
 		box-shadow: inset 0 0 1px 1px white;
 
@@ -125,6 +134,7 @@
 	}
 
 	.controls {
+		border-radius: 0 5px 0 0;
 		position: absolute; right: 0; top: 0;
 		background: url(../images/window_controls_bg.png) 0 0;
 

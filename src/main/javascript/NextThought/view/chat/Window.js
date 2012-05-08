@@ -19,8 +19,8 @@ Ext.define('NextThought.view.chat.Window',{
 	liveDrag: true,
 
 	minWidth: 285,
-	minHeight: 350,
-	height: 350,
+	minHeight: 250,
+	height: 250,
 
 	renderSelectors: {
 		closeEl: 'img.tool.close',
@@ -43,7 +43,7 @@ Ext.define('NextThought.view.chat.Window',{
 
 		this.setPosition(
 			Ext.dom.Element.getViewportWidth() - 305,
-			Ext.dom.Element.getViewportHeight() - 370 );
+			Ext.dom.Element.getViewportHeight() - 270 );
 
 		if(!this.roomInfo){
 			Ext.Error.raise('roomInfo required');
