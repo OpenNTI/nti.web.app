@@ -14,7 +14,8 @@ Ext.define('NextThought.view.account.MyAccount',{
 	],
 
 	renderSelectors: {
-		boxEl: 'div.my-account-wrapper'
+		boxEl: 'div.my-account-wrapper',
+		notificationCount: 'span.notifications'
 	},
 
 	initComponent: function(){
@@ -22,13 +23,16 @@ Ext.define('NextThought.view.account.MyAccount',{
 		me.callParent(arguments);
 		me.renderData = Ext.apply(me.renderData||{},{
 			name: $AppConfig.userObject.getName(),
-			'notification-count': 7,
+			'notification-count': $AppConfig.userObject.get('NotificationCount') || '',
 			status: 'Reading Prime Factorization'
 		});
 		me.menu = Ext.widget({xtype: 'my-account-menu', xhooks:{
 			hide: function(){ this.callParent(arguments); clearTimeout(t); me.getEl().removeCls(cls);},
 			show: function(){ this.callParent(arguments); t=setTimeout(function(){me.getEl().addCls(cls);},600);}
 		}});
+
+		//Listen to the store for updating notification count
+		Ext.getStore('Stream').on('datachanged', this.updateCountFromStore, this);
 	},
 
 	afterRender: function(){
@@ -39,6 +43,25 @@ Ext.define('NextThought.view.account.MyAccount',{
 			click: this.showMenu
 		});
 	},
+
+
+	updateCountFromStore: function(store) {
+		var lastLogin = $AppConfig.userObject.get('lastLoginTime'),
+			count = 0;
+		store.each(function(change){
+			if (change.get('Last Modified') > lastLogin) {
+				count++;
+			}
+		});
+
+		if (!this.rendered) {
+			this.renderData['notification-count'] = count || '';
+		}
+		else {
+			this.notificationCount.update(count || '');
+		}
+	},
+
 
 	showMenu: function(e){
 		e.stopPropagation();
