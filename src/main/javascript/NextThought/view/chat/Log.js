@@ -1,24 +1,24 @@
 Ext.define('NextThought.view.chat.Log', {
-	extend:'Ext.panel.Panel',
+	extend:'Ext.container.Container',
 	alias: 'widget.chat-log-view',
 	requires: [
-		'NextThought.view.chat.LogEntry',
-		'NextThought.view.chat.LogEntryModerated',
-		'NextThought.view.chat.ContentLogEntry',
-		'NextThought.view.chat.InfoLogEntry',
+		'NextThought.view.chat.log.Entry',
+		'NextThought.view.chat.log.Moderated',
+		'NextThought.view.chat.log.Content',
+		'NextThought.view.chat.log.Info',
 		'NextThought.cache.IdCache'
 	],
 
 	cls: 'chat-log-view',
 	autoScroll: true,
 	layout: 'anchor',
-	border: false,
-	minWidth: 250,
 	defaults: {border: false},
+
 
 	getMessageQuery: function(id){
 		return Ext.String.format('{0}[messageId={1}]', this.entryType, IdCache.getIdentifier(id));
 	},
+
 
 	initComponent:function() {
 
@@ -74,17 +74,20 @@ Ext.define('NextThought.view.chat.Log', {
 		this.callParent(arguments);
 	},
 
+
 	selectall: function() {
 		Ext.each(this.query(this.entryType), function(f){
 			f.setValue(true);
 		});
 	},
 
+
 	selectnone: function() {
 		Ext.each(this.query(this.entryType), function(f){
 			f.setValue(false);
 		});
 	},
+
 
 	approve: function(){
 		var a = [];

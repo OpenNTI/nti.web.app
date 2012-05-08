@@ -101,7 +101,6 @@ Ext.application({
 		'FilterControl',
 		'Google',
 		'Groups',
-		'Home',
 		'Navigation',
 		'ObjectExplorer',
 		'Library',

@@ -3,7 +3,6 @@ Ext.define('NextThought.view.classroom.Management', {
 	alias: 'widget.classroom-management',
 	requires: [
 		'NextThought.view.classroom.LiveDisplay',
-		'NextThought.view.chat.OccupantsList',
 		'NextThought.view.classroom.ResourceView'
 	],
 

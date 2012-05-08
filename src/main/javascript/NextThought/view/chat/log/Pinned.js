@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.chat.LogEntryPinned', {
+Ext.define('NextThought.view.chat.log.Pinned', {
 	extend: 'Ext.Component',
 	alias: 'widget.chat-log-entry-pinned',
 

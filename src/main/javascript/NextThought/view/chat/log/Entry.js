@@ -1,38 +1,30 @@
-Ext.define('NextThought.view.chat.LogEntry', {
+Ext.define('NextThought.view.chat.log.Entry', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.chat-log-entry',
 
 	requires: [
+		'NextThought.layout.component.TemplatedContainer',
 		'NextThought.util.AnnotationUtils',
-		'NextThought.view.chat.ReplyTo',
 		'NextThought.cache.IdCache'
 	],
 
+	componentLayout: 'templated-container',
+
 	renderTpl: new Ext.XTemplate(
-		'<div class="x-chat-log-entry">',
-			'<span class="reply">',
-				'<span class="reply-whisper {enablewhisper}"></span>',
-				'<span class="reply-public"></span>',
-				'<span class="pin"></span>',
-			'</span>',
-			'<div class="timestamp">{time}</div>',
-			'<img class="icon" src="{icon}" width=16 height=16"/>',
-			'<div>',
-				'<span class="name">{name}</span> ',
-				'<span class="body-text">{body}</span> ',
-			'</div>',
+		'<div class="log-entry {me}">',
+			'<div class="name">{name}</div> ',
+			'<div class="body-text">{body}</div> ',
 		'</div>',
-		'<div class="x-chat-replies"></div>'
-		),
+		'<div id="{id}-body" class="replies">',
+			'{%this.renderContainer(out,values)%}',
+		'</div>'
+	),
+
+	childEls: ['body'],
 
 	renderSelectors: {
-		box: 'div.x-chat-log-entry',
-		name: '.x-chat-log-entry span.name',
-		text: 'span.body-text',
-		time: 'div.timestamp',
-		icon: 'img',
-		frameBody: 'div.x-chat-replies',
-		enablewhisper: '.x-chat-log-entry span.nowhisper'
+		name: '.name',
+		text: '.body-text'
 	},
 
 	initComponent: function(){
@@ -62,19 +54,19 @@ Ext.define('NextThought.view.chat.LogEntry', {
 		me.message = m;
 		me.messageId = IdCache.getIdentifier(m.getId());
 
-		me.renderData.time = Ext.Date.format(m.get('Last Modified'), 'g:i:sa');
 		me.renderData.name = 'resolving...';
 
 		if (s !== $AppConfig.username) {
 			//This entry is created by you, so don't show the reply whisper option
 			me.renderData.enablewhisper = 'enable-whisper';
+		} else {
+			me.renderData.me = 'me';
 		}
 
 		AnnotationUtils.compileBodyContent(m,function(content){
 			me.renderData.body = content;
 			if(me.rendered){
 			   me.text.update(me.renderData.body);
-			   me.time.update(me.renderData.time);
 			   me.fireEvent('rendered-late');
 			}
 		});
@@ -107,41 +99,21 @@ Ext.define('NextThought.view.chat.LogEntry', {
 
 	click: function(event, target, eOpts){
 		target = Ext.get(target);
-		var inBox = target && this.box.contains(target);
-		if(inBox){
-			if(target.hasCls('reply-public')){
-				this.fireEvent('reply-public', this);
-			}
-			else if(target.hasCls('reply-whisper')){
-				this.fireEvent('reply-whisper', this);
-			}
-			else if(target.hasCls('pin')){
-				this.fireEvent('pin', this);
-			}
-		}
-		else if(/whiteboard/i.test(target.getAttribute('class'))){
+		if(/whiteboard/i.test(target.getAttribute('class'))){
 			//do lightbox/zoom of whiteboard image
 			if(!target.is('img')){
 				target = target.parent().first('img');
 			}
-
 			NextThought.view.whiteboard.Utils.display(target.getAttribute('src'));
 		}
 	},
 
 	fillInUser: function(u) {
-		var name = u.get('alias') || u.get('Username'),
-			i = u.get('avatarURL');
-
+		var name = u.getName();
+		this.renderData.name = name;
 		if(this.rendered){
-			this.icon.set({src: i});
 			this.name.update(name);
 		}
-		else {
-			this.renderData.name = name;
-			this.renderData.icon = i;
-		}
-
 	},
 
 	initializeDragZone: function(v) {
@@ -165,13 +137,6 @@ Ext.define('NextThought.view.chat.LogEntry', {
 			getRepairXY: function() {
 				return this.dragData.repairXY;
 			}
-		});
-	},
-
-	showReplyToComponent: function() {
-		return this.add({
-			xtype: 'chat-reply-to',
-			replyTo: this.message.getId()
 		});
 	}
 });

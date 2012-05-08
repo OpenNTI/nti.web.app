@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.chat.InfoLogEntry', {
+Ext.define('NextThought.view.chat.log.Info', {
 	extend: 'Ext.container.Container',
 	alias: 'widget.chat-info-log-entry',
 

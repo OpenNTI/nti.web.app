@@ -9,7 +9,8 @@ Ext.define('NextThought.controller.Account', {
 	],
 
 	views: [
-		'form.AccountForm'
+		'form.AccountForm',
+		'account.contacts.Card',
 	],
 
 	refs: [],
@@ -18,8 +19,19 @@ Ext.define('NextThought.controller.Account', {
 		this.control({
 			'#account-window button[actionName]':{
 				'click': this.accountActionButton
+			},
+
+			'contact-card':{
+				'click': this.contactCardClicked
 			}
+
+
 		},{});
+	},
+
+
+	contactCardClicked: function(cmp,username){
+		this.getController('Chat').enterRoom(username);
 	},
 
 

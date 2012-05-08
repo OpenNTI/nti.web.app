@@ -1,14 +1,13 @@
 Ext.define('NextThought.controller.Chat', {
 	extend: 'Ext.app.Controller',
 	requires: [
-		'NextThought.util.ParseUtils',
-		'NextThought.proxy.Socket',
-		'NextThought.view.views.Classroom',
+		'NextThought.cache.IdCache',
+		'NextThought.util.AnnotationUtils',
 		'NextThought.util.ClassroomUtils',
-		'NextThought.cache.IdCache',
-		'NextThought.cache.IdCache',
-		'NextThought.util.AnnotationUtils'
+		'NextThought.util.ParseUtils',
+		'NextThought.proxy.Socket'
 	],
+
 
 	models: [
 		'FriendsList',
@@ -16,18 +15,11 @@ Ext.define('NextThought.controller.Chat', {
 		'RoomInfo'
 	],
 
+
 	views: [
-		'views.Classroom',
-		'content.Classroom',
-		'chat.View',
-		'chat.Log',
-		'chat.LogEntryPinned',
-		'chat.PinnedMessageView',
-		'chat.Friends',
-		'chat.FriendEntry',
-		'classroom.ScriptEntry',
-		'classroom.ScriptLog'
+		'chat.Window'
 	],
+
 
 	refs: [
 		{ ref: 'classroomMode', selector: 'classroom-view-container'}
@@ -64,25 +56,6 @@ Ext.define('NextThought.controller.Chat', {
 		});
 
 		this.control({
-			'chat-window splitbutton menuitem': {
-				'click': this.flaggedMenuItemClicked
-			},
-			'chat-window splitbutton[action=flagged]': {
-				'click' : this.flaggedButtonClicked
-			},
-			'button[showChat]':{
-				'click': this.openChatWindow
-			},
-
-			'chat-friends-view' : {
-				'group-click': this.groupEntryClicked
-			},
-
-			'chat-friend-entry' : {
-				click : this.friendEntryClicked,
-				'shadow' : this.shadowClicked,
-				'messages-dropped' : this.flagMessagesTo
-			},
 
 			'chat-view':{
 				'beforedestroy': function(cmp){
@@ -92,35 +65,31 @@ Ext.define('NextThought.controller.Chat', {
 				}
 			},
 
+			'noteeditor button[action=send]':{ 'click': this.sendComposed },
+
 			'chat-log-view':{'approve': function(ids){this.approveMessages(ids);}},
 			'chat-log-view button[action]':{'click': this.toolClicked},
 			'chat-log-view tool[action]':{'click': this.toolClicked},
 
-			'noteeditor button[action=send]':{ 'click': this.sendComposed },
-			'chat-view chat-reply-to' : {
-				'compose': this.compose,
-				'send': this.send,
-				'classroom': this.classroom
+			'chat-view chat-entry' : {
+				//'classroom': this.classroom,
+				//'compose': this.compose,
+				'send': this.send
 			},
-			'chat-occupants-list button[action=moderate]' : {
-				'click' : this.moderateClicked
+
+			'chat-window': {
+				'add-people': function(cmp,people){
+					var ri = ClassroomUtils.getRoomInfoFromComponent(cmp),
+						o = ri.data.Occupants;
+
+					if(!Ext.isArray(people)){
+						people = [people];
+					}
+					o.push.apply(o,people);
+					Socket.emit('chat_enterRoom', {NTIID: ri.getId(), Occupants: o});
+				}
 			},
-			'chat-log-entry' : {
-				'reply-public': this.replyPublic,
-				'reply-whisper': this.replyWhisper,
-				'pin': this.pinMessage
-			},
-			'chat-content-log-entry' : {
-				'click': this.contentEntryClicked
-			},
-			'chat-log-entry-moderated' : {
-				'reply-public': this.replyPublic,
-				'reply-whisper': this.replyWhisper,
-				'pin': this.pinMessage
-			},
-			'chat-pinned-message-view toolbar button' : {
-				'click': this.clearPinnedMessages
-			},
+
 			'script-entry' : {
 				'script-to-chat': this.send
 			}
@@ -128,19 +97,22 @@ Ext.define('NextThought.controller.Chat', {
 		},{});
 	},
 
+
 	/* UTILITY METHODS */
 	getClassroom: function(){
 		return this.getController('Classroom');
 	},
 
-	getChatView: function(r) {
+
+	getChatWindow: function(r) {
 		if (!r){return null;}
 
 		var rIsString = (typeof(r) === 'string'),
 			id = IdCache.getIdentifier(rIsString ? r : r.getId());
 
-		return Ext.ComponentQuery.query('chat-view[roomId='+id+']')[0];
+		return Ext.ComponentQuery.query('chat-window[roomInfoHash='+id+']')[0];
 	},
+
 
 	isModerator: function(ri) {
 		return Ext.Array.contains(ri.get('Moderators'), $AppConfig.username);
@@ -182,6 +154,7 @@ Ext.define('NextThought.controller.Chat', {
 		return null;
 	},
 
+
 	postMessage: function(room, message, replyTo, channel, recipients) {
 
 		if(typeof message === 'string') {
@@ -203,9 +176,11 @@ Ext.define('NextThought.controller.Chat', {
 		Socket.emit('chat_postMessage', m);
 	},
 
+
 	approveMessages: function(messageIds){
 		Socket.emit('chat_approveMessages', messageIds);
 	},
+
 
 	enterRoom: function(usersOrList, options) {
 		options = options || {};
@@ -266,6 +241,7 @@ Ext.define('NextThought.controller.Chat', {
 			Socket.emit('chat_enterRoom', Ext.apply(roomCfg, options));
 		}
 	},
+
 
 	showMessage: function(msgCmp) {
 		var log = msgCmp.up('chat-log-view'),
@@ -330,9 +306,9 @@ Ext.define('NextThought.controller.Chat', {
 
 		this.postMessage(room, val, mid, channel, recipients);
 
-		f.setValue('');
 		f.focus();
 	},
+
 
 	classroom: function(f, mid, channel, recipients) {
 		var cv = f.up('chat-view'),
@@ -359,9 +335,11 @@ Ext.define('NextThought.controller.Chat', {
 		c.onMessage(messages);
 	 },
 
+
 	flaggedMenuItemClicked: function(mi) {
 		this.showMessage(mi.relatedCmp);
 	},
+
 
 	flaggedButtonClicked: function(btn){
 		var i = btn.menu.items,
@@ -371,6 +349,7 @@ Ext.define('NextThought.controller.Chat', {
 
 		this.flaggedMenuItemClicked(i.getAt(btn.lastAction));
 	},
+
 
 	toolClicked: function(field) {
 		var a = field.action.toLowerCase(),
@@ -415,6 +394,7 @@ Ext.define('NextThought.controller.Chat', {
 		Socket.emit('chat_makeModerated', roomInfo.getId(), shouldModerate);
 	},
 
+
 	flagMessagesTo: function(user, dropData){
 		var u = [], m = [];
 		u.push(user.getId());
@@ -431,6 +411,7 @@ Ext.define('NextThought.controller.Chat', {
 		this.activeRooms[ri.getId()] = ri;
 	},
 
+
 	sendChangeMessages: function(oldRoomInfo, newRoomInfo) {
 		var oldOccupants = oldRoomInfo.get('Occupants'),
 			newOccupants = newRoomInfo.get('Occupants'),
@@ -445,16 +426,25 @@ Ext.define('NextThought.controller.Chat', {
 	},
 
 
-	openChatWindow: function(){
-		(this.getChatWindow() || Ext.create('widget.chat-window')).show();
-		//turn off any notifications
-		this.setChatNotification(false);
+	openChatWindow: function(roomInfo){
+		var w = this.getChatWindow(roomInfo);
+		if(!w){
+			w = Ext.widget({
+				xtype: 'chat-window',
+				roomInfoHash: IdCache.getIdentifier(roomInfo.getId()),
+				roomInfo: roomInfo
+			});
+		}
+
+		w.show();
 	},
 
-	friendEntryClicked: function(u) {
+
+	occupantClicked: function(u) {
 		//open a new tab to chat with this user...
 		this.enterRoom(u);
 	},
+
 
 	shadowClicked: function(cmp,user) {
 		var u = [],
@@ -469,9 +459,6 @@ Ext.define('NextThought.controller.Chat', {
 		Socket.emit('chat_shadowUsers',rid, u);
 	 },
 
-	groupEntryClicked: function(group){
-		this.enterRoom(group);
-	},
 
 	leaveRoom: function(room){
 		if (!room) {
@@ -494,9 +481,11 @@ Ext.define('NextThought.controller.Chat', {
 		}
 	},
 
+
 	replyPublic: function(msgCmp) {
 		msgCmp.showReplyToComponent().setChannel('DEFAULT');
 	},
+
 
 	replyWhisper: function(msgCmp) {
 		var message = msgCmp.message,
@@ -522,6 +511,7 @@ Ext.define('NextThought.controller.Chat', {
 		msgCmp.showReplyToComponent().setChannel('WHISPER', recipients.getKeys());
 	},
 
+
 	pinMessage: function(msgCmp) {
 		var m = msgCmp.message,
 			ri = this.activeRooms[m.get('ContainerId')];
@@ -533,7 +523,9 @@ Ext.define('NextThought.controller.Chat', {
 		this.postMessage(ri, {'channel': 'DEFAULT', 'action': 'clearPinned'}, null, 'META');
 	},
 
+
 	/* SERVER EVENT HANDLERS*/
+
 
 	onFailedToEnterRoom: function(ri){
 		if (this.getClassroom().isClassroom(ri)) {
@@ -541,9 +533,11 @@ Ext.define('NextThought.controller.Chat', {
 		}
 	},
 
+
 	onSocketDisconnect: function(){
 	   this.activeRooms = {};
 	},
+
 
 	onModerationChange: function(msg) {
 		var newRoomInfo = this.onMembershipOrModerationChanged(msg),
@@ -586,6 +580,7 @@ Ext.define('NextThought.controller.Chat', {
 		}
 	},
 
+
 	onMembershipOrModerationChanged: function(msg) {
 		var newRoomInfo = ParseUtils.parseItems([msg])[0],
 			oldRoomInfo = this.activeRooms[newRoomInfo.getId()];
@@ -615,6 +610,7 @@ Ext.define('NextThought.controller.Chat', {
 		*/
 		delete this.activeRooms[room.ID];
 	},
+
 
 	onMessageForAttention: function(mid) {
 		var id = IdCache.getIdentifier(mid),
@@ -657,6 +653,7 @@ Ext.define('NextThought.controller.Chat', {
 		});
 	},
 
+
 	onMessage: function(msg, opts) {
 		var m = ParseUtils.parseItems([msg])[0],
 			channel = m.get('channel'),
@@ -668,12 +665,6 @@ Ext.define('NextThought.controller.Chat', {
 		}
 
 		this.channelMap[channel].call(this, m, opts||{});
-
-		//notify if window is closed:
-		w = this.getChatWindow();
-		if (!w.isVisible()) {
-			this.setChatNotification(true);
-		}
 	},
 
 
@@ -717,26 +708,21 @@ Ext.define('NextThought.controller.Chat', {
 
 
 	onMessageDefaultChannel: function(msg, opts) {
-		var win = this.getChatWindow(),
-			cid = msg.get('ContainerId'),
+		var	cid = msg.get('ContainerId'),
+			win = this.getChatWindow(cid),
 			moderated = opts && opts.hasOwnProperty('moderated'),
 			tab,
 			log;
 
 		if(!win) {
+			alert('no window?');
+			console.log(msg);
 			return;
 		}
 
-		tab = this.getChatView(cid);
-		log = tab ? tab.down('chat-log-view[moderated=true]') : null;
+		log = win.down('chat-log-view[moderated=true]');
 
-		if(!tab) {
-			console.warn('message received for tab which no longer exists', msg, cid, win.items);
-			return;
-		}
-
-		win.down('tabpanel').setActiveTab(tab);
-		tab.down('chat-log-view[moderated='+moderated+']').addMessage(msg);
+		win.down('chat-log-view[moderated='+moderated+']').addMessage(msg);
 
 		if(!moderated && log) {
 			log.removeMessage(msg);
@@ -796,6 +782,7 @@ Ext.define('NextThought.controller.Chat', {
 		console.log('POLL channel message not supported yet');
 	},
 
+
 	onModeratedMessage: function(msg) {
 		var m = ParseUtils.parseItems([msg])[0],
 			o = {moderated:true};
@@ -807,6 +794,7 @@ Ext.define('NextThought.controller.Chat', {
 
 		this.onMessageDefaultChannel(m, o);
 	},
+
 
 	onEnteredRoom: function(msg) {
 		var roomInfo = msg && msg.isModel? msg : ParseUtils.parseItems([msg])[0],
@@ -837,9 +825,7 @@ Ext.define('NextThought.controller.Chat', {
 			this.getClassroom().onEnteredRoom(roomInfo);
 		}
 		else{
-			this.openChatWindow();
-			this.getChatWindow().addNewChat(roomInfo);
-			this.getChatWindow().doComponentLayout();
+			this.openChatWindow(roomInfo);
 		}
 	}
 

@@ -3,7 +3,9 @@ Ext.define('NextThought.controller.Groups', {
 
 	models: [
 		'Community',
-		'FriendsList'
+		'FriendsList',
+		'User',
+		'UserSearch'
 	],
 
 	stores: [
@@ -17,49 +19,7 @@ Ext.define('NextThought.controller.Groups', {
 	init: function() {
 		this.application.on('session-ready', this.onSessionReady, this);
 
-		this.control({
-			'groups-view-container toolbar button[createItem]':{
-				'click':function(){
-					var rec = Ext.create('NextThought.model.FriendsList');
-					Ext.widget({xtype: 'group-editor', record: rec}).show();
-				}
-			},
-
-			'groups-view-container toolbar button[deleteItem]':{
-				'click':function(){
-					var q = 'groups-view-container dataview';
-					Ext.each(Ext.ComponentQuery.query(q),function(v){
-						Ext.each(v.getSelectionModel().getSelection(), function(r){
-							r.destroy();
-						});
-					});
-
-					this.reloadGroups();
-				}
-			},
-
-			'groups-view-container dataview':{
-				'itemdblclick':function(a, rec){
-					if(rec.isModifiable()) {
-						Ext.widget({xtype: 'group-editor', record: rec}).show();
-					}
-				},
-				'selectionchange': function(a, sel){
-					var q = 'groups-view-container toolbar button[deleteItem]';
-					Ext.each(Ext.ComponentQuery.query(q),function(v){
-						if(sel.length) {
-							v.enable();
-						} else {
-							v.disable();
-						}
-					});
-				}
-			},
-
-			'group-editor button':{
-				'click': this.groupEditorButtonClicked
-			}
-		},{});
+		this.control({},{});
 
 		//Listen for changes of presence to notify the online/offline lists
 		var me = this;
@@ -84,11 +44,6 @@ Ext.define('NextThought.controller.Groups', {
 	},
 
 
-	reloadGroups: function(){
-		this.getFriendsListStore().load();
-	},
-
-
 	publishFriends: function(){
 		var store = this.getFriendsListStore(),
 			groups = Ext.getCmp('my-groups');
@@ -109,47 +64,47 @@ Ext.define('NextThought.controller.Groups', {
 	},
 
 
-	groupEditorButtonClicked: function(btn){
-		var win = btn.up('window'),
-			frm = win.down('form'),
-			str = win.store,
-			rec = win.record,
-			names = [],
-			values, n;
-
-
-		if(btn.actionName === 'save') {
-			if(!frm.getForm().isValid()){
-				return;
-			}
-
-			win.el.mask('Saving...');
-			values = frm.getValues();
-			Ext.each(str.data.items, function(u){ names.push(u.get('Username')); });
-
-			if(rec.phantom){
-				n = values.name;
-				n = n.replace(/[^0-9A-Za-z\-@]/g, '.');
-				n = n.replace(/^[\.\-_]+/g, '');
-				rec.set('Username',n+'@nextthought.com');
-			}
-			rec.set('realname', values.name);
-			rec.set('friends', names);
-			rec.save({
-				scope: this,
-				success: function(){
-					this.reloadGroups();
-					win.close();
-				},
-				failed: function(){
-					win.el.unmask();
-				}
-			});
-			return;
-		}
-
-		win.close();
-	},
+//	groupEditorButtonClicked: function(btn){
+//		var win = btn.up('window'),
+//			frm = win.down('form'),
+//			str = win.store,
+//			rec = win.record,
+//			names = [],
+//			values, n;
+//
+//
+//		if(btn.actionName === 'save') {
+//			if(!frm.getForm().isValid()){
+//				return;
+//			}
+//
+//			win.el.mask('Saving...');
+//			values = frm.getValues();
+//			Ext.each(str.data.items, function(u){ names.push(u.get('Username')); });
+//
+//			if(rec.phantom){
+//				n = values.name;
+//				n = n.replace(/[^0-9A-Za-z\-@]/g, '.');
+//				n = n.replace(/^[\.\-_]+/g, '');
+//				rec.set('Username',n+'@nextthought.com');
+//			}
+//			rec.set('realname', values.name);
+//			rec.set('friends', names);
+//			rec.save({
+//				scope: this,
+//				success: function(){
+//					this.reloadGroups();
+//					win.close();
+//				},
+//				failed: function(){
+//					win.el.unmask();
+//				}
+//			});
+//			return;
+//		}
+//
+//		win.close();
+//	},
 
 	incomingPresenceChange: function(name, presence){
 		var offline = Ext.getCmp('offline-contacts'),

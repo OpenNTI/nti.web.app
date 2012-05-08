@@ -20,6 +20,7 @@ Ext.define('NextThought.view.account.contacts.Card',{
 	],
 
 	childEls: ['body'],
+
 	getTargetEl: function () {
 		return this.body;
 	},
@@ -42,6 +43,41 @@ Ext.define('NextThought.view.account.contacts.Card',{
 			status: 'Number Theory'
 		});
 
+	},
+
+	afterRender: function(){
+		this.callParent(arguments);
+
+		var me = this, e = this.getEl();
+
+		e.on('click', this.clicked, this);
+
+		this.dragZone = Ext.create('Ext.dd.DragZone', e, {
+
+			getDragData: function(e) {
+				var sourceEl = e.getTarget('.contact-card'), d;
+				if (sourceEl) {
+					d = sourceEl.cloneNode(true);
+					Ext.fly(d).select('.activities').remove();
+					Ext.fly(d).select('.status').remove();
+					d.id = Ext.id();
+					return this.dragData = {
+						sourceEl: sourceEl,
+						repairXY: Ext.fly(sourceEl).getXY(),
+						ddel: d,
+						username: me.user.getId()
+					};
+				}
+			},
+
+			getRepairXY: function() {
+				return this.dragData.repairXY;
+			}
+		});
+	},
+
+	clicked: function(){
+		this.fireEvent('click', this, this.user.getId());
 	}
 
 });

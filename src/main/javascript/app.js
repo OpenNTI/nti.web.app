@@ -23,7 +23,6 @@ Ext.application({
 		'FilterControl',
 		'Google',
 		'Groups',
-		'Home',
 		'Navigation',
 		'Library',
 		'Search',
