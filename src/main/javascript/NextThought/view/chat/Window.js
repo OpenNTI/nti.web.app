@@ -41,6 +41,10 @@ Ext.define('NextThought.view.chat.Window',{
 	initComponent: function(){
 		this.callParent(arguments);
 
+		this.setPosition(
+			Ext.dom.Element.getViewportWidth() - 420,
+			Ext.dom.Element.getViewportHeight() - 380 );
+
 		if(!this.roomInfo){
 			Ext.Error.raise('roomInfo required');
 		}
@@ -81,8 +85,6 @@ Ext.define('NextThought.view.chat.Window',{
 			delegate: '#' + Ext.escapeId(this.id) + '-body'
 		});
 		this.relayEvents(this.dd, ['dragstart', 'drag', 'dragend']);
-
-
 	},
 
 
