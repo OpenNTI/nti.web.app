@@ -448,7 +448,6 @@ Ext.define('NextThought.util.AnnotationUtils',{
 
 
 	buildRangeFromRecord: function(r, root) {
-
 		try {
 			var endElement = this.getNodeFromXPath(r.get('endXpath'),root),
 				startElement = this.getNodeFromXPath(r.get('startXpath'), root),
@@ -476,7 +475,7 @@ Ext.define('NextThought.util.AnnotationUtils',{
 
 
 	getAnchors: function getAnchors(root){
-		return Ext.Array.unique(Ext.query('#NTIContent A[name], #NTIContent [id]',root));
+		return Ext.Array.unique(Ext.query('#NTIContent A[name]',root));
 	},
 
 
