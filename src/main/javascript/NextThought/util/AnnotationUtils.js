@@ -475,7 +475,7 @@ Ext.define('NextThought.util.AnnotationUtils',{
 
 
 	getAnchors: function getAnchors(root){
-		return Ext.Array.unique(Ext.query('#NTIContent A[name], #NTIContent [id]',root));
+		return Ext.Array.unique(Ext.query('#NTIContent A[name]',root));
 	},
 
 
