@@ -225,7 +225,6 @@ Ext.define('NextThought.view.annotations.Highlight', {
 			s = RectUtils.merge(this.selection.getClientRects(),this.getLineHeight(),this.getBlockWidth()),
 			l = s.length,
 			i = l-1,
-			rgba = Color.toRGBA(this.getColor()),
 			me = this,
 			ox = me.offsets.left;
 
@@ -242,7 +241,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
 
 		//stage draw
 		for(; i>=0; i--){
-			this.self.enqueue(this, this.drawRect(s[i], rgba));
+			this.self.enqueue(this, this.drawRect(s[i], '#a4d8f6'));
 		}
 		this.self.enqueue(this, function(){ delete me.rendering; });
 		this.self.renderCanvas(this.prefix);//buffered
