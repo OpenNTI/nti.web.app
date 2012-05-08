@@ -71,7 +71,7 @@ Ext.define('NextThought.controller.Annotations', {
 			delete this.definition;
 		}
 
-		this.definition = Ext.widget('window',{
+		this.definition = Ext.widget('nti-window',{
 			title: 'Define: '+term,
 			closeAction: 'destroy',
 			width: 300,
@@ -79,12 +79,21 @@ Ext.define('NextThought.controller.Annotations', {
 			layout: 'fit',
 			items: {
 				xtype: 'component',
+				cls: 'definition',
 				autoEl: {
 					tag: 'iframe',
 					src: url,
 					frameBorder: 0,
 					marginWidth: 0,
-					marginHeight: 0
+					marginHeight: 0,
+//					scrolling: 'no',
+					seamless: true,
+					transparent: true,
+					allowTransparency: true,
+					style: 'overflow: hidden'
+				},
+				xhooks: {
+
 				}
 			}
 		}).show().center();

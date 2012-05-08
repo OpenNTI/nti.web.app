@@ -23,9 +23,10 @@ Ext.define( 'NextThought.view.annotations.ShareWith', {
 	
 	initComponent: function(){
 		var m = this,
-			u =  NextThought.cache.UserRepository.getUser(m.record.get('Creator')),
+//			u =  NextThought.cache.UserRepository.getUser(m.record.get('Creator')),
+			u = $AppConfig.userObject,
 			a = u.get('avatarURL'),
-			n = u.get('realname'),
+			n = u.getName(),
 			t = m.record.getModelName(),
 			sw= m.record.get('sharedWith'),
 			readOnly = !m.record.isModifiable(),
@@ -44,17 +45,13 @@ Ext.define( 'NextThought.view.annotations.ShareWith', {
 				{ html:'<span style="font-size: 16pt; font-weight: normal">'+title+'</span>'},
 				{ html:'<img src="'+a+'" width=24 height=24 valign=middle atl="'+n+'"/> '+t+' by '+n+':<hr size=1/>'},
 				{ html:content, padding: '0 0 0 15px'},
-				{ html:'<hr size=1/>'},
-				{ xtype: 'sharewith', value: sw, allowBlank: true, readOnly: readOnly }
+				{ html:'<hr size=1/>'}
+				//{ xtype: 'sharewith', value: sw, allowBlank: true, readOnly: readOnly }
 			]
 		});
 
-		if(readOnly){
-			m.down('button[isOk]').destroy();
-		}
-	},
-
-	show: function(){
-		this.callParent(arguments);
+//		if(readOnly){
+//			m.down('button[isOk]').destroy();
+//		}
 	}
 });

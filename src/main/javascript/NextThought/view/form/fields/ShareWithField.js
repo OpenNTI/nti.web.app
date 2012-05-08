@@ -15,10 +15,17 @@ Ext.define('NextThought.view.form.fields.ShareWithField', {
 	emptyText: 'Share with...',
 	items: [
 		{//contain the tokens
+			xtype: 'container',
 			cls: 'share-with-selected-tokens',
 			layout: 'auto',
 			border: false,
 			margin: '0 0 10px 0'
+		},{
+			xtype: 'usersearchinput',
+			emptyText: this.emptyText,
+			allowBlank: true,
+			multiSelect: false,
+			enableKeyEvents: true
 		}
 	],
 
@@ -26,13 +33,7 @@ Ext.define('NextThought.view.form.fields.ShareWithField', {
 		this.callParent(arguments);
 		this.xtypes.push('field');
 		this.selections = [];
-		this.inputField = this.add({
-			xtype: 'usersearchinput',
-			emptyText: this.emptyText,
-			allowBlank: true,
-			multiSelect: false,
-			enableKeyEvents: true
-		});
+		this.inputField = this.down('usersearchinput');
 
 		this.setReadOnly(!!this.readOnly);
 
@@ -76,14 +77,10 @@ Ext.define('NextThought.view.form.fields.ShareWithField', {
 
 	initValue: function(){
 		var m = this;
-		Ext.each(m.value, function(o){
-			var u = NextThought.cache.UserRepository.getUser(o);
-			if(u) {
+		UserRepository.prefetchUser(m.value, function(users){
+			Ext.each(users, function(u){
 				m.addSelection(u);
-			}
-			else{
-				m.addSelection(Ext.create('model.unresolved-user',{Username: o}));
-			}
+			});
 		});
 	},
 
