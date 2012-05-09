@@ -64,25 +64,29 @@ Ext.define('NextThought.controller.Search', {
 
 		//get the groups storted by type, cause the display to chunk them.
 		var resultGroups = store.getGroups(),
-			category, result, loc,
+			result, loc, results = [],
 			menu = Ext.getCmp('search-results');
 
 		Ext.each(resultGroups, function(group){
-			console.log('got a group for ' + group.name, 'with children', group.children);
-			category = Ext.widget('search-result-category', {category: this.sanitizeCategoryName(group.name)});
+			result = {xtype:'search-result-category', category: this.sanitizeCategoryName(group.name), items:[]};
+			results.push(result);
+			result = result.items;
+
 			Ext.each(group.children, function(hit){
 				loc = LocationProvider.getLocation(hit.get('ContainerId'));
-				result = Ext.widget('search-result', {
+				result.push( {
+					xtype: 'search-result',
 					title: loc ? loc.title.get('title') : 'Untitled',
 					section: loc ? loc.label : 'Unlabeled',
-					snippet: this.addSpansToSnippet(hit.get('Snippet'), searchVal),
+					snippet: hit.get('Snippet'),
+					term: searchVal,
 					containerId: hit.get('ContainerId')
 				});
-				category.addResult(result);
 			}, this);
-			menu.add(category);
 		}, this);
 
+		menu.removeAll(true);
+		menu.add(results);
 		//show results...
 		menu.hide().show();
 	},
@@ -96,25 +100,20 @@ Ext.define('NextThought.controller.Search', {
 	},
 
 
-	addSpansToSnippet: function(snippet, searchVal) {
-		var u = searchVal.toUpperCase(),
-			re = new RegExp(u, 'g');
-		return snippet.replace(re, '<span>'+u+'</span>');
-	},
-
-
 	searchForValue: function(value) {
 		if(!value || value.length < 4){return;}
 
 		var s = this.getHitStore(),
 			filter = this.modelFilter,
+			partial = this.doPartialSearch,
 			rootUrl = $AppConfig.service.getUserUnifiedSearchURL(),
 			loc = LocationProvider.currentNTIID || 'noNTIID',
 			url = [
 				rootUrl,
 				loc,
 				'/',
-				value
+				value,
+				partial? '*':''
 			];
 
 		//clear old results from both store and search results.
@@ -123,7 +122,8 @@ Ext.define('NextThought.controller.Search', {
 
 		s.clearFilter();
 		if(filter){
-			s.filter([{filterFn: function(item) { return filter.test(item); }} ]);
+			s.filter([{filterFn: function(item) {
+				return filter.test(item); }} ]);
 		}
 		s.proxy.url = url.join('');
 		s.on('load', Ext.bind(this.storeLoad, this, [value], true), this, {single: true});
@@ -143,6 +143,7 @@ Ext.define('NextThought.controller.Search', {
 			everything = menu.down('[isEverything]').checked,
 			searchValue = this.getSearchField().getValue();
 
+		this.doPartialSearch = menu.down('[doPartialSearch]').checked;
 		this.modelFilter = new NextThought.FilterGroup(menu.getId(),NextThought.FilterGroup.OPERATION_UNION);
 
 		Ext.each(allItems, function(item){

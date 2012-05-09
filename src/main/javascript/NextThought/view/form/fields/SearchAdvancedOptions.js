@@ -31,14 +31,15 @@ Ext.define('NextThought.view.form.fields.SearchAdvancedOptions',{
 		{ cls: 'type-filter bookmarks', text: 'Bookmarks', model: 'Bookmark' },
 		{ cls: 'type-filter contacts', text: 'Contacts', model: 'Contact' },
 		{ xtype: 'labeledseparator', text: 'Return' },
-		{ cls: 'return-type', group: 'return-type', hideOnClick: false, text: 'Exact Matches' },
-		{ cls: 'return-type', group: 'return-type', hideOnClick: false, text: 'Partial Matches', checked: true }
+		{ cls: 'return-type', group: 'return-type', hideOnClick: false, text: 'Exact Matches', checked: true },
+		{ cls: 'return-type', group: 'return-type', hideOnClick: false, text: 'Partial Matches', doPartialSearch: true }
 	],
 
 	initComponent: function(){
 		this.callParent(arguments);
 		this.filterChanged = false;
 		this.on('click',this.handleClick,this);
+		this.fireEvent('changed', this);//set the intial filter
 	},
 
 	handleClick: function(menu, item, e){

@@ -17,34 +17,22 @@ Ext.define('NextThought.view.menus.search.ResultCategory',{
 	},
 
 	initComponent: function(){
+		this.fullResults = this.items.slice();
+
+		if(this.items.length > this.MAX_RESULTS_AT_FIRST){
+			this.items.splice(this.MAX_RESULTS_AT_FIRST);
+			this.items.push({xtype: 'search-more'});
+		}
+
 		this.callParent(arguments);
 		this.renderData = Ext.copyTo({},this,'category');
 	},
 
 
-	addResult: function(r) {
-		if (!this.fullResults){
-			this.fullResults = [];
-		}
-		this.fullResults.push(r);
-
-		if (this.fullResults.length <= this.MAX_RESULTS_AT_FIRST) {
-			this.add(r);
-		}
-		else if (this.fullResults.length === this.MAX_RESULTS_AT_FIRST + 1) {
-			this.add({xtype: 'search-more'});
-		}
-	},
-
-
 	showAll: function(){
-		var i;
-
-		//remove showAll if its there
-		this.remove(this.down('search-more'));
-
-		for (i = this.MAX_RESULTS_AT_FIRST; i < this.fullResults.length; i++) {
-			this.add(this.fullResults[i]);
-		}
+		if(!this.fullResults){return;}
+		this.removeAll(true);
+		this.add(this.fullResults);
+		delete this.fullResults;
 	}
 });
