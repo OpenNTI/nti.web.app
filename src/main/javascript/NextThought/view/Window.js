@@ -11,12 +11,20 @@ Ext.define('NextThought.view.Window',{
 	frame: false,
 	header: false,
 
+	constrainHeader: false,
 	liveDrag: true,
 
 	renderSelectors: {
 		closeEl: 'img.tool.close',
 		minimizeEl: 'img.tool.minimize'
 	},
+
+
+	constructor: function(config){
+		delete config.title;
+		return this.callParent([config]);
+	},
+
 
 	initDraggable: function() {
 		this.dd = new Ext.util.ComponentDragger(this, {
@@ -34,6 +42,9 @@ Ext.define('NextThought.view.Window',{
 		this.callParent(arguments);
 		this.closeEl.on('click', this.close, this);
 		this.minimizeEl.on('click', this.minimize, this);
+		if(!this.minimizable){
+			this.minimizeEl.remove();
+		}
 	}
 
 }, function(){

@@ -181,13 +181,17 @@ Ext.define('NextThought.Library', {
 		return undefined;
 	},
 
-
+	/**
+	 * TODO: move to NextThought.providers.Location
+	 */
 	findLocationTitle: function(containerId){
 		var l = this.findLocation(containerId);
 		return l? l.location.getAttribute('label') : 'Not found';
 	},
 
-
+	/**
+	 * TODO: move to NextThought.providers.Location
+	 */
 	findLocation: function(containerId) {
 		var result = null;
 		this.each(function(o){
@@ -200,7 +204,9 @@ Ext.define('NextThought.Library', {
 		return result;
 	},
 
-
+	/**
+	 * TODO: move to NextThought.providers.Location
+	 */
 	isOrDecendantOf: function(parentId, potentialChild) {
 		if (parentId === potentialChild) {
 			return true;
@@ -222,7 +228,9 @@ Ext.define('NextThought.Library', {
 		return found;
 	},
 
-
+	/**
+	 * TODO: move to NextThought.providers.Location
+	 */
 	getLineage: function(containerId){
 		var leaf = this.findLocation(containerId) || {},
 			node = leaf.location,
@@ -240,7 +248,9 @@ Ext.define('NextThought.Library', {
 		return lineage;
 	},
 
-
+	/**
+	 * TODO: move to NextThought.providers.Location
+	 */
 	resolveLocation: function(toc, title, containerId) {
 		if( toc.documentElement.getAttribute( 'ntiid' ) === containerId ) {
 			return {toc:toc, location:toc.documentElement, NTIID: containerId, ContentNTIID: containerId, title: title};
@@ -248,7 +258,9 @@ Ext.define('NextThought.Library', {
 		return this.recursiveResolveLocation( containerId, toc, title);
 	},
 
-
+	/**
+	 * TODO: move to NextThought.providers.Location
+	 */
 	recursiveResolveLocation: function recurse( containerId, elt, title ) {
 		var elts = elt.getElementsByTagName( 'topic' ), ix, child, cr;
 		for( ix = 0; ix < elts.length; ix++ ) {
@@ -274,6 +286,6 @@ Ext.define('NextThought.Library', {
 
 },
 function(){
-	window.Library = NextThought.Library;
+	window.Library = this;
 }
 );

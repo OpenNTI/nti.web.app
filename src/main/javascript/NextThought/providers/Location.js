@@ -2,7 +2,8 @@ Ext.define('NextThought.providers.Location', {
 	singleton: true,
 	mixins: { observable: 'Ext.util.Observable' },
 	requires: [
-		'NextThought.Library'
+		'NextThought.Library',
+		'NextThought.view.video.Window'
 	],
 
 	constructor: function(){
@@ -111,7 +112,6 @@ Ext.define('NextThought.providers.Location', {
 	},
 
 
-
 	getNavigationInfo: function(ntiid) {
 		var loc = Library.findLocation(ntiid),
 			toc = loc? loc.toc : null,
@@ -137,9 +137,102 @@ Ext.define('NextThought.providers.Location', {
 		}
 
 		return info;
+	},
+
+
+	getRelated: function(ntiid){
+		var me = this,
+			map = {},
+			info = Library.findLocation(ntiid || me.currentNTIID),
+			related = info ? info.location.getElementsByTagName('Related') : null;
+
+		function findIcon(n) {
+			return !n ? null : n.getAttribute('icon') || findIcon(n.parentNode) || '';
+		}
+
+		Ext.each(related, function(r){
+			r = r.firstChild;
+			do{
+				if(!r.tagName) {
+					continue;
+				}
+
+				var tag= r.tagName,
+					id = r.getAttribute('ntiid'),
+					type = r.getAttribute('type'),
+					qual = r.getAttribute('qualifier'),
+
+					target = tag==='page' ? Library.findLocation(id) : null,
+					location = target? target.location : null,
+
+					label = location? location.getAttribute('label') : r.getAttribute('title'),
+					href = (location? location : r ).getAttribute('href');
+
+				if(!map[id]){
+					map[id] = {
+						id: id,
+						type: type,
+						label: label,
+						href: href,
+						qualifier: qual,
+						root: info.title.get('root'),
+						icon: findIcon(r)
+					};
+				}
+			}
+			while(!!(r = r.nextSibling));
+
+		},this);
+
+		return map;
+
+	},
+
+
+	relatedItemHandler: function(el){
+		var m = el.relatedInfo;
+
+		if(m.type==='index'||m.type==='link') {
+			LocationProvider.setLocation(m.id);
+		}
+		else if (/http...*/.test(m.href)){
+			Ext.widget('window',{
+				title: m.label,
+				closeAction: 'destroy',
+				width: 646,
+				height: 396,
+				layout: 'fit',
+				items: {
+					xtype: 'component',
+					autoEl: {
+						tag: 'iframe',
+						src: m.href,
+						frameBorder: 0,
+						marginWidth: 0,
+						marginHeight: 0,
+						allowfullscreen: true
+					}
+				}
+			}).show();
+		}
+		else if(m.type==='video'){
+			Ext.create('widget.video-window', {
+				title: m.label,
+				modal: true,
+				src:[{
+					src: $AppConfig.server.host+m.root+m.href,
+					type: 'video/mp4'
+				}]
+			}).show();
+
+		}
+		else {
+			console.error('No handler for type:',m.type, m);
+		}
 	}
 
 
 }, function(){
 	window.LocationProvider = this;
+	ContentAPIRegistry.register('NTIRelatedItemHandler',this.relatedItemHandler,this);
 });

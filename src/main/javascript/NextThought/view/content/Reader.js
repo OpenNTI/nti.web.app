@@ -112,8 +112,6 @@ Ext.define('NextThought.view.content.Reader', {
 	},
 
 
-
-
 	initContentFrame: function(){
 		console.log('frame initialized, setting up...');
 		var me = this,
@@ -228,9 +226,11 @@ Ext.define('NextThought.view.content.Reader', {
 		};
 	},
 
+
 	onContextMenuHandler: function(){
 		return this.mixins.annotations.onContextMenuHandler.apply(this,arguments);
 	},
+
 
 	checkContentFrames: function(){
 		var me = this,
@@ -311,6 +311,7 @@ Ext.define('NextThought.view.content.Reader', {
 
 	},
 
+
 	checkFrame: function(){
 		var doc = this.getDocumentElement(),
 			body = Ext.get(doc.getElementById('NTIContent')),
@@ -328,6 +329,7 @@ Ext.define('NextThought.view.content.Reader', {
 		}
 	},
 
+
 	syncFrame: function(){
 		var doc = this.getDocumentElement(),
 			b = Ext.get(doc.getElementById('NTIContent')),
@@ -344,6 +346,7 @@ Ext.define('NextThought.view.content.Reader', {
 
 		this.lastFrameSync = Ext.Date.now();
 	},
+
 
 	getIframe: function(){
 		var el = this.items.first().el,
@@ -363,21 +366,47 @@ Ext.define('NextThought.view.content.Reader', {
 		body.update(html);
 		body.setStyle('background','transparent');
 
+		this.insertRelatedLinks(body.query('#NTIContent .chapter.title')[0],doc);
 
+		//TODO: solidify our story about content scripts (reset the iframe after navigating to a page that has scripts?)
 		Ext.each(body.query('script'),function(s){
 			s.parentNode.removeChild(s);
-
 			var e = doc.createElement('script'); e.src = s.src;
-
 			head.appendChild(e);
 		});
-
 
 		this.checkContentFrames();
 
 		clearInterval(this.syncInterval);
 		this.syncInterval = setInterval(this.checkFrame,100);
 	},
+
+
+	insertRelatedLinks: function(position,doc){
+		var tpl = this.relatedTemplate, last = null,
+			container = Ext.DomHelper.insertAfter(position,{
+				tag: 'div',
+				cls:'injected-related-items',
+				html:'Related Topics: '
+			});
+
+		if(!tpl){
+			tpl = Ext.DomHelper.createTemplate(
+					'<a href="{0}" onclick="NTIRelatedItemHandler(this);return false;" class="related">{1}</a>, '
+			);
+			tpl.compile();
+			this.relatedTemplate = tpl;
+		}
+
+		Ext.Object.each(LocationProvider.getRelated(),function(key,value){
+			last = tpl.append(container,[key,value.label]);
+			last.previousSibling.relatedInfo = value;
+		});
+		if(last){
+			container.removeChild(last);
+		}
+	},
+
 
 	getDocumentElement: function(){
 		var iframe, win, dom, doc = this.contentDocumentElement;
@@ -760,7 +789,7 @@ turn off html5 player
 			target = hash[1],
 			whref = window.location.href.split('#')[0];
 
-		if (!r || whref+'#' === r) {
+		if (el.getAttribute('onclick') || !r || whref+'#' === r) {
 			return;
 		}
 
