@@ -384,11 +384,24 @@ Ext.define('NextThought.view.content.Reader', {
 
 	insertRelatedLinks: function(position,doc){
 		var tpl = this.relatedTemplate, last = null,
+			related = LocationProvider.getRelated(),
+			container;
+
+		if(Object.keys(related).length === 0){
+			return;
+		}
+
+		try {
 			container = Ext.DomHelper.insertAfter(position,{
 				tag: 'div',
 				cls:'injected-related-items',
 				html:'Related Topics: '
 			});
+		}
+		catch(e){
+			console.warn('no header?');
+			return;
+		}
 
 		if(!tpl){
 			tpl = Ext.DomHelper.createTemplate(
@@ -398,7 +411,7 @@ Ext.define('NextThought.view.content.Reader', {
 			this.relatedTemplate = tpl;
 		}
 
-		Ext.Object.each(LocationProvider.getRelated(),function(key,value){
+		Ext.Object.each(related,function(key,value){
 			last = tpl.append(container,[key,value.label]);
 			last.previousSibling.relatedInfo = value;
 		});
