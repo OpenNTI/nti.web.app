@@ -1,7 +1,6 @@
 #NTIContent {
 	.injected-related-items {
-		font-weight: bolder;
-		font-size: smaller;
+		font-size: 14px;
 		a.related {
 			color: #84b93d;
 		}
@@ -89,13 +88,15 @@
 	.page-contents {
 		color: #757474;
 		margin-left: 80px;
+		font-size: 14px !important;
+		font-weight: normal !important;
 
 		.chapter.title,
 		.title {
 			position: relative;
 			left: -85px;
 			display: block;
-			font-size: 180%;
+			font-size: 31px;
 			font-weight: 200;
 			border: none !important;
 			span.ref{

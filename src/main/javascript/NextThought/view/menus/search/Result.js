@@ -21,10 +21,11 @@ Ext.define('NextThought.view.menus.search.Result',{
 		].join(''), 'igm');
 
 		function fn(original,before,group,after){
+			var context = 15;
 			return [
-				before.length > 30 ? '...'+before.substring(before.length-30) : before,
+				before.length > context ? '...'+before.substring(before.length-context) : before,
 				'<span>',group,'</span>',
-				Ext.String.ellipsis(after,30,true)
+				Ext.String.ellipsis(after,context,true)
 			].join('');
 		}
 
