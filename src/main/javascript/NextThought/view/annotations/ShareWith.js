@@ -34,8 +34,10 @@ Ext.define( 'NextThought.view.annotations.ShareWith', {
 			xtype: 'container',
 			layout:{ type: 'hbox', pack: 'end' },
 			items: [
-				{xtype: 'button', text: 'Save'},
-				{xtype: 'button', text: 'Cancel'}
+				{xtype: 'button', text: 'Save', action: 'save'},
+				{xtype: 'button', text: 'Cancel', handler: function(btn){
+					btn.up('window').close();
+				}}
 			]
 		}
 	],

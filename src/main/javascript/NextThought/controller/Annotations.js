@@ -57,8 +57,8 @@ Ext.define('NextThought.controller.Annotations', {
 			'noteeditor button[action=discuss]':{ 'click': this.onDiscussNote },
 			'noteeditor button[action=cancel]':{ 'click': this.onCancelNote },
 
-			'share button':{
-				'click': this.shareWithButton
+			'share button[action=save]':{
+				'click': this.onShareWithSaveClick
 			}
 		},{});
 	},
@@ -100,20 +100,10 @@ Ext.define('NextThought.controller.Annotations', {
 	},
 
 
-	shareWithButton: function(btn){
+	onShareWithSaveClick: function(btn){
 		var win = btn.up('window'),
-			form= win.down('form'),
 			shbx= win.down('sharewith'),
 			rec = win.record;
-
-		if(btn.isCancel){
-			win.close();
-			return;
-		}
-
-		if(!form.getForm().isValid()){
-			return false;
-		}
 
 		win.el.mask('Sharing...');
 
