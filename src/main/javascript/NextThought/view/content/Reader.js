@@ -404,6 +404,8 @@ Ext.define('NextThought.view.content.Reader', {
 		});
 		if(last){
 			container.removeChild(last);
+		} else {
+			Ext.fly(container).remove();
 		}
 	},
 
