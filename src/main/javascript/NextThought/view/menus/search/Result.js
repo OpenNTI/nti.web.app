@@ -13,6 +13,25 @@ Ext.define('NextThought.view.menus.search.Result',{
 		this.renderData = Ext.copyTo({},this,'title,section,snippet');
 	},
 
+	beforeRender: function() {
+		var re = new RegExp([
+			'(.*)\\b(',
+			RegExp.escape(this.term),
+			')(.*)'
+		].join(''), 'igm');
+
+		function fn(original,before,group,after){
+			return [
+				before.length > 30 ? '...'+before.substring(before.length-30) : before,
+				'<span>',group,'</span>',
+				Ext.String.ellipsis(after,30,true)
+			].join('');
+		}
+
+		this.renderData.snippet = this.snippet.replace(re, fn);
+		return this.callParent(arguments);
+	},
+
 	afterRender: function() {
 		this.callParent(arguments);
 		this.getEl().on({

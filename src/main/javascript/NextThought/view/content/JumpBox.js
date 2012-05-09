@@ -11,8 +11,8 @@ Ext.define('NextThought.view.content.JumpBox',{
 
 	renderTpl: [
 		'<div class="shrink-wrap">',
-			'<div class="label"><span>chapter</span></div>',
-			'<div class="menu"><span>section</span></div>',
+			'<div class="label"><span>{chapter}</span></div>',
+			'<div class="menu"><span>{section}</span></div>',
 		'</div>'
 	],
 
@@ -33,6 +33,11 @@ Ext.define('NextThought.view.content.JumpBox',{
 				}
 			}
 		};
+
+		Ext.applyIf(me.renderData,{
+			chapter: 'chapter',
+			section: 'section'
+		});
 
 		me.callParent(arguments);
 		me.chapterMenu = Ext.widget('jump-menu',Ext.apply({},cfg));
@@ -67,6 +72,7 @@ Ext.define('NextThought.view.content.JumpBox',{
 			chapters = [],
 			currentChapter,
 			currentSection;
+
 		if(!loc || !loc.NTIID){
 			this.canShow = false;
 			this.hide();
@@ -106,9 +112,19 @@ Ext.define('NextThought.view.content.JumpBox',{
 		this.sectionMenu.removeAll();
 		this.sectionMenu.add(sections);
 
-		this.labelEl.update(currentChapter.getAttribute('label'));
-		this.menuEl.update(currentSection?currentSection.getAttribute('label'):'Chapter Index');
-		this.ownerCt.updateLayout();
+		currentChapter = currentChapter.getAttribute('label');
+		currentSection = currentSection?currentSection.getAttribute('label'):'Chapter Index';
+
+		if(this.rendered) {
+			this.labelEl.update(currentChapter);
+			this.menuEl.update(currentSection);
+			this.ownerCt.updateLayout();
+		} else {
+			Ext.apply(this.renderData,{
+				chapter: currentChapter,
+				section: currentSection
+			});
+		}
 	},
 
 
