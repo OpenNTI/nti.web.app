@@ -86,9 +86,10 @@ Ext.define( 'NextThought.view.annotations.Transcript', {
 		try{
 			var me = this,
 				a = me.anchorNode,
-				ox = me.offsets.left;
+				ox = me.offsets.left+65;
 
 			if ( me.img && a ) {
+				ox -= Ext.fly(me.img).getWidth();
 				// If the page is empty of content, there may not be an anchor node
 				Ext.get(me.img).setStyle({left: ox+'px', top: a.getTop()+'px'});
 			}

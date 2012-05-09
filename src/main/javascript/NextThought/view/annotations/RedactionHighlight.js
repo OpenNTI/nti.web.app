@@ -160,9 +160,7 @@ Ext.define('NextThought.view.annotations.RedactionHighlight', {
 
 		var nib = Ext.get(this.img),
 			r = this.selection.getBoundingClientRect(),
-			ox = this.offsets.left;
-
-		console.log('left:', ox+'px', 'top:', r.top+'px');
+			ox = (this.offsets.left+65)-nib.getWidth();
 
 		//move nib
 		nib.setStyle({
