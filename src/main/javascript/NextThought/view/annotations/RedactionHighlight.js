@@ -285,16 +285,16 @@ Ext.define('NextThought.view.annotations.RedactionHighlight', {
 		if(nodeEndToHighlightStart < 0){
 			return 0; //node completely before
 		}
-		else if(nodeStartToHighlightStart < 0 && nodeEndToHighlightStart > 0 && nodeEndToHighlightEnd < 0){
+		else if(nodeStartToHighlightStart < 0 && nodeEndToHighlightStart > 0 && nodeEndToHighlightEnd <= 0){
 			return 1; //node starts before ends in
 		}
-		else if(nodeStartToHighlightStart > 0 && nodeStartToHighlightEnd < 0 && nodeEndToHighlightEnd > 0){
+		else if(nodeStartToHighlightStart >= 0 && nodeStartToHighlightEnd < 0 && nodeEndToHighlightEnd > 0){
 			return 3; //node starts in ends after
 		}
 		else if(nodeStartToHighlightEnd > 0){
 			return 4; //node is after
 		}
-		else if(nodeStartToHighlightStart < 0 && nodeEndToHighlightEnd > 0){
+		else if(nodeStartToHighlightStart <= 0 && nodeEndToHighlightEnd >= 0){
 			return 5; //node encloses range
 		}
 		else{
