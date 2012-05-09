@@ -359,7 +359,7 @@ Ext.define('NextThought.view.content.Reader', {
 	/** @private */
 	setContent: function(html) {
 		var doc = this.getDocumentElement(),
-			body = Ext.get(doc.body || doc.documentElement),
+			body = Ext.get(doc.body),
 			head = doc.getElementsByTagName('head')[0];
 		this.getIframe().setHeight(0);
 
@@ -385,22 +385,29 @@ Ext.define('NextThought.view.content.Reader', {
 	insertRelatedLinks: function(position,doc){
 		var tpl = this.relatedTemplate, last = null,
 			related = LocationProvider.getRelated(),
-			container;
+			container = {
+				tag: 'div',
+				cls:'injected-related-items',
+				html:'Related Topics: '
+			};
 
 		if(Object.keys(related).length === 0){
 			return;
 		}
 
 		try {
-			container = Ext.DomHelper.insertAfter(position,{
-				tag: 'div',
-				cls:'injected-related-items',
-				html:'Related Topics: '
-			});
+			container = Ext.DomHelper.insertAfter(position,container);
 		}
 		catch(e){
-			console.warn('no header?');
-			return;
+			console.warn('no header? okay...');
+			try {
+				position = Ext.fly(doc.body).query('#NTIContent .page-contents')[0];
+				container = Ext.DomHelper.insertFirst(position,container);
+			}
+			catch(ffs){
+				console.error('what now?!',e, ffs);
+				return;
+			}
 		}
 
 		if(!tpl){
@@ -437,6 +444,10 @@ Ext.define('NextThought.view.content.Reader', {
 			// WebKit & Gecko don't natively have this, so we're populating it
 			if(!doc.parentWindow){
 				doc.parentWindow = win;
+			}
+
+			if(!doc.body){
+				doc.body = doc.documentElement;
 			}
 			this.contentDocumentElement = doc;
 		}
