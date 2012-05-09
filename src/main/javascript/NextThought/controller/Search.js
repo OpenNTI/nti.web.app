@@ -3,7 +3,9 @@ Ext.define('NextThought.controller.Search', {
 
 	requires: [
 		'NextThought.providers.Location',
-		'NextThought.util.ViewUtils'
+		'NextThought.util.ViewUtils',
+		'NextThought.filter.FilterGroup',
+		'NextThought.filter.Filter'
 	],
 
 	models: [
@@ -19,7 +21,8 @@ Ext.define('NextThought.controller.Search', {
 		'menus.Search',
 		'menus.search.ResultCategory',
 		'menus.search.Result',
-		'menus.search.More'
+		'menus.search.More',
+		'form.fields.SearchAdvancedOptions'
 	],
 
 	refs: [
@@ -45,6 +48,9 @@ Ext.define('NextThought.controller.Search', {
 			},
 			'search-more' : {
 				'click': this.showAllForCategoryClicked
+			},
+			'search-advanced-menu': {
+				'changed': this.searchFilterChanged
 			}
 		},{});
 	},
@@ -101,6 +107,7 @@ Ext.define('NextThought.controller.Search', {
 		if(!value || value.length < 4){return;}
 
 		var s = this.getHitStore(),
+			filter = this.modelFilter,
 			rootUrl = $AppConfig.service.getUserUnifiedSearchURL(),
 			loc = LocationProvider.currentNTIID || 'noNTIID',
 			url = [
@@ -114,6 +121,10 @@ Ext.define('NextThought.controller.Search', {
 		this.clearSearchResults();
 		s.removeAll();
 
+		s.clearFilter();
+		if(filter){
+			s.filter([{filterFn: function(item) { return filter.test(item); }} ]);
+		}
 		s.proxy.url = url.join('');
 		s.on('load', Ext.bind(this.storeLoad, this, [value], true), this, {single: true});
 		s.load();
@@ -122,6 +133,25 @@ Ext.define('NextThought.controller.Search', {
 
 	clearSearchResults: function() {
 		Ext.getCmp('search-results').removeAll(true);
+
+	},
+
+
+	searchFilterChanged: function(menu) {
+		var allItems = menu.query('menuitem'),
+			Filter = NextThought.Filter,
+			everything = menu.down('[isEverything]').checked,
+			searchValue = this.getSearchField().getValue();
+
+		this.modelFilter = new NextThought.FilterGroup(menu.getId(),NextThought.FilterGroup.OPERATION_UNION);
+
+		Ext.each(allItems, function(item){
+			if ((everything || item.checked) && item.model) {
+				this.modelFilter.addFilter(new Filter('Type',Filter.OPERATION_INCLUDE, item.model));
+			}
+		}, this);
+
+		this.searchForValue(searchValue);
 	},
 
 

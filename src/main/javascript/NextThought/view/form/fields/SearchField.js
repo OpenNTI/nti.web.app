@@ -65,7 +65,7 @@ Ext.define('NextThought.view.form.fields.SearchField', {
 
 	fireSearchEvent: function(){
 		clearTimeout(this.searchEventDelayId);
-		var val = this.inputEl.getValue();
+		var val = this.getValue();
 		if(!val){
 			this.fireEvent('clear-search');
 		}
@@ -93,5 +93,10 @@ Ext.define('NextThought.view.form.fields.SearchField', {
 
 		//IE needs this
 		return false;
+	},
+
+
+	getValue: function() {
+		return this.inputEl.getValue();
 	}
 });

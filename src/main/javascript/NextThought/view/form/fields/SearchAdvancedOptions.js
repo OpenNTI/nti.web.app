@@ -23,13 +23,13 @@ Ext.define('NextThought.view.form.fields.SearchAdvancedOptions',{
 	items: [
 		{ cls: 'label', xtype: 'menuitem', text: 'Search for', ui: 'nt', plain: true, canActivate: false, focusable: false, hideOnClick: false},
 		{ cls: 'type-filter everything', text: 'Everything', checked: true, allowUncheck:false, isEverything: true},
-		{ cls: 'type-filter books', text: 'Books', model: 'NextThought.model.Title' },
-		{ cls: 'type-filter highlight', text: 'Highlights', model: 'NextThought.model.Highlight' },
-		{ cls: 'type-filter note', text: 'Notes', model: 'NextThought.model.Note' },
-		{ cls: 'type-filter transcript', text: 'Transcripts', model: 'NextThought.model.TranscriptSummary' },
-		{ cls: 'type-filter quizresult', text: 'Quiz Results', model: 'NextThought.model.QuizResult' },
-		{ cls: 'type-filter bookmarks', text: 'Bookmarks', model: 'NextThought.model.Bookmark' },
-		{ cls: 'type-filter contacts', text: 'Contacts', model: 'NextThought.model.Contact' },
+		{ cls: 'type-filter books', text: 'Books', model: 'Content' },
+		{ cls: 'type-filter highlight', text: 'Highlights', model: 'Highlight' },
+		{ cls: 'type-filter note', text: 'Notes', model: 'Note' },
+		{ cls: 'type-filter transcript', text: 'Transcripts', model: 'TranscriptSummary' },
+		{ cls: 'type-filter quizresult', text: 'Quiz Results', model: 'QuizResult' },
+		{ cls: 'type-filter bookmarks', text: 'Bookmarks', model: 'Bookmark' },
+		{ cls: 'type-filter contacts', text: 'Contacts', model: 'Contact' },
 		{ xtype: 'labeledseparator', text: 'Return' },
 		{ cls: 'return-type', group: 'return-type', hideOnClick: false, text: 'Exact Matches' },
 		{ cls: 'return-type', group: 'return-type', hideOnClick: false, text: 'Partial Matches', checked: true }
@@ -37,11 +37,14 @@ Ext.define('NextThought.view.form.fields.SearchAdvancedOptions',{
 
 	initComponent: function(){
 		this.callParent(arguments);
+		this.filterChanged = false;
 		this.on('click',this.handleClick,this);
 	},
 
 	handleClick: function(menu, item, e){
 		if(!item){return;}
+
+		this.filterChanged = true;
 
 		if(item.checked){
 			if(item.isEverything){
@@ -54,6 +57,14 @@ Ext.define('NextThought.view.form.fields.SearchAdvancedOptions',{
 			}
 		}
 
-		this.fireEvent('changed',this);
+	},
+
+	hide: function() {
+		if (this.filterChanged) {
+			this.fireEvent('changed', this);
+			this.filterChanged = false;
+		}
+		this.callParent(arguments);
 	}
+
 });
