@@ -1,73 +1,54 @@
 Ext.define('NextThought.view.form.fields.ShareWithField', {
-	extend: 'Ext.panel.Panel',
+	extend: 'Ext.container.Container',
 	alias: 'widget.sharewith',
 	mixins: {
 		labelable: 'Ext.form.Labelable',
 		field: 'Ext.form.field.Field'
 	},
 	requires: [
-		'NextThought.view.form.fields.UserSearchInputField',
-		'NextThought.view.form.util.Token'
+		'NextThought.view.form.util.Token',
+		'NextThought.view.form.fields.UserSearchInputField'
 	],
 
-	layout: 'anchor',
-	defaults: {anchor: '100%'},
-	emptyText: 'Share with...',
-	items: [
-		{//contain the tokens
-			xtype: 'container',
-			cls: 'share-with-selected-tokens',
-			layout: 'auto',
-			border: false,
-			margin: '0 0 10px 0'
-		},{
-			xtype: 'usersearchinput'
-//			emptyText: this.emptyText,
-//			allowBlank: true,
-//			multiSelect: false,
-//			enableKeyEvents: true
-		}
-	],
 
 	initComponent: function(){
 		this.callParent(arguments);
 		this.xtypes.push('field');
-		this.selections = [];
-		this.inputField = this.down('usersearchinput');
 
-		this.setReadOnly(!!this.readOnly);
+		this.selections = [];
+
 
 		this.initField();
+
+		this.inputField = this.add({xtype: 'usersearchinput'});
 		this.inputField.on({
 			scope: this,
-			'select': this.select,
-			'focus': this.doFocus,
-			'blur': this.doBlur
+			'select': this.select
 		});
+		this.setReadOnly(!!this.readOnly);
 	},
 
 
 
 	setReadOnly: function(readOnly){
 		this.readOnly = readOnly;
-//		if(readOnly) {
-//			this.inputField.hide();
-//		}
-//		else {
-//			this.inputField.show();
-//		}
+		if(readOnly) {
+			this.inputField.hide();
+		}
+		else {
+			this.inputField.show();
+		}
 
-		this.items.get(0).items.each(function(token){
-			token.setReadOnly(readOnly);
-		}, this);
+		this.items.each(function(token){ token.setReadOnly(readOnly); },this);
 	},
 
 
 
 	focus: function(){
 		this.callParent(arguments);
-		this.down('usersearchinput').focus();
+//		this.down('usersearchinput').focus();
 	},
+
 
 	setValue: function(value){
 		var me = this;
@@ -77,18 +58,23 @@ Ext.define('NextThought.view.form.fields.ShareWithField', {
 		return me;
 	},
 
+
 	initValue: function(){
 		var m = this;
-		UserRepository.prefetchUser(m.value, function(users){
-			Ext.each(users, function(u){
-				m.addSelection(u);
+		if (m.value) {
+			UserRepository.prefetchUser(m.value, function(users){
+				Ext.each(users, function(u){
+					m.addSelection(u);
+				});
 			});
-		});
+		}
 	},
+
 
 	isValid: function() {
 		return this.allowBlank || this.selections.length>0;
 	},
+
 
 	getValue: function(){
 		var m = this, r = [];
@@ -98,15 +84,13 @@ Ext.define('NextThought.view.form.fields.ShareWithField', {
 		return r;
 	},
 
-	doBlur: function(/*ctrl*/) {},
-
-	doFocus: function(/*ctrl*/) {},
 
 	select: function(ctrl, selected) {
 		ctrl.collapse();
 		ctrl.setValue('');
 		this.addSelection(selected[0]);
 	},
+
 
 	containsToken: function(model){
 		var id = model.getId(), found = false;
@@ -119,6 +103,7 @@ Ext.define('NextThought.view.form.fields.ShareWithField', {
 		);
 		return found;
 	},
+
 
 	removeToken: function(token, model){
 		token.destroy();
@@ -138,13 +123,24 @@ Ext.define('NextThought.view.form.fields.ShareWithField', {
 		this.doComponentLayout();
 	},
 
+
 	addToken: function(model){
-		var c = this.items.get(0),
+		var c = this.items,
 			text = model.get('realname') || model.get('Username');
 
-		c.add({ xtype: 'token', readOnly: this.readOnly, model: model, text: text,
-				listeners: {scope: this, click: this.removeToken}});
+		this.insert(c.length-1,//indexOf(saerchbox)-1
+			{
+				xtype: 'token',
+				readOnly: this.readOnly,
+				model: model,
+				text: text,
+				listeners: {
+					scope: this,
+					click: this.removeToken
+				}
+			});
 	},
+
 
 	addSelection: function(user){
 		var m = this;
@@ -155,4 +151,5 @@ Ext.define('NextThought.view.form.fields.ShareWithField', {
 		m.selections.push(user);
 		m.addToken(user);
 	}
+
 });

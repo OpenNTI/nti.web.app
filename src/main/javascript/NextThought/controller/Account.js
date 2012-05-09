@@ -8,9 +8,13 @@ Ext.define('NextThought.controller.Account', {
 		'User'
 	],
 
+	stores: [
+		'UserSearch'
+	],
+
 	views: [
 		'form.AccountForm',
-		'account.contacts.Card',
+		'account.contacts.Card'
 	],
 
 	refs: [],

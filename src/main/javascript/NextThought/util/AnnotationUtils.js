@@ -35,6 +35,8 @@ Ext.define('NextThought.util.AnnotationUtils',{
 
 //tested
 	getBodyTextOnly: function(obj) {
+		if (!obj) {return '';}
+
 		var bdy = obj.get('body'), o, i, text = [],
 			hlStart = obj.get('startHighlightedText'), //Highlight only
 			hlEnd = obj.get('endHighlightedText'); //Highlight only
