@@ -43,6 +43,7 @@ Ext.define('NextThought.controller.State', {
 			Ext.applyIf(s,{active: me.currentState.active});
 			if(!me.isPoppingHistory && push){
 				me.currentState = Ext.Object.merge(me.currentState, s);
+				window.localStorage.setItem('state',JSON.stringify(me.currentState));
 				return me.fireEvent('stateChange',s);
 			}
 			return false;
@@ -151,9 +152,17 @@ Ext.define('NextThought.controller.State', {
 			return {};
 		}
 
-		return {
+		var defaultState = {
 			active: 'library'
 		};
+
+		try {
+			return Ext.decode( window.localStorage.getItem('state') ) || defaultState;
+		}
+		catch(e){
+			window.localStorage.removeItem('state');
+			return defaultState;
+		}
 
 //		return {
 //			location: 'tag:nextthought.com,2011-10:AOPS-HTML-prealgebra.0',
