@@ -169,10 +169,20 @@ img.action {
     height: 16px;
     position: absolute;
 	&.note {
-		background-image: $charm-note-icon;
+		width: 17px;
+		height: 21px;
+		background-image: url(../images/charms/note_glyph_gray.png);
+		&:hover {
+			background-image: url(../images/charms/note_glyph.png);
+		}
 	}
 	&.highlight {
-        background-image: $charm-highlight-icon;
+		width: 30px;
+		height: 19px;
+		background-image: url(../images/charms/highlight_glyph_gray.png);
+		&:hover {
+			background-image: url(../images/charms/highlight_glyph.png);
+		}
     }
 	&.quizresults {
     	background-image: $charm-quizresult-icon;

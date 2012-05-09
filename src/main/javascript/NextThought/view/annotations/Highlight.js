@@ -194,7 +194,6 @@ Ext.define('NextThought.view.annotations.Highlight', {
 	 drawRect: function(rect, fill){
 		return function(ctx){
 			ctx.fillStyle = fill;
-			console.log(ctx.fillStyle, fill);
 			ctx.fillRect(rect.left, rect.top, rect.width, rect.height);
 		};
 	},

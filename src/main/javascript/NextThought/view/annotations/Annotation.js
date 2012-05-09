@@ -70,17 +70,12 @@ Ext.define( 'NextThought.view.annotations.Annotation', {
 
 	createImage: function(src,parent,cls, type, css){
 		var el = document.createElement('img'),
-			e = Ext.get(el),
-			s;
+			e = Ext.get(el);
 
 		el.setAttribute('src',src);
 		e.addCls([cls,type]);
 		el.setAttribute('style',css);
 		parent.appendChild(el);
-
-		s = e.getStyle('background-image').replace(/url\((.*?)\)/i, '$1');
-		e.removeCls(type);
-		el.setAttribute('src', s.replace(/^["']|['"]$/ig,''));
 
 		return el;
 	},
@@ -190,7 +185,6 @@ Ext.define( 'NextThought.view.annotations.Annotation', {
 
 
 	render: function(isLastOfAnchor){
-		Ext.fly(this.img).setStyle('background', this.getColor().toString());
 	},
 
 	
@@ -203,9 +197,6 @@ Ext.define( 'NextThought.view.annotations.Annotation', {
 		this.record.destroy();
 		this.cleanup();
 		this.cleanup = function(){};
-
-		//reload mystuff store, it needs to refresh since we removed something underneath it.
-		Ext.getStore('MyStuff').load();
 	},
 
 

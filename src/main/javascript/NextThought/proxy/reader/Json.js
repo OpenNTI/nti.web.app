@@ -9,6 +9,13 @@ Ext.define('NextThought.proxy.reader.Json', {
 			mimeType = data.MimeType,
 			result, i, record, modelName;
 
+		if(data.request) {
+			if( data.status !== 204 ){
+				console.warn('Unknown response?',data);
+			}
+			return [];
+		}
+
 		if(mimeType === 'application/vnd.nextthought.collection' || (mimeType===undefined && items)) {
 			for(key in items){
 				if(items.hasOwnProperty(key)){
@@ -39,15 +46,17 @@ Ext.define('NextThought.proxy.reader.Json', {
 			for(; i>=0; i--){
 				record = result.records[i];
 				try{
-					modelName = 'NextThought.model.'+record.get('Class');
-					if(record.modelName !== modelName){
-//						console.debug('converting model:',modelName, 'from:', record.modelName);
-						result.records[i] = Ext.create(
-								modelName,
-								Ext.clone(record.raw),
-								record.getId(),
-								record.raw
-						);
+					if(record instanceof NextThought.model.Base) {
+						modelName = 'NextThought.model.'+record.get('Class');
+						if(record.modelName !== modelName){
+	//						console.debug('converting model:',modelName, 'from:', record.modelName);
+							result.records[i] = Ext.create(
+									modelName,
+									Ext.clone(record.raw),
+									record.getId(),
+									record.raw
+							);
+						}
 					}
 				}
 				catch(e1){
