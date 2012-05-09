@@ -1,3 +1,7 @@
+/*
+TODOs
+*trigger should show all, clicking on entries adds them to the token list
+*/
 Ext.define( 'NextThought.view.annotations.ShareWith', {
 	extend: 'NextThought.view.Window',
 	requires: [
@@ -73,5 +77,8 @@ Ext.define( 'NextThought.view.annotations.ShareWith', {
 		}, this);
 
 		this.callParent(arguments);
+
+		//any down calls below this:
+		this.down('sharewith').setValue(this.record.get('sharedWith'));
 	}
 });
