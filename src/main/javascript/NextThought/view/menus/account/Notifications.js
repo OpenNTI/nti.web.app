@@ -31,14 +31,25 @@ Ext.define('NextThought.view.menus.account.Notifications',{
 
 	initComponent: function(){
 		this.callParent(arguments);
+		Ext.getStore('Stream').on('datachanged', this.setupRenderData, this);
+	},
 
-		Ext.getStore('Stream').on('load', this.setupRenderData, this);
-		Ext.getStore('Stream').on('add', this.setupRenderData, this);
+
+	onAdded: function(){
+		this.parentMenu.on('beforeshow', function(){this.setupRenderData();}, this);
+	},
+
+
+	afterRender: function(){
+		this.callParent(arguments);
+		this.el.on('click', this.clicked, this);
 	},
 
 
 	setupRenderData: function(store, records, success) {
-		if (!store) {store = Ext.getStore('Stream');}
+		if(!store) {store = Ext.getStore('Stream');}
+
+		if(!this.rendered){return;}
 
 		var itemsToLoad = store.getCount();
 
@@ -89,13 +100,6 @@ Ext.define('NextThought.view.menus.account.Notifications',{
 		if (this.seeAll) {
 			this.seeAll.on('click', this.showAllNotifications, this);
 		}
-	},
-
-
-	afterRender: function(){
-		this.callParent(arguments);
-		this.parentMenu.on('beforeshow', function(){this.setupRenderData();}, this);
-		this.el.on('click', this.clicked, this);
 	},
 
 

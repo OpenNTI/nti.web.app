@@ -10,14 +10,12 @@ Ext.define('NextThought.controller.Application', {
 		launchToken: {},
 
 		launch: function(){
-			//console.groupCollapsed('Launch');
-
 			Ext.widget({xtype: 'master-view'});
 			try{
 				Library.load();
 			}
-			catch(e){ console.error('Loading Library: ', e, e.message, e.stack); }
-		}
+			catch(e){ console.error('Loading Library: ', e.stack || e.stacktrace); }
+			}
 	},
 
 	init: function() {

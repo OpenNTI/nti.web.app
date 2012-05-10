@@ -45,8 +45,14 @@ Ext.define('NextThought.controller.Groups', {
 
 
 	publishFriends: function(){
-		var store = this.getFriendsListStore(),
+		var me = this,
+			store = me.getFriendsListStore(),
 			groups = Ext.getCmp('my-groups');
+
+		if(!groups){
+			setTimeout(function(){ me.publishFriends(); },10);
+			return;
+		}
 
 		store.getFriends(function(friends){
 			Ext.getCmp('offline-contacts').setUsers(friends.Offline);

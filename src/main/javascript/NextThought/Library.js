@@ -45,7 +45,7 @@ Ext.define('NextThought.Library', {
 
 
 	each: function(callback, scope){
-		this.getStore().data.each(callback,scope||this);
+		this.getStore().each(callback,scope||this);
 	},
 
 
@@ -133,6 +133,9 @@ Ext.define('NextThought.Library', {
 	
 	
 	loadToc: function(index, callback){
+		if(!this.loaded && !callback){
+			Ext.Error.raise('The library has not loaded yet, should not be making a synchronous call');
+		}
 		try{
 			var url = $AppConfig.server.host+index;
 			Ext.Ajax.request({

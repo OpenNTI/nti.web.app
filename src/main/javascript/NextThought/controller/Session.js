@@ -19,12 +19,10 @@ Ext.define('NextThought.controller.Session', {
 
 	statics: {
 		login: function(app){
-//			console.groupCollapsed('Session Setup');
 			console.time('session restore');
 			function success(){
 				app.fireEvent('session-ready');
 				console.timeEnd ('session restore');
-//				console.groupEnd();
 				NextThought.controller.Application.launch();
 			}
 
