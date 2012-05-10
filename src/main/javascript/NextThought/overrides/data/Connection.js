@@ -30,8 +30,12 @@ Ext.define('NextThought.overrides.data.Connection',{
 		if(options&&options.async===false){
 			var loc = null;
 			try { loc.toString(); }//force an error
-			catch (e) { loc = e.stack || e.stacktrace; }
-			console.warn( 'Synchronous Call in: ', loc, ' Options: ', options );
+			catch (e) {
+				loc = e.stack || e.stacktrace;
+				loc = loc.toString().split('\n').slice(6).join('\n');
+
+			}
+			console.warn( 'Synchronous Call in: \n'+loc, '\nOptions: ', options );
 		}
 	});
 });
