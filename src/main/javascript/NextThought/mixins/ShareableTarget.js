@@ -16,6 +16,7 @@ Ext.define('NextThought.mixins.ShareableTarget', {
 				if (sourceEl) {
 					d = sourceEl.cloneNode(true);
 					d.id = Ext.id();
+					d.setAttribute('style','');
 					return this.dragData = {
 						sourceEl: sourceEl,
 						repairXY: Ext.fly(sourceEl).getXY(),

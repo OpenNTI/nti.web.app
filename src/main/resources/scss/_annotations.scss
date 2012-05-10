@@ -174,7 +174,8 @@ img.action {
 		width: 17px;
 		height: 21px;
 		background-image: url(../images/charms/note_glyph_gray.png);
-		&:hover {
+		&:hover,
+		.x-dd-drop-ok & {
 			background-image: url(../images/charms/note_glyph.png);
 		}
 	}
@@ -182,7 +183,8 @@ img.action {
 		width: 23px;
 		height: 19px;
 		background-image: url(../images/charms/highlight_glyph_gray.png);
-		&:hover {
+		&:hover,
+		.x-dd-drop-ok & {
 			background-image: url(../images/charms/highlight_glyph.png);
 		}
     }
@@ -198,4 +200,30 @@ img.action {
     &.expanded {
  	    background-image: $charm-expanded-icon;
      }
+}
+
+.x-dd-drag-proxy {
+
+	.x-dd-drop-icon{
+		display: none;
+		opacity: 0.3;
+	}
+
+	&.x-dd-drop-ok {
+		//ok state
+		//.x-dd-drag-ghost {opacity: 1;}
+	}
+
+	.x-dd-drag-ghost {
+		padding: 0;
+		border: none;
+
+		img {
+			max-width: 48px;
+
+			&.action {
+				position: static;
+			}
+		}
+	}
 }
