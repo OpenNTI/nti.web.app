@@ -6,7 +6,7 @@ Ext.define('NextThought.view.content.Reader', {
 		'Ext.dd.DragTracker',
 		'NextThought.ContentAPIRegistry',
 		'NextThought.providers.Location',
-		'NextThought.util.QuizUtils'
+		'NextThought.util.Quizes'
 	],
 	mixins:{
 		annotations: 'NextThought.mixins.Annotations'

@@ -93,7 +93,7 @@ describe("Annotation Utils", function() {
 
 
 	it("AnnotationUtils is defined", function() {
-		expect(NextThought.util.AnnotationUtils).toBeDefined();
+		expect(NextThought.util.Annotations).toBeDefined();
 		expect(AnnotationUtils).toBeDefined();
 	});
 

@@ -1,5 +1,4 @@
-Ext.define('NextThought.util.ViewUtils',{
-	alternateClassName: 'ViewUtils',
+Ext.define('NextThought.util.Views',{
 	singleton: true,
 	requires: [
 

@@ -1,5 +1,4 @@
 Ext.define('NextThought.util.Color',{
-	alternateClassName: 'Color',
 	singleton: true,
 	requires: [
 		'Ext.draw.Color'

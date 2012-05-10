@@ -3,7 +3,7 @@ Ext.define('NextThought.view.chat.log.Pinned', {
 	alias: 'widget.chat-log-entry-pinned',
 
 	requires: [
-		'NextThought.util.AnnotationUtils'
+		'NextThought.util.Annotations'
 	],
 
 	renderTpl: new Ext.XTemplate(

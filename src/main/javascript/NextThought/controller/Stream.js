@@ -3,7 +3,7 @@ Ext.define('NextThought.controller.Stream', {
 
 	requires: [
 		'NextThought.proxy.Socket',
-		'NextThought.util.ParseUtils'
+		'NextThought.util.Parsing'
 	],
 
 	stores: [

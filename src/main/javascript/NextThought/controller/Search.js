@@ -3,7 +3,7 @@ Ext.define('NextThought.controller.Search', {
 
 	requires: [
 		'NextThought.providers.Location',
-		'NextThought.util.ViewUtils',
+		'NextThought.util.Views',
 		'NextThought.filter.FilterGroup',
 		'NextThought.filter.Filter'
 	],

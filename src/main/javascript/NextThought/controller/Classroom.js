@@ -2,7 +2,7 @@ Ext.define('NextThought.controller.Classroom', {
 	extend: 'Ext.app.Controller',
 
 	requires: [
-		'NextThought.util.ClassroomUtils'
+		'NextThought.util.Classrooms'
 	],
 
 	views: [

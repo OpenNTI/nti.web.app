@@ -1,11 +1,10 @@
-Ext.define('NextThought.util.AnnotationUtils',{
+Ext.define('NextThought.util.Annotations',{
 	requires: [
 		'NextThought.model.Highlight',
 		'NextThought.model.Note',
 		'NextThought.view.whiteboard.Canvas'
 	],
 	singleton: true,
-	alternateClassName: 'AnnotationUtils',
 
 	/** @constant */
 	NOTE_BODY_DIVIDER: '\u200b<div id="{0}" class="body-divider" style="text-align: left; margin: 10px; padding: 5px;">{1}</div>\u200b',
@@ -914,6 +913,7 @@ Ext.define('NextThought.util.AnnotationUtils',{
 },
 function(){
 	window.AnnotationUtils = this;
+
 	this.SEPERATOR = Ext.String.format(this.NOTE_BODY_DIVIDER, '', '<hr/>');
 
 	function escapeRegExp(str) {

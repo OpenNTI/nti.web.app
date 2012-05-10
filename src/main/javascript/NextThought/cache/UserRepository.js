@@ -2,7 +2,7 @@ Ext.define('NextThought.cache.UserRepository', {
 	alias: 'UserRepository',
 	singleton: true,
 	requires: [
-		'NextThought.util.ParseUtils'
+		'NextThought.util.Parsing'
 	],
 
 	constructor: function() {

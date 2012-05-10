@@ -4,7 +4,7 @@ Ext.define('NextThought.view.chat.log.Entry', {
 
 	requires: [
 		'NextThought.layout.component.TemplatedContainer',
-		'NextThought.util.AnnotationUtils',
+		'NextThought.util.Annotations',
 		'NextThought.cache.IdCache'
 	],
 

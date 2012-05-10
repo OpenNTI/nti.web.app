@@ -7,7 +7,7 @@ Ext.define('NextThought.view.annotations.BodyEditor', {
 
 	requires: [
 		'Ext.form.field.HtmlEditor',
-		'NextThought.util.AnnotationUtils',
+		'NextThought.util.Annotations',
 		'NextThought.view.whiteboard.Editor'
 	],
 	items: [{

@@ -3,7 +3,7 @@ Ext.define('NextThought.view.classroom.ResourceView', {
 	alias: 'widget.classroom-resource-view',
 	requires:[
 		'NextThought.model.Link',
-		'NextThought.util.UploadUtils'
+		'NextThought.util.Uploads'
 	],
 
 	cls: 'x-class-resourceview-panel',

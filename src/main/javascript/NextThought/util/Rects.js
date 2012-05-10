@@ -1,4 +1,4 @@
-Ext.define('NextThought.util.RectUtils',{
+Ext.define('NextThought.util.Rects',{
 	singleton: true,
 
 

@@ -1,5 +1,4 @@
-Ext.define('NextThought.util.Globals',
-{
+Ext.define('NextThought.util.Globals', {
 	requires: [
 		'NextThought.overrides.app.Application',
 		'NextThought.overrides.builtins.Array',
@@ -15,7 +14,6 @@ Ext.define('NextThought.util.Globals',
 		'NextThought.overrides.XTemplate'
 
 	],
-	alternateClassName: 'Globals',
 	singleton: true,
 
 

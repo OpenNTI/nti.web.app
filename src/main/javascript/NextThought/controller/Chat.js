@@ -2,9 +2,9 @@ Ext.define('NextThought.controller.Chat', {
 	extend: 'Ext.app.Controller',
 	requires: [
 		'NextThought.cache.IdCache',
-		'NextThought.util.AnnotationUtils',
-		'NextThought.util.ClassroomUtils',
-		'NextThought.util.ParseUtils',
+		'NextThought.util.Annotations',
+		'NextThought.util.Classrooms',
+		'NextThought.util.Parsing',
 		'NextThought.proxy.Socket'
 	],
 

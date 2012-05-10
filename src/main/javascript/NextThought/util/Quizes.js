@@ -1,12 +1,11 @@
-Ext.define('NextThought.util.QuizUtils', {
+Ext.define('NextThought.util.Quizes', {
 	singleton: true,
 	requires: [
-		'NextThought.view.math.symbols.Panel',
 		'NextThought.ContentAPIRegistry',
-		'NextThought.util.ParseUtils',
-		'NextThought.providers.Location'
+		'NextThought.util.Parsing',
+		'NextThought.providers.Location',
+		'NextThought.view.math.symbols.Panel'
 	],
-	alternateClassName: 'QuizUtils',
 
 
 	sendLaTeXCommand: function(mq, tex, root) {
@@ -259,6 +258,7 @@ Ext.define('NextThought.util.QuizUtils', {
 
 }, function(){
 	window.QuizUtils = this;
+
 	ContentAPIRegistry.register('NTIHintNavigation',LocationProvider.setLocation,LocationProvider);
 	ContentAPIRegistry.register('NTISubmitAnswers',this.submitAnswersHandler,this);
 	ContentAPIRegistry.register('togglehint',function(e) {

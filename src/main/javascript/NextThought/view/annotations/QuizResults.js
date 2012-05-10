@@ -2,7 +2,7 @@ Ext.define( 'NextThought.view.annotations.QuizResults', {
 	extend: 'NextThought.view.annotations.Annotation',
 	alias: 'widget.quiz-result-annotation',
 	requires:[
-		'NextThought.util.QuizUtils',
+		'NextThought.util.Quizes',
 		'NextThought.cache.IdCache'
 	],
 

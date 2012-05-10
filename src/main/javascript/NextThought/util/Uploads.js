@@ -1,6 +1,5 @@
-Ext.define('NextThought.util.UploadUtils',{
+Ext.define('NextThought.util.Uploads',{
 	singleton: true,
-	alternateClassName: 'UploadUtils',
 	requires: [
 		'Ext.ProgressBar'
 	],

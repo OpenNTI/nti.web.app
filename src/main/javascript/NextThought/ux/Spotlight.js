@@ -15,7 +15,7 @@
  */
 Ext.define('NextThought.ux.Spotlight',{
 	requires: [
-		'NextThought.util.RectUtils'
+		'NextThought.util.Rects'
 	],
 
 	constructor: function(){

@@ -1,4 +1,4 @@
-Ext.define('NextThought.util.TocUtils',{
+Ext.define('NextThought.util.Tocs',{
 	singleton: true,
 
 

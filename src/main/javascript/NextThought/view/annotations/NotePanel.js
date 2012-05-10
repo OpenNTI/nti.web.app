@@ -4,7 +4,7 @@ Ext.define('NextThought.view.annotations.NotePanel',{
 	requires: [
 		'NextThought.cache.UserRepository',
 		'NextThought.cache.IdCache',
-		'NextThought.util.AnnotationUtils'
+		'NextThought.util.Annotations'
 	],
 
 	mixins: {

@@ -1,6 +1,4 @@
-Ext.define('NextThought.util.ClassroomUtils',{
-	alternateClassName: 'ClassroomUtils',
-
+Ext.define('NextThought.util.Classrooms',{
 	singleton: true,
 
 	requires: [

@@ -48,7 +48,7 @@ Ext.data.Types.LINKS = {
 Ext.define('NextThought.model.Base', {
 	extend: 'Ext.data.Model',
 	requires: [
-		'NextThought.util.ParseUtils',
+		'NextThought.util.Parsing',
 		'NextThought.proxy.Rest'
 	],
 	idProperty: 'NTIID',

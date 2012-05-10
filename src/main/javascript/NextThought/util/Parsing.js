@@ -1,5 +1,4 @@
-Ext.define('NextThought.util.ParseUtils',{
-	alternateClassName: 'ParseUtils',
+Ext.define('NextThought.util.Parsing',{
 	singleton: true,
 
 	/**
@@ -119,8 +118,7 @@ Ext.define('NextThought.util.ParseUtils',{
 
 		return result;
 	}
-},
-	function(){
-		window.ParseUtils = this;
-	}
-);
+
+},function(){
+	window.ParseUtils = this;
+});

@@ -3,7 +3,7 @@ Ext.define('NextThought.view.classroom.ScriptEntry', {
 	alias: 'widget.script-entry',
 
 	requires: [
-		'NextThought.util.AnnotationUtils',
+		'NextThought.util.Annotations',
 		'NextThought.cache.IdCache'
 	],
 

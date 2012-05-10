@@ -4,7 +4,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
 	requires:[
 		'NextThought.cache.IdCache',
 		'NextThought.util.Color',
-		'NextThought.util.RectUtils',
+		'NextThought.util.Rects',
 		'Ext.util.TextMetrics'
 	],
 

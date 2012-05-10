@@ -3,7 +3,7 @@ Ext.define('NextThought.view.menus.Flyout',{
 	alias: 'widget.nav-flyout',
 	requires: [
 		'Ext.tree.Panel',
-		'NextThought.util.TocUtils'
+		'NextThought.util.Tocs'
 	],
 	ui: 'nav-flyout',
 	defaultAlign: 'r-l?',

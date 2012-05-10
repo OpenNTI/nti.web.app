@@ -6,7 +6,7 @@ Ext.define('NextThought.view.chat.log.Moderated', {
 		contains: 'Ext.container.Container'
 	},
 	requires: [
-		'NextThought.util.AnnotationUtils',
+		'NextThought.util.Annotations',
 		'NextThought.cache.IdCache'
 	],
 

@@ -4,8 +4,7 @@ Ext.define('NextThought.view.chat.View', {
 
     requires: [
         'NextThought.view.chat.Log',
-        'NextThought.view.chat.Entry',
-        'NextThought.util.ClassroomUtils'
+        'NextThought.view.chat.Entry'
     ],
 
 	header: false,

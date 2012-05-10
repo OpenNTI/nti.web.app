@@ -2,7 +2,7 @@ Ext.define( 'NextThought.view.annotations.ShareWith', {
 	extend: 'NextThought.view.Window',
 	requires: [
 		'NextThought.view.form.fields.ShareWithField',
-		'NextThought.util.AnnotationUtils'
+		'NextThought.util.Annotations'
 	],
 	alias : 'widget.share',
 	
