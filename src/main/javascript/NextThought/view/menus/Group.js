@@ -10,18 +10,20 @@ Ext.define('NextThought.view.menus.Group',{
 	frame: false,
 	border: false,
 	hideMode: 'display',
-	minWidth: 300,
 
 	defaults: {
 		ui: 'nt-menuitem',
 		xtype: 'menuitem',
-		plain: true
+		plain: true,
+		listeners: {
+			'click':function(item){ item.ownerCt.fireEvent('selected',item.record, item); }
+		}
 	},
 
 	initComponent: function(){
 		this.callParent(arguments);
 		this.store = Ext.getStore('FriendsList');
-		this.store.on('load', this.reload, this);
+		this.store.on('datachanged', this.reload, this);
 		this.reload();
 	},
 
@@ -34,6 +36,7 @@ Ext.define('NextThought.view.menus.Group',{
 		items.push({xtype: 'menuseparator'});
 		this.store.each(function(v){
 			if(/everyone/i.test(v.get('ID'))){
+				items[0].record = v;
 				return;
 			}
 

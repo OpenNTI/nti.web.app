@@ -7,8 +7,7 @@ Ext.define('NextThought.view.form.fields.ShareWithField', {
 	},
 	requires: [
 		'NextThought.view.form.util.Token',
-		'NextThought.view.form.fields.UserSearchInputField',
-		'NextThought.view.menus.Group'
+		'NextThought.view.form.fields.UserSearchInputField'
 	],
 
 
@@ -26,47 +25,9 @@ Ext.define('NextThought.view.form.fields.ShareWithField', {
 			scope: this,
 			'select': this.select,
 			'keydown': this.keyPress
-
 		});
 		this.setReadOnly(!!this.readOnly);
 	},
-
-
-	afterRender: function(){
-		this.callParent(arguments);
-
-		//special group menu and handling logic for said menu:
-		this.inputField.triggerEl.on('click',this.triggerMenu,this);
-		this.menu = Ext.widget({xtype: 'group-menu', width: 200});
-		this.menu.on('click', this.groupMenuItemClicked, this);
-	},
-
-
-	groupMenuItemClicked: function(menu, selected, event){
-		var record = selected.record;
-		this.addToken(record);
-		this.selections.push(record);
-	},
-
-
-	triggerMenu: function(event, el){
-		console.log('trigger menu', arguments);
-		if (Ext.fly(el).hasCls('groupMenuEnable')) {
-			event.stopPropagation();
-			event.preventDefault();
-
-			if(!this.menu.isVisible()){
-				this.menu.showBy(this.inputField,'tl-bl?',[0,5]);
-			}
-			else {
-				this.menu.hide();
-			}
-
-			return false;
-		}
-		return true; //allow continue
-	},
-
 
 
 	setReadOnly: function(readOnly){

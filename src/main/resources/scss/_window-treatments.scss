@@ -29,3 +29,29 @@
 		}
 	}
 }
+
+
+//search widget
+
+.user-search-suggestion {
+	position: relative;
+	overflow: hidden;
+	clear: both;
+	line-height: 34px;
+
+	img {
+		width: 24px;
+		height: auto;
+		vertical-align: middle;
+		float: left;
+		margin: 5px;
+	}
+	span {
+		display: block;
+		margin-left: 40px;
+		font-weight: bold;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+}
