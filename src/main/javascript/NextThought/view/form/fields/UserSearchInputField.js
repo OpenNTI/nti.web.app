@@ -7,12 +7,13 @@ Ext.define( 'NextThought.view.form.fields.UserSearchInputField', {
 	displayField: 'realname',
 	typeAhead: false,
 	hideLabel: true,
-	hideTrigger:true,
+	//hideTrigger:true,
 	multiSelect:false,
 	enableKeyEvents: true,
 	minChars: 1,
 	valueField: 'Username',
 	emptyText: 'Search...',
+	trigger2Cls: 'sample',
 
 	listConfig: {
 		loadingText: 'Searching...',

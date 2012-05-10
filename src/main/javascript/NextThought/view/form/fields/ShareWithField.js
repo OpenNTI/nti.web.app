@@ -23,7 +23,9 @@ Ext.define('NextThought.view.form.fields.ShareWithField', {
 		this.inputField = this.add({xtype: 'usersearchinput'});
 		this.inputField.on({
 			scope: this,
-			'select': this.select
+			'select': this.select,
+			'keydown': this.keyPress
+
 		});
 		this.setReadOnly(!!this.readOnly);
 	},
@@ -92,6 +94,13 @@ Ext.define('NextThought.view.form.fields.ShareWithField', {
 	},
 
 
+	keyPress: function(field, event) {
+		if (event.keyCode===event.BACKSPACE && !field.getValue()){
+			this.removeLastToken();
+		}
+	},
+
+
 	containsToken: function(model){
 		var id = model.getId(), found = false;
 		Ext.each(
@@ -102,6 +111,15 @@ Ext.define('NextThought.view.form.fields.ShareWithField', {
 			this
 		);
 		return found;
+	},
+
+
+	removeLastToken: function(){
+		if (this.selections.length > 0) {
+			var lastSelection = this.selections.last();
+			this.down('[modelId='+lastSelection.getId()+']').destroy();
+			this.selections = this.selections.splice(0, this.selections.length -1);
+		}
 	},
 
 
@@ -133,6 +151,7 @@ Ext.define('NextThought.view.form.fields.ShareWithField', {
 				xtype: 'token',
 				readOnly: this.readOnly,
 				model: model,
+				modelId: model.getId(),
 				text: text,
 				listeners: {
 					scope: this,
