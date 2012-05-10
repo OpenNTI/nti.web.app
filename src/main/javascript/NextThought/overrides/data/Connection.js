@@ -18,7 +18,7 @@ Ext.define('NextThought.overrides.data.Connection',{
 			}
 		}
 
-		return this.callOverridden(arguments);
+		return this.callParent(arguments);
 	}
 },function(){
 	Ext.Ajax.cors = true;

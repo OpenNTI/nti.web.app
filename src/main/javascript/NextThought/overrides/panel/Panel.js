@@ -2,7 +2,7 @@ Ext.define('NextThought.overrides.panel.Panel',{
 	override: 'Ext.panel.Panel',
 
 	render: function(){
-		this.callOverridden(arguments);
+		this.callParent(arguments);
 		if(!this.enableSelect){this.el.unselectable();}
 		else{this.el.selectable();}
 	}

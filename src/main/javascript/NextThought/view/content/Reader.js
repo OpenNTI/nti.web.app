@@ -2,6 +2,8 @@ Ext.define('NextThought.view.content.Reader', {
 	extend:'NextThought.view.content.Base',
 	alias: 'widget.reader-panel',
 	requires: [
+		'Ext.dd.DragDropManager',
+		'Ext.dd.DragTracker',
 		'NextThought.ContentAPIRegistry',
 		'NextThought.providers.Location',
 		'NextThought.util.QuizUtils'
@@ -59,19 +61,19 @@ Ext.define('NextThought.view.content.Reader', {
 		this.css = {};
 //		this.nav = {};
 
-		this.self.classEvents.on('window-drag-start',this.mask,this);
-		this.self.classEvents.on('window-drag-end',this.unmask,this);
+		this.self.classEvents.on('general-drag-start',this.mask,this);
+		this.self.classEvents.on('general-drag-end',this.unmask,this);
 	},
 
 
 	destroy: function(){
-		this.self.classEvents.un('window-drag-start',this.mask,this);
-		this.self.classEvents.un('window-drag-end',this.unmask,this);
+		this.self.classEvents.un('general-drag-start',this.mask,this);
+		this.self.classEvents.un('general-drag-end',this.unmask,this);
 		this.callParent(arguments);
 	},
 
 
-	mask: function(){var e=this.el;if(e){e.mask();}},
+	mask: function(){var e=this.el;if(e && !e.isMasked()){e.mask();}},
 	unmask: function(){var e=this.el;if(e){e.unmask();}},
 
 	resetFrame: function(cb){
@@ -840,16 +842,19 @@ turn off html5 player
 
 }, function(){
 	var o = this.classEvents = new Ext.util.Observable(),
+		dm= Ext.dd.DragDropManager,
 		timeoutMillis = 500;
 
 	function startTimer(){
 		return function() {
 			var me = this;
-			o.fireEvent('window-drag-start');
-			me.NTImaskRemovalTimer = setTimeout(function(){
-				me.NTIEndTimer();
-			},
-			timeoutMillis);
+			o.fireEvent('general-drag-start');
+			if(this !== dm) {
+				me.NTImaskRemovalTimer = setTimeout(function(){
+					me.NTIEndTimer();
+				},
+				timeoutMillis);
+			}
 		};
 	}
 
@@ -873,32 +878,48 @@ turn off html5 player
 		return function(){
 			clearTimeout(this.NTImaskRemovalTimer);
 			delete this.NTImaskRemovalTimer;
-			o.fireEvent('window-drag-end');
+			o.fireEvent('general-drag-end');
 		};
 	}
 
 	function a(){
 		return function(){
 			this.NTIstartTimer();
-			return this.callOverridden(arguments);
+			return this.callParent(arguments);
 		};
 	}
 
 	function b(){
 		return function(){
 			this.NTIEndTimer();
-			return this.callOverridden(arguments);
+			return this.callParent(arguments);
 		};
 	}
 
 	function c() {
 		return function(){
 			this.NTIPostponeTimer();
-			return this.callOverridden(arguments);
+			return this.callParent(arguments);
 		};
 	}
 
-	Ext.util.ComponentDragger.override({ NTIstartTimer: startTimer(), NTIEndTimer: endTimer(), NTIPostponeTimer: postponeTimer(), onStart: a(), onEnd: b(), onDrag: c()});
-	Ext.resizer.ResizeTracker.override({ NTIstartTimer: startTimer(), NTIEndTimer: endTimer(), NTIPostponeTimer: postponeTimer(), onMouseDown: a(), onEnd: b(), onDrag: c()});
+	Ext.EventManager.un(document, "mousemove", dm.handleMouseMove, dm, true);
+	Ext.override(dm,{
+		NTIstartTimer: startTimer(),
+		NTIEndTimer: endTimer(),
+		NTIPostponeTimer: postponeTimer(),
+		startDrag: a(),
+		stopDrag: b()
+	});
+	Ext.EventManager.on(document, "mousemove", dm.handleMouseMove, dm, true);
+
+	Ext.dd.DragTracker.override({
+		NTIstartTimer: startTimer(),
+		NTIEndTimer: endTimer(),
+		NTIPostponeTimer: postponeTimer(),
+		onMouseDown: a(),
+		onEnd: b(),
+		onDrag: c()
+	});
 });
 

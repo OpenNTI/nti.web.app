@@ -168,6 +168,8 @@ img.action {
     width: 16px;
     height: 16px;
     position: absolute;
+	z-index: 1000;
+
 	&.note {
 		width: 17px;
 		height: 21px;
