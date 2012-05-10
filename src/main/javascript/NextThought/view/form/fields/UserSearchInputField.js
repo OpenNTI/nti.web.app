@@ -13,7 +13,7 @@ Ext.define( 'NextThought.view.form.fields.UserSearchInputField', {
 	minChars: 1,
 	valueField: 'Username',
 	emptyText: 'Search...',
-	trigger2Cls: 'sample',
+	trigger2Cls: 'groupMenuEnable',
 
 	listConfig: {
 		loadingText: 'Searching...',
