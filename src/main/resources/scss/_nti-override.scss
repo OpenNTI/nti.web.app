@@ -121,13 +121,20 @@
 		}
 
 		.subsection,
-		.subsubsection {
+		.subsubsection,
+		.paragraph{
 			&.title {
 				display: block;
 			}
 		}
-		.subsubsection.title {
-			padding-left: 85px;
+		.subsubsection,
+		.paragraph {
+			&.title {
+				font-weight: bold;
+				padding-left: 85px;
+			}
 		}
+		.subsubsection.title {font-size: 16px;}
+		.paragraph.title {font-size: 14px;}
 	}
 }
