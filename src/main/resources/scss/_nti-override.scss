@@ -38,7 +38,12 @@
    .warning,
    .game,
    .sidebar{
-      background-color: rgba(235, 235, 235, 0.3) !important;
+	  &::after{
+		  content: "" !important;
+	  }
+		padding: 1em !important;
+		background-image: none !important;
+		background-color: rgba(235, 235, 235, 0.3) !important;
    }
 
 	.worksheet-problems {
