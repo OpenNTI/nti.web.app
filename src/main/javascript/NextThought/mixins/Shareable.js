@@ -1,4 +1,7 @@
 Ext.define('NextThought.mixins.Shareable', {
+	requires: [
+		'NextThought.util.Sharing'
+	],
 
 	afterRender: function(){
 		this.registerDragZone(this.dragSelector||'img');
@@ -43,9 +46,7 @@ Ext.define('NextThought.mixins.Shareable', {
 			},
 
 			onNodeDrop: function(target, dd, e, data){
-				//do share
-				console.log('dropped:',data);
-				return true;
+				return SharingUtils.shareWith(me.record, data.usernames || [data.username]);
 			}
 		});
 	}

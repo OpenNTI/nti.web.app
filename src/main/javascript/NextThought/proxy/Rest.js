@@ -22,8 +22,12 @@ Ext.define('NextThought.proxy.Rest', {
 
 	doRequest: function(operation, callback, scope){
 		operation.retryArgs = {callback: callback, scope: scope};
-
+		if(operation.async===false){
+			Ext.Ajax.async = false;
+		}
 		this.callParent(arguments);
+		delete Ext.Ajax.async;
+
 		if(this.headers){
 			delete this.headers;
 		}

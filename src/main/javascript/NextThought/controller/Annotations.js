@@ -2,7 +2,8 @@ Ext.define('NextThought.controller.Annotations', {
 	extend: 'Ext.app.Controller',
 
 	required: [
-		'NextThought.cache.IdCache'
+		'NextThought.cache.IdCache',
+		'NextThought.util.Sharing'
 	],
 
 	models: [
@@ -107,14 +108,12 @@ Ext.define('NextThought.controller.Annotations', {
 
 		win.el.mask('Sharing...');
 
-		rec.set('sharedWith',shbx.getValue());
-		rec.save({
-			scope: this,
-			success:function(newRecord,operation){
+		SharingUtils.setSharedWith(rec,shbx.getValue(),function(newRec,op){
+			if(op.success){
 				win.close();
-				rec.fireEvent('updated',newRecord);
-			},
-			failure:function(){
+				rec.fireEvent('updated',newRec);
+			}
+			else{
 				console.error('Failed to save object');
 				win.el.unmask();
 			}
