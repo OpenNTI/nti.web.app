@@ -61,10 +61,10 @@ Ext.define( 'NextThought.view.annotations.QuizResults', {
 		try{
 			var me= this,
 				a = me.anchorNode,
-				ox = (me.offsets.left+65);
+				ox = me.offsets.left+60;
 
 			if (me.img){
-				ox -= Ext.fly(me.img).getWidth();
+				ox -= Ext.fly(me.img).getWidth()/2;
 				Ext.get(me.img).setStyle({left: ox+'px', top: a.getTop()+'px'});
 			}
 		}

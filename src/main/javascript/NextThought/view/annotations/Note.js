@@ -196,7 +196,7 @@ Ext.define( 'NextThought.view.annotations.Note', {
 
 			c.setStyle({top: y+'px', left: x+'px'});
 
-			ox = (ox+65)-Ext.fly(me.img).getWidth();
+			ox = (ox+60)-(Ext.fly(me.img).getWidth()/2);
 			//move the nib to the top-aligning corner of the note container
 			c.nib.moveTo(ox+p.getLeft(), c.down('.x-nti-note img').getTop());
 

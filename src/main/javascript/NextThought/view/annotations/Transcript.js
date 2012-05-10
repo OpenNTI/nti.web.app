@@ -86,7 +86,7 @@ Ext.define( 'NextThought.view.annotations.Transcript', {
 		try{
 			var me = this,
 				a = me.anchorNode,
-				ox = me.offsets.left+65;
+				ox = me.offsets.left+60;
 
 			if ( me.img && a ) {
 				ox -= Ext.fly(me.img).getWidth();

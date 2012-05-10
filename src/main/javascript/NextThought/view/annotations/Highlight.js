@@ -225,7 +225,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
 			l = s.length,
 			i = l-1,
 			me = this,
-			ox = (me.offsets.left+65)-nib.getWidth();
+			ox = (me.offsets.left+60)-(nib.getWidth()/2);
 
 		if(!r){
 			return;
