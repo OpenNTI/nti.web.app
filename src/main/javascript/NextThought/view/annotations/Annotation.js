@@ -4,12 +4,14 @@ Ext.define( 'NextThought.view.annotations.Annotation', {
 		'Ext.String'
 	],
 	mixins: {
-		observable: 'Ext.util.Observable'
+		observable: 'Ext.util.Observable',
+		shareable: 'NextThought.mixins.Shareable'
 	},
-
 
 	constructor: function(record, component) {
 		this.mixins.observable.constructor.call(this);
+		this.addEvents('afterrender');
+		this.mixins.shareable.constructor.call(this);
 		var me = this,
 			container = component.body.dom,
 			userId= record.get('Creator') || $AppConfig.userObject.getId(),
@@ -55,6 +57,12 @@ Ext.define( 'NextThought.view.annotations.Annotation', {
 		me.attachRecord(record);
 
 		NextThought.view.annotations.Annotation.register(me);
+		this.mixins.shareable.afterRender.call(this);
+	},
+
+
+	getEl: function(){
+		return Ext.get(this.img);
 	},
 
 

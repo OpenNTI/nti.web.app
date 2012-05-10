@@ -5,6 +5,9 @@ Ext.define('NextThought.view.account.contacts.Card',{
 		'NextThought.layout.component.TemplatedContainer',
 		'NextThought.view.account.contacts.Activity'
 	],
+	mixins: {
+		shareableTarget: 'NextThought.mixins.ShareableTarget'
+	},
 	cls: 'contact-card',
 	layout: 'auto',
 	componentLayout: 'templated-container',
@@ -19,7 +22,14 @@ Ext.define('NextThought.view.account.contacts.Card',{
 		'</div>'
 	],
 
+
 	childEls: ['body'],
+
+
+	constructor: function(){
+		this.mixins.shareableTarget.constructor.call(this);
+		return this.callParent(arguments);
+	},
 
 	getTargetEl: function () {
 		return this.body;
@@ -45,36 +55,13 @@ Ext.define('NextThought.view.account.contacts.Card',{
 
 	},
 
+
 	afterRender: function(){
+		this.getEl().on('click', this.clicked, this);
+		this.mixins.shareableTarget.afterRender.call(this);
 		this.callParent(arguments);
-
-		var me = this, e = this.getEl();
-
-		e.on('click', this.clicked, this);
-
-		this.dragZone = Ext.create('Ext.dd.DragZone', e, {
-
-			getDragData: function(e) {
-				var sourceEl = e.getTarget('.contact-card'), d;
-				if (sourceEl) {
-					d = sourceEl.cloneNode(true);
-					Ext.fly(d).select('.activities').remove();
-					Ext.fly(d).select('.status').remove();
-					d.id = Ext.id();
-					return this.dragData = {
-						sourceEl: sourceEl,
-						repairXY: Ext.fly(sourceEl).getXY(),
-						ddel: d,
-						username: me.user.getId()
-					};
-				}
-			},
-
-			getRepairXY: function() {
-				return this.dragData.repairXY;
-			}
-		});
 	},
+
 
 	clicked: function(){
 		this.fireEvent('click', this, this.user.getId());
