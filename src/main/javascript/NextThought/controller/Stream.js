@@ -102,7 +102,7 @@ Ext.define('NextThought.controller.Stream', {
 			for (var user in m) {
 				if (m.hasOwnProperty(user)){
 					UserRepository.prefetchUser(user, function(u){
-						activityStream.addUser(u[0], m[u[0].get('Username')]);
+						activityStream.addUser(u[0], m[u[0].get('Username')], true);
 					}, this);
 				}
 			}

@@ -58,17 +58,17 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 	},
 
 	removeUser: function(user) {
-		var exists = this.hasUser(user);
-		if (exists){
-			this.remove(exists, true);
+		var existing = this.getUser(user);
+		if (existing){
+			this.remove(existing, true);
 			this.updateTitle();
 		}
 	},
 
-	addUser: function(user, changes) {
+	addUser: function(user, changes, hideIfNoActivity) {
 		var widget, item, ct, elapsed;
 
-		if (!this.hasUser(user)) {
+		if (!this.getUser(user)) {
 			widget = {xtype:'contact-card', user: user, username: user.get('Username'), items:[]};
 
 			if (!changes) {changes = [];}
@@ -94,7 +94,7 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 			});
 
 			//if this widget has no activity, hide it but still add it so we can find it later
-			if (widget.items.length === 0) {
+			if (hideIfNoActivity && widget.items.length === 0) {
 				widget.hidden = true;
 			}
 
@@ -104,8 +104,8 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 		}
 	},
 
-	hasUser: function(user) {
-		return !!(this.down('[username='+user.get('Username')+']'));
+	getUser: function(user) {
+		return this.down('[username='+user.get('Username')+']');
 	},
 
 
@@ -135,7 +135,7 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 
 		if (!widget) {
 			UserRepository.prefetchUser(username, function(u){
-				me.addUser(u[0], [change]);
+				me.addUser(u[0], [change], true);
 			});
 			return;
 		}
