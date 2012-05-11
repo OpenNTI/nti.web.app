@@ -16,21 +16,31 @@ Ext.define('NextThought.view.form.fields.ShareWithField', {
 
 
 	initComponent: function(){
-		this.callParent(arguments);
-		this.xtypes.push('field');
+		var me = this;
+		me.callParent(arguments);
+		me.xtypes.push('field');
 
-		this.selections = [];
+		me.selections = [];
 
 
-		this.initField();
+		me.initField();
 
-		this.inputField = this.add({xtype: 'usersearchinput'});
-		this.inputField.on({
-			scope: this,
-			'select': this.select,
-			'keydown': this.keyPress
+		me.inputField = me.add({xtype: 'usersearchinput', xhooks: {
+			alignPicker: function(){
+				var o = this.inputEl;
+				var b = this.bodyEl;
+				this.bodyEl = this.inputEl = me.getEl();
+				this.callParent();
+				this.inputEl = o;
+				this.bodyEl = b;
+			}
+		}});
+		me.inputField.on({
+			scope: me,
+			'select': me.select,
+			'keydown': me.keyPress
 		});
-		this.setReadOnly(!!this.readOnly);
+		me.setReadOnly(!!me.readOnly);
 	},
 
 
