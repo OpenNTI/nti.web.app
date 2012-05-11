@@ -57,7 +57,14 @@ Ext.define( 'NextThought.view.annotations.Annotation', {
 		me.attachRecord(record);
 
 		NextThought.view.annotations.Annotation.register(me);
-		this.mixins.shareable.afterRender.call(this);
+		if(typeof record.data.sharedWith !== 'undefined'){
+			try{
+				this.mixins.shareable.afterRender.call(this);
+			}
+			catch(e){
+				console.error('attempted to setup dragging on ',record.getClassName(), e.stack|| e.stacktrace);
+			}
+		}
 	},
 
 
