@@ -26,10 +26,9 @@ Ext.define('NextThought.view.account.GroupEditor', {
 		});
 
 		if(!me.record.phantom){
-			Ext.each(me.record.get('friends'),
-				function(f){
-					me.store.add(UserRepository.getUser(f));
-				});
+			UserRepository.getUser(me.record.get('friends'), function(users){
+				me.store.add(users);
+			});
 
 			n = me.record.get('realname');
 		}

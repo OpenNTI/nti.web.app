@@ -31,18 +31,7 @@ Ext.define('NextThought.util.Parsing',{
 					Ext.applyIf(item, supplemental);
 				}
 
-				try{
-					results.push( reader.read(item).records[0] );
-				}
-				catch(e){
-					console.error(e.stack);
-					if(/user/i.test(item.Class)) {
-						results.push( UserRepository.getUser(item.Username) );
-					}
-					else {
-						throw e;
-					}
-				}
+				results.push( reader.read(item).records[0] );
 			}
 		}
 

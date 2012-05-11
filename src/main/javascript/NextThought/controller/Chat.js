@@ -613,44 +613,47 @@ Ext.define('NextThought.controller.Chat', {
 
 
 	onMessageForAttention: function(mid) {
-		var id = IdCache.getIdentifier(mid),
+		var	id = IdCache.getIdentifier(mid),
 			cmp = Ext.ComponentQuery.query('[messageId=' + id + ']')[0],
 			win = cmp ? cmp.up('window') : null,
-			msg = cmp ? cmp.message : null,
-			u = msg ? UserRepository.getUser(msg.get('Creator')) : null,
-			name = u ? u.get('alias') || u.get('realname') : null,
-			i = u ? u.get('avatarURL'): null,
-			b, c;
+			msg = cmp ? cmp.message : null;
+
+		UserRepository.getUser(msg.get('Creator'), function(users){
+			var u = users[0],
+				name = u ? u.getName() : null,
+				i = u ? u.get('avatarURL'): null,
+				b, c;
 
 
-		if (!cmp || !msg) {
-			console.error('can not find messages');
-			return;
-		}
+			if (!cmp || !msg) {
+				console.error('can not find messages');
+				return;
+			}
 
-		//apply flagged class to message wherever it is.
-		if (cmp) {
-			cmp.addCls('flagged');
-		}
+			//apply flagged class to message wherever it is.
+			if (cmp) {
+				cmp.addCls('flagged');
+			}
 
-		if (!win) {
-			b = this.getController('Classroom').getFlaggedMessagesButton();
-		}
-		else {
-			//If we are here then we have a chat window, setup button there
-			b = win.query('button[action=flagged]')[0];
-		}
+			if (!win) {
+				b = this.getController('Classroom').getFlaggedMessagesButton();
+			}
+			else {
+				//If we are here then we have a chat window, setup button there
+				b = win.query('button[action=flagged]')[0];
+			}
 
-		b.enable();
-		c = parseInt(b.getText(), 10);
-		b.setText(isNaN(c) ? 1 : c+1);
+			b.enable();
+			c = parseInt(b.getText(), 10);
+			b.setText(isNaN(c) ? 1 : c+1);
 
-		b.menu.add({
-			text:Ext.String.format('<b>{0}</b> - {1}', name,
-					Ext.String.ellipsis(AnnotationUtils.getBodyTextOnly(msg), 15)),
-			icon: i,
-			relatedCmp: cmp
-		});
+			b.menu.add({
+				text:Ext.String.format('<b>{0}</b> - {1}', name,
+					Ext.String.ellipsis(AnnotationUtils.getBodyTextOnly(msg), 15, false)),
+				icon: i,
+				relatedCmp: cmp
+			});
+		}, this);
 	},
 
 

@@ -69,6 +69,7 @@ Ext.define('NextThought.view.account.MyAccount',{
 
 		if(!this.menu.isVisible()){
 			this.menu.showBy(this.boxEl,'tl-bl?',[0,-1]);
+			this.updateLastLoginTime();
 		}
 		else {
 			this.menu.hide();
@@ -76,5 +77,11 @@ Ext.define('NextThought.view.account.MyAccount',{
 
 		//IE needs this
 		return false;
+	},
+
+
+	updateLastLoginTime: function(){
+		$AppConfig.userObject.set('lastLoginTime', Ext.Date.now());
+		$AppConfig.userObject.save();
 	}
 });

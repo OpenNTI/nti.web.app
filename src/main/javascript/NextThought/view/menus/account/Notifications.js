@@ -3,7 +3,7 @@ Ext.define('NextThought.view.menus.account.Notifications',{
 	alias: 'widget.notifications-menuitem',
 	cls: 'notifications',
 
-	NOTIFICATIONS_TO_SHOW_AT_FIRST: 2,
+	NOTIFICATIONS_TO_SHOW_AT_FIRST: 5,
 
 	messagePrefixes: {
 		'Highlight': 'Highlighted',

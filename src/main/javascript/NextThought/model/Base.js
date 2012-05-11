@@ -76,7 +76,6 @@ Ext.define('NextThought.model.Base', {
 			cField = f.getByKey('Class');
 //			openedGroup = false;
 
-
 		if(!cField.defaultValue) {
 			cField.defaultValue = cName;
 		}
@@ -133,14 +132,9 @@ Ext.define('NextThought.model.Base', {
 
 
 	getLink: function(rel){
-		var links = this.get('Links'),
+		var links = this.get('Links') || Ext.data.Types.LINKS.convert( this.raw.Links || [] ),
 			ref = links ? links.getRelHref(rel) : null;
 		return ref? $AppConfig.server.host + Globals.ensureSlash(ref, true) : null;
-	},
-
-
-	getLinks: function(rel){
-		return this.get('Links').getLinksForRel(rel);
 	},
 
 
@@ -278,7 +272,7 @@ Ext.data.Types.SINGLEITEM = {
 	type: 'singleItem',
 	convert: function(v) {
 		if (v instanceof Object) {
-			return !v ? null : ParseUtils.parseItems([v], {childRecord: true})[0];
+			return !v ? null : ParseUtils.parseItems([v], {ignoreIfExists: true})[0];
 		}
 		else {
 			console.warn('unexpected value', v);
@@ -295,7 +289,7 @@ Ext.data.Types.ARRAYITEM = {
 	type: 'arrayItem',
 	convert: function(v) {
 		if (Ext.isArray(v)) {
-			return ParseUtils.parseItems(v, {childRecord: true});
+			return ParseUtils.parseItems(v, {ignoreIfExists: true});
 		}
 		else {
 			console.warn('unexpected value', v);
@@ -318,7 +312,7 @@ Ext.data.Types.COLLECTIONITEM = {
 					values.push(v[key]);
 				}
 			}
-			return ParseUtils.parseItems(values, {childRecord: true}) ;
+			return ParseUtils.parseItems(values, {ignoreIfExists: true}) ;
 		}
 		else {
 			console.warn('unexpected value', v);
@@ -349,13 +343,9 @@ Ext.data.Types.USERLIST = {
 					}
 					else  {
 						u.push(p);
-						if(!UserRepository.has(o) && record.resolveUsers){
-//							if(typeof(o) === 'string') {
-//								console.warn("Will resolve UserId because we don't have an object to parse:",
-//										record.get('Class'), '@', record.getId(), o);
-//							}
-							//asynchronously resolve this user so its cached and ready
-							UserRepository.prefetchUser(o);
+						if(record.resolveUsers){
+//							//asynchronously resolve this user so its cached and ready
+							UserRepository.getUser(o);
 						}
 					}
 				});
