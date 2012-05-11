@@ -30,6 +30,28 @@ Ext.define('NextThought.util.Globals', {
 	MIN_SIDE_WIDTH: 175,
 
 
+	stopBackspace: function(doc){
+		function fn(){
+			return function(e){
+				if(e.getKey()=== e.BACKSPACE){
+					var t = e.getTarget();
+					if(!t || !(/input|textarea/i).test(t.tagName)){
+						console.log(t);
+						e.preventDefault();
+						e.stopPropagation();
+						return false;
+					}
+				}
+			};
+		}
+
+		Ext.fly(doc).on({
+			keydown:fn(),
+			keypress: fn()
+		});
+	},
+
+
 	validateConfig: function(){
 		var HOST_PATTERN = /^(http(s)?):\/\/([a-z.\-_0-9]+)(:(\d+))?$/i,
 			HOST_PATTERN_PROTOCOL_MATCH_GROUP = 1,
@@ -309,6 +331,8 @@ function(){
 	window.onerror = function(){
 		Ext.getBody().unmask();
 	};
+
+	this.stopBackspace(document);
 
 	this.handleCache();
 

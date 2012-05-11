@@ -122,12 +122,13 @@ Ext.define('NextThought.view.content.Reader', {
 			meta, g = Globals;
 
 		function on(dom,event,fn){
-			if(dom.addEventListener) {
-				dom.addEventListener(event,fn,false);
+			if(!Ext.isArray(event)){
+				event = [event];
 			}
-			else if(dom.attachEvent) {
-				dom.attachEvent(event,fn);
-			}
+			Ext.each(event,function(event){
+				if(dom.addEventListener) { dom.addEventListener(event,fn,false); }
+				else if(dom.attachEvent) { dom.attachEvent(event,fn); }
+			});
 		}
 
 		function addCSS(cssStr){
@@ -173,6 +174,18 @@ Ext.define('NextThought.view.content.Reader', {
 			function(){ g.loadScript({ url: base+'assets/misc/mathjaxconfig.js', document: doc }); });
 
 
+		on(doc,['keypress','keydown'],function(e){
+			e = Ext.EventObject.setEvent(e||event);
+			if(e.getKey() === e.BACKSPACE){
+				var t = e.getTarget();
+				if(!t || !(/input|textarea/i).test(t.tagName)){
+					console.log(t);
+					e.preventDefault();
+					e.stopPropagation();
+				return false;
+				}
+			}
+		});
 		on(doc,'mousedown',function(){ Ext.menu.Manager.hideAll(); });
 		on(doc,'contextmenu',function(e){
 			e = Ext.EventObject.setEvent(e||event);
