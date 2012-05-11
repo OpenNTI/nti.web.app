@@ -10,12 +10,19 @@ Ext.define('NextThought.controller.Application', {
 		launchToken: {},
 
 		launch: function(){
-			Ext.widget({xtype: 'master-view'});
+			try{
+				Ext.widget({xtype: 'master-view'});
+			}
+			catch(e){
+				console.error('Loading View: ', Globals.getError(e));
+			}
 			try{
 				Library.load();
 			}
-			catch(e){ console.error('Loading Library: ', e.stack || e.stacktrace); }
+			catch(e){
+				console.error('Loading Library: ', Globals.getError(e));
 			}
+		}
 	},
 
 	init: function() {
@@ -23,7 +30,6 @@ Ext.define('NextThought.controller.Application', {
 
 		Library.on('loaded', this.restore, this);
 		this.application.on('finished-loading', function(){
-			//console.groupEnd();
 			window.stopTrackingModelConstruction = true;
 			NextThought.isInitialised = true;
 			Globals.removeLoaderSplash();

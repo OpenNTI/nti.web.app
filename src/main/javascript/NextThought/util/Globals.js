@@ -30,7 +30,7 @@ Ext.define('NextThought.util.Globals', {
 	MIN_SIDE_WIDTH: 175,
 
 	getError: function(e){
-		return (e.stack || e.stacktrace);
+		return e.stack || e.stacktrace || e;
 	},
 
 	stopBackspace: function(doc){

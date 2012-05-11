@@ -15,41 +15,41 @@ Ext.define('NextThought.view.content.Reader', {
 
 	ui: 'reader',
 	layout: 'anchor',
+	items: {
+		xtype: 'box',
+		anchor: '100%',
+		autoEl: {
+			tag: 'iframe',
+			name: '-content',
+			src: 'javascript',
+			frameBorder: 0,
+			marginWidth: 0,
+			marginHeight: 0,
+			scrolling: 'no',
+			seamless: true,
+			transparent: true,
+			allowTransparency: true,
+			style: 'overflow: hidden'
+		}
+	},
 
 	initComponent: function() {
-		var jsPrefix = 'javascript'; //this in var to trick jslint
+		this.items = Ext.clone(this.items);
+		this.items.autoEl.src += ':';
+		this.items.autoEl.name += guidGenerator();
+		this.items.listeners = {
+			scope: this,
+			afterRender: this.resetFrame
+		};
 
 		this.loadedResources = {};
 		this.addEvents('loaded','finished-restore');
 		this.enableBubble('loaded','finished-restore');
-		this.on('afterrender',this.postRender,this);
 
 		this.callParent(arguments);
 		Ext.applyIf(this, {
 			prefix: 'default',
 			padding: '0 0 0 100px'
-		});
-
-		this.add({
-			xtype: 'box',
-			anchor: '100%',
-			autoEl: {
-				tag: 'iframe',
-				name: guidGenerator()+'-content',
-				src: jsPrefix + ':',
-				frameBorder: 0,
-				marginWidth: 0,
-				marginHeight: 0,
-				scrolling: 'no',
-				seamless: true,
-				transparent: true,
-				allowTransparency: true,
-				style: 'overflow: hidden'
-			},
-			listeners: {
-				scope: this,
-				afterRender: this.resetFrame
-			}
 		});
 
 		this.mixins.annotations.initAnnotations.call(this);
@@ -63,6 +63,13 @@ Ext.define('NextThought.view.content.Reader', {
 
 		this.self.classEvents.on('general-drag-start',this.mask,this);
 		this.self.classEvents.on('general-drag-end',this.unmask,this);
+	},
+
+
+	afterRender: function(){
+		this.callParent();
+		this.splash = this.body.insertHtml('beforeEnd','<div class="no-content-splash"></div>',true);
+		this.body.on('scroll',this.checkContentFrames,this);
 	},
 
 
@@ -366,7 +373,7 @@ Ext.define('NextThought.view.content.Reader', {
 	getIframe: function(){
 		var el = this.items.first().el,
 			iframe = el.dom;
-		el.win = (Ext.isIE ? iframe.contentWindow : window.frames[iframe.name]);
+		el.win = window.frames[iframe.name] || iframe.contentWindow;
 		return el;
 	},
 
@@ -461,10 +468,15 @@ Ext.define('NextThought.view.content.Reader', {
 				doc.parentWindow = win;
 			}
 
-			if(!doc.body){
-				doc.body = doc.documentElement;
+			try {
+				if(!doc.body){
+					doc.body = doc.getElementsByTagName('body')[0];
+				}
+				this.contentDocumentElement = doc;
 			}
-			this.contentDocumentElement = doc;
+			catch(e){
+				console.log('body not ready');
+			}
 		}
 
 		return doc;
@@ -592,11 +604,6 @@ Ext.define('NextThought.view.content.Reader', {
 		return this.meta.NTIID;
 	},
 
-
-	postRender: function(){
-		this.splash = this.body.insertHtml('beforeEnd','<div class="no-content-splash"></div>',true);
-		this.body.on('scroll',this.checkContentFrames,this);
-	},
 
 	loadPage: function(ntiid, callback) {
 		var me = this,
