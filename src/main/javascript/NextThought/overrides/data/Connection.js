@@ -21,11 +21,11 @@ Ext.define('NextThought.overrides.data.Connection',{
 		return this.callParent(arguments);
 	}
 },function(){
-	Ext.Ajax.cors = true;
+//	Ext.Ajax.cors = true;
 	Ext.Ajax.disableCaching = false;
 	Ext.Ajax.defaultHeaders = Ext.Ajax.defaultHeaders || {};
 	Ext.Ajax.defaultHeaders.Accept= 'application/vnd.nextthought+json';
-	Ext.Ajax.timeout=10000;//10sec timeout
+//	Ext.Ajax.timeout=10000;//10sec timeout
 	Ext.Ajax.on('beforerequest', function(connection,options) {
 		if(options&&options.async===false){
 			var loc = null;

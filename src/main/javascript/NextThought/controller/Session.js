@@ -26,7 +26,7 @@ Ext.define('NextThought.controller.Session', {
 				NextThought.controller.Application.launch();
 			}
 
-			function showLogin(){
+			function showLogin(timedout){
 				var host = $AppConfig.server.host,
 					url = Ext.String.urlAppend(
 							Ext.String.urlAppend(
@@ -34,6 +34,10 @@ Ext.define('NextThought.controller.Session', {
 									"return=" + encodeURIComponent(location.pathname) ),
 							"host=" + encodeURIComponent(host));
 
+				if(timedout){
+					alert('a request timed out');
+					return;
+				}
 				location.replace( url );
 			}
 
@@ -58,14 +62,19 @@ Ext.define('NextThought.controller.Session', {
 			try{
 
 			Ext.Ajax.request({
+				timeout: 60000,
 				url: h + d + ping,
 				callback: function(q,s,r){
 					var l = getLink(r,'logon.handshake');
 					if(!s || !l){
-						return failureCallback.call(m);
+						if(r.timedout){
+							console.log('Request timed out: ', r.request.options.url);
+						}
+						return Ext.callback(failureCallback,m,[r.timedout]);
 					}
 					Ext.Ajax.request({
 						method: 'POST',
+						timeout: 60000,
 						url: h + l,
 						params : {
 							username: u
@@ -73,7 +82,10 @@ Ext.define('NextThought.controller.Session', {
 						callback: function(q,s,r){
 							l = getLink(r,'logon.continue');
 							if(!s || !l){
-								return failureCallback.call(m);
+								if(r.timedout){
+									console.log('Request timed out: ', r.request.options.url);
+								}
+								return failureCallback.call(m,r.timedout);
 							}
 							m.logoutURL = getLink(r,'logon.logout');
 							m.resolveService(successCallback,failureCallback);
@@ -88,7 +100,7 @@ Ext.define('NextThought.controller.Session', {
 		},
 
 
-		resolveService: function(successCallback, failureCallback){
+		resolveService: function(successFn, failureFn){
 			var m = this,
 				s = $AppConfig.server;
 
@@ -102,7 +114,7 @@ Ext.define('NextThought.controller.Session', {
 					scope: this,
 					callback: function(q,success,r){
 						if(!success){
-//							failureCallback.call(m);
+//							Ext.callback(failureFn,m);
 							alert('Could not resolve service document');
 							console.log('\nreq:',q,'\nresp:',r, '\n');
 							return;
@@ -112,24 +124,16 @@ Ext.define('NextThought.controller.Session', {
 								user = doc.Items[0].Title;
 
 							$AppConfig.service = Ext.create('NextThought.model.Service', doc, user);
-							m.attemptLoginCallback(user,successCallback);
+							m.attemptLoginCallback(user,successFn);
 						}
 						catch(e){
-							console.error(e);
-//							Ext.Ajax.request({
-//								method: 'POST',
-//								url: s.host + s.data + 'logout',
-//								callback: function(){
-//									failureCallback.call(m);
-//								}
-//							});
-
+							console.error(Globals.getError(e));
 						}
 					}
 				});
 			}
 			catch(e){
-				console.error('AttemptLogin Exception: ', e.message, '\n', e.stack);
+				console.error('AttemptLogin Exception: ', Globals.getError(e));
 			}
 		},
 
