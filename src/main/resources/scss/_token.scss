@@ -1,5 +1,8 @@
 div.nt-token-wrapper{
 	display: inline-block;
+	* {
+		font-size: 12px;
+	}
 
 	.nt-token {
 		background: #1DA1D8;
@@ -47,8 +50,8 @@ div.nt-token-wrapper{
 				width: 13px;
 
 				&.nt-token-nib-person { display: none; }
-				&.nt-token-nib-public { background-position: 0 0; }
-				&.nt-token-nib-group { background-position: -14px -14px; }
+				&.nt-token-nib-public { background-position: 0 0; font-weight: bold;}
+				&.nt-token-nib-group { background-position: -14px -14px; font-weight: bold;}
 			}
 
 			.nt-token-nib-end {

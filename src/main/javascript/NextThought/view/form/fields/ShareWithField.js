@@ -5,6 +5,10 @@ Ext.define('NextThought.view.form.fields.ShareWithField', {
 		labelable: 'Ext.form.Labelable',
 		field: 'Ext.form.field.Field'
 	},
+	cls: 'share-with-field',
+	autoEl: 'div',
+	layout: 'auto',
+	ui: 'sharewith',
 	requires: [
 		'NextThought.view.form.util.Token',
 		'NextThought.view.form.fields.UserSearchInputField'
@@ -30,6 +34,16 @@ Ext.define('NextThought.view.form.fields.ShareWithField', {
 	},
 
 
+	afterRender: function(){
+		var me = this;
+		me.callParent();
+		me.inputField.ref = me.el;
+		me.el.on('click',function(){
+			me.inputField.focus();
+		});
+	},
+
+
 	setReadOnly: function(readOnly){
 		this.readOnly = readOnly;
 		if(readOnly) {
@@ -41,7 +55,6 @@ Ext.define('NextThought.view.form.fields.ShareWithField', {
 
 		this.items.each(function(token){ token.setReadOnly(readOnly); },this);
 	},
-
 
 
 	focus: function(){

@@ -34,7 +34,22 @@ Ext.define('NextThought.view.Window',{
 			el: this.el,
 			delegate: '#' + Ext.escapeId(this.id) + '-body'
 		});
+		this.dd.on('beforedragstart',this.onBeforeDragStart,this);
 		this.relayEvents(this.dd, ['dragstart', 'drag', 'dragend']);
+	},
+
+
+	onBeforeDragStart: function(dd,e){
+		var id = e.getTarget('[id]',null,true),
+			cmp;
+		if(id){
+			cmp = Ext.getCmp(id.id);
+			if(cmp){
+				console.log(cmp.is('button,field'));
+				return !cmp.is('button,field');
+			}
+		}
+		return true;
 	},
 
 

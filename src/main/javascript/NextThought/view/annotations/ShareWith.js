@@ -8,34 +8,35 @@ Ext.define( 'NextThought.view.annotations.ShareWith', {
 	
 
 	width: 450,
-	height: 300,
 	modal: true,
-//	layout: 'vbox',
 
 	items: [
 		{
 			xtype: 'component',
 			renderTpl: [
-				'<div class="share-with-data {model:lowercase}">',
-					'<img id="{id}-avatar" src="{avatarURL}" width="48" height="48">',
-					'<div class="title">{title}</div>',
-					'<div class="modeltype">{model:capitalize} by <span id="{id}-name" class="username">{name}</span></div>',
-					'<div>',
-						'<img class="charm" src="{blank}"/>',
-						'<span class="content">{content:ellipsis(150)}</span>',
-					'</div>'
+				'<div class="{model:lowercase}">',
+				'<div class="share-with-data">',
+					'<div class="title"><img id="{id}-avatar" src="{avatarURL}"> {title}</div>',
+					'<div class="description">{model:capitalize} by <span id="{id}-name" class="username">{name}</span></div>',
+					'<div class="snippet">{content:ellipsis(150)}</div>',
+				'</div>',
+				'</div>'
 			],
 			childEls: ['name','avatar']
 		},
 		{
-			xtype: 'sharewith'
+			xtype: 'container',
+			autoEl: {tag: 'div', cls: 'field' },
+			items: { xtype: 'sharewith' }
 		},
 		{
 			xtype: 'container',
+			cls: 'buttons',
 			layout:{ type: 'hbox', pack: 'end' },
+			defaults: {ui: 'primary', scale: 'medium'},
 			items: [
 				{xtype: 'button', text: 'Save', action: 'save'},
-				{xtype: 'button', text: 'Cancel', handler: function(btn){
+				{xtype: 'button', text: 'Cancel', ui: 'secondary', handler: function(btn){
 					btn.up('window').close();
 				}}
 			]

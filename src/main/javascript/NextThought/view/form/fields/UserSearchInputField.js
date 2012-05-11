@@ -4,8 +4,8 @@ Ext.define( 'NextThought.view.form.fields.UserSearchInputField', {
 	requires: [
 		'NextThought.view.menus.Group'
 	],
-	
-	anchor: '100%',
+
+	width: 70,
 	allowBlank: true,
 	displayField: 'realname',
 	typeAhead: false,
@@ -15,6 +15,7 @@ Ext.define( 'NextThought.view.form.fields.UserSearchInputField', {
 	minChars: 1,
 	valueField: 'Username',
 	emptyText: 'Search...',
+	cls: 'user-search-field',
 	trigger1Cls: 'hidden',
 	trigger2Cls: 'x-menu',
 
@@ -36,10 +37,19 @@ Ext.define( 'NextThought.view.form.fields.UserSearchInputField', {
 	initComponent: function(){
 		var me = this;
 		me.callParent(arguments);
-		me.menu = Ext.widget({xtype: 'group-menu', width: 200});
+		me.menu = Ext.widget({xtype: 'group-menu'});
 		me.menu.on('selected',function(record, item){
 			me.fireEvent('select',me,[record]);
 		});
+	},
+
+
+	afterRender: function(){
+		this.callParent();
+		this.inputEl.on({
+			mousedown: function(e){ e.dragTracked = true; }
+		});
+		this.triggerEl.first().parent().addCls('hidden');
 	},
 
 
@@ -50,9 +60,16 @@ Ext.define( 'NextThought.view.form.fields.UserSearchInputField', {
 	},
 
 
+	getRefEl: function(){
+		return this.ref || this.getEl();
+	},
+
+
 	onTrigger2Click: function(){
+		var e = this.getRefEl();
 		if(!this.menu.isVisible()){
-			this.menu.showBy(this.getEl(),'tl-bl?',[0,5]);
+			this.menu.setWidth(e.getWidth());
+			this.menu.showBy(e,'tl-bl?',[0,5]);
 		}
 		else {
 			this.menu.hide();
