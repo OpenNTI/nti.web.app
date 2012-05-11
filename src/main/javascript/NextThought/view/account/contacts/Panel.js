@@ -28,8 +28,13 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 	},
 
 	setTitle: function(title){
+		var itemsShown = 0;
 		if(this.showCount){
-			title = Ext.String.format('{0} ({1})',title,this.items.getCount());
+			Ext.each(this.items.items, function(x){
+				if (!x.hidden){itemsShown++;}
+			}, this);
+
+			title = Ext.String.format('{0} ({1})',title,itemsShown);
 		}
 
 		return this.callParent([title]);
@@ -61,20 +66,39 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 	},
 
 	addUser: function(user, changes) {
-		var widget, item, ct;
+		var widget, item, ct, elapsed;
 
 		if (!this.hasUser(user)) {
-			widget = Ext.widget('contact-card', {user: user, username: user.get('Username')});
+			widget = {xtype:'contact-card', user: user, username: user.get('Username'), items:[]};
 
 			if (!changes) {changes = [];}
 			Ext.each(changes, function(c){
 				ct = c.get('ChangeType');
 				item = c.get('Item');
-				if (ct !== 'Circled') {
-					widget.add({type: item.getModelName(), message: this.getMessage(c), ContainerId: item.get('ContainerId')});
+				elapsed = item ? Ext.Date.getElapsed(item.get('Last Modified')) : null;
+				if (ct !== 'Circled' && elapsed && elapsed <=  1800000) { //newer than 30 min
+					widget.items.push({
+						item: item,
+						type: item.getModelName(),
+						message: this.getMessage(c),
+						ContainerId: item.get('ContainerId')
+					});
 				}
 			}, this);
 
+			//So now we have the widgets created and in the card, we need to sort them so newest first:
+			Ext.Array.sort(widget.items, function(a, b){
+				var d1 = Ext.Date.format(a.item.get('Last Modified'), 'U');
+				var d2 = Ext.Date.format(b.item.get('Last Modified'), 'U');
+				return d2-d1;
+			});
+
+			//if this widget has no activity, hide it but still add it so we can find it later
+			if (widget.items.length === 0) {
+				widget.hidden = true;
+			}
+
+			//Add and update title
 			this.add(widget);
 			this.updateTitle();
 		}
@@ -104,21 +128,27 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 
 
 	addActivity: function(username, change) {
-		var widget = this.down('[username='+username+']'),
+		var me = this,
+			widget = me.down('[username='+username+']'),
 			item = change.get('Item'),
 			ct = change.get('ChangeType');
 
 		if (!widget) {
-			console.error('Cannot add activity, no user card exists for', username);
+			UserRepository.prefetchUser(username, function(u){
+				me.addUser(u[0], [change]);
+			});
 			return;
 		}
 
 		if (ct!=='Circled'){
-			widget.add({
+			widget.insert(0, {
 				type: item.getModelName(),
 				message: this.getMessage(change),
 				ContainerId: item.get('ContainerId')
 			});
+			this.insert(0, widget);//move?
+			widget.setVisible(true);
+
 		}
 	}
 
