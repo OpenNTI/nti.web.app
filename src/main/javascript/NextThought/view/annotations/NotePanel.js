@@ -304,8 +304,6 @@ Ext.define('NextThought.view.annotations.NotePanel',{
 		}
 
 		target = Ext.get(target);
-		event.preventDefault();
-		event.stopPropagation();
 
 		var me = this,
 			inBox = target && me.controls && me.controls.contains(target),
@@ -326,7 +324,10 @@ Ext.define('NextThought.view.annotations.NotePanel',{
 			me.box.setDisplayed(false);
 			me.fireEvent('load-transcript', me.record, me);
 		}
-		else{
+		else if(me.record.isModifiable()) {
+			event.preventDefault();
+			event.stopPropagation();
+
 			me.box.fadeOut({
 			    opacity: 0,
 			    easing: 'easeOut',
@@ -338,14 +339,12 @@ Ext.define('NextThought.view.annotations.NotePanel',{
 			    easing: 'easeOut',
 			    duration: 50,
 				callback: function(){
-					if(me.record.isModifiable()) {
 						me.fireEvent('action', 'edit', me);
-					}
 				}
 			});
+			return false;
 		}
-
-		return false;
+		return true;
 	},
 
 
