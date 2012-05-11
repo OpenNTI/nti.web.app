@@ -239,7 +239,7 @@ Ext.define( 'NextThought.view.annotations.Annotation', {
 				me.record.fireEvent('updated', newRecord);
 				me.record = newRecord;
 				if (callback) {
-					Globals.callback(callback);
+					Ext.callback(callback);
 				}
 			}
 		});

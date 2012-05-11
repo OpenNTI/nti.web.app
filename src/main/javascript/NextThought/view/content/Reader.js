@@ -106,7 +106,7 @@ Ext.define('NextThought.view.content.Reader', {
 				Ext.TaskManager.stop(task);
 				me.initContentFrame();
 				if(cb){
-					Globals.callback(cb,me);
+					Ext.callback(cb,me);
 				}
 			}
 		};
@@ -603,7 +603,7 @@ Ext.define('NextThought.view.content.Reader', {
 			service = $AppConfig.service;
 
 		if(ntiid === me.getContainerId()){
-			Globals.callback(callback,null,[me]);
+			Ext.callback(callback,null,[me]);
 			return false;
 		}
 
@@ -626,7 +626,7 @@ Ext.define('NextThought.view.content.Reader', {
 
 		function failure(q,r){
 			console.error(arguments);
-			Globals.callback(callback,null,[{req:q,error:r}]);
+			Ext.callback(callback,null,[{req:q,error:r}]);
 			if(r && r.responseText){
 				me.splash.hide();
 				me.setContent(r.responseText);
@@ -640,7 +640,7 @@ Ext.define('NextThought.view.content.Reader', {
 		else {
 			this.setSplash();
 			this.relayout();
-			Globals.callback(callback,null,[me]);
+			Ext.callback(callback,null,[me]);
 		}
 
 		return true;
@@ -663,7 +663,7 @@ Ext.define('NextThought.view.content.Reader', {
 
 		function onFinishLoading() {
 			me.relayout();
-			Globals.callback(callback,null,[me]);
+			Ext.callback(callback,null,[me]);
 			me.fireEvent('loaded', containerId);
 		}
 

@@ -44,7 +44,7 @@ Ext.define('NextThought.store.FriendsList',{
 				if(p){ friends[p][user.getId()] = user; }
 			});
 
-			Globals.callback(callback,null,[friends]);
+			Ext.callback(callback,null,[friends]);
 		});
 	}
 });

@@ -17,7 +17,7 @@ Ext.define('NextThought.util.Sharing',{
 			callback: function(record, operation){
 				success = operation.success;//if we're synchronous
 				if(callback){
-					Globals.callback(callback,null,arguments);
+					Ext.callback(callback,null,arguments);
 				}
 			}
 		});

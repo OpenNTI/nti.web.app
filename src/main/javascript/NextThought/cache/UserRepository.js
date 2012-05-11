@@ -91,7 +91,7 @@ Ext.define('NextThought.cache.UserRepository', {
 			async = false;
 
 		function finish() {
-			Globals.callback(callback,scope, [result]);
+			Ext.callback(callback,scope, [result]);
 		}
 
 		Ext.each(

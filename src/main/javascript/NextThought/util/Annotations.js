@@ -20,7 +20,7 @@ Ext.define('NextThought.util.Annotations',{
 		var a = NextThought.view.annotations.Annotation;
 
 		function cb(){
-			Globals.callback(fn,scope);
+			Ext.callback(fn,scope);
 		}
 
 		if(a.rendering || a.aboutToRender){

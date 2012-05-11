@@ -37,7 +37,7 @@ Ext.define('NextThought.providers.Location', {
 			if(e.isMasked()){
 				e.unmask();
 			}
-			Globals.callback(callback,null,arguments);
+			Ext.callback(callback,null,arguments);
 
 			if(fromHistory!==true){
 				window.history.pushState({location: ntiid}, "");

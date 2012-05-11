@@ -29,6 +29,9 @@ Ext.define('NextThought.util.Globals', {
 
 	MIN_SIDE_WIDTH: 175,
 
+	getError: function(e){
+		return (e.stack || e.stacktrace);
+	},
 
 	stopBackspace: function(doc){
 		function fn(){
@@ -149,7 +152,7 @@ Ext.define('NextThought.util.Globals', {
 		function tick(){
 			stack.pop();
 			if(stack.length === 0) {
-				Globals.callback(onLoad, scope,[errors]);
+				Ext.callback(onLoad, scope,[errors]);
 			}
 		}
 
@@ -292,24 +295,6 @@ Ext.define('NextThought.util.Globals', {
 
 
 	/**
-	 * Call a function and return its value
-	 *
-	 * Will ignore non-functions.
-	 *
-	 * @param fn - function to call
-	 * @param scope - scope of the function's invocation
-	 * @param args - arguments array
-	 */
-	callback: function(fn, scope, args){
-		if(!Ext.isFunction(fn)){
-			return false;
-		}
-
-		return fn.apply(scope||window, args);
-	},
-
-
-	/**
 	 * @see http://stackoverflow.com/questions/105034/how-to-create-a-guid-uuid-in-javascript
 	 */
 	guidGenerator: function() {
@@ -329,7 +314,7 @@ function(){
 	window.guidGenerator = this.guidGenerator;
 
 	window.onerror = function(){
-		Ext.getBody().unmask();
+		console.log('Caught an error? ',arguments);
 	};
 
 	this.stopBackspace(document);
