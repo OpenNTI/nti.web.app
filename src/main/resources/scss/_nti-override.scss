@@ -4,6 +4,15 @@
 		a.related {
 			color: #84b93d;
 		}
+
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		cursor: pointer;
+		&.showall {
+			white-space: normal;
+			cursor: auto;
+		}
 	}
 
 	.externalvideo {

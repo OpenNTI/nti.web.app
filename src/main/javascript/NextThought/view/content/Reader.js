@@ -446,6 +446,9 @@ Ext.define('NextThought.view.content.Reader', {
 		});
 		if(last){
 			container.removeChild(last);
+			Ext.fly(container).on('click',function(){
+				Ext.fly(container).removeAllListeners().addCls('showall');
+			});
 		} else {
 			Ext.fly(container).remove();
 		}
