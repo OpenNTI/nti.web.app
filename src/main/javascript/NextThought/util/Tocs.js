@@ -30,6 +30,12 @@ Ext.define('NextThought.util.Tocs',{
 			tree.children.first().expanded = true;
 		}
 
+		tree.children.unshift({
+			text: 'Title Page',
+			ntiid: root.getAttribute('ntiid'),
+			leaf: true
+		});
+
 		return tree;
 	},
 
