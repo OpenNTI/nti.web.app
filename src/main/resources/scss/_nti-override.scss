@@ -50,9 +50,6 @@
    .warning,
    .game,
    .sidebar{
-	  &::after{
-		  content: "" !important;
-	  }
 		padding: 1em !important;
 		background-image: none !important;
 		background-color: rgba(235, 235, 235, 0.3) !important;
@@ -103,7 +100,6 @@
 	}
 
 	.page-contents {
-		color: #757474;
 		margin-left: 80px;
 		font-size: 14px !important;
 		font-weight: normal !important;
