@@ -299,6 +299,8 @@ Ext.define('NextThought.view.annotations.NotePanel',{
 
 
 	click: function(event, target){
+		event.stopPropagation();
+
 		if (this.isDisabled()) {
 			return;
 		}
@@ -307,7 +309,8 @@ Ext.define('NextThought.view.annotations.NotePanel',{
 
 		var me = this,
 			inBox = target && me.controls && me.controls.contains(target),
-			action = inBox && target.getAttribute('className');
+			action = inBox && target.getAttribute('className'),
+			t = event.getTarget();
 
 		if(action){
 			me.fireEvent('action', action, me);
@@ -320,29 +323,30 @@ Ext.define('NextThought.view.annotations.NotePanel',{
 
 			NextThought.view.whiteboard.Utils.display(target.getAttribute('src'));
 		}
-		else if(me.box.isDisplayed() && me.isTranscriptSummary()){
-			me.box.setDisplayed(false);
-			me.fireEvent('load-transcript', me.record, me);
-		}
-		else if(me.record.isModifiable()) {
-			event.preventDefault();
-			event.stopPropagation();
+		else if(!t || !(/input|textarea|audio|video|button|a/i).test(t.tagName)){
+			if(me.box.isDisplayed() && me.isTranscriptSummary()){
+				me.box.setDisplayed(false);
+				me.fireEvent('load-transcript', me.record, me);
+			}
+			else if(me.record.isModifiable()) {
+				event.preventDefault();
 
-			me.box.fadeOut({
-			    opacity: 0,
-			    easing: 'easeOut',
-			    duration: 50,
-			    remove: false,
-			    useDisplay: false
-			}).fadeIn({
-			    opacity: 1,
-			    easing: 'easeOut',
-			    duration: 50,
-				callback: function(){
-						me.fireEvent('action', 'edit', me);
-				}
-			});
-			return false;
+				me.box.fadeOut({
+					opacity: 0,
+					easing: 'easeOut',
+					duration: 50,
+					remove: false,
+					useDisplay: false
+				}).fadeIn({
+					opacity: 1,
+					easing: 'easeOut',
+					duration: 50,
+					callback: function(){
+							me.fireEvent('action', 'edit', me);
+					}
+				});
+				return false;
+			}
 		}
 		return true;
 	},
