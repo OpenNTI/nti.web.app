@@ -10,6 +10,9 @@
 		width: 215px !important;
 		margin-right: 30px;
 		background: url(../images/contact-under-divider.png) no-repeat 1px 49px;
+		.x-gecko & {
+			background-position: 1px 51px;
+		}
 	}
 }
 
