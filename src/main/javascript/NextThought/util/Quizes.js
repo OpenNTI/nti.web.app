@@ -9,7 +9,7 @@ Ext.define('NextThought.util.Quizes', {
 
 
 	sendLaTeXCommand: function(mq, tex, root) {
-		root = root || Ext.getCmp('reader').down('reader-panel').getDocumentElement();
+		root = root || Ext.getCmp('library').down('reader-panel').getDocumentElement();
 		var w = root.parentWindow;
 
 		if (mq) {
@@ -62,7 +62,7 @@ Ext.define('NextThought.util.Quizes', {
 
 	attachMathSymbolToMathquillObjects: function(objectOrObjects) {
 		objectOrObjects.bind('mousedown click focusin', function(e){
-			var r = Ext.getCmp('reader').down('reader-panel');
+			var r = Ext.getCmp('library').down('reader-panel');
 			r.scrollToNode(this, true, 90);
 			MathSymbolPanel.showMathSymbolPanelFor(this, r.body);
 		});
