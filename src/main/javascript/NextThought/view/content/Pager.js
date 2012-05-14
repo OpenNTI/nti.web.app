@@ -16,7 +16,7 @@ Ext.define('NextThought.view.content.Pager',{
 		iconCls: 'page',
 		scale: 'large',
 		ui: 'content-button',
-		handler: function(btn){ LocationProvider.setLocation(btn?btn.ntiid:null); }
+		handler: function(btn){ if(btn && btn.ntiid){ LocationProvider.setLocation(btn.ntiid); } }
 	},
 
 	items: [
@@ -35,15 +35,17 @@ Ext.define('NextThought.view.content.Pager',{
 			prevBtn = this.down('[cls=prev]');
 
 		nextBtn.disable();
-		if(info.hasNext) {
+		delete nextBtn.ntiid;
+		if(info.next) {
 			nextBtn.enable();
-			nextBtn.ntiid = info.nextRef;
+			nextBtn.ntiid = info.next;
 		}
 
 		prevBtn.disable();
-		if(info.hasPrevious){
+		delete prevBtn.ntiid;
+		if(info.previous){
 			prevBtn.enable();
-			prevBtn.ntiid = info.previousRef;
+			prevBtn.ntiid = info.previous;
 		}
 	}
 });

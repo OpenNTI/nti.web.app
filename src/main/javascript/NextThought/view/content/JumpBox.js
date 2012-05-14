@@ -66,6 +66,7 @@ Ext.define('NextThought.view.content.JumpBox',{
 	locationChanged: function(ntiid){
 		var loc = LocationProvider.getLocation(ntiid),
 			currentNode = loc.location,
+			toc = /toc/i,
 			isChapter,
 			node,
 			sections = [],
@@ -84,7 +85,7 @@ Ext.define('NextThought.view.content.JumpBox',{
 		}
 
 
-		isChapter = /toc/i.test(currentNode.parentNode.tagName);
+		isChapter = toc.test(currentNode.parentNode.tagName);
 		node = isChapter? currentNode.firstChild : currentNode.parentNode.firstChild;
 		currentChapter = isChapter? currentNode : currentNode.parentNode;
 		currentSection = isChapter? null : currentNode;
@@ -112,8 +113,14 @@ Ext.define('NextThought.view.content.JumpBox',{
 		this.sectionMenu.removeAll();
 		this.sectionMenu.add(sections);
 
-		currentChapter = currentChapter.getAttribute('label');
-		currentSection = currentSection?currentSection.getAttribute('label'):'Chapter Index';
+		if(toc.test(currentNode.tagName)){
+			currentChapter = 'Book Cover';
+			currentSection = '---------------';
+		}
+		else {
+			currentChapter = currentChapter.getAttribute('label');
+			currentSection = currentSection?currentSection.getAttribute('label'):'Chapter Index';
+		}
 
 		if(this.rendered) {
 			this.labelEl.update(currentChapter);

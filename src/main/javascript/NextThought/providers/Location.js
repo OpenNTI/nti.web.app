@@ -113,26 +113,48 @@ Ext.define('NextThought.providers.Location', {
 
 	getNavigationInfo: function(ntiid) {
 		var loc = Library.findLocation(ntiid),
-			toc = loc? loc.toc : null,
-			list = toc ? Ext.DomQuery.select('toc,topic' ,toc): [],
-			i = 0,
-			len = list.length,
-			info = {};
+			info = {},
+			re = /topic|toc/i,
+			slice = Array.prototype.slice;
 
-		for (i; i < len; i++) {
-			if (!list[i] || !list[i].tagName) {
-				console.error('error in loop', ntiid, loc, list, i, len);
-				continue;
+		function is(t){ return t && re.test(t.tagName); }
+
+		function getRef(n){
+			if(!n || !n.getAttribute){ return null; }
+			return n.getAttribute('ntiid') || null;
+		}
+
+		function child(n,first){
+			var v,
+				topics = n && n.childNodes ? slice.call(n.childNodes) : [];
+
+			if(first){
+				topics.reverse();
 			}
 
-			if(list[i].getAttribute('ntiid') === ntiid) {
-				info.hasPrevious = Boolean(info.previous = list[i - 1]);
-				info.hasNext = !!(info.next = list[i + 1]);
-				info.nextRef = info.hasNext ? info.next.getAttribute('ntiid') : null;
-				info.previousRef = info.hasPrevious ? info.previous.getAttribute('ntiid') : null;
-				info.current = list[i];
-				break;
+			while(topics.length && !is(topics.peek())){topics.pop();}
+			if(n && topics.length){
+				v = topics.peek();
+				return first? v : child(v,first);
 			}
+			return first? null : n;
+		}
+
+
+		function sibling(n,dir){
+			var k = dir+'Sibling',x;
+			if(n){
+				x = n[k];
+				x = (x && is(x)) ? x : null;
+				return x || sibling(n[k],dir);
+			}
+			return null;
+		}
+
+		loc = loc ? loc.location : null;
+		if(loc) {
+			info.previous = getRef(child(sibling(loc,'previous')) || loc.parentNode);
+			info.next = getRef(child(loc,true) || sibling(loc,'next') || sibling(loc.parentNode,'next'));
 		}
 
 		return info;
