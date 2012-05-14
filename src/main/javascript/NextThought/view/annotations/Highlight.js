@@ -90,7 +90,8 @@ Ext.define('NextThought.view.annotations.Highlight', {
 		var rects = [],
 			list = this.selection.getClientRects(),
 			i=list.length-1,
-			xy = Ext.fly(this.canvas).getXY();
+			//xy = Ext.fly(this.canvas).getXY();
+			xy = Ext.fly(this.renderTarget).getXY();
 
 		for(;i>=0; i--){ rects.push( this.adjustCoordinates(list[i],xy) ); }
 
