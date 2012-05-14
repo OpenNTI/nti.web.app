@@ -317,7 +317,7 @@ Ext.define('NextThought.view.content.Reader', {
 				f.src = f.originalSrc;
 			}
 			else if(style===display && outOfBounds){
-				console.log(scrollTop, top, bottom, bounds);
+//				console.log(scrollTop, top, bottom, bounds);
 				f.removeAttribute('style');
 				f.src = 'about:blank';
 //				height = contentHeight-container.clientHeight;
