@@ -101,7 +101,7 @@ Ext.define('NextThought.controller.Search', {
 
 
 	searchForValue: function(value) {
-		if(!value || value.length < 4){return;}
+		if(!value){return;}
 
 		var s = this.getHitStore(),
 			filter = this.modelFilter,
@@ -133,7 +133,6 @@ Ext.define('NextThought.controller.Search', {
 
 	clearSearchResults: function() {
 		Ext.getCmp('search-results').removeAll(true);
-
 	},
 
 
@@ -165,7 +164,10 @@ Ext.define('NextThought.controller.Search', {
 		}
 
 		Ext.ComponentQuery.query('library-view-container')[0].activate();
-		LocationProvider.setLocation( cid );
+		LocationProvider.setLocation( cid, function(reader){
+			reader.scrollToText(result.term);
+			result.on('destroy', reader.clearSearchRanges,reader,{single:true});
+		});
 	},
 
 

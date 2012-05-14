@@ -99,12 +99,24 @@ Ext.define('NextThought.view.annotations.Highlight', {
 
 
 	createCanvas: function(){
+		var t = document.getElementById(this.canvasId+'-Image');
 		var c = document.getElementById(this.canvasId);
+
+		if(!t){
+			t = this.createElement(
+				'img',
+				this.ownerCmp.body.dom,
+				'highlight-object','position: absolute; top: 0; left:0; pointer-events: none',
+				this.canvasId+'-Image'
+				);
+		}
+		this.renderTarget = t;
+
 		if(!c){
 			c = this.createElement(
 				'canvas',
 				this.ownerCmp.body.dom,
-				'highlight-object','position: absolute; pointer-events: none',
+				'highlight-object','display: none',
 				this.canvasId
 				);
 			this.ownerCmp.on('resize', this.canvasResize, this);
@@ -259,7 +271,8 @@ Ext.define('NextThought.view.annotations.Highlight', {
 			if (!this.queue[p]) {
 				this.queue[p] = {
 					queue: [],
-					canvas: annotation.canvas
+					canvas: annotation.canvas,
+					target: annotation.renderTarget
 				};
 
 			}
@@ -270,6 +283,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
 			if (!this.queue[prefix]){return;}
 
 			var c = this.queue[prefix].canvas,
+				t = this.queue[prefix].target,
 				ctx = c ? c.getContext("2d") : null,
 				w = c ? c.width : 0,
 				q = Ext.clone(this.queue[prefix].queue);
@@ -285,6 +299,8 @@ Ext.define('NextThought.view.annotations.Highlight', {
 			ctx.globalAlpha = 0.3;
 
 			while(q.length){ (q.pop())(ctx); }
+
+			t.src = c.toDataURL();
 		}
 	}
 },

@@ -428,7 +428,7 @@ Ext.define( 'NextThought.view.annotations.Annotation', {
 				return;
 			}
 			this.aboutToRender = false;
-			console.time('Rendering');
+//			console.time('Rendering');
 			this.rendering = true;
 			this.events.fireEvent('rendering');
 			this.sorter[prefix] = this.sorter[prefix] || this.buildSorter(prefix);
@@ -450,7 +450,7 @@ Ext.define( 'NextThought.view.annotations.Annotation', {
 
 			this.rendering = false;
 			this.events.fireEvent('finish');
-			console.timeEnd('Rendering');
+//			console.timeEnd('Rendering');
 		}
 
 	}

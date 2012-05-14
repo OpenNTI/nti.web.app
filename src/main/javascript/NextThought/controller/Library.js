@@ -57,7 +57,7 @@ Ext.define('NextThought.controller.Library', {
 			ps.load();
 		}
 		else {
-			Ext.callback(callback);
+			Ext.callback(callback,null,[cmp]);
 		}
 		//When the reader changes, we need to tell the stream controller so he knows to
 		//update his data

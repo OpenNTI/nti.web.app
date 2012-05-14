@@ -33,7 +33,7 @@ Ext.define('NextThought.providers.Location', {
 		var me = this,e = Ext.getCmp('viewport').getEl();
 
 		function finish(){
-			console.timeEnd('navigation');
+			console.log('Navigation for '+ntiid+' finished.');
 			if(e.isMasked()){
 				e.unmask();
 			}
@@ -50,7 +50,6 @@ Ext.define('NextThought.providers.Location', {
 
 		//make this happen out of this function's flow, so that the mask shows immediately.
 		setTimeout(function(){
-			console.time('navigation');
 			if(!me.fireEvent('navigate',ntiid,finish)){
 				return false;
 			}

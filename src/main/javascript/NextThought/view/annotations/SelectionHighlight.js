@@ -2,7 +2,6 @@ Ext.define('NextThought.view.annotations.SelectionHighlight', {
 	alias: 'annotations.SelectionHighlight',
 
 	constructor: function(selections, component){
-		this.callParent();
 		Ext.apply(this, {
 			selections: selections || [],
 			ownerCmp: component,
@@ -15,6 +14,7 @@ Ext.define('NextThought.view.annotations.SelectionHighlight', {
 
 		me.color = 'rgba(255,255,0,0.3)';
 		me.canvas =  me.createCanvas();
+
 		me.render = Ext.Function.createBuffered(me.render,100,me,[true]);
 
 		component.on('resize', me.canvasResize, me);
@@ -24,7 +24,8 @@ Ext.define('NextThought.view.annotations.SelectionHighlight', {
 
 	cleanup: function(){
 		try{
-			Ext.get(this.canvas).remove();
+			Ext.fly(this.canvas).remove();
+			Ext.fly(this.renderTarget).remove();
 		}
 		catch(e){
 			console.error(e);
@@ -42,10 +43,17 @@ Ext.define('NextThought.view.annotations.SelectionHighlight', {
 	},
 
 	createCanvas: function(){
+		this.renderTarget = this.createElement(
+			'img',
+			this.container,
+			'search-highlight-object unselectable',
+			'position: absolute; pointer-events: none; top: 0; left: 0;',
+			this.canvasId+'-Image');
+
 		return this.createElement(
 			'canvas',
 			this.container,
-			'search-highlight-object unselectable','position: absolute; pointer-events: none',
+			'search-highlight-object unselectable','display: none',
 			this.canvasId
 			);
 	},
@@ -86,6 +94,8 @@ Ext.define('NextThought.view.annotations.SelectionHighlight', {
 				this.drawRect(ctx,s[i]);
 			}
 		}, this);
+
+		this.renderTarget.src = c.toDataURL();
 	},
 
 	drawRect: function(ctx, rect){

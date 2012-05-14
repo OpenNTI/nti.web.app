@@ -359,7 +359,7 @@ Ext.define('NextThought.view.content.Reader', {
 
 		b = b? b.getHeight()+100: 100;
 
-		console.log('Sync Height: '+b);
+//		console.log('Sync Height: '+b);
 		i.setHeight(this.el.getHeight()-100);
 		i.setHeight(b);
 
@@ -636,7 +636,7 @@ Ext.define('NextThought.view.content.Reader', {
 
 		function failure(q,r){
 			console.error(arguments);
-			Ext.callback(callback,null,[{req:q,error:r}]);
+			Ext.callback(callback,null,[me,{req:q,error:r}]);
 			if(r && r.responseText){
 				me.splash.hide();
 				me.setContent(r.responseText);
