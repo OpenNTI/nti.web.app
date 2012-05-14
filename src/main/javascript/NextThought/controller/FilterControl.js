@@ -66,12 +66,14 @@ Ext.define('NextThought.controller.FilterControl', {
 			people = new NextThought.FilterGroup(id,NextThought.FilterGroup.OPERATION_UNION),
 			models = new NextThought.FilterGroup(id,NextThought.FilterGroup.OPERATION_UNION);
 
-		group.addFilter(people);
+		if (!everyone) {
+			group.addFilter(people);
+		}
 		group.addFilter(models);
 
 		Ext.each( groups,
 			function(g) {
-				if(!g.checked && !everyone) { return; }
+				if(!g.checked) { return; }
 
 				if(g.isMe){
 					people.addFilter(new Filter('Creator',Filter.OPERATION_INCLUDE, $AppConfig.username));
