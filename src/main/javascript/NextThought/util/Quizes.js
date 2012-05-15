@@ -46,7 +46,7 @@ Ext.define('NextThought.util.Quizes', {
 			//the frame has jQuery & MathQuill
 			w.$('input[type=number]').replaceWith(function(){
 				var id = w.$(this).attr('id');
-				return '<input id="'+id+'" type="hidden"/><span class="quiz-input"></span>';
+				return '<input id="'+id+'" type="hidden"/><span class="quiz-input" style="min-width: 80px;"></span>';
 			});
 
 			q = w.$('span.quiz-input').mathquill('editable');
