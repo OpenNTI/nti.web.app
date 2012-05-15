@@ -45,11 +45,19 @@ Ext.define( 'NextThought.view.annotations.ShareWith', {
 
 
 	initComponent: function(){
+		this.items = Ext.clone(this.items);
 		var readOnly = this.record ? !this.record.isModifiable() : false,
 			title = this.titleLabel ? this.titleLabel : readOnly ? 'Item Info' : 'Share this...',
 			content = AnnotationUtils.getBodyTextOnly(this.record) || 'This item does not have text',
 			u = this.record? this.record.get('Creator') : $AppConfig.username,
 			info = this.items.first();
+
+		//if it is readonly, don't let people select more people they can't share with.
+		if (readOnly){
+			this.items[1].items.readOnly = true;
+			this.items.last().items[1].text = 'Close';
+			delete this.items.last().items[0]
+		}
 
 		info.renderData = {
 			title: title,
@@ -58,12 +66,11 @@ Ext.define( 'NextThought.view.annotations.ShareWith', {
 			name: 'resolving...'
 		};
 
-		UserRepository.prefetchUser(u, function(users){
-			var info = this.items.first();
+		UserRepository.getUser(u, function(users){
 			if (!info.rendered) {
 				Ext.apply(info.renderData, {
 					avatarURL: users[0].get('avatarURL'),
-					username: users[0].getName()
+					name: users[0].getName()
 				});
 			}
 			else {

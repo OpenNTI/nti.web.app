@@ -40,6 +40,7 @@ Ext.define('NextThought.view.form.fields.ShareWithField', {
 			'select': me.select,
 			'keydown': me.keyPress
 		});
+
 		me.setReadOnly(!!me.readOnly);
 	},
 
