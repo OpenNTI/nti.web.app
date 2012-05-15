@@ -216,12 +216,7 @@ Ext.define('NextThought.controller.Chat', {
 					else {
 						console.error('ERROR: found something other than a user/username string in occupants list', users[k]);
 						delete users[k];
-						continue;
 					}
-				}
-
-				if(!UserRepository.isOnline(users[k])) {
-					delete users[k];
 				}
 			}
 		}
