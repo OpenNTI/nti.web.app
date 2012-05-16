@@ -55,8 +55,7 @@ Ext.define('NextThought.view.chat.Window',{
 		var list = this.down('chat-gutter');
 
 		console.log('RoomInfo',roomInfo.data);
-		UserRepository.prefetchUser(roomInfo.get('Occupants'),function(users){
-			console.log('RoomInfo Occupants',users);
+		UserRepository.getUser(roomInfo.get('Occupants'),function(users){
 			list.updateList(users);
 		});
 	},

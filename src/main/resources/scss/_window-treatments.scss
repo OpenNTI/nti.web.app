@@ -27,7 +27,7 @@
 			float: right;
 			cursor: pointer;
 
-			background: url(../images/window-sprites.png) -100 -100 no-repeat;
+			background: url(../images/window-sprites.png) -100px -100px no-repeat;
 			&.close { background-position: -1px 0; }
 			&.minimize { background-position: -15px 0; }
 		}
