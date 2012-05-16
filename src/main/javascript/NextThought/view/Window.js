@@ -26,6 +26,37 @@ Ext.define('NextThought.view.Window',{
 	},
 
 
+	initComponent: function(){
+		this.callParent(arguments);
+		var me = this,
+			w = this.width,
+			h = this.height;
+
+		this.widthPercent = typeof w === 'string' ? (parseInt(w,10)/100) : null;
+		this.heightPercent = typeof h === 'string' ? (parseInt(h,10)/100) : null;
+
+		if( this.widthPercent || this.heightPercent ) {
+			this.syncSize();
+			Ext.EventManager.onWindowResize(me.syncSize,me);
+			this.on('destroy',function(){ Ext.EventManager.removeResizeListener(me.syncSize,me);});
+		}
+	},
+
+
+	syncSize: function(){
+		var me = this,
+			h = Ext.Element.getViewportHeight() * me.heightPercent,
+			w = Ext.Element.getViewportWidth() * me.widthPercent,
+			size = me.rendered ? me.getSize() : {width: me.width, height: me.height};
+
+		size.width	= w || size.width;//NaN is falsy
+		size.height	= h || size.height;
+
+		this.setSize(size,undefined);
+		this.center();
+	},
+
+
 	initDraggable: function() {
 		this.dd = new Ext.util.ComponentDragger(this, {
 			constrain: true,
@@ -57,9 +88,9 @@ Ext.define('NextThought.view.Window',{
 		this.callParent(arguments);
 		this.closeEl.on('click', this.close, this);
 		this.minimizeEl.on('click', this.minimize, this);
-		if(!this.minimizable){
-			this.minimizeEl.remove();
-		}
+
+		if(!this.closable){ this.closeEl.remove(); }
+		if(!this.minimizable){ this.minimizeEl.remove(); }
 	}
 
 }, function(){
