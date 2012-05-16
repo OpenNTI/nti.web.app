@@ -205,7 +205,7 @@ Ext.define('NextThought.view.chat.Log', {
 					});
 
 		if(o.el && this.el){
-			o.el.scrollIntoView(this.el.first());
+			o.el.scrollIntoView(this.el);
 		}
 	},
 
