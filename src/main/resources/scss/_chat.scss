@@ -1,6 +1,7 @@
 
 .chat-window {
 	@extend .nti-window;
+	background: #fbfbfb;
 
 	.gutter {
 		& > img:first-child {
