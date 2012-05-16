@@ -11,6 +11,7 @@ $button-end-colors: #384EA9,#87b133,#c8c8c8;
 
 $button-text-colors: #ffffff,#ffffff,#707070;
 $button-text-shadows: #12236a,#688b23,#ffffff;
+$button-text-weights: bold,bolder,normal;
 
 @each $skin in $skins {
 	$experimental-support-for-svg: true;
@@ -22,6 +23,7 @@ $button-text-shadows: #12236a,#688b23,#ffffff;
 	$endColor: nth($button-end-colors,$x);
 	$color: nth($button-text-colors,$x);
 	$text-shadow: nth($button-text-shadows,$x);
+	$font-weight: nth($button-text-weights,$x);
 
 	$direction: -1px;
 
@@ -34,6 +36,13 @@ $button-text-shadows: #12236a,#688b23,#ffffff;
 
 		@each $type in icon, noicon {
 			.x-btn-#{$skin}-#{$size}-#{$type} {
+				button {
+					background: none;
+					border: none;
+					padding: 0;
+					margin: 0;
+				}
+
 				button,
 				.x-btn-inner {
 					height: auto;
@@ -72,8 +81,9 @@ $button-text-shadows: #12236a,#688b23,#ffffff;
 
 			.x-btn-inner {
 				font-size: 10px + (2px*$i) !important;
+				font-weight: $font-weight;
 				color: $color;
-				text-shadow: 0 $direction 0 $text-shadow;
+				text-shadow: 0 $direction -1px $text-shadow;
 			}
 		}
 	}
