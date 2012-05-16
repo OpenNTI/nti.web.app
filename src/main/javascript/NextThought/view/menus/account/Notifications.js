@@ -60,7 +60,7 @@ Ext.define('NextThought.view.menus.account.Notifications',{
 			hideSeeAll: true
 		});
 		this.notifications = [];
-		this.containers = {};
+		this.notificationData = {};
 
 		store.each(function(change){
 			var item = change.get('Item'),
@@ -72,9 +72,12 @@ Ext.define('NextThought.view.menus.account.Notifications',{
 			//update counter so we know when we are done:
 			itemsToLoad--;
 
-			UserRepository.prefetchUser(change.get('Creator'), function(u){
+			UserRepository.getUser(change.get('Creator'), function(u){
 				this.notifications.push({'name' :u[0].get('realname'), 'message': m, 'guid': guid});
-				this.containers[guid] = item.get('ContainerId');
+				this.notificationData[guid] = {
+					containerId: item.get('ContainerId'),
+					id: item.getId()
+				};
 				this.renderData.notificationcount = this.notifications.length;
 				//only add this to actual render data if we have few enough
 				if (this.notifications.length <= this.NOTIFICATIONS_TO_SHOW_AT_FIRST) {
@@ -109,9 +112,11 @@ Ext.define('NextThought.view.menus.account.Notifications',{
 			is = f.is(css),
 			c = is ? f : f.up(css),
 			guid = c.id,
-			containerId = this.containers[guid];
+			containerId = this.notificationData[guid].containerId,
+			recordId = this.notificationData[guid].id;
 
-		this.fireEvent('navigation-selected', containerId);
+
+		this.fireEvent('navigation-selected', containerId, recordId);
 	},
 
 	showAllNotifications: function(event) {

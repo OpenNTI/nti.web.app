@@ -88,6 +88,7 @@ Ext.define( 'NextThought.view.annotations.Annotation', {
 			e = Ext.get(el);
 
 		el.setAttribute('src',src);
+		el.setAttribute('nibFor', IdCache.getComponentId(this.record.getId(), null, this.prefix));
 		e.addCls([cls,type]);
 		el.setAttribute('style',css);
 		parent.appendChild(el);

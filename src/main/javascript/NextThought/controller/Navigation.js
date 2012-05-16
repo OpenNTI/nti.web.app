@@ -20,14 +20,10 @@ Ext.define('NextThought.controller.Navigation', {
 				}
 			},
 			'notifications-menuitem': {
-				'navigation-selected': function(ntiid){
-					LocationProvider.setLocation(ntiid);
-				}
+				'navigation-selected': this.navigate
 			},
 			'contact-activity': {
-				'navigation-selected': function(ntiid){
-					LocationProvider.setLocation(ntiid);
-				}
+				'navigation-selected': this.navigate
 			},
 			'main-views': {
 				'activate-view': this.track
@@ -36,6 +32,18 @@ Ext.define('NextThought.controller.Navigation', {
 				toggle: this.switchViews
 			}
 		},{});
+	},
+
+
+
+	navigate: function(ntiid, scrollToTargetId) {
+		var callback = Ext.emptyFn();
+		if (scrollToTargetId) {
+			callback = function(reader) {
+				reader.scrollToTarget(IdCache.getComponentId(scrollToTargetId, null, reader.prefix));
+			}
+		}
+		LocationProvider.setLocation(ntiid, callback, this);
 	},
 
 

@@ -521,7 +521,10 @@ Ext.define('NextThought.view.content.Reader', {
 
 	scrollToTarget: function(target){
 		var de = this.getDocumentElement(),
-			e = de.getElementById(target) || Ext.fly(de).query('*[name='+target+']')[0];
+			e = document.getElementById(target) ||
+				de.getElementById(target) ||
+				Ext.fly(de).query('*[name='+target+']')[0] ||
+				Ext.fly(document).query('[nibFor='+target+']')[0];
 
 		if(!e) {
 			console.warn('scrollToTarget: no target found: ',target);
@@ -552,7 +555,6 @@ Ext.define('NextThought.view.content.Reader', {
 
 		//logic to halt scrolling if conditions mentioned in function docs are met.
 		if (onlyIfNotVisible && o > st && o < b) {
-			console.debug('component is already visable, not scrolling.');
 			return;
 		}
 
