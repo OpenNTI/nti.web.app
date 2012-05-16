@@ -373,7 +373,7 @@ Ext.define('NextThought.view.content.Reader', {
 	getIframe: function(){
 		var el = this.items.first().el,
 			iframe = el.dom;
-		el.win = window.frames[iframe.name] || iframe.contentWindow;
+		el.win = iframe.contentWindow || window.frames[iframe.name];
 		return el;
 	},
 
@@ -432,6 +432,8 @@ Ext.define('NextThought.view.content.Reader', {
 			}
 		}
 
+		container = Ext.DomHelper.append(container,{tag: 'span',cls:'related'});
+
 		if(!tpl){
 			tpl = Ext.DomHelper.createTemplate(
 					'<a href="{0}" onclick="NTIRelatedItemHandler(this);return false;" class="related">{1}</a>, '
@@ -446,6 +448,7 @@ Ext.define('NextThought.view.content.Reader', {
 		});
 		if(last){
 			container.removeChild(last);
+			container = container.parentNode;
 			Ext.fly(container).on('click',function(){
 				Ext.fly(container).removeAllListeners().addCls('showall');
 			});
