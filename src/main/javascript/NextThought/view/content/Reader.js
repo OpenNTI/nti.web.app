@@ -177,7 +177,7 @@ Ext.define('NextThought.view.content.Reader', {
 
 		//Quiz Dependencies: Load MathJax 1.1 (2.0 buggy)
 		g.loadScript(
-			{ url: 'https://d3eoax9i5htok0.cloudfront.net/mathjax/1.1-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML', document: doc },
+			{ url: 'https://c328740.ssl.cf1.rackcdn.com/mathjax/1.1-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML', document: doc },
 			function(){ g.loadScript({ url: base+'assets/misc/mathjaxconfig.js', document: doc }); });
 
 
