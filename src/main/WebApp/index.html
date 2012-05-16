@@ -4,9 +4,10 @@
     <title>NextThought App</title>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
     <link rel="shortcut icon" href="assets/images/favicon.ico">
-	<link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
-    <!--<link rel="stylesheet" id="ext-base" type="text/css" href="//cdn.sencha.io/ext-4.1.0-gpl/resources/css/ext-all-gray.css">-->
-    <link rel="stylesheet" id="ext-base" type="text/css" href="/extjs-4.1.0/resources/css/ext-all-gray.css">
+
+	<link rel="stylesheet" id="ext-base" type="text/css" href="//cdn.sencha.io/ext-4.1.0-gpl/resources/css/ext-all-gray.css">
+    <!--<link rel="stylesheet" id="ext-base" type="text/css" href="/extjs-4.1.0/resources/css/ext-all-gray.css">-->
+
     <link rel="stylesheet" id="main-stylesheet" type="text/css" href="assets/css/main.css">
 	<!--[if gte IE 9]>
 	  <style type="text/css">
@@ -22,9 +23,19 @@
 
 	<script type="text/javascript" src="config.js"></script>
 
-	<!--<script type="text/javascript" src="//cdn.sencha.io/ext-4.1.0-gpl/ext-debug.js"></script>-->
-	<script type="text/javascript" src="/extjs-4.1.0/ext-debug.js"></script>
+	<!-- using the CDN version -->
+	<script type="text/javascript" src="//cdn.sencha.io/ext-4.1.0-gpl/ext-all.js"></script>
+	<script type="text/javascript">
+		//pointing to the 'ext-all.js' instead of 'ext-debug.js' requires us to re-enable the Loader if we are loading
+		// the development version (build version has minified+concatinated js)
+		 Ext.Loader.setConfig('enabled',true);
+		 Ext.Loader.setPath('Ext','//cdn.sencha.io/ext-4.1.0-gpl/src/');
+	</script>
+
+	<!-- local copy of ExtJS -->
+	<!--<script type="text/javascript" src="/extjs-4.1.0/ext-debug.js"></script>-->
+
+	<!-- application main entry -->
 	<script type="text/javascript" src="assets/js/app.js"></script>
-	<!--<script type="text/javascript" src="assets/lib/ext-4.1.0-rc1/ext-neptune.js"></script>-->
 </body>
 </html>

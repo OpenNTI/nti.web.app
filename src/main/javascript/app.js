@@ -1,7 +1,3 @@
-//if(window.console && console.groupCollapsed){
-//	console.groupCollapsed("Initialization");
-//}
-
 //disable script cache-busting _dc=... get string args
 Ext.Loader.setConfig('disableCaching', false);
 
@@ -37,8 +33,6 @@ Ext.application({
 			NextThought.controller.Session.login(app);
 			NextThought.isReady = true;
 		}
-
-		$AppConfig.server.host = location.protocol + '//' + location.host;
 
 		if(!Globals.validateConfig()){
 			return;
