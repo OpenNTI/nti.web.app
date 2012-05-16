@@ -524,7 +524,7 @@ Ext.define('NextThought.view.content.Reader', {
 			e = document.getElementById(target) ||
 				de.getElementById(target) ||
 				Ext.fly(de).query('*[name='+target+']')[0] ||
-				Ext.fly(document).query('[nibFor='+target+']')[0];
+				Ext.getCmp(target).img;
 
 		if(!e) {
 			console.warn('scrollToTarget: no target found: ',target);
