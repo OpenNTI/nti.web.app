@@ -2,6 +2,7 @@ Ext.define('NextThought.overrides.data.Connection',{
 	override: 'Ext.data.Connection',
 
 	disableCaching: false,
+	withCredentials: true,
 
 	setOptions: function(options, scope){
 		var i, badParams = ['_dc', 'id', 'page', 'start', 'limit', 'group', 'sort'],
@@ -21,11 +22,11 @@ Ext.define('NextThought.overrides.data.Connection',{
 		return this.callParent(arguments);
 	}
 },function(){
-//	Ext.Ajax.cors = true;
+	Ext.Ajax.cors = true;
+	Ext.Ajax.withCredentials = true;
 	Ext.Ajax.disableCaching = false;
 	Ext.Ajax.defaultHeaders = Ext.Ajax.defaultHeaders || {};
 	Ext.Ajax.defaultHeaders.Accept= 'application/vnd.nextthought+json';
-//	Ext.Ajax.timeout=10000;//10sec timeout
 	Ext.Ajax.on('beforerequest', function(connection,options) {
 		if(options&&options.async===false){
 			var loc = null;
