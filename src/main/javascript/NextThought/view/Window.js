@@ -11,6 +11,7 @@ Ext.define('NextThought.view.Window',{
 	frame: false,
 	header: false,
 
+	constrain: true,
 	constrainHeader: false,
 	liveDrag: true,
 
