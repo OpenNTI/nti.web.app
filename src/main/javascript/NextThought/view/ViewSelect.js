@@ -34,6 +34,7 @@ Ext.define('NextThought.view.ViewSelect', {
 			renderData: {text: '<span class="left cap"></span><span class="right cap"></span>'}
 		},
 		{
+			disabled: true,
 			iconCls: 'classroom',
 			title: 'Classroom',
 			tooltip: 'Classroom',
