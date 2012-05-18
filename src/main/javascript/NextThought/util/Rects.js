@@ -11,8 +11,7 @@ Ext.define('NextThought.util.Rects',{
 		var r=[], ri,
 			x,xx,y,yy, w,h,
 			b, bins={},
-			i = rects.length-1,
-			lh2 = lineHeight*2;
+			i = rects.length-1;
 
 		for(; i>=0; i--){
 			ri = rects[i];
@@ -24,7 +23,7 @@ Ext.define('NextThought.util.Rects',{
 			xx = ri.right || (x + ri.height);
 			yy = ri.bottom || (y + ri.width);
 
-			b = Math.floor((y/lh2));
+			b = Math.floor(y+(h/2));//vertical center line of the rect
 
 			if(!bins[b]){
 				r.push( { left:x, top:y, right:xx, bottom:yy, width:w, height:h } );
