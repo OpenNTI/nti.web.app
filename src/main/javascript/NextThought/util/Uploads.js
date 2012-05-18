@@ -5,39 +5,63 @@ Ext.define('NextThought.util.Uploads',{
 	],
 
 	constructor: function(){
-		var bb, worker, dataUrl, me = this;
-		this.requests = {};
-
-		window.BlobBuilder = window.BlobBuilder || window.WebKitBlobBuilder || window.MozBlobBuilder;
+		//deprefix...
+		window.Blob = window.Blob || window.WebKitBlob || window.MozBlob || window.MSBlob;
+		window.BlobBuilder = window.BlobBuilder || window.WebKitBlobBuilder || window.MozBlobBuilder || window.MSBlobBuilder;
 		window.URL = window.URL || window.webkitURL;
 
-		if(window.Worker && window.BlobBuilder){
-			bb = new BlobBuilder();
-			bb.append('self.addEventListener("message", function(e){dispatch(e.data);}, false);');
-			bb.append('self.postMessage( {message:"started",time:Date.now()} );');
-			//bb.append('setInterval( function(){ self.postMessage( {message:"beat",time:Date.now()} ) }, 1000);');
-			bb.append(this.dispatch.toString());
-			bb.append(this.abort.toString());
-			bb.append(this.upload.toString());
+		var worker, me = this;
+		this.requests = {};
+
+		if(window.Worker){
+			worker = (function(){
+				var b, bb, result, url, script = [
+					'self.addEventListener("message", function(e){dispatch(e.data);}, false);',
+					'self.postMessage( {message:"started",time:Date.now()} );',
+					me.dispatch.toString(),
+					me.abort.toString(),
+					me.upload.toString()
+				];
+				try {
+					try {
+						b = new window.Blob(script,'text/javascript');//preferred method
+					}
+					catch(e){
+						//depricated (previous) prefered method
+						bb = new window.BlobBuilder();
+						bb.append(script.join('\n'));
+						b = bb.getBlob('text/javascript');
+					}
+					url = URL.createObjectURL(b);
+					result = new Worker(url);
+					URL.revokeObjectURL(url);
+					return result;
+				}
+				catch(er){
+					//fallback, probably shouldn't allow it
+					//return new Worker('data:application/javascript,' + encodeURIComponent(script.join('\n')));
+				}
+				return null;
+			}());
+		}
+
+		if(worker){
+			worker.onmessage = function(e){me.onMessageFromWorker(e.data); };
+			worker.onerror = worker.onerror = function(e) {
+				console.error("Error in file: "+e.filename+"\nline: "+e.lineno+"\nDescription: "+e.message);
+			};
+
+			this.worker = worker;
 
 			//ensure we're running these functions in a worker, not in the main thread.
 			this.upload = null;
 			this.abort = null;
 			this.dispatch = null;
 
-			dataUrl = URL.createObjectURL(bb.getBlob());
-			worker = new Worker(dataUrl);
-			worker.onmessage = function(e){me.onMessageFromWorker(e.data); };
-			worker.onerror = worker.onerror = function(e) {
-			    console.error("Error in file: "+e.filename+"\nline: "+e.lineno+"\nDescription: "+e.message);
-			};
-
-			this.worker = worker;
 			worker.postMessage('');
-			URL.revokeObjectURL(dataUrl);
 		}
 		else {
-			console.error("Not able to use Workers...uploads might make UI jerky");
+			console.error("Not able to use Workers for uploads");
 			this.worker = {
 				postMessage: function(data){
 					me.dispatch(data);
