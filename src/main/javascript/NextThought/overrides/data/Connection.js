@@ -3,6 +3,7 @@ Ext.define('NextThought.overrides.data.Connection',{
 
 	disableCaching: false,
 	withCredentials: true,
+	useDefaultXhrHeader: false,
 
 	setOptions: function(options, scope){
 		var i, badParams = ['_dc', 'id', 'page', 'start', 'limit', 'group', 'sort'],
@@ -25,6 +26,7 @@ Ext.define('NextThought.overrides.data.Connection',{
 	Ext.Ajax.cors = true;
 	Ext.Ajax.withCredentials = true;
 	Ext.Ajax.disableCaching = false;
+	Ext.Ajax.useDefaultXhrHeader = false;
 	Ext.Ajax.defaultHeaders = Ext.Ajax.defaultHeaders || {};
 	Ext.Ajax.defaultHeaders.Accept= 'application/vnd.nextthought+json';
 	Ext.Ajax.on('beforerequest', function(connection,options) {
