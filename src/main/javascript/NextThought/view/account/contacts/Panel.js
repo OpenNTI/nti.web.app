@@ -24,7 +24,14 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 
 	afterRender: function(){
 		this.callParent(arguments);
-		this.getHeader().on('click',this.toggleCollapse,this);
+		this.getHeader().on('click',
+			function(){
+				//panel collapse causes permanent failure if there are no items, avoid that.
+				if (this.items.length > 0) {
+					this.toggleCollapse();
+				}
+			}
+			,this);
 	},
 
 	setTitle: function(title){
