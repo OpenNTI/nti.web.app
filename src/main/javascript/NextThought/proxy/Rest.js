@@ -95,24 +95,6 @@ Ext.define('NextThought.proxy.Rest', {
 	},
 
 	exception: function(proxy, response, operation, eOpts) {
-		var retryArgs = operation.retryArgs;
-
-//		if(response.status === 0 && response.responseText==='') {
-//			//Um, probably a 302 on CORS
-//			console.warn('CORS 302? Retrying w/ known redirects.',
-//					{
-//						Proxy:proxy,
-//						Response:response,
-//						Operation: operation
-//					});
-//
-//			if(retryArgs && operation.action === 'read'){
-//				operation.url += '/Classes';
-//				this.read(operation, retryArgs.callback,retryArgs.scope);
-//			}
-//			return;
-//		}
-//		else
 		if(response.status !== 404) {
 			console.error('Error getting data:', arguments);
 		}
