@@ -54,32 +54,23 @@ Ext.define( 'NextThought.view.annotations.Transcript', {
 	openTranscript: function() {
 		if (this.win){this.win.close();}
 
-		var np, it,
-			win = this.win = Ext.widget('window', {
+		var np, it,log,
+			win = this.win = Ext.widget('nti-window', {
 			title: this.getTitle(),
-			cls: 'chat-transcript',
+			cls: 'chat-window',
 			disableDragDrop: true,
 			constrain: true,
 			autoScroll: true,
 			width: 400,
 			height: 300,
-			modal: true
+			modal: true,
+			items: [
+				{xtype:'chat-log-view'}
+			]
 		});
 
-		np = Ext.widget({xtype:'note-entry',  annotation: this, component: this.ownerCmp, idPrefix: 'win-'});
-		np.failedToLoadTranscript = function(){
-			win.close();
-			alert('Could not load transcript');
-		};
-		it = np.insertTranscript;
-		np.insertTranscript = function(m){
-			win.show();
-			it.call(np, m, win);
-			win.doComponentLayout();
-		};
-
-		win.on('destroy', function(){np.destroy();});
-		np.fireEvent('load-transcript', this.record, np);
+		win.items.first().fireEvent('load-transcript', this.record, win.items.first());
+		win.show();
 	},
 
 	render: function(){

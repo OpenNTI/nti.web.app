@@ -165,6 +165,19 @@ Ext.define('NextThought.view.chat.Log', {
 	},
 
 
+	insertTranscript: function(m) {
+		var messages = m.get('Messages');
+		messages.sort(Globals.SortModelsBy('Last Modified', null, null));
+		Ext.each(messages, function(msg){
+			this.addMessage(msg);
+		}, this);
+	},
+
+
+	failedToLoadTranscript: function(){
+		console.error('failed to load transcript', arguments);
+	},
+
 	addMessage: function(msg) {
 		var id = msg.getId(),
 			rid = msg.get('inReplyTo'),

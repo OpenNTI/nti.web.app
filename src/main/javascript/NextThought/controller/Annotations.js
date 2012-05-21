@@ -60,6 +60,10 @@ Ext.define('NextThought.controller.Annotations', {
 
 			'share button[action=save]':{
 				'click': this.onShareWithSaveClick
+			},
+
+			'chat-log-view': {
+				'load-transcript': this.onLoadTranscript
 			}
 		},{});
 	},

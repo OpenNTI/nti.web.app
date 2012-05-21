@@ -44,56 +44,6 @@
 			border: 1px solid #cfcfcf;
 			border-width: 0;
 			border-left-width: 1px;
-
-		}
-
-		.log-entry{
-			background: #3fb3f6;
-			border-radius: 5px;
-			box-shadow: 1px 1px 20px -6px #000000;
-			float: left;
-			overflow: visible;
-			margin: 12px;
-			padding: 8px;
-			clear: both;
-			position: relative;
-
-			&::before {
-				top: 0;
-				left: -9px;
-				position: absolute;
-				content: url(../images/other-bubble-tip.png);
-			}
-
-			&.me {
-				float: right;
-				box-shadow: 1px 1px 10px -6px #000000;
-				background: #e8e8e8;
-				.name {display: none;}
-				.body-text {
-					color: #757474;
-				}
-				&::before{
-					left: initial;
-					top: initial;
-					bottom: 2px;
-					right: -8px;
-					content: url(../images/my-bubble-tip.png);
-				}
-			}
-
-			.name {
-				color: #d8f0fe;
-				font-weight: 800;
-				font-size: 7.5pt;
-				margin-bottom: 3px;
-				text-transform: uppercase;
-			}
-			.body-text {
-				font-size: 10pt;
-				font-weight: 700;
-				color: #ffffff;
-			}
 		}
 	}
 
@@ -101,6 +51,55 @@
 		border-radius: 0 5px 0 0;
 		border-bottom: 1px solid #cfcfcf !important;
 		background: #fbfbfb;
+
+        .log-entry{
+            background: #3fb3f6;
+            border-radius: 5px;
+            box-shadow: 1px 1px 20px -6px #000000;
+            float: left;
+            overflow: visible;
+            margin: 12px;
+            padding: 8px;
+            clear: both;
+            position: relative;
+
+            &::before {
+                top: 0;
+                left: -9px;
+                position: absolute;
+                content: url(../images/other-bubble-tip.png);
+            }
+
+            &.me {
+                float: right;
+                box-shadow: 1px 1px 10px -6px #000000;
+                background: #e8e8e8;
+                .name {display: none;}
+                .body-text {
+                    color: #757474;
+                }
+                &::before{
+                    left: initial;
+                    top: initial;
+                    bottom: 2px;
+                    right: -8px;
+                    content: url(../images/my-bubble-tip.png);
+                }
+            }
+
+            .name {
+                color: #d8f0fe;
+                font-weight: 800;
+                font-size: 7.5pt;
+                margin-bottom: 3px;
+                text-transform: uppercase;
+            }
+            .body-text {
+                font-size: 10pt;
+                font-weight: 700;
+                color: #ffffff;
+            }
+    	}
 	}
 
 	.chat-entry {
