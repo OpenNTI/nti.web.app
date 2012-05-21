@@ -96,13 +96,13 @@ Ext.define('NextThought.util.Quizes', {
 	getProblemElementMap: function(doc,iterationCallback,scope){
 		var problems = {};
 		 Ext.each(
-			Ext.query('.worksheet-problems input',doc),
+			Ext.query('.question input',doc),
 			function(v){
 				var id = v.getAttribute('id'),
 					el = Ext.get(v);
 
 				el.setVisibilityMode(Ext.Element.DISPLAY);
-				problems[id] = el.up('.problem');
+			        problems[id] = el.up('.question').down('.problem');
 
 				if(iterationCallback){
 					iterationCallback.call(scope||window, id, el, problems[id]);
@@ -176,22 +176,50 @@ Ext.define('NextThought.util.Quizes', {
 				q = qqr.get('Question');
 				id = q.get('ID');
 				p = problems[id];
-				r = p.next('.result');
+			        r = p.parent().next('.result');
 
 				r.removeCls('hidden');
-				r.addCls((qqr.get('Assessment')?'':'in')+'correct');
 
-				r.createChild({
-					tag : 'div',
-					html: 'Your response: \\('+qqr.get('Response')+'\\)',
-					cls: mathCls+'response'
+			        r.createChild({
+				    tag: 'span',
+				    cls: 'result'
+			        });
+			        s = r.down('.result');
+			        s.addCls((qqr.get('Assessment')?'':'in')+'correct');
+			        s.createChild({
+				    tag: 'span',
+				    cls: 'rightwrongbox-inverse ' + (qqr.get('Assessment')?'rightbox':'wrongbox') + '-inverted'
+			        });
+
+				s.createChild({
+					tag : 'span',
+					html: '"\\('+qqr.get('Response')+'\\)" is ' + (qqr.get('Assessment')?'':'in')+'correct',
+					cls: mathCls+'response' + ' answer-text'
 				});
 
-				r.createChild({
-					tag : 'div',
-					html: 'Correct answer(s): '+q.get('Answers').join(', ').replace(/\$(.+?)\$/ig,'\\($1\\)'),
-					cls: mathCls+'answer'
-				});
+			        if (! qqr.get('Assessment')){
+			            r.createChild({
+				        tag : 'a',
+				        html : 'Why?',
+				        cls: 'why',
+				        href: '#',
+					onclick: "var state=$(this).hasClass('bubble');$('a.why').removeClass('bubble');if (!state) {$(this).addClass('bubble');}",
+				        cn: { tag: 'span', cls: 'bubble'}
+			            });
+				
+			            s = r.down('span.bubble');
+			            s.createChild({
+				        tag: 'span',
+				        html: 'Solution',
+				        cls: 'bubble-title'
+			            });
+
+				    s.createChild({
+					tag : 'span',
+					html: q.get('Answers').join(', ').replace(/\$(.+?)\$/ig,'\\($1\\)'),
+					cls: mathCls+'bubble-text'
+				    });
+				}
 			});
 
 		doc.parentWindow.postMessage('MathJax.reRender()',location.href);
@@ -212,14 +240,14 @@ Ext.define('NextThought.util.Quizes', {
 
 				this.attachMathSymbolToMathquillObjects(w.$('span.quiz-input'));
 
-				var r = c.next('.result'),
+			    var r = c.parent().next('.result'),
 					resp, ans;
 
 				r.addCls('hidden');
 				r.removeCls(['correct','incorrect']);
 
-				resp = r.down('.response');
-				ans = r.down('.answer');
+				resp = r.down('span.result');
+				ans = r.down('a.why');
 
 				if (resp){resp.remove();}
 				if (ans){ans.remove();}
