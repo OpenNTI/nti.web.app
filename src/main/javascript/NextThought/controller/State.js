@@ -18,10 +18,9 @@ Ext.define('NextThought.controller.State', {
 	},
 
 	init: function() {
-		var me = this,
-			push = history.pushState || function(){};
+		var me = this;
 
-		history.replaceState = history.replaceState || function(){};
+		this.application.on('session-ready', this.onSessionReady, this);
 
 		me.currentState = {};
 
@@ -32,14 +31,17 @@ Ext.define('NextThought.controller.State', {
 				'activate-view': me.track
 			}
 		},{});
+	},
 
-		window.onpopstate = function(e){
-			me.isPoppingHistory = true;
-			me.onPopState(e);
-			me.isPoppingHistory = false;
-		};
 
-		window.history.updateState = function(s){
+	onSessionReady: function(){
+		var me = this,
+			history = window.history,
+			push = history.pushState || function(){};
+
+		history.replaceState = history.replaceState || function(){};
+
+		history.updateState = function(s){
 			Ext.applyIf(s,{active: me.currentState.active});
 			if(!me.isPoppingHistory && push){
 				me.currentState = Ext.Object.merge(me.currentState, s);
@@ -49,14 +51,18 @@ Ext.define('NextThought.controller.State', {
 			return false;
 		};
 
-		window.history.pushState = function(s){
+		history.pushState = function(s){
 			console.log('push state', arguments);
 			if (this.updateState(s)) {
 				push.apply(history, arguments);
 			}
 		};
 
-
+		window.onpopstate = function(e){
+			me.isPoppingHistory = true;
+			me.onPopState(e);
+			me.isPoppingHistory = false;
+		};
 	},
 
 
@@ -81,7 +87,7 @@ Ext.define('NextThought.controller.State', {
 		if(this.currentState.active !== viewId && NextThought.isInitialised){
 			//console.debug(this.currentState.active, modeId);
 			this.currentState.active = viewId;
-			history.pushState(this.currentState, 'NextThought: '+viewId);
+			window.history.pushState(this.currentState, 'NextThought: '+viewId);
 		}
 	},
 
@@ -93,6 +99,7 @@ Ext.define('NextThought.controller.State', {
 		}
 		this.restoringState = true;
 		var app = this.application,
+			history = window.history,
 			replaceState = false, c, key, stateScoped;
 
 		function fin(){
@@ -104,7 +111,7 @@ Ext.define('NextThought.controller.State', {
 		if(stateObject === PREVIOUS_STATE){
 			replaceState = true;
 			stateObject = this.loadState();
-			window.history.updateState(stateObject);
+			history.updateState(stateObject);
 		}
 
 		c = Ext.getCmp(stateObject.active);
