@@ -30,7 +30,6 @@ Ext.define('NextThought.controller.Application', {
 
 		Library.on('loaded', this.restore, this);
 		this.application.on('finished-loading', function(){
-			window.stopTrackingModelConstruction = true;
 			NextThought.isInitialised = true;
 			Globals.removeLoaderSplash();
 		});
