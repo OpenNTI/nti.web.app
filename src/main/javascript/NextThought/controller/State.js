@@ -42,10 +42,11 @@ Ext.define('NextThought.controller.State', {
 		history.replaceState = history.replaceState || function(){};
 
 		history.updateState = function(s){
+			console.log('update state', arguments);
 			Ext.applyIf(s,{active: me.currentState.active});
 			if(!me.isPoppingHistory && push){
 				me.currentState = Ext.Object.merge(me.currentState, s);
-				window.localStorage.setItem('state',JSON.stringify(me.currentState));
+				window.localStorage.setItem(me.getStateKey(),JSON.stringify(me.currentState));
 				return me.fireEvent('stateChange',s);
 			}
 			return false;
@@ -111,7 +112,9 @@ Ext.define('NextThought.controller.State', {
 		if(stateObject === PREVIOUS_STATE){
 			replaceState = true;
 			stateObject = this.loadState();
-			history.updateState(stateObject);
+			if (history.updateState) {
+				history.updateState(stateObject);
+			}
 		}
 
 		c = Ext.getCmp(stateObject.active);
@@ -164,10 +167,10 @@ Ext.define('NextThought.controller.State', {
 		};
 
 		try {
-			return Ext.decode( window.localStorage.getItem('state') ) || defaultState;
+			return Ext.decode( window.localStorage.getItem(this.getStateKey()) ) || defaultState;
 		}
 		catch(e){
-			window.localStorage.removeItem('state');
+			window.localStorage.removeItem(this.getStateKey());
 			return defaultState;
 		}
 
@@ -175,5 +178,14 @@ Ext.define('NextThought.controller.State', {
 //			location: 'tag:nextthought.com,2011-10:AOPS-HTML-prealgebra.0',
 //			active: 'reader'
 //		};
+	},
+
+
+	getStateKey: function(){
+		var username = $AppConfig.userObject ? $AppConfig.userObject.get('Username') : null;
+		if (!username){
+			console.error('unknown username for state mgmt.');
+		}
+		return 'state-' + username;
 	}
 });

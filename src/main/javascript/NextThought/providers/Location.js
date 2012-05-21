@@ -33,15 +33,16 @@ Ext.define('NextThought.providers.Location', {
 		var me = this,e = Ext.getCmp('viewport').getEl();
 
 		function finish(){
-			console.log('Navigation for '+ntiid+' finished.');
+			console.log('Navigation for '+ntiid+' finished.', arguments);
 			if(e.isMasked()){
 				e.unmask();
 			}
 			Ext.callback(callback,null,arguments);
 
 			if(fromHistory!==true){
-				window.history.pushState({location: ntiid}, "");
+				history.pushState({location: ntiid}, "");
 			}
+
 		}
 
 		if(me.currentNTIID && ntiid !== me.currentNTIID){
