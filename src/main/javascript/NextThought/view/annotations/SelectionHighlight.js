@@ -25,7 +25,6 @@ Ext.define('NextThought.view.annotations.SelectionHighlight', {
 	cleanup: function(){
 		try{
 			Ext.fly(this.canvas).remove();
-			Ext.fly(this.renderTarget).remove();
 		}
 		catch(e){
 			console.error(e);
@@ -43,17 +42,10 @@ Ext.define('NextThought.view.annotations.SelectionHighlight', {
 	},
 
 	createCanvas: function(){
-		this.renderTarget = this.createElement(
-			'img',
-			this.container,
-			'search-highlight-object unselectable',
-			'position: absolute; pointer-events: none; top: 0; left: 0;',
-			this.canvasId+'-Image');
-
 		return this.createElement(
 			'canvas',
 			this.container,
-			'search-highlight-object unselectable','display: none',
+			'search-highlight-object unselectable','position: absolute; pointer-events: none; top: 0; left: 0;',
 			this.canvasId
 			);
 	},
@@ -94,8 +86,6 @@ Ext.define('NextThought.view.annotations.SelectionHighlight', {
 				this.drawRect(ctx,s[i]);
 			}
 		}, this);
-
-		this.renderTarget.src = c.toDataURL();
 	},
 
 	drawRect: function(ctx, rect){
