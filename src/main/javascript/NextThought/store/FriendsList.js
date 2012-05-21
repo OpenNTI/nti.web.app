@@ -27,28 +27,5 @@ Ext.define('NextThought.store.FriendsList',{
 			property : 'realname',
 			direction: 'ASC'
 		}
-	],
-
-
-	getFriends: function(callback){
-		var //distinct = {},
-			names = $AppConfig.userObject.get('following') || [];
-
-//		this.each(function(group){
-//			Ext.each(group.get('friends'),function(f){ distinct[f] = true; });
-//		});
-//		names = Object.keys(distinct);
-
-
-
-		UserRepository.prefetchUser(names,function(u){
-			var friends = {Online: {}, Offline: {}};
-			Ext.each(u,function(user){
-				var p = user.get('Presence');
-				if(p){ friends[p][user.getId()] = user; }
-			});
-
-			Ext.callback(callback,null,[friends]);
-		});
-	}
+	]
 });

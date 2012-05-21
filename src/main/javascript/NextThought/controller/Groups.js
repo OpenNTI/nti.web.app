@@ -38,23 +38,42 @@ Ext.define('NextThought.controller.Groups', {
 
 		app.registerInitializeTask(token);
 		store.on('load', function(s){ app.finishInitializeTask(token); }, this, {single: true});
-		store.on('load', this.publishFriends, this);
 		store.proxy.url = $AppConfig.server.host+coll.href;
 		store.load();
+
+		this.publishContacts();
 	},
 
 
-	publishFriends: function(){
+
+	getContacts: function(user,callback){
+		var names = user.get('following') || [];
+
+		UserRepository.prefetchUser(names,function(u){
+			var friends = {Online: {}, Offline: {}};
+			Ext.each(u,function(user){
+				var p = user.get('Presence');
+				if(p){ friends[p][user.getId()] = user; }
+			});
+
+			Ext.callback(callback,null,[friends]);
+		});
+	},
+
+
+
+	publishContacts: function(){
 		var me = this,
+			user = $AppConfig.userObject,
 			store = me.getFriendsListStore(),
 			groups = Ext.getCmp('my-groups');
 
 		if(!groups){
-			setTimeout(function(){ me.publishFriends(); },10);
+			setTimeout(function(){ me.publishContacts(); },10);
 			return;
 		}
 
-		store.getFriends(function(friends){
+		this.getContacts(user,function(friends){
 			Ext.getCmp('offline-contacts').setUsers(friends.Offline);
 			Ext.getCmp('online-contacts').setUsers(friends.Online);
 		});

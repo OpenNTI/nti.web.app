@@ -1,6 +1,7 @@
 Ext.define(	'NextThought.model.User', {
 	extend: 'NextThought.model.Base',
 	idProperty: 'Username',
+	resolveUsers: true,
 	fields: [
 		{ name: 'lastLoginTime', type: 'date', dateFormat: 'timestamp' },
 		{ name: 'NotificationCount', type: 'int' },
