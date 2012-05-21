@@ -39,6 +39,7 @@ Ext.define('NextThought.view.account.MyContacts',{
 				{ id: 'offline-contacts', title: 'Offline', collapsed: true, showCount: false }
 			]
 		},
-		{ id: 'my-groups', title: 'Groups' }
+		{ id: 'my-groups', title: 'Groups' },
+		{ id: 'manage-contacts', iconCls: 'manage-groups' }
 	]
 });

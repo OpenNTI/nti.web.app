@@ -9,7 +9,7 @@
 		border-top: 1px solid #dcdcdc;
 		width: 215px !important;
 		margin-right: 30px;
-		background: url(../images/contact-under-divider.png) no-repeat 1px 49px;
+		background: url(../images/contact-under-divider.png) repeat-x 1px 49px;
 		.x-gecko & {
 			background-position: 1px 51px;
 		}
@@ -31,7 +31,9 @@
 				}
 			}
 		}
+
 		em { padding: 0; line-height: normal; }
+
 		button {
 			//height: 31px;
 			color: #c4c4c4;
@@ -44,6 +46,48 @@
 			.x-ie & {
 				border-bottom: none;
 				padding-bottom: 2px;
+			}
+		}
+
+		&.x-icon {
+			margin-left: 50px;
+			margin-right: 0;
+			&.x-tab-top-active{
+				.x-tab-icon{
+					&.manage-groups {
+						background-position: -56px 0 !important;
+					}
+				}
+			}
+			&.x-over{
+				.x-tab-icon{
+					&.manage-groups {
+						background-position: -28px 0;
+					}
+				}
+			}
+
+			button{
+				height: 31px !important;
+				padding: 0 !important;
+
+				.x-tab-inner {
+					display: none;
+				}
+
+				.x-tab-icon{
+					position: static;
+					display: inline-block;
+					width: 24px;
+					height: 24px;
+
+					&.manage-groups{
+						background: url(../images/add_btn.png) 0 0 no-repeat;
+						&:hover {
+							background-position: -28px 0;
+						}
+					}
+				}
 			}
 		}
 	}
