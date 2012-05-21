@@ -29,7 +29,6 @@ Ext.application({
 
 	launch: function(){
 		function start() {
-			console.groupEnd();
 			NextThought.controller.Session.login(app);
 			NextThought.isReady = true;
 		}
