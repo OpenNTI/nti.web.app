@@ -49,7 +49,7 @@ Ext.define('NextThought.controller.Groups', {
 	getContacts: function(user,callback){
 		var names = user.get('following') || [];
 
-		UserRepository.prefetchUser(names,function(u){
+		UserRepository.getUser(names,function(u){
 			var friends = {Online: {}, Offline: {}};
 			Ext.each(u,function(user){
 				var p = user.get('Presence');
@@ -69,7 +69,7 @@ Ext.define('NextThought.controller.Groups', {
 			groups = Ext.getCmp('my-groups');
 
 		if(!groups){
-			setTimeout(function(){ me.publishContacts(); },10);
+			setTimeout(function(){ me.publishContacts(); },250);
 			return;
 		}
 
