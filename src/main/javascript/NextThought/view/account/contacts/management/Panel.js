@@ -1,8 +1,9 @@
-Ext.define('NextThought.view.account.contacts.Add',{
+Ext.define('NextThought.view.account.contacts.management.Panel',{
 	extend: 'Ext.container.Container',
-	alias: 'widget.contacts-add-panel',
+	alias: 'widget.contacts-management-panel',
 
 	requires: [
+		'NextThought.view.account.contacts.management.GroupList',
 		'NextThought.view.form.fields.SimpleTextField',
 		'NextThought.view.form.fields.UserSearchInputField'
 	],
@@ -21,6 +22,7 @@ Ext.define('NextThought.view.account.contacts.Add',{
 		{
 			xtype: 'usersearchinput',
 			ui: 'group-editor',
+			emptyText: 'Name',
 			trigger2Cls: null,//turn off the second trigger
 			listConfig: {
 				ui: 'nt',
@@ -50,7 +52,7 @@ Ext.define('NextThought.view.account.contacts.Add',{
 				}
 			}
 		},
-		{ xtype: 'container', id: 'selected-people-to-add' },
+		{ xtype: 'container', id: 'add-people-list' },
 		{
 			xtype: 'box',
 			html: { tag: 'div', cls: 'label', html: 'Add Groups'}
@@ -59,9 +61,24 @@ Ext.define('NextThought.view.account.contacts.Add',{
 			xtype: 'container',
 			layout: 'hbox',
 			items: [
-				{xtype: 'simpletext', flex: 1},
+				{xtype: 'simpletext', flex: 1, autoEl: { placeHolder: 'Group' }},
 				{xtype: 'button', scale: 'medium', ui: 'secondary', text: 'Add'}
 			]
+		},
+		{ xtype: 'management-group-list', id: 'manage-groups-list' },
+		{
+			cls: 'add-contacts-finish-box',
+			xtype: 'container',
+			layout: {
+				type: 'hbox',
+				pack: 'end'
+			},
+			items: {
+				xtype: 'button',
+				scale: 'medium',
+				ui: 'secondary',
+				text: 'Finish'
+			}
 		}
 	]
 });

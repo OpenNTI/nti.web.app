@@ -37,7 +37,9 @@ Ext.define('NextThought.controller.Groups', {
 
 		app.registerInitializeTask(token);
 		store.on('load', function(s){ app.finishInitializeTask(token); }, this, {single: true});
-		store.on('load', this.publishContacts, this, {single: true});
+
+		store.on('datachanged', this.publishContacts, this);
+
 		store.proxy.url = $AppConfig.server.host+coll.href;
 		store.load();
 	},
@@ -77,6 +79,7 @@ Ext.define('NextThought.controller.Groups', {
 		});
 
 		groups.removeAll(true);
+
 		store.each(function(group){
 			var id = ParseUtils.parseNtiid(group.getId()),
 				friends = group.get('friends');
@@ -86,7 +89,6 @@ Ext.define('NextThought.controller.Groups', {
 				return;
 			}
 
-
 			var name = group.getName();
 			UserRepository.prefetchUser(friends,function(users){
 				groups.add({title: name}).setUsers(users);
@@ -95,48 +97,6 @@ Ext.define('NextThought.controller.Groups', {
 
 	},
 
-
-//	groupEditorButtonClicked: function(btn){
-//		var win = btn.up('window'),
-//			frm = win.down('form'),
-//			str = win.store,
-//			rec = win.record,
-//			names = [],
-//			values, n;
-//
-//
-//		if(btn.actionName === 'save') {
-//			if(!frm.getForm().isValid()){
-//				return;
-//			}
-//
-//			win.el.mask('Saving...');
-//			values = frm.getValues();
-//			Ext.each(str.data.items, function(u){ names.push(u.get('Username')); });
-//
-//			if(rec.phantom){
-//				n = values.name;
-//				n = n.replace(/[^0-9A-Za-z\-@]/g, '.');
-//				n = n.replace(/^[\.\-_]+/g, '');
-//				rec.set('Username',n+'@nextthought.com');
-//			}
-//			rec.set('realname', values.name);
-//			rec.set('friends', names);
-//			rec.save({
-//				scope: this,
-//				success: function(){
-//					this.reloadGroups();
-//					win.close();
-//				},
-//				failed: function(){
-//					win.el.unmask();
-//				}
-//			});
-//			return;
-//		}
-//
-//		win.close();
-//	},
 
 	incomingPresenceChange: function(name, presence){
 		var offline = Ext.getCmp('offline-contacts'),

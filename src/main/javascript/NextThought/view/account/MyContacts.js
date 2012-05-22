@@ -2,7 +2,7 @@ Ext.define('NextThought.view.account.MyContacts',{
 	extend: 'Ext.tab.Panel',
 	alias: 'widget.my-contacts',
 	requires: [
-		'NextThought.view.account.contacts.Add',
+		'NextThought.view.account.contacts.management.Panel',
 		'NextThought.view.account.contacts.Card',
 		'NextThought.view.account.contacts.Panel'
 	],
@@ -43,7 +43,7 @@ Ext.define('NextThought.view.account.MyContacts',{
 		{	id: 'my-groups', title: 'Groups' },
 		{
 			id: 'manage-contacts',
-			xtype: 'contacts-add-panel',
+			xtype: 'contacts-management-panel',
 			iconCls: 'manage-groups'
 		}
 	]
