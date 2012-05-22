@@ -8,7 +8,7 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
 	frame: false,
 	border: false,
 
-	cls: 'selection-list',
+	cls: 'group-selection-list',
 	baseCls: 'selection',
 	itemCls: 'selection-list-item multiselect',
 	displayField: 'realname',
@@ -19,14 +19,6 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
 		this.callParent(arguments);
 		this.itemSelector = '.selection-list-item';
 
-		/*
-		me.mon(picker, {
-			itemclick: me.onItemClick,
-			refresh: me.onListRefresh,
-			scope: me
-		});
-		 */
-
 		this.mon(this.getSelectionModel(), {
 			beforeselect: this.onBeforeSelect,
 			beforedeselect: this.onBeforeDeselect,
@@ -36,7 +28,9 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
 
 
 	refresh: function(){
-		this.getSelectionModel().select(0,true,true);
+		if(this.allowSelect){
+			this.getSelectionModel().select(0,true,true);
+		}
 		return this.callParent(arguments);
 	},
 
@@ -47,15 +41,27 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
 
 
 	onBeforeSelect: function(list,model){
-		if(!model.isModifiable()){
+		if(!this.allowSelect || !model.isModifiable()){
 			return false;
 		}
 	},
 
 	onBeforeDeselect: function(list,model){
-		if(!model.isModifiable()){
+		if(this.allowSelect && !model.isModifiable()){
 			return false;
 		}
+	},
+
+
+	disallowSelection: function(){
+		this.allowSelect = false;
+		this.getSelectionModel().deselectAll();
+	},
+
+
+	allowSelection: function(){
+		this.allowSelect = true;
+		this.refresh();
 	}
 
 

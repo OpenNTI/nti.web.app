@@ -18,6 +18,8 @@
 	box-shadow: inset 3px 3px 10px -5px #a0a0a0;
 }
 
+$over-color: #f4f3f3;
+
 .my-contacts-tab-bar{
 	padding: 0 0 10px 30px;
 
@@ -142,7 +144,27 @@
 		width: 32px;
 		height: 32px;
 		margin-top: 2px;
+
+		&.nib {
+			background: transparent url(../images/add_remove_gry.png) -2px -2px no-repeat;
+			display: none;
+			margin-top: 10px;
+			border: none !important;
+			float: right;
+			width: 14px;
+			height: 14px;
+			cursor: pointer;
+		}
 	}
+
+	&.selection-item-over,
+	&.x-menu-item-over {
+		img.nib{
+			display: block;
+		}
+	}
+
+
 	.card-body {
 		margin-left: 50px;
 	}
@@ -207,7 +229,15 @@
 		@include text-box-style;
 	}
 
-	.selection-nt .selection-list-ct ul li:first-of-type{
+	.people-selection-list {
+		.contact-card {
+			img.nib{
+				background-position: -20px -2px;
+			}
+		}
+	}
+
+	.group-selection-list .selection-list-ct ul li:first-of-type{
 		opacity: 0.6;
 		&.selection-item-over{
 			color: #767676 !important;

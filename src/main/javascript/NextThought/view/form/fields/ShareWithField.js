@@ -35,7 +35,7 @@ Ext.define('NextThought.view.form.fields.ShareWithField', {
 				this.bodyEl = b;
 			}
 		}});
-		me.inputField.on({
+		me.inputField.xon({
 			scope: me,
 			'select': me.select,
 			'keydown': me.keyPress
@@ -110,9 +110,7 @@ Ext.define('NextThought.view.form.fields.ShareWithField', {
 
 
 	select: function(ctrl, selected) {
-		ctrl.collapse();
-		ctrl.setValue('');
-		this.addSelection(selected[0]);
+		this.addSelection(selected);
 	},
 
 
@@ -183,14 +181,18 @@ Ext.define('NextThought.view.form.fields.ShareWithField', {
 	},
 
 
-	addSelection: function(user){
+	addSelection: function(users){
 		var m = this;
-		if(m.containsToken(user)) {
-			return;
+
+		if(!Ext.isArray(users)){
+			users = [users];
 		}
 
-		m.selections.push(user);
-		m.addToken(user);
+		Ext.each(users,function(user){
+			if(m.containsToken(user)) { return; }
+			m.selections.push(user);
+			m.addToken(user);
+		});
 	}
 
 });

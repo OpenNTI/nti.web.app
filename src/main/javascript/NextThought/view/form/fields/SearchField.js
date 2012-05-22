@@ -25,7 +25,7 @@ Ext.define('NextThought.view.form.fields.SearchField', {
 		this.triggerEl.on('click',this.triggerMenu,this);
 		this.triggerEl.addCls(Ext.baseCSSPrefix + 'menu');//make clicks on this not hide the menu
 		this.menu = Ext.widget({xtype: 'search-advanced-menu', width: this.boxEl.getWidth()});
-		this.inputEl.on({
+		this.mon(this.inputEl,{
 			scope: this,
 			keypress: this.keyPressed,
 			keydown: this.keyDown //keypress does not always fire for escape
