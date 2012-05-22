@@ -37,10 +37,11 @@ Ext.define('NextThought.view.account.contacts.management.Panel',{
 				emptyText: '<div class="x-menu-item">No results</div>',
 				getInnerTpl: function() {
 					return [
+						'<img class="add" src="{blank}">',
 						'<img src="{avatarURL}">',
 						'<div class="card-body">',
 							'<div class="name">{realname}</div>',
-							'<div class="status">{status}</div>',
+							'<div class="status">Affiliation</div>',
 						'</div>'
 					].join('');
 				},
@@ -61,8 +62,8 @@ Ext.define('NextThought.view.account.contacts.management.Panel',{
 			xtype: 'container',
 			layout: 'hbox',
 			items: [
-				{xtype: 'simpletext', flex: 1, autoEl: { placeHolder: 'Group' }},
-				{xtype: 'button', scale: 'medium', ui: 'secondary', text: 'Add'}
+				{xtype: 'simpletext', width: 129, autoEl: { placeHolder: 'Group' }},
+				{xtype: 'button', scale: 'medium', ui: 'secondary', text: 'Add' }
 			]
 		},
 		{ xtype: 'management-group-list', id: 'manage-groups-list' },
@@ -76,7 +77,7 @@ Ext.define('NextThought.view.account.contacts.management.Panel',{
 			items: {
 				xtype: 'button',
 				scale: 'medium',
-				ui: 'secondary',
+				ui: 'primary',
 				text: 'Finish'
 			}
 		}

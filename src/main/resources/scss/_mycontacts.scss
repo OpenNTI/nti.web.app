@@ -207,6 +207,15 @@
 		@include text-box-style;
 	}
 
+	.selection-nt .selection-list-ct ul li:first-of-type{
+		opacity: 0.6;
+		&.selection-item-over{
+			color: #767676 !important;
+			background-color: #ffffff !important;
+			cursor: default;
+		}
+	}
+
 	.add-contacts-finish-box {
 		margin-top: 20px !important;
 		padding-top: 10px !important;

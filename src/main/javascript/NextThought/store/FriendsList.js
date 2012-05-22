@@ -8,6 +8,7 @@ Ext.define('NextThought.store.FriendsList',{
 	remoteSort: false,
 	remoteFilter: false,
 	remoteGroup: false,
+	sortOnFilter: true,
 
 	proxy: {
 		type: 'rest',
@@ -24,8 +25,18 @@ Ext.define('NextThought.store.FriendsList',{
 
 	sorters: [
 		{
+			sorterFn: function(a,b){
+				var ac = a.get('Creator');
+				var bc = b.get('Creator');
+				var sys = 'zope.security.management.system_user';
+				return ac === bc
+						? 0
+						: ac == sys ? -1 : 1;
+			}
+		},
+		{
 			property : 'realname',
-			direction: 'ASC'
+			direction: 'ACE'
 		}
 	]
 });
