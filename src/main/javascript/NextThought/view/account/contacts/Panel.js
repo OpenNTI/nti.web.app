@@ -73,7 +73,7 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 	},
 
 	addUser: function(user, changes, hideIfNoActivity) {
-		var widget, item, ct, elapsed;
+		var widget, item, ct, elapsed, cid;
 
 		if (!this.getUser(user)) {
 			widget = {xtype:'contact-card', user: user, username: user.get('Username'), items:[]};
@@ -82,13 +82,15 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 			Ext.each(changes, function(c){
 				ct = c.get('ChangeType');
 				item = c.get('Item');
+				cid = item.get('ContainerId');
 				elapsed = item ? Ext.Date.getElapsed(item.get('Last Modified')) : null;
-				if (ct !== 'Circled' && elapsed && elapsed <=  1800000) { //newer than 30 min
+				if (ct !== 'Circled' && ct !== 'Deleted' && elapsed && elapsed <=  1800000) { //newer than 30 min
 					widget.items.push({
 						item: item,
 						type: item.getModelName(),
 						message: this.getMessage(c),
-						ContainerId: item.get('ContainerId')
+						ContainerId: cid,
+						id: IdCache.getIdentifier(cid)
 					});
 				}
 			}, this);
@@ -138,20 +140,29 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 		var me = this,
 			widget = me.down('[username='+username+']'),
 			item = change.get('Item'),
-			ct = change.get('ChangeType');
+			cid = item ? item.get('ContainerId') : null,
+			id = IdCache.getIdentifier(cid),
+			ct = change.get('ChangeType'), cmp;
 
 		if (!widget) {
-			UserRepository.prefetchUser(username, function(u){
+			UserRepository.getUser(username, function(u){
 				me.addUser(u[0], [change], true);
 			});
 			return;
 		}
 
-		if (ct!=='Circled'){
-			widget.insert(0, {
+		if (ct === 'Deleted') {
+			cmp = widget.down('[id='+id+']');
+			if (cmp) {
+				widget.remove(cmp);
+			}
+		}
+		else if (ct!=='Circled'){
+			cmp = widget.insert(0, {
 				type: item.getModelName(),
 				message: this.getMessage(change),
-				ContainerId: item.get('ContainerId')
+				ContainerId: cid,
+				id: id
 			});
 			this.insert(0, widget);//move?
 			widget.setVisible(true);
