@@ -13,7 +13,6 @@ Ext.define('NextThought.controller.Groups', {
 	],
 
 	views: [
-		'account.GroupEditor'
 	],
 
 	init: function() {

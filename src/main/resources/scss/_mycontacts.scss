@@ -1,3 +1,22 @@
+@mixin contact-header {
+	color: #8a8989;
+	font-size: 7.5pt;
+	font-weight: 700;
+	padding-bottom: 2px;
+	text-transform: uppercase;
+}
+
+@mixin text-box-style {
+	padding: 5px;
+	color: #757474;
+	height: 30px;
+	font-family: 'Open Sans', sans-serif;
+	//font-size: 15pt;
+	width: 100%;
+	border-radius: 3px;
+	border: 1px solid #a0a0a0;
+	box-shadow: inset 3px 3px 10px -5px #a0a0a0;
+}
 
 .my-contacts-tab-bar{
 	padding: 0 0 10px 30px;
@@ -108,18 +127,15 @@
 
 	.x-panel-header {
 		background: url(../images/collapse-expand.png) no-repeat 0 3px;
-		color: #8a8989;
 		cursor: pointer;
-		font-size: 7.5pt;
-		font-weight: 700;
 		padding-left: 10px;
-		padding-bottom: 2px;
-		text-transform: uppercase;
+		@include contact-header;
 	}
 }
 
 .contact-card {
 	margin: 7px 0 0 10px;
+
 	overflow: hidden;
 	img {
 		float: left;
@@ -159,4 +175,35 @@
 		&.highlight{background: url(../images/activity-highlight.png) 0 3px no-repeat;}
 		&.note{		background: url(../images/activity-note.png) 4px 0 no-repeat;}
 	}
+}
+
+
+
+.contacts-management {
+	padding: 0 30px;
+
+	.label {
+		@include contact-header;
+	}
+
+	.user-search-field {
+		margin: 7px 0;
+		input {
+			background: none;
+			@include text-box-style;
+		}
+		.x-form-item-body {
+			position: static;
+		}
+		.x-trigger-cell {
+			&.hidden {
+				display: none;
+			}
+		}
+	}
+
+	input {
+				background: none;
+				@include text-box-style;
+			}
 }
