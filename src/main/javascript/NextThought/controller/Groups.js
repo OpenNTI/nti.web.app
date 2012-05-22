@@ -37,10 +37,9 @@ Ext.define('NextThought.controller.Groups', {
 
 		app.registerInitializeTask(token);
 		store.on('load', function(s){ app.finishInitializeTask(token); }, this, {single: true});
+		store.on('load', this.publishContacts, this, {single: true});
 		store.proxy.url = $AppConfig.server.host+coll.href;
 		store.load();
-
-		this.publishContacts();
 	},
 
 
@@ -68,7 +67,7 @@ Ext.define('NextThought.controller.Groups', {
 			groups = Ext.getCmp('my-groups');
 
 		if(!groups){
-			setTimeout(function(){ me.publishContacts(); },250);
+			setTimeout(function(){ me.publishContacts(); },10);
 			return;
 		}
 
