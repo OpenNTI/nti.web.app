@@ -69,6 +69,8 @@
 	.x-menu-body {
 		border: 1px solid #dcdcdc !important;
 		background: #ffffff !important;
+	}
+	.x-menu-body {
 		padding: 0 0 20px 0;
 	}
 }
@@ -82,14 +84,21 @@
 	.x-menu-body {
 		background: #ffffff !important;
 
+		li.x-menu-item {
+			border-bottom: 1px solid #dcdcdc;
+			&:last-of-type {
+				border-bottom-width: 0px;
+			}
+		}
+
 		.selection-list-item,
 		.x-menu-item {
 			color: #767676 !important;
 			font-size: 11pt;
 			font-weight: 400;
 			background: none;
-			padding: 5px 10px;
-			margin: 2px 0 !important;
+			padding: 7px 10px;
+			margin: 0 !important;
 			cursor: pointer;
 
 			&.label{

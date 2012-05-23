@@ -7,6 +7,7 @@ Ext.define('NextThought.view.account.contacts.management.PeopleList',{
 	shadow: false,
 	frame: false,
 	border: false,
+	hidden: true,
 
 	cls: 'people-selection-list',
 	baseCls: 'selection',
@@ -60,7 +61,12 @@ Ext.define('NextThought.view.account.contacts.management.PeopleList',{
 
 
 	onChange: function(){
-		this.fireEvent('change', !this.store.getCount() );//isEmpty === (count === 0)
+		var isEmpty = !this.store.getCount(); //=== (count === 0)
+
+		if(isEmpty){ this.hide(); }
+		else { this.show(); }
+
+		this.fireEvent('change', isEmpty );
 	},
 
 

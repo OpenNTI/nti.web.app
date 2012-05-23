@@ -24,6 +24,7 @@ Ext.define('NextThought.view.account.contacts.management.Panel',{
 			trigger2Cls: null//turn off the second trigger
 		},
 		{ xtype: 'management-people-list' },
+
 		{ xtype: 'box', html: { tag: 'div', cls: 'label', html: 'Add Groups'}, labelFor: 'groups' },
 		{
 			xtype: 'container',
@@ -34,6 +35,7 @@ Ext.define('NextThought.view.account.contacts.management.Panel',{
 			]
 		},
 		{ xtype: 'management-group-list' },
+
 		{
 			cls: 'add-contacts-finish-box',
 			xtype: 'container',

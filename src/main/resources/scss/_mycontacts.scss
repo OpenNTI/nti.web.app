@@ -216,6 +216,7 @@ $over-color: #f4f3f3;
 
 	.label {
 		@include contact-header;
+		margin-top: 20px;
 	}
 
 	.user-search-field {
@@ -240,6 +241,31 @@ $over-color: #f4f3f3;
 	}
 
 	.people-selection-list {
+		margin: 10px 1px;
+		border-radius: 3px;
+		box-shadow: 1px 1px 6px -3px #000000 !important;
+
+		.selection-list-ct {
+			overflow: hidden;
+			border-radius: 3px;
+			border: 1px solid #dcdcdc;
+			background: #ffffff;
+			li {
+				border-bottom: 1px solid #dcdcdc;
+				&:first-of-type{
+					border-radius: 3px 3px 0 0;
+				}
+
+				&:last-of-type {
+					border-bottom-width: 0px;
+					border-radius: 0 0 3px 3px;
+				}
+
+				&.selection-item-over{
+					background-color: $over-color;
+				}
+			}
+		}
 		.contact-card {
 			img.nib{
 				background-position: -20px -2px;
@@ -247,30 +273,41 @@ $over-color: #f4f3f3;
 		}
 	}
 
-	.group-selection-list .selection-list-ct ul li {
-		&:first-of-type{
-			opacity: 0.6;
-			&.selection-item-over{
-				color: #767676 !important;
-				background-color: #ffffff !important;
-				cursor: default;
-				img.delete-group { display: none; }
+	.group-selection-list {
+
+		.selection-list-ct {
+			ul {
+				li {
+					&:first-of-type{
+						opacity: 0.6;
+						&.selection-item-over{
+							color: #767676 !important;
+							background-color: #ffffff !important;
+							cursor: default;
+							img.delete-group { display: none; }
+						}
+					}
+					&.selection-item-over{
+						background-color: $over-color;
+					}
+
+
+					img.delete-group {
+						display: none;
+						background: transparent url(../images/add_remove_gry.png) -20px -2px no-repeat;
+						margin-top: 3px;
+						border: none !important;
+						float: right;
+						width: 14px;
+						height: 14px;
+						cursor: pointer;
+					}
+
+					&.selection-item-over {
+						img.delete-group { display: block !important; }
+					}
+				}
 			}
-		}
-
-		img.delete-group {
-			display: none;
-			background: transparent url(../images/add_remove_gry.png) -20px -2px no-repeat;
-			margin-top: 3px;
-			border: none !important;
-			float: right;
-			width: 14px;
-			height: 14px;
-			cursor: pointer;
-		}
-
-		&.selection-item-over {
-			img.delete-group { display: block !important; }
 		}
 	}
 
