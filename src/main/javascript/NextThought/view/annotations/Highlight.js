@@ -131,7 +131,8 @@ Ext.define('NextThought.view.annotations.Highlight', {
 		var me = this,
 			items = [],
 			r = me.record,
-			text = r.get('text');
+			text = r.get('text'),
+			redactionRegex = /USSC-HTML-Cohen|Howes_converted|USvJones2012_converted/i;
 
 		if(this.isModifiable) {
 			items.push({
@@ -140,7 +141,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
 				});
 
 			//hack to allow redactions only in legal texts for now...
-			if (LocationProvider.currentNTIID.indexOf('Howes_converted') > 0 || LocationProvider.currentNTIID.indexOf('USvJones2012_converted') > 0 ) {
+			if (redactionRegex.test(LocationProvider.currentNTIID)) {
 
 				if (r.phantom) {
 					items.push({
