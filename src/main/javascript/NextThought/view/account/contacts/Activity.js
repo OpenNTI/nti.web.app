@@ -15,10 +15,14 @@ Ext.define('NextThought.view.account.contacts.Activity',{
 	afterRender: function() {
 		this.callParent(arguments);
 		this.el.on('click', function(e){
-			this.fireEvent('navigation-selected', this.ContainerId, this.item.getId());
-
 			e.stopPropagation();
 			e.preventDefault();
+			try{
+				this.fireEvent('navigation-selected', this.ContainerId, this.item.getId());
+			}
+			catch(e){
+				console.error(Globals.getError(e));
+			}
 			return false;
 		}, this);
 	}

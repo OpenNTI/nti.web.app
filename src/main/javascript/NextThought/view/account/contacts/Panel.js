@@ -73,13 +73,14 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 	},
 
 	addUser: function(user, changes, hideIfNoActivity) {
-		var widget, item, ct, elapsed, cid;
+		var widget;
 
 		if (!this.getUser(user)) {
 			widget = {xtype:'contact-card', user: user, username: user.get('Username'), items:[]};
 
 			if (!changes) {changes = [];}
 			Ext.each(changes, function(c){
+				var item, ct, elapsed, cid;
 				ct = c.get('ChangeType');
 				item = c.get('Item');
 				cid = item.get('ContainerId');
@@ -90,16 +91,15 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 						type: item.getModelName(),
 						message: this.getMessage(c),
 						ContainerId: cid,
-						id: IdCache.getIdentifier(cid)
+						ContainerIdHash: IdCache.getIdentifier(cid)
 					});
 				}
 			}, this);
 
 			//So now we have the widgets created and in the card, we need to sort them so newest first:
 			Ext.Array.sort(widget.items, function(a, b){
-				var d1 = Ext.Date.format(a.item.get('Last Modified'), 'U');
-				var d2 = Ext.Date.format(b.item.get('Last Modified'), 'U');
-				return d2-d1;
+				var k = 'Last Modified';
+				return Number(b.item.get(k) - a.item.get(k));
 			});
 
 			//if this widget has no activity, hide it but still add it so we can find it later
@@ -137,6 +137,7 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 
 
 	addActivity: function(username, change) {
+		console.log(arguments);
 		var me = this,
 			widget = me.down('[username='+username+']'),
 			item = change.get('Item'),
@@ -152,7 +153,7 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 		}
 
 		if (ct === 'Deleted') {
-			cmp = widget.down('[id='+id+']');
+			cmp = widget.down('[ContainerIdHash='+id+']');
 			if (cmp) {
 				widget.remove(cmp);
 			}
@@ -162,7 +163,7 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 				type: item.getModelName(),
 				message: this.getMessage(change),
 				ContainerId: cid,
-				id: id
+				ContainerIdHash: id
 			});
 			this.insert(0, widget);//move?
 			widget.setVisible(true);
