@@ -23,6 +23,10 @@ Ext.define('NextThought.controller.Groups', {
 
 			'contacts-management-panel': {
 				'add-group': this.addGroup
+			},
+
+			'management-group-list': {
+				'delete-group': this.deleteGroup
 			}
 
 		},{});
@@ -149,6 +153,14 @@ Ext.define('NextThought.controller.Groups', {
 				Ext.callback(callback,scope, [false]);
 			}
 		});
+	},
+
+
+	deleteGroup: function(record){
+		var store = this.getFriendsListStore();
+		record.destroy({callback: function(){
+			store.load();
+		}});
 	}
 
 });

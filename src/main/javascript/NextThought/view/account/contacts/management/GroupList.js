@@ -31,12 +31,22 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
 		if(this.allowSelect){
 			this.getSelectionModel().select(0,true,true);
 		}
-		return this.callParent(arguments);
+		this.callParent(arguments);
+
+		if(this.rendered){
+		Ext.each( this.getEl().query('img.delete-group'),
+			function(dom){Ext.fly(dom).on('click',this.deleteGroup, this);},
+			this);
+		}
 	},
 
 
 	getInnerTpl: function(displayField){
-		return '<div class="name">{'+displayField+'}</div>';
+		return ['<div class="name">',
+				'<img src="',Ext.BLANK_IMAGE_URL,'" class="delete-group"/>',
+				'{',displayField,'}',
+				'</div>'
+		].join('');
 	},
 
 
@@ -62,7 +72,17 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
 	allowSelection: function(){
 		this.allowSelect = true;
 		this.refresh();
-	}
+	},
 
+
+	deleteGroup: function(evt, dom){
+		evt.preventDefault();
+		evt.stopPropagation();
+
+		var r = this.getRecord(Ext.fly(dom).up(this.itemSelector, this.getEl()));
+
+
+		this.fireEvent('delete-group', r);
+	}
 
 });
