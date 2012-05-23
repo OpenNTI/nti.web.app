@@ -24,7 +24,7 @@ Ext.define('NextThought.view.account.MyAccount',{
 		me.renderData = Ext.apply(me.renderData||{},{
 			name: $AppConfig.userObject.getName(),
 			'notification-count': $AppConfig.userObject.get('NotificationCount') || '',
-			status: 'Reading Prime Factorization'
+			status: 'Placeholder text for status'
 		});
 		me.menu = Ext.widget({xtype: 'my-account-menu', xhooks:{
 			hide: function(){ this.callParent(arguments); clearTimeout(t); me.getEl().removeCls(cls);},

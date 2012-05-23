@@ -49,6 +49,10 @@
 		}
 	}
 	.status {
+		text-overflow: ellipsis;
+		max-width: 190px;
+		white-space: nowrap;
+		overflow: hidden;
 		color: #b8b8b8;
 		font: { size: 8pt; weight: 500; }
 	}
