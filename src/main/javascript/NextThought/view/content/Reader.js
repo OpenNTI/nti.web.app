@@ -548,7 +548,8 @@ Ext.define('NextThought.view.content.Reader', {
 			n = n.parentNode;
 		}
 
-		var o = Ext.fly(n).getTop(),
+		var offsets = this.body.getXY(),
+			o = Ext.fly(n).getTop() - offsets[1],
 			st = this.body.getScroll().top,
 			h = this.body.getHeight(),
 			b = st + h - (bottomThreashold || 0);
