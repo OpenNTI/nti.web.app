@@ -44,6 +44,7 @@ Ext.define('NextThought.view.account.contacts.management.Panel',{
 				pack: 'end'
 			},
 			items: {
+				action: 'finish',
 				xtype: 'button',
 				scale: 'medium',
 				ui: 'primary',
@@ -70,6 +71,25 @@ Ext.define('NextThought.view.account.contacts.management.Panel',{
 				addBtn.disable();
 			}
 		});
+	},
+
+
+	getData: function(){
+		var people = this.down('management-people-list').getSelected();
+		var groups = this.down('management-group-list').getSelected();
+
+		return {
+			users: people,
+			groups: groups
+		};
+	},
+
+
+	reset: function(){
+		this.down('usersearchinput').reset();
+		this.down('management-people-list').reset();
+		this.down('management-group-list').reset();
+		this.addGroupComplete(true);
 	},
 
 

@@ -45,6 +45,19 @@ Ext.define('NextThought.view.account.contacts.management.PeopleList',{
 	},
 
 
+	getSelected: function(){
+		var sel = [];
+		this.store.each(function(s){ sel.push(s.getId()); });
+		return sel;
+	},
+
+
+	reset: function(){
+		this.store.removeAll(false);
+		this.onChange();
+	},
+
+
 	doSelect: function(ctrl, selected) {
 		var s = this.store;
 		if(!Ext.isArray(selected)){

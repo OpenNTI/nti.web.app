@@ -35,11 +35,13 @@ Ext.define('NextThought.view.form.fields.SimpleTextField',{
 
 	afterRender: function(){
 		this.callParent(arguments);
-		this.mon(this.getEl(),{
+		var e = this.getEl();
+		this.mon(e, {
 			scope: this,
 			keyup: this.keyPressed,
 			keydown: this.keyDown //keypress does not always fire for escape
 		});
+		e.addCls('empty');
 	},
 
 
@@ -63,14 +65,16 @@ Ext.define('NextThought.view.form.fields.SimpleTextField',{
 
 
 	keyPressed: function(event){
-		var k = event.getKey(),
+		var e = this.getEl(),
+			k = event.getKey(),
 			v = this.getValue();
-		if (k === event.ENTER || k === event.ESC )  {
+		if (k === event.ENTER || k === event.ESC ) {
 			this.fireEvent('commit', v );
 		}
 
 		if( this.lastValue !== v ){
 			this.lastValue = v;
+			(v==="" ? e.addCls: e.removeCls).call(e,'empty');
 			this.fireEvent('changed', v );
 		}
 	}

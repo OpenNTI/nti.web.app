@@ -26,6 +26,11 @@
 		border-color: red;
 		background-color: #ffc0c0;
 	}
+
+	&.empty,
+	&.x-form-empty-field {
+		font-style: italic !important;
+	}
 }
 
 $over-color: #f4f3f3;

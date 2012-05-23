@@ -79,6 +79,13 @@ Ext.define( 'NextThought.view.form.fields.UserSearchInputField', {
 	},
 
 
+	reset: function(){
+		this.menu.hide();
+		this.collapse();
+		this.setValue('',false);
+	},
+
+
 	destroy: function(){
 		this.menu.destroy();
 		delete this.menu;

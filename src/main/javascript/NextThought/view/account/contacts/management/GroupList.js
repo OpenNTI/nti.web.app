@@ -27,6 +27,11 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
 	},
 
 
+	getSelected: function(){
+		return this.getSelectionModel().getSelection();
+	},
+
+
 	refresh: function(){
 		if(this.allowSelect){
 			this.getSelectionModel().select(0,true,true);
@@ -38,6 +43,12 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
 			function(dom){Ext.fly(dom).on('click',this.deleteGroup, this);},
 			this);
 		}
+	},
+
+
+	reset: function(){
+		this.getSelectionModel().deselectAll();
+		this.refresh();
 	},
 
 

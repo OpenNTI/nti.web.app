@@ -21,6 +21,10 @@ Ext.define('NextThought.controller.Groups', {
 
 		this.control({
 
+			'contacts-management-panel button[action=finish]': {
+				'click': this.saveGroupAdditions
+			},
+
 			'contacts-management-panel': {
 				'add-group': this.addGroup
 			},
@@ -161,6 +165,17 @@ Ext.define('NextThought.controller.Groups', {
 		record.destroy({callback: function(){
 			store.load();
 		}});
+	},
+
+
+	saveGroupAdditions: function(btn){
+		var panel = btn.up('contacts-management-panel'),
+			data = panel.getData();
+
+
+		console.log(data);
+
+		panel.reset();
 	}
 
 });
