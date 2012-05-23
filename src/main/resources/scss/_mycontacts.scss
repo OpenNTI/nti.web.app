@@ -71,7 +71,6 @@ $over-color: #f4f3f3;
 		em { padding: 0; line-height: normal; }
 
 		button {
-			//height: 31px;
 			color: #c4c4c4;
 			font-family: 'Open Sans', serif !important;
 			font-size: 13.5pt;
@@ -106,6 +105,9 @@ $over-color: #f4f3f3;
 			button{
 				height: 31px !important;
 				padding: 0 !important;
+				.x-gecko & {
+					height: 33px;
+				}
 
 				.x-tab-inner {
 					display: none;
