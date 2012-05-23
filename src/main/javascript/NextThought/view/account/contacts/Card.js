@@ -50,7 +50,7 @@ Ext.define('NextThought.view.account.contacts.Card',{
 		this.renderData = Ext.apply(this.renderData||{},{
 			avatarURL: this.user.get('avatarURL'),
 			name: this.user.getName(),
-			status: 'Number Theory'
+			status: 'Current Status'
 		});
 
 	},
@@ -63,7 +63,7 @@ Ext.define('NextThought.view.account.contacts.Card',{
 	},
 
 
-	clicked: function(){
+	clicked: function(e){
 		this.fireEvent('click', this, this.user.getId());
 	}
 
