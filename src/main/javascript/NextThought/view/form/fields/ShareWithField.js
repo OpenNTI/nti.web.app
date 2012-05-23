@@ -35,7 +35,7 @@ Ext.define('NextThought.view.form.fields.ShareWithField', {
 				this.bodyEl = b;
 			}
 		}});
-		me.inputField.xon({
+		me.mon(me.inputField,{
 			scope: me,
 			'select': me.select,
 			'keydown': me.keyPress
