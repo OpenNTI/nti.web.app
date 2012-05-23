@@ -6,6 +6,6 @@ Ext.define('NextThought.view.menus.Home',{
 	ui: 'nav-container',
 
 	items: [
-		{html: 'Home Menu' }
+		{html: '' }
 	]
 });
