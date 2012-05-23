@@ -27,8 +27,15 @@ Ext.define('NextThought.controller.Account', {
 
 			'contact-card':{
 				'click': this.contactCardClicked
-			}
+			},
 
+			'my-account-menu menuitem[href]' : {
+				'click': this.openHref
+			},
+
+			'my-account-menu menuitem[action=privacy]' : {
+				'click': this.showPrivacy
+			}
 
 		},{});
 	},
@@ -91,5 +98,48 @@ Ext.define('NextThought.controller.Account', {
 				}
 			}
 		).show();
+	},
+
+
+	openHref: function(item){
+		event.stopPropagation();
+		event.preventDefault();
+		window.open(item.href, item.hrefTarget);
+		return false;
+	},
+
+
+	showPrivacy: function(item){
+		if (!this.privacyWin) {
+			this.privacyWin = this.createWin('Privacy', 'https://docs.google.com/document/pub?id=1W9R8s1jIHWTp38gvacXOStsfmUz5TjyDYYy3CVJ2SmM');
+		}
+		this.privacyWin.show();
+	},
+
+
+	createWin: function(title, url) {
+		return Ext.widget('nti-window',{
+			title: title,
+			closeAction: 'hide',
+			width: '60%',
+			height: '75%',
+			layout: 'fit',
+			items: {
+				xtype: 'component',
+				cls: 'padded',
+				autoEl: {
+					tag: 'iframe',
+					src: url,
+					frameBorder: 0,
+					marginWidth: 0,
+					marginHeight: 0,
+					seamless: true,
+					transparent: true,
+					allowTransparency: true,
+					style: 'overflow: hidden'
+				}
+			}
+		});
 	}
+
 });

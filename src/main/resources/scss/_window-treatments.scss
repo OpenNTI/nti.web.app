@@ -8,6 +8,9 @@
 
 	iframe {
 		border-radius: 5px;
+        &.padded {
+            margin: 15px;
+        }
 	}
 
 	.x-window-body {

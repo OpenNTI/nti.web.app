@@ -23,21 +23,10 @@ Ext.define('NextThought.view.menus.MyAccount',{
 		{xtype: 'notifications-menuitem'},
 		{text: 'My Account', disabled: true}, //TODO - re-enable when we have
 		{text: 'Settings',  disabled: true},  //something for these two.
-		{text: 'About'},
-		{text: 'Help'},
+		{text: 'About', href: 'http://www.nextthought.com/', hrefTarget: '_blank'},
+		{text: 'Help', href: 'mailto:alpha-support@nextthought.com', hrefTarget: '_blank'},
+		{text: 'Privacy', action: 'privacy'},
 		{xtype: 'menuseparator'},
 		{text: 'Sign out', action: 'logout'}
-	],
-
-	initComponent: function(){
-		this.callParent(arguments);
-		this.on('click',this.handleClick,this);
-	},
-
-
-	handleClick: function(menu,item){
-		if(!item || !item.ntiid){
-			return;
-		}
-	}
+	]
 });
