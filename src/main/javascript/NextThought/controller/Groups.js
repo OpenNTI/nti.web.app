@@ -188,6 +188,7 @@ Ext.define('NextThought.controller.Groups', {
 			}
 			else {
 				//tell the panel which groups failed
+				console.log('some failures');
 			}
 		}
 

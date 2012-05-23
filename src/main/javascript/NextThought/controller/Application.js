@@ -13,14 +13,14 @@ Ext.define('NextThought.controller.Application', {
 			try{
 				Ext.widget({xtype: 'master-view'});
 			}
-			catch(e){
-				console.error('Loading View: ', Globals.getError(e));
+			catch(e1){
+				console.error('Loading View: ', Globals.getError(e1));
 			}
 			try{
 				Library.load();
 			}
-			catch(e){
-				console.error('Loading Library: ', Globals.getError(e));
+			catch(e2){
+				console.error('Loading Library: ', Globals.getError(e2));
 			}
 		}
 	},

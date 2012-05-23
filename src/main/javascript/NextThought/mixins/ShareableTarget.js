@@ -17,12 +17,13 @@ Ext.define('NextThought.mixins.ShareableTarget', {
 					d = sourceEl.cloneNode(true);
 					d.id = Ext.id();
 					d.setAttribute('style','');
-					return this.dragData = {
+					this.dragData = {
 						sourceEl: sourceEl,
 						repairXY: Ext.fly(sourceEl).getXY(),
 						ddel: d,
 						username: me.user.getId()
 					};
+					return this.dragData;
 				}
 			},
 

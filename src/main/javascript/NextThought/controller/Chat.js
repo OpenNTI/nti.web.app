@@ -608,10 +608,10 @@ Ext.define('NextThought.controller.Chat', {
 
 
 	onMessageForAttention: function(mid) {
-		var	id = IdCache.getIdentifier(mid),
-			cmp = Ext.ComponentQuery.query('[messageId=' + id + ']')[0],
-			win = cmp ? cmp.up('window') : null,
-			msg = cmp ? cmp.message : null;
+		var	id = IdCache.getIdentifier(mid);
+		var cmp = Ext.ComponentQuery.query('[messageId='+id+']')[0];
+		var win = (cmp ? cmp.up('window') : null),
+			msg = (cmp ? cmp.message : null);
 
 		UserRepository.getUser(msg.get('Creator'), function(users){
 			var u = users[0],
@@ -706,9 +706,9 @@ Ext.define('NextThought.controller.Chat', {
 
 
 	onMessageDefaultChannel: function(msg, opts) {
-		var	cid = msg.get('ContainerId'),
-			win = this.getChatWindow(cid),
-			moderated = opts && opts.hasOwnProperty('moderated'),
+		var	cid = msg.get('ContainerId');
+		var win = this.getChatWindow(cid),
+			moderated = Boolean(opts && opts.hasOwnProperty('moderated')),
 			tab,
 			log;
 

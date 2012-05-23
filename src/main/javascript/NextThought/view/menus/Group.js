@@ -28,7 +28,7 @@ Ext.define('NextThought.view.menus.Group',{
 	},
 
 
- 	reload: function(){
+	reload: function(){
 		this.removeAll(true);
 
 		var items = [];

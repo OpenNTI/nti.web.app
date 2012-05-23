@@ -99,11 +99,15 @@ Ext.define('NextThought.controller.Stream', {
 			masterId = Library.getLineage(containerId).last();
 
 		function addUsers(m, activityStream) {
-			for (var user in m) {
+			var user;
+
+			function update(u){
+				activityStream.addUser(u[0], m[u[0].get('Username')], true);
+			}
+
+			for (user in m) {
 				if (m.hasOwnProperty(user)){
-					UserRepository.prefetchUser(user, function(u){
-						activityStream.addUser(u[0], m[u[0].get('Username')], true);
-					}, this);
+					UserRepository.getUser(user, update, this);
 				}
 			}
 		}

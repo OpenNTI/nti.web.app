@@ -41,7 +41,7 @@ Ext.define('NextThought.controller.Navigation', {
 		if (scrollToTargetId) {
 			callback = function(reader) {
 				reader.scrollToTarget(IdCache.getComponentId(scrollToTargetId, null, reader.prefix));
-			}
+			};
 		}
 		LocationProvider.setLocation(ntiid, callback, this);
 	},

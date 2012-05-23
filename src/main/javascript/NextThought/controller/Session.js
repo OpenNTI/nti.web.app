@@ -67,7 +67,7 @@ Ext.define('NextThought.controller.Session', {
 								transparent: true,
 								allowTransparency: true,
 								style: 'overflow: hidden'
-						 	},
+							},
 							listeners: {
 								afterrender: function(self){
 									var iframe = self.getEl().dom;

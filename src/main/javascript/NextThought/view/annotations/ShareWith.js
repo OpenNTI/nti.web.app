@@ -56,7 +56,7 @@ Ext.define( 'NextThought.view.annotations.ShareWith', {
 		if (readOnly){
 			this.items[1].items.readOnly = true;
 			this.items.last().items[1].text = 'Close';
-			delete this.items.last().items[0]
+			delete this.items.last().items[0];
 		}
 
 		info.renderData = {
