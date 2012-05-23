@@ -8,6 +8,7 @@ Ext.define('NextThought.store.FriendsList',{
 	remoteSort: false,
 	remoteFilter: false,
 	remoteGroup: false,
+	sortOnFilter: true,
 
 	proxy: {
 		type: 'rest',
@@ -24,14 +25,16 @@ Ext.define('NextThought.store.FriendsList',{
 
 	sorters: [
 		{
-//			sorterFn: function(o1, o2){
-//				function f(o){ return (/@/).test(o.get('Username')); }
-//				var a = f(o1), b = f(o2);
-//				return a==b ? 0 : a ? -1 : 1;
-//			}
-//		},{
+			//Sort system groups to the front
+			sorterFn: function(a,b){
+				var ac = a.isSystem();
+				var bc = b.isSystem();
+				return ac === bc ? 0 : ac ? -1 : 1;
+			}
+		},
+		{
 			property : 'realname',
-			direction: 'ASC'
+			direction: 'ACE'
 		}
 	]
 });

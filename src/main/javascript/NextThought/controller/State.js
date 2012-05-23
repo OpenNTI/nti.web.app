@@ -18,44 +18,52 @@ Ext.define('NextThought.controller.State', {
 	},
 
 	init: function() {
-		var me = this,
-			push = history.pushState || function(){};
+		var me = this;
 
-		history.replaceState = history.replaceState || function(){};
+		this.application.on('session-ready', this.onSessionReady, this);
 
 		me.currentState = {};
 
 		me.isHangout = this.getController('Google').isHangout();
 
 		me.control({
-			'modeContainer': {
-				'activate-mode': me.trackMode
+			'main-views': {
+				'activate-view': me.track
 			}
 		},{});
+	},
 
-		window.onpopstate = function(e){
-			me.isPoppingHistory = true;
-			me.onPopState(e);
-			me.isPoppingHistory = false;
-		};
 
-		window.history.updateState = function(s){
+	onSessionReady: function(){
+		var me = this,
+			history = window.history,
+			push = history.pushState || function(){};
+
+		history.replaceState = history.replaceState || function(){};
+
+		history.updateState = function(s){
+			console.log('update state', arguments);
 			Ext.applyIf(s,{active: me.currentState.active});
 			if(!me.isPoppingHistory && push){
 				me.currentState = Ext.Object.merge(me.currentState, s);
+				window.localStorage.setItem(me.getStateKey(),JSON.stringify(me.currentState));
 				return me.fireEvent('stateChange',s);
 			}
 			return false;
 		};
 
-		window.history.pushState = function(s){
+		history.pushState = function(s){
 			console.log('push state', arguments);
 			if (this.updateState(s)) {
 				push.apply(history, arguments);
 			}
 		};
 
-
+		window.onpopstate = function(e){
+			me.isPoppingHistory = true;
+			me.onPopState(e);
+			me.isPoppingHistory = false;
+		};
 	},
 
 
@@ -76,11 +84,11 @@ Ext.define('NextThought.controller.State', {
 	},
 
 
-	trackMode: function(modeId){
-		if(this.currentState.active !== modeId && NextThought.isInitialised){
+	track: function(viewId){
+		if(this.currentState.active !== viewId && NextThought.isInitialised){
 			//console.debug(this.currentState.active, modeId);
-			this.currentState.active = modeId;
-			history.pushState(this.currentState, 'NextThought: '+modeId);
+			this.currentState.active = viewId;
+			window.history.pushState(this.currentState, 'NextThought: '+viewId);
 		}
 	},
 
@@ -92,6 +100,7 @@ Ext.define('NextThought.controller.State', {
 		}
 		this.restoringState = true;
 		var app = this.application,
+			history = window.history,
 			replaceState = false, c, key, stateScoped;
 
 		function fin(){
@@ -103,7 +112,9 @@ Ext.define('NextThought.controller.State', {
 		if(stateObject === PREVIOUS_STATE){
 			replaceState = true;
 			stateObject = this.loadState();
-			window.history.updateState(stateObject);
+			if (history.updateState) {
+				history.updateState(stateObject);
+			}
 		}
 
 		c = Ext.getCmp(stateObject.active);
@@ -151,13 +162,30 @@ Ext.define('NextThought.controller.State', {
 			return {};
 		}
 
-		return {
-			active: 'home'
+		var defaultState = {
+			active: 'library'
 		};
+
+		try {
+			return Ext.decode( window.localStorage.getItem(this.getStateKey()) ) || defaultState;
+		}
+		catch(e){
+			window.localStorage.removeItem(this.getStateKey());
+			return defaultState;
+		}
 
 //		return {
 //			location: 'tag:nextthought.com,2011-10:AOPS-HTML-prealgebra.0',
 //			active: 'reader'
 //		};
+	},
+
+
+	getStateKey: function(){
+		var username = $AppConfig.userObject ? $AppConfig.userObject.get('Username') : null;
+		if (!username){
+			console.error('unknown username for state mgmt.');
+		}
+		return 'state-' + username;
 	}
 });

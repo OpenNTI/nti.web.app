@@ -1,48 +1,58 @@
 Ext.define('NextThought.view.form.fields.ShareWithField', {
-	extend: 'Ext.panel.Panel',
+	extend: 'Ext.container.Container',
 	alias: 'widget.sharewith',
 	mixins: {
 		labelable: 'Ext.form.Labelable',
 		field: 'Ext.form.field.Field'
 	},
+	cls: 'share-with-field',
+	autoEl: 'div',
+	layout: 'auto',
+	ui: 'sharewith',
 	requires: [
-		'NextThought.view.form.fields.UserSearchInputField',
-		'NextThought.view.form.util.Token'
+		'NextThought.view.form.util.Token',
+		'NextThought.view.form.fields.UserSearchInputField'
 	],
 
-	layout: 'anchor',
-	defaults: {anchor: '100%'},
-	emptyText: 'Share with...',
-	items: [
-		{//contain the tokens
-			cls: 'share-with-selected-tokens',
-			layout: 'auto',
-			border: false,
-			margin: '0 0 10px 0'
-		}
-	],
 
 	initComponent: function(){
-		this.callParent(arguments);
-		this.xtypes.push('field');
-		this.selections = [];
-		this.inputField = this.add({
-			xtype: 'usersearchinput',
-			emptyText: this.emptyText,
-			allowBlank: true,
-			multiSelect: false,
-			enableKeyEvents: true
+		var me = this;
+		me.callParent(arguments);
+		me.xtypes.push('field');
+
+		me.selections = [];
+
+
+		me.initField();
+
+		me.inputField = me.add({xtype: 'usersearchinput', xhooks: {
+			alignPicker: function(){
+				var o = this.inputEl;
+				var b = this.bodyEl;
+				this.bodyEl = this.inputEl = me.getEl();
+				this.callParent();
+				this.inputEl = o;
+				this.bodyEl = b;
+			}
+		}});
+		me.inputField.xon({
+			scope: me,
+			'select': me.select,
+			'keydown': me.keyPress
 		});
 
-		this.setReadOnly(!!this.readOnly);
-
-		this.initField();
-		var b = this.inputField;
-		b.on('select', this.select, this);
-		b.on('focus', this.doFocus, this);
-		b.on('blur', this.doBlur, this);
+		me.setReadOnly(!!me.readOnly);
 	},
 
+
+	afterRender: function(){
+		var me = this;
+		me.callParent();
+		me.inputField.ref = me.el;
+		me.el.on('click',function(){
+			me.inputField.focus();
+		});
+	},
 
 
 	setReadOnly: function(readOnly){
@@ -54,17 +64,15 @@ Ext.define('NextThought.view.form.fields.ShareWithField', {
 			this.inputField.show();
 		}
 
-		this.items.get(0).items.each(function(token){
-			token.setReadOnly(readOnly);
-		}, this);
+		this.items.each(function(token){ token.setReadOnly(readOnly); },this);
 	},
-
 
 
 	focus: function(){
 		this.callParent(arguments);
-		this.down('usersearchinput').focus();
+//		this.down('usersearchinput').focus();
 	},
+
 
 	setValue: function(value){
 		var me = this;
@@ -74,22 +82,23 @@ Ext.define('NextThought.view.form.fields.ShareWithField', {
 		return me;
 	},
 
+
 	initValue: function(){
 		var m = this;
-		Ext.each(m.value, function(o){
-			var u = NextThought.cache.UserRepository.getUser(o);
-			if(u) {
-				m.addSelection(u);
-			}
-			else{
-				m.addSelection(Ext.create('model.unresolved-user',{Username: o}));
-			}
-		});
+		if (m.value) {
+			UserRepository.prefetchUser(m.value, function(users){
+				Ext.each(users, function(u){
+					m.addSelection(u);
+				});
+			});
+		}
 	},
+
 
 	isValid: function() {
 		return this.allowBlank || this.selections.length>0;
 	},
+
 
 	getValue: function(){
 		var m = this, r = [];
@@ -99,15 +108,18 @@ Ext.define('NextThought.view.form.fields.ShareWithField', {
 		return r;
 	},
 
-	doBlur: function(/*ctrl*/) {},
-
-	doFocus: function(/*ctrl*/) {},
 
 	select: function(ctrl, selected) {
-		ctrl.collapse();
-		ctrl.setValue('');
-		this.addSelection(selected[0]);
+		this.addSelection(selected);
 	},
+
+
+	keyPress: function(field, event) {
+		if (event.keyCode===event.BACKSPACE && !field.getValue()){
+			this.removeLastToken();
+		}
+	},
+
 
 	containsToken: function(model){
 		var id = model.getId(), found = false;
@@ -120,6 +132,16 @@ Ext.define('NextThought.view.form.fields.ShareWithField', {
 		);
 		return found;
 	},
+
+
+	removeLastToken: function(){
+		if (this.selections.length > 0) {
+			var lastSelection = this.selections.last();
+			this.down('[modelId='+lastSelection.getId()+']').destroy();
+			this.selections = this.selections.splice(0, this.selections.length -1);
+		}
+	},
+
 
 	removeToken: function(token, model){
 		token.destroy();
@@ -139,21 +161,38 @@ Ext.define('NextThought.view.form.fields.ShareWithField', {
 		this.doComponentLayout();
 	},
 
+
 	addToken: function(model){
-		var c = this.items.get(0),
+		var c = this.items,
 			text = model.get('realname') || model.get('Username');
 
-		c.add({ xtype: 'token', readOnly: this.readOnly, model: model, text: text,
-				listeners: {scope: this, click: this.removeToken}});
+		this.insert(c.length-1,//indexOf(saerchbox)-1
+			{
+				xtype: 'token',
+				readOnly: this.readOnly,
+				model: model,
+				modelId: model.getId(),
+				text: text,
+				listeners: {
+					scope: this,
+					click: this.removeToken
+				}
+			});
 	},
 
-	addSelection: function(user){
+
+	addSelection: function(users){
 		var m = this;
-		if(m.containsToken(user)) {
-			return;
+
+		if(!Ext.isArray(users)){
+			users = [users];
 		}
 
-		m.selections.push(user);
-		m.addToken(user);
+		Ext.each(users,function(user){
+			if(m.containsToken(user)) { return; }
+			m.selections.push(user);
+			m.addToken(user);
+		});
 	}
+
 });

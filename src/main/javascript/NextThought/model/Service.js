@@ -44,6 +44,18 @@ Ext.define('NextThought.model.Service', {
 	},
 
 
+	getUserUnifiedSearchURL: function(){
+		var w = this.getCollection('Pages') || {},
+			l = this.getLinkFrom(w.Links||[], Globals.USER_UNIFIED_SEARCH_REL);
+
+		if(!l) {
+			return null;
+		}
+
+		return $AppConfig.server.host + this.forceTrailingSlash(l);
+	},
+
+
 	getSearchURL : function(containerId){
 		var h = $AppConfig.server.host,
 			c = containerId ? containerId : 'prealgebra';
@@ -189,7 +201,7 @@ Ext.define('NextThought.model.Service', {
 		}
 
 		if(o){
-			return Globals.callback(success,null,[o]);
+			return Ext.callback(success,null,[o]);
 		}
 
 		me.getObject(containerId, step, failure, me);
@@ -206,7 +218,7 @@ Ext.define('NextThought.model.Service', {
 			q = {};
 
 		if(!ParseUtils.parseNtiid(ntiid)){
-			Globals.callback(failure,scope, ['']);
+			Ext.callback(failure,scope, ['']);
 			return;
 		}
 
@@ -218,15 +230,15 @@ Ext.define('NextThought.model.Service', {
 					callback: function(req, s, resp){
 						if(s){
 							resp.responseLocation = resolvedUrl;
-							Globals.callback(success, scope, [resp]);
+							Ext.callback(success, scope, [resp]);
 						} else {
-							Globals.callback(failure,scope, [req,resp]);
+							Ext.callback(failure,scope, [req,resp]);
 						}
 					}
 				});
 			}
 			catch(e){
-				Globals.callback(failure,scope,[{},e]);
+				Ext.callback(failure,scope,[{},e]);
 			}
 		}
 
@@ -244,13 +256,13 @@ Ext.define('NextThought.model.Service', {
 						href = Ext.JSON.decode(resp.responseText).href;
 						continueRequest(host+href);
 					} else {
-						Globals.callback(failure,scope, [req,resp]);
+						Ext.callback(failure,scope, [req,resp]);
 					}
 				}
 			});
 		}
 		catch(e){
-			Globals.callback(failure,scope,[{},e]);
+			Ext.callback(failure,scope,[{},e]);
 		}
 
 		return q;
@@ -260,10 +272,10 @@ Ext.define('NextThought.model.Service', {
 	getObject: function (ntiid, success, failure, scope){
 		return this.getObjectRaw(ntiid,
 				function(resp){
-					Globals.callback(success, scope, ParseUtils.parseItems(resp.responseText));
+					Ext.callback(success, scope, ParseUtils.parseItems(resp.responseText));
 				},
 				function(req,resp){
-					Globals.callback(failure,scope, [req,resp]);
+					Ext.callback(failure,scope, [req,resp]);
 				},
 				this
 		);

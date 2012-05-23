@@ -1,37 +1,160 @@
-/* leave here until worksheet gets updated*/
-#nticontent .worksheet-problems li{clear: both;}
+#NTIContent {
+	.injected-related-items {
+		margin: 15px 0 0 0;
 
-#nticontent .worksheet-problems .problem {
-	overflow: visible;
-	display: block;
-	border: none;
-	text-align: left;
-	padding: 0;
-	position: static;
-	margin: 0;
-	background: none;
-	white-space: normal;
-}
+		font-size: 14px;
+		.related {
+			color: #84b93d;
+		}
 
-#nticontent .worksheet-problems .result {
-	clear: both;
-}
-#nticontent .worksheet-problems .problem::after {
-	display: none;
-}
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		cursor: pointer;
+		&.showall {
+			white-space: normal;
+			cursor: auto;
+		}
+	}
 
-#nticontent div.mathjax.answer,
-#nticontent div.mathjax.response {
-	clear: both;
-	display: block !important;
-	margin: 1.2em;
-}
-#nticontent .result {
-	padding:  1.2em;
-}
-#nticontent .result.correct {
-	background-color: #77BB4E;
-}
-#nticontent .result.incorrect {
-	background-color: #DD8888;
+	.externalvideo {
+		display: inline-block;
+	}
+
+    div.section-problems,
+    div.challenge-problems,
+    div.review-problems,
+    div.exercises{
+        &::before{
+            background: none !important;
+        }
+        & > span.headingtext {
+          position: static !important;
+          top: initial;
+          left: initial;
+      }
+    }
+    ol.section-problems,
+    ol.challenge-problems,
+    ol.review-problems {
+        margin: 0;
+        padding: 0;
+    }
+  
+   div.picdefns,
+   .xtra,
+   div.defn,
+   div.defns,
+   .bogus,
+   .importantdef,
+   .important,
+   .concept,
+   .warning,
+   .game,
+   .sidebar{
+		padding: 1em !important;
+		background-image: none !important;
+		background-color: rgba(235, 235, 235, 0.3) !important;
+   }
+
+   .quiz-input {
+   	       min-width: 80px;
+   }  
+
+	.worksheet-problems {
+		li{
+			clear: both;
+		}
+		.problem {
+			overflow: visible;
+			display: block;
+			border: none;
+			text-align: left;
+			padding: 0;
+			position: static;
+			margin: 0;
+			background: none;
+			white-space: normal;
+			&::after {
+				display: none;
+			}
+		}
+		.result {
+			clear: both;
+		}
+	}
+
+	div {
+		&.mathjax{
+			&.answer,
+			&.response {
+				clear: both;
+				display: block !important;
+				margin: 1.2em;
+			}
+		}
+	}
+
+	.result {
+		padding:  1.2em;
+		&.correct {
+			background-color: #77BB4E;
+		}
+		&.incorrect {
+			background-color: #DD8888;
+		}
+	}
+
+	.page-contents {
+		color: #757474;
+		margin-left: 80px;
+		font-size: 14px !important;
+		font-weight: normal !important;
+
+		.chapter.title,
+		.title {
+			position: relative;
+			left: -85px;
+			display: block;
+			font-size: 31px;
+			font-weight: 200;
+			border: none !important;
+			span.ref{
+				display: block;
+				width: 65px;
+				text-align: right;
+				float: left;
+				padding: 0;
+			}
+			span.label {
+				font-size: inherit;
+				margin-left: 80px;
+				border: none !important;
+				padding: 0 !important;
+				display: block;
+			}
+		}
+
+		.titlepage .title {
+			position: static;
+			left: 0;
+		}
+
+		.subsection,
+		.subsubsection,
+		.paragraph{
+			&.title {
+				display: block;
+			}
+		}
+		.subsubsection,
+		.paragraph {
+			&.title {
+				font-weight: bold;
+				padding-left: 85px;
+			}
+		}
+		.subsubsection.title {font-size: 16px;}
+		.paragraph.title {font-size: 14px;}
+	}
 }

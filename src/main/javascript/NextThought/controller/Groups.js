@@ -3,7 +3,9 @@ Ext.define('NextThought.controller.Groups', {
 
 	models: [
 		'Community',
-		'FriendsList'
+		'FriendsList',
+		'User',
+		'UserSearch'
 	],
 
 	stores: [
@@ -11,56 +13,33 @@ Ext.define('NextThought.controller.Groups', {
 	],
 
 	views: [
-		'modes.Groups',
-		'windows.GroupEditorWindow'
+		'account.contacts.management.Panel'
 	],
 
 	init: function() {
 		this.application.on('session-ready', this.onSessionReady, this);
 
 		this.control({
-			'groups-mode-container toolbar button[createItem]':{
-				'click':function(){
-					var rec = Ext.create('NextThought.model.FriendsList');
-					Ext.create('NextThought.view.windows.GroupEditorWindow',{record: rec}).show();
-				}
+
+			'contacts-management-panel button[action=finish]': {
+				'click': this.saveGroupAdditions
 			},
 
-			'groups-mode-container toolbar button[deleteItem]':{
-				'click':function(){
-					var q = 'groups-mode-container dataview';
-					Ext.each(Ext.ComponentQuery.query(q),function(v){
-						Ext.each(v.getSelectionModel().getSelection(), function(r){
-							r.destroy();
-						});
-					});
-
-					this.reloadGroups();
-				}
+			'contacts-management-panel': {
+				'add-group': this.addGroup
 			},
 
-			'groups-mode-container dataview':{
-				'itemdblclick':function(a, rec){
-					if(rec.isModifiable()) {
-						Ext.create('NextThought.view.windows.GroupEditorWindow',{record: rec}).show();
-					}
-				},
-				'selectionchange': function(a, sel){
-					var q = 'groups-mode-container toolbar button[deleteItem]';
-					Ext.each(Ext.ComponentQuery.query(q),function(v){
-						if(sel.length) {
-							v.enable();
-						} else {
-							v.disable();
-						}
-					});
-				}
-			},
-
-			'group-editor button':{
-				'click': this.groupEditorButtonClicked
+			'management-group-list': {
+				'delete-group': this.deleteGroup
 			}
+
 		},{});
+
+		//Listen for changes of presence to notify the online/offline lists
+		var me = this;
+		Socket.register({
+			'chat_presenceOfUserChangedTo': function(){me.incomingPresenceChange.apply(me, arguments);}
+		});
 	},
 
 
@@ -73,56 +52,178 @@ Ext.define('NextThought.controller.Groups', {
 
 		app.registerInitializeTask(token);
 		store.on('load', function(s){ app.finishInitializeTask(token); }, this, {single: true});
+
+		store.on('datachanged', this.publishContacts, this);
+
 		store.proxy.url = $AppConfig.server.host+coll.href;
 		store.load();
 	},
 
 
-	reloadGroups: function(){
-		this.getFriendsListStore().load();
+
+	getContacts: function(user,callback){
+		var names = user.get('following') || [];
+
+		UserRepository.getUser(names,function(u){
+			var friends = {Online: {}, Offline: {}};
+			Ext.each(u,function(user){
+				var p = user.get('Presence');
+				if(p){ friends[p][user.getId()] = user; }
+			});
+
+			Ext.callback(callback,null,[friends]);
+		});
 	},
 
 
-	groupEditorButtonClicked: function(btn){
-		var win = btn.up('window'),
-			frm = win.down('form'),
-			str = win.store,
-			rec = win.record,
-			names = [],
-			values, n;
 
+	publishContacts: function(){
+		var me = this,
+			user = $AppConfig.userObject,
+			store = me.getFriendsListStore(),
+			groups = Ext.getCmp('my-groups');
 
-		if(btn.actionName === 'save') {
-			if(!frm.getForm().isValid()){
-				return;
-			}
-
-			win.el.mask('Saving...');
-			values = frm.getValues();
-			Ext.each(str.data.items, function(u){ names.push(u.get('Username')); });
-
-			if(rec.phantom){
-				n = values.name;
-				n = n.replace(/[^0-9A-Za-z\-@]/g, '.');
-				n = n.replace(/^[\.\-_]+/g, '');
-				rec.set('Username',n+'@nextthought.com');
-			}
-			rec.set('realname', values.name);
-			rec.set('friends', names);
-			rec.save({
-				scope: this,
-				success: function(){
-					this.reloadGroups();
-					win.close();
-				},
-				failed: function(){
-					win.el.unmask();
-				}
-			});
+		if(!groups){
+			setTimeout(function(){ me.publishContacts(); },10);
 			return;
 		}
 
-		win.close();
+		this.getContacts(user,function(friends){
+			Ext.getCmp('offline-contacts').setUsers(friends.Offline);
+			Ext.getCmp('online-contacts').setUsers(friends.Online);
+		});
+
+		groups.removeAll(true);
+
+		store.each(function(group){
+			var id = ParseUtils.parseNtiid(group.getId()),
+				friends = group.get('friends');
+
+			if(friends.length === 1 && friends[0] === 'Everyone'
+			&& id.specific.provider === 'zope.security.management.system_user'){
+				return;
+			}
+
+			var name = group.getName();
+			UserRepository.prefetchUser(friends,function(users){
+				groups.add({title: name}).setUsers(users);
+			});
+		});
+
+	},
+
+
+	incomingPresenceChange: function(name, presence){
+		var offline = Ext.getCmp('offline-contacts'),
+			online = Ext.getCmp('online-contacts'),
+			u;
+
+		UserRepository.prefetchUser(name, function(users) {
+			u = users[0];
+			if (presence.toLowerCase()==='online') {
+				//remove from offline, add to online
+				online.addUser(u);
+				offline.removeUser(u);
+			}
+			else if (presence.toLowerCase()==='offline') {
+				online.removeUser(u);
+				offline.addUser(u);
+			}
+			else {
+				console.error('Got a weird presence notification.', name, presence);
+			}
+		});
+	},
+
+
+	addGroup: function(newGroupName, callback, scope){
+		var rec = this.getFriendsListModel().create(),
+			store = this.getFriendsListStore(),
+			username = newGroupName
+				.replace(/[^0-9A-Za-z\-@]/g, '.')
+				.replace(/^[\.\-_]+/g, '');
+
+		rec.set('Username',username+'@nextthought.com');
+
+		rec.set('realname', newGroupName);
+		rec.set('friends', []);
+		rec.save({
+			scope: this,
+			success: function(){
+				store.load();
+				Ext.callback(callback,scope, [true]);
+			},
+			failed: function(){
+				Ext.callback(callback,scope, [false]);
+			}
+		});
+	},
+
+
+	deleteGroup: function(record){
+		var store = this.getFriendsListStore();
+		record.destroy({callback: function(){
+			store.load();
+		}});
+	},
+
+
+	saveGroupAdditions: function(btn){
+		var store = this.getFriendsListStore(),
+			panel = btn.up('contacts-management-panel'),
+			data = panel.getData(),
+			people = data.people,
+			groups = data.groups,
+			active = Globals.getAsynchronousTaskQueueForList(groups),
+			push = Array.prototype.push,
+			hasErrors = false,
+			failedGroups = [];
+
+		function complete(){
+			panel.getEl().unmask();
+
+			if( !hasErrors ){
+				panel.reset();
+				store.load();
+			}
+			else {
+				//tell the panel which groups failed
+			}
+		}
+
+		panel.getEl().mask();
+
+		Ext.each(groups,function(group){
+
+			var record = group,
+				field = 'friends',
+				list;
+
+			if(group.isEveryone()){
+				record = $AppConfig.userObject;
+				field = 'following';
+			}
+
+			list = record.get(field).slice();//clone list
+			push.apply(list, people); //add users
+			record.set(field, list); //reassign the list back
+
+			record.save({
+				callback: function(newRecord,operation){
+					var failed = !operation || !operation.success;
+
+					hasErrors = hasErrors || failed;
+					if(failed){
+						failedGroups.push(record);
+					}
+
+					active.pop();
+					if(active.length===0){
+						complete();
+					}
+				}
+			});
+		});
 	}
 
 });

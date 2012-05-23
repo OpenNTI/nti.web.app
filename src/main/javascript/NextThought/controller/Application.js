@@ -4,19 +4,24 @@ Ext.define('NextThought.controller.Application', {
 		'NextThought.Library'
 	],
 	
-	views: ['Viewport'],
+	views: ['Main'],
 
 	statics: {
 		launchToken: {},
 
 		launch: function(){
-			//console.groupCollapsed('Launch');
-
-			Ext.create('NextThought.view.Viewport');
+			try{
+				Ext.widget({xtype: 'master-view'});
+			}
+			catch(e){
+				console.error('Loading View: ', Globals.getError(e));
+			}
 			try{
 				Library.load();
 			}
-			catch(e){ console.error('Loading Library: ', e, e.message, e.stack); }
+			catch(e){
+				console.error('Loading Library: ', Globals.getError(e));
+			}
 		}
 	},
 
@@ -25,8 +30,6 @@ Ext.define('NextThought.controller.Application', {
 
 		Library.on('loaded', this.restore, this);
 		this.application.on('finished-loading', function(){
-			//console.groupEnd();
-			window.stopTrackingModelConstruction = true;
 			NextThought.isInitialised = true;
 			Globals.removeLoaderSplash();
 		});

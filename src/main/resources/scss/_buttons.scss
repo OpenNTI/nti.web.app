@@ -1,0 +1,90 @@
+$skins: nt,primary,secondary;
+$sizes: small,medium,large;
+
+$button-borders:
+	#24418c,
+	#a8a8a8,
+	#a8a8a8;
+$button-shadows: #a4c8f5,#cce49c,#ffffff;
+$button-start-colors: #6D91EB,#a4ce50,#e4e4e4;
+$button-end-colors: #384EA9,#87b133,#c8c8c8;
+
+$button-text-colors: #ffffff,#ffffff,#707070;
+$button-text-shadows: #12236a,#688b23,#ffffff;
+$button-text-weights: bold,bolder,normal;
+
+@each $skin in $skins {
+	$experimental-support-for-svg: true;
+	$x: index($skins,$skin);
+
+	$border: nth($button-borders,$x);
+	$shadow: nth($button-shadows,$x);
+	$startColor: nth($button-start-colors,$x);
+	$endColor: nth($button-end-colors,$x);
+	$color: nth($button-text-colors,$x);
+	$text-shadow: nth($button-text-shadows,$x);
+	$font-weight: nth($button-text-weights,$x);
+
+	$direction: -1px;
+
+	@if lightness($text-shadow) > lightness($color) {
+		$direction: 1px;
+	}
+
+	@each $size in $sizes {
+		$i: index($sizes,$size)  - 1;
+
+		@each $type in icon, noicon {
+			.x-btn-#{$skin}-#{$size}-#{$type} {
+				button {
+					background: none;
+					border: none;
+					padding: 0;
+					margin: 0;
+				}
+
+				button,
+				.x-btn-inner {
+					height: auto;
+					line-height: normal;
+				}
+			}
+		}
+
+		.x-btn-#{$skin}-#{$size} {
+			margin-left:10px;
+			border: 1px $border solid;
+			border-radius: 4px;
+			box-shadow: inset 0px 1px 1px $shadow;
+			padding: 2px+(4px*$i) 10px+(15px*$i);
+
+			@include background-image( linear-gradient(top,
+					$startColor 0%,
+					$endColor 100%
+					));
+
+			&.x-over {}
+			&.x-disabled{
+				background: #e4e4e4;
+				color: #adadad;
+			}
+			&.x-pressed {
+				box-shadow: inset 0px -1px 1px $shadow;
+				@include background-image( linear-gradient(top,
+									$endColor 0%,
+									$startColor 100%
+									));
+				.x-btn-inner {
+					text-shadow: 0 -$direction 0 $text-shadow;
+				}
+			}
+
+			.x-btn-inner {
+				font-size: 10px + (2px*$i) !important;
+				font-weight: $font-weight;
+				color: $color;
+				text-shadow: 0 $direction -1px $text-shadow;
+			}
+		}
+	}
+}

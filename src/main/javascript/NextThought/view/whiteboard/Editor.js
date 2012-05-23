@@ -844,7 +844,7 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 			if(cmp.is('field')){
 				cmp.ui = cmp.ui + '-toolbar';
 			}
-			this.callOverridden(arguments);
+			this.callParent(arguments);
 		}
 	});
 

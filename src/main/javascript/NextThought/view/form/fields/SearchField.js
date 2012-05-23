@@ -1,83 +1,102 @@
 Ext.define('NextThought.view.form.fields.SearchField', {
-	extend: 'Ext.form.field.Trigger',
-
+	extend: 'Ext.Component',
 	alias: 'widget.searchfield',
+	requires: [
+		'NextThought.view.form.fields.SearchAdvancedOptions'
+	],
 
-	trigger1Cls: Ext.baseCSSPrefix + 'form-clear-trigger',
+	renderTpl: [
+		'<div class="search-field-wrap">',
+			'<div class="search-field">',
+				'<input type="text" placeholder="Search">',
+				'<a href="#" class="trigger"></a>',
+			'</div>',
+		'</div>'
+	],
 
-	trigger2Cls: Ext.baseCSSPrefix + 'form-search-trigger',
-
-	hasSearch : false,
-
-	initComponent: function(){
-		this.addEvents('search', 'cleared-search', 'select-down', 'select-up', 'choose-selection');
-		this.callParent(arguments);
-		this.on('specialkey', function(f, e){
-			//trigger search if enter is pressed, or if down is pressed and there isn't already a search
-			//console.debug('key=', e, ' hasSearch=', this.hasSearch);
-			if(e.getKey() === e.ESC){
-				this.onTrigger1Click();
-			}
-			else if(!this.hasSearch && (e.getKey() === e.ENTER || e.getKey() === e.DOWN)){
-				this.onTrigger2Click();
-			}
-			else if (e.getKey() === e.DOWN) {
-				this.onSelectDown();
-			}
-			else if (e.getKey() === e.UP) {
-				this.onSelectUp();
-			}
-			else if (e.getKey() === e.ENTER || e.getKey() === e.RIGHT) {
-				//someone pressed enter when the search is visable, means navigate to selection
-				this.onChooseSelection();
-			}
-		}, this);
-		this.on('change', function(f,n,o){
-			this.hasSearch = false;
-			this.fireEvent('cleared-search', this);
-		}, this);
+	renderSelectors: {
+		boxEl: 'div.search-field',
+		inputEl: 'input',
+		triggerEl: 'a'
 	},
 
 	afterRender: function(){
 		this.callParent(arguments);
-		this.triggerEl.item(0).setDisplayed('none');
+		this.triggerEl.on('click',this.triggerMenu,this);
+		this.triggerEl.addCls(Ext.baseCSSPrefix + 'menu');//make clicks on this not hide the menu
+		this.menu = Ext.widget({xtype: 'search-advanced-menu', width: this.boxEl.getWidth()});
+		this.mon(this.inputEl,{
+			scope: this,
+			keypress: this.keyPressed,
+			keydown: this.keyDown //keypress does not always fire for escape
+		});
 	},
 
-	onSelectDown: function() {
-		this.fireEvent('select-down',this);
+
+	specialKeys: {
+		27: true,	//Ext.EventObject.prototype.ESC
+		8: true,	//Ext.EventObject.prototype.BACKSPACE
+		46: true	//Ext.EventObject.prototype.DELETE
 	},
 
-	onSelectUp: function() {
-		this.fireEvent('select-up', this);
+
+	keyDown: function(event) {
+		var k = event.getKey();
+		if(this.specialKeys[k]){
+			if(k === event.ESC){
+				this.inputEl.dom.value = '';
+			}
+			event.stopPropagation();
+			this.keyPressed(event);
+		}
 	},
 
-	onChooseSelection: function() {
-		this.fireEvent('choose-selection', this);
+
+	keyPressed: function(event){
+		var k = event.getKey();
+		if (k === event.ENTER || k === event.ESC) {
+			this.fireSearchEvent();
+		}
+		else {
+			this.fireSearchEventBuffered();
+		}
 	},
 
-	onTrigger1Click : function(){
+
+	fireSearchEvent: function(){
+		clearTimeout(this.searchEventDelayId);
+		var val = this.getValue();
+		if(!val){
+			this.fireEvent('clear-search');
+		}
+		else if(val.length > 3) {
+			this.fireEvent('search', val);
+		}
+	},
+
+	fireSearchEventBuffered: function(){
 		var me = this;
-
-		if (me.hasSearch) {
-			me.setValue('');
-			me.hasSearch = false;
-			me.triggerEl.item(0).setDisplayed('none');
-			me.doComponentLayout();
-			me.fireEvent('cleared-search', this);
-		}
+		clearTimeout(this.searchEventDelayId);
+		this.searchEventDelayId = setTimeout(function(){ me.fireSearchEvent(); }, 500);
 	},
 
-	onTrigger2Click : function(){
-		var me = this,
-			value = me.getValue();
+	triggerMenu: function(e,el){
+		e.stopPropagation();
+		e.preventDefault();
 
-		if (value.length < 1) {
-			me.onTrigger1Click();
-			return;
+		if(!this.menu.isVisible()){
+			this.menu.showBy(this.boxEl,'tl-bl?',[0,5]);
 		}
-		me.hasSearch = true;
-		me.triggerEl.item(0).setDisplayed('block');
-		me.doComponentLayout();
-		me.fireEvent('search', me);
+		else {
+			this.menu.hide();
+		}
+
+		//IE needs this
+		return false;
+	},
+
+
+	getValue: function() {
+		return this.inputEl.getValue();
 	}
 });

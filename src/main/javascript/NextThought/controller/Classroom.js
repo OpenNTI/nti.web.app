@@ -2,26 +2,23 @@ Ext.define('NextThought.controller.Classroom', {
 	extend: 'Ext.app.Controller',
 
 	requires: [
-		'NextThought.util.ClassroomUtils'
+		'NextThought.util.Classrooms'
 	],
 
 	views: [
 		'content.Classroom',
-		'modes.Classroom',
+		'views.Classroom',
 		'form.ClassInfoForm',
 		'form.SectionInfoForm',
-		'widgets.ClassroomBreadcrumb',
-		'widgets.classroom.Browser',
-		'widgets.classroom.BrowserStudyGroups',
-		'widgets.classroom.ResourceView',
-		'widgets.LinkButton',
-		'widgets.classroom.LiveDisplay',
-		'widgets.classroom.Management',
-		'widgets.classroom.ScriptLog',
-		'windows.ClassCreateEditWindow',
-		'windows.ClassroomChooser',
-		'windows.ClassResourceEditor',
-		'Viewport'
+		'classroom.Browser',
+		'classroom.BrowserStudyGroups',
+		'classroom.ResourceView',
+		'classroom.LiveDisplay',
+		'classroom.Management',
+		'classroom.ScriptLog',
+		'classroom.ClassCreateEditWindow',
+		'classroom.ClassroomChooser',
+		'classroom.ClassResourceEditor'
 	],
 
 	models: [
@@ -37,8 +34,7 @@ Ext.define('NextThought.controller.Classroom', {
 	],
 
 	refs:[
-		{ ref: 'classroomContainer', selector: 'classroom-mode-container' },
-		{ ref: 'viewport', selector: 'master-view' },
+		{ ref: 'classroomContainer', selector: 'classroom-view-container' },
 		{ ref: 'classResourceEditor', selector: 'class-resource-editor' }
 	],
 
@@ -64,27 +60,27 @@ Ext.define('NextThought.controller.Classroom', {
 				'selected': this.selectedClassRoom
 			},
 
-			'classroom-mode-container toolbar button[action=leave]':{
+			'classroom-view-container toolbar button[action=leave]':{
 				'click': this.leaveRoom
 			},
 
-			'classroom-mode-container classroom-content' : {
+			'classroom-view-container classroom-content' : {
 				'content-message-received': this.onMessageContentNavigate
 			},
 
-			'classroom-mode-container' : {
-				'mode-activated' : this.classroomActivated
+			'classroom-view-container' : {
+				'view-activated' : this.classroomActivated
 			},
 
-			'classroom-mode-container splitbutton[action=flagged] menuitem': {
+			'classroom-view-container splitbutton[action=flagged] menuitem': {
 				'click': this.flaggedMenuItemClicked
 			},
 
-			'classroom-mode-container splitbutton[action=flagged]': {
+			'classroom-view-container splitbutton[action=flagged]': {
 				'click' : this.flaggedButtonClicked
 			},
 
-			'classroom-mode-container button[action=manageclass] menuitem': {
+			'classroom-view-container button[action=manageclass] menuitem': {
 				'click': this.manageClassMenuItemClicked,
 				'delete-clicked' : this.deleteClassClicked,
 				'manageScripts' : this.manageClassScriptsClicked
@@ -557,7 +553,7 @@ Ext.define('NextThought.controller.Classroom', {
 		//actually leave room on server
 		this.getController('Chat').leaveRoom(ri);
 
-		//tell the mode to leave the classroom
+		//tell the view to leave the classroom
 		c.leaveClassroom();
 
 		delete this.rooms[ri.getId()];

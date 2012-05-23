@@ -22,8 +22,12 @@ Ext.define('NextThought.proxy.Rest', {
 
 	doRequest: function(operation, callback, scope){
 		operation.retryArgs = {callback: callback, scope: scope};
-
+		if(operation.async===false){
+			Ext.Ajax.async = false;
+		}
 		this.callParent(arguments);
+		delete Ext.Ajax.async;
+
 		if(this.headers){
 			delete this.headers;
 		}
@@ -44,11 +48,12 @@ Ext.define('NextThought.proxy.Rest', {
 		//making sure headers propagate
 		Ext.apply(this.headers, request.headers || {});
 		Ext.apply(this.headers, request.operation.headers || {});
-		Ext.apply(this.headers,  { 'Content-Type': mimeType+'+json' });
 
 		if(!record){
 			return request.operation.url || request.url || this.url;
 		}
+
+		Ext.apply(this.headers,  { 'Content-Type': mimeType+'+json' });
 
 		if (request.operation.url || request.url) {
 			console.log('returning set url. not generating a new one', 'operation url', this.operation ? this.operation.url: 'NA', 'request url', request.url);
@@ -90,24 +95,8 @@ Ext.define('NextThought.proxy.Rest', {
 	},
 
 	exception: function(proxy, response, operation, eOpts) {
-		var retryArgs = operation.retryArgs;
-
-		if(response.status === 0 && response.responseText==='') {
-			//Um, probably a 302 on CORS
-			console.warn('CORS 302? Retrying w/ known redirects.',
-					{
-						Proxy:proxy,
-						Response:response,
-						Operation: operation
-					});
-
-			if(retryArgs && operation.action === 'read'){
-				operation.url += '/Classes';
-				this.read(operation, retryArgs.callback,retryArgs.scope);
-			}
-			return;
-		}
-		else if(response.status !== 404) {
+		var code = response.status;
+		if(code < 400 || code >= 500 ) {
 			console.error('Error getting data:', arguments);
 		}
 

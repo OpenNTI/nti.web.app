@@ -2,7 +2,8 @@ Ext.define('NextThought.controller.Annotations', {
 	extend: 'Ext.app.Controller',
 
 	required: [
-		'NextThought.cache.IdCache'
+		'NextThought.cache.IdCache',
+		'NextThought.util.Sharing'
 	],
 
 	models: [
@@ -16,18 +17,13 @@ Ext.define('NextThought.controller.Annotations', {
 	],
 
 	views: [
-		'Viewport',
-		'windows.ChatWindow',
-		'widgets.annotations.Highlight',
-		'widgets.annotations.Note',
-		'windows.NoteEditor',
-		'windows.ShareWithWindow'
+		'annotations.Highlight',
+		'annotations.Note',
+		'annotations.NoteEditor',
+		'annotations.ShareWith'
 	],
 
-	refs: [
-		{ref: 'viewport', selector: 'master-view'},
-		{ref: 'chatWindow', selector: 'chat-window'}
-	],
+	refs: [],
 
 	statics: {
 		events: new Ext.util.Observable()
@@ -62,8 +58,12 @@ Ext.define('NextThought.controller.Annotations', {
 			'noteeditor button[action=discuss]':{ 'click': this.onDiscussNote },
 			'noteeditor button[action=cancel]':{ 'click': this.onCancelNote },
 
-			'sharewithwindow button':{
-				'click': this.shareWithButton
+			'share button[action=save]':{
+				'click': this.onShareWithSaveClick
+			},
+
+			'chat-log-view': {
+				'load-transcript': this.onLoadTranscript
 			}
 		},{});
 	},
@@ -76,7 +76,7 @@ Ext.define('NextThought.controller.Annotations', {
 			delete this.definition;
 		}
 
-		this.definition = Ext.widget('window',{
+		this.definition = Ext.widget('nti-window',{
 			title: 'Define: '+term,
 			closeAction: 'destroy',
 			width: 300,
@@ -84,43 +84,40 @@ Ext.define('NextThought.controller.Annotations', {
 			layout: 'fit',
 			items: {
 				xtype: 'component',
+				cls: 'definition',
 				autoEl: {
 					tag: 'iframe',
 					src: url,
 					frameBorder: 0,
 					marginWidth: 0,
-					marginHeight: 0
+					marginHeight: 0,
+//					scrolling: 'no',
+					seamless: true,
+					transparent: true,
+					allowTransparency: true,
+					style: 'overflow: hidden'
+				},
+				xhooks: {
+
 				}
 			}
 		}).show().center();
 	},
 
 
-	shareWithButton: function(btn){
+	onShareWithSaveClick: function(btn){
 		var win = btn.up('window'),
-			form= win.down('form'),
 			shbx= win.down('sharewith'),
 			rec = win.record;
 
-		if(btn.isCancel){
-			win.close();
-			return;
-		}
-
-		if(!form.getForm().isValid()){
-			return false;
-		}
-
 		win.el.mask('Sharing...');
 
-		rec.set('sharedWith',shbx.getValue());
-		rec.save({
-			scope: this,
-			success:function(newRecord,operation){
+		SharingUtils.setSharedWith(rec,shbx.getValue(),function(newRec,op){
+			if(op.success){
 				win.close();
-				rec.fireEvent('updated',newRecord);
-			},
-			failure:function(){
+				rec.fireEvent('updated',newRec);
+			}
+			else{
 				console.error('Failed to save object');
 				win.el.unmask();
 			}
@@ -293,7 +290,7 @@ Ext.define('NextThought.controller.Annotations', {
 			};
 		}
 
-		Ext.create('NextThought.view.windows.ShareWithWindow',Ext.apply({record: record}, options)).show();
+		Ext.widget(Ext.apply({xtype: 'share',record: record}, options)).show();
 	},
 
 	editNote: function(record){

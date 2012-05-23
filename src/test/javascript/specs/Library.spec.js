@@ -76,24 +76,6 @@ describe('Library Store', function(){
 	});
 
 
-	it('can determine navigation', function(){
-		var n = Library.getNavigationInfo('book2-1-1');
-
-		expect(n).toBeTruthy();
-		isTopicElement(n.current);
-		isTopicElement(n.next);
-		isTopicElement(n.previous);
-
-		expect(n.hasNext).toBeTruthy();
-		expect(n.hasPrevious).toBeTruthy();
-
-		expect(n.nextRef).toBeTruthy();
-		expect(n.previousRef).toBeTruthy();
-
-
-	});
-
-
 	it('can handle Structured NTI IDs', function(){
 		var n = Library.findLocation('tag:nextthought.com,2011-07-14:AOPS-HTML-prealgebra-69');
 

@@ -1,5 +1,9 @@
 Ext.define('NextThought.model.FriendsList', {
 	extend: 'NextThought.model.Base',
+	resolveUsers: true,
+
+	EVERYONE_USERNAME: 'everyone',
+	SYSTEM_CREATOR: 'zope.security.management.system_user',
 
 	fields: [
 		{ name: 'Username', type: 'string' },
@@ -16,8 +20,18 @@ Ext.define('NextThought.model.FriendsList', {
 	},
 
 
+	isSystem: function(){
+		return this.SYSTEM_CREATOR === this.get('Creator').toLowerCase();
+	},
+
+
+	isEveryone: function(){
+		return this.isSystem() && this.EVERYONE_USERNAME === this.get('Username').toLowerCase();
+	},
+
+
 	getName: function(){
-		return this.get('alias') || this.get('realname');
+		return this.get('realname') || this.get('alias');
 	},
 
 

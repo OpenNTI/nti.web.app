@@ -48,7 +48,7 @@ Ext.define('NextThought.controller.Google', {
 
 
 	onHangoutReady: function(fn){
-		console.info("Starting app in Hangout Mode");
+		console.info("Starting app in Hangout View");
 		gapi.hangout.addApiReady.add(function(e) {
 			if (e.isApiReady) {
 				fn();

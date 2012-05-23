@@ -10,11 +10,12 @@ Ext.define('NextThought.view.form.util.Token', {
 			'<span class="{prefix}-body">',
 				'<span class="{prefix}-nib-{[this.getType(values)]} {prefix}-nib"></span> ',
 				'<span class="{prefix}-label">{text}</span>&nbsp;',
-				'<span class="{prefix}-nib {prefix}-nib-end"></span>',
+				'<span id="{id}-closer" class="{prefix}-nib {prefix}-nib-end"></span>',
 			'</span>',
 		'</span>',
 		{
 			getType: function(values){
+				if (!values.model){return 'person';}
 				var model = values.model,
 					m = ((model.raw && model.raw.Class) || model.getModelName()).toLowerCase(),
 					u = model.get('Username').toLowerCase();
@@ -26,10 +27,7 @@ Ext.define('NextThought.view.form.util.Token', {
 		}
 	),
 
-	renderSelectors: {
-	   closer: 'span.nt-token-nib-end'
-	},
-
+	childEls: ['closer'],
 
 	initComponent: function(){
 		this.addEvents('click');

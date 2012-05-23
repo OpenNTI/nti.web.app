@@ -3,30 +3,21 @@ Ext.define('NextThought.controller.Stream', {
 
 	requires: [
 		'NextThought.proxy.Socket',
-		'NextThought.util.ParseUtils'
+		'NextThought.util.Parsing'
 	],
 
 	stores: [
-		'Stream'
+		'Stream',
+		'Page'
 	],
 
 	models: [
 		'Change'
 	],
 
-	views: [
-		'modes.Stream',
-		'content.Stream',
-		'widgets.MiniStreamEntry'
+	views: [],
 
-	],
-
-	refs: [
-		{ ref: 'viewport', selector: 'master-view' },
-		{ ref: 'streamPeople', selector: 'stream-mode-container people-list' },
-		{ ref: 'stream', selector: 'stream-mode-container stream-panel' },
-		{ ref: 'miniStream', selector: 'mini-stream' }
-	],
+	refs: [],
 
 	statics:{
 		eventName: 'changed',
@@ -57,75 +48,104 @@ Ext.define('NextThought.controller.Stream', {
 			'data_noticeIncomingChange': function(){me.incomingChange.apply(me, arguments);}
 		});
 
-		this.control({
-			'miniStreamEntry': {
-				'clicked' : this.onClick
-			},
-			'streamEntry': {
-				'dblclick': this.onClick
-			}
-		},{});
+//		this.control({},{});
 	},
 
 	onSessionReady: function(){
-		var app = this.application,
-			s = this.getStreamStore(),
-			ps = Ext.getStore('Page'),
-			token = {};
+		//Load page and root stream stores...
+		var ss = this.getStreamStore(),
+			ps = this.getPageStore();
 
-		app.registerInitializeTask(token);
-		s.on('load', function(s){ app.finishInitializeTask(token); }, this, {single: true});
+		ps.on('load', function(pageStore, records, success){
+			if (!success) {
+				console.error('Problem loading page store');
+				return;
+			}
 
-		function load() {
-			s.getProxy().url = ps.getById('tag:nextthought.com,2011-10:Root').getLink(Globals.RECURSIVE_STREAM);
-			s.load();
-		}
-
-		if (ps.isLoading()) {
-			ps.on('load', load, this, {single: true});
-		}
-		else {
-			load();
-		}
+			ss.getProxy().url = ps.getById('tag:nextthought.com,2011-10:Root').getLink(Globals.RECURSIVE_STREAM);
+			ss.load();
+		},this, {single: true});
 	},
 
 
-	onClick: function(item) {
-		var cid = item.get('ContainerId'),
-			ntiid = item.getId(),
-			mType = item.getModelName(),
-			rp, p;
+//	onClick: function(item) {
+//		var cid = item.get('ContainerId'),
+//			ntiid = item.getId(),
+//			mType = item.getModelName(),
+//			rp, p;
+//
+//		if (mType !== 'Note' && mType !== 'Highlight') {
+//			return;
+//		}
+//
+//		//ensure reader panel is up
+//		rp = Ext.ComponentQuery.query('library-view-container')[0];
+//		rp.activate();
+//		p = rp.down('reader-panel').prefix;
+//
+//		LocationProvider.setLocation(cid, function(a){
+//			if (IdCache.hasIdentifier(ntiid)){
+//				//use default reader-panel prefix as we are always opening this in the reader panel
+//				a.scrollToId(IdCache.getComponentId(ntiid, null, p));
+//			}
+//		});
+//	},
 
-		if (mType !== 'Note' && mType !== 'Highlight') {
-			return;
+
+	//called by the Library controller when navigation occurs
+	containerIdChanged: function(containerId) {
+		var as = Ext.getCmp('activity-stream'),
+			friendsToChangeMap = {},
+			masterId = Library.getLineage(containerId).last();
+
+		function addUsers(m, activityStream) {
+			for (var user in m) {
+				if (m.hasOwnProperty(user)){
+					UserRepository.prefetchUser(user, function(u){
+						activityStream.addUser(u[0], m[u[0].get('Username')], true);
+					}, this);
+				}
+			}
 		}
 
-		//ensure reader panel is up
-		rp = Ext.ComponentQuery.query('reader-mode-container')[0];
-		rp.activate();
-		p = rp.down('reader-panel').prefix;
-
-		LocationProvider.setLocation(cid, function(a){
-			if (IdCache.hasIdentifier(ntiid)){
-				//use default reader-panel prefix as we are always opening this in the reader panel
-				a.scrollToId(IdCache.getComponentId(ntiid, null, p));
+		function addToChangeMap(mid, change, m) {
+			var itemContainerId = Library.getLineage(change.get('Item').get('ContainerId')).last(),
+				creator;
+			if (mid !== itemContainerId) {
+				return;
 			}
+
+			creator = change.get('Creator');
+			if (!m[creator]){
+				m[creator] = [];
+			}
+			m[creator].push(change);
+		}
+
+
+		this.getStreamStore().each(
+			function(change) {
+				addToChangeMap(masterId, change, friendsToChangeMap);
+			}
+			,this);
+
+		addUsers(friendsToChangeMap, as);
+
+		//TODO - Is there a see all per user?  Should be...
+		//TODO - ellipses the messages?
+		this.getStreamStore().on('add', function(store, records) {
+			Ext.each(records, function(r){
+				as.addActivity(r.get('Creator'), r);
+			}, this);
 		});
 	},
 
-	containerIdChanged: function(containerId) {
-		var widget = this.getMiniStream(),ss;
-		//make sure stream doesn't contain old stuff.
-		ss = this.getStoreForStream(containerId);
-		widget.setStore(ss);
-		if( ss.getProxy().url && !ss.isLoading() ) {
-			ss.load();
-		}
-	},
 
 	getStoreForStream: function(containerId) {
+		//root all streams to the book...
+		containerId = Library.getLineage(containerId).last();
 		var me = this,
-			store = me.getController('Reader').getPageStore(),
+			store = me.getController('Library').getPageStore(),
 			stores = me.streamStores,
 			ps = stores[containerId];
 
@@ -170,17 +190,19 @@ Ext.define('NextThought.controller.Stream', {
 	incomingChange: function(change) {
 		change = ParseUtils.parseItems([change])[0];
 		var cid = change.getItemValue('ContainerId'),
-			lineage = Library.getLineage(cid),
 			me = this;
 
-		Ext.each(lineage,function(cid){
+		Ext.each(Library.getLineage(cid),function(cid){
 			var s = me.getStoreForStream(cid);
 			if( s ) {
 				s.add(change);
 			}
 		});
 
+		//add it to the root stream store, why the heck not?
 		this.getStreamStore().add(change);
+
+
 		this.self.fireChange(change);
 	}
 });

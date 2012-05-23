@@ -2,7 +2,7 @@ Ext.define('NextThought.cache.UserRepository', {
 	alias: 'UserRepository',
 	singleton: true,
 	requires: [
-		'NextThought.util.ParseUtils'
+		'NextThought.util.Parsing'
 	],
 
 	constructor: function() {
@@ -12,75 +12,39 @@ Ext.define('NextThought.cache.UserRepository', {
 		});
 	},
 
-	has: function(username){
-		if(typeof username === 'object'){
-			if( username instanceof Ext.data.Model){
-				username = username.getId();
-			}
-			else {
-				username = username.Username;
-			}
-		}
-
-		var user = this.getStore().getById(username);
-		return user && user.raw && !user.raw.hasOwnProperty('ignoreIfExists') && !user.raw.hasOwnProperty('childRecord');
-	},
 
 	getStore: function() {
 		return (this.store = this.store || Ext.create('Ext.data.Store', {model: 'NextThought.model.User'}));
 	},
 
-	refresh: function() {
-		var s = this.store;
-		if (!s) {
-			return;
-		}
-
-		s.each(function(u){
-			this.makeRequest(u.getId(), {
-				scope:this,
-				success: Ext.emptyFn, //loading into the store happens automatically because of the User model constructor.
-				failure: function(){
-					console.error('something went wrong making request', arguments, u);
-				}
-			});
-		},
-		this);
-	},
 
 	updateUser: function(refreshedUser) {
 		var s = this.getStore(),
 			uid = refreshedUser.getId(),
 			u = s.getById(uid),
-			ignoreNewInstance = (refreshedUser.raw && (refreshedUser.raw.hasOwnProperty('ignoreIfExists') || refreshedUser.raw.hasOwnProperty('childRecord')));
+			raw = refreshedUser.raw,
+			ignoreNewInstance = (raw && raw.hasOwnProperty('ignoreIfExists'));
 
-
-		console.debug('updateUser',ignoreNewInstance, refreshedUser.getId(), u, refreshedUser);
-
-		if (u && ((!ignoreNewInstance || !u.raw) || !u.equal(refreshedUser))) {
+		if (u && (!ignoreNewInstance || !u.equal(refreshedUser))) {
 			if ($AppConfig.userObject && u.getId() === $AppConfig.userObject.getId() ){
 				if(u !== $AppConfig.userObject) {
-					$AppConfig.userObject.fireEvent('changed', refreshedUser);
+					console.warn('AppConfig user instance is different');
 				}
 				$AppConfig.userObject = refreshedUser;
 			}
 
 			u.fireEvent('changed', refreshedUser);
 			s.remove(u);
-			//console.debug('updateUser: refreshing...',refreshedUser.getId());
 			u=null;
 		}
 
 		if(!u){
-			console.debug('updateUser: adding...',refreshedUser.getId());
-			if (ignoreNewInstance){
-				delete refreshedUser.raw;
-			}
 			s.add(refreshedUser);
 		}
 	},
 
-	prefetchUser: function(username, callback, scope) {
+
+	getUser: function(username, callback, scope) {
 		if (!Ext.isArray(username)) {
 			username = [username];
 		}
@@ -91,7 +55,7 @@ Ext.define('NextThought.cache.UserRepository', {
 			async = false;
 
 		function finish() {
-			Globals.callback(callback,scope, [result]);
+			Ext.callback(callback,scope, [result]);
 		}
 
 		Ext.each(
@@ -152,24 +116,6 @@ Ext.define('NextThought.cache.UserRepository', {
 	},
 
 
-	getUser: function(username, raw) {
-		var user = this.getStore().getById(username);
-
-		if (!user) {
-			user = raw? ParseUtils.parseItems([raw])[0] : this.makeRequest(username);
-			//user's constructor adds the user to the repo, so do the following only if the user is different somehow,
-			//this is more of an assertion.  The reason we have to do this is because things are listening to events
-			//on user instances in this repository so we cant just replace them.
-			if (user && user !== this.getStore().getById(username)) {
-				console.warn('user does not equal user in store', user, this.getStore().getById(username));
-				//this.getStore().add(user);
-			}
-		}
-
-		return user;
-	},
-
-
 	/**
 	 * Once called, if the user is not in the cache, a placeholder object will be injected. If something requests that
 	 * user while its still resolving, the record will not have a 'raw' property and it will have 'placeholder' set true
@@ -219,7 +165,7 @@ Ext.define('NextThought.cache.UserRepository', {
 		}
 
 		if(this.activeRequests[username] && this.activeRequests[username].options){
-			console.log('active request detected for ' + username);
+//			console.log('active request detected for ' + username);
 			options = this.activeRequests[username].options;
 			options.callback = Ext.Function.createSequence(
 					options.callback,
@@ -229,13 +175,6 @@ Ext.define('NextThought.cache.UserRepository', {
 			return;
 		}
 
-		if(this.has(username)){
-			console.error('um...why are we requesting a resolve for something we already have??');
-			//return;
-		}
-
-		s.add({Username:username, placeholder: true});//make this.has return return true now...
-		console.log('adding active request for ' + username);
 		this.activeRequests[username] = Ext.Ajax.request({
 			url: url,
 			scope: me,
@@ -252,15 +191,9 @@ Ext.define('NextThought.cache.UserRepository', {
 			u.set('Presence', presence);
 			u.fireEvent('changed', u);
 		}
-	},
-
-	isOnline: function(username) {
-		var u = this.getUser(username);
-
-		return u && !/offline/i.test(u.get('Presence'));
 	}
-
 },
 function(){
-	window.UserRepository = NextThought.cache.UserRepository;
+	window.UserRepository = this;
+	this.prefetchUser = Ext.Function.alias(this, 'getUser');
 });

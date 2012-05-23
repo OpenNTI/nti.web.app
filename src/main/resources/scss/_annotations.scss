@@ -13,12 +13,101 @@
 	zoom: 1;
 }
 
+.nti-window .definition {
+	margin: 12px;
+}
+
+
+.share-with-data {
+
+	.title {
+		font-size: 32px;
+		font-weight: normal;
+		line-height: 48px;
+		img {
+			width: auto;
+			height: 48px;
+			border-radius: 4px;
+			vertical-align: middle;
+			margin: 10px;
+			margin-right: 15px;
+		}
+	}
+
+	.description {
+		margin: 10px;
+		font-size: 14px;
+	}
+
+	.snippet {
+		margin: 10px;
+		font-size: 8pt;
+		color: #b8b8b8;
+		padding: 0 0 0 25px;
+		.comment & {	background: url(../images/activity-comment.png) 0 2px no-repeat;}
+		.highlight & {	background: url(../images/activity-highlight.png) 0 3px no-repeat;}
+		.note & {		background: url(../images/activity-note.png) 4px 0 no-repeat;}
+	}
+}
+
+.nti-window {
+	div.field {
+		margin: 12px 8px 10px 8px;
+		background: #f7f7f7;
+		box-shadow: inset 0 0 1px 1px white;
+	}
+
+	.buttons {
+		margin: 10px;
+	}
+}
+
+.share-with-field {
+	padding: 5px 25px 5px 5px;
+	color: #757474;
+	font-family: 'Open Sans', sans-serif;
+	//font-size: 15pt;
+	width: 100%;
+	border-radius: 3px;
+	border: 1px solid #a0a0a0;
+	box-shadow: inset 3px 3px 10px -5px #a0a0a0;
+	position: relative;
+
+	.user-search-field {
+		display: inline-block;
+		margin: 5px 0 0 0;
+		input {
+			border: none !important;
+			border-width: 0 !important;
+			background: none;
+			padding: 0;
+		}
+		.x-form-item-body {
+			position: static;
+		}
+		.x-trigger-cell {
+			&.hidden {
+				display: none;
+			}
+			.x-form-trigger {
+				position: absolute;
+				top: 0;
+				right: 0;
+				border-width: 0px;
+				background: url(../images/search-nib.png) left center no-repeat;
+				width: 17px;
+				height: 100%;
+			}
+		}
+	}
+}
+
+
 
 .editor-whiteboard {
 	background: $whiteboard-tools-sprite;
 	background-position: 0 -232px;
 }
-
 
 .editor-seperator {
 	background: $whiteboard-tools-sprite;
@@ -165,11 +254,25 @@ img.action {
     width: 16px;
     height: 16px;
     position: absolute;
+	z-index: 1000;
+
 	&.note {
-		background-image: $charm-note-icon;
+		width: 17px;
+		height: 21px;
+		background-image: url(../images/charms/note_glyph_gray.png);
+		&:hover,
+		.x-dd-drop-ok & {
+			background-image: url(../images/charms/note_glyph.png);
+		}
 	}
 	&.highlight {
-        background-image: $charm-highlight-icon;
+		width: 23px;
+		height: 19px;
+		background-image: url(../images/charms/highlight_glyph_gray.png);
+		&:hover,
+		.x-dd-drop-ok & {
+			background-image: url(../images/charms/highlight_glyph.png);
+		}
     }
 	&.quizresults {
     	background-image: $charm-quizresult-icon;
@@ -183,4 +286,30 @@ img.action {
     &.expanded {
  	    background-image: $charm-expanded-icon;
      }
+}
+
+.x-dd-drag-proxy {
+
+	.x-dd-drop-icon{
+		display: none;
+		opacity: 0.3;
+	}
+
+	&.x-dd-drop-ok {
+		//ok state
+		//.x-dd-drag-ghost {opacity: 1;}
+	}
+
+	.x-dd-drag-ghost {
+		padding: 0;
+		border: none;
+
+		img {
+			max-width: 48px;
+
+			&.action {
+				position: static;
+			}
+		}
+	}
 }

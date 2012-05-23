@@ -4,14 +4,14 @@ Ext.define('NextThought.mixins.Annotations', {
 		'NextThought.model.Note',
 		'NextThought.model.TranscriptSummary',
 		'NextThought.model.QuizResult',
-		'NextThought.util.AnnotationUtils',
-		'NextThought.util.QuizUtils',
-		'NextThought.view.widgets.annotations.SelectionHighlight',
-		'NextThought.view.widgets.annotations.RedactionHighlight',
-		'NextThought.view.widgets.annotations.Highlight',
-		'NextThought.view.widgets.annotations.Note',
-		'NextThought.view.widgets.annotations.Transcript',
-		'NextThought.view.widgets.annotations.QuizResults',
+		'NextThought.util.Annotations',
+		'NextThought.util.Quizes',
+		'NextThought.view.annotations.SelectionHighlight',
+		'NextThought.view.annotations.RedactionHighlight',
+		'NextThought.view.annotations.Highlight',
+		'NextThought.view.annotations.Note',
+		'NextThought.view.annotations.Transcript',
+		'NextThought.view.annotations.QuizResults',
 		'NextThought.cache.IdCache',
 		'NextThought.providers.Contributors'
 	],
@@ -64,6 +64,7 @@ Ext.define('NextThought.mixins.Annotations', {
 
 
 	showRanges: function(ranges) {
+		this.clearSearchRanges();
 		this.searchAnnotations = Ext.create('annotations.SelectionHighlight', ranges, this);
 	},
 
@@ -268,7 +269,7 @@ Ext.define('NextThought.mixins.Annotations', {
 			delAction = /deleted/i.test(type),
 			cmp = Ext.getCmp(IdCache.getComponentId(oid, null, this.prefix)),
 			cls, replyTo, builder, result,
-			contribNS = Globals.getModeIdFromComponent(this);
+			contribNS = Globals.getViewIdFromComponent(this);
 
 		if (!item || !this.containerId || this.containerId !== cid) {
 			return;
@@ -340,7 +341,7 @@ Ext.define('NextThought.mixins.Annotations', {
 			tree = {}, b,
 			items,
 			foundBins,
-			contribNS = Globals.getModeIdFromComponent(this);
+			contribNS = Globals.getViewIdFromComponent(this);
 
 		if (!this.containerId) {
 			return;
@@ -384,7 +385,7 @@ Ext.define('NextThought.mixins.Annotations', {
 
 	buildAnnotations: function(list){
 		var me = this, contributors = [],
-			a = NextThought.view.widgets.annotations.Annotation;
+			a = NextThought.view.annotations.Annotation;
 		Ext.each(list,
 			function(r){
 				if(!r) {

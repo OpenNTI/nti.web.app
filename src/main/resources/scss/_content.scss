@@ -1,0 +1,233 @@
+
+.x-toolbar-content {
+	padding: 0;
+	border: none;
+}
+
+.x-component-content-filter,
+.x-component-content-jumpbox{
+	margin-right: 25px;
+
+	.shrink-wrap {
+		position: relative;
+		overflow: hidden;
+
+		&.active,
+		&.over {
+			&.jumpto .label span{
+				background-image: url(../images/menu-arrow-down-active.png);
+			}
+
+			.label { color: #585858; }
+			.menu {
+				color: #767676;
+				span {
+					background-image: url(../images/menu-arrow-down-active.png);
+				}
+			}
+		}
+	}
+
+	&.jumpto .label span{
+		padding-right: 15px;
+		background: url(../images/menu-arrow-down-default.png) no-repeat 100% 50%;
+	}
+
+	.label {
+		color: #8a8989;
+		font-size: 7.5pt;
+		text-transform: uppercase;
+		font-weight: 800;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+	.menu {
+		max-width: 450px;
+		color: #b2b2b2;
+		font-size: 11pt;
+		font-weight: 400;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		margin-bottom: 6px;
+		white-space: nowrap;
+		span {
+			padding-right: 15px !important;
+			background: url(../images/menu-arrow-down-default.png) no-repeat 100% 50%;
+		}
+	}
+}
+
+
+
+.x-menu-nt,
+.x-panel-nt {
+	@include animate(fadeIn,0.5s);
+	box-shadow: 1px 1px 6px -3px #000000 !important;
+
+	.x-menu-list-ct,
+	.x-menu-body {
+		border: 1px solid #dcdcdc !important;
+		background: #ffffff !important;
+	}
+	.x-menu-body {
+		padding: 0 0 20px 0;
+	}
+}
+
+.selection-nt,
+.x-menu-nt,
+.x-panel-nt {
+
+	.selection-list-ct,
+	.x-menu-list-ct,
+	.x-menu-body {
+		background: #ffffff !important;
+
+		li.x-menu-item {
+			border-bottom: 1px solid #dcdcdc;
+			&:last-of-type {
+				border-bottom-width: 0px;
+			}
+		}
+
+		.selection-list-item,
+		.x-menu-item {
+			color: #767676 !important;
+			font-size: 11pt;
+			font-weight: 400;
+			background: none;
+			padding: 7px 10px;
+			margin: 0 !important;
+			cursor: pointer;
+
+			&.label{
+				color: #8a8989;
+				font-size: 7.5pt;
+				text-transform: uppercase;
+				font-weight: 800;
+				white-space: nowrap;
+				overflow: hidden;
+				padding: 15px 5px 5px 30px;
+			}
+
+			&.selection-selected,
+			&.x-menu-item-checked {
+				background: transparent url(../images/menu-check.png) no-repeat 10px 50%;
+			}
+
+			&.multiselect,
+			&.x-menu-item-checked,
+			&.x-menu-item-unchecked{
+				padding: 5px 5px 5px 30px;
+			}
+
+			&.current,
+			&.selection-item-over,
+			&.x-menu-item-over,
+			&.x-menu-item-active {
+				background-color: #efefef;
+				color: #3c3c3c !important;
+			}
+
+			&.x-menu-item-separator{
+				background: #dcdcdc !important;
+				height: 1px;
+				padding: 0 !important;
+				margin-top: 8px !important;
+				margin-bottom: 18px !important;
+				overflow: visible;
+
+				.label {
+					background: none;
+					position: relative;
+					span {
+						color: #d0d0d0;
+						background: #ffffff;
+						top: -6px;
+						left: 25px;
+						padding: 0 5px;
+						position: absolute;
+						display: block;
+						font-size: 7.5pt;
+						text-transform: uppercase;
+						font-weight: 600;
+						white-space: nowrap;
+						overflow: hidden;
+					}
+				}
+			}
+		}
+	}
+}
+
+
+.x-btn-content-button-large {
+	width: 38px;
+	height: 34px;
+	border: 1px solid #ebebeb;
+	margin-top: 5px;
+	.x-btn-icon {
+		top: 0; left: 0;
+		width: 36px;
+		height: 32px;
+		background-position: 11px 6px;
+		opacity: 0.3;
+
+	}
+
+	&.x-over {
+		.x-btn-icon{
+			opacity: 0.5;
+		}
+	}
+
+	&.font {
+		border-radius: 3px;
+		.x-btn-icon {
+			background-position: 6px 9px;
+			background-image: url(../images/page-font.png);
+		}
+	}
+
+	&.settings {
+		width: 48px;
+		border-radius: 3px;
+		.x-btn-icon {
+			width: 46px;
+			background-position: 10px 7px;
+			background-image: url(../images/page-settings.png);
+		}
+	}
+
+	&.prev {
+		border-radius: 3px 0 0 3px;
+		.x-btn-icon {
+			background-image: url(../images/page-prev.png);
+		}
+	}
+	&.next {
+		border-radius: 0 3px 3px 0;
+		border-left-width: 0 !important;
+		.x-btn-icon {
+			left: 1px;
+			background-image: url(../images/page-next.png);
+		}
+	}
+}
+
+
+.x-reader-pane .x-panel-body-reader {
+	@include scrollbar(#ffffff, #b2b2b2, 45px 0);
+};
+
+div.no-content-splash {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+	height: 100%;
+	background: $empty-reader-bg center no-repeat;
+	z-index: 99;
+	background-color: white;
+}

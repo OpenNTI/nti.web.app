@@ -82,15 +82,11 @@ var mockService = {
 	"Class": "Service"
 };
 
-console.group = console.groupCollapsed = console.groupEnd = function(){};
-
 Ext.application({
 	name: 'NextThought',
 	appFolder: 'assets/js/NextThought',
 
 	requires: [
-		'NextThought.util.StacktraceUtils',
-		'NextThought.util.MD5',
 		'NextThought.util.Globals'
 	],
 
@@ -103,10 +99,9 @@ Ext.application({
 		'FilterControl',
 		'Google',
 		'Groups',
-		'Home',
-		'Modes',
+		'Navigation',
 		'ObjectExplorer',
-		'Reader',
+		'Library',
 		'Search',
 		'Session',
 		'State',

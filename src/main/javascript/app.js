@@ -1,17 +1,12 @@
-//if(window.console && console.groupCollapsed){
-//	console.groupCollapsed("Initialization");
-//}
-
 //disable script cache-busting _dc=... get string args
 Ext.Loader.setConfig('disableCaching', false);
 
 Ext.application({
 	name: 'NextThought',
 	appFolder: 'assets/js/NextThought',
+	autoCreateViewport: false,
 
 	requires: [
-		'NextThought.util.StacktraceUtils',
-		'NextThought.util.MD5',
 		'NextThought.util.Globals'
 	],
 
@@ -24,10 +19,8 @@ Ext.application({
 		'FilterControl',
 		'Google',
 		'Groups',
-		'Home',
-		'Modes',
-		'ObjectExplorer',
-		'Reader',
+		'Navigation',
+		'Library',
 		'Search',
 		'Session',
 		'State',
@@ -36,12 +29,9 @@ Ext.application({
 
 	launch: function(){
 		function start() {
-			console.groupEnd();
 			NextThought.controller.Session.login(app);
 			NextThought.isReady = true;
 		}
-
-		$AppConfig.server.host = location.protocol + '//' + location.host;
 
 		if(!Globals.validateConfig()){
 			return;

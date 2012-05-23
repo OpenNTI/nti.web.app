@@ -8,18 +8,16 @@ Ext.define('NextThought.controller.Account', {
 		'User'
 	],
 
-	views: [
-		'form.AccountForm',
-		'windows.FullScreenFormWindow',
-		'windows.NotificationsPopover',
-		'widgets.main.SessionInfo',
-		'widgets.main.Identity'
+	stores: [
+		'UserSearch'
 	],
 
-	refs: [
-		{ ref: 'sessionInfo', selector: 'session-info' },
-		{ ref: 'identity', selector: 'identity-panel' }
+	views: [
+		'form.AccountForm',
+		'account.contacts.Card'
 	],
+
+	refs: [],
 
 	init: function() {
 		this.control({
@@ -27,17 +25,23 @@ Ext.define('NextThought.controller.Account', {
 				'click': this.accountActionButton
 			},
 
-			'session-info': {
-				'account': this.showAccount,
-				'notification': this.popoverNotifications
+			'contact-card':{
+				'click': this.contactCardClicked
 			}
+
+
 		},{});
+	},
+
+
+	contactCardClicked: function(cmp,username){
+		this.getController('Chat').enterRoom(username);
 	},
 
 
 	accountActionButton: function(btn){
 		var me = this,
-			win = btn.up('fullscreen-window'),
+			win = btn.up('window'),
 			form= win.down('account-form'),
 			values = form.getForm().getFieldValues(false),
 			u = $AppConfig.userObject,
@@ -49,10 +53,9 @@ Ext.define('NextThought.controller.Account', {
 			if(!op.success){
 				console.error('FAILURE:',arguments);
 			}
-			else if(fire){
-				me.getSessionInfo().fireEvent('password-changed',
-						u.get('Username'),values.password);
-			}
+//			else if(fire){
+//				me.getSessionInfo().fireEvent('password-changed', u.get('Username'),values.password);
+//			}
 		}
 
 		if(btn.actionName !== 'save'){
@@ -77,25 +80,10 @@ Ext.define('NextThought.controller.Account', {
 	},
 
 
-	popoverNotifications: function() {
-		var u = $AppConfig.userObject,
-			popover = Ext.create('window.notifications-popover', {bindTo: this.getSessionInfo()});
-		popover.show();
-
-		u.set('lastLoginTime', new Date());
-		u.save({
-			callback: function(newRecord, op){
-				if(!op.success){
-					console.warn('FAILED: Saving user', op);
-				}
-			}
-		});
-	},
-
-
 	showAccount: function(){
-		Ext.create('widget.fullscreen-window',
+		Ext.widget(
 			{
+				xtype: 'window',
 				id: 'account-window',
 				items: {
 					xtype: 'account-form',

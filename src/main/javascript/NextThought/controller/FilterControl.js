@@ -8,41 +8,14 @@ Ext.define('NextThought.controller.FilterControl', {
 	],
 
 	views: [
-		'widgets.FilterControlPanel'
+		'menus.Filter'
 	],
 
-	getAllTypesButton: function(cmp){
-		return cmp.down('checkboxfield[name="alltypesbutton"]');
-	},
-	
-	getAllGroupsButton: function(cmp){
-		return cmp.down('checkboxfield[name="allgroupsbutton"]');
-	},
-	
-	getGroups: function(cmp){
-		return cmp.query('checkboxfield[usergroup]');
-	},
-	
-	getTypes: function(cmp){
-		return cmp.query('checkboxfield[model]');
-	},
-	
 	init: function() {
 		this.control({
-			'filter-control':{
-				'filter-control-loaded': this.setState
-			},
-			'filter-control checkboxfield[name="allgroupsbutton"]': {
-				change: this.allGroupsSelected
-			},
-			'filter-control checkboxfield[usergroup]':{
-				change:this.groupSelectionChanged
-			},
-			'filter-control checkboxfield[name="alltypesbutton"]': {
-				change: this.allTypesSelected
-			},
-			'filter-control checkboxfield[model]':{
-				change:this.typeSelectionChanged
+			'filter-menu':{
+				'filter-control-loaded': this.setState,
+				'changed': this.rebuildFilter
 			}
 		},{});
 	},
@@ -64,68 +37,12 @@ Ext.define('NextThought.controller.FilterControl', {
 		if(!this.beginChanges(cmp.getId())) {
 			return;
 		}
-		//TODO: rebuild saved state
-		
-		this.getAllGroupsButton(cmp).setValue(true);
-		this.getAllTypesButton(cmp).setValue(true);
-		Ext.each(this.getGroups(cmp), function(c){ c.setValue(true); },this);
-		Ext.each(this.getTypes(cmp), function(c){ c.setValue(true); },this);
-		
-		this.rebuildFilter(cmp);
-	},
-	
-	
-	allGroupsSelected: function(me, nv){
-		var cmp = me.up('filter-control'),
-			id = cmp.getId();
 
-		if(!this.beginChanges(id)) {
-			return;
-		}
-			
-		Ext.each(this.getGroups(cmp), function(c){ c.setValue(nv); },this);
+		cmp.down('[isEveryone]').setChecked(true);
+		cmp.down('[isEverything]').setChecked(true);
+
 		this.rebuildFilter(cmp);
 	},
-	
-	groupSelectionChanged: function(me){
-		var cmp = me.up('filter-control'),
-			id = cmp.getId();
-		if(!this.beginChanges(id)) {
-			return;
-		}
-		
-		this.getAllGroupsButton(cmp).setValue(false);
-		this.rebuildFilter(cmp);
-	},
-	
-	
-	
-	
-	
-	allTypesSelected: function(me, nv){
-		var cmp = me.up('filter-control'),
-			id = cmp.getId();
-		if(!this.beginChanges(id)) {
-			return;
-		}
-			
-		Ext.each(this.getTypes(cmp), function(c){ c.setValue(nv); },this);
-		this.rebuildFilter(cmp);
-	},
-	
-	typeSelectionChanged: function(me){
-		var cmp = me.up('filter-control'),
-			id = cmp.getId();
-		if(!this.beginChanges(id)) {
-			return;
-		}
-		
-		this.getAllTypesButton(cmp).setValue(false);
-		this.rebuildFilter(cmp);
-	},
-	
-	
-	
 	
 	
 	rebuildFilter: function(cmp){
@@ -136,23 +53,27 @@ Ext.define('NextThought.controller.FilterControl', {
 		}
 		f.call(this);
 	},
-	
+
+
 	rebuildFilterBuffered: function(cmp){
 		var id = cmp.getId(),
-			allGroups = this.getAllGroupsButton(cmp).getValue(),
-			groups = this.getGroups(cmp),
-			types = this.getTypes(cmp),
+			everyone = cmp.down('[isEveryone]').checked,
+			everything = cmp.down('[isEverything]').checked,
+			groups = cmp.query('[isGroup]'),
+			types = cmp.query('[model]'),
 			Filter = NextThought.Filter,
 			group = new NextThought.FilterGroup(id,NextThought.FilterGroup.OPERATION_INTERSECTION),
 			people = new NextThought.FilterGroup(id,NextThought.FilterGroup.OPERATION_UNION),
 			models = new NextThought.FilterGroup(id,NextThought.FilterGroup.OPERATION_UNION);
 
-		group.addFilter(people);
+		if (!everyone) {
+			group.addFilter(people);
+		}
 		group.addFilter(models);
 
 		Ext.each( groups,
 			function(g) {
-				if(!g.getValue()) { return; }
+				if(!g.checked) { return; }
 
 				if(g.isMe){
 					people.addFilter(new Filter('Creator',Filter.OPERATION_INCLUDE, $AppConfig.username));
@@ -166,7 +87,7 @@ Ext.define('NextThought.controller.FilterControl', {
 			this);
 
 		Ext.each(types,function(t){
-			if(!t.getValue()) {
+			if(!t.checked && !everything) {
 				return;
 			}
 			models.addFilter(new Filter('$className',Filter.OPERATION_INCLUDE, t.model));

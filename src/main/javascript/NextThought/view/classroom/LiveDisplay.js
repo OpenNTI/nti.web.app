@@ -1,0 +1,63 @@
+Ext.define('NextThought.view.classroom.LiveDisplay', {
+	extend:'Ext.tab.Panel',
+	alias: 'widget.live-display',
+	requires: [
+		'NextThought.view.content.Reader'
+	],
+	cls: 'nti-live-display',
+	tabPosition: 'bottom',
+	border: false,
+	defaults: {
+		border: false,
+		defaults: {
+			border: false
+		}
+	},
+
+	initComponent: function()
+	{
+		this.callParent(arguments);
+		var prefix = guidGenerator();
+		this.content = this.add({
+			xtype: 'reader-panel',
+			prefix: prefix,
+			tabConfig:{
+				title: 'Content',
+				content: true,
+				tooltip: 'Live Content'
+			},
+
+			dockedItems: {dock:'bottom', xtype: 'classroom-breadcrumbbar', prefix: prefix, skipHistory: true}
+		});
+	}
+	/*
+	Disabled because we dont send content like this any more
+
+	getReaderPanel: function() {
+		throw 'Fix me';
+	},
+
+
+	addContent: function(href) {
+		var c = this.down('image');
+
+		//If no content tab, create one
+		if (!c) {
+			c = this.add(
+				{
+					xtype: 'image',
+					src: href,
+					tabConfig: {
+						title: 'Image'
+					}
+				}
+			);
+		}
+		else {
+			c.setSrc(href);
+		}
+
+		this.setActiveTab(c);
+	}
+	*/
+});

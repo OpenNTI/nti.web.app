@@ -3,164 +3,176 @@ Ext.define('NextThought.controller.Search', {
 
 	requires: [
 		'NextThought.providers.Location',
-		'NextThought.util.ViewUtils'
+		'NextThought.util.Views',
+		'NextThought.filter.FilterGroup',
+		'NextThought.filter.Filter'
 	],
 
 	models: [
-		'Hit',
-		'UserSearch'
+		'Hit'
 	],
 
 	stores: [
-		'UserSearch'
+		'Hit'
 	],
 
 	views: [
-		'Viewport',
-		'windows.SearchResultsPopover'
+		'form.fields.SearchField',
+		'menus.Search',
+		'menus.search.ResultCategory',
+		'menus.search.Result',
+		'menus.search.More',
+		'form.fields.SearchAdvancedOptions'
 	],
 
 	refs: [
 		{
-			ref: 'searchPopover',
-			selector: 'search-results-popover'
+			ref: 'searchField',
+			selector: 'searchfield'
 		},
 		{
-			ref: 'viewport',
-			selector: 'master-view'
+			ref: 'searchMenu',
+			selector: 'search-menu'
 		}
 	],
 
+
 	init: function() {
 		this.control({
-			'#searchBox': {
-				'blur': this.lostFocus,
-				'search': this.search,
-				'cleared-search': this.clearSearch,
-				'select-down' : this.selectDown,
-				'select-up' : this.selectUp,
-				'choose-selection': this.chooseSelection
+			'searchfield': {
+				'search' : this.searchForValue,
+				'clear-search' : this.clearSearchResults
 			},
-			'search-results-popover': {
-				'goto': this.searchResultClicked
+			'search-result' : {
+				'click': this.searchResultClicked
+			},
+			'search-more' : {
+				'click': this.showAllForCategoryClicked
+			},
+			'search-advanced-menu': {
+				'changed': this.searchFilterChanged
 			}
 		},{});
 	},
 
-	lostFocus: function(searchBox){
-		var popover = this.getSearchPopover();
-		if(popover && popover.isVisible()){
-			popover.startClose();
 
+	storeLoad: function(store, records, success, opts, searchVal){
+		if (!success) {
+			console.error('Store did not load correctly!, Do something, no results???');
+			return;
 		}
+
+		//get the groups storted by type, cause the display to chunk them.
+		var resultGroups = store.getGroups(),
+			result, loc, results = [],
+			menu = Ext.getCmp('search-results');
+
+		Ext.each(resultGroups, function(group){
+			result = {xtype:'search-result-category', category: this.sanitizeCategoryName(group.name), items:[]};
+			results.push(result);
+			result = result.items;
+
+			Ext.each(group.children, function(hit){
+				loc = LocationProvider.getLocation(hit.get('ContainerId'));
+				result.push( {
+					xtype: 'search-result',
+					title: loc ? loc.title.get('title') : 'Untitled',
+					section: loc ? loc.label : 'Unlabeled',
+					snippet: hit.get('Snippet'),
+					term: searchVal,
+					containerId: hit.get('ContainerId')
+				});
+			}, this);
+		}, this);
+
+		menu.removeAll(true);
+		menu.add(results);
+		//show results...
+		menu.hide().show();
 	},
 
 
-	searchResultClicked: function(hit, searchValue) {
-		var me = this,
-			service = $AppConfig.service,
-			containerId = hit.get('ContainerId'),
-			popover = me.getSearchPopover();
+	sanitizeCategoryName: function(n){
+		if (n.toLowerCase()==='content') {
+			return 'Books';
+		}
+		return n;
+	},
 
-		function success(o) {
 
-			function sc(a){
-				//these have to be resolved after navigation
-				var cid = hit.get('ContainerId'),
-					id = IdCache.hasIdentifier(hit.getId())
-							? IdCache.getComponentId(hit.getId(),null,'default')
-							: IdCache.hasIdentifier(cid)
-								? IdCache.getComponentId(cid,null,'default')
-								: null;
-				//there's no id, meaning it's probably not user generated
-				if (!id) {
-					setTimeout(function(){ a.scrollToText(searchValue); },500);
-				}
-				else {
-					setTimeout(function(){ a.scrollToId(id); },500);
-				}
+	searchForValue: function(value) {
+		if(!value){return;}
 
+		var s = this.getHitStore(),
+			filter = this.modelFilter,
+			partial = this.doPartialSearch,
+			rootUrl = $AppConfig.service.getUserUnifiedSearchURL(),
+			loc = LocationProvider.currentNTIID || 'noNTIID',
+			url = [
+				rootUrl,
+				loc,
+				'/',
+				value,
+				partial? '*':''
+			];
+
+		//clear old results from both store and search results.
+		this.clearSearchResults();
+		s.removeAll();
+
+		s.clearFilter();
+		if(filter){
+			s.filter([{filterFn: function(item) {
+				return filter.test(item); }} ]);
+		}
+		s.proxy.url = url.join('');
+		s.on('load', Ext.bind(this.storeLoad, this, [value], true), this, {single: true});
+		s.load();
+	},
+
+
+	clearSearchResults: function() {
+		Ext.getCmp('search-results').removeAll(true);
+	},
+
+
+	searchFilterChanged: function(menu) {
+		var allItems = menu.query('menuitem'),
+			Filter = NextThought.Filter,
+			everything = menu.down('[isEverything]').checked,
+			searchValue = this.getSearchField().getValue();
+
+		this.doPartialSearch = menu.down('[doPartialSearch]').checked;
+		this.modelFilter = new NextThought.FilterGroup(menu.getId(),NextThought.FilterGroup.OPERATION_UNION);
+
+		Ext.each(allItems, function(item){
+			if ((everything || item.checked) && item.model) {
+				this.modelFilter.addFilter(new Filter('Type',Filter.OPERATION_INCLUDE, item.model));
 			}
+		}, this);
 
-			var r = Ext.getCmp('reader');
-
-
-			Ext.getBody().unmask();
-			if(!o){
-				alert("bad things");
-				return;
-			}
-
-			r.activate();
-
-			if(LocationProvider.currentNTIID !== o.NTIID){
-				LocationProvider.setLocation(o.NTIID, sc);
-			}
-			else {
-				sc(r.down('reader-panel'));
-			}
-		}
-
-		function failure(){
-			Ext.getBody().unmask();
-			service.getObject(hit.getId(),
-				function success(o){ ViewUtils.displayModel(o); },
-				function fail(){
-					console.error(
-							'error resolving container ', Ext.encode(hit.data),
-							'Error resolving object: ', arguments);
-				},
-				this);
-		}
-
-		Ext.getBody().mask("Loading...");
-		service.resolveTopContainer(containerId, success, failure);
-		if(popover && popover.isVisible()){
-			popover.startClose();
-		}
+		this.searchForValue(searchValue);
 	},
 
-	selectDown: function(field) {
-		var popover = this.getSearchPopover();
-		if(popover && popover.isVisible()){
-			popover.select(false);
+
+	searchResultClicked: function(result){
+		var cid = result.containerId;
+
+		if (!cid) {
+			console.error('No container ID taged on search result, cannot navigate.');
+			return;
 		}
-		else{
-			this.search(field);
-		}
+
+		Ext.ComponentQuery.query('library-view-container')[0].activate();
+		LocationProvider.setLocation( cid, function(reader){
+			reader.scrollToText(result.term);
+			result.on('destroy', reader.clearSearchRanges,reader,{single:true});
+		});
 	},
 
-	selectUp: function() {
-		var popover = this.getSearchPopover();
-		if(popover) {
-			popover.select(true);
-		}
-	},
 
-	chooseSelection: function() {
-		var popover = this.getSearchPopover();
-
-		if(popover && popover.isVisible()) {
-			popover.chooseSelection();
-		}
-	},
-
-	clearSearch: function(){
-		var popover = this.getSearchPopover();
-
-		if(popover){
-			popover.reset();
-			popover.close();
-		}
-
-		this.getViewport().fireEvent('cleared-search');
-	},
-
-	search: function(field) {
-		var popover = this.getSearchPopover() || Ext.create('widget.search-results-popover',{bindTo: field});
-
-		popover.performSearch(field.getValue());
-		popover.show();
+	showAllForCategoryClicked: function(more) {
+		var cat = more.up('search-result-category');
+		cat.showAll();
 	}
-
 });

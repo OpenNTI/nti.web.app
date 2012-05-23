@@ -1,54 +1,55 @@
 Ext.define('NextThought.view.content.Reader', {
-	extend:'NextThought.view.content.Panel',
+	extend:'NextThought.view.content.Base',
 	alias: 'widget.reader-panel',
 	requires: [
+		'Ext.dd.DragDropManager',
+		'Ext.dd.DragTracker',
 		'NextThought.ContentAPIRegistry',
 		'NextThought.providers.Location',
-		'NextThought.util.QuizUtils',
-		'NextThought.view.widgets.Tracker'
+		'NextThought.util.Quizes'
 	],
 	mixins:{
 		annotations: 'NextThought.mixins.Annotations'
 	},
 	cls: 'x-reader-pane',
 
+	ui: 'reader',
 	layout: 'anchor',
+	items: {
+		xtype: 'box',
+		anchor: '100%',
+		autoEl: {
+			tag: 'iframe',
+			name: '-content',
+			src: 'javascript',
+			frameBorder: 0,
+			marginWidth: 0,
+			marginHeight: 0,
+			scrolling: 'no',
+			seamless: true,
+			transparent: true,
+			allowTransparency: true,
+			style: 'overflow: hidden'
+		}
+	},
 
 	initComponent: function() {
-		var jsPrefix = 'javascript'; //this in var to trick jslint
+		this.items = Ext.clone(this.items);
+		this.items.autoEl.src += ':';
+		this.items.autoEl.name += guidGenerator();
+		this.items.listeners = {
+			scope: this,
+			afterRender: this.resetFrame
+		};
 
 		this.loadedResources = {};
 		this.addEvents('loaded','finished-restore');
 		this.enableBubble('loaded','finished-restore');
-		this.on('afterrender',this.postRender,this);
 
 		this.callParent(arguments);
 		Ext.applyIf(this, {
-			tracker: null,
 			prefix: 'default',
-			padding: this.tracker === false ? 0 : '0 0 0 50px'
-		});
-
-		this.add({
-			xtype: 'box',
-			anchor: '100%',
-			autoEl: {
-				tag: 'iframe',
-				name: guidGenerator()+'-content',
-				src: jsPrefix + ':',
-				frameBorder: 0,
-				marginWidth: 0,
-				marginHeight: 0,
-				scrolling: 'no',
-				seamless: true,
-				transparent: true,
-				allowTransparency: true,
-				style: 'overflow: hidden'
-			},
-			listeners: {
-				scope: this,
-				afterRender: this.resetFrame
-			}
+			padding: '0 0 0 100px'
 		});
 
 		this.mixins.annotations.initAnnotations.call(this);
@@ -60,19 +61,26 @@ Ext.define('NextThought.view.content.Reader', {
 		this.css = {};
 //		this.nav = {};
 
-		this.self.classEvents.on('window-drag-start',this.mask,this);
-		this.self.classEvents.on('window-drag-end',this.unmask,this);
+		this.self.classEvents.on('general-drag-start',this.mask,this);
+		this.self.classEvents.on('general-drag-end',this.unmask,this);
+	},
+
+
+	afterRender: function(){
+		this.callParent();
+		this.splash = this.body.insertHtml('beforeEnd','<div class="no-content-splash"></div>',true);
+		this.body.on('scroll',this.checkContentFrames,this);
 	},
 
 
 	destroy: function(){
-		this.self.classEvents.un('window-drag-start',this.mask,this);
-		this.self.classEvents.un('window-drag-end',this.unmask,this);
+		this.self.classEvents.un('general-drag-start',this.mask,this);
+		this.self.classEvents.un('general-drag-end',this.unmask,this);
 		this.callParent(arguments);
 	},
 
 
-	mask: function(){var e=this.el;if(e){e.mask();}},
+	mask: function(){var e=this.el;if(e && !e.isMasked()){e.mask();}},
 	unmask: function(){var e=this.el;if(e){e.unmask();}},
 
 	resetFrame: function(cb){
@@ -105,14 +113,12 @@ Ext.define('NextThought.view.content.Reader', {
 				Ext.TaskManager.stop(task);
 				me.initContentFrame();
 				if(cb){
-					Globals.callback(cb,me);
+					Ext.callback(cb,me);
 				}
 			}
 		};
 		setTimeout(function(){Ext.TaskManager.start(task);},200);
 	},
-
-
 
 
 	initContentFrame: function(){
@@ -123,12 +129,13 @@ Ext.define('NextThought.view.content.Reader', {
 			meta, g = Globals;
 
 		function on(dom,event,fn){
-			if(dom.addEventListener) {
-				dom.addEventListener(event,fn,false);
+			if(!Ext.isArray(event)){
+				event = [event];
 			}
-			else if(dom.attachEvent) {
-				dom.attachEvent(event,fn);
-			}
+			Ext.each(event,function(event){
+				if(dom.addEventListener) { dom.addEventListener(event,fn,false); }
+				else if(dom.attachEvent) { dom.attachEvent(event,fn); }
+			});
 		}
 
 		function addCSS(cssStr){
@@ -170,10 +177,22 @@ Ext.define('NextThought.view.content.Reader', {
 
 		//Quiz Dependencies: Load MathJax 1.1 (2.0 buggy)
 		g.loadScript(
-			{ url: 'https://d3eoax9i5htok0.cloudfront.net/mathjax/1.1-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML', document: doc },
+			{ url: 'https://c328740.ssl.cf1.rackcdn.com/mathjax/1.1-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML', document: doc },
 			function(){ g.loadScript({ url: base+'assets/misc/mathjaxconfig.js', document: doc }); });
 
 
+		on(doc,['keypress','keydown'],function(e){
+			e = Ext.EventObject.setEvent(e||event);
+			if(e.getKey() === e.BACKSPACE){
+				var t = e.getTarget();
+				if(!t || !(/input|textarea/i).test(t.tagName)){
+					console.log(t);
+					e.preventDefault();
+					e.stopPropagation();
+				return false;
+				}
+			}
+		});
 		on(doc,'mousedown',function(){ Ext.menu.Manager.hideAll(); });
 		on(doc,'contextmenu',function(e){
 			e = Ext.EventObject.setEvent(e||event);
@@ -229,9 +248,11 @@ Ext.define('NextThought.view.content.Reader', {
 		};
 	},
 
+
 	onContextMenuHandler: function(){
 		return this.mixins.annotations.onContextMenuHandler.apply(this,arguments);
 	},
+
 
 	checkContentFrames: function(){
 		var me = this,
@@ -296,7 +317,7 @@ Ext.define('NextThought.view.content.Reader', {
 				f.src = f.originalSrc;
 			}
 			else if(style===display && outOfBounds){
-				console.log(scrollTop, top, bottom, bounds);
+//				console.log(scrollTop, top, bottom, bounds);
 				f.removeAttribute('style');
 				f.src = 'about:blank';
 //				height = contentHeight-container.clientHeight;
@@ -311,6 +332,7 @@ Ext.define('NextThought.view.content.Reader', {
 		});
 
 	},
+
 
 	checkFrame: function(){
 		var doc = this.getDocumentElement(),
@@ -329,6 +351,7 @@ Ext.define('NextThought.view.content.Reader', {
 		}
 	},
 
+
 	syncFrame: function(){
 		var doc = this.getDocumentElement(),
 			b = Ext.get(doc.getElementById('NTIContent')),
@@ -336,7 +359,7 @@ Ext.define('NextThought.view.content.Reader', {
 
 		b = b? b.getHeight()+100: 100;
 
-		console.log('Sync Height: '+b);
+//		console.log('Sync Height: '+b);
 		i.setHeight(this.el.getHeight()-100);
 		i.setHeight(b);
 
@@ -346,10 +369,11 @@ Ext.define('NextThought.view.content.Reader', {
 		this.lastFrameSync = Ext.Date.now();
 	},
 
+
 	getIframe: function(){
 		var el = this.items.first().el,
 			iframe = el.dom;
-		el.win = (Ext.isIE ? iframe.contentWindow : window.frames[iframe.name]);
+		el.win = iframe.contentWindow || window.frames[iframe.name];
 		return el;
 	},
 
@@ -357,16 +381,82 @@ Ext.define('NextThought.view.content.Reader', {
 	/** @private */
 	setContent: function(html) {
 		var doc = this.getDocumentElement(),
-			body = Ext.get(doc.body || doc.documentElement);
+			body = Ext.get(doc.body),
+			head = doc.getElementsByTagName('head')[0];
 		this.getIframe().setHeight(0);
 
 		body.update(html);
 		body.setStyle('background','transparent');
+
+		this.insertRelatedLinks(body.query('#NTIContent .chapter.title')[0],doc);
+
+		//TODO: solidify our story about content scripts (reset the iframe after navigating to a page that has scripts?)
+		Ext.each(body.query('script'),function(s){
+			s.parentNode.removeChild(s);
+			var e = doc.createElement('script'); e.src = s.src;
+			head.appendChild(e);
+		});
+
 		this.checkContentFrames();
 
 		clearInterval(this.syncInterval);
 		this.syncInterval = setInterval(this.checkFrame,100);
 	},
+
+
+	insertRelatedLinks: function(position,doc){
+		var tpl = this.relatedTemplate, last = null,
+			related = LocationProvider.getRelated(),
+			container = {
+				tag: 'div',
+				cls:'injected-related-items',
+				html:'Related Topics: '
+			};
+
+		if(Object.keys(related).length === 0){
+			return;
+		}
+
+		try {
+			container = Ext.DomHelper.insertAfter(position,container);
+		}
+		catch(e){
+			console.warn('no header? okay...');
+			try {
+				position = Ext.fly(doc.body).query('#NTIContent .page-contents')[0];
+				container = Ext.DomHelper.insertFirst(position,container);
+			}
+			catch(ffs){
+				console.error('what now?!',e, ffs);
+				return;
+			}
+		}
+
+		container = Ext.DomHelper.append(container,{tag: 'span',cls:'related'});
+
+		if(!tpl){
+			tpl = Ext.DomHelper.createTemplate(
+					'<a href="{0}" onclick="NTIRelatedItemHandler(this);return false;" class="related">{1}</a>, '
+			);
+			tpl.compile();
+			this.relatedTemplate = tpl;
+		}
+
+		Ext.Object.each(related,function(key,value){
+			last = tpl.append(container,[key,value.label]);
+			last.previousSibling.relatedInfo = value;
+		});
+		if(last){
+			container.removeChild(last);
+			container = container.parentNode;
+			Ext.fly(container).on('click',function(){
+				Ext.fly(container).removeAllListeners().addCls('showall');
+			});
+		} else {
+			Ext.fly(container).remove();
+		}
+	},
+
 
 	getDocumentElement: function(){
 		var iframe, win, dom, doc = this.contentDocumentElement;
@@ -383,7 +473,16 @@ Ext.define('NextThought.view.content.Reader', {
 			if(!doc.parentWindow){
 				doc.parentWindow = win;
 			}
-			this.contentDocumentElement = doc;
+
+			try {
+				if(!doc.body){
+					doc.body = doc.getElementsByTagName('body')[0];
+				}
+				this.contentDocumentElement = doc;
+			}
+			catch(e){
+				console.log('body not ready');
+			}
 		}
 
 		return doc;
@@ -422,7 +521,10 @@ Ext.define('NextThought.view.content.Reader', {
 
 	scrollToTarget: function(target){
 		var de = this.getDocumentElement(),
-			e = de.getElementById(target) || Ext.fly(de).query('*[name='+target+']')[0];
+			e = document.getElementById(target) ||
+				de.getElementById(target) ||
+				Ext.fly(de).query('*[name='+target+']')[0] ||
+				Ext.getCmp(target).img;
 
 		if(!e) {
 			console.warn('scrollToTarget: no target found: ',target);
@@ -453,7 +555,6 @@ Ext.define('NextThought.view.content.Reader', {
 
 		//logic to halt scrolling if conditions mentioned in function docs are met.
 		if (onlyIfNotVisible && o > st && o < b) {
-			console.debug('component is already visable, not scrolling.');
 			return;
 		}
 
@@ -512,33 +613,12 @@ Ext.define('NextThought.view.content.Reader', {
 	},
 
 
-	postRender: function(){
-
-		this.splash = this.body.insertHtml('beforeEnd','<div class="no-content-splash"></div>',true);
-
-		this.body.on('scroll',this.checkContentFrames,this);
-
-		if (this.tracker !== false) {
-			if(this.tracker){
-				this.tracker.destroy();
-				delete this.tracker;
-				console.log('clearing old tracker...');
-			}
-			try{
-				this.tracker = Ext.create('widget.tracker', this, this.getIframe().dom);
-			}
-			catch(e){
-				console.error(e.stack);
-			}
-		}
-	},
-
 	loadPage: function(ntiid, callback) {
 		var me = this,
 			service = $AppConfig.service;
 
 		if(ntiid === me.getContainerId()){
-			Globals.callback(callback,null,[me]);
+			Ext.callback(callback,null,[me]);
 			return false;
 		}
 
@@ -561,7 +641,7 @@ Ext.define('NextThought.view.content.Reader', {
 
 		function failure(q,r){
 			console.error(arguments);
-			Globals.callback(callback,null,[{req:q,error:r}]);
+			Ext.callback(callback,null,[me,{req:q,error:r}]);
 			if(r && r.responseText){
 				me.splash.hide();
 				me.setContent(r.responseText);
@@ -575,7 +655,7 @@ Ext.define('NextThought.view.content.Reader', {
 		else {
 			this.setSplash();
 			this.relayout();
-			Globals.callback(callback,null,[me]);
+			Ext.callback(callback,null,[me]);
 		}
 
 		return true;
@@ -598,7 +678,7 @@ Ext.define('NextThought.view.content.Reader', {
 
 		function onFinishLoading() {
 			me.relayout();
-			Globals.callback(callback,null,[me]);
+			Ext.callback(callback,null,[me]);
 			me.fireEvent('loaded', containerId);
 		}
 
@@ -765,7 +845,7 @@ turn off html5 player
 			target = hash[1],
 			whref = window.location.href.split('#')[0];
 
-		if (!r || whref+'#' === r) {
+		if (el.getAttribute('onclick') || !r || whref+'#' === r) {
 			return;
 		}
 
@@ -790,16 +870,19 @@ turn off html5 player
 
 }, function(){
 	var o = this.classEvents = new Ext.util.Observable(),
+		dm= Ext.dd.DragDropManager,
 		timeoutMillis = 500;
 
 	function startTimer(){
 		return function() {
 			var me = this;
-			o.fireEvent('window-drag-start');
-			me.NTImaskRemovalTimer = setTimeout(function(){
-				me.NTIEndTimer();
-			},
-			timeoutMillis);
+			o.fireEvent('general-drag-start');
+			if(this !== dm) {
+				me.NTImaskRemovalTimer = setTimeout(function(){
+					me.NTIEndTimer();
+				},
+				timeoutMillis);
+			}
 		};
 	}
 
@@ -823,32 +906,48 @@ turn off html5 player
 		return function(){
 			clearTimeout(this.NTImaskRemovalTimer);
 			delete this.NTImaskRemovalTimer;
-			o.fireEvent('window-drag-end');
+			o.fireEvent('general-drag-end');
 		};
 	}
 
 	function a(){
 		return function(){
 			this.NTIstartTimer();
-			return this.callOverridden(arguments);
+			return this.callParent(arguments);
 		};
 	}
 
 	function b(){
 		return function(){
 			this.NTIEndTimer();
-			return this.callOverridden(arguments);
+			return this.callParent(arguments);
 		};
 	}
 
 	function c() {
 		return function(){
 			this.NTIPostponeTimer();
-			return this.callOverridden(arguments);
+			return this.callParent(arguments);
 		};
 	}
 
-	Ext.util.ComponentDragger.override({ NTIstartTimer: startTimer(), NTIEndTimer: endTimer(), NTIPostponeTimer: postponeTimer(), onStart: a(), onEnd: b(), onDrag: c()});
-	Ext.resizer.ResizeTracker.override({ NTIstartTimer: startTimer(), NTIEndTimer: endTimer(), NTIPostponeTimer: postponeTimer(), onMouseDown: a(), onEnd: b(), onDrag: c()});
+	Ext.EventManager.un(document, "mousemove", dm.handleMouseMove, dm, true);
+	Ext.override(dm,{
+		NTIstartTimer: startTimer(),
+		NTIEndTimer: endTimer(),
+		NTIPostponeTimer: postponeTimer(),
+		startDrag: a(),
+		stopDrag: b()
+	});
+	Ext.EventManager.on(document, "mousemove", dm.handleMouseMove, dm, true);
+
+	Ext.dd.DragTracker.override({
+		NTIstartTimer: startTimer(),
+		NTIEndTimer: endTimer(),
+		NTIPostponeTimer: postponeTimer(),
+		onMouseDown: a(),
+		onEnd: b(),
+		onDrag: c()
+	});
 });
 
