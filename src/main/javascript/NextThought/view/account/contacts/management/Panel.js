@@ -75,12 +75,9 @@ Ext.define('NextThought.view.account.contacts.management.Panel',{
 
 
 	getData: function(){
-		var people = this.down('management-people-list').getSelected();
-		var groups = this.down('management-group-list').getSelected();
-
 		return {
-			users: people,
-			groups: groups
+			people: this.down('management-people-list').getSelected(),
+			groups: this.down('management-group-list').getSelected()
 		};
 	},
 

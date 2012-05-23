@@ -241,6 +241,13 @@ Ext.define('NextThought.util.Globals', {
 	},
 
 
+	getAsynchronousTaskQueueForList: function(s){
+		var list = [], i = s.length;
+		for(;i > 0; i--){ list.push({}); }
+		return list;
+	},
+
+
 	removeLoaderSplash: function(){
 		var me = this;
 		me.removeLoaderSplash = Ext.emptyFn;

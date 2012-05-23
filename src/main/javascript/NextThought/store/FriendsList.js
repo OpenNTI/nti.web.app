@@ -25,13 +25,11 @@ Ext.define('NextThought.store.FriendsList',{
 
 	sorters: [
 		{
+			//Sort system groups to the front
 			sorterFn: function(a,b){
-				var ac = a.get('Creator');
-				var bc = b.get('Creator');
-				var sys = 'zope.security.management.system_user';
-				return ac === bc
-						? 0
-						: ac == sys ? -1 : 1;
+				var ac = a.isSystem();
+				var bc = b.isSystem();
+				return ac === bc ? 0 : ac ? -1 : 1;
 			}
 		},
 		{

@@ -169,13 +169,61 @@ Ext.define('NextThought.controller.Groups', {
 
 
 	saveGroupAdditions: function(btn){
-		var panel = btn.up('contacts-management-panel'),
-			data = panel.getData();
+		var store = this.getFriendsListStore(),
+			panel = btn.up('contacts-management-panel'),
+			data = panel.getData(),
+			people = data.people,
+			groups = data.groups,
+			active = Globals.getAsynchronousTaskQueueForList(groups),
+			push = Array.prototype.push,
+			hasErrors = false,
+			failedGroups = [];
 
+		function complete(){
+			panel.getEl().unmask();
 
-		console.log(data);
+			if( !hasErrors ){
+				panel.reset();
+				store.load();
+			}
+			else {
+				//tell the panel which groups failed
+			}
+		}
 
-		panel.reset();
+		panel.getEl().mask();
+
+		Ext.each(groups,function(group){
+
+			var record = group,
+				field = 'friends',
+				list;
+
+			if(group.isEveryone()){
+				record = $AppConfig.userObject;
+				field = 'following';
+			}
+
+			list = record.get(field).slice();//clone list
+			push.apply(list, people); //add users
+			record.set(field, list); //reassign the list back
+
+			record.save({
+				callback: function(newRecord,operation){
+					var failed = !operation || !operation.success;
+
+					hasErrors = hasErrors || failed;
+					if(failed){
+						failedGroups.push(record);
+					}
+
+					active.pop();
+					if(active.length===0){
+						complete();
+					}
+				}
+			});
+		});
 	}
 
 });
