@@ -15,7 +15,7 @@ Ext.define('NextThought.view.account.contacts.Activity',{
 	afterRender: function() {
 		this.callParent(arguments);
 		this.el.on('click', function(e){
-			this.fireEvent('navigation-selected', this.ContainerId);
+			this.fireEvent('navigation-selected', this.ContainerId, this.item.getId());
 
 			e.stopPropagation();
 			e.preventDefault();

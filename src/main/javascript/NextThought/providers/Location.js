@@ -33,7 +33,6 @@ Ext.define('NextThought.providers.Location', {
 		var me = this,e = Ext.getCmp('viewport').getEl();
 
 		function finish(){
-			console.log('Navigation for '+ntiid+' finished.', arguments);
 			if(e.isMasked()){
 				e.unmask();
 			}
