@@ -13,6 +13,26 @@ Ext.define('NextThought.view.form.fields.SimpleTextField',{
 	},
 
 
+	setError: function(){
+		var e = this.getEl();
+		e.addCls('error-saving');
+		setTimeout(function(){ e.removeCls('error-saving'); },750);
+	},
+
+
+	clearValue: function(){
+		var e = this.getEl();
+		e.dom.value = '';
+		e.removeCls('error-saving');
+		this.keyPressed(new Ext.EventObjectImpl());
+	},
+
+
+	getValue: function(){
+		return this.getEl().getValue();
+	},
+
+
 	afterRender: function(){
 		this.callParent(arguments);
 		this.mon(this.getEl(),{
@@ -44,7 +64,7 @@ Ext.define('NextThought.view.form.fields.SimpleTextField',{
 
 	keyPressed: function(event){
 		var k = event.getKey(),
-			v = this.getEl().dom.value;
+			v = this.getValue();
 		if (k === event.ENTER || k === event.ESC )  {
 			this.fireEvent('commit', v );
 		}

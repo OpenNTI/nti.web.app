@@ -53,24 +53,38 @@ Ext.define('NextThought.view.account.contacts.management.Panel',{
 
 	initComponent: function(){
 		this.callParent(arguments);
-		this.down('management-people-list').on('change',this.onPeopleListChanged,this);
 
-		var addBtn = this.down('button[text=Add]');
-		this.mon(this.down('simpletext'),{
-			scope: this,
-			'commit': function(value){
-				if(value){
-					console.log('trigger the same code that the add button does');
-				}
-			},
+		var me = this,
+			peopleList = me.down('management-people-list'),
+			addBtn = me.down('button[text=Add]');
+
+		me.mon( peopleList, 'change', me.onPeopleListChanged, me);
+		me.mon( addBtn, 'click', me.addGroup, me);
+		me.mon( me.down('simpletext'),{
+			scope: me,
+			'commit': function(value){ if(value){ me.addGroup(); } },
 			'changed': function(newValue){
-				if(newValue){
-					addBtn.enable();
-					return;
-				}
+				if(newValue){ addBtn.enable(); return; }
 				addBtn.disable();
 			}
 		});
+	},
+
+
+	addGroup: function(){
+		var groupName = this.down('simpletext').getValue();
+		this.fireEvent('add-group', groupName, this.addGroupComplete, this);
+	},
+
+
+	addGroupComplete: function(success){
+		var text = this.down('simpletext');
+		if(success) {
+			text.clearValue();
+			return;
+		}
+
+		text.setError();
 	},
 
 

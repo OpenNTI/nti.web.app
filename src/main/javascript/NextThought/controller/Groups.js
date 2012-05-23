@@ -13,12 +13,19 @@ Ext.define('NextThought.controller.Groups', {
 	],
 
 	views: [
+		'account.contacts.management.Panel'
 	],
 
 	init: function() {
 		this.application.on('session-ready', this.onSessionReady, this);
 
-		this.control({},{});
+		this.control({
+
+			'contacts-management-panel': {
+				'add-group': this.addGroup
+			}
+
+		},{});
 
 		//Listen for changes of presence to notify the online/offline lists
 		var me = this;
@@ -116,6 +123,30 @@ Ext.define('NextThought.controller.Groups', {
 			}
 			else {
 				console.error('Got a weird presence notification.', name, presence);
+			}
+		});
+	},
+
+
+	addGroup: function(newGroupName, callback, scope){
+		var rec = this.getFriendsListModel().create(),
+			store = this.getFriendsListStore(),
+			username = newGroupName
+				.replace(/[^0-9A-Za-z\-@]/g, '.')
+				.replace(/^[\.\-_]+/g, '');
+
+		rec.set('Username',username+'@nextthought.com');
+
+		rec.set('realname', newGroupName);
+		rec.set('friends', []);
+		rec.save({
+			scope: this,
+			success: function(){
+				store.load();
+				Ext.callback(callback,scope, [true]);
+			},
+			failed: function(){
+				Ext.callback(callback,scope, [false]);
 			}
 		});
 	}

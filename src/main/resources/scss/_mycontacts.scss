@@ -16,6 +16,16 @@
 	border-radius: 3px;
 	border: 1px solid #a0a0a0;
 	box-shadow: inset 3px 3px 10px -5px #a0a0a0;
+
+	$value: background-color 0.5s, color 0.5s;
+
+	@include experimental(transition, $value);
+
+	&.error-saving {
+		@include experimental(transition, $value);
+		border-color: red;
+		background-color: #ffc0c0;
+	}
 }
 
 $over-color: #f4f3f3;

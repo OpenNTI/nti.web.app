@@ -95,7 +95,8 @@ Ext.define('NextThought.proxy.Rest', {
 	},
 
 	exception: function(proxy, response, operation, eOpts) {
-		if(response.status !== 404) {
+		var code = response.status;
+		if(code < 400 || code >= 500 ) {
 			console.error('Error getting data:', arguments);
 		}
 
