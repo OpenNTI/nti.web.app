@@ -21,8 +21,8 @@ Ext.define('NextThought.view.menus.MyAccount',{
 
 	items: [
 		{xtype: 'notifications-menuitem'},
-		{text: 'My Account'},
-		{text: 'Settings'},
+		{text: 'My Account', disabled: true}, //TODO - re-enable when we have
+		{text: 'Settings',  disabled: true},  //something for these two.
 		{text: 'About'},
 		{text: 'Help'},
 		{xtype: 'menuseparator'},
