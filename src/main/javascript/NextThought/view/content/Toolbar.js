@@ -18,8 +18,8 @@ Ext.define('NextThought.view.content.Toolbar',{
 
 	items: [
 		{ width: 180 },
-		{ xtype: 'content-filter', flex: 1 },
 		{ xtype: 'content-jumper', flex: 1 },
+		{ xtype: 'content-filter', flex: 1 },
 		{ xtype: 'content-pager'},
 		{ width:100 }
 	],
