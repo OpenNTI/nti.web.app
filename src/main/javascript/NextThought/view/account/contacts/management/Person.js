@@ -56,7 +56,7 @@ Ext.define('NextThought.view.account.contacts.management.Person',{
 	afterRender: function(){
 		this.callParent(arguments);
 		this.getEl().addClsOnOver('selection-item-over');
-		this.getEl().down('.contact-card-wrapper').on('click', this.toggle, this);
+		this.getEl().down('.contact-card').on('click', this.toggle, this);
 		this.getEl().down('.nib').on('click', this.destroy, this);
 	},
 

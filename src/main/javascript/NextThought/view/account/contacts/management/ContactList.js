@@ -88,7 +88,8 @@ Ext.define('NextThought.view.account.contacts.management.ContactList',{
 
 
 	removeContact: function(item){
-		this.store.remove(item);
+		this.store.remove(item.user);
+		this.onChange();
 	},
 
 
