@@ -174,6 +174,7 @@ $over-color: #f4f3f3;
 		}
 	}
 
+	.selection-item-over &,
 	&.selection-item-over,
 	&.x-menu-item-over {
 		img.nib{
@@ -224,6 +225,9 @@ $over-color: #f4f3f3;
 	.label {
 		@include contact-header;
 		margin-top: 20px;
+		&.group {
+			margin-top: 40px;
+		}
 	}
 
 	.user-search-field {
@@ -247,43 +251,65 @@ $over-color: #f4f3f3;
 		@include text-box-style;
 	}
 
-	.people-selection-list {
-		margin: 10px 1px;
-		border-radius: 3px;
+	.contact-selection-list {
+		margin: 10px 0;
 		box-shadow: 1px 1px 6px -3px #000000 !important;
 
-		.selection-list-ct {
-			overflow: hidden;
-			border-radius: 3px;
-			border: 1px solid #dcdcdc;
-			background: #ffffff;
-			li {
-				border-bottom: 1px solid #dcdcdc;
-				&:first-of-type{
-					border-radius: 3px 3px 0 0;
-				}
+		overflow: hidden;
+		border-radius: 3px;
+		border: 1px solid #dcdcdc;
+		background: #ffffff;
 
-				&:last-of-type {
-					border-bottom-width: 0px;
-					border-radius: 0 0 3px 3px;
-				}
+		div.add-person-card {
+			border-bottom: 1px solid #dcdcdc;
+			&.expanded,
+			&.selection-item-over{
+				background-color: $over-color;
+				cursor: pointer;
+			}
 
-				&.selection-item-over{
-					background-color: $over-color;
+			.selection-nt .selection-list-ct {
+				border-top: 1px solid #dcdcdc;
+				background-color: $over-color !important;
+				li.selection-item-over {
+					background-color: transparent !important;
+					img.delete-group { display: none !important; }
 				}
 			}
-		}
-		.contact-card {
-			img.nib{
-				background-position: -20px -2px;
+
+			.contact-card-wrapper {
+				padding-right: 5px;
+				.contact-card {
+					margin: 7px 10px;
+					img.nib{
+						background-position: -20px -2px;
+					}
+				}
+			}
+
+			&:first-of-type{
+				border-radius: 3px 3px 0 0;
+			}
+
+			&:last-of-type {
+				border-bottom-width: 0px;
+				border-radius: 0 0 3px 3px;
 			}
 		}
 	}
 
-	.group-selection-list {
 
+	.group-selection-list {
+		margin-top: 10px;
 		.selection-list-ct {
 			ul {
+				&.disallowSelection{
+					li.selection-list-item {
+						background: none !important;
+						padding: 5px;
+					}
+				}
+
 				li {
 					&:first-of-type{
 						opacity: 0.6;
@@ -291,7 +317,7 @@ $over-color: #f4f3f3;
 							color: #767676 !important;
 							background-color: #ffffff !important;
 							cursor: default;
-							img.delete-group { display: none; }
+							img.delete-group { display: none !important; }
 						}
 					}
 					&.selection-item-over{

@@ -10,7 +10,7 @@ Ext.define( 'NextThought.view.form.fields.UserSearchInputField', {
 	displayField: 'realname',
 	typeAhead: false,
 	hideLabel: true,
-	multiSelect: true,
+	multiSelect: false,
 	enableKeyEvents: true,
 	minChars: 1,
 	valueField: 'Username',
@@ -64,8 +64,8 @@ Ext.define( 'NextThought.view.form.fields.UserSearchInputField', {
 		//handle some basic behavior accross the board
 		me.on('select',function(){
 			me.setValue('',false);
-//			me.collapse();
-//			me.focus();
+			me.collapse();
+			me.focus();
 		});
 	},
 

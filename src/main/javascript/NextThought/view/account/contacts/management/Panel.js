@@ -4,7 +4,7 @@ Ext.define('NextThought.view.account.contacts.management.Panel',{
 
 	requires: [
 		'NextThought.view.account.contacts.management.GroupList',
-		'NextThought.view.account.contacts.management.PeopleList',
+		'NextThought.view.account.contacts.management.ContactList',
 		'NextThought.view.form.fields.SimpleTextField',
 		'NextThought.view.form.fields.UserSearchInputField'
 	],
@@ -23,10 +23,11 @@ Ext.define('NextThought.view.account.contacts.management.Panel',{
 			emptyText: 'Name',
 			trigger2Cls: null//turn off the second trigger
 		},
-		{ xtype: 'management-people-list' },
+		{ xtype: 'management-contact-list' },
 
-		{ xtype: 'box', html: { tag: 'div', cls: 'label', html: 'Add Groups'}, labelFor: 'groups' },
+		{ xtype: 'box', html: { tag: 'div', cls: 'label group', html: 'Add Groups'}, for: 'groups' },
 		{
+			for: 'groups',
 			xtype: 'container',
 			layout: 'hbox',
 			items: [
@@ -34,7 +35,7 @@ Ext.define('NextThought.view.account.contacts.management.Panel',{
 				{xtype: 'button', scale: 'medium', ui: 'secondary', text: 'Add', disabled: true }
 			]
 		},
-		{ xtype: 'management-group-list' },
+		{ xtype: 'management-group-list', for: 'groups' },
 
 		{
 			cls: 'add-contacts-finish-box',
@@ -43,13 +44,19 @@ Ext.define('NextThought.view.account.contacts.management.Panel',{
 				type: 'hbox',
 				pack: 'end'
 			},
-			items: {
+			items: [{
+					action: 'cancel',
+					xtype: 'button',
+					scale: 'medium',
+					ui: 'secondary',
+					text: 'Cancel'
+				},{
 				action: 'finish',
 				xtype: 'button',
 				scale: 'medium',
 				ui: 'primary',
 				text: 'Finish'
-			},
+			}],
 			hidden: true
 		}
 	],
@@ -58,10 +65,10 @@ Ext.define('NextThought.view.account.contacts.management.Panel',{
 		this.callParent(arguments);
 
 		var me = this,
-			peopleList = me.down('management-people-list'),
+			contactList = me.down('management-contact-list'),
 			addBtn = me.down('button[text=Add]');
 
-		me.mon( peopleList, 'change', me.onPeopleListChanged, me);
+		me.mon( contactList, 'change', me.onContactListChanged, me);
 		me.mon( addBtn, 'click', me.addGroup, me);
 		me.mon( me.down('simpletext'),{
 			scope: me,
@@ -75,16 +82,13 @@ Ext.define('NextThought.view.account.contacts.management.Panel',{
 
 
 	getData: function(){
-		return {
-			people: this.down('management-people-list').getSelected(),
-			groups: this.down('management-group-list').getSelected()
-		};
+		return this.down('management-contact-list').getSelected();
 	},
 
 
 	reset: function(){
 		this.down('usersearchinput').reset();
-		this.down('management-people-list').reset();
+		this.down('management-contact-list').reset();
 		this.down('management-group-list').reset();
 		this.addGroupComplete(true);
 	},
@@ -107,21 +111,18 @@ Ext.define('NextThought.view.account.contacts.management.Panel',{
 	},
 
 
-	onPeopleListChanged: function(isEmpty){
-		var label = this.down('[labelFor=groups]').getEl().down('.label'),
-			list = this.down('management-group-list'),
+	onContactListChanged: function(isEmpty){
+		var groupControls = this.query('[for=groups]'),
 			finish = this.down('[cls=add-contacts-finish-box]');
 
 		if(isEmpty){
-			list.disallowSelection();
 			finish.hide();
-			label.update('Add Groups');
+			Ext.each(groupControls,function(c){c.show();});
 			return;
 		}
 
-		list.allowSelection();
+		Ext.each(groupControls,function(c){c.hide();});
 		finish.show();
-		label.update('To Groups');
 
 	}
 });

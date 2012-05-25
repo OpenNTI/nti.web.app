@@ -21,6 +21,9 @@ Ext.define('NextThought.controller.Groups', {
 
 		this.control({
 
+			'contacts-management-panel button[action=cancel]': {
+				'click': this.cancelGroupAdditions
+			},
 			'contacts-management-panel button[action=finish]': {
 				'click': this.saveGroupAdditions
 			},
@@ -168,13 +171,16 @@ Ext.define('NextThought.controller.Groups', {
 	},
 
 
+	cancelGroupAdditions: function(btn){
+		btn.up('contacts-management-panel').reset();
+	},
+
+
 	saveGroupAdditions: function(btn){
 		var store = this.getFriendsListStore(),
 			panel = btn.up('contacts-management-panel'),
 			data = panel.getData(),
-			people = data.people,
-			groups = data.groups,
-			active = Globals.getAsynchronousTaskQueueForList(groups),
+			active = Globals.getAsynchronousTaskQueueForList(Object.keys(data)),
 			push = Array.prototype.push,
 			hasErrors = false,
 			failedGroups = [];
@@ -194,19 +200,19 @@ Ext.define('NextThought.controller.Groups', {
 
 		panel.getEl().mask();
 
-		Ext.each(groups,function(group){
+		Ext.Object.each(data,function(key,info){
 
-			var record = group,
+			var record = info.record,
 				field = 'friends',
 				list;
 
-			if(group.isEveryone()){
+			if(record.isEveryone()){
 				record = $AppConfig.userObject;
 				field = 'following';
 			}
 
 			list = record.get(field).slice();//clone list
-			push.apply(list, people); //add users
+			push.apply(list, info.people); //add users
 			record.set(field, list); //reassign the list back
 
 			record.save({
