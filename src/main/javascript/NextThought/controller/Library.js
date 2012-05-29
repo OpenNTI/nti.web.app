@@ -71,19 +71,14 @@ Ext.define('NextThought.controller.Library', {
 			link = page ? page.getLink(Globals.USER_GENERATED_DATA) : null,
 			ps = this.pageStores[containerId];
 
+		//No link in pages means that there are was no data here when the service doc was loaded or the last time
+		//the pages store was loaded.  Just in case, try to reload the store now.  If there's still nothing there,
+		//it's okay, there's just no data.
 		if(!link) {
-	
-			//CUTZ Hack around an issue with the page store by falling back to the hardcoded UGD link.  
-			//If an object is created on a page that has no objects on it, when you navigate away and then come back
-			//to the page, your data doesn't show up.  It's not clear to me if the callback from the object creation
-			//should be putting the new object in the page store, or if we just need to be fetching the pages data.
-			//Regardless, the browser neither displays the created object, nor does it make an attempt to 
-			//fetch the pages data.  I think this is related to what Troy and I talked about two days ago w.r.t. the pages
-			//collection cache.
-			link = $AppConfig.server.host + '/dataserver2/users/' + escape($AppConfig.username) + '/' + escape('Pages(' + containerId + ')') + '/UserGeneratedData';
-
-			console.log('Falling back to hardcoded pages url because page store is busted ', link);
-			//return null;
+			store.load();
+			page = store.getById(containerId);
+			link = page ? page.getLink(Globals.USER_GENERATED_DATA) : null;
+			if (!link) {return null;}
 		}
 
 		if(!ps){
