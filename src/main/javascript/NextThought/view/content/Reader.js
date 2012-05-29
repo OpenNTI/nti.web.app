@@ -546,7 +546,7 @@ Ext.define('NextThought.view.content.Reader', {
 	 * @param n - the node you want to scroll to
 	 * @param onlyIfNotVisible - pass true here if you want this function to decide if it should scroll or not,
 	 *                           based on its visibility on screen
-	 * @param bottomThreashold - if you want to scroll if the target is close to the bottom, specify a threashold.
+	 * @param bottomThreshold - if you want to scroll if the target is close to the bottom, specify a threshold.
 	 */
 	scrollToNode: function(n, onlyIfNotVisible, bottomThreshold) {
 		while(n && n.nodeType === Node.TEXT_NODE) {
