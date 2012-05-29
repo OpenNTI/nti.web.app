@@ -81,7 +81,7 @@ Ext.define('NextThought.view.account.MyAccount',{
 
 
 	updateLastLoginTime: function(){
-		$AppConfig.userObject.set('lastLoginTime', Ext.Date.now());
+		$AppConfig.userObject.set('lastLoginTime', Ext.Date.now()/1000);
 		$AppConfig.userObject.save();
 	}
 });
