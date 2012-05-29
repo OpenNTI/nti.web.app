@@ -80,7 +80,8 @@ Ext.define('NextThought.controller.Search', {
 					section: loc ? loc.label : 'Unlabeled',
 					snippet: hit.get('Snippet'),
 					term: searchVal,
-					containerId: hit.get('ContainerId')
+					containerId: hit.get('ContainerId'),
+					hitId: hit.getId()
 				});
 			}, this);
 		}, this);
@@ -156,7 +157,8 @@ Ext.define('NextThought.controller.Search', {
 
 
 	searchResultClicked: function(result){
-		var cid = result.containerId;
+		var cid = result.containerId,
+			cat = result.up('search-result-category').category;
 
 		if (!cid) {
 			console.error('No container ID taged on search result, cannot navigate.');
@@ -165,8 +167,13 @@ Ext.define('NextThought.controller.Search', {
 
 		Ext.ComponentQuery.query('library-view-container')[0].activate();
 		LocationProvider.setLocation( cid, function(reader){
-			reader.scrollToText(result.term);
-			result.on('destroy', reader.clearSearchRanges,reader,{single:true});
+			if (cat === 'Note') {
+				reader.scrollToTarget(IdCache.getIdentifier(result.hitId));
+			}
+			else {
+				reader.scrollToText(result.term);
+				result.on('destroy', reader.clearSearchRanges,reader,{single:true});
+			}
 		});
 	},
 

@@ -119,6 +119,8 @@ Ext.define( 'NextThought.view.annotations.Note', {
 			e = Ext.get(i),
 			n = e ? e.dom : this.createElement('div',this.container,'document-notes');
 		n.setAttribute('id',i);
+		n.setAttribute('name',IdCache.getComponentId(this.record, null, this.prefix));
+
 		if(Ext.isIE9){
 			Ext.get(n).setStyle('z-index','2');
 		}

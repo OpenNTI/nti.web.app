@@ -521,16 +521,21 @@ Ext.define('NextThought.view.content.Reader', {
 
 	scrollToTarget: function(target){
 		var de = this.getDocumentElement(),
+			c = Ext.getCmp(target),
 			e = document.getElementById(target) ||
 				de.getElementById(target) ||
 				Ext.fly(de).query('*[name='+target+']')[0] ||
-				Ext.getCmp(target).img;
+				Ext.query('*[name*='+target+']')[0];
+
+		if (!e && c) {
+			e = c.img;
+		}
 
 		if(!e) {
 			console.warn('scrollToTarget: no target found: ',target);
 		}
 		else {
-			this.scrollToNode(e);
+			this.scrollToNode(e, null, null);
 		}
 	},
 
@@ -543,7 +548,7 @@ Ext.define('NextThought.view.content.Reader', {
 	 *                           based on its visibility on screen
 	 * @param bottomThreashold - if you want to scroll if the target is close to the bottom, specify a threashold.
 	 */
-	scrollToNode: function(n, onlyIfNotVisible, bottomThreashold) {
+	scrollToNode: function(n, onlyIfNotVisible, bottomThreshold) {
 		while(n && n.nodeType === Node.TEXT_NODE) {
 			n = n.parentNode;
 		}
@@ -552,7 +557,7 @@ Ext.define('NextThought.view.content.Reader', {
 			o = Ext.fly(n).getTop() - offsets[1],
 			st = this.body.getScroll().top,
 			h = this.body.getHeight(),
-			b = st + h - (bottomThreashold || 0);
+			b = st + h - (bottomThreshold || 0);
 
 		//logic to halt scrolling if conditions mentioned in function docs are met.
 		if (onlyIfNotVisible && o > st && o < b) {
@@ -817,6 +822,7 @@ turn off html5 player
 			}
 
 			if(url.indexOf('http:')===0){
+				debugger;
 				console.log('WARNING: referencing external url via insecure protocol: '+url+' Assuming naive https string substitution.');
 				original = original.replace(/http:/i,'https:');
 			}
