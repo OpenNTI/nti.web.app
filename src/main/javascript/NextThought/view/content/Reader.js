@@ -822,7 +822,6 @@ turn off html5 player
 			}
 
 			if(url.indexOf('http:')===0){
-				debugger;
 				console.log('WARNING: referencing external url via insecure protocol: '+url+' Assuming naive https string substitution.');
 				original = original.replace(/http:/i,'https:');
 			}
