@@ -820,12 +820,12 @@ turn off html5 player
 			if(/src/i.test(attr) && /youtube/i.test(url)){
 				return Ext.String.format('src="{0}&wmode={1}"',url.replace(/http:/i,'https:'), 'opaque');
 			}
-
+/*
 			if(url.indexOf('http:')===0){
 				console.log('WARNING: referencing external url via insecure protocol: '+url+' Assuming naive https string substitution.');
 				original = original.replace(/http:/i,'https:');
 			}
-
+*/
 
 			//inline
 			return (anchor || external || /^data:/i.test(url)) ?
