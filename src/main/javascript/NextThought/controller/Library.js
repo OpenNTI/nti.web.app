@@ -71,14 +71,10 @@ Ext.define('NextThought.controller.Library', {
 			link = page ? page.getLink(Globals.USER_GENERATED_DATA) : null,
 			ps = this.pageStores[containerId];
 
-		//No link in pages means that there are was no data here when the service doc was loaded or the last time
-		//the pages store was loaded.  Just in case, try to reload the store now.  If there's still nothing there,
-		//it's okay, there's just no data.
+
 		if(!link) {
-			store.load();
-			page = store.getById(containerId);
-			link = page ? page.getLink(Globals.USER_GENERATED_DATA) : null;
-			if (!link) {return null;}
+			console.log('no link found for this page, use standard page link and create a store for it.');
+			link = $AppConfig.server.host + '/dataserver2/users/' + escape($AppConfig.username) + '/' + escape('Pages(' + containerId + ')') + '/UserGeneratedData';
 		}
 
 		if(!ps){
