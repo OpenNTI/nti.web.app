@@ -90,7 +90,7 @@ Ext.define('NextThought.mixins.Annotations', {
 
 
 	clearAnnotations: function(){
-		var v, oid;
+		var v, oid, leftovers;
 		for(oid in this.annotations){
 			if(this.annotations.hasOwnProperty(oid)) {
 				v = this.annotations[oid];
@@ -103,6 +103,16 @@ Ext.define('NextThought.mixins.Annotations', {
 
 		this.annotations = {};
 		this.clearSearchRanges();
+
+		//Catchall for existing annotations that did not get removed properly or are left
+		//hanging like placeholder notes.
+		leftovers = Ext.query('[id*=note-container]');
+		if (leftovers && leftovers.length > 0) {
+			Ext.each(leftovers, function(l){
+				Ext.fly(l).destroy();
+			});
+		}
+
 	},
 
 
