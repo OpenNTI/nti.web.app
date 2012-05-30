@@ -1,6 +1,6 @@
 Ext.define('NextThought.model.FriendsList', {
 	extend: 'NextThought.model.Base',
-	resolveUsers: true,
+	resolveUsers: false,
 
 	EVERYONE_USERNAME: 'everyone',
 	SYSTEM_CREATOR: 'zope.security.management.system_user',
