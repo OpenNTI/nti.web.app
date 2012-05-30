@@ -95,6 +95,7 @@ Ext.define('NextThought.controller.Stream', {
 	//called by the Library controller when navigation occurs
 	containerIdChanged: function(containerId) {
 		var as = Ext.getCmp('activity-stream'),
+			ss = this.getStreamStore(),
 			friendsToChangeMap = {},
 			masterId = Library.getLineage(containerId).last();
 
@@ -126,22 +127,24 @@ Ext.define('NextThought.controller.Stream', {
 			m[creator].push(change);
 		}
 
-
-		this.getStreamStore().each(
+		ss.each(
 			function(change) {
 				addToChangeMap(masterId, change, friendsToChangeMap);
 			}
 			,this);
 
+		//remove any old listeners before resetting listeners
+		ss.un('add', this.updateStreamStore, this);
 		addUsers(friendsToChangeMap, as);
+		ss.on('add', this.updateStreamStore, this);
+	},
 
-		//TODO - Is there a see all per user?  Should be...
-		//TODO - ellipses the messages?
-		this.getStreamStore().on('add', function(store, records) {
-			Ext.each(records, function(r){
-				as.addActivity(r.get('Creator'), r);
-			}, this);
-		});
+
+	updateStreamStore: function(store, records) {
+		var as = Ext.getCmp('activity-stream');
+		Ext.each(records, function(r){
+			as.addActivity(r.get('Creator'), r);
+		}, this);
 	},
 
 
@@ -205,8 +208,6 @@ Ext.define('NextThought.controller.Stream', {
 
 		//add it to the root stream store, why the heck not?
 		this.getStreamStore().add(change);
-
-
 		this.self.fireChange(change);
 	}
 });
