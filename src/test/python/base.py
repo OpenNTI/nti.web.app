@@ -16,8 +16,7 @@ class WebAppTestBase(unittest.TestCase):
 			self.resp = self.app.get(self.url)
 		except Exception, e:
 			self.fail(str(e))
-	
-	
+			
 	def login(self, user=None, password=None):
 		resp = self.resp
 		
@@ -35,9 +34,9 @@ class WebAppTestBase(unittest.TestCase):
 		self.resp.doc.xpath("//img[contains(@class, 'session-logout')]/..").click()		
 		self.wait_for_text("Username:","//label")
 	
-	def wait_for_text(self, text, xpath):
+	def wait_for_text(self, text, xpath, timeout=60):
 		resp = self.resp
-		for _ in range(60):
+		for _ in range(timeout):
 			try:
 				if text == resp.doc.xpath(xpath).text():
 					break
@@ -47,9 +46,9 @@ class WebAppTestBase(unittest.TestCase):
 		else: 
 			self.fail("time out")
 	
-	def wait_for_node(self, xpath):
+	def wait_for_node(self, xpath, timeout=60):
 		resp = self.resp
-		for _ in range(60):
+		for _ in range(timeout):
 			try:
 				if resp.doc.xpath(xpath).exist(): 
 					break
