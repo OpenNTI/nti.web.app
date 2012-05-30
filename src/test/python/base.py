@@ -4,7 +4,7 @@ class WebAppTestBase(unittest.TestCase):
 	
 	@classmethod
 	def setUpClass(cls):
-		cls.url = os.environ.get('TEST_URL',None)
+		cls.url = os.environ.get('TEST_URL', 'http://localhost:8081/NextThoughtWebApp/')
 		cls.app = webtest.SeleniumApp(url=cls.url)
 	
 	@classmethod
@@ -18,42 +18,46 @@ class WebAppTestBase(unittest.TestCase):
 			self.fail(str(e))
 	
 	
-	def login(self):
+	def login(self, user=None, password=None):
 		resp = self.resp
+		
+		user = user or "jonathan.grimes@nextthought.com"
+		password = password or "jonathan.grimes"
 		self.wait_for_text("Username:","//label")
 		
-		resp.doc.input(name="username").value = "jonathan.grimes@nextthought.com"
-		resp.doc.input(name="password").value = "jonathan.grimes"
+		resp.doc.input(name="username").value = user
+		resp.doc.input(name="password").value = password
 		resp.doc.button(buttonid='loginButton-btnEl').click()
 		
 		self.wait_for_node('//div[@id="top-controls"]')
-	
 	
 	def logout(self):
 		self.resp.doc.xpath("//img[contains(@class, 'session-logout')]/..").click()		
 		self.wait_for_text("Username:","//label")
 	
-	
 	def wait_for_text(self, text, xpath):
 		resp = self.resp
-		
-		for i in range(60):
+		for _ in range(60):
 			try:
-				if text == resp.doc.xpath(xpath).text(): break
-			except: pass
+				if text == resp.doc.xpath(xpath).text():
+					break
+			except: 
+				pass
 			time.sleep(1)
-		else: self.fail("time out")
+		else: 
+			self.fail("time out")
 	
 	def wait_for_node(self, xpath):
 		resp = self.resp
-		
-		for i in range(60):
+		for _ in range(60):
 			try:
-				if resp.doc.xpath(xpath).exist(): break
-			except: pass
+				if resp.doc.xpath(xpath).exist(): 
+					break
+			except:
+				pass
 			time.sleep(1)
-		else: self.fail("time out")
-
+		else: 
+			self.fail("time out")
 
 if __name__ == '__main__':
 	unittest.main()
