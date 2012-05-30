@@ -1,12 +1,20 @@
 import os, time, unittest, webtest
 
+TEST_URL = os.environ.get('TEST_URL', 'http://localhost:8081/NextThoughtWebApp/')
+TEST_USER = os.environ.get('TEST_USER', 'jonathan.grimes@nextthought.com')
+TEST_PASSWORD = os.environ.get('TEST_PASSWORD', 'jonathan.grimes')
+
 class WebAppTestBase(unittest.TestCase):
 	
 	@classmethod
 	def setUpClass(cls):
+		cls.setUpApp(TEST_URL)
+	
+	@classmethod
+	def setUpApp(cls, test_url=TEST_URL):
 		cls.url = os.environ.get('TEST_URL', 'http://localhost:8081/NextThoughtWebApp/')
 		cls.app = webtest.SeleniumApp(url=cls.url)
-	
+		
 	@classmethod
 	def tearDownClass(cls):
 		cls.app.close()
@@ -17,11 +25,9 @@ class WebAppTestBase(unittest.TestCase):
 		except Exception, e:
 			self.fail(str(e))
 			
-	def login(self, user=None, password=None):
+	def login(self, user=TEST_USER, password=TEST_PASSWORD):
 		resp = self.resp
 		
-		user = user or "jonathan.grimes@nextthought.com"
-		password = password or "jonathan.grimes"
 		self.wait_for_text("Username:","//label")
 		
 		resp.doc.input(name="username").value = user
