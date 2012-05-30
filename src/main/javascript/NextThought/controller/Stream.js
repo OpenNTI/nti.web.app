@@ -65,6 +65,9 @@ Ext.define('NextThought.controller.Stream', {
 			ss.getProxy().url = ps.getById('tag:nextthought.com,2011-10:Root').getLink(Globals.RECURSIVE_STREAM);
 			ss.load();
 		},this, {single: true});
+
+
+		ss.on('add', this.updateStreamStore, this);
 	},
 
 
@@ -133,10 +136,7 @@ Ext.define('NextThought.controller.Stream', {
 			}
 			,this);
 
-		//remove any old listeners before resetting listeners
-		ss.un('add', this.updateStreamStore, this);
 		addUsers(friendsToChangeMap, as);
-		ss.on('add', this.updateStreamStore, this);
 	},
 
 
