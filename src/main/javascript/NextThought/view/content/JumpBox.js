@@ -90,13 +90,15 @@ Ext.define('NextThought.view.content.JumpBox',{
 		currentChapter = isChapter? currentNode : currentNode.parentNode;
 		currentSection = isChapter? null : currentNode;
 
-		for(;node.nextSibling; node = node.nextSibling){
-			if(!/topic/i.test(node.tagName)){continue;}
-			sections.push({
-				text	: node.getAttribute('label'),
-				ntiid	: node.getAttribute('ntiid'),
-				cls		: node===currentSection?'current':''
-			});
+		if (node){
+			for(;node.nextSibling; node = node.nextSibling){
+				if(!/topic/i.test(node.tagName)){continue;}
+				sections.push({
+					text	: node.getAttribute('label'),
+					ntiid	: node.getAttribute('ntiid'),
+					cls		: node===currentSection?'current':''
+				});
+			}
 		}
 
 		Ext.each(Ext.query('toc > topic[href]',loc.toc),function(o){
