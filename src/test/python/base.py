@@ -6,12 +6,34 @@ import unittest
 from ConfigParser import SafeConfigParser
 from selenium.webdriver.common.keys import Keys
 
-TEST_URL = os.environ.get('TEST_URL', 'http://localhost:8081/NextThoughtWebApp/')
-TEST_USER = os.environ.get('TEST_USER', 'jonathan.grimes@nextthought.com')
-TEST_PASSWORD = os.environ.get('TEST_PASSWORD', 'jonathan.grimes')
 
 # ----------------------------------
 
+class configuration ():
+	
+	def __init__(self):
+		self.config = ConfigParser.ConfigParser() 	
+		
+	def users(self):
+		self.config.read('config.ini') 
+		tuple = self.config.items('Users')
+		users = [] 
+		for tuple in tuples: 
+			users.append (tuples[1].split (','))
+		return users 
+	
+	def url(self):
+		self.config.read ('config.ini')
+		url = self.config.get ('data', 'url')
+		return url
+	
+	def driver(self):
+		self.config.read ('config.ini')
+		driver = self.config.get ('data', 'driver')
+		return driver 
+	
+#-----------------------------------------------	
+	
 def wait_for_node(resp, xpath, timeout=60):
 	for _ in range(timeout):
 		try:
@@ -56,19 +78,17 @@ class WebAppTestBase(unittest.TestCase):
 	
 	@classmethod
 	def setUpClass(cls):
-		cls.setUpApp(TEST_URL)
-	
+		cls.setUpApp()
+		
 	@classmethod
-	def setUpApp(cls, test_url=TEST_URL):
-		cls.parser_config = SafeConfigParser()
-		cls.parser_config.read('config.ini')
-		cls.user1 = cls.parser_config.get('data', 'user1').split(',')
-		cls.user2 = cls.parser_config.get('data', 'user2').split(',')
-		cls.user3 = cls.parser_config.get('data', 'user3').split(',')
-		cls.user4 = cls.parser_config.get('data', 'user4').split(',')
-		os.environ.setdefault('SELENIUM_DRIVER', '*firefox')
-		cls.url = os.environ.get('TEST_URL', 'http://localhost:8081/NextThoughtWebApp/')
-		cls.app = webtest.SeleniumApp(url=cls.url)
+	def setUpApp(cls):
+		self.users = configuration.users()
+		self.user = users[0]
+		url = configuration.url()
+		environ = configuration.driver() 
+		os.environ.setdefault('SELENIUM_DRIVER', environ)
+		cls.url = os.environ.get('TEST_URL', url)
+		cls.app = webtest.SeleniumApp(url= cls.url)
 		
 	@classmethod
 	def tearDownClass(cls):
@@ -80,17 +100,17 @@ class WebAppTestBase(unittest.TestCase):
 		except Exception, e:
 			self.fail(str(e))
 			
-	def login(self, user=TEST_USER, password=TEST_PASSWORD):
-		login(self.resp, self.user1[0], self.user1[1])
+	def login(self, user= self.user[0], password= self.user[0]):
+		login(self.resp, user, password)
 
 	def logout(self):
 		logout(self.resp)
 	
-	def wait_for_text(self, text, xpath, timeout=60):
+	def wait_for_text_by_xpath(self, text, xpath, timeout=60):
 		if not wait_for_text(self.resp, text, xpath, timeout):
 			self.fail("time out")
 	
-	def wait_for_node(self, xpath, timeout=60):
+	def wait_for_node_by_xpath(self, xpath, timeout=60):
 		if not wait_for_node(self.resp, xpath, timeout):
 			self.fail("time out")
 
