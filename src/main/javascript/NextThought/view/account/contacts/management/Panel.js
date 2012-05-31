@@ -95,8 +95,15 @@ Ext.define('NextThought.view.account.contacts.management.Panel',{
 
 
 	addGroup: function(){
-		var groupName = this.down('simpletext').getValue();
-		this.fireEvent('add-group', groupName, this.addGroupComplete, this);
+		var text = this.down('simpletext'),
+			groupName = text.getValue();
+
+		if (!Globals.INVALID_CHARACTERS_PATTERN.test(groupName)){
+			text.setError();
+		}
+		else {
+			this.fireEvent('add-group', groupName, this.addGroupComplete, this);
+		}
 	},
 
 
