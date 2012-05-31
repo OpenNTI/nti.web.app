@@ -9,17 +9,17 @@ from selenium.webdriver.common.keys import Keys
 
 # ----------------------------------
 
-class configuration ():
+class Configuration ():
 	
 	def __init__(self):
-		self.config = ConfigParser.ConfigParser() 	
+		self.config = SafeConfigParser() 	
 		
 	def users(self):
 		self.config.read('config.ini') 
-		tuple = self.config.items('Users')
+		tuples = self.config.get('data', 'users').split(':')
 		users = [] 
-		for tuple in tuples: 
-			users.append (tuples[1].split (','))
+		for toople in tuples: 
+			users.append((toople.split (',')[0],toople.split(',')[1]))
 		return users 
 	
 	def url(self):
@@ -33,6 +33,19 @@ class configuration ():
 		return driver 
 	
 #-----------------------------------------------	
+	
+def is_node_displayed(resp, ID, xpath, timeout=60):
+	for _ in range(timeout):
+		try:
+			if ID == resp.doc.xpath(xpath).id: 
+				if id.is_displayed():
+					break
+		except:
+			pass
+		time.sleep(1)
+		return True
+	else: 
+		return False
 	
 def wait_for_node(resp, xpath, timeout=60):
 	for _ in range(timeout):
@@ -61,8 +74,8 @@ def wait_for_text(resp, text, xpath, timeout=60):
 def login(resp, user, password, wait_after_login=5):
 	wait_for_text(resp, "Username:","//label")
 	resp.doc.input(name="username").value = user
-	resp.doc.input(Keys.RETURN)
 	resp.doc.input(name="password").value = password
+	is_node_displayed(resp, 'submit', '//button')
 	resp.doc.button(buttonid='submit').click()
 	if wait_after_login:
 		time.sleep(wait_after_login)
@@ -82,13 +95,14 @@ class WebAppTestBase(unittest.TestCase):
 		
 	@classmethod
 	def setUpApp(cls):
-		self.users = configuration.users()
-		self.user = users[0]
-		url = configuration.url()
-		environ = configuration.driver() 
+		config = Configuration()
+		cls.users = config.users()
+		cls.user = cls.users[0]
+		url = config.url()
+		environ = config.driver() 
 		os.environ.setdefault('SELENIUM_DRIVER', environ)
 		cls.url = os.environ.get('TEST_URL', url)
-		cls.app = webtest.SeleniumApp(url= cls.url)
+		cls.app = webtest.SeleniumApp(url=url)
 		
 	@classmethod
 	def tearDownClass(cls):
@@ -100,7 +114,9 @@ class WebAppTestBase(unittest.TestCase):
 		except Exception, e:
 			self.fail(str(e))
 			
-	def login(self, user= self.user[0], password= self.user[0]):
+	def login(self, user=None, password=None):
+		if not user: user = self.users[0][0] + '@nextthought.com'
+		if not password: password = self.users[0][1]
 		login(self.resp, user, password)
 
 	def logout(self):
