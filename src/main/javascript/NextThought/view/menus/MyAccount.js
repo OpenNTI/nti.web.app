@@ -13,6 +13,7 @@ Ext.define('NextThought.view.menus.MyAccount',{
 	hideMode: 'display',
 	minWidth: 250,
 	width: 250,
+	overflowY: 'auto',
 
 	defaults: {
 		ui: 'my-account',
