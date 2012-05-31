@@ -1,13 +1,56 @@
-import os, time, unittest, webtest
-from ConfigParser import SafeConfigParser
+import os
+import time
+import webtest
+import unittest
 
-import selenium, time
-from selenium import webdriver
+from ConfigParser import SafeConfigParser
 from selenium.webdriver.common.keys import Keys
 
 TEST_URL = os.environ.get('TEST_URL', 'http://localhost:8081/NextThoughtWebApp/')
 TEST_USER = os.environ.get('TEST_USER', 'jonathan.grimes@nextthought.com')
 TEST_PASSWORD = os.environ.get('TEST_PASSWORD', 'jonathan.grimes')
+
+# ----------------------------------
+
+def wait_for_node(resp, xpath, timeout=60):
+	for _ in range(timeout):
+		try:
+			if resp.doc.xpath(xpath).exist(): 
+				break
+		except:
+			pass
+		time.sleep(1)
+		return True
+	else: 
+		return False
+			
+def wait_for_text(resp, text, xpath, timeout=60):
+	for _ in range(timeout):
+		try:
+			if text == resp.doc.xpath(xpath).text():
+				break
+		except: 
+			pass
+		time.sleep(1)
+		return True
+	else: 
+		return False
+			
+def login(resp, user, password, wait_after_login=5):
+	wait_for_text(resp, "Username:","//label")
+	resp.doc.input(name="username").value = user
+	resp.doc.input(Keys.RETURN)
+	resp.doc.input(name="password").value = password
+	resp.doc.button(buttonid='submit').click()
+	if wait_after_login:
+		time.sleep(wait_after_login)
+		
+def logout(resp):
+	#TODO: Fix for new skin
+	resp.doc.xpath("//img[contains(@class, 'session-logout')]/..").click()		
+	wait_for_text(resp, "Username:","//label")
+
+# ----------------------------------
 
 class WebAppTestBase(unittest.TestCase):
 	
@@ -31,14 +74,6 @@ class WebAppTestBase(unittest.TestCase):
 	def tearDownClass(cls):
 		cls.app.close()
 	
-	# give enough time for elements to appear and be selectable
-#	def listen_for_element_presents(self, element_name, obj, timeout=30):
-#		start_time = time.time()
-#		while(not obj.find_element_by_id(element_name).is_displayed()):
-#			time.sleep(0.2)
-#		if (time.time() - start_time) > timeout: raise Exception
-#		time.sleep(1)
-	
 	def setUp(self):
 		try:
 			self.resp = self.app.get(self.url)
@@ -46,44 +81,17 @@ class WebAppTestBase(unittest.TestCase):
 			self.fail(str(e))
 			
 	def login(self, user=TEST_USER, password=TEST_PASSWORD):
-		resp = self.resp
-		
-		self.wait_for_text("Username:","//label")
-		
-		resp.doc.input(name="username").value = self.user1[0]
-		resp.doc.input(Keys.RETURN)
-		resp.doc.input(name="password").value = self.user2[1]
-		resp.doc.button(buttonid='submit').click()
-		time.sleep(5)
-#		self.listen_for_element_presents("submit", resp)
-#		self.wait_for_node('//div[@id="top-controls"]')
-	
+		login(self.resp, self.user1[0], self.user1[1])
+
 	def logout(self):
-		self.resp.doc.xpath("//img[contains(@class, 'session-logout')]/..").click()		
-		self.wait_for_text("Username:","//label")
+		logout(self.resp)
 	
 	def wait_for_text(self, text, xpath, timeout=60):
-		resp = self.resp
-		for _ in range(timeout):
-			try:
-				if text == resp.doc.xpath(xpath).text():
-					break
-			except: 
-				pass
-			time.sleep(1)
-		else: 
+		if not wait_for_text(self.resp, text, xpath, timeout):
 			self.fail("time out")
 	
 	def wait_for_node(self, xpath, timeout=60):
-		resp = self.resp
-		for _ in range(timeout):
-			try:
-				if resp.doc.xpath(xpath).exist(): 
-					break
-			except:
-				pass
-			time.sleep(1)
-		else: 
+		if not wait_for_node(self.resp, xpath, timeout):
 			self.fail("time out")
 
 if __name__ == '__main__':
