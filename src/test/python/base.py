@@ -18,6 +18,7 @@ class Configuration():
 		
 	@classmethod
 	def read(cls, source):
+		source = os.path.expanduser(source)
 		config = ConfigParser.ConfigParser()
 		config.read(source) 
 		
