@@ -83,7 +83,7 @@ Ext.define('NextThought.view.account.contacts.management.ContactList',{
 			})
 		});
 
-		this.add(items);
+		this.insert(0, items);
 	},
 
 
