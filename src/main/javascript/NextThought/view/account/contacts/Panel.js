@@ -137,7 +137,6 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 
 
 	addActivity: function(username, change) {
-		console.log(arguments);
 		var me = this,
 			widget = me.down('[username='+username+']'),
 			item = change.get('Item'),
@@ -159,7 +158,8 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 			}
 		}
 		else if (ct!=='Circled'){
-			cmp = widget.insert(0, {
+			widget.insert(0, {
+				item: item,
 				type: item.getModelName(),
 				message: this.getMessage(change),
 				ContainerId: cid,
