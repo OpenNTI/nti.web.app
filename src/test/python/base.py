@@ -10,7 +10,7 @@ from selenium.webdriver.common.keys import Keys
 
 class Configuration():
 	
-	def __init__(self, users=(), url=None, driver=None):
+	def __init__(self, url=None, users=(), driver=None):
 		self.url = url
 		self.users = users
 		self.driver = driver
@@ -35,7 +35,7 @@ class Configuration():
 		# driver
 		driver = cls._get_str_option(config, section='data', name="driver")
 		
-		c = Configuration(users, url, driver)
+		c = Configuration(url, users, driver)
 		return c
 		
 	@classmethod
@@ -117,17 +117,28 @@ def logout(resp):
 # ----------------------------------
 
 TEST_URL = os.environ.get('TEST_URL', 'http://localhost:8081/NextThoughtWebApp/')
+TEST_USER = os.environ.get('TEST_USER', 'jonathan.grimes@nextthought.com')
+TEST_PASSWORD = os.environ.get('TEST_PASSWORD', 'jonathan.grimes')
 
 class WebAppTestBase(unittest.TestCase):
 	
 	@classmethod
 	def setUpClass(cls):
-		#TODO: pass the config file
-		cls.setUpApp()
+		ini_file = getattr(cls, 'ini_file', None)
+		if ini_file:
+			cls.setUpApp(ini_file)
+		else:
+			c = Configuration( TEST_URL, ((TEST_USER, TEST_PASSWORD),),  None)
+			cls.setUpAppWithConfig(c)
 		
 	@classmethod
 	def setUpApp(cls, ini_file):
 		config = Configuration.read(ini_file)
+		cls.setUpAppWithConfig(config)
+		
+	@classmethod
+	def setUpAppWithConfig(cls, config):
+		cls.config = config
 		cls.users = config.users
 		cls.url = config.url or TEST_URL
 		cls.driver = config.driver
