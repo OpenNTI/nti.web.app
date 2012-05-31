@@ -72,7 +72,7 @@ class Configuration():
 		return cls._get_option(config.getfloat, section, name, default)
 		
 	@classmethod
-	def _get_option(method, section, name, default):
+	def _get_option(cls, method, section, name, default):
 		try:
 			return method(section, name)
 		except:
