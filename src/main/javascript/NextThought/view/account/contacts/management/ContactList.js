@@ -84,6 +84,22 @@ Ext.define('NextThought.view.account.contacts.management.ContactList',{
 		});
 
 		this.insert(0, items);
+		this.expandFirstItemOnly();
+	},
+
+
+	/**
+	 * This method causes the group list to be expanded for the very first item in the list.
+	 * The rest of the items are automatically collapsed.  Thus, if you always add at 0, the thing
+	 * you just added will be expanded.
+	 */
+	expandFirstItemOnly: function(){
+		var i = 0, item;
+		for (i; i < this.items.getCount(); i++) {
+			item = this.items.get(i);
+			if (i === 0){ item.expand(); }
+			else{ item.collapse(); }
+		}
 	},
 
 
