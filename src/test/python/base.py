@@ -26,9 +26,18 @@ class Configuration():
 		users = eval(users)
 		if not users or not isinstance(users, (list, tuple)):
 			raise ValueError('invalid users array value')
+		
+		tmp = []
 		for t in users:
-			assert isinstance(t, tuple) and len(t)==2, 'incorrect user/password tuple'
-			
+			assert isinstance(t, tuple), 'incorrect user/password tuple'
+			name = t[0]
+			pwd = t[1] if len(t) >=2 else name
+			pwd = pwd or name
+			if '@' not in name:
+				name += '@nextthought.com'
+			tmp.append((name, pwd))
+		users = tuple(tmp)
+		
 		# url
 		url = cls._get_str_option(config, section='data', name="url")
 		
