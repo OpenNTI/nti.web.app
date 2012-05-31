@@ -1,4 +1,5 @@
 import os
+import six
 import time
 import webtest
 import unittest
@@ -29,7 +30,13 @@ class Configuration():
 		
 		tmp = []
 		for t in users:
+			if isinstance(t, six.string_types): # if string change to a tuple
+				t = (t,)
+			
+			# check type
 			assert isinstance(t, tuple), 'incorrect user/password tuple'
+			
+			# gather username and pwd
 			name = t[0]
 			pwd = t[1] if len(t) >=2 else name
 			pwd = pwd or name
