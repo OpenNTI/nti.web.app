@@ -90,6 +90,7 @@ mkdir $DEST/assets/lib/$EXT/resources/css
 mkdir $DEST/assets/lib/$EXT/resources/themes
 mkdir $DEST/assets/lib/$EXT/resources/themes/images
 mkdir $DEST/assets/lib/mathquill
+mkdir $DEST/assets/lib/fonts
 mkdir $DEST/assets/js
 
 #Compile SCSS to CSS
@@ -102,6 +103,7 @@ cp -R src/main/resources/misc $DEST/assets
 cp -R lib/$EXT/resources/css/ext-all-gray.css $DEST/assets/lib/$EXT/resources/css
 cp -R lib/$EXT/resources/themes/images/gray $DEST/assets/lib/$EXT/resources/themes/images
 cp -R lib/mathquill $DEST/assets/lib/mathquill
+cp -R lib/fonts $DEST/assets/lib/fonts
 
 if [ "$DEBUG" = "true" ]; then
 	cp -R src/main/javascript $DEST/assets/js

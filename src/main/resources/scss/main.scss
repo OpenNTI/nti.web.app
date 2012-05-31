@@ -6,6 +6,9 @@
 @import "_variables.scss";
 @import "_common-mixins.scss";
 
+//Add any extra fonts
+@import "_fonts.scss";
+
 //For the reader panel, this must be first
 @import "_panel-reset.scss";
 @import "_window-treatments.scss";
@@ -32,4 +35,13 @@ body.x-border-layout-ct { background: white; }
 
 .x-body {
 	font-family: 'Open Sans', 'Helvetica', arial, sans-serif !important;
+}
+
+@font-face {
+  font-family: Stix;
+  src: url(font/Symbola.eot);
+  src: local("Symbola Regular"), local("Symbola"),
+    url(font/Symbola.ttf) format("truetype"),
+    url(font/Symbola.otf) format("opentype"),
+    url(font/Symbola.svg#Symbola) format("svg");
 }
