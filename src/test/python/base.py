@@ -5,6 +5,7 @@ import webtest
 import unittest
 import ConfigParser
 
+from lxml import etree
 from selenium.webdriver.common.keys import Keys
 
 # ----------------------------------
@@ -122,9 +123,8 @@ def login(resp, user, password, wait_after_login=5):
 	wait_for_text(resp, "Username:","//label")
 	time.sleep(1)
 	resp.doc.input(name="username").value = user
-	resp.doc.input(Keys.RETURN)
 	resp.doc.input(name="password").value = password
-	time.sleep(1)
+	is_node_displayed(resp, 'submit', "//button")
 	resp.doc.button(buttonid='submit').click()
 	if wait_after_login:
 		time.sleep(wait_after_login)
@@ -142,39 +142,46 @@ TEST_PASSWORD = os.environ.get('TEST_PASSWORD', 'jonathan.grimes')
 
 class WebAppTestBase(unittest.TestCase):
 	
-	@classmethod
-	def setUpClass(cls):
-		ini_file = getattr(cls, 'ini_file', None)
-		if ini_file:
-			cls.setUpApp(ini_file)
-		else:
-			c = Configuration( TEST_URL, ((TEST_USER, TEST_PASSWORD),),  None)
-			cls.setUpAppWithConfig(c)
-		
-	@classmethod
-	def setUpApp(cls, ini_file):
-		config = Configuration.read(ini_file)
-		cls.setUpAppWithConfig(config)
-		
-	@classmethod
-	def setUpAppWithConfig(cls, config):
-		cls.config = config
-		cls.users = config.users
-		cls.url = config.url or TEST_URL
-		cls.driver = config.driver
-		if cls.driver:
-			os.environ.setdefault('SELENIUM_DRIVER', cls.driver)
-		cls.app = webtest.SeleniumApp(url= cls.url)
-		
-	@classmethod
-	def tearDownClass(cls):
-		cls.app.close()
+	# -------------setup/teardown------------
 	
 	def setUp(self):
+		ini_file = getattr(self, 'ini_file', None)
+		if ini_file:
+			self.setUpApp(ini_file)
+		else:
+			c = Configuration( TEST_URL, ((TEST_USER, TEST_PASSWORD),),  None)
+			self.setUpAppWithConfig(c)
+		
+	def setUpApp(self, ini_file):
+		config = Configuration.read(ini_file)
+		self.setUpAppWithConfig(config)
+		
+	def setUpAppWithConfig(self, config):
+		self.config = config
+		self.users = config.users
+		self.url = config.url or TEST_URL
+		self.driver = config.driver
+		if self.driver:
+			os.environ.setdefault('SELENIUM_DRIVER', self.driver)
+		self.app = webtest.SeleniumApp(url= self.url)
 		try:
 			self.resp = self.app.get(self.url)
 		except Exception, e:
 			self.fail(str(e))
+		
+	def tearDown(self):
+		self.app.close()
+		
+	# -----------helper functions-------------
+	
+	def elem_in_tree(self, node, element, value):		
+		tree = etree.ElementTree(self.resp.lxml)
+		for item in tree.iter(node):
+			if element == 'text' and item.text == value:
+				return True
+			if item.get(element) == value:
+				return True
+		else: return False
 			
 	def login(self, user=None, password=None, wait_after_login=5):
 		credentials = self.users[0]
@@ -193,5 +200,4 @@ class WebAppTestBase(unittest.TestCase):
 		if not wait_for_node(self.resp, xpath, timeout):
 			self.fail("time out")
 
-if __name__ == '__main__':
-	unittest.main()
+
