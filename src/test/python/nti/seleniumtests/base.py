@@ -8,10 +8,7 @@ from nti.seleniumtests import test_password
 
 from nti.seleniumtests import login
 from nti.seleniumtests import logout
-from nti.seleniumtests import wait_for_text
-from nti.seleniumtests import wait_for_node
-#from nti.seleniumtests import has_element_with_text
-#from nti.seleniumtests import has_element_with_attr_value
+from nti.seleniumtests import wait_for_node_to_display
 
 from nti.seleniumtests.config import Configuration
 
@@ -38,7 +35,6 @@ class WebAppTestBase(unittest.TestCase):
 		self.url = config.url or test_url()
 		if self.driver:
 			os.environ.setdefault('SELENIUM_DRIVER', self.driver)
-		
 		self.app = webtest.SeleniumApp(url= self.url)
 		try:
 			self.resp = self.app.get(self.url)
@@ -50,11 +46,11 @@ class WebAppTestBase(unittest.TestCase):
 
 	# -----------------------
 			
-	def login(self, user=None, password=None, wait_after_login=5):
+	def login(self, user=None, password=None):
 		credentials = self.users[0]
 		user = user or credentials[0]
 		password = password or credentials[1]
-		login(self.resp, user, password, wait_after_login)
+		login(self.resp, user, password)
 
 	def logout(self):
 		logout(self.resp)
