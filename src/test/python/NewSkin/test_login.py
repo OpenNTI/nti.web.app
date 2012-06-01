@@ -12,7 +12,6 @@ class TestLogin(WebAppTestBase):
     ini_file = os.path.join(__path__, 'config.ini')
     
     def test_login(self):
-        print self.ini_file
         self.login(self.users[0][0], self.users[0][1])
         tree = etree.ElementTree(self.resp.lxml)
         assert_that(etree.tostring(tree.find('//title')), is_('<title>NextThought App</title>'))

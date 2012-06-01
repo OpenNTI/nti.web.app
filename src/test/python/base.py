@@ -52,8 +52,9 @@ class Configuration():
 		# driver
 		driver = cls._get_str_option(config, section='data', name="driver")
 		
-		c = Configuration(url, users, driver)
-		return c
+		result = Configuration(url, users, driver)
+		result.config = config
+		return result
 		
 	@classmethod
 	def _get_str_option(cls, config, section=ConfigParser.DEFAULTSECT, name=None, default=None):
@@ -119,9 +120,11 @@ def wait_for_text(resp, text, xpath, timeout=60):
 			
 def login(resp, user, password, wait_after_login=5):
 	wait_for_text(resp, "Username:","//label")
+	time.sleep(1)
 	resp.doc.input(name="username").value = user
 	resp.doc.input(Keys.RETURN)
 	resp.doc.input(name="password").value = password
+	time.sleep(1)
 	resp.doc.button(buttonid='submit').click()
 	if wait_after_login:
 		time.sleep(wait_after_login)
@@ -173,11 +176,11 @@ class WebAppTestBase(unittest.TestCase):
 		except Exception, e:
 			self.fail(str(e))
 			
-	def login(self, user=None, password=None):
+	def login(self, user=None, password=None, wait_after_login=5):
 		credentials = self.users[0]
 		user = user or credentials[0]
 		password = password or credentials[1]
-		login(self.resp, user, password)
+		login(self.resp, user, password, wait_after_login)
 
 	def logout(self):
 		logout(self.resp)
