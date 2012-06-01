@@ -55,21 +55,20 @@ def wait_for_text(resp, text, xpath, timeout=60):
 			
 # ---------------------------------------	
 
-def has_element_with_text(resp, node, value):
+def as_the_text_of(node, resp):
 	tree = etree.ElementTree(resp.lxml)
+	items = [node]
 	for item in tree.iter(node):
-		if item.text == value:
-			return True
-	else:
-		return False
+		items.append(item.text)
+	return items
 	
-def has_element_with_attr_value(resp, node, attribute, value):		
+def as_the_value_of(element, node, resp):		
 	tree = etree.ElementTree(resp.lxml)
+	items = [node]
 	for item in tree.iter(node):
-		if item.get(attribute) == value:
-			return True
-	else:
-		return False
+		value = item.get(element)
+		items.append(value)
+	return items
 		
 # ---------------------------------------	
 
@@ -84,6 +83,11 @@ def login(resp, user, password, wait_after_login=5):
 		time.sleep(wait_after_login)
 		
 def logout(resp):
-	#TODO: Fix for new skin
+	tree = etree.ElementTree(resp.lxml)
+	for item in tree.iter('div'):
+		if item.get('id') == 'status':
+			item.click()
+			print 'clicked'
+	time.sleep(3)
 	resp.doc.xpath("//img[contains(@class, 'session-logout')]/..").click()		
 	wait_for_text(resp, "Username:","//label")

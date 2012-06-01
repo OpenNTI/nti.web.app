@@ -5,7 +5,7 @@ from nti.seleniumtests.base import  WebAppTestBase
 
 from nti.seleniumtests import as_the_text_of
 from nti.seleniumtests import as_the_value_of
-from nti.seleniumtests.isintree import is_in_tree
+from nti.seleniumtests.matchers import is_in_tree
 from hamcrest import assert_that
 
 __path__ = os.path.split(__file__)[0]
@@ -27,7 +27,7 @@ class TestLogin(WebAppTestBase):
         assert_that('message', is_in_tree(as_the_value_of('id', 'div', self.resp)))
         assert_that('message', is_in_tree(as_the_value_of('class', 'div', self.resp)))
         assert_that('Please try again, there was a problem logging in.', is_in_tree(as_the_text_of('div', self.resp)))
-    
+        
 #    def test_logout(self):pass
 #        self.login()
     
