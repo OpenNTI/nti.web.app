@@ -6,7 +6,6 @@ import unittest
 import ConfigParser
 
 from lxml import etree
-from selenium.webdriver.common.keys import Keys
 
 # ----------------------------------
 
