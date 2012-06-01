@@ -33,7 +33,7 @@ if(window['MathJax']){
         "HTML-CSS": {
             preferredFont: "STIX",
             availableFonts: ["STIX"],
-            webFont: null,
+            webFont: "STIX",
             imageFont: null
         },
         TeX : {
