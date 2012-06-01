@@ -121,7 +121,6 @@ def wait_for_text(resp, text, xpath, timeout=60):
 			
 def login(resp, user, password, wait_after_login=5):
 	wait_for_text(resp, "Username:","//label")
-	time.sleep(1)
 	resp.doc.input(name="username").value = user
 	resp.doc.input(name="password").value = password
 	is_node_displayed(resp, 'submit', "//button")
@@ -130,9 +129,11 @@ def login(resp, user, password, wait_after_login=5):
 		time.sleep(wait_after_login)
 		
 def logout(resp):
-	#TODO: Fix for new skin
-	resp.doc.xpath("//img[contains(@class, 'session-logout')]/..").click()		
-	wait_for_text(resp, "Username:","//label")
+	status = resp.doc.get('div', id='submit')
+	status.click()
+	time.sleep(3)
+#	resp.doc.xpath("//img[contains(@class, 'session-logout')]/..").click()		
+#	wait_for_text(resp, "Username:","//label")
 
 # ----------------------------------
 
@@ -177,9 +178,14 @@ class WebAppTestBase(unittest.TestCase):
 	def elem_in_tree(self, node, element, value):		
 		tree = etree.ElementTree(self.resp.lxml)
 		for item in tree.iter(node):
-			if element == 'text' and item.text == value:
-				return True
 			if item.get(element) == value:
+				return True
+		else: return False
+		
+	def text_in_tree(self, node, value):		
+		tree = etree.ElementTree(self.resp.lxml)
+		for item in tree.iter(node):
+			if item.text == value:
 				return True
 		else: return False
 			
