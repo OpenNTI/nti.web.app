@@ -16,42 +16,15 @@ def test_password():
 
 # ---------------------------------------	
 	
-def is_node_displayed(resp, _id, xpath, timeout=60):
+def wait_for_node_to_display(resp, xpath, element, value, timeout=60):
 	for _ in range(timeout):
 		try:
-			node_id = resp.doc.xpath(xpath).id
-			if _id == node_id and id.is_displayed():
+			if resp.doc.xpath(xpath + "[contains(@" + element + ", " + value + ")]/..").exist():
 				break
 		except:
 			pass
-		time.sleep(1)
-		return True
-	else:
-		return False
-
-def wait_for_node(resp, xpath, timeout=60):
-	for _ in range(timeout):
-		try:
-			if resp.doc.xpath(xpath).exist(): 
-				break
-		except:
-			pass
-		time.sleep(1)
-		return True
-	else: 
-		return False
-			
-def wait_for_text(resp, text, xpath, timeout=60):
-	for _ in range(timeout):
-		try:
-			if text == resp.doc.xpath(xpath).text():
-				break
-		except: 
-			pass
-		time.sleep(1)
-		return True
-	else: 
-		return False
+		time.sleep(0.2)
+	time.sleep(1)
 			
 # ---------------------------------------	
 
@@ -72,22 +45,33 @@ def as_the_value_of(element, node, resp):
 		
 # ---------------------------------------	
 
-def login(resp, user, password, wait_after_login=5):
-	wait_for_text(resp, "Username:","//label")
-	time.sleep(1)
+def login(resp, user, password):
+	wait_for_node_to_display(resp, '//label', 'for', 'username')
 	resp.doc.input(name="username").value = user
+	wait_for_node_to_display(resp, '//label', 'for', 'password')
 	resp.doc.input(name="password").value = password
-	is_node_displayed(resp, 'submit', "//button")
+	wait_for_node_to_display(resp, '//button', 'id', 'submit')
 	resp.doc.button(buttonid='submit').click()
-	if wait_after_login:
-		time.sleep(wait_after_login)
 		
 def logout(resp):
-	tree = etree.ElementTree(resp.lxml)
-	for item in tree.iter('div'):
-		if item.get('id') == 'status':
-			item.click()
-			print 'clicked'
 	time.sleep(3)
-	resp.doc.xpath("//img[contains(@class, 'session-logout')]/..").click()		
-	wait_for_text(resp, "Username:","//label")
+	resp.doc.xpath("//div[contains(@class, 'my-account-wrapper')]/..").click()
+#	time.sleep(3)
+#	resp.doc.xpath("//div[contains(@style, 'border-width: 0px; left: 0px; margin: 0px; width: 250px; top')]/..").click()
+#	time.sleep(3)
+#	tree = etree.ElementTree(resp.lxml)
+#	resp.doc.button(buttonid='my-account-1038').click()
+#	resp.doc.xpath("//div[contains(@id, 'my-account-1038')]/..").click()
+#	time.sleep(5)
+#	resp.doc.xpath("//div[contains(@id, 'menuitem-1047')]/..").click()
+#	time.sleep(5)
+	
+#	for item in tree.iter('div'):
+#		if item.get('class') == 'my-account-wrapper':
+#			print item.get('class')
+#			item.click()
+#			dir(item)
+#			print dir(item)
+	time.sleep(3)
+#	resp.doc.xpath("//img[contains(@class, 'session-logout')]/..").click()		
+#	wait_for_text(resp, "Username:","//label")
