@@ -1,7 +1,6 @@
-import actions
-import items
-from ConfigParser import SafeConfigParser
-from   base import WebAppTestBase
+import os
+
+from base import WebAppTestBase
 
 
 
@@ -15,28 +14,27 @@ import lxml.etree
 
 #----------------------------------------------------
     
-def library_mode (cls, resp, tag = 'span', attribute = 'class', attributeValue = 'home'):
-    click_button (cls, resp, tag,  attribute, attributeValue)
+def library_mode(resp, tag='span', attribute='class', attribute_value='home'):
+    click_button (resp, tag,  attribute, attribute_value)
 
-def search_mode (cls, resp, tag = 'span', attribute = 'class', attributeValue = 'search'):
-    click_button(cls, resp, tag, attribute, attributeValue)
+def search_mode(resp, tag='span', attribute='class', attribute_value='search'):
+    click_button(resp, tag, attribute, attribute_value)
     
-def click_button (cls, resp, tag = None, attribute = None, attributeValue = None ):
-    resp.doc.button (tag, attribute = attributeValue).wait_and_click()
-#def find_item_xpath(cls, tag = None, xpath = None, xpathValue = None):
-    
+def click_button(resp, tag=None, attribute=None):
+    resp.doc.button (tag, attribute=attribute).wait_and_click()
+
+__path__ = os.path.split(__file__)[0]
 
 #-----------------------------------------------------
 class Navigation(WebAppTestBase): 
-
-
-    def setUp():
-        WebAppTestBase.setupUpClass()
-        cls.credentials = WebAppTestBase.users[0]
-        WebAppTestBase.login(credentials[0],crendentials[1])
-        cls.resp = WebAppTestBase.resp
-        
-        change_mode(self, cls.resp, 'library')
+    
+    ini_file = os.path.join(__path__, 'config.ini')
+     
+    def setUp(self):
+        super(Navigation, self).setUp()
+        self.credentials = self.users[0]
+        self.login(self.credentials[0], self.crendentials[1])
+        #change_mode(self.resp, 'library')
         
         
     def __init__(self):
