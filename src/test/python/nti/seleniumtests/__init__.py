@@ -55,7 +55,7 @@ def wait_for_text(resp, text, xpath, timeout=60):
 			
 # ---------------------------------------	
 
-def is_text_element_in_tree(resp, node, value):
+def has_element_with_text(resp, node, value):
 	tree = etree.ElementTree(resp.lxml)
 	for item in tree.iter(node):
 		if item.text == value:
@@ -63,12 +63,10 @@ def is_text_element_in_tree(resp, node, value):
 	else:
 		return False
 	
-def elem_in_tree(resp, node, element, value):		
+def has_element_with_attr_value(resp, node, attribute, value):		
 	tree = etree.ElementTree(resp.lxml)
 	for item in tree.iter(node):
-		if element == 'text' and item.text == value:
-			return True
-		if item.get(element) == value:
+		if item.get(attribute) == value:
 			return True
 	else:
 		return False

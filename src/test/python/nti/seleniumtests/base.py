@@ -2,8 +2,6 @@ import os
 import webtest
 import unittest
 
-from lxml import etree
-
 from nti.seleniumtests import test_url
 from nti.seleniumtests import test_user
 from nti.seleniumtests import test_password
@@ -12,6 +10,8 @@ from nti.seleniumtests import login
 from nti.seleniumtests import logout
 from nti.seleniumtests import wait_for_text
 from nti.seleniumtests import wait_for_node
+from nti.seleniumtests import has_element_with_text
+from nti.seleniumtests import has_element_with_attr_value
 
 from nti.seleniumtests.config import Configuration
 
@@ -47,17 +47,14 @@ class WebAppTestBase(unittest.TestCase):
 		
 	def tearDown(self):
 		self.app.close()
-		
-	# -----------helper functions-------------
+
+	# -----------------------
 	
-	def elem_in_tree(self, node, element, value):		
-		tree = etree.ElementTree(self.resp.lxml)
-		for item in tree.iter(node):
-			if element == 'text' and item.text == value:
-				return True
-			if item.get(element) == value:
-				return True
-		else: return False
+	def has_element_with_text(self, element, value):
+		return has_element_with_text(self.resp, element, value)
+	
+	def has_element_with_attr_value(self, element, attribute, value):
+		return has_element_with_attr_value(self.resp,  element, attribute, value)
 			
 	def login(self, user=None, password=None, wait_after_login=5):
 		credentials = self.users[0]
