@@ -5,18 +5,18 @@ import ConfigParser
 # ----------------------------------
 
 def get_str_option(config, section=ConfigParser.DEFAULTSECT, name=None, default=None):
-	return get_option(config.get, section, name, default)
+	return _get_option(config.get, section, name, default)
 
 def get_bool_option(config, section=ConfigParser.DEFAULTSECT, name=None, default=False):
-	return get_option(config.getboolean, section, name, default)
+	return _get_option(config.getboolean, section, name, default)
 
 def get_int_option(config, section=ConfigParser.DEFAULTSECT, name=None, default=None):
-	return get_option(config.getint, section, name, default)
+	return _get_option(config.getint, section, name, default)
 
 def get_float_option(config, section=ConfigParser.DEFAULTSECT, name=None, default=None):
-	return get_option(config.getfloat, section, name, default)
+	return _get_option(config.getfloat, section, name, default)
 	
-def get_option(cls, method, section, name, default):
+def _get_option(method, section, name, default):
 	try:
 		return method(section, name)
 	except:
