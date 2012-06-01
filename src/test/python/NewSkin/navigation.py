@@ -1,9 +1,44 @@
 import actions
 import items
 from ConfigParser import SafeConfigParser
+from   base import WebAppTestBase
 
-class Navigation(): 
 
+
+
+
+#finder methods 
+
+import html5lib
+from   html5lib import treewalkers, serializer, treebuilders
+import lxml.etree 
+
+#----------------------------------------------------
+    
+def library_mode (cls, resp, tag = 'span', attribute = 'class', attributeValue = 'home'):
+    click_button (cls, resp, tag,  attribute, attributeValue)
+
+def search_mode (cls, resp, tag = 'span', attribute = 'class', attributeValue = 'search'):
+    click_button(cls, resp, tag, attribute, attributeValue)
+    
+def click_button (cls, resp, tag = None, attribute = None, attributeValue = None ):
+    resp.doc.button (tag, attribute = attributeValue).wait_and_click()
+#def find_item_xpath(cls, tag = None, xpath = None, xpathValue = None):
+    
+
+#-----------------------------------------------------
+class Navigation(WebAppTestBase): 
+
+
+    def setUp():
+        WebAppTestBase.setupUpClass()
+        cls.credentials = WebAppTestBase.users[0]
+        WebAppTestBase.login(credentials[0],crendentials[1])
+        cls.resp = WebAppTestBase.resp
+        
+        change_mode(self, cls.resp, 'library')
+        
+        
     def __init__(self):
         self.parser_config = SafeConfigParser()
         self.parser_config.read ('config.ini')
