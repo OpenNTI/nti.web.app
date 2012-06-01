@@ -5,9 +5,14 @@ from lxml import etree
 
 # ---------------------------------------		
 
-TEST_URL = os.environ.get('TEST_URL', 'http://localhost:8081/NextThoughtWebApp/')
-TEST_USER = os.environ.get('TEST_USER', 'jonathan.grimes@nextthought.com')
-TEST_PASSWORD = os.environ.get('TEST_PASSWORD', 'jonathan.grimes')
+def test_url():
+	return os.environ.get('TEST_URL', 'http://localhost:8081/NextThoughtWebApp/')
+
+def test_user():
+	return os.environ.get('TEST_USER', 'jonathan.grimes@nextthought.com')
+
+def test_password():
+	return os.environ.get('TEST_PASSWORD', 'jonathan.grimes')
 
 # ---------------------------------------	
 	

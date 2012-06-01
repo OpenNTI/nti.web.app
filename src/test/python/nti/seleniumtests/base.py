@@ -4,9 +4,9 @@ import unittest
 
 from lxml import etree
 
-from nti.seleniumtests import TEST_URL
-from nti.seleniumtests import TEST_USER
-from nti.seleniumtests import TEST_PASSWORD
+from nti.seleniumtests import test_url
+from nti.seleniumtests import test_user
+from nti.seleniumtests import test_password
 
 from nti.seleniumtests import login
 from nti.seleniumtests import logout
@@ -24,7 +24,7 @@ class WebAppTestBase(unittest.TestCase):
 		if ini_file:
 			self.setUpApp(ini_file)
 		else:
-			config = Configuration( TEST_URL, ((TEST_USER, TEST_PASSWORD),),  None)
+			config = Configuration( test_url(), ((test_user(), test_password()),),  None)
 			self.setUpAppWithConfig(config)
 		
 	def setUpApp(self, ini_file):
@@ -35,7 +35,7 @@ class WebAppTestBase(unittest.TestCase):
 		self.config = config
 		self.users = config.users
 		self.driver = config.driver
-		self.url = config.url or TEST_URL
+		self.url = config.url or test_url()
 		if self.driver:
 			os.environ.setdefault('SELENIUM_DRIVER', self.driver)
 		
