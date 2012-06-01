@@ -114,14 +114,33 @@ Ext.define('NextThought.providers.Location', {
 	getNavigationInfo: function(ntiid) {
 		var loc = Library.findLocation(ntiid),
 			info = {},
-			re = /topic|toc/i,
+			topicOrTocRegex = /topic|toc/i,
 			slice = Array.prototype.slice;
 
-		function is(t){ return t && re.test(t.tagName); }
+		//This function returns true if the node submitted matches a regex looking for topic or toc
+		function isTopicOrToc(node){
+			if (!node){return false;}
+			var result = false,
+				topicOrToc = topicOrTocRegex.test(node.tagName),
+				href = (node.getAttribute) ? node.getAttribute('href') : null;
 
-		function getRef(n){
-			if(!n || !n.getAttribute){ return null; }
-			return n.getAttribute('ntiid') || null;
+			//decide if this is a navigate-able thing, it most be a topic or toc, it must
+			//have an href, and that href must NOT have a anchor
+			if (topicOrToc && href && href.lastIndexOf('#') === -1) {
+				result = true;
+			}
+
+			return result;
+		}
+
+		//returns the NTIID attribute of the node, or null if it's not there.
+		function getRef(node){
+			if(!node || !node.getAttribute){
+				console.error('TOC ERROR: Unable to get ntiid from node', node);
+				return null;
+			}
+
+			return node.getAttribute('ntiid') || null;
 		}
 
 		function child(n,first){
@@ -132,7 +151,7 @@ Ext.define('NextThought.providers.Location', {
 				topics.reverse();
 			}
 
-			while(topics.length && !is(topics.peek())){topics.pop();}
+			while(topics.length && !isTopicOrToc(topics.peek())){topics.pop();}
 			if(n && topics.length){
 				v = topics.peek();
 				return first? v : child(v,first);
@@ -140,21 +159,28 @@ Ext.define('NextThought.providers.Location', {
 			return first? null : n;
 		}
 
+		//returns either the previous or next actionable node (topic or toc), or null if
+		//we never find anything, meaning we are at one end or the other...
+		function sibling(node,previous){
+			if (!node){return null;}
 
-		function sibling(n,dir){
-			var k = dir+'Sibling',x;
-			if(n){
-				x = n[k];
-				x = (x && is(x)) ? x : null;
-				return x || sibling(n[k],dir);
+			var siblingMethod = previous ? 'previousSibling' : 'nextSibling', //figure direction
+				siblingNode = node[siblingMethod]; //execute directional sibling method
+
+			//If the sibling is TOC or topic, we are done here...
+			if (isTopicOrToc(siblingNode)){
+				return siblingNode;
 			}
-			return null;
+			//If not, recurse in the same direction
+			else {
+				return sibling(node[siblingMethod],previous);
+			}
 		}
 
 		loc = loc ? loc.location : null;
 		if(loc) {
-			info.previous = getRef(child(sibling(loc,'previous')) || loc.parentNode);
-			info.next = getRef(child(loc,true) || sibling(loc,'next') || sibling(loc.parentNode,'next'));
+			info.previous = getRef(child(sibling(loc,true)) || loc.parentNode);
+			info.next = getRef(child(loc,true) || sibling(loc,false) || sibling(loc.parentNode,false));
 		}
 
 		return info;
