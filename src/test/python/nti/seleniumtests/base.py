@@ -10,8 +10,8 @@ from nti.seleniumtests import login
 from nti.seleniumtests import logout
 from nti.seleniumtests import wait_for_text
 from nti.seleniumtests import wait_for_node
-from nti.seleniumtests import has_element_with_text
-from nti.seleniumtests import has_element_with_attr_value
+#from nti.seleniumtests import has_element_with_text
+#from nti.seleniumtests import has_element_with_attr_value
 
 from nti.seleniumtests.config import Configuration
 
@@ -49,12 +49,6 @@ class WebAppTestBase(unittest.TestCase):
 		self.app.close()
 
 	# -----------------------
-	
-	def has_element_with_text(self, element, value):
-		return has_element_with_text(self.resp, element, value)
-	
-	def has_element_with_attr_value(self, element, attribute, value):
-		return has_element_with_attr_value(self.resp,  element, attribute, value)
 			
 	def login(self, user=None, password=None, wait_after_login=5):
 		credentials = self.users[0]
