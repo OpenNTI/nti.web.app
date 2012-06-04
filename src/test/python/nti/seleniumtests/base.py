@@ -1,6 +1,6 @@
 import os
 import webtest
-import unittest
+import unittest, time
 
 from nti.seleniumtests import test_url
 from nti.seleniumtests import test_user
@@ -8,6 +8,7 @@ from nti.seleniumtests import test_password
 
 from nti.seleniumtests import login
 from nti.seleniumtests import logout
+from nti.seleniumtests import wait_for_text_to_display
 from nti.seleniumtests import wait_for_node_to_display
 
 from nti.seleniumtests.config import Configuration
@@ -43,6 +44,7 @@ class WebAppTestBase(unittest.TestCase):
 		
 	def tearDown(self):
 		self.app.close()
+		time.sleep(1)
 
 	# -----------------------
 			
@@ -55,12 +57,12 @@ class WebAppTestBase(unittest.TestCase):
 	def logout(self):
 		logout(self.resp)
 	
-	def wait_for_text_by_xpath(self, text, xpath, timeout=60):
-		if not wait_for_text(self.resp, text, xpath, timeout):
+	def wait_for_text_by_xpath(self, xpath, text, timeout=60):
+		if not wait_for_text_to_display(self.resp, xpath, text, timeout):
 			self.fail("time out")
 	
-	def wait_for_node_by_xpath(self, xpath, timeout=60):
-		if not wait_for_node(self.resp, xpath, timeout):
+	def wait_for_node_by_xpath(self, xpath, element, value, timeout=60):
+		if not wait_for_node_to_display(self.resp, xpath, element, value, timeout):
 			self.fail("time out")
 
 
