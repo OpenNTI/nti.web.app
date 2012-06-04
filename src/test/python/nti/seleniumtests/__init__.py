@@ -15,8 +15,18 @@ def test_password():
 	return os.environ.get('TEST_PASSWORD', 'jonathan.grimes')
 
 # ---------------------------------------	
+
+def wait_for_text_to_display(resp, xpath, value, timeout=10):
+	for _ in range(timeout):
+		try:
+			if resp.doc.xpath(xpath).text() == value:
+				break
+		except:
+			pass
+		time.sleep(0.2)
+	time.sleep(1)
 	
-def wait_for_node_to_display(resp, xpath, element, value, timeout=60):
+def wait_for_node_to_display(resp, xpath, element, value, timeout=10):
 	for _ in range(timeout):
 		try:
 			if resp.doc.xpath(xpath + "[contains(@" + element + ", " + value + ")]/..").exist():
@@ -25,24 +35,7 @@ def wait_for_node_to_display(resp, xpath, element, value, timeout=60):
 			pass
 		time.sleep(0.2)
 	time.sleep(1)
-			
-# ---------------------------------------	
-
-def as_the_text_of(node, resp):
-	tree = etree.ElementTree(resp.lxml)
-	items = [node]
-	for item in tree.iter(node):
-		items.append(item.text)
-	return items
 	
-def as_the_value_of(element, node, resp):		
-	tree = etree.ElementTree(resp.lxml)
-	items = [node]
-	for item in tree.iter(node):
-		value = item.get(element)
-		items.append(value)
-	return items
-		
 # ---------------------------------------	
 
 def login(resp, user, password):
@@ -52,12 +45,15 @@ def login(resp, user, password):
 	resp.doc.input(name="password").value = password
 	wait_for_node_to_display(resp, '//button', 'id', 'submit')
 	resp.doc.button(buttonid='submit').click()
+	wait_for_text_to_display(resp, '//title', 'NextThough App')
 		
 def logout(resp):
 	time.sleep(3)
 	resp.doc.xpath("//div[contains(@class, 'my-account-wrapper')]/..").click()
-#	time.sleep(3)
-#	resp.doc.xpath("//div[contains(@style, 'border-width: 0px; left: 0px; margin: 0px; width: 250px; top')]/..").click()
+	time.sleep(3)
+	print dir(resp)
+	print dir(resp.doc)
+	print resp.doc.xpath("//div/div").text()
 #	time.sleep(3)
 #	tree = etree.ElementTree(resp.lxml)
 #	resp.doc.button(buttonid='my-account-1038').click()
