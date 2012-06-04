@@ -1,11 +1,8 @@
 import os
+import time
 import unittest
 from nti.seleniumtests.navigation.navigation import WebAppNavigation
-
 from nti.seleniumtests.base import  WebAppTestBase
-
-from nti.seleniumtests import as_the_text_of
-from nti.seleniumtests import as_the_value_of
 from nti.seleniumtests.matchers import is_in_tree
 from hamcrest import assert_that
 
@@ -27,25 +24,26 @@ class TestNavigation(WebAppNavigation):
         
         #TO-DO: Optimize this
         for book in BOOKS: 
-            assert_that (book, is_in_tree (as_the_text_of('div', self.resp)))
+            assert_that (book, is_in_tree ('div', self.resp))
         
     def test_open_book(self):
         self.open_library()
         self.open_book ()
+        time.sleep(5)
         for chapter in CHAPTERS: 
-            assert_that (chapter, is_in_tree(as_the_text_of ('div', self.resp)))
+            assert_that (chapter, is_in_tree('div', self.resp))
                 
-    def test_open_chapter (self):  
+    #def test_open_chapter (self):  
     
-        self.open_library()
-        self.open_book()
-        self.open_chapter()
+     #   self.open_library()
+      #  self.open_book()
+       # self.open_chapter()
     
-        for section in SECTIONS: 
-            assert_that (section,is_in_tree(as_the_text_of ('div', self.resp)))
+        #for section in SECTIONS: 
+         #   assert_that (section,is_in_tree( 'div', self.resp, 'class'))
             
-    def test_open_section(self):
-        self.open_section()
+    #def test_open_section(self):
+     #   self.open_section()
     
         
         
