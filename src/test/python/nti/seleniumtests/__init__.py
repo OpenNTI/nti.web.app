@@ -26,10 +26,10 @@ def wait_for_text_to_display(resp, xpath, value, timeout=10):
 		time.sleep(0.2)
 	time.sleep(1)
 	
-def wait_for_node_to_display(resp, xpath, element, value, timeout=10):
+def wait_for_node_to_display(resp, xpath, timeout=10):
 	for _ in range(timeout):
 		try:
-			if resp.doc.xpath(xpath + "[contains(@" + element + ", " + value + ")]/..").exist():
+			if resp.doc.xpath(xpath).exist():
 				break
 		except:
 			pass
@@ -38,16 +38,16 @@ def wait_for_node_to_display(resp, xpath, element, value, timeout=10):
 	
 # ---------------------------------------	
 
-def login(resp, user, password):
-	wait_for_node_to_display(resp, '//label', 'for', 'username')
+def login(resp, user, password, xpath_builder):
+	wait_for_node_to_display(resp, xpath_builder('//label', 'for', 'username'))
 	resp.doc.input(name="username").value = user
-	wait_for_node_to_display(resp, '//label', 'for', 'password')
+	wait_for_node_to_display(resp, xpath_builder('//label', 'for', 'password'))
 	resp.doc.input(name="password").value = password
-	wait_for_node_to_display(resp, '//button', 'id', 'submit')
+	wait_for_node_to_display(resp, xpath_builder('//button', 'id', 'submit'))
 	resp.doc.button(buttonid='submit').click()
 	wait_for_text_to_display(resp, '//title', 'NextThough App')
 		
-def logout(resp):
+def logout(resp, xpath):
 	time.sleep(3)
 	resp.doc.xpath("//div[contains(@class, 'my-account-wrapper')]/..").click()
 	time.sleep(3)
