@@ -11,24 +11,22 @@ class WebAppNavigation (WebAppTestBase):
         self.login()
         
     def open_library (self):
-        
-        #Remove time.sleep()
-        time.sleep(3)
         self.resp.doc.xpath ("//span[contains(@class, 'x-btn-icon library')]/..").click()
     
     
     def open_book(self,title = 'Prealgebra'):
-        time.sleep(3)
         self.resp.doc.xpath ("//div[contains (@class, 'title') and text () ='" + title + "']/..").click()
         
     def open_chapter (self, title = 'Exponents'):
-        time.sleep(5)
-        self.resp.doc.xpath ("//div[contains (@class, 'x-grid-cell-inner') and text() ='" + title + "']/..").click() 
+        self.resp.doc.xpath ("//div[contains (@class, 'x-grid-row') and text() ='" + title + "']/..").click() 
       
-
+    def open_section (self, title = 'Squares'):
+        self.resp.doc.xpath ("//div[contains (@class, 'x-grid-row  x-grid-tree-node-leaf') and text () = '" + title + "']/..").click()
         
         
-    
+    def switch_frame (self):
+        print 'switch frame'
+        
     def tearDown (self):
         self.app.close()
         
