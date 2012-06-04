@@ -38,12 +38,12 @@ def wait_for_node_to_display(resp, xpath, timeout=10):
 	
 # ---------------------------------------	
 
-def login(resp, user, password, xpath_builder):
-	wait_for_node_to_display(resp, xpath_builder('//label', 'for', 'username'))
+def login(resp, user, password, xpath_contains_builder):
+	wait_for_node_to_display(resp, xpath_contains_builder('//label', 'for', 'username'))
 	resp.doc.input(name="username").value = user
-	wait_for_node_to_display(resp, xpath_builder('//label', 'for', 'password'))
+	wait_for_node_to_display(resp, xpath_contains_builder('//label', 'for', 'password'))
 	resp.doc.input(name="password").value = password
-	wait_for_node_to_display(resp, xpath_builder('//button', 'id', 'submit'))
+	wait_for_node_to_display(resp, xpath_contains_builder('//button', 'id', 'submit'))
 	resp.doc.button(buttonid='submit').click()
 	wait_for_text_to_display(resp, '//title', 'NextThough App')
 		
