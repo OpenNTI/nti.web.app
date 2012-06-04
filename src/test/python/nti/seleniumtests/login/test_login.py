@@ -27,9 +27,9 @@ class TestLogin(WebAppTestBase):
 		assert_that('message', is_in_tree('div', self.resp, 'class'))
 		assert_that('Please try again, there was a problem logging in.', is_in_tree('div', self.resp))
 		
-	def test_logout(self):
-		self.login()
-		self.logout()
+#	def test_logout(self):
+#		self.login()
+#		self.logout()
 	
 if __name__ == "__main__":
 	unittest.main()
