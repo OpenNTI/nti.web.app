@@ -48,14 +48,14 @@ class WebAppTestBase(unittest.TestCase):
 
 	# -----------------------
 	
-	def xpath_builder(self, xpath, element, value):
+	def xpath_contains_builder(self, xpath, element, value):
 		return xpath + "[contains(@" + element + ", " + value + ")]/.."
 	
 	def login(self, user=None, password=None):
 		credentials = self.users[0]
 		user = user or credentials[0]
 		password = password or credentials[1]
-		login(self.resp, user, password, self.xpath_builder)
+		login(self.resp, user, password, self.xpath_contains_builder)
 
 	def logout(self):
 		logout(self.resp)
