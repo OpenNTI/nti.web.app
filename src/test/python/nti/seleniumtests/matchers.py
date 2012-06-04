@@ -1,6 +1,14 @@
 from hamcrest.core.base_matcher import BaseMatcher
+from lxml import etree
 
-from . import as_the_text_of as hewt
+def _values_of_node(node, resp, element):		
+	tree = etree.ElementTree(resp.lxml)
+	items = []
+	for item in tree.iter(node):
+		if element: value = item.get(element)
+		else: value = item.text
+		items.append(value)
+	return items
 
 class HasElementWithText(BaseMatcher):
 
@@ -10,7 +18,7 @@ class HasElementWithText(BaseMatcher):
 		self.element = element
 
 	def _matches( self, item ):
-		return hewt(self.resp, self.element, str(item))
+		return _values_of_node(self.resp, self.element, str(item))
 
 	def describe_to( self, description ):
 		description.append_text('text in element').append( str(self.element) )
@@ -19,13 +27,15 @@ def is_in_text_for_element( resp, element ):
 	return HasElementWithText( resp, element )
 
 class IsInTree(BaseMatcher):
-	def __init__(self, matcher):
-		self.node = matcher[0]
-		self.matcher = matcher[1:]
+	def __init__(self, node, resp, element):
+		self.node = node
+		self.resp = resp
+		self.element = element
 		
 	def _matches(self, item, mismatch_desciption=None):
 		self.item = item
-		return item in self.matcher
+		matcher = _values_of_node(self.node, self.resp, self.element)
+		return item in matcher
 	
 	def describe_mismatch(self, item, description):
 		description.append_description_of('lxml ' + self.node + ' attributes did not contain ' + item)
@@ -33,5 +43,5 @@ class IsInTree(BaseMatcher):
 	def describe_to(self, description):
 		description.append_description_of(self.node + ' attribute to contain ' + self.item)
 	
-def is_in_tree(attr):
-	return IsInTree(attr)
+def is_in_tree(node, resp, element=None):
+	return IsInTree(node, resp, element)
