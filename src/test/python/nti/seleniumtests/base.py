@@ -10,6 +10,9 @@ from nti.seleniumtests import login
 from nti.seleniumtests import logout
 from nti.seleniumtests import wait_for_text_to_display
 from nti.seleniumtests import wait_for_node_to_display
+from sst.actions import start
+from sst.actions import stop
+from sst.actions import go_to
 
 from nti.seleniumtests.config import Configuration
 
@@ -34,31 +37,29 @@ class WebAppTestBase(unittest.TestCase):
 		self.users = config.users
 		self.driver = config.driver
 		self.url = config.url or test_url()
-		if self.driver:
-			os.environ.setdefault('SELENIUM_DRIVER', self.driver)
-		self.app = webtest.SeleniumApp(url= self.url)
 		try:
-			self.resp = self.app.get(self.url)
+			start()
+			go_to(test_url())
 		except Exception, e:
 			self.fail(str(e))
 		
-	def tearDown(self):
-		self.app.close()
+	def tearDown(self): 
+		stop()
 		time.sleep(1)
 
 	# -----------------------
 	
 	def xpath_contains_builder(self, xpath, element, value):
-		return xpath + "[contains(@" + element + ", " + value + ")]/.."
+		return xpath + "[contains(@" + element + ", '" + value + "')]"
 	
 	def login(self, user=None, password=None):
 		credentials = self.users[0]
 		user = user or credentials[0]
 		password = password or credentials[1]
-		login(self.resp, user, password, self.xpath_contains_builder)
+		login(user, password, self.xpath_contains_builder)
 
 	def logout(self):
-		logout(self.resp)
+		logout(self.resp, self.xpath_contains_builder)
 	
 	def wait_for_text_by_xpath(self, xpath, text, timeout=60):
 		if not wait_for_text_to_display(self.resp, xpath, text, timeout):
