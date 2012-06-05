@@ -33,7 +33,7 @@ Ext.define('NextThought.model.Service', {
 
 
 	getUserDataSearchURL: function(){
-		var w = this.getCollection('Pages') || {},
+		var w = this.getWorkspace($AppConfig.username) || {},
 			l = this.getLinkFrom(w.Links||[], Globals.USER_GENERATED_DATA_SEARCH_REL);
 
 		if(!l) {
@@ -45,7 +45,7 @@ Ext.define('NextThought.model.Service', {
 
 
 	getUserUnifiedSearchURL: function(){
-		var w = this.getCollection('Pages') || {},
+		var w = this.getWorkspace($AppConfig.username) || {},
 			l = this.getLinkFrom(w.Links||[], Globals.USER_UNIFIED_SEARCH_REL);
 
 		if(!l) {
@@ -267,6 +267,48 @@ Ext.define('NextThought.model.Service', {
 
 		return q;
 	},
+
+
+	getPageInfo: function(ntiid, success, failure, scope){
+			var host = $AppConfig.server.host,
+				url = Ext.String.format("{0}{1}/{2}",
+					host,
+					this.getCollection('Objects', 'Global').href,
+					encodeURIComponent(ntiid)
+				),
+				q = {};
+
+			if(!ParseUtils.parseNtiid(ntiid)){
+				Ext.callback(failure,scope, ['']);
+				return;
+			}
+
+			try{
+				//lookup step
+				q.request = Ext.Ajax.request({
+					url: url,
+					scope: scope,
+					headers: {
+						Accept: 'application/vnd.nextthought.pageinfo+json'
+					},
+					callback: function(req,s,resp){
+						var pageInfos;
+						if(s){
+							pageInfos = ParseUtils.parseItems(resp.responseText);
+							Ext.callback(success, scope, pageInfos);
+						} else {
+							Ext.callback(failure,scope, [req,resp]);
+						}
+					}
+				});
+			}
+			catch(e){
+				Ext.callback(failure,scope,[{},e]);
+			}
+
+			return q;
+		},
+
 
 
 	getObject: function (ntiid, success, failure, scope){

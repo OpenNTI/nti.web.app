@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.Page', {
+Ext.define('NextThought.model.PageInfo', {
 	extend: 'NextThought.model.Base',
 	idProperty: 'ID',
 	fields: []

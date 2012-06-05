@@ -630,20 +630,20 @@ Ext.define('NextThought.view.content.Reader', {
 
 		me.clearAnnotations();
 
-		function success(resp){
-			function f(){
+		function success(pageInfo){
+			function f(resp){
 				me.splash.hide();
 				me.setReaderContent(resp, callback);
 			}
 
-			if(Ext.isIE){
-				me.resetFrame(f);
-			}
-			else {
-				f();
-			}
+			Ext.Ajax.request({
+			    url: pageInfo.getLink('content'),
+			    success: f,
+			    failure: function(response, opts) {
+			        console.log('server-side failure with status code ' + response.status);
+			    }
+			});
 		}
-
 
 		function failure(q,r){
 			console.error(arguments);
@@ -656,7 +656,7 @@ Ext.define('NextThought.view.content.Reader', {
 		}
 
 		if(ntiid) {
-			me.request = service.getObjectRaw(ntiid, success, failure, me);
+			me.request = service.getPageInfo(ntiid, success, failure, me);
 		}
 		else {
 			this.setSplash();
@@ -695,7 +695,7 @@ Ext.define('NextThought.view.content.Reader', {
 		//apply any styles that may be on the content's bory, to the NTIContent div:
 		this.applyBodyStyles(
 				resp.responseText.match(/<body([^>]*)>/i),
-				this.buildPath(resp.responseLocation));
+				this.buildPath(resp.request.options.url));
 
 
 		QuizUtils.setupQuiz(me.getDocumentElement());
@@ -749,7 +749,7 @@ Ext.define('NextThought.view.content.Reader', {
 		}
 
 		var me = this,
-			basePath = this.buildPath(request.responseLocation),
+			basePath = this.buildPath(request.request.options.url),
 			rc = me.loadedResources,
 
 			c = request.responseText,

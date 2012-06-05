@@ -7,11 +7,10 @@ Ext.define('NextThought.controller.Library', {
 	],
 
 	models: [
-		'Page'
+		'PageInfo'
 	],
 
 	stores: [
-		'Page',
 		'PageItem'
 	],
 
@@ -28,8 +27,6 @@ Ext.define('NextThought.controller.Library', {
 	init: function() {
 		this.pageStores = {};
 
-		this.application.on('session-ready', this.onSessionReady, this);
-
 		this.control({
 			'reader-panel':{
 				'annotations-load': this.onAnnotationsLoad
@@ -37,58 +34,56 @@ Ext.define('NextThought.controller.Library', {
 		},{});
 	},
 
-	onSessionReady: function(){
-		var app = this.application,
-			store = this.getPageStore(),
-			token = {};
-
-		app.registerInitializeTask(token);
-		store.on('load', function(s){ app.finishInitializeTask(token); }, this, {single: true});
-		store.load();
-	},
 
 	onAnnotationsLoad: function(cmp, containerId, callback) {
 		//clear the contributors for this page.  in case there are none.
-		ContributorsProvider.clearContributors(Globals.getViewIdFromComponent(cmp));
-		var ps = this.getStoreForPageItems(containerId);
+		//ContributorsProvider.clearContributors(Globals.getViewIdFromComponent(cmp));
+		var me = this;
 
-		if( ps ) {
+		function success(ps){
 			ps.onAnnotationsLoadCallback = {callback: callback, cmp: cmp};
 			ps.load();
+
+			//if we make it this far, also notify the stream controller
+			me.getController('Stream').containerIdChanged(containerId);
 		}
-		else {
+
+		function failure(){
 			Ext.callback(callback,null,[cmp]);
 		}
-		//When the reader changes, we need to tell the stream controller so he knows to
-		//update his data
-		this.getController('Stream').containerIdChanged(containerId);
+
+		me.getStoreForPageItems(containerId, success, me);
 	},
 
 
-	getStoreForPageItems: function(containerId){
-		var store = this.getPageStore(),
-			page = store.getById(containerId),
-			link = page ? page.getLink(Globals.USER_GENERATED_DATA) : null,
+	getStoreForPageItems: function(containerId, success, failure, scope){
+		var me = this,
 			ps = this.pageStores[containerId];
 
-
-		if(!link) {
-			console.log('no link found for this page, use standard page link and create a store for it.');
-			link = $AppConfig.server.host + '/dataserver2/users/' + escape($AppConfig.username) + '/' + escape('Pages(' + containerId + ')') + '/UserGeneratedData';
+		if (!containerId){
+			Ext.Error.raise('Cannot get store page items without containerId.', arguments);
 		}
 
-		if(!ps){
-			ps = Ext.create(
-				'NextThought.store.PageItem',
-				{ storeId:'page-store:'+containerId }
-			);
-
-			ps.on('load', this.onAnnotationStoreLoadComplete, this, {containerId: containerId});
-
-			this.pageStores[containerId] = ps;
+		//when the pageinfo comes back, we want to set up the page item store
+		function pageInfoSuccess(pi){
+			if (!ps){
+				ps = Ext.create(
+					'NextThought.store.PageItem',
+					{ storeId:'page-store:'+containerId }
+				);
+				ps.on('load', me.onAnnotationStoreLoadComplete, me, {containerId: containerId});
+				ps.proxy.url = pi.getLink(Globals.USER_GENERATED_DATA);
+				me.pageStores[containerId] = ps;
+			}
+			Ext.callback(success, scope, [ps]);
 		}
-		ps.proxy.url = link;
-		return ps;
+
+		function pageInfoFail(){
+			console.error('Failed to load page info for', containerId);
+			Ext.callback(failure, scope, []);
+		}
+
+		$AppConfig.service.getPageInfo(containerId, pageInfoSuccess, pageInfoFail, this);
 	},
 
 

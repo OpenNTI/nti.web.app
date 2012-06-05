@@ -7,12 +7,12 @@ Ext.define('NextThought.controller.Stream', {
 	],
 
 	stores: [
-		'Stream',
-		'Page'
+		'Stream'
 	],
 
 	models: [
-		'Change'
+		'Change',
+		'PageInfo'
 	],
 
 	views: [],
@@ -47,52 +47,25 @@ Ext.define('NextThought.controller.Stream', {
 		Socket.register({
 			'data_noticeIncomingChange': function(){me.incomingChange.apply(me, arguments);}
 		});
-
-//		this.control({},{});
 	},
 
 	onSessionReady: function(){
 		//Load page and root stream stores...
-		var ss = this.getStreamStore(),
-			ps = this.getPageStore();
-
-		ps.on('load', function(pageStore, records, success){
-			if (!success) {
-				console.error('Problem loading page store');
-				return;
-			}
-
-			ss.getProxy().url = ps.getById('tag:nextthought.com,2011-10:Root').getLink(Globals.RECURSIVE_STREAM);
-			ss.load();
-		},this, {single: true});
-
-
+		var ss = this.getStreamStore();
 		ss.on('add', this.updateStreamStore, this);
+
+		$AppConfig.service.getPageInfo('tag:nextthought.com,2011-10:Root',
+			//success:
+			function(pageInfo){
+				ss.getProxy().url = pageInfo.getLink(Globals.RECURSIVE_STREAM);
+				ss.load();
+			},
+			//failure:
+			function(){
+				console.error('Could not load Stream Store!', arguments);
+			},
+			this);
 	},
-
-
-//	onClick: function(item) {
-//		var cid = item.get('ContainerId'),
-//			ntiid = item.getId(),
-//			mType = item.getModelName(),
-//			rp, p;
-//
-//		if (mType !== 'Note' && mType !== 'Highlight') {
-//			return;
-//		}
-//
-//		//ensure reader panel is up
-//		rp = Ext.ComponentQuery.query('library-view-container')[0];
-//		rp.activate();
-//		p = rp.down('reader-panel').prefix;
-//
-//		LocationProvider.setLocation(cid, function(a){
-//			if (IdCache.hasIdentifier(ntiid)){
-//				//use default reader-panel prefix as we are always opening this in the reader panel
-//				a.scrollToId(IdCache.getComponentId(ntiid, null, p));
-//			}
-//		});
-//	},
 
 
 	//called by the Library controller when navigation occurs
@@ -148,49 +121,36 @@ Ext.define('NextThought.controller.Stream', {
 	},
 
 
-	getStoreForStream: function(containerId) {
-		//root all streams to the book...
-		containerId = Library.getLineage(containerId).last();
+	getStoreForStream: function(containerId, success, failure, scope) {
 		var me = this,
-			store = me.getController('Library').getPageStore(),
 			stores = me.streamStores,
 			ps = stores[containerId];
 
-		function buildStore(){
-			var ps,
-				link = store.getLink(containerId,Globals.RECURSIVE_STREAM);
+		//root all streams to the book...
+		containerId = Library.getLineage(containerId).last();
 
-			//page exists, no link
+		function pageInfoSuccess(pageInfo) {
+			var link = pageInfo.getLink(Globals.RECURSIVE_STREAM);
+			//page exists but no link, does this still happen?
 			if(link===null) {
-				return null;
-			}
-
-			//we don't know... reload page store
-			if(link===false) {
-				store.on('load', onReload, me, {single: true});
-				store.load();
+				return;
 			}
 
 			ps = stores[containerId] || Ext.create('NextThought.store.Stream',
-					{ storeId:'stream-store:'+containerId, containerId: containerId });
+				{ storeId:'stream-store:'+containerId, containerId: containerId });
 
 			ps.getProxy().url = link;
 			stores[containerId] = ps;
-			return ps;
+			Ext.callback(success, scope, [ps]);
 		}
 
-		function onReload(){
-			var link = store.getLink(containerId,Globals.RECURSIVE_STREAM),
-				s;
-			if(!link){
-				console.warn('Could not find page:', containerId);
-				return;
-			}
-			s = buildStore();
-			s.load();
+		//If we already have that store, just callback, otherwise go about loading it.
+		if (ps) {
+			Ext.callback(success, scope, [ps]);
 		}
-
-		return ps? ps : buildStore();
+		else {
+			$AppConfig.service.getPageInfo(containerId, pageInfoSuccess, failure, this);
+		}
 	},
 
 
@@ -200,10 +160,17 @@ Ext.define('NextThought.controller.Stream', {
 			me = this;
 
 		Ext.each(Library.getLineage(cid),function(cid){
-			var s = me.getStoreForStream(cid);
-			if( s ) {
-				s.add(change);
-			}
+			me.getStoreForStream(cid,
+				//success
+				function(s){
+					s.add(change);
+				},
+				//failure
+				function(){
+					console.error('could not load store for', cid, arguments);
+				},
+				me
+			);
 		});
 
 		//add it to the root stream store, why the heck not?
