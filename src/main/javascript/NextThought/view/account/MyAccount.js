@@ -53,7 +53,12 @@ Ext.define('NextThought.view.account.MyAccount',{
 				count++;
 			}
 		});
+		this.setNotificationCountValue(count);
 
+	},
+
+
+	setNotificationCountValue: function(count){
 		if (!this.rendered) {
 			this.renderData['notification-count'] = count || '';
 		}
@@ -81,7 +86,7 @@ Ext.define('NextThought.view.account.MyAccount',{
 
 
 	updateLastLoginTime: function(){
-		$AppConfig.userObject.set('lastLoginTime', Ext.Date.now()/1000);
-		$AppConfig.userObject.save();
+		$AppConfig.userObject.saveField('lastLoginTime', Ext.Date.now()/1000);
+		this.setNotificationCountValue(null);
 	}
 });
