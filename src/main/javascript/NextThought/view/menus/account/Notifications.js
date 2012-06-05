@@ -13,19 +13,22 @@ Ext.define('NextThought.view.menus.account.Notifications',{
 
 	renderTpl: [
 		'Notifications <tpl if="notificationcount &gt; 0">({notificationcount})</tpl>',
-		'<tpl for="notifications">',
-			'<div class="notification-item" id="{guid}">',
-				'<div class="name">{name}</div>',
-				'<div class="message">{message}</div>',
-			'</div>',
-		'</tpl>',
+		'<div class="notification-scroll-container">',
+			'<tpl for="notifications">',
+				'<div class="notification-item" id="{guid}">',
+					'<div class="name">{name}</div>',
+					'<div class="message">{message}</div>',
+				'</div>',
+			'</tpl>',
+		'</div>',
 		'<tpl if="!hideSeeAll">',
 			'<a href="#" class="notification-see-all">See All</a>',
 		'</tpl>'
 	],
 
 	renderSelectors: {
-		seeAll: 'a.notification-see-all'
+		seeAll: 'a.notification-see-all',
+		scrollBox: 'div.notification-scroll-container'
 	},
 
 
@@ -123,14 +126,15 @@ Ext.define('NextThought.view.menus.account.Notifications',{
 		event.preventDefault();
 		event.stopPropagation();
 
+		var height = this.el.getHeight() - 30;
+
 		this.el.update(this.renderTpl.apply({
 			'notifications': this.notifications,
 			hideShowAll: true
 		}));
 
-		//cause parent to layout
-		this.parentMenu.doLayout();
-
+		this.applyRenderSelectors();
+		this.scrollBox.setHeight(height);
 		return false;
 	},
 

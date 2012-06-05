@@ -67,7 +67,13 @@
 		padding-left: 20px !important;
 	}
 	.notifications {
-		cursor: default;
+        cursor: default;
+
+        .notification-scroll-container {
+            overflow: auto;
+            position: relative;
+        }
+
 		a {
 			font-size: 8.5pt;
 			font-weight: 300;
