@@ -52,11 +52,11 @@ class WebAppTestBase(unittest.TestCase):
 	def xpath_contains_builder(self, xpath, element, value):
 		return xpath + "[contains(@" + element + ", '" + value + "')]"
 	
-	def login(self, user=None, password=None):
+	def login(self, user=None, password=None, click=True):
 		credentials = self.users[0]
 		user = user or credentials[0]
 		password = password or credentials[1]
-		login(user, password, self.xpath_contains_builder)
+		login(user, password, click)
 
 	def logout(self):
 		logout(self.resp, self.xpath_contains_builder)
