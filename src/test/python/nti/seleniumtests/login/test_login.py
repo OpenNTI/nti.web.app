@@ -38,11 +38,11 @@ class TestLogin(WebAppTestBase):
 		assert_that('message', is_in_tree('div', 'class'))
 		assert_that('Please try again, there was a problem logging in.', is_in_tree('div'))
 		
-#	def test_logout(self):
-#		self.login()
-#		assert_that('NextThought App', is_in_tree('title', self.resp))
-#		self.logout()
-#		assert_that('NextThought Login', is_in_tree('title', self.resp))
+	def test_logout(self):
+		self.login()
+		assert_that('NextThought App', is_in_tree('title'))
+		self.logout()
+		assert_that('NextThought Login', is_in_tree('title'))
 	
 if __name__ == "__main__":
 	unittest.main()

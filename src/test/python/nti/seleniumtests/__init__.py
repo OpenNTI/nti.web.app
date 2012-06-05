@@ -2,12 +2,14 @@ import os
 import time
 
 from sst.actions import get_element
+from sst.actions import get_elements
 from sst.actions import get_element_by_xpath
 from sst.actions import write_textfield
 from sst.actions import simulate_keys
 from sst.actions import click_button
 from sst.actions import exists_element
 from sst.actions import wait_for
+from sst.actions import click_element
 from selenium.common.exceptions import ElementNotVisibleException
 
 from lxml import etree
@@ -26,29 +28,22 @@ def test_password():
 
 # ---------------------------------------	
 
-def wait_for_text_to_display(resp, xpath, value, timeout=10):
+def wait_for_element_text(node, value, timeout=10):
 	for _ in range(timeout):
-		try:
-			if resp.doc.xpath(xpath).text() == value:
-				break
-		except:
-			pass
+		print 'cycled'
+		if exists_element(css_class=node):
+			print 'stupid'
+			elements = get_elements(css_class=node)
+			print 'thing'
+			for element in elements:
+				if element.text == value:
+					break
 		time.sleep(0.2)
 	time.sleep(1)
 	
-def wait_for_node_to_display(resp, xpath, timeout=10):
+def wait_for_element_xpath(xpath, timeout=10):
 	for _ in range(timeout):
-		try:
-			if resp.doc.xpath(xpath).exist():
-				break
-		except:
-			pass
-		time.sleep(0.2)
-	time.sleep(1)
-	
-def wait_for_element_text(xpath, value, timeout=10):
-	for _ in range(timeout):
-		if get_element_by_xpath(xpath).text == value:
+		if exists_element(get_element_by_xpath(xpath)):
 			break
 		time.sleep(0.2)
 	time.sleep(1)
@@ -71,16 +66,19 @@ def login(user, password, click):
 		wait_for_element_id('submit')
 		if click: click_button('submit')
 		else: simulate_keys(get_element(id='password'), 'RETURN')
-		wait_for_element_text('//title', 'NextThought App')
+#		wait_for_element_text('title', 'NextThought App')
+		time.sleep(3)
 	except ElementNotVisibleException:
 		pass
 		
-def logout(resp, xpath_contains_builder): pass
+def logout(xpath_contains_builder): 
 #	wait_for_element_text('//title', 'NextThought App')
-#	resp.doc.xpath(xpath_contains_builder("//div", "class", 'my-account-wrapper')).click()
-#	logout_xpath = (xpath_contains_builder('//div', 'class', 'x-box-inner x-vertical-box-overflow-body') + 
-#					'/*' + 
-#					xpath_contains_builder('//div', 'id', 'menuitem-1047'))
-#	wait_for_node_to_display(resp, logout_xpath)
-#	resp.doc.xpath(logout_xpath).click()
-#	wait_for_node_to_display(resp, xpath_contains_builder('//label', 'for', 'username') + '/..')
+	click_element(get_element_by_xpath(xpath_contains_builder("//div", "class", 'my-account-wrapper')))
+	logout_xpath = (xpath_contains_builder('//div', 'class', 'x-box-inner x-vertical-box-overflow-body') + 
+					'/*' + 
+					xpath_contains_builder('//div', 'id', 'menuitem-1047'))
+#	wait_for_element_xpath(logout_xpath)
+	time.sleep(3)
+	click_element(get_element_by_xpath(logout_xpath))
+	time.sleep(3)
+#	wait_for_element_xpath(xpath_contains_builder('//label', 'for', 'username') + '/..')

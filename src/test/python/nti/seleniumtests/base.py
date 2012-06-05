@@ -8,8 +8,6 @@ from nti.seleniumtests import test_password
 
 from nti.seleniumtests import login
 from nti.seleniumtests import logout
-from nti.seleniumtests import wait_for_text_to_display
-from nti.seleniumtests import wait_for_node_to_display
 from sst.actions import start
 from sst.actions import stop
 from sst.actions import go_to
@@ -59,14 +57,6 @@ class WebAppTestBase(unittest.TestCase):
 		login(user, password, click)
 
 	def logout(self):
-		logout(self.resp, self.xpath_contains_builder)
-	
-	def wait_for_text_by_xpath(self, xpath, text, timeout=60):
-		if not wait_for_text_to_display(self.resp, xpath, text, timeout):
-			self.fail("time out")
-	
-	def wait_for_node_by_xpath(self, xpath, element, value, timeout=60):
-		if not wait_for_node_to_display(self.resp, xpath, element, value, timeout):
-			self.fail("time out")
+		logout(self.xpath_contains_builder)
 
 
