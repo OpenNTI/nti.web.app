@@ -100,7 +100,6 @@ Ext.application({
 		'Google',
 		'Groups',
 		'Navigation',
-		'ObjectExplorer',
 		'Library',
 		'Search',
 		'Session',
