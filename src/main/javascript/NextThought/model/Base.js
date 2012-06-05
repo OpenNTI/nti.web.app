@@ -145,6 +145,65 @@ Ext.define('NextThought.model.Base', {
 
 
 	/**
+	 * Save a specific field of this model, optionally set a value and save it if value is sent.
+	 *
+	 * @param fieldName - name of the field that we want to save
+	 * @param [value] - optional value to save (also set it on model)
+	 */
+	saveField: function(fieldName, value, successCallback) {
+		//check to make sure we can do this, and we have the info we need
+		if (!this.isModifiable() || !fieldName || !this.hasField(fieldName)){
+			console.error('Cannot save field', this, arguments);
+			Ext.Error.raise('Cannot save field, issues with model?');
+		}
+
+		//If there's a value, set it on the model
+		if (value) {
+			this.set(fieldName, value);
+		}
+
+		//put together the json we want to save.
+		var json = {}, me=this;
+		json[fieldName] = this.get(fieldName);
+		json = Ext.JSON.encode(json);
+
+		Ext.Ajax.request({
+			url: this.getLink('edit'),
+			jsonData: json,
+			method: 'PUT',
+			scope: me,
+			callback: function(){ },
+			failure: function(){
+				console.error("field save fail", arguments);
+			},
+			success: function(resp){
+				//it worked, reset the dirty flag, and reset the field
+				//because the server may have sanitized it.
+				this.dirty = false;
+				var sanitizedValue = Ext.JSON.decode(resp.responseText)[fieldName];
+				if (successCallback){
+					Ext.callback(successCallback, me, [fieldName, sanitizedValue, me]);
+				}
+			}
+		});
+	},
+
+
+	hasField: function(fieldName) {
+		var result = false;
+		this.fields.each(
+			function(f){
+				if (f.name === fieldName){
+					result = true;
+					return false;
+				}
+		});
+
+		return result;
+	},
+
+
+	/**
 	 * Calls the href and fills in the values missing.
 	 */
 	resolve: function(){
