@@ -11,7 +11,7 @@ __path__ = os.path.split(__file__)[0]
 class TestLogin(WebAppTestBase):
 	
 	ini_file = os.path.join(__path__, '../config/main.ini')
-#	
+	
 	def test_login_with_click(self):
 		self.login()
 		assert_that('NextThought App', is_in_tree('title'))
@@ -38,10 +38,16 @@ class TestLogin(WebAppTestBase):
 		assert_that('message', is_in_tree('div', 'class'))
 		assert_that('Please try again, there was a problem logging in.', is_in_tree('div'))
 		
-	def test_logout(self):
+	def test_logout_click(self):
 		self.login()
 		assert_that('NextThought App', is_in_tree('title'))
 		self.logout()
+		assert_that('NextThought Login', is_in_tree('title'))
+	
+	def test_logout_enter_key(self):
+		self.login()
+		assert_that('NextThought App', is_in_tree('title'))
+		self.logout(click=False)
 		assert_that('NextThought Login', is_in_tree('title'))
 	
 if __name__ == "__main__":
