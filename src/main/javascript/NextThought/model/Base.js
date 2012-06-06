@@ -158,7 +158,8 @@ Ext.define('NextThought.model.Base', {
 		}
 
 		//If there's a value, set it on the model
-		if (value) {
+		//Do explicit check so you can set values to 0 or ''
+		if (value !== null) {
 			this.set(fieldName, value);
 		}
 

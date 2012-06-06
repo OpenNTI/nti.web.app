@@ -20,10 +20,13 @@ Ext.define('NextThought.view.account.MyAccount',{
 
 	initComponent: function(){
 		var me = this, cls = 'menu-visible',t;
+
+		me.currentNotificationCount = $AppConfig.userObject.get('NotificationCount') || 0;
+
 		me.callParent(arguments);
 		me.renderData = Ext.apply(me.renderData||{},{
 			name: $AppConfig.userObject.getName(),
-			'notification-count': $AppConfig.userObject.get('NotificationCount') || '',
+			'notification-count': me.currentNotificationCount || '',
 			status: 'Placeholder text for status'
 		});
 		me.menu = Ext.widget({xtype: 'my-account-menu', xhooks:{
@@ -31,8 +34,9 @@ Ext.define('NextThought.view.account.MyAccount',{
 			show: function(){ this.callParent(arguments); t=setTimeout(function(){me.getEl().addCls(cls);},600);}
 		}});
 
-		//Listen to the store for updating notification count
-		Ext.getStore('Stream').on('datachanged', this.updateCountFromStore, this);
+		//When something is added to the stream store, ONLY added, we need to adjust the counter.
+		//We DO NOT adjust on datachanged because we get the original not count from the user obj.
+		Ext.getStore('Stream').on('add', this.updateNotificationCount, this);
 	},
 
 	afterRender: function(){
@@ -45,16 +49,9 @@ Ext.define('NextThought.view.account.MyAccount',{
 	},
 
 
-	updateCountFromStore: function(store) {
-		var lastLogin = $AppConfig.userObject.get('lastLoginTime'),
-			count = 0;
-		store.each(function(change){
-			if (change.get('Last Modified') > lastLogin) {
-				count++;
-			}
-		});
-		this.setNotificationCountValue(count);
-
+	updateNotificationCount: function(store, records) {
+		this.currentNotificationCount+=records.length;
+		this.setNotificationCountValue(this.currentNotificationCount);
 	},
 
 
@@ -74,7 +71,7 @@ Ext.define('NextThought.view.account.MyAccount',{
 
 		if(!this.menu.isVisible()){
 			this.menu.showBy(this.boxEl,'tl-bl?',[0,-1]);
-			this.updateLastLoginTime();
+			this.resetNotificationCount();
 		}
 		else {
 			this.menu.hide();
@@ -85,8 +82,9 @@ Ext.define('NextThought.view.account.MyAccount',{
 	},
 
 
-	updateLastLoginTime: function(){
-		$AppConfig.userObject.saveField('lastLoginTime', Ext.Date.now()/1000);
+	resetNotificationCount: function(){
+		$AppConfig.userObject.saveField('NotificationCount', 0);
+		this.currentNotificationCount = 0;
 		this.setNotificationCountValue(null);
 	}
 });
