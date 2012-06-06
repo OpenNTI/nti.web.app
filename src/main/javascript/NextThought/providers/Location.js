@@ -136,7 +136,7 @@ Ext.define('NextThought.providers.Location', {
 		//returns the NTIID attribute of the node, or null if it's not there.
 		function getRef(node){
 			if(!node || !node.getAttribute){
-				console.error('TOC ERROR: Unable to get ntiid from node', node);
+				console.warn('Unable to get ntiid from node, might have navved to root?', node);
 				return null;
 			}
 
