@@ -57,7 +57,7 @@ Ext.define('NextThought.util.Tocs',{
 				}
 			}
 			catch(e){
-				console.warn('TocUtils: ',v, e.message);
+				console.error('TocUtils: ', v, Globals.getError(e));
 			}
 		}, this);
 	},
@@ -88,7 +88,7 @@ Ext.define('NextThought.util.Tocs',{
 			}
 		}
 
-		if(leaf.children === undefined){
+		if(leaf && leaf.children === undefined){
 			leaf.leaf=true;
 		}
 
