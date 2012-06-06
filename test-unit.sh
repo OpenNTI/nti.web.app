@@ -8,13 +8,13 @@ if [[ "$PHANTOMJS_VER" != 1.* ]] ; then
 	exit 1
 fi
 
-cd src/test/WebApp
+cd src/test
 # fire up an http server in the background
 echo "Starting SimpleHTTP Server"
 python -m SimpleHTTPServer $PORT >/dev/null 2>&1 &
 sleep 5 # sleep is required to make sure server is running
 
-phantomjs ../javascript/run-jasmine.js http://localhost:$PORT
+phantomjs javascript/run-jasmine.js http://localhost:$PORT
 
 # kill the http server
 echo "Stopping Simple HTTP Server"

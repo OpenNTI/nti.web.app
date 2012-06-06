@@ -128,6 +128,7 @@ page.onAlert = function(msg){
 };
 
 
+
 page.onConsoleMessage = function(msg, line, source) {
 	if(source)
 		console.log(msg+"\t\t"+source+":"+line);

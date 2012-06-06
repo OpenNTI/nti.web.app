@@ -84,7 +84,7 @@ var mockService = {
 
 Ext.application({
 	name: 'NextThought',
-	appFolder: 'assets/js/NextThought',
+	appFolder: 'javascript/NextThought',
 
 	requires: [
 		'NextThought.util.Globals'
@@ -119,13 +119,14 @@ Ext.application({
 		NextThought.phantomRender = true;
 
 
-		Globals.loadScripts(['assets/js-test/specs/example.spec.js',
-			'assets/js-test/specs/Library.spec.js',
-			'assets/js-test/specs/view/widgets/draw/Whiteboard.spec.js',
-			'assets/js-test/specs/cache/UserRepository.spec.js',
-			'assets/js-test/specs/util/AnnotationUtils.spec.js',
-			'assets/js-test/specs/util/ParseUtils.spec.js',
-			'assets/js-test/specs/util/Color.spec.js'],
+		Globals.loadScripts([
+			'javascript/specs/example.spec.js',
+			'javascript/specs/Library.spec.js',
+			'javascript/specs/view/widgets/draw/Whiteboard.spec.js',
+			'javascript/specs/cache/UserRepository.spec.js',
+			'javascript/specs/util/AnnotationUtils.spec.js',
+			'javascript/specs/util/ParseUtils.spec.js',
+			'javascript/specs/util/Color.spec.js'],
 		go);
 	}
 });

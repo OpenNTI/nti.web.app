@@ -170,15 +170,15 @@ Ext.define('NextThought.view.content.Reader', {
 		addCSS("iframe{display:none;}");
 
 		//Quiz Dependencies: Load MathQuill
-		g.loadStyleSheet({ url: base+'assets/lib/mathquill/mathquill.css', document: doc });
+		g.loadStyleSheet({ url: base+'resources/lib/mathquill/mathquill.css', document: doc });
 		g.loadScript({url: '//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js', document: doc},
 			function(){
-				g.loadScript({ url: base+'assets/lib/mathquill/mathquill.min.js', document: doc }); });
+				g.loadScript({ url: base+'resources/lib/mathquill/mathquill.min.js', document: doc }); });
 
 		//Quiz Dependencies: Load MathJax 1.1 (2.0 buggy)
 		g.loadScript(
 			{ url: 'https://c328740.ssl.cf1.rackcdn.com/mathjax/1.1-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML', document: doc },
-			function(){ g.loadScript({ url: base+'assets/misc/mathjaxconfig.js', document: doc }); });
+			function(){ g.loadScript({ url: base+'resources/misc/mathjaxconfig.js', document: doc }); });
 
 
 		on(doc,['keypress','keydown'],function(e){
@@ -810,7 +810,7 @@ Ext.define('NextThought.view.content.Reader', {
 turn off html5 player
 			if(/src/i.test(attr) && /youtube/i.test(url)){
 				match = url.match(/youtube.com\/embed\/([^\?&#]+)/i);
-				return "src=assets/wrappers/youtube.html?host=" +
+				return "src=resources/wrappers/youtube.html?host=" +
 						encodeURIComponent($AppConfig.server.host) +
 						'&videoId='+encodeURIComponent(match[1]) +
 						'&original='+encodeURIComponent(url) +

@@ -3,7 +3,7 @@ Ext.Loader.setConfig('disableCaching', false);
 
 Ext.application({
 	name: 'NextThought',
-	appFolder: 'assets/js/NextThought',
+	appFolder: 'javascript/NextThought',
 	autoCreateViewport: false,
 
 	requires: [

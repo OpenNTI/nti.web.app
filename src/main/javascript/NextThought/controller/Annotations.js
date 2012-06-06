@@ -115,6 +115,7 @@ Ext.define('NextThought.controller.Annotations', {
 		SharingUtils.setSharedWith(rec,shbx.getValue(),function(newRec,op){
 			if(op.success){
 				win.close();
+				rec.fireEvent('updated',newRec);
 			}
 			else{
 				console.error('Failed to save object');

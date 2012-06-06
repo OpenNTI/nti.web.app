@@ -1,26 +1,13 @@
 #!/usr/bin/python
+# either, make a phantomjs script that reads all the dependencies using ExtJS's class loader...
+# Or... read each js file and parse the requires dependency tree and order the files our selves...
+# then, use that list to read our files into Google Closure compiler to minify our code.
 
 import httplib, urllib, sys,json,os
 from pprint import pprint
 
-if(len(sys.argv) < 2):
-	print "provide a jsb3 file to build"
-	sys.exit(1)
 
-json_data = open(sys.argv[1])
-data = json.load(json_data)
-json_data.close()
-
-files = [{'path':'lib/ext-4.0.7/', 'name':'ext.js'}]
-files.extend( data['builds'][0]['files'] );
-files.append( data['builds'][1]['files'][1] )
-
-if os.system('which java > /dev/null') == 0:
-	opts = ['java', '-jar lib/compiler.jar', '--compilation_level ADVANCED_OPTIMIZATIONS', '--create_source_map ./app.min.js.map', '--source_map_format=V3', '--js_output_file app.min.js']
-	for i in files:
-		opts.append('--js '+i['path']+i['name'])
-	os.system(' '.join(opts))
-else:
+def doWebServiceCompile(files):
 	opts = [
 	    ('compilation_level', 'ADVANCED_OPTIMIZATIONS'),
 	    # ('create_source_map', 'app.min.js.map'),
@@ -29,7 +16,7 @@ else:
 	    ('output_info','compiled_code')]
 
 	for i in files:
-		file = open(i['path']+i['name'])
+		file = open(i)
 		opts.append( ('js_code', file.read() ) )
 		file.close()
 
