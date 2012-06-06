@@ -37,6 +37,20 @@ def html_parse(html=None):
 	tree = p.parse (html)
 	return tree
 
+def wait_for_element_to_reappear(node, value, timeout=10):
+	for _ in range(timeout):
+		if not exists_element(node):
+			break
+		time.sleep(0.1)
+	for _ in range(timeout):
+		if exists_element(node):
+			for element in get_elements(css_class=node):
+				if element.text == value:
+					break
+		time.sleep(0.2)
+	time.sleep(1)
+			
+
 def wait_for_element_text(node, value, timeout=10):
 	for _ in range(timeout):
 		html = get_page_source()
@@ -57,7 +71,7 @@ def wait_for_element_xpath(xpath, timeout=10):
 		time.sleep(0.2)
 	time.sleep(1)
 	
-def wait_for_element_id(value, timeout=10):
+def wait_for_element_id(value, timeout=30):
 	for _ in range(timeout):
 		if exists_element(id=value):
 			break
@@ -68,16 +82,17 @@ def wait_for_element_id(value, timeout=10):
 
 def login(user, password, click):
 	try:
-		wait_for_element_id('username')
+		wait_for_element_text('Username', user)
 		write_textfield(get_element(id='username'), user)
-		wait_for_element_id('password')
+		wait_for_element_text('Password', password)
 		write_textfield(get_element(id='password'), password)
 		wait_for_element_id('submit')
 		if click: 
 			click_button('submit')
 		else: 
 			simulate_keys(get_element(id='password'), 'RETURN')
-		wait_for_element_text('title', 'NextThought App')
+			
+		wait_for_element_to_reappear('title', 'NextThought App')
 	except ElementNotVisibleException:
 		pass
 		
