@@ -25,9 +25,9 @@ Ext.define('NextThought.view.account.contacts.management.Panel',{
 		},
 		{ xtype: 'management-contact-list' },
 
-		{ xtype: 'box', html: { tag: 'div', cls: 'label group', html: 'Add Groups'}, for: 'groups' },
+		{ xtype: 'box', html: { tag: 'div', cls: 'label group', html: 'Add Groups'}, set: 'groups' },
 		{
-			for: 'groups',
+			set: 'groups',
 			xtype: 'container',
 			layout: 'hbox',
 			items: [
@@ -35,7 +35,7 @@ Ext.define('NextThought.view.account.contacts.management.Panel',{
 				{xtype: 'button', scale: 'medium', ui: 'secondary', text: 'Add', disabled: true }
 			]
 		},
-		{ xtype: 'management-group-list', for: 'groups' },
+		{ xtype: 'management-group-list', set: 'groups' },
 
 		{
 			cls: 'add-contacts-finish-box',
@@ -119,7 +119,7 @@ Ext.define('NextThought.view.account.contacts.management.Panel',{
 
 
 	onContactListChanged: function(isEmpty){
-		var groupControls = this.query('[for=groups]'),
+		var groupControls = this.query('[set=groups]'),
 			finish = this.down('[cls=add-contacts-finish-box]');
 
 		if(isEmpty){

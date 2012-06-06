@@ -80,7 +80,7 @@ Ext.define('NextThought.view.account.contacts.management.ContactList',{
 				scope: me,
 				beforedestroy: me.removeContact,
 				beforeexpand: me.collapseExpanded
-			})
+			});
 		});
 
 		this.insert(0, items);

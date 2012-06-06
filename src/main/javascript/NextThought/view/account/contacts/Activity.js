@@ -20,8 +20,8 @@ Ext.define('NextThought.view.account.contacts.Activity',{
 			try{
 				this.fireEvent('navigation-selected', this.ContainerId, this.item.getId());
 			}
-			catch(e){
-				console.error(Globals.getError(e));
+			catch(er){
+				console.error(Globals.getError(er));
 			}
 			return false;
 		}, this);
