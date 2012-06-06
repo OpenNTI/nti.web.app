@@ -20,14 +20,15 @@ class TestNavigation(WebAppNavigation):
 	
 	ini_file = os.path.join(__path__, '../config/main.ini')
 
-	def test_open_library(self):
-		self.open_library()		
-		#TO-DO: Optimize this
-		for book in BOOKS: 
-			assert_that (book, is_in_tree ('div'))
+#	def test_open_library(self):
+#		self.open_library()		
+#		#TO-DO: Optimize this
+#		for book in BOOKS: 
+#			assert_that (book, is_in_tree ('div'))
 					
 	def test_open_book(self):
 		values = self.open_book ()
+		print values
 		#TO_DO: Optimize this 
 		assert_that(CHAPTERS, list ((set(values) & set (CHAPTERS))))
 		
@@ -36,18 +37,18 @@ class TestNavigation(WebAppNavigation):
 		#for chapter in CHAPTERS:
 		#   assert_that (chapter, is_in_tree('div'))
 				
-	def test_open_chapter (self):  
-		values = self.open_chapter()
-		
-		#TO-DO: Optimize this
-		assert_that(SECTIONS, list ((set(values) & set (CHAPTERS))))
-		#for section in SECTIONS: 
-		#   assert_that (section,is_in_tree( 'div', self.resp, 'class'))
-			
-	def test_open_section(self):
-		self.open_section()
-		value = self.get_section_chapter_title()
-		assert_that(value, text = 'Squares')
-		
+#	def test_open_chapter (self):  
+#		values = self.open_chapter()
+#		
+#		#TO-DO: Optimize this
+#		assert_that(SECTIONS, list ((set(values) & set (CHAPTERS))))
+#		#for section in SECTIONS: 
+#		#   assert_that (section,is_in_tree( 'div', self.resp, 'class'))
+#			
+#	def test_open_section(self):
+#		self.open_section()
+#		value = self.get_section_chapter_title()
+#		assert_that(value, text = 'Squares')
+#		
 if __name__ == "__main__":
 	unittest.main()
