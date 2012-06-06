@@ -18,7 +18,7 @@ class WebAppNavigation (WebAppTestBase):
 		self.books = [] 
 		self.chapters = []    # list of chapter elements for the current book being navigated
 		self.sections = []	  # list of sections
- 		
+		
 	def open_library (self):
 		element = get_element(css_class='library', tag='span')
 		element.click()
