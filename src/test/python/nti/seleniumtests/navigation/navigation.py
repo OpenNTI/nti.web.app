@@ -1,6 +1,7 @@
 from nti.seleniumtests.base import WebAppTestBase
-from nti.seleniumtests import click_on_element_by_xpath
 import time
+from sst.actions import *
+
 
 LIBRARY_CLASS = "//span[contains(@class, 'x-btn-icon library')]/.."
 BOOK_CLASS = "//div[contains (@class, 'title') and text () ='"
@@ -15,26 +16,52 @@ class WebAppNavigation (WebAppTestBase):
         self.login()
         
     def open_library (self):
-        click_on_element_by_xpath (self.resp,LIBRARY_CLASS)
-        #self.resp.doc.xpath ("//span[contains(@class, 'x-btn-icon library')]/..").click()
-    
+        element = get_element (css_class = 'library', tag = 'span')
+        element.click()
     
     def open_book(self,title = 'Prealgebra'):
-        xpath = BOOK_CLASS + title + "']/.."
-        click_on_element_by_xpath (self.resp,xpath)
-        #self.resp.doc.xpath ("//div[contains (@class, 'title') and text () ='" + title + "']/..").click()
+        self.open_library()
+        element = get_element (css_class = 'title', tag = 'div', text = 'Prealgebra')
+        element.click()
+        elements = get_elements (css_class = 'x-grid-row', tag= 'tr')
+        values  = []
+        for element in elements:
+            if element.text:  
+                values.append (element.text)
+        
+        return values
+            
+        
+        
+        
         
     def open_chapter (self, title = 'Exponents'):
-        xpath = CHAPTER_CLASS + title + "']/.."
-        click_on_element_by_xpath (self.resp,xpath)
-        #self.resp.doc.xpath ("//div[contains (@class, 'x-grid-row') and text() ='" + title + "']/..").click() 
+        self.open_book()
+        element = get_element (css_class = 'x-grid-row', tag = 'tr', text = title)
+        element.click()
+        elements = get_elements (css_class = 'x-grid-tree-node-leaf', tag= 'tr')
+        values  = []
+        for element in elements:
+            if element.text:  
+                values.append (element.text)
+        
+        return values
+    
+        
       
     def open_section (self, title = 'Squares'):
-        xpath = SECTION_CLASS + title + "']/.."
-        click_on_element_by_xpath (self.resp, xpath)
-        #self.resp.doc.xpath ("//div[contains (@class, 'x-grid-row  x-grid-tree-node-leaf') and text () = '" + title + "']/..").click()
+        self.open_chapter()
+        element = get_element (css_class = 'x-grid-row', tag = 'div', text = title)
+        element.click()
+    
+    def get_page_section_title (self, frameName = 'component-1036'):
+        switch_to_frame (frameName)
+        element_chapter = get_element (css_class ='chapter title')
+        
+        return element_chapter.find_element_by_class_name ('label')
+    
 
         
     def tearDown (self):
-        self.app.close()
+        super(WebAppNavigation, self).tearDown()
         
