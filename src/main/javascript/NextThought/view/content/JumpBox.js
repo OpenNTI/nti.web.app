@@ -65,7 +65,7 @@ Ext.define('NextThought.view.content.JumpBox',{
 
 	locationChanged: function(ntiid){
 		var loc = LocationProvider.getLocation(ntiid),
-			currentNode = loc.location,
+			currentNode = loc ? loc.location: null,
 			toc = /toc/i,
 			isChapter,
 			node,
