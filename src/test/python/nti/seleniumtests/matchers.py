@@ -1,18 +1,18 @@
-from hamcrest.core.base_matcher import BaseMatcher
-from lxml import etree
-import html5lib 
-from html5lib import treewalkers, serializer, treebuilders
-from sst.actions import *
+from sst.actions import get_page_source
 
-def _values_of_node(node, element):		
-	#tree = etree.ElementTree(resp.lxml)
+from nti.seleniumtests import html_parse
+
+from hamcrest.core.base_matcher import BaseMatcher
+
+def _values_of_node(node, element):	
+	items = []	
 	html = get_page_source()
-	p = html5lib.HTMLParser( tree=treebuilders.getTreeBuilder("lxml"), namespaceHTMLElements=False )
-	tree = p.parse (html)
-	items = []
+	tree = html_parse(html)
 	for item in tree.iter(node):
-		if element: value = item.get(element)
-		else: value = item.text
+		if element: 
+			value = item.get(element)
+		else: 
+			value = item.text
 		items.append(value)
 	return items
 

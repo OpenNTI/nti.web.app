@@ -1,5 +1,8 @@
 import os
 import time
+import html5lib
+from lxml import etree
+from html5lib import treewalkers, serializer, treebuilders
 
 from sst.actions import get_element
 from sst.actions import get_elements
@@ -11,12 +14,9 @@ from sst.actions import exists_element
 from sst.actions import wait_for
 from sst.actions import click_element
 from sst.actions import get_page_source
-from selenium.common.exceptions import ElementNotVisibleException
 
-from lxml import etree
+from selenium.common.exceptions import ElementNotVisibleException
 from selenium.webdriver.common.keys import Keys
-import html5lib 
-from html5lib import treewalkers, serializer, treebuilders
 
 # ---------------------------------------		
 
@@ -31,11 +31,16 @@ def test_password():
 
 # ---------------------------------------	
 
+def html_parse(html=None):
+	html = html or  get_page_source()
+	p = html5lib.HTMLParser( tree=treebuilders.getTreeBuilder("lxml"), namespaceHTMLElements=False )
+	tree = p.parse (html)
+	return tree
+
 def wait_for_element_text(node, value, timeout=10):
 	for _ in range(timeout):
 		html = get_page_source()
-		p = html5lib.HTMLParser( tree=treebuilders.getTreeBuilder("lxml"), namespaceHTMLElements=False )
-		tree = p.parse (html)
+		tree = html_parse(html)
 		for item in tree.iter(node):
 			txt = item.text
 			if txt == value:
@@ -46,8 +51,7 @@ def wait_for_element_text(node, value, timeout=10):
 def wait_for_element_xpath(xpath, timeout=10):
 	for _ in range(timeout):
 		html = get_page_source()
-		p = html5lib.HTMLParser( tree=treebuilders.getTreeBuilder("lxml"), namespaceHTMLElements=False )
-		tree = p.parse (html)
+		tree = html_parse(html)
 		if tree.xpath(xpath):
 			break
 		time.sleep(0.2)
@@ -69,8 +73,10 @@ def login(user, password, click):
 		wait_for_element_id('password')
 		write_textfield(get_element(id='password'), password)
 		wait_for_element_id('submit')
-		if click: click_button('submit')
-		else: simulate_keys(get_element(id='password'), 'RETURN')
+		if click: 
+			click_button('submit')
+		else: 
+			simulate_keys(get_element(id='password'), 'RETURN')
 		wait_for_element_text('title', 'NextThought App')
 	except ElementNotVisibleException:
 		pass
@@ -78,11 +84,14 @@ def login(user, password, click):
 def logout(xpath_contains_builder): 
 	wait_for_element_text('title', 'NextThought App')
 	click_element(get_element_by_xpath(xpath_contains_builder("//div", "class", 'my-account-wrapper')))
-	logout_xpath = (xpath_contains_builder('//div', 'class', 'x-box-inner x-vertical-box-overflow-body') + 
-					'/*' + 
-					xpath_contains_builder('//div', 'id', 'menuitem-1047'))
+	
+	xpath_1 = xpath_contains_builder('//div', 'class', 'x-box-inner x-vertical-box-overflow-body')
+	xpath_2 = xpath_contains_builder('//div', 'id', 'menuitem-1047') #TODO: why refering to menuitem-1047
+	logout_xpath = xpath_1 + '/*' + xpath_2
 	wait_for_element_xpath(logout_xpath)
+	
 	time.sleep(3)
 	click_element(get_element_by_xpath(logout_xpath))
 	time.sleep(3)
+	
 	wait_for_element_xpath(xpath_contains_builder('//label', 'for', 'username') + '/..')

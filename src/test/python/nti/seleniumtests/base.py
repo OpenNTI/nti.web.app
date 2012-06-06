@@ -1,6 +1,9 @@
-import os
-import webtest
-import unittest, time
+import time
+import unittest
+
+from sst.actions import start
+from sst.actions import stop
+from sst.actions import go_to
 
 from nti.seleniumtests import test_url
 from nti.seleniumtests import test_user
@@ -8,10 +11,6 @@ from nti.seleniumtests import test_password
 
 from nti.seleniumtests import login
 from nti.seleniumtests import logout
-from sst.actions import start
-from sst.actions import stop
-from sst.actions import go_to
-
 from nti.seleniumtests.config import Configuration
 
 # ----------------------------------
