@@ -10,10 +10,13 @@ from sst.actions import click_button
 from sst.actions import exists_element
 from sst.actions import wait_for
 from sst.actions import click_element
+from sst.actions import get_page_source
 from selenium.common.exceptions import ElementNotVisibleException
 
 from lxml import etree
 from selenium.webdriver.common.keys import Keys
+import html5lib 
+from html5lib import treewalkers, serializer, treebuilders
 
 # ---------------------------------------		
 
@@ -30,20 +33,22 @@ def test_password():
 
 def wait_for_element_text(node, value, timeout=10):
 	for _ in range(timeout):
-		print 'cycled'
-		if exists_element(css_class=node):
-			print 'stupid'
-			elements = get_elements(css_class=node)
-			print 'thing'
-			for element in elements:
-				if element.text == value:
-					break
+		html = get_page_source()
+		p = html5lib.HTMLParser( tree=treebuilders.getTreeBuilder("lxml"), namespaceHTMLElements=False )
+		tree = p.parse (html)
+		for item in tree.iter(node):
+			txt = item.text
+			if txt == value:
+				break
 		time.sleep(0.2)
 	time.sleep(1)
 	
 def wait_for_element_xpath(xpath, timeout=10):
 	for _ in range(timeout):
-		if exists_element(get_element_by_xpath(xpath)):
+		html = get_page_source()
+		p = html5lib.HTMLParser( tree=treebuilders.getTreeBuilder("lxml"), namespaceHTMLElements=False )
+		tree = p.parse (html)
+		if tree.xpath(xpath):
 			break
 		time.sleep(0.2)
 	time.sleep(1)
@@ -66,19 +71,18 @@ def login(user, password, click):
 		wait_for_element_id('submit')
 		if click: click_button('submit')
 		else: simulate_keys(get_element(id='password'), 'RETURN')
-#		wait_for_element_text('title', 'NextThought App')
-		time.sleep(3)
+		wait_for_element_text('title', 'NextThought App')
 	except ElementNotVisibleException:
 		pass
 		
 def logout(xpath_contains_builder): 
-#	wait_for_element_text('//title', 'NextThought App')
+	wait_for_element_text('title', 'NextThought App')
 	click_element(get_element_by_xpath(xpath_contains_builder("//div", "class", 'my-account-wrapper')))
 	logout_xpath = (xpath_contains_builder('//div', 'class', 'x-box-inner x-vertical-box-overflow-body') + 
 					'/*' + 
 					xpath_contains_builder('//div', 'id', 'menuitem-1047'))
-#	wait_for_element_xpath(logout_xpath)
+	wait_for_element_xpath(logout_xpath)
 	time.sleep(3)
 	click_element(get_element_by_xpath(logout_xpath))
 	time.sleep(3)
-#	wait_for_element_xpath(xpath_contains_builder('//label', 'for', 'username') + '/..')
+	wait_for_element_xpath(xpath_contains_builder('//label', 'for', 'username') + '/..')

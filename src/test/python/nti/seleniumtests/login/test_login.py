@@ -11,7 +11,7 @@ __path__ = os.path.split(__file__)[0]
 class TestLogin(WebAppTestBase):
 	
 	ini_file = os.path.join(__path__, '../config/main.ini')
-	
+#	
 	def test_login_with_click(self):
 		self.login()
 		assert_that('NextThought App', is_in_tree('title'))
