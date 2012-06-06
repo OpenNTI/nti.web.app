@@ -7,6 +7,7 @@ from html5lib import treewalkers, serializer, treebuilders
 from sst.actions import get_element
 from sst.actions import get_elements
 from sst.actions import get_element_by_xpath
+from sst.actions import get_elements_by_xpath
 from sst.actions import write_textfield
 from sst.actions import simulate_keys
 from sst.actions import click_button
@@ -84,8 +85,10 @@ def login(user, password, click):
 	try:
 		wait_for_element_text('Username', user)
 		write_textfield(get_element(id='username'), user)
+		
 		wait_for_element_text('Password', password)
 		write_textfield(get_element(id='password'), password)
+		
 		wait_for_element_id('submit')
 		if click: 
 			click_button('submit')
@@ -93,6 +96,7 @@ def login(user, password, click):
 			simulate_keys(get_element(id='password'), 'RETURN')
 			
 		wait_for_element_to_reappear('title', 'NextThought App')
+		
 	except ElementNotVisibleException:
 		pass
 		
@@ -100,13 +104,16 @@ def logout(xpath_contains_builder):
 	wait_for_element_text('title', 'NextThought App')
 	click_element(get_element_by_xpath(xpath_contains_builder("//div", "class", 'my-account-wrapper')))
 	
-	xpath_1 = xpath_contains_builder('//div', 'class', 'x-box-inner x-vertical-box-overflow-body')
-	xpath_2 = xpath_contains_builder('//div', 'id', 'menuitem-1047') #TODO: why refering to menuitem-1047
-	logout_xpath = xpath_1 + '/*' + xpath_2
+	xpath = xpath_contains_builder('//div', 'class', 'x-box-inner x-vertical-box-overflow-body')
+	logout_xpath = xpath + '/*' + '/*'
 	wait_for_element_xpath(logout_xpath)
 	
-	time.sleep(3)
-	click_element(get_element_by_xpath(logout_xpath))
-	time.sleep(3)
-	
+	elements = get_elements_by_xpath(logout_xpath)
+	elem = ''
+	for element in elements:
+		if element.text == 'Sign out':
+			elem = element
+	if elem:
+		click_element(elem)
+		
 	wait_for_element_xpath(xpath_contains_builder('//label', 'for', 'username') + '/..')
