@@ -19,36 +19,29 @@ SECTIONS = ['Index', 'Squares', 'Higher Exponents']
 class TestNavigation(WebAppNavigation):
 	
 	ini_file = os.path.join(__path__, '../config/main.ini')
-
+#
 #	def test_open_library(self):
-#		self.open_library()		
+#		books = self.open_library()		
 #		#TO-DO: Optimize this
-#		for book in BOOKS: 
-#			assert_that (book, is_in_tree ('div'))
-					
-	def test_open_book(self):
-		values = self.open_book ()
-		print values
-		#TO_DO: Optimize this 
-		assert_that(CHAPTERS, list ((set(values) & set (CHAPTERS))))
+#		if not books: 
+#			print 'Library is empty'
+#					
+#	def test_open_book(self):
+#		chapters = self.open_book ()
+#		#TO_DO: Optimize this 
+#		if not chapters: 
+#			print 'Book has no chapter'
+#						
+#	def test_open_chapter (self): 
+#		sections = self.open_chapter()
+#		#TO-DO: Optimize this
+#		if not sections: 
+#			print 'Chapter has no sections'
+			
+	def test_open_section(self):
+		self.open_section()
+		value = self.get_page_section_title()
+		assert_that(value, text = 'Squares')
 		
-		#Info: the code below is a better option but chapter names are buried to deep in the div to be recognizable by the lxml
-		#the same applies to open_chapter and open_section
-		#for chapter in CHAPTERS:
-		#   assert_that (chapter, is_in_tree('div'))
-				
-#	def test_open_chapter (self):  
-#		values = self.open_chapter()
-#		
-#		#TO-DO: Optimize this
-#		assert_that(SECTIONS, list ((set(values) & set (CHAPTERS))))
-#		#for section in SECTIONS: 
-#		#   assert_that (section,is_in_tree( 'div', self.resp, 'class'))
-#			
-#	def test_open_section(self):
-#		self.open_section()
-#		value = self.get_section_chapter_title()
-#		assert_that(value, text = 'Squares')
-#		
 if __name__ == "__main__":
 	unittest.main()
