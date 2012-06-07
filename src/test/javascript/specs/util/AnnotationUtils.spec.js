@@ -1,4 +1,4 @@
-describe("Annotation Utils", function() {
+xdescribe("Annotation Utils", function() {
 
 	var div = null,
 		testWhiteboard =

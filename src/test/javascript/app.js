@@ -87,7 +87,8 @@ Ext.application({
 	appFolder: 'javascript/NextThought',
 
 	requires: [
-		'NextThought.util.Globals'
+		'NextThought.util.Globals',
+		'NextThought.util.shared.Anchors'
 	],
 
 	controllers: [
@@ -126,7 +127,8 @@ Ext.application({
 			'javascript/specs/cache/UserRepository.spec.js',
 			'javascript/specs/util/AnnotationUtils.spec.js',
 			'javascript/specs/util/ParseUtils.spec.js',
-			'javascript/specs/util/Color.spec.js'],
+			'javascript/specs/util/Color.spec.js',
+			'javascript/specs/util/shared/Anchors.spec.js'],
 		go);
 	}
 });
