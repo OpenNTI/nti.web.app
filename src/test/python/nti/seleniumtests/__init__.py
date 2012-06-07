@@ -30,24 +30,25 @@ def html_parse(html=None):
 
 # ---------------------------------------
 
+def safe_get_elements(tag):
+	try:
+		return get_elements(tag=tag)
+	except:
+		return []
+	
 def wait_for_element_to_reappear(node, value, timeout=10):
 	
 	#FIXME: we need to better handle the race event
-	time.sleep(5)
-	
+	#time.sleep(5)
 	for _ in range(timeout):
 		getout = False
-		if exists_element(tag=node):
-			for element in get_elements(tag=node):
-				if element.text == value:
-					getout = True
-					break
-		if getout:
-			break
-		time.sleep(0.2)
-	time.sleep(1)
+		for element in safe_get_elements(node):
+			if element.text == value:
+				getout = True
+				break
+		time.sleep(1)
+		if getout: break
 			
-
 def wait_for_element_text(node, value, timeout=10):
 	for _ in range(timeout):
 		getout = False
