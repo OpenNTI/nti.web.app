@@ -16,7 +16,7 @@ class TestQuizzes(WebAppQuizzes):
     ini_file = os.path.join(__path__, '../config/main.ini')
     
     def test_quiz(self):
-        self.setUp()
+        print 'hello'
         
 if __name__ == "__main__":
     unittest.main()

@@ -10,4 +10,4 @@ class WebAppQuizzes(WebAppNavigation):
     
     def setUp(self):
         super(WebAppQuizzes, self).setUp()
-        self.navigate_to('MathCounts2012', '2012', 'Warm-Up 1')
+        self.navigate_to(book='MathCounts2012', section='Warm-Up 1')
