@@ -54,13 +54,11 @@ class WebAppNavigation (WebAppTestBase):
         self.section_elements = get_elements_by_xpath(xpath)
         for elem in self.section_elements:
             if elem.text == section:
+                wait_for_element_xpath('//tr[contains (@class, "x-grid-tree-node-leaf") and text() ="' + section + '"]/*')
                 click_element (elem)
-                time.sleep(3)
-        #wait_for_element_xpath ('//div[contains (@class. "x-grid-cell-treecolumn")]/..')
-        #element = get_element (css_class='x-grid-cell-treecolumn', tag='td', text=title)
-        #element = self.sections[4]
-        #print element.text
-        #click_element(element)
+                break 
+        self.open_library()
+        
     
     def navigate_to(self, book, chapter=None, section=None):
         
