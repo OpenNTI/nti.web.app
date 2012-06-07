@@ -1,6 +1,7 @@
-xdescribe("Annotation Utils", function() {
+describe("Annotation Utils", function() {
 
-	var div = null,
+	var txt,
+		div = null,
 		testWhiteboard =
 		{
 			"Class":"Canvas",
@@ -53,19 +54,11 @@ xdescribe("Annotation Utils", function() {
 		};
 
 	function setup(){
-		if(div) {
+		if(div || !txt) {
 			return;
 		}
 
-		var req = new XMLHttpRequest(),
-			txt, rf, start, end;
-
-		req.open('GET',$AppConfig.server.host+'/annotation-test.html',false);
-		req.send('');
-
-		expect(req.status).toBe(200);
-
-		txt = req.responseText;
+		var rf, start, end;
 
 		rf= txt.toLowerCase();
 
@@ -90,6 +83,24 @@ xdescribe("Annotation Utils", function() {
 	}
 
 	beforeEach(function(){ setup(); });
+
+	it("should load the test page",function(){
+		var req = new XMLHttpRequest();
+		var flag = false;
+
+		runs(function() {
+			req.open('GET',$AppConfig.server.host+'/annotation-test.html',true);
+			req.onreadystatechange = function(){if(req.readyState === 4){ flag = true; }};
+			req.send('');
+		});
+
+		waitsFor(function() { return flag; }, "Could not load page?", 1000);
+
+		runs(function(){
+			expect(req.status).toBe(200);
+			txt = req.responseText;
+		});
+	});
 
 
 	it("AnnotationUtils is defined", function() {
