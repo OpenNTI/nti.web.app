@@ -4,9 +4,13 @@ import html5lib
 from lxml import etree
 from html5lib import treewalkers, serializer, treebuilders
 
+from sst.actions import get_element
 from sst.actions import get_elements
+from sst.actions import get_element_by_xpath
 from sst.actions import get_elements_by_xpath
 from sst.actions import exists_element
+from sst.actions import click_button 
+from sst.actions import click_element
 from sst.actions import get_page_source
 
 # ---------------------------------------		
@@ -30,48 +34,62 @@ def html_parse(html=None):
 
 # ---------------------------------------
 
-def safe_get_elements(tag):
+def safe_get_element(tag=None, css_class=None, ID=None, text=None, text_regex=None, **kwargs):
 	try:
-		return get_elements(tag=tag)
+		return get_element(tag=tag, css_class=css_class, id=ID, text=text, text_regex=text_regex, **kwargs)
+	except:
+		return False
+
+def safe_get_elements(tag=None, css_class=None, ID=None, text=None, text_regex=None, **kwargs):
+	try:
+		return get_elements(tag=tag, css_class=css_class, id=ID, text=text, text_regex=text_regex, **kwargs)
 	except:
 		return []
 	
-def wait_for_element_to_reappear(node, value, timeout=10):
+def safe_get_element_by_xpath(selector):
+	try:
+		return get_element_by_xpath(selector)
+	except:
+		return []
 	
-	#FIXME: we need to better handle the race event
-	#time.sleep(5)
-	for _ in range(timeout):
-		getout = False
-		for element in safe_get_elements(node):
-			if element.text == value:
-				getout = True
-				break
-		time.sleep(1)
-		if getout: break
+def safe_get_elements_by_xpath(selector):
+	try:
+		return get_elements_by_xpath(selector)
+	except:
+		return []
+	
+def safe_exists_element(tag=None, css_class=None, ID=None, text=None, text_regex=None, **kwargs):
+	try:
+		return exists_element(tag=tag, css_class=css_class, id=ID, text=text, text_regex=text_regex, **kwargs)
+	except Exception:
+		return []
+	
+def safe_click_button(id_or_elem):
+	try:
+		return click_button(id_or_elem)
+	except:
+		pass
+	
+def safe_click_element(id_or_elem):
+	try:
+		return click_element(id_or_elem)
+	except:
+		pass
+	
+# ---------------------------------------
 			
-def wait_for_element_text(node, value, timeout=10):
-	for _ in range(timeout):
-		getout = False
-		if exists_element(node):
-			for element in get_elements(node):
-				if element.text == value:
-					getout = True
-					break
-		if getout:
+def wait_for_element(tag=None, css_class=None, ID=None, text=None, text_regex=None, timeout=10):
+	for _ in range(timeout*5):
+		if text == 'NextThought App':
+			print safe_exists_element(tag=tag, css_class=css_class, ID=ID, text=text, text_regex=text_regex)
+		if safe_exists_element(tag=tag, css_class=css_class, ID=ID, text=text, text_regex=text_regex):
 			break
-		time.sleep(0.2)
+		time.sleep(0.1)
 	time.sleep(1)
 	
 def wait_for_element_xpath(xpath, timeout=10):
-	for _ in range(timeout):
-		if exists_element(get_elements_by_xpath(xpath)):
+	for _ in range(timeout*5):
+		if safe_exists_element(safe_get_elements_by_xpath(xpath)):
 			break
-		time.sleep(0.2)
-	time.sleep(1)
-	
-def wait_for_element_id(value, timeout=30):
-	for _ in range(timeout):
-		if exists_element(id=value):
-			break
-		time.sleep(0.2)
+		time.sleep(0.1)
 	time.sleep(1)
