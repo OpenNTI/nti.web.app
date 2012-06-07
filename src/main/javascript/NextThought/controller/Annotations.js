@@ -3,8 +3,7 @@ Ext.define('NextThought.controller.Annotations', {
 
 	requires: [
 		'NextThought.cache.IdCache',
-		'NextThought.util.Sharing',
-		'NextThought.util.NTIRangeUtils'
+		'NextThought.util.Sharing'
 	],
 
 	models: [
