@@ -14,15 +14,6 @@ $file-type-zip:				url(../images/file-types/zip.png);
 $loading-indicator:			url(../images/ajax-loader.gif);
 $tokens-sprite:				url(../images/token-sprite.png);
 
-$header-logo:				url(../images/ntbanner.png);
-$view-button-sprite:		url(../images/nti-pc-icons-masthead.png);
-
-$session-my-account-icon:	url(../images/user_silhouette.gif);
-$session-logout-icon:		url(../images/sign_in_16.png);
-$session-settings-icon:		url(../images/gear.png);
-$session-notice-box:		url(../images/notify.png);
-
-$filter-sprite:				url(../images/filters/sprite.png);
 $note-action-chat-icon:		url(../images/chat/chat-16.png);
 $note-action-delete-icon:	url(../images/chat/delete-16.png);
 $note-action-edit-icon:		url(../images/chat/edit-16.png);
@@ -35,27 +26,8 @@ $empty-class-resources-bg:	url(../images/folder_web_upload.png);
 $data-view-over-bg:			url(../images/over.gif);
 $data-view-selected-bg:		url(../images/selected.gif);
 
-$ext-text-entry:			url(../images/controls/text-bg.gif);
-
-$moderation-toggle:			url(../images/chat/moderator.png);
-$script-entry-promot-icon:	url(../images/chat/script-promote-16.png);
-$chat-icon:					url(../images/chat/speachbubble_sprite.png);
-$chat-menu-icon:			url(../images/chat/chat-16.png);
-$chat-pin:					url(../images/chat/chat-pin-64.png);
-$chat-reply-public:			url(../images/chat/re-32.png);
-$chat-reply-whisper:		url(../images/chat/whisper-16.png);
-$chat-expand-group:			url(../images/chat/expand-group.png);
-$chat-collapse-group:		url(../images/chat/collapse-group.png);
-$start-group-chat:			url(../images/chat/start-group-chat.png);
-$flag-icon:					url(../images/chat/flag-16.png);
-$flag-icon-disabled:		url(../images/chat/flag-16-disabled.png);
 $presences-offline:			url(../images/core/offline.png);
 $presences-online:			url(../images/core/online.png);
-$shadow-menu-icon:			url(../images/chat/shadow-user-16.png);
-$reply-to-button-icon:		url(../images/chat/submit-22.png);
-$compose-message-icon:		url(../images/chat/compose-message.png);
-$switch-to-classroom-icon:	url(../images/chat/classroom-22.png);
-$object-explorer-icon:		url(../images/objects16.png);
 
 $whiteboard-tools-sprite:	url(../images/draw/sprite.png);
 $whiteboard-color-none:		url(../images/draw/nofill.png);
@@ -63,16 +35,10 @@ $whiteboard-color-none-sm:	url(../images/draw/nofill-sm.png);
 $magnifying-glass:			url(../images/zoom_preview_24.png);
 
 //charms
-$charm-note-icon: 			url(../images/charms/note-white.png);
-$charm-highlight-icon:  	url(../images/charms/highlight-white.png);
 $charm-quizresult-icon:  	url(../images/charms/quiz-results.png);
 $charm-chattranscript-icon:	url(../images/charms/chat-transcript.png);
 $charm-collapsed-icon:  	url(../images/charms/OICollapsed.png);
 $charm-expanded-icon:  	    url(../images/charms/OIExpanded.png);
-
-//badges
-$new-notification-badge:	url(../images/new_notification_badge.png);
-
 
 
 //colors
@@ -80,26 +46,6 @@ $panel-background: white;
 $ui-link-color: #222;
 $external-link-color:  #7889A3;
 $border-color: #ccc;
-$hover-background-color: #7889A3;
-$hover-foreground-color: white;
-
-$read-background-color: transparent;
-$read-foreground-color: inherit;
-$unread-background-color: #D8D8D8;
-$unread-foreground-color: inherit;
-
-$shadowed-background-color: #f2eeee;
-$shadowed-foreground-color: white;
-$shadowed-hover-background-color: #cecece;
-$shadowed-hover-foreground-color: black;
-
-$promoted-background-color: #cecece;
-$promoted-foreground-color: inherit;
-
-$flagged-background-color: #ffdddd;
-$flagged-foreground-color: black;
-$flagged-hover-background-color: #fa8072;
-$flagged-hover-foreground-color: black;
 
 $timestamp-color: #7a7a7a;
 $name-label-color: #7889A3;
