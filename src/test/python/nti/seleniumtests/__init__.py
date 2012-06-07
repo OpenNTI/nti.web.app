@@ -50,7 +50,7 @@ def safe_get_element_by_xpath(selector):
 	try:
 		return get_element_by_xpath(selector)
 	except:
-		return []
+		return None
 	
 def safe_get_elements_by_xpath(selector):
 	try:
@@ -62,7 +62,7 @@ def safe_exists_element(tag=None, css_class=None, ID=None, text=None, text_regex
 	try:
 		return exists_element(tag=tag, css_class=css_class, id=ID, text=text, text_regex=text_regex, **kwargs)
 	except Exception:
-		return []
+		return False
 	
 def safe_click_button(id_or_elem):
 	try:
