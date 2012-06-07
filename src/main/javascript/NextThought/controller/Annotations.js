@@ -1,9 +1,10 @@
 Ext.define('NextThought.controller.Annotations', {
 	extend: 'Ext.app.Controller',
 
-	required: [
+	requires: [
 		'NextThought.cache.IdCache',
-		'NextThought.util.Sharing'
+		'NextThought.util.Sharing',
+		'NextThought.util.NTIRangeUtils'
 	],
 
 	models: [

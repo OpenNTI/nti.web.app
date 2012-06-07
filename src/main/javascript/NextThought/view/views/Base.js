@@ -20,10 +20,6 @@ Ext.define( 'NextThought.view.views.Base', {
 			return false;
 		}
 
-		if (ct.getLayout().getActiveItem() === me) {
-			return false;
-		}
-
 		ct.fireEvent('activate-view', me.getId());
 
 		ct.items.each(function(o,i){
