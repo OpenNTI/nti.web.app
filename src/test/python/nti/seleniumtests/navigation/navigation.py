@@ -24,8 +24,7 @@ class WebAppNavigation (WebAppTestBase):
         self.section_elements = []      # list of sections
         
     def open_library (self):
-        print 'in library'
-        wait_for_element_xpath ('//span[contains (@class, "library")]/..')
+        wait_for_element_xpath (self.xpath_contains_builder('//span', 'class', 'library') + '/..')
         element = get_element(css_class='library', tag='span')
         click_element (element)
         wait_for_element_xpath ('//div[contains (@class, "title")]/..')
@@ -34,12 +33,11 @@ class WebAppNavigation (WebAppTestBase):
         print values 
         return values
     
-    def open_book(self, title='Prealgebra'):
-        print 'in book'
+    def open_book(self, book):
         self.open_library()
         #Find a better way to handle opening a book
         wait_for_element_xpath ('//div[contains (@class, "title")]/..')
-        element = get_element(css_class='title', tag='div', text= self.books[1].text)
+        element = get_element(css_class='title', tag='div', text=book)
         click_element(element)
         wait_for_element_xpath ('//div[contains (@class, "x-grid-row")]/..')
         self.chapters = get_elements(css_class = 'x-grid-row', tag= 'tr')
@@ -47,34 +45,49 @@ class WebAppNavigation (WebAppTestBase):
         print values
         return values
             
-    def open_chapter (self, title='Exponents'):
-        print 'in chapter'
-        self.open_book()
+    def open_chapter (self, book, chapter):
+        self.open_book(book)
         wait_for_element_xpath ('//div[contains (@class, "x-grid-row")]/..')
-        print 'done'
-        element = get_element (css_class='x-grid-row', tag='tr', text=title)
+        element = get_element (css_class='x-grid-row', tag='tr', text=chapter)
         click_element (element, wait=False)
-        print 'hang'
-        wait_for_element_xpath ('//tr[contains (@class, "x-grid-tree-node-leaf")]/..')
-        print 'hung?'
-        xpath = "//tr[contains (@class, 'x-grid-tree-node-leaf')]/.."
+        time.sleep(1)
+        xpath = "//tr[contains (@class, 'x-grid-tree-node-leaf')]/*"
         self.section_elements = get_elements_by_xpath(xpath)
         
         values  = [element.text for element in self.section_elements if element.text]    
         print values
         return values
     
-    def open_section (self, title='Squares'):
-        print ('Searching for section')
-        self.open_chapter()
-        for elem in self.section_elements:
-            if elem.text == title:
-                click_element (elem)
+    def open_section (self, book, chapter, section):
+            self.open_chapter(book, chapter)
+            for elem in self.section_elements:
+                if elem.text == section:
+                    click_element (elem)
+                    time.sleep(3)
         #wait_for_element_xpath ('//div[contains (@class. "x-grid-cell-treecolumn")]/..')
         #element = get_element (css_class='x-grid-cell-treecolumn', tag='td', text=title)
         #element = self.sections[4]
         #print element.text
         #click_element(element)
+    
+    def navigate_to(self, book, chapter=None, section=None):
+        
+        if not book:
+            return
+        
+        # for a book with no chapters or sections
+        if not section and not chapter:
+            pass
+            
+        # for a book with only sections, no chapters
+        if chapter and not section:
+            pass
+        
+        
+        
+        # for a book with sections and chapters
+        if section and chapter:
+            self.open_section(book, chapter, section)
     
     def get_page_section_title (self, frameName='component-1036'):
         wait_for_element_id (frameName)

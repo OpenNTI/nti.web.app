@@ -1,2 +1,2 @@
-from nti.seleniumtests import login
-from nti.seleniumtests import logout
+#from nti.seleniumtests import login
+#from nti.seleniumtests import logout

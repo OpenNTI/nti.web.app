@@ -39,7 +39,7 @@ class TestNavigation(WebAppNavigation):
 #			print 'Chapter has no sections'
 			
 	def test_open_section(self):
-		self.open_section()
+		self.open_section('Prealgebra', 'Decimals', 'Rounding')
 		value = self.get_page_section_title()
 		assert_that(value, text = 'Squares')
 		
