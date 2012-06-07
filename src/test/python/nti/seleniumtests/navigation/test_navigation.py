@@ -41,7 +41,7 @@ class TestNavigation(WebAppNavigation):
 	def test_open_section(self):
 		self.navigate_to(book='Prealgebra', chapter='Decimals', section='Rounding')
 		value = self.get_page_section_title()
-		assert_that(value, text = 'Rounding')
+		assert_that(value, 'Rounding')
 		
 if __name__ == "__main__":
 	unittest.main()
