@@ -60,7 +60,7 @@ class WebAppTestBase(unittest.TestCase):
 	# -----------------------
 	
 	def xpath_contains_builder(self, xpath, element, value):
-		return xpath + "[contains(@" + element + ", '" + value + "')]"
+		return '//' + xpath + "[contains(@" + element + ", '" + value + "')]"
 	
 	def _logout_click(self, logout_xpath):
 		elements = get_elements_by_xpath(logout_xpath)
@@ -97,12 +97,12 @@ class WebAppTestBase(unittest.TestCase):
 	def _logout(self, xpath_contains_builder, click): 
 		wait_for_element_text('title', 'NextThought App')
 		
-		options_xpath = xpath_contains_builder("//div", "class", 'my-account-wrapper')
+		options_xpath = xpath_contains_builder("div", "class", 'my-account-wrapper')
 		options_element = get_element_by_xpath(options_xpath)
-		dropdown_items_xpath = xpath_contains_builder('//div', 'class', 'x-vertical-box-overflow-body')
+		dropdown_items_xpath = xpath_contains_builder('div', 'class', 'x-vertical-box-overflow-body')
 		dropdown_xpath = dropdown_items_xpath + '/*' + '/*'
-		menu_xpath = xpath_contains_builder('//div', 'class', 'my-account-menu') 
-		notifications_xpath = xpath_contains_builder('//div', 'class', 'notifications')
+		menu_xpath = xpath_contains_builder('div', 'class', 'my-account-menu') 
+		notifications_xpath = xpath_contains_builder('div', 'class', 'notifications')
 		
 		click_element(options_element)
 		
@@ -113,7 +113,7 @@ class WebAppTestBase(unittest.TestCase):
 			dropdown_items_element = get_element_by_xpath(menu_xpath + '/*' + notifications_xpath)
 			self._logout_enter_key(dropdown_items_element)
 			
-		wait_for_element_xpath(xpath_contains_builder('//label', 'for', 'username'))
+		wait_for_element_xpath(xpath_contains_builder('label', 'for', 'username'))
 	
 	def login(self, user=None, password=None, click=True):
 		credentials = self.users[0]

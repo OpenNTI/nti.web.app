@@ -24,7 +24,7 @@ class WebAppNavigation (WebAppTestBase):
         self.section_elements = []      # list of sections
         
     def open_library (self):
-        wait_for_element_xpath (self.xpath_contains_builder('//span', 'class', 'library') + '/..')
+        wait_for_element_xpath (self.xpath_contains_builder('span', 'class', 'library') + '/..')
         element = get_element(css_class='library', tag='span')
         click_element (element)
         wait_for_element_xpath ('//div[contains (@class, "title")]/..')
