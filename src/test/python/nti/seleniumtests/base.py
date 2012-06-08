@@ -11,16 +11,15 @@ from nti.seleniumtests import test_password
 from nti.seleniumtests import wait_for_element
 from nti.seleniumtests import wait_for_element_xpath
 
-from nti.seleniumtests import safe_get_element
-from nti.seleniumtests import safe_get_elements
-from nti.seleniumtests import safe_get_element_by_xpath
-from nti.seleniumtests import safe_get_elements_by_xpath
-from nti.seleniumtests import safe_exists_element
-from nti.seleniumtests import safe_click_button
-from nti.seleniumtests import safe_click_element
-
 from nti.seleniumtests.config import Configuration
 
+from sst.actions import get_element
+from sst.actions import get_elements
+from sst.actions import get_element_by_xpath
+from sst.actions import get_elements_by_xpath
+from sst.actions import exists_element
+from sst.actions import click_button
+from sst.actions import click_element
 from sst.actions import write_textfield
 from sst.actions import simulate_keys
 from sst.actions import get_page_source
@@ -64,13 +63,13 @@ class WebAppTestBase(unittest.TestCase):
 		return '//' + xpath + "[contains(@" + element + ", '" + value + "')]"
 	
 	def _logout_click(self, logout_xpath):
-		elements = safe_get_elements_by_xpath(logout_xpath)
+		elements = get_elements_by_xpath(logout_xpath)
 		elem = ''
 		for element in elements:
 			if element.text == 'Sign out':
 				elem = element
 		if elem:
-			safe_click_element(elem)
+			click_element(elem)
 	
 	def _logout_enter_key(self, dropdown_item_element):
 		simulate_keys(dropdown_item_element, 'ARROW_UP')
@@ -79,16 +78,16 @@ class WebAppTestBase(unittest.TestCase):
 	def _login(self, user, password, click):
 		try:
 			wait_for_element(ID='username')
-			write_textfield(safe_get_element(ID='username'), user)
+			write_textfield(get_element(ID='username'), user)
 			
 			wait_for_element(ID='password')
-			write_textfield(safe_get_element(ID='password'), password)
+			write_textfield(get_element(ID='password'), password)
 			
 			wait_for_element(tag='button', ID='submit')
 			if click: 
-				safe_click_button('submit')
+				click_button('submit')
 			else: 
-				simulate_keys(safe_get_element(ID='password'), 'RETURN')
+				simulate_keys(get_element(ID='password'), 'RETURN')
 				
 			wait_for_element(tag='title', text='NextThought App')
 			
@@ -99,19 +98,19 @@ class WebAppTestBase(unittest.TestCase):
 		wait_for_element(tag='title', text='NextThought App')
 		
 		options_xpath = xpath_contains_builder("div", "class", 'my-account-wrapper')
-		options_element = safe_get_element_by_xpath(options_xpath)
+		options_element = get_element_by_xpath(options_xpath)
 		dropdown_items_xpath = xpath_contains_builder('div', 'class', 'x-vertical-box-overflow-body')
 		dropdown_xpath = dropdown_items_xpath + '/*' + '/*'
 		menu_xpath = xpath_contains_builder('div', 'class', 'my-account-menu') 
 		notifications_xpath = xpath_contains_builder('div', 'class', 'notifications')
 		
-		safe_click_element(options_element)
+		click_element(options_element)
 		
 		wait_for_element_xpath(dropdown_xpath)
 		if click:
 			self._logout_click(dropdown_xpath)
 		else:
-			dropdown_items_element = safe_get_element_by_xpath(menu_xpath + '/*' + notifications_xpath)
+			dropdown_items_element = get_element_by_xpath(menu_xpath + '/*' + notifications_xpath)
 			self._logout_enter_key(dropdown_items_element)
 			
 		wait_for_element_xpath(xpath_contains_builder('label', 'for', 'username'))
