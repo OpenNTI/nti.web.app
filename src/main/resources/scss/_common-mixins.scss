@@ -59,6 +59,17 @@
 
 
 
+@mixin menu-label-text-treatment {
+	color: #8a8989;
+	font-size: 7.5pt;
+	font-weight: 800;
+	overflow: hidden;
+	text-transform: uppercase;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+
 @mixin system-link-def {
 	color: $ui-link-color;
 	text-decoration: underline;

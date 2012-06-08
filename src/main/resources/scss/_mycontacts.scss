@@ -1,3 +1,4 @@
+
 @mixin contact-header {
 	color: #8a8989;
 	font-size: 7.5pt;
@@ -189,12 +190,8 @@ $over-color: #f4f3f3;
 
 
 	.name {
-		font-size: 7.5pt;
-		font-weight: 800;
+		@include menu-label-text-treatment;
 		color: #3fb3f6;
-		text-transform: uppercase;
-		text-overflow: ellipsis;
-		overflow: hidden;
 	}
 	.status {
 		color: #b8b8b8;
@@ -253,24 +250,58 @@ $over-color: #f4f3f3;
 
 	.contact-selection-list {
 		margin: 10px 0;
-		box-shadow: 1px 1px 6px -3px #000000 !important;
 
-		overflow: hidden;
+		overflow: visible;
 		border-radius: 3px;
-		border: 1px solid #dcdcdc;
 		background: #ffffff;
 
 		div.add-person-card {
-			border-bottom: 1px solid #dcdcdc;
+			background: #ffffff;
+			box-shadow: 1px 1px 3px -1px rgba(100, 100, 100, 0.4);
+			border: 1px solid #dcdcdc;
+			border-bottom-width: 0;
+			overflow: hidden;
+
 			&.expanded,
 			&.selection-item-over{
-				background-color: $over-color;
 				cursor: pointer;
+			}
+
+			&:first-of-type{
+				border-radius: 3px 3px 0 0;
+			}
+
+			&.last-item {
+				border-bottom-width: 1px;
+				border-radius: 0 0 3px 3px;
+			}
+
+			&.expanded {
+				margin-bottom: 10px;
+				&.last-item {
+					margin-bottom: 0;
+				}
+				border-bottom-width: 1px;
+
+				&, & * {
+					border-radius: 0 0 3px 3px;
+				}
+
+			}
+
+			.group-selection-list {
+				margin-top: 0px;
+				ul:first-of-type:before {
+					margin-top: 10px;
+					padding: 5px 5px 5px 60px;
+					content: 'Select Groups';
+					display: block;
+					@include menu-label-text-treatment;
+				}
 			}
 
 			.selection-nt .selection-list-ct {
 				border-top: 1px solid #dcdcdc;
-				background-color: $over-color !important;
 				li.selection-item-over {
 					background-color: transparent !important;
 					img.delete-group { display: none !important; }
@@ -286,21 +317,13 @@ $over-color: #f4f3f3;
 					}
 				}
 			}
-
-			&:first-of-type{
-				border-radius: 3px 3px 0 0;
-			}
-
-			&:last-of-type {
-				border-bottom-width: 0px;
-				border-radius: 0 0 3px 3px;
-			}
 		}
 	}
 
 
 	.group-selection-list {
 		margin-top: 10px;
+
 		.selection-list-ct {
 			ul {
 				&.disallowSelection{
@@ -310,18 +333,28 @@ $over-color: #f4f3f3;
 					}
 				}
 
-				li {
+				li.selection-list-item {
+					padding: 5px 5px 5px 60px;
+					background: transparent url(../images/forms/check_box.png) no-repeat 35px 7px;
+
 					&:first-of-type{
 						opacity: 0.6;
 						&.selection-item-over{
-							color: #767676 !important;
-							background-color: #ffffff !important;
-							cursor: default;
 							img.delete-group { display: none !important; }
 						}
 					}
 					&.selection-item-over{
 						background-color: $over-color;
+						color: #767676 !important;
+						pointer: default;
+					}
+
+
+					&.selection-selected {
+						background: transparent url(../images/forms/check_mark_a.png) no-repeat 38px 10px;
+						&:active {
+							background-image: url(../images/forms/check_mark_b.png);
+						}
 					}
 
 
