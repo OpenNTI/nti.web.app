@@ -6,10 +6,10 @@ from html5lib import treewalkers, serializer, treebuilders
 
 from sst.actions import get_element
 from sst.actions import get_elements
-from sst.actions import get_element_by_xpath
-from sst.actions import get_elements_by_xpath
 from sst.actions import exists_element
 from sst.actions import get_page_source
+from sst.actions import get_element_by_xpath
+from sst.actions import get_elements_by_xpath
 
 # ---------------------------------------		
 
@@ -33,20 +33,20 @@ def html_parse(html=None):
 # ---------------------------------------
 
 def wait_for_element(tag=None, css_class=None, ID=None, text=None, text_regex=None, timeout=10):
-	try:
-		for _ in range(timeout):
-			if text == 'NextThought App':
-				print 'nextthought'
-			if exists_element(tag=tag, css_class=css_class, ID=ID, text=text, text_regex=text_regex):
-				break
-			time.sleep(1)
+	for _ in range(timeout):
+		print  'waiting for', locals()
+		if exists_element(tag=tag, css_class=css_class, ID=ID, text=text, text_regex=text_regex):
+			break
 		time.sleep(1)
-	except:
-		pass
+	time.sleep(1)
 	
 def wait_for_element_xpath(xpath, timeout=10):
 	for _ in range(timeout):
-		if exists_element(get_elements_by_xpath(xpath)):
-			break
+		try:
+			print  'checking', xpath
+			node = get_element_by_xpath(xpath)
+			if node: break
+		except:
+			pass
 		time.sleep(1)
 	time.sleep(1)
