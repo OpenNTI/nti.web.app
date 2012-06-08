@@ -4,6 +4,14 @@ import unittest
 from sst.actions import start
 from sst.actions import stop
 from sst.actions import go_to
+from sst.actions import get_element
+from sst.actions import click_button
+from sst.actions import click_element
+from sst.actions import simulate_keys
+from sst.actions import write_textfield
+from sst.actions import get_current_url
+from sst.actions import get_element_by_xpath
+from sst.actions import get_elements_by_xpath
 
 from nti.seleniumtests import test_url
 from nti.seleniumtests import test_user
@@ -13,15 +21,6 @@ from nti.seleniumtests import wait_for_element_xpath
 from nti.seleniumtests import wait_for_page_to_load
 
 from nti.seleniumtests.config import Configuration
-
-from sst.actions import get_element
-from sst.actions import click_button
-from sst.actions import click_element
-from sst.actions import simulate_keys
-from sst.actions import write_textfield
-from sst.actions import get_element_by_xpath
-from sst.actions import get_elements_by_xpath
-from sst.actions import get_current_url
 
 # ----------------------------------
 
@@ -57,15 +56,16 @@ class WebAppTestBase(unittest.TestCase):
 	# -----------------------
 	
 	def xpath_contains_and_text_builder (self, tag, attribute, value, text):
-		return "//" + tag + "[contains(@" + attribute + ", '" + value + "' and text () = '" + text + "')]"
+		result = ['//', tag, '[contains(@%s,"%s" and text() = "%s")]' % (attribute, value, text)]
+		return ''.join(result)
 	
 	def xpath_contains_builder(self, xpath, element, value):
 		result = ['//', xpath, '[contains(@%s,"%s")]' % (element, value)]
 		return ''.join(result)
 	
 	def _logout_click(self, logout_xpath):
+		elem = None
 		elements = get_elements_by_xpath(logout_xpath)
-		elem = ''
 		for element in elements:
 			if element.text == 'Sign out':
 				elem = element
