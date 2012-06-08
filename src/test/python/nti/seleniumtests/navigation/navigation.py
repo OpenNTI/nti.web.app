@@ -21,39 +21,34 @@ class WebAppNavigation (WebAppTestBase):
         self.login()
         
     def open_level (self, tag = None, attribute = None, attribute_value = None, text_value = None):
-        wait_for_element_xpath (self.xpath_contains_builder (tag, attribute, attribute_value ) + '/..')
-        if not text_value:
-            element = get_element (css_class = attribute_value, tag = tag)
-        else: 
-            wait_for_element_xpath (self.xpath_contains_and_text_builder(tag, attribute, attribute_value, text_value) + '/..')
-            element = get_element (css_class = attribute_value, tag = tag, text = text_value)
-            time.sleep(1)
-        click_element (element)
+        wait_for_element (css_class = attribute_value, tag = tag, text = text_value)
+        element = get_element (css_class = attribute_value, tag = tag, text = text_value)
+        click_element (element, wait=False)
     
     def open_library (self):
         self.open_level('span', 'class', 'library')
         library_elements = get_elements (css_class = 'title', tag = 'div')  
-        books  = [element.text for element in library_elements if element.text]
-        return books
+        return [element.text for element in library_elements if element.text]
     
     def open_book(self, book):
         self.open_level('div', 'class', 'title', book)
         wait_for_element_xpath (self.xpath_contains_builder('tr', 'class', 'x-grid-row') + '/..')
         book_elements = get_elements(css_class = 'x-grid-row', tag= 'tr')
-        chapters  = [element.text for element in book_elements if element.text]
-        return chapters 
+        return [element.text for element in book_elements if element.text]
     
     def open_chapter (self, chapter):
-        self.open_level ('tr', 'class', 'x-grid-row', chapter)    
+        self.open_level ('tr', 'class', 'x-grid-row', chapter) 
         xpath = self.xpath_contains_builder('tr', 'class', 'x-grid-tree-node-leaf') + '/*'
-        #xpath = "//tr[contains (@class, 'x-grid-tree-node-leaf')]/*"
+        print 'getting'
+        wait_for_element_xpath (xpath)
         self.chapter_elements = get_elements_by_xpath(xpath)
-        sections  = [element.text for element in self.chapter_elements if element.text]
-        return sections
+        return [element.text for element in self.chapter_elements if element.text]
     
     def open_section (self, section):
         
         self.open_level ('tr', 'class', 'x-grid-tree-node-leaf', section)
+        self.open_library()
+        
 #        xpath = self.xpath_contains_builder('tr', 'class', 'x-grid-tree-node-leaf') + '/*' 
 #        #chapter_elements = get_elements_by_xpath(xpath)
 #        
@@ -63,9 +58,6 @@ class WebAppNavigation (WebAppTestBase):
 #                wait_for_element_xpath(self.xpath_contains_and_text_builder ('tr', 'class', 'x-grid=tree-node-keaf', section) + '/..')
 #                click_element(elem, wait = True)
 #                break 
-        self.open_library()
-    
-    
     
     def navigate_to(self, book, chapter=None, section=None):
         
@@ -74,11 +66,14 @@ class WebAppNavigation (WebAppTestBase):
         
         # for a book with no chapters or sections
         if not section and not chapter:
-            pass
+            self.open_library()
+            self.open_book(book)
             
         # for a book with only chapters, no sections
         if chapter and not section:
-            pass
+            self.open_library()
+            self.open_book(book)
+            self.open_chapter(chapter)
         
         # for a book with only sections, no chapters
         if section and not chapter:
