@@ -19,6 +19,7 @@ class TestLogin(WebAppTestBase):
 	def test_failed_user_login(self):
 		try:
 			self.login('incorrect_user', 'incorrect_password')
+			self.fail("it should not have login")
 		except:
 			pass
 		finally:
