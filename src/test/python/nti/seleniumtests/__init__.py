@@ -10,6 +10,8 @@ from sst.actions import exists_element
 from sst.actions import get_page_source
 from sst.actions import get_element_by_xpath
 from sst.actions import get_elements_by_xpath
+from sst.actions import assert_title
+from sst.actions import assert_title_contains
 
 # ---------------------------------------		
 
@@ -32,19 +34,28 @@ def html_parse(html=None):
 
 # ---------------------------------------
 
+def wait_for_page_load(text, timeout=10):
+	for _ in range(timeout):
+		try:
+			assert_title()
+			assert_title_contains(text)
+		except:
+			pass
+		time.sleep(1)
+	time.sleep(1)
+
 def wait_for_element(tag=None, css_class=None, ID=None, text=None, text_regex=None, timeout=10):
 	for _ in range(timeout):
-		print  'waiting for', locals()
-		if exists_element(tag=tag, css_class=css_class, ID=ID, text=text, text_regex=text_regex):
+		if exists_element(tag=tag, css_class=css_class, id=ID, text=text, text_regex=text_regex):
 			break
 		time.sleep(1)
 	time.sleep(1)
 	
-def wait_for_element_xpath(xpath, timeout=10):
+def wait_for_element_xpath(xpath, wait=0, timeout=10):
+	time.sleep(wait)
 	for _ in range(timeout):
 		try:
-			print  'checking', xpath
-			node = get_element_by_xpath(xpath)
+			node = get_elements_by_xpath(xpath)
 			if node: break
 		except:
 			pass

@@ -10,6 +10,7 @@ from nti.seleniumtests import test_user
 from nti.seleniumtests import test_password
 from nti.seleniumtests import wait_for_element
 from nti.seleniumtests import wait_for_element_xpath
+from nti.seleniumtests import wait_for_page_load
 
 from nti.seleniumtests.config import Configuration
 
@@ -90,13 +91,13 @@ class WebAppTestBase(unittest.TestCase):
 			else: 
 				simulate_keys(get_element(ID='password'), 'RETURN')
 				
-			wait_for_element(tag='title', text='NextThought App')
-			
+			wait_for_page_load('NextThought App')
 		except ElementNotVisibleException:
 			pass
 			
 	def _logout(self, xpath_contains_builder, click): 
 	
+		
 		options_xpath = xpath_contains_builder("div", "class", 'my-account-wrapper')
 		options_element = get_element_by_xpath(options_xpath)
 		assert options_element, 'my-account-wrapper element not found'
