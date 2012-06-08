@@ -88,7 +88,8 @@ Ext.application({
 
 	requires: [
 		'NextThought.util.Globals',
-		'NextThought.util.shared.Anchors'
+		'NextThought.util.shared.Anchors',
+		'NextThought.model.anchorables.ContentAnchor'
 	],
 
 	controllers: [
