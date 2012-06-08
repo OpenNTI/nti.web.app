@@ -56,6 +56,9 @@ class WebAppTestBase(unittest.TestCase):
 
 	# -----------------------
 	
+	def xpath_contains_and_text_builder (self, tag, attribute, value, text):
+		return "//" + tag + "[contains(@" + attribute + ", '" + value + "' and text () = '" + text + "')]"
+	
 	def xpath_contains_builder(self, xpath, element, value):
 		result = ['//', xpath, '[contains(@%s,"%s")]' % (element, value)]
 		return ''.join(result)
