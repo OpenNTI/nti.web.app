@@ -51,8 +51,7 @@ def wait_for_element(tag=None, css_class=None, ID=None, text=None, text_regex=No
 		time.sleep(1)
 	time.sleep(1)
 	
-def wait_for_element_xpath(xpath, wait=0, timeout=10):
-	time.sleep(wait)
+def wait_for_element_xpath(xpath, timeout=10):
 	for _ in range(timeout):
 		try:
 			node = get_elements_by_xpath(xpath)

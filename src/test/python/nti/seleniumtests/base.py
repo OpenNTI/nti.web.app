@@ -77,7 +77,7 @@ class WebAppTestBase(unittest.TestCase):
 		simulate_keys(dropdown_item_element, 'ARROW_UP')
 		simulate_keys(dropdown_item_element, 'RETURN')
 	
-	def _login(self, user, password, click):
+	def _login(self, user, password):
 		try:
 			wait_for_element(ID='username')
 			write_textfield(get_element(ID='username'), user)
@@ -86,16 +86,13 @@ class WebAppTestBase(unittest.TestCase):
 			write_textfield(get_element(ID='password'), password)
 			
 			wait_for_element(tag='button', ID='submit')
-			if click: 
-				click_button('submit')
-			else: 
-				simulate_keys(get_element(ID='password'), 'RETURN')
+			click_button('submit')
 				
 			wait_for_page_load('NextThought App')
 		except ElementNotVisibleException:
 			pass
 			
-	def _logout(self, xpath_contains_builder, click): 
+	def _logout(self, xpath_contains_builder): 
 	
 		
 		options_xpath = xpath_contains_builder("div", "class", 'my-account-wrapper')
@@ -103,29 +100,21 @@ class WebAppTestBase(unittest.TestCase):
 		assert options_element, 'my-account-wrapper element not found'
 		click_element(options_element)
 		
-		#//*[@id="my-account-menu-1039-innerCt"]
 		dropdown_items_xpath = xpath_contains_builder('div', 'class', 'x-vertical-box-overflow-body')
 		dropdown_xpath = dropdown_items_xpath + '/*' + '/*'
-		menu_xpath = xpath_contains_builder('div', 'class', 'my-account-menu') 
-		notifications_xpath = xpath_contains_builder('div', 'class', 'notifications')
-		
 		
 		wait_for_element_xpath(dropdown_xpath)
-		if click:
-			self._logout_click(dropdown_xpath)
-		else:
-			dropdown_items_element = get_element_by_xpath(menu_xpath + '/*' + notifications_xpath)
-			self._logout_enter_key(dropdown_items_element)
+		self._logout_click(dropdown_xpath)
 			
 		wait_for_element_xpath(xpath_contains_builder('label', 'for', 'username'))
 	
-	def login(self, user=None, password=None, click=True):
+	def login(self, user=None, password=None):
 		credentials = self.users[0]
 		user = user or credentials[0]
 		password = password or credentials[1]
-		self._login(user, password, click)
+		self._login(user, password)
 
-	def logout(self, click=True):
-		self._logout(self.xpath_contains_builder, click)
+	def logout(self):
+		self._logout(self.xpath_contains_builder)
 
 
