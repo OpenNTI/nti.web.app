@@ -1,9 +1,3 @@
-'''
-Created on Jun 7, 2012
-
-@author: ltesti
-'''
-
 from nti.seleniumtests.navigation.navigation import WebAppNavigation
 
 class WebAppQuizzes(WebAppNavigation):

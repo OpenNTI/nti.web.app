@@ -1,9 +1,3 @@
-'''
-Created on Jun 7, 2012
-
-@author: ltesti
-'''
-
 import os
 import unittest
 
