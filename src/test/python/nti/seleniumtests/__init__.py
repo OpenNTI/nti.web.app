@@ -8,9 +8,9 @@ from sst.actions import get_element
 from sst.actions import get_elements
 from sst.actions import exists_element
 from sst.actions import get_page_source
+from sst.actions import get_current_url
 from sst.actions import get_element_by_xpath
 from sst.actions import get_elements_by_xpath
-from sst.actions import get_current_url
 
 # ---------------------------------------		
 
