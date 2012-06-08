@@ -10,7 +10,7 @@ from nti.seleniumtests import test_user
 from nti.seleniumtests import test_password
 from nti.seleniumtests import wait_for_element
 from nti.seleniumtests import wait_for_element_xpath
-from nti.seleniumtests import wait_for_page_load
+from nti.seleniumtests import wait_for_page_to_load
 
 from nti.seleniumtests.config import Configuration
 
@@ -73,17 +73,19 @@ class WebAppTestBase(unittest.TestCase):
 		simulate_keys(dropdown_item_element, 'RETURN')
 	
 	def _login(self, user, password):
-		wait_for_element(ID='username')
-		write_textfield(get_element(ID='username'), user)
-			
-		wait_for_element(ID='password')
-		write_textfield(get_element(ID='password'), password)
-			
-		wait_for_element(tag='button', ID='submit')
-		click_button('submit')
+		try:
+			wait_for_element(ID='username')
+			write_textfield(get_element(ID='username'), user)
 				
-		wait_for_page_load('NextThought App')
-
+			wait_for_element(ID='password')
+			write_textfield(get_element(ID='password'), password)
+				
+			wait_for_element(tag='button', ID='submit')
+			click_button('submit')
+					
+			wait_for_page_to_load('http://localhost:8081/NextThoughtWebApp/')
+		except:
+			pass
 	def _logout(self): 		
 		options_xpath = self.xpath_contains_builder("div", "class", 'my-account-wrapper')
 		options_element = get_element_by_xpath(options_xpath)

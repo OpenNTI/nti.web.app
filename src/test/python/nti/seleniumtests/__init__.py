@@ -10,8 +10,7 @@ from sst.actions import exists_element
 from sst.actions import get_page_source
 from sst.actions import get_element_by_xpath
 from sst.actions import get_elements_by_xpath
-from sst.actions import assert_title
-from sst.actions import assert_title_contains
+from sst.actions import get_current_url
 
 # ---------------------------------------		
 
@@ -34,13 +33,10 @@ def html_parse(html=None):
 
 # ---------------------------------------
 
-def wait_for_page_load(text, timeout=10):
+def wait_for_page_to_load(url, timeout=10):
 	for _ in range(timeout):
-		try:
-			assert_title()
-			assert_title_contains(text)
-		except:
-			pass
+		if url == get_current_url():
+			break
 		time.sleep(1)
 	time.sleep(1)
 
