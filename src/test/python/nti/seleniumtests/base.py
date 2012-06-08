@@ -21,6 +21,7 @@ from sst.actions import simulate_keys
 from sst.actions import write_textfield
 from sst.actions import get_element_by_xpath
 from sst.actions import get_elements_by_xpath
+from sst.actions import get_current_url
 
 # ----------------------------------
 
@@ -73,19 +74,18 @@ class WebAppTestBase(unittest.TestCase):
 		simulate_keys(dropdown_item_element, 'RETURN')
 	
 	def _login(self, user, password):
-		try:
-			wait_for_element(ID='username')
-			write_textfield(get_element(ID='username'), user)
+		self.login_url = get_current_url()
+		
+		wait_for_element(ID='username')
+		write_textfield(get_element(ID='username'), user)
 				
-			wait_for_element(ID='password')
-			write_textfield(get_element(ID='password'), password)
+		wait_for_element(ID='password')
+		write_textfield(get_element(ID='password'), password)
 				
-			wait_for_element(tag='button', ID='submit')
-			click_button('submit')
+		wait_for_element(tag='button', ID='submit')
+		click_button('submit')
 					
-			wait_for_page_to_load('http://localhost:8081/NextThoughtWebApp/')
-		except:
-			pass
+		wait_for_page_to_load(self.url)
 	def _logout(self): 		
 		options_xpath = self.xpath_contains_builder("div", "class", 'my-account-wrapper')
 		options_element = get_element_by_xpath(options_xpath)
@@ -98,7 +98,7 @@ class WebAppTestBase(unittest.TestCase):
 		wait_for_element_xpath(dropdown_xpath)
 		self._logout_click(dropdown_xpath)
 			
-		wait_for_element_xpath(self.xpath_contains_builder('label', 'for', 'username'))
+		wait_for_page_to_load(self.login_url)
 	
 	def login(self, user=None, password=None):
 		credentials = self.users[0]

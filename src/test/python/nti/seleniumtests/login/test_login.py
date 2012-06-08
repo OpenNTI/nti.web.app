@@ -17,8 +17,12 @@ class TestLogin(WebAppTestBase):
 		assert_that('NextThought App', is_in_tree('title'))
 
 	def test_failed_user_login(self):
-		self.login('incorrect_user', 'incorrect_password')
-		assert_that('NextThought Login', is_in_tree('title'))
+		try:
+			self.login('incorrect_user', 'incorrect_password')
+		except:
+			pass
+		finally:
+			assert_that('NextThought Login', is_in_tree('title'))
 		
 	def test_failed_password_login_with_click(self):
 		self.login(password='incorrect_password')
