@@ -16,7 +16,6 @@
 @import "_content.scss";
 @import "_myaccount.scss";
 @import "_mycontacts.scss";
-@import "_sidebar.scss";
 @import "_masks-and-tips.scss";
 @import "_file-uploader.scss";
 @import "_nti-override.scss";
@@ -24,15 +23,14 @@
 @import "_token.scss";
 @import "_chat.scss";
 @import "_annotations.scss";
-@import "_column-widgets.scss";
 @import "_link-styles.scss";
 @import "_whiteboard.scss";
 @import "_classroom.scss";
 @import "_menu-items.scss";
 @import "_buttons.scss";
 
-body.x-border-layout-ct { background: white; }
 
+body.x-border-layout-ct { background: white; }
 .x-body {
 	font-family: 'Open Sans', 'Helvetica', arial, sans-serif !important;
 }

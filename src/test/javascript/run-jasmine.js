@@ -1,6 +1,6 @@
 var page = require('webpage').create();
 var server = require('webserver').create();
-var fs = require('fs');
+var fs = 'fs';
 var s = fs.separator;
 var host, port = 45670, path = phantom.libraryPath.split(s);
 var mimeMap = {
@@ -14,7 +14,8 @@ var mimeMap = {
 	png: 'image/png'
 };
 
-
+//do this to shutup the node.js error :/ on this phantomjs script..sigh.
+fs = require(fs);
 
 while( !fs.exists(path.join(s)+s+'index.html') && path.length ){ path.pop(); }
 if(!path.length){ console.log('index.html not found'); phantom.exit(); }

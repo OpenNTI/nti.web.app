@@ -1,18 +1,3 @@
-.x-spotlight {
-	background-color: #ccc;
-
-	z-index: 8999;
-	position: absolute;
-	top: 0;
-	left: 0;
-	-moz-opacity: 0.2;
-	opacity: .20;
-	filter: alpha(opacity=20);
-	width: 0;
-	height: 0;
-	zoom: 1;
-}
-
 .nti-window .definition {
 	margin: 12px;
 }
@@ -172,12 +157,6 @@
 	}
 }
 
-.x-nti-note-replies.chat-transcript {
-	@include clearfix_left(0px);
-	.x-panel-body{
-		@include clearfix_left(0px);
-	}
-}
 
 .x-window.chat-transcript,
 .x-nti-note-replies.chat-transcript {
@@ -243,10 +222,6 @@
 			display: inline-block;
 		}
 	}
-}
-
-.x-nti-note-replies {
-	@include clearfix_left(15px);
 }
 
 //charms

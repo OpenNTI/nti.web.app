@@ -5,9 +5,3 @@ a{
 	}
 	#NTIContent &{ @include content-link-def; }
 }
-
-/* Fix strange CSS behavior ...menu item links' style were not correctly applying...this seems to fix it.*/
-.x-menu-item-link,
-.x-menu-item-text {
-	color: $ui-link-color;
-}

@@ -227,7 +227,7 @@
 
 .classroom-chooser {
 	a {
-		@include system-link-def;
+		&,
 		&:link,
         &:visited,
         &:active {
