@@ -2,6 +2,10 @@ Ext.define('NextThought.view.Window',{
 	extend: 'Ext.window.Window',
 	alias: 'widget.nti-window',
 
+	requires: [
+		'NextThought.view.WindowHeader'
+	],
+
 	cls: 'nti-window',
 	ui: 'nti-window',
 	plain: true,
@@ -15,14 +19,28 @@ Ext.define('NextThought.view.Window',{
 	constrainHeader: false,
 	liveDrag: true,
 
-	renderSelectors: {
-		closeEl: 'img.tool.close',
-		minimizeEl: 'img.tool.minimize'
-	},
-
 
 	constructor: function(config){
+		var p = this.self.prototype;
+		var items = config.items || p.items,
+			title = config.title || p.title,
+			layout = config.layout || p.layout;
+
+		this.items = [
+			{xtype:'nti-window-header', title: title},
+			{xtype:'container', layout: layout, items: items, flex: 1}
+		];
+
+		this.layout = {
+			type: 'vbox',
+			align: 'stretch'
+		};
+
+		//delete what we will be moving somewhere else
+		delete config.items;
 		delete config.title;
+		delete config.layout;
+
 		return this.callParent([config]);
 	},
 
@@ -64,7 +82,7 @@ Ext.define('NextThought.view.Window',{
 			constrainDelegate: true,
 			constrainTo: Ext.getBody(),
 			el: this.el,
-			delegate: '#' + Ext.escapeId(this.id) + '-body'
+			delegate: '#' + Ext.escapeId(this.down('nti-window-header').getId()) + '-body'
 		});
 		this.dd.on('beforedragstart',this.onBeforeDragStart,this);
 		this.relayEvents(this.dd, ['dragstart', 'drag', 'dragend']);
@@ -82,33 +100,6 @@ Ext.define('NextThought.view.Window',{
 			}
 		}
 		return true;
-	},
-
-
-	afterRender: function(){
-		this.callParent(arguments);
-		this.closeEl.on('click', this.close, this);
-		this.minimizeEl.on('click', this.minimize, this);
-
-		if(!this.closable){ this.closeEl.remove(); }
-		if(!this.minimizable){ this.minimizeEl.remove(); }
 	}
 
-}, function(){
-	var p = this.prototype,
-		r = p.renderTpl,
-		tpl = [	'<div class="controls">',
-					'<img src="{[Ext.BLANK_IMAGE_URL]}"	class="tool close">',
-					'<img src="{[Ext.BLANK_IMAGE_URL]}" class="tool minimize">',
-				'</div>' ];
-
-	//if this is loaded after the inital classloader finishes, renderTpl will be an
-	// XTemplate instance instead of a raw array of strings.
-	if(Ext.isArray(r)){
-		r = p.renderTpl = r.slice();
-		r.push.apply(r, tpl);
-	}
-	else {
-		p.renderTpl = new Ext.XTemplate(r.html,tpl.join(''));
-	}
 });

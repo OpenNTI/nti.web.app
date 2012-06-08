@@ -13,16 +13,20 @@ Ext.define('NextThought.view.chat.Window',{
 	minHeight: 250,
 	height: 250,
 
+	title: 'chat',
+
 	layout: {
 		type: 'hbox',
 		align: 'stretch'
 	},
 
 	items: [
-		{xtype:'chat-gutter'},
 		{xtype:'chat-view', flex: 1}
 	],
 
+	dockedItems: [
+		{xtype:'chat-gutter', dock: 'left'}
+	],
 
 	initComponent: function(){
 		this.callParent(arguments);
