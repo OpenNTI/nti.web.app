@@ -11,7 +11,7 @@ Ext.define('NextThought.view.Window',{
 	plain: true,
 	shadow: false,
 
-	border: false,
+	border: true,
 	frame: false,
 	header: false,
 
@@ -26,20 +26,21 @@ Ext.define('NextThought.view.Window',{
 			title = config.title || p.title,
 			layout = config.layout || p.layout;
 
-		this.items = [
-			{xtype:'nti-window-header', title: title},
-			{xtype:'container', layout: layout, items: items, flex: 1}
-		];
-
-		this.layout = {
-			type: 'vbox',
-			align: 'stretch'
-		};
-
 		//delete what we will be moving somewhere else
 		delete config.items;
 		delete config.title;
 		delete config.layout;
+
+		Ext.apply(this,{
+			items: [
+				{xtype:'nti-window-header', title: title},
+				{xtype:'container', layout: layout, items: items, flex: 1}
+			],
+			layout: {
+				type: 'vbox',
+				align: 'stretch'
+			}
+		});
 
 		return this.callParent([config]);
 	},
@@ -62,6 +63,9 @@ Ext.define('NextThought.view.Window',{
 	},
 
 
+
+
+
 	syncSize: function(){
 		var me = this,
 			h = Ext.Element.getViewportHeight() * me.heightPercent,
@@ -82,7 +86,7 @@ Ext.define('NextThought.view.Window',{
 			constrainDelegate: true,
 			constrainTo: Ext.getBody(),
 			el: this.el,
-			delegate: '#' + Ext.escapeId(this.down('nti-window-header').getId()) + '-body'
+			delegate: '#'+this.down('nti-window-header').getId()
 		});
 		this.dd.on('beforedragstart',this.onBeforeDragStart,this);
 		this.relayEvents(this.dd, ['dragstart', 'drag', 'dragend']);

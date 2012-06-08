@@ -1,24 +1,38 @@
 Ext.define('NextThought.view.WindowHeader', {
-	extend: 'Ext.container.Container',
+	extend: 'Ext.Component',
 	alias: 'widget.nti-window-header',
 
-	requires: [
-		'NextThought.layout.component.TemplatedContainer'
-	],
-
 	cls: 'nti-window-header',
-	layout: 'auto',
-	componentLayout: 'templated-container',
+
 	renderTpl: [
-		'{title}',
 		'<div id="{id}-body" class="header-body">',
-			'{%this.renderContainer(out,values)%}',
+			'<span>{title}</span>',
+
+			'<div class="tools">',
+				//TODO: render tool images here AND add CSS rules
+			'</div>',
+
 			'<div class="controls">',
-				'<img src="{[Ext.BLANK_IMAGE_URL]}"	class="tool close">',
-				'<img src="{[Ext.BLANK_IMAGE_URL]}" class="tool minimize">',
+				'<img src="{[Ext.BLANK_IMAGE_URL]}"	class="tool close" />',
+				'<img src="{[Ext.BLANK_IMAGE_URL]}" class="tool minimize" />',
 			'</div>',
 		'</div>'
 	],
+
+	/**
+	 * @cfg {Object} tools
+	 *
+	 * A dictionary of tools dictionaries.
+	 *
+	 * Ex:
+	 *
+	 * { whiteboard: { handler: function(){}, scope: this, alt: 'tool tip' } }
+	 *
+	 * The key will be the tool's class and will always be like img.tool.x where x is the tool's key in the dictionary.
+	 * The generated HTML will look something like this:
+	 *
+	 * <img src="..." class="tool x" alt="tool tip"/>
+	 */
 
 	renderSelectors: {
 		closeEl: 'img.tool.close',
@@ -38,6 +52,8 @@ Ext.define('NextThought.view.WindowHeader', {
 		this.renderData = Ext.apply(this.renderData||{},{
 			title: this.title
 		});
+
+		//TODO: add render selectors from the tools dictionary
 	},
 
 
@@ -48,5 +64,8 @@ Ext.define('NextThought.view.WindowHeader', {
 
 		if(!this.ownerCt.closable){ this.closeEl.remove(); }
 		if(!this.ownerCt.minimizable){ this.minimizeEl.remove(); }
+
+		//TODO: hook tool handlers to image click events.
+		//TODO: setup tool hover class using Ext.dom.Element#addClsOnOver('over')
 	}
 });
