@@ -15,17 +15,12 @@ from nti.seleniumtests import wait_for_page_load
 from nti.seleniumtests.config import Configuration
 
 from sst.actions import get_element
-from sst.actions import get_elements
-from sst.actions import get_element_by_xpath
-from sst.actions import get_elements_by_xpath
-from sst.actions import exists_element
 from sst.actions import click_button
 from sst.actions import click_element
-from sst.actions import write_textfield
 from sst.actions import simulate_keys
-from sst.actions import get_page_source
-
-from selenium.common.exceptions import ElementNotVisibleException
+from sst.actions import write_textfield
+from sst.actions import get_element_by_xpath
+from sst.actions import get_elements_by_xpath
 
 # ----------------------------------
 
@@ -78,35 +73,30 @@ class WebAppTestBase(unittest.TestCase):
 		simulate_keys(dropdown_item_element, 'RETURN')
 	
 	def _login(self, user, password):
-		try:
-			wait_for_element(ID='username')
-			write_textfield(get_element(ID='username'), user)
+		wait_for_element(ID='username')
+		write_textfield(get_element(ID='username'), user)
 			
-			wait_for_element(ID='password')
-			write_textfield(get_element(ID='password'), password)
+		wait_for_element(ID='password')
+		write_textfield(get_element(ID='password'), password)
 			
-			wait_for_element(tag='button', ID='submit')
-			click_button('submit')
+		wait_for_element(tag='button', ID='submit')
+		click_button('submit')
 				
-			wait_for_page_load('NextThought App')
-		except ElementNotVisibleException:
-			pass
-			
-	def _logout(self, xpath_contains_builder): 
-	
-		
-		options_xpath = xpath_contains_builder("div", "class", 'my-account-wrapper')
+		wait_for_page_load('NextThought App')
+
+	def _logout(self): 		
+		options_xpath = self.xpath_contains_builder("div", "class", 'my-account-wrapper')
 		options_element = get_element_by_xpath(options_xpath)
 		assert options_element, 'my-account-wrapper element not found'
 		click_element(options_element)
 		
-		dropdown_items_xpath = xpath_contains_builder('div', 'class', 'x-vertical-box-overflow-body')
+		dropdown_items_xpath = self.xpath_contains_builder('div', 'class', 'x-vertical-box-overflow-body')
 		dropdown_xpath = dropdown_items_xpath + '/*' + '/*'
 		
 		wait_for_element_xpath(dropdown_xpath)
 		self._logout_click(dropdown_xpath)
 			
-		wait_for_element_xpath(xpath_contains_builder('label', 'for', 'username'))
+		wait_for_element_xpath(self.xpath_contains_builder('label', 'for', 'username'))
 	
 	def login(self, user=None, password=None):
 		credentials = self.users[0]
@@ -115,6 +105,6 @@ class WebAppTestBase(unittest.TestCase):
 		self._login(user, password)
 
 	def logout(self):
-		self._logout(self.xpath_contains_builder)
+		self._logout()
 
 
