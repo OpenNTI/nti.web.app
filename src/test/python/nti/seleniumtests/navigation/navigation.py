@@ -3,11 +3,10 @@ from sst.actions import get_elements
 from sst.actions import switch_to_frame
 from sst.actions import click_element
 from sst.actions import get_elements_by_xpath
-from nti.seleniumtests import wait_for_element
-from nti.seleniumtests import wait_for_element_xpath
-import time
 
+from nti.seleniumtests import wait_for_element
 from nti.seleniumtests.base import WebAppTestBase
+from nti.seleniumtests import wait_for_element_xpath
 
 LIBRARY_CLASS = "//span[contains(@class, 'x-btn-icon library')]/.."
 BOOK_CLASS = "//div[contains (@class, 'title') and text () ='"
@@ -19,6 +18,9 @@ class WebAppNavigation (WebAppTestBase):
     def setUp(self):
         super (WebAppNavigation, self).setUp()
         self.login()
+    
+    def tearDown (self):
+        super(WebAppNavigation, self).tearDown()
         
     def open_level (self, tag = None, attribute = None, attribute_value = None, text_value = None):
         wait_for_element (css_class = attribute_value, tag = tag, text = text_value)
@@ -44,21 +46,10 @@ class WebAppNavigation (WebAppTestBase):
         self.chapter_elements = get_elements_by_xpath(xpath)
         return [element.text for element in self.chapter_elements if element.text]
     
-    def open_section (self, section):
-        
+    def open_section (self, section):        
         self.open_level ('tr', 'class', 'x-grid-tree-node-leaf', section)
         self.open_library()
         
-#        xpath = self.xpath_contains_builder('tr', 'class', 'x-grid-tree-node-leaf') + '/*' 
-#        #chapter_elements = get_elements_by_xpath(xpath)
-#        
-#        for elem in self.chapter_elements:
-#            if elem.text == section:
-#        # find an xpath builder for expressions with more than contains...
-#                wait_for_element_xpath(self.xpath_contains_and_text_builder ('tr', 'class', 'x-grid=tree-node-keaf', section) + '/..')
-#                click_element(elem, wait = True)
-#                break 
-    
     def navigate_to(self, book, chapter=None, section=None):
         
         if not book:
@@ -93,7 +84,5 @@ class WebAppNavigation (WebAppTestBase):
         switch_to_frame (frameName)
         element_chapter = get_element (css_class ='chapter title')
         return element_chapter.find_element_by_class_name ('label').text
-        
-    def tearDown (self):
-        super(WebAppNavigation, self).tearDown()
+
         

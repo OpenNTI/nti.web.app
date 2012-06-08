@@ -3,8 +3,6 @@ import unittest
 
 from nti.seleniumtests.navigation.navigation import WebAppNavigation
 
-from nti.seleniumtests.matchers import is_in_tree
-
 from hamcrest import assert_that
 
 __path__ = os.path.split(__file__)[0]
