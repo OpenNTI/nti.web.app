@@ -58,6 +58,11 @@
 }
 
 
+@mixin clearfix_left($dist:0px) {
+	clear: both;
+	padding-left: $dist !important;
+}
+
 
 @mixin menu-label-text-treatment {
 	color: #8a8989;

@@ -177,6 +177,14 @@
 	}
 }
 
+.x-note-panel{
+	width: 100%;
+}
+
+.document-notes {
+	position: absolute;
+}
+
 .x-nti-note {
 	span.controls {
 		position: absolute;
@@ -211,17 +219,27 @@
 		.share { background: $note-action-share-icon; }
 		.mute { background: $note-action-mute-icon center center no-repeat; }
 	}
-}
 
-.x-nti-note.owner {
-	.controls {
-		span.edit {
-			display: inline-block;
-		}
-		span.delete {
-			display: inline-block;
+	&.owner {
+		.controls {
+			span.edit {
+				display: inline-block;
+			}
+			span.delete {
+				display: inline-block;
+			}
 		}
 	}
+}
+
+.x-nti-note-replies {
+	&.chat-transcript {
+		@include clearfix_left();
+		.x-panel-body{
+			@include clearfix_left();
+		}
+	}
+	@include clearfix_left(15px);
 }
 
 //charms
