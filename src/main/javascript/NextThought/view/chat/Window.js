@@ -26,7 +26,7 @@ Ext.define('NextThought.view.chat.Window',{
 	],
 
 	dockedItems: [
-		{xtype:'chat-gutter', dock: 'left'}
+		{xtype:'chat-gutter', dock: 'left', hidden: true}
 	],
 
 	initComponent: function(){
@@ -51,16 +51,10 @@ Ext.define('NextThought.view.chat.Window',{
 		var list = this.down('chat-gutter');
 		var me = this;
 
-		list.hide();
+
 
 		UserRepository.getUser(roomInfo.get('Occupants'),function(users){
-
 			me.setTitle(users);
-
-			if(users.length>2){
-				list.show();
-			}
-
 			list.updateList(users);
 		});
 	},
@@ -95,12 +89,19 @@ Ext.define('NextThought.view.chat.Window',{
 		var title = [];
 
 		Ext.each(users,function(u){
-			if(u.getId() !== $AppConfig.userObject.getId()){
+			if(!isMe(u)){
 				title.push(u.getName());
 			}
 		});
 
-		this.callParent([title.join(', ')]);
+		if(title.length===1){
+			title = title[0];
+		}
+		else {
+			title = Ext.String.format('Group Chat ({0})',title.length);
+		}
+
+		this.callParent([title]);
 	},
 
 

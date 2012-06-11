@@ -64,6 +64,14 @@
 }
 
 
+@mixin bottom-etch( $dark: #ebebeb, $light: #f8f8f8 ){
+	box-shadow: inset 0px -1px 0px 0px $dark;
+	border: 1px solid $light;
+	border-width: 0;
+	border-bottom-width: 1px;
+}
+
+
 @mixin menu-label-text-treatment {
 	color: #8a8989;
 	font-size: 7.5pt;

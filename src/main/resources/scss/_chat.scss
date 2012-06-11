@@ -3,37 +3,45 @@
 	@extend .nti-window;
 
 	.gutter {
-		& > img:first-child {
+		overflow: hidden;
+		background: #f4f3f3;
+
+		&.x-docked-left {
+			border-radius: 5px 0 0 5px;
+			border: 1px solid #dbdbdb;
+			border-width: 0;
+			border-right-width: 1px !important;
+		}
+
+		& > div.gutter-entry:first-child {
 			border-radius: 5px 0 0 0;
 		}
-		overflow: hidden;
-		background: #eeeeee;
-		border-radius: 5px 0 0 5px;
-
-		border: 1px solid #cfcfcf;
-		border-width: 0;
-		border-right-width: 1px;
-
-		.x-btn {
+		.gutter-entry {
+			overflow: hidden;
 			position: relative;
-			left: 2px;
-			width: 34px;
-			height: 36px;
-			border-bottom: 1px solid #f9f9f9;
-			box-shadow: 0px -5px 0 -4px #e2e2e2 inset;
 
-			button {
-				width: 34px; height: 36px;
-				.x-btn-inner {display: none;}
-				.x-btn-icon {
-					position: absolute; top: 0; left: 0;
-					width: 34px; height: 36px;
+			@include bottom-etch;
 
-					&.people {
-						opacity: 0.7;
-						background: url(../images/add-people.png) no-repeat 7px 8px; 
-					}
-					&.whiteboard { background: url(../images/add-whiteboard.png) no-repeat 5px 7px;}
+			img {
+				border-radius: 1px;
+				border: 1px solid #c7c6c6;
+				width: 36px;
+				height: auto;
+				float: left;
+				margin: 3px 10px 3px 6px;
+			}
+			.wrapper {
+				margin: 6px 0 10px 53px;
+
+				.name {
+					@include menu-label-text-treatment;
+				}
+				.status {
+					@include menu-label-text-treatment;
+					text-transform: none;
+					font-weight: 500;
+					font-style: italic;
+					font-size: 8pt;
 				}
 			}
 		}

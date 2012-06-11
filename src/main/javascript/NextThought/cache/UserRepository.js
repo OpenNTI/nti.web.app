@@ -26,7 +26,7 @@ Ext.define('NextThought.cache.UserRepository', {
 			ignoreNewInstance = (raw && raw.hasOwnProperty('ignoreIfExists'));
 
 		if (u && (!ignoreNewInstance || !u.equal(refreshedUser))) {
-			if ($AppConfig.userObject && u.getId() === $AppConfig.userObject.getId() ){
+			if ($AppConfig.userObject && isMe(u) ){
 				if(u !== $AppConfig.userObject) {
 					console.warn('AppConfig user instance is different');
 				}

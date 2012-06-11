@@ -312,6 +312,11 @@ Ext.define('NextThought.util.Globals', {
 	},
 
 
+	isMe: function(user){
+		return $AppConfig.userObject.getId() === user.getId();
+	},
+
+
 	getViewIdFromComponent: function(c) {
 		return c.up('view-container').id;
 	}
@@ -319,6 +324,7 @@ Ext.define('NextThought.util.Globals', {
 function(){
 	window.Globals = this;
 	window.guidGenerator = this.guidGenerator;
+	window.isMe = this.isMe;
 
 	window.onerror = function(){
 		console.log('Caught an error? ',arguments);
