@@ -7,7 +7,7 @@ Ext.define('NextThought.view.chat.Window',{
 		'NextThought.view.chat.Gutter'
 	],
 
-	cls: 'chat-window',
+	cls: 'chat-window no-gutter',
 	ui: 'chat-window',
 	minimizable: true,
 	minWidth: 285,
