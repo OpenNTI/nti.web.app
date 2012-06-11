@@ -19,28 +19,49 @@ Ext.define('NextThought.view.Window',{
 	constrainHeader: false,
 	liveDrag: true,
 
+	layout: { type: 'vbox', align: 'stretch' },
+	items: [
+		{xtype:'nti-window-header' },
+		{xtype:'container', flex: 1}
+	],
+
+
+	onClassExtended: function(cls, data, hooks) {
+		var onBeforeClassCreated = hooks.onBeforeCreated;
+
+		hooks.onBeforeCreated = function(cls, data) {
+			var superCls = cls.prototype.superclass;
+			var frame = Ext.clone(superCls.items),
+				layout = Ext.clone(superCls.layout);
+
+			if(data.dialog){
+				data.layout = data.layout || 'auto';//dialogs define their own view
+			}
+			else {
+				Ext.apply(frame.last(),{
+					items: data.items,
+					layout: data.layout
+				});
+
+				frame.first().title = data.title || '';
+
+				data.items = frame;
+				data.layout = layout;
+			}
+			onBeforeClassCreated.call(this, cls, data, hooks);
+		};
+	},
 
 	constructor: function(config){
-		var p = this.self.prototype;
-		var items = config.items || p.items,
-			title = config.title || p.title,
-			layout = config.layout || p.layout;
-
-		//delete what we will be moving somewhere else
 		delete config.items;
-		delete config.title;
 		delete config.layout;
 
-		Ext.apply(this,{
-			items: [
-				{xtype:'nti-window-header', title: title},
-				{xtype:'container', layout: layout, items: items, flex: 1}
-			],
-			layout: {
-				type: 'vbox',
-				align: 'stretch'
-			}
-		});
+		var title = config.title;
+		delete config.title;
+
+		if(title){
+			this.items.first().title = title;
+		}
 
 		return this.callParent([config]);
 	},
@@ -81,15 +102,22 @@ Ext.define('NextThought.view.Window',{
 
 
 	initDraggable: function() {
-		this.dd = new Ext.util.ComponentDragger(this, {
-			constrain: true,
-			constrainDelegate: true,
-			constrainTo: Ext.getBody(),
-			el: this.el,
-			delegate: '#'+this.down('nti-window-header').getId()
-		});
-		this.dd.on('beforedragstart',this.onBeforeDragStart,this);
-		this.relayEvents(this.dd, ['dragstart', 'drag', 'dragend']);
+		if(!this.dialog){
+			try {
+				this.dd = new Ext.util.ComponentDragger(this, {
+					constrain: true,
+					constrainDelegate: true,
+					constrainTo: Ext.getBody(),
+					el: this.el,
+					delegate: '#'+this.down('nti-window-header').getId()
+				});
+				this.dd.on('beforedragstart',this.onBeforeDragStart,this);
+				this.relayEvents(this.dd, ['dragstart', 'drag', 'dragend']);
+			}
+			catch(e){
+				console.error(Globals.getError(e));
+			}
+		}
 	},
 
 

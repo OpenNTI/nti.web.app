@@ -9,6 +9,7 @@ Ext.define( 'NextThought.view.annotations.ShareWith', {
 
 	width: 450,
 	modal: true,
+	dialog: true,
 
 	items: [
 		{
