@@ -20,127 +20,254 @@ describe("Anchor Utils", function() {
 	});
 
 	describe("Model Tests", function(){
-		it("ContentAnchor created via JSON", function(){
-			var id = 'a1234567',
-				tagName = 'SOMETAGNAME',
-				ca = Ext.create('NextThought.model.anchorables.ContentAnchor', {domId: id, tagName: tagName});
+		it('Good TextContent Creation', function(){
+			var text = 'This is some text',
+				offset = 5,
+				ct = Ext.create('NextThought.model.anchorables.TextContext', {contextText:text, contextOffset:offset});
 
-			expect(ca.getTagName()).toBe(tagName);
-			expect(ca.getDomId()).toBe(id);
+			expect(ct).toBeTruthy();
+			expect(ct.getContextText()).toEqual(text);
+			expect(ct.getContextOffset()).toEqual(offset);
 		});
 
-		it("ContentAnchor created via node", function(){
+		it('Bad TextContent Creation', function(){
+			try {
+				Ext.create('NextThought.model.anchorables.TextContext', {contextText:'', contextOffset:5});
+			}
+			catch (e) {
+				expect(e.message).toEqual('Text must have one or more characters');
+			}
+			try {
+				Ext.create('NextThought.model.anchorables.TextContext', {contextOffset:5});
+			}
+			catch (e) {
+				expect(e.message).toEqual('Text must have one or more characters');
+			}
+			try {
+				Ext.create('NextThought.model.anchorables.TextContext', {contextText: 'text', contextOffset:-1})
+			}
+			catch (e) {
+				expect(e.message).toEqual('Offset must be greater than 0, supplied value: -1');
+			}
+			try {
+				Ext.create('NextThought.model.anchorables.TextContext', {contextText: 'text'});
+			}
+			catch (e) {
+				expect(e.message).toEqual('No offset supplied');
+			}
+		});
+
+		it("Good DomContentPointer Creation via config", function(){
 			var id = 'a1234567',
 				tagName = 'SOMETAGNAME',
+				type = 'end',
+				ca = Ext.create('NextThought.model.anchorables.DomContentPointer', {elementId: id, elementTagName: tagName, type: type});
+
+			expect(ca.getElementTagName()).toBe(tagName);
+			expect(ca.getElementId()).toBe(id);
+			expect(ca.getType()).toBe(type);
+		});
+
+		it("Good DomContentPointer Creation via node", function(){
+			var id = 'a1234567',
+				tagName = 'SOMETAGNAME',
+				type = 'start',
 				element = document.createElement(tagName), ca;
 
 			element.setAttribute('id', id);
-			ca = Ext.create('NextThought.model.anchorables.ContentAnchor', element);
+			ca = Ext.create('NextThought.model.anchorables.DomContentPointer', {node: element, type:type});
 
-			expect(ca.getTagName()).toBe(tagName);
-			expect(ca.getDomId()).toBe(id);
+			expect(ca.getElementTagName()).toBe(tagName);
+			expect(ca.getElementId()).toBe(id);
+			expect(ca.getType()).toBe(type);
 		});
 
-		it("TextContentAnchor created via JSON", function(){
-			var id = 'a1234567',
-				tagName = 'SOMETAGNAME',
-				contextText = 'some text',
-				contextOffset = 15,
-				edgeOffset = 3,
-				cfg = {
-					domId: id,
-					tagName: tagName,
-					contextText: contextText,
-					contextOffset: contextOffset,
-					edgeOffset: edgeOffset
+		it("Bad DomContentPointer Creation", function(){
+			try {
+				Ext.create('NextThought.model.anchorables.DomContentPointer', {elementTagName: 'name', type: 'end'});
+			}
+			catch (e){
+				expect(e.message).toBe('Must supply an Id');
+			}
+
+			try {
+				Ext.create('NextThought.model.anchorables.DomContentPointer', {elementId: 'id', type: 'start'});
+			}
+			catch (e){
+				expect(e.message).toBe('Must supply a tag name');
+			}
+
+			try {
+				Ext.create('NextThought.model.anchorables.DomContentPointer', {elementId: 'id', elementTagName: 'tagName', type: 'wrong'});
+			}
+			catch (e){
+				expect(e.message).toBe('Type must be of the type start,end,ancestor, supplied wrong');
+			}
+
+			try {
+				Ext.create('NextThought.model.anchorables.DomContentPointer', {elementId: 'id', elementTagName: 'tagName'});
+			}
+			catch (e){
+				expect(e.message).toBe('Must supply a type');
+			}
+		});
+
+		it("Good TextDomContentPointer Creation via config", function(){
+			var	cfg = {
+					elementId: 'id',
+					elementTagName: 'tagName',
+					type: 'ancestor',
+					edgeOffset: 5,
+					contexts: [
+						Ext.create('NextThought.model.anchorables.TextContext', {contextText:'text1', contextOffset:0}),
+						Ext.create('NextThought.model.anchorables.TextContext', {contextText:'text2', contextOffset:1}),
+						Ext.create('NextThought.model.anchorables.TextContext', {contextText:'text3', contextOffset:2})
+					]
 				},
-				tca = Ext.create('NextThought.model.anchorables.TextContentAnchor', cfg);
+				x = Ext.create('NextThought.model.anchorables.TextDomContentPointer', cfg);
 
-			expect(tca.getTagName()).toBe(tagName);
-			expect(tca.getDomId()).toBe(id);
-			expect(tca.getContextText()).toBe(contextText);
-			expect(tca.getContextOffset()).toBe(contextOffset);
-			expect(tca.getEdgeOffset()).toBe(edgeOffset);
+			expect(x.getEdgeOffset()).toBe(cfg.edgeOffset);
+			expect(x.getType()).toBe(cfg.type);
+			expect(x.getContexts()).toBeTruthy();
+			expect(x.getContexts().length).toBe(cfg.contexts.length);
+			expect(x.getElementTagName()).toBe(cfg.elementTagName);
+			expect(x.getElementId()).toBe(cfg.elementId);
 		});
 
-		it("ContentRangeSpec creation", function(){
-			var id = 'a1234567',
-				tagName = 'SOMETAGNAME',
-				contextText = 'some text',
-				contextOffset = 15,
-				edgeOffset = 3,
-				tca1 = Ext.create('NextThought.model.anchorables.TextContentAnchor', {
-					domId: id+'0',
-					tagName: tagName + 'C',
-					contextText: contextText,
-					contextOffset: contextOffset,
-					edgeOffset: edgeOffset
+		it("Bad TextDomContentPointer Creation via config", function(){
+			try {
+				Ext.create('NextThought.model.anchorables.TextDomContentPointer', {
+					elementId: 'id',
+					elementTagName: 'tagName',
+					type: 'ancestor',
+					edgeOffset: 5,
+					contexts: []
+				});
+			}
+			catch (e){
+				expect(e.message).toEqual('Must supply at least 1 TextContext');
+			}
+
+			try {
+				Ext.create('NextThought.model.anchorables.TextDomContentPointer', {
+					elementId: 'id',
+					elementTagName: 'tagName',
+					type: 'ancestor',
+					edgeOffset: 5
+				});
+			}
+			catch (e){
+				expect(e.message).toEqual('Must supply TextContexts');
+			}
+
+			try {
+				Ext.create('NextThought.model.anchorables.TextDomContentPointer', {
+					elementId: 'id',
+					elementTagName: 'tagName',
+					type: 'ancestor',
+					contexts: [
+						Ext.create('NextThought.model.anchorables.TextContext', {contextText:'text1', contextOffset:0}),
+						Ext.create('NextThought.model.anchorables.TextContext', {contextText:'text2', contextOffset:1}),
+						Ext.create('NextThought.model.anchorables.TextContext', {contextText:'text3', contextOffset:2})
+					]
+				});
+			}
+			catch (e) {
+				expect(e.message).toEqual('Offset must exist and be 0 or more');
+			}
+
+		});
+
+		it("Good DomContentRangeDescription Creation", function(){
+			var tca1 = Ext.create('NextThought.model.anchorables.TextDomContentPointer',{
+					elementId: 'id',
+					elementTagName: 'tagName',
+					type: 'ancestor',
+					edgeOffset: 5,
+					contexts: [
+						Ext.create('NextThought.model.anchorables.TextContext', {contextText:'text1', contextOffset:0}),
+						Ext.create('NextThought.model.anchorables.TextContext', {contextText:'text2', contextOffset:1}),
+						Ext.create('NextThought.model.anchorables.TextContext', {contextText:'text3', contextOffset:2})
+					]
 				}),
-				tca2 = Ext.create('NextThought.model.anchorables.TextContentAnchor', {
-					domId: id+'1',
-					tagName: tagName + 'B',
-					contextText: contextText,
-					contextOffset: contextOffset,
-					edgeOffset: edgeOffset
+				tca2 = Ext.create('NextThought.model.anchorables.TextDomContentPointer', {
+					elementId: 'id',
+					elementTagName: 'tagName',
+					type: 'ancestor',
+					edgeOffset: 5,
+					contexts: [
+						Ext.create('NextThought.model.anchorables.TextContext', {contextText:'text1', contextOffset:0}),
+						Ext.create('NextThought.model.anchorables.TextContext', {contextText:'text2', contextOffset:1}),
+						Ext.create('NextThought.model.anchorables.TextContext', {contextText:'text3', contextOffset:2})
+					]
 				}),
-				ca1 = Ext.create('NextThought.model.anchorables.TextContentAnchor', {
-					domId: id,
-					tagName: tagName
+				ca1 = Ext.create('NextThought.model.anchorables.TextDomContentPointer', {
+					elementId: 'id',
+					elementTagName: 'tagName',
+					type: 'ancestor',
+					edgeOffset: 5,
+					contexts: [
+						Ext.create('NextThought.model.anchorables.TextContext', {contextText:'text1', contextOffset:0}),
+						Ext.create('NextThought.model.anchorables.TextContext', {contextText:'text2', contextOffset:1}),
+						Ext.create('NextThought.model.anchorables.TextContext', {contextText:'text3', contextOffset:2})
+					]
 				}),
-				cas = Ext.create('NextThought.model.anchorables.ContentRangeSpec', {
+				dcrd = Ext.create('NextThought.model.anchorables.DomContentRangeDescription', {
 					start: tca1,
 					end: tca2,
 					ancestor: ca1
 				});
 
-			expect(cas.getStart()).toBeTruthy();
-			expect(cas.getEnd()).toBeTruthy();
-			expect(cas.getAncestor()).toBeTruthy();
+			expect(dcrd.getStart()).toBeTruthy();
+			expect(dcrd.getEnd()).toBeTruthy();
+			expect(dcrd.getAncestor()).toBeTruthy();
 		});
 
-		it("ContentSimpleTextRangeSpec creation", function(){
-			var id = 'a1234567',
-				tagName = 'SOMETAGNAME',
-				contextText = 'some text',
-				contextOffset = 15,
-				edgeOffset = 3,
-				selectedText = 'this is a test',
-				offset = 5,
-				tca1 = Ext.create('NextThought.model.anchorables.TextContentAnchor', {
-					domId: id+'0',
-					tagName: tagName + 'C',
-					contextText: contextText,
-					contextOffset: contextOffset,
-					edgeOffset: edgeOffset
+		it("Bad DomContentRangeDescription Creation", function(){
+			var tca1 = Ext.create('NextThought.model.anchorables.TextDomContentPointer',{
+					elementId: 'id',
+					elementTagName: 'tagName',
+					type: 'ancestor',
+					edgeOffset: 5,
+					contexts: [
+						Ext.create('NextThought.model.anchorables.TextContext', {contextText:'text1', contextOffset:0}),
+						Ext.create('NextThought.model.anchorables.TextContext', {contextText:'text2', contextOffset:1}),
+						Ext.create('NextThought.model.anchorables.TextContext', {contextText:'text3', contextOffset:2})
+					]
 				}),
-				tca2 = Ext.create('NextThought.model.anchorables.TextContentAnchor', {
-					domId: id+'1',
-					tagName: tagName + 'B',
-					contextText: contextText,
-					contextOffset: contextOffset,
-					edgeOffset: edgeOffset
+				tca2 = Ext.create('NextThought.model.anchorables.TextDomContentPointer', {
+					elementId: 'id',
+					elementTagName: 'tagName',
+					type: 'ancestor',
+					edgeOffset: 5,
+					contexts: [
+						Ext.create('NextThought.model.anchorables.TextContext', {contextText:'text1', contextOffset:0}),
+						Ext.create('NextThought.model.anchorables.TextContext', {contextText:'text2', contextOffset:1}),
+						Ext.create('NextThought.model.anchorables.TextContext', {contextText:'text3', contextOffset:2})
+					]
 				}),
-				ca1 = Ext.create('NextThought.model.anchorables.TextContentAnchor', {
-					domId: id,
-					tagName: tagName
-				}),
-				cstas = Ext.create('NextThought.model.anchorables.ContentSimpleTextRangeSpec', {
-					start: tca1,
-					end: tca2,
-					ancestor: ca1,
-					offset: offset,
-					selectedText: selectedText
+				ca1 = Ext.create('NextThought.model.anchorables.TextDomContentPointer', {
+					elementId: 'id',
+					elementTagName: 'tagName',
+					type: 'ancestor',
+					edgeOffset: 5,
+					contexts: [
+						Ext.create('NextThought.model.anchorables.TextContext', {contextText:'text1', contextOffset:0}),
+						Ext.create('NextThought.model.anchorables.TextContext', {contextText:'text2', contextOffset:1}),
+						Ext.create('NextThought.model.anchorables.TextContext', {contextText:'text3', contextOffset:2})
+					]
 				});
 
-			expect(cstas.getStart()).toBeTruthy();
-			expect(cstas.getEnd()).toBeTruthy();
-			expect(cstas.getAncestor()).toBeTruthy();
-			expect(cstas.getOffset()).toBeTruthy();
-			expect(cstas.getSelectedText()).toBeTruthy();
-
-			expect(cstas.getOffset()).toBe(offset);
-			expect(cstas.getSelectedText()).toBe(selectedText);
+			try {
+					Ext.create('NextThought.model.anchorables.DomContentRangeDescription', {
+						start: tca1,
+						end: tca2
+					});
+			}
+			catch (e) {
+				expect(e.message).toEqual('Invalid contents');
+			}
 		});
-	});
+	})
 });
 
