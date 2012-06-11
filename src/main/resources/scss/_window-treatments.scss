@@ -1,6 +1,6 @@
 
 .nti-window {
-    background-color: #ffffff;
+    background-color: #fcfcfc;
 	box-shadow: 3px 3px 6px -3px #cccccc;
 	border-radius: 5px;
 	border: 1px solid #dbdbdb;
@@ -19,22 +19,49 @@
 		border-width: 0 !important;
 	}
 
-	.controls {
-		border-radius: 0 5px 0 0;
-		position: absolute; right: 0; top: 0;
-		background: url(../images/window_controls_bg.png) 0 0;
+	.nti-window-header {
+		border-radius: 5px 5px 0 0;
+		background: transparent;
+		border-bottom: 1px solid #ffffff;
+		box-shadow: inset 0px -1px 0px 0px #F6F5F5;
 
-		img.tool {
-			width: 8px; height: 8px;
-			margin: 10px 10px 10px 5px;
-			float: right;
-			cursor: pointer;
+		.header-body {
+			border-radius: 5px 5px 0 0;
+			position: relative;
+			overflow: hidden;
+			span {
+				@include menu-label-text-treatment;
+				padding: 8px 10px;
+				float: left;
+				display: inline-block;
+			}
 
-			background: url(../images/window-sprites.png) -100px -100px no-repeat;
-			&.close { background-position: -1px 0; }
-			&.minimize { background-position: -15px 0; }
+			.tools {
+				float: right;
+			}
+
+			.controls {
+				border-radius: 0 5px 0 0;
+				height: 100%;
+				float: right;
+				background: url(../images/window_controls_v_div.png) left center no-repeat;
+				padding: 10px 5px 10px 5px;
+
+				img.tool {
+					width: 8px; height: 8px;
+					margin: 2px 7px;
+					float: right;
+					cursor: pointer;
+
+					background: url(../images/window-sprites.png) -100px -100px no-repeat;
+					&.close { background-position: -1px 0; }
+					&.minimize { background-position: -15px 0; }
+				}
+			}
 		}
+
 	}
+
 }
 
 

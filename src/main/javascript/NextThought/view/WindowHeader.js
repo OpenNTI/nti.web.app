@@ -6,16 +6,16 @@ Ext.define('NextThought.view.WindowHeader', {
 
 	renderTpl: [
 		'<div id="{id}-body" class="header-body">',
-			'<span>{title}</span>',
+			'<div class="controls">',
+				'<img src="{[Ext.BLANK_IMAGE_URL]}"	class="tool close" />',
+				'<img src="{[Ext.BLANK_IMAGE_URL]}" class="tool minimize" />',
+			'</div>',
 
 			'<div class="tools">',
 				//TODO: render tool images here AND add CSS rules
 			'</div>',
 
-			'<div class="controls">',
-				'<img src="{[Ext.BLANK_IMAGE_URL]}"	class="tool close" />',
-				'<img src="{[Ext.BLANK_IMAGE_URL]}" class="tool minimize" />',
-			'</div>',
+			'<span>{title}</span>',
 		'</div>'
 	],
 

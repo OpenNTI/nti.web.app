@@ -1,7 +1,6 @@
 
 .chat-window {
 	@extend .nti-window;
-	background: #fbfbfb;
 
 	.gutter {
 		& > img:first-child {
@@ -50,7 +49,6 @@
 	.chat-log-view {
 		border-radius: 0 5px 0 0;
 		border-bottom: 1px solid #cfcfcf !important;
-		background: #fbfbfb;
 
         .log-entry{
             background: #3fb3f6;
