@@ -32,10 +32,6 @@ Ext.define('NextThought.view.chat.Window',{
 	initComponent: function(){
 		this.callParent(arguments);
 
-		this.setPosition(
-			Ext.dom.Element.getViewportWidth() - 305,
-			Ext.dom.Element.getViewportHeight() - 270 );
-
 		if(!this.roomInfo){
 			Ext.Error.raise('roomInfo required');
 		}
@@ -46,11 +42,6 @@ Ext.define('NextThought.view.chat.Window',{
 	roomInfoChanged: function(roomInfo){
 		if (!this.roomInfo){return;}  //Only do this if it's there.
 
-//		//Just checking to see if we got the correct room info
-//		if (roomInfo.getId() !== this.roomInfo.getId()) {
-//			console.error('Got a RoomInfo change event for a RoomInfo that has a different ID, current', this.roomInfo, 'new', roomInfo);
-//			return;
-//		}
 		//stop listening on old room info, reassign and start listening again.
 		this.roomInfo.un('changed', this.roomInfoChanged, this);
 		this.roomInfo = roomInfo;
@@ -59,8 +50,13 @@ Ext.define('NextThought.view.chat.Window',{
 
 		var list = this.down('chat-gutter');
 
-		console.log('RoomInfo',roomInfo.data);
+		list.hide();
+
 		UserRepository.getUser(roomInfo.get('Occupants'),function(users){
+
+			if(users.length>2){
+				list.show();
+			}
 			list.updateList(users);
 		});
 	},

@@ -11,6 +11,18 @@ Ext.define('NextThought.view.chat.Gutter',{
 	},
 
 
+	hide: function(){
+		this.ownerCt.addCls('no-gutter');
+		return this.callParent();
+	},
+
+
+	show: function(){
+		this.ownerCt.removeCls('no-gutter');
+		return this.callParent();
+	},
+
+
 	updateList: function(users){
 		var list = [];
 

@@ -11,9 +11,12 @@ Ext.define('NextThought.view.chat.log.Entry', {
 	componentLayout: 'templated-container',
 
 	renderTpl: new Ext.XTemplate(
-		'<div class="log-entry {me}">',
-			'<div class="name">{name}</div> ',
-			'<div class="body-text">{body}</div> ',
+		'<div class="log-entry-wrapper {me}">',
+			'<img src="{avatarURL}" class="avatar" alt="{name}">',
+			'<div class="log-entry {me}">',
+				'<div class="name">{name}</div> ',
+				'<div class="body-text">{body}</div> ',
+			'</div>',
 		'</div>',
 		'<div id="{id}-body" class="replies">',
 			'{%this.renderContainer(out,values)%}',
@@ -23,6 +26,7 @@ Ext.define('NextThought.view.chat.log.Entry', {
 	childEls: ['body'],
 
 	renderSelectors: {
+		icon: 'img',
 		name: '.name',
 		text: '.body-text'
 	},
@@ -110,9 +114,16 @@ Ext.define('NextThought.view.chat.log.Entry', {
 
 	fillInUser: function(u) {
 		var name = u.getName();
+		var url = u.get('avatarURL');
+		console.log(url, u);
 		this.renderData.name = name;
+		this.renderData.avatarURL = url;
 		if(this.rendered){
 			this.name.update(name);
+			this.icon.set({
+				src: url,
+				alt: name
+			});
 		}
 	},
 
