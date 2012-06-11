@@ -13,6 +13,9 @@ Ext.define('NextThought.view.WindowHeader', {
 
 			'<div class="tools">',
 				//TODO: render tool images here AND add CSS rules
+				'<tpl for="tools">',
+					'<img src="{[Ext.BLANK_IMAGE_URL]}" class="tool {tool}" alt="{tip}" />',
+				'</tpl>',
 			'</div>',
 
 			'<span>{title}</span>',
@@ -26,7 +29,11 @@ Ext.define('NextThought.view.WindowHeader', {
 	 *
 	 * Ex:
 	 *
-	 * { whiteboard: { handler: function(){}, scope: this, alt: 'tool tip' } }
+	 * { whiteboard: { handler: function(){}, scope: this, tip: 'tool tip' } }
+	 *
+	 * A null scope will resolve to this components' parent (the window)
+	 *
+	 * A string value for the handler will resolve to a property name inside the scope: Ex: scope[handler]
 	 *
 	 * The key will be the tool's class and will always be like img.tool.x where x is the tool's key in the dictionary.
 	 * The generated HTML will look something like this:
@@ -35,7 +42,7 @@ Ext.define('NextThought.view.WindowHeader', {
 	 */
 
 	renderSelectors: {
-		text: 'span',
+		textEl: 'span',
 		closeEl: 'img.tool.close',
 		minimizeEl: 'img.tool.minimize'
 	},
@@ -50,34 +57,78 @@ Ext.define('NextThought.view.WindowHeader', {
 
 	initComponent: function(){
 		this.callParent(arguments);
-		this.renderData = Ext.apply(this.renderData||{},{
-			title: this.title
+
+		var me = this,
+			tools = [];
+
+		Ext.Object.each(this.tools,function(tool,info){
+			tools.push({ tool: tool, tip: info.tip });
+			me.renderSelectors[tool] = Ext.String.format('img.tool.{0}',tool);
 		});
 
-		//TODO: add render selectors from the tools dictionary
+		this.renderData = Ext.apply(this.renderData||{},{
+			title: this.title,
+			tools: tools
+		});
+	},
+
+
+	addTools: function(tools){
+		var me = this,
+			rd = this.renderData;
+
+		if(!me.rendered){
+			Ext.Object.each(tools,function(tool,info){
+				if(!me.renderSelectors[tool]){
+					me.tools[tool] = info;//merge it in
+					me.renderSelectors[tool] = Ext.String.format('img.tool.{0}',tool);
+					rd.tools.push({tool: tool, tip: info.tip});
+				}
+			});
+		}
+		else {
+			Ext.Error.raise('not implemented yet');
+//			this.applyToolHandlers();
+		}
+	},
+
+
+	applyToolHandlers: function(){
+		var me = this;
+		Ext.Object.each(me.tools,function(tool,info){
+			var t = me[tool];
+			if(t && !t.toolAttached){
+				var sc = info.scope||me.ownerCt,
+					fn = info.handler;
+				fn = typeof fn === 'string' ? sc[fn] : fn;
+				t.on('click',fn,sc);
+				t.addClsOnOver('tool-over');
+				t.toolAttached = true;
+			}
+		});
 	},
 
 
 	update: function(text){
 		this.title = text;
-		if(this.text){
-			this.text.update(text);
+		if(this.textEl){
+			this.textEl.update(text);
 		}
 		else {
 			this.renderData.title = text;
 		}
 	},
 
+ 
+ 	afterRender: function(){
+		 var me = this;
+		 me.callParent(arguments);
+		 me.closeEl.on('click', me.ownerCt.close, me.ownerCt);
+		 me.minimizeEl.on('click', me.ownerCt.minimize, me.ownerCt);
 
-	afterRender: function(){
-		this.callParent(arguments);
-		this.closeEl.on('click', this.ownerCt.close, this.ownerCt);
-		this.minimizeEl.on('click', this.ownerCt.minimize, this.ownerCt);
+		 if(!me.ownerCt.closable){ me.closeEl.remove(); }
+		 if(!me.ownerCt.minimizable){ me.minimizeEl.remove(); }
 
-		if(!this.ownerCt.closable){ this.closeEl.remove(); }
-		if(!this.ownerCt.minimizable){ this.minimizeEl.remove(); }
-
-		//TODO: hook tool handlers to image click events.
-		//TODO: setup tool hover class using Ext.dom.Element#addClsOnOver('over')
-	}
+		 me.applyToolHandlers();
+	 }
 });

@@ -29,6 +29,14 @@ Ext.define('NextThought.view.chat.Window',{
 		{xtype:'chat-gutter', dock: 'left', hidden: true}
 	],
 
+
+	tools: {
+		'add-people': {
+			tip: 'Add someone to this conversation',
+			handler: 'addPeople'
+		}
+	},
+
 	initComponent: function(){
 		this.callParent(arguments);
 
@@ -82,6 +90,14 @@ Ext.define('NextThought.view.chat.Window',{
 				return true;
 			}
 		});
+	},
+
+
+	addPeople : function(){
+		//this doesn't do what it should, its only toggling the gutter to play with the tool wiring.
+		var list = this.down('chat-gutter');
+		list.isHidden()? list.show() : list.hide();
+		//TODO: actually show an interface to add people to the conversation instead of playing with the gutter.
 	},
 
 

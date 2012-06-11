@@ -38,6 +38,14 @@
 
 			.tools {
 				float: right;
+				padding: 5px;
+
+				img.tool {
+					margin: 2px 7px;
+					width: 14px;
+					height: 14px;
+					cursor: pointer;
+				}
 			}
 
 			.controls {
@@ -45,7 +53,7 @@
 				height: 100%;
 				float: right;
 				background: url(../images/window_controls_v_div.png) left center no-repeat;
-				padding: 10px 5px 10px 5px;
+				padding: 8px 5px;
 
 				img.tool {
 					width: 8px; height: 8px;

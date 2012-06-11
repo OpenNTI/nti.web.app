@@ -43,7 +43,12 @@ Ext.define('NextThought.view.Window',{
 					layout: data.layout
 				});
 
-				frame.first().title = data.title || '';
+				Ext.apply(frame.first(),{
+					title: data.title || '',
+					tools: data.tools || []
+				});
+
+				delete data.tools;
 
 				data.items = frame;
 				data.layout = layout;
@@ -126,8 +131,15 @@ Ext.define('NextThought.view.Window',{
 		if(titleBox){
 			titleBox.update(title);
 		}
-	}
+	},
 
+
+	addTools: function(tools){
+		var titleBox = this.down('nti-window-header');
+		if(titleBox){
+			titleBox.addTools(tools);
+		}
+	}
 
 
 });

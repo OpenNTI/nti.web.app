@@ -23,9 +23,13 @@ Ext.define('NextThought.view.chat.Gutter',{
 		}
 
 		var ct = this.ownerCt,
-			r = this.callParent(),
+			r,
 			width = this.width,
 			w, x;
+
+		if(Ext.isNumber(ct.minWidth)){
+			ct.minWidth -= width;
+		}
 
 		if(ct.rendered) {
 			w = ct.getWidth();
@@ -34,12 +38,10 @@ Ext.define('NextThought.view.chat.Gutter',{
 			ct.setPosition(x+width);
 		}
 
-		if(Ext.isNumber(ct.minWidth)){
-			ct.minWidth -= width;
-		}
 
 		ct.addCls('no-gutter');
 		ct.doLayout();
+		r = this.callParent();
 		return r;
 	},
 
@@ -50,9 +52,13 @@ Ext.define('NextThought.view.chat.Gutter',{
 		}
 
 		var ct = this.ownerCt,
-			r = this.callParent(),
+			r,
 			width = this.width,
 			w, x;
+
+		if(Ext.isNumber(ct.minWidth)){
+			ct.minWidth += width;
+		}
 
 		if(ct.rendered) {
 			w = ct.getWidth();
@@ -61,12 +67,10 @@ Ext.define('NextThought.view.chat.Gutter',{
 			ct.setPosition(x-width);
 		}
 
-		if(Ext.isNumber(ct.minWidth)){
-			ct.minWidth += width;
-		}
 
 		ct.removeCls('no-gutter');
 		ct.doLayout();
+		r = this.callParent();
 		return r;
 	},
 
