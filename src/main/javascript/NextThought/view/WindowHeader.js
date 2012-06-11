@@ -35,6 +35,7 @@ Ext.define('NextThought.view.WindowHeader', {
 	 */
 
 	renderSelectors: {
+		text: 'span',
 		closeEl: 'img.tool.close',
 		minimizeEl: 'img.tool.minimize'
 	},
@@ -54,6 +55,17 @@ Ext.define('NextThought.view.WindowHeader', {
 		});
 
 		//TODO: add render selectors from the tools dictionary
+	},
+
+
+	update: function(text){
+		this.title = text;
+		if(this.text){
+			this.text.update(text);
+		}
+		else {
+			this.renderData.title = text;
+		}
 	},
 
 

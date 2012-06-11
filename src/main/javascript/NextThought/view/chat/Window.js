@@ -49,14 +49,18 @@ Ext.define('NextThought.view.chat.Window',{
 		this.roomInfoHash = IdCache.getIdentifier(roomInfo.getId());
 
 		var list = this.down('chat-gutter');
+		var me = this;
 
 		list.hide();
 
 		UserRepository.getUser(roomInfo.get('Occupants'),function(users){
 
+			me.setTitle(users);
+
 			if(users.length>2){
 				list.show();
 			}
+
 			list.updateList(users);
 		});
 	},
@@ -84,6 +88,19 @@ Ext.define('NextThought.view.chat.Window',{
 				return true;
 			}
 		});
+	},
+
+
+	setTitle: function(users){
+		var title = [];
+
+		Ext.each(users,function(u){
+			if(u.getId() !== $AppConfig.userObject.getId()){
+				title.push(u.getName());
+			}
+		});
+
+		this.callParent([title.join(', ')]);
 	},
 
 
