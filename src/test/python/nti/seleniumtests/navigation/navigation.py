@@ -1,54 +1,83 @@
-from sst.actions import get_element
-from sst.actions import get_elements
-from sst.actions import switch_to_frame
-from sst.actions import click_element
-from sst.actions import get_elements_by_xpath
+
+
 
 from nti.seleniumtests import wait_for_element
 from nti.seleniumtests.base import WebAppTestBase
 from nti.seleniumtests import wait_for_element_xpath
+import time
 
-LIBRARY_CLASS = "//span[contains(@class, 'x-btn-icon library')]/.."
-BOOK_CLASS = "//div[contains (@class, 'title') and text () ='"
-CHAPTER_CLASS = "//div[contains (@class, 'x-grid-row') and text() ='"
-SECTION_CLASS = "//div[contains (@class, 'x-grid-row  x-grid-tree-node-leaf') and text () = '"
 
 class WebAppNavigation (WebAppTestBase):
 
     def setUp(self):
         super (WebAppNavigation, self).setUp()
         self.login()
-    
+        
+        
     def tearDown (self):
         super(WebAppNavigation, self).tearDown()
         
-    def open_level (self, tag = None, attribute = None, attribute_value = None, text_value = None):
-        wait_for_element (css_class = attribute_value, tag = tag, text = text_value)
-        element = get_element (css_class = attribute_value, tag = tag, text = text_value)
-        click_element (element, wait=False)
+    def open_level (self, tag = None, attribute = None, attribute_value = None, text_value = None, dicts = None):
+        xpath = self.xpath_contains_builder(tag, attribute, attribute_value)
+        if text_value is None: 
+            self.driver.find_element_by_xpath (xpath).click()
+        
+        elif text_value: 
+            if dicts and (text_value.strip() in dicts.keys()):
+                print 'index:'
+                print dicts [text_value.strip()]
+                self.driver.find_elements_by_class_name(attribute_value)[dicts[text_value.strip()]].click()
+            
+
+
+    def find_and_parse_elements(self, xpath):
+        dicts = {}
+        i = 0
+        time.sleep(1)
+
+        elements = self.driver.find_elements_by_xpath (xpath)
+        for node in elements:
+            if node.text.strip() != '':
+                dicts[node.text.strip()] = i
+                i = i+1
+
+        return dicts
     
     def open_library (self):
-        self.open_level('span', 'class', 'library')
-        library_elements = get_elements (css_class = 'title', tag = 'div')  
-        return [element.text for element in library_elements if element.text]
+
+        self.open_level (tag = 'span', attribute = 'class', attribute_value = 'library')
+        wait_for_element(self.driver, tag = 'div', attribute = 'class', attribute_value = 'title')
+        xpath = self.xpath_contains_builder ( tag = 'div', attribute = 'class', attribute_value = 'title')
+        self.books = self.find_and_parse_elements (xpath)
+        print 'books: ' 
+        print  self.books
+
+        return self.books
+    
+   
     
     def open_book(self, book):
-        self.open_level('div', 'class', 'title', book)
-        wait_for_element_xpath (self.xpath_contains_builder('tr', 'class', 'x-grid-row') + '/..')
-        book_elements = get_elements(css_class = 'x-grid-row', tag= 'tr')
-        return [element.text for element in book_elements if element.text]
+        
+        self.open_level(tag = 'div', attribute = 'class', attribute_value = 'title', text_value = book, dicts = self.books)
+        xpath = self.xpath_contains_builder ( tag = 'tr', attribute = 'class', attribute_value = 'x-grid-row')
+        self.chapters = self.find_and_parse_elements(xpath)
+        print 'chapters: ' 
+        print  self.chapters
+        return self.chapters
     
-    def open_chapter (self, chapter):
-        self.open_level ('tr', 'class', 'x-grid-row', chapter) 
-        xpath = self.xpath_contains_builder('tr', 'class', 'x-grid-tree-node-leaf') + '/*'
-        print 'getting'
-        wait_for_element_xpath (xpath)
-        self.chapter_elements = get_elements_by_xpath(xpath)
-        return [element.text for element in self.chapter_elements if element.text]
+    def open_chapter (self, chapter = None):
+        self.open_level (tag = 'tr', attribute = 'class', attribute_value ='x-grid-row', text_value = chapter, dicts = self.chapters) 
+        xpath = self.xpath_contains_builder(tag = 'tr', attribute = 'class', attribute_value ='x-grid-tree-node-leaf') 
+        self.sections = self.find_and_parse_elements(xpath)
+        
+        print 'sections: ' 
+        print  self.sections
+        return  self.sections
+
     
-    def open_section (self, section):        
-        self.open_level ('tr', 'class', 'x-grid-tree-node-leaf', section)
-        self.open_library()
+    def open_section (self, section = None):        
+        self.open_level (tag = 'tr', attribute = 'class', attribute_value = 'x-grid-tree-node-leaf', text_value = section, dicts = self.sections)
+    
         
     def navigate_to(self, book, chapter=None, section=None):
         
@@ -80,9 +109,9 @@ class WebAppNavigation (WebAppTestBase):
             self.open_section(section)
     
     def get_page_section_title (self, frameName='component-1036'):
-        wait_for_element(frameName)
-        switch_to_frame (frameName)
-        element_chapter = get_element (css_class ='chapter title')
+        wait_for_element(driver = self.driver,tag = 'iframe',  attribute = 'id', attribute_value = frameName)
+        self.driver.switch_to_frame(frameName)
+        element_chapter = self.driver.find_element_by_class_name ('chapter')
         return element_chapter.find_element_by_class_name ('label').text
 
         
