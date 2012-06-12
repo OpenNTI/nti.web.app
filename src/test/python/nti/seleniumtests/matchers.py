@@ -13,9 +13,10 @@ def _values_of_node(node, element, html=None):
 	for item in tree.iter(node):
 		if element: 
 			value = item.get(element)
-		else: 
-			value = item.text
-		items.append(value)
+		else:
+			if item.text:  
+				value = item.text
+				items.append(value)
 	return items
 
 class HasElementWithText(BaseMatcher):
@@ -49,6 +50,40 @@ class IsInTree(BaseMatcher):
 	
 	def describe_to(self, description):
 		description.append_description_of(self.node + ' attribute to contain ' + self.item)
+
+class IsListInTree(BaseMatcher):
+	def __init__(self, node, element, html=None):
+		self.node = node 
+		self.html = html 
+		self.element = element
+		
+	def _matches (self, items, mismatch_description = None):
+		self.items = items
+		matcher = _values_of_node (self.node, self.element, self.html)
+		print matcher
+		print 'sets:'
+		print set(matcher)
+		print set(items.keys())
+		#print 'result of match: '
+		#print set(items.keys()) ==  set(items.keys())&set(matcher) 
+		#print 'resulting set: '
+		#print set(items.keys())&set(matcher) 
+		
+		return set(items) ==  set(items)&set(matcher) 
+		
+		
+	def describe_mismatch(self, items,description):
+		#worst printed list ever, find a better way to show it...
+		description.append_description_of('lxml ' + self.node + ' attributes did not contain this list:' + "".join(items)) 
+		
+		
+	
+	def describe_to(self, description):
+		description.append_description_of(self.node + ' attribute to contain this list') 
+				
+	
+def is_list_in_tree(node, element=None, html=None):
+	return IsListInTree(node,element, html)
 	
 def is_in_tree(node, element=None, html=None):
 	return IsInTree(node, element, html)

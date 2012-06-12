@@ -52,7 +52,7 @@ def xpath_text_builder(tag,text):
 	result = ['//', tag, '[(text() = "%s")]' %  (text)]
 	return ''.join(result)
 	
-def wait_for_element(driver = None, tag=None,attribute = None, attribute_value = None, ID=None, text=None, text_regex=None, timeout=30):
+def wait_for_element(driver = None, tag=None,attribute = None, attribute_value = None, ID=None, text=None, text_regex=None, timeout=10):
 	if text is None: 
 		xpath = xpath_contains_builder(tag, attribute, attribute_value)
 	elif text and attribute: 
@@ -62,9 +62,8 @@ def wait_for_element(driver = None, tag=None,attribute = None, attribute_value =
 	else:
 		print 'should handle this xpath'
 		
- 	print xpath
 	for _ in range(timeout):
-		driver.find_element_by_xpath (xpath)
+		
 		if driver.find_element_by_xpath(xpath): 
 			break
 		

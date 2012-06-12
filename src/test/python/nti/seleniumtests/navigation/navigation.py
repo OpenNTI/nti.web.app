@@ -18,14 +18,16 @@ class WebAppNavigation (WebAppTestBase):
         super(WebAppNavigation, self).tearDown()
         
     def open_level (self, tag = None, attribute = None, attribute_value = None, text_value = None, dicts = None):
+    
         xpath = self.xpath_contains_builder(tag, attribute, attribute_value)
         if text_value is None: 
+            
+            wait_for_element (self.driver, tag = tag, attribute = attribute, attribute_value = attribute_value) 
             self.driver.find_element_by_xpath (xpath).click()
         
-        elif text_value: 
+        elif text_value:
+            
             if dicts and (text_value.strip() in dicts.keys()):
-                print 'index:'
-                print dicts [text_value.strip()]
                 self.driver.find_elements_by_class_name(attribute_value)[dicts[text_value.strip()]].click()
             
 
@@ -49,9 +51,7 @@ class WebAppNavigation (WebAppTestBase):
         wait_for_element(self.driver, tag = 'div', attribute = 'class', attribute_value = 'title')
         xpath = self.xpath_contains_builder ( tag = 'div', attribute = 'class', attribute_value = 'title')
         self.books = self.find_and_parse_elements (xpath)
-        print 'books: ' 
-        print  self.books
-
+      
         return self.books
     
    
@@ -61,8 +61,7 @@ class WebAppNavigation (WebAppTestBase):
         self.open_level(tag = 'div', attribute = 'class', attribute_value = 'title', text_value = book, dicts = self.books)
         xpath = self.xpath_contains_builder ( tag = 'tr', attribute = 'class', attribute_value = 'x-grid-row')
         self.chapters = self.find_and_parse_elements(xpath)
-        print 'chapters: ' 
-        print  self.chapters
+       
         return self.chapters
     
     def open_chapter (self, chapter = None):
@@ -70,15 +69,14 @@ class WebAppNavigation (WebAppTestBase):
         xpath = self.xpath_contains_builder(tag = 'tr', attribute = 'class', attribute_value ='x-grid-tree-node-leaf') 
         self.sections = self.find_and_parse_elements(xpath)
         
-        print 'sections: ' 
-        print  self.sections
+     
         return  self.sections
 
     
     def open_section (self, section = None):        
         self.open_level (tag = 'tr', attribute = 'class', attribute_value = 'x-grid-tree-node-leaf', text_value = section, dicts = self.sections)
     
-        
+    
     def navigate_to(self, book, chapter=None, section=None):
         
         if not book:
@@ -114,4 +112,13 @@ class WebAppNavigation (WebAppTestBase):
         element_chapter = self.driver.find_element_by_class_name ('chapter')
         return element_chapter.find_element_by_class_name ('label').text
 
+#__________________________________________________________________________
+#SEARCH FUNCTIONS 
+    def open_search(self):
+        self.open_level(tag = 'span', attribute = 'class', attribute_value = 'search')
+        xpath = self.xpath_contains_builder(tag = 'input', attribute = 'placeholder', attribute_value = 'Search')
+        return self.driver.find_element_by_xpath (xpath)
+        
+    
+    
         

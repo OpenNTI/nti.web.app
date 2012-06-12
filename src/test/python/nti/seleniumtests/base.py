@@ -103,8 +103,7 @@ class WebAppTestBase(unittest.TestCase):
 		self.driver.find_element_by_id ('password').send_keys (password)
 		wait_for_element(driver = self.driver,tag = 'button', attribute = 'id', attribute_value = 'submit')
 		self.driver.find_element_by_id ('submit').click()
-		
-	
+		#wait_for_element (driver = self.driver, tag = 'title', text = 'NextThought App')
 		
 #		xpath = xpath_text_builder ('title', 'NextThought App')
 #		element = self.driver.find_element_by_xpath(xpath)
