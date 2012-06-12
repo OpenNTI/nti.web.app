@@ -7,7 +7,9 @@ Ext.application({
 	autoCreateViewport: false,
 
 	requires: [
-		'NextThought.util.Globals'
+		'NextThought.util.Globals',
+		'NextThought.model.anchorables.ContentPointer',
+		'NextThought.model.anchorables.DomContentPointer'
 	],
 
 	controllers: [

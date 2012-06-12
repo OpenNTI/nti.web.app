@@ -795,6 +795,7 @@ Ext.define('NextThought.controller.Chat', {
 
 
 	onEnteredRoom: function(msg) {
+		debugger;
 		var roomInfo = msg && msg.isModel? msg : ParseUtils.parseItems([msg])[0],
 			existingRoom;
 

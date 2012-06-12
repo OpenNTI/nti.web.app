@@ -1,5 +1,5 @@
 Ext.define('NextThought.model.anchorables.DomContentRangeDescription', {
-	require: [
+	requires: [
 		'NextThought.model.anchorables.DomContentPointer'
 	],
 

@@ -25,6 +25,12 @@ describe("Anchor Utils", function() {
 			var node = document.createElement('span');
 			expect(Anchors.isNodeAnchorable(node)).toBeFalsy();
 		});
+
+		it('Node with Id', function(){
+			var node = document.createElement('span');
+			node.setAttribute('id', 'a1234567');
+			expect(Anchors.isNodeAnchorable(node)).toBeTruthy();
+		});
 	});
 
 	describe('nodeThatIsEdgeOfRange Tests', function(){
@@ -113,4 +119,175 @@ describe("Anchor Utils", function() {
 			expect(Anchors.nodeThatIsEdgeOfRange(range, false).getAttribute('test')).toEqual('test');
 		});
 	});
+
+	describe('searchFromRangeStartInwardForAnchorableNode Tests', function(){
+		it ('Null Node', function(){
+			expect(Anchors.searchFromRangeStartInwardForAnchorableNode(null)).toBeNull();
+		});
+
+		it('Already Anchorable Node', function(){
+			var anchorable = document.createTextNode('This is a text node, yay'),
+				result = Anchors.searchFromRangeStartInwardForAnchorableNode(anchorable);
+
+			expect(result).toBe(anchorable);
+		});
+
+		it('Buried Anchorable text node', function(){
+			var div = document.createElement('div'),
+				p = document.createElement('p'),
+				txt = document.createTextNode('This is text'),
+				result;
+
+			//setup heirarchy
+			p.appendChild(txt);
+			div.appendChild(p);
+
+			result = Anchors.searchFromRangeStartInwardForAnchorableNode(div);
+			expect(result).toBe(txt);
+		});
+
+		it('Buried Anchorable non-text node', function(){
+			var div = document.createElement('div'),
+				p = document.createElement('p'),
+				a = document.createElement('a'),
+				result;
+
+			//setup heirarchy
+			a.setAttribute('id', 'a12345');
+			p.appendChild(a);
+			div.appendChild(p);
+
+			result = Anchors.searchFromRangeStartInwardForAnchorableNode(div);
+			expect(result).toBe(a);
+		});
+
+		it('Buried Non Anchorable nodes', function(){
+			var div = document.createElement('div'),
+				p = document.createElement('p'),
+				a = document.createElement('a'), //no id, not anchorable
+				result;
+
+			//setup heirarchy
+			p.appendChild(a);
+			div.appendChild(p);
+
+			result = Anchors.searchFromRangeStartInwardForAnchorableNode(div);
+			expect(result).toBeNull();
+		});
+	});
+
+	describe('walkDownToLastNode Tests', function(){
+		it ('Null Node', function(){
+			try {
+				Anchors.walkDownToLastNode(null);
+				expect(false).toBeTruthy();
+			}
+			catch(e) {
+				expect(e.message).toEqual('Node cannot be null');
+			}
+		});
+
+		it ('Already At Bottom', function(){
+			var bottom = document.createElement('a');
+			expect(Anchors.walkDownToLastNode(bottom)).toBe(bottom);
+		});
+
+		it ('Several Layers Deep', function(){
+			var n4 = document.createTextNode('Text Node'),
+				n3 = document.createElement('p'),
+				n2 = document.createElement('span'),
+				n1 = document.createElement('div');
+
+			n3.appendChild(n4);
+			n2.appendChild(n3);
+			n1.appendChild(n2);
+
+			expect(Anchors.walkDownToLastNode(n1)).toBe(n4);
+		});
+
+		it ('Several Layers Deep With Siblings', function(){
+			var n5 = document.createTextNode('More Text');
+				n4 = document.createTextNode('Text Node'),
+				n4a = document.createElement('p');
+				n3 = document.createElement('p'),
+				n3a = document.createElement('span'),
+				n2 = document.createElement('span'),
+				n1 = document.createElement('div');
+
+			n4a.appendChild(n5);
+			n3a.appendChild(n4a);
+			n3.appendChild(n4);
+			n2.appendChild(n3a);
+			n2.appendChild(n3);
+			n1.appendChild(n2);
+
+			expect(Anchors.walkDownToLastNode(n1)).toBe(n4);
+		});
+	});
+
+	describe('searchFromRangeEndInwardForAnchorableNode Tests', function(){
+		it('Null Node', function(){
+			expect(Anchors.searchFromRangeEndInwardForAnchorableNode(null)).toBeNull();
+		});
+
+		it('Already Anchorable Node', function(){
+			var anchorable = document.createTextNode('This is a text node, yay'),
+				result = Anchors.searchFromRangeEndInwardForAnchorableNode(anchorable);
+
+			expect(result).toBe(anchorable);
+		});
+
+		it('Buried Non Anchorable Node', function(){
+			var div = document.createElement('div'),
+				p = document.createElement('p'),
+				a = document.createElement('a'), //no id, not anchorable
+				result;
+
+			//setup heirarchy
+			p.appendChild(a);
+			div.appendChild(p);
+
+			result = Anchors.searchFromRangeEndInwardForAnchorableNode(div);
+			expect(result).toBeNull();
+		});
+
+		it('Buried Anchorable Node', function(){
+			var div = document.createElement('div'),
+				span1 = document.createElement('span'),
+				p1 = document.createElement('p'),
+				t1 = document.createTextNode('Textify!'),
+				span2 = document.createElement('span'),
+				div2 = document.createElement('div'),
+				start = document.createElement('a');
+
+			p1.appendChild(t1);
+			span1.appendChild(p1);
+			div2.appendChild(start);
+			span2.appendChild(div2);
+			div.appendChild(span1);
+			div.appendChild(span2);
+
+			expect(Anchors.searchFromRangeEndInwardForAnchorableNode(start)).toBe(t1);
+		})
+
+	});
+
+	describe('makeRangeAnchorable Tests', function(){
+		it('Range Already Valid', function(){});
+
+		it('Range Both Sides Need Digging', function(){});
+
+		it ('Null Range', function(){
+			try {
+				Anchors.makeRangeAnchorable(null);
+				expect(false).toBeTruthy();
+			}
+			catch (e) {
+				expect(e.message).toEqual('Range cannot be null');
+			}
+		});
+
+		it ('Range With NO Anchorables', function(){});
+	});
+
 });
