@@ -61,18 +61,25 @@ def wait_for_element(driver = None, tag=None,attribute = None, attribute_value =
 		xpath = xpath_text_builder (tag, text)
 	else:
 		print 'should handle this xpath'
-		
+	
+	print xpath
 	for _ in range(timeout):
 		
-		if driver.find_element_by_xpath(xpath): 
-			break
-		
+		print 'find'
+		try:
+			node = driver.find_element_by_xpath(xpath) 
+			print 'found'
+			if node: break
+		except: 
+			pass
+			
+			
 #		print exists_element(tag=tag, css_class=css_class, id=ID, text=text, text_regex=text_regex)
 #		if exists_element(tag=tag, css_class=css_class, id=ID, text=text, text_regex=text_regex):
 #			break
 		time.sleep(1)
 	time.sleep(1)
-	return False
+	
 
 
 def wait_for_element_xpath(xpath, timeout=10):
