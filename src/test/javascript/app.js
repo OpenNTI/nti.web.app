@@ -89,6 +89,7 @@ Ext.application({
 	requires: [
 		'NextThought.util.Globals',
 		'NextThought.util.shared.Anchors',
+		'NextThought.util.Anchors',
 		'NextThought.model.anchorables.ContentPointer'
 	],
 
@@ -129,7 +130,8 @@ Ext.application({
 			'javascript/specs/util/AnnotationUtils.spec.js',
 			'javascript/specs/util/ParseUtils.spec.js',
 			'javascript/specs/util/Color.spec.js',
-			'javascript/specs/util/shared/Anchors.spec.js'],
+			'javascript/specs/util/anchorables/Anchors.spec.js',
+			'javascript/specs/util/anchorables/Utils.spec.js'],
 		go);
 	}
 });
