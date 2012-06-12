@@ -19,37 +19,37 @@ class TestNavigation(WebAppNavigation):
 	
 	ini_file = os.path.join(__path__, '../config/main.ini')
 #
-#	def test_open_library(self):
-#		print 'test open library'
-#		books = self.open_library()	 
+	def test_open_library(self):
+		print 'test open library'
+		books = self.open_library()	 
+		
+#		TO-DO: Optimize this
+		print 'here'
 #		
-##		TO-DO: Optimize this
-#		print 'here'
-##		
-#		if not books: 
-#			print 'Library is empty'
-#					
-#	def test_open_book(self):
-#		print 'test open book'
-#		self.open_library()
-#		chapters = self.open_book ('Prealgebra')
-#		
-##		TO_DO: Optimize this 
-#		
-#
-#		if not chapters: 
-#			print 'Book has no chapter'
-#####						
-#	def test_open_chapter (self): 
-#		print 'test open chapter'
-#		self.open_library()
-#		self.open_book('Prealgebra')
-#		sections = self.open_chapter('Decimals')
-#	
-#	
-#		#TO-DO: Optimize this
-#		if not sections: 
-#			print 'Chapter has no sections'
+		if not books: 
+			print 'Library is empty'
+					
+	def test_open_book(self):
+		print 'test open book'
+		self.open_library()
+		chapters = self.open_book ('Prealgebra')
+		
+#		TO_DO: Optimize this 
+		
+
+		if not chapters: 
+			print 'Book has no chapter'
+						
+	def test_open_chapter (self): 
+		print 'test open chapter'
+		self.open_library()
+		self.open_book('Prealgebra')
+		sections = self.open_chapter('Decimals')
+	
+	
+		#TO-DO: Optimize this
+		if not sections: 
+			print 'Chapter has no sections'
 #			
 	def test_open_section(self):
 		
@@ -61,6 +61,7 @@ class TestNavigation(WebAppNavigation):
 		value =  self.get_page_section_title()
 		if value != 'Rounding': 
 			print 'the section was not successfully opened'
+
 		
 		
 	def test_open_search(self):
@@ -68,6 +69,6 @@ class TestNavigation(WebAppNavigation):
 		if not value: 
 			print 'Search box not found'
 	
-		
+	
 if __name__ == "__main__":
 	unittest.main()
