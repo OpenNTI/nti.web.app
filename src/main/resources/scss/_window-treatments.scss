@@ -73,6 +73,51 @@
 }
 
 
+#window-tracker{
+	position: fixed;
+	right: 0;
+	bottom: 0;
+
+	.window-minimized{
+		margin: 6px;
+		border: 1px solid #dbdbdb;
+		border-radius: 5px;
+		background: #fcfcfc;
+		box-shadow: 1px 1px 5px 0 rgba(0,0,0,0.2);
+		min-width: 200px;
+
+
+		.title {
+			@include menu-label-text-treatment;
+			color: #ababab;
+			margin-right: 32px;
+			padding: 6px 8px 6px 8px;
+		}
+
+		.activity{
+			position: absolute;
+		}
+		.closer {
+			border-radius: 0 5px 5px 0;
+			padding: 10px 11px 8px 11px;
+			border-left: 1px solid #fcfcfc;
+			float: right;
+
+			&:hover {
+				background: #f4f4f4;
+				border-left-color: #dbdbdb;
+			}
+
+			img.closer-nib {
+				width: 8px; height: 8px;
+				cursor: pointer;
+				background: url(../images/window-sprites.png) -1px 0 no-repeat;
+			}
+		}
+	}
+}
+
+
 //search widget
 
 .user-search-suggestion {

@@ -3,7 +3,8 @@ Ext.define('NextThought.view.Window',{
 	alias: 'widget.nti-window',
 
 	requires: [
-		'NextThought.view.WindowHeader'
+		'NextThought.view.WindowHeader',
+		'NextThought.view.WindowManager'
 	],
 
 	cls: 'nti-window',
@@ -58,6 +59,9 @@ Ext.define('NextThought.view.Window',{
 	},
 
 	constructor: function(config){
+		console.log(this.manager);
+		this.manager = NextThought.view.WindowManager;
+
 		delete config.items;
 		delete config.layout;
 
@@ -86,6 +90,8 @@ Ext.define('NextThought.view.Window',{
 			Ext.EventManager.onWindowResize(me.syncSize,me);
 			this.on('destroy',function(){ Ext.EventManager.removeResizeListener(me.syncSize,me);});
 		}
+
+		this.manager.register(this);
 	},
 
 
@@ -131,6 +137,16 @@ Ext.define('NextThought.view.Window',{
 		if(titleBox){
 			titleBox.update(title);
 		}
+	},
+
+
+	getTitle: function(){
+		var titleBox = this.down('nti-window-header');
+		if(titleBox){
+			titleBox = titleBox.getTitle();
+		}
+
+		return titleBox || this.title || 'Untitled';
 	},
 
 

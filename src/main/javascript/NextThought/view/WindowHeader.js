@@ -119,6 +119,14 @@ Ext.define('NextThought.view.WindowHeader', {
 		}
 	},
 
+
+	getTitle: function(){
+		if(this.textEl){
+			return this.textEl.getHTML();
+		}
+		return this.renderData.title;
+	},
+
  
  	afterRender: function(){
 		 var me = this;
