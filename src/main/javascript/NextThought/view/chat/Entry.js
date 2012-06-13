@@ -28,6 +28,8 @@ Ext.define('NextThought.view.chat.Entry',{
 			mousedown: function(e){ e.dragTracked = true; },
 			keydown: this.keyDown
 		});
+
+		this.buttonEl.on('click',this.addWhiteboard,this);
 	},
 
 	keyDown: function(e){
@@ -49,5 +51,10 @@ Ext.define('NextThought.view.chat.Entry',{
 			v = e.getValue();
 		e.dom.value = '';
 		return v;
+	},
+
+
+	addWhiteboard: function(){
+		this.fireEvent('send-whiteboard',this, this.replyTo, this.chanel, this.recipients);
 	}
 });
