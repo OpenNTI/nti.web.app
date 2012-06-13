@@ -273,9 +273,58 @@ describe("Anchor Utils", function() {
 	});
 
 	describe('makeRangeAnchorable Tests', function(){
-		it('Range Already Valid', function(){});
+		it('Range Already Valid', function(){
+			var div = document.createElement('div'),
+				t1 = document.createTextNode('test node 1'),
+				t2 = document.createTextNode('test node 2'),
+				range, result;
 
-		it('Range Both Sides Need Digging', function(){});
+			//make sure div is valid
+			div.setAttribute('Id', 'someid');
+
+			//add this stuff to the body so we can then put it in a range
+			div.appendChild(t1);
+			div.appendChild(t2);
+			document.body.appendChild(div);
+
+			range = document.createRange();
+			range.setStart(div, 0);
+			range.setEnd(t2, 2);
+
+			result = Anchors.makeRangeAnchorable(range);
+			expect(result).toBe(range); //should not have changed
+		});
+
+		it('Range Both Sides Need Digging', function(){
+			var div = document.createElement('div'),
+				span = document.createElement('span'),
+				p = document.createElement('p'),
+				t1 = document.createTextNode('text node 1'),
+				span2 = document.createElement('span'),
+				p2 = document.createElement('p'),
+				t2 = document.createTextNode('text node 2'),
+				a = document.createElement('div'),
+				range, result;
+
+			p2.appendChild(t2);
+			span2.appendChild(p2);
+			p.appendChild(t1);
+			span.appendChild(p);
+			span.appendChild(span2);
+			span.appendChild(a);
+			div.appendChild(span);
+			document.body.appendChild(div);
+			range = document.createRange();
+			range.setStartBefore(p);
+			range.setEndAfter(a);
+
+			result = Anchors.makeRangeAnchorable(range);
+
+			expect(result.startContainer).toBe(t1);
+			expect(result.startOffset).toEqual(0);
+			expect(result.endContainer).toBe(t2);
+			expect(result.endOffset).toEqual(11);
+		});
 
 		it ('Null Range', function(){
 			try {
@@ -287,7 +336,51 @@ describe("Anchor Utils", function() {
 			}
 		});
 
-		it ('Range With NO Anchorables', function(){});
+		it ('Range With NO Anchorables', function(){
+			var div = document.createElement('div'),
+				span = document.createElement('span'),
+				p = document.createElement('p'),
+				span2 = document.createElement('span'),
+				p2 = document.createElement('p'),
+				a = document.createElement('a'),
+				range, result;
+
+			span2.appendChild(p2);
+			span.appendChild(p);
+			span.appendChild(span2);
+			span.appendChild(a);
+			div.appendChild(span);
+			document.body.appendChild(div);
+			range = document.createRange();
+			range.setStartBefore(p);
+			range.setEndAfter(a);
+
+			result = Anchors.makeRangeAnchorable(range);
+			expect(result).toBeNull();
+		});
+	});
+
+	describe('referenceNodeForNode Tests', function(){
+		it ('Null Node', function(){
+			expect(Anchors.referenceNodeForNode(null)).toBeNull();
+		});
+
+		it ('Node Already Anchorable', function(){
+			var textNode = document.createTextNode('Scott Pilgram vs. The World');
+			expect(Anchors.referenceNodeForNode(textNode)).toBe(textNode);
+		});
+
+		it ('Parent Node Anchorable', function(){
+			var first = document.createElement('div'),
+				second = document.createElement('span'),
+				third = document.createElement('p');
+
+			first.setAttribute('Id', 'someid');
+			second.appendChild(third);
+			first.appendChild(second);
+
+			expect(Anchors.referenceNodeForNode(third)).toBe(first);
+		});
 	});
 
 });

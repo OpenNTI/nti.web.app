@@ -8,21 +8,36 @@ Ext.define('NextThought.util.Anchors', {
 			Ext.Error.raise('Cannot create anchorable, range missing or collapsed');
 		}
 
-		var rangeSpec = new NextThought.DomContentRangeDescription();
+		var ancestorNode = Anchors.referenceNodeForNode(range.commonAncestorContainer);
+		var ancestorAnchor = Ext.create('NextThought.model.anchorables.ElementDomContentPointer', {
+			node: ancestorNode,
+			role: 'ancestor'
+		});
 
-		var ancestorNode = referenceNodeForNode(range.commonAncestorContainer);
-		var ancestorAnchor = NextThought.ElementDomContentPointer.createWithNode(ancestorNode);
-		ancestorAnchor.type = NextThought.DomContentPointer.ancestorType;
-
-		rangeSpec.ancestor = ancestorAnchor;
-
-		rangeSpec.start = NextThought.DomContentPointer.createStartAnchorForRange(range);
-		rangeSpec.end = NextThought.DomContentPointer.createEndAnchorForRange(range);
-
-		return rangeSpec;
+		return Ext.create('NextThought.model.anchorables.DomContentRangeDescription', {
+			start: NextThought.DomContentPointer.createStartAnchorForRange(range),
+			end: NextThought.DomContentPointer.createEndAnchorForRange(range),
+			ancestor: ancestorAnchor
+		});
 	},
 
 
+	/* tested */
+	referenceNodeForNode: function(node){
+		if(!node){
+			return null;
+		}
+
+		if( Anchors.isNodeAnchorable(node) ){
+			return node;
+		}
+		else{
+			return Anchors.referenceNodeForNode(node.parentElement);
+		}
+	},
+
+
+	/* tested */
 	makeRangeAnchorable: function(range) {
 		if (!range){Ext.Error.raise('Range cannot be null');}
 
@@ -141,8 +156,7 @@ Ext.define('NextThought.util.Anchors', {
 
 
 	/* tested */
-	nodeThatIsEdgeOfRange: function(range, start)
-	{
+	nodeThatIsEdgeOfRange: function(range, start){
 		if (!range){
 			Ext.Error.raise('Node is not defined');
 		}
@@ -185,8 +199,7 @@ Ext.define('NextThought.util.Anchors', {
 
 
 	/* tested */
-	isNodeAnchorable: function(node)
-	{
+	isNodeAnchorable: function(node){
 		//obviously not if node is not there
 		if (!node) {return false;}
 
@@ -221,8 +234,6 @@ Ext.define('NextThought.util.Anchors', {
 		//otherwise, assume not
 	    return false;
 	}
-
-
 },
 function(){
 	window.Anchors = this;
