@@ -1,11 +1,12 @@
 Ext.define('NextThought.model.anchorables.ElementDomContentPointer', {
-	extends: [
-		'NextThought.model.anchorables.DomContentPointer'
-	],
+	extend: 'NextThought.model.anchorables.DomContentPointer',
+
 	config: {
 		elementTagName: '',
 		elementId: ''
 	},
+
+
 	constructor: function(o){
 		//If we are given a dom element as input, pull the necessary parts and
 		//create a config we can use to create this.
@@ -19,7 +20,7 @@ Ext.define('NextThought.model.anchorables.ElementDomContentPointer', {
 		this.validateTagName(o.elementTagName);
 		this.validateId(o.elementId);
 
-		this.initConfig(o);
+		return this.callParent([o]);
 	},
 
 
@@ -36,4 +37,6 @@ Ext.define('NextThought.model.anchorables.ElementDomContentPointer', {
 		}
 	}
 
+}, function(){
+	console.log('CHECK ME', this.prototype.config);
 });

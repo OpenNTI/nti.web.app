@@ -96,11 +96,11 @@ describe("Anchor Utils", function() {
 		it("Good ElementDomContentPointer Creation via node", function(){
 			var id = 'a1234567',
 				tagName = 'SOMETAGNAME',
-				type = 'start',
+				role = 'start',
 				element = document.createElement(tagName), ca;
 
 			element.setAttribute('id', id);
-			ca = Ext.create('NextThought.model.anchorables.ElementDomContentPointer', {node: element, type:type});
+			ca = Ext.create('NextThought.model.anchorables.ElementDomContentPointer', {node: element, role:role});
 
 			expect(ca.getElementTagName()).toBe(tagName);
 			expect(ca.getElementId()).toBe(id);
@@ -109,7 +109,7 @@ describe("Anchor Utils", function() {
 
 		it("Bad ElementDomContentPointer Creation", function(){
 			try {
-				Ext.create('NextThought.model.anchorables.ElementDomContentPointer', {elementTagName: 'name', type: 'end'});
+				Ext.create('NextThought.model.anchorables.ElementDomContentPointer', {elementTagName: 'name', role: 'end'});
 				expect(false).toBeTruthy();
 			}
 			catch (e){
@@ -117,7 +117,7 @@ describe("Anchor Utils", function() {
 			}
 
 			try {
-				Ext.create('NextThought.model.anchorables.ElementDomContentPointer', {elementId: 'id', type: 'start'});
+				Ext.create('NextThought.model.anchorables.ElementDomContentPointer', {elementId: 'id', role: 'start'});
 				expect(false).toBeTruthy();
 			}
 			catch (e){
@@ -125,11 +125,11 @@ describe("Anchor Utils", function() {
 			}
 
 			try {
-				Ext.create('NextThought.model.anchorables.ElementDomContentPointer', {elementId: 'id', elementTagName: 'tagName', type: 'wrong'});
+				Ext.create('NextThought.model.anchorables.ElementDomContentPointer', {elementId: 'id', elementTagName: 'tagName', role: 'wrong'});
 				expect(false).toBeTruthy();
 			}
 			catch (e){
-				expect(e.message).toBe('Type must be of the type start,end,ancestor, supplied wrong');
+				expect(e.message).toBe('Role must be of the value start,end,ancestor, supplied wrong');
 			}
 
 			try {
@@ -137,15 +137,18 @@ describe("Anchor Utils", function() {
 				expect(false).toBeTruthy();
 			}
 			catch (e){
-				expect(e.message).toBe('Must supply a type');
+				expect(e.message).toBe('Must supply a role');
 			}
 		});
 
-		it("Good TextDomContentPointer Creation via config", function(){
+		it("Good TextDomContentPointer Creation", function(){
 			var	cfg = {
-					elementId: 'id',
-					elementTagName: 'tagName',
-					role: 'ancestor',
+					ancestor: Ext.create('NextThought.model.anchorables.ElementDomContentPointer', {
+						elementId: 'id',
+						elementTagName: 'tagName',
+						role: 'ancestor'
+					}),
+					role: 'start',
 					edgeOffset: 5,
 					contexts: [
 						Ext.create('NextThought.model.anchorables.TextContext', {contextText:'text1', contextOffset:0}),
@@ -155,20 +158,19 @@ describe("Anchor Utils", function() {
 				},
 				x = Ext.create('NextThought.model.anchorables.TextDomContentPointer', cfg);
 
-			expect(x.getEdgeOffset()).toBe(cfg.edgeOffset);
-			expect(x.getRole()).toBe(cfg.role);
+			expect(x.getEdgeOffset()).toEqual(cfg.edgeOffset);
 			expect(x.getContexts()).toBeTruthy();
-			expect(x.getContexts().length).toBe(cfg.contexts.length);
-			expect(x.getElementTagName()).toBe(cfg.elementTagName);
-			expect(x.getElementId()).toBe(cfg.elementId);
+			expect(x.getContexts().length).toEqual(cfg.contexts.length);
+			expect(x.getAncestor().getRole()).toEqual('ancestor');
+			expect(x.getAncestor().getElementTagName()).toEqual('TAGNAME');
+			expect(x.getAncestor().getElementId()).toEqual('id');
+			expect(x.getRole()).toEqual(cfg.role);
 		});
 
-		it("Bad TextDomContentPointer Creation via config", function(){
+		it("Bad TextDomContentPointer Creation", function(){
 			try {
 				Ext.create('NextThought.model.anchorables.TextDomContentPointer', {
-					elementId: 'id',
-					elementTagName: 'tagName',
-					type: 'ancestor',
+					role: 'ancestor',
 					edgeOffset: 5,
 					contexts: []
 				});
@@ -180,9 +182,7 @@ describe("Anchor Utils", function() {
 
 			try {
 				Ext.create('NextThought.model.anchorables.TextDomContentPointer', {
-					elementId: 'id',
-					elementTagName: 'tagName',
-					type: 'ancestor',
+					role: 'ancestor',
 					edgeOffset: 5
 				});
 				expect(false).toBeTruthy();
@@ -193,9 +193,7 @@ describe("Anchor Utils", function() {
 
 			try {
 				Ext.create('NextThought.model.anchorables.TextDomContentPointer', {
-					elementId: 'id',
-					elementTagName: 'tagName',
-					type: 'ancestor',
+					role: 'ancestor',
 					contexts: [
 						Ext.create('NextThought.model.anchorables.TextContext', {contextText:'text1', contextOffset:0}),
 						Ext.create('NextThought.model.anchorables.TextContext', {contextText:'text2', contextOffset:1}),
@@ -208,13 +206,53 @@ describe("Anchor Utils", function() {
 				expect(e.message).toEqual('Offset must exist and be 0 or more');
 			}
 
+			try {
+				Ext.create('NextThought.model.anchorables.TextDomContentPointer', {
+					role: 'ancestor',
+					edgeOffset: 3,
+					contexts: [
+						Ext.create('NextThought.model.anchorables.TextContext', {contextText:'text1', contextOffset:0}),
+						Ext.create('NextThought.model.anchorables.TextContext', {contextText:'text2', contextOffset:1}),
+						Ext.create('NextThought.model.anchorables.TextContext', {contextText:'text3', contextOffset:2})
+					]
+				});
+				expect(false).toBeTruthy();
+			}
+			catch (e) {
+				expect(e.message).toEqual('Ancestor must be supplied');
+			}
+
+			try {
+				Ext.create('NextThought.model.anchorables.TextDomContentPointer', {
+					role: 'ancestor',
+					edgeOffset: 3,
+					ancestor: Ext.create('NextThought.model.anchorables.ElementDomContentPointer', {
+						elementId: 'id',
+						elementTagName: 'tagName',
+						role: 'end' //must be ancestor
+					}),
+					contexts: [
+						Ext.create('NextThought.model.anchorables.TextContext', {contextText:'text1', contextOffset:0}),
+						Ext.create('NextThought.model.anchorables.TextContext', {contextText:'text2', contextOffset:1}),
+						Ext.create('NextThought.model.anchorables.TextContext', {contextText:'text3', contextOffset:2})
+					]
+				});
+				expect(false).toBeTruthy();
+			}
+			catch (e) {
+				expect(e.message).toEqual('If ancestor is an ElementDomContentPointer, role must be of value ancestor');
+			}
+
 		});
 
 		it("Good DomContentRangeDescription Creation", function(){
 			var tca1 = Ext.create('NextThought.model.anchorables.TextDomContentPointer',{
-					elementId: 'id',
-					elementTagName: 'tagName',
-					type: 'ancestor',
+					role: 'start',
+					ancestor: Ext.create('NextThought.model.anchorables.ElementDomContentPointer', {
+						elementId: 'id',
+						elementTagName: 'tagName',
+						role: 'ancestor'
+					}),
 					edgeOffset: 5,
 					contexts: [
 						Ext.create('NextThought.model.anchorables.TextContext', {contextText:'text1', contextOffset:0}),
@@ -223,9 +261,12 @@ describe("Anchor Utils", function() {
 					]
 				}),
 				tca2 = Ext.create('NextThought.model.anchorables.TextDomContentPointer', {
-					elementId: 'id',
-					elementTagName: 'tagName',
-					type: 'ancestor',
+					role: 'start',
+					ancestor: Ext.create('NextThought.model.anchorables.ElementDomContentPointer', {
+						elementId: 'id',
+						elementTagName: 'tagName',
+						role: 'ancestor'
+					}),
 					edgeOffset: 5,
 					contexts: [
 						Ext.create('NextThought.model.anchorables.TextContext', {contextText:'text1', contextOffset:0}),
@@ -234,9 +275,12 @@ describe("Anchor Utils", function() {
 					]
 				}),
 				ca1 = Ext.create('NextThought.model.anchorables.TextDomContentPointer', {
-					elementId: 'id',
-					elementTagName: 'tagName',
-					type: 'ancestor',
+					role: 'start',
+					ancestor: Ext.create('NextThought.model.anchorables.ElementDomContentPointer', {
+						elementId: 'id',
+						elementTagName: 'tagName',
+						role: 'ancestor'
+					}),
 					edgeOffset: 5,
 					contexts: [
 						Ext.create('NextThought.model.anchorables.TextContext', {contextText:'text1', contextOffset:0}),
@@ -257,9 +301,12 @@ describe("Anchor Utils", function() {
 
 		it("Bad DomContentRangeDescription Creation", function(){
 			var tca1 = Ext.create('NextThought.model.anchorables.TextDomContentPointer',{
-					elementId: 'id',
-					elementTagName: 'tagName',
-					type: 'ancestor',
+					role: 'start',
+					ancestor: Ext.create('NextThought.model.anchorables.ElementDomContentPointer', {
+						elementId: 'id',
+						elementTagName: 'tagName',
+						role: 'ancestor'
+					}),
 					edgeOffset: 5,
 					contexts: [
 						Ext.create('NextThought.model.anchorables.TextContext', {contextText:'text1', contextOffset:0}),
@@ -268,21 +315,13 @@ describe("Anchor Utils", function() {
 					]
 				}),
 				tca2 = Ext.create('NextThought.model.anchorables.TextDomContentPointer', {
-					elementId: 'id',
-					elementTagName: 'tagName',
-					type: 'ancestor',
+					role: 'start',
 					edgeOffset: 5,
-					contexts: [
-						Ext.create('NextThought.model.anchorables.TextContext', {contextText:'text1', contextOffset:0}),
-						Ext.create('NextThought.model.anchorables.TextContext', {contextText:'text2', contextOffset:1}),
-						Ext.create('NextThought.model.anchorables.TextContext', {contextText:'text3', contextOffset:2})
-					]
-				}),
-				ca1 = Ext.create('NextThought.model.anchorables.TextDomContentPointer', {
-					elementId: 'id',
-					elementTagName: 'tagName',
-					type: 'ancestor',
-					edgeOffset: 5,
+					ancestor: Ext.create('NextThought.model.anchorables.ElementDomContentPointer', {
+						elementId: 'id',
+						elementTagName: 'tagName',
+						role: 'ancestor'
+					}),
 					contexts: [
 						Ext.create('NextThought.model.anchorables.TextContext', {contextText:'text1', contextOffset:0}),
 						Ext.create('NextThought.model.anchorables.TextContext', {contextText:'text2', contextOffset:1}),

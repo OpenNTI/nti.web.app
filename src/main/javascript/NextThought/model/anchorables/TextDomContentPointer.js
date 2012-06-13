@@ -1,11 +1,12 @@
-/**
- * Text Content Anchor Class defines an anchorable text node in the DOM, defined
- * by an set of text and offsets both within the context and within the text
- */
 Ext.define('NextThought.model.anchorables.TextDomContentPointer', {
 	extend: 'NextThought.model.anchorables.DomContentPointer',
 
+	requires: [
+		'NextThought.model.anchorables.DomContentPointer'
+	],
+
 	config: {
+		ancestor: {},
 		contexts: [],
 		edgeOffset: 0
 	},
@@ -13,8 +14,19 @@ Ext.define('NextThought.model.anchorables.TextDomContentPointer', {
 	constructor: function(o){
 		this.validateContexts(o.contexts);
 		this.validateEdgeOffset(o.edgeOffset);
+		this.validateAncestor(o.ancestor);
 
-		this.initConfig(o);
+		return this.callParent(arguments);
+	},
+
+
+	validateAncestor: function(a) {
+		if (!a || !(a instanceof NextThought.model.anchorables.DomContentPointer)) {
+			Ext.Error.raise('Ancestor must be supplied');
+		}
+		else if (a instanceof NextThought.model.anchorables.ElementDomContentPointer && a.getRole() !== 'ancestor') {
+			Ext.Error.raise('If ancestor is an ElementDomContentPointer, role must be of value ancestor');
+		}
 	},
 
 

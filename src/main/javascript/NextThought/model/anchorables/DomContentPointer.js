@@ -1,7 +1,6 @@
 Ext.define('NextThought.model.anchorables.DomContentPointer', {
-	extends: [
-		'NextThought.model.anchorables.ContentPointer'
-	],
+	extend: 'NextThought.model.anchorables.ContentPointer',
+
 	config: {
 		role: ''
 	},
@@ -14,7 +13,7 @@ Ext.define('NextThought.model.anchorables.DomContentPointer', {
 
 	constructor: function(o){
 		this.validateRole(o.role);
-		this.initConfig(o);
+		return this.callParent(arguments);
 	},
 
 

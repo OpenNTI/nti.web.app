@@ -24,11 +24,13 @@ Ext.define('NextThought.model.anchorables.DomContentRangeDescription', {
 			Ext.Error.raise('Invalid contents');
 		}
 
-		this.initConfig({
-			start: start,
-			end: end,
-			ancestor: ancestor
-		});
+		this.callParent(arguments);
+
+		this.setStart(start);
+		this.setEnd(end);
+		this.setAncestor(ancestor);
+
+		return this;
 	},
 
 	isDomContentPointer: function(o) {
