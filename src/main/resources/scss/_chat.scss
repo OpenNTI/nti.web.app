@@ -91,6 +91,7 @@
 	.chat-log-view {
 		border-radius: 0 5px 0 0;
 		border-bottom: 1px solid #cfcfcf !important;
+		box-shadow: inset  0px -7px 7px -7px #f7f7f7;
 
 		.log-entry-wrapper {
 			overflow: hidden;
@@ -104,6 +105,7 @@
 			}
 
 			img {
+				cursor: pointer;
 				float: left;
 				width: 36px;
 				height: auto;
@@ -172,16 +174,27 @@
 
 		div {
 			margin: 12px 8px 10px 8px;
-			input {
-				padding: 5px;
-				color: #757474;
-				height: 30px;
-				font-family: 'Open Sans', sans-serif;
-				//font-size: 15pt;
-				width: 100%;
-				border-radius: 3px;
-				border: 1px solid #a0a0a0;
-				box-shadow: inset 3px 3px 10px -5px #a0a0a0;
+			img {
+				width: 21px;
+				height: 21px;
+				float: left;
+				margin: 4px;
+				background: url(../images/add-whiteboard.png);
+			}
+
+			div {
+				margin: 0 0 0 37px;
+				input {
+					padding: 5px;
+					color: #757474;
+					height: 30px;
+					font-family: 'Open Sans', sans-serif;
+					//font-size: 15pt;
+					width: 100%;
+					border-radius: 3px;
+					border: 1px solid #a0a0a0;
+					box-shadow: inset 3px 3px 10px -5px #a0a0a0;
+				}
 			}
 		}
 	}

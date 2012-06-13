@@ -8,13 +8,15 @@ Ext.define('NextThought.view.chat.Entry',{
 
 	renderTpl: [
 		'<div>',
-			'<input type="text" value="">',
+			'<img src="{[Ext.BLANK_IMAGE_URL]}" class="add-whiteboard" alt="Draw">',
+			'<div><input type="text" value=""></div>',
 		'</div>'
 	],
 
 	chanel: 'DEFAULT',
 
 	renderSelectors: {
+		buttonEl: 'img',
 		inputEl: 'input'
 	},
 
