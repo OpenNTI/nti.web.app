@@ -51,55 +51,5 @@ public class LoginTest extends TestCase{
 	public void testHello(){
 		this.loginHelper.login();
 	}
-
-	@Test
-	public void testHello1(){
-		this.loginHelper.login();
-	}
-	
-	@Test
-	public void testHello2(){
-		this.loginHelper.login();
-	}
-	
-	@Test
-	public void testHello3(){
-		this.loginHelper.login();
-	}
-	
-	@Test
-	public void testHello4(){
-		this.loginHelper.login();
-	}
-	
-	@Test
-	public void testHello5(){
-		this.loginHelper.login();
-	}
-	
-	@Test
-	public void testHello6(){
-		this.loginHelper.login();
-	}
-	
-	@Test
-	public void testHello7(){
-		this.loginHelper.login();
-	}
-	
-	@Test
-	public void testHello8(){
-		this.loginHelper.login();
-	}
-	
-	@Test
-	public void testHello9(){
-		this.loginHelper.login();
-	}
-	
-	@Test
-	public void testHello0(){
-		this.loginHelper.login();
-	}
 	
 }

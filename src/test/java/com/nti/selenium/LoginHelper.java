@@ -17,7 +17,7 @@ public class LoginHelper {
 	}
 	
 	public boolean waitForLoading(int timeout){
-		while(this.waitForElement("xpath=//title[text()='NextThought App']", 1)){
+		while(this.waitForElement("xpath=//title[@id='loading']", 1)){
 			timeout--;
 			if(timeout <= 0){
 				return false;
