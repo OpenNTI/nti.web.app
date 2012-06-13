@@ -63,6 +63,11 @@ Ext.define('NextThought.view.WindowManager',{
 				this.handleRestore(map[id]);
 			}
 		});
+
+		btn.down('.closer').on('click',function(e){
+			var id = e.getTarget('.window-minimized',null,true).id;
+			map[id].close();
+		});
 	},
 
 

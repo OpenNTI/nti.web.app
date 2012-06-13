@@ -79,6 +79,7 @@
 	bottom: 0;
 
 	.window-minimized{
+		white-space: nowrap;
 		margin: 6px;
 		border: 1px solid #dbdbdb;
 		border-radius: 5px;
@@ -92,6 +93,7 @@
 			color: #ababab;
 			margin-right: 32px;
 			padding: 6px 8px 6px 8px;
+			position: relative;
 		}
 
 		.activity{
