@@ -62,7 +62,21 @@ class TestNavigation(WebAppNavigation):
 		if value != 'Rounding': 
 			print 'the section was not successfully opened'
 
-		
+	def test_pager_move(self):
+		print 'test pager'
+		self.navigate_to('Prealgebra', 'Decimals', 'Rounding')
+		self.pager_move()
+		value = self.get_page_section_title ()
+		if value != 'Decimals and Fractions': 
+			print 'The page did not move to the contents of the next section'
+			
+
+# TO-DO: take care of jumper
+#	def test_menu_jumper_chapters(self):
+#		print 'test menu jumper'
+#		self.navigate_to('Prealgebra', 'Decimals', 'Rounding')
+#		self.menu_jumper ('Percents')
+#		
 		
 	def test_open_search(self):
 		value = self.open_search() 

@@ -1,6 +1,3 @@
-
-
-
 from nti.seleniumtests import wait_for_element
 from nti.seleniumtests.base import WebAppTestBase
 from nti.seleniumtests import wait_for_element_xpath
@@ -75,8 +72,8 @@ class WebAppNavigation (WebAppTestBase):
     
     def open_section (self, section = None):        
         self.open_level (tag = 'tr', attribute = 'class', attribute_value = 'x-grid-tree-node-leaf', text_value = section, dicts = self.sections)
-    
-    
+        self.driver.find_element_by_class_name ('library').click()
+        
     def navigate_to(self, book, chapter=None, section=None):
         
         if not book:
@@ -105,6 +102,7 @@ class WebAppNavigation (WebAppTestBase):
             self.open_book(book)
             self.open_chapter(chapter)
             self.open_section(section)
+            
     
     def get_page_section_title (self, frameName='component-1036'):
         wait_for_element(driver = self.driver,tag = 'iframe',  attribute = 'id', attribute_value = frameName)
@@ -120,5 +118,24 @@ class WebAppNavigation (WebAppTestBase):
         return self.driver.find_element_by_xpath (xpath)
         
     
-    
+#---------------------------------------------------------------------------
+#PAGER 
+    def pager_move(self):
+        wait_for_element(driver = self.driver, tag = 'div', attribute = 'class', attribute_value = 'next')
+        self.driver.find_element_by_class_name ('next').click()
+        
+        
+    def menu_jumper (self, chapter = None, section = None):
+        wait_for_element(driver = self.driver, tag = 'div', attribute = 'class', attribute_value = 'jumpto')
+        xpath = self.xpath_contains_builder('div', 'class', 'jumpto')
+        elt = self.driver.find_element_by_xpath(xpath)
+        label_select_elt = elt.find_element_by_class_name('label')
+        label_select_elt.click()
+        time.sleep(3)
+        #xpath = self.xpath_contains_and_text_builder(tag = 'div', attribute = 'class',value = 'x-component-jumpto-menuitem', text =  chapter)
+        #wait for element here? 
+        #chapter = elt.find_element_by_xpath(xpath).click()
+        #if section is not None: 
+        #    wait_for_element(driver = self.driver, tag = 'div', attribute = 'id', attribute_value = 'content-jumper')
+        
         
