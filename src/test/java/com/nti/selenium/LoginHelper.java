@@ -10,18 +10,16 @@ public class LoginHelper {
 		this.selenium = selenium;
 	}
 	
-	public void wait_(int timeToWait){
-		long time = System.currentTimeMillis() + timeToWait * 1000;
-		while(time > System.currentTimeMillis()){
-		}
+	public void wait_(final int secs){
+		Thread.currentThread().sleep(secs * 1000)
 	}
 	
-	public boolean waitForLoading(int timeout){
-		while(this.waitForElement("xpath=//title[@id='loading']", 1)){
+	public boolean waitForLoading(final int timeout)
+	{
+		while(this.waitForElement("xpath=//title[@id='loading']", 1) && timeout>0)
+		{
 			timeout--;
-			if(timeout <= 0){
-				return false;
-			}
+			wait_(1)
 		}
 		return true;
 	}
