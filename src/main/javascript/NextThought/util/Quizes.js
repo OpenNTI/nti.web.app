@@ -185,6 +185,9 @@ Ext.define('NextThought.util.Quizes', {
 				    cls: 'result'
 			        });
 			        s = r.down('.result');
+
+			    if (qqr.get('Response') != '')
+			    {
 			        s.addCls((qqr.get('Assessment')?'':'in')+'correct');
 			        s.createChild({
 				    tag: 'span',
@@ -206,7 +209,7 @@ Ext.define('NextThought.util.Quizes', {
 					onclick: "var state=$(this).hasClass('bubble');$('a.why').removeClass('bubble');if (!state) {$(this).addClass('bubble');}",
 				        cn: { tag: 'span', cls: 'bubble'}
 			            });
-				
+ 
 			            s = r.down('span.bubble');
 			            s.createChild({
 				        tag: 'span',
@@ -220,6 +223,18 @@ Ext.define('NextThought.util.Quizes', {
 					cls: mathCls+'bubble-text'
 				    });
 				}
+			    }
+			    else
+			    {
+				s.addCls('noanswer');
+
+				s.createChild({
+				    tag : 'span',
+				    html: 'Question not answered.',
+				    cls: mathCls+'response' + ' answer-text'
+				});
+				
+			    }
 			});
 
 		doc.parentWindow.postMessage('MathJax.reRender()',location.href);
