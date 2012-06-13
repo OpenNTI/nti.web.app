@@ -21,15 +21,25 @@ Ext.define('NextThought.cache.UserRepository', {
 	updateUser: function(refreshedUser) {
 		var s = this.getStore(),
 			uid = refreshedUser.getId(),
-			u = s.getById(uid),
+			u = s.getById(uid), //user from the store
 			raw = refreshedUser.raw,
 			ignoreNewInstance = (raw && raw.hasOwnProperty('ignoreIfExists'));
 
+		//if the store had the user
+		// AND it was not equal to the refreshedUser (the user resolved from the server)
+		//	OR we were asked NOT to ignore new instances...
 		if (u && (!ignoreNewInstance || !u.equal(refreshedUser))) {
+			//If we have a current user, and the user from the store is that user (compared by ID)
 			if ($AppConfig.userObject && isMe(u) ){
+				//If the INSTANCE of the user from the store does not match the instance of the current user object
 				if(u !== $AppConfig.userObject) {
+					//this is strange...why do we get here?
 					console.warn('AppConfig user instance is different');
+					//if the user in the store is not the same object as our global reference, then we need to make sure
+					// that we fire changed event just incase someone is listening to it.
+					$AppConfig.userObject.fireEvent('changed', refreshedUser);
 				}
+
 				$AppConfig.userObject = refreshedUser;
 			}
 

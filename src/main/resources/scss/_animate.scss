@@ -96,3 +96,24 @@
 @-ms-keyframes fadeOutRight { 0% { opacity: 1; -ms-transform: translateX(0); } 100% { opacity: 0; -ms-transform: translateX(20px); } }
 @-o-keyframes fadeOutRight { 0% { opacity: 1; -o-transform: translateX(0); } 100% { opacity: 0; -o-transform: translateX(20px); } }
 @keyframes fadeOutRight { 0% { opacity: 1; transform: translateX(0); } 100% { opacity: 0; transform: translateX(20px); } }
+
+@-webkit-keyframes shake {
+	0%, 100% {-webkit-transform: translateX(0);}
+	10%, 30%, 50%, 70%, 90% {-webkit-transform: translateX(-10px);}
+	20%, 40%, 60%, 80% {-webkit-transform: translateX(10px);} }
+@-moz-keyframes shake {
+	0%, 100% {-moz-transform: translateX(0);}
+	10%, 30%, 50%, 70%, 90% {-moz-transform: translateX(-10px);}
+	20%, 40%, 60%, 80% {-moz-transform: translateX(10px);} }
+@-ms-keyframes shake {
+	0%, 100% {-ms-transform: translateX(0);}
+	10%, 30%, 50%, 70%, 90% {-ms-transform: translateX(-10px);}
+	20%, 40%, 60%, 80% {-ms-transform: translateX(10px);} }
+@-o-keyframes shake {
+	0%, 100% {-o-transform: translateX(0);}
+	10%, 30%, 50%, 70%, 90% {-o-transform: translateX(-10px);}
+	20%, 40%, 60%, 80% {-o-transform: translateX(10px);} }
+@keyframes shake {
+	0%, 100% {transform: translateX(0);}
+	10%, 30%, 50%, 70%, 90% {transform: translateX(-10px);}
+	20%, 40%, 60%, 80% {transform: translateX(10px);} }

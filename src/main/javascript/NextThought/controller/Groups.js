@@ -33,6 +33,7 @@ Ext.define('NextThought.controller.Groups', {
 			},
 
 			'management-group-list': {
+				'add-group': this.addGroup,
 				'delete-group': this.deleteGroup
 			}
 
@@ -145,6 +146,10 @@ Ext.define('NextThought.controller.Groups', {
 			username = newGroupName
 				.replace(/[^0-9A-Za-z\-@]/g, '.')
 				.replace(/^[\.\-_]+/g, '');
+
+		if(!Globals.INVALID_CHARACTERS_PATTERN.test(newGroupName)){
+			return Ext.callback(callback,scope, [false]);
+		}
 
 		rec.set('Username',username+'@nextthought.com');
 

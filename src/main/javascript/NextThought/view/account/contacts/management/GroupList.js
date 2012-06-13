@@ -35,19 +35,45 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
 
 
 	refresh: function(){
+		var el = this.getEl(), ul, link;
+
 		if(this.allowSelect){
 			this.getSelectionModel().select(0,true,true);
 		}
 		this.callParent(arguments);
 
 		if(this.rendered){
+			ul = el.down('ul');
 			if(!this.allowSelect){
-				this.getEl().down('ul').addCls('disallowSelection');
+				ul.addCls('disallowSelection');
 			}
 
-			Ext.each( this.getEl().query('img.delete-group'),
+			Ext.fly(this.getNode(0)).setStyle({display:'none'});
+
+			Ext.each( el.query('img.delete-group'),
 				function(dom){Ext.fly(dom).on('click',this.deleteGroup, this);},
 				this);
+
+			if(this.allowSelect){
+				link = Ext.DomHelper.append( ul,
+					{
+						tag: 'li',
+						cls: 'add-group-action selection-list-item',
+						role: 'button',
+						children: [
+							{ tag: 'a', href: '#', html: 'Add Group' },
+							{ tag: 'input', type: 'text', cls: 'new-group-input', style: 'display: none;'  }
+						]
+					}, true);
+
+				link.down('a').on('click', this.addGroupClicked, this);
+				link.down('input').on({
+					scope: this,
+					blur: this.newGroupBlurred,
+					keypress: this.newGroupKeyPressed,
+					keydown: this.newGroupKeyDown
+				});
+			}
 		}
 	},
 
@@ -90,6 +116,77 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
 	allowSelection: function(){
 		this.allowSelect = true;
 		this.refresh();
+	},
+
+
+	selectNewGroup: function(groupName){
+		if(!this.allowSelect){
+			return;
+		}
+
+		console.log(groupName);
+	},
+
+
+	addGroupClicked: function(e){
+		var a = Ext.get(e.getTarget('a',undefined,true));
+
+		a.next('input').setStyle('display','').focus();
+		a.remove();
+
+		e.preventDefault();
+		e.stopPropagation();
+		return false;
+	},
+
+
+	newGroupBlurred: function(e){
+		if(this.suppressBlur){
+			delete this.suppressBlur;
+			return;
+		}
+		this.submitNewGroup(e.getTarget().value);
+	},
+
+
+	newGroupKeyDown: function(event) {
+		var specialKeys = {
+			27: true,	//Ext.EventObject.prototype.ESC
+			8: true,	//Ext.EventObject.prototype.BACKSPACE
+			46: true	//Ext.EventObject.prototype.DELETE
+		};
+
+		Ext.fly(event.getTarget()).removeCls('error');
+		event.stopPropagation();
+
+		if(specialKeys[event.getKey()]){
+			this.newGroupKeyPressed(event);
+		}
+	},
+
+
+	newGroupKeyPressed: function(event){
+		var k = event.getKey();
+		if(k === event.ESC){
+			return this.reset();
+		}
+		else if (k === event.ENTER) {
+			this.suppressBlur = true;
+			this.submitNewGroup(event.getTarget().value);
+		}
+
+		event.stopPropagation();
+	},
+
+
+	submitNewGroup: function(groupName){
+		var input = this.getEl().down('li > input'),
+			me = this;
+
+		this.fireEvent('add-group', groupName, function(success){
+			if(!success){ input.addCls('error'); return; }
+			me.selectNewGroup(groupName);
+		});
 	},
 
 

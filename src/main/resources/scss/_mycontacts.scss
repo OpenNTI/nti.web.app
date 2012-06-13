@@ -304,7 +304,7 @@ $over-color: #f4f3f3;
 				border-top: 1px solid #dcdcdc;
 				li.selection-item-over {
 					background-color: transparent !important;
-					img.delete-group { display: none !important; }
+					//img.delete-group { display: none !important; }
 				}
 			}
 
@@ -326,6 +326,8 @@ $over-color: #f4f3f3;
 
 		.selection-list-ct {
 			ul {
+				padding-bottom: 10px;
+
 				&.disallowSelection{
 					li.selection-list-item {
 						background: none !important;
@@ -343,6 +345,7 @@ $over-color: #f4f3f3;
 							img.delete-group { display: none !important; }
 						}
 					}
+
 					&.selection-item-over{
 						background-color: $over-color;
 						color: #767676 !important;
@@ -357,6 +360,42 @@ $over-color: #f4f3f3;
 						}
 					}
 
+
+					&.add-group-action {
+						background: none;
+					}
+
+					a {
+						&:active, &:visited, &:link{
+							border: 0 dotted #767676;
+							border-bottom-width: 2px;
+							color: #767676;
+							display: inline-block;
+							font-style: italic;
+							padding: 0px 2px;
+							text-decoration: none;
+						}
+					}
+
+					input {
+						border: none;
+						box-shadow: none;
+						background: transparent;
+						padding: 0;
+						font-style: italic;
+						height: auto;
+
+						$value: text-shadow 0.5s, color 0.5s;
+
+						@include experimental(transition, $value);
+
+						&.error {
+							@include experimental(transition, $value);
+							@include animate(shake);
+							color: red;
+							text-shadow: 2px 2px 2px #ffc0c0;
+						}
+					}
 
 					img.delete-group {
 						display: none;

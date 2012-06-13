@@ -124,9 +124,12 @@ Ext.define('NextThought.view.account.contacts.management.ContactList',{
 
 
 	updateLastClass: function(){
-		var cls = 'last-item';
+		var cls = 'last-item',
+			last = this.items.last();
 		this.items.each(function(c){ c.removeCls(cls); },this);
-		this.items.last().addCls(cls);
+		if( last ){
+			last.addCls(cls);
+		}
 	},
 
 
