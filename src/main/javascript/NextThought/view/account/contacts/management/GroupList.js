@@ -123,8 +123,15 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
 		if(!this.allowSelect){
 			return;
 		}
-
-		console.log(groupName);
+		try {
+			var record = this.store.find(this.displayField,groupName);
+			if(record && record !== -1){
+				this.getSelectionModel().select(record,true,true);
+			}
+		}
+		catch(er){
+			console.error(Globals.getError(er));
+		}
 	},
 
 
@@ -185,7 +192,7 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
 
 		this.fireEvent('add-group', groupName, function(success){
 			if(!success){ input.addCls('error'); return; }
-			me.selectNewGroup(groupName);
+			me.store.on('datachanged',function(){me.selectNewGroup(groupName);},me,{single:true});
 		});
 	},
 
