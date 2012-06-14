@@ -53,17 +53,20 @@
 				height: 100%;
 				float: right;
 				background: url(../images/window_controls_v_div.png) left center no-repeat;
-				padding: 8px 5px;
+				padding: 0;
 
 				img.tool {
-					width: 8px; height: 8px;
-					margin: 2px 7px;
+					&:hover{ opacity: 1; }
+					opacity: 0.5;
+					width: 27px; height: 28px;
+					margin: 0;
 					float: right;
 					cursor: pointer;
 
-					background: url(../images/window-sprites.png) -100px -100px no-repeat;
-					&.close { background-position: -1px 0; }
-					&.minimize { background-position: -15px 0; }
+
+					background: url(../images/window_controls.png) -100px -100px no-repeat;
+					&.close { background-position: -27px 0; }
+					&.minimize { background-position: 0 0; }
 				}
 			}
 		}
@@ -81,16 +84,16 @@
 	.window-minimized{
 		white-space: nowrap;
 		margin: 6px;
-		border: 1px solid #dbdbdb;
+		border: 1px solid #cbcbcb;
 		border-radius: 5px;
 		background: #fcfcfc;
-		box-shadow: 1px 1px 5px 0 rgba(0,0,0,0.2);
+		box-shadow: 2px 2px 2px 0 rgba(0, 0, 0, 0.1);
 		min-width: 200px;
 
 
 		.title {
 			@include menu-label-text-treatment;
-			color: #ababab;
+			color: #8A8989;
 			margin-right: 32px;
 			padding: 6px 8px 6px 8px;
 			position: relative;
@@ -101,19 +104,23 @@
 		}
 		.closer {
 			border-radius: 0 5px 5px 0;
-			padding: 10px 11px 8px 11px;
+			padding: 0;
 			border-left: 1px solid #fcfcfc;
 			float: right;
 
 			&:hover {
 				background: #f4f4f4;
-				border-left-color: #dbdbdb;
+				border-left-color: #cbcbcb;
+				img.closer-nib {
+					opacity: 1;
+				}
 			}
 
 			img.closer-nib {
-				width: 8px; height: 8px;
+				opacity: 0.5;
+				width: 30px; height: 26px;
 				cursor: pointer;
-				background: url(../images/window-sprites.png) -1px 0 no-repeat;
+				background: url(../images/window_controls.png) -22px -1px no-repeat;
 			}
 		}
 	}
