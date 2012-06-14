@@ -6,50 +6,49 @@ public class LoginHelper {
 	
 	Selenium selenium;
 	
-	public LoginHelper(Selenium selenium){
+	public LoginHelper(final Selenium selenium) {
 		this.selenium = selenium;
 	}
 	
-	public void wait_(final int secs){
+	public void wait_(final int secs) {
 		Thread.currentThread().sleep(secs * 1000)
 	}
 	
 	public boolean waitForLoading(final int timeout)
 	{
-		while(this.waitForElement("xpath=//title[@id='loading']", 1) && timeout>0)
+		while(this.waitForElement("xpath=//title[@id='loading']", 1) && timeout > 0)
 		{
 			timeout--;
-			wait_(1)
+			this.wait_(1)
 		}
-		return true;
+		return timeout > 0;
 	}
 	
-	public boolean waitForElement(String xpath, int timeout){
-		while(!this.selenium.isElementPresent(xpath)){
+	public boolean waitForElement(final String xpath, final int timeout){
+		while(!this.selenium.isElementPresent(xpath) && timemout > 0)
+		{
 			this.wait_(1);
 			timeout--;
-			if(timeout <= 0){
-				return false;
-			}
 		}
 		this.wait_(1);
-		return true;
+		return timeout > 0;
 	}
 	
-	public void typeKeys(String xpath, String text){
-		char[] keys = text.toCharArray();
-		for(char key: keys){
+	public void typeKeys(final String xpath, final String text){
+		final char[] keys = text.toCharArray();
+		for(final char key: keys)
+		{
 			this.selenium.type(xpath, ""+key);
 		}
 	}
 	
-	public void login(){
+	public void login() {
 		
-		int timeout = 10;
+		final int timeout = 10;
 		
-		String usernameXpath = "xpath=//input[@name='username']";
-		String passwordXpath = "xpath=//input[@name='password']";
-		String buttonXpath = "xpath=//button[@id='submit']";
+		final String usernameXpath = "xpath=//input[@name='username']";
+		final String passwordXpath = "xpath=//input[@name='password']";
+		final String buttonXpath = "xpath=//button[@id='submit']";
 		
 		this.selenium.waitForPageToLoad("10000");
 		this.waitForElement(usernameXpath, timeout);
