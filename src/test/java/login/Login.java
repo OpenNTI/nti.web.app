@@ -1,6 +1,8 @@
-package com.nti.selenium;
+package login;
 
-public class LoginHelper extends Base{
+import com.nti.selenium.Base;
+
+public class Login extends Base{
 	
 	public void wait_(final int secs) {
 		try {

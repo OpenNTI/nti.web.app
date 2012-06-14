@@ -1,10 +1,11 @@
-package com.nti.selenium;
+package login;
+
 
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class LoginTest extends LoginHelper{
+public class TestLogin extends Login{
 
 	@Test
 	public void testLogin(){
