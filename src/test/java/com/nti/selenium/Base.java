@@ -18,6 +18,7 @@ public class Base {
 
 	protected static final int timeout = 10;
 	
+	protected static int port;
 	protected static String url;
 	protected static String books;
 	protected static String driver;
@@ -26,7 +27,6 @@ public class Base {
 	protected static String sectionName;
 	protected static String chapterName;
 	protected static String dataserver;
-	protected static int port;
 	protected static Credentials[] credentials;
 	protected static final Properties propertiesFile = new Properties();
 	
@@ -50,7 +50,7 @@ public class Base {
 			chapterName = propertiesFile.getProperty("chapterName");
 			dataserver = propertiesFile.getProperty("dataserver");
 			port = Integer.parseInt(propertiesFile.getProperty("port"));
-			credentials = setCredentials();
+			credentials = readCredentials(propertiesFile.getProperty("users"));
 			selenium = new DefaultSelenium(dataserver, port, driver, url);
 			
 		} catch (final IOException e) {
@@ -59,10 +59,12 @@ public class Base {
 		}
 	}
 	
-	public static Credentials[] setCredentials(){
-		String[] users = propertiesFile.getProperty("users").split(",");
+	public static Credentials[] readCredentials(final String source){
+		final String[] users = source.split(",");
 		credentials = new Credentials[users.length];
-		for(int i = 0; i < users.length; i++){
+		for(int i = 0; i < users.length; i++)
+		{
+			// TODO: set password correctly
 			credentials[i] = new Credentials(users[i], users[i]);
 		}
 		return credentials;
