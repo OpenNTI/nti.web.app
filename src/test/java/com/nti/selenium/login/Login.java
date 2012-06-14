@@ -1,4 +1,4 @@
-package login;
+package com.nti.selenium.login;
 
 import com.nti.selenium.Base;
 

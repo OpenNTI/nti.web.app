@@ -1,4 +1,4 @@
-package login;
+package com.nti.selenium.login;
 
 
 import org.junit.Test;
