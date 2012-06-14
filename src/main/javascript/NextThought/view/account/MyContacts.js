@@ -37,7 +37,7 @@ Ext.define('NextThought.view.account.MyContacts',{
 			items: [
 				{ id: 'activity-stream', title: 'Active' },
 				{ id: 'online-contacts', title: 'Online' },
-				{ id: 'offline-contacts', title: 'Offline', collapsed: true, showCount: false }
+				{ id: 'offline-contacts', title: 'Offline', collapsed: true }
 			]
 		},
 		{	id: 'my-groups', title: 'Groups' },
