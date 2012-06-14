@@ -1,42 +1,47 @@
 package com.nti.selenium;
 
-import java.io.FileInputStream;
+import java.io.File
 import java.io.IOException;
+import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.Properties;
+import java.net.URL;
 
-import org.junit.BeforeClass;
-import org.junit.Before;
 import org.junit.After;
-//import org.junit.AfterClass;
-//import static org.junit.Assert.assertEquals;
+import org.junit.Before;
+import org.junit.BeforeClass;
 
 import com.thoughtworks.selenium.Selenium;
 import com.thoughtworks.selenium.DefaultSelenium;
 import org.openqa.selenium.server.SeleniumServer;
 
-public class Base{
+public class Base {
 
-	protected SeleniumServer seleniumServer;
-	protected int timeout = 10;
+	protected static final int timeout = 10;
 	
-	protected static Selenium selenium;
-	protected static Properties propertiesFile;
 	protected static String url;
-	protected static String sectionName;
-	protected static String bookName;
-	protected static String driver;
 	protected static String books;
+	protected static String driver;
+	protected static String bookName;
+	protected static Selenium selenium;
+	protected static String sectionName;
 	protected static String chapterName;
 	protected static Credentials credentials;
+	protected static Properties propertiesFile;
+	
+	protected SeleniumServer seleniumServer;
 	
 	@BeforeClass
-	public static void oneTimeSetUp(){
-		propertiesFile = new Properties();
+	public static void oneTimeSetUp() {
+		final propertiesFile = new Properties();
 		try {
-			String webAppPath = System.getProperty("user.dir");
-			String localPath = "/src/test/java/com/nti/selenium/config/main.properties";
+			final URL main = Base.class.getResource("Base.class");
+			final File mp = new File(url.getPath());
+			final String webAppPath = mp.getParent() + "/"
+			final String localPath = "../config/main.properties";
 			
+			// set properties
+			// TODO: Close Stream we need commons-io
 			propertiesFile.load(new FileInputStream(webAppPath + localPath));
 			url = propertiesFile.getProperty("url");
 			sectionName = propertiesFile.getProperty("sectionName");
@@ -45,8 +50,10 @@ public class Base{
 			books = propertiesFile.getProperty("books");
 			chapterName = propertiesFile.getProperty("chapterName");
 			credentials = new Credentials(propertiesFile);
+			
+			// TODO: Make sure we get the host/port from the config file
 			selenium = new DefaultSelenium("localhost", 4444, driver, url);
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			System.out.println("couldnt find the config file");
 		}
 	}
