@@ -1,31 +1,28 @@
 package com.nti.selenium;
 
-import com.thoughtworks.selenium.Selenium;
-
-public class LoginHelper {
-	
-	Selenium selenium;
-	
-	public LoginHelper(final Selenium selenium) {
-		this.selenium = selenium;
-	}
+public class LoginHelper extends Base{
 	
 	public void wait_(final int secs) {
-		Thread.currentThread().sleep(secs * 1000)
+		try {
+			Thread.currentThread();
+			Thread.sleep(secs * 1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 	
-	public boolean waitForLoading(final int timeout)
+	public boolean waitForLoading(int timeout)
 	{
 		while(this.waitForElement("xpath=//title[@id='loading']", 1) && timeout > 0)
 		{
 			timeout--;
-			this.wait_(1)
+			this.wait_(1);
 		}
 		return timeout > 0;
 	}
 	
-	public boolean waitForElement(final String xpath, final int timeout){
-		while(!this.selenium.isElementPresent(xpath) && timemout > 0)
+	public boolean waitForElement(final String xpath, int timeout){
+		while(!selenium.isElementPresent(xpath) && timeout > 0)
 		{
 			this.wait_(1);
 			timeout--;
@@ -38,26 +35,50 @@ public class LoginHelper {
 		final char[] keys = text.toCharArray();
 		for(final char key: keys)
 		{
-			this.selenium.type(xpath, ""+key);
+			selenium.type(xpath, ""+key);
 		}
 	}
 	
-	public void login() {
-		
-		final int timeout = 10;
+	public void login(String username, String password){
 		
 		final String usernameXpath = "xpath=//input[@name='username']";
 		final String passwordXpath = "xpath=//input[@name='password']";
 		final String buttonXpath = "xpath=//button[@id='submit']";
 		
-		this.selenium.waitForPageToLoad("10000");
-		this.waitForElement(usernameXpath, timeout);
-		this.selenium.type(usernameXpath, "logan.testi@nextthought.com");
-		this.waitForElement(passwordXpath, timeout);
-		this.selenium.type(passwordXpath, "logan.testi");
-		this.waitForElement(buttonXpath, timeout);
-		this.selenium.click(buttonXpath);
-		this.waitForLoading(timeout);
+		selenium.waitForPageToLoad("10000");
+		this.waitForElement(usernameXpath, this.timeout);
+		selenium.type(usernameXpath, username);
+		this.waitForElement(passwordXpath, this.timeout);
+		selenium.type(passwordXpath, password);
+		this.waitForElement(buttonXpath, this.timeout);
+		selenium.click(buttonXpath);
+		this.waitForLoading(this.timeout);
+	}
+	
+	private void _logout(){
+		
+		String optionsXpath = "xpath=//div[@class='my-account-wrapper']";
+		String logoutButtonXpath = "xpath=//div[text()='Sign out']";
+		
+		this.waitForElement(optionsXpath, this.timeout);
+		selenium.click(optionsXpath);
+		this.waitForElement(logoutButtonXpath, this.timeout);
+		selenium.click(logoutButtonXpath);
+		this.waitForLoading(this.timeout);
+	}
+	
+	public void login(String password){
+		this.login(credentials.get(0).get(0), password);
+	}
+	
+	public void login(){
+		this.login(credentials.get(0).get(1));
+	}
+	
+	public void logout(){
+		this.login();
+		this._logout();
+		this.wait_(3);
 	}
 	
 }
