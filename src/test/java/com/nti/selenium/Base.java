@@ -39,7 +39,6 @@ public class Base {
 			final URL main = Base.class.getResource("Base.class");
 			final File mp = new File(main.getPath());
 			final String webAppPath = mp.getParent() + "/";
-			System.out.println(webAppPath);
 			final String localPath = "config/main.properties";
 			
 			propertiesFile.load(new FileInputStream(webAppPath + localPath));
