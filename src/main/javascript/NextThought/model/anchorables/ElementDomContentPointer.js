@@ -35,8 +35,14 @@ Ext.define('NextThought.model.anchorables.ElementDomContentPointer', {
 		if (!n){
 			Ext.Error.raise('Must supply a tag name');
 		}
-	}
+	},
 
-}, function(){
-	console.log('CHECK ME', this.prototype.config);
+
+	locateRangePointInAncestor: function(ancestorNode){
+		 return Anchors.locateElementDomContentPointer(this, ancestorNode);
+	},
+
+	locateRangePointInAncestorAfter: function(ancestorNode, after){
+		 return Anchors.locateElementDomContentPointer(this, ancestorNode, after);
+	}
 });

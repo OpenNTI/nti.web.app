@@ -25,5 +25,15 @@ Ext.define('NextThought.model.anchorables.DomContentPointer', {
 		else if (!Ext.Array.contains(this.validRoles, r)){
 			Ext.Error.raise('Role must be of the value ' + this.validRoles.join(',') + ', supplied ' + r);
 		}
+	},
+
+
+	locateRangePointInAncestor: function(){
+		return {confidence: 0, node: null};
+	},
+
+
+	locateRangePointInAncestorAfter: function(){
+		return {confidence: 0, node: null};
 	}
 });

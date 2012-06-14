@@ -1,6 +1,24 @@
 Ext.define('NextThought.util.Anchors', {
 	singleton: true,
 
+	//TODO - this is from out obj back to dom
+	toDomRange: function(contentRangeDescription) {
+		   var ancestorNode = contentRangeDescription.getAncestor().locateRangePointInAncestor(document.body).node || document.body;
+
+		   console.log('Will use '+ancestorNode+' as root');
+
+		   var range = Anchors.resolveSpecBeneathAncestor(contentRangeDescription, ancestorNode);
+
+		   if( !range && ancestorNode !== document.body ){
+				   console.log('Retrying resolution using documentBody');
+				   range = Anchors.resolveSpecBeneathAncestor(contentRangeDescription, document.body );
+		   }
+
+		   return range;
+	},
+
+
+	//TODO - testing
 	createRangeDescriptionFromRange: function(range) {
 		range = Anchors.makeRangeAnchorable(range);
 
@@ -19,6 +37,202 @@ Ext.define('NextThought.util.Anchors', {
 			end: NextThought.DomContentPointer.createEndAnchorForRange(range),
 			ancestor: ancestorAnchor
 		});
+	},
+
+
+	/* tested */
+	resolveSpecBeneathAncestor: function(rangeDesc, ancestor){
+		if(!rangeDesc){
+			Ext.Error.raise('Must supply Description');
+		}
+
+		//Resolve the start anchor.
+		//see below for details no resolving various
+		//anchor types
+		var startResult = rangeDesc.getStart().locateRangePointInAncestor(ancestor);
+
+		//If we can't even resolve the start anchor there
+		//is no point in resolving the end
+		if(    !startResult.node
+			|| !startResult.hasOwnProperty('confidence')
+			|| startResult.confidence !== 1){
+			return null;
+		}
+
+		//Resolve the end anchor.
+		//see below for details no resolving various
+		//anchor types
+		var endResult = rangeDesc.getEnd().locateRangePointInAncestorAfter(ancestor, startResult);
+
+		if(    !endResult.node
+			|| !endResult.hasOwnProperty('confidence')
+			|| endResult.confidence != 1){
+			return null;
+		}
+
+		var range = document.createRange();
+		if(startResult.hasOwnProperty('confidence')){
+			range.setStart(startResult.node, startResult.offset);
+		}
+		else{
+			range.setStartBefore(startResult.node);
+		}
+
+		if(endResult.hasOwnProperty('confidence')){
+			range.setEnd(endResult.node, endResult.offset);
+		}
+		else{
+			range.setEndAfter(endResult.node);
+		}
+		return range;
+	},
+
+
+	/* tested */
+	locateElementDomContentPointer: function(pointer, ancestor, after){
+		//only element dom pointers after this point:
+		if (!(pointer instanceof NextThought.model.anchorables.ElementDomContentPointer)) {
+			Ext.Error.raise('This method expects ElementDomContentPointers only');
+		}
+
+		var isStart = pointer.getRole() === 'start',
+			treeWalker = document.createTreeWalker(ancestor, NodeFilter.SHOW_ELEMENT, null, null),
+			testNode;
+
+		if(!isStart && after && after.node){
+				//Want to search after the start node
+				treeWalker.currentNode = after.node;
+		}
+
+		while( (testNode = treeWalker.nextNode()) ){
+				if(   testNode.id === pointer.getElementId()
+					  && testNode.tagName === pointer.getElementTagName() ){
+						return {confidence: 1, node: testNode};
+				}
+		}
+		return {confidence: 0};
+	},
+
+
+	/* tested */
+	//TODO - refactor this, break it up
+	locateRangeEdgeForAnchor: function(pointer, ancestorNode, startResult ){
+		if (!pointer) {
+			Ext.Error.raise('Must supply a Pointer');
+		}
+		else if (!(pointer instanceof NextThought.model.anchorables.TextDomContentPointer)) {
+			Ext.Error.raise('ContentPointer must be a TextDomContentPointer');
+		}
+
+		//Resolution starts by locating the reference node
+		//for this text anchor.  If it can't be found ancestor is used
+
+		var referenceNode = pointer.getAncestor().locateRangePointInAncestor(document.body).node;
+		if(!referenceNode){
+				referenceNode = ancestorNode;
+		}
+
+		var isStart = pointer.role === 'start';
+
+		//We use a tree walker to search beneath the reference node
+		//for textContent matching our primary context with confidence
+		// >= requiredConfidence
+
+		var treeWalker = document.createTreeWalker( referenceNode, NodeFilter.SHOW_TEXT, null, null);
+
+		//If we are looking for the end node.  we want to start
+		//looking where the start node ended
+		if( !isStart && startResult && startResult.node ){
+				treeWalker.currentNode = startResult.node;
+		}
+
+		var textNode;
+
+		if(treeWalker.currentNode.nodeType == Node.TEXT_NODE){
+				textNode = treeWalker.currentNode;
+		}
+		else{
+				textNode = treeWalker.nextNode();
+		}
+
+		function contextMatchNode(context, node, isStart)
+		{
+
+				var adjustedOffset = context.contextOffset,
+					indexOf = node.textContent.indexOf(context.contextText);
+				if(isStart){
+						adjustedOffset = node.textContent.length - adjustedOffset;
+				}
+
+				if( indexOf !== -1 && indexOf === adjustedOffset){
+						return true;
+				}
+				return false;
+		}
+
+			//If we are working on the start anchor, when checking context
+		//we look back at previous nodes.  if we are looking at end we
+		//look forward to next nodes
+		var siblingFunction = isStart ? treeWalker.previousNode : treeWalker.nextNode;
+		while( textNode ) {
+				//Do all our contexts match this textNode
+				var nextNodeToCheck = textNode;
+				var match = true;
+				var i;
+				for(i = 0; i < pointer.getContexts().length; i++ ){
+						var contextObj = pointer.getContexts()[i];
+
+						//Right now, if we don't have all the nodes we need to have
+						//for the contexts, we fail.  In the future this
+						//probably changes but that requires looking ahead to
+						//see if there is another node that makes us ambiguous
+						//if we don't apply all the context
+						if(!nextNodeToCheck){
+							match = false;
+								break;
+						}
+						//If we don't match this context with high enough confidence
+						//we fail
+						if( !contextMatchNode(contextObj, nextNodeToCheck, isStart) ){
+								match = false;
+								break;
+						}
+
+						//That context matched so we continue verifying.
+						nextNodeToCheck = siblingFunction.call(treeWalker);
+				}
+
+				//We matched as much context is we could,
+				//this is our node
+				if(match){
+						break;
+				}
+				else{
+						//That wasn't it.  Continue searching
+						treeWalker.currentNode = textNode;
+				}
+
+				//Start the context search over in the next textnode
+				textNode = treeWalker.nextNode();
+		}
+
+		//If we made it through the tree without finding
+		//a node we failed
+		if(!textNode){
+				return {confidence: 0};
+		}
+
+
+		//We found what we need.  Set the context
+		var primaryContext = pointer.primaryContext();
+
+		var container = textNode;
+		var indexOfContext = primaryContext.contextOffset;
+		if(isStart){
+				indexOfContext = container.textContent.length - indexOfContext;
+		}
+		indexOfContext += this.edgeOffset;
+		return {node: container, offset: indexOfContext, confidence: 1};
 	},
 
 

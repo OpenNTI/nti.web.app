@@ -20,6 +20,13 @@ Ext.define('NextThought.model.anchorables.TextDomContentPointer', {
 	},
 
 
+	primaryContext: function(){
+	   if(this.getContexts().length > 0){
+			   return this.getContexts()[0];
+	   }
+	   return null;
+	},
+
 	validateAncestor: function(a) {
 		if (!a || !(a instanceof NextThought.model.anchorables.DomContentPointer)) {
 			Ext.Error.raise('Ancestor must be supplied');
@@ -44,6 +51,15 @@ Ext.define('NextThought.model.anchorables.TextDomContentPointer', {
 		if (!o || o < 0) {
 			Ext.Error.raise('Offset must exist and be 0 or more');
 		}
-	}
+	},
 
+
+	locateRangePointInAncestor: function(ancestorNode){
+		return Anchors.locateRangeEdgeForAnchor(this, ancestorNode);
+	},
+
+
+	locateRangePointInAncestorAfter: function(ancestorNode, after){
+		return Anchors.locateRangeEdgeForAnchor(this, ancestorNode, after);
+	}
 });
