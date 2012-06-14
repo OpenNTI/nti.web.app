@@ -135,6 +135,7 @@ Ext.define('NextThought.view.Window',{
 	setTitle: function(title){
 		var titleBox = this.down('nti-window-header');
 		if(titleBox){
+			this.fireEvent('titleChange',this,title);
 			titleBox.update(title);
 		}
 	},

@@ -99,7 +99,14 @@ Ext.define('NextThought.view.WindowManager',{
 	},
 
 
-	handleTitleChange: function(){}
+	handleTitleChange: function(window, newTitle){
+		var btn = window.minimizedButton;
+		if(!btn){
+			console.warn('no associated button with window: ', window, 'now titled: ', newTitle);
+			return;
+		}
+		btn.down('.title span').update(newTitle);
+	}
 
 
 });
