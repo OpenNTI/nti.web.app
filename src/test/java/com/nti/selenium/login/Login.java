@@ -42,13 +42,13 @@ public class Login extends Base{
 		final String buttonXpath = "xpath=//button[@id='submit']";
 		
 		selenium.waitForPageToLoad("10000");
-		this.waitForElement(usernameXpath, this.timeout);
+		this.waitForElement(usernameXpath, timeout);
 		selenium.type(usernameXpath, username);
-		this.waitForElement(passwordXpath, this.timeout);
+		this.waitForElement(passwordXpath, timeout);
 		selenium.type(passwordXpath, password);
-		this.waitForElement(buttonXpath, this.timeout);
+		this.waitForElement(buttonXpath, timeout);
 		selenium.click(buttonXpath);
-		this.waitForLoading(this.timeout);
+		this.waitForLoading(timeout);
 	}
 	
 	protected void doLogout(){
@@ -56,11 +56,11 @@ public class Login extends Base{
 		final String optionsXpath = "xpath=//div[@class='my-account-wrapper']";
 		final String logoutButtonXpath = "xpath=//div[text()='Sign out']";
 		
-		this.waitForElement(optionsXpath, this.timeout);
+		this.waitForElement(optionsXpath, timeout);
 		selenium.click(optionsXpath);
-		this.waitForElement(logoutButtonXpath, this.timeout);
+		this.waitForElement(logoutButtonXpath, timeout);
 		selenium.click(logoutButtonXpath);
-		this.waitForLoading(this.timeout);
+		this.waitForLoading(timeout);
 	}
 
 	public void login(String username, String password){
@@ -68,7 +68,7 @@ public class Login extends Base{
 	}
 	
 	public void login() {
-		String[] credential = credentials.getFirstUser();
+		String[] credential = credentials[0].getCredential();
 		this.doLogin(credential[0], credential[1]);
 	}
 	

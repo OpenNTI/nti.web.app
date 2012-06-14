@@ -21,7 +21,7 @@ public class TestLogin extends Login{
 	
 	@Test
 	public void testIncorrectPasswordLogin(){
-		this.login(credentials.getFirstUser()[0], "incorrect_password");
+		this.login(credentials[0].getCredential()[0], "incorrect_password");
 		assertEquals(selenium.getTitle(), "NextThought Login");
 		assertTrue(selenium.isElementPresent("xpath=//div[@id='message']"));
 		assertTrue(selenium.isElementPresent("xpath=//div[@class='message']"));
