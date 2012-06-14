@@ -18,7 +18,7 @@ import org.openqa.selenium.server.SeleniumServer;
 public class Base{
 
 	protected SeleniumServer seleniumServer;
-	protected Integer timeout = 10;
+	protected int timeout = 10;
 	
 	protected static Selenium selenium;
 	protected static Properties propertiesFile;
@@ -28,7 +28,7 @@ public class Base{
 	protected static String driver;
 	protected static String books;
 	protected static String chapterName;
-	protected static ArrayList<ArrayList<String>> credentials;
+	protected static Credentials credentials;
 	
 	@BeforeClass
 	public static void oneTimeSetUp(){
@@ -44,8 +44,7 @@ public class Base{
 			driver = propertiesFile.getProperty("driver");
 			books = propertiesFile.getProperty("books");
 			chapterName = propertiesFile.getProperty("chapterName");
-			credentials = Base.setUsers(propertiesFile.getProperty("users"));
-			
+			credentials = new Credentials(propertiesFile);
 			selenium = new DefaultSelenium("localhost", 4444, driver, url);
 		} catch (IOException e) {
 			System.out.println("couldnt find the config file");
@@ -64,19 +63,6 @@ public class Base{
 	public void tearDown() throws Exception{
 		selenium.stop();
 		this.seleniumServer.stop();
-	}
-	
-	private static ArrayList<ArrayList<String>> setUsers(String userList){
-		String[] userNames = userList.split(",");
-		ArrayList<ArrayList<String>> credentials = new ArrayList<ArrayList<String>>();
-		for(String userName: userNames){
-			userName.trim();
-			ArrayList<String> credential = new ArrayList<String>();
-			credential.add(userName + "@nextthought.com");
-			credential.add(userName);
-			credentials.add(credential);
-		}
-		return credentials;
 	}
 	
 }

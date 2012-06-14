@@ -6,7 +6,7 @@ public class Login extends Base{
 	
 	public void wait_(final int secs) {
 		try {
-			Thread.sleep(secs * 1000);
+			Thread.sleep(secs);
 		} catch (final InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -14,34 +14,28 @@ public class Login extends Base{
 	
 	public boolean waitForLoading(final int timeout)
 	{
-		while(this.waitForElement("xpath=//title[@id='loading']", 1) && timeout > 0)
+		double timer = 0;
+		while(selenium.isElementPresent("xpath=//title[@id='loading']") && timer <= timeout)
 		{
-			timeout--;
-			this.wait_(1);
+			timer++;
+			this.wait_(1000);
 		}
-		return timeout > 0;
+		this.wait_(1000);
+		return timer < timeout;
 	}
 	
 	public boolean waitForElement(final String xpath, final int timeout){
-		while(!selenium.isElementPresent(xpath) && timeout > 0)
+		int timer = 0;
+		while((!selenium.isElementPresent(xpath)) && timer < timeout)
 		{
-			this.wait_(1);
-			timeout--;
+			timer++;
+			this.wait_(1000);
 		}
-		this.wait_(1);
-		return timeout > 0;
+		this.wait_(1000);
+		return timer <= timeout;
 	}
 	
-	public void typeKeys(final String xpath, final String text){
-		final char[] keys = text.toCharArray();
-		for(int i = 0; i < keys.length; i++)
-		{
-			key = keys[i];
-			selenium.type(xpath, ""+key);
-		}
-	}
-	
-	public void login(final String username, final String password) {
+	protected void doLogin(String username, String password){
 		
 		final String usernameXpath = "xpath=//input[@name='username']";
 		final String passwordXpath = "xpath=//input[@name='password']";
@@ -57,7 +51,7 @@ public class Login extends Base{
 		this.waitForLoading(this.timeout);
 	}
 	
-	protected void do_logout() {
+	protected void doLogout(){
 		
 		final String optionsXpath = "xpath=//div[@class='my-account-wrapper']";
 		final String logoutButtonXpath = "xpath=//div[text()='Sign out']";
@@ -68,19 +62,19 @@ public class Login extends Base{
 		selenium.click(logoutButtonXpath);
 		this.waitForLoading(this.timeout);
 	}
-	
-	public void login(final String password){
-		this.login(credentials.get(0).get(0), password);
+
+	public void login(String username, String password){
+		this.doLogin(username, password);
 	}
 	
 	public void login() {
-		this.login(credentials.get(0).get(1));
+		String[] credential = credentials.getFirstUser();
+		this.doLogin(credential[0], credential[1]);
 	}
 	
 	public void logout() {
 		this.login();
-		this.do_logout();
-		this.wait_(3);
+		this.doLogout();
 	}
 	
 }
