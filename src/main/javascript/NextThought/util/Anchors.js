@@ -33,31 +33,23 @@ Ext.define('NextThought.util.Anchors', {
 		});
 
 		return Ext.create('NextThought.model.anchorables.DomContentRangeDescription', {
-			start: Anchors.createPointerForRange(range, false),
-			end: Anchors.createPointerForRange(range, true),
+			start: Anchors.createPointer(range, false),
+			end: Anchors.createPointer(range, true),
 			ancestor: ancestorAnchor
 		});
 	},
 
 
-	createPointerForRange: function(range, start) {
-		var endEdgeNode = Anchors.nodeThatIsEdgeOfRange(range, start),
+	createPointer: function(range, start, node) {
+		var endEdgeNode = node || Anchors.nodeThatIsEdgeOfRange(range, start),
 			role = start ? 'start' : 'end';
 
-		return Anchors.pointerImplementationForNode(endEdgeNode, role);
-	},
-
-
-	pointerImplementationForNode: function(node, role) {
-		if (Ext.isTextNode(node)) {
-			//TODO - finish me, pass role
-			return Ext.create('NextThought.model.anchorables.TextDomContentPointer', {
-				role: role
-			})
+		if (Ext.isTextNode(endEdgeNode)) {
+			return Anchors.createTextPointerFromRange(range, role);
 		}
-		else if (Ext.isElement(node)) {
-			var id = node.getAttribute('Id'),
-				tagName = node.tagName;
+		else if (Ext.isElement(endEdgeNode)) {
+			var id = endEdgeNode.getAttribute('Id'),
+				tagName = endEdgeNode.tagName;
 			return Ext.create('NextThought.model.anchorables.ElementDomContentPointer', {
 				elementTagName: tagName,
 				elementId: id
@@ -70,10 +62,13 @@ Ext.define('NextThought.util.Anchors', {
 	},
 
 
-	initializeTextAnchorFromRange: function(range, role){
-            var start = this.role === 'start';
-            var container = start ? range.startContainer : range.endContainer;
-            var offset = start ? range.startOffset : range.endOffset;
+	createTextPointerFromRange: function(range, role){
+            var start = this.role === 'start',
+            	container = start ? range.startContainer : range.endContainer,
+            	offset = start ? range.startOffset : range.endOffset,
+				contexts = [],
+				edgeOffset,
+				ancestor;
 
             if(!Ext.isTextNode(container)){
 				Ext.Error.raise('Range must contain text containers');
@@ -81,23 +76,21 @@ Ext.define('NextThought.util.Anchors', {
 
             var referenceNode = Anchors.referenceNodeForNode(container);
 
-            this.ancestor = Anchors.pointerImplementationForNode(referenceNode, 'ancestor');
-
-            this.contexts = [];
+            ancestor = Anchors.createPointer(range, 'ancestor', referenceNode);
 
             var primaryContext = Anchors.generatePrimaryContext(range, role);
 
             if(primaryContext){
-                    this.contexts.push(primaryContext);
+                    contexts.push(primaryContext);
             }
 
             //Generate the edge offset
-            var normalizedOffset = primaryContext.contextOffset;
+            var normalizedOffset = primaryContext.getContextOffset();
             if(start){
                     normalizedOffset = container.textContent.length - normalizedOffset;
             }
 
-            this.edgeOffset = offset - normalizedOffset;
+            edgeOffset = offset - normalizedOffset;
 
             //Now we want to collect subsequent context
             var collectedCharacters = 0;
@@ -117,9 +110,16 @@ Ext.define('NextThought.util.Anchors', {
                     }
 
                     var additionalContext = Anchors.generateAdditionalContext(sibling, role);
-                    collectedCharacters += additionalContext.contextText.length;
-                    this.contexts.push(additionalContext);
+                    collectedCharacters += additionalContext.getContextText().length;
+                    contexts.push(additionalContext);
             }
+
+		return Ext.create('NextThought.model.anchorables.TextDomContentPointer', {
+			role: role,
+			contexts: contexts,
+			edgeOffset: edgeOffset,
+			ancestor: ancestor
+		});
     },
 
 
