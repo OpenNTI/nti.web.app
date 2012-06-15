@@ -25,7 +25,6 @@ Ext.define('NextThought.view.chat.Entry',{
 		this.inputEl.selectable();
 		this.inputEl.on({
 			scope: this,
-			mousedown: function(e){ e.dragTracked = true; },
 			keydown: this.keyDown
 		});
 
