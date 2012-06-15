@@ -250,6 +250,12 @@ $over-color: #f4f3f3;
 
 	.contact-selection-list {
 		margin: 10px 0;
+		$value: opacity 0.5s;
+		@include experimental(transition, $value);
+
+		&.fade-out {
+			opacity: 0.2;
+		}
 
 		overflow: visible;
 		border-radius: 3px;

@@ -66,7 +66,8 @@ Ext.define('NextThought.view.account.contacts.management.Panel',{
 
 		var me = this,
 			contactList = me.down('management-contact-list'),
-			addBtn = me.down('button[text=Add]');
+			addBtn = me.down('button[text=Add]'),
+			userSearch = me.down('usersearchinput');
 
 		me.mon( contactList, 'change', me.onContactListChanged, me);
 		me.mon( addBtn, 'click', me.addGroup, me);
@@ -77,6 +78,11 @@ Ext.define('NextThought.view.account.contacts.management.Panel',{
 				if(newValue){ addBtn.enable(); return; }
 				addBtn.disable();
 			}
+		});
+		me.mon( userSearch, {
+			scope: me,
+			expand: function(){ contactList.addCls('fade-out'); },
+			collapse: function(){ contactList.removeCls('fade-out'); }
 		});
 	},
 
