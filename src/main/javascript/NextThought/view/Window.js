@@ -123,30 +123,15 @@ Ext.define('NextThought.view.Window',{
 	},
 
 
-//	ghost: function(){
-//		var me = this,
-//			gp = me.ghostPanel,
-//			box = me.getBox();
-//
-//		if (!gp) {
-//			gp = new NextThought.view.Window({
-//				title: me.header ? me.header.getTitle() : '',
-//				renderTo: document.body,
-//				cls: me.cls + ' ' + me.baseCls + '-ghost '
-//			});
-//			me.ghostPanel = gp;
-//		}
-//
-//		gp.floatParent = me.floatParent;
-//		gp.toFront();
-//
-//		gp.show();
-//		gp.header = gp.down('nti-window-header');
-//		gp.setPagePosition(box.x, box.y);
-//		gp.setSize(box, undefined);
-//		me.el.hide();
-//		return gp;
-//	},
+	initResizable: function(){
+		this.callParent(arguments);
+
+		this.resizer.on({
+			scope: this,
+			beforeresize: this.dragMaskOn,
+			resize: this.dragMaskOff
+		});
+	},
 
 
 	initDraggable: function() {
