@@ -8,6 +8,7 @@ Ext.define('NextThought.view.form.AccountForm', {
 		'NextThought.view.form.fields.ShareWithField'
 	],
 
+	ui: 'account',
 	border: false,
 	bodyPadding: 5,
 	autoScroll: true,
@@ -21,15 +22,18 @@ Ext.define('NextThought.view.form.AccountForm', {
 
 	layout: 'anchor',
 	defaults: {
+		ui: 'account',
 		layout: 'anchor',
 		anchor: '100%',
 		border: false,
 		padding: 5,
 		defaults: {
+			ui: 'account',
 			layout: 'anchor',
 			padding: 5,
 			anchor: '100%',
-			border: false
+			border: false,
+			defaults: {ui: 'account',defaults: {ui: 'account'}}
 		}
 	},
 
@@ -82,7 +86,7 @@ Ext.define('NextThought.view.form.AccountForm', {
 							border: false,
 							hidden: true,
 							changePassword: true,
-							defaults: { flex: 1, disabled: true },
+							defaults: { ui: 'account', flex: 1, disabled: true },
 							items:[
 								{
 									xtype: 'textfield',
@@ -114,6 +118,7 @@ Ext.define('NextThought.view.form.AccountForm', {
 							border: false,
 							margin: '10px 0px',
 							defaults: {
+								ui: '',
 								padding: 0,
 								margin: '10px 0px',
 								anchor: '100%',
@@ -123,21 +128,20 @@ Ext.define('NextThought.view.form.AccountForm', {
 								collapsed: true,
 								border: false,
 								defaults: {
-									padding: 0,
-									margin: '10px 5px',
-									anchor: '100%',
-									layout: 'anchor',
-									border: false,
-									allowBlank: true,
-									emptyText: 'Search to add...',
-									xtype: 'sharewith'
+									layout: 'fit',
+									xtype: 'container',
+									autoEl: {tag: 'div', cls: 'field' },
+									defaults: {
+										xtype: 'sharewith',
+										allowBlank: true
+									}
 								}
 							},
 							items:[
-								{ title: 'Following',   items: { name: 'following'  }, collapsed: false },
-								{ title: 'Communities', items: { name: 'Communities', readOnly: true } },
-								{ title: 'Accepting',   items: { name: 'accepting'  } },
-								{ title: 'Ignoring',	items: { name: 'ignoring'   } }
+								{ title: 'Following',   items: { items: { name: 'following', readOnly: true  } }, collapsed: false },
+								{ title: 'Communities', items: { items: { name: 'Communities', readOnly: true } } },
+								{ title: 'Accepting',   items: { items: { name: 'accepting'  } } },
+								{ title: 'Ignoring',	items: { items: { name: 'ignoring'   } } }
 							]
 						}
 					]

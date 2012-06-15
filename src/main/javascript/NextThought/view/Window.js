@@ -91,6 +91,8 @@ Ext.define('NextThought.view.Window',{
 		this.heightPercent = typeof h === 'string' ? (parseInt(h,10)/100) : null;
 
 		if( this.widthPercent || this.heightPercent ) {
+			this.resizable = false;
+			this.draggable = false;
 			this.syncSize();
 			Ext.EventManager.onWindowResize(me.syncSize,me);
 			this.on('destroy',function(){ Ext.EventManager.removeResizeListener(me.syncSize,me);});
@@ -112,8 +114,8 @@ Ext.define('NextThought.view.Window',{
 			w = Ext.Element.getViewportWidth() * me.widthPercent,
 			size = me.rendered ? me.getSize() : {width: me.width, height: me.height};
 
-		size.width	= w || size.width;//NaN is falsy
-		size.height	= h || size.height;
+		size.width	= Math.floor( w || size.width );//NaN is falsy
+		size.height	= Math.floor( h || size.height );
 
 		console.log('syncing size');
 		this.setSize(size,undefined);

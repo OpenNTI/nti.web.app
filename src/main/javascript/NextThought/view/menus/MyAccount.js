@@ -21,8 +21,8 @@ Ext.define('NextThought.view.menus.MyAccount',{
 
 	items: [
 		{xtype: 'notifications-menuitem'},
-		{text: 'My Account', disabled: true}, //TODO - re-enable when we have
-		{text: 'Settings',  disabled: true},  //something for these two.
+		{text: 'My Account', action: 'account' },
+		{text: 'Settings',  disabled: true}, //TODO - re-enable when we have something for this
 		{text: 'About', href: 'http://www.nextthought.com/', hrefTarget: '_blank'},
 		{text: 'Help', href: 'mailto:alpha-support@nextthought.com', hrefTarget: '_blank'},
 		{text: 'Privacy', action: 'privacy'},

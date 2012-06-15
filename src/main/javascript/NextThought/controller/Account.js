@@ -35,6 +35,10 @@ Ext.define('NextThought.controller.Account', {
 
 			'my-account-menu menuitem[action=privacy]' : {
 				'click': this.showPrivacy
+			},
+
+			'my-account-menu menuitem[action=account]' : {
+				'click': this.showAccount
 			}
 
 		},{});
@@ -47,8 +51,7 @@ Ext.define('NextThought.controller.Account', {
 
 
 	accountActionButton: function(btn){
-		var me = this,
-			win = btn.up('window'),
+		var win = btn.up('window'),
 			form= win.down('account-form'),
 			values = form.getForm().getFieldValues(false),
 			u = $AppConfig.userObject,
@@ -60,14 +63,6 @@ Ext.define('NextThought.controller.Account', {
 			if(!op.success){
 				console.error('FAILURE:',arguments);
 			}
-//			else if(fire){
-//				me.getSessionInfo().fireEvent('password-changed', u.get('Username'),values.password);
-//			}
-		}
-
-		if(btn.actionName !== 'save'){
-			win.close();
-			return;
 		}
 
 		if(!form.getForm().isValid()){
@@ -88,16 +83,37 @@ Ext.define('NextThought.controller.Account', {
 
 
 	showAccount: function(){
-		Ext.widget(
-			{
-				xtype: 'window',
-				id: 'account-window',
-				items: {
-					xtype: 'account-form',
-					account: $AppConfig.userObject
-				}
-			}
-		).show();
+		var me = this;
+		var win = Ext.widget({
+			xtype: 'nti-window',
+			id: 'account-window',
+			width: '40%',
+			height: '75%',
+			dialog: true,
+			layout: 'fit',
+			items: {
+				xtype: 'account-form',
+				account: $AppConfig.userObject
+			},
+
+			dockedItems: [ {
+				dock: 'bottom',
+				xtype: 'container',
+				cls: 'buttons',
+				layout:{ type: 'hbox', pack: 'end' },
+				defaults: {ui: 'primary', scale: 'medium'},
+				items: [
+					{xtype: 'button', text: 'Save', action: 'save', handler: function(btn){
+						me.accountActionButton(btn);
+					}},
+					{xtype: 'button', text: 'Cancel', ui: 'secondary', handler: function(btn){
+						btn.up('window').close();
+					}}
+				]
+			}]
+		});
+
+		win.show();
 	},
 
 
