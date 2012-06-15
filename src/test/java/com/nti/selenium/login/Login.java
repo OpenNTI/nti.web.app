@@ -68,8 +68,9 @@ public class Login extends Base{
 	}
 	
 	public void login() {
-		String[] credential = credentials[0].getCredential();
-		this.doLogin(credential[0], credential[1]);
+		String username = credentials[0].getUserName();
+		String password = credentials[1].getPassword();
+		this.doLogin(username, password);
 	}
 	
 	public void logout() {

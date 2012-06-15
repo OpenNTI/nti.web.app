@@ -84,4 +84,6 @@ public class Base {
 		this.seleniumServer.stop();
 	}
 	
+	public String xpathBuilder
+	
 }
