@@ -815,13 +815,13 @@ Ext.define('NextThought.controller.Chat', {
 		existingRoom = this.existingRoom(roomInfo.get('Occupants'), roomInfo.getId(), null);
 
 		this.activeRooms[roomInfo.getId()] = roomInfo;
-
+/*
 		if (existingRoom) {
 			existingRoom.fireEvent('changed', roomInfo);
 			this.leaveRoom(existingRoom);
 			return;
 		}
-
+*/
 
 		if (this.getClassroom().isClassroom(roomInfo)) {
 			this.getClassroom().onEnteredRoom(roomInfo);
