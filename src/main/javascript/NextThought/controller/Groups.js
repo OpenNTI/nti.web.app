@@ -32,6 +32,10 @@ Ext.define('NextThought.controller.Groups', {
 				'add-group': this.addGroup
 			},
 
+			'contact-card': {
+				'remove-contact-from': this.removeContact
+			},
+
 			'management-group-list': {
 				'add-group': this.addGroup,
 				'delete-group': this.deleteGroup
@@ -236,6 +240,19 @@ Ext.define('NextThought.controller.Groups', {
 				}
 			});
 		});
-	}
+	},
 
+	removeContact: function(contactContainer, contact){
+		var store = this.getFriendsListStore();
+		var userId = typeof contact === 'string' ? contact : contact.getId();
+		var record = contactContainer.record;
+		var field = contactContainer.field;
+		var list = record.get(field);
+
+		list = Ext.Array.remove(list,userId);
+
+		record.saveField(field, list, function() {
+			store.load();
+		});
+	}
 });

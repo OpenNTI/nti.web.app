@@ -17,6 +17,7 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 	defaultType: 'contact-card',
 	tools:[{
 	    type:'chat',
+		width: 22,
 	    tooltip: 'Chat with this group',
 	    handler: function(event, toolEl, panel){
 			var p = panel.up('contacts-panel');
@@ -65,12 +66,14 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 	},
 
 	setUsers: function(users){
-		var p = [];
+		var p = [],
+			g = this.associatedGroup;
+
 		if(Ext.isArray(users)){
-			Ext.each(users,function(u){ p.push({user: u}); });
+			Ext.each(users,function(u){ p.push({user: u, group: g}); });
 		}
 		else {
-			Ext.Object.each(users,function(n,u){ p.push({user: u}); });
+			Ext.Object.each(users,function(n,u){ p.push({user: u, group: g}); });
 		}
 		this.removeAll(true);
 		this.add(p);
@@ -86,10 +89,11 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 	},
 
 	addUser: function(user, changes, hideIfNoActivity) {
-		var widget;
+		var widget,
+			group = this.associatedGroup;
 
 		if (!this.getUser(user)) {
-			widget = {xtype:'contact-card', user: user, username: user.get('Username'), items:[]};
+			widget = { group: group, user: user, username: user.get('Username'), items:[]};
 
 			if (!changes) {changes = [];}
 			Ext.each(changes, function(c){

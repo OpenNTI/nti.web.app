@@ -134,6 +134,7 @@ $over-color: #f4f3f3;
 
 .x-panel-body-my-contacts {
 	.x-tabpanel-child {
+		padding-right: 30px;
 		@include animate(bounceInRight, 0.5s);
 	}
 }
@@ -152,7 +153,6 @@ $over-color: #f4f3f3;
 		@include contact-header;
 
 		.x-tool {
-			margin-right: 40px;
 			margin-left: 0px;
 
 			.x-tool-chat {
@@ -187,12 +187,18 @@ $over-color: #f4f3f3;
 			width: 14px;
 			height: 14px;
 			cursor: pointer;
+
+			.contacts-panel & {
+				background-position: -20px -2px;
+				margin-right: 5px;
+			}
 		}
 	}
 
 	.selection-item-over &,
 	&.selection-item-over,
-	&.x-menu-item-over {
+	&.x-menu-item-over,
+	&.card-over {
 		img.nib{
 			display: block;
 		}

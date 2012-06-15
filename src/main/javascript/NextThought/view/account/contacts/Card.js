@@ -12,6 +12,9 @@ Ext.define('NextThought.view.account.contacts.Card',{
 	layout: 'auto',
 	componentLayout: 'templated-container',
 	renderTpl: [
+		'<tpl if="!hideNib">',
+			'<img class="nib" src="{blank}" alt="Remove this contact from {from}">',
+		'</tpl>',
 		'<img src="{avatarURL}">',
 		'<div class="card-body">',
 			'<div class="name">{name}</div>',
@@ -38,6 +41,17 @@ Ext.define('NextThought.view.account.contacts.Card',{
 	defaultType: 'contact-activity',
 
 	initComponent: function(){
+
+		//convenience interface class. This will abstract the user object and the friendslist record so we can just have
+		// a record and a field to remove the contact from the list and save.
+		function ContactContainer(group){
+			this.record = group || $AppConfig.userObject;
+			this.field = group ? 'friends' : 'following';
+		}
+		//store the data for the event of clicking on the nib...
+		this.contactContainer = new ContactContainer(this.group);
+
+
 		this.callParent(arguments);
 		if(!this.user){
 			console.error('No user specified');
@@ -45,26 +59,45 @@ Ext.define('NextThought.view.account.contacts.Card',{
 		}
 
 		//for querying later:
-		this.username = this.user.get('Username');
+		this.username = this.user.getId();
+
 
 		this.renderData = Ext.apply(this.renderData||{},{
+			hideNib: Boolean(this.hideNib),
+			blank: Ext.BLANK_IMAGE_URL,
 			avatarURL: this.user.get('avatarURL'),
 			name: this.user.getName(),
-			status: 'Current Status'
+			status: 'Current Status',
+			from: this.group ? 'this Group' : 'my contacts'
 		});
 
 	},
 
 
 	afterRender: function(){
-		this.getEl().on('click', this.clicked, this);
+		var el = this.getEl();
+		var nib = el.down('img.nib');
+		var tip;
+
+		el.on('click', this.clicked, this);
+		el.addClsOnOver('card-over');
 		this.mixins.shareableTarget.afterRender.call(this);
 		this.callParent(arguments);
+
+		if(nib){
+			tip = Ext.widget({ xtype: 'tooltip', target: nib, html: nib.getAttribute('alt') });
+			this.on('destroy',function(){ tip.destroy(); });
+		}
 	},
 
 
 	clicked: function(e){
-		this.fireEvent('click', this, this.user.getId());
+		if(e.getTarget('img.nib')){
+			this.fireEvent('remove-contact-from', this.contactContainer, this.user);
+		}
+		else {
+			this.fireEvent('click', this, this.user.getId());
+		}
 	}
 
 });

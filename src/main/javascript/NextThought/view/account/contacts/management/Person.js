@@ -11,7 +11,7 @@ Ext.define('NextThought.view.account.contacts.management.Person',{
 	renderTpl: [
 		'<div class="contact-card-wrapper">',
 		'<div class="contact-card">',
-			'<img class="nib" src="',Ext.BLANK_IMAGE_URL,'" alt="Unselect this contact">',
+			'<img class="nib" src="{blank}" alt="Unselect this contact">',
 			'<img src="{avatarURL}">',
 			'<div class="card-body">',
 				'<div class="name">{name}</div>',
@@ -36,6 +36,7 @@ Ext.define('NextThought.view.account.contacts.management.Person',{
 	initComponent: function(){
 		this.callParent(arguments);
 		this.renderData = Ext.apply(this.renderData||{},{
+			blank: Ext.BLANK_IMAGE_URL,
 			avatarURL: this.user.get('avatarURL'),
 			name: this.user.getName(),
 			status: 'Current Status'
