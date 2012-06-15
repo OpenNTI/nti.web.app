@@ -78,6 +78,12 @@
 					display: inline-block;
 				}
 
+				div.message-bounding-box{
+					margin-left: 40px;
+					overflow: hidden;
+					position: relative;
+				}
+
 				.log-entry {
 					.name {
 						display: none;

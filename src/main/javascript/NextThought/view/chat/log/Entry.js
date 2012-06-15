@@ -13,9 +13,11 @@ Ext.define('NextThought.view.chat.log.Entry', {
 	renderTpl: new Ext.XTemplate(
 		'<div class="log-entry-wrapper {me}">',
 			'<img src="{avatarURL}" class="avatar" alt="{name}">',
+			'<div class="message-bounding-box">',
 			'<div class="log-entry {me}">',
 				'<div class="name">{name}</div> ',
 				'<div class="body-text">{body}</div> ',
+			'</div>',
 			'</div>',
 		'</div>',
 		'<div id="{id}-body" class="replies">',
