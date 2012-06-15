@@ -50,7 +50,7 @@ Ext.define('NextThought.util.Anchors', {
 
 	pointerImplementationForNode: function(node, role) {
 		if (Ext.isTextNode(node)) {
-			//TODO - finish me
+			//TODO - finish me, pass role
 			return Ext.create('NextThought.model.anchorables.TextDomContentPointer', {
 				role: role
 			})
@@ -70,7 +70,7 @@ Ext.define('NextThought.util.Anchors', {
 	},
 
 
-	initializeTextAnchorFromRange: function(range){
+	initializeTextAnchorFromRange: function(range, role){
             var start = this.role === 'start';
             var container = start ? range.startContainer : range.endContainer;
             var offset = start ? range.startOffset : range.endOffset;
@@ -85,7 +85,7 @@ Ext.define('NextThought.util.Anchors', {
 
             this.contexts = [];
 
-            var primaryContext = Anchors.generatePrimaryContext.call(this, range);
+            var primaryContext = Anchors.generatePrimaryContext(range, role);
 
             if(primaryContext){
                     this.contexts.push(primaryContext);
@@ -137,19 +137,24 @@ Ext.define('NextThought.util.Anchors', {
                  offset = relativeNode.textContent.length - offset;
          }
 
-		return Ext.create('NextThought.model.anchorable.TextContext', {
+		return Ext.create('NextThought.model.anchorables.TextContext', {
 			contextText: contextText,
 			contextOffset: offset
 		});
  },
 
 
-	generatePrimaryContext: function(range) {
+	/* tested */
+	generatePrimaryContext: function(range, role) {
+		if (!range){
+			Ext.Error.raise('Range must not be null');
+		}
+
 		var container = null,
 			offset = null,
 			contextText, contextOffset;
 
-		if(this.role === 'start'){
+		if(role === 'start'){
 			container = range.startContainer;
 			offset = range.startOffset;
 		}
@@ -161,6 +166,9 @@ Ext.define('NextThought.util.Anchors', {
 		//For the primary context we want a word on each side of the
 		//range
 		var textContent = container.textContent;
+		if (!textContent || textContent.length ===0 ) {
+			return null;
+		}
 
 		var prefix = Anchors.lastWordFromString(textContent.substring(0, offset));
 		var suffix = Anchors.firstWordFromString(textContent.substring(offset, textContent.length));
@@ -168,11 +176,8 @@ Ext.define('NextThought.util.Anchors', {
 		contextText = prefix+suffix;
 		contextOffset = textContent.indexOf(contextText);
 
-		if( this.role === 'start' ){
-			contextOffset = textContent.length - contextOffset;
-		}
-
-		return Ext.create('NextThought.model.anchorable.TextContext', {
+		if (contextText && contextOffset !== null)
+		return Ext.create('NextThought.model.anchorables.TextContext', {
 			contextText: contextText,
 			contextOffset: contextOffset
 		});

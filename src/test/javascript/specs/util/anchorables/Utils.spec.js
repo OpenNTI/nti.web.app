@@ -741,4 +741,67 @@ describe("Anchor Utils", function() {
 			}
 		});
 	});
+
+	describe('generatePrimaryContext Tests', function(){
+		it('Null Range', function(){
+			try {
+				Anchors.generatePrimaryContext(null);
+				expect(false).toBeTruthy();
+			}
+			catch(e) {
+				expect(e.message).toEqual('Range must not be null');
+			}
+		});
+
+		it('No Text in Range', function(){
+			var div = document.createElement('div'),
+				span = document.createElement('span'),
+				p = document.createElement('p'),
+				span2 = document.createElement('span'),
+				p2 = document.createElement('p'),
+				a = document.createElement('a'),
+				range, result;
+
+			span2.appendChild(p2);
+			span.appendChild(p);
+			span.appendChild(span2);
+			span.appendChild(a);
+			div.appendChild(span);
+			document.body.appendChild(div);
+			range = document.createRange();
+			range.setStartBefore(p);
+			range.setEndAfter(a);
+
+			result = Anchors.generatePrimaryContext(range);
+			expect(result).toBeNull();
+		});
+
+		it('Good Range', function(){
+			var div = document.createElement('div'),
+				span = document.createElement('span'),
+				p = document.createElement('p'),
+				t = document.createTextNode('This is some text'),
+				span2 = document.createElement('span'),
+				p2 = document.createElement('p'),
+				t2 = document.createTextNode('Also, this is more text'),
+				a = document.createElement('a'),
+				range, result;
+
+			p.appendChild(t);
+			p2.appendChild(t2);
+			span2.appendChild(p2);
+			span.appendChild(p);
+			span.appendChild(span2);
+			span.appendChild(a);
+			div.appendChild(span);
+			document.body.appendChild(div);
+			range = document.createRange();
+			range.setStart(t, 3);
+			range.setEnd(t, 6);
+
+			result = Anchors.generatePrimaryContext(range, 'start');
+			expect(result.getContextText()).toEqual('This');
+			expect(result.getContextOffset()).toEqual(0);
+		});
+	});
 });
