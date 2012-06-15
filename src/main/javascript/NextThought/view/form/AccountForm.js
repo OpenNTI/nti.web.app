@@ -124,8 +124,6 @@ Ext.define('NextThought.view.form.AccountForm', {
 								anchor: '100%',
 								layout: 'anchor',
 								xtype:'fieldset',
-								collapsible: true,
-								collapsed: true,
 								border: false,
 								defaults: {
 									layout: 'fit',
@@ -138,7 +136,7 @@ Ext.define('NextThought.view.form.AccountForm', {
 								}
 							},
 							items:[
-								{ title: 'Following',   items: { items: { name: 'following', readOnly: true  } }, collapsed: false },
+								{ title: 'Following',   items: { items: { name: 'following', readOnly: true  } } },
 								{ title: 'Communities', items: { items: { name: 'Communities', readOnly: true } } },
 								{ title: 'Accepting',   items: { items: { name: 'accepting'  } } },
 								{ title: 'Ignoring',	items: { items: { name: 'ignoring'   } } }
