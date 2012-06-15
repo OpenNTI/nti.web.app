@@ -80,13 +80,13 @@ Ext.define('NextThought.view.chat.Window',{
 			onNodeOut: function(target, dd, e, data){ Ext.fly(target).removeCls('target-hover'); },
 
 			onNodeOver: function(target, dd, e, data){
-//				if(data && data.Username) {
+				if(data && data.Username) {
 					return Ext.dd.DropZone.prototype.dropAllowed;
-//				}
+				}
 			},
 
 			onNodeDrop: function(target, dd, e, data){
-				me.fireEvent('add-people', me, [data.username]);
+//				me.fireEvent('add-people', me, [data.username]);
 				return true;
 			}
 		});
