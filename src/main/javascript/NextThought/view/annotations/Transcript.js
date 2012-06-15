@@ -55,21 +55,24 @@ Ext.define( 'NextThought.view.annotations.Transcript', {
 		if (this.win){this.win.close();}
 
 		var np, it,log,
-			win = this.win = Ext.widget('nti-window', {
-			title: this.getTitle(),
-			cls: 'chat-window',
-			disableDragDrop: true,
-			constrain: true,
-			autoScroll: true,
-			width: 400,
-			height: 300,
-			modal: true,
-			items: [
-				{xtype:'chat-log-view'}
-			]
-		});
+			win = this.win = Ext.widget({
+				xtype:'nti-window',
+				title: this.getTitle(),
+				cls: 'chat-window',
+				disableDragDrop: true,
+				constrain: true,
+				autoScroll: true,
+				width: 400,
+				height: 300,
+				modal: true,
+				layout: 'fit',
+				items: [
+					{xtype:'chat-log-view'}
+				]
+			});
 
-		win.items.first().fireEvent('load-transcript', this.record, win.items.first());
+		log = win.down('chat-log-view');
+		log.fireEvent('load-transcript', this.record, log);
 		win.show();
 	},
 

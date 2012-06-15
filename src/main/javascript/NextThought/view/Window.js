@@ -62,14 +62,19 @@ Ext.define('NextThought.view.Window',{
 	constructor: function(config){
 		this.manager = NextThought.view.WindowManager;
 
-		delete config.items;
-		delete config.layout;
+		if(!this.dialog && !config.dialog){
 
-		var title = config.title;
-		delete config.title;
+			Ext.copyTo(this.items.last(),config,['items','layout']);
 
-		if(title){
-			this.items.first().title = title;
+			delete config.items;
+			delete config.layout;
+
+			var title = config.title;
+			delete config.title;
+
+			if(title){
+				this.items.first().title = title;
+			}
 		}
 
 		return this.callParent([config]);
@@ -92,7 +97,9 @@ Ext.define('NextThought.view.Window',{
 		}
 
 		this.titleBar = this.down('nti-window-header');
-		this.manager.register(this);
+		if(!this.modal){
+			this.manager.register(this);
+		}
 	},
 
 
