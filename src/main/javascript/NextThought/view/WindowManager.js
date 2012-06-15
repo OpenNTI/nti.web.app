@@ -155,8 +155,25 @@ Ext.define('NextThought.view.WindowManager',{
 	},
 
 
-	handleDrag: function(dd){
+	handleDrag: function(dd,e){
+		var me = this;
+		var win = dd.comp;
+		var wrap = win.trackWrapper.dom;
+		var p = this.tracker.dom;
+		var x = e.getXY()[0];
 
+		Ext.each(me.registry,function(w){
+			if(w === win ){return;}
+
+			var t = w.trackWrapper;
+			var b = t.getPageBox();
+			var n = t.dom;
+
+			if(b.left <= x && x <= b.right){
+				if(wrap.previousSibling){ p.insertBefore(wrap, n); }
+				else { p.insertBefore(n,wrap); }
+			}
+		});
 	},
 
 
@@ -191,6 +208,12 @@ Ext.define('NextThought.view.WindowManager',{
 
 	organizeSnappedWindows: function(){
 		var me = this;
+
+		Ext.Array.sort(me.registry,function(a,b){
+			var as = a.trackWrapper.getPageBox().right;
+			var bs = b.trackWrapper.getPageBox().right;
+			return as === bs ? 0 : as < bs ? 1 : -1; //smaller is greater in this case (0 = MAX, width of screen = MIN)
+		});
 
 		Ext.each(me.registry,function(win){
 			if(!win.snapped || win.minimized===true || win.dragging){return;}
