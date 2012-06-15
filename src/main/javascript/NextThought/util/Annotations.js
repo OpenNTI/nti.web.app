@@ -2,7 +2,8 @@ Ext.define('NextThought.util.Annotations',{
 	requires: [
 		'NextThought.model.Highlight',
 		'NextThought.model.Note',
-		'NextThought.view.whiteboard.Canvas'
+		'NextThought.view.whiteboard.Canvas',
+		'NextThought.util.Anchors'
 	],
 	singleton: true,
 
@@ -595,7 +596,12 @@ Ext.define('NextThought.util.Annotations',{
 	},
 
 
-	selectionToHighlight: function(range, style) {
+	selectionToHighlight: function(range, style, docRoot) {
+
+		var p = Anchors.createRangeDescriptionFromRange(range);
+		var r = Anchors.toDomRange(p, docRoot);
+		console.log('DESCRIPTION = ' , p, r);
+
 		if(range.collapsed){
 			return;
 		}

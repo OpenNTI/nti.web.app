@@ -30,10 +30,5 @@ Ext.define('NextThought.model.anchorables.DomContentPointer', {
 
 	locateRangePointInAncestor: function(){
 		return {confidence: 0, node: null};
-	},
-
-
-	locateRangePointInAncestorAfter: function(){
-		return {confidence: 0, node: null};
 	}
 });

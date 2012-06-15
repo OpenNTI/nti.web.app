@@ -441,10 +441,10 @@ describe("Anchor Utils", function() {
 				p2 = document.createElement('p'),
 				t2 = document.createTextNode('text node 2'),
 				a = document.createElement('div'),
-				pointer = Ext.create('NextThought.model.anchorables.ElementDomContentPointer', {role: 'end', elementTagName: 'p', elementId: 'SomeId'}),
+				pointer = Ext.create('NextThought.model.anchorables.ElementDomContentPointer', {role: 'end', elementTagName: 'p', elementId: 'SomeId2'}),
 				result = {};
 
-			p.setAttribute('Id', 'SomeId');
+			p.setAttribute('Id', 'SomeId1');
 			p2.appendChild(t2);
 			span2.appendChild(p2);
 			p.appendChild(t1);
@@ -452,9 +452,10 @@ describe("Anchor Utils", function() {
 			span.appendChild(span2);
 			span.appendChild(a);
 			div.appendChild(span);
-			p2.setAttribute('Id', 'SomeId');
+			p2.setAttribute('Id', 'SomeId2');
 			document.body.appendChild(div);
 
+			console.warn('ExtJS means after is not necessary, dupe test')
 			result = Anchors.locateElementDomContentPointer(pointer, div, {node:span2});
 			expect(result.confidence).toEqual(1);
 			expect(result.node).toBe(p2);

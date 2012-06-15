@@ -132,7 +132,7 @@ Ext.define('NextThought.mixins.Annotations', {
 			return;
 		}
 
-		var highlight = AnnotationUtils.selectionToHighlight(range),
+		var highlight = AnnotationUtils.selectionToHighlight(range, null, this.getDocumentElement()),
 			menu,
 			w,offset;
 

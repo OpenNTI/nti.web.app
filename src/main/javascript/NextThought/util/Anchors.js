@@ -2,8 +2,8 @@ Ext.define('NextThought.util.Anchors', {
 	singleton: true,
 
 	//TODO - this is from out obj back to dom
-	toDomRange: function(contentRangeDescription) {
-		   var ancestorNode = contentRangeDescription.getAncestor().locateRangePointInAncestor(document.body).node || document.body;
+	toDomRange: function(contentRangeDescription, docElement) {
+		   var ancestorNode = contentRangeDescription.getAncestor().locateRangePointInAncestor(docElement).node || docElement;
 
 		   console.log('Will use '+ancestorNode+' as root');
 
@@ -20,13 +20,19 @@ Ext.define('NextThought.util.Anchors', {
 
 	//TODO - testing
 	createRangeDescriptionFromRange: function(range) {
-		range = Anchors.makeRangeAnchorable(range);
-
 		if(!range || range.collapsed){
 			Ext.Error.raise('Cannot create anchorable, range missing or collapsed');
 		}
 
-		var ancestorNode = Anchors.referenceNodeForNode(range.commonAncestorContainer);
+		range = Anchors.makeRangeAnchorable(range);
+		var ancestorNode = range.commonAncestorContainer;
+
+		//If the ancestorcontainer is a text node, we want a containing element as per the docs
+		if (Ext.isTextNode(ancestorNode)) {
+			ancestorNode = ancestorNode.parentNode;
+		}
+		ancestorNode = Anchors.referenceNodeForNode(ancestorNode);
+
 		var ancestorAnchor = Ext.create('NextThought.model.anchorables.ElementDomContentPointer', {
 			node: ancestorNode,
 			role: 'ancestor'
@@ -109,7 +115,7 @@ Ext.define('NextThought.util.Anchors', {
 
 		while( (sibling = nextSiblingFunction.call(walker)) ) {
 			if(   collectedCharacters >= maxCollectedChars
-					  || this.contexts.length - 1 >= maxSubsequentContextObjects ){
+					  || contexts.length - 1 >= maxSubsequentContextObjects ){
 					break;
 			}
 
@@ -262,7 +268,7 @@ Ext.define('NextThought.util.Anchors', {
 		//Resolve the end anchor.
 		//see below for details no resolving various
 		//anchor types
-		var endResult = rangeDesc.getEnd().locateRangePointInAncestorAfter(ancestor, startResult);
+		var endResult = rangeDesc.getEnd().locateRangePointInAncestor(ancestor);
 
 		if(    !endResult.node
 			|| !endResult.hasOwnProperty('confidence')
@@ -289,27 +295,28 @@ Ext.define('NextThought.util.Anchors', {
 
 
 	/* tested */
-	locateElementDomContentPointer: function(pointer, ancestor, after){
+	locateElementDomContentPointer: function(pointer, ancestor){
 		//only element dom pointers after this point:
 		if (!(pointer instanceof NextThought.model.anchorables.ElementDomContentPointer)) {
 			Ext.Error.raise('This method expects ElementDomContentPointers only');
 		}
 
-		var isStart = pointer.getRole() === 'start',
-			treeWalker = document.createTreeWalker(ancestor, NodeFilter.SHOW_ELEMENT, null, null),
-			testNode;
+		var selector = '[Id='+pointer.getElementId()+']',
+			potentials = Ext.query(selector, ancestor),
+			p, i;
 
-		if(!isStart && after && after.node){
-				//Want to search after the start node
-				treeWalker.currentNode = after.node;
-		}
-
-		while( (testNode = treeWalker.nextNode()) ){
-				if(   testNode.id === pointer.getElementId()
-					  && testNode.tagName === pointer.getElementTagName() ){
-						return {confidence: 1, node: testNode};
+		for(i in potentials){
+			if (potentials.hasOwnProperty(i)){
+				p = potentials[i];
+				if (p.tagName !== pointer.getElementTagName()) {
+					console.error('Found a potential match to node, but tagnames do not match', p);
 				}
+				else {
+					return {confidence: 1, node: p};
+				}
+			}
 		}
+
 		return {confidence: 0};
 	},
 
