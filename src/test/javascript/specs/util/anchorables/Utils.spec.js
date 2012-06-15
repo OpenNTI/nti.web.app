@@ -831,4 +831,87 @@ describe("Anchor Utils", function() {
 			expect(result2.getContextOffset()).toEqual(0);
 		});
 	});
+
+	describe('createTextPointerFromRange Tests', function(){
+		it('Null and Collapsed Ranges', function(){
+			try {
+				Anchors.createTextPointerFromRange(null, 'start');
+				expect(false).toBeTruthy();
+			}
+			catch(e) {
+				expect(e.message).toEqual('Cannot proceed without range or with a collapsed range');
+			}
+
+			try {
+				Anchors.createTextPointerFromRange(document.createRange(), 'start');
+				expect(false).toBeTruthy();
+			}
+			catch(e) {
+				expect(e.message).toEqual('Cannot proceed without range or with a collapsed range');
+			}
+		});
+
+		it('Range Without Text Containers', function(){
+			var div = document.createElement('div'),
+				span = document.createElement('span'),
+				p = document.createElement('p'),
+				span2 = document.createElement('span'),
+				p2 = document.createElement('p'),
+				a = document.createElement('a'),
+				range;
+
+			span2.appendChild(p2);
+			span.appendChild(p);
+			span.appendChild(span2);
+			span.appendChild(a);
+			div.appendChild(span);
+			document.body.appendChild(div);
+			range = document.createRange();
+			range.setStartBefore(p);
+			range.setEndAfter(a);
+
+			try {
+				Anchors.createTextPointerFromRange(range);
+				expect(false).toBeTruthy();
+			}
+			catch(e) {
+				expect(e.message).toEqual('Range must contain text containers');
+			}
+
+
+		});
+
+		it('Good Range', function(){
+			var div = document.createElement('div'),
+				span = document.createElement('span'),
+				p = document.createElement('p'),
+				t1 = document.createTextNode('Once upon a time, there lived a BEAST!'),
+				span2 = document.createElement('span'),
+				p2 = document.createElement('p'),
+				t2 = document.createTextNode('The beasts name was, NextThoughtASaurus!'),
+				a = document.createElement('a'),
+				range, result;
+
+			p.setAttribute('Id', 'xzy1232314');
+			p.appendChild(t1);
+			p2.setAttribute('Id', 'xzydasdasae2342');
+			p2.appendChild(t2);
+			span2.appendChild(p2);
+			span.appendChild(p);
+			span.appendChild(span2);
+			span.appendChild(a);
+			div.appendChild(span);
+			document.body.appendChild(div);
+			range = document.createRange();
+			range.setStart(t1, 3);
+			range.setEnd(t2, 5);
+
+
+			result = Anchors.createTextPointerFromRange(range, 'end');
+			expect(result).toBeTruthy();
+			expect(result.getRole()).toEqual('end');
+			expect(result.getAncestor().getElementId()).toEqual(p2.getAttribute('Id'));
+			expect(result.getContexts().length).toBeGreaterThan(0);
+		});
+	});
 });

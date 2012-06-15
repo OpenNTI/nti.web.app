@@ -33,16 +33,15 @@ Ext.define('NextThought.util.Anchors', {
 		});
 
 		return Ext.create('NextThought.model.anchorables.DomContentRangeDescription', {
-			start: Anchors.createPointer(range, false),
-			end: Anchors.createPointer(range, true),
+			start: Anchors.createPointer(range, 'end'),
+			end: Anchors.createPointer(range, 'start'),
 			ancestor: ancestorAnchor
 		});
 	},
 
 
-	createPointer: function(range, start, node) {
-		var endEdgeNode = node || Anchors.nodeThatIsEdgeOfRange(range, start),
-			role = start ? 'start' : 'end';
+	createPointer: function(range, role, node) {
+		var endEdgeNode = node || Anchors.nodeThatIsEdgeOfRange(range, (role === 'start'));
 
 		if (Ext.isTextNode(endEdgeNode)) {
 			return Anchors.createTextPointerFromRange(range, role);
@@ -52,7 +51,8 @@ Ext.define('NextThought.util.Anchors', {
 				tagName = endEdgeNode.tagName;
 			return Ext.create('NextThought.model.anchorables.ElementDomContentPointer', {
 				elementTagName: tagName,
-				elementId: id
+				elementId: id,
+				role: role
 			});
 		}
 		else {
@@ -62,57 +62,61 @@ Ext.define('NextThought.util.Anchors', {
 	},
 
 
+	/* tested */
 	createTextPointerFromRange: function(range, role){
-            var start = this.role === 'start',
-            	container = start ? range.startContainer : range.endContainer,
-            	offset = start ? range.startOffset : range.endOffset,
-				contexts = [],
-				edgeOffset,
-				ancestor;
+		if (!range || range.collapsed) {
+			Ext.Error.raise('Cannot proceed without range or with a collapsed range');
+		}
 
-            if(!Ext.isTextNode(container)){
-				Ext.Error.raise('Range must contain text containers');
-            }
+		var start = role === 'start',
+			container = start ? range.startContainer : range.endContainer,
+			offset = start ? range.startOffset : range.endOffset,
+			contexts = [],
+			edgeOffset,
+			ancestor;
 
-            var referenceNode = Anchors.referenceNodeForNode(container);
+		if(!Ext.isTextNode(container)){
+			Ext.Error.raise('Range must contain text containers');
+		}
 
-            ancestor = Anchors.createPointer(range, 'ancestor', referenceNode);
+		var referenceNode = Anchors.referenceNodeForNode(container.parentNode);
 
-            var primaryContext = Anchors.generatePrimaryContext(range, role);
+		ancestor = Anchors.createPointer(range, 'ancestor', referenceNode);
 
-            if(primaryContext){
-                    contexts.push(primaryContext);
-            }
+		var primaryContext = Anchors.generatePrimaryContext(range, role);
 
-            //Generate the edge offset
-            var normalizedOffset = primaryContext.getContextOffset();
-            if(start){
-                    normalizedOffset = container.textContent.length - normalizedOffset;
-            }
+		if(primaryContext){
+			contexts.push(primaryContext);
+		}
 
-            edgeOffset = offset - normalizedOffset;
+		//Generate the edge offset
+		var normalizedOffset = primaryContext.getContextOffset();
+		if(start){
+			normalizedOffset = container.textContent.length - normalizedOffset;
+		}
 
-            //Now we want to collect subsequent context
-            var collectedCharacters = 0;
-            var maxSubsequentContextObjects = 5;
-            var maxCollectedChars = 15;
+		edgeOffset = offset - normalizedOffset;
 
-            var walker = document.createTreeWalker( referenceNode, NodeFilter.SHOW_TEXT );
-            walker.currentNode = container;
+		//Now we want to collect subsequent context
+		var collectedCharacters = 0;
+		var maxSubsequentContextObjects = 5;
+		var maxCollectedChars = 15;
 
-            var nextSiblingFunction = start ? walker.previousNode : walker.nextNode;
+		var walker = document.createTreeWalker( referenceNode, NodeFilter.SHOW_TEXT );
+		walker.currentNode = container;
 
-            while( (sibling = nextSiblingFunction.call(walker)) ) {
+		var nextSiblingFunction = start ? walker.previousNode : walker.nextNode;
 
-                    if(   collectedCharacters >= maxCollectedChars
-                              || this.contexts.length - 1 >= maxSubsequentContextObjects ){
-                            break;
-                    }
+		while( (sibling = nextSiblingFunction.call(walker)) ) {
+			if(   collectedCharacters >= maxCollectedChars
+					  || this.contexts.length - 1 >= maxSubsequentContextObjects ){
+					break;
+			}
 
-                    var additionalContext = Anchors.generateAdditionalContext(sibling, role);
-                    collectedCharacters += additionalContext.getContextText().length;
-                    contexts.push(additionalContext);
-            }
+			var additionalContext = Anchors.generateAdditionalContext(sibling, role);
+			collectedCharacters += additionalContext.getContextText().length;
+			contexts.push(additionalContext);
+		}
 
 		return Ext.create('NextThought.model.anchorables.TextDomContentPointer', {
 			role: role,
@@ -437,8 +441,7 @@ Ext.define('NextThought.util.Anchors', {
 		if(!node){
 			return null;
 		}
-
-		if( Anchors.isNodeAnchorable(node) ){
+		if( Anchors.isNodeAnchorable(node)){
 			return node;
 		}
 		else{
