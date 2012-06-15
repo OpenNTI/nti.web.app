@@ -63,13 +63,13 @@ public class Login extends Base{
 		this.waitForLoading(timeout);
 	}
 
-	public void login(String username, String password){
+	public void login(final String username, final String password) {
 		this.doLogin(username, password);
 	}
 	
 	public void login() {
-		String username = credentials[0].getUserName();
-		String password = credentials[1].getPassword();
+		final String username = credentials[0].getUserName();
+		final String password = credentials[0].getPassword();
 		this.doLogin(username, password);
 	}
 	

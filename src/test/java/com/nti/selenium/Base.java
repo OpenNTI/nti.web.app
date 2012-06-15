@@ -30,7 +30,8 @@ public class Base {
 	protected static Credentials[] credentials;
 	protected static final Properties propertiesFile = new Properties();
 	
-	protected SeleniumServer seleniumServer;
+	protected String xpathBuilder = null
+	protected SeleniumServer seleniumServer = null;
 	
 	@BeforeClass
 	public static void oneTimeSetUp() {
@@ -83,7 +84,5 @@ public class Base {
 		selenium.stop();
 		this.seleniumServer.stop();
 	}
-	
-	public String xpathBuilder
 	
 }

@@ -13,60 +13,50 @@ public class Navigation extends Login {
 		this.login();
 	}
 	
-	public void openLevel(){
-		String xpath = 
+	public void openLevel() {
 	}
 	
-	public void findAndParseElements(String xpath){
+	public void findAndParseElements(final String xpath) {
 		
 	}
 	
-	public void openLibrary(){
+	public void openLibrary() {
 		
 	}
 	
-	public void openBook(String book){
+	public void openBook(final String book) {
 		
 	}
 	
-	public void openChapter(String chapter){
+	public void openChapter(final String chapter){
 		
 	}
 	
-	public void openSection(String section){
+	public void openSection(final String section){
 		
 	}
 	
-	public void navigateTo(String book, String chapter, String section){
+	public void navigateTo(final String book,final String chapter, final String section) {
 		
 		if(book == null){
 			return;
-		}
-		
-		else if(chapter == null && section == null){
+		} else if(chapter == null && section == null) {
 			this.openLibrary();
 			this.openBook(book);
-		}
-		
-		else if(chapter == null && section != null){
+		} else if(chapter == null && section != null) {
 			this.openLibrary();
 			this.openBook(book);
 			this.openSection(section);
-		}
-		
-		else if(chapter != null && section == null){
+		} else if(chapter != null && section == null) {
 			this.openLibrary();
 			this.openBook(book);
 			this.openChapter(chapter);
-		}
-		
-		else{
+		} else {
 			this.openLibrary();
 			this.openBook(book);
 			this.openChapter(chapter);
 			this.openSection(section);
 		}
-		
 	}
 	
 	public void getPageSectionTitle(){
