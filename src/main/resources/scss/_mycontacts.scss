@@ -150,6 +150,21 @@ $over-color: #f4f3f3;
 		cursor: pointer;
 		padding-left: 10px;
 		@include contact-header;
+
+		.x-tool {
+			margin-right: 40px;
+			margin-left: 0px;
+
+			.x-tool-chat {
+				width: 22px;
+				height: 15px;
+				opacity: 0.5;
+				background: url(../images/group_chat_icon.png);
+				&:hover {
+					opacity: 1;
+				}
+			}
+		}
 	}
 }
 

@@ -110,7 +110,7 @@ Ext.define('NextThought.controller.Groups', {
 
 			var name = group.getName();
 			UserRepository.prefetchUser(friends,function(users){
-				groups.add({title: name}).setUsers(users);
+				groups.add({title: name, associatedGroup: group}).setUsers(users);
 			});
 		});
 

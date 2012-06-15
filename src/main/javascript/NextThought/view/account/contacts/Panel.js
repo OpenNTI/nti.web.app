@@ -15,8 +15,19 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 	unstyled: true,
 	showCount: true,
 	defaultType: 'contact-card',
+	tools:[{
+	    type:'chat',
+	    tooltip: 'Chat with this group',
+	    handler: function(event, toolEl, panel){
+			var p = panel.up('contacts-panel');
+			p.fireEvent('group-chat', p.associatedGroup);
+	    }
+	}],
 
 	initComponent: function(){
+		if(!this.associatedGroup){
+			this.tools = null;
+		}
 		this.callParent(arguments);
 		this.setTitle(this.title);
 	},

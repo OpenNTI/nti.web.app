@@ -69,6 +69,10 @@ Ext.define('NextThought.controller.Chat', {
 				'send': this.send
 			},
 
+			'contacts-panel': {
+				'group-chat': this.enterRoom
+			},
+
 			'chat-window': {
 				'beforedestroy': function(cmp){
 					if (!cmp.disableExitRoom) {
