@@ -804,4 +804,31 @@ describe("Anchor Utils", function() {
 			expect(result.getContextOffset()).toEqual(0);
 		});
 	});
+
+	describe('generateAdditionalContext', function(){
+		it('Null Node', function(){
+			try {
+				Anchors.generateAdditionalContext(null, 'start');
+				expect(false).toBeTruthy();
+			}
+			catch(e) {
+				expect(e.message).toEqual('Node must not be null');
+			}
+		});
+
+		it('Non-Text Node', function(){
+			expect(Anchors.generateAdditionalContext(document.createElement('div'), 'start')).toBeNull();
+		});
+
+		it('Text Node', function(){
+			var t = document.createTextNode('This is a text node, yay'),
+				result1 = Anchors.generateAdditionalContext(t, 'start'),
+				result2 = Anchors.generateAdditionalContext(t, 'end');
+
+			expect(result1.getContextText()).toEqual('yay');
+			expect(result2.getContextText()).toEqual('This');
+			expect(result1.getContextOffset()).toEqual(3);
+			expect(result2.getContextOffset()).toEqual(0);
+		});
+	});
 });

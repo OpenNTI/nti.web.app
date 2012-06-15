@@ -116,32 +116,40 @@ Ext.define('NextThought.util.Anchors', {
                             break;
                     }
 
-                    var additionalContext = Anchors.generateAdditionalContext(sibling);
+                    var additionalContext = Anchors.generateAdditionalContext(sibling, role);
                     collectedCharacters += additionalContext.contextText.length;
                     this.contexts.push(additionalContext);
             }
     },
 
 
-	generateAdditionalContext: function(relativeNode){
-         var contextText = null;
-         if(this.role === 'start'){
-                 contextText = Anchors.lastWordFromString(relativeNode.textContent);
-         }
-         else{
-                 contextText = Anchors.firstWordFromString(relativeNode.textContent);
-         }
+	/* tested */
+	generateAdditionalContext: function(relativeNode, role){
+		if (!relativeNode){
+			Ext.Error.raise('Node must not be null');
+		}
+		var contextText = null;
+		if(role === 'start'){
+			contextText = Anchors.lastWordFromString(relativeNode.textContent);
+		}
+		else{
+			contextText = Anchors.firstWordFromString(relativeNode.textContent);
+		}
 
-         var offset = relativeNode.textContent.indexOf(contextText);
-         if(this.role === 'start'){
-                 offset = relativeNode.textContent.length - offset;
-         }
+		if (!contextText && contextText.length === 0){
+			return null;
+		}
+
+		var offset = relativeNode.textContent.indexOf(contextText);
+		if(role === 'start'){
+			offset = relativeNode.textContent.length - offset;
+		}
 
 		return Ext.create('NextThought.model.anchorables.TextContext', {
 			contextText: contextText,
 			contextOffset: offset
 		});
- },
+	},
 
 
 	/* tested */
