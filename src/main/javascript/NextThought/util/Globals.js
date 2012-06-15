@@ -4,6 +4,7 @@ Ext.define('NextThought.util.Globals', {
 		'NextThought.overrides.builtins.Array',
 		'NextThought.overrides.builtins.Console',
 		'NextThought.overrides.builtins.Node',
+		'NextThought.overrides.builtins.Object',
 		'NextThought.overrides.builtins.RegExp',
 		'NextThought.overrides.data.proxy.Server',
 		'NextThought.overrides.data.Connection',

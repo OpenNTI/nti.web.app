@@ -19,6 +19,7 @@ Ext.define('NextThought.view.Window',{
 	constrain: true,
 	constrainHeader: false,
 	liveDrag: true,
+	dragStartTolerance: 5,
 
 	layout: { type: 'vbox', align: 'stretch' },
 	items: [
@@ -59,7 +60,6 @@ Ext.define('NextThought.view.Window',{
 	},
 
 	constructor: function(config){
-		console.log(this.manager);
 		this.manager = NextThought.view.WindowManager;
 
 		delete config.items;
@@ -91,6 +91,7 @@ Ext.define('NextThought.view.Window',{
 			this.on('destroy',function(){ Ext.EventManager.removeResizeListener(me.syncSize,me);});
 		}
 
+		this.titleBar = this.down('nti-window-header');
 		this.manager.register(this);
 	},
 
@@ -107,9 +108,36 @@ Ext.define('NextThought.view.Window',{
 		size.width	= w || size.width;//NaN is falsy
 		size.height	= h || size.height;
 
+		console.log('syncing size');
 		this.setSize(size,undefined);
 		this.center();
 	},
+
+
+//	ghost: function(){
+//		var me = this,
+//			gp = me.ghostPanel,
+//			box = me.getBox();
+//
+//		if (!gp) {
+//			gp = new NextThought.view.Window({
+//				title: me.header ? me.header.getTitle() : '',
+//				renderTo: document.body,
+//				cls: me.cls + ' ' + me.baseCls + '-ghost '
+//			});
+//			me.ghostPanel = gp;
+//		}
+//
+//		gp.floatParent = me.floatParent;
+//		gp.toFront();
+//
+//		gp.show();
+//		gp.header = gp.down('nti-window-header');
+//		gp.setPagePosition(box.x, box.y);
+//		gp.setSize(box, undefined);
+//		me.el.hide();
+//		return gp;
+//	},
 
 
 	initDraggable: function() {
@@ -120,9 +148,15 @@ Ext.define('NextThought.view.Window',{
 					constrainDelegate: true,
 					constrainTo: Ext.getBody(),
 					el: this.el,
+					tolerance: this.dragStartTolerance,
 					delegate: '#'+this.down('nti-window-header').getId()
 				});
 				this.relayEvents(this.dd, ['dragstart', 'drag', 'dragend']);
+				this.on({
+					scope: this,
+					dragstart: this.dragMaskOn,
+					dragend: this.dragMaskOff
+				});
 			}
 			catch(e){
 				console.error(Globals.getError(e));
@@ -133,30 +167,45 @@ Ext.define('NextThought.view.Window',{
 
 
 	setTitle: function(title){
-		var titleBox = this.down('nti-window-header');
-		if(titleBox){
+		if( this.titleBar ){
+			this.titleBar.update(title);
 			this.fireEvent('titleChange',this,title);
-			titleBox.update(title);
 		}
 	},
 
 
 	getTitle: function(){
-		var titleBox = this.down('nti-window-header');
-		if(titleBox){
-			titleBox = titleBox.getTitle();
+		var title;
+		if(this.titleBar){
+			title = this.titleBar.getTitle();
 		}
+		return title || 'Untitled';
+	},
 
-		return titleBox || this.title || 'Untitled';
+
+	getHeight: function(){
+		return this.rendered? this.callParent() : this.height || this.minHeight;
+	},
+
+
+	getWidth: function(){
+		return this.rendered? this.callParent() : this.width || this.minWidth;
 	},
 
 
 	addTools: function(tools){
-		var titleBox = this.down('nti-window-header');
-		if(titleBox){
-			titleBox.addTools(tools);
+		if( this.titleBar ){
+			this.titleBar.addTools(tools);
 		}
+	},
+
+
+	dragMaskOn: function(){
+		Ext.getCmp('viewport').el.mask('','drag-mask');
+	},
+
+
+	dragMaskOff: function(){
+		Ext.getCmp('viewport').el.unmask();
 	}
-
-
 });

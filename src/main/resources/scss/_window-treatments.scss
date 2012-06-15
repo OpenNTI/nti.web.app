@@ -80,8 +80,30 @@
 	position: fixed;
 	right: 0;
 	bottom: 0;
+	width: 100%;
+
+	.wrapper {
+		float: right;
+	}
+
+	.window-placeholder{
+		float: right;
+		margin: 6px;
+		height: 28px;
+		background: red;
+
+		//$value: width 0.5s;
+		//@include experimental(transition, $value);
+
+		&.hidden {
+			//width: 0px !important;
+			//margin: 6px 0px;
+			display: none;
+		}
+	}
 
 	.window-minimized{
+		float: right;
 		white-space: nowrap;
 		margin: 6px;
 		border: 1px solid #cbcbcb;

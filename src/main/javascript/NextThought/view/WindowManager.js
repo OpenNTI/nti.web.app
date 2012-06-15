@@ -1,6 +1,9 @@
 Ext.define('NextThought.view.WindowManager',{
 	singleton: true,
 
+	padding: 6,
+	snapZone: 40,
+
 	registry: [],
 	buttonMap: {},
 
@@ -11,50 +14,81 @@ Ext.define('NextThought.view.WindowManager',{
 			cls: 'window-tracker'
 		}, true);
 
-		this.tpl = Ext.DomHelper.createTemplate({
-			cls: 'window-minimized',
+		var me = this;
+		var task = {
+			interval: 600,
+			run: function(){ me.organizeSnappedWindows(); }
+		};
+		var spec = {
+			cls: 'wrapper',
 			children: [
+				{ cls: 'window-placeholder' },
 				{
-					cls: 'closer',
-					children: [ {
-						tag: 'img',
-						src: Ext.BLANK_IMAGE_URL,
-						cls: 'closer-nib'
-					} ]
-				},
-				{ cls: 'title', children: [
-					{tag: 'span',html: '{0}'},
-					{ cls: 'activity' }]
+					cls: 'window-minimized',
+					children: [
+						{
+							cls: 'closer',
+							children: [ {
+								tag: 'img',
+								src: Ext.BLANK_IMAGE_URL,
+								cls: 'closer-nib'
+							} ]
+						},
+						{ cls: 'title', children: [
+							{tag: 'span',html: '{0}'},
+							{ cls: 'activity' }]
+						}
+					]
 				}
 			]
-		});
-		this.tpl.compile();
+		};
+
+		this.tpl = Ext.DomHelper.createTemplate(spec).compile();
 
 		this.mappedEvents = {
 			scope: this,
+			titleChange: this.handleTitleChange,
 			minimize: this.handleMinimize,
 			close: this.handleClose,
-			titleChange: this.handleTitleChange
+			dragstart: this.handleDragStart,
+			dragend: this.handleDragEnd,
+			drag: this.handleDrag,
+			move: this.handleMove,
+			resize: this.handleResize
 		};
+
+		Ext.TaskManager.start(task);
 	},
 
 
-	register: function(window){
-		if(Ext.Array.contains(this.registry,window)){
+	register: function(win){
+		if(Ext.Array.contains(this.registry,win)){
 			Ext.Error.raise('duplicate');
 		}
 
-		this.registry.push(window);
+		var wrap = this.tpl.append(this.tracker,[win.getTitle()], true),
+			map = this.buttonMap,
+			reg = this.registry,
+			btn = wrap.down('.window-minimized'),
+			hlr = wrap.down('.window-placeholder');
 
-		window.mon(window,this.mappedEvents);
+		win.mon(win,this.mappedEvents);
 
-		var btn = this.tpl.append(this.tracker,[window.getTitle()], true),
-			map = this.buttonMap;
+		btn.setVisibilityMode(Ext.Element.DISPLAY);
+		hlr.setVisibilityMode(Ext.Element.ASCLASS);
+		hlr.visibilityCls = 'hidden';
 
-		window.minimizedButton = btn;
-		map[btn.id] = window;
+		win.snapped = true;
+		win.dragStartTolerance = 50;
+		win.trackWrapper = wrap;
+		win.minimizedButton = btn;
+		win.placeHolder = hlr;
 
-		window.minimized ? btn.show(): btn.hide();
+		map[btn.id] = win;
+		reg.push(win);
+
+		win.minimized ? btn.show(): btn.hide();
+		win.minimized ? hlr.hide(): hlr.show();
 
 		btn.on({
 			scope: this,
@@ -68,14 +102,16 @@ Ext.define('NextThought.view.WindowManager',{
 			var id = e.getTarget('.window-minimized',null,true).id;
 			map[id].close();
 		});
+
+		this.organizeSnappedWindows();
 	},
 
 
-	unregister: function(window){
-		Ext.Array.remove(this.registry,window);
+	unregister: function(win){
+		Ext.Array.remove(this.registry,win);
 
-		if(window.minimizedButton){
-			window.minimizedButton.remove();
+		if(win.trackWrapper){
+			win.trackWrapper.remove();
 		}
 	},
 
@@ -85,28 +121,90 @@ Ext.define('NextThought.view.WindowManager',{
 	},
 
 
-	handleMinimize: function(window){
-		var btn = window.minimizedButton;
-		window.minimized = true;
-		window.hide();
+	handleMinimize: function(win){
+		var btn = win.minimizedButton,
+			hlr = win.placeHolder;
+		win.minimized = true;
+		win.hide();
+		hlr.hide();
 		btn.show();
+		this.organizeSnappedWindows();
 	},
 
 
-	handleRestore: function(window){
-		window.show();
-		window.minimizedButton.hide();
+	handleRestore: function(win){
+		win.minimized = false;
+		win.minimizedButton.hide();
+		this.organizeSnappedWindows();
+		win.show();
 	},
 
 
-	handleTitleChange: function(window, newTitle){
-		var btn = window.minimizedButton;
+	handleTitleChange: function(win, newTitle){
+		var btn = win.minimizedButton;
 		if(!btn){
-			console.warn('no associated button with window: ', window, 'now titled: ', newTitle);
+			console.warn('no associated button with win: ', win, 'now titled: ', newTitle);
 			return;
 		}
 		btn.down('.title span').update(newTitle);
+	},
+
+
+	handleDragStart: function(dd){
+		dd.comp.dragging = true;
+	},
+
+
+	handleDrag: function(dd){
+
+	},
+
+
+	handleDragEnd: function(dd){
+		var win = dd.comp;
+		delete win.dragging;
+	},
+
+
+	handleMove: function(win,x, y){
+		var bottom = y+win.getHeight(),
+			zone = Ext.Element.getViewportHeight() - this.snapZone;
+
+		win.snapped = (bottom >= zone);
+
+		if(!win.snapped){
+			win.placeHolder.hide();
+		}
+		else {
+			win.placeHolder.show();
+		}
+	},
+
+
+	handleResize: function(win,w){
+		win.placeHolder.setWidth(w);
+		if(win.snapped){
+			this.organizeSnappedWindows();
+		}
+	},
+
+
+	organizeSnappedWindows: function(){
+		var me = this;
+
+		Ext.each(me.registry,function(win){
+			if(!win.snapped || win.minimized===true || win.dragging){return;}
+
+			win.placeHolder.show();
+
+
+			var box = win.placeHolder.getPageBox();
+
+
+			win.setPosition(
+				box.right-win.getWidth(),
+				box.bottom-win.getHeight());
+
+		});
 	}
-
-
 });

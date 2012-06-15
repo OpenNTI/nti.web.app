@@ -26,17 +26,20 @@
     border: none !important;
 	background: transparent;
 	color: #555;
-	&.body-mask {
+
+	&.body-mask,
+	&.drag-mask {
 		div{
 			border: none !important;
 			background: transparent !important;
-			text-align: center;
-			font-size: 2.4em;
+			width: 100%;
+			height: 100%;
+			padding: 0 !important;
 		}
 	}
 
 	div {
-	    border: none;
+		border: none;
 		padding: 1em 0 1.5em 1em;
 		font-size: 1.5em;
 		background: {
@@ -45,33 +48,15 @@
 			position: center bottom;
 		};
 	}
+
 }
 
 .body-mask {
 	width: 100%;
 	height: 100%;
 	padding: 0 !important;
-
 }
 
-//.x-masked
-/*.x-mask {*/
-    /*filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=70);*/
-    /*opacity: 0.7;*/
-	/*background: #F8F8FF;*/
-/*}*/
-/*.x-body-masked */
-.x-mask {
-    /*
-	filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=40);
-	opacity: 0.4;
-	background: #FFFFFF;
-	*/
-  background: url(data:image/gif;base64,R0lGODlhAQABAID/AMDAwAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==);
+.x-mask { background: url(data:image/gif;base64,R0lGODlhAQABAID/AMDAwAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==); }
 
-}
-
-
-.x-tip {
-	background-color: white;
-}
+.x-tip { background-color: white; }

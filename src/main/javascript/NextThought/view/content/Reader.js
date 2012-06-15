@@ -60,9 +60,6 @@ Ext.define('NextThought.view.content.Reader', {
 		this.meta = {};
 		this.css = {};
 //		this.nav = {};
-
-		this.self.classEvents.on('general-drag-start',this.mask,this);
-		this.self.classEvents.on('general-drag-end',this.unmask,this);
 	},
 
 
@@ -79,9 +76,6 @@ Ext.define('NextThought.view.content.Reader', {
 		this.callParent(arguments);
 	},
 
-
-	mask: function(){var e=this.el;if(e && !e.isMasked()){e.mask();}},
-	unmask: function(){var e=this.el;if(e){e.unmask();}},
 
 	resetFrame: function(cb){
 		console.log('resetFrame');
@@ -873,87 +867,5 @@ turn off html5 player
 			});
 		}
 	}
-
-}, function(){
-	var o = this.classEvents = new Ext.util.Observable(),
-		dm= Ext.dd.DragDropManager,
-		timeoutMillis = 500;
-
-	function startTimer(){
-		return function() {
-			var me = this;
-			o.fireEvent('general-drag-start');
-			if(this !== dm) {
-				me.NTImaskRemovalTimer = setTimeout(function(){
-					me.NTIEndTimer();
-				},
-				timeoutMillis);
-			}
-		};
-	}
-
-	function postponeTimer(){
-		return function(){
-			var me = this;
-			if (!me.NTImaskRemovalTimer){
-				me.NTIstartTimer();
-				return;
-			}
-
-			clearTimeout(me.NTImaskRemovalTimer);
-			me.NTImaskRemovalTimer = setTimeout(function(){
-				me.NTIEndTimer();
-			},
-			timeoutMillis);
-		};
-	}
-
-	function endTimer() {
-		return function(){
-			clearTimeout(this.NTImaskRemovalTimer);
-			delete this.NTImaskRemovalTimer;
-			o.fireEvent('general-drag-end');
-		};
-	}
-
-	function a(){
-		return function(){
-			this.NTIstartTimer();
-			return this.callParent(arguments);
-		};
-	}
-
-	function b(){
-		return function(){
-			this.NTIEndTimer();
-			return this.callParent(arguments);
-		};
-	}
-
-	function c() {
-		return function(){
-			this.NTIPostponeTimer();
-			return this.callParent(arguments);
-		};
-	}
-
-	Ext.EventManager.un(document, "mousemove", dm.handleMouseMove, dm, true);
-	Ext.override(dm,{
-		NTIstartTimer: startTimer(),
-		NTIEndTimer: endTimer(),
-		NTIPostponeTimer: postponeTimer(),
-		startDrag: a(),
-		stopDrag: b()
-	});
-	Ext.EventManager.on(document, "mousemove", dm.handleMouseMove, dm, true);
-
-	Ext.dd.DragTracker.override({
-		NTIstartTimer: startTimer(),
-		NTIEndTimer: endTimer(),
-		NTIPostponeTimer: postponeTimer(),
-		onMouseDown: a(),
-		onEnd: b(),
-		onDrag: c()
-	});
 });
 

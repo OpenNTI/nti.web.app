@@ -17,6 +17,17 @@ Ext.define('NextThought.view.chat.Gutter',{
 	},
 
 
+	initComponent: function(){
+		this.enableBubble('expand');
+		return this.callParent(arguments);
+	},
+
+
+	getBubbleTarget : function() {
+		return this.ownerCt;
+	},
+
+
 	hide: function(){
 		if(this.isHidden()){
 			return;
@@ -42,6 +53,7 @@ Ext.define('NextThought.view.chat.Gutter',{
 		ct.addCls('no-gutter');
 		ct.doLayout();
 		r = this.callParent();
+		this.fireEvent('expand',ct,-width);
 		return r;
 	},
 
@@ -71,6 +83,7 @@ Ext.define('NextThought.view.chat.Gutter',{
 		ct.removeCls('no-gutter');
 		ct.doLayout();
 		r = this.callParent();
+		this.fireEvent('expand',ct,width);
 		return r;
 	},
 
