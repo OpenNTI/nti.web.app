@@ -145,14 +145,13 @@ Ext.define('NextThought.view.Window',{
 			try {
 				this.dd = new Ext.util.ComponentDragger(this, {
 					constrain: true,
-					constrainDelegate: true,
 					constrainTo: Ext.getBody(),
 					el: this.el,
 					tolerance: this.dragStartTolerance,
-					delegate: '#'+this.down('nti-window-header').getId()
+					delegate: this.titleBar.getEl()
 				});
 				this.relayEvents(this.dd, ['dragstart', 'drag', 'dragend']);
-				this.on({
+				this.mon(this.dd,{
 					scope: this,
 					dragstart: this.dragMaskOn,
 					dragend: this.dragMaskOff
