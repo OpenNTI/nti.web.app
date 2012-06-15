@@ -709,4 +709,36 @@ describe("Anchor Utils", function() {
 
 		});
 	});
+
+	describe('firstWordFromString and lastWordFromString Tests', function(){
+		it('lots of general tests', function(){
+			expect(Anchors.lastWordFromString('word')).toEqual('word');
+			expect(Anchors.firstWordFromString('word')).toEqual('word');
+
+			expect(Anchors.lastWordFromString('word1 word2')).toEqual('word2');
+			expect(Anchors.firstWordFromString('word1 word2')).toEqual('word1');
+
+			expect(Anchors.firstWordFromString('word1 word2 word3')).toEqual('word1');
+			expect(Anchors.lastWordFromString('word1 word2 word3')).toEqual('word3');
+
+			expect(Anchors.firstWordFromString('')).toEqual('');
+			expect(Anchors.lastWordFromString('')).toEqual('');
+
+			try {
+				Anchors.lastWordFromString(null);
+				expect(false).toBeTruthy();
+			}
+			catch (e) {
+				expect(e.message).toEqual('Must supply a string')
+			}
+
+			try {
+				Anchors.firstWordFromString(null);
+				expect(false).toBeTruthy();
+			}
+			catch (e) {
+				expect(e.message).toEqual('Must supply a string')
+			}
+		});
+	});
 });

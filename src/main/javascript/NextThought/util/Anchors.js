@@ -33,10 +33,193 @@ Ext.define('NextThought.util.Anchors', {
 		});
 
 		return Ext.create('NextThought.model.anchorables.DomContentRangeDescription', {
-			start: NextThought.DomContentPointer.createStartAnchorForRange(range),
-			end: NextThought.DomContentPointer.createEndAnchorForRange(range),
+			start: Anchors.createPointerForRange(range, false),
+			end: Anchors.createPointerForRange(range, true),
 			ancestor: ancestorAnchor
 		});
+	},
+
+
+	createPointerForRange: function(range, start) {
+		var endEdgeNode = Anchors.nodeThatIsEdgeOfRange(range, start),
+			role = start ? 'start' : 'end';
+
+		return Anchors.pointerImplementationForNode(endEdgeNode, role);
+	},
+
+
+	pointerImplementationForNode: function(node, role) {
+		if (Ext.isTextNode(node)) {
+			//TODO - finish me
+			return Ext.create('NextThought.model.anchorables.TextDomContentPointer', {
+				role: role
+			})
+		}
+		else if (Ext.isElement(node)) {
+			var id = node.getAttribute('Id'),
+				tagName = node.tagName;
+			return Ext.create('NextThought.model.anchorables.ElementDomContentPointer', {
+				elementTagName: tagName,
+				elementId: id
+			});
+		}
+		else {
+			console.error('Not sure what to do with this node', node, role);
+			Ext.Error.raise('Unable to translate node to pointer');
+		}
+	},
+
+
+	initializeTextAnchorFromRange: function(range){
+            var start = this.role === 'start';
+            var container = start ? range.startContainer : range.endContainer;
+            var offset = start ? range.startOffset : range.endOffset;
+
+            if(!Ext.isTextNode(container)){
+				Ext.Error.raise('Range must contain text containers');
+            }
+
+            var referenceNode = Anchors.referenceNodeForNode(container);
+
+            this.ancestor = Anchors.pointerImplementationForNode(referenceNode, 'ancestor');
+
+            this.contexts = [];
+
+            var primaryContext = Anchors.generatePrimaryContext.call(this, range);
+
+            if(primaryContext){
+                    this.contexts.push(primaryContext);
+            }
+
+            //Generate the edge offset
+            var normalizedOffset = primaryContext.contextOffset;
+            if(start){
+                    normalizedOffset = container.textContent.length - normalizedOffset;
+            }
+
+            this.edgeOffset = offset - normalizedOffset;
+
+            //Now we want to collect subsequent context
+            var collectedCharacters = 0;
+            var maxSubsequentContextObjects = 5;
+            var maxCollectedChars = 15;
+
+            var walker = document.createTreeWalker( referenceNode, NodeFilter.SHOW_TEXT );
+            walker.currentNode = container;
+
+            var nextSiblingFunction = start ? walker.previousNode : walker.nextNode;
+
+            while( (sibling = nextSiblingFunction.call(walker)) ) {
+
+                    if(   collectedCharacters >= maxCollectedChars
+                              || this.contexts.length - 1 >= maxSubsequentContextObjects ){
+                            break;
+                    }
+
+                    var additionalContext = Anchors.generateAdditionalContext(sibling);
+                    collectedCharacters += additionalContext.contextText.length;
+                    this.contexts.push(additionalContext);
+            }
+    },
+
+
+	generateAdditionalContext: function(relativeNode){
+         var contextText = null;
+         if(this.role === 'start'){
+                 contextText = Anchors.lastWordFromString(relativeNode.textContent);
+         }
+         else{
+                 contextText = Anchors.firstWordFromString(relativeNode.textContent);
+         }
+
+         var offset = relativeNode.textContent.indexOf(contextText);
+         if(this.role === 'start'){
+                 offset = relativeNode.textContent.length - offset;
+         }
+
+		return Ext.create('NextThought.model.anchorable.TextContext', {
+			contextText: contextText,
+			contextOffset: offset
+		});
+ },
+
+
+	generatePrimaryContext: function(range) {
+		var container = null,
+			offset = null,
+			contextText, contextOffset;
+
+		if(this.role === 'start'){
+			container = range.startContainer;
+			offset = range.startOffset;
+		}
+		else{
+			container = range.endContainer;
+			offset = range.endOffset;
+		}
+
+		//For the primary context we want a word on each side of the
+		//range
+		var textContent = container.textContent;
+
+		var prefix = Anchors.lastWordFromString(textContent.substring(0, offset));
+		var suffix = Anchors.firstWordFromString(textContent.substring(offset, textContent.length));
+
+		contextText = prefix+suffix;
+		contextOffset = textContent.indexOf(contextText);
+
+		if( this.role === 'start' ){
+			contextOffset = textContent.length - contextOffset;
+		}
+
+		return Ext.create('NextThought.model.anchorable.TextContext', {
+			contextText: contextText,
+			contextOffset: contextOffset
+		});
+    },
+
+
+	/* tested */
+	lastWordFromString: function(str){
+		if (str === null || str === undefined){Ext.Error.raise('Must supply a string');}
+		var word = '';
+		var readingWord = false;
+		for(var i=str.length - 1; i >= 0; i--){
+			var char = str.charAt(i);
+			if(/\s/.test(char)){
+					if(readingWord){
+							break;
+					}
+					word += char;
+			}
+			else{
+					readingWord = true;
+					word += char;
+			}
+		}
+		return word.split("").reverse().join("");
+	},
+
+
+	/* tested */
+	firstWordFromString: function(str){
+		if (str === null || str === undefined){Ext.Error.raise('Must supply a string');}
+		var word = '';
+		var readingWord = false;
+		for(var i=0; i < str.length; i++){
+			var char = str.charAt(i);
+			if(/\s/.test(char)){
+					if(readingWord){
+							break;
+					}
+					word += char;
+			}
+			else{
+					readingWord = true;
+					word += char;
+			}
+		}
+		return word;
 	},
 
 
