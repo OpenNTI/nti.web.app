@@ -435,7 +435,28 @@ Ext.define('NextThought.controller.Chat', {
 			});
 		}
 
-		w.show();
+		if(isMe(roomInfo.get('Creator'))){
+			w.show();
+		}
+	},
+
+
+
+	rebuildWindow: function(roomInfoId, callback){
+		var service = $AppConfig.service;
+
+		function success(obj){
+			this.openChatWindow(obj);
+			Ext.callback(callback);
+		}
+
+		service.getObject(roomInfoId,
+				success,
+				function(){
+					alert('Could not recover room info');
+					console.error('Could not resolve roomInfo for: ',roomInfoId);
+				},
+				this);
 	},
 
 
@@ -657,16 +678,30 @@ Ext.define('NextThought.controller.Chat', {
 
 
 	onMessage: function(msg, opts) {
+		var me = this, args = Array.prototype.slice.call(arguments);
 		var m = ParseUtils.parseItems([msg])[0],
 			channel = m.get('channel'),
-			w;
+			cid = m.get('ContainerId'),
+			w = this.getChatWindow(cid);
 
 		if (this.getClassroom().isClassroom(m) &&
 			this.getClassroom().onMessage(m, {})){
 			return;
 		}
 
+
+		if(!w) {
+			this.rebuildWindow(cid, function(){
+				me.onMessage.apply(me,args);
+			});
+			return;
+		}
+
 		this.channelMap[channel].call(this, m, opts||{});
+
+		if(!w.minimized){
+			w.show();
+		}
 	},
 
 
@@ -713,17 +748,9 @@ Ext.define('NextThought.controller.Chat', {
 		var	cid = msg.get('ContainerId');
 		var win = this.getChatWindow(cid),
 			moderated = Boolean(opts && opts.hasOwnProperty('moderated')),
-			tab,
 			log;
 
-		if(!win) {
-			alert('no window?');
-			console.log(msg);
-			return;
-		}
-
 		log = win.down('chat-log-view[moderated=true]');
-
 		win.down('chat-log-view[moderated='+moderated+']').addMessage(msg);
 
 		if(!moderated && log) {

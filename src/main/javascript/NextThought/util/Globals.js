@@ -314,7 +314,11 @@ Ext.define('NextThought.util.Globals', {
 
 
 	isMe: function(user){
-		return $AppConfig.userObject.getId() === user.getId();
+		var id = user;
+		if(typeof user !== 'string'){
+			id = user.getId();
+		}
+		return $AppConfig.userObject.getId() === id;
 	},
 
 
