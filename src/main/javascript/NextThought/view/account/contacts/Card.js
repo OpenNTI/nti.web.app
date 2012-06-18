@@ -41,6 +41,7 @@ Ext.define('NextThought.view.account.contacts.Card',{
 	defaultType: 'contact-activity',
 
 	initComponent: function(){
+		this.clickBlocker = Globals.buildBlocker(this);
 
 		//convenience interface class. This will abstract the user object and the friendslist record so we can just have
 		// a record and a field to remove the contact from the list and save.
@@ -96,7 +97,13 @@ Ext.define('NextThought.view.account.contacts.Card',{
 			this.fireEvent('remove-contact-from', this.contactContainer, this.user);
 		}
 		else {
-			this.fireEvent('click', this, this.user.getId());
+			try{
+				this.clickBlocker();
+				this.fireEvent('click', this, this.user.getId());
+			}
+			catch(e){
+				this.fireEvent('blocked-click', this, this.user.getId());
+			}
 		}
 	}
 

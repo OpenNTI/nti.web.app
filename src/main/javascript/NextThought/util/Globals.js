@@ -320,6 +320,26 @@ Ext.define('NextThought.util.Globals', {
 
 	getViewIdFromComponent: function(c) {
 		return c.up('view-container').id;
+	},
+
+	buildBlocker: function(scope, blockTime){
+		var me = scope,
+			key = this.guidGenerator(),
+			time = blockTime || 500;
+
+		return function (){
+			var block = me.hasOwnProperty(key);
+
+			if(block){ clearTimeout(me[key]); }
+
+			me[key] = setTimeout(
+					function(){ delete me[key]; },
+					time);
+
+			if(block){
+				throw 'stop';
+			}
+		};
 	}
 },
 function(){
