@@ -1,4 +1,9 @@
 Ext.define('NextThought.util.Anchors', {
+	requires: [
+		'NextThought.model.anchorables.TextDomContentPointer',
+		'NextThought.model.anchorables.ElementDomContentPointer',
+		'NextThought.model.anchorables.DomContentPointer'
+	],
 	singleton: true,
 
 	//TODO - this is from out obj back to dom
@@ -7,14 +12,7 @@ Ext.define('NextThought.util.Anchors', {
 
 		   console.log('Will use '+ancestorNode+' as root');
 
-		   var range = Anchors.resolveSpecBeneathAncestor(contentRangeDescription, ancestorNode);
-
-		   if( !range && ancestorNode !== document.body ){
-				   console.log('Retrying resolution using documentBody');
-				   range = Anchors.resolveSpecBeneathAncestor(contentRangeDescription, document.body );
-		   }
-
-		   return range;
+		   return Anchors.resolveSpecBeneathAncestor(contentRangeDescription, ancestorNode, docElement);
 	},
 
 
@@ -39,8 +37,8 @@ Ext.define('NextThought.util.Anchors', {
 		});
 
 		return Ext.create('NextThought.model.anchorables.DomContentRangeDescription', {
-			start: Anchors.createPointer(range, 'end'),
-			end: Anchors.createPointer(range, 'start'),
+			start: Anchors.createPointer(range, 'start'),
+			end: Anchors.createPointer(range, 'end'),
 			ancestor: ancestorAnchor
 		});
 	},
@@ -194,7 +192,11 @@ Ext.define('NextThought.util.Anchors', {
 		contextText = prefix+suffix;
 		contextOffset = textContent.indexOf(contextText);
 
-		if (contextText && contextOffset !== null)
+		//If start then we readjust offset to be from the right side...
+		if( role === 'start' ){
+			contextOffset = textContent.length - contextOffset;
+		}
+
 		return Ext.create('NextThought.model.anchorables.TextContext', {
 			contextText: contextText,
 			contextOffset: contextOffset
@@ -247,9 +249,12 @@ Ext.define('NextThought.util.Anchors', {
 
 
 	/* tested */
-	resolveSpecBeneathAncestor: function(rangeDesc, ancestor){
+	resolveSpecBeneathAncestor: function(rangeDesc, ancestor, docElement){
 		if(!rangeDesc){
 			Ext.Error.raise('Must supply Description');
+		}
+		else if(!docElement){
+			Ext.Error.raise('Must supply a docElement');
 		}
 
 		//Resolve the start anchor.
@@ -276,7 +281,7 @@ Ext.define('NextThought.util.Anchors', {
 			return null;
 		}
 
-		var range = document.createRange();
+		var range = docElement.createRange();
 		if(startResult.hasOwnProperty('confidence')){
 			range.setStart(startResult.node, startResult.offset);
 		}
@@ -323,7 +328,7 @@ Ext.define('NextThought.util.Anchors', {
 
 	/* tested */
 	//TODO - refactor this, break it up
-	locateRangeEdgeForAnchor: function(pointer, ancestorNode, startResult ){
+	locateRangeEdgeForAnchor: function(pointer, referenceNode){
 		if (!pointer) {
 			Ext.Error.raise('Must supply a Pointer');
 		}
@@ -331,29 +336,18 @@ Ext.define('NextThought.util.Anchors', {
 			Ext.Error.raise('ContentPointer must be a TextDomContentPointer');
 		}
 
-		//Resolution starts by locating the reference node
-		//for this text anchor.  If it can't be found ancestor is used
+		//var declarations:
+		var isStart = pointer.role === 'start',
+			primaryContext = pointer.primaryContext(),
+			indexOfContext = primaryContext.getContextOffset(),
+			textNode, treeWalker;
 
-		var referenceNode = pointer.getAncestor().locateRangePointInAncestor(document.body).node;
-		if(!referenceNode){
-				referenceNode = ancestorNode;
-		}
-
-		var isStart = pointer.role === 'start';
 
 		//We use a tree walker to search beneath the reference node
 		//for textContent matching our primary context with confidence
 		// >= requiredConfidence
 
-		var treeWalker = document.createTreeWalker( referenceNode, NodeFilter.SHOW_TEXT, null, null);
-
-		//If we are looking for the end node.  we want to start
-		//looking where the start node ended
-		if( !isStart && startResult && startResult.node ){
-				treeWalker.currentNode = startResult.node;
-		}
-
-		var textNode;
+		treeWalker = document.createTreeWalker( referenceNode, NodeFilter.SHOW_TEXT, null, null);
 
 		if(treeWalker.currentNode.nodeType == Node.TEXT_NODE){
 				textNode = treeWalker.currentNode;
@@ -365,8 +359,8 @@ Ext.define('NextThought.util.Anchors', {
 		function contextMatchNode(context, node, isStart)
 		{
 
-				var adjustedOffset = context.contextOffset,
-					indexOf = node.textContent.indexOf(context.contextText);
+				var adjustedOffset = context.getContextOffset(),
+					indexOf = node.textContent.indexOf(context.getContextText());
 				if(isStart){
 						adjustedOffset = node.textContent.length - adjustedOffset;
 				}
@@ -429,17 +423,11 @@ Ext.define('NextThought.util.Anchors', {
 				return {confidence: 0};
 		}
 
-
-		//We found what we need.  Set the context
-		var primaryContext = pointer.primaryContext();
-
-		var container = textNode;
-		var indexOfContext = primaryContext.contextOffset;
 		if(isStart){
-				indexOfContext = container.textContent.length - indexOfContext;
+			indexOfContext = textNode.textContent.length - indexOfContext;
 		}
-		indexOfContext += this.edgeOffset;
-		return {node: container, offset: indexOfContext, confidence: 1};
+		indexOfContext += pointer.getEdgeOffset();
+		return {node: textNode, offset: indexOfContext, confidence: 1};
 	},
 
 

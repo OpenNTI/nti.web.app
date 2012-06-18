@@ -492,11 +492,21 @@ describe("Anchor Utils", function() {
 	describe('resolveSpecBeneathAncestor Tests', function(){
 		it('Null Description', function(){
 			try {
-				Anchors.resolveSpecBeneathAncestor(null, null);
+				Anchors.resolveSpecBeneathAncestor(null, null, document);
 				expect(false).toBeTruthy();
 			}
 			catch(e){
 				expect(e.message).toEqual('Must supply Description');
+			}
+		});
+
+		it('Null Doc Root', function(){
+			try {
+				Anchors.resolveSpecBeneathAncestor(true, true, null);
+				expect(false).toBeTruthy();
+			}
+			catch(e){
+				expect(e.message).toEqual('Must supply a docElement');
 			}
 		});
 
@@ -532,7 +542,7 @@ describe("Anchor Utils", function() {
 			document.body.appendChild(span);
 
 			//send in doc.body for maximum workage
-			result = Anchors.resolveSpecBeneathAncestor(desc, document.body);
+			result = Anchors.resolveSpecBeneathAncestor(desc, document.body, document);
 			expect(result.collapsed).toBe(false);
 			expect(result.commonAncestorContainer).toBe(span);
 			expect(result.startContainer).toBe(div1);
@@ -595,7 +605,7 @@ describe("Anchor Utils", function() {
 			document.body.appendChild(span);
 
 			//send in doc.body for maximum workage
-			result = Anchors.resolveSpecBeneathAncestor(desc, document.body);
+			result = Anchors.resolveSpecBeneathAncestor(desc, document.body, document);
 			expect(result.collapsed).toBe(false);
 			expect(result.commonAncestorContainer).toBe(span);
 			expect(result.startContainer).toBe(text1);
@@ -623,7 +633,7 @@ describe("Anchor Utils", function() {
 				result;
 
 			//send in doc.body for maximum workage
-			result = Anchors.resolveSpecBeneathAncestor(desc, document.body);
+			result = Anchors.resolveSpecBeneathAncestor(desc, document.body, document);
 			expect(result).toBeNull();
 		});
 	});
@@ -631,7 +641,7 @@ describe("Anchor Utils", function() {
 	describe('locateRangeEdgeForAnchor Tests', function(){
 		it('Null Pointer', function(){
 			try {
-				Anchors.locateRangeEdgeForAnchor(null, null, null);
+				Anchors.locateRangeEdgeForAnchor(null, null);
 				expect(false).toBeTruthy();
 			}
 			catch (e) {
@@ -648,7 +658,7 @@ describe("Anchor Utils", function() {
 
 			//send in doc.body for maximum workage
 			try{
-				Anchors.locateRangeEdgeForAnchor(pointer, document.body, null)
+				Anchors.locateRangeEdgeForAnchor(pointer, document.body);
 				expect(false).toBeTruthy();
 			}
 			catch (e){
@@ -675,7 +685,7 @@ describe("Anchor Utils", function() {
 				result;
 
 			//send in doc.body for maximum workage
-			result = Anchors.locateRangeEdgeForAnchor(pointer, document.body, null);
+			result = Anchors.locateRangeEdgeForAnchor(pointer, document.body);
 			expect(result.confidence).toEqual(0);
 		});
 
@@ -704,7 +714,8 @@ describe("Anchor Utils", function() {
 			document.body.appendChild(textNode1);
 			document.body.appendChild(div);
 
-			result = Anchors.locateRangeEdgeForAnchor(pointer, document.body, null);
+			result = Anchors.locateRangeEdgeForAnchor(pointer, document.body);
+			expect(result.offset).toEqual(14);
 			expect(result.confidence).toEqual(1);
 			expect(result.node.nodeValue).toEqual(txt);
 
@@ -802,7 +813,7 @@ describe("Anchor Utils", function() {
 
 			result = Anchors.generatePrimaryContext(range, 'start');
 			expect(result.getContextText()).toEqual('This');
-			expect(result.getContextOffset()).toEqual(0);
+			expect(result.getContextOffset()).toEqual(17);
 		});
 	});
 
