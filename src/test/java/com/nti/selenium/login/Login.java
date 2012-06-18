@@ -61,6 +61,7 @@ public class Login extends Base{
 		this.waitForElement(logoutButtonXpath, timeout);
 		selenium.click(logoutButtonXpath);
 		this.waitForLoading(timeout);
+		wait_(1000);
 	}
 
 	public void login(final String username, final String password) {

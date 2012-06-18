@@ -1,5 +1,7 @@
 package com.nti.selenium;
 
+import java.lang.StringBuilder;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.FileInputStream;
@@ -12,6 +14,10 @@ import org.junit.BeforeClass;
 
 import com.thoughtworks.selenium.Selenium;
 import com.thoughtworks.selenium.DefaultSelenium;
+
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+
 import org.openqa.selenium.server.SeleniumServer;
 
 public class Base {
@@ -30,7 +36,7 @@ public class Base {
 	protected static Credentials[] credentials;
 	protected static final Properties propertiesFile = new Properties();
 	
-	protected String xpathBuilder = null
+	protected String xpathBuilder = null;
 	protected SeleniumServer seleniumServer = null;
 	
 	@BeforeClass
@@ -83,6 +89,29 @@ public class Base {
 	public void tearDown() throws Exception{
 		selenium.stop();
 		this.seleniumServer.stop();
+	}
+	
+	public String buildString(String[] strings){
+		StringBuilder builder = new StringBuilder();
+		for(String str: strings){
+			builder.append(str);
+		}
+		return builder.toString();
+	}
+	
+	public String xpathAttributeBuilder(String tag, String attribute, String value){
+		String[] xpathElements = {"xpath=//", tag, "[@", attribute, "='", value, "']"};
+		return this.buildString(xpathElements);
+	}
+	
+	public String xpathTextBuilder(String tag, String text){
+		String[] xpathElements = {"xpath=//", tag, "[text()='", text, "']"};
+		return this.buildString(xpathElements);
+	}
+	
+	public String xpathAttributeAndTextBuilder(String tag, String attribute, String value, String text){
+		String[] xpathElements = {"xpath=//", tag, "[@", attribute, "='", value, "' and text()='", text, "']"};
+		return this.buildString(xpathElements);
 	}
 	
 }
