@@ -206,7 +206,6 @@ Ext.define('NextThought.mixins.Annotations', {
 
 
 	createNoteWidget: function(record){
-		console.log('create note widget prefix', this.prefix);
 		try{
 			if(!record.pruned && (record.get('inReplyTo') || record.parent)){
 				return false;
@@ -543,6 +542,4 @@ Ext.define('NextThought.mixins.Annotations', {
 		}
 		catch(e){console.warn(e.stack||e.toString());}
 	}
-
-
 });

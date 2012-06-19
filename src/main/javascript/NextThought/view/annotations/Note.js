@@ -15,20 +15,16 @@ Ext.define( 'NextThought.view.annotations.Note', {
 
 		this.callParent([record, component]);
 
-		var me = this, c,
-			a = this.query('a[name=' + record.get('anchorPoint') + ']')[0];
+		//get the range this note is associated with:
+		var me = this,
+			id = record.get('applicableRange').ancestor.getElementId(),
+			block = this.doc.getElementById(id),
+			anchor = this.findOrCreateAnchorForParent(block),
+			c = me.createNoteContainer(record.get('applicableRange').ancestor.getElementId()),
+			a;
 
-		if(!a) {
-			a = AnnotationUtils.getAnchors(this.doc).first();
-		}
-		else {
-			a = AnnotationUtils.getNextAnchorInBlock(a,true);
-		}
-
-		a = Ext.get(a);
-
-		c = me.createNoteContainer(a.getAttribute('name'));
-
+		block.appendChild(anchor);
+		a = Ext.get(anchor);
 		c.nib.add(me.img);
 
 		a.setStyle({
@@ -51,6 +47,37 @@ Ext.define( 'NextThought.view.annotations.Note', {
 		me.noteCmp = Ext.widget({xtype: 'note-entry', renderTo: me.noteDiv, annotation: me, owner: component });
 
 		return me;
+	},
+
+
+	/**
+	 *
+	 * @param parent - a DOM element that is the block parent we will look under
+	 */
+	findOrCreateAnchorForParent: function(parent) {
+		if (!parent){
+			Ext.Error.raise('Requires a parent or an id');
+		}
+		var attr = 'data-artificial',
+			p = Ext.get(parent),
+			existingAnchors = p.query('['+attr+']'),
+			result;
+
+		//Do some double checking here, there should never be more than one, freak out if so:
+		if (existingAnchors.length > 1) {
+			console.error('Found more than one artificial anchor', existingAnchors);
+			Ext.Error.raise('Found more than one artificial anchor, never should there be more than one!');
+		}
+		else if (existingAnchors.length === 0) {
+			//none here, create one
+			result = this.doc.createElement('a');
+			result.setAttribute(attr, 'true');
+			return result;
+		}
+		else {
+			//found one, just return it
+			return existingAnchors[0];
+		}
 	},
 
 
@@ -165,8 +192,6 @@ Ext.define( 'NextThought.view.annotations.Note', {
 			if(!this.noteCmp){return;}
 
 			this.callParent(arguments);
-
-			if(!isLastOfAnchor){ return; }
 
 			var me= this,
 				p = Ext.get(me.container),

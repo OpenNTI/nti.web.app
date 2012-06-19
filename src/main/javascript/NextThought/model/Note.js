@@ -1,18 +1,19 @@
 Ext.define('NextThought.model.Note', {
 	extend: 'NextThought.model.Base',
 
+	requires: [
+		'NextThought.model.anchorables.DomContentRangeDescription',
+		'NextThought.model.converters.ContentRangeDescription'
+	],
+
 	fields: [
 		{ name: 'inReplyTo', type: 'string' },
 		{ name: 'references', type: 'auto', defaultValue: [] },
-		{ name: 'anchorPoint', type: 'string' },
-		{ name: 'anchorType', type: 'string', defaultValue: 'previousSiblingAnchorName'},
-		{ name: 'left', type: 'int' },
-		{ name: 'top', type: 'int' },
+		{ name: 'AutoTags', type: 'Auto'},
+		{ name: 'tags', type: 'Auto'},
+		{ name: 'applicableRange', type: 'ContentRangeDescription'},
 		{ name: 'body', type: 'auto' },
-		{ name: 'sharedWith', type: 'UserList' }
-	],
-
-	getAnchorForSort: function(){
-		return this.get('anchorPoint');
-	}
+		{ name: 'sharedWith', type: 'UserList' },
+		{ name: 'prohibitReSharing', type: 'boolean' }
+	]
 });

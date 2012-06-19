@@ -8,14 +8,11 @@ Ext.define('NextThought.model.Highlight', {
 
 	fields: [
 		{ name: 'sharedWith', type: 'UserList'},
+		{ name: 'prohibitReSharing', type: 'boolean' },
 		{ name: 'AutoTags', type: 'Auto'},
 		{ name: 'tags', type: 'Auto'},
 		{ name: 'selectedText', type: 'string'},
 		{ name: 'style', type: 'string'},
 		{ name: 'applicableRange', type: 'ContentRangeDescription'}
-	],
-
-	getAnchorForSort: function(){
-		return this.get('startAnchor');
-	}
+	]
 });
