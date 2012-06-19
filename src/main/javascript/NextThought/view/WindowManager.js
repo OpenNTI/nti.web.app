@@ -35,7 +35,7 @@ Ext.define('NextThought.view.WindowManager',{
 							} ]
 						},
 						{ cls: 'title', children: [
-							{tag: 'span',html: '{0}'},
+							{ tag: 'span', html: '{0}' },
 							{ cls: 'activity' }]
 						}
 					]
@@ -136,6 +136,7 @@ Ext.define('NextThought.view.WindowManager',{
 		win.hide();
 		hlr.hide();
 		btn.show();
+		this.resetNotifications(win);
 		this.organizeSnappedWindows();
 	},
 
@@ -143,6 +144,7 @@ Ext.define('NextThought.view.WindowManager',{
 	handleRestore: function(win){
 		win.minimized = false;
 		win.minimizedButton.hide();
+		this.resetNotifications(win);
 		this.organizeSnappedWindows();
 		win.show();
 	},
@@ -243,8 +245,17 @@ Ext.define('NextThought.view.WindowManager',{
 	notifyTracker: function(){
 		return function(){
 			var btn = this.minimizedButton;
-
+			this.notificationCount = (this.notificationCount || 0) + 1;
+			btn.addCls(['notice-me']);
+			btn.down('.activity').update(this.notificationCount);
 		};
+	},
+
+
+	resetNotifications: function(win){
+		delete win.notificationCount;
+		var btn = win.minimizedButton;
+		btn.removeCls(['notice-me','someone-is-typing']);
 	}
 
 });

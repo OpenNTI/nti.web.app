@@ -120,11 +120,68 @@
 			margin-right: 32px;
 			padding: 6px 8px 6px 8px;
 			position: relative;
+			display: inline-block;
+			overflow: visible;
+		}
+
+		&.notice-me {
+
+			&.someone-is-typing {
+				.activity {
+					text-indent: -1000px;
+					background: #c5c5c5;
+					width: 20px;
+
+					&::before {
+						color: #ffffff;
+						position: absolute;
+						top: -4px;
+						left: 4px;
+						font-weight: 800;
+						font-size: 15px;
+						z-index: 1;
+						text-indent: 0px;
+						content: '...';
+						padding: 0;
+						margin: 0;
+					}
+					&::after {
+						border-top-color: #c5c5c5;
+					}
+				}
+			}
+
+			.activity {
+				display: block;
+			}
 		}
 
 		.activity{
+			min-width: 20px;
+			font-size: 12px;
+			font-weight: 800;
+			color: #ffffff;
+			background: #37b2f9;
+			border-radius: 5px;
+			display: none;
 			position: absolute;
+			top: -15px;
+			right: -12px;
+			padding: 1px 6px;
+
+			&::after {
+				z-index: 0;
+				position: absolute;
+				bottom: -4px;
+				left: 4px;
+				content: '';
+				border: 0px solid transparent;
+				border-right-width: 6px;
+				border-top-width: 5px;
+				border-top-color: #37B2F9;
+			}
 		}
+
 		.closer {
 			border-radius: 0 5px 5px 0;
 			padding: 0;
