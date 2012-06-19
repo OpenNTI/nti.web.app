@@ -113,7 +113,7 @@ Ext.application({
 			$AppConfig.userObject = Ext.create('NextThought.model.User', mockUser, 'test@nextthought.com', mockUser);
 			$AppConfig.service = Ext.create('NextThought.model.Service', mockService, $AppConfig.username);
 
-			jasmine.getEnv().addReporter(new jasmine.TrivialReporter());
+			jasmine.getEnv().addReporter(new jasmine.HtmlReporter());
 			jasmine.getEnv().execute();
 		}
 

@@ -1,5 +1,16 @@
 describe("Anchor Utils", function() {
 
+	var testBody;
+
+	beforeEach(function(){
+		testBody = document.createElement('div');
+		document.body.appendChild(testBody);
+	});
+
+	afterEach(function(){
+		document.body.removeChild(testBody);
+	});
+
 	describe("isNodeAnchorable Tests", function(){
 		it('Null Node', function(){
 			expect(Anchors.isNodeAnchorable(null)).toBeFalsy();
@@ -49,8 +60,8 @@ describe("Anchor Utils", function() {
 				txtNode1 = document.createTextNode('Text node 1'),
 				txtNode2 = document.createTextNode('Text node 2');
 
-			document.body.appendChild(txtNode1);
-			document.body.appendChild(txtNode2);
+			testBody.appendChild(txtNode1);
+			testBody.appendChild(txtNode2);
 			range.setStart(txtNode1, 5);
 			range.setEnd(txtNode2, 5);
 
@@ -69,8 +80,8 @@ describe("Anchor Utils", function() {
 			nonTxtNode1.appendChild(nonTxtNode3);
 			nonTxtNode2.appendChild(txtNode1);
 			nonTxtNode1.appendChild(nonTxtNode2);
-			document.body.appendChild(nonTxtNode1);
-			document.body.appendChild(txtNode2);
+			testBody.appendChild(nonTxtNode1);
+			testBody.appendChild(txtNode2);
 			range.setStart(nonTxtNode1, 1);
 			range.setEnd(txtNode2, 5);
 
@@ -88,8 +99,8 @@ describe("Anchor Utils", function() {
 			nonTxtNode1.appendChild(nonTxtNode3);
 			nonTxtNode2.appendChild(txtNode1);
 			nonTxtNode1.appendChild(nonTxtNode2);
-			document.body.appendChild(txtNode2);
-			document.body.appendChild(nonTxtNode1);
+			testBody.appendChild(txtNode2);
+			testBody.appendChild(nonTxtNode1);
 			range.setStart(txtNode2, 5);
 			range.setEnd(nonTxtNode1, 2);
 
@@ -111,8 +122,8 @@ describe("Anchor Utils", function() {
 			nonTxtNode2.appendChild(txtNode1);
 			nonTxtNode1.appendChild(nonTxtNode22);
 			nonTxtNode1.appendChild(nonTxtNode2);
-			document.body.appendChild(txtNode2);
-			document.body.appendChild(nonTxtNode1);
+			testBody.appendChild(txtNode2);
+			testBody.appendChild(nonTxtNode1);
 			range.setStart(txtNode2, 5);
 			range.setEnd(nonTxtNode2, 0);
 
@@ -285,7 +296,7 @@ describe("Anchor Utils", function() {
 			//add this stuff to the body so we can then put it in a range
 			div.appendChild(t1);
 			div.appendChild(t2);
-			document.body.appendChild(div);
+			testBody.appendChild(div);
 
 			range = document.createRange();
 			range.setStart(div, 0);
@@ -313,7 +324,7 @@ describe("Anchor Utils", function() {
 			span.appendChild(span2);
 			span.appendChild(a);
 			div.appendChild(span);
-			document.body.appendChild(div);
+			testBody.appendChild(div);
 			range = document.createRange();
 			range.setStartBefore(p);
 			range.setEndAfter(a);
@@ -350,7 +361,7 @@ describe("Anchor Utils", function() {
 			span.appendChild(span2);
 			span.appendChild(a);
 			div.appendChild(span);
-			document.body.appendChild(div);
+			testBody.appendChild(div);
 			range = document.createRange();
 			range.setStartBefore(p);
 			range.setEndAfter(a);
@@ -425,7 +436,7 @@ describe("Anchor Utils", function() {
 			span.appendChild(a);
 			div.appendChild(span);
 			p2.setAttribute('Id', 'SomeId');
-			document.body.appendChild(div);
+			testBody.appendChild(div);
 
 			result = Anchors.locateElementDomContentPointer(pointer, div, {});
 			expect(result.confidence).toEqual(1);
@@ -453,7 +464,7 @@ describe("Anchor Utils", function() {
 			span.appendChild(a);
 			div.appendChild(span);
 			p2.setAttribute('Id', 'SomeId2');
-			document.body.appendChild(div);
+			testBody.appendChild(div);
 
 			console.warn('ExtJS means after is not necessary, dupe test')
 			result = Anchors.locateElementDomContentPointer(pointer, div, {node:span2});
@@ -481,7 +492,7 @@ describe("Anchor Utils", function() {
 			span.appendChild(span2);
 			span.appendChild(a);
 			div.appendChild(span);
-			document.body.appendChild(div);
+			testBody.appendChild(div);
 
 			result = Anchors.locateElementDomContentPointer(pointer, div, {node:span2});
 			expect(result.confidence).toEqual(0);
@@ -539,7 +550,7 @@ describe("Anchor Utils", function() {
 			span.appendChild(div1);
 			span.appendChild(div2);
 
-			document.body.appendChild(span);
+			testBody.appendChild(span);
 
 			//send in doc.body for maximum workage
 			result = Anchors.resolveSpecBeneathAncestor(desc, document.body, document);
@@ -602,7 +613,7 @@ describe("Anchor Utils", function() {
 			span.appendChild(div1);
 			span.appendChild(div2);
 
-			document.body.appendChild(span);
+			testBody.appendChild(span);
 
 			//send in doc.body for maximum workage
 			result = Anchors.resolveSpecBeneathAncestor(desc, document.body, document);
@@ -711,8 +722,8 @@ describe("Anchor Utils", function() {
 				result;
 
 			div.setAttribute('Id', 'ThisIsAnId902384');
-			document.body.appendChild(textNode1);
-			document.body.appendChild(div);
+			testBody.appendChild(textNode1);
+			testBody.appendChild(div);
 
 			result = Anchors.locateRangeEdgeForAnchor(pointer, document.body);
 			expect(result.offset).toEqual(14);
@@ -779,7 +790,7 @@ describe("Anchor Utils", function() {
 			span.appendChild(span2);
 			span.appendChild(a);
 			div.appendChild(span);
-			document.body.appendChild(div);
+			testBody.appendChild(div);
 			range = document.createRange();
 			range.setStartBefore(p);
 			range.setEndAfter(a);
@@ -806,7 +817,7 @@ describe("Anchor Utils", function() {
 			span.appendChild(span2);
 			span.appendChild(a);
 			div.appendChild(span);
-			document.body.appendChild(div);
+			testBody.appendChild(div);
 			range = document.createRange();
 			range.setStart(t, 3);
 			range.setEnd(t, 6);
@@ -877,7 +888,7 @@ describe("Anchor Utils", function() {
 			span.appendChild(span2);
 			span.appendChild(a);
 			div.appendChild(span);
-			document.body.appendChild(div);
+			testBody.appendChild(div);
 			range = document.createRange();
 			range.setStartBefore(p);
 			range.setEndAfter(a);
@@ -913,7 +924,7 @@ describe("Anchor Utils", function() {
 			span.appendChild(span2);
 			span.appendChild(a);
 			div.appendChild(span);
-			document.body.appendChild(div);
+			testBody.appendChild(div);
 			range = document.createRange();
 			range.setStart(t1, 3);
 			range.setEnd(t2, 5);
