@@ -61,57 +61,65 @@ Ext.define('NextThought.view.WindowManager',{
 	},
 
 
-	register: function(win){
-		if(Ext.Array.contains(this.registry,win)){
-			Ext.Error.raise('duplicate');
-		}
-
-		var wrap = this.tpl.append(this.tracker,[win.getTitle()], true),
-			map = this.buttonMap,
-			reg = this.registry,
-			btn = wrap.down('.window-minimized'),
+	initWindow: function(win,wrap){
+		var btn = wrap.down('.window-minimized'),
 			hlr = wrap.down('.window-placeholder');
-
-		win.mon(win,this.mappedEvents);
 
 		btn.setVisibilityMode(Ext.Element.DISPLAY);
 		hlr.setVisibilityMode(Ext.Element.ASCLASS);
 		hlr.visibilityCls = 'hidden';
 
-		win.snapped = true;
-		win.dragStartTolerance = 50;
-		win.trackWrapper = wrap;
-		win.minimizedButton = btn;
-		win.placeHolder = hlr;
+		this.buttonMap[btn.id] = win;
 
-		map[btn.id] = win;
-		reg.push(win);
-
-		win.minimized ? btn.show(): btn.hide();
-		win.minimized ? hlr.hide(): hlr.show();
-
-		btn.on({
-			scope: this,
-			click: function(e){
-				var id = e.getTarget('.window-minimized',null,true).id;
-				this.handleRestore(map[id]);
-			}
+		win.mon(win,this.mappedEvents);
+		Ext.apply(win,{
+			snapped: true,
+			dragStartTolerance: 50,
+			trackWrapper: wrap,
+			minimizedButton: btn,
+			placeHolder: hlr
 		});
 
-		btn.down('.closer').on('click',function(e){
-			var id = e.getTarget('.window-minimized',null,true).id;
-			map[id].close();
-		});
+		btn.on('click',this.handleButtonClicked, this);
+	},
 
-		this.organizeSnappedWindows();
+
+	register: function(win){
+		if(Ext.Array.contains(this.registry,win)){
+			Ext.Error.raise('duplicate');
+		}
+
+		this.registry.push(win);
+		this.initWindow(win, this.tpl.append(this.tracker,[win.getTitle()], true));
+
+		win.notify = this.notifyTracker();
+
+		if(win.minimized){ this.handleMinimize(win); }
+		else { this.handleRestore(win); }
 	},
 
 
 	unregister: function(win){
 		Ext.Array.remove(this.registry,win);
 
+		win.notify = Ext.emptyFn;
+
 		if(win.trackWrapper){
 			win.trackWrapper.remove();
+		}
+	},
+
+
+	handleButtonClicked: function(e){
+		var id = e.getTarget('.window-minimized',null,true).id;
+		var m = this.buttonMap;
+
+		if(e.getTarget('.closer')){
+			m[id].close();
+			delete m[id];
+		}
+		else {
+			this.handleRestore(m[id]);
 		}
 	},
 
@@ -229,5 +237,14 @@ Ext.define('NextThought.view.WindowManager',{
 				box.bottom-win.getHeight());
 
 		});
+	},
+
+
+	notifyTracker: function(){
+		return function(){
+			var btn = this.minimizedButton;
+
+		};
 	}
+
 });

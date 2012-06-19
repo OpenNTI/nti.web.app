@@ -134,7 +134,7 @@ Ext.define('NextThought.controller.Chat', {
 	existingRoom: function(users, roomId, options) {
 		//Add ourselves to this list
 		var key, ri,
-			allUsers = Ext.Array.unique(users.slice().concat($AppConfig.userObject.getId()));
+			allUsers = Ext.Array.unique(users.slice().concat($AppConfig.username));
 
 		if(options && options.ContainerId && !roomId){
 			roomId = options.ContainerId;
@@ -514,7 +514,7 @@ Ext.define('NextThought.controller.Chat', {
 			r,m;
 
 		recipients.add(message.get('Creator'), 1);
-		recipients.add($AppConfig.userObject.getId(), 1);
+		recipients.add($AppConfig.username, 1);
 
 		while(w && message && message.get('inReplyTo')){
 			r = IdCache.getIdentifier('inReplyTo');
@@ -701,6 +701,9 @@ Ext.define('NextThought.controller.Chat', {
 
 		if(!w.minimized){
 			w.show();
+		}
+		else {
+			w.notify();
 		}
 	},
 

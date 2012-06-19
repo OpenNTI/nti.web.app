@@ -200,5 +200,9 @@ Ext.define('NextThought.view.Window',{
 
 	dragMaskOff: function(){
 		Ext.getCmp('viewport').el.unmask();
-	}
+	},
+
+
+	//stub for interface, WindowManager will implement
+	notify: Ext.emptyFn
 });
