@@ -1,6 +1,6 @@
 var page = require('webpage').create();
 var server = require('webserver').create();
-var fs = 'fs';
+var fs = require('fs');
 var s = fs.separator;
 var host, port = 45670, path = phantom.libraryPath.split(s);
 var mimeMap = {
@@ -13,9 +13,6 @@ var mimeMap = {
 	jpg: 'image/jpeg',
 	png: 'image/png'
 };
-
-//do this to shutup the node.js error :/ on this phantomjs script..sigh.
-fs = require(fs);
 
 while( !fs.exists(path.join(s)+s+'index.html') && path.length ){ path.pop(); }
 if(!path.length){ console.log('index.html not found'); phantom.exit(); }
@@ -119,9 +116,7 @@ if (!listening) {
 			waitFor(
 				function(){//waiting for this to return true
 					return page.evaluate(function(){
-						var runner = document.body.querySelector('.runner');
-						if(!runner){ return !!runner; }
-						return !!runner.querySelector('.description');
+						return !!document.body.querySelector('.pending');
 					});
 				},
 				function(){
@@ -130,16 +125,25 @@ if (!listening) {
 					page.evaluate( function() {
 						var suites = document.body.querySelectorAll('.suite'),
 							i, j, suite, suiteName, specName, passOrFail,
-							specs, spec, passed, trace, runner, passedAll = true;
+							specs, spec, passed, trace, runner, passedAll = true, suiteNameParent;
 
 						for (i = 0; i < suites.length; i++){
 							suite = suites[i];
 
+							//if this suite contains suites then skip, we will flatten this list out
+							if(suite.querySelector('.suite')){continue;}
+
 							suiteName = suite.querySelector('.description').innerText;
+							suiteNameParent = suite.parentNode;
+							while(suiteNameParent && suiteNameParent.className.indexOf("suite") >= 0){
+								suiteName = suiteNameParent.querySelector('.description').innerText + " > " + suiteName;
+								suiteNameParent = suiteNameParent.parentNode;
+							}
+
 							passOrFail = suite.className.indexOf('passed') != -1 ? "Passed" : "Failed";
 							console.log(passOrFail+':\t'+'Suite: '+suiteName);
 							console.log('--------------------------------------------------------');
-							specs = suite.querySelectorAll('.spec');
+							specs = suite.querySelectorAll('.specSummary');
 							for (j = 0; j < specs.length; j++){
 								spec = specs[j];
 								passed = spec.className.indexOf('passed') != -1;
@@ -158,9 +162,9 @@ if (!listening) {
 							console.log('');
 						}
 
-						runner = document.body.querySelector('.runner');
+						runner = document.body.querySelector('.alert');
 						console.log('--------------------------------------------------------');
-						console.log('Finished: '+runner.querySelector('.description').innerText);
+						console.log('Finished: '+runner.innerText);
 						console.log('\nStatus: '+(passedAll? 'Good!':'There were failures!'));
 					});
 					console.log('\n');
