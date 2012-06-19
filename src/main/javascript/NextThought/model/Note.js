@@ -2,7 +2,7 @@ Ext.define('NextThought.model.Note', {
 	extend: 'NextThought.model.Base',
 
 	requires: [
-		'NextThought.model.anchorables.ContentRangeDescription',
+		'NextThought.model.anchorables.DomContentRangeDescription',
 		'NextThought.model.converters.ContentRangeDescription'
 	],
 

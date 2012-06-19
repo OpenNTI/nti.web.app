@@ -9,9 +9,6 @@ Ext.define('NextThought.util.Anchors', {
 	//TODO - this is from out obj back to dom
 	toDomRange: function(contentRangeDescription, docElement) {
 		   var ancestorNode = contentRangeDescription.getAncestor().locateRangePointInAncestor(docElement).node || docElement;
-
-		   console.log('Will use '+ancestorNode+' as root');
-
 		   return Anchors.resolveSpecBeneathAncestor(contentRangeDescription, ancestorNode, docElement);
 	},
 

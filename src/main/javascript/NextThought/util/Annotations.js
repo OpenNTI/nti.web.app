@@ -156,9 +156,11 @@ Ext.define('NextThought.util.Annotations',{
 	 * @return {NextThought.model.Note}
 	 */
 	noteToReply: function(note){
-		var reply = Ext.create('NextThought.model.Note'),
-				parent = note.get('NTIID'),
-				refs = Ext.Array.clone(note.get('references') || []);
+		var reply = Ext.create('NextThought.model.Note', {
+				applicableRange: Ext.create('NextThought.model.anchorables.ContentRangeDescription')
+			}),
+			parent = note.get('NTIID'),
+			refs = Ext.Array.clone(note.get('references') || []);
 
 		refs.push(parent);
 
