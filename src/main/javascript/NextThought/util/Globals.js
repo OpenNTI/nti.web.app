@@ -318,7 +318,7 @@ Ext.define('NextThought.util.Globals', {
 		if(typeof user !== 'string'){
 			id = user.getId();
 		}
-		return $AppConfig.userObject.getId() === id;
+		return $AppConfig.username === id;
 	},
 
 

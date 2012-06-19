@@ -20,10 +20,8 @@ Ext.define('NextThought.controller.Session', {
 
 	statics: {
 		login: function(app){
-//			console.time('session restore');
 			function success(){
 				app.fireEvent('session-ready');
-//				console.timeEnd ('session restore');
 				NextThought.controller.Application.launch();
 			}
 
@@ -41,46 +39,6 @@ Ext.define('NextThought.controller.Session', {
 					return;
 				}
 				location.replace( url );
-
-/*
-				Globals.removeLoaderSplash();
-				me.win = Ext.widget({
-						xtype:'nti-window',
-						title: 'Login: ',
-						closeAction: 'destroy',
-						resizable: false,
-						closable: false,
-						renderTo: Ext.getBody(),
-						width: '70%',
-						height: '70%',
-						layout: 'fit',
-						items: {
-							xtype: 'component', cls: 'login',
-							autoEl: {
-								tag: 'iframe',
-								src: url,
-								frameBorder: 0,
-								marginWidth: 0,
-								marginHeight: 0,
-								scrolling: 'no',
-								seamless: true,
-								transparent: true,
-								allowTransparency: true,
-								style: 'overflow: hidden'
-							},
-							listeners: {
-								afterrender: function(self){
-									var iframe = self.getEl().dom;
-									self.iframeWin = iframe.contentWindow || window.frames[iframe.name];
-
-									self.iframeWin.addEventListener('message', function(){
-										console.log('from iframe: ', arguments);
-									}, true);
-								}
-							}
-						}
-					}).show().addCls('login-window');
-*/
 			}
 
 			this.attemptLogin(success,showLogin);
@@ -156,9 +114,7 @@ Ext.define('NextThought.controller.Session', {
 					scope: this,
 					callback: function(q,success,r){
 						if(!success){
-//							Ext.callback(failureFn,m);
-							alert('Could not resolve service document');
-							console.log('\nreq:',q,'\nresp:',r, '\n');
+							console.log('Could not resolve service document\nrequest:',q,'\n\nresponse:',r,'\n\n');
 							return;
 						}
 						try{
@@ -181,7 +137,6 @@ Ext.define('NextThought.controller.Session', {
 
 		attemptLoginCallback: function(username,successCallback, failureCallback){
 			var me = this;
-			$AppConfig.username = username;
 			Socket.setup();
 
 			UserRepository.getUser(username, function(users){
@@ -192,9 +147,8 @@ Ext.define('NextThought.controller.Session', {
 					successCallback.call(me);
 				}
 				else{
-					alert('could not resolve user: '+username);
 					console.log('could not resolve user',username, arguments);
-//					failureCallback.call(me);
+					failureCallback.call(me);
 				}
 			});
 		}

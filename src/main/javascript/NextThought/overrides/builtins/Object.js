@@ -1,5 +1,5 @@
 Ext.define('NextThought.overrides.builtins.Object',{
-	overrides: 'Object',
+	overrides: 'Ext.Object',
 
 	statics: {
 		defineAttributes: function(obj,attrs){
@@ -25,5 +25,13 @@ Ext.define('NextThought.overrides.builtins.Object',{
 	}
 
 },function(){
+
+
+	this.defineAttributes($AppConfig,{
+		username: {
+			getter: function(){ try { return this.userObject.getId(); } catch(e){console.error(e.stack);} },
+			setter: function(){ throw 'readonly'; }
+		}
+	});
 
 });

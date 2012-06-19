@@ -173,19 +173,14 @@ Ext.define('NextThought.controller.State', {
 			window.localStorage.removeItem(this.getStateKey());
 			return defaultState;
 		}
-
-//		return {
-//			location: 'tag:nextthought.com,2011-10:AOPS-HTML-prealgebra.0',
-//			active: 'reader'
-//		};
 	},
 
 
 	getStateKey: function(){
-		var username = $AppConfig.userObject ? $AppConfig.userObject.get('Username') : null;
+		var username = $AppConfig.username;
 		if (!username){
 			console.error('unknown username for state mgmt.');
 		}
-		return 'state-' + username;
+		return btoa('state-' + username);
 	}
 });

@@ -14,7 +14,7 @@ Ext.define( 'NextThought.view.annotations.Annotation', {
 		this.mixins.shareable.constructor.call(this);
 		var me = this,
 			container = component.body.dom,
-			userId= record.get('Creator') || $AppConfig.userObject.getId(),
+			userId= record.get('Creator') || $AppConfig.username,
 			d = Ext.query('.document-nibs',container),
 			cName = this.self.getName().split('.').pop().toLowerCase();
 

@@ -141,7 +141,7 @@ Ext.define('NextThought.util.Color',{
 			Ext.Array.sort(this.sources);
 
 			//keep the logged in user at index 0
-			var id = $AppConfig.userObject.getId();
+			var id = $AppConfig.username;
 			Ext.Array.remove(this.sources,id);
 			this.sources.unshift(id);
 		}

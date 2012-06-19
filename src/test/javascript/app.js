@@ -1,7 +1,5 @@
 // Config stubbing
 var $AppConfig = {
-	userObject: null,//construct this mock user on launch
-	username: 'test@nextthought.com',
 	server: {
 		host: 'mock',
 		data: '/dataserver/'
@@ -112,8 +110,8 @@ Ext.application({
 
 	launch: function() {
 		function go(){
+			$AppConfig.userObject = Ext.create('NextThought.model.User', mockUser, 'test@nextthought.com', mockUser);
 			$AppConfig.service = Ext.create('NextThought.model.Service', mockService, $AppConfig.username);
-			$AppConfig.userObject = Ext.create('NextThought.model.User', mockUser, $AppConfig.username, mockUser);
 
 			jasmine.getEnv().addReporter(new jasmine.TrivialReporter());
 			jasmine.getEnv().execute();
