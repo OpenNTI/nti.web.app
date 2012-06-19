@@ -216,7 +216,7 @@ Ext.define('NextThought.util.Annotations',{
 
 	selectionToNote: function(range) {
 		if(range && range.collapsed){
-			Ext.Error.raise('Cannot create highlight from null or collapsed range')
+			Ext.Error.raise('Cannot create highlight from null or collapsed range');
 		}
 
 		//generate the range description
@@ -230,7 +230,7 @@ Ext.define('NextThought.util.Annotations',{
 
 	selectionToHighlight: function(range, style) {
 		if(range && range.collapsed){
-			Ext.Error.raise('Cannot create highlight from null or collapsed range')
+			Ext.Error.raise('Cannot create highlight from null or collapsed range');
 		}
 
 		//generate the range description

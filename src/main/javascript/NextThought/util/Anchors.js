@@ -6,7 +6,7 @@ Ext.define('NextThought.util.Anchors', {
 	],
 	singleton: true,
 
-	//TODO - this is from out obj back to dom
+	//TODO - testing
 	toDomRange: function(contentRangeDescription, docElement) {
 		   var ancestorNode = contentRangeDescription.getAncestor().locateRangePointInAncestor(docElement).node || docElement;
 		   return Anchors.resolveSpecBeneathAncestor(contentRangeDescription, ancestorNode, docElement);
@@ -41,6 +41,7 @@ Ext.define('NextThought.util.Anchors', {
 	},
 
 
+	//TODO - testing
 	createPointer: function(range, role, node) {
 		var endEdgeNode = node || Anchors.nodeThatIsEdgeOfRange(range, (role === 'start'));
 
@@ -204,19 +205,22 @@ Ext.define('NextThought.util.Anchors', {
 	/* tested */
 	lastWordFromString: function(str){
 		if (str === null || str === undefined){Ext.Error.raise('Must supply a string');}
-		var word = '';
-		var readingWord = false;
-		for(var i=str.length - 1; i >= 0; i--){
-			var char = str.charAt(i);
-			if(/\s/.test(char)){
+
+		var word = '',
+			readingWord = false,
+			c, i;
+
+		for(i=str.length - 1; i >= 0; i--){
+			c = str.charAt(i);
+			if(/\s/.test(c)){
 					if(readingWord){
 							break;
 					}
-					word += char;
+					word += c;
 			}
 			else{
 					readingWord = true;
-					word += char;
+					word += c;
 			}
 		}
 		return word.split("").reverse().join("");
@@ -226,19 +230,21 @@ Ext.define('NextThought.util.Anchors', {
 	/* tested */
 	firstWordFromString: function(str){
 		if (str === null || str === undefined){Ext.Error.raise('Must supply a string');}
-		var word = '';
-		var readingWord = false;
-		for(var i=0; i < str.length; i++){
-			var char = str.charAt(i);
-			if(/\s/.test(char)){
+		var word = '',
+			readingWord = false,
+			c, i;
+
+		for(i=0; i < str.length; i++){
+			c = str.charAt(i);
+			if(/\s/.test(c)){
 					if(readingWord){
 							break;
 					}
-					word += char;
+					word += c;
 			}
 			else{
 					readingWord = true;
-					word += char;
+					word += c;
 			}
 		}
 		return word;
@@ -274,7 +280,7 @@ Ext.define('NextThought.util.Anchors', {
 
 		if(    !endResult.node
 			|| !endResult.hasOwnProperty('confidence')
-			|| endResult.confidence != 1){
+			|| endResult.confidence !== 1){
 			return null;
 		}
 
@@ -346,7 +352,7 @@ Ext.define('NextThought.util.Anchors', {
 
 		treeWalker = document.createTreeWalker( referenceNode, NodeFilter.SHOW_TEXT, null, null);
 
-		if(treeWalker.currentNode.nodeType == Node.TEXT_NODE){
+		if(treeWalker.currentNode.nodeType === Node.TEXT_NODE){
 				textNode = treeWalker.currentNode;
 		}
 		else{
@@ -567,11 +573,11 @@ Ext.define('NextThought.util.Anchors', {
 		}
 
 		var container = start ? range.startContainer : range.endContainer,
-	    	offset = start ? range.startOffset : range.endOffset;
+			offset = start ? range.startOffset : range.endOffset;
 
-	    //If the container is a textNode look no further, that node is the edge
-	    if( container.nodeType === Node.TEXT_NODE ){
-	    	return container;
+		//If the container is a textNode look no further, that node is the edge
+		if( container.nodeType === Node.TEXT_NODE ){
+			return container;
 		}
 
 		if(start){
@@ -617,7 +623,7 @@ Ext.define('NextThought.util.Anchors', {
 			if( node.nodeValue.trim().length < 1 ){
 				return false;
 			}
-			return true
+			return true;
 		}
 
 
@@ -633,11 +639,11 @@ Ext.define('NextThought.util.Anchors', {
 
 		//if not a text node, us it missing an id or a tagname?
 		else if(!id || !node.tagName ){
-        	return false;
-        }
+			return false;
+		}
 
 		//otherwise, assume not
-	    return false;
+		return false;
 	}
 },
 function(){

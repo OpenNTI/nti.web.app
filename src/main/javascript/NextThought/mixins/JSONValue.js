@@ -28,7 +28,7 @@ Ext.define('NextThought.mixins.JSONValue',{
 				else if (typeof v === 'object') {
 					result[k] = me.getJSONObject(v);
 				}
-				else {result[k] = v}
+				else {result[k] = v;}
 			}
 		});
 		return result;

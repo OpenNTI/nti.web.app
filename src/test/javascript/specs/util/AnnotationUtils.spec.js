@@ -1,4 +1,4 @@
-xdescribe("Annotation Utils", function() {
+describe("Annotation Utils", function() {
 
 	var txt,
 		div = null,
@@ -137,8 +137,6 @@ xdescribe("Annotation Utils", function() {
 
 
 	it("should call callbacks if given",function(){
-
-
 			var note = Ext.create('NextThought.model.Note',{body:[
 					'test',
 					Ext.clone(testWhiteboard),
@@ -159,29 +157,6 @@ xdescribe("Annotation Utils", function() {
 			expect(thumbnailGen.callCount).toBe(2);
 
 		});
-
-
-
-	it("should build a new note from any element in the content", function(){
-
-		var i, el, all;
-
-		function doTest(el){
-			var note = AnnotationUtils.selectionToNote({startContainer: el});
-
-			expect(note).toBeTruthy();//todo: continue fleshing this out...
-			expect(note.get('anchorPoint')).toBeTruthy();
-		}
-
-		//test all non-text nodes
-		all = Ext.toArray(document.querySelectorAll('#NTIContent *'));
-		for(i=all.length-1; i>=0; i--) doTest(all[i]);
-
-		//Test all text nodes
-		all = document.evaluate('id("NTIContent")//text()', document, null, XPathResult.ANY_TYPE, null);
-		while((el = all.iterateNext())) doTest(el);
-	});
-
 
 	//this needs to remain the last spec in this suite
 	it("should cleanup",function(){

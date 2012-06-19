@@ -186,7 +186,7 @@ Ext.define('NextThought.util.Quizes', {
 			        });
 			        s = r.down('.result');
 
-			    if (qqr.get('Response') != '')
+			    if (qqr.get('Response') !== '')
 			    {
 			        s.addCls((qqr.get('Assessment')?'':'in')+'correct');
 			        s.createChild({
