@@ -3,10 +3,25 @@ Ext.define('NextThought.model.anchorables.DomContentRangeDescription', {
 		'NextThought.model.anchorables.DomContentPointer'
 	],
 
+	mixins: {
+		JSONValue: 'NextThought.mixins.JSONValue'
+	},
+
 	config: {
 		start: {},
 		end: {},
 		ancestor: {}
+	},
+
+	statics: {
+		createFromObject: function(o){
+			var cp = NextThought.model.anchorables.ContentPointer;
+			return Ext.create('NextThought.model.anchorables.DomContentRangeDescription', {
+				start: cp.createFromObject(o.start),
+				end: cp.createFromObject(o.end),
+				ancestor: cp.createFromObject(o.ancestor)
+			});
+		}
 	},
 
 	constructor: function(o){
@@ -29,7 +44,7 @@ Ext.define('NextThought.model.anchorables.DomContentRangeDescription', {
 		this.setStart(start);
 		this.setEnd(end);
 		this.setAncestor(ancestor);
-
+		this.Class = 'DomContentRangeDescription';
 		return this;
 	},
 

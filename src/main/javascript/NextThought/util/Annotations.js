@@ -449,30 +449,14 @@ Ext.define('NextThought.util.Annotations',{
 	},
 
 
-	buildRangeFromRecord: function(r, root) {
+	buildRangeFromRecord: function(highlightRecord, root) {
 		try {
-			var endElement = this.getNodeFromXPath(r.get('endXpath'),root),
-				startElement = this.getNodeFromXPath(r.get('startXpath'), root),
-				range = (root||document).createRange();
-
-			try {
-				endElement = endElement ? endElement : startElement;
-				range.setEnd(endElement, this.sanitizeOffset(endElement, r.get('endOffset')));
-				range.setStart(startElement, this.sanitizeOffset(startElement,r.get('startOffset')));
-				if (startElement && !range.collapsed) {
-					return range;
-				}
-			}
-			catch(e) { console.warn('bad range', r, e, e.toString()); }
+			return Anchors.toDomRange(highlightRecord.get('applicableRange'), root);
 		}
 		catch(er){
-			if(!er.warn){
-				console.error(er);
-			}
+			console.error('Could not generate range for highlight', er, arguments);
+			return null;
 		}
-
-		//if we make it this far, there's something wrong with the range, we'll try to reconstruct from anchors
-		return this.rangeFromAnchors(r,root);
 	},
 
 
@@ -506,72 +490,6 @@ Ext.define('NextThought.util.Annotations',{
 	},
 
 
-	rangeFromAnchors: function(r,root) {
-		//TODO: this still isn't qorking quite right, if the start/end anchor are the same but have diff text nodes.
-		var startAnchor = r.get('startAnchor'),
-			endAnchor = r.get('endAnchor'),
-			startHighlightedFullText = r.get('startHighlightedFullText'),
-			endHighlightedFullText = r.get('endHighlightedFullText'),
-			sht = r.get('startHighlightedText'),
-			eht = r.get('endHighlightedText'),
-			resultRange = root.createRange(),
-			container,
-			text, texts,
-			tempRange,
-			i;
-
-		if(!endHighlightedFullText) {
-			endHighlightedFullText = startHighlightedFullText;
-			eht = sht;
-		}
-
-		//resolve anchors to their actual DOM nodes
-		startAnchor = this.getAnchor(startAnchor,root);
-		endAnchor = endAnchor ? this.getAnchor(endAnchor,root) : this.getNextAnchor(startAnchor);
-
-		try {
-			tempRange = root.createRange();
-			tempRange.setStart(startAnchor, 0);
-			tempRange.setEnd(endAnchor, 0);
-			container = tempRange.commonAncestorContainer;
-			if(container === startAnchor) {
-				//If start and end anchors are the same, they are their own common ancestor, so go up one.
-				container = container.parentNode;
-			}
-		}
-		catch (e) {
-			console.warn('End Anchor is null', e, e.stack);
-			container = Ext.get(startAnchor).up('.page-contents').dom;
-		}
-
-		texts = this.getTextNodes( container );
-
-		while(resultRange.collapsed && !!(text = texts.shift())){
-			if (text.nodeValue===startHighlightedFullText) {
-				resultRange.setStart(text, text.nodeValue.indexOf(sht));
-			}
-			if (text.nodeValue===endHighlightedFullText) {
-				i = text.nodeValue.indexOf(eht);
-				if (i < 0){i =0;}
-
-				resultRange.setEnd(text, i + eht.length);
-			}
-		}
-
-		//add xpaths here for simplicity next time
-		if (!resultRange.collapsed){
-			if (r.isModifiable()) {
-				r.set('startXpath', this.getPathTo(resultRange.startContainer));
-				r.set('endXpath', this.getPathTo(resultRange.endContainer));
-				r.save();
-			}
-			return resultRange;
-		}
-
-		return null;
-	},
-
-
 	getTextNodes: function (root) {
 		var textNodes = [];
 		function getNodes(node) {
@@ -588,140 +506,21 @@ Ext.define('NextThought.util.Annotations',{
 		return textNodes;
 	},
 
-	sanitizeOffset: function(node, offset) {
-		if (this.isTextNode(node)) {
-			return offset;
-		}
-		return 0;
-	},
-
 
 	selectionToHighlight: function(range, style, docRoot) {
-
-		var p = Anchors.createRangeDescriptionFromRange(range);
-		var r = Anchors.toDomRange(p, docRoot);
-		console.log('DESCRIPTION = ' , p, r);
-
-		if(range.collapsed){
-			return;
+		if(range && range.collapsed){
+			Ext.Error.raise('Cannot create highlight from null or collapsed range')
 		}
 
-		var highlight = Ext.create('NextThought.model.Highlight'),
-			startNode = range.startContainer,
-			endNode = range.endContainer,
-			startAnchor = this.ascendToAnchor(startNode),
-			endAnchor = this.ascendToAnchor(endNode);
+		//generate the range description
+		var contentRangeDescription = Anchors.createRangeDescriptionFromRange(range);
 
-		highlight.set('text', range.toString());
-
-		//start information
-		highlight.set('startXpath', this.getPathTo(startNode));
-		highlight.set('startAnchor', startAnchor);
-		highlight.set('startOffset', this.sanitizeOffset(startNode, range.startOffset));
-		//end information
-		highlight.set('endXpath', this.getPathTo(endNode));
-		if (startAnchor !== endAnchor) {
-			highlight.set('endAnchor', endAnchor);
-		}
-
-		highlight.set('endOffset', this.sanitizeOffset(endNode, range.endOffset));
-
-		//special case when the end node is a div containing an img.
-		if (this.isBlockNode(endNode) && this.isImageNode(endNode.firstChild)){
-			endNode = endNode.firstChild;
-		}
-
-		//if a style is sent, set it:
-		if (style){highlight.set('style', style);}
-
-		this.fixHighlightEndpoints(endNode, startNode, highlight);
-		return highlight;
+		return Ext.create('NextThought.model.Highlight', {
+			style: style,
+			applicableRange: contentRangeDescription,
+			selectedText: range.toString()
+		});
 	},
-
-
-	fixHighlightEndpoints: function(endNode, startNode, highlight) {
-		var end = null,
-			workingNode = endNode,
-			fullText, endOffset, startOffset;
-
-		if (!this.isTextNode(endNode) && !this.isMathNode(endNode) && !this.isImageNode(endNode)) {
-			while(!end) {
-				workingNode = (workingNode.previousSibling) ? workingNode.previousSibling : workingNode.parentNode;
-				end = this.findLastHighlightableNodeFromChildren(workingNode, endNode);
-				if (end) {
-					endNode = end;
-					highlight.set('endAnchor', this.ascendToAnchor(end));
-					if (this.isTextNode(end)) {
-						highlight.set('endOffset', endNode.nodeValue.length);
-					}
-				}
-			}
-		}
-
-		//now we have our start and end, let's see if we span anchors
-		fullText = this.getNodeTextValue(startNode);
-		endOffset = highlight.get('endOffset');
-		startOffset = highlight.get('startOffset');
-		highlight.set('startHighlightedFullText', fullText);
-		highlight.set('startHighlightedText', (fullText !== startNode.nodeValue) ?
-			fullText : startNode.nodeValue.substring(startOffset));
-		highlight.set('endHighlightedFullText', this.getNodeTextValue(endNode));
-
-		fullText = this.getNodeTextValue(endNode);
-		highlight.set('endHighlightedText',
-			(endOffset !== 0 && endNode.nodeValue !== null) ?
-				(fullText !== endNode.nodeValue) ?
-					fullText : endNode.nodeValue.substring(0, endOffset)
-				: highlight.get('endHighlightedFullText'));
-	},
-
-
-	ascendToAnchor: function(textNode) {
-		var parentNode = textNode,
-			previousSibling,
-			name,
-			anchorFromChildrenOrNull;
-
-		if (this.isTextNode(textNode)) {
-			parentNode = textNode.parentNode;
-		}
-
-		while (parentNode !== null) {
-			if (parentNode.nodeName === 'A') {
-				name = this.anchorNameOrNull(parentNode);
-				if (name !== null) {
-					//if we found a name, return it, otherwise allow this to continue.
-					return name;
-				}
-			}
-
-			//Look at all prior siblings at this level looking for an anchor
-			previousSibling = parentNode.previousSibling;
-			while(previousSibling !== null) {
-				if (previousSibling.nodeName === 'A') {
-					name = this.anchorNameOrNull(previousSibling);
-					if (name !== null) {
-						//if we found a name, return it, otherwise allow this to continue.
-						return name;
-					}
-
-				}
-				//look into the children of this previous node
-				anchorFromChildrenOrNull = this.findLastAnchorFromChildren(previousSibling);
-				if (anchorFromChildrenOrNull === null) {
-					previousSibling = previousSibling.previousSibling;
-				}
-				else {
-					return anchorFromChildrenOrNull;
-				}
-			}
-			parentNode = parentNode.parentNode;
-		}
-
-		//if we make it here, we haven't found an anchor name:
-		return null;
-	},
-
 
 	anchorNameOrNull: function(node) {
 		if (node.name !== null && node.name.trim().length > 0) {
@@ -784,53 +583,6 @@ Ext.define('NextThought.util.Annotations',{
 //tested
 	isImageNode: function(node) {
 		return (node && node.nodeName === 'IMG');
-	},
-
-
-	getNodeTextValue: function(node) {
-		var math = this.climbToMathNode(node),
-			img = this.digForImageNode(node);
-
-		if (math !== null) {
-			//we have a math parent node
-			//TODO - using the id here is fragile because changing content can break this when saved
-			return this.getDOMTreeId(math);
-		}
-		else if (img !== null) {
-			return this.getDOMTreeId(img);
-		}
-		else if (this.isTextNode(node)) {
-			return node.nodeValue;
-		}
-		else {
-			//console.warn("Cannot figure out the textual value of the node " + node);
-			return null;
-		}
-
-	},
-
-
-	getDOMTreeId: function(node) {
-		var parentNode = node||null,
-			previousSibling,
-			parents = 0,
-			sibs = 0;
-
-		while (parentNode !== null) {
-			parents++;
-
-			//Look at all prior siblings at this level looking for an anchor
-			previousSibling = parentNode.previousSibling;
-			while(previousSibling !== null) {
-				sibs++;
-
-				previousSibling = previousSibling.previousSibling;
-			}
-			parentNode = parentNode.parentNode;
-		}
-
-		//if we make it here, we haven't found an anchor name:
-		return "DOMTreeID:" + parents + "," + sibs;
 	},
 
 

@@ -6,6 +6,15 @@ Ext.define('NextThought.model.anchorables.ElementDomContentPointer', {
 		elementId: ''
 	},
 
+	statics: {
+		createFromObject: function(o){
+			return Ext.create('NextThought.model.anchorables.ElementDomContentPointer', {
+				role: o.role,
+				elementTagName: o.elementTagName,
+				elementId: o.elementId
+			});
+		}
+	},
 
 	constructor: function(o){
 		//If we are given a dom element as input, pull the necessary parts and
@@ -19,8 +28,9 @@ Ext.define('NextThought.model.anchorables.ElementDomContentPointer', {
 
 		this.validateTagName(o.elementTagName);
 		this.validateId(o.elementId);
-
-		return this.callParent([o]);
+		var r = this.callParent([o]);
+		this.Class = 'ElementDomContentPointer';
+		return r;
 	},
 
 

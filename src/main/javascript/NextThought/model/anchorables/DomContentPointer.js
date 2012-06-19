@@ -10,10 +10,19 @@ Ext.define('NextThought.model.anchorables.DomContentPointer', {
 		'ancestor'
 	],
 
+	statics: {
+		createFromObject: function(o){
+			return Ext.create('NextThought.model.anchorables.DomContentPointer', {
+				role: o.role
+			});
+		}
+	},
 
 	constructor: function(o){
 		this.validateRole(o.role);
-		return this.callParent(arguments);
+		var r = this.callParent(arguments);
+		this.Class = 'DomContentPointer';
+		return r;
 	},
 
 

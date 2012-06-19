@@ -13,7 +13,7 @@ Ext.define('NextThought.proxy.writer.Json', {
 
 		function getJSON(obj) {
 			var a=[];
-			if (obj instanceof NextThought.model.Base) {
+			if (obj && Ext.isFunction(obj.asJSON)) {
 				return obj.asJSON();
 			}
 			else if (Ext.isArray(obj)) {

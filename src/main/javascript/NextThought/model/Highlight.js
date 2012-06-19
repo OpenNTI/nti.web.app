@@ -1,20 +1,18 @@
 Ext.define('NextThought.model.Highlight', {
 	extend: 'NextThought.model.Base',
 
+	requires: [
+		'NextThought.model.anchorables.DomContentRangeDescription',
+		'NextThought.model.converters.ContentRangeDescription'
+	],
+
 	fields: [
-		{ name: 'startXpath', type: 'string' },
-		{ name: 'startAnchor', type: 'string' },
-		{ name: 'startHighlightedFullText', type: 'string' },
-		{ name: 'startHighlightedText', type: 'string' },
-		{ name: 'startOffset', type: 'int' },
-		{ name: 'endXpath', type: 'string' },
-		{ name: 'endAnchor', type: 'string' },
-		{ name: 'endHighlightedFullText', type: 'string' },
-		{ name: 'endHighlightedText', type: 'string' },
-		{ name: 'endOffset', type: 'int' },
-		{ name: 'text', type: 'string' },
-		{ name: 'style', type: 'string' },
-		{ name: 'sharedWith', type: 'UserList'}
+		{ name: 'sharedWith', type: 'UserList'},
+		{ name: 'AutoTags', type: 'Auto'},
+		{ name: 'tags', type: 'Auto'},
+		{ name: 'selectedText', type: 'string'},
+		{ name: 'style', type: 'string'},
+		{ name: 'applicableRange', type: 'ContentRangeDescription'}
 	],
 
 	getAnchorForSort: function(){

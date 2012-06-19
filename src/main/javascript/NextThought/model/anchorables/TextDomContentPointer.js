@@ -2,6 +2,7 @@ Ext.define('NextThought.model.anchorables.TextDomContentPointer', {
 	extend: 'NextThought.model.anchorables.DomContentPointer',
 
 	requires: [
+		'NextThought.model.anchorables.TextContext',
 		'NextThought.model.anchorables.DomContentPointer'
 	],
 
@@ -11,11 +12,25 @@ Ext.define('NextThought.model.anchorables.TextDomContentPointer', {
 		edgeOffset: 0
 	},
 
+	statics: {
+		createFromObject: function(o){
+			var cp = NextThought.model.anchorables.ContentPointer;
+			return Ext.create('NextThought.model.anchorables.TextDomContentPointer', {
+				role: o.role,
+				contexts: NextThought.model.anchorables.TextContext.createFromObjects(o.contexts),
+				edgeOffset:o.edgeOffset,
+				ancestor: cp.createFromObject(o.ancestor)
+			});
+		}
+	},
+
 	constructor: function(o){
 		this.validateContexts(o.contexts);
 		this.validateEdgeOffset(o.edgeOffset);
 		this.validateAncestor(o.ancestor);
-		return this.callParent(arguments);
+		var r = this.callParent(arguments);
+		this.Class = 'TextDomContentPointer';
+		return r;
 	},
 
 
