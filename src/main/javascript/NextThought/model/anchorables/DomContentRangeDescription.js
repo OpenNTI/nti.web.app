@@ -1,11 +1,8 @@
 Ext.define('NextThought.model.anchorables.DomContentRangeDescription', {
+	extend: 'NextThought.model.anchorables.ContentRangeDescription',
 	requires: [
 		'NextThought.model.anchorables.DomContentPointer'
 	],
-
-	mixins: {
-		JSONValue: 'NextThought.mixins.JSONValue'
-	},
 
 	config: {
 		start: {},

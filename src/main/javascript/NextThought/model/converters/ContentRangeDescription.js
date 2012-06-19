@@ -5,7 +5,7 @@ Ext.define('NextThought.model.converters.ContentRangeDescription', {
 		type: 'ContentRangeDescription',
 		convert: function(v,record) {
 			try {
-				return NextThought.model.anchorables.DomContentRangeDescription.createFromObject(v);
+				return NextThought.model.anchorables.ContentRangeDescription.createFromObject(v);
 			}
 			catch (e) {
 				console.error('CRD: Parsing Error: ',e.message, e.stack, arguments);
