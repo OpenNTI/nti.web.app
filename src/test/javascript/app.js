@@ -123,7 +123,6 @@ Ext.application({
 		Globals.loadScripts([
 			'javascript/specs/example.spec.js',
 			'javascript/specs/Library.spec.js',
-			'javascript/specs/view/widgets/draw/Whiteboard.spec.js',
 			'javascript/specs/cache/UserRepository.spec.js',
 			'javascript/specs/util/AnnotationUtils.spec.js',
 			'javascript/specs/util/ParseUtils.spec.js',
