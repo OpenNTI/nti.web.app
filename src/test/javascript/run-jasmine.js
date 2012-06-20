@@ -127,13 +127,11 @@ if (!listening) {
 					page.evaluate( function() {
 						var suites = document.body.querySelectorAll('.suite'),
 							i, j, suite, suiteName, specName, passOrFail,
-							specs, spec, passed, trace, runner, passedAll = true, suiteNameParent;
+							specs, spec, passed, trace, runner, passedAll = true, suiteNameParent,
+								suiteId, m;
 
 						for (i = 0; i < suites.length; i++){
 							suite = suites[i];
-
-							//if this suite contains suites then skip, we will flatten this list out
-							if(suite.querySelector('.suite')){continue;}
 
 							suiteName = suite.querySelector('.description').innerText;
 							suiteNameParent = suite.parentNode;
@@ -142,23 +140,28 @@ if (!listening) {
 								suiteNameParent = suiteNameParent.parentNode;
 							}
 
+
+
 							passOrFail = suite.className.indexOf('passed') != -1 ? "Passed" : "Failed";
 							console.log(passOrFail+':\t'+'Suite: '+suiteName);
 							console.log('--------------------------------------------------------');
-							specs = suite.querySelectorAll('.specSummary');
+
+							suiteId = 'suite-'+i;
+							suite.setAttribute('id',suiteId);
+							specs = suite.querySelectorAll('#'+suiteId+' > .specSummary');
+
+
 							for (j = 0; j < specs.length; j++){
 								spec = specs[j];
 								passed = spec.className.indexOf('passed') != -1;
 
 								specName = spec.querySelector('.description').innerText;
+
 								passOrFail = passed ? 'Passed' : "Failed";
 								console.log('\t'+passOrFail+':\t'+specName);
 
 								if(!passed){
 									passedAll = false;
-									console.log('\t\t-> Message: '+spec.querySelector('.resultMessage.fail').innerText);
-									trace = spec.querySelector('.stackTrace');
-									console.log('\t\t-> Stack: '+(trace!==null ? trace.innerText : 'not supported by phantomJS yet'));
 								}
 							}
 							console.log('');
