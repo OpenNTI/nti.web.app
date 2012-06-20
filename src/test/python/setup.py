@@ -19,8 +19,8 @@ setup(
 		],
 
 	install_requires = [ 'nti.dataserver',
-						 'selenium',
-						 'sst'
+						 'selenium >= 2.24.0',
+						 'sst >= 0.2.1'
 						],
 	
 	packages = find_packages('.'),
