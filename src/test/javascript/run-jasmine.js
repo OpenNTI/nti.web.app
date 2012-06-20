@@ -108,15 +108,17 @@ if (!listening) {
 	page.open("http://localhost:"+port+"/index.html", function(status){
 
 		console.log('\nInitial Load finished, executing...\n');
+
 		if (status !== "success") {
 			console.log("Unable to access network\n\n"+JSON.stringify(status, null, 4));
 			phantom.exit();
 		}
 		else {
 			waitFor(
-				function(){//waiting for this to return true
+				function(){
 					return page.evaluate(function(){
-						return !!document.body.querySelector('.pending');
+						return !Boolean(document.body.querySelector('.pending'))
+							&& Boolean(document.body.querySelector('.results'));
 					});
 				},
 				function(){
