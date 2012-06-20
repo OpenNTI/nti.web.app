@@ -6,7 +6,7 @@ Ext.define('NextThought.view.WindowHeader', {
 
 	renderTpl: [
 		'<div id="{id}-body" class="header-body">',
-			'<div class="controls">',
+			'<div class="controls {hasTools}">',
 				'<img src="{[Ext.BLANK_IMAGE_URL]}"	class="tool close" />',
 				'<img src="{[Ext.BLANK_IMAGE_URL]}" class="tool minimize" />',
 			'</div>',
@@ -68,7 +68,8 @@ Ext.define('NextThought.view.WindowHeader', {
 
 		this.renderData = Ext.apply(this.renderData||{},{
 			title: this.title,
-			tools: tools
+			tools: tools,
+			hasTools: tools.length===0 ? '' : 'has-tools'
 		});
 	},
 
@@ -83,6 +84,7 @@ Ext.define('NextThought.view.WindowHeader', {
 					me.tools[tool] = info;//merge it in
 					me.renderSelectors[tool] = Ext.String.format('img.tool.{0}',tool);
 					rd.tools.push({tool: tool, tip: info.tip});
+					rd.hasTools = 'has-tools';
 				}
 			});
 		}

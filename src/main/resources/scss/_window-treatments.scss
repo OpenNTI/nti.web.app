@@ -53,8 +53,10 @@
 				border-radius: 0 5px 0 0;
 				height: 100%;
 				float: right;
-				background: url(../images/window_controls_v_div.png) left center no-repeat;
 				padding: 0;
+				&.has-tools {
+					background: url(../images/window_controls_v_div.png) left center no-repeat;
+				}
 
 				img.tool {
 					&:hover{ opacity: 1; }
@@ -66,8 +68,9 @@
 
 
 					background: url(../images/window_controls.png) -100px -100px no-repeat;
-					&.close { background-position: -27px 0; }
-					&.minimize { background-position: 0 0; }
+					&.close { background-position: -54px 0; }
+					&.minimize { background-position: -27 0; }
+					&.popout { background-position: 0 0; }
 				}
 			}
 		}
@@ -200,7 +203,7 @@
 				opacity: 0.5;
 				width: 30px; height: 26px;
 				cursor: pointer;
-				background: url(../images/window_controls.png) -22px -1px no-repeat;
+				background: url(../images/window_controls.png) -49px -1px no-repeat;
 			}
 		}
 	}
