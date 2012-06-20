@@ -21,22 +21,21 @@ public class TestNavigation extends Navigation {
 		assertTrue(selenium.isElementPresent(this.getChapterXpath()));
 	}
 
-//	@Test
-//	public void testOpenChapter(){
-//		this.setBook("Prealgebra");
-//		this.setChapter("Fractions");
-//		this.setSection("Index");
-//		this.openLibrary();
-//		this.openBook();
-//		this.openChapter();
-//		assertTrue(selenium.isElementPresent(this.getSectionXpath()));
-//	}
+	@Test
+	public void testOpenChapter(){
+		this.setBook("Prealgebra");
+		this.setChapter("Fractions");
+		this.setSection("Index");
+		this.openLibrary();
+		this.openBook();
+		this.openChapter();
+		assertTrue(selenium.isElementPresent(this.getSectionXpath()));
+	}
 	
-	
-//	@Test
-//	public void testOpenSection(){
-//		this.navigateTo("Prealgebra", "Fractions", "Index");
-//		assertTrue(selenium.isElementPresent(this.getFractionIndexPAgeXpath()));
-//	}
+	@Test
+	public void testOpenSection(){
+		this.navigateTo("Prealgebra", "Fractions", "Index");
+		assertTrue(selenium.isElementPresent(this.getFractionIndexPageXpath()));
+	}
 	
 }

@@ -30,7 +30,7 @@ public class Navigation extends Login {
 	}
 	
 	public String getSectionXpath(){
-		return this.xpathTextBuilder("img", section);
+		return this.xpathTextBuilder("div", section);
 	}
 	
 	public String getFractionIndexPageXpath(){
@@ -44,6 +44,11 @@ public class Navigation extends Login {
 		selenium.mouseUp(xpath);
 	}
 	
+	public void openLevelClick(String xpath){
+		this.waitForElement(xpath, timeout);
+		selenium.click(xpath);
+	}
+	
 	public void openLibrary() {
 		this.openLevel(this.getLibraryXpath());
 		this.waitForElement(this.getBookXpath(), timeout);
@@ -55,13 +60,12 @@ public class Navigation extends Login {
 	}
 	
 	public void openChapter(){
-		this.openLevel(this.getChapterXpath());
-		this.openLevel(this.getChapterXpath());
+		this.openLevelClick(this.getChapterXpath());
 		this.waitForElement(this.getSectionXpath(), timeout);
 	}
 	
 	public void openSection(){
-		this.openLevel(this.getSectionXpath());
+		this.openLevelClick(this.getSectionXpath());
 		this.waitForElement(this.getFractionIndexPageXpath(), timeout);
 	}
 	
