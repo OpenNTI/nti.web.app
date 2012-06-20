@@ -330,14 +330,9 @@ Ext.define('NextThought.view.content.Reader', {
 
 	checkFrame: function(){
 		var doc = this.getDocumentElement(),
-			body = Ext.get(doc.getElementById('NTIContent')),
-			h;
+			body = Ext.get(doc.getElementById('NTIContent'));
 		if (body) {
-			h = Math.max(body.getHeight(), this.getEl().getHeight());
-			if(h !== this.lastHeight){
-				this.lastHeight = h;
-				this.syncFrame();
-			}
+			this.syncFrame(body);
 			if(Ext.Date.now()-this.lastFrameSync > 500){
 				clearInterval(this.syncInterval);
 				this.syncInterval = setInterval(this.checkFrame,500);
@@ -346,20 +341,23 @@ Ext.define('NextThought.view.content.Reader', {
 	},
 
 
-	syncFrame: function(){
-		var doc = this.getDocumentElement(),
-			b = Ext.get(doc.getElementById('NTIContent')),
-			i = this.getIframe();
+	syncFrame: function(body){
+		var i = this.getIframe(),
+			h = body.getHeight()+100;
 
-		b = b? b.getHeight()+100: 100;
+		if(h === this.lastHeight){
+			return;
+		}
 
-//		console.log('Sync Height: '+b);
-		i.setHeight(this.el.getHeight()-100);
-		i.setHeight(b);
+		console.log('Syncing Frame Height: content:', h, ' view:', this.getEl().getHeight());
+
+		body.hide().show();
+		i.setHeight(Math.max(h, this.getEl().getHeight()));
 
 		this.fireEvent('resize');
 		this.doLayout();
 
+		this.lastHeight = h;
 		this.lastFrameSync = Ext.Date.now();
 	},
 
