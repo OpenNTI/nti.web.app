@@ -16,6 +16,8 @@ import com.thoughtworks.selenium.Selenium;
 import com.thoughtworks.selenium.DefaultSelenium;
 
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeDriverService;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
 import org.openqa.selenium.server.SeleniumServer;
@@ -27,7 +29,7 @@ public class Base {
 	protected static int port;
 	protected static String url;
 	protected static String books;
-	protected static String driver;
+	protected static String browser;
 	protected static String bookName;
 	protected static Selenium selenium;
 	protected static String sectionName;
@@ -35,6 +37,8 @@ public class Base {
 	protected static String dataserver;
 	protected static Credentials[] credentials;
 	protected static final Properties propertiesFile = new Properties();
+	protected static WebDriver driver;
+	private static ChromeDriverService service;
 	
 	protected String xpathBuilder = null;
 	protected SeleniumServer seleniumServer = null;
@@ -52,13 +56,13 @@ public class Base {
 			url = propertiesFile.getProperty("url");
 			sectionName = propertiesFile.getProperty("sectionName");
 			bookName = propertiesFile.getProperty("bookName");
-			driver = propertiesFile.getProperty("driver");
+			browser = propertiesFile.getProperty("driver");
 			books = propertiesFile.getProperty("books");
 			chapterName = propertiesFile.getProperty("chapterName");
 			dataserver = propertiesFile.getProperty("dataserver");
 			port = Integer.parseInt(propertiesFile.getProperty("port"));
 			credentials = readCredentials(propertiesFile.getProperty("users"));
-			selenium = new DefaultSelenium(dataserver, port, driver, url);
+			selenium = new DefaultSelenium(dataserver, port, browser, url);
 			
 		} catch (final IOException e) {
 			System.out.println("couldnt find the config file");
@@ -77,17 +81,27 @@ public class Base {
 		return credentials;
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Before
 	public void setUp() throws Exception{
 		this.seleniumServer = new SeleniumServer();
-		this.seleniumServer.start();
-		selenium.start();
-		selenium.open(url);
+		service = new ChromeDriverService.Builder()
+        .usingChromeDriverExecutable(new File("/Users/ltesti/Projects/NextThoughtWebApp/src/test/python/legacy/drivers/chromedriver"))
+        .usingAnyFreePort()
+        .build();
+		service.start();
+		driver = new ChromeDriver(service);
+		driver.get("http://localhost:8081/NextThoughtWebApp/");
+		Thread.sleep(3000);
+//		this.seleniumServer.start();
+//		driver.;
+//		selenium.open(url);
 	}
 	
 	@After
 	public void tearDown() throws Exception{
-		selenium.stop();
+//		selenium.stop();
+		driver.close();
 		this.seleniumServer.stop();
 	}
 	
