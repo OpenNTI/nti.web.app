@@ -37,6 +37,14 @@ public class Navigation extends Login {
 		return this.xpathAttributeAndTextBuilder("span", "class", "label", "Fractions");
 	}
 	
+	public String getChallengeProblemXpath(){
+		return this.xpathAttributeBuilder("div", "class", "challenge-problems");
+	}
+	
+	public String getWhatIsAFractionXpath(){
+		return this.xpathAttributeAndTextBuilder("span", "class", "label", "What is a Fraction?");
+	}
+	
 	public void openLevel(String xpath) {
 		this.waitForElement(xpath, timeout);
 		selenium.mouseOver(xpath);
@@ -66,7 +74,17 @@ public class Navigation extends Login {
 	
 	public void openSection(){
 		this.openLevelClick(this.getSectionXpath());
-		this.waitForElement(this.getFractionIndexPageXpath(), timeout);
+		this.waitForLoading(timeout);
+	}
+	
+	public void clickArrowBackButton(){
+		selenium.click(this.xpathAttributeBuilder("button", "id", "button-1032-btnEl"));
+		this.waitForLoading(timeout);
+	}
+	
+	public void clickArrowForwardButton(){
+		selenium.click(this.xpathAttributeBuilder("button", "id", "button-1033-btnEl"));
+		this.waitForLoading(timeout);
 	}
 	
 	public void navigateTo(final String book,final String chapter, final String section) {

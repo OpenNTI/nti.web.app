@@ -4,9 +4,10 @@ import com.nti.selenium.Base;
 
 public class Login extends Base{
 	
-	public void wait_(final int secs) {
+	public void wait_(final double secs) {
 		try {
-			Thread.sleep(secs);
+			Double dsec = new Double(secs*1000);
+			Thread.sleep(dsec.intValue());
 		} catch (final InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -18,9 +19,9 @@ public class Login extends Base{
 		while(selenium.isElementPresent("xpath=//title[@id='loading']") && timer <= timeout)
 		{
 			timer++;
-			this.wait_(1000);
+			this.wait_(1);
 		}
-		this.wait_(1000);
+		this.wait_(1);
 		return timer < timeout;
 	}
 	
@@ -29,9 +30,9 @@ public class Login extends Base{
 		while((!selenium.isElementPresent(xpath)) && timer < timeout)
 		{
 			timer++;
-			this.wait_(1000);
+			this.wait_(1);
 		}
-		this.wait_(1000);
+		this.wait_(1);
 		return timer <= timeout;
 	}
 	
@@ -61,7 +62,7 @@ public class Login extends Base{
 		this.waitForElement(logoutButtonXpath, timeout);
 		selenium.click(logoutButtonXpath);
 		this.waitForLoading(timeout);
-		wait_(1000);
+		wait_(1);
 	}
 
 	public void login(final String username, final String password) {

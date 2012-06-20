@@ -38,4 +38,19 @@ public class TestNavigation extends Navigation {
 		assertTrue(selenium.isElementPresent(this.getFractionIndexPageXpath()));
 	}
 	
+	@Test
+	public void testBackArrow(){
+		this.navigateTo("Prealgebra", "Fractions", "Index");
+		this.clickArrowBackButton();
+		assertTrue(selenium.isElementPresent(this.getChallengeProblemXpath()));
+	}
+	
+	@Test
+	public void testForwardArrow(){
+		this.navigateTo("Prealgebra", "Fractions", "Index");
+		this.clickArrowForwardButton();
+		this.wait_(3);
+		assertTrue(selenium.isElementPresent(this.getWhatIsAFractionXpath()));
+	}
+	
 }

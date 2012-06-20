@@ -77,24 +77,14 @@ public class Base {
 		credentials = new Credentials[users.length];
 		for(int i = 0; i < users.length; i++)
 		{
-			// TODO: set password correctly
 			credentials[i] = new Credentials(users[i], users[i]);
 		}
 		return credentials;
 	}
 	
-//	@SuppressWarnings("deprecation")
 	@Before
 	public void setUp() throws Exception{
 		this.seleniumServer = new SeleniumServer();
-//		System.out.println(System.getProperty("user.dir"));
-//		service = new ChromeDriverService.Builder()
-//        .usingChromeDriverExecutable(new File("/Users/ltesti/Projects/NextThoughtWebApp/src/test/python/legacy/drivers/chromedriver"))
-//        .usingAnyFreePort()
-//        .build();
-//		service.start();
-//		driver = new ChromeDriver(service);
-//		driver.get("http://localhost:8081/NextThoughtWebApp/");
 		Thread.sleep(3000);
 		this.seleniumServer.start();
 		selenium.start();
@@ -103,8 +93,7 @@ public class Base {
 	
 	@After
 	public void tearDown() throws Exception{
-//		selenium.stop();
-//		driver.close();
+		selenium.stop();
 		this.seleniumServer.stop();
 	}
 	
