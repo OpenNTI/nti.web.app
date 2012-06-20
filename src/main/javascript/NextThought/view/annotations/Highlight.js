@@ -5,7 +5,8 @@ Ext.define('NextThought.view.annotations.Highlight', {
 		'NextThought.cache.IdCache',
 		'NextThought.util.Color',
 		'NextThought.util.Rects',
-		'Ext.util.TextMetrics'
+		'Ext.util.TextMetrics',
+		'NextThought.model.Redaction'
 	],
 
 
@@ -145,18 +146,23 @@ Ext.define('NextThought.view.annotations.Highlight', {
 
 				if (r.phantom) {
 					items.push({
-							text : 'Redact Highlight',
-							handler: function(){
-								me.record.set('style', 'redaction');
-								me.savePhantom(function(){
-									var r = Ext.clone(me.record);
+						text : 'Redact Highlight',
+						handler: function(){
+							var redaction = NextThought.model.Redaction.createFromHighlight(r);
+							redaction.save({
+								scope: me,
+								failure:function(){
+									console.error('Failed to save redaction',redaction);
 									me.cleanup();
-									me.ownerCmp.fireEvent('redact', r);
-								});
-							}
-						});
+								},
+								success:function(){
+									me.cleanup();
+									me.ownerCmp.fireEvent('redact', redaction);
+								}
+							});
+						}
+					});
 				}
-
 			}
 		}
 

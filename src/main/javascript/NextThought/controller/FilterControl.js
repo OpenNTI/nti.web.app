@@ -98,6 +98,7 @@ Ext.define('NextThought.controller.FilterControl', {
 		models.addFilter(new Filter('$className',Filter.OPERATION_INCLUDE, 'NextThought.model.Change'));
 		models.addFilter(new Filter('$className',Filter.OPERATION_INCLUDE, 'NextThought.model.Hit'));
 		models.addFilter(new Filter('$className',Filter.OPERATION_INCLUDE, 'String'));
+		models.addFilter(new Filter('$className',Filter.OPERATION_INCLUDE, 'NextThought.model.Redaction'));
 
 		FilterManager.setFilter(id,group);
 		delete this.beginChanges[id];

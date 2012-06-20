@@ -7,8 +7,6 @@ Ext.define('NextThought.view.annotations.RedactionHighlight', {
 
 
 	constructor: function(selection, record, component){
-		this.validateRecord(record);
-
 		var me = this,
 			expImg;
 
@@ -78,15 +76,7 @@ Ext.define('NextThought.view.annotations.RedactionHighlight', {
 	},
 
 
-	validateRecord: function(r) {
-		if (r && r.get && r.get('style') !== 'redaction') {
-			Ext.raise('RedactionHighlight cannot be created with a Highlight record that is not of style redaction');
-		}
-	},
-
-
 	attachRecord: function(record){
-		this.validateRecord(record);
 		var me = this,
 			i = record.getId(),
 			id = IdCache.getComponentId(i, null, me.prefix);
@@ -181,6 +171,7 @@ Ext.define('NextThought.view.annotations.RedactionHighlight', {
 		}, this);
 		this.img.setAttribute('src', this.expandedSrc);
 		this.redactionsShown = true;
+		this.ownerCmp.doComponentLayout();
 	},
 
 
@@ -191,6 +182,7 @@ Ext.define('NextThought.view.annotations.RedactionHighlight', {
 		}, this);
 		this.img.setAttribute('src', this.collapsedSrc);
 		this.redactionsShown = false;
+		this.ownerCmp.doComponentLayout();
 	},
 
 

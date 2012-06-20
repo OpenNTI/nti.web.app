@@ -33,6 +33,7 @@ Ext.define('NextThought.mixins.Annotations', {
 		me.addEvents('share-with','create-note');
 		me.widgetBuilder = {
 			'Highlight': me.createHighlightWidget,
+			'Redaction': me.createRedactionWidget,
 			'Note': me.createNoteWidget,
 			'TranscriptSummary': me.createTranscriptSummaryWidget,
 			'QuizResult': me.createQuizResultWidget
@@ -204,6 +205,25 @@ Ext.define('NextThought.mixins.Annotations', {
 		return w;
 	},
 
+	createRedactionWidget: function(record, r){
+		var range = r || AnnotationUtils.buildRangeFromRecord(record, this.getDocumentElement()),
+			oid = record.getId(),
+			style = record.get('style'),
+			w;
+
+		if (!range) {
+			Ext.Error.raise('could not create range');
+		}
+
+		if (this.annotationExists(record)) {
+			this.annotations[record.getId()].getRecord().fireEvent('updated',record);
+			return null;
+		}
+
+		w = Ext.create( 'widget.redaction-highlight-annotation', range, record, this);
+		return w;
+	},
+
 
 	createNoteWidget: function(record){
 		try{
@@ -260,7 +280,7 @@ Ext.define('NextThought.mixins.Annotations', {
 
 
 	onRedactionCreated: function(record){
-		this.createHighlightWidget(record);
+		this.createRedactionWidget(record);
 		this.fireEvent('resize');
 	},
 
@@ -370,8 +390,7 @@ Ext.define('NextThought.mixins.Annotations', {
 			this.buildAnnotationTree(bins.QuizResult, tree);
 
 			this.prunePlaceholders(tree);
-
-			items = Ext.Object.getValues(tree).concat(bins.Highlight||[]);
+			items = Ext.Object.getValues(tree).concat(bins.Highlight||[]).concat(bins.Redaction||[]);
 			
 			contributors = this.buildAnnotations(items);
 		}
