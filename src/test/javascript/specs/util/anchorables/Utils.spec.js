@@ -256,9 +256,9 @@ describe("Anchor Utils", function() {
 		});
 
 		it ('Several Layers Deep With Siblings', function(){
-			var n5 = document.createTextNode('More Text');
+			var n5 = document.createTextNode('More Text'),
 				n4 = document.createTextNode('Text Node'),
-				n4a = document.createElement('p');
+				n4a = document.createElement('p'),
 				n3 = document.createElement('p'),
 				n3a = document.createElement('span'),
 				n2 = document.createElement('span'),
@@ -975,5 +975,47 @@ describe("Anchor Utils", function() {
 			expect(result.getAncestor().getElementId()).toEqual(p2.getAttribute('Id'));
 			expect(result.getContexts().length).toBeGreaterThan(0);
 		});
+	});
+
+	it('Ancestor Spanning Identical Text Node Bug', function(){
+		var root = document.createElement('div'), //this should be the ancestor
+			p1 = document.createElement('p'),
+			t1 = document.createTextNode('This is some text.'), //same as t2
+			p2 = document.createElement('p'),
+			t2 = document.createTextNode('This is some text.'),
+			range, desc, recreatedRange;
+
+		//set up ids and heirarchy
+		root.setAttribute('Id', 'a123242354543523');
+		p1.appendChild(t1);
+		p2.appendChild(t2);
+		root.appendChild(p1);
+		root.appendChild(p2);
+		testBody.appendChild(root);
+
+		//create a range now starting at the first char of t1 and the last of t2
+		range = document.createRange();
+		range.setStart(t1, 0);
+		range.setEnd(t2, t2.length);
+
+		//double check that my range has different nodes and is set up correctly
+		expect(range.startContainer).toBe(t1);
+		expect(range.endContainer).toBe(t2);
+		expect(t1).not.toBe(t2);
+		expect(range.startContainer).not.toBe(range.endContainer);
+		expect(range.toString()).toEqual(t1.textContent+t2.textContent);
+
+		//now turn that into a description, and check a few assumptions
+		desc = Anchors.createRangeDescriptionFromRange(range);
+		expect(desc).toBeTruthy();
+		expect(desc.getAncestor()).toBeTruthy();
+		expect(desc.getAncestor().getElementId()).toEqual(root.getAttribute('Id'));
+
+		//now round trip back to a range, verify that it is the same range as before
+		recreatedRange = Anchors.toDomRange(desc, document);
+		expect(recreatedRange).toBeTruthy();
+		expect(recreatedRange.startContainer).toBe(range.startContainer);
+		expect(recreatedRange.endContainer).toBe(range.endContainer);
+		expect(recreatedRange.commonAncestorContainer).toBe(range.commonAncestorContainer);
 	});
 });
