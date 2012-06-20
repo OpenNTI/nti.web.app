@@ -310,6 +310,7 @@ Ext.define('NextThought.view.annotations.RedactionHighlight', {
 	{
 		var highlightSpan = this.doc.createElement("span");
 		highlightSpan.setAttribute('style', 'display:none;');
+		highlightSpan.setAttribute('data-non-anchorable', 'true');
 		//highlightSpan.setAttribute("class", highlightClassesForHighlight(highlight).join(" "));
 		//highlight.appendCreatedNode(highlightSpan);
 		range.surroundContents(highlightSpan);

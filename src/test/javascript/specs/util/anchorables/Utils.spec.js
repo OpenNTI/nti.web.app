@@ -11,6 +11,38 @@ describe("Anchor Utils", function() {
 		document.body.removeChild(testBody);
 	});
 
+	describe('createRangeDescriptionFromRange Tests', function(){
+		it('Create Description with non-anchorable', function(){
+			var div = document.createElement('div'),
+				span = document.createElement('span'),
+				p = document.createElement('p'),
+				t1 = document.createTextNode('text node 1'),
+				span2 = document.createElement('span'),
+				p2 = document.createElement('p'),
+				t2 = document.createTextNode('text node 2'),
+				a = document.createElement('div'),
+				range, result;
+
+			p2.appendChild(t2);
+			span2.appendChild(p2);
+			p.appendChild(t1);
+			span.appendChild(p);
+			span.appendChild(span2);
+			span.appendChild(a);
+			span.setAttribute('Id', '12312312');
+			span.setAttribute('data-non-anchorable', 'true');
+			div.setAttribute('Id', 'ThisIdIsTheBest');
+			div.appendChild(span);
+			testBody.appendChild(div);
+			range = document.createRange();
+			range.setStartBefore(p);
+			range.setEndAfter(a);
+
+			result = Anchors.createRangeDescriptionFromRange(range);
+			expect(result.getAncestor().getElementId()).toEqual(div.getAttribute('Id'));
+		});
+	});
+
 	describe("isNodeAnchorable Tests", function(){
 		it('Null Node', function(){
 			expect(Anchors.isNodeAnchorable(null)).toBeFalsy();
@@ -41,6 +73,13 @@ describe("Anchor Utils", function() {
 			var node = document.createElement('span');
 			node.setAttribute('id', 'a1234567');
 			expect(Anchors.isNodeAnchorable(node)).toBeTruthy();
+		});
+
+		it('Node with Id and data-non-anchorable Attribute', function(){
+			var node = document.createElement('span');
+			node.setAttribute('id', 'a1234567');
+			node.setAttribute('data-non-anchorable', 'true');
+			expect(Anchors.isNodeAnchorable(node)).toBeFalsy();
 		});
 	});
 

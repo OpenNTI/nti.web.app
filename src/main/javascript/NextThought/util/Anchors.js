@@ -615,10 +615,13 @@ Ext.define('NextThought.util.Anchors', {
 		if (!node) {return false;}
 
 		//distill the possible ids into an id var for easier reference later
-		var id = node.id || node.getAttribute ? node.getAttribute('id') : null;
+		var id = node.id || node.getAttribute ? node.getAttribute('id') : null,
+			nonAnchorable = node.getAttribute ? node.getAttribute('data-non-anchorable'): false;
+
+		if (nonAnchorable) {return false;}
 
 		//Most common is text
-		if( node.nodeType === Node.TEXT_NODE ){
+		if( Ext.isTextNode(node)){
 			//We don't want to try to anchor to empty text nodes
 			if( node.nodeValue.trim().length < 1 ){
 				return false;
