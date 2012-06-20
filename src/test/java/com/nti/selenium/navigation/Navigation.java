@@ -26,16 +26,22 @@ public class Navigation extends Login {
 	}
 	
 	public String getChapterXpath(){
-		return this.xpathAttributeAndTextBuilder("tr", "class", "x-grid-row", chapter);
+		return this.xpathTextBuilder("div", chapter);
 	}
 	
 	public String getSectionXpath(){
-		return this.xpathAttributeAndTextBuilder("tr", "class", "x-grid-tree-node-leaf", section);
+		return this.xpathTextBuilder("img", section);
+	}
+	
+	public String getFractionIndexPageXpath(){
+		return this.xpathAttributeAndTextBuilder("span", "class", "label", "Fractions");
 	}
 	
 	public void openLevel(String xpath) {
 		this.waitForElement(xpath, timeout);
-		selenium.click(xpath);
+		selenium.mouseOver(xpath);
+		selenium.mouseDown(xpath);
+		selenium.mouseUp(xpath);
 	}
 	
 	public void openLibrary() {
@@ -49,11 +55,14 @@ public class Navigation extends Login {
 	}
 	
 	public void openChapter(){
-		
+		this.openLevel(this.getChapterXpath());
+		this.openLevel(this.getChapterXpath());
+		this.waitForElement(this.getSectionXpath(), timeout);
 	}
 	
 	public void openSection(){
-		
+		this.openLevel(this.getSectionXpath());
+		this.waitForElement(this.getFractionIndexPageXpath(), timeout);
 	}
 	
 	public void navigateTo(final String book,final String chapter, final String section) {

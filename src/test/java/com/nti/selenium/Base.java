@@ -39,6 +39,7 @@ public class Base {
 	protected static final Properties propertiesFile = new Properties();
 	protected static WebDriver driver;
 	private static ChromeDriverService service;
+	private static String chromeDriver;
 	
 	protected String xpathBuilder = null;
 	protected SeleniumServer seleniumServer = null;
@@ -51,12 +52,13 @@ public class Base {
 			final File mp = new File(main.getPath());
 			final String webAppPath = mp.getParent() + "/";
 			final String localPath = "config/main.properties";
+			chromeDriver = webAppPath;
 			
 			propertiesFile.load(new FileInputStream(webAppPath + localPath));
 			url = propertiesFile.getProperty("url");
 			sectionName = propertiesFile.getProperty("sectionName");
 			bookName = propertiesFile.getProperty("bookName");
-			browser = propertiesFile.getProperty("driver");
+			browser = propertiesFile.getProperty("browser");
 			books = propertiesFile.getProperty("books");
 			chapterName = propertiesFile.getProperty("chapterName");
 			dataserver = propertiesFile.getProperty("dataserver");
@@ -81,27 +83,28 @@ public class Base {
 		return credentials;
 	}
 	
-	@SuppressWarnings("deprecation")
+//	@SuppressWarnings("deprecation")
 	@Before
 	public void setUp() throws Exception{
 		this.seleniumServer = new SeleniumServer();
-		service = new ChromeDriverService.Builder()
-        .usingChromeDriverExecutable(new File("/Users/ltesti/Projects/NextThoughtWebApp/src/test/python/legacy/drivers/chromedriver"))
-        .usingAnyFreePort()
-        .build();
-		service.start();
-		driver = new ChromeDriver(service);
-		driver.get("http://localhost:8081/NextThoughtWebApp/");
+//		System.out.println(System.getProperty("user.dir"));
+//		service = new ChromeDriverService.Builder()
+//        .usingChromeDriverExecutable(new File("/Users/ltesti/Projects/NextThoughtWebApp/src/test/python/legacy/drivers/chromedriver"))
+//        .usingAnyFreePort()
+//        .build();
+//		service.start();
+//		driver = new ChromeDriver(service);
+//		driver.get("http://localhost:8081/NextThoughtWebApp/");
 		Thread.sleep(3000);
-//		this.seleniumServer.start();
-//		driver.;
-//		selenium.open(url);
+		this.seleniumServer.start();
+		selenium.start();
+		selenium.open(url);
 	}
 	
 	@After
 	public void tearDown() throws Exception{
 //		selenium.stop();
-		driver.close();
+//		driver.close();
 		this.seleniumServer.stop();
 	}
 	

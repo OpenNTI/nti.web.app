@@ -1,7 +1,5 @@
 package com.nti.selenium.login;
 
-import org.openqa.selenium.By;
-
 import com.nti.selenium.Base;
 
 public class Login extends Base{
@@ -28,7 +26,7 @@ public class Login extends Base{
 	
 	public boolean waitForElement(final String xpath, final int timeout){
 		int timer = 0;
-		while((driver.findElement(By.xpath(xpath)) == null) && timer < timeout)
+		while((!selenium.isElementPresent(xpath)) && timer < timeout)
 		{
 			timer++;
 			this.wait_(1000);
@@ -43,16 +41,13 @@ public class Login extends Base{
 		final String passwordXpath = "xpath=//input[@name='password']";
 		final String buttonXpath = "xpath=//button[@id='submit']";
 		
-		By x = By.xpath(usernameXpath);
-		driver.findElement(x);
-		
-//		selenium.waitForPageToLoad("10000");
+		selenium.waitForPageToLoad("10000");
 		this.waitForElement(usernameXpath, timeout);
-		driver.findElement(By.xpath(usernameXpath)).sendKeys(username);
+		selenium.type(usernameXpath, username);
 		this.waitForElement(passwordXpath, timeout);
-		driver.findElement(By.xpath(passwordXpath)).sendKeys(password);
+		selenium.type(passwordXpath, password);
 		this.waitForElement(buttonXpath, timeout);
-		driver.findElement(By.xpath(buttonXpath)).click();
+		selenium.click(buttonXpath);
 		this.waitForLoading(timeout);
 	}
 	
