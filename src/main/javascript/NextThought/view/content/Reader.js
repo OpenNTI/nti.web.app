@@ -345,7 +345,7 @@ Ext.define('NextThought.view.content.Reader', {
 		var i = this.getIframe(),
 			h = body.getHeight()+100;
 
-		if(h === this.lastHeight){
+		if(h === this.lastHeight && i.getHeight() !== 0 ){
 			return;
 		}
 
