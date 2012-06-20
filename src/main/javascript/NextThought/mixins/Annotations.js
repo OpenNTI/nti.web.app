@@ -177,14 +177,7 @@ Ext.define('NextThought.mixins.Annotations', {
 			return null;
 		}
 
-		//special case, if it's a redaction, we must create a different annotation...
-		if (style === 'redaction'){
-			w = Ext.create( 'widget.redaction-highlight-annotation', range, record, this);
-		}
-		else {
-			w = Ext.create( 'widget.highlight-annotation', range, record, this);
-		}
-
+		w = Ext.create( 'widget.highlight-annotation', range, record, this);
 
 		if (!oid) {
 			oid = 'Highlight-TEMP-OID';
@@ -221,6 +214,24 @@ Ext.define('NextThought.mixins.Annotations', {
 		}
 
 		w = Ext.create( 'widget.redaction-highlight-annotation', range, record, this);
+
+		if (!oid) {
+			oid = 'Redaction-TEMP-OID';
+			if (this.annotations[oid]){
+				this.annotations[oid].cleanup();
+				delete this.annotations[oid];
+			}
+			w.tempID = oid;
+			record.on('updated',function(r){
+				this.annotations[r.get('NTIID')] = this.annotations[oid];
+				this.annotations[oid] = undefined;
+				delete this.annotations[oid];
+				delete w.tempID;
+			}, this);
+		}
+
+		this.annotations[oid] = w;
+
 		return w;
 	},
 
