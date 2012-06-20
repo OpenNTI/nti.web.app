@@ -13,7 +13,7 @@ Ext.define('NextThought.util.Anchors', {
 	},
 
 
-	//TODO - testing
+	/* tested */
 	createRangeDescriptionFromRange: function(range) {
 		if(!range || range.collapsed){
 			Ext.Error.raise('Cannot create anchorable, range missing or collapsed');
