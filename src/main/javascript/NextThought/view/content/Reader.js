@@ -333,7 +333,7 @@ Ext.define('NextThought.view.content.Reader', {
 			body = Ext.get(doc.getElementById('NTIContent')),
 			h;
 		if (body) {
-			h = body.getHeight();
+			h = Math.max(body.getHeight(), this.getEl().getHeight());
 			if(h !== this.lastHeight){
 				this.lastHeight = h;
 				this.syncFrame();
