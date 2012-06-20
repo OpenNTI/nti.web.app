@@ -12,6 +12,7 @@ Ext.define('NextThought.view.Window',{
 	plain: true,
 	shadow: false,
 
+	autoShow: false,
 	border: true,
 	frame: false,
 	header: false,

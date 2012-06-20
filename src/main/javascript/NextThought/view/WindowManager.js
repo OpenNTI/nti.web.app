@@ -146,7 +146,9 @@ Ext.define('NextThought.view.WindowManager',{
 		win.minimizedButton.hide();
 		this.resetNotifications(win);
 		this.organizeSnappedWindows();
-		win.show();
+		if(win.rendered){
+			win.show();
+		}
 	},
 
 
