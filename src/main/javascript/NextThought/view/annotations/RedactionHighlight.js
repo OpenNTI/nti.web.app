@@ -91,7 +91,6 @@ Ext.define('NextThought.view.annotations.RedactionHighlight', {
 
 
 	buildMenu: function(){
-		console.log('building menu...');
 		var me = this,
 			items = [],
 			r = me.record,
@@ -108,7 +107,6 @@ Ext.define('NextThought.view.annotations.RedactionHighlight', {
 			items.push({
 				text : 'Show Redaction',
 				handler: function(){
-					console.log('user wants to show redaction!  Whoop!');
 					me.unRedact();
 				}
 			});
@@ -117,7 +115,6 @@ Ext.define('NextThought.view.annotations.RedactionHighlight', {
 			items.push({
 				text : 'Hide Redaction',
 				handler: function(){
-					console.log('user wants to hide redaction!  Whoop!');
 					me.reRedact();
 				}
 			});
