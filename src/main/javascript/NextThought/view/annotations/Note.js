@@ -17,13 +17,12 @@ Ext.define( 'NextThought.view.annotations.Note', {
 
 		//get the range this note is associated with:
 		var me = this,
-			id = record.get('applicableRange').ancestor.getElementId(),
-			block = this.doc.getElementById(id),
-			anchor = this.findOrCreateAnchorForParent(block),
+			range = Anchors.toDomRange(record.get('applicableRange'), this.doc),
+			anchor = this.findOrCreateAnchorForParent(range.commonAncestorContainer),
 			c = me.createNoteContainer(record.get('applicableRange').ancestor.getElementId()),
 			a;
 
-		block.appendChild(anchor);
+		range.commonAncestorContainer.appendChild(anchor);
 		a = Ext.get(anchor);
 		c.nib.add(me.img);
 
