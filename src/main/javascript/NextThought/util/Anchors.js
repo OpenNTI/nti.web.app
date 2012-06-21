@@ -500,9 +500,7 @@ Ext.define('NextThought.util.Anchors', {
 		var possibleNodes = [];
 
 		while( textNode ) {
-			console.log(textNode);
 			confidence = Anchors.confidenceOfCurrentNode(pointer, treeWalker, startResult);
-			console.log('Confidence was '+confidence);
 
 			if(confidence > 0){
 				possibleNodes.push({node: treeWalker.currentNode, confidence: confidence});
@@ -520,7 +518,6 @@ Ext.define('NextThought.util.Anchors', {
 		//If we made it through the tree without finding
 		//a node we failed
 		if(possibleNodes.length == 0){
-			console.log('Found no possible nodes');
 			return {confidence: 0};
 		}
 
@@ -529,15 +526,12 @@ Ext.define('NextThought.util.Anchors', {
 		if(possibleNodes[possibleNodes.length - 1].confidence == 1){
 			container = possibleNodes[possibleNodes.length - 1].node;
 			confidence = 1;
-			console.log('Found a perfect match for ');
-			console.log(container);
 		}
 		else{
 			//Not a perfect match, if we are in a properly
 			//resolved reference node we want the thing that
 			//makes us the largest range.  If not we fail to resolve
 			if(!foundReferenceNode){
-				console.log('Not a perfect match and we couldn\'t resolve the reference node.  Orphaned')
 				return {confidence: 0};
 			}
 			else{
@@ -547,10 +541,7 @@ Ext.define('NextThought.util.Anchors', {
 				var isStart = pointer.getRole() === 'start';
 
 				container = isStart ? possibleNodes[0].node : possibleNodes[possibleNodes.length - 1].node;
-				console.log('Container is ');
-				console.log(container);
 				confidence = 1.0/possibleNodes.length;
-				console.log('Confidence is '+confidence);
 			}
 		}
 
@@ -573,7 +564,6 @@ Ext.define('NextThought.util.Anchors', {
 		{
 			var adjustedOffset = context.contextOffset;
 			if(isStart){
-				console.log(isStart);
 				adjustedOffset = node.textContent.length - adjustedOffset;
 			}
 
