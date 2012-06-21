@@ -18,11 +18,12 @@ Ext.define( 'NextThought.view.annotations.Note', {
 		//get the range this note is associated with:
 		var me = this,
 			range = Anchors.toDomRange(record.get('applicableRange'), this.doc),
-			anchor = this.findOrCreateAnchorForParent(range.commonAncestorContainer),
+			block = Ext.isTextNode(range.endContainer) ? range.endContainer.parentNode : range.endContainer,
+			anchor = this.findOrCreateAnchorForParent(block),
 			c = me.createNoteContainer(record.get('applicableRange').ancestor.getElementId()),
 			a;
 
-		range.commonAncestorContainer.appendChild(anchor);
+		block.appendChild(anchor);
 		a = Ext.get(anchor);
 		c.nib.add(me.img);
 
@@ -57,6 +58,10 @@ Ext.define( 'NextThought.view.annotations.Note', {
 		if (!parent){
 			Ext.Error.raise('Requires a parent');
 		}
+		else if (Ext.isTextNode(parent)) {
+			Ext.Error.raise('Cannot anchor things to text node');
+		}
+
 		var attr = 'data-artificial',
 			p = Ext.get(parent),
 			existingAnchors = p.query('['+attr+']'),
