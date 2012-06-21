@@ -116,7 +116,7 @@ Ext.define('NextThought.util.Annotations',{
 				cb.getResult.call(cb.scope,text.join(me.SEPERATOR).replace(me.DIVIDER_REGEX, "$2"));
 			}
 			else if(typeof(o) === 'string'){
-				text.push(Ext.String.htmlEncode(o));
+				text.push(o);
 				render(i-1);
 			}
 			else {
