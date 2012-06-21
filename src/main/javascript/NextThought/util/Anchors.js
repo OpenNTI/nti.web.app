@@ -14,12 +14,12 @@ Ext.define('NextThought.util.Anchors', {
 
 
 	/* tested */
-	createRangeDescriptionFromRange: function(range) {
+	createRangeDescriptionFromRange: function(range, docElement) {
 		if(!range || range.collapsed){
 			Ext.Error.raise('Cannot create anchorable, range missing or collapsed');
 		}
 
-		range = Anchors.makeRangeAnchorable(range);
+		range = Anchors.makeRangeAnchorable(range, docElement);
 		var ancestorNode = range.commonAncestorContainer;
 
 		//If the ancestorcontainer is a text node, we want a containing element as per the docs
@@ -330,7 +330,8 @@ Ext.define('NextThought.util.Anchors', {
 
 
 	/* tested */
-	locateRangeEdgeForAnchor: function(pointer, referenceNode, startResult){
+	/*
+	locateRangeEdgeForAnchor2: function(pointer, referenceNode, startResult){
 		if (!pointer) {
 			Ext.Error.raise('Must supply a Pointer');
 		}
@@ -426,6 +427,246 @@ Ext.define('NextThought.util.Anchors', {
 		indexOfContext += pointer.getEdgeOffset();
 		return {node: textNode, offset: indexOfContext, confidence: 1};
 	},
+	*/
+
+
+	//TODO - testing
+	isNodeChildOfAncestor: function(node, ancestor) {
+			while(node && node.parentNode){
+					if(node.parentNode === ancestor){
+							return true;
+					}
+					node = node.parentNode;
+			}
+			return false;
+	},
+
+
+	/* tested */
+	locateRangeEdgeForAnchor: function(pointer, ancestorNode, startResult ){
+		if (!pointer) {
+			Ext.Error.raise('Must supply a Pointer');
+		}
+		else if (!(pointer instanceof NextThought.model.anchorables.TextDomContentPointer)) {
+			Ext.Error.raise('ContentPointer must be a TextDomContentPointer');
+		}
+
+		//Resolution starts by locating the reference node
+		//for this text anchor.  If it can't be found ancestor is used
+
+		var root = ancestorNode;
+		if(root.parentNode){
+			root = root.parentNode;
+		}
+
+		var referenceNode = pointer.getAncestor().locateRangePointInAncestor(root).node;
+		var foundReferenceNode = true;
+		if(!referenceNode){
+			foundReferenceNode = false;
+			referenceNode = ancestorNode;
+		}
+
+		var isStart = pointer.getRole() === 'start';
+
+		//We use a tree walker to search beneath the reference node
+		//for textContent matching our contexts
+
+		var treeWalker = document.createTreeWalker( referenceNode, NodeFilter.SHOW_TEXT );
+
+		//If we are looking for the end node.  we want to start
+		//looking where the start node ended.  This is a shortcut
+		//in the event that the found start node is in our reference node
+		if( !isStart
+			&& startResult
+			&& startResult.node
+			&& Anchors.isNodeChildOfAncestor(startResult.node, referenceNode)){
+
+			treeWalker.currentNode = startResult.node;
+		}
+
+		var textNode;
+		//We may be in the same textNode as start
+		if(treeWalker.currentNode.nodeType == Node.TEXT_NODE){
+			textNode = treeWalker.currentNode;
+		}
+		else{
+			textNode = treeWalker.nextNode();
+		}
+
+
+		var confidence = 0;
+
+		//Array of objects that has a node and confidence
+		var possibleNodes = [];
+
+		while( textNode ) {
+			console.log(textNode);
+			confidence = Anchors.confidenceOfCurrentNode(pointer, treeWalker, startResult);
+			console.log('Confidence was '+confidence);
+
+			if(confidence > 0){
+				possibleNodes.push({node: treeWalker.currentNode, confidence: confidence});
+			}
+
+			//100% sure, that is the best we can do
+			if(confidence == 1){
+				break;
+			}
+
+			//Start the context search over in the next textnode
+			textNode = treeWalker.nextNode();
+		}
+
+		//If we made it through the tree without finding
+		//a node we failed
+		if(possibleNodes.length == 0){
+			console.log('Found no possible nodes');
+			return {confidence: 0};
+		}
+
+		var container = null;
+		//Did we stop because we found a perfect match?
+		if(possibleNodes[possibleNodes.length - 1].confidence == 1){
+			container = possibleNodes[possibleNodes.length - 1].node;
+			confidence = 1;
+			console.log('Found a perfect match for ');
+			console.log(container);
+		}
+		else{
+			//Not a perfect match, if we are in a properly
+			//resolved reference node we want the thing that
+			//makes us the largest range.  If not we fail to resolve
+			if(!foundReferenceNode){
+				console.log('Not a perfect match and we couldn\'t resolve the reference node.  Orphaned')
+				return {confidence: 0};
+			}
+			else{
+				//We want the largest range, that means
+				//if we are the start we iterate from the beginning
+				//if we are the end we iterate from the end
+				var isStart = pointer.getRole() === 'start';
+
+				container = isStart ? possibleNodes[0].node : possibleNodes[possibleNodes.length - 1].node;
+				console.log('Container is ');
+				console.log(container);
+				confidence = 1.0/possibleNodes.length;
+				console.log('Confidence is '+confidence);
+			}
+		}
+
+		//We found what we need.  Set the context
+		var primaryContext = pointer.primaryContext();
+
+		var indexOfContext = primaryContext.contextOffset;
+		if(isStart){
+			indexOfContext = container.textContent.length - indexOfContext;
+		}
+		indexOfContext += pointer.getEdgeOffset();
+
+		return {node: container, offset: indexOfContext, confidence: confidence};
+	},
+
+
+	//TODO - testing
+	confidenceOfCurrentNode: function(pointer, treeWalker, startResult ) {
+		function contextMatchNode(context, node, isStart)
+		{
+			var adjustedOffset = context.contextOffset;
+			if(isStart){
+				console.log(isStart);
+				adjustedOffset = node.textContent.length - adjustedOffset;
+			}
+
+			if( node.textContent.indexOf(context.contextText) == adjustedOffset){
+				return true;
+			}
+			return false;
+		}
+
+		var currentNode = treeWalker.currentNode;
+
+		var lookingAtNode = currentNode;
+
+		var isStart = pointer.getRole() === 'start';
+
+		//If we are working on the start anchor, when checking context
+		//we look back at previous nodes.  if we are looking at end we
+		//look forward to next nodes
+		var siblingFunction = isStart ? treeWalker.previousNode : treeWalker.nextNode;
+
+		var match = true;
+		var i;
+		for(i = 0; i < pointer.getContexts().length; i++ ){
+			var contextObj = pointer.getContexts()[i];
+
+			//Right now, if we don't have all the nodes we need to have
+			//for the contexts, we fail.  In the future this
+			//probably changes but that requires looking ahead to
+			//see if there is another node that makes us ambiguous
+			//if we don't apply all the context
+			if(!lookingAtNode){
+				match = false;
+				break;
+			}
+			//If we don't match this context with high enough confidence
+			//we fail
+			if( !contextMatchNode(contextObj, lookingAtNode, isStart) ){
+				match = false;
+				break;
+			}
+
+			//That context matched so we continue verifying.
+			lookingAtNode = siblingFunction.call(treeWalker);
+		}
+
+		var confidence = 0;
+		//If we don't have a full set of contexts.  lookingAtNode
+		//should be null here.  If it is, we are sure this is the match
+		if(match){
+			if(!Anchors.containsFullContext(pointer)){
+				if(!lookingAtNode){
+					confidence = 1;
+				}
+				else{
+					confidence = .5; //TODO this is an arbitrary value.  Can we give something better than "maybe"
+				}
+			}
+			else{
+				confidence = 1;
+			}
+		}
+		else{
+			//Hmm we expected this to be at the end of ancestor but
+			//its not.  Maybe something was added.
+			confidence = 0;
+		}
+
+		treeWalker.currentNode = currentNode;
+		return confidence;
+	},
+
+
+	//TODO - testing
+	containsFullContext: function(pointer){
+		//Do we have a primary + 5 additional?
+
+		if(!pointer.getContexts()){
+				return false;
+		}
+
+		if(pointer.getContexts().length >= 6){
+				return true;
+		}
+
+		//Maybe we have 5 characters of additional context
+		var i;
+		var chars = 0;
+		for(i = 1; i< pointer.getContexts().length; i++){
+				chars += pointer.getContexts()[i].contextText.length;
+		}
+
+		return chars >= 15;
+	},
 
 
 	/* tested */
@@ -443,7 +684,7 @@ Ext.define('NextThought.util.Anchors', {
 
 
 	/* tested */
-	makeRangeAnchorable: function(range) {
+	makeRangeAnchorable: function(range, docElement) {
 		if (!range){Ext.Error.raise('Range cannot be null');}
 
 		var startEdgeNode = Anchors.nodeThatIsEdgeOfRange(range, true);
@@ -454,7 +695,7 @@ Ext.define('NextThought.util.Anchors', {
 			return range;
 		}
 
-         var newRange = document.createRange();
+         var newRange = docElement.createRange();
 
          if( Anchors.isNodeAnchorable(startEdgeNode) ){
                  newRange.setStart(range.startContainer, range.startOffset);
@@ -516,18 +757,27 @@ Ext.define('NextThought.util.Anchors', {
 		if(!endNode){ return null; }
 		if( Anchors.isNodeAnchorable(endNode)){return endNode;}
 
-		var recurseOn = endNode;
-		while(!recurseOn.previousSibling && recurseOn.parentNode){
-			recurseOn = recurseOn.parentNode;
+		endNode = Anchors.walkDownToLastNode(endNode);
+
+		function recurse(n) {
+			if(!n){ return null; }
+			if( Anchors.isNodeAnchorable(n)){return n;}
+
+			var recurseOn = n;
+			while(!recurseOn.previousSibling && recurseOn.parentNode){
+				recurseOn = recurseOn.parentNode;
+			}
+
+			if(!recurseOn.previousSibling){
+				return null;
+			}
+			recurseOn = recurseOn.previousSibling;
+			recurseOn = Anchors.walkDownToLastNode(recurseOn);
+
+			return Anchors.searchFromRangeEndInwardForAnchorableNode(recurseOn);
 		}
 
-		if(!recurseOn.previousSibling){
-			return null;
-		}
-		recurseOn = recurseOn.previousSibling;
-
-		recurseOn = Anchors.walkDownToLastNode(recurseOn);
-		return Anchors.searchFromRangeEndInwardForAnchorableNode(recurseOn);
+		return recurse(endNode);
 	},
 
 

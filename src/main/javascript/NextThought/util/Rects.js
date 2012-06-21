@@ -64,6 +64,7 @@ Ext.define('NextThought.util.Rects',{
 
 		for(;i>=0;i--){
 			o = flip(rs,i);
+			if (o.height < lineHeight){o.height = lineHeight;} //round up to look nice
 			h = o.height;
 			w = o.width;
 			if( h > 0 && h < lh2 && w <= clientWidth && acceptableHeight(h)) {

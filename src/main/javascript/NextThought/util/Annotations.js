@@ -220,7 +220,7 @@ Ext.define('NextThought.util.Annotations',{
 		}
 
 		//generate the range description
-		var contentRangeDescription = Anchors.createRangeDescriptionFromRange(range);
+		var contentRangeDescription = Anchors.createRangeDescriptionFromRange(range, document);
 
 		return Ext.create('NextThought.model.Note', {
 			applicableRange: contentRangeDescription
@@ -228,13 +228,13 @@ Ext.define('NextThought.util.Annotations',{
 	},
 
 
-	selectionToHighlight: function(range, style) {
+	selectionToHighlight: function(range, style, root) {
 		if(range && range.collapsed){
 			Ext.Error.raise('Cannot create highlight from null or collapsed range');
 		}
 
 		//generate the range description
-		var contentRangeDescription = Anchors.createRangeDescriptionFromRange(range);
+		var contentRangeDescription = Anchors.createRangeDescriptionFromRange(range, root);
 
 		return Ext.create('NextThought.model.Highlight', {
 			style: style,

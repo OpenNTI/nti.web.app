@@ -38,7 +38,7 @@ describe("Anchor Utils", function() {
 			range.setStartBefore(p);
 			range.setEndAfter(a);
 
-			result = Anchors.createRangeDescriptionFromRange(range);
+			result = Anchors.createRangeDescriptionFromRange(range, document);
 			expect(result.getAncestor().getElementId()).toEqual(div.getAttribute('Id'));
 		});
 	});
@@ -318,8 +318,25 @@ describe("Anchor Utils", function() {
 			div.appendChild(span2);
 
 			expect(Anchors.searchFromRangeEndInwardForAnchorableNode(start)).toBe(t1);
-		})
+		});
 
+		it('Walks Down Into Current Node', function(){
+            var div = document.createElement('div'),
+				span1 = document.createElement('span'),
+				t1 = document.createTextNode('Foo'),
+				span2 = document.createElement('span'),
+				result;
+
+			div.setAttribute('Id', 'a1234');
+
+			span1.appendChild(t1);
+			div.appendChild(span1);
+			div.appendChild(span2);
+
+			testBody.appendChild(div);
+			result = Anchors.searchFromRangeEndInwardForAnchorableNode(span1);
+            expect(result).toBe(t1);
+        });
 	});
 
 	describe('makeRangeAnchorable Tests', function(){
@@ -341,7 +358,7 @@ describe("Anchor Utils", function() {
 			range.setStart(div, 0);
 			range.setEnd(t2, 2);
 
-			result = Anchors.makeRangeAnchorable(range);
+			result = Anchors.makeRangeAnchorable(range, document);
 			expect(result).toBe(range); //should not have changed
 		});
 
@@ -368,7 +385,7 @@ describe("Anchor Utils", function() {
 			range.setStartBefore(p);
 			range.setEndAfter(a);
 
-			result = Anchors.makeRangeAnchorable(range);
+			result = Anchors.makeRangeAnchorable(range, document);
 
 			expect(result.startContainer).toBe(t1);
 			expect(result.startOffset).toEqual(0);
@@ -378,7 +395,7 @@ describe("Anchor Utils", function() {
 
 		it ('Null Range', function(){
 			try {
-				Anchors.makeRangeAnchorable(null);
+				Anchors.makeRangeAnchorable(null, null);
 				expect(false).toBeTruthy();
 			}
 			catch (e) {
@@ -405,7 +422,7 @@ describe("Anchor Utils", function() {
 			range.setStartBefore(p);
 			range.setEndAfter(a);
 
-			result = Anchors.makeRangeAnchorable(range);
+			result = Anchors.makeRangeAnchorable(range, document);
 			expect(result).toBeNull();
 		});
 	});
@@ -738,38 +755,6 @@ describe("Anchor Utils", function() {
 			result = Anchors.locateRangeEdgeForAnchor(pointer, document.body);
 			expect(result.confidence).toEqual(0);
 		});
-
-		it('Something Findable With and Without Start Result', function(){
-			var txt = 'This is some horrible text which is nasty',
-				div = document.createElement('div'),
-				textNode1 = document.createTextNode(txt),
-				pointer = Ext.create('NextThought.model.anchorables.TextDomContentPointer', {
-					role: 'start',
-					edgeOffset: 1,
-					ancestor: Ext.create('NextThought.model.anchorables.ElementDomContentPointer', {
-						role: 'ancestor',
-						elementTagName: 'div',
-						elementId: 'zsdkljhadslkfjhadslkj'
-					}),
-					contexts: [
-						Ext.create('NextThought.model.anchorables.TextContext', {
-							contextText:'horrible text',
-							contextOffset:28
-						})
-					]
-				}),
-				result;
-
-			div.setAttribute('Id', 'ThisIsAnId902384');
-			testBody.appendChild(textNode1);
-			testBody.appendChild(div);
-
-			result = Anchors.locateRangeEdgeForAnchor(pointer, document.body);
-			expect(result.offset).toEqual(14);
-			expect(result.confidence).toEqual(1);
-			expect(result.node.nodeValue).toEqual(txt);
-
-		});
 	});
 
 	describe('firstWordFromString and lastWordFromString Tests', function(){
@@ -1009,7 +994,7 @@ describe("Anchor Utils", function() {
 			expect(range.toString()).toEqual(t1.textContent+t2.textContent);
 
 			//now turn that into a description, and check a few assumptions
-			desc = Anchors.createRangeDescriptionFromRange(range);
+			desc = Anchors.createRangeDescriptionFromRange(range, document);
 			expect(desc).toBeTruthy();
 			expect(desc.getAncestor()).toBeTruthy();
 			expect(desc.getAncestor().getElementId()).toEqual(root.getAttribute('Id'));
@@ -1023,75 +1008,75 @@ describe("Anchor Utils", function() {
 		});
 
 		it('Ambigious Model Causing Incorrect Highlight Bug', function(){
-		/*
-		From the documentation:, this does not highlight correctly
-		<p id="id">
-		        [|This is a sentence]
-		        <b class="bfseries"><em>WOW</em></b>
-		        [. Another sentence]<em>YIKES</em>[ and ]<em>foo</em>[. |]
-		</p>
-		*/
-		//declare our elements and nodes and stuff:
-		var p = document.createElement('p'),
-			t1 = document.createTextNode('This is a sentence'),
-			b = document.createElement('b'),
-			em1 = document.createElement('em'),
-			t2 = document.createTextNode('WOW'),
-			t3 = document.createTextNode('. Another sentence'),
-			em2 = document.createElement('em'),
-			t4 = document.createTextNode('YIKES'),
-			t5 = document.createTextNode(' and '),
-			em3 = document.createElement('em'),
-			t6 = document.createTextNode('foo'),
-			t7 = document.createTextNode('. '),
-			range, desc, recreatedRange,
-			expectedRangeToString = 'This is a sentenceWOW. Another sentenceYIKES and foo. ';
+			/*
+			From the documentation:, this does not highlight correctly
+			<p id="id">
+					[|This is a sentence]
+					<b class="bfseries"><em>WOW</em></b>
+					[. Another sentence]<em>YIKES</em>[ and ]<em>foo</em>[. |]
+			</p>
+			*/
+			//declare our elements and nodes and stuff:
+			var p = document.createElement('p'),
+				t1 = document.createTextNode('This is a sentence'),
+				b = document.createElement('b'),
+				em1 = document.createElement('em'),
+				t2 = document.createTextNode('WOW'),
+				t3 = document.createTextNode('. Another sentence'),
+				em2 = document.createElement('em'),
+				t4 = document.createTextNode('YIKES'),
+				t5 = document.createTextNode(' and '),
+				em3 = document.createElement('em'),
+				t6 = document.createTextNode('foo'),
+				t7 = document.createTextNode('. '),
+				range, desc, recreatedRange,
+				expectedRangeToString = 'This is a sentenceWOW. Another sentenceYIKES and foo. ';
 
-		//setup ids and heirarchies:
-		p.setAttribute('Id', 'id');
-		b.setAttribute('class', 'bfseries');
-		//fill up ems
-		em3.appendChild(t6);
-		em2.appendChild(t4);
-		em1.appendChild(t2);
-		//fill up bold tag
-		b.appendChild(em1);
-		//put the rest under the paragraph
-		p.appendChild(t1);
-		p.appendChild(b);
-		p.appendChild(t3);
-		p.appendChild(em2);
-		p.appendChild(t5);
-		p.appendChild(em3);
-		p.appendChild(t7);
-		//now put the paragraph in the body
-		testBody.appendChild(p);
+			//setup ids and heirarchies:
+			p.setAttribute('Id', 'id');
+			b.setAttribute('class', 'bfseries');
+			//fill up ems
+			em3.appendChild(t6);
+			em2.appendChild(t4);
+			em1.appendChild(t2);
+			//fill up bold tag
+			b.appendChild(em1);
+			//put the rest under the paragraph
+			p.appendChild(t1);
+			p.appendChild(b);
+			p.appendChild(t3);
+			p.appendChild(em2);
+			p.appendChild(t5);
+			p.appendChild(em3);
+			p.appendChild(t7);
+			//now put the paragraph in the body
+			testBody.appendChild(p);
 
-		//okay, whew, now create the range described in the docs
-		range = document.createRange();
-		range.setStart(t1, 0);
-		range.setEnd(t7, t7.length);
+			//okay, whew, now create the range described in the docs
+			range = document.createRange();
+			range.setStart(t1, 0);
+			range.setEnd(t7, t7.length);
 
-		//verify assumptions
-		expect(range).toBeTruthy();
-		expect(range.startContainer).toBe(t1);
-		expect(range.endContainer).toBe(t7);
-		expect(range.commonAncestorContainer).toBe(p);
-		expect(range.toString()).toEqual(expectedRangeToString);
+			//verify assumptions
+			expect(range).toBeTruthy();
+			expect(range.startContainer).toBe(t1);
+			expect(range.endContainer).toBe(t7);
+			expect(range.commonAncestorContainer).toBe(p);
+			expect(range.toString()).toEqual(expectedRangeToString);
 
-		//now turn that into a description, and check a few assumptions
-		desc = Anchors.createRangeDescriptionFromRange(range);
-		expect(desc).toBeTruthy();
-		expect(desc.getAncestor()).toBeTruthy();
-		expect(desc.getAncestor().getElementId()).toEqual(p.getAttribute('Id'));
+			//now turn that into a description, and check a few assumptions
+			desc = Anchors.createRangeDescriptionFromRange(range, document);
+			expect(desc).toBeTruthy();
+			expect(desc.getAncestor()).toBeTruthy();
+			expect(desc.getAncestor().getElementId()).toEqual(p.getAttribute('Id'));
 
-		//now round trip back to a range, verify that it is the same range as before
-		recreatedRange = Anchors.toDomRange(desc, document);
-		expect(recreatedRange).toBeTruthy();
-		expect(recreatedRange.startContainer).toBe(range.startContainer);
-		expect(recreatedRange.endContainer).toBe(range.endContainer);
-		expect(recreatedRange.commonAncestorContainer).toBe(range.commonAncestorContainer);
-		expect(recreatedRange.toString()).toEqual(expectedRangeToString);
-	});
+			//now round trip back to a range, verify that it is the same range as before
+			recreatedRange = Anchors.toDomRange(desc, document);
+			expect(recreatedRange).toBeTruthy();
+			expect(recreatedRange.startContainer).toBe(range.startContainer);
+			expect(recreatedRange.endContainer).toBe(range.endContainer);
+			expect(recreatedRange.commonAncestorContainer).toBe(range.commonAncestorContainer);
+			expect(recreatedRange.toString()).toEqual(expectedRangeToString);
+		});
 	});
 });
