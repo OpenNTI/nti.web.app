@@ -55,7 +55,7 @@ Ext.define( 'NextThought.view.annotations.Note', {
 	 */
 	findOrCreateAnchorForParent: function(parent) {
 		if (!parent){
-			Ext.Error.raise('Requires a parent or an id');
+			Ext.Error.raise('Requires a parent');
 		}
 		var attr = 'data-artificial',
 			p = Ext.get(parent),
