@@ -869,6 +869,11 @@ Ext.define('NextThought.util.Anchors', {
 			return false;
 		}
 
+		//no extjs ids allowd
+		else if (id && id.indexOf("ext-gen") !== -1) {
+			return false;
+		}
+
 		//If this node had an id and a tagName, then yay node!
 		else if (id && node.tagName){
 			return true;

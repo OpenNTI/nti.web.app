@@ -195,7 +195,6 @@ Ext.define('NextThought.view.annotations.RedactionHighlight', {
 		}
 
 		var rangeComparison = this.rangeCompareNode(range, node);
-		console.log('range compare ', rangeComparison);
 
 		//Easy case, the node is completely surronded by the highlight
 		//wrap the node in a highlight

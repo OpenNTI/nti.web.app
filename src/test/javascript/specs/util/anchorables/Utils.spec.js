@@ -71,14 +71,20 @@ describe("Anchor Utils", function() {
 
 		it('Node with Id', function(){
 			var node = document.createElement('span');
-			node.setAttribute('id', 'a1234567');
+			node.setAttribute('Id', 'a1234567');
 			expect(Anchors.isNodeAnchorable(node)).toBeTruthy();
 		});
 
 		it('Node with Id and data-non-anchorable Attribute', function(){
 			var node = document.createElement('span');
-			node.setAttribute('id', 'a1234567');
+			node.setAttribute('Id', 'a1234567');
 			node.setAttribute('data-non-anchorable', 'true');
+			expect(Anchors.isNodeAnchorable(node)).toBeFalsy();
+		});
+
+		it('Node with Auto-Generated ExtJS Id Attribute', function(){
+			var node = document.createElement('span');
+			node.setAttribute('Id', 'ext-gen1223423');
 			expect(Anchors.isNodeAnchorable(node)).toBeFalsy();
 		});
 	});
