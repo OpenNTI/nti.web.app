@@ -276,7 +276,7 @@ Ext.define('NextThought.util.Anchors', {
 		//Resolve the end anchor.
 		//see below for details no resolving various
 		//anchor types
-		var endResult = rangeDesc.getEnd().locateRangePointInAncestor(ancestor);
+		var endResult = rangeDesc.getEnd().locateRangePointInAncestor(ancestor, startResult);
 
 		if(    !endResult.node
 			|| !endResult.hasOwnProperty('confidence')
@@ -330,8 +330,7 @@ Ext.define('NextThought.util.Anchors', {
 
 
 	/* tested */
-	//TODO - refactor this, break it up
-	locateRangeEdgeForAnchor: function(pointer, referenceNode){
+	locateRangeEdgeForAnchor: function(pointer, referenceNode, startResult){
 		if (!pointer) {
 			Ext.Error.raise('Must supply a Pointer');
 		}
@@ -339,91 +338,86 @@ Ext.define('NextThought.util.Anchors', {
 			Ext.Error.raise('ContentPointer must be a TextDomContentPointer');
 		}
 
+		//internal function that returns true of the context is a match, false if not.
+		function contextMatchNode(context, node, isStart){
+			var adjustedOffset = context.getContextOffset(),
+				indexOf = node.textContent.indexOf(context.getContextText());
+			if(isStart){
+				adjustedOffset = node.textContent.length - adjustedOffset;
+			}
+			return ( indexOf !== -1 && indexOf === adjustedOffset);
+		}
+
 		//var declarations:
 		var isStart = pointer.role === 'start',
 			primaryContext = pointer.primaryContext(),
 			indexOfContext = primaryContext.getContextOffset(),
-			textNode, treeWalker;
+			textNode,
+			treeWalker = document.createTreeWalker(referenceNode, NodeFilter.SHOW_TEXT, null, null);
 
+		//If we are looking for the end node.  we want to start
+		//looking where the start node ended.  This is a shortcut
+		//in the event that the found start node is in our reference node
+		if( !isStart && startResult && startResult.node){
+			treeWalker.currentNode = startResult.node;
+			treeWalker.nextNode();
+		}
 
-		//We use a tree walker to search beneath the reference node
-		//for textContent matching our primary context with confidence
-		// >= requiredConfidence
-
-		treeWalker = document.createTreeWalker( referenceNode, NodeFilter.SHOW_TEXT, null, null);
-
-		if(treeWalker.currentNode.nodeType === Node.TEXT_NODE){
+		if(Ext.isTextNode(treeWalker.currentNode)){
 				textNode = treeWalker.currentNode;
 		}
 		else{
 				textNode = treeWalker.nextNode();
 		}
 
-		function contextMatchNode(context, node, isStart)
-		{
-
-				var adjustedOffset = context.getContextOffset(),
-					indexOf = node.textContent.indexOf(context.getContextText());
-				if(isStart){
-						adjustedOffset = node.textContent.length - adjustedOffset;
-				}
-
-				if( indexOf !== -1 && indexOf === adjustedOffset){
-						return true;
-				}
-				return false;
-		}
-
-			//If we are working on the start anchor, when checking context
+		//If we are working on the start anchor, when checking context
 		//we look back at previous nodes.  if we are looking at end we
 		//look forward to next nodes
 		var siblingFunction = isStart ? treeWalker.previousNode : treeWalker.nextNode;
 		while( textNode ) {
-				//Do all our contexts match this textNode
-				var nextNodeToCheck = textNode;
-				var match = true;
-				var i;
-				for(i = 0; i < pointer.getContexts().length; i++ ){
-						var contextObj = pointer.getContexts()[i];
+			//Do all our contexts match this textNode
+			var nextNodeToCheck = textNode;
+			var match = true;
+			var i;
+			for(i = 0; i < pointer.getContexts().length; i++ ){
+				var contextObj = pointer.getContexts()[i];
 
-						//Right now, if we don't have all the nodes we need to have
-						//for the contexts, we fail.  In the future this
-						//probably changes but that requires looking ahead to
-						//see if there is another node that makes us ambiguous
-						//if we don't apply all the context
-						if(!nextNodeToCheck){
-							match = false;
-								break;
-						}
-						//If we don't match this context with high enough confidence
-						//we fail
-						if( !contextMatchNode(contextObj, nextNodeToCheck, isStart) ){
-								match = false;
-								break;
-						}
-
-						//That context matched so we continue verifying.
-						nextNodeToCheck = siblingFunction.call(treeWalker);
+				//Right now, if we don't have all the nodes we need to have
+				//for the contexts, we fail.  In the future this
+				//probably changes but that requires looking ahead to
+				//see if there is another node that makes us ambiguous
+				//if we don't apply all the context
+				if(!nextNodeToCheck){
+					match = false;
+					break;
+				}
+				//If we don't match this context with high enough confidence
+				//we fail
+				if( !contextMatchNode(contextObj, nextNodeToCheck, isStart) ){
+					match = false;
+					break;
 				}
 
-				//We matched as much context is we could,
-				//this is our node
-				if(match){
-						break;
-				}
-				else{
-						//That wasn't it.  Continue searching
-						treeWalker.currentNode = textNode;
-				}
+				//That context matched so we continue verifying.
+				nextNodeToCheck = siblingFunction.call(treeWalker);
+			}
 
-				//Start the context search over in the next textnode
-				textNode = treeWalker.nextNode();
+			//We matched as much context is we could,
+			//this is our node
+			if(match){ break;}
+			else{
+				//That wasn't it.  Continue searching
+				treeWalker.currentNode = textNode;
+			}
+
+			//Start the context search over in the next textnode
+			textNode = treeWalker.nextNode();
 		}
 
 		//If we made it through the tree without finding
 		//a node we failed
 		if(!textNode){
-				return {confidence: 0};
+			return {confidence: 0};
 		}
 
 		if(isStart){

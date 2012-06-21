@@ -70,7 +70,7 @@ Ext.define('NextThought.model.anchorables.TextDomContentPointer', {
 	},
 
 
-	locateRangePointInAncestor: function(ancestorNode){
-		return Anchors.locateRangeEdgeForAnchor(this, ancestorNode);
+	locateRangePointInAncestor: function(ancestorNode, startResult){
+		return Anchors.locateRangeEdgeForAnchor(this, ancestorNode, startResult);
 	}
 });

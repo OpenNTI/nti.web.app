@@ -48,7 +48,7 @@ Ext.define('NextThought.model.anchorables.ElementDomContentPointer', {
 	},
 
 
-	locateRangePointInAncestor: function(ancestorNode){
-		 return Anchors.locateElementDomContentPointer(this, ancestorNode);
+	locateRangePointInAncestor: function(ancestorNode, startResult){
+		 return Anchors.locateElementDomContentPointer(this, ancestorNode, startResult);
 	}
 });
