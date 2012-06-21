@@ -3,6 +3,7 @@ Ext.define('NextThought.util.Rects',{
 
 
 	merge: function(rects,lineHeight,clientWidth){
+		console.log('rects', arguments);
 		if(!lineHeight){
 			Ext.Error.raise("Invalid Line Height");
 		}
@@ -49,6 +50,12 @@ Ext.define('NextThought.util.Rects',{
 	trimCrazies: function(rects, lineHeight, clientWidth){
 		function flip(a,i){ return Ext.apply({},a[i]); }
 
+		function acceptableHeight(h){
+			if (h < lineHeight){return false;}
+			else if(lineHeight/h < .6) {return false;}
+			return true;
+		}
+
 		var rs = Array.prototype.slice.call(rects),
 				i = rs.length-1, out = [], o, h, w,
 				lh2 = lineHeight*2;
@@ -59,7 +66,7 @@ Ext.define('NextThought.util.Rects',{
 			o = flip(rs,i);
 			h = o.height;
 			w = o.width;
-			if( h > 0 && h < lh2 && w <= clientWidth) {
+			if( h > 0 && h < lh2 && w <= clientWidth && acceptableHeight(h)) {
 				out.push(o);
 			}
 		}
