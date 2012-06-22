@@ -1,10 +1,8 @@
 package com.nti.selenium.quizzes;
 
-import java.awt.event.KeyEvent;
 
 import com.nti.selenium.navigation.Navigation;
 import org.junit.Before;
-import org.openqa.selenium.HasInputDevices;
 
 public class Quizzes extends Navigation {
 

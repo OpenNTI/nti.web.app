@@ -1,7 +1,5 @@
 package com.nti.selenium.login;
 
-import org.openqa.selenium.WebElement;
-
 import com.nti.selenium.Base;
 
 public class Login extends Base{
@@ -46,13 +44,10 @@ public class Login extends Base{
 		
 		this.waitForElement(usernameXpath, timeout);
 		this.getElement(usernameXpath).sendKeys(username);
-//		selenium.type(usernameXpath, username);
 		this.waitForElement(passwordXpath, timeout);
 		this.getElement(passwordXpath).sendKeys(password);
-//		selenium.type(passwordXpath, password);
 		this.waitForElement(buttonXpath, timeout);
 		this.getElement(buttonXpath).click();
-//		selenium.click(buttonXpath);
 		this.waitForLoading(timeout);
 	}
 	
@@ -66,7 +61,6 @@ public class Login extends Base{
 		this.waitForElement(logoutButtonXpath, timeout);
 		this.getElement(logoutButtonXpath).click();
 		this.waitForLoading(timeout);
-		wait_(1);
 	}
 
 	public void login(final String username, final String password) {

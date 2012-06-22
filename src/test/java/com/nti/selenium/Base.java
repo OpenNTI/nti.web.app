@@ -70,7 +70,6 @@ public class Base {
 	
 	@Before
 	public void setUp() throws Exception{
-		Thread.sleep(3000);
 		driver = new FirefoxDriver();
 		selenium = new WebDriverBackedSelenium(driver, url);
 		selenium.open(url);
