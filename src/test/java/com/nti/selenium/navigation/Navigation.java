@@ -1,6 +1,5 @@
 package com.nti.selenium.navigation;
 
-import org.junit.After;
 import org.junit.Before;
 
 import com.nti.selenium.login.Login;
@@ -38,7 +37,7 @@ public class Navigation extends Login {
 	}
 	
 	public String getChallengeProblemXpath(){
-		return this.xpathAttributeBuilder("div", "class", "challenge-problems");
+		return this.xpathAttributeAndTextBuilder("span", "class", "headingtext", "Challenge Problems");
 	}
 	
 	public String getWhatIsAFractionXpath(){
@@ -46,44 +45,43 @@ public class Navigation extends Login {
 	}
 	
 	public void openLevel(String xpath) {
-		this.waitForElement(xpath, timeout);
-		selenium.mouseOver(xpath);
-		selenium.mouseDown(xpath);
-		selenium.mouseUp(xpath);
+		this.getElement(xpath).click();
 	}
 	
 	public void openLevelClick(String xpath){
 		this.waitForElement(xpath, timeout);
-		selenium.click(xpath);
+		this.getElement(xpath).click();
 	}
 	
 	public void openLibrary() {
+		this.waitForLoading(timeout);
 		this.openLevel(this.getLibraryXpath());
-		this.waitForElement(this.getBookXpath(), timeout);
 	}
 	
 	public void openBook() {
+		this.waitForElement(this.getBookXpath(), timeout);
 		this.openLevel(this.getBookXpath());
-		this.waitForElement(this.getChapterXpath(), timeout);
 	}
 	
 	public void openChapter(){
 		this.openLevelClick(this.getChapterXpath());
-		this.waitForElement(this.getSectionXpath(), timeout);
 	}
 	
 	public void openSection(){
 		this.openLevelClick(this.getSectionXpath());
+		this.openBook();
 		this.waitForLoading(timeout);
 	}
 	
 	public void clickArrowBackButton(){
-		selenium.click(this.xpathAttributeBuilder("button", "id", "button-1032-btnEl"));
+		String arrowXpath = this.xpathAttributeBuilder("button", "id", "button-1032-btnEl");
+		this.getElement(arrowXpath).click();
 		this.waitForLoading(timeout);
 	}
 	
 	public void clickArrowForwardButton(){
-		selenium.click(this.xpathAttributeBuilder("button", "id", "button-1033-btnEl"));
+		String arrowXpath = this.xpathAttributeBuilder("button", "id", "button-1033-btnEl");
+		this.getElement(arrowXpath).click();
 		this.waitForLoading(timeout);
 	}
 	

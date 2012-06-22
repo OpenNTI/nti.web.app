@@ -3,6 +3,7 @@ package com.nti.selenium.login;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 public class TestLogin extends Login{
 
@@ -14,8 +15,15 @@ public class TestLogin extends Login{
 	
 	@Test
 	public void testIncorrectUserLogin(){
-		this.login("incorrect_user", "incorrect_password");
-		assertEquals(selenium.getTitle(), "NextThought Login");
+		try{
+			this.login("incorrect_user", "incorrect_password");
+			fail("Should have errored for lack of password field");
+		}
+		catch (final Exception e){
+		}
+		finally{
+			assertEquals(selenium.getTitle(), "NextThought Login");
+		}
 	}
 	
 	@Test

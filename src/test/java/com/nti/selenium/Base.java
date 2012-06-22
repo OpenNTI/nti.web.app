@@ -13,36 +13,28 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 
 import com.thoughtworks.selenium.Selenium;
-import com.thoughtworks.selenium.DefaultSelenium;
 
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeDriverService;
+import org.openqa.selenium.WebDriverBackedSelenium;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
-
-import org.openqa.selenium.server.SeleniumServer;
 
 public class Base {
 
 	protected static final int timeout = 10;
 	
-	protected static int port;
 	protected static String url;
 	protected static String books;
-	protected static String browser;
-	protected static String bookName;
-	protected static Selenium selenium;
 	protected static String sectionName;
 	protected static String chapterName;
-	protected static String dataserver;
 	protected static Credentials[] credentials;
 	protected static final Properties propertiesFile = new Properties();
-	protected static WebDriver driver;
-	private static ChromeDriverService service;
-	private static String chromeDriver;
 	
+	protected Selenium selenium;
+	protected WebDriver driver;
 	protected String xpathBuilder = null;
-	protected SeleniumServer seleniumServer = null;
 	
 	@BeforeClass
 	public static void oneTimeSetUp() {
@@ -52,19 +44,13 @@ public class Base {
 			final File mp = new File(main.getPath());
 			final String webAppPath = mp.getParent() + "/";
 			final String localPath = "config/main.properties";
-			chromeDriver = webAppPath;
 			
 			propertiesFile.load(new FileInputStream(webAppPath + localPath));
 			url = propertiesFile.getProperty("url");
 			sectionName = propertiesFile.getProperty("sectionName");
-			bookName = propertiesFile.getProperty("bookName");
-			browser = propertiesFile.getProperty("browser");
 			books = propertiesFile.getProperty("books");
 			chapterName = propertiesFile.getProperty("chapterName");
-			dataserver = propertiesFile.getProperty("dataserver");
-			port = Integer.parseInt(propertiesFile.getProperty("port"));
 			credentials = readCredentials(propertiesFile.getProperty("users"));
-			selenium = new DefaultSelenium(dataserver, port, browser, url);
 			
 		} catch (final IOException e) {
 			System.out.println("couldnt find the config file");
@@ -84,17 +70,15 @@ public class Base {
 	
 	@Before
 	public void setUp() throws Exception{
-		this.seleniumServer = new SeleniumServer();
 		Thread.sleep(3000);
-		this.seleniumServer.start();
-		selenium.start();
+		driver = new FirefoxDriver();
+		selenium = new WebDriverBackedSelenium(driver, url);
 		selenium.open(url);
 	}
 	
 	@After
 	public void tearDown() throws Exception{
 		selenium.stop();
-		this.seleniumServer.stop();
 	}
 	
 	public String buildString(String[] strings){
@@ -106,18 +90,41 @@ public class Base {
 	}
 	
 	public String xpathAttributeBuilder(String tag, String attribute, String value){
-		String[] xpathElements = {"xpath=//", tag, "[@", attribute, "='", value, "']"};
+		String[] xpathElements = {"//", tag, "[@", attribute, "='", value, "']"};
 		return this.buildString(xpathElements);
 	}
 	
 	public String xpathTextBuilder(String tag, String text){
-		String[] xpathElements = {"xpath=//", tag, "[text()='", text, "']"};
+		String[] xpathElements = {"//", tag, "[text()='", text, "']"};
 		return this.buildString(xpathElements);
 	}
 	
 	public String xpathAttributeAndTextBuilder(String tag, String attribute, String value, String text){
-		String[] xpathElements = {"xpath=//", tag, "[@", attribute, "='", value, "' and text()='", text, "']"};
+		String[] xpathElements = {"//", tag, "[@", attribute, "='", value, "' and text()='", text, "']"};
 		return this.buildString(xpathElements);
+	}
+	
+	public String xpathAddonBuilder(String tag, String attribute, String value){
+		String[] xpathElements = {"//", tag, "[@", attribute, "='", value, "']"};
+		return this.buildString(xpathElements);
+	}
+	
+	public String findContentFrameBodyElement(){
+		return "return document.querySelector('#readerPanel-body iframe');";
+	}
+	
+	public WebElement findContentElement(String xpath){
+		WebElement iframe = (WebElement)((JavascriptExecutor) driver).executeScript(findContentFrameBodyElement());
+		return driver.switchTo().frame(iframe).findElement(By.xpath(xpath));
+	}
+	
+	public WebElement getElement(String xpath){
+		try{
+			return driver.findElement(By.xpath(xpath));
+		}
+		catch(Exception e){
+			return null;
+		}
 	}
 	
 }

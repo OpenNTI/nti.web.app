@@ -1,6 +1,9 @@
 package com.nti.selenium.navigation;
 
 import org.junit.Test;
+import org.openqa.selenium.By;
+
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class TestNavigation extends Navigation {
@@ -35,14 +38,15 @@ public class TestNavigation extends Navigation {
 	@Test
 	public void testOpenSection(){
 		this.navigateTo("Prealgebra", "Fractions", "Index");
-		assertTrue(selenium.isElementPresent(this.getFractionIndexPageXpath()));
+		this.waitForLoading(timeout);
+		assertEquals("Fractions", this.findContentElement(this.getFractionIndexPageXpath()).getText());
 	}
 	
 	@Test
 	public void testBackArrow(){
 		this.navigateTo("Prealgebra", "Fractions", "Index");
 		this.clickArrowBackButton();
-		assertTrue(selenium.isElementPresent(this.getChallengeProblemXpath()));
+		assertEquals("Challenge Problems", this.findContentElement(this.getChallengeProblemXpath()).getText());
 	}
 	
 	@Test
@@ -50,7 +54,7 @@ public class TestNavigation extends Navigation {
 		this.navigateTo("Prealgebra", "Fractions", "Index");
 		this.clickArrowForwardButton();
 		this.wait_(3);
-		assertTrue(selenium.isElementPresent(this.getWhatIsAFractionXpath()));
+		assertEquals("What is a Fraction?", this.findContentElement(this.getWhatIsAFractionXpath()).getText());
 	}
 	
 }
