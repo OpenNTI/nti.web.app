@@ -158,6 +158,26 @@ describe("Annotation Utils", function() {
 
 		});
 
+
+	it("should be able to identify a block node",function(){
+		function makeIt(tag, blocky){
+			var q = blocky? (':not({display=none}) > '+tag+':any({display*=block}|{display=box})') : (tag+'{display=inline}'),
+				e = Ext.select(q).first().dom;
+
+			return [e,blocky];
+		}
+
+		var a = [
+			makeIt('div',true),
+			makeIt('span',false)
+		];
+
+		a.forEach(function(o){
+			expect(AnnotationUtils.isBlockNode(o[0])).toBe(o[1]);
+		});
+	});
+
+
 	//this needs to remain the last spec in this suite
 	it("should cleanup",function(){
 		document.body.removeChild(div);

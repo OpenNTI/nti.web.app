@@ -18,7 +18,7 @@ Ext.define( 'NextThought.view.annotations.Note', {
 		//get the range this note is associated with:
 		var me = this,
 			range = Anchors.toDomRange(record.get('applicableRange'), this.doc),
-			block = Ext.isTextNode(range.endContainer) ? range.endContainer.parentNode : range.endContainer,
+			block = AnnotationUtils.getBlockParent(range.endContainer, true),
 			anchor = this.findOrCreateAnchorForParent(block),
 			c = me.createNoteContainer(record.get('applicableRange').ancestor.getElementId()),
 			a;

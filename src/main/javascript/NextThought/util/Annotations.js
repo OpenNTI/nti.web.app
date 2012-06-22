@@ -244,6 +244,52 @@ Ext.define('NextThought.util.Annotations',{
 	},
 
 
+	getBlockParent: function(node, ignoreSpan){
+		if(!node || this.isBlockNode(node) && !(node.tagName === 'SPAN' && ignoreSpan)){
+			return node;
+		}
+		return this.getBlockParent(node.parentNode, ignoreSpan);
+	},
+
+
+	/* tested */
+	isBlockNode: function(n) {
+		var e = Ext.get(n),
+				p = /static|relative|^$/i,
+				d = /block|box/i;
+
+		if (n) {
+			if (n.tagName === 'A') {
+				return false;
+			}
+			else if (n.tagName === 'BODY') {
+				return true;
+			}
+		}
+
+		return this.isDisplayed(n)
+			&& e
+			&& d.test(e.getStyle('display'))
+			&& p.test(e.getStyle('position'));
+	},
+
+
+	isDisplayed:function(a,root){
+		if(!a || a === root || a.nodeType===Node.DOCUMENT_NODE || Ext.get(a)===null ){
+			return true;
+		}
+
+		function check(a){
+			var e = Ext.get(a);
+			return e.getStyle('display')!=='none'
+				&& e.getAttribute('type')!=='hidden'
+				&& (e.getWidth(true)!==0 || e.getHeight(true)!==0)
+				&& !e.hasCls('hidden');
+		}
+
+		return this.isDisplayed(a.parentNode,root) && check(a);
+	},
+
 	getTextNodes: function (root) {
 		var textNodes = [];
 		function getNodes(node) {
