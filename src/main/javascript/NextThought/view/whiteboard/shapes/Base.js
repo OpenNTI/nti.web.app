@@ -334,14 +334,19 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Base', {
 
 	/**
 	 *
-	 * @param x - canvas coordinate space
-	 * @param y - canvas coordinate space
+	 * @param x - Integer or Array of [X,Y] in canvas coordinate space
+	 * @param [y] - Integer in canvas coordinate space
 	 *
 	 * @returns truthy, with the name of the nib if true, false if not within a nib.
 	 */
 	isPointInNib: function(x,y){
 		var n, nib, nibs = this.nibData, d,dx,dy;
 		if(!nibs){ return false; }
+
+		if(Ext.isArray(x)){
+			y = x[1];
+			x = x[0];
+		}
 
 		for( n in nibs){
 			if(nibs.hasOwnProperty(n)){

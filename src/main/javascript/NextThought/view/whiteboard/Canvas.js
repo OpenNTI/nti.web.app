@@ -10,7 +10,7 @@ Ext.define(	'NextThought.view.whiteboard.Canvas',{
 		'NextThought.view.whiteboard.shapes.Url'
 	],
 
-	autoEl: { tag: 'canvas' },
+	autoEl: 'canvas',
 
 	objectNameRe: (/^Canvas(.+?)Shape$/i),
 
@@ -21,13 +21,8 @@ Ext.define(	'NextThought.view.whiteboard.Canvas',{
 
 
 	destroy: function(){
+		this.el.removeAllListeners();
 		this.callParent(arguments);
-	},
-
-
-	doComponentLayout: function(width,height,isSetSize,callingContainer){
-		if(width){ height = width; }//force height to be the same as width
-		return this.callParent([width,height,isSetSize,callingContainer]);
 	},
 
 

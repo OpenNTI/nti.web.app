@@ -8,7 +8,7 @@ Ext.define('NextThought.view.annotations.BodyEditor', {
 	requires: [
 		'Ext.form.field.HtmlEditor',
 		'NextThought.util.Annotations',
-		'NextThought.view.whiteboard.Editor'
+		'NextThought.view.whiteboard.Window'
 	],
 	items: [{
 		xtype: 'htmleditor',
@@ -250,48 +250,15 @@ Ext.define('NextThought.view.annotations.BodyEditor', {
 
 	getWhiteboardEditor: function(canvas, id){
 
-		var h = Ext.getBody().getHeight()*0.5,
-			w = Ext.getBody().getWidth()*0.5,
-			win = this.editors[id] = this.editors[id] || Ext.widget('window', {
-				maximizable:true,
-				closeAction: 'hide',
-				closable: false,
-				constrain: true,
-				title: 'Whiteboard',
-				width: w, height: h,
-				modal: true,
-				layout: 'fit',
-				hideMode: 'display',
-				items: { xtype: 'whiteboard-editor', value: Ext.clone(canvas) },
-				bbar: this.getWhiteboardBottomToolbar()
-			});
+		this.editors[id] = this.editors[id] || Ext.widget('nit-window', {
+			closeAction: 'hide',
+			title: 'Whiteboard',
+			width: Ext.getBody().getWidth()*0.7,
+			height: Ext.getBody().getHeight()*0.8,
+			value: Ext.clone(canvas)
+		});
 
-		win.getValue = function(){
-			return !win.rendered? canvas : this.down('whiteboard-editor').getValue();
-		};
-
-		return win;
-	},
-
-
-	getWhiteboardBottomToolbar: function() {
-		return [
-			'->',
-			{ xtype:'button', text:'Save',
-				handler:function (btn) {
-					var win = btn.up('window').hide(),
-						wb = win.down('whiteboard-editor');
-					wb.initialConfig.value = wb.getValue();
-					wb.fireEvent('save', wb);
-				}
-			},
-			{ xtype:'button', text:'Cancel',
-				handler:function (btn) {
-					var win = btn.up('window').hide();
-					win.down('whiteboard-editor').reset();
-				}
-			}
-		];
+		return this.editors[id];
 	},
 
 
