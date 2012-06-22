@@ -20,10 +20,13 @@ Ext.define('NextThought.controller.Annotations', {
 		'annotations.Highlight',
 		'annotations.Note',
 		'annotations.NoteEditor',
-		'annotations.ShareWith'
+		'annotations.ShareWith',
+		'content.Reader'
 	],
 
-	refs: [],
+	refs: [
+		{ ref: 'reader', selector: 'reader-panel'}
+	],
 
 	statics: {
 		events: new Ext.util.Observable()
@@ -302,7 +305,7 @@ Ext.define('NextThought.controller.Annotations', {
 			return;
 		}
 
-		var note = AnnotationUtils.selectionToNote(range);
+		var note = AnnotationUtils.selectionToNote(range, this.getReader().getDocumentElement());
 		note.set('ContainerId', LocationProvider.currentNTIID);
 
 		this.editNote(note);
