@@ -40,13 +40,39 @@ Ext.define('NextThought.view.whiteboard.editor.ImageOptions',{
 		'Upload from Class Resources folder'
 	],
 
-	enableImageDropping: function(){
-		var el = this.canvas.el, t;//TODO: point el to the editor's canvas's el.
-		// "this.canvas" is meant from the context of the editor, not this toolbar.
-		// The code was cut from the editor and needs to be rewritten for this context.
-		// This method should hook into the editor, by calling this.up('editor').canvas.el
-		// in the initComponent method... it should call this.up('editor').on(afterRender, this.enableImageDropping,this)
 
+	initComponent: function(){
+		this.callParent(arguments);
+		var me = this;
+
+		this.doUpload = this.readFile;
+		Ext.apply(this.down('file-browser-menu-item'), {
+			target: this,
+			disabled: !(window.FileReader)
+		});
+	},
+
+
+	afterRender: function(){
+		this.callParent(arguments);
+		this.enableImageDropping();
+	},
+
+
+	enableImageDropping: function(){
+		console.log('calling...');
+		var me = this,
+			el = me.up('whiteboard-editor').canvas.el,
+			t;
+
+		if (!el){
+			setTimeout(function(){
+
+				me.enableImageDropping();
+			},
+			500);
+			return;
+		}
 
 		function over(e) {
 			el.addCls('drop-over');
@@ -57,9 +83,9 @@ Ext.define('NextThought.view.whiteboard.editor.ImageOptions',{
 			return false; //for IE
 		}
 
-		this.mon(el,{
-			'scope': this,
-			'drop': this.dropImage,
+		me.mon(el,{
+			'scope': me,
+			'drop': me.dropImage,
 			'dragenter': over,
 			'dragover': over
 		});
@@ -83,6 +109,7 @@ Ext.define('NextThought.view.whiteboard.editor.ImageOptions',{
 	},
 
 
+	//TODO - should fire when menuitem is selected, override in initComponent of this toolbar
 	selectImage: function(inputField){
 		var hasFileApi = Boolean(inputField.fileInputEl.dom.files),
 			files = hasFileApi ? inputField.extractFileInput().files : [];
@@ -111,13 +138,13 @@ Ext.define('NextThought.view.whiteboard.editor.ImageOptions',{
 
 	insertImage: function(dataUrl){
 		var image = new Image(),
-			me = this,
-			c = this.canvas;
+			e = this.up('whiteboard-editor'),
+			c = e.canvas;
 
 		image.onload = function(){
 			var m = new NTMatrix(),
 				canvasWidth = c.getWidth(),
-				s = me.addShape('Url'),
+				s = e.addShape('Url'),
 				max = Math.max(image.width,image.height),
 				scale = (max > canvasWidth) ? (canvasWidth*0.75)/max : 1;
 
@@ -132,7 +159,18 @@ Ext.define('NextThought.view.whiteboard.editor.ImageOptions',{
 			c.drawScene();
 		};
 		image.src = dataUrl;
-	}
+	},
 
+	getOptions: function() {
+		return {};
+	},
+
+	setOptions: function(o){
+		console.warn('no need to set options on image toolbar');
+	},
+
+	getToolType: function() {
+		return 'image';
+	}
 
 });
