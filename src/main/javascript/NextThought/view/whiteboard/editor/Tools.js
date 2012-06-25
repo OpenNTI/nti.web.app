@@ -33,17 +33,32 @@ Ext.define('NextThought.view.whiteboard.editor.Tools',{
 	},{
 		ui: 'secondary',
 		xtype: 'container',
+		activeItem: 0,
 		layout: 'card',
 		defaults: {
 			height: 60
 		},
 		items: [
-			{xtype: 'wb-tool-move-options'},
-			{xtype: 'wb-tool-pencil-options'},
-			{xtype: 'wb-tool-shape-options'},
-			{xtype: 'wb-tool-text-options'},
-			{xtype: 'wb-tool-image-options'}
-//			{xtype: 'wb-tool-eraser-options'}
+			{xtype: 'wb-tool-move-options', forTool: 'move'},
+			{xtype: 'wb-tool-pencil-options', forTool: 'pencil'},
+			{xtype: 'wb-tool-shape-options', forTool: 'shape'},
+			{xtype: 'wb-tool-text-options', forTool: 'text'},
+			{xtype: 'wb-tool-image-options', forTool: 'image'}
+//			{xtype: 'wb-tool-eraser-options', forTool: 'eraser'}
 		]
-	}]
+	}],
+
+	initComponent: function(){
+		this.callParent(arguments);
+
+		function attach(btn){ btn.on('click',this.switchMenus,this); }
+
+		Ext.each(this.query('button[tool]'),attach,this);
+	},
+
+
+	switchMenus: function(btn){
+		var q = Ext.String.format('[forTool={0}]',btn.tool);
+		this.down('container[ui=secondary]').getLayout().setActiveItem(this.down(q));
+	}
 });

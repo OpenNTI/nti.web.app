@@ -98,7 +98,32 @@
 
 	canvas { cursor: crosshair; }
 
-	.x-toolbar-options {@include whiteboard-toolbar-common;}
+	.x-toolbar-options {
+		@include whiteboard-toolbar-common;
+		padding-left: 6px;
+
+		.x-btn-option-toolbar-large {
+			margin: 0;
+
+			.x-btn-inner {
+				padding: 10px;
+				color: #8b8b8b;
+				font-size: 18px;
+				opacity: 0.6;
+			}
+			
+			&.x-btn-over .x-btn-inner,
+			&.x-btn-pressed .x-btn-inner{ opacity: 1; }
+			&.x-item-disabled .x-btn-inner{ opacity: 0.4; }
+		}
+		.x-toolbar-separator-horizontal {
+			margin: 0;
+			height: 28px;
+			width: 0;
+			border-left: 1px solid #f2f2f2;//#bcbcbc;
+			border-right: 1px solid #e3e3e3;//#e9e9e9;
+		}
+	}
 
 	.whiteboard-tool {
 		button{
