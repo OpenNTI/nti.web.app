@@ -53,7 +53,6 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 
 
 	onMouseDown: function(e){
-		console.log('mousedown');
 		var s = this.selected;
 		this.mouseDown = true;
 		this.mouseInitialPoint = this.getRelativeXY(e);
@@ -74,7 +73,6 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 
 
 	onMouseUp: function(e){
-		console.log('mouseup');
 		delete this.clickedNib;
 		delete this.mouseDown;
 		delete this.mouseInitialPoint;
