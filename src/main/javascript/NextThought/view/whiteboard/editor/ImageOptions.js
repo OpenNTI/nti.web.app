@@ -1,10 +1,52 @@
 Ext.define('NextThought.view.whiteboard.editor.ImageOptions',{
 	alias: 'widget.wb-tool-image-options',
 	extend: 'Ext.toolbar.Toolbar',
+	requires: [
+		'NextThought.view.menus.file.BrowserItem'
+	],
 	ui: 'options',
+	cls: 'image-options',
+
+	defaults: {
+		ui: 'option',
+		scale: 'large',
+		xtype: 'button'
+	},
+	items: [
+		{
+			text: 'Choose File',
+			menu: {
+				ui: 'nt',
+				cls: 'no-footer no-checkboxes',
+				plain: true,
+				shadow: false,
+				frame: false,
+				border: false,
+				minWidth: 150,
+				defaults: {
+					ui: 'nt-menuitem',
+					plain: true
+				},
+				items: [
+					{ text: 'From', cls: 'label', ui: 'nt', canActivate: false, focusable: false, hideOnClick: false },
+					{ text: 'Computer', xtype: 'file-browser-menu-item' },
+					{ text: 'Class Documents' },
+					{ text: 'Web' }
+				]
+			}
+		},
+		{ text: 'Take Picture', menu: [], disabled: true },
+		'->',
+		'Upload from Class Resources folder'
+	],
 
 	enableImageDropping: function(){
-		var el = this.canvas.el, t;
+		var el = this.canvas.el, t;//TODO: point el to the editor's canvas's el.
+		// "this.canvas" is meant from the context of the editor, not this toolbar.
+		// The code was cut from the editor and needs to be rewritten for this context.
+		// This method should hook into the editor, by calling this.up('editor').canvas.el
+		// in the initComponent method... it should call this.up('editor').on(afterRender, this.enableImageDropping,this)
+
 
 		function over(e) {
 			el.addCls('drop-over');
@@ -15,15 +57,8 @@ Ext.define('NextThought.view.whiteboard.editor.ImageOptions',{
 			return false; //for IE
 		}
 
-		el.on({
+		this.mon(el,{
 			'scope': this,
-			'mousedown': this.onMouseDown,
-			'mousemove': this.onMouseMove,
-			'mouseup': this.onMouseUp,
-			'click': this.onClick,
-			'dblclick': this.onDoubleClick,
-			'contextmenu': this.onContextMenu,
-
 			'drop': this.dropImage,
 			'dragenter': over,
 			'dragover': over

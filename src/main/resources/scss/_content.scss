@@ -73,6 +73,10 @@
 	.x-menu-body {
 		padding: 0 0 20px 0;
 	}
+
+	&.no-footer .x-menu-body {
+		padding: 0;
+	}
 }
 
 .selection-nt,
@@ -97,7 +101,7 @@
 			font-size: 11pt;
 			font-weight: 400;
 			background: none;
-			padding: 7px 10px;
+			padding: 7px 15px;
 			margin: 0 !important;
 			cursor: pointer;
 
@@ -150,6 +154,21 @@
 						white-space: nowrap;
 						overflow: hidden;
 					}
+				}
+			}
+		}
+	}
+
+	&.no-checkboxes {
+		.selection-list-ct,
+		.x-menu-list-ct,
+		.x-menu-body {
+
+			.selection-list-item,
+			.x-menu-item {
+				padding-left: 15px;
+				&.label{
+					padding-left: 15px;
 				}
 			}
 		}

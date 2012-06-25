@@ -120,6 +120,15 @@
 		@include whiteboard-toolbar-common;
 		padding-left: 6px;
 
+		.x-toolbar-text {color: #8b8b8b;}
+
+		&.image-options{
+			padding: 0 35px 0 30px;
+			.x-btn-option-toolbar-large{
+				margin-right: 30px;
+			}
+		}
+
 		&.pencil-stroke-options {
 			padding: 0 34px 0 20px;
 		}
@@ -131,17 +140,26 @@
 
 		.x-btn-option-toolbar-large {
 			margin: 0;
+			opacity: 0.6;
+
+			&.x-btn-over,
+			&.x-btn-pressed { opacity: 1; }
+			&.x-item-disabled { opacity: 0.4; }
+
+			.x-btn-arrow-right,
+			.x-btn-split-right {
+				background: url(../images/menu-arrow-down-active.png) right 20px no-repeat;
+				padding-right: 15px!important;
+				.x-btn-inner{
+					padding-right: 0px;
+				}
+			}
 
 			.x-btn-inner {
 				padding: 10px;
 				color: #8b8b8b;
 				font-size: 18px;
-				opacity: 0.6;
 			}
-			
-			&.x-btn-over .x-btn-inner,
-			&.x-btn-pressed .x-btn-inner{ opacity: 1; }
-			&.x-item-disabled .x-btn-inner{ opacity: 0.4; }
 		}
 
 		.x-toolbar-separator-horizontal {
@@ -160,6 +178,7 @@
 				border-right-color: #e9e9e9;
 			}
 		}
+
 
 		.whiteboard-tool-option-button-toolbar-large{
 			margin: 0;
