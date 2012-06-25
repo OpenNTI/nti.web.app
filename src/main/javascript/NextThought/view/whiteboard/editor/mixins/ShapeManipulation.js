@@ -12,6 +12,20 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 	],
 
 
+	initMixin: function(toolbar, canvas){
+		this.toolbar = toolbar;
+		this.canvas = canvas;
+
+		this.mon(this.canvas.el, {
+			scope: this,
+			mousedown: this.onMouseDown,
+			mousemove: this.onMouseMove,
+			mouseup: this.onMouseUp,
+			click: this.onClick
+		});
+	},
+
+
 	getRelativeXY: function(e, scaled){
 		var x = e.getXY().slice(),
 			c = this.canvas.el.getXY();
@@ -39,6 +53,7 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 
 
 	onMouseDown: function(e){
+		console.log('mousedown');
 		var s = this.selected;
 		this.mouseDown = true;
 		this.mouseInitialPoint = this.getRelativeXY(e);
@@ -48,9 +63,10 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 
 	onMouseMove: function(e){
 		if(!this.mouseDown){ return; }
-		var c = this.mouseMoveHandlerMap[this.currentTool];
+		var tool = this.toolbar.getCurrentTool(),
+			c = this.mouseMoveHandlerMap[tool.getToolType()];
 		if(!c){
-			console.warn('No handler for tool: ',this.currentTool);
+			console.warn('No handler for tool: ',tool.getToolType);
 		}
 
 		return c.apply(this,arguments);
@@ -58,6 +74,7 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 
 
 	onMouseUp: function(e){
+		console.log('mouseup');
 		delete this.clickedNib;
 		delete this.mouseDown;
 		delete this.mouseInitialPoint;
@@ -74,6 +91,7 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 
 
 	onClick: function(e){
+		console.log('click');
 		if(this.currentTool==='Hand'){
 			this.selectShape(e);
 		}
@@ -167,13 +185,17 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 
 	doPath: function(e){
 		var s = this.selected,
+			opts = this.toolbar.getCurrentTool().getOptions(),
 			t,xy,w,p;
+
+
+		console.log('mouseDown?', this.mouseDown);
 
 		if(!this.mouseDown){ return; }
 		if(!s || s.Class !== 'CanvasPathShape' || !s.isNew){
 			w = this.canvas.el.getWidth();
 			this.selected = s = this.addShape('path');
-			s.strokeWidth = this.strokeWidthField.getValue()/w;
+			s.strokeWidth = opts.strokeWidth/w;
 			s.points = [];
 			s.closed = false;
 
@@ -306,13 +328,14 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 
 
 	addShape: function(shape){
-		var data = this.canvas.getData() || {'Class': 'Canvas','shapeList':[]},
-//			stroke = this.selectedValues.strokeWidth/(this.canvas.el.getWidth()),
+		var opts = this.toolbar.getCurrentTool().getOptions(),
+			data = this.canvas.getData() || {'Class': 'Canvas','shapeList':[]},
+			stroke = opts.strokeWidth/(this.canvas.el.getWidth()),
 			defs = {
 				'Class': 'Canvas'+Ext.String.capitalize(shape.toLowerCase())+'Shape',
 //				'fill': this.selectedValues.fill,
-//				'stroke': this.selectedValues.stroke,
-//				'strokeWidth': isFinite(stroke)? stroke : 0,
+				'stroke': opts.stroke,
+				'strokeWidth': isFinite(stroke)? stroke : 0,
 				'transform':{
 					initial: true,
 					'Class':'CanvasAffineTransform',
@@ -348,10 +371,10 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 	var p = this.prototype;
 
 	p.mouseMoveHandlerMap = {
-		'Hand':		p.doMove,
-		'Path':		p.doPath,
-		'Line':		p.doLine,
-		'Text':		p.doText,
+		'move':		p.doMove,
+		'pencil':	p.doPath,
+		'text':		p.doText,
+		'Line':		p.doLine, //TODO - these are all shape... use secondary tools
 		'Circle':	p.doShape,
 		'Polygon':	p.doShape
 	};

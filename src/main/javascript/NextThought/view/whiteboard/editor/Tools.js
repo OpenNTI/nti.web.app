@@ -57,6 +57,15 @@ Ext.define('NextThought.view.whiteboard.editor.Tools',{
 
 	switchMenus: function(btn){
 		var q = Ext.String.format('[forTool={0}]',btn.tool);
+		delete this.currentTool;
 		this.down('container[ui=secondary]').getLayout().setActiveItem(this.down(q));
+	},
+
+
+	getCurrentTool: function(){
+		if (!this.currentTool) {
+			this.currentTool = this.down('container[ui=secondary]').getLayout().getActiveItem();
+		}
+		return this.currentTool;
 	}
 });

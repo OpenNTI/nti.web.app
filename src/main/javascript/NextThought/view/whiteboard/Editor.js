@@ -19,10 +19,18 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 
 	initComponent: function(){
 		this.callParent(arguments);
+
 		this.canvas = this.down('whiteboard-canvas');
+		this.toolbar = this.down('whiteboard-tools');
 		this.canvas.updateData(this.value);
 	},
 
+
+	afterRender: function(){
+		this.callParent(arguments);
+
+		this.initMixin(this.toolbar, this.canvas);
+	},
 
 	reset: function(){
 		this.value = Ext.clone(this.initialConfig.value);
