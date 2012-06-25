@@ -60,6 +60,35 @@
 .wb-window{
 	@extend .nti-window;
 	background: #ffffff;
+
+	.x-btn-new-medium,
+	.x-btn-history-medium {
+		width: 50px;
+		height: 30px;
+		.x-btn-icon {
+			top: 0; left: 0;
+			width: 50px;
+			height: 30px;
+			background: url(../images/whiteboard/sprite.png) 0 0 no-repeat;
+
+			&.undo{ background-position:  -325px -1335px; }
+			&.redo{ background-position:  -425px -1335px; }
+			&.new-page { background-position:  -525px -1335px; }
+		}
+
+		&.x-over .x-btn-icon{
+			&.undo{ background-position:  -325px -1435px; }
+			&.redo{ background-position:  -425px -1435px; }
+			&.new-page { background-position:  -525px -1435px; }
+		}
+
+		&.x-pressed .x-btn-icon{
+			&.undo{ background-position:  -325px -1235px; }
+			&.redo{ background-position:  -425px -1235px; }
+			&.new-page { background-position:  -525px -1235px; }
+		}
+	}
+
 }
 
 .x-panel-whiteboard-editor {
