@@ -6,7 +6,11 @@ public class Credentials {
 	private final String password;
 	
 	public Credentials(final String user, final String password) {
-		this.username = user + "@nextthought.com";
+		if  (user.indexOf('@') == -1) {
+			this.username = user + "@nextthought.com";
+		} else {
+			this.username = user;
+		}
 		this.password = password;
 	}
 	

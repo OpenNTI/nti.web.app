@@ -7,9 +7,9 @@ import com.nti.selenium.login.Login;
 
 public class Navigation extends Login {
 
-	String book;
-	String chapter;
-	String section;
+	private String book;
+	private String chapter;
+	private String section;
 	
 	@Before
 	public void setUp() throws Exception {
@@ -17,15 +17,15 @@ public class Navigation extends Login {
 		this.login();
 	}
 	
-	public String getLibraryXpath(){
+	public String getLibraryXpath() {
 		return this.xpathAttributeBuilder("span", "id", "button-1014-btnIconEl");
 	}
 	
-	public String getBookXpath(){
+	public String getBookXpath() {
 		return this.xpathAttributeAndTextBuilder("div", "class", "title", book);
 	}
 	
-	public String getChapterXpath(){
+	public String getChapterXpath() {
 		return this.xpathTextBuilder("div", chapter);
 	}
 	
@@ -33,15 +33,15 @@ public class Navigation extends Login {
 		return this.xpathTextBuilder("div", section);
 	}
 	
-	public String getFractionIndexPageXpath(){
+	public String getFractionIndexPageXpath() {
 		return this.xpathAttributeAndTextBuilder("span", "class", "label", "Fractions");
 	}
 	
-	public String getChallengeProblemXpath(){
+	public String getChallengeProblemXpath() {
 		return this.xpathAttributeAndTextBuilder("span", "class", "headingtext", "Challenge Problems");
 	}
 	
-	public String getWhatIsAFractionXpath(){
+	public String getWhatIsAFractionXpath() {
 		return this.xpathAttributeAndTextBuilder("span", "class", "label", "What is a Fraction?");
 	}
 	
@@ -101,7 +101,7 @@ public class Navigation extends Login {
 		this.section = section;
 		this.switchToDefault();
 		
-		if(book == null){
+		if (book == null) {
 			return;
 		} else if(chapter == null && section == null) {
 			this.openLibrary();
@@ -122,19 +122,19 @@ public class Navigation extends Login {
 		}
 	}
 	
-	public void setBook(String book){
+	public void setBook(final String book) {
 		this.book = book;
 	}
 	
-	public void setChapter(String chapter){
+	public void setChapter(final String chapter) {
 		this.chapter = chapter;
 	}
 	
-	public void setSection(String section){
+	public void setSection(final String section) {
 		this.section = section;
 	}
 	
-	public WebElement getNavTestText(String xpath){
+	public WebElement getNavTestText(final String xpath) {
 		this.switchiToIframe();
 		return this.findElement(xpath);
 	}

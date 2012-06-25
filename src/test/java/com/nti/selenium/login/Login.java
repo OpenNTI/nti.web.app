@@ -19,7 +19,7 @@ public class Login extends Base {
 		this.waitForLoading(timeout);
 	}
 	
-	protected void doLogout(){
+	protected void doLogout() {
 		final String optionsXpath = this.xpathAttributeBuilder("div", "class", "my-account-wrapper");
 		final String logoutButtonXpath = this.xpathTextBuilder("div", "Sign out");
 	

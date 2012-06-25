@@ -18,10 +18,8 @@ public class TestLogin extends Login {
 		try{
 			this.login("incorrect_user", "incorrect_password");
 			fail("Should have errored for lack of password field");
-		}
-		catch (final Exception e) {
-		}
-		finally {
+		} catch (final Exception e) {
+		} finally {
 			assertEquals(selenium.getTitle(), "NextThought Login");
 		}
 	}
@@ -40,5 +38,4 @@ public class TestLogin extends Login {
 		this.logout();
 		assertEquals(selenium.getTitle(), "NextThought Login");
 	}
-	
 }

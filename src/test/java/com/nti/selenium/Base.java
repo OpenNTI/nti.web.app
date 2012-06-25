@@ -79,7 +79,8 @@ public class Base {
 	
 	@Before
 	public void setUp() throws Exception{
-		driver = new FirefoxDriver();
+		// TODO: We should not default to FireFox
+		driver = new FirefoxDriver(); 
 		selenium = new WebDriverBackedSelenium(driver, url);
 		selenium.open(url);
 	}
@@ -90,7 +91,7 @@ public class Base {
 	}
 	
 	public String buildString(final String... strings) {
-		StringBuilder builder = new StringBuilder();
+		final StringBuilder builder = new StringBuilder();
 		for(final String str: strings)
 		{
 			builder.append(str);
@@ -108,7 +109,10 @@ public class Base {
 		return this.buildString(xpathElements);
 	}
 	
-	public String xpathAttributeAndTextBuilder(final String tag, final String attribute, final String value, final String text) {
+	public String xpathAttributeAndTextBuilder(	final String tag,
+												final String attribute,
+												final String value,
+												final String text) {
 		final String[] xpathElements = {"//", tag, "[@", attribute, "='", value, "' and text()='", text, "']"};
 		return this.buildString(xpathElements);
 	}
@@ -123,7 +127,7 @@ public class Base {
 	}
 	
 	public void switchiToIframe() {
-		if(isDefault == true){
+		if (isDefault) {
 			final JavascriptExecutor executor = (JavascriptExecutor) driver;
 			final WebElement iframe = (WebElement)executor.executeScript(findContentFrameBodyElement());
 			this.driver.switchTo().frame(iframe);
@@ -132,13 +136,13 @@ public class Base {
 	}
 	
 	public void switchToDefault() {
-		if(isDefault == false){
+		if (!isDefault) {
 			this.driver.switchTo().defaultContent();
 			isDefault = true;
 		}
 	}
 	
-	public WebElement findElement(final String xpath){
+	public WebElement findElement(final String xpath) {
 		return this.driver.findElement(By.xpath(xpath));
 	}
 	
@@ -146,12 +150,11 @@ public class Base {
 		return this.driver.findElements(By.xpath(xpath));
 	}
 	
-	public boolean elementExists(String xpath){
+	public boolean elementExists(final String xpath) {
 		try{
 			this.findElement(xpath);
 			return true;
-		}
-		catch(Exception e){
+		} catch(final Exception e) {
 			return false;
 		}
 	}
@@ -173,8 +176,7 @@ public class Base {
 		}
 	}
 	
-	public boolean waitForLoading(final int timeout)
-	{
+	public boolean waitForLoading(final int timeout) {
 		int timer = 0;
 		while(this.getElement("xpath=//title[@id='loading']") != null && timer <= timeout)
 		{
@@ -185,7 +187,7 @@ public class Base {
 		return timer < timeout;
 	}
 	
-	public boolean waitForElement(final String xpath, final int timeout){
+	public boolean waitForElement(final String xpath, final int timeout) {
 		int timer = 0;
 		while(this.getElement(xpath) == null && timer < timeout)
 		{
