@@ -49,11 +49,9 @@ Ext.define('NextThought.view.whiteboard.editor.Tools',{
 	}],
 
 	initComponent: function(){
-		this.callParent(arguments);
-
-		function attach(btn){ btn.on('click',this.switchMenus,this); }
-
-		Ext.each(this.query('button[tool]'),attach,this);
+		var me = this;
+		me.callParent(arguments);
+		Ext.each(me.query('button[tool]'),function(b){b.on('click',me.switchMenus,me);});
 	},
 
 
