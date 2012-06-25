@@ -8,6 +8,9 @@ Ext.define('NextThought.view.whiteboard.editor.MoveOptions',{
 		scale: 'large'
 	},
 	items: [
+
+		//These all need to disable until a shape is selected. Then they can enable, but as soon as a shape is de-selected, disable them.
+
 		{ text: 'Send Back'},'-',
 		{ text: 'Send Forward'},'-',
 		{ text: 'Duplicate'},'-',

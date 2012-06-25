@@ -23,8 +23,8 @@ Ext.define('NextThought.view.whiteboard.editor.Tools',{
 		xtype:'toolbar',
 		defaults: { xtype: 'wb-tool' },
 		items: [
-			{ tool: 'move', pressed: true },
-			{ tool: 'pencil' },
+			{ tool: 'move' },
+			{ tool: 'pencil', pressed: true },
 			{ tool: 'shape' },
 			{ tool: 'text' },
 			{ tool: 'image' },
@@ -33,7 +33,7 @@ Ext.define('NextThought.view.whiteboard.editor.Tools',{
 	},{
 		ui: 'secondary',
 		xtype: 'container',
-		activeItem: 0,
+		activeItem: 1,
 		layout: 'card',
 		defaults: {
 			height: 60
