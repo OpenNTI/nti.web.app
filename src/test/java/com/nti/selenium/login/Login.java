@@ -4,9 +4,9 @@ import com.nti.selenium.Base;
 
 public class Login extends Base {
 	
-	public void wait_(final double secs) {
+	public void wait_(final int secs) {
 		try {
-			millis = secs*1000;
+			final long millis = secs*1000;
 			Thread.sleep(millis);
 		} catch (final InterruptedException e) {
 		}
@@ -51,7 +51,6 @@ public class Login extends Base {
 	}
 	
 	protected void doLogout(){
-		
 		final String optionsXpath = this.xpathAttributeBuilder("div", "class", "my-account-wrapper");
 		final String logoutButtonXpath = this.xpathTextBuilder("div", "Sign out");
 	

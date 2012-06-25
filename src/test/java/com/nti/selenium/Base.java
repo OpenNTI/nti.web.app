@@ -4,6 +4,7 @@ import java.lang.StringBuilder;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.FileInputStream;
 import java.util.Properties;
 import java.net.URL;
@@ -12,14 +13,16 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 
-import com.thoughtworks.selenium.Selenium;
-
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverBackedSelenium;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
+
+import com.thoughtworks.selenium.Selenium;
+
+import org.apache.commons.io.IOUtils;
 
 public class Base {
 
@@ -39,13 +42,15 @@ public class Base {
 	@BeforeClass
 	public static void oneTimeSetUp() {
 		
+		InputStream is = null;
 		try {
 			final URL main = Base.class.getResource("Base.class");
 			final File mp = new File(main.getPath());
 			final String webAppPath = mp.getParent() + "/";
 			final String localPath = "config/main.properties";
 			
-			propertiesFile.load(new FileInputStream(webAppPath + localPath));
+			is = new FileInputStream(webAppPath + localPath);
+			propertiesFile.load(is);
 			url = propertiesFile.getProperty("url");
 			sectionName = propertiesFile.getProperty("sectionName");
 			books = propertiesFile.getProperty("books");
@@ -55,6 +60,8 @@ public class Base {
 		} catch (final IOException e) {
 			System.out.println("couldnt find the config file");
 			System.exit(1);
+		} finally {
+			IOUtils.closeQuietly(is);
 		}
 	}
 	
@@ -105,7 +112,7 @@ public class Base {
 	}
 	
 	public String xpathAddonBuilder(final String tag, final String attribute, final String value){
-		String[] xpathElements = {"//", tag, "[@", attribute, "='", value, "']"};
+		final String[] xpathElements = {"//", tag, "[@", attribute, "='", value, "']"};
 		return this.buildString(xpathElements);
 	}
 	
@@ -114,7 +121,8 @@ public class Base {
 	}
 	
 	public WebElement findContentElement(final String xpath) {
-		WebElement iframe = (WebElement)((JavascriptExecutor) driver).executeScript(findContentFrameBodyElement());
+		final JavascriptExecutor executor = (JavascriptExecutor) driver;
+		final WebElement iframe = (WebElement)executor.executeScript(findContentFrameBodyElement());
 		return driver.switchTo().frame(iframe).findElement(By.xpath(xpath));
 	}
 	
