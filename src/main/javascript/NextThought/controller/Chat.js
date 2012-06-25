@@ -843,7 +843,6 @@ Ext.define('NextThought.controller.Chat', {
 		if (!roomInfo){Ext.Error.raise('Requires a RoomInfo object');}
 		var key = roomInfo.getId();
 		sessionStorage.setItem(key, Ext.JSON.encode(roomInfo.getData()));
-		console.log('PUTTED', sessionStorage.getItem(key))
 	},
 
 
