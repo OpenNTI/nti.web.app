@@ -3,6 +3,8 @@ package com.nti.selenium.quizzes;
 
 import com.nti.selenium.navigation.Navigation;
 import org.junit.Before;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 
 public class Quizzes extends Navigation {
 	
@@ -14,24 +16,42 @@ public class Quizzes extends Navigation {
 		this.navigateTo("MathCounts 2012", null, "Warm-Up 1");
 	}
 	
-	public void focusQuestion(final String questionID) {
-		StringBuilder sb = new StringBuilder(this.xpathAttributeBuilder("li", "value", questionID));
-		sb.append(this.xpathAddonBuilder("div", "class", "question"));
-		sb.append(this.xpathAddonBuilder("div", "class", "answerblock"));
-		String xpathInput = sb.toString()
-		selenium.click(xpathInput + "//span");
-		this.wait_(3);
+	private String findBlank(String questionID){
+		return this.xpathAttributeBuilder("li", "value", questionID)
+				+ this.xpathAddonBuilder("div", "class", "question")
+				+ this.xpathAddonBuilder("div", "class", "answerblock")
+				+ "//span";
+	}
+	
+	private String getTextBlankXpathAddon(){
+		return this.xpathAddonBuilder("span", "class", "textarea") + "//textarea";
+	}
+	
+	public String getTextInAnswerblock(String questionID){
+		String xpath = this.findBlank(questionID);
+		String answer = "";
+		for(WebElement element: this.driver.findElements(By.xpath(xpath+"//span"))){
+			String character = element.getText();
+			answer = answer + character;
+		}
+		return answer;
+	}
+	
+	public void clickBlank(String questionID){
+		String xpathInput = this.findBlank(questionID);
+		this.findContentElement(xpathInput).click();
 		this.focusedQuestionXpath = xpathInput;
 	}
 	
-	public void answerQuestion(String answer){
-//		String js = iframeSelector(".quiz-input.hasCursor textarea");
-		
+	public void answerQuestion(String questionID, String answer){
+		this.clickBlank(questionID);
+		String xpathInput = this.findBlank(questionID);
+		this.driver.findElement(By.xpath(xpathInput + this.getTextBlankXpathAddon())).sendKeys(answer);
 	}
 	
-	public void selectMathSymbol(String mathSymbol){
+	public void clickMathSymbol(String mathSymbol){
 		String xpathInput = this.xpathTextBuilder("span", mathSymbol);
-		selenium.click(xpathInput);
+		this.driver.findElement(By.xpath("//div[@class='x-window-body-default']")).click();
 	}
 	
 	public void clickSubmit(){

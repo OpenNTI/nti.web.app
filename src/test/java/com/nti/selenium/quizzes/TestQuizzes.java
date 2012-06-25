@@ -6,18 +6,19 @@ import static org.junit.Assert.assertEquals;
 public class TestQuizzes extends Quizzes {
 
 	@Test
-	public void testAnswerQuizQuestion(){
-		this.focusQuestion("1");
-		this.answerQuestion("7");
-//		this.selectMathSymbol("√");
-//		this.selectMathSymbol("x²");
-//		this.selectMathSymbol("()");
-//		this.selectMathSymbol("≈");
-		this.wait_(13);
-//		String x = selenium.getText(this.focusedQuestionXpath + "//*");
-//		System.out.println("\n\n\n");
-//		System.out.println(x);
-//		assertEquals(x, "√");
+	public void testFillInBlank(){
+		this.answerQuestion("1", "420");
+		assertEquals("420", this.getTextInAnswerblock("1"));
+		this.wait_(3);
 	}
+	
+//	@Test
+//	public void testClickSymbolButton(){
+//		this.clickBlank("1");
+//		this.wait_(3);
+//		this.clickMathSymbol("()");
+////		assertEquals("√", this.getTextInAnswerblock("1"));
+//		this.wait_(3);
+//	}
 	
 }
