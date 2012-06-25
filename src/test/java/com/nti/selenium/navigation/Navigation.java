@@ -1,6 +1,7 @@
 package com.nti.selenium.navigation;
 
 import org.junit.Before;
+import org.openqa.selenium.WebElement;
 
 import com.nti.selenium.login.Login;
 
@@ -45,43 +46,51 @@ public class Navigation extends Login {
 	}
 	
 	public void openLevel(String xpath) {
-		this.getElement(xpath).click();
+		this.switchToDefault();
+		this.findElement(xpath).click();
 	}
 	
 	public void openLevelClick(String xpath){
+		this.switchToDefault();
 		this.waitForElement(xpath, timeout);
-		this.getElement(xpath).click();
+		this.findElement(xpath).click();
 	}
 	
 	public void openLibrary() {
+		this.switchToDefault();
 		this.waitForLoading(timeout);
 		this.openLevel(this.getLibraryXpath());
 	}
 	
 	public void openBook() {
+		this.switchToDefault();
 		this.waitForElement(this.getBookXpath(), timeout);
 		this.openLevel(this.getBookXpath());
 	}
 	
 	public void openChapter(){
+		this.switchToDefault();
 		this.openLevelClick(this.getChapterXpath());
 	}
 	
 	public void openSection(){
+		this.switchToDefault();
 		this.openLevelClick(this.getSectionXpath());
 		this.openBook();
 		this.waitForLoading(timeout);
 	}
 	
 	public void clickArrowBackButton(){
+		this.switchToDefault();
 		String arrowXpath = this.xpathAttributeBuilder("button", "id", "button-1032-btnEl");
-		this.getElement(arrowXpath).click();
+		this.findElement(arrowXpath).click();
 		this.waitForLoading(timeout);
 	}
 	
 	public void clickArrowForwardButton(){
+		this.switchToDefault();
 		String arrowXpath = this.xpathAttributeBuilder("button", "id", "button-1033-btnEl");
-		this.getElement(arrowXpath).click();
+		this.findElement(arrowXpath).click();
 		this.waitForLoading(timeout);
 	}
 	
@@ -90,6 +99,7 @@ public class Navigation extends Login {
 		this.book = book;
 		this.chapter = chapter;
 		this.section = section;
+		this.switchToDefault();
 		
 		if(book == null){
 			return;
@@ -124,20 +134,9 @@ public class Navigation extends Login {
 		this.section = section;
 	}
 	
-	public void getPageSectionTitle(){
-		
-	}
-	
-	public void openSearch(){
-		
-	}
-	
-	public void pagerMover(){
-		
-	}
-	
-	public void menuJumper(){
-		
+	public WebElement getNavTestText(String xpath){
+		this.switchiToIframe();
+		return this.findElement(xpath);
 	}
 	
 }

@@ -8,8 +8,6 @@ import org.openqa.selenium.WebElement;
 
 public class Quizzes extends Navigation {
 	
-	private String focusedQuestionXpath = null;
-	
 	@Before
 	public void setUp() throws Exception {
 		super.setUp();
@@ -28,6 +26,7 @@ public class Quizzes extends Navigation {
 	}
 	
 	public String getTextInAnswerblock(String questionID){
+		this.switchiToIframe();
 		String xpath = this.findBlank(questionID);
 		String answer = "";
 		for(WebElement element: this.driver.findElements(By.xpath(xpath+"//span"))){
@@ -38,30 +37,38 @@ public class Quizzes extends Navigation {
 	}
 	
 	public void clickBlank(String questionID){
+		this.switchiToIframe();
 		String xpathInput = this.findBlank(questionID);
-		this.findContentElement(xpathInput).click();
-		this.focusedQuestionXpath = xpathInput;
+		this.switchiToIframe();
+		this.findElement(xpathInput).click();
 	}
 	
 	public void answerQuestion(String questionID, String answer){
+		this.switchiToIframe();
 		this.clickBlank(questionID);
 		String xpathInput = this.findBlank(questionID);
-		this.driver.findElement(By.xpath(xpathInput + this.getTextBlankXpathAddon())).sendKeys(answer);
+		this.findElement(xpathInput + this.getTextBlankXpathAddon()).sendKeys(answer);
 	}
 	
 	public void clickMathSymbol(String mathSymbol){
+		this.switchToDefault();
 		String xpathInput = this.xpathTextBuilder("span", mathSymbol);
-		this.driver.findElement(By.xpath("//div[@class='x-window-body-default']")).click();
+		this.switchToDefault();
+		this.findElement(xpathInput).click();
 	}
 	
 	public void clickSubmit(){
+		this.switchiToIframe();
 		String xpathSubmit = this.xpathAttributeAndTextBuilder("a", "id", "submit", "Submit");
-//		this.clickElement(xpathSubmit);
+		this.findElement(xpathSubmit).click();
+		this.waitForLoading(timeout);
 	}
 	
 	public void clickReset(){
-		String xpathSubmit = this.xpathAttributeAndTextBuilder("a", "id", "submit", "Reset");
-//		this.clickElement(xpathSubmit);
+		this.switchiToIframe();
+		String xpathReset = this.xpathAttributeAndTextBuilder("a", "id", "submit", "Reset");
+		this.findElement(xpathReset).click();
+		this.waitForLoading(timeout);
 	}
 	
 	public void completeQuiz100Percent(){
@@ -70,6 +77,11 @@ public class Quizzes extends Navigation {
 	
 	public void completeQuiz0Percent(){
 		
+	}
+	
+	public String assertXpath(){
+		this.switchiToIframe();
+		return this.xpathAttributeBuilder("span", "id", "noanswer");
 	}
 	
 }

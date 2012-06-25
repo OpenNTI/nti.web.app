@@ -38,22 +38,21 @@ public class TestNavigation extends Navigation {
 	public void testOpenSection(){
 		this.navigateTo("Prealgebra", "Fractions", "Index");
 		this.waitForLoading(timeout);
-		assertEquals("Fractions", this.findContentElement(this.getFractionIndexPageXpath()).getText());
+		assertEquals("Fractions", this.getNavTestText(this.getFractionIndexPageXpath()).getText());
 	}
 	
 	@Test
 	public void testBackArrow(){
 		this.navigateTo("Prealgebra", "Fractions", "Index");
 		this.clickArrowBackButton();
-		assertEquals("Challenge Problems", this.findContentElement(this.getChallengeProblemXpath()).getText());
+		assertEquals("Challenge Problems", this.getNavTestText(this.getChallengeProblemXpath()).getText());
 	}
 	
 	@Test
 	public void testForwardArrow(){
 		this.navigateTo("Prealgebra", "Fractions", "Index");
 		this.clickArrowForwardButton();
-		this.wait_(3);
-		assertEquals("What is a Fraction?", this.findContentElement(this.getWhatIsAFractionXpath()).getText());
+		assertEquals("What is a Fraction?", this.getNavTestText(this.getWhatIsAFractionXpath()).getText());
 	}
 	
 }

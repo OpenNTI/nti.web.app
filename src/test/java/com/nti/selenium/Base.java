@@ -20,6 +20,7 @@ import org.openqa.selenium.WebDriverBackedSelenium;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
+import java.util.List;
 import com.thoughtworks.selenium.Selenium;
 
 import org.apache.commons.io.IOUtils;
@@ -38,6 +39,7 @@ public class Base {
 	protected WebDriver driver;
 	protected Selenium selenium;
 	protected String xpathBuilder = null;
+	protected boolean isDefault = true;
 	
 	@BeforeClass
 	public static void oneTimeSetUp() {
@@ -120,18 +122,78 @@ public class Base {
 		return "return document.querySelector('#readerPanel-body iframe');";
 	}
 	
-	public WebElement findContentElement(final String xpath) {
-		final JavascriptExecutor executor = (JavascriptExecutor) driver;
-		final WebElement iframe = (WebElement)executor.executeScript(findContentFrameBodyElement());
-		return driver.switchTo().frame(iframe).findElement(By.xpath(xpath));
+	public void switchiToIframe() {
+		if(isDefault == true){
+			final JavascriptExecutor executor = (JavascriptExecutor) driver;
+			final WebElement iframe = (WebElement)executor.executeScript(findContentFrameBodyElement());
+			this.driver.switchTo().frame(iframe);
+			isDefault = false;
+		}
 	}
 	
-	public WebElement getElement(final String xpath) {
+	public void switchToDefault() {
+		if(isDefault == false){
+			this.driver.switchTo().defaultContent();
+			isDefault = true;
+		}
+	}
+	
+	public WebElement findElement(final String xpath){
+		return this.driver.findElement(By.xpath(xpath));
+	}
+	
+	public List<WebElement> findElements(final String xpath){
+		return this.driver.findElements(By.xpath(xpath));
+	}
+	
+	public boolean elementExists(String xpath){
 		try{
+			this.findElement(xpath);
+			return true;
+		}
+		catch(Exception e){
+			return false;
+		}
+	}
+	
+	private WebElement getElement(final String xpath) {
+		try{
+			this.driver.switchTo().defaultContent();
 			return driver.findElement(By.xpath(xpath));
 		} catch(final Exception e) {
 			return null;
 		}
+	}
+	
+	public void wait_(final int secs) {
+		try {
+			final long millis = secs*1000;
+			Thread.sleep(millis);
+		} catch (final InterruptedException e) {
+		}
+	}
+	
+	public boolean waitForLoading(final int timeout)
+	{
+		int timer = 0;
+		while(this.getElement("xpath=//title[@id='loading']") != null && timer <= timeout)
+		{
+			timer++;
+			this.wait_(1);
+		}
+		this.wait_(1);
+		return timer < timeout;
+	}
+	
+	public boolean waitForElement(final String xpath, final int timeout){
+		int timer = 0;
+		while(this.getElement(xpath) == null && timer < timeout)
+		{
+			timer++;
+			this.wait_(1);
+		}
+		this.wait_(1);
+		return timer <= timeout;
 	}
 	
 }
