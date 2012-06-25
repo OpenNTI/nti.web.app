@@ -135,6 +135,7 @@ Ext.define('NextThought.controller.Session', {
 			}
 		},
 
+
 		attemptLoginCallback: function(username,successCallback, failureCallback){
 			var me = this;
 			Socket.setup();
@@ -170,6 +171,7 @@ Ext.define('NextThought.controller.Session', {
 		//Log here to help address #550.
 		console.log('logout, redirect to ' + url);
 		Socket.tearDownSocket();
+		app.fireEvent('session-closed');
 		location.replace(url);
 	}
 });

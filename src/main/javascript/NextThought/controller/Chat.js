@@ -27,8 +27,6 @@ Ext.define('NextThought.controller.Chat', {
 
 
 	init: function() {
-		this.activeRooms = {};
-
 		var me = this;
 
 		//table of behavious based on channel
@@ -97,6 +95,25 @@ Ext.define('NextThought.controller.Chat', {
 			}
 
 		},{});
+
+		//handle some events on session, open existing chat rooms and clear the session on logout.
+		this.application.on('session-ready', this.onSessionReady, this);
+		this.application.on('session-closed', function(){sessionStorage.clear();}, this);
+	},
+
+
+	onSessionReady: function(){
+		//open any rooms we were currently involved in
+		var me = this,
+			roomInfos = me.getAllRoomInfosFromSessionStorage(),
+			w;
+		Ext.each(roomInfos, function(ri) {
+			me.onEnteredRoom(ri);
+			w = me.getChatWindow(ri);
+			w.show();
+			w.minimize();
+		});
+
 	},
 
 
@@ -140,18 +157,17 @@ Ext.define('NextThought.controller.Chat', {
 			roomId = options.ContainerId;
 		}
 
-		//Check to see if a room with these users already exists, and use that.
-		for (key in this.activeRooms) {
-			if (this.activeRooms.hasOwnProperty(key)) {
-				ri = this.activeRooms[key];
-				if (roomId && roomId === ri.getId()){
-					return ri;
+		var i, rInfo;
+		for (i = 0; i < sessionStorage.length; i++)
+			rInfo = this.getRoomInfoFromSessionStorage(sessionStorage.key(i));
+			if (rInfo){
+				if (roomId && roomId === rInfo.getId()){
+					return rInfo;
 				}
-				else if (!ClassroomUtils.isClassroomId(ri.getId())) {
-					if( Ext.Array.difference(ri.get('Occupants'),allUsers).length === 0
-					||	Ext.Array.difference(allUsers,ri.get('Occupants')).length === 0 ){
-						return ri;
-					}
+				else if (!ClassroomUtils.isClassroomId(rInfo.getId())) {
+					if( Ext.Array.difference(rInfo.get('Occupants'),allUsers).length === 0
+					||	Ext.Array.difference(allUsers,rInfo.get('Occupants')).length === 0 ){
+						return rInfo;
 				}
 			}
 		}
@@ -196,7 +212,7 @@ Ext.define('NextThought.controller.Chat', {
 		if (!options.ContainerId){
 			//TODO: figure out what to do when there's no container ID?
 			delete options.ContainerId;
-			console.error('Chat room entered and no current location is set, this chat will not be visable as a transcript.');
+			console.error('Chat room entered and no current location is set, this chat will not be visible as a transcript.');
 		}
 
 		if (usersOrList.get && usersOrList.get('friends')) {
@@ -389,7 +405,6 @@ Ext.define('NextThought.controller.Chat', {
 		var roomInfo = ClassroomUtils.getRoomInfoFromComponent(cmp),
 			shouldModerate = this.isModerator(roomInfo) ? false : true;
 
-
 		console.log('moderate clicked, moderation value', shouldModerate);
 		Socket.emit('chat_makeModerated', roomInfo.getId(), shouldModerate);
 	},
@@ -404,11 +419,11 @@ Ext.define('NextThought.controller.Chat', {
 
 
 	updateRoomInfo: function(ri) {
-		if (this.activeRooms.hasOwnProperty(ri.getId())) {
-			this.activeRooms[ri.getId()].fireEvent('changed', ri);
+			var ri = this.getRoomInfoFromSessionStorage(ri.getId());
+		if (ri) {
+			ri.fireEvent('changed', ri);
 		}
-
-		this.activeRooms[ri.getId()] = ri;
+		this.putRoomInfoIntoSessionStorage(ri);
 	},
 
 
@@ -534,7 +549,7 @@ Ext.define('NextThought.controller.Chat', {
 
 	pinMessage: function(msgCmp) {
 		var m = msgCmp.message,
-			ri = this.activeRooms[m.get('ContainerId')];
+			ri = this.getRoomInfoFromSessionStorage(m.get('ContainerId'));
 		this.postMessage(ri, {'channel': m.get('channel'), 'action': 'pin', 'ntiid': m.getId()}, null, 'META');
 	},
 
@@ -555,7 +570,7 @@ Ext.define('NextThought.controller.Chat', {
 
 
 	onSocketDisconnect: function(){
-	   this.activeRooms = {};
+	   sessionStorage.clear();
 	},
 
 
@@ -603,7 +618,7 @@ Ext.define('NextThought.controller.Chat', {
 
 	onMembershipOrModerationChanged: function(msg) {
 		var newRoomInfo = ParseUtils.parseItems([msg])[0],
-			oldRoomInfo = this.activeRooms[newRoomInfo.getId()];
+			oldRoomInfo = this.getRoomInfoFromSessionStorage(newRoomInfo.getId());
 
 		if(newRoomInfo.get('Moderators').length === 0 && newRoomInfo.get('Moderated')) {
 			console.log('Transient moderation change encountered, ignoring', newRoomInfo);
@@ -617,18 +632,7 @@ Ext.define('NextThought.controller.Chat', {
 
 
 	onExitedRoom: function(room) {
-		/*
-		room already closed, tabs gone
-		if (this.activeRooms.hasOwnProperty(room.ID)) {
-			try {
-			this.activeRooms[room.ID].fireEvent('left-room');
-			}
-			catch(e) {
-				debugger;
-			}
-		}
-		*/
-		delete this.activeRooms[room.ID];
+		sessionStorage.removeItem(room.ID);
 	},
 
 
@@ -791,7 +795,7 @@ Ext.define('NextThought.controller.Chat', {
 			a = b.action,
 			i = b.ntiid,
 			e,
-			r = this.activeRooms[msg.get('ContainerId')],
+			r = this.getRoomInfoFromSessionStorage(msg.get('ContainerId')),
 			cv = this.getChatView(r);
 
 		if ('clearPinned' === a) {
@@ -829,40 +833,42 @@ Ext.define('NextThought.controller.Chat', {
 
 
 	onEnteredRoom: function(msg) {
-		var roomInfo = msg && msg.isModel? msg : ParseUtils.parseItems([msg])[0],
-			existingRoom;
+		var roomInfo = msg && msg.isModel? msg : ParseUtils.parseItems([msg])[0];
+		this.putRoomInfoIntoSessionStorage(roomInfo);
+		this.openChatWindow(roomInfo);
+	},
 
-		//double check the roominfo.  if it's empty, we probably shouldn't have gotten this far...
-		//...but just in case, make sure we don't confuse the user and open tabs/etc
-		if (ClassroomUtils.isRoomEmpty(roomInfo)) {
-			console.warn('chat room ' + roomInfo.getId()+ ' entered but is empty, exiting room', roomInfo);
-			this.leaveRoom(roomInfo);
-			return;
+
+	putRoomInfoIntoSessionStorage: function(roomInfo){
+		if (!roomInfo){Ext.Error.raise('Requires a RoomInfo object');}
+		var key = roomInfo.getId();
+		sessionStorage.setItem(key, Ext.JSON.encode(roomInfo.getData()));
+		console.log('PUTTED', sessionStorage.getItem(key))
+	},
+
+
+	getRoomInfoFromSessionStorage: function(key) {
+		if (!key){Ext.Error.raise('Requires key to look up RoomInfo');}
+		var jsonString = sessionStorage.getItem(key);
+		if (jsonString){
+			try {
+				return Ext.create('NextThought.model.RoomInfo', Ext.JSON.decode(jsonString));
+			}
+			catch(e) {
+				console.warn('Item in session storage is not a roomInfo', jsonString);
+			}
 		}
+		return null; //not there
+	},
 
-		if (this.activeRooms.hasOwnProperty(roomInfo.getId())) {
-			console.warn('room already exists, all rooms/roomInfo', this.activeRooms, roomInfo);
+
+	getAllRoomInfosFromSessionStorage: function(){
+		var i, roomInfos = [], ri;
+		for (i = 0; i < sessionStorage.length; i++) {
+			ri = this.getRoomInfoFromSessionStorage(sessionStorage.key(i));
+			if (ri){roomInfos.push(ri);}
 		}
-
-
-		//TODO - this needs reworking...
-		existingRoom = this.existingRoom(roomInfo.get('Occupants'), roomInfo.getId(), null);
-
-		this.activeRooms[roomInfo.getId()] = roomInfo;
-/*
-		if (existingRoom) {
-			existingRoom.fireEvent('changed', roomInfo);
-			this.leaveRoom(existingRoom);
-			return;
-		}
-*/
-
-		if (this.getClassroom().isClassroom(roomInfo)) {
-			this.getClassroom().onEnteredRoom(roomInfo);
-		}
-		else{
-			this.openChatWindow(roomInfo);
-		}
+		return roomInfos;
 	}
 
 });
