@@ -5,8 +5,8 @@ import com.nti.selenium.navigation.Navigation;
 import org.junit.Before;
 
 public class Quizzes extends Navigation {
-
-	protected String focusedQuestionXpath;
+	
+	private String focusedQuestionXpath = null;
 	
 	@Before
 	public void setUp() throws Exception {
@@ -14,10 +14,11 @@ public class Quizzes extends Navigation {
 		this.navigateTo("MathCounts 2012", null, "Warm-Up 1");
 	}
 	
-	public void focusQuestion(String questionID){
-		String xpathInput = this.xpathAttributeBuilder("li", "value", questionID)
-				+ this.xpathAddonBuilder("div", "class", "question")
-				+ this.xpathAddonBuilder("div", "class", "answerblock");
+	public void focusQuestion(final String questionID) {
+		StringBuilder sb = new StringBuilder(this.xpathAttributeBuilder("li", "value", questionID));
+		sb.append(this.xpathAddonBuilder("div", "class", "question"));
+		sb.append(this.xpathAddonBuilder("div", "class", "answerblock"));
+		String xpathInput = sb.toString()
 		selenium.click(xpathInput + "//span");
 		this.wait_(3);
 		this.focusedQuestionXpath = xpathInput;
@@ -42,8 +43,6 @@ public class Quizzes extends Navigation {
 		String xpathSubmit = this.xpathAttributeAndTextBuilder("a", "id", "submit", "Reset");
 //		this.clickElement(xpathSubmit);
 	}
-	
-	
 	
 	public void completeQuiz100Percent(){
 		

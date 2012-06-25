@@ -32,8 +32,8 @@ public class Base {
 	protected static Credentials[] credentials;
 	protected static final Properties propertiesFile = new Properties();
 	
-	protected Selenium selenium;
 	protected WebDriver driver;
+	protected Selenium selenium;
 	protected String xpathBuilder = null;
 	
 	@BeforeClass
@@ -80,48 +80,48 @@ public class Base {
 		selenium.stop();
 	}
 	
-	public String buildString(String[] strings){
+	public String buildString(final String... strings) {
 		StringBuilder builder = new StringBuilder();
-		for(String str: strings){
+		for(final String str: strings)
+		{
 			builder.append(str);
 		}
 		return builder.toString();
 	}
 	
-	public String xpathAttributeBuilder(String tag, String attribute, String value){
+	public String xpathAttributeBuilder(final String tag, final String attribute, final String value){
+		final String[] xpathElements = {"//", tag, "[@", attribute, "='", value, "']"};
+		return this.buildString(xpathElements);
+	}
+	
+	public String xpathTextBuilder(final String tag, final String text) {
+		final String[] xpathElements = {"//", tag, "[text()='", text, "']"};
+		return this.buildString(xpathElements);
+	}
+	
+	public String xpathAttributeAndTextBuilder(final String tag, final String attribute, final String value, final String text) {
+		final String[] xpathElements = {"//", tag, "[@", attribute, "='", value, "' and text()='", text, "']"};
+		return this.buildString(xpathElements);
+	}
+	
+	public String xpathAddonBuilder(final String tag, final String attribute, final String value){
 		String[] xpathElements = {"//", tag, "[@", attribute, "='", value, "']"};
 		return this.buildString(xpathElements);
 	}
 	
-	public String xpathTextBuilder(String tag, String text){
-		String[] xpathElements = {"//", tag, "[text()='", text, "']"};
-		return this.buildString(xpathElements);
-	}
-	
-	public String xpathAttributeAndTextBuilder(String tag, String attribute, String value, String text){
-		String[] xpathElements = {"//", tag, "[@", attribute, "='", value, "' and text()='", text, "']"};
-		return this.buildString(xpathElements);
-	}
-	
-	public String xpathAddonBuilder(String tag, String attribute, String value){
-		String[] xpathElements = {"//", tag, "[@", attribute, "='", value, "']"};
-		return this.buildString(xpathElements);
-	}
-	
-	public String findContentFrameBodyElement(){
+	public String findContentFrameBodyElement() {
 		return "return document.querySelector('#readerPanel-body iframe');";
 	}
 	
-	public WebElement findContentElement(String xpath){
+	public WebElement findContentElement(final String xpath) {
 		WebElement iframe = (WebElement)((JavascriptExecutor) driver).executeScript(findContentFrameBodyElement());
 		return driver.switchTo().frame(iframe).findElement(By.xpath(xpath));
 	}
 	
-	public WebElement getElement(String xpath){
+	public WebElement getElement(final String xpath) {
 		try{
 			return driver.findElement(By.xpath(xpath));
-		}
-		catch(Exception e){
+		} catch(final Exception e) {
 			return null;
 		}
 	}

@@ -5,7 +5,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-public class TestLogin extends Login{
+public class TestLogin extends Login {
 
 	@Test
 	public void testLogin(){
@@ -14,14 +14,14 @@ public class TestLogin extends Login{
 	}
 	
 	@Test
-	public void testIncorrectUserLogin(){
+	public void testIncorrectUserLogin() {
 		try{
 			this.login("incorrect_user", "incorrect_password");
 			fail("Should have errored for lack of password field");
 		}
-		catch (final Exception e){
+		catch (final Exception e) {
 		}
-		finally{
+		finally {
 			assertEquals(selenium.getTitle(), "NextThought Login");
 		}
 	}

@@ -2,20 +2,19 @@ package com.nti.selenium.login;
 
 import com.nti.selenium.Base;
 
-public class Login extends Base{
+public class Login extends Base {
 	
 	public void wait_(final double secs) {
 		try {
-			Double dsec = new Double(secs*1000);
-			Thread.sleep(dsec.intValue());
+			millis = secs*1000;
+			Thread.sleep(millis);
 		} catch (final InterruptedException e) {
-			e.printStackTrace();
 		}
 	}
 	
 	public boolean waitForLoading(final int timeout)
 	{
-		double timer = 0;
+		int timer = 0;
 		while(this.getElement("xpath=//title[@id='loading']") != null && timer <= timeout)
 		{
 			timer++;
@@ -36,7 +35,7 @@ public class Login extends Base{
 		return timer <= timeout;
 	}
 	
-	protected void doLogin(String username, String password){
+	protected void doLogin(final String username, final String password) {
 		
 		final String usernameXpath = this.xpathAttributeBuilder("input", "name", "username");
 		final String passwordXpath = this.xpathAttributeBuilder("input", "name", "password");
@@ -77,5 +76,4 @@ public class Login extends Base{
 		this.login();
 		this.doLogout();
 	}
-	
 }
