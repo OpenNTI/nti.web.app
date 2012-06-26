@@ -29,6 +29,7 @@
 
 .color {
 	&.x-toolbar-item {margin: 0;}
+	display: inline-block;
 	padding: 8px 7px;
 	border: 1px solid transparent;
 	border-radius: 3px;
@@ -39,6 +40,7 @@
 		background: #ffffff;
 	}
 
+	em.button,
 	button{
 		@include color-button-base;
 		$g: linear-gradient(left top,
@@ -66,17 +68,45 @@
 
 	}
 
-	&.black button  { background: #333333; border-color: #333333; }
-	&.grey1 button  { background: #707070; border-color: #707070; }
-	&.grey2 button  { background: #acacac; border-color: #acacac; }
-	&.grey3 button  { background: #e1e1e1; border-color: #b3b3b3; div {opacity: 0.9;} }
-	&.red button    { background: #d34f39; border-color: #c6452f; }
-	&.blue button   { background: #2b89c5; border-color: #2880b9; }
-	&.green button  { background: #a0c94c; border-color: #82a835; }
-	&.orange button { background: #fa8700; border-color: #d97704; }
-	&.magenta button{ background: #b42789; border-color: #b42789; }
-	&.purple button { background: #6f3d93; border-color: #6f3d93; }
-	&.yellow button { background: #fff02a; border-color: #d9d15d; div {opacity: 0.93;} }
+	&.black {em.button,button  { background: #333333; border-color: #333333; }}
+	&.grey1 {em.button,button  { background: #707070; border-color: #707070; }}
+	&.grey2 {em.button,button  { background: #acacac; border-color: #acacac; }}
+	&.grey3 {em.button,button  { background: #e1e1e1; border-color: #b3b3b3; div {opacity: 0.9;} }}
+	&.red {em.button,button    { background: #d34f39; border-color: #c6452f; }}
+	&.blue {em.button,button   { background: #2b89c5; border-color: #2880b9; }}
+	&.green {em.button,button  { background: #a0c94c; border-color: #82a835; }}
+	&.orange {em.button,button { background: #fa8700; border-color: #d97704; }}
+	&.magenta {em.button,button{ background: #b42789; border-color: #b42789; }}
+	&.purple {em.button,button { background: #6f3d93; border-color: #6f3d93; }}
+	&.yellow {em.button,button { background: #fff02a; border-color: #d9d15d; div {opacity: 0.93;} }}
+}
+
+.x-panel-nt,
+.x-menu-nt {
+	&.color-picker {
+		.x-menu-body {padding: 0;border-radius: 3px;}
+		overflow: visible;
+
+		&::before {
+			position: absolute;
+			content: url(../images/flyout-nib.png);
+			width: 12px;
+			height: 8px;
+			top: -6px;
+			left: 73px;
+			z-index: 1;
+		}
+	}
+}
+
+.color-palette {
+	.x-panel-nt .x-menu-body &.x-menu-item { padding: 5; margin: 0; }
+	.color { float: left; clear: right; padding: 5px; }
+
+	overflow: hidden;
+	width: 155px;
+	height: 118px;
+	margin: 0;
 }
 
 .wb-window{

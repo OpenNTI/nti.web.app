@@ -35,6 +35,7 @@ Ext.define('NextThought.view.whiteboard.editor.TextOptions',{
 			cls: 'color',
 			ui: 'button',
 			baseCls: 'whiteboard-color',
+			menuAlign: 't-b?',
 			menu: {xtype: 'color-picker'}
 		},{
 			ui: 'options',
