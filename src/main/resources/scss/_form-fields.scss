@@ -1,0 +1,35 @@
+
+.nt-combobox {
+	.x-form-trigger-wrap {
+		border-collapse: initial;
+		padding: 0 15px 0 0;
+		border-radius: 5px;
+		border: 1px solid #a0a0a0;
+		box-shadow: inset 1px 1px 0 0 #cccccc;
+		background: #ffffff;
+		position: relative;
+
+	}
+
+	.x-trigger-cell {width: 0 !important; display: inline;}
+	.x-form-trigger {
+		position: absolute;
+		right: 6px;
+		top: 14px;
+		width: 8px;
+		height: 5px;
+		border-width: 0 !important;
+		background: url(../images/search-nib.png) 0 0 no-repeat;
+	}
+
+	.x-form-field.x-form-text{
+		padding: 15px 0 15px 15px;
+		border: none;
+		border-radius: 5px;
+		background: none;
+		color: #909090;
+		font-size: 13px;
+		font-weight: 600;
+	}
+
+}

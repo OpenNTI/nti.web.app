@@ -2,11 +2,11 @@ Ext.define('NextThought.view.whiteboard.editor.ColorOption',{
 	alias: 'widget.wb-color-option',
 	extend: 'Ext.button.Button',
 
-	scale: 'large',
 	enableToggle: true,
 	allowDepress: false,
 	toggleGroup: 'whitebard-color-option',
 
+	scale: 'large',
 	ui: 'button',
 	baseCls: 'whiteboard-color',
 

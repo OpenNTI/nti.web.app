@@ -90,6 +90,7 @@
 
 		li.x-menu-item {
 			border-bottom: 1px solid #dcdcdc;
+			&.no-border,
 			&:last-of-type {
 				border-bottom-width: 0px;
 			}
