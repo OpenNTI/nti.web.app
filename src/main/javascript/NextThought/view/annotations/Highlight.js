@@ -133,7 +133,11 @@ Ext.define('NextThought.view.annotations.Highlight', {
 			items = [],
 			r = me.record,
 			text = r.get('selectedText'),
+			boundingBox = this.ownerCmp.convertRectToScreen(this.selection.getBoundingClientRect()),
 			redactionRegex = /USSC-HTML|Howes_converted|USvJones2012_converted/i;
+
+		//adjust boundingBox for screen coords:
+
 
 		if(this.isModifiable) {
 			items.push({
@@ -169,7 +173,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
 		if(/^\w+$/i.test(text)){//is it a word
 			items.push({
 				text: 'Define...',
-				handler:function(){ me.ownerCmp.fireEvent('define', text ); }
+				handler:function(){ me.ownerCmp.fireEvent('define', text, boundingBox ); }
 			});
 		}
 

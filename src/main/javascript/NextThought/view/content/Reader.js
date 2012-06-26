@@ -864,6 +864,22 @@ turn off html5 player
 				}
 			});
 		}
+	},
+
+
+	convertRectToScreen: function(r) {
+		var iframe = this.getIframe(),
+			result;
+
+		result = {
+			top: r.top + iframe.getTop(),
+			left: r.left + iframe.getLeft(),
+			right: r.right + iframe.getLeft(),
+			bottom: r.bottom + iframe.getTop(),
+			height: r.height,
+			width: r.width
+		};
+		return result;
 	}
 });
 

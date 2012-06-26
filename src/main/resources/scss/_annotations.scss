@@ -1,4 +1,9 @@
-.nti-window .definition {
+.dictionary-window {
+    @extend .nti-window;
+
+    .nti-window-header {
+ 		border-bottom: 1px solid #E7E7E7;
+    }
 }
 
 

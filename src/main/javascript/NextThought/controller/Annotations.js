@@ -21,7 +21,8 @@ Ext.define('NextThought.controller.Annotations', {
 		'annotations.Note',
 		'annotations.NoteEditor',
 		'annotations.ShareWith',
-		'content.Reader'
+		'content.Reader',
+		'definition.Window'
 	],
 
 	refs: [
@@ -71,7 +72,7 @@ Ext.define('NextThought.controller.Annotations', {
 		},{});
 	},
 
-	define: function(term){
+	define: function(term, boundingScreenBox){
 		var url = $AppConfig.server.host + '/dictionary/' + encodeURIComponent(term);
 
 		if(this.definition){
@@ -79,32 +80,16 @@ Ext.define('NextThought.controller.Annotations', {
 			delete this.definition;
 		}
 
-		this.definition = Ext.widget('nti-window',{
-			title: 'Define: '+term,
-			closeAction: 'destroy',
-			width: 300,
-			height: 400,
-			layout: 'fit',
-			items: {
-				xtype: 'component',
-				cls: 'definition',
-				autoEl: {
-					tag: 'iframe',
-					src: url,
-					frameBorder: 0,
-					marginWidth: 0,
-					marginHeight: 0,
-					scrolling: 'no',
-					seamless: true,
-					transparent: true,
-					allowTransparency: true,
-					style: 'overflow: hidden'
-				},
-				xhooks: {
+		this.definition = Ext.widget({xtype: 'definition-window', src:url});
 
-				}
-			}
-		}).show().center();
+		//figure out xy
+		var nib = 20,
+			top = Ext.Element.getViewportHeight() < (boundingScreenBox.bottom + this.definition.getHeight() + nib),
+			y = top ? boundingScreenBox.top - nib - this.definition.getHeight() : boundingScreenBox.bottom + nib,
+			x = (boundingScreenBox.left + (boundingScreenBox.width/2)) - (this.definition.getWidth()/2);
+
+		this.definition.setPosition(Math.round(x),Math.round(y)).show();
+
 	},
 
 
