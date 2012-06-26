@@ -35,6 +35,19 @@ Ext.define('NextThought.view.definition.Window', {
 			Ext.Error.raise('definition source (src) required');
 		}
 
+
 		this.down('[cls=definition]').autoEl.src = this.src;
+
+		//figure out xy
+		var p = this.pointTo || {};
+		var nib = 20;
+		var top = Ext.Element.getViewportHeight() < (p.bottom + this.getHeight() + nib),
+			y = Math.round(top ? p.top - nib - this.getHeight() : p.bottom + nib),
+			x = Math.round((p.left + (p.width/2)) - (this.getWidth()/2));
+
+		if(this.pointTo){
+			this.setPosition(x,y);
+			this.addCls(top?'south':'north');
+		}
 	}
 });

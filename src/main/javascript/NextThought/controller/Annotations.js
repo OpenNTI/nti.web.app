@@ -80,16 +80,10 @@ Ext.define('NextThought.controller.Annotations', {
 			delete this.definition;
 		}
 
-		this.definition = Ext.widget({xtype: 'definition-window', src:url});
-
-		//figure out xy
-		var nib = 20,
-			top = Ext.Element.getViewportHeight() < (boundingScreenBox.bottom + this.definition.getHeight() + nib),
-			y = top ? boundingScreenBox.top - nib - this.definition.getHeight() : boundingScreenBox.bottom + nib,
-			x = (boundingScreenBox.left + (boundingScreenBox.width/2)) - (this.definition.getWidth()/2);
-
-		this.definition.setPosition(Math.round(x),Math.round(y)).show();
-
+		this.definition = Ext.widget({
+			xtype: 'definition-window',
+			src:url,
+			pointTo: boundingScreenBox}).show();
 	},
 
 
