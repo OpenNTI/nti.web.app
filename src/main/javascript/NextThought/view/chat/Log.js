@@ -3,6 +3,7 @@ Ext.define('NextThought.view.chat.Log', {
 	alias: 'widget.chat-log-view',
 	requires: [
 		'NextThought.view.chat.log.Entry',
+		'NextThought.view.chat.log.NotificationEntry',
 		'NextThought.view.chat.log.Moderated',
 		'NextThought.view.chat.log.Content',
 		'NextThought.view.chat.log.Info',
@@ -119,44 +120,6 @@ Ext.define('NextThought.view.chat.Log', {
 	},
 
 
-	occupantsChanged: function(peopleWhoLeft, peopleWhoArrived) {
-		Ext.each(peopleWhoLeft, function(peep){
-			this.add({
-				xtype: 'chat-info-log-entry',
-				message: 'has left the room',
-				person: peep
-			});
-		}, this);
-		Ext.each(peopleWhoArrived, function(peep){
-			this.add({
-				xtype: 'chat-info-log-entry',
-				message: 'has entered the room',
-				person: peep
-			});
-		}, this);
-
-	},
-
-
-	modsChanged: function(modsLeft, modsAdded) {
-		Ext.each(modsLeft, function(peep){
-			this.add({
-				xtype: 'chat-info-log-entry',
-				message: 'is no longer a moderator',
-				person: peep
-			});
-		}, this);
-		Ext.each(modsAdded, function(peep){
-			this.add({
-				xtype: 'chat-info-log-entry',
-				message: 'has become a moderator',
-				person: peep
-			});
-		}, this);
-
-	},
-
-
 	addContentMessage: function(msg) {
 		this.add({
 			xtype: 'chat-content-log-entry',
@@ -221,6 +184,20 @@ Ext.define('NextThought.view.chat.Log', {
 			o.el.scrollIntoView(this.el);
 		}
 	},
+
+
+	addNotification: function(msg) {
+		//we are going to add then scroll to
+		var o = this.add({
+			xtype: 'chat-notification-entry',
+			message: msg
+		});
+
+		if(o.el && this.el){
+			o.el.scrollIntoView(this.el);
+		}
+	},
+
 
 	scroll: function(entry) {
 		var input = entry.nextSibling('chat-reply-to');

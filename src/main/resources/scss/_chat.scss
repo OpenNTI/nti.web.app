@@ -99,6 +99,15 @@
 		border-bottom: 1px solid #cfcfcf !important;
 		box-shadow: inset  0px -7px 7px -7px #f7f7f7;
 
+        .log-notification-wrapper {
+            clear: both;
+            text-align: center;
+            color: #cacaca;
+            font-size: 12px;
+            font-style: italic;
+            font-weight: 600;
+        }
+
 		.log-entry-wrapper {
 			overflow: hidden;
 			position: relative;

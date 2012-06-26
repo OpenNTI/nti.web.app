@@ -723,31 +723,34 @@ Ext.define('NextThought.controller.Chat', {
 
 
 	onOccupantsChanged: function(newRoomInfo, peopleWhoLeft, peopleWhoArrived, modsLeft, modsAdded) {
-		var win = this.getChatWindow(),
-			cid = newRoomInfo.get('ContainerId'),
-			id = newRoomInfo.getId(),
-			tab, view;
-
-		if (this.getClassroom().isClassroom({Id: id})) {
-			this.getClassroom().onOccupantsChanged(id, peopleWhoLeft, peopleWhoArrived);
-			this.getClassroom().onModsChanged(id, modsLeft, modsAdded);
-			return;
-		}
+		var win = this.getChatWindow(newRoomInfo.getId()),
+			log = win.down('chat-log-view[moderated=false]');
 
 		if(!win) {
 			return;
 		}
-
-		tab = this.getChatView(id);
-		if (!tab){return;}
-
-		tab.setTitle(ClassroomUtils.generateOccupantsString(newRoomInfo));
+/*
 		if (ClassroomUtils.isRoomEmpty(newRoomInfo)) {
 			tab.disableChat();
 		}
-		view = tab.down('chat-log-view[moderated=false]');
-		view.occupantsChanged(peopleWhoLeft, peopleWhoArrived);
-		view.modsChanged(modsLeft, modsAdded);
+*/
+		Ext.each(peopleWhoLeft, function(p){
+			if (!isMe(p)){
+				UserRepository.getUser(p, function(u){
+					var name = u[0].get('alias');
+					log.addNotification(name + ' has left the chat...');
+				}, this);
+			}
+		});
+
+		Ext.each(peopleWhoArrived, function(p){
+			if (!isMe(p)){
+				UserRepository.getUser(p, function(u){
+					var name = u[0].get('alias');
+					log.addNotification(name + ' entered the chat...');
+				}, this);
+			}
+		});
 	},
 
 
