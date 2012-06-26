@@ -159,6 +159,18 @@
 				background: #ffffff;
 			}
 
+			&.x-over .x-btn-icon{
+				&.bold { background-position: -36px -1436px; }
+				&.italic { background-position: -136px -1436px; }
+				&.underline { background-position: -236px -1436px; }
+			}
+
+			&.x-pressed .x-btn-icon{
+				&.bold { background-position: -36px -1236px !important; }
+				&.italic { background-position: -136px -1236px !important; }
+				&.underline { background-position: -236px -1236px !important; }
+			}
+
 			button {
 				@include button-base(30px, 3px);
 				span.x-btn-icon {
@@ -166,16 +178,10 @@
 					position: absolute;
 					top: 0; left: 0;
 					background: url(../images/whiteboard/sprite.png) 0 0 no-repeat;
-					&.bold {
-						background-position: -36px -1336px;
-					}
-					&.italic {
-						background-position: -136px -1336px;
-					}
-					&.underline {
-						background-position: -236px -1336px;
-					}
 
+					&.bold { background-position: -36px -1336px; }
+					&.italic { background-position: -136px -1336px; }
+					&.underline { background-position: -236px -1336px; }
 				}
 			}
 		}
