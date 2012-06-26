@@ -2,7 +2,8 @@ Ext.define('NextThought.view.whiteboard.editor.TextOptions',{
 	alias: 'widget.wb-tool-text-options',
 	extend: 'Ext.toolbar.Toolbar',
 	requires: [
-		'NextThought.view.form.fields.ComboBox'
+		'NextThought.view.form.fields.ComboBox',
+		'NextThought.view.whiteboard.editor.ColorPicker'
 	],
 	ui: 'options',
 	cls: 'text-options',
@@ -33,7 +34,8 @@ Ext.define('NextThought.view.whiteboard.editor.TextOptions',{
 			scale: 'large',
 			cls: 'color',
 			ui: 'button',
-			baseCls: 'whiteboard-color'
+			baseCls: 'whiteboard-color',
+			menu: {xtype: 'color-picker'}
 		},{
 			ui: 'options',
 			scale: 'medium',
