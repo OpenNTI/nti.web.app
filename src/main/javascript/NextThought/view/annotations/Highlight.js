@@ -132,7 +132,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
 		var me = this,
 			items = [],
 			r = me.record,
-			text = r.get('text'),
+			text = r.get('selectedText'),
 			redactionRegex = /USSC-HTML|Howes_converted|USvJones2012_converted/i;
 
 		if(this.isModifiable) {

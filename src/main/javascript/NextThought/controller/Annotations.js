@@ -94,7 +94,7 @@ Ext.define('NextThought.controller.Annotations', {
 					frameBorder: 0,
 					marginWidth: 0,
 					marginHeight: 0,
-//					scrolling: 'no',
+					scrolling: 'no',
 					seamless: true,
 					transparent: true,
 					allowTransparency: true,
