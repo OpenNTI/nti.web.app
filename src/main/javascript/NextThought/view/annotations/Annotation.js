@@ -267,7 +267,25 @@ Ext.define( 'NextThought.view.annotations.Annotation', {
 				}
 			});
 		}
-		return Ext.create('Ext.menu.Menu',{items: items});
+
+		Ext.each(items, function(i){
+			Ext.apply(i,{
+				ui: 'nt-annotaion',
+				plain: true
+			});
+		});
+
+		return Ext.create('Ext.menu.Menu',{
+			items: items,
+			ui: 'nt',
+			plain: true,
+			showSeparator: false,
+			shadow: false,
+			frame: false,
+			border: false,
+			hideMode: 'display',
+			minWidth: 150
+		});
 	},
 	
 	onClick: function(e) {
