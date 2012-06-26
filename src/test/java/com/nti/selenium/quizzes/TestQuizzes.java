@@ -19,16 +19,17 @@ public class TestQuizzes extends Quizzes {
 		assertEquals("√", this.getTextInAnswerblock("1"));
 	}
 	
-//	@Test
-//	public void testSubmit(){
-//		this.clickSubmit();
-//		assertTrue(this.elementExists(this.assertXpath()));
-//	}
-//	
-//	@Test
-//	public void testReset(){
-//		this.clickSubmit();
-//		this.clickReset();
-//	}
+	@Test
+	public void testSubmit(){
+		this.clickSubmit();
+		assertTrue(this.elementExists(this.noAnswerXpath("1")));
+	}
+	
+	@Test
+	public void testReset(){
+		this.clickSubmit();
+		this.clickReset();
+		assertTrue(this.elementExists(this.answerableXpath("1")));
+	}
 	
 }

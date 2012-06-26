@@ -135,7 +135,7 @@ public class Navigation extends Login {
 	}
 	
 	public WebElement getNavTestText(final String xpath) {
-		this.switchiToIframe();
+		this.switchToIframe();
 		return this.findElement(xpath);
 	}
 	

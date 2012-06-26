@@ -11,6 +11,7 @@ public class Login extends Base {
 		final String buttonXpath = this.xpathAttributeBuilder("button", "id", "submit");
 		
 		this.waitForElement(usernameXpath, timeout);
+		this.wait_(3);
 		this.findElement(usernameXpath).sendKeys(username);
 		this.waitForElement(passwordXpath, timeout);
 		this.findElement(passwordXpath).sendKeys(password);

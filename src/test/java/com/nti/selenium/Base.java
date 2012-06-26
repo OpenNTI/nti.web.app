@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.FileInputStream;
+import org.openqa.selenium.NoSuchElementException;
 import java.util.Properties;
 import java.net.URL;
 
@@ -27,12 +28,13 @@ import org.apache.commons.io.IOUtils;
 
 public class Base {
 
-	protected static final int timeout = 10;
+	protected static final int timeout = 15;
 	
 	protected static String url;
 	protected static String books;
 	protected static String sectionName;
 	protected static String chapterName;
+	protected static String browser;
 	protected static Credentials[] credentials;
 	protected static final Properties propertiesFile = new Properties();
 	
@@ -53,11 +55,13 @@ public class Base {
 			
 			is = new FileInputStream(webAppPath + localPath);
 			propertiesFile.load(is);
+			browser = propertiesFile.getProperty("browser");
 			url = propertiesFile.getProperty("url");
 			sectionName = propertiesFile.getProperty("sectionName");
 			books = propertiesFile.getProperty("books");
 			chapterName = propertiesFile.getProperty("chapterName");
 			credentials = readCredentials(propertiesFile.getProperty("users"));
+			
 			
 		} catch (final IOException e) {
 			System.out.println("couldnt find the config file");
@@ -79,8 +83,15 @@ public class Base {
 	
 	@Before
 	public void setUp() throws Exception{
-		// TODO: We should not default to FireFox
-		driver = new FirefoxDriver(); 
+		if(browser.equals("chrome")){
+			// TODO: ChromeDriver setup
+		}
+		else if(browser.equals("what ever other browsers we need")){
+			//TODO: add those browers
+		}
+		else{
+			driver = new FirefoxDriver(); 
+		}
 		selenium = new WebDriverBackedSelenium(driver, url);
 		selenium.open(url);
 	}
@@ -126,7 +137,7 @@ public class Base {
 		return "return document.querySelector('#readerPanel-body iframe');";
 	}
 	
-	public void switchiToIframe() {
+	public void switchToIframe() {
 		if (isDefault) {
 			final JavascriptExecutor executor = (JavascriptExecutor) driver;
 			final WebElement iframe = (WebElement)executor.executeScript(findContentFrameBodyElement());
@@ -142,11 +153,11 @@ public class Base {
 		}
 	}
 	
-	public WebElement findElement(final String xpath) {
+	public WebElement findElement(final String xpath) throws NoSuchElementException{
 		return this.driver.findElement(By.xpath(xpath));
 	}
 	
-	public List<WebElement> findElements(final String xpath){
+	public List<WebElement> findElements(final String xpath) throws NoSuchElementException{
 		return this.driver.findElements(By.xpath(xpath));
 	}
 	
@@ -154,17 +165,8 @@ public class Base {
 		try{
 			this.findElement(xpath);
 			return true;
-		} catch(final Exception e) {
+		} catch(NoSuchElementException e) {
 			return false;
-		}
-	}
-	
-	private WebElement getElement(final String xpath) {
-		try{
-			this.driver.switchTo().defaultContent();
-			return driver.findElement(By.xpath(xpath));
-		} catch(final Exception e) {
-			return null;
 		}
 	}
 	
@@ -178,7 +180,7 @@ public class Base {
 	
 	public boolean waitForLoading(final int timeout) {
 		int timer = 0;
-		while(this.getElement("xpath=//title[@id='loading']") != null && timer <= timeout)
+		while(this.elementExists("//title[@id='loading']")  && timer <= timeout)
 		{
 			timer++;
 			this.wait_(1);
@@ -189,7 +191,7 @@ public class Base {
 	
 	public boolean waitForElement(final String xpath, final int timeout) {
 		int timer = 0;
-		while(this.getElement(xpath) == null && timer < timeout)
+		while(!this.elementExists(xpath) && timer < timeout)
 		{
 			timer++;
 			this.wait_(1);

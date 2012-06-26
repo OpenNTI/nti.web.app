@@ -21,12 +21,44 @@ public class Quizzes extends Navigation {
 				+ "//span";
 	}
 	
+	private String findResult(String questionID){
+		return this.xpathAttributeBuilder("li", "value", questionID)
+				+ this.xpathAddonBuilder("div", "class", "question")
+				+ this.xpathAddonBuilder("div", "class", "result");
+	}
+	
 	private String getTextBlankXpathAddon(){
 		return this.xpathAddonBuilder("span", "class", "textarea") + "//textarea";
 	}
 	
+	public String noAnswerXpath(String questionID){
+		this.switchToIframe();
+		return this.findResult(questionID) +
+			   this.xpathAttributeBuilder("span", "class", "result noanswer");
+	}
+	
+	public String correctAnswerXpath(String questionID){
+		this.switchToIframe();
+		return this.findResult(questionID) + 
+			   this.xpathAttributeBuilder("span", "class", "result correct");
+	}
+	
+	public String incorrectAnswerXpath(String questionID){
+		this.switchToIframe();
+		return this.findResult(questionID) + 
+			   this.xpathAttributeBuilder("span", "class", "result incorrect");
+	}
+	
+	public String answerableXpath(String questionID){
+		this.switchToIframe();
+		String x = this.xpathAttributeBuilder("li", "value", questionID)
+				+ this.xpathAddonBuilder("div", "class", "question")
+				+ this.xpathAddonBuilder("div", "class", "result hidden");
+		return x;
+	}
+	
 	public String getTextInAnswerblock(String questionID){
-		this.switchiToIframe();
+		this.switchToIframe();
 		String xpath = this.findBlank(questionID);
 		String answer = "";
 		for(WebElement element: this.driver.findElements(By.xpath(xpath+"//span"))){
@@ -37,14 +69,14 @@ public class Quizzes extends Navigation {
 	}
 	
 	public void clickBlank(String questionID){
-		this.switchiToIframe();
+		this.switchToIframe();
 		String xpathInput = this.findBlank(questionID);
-		this.switchiToIframe();
+		this.switchToIframe();
 		this.findElement(xpathInput).click();
 	}
 	
 	public void answerQuestion(String questionID, String answer){
-		this.switchiToIframe();
+		this.switchToIframe();
 		this.clickBlank(questionID);
 		String xpathInput = this.findBlank(questionID);
 		this.findElement(xpathInput + this.getTextBlankXpathAddon()).sendKeys(answer);
@@ -58,14 +90,14 @@ public class Quizzes extends Navigation {
 	}
 	
 	public void clickSubmit(){
-		this.switchiToIframe();
+		this.switchToIframe();
 		String xpathSubmit = this.xpathAttributeAndTextBuilder("a", "id", "submit", "Submit");
 		this.findElement(xpathSubmit).click();
 		this.waitForLoading(timeout);
 	}
 	
 	public void clickReset(){
-		this.switchiToIframe();
+		this.switchToIframe();
 		String xpathReset = this.xpathAttributeAndTextBuilder("a", "id", "submit", "Reset");
 		this.findElement(xpathReset).click();
 		this.waitForLoading(timeout);
@@ -77,11 +109,6 @@ public class Quizzes extends Navigation {
 	
 	public void completeQuiz0Percent(){
 		
-	}
-	
-	public String assertXpath(){
-		this.switchiToIframe();
-		return this.xpathAttributeBuilder("span", "id", "noanswer");
 	}
 	
 }
