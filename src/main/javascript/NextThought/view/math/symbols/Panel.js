@@ -3,6 +3,10 @@ Ext.define('NextThought.view.math.symbols.Panel',{
 	cls: 'math-symbol-panel',
 	alias: 'widget.math-symbol-panel',
 
+	requires: [
+		'NextThought.view.Window'
+	],
+
 	statics: {
 		/**
 		 * Static method called when we need to show the Math Panel.
@@ -18,15 +22,16 @@ Ext.define('NextThought.view.math.symbols.Panel',{
 			}
 
 			if (!this.win) {
-				this.win = Ext.widget('window',{
+				this.win = Ext.widget('nti-window',{
 					title: 'Math Symbols',
 					closeAction: 'hide',
 					hidden: true,
-					layout: 'fit',
+					minHeight: 115,
+					layout: 'auto',
 					focusOnToFront: false,
-					items: {
-						xtype: 'math-symbol-panel'
-					}
+					items: [
+						{xtype: 'math-symbol-panel'}
+					]
 				});
 			}
 			this.win.show();
@@ -55,7 +60,6 @@ Ext.define('NextThought.view.math.symbols.Panel',{
 			}
 		}
 	},
-
 
 	/* settings for this panel*/
 	layout: {
