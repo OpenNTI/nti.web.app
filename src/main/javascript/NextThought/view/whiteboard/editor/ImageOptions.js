@@ -60,7 +60,6 @@ Ext.define('NextThought.view.whiteboard.editor.ImageOptions',{
 
 
 	enableImageDropping: function(){
-		console.log('calling...');
 		var me = this,
 			el = me.up('whiteboard-editor').canvas.el,
 			t;

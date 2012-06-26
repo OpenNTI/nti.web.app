@@ -3,7 +3,7 @@ Ext.define('NextThought.view.whiteboard.editor.TextOptions',{
 	extend: 'Ext.toolbar.Toolbar',
 	requires: [
 		'NextThought.view.form.fields.ComboBox',
-		'NextThought.view.whiteboard.editor.ColorPicker'
+		'NextThought.view.whiteboard.editor.ColorPickerButton'
 	],
 	ui: 'options',
 	cls: 'text-options',
@@ -31,12 +31,7 @@ Ext.define('NextThought.view.whiteboard.editor.TextOptions',{
 			displayField: 'size',
 			valueField: 'size'
 		},{
-			scale: 'large',
-			cls: 'color',
-			ui: 'button',
-			baseCls: 'whiteboard-color',
-			menuAlign: 't-b?',
-			menu: {xtype: 'color-picker'}
+			xtype: 'color-picker-button'
 		},{
 			ui: 'options',
 			scale: 'medium',

@@ -3,6 +3,7 @@ Ext.define('NextThought.view.menus.JumpTo',{
 	alias: 'widget.jump-menu',
 	ui: 'nt',
 	plain: true,
+	showSeparator: false,
 	shadow: false,
 	frame: false,
 	border: false,

@@ -7,6 +7,7 @@ Ext.define('NextThought.view.menus.MyAccount',{
 	ui: 'nt',
 	cls: 'my-account-menu',
 	plain: true,
+	showSeparator: false,
 	shadow: false,
 	frame: false,
 	border: false,

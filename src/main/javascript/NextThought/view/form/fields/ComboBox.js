@@ -15,6 +15,7 @@ Ext.define('NextThought.view.form.fields.ComboBox',{
 	listConfig: {
 		ui: 'nt',
 		plain: true,
+		showSeparator: false,
 		shadow: false,
 		frame: false,
 		border: false,

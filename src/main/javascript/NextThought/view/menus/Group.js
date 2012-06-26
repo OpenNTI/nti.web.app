@@ -6,6 +6,7 @@ Ext.define('NextThought.view.menus.Group',{
 
 	ui: 'nt',
 	plain: true,
+	showSeparator: false,
 	shadow: false,
 	frame: false,
 	border: false,

@@ -6,6 +6,7 @@ Ext.define('NextThought.view.form.fields.SearchAdvancedOptions',{
 	],
 	ui: 'nt',
 	plain: true,
+	showSeparator: false,
 	shadow: false,
 	frame: false,
 	border: false,

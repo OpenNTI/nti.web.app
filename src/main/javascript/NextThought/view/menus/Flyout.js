@@ -10,6 +10,7 @@ Ext.define('NextThought.view.menus.Flyout',{
 	ignoreParentClicks: true,
 	autoScroll: false,
 	plain: true,
+	showSeparator: false,
 	shadow: false,
 	frame: false,
 	border: false,
