@@ -308,7 +308,11 @@ $itemWidth: 275px;
 				$margin: 14px;
 				$nibWidth: 20px;
 
-				box-shadow: inset 2px 2px 6px -4px #000000;
+				box-shadow: inset 2px 2px 6px -4px #000000;//TODO: fix to be a sane value (use RGBA to lighten the shadow, not the blur & spread)
+				// REFRESHER: box-shadow syntax is:
+				// box-shadow:  none | <shadow> [,<shadow>]*
+				//	where <shadow> is defined as:
+				//		inset? && [ <offset-x> <offset-y> <blur-radius>? <spread-radius>? <color>? ]
 				width: $itemWidth - (2*$margin);
 				margin: $margin;
 				border: 1px solid #a0a0a0;

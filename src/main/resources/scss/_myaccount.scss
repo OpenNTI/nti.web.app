@@ -11,7 +11,11 @@
 	.menu-visible &,
 	&:hover{
 		border-color: #dcdcdc;
-		box-shadow: 1px 1px 6px -3px #000000 !important;
+		box-shadow: 1px 1px 6px -3px #000000 !important;//TODO: fix to be a sane value (use RGBA to lighten the shadow, not the spread... 10px is too high, and -5px is too low. those values should be something like 2px and 1px or 0)
+			// REFRESHER: box-shadow syntax is:
+			// box-shadow:  none | <shadow> [,<shadow>]*
+			//	where <shadow> is defined as:
+			//		inset? && [ <offset-x> <offset-y> <blur-radius>? <spread-radius>? <color>? ]
 		.settings.menu-nib {
 			background-position: 0 -17px
 		}
@@ -22,7 +26,11 @@
 		}
 	}
 	.menu-visible &{
-		box-shadow: 1px 5px 6px -3px #000000 !important;
+		box-shadow: 1px 5px 6px -3px #000000 !important;//TODO: fix to be a sane value (use RGBA to lighten the shadow, not the spread... 10px is too high, and -5px is too low. those values should be something like 2px and 1px or 0)
+			// REFRESHER: box-shadow syntax is:
+			// box-shadow:  none | <shadow> [,<shadow>]*
+			//	where <shadow> is defined as:
+			//		inset? && [ <offset-x> <offset-y> <blur-radius>? <spread-radius>? <color>? ]
 	}
 
 	.settings.menu-nib{

@@ -63,7 +63,11 @@
 
 	.chat-view {
 		border-radius: 0 5px 5px 0;
-		box-shadow: -2px 0px 9px -5px #333333;
+		box-shadow: -2px 0px 9px -5px #333333;//TODO: fix to be a sane value (use RGBA to lighten the shadow, not the blur & spread)
+		// REFRESHER: box-shadow syntax is:
+		// box-shadow:  none | <shadow> [,<shadow>]*
+		//	where <shadow> is defined as:
+		//		inset? && [ <offset-x> <offset-y> <blur-radius>? <spread-radius>? <color>? ]
 
 		.x-box-inner{
 
@@ -97,7 +101,11 @@
 	.chat-log-view {
 		border-radius: 0 5px 0 0;
 		border-bottom: 1px solid #cfcfcf !important;
-		box-shadow: inset  0px -7px 7px -7px #f7f7f7;
+		box-shadow: inset  0px -7px 7px -7px #f7f7f7;//TODO: fix to be a sane value (use RGBA to lighten the shadow, not the blur & spread)
+		// REFRESHER: box-shadow syntax is:
+		// box-shadow:  none | <shadow> [,<shadow>]*
+		//	where <shadow> is defined as:
+		//		inset? && [ <offset-x> <offset-y> <blur-radius>? <spread-radius>? <color>? ]
 
         .log-notification-wrapper {
             clear: both;
@@ -131,7 +139,11 @@
 			.log-entry{
 				background: #3fb3f6;
 				border-radius: 5px;
-				box-shadow: 1px 1px 10px -1px #999;
+				box-shadow: 1px 1px 10px -1px #999;//TODO: fix to be a sane value (use RGBA to lighten the shadow, not the blur & spread)
+				// REFRESHER: box-shadow syntax is:
+				// box-shadow:  none | <shadow> [,<shadow>]*
+				//	where <shadow> is defined as:
+				//		inset? && [ <offset-x> <offset-y> <blur-radius>? <spread-radius>? <color>? ]
 				float: left;
 				overflow: visible;
 				margin: 12px;
@@ -208,7 +220,11 @@
 					width: 100%;
 					border-radius: 3px;
 					border: 1px solid #a0a0a0;
-					box-shadow: inset 3px 3px 10px -5px #a0a0a0;
+					box-shadow: inset 3px 3px 10px -5px #a0a0a0;//TODO: fix to be a sane value (use RGBA to lighten the shadow, not the blur & spread)
+					// REFRESHER: box-shadow syntax is:
+					// box-shadow:  none | <shadow> [,<shadow>]*
+					//	where <shadow> is defined as:
+					//		inset? && [ <offset-x> <offset-y> <blur-radius>? <spread-radius>? <color>? ]
 				}
 			}
 		}

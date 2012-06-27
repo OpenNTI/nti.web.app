@@ -1,7 +1,11 @@
 
 .nti-window {
     background-color: #fcfcfc;
-	box-shadow: 3px 3px 6px -3px #cccccc;
+	box-shadow: 3px 3px 6px -3px #cccccc;//TODO: fix to be a sane value (use RGBA to lighten the shadow, not the blur & spread)
+	// REFRESHER: box-shadow syntax is:
+	// box-shadow:  none | <shadow> [,<shadow>]*
+	//	where <shadow> is defined as:
+	//		inset? && [ <offset-x> <offset-y> <blur-radius>? <spread-radius>? <color>? ]
 	border-radius: 5px;
 	border: 1px solid #dbdbdb;
 	overflow: hidden;

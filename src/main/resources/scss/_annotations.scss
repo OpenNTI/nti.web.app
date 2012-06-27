@@ -83,7 +83,12 @@
 	width: 100%;
 	border-radius: 3px;
 	border: 1px solid #a0a0a0;
-	box-shadow: inset 3px 3px 10px -5px #a0a0a0;
+	box-shadow: inset 3px 3px 10px -5px #a0a0a0; //TODO: fix to be a sane value (use RGBA to lighten the shadow, not the blur & spread)
+	// REFRESHER: box-shadow syntax is:
+	// box-shadow:  none | <shadow> [,<shadow>]*
+	//	where <shadow> is defined as:
+	//		inset? && [ <offset-x> <offset-y> <blur-radius>? <spread-radius>? <color>? ]
+
 	position: relative;
 
 	.user-search-field {
