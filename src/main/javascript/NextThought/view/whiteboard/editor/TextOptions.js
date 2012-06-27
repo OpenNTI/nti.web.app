@@ -29,7 +29,8 @@ Ext.define('NextThought.view.whiteboard.editor.TextOptions',{
 			}),
 			queryMode: 'local',
 			displayField: 'size',
-			valueField: 'size'
+			valueField: 'size',
+			value: '12 pt'
 		},{
 			xtype: 'color-picker-button'
 		},{

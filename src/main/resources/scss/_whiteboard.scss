@@ -173,6 +173,7 @@
 		&.pencil-stroke-options {
 			padding: 0 34px 0 20px;
 		}
+		&.shape-color-options,
 		&.pencil-color-options {
 			padding: 11px 0 8px 34px;
 			border: 0 solid transparent;
@@ -270,12 +271,37 @@
 				border: 1px solid #e0e0e0;
 			}
 
+			.whiteboard-tool-option-split {
+				&.whiteboard-tool-option-split-right {
+					display: block;
+					padding-right: 15px;
+					background: url(../images/forms/split-light-nib.png) right 14px no-repeat;
+					margin-right: 2px;
+
+					//for poly
+					.whiteboard-tool-option-inner {
+						display: block;
+						position: absolute;
+						top: 8px;
+						left: 1px;
+						width: 30px;
+						text-align: center;
+						z-index: 1;
+						font-weight: bold;
+						color: white;
+						font-size: 12px;
+
+					}
+				}
+			}
+
 			button {
 				@include whiteboard-toolbar-common;
 				position: relative;
 				background: none;
 				width: 32px; height: 32px;
 			}
+
 
 			.whiteboard-tool-option-icon{
 				@include whiteboard-toolbar-common;
@@ -289,20 +315,46 @@
 					&.medium { background-position: -234px -1034px; }
 					&.large { background-position: -334px -1034px; }
 				}
+
+				&.shape {
+					&.line { background-position: -34px -434px; }
+					&.square { background-position: -134px -434px; }
+					&.circle { background-position: -234px -434px; }
+					&.triangle { background-position: -334px -434px; }
+					&.poly { background-position: -434px -434px; }
+				}
 			}
 
-			&.x-pressed .whiteboard-tool-option-icon.stroke {
-				&.fine { background-position: -34px -934px !important; }
-				&.small { background-position: -134px -934px !important; }
-				&.medium { background-position: -234px -934px !important; }
-				&.large { background-position: -334px -934px !important; }
+			&.x-pressed .whiteboard-tool-option-icon{
+				&.stroke {
+					&.fine { background-position: -34px -934px !important; }
+					&.small { background-position: -134px -934px !important; }
+					&.medium { background-position: -234px -934px !important; }
+					&.large { background-position: -334px -934px !important; }
+				}
+				&.shape {
+					&.line { background-position: -34px -334px !important; }
+					&.square { background-position: -134px -334px !important; }
+					&.circle { background-position: -234px -334px !important; }
+					&.triangle { background-position: -334px -334px !important; }
+					&.poly { background-position: -434px -334px !important; }
+				}
 			}
 
-			&.x-over .whiteboard-tool-option-icon.stroke {
-				&.fine { background-position: -34px -1134px; }
-				&.small { background-position: -134px -1134px; }
-				&.medium { background-position: -234px -1134px; }
-				&.large { background-position: -334px -1134px; }
+			&.x-over .whiteboard-tool-option-icon {
+				&.stroke {
+					&.fine { background-position: -34px -1134px; }
+					&.small { background-position: -134px -1134px; }
+					&.medium { background-position: -234px -1134px; }
+					&.large { background-position: -334px -1134px; }
+				}
+				&.shape {
+					&.line { background-position: -34px -534px; }
+					&.square { background-position: -134px -534px; }
+					&.circle { background-position: -234px -534px; }
+					&.triangle { background-position: -334px -534px; }
+					&.poly { background-position: -434px -534px; }
+				}
 			}
 		}
 	}
