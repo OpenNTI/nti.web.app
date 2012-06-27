@@ -1,0 +1,61 @@
+
+@mixin button-base{
+	cursor: pointer;
+	border-width: 0;
+	display: block;
+	overflow: hidden;
+	position: relative;
+	width: 36px;
+	height: 36px;
+}
+
+.math-symbol-panel {
+
+	table {
+	  border-collapse: collapse;
+		border-width: 0;
+
+		td, th {
+		  border: 1px solid black;
+		}
+
+		tr:first-child {th,td {
+		  border-top: 0;
+		}}
+
+		tr:last-child td {
+		  border-bottom: 0;
+		}
+		tr td:first-child,
+		tr th:first-child {
+		  border-left: 0;
+		}
+		tr td:last-child,
+		tr th:last-child {
+		  border-right: 0;
+		}
+	}
+}
+
+.x-btn-math-symbol-large {
+	@include button-base;
+
+	button {
+		@include button-base;
+
+		.x-btn-icon {
+			@include button-base;
+			position: absolute;
+			top: 0; left: 0;
+
+			background: url(../images/symbols/math_symbols_sprite.png) 0 0 no-repeat;
+
+			&.radic { background-position: 2px -2px; }
+			&.squared { background-position: -42px -2px; }
+			&.parens { background-position: -82px -2px; }
+			&.approx { background-position: -122px -2px; }
+			&.pi { background-position: -162px -2px; }
+		}
+
+	}
+}

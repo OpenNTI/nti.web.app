@@ -67,31 +67,18 @@ Ext.define('NextThought.view.math.symbols.Panel',{
 		columns: 4
 	},
 	defaults: {
-		height: 40,
-		width: 40,
-		cls: 'math-symbol-button'
+		ui: 'math-symbol',
+		scale: 'large'
 	},
 
 
 	/** These are the math buttons*/
 	items: [
-		{xtype:'button', text: '&radic;', latex: '\\surd' },
-		{xtype:'button', text: 'x&sup2', latex: 'x^2' },
-		{xtype:'button', text: '()', latex: '(x)' },
-		{xtype:'button', text: '&Pi;', latex: '\\pi' },
-		{xtype:'button', text: '&#8776', latex: '\\approx' }
-		/*
-		{xtype:'button', text: 'S6', latex: '/S6' },
-		{xtype:'button', text: 'S7', latex: '/S7' },
-		{xtype:'button', text: 'S8', latex: '/S8' },
-		{xtype:'button', text: 'S9', latex: '/S9' },
-		{xtype:'button', text: 'S10', latex: '/S10' },
-		{xtype:'button', text: 'S11', latex: '/S11' },
-		{xtype:'button', text: 'S12', latex: '/S12' },
-		{xtype:'button', text: 'S13', latex: '/S13' },
-		{xtype:'button', text: 'S14', latex: '/S14' },
-		{xtype:'button', text: 'S15', latex: '/S15' }
-		*/
+		{xtype:'button', iconCls: 'radic', latex: '\\surd' },
+		{xtype:'button', iconCls: 'squared', latex: 'x^2' },
+		{xtype:'button', iconCls: 'parens', latex: '(x)' },
+		{xtype:'button', iconCls: 'pi', latex: '\\pi' },
+		{xtype:'button', iconCls: 'approx', latex: '\\approx' }
 	],
 
 
