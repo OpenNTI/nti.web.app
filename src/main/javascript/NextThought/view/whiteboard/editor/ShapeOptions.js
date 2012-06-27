@@ -14,7 +14,7 @@ Ext.define('NextThought.view.whiteboard.editor.ShapeOptions',{
 	items: [{
 		xtype: 'toolbar',
 		ui: 'options',
-		cls: 'shape-options',
+		cls: 'shape-picker',
 		defaults: {
 			xtype: 'wb-tool-option',
 			toggleGroup: 'shape-selected-'+guidGenerator()
@@ -29,7 +29,7 @@ Ext.define('NextThought.view.whiteboard.editor.ShapeOptions',{
 	},{
 		xtype: 'toolbar',
 		ui: 'options',
-		cls: 'shape-color-options',
+		cls: 'shape-options',
 		defaults: {
 			ui: 'option',
 			scale: 'large'

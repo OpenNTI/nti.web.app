@@ -64,4 +64,5 @@ Ext.define('NextThought.view.whiteboard.editor.ToolOption',{
 	getValue: function(){
 		return this.value;
 	}
+
 });
