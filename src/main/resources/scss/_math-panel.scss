@@ -16,16 +16,24 @@
 	}
 }
 
-.mathquill-editable {
-	border-radius: 3px;
-	border: 1px solid #dbdbdb;
-	//min-height: 24px;
-	padding: 5px 8px !important;
+.quiz-input{
+	&.mathquill-editable {
+		border-radius: 3px;
+		border: 1px solid #dbdbdb;
+		//min-height: 24px;
+		padding: 5px 8px !important;
 
-	&.hasCursor, .hasCursor {
-		border-radius: 5px;
-		border: 2px solid #3fb3f6;
-		box-shadow: inset 2px 2px 3px 0 rgba(0,0,0,0.15) !important;
+		&.hasCursor {
+			border-radius: 5px;
+			border: 2px solid #3fb3f6;
+			box-shadow: inset 2px 2px 3px 0 rgba(0,0,0,0.15) !important;
+		}
+		//child elements
+		.hasCursor {
+			border-radius: 3px;
+			box-shadow: 0px 0px 1px 2px #3FB3F6,
+				  inset 2px 2px 3px 0 rgba(0, 0, 0, 0.15) !important
+		}
 	}
 }
 
