@@ -1,6 +1,9 @@
 package com.nti.selenium.quizzes;
 
 
+import java.util.List;
+import java.util.regex.Pattern;
+
 import com.nti.selenium.navigation.Navigation;
 import org.junit.Before;
 import org.openqa.selenium.By;
@@ -12,6 +15,10 @@ public class Quizzes extends Navigation {
 	public void setUp() throws Exception {
 		super.setUp();
 		this.navigateTo("MathCounts 2012", null, "Warm-Up 1");
+	}
+		
+	private String getMathSymbolsWindowNotVisibleClass(){
+		return "x-window x-layer x-window-default x-closable x-window-closable x-window-default-closable x-unselectable x-hide-offsets";
 	}
 	
 	private String findBlank(String questionID){
@@ -51,9 +58,34 @@ public class Quizzes extends Navigation {
 	
 	public String answerableXpath(String questionID){
 		this.switchToIframe();
-		String x = this.xpathAttributeBuilder("li", "value", questionID)
+		return this.xpathAttributeBuilder("li", "value", questionID)
 				+ this.xpathAddonBuilder("div", "class", "question")
 				+ this.xpathAddonBuilder("div", "class", "result hidden");
+	}
+	
+	public String getMathSymbolsXButtonXpath(){
+		return this.xpathAttributeBuilder("img", "class", "x-tool-close");
+	}
+
+	public String getMathSymbolsWindowNotVisibleXpath(){
+		return this.xpathAttributeBuilder("div", "class", this.getMathSymbolsWindowNotVisibleClass());
+	}
+	
+	public String getOldQuizzesQuestionMarkXpath(){
+		return this.xpathAttributeBuilder("img", "class", "action quizresults");
+	}
+	
+	public String getOldQuizzesXpath(){
+		return this.xpathAttributeBuilder("div", "class", "x-component x-box-item x-component-default x-menu-item");
+	}
+	
+	public String getOldQuizAnswerXpath(String questionID, String answer){
+		String x = this.incorrectAnswerXpath(questionID) + 
+				"//span[@class='mathjax tex2jax_process response answer-text']" +
+				"//span[@class='MathJax_MathML']";
+//				"//math" +
+//				"//mn[text()='" + answer + "']";
+//		System.out.println(x);
 		return x;
 	}
 	
@@ -103,12 +135,24 @@ public class Quizzes extends Navigation {
 		this.waitForLoading(timeout);
 	}
 	
-	public void completeQuiz100Percent(){
-		
+	public void clickMathSymbolsXButton(){
+		this.switchToDefault();
+		this.waitForElement(this.getMathSymbolsXButtonXpath(), timeout);
+		this.findElement(this.getMathSymbolsXButtonXpath()).click();
 	}
 	
-	public void completeQuiz0Percent(){
-		
+	public void inspectPreviousQuiz(String answer){
+		this.answerQuestion("1", answer);
+		this.clickSubmit();
+		this.clickReset();
+		this.clickArrowForwardButton();
+		this.clickArrowBackButton();
+		this.switchToDefault();
+		this.wait_(3);
+		List<WebElement> quizQuestionMarkElements = this.findElements(this.getOldQuizzesQuestionMarkXpath());
+		quizQuestionMarkElements.get(quizQuestionMarkElements.size()-1).click();
+		List<WebElement> quizElements = this.findElements(this.getOldQuizzesXpath());
+		quizElements.get(quizQuestionMarkElements.size()-1).click();
 	}
 	
 }

@@ -28,7 +28,7 @@ import org.apache.commons.io.IOUtils;
 
 public class Base {
 
-	protected static final int timeout = 15;
+	protected static final int timeout = 10;
 	
 	protected static String url;
 	protected static String books;
