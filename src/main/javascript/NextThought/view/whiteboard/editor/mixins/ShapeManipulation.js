@@ -252,15 +252,17 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 	doShape: function(e){
 		if(!this.mouseDown){ return; }
 
-		var tool = this.currentTool,
-			s = this.selected, w = this.canvas.el.getWidth(),
+		var tool = this.toolbar.getCurrentTool(),
+			ttype = tool.getToolType(),
+			s = this.selected,
+			w = this.canvas.el.getWidth(),
 			p = this.mouseInitialPoint.slice(),
 			m,
 			x = p[0],
 			y = p[1];
 
-		if(!s || s.Class !== 'Canvas'+tool+'Shape' || !s.isNew){
-			this.selected = this.addShape(tool);
+		if(!s || s.Class !== 'Canvas'+Ext.String.capitalize(ttype)+'Shape' || !s.isNew){
+			this.selected = this.addShape(ttype);
 			return;
 		}
 
@@ -331,7 +333,7 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 			stroke = opts.strokeWidth/(this.canvas.el.getWidth()),
 			defs = {
 				'Class': 'Canvas'+Ext.String.capitalize(shape.toLowerCase())+'Shape',
-//				'fill': this.selectedValues.fill,
+				'fill': opts.fill,
 				'stroke': opts.stroke,
 				'strokeWidth': isFinite(stroke)? stroke : 0,
 				'transform':{
@@ -373,7 +375,7 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 		'pencil':	p.doPath,
 		'text':		p.doText,
 		'Line':		p.doLine, //TODO - these are all shape... use secondary tools
-		'Circle':	p.doShape,
+		'circle':	p.doShape,
 		'Polygon':	p.doShape
 	};
 

@@ -36,12 +36,13 @@ Ext.define('NextThought.view.whiteboard.editor.ShapeOptions',{
 		},
 		items: [
 			'Fill',
-			{xtype: 'color-picker-button'},
+			{xtype: 'color-picker-button', fillSelect: true},
 			'Stroke',
 			{
 				ui: 'stroke-size-select',
 				xtype: 'nt-combobox',
 				width: 85,
+				strokeWidthSelect: true,
 
 				store: Ext.create('Ext.data.Store', {
 					fields: ['size'],
@@ -61,13 +62,15 @@ Ext.define('NextThought.view.whiteboard.editor.ShapeOptions',{
 				valueField: 'size',
 				value: '12 pt'
 			},
-			{xtype: 'color-picker-button'}
+			{xtype: 'color-picker-button', strokeSelect: true}
 		]
 	}],
 
 
 	getToolType: function() {
-		return 'pencil';
+		var shapeFull = this.down('toolbar[cls=shape-picker]').down('[pressed]').option;
+		shapeFull = shapeFull.replace('shape', '');
+		return shapeFull.trim();
 	},
 
 
@@ -85,20 +88,17 @@ Ext.define('NextThought.view.whiteboard.editor.ShapeOptions',{
 
 
 	getOptions: function(){
-		var pressed = this.query('button[pressed]'),
-			stroke, strokeWidth;
+		var toolbar = this.down('toolbar[cls=shape-options]'),
+			fillButton = toolbar.down('[fillSelect]'),
+			strokeButton = toolbar.down('[strokeSelect]'),
+			stroke, strokeWidth, fill;
 
-		Ext.each(pressed, function(b){
-			if (b.strokeWidth){
-				strokeWidth = b.strokeWidth
-			}
-			else if (b.stroke) {
-				stroke = b.stroke
-			}
-		});
+		fill = fillButton.getValue();
+		stroke = strokeButton.getValue();
+		strokeWidth = parseInt(this.down('[strokeWidthSelect]').value.replace(' pt', ''));
 
 		return {
-			fill: null, //TODO - not implemented in design
+			fill: fill,
 			stroke:	stroke,
 			strokeWidth: strokeWidth
 		};
