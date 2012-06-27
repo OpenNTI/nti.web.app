@@ -64,8 +64,9 @@ Ext.define('NextThought.view.math.symbols.Panel',{
 	/* settings for this panel*/
 	layout: {
 		type: 'table',
-		columns: 4
+		columns: 3
 	},
+	border: false,
 	defaults: {
 		ui: 'math-symbol',
 		scale: 'large'
@@ -78,7 +79,8 @@ Ext.define('NextThought.view.math.symbols.Panel',{
 		{xtype:'button', iconCls: 'squared', latex: 'x^2' },
 		{xtype:'button', iconCls: 'parens', latex: '(x)' },
 		{xtype:'button', iconCls: 'pi', latex: '\\pi' },
-		{xtype:'button', iconCls: 'approx', latex: '\\approx' }
+		{xtype:'button', iconCls: 'approx', latex: '\\approx' },
+		{html: ''}//filler to make the interior border show up
 	],
 
 

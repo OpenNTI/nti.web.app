@@ -12,27 +12,19 @@
 .math-symbol-panel {
 
 	table {
-	  border-collapse: collapse;
+		border-collapse: collapse;
 		border-width: 0;
 
-		td, th {
-		  border: 1px solid black;
-		}
+		tr {
+			&:first-child { th,td { border-top: 0; } }
+			&:last-child { th,td { border-bottom: 0; } }
 
-		tr:first-child {th,td {
-		  border-top: 0;
-		}}
+			th, td {
+				border: 1px solid #dbdbdb;
 
-		tr:last-child td {
-		  border-bottom: 0;
-		}
-		tr td:first-child,
-		tr th:first-child {
-		  border-left: 0;
-		}
-		tr td:last-child,
-		tr th:last-child {
-		  border-right: 0;
+				&:first-child { border-left: 0; }
+				&:last-child { border-right: 0; }
+			}
 		}
 	}
 }
