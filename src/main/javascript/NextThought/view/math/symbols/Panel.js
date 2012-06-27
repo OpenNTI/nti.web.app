@@ -23,10 +23,11 @@ Ext.define('NextThought.view.math.symbols.Panel',{
 
 			if (!this.win) {
 				this.win = Ext.widget('nti-window',{
-					title: 'Math Symbols',
+					dialog: true,
+					cls: 'math-symbols',
 					closeAction: 'hide',
 					hidden: true,
-					minHeight: 115,
+//					minHeight: 115,
 					layout: 'auto',
 					focusOnToFront: false,
 					items: [

@@ -9,7 +9,16 @@
 	height: 36px;
 }
 
+.math-symbols{
+	@extend .nti-window;
+	border-radius: 0;
+	background: #ffffff;
+}
+
 .math-symbol-panel {
+	.x-panel-body {
+		background: transparent;
+	}
 
 	table {
 		border-collapse: collapse;
@@ -42,12 +51,16 @@
 
 			background: url(../images/symbols/math_symbols_sprite.png) 0 0 no-repeat;
 
-			&.radic { background-position: 2px -2px; }
+			&.radic { background-position: -2px -2px; }
 			&.squared { background-position: -42px -2px; }
 			&.parens { background-position: -82px -2px; }
 			&.approx { background-position: -122px -2px; }
 			&.pi { background-position: -162px -2px; }
 		}
 
+	}
+	&.x-pressed,
+	&.x-over {
+		background: #eeeeee;
 	}
 }
