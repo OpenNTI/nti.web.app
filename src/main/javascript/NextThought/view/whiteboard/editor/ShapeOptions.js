@@ -3,6 +3,7 @@ Ext.define('NextThought.view.whiteboard.editor.ShapeOptions',{
 	extend: 'Ext.container.Container',
 	requires: [
 		'NextThought.view.whiteboard.editor.ColorPickerButton',
+		'NextThought.view.whiteboard.editor.StrokeWidthSelector',
 		'NextThought.view.whiteboard.editor.ToolOption'
 	],
 
@@ -36,33 +37,10 @@ Ext.define('NextThought.view.whiteboard.editor.ShapeOptions',{
 		},
 		items: [
 			'Fill',
-			{xtype: 'color-picker-button', fillSelect: true},
+			{ xtype: 'color-picker-button', fillSelect: true },
 			'Stroke',
-			{
-				ui: 'stroke-size-select',
-				xtype: 'nt-combobox',
-				width: 85,
-				strokeWidthSelect: true,
-
-				store: Ext.create('Ext.data.Store', {
-					fields: ['size'],
-					data : [
-						{"size":"12 pt"},
-						{"size":"14 pt"},
-						{"size":"18 pt"},
-						{"size":"24 pt"},
-						{"size":"30 pt"},
-						{"size":"36 pt"},
-						{"size":"48 pt"},
-						{"size":"60 pt"}
-					]
-				}),
-				queryMode: 'local',
-				displayField: 'size',
-				valueField: 'size',
-				value: '12 pt'
-			},
-			{xtype: 'color-picker-button', strokeSelect: true}
+			{ xtype: 'stroke-select' },
+			{ xtype: 'color-picker-button', strokeSelect: true }
 		]
 	}],
 
@@ -95,7 +73,7 @@ Ext.define('NextThought.view.whiteboard.editor.ShapeOptions',{
 
 		fill = fillButton.getValue();
 		stroke = strokeButton.getValue();
-		strokeWidth = parseInt(this.down('[strokeWidthSelect]').value.replace(' pt', ''));
+		strokeWidth = this.down('stroke-select').getValue();
 
 		return {
 			fill: fill,

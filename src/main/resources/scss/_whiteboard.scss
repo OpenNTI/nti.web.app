@@ -174,11 +174,38 @@
 		&.pencil-stroke-options {
 			padding: 0 34px 0 20px;
 		}
-		&.shape-options,
 		&.pencil-color-options {
 			padding: 11px 0 8px 34px;
 			border: 0 solid transparent;
 			border-left: 1px solid #e7e7e7;
+		}
+		&.shape-options {
+			padding: 11px 0 8px 0px;
+			border: 0 solid transparent;
+			border-left: 1px solid #e7e7e7;
+
+			.whiteboard-color-option-toolbar-large {
+				margin: 0;
+				padding-left: 0;
+				padding-right: 0;
+				&.x-over,
+				&.x-pressed {
+					border-color: transparent;
+					background: none;
+				}
+			}
+			.nt-combobox {
+				margin-right: 10px;
+			}
+
+			.x-toolbar-text {
+				margin-left: 45px;
+				margin-right: 10px;
+				text-transform: uppercase;
+				font-size: 12px;
+				font-weight: bold;
+				color: #5d5d5d;
+			}
 		}
 
 		.x-btn-options-toolbar-medium {
@@ -412,6 +439,49 @@
 		border-right-width: 0;
 	}
 
+}
+
+.shape-options .nt-combobox-option-toolbar {
+	input.x-form-text {
+		height: 32px;
+		text-indent: -1000px;
+		background: url(../images/whiteboard/sprite.png) 1000 1000 no-repeat;
+
+		&[value="fine"] { background-position: -16px -732px; }
+		&[value="thin"] { background-position: -116px -732px; }
+		&[value="medium"] { background-position: -216px -732px; }
+		&[value="heavy"] { background-position: -316px -732px; }
+		&[value="thick"] { background-position: -416px -732px; }
+	}
+}
+
+.stroke-size-list.x-menu-nt {
+	ul {
+		padding-bottom: 5px;
+	}
+
+	li.stroke-size {
+		margin: 0;
+		padding: 0;
+
+		.stroke {
+			background: url(../images/whiteboard/sprite.png) 0 0 no-repeat;
+
+			&.fine { background-position: -16px -740px; height: 20px; }
+			&.thin { background-position: -116px -740px; height: 20px; }
+			&.medium { background-position: -216px -740px; height: 20px; }
+			&.heavy { background-position: -316px -736px; height: 27px; }
+			&.thick { background-position: -416px -734px; height: 32px; }
+		}
+
+		&.x-menu-item-over .stroke {
+			&.fine { background-position: -16px -840px; }
+			&.thin { background-position: -116px -840px; }
+			&.medium { background-position: -216px -840px; }
+			&.heavy { background-position: -316px -836px; }
+			&.thick { background-position: -416px -834px; }
+		}
+	}
 }
 
 

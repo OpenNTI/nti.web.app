@@ -29,6 +29,15 @@ Ext.define('NextThought.view.whiteboard.editor.ToolOption',{
 	},
 
 
+	onClick : function(e, t) {
+		var me = this;
+		if (!me.disabled && me.pressed) {
+			me.overMenuTrigger = true;
+		}
+		return this.callParent(arguments);
+	},
+
+
 	buildOptions: function(){
 		var me = this,
 			menu = {
