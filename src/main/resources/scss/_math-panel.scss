@@ -23,6 +23,7 @@
         border-radius: 3px;
         border: 1px solid #dbdbdb;
         //min-height: 24px;
+        min-width: 100px;
         padding: 5px 8px !important;
 
         &.hasCursor {
@@ -42,6 +43,7 @@
 
 .math-symbols{
 	@extend .nti-window;
+    @include animate(fadeIn,0.25s);
 	border-radius: 0;
 	background: #ffffff;
 	border-top-width: 0;

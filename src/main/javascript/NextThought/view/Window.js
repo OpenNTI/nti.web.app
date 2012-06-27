@@ -100,7 +100,7 @@ Ext.define('NextThought.view.Window',{
 		}
 
 		this.titleBar = this.down('nti-window-header');
-		if(!this.modal){
+		if(!this.modal && !this.dialog){
 			this.manager.register(this);
 		}
 	},

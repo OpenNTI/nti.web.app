@@ -77,6 +77,16 @@ Ext.define('NextThought.view.content.Reader', {
 	},
 
 
+	registerScrollHandler: function(fn, scope){
+		this.body.on('scroll', fn, scope);
+	},
+
+
+	unRegisterScrollHandler: function(fn, scope){
+		this.body.un('scroll', fn, scope);
+	},
+
+
 	resetFrame: function(cb){
 		console.log('resetFrame');
 
@@ -690,7 +700,7 @@ Ext.define('NextThought.view.content.Reader', {
 				this.buildPath(resp.request.options.url));
 
 
-		QuizUtils.setupQuiz(me.getDocumentElement());
+		QuizUtils.setupQuiz(me.getDocumentElement(), me);
 
 		containerId = me.getContainerId();
 		me.loadContentAnnotations(containerId, onFinishLoading);

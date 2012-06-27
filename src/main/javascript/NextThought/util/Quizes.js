@@ -4,9 +4,10 @@ Ext.define('NextThought.util.Quizes', {
 		'NextThought.ContentAPIRegistry',
 		'NextThought.util.Parsing',
 		'NextThought.providers.Location',
-		'NextThought.view.math.symbols.Panel'
+		'NextThought.view.math.Window'
 	],
 
+	idToVar: {},
 
 	sendLaTeXCommand: function(mq, tex, root) {
 		root = root || Ext.getCmp('library').down('reader-panel').getDocumentElement();
@@ -22,11 +23,21 @@ Ext.define('NextThought.util.Quizes', {
 			//write the latex, then refocus since it's probably been lost...
 			mq.mathquill('write', tex);
 			mq.trigger('focus');
+			mq.trigger('focusin');
 		}
 	},
 
 
-	setupQuiz: function(doc){
+	contentScrollHandler: function(){
+		Ext.Object.each(this.idToVar, function(key, vars){
+			vars.win.hide();
+			clearTimeout(vars.scrollTimeout);
+			vars.scrollTimeout = setTimeout( function(){if (vars.win){vars.win.show();}}, 200 );
+		});
+	},
+
+
+	setupQuiz: function(doc, reader){
 		try{
 			var me = this,
 				inputs = doc.querySelectorAll('input[type=number]'),
@@ -35,12 +46,18 @@ Ext.define('NextThought.util.Quizes', {
 				q;
 
 			if(!w.$ || !w.$.fn.mathquill){
-				setTimeout(function(){me.setupQuiz(doc);},50);
+				setTimeout(function(){me.setupQuiz(doc, reader);},50);
 				return;
 			}
 
 			if(!quiz){
 				return;
+			}
+
+
+			if (!me.hookedScrollUp){
+				me.hookedScrollUp = true;
+				reader.registerScrollHandler(me.contentScrollHandler, me);
 			}
 
 			//the frame has jQuery & MathQuill
@@ -60,12 +77,73 @@ Ext.define('NextThought.util.Quizes', {
 	},
 
 
+	getBoundingRect: function(c){
+		var cmp = Ext.fly(c),
+			xy = cmp.getXY(),
+			h = cmp.getHeight(),
+			w = cmp.getWidth();
+
+		return {
+			top: xy[1],
+			bottom: xy[1] + h,
+			left: xy[0],
+			right: xy[0] + w,
+			height: h,
+			width: w
+		};
+	},
+
+
 	attachMathSymbolToMathquillObjects: function(objectOrObjects) {
+		var me = this,
+			r = Ext.getCmp('library').down('reader-panel');
+
+		function getVars(ctx){
+			var id = Ext.get(ctx).id,
+			vars = me.idToVar[id] || {};
+			me.idToVar[id] = vars;
+			return vars;
+		}
+
+		function cleanVars(ctx) {
+			var id = Ext.get(ctx).id;
+			delete me.idToVar[id];
+		}
+
 		objectOrObjects.bind('mousedown click focusin', function(e){
-			var r = Ext.getCmp('library').down('reader-panel');
+			var ctx = this,
+				vars = getVars(ctx);
+
+			clearTimeout(vars.closeTimeout);
+
 			r.scrollToNode(this, true, 90);
-			MathSymbolPanel.showMathSymbolPanelFor(this, r.body);
+			if (!vars.win){
+				vars.win = Ext.widget({xtype: 'math-symbol-window', target: ctx, posFn: function(){
+					var rect = me.getBoundingRect(ctx);
+					rect.left += 4; //adjust to center
+					rect.right += 4;
+					return r.convertRectToScreen(rect);
+					}
+				});
+			}
+			setTimeout(function(){vars.win.show();}, 10);
 		});
+
+		objectOrObjects.bind('focusout blur', function(e){
+			var ctx = this,
+				vars = getVars(ctx);
+
+
+			vars.closeTimeout = setTimeout(function(){
+				clearTimeout(vars.scrollTimeout);
+				if (vars.win) {
+					vars.win.close();
+					cleanVars(ctx);
+				}
+			},
+			200);
+		});
+
 	},
 
 

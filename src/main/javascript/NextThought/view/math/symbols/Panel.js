@@ -3,65 +3,6 @@ Ext.define('NextThought.view.math.symbols.Panel',{
 	cls: 'math-symbol-panel',
 	alias: 'widget.math-symbol-panel',
 
-	requires: [
-		'NextThought.view.Window'
-	],
-
-	statics: {
-		/**
-		 * Static method called when we need to show the Math Panel.
-		 *
-		 * @param cmp - the current target component you want clicks of this
-		 *				panel along to.
-		 * @param alignTo - a component this window should align it's top right corner to.
-		 */
-		showMathSymbolPanelFor: function(cmp, alignTo) {
-			if(!cmp) {
-				console.error('must call math symbol panel with some component');
-				return;
-			}
-
-			if (!this.win) {
-				this.win = Ext.widget('nti-window',{
-					dialog: true,
-					cls: 'math-symbols',
-					closeAction: 'hide',
-					hidden: true,
-//					minHeight: 115,
-					layout: 'auto',
-					focusOnToFront: false,
-					items: [
-						{xtype: 'math-symbol-panel'}
-					]
-				});
-			}
-			this.win.show();
-			if (!this.win.keepPosition){this.win.alignTo(alignTo, 'tr-tl', [0, 10]);}
-			this.win.down('math-symbol-panel').setTargetComponent(cmp);
-			this.win.on({
-				'hide': function(){
-					delete this.keepPosition;
-				},
-				'move': function(){
-					this.keepPosition = true;
-				},
-				scope: this.win
-			});
-
-		},
-
-
-		/**
-		 * Hide the window and release the target component
-		 */
-		hideMathSymbolPanel: function() {
-			if (this.win) {
-				this.win.down('math-symbol-panel').releaseTargetComponent();
-				this.win.hide();
-			}
-		}
-	},
-
 	/* settings for this panel*/
 	layout: {
 		type: 'table',
@@ -125,8 +66,4 @@ Ext.define('NextThought.view.math.symbols.Panel',{
 	symbolClicked: function(symBtn) {
 		QuizUtils.sendLaTeXCommand(this.targetComponent, symBtn.latex);
 	}
-},
-function(){
-	//Make this globally accessed for the statics...
-	window.MathSymbolPanel = this;
 });
