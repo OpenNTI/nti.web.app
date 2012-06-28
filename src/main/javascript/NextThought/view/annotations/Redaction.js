@@ -7,7 +7,6 @@ Ext.define('NextThought.view.annotations.Redaction', {
 
 
 	constructor: function(config){
-		debugger;
 		var me = this;
 		me.callParent(arguments);
 
