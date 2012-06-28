@@ -65,7 +65,7 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 		var tool = this.toolbar.getCurrentTool(),
 			c = this.mouseMoveHandlerMap[tool.getToolType()];
 		if(!c){
-			console.warn('No handler for tool: ',tool.getToolType);
+			console.warn('No handler for tool: ',tool.getToolType());
 		}
 
 		return c.apply(this,arguments);
@@ -112,7 +112,7 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 			delete this.selected;
 		}
 		this.canvas.drawScene();
-		this.activateToolOptions(this.currentTool);
+		//this.activateToolOptions(this.currentTool);
 	},
 
 
@@ -141,10 +141,10 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 
 		if(s){
 			delete s.isNew;
-			this.activateToolOptions(s.getShapeName());
+		//	this.activateToolOptions(s.getShapeName());
 		}
 		else {
-			this.activateToolOptions(this.currentTool);
+		//	this.activateToolOptions(this.currentTool);
 		}
 
 		c.drawScene();
@@ -218,14 +218,16 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 
 
 	doLine: function(e){
-		var s = this.selected,
+		var tool = this.toolbar.getCurrentTool(),
+			opts = tool.getOptions(),
+			s = this.selected,
 			t,xy,w,p,m;
 
 		if(!this.mouseDown){ return; }
 		if(!s || s.Class !== 'CanvasPolygonShape' || s.sides !== 1 || !s.isNew){
 			w = this.canvas.el.getWidth();
-			this.selected = s = this.addShape('line');
-			s.strokeWidth = this.strokeWidthField.getValue()/w;
+			this.selected = s = this.addShape('polygon');
+			s.strokeWidth = opts.strokeWidth/w;
 
 			xy = this.getRelativeXY(e,true);
 			t = s.transform;
@@ -349,13 +351,15 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 				isNew: true
 			};
 
-		if(/polygon/i.test(shape)){
-//			defs.sides = this.polygonSidesField.getValue();
+		if(/poly/i.test(shape)){
+			defs.sides = opts.sides;
 		}
+/*
 		else if(/line/i.test(shape)){
 			defs.sides = 1;
 			defs.Class = 'CanvasPolygonShape';
 		}
+*/
 		else if(/text/i.test(shape)){
 //			defs.text = this.textValueField.getValue();
 		}
@@ -374,9 +378,9 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 		'move':		p.doMove,
 		'pencil':	p.doPath,
 		'text':		p.doText,
-		'Line':		p.doLine, //TODO - these are all shape... use secondary tools
+		'line':		p.doLine,
 		'circle':	p.doShape,
-		'Polygon':	p.doShape
+		'polygon': 	p.doShape
 	};
 
 });
