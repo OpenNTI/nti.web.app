@@ -40,8 +40,8 @@ public class Base {
 	
 	protected WebDriver driver;
 	protected Selenium selenium;
-	protected String xpathBuilder = null;
 	protected boolean isDefault = true;
+	protected String xpathBuilder = null;
 	
 	@BeforeClass
 	public static void oneTimeSetUp() {
@@ -103,34 +103,30 @@ public class Base {
 	
 	public String buildString(final String... strings) {
 		final StringBuilder builder = new StringBuilder();
-		for(final String str: strings)
+		for(int i = 0; strings != null && i < strings.length; i++)
 		{
-			builder.append(str);
+			builder.append(strings[i]);
 		}
 		return builder.toString();
 	}
 	
 	public String xpathAttributeBuilder(final String tag, final String attribute, final String value){
-		final String[] xpathElements = {"//", tag, "[@", attribute, "='", value, "']"};
-		return this.buildString(xpathElements);
+		return this.buildString("//", tag, "[@", attribute, "='", value, "']");
 	}
 	
 	public String xpathTextBuilder(final String tag, final String text) {
-		final String[] xpathElements = {"//", tag, "[text()='", text, "']"};
-		return this.buildString(xpathElements);
+		return this.buildString("//", tag, "[text()='", text, "']");
 	}
 	
 	public String xpathAttributeAndTextBuilder(	final String tag,
 												final String attribute,
 												final String value,
 												final String text) {
-		final String[] xpathElements = {"//", tag, "[@", attribute, "='", value, "' and text()='", text, "']"};
-		return this.buildString(xpathElements);
+		return this.buildString("//", tag, "[@", attribute, "='", value, "' and text()='", text, "']");
 	}
 	
 	public String xpathAddonBuilder(final String tag, final String attribute, final String value){
-		final String[] xpathElements = {"//", tag, "[@", attribute, "='", value, "']"};
-		return this.buildString(xpathElements);
+		return this.buildString("//", tag, "[@", attribute, "='", value, "']");
 	}
 	
 	public String findContentFrameBodyElement() {

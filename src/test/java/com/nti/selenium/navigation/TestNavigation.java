@@ -8,14 +8,14 @@ import static org.junit.Assert.assertTrue;
 public class TestNavigation extends Navigation {
 
 	@Test
-	public void testOpenLibrary(){
+	public void testOpenLibrary() {
 		this.setBook("Prealgebra");
 		this.openLibrary();
 		assertTrue(selenium.isElementPresent(this.getBookXpath()));
 	}
 	
 	@Test
-	public void testOpenBook(){
+	public void testOpenBook() {
 		this.setBook("Prealgebra");
 		this.setChapter("Fractions");
 		this.openLibrary();
@@ -24,7 +24,7 @@ public class TestNavigation extends Navigation {
 	}
 
 	@Test
-	public void testOpenChapter(){
+	public void testOpenChapter() {
 		this.setBook("Prealgebra");
 		this.setChapter("Fractions");
 		this.setSection("Index");
@@ -35,21 +35,21 @@ public class TestNavigation extends Navigation {
 	}
 	
 	@Test
-	public void testOpenSection(){
+	public void testOpenSection() {
 		this.navigateTo("Prealgebra", "Fractions", "Index");
 		this.waitForLoading(timeout);
 		assertEquals("Fractions", this.getNavTestText(this.getFractionIndexPageXpath()).getText());
 	}
 	
 	@Test
-	public void testBackArrow(){
+	public void testBackArrow() {
 		this.navigateTo("Prealgebra", "Fractions", "Index");
 		this.clickArrowBackButton();
 		assertEquals("Challenge Problems", this.getNavTestText(this.getChallengeProblemXpath()).getText());
 	}
 	
 	@Test
-	public void testForwardArrow(){
+	public void testForwardArrow() {
 		this.navigateTo("Prealgebra", "Fractions", "Index");
 		this.clickArrowForwardButton();
 		assertEquals("What is a Fraction?", this.getNavTestText(this.getWhatIsAFractionXpath()).getText());

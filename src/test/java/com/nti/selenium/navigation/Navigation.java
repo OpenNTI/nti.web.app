@@ -45,12 +45,12 @@ public class Navigation extends Login {
 		return this.xpathAttributeAndTextBuilder("span", "class", "label", "What is a Fraction?");
 	}
 	
-	public void openLevel(String xpath) {
+	public void openLevel(final String xpath) {
 		this.switchToDefault();
 		this.findElement(xpath).click();
 	}
 	
-	public void openLevelClick(String xpath){
+	public void openLevelClick(final String xpath){
 		this.switchToDefault();
 		this.waitForElement(xpath, timeout);
 		this.findElement(xpath).click();
@@ -68,33 +68,33 @@ public class Navigation extends Login {
 		this.openLevel(this.getBookXpath());
 	}
 	
-	public void openChapter(){
+	public void openChapter() {
 		this.switchToDefault();
 		this.openLevelClick(this.getChapterXpath());
 	}
 	
-	public void openSection(){
+	public void openSection() {
 		this.switchToDefault();
 		this.openLevelClick(this.getSectionXpath());
 		this.openBook();
 		this.waitForLoading(timeout);
 	}
 	
-	public void clickArrowBackButton(){
+	public void clickArrowBackButton() {
 		this.switchToDefault();
 		String arrowXpath = this.xpathAttributeBuilder("button", "id", "button-1032-btnEl");
 		this.findElement(arrowXpath).click();
 		this.waitForLoading(timeout);
 	}
 	
-	public void clickArrowForwardButton(){
+	public void clickArrowForwardButton() {
 		this.switchToDefault();
 		String arrowXpath = this.xpathAttributeBuilder("button", "id", "button-1033-btnEl");
 		this.findElement(arrowXpath).click();
 		this.waitForLoading(timeout);
 	}
 	
-	public void navigateTo(final String book,final String chapter, final String section) {
+	public void navigateTo(final String book, final String chapter, final String section) {
 		
 		this.book = book;
 		this.chapter = chapter;
@@ -138,5 +138,4 @@ public class Navigation extends Login {
 		this.switchToIframe();
 		return this.findElement(xpath);
 	}
-	
 }
