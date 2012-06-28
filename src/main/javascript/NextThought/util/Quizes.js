@@ -198,9 +198,6 @@ Ext.define('NextThought.util.Quizes', {
 			vp = Ext.getBody(),
 			quizResult = Ext.create('NextThought.model.QuizResult' ,{ContainerId: ntiid});
 
-		//ask the symbol panel to go away (does nothing if it's not up)
-		MathSymbolPanel.hideMathSymbolPanel();
-
 		function populateQuestionResponses(id,v){
 			var items = quizResult.get('Items') || [];
 
