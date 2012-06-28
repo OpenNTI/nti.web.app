@@ -78,15 +78,23 @@ public class Quizzes extends Navigation {
 	public String getOldQuizzesXpath() {
 		return this.xpathAttributeBuilder("div", "class", "x-component x-box-item x-component-default x-menu-item");
 	}
+
+	public String getOldQuizAnswerXpath(String questionID){
+		return this.xpathAttributeBuilder("input", "id", "1") +
+				"/../../div[@class='result']" +
+				"//span[@class='mathjax tex2jax_process response answer-text']" +
+				"//span[@class='MathJax_MathML']";
+	}
 	
-	public String getOldQuizAnswerXpath(String questionID, String answer){
-		final String x = this.buildString(this.incorrectAnswerXpath(questionID),
-										  "//span[@class='mathjax tex2jax_process response answer-text']",
-										  "//span[@class='MathJax_MathML']");
-										  // "//math",
-										  // "//mn[text()='" + answer + "']",
-		// System.out.println(x);
-		return x;
+	public String getClosedWhyBubbleXpath(){
+		return this.findResult("1") +
+			   this.xpathAttributeAndTextBuilder("a", "class", "why", "Why?");
+	}
+	
+	public String getOpenWhyBubbleXpath(){
+		return this.findResult("1") +
+			   this.xpathAttributeAndTextBuilder("a", "class", "why bubble", "Why?");
+
 	}
 	
 	public String getTextInAnswerblock(final String questionID) {
@@ -140,6 +148,14 @@ public class Quizzes extends Navigation {
 		this.switchToDefault();
 		this.waitForElement(this.getMathSymbolsXButtonXpath(), timeout);
 		this.findElement(this.getMathSymbolsXButtonXpath()).click();
+	}
+	
+	public void openWhyBubble(){
+		this.findElement(this.getClosedWhyBubbleXpath()).click();
+	}
+	
+	public void closeWhyBubble(){
+		this.findElement(this.getOpenWhyBubbleXpath()).click();
 	}
 	
 	public void inspectPreviousQuiz(String answer){

@@ -3,6 +3,7 @@ package com.nti.selenium.quizzes;
 import java.util.Random;
 
 import org.junit.Test;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -48,7 +49,24 @@ public class TestQuizzes extends Quizzes {
 		final String answer = Integer.toString(random.nextInt(100));
 		inspectPreviousQuiz(answer);
 		this.switchToIframe();
-		assertTrue(this.elementExists(this.getOldQuizAnswerXpath("1", answer)));
+		assertEquals(this.findElement(this.getOldQuizAnswerXpath("1")).getText(), answer);
+	}
+	
+	@Test
+	public void testOpenWhyBubble(){
+		this.answerQuestion("1", "1");
+		this.clickSubmit();
+		this.openWhyBubble();
+		assertTrue(this.elementExists(this.getOpenWhyBubbleXpath()));
+	}
+	
+	@Test
+	public void testCloseWhyBubble(){
+		this.answerQuestion("1", "1");
+		this.clickSubmit();
+		this.openWhyBubble();
+		this.closeWhyBubble();
+		assertTrue(this.elementExists(this.getClosedWhyBubbleXpath()));
 	}
 	
 }
