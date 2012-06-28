@@ -36,7 +36,7 @@ Ext.define( 'NextThought.view.annotations.Annotation', {
 		me.addEvents('afterrender');
 
 		Ext.applyIf(me, {
-			id: IdCache.getComponentId(config.record.getId(), null, c.prefix),
+			id: IdCache.getComponentId(r.getId(), null, c.prefix),
 			container: container,
 			ownerCmp: c,
 			doc: c.getDocumentElement(),
@@ -120,10 +120,12 @@ Ext.define( 'NextThought.view.annotations.Annotation', {
 	},
 
 	cleanup: function(){
+		this.cleanup = Ext.emptyFn;
 		var me = this,
 			r = me.record,
 			id = r.getId(),
 			c = me.ownerCmp;
+
 		delete me.record;
 
 		r.clearListeners();
@@ -269,8 +271,8 @@ Ext.define( 'NextThought.view.annotations.Annotation', {
 			return;
 		}
 
-		spot = Ext.widget({xtype:'spotlight', target: this});
-		menu.on('hide', function(){ spot.destroy();});
+//		spot = Ext.widget({xtype:'spotlight', target: this});
+//		menu.on('hide', function(){ spot.destroy();});
 		menu.showAt.apply(menu,e.getXY());
 
 		e.stopPropagation();
