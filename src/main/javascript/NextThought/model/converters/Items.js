@@ -9,7 +9,7 @@ Ext.define('NextThought.model.converters.Items', {
 				return !v ? null : ParseUtils.parseItems([v], {ignoreIfExists: true})[0];
 			}
 			else {
-				console.warn('unexpected value', v);
+				if(v){ console.warn('unexpected value', v); }
 				return null;
 			}
 		},
@@ -27,7 +27,7 @@ Ext.define('NextThought.model.converters.Items', {
 				return ParseUtils.parseItems(v, {ignoreIfExists: true});
 			}
 			else {
-				console.warn('unexpected value', v);
+				if(v){ console.warn('unexpected value', v); }
 				return null;
 			}
 		},
@@ -51,7 +51,7 @@ Ext.define('NextThought.model.converters.Items', {
 				return ParseUtils.parseItems(values, {ignoreIfExists: true}) ;
 			}
 			else {
-				console.warn('unexpected value', v);
+				if(v){ console.warn('unexpected value', v); }
 				return null;
 			}
 		},

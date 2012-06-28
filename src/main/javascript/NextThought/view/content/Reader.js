@@ -88,8 +88,6 @@ Ext.define('NextThought.view.content.Reader', {
 
 
 	resetFrame: function(cb){
-		console.log('resetFrame');
-
 		// must defer to wait for browser to be ready
 		var me = this,
 			jsPrefix = 'javascript', //this in var to trick jslint
@@ -126,7 +124,6 @@ Ext.define('NextThought.view.content.Reader', {
 
 
 	initContentFrame: function(){
-		console.log('frame initialized, setting up...');
 		var me = this,
 			base = location.pathname.toString().replace('index.html',''),
 			doc = me.getDocumentElement(),
@@ -359,7 +356,7 @@ Ext.define('NextThought.view.content.Reader', {
 			return;
 		}
 
-		console.log('Syncing Frame Height: content:', h, ' view:', this.getEl().getHeight());
+//		console.log('Syncing Frame Height: content:', h, ' view:', this.getEl().getHeight());
 
 		body.hide().show();
 		i.setHeight(Math.max(h, this.getEl().getHeight()));
