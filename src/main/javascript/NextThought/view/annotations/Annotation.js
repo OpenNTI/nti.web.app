@@ -58,9 +58,9 @@ Ext.define( 'NextThought.view.annotations.Annotation', {
 		if(typeof r.data.sharedWith !== 'undefined'){
 			try{ this.mixins.shareable.afterRender.call(this); }
 			catch(e){
-				console.error(
+				console.warn(
 						'attempted to setup dragging on ',
-						r.getClassName(),
+						r.$className,
 						Globals.getError(e));
 			}
 		}
@@ -115,6 +115,9 @@ Ext.define( 'NextThought.view.annotations.Annotation', {
 		}
 	},
 
+	getDisplayName: function(){
+		return this.$displayName || this.$className.split('.').last();
+	},
 
 	cleanup: function(){
 		var me = this,
@@ -123,7 +126,7 @@ Ext.define( 'NextThought.view.annotations.Annotation', {
 			c = me.ownerCmp;
 		delete me.record;
 
-		r.removeAllListeners();
+		r.clearListeners();
 		Ext.ComponentManager.unregister(me);
 		AnnotationsRenderer.unregister(me);
 
@@ -161,7 +164,7 @@ Ext.define( 'NextThought.view.annotations.Annotation', {
 	render: function(isLastOfBlock){
 		console.warn( Ext.String.format(
 						'{0} does not implement render()',
-						this.self.getClassName()));
+						this.$className));
 	},
 
 
@@ -199,12 +202,13 @@ Ext.define( 'NextThought.view.annotations.Annotation', {
 
 
 	buildMenu: function(items) {
-		var m = this;
+		var m = this,
+			r = m.getRecord();
 
 		items = items || [];
 		if(items.length) { items.push('-'); }
 		items.push({
-			text: m.isModifiable? 'Share With' : 'Get Info',
+			text: m.isModifiable? 'Share With...' : 'Get Info...',
 			handler: function(){
 				if (m.record.phantom) {
 					m.record.on('updated', function(){
@@ -223,7 +227,7 @@ Ext.define( 'NextThought.view.annotations.Annotation', {
 
 		if(this.isModifiable) {
 			items.unshift({
-				text : (r.phantom?'Save':'Delete')+' Redaction',
+				text : (r.phantom?'Save':'Delete')+' '+ m.getDisplayName(),
 				handler: Ext.bind(r.phantom? m.savePhantom : m.remove, m)
 			});
 		}

@@ -189,7 +189,7 @@ Ext.define('NextThought.mixins.Annotations', {
 			this.annotations[oid] = w;
 		}
 		catch(e){
-
+			console.error(e.stack);
 		}
 		return w;
 	},
