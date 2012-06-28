@@ -234,8 +234,6 @@ Ext.define( 'NextThought.view.annotations.Annotation', {
 			});
 		}
 
-		Ext.each(items, function(i){ Ext.apply(i,{ ui: 'nt-annotaion', plain: true }); });
-
 		return Ext.create('Ext.menu.Menu',{
 			items: items,
 			ui: 'nt',
@@ -245,7 +243,8 @@ Ext.define( 'NextThought.view.annotations.Annotation', {
 			frame: false,
 			border: false,
 			hideMode: 'display',
-			minWidth: 150
+			minWidth: 150,
+			defaults: {ui: 'nt-annotaion', plain: true }
 		});
 	},
 

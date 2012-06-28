@@ -2,6 +2,7 @@ Ext.define('NextThought.mixins.Annotations', {
 	requires: [
 		'NextThought.model.Highlight',
 		'NextThought.model.Note',
+		'NextThought.model.Redaction',
 		'NextThought.model.TranscriptSummary',
 		'NextThought.model.QuizResult',
 		'NextThought.util.Annotations',
@@ -120,13 +121,14 @@ Ext.define('NextThought.mixins.Annotations', {
 	},
 
 
-	addHighlight: function(range, xy){
+	addAnnotation: function(range, xy){
 		if(!range) {
 			console.warn('bad range');
 			return;
 		}
 
-		var record = AnnotationUtils.selectionToHighlight(range, null, this.getDocumentElement()),
+		var me = this,
+			record = AnnotationUtils.selectionToHighlight(range, null, me.getDocumentElement()),
 			menu,
 			w,offset;
 
@@ -134,20 +136,30 @@ Ext.define('NextThought.mixins.Annotations', {
 			return;
 		}
 
-		w = this.createAnnotationWidget('highlight',record);
+		w = me.createAnnotationWidget('highlight',record);
 
-		record.set('ContainerId', this.containerId);
+		record.set('ContainerId', me.containerId);
 
 		menu = w.getMenu();
+
+		//inject other menu items:
+		menu.add({
+			text: 'Redact',
+			handler: function(){
+				var r = NextThought.model.Redaction.createFromHighlight(record);
+				me.createAnnotationWidget('redaction',r);
+				r.save();
+			}
+		});
+
 		menu.on('hide', function(){
 				if(!w.isSaving){
 					w.cleanup();
-					delete this.annotations[w.tempID]; //remove the key from the object
+					delete me.annotations[w.tempID]; //remove the key from the object
 				}
-			},
-			this);
+			});
 
-		offset = this.el.getXY();
+		offset = me.el.getXY();
 		xy[0] += offset[0];
 		xy[1] += offset[1];
 
@@ -460,7 +472,7 @@ Ext.define('NextThought.mixins.Annotations', {
 			if( range && !range.collapsed ) {
 				e.stopPropagation();
 				e.preventDefault();
-				this.addHighlight(range, e.getXY());
+				this.addAnnotation(range, e.getXY());
 				this.clearSelection();
 			}
 		}

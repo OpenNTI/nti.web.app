@@ -7,6 +7,7 @@ Ext.define('NextThought.view.annotations.Redaction', {
 
 
 	constructor: function(config){
+		debugger;
 		var me = this;
 		me.callParent(arguments);
 
@@ -19,7 +20,6 @@ Ext.define('NextThought.view.annotations.Redaction', {
 
 		return me;
 	},
-
 
 
 	buildMenu: function(){
@@ -41,7 +41,7 @@ Ext.define('NextThought.view.annotations.Redaction', {
 			items.push({
 				text : 'Hide Redaction',
 				handler: function(){
-					me.reRedact();
+					me.redact();
 				}
 			});
 		}
@@ -51,198 +51,16 @@ Ext.define('NextThought.view.annotations.Redaction', {
 
 
 	cleanup: function(){
-		if(!this.selection){
-			return;
-		}
-		this.unRedact();  //always show hidden content on delete.
-		if (!this.record.phantom){Ext.ComponentManager.unregister(this);}
-		delete this.selection;
 		this.callParent(arguments);
 	},
 
 
-	render: function() {
-		if(!this.selection){
-			this.cleanup();
-			return;
-		}
-
-		this.callParent();
-
-		if (!this.rendered) {
-
-		var nib = Ext.get(this.img),
-			r = this.selection.getBoundingClientRect(),
-			ox = (this.offsets.left+60)-(nib.getWidth()/2);
-
-		//move nib
-		nib.setStyle({
-			left: ox+'px',
-			top: r.top +'px'
-		});
-			this.redactionSpans = this.renderRedaction(this.selection.commonAncestorContainer, this.selection);
-			this.rendered = true;
-		}
-
-
-	},
-
-
 	unRedact: function(){
-		Ext.each(this.redactionSpans, function(s){
-			s.show();
-		}, this);
-		this.img.setAttribute('src', this.expandedSrc);
-		this.redactionsShown = true;
-		this.ownerCmp.doComponentLayout();
+		//TODO: loop over rendered, do something, cleanup it?  restyle it?
 	},
 
 
-	reRedact: function(){
-		Ext.each(this.redactionSpans, function(s){
-			s.setVisibilityMode(Ext.Element.DISPLAY);
-			s.hide();
-		}, this);
-		this.img.setAttribute('src', this.collapsedSrc);
-		this.redactionsShown = false;
-		this.ownerCmp.doComponentLayout();
-	},
-
-
-	renderRedaction: function(node, range){
-		var i, partialRange, redactionList = [], n;
-
-		if (!node) {
-			console.error('No node found, stopping redaction render', arguments);
-			return;
-		}
-
-		var rangeComparison = this.rangeCompareNode(range, node);
-
-		//Easy case, the node is completely surronded by the highlight
-		//wrap the node in a highlight
-		if(rangeComparison === 2){
-			//If this is a text node we want to wrap it in a span
-			if(node.nodeType === 3){
-				var rangeAroundNode = this.rangeForNode(node);
-				redactionList.push(this.wrapRangeInHighlight(rangeAroundNode, this.record));
-			}
-			else{
-				redactionList.push(this.highlightElementNode(node));
-			}
-
-		}
-		//If the node overlaps with the range in anyway we need to work on it's children
-		else if(rangeComparison === 5 || rangeComparison === 1 || rangeComparison === 3){
-			var children = [];
-			for(i = 0; i < node.childNodes.length; i++){
-				children.push(node.childNodes[i]);
-			}
-			if(children.length > 0){
-				for(i = 0; i < children.length; i++){
-					Ext.Array.insert(redactionList, 0, this.renderRedaction(children[i], range));
-				}
-			}
-			else{
-				if(rangeComparison === 5){
-					if(node.nodeType === 3){
-						redactionList.push(this.wrapRangeInHighlight(range, this.record));
-					}
-					else{
-						redactionList.push(this.highlightElementNode(node));
-					}
-				}
-				else if(rangeComparison === 1){
-					partialRange = this.doc.createRange();
-					partialRange.setStart(range.startContainer, range.startOffset);
-					partialRange.setEndAfter(node);
-					redactionList.push(this.wrapRangeInHighlight(partialRange, this.record));
-				}
-				else{
-					//3
-					partialRange = this.doc.createRange();
-					partialRange.setStartBefore(node);
-					partialRange.setEnd(range.endContainer, range.endOffset);
-					redactionList.push(this.wrapRangeInHighlight(partialRange, this.record));
-				}
-			}
-		}
-		return redactionList;
-	},
-
-	/*
-	 Adapted From https://developer.mozilla.org/en/DOM/range.compareNode
-
-	 NODE_COMPLETELY_BEFORE = 0
-		Node starts and ends before the range
-	 NODE_STARTS_BEFORE_ENDS_IN = 1
-		Node starts before the Range but ends in it
-	 NODE_INSIDE = 2
-		Node start and ends in the range
-	 NODE_STARTS_IN_ENDS_AFTER = 3
-		Node starts during the range but ends after it
-	 NODE_COMPLETELY_AFTER = 4
-		Node starts before and ends after the Range
-	 NODE_ENCLOSES = 5
-		Node starts before the range and ends after the range
-	 */
-	rangeCompareNode: function(highlightRange, node) {
-		var nodeRange = this.rangeForNodeContents(node);
-
-		var nodeStartToHighlightStart = nodeRange.compareBoundaryPoints(Range.START_TO_START, highlightRange);
-		var nodeStartToHighlightEnd = nodeRange.compareBoundaryPoints(Range.END_TO_START, highlightRange);
-		var nodeEndToHighlightStart = nodeRange.compareBoundaryPoints(Range.START_TO_END, highlightRange);
-		var nodeEndToHighlightEnd = nodeRange.compareBoundaryPoints(Range.END_TO_END, highlightRange);
-
-		if(nodeEndToHighlightStart < 0){
-			return 0; //node completely before
-		}
-		else if(nodeStartToHighlightStart < 0 && nodeEndToHighlightStart > 0 && nodeEndToHighlightEnd <= 0){
-			return 1; //node starts before ends in
-		}
-		else if(nodeStartToHighlightStart >= 0 && nodeStartToHighlightEnd < 0 && nodeEndToHighlightEnd > 0){
-			return 3; //node starts in ends after
-		}
-		else if(nodeStartToHighlightEnd > 0){
-			return 4; //node is after
-		}
-		else if(nodeStartToHighlightStart <= 0 && nodeEndToHighlightEnd >= 0){
-			return 5; //node encloses range
-		}
-		else{
-			return 2; //node inside range
-		}
-
-	},
-
-	rangeForNodeContents: function(node){
-		var nodeRange = node.ownerDocument.createRange();
-		nodeRange.selectNodeContents(node);
-		return nodeRange;
-	},
-
-
-	rangeForNode: function(node){
-		var nodeRange = node.ownerDocument.createRange();
-		nodeRange.selectNode(node);
-		return nodeRange;
-	},
-
-	wrapRangeInHighlight: function(range, highlight)
-	{
-		var highlightSpan = this.doc.createElement("span");
-		highlightSpan.setAttribute('style', 'display:none;');
-		highlightSpan.setAttribute('data-non-anchorable', 'true');
-		//highlightSpan.setAttribute("class", highlightClassesForHighlight(highlight).join(" "));
-		//highlight.appendCreatedNode(highlightSpan);
-		range.surroundContents(highlightSpan);
-		return Ext.get(highlightSpan);
-	},
-
-	highlightElementNode: function(node)
-	{
-		var n = Ext.get(node);
-		n.setStyle('display', 'none');
-		return n;
+	redact: function(){
+		//TODO: see above
 	}
 });

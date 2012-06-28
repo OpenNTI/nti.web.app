@@ -107,6 +107,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
 		return span;
 	},
 
+
 	unwrap: function(node) {
 		var r, p = node.parentNode;
 
