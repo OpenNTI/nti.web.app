@@ -1,6 +1,6 @@
 Ext.define( 'NextThought.view.annotations.QuizResults', {
 	extend: 'NextThought.view.annotations.Annotation',
-	alias: 'widget.quiz-result',
+	alias: 'widget.quizresult',
 	requires:[],
 
 	constructor: function(config){

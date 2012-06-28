@@ -6,88 +6,20 @@ Ext.define('NextThought.view.annotations.Redaction', {
 	],
 
 
-	constructor: function(selection, record, component){
-		var me = this,
-			expImg;
-
-		me.callParent([record, component]);
+	constructor: function(config){
+		var me = this;
+		me.callParent(arguments);
 
 		Ext.apply(me,{
-			selection: selection,
 			rendered: false,
 			renderPriority: 2,
 			redactionsShown: false, //current state of hiding or unhiding, initially they are hid
 			redactionSpans: [] //the spans that have been redacted are stored here for hide/unhide later
 		});
 
-		expImg = me.createImage(
-			Ext.BLANK_IMAGE_URL,
-			me.div,
-			'action',
-			'expanded',
-			'visibility:hidden;'
-		);
-		this.expandedSrc = expImg.src;
-		this.collapsedSrc = me.img.src;
-
-
-		me.div.removeChild(expImg);
 		return me;
 	},
 
-	getItemId: function(){return this.id; },
-	isXType: function(){return false;},
-	getEl: function(){return Ext.get(this.img);},
-	getPosition: function(){
-		return Ext.fly(this.img).getXY();
-	},
-
-
-	getColor: function(){
-		return 'transparent';
-	},
-
-
-	getRects: function(){
-		var rects = [],
-			list = this.selection.getClientRects(),
-			i=list.length-1,
-			cont = Ext.get(this.ownerCmp.getIframe()),
-			pos = cont.getXY();
-
-		for(;i>=0; i--){ rects.push( this.adjustCoordinates(list[i],pos) ); }
-
-		return rects.reverse();
-	},
-
-
-	adjustCoordinates: function(rect,offsetToTrim){
-		var x = offsetToTrim[0]!==undefined ? offsetToTrim[0] : offsetToTrim.left,
-			y = offsetToTrim[1]!==undefined ? offsetToTrim[1] : offsetToTrim.top;
-
-		return {
-			top: rect.top+y,
-			left: rect.left+x,
-			width: rect.width,
-			height: rect.height,
-			right: rect.left+x+rect.width,
-			bottom: rect.top+y+rect.height
-		};
-	},
-
-
-	attachRecord: function(record){
-		var me = this,
-			i = record.getId(),
-			id = IdCache.getComponentId(i, null, me.prefix);
-
-		me.callParent(arguments);
-
-		if (!record.phantom && !Ext.ComponentManager.get(id)) {
-			me.id = id;
-			Ext.ComponentManager.register(me);
-		}
-	},
 
 
 	buildMenu: function(){
@@ -96,12 +28,6 @@ Ext.define('NextThought.view.annotations.Redaction', {
 			r = me.record,
 			text = r.get('text');
 
-		if(this.isModifiable) {
-			items.push({
-					text : (r.phantom?'Save':'Delete')+' Redaction',
-					handler: Ext.bind(r.phantom? me.savePhantom : me.remove, me)
-				});
-		}
 
 		if (!this.redactionsShown) {
 			items.push({

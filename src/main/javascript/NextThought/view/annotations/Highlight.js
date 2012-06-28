@@ -17,4 +17,5 @@ Ext.define('NextThought.view.annotations.Highlight', {
 		}
 		return this.range;
 	}
+
 });

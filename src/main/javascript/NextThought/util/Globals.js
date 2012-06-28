@@ -351,10 +351,6 @@ function(){
 	window.guidGenerator = this.guidGenerator;
 	window.isMe = this.isMe;
 
-	window.onerror = function(){
-		console.log('Caught an error? ',arguments);
-	};
-
 	this.stopBackspace(document);
 
 	this.handleCache();

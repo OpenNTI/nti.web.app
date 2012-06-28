@@ -221,6 +221,13 @@ Ext.define( 'NextThought.view.annotations.Annotation', {
 
 		//standard items Share, Remove, save(if phantom?)
 
+		if(this.isModifiable) {
+			items.unshift({
+				text : (r.phantom?'Save':'Delete')+' Redaction',
+				handler: Ext.bind(r.phantom? m.savePhantom : m.remove, m)
+			});
+		}
+
 		Ext.each(items, function(i){ Ext.apply(i,{ ui: 'nt-annotaion', plain: true }); });
 
 		return Ext.create('Ext.menu.Menu',{

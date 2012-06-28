@@ -31,13 +31,6 @@ Ext.define('NextThought.mixins.Annotations', {
 		});
 
 		me.addEvents('share-with','create-note');
-		me.widgetBuilder = {
-			'Highlight': me.createHighlightWidget,
-			'Redaction': me.createRedactionWidget,
-			'Note': me.createNoteWidget,
-			'TranscriptSummary': me.createTranscriptSummaryWidget,
-			'QuizResult': me.createQuizResultWidget
-		};
 
 		NextThought.controller.Annotations.events.on('new-note',this.onNoteCreated,this);
 		NextThought.controller.Annotations.events.on('new-redaction',this.onRedactionCreated,this);
@@ -133,17 +126,17 @@ Ext.define('NextThought.mixins.Annotations', {
 			return;
 		}
 
-		var highlight = AnnotationUtils.selectionToHighlight(range, null, this.getDocumentElement()),
+		var record = AnnotationUtils.selectionToHighlight(range, null, this.getDocumentElement()),
 			menu,
 			w,offset;
 
-		if(!highlight) {
+		if(!record) {
 			return;
 		}
 
-		w = this.widgetBuilder.Highlight.call(this,highlight,range);
+		w = this.createAnnotationWidget('highlight',record);
 
-		highlight.set('ContainerId', this.containerId);
+		record.set('ContainerId', this.containerId);
 
 		menu = w.getMenu();
 		menu.on('hide', function(){
@@ -162,112 +155,44 @@ Ext.define('NextThought.mixins.Annotations', {
 	},
 
 
-	createHighlightWidget: function(record, r){
-		var range = r || AnnotationUtils.buildRangeFromRecord(record, this.getDocumentElement()),
-			oid = record.getId(),
+	createAnnotationWidget: function(type, record){
+		var oid = record.getId(),
 			style = record.get('style'),
 			w;
 
-		if (!range) {
-			Ext.Error.raise('could not create range');
+		if(!record.pruned && (record.get('inReplyTo') || record.parent)){
+			return false;
 		}
-
-		if (this.annotationExists(record)) {
+		else if (this.annotationExists(record)) {
 			this.annotations[record.getId()].getRecord().fireEvent('updated',record);
-			return null;
-		}
-
-		w = Ext.create( 'widget.highlight-annotation', range, record, this);
-
-		if (!oid) {
-			oid = 'Highlight-TEMP-OID';
-			if (this.annotations[oid]){
-				this.annotations[oid].cleanup();
-				delete this.annotations[oid];
-			}
-			w.tempID = oid;
-			record.on('updated',function(r){
-				this.annotations[r.get('NTIID')] = this.annotations[oid];
-				this.annotations[oid] = undefined;
-				delete this.annotations[oid];
-				delete w.tempID;
-			}, this);
-		}
-
-		this.annotations[oid] = w;
-		return w;
-	},
-
-	createRedactionWidget: function(record, r){
-		var range = r || AnnotationUtils.buildRangeFromRecord(record, this.getDocumentElement()),
-			oid = record.getId(),
-			style = record.get('style'),
-			w;
-
-		if (!range) {
-			Ext.Error.raise('could not create range');
-		}
-
-		if (this.annotationExists(record)) {
-			this.annotations[record.getId()].getRecord().fireEvent('updated',record);
-			return null;
-		}
-
-		w = Ext.create( 'widget.redaction-highlight-annotation', range, record, this);
-
-		if (!oid) {
-			oid = 'Redaction-TEMP-OID';
-			if (this.annotations[oid]){
-				this.annotations[oid].cleanup();
-				delete this.annotations[oid];
-			}
-			w.tempID = oid;
-			record.on('updated',function(r){
-				this.annotations[r.get('NTIID')] = this.annotations[oid];
-				this.annotations[oid] = undefined;
-				delete this.annotations[oid];
-				delete w.tempID;
-			}, this);
-		}
-
-		this.annotations[oid] = w;
-
-		return w;
-	},
-
-
-	createNoteWidget: function(record){
-		try{
-			if(!record.pruned && (record.get('inReplyTo') || record.parent)){
-				return false;
-			}
-			else if (this.annotationExists(record)) {
-				this.annotations[record.getId()].getRecord().fireEvent('updated',record);
-				return true;
-			}
-
-			this.annotations[record.getId()] = Ext.create( 'widget.note-annotation', record, this);
-
 			return true;
 		}
-		catch(e){ console.error('Error notes: ',e.toString(), e.stack); }
 
-		return false;
+		try {
+			w = Ext.widget({xtype: type.toLowerCase(), record: record, reader: this});
+
+			if (!oid) {
+				oid = type.toUpperCase()+'-TEMP-OID';
+				if (this.annotations[oid]){
+					this.annotations[oid].cleanup();
+					delete this.annotations[oid];
+				}
+				w.tempID = oid;
+				record.on('updated',function(r){
+					this.annotations[r.get('NTIID')] = this.annotations[oid];
+					this.annotations[oid] = undefined;
+					delete this.annotations[oid];
+					delete w.tempID;
+				}, this);
+			}
+
+			this.annotations[oid] = w;
+		}
+		catch(e){
+
+		}
+		return w;
 	},
-
-
-	createTranscriptSummaryWidget: function(record) {
-		if (record.parent) { return; }
-		this.annotations[record.getId()] = Ext.create( 'widget.transcript-annotation', record, this);
-		return true;
-	},
-
-	createQuizResultWidget: function(record) {
-		if (record.parent) { return; }
-		this.annotations[record.getId()] = Ext.create( 'widget.quiz-result-annotation', record, this);
-		return true;
-	},
-
 
 
 	onNoteCreated: function(record){
@@ -308,7 +233,7 @@ Ext.define('NextThought.mixins.Annotations', {
 			creator = item? item.get('Creator') : null,
 			delAction = /deleted/i.test(type),
 			cmp = Ext.getCmp(IdCache.getComponentId(oid, null, this.prefix)),
-			cls, replyTo, builder, result,
+			cls, replyTo, result,
 			contribNS = Globals.getViewIdFromComponent(this);
 
 		if (!item || !this.containerId || this.containerId !== cid) {
@@ -351,17 +276,16 @@ Ext.define('NextThought.mixins.Annotations', {
 		else if(!delAction){
 			cls = item.get('Class');
 			replyTo = item.get('inReplyTo');
-			builder = this.widgetBuilder[cls];
-			result = builder ? builder.call(this, item) : false;
+			result = this.createAnnotationWidget(cls,item) || false;
 
 			if(result === false){
-				if (/Note/i.test(cls) && replyTo) {
-					replyTo = Ext.getCmp(IdCache.getComponentId(replyTo, null, this.prefix));
-					replyTo.addReply(item);
-				}
-				else {
+//				if (replyTo) {
+//					replyTo = Ext.getCmp(IdCache.getComponentId(replyTo, null, this.prefix));
+//					replyTo.addReply(item);
+//				}
+//				else {
 					console.error('ERROR: Do not know what to do with this item',item);
-				}
+//				}
 			}
 		}
 	},
@@ -431,7 +355,7 @@ Ext.define('NextThought.mixins.Annotations', {
 				}
 				try{
 					Ext.Array.insert(contributors, 0, me.getContributors(r));
-					me.widgetBuilder[r.getModelName()].call(me,r);
+					me.createAnnotationWidget(r.getModelName(),r);
 					AnnotationsRenderer.aboutToRender = true;
 				}
 				catch(e) {
