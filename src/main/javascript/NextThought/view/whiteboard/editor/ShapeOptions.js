@@ -37,7 +37,7 @@ Ext.define('NextThought.view.whiteboard.editor.ShapeOptions',{
 		},
 		items: [
 			'Fill',
-			{ xtype: 'color-picker-button', fillSelect: true },
+			{ xtype: 'color-picker-button', fillSelect: true, value: '333333' },
 			'Stroke',
 			{ xtype: 'stroke-select' },
 			{ xtype: 'color-picker-button', strokeSelect: true }

@@ -32,7 +32,8 @@ Ext.define('NextThought.view.whiteboard.editor.TextOptions',{
 			valueField: 'size',
 			value: '12 pt'
 		},{
-			xtype: 'color-picker-button'
+			xtype: 'color-picker-button',
+			value: '333333'
 		},{
 			ui: 'options',
 			scale: 'medium',

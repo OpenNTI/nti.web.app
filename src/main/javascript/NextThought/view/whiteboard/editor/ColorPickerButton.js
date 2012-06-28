@@ -16,13 +16,13 @@ Ext.define('NextThought.view.whiteboard.editor.ColorPickerButton',{
 
 	initComponent: function(){
 		this.callParent(arguments);
-		this.value = this.value || 'NONE';
 
 		this.palette = this.menu.down('color-palette');
 		this.mon( this.menu,{
 			scope: this,
 			select: this.selectHandler
-		})
+		});
+		this.setValue(this.value);
 	},
 
 
@@ -43,8 +43,8 @@ Ext.define('NextThought.view.whiteboard.editor.ColorPickerButton',{
 			else { me.removeCls(c.name); }
 		});
 
-		if(found){
-			me.value = color;
+		if(found || !color){
+			me.value = color || 'NONE';
 		}
 		else {
 			Ext.Error.raise(Ext.String.format('The color "{0}" is invalid',color));

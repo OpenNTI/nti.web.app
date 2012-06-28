@@ -19,6 +19,7 @@ Ext.define('NextThought.view.whiteboard.editor.StrokeWidthSelector',{
 	queryMode: 'local',
 	displayField: 'size-class',
 	valueField: 'size',
+	value: 'fine',
 
 	listConfig: {
 		ui: 'nt',
@@ -44,7 +45,7 @@ Ext.define('NextThought.view.whiteboard.editor.StrokeWidthSelector',{
 		this.callParent(arguments);
 
 		this.on('select',function(me,val){
-			console.log(arguments);
+			console.log(me.getValue());
 			me.inputEl.dom.setAttribute('value',val[0].get(me.displayField));
 		},this);
 	}
