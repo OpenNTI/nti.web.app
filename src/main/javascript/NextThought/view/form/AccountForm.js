@@ -5,7 +5,7 @@ Ext.define('NextThought.view.form.AccountForm', {
 	requires: [
 		'Ext.form.field.Text',
 		'Ext.form.FieldSet',
-		'NextThought.view.form.fields.ShareWithField'
+		'NextThought.view.form.fields.UserListField'
 	],
 
 	ui: 'account',
@@ -130,7 +130,7 @@ Ext.define('NextThought.view.form.AccountForm', {
 									xtype: 'container',
 									autoEl: {tag: 'div', cls: 'field' },
 									defaults: {
-										xtype: 'sharewith',
+										xtype: 'user-list',
 										allowBlank: true
 									}
 								}

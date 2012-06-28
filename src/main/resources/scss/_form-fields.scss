@@ -33,3 +33,49 @@
 	}
 
 }
+
+
+.user-list-field {
+	padding: 5px 25px 5px 5px;
+	color: #757474;
+	font-family: 'Open Sans', sans-serif;
+	//font-size: 15pt;
+	width: 100%;
+	border-radius: 3px;
+	border: 1px solid #a0a0a0;
+	box-shadow: inset 3px 3px 10px -5px #a0a0a0; //TODO: fix to be a sane value (use RGBA to lighten the shadow, not the blur & spread)
+	// REFRESHER: box-shadow syntax is:
+	// box-shadow:  none | <shadow> [,<shadow>]*
+	//	where <shadow> is defined as:
+	//		inset? && [ <offset-x> <offset-y> <blur-radius>? <spread-radius>? <color>? ]
+
+	position: relative;
+
+	.user-search-field {
+		display: inline-block;
+		margin: 5px 0 0 0;
+		input {
+			border: none !important;
+			border-width: 0 !important;
+			background: none;
+			padding: 0;
+		}
+		.x-form-item-body {
+			position: static;
+		}
+		.x-trigger-cell {
+			&.hidden {
+				display: none;
+			}
+			.x-form-trigger {
+				position: absolute;
+				top: 0;
+				right: 0;
+				border-width: 0px;
+				background: url(../images/search-nib.png) left center no-repeat;
+				width: 17px;
+				height: 100%;
+			}
+		}
+	}
+}

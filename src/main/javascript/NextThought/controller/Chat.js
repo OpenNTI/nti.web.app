@@ -277,7 +277,8 @@ Ext.define('NextThought.controller.Chat', {
 			channel: channel,
 			recipients: recipients
 		}),
-			win = Ext.widget('noteeditor',{
+			win = Ext.widget({
+				xtype: 'noteeditor',
 				record: record,
 				room: room,
 				closable: true,

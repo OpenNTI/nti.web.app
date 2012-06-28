@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.annotations.BodyEditor', {
+Ext.define('NextThought.view.annotations.editor.Body', {
 	extend: 'Ext.panel.Panel',
 	alias: 'widget.body-editor',
 

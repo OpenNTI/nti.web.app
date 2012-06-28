@@ -19,8 +19,8 @@ Ext.define('NextThought.controller.Annotations', {
 	views: [
 		'annotations.Highlight',
 		'annotations.Note',
-		'annotations.NoteEditor',
-		'annotations.ShareWith',
+		'annotations.editor.Note',
+		'sharing.Window',
 		'content.Reader',
 		'definition.Window'
 	],
@@ -89,7 +89,7 @@ Ext.define('NextThought.controller.Annotations', {
 
 	onShareWithSaveClick: function(btn){
 		var win = btn.up('window'),
-			shbx= win.down('sharewith'),
+			shbx= win.down('user-list'),
 			rec = win.record;
 
 		win.el.mask('Sharing...');
@@ -272,11 +272,11 @@ Ext.define('NextThought.controller.Annotations', {
 			};
 		}
 
-		Ext.widget(Ext.apply({xtype: 'share',record: record}, options)).show();
+		Ext.widget(Ext.apply({xtype: 'share-window',record: record}, options)).show();
 	},
 
 	editNote: function(record){
-		Ext.widget('noteeditor',{record: record}).show();
+		Ext.widget({xtype:'noteeditor', record: record}).show();
 	},
 
 	addNote: function(range){

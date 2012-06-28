@@ -6,8 +6,8 @@ Ext.define('NextThought.mixins.Annotations', {
 		'NextThought.model.QuizResult',
 		'NextThought.util.Annotations',
 		'NextThought.util.Quizes',
-		'NextThought.view.annotations.SelectionHighlight',
-		'NextThought.view.annotations.RedactionHighlight',
+		'NextThought.ux.SearchHits',
+		'NextThought.view.annotations.Redaction',
 		'NextThought.view.annotations.Highlight',
 		'NextThought.view.annotations.Note',
 		'NextThought.view.annotations.Transcript',
@@ -66,7 +66,7 @@ Ext.define('NextThought.mixins.Annotations', {
 
 	showRanges: function(ranges) {
 		this.clearSearchRanges();
-		this.searchAnnotations = Ext.create('annotations.SelectionHighlight', ranges, this);
+		this.searchAnnotations = Ext.widget({xtype: 'SearchHits', hits: ranges, owner: this});
 	},
 
 
@@ -423,8 +423,7 @@ Ext.define('NextThought.mixins.Annotations', {
 
 
 	buildAnnotations: function(list){
-		var me = this, contributors = [],
-			a = NextThought.view.annotations.Annotation;
+		var me = this, contributors = [];
 		Ext.each(list,
 			function(r){
 				if(!r) {
@@ -433,7 +432,7 @@ Ext.define('NextThought.mixins.Annotations', {
 				try{
 					Ext.Array.insert(contributors, 0, me.getContributors(r));
 					me.widgetBuilder[r.getModelName()].call(me,r);
-					a.aboutToRender = true;
+					AnnotationsRenderer.aboutToRender = true;
 				}
 				catch(e) {
 					console.error('Could not build '+r.getModelName()+' from record:', r, 'because: ', e, e.stack);

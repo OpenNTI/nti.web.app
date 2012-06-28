@@ -1,6 +1,6 @@
-Ext.define('NextThought.view.annotations.RedactionHighlight', {
-	extend:'NextThought.view.annotations.Annotation',
-	alias: 'widget.redaction-highlight-annotation',
+Ext.define('NextThought.view.annotations.Redaction', {
+	extend:'NextThought.view.annotations.Highlight',
+	alias: 'widget.redaction',
 	requires:[
 		'NextThought.cache.IdCache'
 	],

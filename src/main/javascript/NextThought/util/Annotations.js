@@ -18,7 +18,7 @@ Ext.define('NextThought.util.Annotations',{
 
 
 	callbackAfterRender: function(fn,scope){
-		var a = NextThought.view.annotations.Annotation;
+		var a = AnnotationsRenderer;
 
 		function cb(){
 			Ext.callback(fn,scope);

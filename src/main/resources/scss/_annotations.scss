@@ -1,34 +1,4 @@
-.dictionary-window {
-    @extend .nti-window;
 
-    .nti-window-header {
- 		border-bottom: 1px solid #E7E7E7;
-    }
-
-	padding-bottom: 3px;
-	overflow: visible;
-	&.north::before {
-		content: "";
-		position: absolute;
-		z-index: 1;
-		top: -15px;
-		left: 0;
-		width: 100%;
-		height: 18px;
-		background: url(../images/window-nib-north.png) center top no-repeat;
-	}
-
-	&.south::before{
-		content: "";
-		position: absolute;
-		z-index: 1;
-		bottom: -15px;
-		left: 0;
-		width: 100%;
-		height: 18px;
-		background: url(../images/window-nib-south.png) center top no-repeat;
-	}
-}
 
 
 .share-with-data {
@@ -63,74 +33,16 @@
 	}
 }
 
-.nti-window {
-	div.field {
-		margin: 12px 8px 10px 8px;
-		background: #f7f7f7;
-		box-shadow: inset 0 0 1px 1px white;
-	}
-
-	.buttons {
-		margin: 10px;
-	}
-}
-
-.share-with-field {
-	padding: 5px 25px 5px 5px;
-	color: #757474;
-	font-family: 'Open Sans', sans-serif;
-	//font-size: 15pt;
-	width: 100%;
-	border-radius: 3px;
-	border: 1px solid #a0a0a0;
-	box-shadow: inset 3px 3px 10px -5px #a0a0a0; //TODO: fix to be a sane value (use RGBA to lighten the shadow, not the blur & spread)
-	// REFRESHER: box-shadow syntax is:
-	// box-shadow:  none | <shadow> [,<shadow>]*
-	//	where <shadow> is defined as:
-	//		inset? && [ <offset-x> <offset-y> <blur-radius>? <spread-radius>? <color>? ]
-
-	position: relative;
-
-	.user-search-field {
-		display: inline-block;
-		margin: 5px 0 0 0;
-		input {
-			border: none !important;
-			border-width: 0 !important;
-			background: none;
-			padding: 0;
-		}
-		.x-form-item-body {
-			position: static;
-		}
-		.x-trigger-cell {
-			&.hidden {
-				display: none;
-			}
-			.x-form-trigger {
-				position: absolute;
-				top: 0;
-				right: 0;
-				border-width: 0px;
-				background: url(../images/search-nib.png) left center no-repeat;
-				width: 17px;
-				height: 100%;
-			}
-		}
-	}
-}
-
-
-
-.editor-whiteboard {
-	background: $whiteboard-tools-sprite;
-	background-position: 0 -232px;
-}
-
-.editor-seperator {
-	background: $whiteboard-tools-sprite;
-	background-position:  0 -192px;
-}
+//
+//.editor-whiteboard {
+//	background: $whiteboard-tools-sprite;
+//	background-position: 0 -232px;
+//}
+//
+//.editor-seperator {
+//	background: $whiteboard-tools-sprite;
+//	background-position:  0 -192px;
+//}
 
 .x-nti-note {
 	border-top: 1px solid $border-color;

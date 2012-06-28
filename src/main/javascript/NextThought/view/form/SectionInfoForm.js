@@ -7,7 +7,7 @@ Ext.define('NextThought.view.form.SectionInfoForm', {
 		'Ext.form.field.Text',
 		'Ext.form.field.Date',
 		'Ext.form.FieldSet',
-		'NextThought.view.form.fields.ShareWithField'
+		'NextThought.view.form.fields.UserListField'
 	],
 
 	border: false,
@@ -86,7 +86,7 @@ Ext.define('NextThought.view.form.SectionInfoForm', {
 						layout: 'anchor',
 						border: false,
 						allowBlank: false,
-						xtype: 'sharewith'
+						xtype: 'user-list'
 					}
 				},
 				items:[
