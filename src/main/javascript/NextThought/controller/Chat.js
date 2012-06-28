@@ -418,12 +418,12 @@ Ext.define('NextThought.controller.Chat', {
 	},
 
 
-	updateRoomInfo: function(ri) {
-			var ri = this.getRoomInfoFromSessionStorage(ri.getId());
-		if (ri) {
-			ri.fireEvent('changed', ri);
+	updateRoomInfo: function(newRi) {
+		var oldRi = this.getRoomInfoFromSessionStorage(newRi.getId());
+		if (oldRi) {
+			oldRi.fireEvent('changed', newRi);
 		}
-		this.putRoomInfoIntoSessionStorage(ri);
+		this.putRoomInfoIntoSessionStorage(newRi);
 	},
 
 
