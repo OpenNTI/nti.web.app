@@ -24,11 +24,12 @@ Ext.define('NextThought.util.Uploads',{
 				];
 				try {
 					try {
-						b = new window.Blob(script,'text/javascript');//preferred method
+						b = new Blob(script,{type:'text/javascript'});//preferred method
 					}
 					catch(e){
+						console.warn(e.message);
 						//depricated (previous) prefered method
-						bb = new window.BlobBuilder();
+						bb = new BlobBuilder();
 						bb.append(script.join('\n'));
 						b = bb.getBlob('text/javascript');
 					}
