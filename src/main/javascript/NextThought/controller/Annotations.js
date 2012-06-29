@@ -62,7 +62,7 @@ Ext.define('NextThought.controller.Annotations', {
 			'noteeditor button[action=discuss]':{ 'click': this.onDiscussNote },
 			'noteeditor button[action=cancel]':{ 'click': this.onCancelNote },
 
-			'share button[action=save]':{
+			'share-window button[action=save]':{
 				'click': this.onShareWithSaveClick
 			},
 
@@ -96,8 +96,8 @@ Ext.define('NextThought.controller.Annotations', {
 
 		SharingUtils.setSharedWith(rec,shbx.getValue(),function(newRec,op){
 			if(op.success){
-				win.close();
 				rec.fireEvent('updated',newRec);
+				win.close();
 			}
 			else{
 				console.error('Failed to save object');
@@ -264,6 +264,11 @@ Ext.define('NextThought.controller.Annotations', {
 
 	shareWith: function(record){
 		var options = {};
+
+		if (Ext.ComponentQuery.query('share-window').length > 0) {
+			//already a share with window, they are modal, just don't do this:
+			return;
+		}
 
 		if (arguments[arguments.length-1] === true) {
 			options = {
