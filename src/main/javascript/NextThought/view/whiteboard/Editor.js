@@ -9,6 +9,7 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 		interaction: 'NextThought.view.whiteboard.editor.mixins.ShapeManipulation'
 	},
 
+	autoScroll: true,
 	border: false,
 	ui: 'whiteboard-editor',
 	layout: 'fit',

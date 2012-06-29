@@ -123,13 +123,11 @@
 
 
 .editor-whiteboard {
-	background: $whiteboard-tools-sprite;
-	background-position: 0 -232px;
+	background: url(../images/whiteboard/whiteboard_16.png) no-repeat center;
 }
 
 .editor-seperator {
-	background: $whiteboard-tools-sprite;
-	background-position:  0 -192px;
+	background: url(../images/whiteboard/seperator_16.png) no-repeat center;
 }
 
 .x-nti-note {
