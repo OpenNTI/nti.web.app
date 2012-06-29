@@ -64,7 +64,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
 			me.render();
 		}
 
-		this.mouseOutTimout = setTimeout(off,500);
+		this.mouseOutTimout = setTimeout(off,250);
 	},
 
 
@@ -75,8 +75,10 @@ Ext.define('NextThought.view.annotations.Highlight', {
 			topOffset = 10,
 			leftOffset = 5,
 			ctx,
-			s = RectUtils.merge(range.getClientRects(),this.getLineHeight(),width+1),
-			i = s.length - 1, x, left,
+			adjustment,
+			lineHeight = this.getLineHeight(),
+			s = RectUtils.merge(range.getClientRects(),lineHeight,width+1),
+			i = s.length - 1, x, y, w, h, left, r, lastY, c,
 			last = true;
 
 		if(!this.rendered){
@@ -89,23 +91,53 @@ Ext.define('NextThought.view.annotations.Highlight', {
 		}
 
 
-		Ext.fly(this.canvas).setXY([bounds.left-leftOffset,bounds.top-topOffset]);
-		Ext.fly(this.canvas).set({ width: width+(leftOffset*2), height: bounds.height+(topOffset*2) });
+		Ext.fly(this.canvas).setXY([
+			Math.ceil(bounds.left-leftOffset),
+			Math.ceil(bounds.top-topOffset)
+		]);
+		Ext.fly(this.canvas).set({
+			width: Math.ceil(width+(leftOffset*2)),
+			height: Math.ceil(bounds.height+(topOffset*2))
+		});
 
 		ctx = this.canvas.getContext('2d');
 		ctx.fillStyle = this.compElements.first().getStyle('background-color');
 		for(; i>=0; i--){
-			left = s[i].left - bounds.left + leftOffset - 2;
+			r = s[i];
+
+			left = Math.ceil(r.left - bounds.left + leftOffset - 2);
+
 			x = i===0 ? left : 0;
+			y = Math.ceil(r.top - bounds.top + topOffset -2);
+			w = last ? (r.width + (x ? 0: left) -5 ) : (width-x);
+			h = r.height + 4;
+
+			if(!last && (Math.abs(y - lastY) < lineHeight || y > lastY )){ continue; }
+
+			if(last){
+				c = Ext.get(this.counter);
+				adjustment = this.adjustedBy || (r.top - c.getTop());
+				if(parseInt(c.getStyle('line-height'),10)!==h){
+					c.setStyle('line-height',h+'px');
+				}
+				//c.setStyle('top',adjustment+'px');
+				if(!this.adjusted){
+					console.log(adjustment,c.getTop());
+					this.adjusted = true;
+					this.adjustedBy = adjustment;
+					this.render();
+					return;
+				}
+			}
+			else {
+				adjustment = 0;
+			}
 
 			//TODO: clamp to 24px tall (centered in the rect)
-			ctx.fillRect(
-					x,
-					s[i].top - bounds.top + topOffset -2,
-					last ? (s[i].width + (x ? 0: left) -5 ) : (width-x),
-					s[i].height + 4
-			);
+			ctx.fillRect( x, y - Math.round(adjustment/2), w, h );
+
 			last = false;
+			lastY = y;
 		}
 
 	},

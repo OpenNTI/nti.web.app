@@ -3,7 +3,7 @@ Ext.define('NextThought.util.Rects',{
 
 
 	merge: function(rects,lineHeight,clientWidth){
-		console.log('rects', arguments);
+//		console.log('rects', arguments);
 		if(!lineHeight){
 			Ext.Error.raise("Invalid Line Height");
 		}
@@ -67,7 +67,7 @@ Ext.define('NextThought.util.Rects',{
 			if (o.height < lineHeight){o.height = lineHeight;} //round up to look nice
 			h = o.height;
 			w = o.width;
-			if( h > 0 && h < lh2 && w <= clientWidth && acceptableHeight(h)) {
+			if( h > 0 && h < lh2 && w > 0 && w <= clientWidth && acceptableHeight(h)) {
 				out.push(o);
 			}
 		}

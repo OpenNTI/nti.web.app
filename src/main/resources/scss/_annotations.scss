@@ -288,8 +288,11 @@ img.action {
 			color: #757474;
 			font-family: 'Open Sans' !important;
 			font-weight: bold;
-			margin-top: -5px;
-			vertical-align: middle;
+
+			position: relative;
+			top: 1px;
+
+			vertical-align: baseline;
 			display: inline-block;
 			width: 5px;
 			overflow: hidden;
@@ -299,7 +302,8 @@ img.action {
 
 			background:{
 				image: url(../images/highlights/tip.png);
-				position: right center;
+				position-x: 100%;
+				position-y: 0px;
 				repeat: no-repeat;
 			}
 
