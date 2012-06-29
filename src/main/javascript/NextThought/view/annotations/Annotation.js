@@ -262,11 +262,11 @@ Ext.define( 'NextThought.view.annotations.Annotation', {
 
 	onClick: function(e) {
 		var spot, text, menu,
-			xy = e.getXY();
+			xy = e.getXY().slice();
 
 		//adjust points
-		xy[0] += this.offsets[0];
-		xy[1] += this.offsets[1];
+		xy[0] += this.offsets.left;
+		xy[1] += this.offsets.top;
 
 		//single annotation
 		menu = this.getMenu();
@@ -278,6 +278,7 @@ Ext.define( 'NextThought.view.annotations.Annotation', {
 //		spot = Ext.widget({xtype:'spotlight', target: this});
 //		menu.on('hide', function(){ spot.destroy();});
 		menu.showAt.apply(menu,xy);
+		menu.setPosition(xy[0]-menu.getWidth()/2,xy[1]+10);
 
 		e.stopPropagation();
 		e.preventDefault();

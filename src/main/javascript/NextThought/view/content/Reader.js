@@ -243,9 +243,11 @@ Ext.define('NextThought.view.content.Reader', {
 
 
 	getAnnotationOffsets: function(){
+		var f = this.getIframe();
 		return {
-			top: this.getIframe().getTop(),
-			left: this.getIframe().getMargin('l')
+			top: f.getTop(),
+			left: f.getLeft(),
+			gutter: f.getMargin('l')
 		};
 	},
 
