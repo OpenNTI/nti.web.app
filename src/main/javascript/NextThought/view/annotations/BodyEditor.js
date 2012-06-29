@@ -250,7 +250,7 @@ Ext.define('NextThought.view.annotations.BodyEditor', {
 
 	getWhiteboardEditor: function(canvas, id){
 
-		this.editors[id] = this.editors[id] || Ext.widget('nit-window', {
+		this.editors[id] = this.editors[id] || Ext.widget('wb-window', {
 			closeAction: 'hide',
 			title: 'Whiteboard',
 			width: Ext.getBody().getWidth()*0.7,
