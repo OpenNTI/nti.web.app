@@ -7,7 +7,6 @@ public class Login extends Base {
 	
 	protected void doLogin(final String username, final String password) {
 		this.waitForElement(Xpath.username, timeout);
-		this.wait_(3);
 		this.findElement(Xpath.username).sendKeys(username);
 		this.waitForElement(Xpath.password, timeout);
 		this.findElement(Xpath.password).sendKeys(password);
