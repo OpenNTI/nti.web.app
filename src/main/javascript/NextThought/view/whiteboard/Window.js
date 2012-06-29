@@ -53,7 +53,7 @@ Ext.define('NextThought.view.whiteboard.Window',{
 					layout: { type: 'hbox', pack: 'end' },
 					defaults: {xtype: 'button', ui: 'primary', scale: 'medium'},
 					items: [
-						{text: 'Cancel', ui: 'secondary' },
+						{text: 'Cancel', action: 'cancel', ui: 'secondary' },
 						{text: 'Save', action: 'save' }
 					]
 				}
@@ -72,6 +72,12 @@ Ext.define('NextThought.view.whiteboard.Window',{
 	},
 
 
+	initComponent: function(){
+		this.callParent(arguments);
+
+		this.down('button[action=save]').setHandler(this.save, this);
+		this.down('button[action=cancel]').setHandler(this.cancel, this);
+	},
 
 
 	save: function (btn) {

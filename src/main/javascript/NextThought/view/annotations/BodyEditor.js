@@ -96,7 +96,7 @@ Ext.define('NextThought.view.annotations.BodyEditor', {
 		}
 
 		editor.getToolbar().add('-');//the layout doesn't work initially with this in one call
-		editor.getToolbar().add({ iconCls: 'editor-whiteboard', tooltip: 'Add Whiteboard', handler: function(){me.insertWhiteboard();} },
+		editor.getToolbar().add({ text: 'wb', iconCls: 'editor-whiteboard', tooltip: 'Add Whiteboard', handler: function(){me.insertWhiteboard();} },
 			{ iconCls: 'editor-seperator', tooltip: 'Add a Seperator', handler: function(){me.insertSeperator();} }
 		);
 
