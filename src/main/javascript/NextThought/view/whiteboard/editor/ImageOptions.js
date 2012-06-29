@@ -30,14 +30,12 @@ Ext.define('NextThought.view.whiteboard.editor.ImageOptions',{
 				items: [
 					{ text: 'From', cls: 'label', ui: 'nt', canActivate: false, focusable: false, hideOnClick: false },
 					{ text: 'Computer', xtype: 'file-browser-menu-item' },
-					{ text: 'Class Documents' },
-					{ text: 'Web' }
+					{ text: 'Class Documents', disabled: true},
+					{ text: 'Web', disabled: true }
 				]
 			}
 		},
-		{ text: 'Take Picture', menu: [], disabled: true },
-		'->',
-		'Upload from Class Resources folder'
+		{ text: 'Take Picture', menu: [], disabled: true }
 	],
 
 
