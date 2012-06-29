@@ -34,9 +34,6 @@ Ext.define('NextThought.view.annotations.Redaction', {
 		this.actionSpan.insertBefore(this.rendered[0]);
 		this.actionSpan.on('click', this.toggleRedaction, this);
 
-		//create a composite element so we can do lots of things at once:
-		this.compElements = new Ext.dom.CompositeElement(this.rendered);
-
 		//add the redaction class and the click handlers for redacted spans:
 		this.compElements.addCls(this.redactionCls);
 

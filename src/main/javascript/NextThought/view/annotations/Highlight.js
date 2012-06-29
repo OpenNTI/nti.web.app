@@ -2,11 +2,15 @@ Ext.define('NextThought.view.annotations.Highlight', {
 	extend:'NextThought.view.annotations.Annotation',
 	alias: 'widget.highlight',
 	requires:[
-		'NextThought.util.Anchors'
+		'NextThought.util.Anchors',
+		'NextThought.util.Rects',
+		'Ext.util.TextMetrics'
 	],
 
 	constructor: function(config){
 		this.callParent(arguments);
+		this.content = Ext.fly(this.doc.getElementById('NTIContent')).first(false,true);
+		this.fillColor = '#e1f4fe';
 		return this;
 	},
 
@@ -22,17 +26,83 @@ Ext.define('NextThought.view.annotations.Highlight', {
 	cleanup: function(){
 		var c = this.rendered.slice();
 		this.rendered = [];
+		Ext.fly(this.canvas).remove();
 		Ext.each(c,this.unwrap,this);
 		return this.callParent(arguments);
 	},
 
 
-	render: function(){
-		if(this.rendered){
-			return;
+	getLineHeight: function(){
+		var s = this.getRange(), m,
+			n = s.commonAncestorContainer;
+
+		if(n.nodeType===n.TEXT_NODE){
+			n = n.parentNode;
 		}
-		var range = this.getRange();
-		this.rendered = this.wrapRange(range.commonAncestorContainer, range);
+		m = new Ext.util.TextMetrics(n);
+		return m.getHeight("TEST");
+	},
+
+
+	onMouseOver: function(){
+//		this.render();
+	},
+	onMouseOut: function(){
+//		this.render();
+	},
+
+
+	render: function(){
+		var range = this.getRange(),
+			bounds = range.getBoundingClientRect(),
+			width = Ext.fly(this.content).getWidth(),
+			topOffset = 10,
+			leftOffset = 5,
+			ctx,
+			s = RectUtils.merge(range.getClientRects(),this.getLineHeight(),width+1),
+			i = s.length-1;
+
+		if(!this.rendered){
+			this.rendered = this.wrapRange(range.commonAncestorContainer, range);
+			//create a composite element so we can do lots of things at once:
+			this.compElements = new Ext.dom.CompositeElement(this.rendered);
+			this.canvas = this.createCanvas();
+		}
+
+
+		Ext.fly(this.canvas).setXY([bounds.left-leftOffset,bounds.top-topOffset]);
+		Ext.fly(this.canvas).set({ width: width+leftOffset, height: bounds.height+topOffset });
+
+		ctx = this.canvas.getContext('2d');
+		ctx.fillStyle = this.fillColor;
+		for(; i>=0; i--){
+			ctx.fillRect(
+					s[i].left - bounds.left + leftOffset - 2,
+					s[i].top - bounds.top + topOffset -2,
+					s[i].width + 4,
+					s[i].height + 4
+			);
+		}
+
+	},
+
+
+	createCanvas: function(){
+
+		var id = 'annotation-container',
+			doc = this.doc,
+			body = this.doc.getElementById('NTIContent'),
+			cnt = doc.getElementById(id);
+
+		if(!cnt){
+			cnt = doc.createElement('div');
+			cnt.setAttribute('id',id);
+			body.parentNode.insertBefore(cnt,body);
+		}
+
+		return this.createElement(
+			'canvas', cnt,
+			'highlight-canvas');
 	},
 
 
@@ -100,10 +170,15 @@ Ext.define('NextThought.view.annotations.Highlight', {
 
 	doWrap: function(range) {
 		var span = this.doc.createElement('span');
-//		span.setAttribute('data-non-anchorable', 'true');
-		span.setAttribute('style', 'background: lightblue');
+		span.setAttribute('data-non-anchorable', 'true');
+		span.setAttribute('class', 'application-highlight');
+
 		range.surroundContents(span);
-		Ext.fly(span).on('click',this.onClick,this);
+		Ext.fly(span).on({
+			scope: this,
+			click:this.onClick
+		});
+		Ext.fly(span).hover(this.onMouseOver,this.onMouseOut,this);
 		return span;
 	},
 

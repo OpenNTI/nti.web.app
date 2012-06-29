@@ -33,16 +33,6 @@
 	}
 }
 
-//
-//.editor-whiteboard {
-//	background: $whiteboard-tools-sprite;
-//	background-position: 0 -232px;
-//}
-//
-//.editor-seperator {
-//	background: $whiteboard-tools-sprite;
-//	background-position:  0 -192px;
-//}
 
 .x-nti-note {
 	border-top: 1px solid $border-color;
@@ -284,5 +274,18 @@ img.action {
         background: rgba(175, 175, 175, 0.6) !important;
     }
 
+	.application-highlight {
+		color: #076da7;
+		background: #e1f4fe;
+	}
 
+}
+
+#annotation-container {
+	position: absolute;
+
+	.highlight-canvas {
+		position: absolute;
+		pointer-events: none;
+	}
 }

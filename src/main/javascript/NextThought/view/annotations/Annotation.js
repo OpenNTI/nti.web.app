@@ -82,6 +82,16 @@ Ext.define( 'NextThought.view.annotations.Annotation', {
 	},
 
 
+	createElement: function(tag,parent,cls,css,id){
+		var el = document.createElement(tag);
+		if(cls) { Ext.get(el).addCls(cls); }
+		if(css) { el.setAttribute('style',css); }
+		if(id){el.setAttribute('id',id);}
+		parent.appendChild(el);
+		return el;
+	},
+
+
 	/**
 	 * Query inside the reader frame
 	 * @param selector
