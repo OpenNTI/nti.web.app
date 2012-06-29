@@ -29,16 +29,21 @@ Ext.define('NextThought.view.annotations.Redaction', {
 		if (this.actionSpan){return;}
 
 		//Add the redaction action span so the user has something to click on
-		this.actionSpan = Ext.get(this.doc.createElement('span'));
-		this.actionSpan.addCls('redactionAction');
-		this.actionSpan.insertBefore(this.rendered[0]);
-		this.actionSpan.on('click', this.toggleRedaction, this);
+		this.actionSpan = this.createActionHandle(this.rendered[0]);
 
 		//add the redaction class and the click handlers for redacted spans:
 		this.compElements.addCls(this.redactionCls);
 
 		this.compElements.add([this.actionSpan]);
 		this.toggleRedaction();
+	},
+
+
+	createActionHandle: function(before){
+		var el = Ext.get(this.doc.createElement('span'));
+		el.addCls('redactionAction');
+		el.insertBefore(before);
+		el.on('click', this.toggleRedaction, this)
 	},
 
 

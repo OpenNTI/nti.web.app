@@ -276,7 +276,51 @@ img.action {
 
 	.application-highlight {
 		color: #076da7;
-		background: #e1f4fe;
+		background-color: #e1f4fe;
+
+		&.highlight-mouse-over{
+			color: #ffffff;
+			background-color: #3fb3f6;
+		}
+
+		&.counter {
+			color: #757474;
+			font-family: 'Open Sans' !important;
+			font-weight: bold;
+			margin-top: -5px;
+			vertical-align: middle;
+			display: inline-block;
+			width: 5px;
+			overflow: hidden;
+			line-height: 23px;
+			text-align: center;
+			padding-left: 4px;
+
+			background:{
+				image: url(../images/highlights/tip.png);
+				position: right center;
+				repeat: no-repeat;
+			}
+
+			&.with-count {
+				width: 30px;
+				background-image: url(../images/highlights/counter_tip_default.png);
+
+
+				&.highlight-mouse-over{
+					color: #ffffff;
+					background-image: url(../images/highlights/counter_tip_hover.png);
+				}
+
+				span {
+					display: block;
+					text-align: center;
+					margin-left: 5px;
+					overflow: hidden;
+					text-overflow: ellipse;
+				}
+			}
+		}
 	}
 
 }

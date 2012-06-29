@@ -7,10 +7,12 @@ Ext.define('NextThought.view.annotations.Highlight', {
 		'Ext.util.TextMetrics'
 	],
 
+	highlightCls: 'application-highlight',
+	mouseOverCls: 'highlight-mouse-over',
+
 	constructor: function(config){
 		this.callParent(arguments);
 		this.content = Ext.fly(this.doc.getElementById('NTIContent')).first(false,true);
-		this.fillColor = '#e1f4fe';
 		return this;
 	},
 
@@ -18,6 +20,9 @@ Ext.define('NextThought.view.annotations.Highlight', {
 	getRange: function(){
 		if(!this.range){
 			this.range = Anchors.toDomRange(this.getRecordField('applicableRange'),this.doc);
+			if(!this.range){
+				Ext.Error.raise('bad range? '+Ext.encode(this.getRecordField('applicableRange')));
+			}
 		}
 		return this.range;
 	},
@@ -27,6 +32,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
 		var c = this.rendered.slice();
 		this.rendered = [];
 		Ext.fly(this.canvas).remove();
+		Ext.fly(this.counter).remove();
 		Ext.each(c,this.unwrap,this);
 		return this.callParent(arguments);
 	},
@@ -45,10 +51,20 @@ Ext.define('NextThought.view.annotations.Highlight', {
 
 
 	onMouseOver: function(){
-//		this.render();
+		clearTimeout(this.mouseOutTimout);
+		if(!this.compElements.first().hasCls(this.mouseOverCls)){
+			this.compElements.addCls(this.mouseOverCls);
+			this.render();
+		}
 	},
 	onMouseOut: function(){
-//		this.render();
+		var me = this;
+		function off(){
+			me.compElements.removeCls(me.mouseOverCls);
+			me.render();
+		}
+
+		this.mouseOutTimout = setTimeout(off,500);
 	},
 
 
@@ -60,28 +76,36 @@ Ext.define('NextThought.view.annotations.Highlight', {
 			leftOffset = 5,
 			ctx,
 			s = RectUtils.merge(range.getClientRects(),this.getLineHeight(),width+1),
-			i = s.length-1;
+			i = s.length - 1, x, left,
+			last = true;
 
 		if(!this.rendered){
 			this.rendered = this.wrapRange(range.commonAncestorContainer, range);
+			this.counter = this.createCounter(this.rendered.last());
 			//create a composite element so we can do lots of things at once:
 			this.compElements = new Ext.dom.CompositeElement(this.rendered);
+			this.compElements.add(this.counter);
 			this.canvas = this.createCanvas();
 		}
 
 
 		Ext.fly(this.canvas).setXY([bounds.left-leftOffset,bounds.top-topOffset]);
-		Ext.fly(this.canvas).set({ width: width+leftOffset, height: bounds.height+topOffset });
+		Ext.fly(this.canvas).set({ width: width+(leftOffset*2), height: bounds.height+(topOffset*2) });
 
 		ctx = this.canvas.getContext('2d');
-		ctx.fillStyle = this.fillColor;
+		ctx.fillStyle = this.compElements.first().getStyle('background-color');
 		for(; i>=0; i--){
+			left = s[i].left - bounds.left + leftOffset - 2;
+			x = i===0 ? left : 0;
+
+			//TODO: clamp to 24px tall (centered in the rect)
 			ctx.fillRect(
-					s[i].left - bounds.left + leftOffset - 2,
+					x,
 					s[i].top - bounds.top + topOffset -2,
-					s[i].width + 4,
+					last ? (s[i].width + (x ? 0: left) -5 ) : (width-x),
 					s[i].height + 4
 			);
+			last = false;
 		}
 
 	},
@@ -103,6 +127,17 @@ Ext.define('NextThought.view.annotations.Highlight', {
 		return this.createElement(
 			'canvas', cnt,
 			'highlight-canvas');
+	},
+
+
+	createCounter: function(after){
+		var el = Ext.get(this.doc.createElement('span'));
+		el.addCls([this.highlightCls,'counter']);//,'with-count']);
+		el.appendTo(after);
+		el.on('click', this.onClick, this);
+//		el.update('<span>0</span>');
+		el.update('&nbsp;');
+		return el.dom;
 	},
 
 
@@ -171,14 +206,11 @@ Ext.define('NextThought.view.annotations.Highlight', {
 	doWrap: function(range) {
 		var span = this.doc.createElement('span');
 		span.setAttribute('data-non-anchorable', 'true');
-		span.setAttribute('class', 'application-highlight');
+		span.setAttribute('class', this.highlightCls);
 
 		range.surroundContents(span);
-		Ext.fly(span).on({
-			scope: this,
-			click:this.onClick
-		});
 		Ext.fly(span).hover(this.onMouseOver,this.onMouseOut,this);
+		Ext.fly(span).on('click',this.onClick,this);
 		return span;
 	},
 
