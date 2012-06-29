@@ -96,8 +96,8 @@ Ext.define('NextThought.controller.Annotations', {
 
 		SharingUtils.setSharedWith(rec,shbx.getValue(),function(newRec,op){
 			if(op.success){
-				win.close();
 				rec.fireEvent('updated',newRec);
+				win.close();
 			}
 			else{
 				console.error('Failed to save object');
@@ -264,6 +264,9 @@ Ext.define('NextThought.controller.Annotations', {
 
 	shareWith: function(record){
 		var options = {};
+
+		//if a modal share with is already open. dont open another one.
+		if (Ext.ComponentQuery.query('share').length > 0){return;}
 
 		if (arguments[arguments.length-1] === true) {
 			options = {
