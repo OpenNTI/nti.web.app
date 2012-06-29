@@ -101,34 +101,6 @@ public class Base {
 		selenium.stop();
 	}
 	
-	public String buildString(final String... strings) {
-		final StringBuilder builder = new StringBuilder();
-		for(int i = 0; strings != null && i < strings.length; i++)
-		{
-			builder.append(strings[i]);
-		}
-		return builder.toString();
-	}
-	
-	public String xpathAttributeBuilder(final String tag, final String attribute, final String value){
-		return this.buildString("//", tag, "[@", attribute, "='", value, "']");
-	}
-	
-	public String xpathTextBuilder(final String tag, final String text) {
-		return this.buildString("//", tag, "[text()='", text, "']");
-	}
-	
-	public String xpathAttributeAndTextBuilder(	final String tag,
-												final String attribute,
-												final String value,
-												final String text) {
-		return this.buildString("//", tag, "[@", attribute, "='", value, "' and text()='", text, "']");
-	}
-	
-	public String xpathAddonBuilder(final String tag, final String attribute, final String value){
-		return this.buildString("//", tag, "[@", attribute, "='", value, "']");
-	}
-	
 	public String findContentFrameBodyElement() {
 		return "return document.querySelector('#readerPanel-body iframe');";
 	}
@@ -176,7 +148,7 @@ public class Base {
 	
 	public boolean waitForLoading(final int timeout) {
 		int timer = 0;
-		while(this.elementExists(this.xpathAddonBuilder("title", "id", "loading"))  && timer <= timeout)
+		while(this.elementExists("//title[@id='loading']")  && timer <= timeout)
 		{
 			timer++;
 			this.wait_(1);
