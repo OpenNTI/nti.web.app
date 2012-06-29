@@ -131,7 +131,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
 
 
 	createCounter: function(after){
-		var el = Ext.get(this.doc.createElement('span'));
+		var el = Ext.get(this.createNonAnchorableSpan());
 		el.addCls([this.highlightCls,'counter']);//,'with-count']);
 		el.appendTo(after);
 		el.on('click', this.onClick, this);
@@ -204,8 +204,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
 
 
 	doWrap: function(range) {
-		var span = this.doc.createElement('span');
-		span.setAttribute('data-non-anchorable', 'true');
+		var span = this.createNonAnchorableSpan();
 		span.setAttribute('class', this.highlightCls);
 
 		range.surroundContents(span);

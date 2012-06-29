@@ -40,10 +40,11 @@ Ext.define('NextThought.view.annotations.Redaction', {
 
 
 	createActionHandle: function(before){
-		var el = Ext.get(this.doc.createElement('span'));
+		var el = Ext.get(this.createNonAnchorableSpan());
 		el.addCls('redactionAction');
 		el.insertBefore(before);
 		el.on('click', this.toggleRedaction, this);
+		el.update('&nbsp;');
 		return el;
 	},
 
@@ -56,5 +57,6 @@ Ext.define('NextThought.view.annotations.Redaction', {
 	toggleRedaction: function(){
 		//toggle redaction on generated spans:
 		this.compElements.toggleCls(this.cls);
+		Ext.fly(this.canvas).toggle();
 	}
 });

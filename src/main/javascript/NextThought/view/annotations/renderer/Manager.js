@@ -55,7 +55,7 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 				o.render(isLastOfAnchor);
 			}
 			catch(e){
-				console.error(o.$className,e.stack);
+				console.error(o.$className,Globals.getError(e));
 			}
 		});
 

@@ -249,8 +249,8 @@ img.action {
     .redactionAction {
         background-color: red;
         margin: 0 2px 0 2px;
-        width: 2px;
-        height: 12px;
+        width: 16px;
+        overflow: hidden;
         display: none;
 
         /*
@@ -267,13 +267,6 @@ img.action {
         }
     }
 
-    .redaction {
-        &.redacted {
-            display: none;
-        }
-        background: rgba(175, 175, 175, 0.6) !important;
-    }
-
 	.application-highlight {
 		color: #076da7;
 		background-color: #e1f4fe;
@@ -282,6 +275,14 @@ img.action {
 			color: #ffffff;
 			background-color: #3fb3f6;
 		}
+
+        &.redaction {
+            &.redacted {
+                display: none;
+            }
+            background: #bbbbbb;
+            color: inherit;
+        }
 
 		&.counter {
 			color: #757474;

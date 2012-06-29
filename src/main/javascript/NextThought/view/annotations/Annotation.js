@@ -92,6 +92,13 @@ Ext.define( 'NextThought.view.annotations.Annotation', {
 	},
 
 
+	createNonAnchorableSpan: function(){
+		var el = this.doc.createElement('span');
+		el.setAttribute('data-non-anchorable', 'true');
+		return el;
+	},
+
+
 	/**
 	 * Query inside the reader frame
 	 * @param selector
