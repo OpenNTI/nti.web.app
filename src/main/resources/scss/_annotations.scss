@@ -268,8 +268,15 @@ img.action {
     }
 
 	.application-highlight {
+
+		&, * {
+			position: relative;
+			z-index: 1;
+		}
+
 		color: #076da7;
 		background-color: #e1f4fe;
+		overflow: hidden;
 
 		&.highlight-mouse-over{
 			color: #ffffff;
@@ -290,7 +297,7 @@ img.action {
 			font-weight: bold;
 
 			position: relative;
-			top: 1px;
+			top: 0;
 
 			vertical-align: baseline;
 			display: inline-block;
@@ -308,6 +315,7 @@ img.action {
 			}
 
 			&.with-count {
+				overflow: hidden;
 				width: 30px;
 				background-image: url(../images/highlights/counter_tip_default.png);
 
@@ -335,6 +343,7 @@ img.action {
 
 	.highlight-canvas {
 		position: absolute;
+		z-index: 1;
 		pointer-events: none;
 	}
 }

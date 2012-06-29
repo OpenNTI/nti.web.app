@@ -71,6 +71,9 @@ Ext.define('NextThought.view.annotations.Highlight', {
 	render: function(){
 		var range = this.getRange(),
 			bounds = range.getBoundingClientRect(),
+			boundingTop = Math.ceil(bounds.top),
+			boundingLeft = Math.ceil(bounds.left),
+			boundingHeight = Math.ceil(bounds.height),
 			width = Ext.fly(this.content).getWidth(),
 			topOffset = 10,
 			leftOffset = 5,
@@ -78,7 +81,9 @@ Ext.define('NextThought.view.annotations.Highlight', {
 			adjustment,
 			lineHeight = this.getLineHeight(),
 			s = RectUtils.merge(range.getClientRects(),lineHeight,width+1),
-			i = s.length - 1, x, y, w, h, left, r, lastY, c,
+			i = s.length - 1, x, y, w, h, left, r,
+			lastY=0, c, small,
+			padding = 2,
 			last = true;
 
 		if(!this.rendered){
@@ -92,12 +97,12 @@ Ext.define('NextThought.view.annotations.Highlight', {
 
 
 		Ext.fly(this.canvas).setXY([
-			Math.ceil(bounds.left-leftOffset),
-			Math.ceil(bounds.top-topOffset)
+			boundingLeft-leftOffset,
+			boundingTop-topOffset
 		]);
 		Ext.fly(this.canvas).set({
-			width: Math.ceil(width+(leftOffset*2)),
-			height: Math.ceil(bounds.height+(topOffset*2))
+			width: width+(leftOffset*2),
+			height: boundingHeight+(topOffset*2)
 		});
 
 		ctx = this.canvas.getContext('2d');
@@ -105,24 +110,27 @@ Ext.define('NextThought.view.annotations.Highlight', {
 		for(; i>=0; i--){
 			r = s[i];
 
-			left = Math.ceil(r.left - bounds.left + leftOffset - 2);
 
-			x = i===0 ? left : 0;
-			y = Math.ceil(r.top - bounds.top + topOffset -2);
-			w = last ? (r.width + (x ? 0: left) -5 ) : (width-x);
-			h = r.height + 4;
+
+			left = Math.ceil(r.left - boundingLeft + leftOffset - padding );
+			y = Math.ceil(r.top - boundingTop + topOffset - padding );
+			small = (r.width/width) < 0.5 && i===0;
+			x = i===0 || small ? left : 0;
+			w = last || small
+					? (r.width + (x ? 0: left) + (padding*(last?1:2)) )
+					: (width-x);
+
+			h = r.height + (padding*2);
 
 			if(!last && (Math.abs(y - lastY) < lineHeight || y > lastY )){ continue; }
 
 			if(last){
 				c = Ext.get(this.counter);
-				adjustment = this.adjustedBy || (r.top - c.getTop());
-				if(parseInt(c.getStyle('line-height'),10)!==h){
-					c.setStyle('line-height',h+'px');
-				}
-				//c.setStyle('top',adjustment+'px');
+				adjustment = this.adjustedBy || (r.top - c.getY());
+				h = c.getHeight();
+
+				if(adjustment < 2){ y += adjustment; }
 				if(!this.adjusted){
-					console.log(adjustment,c.getTop());
 					this.adjusted = true;
 					this.adjustedBy = adjustment;
 					this.render();
@@ -134,7 +142,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
 			}
 
 			//TODO: clamp to 24px tall (centered in the rect)
-			ctx.fillRect( x, y - Math.round(adjustment/2), w, h );
+			ctx.fillRect( x, y, w, h);
 
 			last = false;
 			lastY = y;
