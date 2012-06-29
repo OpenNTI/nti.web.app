@@ -1,7 +1,10 @@
 package com.nti.selenium.quizzes;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import com.nti.selenium.navigation.Navigation;
 
@@ -10,6 +13,9 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
 public class Quizzes extends Navigation {
+	
+	protected String[] answers = {"420", "3", "69", "5", "40", "64", "480", "5/8", "6", "3"};
+	protected String wrongAnswer = "wrongAnswer";
 	
 	@Before
 	public void setUp() throws Exception {
@@ -94,7 +100,12 @@ public class Quizzes extends Navigation {
 	public String getOpenWhyBubbleXpath(){
 		return this.findResult("1") +
 			   this.xpathAttributeAndTextBuilder("a", "class", "why bubble", "Why?");
-
+	}
+	
+	public String getFractionQuizAnswerXpath(String questionID){
+		return this.findResult(questionID) +
+			   this.xpathAttributeBuilder("span", "class", "mathjax tex2jax_process response answer-text") +
+			   this.xpathAttributeBuilder("script", "type", "math/tex");
 	}
 	
 	public String getTextInAnswerblock(final String questionID) {
@@ -120,7 +131,9 @@ public class Quizzes extends Navigation {
 		this.switchToIframe();
 		this.clickBlank(questionID);
 		final String xpathInput = this.findBlank(questionID);
-		this.findElement(xpathInput + this.getTextBlankXpathAddon()).sendKeys(answer);
+		for(char ch: (answer).toCharArray()){
+			this.findElement(xpathInput + this.getTextBlankXpathAddon()).sendKeys(Character.toString(ch));
+		}
 	}
 	
 	public void clickMathSymbol(final String mathSymbol) {
@@ -170,6 +183,46 @@ public class Quizzes extends Navigation {
 		quizQuestionMarkElements.get(quizQuestionMarkElements.size()-1).click();
 		List<WebElement> quizElements = this.findElements(this.getOldQuizzesXpath());
 		quizElements.get(quizQuestionMarkElements.size()-1).click();
+	}
+	
+	public void completeQuiz100Percent(){
+		for(int i = 0; i < 10; i++){
+			this.answerQuestion(Integer.toString(i + 1), this.answers[i]);
+		}
+		this.clickSubmit();
+	}
+	
+	public void completeQuiz0Percent(){
+		for(int i = 0; i < 10; i++){
+			this.answerQuestion(Integer.toString(i + 1), this.wrongAnswer);
+		}
+		this.clickSubmit();
+	}
+	
+	public void checkAnswers100Percent(){
+		for(int i = 0; i < 10; i++){
+			String element = this.findElement(this.correctAnswerXpath(Integer.toString(i + 1))).getText();
+			String[] answerParts = {"\"", this.answers[i], "\" is correct"};
+			for(char character: this.answers[i].toCharArray()){
+				if('/' == character){
+					answerParts[1] = this.buildString(this.answers[i].split("/"));
+					break;
+				}
+			}
+			String answer = this.buildString(answerParts);
+			assertEquals(answer, element);
+		}
+	}
+	
+	public void checkAnswers0Percent(){
+		for(int i = 0; i < 10; i++){
+			try{
+				assertEquals("\"" + this.wrongAnswer + "\" is incorrect", this.findElement(this.incorrectAnswerXpath(Integer.toString(i + 1))).getText());
+			}
+			catch(NoSuchElementException e){
+				fail("answer evaluated to incorrect, expected correct answer");
+			}
+		}
 	}
 	
 }

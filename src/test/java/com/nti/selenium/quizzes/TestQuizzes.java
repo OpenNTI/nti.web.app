@@ -69,4 +69,16 @@ public class TestQuizzes extends Quizzes {
 		assertTrue(this.elementExists(this.getClosedWhyBubbleXpath()));
 	}
 	
+	@Test
+	public void testSubmitQuiz100Percent(){
+		this.completeQuiz100Percent();
+		this.checkAnswers100Percent();
+	}
+	
+	@Test
+	public void testSubmitQuiz0Percent(){
+		this.completeQuiz0Percent();
+		this.checkAnswers0Percent();
+	}
+	
 }
