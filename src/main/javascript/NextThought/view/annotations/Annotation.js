@@ -208,7 +208,16 @@ Ext.define( 'NextThought.view.annotations.Annotation', {
 			r = m.getRecord();
 
 		items = items || [];
-		if(items.length) { items.push('-'); }
+
+		if(items.length) { items.push({xtype: 'menuseparator'}); }
+
+		if(this.isModifiable) {
+			items.push({
+				text : (r.phantom?'Save':'Delete')+' '+ m.getDisplayName(),
+				handler: Ext.bind(r.phantom? m.savePhantom : m.remove, m)
+			});
+		}
+
 		items.push({
 			text: m.isModifiable? 'Share With...' : 'Get Info...',
 			handler: function(){
@@ -224,13 +233,6 @@ Ext.define( 'NextThought.view.annotations.Annotation', {
 				}
 			}
 		});
-
-		if(this.isModifiable) {
-			items.unshift({
-				text : (r.phantom?'Save':'Delete')+' '+ m.getDisplayName(),
-				handler: Ext.bind(r.phantom? m.savePhantom : m.remove, m)
-			});
-		}
 
 		return Ext.create('Ext.menu.Menu',{
 			items: items,

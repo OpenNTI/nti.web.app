@@ -5,47 +5,43 @@ Ext.define('NextThought.view.annotations.Redaction', {
 		'NextThought.cache.IdCache'
 	],
 
+	redactionCls: 'redaction',
+	cls: 'redacted',
 
-	constructor: function(config){
+
+	buildMenu: function(items){
 		var me = this;
-		me.callParent(arguments);
 
-		Ext.apply(me,{
-			rendered: false,
-			renderPriority: 2,
-			redactionsShown: false, //current state of hiding or unhiding, initially they are hid
-			redactionSpans: [] //the spans that have been redacted are stored here for hide/unhide later
+		items.push({
+			text : 'Redact',
+			handler: function(){
+				me.toggleRedaction();
+			}
 		});
 
-		return me;
+		return this.callParent([items]);
 	},
 
 
-	buildMenu: function(){
-		var me = this,
-			items = [],
-			r = me.record,
-			text = r.get('text');
+	render: function(){
+		this.callParent(arguments);
 
+		if (this.actionSpan){return;}
 
-		if (!this.redactionsShown) {
-			items.push({
-				text : 'Show Redaction',
-				handler: function(){
-					me.unRedact();
-				}
-			});
-		}
-		else {
-			items.push({
-				text : 'Hide Redaction',
-				handler: function(){
-					me.redact();
-				}
-			});
-		}
+		//Add the redaction action span so the user has something to click on
+		this.actionSpan = Ext.get(this.doc.createElement('span'));
+		this.actionSpan.addCls('redactionAction');
+		this.actionSpan.insertBefore(this.rendered[0]);
+		this.actionSpan.on('click', this.toggleRedaction, this);
 
-		return this.callParent([items]);
+		//create a composite element so we can do lots of things at once:
+		this.compElements = new Ext.dom.CompositeElement(this.rendered);
+
+		//add the redaction class and the click handlers for redacted spans:
+		this.compElements.addCls(this.redactionCls);
+
+		this.compElements.add([this.actionSpan]);
+		this.toggleRedaction();
 	},
 
 
@@ -54,12 +50,8 @@ Ext.define('NextThought.view.annotations.Redaction', {
 	},
 
 
-	unRedact: function(){
-		//TODO: loop over rendered, do something, cleanup it?  restyle it?
-	},
-
-
-	redact: function(){
-		//TODO: see above
+	toggleRedaction: function(){
+		//toggle redaction on generated spans:
+		this.compElements.toggleCls(this.cls);
 	}
 });

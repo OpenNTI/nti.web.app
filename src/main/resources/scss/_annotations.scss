@@ -251,3 +251,38 @@ img.action {
 		}
 	}
 }
+
+#NTIContent {
+    /*
+    Commented portions are for redaction line across width of text
+    */
+    .redactionAction {
+        background-color: red;
+        margin: 0 2px 0 2px;
+        width: 2px;
+        height: 12px;
+        display: none;
+
+        /*
+        height: 2px;
+        width: 100%;
+        margin: 1em 0;
+        */
+
+        &.redacted {
+           /*
+           display: block;
+           */
+           display: inline-block;
+        }
+    }
+
+    .redaction {
+        &.redacted {
+            display: none;
+        }
+        background: rgba(175, 175, 175, 0.6) !important;
+    }
+
+
+}
