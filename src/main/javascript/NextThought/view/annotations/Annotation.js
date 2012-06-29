@@ -225,8 +225,6 @@ Ext.define( 'NextThought.view.annotations.Annotation', {
 			}
 		});
 
-		//standard items Share, Remove, save(if phantom?)
-
 		if(this.isModifiable) {
 			items.unshift({
 				text : (r.phantom?'Save':'Delete')+' '+ m.getDisplayName(),
@@ -261,7 +259,7 @@ Ext.define( 'NextThought.view.annotations.Annotation', {
 
 
 	onClick: function(e) {
-		var spot, text, menu,
+		var menu,
 			xy = e.getXY().slice();
 
 		//adjust points
@@ -275,8 +273,6 @@ Ext.define( 'NextThought.view.annotations.Annotation', {
 			return;
 		}
 
-//		spot = Ext.widget({xtype:'spotlight', target: this});
-//		menu.on('hide', function(){ spot.destroy();});
 		menu.showAt.apply(menu,xy);
 		menu.setPosition(xy[0]-menu.getWidth()/2,xy[1]+10);
 
