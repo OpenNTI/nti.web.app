@@ -89,7 +89,6 @@ public class Quizzes extends Navigation {
 		this.clickArrowForwardButton();
 		this.clickArrowBackButton();
 		this.switchToDefault();
-		this.wait_(3);
 		List<WebElement> quizQuestionMarkElements = this.findElements(Xpath.oldQuizzesQuestionMark);
 		quizQuestionMarkElements.get(quizQuestionMarkElements.size()-1).click();
 		List<WebElement> quizElements = this.findElements(Xpath.oldQuizzes);
