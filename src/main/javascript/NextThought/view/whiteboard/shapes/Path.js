@@ -29,6 +29,7 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Path', {
 			y: miny,	h: maxy-miny
 		};
 
+		ctx.lineCap = 'round';
 		this.performFillAndStroke(ctx);
 		renderCallback.call(this);
 	}

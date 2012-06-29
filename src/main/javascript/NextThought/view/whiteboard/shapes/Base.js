@@ -83,10 +83,12 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Base', {
 		ctx.setTransform.apply(ctx,m.m);
 
 		if(this.selected){
-			ctx.shadowOffsetX = 0;
-			ctx.shadowOffsetY = 0;
-			ctx.shadowBlur = 10;
-			ctx.shadowColor = "rgba(0,0,255,1)";
+			ctx.shadowColor = null;
+//turn off shadow glow thing for now
+//			ctx.shadowOffsetX = 0;
+//			ctx.shadowOffsetY = 0;
+//			ctx.shadowBlur = 10;
+//			ctx.shadowColor = "rgba(0,0,255,1)";
 			this.nibData = {};
 		}
 		else {
