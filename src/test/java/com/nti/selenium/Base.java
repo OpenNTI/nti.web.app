@@ -148,7 +148,7 @@ public class Base {
 	
 	public boolean waitForLoading(final int timeout) {
 		int timer = 0;
-		while(this.elementExists("//title[@id='loading']")  && timer <= timeout)
+		while(this.elementExists(Xpath.loading)  && timer <= timeout)
 		{
 			timer++;
 			this.wait_(1);

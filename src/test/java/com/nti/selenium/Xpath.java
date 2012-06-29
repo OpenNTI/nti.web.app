@@ -2,12 +2,13 @@ package com.nti.selenium;
 
 public class Xpath {
 
-	public static String title;
+	public static String loading;
 	public static String username;
 	public static String password;
 	public static String loginButton;
 	public static String options;
 	public static String logoutButton;
+	public static String loginProblemMessage;
 	public static String library;
 	public static String book;
 	public static String chapter;
@@ -43,12 +44,13 @@ public class Xpath {
 	private static String currentQuestionID;
 	
 	static {
-		title = getTitle();
+		loading = getLoadingXpath();
 		username = getUsernameXpath();
 		password = getPasswordXpath();
 		loginButton = getButtonXpath();
 		options = getOptionsXpath();
 		logoutButton = getLogoutXpath();
+		loginProblemMessage = getLoginProblemMessageXpath();
 		library = getLibraryXpath();
 		book = getBookXpath(null);
 		chapter = getChapterXpath(null);
@@ -127,7 +129,7 @@ public class Xpath {
 		return buildString("//", tag, "[@", attribute, "='", value, "' and text()='", text, "']");
 	}
 	
-	private static String getTitle(){
+	private static String getLoadingXpath(){
 		return xpathAttributeBuilder("title", "id", "loading");
 	}
 	
@@ -149,6 +151,10 @@ public class Xpath {
 	
 	private static String getLogoutXpath(){
 		return xpathTextBuilder("div", "Sign out");
+	}
+	
+	private static String getLoginProblemMessageXpath(){
+		return xpathTextBuilder("div", "Please try again, there was a problem logging in");
 	}
 	
 	private static String getLibraryXpath() {
