@@ -52,7 +52,7 @@ Ext.define('NextThought.util.Rects',{
 
 		function acceptableHeight(h){
 			if (h < lineHeight){return false;}
-			else if(lineHeight/h < .6) {return false;}
+			else if(lineHeight/h < 0.6) {return false;}
 			return true;
 		}
 

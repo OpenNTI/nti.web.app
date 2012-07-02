@@ -351,6 +351,7 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 
 		if(/polygon/i.test(shape)){
 //			defs.sides = this.polygonSidesField.getValue();
+			console.debug('implement path');
 		}
 		else if(/line/i.test(shape)){
 			defs.sides = 1;
@@ -358,6 +359,7 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 		}
 		else if(/text/i.test(shape)){
 //			defs.text = this.textValueField.getValue();
+			console.debug('implement path');
 		}
 
 		data.shapeList.push(defs);

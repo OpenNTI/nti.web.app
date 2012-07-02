@@ -551,7 +551,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 				sel.modify("extend", direction[1], "character");
 				sel.modify("extend", direction[0], "word");
 			}
-		} else if ( (sel = doc.selection) && sel.type != "Control") {
+		} else if ( !!(sel = doc.selection) && sel.type !== "Control") {
 			var textRange = sel.createRange();
 			if (textRange.text) {
 				textRange.expand("word");

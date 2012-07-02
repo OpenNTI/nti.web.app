@@ -77,10 +77,10 @@ Ext.define('NextThought.view.whiteboard.editor.PencilOptions',{
 
 		Ext.each(pressed, function(b){
 			if (b.strokeWidth){
-				strokeWidth = b.strokeWidth
+				strokeWidth = b.strokeWidth;
 			}
 			else if (b.stroke) {
-				stroke = b.stroke
+				stroke = b.stroke;
 			}
 		});
 

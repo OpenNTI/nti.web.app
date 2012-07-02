@@ -15,7 +15,7 @@ Ext.define('NextThought.view.whiteboard.editor.TextOptions',{
 			width: 70,
 
 			store: Ext.create('Ext.data.Store', {
-		    	fields: ['size'],
+				fields: ['size'],
 				data : [
 					{"size":"12 pt"},
 					{"size":"14 pt"},

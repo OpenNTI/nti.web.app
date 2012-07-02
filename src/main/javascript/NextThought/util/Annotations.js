@@ -239,7 +239,7 @@ Ext.define('NextThought.util.Annotations',{
 
 
 	getBlockParent: function(node, ignoreSpan){
-		if(!node || this.isBlockNode(node) && !(node.tagName === 'SPAN' && ignoreSpan)){
+		if(!node || (this.isBlockNode(node) && !(node.tagName === 'SPAN' && ignoreSpan))){
 			return node;
 		}
 		return this.getBlockParent(node.parentNode, ignoreSpan);

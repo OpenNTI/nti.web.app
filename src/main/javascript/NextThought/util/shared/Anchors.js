@@ -3,7 +3,7 @@
  * I'm leaving this here for now in case we want to someday. Delete this if it hasn't been used
  * within a few months.
  */
-(function(global, undefined){
+(function(global){
 	global.NextThought = global.NextThought || {};
 	NextThought.util = NextThought.util || {};
 	NextThought.util.shared = NextThought.util.shared || {};
@@ -16,4 +16,4 @@
 			return 1;
 		}
 	};
-})(window);
+}(window));

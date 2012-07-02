@@ -261,6 +261,6 @@ turn off html5 player
 				}
 			});
 		}
-	},
+	}
 
 });

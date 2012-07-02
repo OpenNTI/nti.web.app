@@ -129,12 +129,13 @@ Ext.define('NextThought.view.WindowHeader', {
 		return this.renderData.title;
 	},
 
- 
- 	afterRender: function(){
-		 var me = this;
-		 me.callParent(arguments);
-		 me.closeEl.on('click', me.ownerCt.close, me.ownerCt);
-		 me.minimizeEl.on('click', me.ownerCt.minimize, me.ownerCt);
+
+	afterRender: function(){
+		var me = this;
+
+		me.callParent(arguments);
+		me.closeEl.on('click', me.ownerCt.close, me.ownerCt);
+		me.minimizeEl.on('click', me.ownerCt.minimize, me.ownerCt);
 
 		 if(!me.ownerCt.closable){ me.closeEl.remove(); }
 		 if(!me.ownerCt.minimizable){ me.minimizeEl.remove(); }

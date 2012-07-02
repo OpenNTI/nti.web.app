@@ -158,7 +158,7 @@ Ext.define('NextThought.controller.Chat', {
 		}
 
 		var i, rInfo;
-		for (i = 0; i < sessionStorage.length; i++)
+		for (i = 0; i < sessionStorage.length; i++) {
 			rInfo = this.getRoomInfoFromSessionStorage(sessionStorage.key(i));
 			if (rInfo){
 				if (roomId && roomId === rInfo.getId()){
@@ -168,6 +168,7 @@ Ext.define('NextThought.controller.Chat', {
 					if( Ext.Array.difference(rInfo.get('Occupants'),allUsers).length === 0
 					||	Ext.Array.difference(allUsers,rInfo.get('Occupants')).length === 0 ){
 						return rInfo;
+					}
 				}
 			}
 		}
@@ -420,7 +421,7 @@ Ext.define('NextThought.controller.Chat', {
 
 
 	updateRoomInfo: function(ri) {
-			var ri = this.getRoomInfoFromSessionStorage(ri.getId());
+		ri = this.getRoomInfoFromSessionStorage(ri.getId());
 		if (ri) {
 			ri.fireEvent('changed', ri);
 		}

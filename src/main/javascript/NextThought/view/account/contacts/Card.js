@@ -101,7 +101,7 @@ Ext.define('NextThought.view.account.contacts.Card',{
 				this.clickBlocker();
 				this.fireEvent('click', this, this.user.getId());
 			}
-			catch(e){
+			catch(er){
 				this.fireEvent('blocked-click', this, this.user.getId());
 			}
 		}
