@@ -693,7 +693,7 @@ Ext.define('NextThought.view.content.Reader', {
 		me.scrollTo(0, false);
 
 
-		//apply any styles that may be on the content's bory, to the NTIContent div:
+		//apply any styles that may be on the content's body, to the NTIContent div:
 		this.applyBodyStyles(
 				resp.responseText.match(/<body([^>]*)>/i),
 				this.buildPath(resp.request.options.url));
@@ -722,10 +722,6 @@ Ext.define('NextThought.view.content.Reader', {
 		function metaObj(m){
 			return toObj(m, /(name|http\-equiv)="([^"]+)"/i, /content="([^"]+)"/i);
 		}
-
-//		function navObj(m){
-//			return toObj(m, /rel="([^"]+)"/i, /href="([^"]+)"/i);
-//		}
 
 		function cssObj(m){
 			var i = m.length-1, k=/href="([^"]*)"/i, o, c = {};

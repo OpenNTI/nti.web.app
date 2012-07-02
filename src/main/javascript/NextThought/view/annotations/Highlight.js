@@ -1,5 +1,5 @@
 Ext.define('NextThought.view.annotations.Highlight', {
-	extend:'NextThought.view.annotations.Annotation',
+	extend:'NextThought.view.annotations.Base',
 	alias: 'widget.highlight',
 	requires:[
 		'NextThought.util.Anchors',
@@ -31,6 +31,12 @@ Ext.define('NextThought.view.annotations.Highlight', {
 	cleanup: function(){
 		var c = this.rendered.slice();
 		this.rendered = [];
+
+		if( this.range ){
+			this.range.detach();
+			delete this.range;
+		}
+
 		Ext.fly(this.canvas).remove();
 		Ext.fly(this.counter).remove();
 		Ext.each(c,this.unwrap,this);

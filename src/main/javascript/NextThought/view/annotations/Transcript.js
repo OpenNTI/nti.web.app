@@ -1,5 +1,5 @@
 Ext.define( 'NextThought.view.annotations.Transcript', {
-	extend: 'NextThought.view.annotations.Annotation',
+	extend: 'NextThought.view.annotations.Base',
 	alias: 'widget.transcript, widget.transcriptsummary',
 
 

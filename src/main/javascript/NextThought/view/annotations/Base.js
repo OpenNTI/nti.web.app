@@ -1,4 +1,4 @@
-Ext.define( 'NextThought.view.annotations.Annotation', {
+Ext.define( 'NextThought.view.annotations.Base', {
 
 	requires: [
 		'NextThought.view.annotations.renderer.Manager',
