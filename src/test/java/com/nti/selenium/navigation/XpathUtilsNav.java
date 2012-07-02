@@ -4,14 +4,19 @@ import com.nti.selenium.login.XpathUtilsLogin;
 
 public class XpathUtilsNav extends XpathUtilsLogin{
 
-	public String book;
-	public String chapter;
-	public String section;
+	private String book;
+	private String chapter;
+	private String section;
+	private String relatedItem;
 	
 	public void setLocation(String book, String chapter, String section){
 		this.book = book;
 		this.chapter = chapter;
 		this.section = section;
+	}
+	
+	public void setRelatedItem(String relatedItem){
+		this.relatedItem = relatedItem;
 	}
 	
 	public String getLibrary() {
@@ -48,6 +53,14 @@ public class XpathUtilsNav extends XpathUtilsLogin{
 	
 	public String getForwardArrow(){
 		return xpathAttributeBuilder("button", "id", "button-1033-btnEl");
+	}
+	
+	public String getRelatedItem(){
+		return xpathAttributeAndTextBuilder("a", "class", "related", this.relatedItem);
+	}
+	
+	public String getDivisionPage(){
+		return xpathAttributeAndTextBuilder("span", "class", "label", this.relatedItem);
 	}
 	
 }

@@ -64,6 +64,13 @@ public class Navigation extends Login {
 		this.waitForLoading(timeout);
 	}
 	
+	public void clickRelatedItem(String item){
+		this.xpath.setRelatedItem("Division");
+		this.switchToIframe();
+		this.findElement(this.xpath.getRelatedItem()).click();
+		this.waitForLoading(timeout);
+	}
+	
 	public void navigateTo(final String book, final String chapter, final String section) {
 		
 		this.xpath.setLocation(book, chapter, section);
@@ -98,4 +105,5 @@ public class Navigation extends Login {
 		this.switchToIframe();
 		return this.findElement(xpath);
 	}
+	
 }

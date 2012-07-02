@@ -54,4 +54,11 @@ public class TestNavigation extends Navigation {
 		assertEquals("What is a Fraction?", this.getNavTestText(this.xpath.getWhatIsAFraction()).getText());
 	}
 	
+	@Test
+	public void testClickRelatedItems(){
+		this.navigateTo("Prealgebra", "Fractions", "Index");
+		this.clickRelatedItem("Division");
+		assertTrue(this.elementExists(this.xpath.getDivisionPage()));
+	}
+	
 }
