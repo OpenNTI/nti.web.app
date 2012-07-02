@@ -1,4 +1,4 @@
-Ext.define('NextThought.mixins.Annotations', {
+Ext.define('NextThought.view.content.reader.Annotations', {
 	requires: [
 		'NextThought.model.Highlight',
 		'NextThought.model.Note',
@@ -23,7 +23,7 @@ Ext.define('NextThought.mixins.Annotations', {
 		'TranscriptSummary': function(r){return r.get('RoomInfo');},
 		'QuizResult': function(r){return r;}},
 
-	initAnnotations: function(){
+	constructor: function(){
 		var me = this;
 		Ext.apply(me,{
 			annotations: {},
@@ -36,9 +36,12 @@ Ext.define('NextThought.mixins.Annotations', {
 		NextThought.controller.Annotations.events.on('new-note',this.onNoteCreated,this);
 		NextThought.controller.Annotations.events.on('new-redaction',this.onRedactionCreated,this);
 		NextThought.controller.Stream.registerChangeListener(me.onNotification, me);
+
 		me.on('added',function(){
 			FilterManager.registerFilterListener(me, me.applyFilter,me);
 		});
+
+		return this;
 	},
 
 
@@ -208,27 +211,24 @@ Ext.define('NextThought.mixins.Annotations', {
 
 
 	onNoteCreated: function(record){
-		console.log('new note...');
 		//check to see if reply is already there, if so, don't do anything...
 		if (Ext.getCmp(IdCache.getComponentId(record,null,this.prefix))) {
 			return;
 		}
 
-		var parent = record.get('inReplyTo');
-		if(parent){
-			parent = Ext.getCmp(IdCache.getComponentId(parent,null,this.prefix));
-			if (parent){parent.addReply(record);}
-		}
-		else {
-			this.createNoteWidget(record);
-		}
-
-		this.fireEvent('resize');
+//		var parent = record.get('inReplyTo');
+//		if(parent){
+//			parent = Ext.getCmp(IdCache.getComponentId(parent,null,this.prefix));
+//			if (parent){parent.addReply(record);}
+//		}
+//		else {
+			this.createAnnotationWidget('note',record);
+//		}
 	},
 
 
 	onRedactionCreated: function(record){
-		this.createRedactionWidget(record);
+		this.createAnnotationWidget('redaction',record);
 		this.fireEvent('resize');
 	},
 
