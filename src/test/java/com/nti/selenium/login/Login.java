@@ -1,25 +1,34 @@
 package com.nti.selenium.login;
 
+import org.junit.Before;
+
 import com.nti.selenium.Base;
-import com.nti.selenium.Xpath;
 
 public class Login extends Base {
 	
+	protected XpathUtilsLogin xpath;
+	
+	@Before
+	public void setUp() throws Exception{
+		super.setUp();
+		this.xpath = new XpathUtilsLogin();
+	}
+	
 	protected void doLogin(final String username, final String password) {
-		this.waitForElement(Xpath.username, timeout);
-		this.findElement(Xpath.username).sendKeys(username);
-		this.waitForElement(Xpath.password, timeout);
-		this.findElement(Xpath.password).sendKeys(password);
-		this.waitForElement(Xpath.loginButton, timeout);
-		this.findElement(Xpath.loginButton).click();
+		this.waitForElement(this.xpath.getUsername(), timeout);
+		this.findElement(this.xpath.getUsername()).sendKeys(username);
+		this.waitForElement(this.xpath.getPassword(), timeout);
+		this.findElement(this.xpath.getPassword()).sendKeys(password);
+		this.waitForElement(this.xpath.getLoginButton(), timeout);
+		this.findElement(this.xpath.getLoginButton()).click();
 		this.waitForLoading(timeout);
 	}
 	
 	protected void doLogout() {
-		this.waitForElement(Xpath.options, timeout);
-		this.findElement(Xpath.options).click();
-		this.waitForElement(Xpath.logoutButton, timeout);
-		this.findElement(Xpath.logoutButton).click();
+		this.waitForElement(this.xpath.getOptions(), timeout);
+		this.findElement(this.xpath.getOptions()).click();
+		this.waitForElement(this.xpath.getLogoutButton(), timeout);
+		this.findElement(this.xpath.getLogoutButton()).click();
 		this.waitForLoading(timeout);
 	}
 

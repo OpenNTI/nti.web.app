@@ -3,15 +3,18 @@ package com.nti.selenium.navigation;
 import org.junit.Before;
 import org.openqa.selenium.WebElement;
 
-import com.nti.selenium.Xpath;
+import com.nti.selenium.XpathUtils;
 import com.nti.selenium.login.Login;
 
 public class Navigation extends Login {
+	
+	protected XpathUtilsNav xpath;
 	
 	@Before
 	public void setUp() throws Exception {
 		super.setUp();
 		this.login();
+		this.xpath = new XpathUtilsNav();
 	}
 	
 	public void openLevel(final String xpath) {
@@ -28,42 +31,42 @@ public class Navigation extends Login {
 	public void openLibrary() {
 		this.switchToDefault();
 		this.waitForLoading(timeout);
-		this.openLevel(Xpath.library);
+		this.openLevel(this.xpath.getLibrary());
 	}
 	
 	public void openBook() {
 		this.switchToDefault();
-		this.waitForElement(Xpath.book, timeout);
-		this.openLevel(Xpath.book);
+		this.waitForElement(this.xpath.getBook(), timeout);
+		this.openLevel(this.xpath.getBook());
 	}
 	
 	public void openChapter() {
 		this.switchToDefault();
-		this.openLevelClick(Xpath.chapter);
+		this.openLevelClick(this.xpath.getChapter());
 	}
 	
 	public void openSection() {
 		this.switchToDefault();
-		this.openLevelClick(Xpath.section);
+		this.openLevelClick(this.xpath.getSection());
 		this.openBook();
 		this.waitForLoading(timeout);
 	}
 	
 	public void clickArrowBackButton() {
 		this.switchToDefault();
-		this.findElement(Xpath.backArrow).click();
+		this.findElement(this.xpath.getBackArrow()).click();
 		this.waitForLoading(timeout);
 	}
 	
 	public void clickArrowForwardButton() {
 		this.switchToDefault();
-		this.findElement(Xpath.forwardArrow).click();
+		this.findElement(this.xpath.getForwardArrow()).click();
 		this.waitForLoading(timeout);
 	}
 	
 	public void navigateTo(final String book, final String chapter, final String section) {
 		
-		Xpath.setLocation(book, chapter, section);
+		this.xpath.setLocation(book, chapter, section);
 		this.switchToDefault();
 		
 		if (book == null) {
@@ -88,7 +91,7 @@ public class Navigation extends Login {
 	}
 	
 	public void setLocation(final String book, final String chapter, final String section) {
-		Xpath.setLocation(book, chapter, section);
+		this.xpath.setLocation(book, chapter, section);
 	}
 	
 	public WebElement getNavTestText(final String xpath) {

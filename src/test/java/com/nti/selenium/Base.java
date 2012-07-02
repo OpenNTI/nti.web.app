@@ -42,6 +42,7 @@ public class Base {
 	protected Selenium selenium;
 	protected boolean isDefault = true;
 	protected String xpathBuilder = null;
+	protected XpathUtils xpath;
 	
 	@BeforeClass
 	public static void oneTimeSetUp() {
@@ -94,6 +95,7 @@ public class Base {
 		}
 		selenium = new WebDriverBackedSelenium(driver, url);
 		selenium.open(url);
+		this.xpath = new XpathUtils();
 	}
 	
 	@After
@@ -148,7 +150,7 @@ public class Base {
 	
 	public boolean waitForLoading(final int timeout) {
 		int timer = 0;
-		while(this.elementExists(Xpath.loading)  && timer <= timeout)
+		while(this.elementExists(this.xpath.getLoading())  && timer <= timeout)
 		{
 			timer++;
 			this.wait_(1);

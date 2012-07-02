@@ -4,7 +4,7 @@ import java.util.Random;
 
 import org.junit.Test;
 
-import com.nti.selenium.Xpath;
+import com.nti.selenium.XpathUtils;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -29,51 +29,51 @@ public class TestQuizzes extends Quizzes {
 	@Test
 	public void testSubmit() { 
 		this.clickSubmit();
-		Xpath.setActiveQuestion("1");
-		assertTrue(this.elementExists(Xpath.noAnswerResult));
+		this.xpath.setActiveQuestion("1");
+		assertTrue(this.elementExists(this.xpath.getNoAnswerResult()));
 	}
 	
 	@Test
 	public void testReset() {
 		this.clickSubmit();
 		this.clickReset();
-		Xpath.setActiveQuestion("1");
-		assertTrue(this.elementExists(Xpath.answerableQuestion));
+		this.xpath.setActiveQuestion("1");
+		assertTrue(this.elementExists(this.xpath.getAnswerableQuestion()));
 	}
 	
 	@Test
 	public void testCloseMathSymbolsWindow() {
 		this.clickBlank("1");
 		this.clickMathSymbolsXButton();
-		assertTrue(this.elementExists(Xpath.mathSymbolsWindowNotVisible));
+		assertTrue(this.elementExists(this.xpath.getMathSymbolsWindowNotVisible()));
 	}
 	
 	@Test
 	public void testGetPreviousQuizzes() {
-		Xpath.setActiveQuestion("1");
+		this.xpath.setActiveQuestion("1");
 		final String answer = Integer.toString(random.nextInt(100));
 		inspectPreviousQuiz(answer);
 		this.switchToIframe();
-		assertEquals(this.findElement(Xpath.oldQuizzesAnswer).getText(), answer);
+		assertEquals(this.findElement(this.xpath.getOldQuizzesAnswer()).getText(), answer);
 	}
 	
 	@Test
 	public void testOpenWhyBubble(){
-		Xpath.setActiveQuestion("1");
+		this.xpath.setActiveQuestion("1");
 		this.answerQuestion("1", "1");
 		this.clickSubmit();
 		this.openWhyBubble();
-		assertTrue(this.elementExists(Xpath.openWhyBubble));
+		assertTrue(this.elementExists(this.xpath.getOpenWhyBubble()));
 	}
 	
 	@Test
 	public void testCloseWhyBubble(){
-		Xpath.setActiveQuestion("1");
+		this.xpath.setActiveQuestion("1");
 		this.answerQuestion("1", "1");
 		this.clickSubmit();
 		this.openWhyBubble();
 		this.closeWhyBubble();
-		assertTrue(this.elementExists(Xpath.closedWhyBubble));
+		assertTrue(this.elementExists(this.xpath.getClosedWhyBubble()));
 	}
 	
 	@Test
