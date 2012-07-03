@@ -968,7 +968,99 @@ describe("Anchor Utils", function() {
 		});
 	});
 
+	describe('Range Putrification Tests', function(){
+		it('Clone Node Test', function(){
+			var p = document.createElement('p'),
+				t1 = document.createTextNode('this is a text node, yay!  go us!'),
+				t2 = document.createTextNode('this is also a text node, yay!  go us!'),
+				spanNoAnchors = document.createElement('span'),
+				em = document.createElement('em'),
+				t3 = document.createTextNode('This is more text actually, always more text'),
+				span = document.createElement('span'),
+				t4 = document.createTextNode('This is the final text'),
+				pureRange, range;
+
+			//add some stuff to span, clone it, add some more, see if it worked
+			p.appendChild(t1);
+			p.appendChild(t2);
+			p.setAttribute('shouldBeThere', 'true');
+			spanNoAnchors.setAttribute('data-non-anchorable', 'true');
+			em.appendChild(t3);
+			spanNoAnchors.appendChild(em);
+			span.appendChild(t4);
+			spanNoAnchors.appendChild(span);
+			p.appendChild(spanNoAnchors);
+			testBody.appendChild(p);
+
+			//create the initial range:
+			range = document.createRange();
+			range.setStart(t1, 2);
+			range.setEnd(t4, 6);
+
+			//purify the range, the pureRange should not be associated with the old range, or it's contents:
+			pureRange = Anchors.purifyRange(range, document);
+
+			//add more attrs to the old range's nodes
+			p.setAttribute('shouldNOTBeThere', 'true'); //this should not be in the pureRange
+
+			//do some checking of attrs to verify they are clones and not the same refs:
+			expect(pureRange.commonAncestorContainer.getAttribute('shouldBeThere')).toBeTruthy();
+			expect(pureRange.commonAncestorContainer.getAttribute('shouldNOTBeThere')).not.toBeTruthy();
+			expect(range.toString()).toEqual(pureRange.toString()); //expect the range to encompass the same text
+		});
+
+		it('Tagging and Cleaning Test', function(){
+			var nodeWithNoAttr = document.createElement('span'),
+				nodeWithAttr = document.createElement('span'),
+				textNodeWithNoTag = document.createTextNode('this is some text'),
+				textNodeWithTag = document.createTextNode('this is also text');
+
+			//add stuff to nodes where needed:
+			Anchors.tagNode(nodeWithAttr, 'tagged');
+			Anchors.tagNode(textNodeWithTag, 'tagged-baby!');
+
+			//check that things were tagged well:
+			expect(nodeWithAttr.getAttribute(Anchors.PURIFICATION_TAG)).toBeTruthy();
+			expect(textNodeWithTag.textContent.indexOf(Anchors.PURIFICATION_TAG)).toBeGreaterThan(-1);
+
+			//cleanup and check results
+			expect(Anchors.cleanNode(nodeWithNoAttr).getAttribute(Anchors.PURIFICATION_TAG)).toBeNull();
+			expect(Anchors.cleanNode(nodeWithAttr).getAttribute(Anchors.PURIFICATION_TAG)).toBeNull();
+			expect(Anchors.cleanNode(textNodeWithNoTag).textContent.indexOf(Anchors.PURIFICATION_TAG)).toEqual(-1);
+			expect(Anchors.cleanNode(textNodeWithTag).textContent.indexOf(Anchors.PURIFICATION_TAG)).toEqual(-1);
+		});
+
+		it ('Tag Finding Tests', function(){
+			var p1 = document.createElement('p'),
+				s1 = document.createElement('span'),
+				p2 = document.createElement('p'),
+				s2 = document.createElement('span'),
+				t1 = document.createTextNode('once upon a time'),
+				t2 = document.createTextNode(' there lived 3 bears');
+
+			//apply tags in some spots:
+			Anchors.tagNode(s1, 'tag1');
+			Anchors.tagNode(t1, 'tag2');
+			Anchors.tagNode(s2, 'tag3');
+			Anchors.tagNode(t2, 'tag4');
+
+			//build dom heirarchy
+			s2.appendChild(t2);
+			p2.appendChild(t1);
+			s1.appendChild(p2);
+			s1.appendChild(s2);
+			p1.appendChild(s1);
+
+			expect(Anchors.findTaggedNode(p1,'tag1')).toBe(s1);
+			expect(Anchors.findTaggedNode(p1,'tag2')).toBe(t1);
+			expect(Anchors.findTaggedNode(p1,'tag3')).toBe(s2);
+			expect(Anchors.findTaggedNode(p1,'tag4')).toBe(t2);
+
+		});
+	});
+
 	describe('Integration Tests', function(){
+		//TODO - write a unit test for 3 identical txt nodes where the anchor ends on teh end of the second
 		it('Ancestor Spanning Identical Text Node Bug', function(){
 			var root = document.createElement('div'), //this should be the ancestor
 				p1 = document.createElement('p'),

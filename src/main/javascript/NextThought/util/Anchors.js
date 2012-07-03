@@ -6,6 +6,8 @@ Ext.define('NextThought.util.Anchors', {
 	],
 	singleton: true,
 
+	PURIFICATION_TAG: 'data-nti-purification-tag',
+
 	//TODO - testing
 	toDomRange: function(contentRangeDescription, docElement) {
 		   var ancestorNode = contentRangeDescription.getAncestor().locateRangePointInAncestor(docElement).node || docElement;
@@ -329,107 +331,6 @@ Ext.define('NextThought.util.Anchors', {
 	},
 
 
-	/* tested */
-	/*
-	locateRangeEdgeForAnchor2: function(pointer, referenceNode, startResult){
-		if (!pointer) {
-			Ext.Error.raise('Must supply a Pointer');
-		}
-		else if (!(pointer instanceof NextThought.model.anchorables.TextDomContentPointer)) {
-			Ext.Error.raise('ContentPointer must be a TextDomContentPointer');
-		}
-
-		//internal function that returns true of the context is a match, false if not.
-		function contextMatchNode(context, node, isStart){
-			var adjustedOffset = context.getContextOffset(),
-				indexOf = node.textContent.indexOf(context.getContextText());
-			if(isStart){
-				adjustedOffset = node.textContent.length - adjustedOffset;
-			}
-			return ( indexOf !== -1 && indexOf === adjustedOffset);
-		}
-
-		//var declarations:
-		var isStart = pointer.role === 'start',
-			primaryContext = pointer.primaryContext(),
-			indexOfContext = primaryContext.getContextOffset(),
-			textNode,
-			treeWalker = document.createTreeWalker(referenceNode, NodeFilter.SHOW_TEXT, null, null);
-
-		//If we are looking for the end node.  we want to start
-		//looking where the start node ended.  This is a shortcut
-		//in the event that the found start node is in our reference node
-		if( !isStart && startResult && startResult.node){
-			treeWalker.currentNode = startResult.node;
-			treeWalker.nextNode();
-		}
-
-		if(Ext.isTextNode(treeWalker.currentNode)){
-				textNode = treeWalker.currentNode;
-		}
-		else{
-				textNode = treeWalker.nextNode();
-		}
-
-		//If we are working on the start anchor, when checking context
-		//we look back at previous nodes.  if we are looking at end we
-		//look forward to next nodes
-		var siblingFunction = isStart ? treeWalker.previousNode : treeWalker.nextNode;
-		while( textNode ) {
-			//Do all our contexts match this textNode
-			var nextNodeToCheck = textNode;
-			var match = true;
-			var i;
-			for(i = 0; i < pointer.getContexts().length; i++ ){
-				var contextObj = pointer.getContexts()[i];
-
-				//Right now, if we don't have all the nodes we need to have
-				//for the contexts, we fail.  In the future this
-				//probably changes but that requires looking ahead to
-				//see if there is another node that makes us ambiguous
-				//if we don't apply all the context
-				if(!nextNodeToCheck){
-					match = false;
-					break;
-				}
-				//If we don't match this context with high enough confidence
-				//we fail
-				if( !contextMatchNode(contextObj, nextNodeToCheck, isStart) ){
-					match = false;
-					break;
-				}
-
-				//That context matched so we continue verifying.
-				nextNodeToCheck = siblingFunction.call(treeWalker);
-			}
-
-			//We matched as much context is we could,
-			//this is our node
-			if(match){ break;}
-			else{
-				//That wasn't it.  Continue searching
-				treeWalker.currentNode = textNode;
-			}
-
-			//Start the context search over in the next textnode
-			textNode = treeWalker.nextNode();
-		}
-
-		//If we made it through the tree without finding
-		//a node we failed
-		if(!textNode){
-			return {confidence: 0};
-		}
-
-		if(isStart){
-			indexOfContext = textNode.textContent.length - indexOfContext;
-		}
-		indexOfContext += pointer.getEdgeOffset();
-		return {node: textNode, offset: indexOfContext, confidence: 1};
-	},
-	*/
-
-
 	//TODO - testing
 	isNodeChildOfAncestor: function(node, ancestor) {
 			while(node && node.parentNode){
@@ -722,6 +623,7 @@ Ext.define('NextThought.util.Anchors', {
          return newRange;
  },
 
+
 	/* tested */
 	searchFromRangeStartInwardForAnchorableNode: function(startNode) {
 		//resolve some initials, do we have a node and is it already anchorable?
@@ -772,6 +674,7 @@ Ext.define('NextThought.util.Anchors', {
 
 
 	/* tested */
+	//TODO - test this for a node which has multiple tree branches, we want it to be the last of the last branch.
 	walkDownToLastNode: function(node){
 		if (!node){Ext.Error.raise('Node cannot be null');}
 
@@ -886,6 +789,122 @@ Ext.define('NextThought.util.Anchors', {
 
 		//otherwise, assume not
 		return false;
+	},
+
+
+	/* tested */
+	purifyRange: function(range, doc){
+		var docFrag,
+			extElement,
+			tempRange = doc.createRange(),
+			tempParent, tempNode,
+			origStartOff = range.startOffset,
+			origEndOff = range.endOffset,
+			resultRange;
+
+		//start by normalizing things, just to make sure it's normalized from the beginning:
+		range.commonAncestorContainer.normalize();
+
+		//apply tags to start and end:
+		Anchors.tagNode(range.startContainer, 'start');
+		Anchors.tagNode(range.endContainer, 'end');
+
+		//setup our copy range
+		tempRange.selectNode(range.commonAncestorContainer);
+		docFrag = tempRange.cloneContents();
+
+		//return original range back to it's original form:
+		range.setStart(Anchors.cleanNode(range.startContainer),origStartOff);
+		range.setEnd(Anchors.cleanNode(range.endContainer), origEndOff);
+
+		//begin the cleanup:
+		extElement = new Ext.dom.Element(docFrag);
+
+		//loop over elements we need to remove and, well, remove them:
+		Ext.each(extElement.query('[data-non-anchorable]'), function(n){
+			tempNode = n.previousSibling || n.parentNode;
+			if (tempNode){
+				tempParent = tempNode.parentNode;
+				Ext.each(n.childNodes, function(c){
+					tempParent.insertBefore(c, n);
+				});
+			}
+			else{
+				Ext.Error.raise('Non-Anchorable node has no previous siblings or parent nodes.');
+			}
+
+			//remove non-anchorable node
+			n.parentNode.removeChild(n);
+		});
+		docFrag.normalize();
+
+		//at this point we know the range ancestor is stored in the 'a' variable, now that the data is cleaned and
+		//normalized, we need to find the range's start and end points, and create a fresh range.
+		var startNode = Anchors.cleanNode(Anchors.findTaggedNode(docFrag, 'start'));
+		var endNode = Anchors.cleanNode(Anchors.findTaggedNode(docFrag, 'end'));
+
+		//build the new range divorced from the dom and return:
+		resultRange = doc.createRange();
+		resultRange.selectNodeContents(docFrag);
+		resultRange.setStart(startNode, origStartOff);
+		resultRange.setEnd(endNode, origEndOff);
+		return resultRange;
+	},
+
+
+	/* tested */
+	tagNode: function(node, tag){
+		var attr = Anchors.PURIFICATION_TAG;
+
+		if (Ext.isTextNode(node)){
+			node.textContent = '['+attr+':'+tag+']' + node.textContent;
+		}
+		else {
+			node.setAttribute(attr, tag);
+		}
+	},
+
+
+	/* tested */
+	cleanNode: function(node){
+		var attr = Anchors.PURIFICATION_TAG,
+			i;
+
+		if (Ext.isTextNode(node)) {
+			i = node.textContent.indexOf(attr);
+			if ( i > 0 ) {
+				node.textContent = node.textContent.substring(node.textContent.indexOf(']', i + attr.length) + 1);
+			}
+		}
+		else {
+			node.removeAttribute(attr);
+		}
+		return node; //for chaining
+	},
+
+
+	/* tested */
+	findTaggedNode: function(root, tag) {
+		var walker = document.createTreeWalker(root, NodeFilter.SHOW_ALL, null, null),
+			attr = Anchors.PURIFICATION_TAG,
+			temp, a;
+
+		while (temp = walker.nextNode()){
+			if (Ext.isTextNode(temp)){
+				if (temp.textContent.indexOf('['+attr+':'+tag+']') === 0) {
+					return temp; //found it
+				}
+			}
+			else {
+				a = temp.getAttribute(attr);
+				if (a && a === tag) {
+					return temp;
+				}
+
+			}
+		}
+
+		return null;
 	}
 },
 function(){
