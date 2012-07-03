@@ -28,9 +28,9 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 			rects;
 
 		range.selectNode(node);
-		rects = range.getClientRects();
+		rects = Array.prototype.slice.call(range.getClientRects());
 		range.detach();
-		return Array.prototype.slice.call(rects).splice(1);
+		return rects.length > 1 ? rects.splice(1) : rects;
 	},
 
 
