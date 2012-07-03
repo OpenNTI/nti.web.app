@@ -151,7 +151,8 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		s.collapseToStart();
 		s.modify('extend', 'forward', 'line');
 
-		while(!r) {
+		while(!r && c < 100000) {
+			c++;
 			r = s.getRangeAt(0);
 			if(is(r.getClientRects()[0],rect)){
 				return r;
