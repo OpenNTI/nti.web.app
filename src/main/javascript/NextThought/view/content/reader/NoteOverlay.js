@@ -30,7 +30,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		range.selectNode(node);
 		rects = range.getClientRects();
 		range.detach();
-		return rects;
+		return Array.prototype.slice.call(rects).splice(1);
 	},
 
 
@@ -115,6 +115,24 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 	},
 
 
+	isCloseToMiddle: function(y,rect){
+		var m = rect.top + (rect.height/2);
+		return Math.abs((m - y)/rect.height) < 1;
+	},
+
+
+	findLine: function(y,node){
+		var rects = this.resolveClientRects( node );
+		var i=0;
+		for(; i<rects.length; i++){
+			if(this.isCloseToMiddle(y,rects[i])){
+				return rects[i];
+			}
+		}
+		return null;
+	},
+
+
 	noteOverlayMouseOver: function(evt,t){
 		evt.stopEvent();
 
@@ -126,14 +144,10 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 			s = doc.parentWindow.getSelection(),
 			n = this.resolveNodeAt(y);
 
-
 		var r = doc.createRange();
 		try {
-			var a = this.resolveClientRects( n );
-			console.log(a);
-			a = a[1];
+			var a = this.findLine(y,n);
 			r.selectNode( n );
-
 			Ext.get(b).setHeight(a.height).setY(a.top + o.top).hide().show();
 		}
 		catch(e){}
