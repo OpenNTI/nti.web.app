@@ -157,7 +157,8 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 				return r;
 			}
 			if(!Ext.fly(node).contains(r.startContainer)){
-				console.log('overextended');
+				s.removeAllRanges();
+				s.selectAllChildren(node);
 				break;
 			}
 			r = null;
@@ -165,6 +166,8 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 			s.modify('move', 'forward', 'line');
 			s.modify('extend', 'forward', 'line');
 		}
+
+		return s.getRangeAt(0);
 	},
 
 
