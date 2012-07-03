@@ -122,39 +122,70 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 
 	findLine: function(y,node){
-		var rects = this.resolveClientRects( node );
+
+		var rects = this.resolveClientRects( node )||[];
 		var i=0;
 		for(; i<rects.length; i++){
 			if(this.isCloseToMiddle(y,rects[i])){
-				return rects[i];
+				return {
+					rect: rects[i],
+					range: this.buildRangeFromRect(rects[i],node)
+				};
 			}
 		}
 		return null;
 	},
 
 
+	buildRangeFromRect: function(rect, node){
+		var s = this.getDocumentElement().parentWindow.getSelection(),
+				r, c = 0;
+
+		function is(rectA,rectB){
+			return rectA.top === rectB.top
+				&& rectA.height === rectB.height;
+		}
+
+		s.removeAllRanges();
+		s.selectAllChildren(node);
+		s.collapseToStart();
+		s.modify('extend', 'forward', 'line');
+
+		while(!r) {
+			r = s.getRangeAt(0);
+			if(is(r.getClientRects()[0],rect)){
+				return r;
+			}
+			if(!Ext.fly(node).contains(r.startContainer)){
+				console.log('overextended');
+				break;
+			}
+			r = null;
+
+			s.modify('move', 'forward', 'line');
+			s.modify('extend', 'forward', 'line');
+		}
+	},
+
+
 	noteOverlayMouseOver: function(evt,t){
 		evt.stopEvent();
 
-		var doc = this.getDocumentElement();
 		var data = this.noteOverlayData;
 		var o = this.getAnnotationOffsets(),
 			y = evt.getY() - o.top,
 			b = data.inputBox,
-			s = doc.parentWindow.getSelection(),
-			n = this.resolveNodeAt(y);
+			n = this.resolveNodeAt(y),
+			a;
 
-		var r = doc.createRange();
 		try {
-			var a = this.findLine(y,n);
-			r.selectNode( n );
-			Ext.get(b).setHeight(a.height).setY(a.top + o.top).hide().show();
+			a = this.findLine(y,n);
+			if(a){
+				Ext.get(b).setHeight(a.rect.height).setY(a.rect.top + o.top).hide().show();
+			}
 		}
-		catch(e){}
-
-		s.removeAllRanges();
-		if(!r.collapsed){
-			s.addRange(r);
+		catch(e){
+			console.warn(Globals.getError(e));
 		}
 	}
 });
