@@ -8,25 +8,26 @@ Ext.define('NextThought.view.content.Reader', {
 		annotations: 'NextThought.view.content.reader.Annotations',
 		content: 'NextThought.view.content.reader.Content',
 		iframe: 'NextThought.view.content.reader.IFrame',
-		scroll: 'NextThought.view.content.reader.Scroll'
+		scroll: 'NextThought.view.content.reader.Scroll',
+		noteOverlay: 'NextThought.view.content.reader.NoteOverlay'
 	},
 	cls: 'x-reader-pane',
 
 	ui: 'reader',
 	layout: 'anchor',
 	prefix: 'default',
-	padding: '0 0 0 100px',
 
 	initComponent: function() {
 		this.callParent(arguments);
 
-		this.addEvents('loaded','finished-restore');
+		this.addEvents('loaded','finished-restore','content-updated');
 		this.enableBubble('loaded','finished-restore');
 
 		this.mixins.content.constructor.apply(this,arguments);
 		this.mixins.iframe.constructor.apply(this,arguments);
 		this.mixins.scroll.constructor.apply(this,arguments);
 		this.mixins.annotations.constructor.apply(this,arguments);
+		this.mixins.noteOverlay.constructor.apply(this,arguments);
 	},
 
 
@@ -66,7 +67,10 @@ Ext.define('NextThought.view.content.Reader', {
 		return {
 			top: f.getTop(),
 			left: f.getLeft(),
-			gutter: f.getMargin('l')
+			height: f.getHeight(),
+			width: f.getWidth(),
+			gutter: f.getMargin('l'),
+			scrollTop: this.body.getScroll().top
 		};
 	},
 

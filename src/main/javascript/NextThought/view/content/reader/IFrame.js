@@ -40,7 +40,7 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 				seamless: true,
 				transparent: true,
 				allowTransparency: true,
-				style: 'overflow: hidden'
+				style: 'overflow: hidden; margin: 0 0 0 100px;'
 			},
 			listeners: {
 				scope: this,
@@ -301,13 +301,15 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 //		console.log('Syncing Frame Height: content:', h, ' view:', this.getEl().getHeight());
 
 		body.hide().show();
-		i.setHeight(Math.max(h, this.getEl().getHeight()));
+		h = Math.max(h, this.getEl().getHeight());
+		i.setHeight(h);
 
 		this.fireEvent('resize');
 		this.doLayout();
 
 		this.lastHeight = h;
 		this.lastFrameSync = Ext.Date.now();
+		this.fireEvent('sync-height',h);
 	},
 
 
@@ -360,6 +362,7 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 		body.setStyle('background','transparent');
 
 		this.insertRelatedLinks(body.query('#NTIContent .chapter.title')[0],doc);
+		this.fireEvent('content-updated');
 
 		//TODO: solidify our story about content scripts (reset the iframe after navigating to a page that has scripts?)
 		Ext.each(body.query('script'),function(s){

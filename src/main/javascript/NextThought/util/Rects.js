@@ -3,11 +3,6 @@ Ext.define('NextThought.util.Rects',{
 
 
 	merge: function(rects,lineHeight,clientWidth){
-//		console.log('rects', arguments);
-		if(!lineHeight){
-			Ext.Error.raise("Invalid Line Height");
-		}
-
 		rects = this.trimCrazies(rects, lineHeight, clientWidth);
 		var r=[], ri,
 			x,xx,y,yy, w,h,
@@ -42,6 +37,7 @@ Ext.define('NextThought.util.Rects',{
 			}
 
 		}
+
 		return r;
 
 	},
@@ -51,8 +47,10 @@ Ext.define('NextThought.util.Rects',{
 		function flip(a,i){ return Ext.apply({},a[i]); }
 
 		function acceptableHeight(h){
-			if (h < lineHeight){return false;}
-			else if(lineHeight/h < 0.6) {return false;}
+			if(lineHeight){
+				if (h < lineHeight){return false;}
+				else if(lineHeight/h < 0.6) {return false;}
+			}
 			return true;
 		}
 
@@ -60,14 +58,14 @@ Ext.define('NextThought.util.Rects',{
 				i = rs.length-1, out = [], o, h, w,
 				lh2 = lineHeight*2;
 
-		if(!i || Ext.isIE) { return rects; }
+		if(!i || Ext.isIE || !lineHeight) { return rects; }
 
 		for(;i>=0;i--){
 			o = flip(rs,i);
 			if (o.height < lineHeight){o.height = lineHeight;} //round up to look nice
 			h = o.height;
 			w = o.width;
-			if( h > 0 && h < lh2 && w > 0 && w <= clientWidth && acceptableHeight(h)) {
+			if( h > 0 && h < lh2 && w > 0 && (w <= clientWidth || !clientWidth) && acceptableHeight(h)) {
 				out.push(o);
 			}
 		}
