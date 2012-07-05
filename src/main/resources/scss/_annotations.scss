@@ -1,3 +1,47 @@
+.note-gutter {
+	position: absolute;
+	top: 0;
+	left: 0;
+	border-right: 1px solid #eee;
+
+	.note-here-control-box {
+		@include animate(fadeIn,0.1s);
+		position: absolute;
+		left: 0; top: 0;
+		min-height: 24px;
+		border: none;
+		margin: 0; padding: 0;
+
+		$t: top 0s, opacity 0.1s;
+		@include experimental(transition, $t);
+
+		&.note-overlay-hidden{
+			display: none;
+			opacity: 0;
+		}
+
+		.bottom-border {
+			width: 100%;
+			overflow: hidden;
+			height: 4px;
+			border: 1px solid #ccc;
+			border-top-width: 0;
+			margin: 0;
+			padding: 0;
+			//z-index: 1;
+			background: none;
+		}
+
+		textarea {
+			border: none;
+			background: none;
+			margin: 0;
+			padding: 0 3px;
+			resize: none;
+			width: 100%;
+		}
+	}
+}
 
 
 
@@ -34,187 +78,6 @@
 }
 
 
-.x-nti-note {
-	border-top: 1px solid $border-color;
-	position: relative;
-	overflow: hidden;
-	padding: 10px 5px;
-	background: rgba(255,255,255,0.1);
-
-	div {
-		margin-left: 22px;
-		overflow: hidden;
-		text-overflow: ellipsis;
-	}
-	div.avatar {
-	    margin: 0 !important;
-		float: left;
-		width: 16px;
-		height: 16px;
-	}
-	.name {
-		font-weight: bold;
-		color: $name-label-color;
-		padding: 0 10px 0 0;
-	}
-	.timestamp {
-		color: $timestamp-color;
-		float: right;
-		font-size: 9px;
-		padding: 0 0 5px 10px;
-	}
-	&:hover {
-		.name {}
-		.timestamp {
-			visibility: hidden;
-		}
-		.controls {
-			display: block;
-		}
-	}
-}
-
-.x-nti-note.chat-transcript {
-	cursor: pointer;
-	div.avatar {
-		float: right;
-		margin-right: 4px !important;
-	}
-	.transcript-placeholder {
-		margin: 0px;
-		font-size: 10px;
-		a {
-			text-decoration: none !important;
-			font-weight: bold;
-			font-size: 10px;
-			color: $transcript-placeholder-text-color;
-		}
-	}
-}
-
-
-.x-window.chat-transcript,
-.x-nti-note-replies.chat-transcript {
-	.x-chat-log-entry {
-		cursor: auto;
-		span.reply{
-			isplay: none;
-		}
-		.reply-whisper { display: none; }
- 		.reply-public { display: none; }
-	}
-}
-
-.x-nti-note.placeholder {
-	padding: 2px;
-	div {
-		margin: 0px;
-	}
-}
-
-.x-note-panel{
-	width: 100%;
-}
-
-.document-notes {
-	position: absolute;
-}
-
-.x-nti-note {
-	span.controls {
-		position: absolute;
-		display: none;
-		right: 5px; top: 5px;
-		height: 24px;
-		cursor: pointer;
-		overflow: hidden;
-
-		span {
-			width: 16px;
-			height: 16px;
-			margin: 2px;
-			display: inline-block;
-			background: $border-color;
-			opacity: 0.4;
-			&:hover{ opacity: 1; }
-		}
-	}
-
-	.controls {
-		span.edit { display: none; }
-		span.delete { display: none; }
-
-		.chat { background: $note-action-chat-icon; }
-		.delete { background: $note-action-delete-icon; }
-		.edit {
-			background: $note-action-edit-icon;
-			background-size: 16px 16px;
-		}
-		.reply { background: $note-action-reply-icon; }
-		.share { background: $note-action-share-icon; }
-		.mute { background: $note-action-mute-icon center center no-repeat; }
-	}
-
-	&.owner {
-		.controls {
-			span.edit {
-				display: inline-block;
-			}
-			span.delete {
-				display: inline-block;
-			}
-		}
-	}
-}
-
-.x-nti-note-replies {
-	&.chat-transcript {
-		@include clearfix_left();
-		.x-panel-body{
-			@include clearfix_left();
-		}
-	}
-	@include clearfix_left(15px);
-}
-
-//charms
-img.action {
-    width: 16px;
-    height: 16px;
-    position: absolute;
-	z-index: 1000;
-
-	&.note {
-		width: 17px;
-		height: 21px;
-		background-image: url(../images/charms/note_glyph_gray.png);
-		&:hover,
-		.x-dd-drop-ok & {
-			background-image: url(../images/charms/note_glyph.png);
-		}
-	}
-	&.highlight {
-		width: 23px;
-		height: 19px;
-		background-image: url(../images/charms/highlight_glyph_gray.png);
-		&:hover,
-		.x-dd-drop-ok & {
-			background-image: url(../images/charms/highlight_glyph.png);
-		}
-    }
-	&.quizresults {
-    	background-image: $charm-quizresult-icon;
-    }
-	&.transcript {
-	    background-image: $charm-chattranscript-icon;
-    }
-    &.redactionhighlight {
- 	    background-image: $charm-collapsed-icon;
-     }
-    &.expanded {
- 	    background-image: $charm-expanded-icon;
-     }
-}
 
 .x-dd-drag-proxy {
 
