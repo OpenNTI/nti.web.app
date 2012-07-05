@@ -969,7 +969,7 @@ describe("Anchor Utils", function() {
 	});
 
 	describe('Range Putrification Tests', function(){
-		it('Clone Node Test', function(){
+		it('Purify Range Test', function(){
 			var p = document.createElement('p'),
 				t1 = document.createTextNode('this is a text node, yay!  go us!'),
 				t2 = document.createTextNode('this is also a text node, yay!  go us!'),
@@ -984,6 +984,7 @@ describe("Anchor Utils", function() {
 			p.appendChild(t1);
 			p.appendChild(t2);
 			p.setAttribute('shouldBeThere', 'true');
+			p.setAttribute('Id', 'someRandomId');
 			spanNoAnchors.setAttribute('data-non-anchorable', 'true');
 			em.appendChild(t3);
 			spanNoAnchors.appendChild(em);
@@ -1007,6 +1008,45 @@ describe("Anchor Utils", function() {
 			expect(pureRange.commonAncestorContainer.getAttribute('shouldBeThere')).toBeTruthy();
 			expect(pureRange.commonAncestorContainer.getAttribute('shouldNOTBeThere')).not.toBeTruthy();
 			expect(range.toString()).toEqual(pureRange.toString()); //expect the range to encompass the same text
+			expect(range.commonAncestorContainer.parentNode).toBe(pureRange.ownerNode);
+		});
+
+		it('Purify Range Where Ancestor is non-anchorable', function(){
+			var div = document.createElement('div'),
+				p = document.createElement('p'),
+				t1 = document.createTextNode('this is a text node, yay!  go us!'),
+				t2 = document.createTextNode('this is also a text node, yay!  go us!'),
+				spanNoAnchors = document.createElement('span'),
+				em = document.createElement('em'),
+				t3 = document.createTextNode('This is more text actually, always more text'),
+				span = document.createElement('span'),
+				t4 = document.createTextNode('This is the final text'),
+				pureRange, range;
+
+			//add some stuff to span, clone it, add some more, see if it worked
+			p.setAttribute('data-non-anchorable', 'true');
+			p.appendChild(t1);
+			p.appendChild(t2);
+			spanNoAnchors.setAttribute('data-non-anchorable', 'true');
+			em.appendChild(t3);
+			spanNoAnchors.appendChild(em);
+			span.appendChild(t4);
+			spanNoAnchors.appendChild(span);
+			p.appendChild(spanNoAnchors);
+			div.setAttribute('Id', 'validId');
+			div.appendChild(p);
+			testBody.appendChild(div);
+
+			//create the initial range:
+			range = document.createRange();
+			range.setStart(t1, 2);
+			range.setEnd(t4, 6);
+
+			//purify the range, the pureRange should not be associated with the old range, or it's contents:
+			pureRange = Anchors.purifyRange(range, document);
+
+			//do some checking of attrs to verify they are clones and not the same refs:
+			expect(range.toString()).toEqual(pureRange.toString()); //expect the range to encompass the same text
 		});
 
 		it('Tagging and Cleaning Test', function(){
@@ -1024,10 +1064,26 @@ describe("Anchor Utils", function() {
 			expect(textNodeWithTag.textContent.indexOf(Anchors.PURIFICATION_TAG)).toBeGreaterThan(-1);
 
 			//cleanup and check results
-			expect(Anchors.cleanNode(nodeWithNoAttr).getAttribute(Anchors.PURIFICATION_TAG)).toBeNull();
-			expect(Anchors.cleanNode(nodeWithAttr).getAttribute(Anchors.PURIFICATION_TAG)).toBeNull();
-			expect(Anchors.cleanNode(textNodeWithNoTag).textContent.indexOf(Anchors.PURIFICATION_TAG)).toEqual(-1);
-			expect(Anchors.cleanNode(textNodeWithTag).textContent.indexOf(Anchors.PURIFICATION_TAG)).toEqual(-1);
+			Anchors.cleanNode(nodeWithNoAttr, 'x');
+			Anchors.cleanNode(nodeWithAttr, 'tagged');
+			Anchors.cleanNode(textNodeWithNoTag, 'x');
+
+			Anchors.cleanNode(textNodeWithTag, 'tagged-baby!');
+			expect(nodeWithNoAttr.getAttribute(Anchors.PURIFICATION_TAG)).toBeNull();
+			expect(nodeWithAttr.getAttribute(Anchors.PURIFICATION_TAG)).toBeNull();
+			expect(textNodeWithNoTag.textContent.indexOf(Anchors.PURIFICATION_TAG)).toEqual(-1);
+			expect(textNodeWithTag.textContent.indexOf(Anchors.PURIFICATION_TAG)).toEqual(-1);
+		});
+
+		it('Cleaning Text Node with Multiple Tags', function(){
+			var text = 'You know [data-nti-purification-tag:start]how to add, subtract, multiply[data-nti-purification-tag:end], and divide. In fact, you may already know how to solve many of the problems in this chapter. So why do we start this book with an entire chapter on arithmetic?',
+				expected = 'You know how to add, subtract, multiply, and divide. In fact, you may already know how to solve many of the problems in this chapter. So why do we start this book with an entire chapter on arithmetic?',
+				textNode = document.createTextNode(text);
+
+			Anchors.cleanNode(textNode, 'end');
+			Anchors.cleanNode(textNode, 'start');
+
+			expect(textNode.textContent).toEqual(expected);
 		});
 
 		it ('Tag Finding Tests', function(){
@@ -1036,13 +1092,17 @@ describe("Anchor Utils", function() {
 				p2 = document.createElement('p'),
 				s2 = document.createElement('span'),
 				t1 = document.createTextNode('once upon a time'),
-				t2 = document.createTextNode(' there lived 3 bears');
+				t2 = document.createTextNode(' there lived 3 bears'),
+				textWithMultTags = document.createTextNode('some fancy text');
+
 
 			//apply tags in some spots:
 			Anchors.tagNode(s1, 'tag1');
 			Anchors.tagNode(t1, 'tag2');
 			Anchors.tagNode(s2, 'tag3');
 			Anchors.tagNode(t2, 'tag4');
+			Anchors.tagNode(textWithMultTags, 'multi-tag1');
+			Anchors.tagNode(textWithMultTags, 'multi-tag2');
 
 			//build dom heirarchy
 			s2.appendChild(t2);
@@ -1055,6 +1115,8 @@ describe("Anchor Utils", function() {
 			expect(Anchors.findTaggedNode(p1,'tag2')).toBe(t1);
 			expect(Anchors.findTaggedNode(p1,'tag3')).toBe(s2);
 			expect(Anchors.findTaggedNode(p1,'tag4')).toBe(t2);
+			expect(Anchors.findTaggedNode(textWithMultTags, 'multi-tag1')).toBe(textWithMultTags);
+			expect(Anchors.findTaggedNode(textWithMultTags, 'multi-tag2')).toBe(textWithMultTags);
 
 		});
 	});

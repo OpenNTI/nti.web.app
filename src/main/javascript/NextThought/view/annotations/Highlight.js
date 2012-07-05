@@ -12,7 +12,12 @@ Ext.define('NextThought.view.annotations.Highlight', {
 
 	constructor: function(config){
 		this.callParent(arguments);
+		if (config.browserRange) {
+			this.range = config.browserRange;
+		}
 		this.content = Ext.fly(this.doc.getElementById('NTIContent')).first(false,true);
+		this.getRange(); //get range right her up front, this won't render it yet.
+		console.log('build highlight for',this.getRecordField('selectedText'));
 		return this;
 	},
 
@@ -21,6 +26,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
 		if(!this.range){
 			this.range = Anchors.toDomRange(this.getRecordField('applicableRange'),this.doc);
 			if(!this.range){
+				console.log('bad range?', this.getRecordField('applicableRange'));
 				Ext.Error.raise('bad range? '+Ext.encode(this.getRecordField('applicableRange')));
 			}
 		}

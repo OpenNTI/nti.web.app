@@ -360,6 +360,7 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 
 		body.update(html);
 		body.setStyle('background','transparent');
+		doc.normalize();
 
 		this.insertRelatedLinks(body.query('#NTIContent .chapter.title')[0],doc);
 		this.fireEvent('content-updated');

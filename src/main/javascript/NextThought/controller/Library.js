@@ -57,6 +57,7 @@ Ext.define('NextThought.controller.Library', {
 
 
 	getStoreForPageItems: function(containerId, success, failure, scope){
+		console.log('CID=', containerId);
 		var me = this,
 			ps = this.pageStores[containerId];
 

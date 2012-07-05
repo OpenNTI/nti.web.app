@@ -139,7 +139,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 			return;
 		}
 
-		w = me.createAnnotationWidget('highlight',record);
+		w = me.createAnnotationWidget('highlight',record, range);
 
 		record.set('ContainerId', me.containerId);
 
@@ -150,7 +150,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 			text: 'Redact',
 			handler: function(){
 				var r = NextThought.model.Redaction.createFromHighlight(record);
-				me.createAnnotationWidget('redaction',r);
+				me.createAnnotationWidget('redaction',r, range);
 				r.save();
 			}
 		});
@@ -170,7 +170,15 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 	},
 
 
-	createAnnotationWidget: function(type, record){
+	/**
+	 *
+	 * @param type
+	 * @param record - annotation record (highlight, note, redaction, etc)
+	 * @param [browserRange] - optional, if we already have a range from the browser, that can be used instead of resolving it
+	 *                         from the record
+	 * @return {*}
+	 */
+	createAnnotationWidget: function(type, record, browserRange){
 		var oid = record.getId(),
 			style = record.get('style'),
 			w;
@@ -184,7 +192,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 		}
 
 		try {
-			w = Ext.widget({xtype: type.toLowerCase(), record: record, reader: this});
+			w = Ext.widget({xtype: type.toLowerCase(), browserRange: browserRange, record: record, reader: this});
 
 			if (!oid) {
 				oid = type.toUpperCase()+'-TEMP-OID';

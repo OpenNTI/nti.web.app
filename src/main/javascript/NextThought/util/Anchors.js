@@ -8,7 +8,7 @@ Ext.define('NextThought.util.Anchors', {
 
 	PURIFICATION_TAG: 'data-nti-purification-tag',
 
-	//TODO - testing
+	//TODO - test
 	toDomRange: function(contentRangeDescription, docElement) {
 		   var ancestorNode = contentRangeDescription.getAncestor().locateRangePointInAncestor(docElement).node || docElement;
 		   return Anchors.resolveSpecBeneathAncestor(contentRangeDescription, ancestorNode, docElement);
@@ -22,9 +22,11 @@ Ext.define('NextThought.util.Anchors', {
 		}
 
 		range = Anchors.makeRangeAnchorable(range, docElement);
-		var ancestorNode = range.commonAncestorContainer;
+		var pureRange = Anchors.purifyRange(range, docElement),
+			ancestorNode = range.commonAncestorContainer;
 
 		//If the ancestorcontainer is a text node, we want a containing element as per the docs
+		//NOTE: use range, not pureRange here because the pureRange's ancestor is probably a doc fragment.
 		if (Ext.isTextNode(ancestorNode)) {
 			ancestorNode = ancestorNode.parentNode;
 		}
@@ -36,8 +38,8 @@ Ext.define('NextThought.util.Anchors', {
 		});
 
 		return Ext.create('NextThought.model.anchorables.DomContentRangeDescription', {
-			start: Anchors.createPointer(range, 'start'),
-			end: Anchors.createPointer(range, 'end'),
+			start: Anchors.createPointer(pureRange, 'start'),
+			end: Anchors.createPointer(pureRange, 'end'),
 			ancestor: ancestorAnchor
 		});
 	},
@@ -77,13 +79,19 @@ Ext.define('NextThought.util.Anchors', {
 			offset = start ? range.startOffset : range.endOffset,
 			contexts = [],
 			edgeOffset,
-			ancestor;
+			ancestor,
+			parent = container.parentNode;
 
 		if(!Ext.isTextNode(container)){
 			Ext.Error.raise('Range must contain text containers');
 		}
 
-		var referenceNode = Anchors.referenceNodeForNode(container.parentNode);
+		//If we run into a doc fragment here, then we may have to bump out of the fragment:
+		if (parent.nodeType === 11){ //DOCUMENT_FRAGMENT_NODE
+			parent = range.ownerNode;
+		}
+
+		var referenceNode = Anchors.referenceNodeForNode(parent);
 
 		ancestor = Anchors.createPointer(range, 'ancestor', referenceNode);
 
@@ -752,7 +760,7 @@ Ext.define('NextThought.util.Anchors', {
 		if (!node) {return false;}
 
 		//distill the possible ids into an id var for easier reference later
-		var id = node.id || node.getAttribute ? node.getAttribute('id') : null,
+		var id = node.id || (node.getAttribute ? node.getAttribute('id') : null),
 			nonAnchorable = node.getAttribute ? node.getAttribute('data-non-anchorable'): false;
 
 		if (nonAnchorable) {return false;}
@@ -797,36 +805,51 @@ Ext.define('NextThought.util.Anchors', {
 		var docFrag,
 			extElement,
 			tempRange = doc.createRange(),
-			tempParent, tempNode,
+			parentContainer,
+			nodeToInsertBefore,
 			origStartOff = range.startOffset,
 			origEndOff = range.endOffset,
-			resultRange;
+			resultRange,
+			ancestor = range.commonAncestorContainer;
+
+		//make sure the common ancestor is anchorable, otherwise we have a problem, climb to one that is
+		while(ancestor && !Anchors.isNodeAnchorable(ancestor)){
+			ancestor = ancestor.parentNode;
+		}
+		if (!ancestor){
+			Ext.Error.raise('No anchorable nodes in heirarchy');
+		}
 
 		//start by normalizing things, just to make sure it's normalized from the beginning:
-		range.commonAncestorContainer.normalize();
+		ancestor.normalize();
 
 		//apply tags to start and end:
 		Anchors.tagNode(range.startContainer, 'start');
 		Anchors.tagNode(range.endContainer, 'end');
 
 		//setup our copy range
-		tempRange.selectNode(range.commonAncestorContainer);
+		tempRange.selectNode(ancestor);
 		docFrag = tempRange.cloneContents();
 
 		//return original range back to it's original form:
-		range.setStart(Anchors.cleanNode(range.startContainer),origStartOff);
-		range.setEnd(Anchors.cleanNode(range.endContainer), origEndOff);
+		Anchors.cleanNode(range.startContainer, 'start');
+		Anchors.cleanNode(range.endContainer, 'end');
+		range.setStart(range.startContainer,origStartOff);
+		range.setEnd(range.endContainer, origEndOff);
 
 		//begin the cleanup:
 		extElement = new Ext.dom.Element(docFrag);
 
+		//remove any counter spans and their children:
+		(new Ext.CompositeElement(extElement.query('span.application-highlight.counter'))).remove();
+
 		//loop over elements we need to remove and, well, remove them:
 		Ext.each(extElement.query('[data-non-anchorable]'), function(n){
-			tempNode = n.previousSibling || n.parentNode;
-			if (tempNode){
-				tempParent = tempNode.parentNode;
-				Ext.each(n.childNodes, function(c){
-					tempParent.insertBefore(c, n);
+			if (n.parentNode){
+				parentContainer = n.parentNode;
+				nodeToInsertBefore = n;
+					Ext.each(n.childNodes, function(c){
+					parentContainer.insertBefore(c, nodeToInsertBefore);
 				});
 			}
 			else{
@@ -834,20 +857,24 @@ Ext.define('NextThought.util.Anchors', {
 			}
 
 			//remove non-anchorable node
-			n.parentNode.removeChild(n);
+			parentContainer.removeChild(nodeToInsertBefore);
 		});
 		docFrag.normalize();
 
 		//at this point we know the range ancestor is stored in the 'a' variable, now that the data is cleaned and
 		//normalized, we need to find the range's start and end points, and create a fresh range.
-		var startNode = Anchors.cleanNode(Anchors.findTaggedNode(docFrag, 'start'));
-		var endNode = Anchors.cleanNode(Anchors.findTaggedNode(docFrag, 'end'));
+		var startNode = Anchors.findTaggedNode(docFrag, 'start');
+		var endNode = Anchors.findTaggedNode(docFrag, 'end');
+		var newStartOffset = Anchors.cleanNode(startNode, 'start');
+		var newEndOffset = Anchors.cleanNode(endNode, 'end');
+
 
 		//build the new range divorced from the dom and return:
 		resultRange = doc.createRange();
 		resultRange.selectNodeContents(docFrag);
-		resultRange.setStart(startNode, origStartOff);
-		resultRange.setEnd(endNode, origEndOff);
+		resultRange.setStart(startNode, newStartOffset + origStartOff);
+		resultRange.setEnd(endNode, newEndOffset + origEndOff);
+		resultRange.ownerNode = range.commonAncestorContainer.parentNode; //for use whenever someone wants to know where this fits in the doc.
 		return resultRange;
 	},
 
@@ -866,20 +893,24 @@ Ext.define('NextThought.util.Anchors', {
 
 
 	/* tested */
-	cleanNode: function(node){
+	cleanNode: function(node, tag){
 		var attr = Anchors.PURIFICATION_TAG,
-			i;
+			i,tagSelector, offset;
+
+		//generic protection:
+		if (!node){return null;}
 
 		if (Ext.isTextNode(node)) {
-			i = node.textContent.indexOf(attr);
-			if ( i > 0 ) {
-				node.textContent = node.textContent.substring(node.textContent.indexOf(']', i + attr.length) + 1);
+			tagSelector = '['+attr+':'+tag+']';
+			offset = node.textContent.indexOf(tagSelector);
+			if ( offset >= 0 ) {
+				node.textContent = node.textContent.replace(tagSelector, '');
 			}
 		}
 		else {
 			node.removeAttribute(attr);
 		}
-		return node; //for chaining
+		return offset;
 	},
 
 
@@ -887,21 +918,29 @@ Ext.define('NextThought.util.Anchors', {
 	findTaggedNode: function(root, tag) {
 		var walker = document.createTreeWalker(root, NodeFilter.SHOW_ALL, null, null),
 			attr = Anchors.PURIFICATION_TAG,
-			temp, a;
+			selector = '['+attr+':'+tag+']',
+			temp = root,
+			a;
 
-		while (temp = walker.nextNode()){
+		while (temp){
 			if (Ext.isTextNode(temp)){
-				if (temp.textContent.indexOf('['+attr+':'+tag+']') === 0) {
+				if (temp.textContent.indexOf(selector) >= 0) {
 					return temp; //found it
 				}
 			}
-			else {
+			else if (temp.getAttribute) {
 				a = temp.getAttribute(attr);
 				if (a && a === tag) {
 					return temp;
 				}
 
 			}
+			else {
+				console.warn('skipping node while looking for tag', temp);
+			}
+
+			//advance:
+			temp = walker.nextNode();
 		}
 
 		return null;
