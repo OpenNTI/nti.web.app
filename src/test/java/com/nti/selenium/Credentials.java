@@ -21,5 +21,4 @@ public class Credentials {
 	public String getPassword() {
 		return this.password;
 	}
-	
 }

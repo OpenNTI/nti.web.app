@@ -97,26 +97,26 @@ public class XpathUtilsQuizzes extends XpathUtilsNav {
 	}
 
 	public String getOldQuizzesAnswer(){
-		return this.buildString(xpathAttributeBuilder("input", "id", currentQuestionID),
-				"/../../div[@class='result']",
-				"//span[@class='mathjax tex2jax_process response answer-text']",
-				"//span[@class='MathJax_MathML']");
+		return buildString(	xpathAttributeBuilder("input", "id", currentQuestionID),
+							"/../../div[@class='result']",
+							"//span[@class='mathjax tex2jax_process response answer-text']",
+							"//span[@class='MathJax_MathML']");
 	}
 	
 	public String getClosedWhyBubble(){
-		return this.buildString(this.getAnswerResult(),
-			   xpathAttributeAndTextBuilder("a", "class", "why", "Why?"));
+		return buildString(	this.getAnswerResult(),
+							xpathAttributeAndTextBuilder("a", "class", "why", "Why?"));
 	}
 	
 	public String getOpenWhyBubble(){
-		return this.buildString(this.getAnswerResult(),
-			   xpathAttributeAndTextBuilder("a", "class", "why bubble", "Why?"));
+		return buildString(	this.getAnswerResult(),
+							xpathAttributeAndTextBuilder("a", "class", "why bubble", "Why?"));
 	}
 	
 	public String getFractionQuizAnswer(){
-		return this.buildString(this.getAnswerResult(),
-			   xpathAttributeBuilder("span", "class", "mathjax tex2jax_process response answer-text"),
-			   xpathAttributeBuilder("script", "type", "math/tex"));
+		return buildString(	this.getAnswerResult(),
+							xpathAttributeBuilder("span", "class", "mathjax tex2jax_process response answer-text"),
+							xpathAttributeBuilder("script", "type", "math/tex"));
 	}
 	
 }

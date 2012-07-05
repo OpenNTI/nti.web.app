@@ -4,31 +4,31 @@ import com.nti.selenium.XpathUtils;
 
 public class XpathUtilsLogin extends XpathUtils {
 	
-	public String getLoading(){
+	public static String getLoginPageLoading() {
 		return xpathAttributeBuilder("title", "id", "loading");
 	}
 	
-	public String getUsername(){
+	public static String getUsername() {
 		return xpathAttributeBuilder("input", "name", "username");
 	}
 	
-	public String getPassword(){
+	public static String getPassword() {
 		return xpathAttributeBuilder("input", "name", "password");
 	}
 	
-	public String getLoginButton(){
+	public static String getLoginButton() {
 		return xpathAttributeBuilder("button", "id", "submit");
 	}
 	
-	public String getOptions(){
+	public static String getOptions() {
 		return xpathAttributeBuilder("div", "class", "my-account-wrapper");
 	}
 	
-	public String getLogoutButton(){
+	public static String getLogoutButton(){
 		return xpathTextBuilder("div", "Sign out");
 	}
 	
-	public String getLoginProblemMessage(){
+	public static String getLoginProblemMessage() {
 		return xpathTextBuilder("div", "Please try again, there was a problem logging in.");
 	}
 	

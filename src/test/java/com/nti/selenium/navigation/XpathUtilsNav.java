@@ -3,64 +3,48 @@ package com.nti.selenium.navigation;
 import com.nti.selenium.login.XpathUtilsLogin;
 
 public class XpathUtilsNav extends XpathUtilsLogin{
-
-	private String book;
-	private String chapter;
-	private String section;
-	private String relatedItem;
 	
-	public void setLocation(String book, String chapter, String section){
-		this.book = book;
-		this.chapter = chapter;
-		this.section = section;
-	}
-	
-	public void setRelatedItem(String relatedItem){
-		this.relatedItem = relatedItem;
-	}
-	
-	public String getLibrary() {
+	public static String getLibrary() {
 		return xpathAttributeBuilder("span", "id", "button-1014-btnIconEl");
 	}
 	
-	public String getBook() {
-		return xpathAttributeAndTextBuilder("div", "class", "title", this.book);
+	public static String getBook(final String book) {
+		return xpathAttributeAndTextBuilder("div", "class", "title", book);
 	}
 	
-	public String getChapter() {
-		return xpathTextBuilder("div", this.chapter);
+	public static String getChapter(final String chapter) {
+		return xpathTextBuilder("div", chapter);
 	}
 	
-	public String getSection(){
-		return xpathTextBuilder("div", this.section);
+	public static String getSection(final String section) {
+		return xpathTextBuilder("div", section);
 	}
 	
-	public String getFractionIndexPage() {
+	public static String getFractionIndexPage() {
 		return xpathAttributeAndTextBuilder("span", "class", "label", "Fractions");
 	}
 	
-	public String getChallengeProblem() {
+	public static String getChallengeProblem() {
 		return xpathAttributeAndTextBuilder("span", "class", "headingtext", "Challenge Problems");
 	}
 	
-	public String getWhatIsAFraction() {
+	public static String getWhatIsAFraction() {
 		return xpathAttributeAndTextBuilder("span", "class", "label", "What is a Fraction?");
 	}
 	
-	public String getBackArrow(){
+	public static String getBackArrow(){
 		return xpathAttributeBuilder("button", "id", "button-1032-btnEl");
 	}
 	
-	public String getForwardArrow(){
+	public static String getForwardArrow(){
 		return xpathAttributeBuilder("button", "id", "button-1033-btnEl");
 	}
 	
-	public String getRelatedItem(){
-		return xpathAttributeAndTextBuilder("a", "class", "related", this.relatedItem);
+	public static String getRelatedItem(final String relatedItem){
+		return xpathAttributeAndTextBuilder("a", "class", "related", relatedItem);
 	}
 	
-	public String getDivisionPage(){
-		return xpathAttributeAndTextBuilder("span", "class", "label", this.relatedItem);
+	public static String getDivisionPage(final String relatedItem) {
+		return xpathAttributeAndTextBuilder("span", "class", "label", relatedItem);
 	}
-	
 }

@@ -1,34 +1,32 @@
 package com.nti.selenium;
 
-import java.lang.StringBuilder;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.FileInputStream;
-import org.openqa.selenium.NoSuchElementException;
-import java.util.Properties;
 import java.net.URL;
+import java.util.List;
+import java.util.Properties;
+
+import org.apache.commons.io.IOUtils;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
-
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverBackedSelenium;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
-import java.util.List;
 import com.thoughtworks.selenium.Selenium;
-
-import org.apache.commons.io.IOUtils;
 
 public class Base {
 
-	protected static final int timeout = 10;
+	protected static final int DEFAULT_TIMEOUT = 10;
 	
 	protected static String url;
 	protected static String books;
@@ -42,7 +40,6 @@ public class Base {
 	protected Selenium selenium;
 	protected boolean isDefault = true;
 	protected String xpathBuilder = null;
-	protected XpathUtils xpath;
 	
 	@BeforeClass
 	public static void oneTimeSetUp() {
@@ -95,7 +92,6 @@ public class Base {
 		}
 		selenium = new WebDriverBackedSelenium(driver, url);
 		selenium.open(url);
-		this.xpath = new XpathUtils();
 	}
 	
 	@After
@@ -123,11 +119,11 @@ public class Base {
 		}
 	}
 	
-	public WebElement findElement(final String xpath) throws NoSuchElementException{
+	public WebElement findElement(final String xpath) throws NoSuchElementException {
 		return this.driver.findElement(By.xpath(xpath));
 	}
 	
-	public List<WebElement> findElements(final String xpath) throws NoSuchElementException{
+	public List<WebElement> findElements(final String xpath) throws NoSuchElementException {
 		return this.driver.findElements(By.xpath(xpath));
 	}
 	
@@ -135,7 +131,7 @@ public class Base {
 		try{
 			this.findElement(xpath);
 			return true;
-		} catch(NoSuchElementException e) {
+		} catch (final NoSuchElementException e) {
 			return false;
 		}
 	}
@@ -148,15 +144,23 @@ public class Base {
 		}
 	}
 	
+	public boolean waitForLoading() {
+		return waitForLoading(DEFAULT_TIMEOUT);
+	}
+	
 	public boolean waitForLoading(final int timeout) {
 		int timer = 0;
-		while(this.elementExists(this.xpath.getLoading())  && timer <= timeout)
+		while(this.elementExists(XpathUtils.getBasePageLoading())  && timer <= timeout)
 		{
 			timer++;
 			this.wait_(1);
 		}
 		this.wait_(1);
 		return timer < timeout;
+	}
+	
+	public boolean waitForElement(final String xpath) {
+		return this.waitForElement(xpath, DEFAULT_TIMEOUT);
 	}
 	
 	public boolean waitForElement(final String xpath, final int timeout) {

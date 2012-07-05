@@ -1,12 +1,10 @@
 package com.nti.selenium.login;
 
-import org.junit.Test;
-
-import com.nti.selenium.XpathUtils;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+
+import org.junit.Test;
 
 public class TestLogin extends Login {
 
@@ -31,7 +29,7 @@ public class TestLogin extends Login {
 	public void testIncorrectPasswordLogin(){
 		this.login(credentials[0].getUserName(), "incorrect_password");
 		assertEquals(selenium.getTitle(), "NextThought Login");
-		assertTrue(selenium.isElementPresent(this.xpath.getLoginProblemMessage()));
+		assertTrue(selenium.isElementPresent(XpathUtilsLogin.getLoginProblemMessage()));
 	}
 	
 	@Test

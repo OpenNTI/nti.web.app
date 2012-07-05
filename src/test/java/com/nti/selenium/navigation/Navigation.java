@@ -3,18 +3,19 @@ package com.nti.selenium.navigation;
 import org.junit.Before;
 import org.openqa.selenium.WebElement;
 
-import com.nti.selenium.XpathUtils;
 import com.nti.selenium.login.Login;
 
 public class Navigation extends Login {
 	
-	protected XpathUtilsNav xpath;
+	private String book = null;
+	private String chapter = null;
+	private String section = null;
+	private String relatedItem = null;
 	
 	@Before
 	public void setUp() throws Exception {
 		super.setUp();
 		this.login();
-		this.xpath = new XpathUtilsNav();
 	}
 	
 	public void openLevel(final String xpath) {
@@ -24,56 +25,55 @@ public class Navigation extends Login {
 	
 	public void openLevelClick(final String xpath){
 		this.switchToDefault();
-		this.waitForElement(xpath, timeout);
+		this.waitForElement(xpath);
 		this.findElement(xpath).click();
 	}
 	
 	public void openLibrary() {
 		this.switchToDefault();
-		this.waitForLoading(timeout);
-		this.openLevel(this.xpath.getLibrary());
+		this.waitForLoading();
+		this.openLevel(XpathUtilsNav.getLibrary());
 	}
 	
 	public void openBook() {
 		this.switchToDefault();
-		this.waitForElement(this.xpath.getBook(), timeout);
-		this.openLevel(this.xpath.getBook());
+		this.waitForElement(this.getXPathBook());
+		this.openLevel(this.getXPathBook());
 	}
 	
 	public void openChapter() {
 		this.switchToDefault();
-		this.openLevelClick(this.xpath.getChapter());
+		this.openLevelClick(this.getXPathChapter());
 	}
 	
 	public void openSection() {
 		this.switchToDefault();
-		this.openLevelClick(this.xpath.getSection());
+		this.openLevelClick(this.getXPathSection());
 		this.openBook();
-		this.waitForLoading(timeout);
+		this.waitForLoading();
 	}
 	
 	public void clickArrowBackButton() {
 		this.switchToDefault();
-		this.findElement(this.xpath.getBackArrow()).click();
-		this.waitForLoading(timeout);
+		this.findElement(XpathUtilsNav.getBackArrow()).click();
+		this.waitForLoading();
 	}
 	
 	public void clickArrowForwardButton() {
 		this.switchToDefault();
-		this.findElement(this.xpath.getForwardArrow()).click();
-		this.waitForLoading(timeout);
+		this.findElement(XpathUtilsNav.getForwardArrow()).click();
+		this.waitForLoading();
 	}
 	
-	public void clickRelatedItem(String item){
-		this.xpath.setRelatedItem("Division");
+	public void clickRelatedItem(final String item){
+		this.setRelatedItem(item);
 		this.switchToIframe();
-		this.findElement(this.xpath.getRelatedItem()).click();
-		this.waitForLoading(timeout);
+		this.findElement(this.getXPathRelatedItem()).click();
+		this.waitForLoading();
 	}
 	
 	public void navigateTo(final String book, final String chapter, final String section) {
-		
-		this.xpath.setLocation(book, chapter, section);
+		this.setLocation(book, chapter, section);
 		this.switchToDefault();
 		
 		if (book == null) {
@@ -97,13 +97,38 @@ public class Navigation extends Login {
 		}
 	}
 	
-	public void setLocation(final String book, final String chapter, final String section) {
-		this.xpath.setLocation(book, chapter, section);
-	}
-	
 	public WebElement getNavTestText(final String xpath) {
 		this.switchToIframe();
 		return this.findElement(xpath);
 	}
 	
+	public void setRelatedItem(final String relatedItem) {
+		this.relatedItem = relatedItem;
+	}
+	
+	public void setLocation(final String book, final String chapter, final String section) {
+		this.book = book;
+		this.chapter = chapter;
+		this.section = section;
+	}
+	
+	public String getXPathBook() {
+		return XpathUtilsNav.getBook(this.book);
+	}
+	
+	public String getXPathChapter() {
+		return XpathUtilsNav.getBook(this.chapter);
+	}
+	
+	public String getXPathSection() {
+		return XpathUtilsNav.getBook(this.section);
+	}
+	
+	public String getXPathRelatedItem() {
+		return XpathUtilsNav.getRelatedItem(this.relatedItem);
+	}
+	
+	public String getXPathDivisionPage() {
+		return XpathUtilsNav.getDivisionPage(this.relatedItem);
+	}
 }
