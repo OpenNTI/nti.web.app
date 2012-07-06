@@ -29,7 +29,7 @@ Ext.define('NextThought.view.annotations.Redaction', {
 		if (this.actionSpan){return;}
 
 		//Add the redaction action span so the user has something to click on
-		this.actionSpan = this.createActionHandle(this.rendered[0]);
+		this.actionSpan = this.createActionHandle(this.rendered[0], this.record.get('replacementText'));
 
 		//add the redaction class and the click handlers for redacted spans:
 		this.compElements.addCls(this.redactionCls);
@@ -39,13 +39,40 @@ Ext.define('NextThought.view.annotations.Redaction', {
 	},
 
 
-	createActionHandle: function(before){
-		var el = Ext.get(this.createNonAnchorableSpan());
-		el.addCls('redactionAction');
-		el.insertBefore(before);
-		el.on('click', this.toggleRedaction, this);
-		el.update('&nbsp;');
-		return el;
+	createActionHandle: function(before, text){
+		var masterSpan = Ext.get(this.createNonAnchorableSpan()),
+			startDelimiter = Ext.get(this.createNonAnchorableSpan()),
+			endDelimiter = Ext.get(this.createNonAnchorableSpan()),
+			replacementTextSpan = Ext.get(this.doc.createElement('span')),
+			replacementTextNode = this.doc.createTextNode(text),
+			openingEllipsesSpan = Ext.get(this.doc.createElement('span')),
+			openingEllipsesTextNode = this.doc.createTextNode('...'),
+			endingEllipsesSpan = Ext.get(this.doc.createElement('span')),
+			endingEllipsesTextNode = this.doc.createTextNode('...');
+
+		//add texts:
+		startDelimiter.update('&nbsp');
+		endDelimiter.update('&nbsp');
+		openingEllipsesSpan.dom.appendChild(openingEllipsesTextNode);
+		endingEllipsesSpan.dom.appendChild(endingEllipsesTextNode);
+		replacementTextSpan.dom.appendChild(replacementTextNode);
+
+		//create the tree:
+		masterSpan.insertFirst(openingEllipsesSpan);
+		masterSpan.insertFirst(endDelimiter);
+		masterSpan.insertFirst(replacementTextSpan);
+		masterSpan.insertFirst(startDelimiter);
+		masterSpan.insertFirst(endingEllipsesSpan);
+
+		masterSpan.addCls('redactionAction');
+		openingEllipsesSpan.addCls('redactionEllipses');
+		endingEllipsesSpan.addCls('redactionEllipses');
+		endDelimiter.addCls('redactionDelimiter');
+		startDelimiter.addCls('redactionDelimiter');
+		replacementTextSpan.addCls('redactionReplacementText');
+		masterSpan.insertBefore(before);
+		masterSpan.on('click', this.toggleRedaction, this);
+		return masterSpan;
 	},
 
 

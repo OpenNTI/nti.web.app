@@ -840,8 +840,9 @@ Ext.define('NextThought.util.Anchors', {
 		//begin the cleanup:
 		extElement = new Ext.dom.Element(docFrag);
 
-		//remove any counter spans and their children:
+		//remove any action or counter spans and their children:
 		(new Ext.CompositeElement(extElement.query('span.application-highlight.counter'))).remove();
+		(new Ext.CompositeElement(extElement.query('span.redactionAction'))).remove();
 
 		//loop over elements we need to remove and, well, remove them:
 		Ext.each(extElement.query('[data-non-anchorable]'), function(n){

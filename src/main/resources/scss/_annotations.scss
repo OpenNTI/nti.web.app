@@ -153,9 +153,7 @@
     Commented portions are for redaction line across width of text
     */
     .redactionAction {
-        background-color: red;
         margin: 0 2px 0 2px;
-        width: 16px;
         overflow: hidden;
         display: none;
 
@@ -164,6 +162,17 @@
         width: 100%;
         margin: 1em 0;
         */
+
+        span.redactionReplacementText {
+            color: #a1a1a1;
+        }
+
+        span.redactionDelimiter {
+            display: inline-block;
+            height: 33px;
+            width: 9px;
+            background: url(../images/redactions/inline-redaction-delimiter.png) 0 0 no-repeat;
+        }
 
         &.redacted {
            /*
