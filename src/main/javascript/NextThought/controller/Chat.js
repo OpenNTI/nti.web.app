@@ -166,7 +166,7 @@ Ext.define('NextThought.controller.Chat', {
 				}
 				else if (!ClassroomUtils.isClassroomId(rInfo.getId())) {
 					if( Ext.Array.difference(rInfo.get('Occupants'),allUsers).length === 0
-					||	Ext.Array.difference(allUsers,rInfo.get('Occupants')).length === 0 ){
+					&&	Ext.Array.difference(allUsers,rInfo.get('Occupants')).length === 0 ){
 						return rInfo;
 					}
 				}
