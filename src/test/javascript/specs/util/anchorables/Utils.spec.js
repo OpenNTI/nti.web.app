@@ -1119,6 +1119,29 @@ describe("Anchor Utils", function() {
 			expect(Anchors.findTaggedNode(textWithMultTags, 'multi-tag2')).toBe(textWithMultTags);
 
 		});
+
+		it ('Purification Offset With Singular Text Node', function(){
+			var p = document.createElement('p'),
+				textNode = document.createTextNode('This is a single text node that exists inside a paragraph!  Can you believe that?'),
+				pureRange, range;
+
+			//add some stuff to span, clone it, add some more, see if it worked
+			p.appendChild(textNode);
+			p.setAttribute('Id', 'someRandomId');
+			testBody.appendChild(p);
+
+			//create the initial range:
+			range = document.createRange();
+			range.setStart(textNode, 5);
+			range.setEnd(textNode, 55);
+
+			//purify the range, the pureRange should not be associated with the old range, or it's contents:
+			pureRange = Anchors.purifyRange(range, document);
+
+			//do some checking of attrs to verify they are clones and not the same refs:
+			expect(range.toString()).toEqual(pureRange.toString()); //expect the range to encompass the same text
+			expect(range.commonAncestorContainer.parentNode).toBe(pureRange.ownerNode);
+		});
 	});
 
 	describe('Integration Tests', function(){

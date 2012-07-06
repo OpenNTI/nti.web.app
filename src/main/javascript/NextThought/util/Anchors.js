@@ -868,6 +868,8 @@ Ext.define('NextThought.util.Anchors', {
 		var newStartOffset = Anchors.cleanNode(startNode, 'start');
 		var newEndOffset = Anchors.cleanNode(endNode, 'end');
 
+		//some adjustment if the text nodes are the same then the start offset will be wrong
+		if(startNode === endNode){newStartOffset -= ('['+Anchors.PURIFICATION_TAG+':end]').length;}
 
 		//build the new range divorced from the dom and return:
 		resultRange = doc.createRange();

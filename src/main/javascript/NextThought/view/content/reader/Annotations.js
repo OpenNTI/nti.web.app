@@ -149,6 +149,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 		menu.add({
 			text: 'Redact',
 			handler: function(){
+				delete w.range; //so that it does not detach it on cleanup
 				var r = NextThought.model.Redaction.createFromHighlight(record);
 				me.createAnnotationWidget('redaction',r, range);
 				r.save();

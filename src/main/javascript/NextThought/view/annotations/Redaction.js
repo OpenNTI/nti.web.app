@@ -50,6 +50,7 @@ Ext.define('NextThought.view.annotations.Redaction', {
 
 
 	cleanup: function(){
+		if (this.actionSpan){this.actionSpan.remove();}
 		this.callParent(arguments);
 	},
 
