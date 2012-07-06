@@ -123,6 +123,8 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 		doc.firstChild.setAttribute('class','x-panel-reset');
 		doc.body.setAttribute('class','x-panel-body');
 
+//		doc.body.setAttribute('contenteditable','true');
+
 		meta = doc.createElement('meta');
 		//<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		meta.setAttribute('http-equiv','X-UA-Compatible');
