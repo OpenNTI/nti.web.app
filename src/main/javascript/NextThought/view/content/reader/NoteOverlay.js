@@ -48,41 +48,54 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 					height: me.getHeight()
 				},
 				cn: [{
-						cls: 'note-here-control-box',
+					cls: 'note-here-control-box',
+					cn: [{
+						cls: 'shadow-text',
+						html: 'Write a note...'
+					},{
+						cls: 'entry',
 						cn: [{
+							cls: 'clear', html: '&nbsp;'
+						},{
+							cls: 'save', html: '&nbsp;'
+						},{
 							tag: 'textarea',
 							cls: 'note-input'
-							},{
-							cls: 'bottom-border',
-							html: '&nbsp;'
 						}]
+					},{
+						cls: 'bottom-border',
+						html: '&nbsp;'
+					}]
 				}]
 			};
 
-			container = Ext.DomHelper.insertAfter(me.body.first(),container);
-			box = Ext.get(data.box = container.firstChild);
-			txt = box.down('textarea');
+			container = Ext.DomHelper.insertAfter(me.body.first(),container,true);
+			data.box = box = container.down('.note-here-control-box');
+			data.textarea = txt = box.down('textarea');
+			data.lineEntry = box.down('.entry');
+
 			box.visibilityCls = data.visibilityCls;
-			box.setVisibilityMode(Ext.Element.ASCLASS);
-			txt.setVisibilityMode(Ext.Element.VISIBILITY);
+//			box.setVisibilityMode(Ext.Element.ASCLASS);
+			txt.setVisibilityMode(Ext.Element.DISPLAY);
+			box.down('.shadow-text').setVisibilityMode(Ext.Element.DISPLAY);
+
 			box.hide();
 			txt.hide();
 
-			data.textarea = txt.dom;
+
 			data.defaultHeight = Ext.util.TextMetrics.measure(box,'TEST',1000).height+5;
 			txt.setHeight(data.defaultHeight);
 
 			me.on({
-				destroy: function(){ Ext.fly(container).remove(); },
-				'sync-height': function(h){ Ext.get(container).setHeight(h); },
+				destroy: function(){ container.remove(); },
+				'sync-height': function(h){ container.setHeight(h); },
 				'content-updated': function(){
 					var e = Ext.get(me.noteOverlayHelpers.root);
 					width = o.gutter + e.getMargin('l') + e.getPadding('l');
-					Ext.get(container).setWidth(width);
-					box.setWidth(width);
+					container.setWidth(width);
+					box.setWidth(width-box.getMargin('lr'));
 				}
 			});
-
 
 			me.mon(txt,{
 				scope: me,
@@ -92,7 +105,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 				keyup: me.noteOverlayEditorKeyUp
 			});
 
-			me.mon(Ext.get(container),{
+			me.mon(container,{
 				scope: me,
 				mousemove: me.noteOverlayMouseOver,
 				mouseover: me.noteOverlayMouseOver,
@@ -119,7 +132,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 			if(!e || e===this.root){return null;}
 			var d = doc.defaultView.getComputedStyle(e).getPropertyValue('display');
 			if(this.blockElementRe.test(d)){
-				return this.findBlockParent(e.parentNode);
+				return this.findBlockParent(e.parentNode,doc);
 			}
 			return e;
 		},
@@ -153,11 +166,12 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 				c++;
 				r = s.getRangeAt(0);
 				if(is(r.getClientRects()[0],rect)){
-					return r;
+					break;
 				}
 				if(!Ext.fly(node).contains(r.startContainer)){
 					s.removeAllRanges();
 					s.selectAllChildren(node);
+					r =  s.getRangeAt(0);
 					break;
 				}
 				r = null;
@@ -166,7 +180,8 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 				s.modify('extend', 'forward', 'line');
 			}
 
-			return s.getRangeAt(0);
+			s.removeAllRanges();
+			return r;
 		},
 
 
@@ -215,7 +230,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 	},
 
 
-	noteOverlayMouseOver: function(evt,t){
+	noteOverlayMouseOver: function(evt){
 		evt.stopEvent();
 
 		var o = this.noteOverlayHelpers,
@@ -233,7 +248,9 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 			lineInfo = o.findLine(y,this.getDocumentElement());
 			if(lineInfo && (lineInfo !== o.lastLine || !o.lastLine)){
 				o.lastLine = lineInfo;
-				box.setY( lineInfo.rect.bottom + offsets.top - box.getHeight() ).hide().show();
+				box.setY( lineInfo.rect.bottom + offsets.top - box.getHeight())
+					.hide()
+					.show();
 			}
 		}
 		catch(e){
@@ -250,22 +267,22 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		clearTimeout(o.mouseLeaveTimeout);
 		o.mouseLeaveTimeout = setTimeout(function(){
 			delete o.lastLine;
-			Ext.get(o.box).hide().repaint();
+			o.box.hide();
 		},500);
 	},
 
 
 	noteOverlayActivateEditor: function(evt){
 		evt.stopEvent();
+		this.noteOverlayMouseOver(evt);
 		var o = this.noteOverlayHelpers;
 		if(o.suspendMoveEvents){
 			return;
 		}
 
-
+		o.box.down('.shadow-text').hide();
 		o.suspendMoveEvents = true;
-		o.textarea.value = "";
-		Ext.get(o.textarea).setHeight(o.defaultHeight).show().focus();
+		o.textarea.setHeight(o.defaultHeight).show().focus().dom.value = "";
 		return false;//stop the click in IE
 	},
 
@@ -273,16 +290,14 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 	noteOverlayDeactivateEditor: function(){
 		var o = this.noteOverlayHelpers;
 		delete o.suspendMoveEvents;
-		o.textarea.value = "";
-		Ext.get(o.textarea).hide();
+		o.textarea.hide().dom.value = "";
+		o.box.down('.shadow-text').show();
 		this.noteOverlayMouseOut();
 	},
 
 
 	noteOverlayEditorBlur: function(){
-		//check value, save?
-
-	//	this.noteOverlayDeactivateEditor();
+		//this.noteOverlayDeactivateEditor();
 	},
 
 
@@ -306,13 +321,11 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 	//handle resizing the editor
 	noteOverlayEditorKeyUp: function(){
 		var o = this.noteOverlayHelpers,
-			t = Ext.get(o.textarea),
-			b = Ext.get(o.box),
+			t = o.textarea,
 			h = t.dom.scrollHeight;
 
 		if(h > t.getHeight()) {
-			t.setHeight(h+5);
-			b.repaint();
+			//transition to rich editor
 		}
 	}
 });
