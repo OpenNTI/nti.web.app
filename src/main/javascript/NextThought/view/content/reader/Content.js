@@ -93,7 +93,7 @@ Ext.define('NextThought.view.content.reader.Content',{
 
 		QuizUtils.setupQuiz(me.getDocumentElement(), me);
 
-		containerId = me.getContainerId();
+		containerId = Ext.util.Format.htmlDecode(me.getContainerId()); //handle apostrophe
 		me.loadContentAnnotations(containerId, onFinishLoading);
 	},
 
