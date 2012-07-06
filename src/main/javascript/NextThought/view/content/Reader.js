@@ -614,7 +614,7 @@ Ext.define('NextThought.view.content.Reader', {
 
 
 	getContainerId: function() {
-		return this.meta.NTIID;
+		return Ext.util.Format.htmlDecode(this.meta.NTIID);
 	},
 
 
