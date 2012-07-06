@@ -36,10 +36,10 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		 */
 		insertNoteOverlay: function(){
 			var me = this, //note: "this" is not "noteOverlayHelpers" its the 'NoteOverlay'ed class. (where this mixin was included)
-				data = me.noteOverlayHelpers,
-				o = me.getAnnotationOffsets(),
-				width = o.gutter + 'px',
-				box, txt;
+					data = me.noteOverlayHelpers,
+					o = me.getAnnotationOffsets(),
+					width = o.gutter + 'px',
+					box, txt;
 
 			var container = {
 				cls:'note-gutter',
@@ -50,9 +50,6 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 				cn: [{
 					cls: 'note-here-control-box',
 					cn: [{
-						cls: 'shadow-text',
-						html: 'Write a note...'
-					},{
 						cls: 'entry',
 						cn: [{
 							cls: 'clear', html: '&nbsp;'
@@ -61,10 +58,14 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 						},{
 							tag: 'textarea',
 							cls: 'note-input'
+						},{
+							cls: 'shadow-text',html: 'Write a note...'
 						}]
 					},{
 						cls: 'bottom-border',
 						html: '&nbsp;'
+					},{
+						cls: 'bottom-border'
 					}]
 				}]
 			};
@@ -74,17 +75,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 			data.textarea = txt = box.down('textarea');
 			data.lineEntry = box.down('.entry');
 
-			box.visibilityCls = data.visibilityCls;
-//			box.setVisibilityMode(Ext.Element.ASCLASS);
-			txt.setVisibilityMode(Ext.Element.DISPLAY);
-			box.down('.shadow-text').setVisibilityMode(Ext.Element.DISPLAY);
-
 			box.hide();
-			txt.hide();
-
-
-			data.defaultHeight = Ext.util.TextMetrics.measure(box,'TEST',1000).height+5;
-			txt.setHeight(data.defaultHeight);
 
 			me.on({
 				destroy: function(){ container.remove(); },
@@ -118,7 +109,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		/** @private */
 		firstElementOnLine: function (y,doc){
 			var right = this.width,
-				el = null;
+					el = null;
 			while(right > this.left && (!el || el === this.root || !Ext.fly(this.root).contains(el))){
 				el = doc.elementFromPoint(right,y);
 				right -= 2;
@@ -154,7 +145,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 			function is(rectA,rectB){
 				return rectA.top === rectB.top
-					&& rectA.height === rectB.height;
+						&& rectA.height === rectB.height;
 			}
 
 			s.removeAllRanges();
@@ -196,8 +187,8 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		resolveClientRects: function(node){
 			if(!node){return null;}
 			var doc = node.ownerDocument,
-				range = doc.createRange(),
-				rects;
+					range = doc.createRange(),
+					rects;
 
 			range.selectNode(node);
 			rects = Array.prototype.slice.call(range.getClientRects());
@@ -234,10 +225,10 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		evt.stopEvent();
 
 		var o = this.noteOverlayHelpers,
-			offsets = this.getAnnotationOffsets(),
-			y = evt.getY() - offsets.top,
-			box = Ext.get(o.box),
-			lineInfo;
+				offsets = this.getAnnotationOffsets(),
+				y = evt.getY() - offsets.top,
+				box = Ext.get(o.box),
+				lineInfo;
 
 		if(o.suspendMoveEvents){
 			return;
@@ -249,8 +240,8 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 			if(lineInfo && (lineInfo !== o.lastLine || !o.lastLine)){
 				o.lastLine = lineInfo;
 				box.setY( lineInfo.rect.bottom + offsets.top - box.getHeight())
-					.hide()
-					.show();
+						.hide()
+						.show();
 			}
 		}
 		catch(e){
@@ -280,9 +271,10 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 			return;
 		}
 
-		o.box.down('.shadow-text').hide();
+
 		o.suspendMoveEvents = true;
-		o.textarea.setHeight(o.defaultHeight).show().focus().dom.value = "";
+		o.lineEntry.addCls('active');
+		o.textarea.focus().dom.value = "";
 		return false;//stop the click in IE
 	},
 
@@ -290,8 +282,8 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 	noteOverlayDeactivateEditor: function(){
 		var o = this.noteOverlayHelpers;
 		delete o.suspendMoveEvents;
-		o.textarea.hide().dom.value = "";
-		o.box.down('.shadow-text').show();
+		o.textarea.dom.value = "";
+		o.lineEntry.removeCls('active');
 		this.noteOverlayMouseOut();
 	},
 
@@ -321,8 +313,8 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 	//handle resizing the editor
 	noteOverlayEditorKeyUp: function(){
 		var o = this.noteOverlayHelpers,
-			t = o.textarea,
-			h = t.dom.scrollHeight;
+				t = o.textarea,
+				h = t.dom.scrollHeight;
 
 		if(h > t.getHeight()) {
 			//transition to rich editor
