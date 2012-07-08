@@ -65,7 +65,33 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 						cls: 'bottom-border',
 						html: '&nbsp;'
 					},{
-						cls: 'bottom-border'
+						cls: 'editor',
+						cn:[{
+							cls: 'main',
+							cn:[{
+								cls: 'toolbar',
+								cn: [{
+									cls: 'left',
+									cn: [{cls: 'action bold'},{cls:'action italic'},{cls:'action underline'}]
+								},{
+									cls: 'right',
+									cn: [{cls: 'action share', html: 'Only Me'}]
+								}]
+							},{
+								cls: 'content',
+								contenteditable:true,
+								html: '&nbsp;'
+							}]
+						},{
+							cls: 'footer',
+							cn: [{
+								cls: 'left',
+								cn: [{cls: 'action whiteboard'}]
+							},{
+								cls: 'right',
+								cn: [{cls:'action save', html: 'Save'},{cls:'action cancel', html: 'Cancel'}]
+							}]
+						}]
 					}]
 				}]
 			};

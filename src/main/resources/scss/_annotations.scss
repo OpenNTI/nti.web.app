@@ -38,6 +38,119 @@
 			right: 33px;
 		}
 
+		.editor {
+			&.active {
+				display:  block;
+			}
+
+			display: none;
+
+			position: absolute;
+			border: 1px solid #dcdcdc;
+			background: #ffffff;
+			min-height: 50px;
+			top: -30px;
+			left: 0px; right: -10px;
+			min-width: 320px;
+			min-height: 210px;
+
+			.action {
+				width: 24px;
+				height: 24px;
+				cursor: pointer;
+				display: inline-block;
+				color: #767676;
+			}
+
+			.main {
+				padding: 0 13px;
+				.toolbar {
+					position: relative;
+					overflow: hidden;
+					border-bottom: 1px solid #dcdcdc;
+					.left .action {float: left;}
+					.right .action {float: right;}
+
+					.action {
+						width: 20px;
+						height: 32px;
+						line-height: 32px;
+
+						&.bold {
+							background: url(../images/tools/bold-icon.png) 4px 11px no-repeat;
+							margin-right: 5px;
+						}
+						&.italic {
+							background: url(../images/tools/italic-icon.png) 6px 11px no-repeat;
+							margin-right: 6px;
+						}
+						&.underline {
+							background: url(../images/tools/underline-icon.png) 4px 11px no-repeat;
+						}
+						&.share {
+							//width: 95px;
+							width: auto;
+							white-space: nowrap;
+							background:{
+								image: url(../images/tools/share.png), url(../images/tools/share-drop-arrow.png);
+								position: 4px 8px, right 15px;
+								repeat: no-repeat;
+							};
+							text-align: center;
+							padding: 0 12px 0 25px;
+							margin: 0 5px 0 0;
+						}
+					}
+
+				}
+				.content {
+					overflow: auto;
+					margin-bottom: 46px;
+					max-height: 50%;
+				}
+			}
+			.footer {
+				position: absolute;
+				bottom: 0;
+				left: 0; right: 0;
+				height: 45px;
+				white-space: nowrap;
+
+				border-top: 1px solid #dcdcdc;
+				.left .action {float: left;}
+				.right .action {float: right;}
+
+				.action {
+					height: 45px;
+					width: 45px;
+					line-height: 45px;
+					font-size: 14px;
+					text-align: center;
+					color: #757474;
+					margin: -1px;
+
+					&.whiteboard {
+						background: url(../images/whiteboard/icon.png) 12px 12px no-repeat;
+					}
+
+					&.cancel {
+						width: 85px;
+					}
+
+					&.save {
+						width: 95px;
+						line-height: 44px;
+						font-weight: bold;
+						font-style: italic;
+						color: #ffffff;
+						background: #3fb3f6 url(../images/notes/comment-icon-white.png) 15px 8px no-repeat;
+						border: 1px solid #39a1dd;
+						padding: 0 0 0 24px;
+					}
+				}
+			}
+		}
+
 		.entry {
 			&.active {
 				textarea, .clear, .save {
