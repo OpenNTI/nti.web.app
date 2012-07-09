@@ -426,10 +426,18 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 	noteOverlayEditorSave: function(e){
 		e.stopEvent();
-		var o = this.noteOverlayHelpers;
+
+		function callback(success, record){
+			if(success){
+				me.noteOverlayDeactivateEditor();
+			}
+		}
+
+		var me = this;
+		var o = me.noteOverlayHelpers;
 		var note = o.textarea.dom.value || o.editor.down('.content').getHTML();
 		console.log('firing event: "save-new-note" with ', note);
-		this.fireEvent('save-new-note', note, o.lastLine.range);
+		me.fireEvent('save-new-note', note, o.lastLine.range, callback);
 		return false;
 	},
 
