@@ -117,11 +117,11 @@ public class Navigation extends Login {
 	}
 	
 	public String getXPathChapter() {
-		return XpathUtilsNav.getBook(this.chapter);
+		return XpathUtilsNav.getChapter(this.chapter);
 	}
 	
 	public String getXPathSection() {
-		return XpathUtilsNav.getBook(this.section);
+		return XpathUtilsNav.getSection(this.section);
 	}
 	
 	public String getXPathRelatedItem() {
