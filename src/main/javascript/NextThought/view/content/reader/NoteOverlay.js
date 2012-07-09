@@ -485,7 +485,9 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 		var o = this.noteOverlayHelpers;
 		delete o.lastRange;
-		o.editor.repaint();
+		if(o.richEditorActive){
+			o.editor.repaint();
+		}
 	},
 
 
