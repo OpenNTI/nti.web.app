@@ -1,7 +1,16 @@
 Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
+	openWhiteboards: {},
+
 	constructor: function(){
 		var data = this.noteOverlayHelpers;
+
+		data.wbThumbnailTpm = Ext.DomHelper.createTemplate(
+			'<img src="{0}" id="{1}" class="wb-thumbnail"/>'
+		);
+		data.wbThumbnailTpm.compile();
+
+
 		this.on({
 			scope: this,
 			'content-updated': function(){
@@ -345,10 +354,16 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 		c.innerHTML = Ext.String.htmlEncode( t.value );
 
-		r = document.createRange();
-		r.setStart(c.firstChild, c.innerHTML.length);
-		r.collapse(true);
-		s.addRange(r);
+		try {
+			r = document.createRange();
+			r.setStart(c.firstChild, c.innerHTML.length);
+			r.collapse(true);
+			s.addRange(r);
+		}
+		catch (e){
+			console.warn('focus issue.');
+
+		}
 		c.focus();
 
 		t.value = '';
@@ -452,10 +467,19 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 		var me = this;
 		var o = me.noteOverlayHelpers;
-		var note = o.textarea.dom.value || o.editor.down('.content').getHTML();
+		var note = o.textarea.dom.value || this.getNoteBody(o.editor.down('.content').getHTML());
 		console.log('firing event: "save-new-note" with ', note);
 		me.fireEvent('save-new-note', note, o.lastLine.range, callback);
 		return false;
+	},
+
+
+	getNoteBody: function(s) {
+		var r = [];
+
+		//var a = s.split(/<img.*?id="(.+?)">/gi);
+		//debugger;
+		return s;
 	},
 
 
@@ -505,6 +529,71 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 
 	noteOverlayAddWhiteboard: function(){
-		console.log('add whiteboard')
+		//pop open a whiteboard:
+		var wbWin = Ext.widget({
+				xtype: 'wb-window',
+				height: '50%',
+				width: '50%'
+			}),
+			guid = guidGenerator(),
+			o = this.noteOverlayHelpers,
+			content = o.editor.down('.content');
+
+		//remember the whiteboard window:
+		wbWin.guid = guid;
+		this.openWhiteboards[guid] = wbWin;
+
+		//hook into the window's save and cancel operations:
+		this.mon(wbWin, {
+			scope: this,
+			save: function(win, wb, e){
+				this.insertWhiteboardThumbnail(content, guid, wb);
+				wbWin.hide();
+			},
+			cancel: function(win, wb, e){
+				console.log('cancel', arguments);
+				this.cleanOpenWindows(win.guid);
+				wbWin.close();
+			}
+		});
+
+		wbWin.show();
+	},
+
+
+	insertWhiteboardThumbnail: function(content, guid, wb){
+		var me = this,
+			o = me.noteOverlayHelpers;
+
+		wb.getThumbnail(function(data){
+			var existingImg = content.query('[id='+guid+']'),
+				el;
+
+			if (existingImg.length === 1) {
+				el = existingImg[0];
+				el.src = data;
+			}
+			else {
+				el = Ext.fly(o.wbThumbnailTpm.append(content, [data, guid]));
+				//listen on clicks and do stuff:
+				el.on('click', function(evt, img, opt){
+					var w = me.openWhiteboards[guid];
+					if (w) {w.show();}
+					else {Ext.Error.raise('No whiteboard for' + guid);}
+				});
+			}
+			o.editor.repaint();
+		});
+	},
+
+
+	cleanOpenWindows: function(guids) {
+		var me = this;
+
+		if (!Ext.isArray(guids)){guids = [guids];}
+
+		Ext.each(guids, function(g){
+			delete me.openWhiteboards[g];
+		});
 	}
 });

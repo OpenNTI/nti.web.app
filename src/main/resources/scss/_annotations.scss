@@ -128,6 +128,14 @@
 					overflow: auto;
 					margin-bottom: 46px;
 					max-height: 500px;
+
+                    img.wb-thumbnail {
+                        height: auto;
+                        width: 95%;
+                        display: block;
+                        clear: both;
+                        overflow: hidden;
+                    }
 				}
 			}
 			.footer {
