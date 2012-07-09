@@ -42,8 +42,12 @@
 			&.active {
 				display:  block;
 			}
+			
+			&.x-repaint{
+				background: #ffffff;
+			}
 
-			//@include animate(fadeIn,0.5s);
+			@include animate(fadeIn,0.5s);
 			display: none;
 
 			background: #ffffff;
@@ -123,7 +127,7 @@
 					font: italic 14px 'Droid Serif';
 					overflow: auto;
 					margin-bottom: 46px;
-					max-height: 50%;
+					max-height: 500px;
 				}
 			}
 			.footer {
