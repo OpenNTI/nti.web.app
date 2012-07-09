@@ -108,20 +108,6 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 			(new Ext.CompositeElement( data.box.query('.save'))).on('click', me.noteOverlayEditorSave, me);
 			(new Ext.CompositeElement( data.box.query('.cancel,.clear'))).on('click', me.noteOverlayEditorCancel, me);
 
-
-			data.editor.down('.content').on({
-				scope: me,
-				focus: function(){ console.log('note content focus'); },
-				blur: function(){ console.log('note content blur'); },
-				selectstart: function(e){
-					e.stopPropagation();
-					return true;
-				},
-				keypress: me.noteOverlayEditorKeyPressed,
-				keydown: me.noteOverlayEditorKeyDown,
-				keyup: me.noteOverlayEditorKeyUp
-			});
-
 			me.on({
 				scope: me,
 				destroy: function(){ container.remove(); },
@@ -132,6 +118,21 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 					container.setWidth(width);
 					box.setWidth(width-box.getMargin('lr'));
 				}
+			});
+
+			me.mon(new Ext.CompositeElement(data.editor.query('.left .action')),{
+				scope: me,
+				click: me.noteOverlayEditorContentAction
+			});
+
+			me.mon(data.editor.down('.content'),{
+				scope: me,
+				selectstart: function(e){ e.stopPropagation(); return true; },//re-enable selection
+				focus: me.noteOverlayRichEditorFocus,
+				blur: me.noteOverlayRichEditorBlur,
+				keypress: me.noteOverlayEditorKeyPressed,
+				keydown: me.noteOverlayEditorKeyDown,
+				keyup: me.noteOverlayEditorKeyUp
 			});
 
 			me.mon(txt,{
@@ -320,26 +321,15 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 		c = o.editor.down('.content').dom;
 
-//		t.contenteditable=false;
-//		c.contenteditable=false;
-
-
 		c.innerHTML = Ext.String.htmlEncode( t.value );
 
 		r = document.createRange();
 		r.setStart(c.firstChild, c.innerHTML.length-1);
 		r.collapse(true);
 		s.addRange(r);
-
-//		setTimeout(function(){
-//			c.contenteditable=true;
-//			t.contenteditable=true;
-
-			c.focus();
-//		},10);
+		c.focus();
 
 		t.value = '';
-
 	},
 
 
@@ -368,6 +358,28 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		o.editor.down('.content').innerHTML = '';
 		window.getSelection().removeAllRanges();
 		this.noteOverlayMouseOut();
+	},
+
+
+	noteOverlayRichEditorBlur: function(){
+	},
+
+
+	noteOverlayRichEditorFocus: function(){
+
+	},
+
+
+	noteOverlayEditorContentAction: function(e){
+		e.stopEvent();
+		var t = e.getTarget('.action',undefined,true);
+
+		if(t.is('.whiteboard')){
+			this.noteOverlayAddWhiteboard();
+		}
+
+
+		return false;
 	},
 
 
@@ -409,7 +421,6 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 	},
 
 
-	//handle resizing the editor
 	noteOverlayEditorKeyUp: function(){
 		var o = this.noteOverlayHelpers,
 				t = o.textarea,
@@ -420,5 +431,10 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 			//transition to rich editor
 			this.noteOverlayAcivateRichEditor();
 		}
+	},
+
+
+	noteOverlayAddWhiteboard: function(){
+		console.log('add whiteboard')
 	}
 });
