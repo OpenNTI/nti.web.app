@@ -1,4 +1,4 @@
-package highlights;
+package src.nti.selenium.highlights;
 
 import org.junit.Test;
 

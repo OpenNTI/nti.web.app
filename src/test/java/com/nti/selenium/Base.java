@@ -50,7 +50,7 @@ public class Base {
 			final File mp = new File(main.getPath());
 			final String webAppPath = mp.getParent() + "/";
 			final String localPath = "config/main.properties";
-			
+			System.out.println(webAppPath + localPath);
 			is = new FileInputStream(webAppPath + localPath);
 			propertiesFile.load(is);
 			browser = propertiesFile.getProperty("browser");
