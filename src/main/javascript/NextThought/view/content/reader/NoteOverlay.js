@@ -383,7 +383,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		var o = this.noteOverlayHelpers;
 		var note = o.textarea.dom.value || o.editor.down('.content').getHTML();
 		console.log('firing event: "save-new-note" with ', note);
-		this.fireEvent('save-new-note', note);
+		this.fireEvent('save-new-note', note, o.lastLine.range);
 		return false;
 	},
 
