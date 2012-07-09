@@ -79,7 +79,8 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 								}]
 							},{
 								cls: 'content',
-								contenteditable:true,
+								contentEditable: true,
+								unselectable: 'off',
 								html: '&nbsp;'
 							}]
 						},{
@@ -100,10 +101,29 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 			data.box = box = container.down('.note-here-control-box');
 			data.textarea = txt = box.down('textarea');
 			data.lineEntry = box.down('.entry');
+			data.editor = box.down('.editor');
 
 			box.hide();
 
+			(new Ext.CompositeElement( data.box.query('.save'))).on('click', me.noteOverlayEditorSave, me);
+			(new Ext.CompositeElement( data.box.query('.cancel,.clear'))).on('click', me.noteOverlayEditorCancel, me);
+
+
+			data.editor.down('.content').on({
+				scope: me,
+				focus: function(){ console.log('note content focus'); },
+				blur: function(){ console.log('note content blur'); },
+				selectstart: function(e){
+					e.stopPropagation();
+					return true;
+				},
+				keypress: me.noteOverlayEditorKeyPressed,
+				keydown: me.noteOverlayEditorKeyDown,
+				keyup: me.noteOverlayEditorKeyUp
+			});
+
 			me.on({
+				scope: me,
 				destroy: function(){ container.remove(); },
 				'sync-height': function(h){ container.setHeight(h); },
 				'content-updated': function(){
@@ -289,6 +309,40 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 	},
 
 
+	noteOverlayAcivateRichEditor: function(){
+		var o = this.noteOverlayHelpers,
+			t = o.textarea.dom,
+			s = window.getSelection(),
+			c,r;
+
+		s.removeAllRanges();
+		o.editor.addCls('active');
+
+		c = o.editor.down('.content').dom;
+
+//		t.contenteditable=false;
+//		c.contenteditable=false;
+
+
+		c.innerHTML = Ext.String.htmlEncode( t.value );
+
+		r = document.createRange();
+		r.setStart(c.firstChild, c.innerHTML.length-1);
+		r.collapse(true);
+		s.addRange(r);
+
+//		setTimeout(function(){
+//			c.contenteditable=true;
+//			t.contenteditable=true;
+
+			c.focus();
+//		},10);
+
+		t.value = '';
+
+	},
+
+
 	noteOverlayActivateEditor: function(evt){
 		evt.stopEvent();
 		this.noteOverlayMouseOver(evt);
@@ -310,12 +364,31 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		delete o.suspendMoveEvents;
 		o.textarea.dom.value = "";
 		o.lineEntry.removeCls('active');
+		o.editor.removeCls('active');
+		o.editor.down('.content').innerHTML = '';
+		window.getSelection().removeAllRanges();
 		this.noteOverlayMouseOut();
 	},
 
 
+	noteOverlayEditorCancel: function(e){
+		e.stopEvent();
+		this.noteOverlayDeactivateEditor();
+		return false;
+	},
+
+
+	noteOverlayEditorSave: function(e){
+		e.stopEvent();
+		var o = this.noteOverlayHelpers;
+		var note = o.textarea.dom.value || o.editor.down('.content').getHTML();
+		console.log('firing event: "save-new-note" with ', note);
+		this.fireEvent('save-new-note', note);
+		return false;
+	},
+
+
 	noteOverlayEditorBlur: function(){
-		//this.noteOverlayDeactivateEditor();
 	},
 
 
@@ -324,12 +397,12 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		if(k === event.ESC){
 			this.noteOverlayDeactivateEditor();
 		}
-		event.stopPropagation();
 		return this.noteOverlayEditorKeyPressed(event);
 	},
 
 
 	noteOverlayEditorKeyPressed: function(event){
+		event.stopPropagation();
 		//control+enter & command+enter submit?
 
 
@@ -342,8 +415,10 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 				t = o.textarea,
 				h = t.dom.scrollHeight;
 
+		//TODO: Use a better way to detect the note has gotten 'complex' and or too long for the line-box.
 		if(h > t.getHeight()) {
 			//transition to rich editor
+			this.noteOverlayAcivateRichEditor();
 		}
 	}
 });

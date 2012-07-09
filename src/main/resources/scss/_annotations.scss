@@ -43,14 +43,18 @@
 				display:  block;
 			}
 
+			//@include animate(fadeIn,0.5s);
 			display: none;
 
-			position: absolute;
-			border: 1px solid #dcdcdc;
 			background: #ffffff;
-			min-height: 50px;
+			border: 1px solid #dcdcdc;
+			position: absolute;
+			z-index: 999;
+
 			top: -30px;
-			left: 0px; right: -10px;
+			left: -10px;
+			right: -10px;
+
 			min-width: 320px;
 			min-height: 210px;
 
@@ -88,7 +92,6 @@
 							background: url(../images/tools/underline-icon.png) 4px 11px no-repeat;
 						}
 						&.share {
-							//width: 95px;
 							width: auto;
 							white-space: nowrap;
 							background:{
@@ -103,7 +106,21 @@
 					}
 
 				}
+
+
 				.content {
+					&, * {
+						-moz-user-select: text;
+						-khtml-user-select: text;
+						-webkit-user-select: text;
+						-o-user-select: text;
+						user-select: text;
+					}
+
+					white-space: pre;
+					padding: 2px 0 0 0;
+					color: #757474;
+					font: italic 14px 'Droid Serif';
 					overflow: auto;
 					margin-bottom: 46px;
 					max-height: 50%;
