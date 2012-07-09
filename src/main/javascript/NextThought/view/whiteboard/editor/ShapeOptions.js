@@ -18,7 +18,7 @@ Ext.define('NextThought.view.whiteboard.editor.ShapeOptions',{
 		cls: 'shape-picker',
 		defaults: {
 			xtype: 'wb-tool-option',
-			toggleGroup: 'shape-selected-'+guidGenerator()
+			toggleGroup: 'shape-selected-'+guidGenerator() //TODO - do this at construction time instead of define time
 		},
 		items: [
 			{ option: 'line shape', pressed: true },
