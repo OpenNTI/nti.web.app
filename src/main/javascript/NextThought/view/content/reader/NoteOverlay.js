@@ -108,16 +108,27 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 			(new Ext.CompositeElement( data.box.query('.save'))).on('click', me.noteOverlayEditorSave, me);
 			(new Ext.CompositeElement( data.box.query('.cancel,.clear'))).on('click', me.noteOverlayEditorCancel, me);
 
+			function sizer(){
+				try {
+					var e = Ext.get(me.noteOverlayHelpers.root),
+						o = me.getAnnotationOffsets();
+					if(e){
+						width = o.gutter + e.getMargin('l') + e.getPadding('l');
+						container.setWidth(width);
+						box.setWidth(width-box.getMargin('lr'));
+					}
+				}
+				catch(er){
+					console.error(er.stack);
+				}
+			}
+
 			me.on({
 				scope: me,
 				destroy: function(){ container.remove(); },
+				resize: sizer,
 				'sync-height': function(h){ container.setHeight(h); },
-				'content-updated': function(){
-					var e = Ext.get(me.noteOverlayHelpers.root);
-					width = o.gutter + e.getMargin('l') + e.getPadding('l');
-					container.setWidth(width);
-					box.setWidth(width-box.getMargin('lr'));
-				}
+				'content-updated': sizer
 			});
 
 			me.mon(new Ext.CompositeElement(data.editor.query('.left .action')),{

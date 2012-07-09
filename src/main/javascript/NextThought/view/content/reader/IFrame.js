@@ -28,8 +28,10 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 		var secureProtocol = 'javascript';
 		return {
 			xtype: 'box',
-			anchor: '100%',
+//			anchor: '100%',
+			width: 760,
 			autoEl: {
+				width: 760,
 				tag: 'iframe',
 				name: 'iframe-' + guidGenerator() + '-content',
 				src: secureProtocol + ':',
@@ -40,7 +42,7 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 				seamless: true,
 				transparent: true,
 				allowTransparency: true,
-				style: 'overflow: hidden; margin: 0 0 0 100px;'
+				style: 'overflow: hidden;'
 			},
 			listeners: {
 				scope: this,

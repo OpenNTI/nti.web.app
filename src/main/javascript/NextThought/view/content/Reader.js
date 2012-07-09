@@ -14,7 +14,10 @@ Ext.define('NextThought.view.content.Reader', {
 	cls: 'x-reader-pane',
 
 	ui: 'reader',
-	layout: 'anchor',
+	layout: {
+		type: 'hbox',
+		pack: 'end'
+	},
 	prefix: 'default',
 
 	initComponent: function() {
@@ -28,6 +31,21 @@ Ext.define('NextThought.view.content.Reader', {
 		this.mixins.scroll.constructor.apply(this,arguments);
 		this.mixins.annotations.constructor.apply(this,arguments);
 		this.mixins.noteOverlay.constructor.apply(this,arguments);
+	},
+
+
+	afterRender: function(){
+		this.callParent();
+		this.splash = this.body.insertHtml('beforeEnd','<div class="no-content-splash"></div>',true);
+	},
+
+
+	setSplash: function(){
+		this.scrollTo(0, false);
+		this.updateContent('');
+		this.meta = {};
+		this.splash.dom.parentNode.appendChild(this.splash.dom);
+		this.splash.show();
 	},
 
 
@@ -47,31 +65,20 @@ Ext.define('NextThought.view.content.Reader', {
 	},
 
 
-	afterRender: function(){
-		this.callParent();
-		this.splash = this.body.insertHtml('beforeEnd','<div class="no-content-splash"></div>',true);
-	},
-
-
-	setSplash: function(){
-		this.scrollTo(0, false);
-		this.updateContent('');
-		this.meta = {};
-		this.splash.dom.parentNode.appendChild(this.splash.dom);
-		this.splash.show();
-	},
-
-
 	getAnnotationOffsets: function(){
 		var f = this.getIframe();
-		return {
+		var l = f.getLeft()-this.getEl().getLeft();
+
+		var r = {
 			top: f.getTop(),
 			left: f.getLeft(),
 			height: f.getHeight(),
 			width: f.getWidth(),
-			gutter: f.getMargin('l'),
+			gutter: l+f.getMargin('l'),
 			scrollTop: this.body.getScroll().top
 		};
+
+		return r;
 	},
 
 
