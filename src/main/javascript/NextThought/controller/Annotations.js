@@ -49,7 +49,8 @@ Ext.define('NextThought.controller.Annotations', {
 				'create-note'   : this.addNote,
 				'share-with'	: this.actionMap.share,
 				'define'		: this.define,
-				'redact'		: this.redact
+				'redact'		: this.redact,
+				'save-new-note' : this.saveNewNote
 			},
 
 			'note-entry':{
@@ -58,9 +59,9 @@ Ext.define('NextThought.controller.Annotations', {
 				'unmute': this.toggleMuteConversation
 			},
 
-			'noteeditor button[action=save]':{ 'click': this.onSaveNote },
+			//'noteeditor button[action=save]':{ 'click': this.onSaveNote },
 			'noteeditor button[action=discuss]':{ 'click': this.onDiscussNote },
-			'noteeditor button[action=cancel]':{ 'click': this.onCancelNote },
+			//'noteeditor button[action=cancel]':{ 'click': this.onCancelNote },
 
 			'share-window button[action=save]':{
 				'click': this.onShareWithSaveClick
@@ -106,6 +107,7 @@ Ext.define('NextThought.controller.Annotations', {
 		});
 	},
 
+
 	onNoteAction: function(action, note, event){
 		var r = note.owner,
 			a = note.annotation,
@@ -138,11 +140,6 @@ Ext.define('NextThought.controller.Annotations', {
 	},
 
 
-	onCancelNote: function(btn, event){
-		btn.up('window').close();
-	},
-
-
 	onDiscussNote: function(btn, event){
 		var win = btn.up('window'),
 			record = win.record,
@@ -170,45 +167,35 @@ Ext.define('NextThought.controller.Annotations', {
 	},
 
 
-	onSaveNote: function(btn, event){
-		var win = btn.up('window'),
-			cmp = win.down('htmleditor');
-
-		win.el.mask('Saving...');
-		win.record.set('body',Ext.Array.clean(win.getValue()));
-
-		if (win.record.data.body.length === 0) {
-			//note has no data, we need to just remove it
-			if(!win.record.phantom){
-				win.record.destroy({
-					scope: this,
-					success: function(){
-						win.record.fireEvent('updated',win.record);
-						win.close();
-					},
-					failure: function(){
-						console.error('failed to delete empty note');
-						win.el.unmask();
-					}
-				});
-			}
-			else {
-				win.close();
-			}
+	saveNewNote: function(body, range, callback, opts){
+		//check that our inputs are valid:
+		if (!body || (Ext.isArray(body) && body.length < 1) || !range){
+			console.error('Note creating a note, either missing content or range.');
 			return;
 		}
 
-		//If we are here, save it.
-		win.record.save({
+		//Define our vars and create our content range description:
+		var doc = this.getReader().getDocumentElement(),
+			rangeDescription = Anchors.createRangeDescriptionFromRange(range, doc),
+			noteRecord;
+
+		//make sure the body is an array:
+		if(!Ext.isArray(body)){body = [body];}
+
+		//define our note object:
+		noteRecord = Ext.create('NextThought.model.Note', {
+			applicableRange: rangeDescription,
+			body: body,
+			ContainerId: LocationProvider.currentNTIID
+		});
+
+		//now save this:
+		noteRecord.save({
 			scope: this,
-			success:function(newRecord,operation){
-				win.close();
-				win.record.fireEvent('updated',newRecord);
-				this.self.events.fireEvent('new-note',newRecord);
-			},
-			failure:function(){
-				console.error('failed to save note');
-				win.el.unmask();
+			callback:function(record, request){
+				var success = request.success,
+					rec = success ? record: null;
+				Ext.callback(callback, this, [rec]);
 			}
 		});
 	},
