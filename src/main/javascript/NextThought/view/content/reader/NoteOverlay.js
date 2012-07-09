@@ -125,9 +125,15 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 				click: me.noteOverlayEditorContentAction
 			});
 
+			me.mon(data.editor,{
+				scope: me,
+				mousedown: me.noteOverlayEditorMouseDown,
+				selectstart: me.noteOverlayEditorSelectionStart
+			});
+
 			me.mon(data.editor.down('.content'),{
 				scope: me,
-				selectstart: function(e){ e.stopPropagation(); return true; },//re-enable selection
+				selectstart: me.noteOverlayEditorSelectionStart,
 				focus: me.noteOverlayRichEditorFocus,
 				blur: me.noteOverlayRichEditorBlur,
 				keypress: me.noteOverlayEditorKeyPressed,
@@ -361,24 +367,52 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 	},
 
 
-	noteOverlayRichEditorBlur: function(){
-	},
+	noteOverlayRichEditorBlur: function(){},
 
 
 	noteOverlayRichEditorFocus: function(){
+		var o = this.noteOverlayHelpers,
+			s = window.getSelection();
+		if(o.lastRange){
+			s.removeAllRanges();
+			s.addRange(o.lastRange);
+		}
+	},
 
+
+	noteOverlayEditorMouseDown: function(e){
+		var o = this.noteOverlayHelpers;
+		if(e.getTarget('.action')){
+			o.lastRange = window.getSelection().getRangeAt(0);
+		}
+	},
+
+
+	noteOverlayEditorSelectionStart: function(e){
+		e.stopPropagation();//re-enable selection, and prevent the handlers higher up from firing.
+
+		var o = this.noteOverlayHelpers;
+		delete o.lastRange;
+
+		return true;//re-enable selection
 	},
 
 
 	noteOverlayEditorContentAction: function(e){
 		e.stopEvent();
-		var t = e.getTarget('.action',undefined,true);
+		var o = this.noteOverlayHelpers;
+		var t = e.getTarget('.action',undefined,true), action;
+		if(t){
+			this.noteOverlayRichEditorFocus();//reselect
+			if(t.is('.whiteboard')){
+				this.noteOverlayAddWhiteboard();
+			}
+			else {
+				action = t.getAttribute('class').split(' ').pop();
+				document.execCommand(action);
+			}
 
-		if(t.is('.whiteboard')){
-			this.noteOverlayAddWhiteboard();
 		}
-
-
 		return false;
 	},
 
@@ -417,7 +451,11 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		event.stopPropagation();
 		//control+enter & command+enter submit?
 
+		//document.queryCommandState('bold')
 
+
+		var o = this.noteOverlayHelpers;
+		delete o.lastRange;
 	},
 
 
