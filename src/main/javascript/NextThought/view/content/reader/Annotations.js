@@ -8,6 +8,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 		'NextThought.util.Annotations',
 		'NextThought.util.Quizes',
 		'NextThought.ux.SearchHits',
+		'NextThought.view.annotations.renderer.Manager',
 		'NextThought.view.annotations.Redaction',
 		'NextThought.view.annotations.Highlight',
 		'NextThought.view.annotations.Note',
@@ -21,7 +22,19 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 		'Highlight': function(r){return r;},
 		'Note': function(r){return r;},
 		'TranscriptSummary': function(r){return r.get('RoomInfo');},
-		'QuizResult': function(r){return r;}},
+		'QuizResult': function(r){return r;}
+	},
+
+
+	insertAnnotationGutter: function(){
+		var me = this;
+		var container = Ext.DomHelper.insertAfter(me.body.first(),
+				{ cls:'annotation-gutter', cn:[{cls:'widgets'},{cls:'controls'}] }, true);
+		me.on('destroy' , function(){ container.remove(); },me);
+
+		AnnotationsRenderer.registerGutter(container, me);
+	},
+
 
 	constructor: function(){
 		var me = this;
@@ -37,8 +50,10 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 		NextThought.controller.Annotations.events.on('new-redaction',this.onRedactionCreated,this);
 		NextThought.controller.Stream.registerChangeListener(me.onNotification, me);
 
-		me.on('added',function(){
-			FilterManager.registerFilterListener(me, me.applyFilter,me);
+		me.on({
+			scope: this,
+			added: function(){ FilterManager.registerFilterListener(me, me.applyFilter,me); },
+			afterRender: me.insertAnnotationGutter
 		});
 
 		return this;

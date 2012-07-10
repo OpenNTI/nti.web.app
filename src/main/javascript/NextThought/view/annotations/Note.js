@@ -8,6 +8,13 @@ Ext.define( 'NextThought.view.annotations.Note', {
 
 
 		return this;
+	},
+
+
+	render: function(){
+		if(this.hasHighlight){
+			this.callParent();
+		}
 	}
 
 });

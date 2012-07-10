@@ -1,9 +1,13 @@
 Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
+	requires: [
+		'NextThought.util.Line'
+	],
+
 	openWhiteboards: {},
 
 	constructor: function(){
-		var data = this.noteOverlayHelpers;
+		var data = this.noteOverlayData;
 
 		data.wbThumbnailTpm = Ext.DomHelper.createTemplate(
 			'<img src="{0}" id="{1}" class="wb-thumbnail"/>'
@@ -21,7 +25,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 				data.width = r.width;
 				data.root = root;
 			},
-			'afterRender': data.insertNoteOverlay
+			'afterRender': this.insertNoteOverlay
 		});
 
 		return this;
@@ -32,283 +36,157 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 	 * This property block serves as a namespace shell so that functions needed by this mixin do not clobber other
 	 * mixin/subclass methods.
 	 */
-	noteOverlayHelpers: {
+	noteOverlayData: {
 		/** @private */
-		blockElementRe: /(inline.*)|(none)|(fixed)/i,
-		visibilityCls: 'note-overlay-hidden',
+		visibilityCls: 'note-overlay-hidden'
+	},
 
 
-		/**
-		 * This is invoked by an event in the context of the mixed in class... so this function exists in this helper
-		 * object but it's "this" will be of the owner object.
-		 * @private
-		 */
-		insertNoteOverlay: function(){
-			var me = this, //note: "this" is not "noteOverlayHelpers" its the 'NoteOverlay'ed class. (where this mixin was included)
-					data = me.noteOverlayHelpers,
-					o = me.getAnnotationOffsets(),
-					width = o.gutter + 'px',
-					box, txt;
+	/**
+	* This is invoked by an event in the context of the mixed in class... so this function exists in this helper
+	* object but it's "this" will be of the owner object.
+	* @private
+	*/
+	insertNoteOverlay: function(){
+		var me = this,
+			data = me.noteOverlayData,
+			o = me.getAnnotationOffsets(),
+			width = o.gutter + 'px',
+			box, txt;
 
-			var container = {
-				cls:'note-gutter',
-				style: {
-					width: width,
-					height: me.getHeight()
-				},
+		var container = {
+			cls:'note-gutter',
+			style: {
+				width: width,
+				height: me.getHeight()
+			},
+			cn: [{
+				cls: 'note-here-control-box',
 				cn: [{
-					cls: 'note-here-control-box',
+					cls: 'entry',
 					cn: [{
-						cls: 'entry',
-						cn: [{
-							cls: 'clear', html: '&nbsp;'
-						},{
-							cls: 'save', html: '&nbsp;'
-						},{
-							tag: 'textarea',
-							cls: 'note-input'
-						},{
-							cls: 'shadow-text',html: 'Write a note...'
-						}]
+						cls: 'clear', html: '&nbsp;'
 					},{
-						cls: 'bottom-border',
-						html: '&nbsp;'
+						cls: 'save', html: '&nbsp;'
 					},{
-						cls: 'editor',
+						tag: 'textarea',
+						cls: 'note-input'
+					},{
+						cls: 'shadow-text',html: 'Write a note...'
+					}]
+				},{
+					cls: 'bottom-border',
+					html: '&nbsp;'
+				},{
+					cls: 'editor',
+					cn:[{
+						cls: 'main',
 						cn:[{
-							cls: 'main',
-							cn:[{
-								cls: 'toolbar',
-								cn: [{
-									cls: 'left',
-									cn: [{cls: 'action bold'},{cls:'action italic'},{cls:'action underline'}]
-								},{
-									cls: 'right',
-									cn: [{cls: 'action share', html: 'Only Me'}]
-								}]
-							},{
-								cls: 'content',
-								contentEditable: true,
-								unselectable: 'off',
-								html: '&nbsp;'
-							}]
-						},{
-							cls: 'footer',
+							cls: 'toolbar',
 							cn: [{
 								cls: 'left',
-								cn: [{cls: 'action whiteboard'}]
+								cn: [{cls: 'action bold'},{cls:'action italic'},{cls:'action underline'}]
 							},{
 								cls: 'right',
-								cn: [{cls:'action save', html: 'Save'},{cls:'action cancel', html: 'Cancel'}]
+								cn: [{cls: 'action share', html: 'Only Me'}]
 							}]
+						},{
+							cls: 'content',
+							contentEditable: true,
+							unselectable: 'off',
+							html: '&nbsp;'
+						}]
+					},{
+						cls: 'footer',
+						cn: [{
+							cls: 'left',
+							cn: [{cls: 'action whiteboard'}]
+						},{
+							cls: 'right',
+							cn: [{cls:'action save', html: 'Save'},{cls:'action cancel', html: 'Cancel'}]
 						}]
 					}]
 				}]
-			};
+			}]
+		};
 
-			container = Ext.DomHelper.insertAfter(me.body.first(),container,true);
-			data.box = box = container.down('.note-here-control-box');
-			data.textarea = txt = box.down('textarea');
-			data.lineEntry = box.down('.entry');
-			data.editor = box.down('.editor');
+		container = Ext.DomHelper.insertAfter(me.body.first(),container,true);
+		data.box = box = container.down('.note-here-control-box');
+		data.textarea = txt = box.down('textarea');
+		data.lineEntry = box.down('.entry');
+		data.editor = box.down('.editor');
 
-			box.hide();
+		box.hide();
 
-			(new Ext.CompositeElement( data.box.query('.save'))).on('click', me.noteOverlayEditorSave, me);
-			(new Ext.CompositeElement( data.box.query('.cancel,.clear'))).on('click', me.noteOverlayEditorCancel, me);
+		(new Ext.CompositeElement( box.query('.save'))).on('click', me.noteOverlayEditorSave, me);
+		(new Ext.CompositeElement( box.query('.cancel,.clear'))).on('click', me.noteOverlayEditorCancel, me);
 
-			function sizer(){
-				try {
-					var e = Ext.get(me.noteOverlayHelpers.root),
-						o = me.getAnnotationOffsets();
-					if(e){
-						width = o.gutter + e.getMargin('l') + e.getPadding('l');
-						container.setWidth(width);
-						box.setWidth(width-box.getMargin('lr'));
-					}
-				}
-				catch(er){
-					console.error(er.stack);
+		function sizer(){
+			try {
+				var e = Ext.get(me.noteOverlayData.root),
+					o = me.getAnnotationOffsets();
+				if(e){
+					width = o.gutter + e.getMargin('l') + e.getPadding('l');
+					container.setWidth(width);
+					box.setWidth(width-box.getMargin('lr'));
 				}
 			}
-
-			me.on({
-				scope: me,
-				destroy: function(){ container.remove(); },
-				resize: sizer,
-				'sync-height': function(h){ container.setHeight(h); },
-				'content-updated': sizer
-			});
-
-			me.mon(new Ext.CompositeElement(data.editor.query('.left .action')),{
-				scope: me,
-				click: me.noteOverlayEditorContentAction
-			});
-
-			me.mon(data.editor,{
-				scope: me,
-				mousedown: me.noteOverlayEditorMouseDown,
-				selectstart: me.noteOverlayEditorSelectionStart
-			});
-
-			me.mon(data.editor.down('.content'),{
-				scope: me,
-				selectstart: me.noteOverlayEditorSelectionStart,
-				focus: me.noteOverlayRichEditorFocus,
-				blur: me.noteOverlayRichEditorBlur,
-				keypress: me.noteOverlayEditorKeyPressed,
-				keydown: me.noteOverlayEditorKeyDown,
-				keyup: me.noteOverlayEditorKeyUp
-			});
-
-			me.mon(txt,{
-				scope: me,
-				blur: me.noteOverlayEditorBlur,
-				keypress: me.noteOverlayEditorKeyPressed,
-				keydown: me.noteOverlayEditorKeyDown,
-				keyup: me.noteOverlayEditorKeyUp
-			});
-
-			me.mon(container,{
-				scope: me,
-				mousemove: me.noteOverlayMouseOver,
-				mouseover: me.noteOverlayMouseOver,
-				mouseout: me.noteOverlayMouseOut,
-				click: me.noteOverlayActivateEditor
-			});
-		},
-
-
-		/** @private */
-		firstElementOnLine: function (y,doc){
-			var right = this.width,
-					el = null;
-			while(right > this.left && (!el || el === this.root || !Ext.fly(this.root).contains(el))){
-				el = doc.elementFromPoint(right,y);
-				right -= 2;
+			catch(er){
+				console.error(er.stack);
 			}
-			return el;
-		},
-
-
-		/** @private */
-		findBlockParent: function(e,doc){
-			if(!e || e===this.root){return null;}
-			var d = doc.defaultView.getComputedStyle(e).getPropertyValue('display');
-			if(this.blockElementRe.test(d)){
-				return this.findBlockParent(e.parentNode,doc);
-			}
-			return e;
-		},
-
-
-		/** @private */
-		resolveNodeAt: function(y,doc){
-			var e = this.findBlockParent( this.firstElementOnLine(y,doc), doc);
-			return Ext.fly(this.root).contains(e)
-					? e
-					: null;
-		},
-
-
-		/** @private */
-		buildRangeFromRect: function(rect, node, parentWindow){
-			var s = parentWindow.getSelection(),
-					r, c = 0, step = 'line';
-
-			function is(rectA,rectB){
-				return rectA.top === rectB.top
-						&& rectA.height === rectB.height;
-			}
-
-			function setup(step){
-				s.removeAllRanges();
-				s.selectAllChildren(node);
-				s.collapseToStart();
-				s.modify('extend', 'forward', step);
-			}
-
-			setup(step);
-
-			while(!r && c < 100) {
-				c++;
-				r = s.getRangeAt(0);
-				if(is(r.getClientRects()[0],rect)){
-					break;
-				}
-				if(!Ext.fly(node).contains(r.startContainer)){
-					if(step === 'line'){
-						step = 'lineboundary';
-						setup(step);
-					}
-					else {
-						s.removeAllRanges();
-						s.selectAllChildren(node);
-						r =  s.getRangeAt(0);
-						break;
-					}
-				}
-				r = null;
-
-				s.collapseToStart();
-				s.modify('move', 'forward', 'line');
-				s.modify('extend', 'forward', step);
-			}
-
-//			s.removeAllRanges();
-			return r;
-		},
-
-
-		/** @private */
-		isCloseToMiddle: function(y,rect){
-			var m = rect.top + (rect.height/2);
-			return Math.abs((m - y)/rect.height) < 1;
-		},
-
-
-		/** @private */
-		resolveClientRects: function(node){
-			if(!node){return null;}
-			var doc = node.ownerDocument,
-					range = doc.createRange(),
-					rects;
-
-			range.selectNode(node);
-			rects = Array.prototype.slice.call(range.getClientRects());
-			range.detach();
-			return rects.length > 1 ? rects.splice(1) : rects;
-		},
-
-
-		/**
-		 * This is the main exported function in this utility scoped block.
-		 *
-		 * @param y
-		 * @param doc
-		 * @return {*}
-		 */
-		findLine: function(y, doc){
-			var node = this.resolveNodeAt(y,doc);
-			var rects = this.resolveClientRects( node )||[];
-			var i=0;
-			for(; i<rects.length; i++){
-				if(this.isCloseToMiddle(y,rects[i])){
-					return {
-						rect: rects[i],
-						range: this.buildRangeFromRect(rects[i],node,doc.parentWindow)
-					};
-				}
-			}
-			return null;
 		}
+
+		me.on({
+			scope: me,
+			destroy: function(){ container.remove(); },
+			resize: sizer,
+			'sync-height': function(h){ container.setHeight(h); },
+			'content-updated': sizer
+		});
+
+		me.mon(new Ext.CompositeElement(data.editor.query('.left .action')),{
+			scope: me,
+			click: me.noteOverlayEditorContentAction
+		});
+
+		me.mon(data.editor,{
+			scope: me,
+			mousedown: me.noteOverlayEditorMouseDown,
+			selectstart: me.noteOverlayEditorSelectionStart
+		});
+
+		me.mon(data.editor.down('.content'),{
+			scope: me,
+			selectstart: me.noteOverlayEditorSelectionStart,
+			focus: me.noteOverlayRichEditorFocus,
+			blur: me.noteOverlayRichEditorBlur,
+			keypress: me.noteOverlayEditorKeyPressed,
+			keydown: me.noteOverlayEditorKeyDown,
+			keyup: me.noteOverlayEditorKeyUp
+		});
+
+		me.mon(txt,{
+			scope: me,
+			blur: me.noteOverlayEditorBlur,
+			keypress: me.noteOverlayEditorKeyPressed,
+			keydown: me.noteOverlayEditorKeyDown,
+			keyup: me.noteOverlayEditorKeyUp
+		});
+
+		me.mon(container,{
+			scope: me,
+			mousemove: me.noteOverlayMouseOver,
+			mouseover: me.noteOverlayMouseOver,
+			mouseout: me.noteOverlayMouseOut,
+			click: me.noteOverlayActivateEditor
+		});
 	},
 
 
 	noteOverlayMouseOver: function(evt){
 		evt.stopEvent();
 
-		var o = this.noteOverlayHelpers,
+		var o = this.noteOverlayData,
 				offsets = this.getAnnotationOffsets(),
 				y = evt.getY() - offsets.top,
 				box = Ext.get(o.box),
@@ -320,7 +198,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 		clearTimeout(o.mouseLeaveTimeout);
 		try {
-			lineInfo = o.findLine(y,this.getDocumentElement());
+			lineInfo = LineUtils.findLine(y,this.getDocumentElement());
 			if(lineInfo && (lineInfo !== o.lastLine || !o.lastLine)){
 				o.lastLine = lineInfo;
 				box.setY( lineInfo.rect.bottom + offsets.top - box.getHeight())
@@ -335,7 +213,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 
 	noteOverlayMouseOut: function(){
-		var o = this.noteOverlayHelpers;
+		var o = this.noteOverlayData;
 		if(o.suspendMoveEvents){
 			return;
 		}
@@ -348,7 +226,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 
 	noteOverlayAcivateRichEditor: function(){
-		var o = this.noteOverlayHelpers,
+		var o = this.noteOverlayData,
 			t = o.textarea.dom,
 			s = window.getSelection(),
 			c,r;
@@ -384,7 +262,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 	noteOverlayActivateEditor: function(evt){
 		evt.stopEvent();
 		this.noteOverlayMouseOver(evt);
-		var o = this.noteOverlayHelpers;
+		var o = this.noteOverlayData;
 		if(o.suspendMoveEvents){
 			return;
 		}
@@ -398,7 +276,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 
 	noteOverlayDeactivateEditor: function(){
-		var o = this.noteOverlayHelpers;
+		var o = this.noteOverlayData;
 		delete o.suspendMoveEvents;
 		delete o.richEditorActive;
 		o.textarea.dom.value = "";
@@ -414,7 +292,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 
 	noteOverlayRichEditorFocus: function(){
-		var o = this.noteOverlayHelpers,
+		var o = this.noteOverlayData,
 			s = window.getSelection();
 		if(o.lastRange){
 			s.removeAllRanges();
@@ -424,7 +302,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 
 	noteOverlayEditorMouseDown: function(e){
-		var o = this.noteOverlayHelpers;
+		var o = this.noteOverlayData;
 		if(e.getTarget('.action')){
 			o.lastRange = window.getSelection().getRangeAt(0);
 		}
@@ -434,7 +312,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 	noteOverlayEditorSelectionStart: function(e){
 		e.stopPropagation();//re-enable selection, and prevent the handlers higher up from firing.
 
-		var o = this.noteOverlayHelpers;
+		var o = this.noteOverlayData;
 		delete o.lastRange;
 
 		return true;//re-enable selection
@@ -443,7 +321,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 	noteOverlayEditorContentAction: function(e){
 		e.stopEvent();
-		var o = this.noteOverlayHelpers;
+		var o = this.noteOverlayData;
 		var t = e.getTarget('.action',undefined,true), action;
 		if(t){
 			this.noteOverlayRichEditorFocus();//reselect
@@ -477,7 +355,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		}
 
 		var me = this;
-		var o = me.noteOverlayHelpers;
+		var o = me.noteOverlayData;
 		var note = o.textarea.dom.value || this.getNoteBody(o.editor.down('.content').getHTML());
 		console.log('firing event: "save-new-note" with ', note);
 		me.fireEvent('save-new-note', note, o.lastLine.range, callback);
@@ -518,7 +396,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		if(k === event.ESC){
 			this.noteOverlayDeactivateEditor();
 		}
-		else if(k === event.ENTER && !this.noteOverlayHelpers.richEditorActive){
+		else if(k === event.ENTER && !this.noteOverlayData.richEditorActive){
 			this.noteOverlayAcivateRichEditor();
 			event.stopEvent();
 		}
@@ -533,7 +411,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		//document.queryCommandState('bold')
 
 
-		var o = this.noteOverlayHelpers;
+		var o = this.noteOverlayData;
 		delete o.lastRange;
 		if(o.richEditorActive){
 			o.editor.repaint();
@@ -542,7 +420,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 
 	noteOverlayEditorKeyUp: function(){
-		var o = this.noteOverlayHelpers,
+		var o = this.noteOverlayData,
 				t = o.textarea,
 				h = t.dom.scrollHeight;
 
@@ -556,13 +434,9 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 	noteOverlayAddWhiteboard: function(){
 		//pop open a whiteboard:
-		var wbWin = Ext.widget({
-				xtype: 'wb-window',
-				height: '50%',
-				width: '50%'
-			}),
+		var wbWin = Ext.widget({ xtype: 'wb-window', height: '50%', width: '50%' }),
 			guid = guidGenerator(),
-			o = this.noteOverlayHelpers,
+			o = this.noteOverlayData,
 			content = o.editor.down('.content');
 
 		//remember the whiteboard window:
@@ -589,7 +463,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 	insertWhiteboardThumbnail: function(content, guid, wb){
 		var me = this,
-			o = me.noteOverlayHelpers;
+			o = me.noteOverlayData;
 
 		wb.getThumbnail(function(data){
 			var existingImg = content.query('[id='+guid+']'),

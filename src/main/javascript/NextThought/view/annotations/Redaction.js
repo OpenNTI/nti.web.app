@@ -27,9 +27,9 @@ Ext.define('NextThought.view.annotations.Redaction', {
 
 
 	render: function(){
-		this.callParent(arguments);
+		var y = this.callParent(arguments);
 
-		if (this.actionSpan){return;}
+		if (this.actionSpan){return y;}
 
 		//Add the redaction action span so the user has something to click on
 		if (this.isInlineRedaction()) {
@@ -51,6 +51,7 @@ if (div){
 
 		this.compElements.add([this.actionSpan]);
 		this.toggleRedaction();
+		return y;
 	},
 
 

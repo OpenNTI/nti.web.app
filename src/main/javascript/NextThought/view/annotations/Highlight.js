@@ -160,6 +160,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
 			lastY = y;
 		}
 
+		return boundingTop;
 	},
 
 

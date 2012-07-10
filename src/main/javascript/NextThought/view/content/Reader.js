@@ -133,7 +133,17 @@ Ext.define('NextThought.view.content.Reader', {
 		}
 
 		return true;
+	},
+
+
+	statics : {
+		get: function(prefix){
+			return Ext.ComponentQuery.query(
+					Ext.String.format('reader-panel[prefix={0}]',prefix))[0];
+		}
 	}
+}, function(){
+	window.ReaderPanel = this;
 
 });
 

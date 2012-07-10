@@ -1,9 +1,57 @@
 Ext.define('NextThought.view.annotations.renderer.Manager',{
 	singleton: true,
 
+	requires: [
+		'NextThought.util.Line'
+	],
+
 	events: new Ext.util.Observable(),
 	registry: {},
 	sorter: {},
+	gutter: {},
+	buckets: {},
+
+
+	/**
+	 * @constructor Inner class
+	 */
+	Bucket: function(){
+		this.values = {};
+		this.length = 0;
+
+		this.free = function(){ this.each(function(v,k,o){ delete o[k]; },this); this.length = 0; };
+
+		this.put = function(o,key){
+			key = typeof key === 'number'? key : guidGenerator();
+			if(this.values[key]){throw 'existing value';}
+			this.values[key] = o;
+			this.length += 1;
+			return key;
+		};
+
+		this.each = function(cb,s){
+			Ext.Object.each(this.values,function(key,value,o){
+				Ext.callback(cb,s,[value,key,o]);
+			});
+		};
+
+		this.get = function(key){ return this.values[key]; };
+	},
+
+
+	registerGutter: function(el, reader){
+		var p = reader.prefix;
+		if(!p){ Ext.Error.raise('Prefix required'); }
+		if(this.gutter[p]){
+			console.warn('replacing exisiting gutter?', this.gutter[p]);
+		}
+		this.gutter[p] = el;
+
+		el.controls = el.down('.controls');
+		el.widgets = el.down('.widgets');
+
+		this.render(p);//renders wait for the gutter to exist
+	},
 
 
 	register: function(o){
@@ -28,39 +76,106 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 	},
 
 
+	getReader: function(prefix){
+		var cache = this.readerPanels, c;
+		if(!cache ){ cache = this.readerPanels = {}; }
+
+		c = cache[prefix];
+		if(!c){
+			c = cache[prefix] = ReaderPanel.get(prefix);
+			c.on('destroy',function(){ delete cache[prefix]; });
+		}
+
+		return c;
+	},
+
+
+	getDoc: function(prefix){
+		return this.getReader(prefix).getDocumentElement();
+	},
+
+
 	buildSorter: function(prefix){},
 
 
-	render: function(prefix){
-		if(this.rendering){
-			this.events.on('finish',this.render,this,{single:true});
-			console.warn('Render called while rendering...');
+	clearBuckets: function(prefix){
+		var g = this.gutter[prefix];
+		g.dom.innerHTML = '';
+
+		if( this.buckets[prefix] ){
+			this.buckets[prefix].free();
+		}
+		this.buckets[prefix] = new this.Bucket();
+	},
+
+
+	getBucket: function(prefix, line){
+		var lineInfo = LineUtils.findLine(line,this.getDoc(prefix));
+		if(!lineInfo){
+			console.error('could not resolve a line for '+prefix+' @'+line+'.');
 			return;
 		}
-		this.aboutToRender = false;
-		this.rendering = true;
-		this.events.fireEvent('rendering');
-		this.sorter[prefix] = this.sorter[prefix] || this.buildSorter(prefix);
-		this.registry[prefix] = Ext.Array.unique(this.registry[prefix]);
 
-		if(this.sorter[prefix]){
-			Ext.Array.sort(this.registry[prefix], this.sorter[prefix]);
+		var c = this.buckets[prefix],
+			l = lineInfo.rect.top,//normalize lines
+			b = c? c.get(l) : null;
+		if(!b && c) {
+			b = new this.Bucket();
+			c.put(b,l);
 		}
-		Ext.each(Ext.Array.clone(this.registry[prefix]), function(o,i,a){
-			try {
-				var n = a[i+1],
-					p = 'renderPriority',
-					isLastOfAnchor = !n || o[p] !== n[p] || o.getSortValue()!==n.getSortValue() ;
+		return b;
+	},
 
-				o.render(isLastOfAnchor);
+
+	layoutBuckets: function(prefix){
+		var b = this.buckets[prefix];
+	},
+
+
+	render: function(prefix){
+		var me = this;
+		if(me.rendering){
+			console.warn('Render called while rendering...');
+			me.events.on('finish',me.render,me,{single:true});
+			return;
+		}
+
+		if(!me.gutter[prefix]){
+			console.warn('no gutter');
+			return;
+		}
+
+		if(!me.registry[prefix]){
+			return;//nothing to do
+		}
+
+		me.aboutToRender = false;
+		me.rendering = true;
+		me.events.fireEvent('rendering');
+
+		me.registry[prefix] = Ext.Array.unique(me.registry[prefix]);
+
+		me.sorter[prefix] = me.sorter[prefix] || me.buildSorter(prefix);
+		if(me.sorter[prefix]){
+			Ext.Array.sort(me.registry[prefix], me.sorter[prefix]);
+		}
+
+		me.clearBuckets(prefix);
+
+		Ext.each(Ext.Array.clone(me.registry[prefix]), function(o){
+			try {
+				var y = o.render() || -1;
+				me.getBucket(prefix,y).put(o);
 			}
 			catch(e){
 				console.error(o.$className,Globals.getError(e));
 			}
 		});
 
-		this.rendering = false;
-		this.events.fireEvent('finish');
+		me.layoutBuckets(prefix);
+
+		me.rendering = false;
+		me.events.fireEvent('finish');
 	}
 
 }, function(){
