@@ -279,11 +279,12 @@ Ext.define( 'NextThought.view.annotations.Base', {
 
 	onClick: function(e) {
 		var menu,
-			xy = e.getXY().slice();
+			xy = e.getXY().slice(),
+			scrollTop = this.ownerCmp.getAnnotationOffsets().scrollTop;
 
 		//adjust points
 		xy[0] += this.offsets.left;
-		xy[1] += this.offsets.top;
+		xy[1] += this.offsets.top - scrollTop;
 
 		//single annotation
 		menu = this.getMenu();
@@ -295,8 +296,7 @@ Ext.define( 'NextThought.view.annotations.Base', {
 		menu.showAt.apply(menu,xy);
 		menu.setPosition(xy[0]-menu.getWidth()/2,xy[1]+10);
 
-		e.stopPropagation();
-		e.preventDefault();
+		e.stopEvent();
 		return false;//IE :(
 	},
 
