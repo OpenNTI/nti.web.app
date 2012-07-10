@@ -262,8 +262,10 @@
 			position: absolute;
 			min-height: 32px;
 			width: 100%;
-			background: rgba(0,0,0,0.1);
-
+			background: #ffffff;
+		}
+		.controlContainer{
+			bottom: transparent;
 		}
 	}
 }

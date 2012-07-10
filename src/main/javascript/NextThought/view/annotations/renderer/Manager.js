@@ -165,6 +165,8 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 				if( w ){ w.appendTo( line.widgets ); }
 			});
 
+			if(!line.controls.first()){ line.controls.remove(); }
+			if(!line.widgets.first()){ line.widgets.remove(); }
 		});
 	},
 
