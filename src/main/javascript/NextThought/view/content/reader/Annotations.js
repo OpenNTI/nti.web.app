@@ -152,7 +152,6 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 				delete w.range; //so that it does not detach it on cleanup
 				var r = NextThought.model.Redaction.createFromHighlight(record);
 				r.set('replacementContent', 'redaction');
-				debugger;
 				me.createAnnotationWidget('redaction',r, range);
 				r.save();
 			}
