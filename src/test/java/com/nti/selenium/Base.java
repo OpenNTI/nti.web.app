@@ -22,7 +22,6 @@ import org.openqa.selenium.WebDriverBackedSelenium;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
-import com.nti.selenium.navigation.XpathUtilsNav;
 import com.thoughtworks.selenium.Selenium;
 
 public class Base {
@@ -175,13 +174,17 @@ public class Base {
 	}
 	
 	public void selectText(int index, int start, int end){ 
-		String script = XpathUtilsNav.buildString("function selectElementContents (el,start, end) {var sel = window.getSelection(); ",
+		String script = XpathUtils.buildString("function selectElementContents (el,start, end) {var sel = window.getSelection(); ",
 				"var range = window.document.createRange();  range.setStart(el,start); range.setEnd(el,end); ",
 				"sel.removeAllRanges(); sel.addRange(range);} selectElementContents(window.document.getElementsByTagName ('p')", 
 				"[", Integer.toString(index), "].firstChild,", Integer.toString(start), ",", Integer.toString(end), ")");
 		((JavascriptExecutor)this.driver).executeScript(script);    	
-		List<WebElement> elements = this.findElements(XpathUtilsNav.getPageContent());
+		List<WebElement> elements = this.findElements(this.getPageContent());
 		elements.get(0).click();
+	}
+	
+	public String getPageContent(){
+		return XpathUtils.xpathAttributeBuilder("div", "class", "page-contents");
 	}
 	
 }

@@ -29,4 +29,5 @@ public class XpathUtils {
 	public static String getBasePageLoading() {
 		return xpathAttributeBuilder("title", "id", "loading");
 	}
+	
 }

@@ -47,4 +47,5 @@ public class XpathUtilsNav extends XpathUtilsLogin{
 	public static String getDivisionPage(final String relatedItem) {
 		return xpathAttributeAndTextBuilder("span", "class", "label", relatedItem);
 	}
+	
 }
