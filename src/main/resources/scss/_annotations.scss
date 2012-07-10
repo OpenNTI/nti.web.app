@@ -256,6 +256,10 @@
 		top: 0;
 		overflow: visible;
 
+		&.widgets {
+			left: 20px;
+		}
+
 		.controlContainer,
 		.widgetContainer {
 			overflow: hidden;
