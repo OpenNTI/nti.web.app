@@ -5,20 +5,20 @@ import com.nti.selenium.navigation.XpathUtilsNav;
 public class XpathUtilsRedaction extends XpathUtilsNav {
 
 	public static String setCreateRedaction(){
-		return xpathTextBuilder ("div", "Redact Highlight");	
+		return xpathBuilder ("div", "Redact Highlight");	
 	}
 	
 	public static String setShareRedaction(){
-		return xpathTextBuilder("div", "Share With");
+		return xpathBuilder("div", "Share With");
 	}
 	
 	public static String getRedaction(){
-		return xpathAttributeBuilder("img", "class", "action redactionhighlight"); 
+		return xpathBuilder("img", "class", "action redactionhighlight"); 
 		
 	}
 	
 	public static String setDeleteRedaction(){ 
-		return xpathTextBuilder ("div", "Delete Redaction"); 
+		return xpathBuilder ("div", "Delete Redaction"); 
 	}
 	
 	public static String setEnterUsername(){ 

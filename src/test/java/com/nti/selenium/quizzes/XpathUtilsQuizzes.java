@@ -11,31 +11,31 @@ public class XpathUtilsQuizzes extends XpathUtilsNav {
 	}
 	
 	public String getSqrtButton(){
-		return xpathTextBuilder("span", "Ã");
+		return xpathBuilder("span", "Ã");
 	}
 	
 	public String getXSquaredButton(){
-		return xpathTextBuilder("span", "Ã");
+		return xpathBuilder("span", "Ã");
 	}
 
 	public String getParenthesesButton(){
-		return xpathTextBuilder("span", "Ã");
+		return xpathBuilder("span", "Ã");
 	}
 	
 	public String getPiButton(){
-		return xpathTextBuilder("span", "Ã");
+		return xpathBuilder("span", "Ã");
 	}
 	
 	public String getApproxButton(){
-		return xpathTextBuilder("span", "Ã");
+		return xpathBuilder("span", "Ã");
 	}
 	
 	public String getSubmitButton(){
-		return xpathAttributeAndTextBuilder("a", "id", "submit", "Submit");
+		return xpathBuilder("a", "id", "submit", "Submit");
 	}
 	
 	public String getResetButton(){
-		return xpathAttributeAndTextBuilder("a", "id", "submit", "Reset");
+		return xpathBuilder("a", "id", "submit", "Reset");
 	}
 	
  	public String getMathSymbolsWindowNotVisibleClass(){
@@ -43,61 +43,61 @@ public class XpathUtilsQuizzes extends XpathUtilsNav {
 	}
 	
 	public String getAnswerBlank() {
-		return buildString(xpathAttributeBuilder("li", "value", currentQuestionID), 
-								xpathAttributeBuilder("div", "class", "question"),
-								xpathAttributeBuilder("div", "class", "answerblock"),
+		return buildString(xpathBuilder("li", "value", currentQuestionID), 
+								xpathBuilder("div", "class", "question"),
+								xpathBuilder("div", "class", "answerblock"),
 								"//span");
 	}
 	
 	public String getAnswerResult() {
-		return buildString(xpathAttributeBuilder("li", "value", currentQuestionID),
-								xpathAttributeBuilder("div", "class", "question"),
-								xpathAttributeBuilder("div", "class", "result"));
+		return buildString(xpathBuilder("li", "value", currentQuestionID),
+								xpathBuilder("div", "class", "question"),
+								xpathBuilder("div", "class", "result"));
 	}
 	
 	public String getQuestionTextArea() {
-		return buildString(getAnswerBlank(), xpathAttributeBuilder("span", "class", "textarea"), "//textarea");
+		return buildString(getAnswerBlank(), xpathBuilder("span", "class", "textarea"), "//textarea");
 	}
 	
 	public String getNoAnswerResult() {
 		return buildString(this.getAnswerResult(),
-								xpathAttributeBuilder("span", "class", "result noanswer"));
+								xpathBuilder("span", "class", "result noanswer"));
 	}
 	
 	public String getCorrectAnswerResult() {
 		return buildString(this.getAnswerResult(),
-								xpathAttributeBuilder("span", "class", "result correct"));
+								xpathBuilder("span", "class", "result correct"));
 	}
 	
 	public String getIncorrectAnswerResult() {
 		return buildString(this.getAnswerResult(),
-								xpathAttributeBuilder("span", "class", "result incorrect"));
+								xpathBuilder("span", "class", "result incorrect"));
 	}
 	
 	public String getAnswerableQuestion() {
-		return buildString(xpathAttributeBuilder("li", "value", currentQuestionID),
-								xpathAttributeBuilder("div", "class", "question"),
-								xpathAttributeBuilder("div", "class", "result hidden"));
+		return buildString(xpathBuilder("li", "value", currentQuestionID),
+								xpathBuilder("div", "class", "question"),
+								xpathBuilder("div", "class", "result hidden"));
 	}
 	
 	public String getMathSymbolsXButton() {
-		return xpathAttributeBuilder("img", "class", "x-tool-close");
+		return xpathBuilder("img", "class", "x-tool-close");
 	}
 
 	public String getMathSymbolsWindowNotVisible() {
-		return xpathAttributeBuilder("div", "class", getMathSymbolsWindowNotVisibleClass());
+		return xpathBuilder("div", "class", getMathSymbolsWindowNotVisibleClass());
 	}
 	
 	public String getOldQuizzesQuestionMark() {
-		return xpathAttributeBuilder("img", "class", "action quizresults");
+		return xpathBuilder("img", "class", "action quizresults");
 	}
 	
 	public String getOldQuizzes() {
-		return xpathAttributeBuilder("div", "class", "x-component x-box-item x-component-default x-menu-item");
+		return xpathBuilder("div", "class", "x-component x-box-item x-component-default x-menu-item");
 	}
 
 	public String getOldQuizzesAnswer(){
-		return buildString(	xpathAttributeBuilder("input", "id", currentQuestionID),
+		return buildString(	xpathBuilder("input", "id", currentQuestionID),
 							"/../../div[@class='result']",
 							"//span[@class='mathjax tex2jax_process response answer-text']",
 							"//span[@class='MathJax_MathML']");
@@ -105,18 +105,18 @@ public class XpathUtilsQuizzes extends XpathUtilsNav {
 	
 	public String getClosedWhyBubble(){
 		return buildString(	this.getAnswerResult(),
-							xpathAttributeAndTextBuilder("a", "class", "why", "Why?"));
+							xpathBuilder("a", "class", "why", "Why?"));
 	}
 	
 	public String getOpenWhyBubble(){
 		return buildString(	this.getAnswerResult(),
-							xpathAttributeAndTextBuilder("a", "class", "why bubble", "Why?"));
+							xpathBuilder("a", "class", "why bubble", "Why?"));
 	}
 	
 	public String getFractionQuizAnswer(){
 		return buildString(	this.getAnswerResult(),
-							xpathAttributeBuilder("span", "class", "mathjax tex2jax_process response answer-text"),
-							xpathAttributeBuilder("script", "type", "math/tex"));
+							xpathBuilder("span", "class", "mathjax tex2jax_process response answer-text"),
+							xpathBuilder("script", "type", "math/tex"));
 	}
 	
 }

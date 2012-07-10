@@ -15,7 +15,7 @@ public class Quizzes extends Navigation {
 	
 	protected String[] answers = {"420", "3", "69", "5", "40", "64", "480", "5/8", "6", "3"};
 	protected String wrongAnswer = "wrongAnswer";
-	protected XpathUtilsQuizzes xpath;
+	protected XpathUtilsQuizzes xpath = new XpathUtilsQuizzes();
 	
 	@Before
 	public void setUp() throws Exception {

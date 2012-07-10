@@ -195,7 +195,7 @@ public class Base {
 		//elements.get(0).click();
 	}
 	public String getPageContent(){
-		return XpathUtils.xpathAttributeBuilder("div", "class", "page-contents");
+		return XpathUtils.xpathBuilder("div", "class", "page-contents");
 	}
 	
 }
