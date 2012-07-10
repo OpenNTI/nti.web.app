@@ -159,7 +159,10 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 			(new Ext.CompositeElement([line.controls,line.widgets])).setTop(y);
 
 			line.each(function(o){
-
+				var w = o.getGutterWidget(line.length-1);
+				var c = o.getControl();
+				if( c ){ c.appendTo( line.controls ); }
+				if( w ){ w.appendTo( line.widgets ); }
 			});
 
 		});
