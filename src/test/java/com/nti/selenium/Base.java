@@ -183,6 +183,17 @@ public class Base {
 		elements.get(0).click();
 	}
 	
+	public void selectText2(int index, int start, int end){ 
+		String script = XpathUtils.buildString("function selectElementContents (el,start, end) {var sel = window.getSelection(); ",
+				"var range = window.document.createRange();  range.setStart(el,start); range.setEnd(el,end); ",
+				"sel.removeAllRanges(); sel.addRange(range);} selectElementContents(window.document.getElementsByTagName ('i')", 
+				"[", Integer.toString(index), "].firstChild,", Integer.toString(start), ",", Integer.toString(end), ")");
+		((JavascriptExecutor)this.driver).executeScript(script);   
+		WebElement element = this.findElement("//i"); 
+		element.click();
+		//List<WebElement> elements = this.findElements(this.getPageContent());
+		//elements.get(0).click();
+	}
 	public String getPageContent(){
 		return XpathUtils.xpathAttributeBuilder("div", "class", "page-contents");
 	}

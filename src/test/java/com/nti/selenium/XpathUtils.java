@@ -26,6 +26,12 @@ public class XpathUtils {
 		return buildString("//", tag, "[@", attribute, "='", value, "' and text()='", text, "']");
 	}
 	
+	public static String xpathPartialAttributeBuilder(final String tag, 
+													  final String attribute,
+													  final String value) {
+		return buildString("//", tag, "[contains(@", attribute, ",'", value, "')]");
+	}	
+	
 	public static String getBasePageLoading() {
 		return xpathAttributeBuilder("title", "id", "loading");
 	}
