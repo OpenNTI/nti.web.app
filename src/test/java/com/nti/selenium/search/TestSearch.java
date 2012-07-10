@@ -1,5 +1,6 @@
 package com.nti.selenium.search;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.List;
@@ -11,16 +12,20 @@ public class TestSearch extends Search{
 
 	@Test
 	public void testEnterText(){
-		this.findElement(XpathUtilsSearch.getSearchField()).sendKeys("math");
-		this.waitForElement(XpathUtilsSearch.getBookSearchResults());
+		this.insertSearchText("math");
 		assertTrue(this.elementExists(XpathUtilsSearch.getBookSearchResults()));
+		assertTrue(this.elementExists(XpathUtilsSearch.getBookResultTitle("Prealgebra")));
+		assertTrue(this.elementExists(XpathUtilsSearch.getBookResultSection("Arithmetic with Square Roots")));
 	}
 	
-//	@Test
-//	public void testNavigateToItem(){
-//		
-//	}
-//	
+	@Test
+	public void testNavigateToItem(){
+		this.insertSearchText("math");
+		this.clickSearchedBook("Arithmetic with Square Roots");
+		this.waitForLoading();
+		assertEquals("Arithmetic with Square Roots", this.getNavTestText((XpathUtilsSearch.getSectionTitle("Arithmetic with Square Roots"))).getText());
+	}
+	
 //	@Test
 //	public void testSeeAll(){
 //		
