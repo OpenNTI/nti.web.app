@@ -214,37 +214,49 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		/** @private */
 		buildRangeFromRect: function(rect, node, parentWindow){
 			var s = parentWindow.getSelection(),
-					r, c = 0;
+					r, c = 0, step = 'line';
 
 			function is(rectA,rectB){
 				return rectA.top === rectB.top
 						&& rectA.height === rectB.height;
 			}
 
-			s.removeAllRanges();
-			s.selectAllChildren(node);
-			s.collapseToStart();
-			s.modify('extend', 'forward', 'line');
+			function setup(step){
+				s.removeAllRanges();
+				s.selectAllChildren(node);
+				s.collapseToStart();
+				s.modify('extend', 'forward', step);
+			}
 
-			while(!r && c < 100000) {
+			setup(step);
+
+			while(!r && c < 100) {
 				c++;
 				r = s.getRangeAt(0);
 				if(is(r.getClientRects()[0],rect)){
 					break;
 				}
 				if(!Ext.fly(node).contains(r.startContainer)){
-					s.removeAllRanges();
-					s.selectAllChildren(node);
-					r =  s.getRangeAt(0);
-					break;
+					console.log('left', node, r.startContainer);
+					if(step === 'line'){
+						step = 'lineboundary';
+						setup(step);
+					}
+					else {
+						s.removeAllRanges();
+						s.selectAllChildren(node);
+						r =  s.getRangeAt(0);
+						break;
+					}
 				}
 				r = null;
 
+				s.collapseToStart();
 				s.modify('move', 'forward', 'line');
-				s.modify('extend', 'forward', 'line');
+				s.modify('extend', 'forward', step);
 			}
 
-			s.removeAllRanges();
+//			s.removeAllRanges();
 			return r;
 		},
 
