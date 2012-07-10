@@ -583,21 +583,5 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 				textRange.select();
 			}
 		}
-	},
-
-
-	/**
-	 * Returns a control for the control gutter.  Many annotations may not have one.
-	 */
-	getControl: function(){},
-
-
-	/**
-	 * Returns the widget to be placed in the gutter for interaction with this annotation.  Override in
-	 * implementation class to return something.
-	 *
-	 * @param [numberOfSiblings] - number of siblings in case there is secondary widget renderings.
-	 *                             null implies you do not care or there is no alternate renderings.
-	 */
-	getGutterWidget: function(numberOfSiblings){}
+	}
 });

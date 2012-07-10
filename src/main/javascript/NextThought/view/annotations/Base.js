@@ -180,7 +180,7 @@ Ext.define( 'NextThought.view.annotations.Base', {
 	},
 	
 
-	render: function(isLastOfBlock){
+	render: function(){
 		console.warn( Ext.String.format(
 						'{0} does not implement render()',
 						this.$className));
@@ -298,5 +298,21 @@ Ext.define( 'NextThought.view.annotations.Base', {
 		e.stopPropagation();
 		e.preventDefault();
 		return false;//IE :(
-	}
+	},
+
+
+	/**
+	 * Returns a control for the control gutter.  Many annotations may not have one.
+	 */
+	getControl: function(){},
+
+
+	/**
+	 * Returns the widget to be placed in the gutter for interaction with this annotation.  Override in
+	 * implementation class to return something.
+	 *
+	 * @param [numberOfSiblings] - number of siblings in case there is secondary widget renderings.
+	 *                             null implies you do not care or there is no alternate renderings.
+	 */
+	getGutterWidget: function(numberOfSiblings){}
 });
