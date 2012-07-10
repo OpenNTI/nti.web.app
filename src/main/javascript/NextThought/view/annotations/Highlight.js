@@ -145,8 +145,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
 				if(!this.adjusted){
 					this.adjusted = true;
 					this.adjustedBy = adjustment;
-					this.render();
-					return;
+					return this.render();
 				}
 			}
 			else {

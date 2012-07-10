@@ -100,7 +100,8 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 
 	clearBuckets: function(prefix){
 		var g = this.gutter[prefix];
-		g.dom.innerHTML = '';
+		g.controls.dom.innerHTML = '';
+		g.widgets.dom.innerHTML = '';
 
 		if( this.buckets[prefix] ){
 			this.buckets[prefix].free();
@@ -128,7 +129,16 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 
 
 	layoutBuckets: function(prefix){
+		var g = this.gutter[prefix];
 		var b = this.buckets[prefix];
+
+		b.each(function(line,y){
+			console.log(y);
+			line.each(function(o){
+				console.log(o.$className);
+			});
+
+		});
 	},
 
 
@@ -164,8 +174,11 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 
 		Ext.each(Ext.Array.clone(me.registry[prefix]), function(o){
 			try {
-				var y = o.render() || -1;
-				me.getBucket(prefix,y).put(o);
+				var y = o.render() || -1,
+					b = me.getBucket(prefix,y);
+				if(b){
+					b.put(o);
+				}
 			}
 			catch(e){
 				console.error(o.$className,Globals.getError(e));

@@ -80,7 +80,7 @@ Ext.define('NextThought.util.Line',{
 			s.modify('extend', 'forward', step);
 		}
 
-		//s.removeAllRanges();
+		s.removeAllRanges();
 		return r;
 	},
 
