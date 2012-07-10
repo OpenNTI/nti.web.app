@@ -13,4 +13,11 @@ public class Highlights extends Navigation {
 		this.navigateTo("Prealgebra", "Fractions", "What is a Fraction?");
 	}
 	
+	public void createHighlight(){
+		this.switchToIframe();
+		this.selectText(0, 0, 10);
+		this.switchToDefault();
+		this.findElement(XpathUtilsHighlights.getCreateHighlight()).click();
+	}
+	
 }

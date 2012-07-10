@@ -11,7 +11,13 @@ public class TestHighlights extends Highlights{
 		this.switchToIframe();
 		this.selectText(0, 0, 10);
 		this.switchToDefault();
-		assertTrue(this.elementExists(XpathUtilsHighlights.getPopUpBox()));
+		assertTrue(this.elementExists(XpathUtilsHighlights.getCreateHighlight()));
+	}
+	
+	@Test
+	public void testCreateHighlight(){
+		this.createHighlight();
+		assertTrue(this.elementExists(XpathUtilsHighlights.getCreateHighlightImage()));
 	}
 	
 }
