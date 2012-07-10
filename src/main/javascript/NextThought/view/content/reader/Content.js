@@ -44,8 +44,7 @@ Ext.define('NextThought.view.content.reader.Content',{
 		if(!tpl){
 			tpl = Ext.DomHelper.createTemplate(
 					'<a href="{0}" onclick="NTIRelatedItemHandler(this);return false;" class="related">{1}</a>, '
-			);
-			tpl.compile();
+			).compile();
 			this.relatedTemplate = tpl;
 		}
 

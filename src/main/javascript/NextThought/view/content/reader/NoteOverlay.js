@@ -18,12 +18,9 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		this.on({
 			scope: this,
 			'content-updated': function(){
-				var doc = this.getDocumentElement();
-				var root = doc.querySelector('#NTIContent > .page-contents');
-				var r = root.getBoundingClientRect();
+				var r = this.getContentRoot().getBoundingClientRect();
 				data.left = r.left;
 				data.width = r.width;
-				data.root = root;
 			},
 			'afterRender': this.insertNoteOverlay
 		});
@@ -123,10 +120,9 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 		function sizer(){
 			try {
-				var e = Ext.get(me.noteOverlayData.root),
-					o = me.getAnnotationOffsets();
-				if(e){
-					width = o.gutter + e.getMargin('l') + e.getPadding('l');
+				var o = me.getAnnotationOffsets();
+				if(o){
+					width = o.gutter + o.contentLeftPadding;
 					container.setWidth(width);
 					box.setWidth(width-box.getMargin('lr'));
 				}

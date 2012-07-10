@@ -29,7 +29,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 	insertAnnotationGutter: function(){
 		var me = this;
 		var container = Ext.DomHelper.insertAfter(me.body.first(),
-				{ cls:'annotation-gutter', cn:[{cls:'widgets'},{cls:'controls'}] }, true);
+				{ cls:'annotation-gutter', cn:[{cls:'column widgets'},{cls:'column controls'}] }, true);
 		me.on('destroy' , function(){ container.remove(); },me);
 
 		AnnotationsRenderer.registerGutter(container, me);

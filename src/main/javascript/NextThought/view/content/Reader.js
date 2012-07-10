@@ -65,20 +65,29 @@ Ext.define('NextThought.view.content.Reader', {
 	},
 
 
+	getContentRoot: function(){
+		if(!this.contentRootElement){
+			this.contentRootElement = this.getDocumentElement()
+					.querySelector('#NTIContent > .page-contents');
+		}
+
+		return this.contentRootElement;
+	},
+
+
 	getAnnotationOffsets: function(){
 		var f = this.getIframe();
-		var l = f.getLeft()-this.getEl().getLeft();
-
-		var r = {
+		var l = f.getLeft()-this.getEl().getLeft(),
+			e = Ext.get(this.getContentRoot());
+		return {
 			top: f.getTop(),
 			left: f.getLeft(),
 			height: f.getHeight(),
 			width: f.getWidth(),
 			gutter: l+f.getMargin('l'),
+			contentLeftPadding: e? (e.getMargin('l') + e.getPadding('l')) : 0,
 			scrollTop: this.body.getScroll().top
 		};
-
-		return r;
 	},
 
 

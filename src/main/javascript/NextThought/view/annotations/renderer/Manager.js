@@ -11,6 +11,9 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 	gutter: {},
 	buckets: {},
 
+	controlLineTmpl: Ext.DomHelper.createTemplate( '<div class="controlContainer"></div>' ).compile(),
+	widgetLineTmpl: Ext.DomHelper.createTemplate( '<div class="widgetContainer"></div>' ).compile(),
+
 
 	/**
 	 * @constructor Inner class
@@ -19,7 +22,10 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 		this.values = {};
 		this.length = 0;
 
-		this.free = function(){ this.each(function(v,k,o){ delete o[k]; },this); this.length = 0; };
+		this.free = function(){
+			this.each(function(v,k,o){ delete o[k]; },this);
+			Ext.Object.each(this,function(k,o,me){ delete me[k]; });
+		};
 
 		this.put = function(o,key){
 			key = typeof key === 'number'? key : guidGenerator();
@@ -123,19 +129,37 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 		if(!b && c) {
 			b = new this.Bucket();
 			c.put(b,l);
+			b.height = lineInfo.rect.height;
 		}
 		return b;
 	},
 
 
 	layoutBuckets: function(prefix){
+		var r = this.getReader(prefix);
+		var o = r.getAnnotationOffsets();
 		var g = this.gutter[prefix];
 		var b = this.buckets[prefix];
+		var cT = this.controlLineTmpl;
+		var wT = this.widgetLineTmpl;
+
+		var width = o.gutter + o.contentLeftPadding;
+
+		g.setWidth(width);
+		g.controls.setLeft(width-50);
+		g.widgets.setRight(50);
 
 		b.each(function(line,y){
-			console.log(y);
+
+			line.controls = line.controls || cT.append(g.controls,[],true);
+			line.widgets = line.widgets || wT.append(g.widgets,[],true);
+
+			y = parseInt(y,10) + (Math.ceil(line.height/2)-16);
+
+			(new Ext.CompositeElement([line.controls,line.widgets])).setTop(y);
+
 			line.each(function(o){
-				console.log(o.$className);
+
 			});
 
 		});

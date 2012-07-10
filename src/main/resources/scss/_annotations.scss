@@ -244,6 +244,29 @@
 	}
 }
 
+.annotation-gutter{
+	position: absolute;
+	top: 0; left: 0;//fill the space
+	overflow: visible;
+
+	.column {
+		position: absolute;
+		left: 0;
+		right: 0;
+		top: 0;
+		overflow: visible;
+
+		.controlContainer,
+		.widgetContainer {
+			overflow: hidden;
+			position: absolute;
+			min-height: 32px;
+			width: 100%;
+			background: rgba(0,0,0,0.1);
+
+		}
+	}
+}
 
 
 .share-with-data {
