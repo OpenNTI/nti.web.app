@@ -29,7 +29,13 @@ Ext.define('NextThought.view.annotations.Redaction', {
 		if (this.actionSpan){return;}
 
 		//Add the redaction action span so the user has something to click on
-		this.actionSpan = this.createActionHandle(this.rendered[0], this.record.get('replacementText'));
+		var replacementText = this.record.get('replacementContent');
+		if (replacementText) {
+			this.actionSpan = this.createActionHandle(this.rendered[0], replacementText);
+		}
+		else {
+			this.actionSpan = this.createBlockActionHandle(this.rendered[0], replacementText);
+		}
 
 		//add the redaction class and the click handlers for redacted spans:
 		this.compElements.addCls(this.redactionCls);
@@ -71,7 +77,43 @@ Ext.define('NextThought.view.annotations.Redaction', {
 		startDelimiter.addCls('redactionDelimiter');
 		replacementTextSpan.addCls('redactionReplacementText');
 		masterSpan.insertBefore(before);
-		masterSpan.on('click', this.toggleRedaction, this);
+		//masterSpan.on('click', this.toggleRedaction, this);
+
+		//make the replacement content editable if it belongs to me.
+		if (this.record.isModifiable()){
+			replacementTextSpan.dom.setAttribute('contenteditable', 'true');
+			replacementTextSpan.on('keydown', this.editableSpanEditorKeyDown, this);
+		}
+
+		return masterSpan;
+	},
+
+
+	editableSpanEditorKeyDown: function(event, span){
+		var k = event.getKey();
+		if(k === event.ESC){
+			//return to orig:
+			span.innerHTML = this.record.get('replacementContent');
+			Ext.fly(span).blur();
+			return false;
+		}
+		else if(k === event.ENTER){
+			this.record.set('replacementContent', span.innerHTML);
+			this.record.save();
+			Ext.fly(span).blur();
+			event.stopEvent();
+			return false;
+		}
+	},
+
+
+	createBlockActionHandle: function(before, text){
+		var masterSpan = Ext.get(this.createNonAnchorableSpan());
+
+		masterSpan.update('&nbsp;');
+		masterSpan.addCls('blockRedactionAction');
+		masterSpan.insertBefore(before);
+		//masterSpan.on('click', this.toggleRedaction, this);
 		return masterSpan;
 	},
 

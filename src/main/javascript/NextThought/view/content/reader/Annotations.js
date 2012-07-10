@@ -147,7 +147,19 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 
 		//inject other menu items:
 		menu.add({
-			text: 'Redact',
+			text: 'Redact Inline',
+			handler: function(){
+				delete w.range; //so that it does not detach it on cleanup
+				var r = NextThought.model.Redaction.createFromHighlight(record);
+				r.set('replacementContent', 'redaction');
+				debugger;
+				me.createAnnotationWidget('redaction',r, range);
+				r.save();
+			}
+		});
+
+		menu.add({
+			text: 'Redact Block',
 			handler: function(){
 				delete w.range; //so that it does not detach it on cleanup
 				var r = NextThought.model.Redaction.createFromHighlight(record);

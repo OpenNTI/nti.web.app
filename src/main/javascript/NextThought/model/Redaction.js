@@ -26,8 +26,8 @@ Ext.define('NextThought.model.Redaction', {
 		{ name: 'AutoTags', type: 'Auto'},
 		{ name: 'tags', type: 'Auto'},
 		{ name: 'selectedText', type: 'string'},
-		{ name: 'replacementText', type: 'string', defaultValue: 'redaction'},
-		{ name: 'reasonText', type: 'string', defaultValue: 'Reason for redaction goes here...'},
+		{ name: 'replacementContent', type: 'string'},
+		{ name: 'redactionExplanation', type: 'string', defaultValue: 'Reason for redaction goes here...'},
 		{ name: 'applicableRange', type: 'ContentRangeDescription'}
 	]
 });
