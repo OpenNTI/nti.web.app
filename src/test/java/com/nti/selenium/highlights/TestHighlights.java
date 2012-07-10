@@ -7,7 +7,7 @@ import org.junit.Test;
 public class TestHighlights extends Highlights{
 
 	@Test
-	public void testhighlight(){
+	public void testHighlight(){
 		this.switchToIframe();
 		this.selectText(0, 0, 10);
 		this.switchToDefault();
