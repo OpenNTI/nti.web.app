@@ -368,7 +368,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 		//split it up, then interleave:
 		splits = str.split(regex);
-		whiteboards = str.match(regex);
+		whiteboards = str.match(regex) || [];
 		if (splits.length === 0){splits.push('');} //no text before WB?  just trick it.
 		for (s=0; s<splits.length; s++) {
 			t = splits[s];
