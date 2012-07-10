@@ -474,12 +474,27 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 	},
 
 
-	getNoteBody: function(s) {
-		var r = [];
+	getNoteBody: function(str) {
+		var r = [],
+			regex = /<img.*?>/gi,
+			splits,
+			whiteboards,
+			s, w = 0, t, wbid;
 
-		//var a = s.split(/<img.*?id="(.+?)">/gi);
-		//debugger;
-		return s;
+		//split it up, then interleave:
+		splits = str.split(regex);
+		whiteboards = str.match(regex);
+		if (splits.length === 0){splits.push('');} //no text before WB?  just trick it.
+		for (s=0; s<splits.length; s++) {
+			t = splits[s];
+			if (t && t.length > 0){r.push(t);}
+			for (w; w<whiteboards.length; w++){
+				wbid = whiteboards[w].match(/id="(.*?)"/)[1];
+				r.push(this.openWhiteboards[wbid].getEditor().getValue());
+			}
+		}
+
+		return r;
 	},
 
 

@@ -91,6 +91,11 @@ Ext.define('NextThought.view.whiteboard.Window',{
 	},
 
 
+	getEditor: function(){
+		return this.down('whiteboard-editor');
+	},
+
+
 	getValue: function(){
 		return this.down('whiteboard-editor').getValue();
 	}
