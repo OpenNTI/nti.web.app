@@ -11,18 +11,20 @@ public class XpathUtils {
 		return builder.toString();
 	}
 	
-	public static String xpathBuilder(String...strings){
-		
-		switch(strings.length){
-		
-		case 1: return buildString("//", strings[0]);
-		case 2: return buildString("//", strings[0], "[text()='", strings[1], "']");
-		case 3: return buildString("//", strings[0], "[@", strings[1], "='", strings[2], "']");
-		case 4: return buildString("//", strings[0], "[@", strings[1], "='", strings[2], "' and text()='", strings[3], "']");
-		
-		}
-		
-		return null;
+	public static String xpathBuilder(String tag){
+		return buildString("//", tag);
+	}
+	
+	public static String xpathBuilder(String tag, String text){
+		return buildString("//", tag, "[text()='", text, "']");
+	}
+
+	public static String xpathBuilder(String tag, String attribute, String value){
+		return buildString("//", tag, "[@", attribute, "='", value, "']");
+	}
+	
+	public static String xpathBuilder(String tag, String attribute, String value, String text){
+		return buildString("//", tag, "[@", attribute, "='", value, "' and text()='", text, "']");
 	}
 	
 	public static String xpathPartialAttributeBuilder(final String tag, 
