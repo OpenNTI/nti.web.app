@@ -27,51 +27,51 @@ public class TestQuizzes extends Quizzes {
 	@Test
 	public void testSubmit() { 
 		this.clickSubmit();
-		this.xpath.setActiveQuestion("1");
-		assertTrue(this.elementExists(this.xpath.getNoAnswerResult()));
+		this.setActiveQuestionID("1");
+		assertTrue(this.elementExists(this.getNoAnswerResult()));
 	}
 	
 	@Test
 	public void testReset() {
 		this.clickSubmit();
 		this.clickReset();
-		this.xpath.setActiveQuestion("1");
-		assertTrue(this.elementExists(this.xpath.getAnswerableQuestion()));
+		this.setActiveQuestionID("1");
+		assertTrue(this.elementExists(this.getAnswerableQuestion()));
 	}
 	
 	@Test
 	public void testCloseMathSymbolsWindow() {
 		this.clickBlank("1");
 		this.clickMathSymbolsXButton();
-		assertTrue(this.elementExists(this.xpath.getMathSymbolsWindowNotVisible()));
+		assertTrue(this.elementExists(XpathUtilsQuizzes.getMathSymbolsWindowNotVisible()));
 	}
 	
 	@Test
 	public void testGetPreviousQuizzes() {
-		this.xpath.setActiveQuestion("1");
+		this.setActiveQuestionID("1");
 		final String answer = Integer.toString(random.nextInt(100));
 		inspectPreviousQuiz(answer);
 		this.switchToIframe();
-		assertEquals(this.findElement(this.xpath.getOldQuizzesAnswer()).getText(), answer);
+		assertEquals(this.findElement(this.getOldQuizzesAnswer()).getText(), answer);
 	}
 	
 	@Test
 	public void testOpenWhyBubble(){
-		this.xpath.setActiveQuestion("1");
+		this.setActiveQuestionID("1");
 		this.answerQuestion("1", "1");
 		this.clickSubmit();
 		this.openWhyBubble();
-		assertTrue(this.elementExists(this.xpath.getOpenWhyBubble()));
+		assertTrue(this.elementExists(this.getOpenWhyBubble()));
 	}
 	
 	@Test
 	public void testCloseWhyBubble(){
-		this.xpath.setActiveQuestion("1");
+		this.setActiveQuestionID("1");
 		this.answerQuestion("1", "1");
 		this.clickSubmit();
 		this.openWhyBubble();
 		this.closeWhyBubble();
-		assertTrue(this.elementExists(this.xpath.getClosedWhyBubble()));
+		assertTrue(this.elementExists(this.getClosedWhyBubble()));
 	}
 	
 	@Test

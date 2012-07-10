@@ -2,7 +2,7 @@ package com.nti.selenium.navigation;
 
 import com.nti.selenium.login.XpathUtilsLogin;
 
-public class XpathUtilsNav extends XpathUtilsLogin{
+public class XpathUtilsNav extends XpathUtilsLogin {
 	
 	public static String getLibrary() {
 		return xpathBuilder("span", "id", "button-1014-btnIconEl");

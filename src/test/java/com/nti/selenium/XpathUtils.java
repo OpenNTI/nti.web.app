@@ -10,7 +10,7 @@ public class XpathUtils {
 		}
 		return builder.toString();
 	}
-	
+
 	public static String xpathBuilder(String tag){
 		return buildString("//", tag);
 	}

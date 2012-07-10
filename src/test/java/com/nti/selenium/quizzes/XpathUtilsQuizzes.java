@@ -4,117 +4,111 @@ import com.nti.selenium.navigation.XpathUtilsNav;
 
 public class XpathUtilsQuizzes extends XpathUtilsNav {
 	
-	private String currentQuestionID;
-	
-	public void setActiveQuestion(String questionID){
-		this.currentQuestionID = questionID;
-	}
-	
-	public String getSqrtButton(){
+	public static String getSqrtButton() {
 		return xpathBuilder("span", "Ã");
 	}
 	
-	public String getXSquaredButton(){
+	public static String getXSquaredButton() {
 		return xpathBuilder("span", "Ã");
 	}
 
-	public String getParenthesesButton(){
+	public static String getParenthesesButton() {
 		return xpathBuilder("span", "Ã");
 	}
 	
-	public String getPiButton(){
+	public static String getPiButton() {
 		return xpathBuilder("span", "Ã");
 	}
 	
-	public String getApproxButton(){
+	public static String getApproxButton() {
 		return xpathBuilder("span", "Ã");
 	}
 	
-	public String getSubmitButton(){
+	public static String getSubmitButton() {
 		return xpathBuilder("a", "id", "submit", "Submit");
 	}
 	
-	public String getResetButton(){
+	public static String getResetButton() {
 		return xpathBuilder("a", "id", "submit", "Reset");
 	}
 	
- 	public String getMathSymbolsWindowNotVisibleClass(){
+ 	public static String getMathSymbolsWindowNotVisibleClass(){
 		return "x-window x-layer x-window-default x-closable x-window-closable x-window-default-closable x-unselectable x-hide-offsets";
 	}
 	
-	public String getAnswerBlank() {
-		return buildString(xpathBuilder("li", "value", currentQuestionID), 
-								xpathBuilder("div", "class", "question"),
-								xpathBuilder("div", "class", "answerblock"),
-								"//span");
+	public static String getAnswerBlank(final String questionID) {
+		return buildString(	xpathBuilder("li", "value", questionID), 
+							xpathBuilder("div", "class", "question"),
+							xpathBuilder("div", "class", "answerblock"),
+							"//span");
 	}
 	
-	public String getAnswerResult() {
-		return buildString(xpathBuilder("li", "value", currentQuestionID),
-								xpathBuilder("div", "class", "question"),
-								xpathBuilder("div", "class", "result"));
+	public static String getAnswerResult(final String questionID) {
+		return buildString(	xpathBuilder("li", "value", questionID),
+							xpathBuilder("div", "class", "question"),
+							xpathBuilder("div", "class", "result"));
 	}
 	
-	public String getQuestionTextArea() {
-		return buildString(getAnswerBlank(), xpathBuilder("span", "class", "textarea"), "//textarea");
+	public static String getQuestionTextArea(final String questionID) {
+		return buildString(getAnswerBlank(questionID), xpathBuilder("span", "class", "textarea"), "//textarea");
 	}
 	
-	public String getNoAnswerResult() {
-		return buildString(this.getAnswerResult(),
-								xpathBuilder("span", "class", "result noanswer"));
+	public static String getNoAnswerResult(final String questionID) {
+		return buildString(	getAnswerResult(questionID),
+							xpathBuilder("span", "class", "result noanswer"));
 	}
 	
-	public String getCorrectAnswerResult() {
-		return buildString(this.getAnswerResult(),
-								xpathBuilder("span", "class", "result correct"));
+	public static String getCorrectAnswerResult(final String questionID) {
+		return buildString(	getAnswerResult(questionID),
+							xpathBuilder("span", "class", "result correct"));
 	}
 	
-	public String getIncorrectAnswerResult() {
-		return buildString(this.getAnswerResult(),
-								xpathBuilder("span", "class", "result incorrect"));
+	public static String getIncorrectAnswerResult(final String questionID) {
+		return buildString(	getAnswerResult(questionID),
+							xpathBuilder("span", "class", "result incorrect"));
 	}
 	
-	public String getAnswerableQuestion() {
-		return buildString(xpathBuilder("li", "value", currentQuestionID),
-								xpathBuilder("div", "class", "question"),
-								xpathBuilder("div", "class", "result hidden"));
+	public static String getAnswerableQuestion(final String questionID) {
+		return buildString(	xpathBuilder("li", "value", questionID),
+							xpathBuilder("div", "class", "question"),
+							xpathBuilder("div", "class", "result hidden"));
 	}
 	
-	public String getMathSymbolsXButton() {
+	public static String getMathSymbolsXButton() {
 		return xpathBuilder("img", "class", "x-tool-close");
 	}
 
-	public String getMathSymbolsWindowNotVisible() {
+	public static String getMathSymbolsWindowNotVisible() {
 		return xpathBuilder("div", "class", getMathSymbolsWindowNotVisibleClass());
 	}
 	
-	public String getOldQuizzesQuestionMark() {
+	public static String getOldQuizzesQuestionMark() {
 		return xpathBuilder("img", "class", "action quizresults");
 	}
 	
-	public String getOldQuizzes() {
+	public static String getOldQuizzes() {
 		return xpathBuilder("div", "class", "x-component x-box-item x-component-default x-menu-item");
 	}
 
-	public String getOldQuizzesAnswer(){
-		return buildString(	xpathBuilder("input", "id", currentQuestionID),
+	public static String getOldQuizzesAnswer(final String questionID) {
+		return buildString(	xpathBuilder("input", "id", questionID),
 							"/../../div[@class='result']",
 							"//span[@class='mathjax tex2jax_process response answer-text']",
 							"//span[@class='MathJax_MathML']");
 	}
 	
-	public String getClosedWhyBubble(){
-		return buildString(	this.getAnswerResult(),
+	public static String getClosedWhyBubble(final String questionID) {
+		return buildString(	getAnswerResult(questionID),
 							xpathBuilder("a", "class", "why", "Why?"));
 	}
 	
-	public String getOpenWhyBubble(){
-		return buildString(	this.getAnswerResult(),
+	public static String getOpenWhyBubble(final String questionID) {
+		return buildString(	getAnswerResult(questionID),
 							xpathBuilder("a", "class", "why bubble", "Why?"));
 	}
 	
-	public String getFractionQuizAnswer(){
-		return buildString(	this.getAnswerResult(),
+	public static String getFractionQuizAnswer(final String questionID) {
+		return buildString(	getAnswerResult(questionID),
 							xpathBuilder("span", "class", "mathjax tex2jax_process response answer-text"),
 							xpathBuilder("script", "type", "math/tex"));
 	}

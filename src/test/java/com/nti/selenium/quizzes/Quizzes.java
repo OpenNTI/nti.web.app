@@ -13,9 +13,11 @@ import com.nti.selenium.navigation.Navigation;
 
 public class Quizzes extends Navigation {
 	
-	protected String[] answers = {"420", "3", "69", "5", "40", "64", "480", "5/8", "6", "3"};
-	protected String wrongAnswer = "wrongAnswer";
-	protected XpathUtilsQuizzes xpath = new XpathUtilsQuizzes();
+	protected static final String[] answers = {"420", "3", "69", "5", "40", "64", "480", "5/8", "6", "3"};
+	protected static final String wrongAnswer = "wrongAnswer";
+	
+	
+	private String activeQuestionID = null;
 	
 	@Before
 	public void setUp() throws Exception {
@@ -23,11 +25,19 @@ public class Quizzes extends Navigation {
 		this.navigateTo("MathCounts 2012", null, "Warm-Up 1");
 	}
 	
+	protected String getActiveQuestionID() {
+		return this.activeQuestionID;
+	}
+	
+	protected void setActiveQuestionID(final String questionID) {
+		this.activeQuestionID = questionID;
+	}
+	
 	public String getTextInAnswerblock(final String questionID) {
 		this.switchToIframe();
-		this.xpath.setActiveQuestion(questionID);
+		this.setActiveQuestionID(questionID);
 		final StringBuilder answer = new StringBuilder();
-		final String xp = XpathUtilsQuizzes.buildString(this.xpath.getAnswerBlank(), "//span");
+		final String xp = XpathUtilsQuizzes.buildString(XpathUtilsQuizzes.getAnswerBlank(questionID), "//span");
 		for (final WebElement element: this.findElements(xp))
 		{
 			final String character = element.getText();
@@ -38,49 +48,51 @@ public class Quizzes extends Navigation {
 	
 	public void clickBlank(final String questionID) {
 		this.switchToIframe();
-		this.xpath.setActiveQuestion(questionID);
+		this.setActiveQuestionID(questionID);
 		this.switchToIframe();
-		this.findElement(this.xpath.getAnswerBlank()).click();
+		this.findElement(XpathUtilsQuizzes.getAnswerBlank(questionID)).click();
 	}
 	
 	public void answerQuestion(final String questionID, final String answer) {
 		this.switchToIframe();
 		this.clickBlank(questionID);
-		for(char ch: (answer).toCharArray()){
-			this.findElement(this.xpath.getQuestionTextArea()).sendKeys(Character.toString(ch));
+		for(final char ch: (answer).toCharArray())
+		{
+			this.findElement(XpathUtilsQuizzes.getQuestionTextArea(questionID)).sendKeys(Character.toString(ch));
 		}
 	}
 	
 	public void clickSqrtMathSymbol() {
 		this.switchToDefault();
-		this.switchToDefault();
-		this.findElement(this.xpath.getSqrtButton()).click();
+		this.findElement(XpathUtilsQuizzes.getSqrtButton()).click();
 	}
 	
 	public void clickSubmit() {
 		this.switchToIframe();
-		this.findElement(this.xpath.getSubmitButton()).click();
+		this.findElement(XpathUtilsQuizzes.getSubmitButton()).click();
 		this.waitForLoading();
 	}
 	
 	public void clickReset() {
 		this.switchToIframe();
-		this.findElement(this.xpath.getResetButton()).click();
+		this.findElement(XpathUtilsQuizzes.getResetButton()).click();
 		this.waitForLoading();
 	}
 	
 	public void clickMathSymbolsXButton() {
 		this.switchToDefault();
-		this.waitForElement(this.xpath.getMathSymbolsXButton());
-		this.findElement(this.xpath.getMathSymbolsXButton()).click();
+		this.waitForElement(XpathUtilsQuizzes.getMathSymbolsXButton());
+		this.findElement(XpathUtilsQuizzes.getMathSymbolsXButton()).click();
 	}
 	
 	public void openWhyBubble() {
-		this.findElement(this.xpath.getClosedWhyBubble()).click();
+		final String qid = this.getActiveQuestionID();
+		this.findElement(XpathUtilsQuizzes.getClosedWhyBubble(qid)).click();
 	}
 	
 	public void closeWhyBubble() {
-		this.findElement(this.xpath.getOpenWhyBubble()).click();
+		final String qid = this.getActiveQuestionID();
+		this.findElement(XpathUtilsQuizzes.getOpenWhyBubble(qid)).click();
 	}
 	
 	public void inspectPreviousQuiz(final String answer) {
@@ -90,16 +102,17 @@ public class Quizzes extends Navigation {
 		this.clickArrowForwardButton();
 		this.clickArrowBackButton();
 		this.switchToDefault();
-		List<WebElement> quizQuestionMarkElements = this.findElements(this.xpath.getOldQuizzesQuestionMark());
+		final List<WebElement> quizQuestionMarkElements = 
+						this.findElements(XpathUtilsQuizzes.getOldQuizzesQuestionMark());
 		quizQuestionMarkElements.get(quizQuestionMarkElements.size()-1).click();
-		List<WebElement> quizElements = this.findElements(this.xpath.getOldQuizzes());
+		List<WebElement> quizElements = this.findElements(XpathUtilsQuizzes.getOldQuizzes());
 		quizElements.get(quizQuestionMarkElements.size()-1).click();
 	}
 	
 	public void completeQuiz100Percent(){
 		for(int i = 0; i < 10; i++)
 		{
-			this.answerQuestion(Integer.toString(i + 1), this.answers[i]);
+			this.answerQuestion(Integer.toString(i + 1), Quizzes.answers[i]);
 		}
 		this.clickSubmit();
 	}
@@ -107,21 +120,24 @@ public class Quizzes extends Navigation {
 	public void completeQuiz0Percent(){
 		for(int i = 0; i < 10; i++)
 		{
-			this.answerQuestion(Integer.toString(i + 1), this.wrongAnswer);
+			this.answerQuestion(Integer.toString(i + 1), Quizzes.wrongAnswer);
 		}
 		this.clickSubmit();
 	}
 	
 	public void checkAnswers100Percent() {
+
 		for(int i = 0; i < 10; i++)
 		{	
-			this.xpath.setActiveQuestion(Integer.toString(i + 1));
-			final String answerInElement = this.findElement(this.xpath.getCorrectAnswerResult()).getText();
-			final String[] answerParts = {"\"", this.answers[i], "\" is correct"};
-			for(char character: this.answers[i].toCharArray()) 
+			this.setActiveQuestionID(Integer.toString(i + 1));
+			final String qid = this.getActiveQuestionID();
+			final String answerInElement =
+						this.findElement(XpathUtilsQuizzes.getCorrectAnswerResult(qid)).getText();
+			final String[] answerParts = {"\"", Quizzes.answers[i], "\" is correct"};
+			for (final char character: Quizzes.answers[i].toCharArray()) 
 			{
 				if ('/' == character) {
-					answerParts[1] = XpathUtilsQuizzes.buildString(this.answers[i].split("/"));
+					answerParts[1] = XpathUtilsQuizzes.buildString(Quizzes.answers[i].split("/"));
 					break;
 				}
 			}
@@ -136,11 +152,12 @@ public class Quizzes extends Navigation {
 	}
 	
 	public void checkAnswers0Percent(){
-		for(int i = 0; i < 10; i++)
+		for (int i = 0; i < 10; i++)
 		{
-			this.xpath.setActiveQuestion(Integer.toString(i + 1));
-			final String answerInElement = this.findElement(this.xpath.getIncorrectAnswerResult()).getText();
-			final String answer = XpathUtilsQuizzes.buildString("\"", this.wrongAnswer, "\" is incorrect");
+			this.setActiveQuestionID(Integer.toString(i + 1));
+			final String qid = this.getActiveQuestionID();
+			final String answerInElement = this.findElement(XpathUtilsQuizzes.getIncorrectAnswerResult(qid)).getText();
+			final String answer = XpathUtilsQuizzes.buildString("\"", Quizzes.wrongAnswer, "\" is incorrect");
 			try{
 				assertEquals(answer, answerInElement);
 			} catch(final NoSuchElementException e) {
@@ -149,4 +166,23 @@ public class Quizzes extends Navigation {
 		}
 	}
 	
+	public String getNoAnswerResult() {
+		return XpathUtilsQuizzes.getNoAnswerResult(this.getActiveQuestionID());
+	}
+	
+	public String getAnswerableQuestion() {
+		return XpathUtilsQuizzes.getAnswerableQuestion(this.getActiveQuestionID());
+	}
+	
+	public String getOldQuizzesAnswer() {
+		return XpathUtilsQuizzes.getOldQuizzesAnswer(this.getActiveQuestionID());
+	}
+	
+	public String getClosedWhyBubble() {
+		return XpathUtilsQuizzes.getClosedWhyBubble(this.getActiveQuestionID());
+	}
+	
+	public String getOpenWhyBubble() {
+		return XpathUtilsQuizzes.getOpenWhyBubble(this.getActiveQuestionID());
+	}
 }
