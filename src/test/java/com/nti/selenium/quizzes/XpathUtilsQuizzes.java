@@ -5,23 +5,23 @@ import com.nti.selenium.navigation.XpathUtilsNav;
 public class XpathUtilsQuizzes extends XpathUtilsNav {
 	
 	public static String getSqrtButton() {
-		return xpathBuilder("span", "Ã");
+		return xpathBuilder("span", "class", "x-btn-icon radic");
 	}
 	
 	public static String getXSquaredButton() {
-		return xpathBuilder("span", "Ã");
+		return xpathBuilder("span", "class", "x-btn-icon squared");
 	}
 
 	public static String getParenthesesButton() {
-		return xpathBuilder("span", "Ã");
+		return xpathBuilder("span", "class", "x-btn-icon parens");
 	}
 	
 	public static String getPiButton() {
-		return xpathBuilder("span", "Ã");
+		return xpathBuilder("span", "class", "x-btn-icon pi");
 	}
 	
 	public static String getApproxButton() {
-		return xpathBuilder("span", "Ã");
+		return xpathBuilder("span", "class", "x-btn-icon approx");
 	}
 	
 	public static String getSubmitButton() {

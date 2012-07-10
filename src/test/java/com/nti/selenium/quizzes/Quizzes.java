@@ -67,6 +67,26 @@ public class Quizzes extends Navigation {
 		this.findElement(XpathUtilsQuizzes.getSqrtButton()).click();
 	}
 	
+	public void clickSquaredMathSymbol() {
+		this.switchToDefault();
+		this.findElement(XpathUtilsQuizzes.getXSquaredButton()).click();
+	}
+	
+	public void clickParenthesesMathSymbol() {
+		this.switchToDefault();
+		this.findElement(XpathUtilsQuizzes.getParenthesesButton()).click();
+	}
+	
+	public void clickPiMathSymbol() {
+		this.switchToDefault();
+		this.findElement(XpathUtilsQuizzes.getPiButton()).click();
+	}
+	
+	public void clickApproxMathSymbol() {
+		this.switchToDefault();
+		this.findElement(XpathUtilsQuizzes.getApproxButton()).click();
+	}
+	
 	public void clickSubmit() {
 		this.switchToIframe();
 		this.findElement(XpathUtilsQuizzes.getSubmitButton()).click();

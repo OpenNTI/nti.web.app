@@ -21,7 +21,17 @@ public class TestQuizzes extends Quizzes {
 	public void testClickSymbolButton() {
 		this.clickBlank("1");
 		this.clickSqrtMathSymbol();
-		assertEquals("√", this.getTextInAnswerblock("1"));
+		this.clickSquaredMathSymbol();
+		this.clickParenthesesMathSymbol();
+//		this.clickPiMathSymbol();
+		this.clickApproxMathSymbol();
+		String answerBlank = XpathUtilsQuizzes.buildString(
+				Character.toString((char)8730),
+				"2",
+				"()",
+//				Character.toString((char)982),
+				Character.toString((char)8776));
+		assertEquals(answerBlank, this.getTextInAnswerblock("1"));
 	}
 	
 	@Test
@@ -37,13 +47,6 @@ public class TestQuizzes extends Quizzes {
 		this.clickReset();
 		this.setActiveQuestionID("1");
 		assertTrue(this.elementExists(this.getAnswerableQuestion()));
-	}
-	
-	@Test
-	public void testCloseMathSymbolsWindow() {
-		this.clickBlank("1");
-		this.clickMathSymbolsXButton();
-		assertTrue(this.elementExists(XpathUtilsQuizzes.getMathSymbolsWindowNotVisible()));
 	}
 	
 	@Test
