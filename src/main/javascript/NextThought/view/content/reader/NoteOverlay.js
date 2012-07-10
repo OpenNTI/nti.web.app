@@ -237,7 +237,6 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 					break;
 				}
 				if(!Ext.fly(node).contains(r.startContainer)){
-					console.log('left', node, r.startContainer);
 					if(step === 'line'){
 						step = 'lineboundary';
 						setup(step);
