@@ -90,6 +90,7 @@ Ext.define('NextThought.view.annotations.Redaction', {
 
 
 	editableSpanEditorKeyDown: function(event, span){
+		event.stopPropagation();
 		var k = event.getKey();
 		if(k === event.ESC){
 			//return to orig:
