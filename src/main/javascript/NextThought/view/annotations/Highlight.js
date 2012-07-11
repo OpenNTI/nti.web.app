@@ -257,10 +257,11 @@ Ext.define('NextThought.view.annotations.Highlight', {
 
 
 	doWrap: function(range) {
-		var span = this.createNonAnchorableSpan();
-		span.setAttribute('class', this.highlightCls);
+		var span = this.createNonAnchorableSpan(),
+			style = this.record.get('style') || 'plain';
 
-		Ext.fly(span).addCls(this.record.get('style'));
+		span.setAttribute('class', this.highlightCls);
+		Ext.fly(span).addCls(style);
 
 
 		range.surroundContents(span);
