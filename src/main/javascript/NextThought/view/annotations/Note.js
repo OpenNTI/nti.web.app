@@ -9,7 +9,7 @@ Ext.define( 'NextThought.view.annotations.Note', {
 	*/
 
 	singleGutterWidgetTmpl: Ext.DomHelper.createTemplate( {
-		cls: 'note-gutter-widget-single',
+		cls: 'note-gutter-widget single',
 		children: [
 			{
 				cls: 'content',
@@ -24,7 +24,7 @@ Ext.define( 'NextThought.view.annotations.Note', {
 
 
 	multiGutterWidgetTmpl: Ext.DomHelper.createTemplate( {
-		cls: 'thumb note-gutter-widget-multi'
+		cls: 'thumb note-gutter-widget multi'
 	}).compile(),
 
 	constructor: function(config){
