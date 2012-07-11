@@ -13,6 +13,7 @@ Ext.define('NextThought.model.Note', {
 		{ name: 'tags', type: 'Auto'},
 		{ name: 'applicableRange', type: 'ContentRangeDescription'},
 		{ name: 'body', type: 'auto' },
+		{ name: 'style', type: 'string' },
 		{ name: 'sharedWith', type: 'UserList' },
 		{ name: 'prohibitReSharing', type: 'boolean' }
 	]
