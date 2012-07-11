@@ -23,13 +23,13 @@ public class TestQuizzes extends Quizzes {
 		this.clickSqrtMathSymbol();
 		this.clickSquaredMathSymbol();
 		this.clickParenthesesMathSymbol();
-//		this.clickPiMathSymbol();
+		this.clickPiMathSymbol();
 		this.clickApproxMathSymbol();
 		String answerBlank = XpathUtilsQuizzes.buildString(
 				Character.toString((char)8730),
 				"2",
 				"()",
-//				Character.toString((char)982),
+				Character.toString('\u03C0'),
 				Character.toString((char)8776));
 		assertEquals(answerBlank, this.getTextInAnswerblock("1"));
 	}
