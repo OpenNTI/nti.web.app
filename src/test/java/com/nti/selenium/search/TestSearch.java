@@ -42,16 +42,21 @@ public class TestSearch extends Search{
 		assertTrue(this.elementExists(XpathUtilsSearch.getSearchTextBoxExpandMenu()));
 	}
 	
-//	@Test
-//	public void testSearchEverything(){
-//		
-//	}
-//	
-//	@Test
-//	public void testRemoveSearchEverything(){
-//		
-//	}
-//	
+	@Test
+	public void testSearchOptionsEverything(){
+		this.clickSearchTextBoxExpandArrow();
+		assertTrue(this.elementExists(XpathUtilsSearch.getSearchTextBoxExpandMenu()));
+		assertTrue(this.isChecked("Everything"));
+	}
+	
+	@Test
+	public void testRemoveSearchEverything(){
+		this.clickSearchTextBoxExpandArrow();
+		assertTrue(this.elementExists(XpathUtilsSearch.getSearchTextBoxExpandMenu()));
+		this.clickMenuItem("Everything");
+		assertTrue(this.isChecked("Everything"));
+	}
+	
 //	@Test
 //	public void testSearchBook(){
 //		

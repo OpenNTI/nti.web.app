@@ -66,4 +66,14 @@ public class Search extends Navigation{
 		this.findElement(XpathUtilsSearch.getSearchTextBoxExpandArrow()).click();
 	}
 	
+	public void clickMenuItem(String name){
+		this.findElement(XpathUtilsSearch.getSearchTextBoxExpandMenuItem(name)).click();
+	}
+	
+	public boolean isChecked(String name){
+		WebElement element = this.findElement(XpathUtilsSearch.getSearchTextBoxExpandMenuItem(name));
+		String clazz = element.getAttribute("class");
+		return !(clazz.matches(".*unchecked.*"));
+	}
+	
 }
