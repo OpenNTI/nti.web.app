@@ -262,11 +262,16 @@
 
 		.controlContainer,
 		.widgetContainer {
-			overflow: hidden;
+			//overflow: hidden;
 			position: absolute;
 			min-height: 32px;
 			width: 100%;
 			background: #ffffff;
+
+			.thumb {
+				float: right;
+				clear: left;
+			}
 		}
 		.controlContainer{
 			bottom: transparent;
@@ -363,6 +368,9 @@ div.redaction-control {
 }
 
 .note-gutter-widget-single {
+	position: relative;
+	//top: -5px;
+
     .name {
         @include menu-label-text-treatment;
         color: #3fb3f6;

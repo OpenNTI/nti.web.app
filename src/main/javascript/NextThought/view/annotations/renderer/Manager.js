@@ -154,7 +154,7 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 			line.controls = line.controls || cT.append(g.controls,[],true);
 			line.widgets = line.widgets || wT.append(g.widgets,[],true);
 
-			y = parseInt(y,10) + (Math.ceil(line.height/2)-16);
+			y = parseInt(y,10) + (Math.ceil(line.height/2)-18);
 
 			(new Ext.CompositeElement([line.controls,line.widgets])).setTop(y);
 

@@ -24,7 +24,7 @@ Ext.define( 'NextThought.view.annotations.Note', {
 
 
 	multiGutterWidgetTmpl: Ext.DomHelper.createTemplate( {
-		cls: 'note-gutter-widget-multi'
+		cls: 'thumb note-gutter-widget-multi'
 	}).compile(),
 
 	constructor: function(config){
@@ -45,7 +45,7 @@ Ext.define( 'NextThought.view.annotations.Note', {
 
 
 	getGutterWidget: function(numberOfSiblings){
-		if (numberOfSiblings > 1){
+		if (numberOfSiblings > 0){//siblings... there is "this" and n others
 			if (!this.multiGutterWidget){
 				this.createMultiGutterWidget();
 			}
