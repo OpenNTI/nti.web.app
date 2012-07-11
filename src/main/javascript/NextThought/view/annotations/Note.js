@@ -20,7 +20,12 @@ Ext.define( 'NextThought.view.annotations.Note', {
 			},
 			{cls: 'mask'}
 		]
-	} ).compile(),
+	}).compile(),
+
+
+	multiGutterWidgetTmpl: Ext.DomHelper.createTemplate( {
+		cls: 'note-gutter-widget-multi'
+	}).compile(),
 
 	constructor: function(config){
 		this.callParent(arguments);
@@ -42,7 +47,7 @@ Ext.define( 'NextThought.view.annotations.Note', {
 	getGutterWidget: function(numberOfSiblings){
 		if (numberOfSiblings > 1){
 			if (!this.multiGutterWidget){
-
+				this.createMultiGutterWidget();
 			}
 			return this.multiGutterWidget;
 
@@ -70,9 +75,22 @@ Ext.define( 'NextThought.view.annotations.Note', {
 			var name = u[0].getName();
 			this.singleGutterWidget.down('.name').update(name);
 		}, this);
+	},
 
 
+	createMultiGutterWidget: function(){
+		var creator = this.record.get('Creator'),
+			htmlString = this.multiGutterWidgetTmpl.apply(),
+			dom = Ext.DomHelper.createDom({html:htmlString}).firstChild;
 
+		//now create the ext object:
+		this.multiGutterWidget = Ext.get(dom);
+
+		UserRepository.getUser(creator, function(u){
+			var url = u[0].get('avatarURL');
+			Ext.fly(this.multiGutterWidget).setStyle({backgroundImage: "url("+url+")"});
+		}, this);
 	}
+
 
 });
