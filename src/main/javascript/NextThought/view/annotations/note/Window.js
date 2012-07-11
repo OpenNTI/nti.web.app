@@ -21,12 +21,18 @@ Ext.define('NextThought.view.annotations.note.Window',{
 
 	layout: {
 		type: 'vbox',
-		align: 'stretchmax'
+		align: 'stretch'
 	},
 	items: [
 		{xtype: 'note-filter-bar' },
 		{xtype: 'note-carousel' },
 		{xtype: 'note-main-view' },
 		{xtype: 'note-responses' }
-	]
+	],
+
+
+	initComponent: function(){
+		this.callParent(arguments);
+		this.down('note-main-view').setRecord(this.record);
+	}
 });

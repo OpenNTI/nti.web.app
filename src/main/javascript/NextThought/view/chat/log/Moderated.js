@@ -89,7 +89,7 @@ Ext.define('NextThought.view.chat.log.Moderated', {
 		me.renderData.time = Ext.Date.format(m.get('Last Modified'), 'g:i:sa');
 		me.renderData.name = 'resolving...';
 
-		AnnotationUtils.compileBodyContent(m,function(content){
+		m.compileBodyContent(function(content){
 			me.renderData.body = content;
 			if(me.rendered){
 			   me.text.update(me.renderData.body);

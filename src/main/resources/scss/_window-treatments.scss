@@ -1,3 +1,14 @@
+@mixin reset-window-border-radius($radius){
+	&,iframe,.x-window-body{ border-radius: $radius; }
+	.nti-window-header {
+		&,.header-body {
+			border-radius: $radius $radius 0 0;
+			.controls {border-radius: 0 $radius 0 0;}
+		}
+	}
+	.nti-window-footer { border-radius: 0 0 $radius $radius; }
+}
+
 
 .nti-window {
     background-color: #fcfcfc;

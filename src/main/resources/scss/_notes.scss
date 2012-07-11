@@ -1,0 +1,27 @@
+.note-window {
+	@extend .nti-window;
+	@include reset-window-border-radius(3px);
+	box-shadow: 0 0 50px 5px rgba(0, 0, 0, 0.3);
+
+	&,.nti-window-header{
+		background-color: #ffffff;
+	}
+
+	.nti-window-header{
+		.header-body {
+			span {}
+		}
+	}
+
+	.carousel {
+		background: #e6e6e6;
+		border: 1px solid #c5c5c5;
+		border-left-width: 0;
+		border-right-width: 0;
+	}
+
+	.main-view {
+		border: 0px solid #f1f1f1;
+		border-bottom-width: 1px;
+	}
+}

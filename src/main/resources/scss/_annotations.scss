@@ -114,11 +114,7 @@
 
 				.content {
 					&, * {
-						-moz-user-select: text;
-						-khtml-user-select: text;
-						-webkit-user-select: text;
-						-o-user-select: text;
-						user-select: text;
+						@include allow-select;
 					}
 
 					white-space: pre;
@@ -408,6 +404,14 @@ div.redaction-control {
 	}
 }
 
+.body-divider {
+	@include no-select;
+	position: relative;
+	overflow: hidden;
+	text-align: left;
+	margin: 10px;
+	padding: 5px;
+}
 
 /* Styles below are intended to target things inside the content iframe */
 

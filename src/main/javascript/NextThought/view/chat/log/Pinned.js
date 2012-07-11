@@ -35,7 +35,7 @@ Ext.define('NextThought.view.chat.log.Pinned', {
 		delete me.message;
 
 		me.renderData.name = 'resolving...';
-		AnnotationUtils.compileBodyContent(m,function(content){
+		m.compileBodyContent(function(content){
 			me.renderData.body = content;
 			if(me.rendered){
 			   me.text.update(me.renderData.body);

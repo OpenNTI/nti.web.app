@@ -1,3 +1,21 @@
+@mixin no-select {
+	-moz-user-select: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-ms-user-select: none;
+	-o-user-select: none;
+	user-select: none;
+}
+
+@mixin allow-select {
+	-moz-user-select: text;
+	-webkit-user-select: text;
+	-khtml-user-select: text;
+	-ms-user-select: text;
+	-o-user-select: text;
+	user-select: text;
+}
+
 
 @mixin scrollbar($track:white,$nib:rgba(0,0,0,0.5),$margin:5px 0){
 	.detected-scrollbars &::-webkit-scrollbar,

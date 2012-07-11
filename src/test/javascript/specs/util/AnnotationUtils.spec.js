@@ -129,34 +129,11 @@ describe("Annotation Utils", function() {
 						'<img.+?src="data:image/png;.+?".*?> '+
 					'</div>';
 
-		AnnotationUtils.compileBodyContent(note,function(text){
+		note.compileBodyContent(function(text){
 			expect(new RegExp(reg.replace(/\S+/g,'.*?'),'i').test(text)).toBeTruthy();
 		});
 
 	});
-
-
-	it("should call callbacks if given",function(){
-			var note = Ext.create('NextThought.model.Note',{body:[
-					'test',
-					Ext.clone(testWhiteboard),
-					Ext.clone(testWhiteboard)
-				]}),
-				clickHandler = jasmine.createSpy(),
-				thumbnailGen = jasmine.createSpy();
-
-			AnnotationUtils.compileBodyContent(note,{
-				getClickHandler: clickHandler,
-				getThumbnail: function(v,id,c){
-					thumbnailGen();
-					c('');
-				}
-			});
-
-			expect(clickHandler.callCount).toBe(2);
-			expect(thumbnailGen.callCount).toBe(2);
-
-		});
 
 
 	it("should be able to identify a block node",function(){

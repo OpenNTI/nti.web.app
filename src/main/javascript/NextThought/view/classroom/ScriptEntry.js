@@ -50,7 +50,7 @@ Ext.define('NextThought.view.classroom.ScriptEntry', {
 			me.message = Ext.create('NextThought.model.MessageInfo', {body: a});
 		}
 
-		AnnotationUtils.compileBodyContent(m,function(content){
+		m.compileBodyContent(function(content){
 			me.renderData.body = content;
 			if(me.rendered){
 				me.text.update(me.renderData.body);

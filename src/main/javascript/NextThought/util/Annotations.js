@@ -7,15 +7,6 @@ Ext.define('NextThought.util.Annotations',{
 	],
 	singleton: true,
 
-	/** @constant */
-	NOTE_BODY_DIVIDER: '\u200b<div id="{0}" class="body-divider" style="text-align: left; margin: 10px; padding: 5px;">{1}</div>\u200b',
-
-	/** @constant */
-	WHITEBOARD_THUMBNAIL: '<a class="whiteboard-magnifier"></a><img src="{0}" {2} onclick="{1}" class="whiteboard-thumbnail" alt="Whiteboard Thumbnail" border="0" />',
-
-	SEPERATOR: null,
-	DIVIDER_REGEX: null,
-
 
 	callbackAfterRender: function(fn,scope){
 		var a = AnnotationsRenderer;
@@ -32,90 +23,6 @@ Ext.define('NextThought.util.Annotations',{
 		cb();
 	},
 
-
-	objectToAttributeString: function(obj){
-		if(!obj) {
-			return '';
-		}
-
-		var a = [];
-
-		Ext.Object.each(obj,function(i,o){
-			if(o){ a.push([i,'="',o,'"'].join('')); }
-		});
-
-		return a.join(' ');
-	},
-
-//tested
-	/**
-	 * Build the body text with the various components mixed in.
-	 *
-	 * The callbacks need to define the scope and the two callback methods:
-	 *		getThumbnail(canvas, guid)
-	 *		getClickHandler(guid)
-	 *
-	 *	If no callbacks are passed in, default behaviour will take place, which is to
-	 *	generate a thumbnail and no click handler.  Pass in callbacks if you want to
-	 *	do something like preserve the canvas for use later.
-	 *
-	 * @param record (Must have a body[] field)
-	 * @param callbacks - function or object getResult(string) callback defined
-	 */
-	compileBodyContent: function(record, callbacks, whiteboardAttrs){
-
-		callbacks = Ext.isFunction(callbacks) ? {getResult: callbacks} : callbacks;
-
-		var me = this,
-			body = (record.get('body')||[]).slice().reverse(),
-			text = [],
-			cb = Ext.applyIf(callbacks||{}, {
-				scope:me,
-				getClickHandler: function(){return '';},
-				getThumbnail: me.generateThumbnail,
-				getResult: function(){console.log(arguments);}
-			}),
-			attrs = this.objectToAttributeString(whiteboardAttrs);
-
-		function render(i){
-			var o = body[i], id;
-
-			if(i<0){
-				cb.getResult.call(cb.scope,text.join(me.SEPERATOR).replace(me.DIVIDER_REGEX, "$2"));
-			}
-			else if(typeof(o) === 'string'){
-				text.push(o);
-				render(i-1);
-			}
-			else {
-				id = guidGenerator();
-				cb.getThumbnail.call(cb.scope, o, id, function(thumbnail){
-					text.push(
-						Ext.String.format(me.NOTE_BODY_DIVIDER, id,
-							Ext.String.format(me.WHITEBOARD_THUMBNAIL,
-									thumbnail,
-									cb.getClickHandler.call(cb.scope,id),
-									attrs
-							))
-					);
-					render(i-1);
-				});
-			}
-		}
-
-		render(body.length-1);
-	},
-
-//tested
-	/**
-	 * Generate a thumbnail from a canvas object.
-	 *
-	 * @param canvas - the canvas object
-	 */
-	generateThumbnail: function(canvas, id, callback) {
-		Ext.require('NextThought.view.whiteboard.Canvas');
-		return NextThought.view.whiteboard.Canvas.getThumbnail(canvas, callback);
-	},
 
 //tested
 	/**
@@ -168,17 +75,6 @@ Ext.define('NextThought.util.Annotations',{
 		delete holder.phantom;
 
 		return holder;
-	},
-
-
-	buildRangeFromRecord: function(r, root) {
-		try {
-			return Anchors.toDomRange(r.get('applicableRange'), root);
-		}
-		catch(er){
-			console.error('Could not generate range for highlight', er, arguments);
-			return null;
-		}
 	},
 
 
@@ -276,18 +172,4 @@ Ext.define('NextThought.util.Annotations',{
 },
 function(){
 	window.AnnotationUtils = this;
-
-	this.SEPERATOR = Ext.String.format(this.NOTE_BODY_DIVIDER, '', '<hr/>');
-
-	function escapeRegExp(str) {
-	  return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
-	}
-
-
-	var part = escapeRegExp(this.SEPERATOR),
-		svg = escapeRegExp(this.NOTE_BODY_DIVIDER)
-				.replace(/\\\{0\\\}/, '[a-z0-9\\-]+?')
-				.replace(/\\\{1\\\}/, '.*?svg.*?');
-
-	this.DIVIDER_REGEX = new RegExp( '('+part+')?('+svg+')('+part+')?', 'gi');
 });

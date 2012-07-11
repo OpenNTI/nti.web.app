@@ -272,5 +272,36 @@ Ext.define('NextThought.model.Base', {
 			}
 		);
 		return data;
+	},
+
+	getRelativeTimeString: function(){
+		//yanked & modifed from: http://stackoverflow.com/questions/6108819/javascript-timestamp-to-relative-time-eg-2-seconds-ago-one-week-ago-etc-best
+		function timeDifference(current, previous) {
+		    var msPerMinute = 60 * 1000;
+		    var msPerHour = msPerMinute * 60;
+		    var msPerDay = msPerHour * 24;
+		    var msPerMonth = msPerDay * 30;
+		    var elapsed = current - previous;
+
+		    if (elapsed < msPerMinute) {
+		         return Math.round(elapsed/1000) + ' seconds ago';
+		    }
+
+		    else if (elapsed < msPerHour) {
+		         return Math.round(elapsed/msPerMinute) + ' minutes ago';
+		    }
+
+		    else if (elapsed < msPerDay ) {
+		         return Math.round(elapsed/msPerHour ) + ' hours ago';
+		    }
+
+		    else if (elapsed < msPerMonth) {
+		        return Math.round(elapsed/msPerDay) + ' days ago';
+		    }
+
+			return Ext.Date.format(previous, 'M j, Y, g:i a');
+		}
+
+		return timeDifference(Ext.Date.now(),this.get('CreatedTime'));
 	}
 });

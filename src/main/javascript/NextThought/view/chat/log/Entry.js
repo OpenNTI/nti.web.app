@@ -69,7 +69,7 @@ Ext.define('NextThought.view.chat.log.Entry', {
 			me.renderData.me = 'me';
 		}
 
-		AnnotationUtils.compileBodyContent(m,function(content){
+		m.compileBodyContent(function(content){
 			me.renderData.body = content;
 			if(me.rendered){
 			   me.text.update(me.renderData.body);
