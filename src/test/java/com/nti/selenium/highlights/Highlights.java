@@ -1,8 +1,5 @@
 package com.nti.selenium.highlights;
 
-
-import java.util.List;
-
 import org.junit.After;
 import org.junit.Before;
 import org.openqa.selenium.WebElement;
@@ -20,18 +17,16 @@ public class Highlights extends Navigation {
 	@After
 	public void tearDown(){
 		this.findElement(XpathUtilsHighlights.getCreateHighlightImage()).click();
-//		this.wait_(3);
 		this.switchToIframe();
-		try{
-//			this.findElement("//div[text()='skdfjnsldf']");
+		try {
 			this.findElements("//span[text()='Highlight In Section']");
 			this.wait_(3);
-			System.out.println("size = ");
-		} catch(Exception e){
+		} catch(final Exception e){
 			System.out.println("errored");
 		}
 		
-		for(WebElement element: this.findElements(XpathUtilsHighlights.getHighlightInList())){
+		for (final WebElement element: this.findElements(XpathUtilsHighlights.getHighlightInList()))
+		{
 			this.wait_(3);
 			element.click();
 			this.removeHighlight();
@@ -48,9 +43,5 @@ public class Highlights extends Navigation {
 	
 	public void removeHighlight(){
 		System.out.println("ima test");
-//		this.findElement(XpathUtilsHighlights.getCreateHighlightImage()).click();
-//		this.switchToDefault();
-//		this.findElement(XpathUtilsHighlights.getRemoveHighlight()).click();
 	}
-	
 }

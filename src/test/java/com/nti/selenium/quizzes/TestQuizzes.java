@@ -25,7 +25,8 @@ public class TestQuizzes extends Quizzes {
 		this.clickParenthesesMathSymbol();
 		this.clickPiMathSymbol();
 		this.clickApproxMathSymbol();
-		String answerBlank = XpathUtilsQuizzes.buildString(
+		final String answerBlank = 
+			XpathUtilsQuizzes.buildString(
 				Character.toString((char)8730),
 				"2",
 				"()",

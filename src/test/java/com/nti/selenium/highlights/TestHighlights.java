@@ -1,11 +1,10 @@
 package com.nti.selenium.highlights;
 
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-public class TestHighlights extends Highlights{
+public class TestHighlights extends Highlights {
 
 //	@Test
 //	public void testHighlight(){
