@@ -29,7 +29,7 @@ public class TestQuizzes extends Quizzes {
 				Character.toString((char)8730),
 				"2",
 				"()",
-				Character.toString('\u03C0'),
+				Character.toString((char)960),
 				Character.toString((char)8776));
 		assertEquals(answerBlank, this.getTextInAnswerblock("1"));
 	}
