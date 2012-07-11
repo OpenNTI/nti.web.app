@@ -968,7 +968,184 @@ describe("Anchor Utils", function() {
 		});
 	});
 
+	describe('Range Putrification Tests', function(){
+		it('Purify Range Test', function(){
+			var p = document.createElement('p'),
+				t1 = document.createTextNode('this is a text node, yay!  go us!'),
+				t2 = document.createTextNode('this is also a text node, yay!  go us!'),
+				spanNoAnchors = document.createElement('span'),
+				em = document.createElement('em'),
+				t3 = document.createTextNode('This is more text actually, always more text'),
+				span = document.createElement('span'),
+				t4 = document.createTextNode('This is the final text'),
+				pureRange, range;
+
+			//add some stuff to span, clone it, add some more, see if it worked
+			p.appendChild(t1);
+			p.appendChild(t2);
+			p.setAttribute('shouldBeThere', 'true');
+			p.setAttribute('Id', 'someRandomId');
+			spanNoAnchors.setAttribute('data-non-anchorable', 'true');
+			em.appendChild(t3);
+			spanNoAnchors.appendChild(em);
+			span.appendChild(t4);
+			spanNoAnchors.appendChild(span);
+			p.appendChild(spanNoAnchors);
+			testBody.appendChild(p);
+
+			//create the initial range:
+			range = document.createRange();
+			range.setStart(t1, 2);
+			range.setEnd(t4, 6);
+
+			//purify the range, the pureRange should not be associated with the old range, or it's contents:
+			pureRange = Anchors.purifyRange(range, document);
+
+			//add more attrs to the old range's nodes
+			p.setAttribute('shouldNOTBeThere', 'true'); //this should not be in the pureRange
+
+			//do some checking of attrs to verify they are clones and not the same refs:
+			expect(pureRange.commonAncestorContainer.getAttribute('shouldBeThere')).toBeTruthy();
+			expect(pureRange.commonAncestorContainer.getAttribute('shouldNOTBeThere')).not.toBeTruthy();
+			expect(range.toString()).toEqual(pureRange.toString()); //expect the range to encompass the same text
+			expect(range.commonAncestorContainer.parentNode).toBe(pureRange.ownerNode);
+		});
+
+		it('Purify Range Where Ancestor is non-anchorable', function(){
+			var div = document.createElement('div'),
+				p = document.createElement('p'),
+				t1 = document.createTextNode('this is a text node, yay!  go us!'),
+				t2 = document.createTextNode('this is also a text node, yay!  go us!'),
+				spanNoAnchors = document.createElement('span'),
+				em = document.createElement('em'),
+				t3 = document.createTextNode('This is more text actually, always more text'),
+				span = document.createElement('span'),
+				t4 = document.createTextNode('This is the final text'),
+				pureRange, range;
+
+			//add some stuff to span, clone it, add some more, see if it worked
+			p.setAttribute('data-non-anchorable', 'true');
+			p.appendChild(t1);
+			p.appendChild(t2);
+			spanNoAnchors.setAttribute('data-non-anchorable', 'true');
+			em.appendChild(t3);
+			spanNoAnchors.appendChild(em);
+			span.appendChild(t4);
+			spanNoAnchors.appendChild(span);
+			p.appendChild(spanNoAnchors);
+			div.setAttribute('Id', 'validId');
+			div.appendChild(p);
+			testBody.appendChild(div);
+
+			//create the initial range:
+			range = document.createRange();
+			range.setStart(t1, 2);
+			range.setEnd(t4, 6);
+
+			//purify the range, the pureRange should not be associated with the old range, or it's contents:
+			pureRange = Anchors.purifyRange(range, document);
+
+			//do some checking of attrs to verify they are clones and not the same refs:
+			expect(range.toString()).toEqual(pureRange.toString()); //expect the range to encompass the same text
+		});
+
+		it('Tagging and Cleaning Test', function(){
+			var nodeWithNoAttr = document.createElement('span'),
+				nodeWithAttr = document.createElement('span'),
+				textNodeWithNoTag = document.createTextNode('this is some text'),
+				textNodeWithTag = document.createTextNode('this is also text');
+
+			//add stuff to nodes where needed:
+			Anchors.tagNode(nodeWithAttr, 'tagged');
+			Anchors.tagNode(textNodeWithTag, 'tagged-baby!');
+
+			//check that things were tagged well:
+			expect(nodeWithAttr.getAttribute(Anchors.PURIFICATION_TAG)).toBeTruthy();
+			expect(textNodeWithTag.textContent.indexOf(Anchors.PURIFICATION_TAG)).toBeGreaterThan(-1);
+
+			//cleanup and check results
+			Anchors.cleanNode(nodeWithNoAttr, 'x');
+			Anchors.cleanNode(nodeWithAttr, 'tagged');
+			Anchors.cleanNode(textNodeWithNoTag, 'x');
+
+			Anchors.cleanNode(textNodeWithTag, 'tagged-baby!');
+			expect(nodeWithNoAttr.getAttribute(Anchors.PURIFICATION_TAG)).toBeNull();
+			expect(nodeWithAttr.getAttribute(Anchors.PURIFICATION_TAG)).toBeNull();
+			expect(textNodeWithNoTag.textContent.indexOf(Anchors.PURIFICATION_TAG)).toEqual(-1);
+			expect(textNodeWithTag.textContent.indexOf(Anchors.PURIFICATION_TAG)).toEqual(-1);
+		});
+
+		it('Cleaning Text Node with Multiple Tags', function(){
+			var text = 'You know [data-nti-purification-tag:start]how to add, subtract, multiply[data-nti-purification-tag:end], and divide. In fact, you may already know how to solve many of the problems in this chapter. So why do we start this book with an entire chapter on arithmetic?',
+				expected = 'You know how to add, subtract, multiply, and divide. In fact, you may already know how to solve many of the problems in this chapter. So why do we start this book with an entire chapter on arithmetic?',
+				textNode = document.createTextNode(text);
+
+			Anchors.cleanNode(textNode, 'end');
+			Anchors.cleanNode(textNode, 'start');
+
+			expect(textNode.textContent).toEqual(expected);
+		});
+
+		it ('Tag Finding Tests', function(){
+			var p1 = document.createElement('p'),
+				s1 = document.createElement('span'),
+				p2 = document.createElement('p'),
+				s2 = document.createElement('span'),
+				t1 = document.createTextNode('once upon a time'),
+				t2 = document.createTextNode(' there lived 3 bears'),
+				textWithMultTags = document.createTextNode('some fancy text');
+
+
+			//apply tags in some spots:
+			Anchors.tagNode(s1, 'tag1');
+			Anchors.tagNode(t1, 'tag2');
+			Anchors.tagNode(s2, 'tag3');
+			Anchors.tagNode(t2, 'tag4');
+			Anchors.tagNode(textWithMultTags, 'multi-tag1');
+			Anchors.tagNode(textWithMultTags, 'multi-tag2');
+
+			//build dom heirarchy
+			s2.appendChild(t2);
+			p2.appendChild(t1);
+			s1.appendChild(p2);
+			s1.appendChild(s2);
+			p1.appendChild(s1);
+
+			expect(Anchors.findTaggedNode(p1,'tag1')).toBe(s1);
+			expect(Anchors.findTaggedNode(p1,'tag2')).toBe(t1);
+			expect(Anchors.findTaggedNode(p1,'tag3')).toBe(s2);
+			expect(Anchors.findTaggedNode(p1,'tag4')).toBe(t2);
+			expect(Anchors.findTaggedNode(textWithMultTags, 'multi-tag1')).toBe(textWithMultTags);
+			expect(Anchors.findTaggedNode(textWithMultTags, 'multi-tag2')).toBe(textWithMultTags);
+
+		});
+
+		it ('Purification Offset With Singular Text Node', function(){
+			var p = document.createElement('p'),
+				textNode = document.createTextNode('This is a single text node that exists inside a paragraph!  Can you believe that?'),
+				pureRange, range;
+
+			//add some stuff to span, clone it, add some more, see if it worked
+			p.appendChild(textNode);
+			p.setAttribute('Id', 'someRandomId');
+			testBody.appendChild(p);
+
+			//create the initial range:
+			range = document.createRange();
+			range.setStart(textNode, 5);
+			range.setEnd(textNode, 55);
+
+			//purify the range, the pureRange should not be associated with the old range, or it's contents:
+			pureRange = Anchors.purifyRange(range, document);
+
+			//do some checking of attrs to verify they are clones and not the same refs:
+			expect(range.toString()).toEqual(pureRange.toString()); //expect the range to encompass the same text
+			expect(range.commonAncestorContainer.parentNode).toBe(pureRange.ownerNode);
+		});
+	});
+
 	describe('Integration Tests', function(){
+		//TODO - write a unit test for 3 identical txt nodes where the anchor ends on teh end of the second
 		it('Ancestor Spanning Identical Text Node Bug', function(){
 			var root = document.createElement('div'), //this should be the ancestor
 				p1 = document.createElement('p'),

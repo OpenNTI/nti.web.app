@@ -1,13 +1,15 @@
-Ext.define('NextThought.mixins.Annotations', {
+Ext.define('NextThought.view.content.reader.Annotations', {
 	requires: [
 		'NextThought.model.Highlight',
 		'NextThought.model.Note',
+		'NextThought.model.Redaction',
 		'NextThought.model.TranscriptSummary',
 		'NextThought.model.QuizResult',
 		'NextThought.util.Annotations',
 		'NextThought.util.Quizes',
-		'NextThought.view.annotations.SelectionHighlight',
-		'NextThought.view.annotations.RedactionHighlight',
+		'NextThought.ux.SearchHits',
+		'NextThought.view.annotations.renderer.Manager',
+		'NextThought.view.annotations.Redaction',
 		'NextThought.view.annotations.Highlight',
 		'NextThought.view.annotations.Note',
 		'NextThought.view.annotations.Transcript',
@@ -20,9 +22,21 @@ Ext.define('NextThought.mixins.Annotations', {
 		'Highlight': function(r){return r;},
 		'Note': function(r){return r;},
 		'TranscriptSummary': function(r){return r.get('RoomInfo');},
-		'QuizResult': function(r){return r;}},
+		'QuizResult': function(r){return r;}
+	},
 
-	initAnnotations: function(){
+
+	insertAnnotationGutter: function(){
+		var me = this;
+		var container = Ext.DomHelper.insertAfter(me.body.first(),
+				{ cls:'annotation-gutter', cn:[{cls:'column widgets'},{cls:'column controls'}] }, true);
+		me.on('destroy' , function(){ container.remove(); },me);
+
+		AnnotationsRenderer.registerGutter(container, me);
+	},
+
+
+	constructor: function(){
 		var me = this;
 		Ext.apply(me,{
 			annotations: {},
@@ -31,20 +45,18 @@ Ext.define('NextThought.mixins.Annotations', {
 		});
 
 		me.addEvents('share-with','create-note');
-		me.widgetBuilder = {
-			'Highlight': me.createHighlightWidget,
-			'Redaction': me.createRedactionWidget,
-			'Note': me.createNoteWidget,
-			'TranscriptSummary': me.createTranscriptSummaryWidget,
-			'QuizResult': me.createQuizResultWidget
-		};
 
 		NextThought.controller.Annotations.events.on('new-note',this.onNoteCreated,this);
 		NextThought.controller.Annotations.events.on('new-redaction',this.onRedactionCreated,this);
 		NextThought.controller.Stream.registerChangeListener(me.onNotification, me);
-		me.on('added',function(){
-			FilterManager.registerFilterListener(me, me.applyFilter,me);
+
+		me.on({
+			scope: this,
+			added: function(){ FilterManager.registerFilterListener(me, me.applyFilter,me); },
+			afterRender: me.insertAnnotationGutter
 		});
+
+		return this;
 	},
 
 
@@ -66,7 +78,7 @@ Ext.define('NextThought.mixins.Annotations', {
 
 	showRanges: function(ranges) {
 		this.clearSearchRanges();
-		this.searchAnnotations = Ext.create('annotations.SelectionHighlight', ranges, this);
+		this.searchAnnotations = Ext.widget({xtype: 'SearchHits', hits: ranges, owner: this});
 	},
 
 
@@ -127,34 +139,57 @@ Ext.define('NextThought.mixins.Annotations', {
 	},
 
 
-	addHighlight: function(range, xy){
+	addAnnotation: function(range, xy){
 		if(!range) {
 			console.warn('bad range');
 			return;
 		}
 
-		var highlight = AnnotationUtils.selectionToHighlight(range, null, this.getDocumentElement()),
+		var me = this,
+			record = AnnotationUtils.selectionToHighlight(range, null, me.getDocumentElement()),
 			menu,
 			w,offset;
 
-		if(!highlight) {
+		if(!record) {
 			return;
 		}
 
-		w = this.widgetBuilder.Highlight.call(this,highlight,range);
+		w = me.createAnnotationWidget('highlight',record, range);
 
-		highlight.set('ContainerId', this.containerId);
+		record.set('ContainerId', me.containerId);
 
 		menu = w.getMenu();
+
+		//inject other menu items:
+		menu.add({
+			text: 'Redact Inline',
+			handler: function(){
+				delete w.range; //so that it does not detach it on cleanup
+				var r = NextThought.model.Redaction.createFromHighlight(record);
+				r.set('replacementContent', 'redaction');
+				me.createAnnotationWidget('redaction',r, range);
+				r.save();
+			}
+		});
+
+		menu.add({
+			text: 'Redact Block',
+			handler: function(){
+				delete w.range; //so that it does not detach it on cleanup
+				var r = NextThought.model.Redaction.createFromHighlight(record);
+				me.createAnnotationWidget('redaction',r, range);
+				r.save();
+			}
+		});
+
 		menu.on('hide', function(){
 				if(!w.isSaving){
 					w.cleanup();
-					delete this.annotations[w.tempID]; //remove the key from the object
+					delete me.annotations[w.tempID]; //remove the key from the object
 				}
-			},
-			this);
+			});
 
-		offset = this.el.getXY();
+		offset = me.el.getXY();
 		xy[0] += offset[0];
 		xy[1] += offset[1];
 
@@ -162,136 +197,73 @@ Ext.define('NextThought.mixins.Annotations', {
 	},
 
 
-	createHighlightWidget: function(record, r){
-		var range = r || AnnotationUtils.buildRangeFromRecord(record, this.getDocumentElement()),
-			oid = record.getId(),
+	/**
+	 *
+	 * @param type
+	 * @param record - annotation record (highlight, note, redaction, etc)
+	 * @param [browserRange] - optional, if we already have a range from the browser, that can be used instead of resolving it
+	 *                         from the record
+	 * @return {*}
+	 */
+	createAnnotationWidget: function(type, record, browserRange){
+		var oid = record.getId(),
 			style = record.get('style'),
 			w;
 
-		if (!range) {
-			Ext.Error.raise('could not create range');
+		if(!record.pruned && (record.get('inReplyTo') || record.parent)){
+			return false;
 		}
-
-		if (this.annotationExists(record)) {
+		else if (this.annotationExists(record)) {
 			this.annotations[record.getId()].getRecord().fireEvent('updated',record);
-			return null;
-		}
-
-		w = Ext.create( 'widget.highlight-annotation', range, record, this);
-
-		if (!oid) {
-			oid = 'Highlight-TEMP-OID';
-			if (this.annotations[oid]){
-				this.annotations[oid].cleanup();
-				delete this.annotations[oid];
-			}
-			w.tempID = oid;
-			record.on('updated',function(r){
-				this.annotations[r.get('NTIID')] = this.annotations[oid];
-				this.annotations[oid] = undefined;
-				delete this.annotations[oid];
-				delete w.tempID;
-			}, this);
-		}
-
-		this.annotations[oid] = w;
-		return w;
-	},
-
-	createRedactionWidget: function(record, r){
-		var range = r || AnnotationUtils.buildRangeFromRecord(record, this.getDocumentElement()),
-			oid = record.getId(),
-			style = record.get('style'),
-			w;
-
-		if (!range) {
-			Ext.Error.raise('could not create range');
-		}
-
-		if (this.annotationExists(record)) {
-			this.annotations[record.getId()].getRecord().fireEvent('updated',record);
-			return null;
-		}
-
-		w = Ext.create( 'widget.redaction-highlight-annotation', range, record, this);
-
-		if (!oid) {
-			oid = 'Redaction-TEMP-OID';
-			if (this.annotations[oid]){
-				this.annotations[oid].cleanup();
-				delete this.annotations[oid];
-			}
-			w.tempID = oid;
-			record.on('updated',function(r){
-				this.annotations[r.get('NTIID')] = this.annotations[oid];
-				this.annotations[oid] = undefined;
-				delete this.annotations[oid];
-				delete w.tempID;
-			}, this);
-		}
-
-		this.annotations[oid] = w;
-
-		return w;
-	},
-
-
-	createNoteWidget: function(record){
-		try{
-			if(!record.pruned && (record.get('inReplyTo') || record.parent)){
-				return false;
-			}
-			else if (this.annotationExists(record)) {
-				this.annotations[record.getId()].getRecord().fireEvent('updated',record);
-				return true;
-			}
-
-			this.annotations[record.getId()] = Ext.create( 'widget.note-annotation', record, this);
-
 			return true;
 		}
-		catch(e){ console.error('Error notes: ',e.toString(), e.stack); }
 
-		return false;
+		try {
+			w = Ext.widget({xtype: type.toLowerCase(), browserRange: browserRange, record: record, reader: this});
+
+			if (!oid) {
+				oid = type.toUpperCase()+'-TEMP-OID';
+				if (this.annotations[oid]){
+					this.annotations[oid].cleanup();
+					delete this.annotations[oid];
+				}
+				w.tempID = oid;
+				record.on('updated',function(r){
+					this.annotations[r.get('NTIID')] = this.annotations[oid];
+					this.annotations[oid] = undefined;
+					delete this.annotations[oid];
+					delete w.tempID;
+				}, this);
+			}
+
+			this.annotations[oid] = w;
+		}
+		catch(e){
+			console.error(e.stack);
+		}
+		return w;
 	},
-
-
-	createTranscriptSummaryWidget: function(record) {
-		if (record.parent) { return; }
-		this.annotations[record.getId()] = Ext.create( 'widget.transcript-annotation', record, this);
-		return true;
-	},
-
-	createQuizResultWidget: function(record) {
-		if (record.parent) { return; }
-		this.annotations[record.getId()] = Ext.create( 'widget.quiz-result-annotation', record, this);
-		return true;
-	},
-
 
 
 	onNoteCreated: function(record){
-		console.log('new note...');
 		//check to see if reply is already there, if so, don't do anything...
 		if (Ext.getCmp(IdCache.getComponentId(record,null,this.prefix))) {
 			return;
 		}
 
-		var parent = record.get('inReplyTo');
-		if(parent){
-			parent = Ext.getCmp(IdCache.getComponentId(parent,null,this.prefix));
-			if (parent){parent.addReply(record);}
-		}
-		else {
-			this.createNoteWidget(record);
-		}
-
-		this.fireEvent('resize');
+//		var parent = record.get('inReplyTo');
+//		if(parent){
+//			parent = Ext.getCmp(IdCache.getComponentId(parent,null,this.prefix));
+//			if (parent){parent.addReply(record);}
+//		}
+//		else {
+			this.createAnnotationWidget('note',record);
+//		}
 	},
 
 
 	onRedactionCreated: function(record){
-		this.createRedactionWidget(record);
+		this.createAnnotationWidget('redaction',record);
 		this.fireEvent('resize');
 	},
 
@@ -308,7 +280,7 @@ Ext.define('NextThought.mixins.Annotations', {
 			creator = item? item.get('Creator') : null,
 			delAction = /deleted/i.test(type),
 			cmp = Ext.getCmp(IdCache.getComponentId(oid, null, this.prefix)),
-			cls, replyTo, builder, result,
+			cls, replyTo, result,
 			contribNS = Globals.getViewIdFromComponent(this);
 
 		if (!item || !this.containerId || this.containerId !== cid) {
@@ -351,17 +323,16 @@ Ext.define('NextThought.mixins.Annotations', {
 		else if(!delAction){
 			cls = item.get('Class');
 			replyTo = item.get('inReplyTo');
-			builder = this.widgetBuilder[cls];
-			result = builder ? builder.call(this, item) : false;
+			result = this.createAnnotationWidget(cls,item) || false;
 
 			if(result === false){
-				if (/Note/i.test(cls) && replyTo) {
-					replyTo = Ext.getCmp(IdCache.getComponentId(replyTo, null, this.prefix));
-					replyTo.addReply(item);
-				}
-				else {
+//				if (replyTo) {
+//					replyTo = Ext.getCmp(IdCache.getComponentId(replyTo, null, this.prefix));
+//					replyTo.addReply(item);
+//				}
+//				else {
 					console.error('ERROR: Do not know what to do with this item',item);
-				}
+//				}
 			}
 		}
 	},
@@ -423,8 +394,7 @@ Ext.define('NextThought.mixins.Annotations', {
 
 
 	buildAnnotations: function(list){
-		var me = this, contributors = [],
-			a = NextThought.view.annotations.Annotation;
+		var me = this, contributors = [];
 		Ext.each(list,
 			function(r){
 				if(!r) {
@@ -432,8 +402,8 @@ Ext.define('NextThought.mixins.Annotations', {
 				}
 				try{
 					Ext.Array.insert(contributors, 0, me.getContributors(r));
-					me.widgetBuilder[r.getModelName()].call(me,r);
-					a.aboutToRender = true;
+					me.createAnnotationWidget(r.getModelName(),r);
+					AnnotationsRenderer.aboutToRender = true;
 				}
 				catch(e) {
 					console.error('Could not build '+r.getModelName()+' from record:', r, 'because: ', e, e.stack);
@@ -537,7 +507,7 @@ Ext.define('NextThought.mixins.Annotations', {
 			if( range && !range.collapsed ) {
 				e.stopPropagation();
 				e.preventDefault();
-				this.addHighlight(range, e.getXY());
+				this.addAnnotation(range, e.getXY());
 				this.clearSelection();
 			}
 		}
@@ -548,6 +518,8 @@ Ext.define('NextThought.mixins.Annotations', {
 
 
 	getSelection: function() {
+		this.snapSelectionToWord();
+
 		var doc = this.getDocumentElement(),
 			win = doc.parentWindow,
 			range, selection;
@@ -571,5 +543,60 @@ Ext.define('NextThought.mixins.Annotations', {
 				win.getSelection().removeAllRanges();
 		}
 		catch(e){console.warn(e.stack||e.toString());}
+	},
+
+
+	/*
+	 * Snap the selection to whole words as opposed to partial words.  This code is taken and only
+	 * minimally adjusted, from here:
+	 * http://stackoverflow.com/questions/10964016/how-do-i-extend-selection-to-word-boundary-using-javascript-once-only/10964743#10964743
+	 */
+	snapSelectionToWord: function() {
+		var sel,
+			doc = this.getDocumentElement(),
+			window = doc.parentWindow;
+
+		// Check for existence of window.getSelection() and that it has a
+		// modify() method. IE 9 has both selection APIs but no modify() method.
+		if (window.getSelection && (sel = window.getSelection()).modify) {
+			sel = window.getSelection();
+			if (!sel.isCollapsed) {
+
+				// Detect if selection is backwards
+				var range = doc.createRange();
+				range.setStart(sel.anchorNode, sel.anchorOffset);
+				range.setEnd(sel.focusNode, sel.focusOffset);
+				var backwards = range.collapsed;
+				range.detach();
+
+				// modify() works on the focus of the selection
+				var endNode = sel.focusNode, endOffset = sel.focusOffset;
+				sel.collapse(sel.anchorNode, sel.anchorOffset);
+
+				var direction = [];
+				if (backwards) {
+					direction = ['backward', 'forward'];
+				} else {
+					direction = ['forward', 'backward'];
+				}
+
+				sel.modify("move", direction[0], "character");
+				sel.modify("move", direction[1], "word");
+				sel.extend(endNode, endOffset);
+				sel.modify("extend", direction[1], "character");
+				sel.modify("extend", direction[0], "word");
+			}
+		} else if ( !!(sel = doc.selection) && sel.type !== "Control") {
+			var textRange = sel.createRange();
+			if (textRange.text) {
+				textRange.expand("word");
+				// Move the end back to not include the word's trailing space(s),
+				// if necessary
+				while (/\s$/.test(textRange.text)) {
+					textRange.moveEnd("character", -1);
+				}
+				textRange.select();
+			}
+		}
 	}
 });

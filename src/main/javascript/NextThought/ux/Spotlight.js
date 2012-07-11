@@ -14,11 +14,12 @@
  * }
  */
 Ext.define('NextThought.ux.Spotlight',{
+	alias: 'widget.spotlight',
 	requires: [
 		'NextThought.util.Rects'
 	],
 
-	constructor: function(){
+	constructor: function(config){
 		this.id = 'spotlight-'+Globals.guidGenerator();
 		this.dom = Ext.getDoc().dom;
 		if(!this.dom.createElementNS){
@@ -27,6 +28,12 @@ Ext.define('NextThought.ux.Spotlight',{
 		}
 		this.createElements();
 		Ext.EventManager.onWindowResize(this.syncSize, this);
+
+		if(config.target){
+			this.show(config.target);
+		}
+
+		return this;
 	},
 
 	/**
@@ -83,11 +90,13 @@ Ext.define('NextThought.ux.Spotlight',{
 		Ext.fly(this.curtain).show();
 		this.cmp = spotlightableComponent;
 		this.render();
+		return this;
 	},
 
 	hide: function(){
 		Ext.fly(this.curtain).hide();
 		delete this.cmp;
+		return this;
 	},
 
 	render: function(){

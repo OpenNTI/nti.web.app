@@ -1,243 +1,96 @@
 Ext.define( 'NextThought.view.annotations.Note', {
-	extend: 'NextThought.view.annotations.Annotation',
-	alias: 'widget.note-annotation',
-	requires:[
-		'NextThought.view.annotations.NotePanel'
-	],
+	extend: 'NextThought.view.annotations.Highlight',
+	alias: 'widget.note',
+	requires:[],
 
-	constructor: function(record, component){
-		Ext.apply(this, {
-			anchorNode : null,
-			noteContainer: null,
-			originalPadding: 0,
-			renderPriority: 0
-		});
+	/*
+	singleGutterWidget: null,
+	multiGutterWidget: null,
+	*/
 
-		this.callParent([record, component]);
+	singleGutterWidgetTmpl: Ext.DomHelper.createTemplate( {
+		cls: 'note-gutter-widget single',
+		children: [
+			{
+				cls: 'content',
+				children: [
+					{cls: 'name', html: '{0}'},
+					{cls: 'text', html: '{1}'}
+				]
+			},
+			{cls: 'mask'}
+		]
+	}).compile(),
 
-		//get the range this note is associated with:
-		var me = this,
-			range = Anchors.toDomRange(record.get('applicableRange'), this.doc),
-			block = AnnotationUtils.getBlockParent(range.endContainer, true),
-			anchor = this.findOrCreateAnchorForParent(block),
-			c = me.createNoteContainer(record.get('applicableRange').ancestor.getElementId()),
-			a;
 
-		block.appendChild(anchor);
-		a = Ext.get(anchor);
-		c.nib.add(me.img);
+	multiGutterWidgetTmpl: Ext.DomHelper.createTemplate( {
+		cls: 'thumb note-gutter-widget multi'
+	}).compile(),
 
-		a.setStyle({
-			display: 'block',
-			clear: 'both'
-		});
+	constructor: function(config){
+		this.callParent(arguments);
 
-		me.anchorNode = a;
-		me.noteContainer = c;
-		me.originalPadding =
-				a.dom.originalPadding!==undefined ?
-						a.dom.originalPadding : a.getPadding('b');
-		a.dom.originalPadding = me.originalPadding;
 
-		// console.debug('original padding:',me.originalPadding);
-
-		me.noteDiv = me.createElement('div',c.dom,'x-note-panel',(me.isVisible?'':'display:none;'));
-		me.noteDiv.annotation = me;
-
-		me.noteCmp = Ext.widget({xtype: 'note-entry', renderTo: me.noteDiv, annotation: me, owner: component });
-
-		return me;
+		return this;
 	},
 
 
-	/**
-	 *
-	 * @param parent - a DOM element that is the block parent we will look under
-	 */
-	findOrCreateAnchorForParent: function(parent) {
-		if (!parent){
-			Ext.Error.raise('Requires a parent');
-		}
-		else if (Ext.isTextNode(parent)) {
-			Ext.Error.raise('Cannot anchor things to text node');
-		}
+	render: function(){
+		return this.callParent();
+		//TODO - initally just render the highlight, we want to use styles to not render highlights created from clicking on the left.
+	},
 
-		var attr = 'data-artificial',
-			p = Ext.get(parent),
-			existingAnchors = p.query('['+attr+']'),
-			result;
+	//Notes don't have controls
+	//getControl: function(){},
 
-		//Do some double checking here, there should never be more than one, freak out if so:
-		if (existingAnchors.length > 1) {
-			console.error('Found more than one artificial anchor', existingAnchors);
-			Ext.Error.raise('Found more than one artificial anchor, never should there be more than one!');
-		}
-		else if (existingAnchors.length === 0) {
-			//none here, create one
-			result = this.doc.createElement('a');
-			result.setAttribute(attr, 'true');
-			return result;
+
+	getGutterWidget: function(numberOfSiblings){
+		if (numberOfSiblings > 0){//siblings... there is "this" and n others
+			if (!this.multiGutterWidget){
+				this.createMultiGutterWidget();
+			}
+			return this.multiGutterWidget;
+
 		}
 		else {
-			//found one, just return it
-			return existingAnchors[0];
-		}
-	},
-
-
-	attachRecord: function(record){
-		var children = this.record.children,
-			parent = this.record.parent,
-			old = this.record;
-
-		this.record = record;
-
-		record.on('updated',this.noteUpdated, this);
-		record.children = record.children || children;
-		record.parent = record.parent || parent;
-
-		if(old !== record){
-			old.un('updated', this.noteUpdated, this);
-		}
-	},
-
-
-	getRects: function(){
-		return [ this.noteCmp.getEl().getBox() ];
-	},
-
-
-	visibilityChanged: function(show){
-		var me = this,
-			c = Ext.get(me.noteDiv);
-
-		c.setVisibilityMode(Ext.Element.DISPLAY);
-
-		if(show){c.show();}
-		else{c.hide();}
-
-		if(me.noteCmp){
-			me.noteCmp.doLayout();
-		}
-
-		me.callParent(arguments);
-	},
-
-
-	noteUpdated: function(record){
-		this.attachRecord(record);
-		this.noteCmp.updateFromRecord(record);
-		this.noteCmp.doLayout();
-		this.requestRender();
-	},
-
-
-	buildMenu: function(){
-		var items = [];
-
-		if(this.isModifiable){
-			items.push({
-				text : 'Remove Note',
-				handler: Ext.bind(this.remove, this)
-			});
-		}
-		return this.callParent([items]);
-	},
-
-
-	createNoteContainer: function(id){
-		var i = 'note-container-'+this.prefix+'-'+id,
-			e = Ext.get(i),
-			n = e ? e.dom : this.createElement('div',this.container,'document-notes');
-		n.setAttribute('id',i);
-		n.setAttribute('name',IdCache.getComponentId(this.record, null, this.prefix));
-
-		if(Ext.isIE9){
-			Ext.get(n).setStyle('z-index','2');
-		}
-
-		n = Ext.get(n);
-
-		if(!n.nib){
-			n.nib = Ext.create('Ext.CompositeElement');
-		}
-
-		return n;
-	},
-
-
-	cleanup: function(removeAll){
-		if(!this.noteCmp){ return; }
-		var hasReplies = this.noteCmp.hasReplies();
-		if(hasReplies){
-			this.noteCmp.cleanupReply(removeAll);
-		}
-
-		if (!hasReplies || removeAll) {
-			this.noteCmp.destroy();
-			delete this.noteCmp;
-			Ext.get(this.noteDiv).remove();
-
-			if(!this.noteContainer.first()){
-				this.noteContainer.remove();
-				this.noteContainer.nib.clear();
-				delete this.noteContainer.nib;
-				delete this.noteContainer;
-				this.anchorNode.setStyle('padding-bottom',this.originalPadding+'px');
+			if (!this.singleGutterWidget){
+				this.createSingleGutterWidget();
 			}
+			return this.singleGutterWidget;
 		}
-
-		this.callParent(arguments);
 	},
 
 
-	render: function(isLastOfAnchor){
-		try{
-			if(!this.noteCmp){return;}
+	createSingleGutterWidget: function(){
+		var creator = this.record.get('Creator'),
+			htmlString = this.singleGutterWidgetTmpl.apply([
+				creator,
+				AnnotationUtils.getBodyTextOnly(this.record)]),
+			dom = Ext.DomHelper.createDom({html:htmlString}).firstChild;
 
-			this.callParent(arguments);
+		//now create the ext object:
+		this.singleGutterWidget = Ext.get(dom);
 
-			var me= this,
-				p = Ext.get(me.container),
-				c = me.noteContainer,
-				a = me.anchorNode,
-				i = me.originalPadding,
-				ifc = Ext.get(this.query('#nticontent .page-contents')[0]),
-				w = ifc.getWidth(),
-				extra = 0,
-				adjust = 0,
-				nx= a.next(),
-				pr= a.prev(),
-				ox = me.offsets.left,
+		UserRepository.getUser(creator, function(u){
+			var name = u[0].getName();
+			this.singleGutterWidget.down('.name').update(name);
+		}, this);
+	},
 
-				h,x,y;
 
-			c.setWidth(w);
+	createMultiGutterWidget: function(){
+		var creator = this.record.get('Creator'),
+			htmlString = this.multiGutterWidgetTmpl.apply(),
+			dom = Ext.DomHelper.createDom({html:htmlString}).firstChild;
 
-			h = c.getHeight();
-			if(h){
-				adjust += pr?(pr.getPadding('b')+pr.getMargin('b')):0;
-				extra += (nx?(nx.getPadding('t')+nx.getMargin('t')):0) + adjust;
-			}
+		//now create the ext object:
+		this.multiGutterWidget = Ext.get(dom);
 
-			a.setStyle('padding-bottom',(i+h+extra)+'px');
-
-			x = ox+ifc.getLeft();
-			y = a.getY()+( adjust? 0: extra);
-
-			c.setStyle({top: y+'px', left: x+'px'});
-
-			ox = (ox+60)-(Ext.fly(me.img).getWidth()/2);
-			//move the nib to the top-aligning corner of the note container
-			c.nib.moveTo(ox+p.getLeft(), c.down('.x-nti-note img').getTop());
-
-			//always move to the end
-			if(c.dom.nextSibling){
-				me.container.appendChild(c.dom);
-			}
-		}
-		catch(e){
-			console.error('Note onResize: ',e,e.message, e.stack);
-		}
+		UserRepository.getUser(creator, function(u){
+			var url = u[0].get('avatarURL');
+			Ext.fly(this.multiGutterWidget).setStyle({backgroundImage: "url("+url+")"});
+		}, this);
 	}
+
+
 });

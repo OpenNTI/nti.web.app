@@ -1,8 +1,8 @@
-Ext.define('NextThought.view.annotations.NoteEditor', {
+Ext.define('NextThought.view.annotations.editor.Note', {
 	extend: 'Ext.window.Window',
 	alias : 'widget.noteeditor',
 	requires: [
-		'NextThought.view.annotations.BodyEditor'
+		'NextThought.view.annotations.editor.Body'
 	],
 
 	constrain: true,

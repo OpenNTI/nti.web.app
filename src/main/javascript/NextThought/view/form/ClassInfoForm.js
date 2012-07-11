@@ -8,7 +8,7 @@ Ext.define('NextThought.view.form.ClassInfoForm', {
 		'NextThought.view.form.SectionInfoForm',
 		'Ext.form.field.Text',
 		'Ext.form.FieldSet',
-		'NextThought.view.form.fields.ShareWithField'
+		'NextThought.view.form.fields.UserListField'
 	],
 
 	border: false,

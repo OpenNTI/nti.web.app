@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.annotations.BodyEditor', {
+Ext.define('NextThought.view.annotations.editor.Body', {
 	extend: 'Ext.panel.Panel',
 	alias: 'widget.body-editor',
 
@@ -96,11 +96,9 @@ Ext.define('NextThought.view.annotations.BodyEditor', {
 		}
 
 		editor.getToolbar().add('-');//the layout doesn't work initially with this in one call
-
 		editor.getToolbar().add({ iconCls: 'editor-whiteboard', tooltip: 'Add Whiteboard', handler: function(){me.insertWhiteboard();} },
 			{ iconCls: 'editor-seperator', tooltip: 'Add a Seperator', handler: function(){me.insertSeperator();} }
 		);
-
 
 		while(!!(id = this.thumbs.pop()) ) {
 			el = iFrameDoc.getElementById(id);
@@ -252,7 +250,7 @@ Ext.define('NextThought.view.annotations.BodyEditor', {
 
 	getWhiteboardEditor: function(canvas, id){
 
-		this.editors[id] = this.editors[id] || Ext.widget('wb-window', {
+		this.editors[id] = this.editors[id] || Ext.widget('nit-window', {
 			closeAction: 'hide',
 			title: 'Whiteboard',
 			width: Ext.getBody().getWidth()*0.7,

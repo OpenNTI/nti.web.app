@@ -1,23 +1,23 @@
-Ext.define('NextThought.view.annotations.SelectionHighlight', {
-	alias: 'annotations.SelectionHighlight',
+Ext.define('NextThought.ux.SearchHits', {
+	alias: 'widget.search-hits',
 
-	constructor: function(selections, component){
-		Ext.apply(this, {
-			selections: selections || [],
-			ownerCmp: component,
-			container: component.body.dom,
+	constructor: function(config){
+		var me = this;
+
+		Ext.apply(me, {
+			selections: config.hits || [],
+			ownerCmp: config.owner,
+			container: config.owner.body.dom,
 			canvas: null,
 			canvasId: 'search-highlight-'+guidGenerator()
 		});
-
-		var me = this;
 
 		me.color = 'rgba(255,255,0,0.3)';
 		me.canvas =  me.createCanvas();
 
 		me.render = Ext.Function.createBuffered(me.render,100,me,[true]);
 
-		component.on('resize', me.canvasResize, me);
+		me.ownerCmp.component.on('resize', me.canvasResize, me);
 		me.canvasResize();
 		return me;
 	},

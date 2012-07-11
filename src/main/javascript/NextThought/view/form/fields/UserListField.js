@@ -1,14 +1,14 @@
-Ext.define('NextThought.view.form.fields.ShareWithField', {
+Ext.define('NextThought.view.form.fields.UserListField', {
 	extend: 'Ext.container.Container',
-	alias: 'widget.sharewith',
+	alias: 'widget.user-list',
 	mixins: {
 		labelable: 'Ext.form.Labelable',
 		field: 'Ext.form.field.Field'
 	},
-	cls: 'share-with-field',
+	cls: 'user-list-field',
 	autoEl: 'div',
 	layout: 'auto',
-	ui: 'sharewith',
+	ui: 'user-list',
 	requires: [
 		'NextThought.view.form.util.Token',
 		'NextThought.view.form.fields.UserSearchInputField'

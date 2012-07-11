@@ -18,7 +18,7 @@ Ext.define('NextThought.util.Annotations',{
 
 
 	callbackAfterRender: function(fn,scope){
-		var a = NextThought.view.annotations.Annotation;
+		var a = AnnotationsRenderer;
 
 		function cb(){
 			Ext.callback(fn,scope);
@@ -41,8 +41,10 @@ Ext.define('NextThought.util.Annotations',{
 			selTxt = obj.get('selectedText'),
 			o, i, text = [];
 
+		//if there is selected text, return that:
 		if (selTxt){return selTxt;}
 
+		//if not selected text, just build from body:
 		for (i in bdy) {
 			if(bdy.hasOwnProperty(i)) {
 				o = bdy[i];
@@ -51,6 +53,7 @@ Ext.define('NextThought.util.Annotations',{
 				}
 			}
 		}
+
 
 		return text.join('') || 'content';
 	},
@@ -236,7 +239,7 @@ Ext.define('NextThought.util.Annotations',{
 
 
 	getBlockParent: function(node, ignoreSpan){
-		if(!node || this.isBlockNode(node) && !(node.tagName === 'SPAN' && ignoreSpan)){
+		if(!node || (this.isBlockNode(node) && !(node.tagName === 'SPAN' && ignoreSpan))){
 			return node;
 		}
 		return this.getBlockParent(node.parentNode, ignoreSpan);

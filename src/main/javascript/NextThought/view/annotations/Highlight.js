@@ -1,67 +1,57 @@
 Ext.define('NextThought.view.annotations.Highlight', {
-	extend:'NextThought.view.annotations.Annotation',
-	alias: 'widget.highlight-annotation',
+	extend:'NextThought.view.annotations.Base',
+	alias: 'widget.highlight',
 	requires:[
-		'NextThought.cache.IdCache',
-		'NextThought.util.Color',
+		'NextThought.util.Anchors',
 		'NextThought.util.Rects',
-		'Ext.util.TextMetrics',
-		'NextThought.model.Redaction'
+		'Ext.util.TextMetrics'
 	],
 
+	highlightCls: 'application-highlight',
+	mouseOverCls: 'highlight-mouse-over',
 
-	constructor: function(selection, record, component){
-		var me = this;
-
-		me.callParent([record, component]);
-
-		Ext.apply(me,{
-			selection: selection,
-			renderPriority: 1,
-			canvasId: component.prefix + '-highlight-canvas'
-		});
-
-
-		me.canvas = me.createCanvas();
-
-		me.self.highlightEvents.on('render',me.render, me);
-
-		return me;
-	},
-
-	getItemId: function(){return this.id; },
-	isXType: function(){return false;},
-	getEl: function(){return Ext.get(this.img);},
-	getPosition: function(){
-		return Ext.fly(this.img).getXY();
-	},
-
-
-	attachRecord: function(record){
-		var me = this,
-			i = record.getId(),
-			id = IdCache.getComponentId(i, null, me.prefix);
-
-		me.callParent(arguments);
-
-		if (!record.phantom && !Ext.ComponentManager.get(id)) {
-			me.id = id;
-			Ext.ComponentManager.register(me);
+	constructor: function(config){
+		this.callParent(arguments);
+		if (config.browserRange) {
+			this.range = config.browserRange;
 		}
+		this.content = Ext.fly(this.doc.getElementById('NTIContent')).first(false,true);
+		this.getRange(); //get range right her up front, this won't render it yet.
+		console.log('build highlight for',this.getRecordField('selectedText'));
+		return this;
 	},
 
 
-	getBlockWidth: function() {
-		var s = this.selection,
-			n = s.commonAncestorContainer;
-		if(n.nodeType===n.TEXT_NODE){
-			n = n.parentNode;
+	getRange: function(){
+		if(!this.range){
+			this.range = Anchors.toDomRange(this.getRecordField('applicableRange'),this.doc);
+			if(!this.range){
+				console.log('bad range?', this.getRecordField('applicableRange'));
+				Ext.Error.raise('bad range? '+Ext.encode(this.getRecordField('applicableRange')));
+			}
 		}
-		return Ext.fly(n).getWidth();
+		return this.range;
 	},
+
+
+	cleanup: function(){
+		var c = this.rendered.slice();
+		this.rendered = [];
+
+		if( this.range ){
+			this.range.detach();
+			delete this.range;
+		}
+
+		Ext.fly(this.canvas).remove();
+		Ext.fly(this.counter).remove();
+		Ext.each(c,this.unwrap,this);
+		return this.callParent(arguments);
+	},
+
 
 	getLineHeight: function(){
-		var s = this.selection, m,
+		var s = this.getRange(), m,
 			n = s.commonAncestorContainer;
 
 		if(n.nodeType===n.TEXT_NODE){
@@ -72,245 +62,224 @@ Ext.define('NextThought.view.annotations.Highlight', {
 	},
 
 
-	adjustCoordinates: function(rect,offsetToTrim){
-		var x = offsetToTrim[0]!==undefined ? offsetToTrim[0] : offsetToTrim.left,
-			y = offsetToTrim[1]!==undefined ? offsetToTrim[1] : offsetToTrim.top;
+	onMouseOver: function(){
+		clearTimeout(this.mouseOutTimout);
+		if(!this.compElements.first().hasCls(this.mouseOverCls)){
+			this.compElements.addCls(this.mouseOverCls);
+			this.render();
+		}
+	},
+	onMouseOut: function(){
+		var me = this;
+		function off(){
+			me.compElements.removeCls(me.mouseOverCls);
+			me.render();
+		}
 
-		return {
-			top: rect.top+y,
-			left: rect.left+x,
-			width: rect.width,
-			height: rect.height,
-			right: rect.left+x+rect.width,
-			bottom: rect.top+y+rect.height
-		};
+		this.mouseOutTimout = setTimeout(off,250);
 	},
 
 
-	getRects: function(){
-		var rects = [],
-			list = this.selection.getClientRects(),
-			i=list.length-1,
-			xy = Ext.fly(this.canvas).getXY();
+	render: function(){
+		var range = this.getRange(),
+			bounds = range.getBoundingClientRect(),
+			boundingTop = Math.ceil(bounds.top),
+			boundingLeft = Math.ceil(bounds.left),
+			boundingHeight = Math.ceil(bounds.height),
+			width = Ext.fly(this.content).getWidth(),
+			topOffset = 10,
+			leftOffset = 5,
+			ctx,
+			adjustment,
+			lineHeight = this.getLineHeight(),
+			s = RectUtils.merge(range.getClientRects(),lineHeight,width+1),
+			i = s.length - 1, x, y, w, h, left, r,
+			lastY=0, c, small,
+			padding = 2,
+			last = true;
 
-		for(;i>=0; i--){ rects.push( this.adjustCoordinates(list[i],xy) ); }
+		if(!this.rendered){
+			this.rendered = this.wrapRange(range.commonAncestorContainer, range);
+			this.counter = this.createCounter(this.rendered.last());
+			//create a composite element so we can do lots of things at once:
+			this.compElements = new Ext.dom.CompositeElement(this.rendered);
+			this.compElements.add(this.counter);
+			this.canvas = this.createCanvas();
+		}
 
-		return rects.reverse();
+
+		Ext.fly(this.canvas).setXY([
+			boundingLeft-leftOffset,
+			boundingTop-topOffset
+		]);
+		Ext.fly(this.canvas).set({
+			width: width+(leftOffset*2),
+			height: boundingHeight+(topOffset*2)
+		});
+
+		ctx = this.canvas.getContext('2d');
+		ctx.fillStyle = this.compElements.first().getStyle('background-color');
+		for(; i>=0; i--){
+			r = s[i];
+
+
+
+			left = Math.ceil(r.left - boundingLeft + leftOffset - padding );
+			y = Math.ceil(r.top - boundingTop + topOffset - padding );
+			small = (r.width/width) < 0.5 && i===0;
+			x = i===0 || small ? left : 0;
+			w = last || small
+					? (r.width + (x ? 0: left) + (padding*(last?1:2)) )
+					: (width-x);
+
+			h = r.height + (padding*2);
+
+			if(!last && (Math.abs(y - lastY) < lineHeight || y > lastY )){ continue; }
+
+			if(last){
+				c = Ext.get(this.counter);
+				adjustment = this.adjustedBy || (r.top - c.getY());
+				h = c.getHeight();
+
+				if(adjustment < 2){ y += adjustment; }
+				if(!this.adjusted){
+					this.adjusted = true;
+					this.adjustedBy = adjustment;
+					return this.render();
+				}
+			}
+			else {
+				adjustment = 0;
+			}
+
+			//TODO: clamp to 24px tall (centered in the rect)
+			ctx.fillRect( x, y, w, h);
+
+			last = false;
+			lastY = y;
+		}
+
+		return boundingTop;
 	},
 
 
 	createCanvas: function(){
-		var c = document.getElementById(this.canvasId);
-		if(!c){
-			c = this.createElement(
-				'canvas',
-				this.ownerCmp.body.dom,
-				'highlight-object','position: absolute; top: 0; left:0; pointer-events: none;',
-				this.canvasId
-				);
-			this.ownerCmp.on('resize', this.canvasResize, this);
-			this.canvasResize();
+
+		var id = 'annotation-container',
+			doc = this.doc,
+			body = this.doc.getElementById('NTIContent'),
+			cnt = doc.getElementById(id);
+
+		if(!cnt){
+			cnt = doc.createElement('div');
+			cnt.setAttribute('id',id);
+			body.parentNode.insertBefore(cnt,body);
 		}
-		return c;
+
+		return this.createElement(
+			'canvas', cnt,
+			'highlight-canvas');
 	},
 
 
-	canvasResize: function(){
-		var c = Ext.get(this.canvas || this.canvasId),
-			cont = Ext.get(this.ownerCmp.getIframe()),
-			pos = cont.getXY(),
-			size = cont.getSize();
-		c.moveTo(pos[0], pos[1]);
-		Ext.apply(c.dom,{
-			width: size.width,
-			height: size.height
-		});
+	createCounter: function(after){
+		var el = Ext.get(this.createNonAnchorableSpan());
+		el.addCls([this.highlightCls,'counter']);//,'with-count']);
+		el.appendTo(after);
+		el.on('click', this.onClick, this);
+//		el.update('<span>0</span>');
+		el.update('&nbsp;');
+		return el.dom;
 	},
 
 
-	buildMenu: function(){
-		var me = this,
-			items = [],
-			r = me.record,
-			text = r.get('selectedText'),
-			boundingBox = this.ownerCmp.convertRectToScreen(this.selection.getBoundingClientRect()),
-			redactionRegex = /USSC-HTML|Howes_converted|USvJones2012_converted/i;
+	wrapRange: function(node, range){
+		var nodeList = [],
+			newRange,
+			nodeRange = node.ownerDocument.createRange(),
 
-		//adjust boundingBox for screen coords:
+			startToStart,
+			startToEnd,
+			endToStart,
+			endToEnd,
+
+			BEFORE = -1,
+			SAME = 0,
+			AFTER = 1;
+
+		nodeRange.selectNodeContents(node);
+
+		startToStart = nodeRange.compareBoundaryPoints(Range.START_TO_START, range);
+		startToEnd = nodeRange.compareBoundaryPoints(Range.START_TO_END, range);
+		endToStart = nodeRange.compareBoundaryPoints(Range.END_TO_START, range);
+		endToEnd = nodeRange.compareBoundaryPoints(Range.END_TO_END, range);
 
 
-		if(this.isModifiable) {
-			items.push({
-					text : (r.phantom?'Save':'Remove')+' Highlight',
-					handler: Ext.bind(r.phantom? me.savePhantom : me.remove, me)
-				});
+		//Easy case, the node is completely surronded, wrap the node
+		if( ( startToStart === AFTER || startToStart === SAME )
+			&& ( endToEnd === BEFORE || endToEnd === SAME ) ) {
+			newRange = node.ownerDocument.createRange();
+			newRange.selectNode(node);
+			nodeList.push(this.doWrap(newRange));
+		}
 
-			//hack to allow redactions only in legal texts for now...
-			if (redactionRegex.test(LocationProvider.currentNTIID)) {
+		//If the node overlaps with the range in anyway we need to work on it's children
+		else {
+			Ext.each(node.childNodes,function(i){
+				nodeList.push.apply( nodeList, this.wrapRange(i, range) );
+			},this);
 
-				if (r.phantom) {
-					items.push({
-						text : 'Redact Highlight',
-						handler: function(){
-							var redaction = NextThought.model.Redaction.createFromHighlight(r);
-							redaction.save({
-								scope: me,
-								failure:function(){
-									console.error('Failed to save redaction',redaction);
-									me.cleanup();
-								},
-								success:function(){
-									me.cleanup();
-									me.ownerCmp.fireEvent('redact', redaction);
-								}
-							});
-						}
-					});
+			if(node.childNodes.length === 0){
+
+				if(startToStart === BEFORE && ( endToEnd === BEFORE || endToEnd === SAME ) ){
+					newRange = this.doc.createRange();
+					newRange.setStart(range.startContainer, range.startOffset);
+					newRange.setEndAfter(node);
+					range = newRange;
+				}
+				else if(endToEnd === AFTER && (startToStart === AFTER || startToStart === SAME ) ){
+					newRange = this.doc.createRange();
+					newRange.setStartBefore(node);
+					newRange.setEnd(range.endContainer, range.endOffset);
+					range = newRange;
+				}
+
+
+
+				if(startToEnd !== BEFORE && endToStart !== AFTER) {
+					nodeList.push(this.doWrap(range));
 				}
 			}
 		}
+		return nodeList;
+	},
 
-		if(/^\w+$/i.test(text)){//is it a word
-			items.push({
-				text: 'Define...',
-				handler:function(){ me.ownerCmp.fireEvent('define', text, boundingBox ); }
-			});
-		}
 
-		items.push({
-			text : 'Add a Note',
-			handler: function(){
-				//me.savePhantom();
-				me.ownerCmp.fireEvent('create-note',me.selection);
+	doWrap: function(range) {
+		var span = this.createNonAnchorableSpan();
+		span.setAttribute('class', this.highlightCls);
+
+		range.surroundContents(span);
+		Ext.fly(span).hover(this.onMouseOver,this.onMouseOut,this);
+		Ext.fly(span).on('click',this.onClick,this);
+		return span;
+	},
+
+
+	unwrap: function(node) {
+		var r, p = node.parentNode;
+
+		Ext.fly(node).un('click',this.onClick,this);
+
+		if(node.firstChild){
+			r = node.ownerDocument.createRange();
+			r.selectNode(node);
+			while(node.lastChild){
+				r.insertNode(node.lastChild);
 			}
-		});
-
-		return this.callParent([items]);
-	},
-
-
-	cleanup: function(){
-		if(!this.selection){
-			return;
-		}
-		if (!this.record.phantom){Ext.ComponentManager.unregister(this);}
-		delete this.selection;
-		this.callParent(arguments);
-		this.self.highlightEvents.fireEvent('render');//make all highlights redraw...
-		this.self.renderCanvas(this.prefix);//this buffered function will only fire after the last invocation. This is to ensure we clear the canvas.
-	},
-
-
-
-	 drawRect: function(rect, fill){
-		return function(ctx){
-			ctx.fillStyle = fill;
-			ctx.fillRect(rect.left, rect.top, rect.width, rect.height);
-		};
-	},
-
-
-	requestRender: function(){
-		this.callParent(arguments);
-		this.self.renderCanvas(this.prefix);//ensure the canvas is redrawn
-	},
-
-
-	render: function() {
-		if(!this.selection){
-			this.cleanup();
-			return;
 		}
 
-		if(!this.isVisible){return;}
-
-		if(this.rendering){
-			return;
-		}
-
-		this.rendering = true;
-
-		var nib = Ext.get(this.img),
-			r = this.selection.getBoundingClientRect(),
-			s = RectUtils.merge(this.selection.getClientRects(),this.getLineHeight(),this.getBlockWidth()),
-			l = s.length,
-			i = l-1,
-			me = this,
-			ox = (me.offsets.left+60)-(nib.getWidth()/2);
-
-		if(!r){
-			return;
-		}
-
-		//move nib
-		nib.setStyle({
-			left: ox+'px',
-			top: r.top +'px'
-		});
-
-
-		//stage draw
-		for(; i>=0; i--){
-			this.self.enqueue(this, this.drawRect(s[i], '#a4d8f6'));
-		}
-		this.self.enqueue(this, function(){ delete me.rendering; });
-		this.self.renderCanvas(this.prefix);//buffered
-
-		this.callParent();
-	},
-
-
-	statics: {
-		highlightEvents: Ext.create('Ext.util.Observable'),
-		queue : {},
-
-		enqueue: function(annotation, op){
-			var p = annotation.prefix;
-
-			if (!this.queue[p]) {
-				this.queue[p] = {
-					queue: [],
-					canvas: annotation.canvas
-				};
-
-			}
-			this.queue[p].queue.push(op);
-		},
-
-		renderCanvas: function(prefix) {
-			if (!this.queue[prefix]){return;}
-
-			var c = this.queue[prefix].canvas,
-				ctx = c ? c.getContext("2d") : null,
-				w = c ? c.width : 0,
-				q = Ext.clone(this.queue[prefix].queue);
-
-			this.queue[prefix].queue = [];
-
-			if (!ctx){return;}
-
-			//reset the context
-			c.width = 1; c.width = w;
-
-			ctx.globalCompositeOperation = 'xor';
-			ctx.globalAlpha = 0.3;
-
-			while(q.length){ (q.pop())(ctx); }
-		}
+		p.removeChild(node);
+		p.normalize();
 	}
-},
-function(){
-	var me = this,
-		fn = this.renderCanvas,
-		timerId = {};
-
-	this.renderCanvas = (function() {
-			return function(prefix) {
-				if (timerId[prefix]) {
-					clearTimeout(timerId[prefix]);
-				}
-				timerId[prefix] = setTimeout(function(){ fn.call(me, prefix); }, 100);
-			};
-
-		}());
 });

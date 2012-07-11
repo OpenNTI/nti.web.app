@@ -26,6 +26,8 @@ Ext.define('NextThought.model.Redaction', {
 		{ name: 'AutoTags', type: 'Auto'},
 		{ name: 'tags', type: 'Auto'},
 		{ name: 'selectedText', type: 'string'},
+		{ name: 'replacementContent', type: 'string'},
+		{ name: 'redactionExplanation', type: 'string'},
 		{ name: 'applicableRange', type: 'ContentRangeDescription'}
 	]
 });

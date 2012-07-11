@@ -53,8 +53,8 @@ Ext.define('NextThought.view.whiteboard.Window',{
 					layout: { type: 'hbox', pack: 'end' },
 					defaults: {xtype: 'button', ui: 'primary', scale: 'medium'},
 					items: [
-						{text: 'Cancel', action: 'cancel', ui: 'secondary' },
-						{text: 'Save', action: 'save' }
+						{text: 'Cancel', ui: 'secondary', handler: function(b){b.up('window').cancel(b)} },
+						{text: 'Save', action: 'save', handler: function(b){b.up('window').save(b)} }
 					]
 				}
 			]
@@ -72,12 +72,6 @@ Ext.define('NextThought.view.whiteboard.Window',{
 	},
 
 
-	initComponent: function(){
-		this.callParent(arguments);
-
-		this.down('button[action=save]').setHandler(this.save, this);
-		this.down('button[action=cancel]').setHandler(this.cancel, this);
-	},
 
 
 	save: function (btn) {
@@ -85,12 +79,20 @@ Ext.define('NextThought.view.whiteboard.Window',{
 			wb = win.down('whiteboard-editor');
 
 		wb.initialConfig.value = wb.getValue();
-		wb.fireEvent('save', wb);
+		//wb.fireEvent('save', wb);
+		win.fireEvent('save', win, wb);
 	},
 
 
 	cancel: function (btn) {
-		btn.up('window').hide().down('whiteboard-editor').reset();
+		var win = btn.up('window');
+		win.hide().down('whiteboard-editor').reset();
+		win.fireEvent('cancel', win);
+	},
+
+
+	getEditor: function(){
+		return this.down('whiteboard-editor');
 	},
 
 

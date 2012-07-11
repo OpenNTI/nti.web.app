@@ -6,12 +6,12 @@ Ext.define('NextThought.overrides.builtins.Object',{
 			var setter = '__defineSetter__',
 				getter = '__defineGetter__',
 				hasDefineProp = Boolean(Object.defineProperty),
-				a, g, s;
+				a, g, s, e = function(){};
 
 			for( a in attrs ){
 				if(attrs.hasOwnProperty(a)){
-					g = attrs[a].getter || function(){};
-					s = attrs[a].setter || function(){};
+					g = attrs[a].getter || e;
+					s = attrs[a].setter || e;
 					if(hasDefineProp){
 						Object.defineProperty(obj,a,{ enumerable: true, set: s, get: g });
 					}

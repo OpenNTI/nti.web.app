@@ -1,10 +1,10 @@
-Ext.define( 'NextThought.view.annotations.ShareWith', {
+Ext.define( 'NextThought.view.sharing.Window', {
 	extend: 'NextThought.view.Window',
 	requires: [
-		'NextThought.view.form.fields.ShareWithField',
+		'NextThought.view.form.fields.UserListField',
 		'NextThought.util.Annotations'
 	],
-	alias : 'widget.share',
+	alias : 'widget.share-window',
 	
 
 	width: 450,
@@ -28,7 +28,7 @@ Ext.define( 'NextThought.view.annotations.ShareWith', {
 		{
 			xtype: 'container',
 			autoEl: {tag: 'div', cls: 'field' },
-			items: { xtype: 'sharewith' }
+			items: { xtype: 'user-list' }
 		},
 		{
 			xtype: 'container',
@@ -84,6 +84,6 @@ Ext.define( 'NextThought.view.annotations.ShareWith', {
 		this.callParent(arguments);
 
 		//any down calls below this:
-		this.down('sharewith').setValue(this.record.get('sharedWith'));
+		this.down('user-list').setValue(this.record.get('sharedWith'));
 	}
 });

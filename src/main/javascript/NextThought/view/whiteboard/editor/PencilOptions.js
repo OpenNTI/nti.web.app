@@ -17,7 +17,7 @@ Ext.define('NextThought.view.whiteboard.editor.PencilOptions',{
 		cls: 'pencil-stroke-options',
 		defaults: {
 			xtype: 'wb-tool-option',
-			toggleGroup: 'pencil-stroke-'+guidGenerator()
+			toggleGroup: 'pencil-stroke-'+guidGenerator() //TODO - do this at construction time instead of define time
 		},
 		items: [
 			{ option: 'fine stroke', strokeWidth: 5, pressed: true },
@@ -77,10 +77,10 @@ Ext.define('NextThought.view.whiteboard.editor.PencilOptions',{
 
 		Ext.each(pressed, function(b){
 			if (b.strokeWidth){
-				strokeWidth = b.strokeWidth
+				strokeWidth = b.strokeWidth;
 			}
 			else if (b.stroke) {
-				stroke = b.stroke
+				stroke = b.stroke;
 			}
 		});
 
