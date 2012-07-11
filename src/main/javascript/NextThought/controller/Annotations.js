@@ -19,7 +19,6 @@ Ext.define('NextThought.controller.Annotations', {
 	views: [
 		'annotations.Highlight',
 		'annotations.Note',
-		'annotations.editor.Note',
 		'sharing.Window',
 		'content.Reader',
 		'definition.Window'

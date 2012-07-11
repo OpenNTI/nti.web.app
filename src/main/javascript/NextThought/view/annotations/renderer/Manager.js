@@ -203,8 +203,13 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 
 		Ext.each(Ext.Array.clone(me.registry[prefix]), function(o){
 			try {
-				var y = o.render() || -1,
+				var y = o.render(), b;
+				if(!y){
+					console.log(o, 'returned a falsy y:',y);
+				}
+				else {
 					b = me.getBucket(prefix,y);
+				}
 				if(b){
 					b.put(o);
 				}

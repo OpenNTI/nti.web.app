@@ -155,7 +155,7 @@ Ext.define('NextThought.view.annotations.Redaction', {
 			return handledKey();
 		}
 		else if(k === event.ENTER){
-			this.record.set('replacementContent', span.innerHTML);
+			this.record.set('replacementContent', span.innerText);//just the text, not the formatting
 			this.record.save();
 			return handledKey();
 		}
