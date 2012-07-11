@@ -66,14 +66,15 @@ Ext.define('NextThought.view.menus.account.Notifications',{
 		this.notificationData = {};
 
 		store.each(function(change){
-			var item = change.get('Item'),
-				loc = LocationProvider.getLocation(item.get('ContainerId')),
+			var item = change.get('Item');
+			var loc = item? LocationProvider.getLocation(item.get('ContainerId')) : null,
 				bookTitle = loc ? loc.title.get('title') : null,
 				m = this.generateMessage(change, bookTitle),
 				guid = guidGenerator();
 
 			//update counter so we know when we are done:
 			itemsToLoad--;
+			if(!item){return;}//skip it
 
 			UserRepository.getUser(change.get('Creator'), function(u){
 				this.notifications.push({'name' :u[0].get('realname'), 'message': m, 'guid': guid});
@@ -141,7 +142,7 @@ Ext.define('NextThought.view.menus.account.Notifications',{
 
 	generateMessage: function(change, bookTitle) {
 		var item = change.get('Item'),
-			it = item.getModelName(),
+			it = item?item.getModelName():'deleted',
 			p = this.messagePrefixes[it],
 			end = bookTitle ? ' in ' + bookTitle : '';
 
