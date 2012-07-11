@@ -33,32 +33,6 @@ Ext.define('NextThought.util.Annotations',{
 	},
 
 
-//tested
-	getBodyTextOnly: function(obj) {
-		if (!obj) {return '';}
-
-		var bdy = obj.get('body'),
-			selTxt = obj.get('selectedText'),
-			o, i, text = [];
-
-		//if there is selected text, return that:
-		if (selTxt){return selTxt;}
-
-		//if not selected text, just build from body:
-		for (i in bdy) {
-			if(bdy.hasOwnProperty(i)) {
-				o = bdy[i];
-				if(typeof(o) === 'string'){
-					text.push(o.replace(/<.*?>/g, ''));
-				}
-			}
-		}
-
-
-		return text.join('') || 'content';
-	},
-
-
 	objectToAttributeString: function(obj){
 		if(!obj) {
 			return '';

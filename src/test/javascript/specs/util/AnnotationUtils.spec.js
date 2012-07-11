@@ -109,7 +109,7 @@ describe("Annotation Utils", function() {
 	});
 
 
-	it("should only be text, no tags", function(){
+	xit("should only be text, no tags", function(){
 
 		var note = Ext.create('NextThought.model.Note',{body:['test ','<b>bold</b>', '<whoKnows/> text']}),
 			text = AnnotationUtils.getBodyTextOnly(note);

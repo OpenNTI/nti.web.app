@@ -1,19 +1,16 @@
 Ext.define( 'NextThought.view.annotations.Note', {
 	extend: 'NextThought.view.annotations.Highlight',
 	alias: 'widget.note',
-	requires:[],
+	requires:[
+		'NextThought.view.annotations.note.Window'
+	],
 
-	/*
-	singleGutterWidget: null,
-	multiGutterWidget: null,
-	*/
-
-	singleGutterWidgetTmpl: Ext.DomHelper.createTemplate( {
+	singleGutterWidgetTmpl: Ext.DomHelper.createTemplate({
 		cls: 'note-gutter-widget single',
-		children: [
+		cn: [
 			{
 				cls: 'content',
-				children: [
+				cn: [
 					{cls: 'name', html: '{0}'},
 					{cls: 'text', html: '{1}'}
 				]
@@ -22,10 +19,8 @@ Ext.define( 'NextThought.view.annotations.Note', {
 		]
 	}).compile(),
 
-
-	multiGutterWidgetTmpl: Ext.DomHelper.createTemplate( {
-		cls: 'thumb note-gutter-widget multi'
-	}).compile(),
+	multiGutterWidgetTmpl: Ext.DomHelper.createTemplate(
+			{ cls: 'thumb note-gutter-widget multi' }).compile(),
 
 	constructor: function(config){
 		this.callParent(arguments);
@@ -42,6 +37,27 @@ Ext.define( 'NextThought.view.annotations.Note', {
 
 	//Notes don't have controls
 	//getControl: function(){},
+
+
+	openWindow: function(){
+		Ext.widget({
+			xtype: 'note-window',
+			record: this.getRecord(),
+			activeAnnotations: []
+		}).show();
+	},
+
+
+	attachListeners: function(el){
+		var me = this;
+		el.on({
+			click: function(e){e.stopEvent();return false;},
+			mouseup: function(e){
+				me.openWindow();
+			}
+		});
+		return el;
+	},
 
 
 	getGutterWidget: function(numberOfSiblings){
@@ -65,11 +81,11 @@ Ext.define( 'NextThought.view.annotations.Note', {
 		var creator = this.record.get('Creator'),
 			htmlString = this.singleGutterWidgetTmpl.apply([
 				creator,
-				AnnotationUtils.getBodyTextOnly(this.record)]),
+				this.record.getBodyText()]),
 			dom = Ext.DomHelper.createDom({html:htmlString}).firstChild;
 
 		//now create the ext object:
-		this.singleGutterWidget = Ext.get(dom);
+		this.singleGutterWidget = this.attachListeners( Ext.get(dom) );
 
 		UserRepository.getUser(creator, function(u){
 			var name = u[0].getName();
@@ -84,7 +100,7 @@ Ext.define( 'NextThought.view.annotations.Note', {
 			dom = Ext.DomHelper.createDom({html:htmlString}).firstChild;
 
 		//now create the ext object:
-		this.multiGutterWidget = Ext.get(dom);
+		this.multiGutterWidget = this.attachListeners( Ext.get(dom) );
 
 		UserRepository.getUser(creator, function(u){
 			var url = u[0].get('avatarURL');

@@ -675,7 +675,7 @@ Ext.define('NextThought.controller.Chat', {
 
 			b.menu.add({
 				text:Ext.String.format('<b>{0}</b> - {1}', name,
-					Ext.String.ellipsis(AnnotationUtils.getBodyTextOnly(msg), 15, false)),
+					Ext.String.ellipsis(msg.getBodyText(), 15, false)),
 				icon: i,
 				relatedCmp: cmp
 			});

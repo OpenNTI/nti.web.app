@@ -1,6 +1,10 @@
 Ext.define('NextThought.model.Note', {
 	extend: 'NextThought.model.Base',
 
+	mixins: {
+		bodyContent: 'NextThought.mixins.ModelWithBodyContent'
+	},
+
 	requires: [
 		'NextThought.model.anchorables.DomContentRangeDescription',
 		'NextThought.model.converters.ContentRangeDescription'

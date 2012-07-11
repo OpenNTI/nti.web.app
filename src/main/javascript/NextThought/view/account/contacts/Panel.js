@@ -144,7 +144,7 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 			return loc ? loc.label : 'Unknown';
 		}
 		else if (item.getModelName() === 'Note'){
-			return AnnotationUtils.getBodyTextOnly(item);
+			return item.getBodyText();
 		}
 		else {
 			console.error('Not sure what activity text to use for ', item, change);
