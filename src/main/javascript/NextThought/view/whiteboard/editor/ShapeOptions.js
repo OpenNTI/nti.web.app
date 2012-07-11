@@ -65,15 +65,15 @@ Ext.define('NextThought.view.whiteboard.editor.ShapeOptions',{
 		if (options.strokeWidth) {
 			this.down('[strokeWidth='+options.strokeWidth+']').toggle(true);
 		}
-		if(options.fill) {
-
-		}
-		if (options.sides) {
-			if (options.sides === 3){}
-			else if (options.sides === 4){}
-			else if (options.sides === 1){}
-			else {}
-		}
+//		if(options.fill) {
+//
+//		}
+//		if (options.sides) {
+//			if (options.sides === 3){/*triangle?*/}
+//			else if (options.sides === 4){/*square?*/}
+//			else if (options.sides === 1){/*line?*/}
+//			else {/*um?*/}
+//		}
 	},
 
 

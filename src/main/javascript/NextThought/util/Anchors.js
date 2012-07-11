@@ -118,8 +118,8 @@ Ext.define('NextThought.util.Anchors', {
 		walker.currentNode = container;
 
 		var nextSiblingFunction = start ? walker.previousNode : walker.nextNode;
-
-		while( (sibling = nextSiblingFunction.call(walker)) ) {
+		var sibling;//oops... this was being declared globally
+		while( Boolean(sibling = nextSiblingFunction.call(walker)) ) {
 			if(   collectedCharacters >= maxCollectedChars
 					  || contexts.length - 1 >= maxSubsequentContextObjects ){
 					break;
@@ -395,7 +395,7 @@ Ext.define('NextThought.util.Anchors', {
 
 		var textNode;
 		//We may be in the same textNode as start
-		if(treeWalker.currentNode.nodeType == Node.TEXT_NODE){
+		if(treeWalker.currentNode.nodeType === Node.TEXT_NODE){
 			textNode = treeWalker.currentNode;
 		}
 		else{
@@ -416,7 +416,7 @@ Ext.define('NextThought.util.Anchors', {
 			}
 
 			//100% sure, that is the best we can do
-			if(confidence == 1){
+			if(confidence === 1){
 				break;
 			}
 
@@ -426,13 +426,13 @@ Ext.define('NextThought.util.Anchors', {
 
 		//If we made it through the tree without finding
 		//a node we failed
-		if(possibleNodes.length == 0){
+		if(possibleNodes.length === 0){
 			return {confidence: 0};
 		}
 
 		var container = null;
 		//Did we stop because we found a perfect match?
-		if(possibleNodes[possibleNodes.length - 1].confidence == 1){
+		if(possibleNodes[possibleNodes.length - 1].confidence === 1){
 			container = possibleNodes[possibleNodes.length - 1].node;
 			confidence = 1;
 		}
@@ -447,7 +447,7 @@ Ext.define('NextThought.util.Anchors', {
 				//We want the largest range, that means
 				//if we are the start we iterate from the beginning
 				//if we are the end we iterate from the end
-				var isStart = pointer.getRole() === 'start';
+				isStart = (pointer.getRole() === 'start');
 
 				container = isStart ? possibleNodes[0].node : possibleNodes[possibleNodes.length - 1].node;
 				confidence = 1.0/possibleNodes.length;
@@ -476,7 +476,7 @@ Ext.define('NextThought.util.Anchors', {
 				adjustedOffset = node.textContent.length - adjustedOffset;
 			}
 
-			if( node.textContent.indexOf(context.contextText) == adjustedOffset){
+			if( node.textContent.indexOf(context.contextText) === adjustedOffset){
 				return true;
 			}
 			return false;
@@ -527,7 +527,7 @@ Ext.define('NextThought.util.Anchors', {
 					confidence = 1;
 				}
 				else{
-					confidence = .5; //TODO this is an arbitrary value.  Can we give something better than "maybe"
+					confidence = 0.5; //TODO this is an arbitrary value.  Can we give something better than "maybe"
 				}
 			}
 			else{

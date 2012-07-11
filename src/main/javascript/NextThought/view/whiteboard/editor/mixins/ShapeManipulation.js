@@ -143,9 +143,9 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 			delete s.isNew;
 		//	this.activateToolOptions(s.getShapeName());
 		}
-		else {
-		//	this.activateToolOptions(this.currentTool);
-		}
+//		else {
+//			this.activateToolOptions(this.currentTool);
+//		}
 
 		c.drawScene();
 	},
@@ -382,7 +382,7 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 		'text':		p.doText,
 		'line':		p.doLine,
 		'circle':	p.doShape,
-		'polygon': 	p.doShape
+		'polygon':	p.doShape
 	};
 
 });

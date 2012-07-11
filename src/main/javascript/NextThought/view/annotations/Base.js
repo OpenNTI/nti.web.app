@@ -112,7 +112,7 @@ Ext.define( 'NextThought.view.annotations.Base', {
 	getLineHeight: function(){ return NaN; },
 	getBlockWidth: function(){ return NaN; },
 	getRects: null,//implement in subclasses
-	getRecord: function(){ return this.record; },
+	getRecord: function(){ return this.record || {get:Ext.emptyFn}; },
 	getRecordField: function(field){ return this.getRecord().get(field); },
 
 	attachRecord: function(record){
