@@ -461,6 +461,11 @@ div.redaction-control {
 		background-color: #e1f4fe;
 		overflow: hidden;
 
+        & .counter-container {
+            display: inline-block;
+            white-space: nowrap;
+        }
+
 		&.highlight-mouse-over{
 			color: #ffffff;
 			background-color: #3fb3f6;

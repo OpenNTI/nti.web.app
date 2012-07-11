@@ -184,11 +184,19 @@ Ext.define('NextThought.view.annotations.Highlight', {
 
 
 	createCounter: function(after){
-		var el = Ext.get(this.createNonAnchorableSpan());
-		el.addCls([this.highlightCls,'counter']);//,'with-count']);
-		el.appendTo(after);
+		var containingSpan = Ext.get(this.createNonAnchorableSpan()),
+			el = Ext.get(this.createNonAnchorableSpan()),
+			afterWords = after.innerHTML.trim().split(' '),
+			style = this.record.get('style') || 'plain';
+
+		containingSpan.update(afterWords.pop());
+		Ext.fly(after).update(afterWords.join(' ') + ' ');
+		containingSpan.addCls('counter-container');
+		el.appendTo(containingSpan);
+		containingSpan.appendTo(after);
+
+		el.addCls([this.highlightCls,'counter', style]);//,'with-count']);
 		el.on('click', this.onClick, this);
-//		el.update('<span>0</span>');
 		el.update('&nbsp;');
 		return el.dom;
 	},
