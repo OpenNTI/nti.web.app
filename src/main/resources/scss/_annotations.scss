@@ -244,7 +244,7 @@
 	}
 }
 
-.annotation-gutter{
+.annotation-gutter {
 	position: absolute;
 	top: 0; left: 0;//fill the space
 	overflow: visible;
@@ -311,8 +311,6 @@
 		.note & {		background: url(../images/activity-note.png) 4px 0 no-repeat;}
 	}
 }
-
-
 
 .x-dd-drag-proxy {
 
@@ -401,6 +399,7 @@ div.redaction-control {
 }
 
 
+/* Styles below are intended to target things inside the content iframe */
 
 #NTIContent {
 
@@ -507,12 +506,4 @@ div.redaction-control {
 
 }
 
-#annotation-container {
-	position: absolute;
-
-	.highlight-canvas {
-		position: absolute;
-		z-index: 1;
-		pointer-events: none;
-	}
-}
+#annotation-container { &, .highlight-canvas { position: absolute; } }
