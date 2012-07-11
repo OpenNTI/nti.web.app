@@ -28,8 +28,20 @@ public class XpathUtilsSearch extends XpathUtilsNav{
 		return buildString(xpathBuilder("div", "class", "body"), "//div");
 	}
 	
-	public static String getSectionTitle(String name){
-		return xpathBuilder("span", "class", "label", name);
+	public static String getSections(){
+		return xpathBuilder("span", "class", "label");
+	}
+	
+	public static String getSectionTitle(String section){
+		return xpathBuilder("span", "class", "label", section);
+	}
+	
+	public static String getSeeAllButton(){
+		return xpathBuilder("div", "class", "see-all");
+	}
+	
+	public static String getSearchTextBoxExpand(){
+		return xpathBuilder("a", "class", "trigger x-menu");
 	}
 	
 }

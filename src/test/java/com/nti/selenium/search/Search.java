@@ -20,7 +20,19 @@ public class Search extends Navigation{
 	
 	public void insertSearchText(String text){
 		this.findElement(XpathUtilsSearch.getSearchField()).sendKeys(text);
-		this.waitForElement(XpathUtilsSearch.getBookResultTitle("Prealgebra"));
+		this.waitForElement(XpathUtilsSearch.getSeeAllButton());
+	}
+	
+	public int findNumberOfSearchResults(){
+		List<WebElement> elements = this.findElements(XpathUtilsSearch.getBooks());
+		return elements.size();
+	}
+	
+	public String findSectionTitle(int bookNum){
+		List<WebElement> elements = this.findElements(XpathUtilsSearch.getBooks());
+		WebElement element = elements.get(bookNum);
+		String result = element.getText();
+		return result.split("\n")[1];
 	}
 	
 	public void clickSearchedBook(String bookName){
@@ -32,6 +44,22 @@ public class Search extends Navigation{
 				element.click();
 			}
 		}
+	}
+	
+	public String convertSectionTitleToTextTitle(String sectionTitle){
+		this.switchToIframe();
+		List<WebElement> elements = this.findElements(XpathUtilsSearch.getSections());
+		for(WebElement element: elements){
+			String elementText = element.getText();
+			if(elementText.toUpperCase().equals(sectionTitle)){
+				return elementText;
+			}
+		}
+		return null;
+	}
+	
+	public void clickSeeAll(){
+		this.findElement(XpathUtilsSearch.getSeeAllButton()).click();
 	}
 	
 }

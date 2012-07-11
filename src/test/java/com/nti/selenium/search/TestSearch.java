@@ -14,23 +14,28 @@ public class TestSearch extends Search{
 	public void testEnterText(){
 		this.insertSearchText("math");
 		assertTrue(this.elementExists(XpathUtilsSearch.getBookSearchResults()));
-		assertTrue(this.elementExists(XpathUtilsSearch.getBookResultTitle("Prealgebra")));
-		assertTrue(this.elementExists(XpathUtilsSearch.getBookResultSection("Arithmetic with Square Roots")));
+		assertTrue(this.findNumberOfSearchResults() > 0);
 	}
 	
 	@Test
 	public void testNavigateToItem(){
 		this.insertSearchText("math");
-		this.clickSearchedBook("Arithmetic with Square Roots");
+		String sectionTitle = this.findSectionTitle(0);
+		this.clickSearchedBook(sectionTitle);
 		this.waitForLoading();
-		assertEquals("Arithmetic with Square Roots", this.getNavTestText((XpathUtilsSearch.getSectionTitle("Arithmetic with Square Roots"))).getText());
+		sectionTitle = this.convertSectionTitleToTextTitle(sectionTitle);
+		assertTrue(this.elementExists(XpathUtilsSearch.getSectionTitle(sectionTitle)));
 	}
 	
-//	@Test
-//	public void testSeeAll(){
-//		
-//	}
-//	
+	@Test
+	public void testSeeAll(){
+		this.insertSearchText("math");
+		int beforeSeeAllNumOfResults = this.findNumberOfSearchResults();
+		this.clickSeeAll();
+		int afterSeeAllNumOfResults = this.findNumberOfSearchResults();
+		assertTrue(beforeSeeAllNumOfResults < afterSeeAllNumOfResults);
+	}
+	
 //	@Test
 //	public void testClickExpandArrow(){
 //		
