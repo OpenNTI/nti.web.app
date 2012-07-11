@@ -356,6 +356,37 @@ div.redaction-control {
     }
 }
 
+.note-gutter-widget-single {
+    .name {
+        @include menu-label-text-treatment;
+        color: #3fb3f6;
+    }
+
+    .text {
+        &::before{
+            content: '"';
+        }
+        &::after{
+            content: '"';
+        }
+        font: italic 12px 'Droid Serif';
+        color: #494949;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+    .mask {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        /* TODO - kind of works but heads through black/grey
+        background-image: -moz-linear-gradient(left, right, from(transparent), to(#ffffff));
+        background-image: -webkit-linear-gradient(left, transparent, #ffffff);
+        */
+    }
+}
+
 
 
 #NTIContent {
