@@ -438,7 +438,12 @@ div.redaction-control {
         }
     }
 
-	.application-highlight {
+    .application-highlight.suppressed {
+        //do nothing special when range is suppressed.
+    }
+
+
+	.application-highlight.plain {
 
 		&, * {
 			position: relative;

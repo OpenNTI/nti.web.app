@@ -81,7 +81,8 @@ Ext.define('NextThought.view.annotations.Highlight', {
 
 
 	render: function(){
-		var range = this.getRange(),
+		var style = this.record.get('style'),
+			range = this.getRange(),
 			bounds = range.getBoundingClientRect(),
 			boundingTop = Math.ceil(bounds.top),
 			boundingLeft = Math.ceil(bounds.left),
@@ -258,6 +259,9 @@ Ext.define('NextThought.view.annotations.Highlight', {
 	doWrap: function(range) {
 		var span = this.createNonAnchorableSpan();
 		span.setAttribute('class', this.highlightCls);
+
+		Ext.fly(span).addCls(this.record.get('style'));
+
 
 		range.surroundContents(span);
 		Ext.fly(span).hover(this.onMouseOver,this.onMouseOut,this);

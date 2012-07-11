@@ -185,6 +185,7 @@ Ext.define('NextThought.controller.Annotations', {
 		noteRecord = Ext.create('NextThought.model.Note', {
 			applicableRange: rangeDescription,
 			body: body,
+			style: 'suppressed',
 			ContainerId: LocationProvider.currentNTIID
 		});
 
