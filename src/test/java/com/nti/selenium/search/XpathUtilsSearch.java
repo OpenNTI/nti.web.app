@@ -40,8 +40,12 @@ public class XpathUtilsSearch extends XpathUtilsNav{
 		return xpathBuilder("div", "class", "see-all");
 	}
 	
-	public static String getSearchTextBoxExpand(){
+	public static String getSearchTextBoxExpandArrow(){
 		return xpathBuilder("a", "class", "trigger x-menu");
+	}
+	
+	public static String getSearchTextBoxExpandMenu(){
+		return xpathBuilder("div", "id", "search-advanced-menu-1070-targetEl");
 	}
 	
 }

@@ -36,11 +36,12 @@ public class TestSearch extends Search{
 		assertTrue(beforeSeeAllNumOfResults < afterSeeAllNumOfResults);
 	}
 	
-//	@Test
-//	public void testClickExpandArrow(){
-//		
-//	}
-//	
+	@Test
+	public void testClickExpandArrow(){
+		this.clickSearchTextBoxExpandArrow();
+		assertTrue(this.elementExists(XpathUtilsSearch.getSearchTextBoxExpandMenu()));
+	}
+	
 //	@Test
 //	public void testSearchEverything(){
 //		

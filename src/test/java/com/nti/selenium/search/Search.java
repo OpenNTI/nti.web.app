@@ -62,4 +62,8 @@ public class Search extends Navigation{
 		this.findElement(XpathUtilsSearch.getSeeAllButton()).click();
 	}
 	
+	public void clickSearchTextBoxExpandArrow(){
+		this.findElement(XpathUtilsSearch.getSearchTextBoxExpandArrow()).click();
+	}
+	
 }
