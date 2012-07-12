@@ -384,6 +384,7 @@
 		&.editor-active, &:hover {
 			box-shadow: inset 0 1px 0 0 #ffffff;
 			background: #f8f8f8;
+			.respond .reply-options{ visibility: visible; }
 		}
 
 		.meta {
@@ -453,10 +454,6 @@
 			@include reply-options;
 			.reply-options {
 				visibility: hidden;
-			}
-
-			&:hover .reply-options{
-				visibility: visible;
 			}
 
 			@include note-editor;

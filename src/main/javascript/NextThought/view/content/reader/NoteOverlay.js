@@ -2,6 +2,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 	requires: [
 		'NextThought.util.Line',
+		'NextThought.view.annotations.note.EditorActions',
 		'NextThought.view.annotations.note.Templates',
 		'NextThought.view.whiteboard.Window'
 	],
@@ -115,22 +116,8 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 			'content-updated': sizer
 		});
 
-		me.mon(new Ext.CompositeElement(data.editor.query('.left .action')),{
-			scope: me,
-			click: me.noteOverlayEditorContentAction
-		});
-
-		me.mon(data.editor,{
-			scope: me,
-			mousedown: me.noteOverlayEditorMouseDown,
-			selectstart: me.noteOverlayEditorSelectionStart
-		});
-
 		me.mon(data.editor.down('.content'),{
 			scope: me,
-			selectstart: me.noteOverlayEditorSelectionStart,
-			focus: me.noteOverlayRichEditorFocus,
-			blur: me.noteOverlayRichEditorBlur,
 			keypress: me.noteOverlayEditorKeyPressed,
 			keydown: me.noteOverlayEditorKeyDown,
 			keyup: me.noteOverlayEditorKeyUp
@@ -138,7 +125,6 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 		me.mon(txt,{
 			scope: me,
-			blur: me.noteOverlayEditorBlur,
 			keypress: me.noteOverlayEditorKeyPressed,
 			keydown: me.noteOverlayEditorKeyDown,
 			keyup: me.noteOverlayEditorKeyUp
@@ -151,6 +137,8 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 			mouseout: me.noteOverlayMouseOut,
 			click: me.noteOverlayActivateEditor
 		});
+
+		data.editorActions = new NoteEditorActions(me, data.editor);
 	},
 
 
@@ -198,34 +186,15 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 	noteOverlayAcivateRichEditor: function(){
 		var o = this.noteOverlayData,
-			t = o.textarea.dom,
-			s = window.getSelection(),
-			c,r;
+			t = o.textarea.dom;
 
 		if(o.richEditorActive){
 			return;
 		}
 		o.richEditorActive = true;
 
-		s.removeAllRanges();
 		o.editor.addCls('active');
-
-		c = o.editor.down('.content').dom;
-
-		c.innerHTML = Ext.String.htmlEncode( t.value );
-
-		try {
-			r = document.createRange();
-			r.setStart(c.firstChild, c.innerHTML.length);
-			r.collapse(true);
-			s.addRange(r);
-		}
-		catch (e){
-			console.warn('focus issue.');
-
-		}
-		c.focus();
-
+		o.editorActions.setValue( t.value, true, true );
 		t.value = '';
 	},
 
@@ -253,59 +222,8 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		o.textarea.dom.value = "";
 		o.lineEntry.removeCls('active');
 		o.editor.removeCls('active');
-		o.editor.down('.content').innerHTML = '';
-		window.getSelection().removeAllRanges();
+		o.editorActions.reset();
 		this.noteOverlayMouseOut();
-	},
-
-
-	noteOverlayRichEditorBlur: function(){},
-
-
-	noteOverlayRichEditorFocus: function(){
-		var o = this.noteOverlayData,
-			s = window.getSelection();
-		if(o.lastRange){
-			s.removeAllRanges();
-			s.addRange(o.lastRange);
-		}
-	},
-
-
-	noteOverlayEditorMouseDown: function(e){
-		var o = this.noteOverlayData;
-		if(e.getTarget('.action')){
-			o.lastRange = window.getSelection().getRangeAt(0);
-		}
-	},
-
-
-	noteOverlayEditorSelectionStart: function(e){
-		e.stopPropagation();//re-enable selection, and prevent the handlers higher up from firing.
-
-		var o = this.noteOverlayData;
-		delete o.lastRange;
-
-		return true;//re-enable selection
-	},
-
-
-	noteOverlayEditorContentAction: function(e){
-		e.stopEvent();
-		var o = this.noteOverlayData;
-		var t = e.getTarget('.action',undefined,true), action;
-		if(t){
-			this.noteOverlayRichEditorFocus();//reselect
-			if(t.is('.whiteboard')){
-				this.noteOverlayAddWhiteboard();
-			}
-			else {
-				action = t.getAttribute('class').split(' ').pop();
-				document.execCommand(action);
-			}
-
-		}
-		return false;
 	},
 
 
@@ -327,38 +245,10 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 		var me = this;
 		var o = me.noteOverlayData;
-		var note = o.textarea.dom.value || this.getNoteBody(o.editor.down('.content').getHTML());
+		var note = o.textarea.dom.value || o.editorActions.getValue();
 		console.log('firing event: "save-new-note" with ', note);
 		me.fireEvent('save-new-note', note, o.lastLine.range, callback);
 		return false;
-	},
-
-
-	getNoteBody: function(str) {
-		var r = [],
-			regex = /<img.*?>/gi,
-			splits,
-			whiteboards,
-			s, w = 0, t, wbid;
-
-		//split it up, then interleave:
-		splits = str.split(regex);
-		whiteboards = str.match(regex) || [];
-		if (splits.length === 0){splits.push('');} //no text before WB?  just trick it.
-		for (s=0; s<splits.length; s++) {
-			t = splits[s];
-			if (t && t.length > 0){r.push(t);}
-			for (w; w<whiteboards.length; w++){
-				wbid = whiteboards[w].match(/id="(.*?)"/)[1];
-				r.push(this.openWhiteboards[wbid].getEditor().getValue());
-			}
-		}
-
-		return r;
-	},
-
-
-	noteOverlayEditorBlur: function(){
 	},
 
 
@@ -383,7 +273,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 
 		var o = this.noteOverlayData;
-		delete o.lastRange;
+		delete o.editorActions.lastRange;
 		if(o.richEditorActive){
 			o.editor.repaint();
 		}
@@ -403,68 +293,5 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 	},
 
 
-	noteOverlayAddWhiteboard: function(){
-		//pop open a whiteboard:
-		var wbWin = Ext.widget({ xtype: 'wb-window', height: '50%', width: '50%' }),
-			guid = guidGenerator(),
-			o = this.noteOverlayData,
-			content = o.editor.down('.content');
 
-		//remember the whiteboard window:
-		wbWin.guid = guid;
-		this.openWhiteboards[guid] = wbWin;
-
-		//hook into the window's save and cancel operations:
-		this.mon(wbWin, {
-			scope: this,
-			save: function(win, wb, e){
-				this.insertWhiteboardThumbnail(content, guid, wb);
-				wbWin.hide();
-			},
-			cancel: function(win, wb, e){
-				console.log('cancel', arguments);
-				this.cleanOpenWindows(win.guid);
-				wbWin.close();
-			}
-		});
-
-		wbWin.show();
-	},
-
-
-	insertWhiteboardThumbnail: function(content, guid, wb){
-		var me = this,
-			o = me.noteOverlayData;
-
-		wb.getThumbnail(function(data){
-			var existingImg = content.query('[id='+guid+']'),
-				el;
-
-			if (existingImg.length === 1) {
-				el = existingImg[0];
-				el.src = data;
-			}
-			else {
-				el = Ext.fly(o.wbThumbnailTpm.append(content, [data, guid]));
-				//listen on clicks and do stuff:
-				el.on('click', function(evt, img, opt){
-					var w = me.openWhiteboards[guid];
-					if (w) {w.show();}
-					else {Ext.Error.raise('No whiteboard for' + guid);}
-				});
-			}
-			o.editor.repaint();
-		});
-	},
-
-
-	cleanOpenWindows: function(guids) {
-		var me = this;
-
-		if (!Ext.isArray(guids)){guids = [guids];}
-
-		Ext.each(guids, function(g){
-			delete me.openWhiteboards[g];
-		});
-	}
 });

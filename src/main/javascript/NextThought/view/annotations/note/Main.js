@@ -4,6 +4,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 
 	requires: [
 		'NextThought.cache.UserRepository',
+		'NextThought.view.annotations.note.EditorActions',
 		'NextThought.view.annotations.note.Templates'
 	],
 
@@ -66,7 +67,16 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		me.mon(me.editor.down('.cancel'),{
 			scope: me,
 			click: me.deactivateReplyEditor
-		})
+		});
+
+
+		me.mon(me.editor.down('.content'),{
+			scope: me,
+			keypress: me.editorKeyPressed,
+			keydown: me.editorKeyDown
+		});
+
+		me.editorActions = new NoteEditorActions(me,me.editor);
 	},
 
 
@@ -94,6 +104,22 @@ Ext.define('NextThought.view.annotations.note.Main',{
 
 	deactivateReplyEditor: function(){
 		this.el.removeCls('editor-active');
+	},
+
+
+	editorKeyDown: function(event){
+		event.stopPropagation();
+		var k = event.getKey();
+		if(k === event.ESC){
+			this.deactivateReplyEditor();
+		}
+	},
+
+
+	editorKeyPressed: function(event){
+		event.stopPropagation();
+		//control+enter & command+enter submit?
+		//document.queryCommandState('bold')
 	}
 
 });
