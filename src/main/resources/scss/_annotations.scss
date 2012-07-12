@@ -1,4 +1,28 @@
+@mixin highlight-tip {
+	position: relative;
+	top: 0;
+
+	vertical-align: baseline;
+	//vertical-align: initial;
+	display: inline-block;
+	width: 5px;
+	overflow: hidden;
+	line-height: 23px;
+	height: 24px;
+	text-align: center;
+	padding: 0 0 0 4px;
+
+	background:{
+		image: url(../images/highlights/tip.png);
+		position-x: 100%;
+		position-y: 0px;
+		repeat: no-repeat;
+	}
+}
+
+
 .note-gutter {
+
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -449,85 +473,69 @@ div.redaction-control {
         }
     }
 
-    .application-highlight.suppressed {
-        //do nothing special when range is suppressed.
-    }
-
-
-	.application-highlight.plain {
-
-		&, * {
-			position: relative;
-			z-index: 1;
+    .application-highlight {
+		&.suppressed {
+			//do nothing special when range is suppressed.
 		}
 
-		color: #076da7;
-		background-color: #e1f4fe;
-		overflow: hidden;
+		&.plain {
 
-        & .counter-container {
-            display: inline-block;
-            white-space: nowrap;
-        }
-
-		&.highlight-mouse-over{
-			color: #ffffff;
-			background-color: #3fb3f6;
-		}
-
-        &.redaction {
-            &.redacted {
-                display: none;
-            }
-            background: #bbbbbb;
-            color: inherit;
-        }
-
-		&.counter {
-			color: #757474;
-			font-family: 'Open Sans' !important;
-			font-weight: bold;
-
-			position: relative;
-			top: 0;
-
-			vertical-align: baseline;
-			display: inline-block;
-			width: 5px;
-			overflow: hidden;
-			line-height: 23px;
-			text-align: center;
-			padding-left: 4px;
-
-			background:{
-				image: url(../images/highlights/tip.png);
-				position-x: 100%;
-				position-y: 0px;
-				repeat: no-repeat;
+			&, * {
+				position: relative;
+				z-index: 1;
 			}
 
-			&.with-count {
-				overflow: hidden;
-				width: 30px;
-				background-image: url(../images/highlights/counter_tip_default.png);
+			color: #076da7;
+			background-color: #e1f4fe;
+			overflow: hidden;
 
+			& .counter-container {
+				display: inline-block;
+				white-space: nowrap;
+			}
 
-				&.highlight-mouse-over{
-					color: #ffffff;
-					background-image: url(../images/highlights/counter_tip_hover.png);
+			&.highlight-mouse-over{
+				color: #ffffff;
+				background-color: #3fb3f6;
+			}
+
+			&.redaction {
+				&.redacted {
+					display: none;
 				}
+				background: #bbbbbb;
+				color: inherit;
+			}
 
-				span {
-					display: block;
-					text-align: center;
-					margin-left: 5px;
+			&.counter {
+				color: #757474;
+				font-family: 'Open Sans' !important;
+				font-weight: bold;
+
+				@include highlight-tip;
+
+				&.with-count {
 					overflow: hidden;
-					text-overflow: ellipse;
+					width: 30px;
+					background-image: url(../images/highlights/counter_tip_default.png);
+
+
+					&.highlight-mouse-over{
+						color: #ffffff;
+						background-image: url(../images/highlights/counter_tip_hover.png);
+					}
+
+					span {
+						display: block;
+						text-align: center;
+						margin-left: 5px;
+						overflow: hidden;
+						text-overflow: ellipse;
+					}
 				}
 			}
 		}
 	}
-
 }
 
 #annotation-container { &, .highlight-canvas { position: absolute; } }

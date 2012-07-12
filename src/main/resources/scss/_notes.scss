@@ -23,5 +23,65 @@
 	.main-view {
 		border: 0px solid #f1f1f1;
 		border-bottom-width: 1px;
+		padding: 16px 27px 20px 27px;
+
+		.meta {
+			@include menu-label-text-treatment;
+			font-size: 12px;
+			font-weight: bold;
+			.name {
+				color: #3fb3f6;
+			}
+
+			.controls {
+				position: absolute;
+				right: 0;
+				top: 0;
+				//background: blue;
+
+				.bookmark, .favorite {
+					cursor: pointer;
+					float: right;
+					background: url(../images/notes/controls.png) 0 0 no-repeat;
+				}
+
+				.favorite{
+					color: #3fb3f6;
+					margin: 8px;
+					padding: 0 0 0 20px;
+					white-space: nowrap;
+					text-overflow: clip;
+					height: 16px;
+					min-width: 30px;
+					line-height: 16px;
+					font-size: 10px;
+					font-style: italic;
+					font-weight: 600;
+					//background-position: -36px -15px;
+					background-position: -36px 0;
+				}
+				.bookmark{
+					margin: -1px 10px 0 0;
+					width: 18px;
+					height: 24px;
+					//background-position: 0 -3px;
+					background-position: -18px -3px;
+				}
+			}
+		}
+
+		.context {
+			span {
+				background: rgba(63,179,246,0.15);
+				padding: 2px 0;
+				&.tip { @include highlight-tip; }
+			}
+
+			margin: 15px 20px 25px;
+			font-size: 14px;
+			line-height: 32px;
+			color: #136ea5;
+		}
 	}
+
 }

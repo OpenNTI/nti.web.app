@@ -12,12 +12,12 @@ Ext.define('NextThought.view.annotations.note.Main',{
 	renderTpl: [
 		'<div class="meta">',
 			'<div class="controls">',
-				'<div class="favorite"></div>',
 				'<div class="bookmark"></div>',
+				'<div class="favorite">0</div>',
 			'</div>',
 			'<span class="name"></span> - <span class="time"></span>',
 		'</div>',
-		'<div class="context"></div>',
+		'<div class="context"><span class="text"></span><span class="tip">&nbsp;</span></div>',
 		'<div class="body"></div>',
 		'<div class="respond">',
 			'<div><input><span class="whiteboard">&nbsp;</span></div>',
@@ -30,7 +30,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		bookmarks: '.meta .controls .bookmark',
 		name: '.meta .name',
 		time: '.meta .time',
-		context: '.context',
+		context: '.context .text',
 		text: '.body',
 		replyBox: '.respond input',
 		whiteboard: '.respond .whiteboard'
@@ -38,7 +38,6 @@ Ext.define('NextThought.view.annotations.note.Main',{
 
 	initComponent: function(){
 		this.callParent(arguments);
-
 	},
 
 
@@ -54,7 +53,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		UserRepository.getUser(r.get('Creator'),this.fillInUser,this);
 		this.time.update(r.getRelativeTimeString());
 
-		this.context.update(r.get('SelectedText'));
+		this.context.update('Get from the page... Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi tincidunt sem eget quam tempor hendrerit. Nulla ultricies tincidunt laoreet. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. Nunc dictum consequat nisl eget eleifend. Duis tincidunt nibh id dui bibendum aliquam. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.');
 
 		r.compileBodyContent(function(text){ this.text.update(text); },this);
 	},
