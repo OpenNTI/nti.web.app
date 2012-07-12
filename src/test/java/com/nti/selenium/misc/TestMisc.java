@@ -208,6 +208,13 @@ public class TestMisc extends Misc{
 	}
 	
 	@Test
+	public void testClickAcceptingDropDownArrow(){
+		this.clickOptionsMyAccountButton();
+		this.clickAcceptingDropDownArrow();
+		assertTrue(this.elementExists(XpathUtilsMisc.getMyAccountOtherPeopleEveryoneOption()));
+	}
+	
+	@Test
 	public void testAcceptingContact(){
 		this.clickOptionsMyAccountButton();
 		this.enterTextInAccepting("carlos");
@@ -217,10 +224,26 @@ public class TestMisc extends Misc{
 	}
 	
 	@Test
-	public void testClickAcceptingDropDownArrow(){
+	public void testAcceptingMultipleContacts(){
 		this.clickOptionsMyAccountButton();
-		this.clickAcceptingDropDownArrow();
-		assertTrue(this.elementExists(XpathUtilsMisc.getMyAccountOtherPeopleEveryoneOption()));
+		this.enterTextInAccepting("carlos");
+		this.waitForElement(XpathUtilsMisc.findNameOptions("Carlos Sanchez"));
+		this.clickContact("Carlos Sanchez");
+		this.enterTextInAccepting("chris");
+		this.waitForElement(XpathUtilsMisc.findNameOptions("Chris Utz"));
+		this.clickContact("Chris Utz");
+		assertTrue(this.elementExists(XpathUtilsMisc.findNameToken("Carlos Sanchez")));
+		assertTrue(this.elementExists(XpathUtilsMisc.findNameToken("Chris Utz")));
+	}
+	
+	@Test
+	public void testAcceptingRemoveContact(){
+		this.clickOptionsMyAccountButton();
+		this.enterTextInAccepting("carlos");
+		this.waitForElement(XpathUtilsMisc.findNameOptions("Carlos Sanchez"));
+		this.clickContact("Carlos Sanchez");
+		this.removeContact("Carlos Sanchez");
+		assertFalse(this.elementExists(XpathUtilsMisc.findNameToken("Carlos Sanchez")));
 	}
 	
 	@Test
@@ -232,13 +255,19 @@ public class TestMisc extends Misc{
 		assertTrue(this.elementExists(XpathUtilsMisc.findNameToken("Everyone")));
 	}
 	
-	
 	@Test
 	public void testEnterTextInIgnoring(){
 		this.clickOptionsMyAccountButton();
 		this.enterTextInIgnoring("carlos");
 		this.waitForElement(XpathUtilsMisc.findNameOptions("Carlos Sanchez"));
 		assertTrue(this.elementExists(XpathUtilsMisc.findNameOptions("Carlos Sanchez")));
+	}
+	
+	@Test
+	public void testClickIgnoringDropDownArrow(){
+		this.clickOptionsMyAccountButton();
+		this.clickIgnoringDropDownArrow();
+		assertTrue(this.elementExists(XpathUtilsMisc.getMyAccountOtherPeopleEveryoneOption()));
 	}
 	
 	@Test
@@ -251,10 +280,16 @@ public class TestMisc extends Misc{
 	}
 	
 	@Test
-	public void testClickIgnoringDropDownArrow(){
+	public void testIgnoringMultipleContacts(){
 		this.clickOptionsMyAccountButton();
-		this.clickIgnoringDropDownArrow();
-		assertTrue(this.elementExists(XpathUtilsMisc.getMyAccountOtherPeopleEveryoneOption()));
+		this.enterTextInAccepting("carlos");
+		this.waitForElement(XpathUtilsMisc.findNameOptions("Carlos Sanchez"));
+		this.clickContact("Carlos Sanchez");
+		this.enterTextInAccepting("chris");
+		this.waitForElement(XpathUtilsMisc.findNameOptions("Chris Utz"));
+		this.clickContact("Chris Utz");
+		assertTrue(this.elementExists(XpathUtilsMisc.findNameToken("Carlos Sanchez")));
+		assertTrue(this.elementExists(XpathUtilsMisc.findNameToken("Chris Utz")));
 	}
 	
 	@Test
@@ -266,4 +301,27 @@ public class TestMisc extends Misc{
 		assertTrue(this.elementExists(XpathUtilsMisc.findNameToken("Everyone")));
 	}
 	
+	@Test
+	public void testIgnoringRemoveContact(){
+		this.clickOptionsMyAccountButton();
+		this.enterTextInIgnoring("carlos");
+		this.waitForElement(XpathUtilsMisc.findNameOptions("Carlos Sanchez"));
+		this.clickContact("Carlos Sanchez");
+		this.removeContact("Carlos Sanchez");
+		assertFalse(this.elementExists(XpathUtilsMisc.findNameToken("Carlos Sanchez")));
+	}
+	
+	@Test
+	public void testSaveButton(){
+		this.clickOptionsMyAccountButton();
+		this.clickSaveButton();
+		assertFalse(this.elementExists(XpathUtilsMisc.getSaveButton()));
+	}
+	
+	@Test
+	public void testCancelButton(){
+		this.clickOptionsMyAccountButton();
+		this.clickCancelButton();
+		assertFalse(this.elementExists(XpathUtilsMisc.getCancelButton()));
+	}
 }

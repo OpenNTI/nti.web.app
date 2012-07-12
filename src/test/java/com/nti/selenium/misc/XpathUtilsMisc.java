@@ -83,12 +83,22 @@ public class XpathUtilsMisc extends XpathUtilsNav{
 		return xpathBuilder("span", "class", "nt-token-label", name);
 	}
 	
+	public static String findNameTokenXButton(String name){
+		return buildString(xpathBuilder("span", "class", "nt-token-label", name),
+						   "/..",
+						   xpathBuilder("span", "class", "nt-token-nib nt-token-nib-end"));
+	}
+	
+	public static String getSaveButton(){
+		return xpathBuilder("span", "Save");
+	}
+	
+	public static String getCancelButton(){
+		return xpathBuilder("span", "Cancel");
+	}
+	
 	public static String getPrivacyButton(){
 		return xpathBuilder("div", "Privacy");
 	}
-	
-//	public static String getTextField(){
-//		return xpathBuilder("div", "class", "x-container user-list-field x-fit-item x-container-user-list");
-//	}
 	
 }

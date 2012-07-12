@@ -108,8 +108,20 @@ public class Misc extends Navigation{
 		this.findElement(XpathUtilsMisc.findNameOptions(name)).click();
 	}
 	
+	public void removeContact(String name){
+		this.findElement(XpathUtilsMisc.findNameTokenXButton(name)).click();
+	}
+	
 	public void clickEveryoneOption(){
 		this.findElement(XpathUtilsMisc.getMyAccountOtherPeopleEveryoneOption()).click();
+	}
+	
+	public void clickSaveButton(){
+		this.findElement(XpathUtilsMisc.getSaveButton()).click();
+	}
+	
+	public void clickCancelButton(){
+		this.findElement(XpathUtilsMisc.getCancelButton()).click();
 	}
 	
 	public void clickOptionsPrivacyButton(){
