@@ -61,8 +61,34 @@ public class XpathUtilsMisc extends XpathUtilsNav{
 		return xpathBuilder("input", "name", "password-verify");
 	}
 	
+	public static String getMyAccountOtherPeopleInput(){
+		return buildString(xpathBuilder("td", "class", "x-form-trigger-input-cell"),
+						   xpathBuilder("input"));
+	}
+	
+	public static String getMyAccountOtherPeopleDropDownArrow(){
+		return buildString(xpathBuilder("td", "class", "x-trigger-cell"),
+						   xpathBuilder("div", "role", "button"));
+	}
+	
+	public static String getMyAccountOtherPeopleEveryoneOption(){
+		return xpathBuilder("div", "Everyone");
+	}
+	
+	public static String findNameOptions(String name){
+		return xpathBuilder("div", "class", "name", name);
+	}
+
+	public static String findNameToken(String name){
+		return xpathBuilder("span", "class", "nt-token-label", name);
+	}
+	
 	public static String getPrivacyButton(){
 		return xpathBuilder("div", "Privacy");
 	}
+	
+//	public static String getTextField(){
+//		return xpathBuilder("div", "class", "x-container user-list-field x-fit-item x-container-user-list");
+//	}
 	
 }

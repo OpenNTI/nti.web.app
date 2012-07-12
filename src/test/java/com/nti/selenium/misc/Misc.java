@@ -88,8 +88,32 @@ public class Misc extends Navigation{
 		this.findElement(XpathUtilsMisc.getChangePasswordLink()).click();
 	}
 	
+	public void enterTextInAccepting(String name){
+		this.findElements(XpathUtilsMisc.getMyAccountOtherPeopleInput()).get(2).sendKeys(name);
+	}
+	
+	public void enterTextInIgnoring(String name){
+		this.findElements(XpathUtilsMisc.getMyAccountOtherPeopleInput()).get(3).sendKeys(name);
+	}
+	
+	public void clickAcceptingDropDownArrow(){
+		this.findElements(XpathUtilsMisc.getMyAccountOtherPeopleDropDownArrow()).get(2).click();
+	}
+	
+	public void clickIgnoringDropDownArrow(){
+		this.findElements(XpathUtilsMisc.getMyAccountOtherPeopleDropDownArrow()).get(3).click();
+	}
+	
+	public void clickContact(String name){
+		this.findElement(XpathUtilsMisc.findNameOptions(name)).click();
+	}
+	
+	public void clickEveryoneOption(){
+		this.findElement(XpathUtilsMisc.getMyAccountOtherPeopleEveryoneOption()).click();
+	}
+	
 	public void clickOptionsPrivacyButton(){
-		this.findElement(XpathUtilsMisc.getMyAccountButton()).click();
+		this.findElement(XpathUtilsMisc.getPrivacyButton()).click();
 	}
 	
 }
