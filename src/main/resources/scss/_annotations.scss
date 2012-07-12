@@ -21,6 +21,7 @@
 }
 
 
+
 .note-gutter {
 
 	position: absolute;
@@ -404,6 +405,9 @@ div.redaction-control {
 		}
 
 		.text {
+			text-rendering: optimizeLegibility;//fallback
+			text-rendering: geometricPrecision;
+
 			&::before{
 				content: '"';
 			}

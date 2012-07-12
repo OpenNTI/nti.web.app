@@ -17,7 +17,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 			'</div>',
 			'<span class="name"></span> - <span class="time"></span>',
 		'</div>',
-		'<div class="context"><span class="text"></span><span class="tip">&nbsp;</span></div>',
+		'<div class="context"><span class="text"></span></div>',
 		'<div class="body"></div>',
 		'<div class="respond">',
 			'<div><input placeholder="Respond..."><span class="whiteboard">&nbsp;</span></div>',
@@ -32,6 +32,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		time: '.meta .time',
 		context: '.context .text',
 		text: '.body',
+		responseBox: '.respond',
 		replyBox: '.respond input',
 		whiteboard: '.respond .whiteboard'
 	},
@@ -42,7 +43,16 @@ Ext.define('NextThought.view.annotations.note.Main',{
 
 
 	afterRender: function(){
+		var focusCls = 'has-focus';
+
 		this.callParent(arguments);
+
+		this.mon(this.replyBox,{
+			scope: this,
+			blur: function(){ this.responseBox.removeCls(focusCls);},
+			focus: function(){this.responseBox.addCls(focusCls);}
+		});
+
 		this.setRecord(this.record);
 	},
 
@@ -53,7 +63,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		UserRepository.getUser(r.get('Creator'),this.fillInUser,this);
 		this.time.update(r.getRelativeTimeString());
 
-		this.context.update('Get from the page... Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi tincidunt sem eget quam tempor hendrerit. Nulla ultricies tincidunt laoreet. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. Nunc dictum consequat nisl eget eleifend. Duis tincidunt nibh id dui bibendum aliquam. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.');
+		this.context.update('Get from the page... Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi tincidunt sem eget quam tempor hendrerit. <span class="highlight">Nulla ultricies tincidunt laoreet. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. Nunc dictum consequat nisl eget eleifend. Duis tincidunt nibh id dui bibendum aliquam.<span class="tip">&nbsp;</span></span> Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.');
 
 		r.compileBodyContent(function(text){ this.text.update(text); },this);
 	},

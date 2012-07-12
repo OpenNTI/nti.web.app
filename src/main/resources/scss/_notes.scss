@@ -41,48 +41,35 @@
 				top: 0;
 				//background: blue;
 
-				.bookmark, .favorite {
-					cursor: pointer;
-					float: right;
-					background: url(../images/notes/controls.png) 0 0 no-repeat;
-				}
-
-				.favorite{
-					color: #3fb3f6;
-					margin: 8px;
-					padding: 0 0 0 20px;
-					white-space: nowrap;
-					text-overflow: clip;
-					height: 16px;
-					min-width: 30px;
-					line-height: 16px;
-					font-size: 10px;
-					font-style: italic;
-					font-weight: 600;
-					//background-position: -36px -15px;
-					background-position: -36px 0;
-				}
-				.bookmark{
-					margin: -1px 10px 0 0;
-					width: 18px;
-					height: 24px;
-					//background-position: 0 -3px;
-					background-position: -18px -3px;
-				}
+				@include favorite-and-bookmark;
 			}
 		}
 
 		.context {
-			span {
-				background: rgba(63,179,246,0.15);
+			text-rendering: optimizeLegibility;//fallback
+			text-rendering: geometricPrecision;
+
+			span{
+				color: #494949;
 				padding: 2px 0;
-				&.tip { @include highlight-tip; }
+				font-size: 14px;
+				line-height: 32px;
+
+				word-wrap: break-word;
+
+				-webkit-hyphens: auto;
+				-moz-hyphens: auto;
+				-ms-hyphens: auto;
+				hyphens: auto;
+
+				&.highlight {
+					color: #136ea5;
+					background: #e1f4fe;
+					.tip { @include highlight-tip; }
+				}
 			}
 
 			margin: 15px 20px 25px;
-			font-size: 14px;
-			line-height: 32px;
-			color: #136ea5;
 		}
 
 		.body {
@@ -93,23 +80,12 @@
 		.respond {
 			margin: 20px 0 0 0;
 			opacity: 0.5;
+			&.has-focus {
+				opacity: 1;
+			}
+			
 			div {
-				position: relative;
-				border: 1px solid #a0a0a0;
-				border-radius: 3px;
-				box-shadow: inset 2px 2px 6px -2px rgba(0, 0, 0, 0.3);
-
-				input {
-					color: #767676;
-					padding: 0 12px;
-					font-size: 14px;
-					border-radius: 3px;
-					border: none;
-					background: none;
-					height: 28px;
-					width: 100%;
-					position: relative;
-				}
+				@include system-inputbox-style;
 				span.whiteboard {
 					position: absolute;
 					top: 0;

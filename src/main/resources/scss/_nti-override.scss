@@ -1,4 +1,16 @@
 #NTIContent {
+	&, * {
+		text-rendering: optimizeLegibility;//fallback
+		text-rendering: geometricPrecision;
+
+		word-wrap: break-word;
+
+		-webkit-hyphens: auto;
+		-moz-hyphens: auto;
+		-ms-hyphens: auto;
+		hyphens: auto;
+	}
+
 	.injected-related-items {
 		margin: 15px 0 0 0;
 

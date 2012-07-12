@@ -11,38 +11,34 @@
 
 
 .nti-window {
+	@include reset-window-border-radius(5px);
     background-color: #fcfcfc;
 	box-shadow: 3px 3px 6px -3px #cccccc;//TODO: fix to be a sane value (use RGBA to lighten the shadow, not the blur & spread)
 	// REFRESHER: box-shadow syntax is:
 	// box-shadow:  none | <shadow> [,<shadow>]*
 	//	where <shadow> is defined as:
 	//		inset? && [ <offset-x> <offset-y> <blur-radius>? <spread-radius>? <color>? ]
-	border-radius: 5px;
 	border: 1px solid #dbdbdb;
 	overflow: hidden;
 
 	iframe {
-		border-radius: 5px;
         &.padded {
             margin: 15px;
         }
 	}
 
 	.x-window-body {
-		border-radius: 5px;
 		border: none !important;
 		border-width: 0 !important;
 	}
 
 	.nti-window-header {
 		cursor: move;
-		border-radius: 5px 5px 0 0;
 		background: transparent;
 		border-bottom: 1px solid #ffffff;
 		box-shadow: inset 0px -1px 0px 0px #F6F5F5;
 
 		.header-body {
-			border-radius: 5px 5px 0 0;
 			position: relative;
 			overflow: hidden;
 			span {
@@ -65,7 +61,6 @@
 			}
 
 			.controls {
-				border-radius: 0 5px 0 0;
 				height: 100%;
 				float: right;
 				padding: 0;
@@ -93,7 +88,6 @@
 
 	.nti-window-footer {
 		background: #ffffff;
-		border-radius: 0 0 5px 5px;
 		border-color: #e7e7e7;
 		border-width: 0px;
 		border-top-width: 1px !important;
