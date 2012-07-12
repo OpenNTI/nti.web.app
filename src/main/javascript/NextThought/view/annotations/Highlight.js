@@ -140,7 +140,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
 			if(last){
 				c = Ext.get(this.counter);
 				adjustment = this.adjustedBy || (r.top - c.getY());
-				h = c.getHeight();
+				h = c.getHeight() + padding;
 
 				if(adjustment < 2){ y += adjustment; }
 				if(!this.adjusted){
