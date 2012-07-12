@@ -76,6 +76,12 @@
 }
 
 
+@mixin placeholder-style(){
+	font-style: italic;
+	color: #767676;
+}
+
+
 @mixin clearfix_left($dist:0px) {
 	clear: both;
 	padding-left: $dist !important;

@@ -20,7 +20,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		'<div class="context"><span class="text"></span><span class="tip">&nbsp;</span></div>',
 		'<div class="body"></div>',
 		'<div class="respond">',
-			'<div><input><span class="whiteboard">&nbsp;</span></div>',
+			'<div><input placeholder="Respond..."><span class="whiteboard">&nbsp;</span></div>',
 		'</div>'
 	],
 
