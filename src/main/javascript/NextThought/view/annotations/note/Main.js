@@ -41,7 +41,10 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		time: '.meta .time',
 		context: '.context .text',
 		text: '.body',
-		responseBox: '.respond'
+		responseBox: '.respond',
+		editor: '.respond .editor',
+		replyOptions: '.respond .reply-options',
+		replyButton: '.respond .reply'
 	},
 
 	initComponent: function(){
@@ -50,11 +53,20 @@ Ext.define('NextThought.view.annotations.note.Main',{
 
 
 	afterRender: function(){
+		var me = this;
+		me.callParent(arguments);
 
-		this.callParent(arguments);
+		me.setRecord(me.record);
 
-		this.setRecord(this.record);
+		me.mon(me.replyButton,{
+			scope: me,
+			click: me.activateReplyEditor
+		});
 
+		me.mon(me.editor.down('.cancel'),{
+			scope: me,
+			click: me.deactivateReplyEditor
+		})
 	},
 
 
@@ -73,6 +85,15 @@ Ext.define('NextThought.view.annotations.note.Main',{
 	fillInUser: function(user){
 		if(Ext.isArray(user)){user = user[0];}
 		this.name.update(user.getName());
+	},
+
+
+	activateReplyEditor: function(){
+		this.el.addCls('editor-active');
+	},
+
+	deactivateReplyEditor: function(){
+		this.el.removeCls('editor-active');
 	}
 
 });

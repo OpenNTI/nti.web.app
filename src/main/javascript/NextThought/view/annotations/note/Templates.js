@@ -49,7 +49,8 @@ Ext.define('NextThought.view.annotations.note.Templates',{
 							{ tag: 'li', cls: 'flag',  html: 'Flag for Moderation' },
 							{ tag: 'li', cls: 'add-contact', html: 'Add to Contacts' },
 							{ tag: 'li', cls: 'follow', html: 'Follow {name}' },
-							{ tag: 'li', cls: 'block', html: 'Block {name}' }
+							{ tag: 'li', cls: 'block', html: 'Block {name}' },
+							{ tag: 'li', cls: 'delete', html: 'Delete' }
 						]
 					}]
 				}
