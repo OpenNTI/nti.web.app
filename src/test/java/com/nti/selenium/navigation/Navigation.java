@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.openqa.selenium.WebElement;
 
 import com.nti.selenium.login.Login;
+import com.nti.selenium.search.XpathUtilsSearch;
 
 public class Navigation extends Login {
 	
@@ -129,6 +130,13 @@ public class Navigation extends Login {
 	}
 	
 	public String getXPathDivisionPage() {
-		return XpathUtilsNav.getDivisionPage(this.relatedItem);
+		return XpathUtilsNav.getSectionPageTitle(this.relatedItem);
 	}
+	
+	public boolean isChecked(String name){
+		WebElement element = this.findElement(XpathUtilsSearch.getSearchTextBoxExpandMenuItem(name));
+		String clazz = element.getAttribute("class");
+		return !(clazz.matches(".*unchecked.*"));
+	}
+	
 }

@@ -1,6 +1,7 @@
 package com.nti.selenium.misc;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.util.List;
@@ -53,6 +54,97 @@ public class TestMisc extends Misc{
 		String title = this.getListItemTitle(0);
 		this.clickListItem(0);
 		assertEquals(title, this.getNavTestText(XpathUtilsNav.getSectionPageTitle(title)).getText());
+	}
+	
+	@Test
+	public void testClickShowMeDropDown(){
+		this.clickShowMeDropDown();
+		assertTrue(this.getListCount() > 0);
+		assertTrue(this.isChecked("Everything"));
+		assertFalse(this.isChecked("Highlights"));
+	}
+	
+	@Test
+	public void testClickOnDropDownItem(){
+		this.clickShowMeDropDown();
+		assertTrue(this.getListCount() > 0);
+		assertTrue(this.isChecked("Everything"));
+		assertFalse(this.isChecked("Highlights"));
+		this.clickListItem("Highlights");
+		assertFalse(this.isChecked("Everything"));
+		assertTrue(this.isChecked("Highlights"));
+	}
+	
+	@Test
+	public void testClickMultipleDropDownItems(){
+		this.clickShowMeDropDown();
+		assertTrue(this.getListCount() > 0);
+		assertTrue(this.isChecked("Everything"));
+		assertFalse(this.isChecked("Highlights"));
+		assertFalse(this.isChecked("Notes"));
+		this.clickListItem("Highlights");
+		this.clickListItem("Notes");
+		assertFalse(this.isChecked("Everything"));
+		assertTrue(this.isChecked("Highlights"));
+		assertTrue(this.isChecked("Notes"));
+	}
+	
+	@Test
+	public void testClickOnDropDownItemSwitchBackToEverything(){
+		this.clickShowMeDropDown();
+		assertTrue(this.getListCount() > 0);
+		assertTrue(this.isChecked("Everything"));
+		assertFalse(this.isChecked("Highlights"));
+		this.clickListItem("Highlights");
+		assertFalse(this.isChecked("Everything"));
+		assertTrue(this.isChecked("Highlights"));
+		this.clickListItem("Everything");
+		assertTrue(this.isChecked("Everything"));
+		assertFalse(this.isChecked("Highlights"));
+	}
+	
+	@Test
+	public void testClickSelectAllItems(){
+		this.clickShowMeDropDown();
+		assertTrue(this.getListCount() > 0);
+		assertTrue(this.isChecked("Everything"));
+		assertFalse(this.isChecked("Highlights"));
+		assertFalse(this.isChecked("Notes"));
+		assertFalse(this.isChecked("Transcripts"));
+		assertFalse(this.isChecked("Quiz Results"));
+		this.clickListItem("Highlights");
+		this.clickListItem("Notes");
+		this.clickListItem("Transcripts");
+		this.clickListItem("Quiz Results");
+		assertTrue(this.isChecked("Highlights"));
+		assertTrue(this.isChecked("Notes"));
+		assertTrue(this.isChecked("Transcripts"));
+		assertTrue(this.isChecked("Quiz Results"));
+	}
+	
+	@Test
+	public void testClickMe(){
+		this.clickShowMeDropDown();
+		assertTrue(this.getListCount() > 0);
+		assertTrue(this.isChecked("Everyone"));
+		assertFalse(this.isChecked("Me"));
+		this.clickListItem("Me");
+		assertFalse(this.isChecked("Everyone"));
+		assertTrue(this.isChecked("Me"));
+	}
+	
+	@Test
+	public void testClickMeBackToEveryone(){
+		this.clickShowMeDropDown();
+		assertTrue(this.getListCount() > 0);
+		assertTrue(this.isChecked("Everyone"));
+		assertFalse(this.isChecked("Me"));
+		this.clickListItem("Me");
+		assertFalse(this.isChecked("Everyone"));
+		assertTrue(this.isChecked("Me"));
+		this.clickListItem("Everyone");
+		assertTrue(this.isChecked("Everyone"));
+		assertFalse(this.isChecked("Me"));
 	}
 	
 }

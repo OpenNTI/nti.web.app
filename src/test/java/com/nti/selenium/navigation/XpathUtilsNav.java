@@ -44,7 +44,7 @@ public class XpathUtilsNav extends XpathUtilsLogin {
 		return xpathBuilder("a", "class", "related", relatedItem);
 	}
 	
-	public static String getDivisionPage(final String relatedItem) {
+	public static String getSectionPageTitle(final String relatedItem) {
 		return xpathBuilder("span", "class", "label", relatedItem);
 	}
 	

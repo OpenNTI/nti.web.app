@@ -7,6 +7,7 @@ import org.junit.Before;
 import org.openqa.selenium.WebElement;
 
 import com.nti.selenium.navigation.Navigation;
+import com.nti.selenium.search.XpathUtilsSearch;
 
 public class Misc extends Navigation{
 
@@ -24,14 +25,18 @@ public class Misc extends Navigation{
 	}
 	
 	public void clickSectionDropDown(){
-		this.findElement(XpathUtilsMisc.dropDownSection()).click();
+		this.findElements(XpathUtilsMisc.dropDownSection()).get(0).click();
+	}
+	
+	public void clickShowMeDropDown(){
+		this.findElements(XpathUtilsMisc.dropDownShowMe()).get(1).click();
 	}
 	
 	private WebElement[] getElementArray(WebElement[] allElements){
 		List<WebElement> chapterElements = new ArrayList<WebElement>();
 		this.wait_(1);
 		for(WebElement element: allElements){
-			if(element.getAttribute("id").matches("menuitem-\\d{4,}")){
+			if(element.getAttribute("id").matches("menu(check)?item-\\d{4,}")){
 				chapterElements.add(element);
 			}
 		}
@@ -39,20 +44,33 @@ public class Misc extends Navigation{
 	}
 	
 	public int getListCount(){
-		List<WebElement> allElements = this.findElements(XpathUtilsMisc.dropDownChapterList());
+		List<WebElement> allElements = this.findElements(XpathUtilsMisc.dropDownList());
 		WebElement[] elements = new WebElement[allElements.size()];
 		return this.getElementArray(allElements.toArray(elements)).length;
 	}
 	
 	public String getListItemTitle(int chapterNum){
-		List<WebElement> allElements = this.findElements(XpathUtilsMisc.dropDownChapterList());
+		List<WebElement> allElements = this.findElements(XpathUtilsMisc.dropDownList());
 		WebElement[] elements = new WebElement[allElements.size()];
 		WebElement element = this.getElementArray(allElements.toArray(elements))[chapterNum];
 		return element.getText();
 	}
 	
+	public void clickListItem(String itemName){
+		List<WebElement> allElements = this.findElements(XpathUtilsMisc.dropDownList());
+		WebElement[] elements = new WebElement[allElements.size()];
+		WebElement[] selectableElements = this.getElementArray(allElements.toArray(elements));
+		for(WebElement element: selectableElements){
+			if(element.getText().equals(itemName)){
+				element.click();
+				break;
+			}
+		}
+		this.waitForLoading();
+	}
+	
 	public void clickListItem(int chapterNum){
-		List<WebElement> allElements = this.findElements(XpathUtilsMisc.dropDownChapterList());
+		List<WebElement> allElements = this.findElements(XpathUtilsMisc.dropDownList());
 		WebElement[] elements = new WebElement[allElements.size()];
 		WebElement element = this.getElementArray(allElements.toArray(elements))[chapterNum];
 		element.click();

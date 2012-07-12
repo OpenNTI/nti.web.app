@@ -24,7 +24,13 @@ public class XpathUtilsMisc extends XpathUtilsNav{
 						   xpathBuilder("span"));
 	}
 	
-	public static String dropDownChapterList(){
+	public static String dropDownShowMe(){
+		return buildString(xpathBuilder("div", "class", "shrink-wrap"), 
+				   xpathBuilder("div", "class", "menu"), 
+				   xpathBuilder("span"));
+	}
+	
+	public static String dropDownList(){
 		return buildString(xpathBuilder("div", "class", "x-box-inner x-box-scroller-top"),
 						   "/..",
 						   xpathBuilder("div"),
