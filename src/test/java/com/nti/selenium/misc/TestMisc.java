@@ -10,6 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.WebElement;
 
+import com.nti.selenium.login.XpathUtilsLogin;
 import com.nti.selenium.navigation.XpathUtilsNav;
 
 public class TestMisc extends Misc{
@@ -20,11 +21,15 @@ public class TestMisc extends Misc{
 		this.navigateTo("Prealgebra", "Fractions", "What is a Fraction?");
 	}
 	
+	// home button test
+	
 	@Test
 	public void testClickNextThoughtButton(){
 		this.clickHomeButton();
 		assertTrue(this.elementExists(XpathUtilsMisc.atHomePanel()));
 	}
+	
+	// navigation tests
 	
 	@Test
 	public void testClickChapterDropDown(){
@@ -55,6 +60,8 @@ public class TestMisc extends Misc{
 		this.clickListItem(0);
 		assertEquals(title, this.getNavTestText(XpathUtilsNav.getSectionPageTitle(title)).getText());
 	}
+	
+	// Show me tests
 	
 	@Test
 	public void testClickShowMeDropDown(){
@@ -145,6 +152,37 @@ public class TestMisc extends Misc{
 		this.clickListItem("Everyone");
 		assertTrue(this.isChecked("Everyone"));
 		assertFalse(this.isChecked("Me"));
+	}
+	
+	// My Acount tests
+	
+	@Test
+	public void testClickMyAccount(){
+		this.clickOptionsMyAccountButton();
+		assertTrue(this.elementExists(XpathUtilsMisc.getRealNameInput()));
+		assertTrue(this.elementExists(XpathUtilsMisc.getAliasInput()));
+	}
+	
+	@Test
+	public void testInputRealName(){
+		this.clickOptionsMyAccountButton();
+		this.findElement(XpathUtilsMisc.getRealNameInput()).sendKeys("Test");
+		this.wait_(3);
+	}
+	
+	@Test
+	public void testInputAlias(){
+		this.clickOptionsMyAccountButton();
+		this.findElement(XpathUtilsMisc.getAliasInput()).sendKeys("Test");
+		this.wait_(3);
+	}
+	
+	@Test
+	public void testClickChangePasswordLink(){
+		this.clickOptionsMyAccountButton();
+		this.clickChangePasswordLink();
+		assertTrue(this.elementExists(XpathUtilsMisc.getChangePasswordInput()));
+		assertTrue(this.elementExists(XpathUtilsMisc.getVerifyPasswordInput()));
 	}
 	
 }

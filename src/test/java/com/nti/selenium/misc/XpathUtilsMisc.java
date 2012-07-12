@@ -37,4 +37,32 @@ public class XpathUtilsMisc extends XpathUtilsNav{
 						   xpathBuilder("div"));
 	}
 	
+	public static String getMyAccountButton(){
+		return xpathBuilder("div", "My Account");
+	}
+	
+	public static String getRealNameInput(){
+		return xpathBuilder("input", "name", "realname");
+	}
+	
+	public static String getAliasInput(){
+		return xpathBuilder("input", "name", "alias");
+	}
+	
+	public static String getChangePasswordLink(){
+		return xpathBuilder("a", "Change password");
+	}
+	
+	public static String getChangePasswordInput(){
+		return xpathBuilder("input", "name", "password");
+	}
+	
+	public static String getVerifyPasswordInput(){
+		return xpathBuilder("input", "name", "password-verify");
+	}
+	
+	public static String getPrivacyButton(){
+		return xpathBuilder("div", "Privacy");
+	}
+	
 }

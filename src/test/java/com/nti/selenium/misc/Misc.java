@@ -6,6 +6,7 @@ import java.util.List;
 import org.junit.Before;
 import org.openqa.selenium.WebElement;
 
+import com.nti.selenium.login.XpathUtilsLogin;
 import com.nti.selenium.navigation.Navigation;
 import com.nti.selenium.search.XpathUtilsSearch;
 
@@ -75,6 +76,20 @@ public class Misc extends Navigation{
 		WebElement element = this.getElementArray(allElements.toArray(elements))[chapterNum];
 		element.click();
 		this.waitForLoading();
+	}
+	
+	public void clickOptionsMyAccountButton(){
+		this.findElement(XpathUtilsLogin.getOptions()).click();
+		this.waitForElement(XpathUtilsMisc.getMyAccountButton());
+		this.findElement(XpathUtilsMisc.getMyAccountButton()).click();
+	}
+	
+	public void clickChangePasswordLink(){
+		this.findElement(XpathUtilsMisc.getChangePasswordLink()).click();
+	}
+	
+	public void clickOptionsPrivacyButton(){
+		this.findElement(XpathUtilsMisc.getMyAccountButton()).click();
 	}
 	
 }
