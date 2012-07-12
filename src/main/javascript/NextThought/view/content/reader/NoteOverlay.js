@@ -77,7 +77,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 					cls: 'bottom-border',
 					html: '&nbsp;'
 				},
-					TemplatesForNotes.getNoteEditorTpl()
+					TemplatesForNotes.getEditorTpl()
 				]
 			}]
 		};

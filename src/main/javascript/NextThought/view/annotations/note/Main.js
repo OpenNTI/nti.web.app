@@ -28,7 +28,8 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		},{ cls: 'body' },{
 			cls: 'respond',
 			cn: [
-				TemplatesForNotes.getNoteEditorTpl()
+				TemplatesForNotes.getReplyOptions(),
+				TemplatesForNotes.getEditorTpl()
 			]
 		}
 	]).compile(),

@@ -132,6 +132,85 @@
 }
 
 
+@mixin reply-options {
+	.reply-options {
+		color: #757474;
+
+		.reply, .chat, .more {
+			display: inline-block;
+			font-weight: 700;
+			font-size: 12px;
+			line-height: 32px;
+			height: 32px;
+			margin-right: 30px;
+
+			opacity: 0.75;
+			&:hover {
+				opacity: 1;
+			}
+		}
+
+		.reply {
+			padding-left: 24px;
+			background: url(../images/reply.png) 0 8px no-repeat;
+		}
+
+		.chat {
+			padding-left: 28px;
+			background: url(../images/start-chat.png) 0 8px no-repeat;
+		}
+
+		.more {
+			position: relative;
+			width: 32px;
+			overflow: hidden;
+			background: url(../images/more-options.png) -27px center no-repeat;
+			border: 1px solid rgba(0,0,0,0);
+			border-radius: 5px;
+
+			&:hover {
+				border-color: #dcdcdc;
+				background-color: #ffffff;
+				background-position-x: 5px;
+				box-shadow: 1px 1px 2px 0 rgba(0,0,0,0.09);
+
+				ol {
+					display: block;
+				}
+			}
+			
+			ol {
+				&::before{
+					position: absolute;
+					width: 30px;
+					height: 2px;
+					background: white;
+					top: -1px;
+					left: 0;
+					z-index: 10;
+					content: ' ';
+					overflow: hidden;
+				}
+				font-size: 14px;
+				font-weight: normal;
+				line-height: 27px;
+				background: #ffffff;
+				border: 1px solid #dcdcdc;
+				box-shadow: 1px 1px 2px 0 rgba(0,0,0,0.09);
+				display: none;
+				position: fixed;
+				margin: -5px 0 0 -1px;
+				padding: 5px 0 10px 0;
+
+				li {
+					&:hover { background-color: #efefef; }
+					padding: 0 10px 0 37px;
+				}
+			}
+		}
+	}
+}
+
 
 .note-gutter {
 
@@ -344,7 +423,9 @@
 		.respond {
 			position: relative;
 			overflow: hidden;
-			margin: 20px 0 0 0;
+			margin: 12px 0 0 0;
+
+			@include reply-options;
 
 			@include note-editor;
 			.editor {

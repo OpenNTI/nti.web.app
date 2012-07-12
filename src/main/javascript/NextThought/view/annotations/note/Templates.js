@@ -1,7 +1,7 @@
 Ext.define('NextThought.view.annotations.note.Templates',{
 	singleton: true,
 
-	getNoteEditorTpl: function(){
+	getEditorTpl: function(){
 		return {
 			cls: 'editor',
 			cn:[{
@@ -31,6 +31,30 @@ Ext.define('NextThought.view.annotations.note.Templates',{
 					cn: [{cls:'action save', html: 'Save'},{cls:'action cancel', html: 'Cancel'}]
 				}]
 			}]
+		};
+	},
+
+
+	getReplyOptions: function(){
+		return {
+			cls: 'reply-options',
+			cn: [
+				{ cls: 'reply', html: 'Reply' },
+				{ cls: 'chat', html: 'Start a chat' },
+				{ cls: 'more', title: 'Options', html: '&nbsp;',
+					cn:[{
+						tag: 'ol',
+						cn: [
+							{ tag: 'li', cls: 'share', html: 'Share' },
+							{ tag: 'li', cls: 'flag',  html: 'Flag for Moderation' },
+							{ tag: 'li', cls: 'add-contact', html: 'Add to Contacts' },
+							{ tag: 'li', cls: 'follow', html: 'Follow {name}' },
+							{ tag: 'li', cls: 'block', html: 'Block {name}' }
+						]
+					}]
+				}
+			]
+
 		};
 	}
 
