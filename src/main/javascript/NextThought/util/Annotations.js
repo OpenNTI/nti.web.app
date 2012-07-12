@@ -24,27 +24,7 @@ Ext.define('NextThought.util.Annotations',{
 	},
 
 
-//tested
-	/**
-	 * From a note, build its reply
-	 * @param {NextThought.model.Note} note
-	 * @return {NextThought.model.Note}
-	 */
-	noteToReply: function(note){
-		var reply = Ext.create('NextThought.model.Note', {
-				applicableRange: Ext.create('NextThought.model.anchorables.ContentRangeDescription')
-			}),
-			parent = note.get('NTIID'),
-			refs = Ext.Array.clone(note.get('references') || []);
 
-		refs.push(parent);
-
-		reply.set('ContainerId', note.get('ContainerId'));
-		reply.set('inReplyTo', parent);
-		reply.set('references', refs);
-
-		return reply;
-	},
 
 //tested
 	/**

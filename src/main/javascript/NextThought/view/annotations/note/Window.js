@@ -26,8 +26,20 @@ Ext.define('NextThought.view.annotations.note.Window',{
 	items: [
 		{xtype: 'note-filter-bar' },
 		{xtype: 'note-carousel' },
-		{xtype: 'note-main-view' },
-		{xtype: 'note-responses' }
+		{
+			xtype: 'container',
+			cls: 'note-content-container',
+			autoScroll: true,
+			flex: 1,
+			layout: {
+				type: 'vbox',
+				align: 'stretch'
+			},
+			items: [
+				{xtype: 'note-main-view' },
+				{xtype: 'note-responses' }
+			]
+		}
 	],
 
 

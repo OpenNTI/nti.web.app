@@ -21,5 +21,39 @@ Ext.define('NextThought.model.Note', {
 		{ name: 'style', type: 'string' },
 		{ name: 'sharedWith', type: 'UserList' },
 		{ name: 'prohibitReSharing', type: 'boolean' }
-	]
+	],
+
+
+	getRoot: function() {
+		var current = this,
+			currentParent = current.parent;
+
+		while(currentParent && currentParent.parent){
+			current = currentParent;
+			currentParent = currentParent.parent;
+		}
+
+		return current;
+	},
+
+	/**
+	 * From a note, build its reply
+	 * @param {NextThought.model.Note} note
+	 * @return {NextThought.model.Note}
+	 */
+	makeReply: function(){
+		var note = this,
+			reply = this.self.create(),
+			parent = note.get('NTIID'),
+			refs = Ext.Array.clone(note.get('references') || []);
+
+		refs.push(parent);
+
+		reply.set('applicableRange', note.get('applicableRange'));
+		reply.set('ContainerId', note.get('ContainerId'));
+		reply.set('inReplyTo', parent);
+		reply.set('references', refs);
+
+		return reply;
+	}
 });

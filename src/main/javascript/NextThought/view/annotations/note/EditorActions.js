@@ -1,10 +1,20 @@
 Ext.define('NextThought.view.annotations.note.EditorActions',{
 
-	constructor: function(cmp, editorEl){
+	mixins: {
+		observable: 'Ext.util.Observable'
+	},
 
+	wbThumbnailTpm: Ext.DomHelper.createTemplate(
+			'<img src="{0}" id="{1}" class="wb-thumbnail"/>'
+	).compile(),
+
+	constructor: function(cmp, editorEl){
 		var me = this;
 		me.editor = editorEl;
+		me.cmp = cmp;
 		me.openWhiteboards = {};
+
+		me.mixins.observable.constructor.call(me);
 
 		cmp.mon(new Ext.CompositeElement(editorEl.query('.left .action')),{
 			scope: me,
@@ -108,7 +118,7 @@ Ext.define('NextThought.view.annotations.note.EditorActions',{
 				el.src = data;
 			}
 			else {
-				el = Ext.fly(this.wbThumbnailTpm.append(content, [data, guid]));
+				el = Ext.fly(me.wbThumbnailTpm.append(content, [data, guid]));
 				//listen on clicks and do stuff:
 				el.on('click', function(evt, img, opt){
 					var w = me.openWhiteboards[guid];
@@ -116,7 +126,8 @@ Ext.define('NextThought.view.annotations.note.EditorActions',{
 					else {Ext.Error.raise('No whiteboard for' + guid);}
 				});
 			}
-			this.editor.repaint();
+			me.editor.repaint();
+			me.fireEvent('size-changed');
 		});
 	},
 

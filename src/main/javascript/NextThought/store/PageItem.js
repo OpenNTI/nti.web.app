@@ -32,5 +32,27 @@ Ext.define('NextThought.store.PageItem',{
 		}
 
 		return bins;
+	},
+
+
+	add: function(record) {
+		//get added to the store:
+		this.callParent(arguments);
+
+		//find my parent if it's there and add myself to it:
+		var parentId = record.get('replyTo');
+		if (parentId) {
+			Ext.each(this.data, function(parent){
+				if (parentId === parent.getId()) {
+					//found our parent:
+					record.parent = parent;
+					if (!parent.children){parent.children = [];}
+					parent.children.push(record);
+					//fire events for anyone who cares:
+					parent.fireEvent('changed');
+					record.fireEvent('changed');
+				}
+			});
+		}
 	}
 });

@@ -54,6 +54,10 @@ Ext.define('NextThought.controller.Annotations', {
 				'save-new-note' : this.saveNewNote
 			},
 
+			'note-window': {
+				'save-new-reply' : this.saveNewReply
+			},
+
 			'note-entry':{
 				'action': this.onNoteAction,
 				'load-transcript': this.onLoadTranscript,
@@ -198,7 +202,30 @@ Ext.define('NextThought.controller.Annotations', {
 				var success = request.success,
 					rec = success ? record: null;
 				if (success){this.self.events.fireEvent('new-note', rec);}
-				Ext.callback(callback, this, [rec]);
+				Ext.callback(callback, this, [success, rec]);
+			}
+		});
+	},
+
+
+	saveNewReply: function(recordRepliedTo, replyBody, sharedWith, callback) {
+		//some validation of input:
+		if(!recordRepliedTo){Ext.Error.raise('Must supply a record to reply to');}
+		if (!Ext.isArray(replyBody)){ replyBody = [replyBody];}
+		//TODO - no shared with coming yet...
+
+		//define our note object:
+		var replyRecord = recordRepliedTo.makeReply();
+		replyRecord.set('body', replyBody);
+
+		//now save this:
+		replyRecord.save({
+			scope: this,
+			callback:function(record, request){
+				var success = request.success,
+					rec = success ? record: null;
+				if (success){this.self.events.fireEvent('new-note', rec);}
+				Ext.callback(callback, this, [success, rec]);
 			}
 		});
 	},

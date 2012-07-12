@@ -69,6 +69,10 @@ Ext.define('NextThought.view.annotations.note.Main',{
 			click: me.deactivateReplyEditor
 		});
 
+		me.mon(me.editor.down('.save'),{
+			scope: me,
+			click: me.saveReply
+		});
 
 		me.mon(me.editor.down('.content'),{
 			scope: me,
@@ -77,6 +81,13 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		});
 
 		me.editorActions = new NoteEditorActions(me,me.editor);
+
+		me.mon(me.editorActions, {
+			scope: me,
+			'size-changed': function(){
+				me.doComponentLayout();
+			}
+		});
 	},
 
 
@@ -89,6 +100,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		this.context.update('Get from the page... Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi tincidunt sem eget quam tempor hendrerit. <span class="highlight">Nulla ultricies tincidunt laoreet. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. Nunc dictum consequat nisl eget eleifend. Duis tincidunt nibh id dui bibendum aliquam.<span class="tip">&nbsp;</span></span> Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.');
 
 		r.compileBodyContent(function(text){ this.text.update(text); },this);
+		this.up('window').down('note-responses').setReplies(this.record.children);
 	},
 
 
@@ -98,12 +110,31 @@ Ext.define('NextThought.view.annotations.note.Main',{
 	},
 
 
+	saveReply: function(){
+		var body = this.editorActions.getValue(),
+			me = this;
+
+		function callback(success, record){
+			console.log('save reply was a success?', success, record);
+			if (success) {
+				me.deactivateReplyEditor();
+				me.up('window').down('note-responses').addReply(record);
+			}
+		}
+
+		this.up('window').fireEvent('save-new-reply', this.record, body, undefined, callback);
+	},
+
+
 	activateReplyEditor: function(){
 		this.el.addCls('editor-active');
+		this.doComponentLayout();
+
 	},
 
 	deactivateReplyEditor: function(){
 		this.el.removeCls('editor-active');
+		this.doComponentLayout();
 	},
 
 

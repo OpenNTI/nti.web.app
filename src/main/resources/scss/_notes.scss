@@ -81,7 +81,7 @@
 
 				img.wb-thumbnail {
 					height: auto;
-					width: 95%;
+					width: 200px;
 					display: block;
 					clear: both;
 					overflow: hidden;
@@ -370,6 +370,10 @@
 		}
 	}
 
+    .note-responses{
+        padding-bottom: 45px;
+    }
+
 	.carousel {
 		background: #e6e6e6;
 		border: 1px solid #c5c5c5;
@@ -377,6 +381,7 @@
 		border-right-width: 0;
 	}
 
+    .note-reply,
 	.main-view {
 		border: 0px solid #f1f1f1;
 		border-bottom-width: 1px;
@@ -442,6 +447,7 @@
 		}
 
 		&.editor-active .respond{
+            display: block;
 			.reply-options{display: none;}
 			.editor { display: block; }
 		}
@@ -472,4 +478,43 @@
 			}
 		}
 	}
+
+    .note-reply {
+        position: relative;
+        padding-left: 30px;
+        &:hover {
+            .meta .controls {
+                display: block;
+            }
+            .respond {
+     			display: block;
+            }
+        }
+        .respond {
+   			display: none;
+        }
+        .meta {
+            font-size: 10px;
+            .controls {
+                display: none;
+            }
+        }
+        .body {
+            font-size: 14px;
+            line-height: default;
+        }
+    }
+
+    .note-reply-container {
+        .note-reply-container {
+            .note-reply {
+                padding-left: 60px;
+            }
+            .note-reply-container {
+                .note-reply {
+                    padding-left: 60px;
+                }
+            }
+        }
+    }
 }

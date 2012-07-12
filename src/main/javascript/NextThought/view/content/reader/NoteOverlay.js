@@ -12,12 +12,6 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 	constructor: function(){
 		var data = this.noteOverlayData;
 
-		data.wbThumbnailTpm = Ext.DomHelper.createTemplate(
-			'<img src="{0}" id="{1}" class="wb-thumbnail"/>'
-		);
-		data.wbThumbnailTpm.compile();
-
-
 		this.on({
 			scope: this,
 			'content-updated': function(){
@@ -290,8 +284,5 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 			//transition to rich editor
 			this.noteOverlayAcivateRichEditor();
 		}
-	},
-
-
-
+	}
 });
