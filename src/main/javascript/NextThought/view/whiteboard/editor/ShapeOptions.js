@@ -18,7 +18,7 @@ Ext.define('NextThought.view.whiteboard.editor.ShapeOptions',{
 		cls: 'shape-picker',
 		defaults: {
 			xtype: 'wb-tool-option',
-			toggleGroup: 'shape-selected-'+guidGenerator() //TODO - do this at construction time instead of define time
+			toggleGroup: 'shape-selected-'
 		},
 		items: [
 			{ option: 'line shape', sides: 1, pressed: true },
@@ -43,6 +43,13 @@ Ext.define('NextThought.view.whiteboard.editor.ShapeOptions',{
 			{ xtype: 'color-picker-button', strokeSelect: true, value: '333333' }
 		]
 	}],
+
+
+	constructor: function(){
+		this.items = Ext.clone(this.items);//copy onto instance from prototype
+		this.items[0].defaults.toggleGroup += guidGenerator();
+		return this.callParent(arguments);
+	},
 
 
 	getToolType: function() {

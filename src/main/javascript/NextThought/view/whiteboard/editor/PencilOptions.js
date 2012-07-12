@@ -17,7 +17,7 @@ Ext.define('NextThought.view.whiteboard.editor.PencilOptions',{
 		cls: 'pencil-stroke-options',
 		defaults: {
 			xtype: 'wb-tool-option',
-			toggleGroup: 'pencil-stroke-'+guidGenerator() //TODO - do this at construction time instead of define time
+			toggleGroup: 'pencil-stroke-'
 		},
 		items: [
 			{ option: 'fine stroke', strokeWidth: 5, pressed: true },
@@ -35,7 +35,7 @@ Ext.define('NextThought.view.whiteboard.editor.PencilOptions',{
 			scale: 'large',
 			cls: 'color',
 			xtype: 'wb-color-option',
-			toggleGroup: 'pencil-color-'+guidGenerator()
+			toggleGroup: 'pencil-color-'
 		},
 		items: [
 			{ color: 'black', stroke: '#333333', pressed: true },
@@ -51,6 +51,15 @@ Ext.define('NextThought.view.whiteboard.editor.PencilOptions',{
 			{ color: 'yellow', stroke: '#fff02a' }
 		]
 	}],
+
+
+	constructor:function(){
+		this.items = Ext.clone(this.items);//copy onto instance from prototype
+		this.items[0].defaults.toggleGroup += guidGenerator();
+		this.items[1].defaults.toggleGroup += guidGenerator();
+		console.log(this);
+		return this.callParent(arguments);
+	},
 
 
 	getToolType: function() {

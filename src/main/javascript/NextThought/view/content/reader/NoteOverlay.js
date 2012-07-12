@@ -1,7 +1,8 @@
 Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 	requires: [
-		'NextThought.util.Line'
+		'NextThought.util.Line',
+		'NextThought.view.whiteboard.Window'
 	],
 
 	openWhiteboards: {},
