@@ -125,7 +125,18 @@ public class Misc extends Navigation{
 	}
 	
 	public void clickOptionsPrivacyButton(){
+		this.findElement(XpathUtilsLogin.getOptions()).click();
+		this.waitForElement(XpathUtilsMisc.getMyAccountButton());
 		this.findElement(XpathUtilsMisc.getPrivacyButton()).click();
+	}
+	
+	public void clickOptionsPrivacyCloseButton(){
+		this.findElement(XpathUtilsMisc.getPrivacyCloseButton()).click();
+	}
+	
+	public boolean isPrivacyWindowVisable(){
+		String clazz = this.findElement(XpathUtilsMisc.getPrivacyWindowStatus()).getAttribute("class");
+		return clazz.matches(".*x-hide-offsets");
 	}
 	
 }

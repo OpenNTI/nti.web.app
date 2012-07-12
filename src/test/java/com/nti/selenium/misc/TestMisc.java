@@ -324,4 +324,21 @@ public class TestMisc extends Misc{
 		this.clickCancelButton();
 		assertFalse(this.elementExists(XpathUtilsMisc.getCancelButton()));
 	}
+	
+	// Privacy Tests
+	
+	@Test
+	public void testOpenPrivacy(){
+		this.clickOptionsPrivacyButton();
+		assertFalse(this.isPrivacyWindowVisable());
+	}
+	
+	@Test
+	public void testClosePrivacy(){
+		this.clickOptionsPrivacyButton();
+		assertFalse(this.isPrivacyWindowVisable());
+		this.clickOptionsPrivacyCloseButton();
+		assertTrue(this.isPrivacyWindowVisable());
+	}
+	
 }

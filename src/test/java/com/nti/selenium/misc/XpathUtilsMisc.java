@@ -101,4 +101,13 @@ public class XpathUtilsMisc extends XpathUtilsNav{
 		return xpathBuilder("div", "Privacy");
 	}
 	
+	public static String getPrivacyWindowStatus(){
+		return buildString(xpathBuilder("span", "Privacy"),
+						   "/../../../../../..");
+	}
+	
+	public static String getPrivacyCloseButton(){
+		return xpathBuilder("img", "class", "tool close");
+	}
+	
 }
