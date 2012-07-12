@@ -3,27 +3,35 @@ Ext.define('NextThought.view.annotations.note.Main',{
 	alias: 'widget.note-main-view',
 
 	requires: [
-		'NextThought.cache.UserRepository'
+		'NextThought.cache.UserRepository',
+		'NextThought.view.annotations.note.Templates'
 	],
 
 	ui: 'nt',
 	cls: 'main-view',
 
-	renderTpl: [
-		'<div class="meta">',
-			'<div class="controls">',
-				'<div class="bookmark"></div>',
-				'<div class="favorite">0</div>',
-			'</div>',
-			'<span class="name"></span> - <span class="time"></span>',
-		'</div>',
-		'<div class="context"><span class="text"></span></div>',
-		'<div class="body"></div>',
-		'<div class="respond">',
-			'<div><input placeholder="Respond..."><span class="whiteboard">&nbsp;</span></div>',
-		'</div>'
-	],
-
+	renderTpl: Ext.DomHelper.createTemplate([
+		{
+			cls: 'meta',
+			cn: [{
+				cls: 'controls',
+				cn: [{ cls: 'bookmark' },{ cls: 'favorite' }]
+			},{
+				tag: 'span',
+				cls: 'name'
+			},' - ',{
+				tag: 'span', cls: 'time'
+			}]
+		},{
+			cls: 'context',
+			cn: [{tag: 'span', cls: 'text'}]
+		},{ cls: 'body' },{
+			cls: 'respond',
+			cn: [
+				TemplatesForNotes.getNoteEditorTpl()
+			]
+		}
+	]).compile(),
 
 	renderSelectors: {
 		favorites: '.meta .controls .favorite',
@@ -32,9 +40,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		time: '.meta .time',
 		context: '.context .text',
 		text: '.body',
-		responseBox: '.respond',
-		replyBox: '.respond input',
-		whiteboard: '.respond .whiteboard'
+		responseBox: '.respond'
 	},
 
 	initComponent: function(){
@@ -43,17 +49,11 @@ Ext.define('NextThought.view.annotations.note.Main',{
 
 
 	afterRender: function(){
-		var focusCls = 'has-focus';
 
 		this.callParent(arguments);
 
-		this.mon(this.replyBox,{
-			scope: this,
-			blur: function(){ this.responseBox.removeCls(focusCls);},
-			focus: function(){this.responseBox.addCls(focusCls);}
-		});
-
 		this.setRecord(this.record);
+
 	},
 
 
