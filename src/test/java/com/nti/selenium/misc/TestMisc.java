@@ -8,12 +8,6 @@ import org.junit.Test;
 
 public class TestMisc extends Misc{
 
-	@Before
-	public void setUp() throws Exception{
-		super.setUp();
-		this.navigateTo("Prealgebra", "Fractions", "What is a Fraction?");
-	}
-
 	@Test
 	public void testClickNextThoughtButton() {
 		this.clickHomeButton();

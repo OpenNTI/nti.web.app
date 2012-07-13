@@ -10,6 +10,7 @@ public class Misc extends Navigation {
 	@Before
 	public void setUp() throws Exception{
 		super.setUp();
+		this.navigateTo("Prealgebra", "Fractions", "What is a Fraction?");
 	}
 	
 	public void clickHomeButton() {
