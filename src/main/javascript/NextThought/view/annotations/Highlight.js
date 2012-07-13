@@ -99,7 +99,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
 			padding = 2,
 			last = true;
 
-		if(style !== 'plain'){
+		if(style === 'suppressed'){
 			return boundingTop;
 		}
 
