@@ -1,13 +1,9 @@
 package com.nti.selenium.search;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import java.util.List;
-
 import org.junit.Test;
-import org.openqa.selenium.WebElement;
 
 public class TestSearch extends Search{
 
@@ -21,6 +17,8 @@ public class TestSearch extends Search{
 	@Test
 	public void testNavigateToItem(){
 		this.insertSearchText("math");
+		assertTrue(this.elementExists(XpathUtilsSearch.getBookSearchResults()));
+		assertTrue(this.findNumberOfSearchResults() > 0);
 		String sectionTitle = this.findSectionTitle(0);
 		this.clickSearchedBook(sectionTitle);
 		this.waitForLoading();
@@ -31,6 +29,8 @@ public class TestSearch extends Search{
 	@Test
 	public void testSeeAll(){
 		this.insertSearchText("math");
+		assertTrue(this.elementExists(XpathUtilsSearch.getBookSearchResults()));
+		assertTrue(this.findNumberOfSearchResults() > 0);
 		int beforeSeeAllNumOfResults = this.findNumberOfSearchResults();
 		this.clickSeeAll();
 		int afterSeeAllNumOfResults = this.findNumberOfSearchResults();
