@@ -190,6 +190,14 @@ public class Quizzes extends Navigation {
 		return XpathUtilsQuizzes.getNoAnswerResult(this.getActiveQuestionID());
 	}
 	
+	public String getIncorrectAnswerResult() {
+		return XpathUtilsQuizzes.getIncorrectAnswerResult(this.getActiveQuestionID());
+	}
+	
+	public String getCorrectAnswerResult() {
+		return XpathUtilsQuizzes.getCorrectAnswerResult(this.getActiveQuestionID());
+	}
+	
 	public String getAnswerableQuestion() {
 		return XpathUtilsQuizzes.getAnswerableQuestion(this.getActiveQuestionID());
 	}
