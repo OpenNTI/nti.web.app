@@ -45,7 +45,8 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		responseBox: '.respond',
 		editor: '.respond .editor',
 		replyOptions: '.respond .reply-options',
-		replyButton: '.respond .reply'
+		replyButton: '.respond .reply',
+		more: '.respond .reply-options .more'
 	},
 
 	initComponent: function(){
@@ -94,6 +95,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 			}
 		});
 
+		TemplatesForNotes.attachMoreReplyOptionsHandler(me, me.more);
 		me.editorActions = new NoteEditorActions(me,me.editor);
 
 		me.mon(me.editorActions, {
@@ -148,9 +150,10 @@ Ext.define('NextThought.view.annotations.note.Main',{
 
 
 	activateReplyEditor: function(){
-		this.el.addCls('editor-active');
-		this.doComponentLayout();
-
+		var me = this;
+		me.el.addCls('editor-active');
+		me.doComponentLayout();
+		setTimeout(function(){me.editorActions.focus()}, 100);
 	},
 
 	deactivateReplyEditor: function(){

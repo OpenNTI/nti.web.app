@@ -46,5 +46,12 @@ Ext.define('NextThought.view.annotations.note.Window',{
 	initComponent: function(){
 		this.callParent(arguments);
 		this.down('note-main-view').setRecord(this.record);
+	},
+
+	afterRender: function(){
+		this.callParent(arguments);
+		if(this.isReply) {
+			this.down('note-main-view').activateReplyEditor();
+		}
 	}
 });

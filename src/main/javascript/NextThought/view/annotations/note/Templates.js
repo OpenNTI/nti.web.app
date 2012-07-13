@@ -57,6 +57,53 @@ Ext.define('NextThought.view.annotations.note.Templates',{
 			]
 
 		};
+	},
+
+	attachMoreReplyOptionsHandler: function(cmp, optionsEl){
+		cmp.mon(optionsEl, {
+			scope: cmp,
+			click: this.replyOptionsClicked,
+			mouseout: this.replyOptionsMouseOut,
+			mouseover: this.replyOptionsMouseIn,
+			mouseup: function(e){
+				e.stopEvent();
+				return false;
+			}
+		});
+	},
+
+	replyOptionsClicked: function(e){
+		e.stopEvent();
+
+		var more = e.getTarget('.more', undefined, true),
+			y, h;
+
+		if (!more){return false;}
+
+		y = more.getY();
+		h = more.getHeight();
+		more.down('ol').setStyle({'top': (y + h) + 'px'});
+
+		//toggle it on or off:
+		more.toggleCls('active');
+
+
+		return false;
+	},
+
+	replyOptionsMouseOut: function(e) {
+		var more = e.getTarget('.more', undefined, true);
+		if (more){
+			this.moreReplyOptionsMouseOutTimer = setTimeout(
+				function(){
+					more.removeCls('active');
+				}
+			,1500);
+		}
+	},
+
+	replyOptionsMouseIn: function(e) {
+		clearTimeout(this.moreReplyOptionsMouseOutTimer);
 	}
 
 

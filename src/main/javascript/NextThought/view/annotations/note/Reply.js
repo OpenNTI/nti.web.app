@@ -53,7 +53,8 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 		responseBox: '.respond',
 		editor: '.respond .editor',
 		replyOptions: '.respond .reply-options',
-		replyButton: '.respond .reply'
+		replyButton: '.respond .reply',
+		more: '.respond .reply-options .more'
 	},
 
 	getTargetEl: function () {
@@ -106,6 +107,7 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 			}
 		});
 
+		TemplatesForNotes.attachMoreReplyOptionsHandler(me, me.more);
  		me.editorActions = new NoteEditorActions(me,me.editor);
 
 		me.mon(me.editorActions, {

@@ -2,22 +2,10 @@ Ext.define( 'NextThought.view.annotations.Note', {
 	extend: 'NextThought.view.annotations.Highlight',
 	alias: 'widget.note',
 	requires:[
-		'NextThought.view.annotations.note.Window'
+		'NextThought.view.annotations.note.Window',
+		'NextThought.view.annotations.note.GutterWidget'
 	],
 
-	singleGutterWidgetTmpl: Ext.DomHelper.createTemplate({
-		cls: 'note-gutter-widget single',
-		cn: [
-			{
-				cls: 'content',
-				cn: [
-					{cls: 'name', html: '{0}'},
-					{cls: 'text', html: '{1}'}
-				]
-			},
-			{cls: 'mask'}
-		]
-	}).compile(),
 
 	multiGutterWidgetTmpl: Ext.DomHelper.createTemplate(
 			{ cls: 'thumb note-gutter-widget multi' }).compile(),
@@ -35,15 +23,25 @@ Ext.define( 'NextThought.view.annotations.Note', {
 		//TODO - initally just render the highlight, we want to use styles to not render highlights created from clicking on the left.
 	},
 
+
+	cleanup: function(){
+		if (this.gutterCmp){this.gutterCmp.destroy(); delete this.gutterCmp;}
+		if (this.singleGutterWidget){this.singleGutterWidget.remove(); delete this.singleGutterWidget;}
+		if (this.multiGutterWidget){this.multiGutterWidget.remove(); delete this.multiGutterWidget;}
+
+		return this.callParent(arguments);
+	},
+
 	//Notes don't have controls
 	//getControl: function(){},
 
 
-	openWindow: function(){
+	openWindow: function(isReply){
 		Ext.widget({
 			xtype: 'note-window',
 			record: this.getRecord(),
-			activeAnnotations: []
+			activeAnnotations: [],
+			isReply: isReply
 		}).show();
 	},
 
@@ -53,7 +51,7 @@ Ext.define( 'NextThought.view.annotations.Note', {
 		el.on({
 			click: function(e){e.stopEvent();return false;},
 			mouseup: function(e){
-				me.openWindow();
+				me.openWindow(Boolean(e.getTarget('.reply')));
 			}
 		});
 		return el;
@@ -78,19 +76,10 @@ Ext.define( 'NextThought.view.annotations.Note', {
 
 
 	createSingleGutterWidget: function(){
-		var creator = this.record.get('Creator'),
-			htmlString = this.singleGutterWidgetTmpl.apply([
-				creator,
-				this.record.getBodyText()]),
-			dom = Ext.DomHelper.createDom({html:htmlString}).firstChild;
+		var dom = document.createElement('div');
 
-		//now create the ext object:
+		this.gutterCmp = Ext.widget({xtype: 'note-gutter-widget', record: this.getRecord(), renderTo: dom});
 		this.singleGutterWidget = this.attachListeners( Ext.get(dom) );
-
-		UserRepository.getUser(creator, function(u){
-			var name = u[0].getName();
-			this.singleGutterWidget.down('.name').update(name);
-		}, this);
 	},
 
 
