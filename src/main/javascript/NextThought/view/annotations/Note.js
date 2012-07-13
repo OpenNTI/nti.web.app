@@ -62,7 +62,7 @@ Ext.define( 'NextThought.view.annotations.Note', {
 	openWindow: function(isReply){
 		Ext.widget({
 			xtype: 'note-window',
-			record: this.getRecord(),
+			annotation: this,
 			activeAnnotations: [],
 			isReply: isReply
 		}).show();

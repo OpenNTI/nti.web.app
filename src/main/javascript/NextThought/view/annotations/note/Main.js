@@ -11,6 +11,20 @@ Ext.define('NextThought.view.annotations.note.Main',{
 	ui: 'nt',
 	cls: 'main-view',
 
+	highlightTpl: Ext.DomHelper.createTemplate(
+		{
+			tag: 'span',
+			cls: 'highlight',
+			cn: [
+				'{0}',
+				{
+					tag: 'span',
+					cls: 'tip'
+				}
+			]
+		}
+	).compile(),
+
 	renderTpl: Ext.DomHelper.createTemplate([
 		{
 			cls: 'meta',
@@ -58,7 +72,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		var me = this;
 		me.callParent(arguments);
 
-		me.setRecord(me.record);
+		me.setRecord(me.record, me.range);
 
 		me.mon(me.replyButton,{
 			scope: me,
@@ -107,8 +121,9 @@ Ext.define('NextThought.view.annotations.note.Main',{
 	},
 
 
-	setRecord: function(r){
+	setRecord: function(r, range){
 		this.record = r;
+		this.range = range;
 		if(!this.rendered){return;}
 		UserRepository.getUser(r.get('Creator'),this.fillInUser,this);
 		this.time.update(r.getRelativeTimeString());
@@ -120,7 +135,22 @@ Ext.define('NextThought.view.annotations.note.Main',{
 			this.favorites.addCls('on');
 		}
 
-		this.context.update('Get from the page... Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi tincidunt sem eget quam tempor hendrerit. <span class="highlight">Nulla ultricies tincidunt laoreet. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. Nunc dictum consequat nisl eget eleifend. Duis tincidunt nibh id dui bibendum aliquam.<span class="tip">&nbsp;</span></span> Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.');
+
+
+
+		var commonAncestor = range.commonAncestorContainer,
+			ancestorText = commonAncestor.innerText,
+			suppressed = r.get('style') === 'suppressed',
+			selectedText = range.toString(),
+			docFrag = range.cloneContents();
+
+		console.log(ancestorText, selectedText, RegExp.escape(selectedText));
+
+		if (!suppressed){
+			ancestorText = ancestorText.replace(selectedText, this.highlightTpl.apply([selectedText]));
+		}
+
+		this.context.update(ancestorText);
 
 		r.compileBodyContent(function(text){ this.text.update(text); },this);
 		this.up('window').down('note-responses').setReplies(this.record.children);
