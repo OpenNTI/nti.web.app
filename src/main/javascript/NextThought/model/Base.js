@@ -22,7 +22,8 @@ Ext.define('NextThought.model.Base', {
 		{ name: 'NTIID', type: 'string' },
 		{ name: 'OID', type: 'string' },
 		{ name: 'accepts', type: 'auto', defaultValue: [] },
-		{ name: 'href', type: 'string' }
+		{ name: 'href', type: 'string' },
+		{ name: 'LikeCount', type: 'int' }
 	],
 
 
@@ -82,10 +83,84 @@ Ext.define('NextThought.model.Base', {
 	},
 
 
+	getFriendlyLikeCount: function(){
+		var c = this.get('LikeCount');
+		if (c <= 0) {return '';}
+		else if (c >= 1000){ return '999+';}
+		return ''+c;
+	},
+
 	getLink: function(rel){
 		var links = this.get('Links') || Ext.data.Types.LINKS.convert( this.raw.Links || [] ),
 			ref = links ? links.getRelHref(rel) : null;
 		return ref? $AppConfig.server.host + Globals.ensureSlash(ref, true) : null;
+	},
+
+
+	isFavorited: function(){
+		//If you have an unfavorite link, you have already favorited it.
+		var f = this.getLink('unfavorite');
+		if (f) {return true;}
+		return false;
+	},
+
+
+	isLiked: function(){
+		//If you have an unlike link, you have already liked it.
+		var f = this.getLink('unlike');
+		if (f) {return true;}
+		return false;
+	},
+
+
+	favorite: function(widget){
+		var action = this.isFavorited() ? 'unfavorite' : 'favorite',
+			prePost = action === 'favorite' ? 'addCls' : 'removeCls',
+			postPost = action === 'favorite' ? 'removeCls' : 'addCls';
+
+		widget[prePost]('on');
+
+		this.postTo(action, function(s){
+			if (!s) {
+				widget[postPost]('on');
+			}
+		});
+	},
+
+
+	like: function(widget){
+		var me = this,
+			lc = this.get('LikeCount'),
+			action = this.isLiked() ? 'unlike' : 'like',
+			prePost = action === 'like' ? 'addCls' : 'removeCls',
+			postPost = action === 'like' ? 'removeCls' : 'addCls',
+			polarity = action === 'like' ? 1 : -1;
+
+		widget[prePost]('on');
+		me.set('LikeCount', lc + polarity);
+		widget.update(me.getFriendlyLikeCount());
+
+		this.postTo(action, function(s){
+			if (!s) {
+				widget[postPost]('on');
+				me.set('LikeCount', lc);
+				widget.update(me.getFriendlyLikeCount());
+			}
+		});
+	},
+
+
+	postTo: function(link, callback){
+		var l = this.getLink(link);
+		if (l) {
+			Ext.Ajax.request({
+				url: l,
+				jsonData: '',
+				method: 'POST',
+				scope: this,
+				callback: function(r, s){Ext.callback(callback, null, [s]);}
+			});
+		}
 	},
 
 

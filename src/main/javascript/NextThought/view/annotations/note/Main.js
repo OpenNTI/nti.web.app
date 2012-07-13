@@ -16,7 +16,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 			cls: 'meta',
 			cn: [{
 				cls: 'controls',
-				cn: [{ cls: 'bookmark' },{ cls: 'favorite' }]
+				cn: [{ cls: 'favorite' },{ cls: 'like' }]
 			},{
 				tag: 'span',
 				cls: 'name'
@@ -36,8 +36,8 @@ Ext.define('NextThought.view.annotations.note.Main',{
 	]).compile(),
 
 	renderSelectors: {
+		liked: '.meta .controls .like',
 		favorites: '.meta .controls .favorite',
-		bookmarks: '.meta .controls .bookmark',
 		name: '.meta .name',
 		time: '.meta .time',
 		context: '.context .text',
@@ -80,6 +80,20 @@ Ext.define('NextThought.view.annotations.note.Main',{
 			keydown: me.editorKeyDown
 		});
 
+		me.mon(me.liked, {
+			scope: me,
+			click: function(){
+				me.record.like(me.liked);
+			}
+		});
+
+		me.mon(me.favorites, {
+			scope: me,
+			click: function(){
+				me.record.favorite(me.favorites);
+			}
+		});
+
 		me.editorActions = new NoteEditorActions(me,me.editor);
 
 		me.mon(me.editorActions, {
@@ -96,6 +110,13 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		if(!this.rendered){return;}
 		UserRepository.getUser(r.get('Creator'),this.fillInUser,this);
 		this.time.update(r.getRelativeTimeString());
+		this.liked.update(r.getFriendlyLikeCount());
+		if (r.isLiked()){
+			this.liked.addCls('on');
+		}
+		if (r.isFavorited()){
+			this.favorites.addCls('on');
+		}
 
 		this.context.update('Get from the page... Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi tincidunt sem eget quam tempor hendrerit. <span class="highlight">Nulla ultricies tincidunt laoreet. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. Nunc dictum consequat nisl eget eleifend. Duis tincidunt nibh id dui bibendum aliquam.<span class="tip">&nbsp;</span></span> Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.');
 

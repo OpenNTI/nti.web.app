@@ -123,14 +123,14 @@
 	}
 }
 
-@mixin favorite-and-bookmark {
-	.bookmark, .favorite {
+@mixin like-and-favorite {
+	.favorite, .like {
 		cursor: pointer;
 		float: right;
 		background: url(../images/notes/controls.png) 0 0 no-repeat;
 	}
 
-	.favorite{
+	.like{
 		color: #3fb3f6;
 		margin: 8px;
 		padding: 0 0 0 20px;
@@ -147,7 +147,7 @@
 		    background-position: -36px 0;
         }
 	}
-	.bookmark{
+	.favorite{
 		margin: -1px 10px 0 0;
 		width: 18px;
 		height: 24px;

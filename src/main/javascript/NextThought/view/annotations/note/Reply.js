@@ -22,7 +22,7 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 				cls: 'meta',
 				cn: [{
 					cls: 'controls',
-					cn: [{ cls: 'bookmark' },{ cls: 'favorite' }]
+					cn: [{ cls: 'favorite' },{ cls: 'like' }]
 				},{
 					tag: 'span',
 					cls: 'name'
@@ -44,8 +44,8 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 	]).compile(),
 
 	renderSelectors: {
+		liked: '.meta .controls .like',
 		favorites: '.meta .controls .favorite',
-		bookmarks: '.meta .controls .bookmark',
 		name: '.meta .name',
 		time: '.meta .time',
 		text: '.body',
@@ -86,6 +86,20 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 			keydown: me.editorKeyDown
 		});
 
+		me.mon(me.liked, {
+			scope: me,
+			click: function(){
+				me.record.like(me.liked);
+			}
+		});
+
+		me.mon(me.favorites, {
+			scope: me,
+			click: function(){
+				me.record.favorite(me.favorites);
+			}
+		});
+
  		me.editorActions = new NoteEditorActions(me,me.editor);
 
 		me.mon(me.editorActions, {
@@ -105,6 +119,13 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 		if(!me.rendered){return;}
 		UserRepository.getUser(r.get('Creator'),me.fillInUser,me);
 		me.time.update(r.getRelativeTimeString());
+		me.liked.update(r.getFriendlyLikeCount());
+		if (r.isLiked()){
+			this.liked.addCls('on');
+		}
+		if (r.isFavorited()){
+			this.favorites.addCls('on');
+		}
 		r.compileBodyContent(function(text){
 			me.text.update(text);
 			setTimeout(function(){
