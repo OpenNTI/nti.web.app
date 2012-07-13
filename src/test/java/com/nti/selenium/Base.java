@@ -30,9 +30,9 @@ public class Base {
 	
 	protected static String url;
 	protected static String books;
+	protected static String browser;
 	protected static String sectionName;
 	protected static String chapterName;
-	protected static String browser;
 	protected static Credentials[] credentials;
 	protected static final Properties propertiesFile = new Properties();
 	
@@ -77,17 +77,21 @@ public class Base {
 		return credentials;
 	}
 	
-	@Before
-	public void setUp() throws Exception{
-		if(browser.equals("chrome")){
+	protected static WebDriver createDriver(final String name) {
+		WebDriver result = null;
+		if (browser.equals("chrome")) {
 			// TODO: ChromeDriver setup
-		}
-		else if(browser.equals("what ever other browsers we need")){
+		} else if(browser.equals("what ever other browsers we need")) { 
 			//TODO: add those browers
+		} else{
+			 result = new FirefoxDriver(); 
 		}
-		else{
-			driver = new FirefoxDriver(); 
-		}
+		return result;
+	}
+	
+	@Before
+	public void setUp() throws Exception {
+		driver = Base.createDriver(browser);
 		selenium = new WebDriverBackedSelenium(driver, url);
 		selenium.open(url);
 	}
@@ -195,16 +199,17 @@ public class Base {
 		final WebElement element = this.findElement("//i"); 
 		element.click();
 	}
-	public String getPageContent(){
+	
+	public String getPageContent() {
 		return XpathUtils.xpathBuilder("div", "class", "page-contents");
 	}
 	
-	public Credentials[] getUsersEmails(int count)
-	{ 
-		Credentials[] usersCredentials = new Credentials  [count]; 
+	public Credentials[] getUsersEmails(final int count) { 
+		final Credentials[] usersCredentials = new Credentials [count]; 
 		for (int i = 0; i < count; i++)
 		{
-			usersCredentials[i] = new Credentials(XpathUtils.buildString("test.user.", Integer.toString(i)), "temp001" );	
+			usersCredentials[i] =
+				new Credentials(XpathUtils.buildString("test.user.", Integer.toString(i)), "temp001" );
 		}
 		return usersCredentials; 
 	}

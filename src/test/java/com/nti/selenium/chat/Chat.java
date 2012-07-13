@@ -7,9 +7,7 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverBackedSelenium;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.firefox.FirefoxDriver;
 
-import com.nti.selenium.XpathUtils;
 import com.nti.selenium.login.Login;
 import com.nti.selenium.login.XpathUtilsLogin;
 import com.thoughtworks.selenium.Selenium;
@@ -20,9 +18,9 @@ public class Chat extends Login {
 	Selenium selenium2;
 	
 	@Before
-	public void setUp() throws Exception{
+	public void setUp() throws Exception {
 		super.setUp();
-		this.driver2 = new FirefoxDriver();
+		this.driver2 = Chat.createDriver(Chat.browser);
 		this.selenium2 = new WebDriverBackedSelenium(driver2, url);
 		this.selenium2.open(url);
 		this.doLogin("pacifique.mahoro@nextthought.com", "pacifique.mahoro");
@@ -30,7 +28,7 @@ public class Chat extends Login {
 	}
 	
 	@After
-	public void tearDown(){
+	public void tearDown() {
 		this.selenium.stop();
 		this.selenium2.stop();
 	}
