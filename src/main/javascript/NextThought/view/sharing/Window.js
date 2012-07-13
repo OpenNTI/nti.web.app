@@ -49,9 +49,16 @@ Ext.define( 'NextThought.view.sharing.Window', {
 		this.items = Ext.clone(this.items);
 		var readOnly = this.record ? !this.record.isModifiable() : false,
 			title = this.titleLabel ? this.titleLabel : readOnly ? 'Item Info' : 'Share this...',
-			content = (this.record ? this.record.getBodyText() : null) || 'This item does not have text',
+			content = 'This item does not have text';
 			u = this.record? this.record.get('Creator') : $AppConfig.username,
 			info = this.items.first();
+
+		if (this.record && this.record.getBodyText) {
+			content = this.record.getBodyText();
+		}
+		else if (this.record) {
+			content = this.record.get('selectedText') || 'Content';
+		}
 
 		//if it is readonly, don't let people select more people they can't share with.
 		if (readOnly){
