@@ -50,7 +50,6 @@ public class Base {
 			final File mp = new File(main.getPath());
 			final String webAppPath = mp.getParent() + "/";
 			final String localPath = "config/main.properties";
-			System.out.println(webAppPath+localPath);
 			is = new FileInputStream(webAppPath + localPath);
 			
 			propertiesFile.load(is);
@@ -60,10 +59,6 @@ public class Base {
 			books = propertiesFile.getProperty("books");
 			chapterName = propertiesFile.getProperty("chapterName");
 			credentials = readCredentials(propertiesFile.getProperty("users"));
-			//System.out.println(webAppPath+localPath);
-			
-			
-			
 		} catch (final IOException e) {
 			System.out.println("couldnt find the config file");
 			System.exit(1);

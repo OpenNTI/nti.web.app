@@ -17,8 +17,7 @@ public class Login extends Base {
 		this.waitForElement(XpathUtilsLogin.getPassword());
 		this.findElement(XpathUtilsLogin.getPassword()).sendKeys(password);
 		this.waitForElement(XpathUtilsLogin.getLoginButton());
-		this.selenium.click(XpathUtilsLogin.getLoginButton());
-//		this.findElement(XpathUtilsLogin.getLoginButton()).click();
+		this.findElement(XpathUtilsLogin.getLoginButton()).click();
 		this.waitForLoading();
 	}
 	
