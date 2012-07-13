@@ -54,8 +54,17 @@ Ext.define('NextThought.controller.Annotations', {
 				'save-new-note' : this.saveNewNote
 			},
 
+			'note-gutter-widget': {
+				'share': this.shareWith
+			},
+
+			'note-reply': {
+				'share': this.shareWith
+			},
+
 			'note-window': {
-				'save-new-reply' : this.saveNewReply
+				'save-new-reply' : this.saveNewReply,
+				'share': this.shareWith
 			},
 
 			'note-entry':{

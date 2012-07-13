@@ -223,6 +223,7 @@
 				position: fixed;
 				margin: -8px 0 0 -1px;
 				padding: 5px 0 10px 0;
+                z-index: 9999;
 
 				li {
 					&:hover { background-color: #efefef; &::after { background-position-x: -20px; } }

@@ -75,8 +75,25 @@ Ext.define('NextThought.view.annotations.note.Templates',{
 	replyOptionsClicked: function(e){
 		e.stopEvent();
 
-		var more = e.getTarget('.more', undefined, true),
-			y, h;
+		var menuItem = e.getTarget('li', undefined, true),
+			more = e.getTarget('.more', undefined, true),
+			y, h, menuCls,
+			re = /\-([a-z])/igm;
+
+		//handle any menu items clicked:
+		if (menuItem) {
+			menuCls = menuItem.getAttribute('class');
+			menuCls = menuCls.replace(re, function(o, c){
+				return c.toUpperCase();
+			});
+			menuCls = 'on' + Ext.String.capitalize(menuCls);
+			if (this[menuCls]){
+				this[menuCls].call(this);
+			}
+			else {
+				console.warn('unimplemented method', menuCls, 'on component', this.$className);
+			}
+		}
 
 		if (!more){return false;}
 

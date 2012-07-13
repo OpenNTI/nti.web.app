@@ -65,12 +65,18 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 		var me = this;
 		me.callParent(arguments);
 
+
 		//decide if we are the first in the parent's list:
 		if (me.ownerCt.items.indexOf(me) === 0) {
 			me.replyBox.addCls('first');
 		}
 
 		me.setRecord(me.record);
+
+		if (this.record.placeHolder) {
+			this.replyBox.remove();
+			return;
+		}
 
 		me.mon(me.replyButton,{
 			scope: me,
@@ -201,6 +207,25 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 
 	addReply: function(record) {
 		this.add({record: record});
+	},
+
+
+	onShare: function(){
+		this.fireEvent('share', this.record);
+	},
+
+
+	onDelete: function(){
+		var r = this.record;
+		if (r.children && r.children.length > 0){
+			//TODO - placeholder with kids....
+			this.replyBox.remove();
+		}
+		else {
+			this.destroy();
+		}
+
+		r.destroy();
 	}
 
 });

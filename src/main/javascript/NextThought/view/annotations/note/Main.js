@@ -205,6 +205,15 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		event.stopPropagation();
 		//control+enter & command+enter submit?
 		//document.queryCommandState('bold')
+	},
+
+	onShare: function(){
+		this.up('window').fireEvent('share', this.record);
+	},
+
+
+	onDelete: function(){
+		this.record.destroy();
 	}
 
 });
