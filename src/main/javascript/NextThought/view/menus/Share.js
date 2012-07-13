@@ -1,5 +1,10 @@
 Ext.define('NextThought.view.menus.Share',{
 	extend: 'Ext.menu.Menu',
+
+	requires: [
+		'NextThought.view.sharing.Window'
+	],
+
 	alias: 'widget.share-menu',
 
 	ui: 'nt',
@@ -22,6 +27,21 @@ Ext.define('NextThought.view.menus.Share',{
 
 	initComponent: function(){
 		this.callParent(arguments);
+
+		//set up custom save win:
+		this.custom = Ext.widget({xtype: 'share-window', closeAction: 'hide'});
+		this.mon(this.custom.down('button[action=save]'), {
+			scope: this,
+			click: function(){
+				this.previousValue = this.getValue();
+				this.custom.close();
+			}
+		});
+		this.mon(this.custom.down('button[action=cancel]'), {
+			scope: this,
+			click: this.revert
+		});
+
 		this.store = Ext.getStore('FriendsList');
 		this.store.on('load', this.reload, this);
 		this.on('click',this.handleClick,this);
@@ -29,24 +49,43 @@ Ext.define('NextThought.view.menus.Share',{
 	},
 
 
-	reload: function(){
+	destroy: function(){
+		this.custom.destroy();
+		delete this.custom;
+		return this.callParent(arguments);
+	},
+
+
+	reload: function(value){
 		this.removeAll(true);
 
-		var p = LocationProvider.getPreferences();
-		p = p ? p.sharing : null;
-		var sharedWith = p ? p.sharedWith : null;
+		var sharedWith, p;
+		if (!Ext.isArray(value)){
+			p = LocationProvider.getPreferences();
+			p = p ? p.sharing : null;
+			value = null;
+		}
+		sharedWith = p ? p.sharedWith : value;
+
+
+		this.custom.setValue(sharedWith);
 
 		if (!Ext.isArray(sharedWith)){sharedWith = [];}
-
-		var items = [];
+		sharedWith = sharedWith.slice(); //clone
+		var items = [],
+			onlyMeChecked = sharedWith.length === 0;
 		//items.push('Share With');
 		items.push({ cls: 'share-with everyone', text: 'Everyone', allowUncheck:false, isEveryone:true });
 		items.push({ cls: 'share-with only-me', text: 'Only Me', isMe: true, isGroup: true,
-			checked: sharedWith.length === 0
+			checked: onlyMeChecked
 		});
+
 
 		this.store.each(function(v){
 			var chkd =  Ext.Array.contains(sharedWith, v.get('Username'));
+			if (chkd){
+				sharedWith = Ext.Array.remove(sharedWith, v.get('Username'));
+			}
 
 			if(/everyone/i.test(v.get('ID'))){
 				items[0].record = v;
@@ -63,13 +102,13 @@ Ext.define('NextThought.view.menus.Share',{
 			});
 		});
 
-		var customChecked = true;
-		Ext.each(items, function(i){
-			if (i.checked){
-				customChecked = false;
-				return false;
-			}
-		});
+		var customChecked = false;
+		if (sharedWith.length) {
+			Ext.each(items, function(i){
+				delete i.checked;
+			});
+			customChecked = true;
+		}
 
 		items.push({ cls: 'share-with custom', text: 'Custom', allowUncheck:false, isCustom:true, checked: customChecked });
 
@@ -104,8 +143,14 @@ Ext.define('NextThought.view.menus.Share',{
 			custom.setChecked(false, true);
 		}
 
+		if (item.isCustom){
+			this.custom.show();
+			this.hide();
+		}
+
 
 		this.fireEvent('changed',this);
+		this.previousValue = this.getValue();
 	},
 
 
@@ -132,7 +177,7 @@ Ext.define('NextThought.view.menus.Share',{
 			return [];
 		}
 		else if (c.checked) {
-			return []; //TODO - get val from win
+			return this.custom.getValue();
 		}
 
 		var result = [];
@@ -141,5 +186,10 @@ Ext.define('NextThought.view.menus.Share',{
 			result.push(c.record.get('Username'));
 		});
 		return result;
+	},
+
+	revert: function(){
+		this.reload(this.previousValue);
+		this.fireEvent('changed',this);
 	}
 });

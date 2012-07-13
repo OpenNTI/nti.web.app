@@ -37,7 +37,7 @@ Ext.define( 'NextThought.view.sharing.Window', {
 			defaults: {ui: 'primary', scale: 'medium'},
 			items: [
 				{xtype: 'button', text: 'Save', action: 'save'},
-				{xtype: 'button', text: 'Cancel', ui: 'secondary', handler: function(btn){
+				{xtype: 'button', text: 'Cancel', action: 'cancel', ui: 'secondary', handler: function(btn){
 					btn.up('window').close();
 				}}
 			]
@@ -49,7 +49,7 @@ Ext.define( 'NextThought.view.sharing.Window', {
 		this.items = Ext.clone(this.items);
 		var readOnly = this.record ? !this.record.isModifiable() : false,
 			title = this.titleLabel ? this.titleLabel : readOnly ? 'Item Info' : 'Share this...',
-			content = this.record.getBodyText() || 'This item does not have text',
+			content = (this.record ? this.record.getBodyText() : null) || 'This item does not have text',
 			u = this.record? this.record.get('Creator') : $AppConfig.username,
 			info = this.items.first();
 
@@ -60,30 +60,49 @@ Ext.define( 'NextThought.view.sharing.Window', {
 			delete this.items.last().items[0];
 		}
 
-		info.renderData = {
-			title: title,
-			content: content,
-			model: this.record? this.record.getModelName() : 'No Data',
-			name: 'resolving...'
-		};
+		if (this.record){
+			info.renderData = {
+				title: title,
+				content: content,
+				model: this.record? this.record.getModelName() : 'No Data',
+				name: 'resolving...'
+			};
 
-		UserRepository.getUser(u, function(users){
-			if (!info.rendered) {
-				Ext.apply(info.renderData, {
-					avatarURL: users[0].get('avatarURL'),
-					name: users[0].getName()
-				});
-			}
-			else {
-				info.avatar.set({src: users[0].get('avatarURL')});
-				info.name.update(users[0].get('realname'));
-			}
+			UserRepository.getUser(u, function(users){
+				if (!info.rendered) {
+					Ext.apply(info.renderData, {
+						avatarURL: users[0].get('avatarURL'),
+						name: users[0].getName()
+					});
+				}
+				else {
+					info.avatar.set({src: users[0].get('avatarURL')});
+					info.name.update(users[0].get('realname'));
+				}
 
-		}, this);
+			}, this);
+		}
+		else {
+			//if no record, kill the parts that depend on it...
+			this.items = this.items.slice(1);
+		}
 
 		this.callParent(arguments);
 
 		//any down calls below this:
-		this.down('user-list').setValue(this.record.get('sharedWith'));
+		if (this.record){
+			this.setValue(this.record.get('sharedWith'));
+		}
+		else if (this.value) {
+			this.setValue(this.value);
+		}
+	},
+
+	getValue: function(){
+		return this.down('user-list').getValue();
+	},
+
+	setValue: function(v) {
+		this.down('user-list').setValue(v);
 	}
 });

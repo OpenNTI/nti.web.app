@@ -173,7 +173,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 	noteOverlayLocationChanged: function(ntiid) {
 		var o = this.noteOverlayData;
 
-		o.editorActions.updatePrefs();
+		if (o.editorActions) {o.editorActions.updatePrefs();}
 	},
 
 

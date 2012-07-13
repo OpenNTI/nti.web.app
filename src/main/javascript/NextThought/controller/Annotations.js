@@ -77,7 +77,7 @@ Ext.define('NextThought.controller.Annotations', {
 			'noteeditor button[action=discuss]':{ 'click': this.onDiscussNote },
 			//'noteeditor button[action=cancel]':{ 'click': this.onCancelNote },
 
-			'share-window button[action=save]':{
+			'share-window[record] button[action=save]':{
 				'click': this.onShareWithSaveClick
 			},
 
@@ -103,6 +103,7 @@ Ext.define('NextThought.controller.Annotations', {
 
 
 	onShareWithSaveClick: function(btn){
+		debugger;
 		var win = btn.up('window'),
 			shbx= win.down('user-list'),
 			v = shbx.getValue(),
