@@ -53,5 +53,9 @@ Ext.define('NextThought.view.annotations.note.Window',{
 		if(this.isReply) {
 			this.down('note-main-view').activateReplyEditor();
 		}
+
+		if(this.isEdit){
+			this.down('note-main-view').activateMainEditor();
+		}
 	}
 });

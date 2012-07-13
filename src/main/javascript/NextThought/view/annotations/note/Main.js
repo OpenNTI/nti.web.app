@@ -86,7 +86,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 
 		me.mon(me.editor.down('.save'),{
 			scope: me,
-			click: me.saveReply
+			click: me.editorSaved
 		});
 
 		me.mon(me.editor.down('.content'),{
@@ -141,10 +141,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		var commonAncestor = range.commonAncestorContainer,
 			ancestorText = commonAncestor.innerText,
 			suppressed = r.get('style') === 'suppressed',
-			selectedText = range.toString(),
-			docFrag = range.cloneContents();
-
-		console.log(ancestorText, selectedText, RegExp.escape(selectedText));
+			selectedText = range.toString();
 
 		if (!suppressed){
 			ancestorText = ancestorText.replace(selectedText, this.highlightTpl.apply([selectedText]));
@@ -160,6 +157,20 @@ Ext.define('NextThought.view.annotations.note.Main',{
 	fillInUser: function(user){
 		if(Ext.isArray(user)){user = user[0];}
 		this.name.update(user.getName());
+	},
+
+
+	editorSaved: function(){
+		if(!this.mainContentEdit){
+			return this.saveReply();
+		}
+
+		var v = this.editorActions.getValue();
+
+		this.record.set('body', v.body);
+		this.record.set('sharedWith', v.shareWith);
+		this.record.save();
+		this.up('window').close();
 	},
 
 
@@ -179,6 +190,16 @@ Ext.define('NextThought.view.annotations.note.Main',{
 	},
 
 
+	activateMainEditor: function(){
+		this.activateReplyEditor();
+		//TODO: update this to build up the whiteboards...
+		this.editorActions.setHTML(this.text.getHTML());
+		this.editorActions.updatePrefs(this.record.get('sharedWith'));
+		this.text.hide();
+		this.mainContentEdit = true;
+	},
+
+
 	activateReplyEditor: function(){
 		var me = this;
 		me.el.addCls('editor-active');
@@ -187,6 +208,8 @@ Ext.define('NextThought.view.annotations.note.Main',{
 	},
 
 	deactivateReplyEditor: function(){
+		delete this.mainContentEdit;
+		this.text.show();
 		this.el.removeCls('editor-active');
 		this.doComponentLayout();
 	},

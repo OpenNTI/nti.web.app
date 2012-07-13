@@ -5,6 +5,19 @@ Ext.define('NextThought.model.Note', {
 		bodyContent: 'NextThought.mixins.ModelWithBodyContent'
 	},
 
+	statics: {
+		createFromHighlight: function(hl){
+			return this.create({
+				ContainerId: hl.get('ContainerId'),
+				sharedWith: hl.get('sharedWith'),
+				prohibitReSharing: hl.get('prohibitReSharing'),
+				tags: hl.get('tags'),
+				selectedText: hl.get('selectedText'),
+				applicableRange: hl.get('applicableRange')
+			});
+		}
+	},
+
 	requires: [
 		'NextThought.model.anchorables.DomContentRangeDescription',
 		'NextThought.model.converters.ContentRangeDescription'

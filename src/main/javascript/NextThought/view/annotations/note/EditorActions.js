@@ -244,8 +244,8 @@ Ext.define('NextThought.view.annotations.note.EditorActions',{
 		window.getSelection().removeAllRanges();
 	},
 
-	updatePrefs: function(){
-		this.shareMenu.reload();
+	updatePrefs: function(v){
+		this.shareMenu.reload(v);
 		this.updateShareWithLabel();
 	}
 

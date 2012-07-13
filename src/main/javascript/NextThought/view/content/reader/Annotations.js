@@ -160,6 +160,20 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 
 		menu = w.getMenu();
 
+		menu.add({
+			text: 'Add Note',
+			handler: function(){
+				delete w.range; //so that it does not detach it on cleanup
+				var r = NextThought.model.Note.createFromHighlight(record);
+				r.set('style','plain');
+				var n = me.createAnnotationWidget('note',r, range);
+				r.save({success: function(rec){
+					n.attachRecord(rec);
+					n.openWindow(false,true);
+				}});
+			}
+		});
+
 		//inject other menu items:
 		menu.add({
 			text: 'Redact Inline',
