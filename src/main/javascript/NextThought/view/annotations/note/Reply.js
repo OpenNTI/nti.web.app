@@ -44,6 +44,7 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 	]).compile(),
 
 	renderSelectors: {
+		replyBox: '.note-reply',
 		liked: '.meta .controls .like',
 		favorites: '.meta .controls .favorite',
 		name: '.meta .name',
@@ -62,6 +63,11 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 	afterRender: function(){
 		var me = this;
 		me.callParent(arguments);
+
+		//decide if we are the first in the parent's list:
+		if (me.ownerCt.items.indexOf(me) === 0) {
+			me.replyBox.addCls('first');
+		}
 
 		me.setRecord(me.record);
 
@@ -162,14 +168,14 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 
 
 	activateReplyEditor: function(){
-		this.el.down('.note-reply').addCls('editor-active');
+		this.replyBox.addCls('editor-active');
 		this.doLayout();
 		this.doComponentLayout();
 	},
 
 
 	deactivateReplyEditor: function(){
-		this.el.down('.note-reply').removeCls('editor-active');
+		this.replyBox.removeCls('editor-active');
 		this.doLayout();
 		this.doComponentLayout();
 	},

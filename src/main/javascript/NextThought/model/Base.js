@@ -151,14 +151,18 @@ Ext.define('NextThought.model.Base', {
 
 
 	postTo: function(link, callback){
-		var l = this.getLink(link);
+		var me = this,
+			l = this.getLink(link);
 		if (l) {
 			Ext.Ajax.request({
 				url: l,
 				jsonData: '',
 				method: 'POST',
 				scope: this,
-				callback: function(r, s){Ext.callback(callback, null, [s]);}
+				callback: function(r, s, response){
+					me.set(Ext.JSON.decode(response.responseText));
+					Ext.callback(callback, null, [s]);
+				}
 			});
 		}
 	},
