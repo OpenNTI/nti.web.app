@@ -44,7 +44,7 @@ Ext.define('NextThought.model.Note', {
 	},
 
 
-	getBubbleTarget: function(){
+	getBubbleParent: function(){
 		return this.parent;
 	},
 

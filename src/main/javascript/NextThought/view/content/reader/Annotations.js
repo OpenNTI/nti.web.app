@@ -459,7 +459,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 				p.children = p.children || [];
 				p.children.push(r);
 
-				r.parent = parent;
+				r.parent = p;
 			}
 		});
 
