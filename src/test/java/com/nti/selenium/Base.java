@@ -34,10 +34,16 @@ public class Base {
 	protected static String sectionName;
 	protected static String chapterName;
 	protected static Credentials[] credentials;
+	protected static String[] searchUserNames;
 	protected static final Properties propertiesFile = new Properties();
 	
 	protected WebDriver driver;
-	protected Selenium selenium;
+	protected WebDriver driver1;
+	protected WebDriver driver2;
+	protected WebDriver driver3;
+	protected Selenium selenium1;
+	protected Selenium selenium2;
+	protected Selenium selenium3;
 	protected boolean isDefault = true;
 	protected String xpathBuilder = null;
 	
@@ -91,14 +97,19 @@ public class Base {
 	
 	@Before
 	public void setUp() throws Exception {
-		driver = Base.createDriver(browser);
-		selenium = new WebDriverBackedSelenium(driver, url);
-		selenium.open(url);
+		driver1 = Base.createDriver(browser);
+		selenium1 = new WebDriverBackedSelenium(driver1, url);
+		selenium1.open(url);
+		driver = driver1;
 	}
 	
 	@After
 	public void tearDown() throws Exception{
-		selenium.stop();
+		selenium1.stop();
+	}
+	
+	public void setActiverDriver(WebDriver driver){
+		this.driver = driver;
 	}
 	
 	public String findContentFrameBodyElement() {
@@ -210,6 +221,15 @@ public class Base {
 		{
 			usersCredentials[i] =
 				new Credentials(XpathUtils.buildString("test.user.", Integer.toString(i+1)), "temp001" );
+		}
+		return usersCredentials; 
+	}
+	
+	public String[] getSearchUserNames(final int count) { 
+		final String[] usersCredentials = new String[count]; 
+		for (int i = 0; i < count; i++)
+		{
+			usersCredentials[i] = new String(XpathUtils.buildString("Test User ", Integer.toString(i+10)));
 		}
 		return usersCredentials; 
 	}

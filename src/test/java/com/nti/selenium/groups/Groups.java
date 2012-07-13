@@ -60,7 +60,7 @@ public class Groups extends Navigation {
 		
 		finally 
 		{
-			selenium.stop(); 
+			selenium1.stop(); 
 		}
 
 
@@ -127,7 +127,21 @@ public class Groups extends Navigation {
 		//		return bool; 
 	}
 
-	public void  addOnePersonToGroup()
+	public void addPeopleToGroup(String...strings){
+		String time = Long.toString(System.currentTimeMillis());
+		this.addGroup(time);
+		for(String str: strings){
+			this.findElement(XpathUtilsGroups.getInputUsername()).sendKeys(str);
+			this.waitForElement(XpathUtilsGroups.getPersonGroupItem(str));
+			this.findElement(XpathUtilsGroups.getPersonGroupItem(str)).click();
+			this.waitForElement("//div[text()='" + time + "']");
+			this.findElement("//div[text()='" + time + "']").click();
+			this.waitForElement("//span[text()='Finish']");
+			this.findElement("//span[text()='Finish']").click();
+		}
+	}
+	
+	public void  addOnePersonToGroup(int userSearchNumber)
 	{
 		this.addGroup("TestGroup"); 
 		this.findElement(XpathUtilsGroups.getInputUsername()).sendKeys(credentials[1].getUserName());
