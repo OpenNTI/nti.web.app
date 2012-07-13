@@ -35,17 +35,19 @@ Ext.define('NextThought.view.annotations.Highlight', {
 
 
 	cleanup: function(){
-		var c = this.rendered.slice();
-		this.rendered = [];
+		if (this.rendered) {
+			var c = this.rendered.slice();
+			this.rendered = [];
 
-		if( this.range ){
-			this.range.detach();
-			delete this.range;
+			if( this.range ){
+				this.range.detach();
+				delete this.range;
+			}
+
+			Ext.fly(this.canvas).remove();
+			Ext.fly(this.counter).remove();
+			Ext.each(c,this.unwrap,this);
 		}
-
-		Ext.fly(this.canvas).remove();
-		Ext.fly(this.counter).remove();
-		Ext.each(c,this.unwrap,this);
 		return this.callParent(arguments);
 	},
 
