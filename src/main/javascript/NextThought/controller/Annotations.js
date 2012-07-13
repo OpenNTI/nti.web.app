@@ -103,11 +103,12 @@ Ext.define('NextThought.controller.Annotations', {
 
 
 	onShareWithSaveClick: function(btn){
-		debugger;
 		var win = btn.up('window'),
 			shbx= win.down('user-list'),
 			v = shbx.getValue(),
 			rec = win.record;
+
+		if (!rec){return;}
 
 		win.el.mask('Sharing...');
 
@@ -317,7 +318,7 @@ Ext.define('NextThought.controller.Annotations', {
 	shareWith: function(record){
 		var options = {};
 
-		if (Ext.ComponentQuery.query('share-window').length > 0) {
+		if (Ext.ComponentQuery.query('share-window[record]').length > 0) {
 			//already a share with window, they are modal, just don't do this:
 			return;
 		}
