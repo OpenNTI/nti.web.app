@@ -1,10 +1,21 @@
 package com.nti.selenium.myaccount;
 
+import org.junit.Before;
+
 import com.nti.selenium.login.Login;
 import com.nti.selenium.login.XpathUtilsLogin;
 
 public class MyAccount extends Login{
 
+	String[] searchUserNames;
+	
+	@Before
+	public void setUp() throws Exception{
+		super.setUp();
+		this.login();
+		this.searchUserNames = this.getSearchUserNames(2);
+	}
+	
 	public void clickOptionsMyAccountButton(){
 		this.findElement(XpathUtilsLogin.getOptions()).click();
 		this.waitForElement(XpathUtilsMyAccount.getMyAccountButton());

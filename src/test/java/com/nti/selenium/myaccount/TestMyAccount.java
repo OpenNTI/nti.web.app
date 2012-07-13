@@ -17,20 +17,24 @@ public class TestMyAccount extends MyAccount{
 	@Test
 	public void testInputRealName(){
 		this.clickOptionsMyAccountButton();
+		assertTrue(this.elementExists(XpathUtilsMyAccount.getRealNameInput()));
+		assertTrue(this.elementExists(XpathUtilsMyAccount.getAliasInput()));
 		this.findElement(XpathUtilsMyAccount.getRealNameInput()).sendKeys("Test");
-		this.wait_(3);
 	}
 	
 	@Test
 	public void testInputAlias(){
 		this.clickOptionsMyAccountButton();
+		assertTrue(this.elementExists(XpathUtilsMyAccount.getRealNameInput()));
+		assertTrue(this.elementExists(XpathUtilsMyAccount.getAliasInput()));
 		this.findElement(XpathUtilsMyAccount.getAliasInput()).sendKeys("Test");
-		this.wait_(3);
 	}
 	
 	@Test
 	public void testClickChangePasswordLink(){
 		this.clickOptionsMyAccountButton();
+		assertTrue(this.elementExists(XpathUtilsMyAccount.getRealNameInput()));
+		assertTrue(this.elementExists(XpathUtilsMyAccount.getAliasInput()));
 		this.clickChangePasswordLink();
 		assertTrue(this.elementExists(XpathUtilsMyAccount.getChangePasswordInput()));
 		assertTrue(this.elementExists(XpathUtilsMyAccount.getVerifyPasswordInput()));
@@ -39,28 +43,40 @@ public class TestMyAccount extends MyAccount{
 	@Test
 	public void testEnterTextInChangePasswordInput(){
 		this.clickOptionsMyAccountButton();
+		assertTrue(this.elementExists(XpathUtilsMyAccount.getRealNameInput()));
+		assertTrue(this.elementExists(XpathUtilsMyAccount.getAliasInput()));
 		this.clickChangePasswordLink();
+		assertTrue(this.elementExists(XpathUtilsMyAccount.getChangePasswordInput()));
+		assertTrue(this.elementExists(XpathUtilsMyAccount.getVerifyPasswordInput()));
 		this.findElement(XpathUtilsMyAccount.getChangePasswordInput()).sendKeys("new password");
 	}
 	
 	@Test
 	public void testEnterTextInVerifyPasswordInput(){
 		this.clickOptionsMyAccountButton();
+		assertTrue(this.elementExists(XpathUtilsMyAccount.getRealNameInput()));
+		assertTrue(this.elementExists(XpathUtilsMyAccount.getAliasInput()));
 		this.clickChangePasswordLink();
+		assertTrue(this.elementExists(XpathUtilsMyAccount.getChangePasswordInput()));
+		assertTrue(this.elementExists(XpathUtilsMyAccount.getVerifyPasswordInput()));
 		this.findElement(XpathUtilsMyAccount.getVerifyPasswordInput()).sendKeys("new password");
 	}
 	
 	@Test
 	public void testEnterTextInAccepting(){
 		this.clickOptionsMyAccountButton();
-		this.enterTextInAccepting("carlos");
-		this.waitForElement(XpathUtilsMyAccount.findNameOptions("Carlos Sanchez"));
-		assertTrue(this.elementExists(XpathUtilsMyAccount.findNameOptions("Carlos Sanchez")));
+		assertTrue(this.elementExists(XpathUtilsMyAccount.getRealNameInput()));
+		assertTrue(this.elementExists(XpathUtilsMyAccount.getAliasInput()));
+		this.enterTextInAccepting(this.searchUserNames[0]);
+		this.waitForElement(XpathUtilsMyAccount.findNameOptions(this.searchUserNames[0]));
+		assertTrue(this.elementExists(XpathUtilsMyAccount.findNameOptions(this.searchUserNames[0])));
 	}
 	
 	@Test
 	public void testClickAcceptingDropDownArrow(){
 		this.clickOptionsMyAccountButton();
+		assertTrue(this.elementExists(XpathUtilsMyAccount.getRealNameInput()));
+		assertTrue(this.elementExists(XpathUtilsMyAccount.getAliasInput()));
 		this.clickAcceptingDropDownArrow();
 		assertTrue(this.elementExists(XpathUtilsMyAccount.getMyAccountOtherPeopleEveryoneOption()));
 	}
@@ -68,40 +84,54 @@ public class TestMyAccount extends MyAccount{
 	@Test
 	public void testAcceptingContact(){
 		this.clickOptionsMyAccountButton();
-		this.enterTextInAccepting("carlos");
-		this.waitForElement(XpathUtilsMyAccount.findNameOptions("Carlos Sanchez"));
-		this.clickContact("Carlos Sanchez");
-		assertTrue(this.elementExists(XpathUtilsMyAccount.findNameToken("Carlos Sanchez")));
+		assertTrue(this.elementExists(XpathUtilsMyAccount.getRealNameInput()));
+		assertTrue(this.elementExists(XpathUtilsMyAccount.getAliasInput()));
+		this.enterTextInAccepting(this.searchUserNames[0]);
+		this.waitForElement(XpathUtilsMyAccount.findNameOptions(this.searchUserNames[0]));
+		assertTrue(this.elementExists(XpathUtilsMyAccount.findNameOptions(this.searchUserNames[0])));
+		this.clickContact(this.searchUserNames[0]);
+		assertTrue(this.elementExists(XpathUtilsMyAccount.findNameToken(this.searchUserNames[0])));
 	}
 	
 	@Test
 	public void testAcceptingMultipleContacts(){
 		this.clickOptionsMyAccountButton();
-		this.enterTextInAccepting("carlos");
-		this.waitForElement(XpathUtilsMyAccount.findNameOptions("Carlos Sanchez"));
-		this.clickContact("Carlos Sanchez");
-		this.enterTextInAccepting("chris");
-		this.waitForElement(XpathUtilsMyAccount.findNameOptions("Chris Utz"));
-		this.clickContact("Chris Utz");
-		assertTrue(this.elementExists(XpathUtilsMyAccount.findNameToken("Carlos Sanchez")));
-		assertTrue(this.elementExists(XpathUtilsMyAccount.findNameToken("Chris Utz")));
+		assertTrue(this.elementExists(XpathUtilsMyAccount.getRealNameInput()));
+		assertTrue(this.elementExists(XpathUtilsMyAccount.getAliasInput()));
+		this.enterTextInAccepting(this.searchUserNames[0]);
+		this.waitForElement(XpathUtilsMyAccount.findNameOptions(this.searchUserNames[0]));
+		assertTrue(this.elementExists(XpathUtilsMyAccount.findNameOptions(this.searchUserNames[0])));
+		this.clickContact(this.searchUserNames[0]);
+		assertTrue(this.elementExists(XpathUtilsMyAccount.findNameToken(this.searchUserNames[0])));
+		this.enterTextInAccepting(this.searchUserNames[1]);
+		this.waitForElement(XpathUtilsMyAccount.findNameOptions(this.searchUserNames[1]));
+		assertTrue(this.elementExists(XpathUtilsMyAccount.findNameOptions(this.searchUserNames[1])));
+		this.clickContact(this.searchUserNames[1]);
+		assertTrue(this.elementExists(XpathUtilsMyAccount.findNameToken(this.searchUserNames[1])));
 	}
 	
 	@Test
 	public void testAcceptingRemoveContact(){
 		this.clickOptionsMyAccountButton();
-		this.enterTextInAccepting("carlos");
-		this.waitForElement(XpathUtilsMyAccount.findNameOptions("Carlos Sanchez"));
-		this.clickContact("Carlos Sanchez");
-		this.removeContact("Carlos Sanchez");
-		assertFalse(this.elementExists(XpathUtilsMyAccount.findNameToken("Carlos Sanchez")));
+		assertTrue(this.elementExists(XpathUtilsMyAccount.getRealNameInput()));
+		assertTrue(this.elementExists(XpathUtilsMyAccount.getAliasInput()));
+		this.enterTextInAccepting(this.searchUserNames[0]);
+		this.waitForElement(XpathUtilsMyAccount.findNameOptions(this.searchUserNames[0]));
+		assertTrue(this.elementExists(XpathUtilsMyAccount.findNameOptions(this.searchUserNames[0])));
+		this.clickContact(this.searchUserNames[0]);
+		assertTrue(this.elementExists(XpathUtilsMyAccount.findNameToken(this.searchUserNames[0])));
+		this.removeContact(this.searchUserNames[0]);
+		assertFalse(this.elementExists(XpathUtilsMyAccount.findNameToken(this.searchUserNames[0])));
 	}
 	
 	@Test
 	public void testAcceptingEveryone(){
 		this.clickOptionsMyAccountButton();
+		assertTrue(this.elementExists(XpathUtilsMyAccount.getRealNameInput()));
+		assertTrue(this.elementExists(XpathUtilsMyAccount.getAliasInput()));
 		this.clickAcceptingDropDownArrow();
 		this.waitForElement(XpathUtilsMyAccount.getMyAccountOtherPeopleEveryoneOption());
+		assertTrue(this.elementExists(XpathUtilsMyAccount.getMyAccountOtherPeopleEveryoneOption()));
 		this.clickEveryoneOption();
 		assertTrue(this.elementExists(XpathUtilsMyAccount.findNameToken("Everyone")));
 	}
@@ -109,14 +139,18 @@ public class TestMyAccount extends MyAccount{
 	@Test
 	public void testEnterTextInIgnoring(){
 		this.clickOptionsMyAccountButton();
-		this.enterTextInIgnoring("carlos");
-		this.waitForElement(XpathUtilsMyAccount.findNameOptions("Carlos Sanchez"));
-		assertTrue(this.elementExists(XpathUtilsMyAccount.findNameOptions("Carlos Sanchez")));
+		assertTrue(this.elementExists(XpathUtilsMyAccount.getRealNameInput()));
+		assertTrue(this.elementExists(XpathUtilsMyAccount.getAliasInput()));
+		this.enterTextInIgnoring(this.searchUserNames[0]);
+		this.waitForElement(XpathUtilsMyAccount.findNameOptions(this.searchUserNames[0]));
+		assertTrue(this.elementExists(XpathUtilsMyAccount.findNameOptions(this.searchUserNames[0])));
 	}
 	
 	@Test
 	public void testClickIgnoringDropDownArrow(){
 		this.clickOptionsMyAccountButton();
+		assertTrue(this.elementExists(XpathUtilsMyAccount.getRealNameInput()));
+		assertTrue(this.elementExists(XpathUtilsMyAccount.getAliasInput()));
 		this.clickIgnoringDropDownArrow();
 		assertTrue(this.elementExists(XpathUtilsMyAccount.getMyAccountOtherPeopleEveryoneOption()));
 	}
@@ -124,28 +158,37 @@ public class TestMyAccount extends MyAccount{
 	@Test
 	public void testIgnoringContact(){
 		this.clickOptionsMyAccountButton();
-		this.enterTextInIgnoring("carlos");
-		this.waitForElement(XpathUtilsMyAccount.findNameOptions("Carlos Sanchez"));
-		this.clickContact("Carlos Sanchez");
-		assertTrue(this.elementExists(XpathUtilsMyAccount.findNameToken("Carlos Sanchez")));
+		assertTrue(this.elementExists(XpathUtilsMyAccount.getRealNameInput()));
+		assertTrue(this.elementExists(XpathUtilsMyAccount.getAliasInput()));
+		this.enterTextInIgnoring(this.searchUserNames[0]);
+		this.waitForElement(XpathUtilsMyAccount.findNameOptions(this.searchUserNames[0]));
+		assertTrue(this.elementExists(XpathUtilsMyAccount.findNameOptions(this.searchUserNames[0])));
+		this.clickContact(this.searchUserNames[0]);
+		assertTrue(this.elementExists(XpathUtilsMyAccount.findNameToken(this.searchUserNames[0])));
 	}
 	
 	@Test
 	public void testIgnoringMultipleContacts(){
 		this.clickOptionsMyAccountButton();
-		this.enterTextInAccepting("carlos");
-		this.waitForElement(XpathUtilsMyAccount.findNameOptions("Carlos Sanchez"));
-		this.clickContact("Carlos Sanchez");
-		this.enterTextInAccepting("chris");
-		this.waitForElement(XpathUtilsMyAccount.findNameOptions("Chris Utz"));
-		this.clickContact("Chris Utz");
-		assertTrue(this.elementExists(XpathUtilsMyAccount.findNameToken("Carlos Sanchez")));
-		assertTrue(this.elementExists(XpathUtilsMyAccount.findNameToken("Chris Utz")));
+		assertTrue(this.elementExists(XpathUtilsMyAccount.getRealNameInput()));
+		assertTrue(this.elementExists(XpathUtilsMyAccount.getAliasInput()));
+		this.enterTextInAccepting(this.searchUserNames[0]);
+		this.waitForElement(XpathUtilsMyAccount.findNameOptions(this.searchUserNames[0]));
+		assertTrue(this.elementExists(XpathUtilsMyAccount.findNameOptions(this.searchUserNames[0])));
+		this.clickContact(this.searchUserNames[0]);
+		assertTrue(this.elementExists(XpathUtilsMyAccount.findNameToken(this.searchUserNames[0])));
+		this.enterTextInAccepting(this.searchUserNames[1]);
+		this.waitForElement(XpathUtilsMyAccount.findNameOptions(this.searchUserNames[1]));
+		assertTrue(this.elementExists(XpathUtilsMyAccount.findNameOptions(this.searchUserNames[1])));
+		this.clickContact(this.searchUserNames[1]);
+		assertTrue(this.elementExists(XpathUtilsMyAccount.findNameToken(this.searchUserNames[1])));
 	}
 	
 	@Test
 	public void testIgnoringEveryone(){
 		this.clickOptionsMyAccountButton();
+		assertTrue(this.elementExists(XpathUtilsMyAccount.getRealNameInput()));
+		assertTrue(this.elementExists(XpathUtilsMyAccount.getAliasInput()));
 		this.clickIgnoringDropDownArrow();
 		this.waitForElement(XpathUtilsMyAccount.getMyAccountOtherPeopleEveryoneOption());
 		this.clickEveryoneOption();
@@ -155,16 +198,22 @@ public class TestMyAccount extends MyAccount{
 	@Test
 	public void testIgnoringRemoveContact(){
 		this.clickOptionsMyAccountButton();
-		this.enterTextInIgnoring("carlos");
-		this.waitForElement(XpathUtilsMyAccount.findNameOptions("Carlos Sanchez"));
-		this.clickContact("Carlos Sanchez");
-		this.removeContact("Carlos Sanchez");
-		assertFalse(this.elementExists(XpathUtilsMyAccount.findNameToken("Carlos Sanchez")));
+		assertTrue(this.elementExists(XpathUtilsMyAccount.getRealNameInput()));
+		assertTrue(this.elementExists(XpathUtilsMyAccount.getAliasInput()));
+		this.enterTextInIgnoring(this.searchUserNames[0]);
+		this.waitForElement(XpathUtilsMyAccount.findNameOptions(this.searchUserNames[0]));
+		assertTrue(this.elementExists(XpathUtilsMyAccount.findNameOptions(this.searchUserNames[0])));
+		this.clickContact(this.searchUserNames[0]);
+		assertTrue(this.elementExists(XpathUtilsMyAccount.findNameToken(this.searchUserNames[0])));
+		this.removeContact(this.searchUserNames[0]);
+		assertFalse(this.elementExists(XpathUtilsMyAccount.findNameToken(this.searchUserNames[0])));
 	}
 	
 	@Test
 	public void testSaveButton(){
 		this.clickOptionsMyAccountButton();
+		assertTrue(this.elementExists(XpathUtilsMyAccount.getRealNameInput()));
+		assertTrue(this.elementExists(XpathUtilsMyAccount.getAliasInput()));
 		this.clickSaveButton();
 		assertFalse(this.elementExists(XpathUtilsMyAccount.getSaveButton()));
 	}
@@ -172,6 +221,8 @@ public class TestMyAccount extends MyAccount{
 	@Test
 	public void testCancelButton(){
 		this.clickOptionsMyAccountButton();
+		assertTrue(this.elementExists(XpathUtilsMyAccount.getRealNameInput()));
+		assertTrue(this.elementExists(XpathUtilsMyAccount.getAliasInput()));
 		this.clickCancelButton();
 		assertFalse(this.elementExists(XpathUtilsMyAccount.getCancelButton()));
 	}
