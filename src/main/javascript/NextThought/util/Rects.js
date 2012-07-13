@@ -19,14 +19,17 @@ Ext.define('NextThought.util.Rects',{
 			xx = ri.right || (x + ri.height);
 			yy = ri.bottom || (y + ri.width);
 
-			b = Math.floor(y+(h/2));//vertical center line of the rect
+			var tolerance = 3;
 
-			if(!bins[b]){
+			b = Math.floor((y+h/2) / tolerance);//center line of the rect
+
+			if(!bins[b] && !bins[b+1]){
 				r.push( { left:x, top:y, right:xx, bottom:yy, width:w, height:h } );
-				bins[b] = r.peek();
+				bins[b] = r.length;
+				bins[b+1] = r.length; //Each bin points to the rectangle occupying it
 			}
 			else {
-				b = bins[b];
+                b = r[(bins[b] || bins[b+1]) - 1];
 				b.left = b.left < x? b.left : x;
 				b.top = b.top < y? b.top : y;
 				b.right = b.right > xx ? b.right : xx;
@@ -37,7 +40,6 @@ Ext.define('NextThought.util.Rects',{
 			}
 
 		}
-
 		return r;
 
 	},
