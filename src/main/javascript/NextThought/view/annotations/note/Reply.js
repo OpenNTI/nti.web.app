@@ -218,7 +218,6 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 	onDelete: function(){
 		var r = this.record;
 		if (r.children && r.children.length > 0){
-			//TODO - placeholder with kids....
 			this.replyBox.remove();
 		}
 		else {
