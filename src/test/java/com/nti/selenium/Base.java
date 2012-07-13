@@ -209,7 +209,7 @@ public class Base {
 		for (int i = 0; i < count; i++)
 		{
 			usersCredentials[i] =
-				new Credentials(XpathUtils.buildString("test.user.", Integer.toString(i)), "temp001" );
+				new Credentials(XpathUtils.buildString("test.user.", Integer.toString(i+1)), "temp001" );
 		}
 		return usersCredentials; 
 	}

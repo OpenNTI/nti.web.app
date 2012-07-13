@@ -9,6 +9,7 @@ public class Login extends Base {
 	@Before
 	public void setUp() throws Exception{
 		super.setUp();
+		credentials = this.getUsersEmails(1);
 	}
 	
 	protected void doLogin(final String username, final String password) {
