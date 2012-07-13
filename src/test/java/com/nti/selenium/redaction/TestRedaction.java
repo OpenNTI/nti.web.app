@@ -4,9 +4,7 @@ import org.junit.Test;
 
 public class TestRedaction extends Redaction { 
 	
-	
-
-	//@Test 
+	@Test 
 	public void testCreateRedaction(){ 
 		this.createRedaction();
 	}

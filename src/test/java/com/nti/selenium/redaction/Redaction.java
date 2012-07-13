@@ -11,13 +11,15 @@ import com.nti.selenium.navigation.Navigation;
 
 public class Redaction extends Navigation { 
 	
+	String[] searchUserNames;
+	
 	@Before
 	public void setUp() throws Exception{
 		super.setUp();
 		this.navigateTo("Criminal Procedure", "MIRANDA v. ARIZONA.", "Opinion of the Court");
+		this.searchUserNames = this.getSearchUserNames(1);
 	}
 	
-
 	@After 
 	public void tearDown(){ 
 		final List <WebElement> elements = this.findElements(XpathUtilsRedaction.getRedaction());
@@ -60,7 +62,7 @@ public class Redaction extends Navigation {
 		
 		element = this.findElement(XpathUtilsRedaction.setEnterUsername()); 
 		element.click();
-		element.sendKeys("Pacifique");
+		element.sendKeys(this.searchUserNames[0]);
 		element.sendKeys (Keys.ENTER);
 	}
 }
