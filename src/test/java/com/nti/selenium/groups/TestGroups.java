@@ -17,18 +17,19 @@ public class TestGroups extends Groups {
 	//@Test 
 	public void testAddGroup()
 	{ 
-		this.addGroup("TestGroup");
-		
+		this.addGroup (Long.toString(System.currentTimeMillis()));
+		this.addGroup (Long.toString(System.currentTimeMillis()));
+		this.addGroup (Long.toString(System.currentTimeMillis()));
 		
 	}
 	
-	//@Test 
+	@Test 
 	public void testAddPeopleToGroup()
 	{ 
 		this.addOnePersonToGroup(); 
 	}
 	
-	@Test 
+	//@Test 
 	public void testAddMultiplePeopleToGroup()
 	{
 		this.addMultiplePeopleToGroup();

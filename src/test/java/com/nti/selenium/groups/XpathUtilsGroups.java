@@ -55,7 +55,7 @@ public class XpathUtilsGroups extends XpathUtilsNav {
 	}
 	public static String getGroupItem()
 	{ 
-		return xpathPartialAttributeBuilder ("li", "class", "selection-list-item");
+		return xpathPartialAttributeBuilder ("li", "class", "selection-list-item multiselect");
 	}
 	public static String getGroupItemDiv(String groupname)
 	{
