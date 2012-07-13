@@ -6,21 +6,18 @@ import org.junit.Test;
 
 public class TestGroups extends Groups { 
 	
-	//@Test
+	@Test
 	public void testOpenGroups ()
 	{ 
 		this.openGroups (); 
-	
-		
 	}
 	
-	//@Test 
+	@Test 
 	public void testAddGroup()
 	{ 
 		this.addGroup (Long.toString(System.currentTimeMillis()));
 		this.addGroup (Long.toString(System.currentTimeMillis()));
 		this.addGroup (Long.toString(System.currentTimeMillis()));
-		
 	}
 	
 	@Test 
@@ -29,7 +26,7 @@ public class TestGroups extends Groups {
 		this.addOnePersonToGroup(); 
 	}
 	
-	//@Test 
+	@Test 
 	public void testAddMultiplePeopleToGroup()
 	{
 		this.addMultiplePeopleToGroup();

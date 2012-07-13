@@ -24,18 +24,15 @@ public class Groups extends Navigation {
 	
 	@After 
 	public void tearDown(){ 
-
-		System.out.println("debugger");
 		try{ 
 			
 			int oldGroupCount = 0;
 			
-			
 			for (;;)
 			{
-				List <WebElement> buttons = this.findElements("//ul[@class = 'disallowSelection']//li[@class = 'selection-list-item multiselect']//div[@class = 'name']//img[@class = 'delete-group']");
-				List <WebElement> groups = this.findElements("//ul[@class = 'disallowSelection']//li[@class = 'selection-list-item multiselect']//div[@class = 'name']");
-				
+				this.wait_(1);
+				List <WebElement> buttons = this.findElements(XpathUtilsGroups.getPeopleAndGroupsDeleteButton());
+				List <WebElement> groups = this.findElements(XpathUtilsGroups.getPeopleAndGroups());
 				
 				if (groups.size() <=1)
 				{
@@ -52,14 +49,11 @@ public class Groups extends Navigation {
 					oldGroupCount = groups.size();
 					groups.get(1).click();
 					buttons.get(1).click();
-				
 				}
-
 			}
 		}
 		catch (Exception e)
 		{ 
-			
 			System.out.println("Unable to remove groups/deleting test");
 			System.out.println(e.getMessage());
 		}
@@ -137,8 +131,8 @@ public class Groups extends Navigation {
 	{
 		this.addGroup("TestGroup"); 
 		this.findElement(XpathUtilsGroups.getInputUsername()).sendKeys(credentials[1].getUserName());
-		this.waitForElement(XpathUtilsGroups.getName(credentials[1].getUserName()));
-		this.findElement(XpathUtilsGroups.getName(credentials[1].getUserName())).click();
+		this.waitForElement(XpathUtilsGroups.getPersonGroupItem(credentials[1].getUserName()));
+		this.findElement(XpathUtilsGroups.getPersonGroupItem(credentials[1].getUserName())).click();
 		 
 
 		//		boolean bool = this.elementExists(XpathUtilsGroups.getName("Logan Testi"));
@@ -176,11 +170,11 @@ public class Groups extends Navigation {
 			element.clear();
 			element.sendKeys(i.getUserName()); 
 			this.wait_(3);
-			boolean bool2 = this.elementExists(XpathUtilsGroups.getSelectGroup()); 
+			boolean bool2 = this.elementExists(XpathUtilsGroups.getPersonGroupList()); 
 			if (bool2 == true)
 			{
 				System.out.println("here"); 
-				this.findElement(XpathUtilsGroups.getSelectGroup()).click();
+				this.findElement(XpathUtilsGroups.getPersonGroupList()).click();
 			}
 			else 
 			{
