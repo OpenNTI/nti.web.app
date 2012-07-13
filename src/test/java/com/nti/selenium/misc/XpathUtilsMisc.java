@@ -8,105 +8,105 @@ public class XpathUtilsMisc extends XpathUtilsNav{
 		return xpathBuilder("span", "id", "button-1013-btnIconEl");
 	}
 	
-	public static String atHomePanel(){
+	public static String atHomePanel() {
 		return xpathBuilder("div", "id", "view-ctr");
 	}
 	
-	public static String dropDownChapter(){
+	public static String dropDownChapter() {
 		return buildString(xpathBuilder("div", "class", "shrink-wrap"), 
 						   xpathBuilder("div", "class", "label"), 
 						   xpathBuilder("span"));
 	}
 	
-	public static String dropDownSection(){
+	public static String dropDownSection() {
 		return buildString(xpathBuilder("div", "class", "shrink-wrap"), 
 						   xpathBuilder("div", "class", "menu"), 
 						   xpathBuilder("span"));
 	}
 	
-	public static String dropDownShowMe(){
+	public static String dropDownShowMe() {
 		return buildString(xpathBuilder("div", "class", "shrink-wrap"), 
 				   xpathBuilder("div", "class", "menu"), 
 				   xpathBuilder("span"));
 	}
 	
-	public static String dropDownList(){
+	public static String dropDownList() {
 		return buildString(xpathBuilder("div", "class", "x-box-inner x-box-scroller-top"),
 						   "/..",
 						   xpathBuilder("div"),
 						   xpathBuilder("div"));
 	}
 	
-	public static String getMyAccountButton(){
+	public static String getMyAccountButton() {
 		return xpathBuilder("div", "My Account");
 	}
 	
-	public static String getRealNameInput(){
+	public static String getRealNameInput() {
 		return xpathBuilder("input", "name", "realname");
 	}
 	
-	public static String getAliasInput(){
+	public static String getAliasInput() {
 		return xpathBuilder("input", "name", "alias");
 	}
 	
-	public static String getChangePasswordLink(){
+	public static String getChangePasswordLink() {
 		return xpathBuilder("a", "Change password");
 	}
 	
-	public static String getChangePasswordInput(){
+	public static String getChangePasswordInput() {
 		return xpathBuilder("input", "name", "password");
 	}
 	
-	public static String getVerifyPasswordInput(){
+	public static String getVerifyPasswordInput() {
 		return xpathBuilder("input", "name", "password-verify");
 	}
 	
-	public static String getMyAccountOtherPeopleInput(){
+	public static String getMyAccountOtherPeopleInput() {
 		return buildString(xpathBuilder("td", "class", "x-form-trigger-input-cell"),
 						   xpathBuilder("input"));
 	}
 	
-	public static String getMyAccountOtherPeopleDropDownArrow(){
+	public static String getMyAccountOtherPeopleDropDownArrow() {
 		return buildString(xpathBuilder("td", "class", "x-trigger-cell"),
 						   xpathBuilder("div", "role", "button"));
 	}
 	
-	public static String getMyAccountOtherPeopleEveryoneOption(){
+	public static String getMyAccountOtherPeopleEveryoneOption() {
 		return xpathBuilder("div", "Everyone");
 	}
 	
-	public static String findNameOptions(String name){
+	public static String findNameOptions(String name) {
 		return xpathBuilder("div", "class", "name", name);
 	}
 
-	public static String findNameToken(String name){
+	public static String findNameToken(String name) {
 		return xpathBuilder("span", "class", "nt-token-label", name);
 	}
 	
-	public static String findNameTokenXButton(String name){
+	public static String findNameTokenXButton(String name) {
 		return buildString(xpathBuilder("span", "class", "nt-token-label", name),
 						   "/..",
 						   xpathBuilder("span", "class", "nt-token-nib nt-token-nib-end"));
 	}
 	
-	public static String getSaveButton(){
+	public static String getSaveButton() {
 		return xpathBuilder("span", "Save");
 	}
 	
-	public static String getCancelButton(){
+	public static String getCancelButton() {
 		return xpathBuilder("span", "Cancel");
 	}
 	
-	public static String getPrivacyButton(){
+	public static String getPrivacyButton() {
 		return xpathBuilder("div", "Privacy");
 	}
 	
-	public static String getPrivacyWindowStatus(){
+	public static String getPrivacyWindowStatus() {
 		return buildString(xpathBuilder("span", "Privacy"),
 						   "/../../../../../..");
 	}
 	
-	public static String getPrivacyCloseButton(){
+	public static String getPrivacyCloseButton() {
 		return xpathBuilder("img", "class", "tool close");
 	}
 	

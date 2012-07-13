@@ -2,7 +2,7 @@ package com.nti.selenium.highlights;
 
 import com.nti.selenium.navigation.XpathUtilsNav;
 
-public class XpathUtilsHighlights extends XpathUtilsNav{
+public class XpathUtilsHighlights extends XpathUtilsNav {
 
 	public static String getCreateHighlight(){
 		return xpathBuilder("div", "Save Highlight");
@@ -18,6 +18,5 @@ public class XpathUtilsHighlights extends XpathUtilsNav{
 	
 	public static String getHighlightInList(){
 		return xpathBuilder("span", "Highlight In Section");
-	}
-	
+	}	
 }

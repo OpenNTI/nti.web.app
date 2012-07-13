@@ -4,13 +4,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import java.util.List;
-
 import org.junit.Before;
 import org.junit.Test;
-import org.openqa.selenium.WebElement;
 
-import com.nti.selenium.login.XpathUtilsLogin;
 import com.nti.selenium.navigation.XpathUtilsNav;
 
 public class TestMisc extends Misc{
@@ -24,7 +20,7 @@ public class TestMisc extends Misc{
 	// home button test
 	
 	@Test
-	public void testClickNextThoughtButton(){
+	public void testClickNextThoughtButton() {
 		this.clickHomeButton();
 		assertTrue(this.elementExists(XpathUtilsMisc.atHomePanel()));
 	}
@@ -32,13 +28,13 @@ public class TestMisc extends Misc{
 	// navigation tests
 	
 	@Test
-	public void testClickChapterDropDown(){
+	public void testClickChapterDropDown() {
 		this.clickChapterDropDown();
 		assertTrue(this.getListCount() > 0);
 	}
 	
 	@Test
-	public void testClickOnChapter(){
+	public void testClickOnChapter() {
 		this.clickChapterDropDown();
 		assertTrue(this.getListCount() > 0);
 		String title = this.getListItemTitle(0);
@@ -47,13 +43,13 @@ public class TestMisc extends Misc{
 	}
 	
 	@Test
-	public void testClickSectionDropDown(){
+	public void testClickSectionDropDown() {
 		this.clickSectionDropDown();
 		assertTrue(this.getListCount() > 0);
 	}
 	
 	@Test
-	public void testClickOnSection(){
+	public void testClickOnSection() {
 		this.clickSectionDropDown();
 		assertTrue(this.getListCount() > 0);
 		String title = this.getListItemTitle(0);
@@ -64,7 +60,7 @@ public class TestMisc extends Misc{
 	// Show me tests
 	
 	@Test
-	public void testClickShowMeDropDown(){
+	public void testClickShowMeDropDown() {
 		this.clickShowMeDropDown();
 		assertTrue(this.getListCount() > 0);
 		assertTrue(this.isChecked("Everything"));
@@ -72,7 +68,7 @@ public class TestMisc extends Misc{
 	}
 	
 	@Test
-	public void testClickOnDropDownItem(){
+	public void testClickOnDropDownItem() {
 		this.clickShowMeDropDown();
 		assertTrue(this.getListCount() > 0);
 		assertTrue(this.isChecked("Everything"));
@@ -83,7 +79,7 @@ public class TestMisc extends Misc{
 	}
 	
 	@Test
-	public void testClickMultipleDropDownItems(){
+	public void testClickMultipleDropDownItems() {
 		this.clickShowMeDropDown();
 		assertTrue(this.getListCount() > 0);
 		assertTrue(this.isChecked("Everything"));
@@ -97,7 +93,7 @@ public class TestMisc extends Misc{
 	}
 	
 	@Test
-	public void testClickOnDropDownItemSwitchBackToEverything(){
+	public void testClickOnDropDownItemSwitchBackToEverything() {
 		this.clickShowMeDropDown();
 		assertTrue(this.getListCount() > 0);
 		assertTrue(this.isChecked("Everything"));
@@ -111,7 +107,7 @@ public class TestMisc extends Misc{
 	}
 	
 	@Test
-	public void testClickSelectAllItems(){
+	public void testClickSelectAllItems() {
 		this.clickShowMeDropDown();
 		assertTrue(this.getListCount() > 0);
 		assertTrue(this.isChecked("Everything"));
@@ -130,7 +126,7 @@ public class TestMisc extends Misc{
 	}
 	
 	@Test
-	public void testClickMe(){
+	public void testClickMe() {
 		this.clickShowMeDropDown();
 		assertTrue(this.getListCount() > 0);
 		assertTrue(this.isChecked("Everyone"));
@@ -141,7 +137,7 @@ public class TestMisc extends Misc{
 	}
 	
 	@Test
-	public void testClickMeBackToEveryone(){
+	public void testClickMeBackToEveryone() {
 		this.clickShowMeDropDown();
 		assertTrue(this.getListCount() > 0);
 		assertTrue(this.isChecked("Everyone"));
@@ -157,28 +153,28 @@ public class TestMisc extends Misc{
 	// My Acount tests
 	
 	@Test
-	public void testClickMyAccount(){
+	public void testClickMyAccount() {
 		this.clickOptionsMyAccountButton();
 		assertTrue(this.elementExists(XpathUtilsMisc.getRealNameInput()));
 		assertTrue(this.elementExists(XpathUtilsMisc.getAliasInput()));
 	}
 	
 	@Test
-	public void testInputRealName(){
+	public void testInputRealName() {
 		this.clickOptionsMyAccountButton();
 		this.findElement(XpathUtilsMisc.getRealNameInput()).sendKeys("Test");
 		this.wait_(3);
 	}
 	
 	@Test
-	public void testInputAlias(){
+	public void testInputAlias() {
 		this.clickOptionsMyAccountButton();
 		this.findElement(XpathUtilsMisc.getAliasInput()).sendKeys("Test");
 		this.wait_(3);
 	}
 	
 	@Test
-	public void testClickChangePasswordLink(){
+	public void testClickChangePasswordLink() {
 		this.clickOptionsMyAccountButton();
 		this.clickChangePasswordLink();
 		assertTrue(this.elementExists(XpathUtilsMisc.getChangePasswordInput()));
@@ -186,21 +182,21 @@ public class TestMisc extends Misc{
 	}
 	
 	@Test
-	public void testEnterTextInChangePasswordInput(){
+	public void testEnterTextInChangePasswordInput() {
 		this.clickOptionsMyAccountButton();
 		this.clickChangePasswordLink();
 		this.findElement(XpathUtilsMisc.getChangePasswordInput()).sendKeys("new password");
 	}
 	
 	@Test
-	public void testEnterTextInVerifyPasswordInput(){
+	public void testEnterTextInVerifyPasswordInput() {
 		this.clickOptionsMyAccountButton();
 		this.clickChangePasswordLink();
 		this.findElement(XpathUtilsMisc.getVerifyPasswordInput()).sendKeys("new password");
 	}
 	
 	@Test
-	public void testEnterTextInAccepting(){
+	public void testEnterTextInAccepting() {
 		this.clickOptionsMyAccountButton();
 		this.enterTextInAccepting("carlos");
 		this.waitForElement(XpathUtilsMisc.findNameOptions("Carlos Sanchez"));
@@ -208,14 +204,14 @@ public class TestMisc extends Misc{
 	}
 	
 	@Test
-	public void testClickAcceptingDropDownArrow(){
+	public void testClickAcceptingDropDownArrow() {
 		this.clickOptionsMyAccountButton();
 		this.clickAcceptingDropDownArrow();
 		assertTrue(this.elementExists(XpathUtilsMisc.getMyAccountOtherPeopleEveryoneOption()));
 	}
 	
 	@Test
-	public void testAcceptingContact(){
+	public void testAcceptingContact() {
 		this.clickOptionsMyAccountButton();
 		this.enterTextInAccepting("carlos");
 		this.waitForElement(XpathUtilsMisc.findNameOptions("Carlos Sanchez"));
@@ -224,7 +220,7 @@ public class TestMisc extends Misc{
 	}
 	
 	@Test
-	public void testAcceptingMultipleContacts(){
+	public void testAcceptingMultipleContacts() {
 		this.clickOptionsMyAccountButton();
 		this.enterTextInAccepting("carlos");
 		this.waitForElement(XpathUtilsMisc.findNameOptions("Carlos Sanchez"));
@@ -237,7 +233,7 @@ public class TestMisc extends Misc{
 	}
 	
 	@Test
-	public void testAcceptingRemoveContact(){
+	public void testAcceptingRemoveContact() {
 		this.clickOptionsMyAccountButton();
 		this.enterTextInAccepting("carlos");
 		this.waitForElement(XpathUtilsMisc.findNameOptions("Carlos Sanchez"));
@@ -247,7 +243,7 @@ public class TestMisc extends Misc{
 	}
 	
 	@Test
-	public void testAcceptingEveryone(){
+	public void testAcceptingEveryone() {
 		this.clickOptionsMyAccountButton();
 		this.clickAcceptingDropDownArrow();
 		this.waitForElement(XpathUtilsMisc.getMyAccountOtherPeopleEveryoneOption());
@@ -256,7 +252,7 @@ public class TestMisc extends Misc{
 	}
 	
 	@Test
-	public void testEnterTextInIgnoring(){
+	public void testEnterTextInIgnoring() {
 		this.clickOptionsMyAccountButton();
 		this.enterTextInIgnoring("carlos");
 		this.waitForElement(XpathUtilsMisc.findNameOptions("Carlos Sanchez"));
@@ -264,14 +260,14 @@ public class TestMisc extends Misc{
 	}
 	
 	@Test
-	public void testClickIgnoringDropDownArrow(){
+	public void testClickIgnoringDropDownArrow() {
 		this.clickOptionsMyAccountButton();
 		this.clickIgnoringDropDownArrow();
 		assertTrue(this.elementExists(XpathUtilsMisc.getMyAccountOtherPeopleEveryoneOption()));
 	}
 	
 	@Test
-	public void testIgnoringContact(){
+	public void testIgnoringContact() {
 		this.clickOptionsMyAccountButton();
 		this.enterTextInIgnoring("carlos");
 		this.waitForElement(XpathUtilsMisc.findNameOptions("Carlos Sanchez"));
@@ -280,7 +276,7 @@ public class TestMisc extends Misc{
 	}
 	
 	@Test
-	public void testIgnoringMultipleContacts(){
+	public void testIgnoringMultipleContacts() {
 		this.clickOptionsMyAccountButton();
 		this.enterTextInAccepting("carlos");
 		this.waitForElement(XpathUtilsMisc.findNameOptions("Carlos Sanchez"));
@@ -293,7 +289,7 @@ public class TestMisc extends Misc{
 	}
 	
 	@Test
-	public void testIgnoringEveryone(){
+	public void testIgnoringEveryone() {
 		this.clickOptionsMyAccountButton();
 		this.clickIgnoringDropDownArrow();
 		this.waitForElement(XpathUtilsMisc.getMyAccountOtherPeopleEveryoneOption());
@@ -302,7 +298,7 @@ public class TestMisc extends Misc{
 	}
 	
 	@Test
-	public void testIgnoringRemoveContact(){
+	public void testIgnoringRemoveContact() {
 		this.clickOptionsMyAccountButton();
 		this.enterTextInIgnoring("carlos");
 		this.waitForElement(XpathUtilsMisc.findNameOptions("Carlos Sanchez"));
@@ -312,14 +308,14 @@ public class TestMisc extends Misc{
 	}
 	
 	@Test
-	public void testSaveButton(){
+	public void testSaveButton() {
 		this.clickOptionsMyAccountButton();
 		this.clickSaveButton();
 		assertFalse(this.elementExists(XpathUtilsMisc.getSaveButton()));
 	}
 	
 	@Test
-	public void testCancelButton(){
+	public void testCancelButton() {
 		this.clickOptionsMyAccountButton();
 		this.clickCancelButton();
 		assertFalse(this.elementExists(XpathUtilsMisc.getCancelButton()));
@@ -328,13 +324,13 @@ public class TestMisc extends Misc{
 	// Privacy Tests
 	
 	@Test
-	public void testOpenPrivacy(){
+	public void testOpenPrivacy() {
 		this.clickOptionsPrivacyButton();
 		assertFalse(this.isPrivacyWindowVisable());
 	}
 	
 	@Test
-	public void testClosePrivacy(){
+	public void testClosePrivacy() {
 		this.clickOptionsPrivacyButton();
 		assertFalse(this.isPrivacyWindowVisable());
 		this.clickOptionsPrivacyCloseButton();
