@@ -18,6 +18,7 @@ public class TestNavigation extends Navigation {
 	public void testOpenBook() {
 		this.setLocation("Prealgebra", "Fractions", "Index");
 		this.openLibrary();
+		assertTrue(selenium.isElementPresent(this.getXPathBook()));
 		this.openBook();
 		assertTrue(selenium.isElementPresent(this.getXPathChapter()));
 	}
@@ -26,7 +27,9 @@ public class TestNavigation extends Navigation {
 	public void testOpenChapter() {
 		this.setLocation("Prealgebra", "Fractions", "Index");
 		this.openLibrary();
+		assertTrue(selenium.isElementPresent(this.getXPathBook()));
 		this.openBook();
+		assertTrue(selenium.isElementPresent(this.getXPathChapter()));
 		this.openChapter();
 		assertTrue(selenium.isElementPresent(this.getXPathSection()));
 	}
@@ -34,13 +37,13 @@ public class TestNavigation extends Navigation {
 	@Test
 	public void testOpenSection() {
 		this.navigateTo("Prealgebra", "Fractions", "Index");
-		this.waitForLoading();
 		assertEquals("Fractions", this.getNavTestText(XpathUtilsNav.getFractionIndexPage()).getText());
 	}
 	
 	@Test
 	public void testBackArrow() {
 		this.navigateTo("Prealgebra", "Fractions", "Index");
+		assertEquals("Fractions", this.getNavTestText(XpathUtilsNav.getFractionIndexPage()).getText());
 		this.clickArrowBackButton();
 		assertEquals("Challenge Problems", this.getNavTestText(XpathUtilsNav.getChallengeProblem()).getText());
 	}
@@ -48,6 +51,7 @@ public class TestNavigation extends Navigation {
 	@Test
 	public void testForwardArrow() {
 		this.navigateTo("Prealgebra", "Fractions", "Index");
+		assertEquals("Fractions", this.getNavTestText(XpathUtilsNav.getFractionIndexPage()).getText());
 		this.clickArrowForwardButton();
 		assertEquals("What is a Fraction?", this.getNavTestText(XpathUtilsNav.getWhatIsAFraction()).getText());
 	}
@@ -55,18 +59,24 @@ public class TestNavigation extends Navigation {
 	@Test
 	public void testClickRelatedItems(){
 		this.navigateTo("Prealgebra", "Fractions", "Index");
+		assertEquals("Fractions", this.getNavTestText(XpathUtilsNav.getFractionIndexPage()).getText());
 		this.clickRelatedItem("Division");
 		assertTrue(this.elementExists(this.getXPathDivisionPage()));
 	}
 	
 	@Test
 	public void testClickChapterDropDown(){
+		this.navigateTo("Prealgebra", "Fractions", "Index");
+		assertEquals("Fractions", this.getNavTestText(XpathUtilsNav.getFractionIndexPage()).getText());
+		this.wait_(3);
 		this.clickChapterDropDown();
 		assertTrue(this.getListCount() > 0);
 	}
 	
 	@Test
 	public void testClickOnChapter(){
+		this.navigateTo("Prealgebra", "Fractions", "Index");
+		assertEquals("Fractions", this.getNavTestText(XpathUtilsNav.getFractionIndexPage()).getText());
 		this.clickChapterDropDown();
 		assertTrue(this.getListCount() > 0);
 		String title = this.getListItemTitle(0);
@@ -76,12 +86,16 @@ public class TestNavigation extends Navigation {
 	
 	@Test
 	public void testClickSectionDropDown(){
+		this.navigateTo("Prealgebra", "Fractions", "Index");
+		assertEquals("Fractions", this.getNavTestText(XpathUtilsNav.getFractionIndexPage()).getText());
 		this.clickSectionDropDown();
 		assertTrue(this.getListCount() > 0);
 	}
 	
 	@Test
 	public void testClickOnSection(){
+		this.navigateTo("Prealgebra", "Fractions", "Index");
+		assertEquals("Fractions", this.getNavTestText(XpathUtilsNav.getFractionIndexPage()).getText());
 		this.clickSectionDropDown();
 		assertTrue(this.getListCount() > 0);
 		String title = this.getListItemTitle(0);
