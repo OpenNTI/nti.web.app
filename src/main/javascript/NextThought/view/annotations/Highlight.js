@@ -99,6 +99,10 @@ Ext.define('NextThought.view.annotations.Highlight', {
 			padding = 2,
 			last = true;
 
+		if(style !== 'plain'){
+			return boundingTop;
+		}
+
 		if(!this.rendered){
 			this.rendered = this.wrapRange(range.commonAncestorContainer, range);
 			this.counter = this.createCounter(this.rendered.last());
