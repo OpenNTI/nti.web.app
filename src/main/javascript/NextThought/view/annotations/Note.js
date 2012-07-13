@@ -8,7 +8,30 @@ Ext.define( 'NextThought.view.annotations.Note', {
 
 
 	multiGutterWidgetTmpl: Ext.DomHelper.createTemplate(
-			{ cls: 'thumb note-gutter-widget multi' }).compile(),
+		{
+			cls: 'thumb note-gutter-widget multi',
+			cn: [
+				//{	cls: 'bubble-wrapper',
+				//	cn: [
+						{
+							cls: 'bubble',
+							cn: [
+								{
+									cls: 'meta',
+									cn: [
+										{tag: 'span', cls: 'name', html: '{0}'},
+										' - ',
+										{tag: 'span', cls: 'time', html: '{1}'}
+									]
+								},
+								{cls: 'text', html: '{2}'}
+							]
+						}
+					//]
+				//}
+			]
+		}
+	).compile(),
 
 	constructor: function(config){
 		this.callParent(arguments);
@@ -85,15 +108,22 @@ Ext.define( 'NextThought.view.annotations.Note', {
 
 	createMultiGutterWidget: function(){
 		var creator = this.record.get('Creator'),
-			htmlString = this.multiGutterWidgetTmpl.apply(),
-			dom = Ext.DomHelper.createDom({html:htmlString}).firstChild;
+			htmlString = this.multiGutterWidgetTmpl.apply([
+				creator,
+				this.record.getRelativeTimeString(),
+				this.record.getBodyText()]),
+			dom = Ext.DomHelper.createDom({html:htmlString}).firstChild,
+			el;
 
 		//now create the ext object:
-		this.multiGutterWidget = this.attachListeners( Ext.get(dom) );
+		el = this.multiGutterWidget = this.attachListeners( Ext.get(dom) );
 
 		UserRepository.getUser(creator, function(u){
-			var url = u[0].get('avatarURL');
-			Ext.fly(this.multiGutterWidget).setStyle({backgroundImage: "url("+url+")"});
+			var url = u[0].get('avatarURL'),
+				name = u[0].getName();
+			el.setStyle({backgroundImage: "url("+url+")"});
+			el.down('.name').update(name);
+
 		}, this);
 	}
 

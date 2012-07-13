@@ -1,3 +1,23 @@
+@mixin meta-row {
+    .meta {
+        @include menu-label-text-treatment;
+        font-size: 12px;
+        font-weight: bold;
+        white-space: nowrap;
+        .name {
+            color: #3fb3f6;
+        }
+
+        .controls {
+            position: absolute;
+            right: 0;
+            top: 0;
+            //background: blue;
+
+            @include like-and-favorite;
+        }
+    }
+}
 
 @mixin note-editor {
 	.editor {
@@ -357,14 +377,61 @@
 
 	&.multi {
 		background-size: cover;
+        overflow: visible;
+        position: relative;
 		height: 30px;
 		width: 30px;
 
+        .bubble {
+            display: none;
+            position: absolute;
+            overflow: hidden;
+            bottom: 46px;
+            left: -175px;
+            max-width: 430px;
+            min-width: 250px;
+            max-height: 250px;
+            padding: 15px 13px 20px 13px;
+            background: #ffffff;
+            border: 1px solid #dcdcdc;
+            border-radius: 3px;
+            box-shadow: 1px 1px 2px 0 rgba(0, 0, 0, 0.1);
+
+            @include meta-row;
+            .meta {
+                font-size: 10px;
+            }
+
+            .text {
+                overflow: hidden;
+                text-overflow: ellipsis;
+                color: #757474;
+                font: 14px/22px 'Droid Serif' normal;
+            }
+        }
+
+        &::after {
+             content: url(../images/notes/bubble-tip.png);
+             display: none;
+             position: absolute;
+             top: -18px;
+             left: -14px;
+             width: 34px;
+             height: 15px;
+        }
+
+
         &:hover {
             box-shadow:
-              inset 0 0 0 3px #ffffff,
+              inset 0 0 0 2px #ffffff,
               0 2px 5px 2px rgba(0,0,0,.3);
             z-index: 10;
+            .bubble {
+                display: block;
+            }
+            &::after {
+                display: block;
+            }
         }
 	}
 
@@ -421,21 +488,8 @@
                 display: none;
             }
 
-            .meta {
-                @include menu-label-text-treatment;
-                font-size: 10px;
-              	font-weight: bold;
-              	.name {
-              		color: #3fb3f6;
-              	}
-                .controls {
-              		position: absolute;
-                    display: block;
-              		right: 0;
-              		top: 0;
-              		@include like-and-favorite;
-              	}
-            }
+            @include meta-row;
+
             .respond {
             	position: relative;
                 display: block;
@@ -488,22 +542,9 @@
 			.respond .reply-options{ visibility: visible; }
 		}
 
+        @include meta-row;
 		.meta {
-			@include menu-label-text-treatment;
 			font-size: 12px;
-			font-weight: bold;
-			.name {
-				color: #3fb3f6;
-			}
-
-			.controls {
-				position: absolute;
-				right: 0;
-				top: 0;
-				//background: blue;
-
-				@include like-and-favorite;
-			}
 		}
 
 		.context {
