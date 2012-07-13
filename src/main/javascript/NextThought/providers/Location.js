@@ -9,7 +9,8 @@ Ext.define('NextThought.providers.Location', {
 	constructor: function(){
 		this.addEvents({
 			navigate: true,
-			change : true
+			change : true,
+			changed : true
 		});
 
 		Ext.apply(this,{
@@ -41,7 +42,7 @@ Ext.define('NextThought.providers.Location', {
 			if(fromHistory!==true){
 				history.pushState({location: ntiid}, "");
 			}
-
+			me.fireEvent('changed', ntiid);
 		}
 
 		if(me.currentNTIID && ntiid !== me.currentNTIID){
@@ -276,7 +277,27 @@ Ext.define('NextThought.providers.Location', {
 		else {
 			console.error('No handler for type:',m.type, m);
 		}
+	},
+
+	updatePreferences: function(pi) {
+		var ntiid = pi.get('NTIID'),
+			sharing = pi.get('sharingPreference');
+
+		if (!this.preferenceMap){this.preferenceMap = {};}
+		this.preferenceMap[ntiid] = {sharing: sharing};
+	},
+
+
+	getPreferences: function(ntiid) {
+		ntiid = ntiid || this.currentNTIID;
+
+		if (!this.preferenceMap || !ntiid) {
+			return null;
+		}
+
+		return this.preferenceMap[ntiid];
 	}
+
 
 
 }, function(){

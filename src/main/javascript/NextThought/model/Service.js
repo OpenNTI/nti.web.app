@@ -208,14 +208,24 @@ Ext.define('NextThought.model.Service', {
 	},
 
 
+	getObjectURL: function(ntiid, field){
+		var f = '';
+		if (field) {
+			f = Ext.String.format("/++fields++{0}", field);
+		}
+
+		return Ext.String.format("{0}{1}/{2}{3}",
+			$AppConfig.server.host,
+			this.getCollection('Objects', 'Global').href,
+			encodeURIComponent(ntiid),
+			f);
+	},
+
+
 	getObjectRaw: function (ntiid, success, failure, scope){
-		var host = $AppConfig.server.host,
-			url = Ext.String.format("{0}{1}/{2}",
-				host,
-				this.getCollection('Objects', 'Global').href,
-				encodeURIComponent(ntiid)
-			),
-			q = {};
+		var url = this.getObjectURL(ntiid),
+			q = {},
+			host = $AppConfig.server.host;
 
 		if(!ParseUtils.parseNtiid(ntiid)){
 			Ext.callback(failure,scope, ['']);
@@ -270,12 +280,7 @@ Ext.define('NextThought.model.Service', {
 
 
 	getPageInfo: function(ntiid, success, failure, scope){
-			var host = $AppConfig.server.host,
-				url = Ext.String.format("{0}{1}/{2}",
-					host,
-					this.getCollection('Objects', 'Global').href,
-					encodeURIComponent(ntiid)
-				),
+			var url = this.getObjectURL(ntiid),
 				q = {};
 
 			if(!ParseUtils.parseNtiid(ntiid)){
@@ -322,5 +327,9 @@ Ext.define('NextThought.model.Service', {
 				this
 		);
 	}
+
+
+
+
 
 });

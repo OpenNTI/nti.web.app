@@ -22,6 +22,11 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 			'afterRender': this.insertNoteOverlay
 		});
 
+		this.mon(LocationProvider, {
+			scope: this,
+			changed: this.noteOverlayLocationChanged
+		});
+
 		return this;
 	},
 
@@ -165,6 +170,13 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 	},
 
 
+	noteOverlayLocationChanged: function(ntiid) {
+		var o = this.noteOverlayData;
+
+		o.editorActions.updatePrefs();
+	},
+
+
 	noteOverlayMouseOut: function(){
 		var o = this.noteOverlayData;
 		if(o.suspendMoveEvents){
@@ -237,11 +249,19 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 			}
 		}
 
+
 		var me = this;
 		var o = me.noteOverlayData;
-		var note = o.textarea.dom.value || o.editorActions.getValue();
-		console.log('firing event: "save-new-note" with ', note);
-		me.fireEvent('save-new-note', note, o.lastLine.range, callback);
+		var note = o.textarea.dom.value;
+		var v, sharing = []; //TODO - load from page??
+
+		if (o.richEditorActive){
+			v = o.editorActions.getValue();
+			note = v.body;
+			sharing = v.sharedWith;
+		}
+
+		me.fireEvent('save-new-note', note, o.lastLine.range, sharing, callback);
 		return false;
 	},
 

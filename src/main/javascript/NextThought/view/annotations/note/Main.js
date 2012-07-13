@@ -164,7 +164,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 
 
 	saveReply: function(){
-		var body = this.editorActions.getValue(),
+		var v = this.editorActions.getValue(),
 			me = this;
 
 		function callback(success, record){
@@ -175,7 +175,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 			}
 		}
 
-		this.up('window').fireEvent('save-new-reply', this.record, body, undefined, callback);
+		this.up('window').fireEvent('save-new-reply', this.record, v.body, v.shareWith, callback);
 	},
 
 

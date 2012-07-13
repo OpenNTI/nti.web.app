@@ -28,17 +28,29 @@ Ext.define('NextThought.view.menus.Share',{
 		this.reload();
 	},
 
+
 	reload: function(){
 		this.removeAll(true);
 
+		var p = LocationProvider.getPreferences();
+		p = p ? p.sharing : null;
+		var sharedWith = p ? p.sharedWith : null;
+
+		if (!Ext.isArray(sharedWith)){sharedWith = [];}
+
 		var items = [];
 		//items.push('Share With');
-		items.push({ cls: 'share-with everyone', text: 'Everyone', checked: true, allowUncheck:false, isEveryone:true });
-		items.push({ cls: 'share-with only-me', text: 'Only Me', isMe: true, isGroup: true });
-
+		items.push({ cls: 'share-with everyone', text: 'Everyone', allowUncheck:false, isEveryone:true });
+		items.push({ cls: 'share-with only-me', text: 'Only Me', isMe: true, isGroup: true,
+			checked: sharedWith.length === 0
+		});
 
 		this.store.each(function(v){
+			var chkd =  Ext.Array.contains(sharedWith, v.get('Username'));
+
 			if(/everyone/i.test(v.get('ID'))){
+				items[0].record = v;
+				items[0].checked = chkd;
 				return;
 			}
 
@@ -46,11 +58,20 @@ Ext.define('NextThought.view.menus.Share',{
 				cls: 'share-with',
 				text: v.get('realname'),
 				record: v,
-				isGroup: true
+				isGroup: true,
+				checked: chkd
 			});
 		});
 
-		items.push({ cls: 'share-with custom', text: 'Custom', allowUncheck:false, isCustom:true });
+		var customChecked = true;
+		Ext.each(items, function(i){
+			if (i.checked){
+				customChecked = false;
+				return false;
+			}
+		});
+
+		items.push({ cls: 'share-with custom', text: 'Custom', allowUncheck:false, isCustom:true, checked: customChecked });
 
 		this.add(items);
 	},
@@ -85,5 +106,40 @@ Ext.define('NextThought.view.menus.Share',{
 
 
 		this.fireEvent('changed',this);
+	},
+
+
+	getLabel: function(){
+		var result = [];
+
+		Ext.each(this.query('[checked]'), function(c){
+			result.push(c.text);
+		});
+
+		return result.join(', ');
+	},
+
+
+	getValue: function(){
+		var e = this.query('[isEveryone]')[0],
+			m = this.query('[isMe]')[0],
+			c = this.query('[isCustom]')[0];
+
+		if (e.checked) {
+			return [e.record.get('Username')];
+		}
+		else if (m.checked){
+			return [];
+		}
+		else if (c.checked) {
+			return []; //TODO - get val from win
+		}
+
+		var result = [];
+
+		Ext.each(this.query('[checked]'), function(c){
+			result.push(c.record.get('Username'));
+		});
+		return result;
 	}
 });

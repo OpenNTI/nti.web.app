@@ -56,6 +56,25 @@ Ext.define('NextThought.controller.Library', {
 	},
 
 
+	saveSharingPrefs: function(prefs, callback, saveToRoot){
+		//TODO - check to see if it's actually different before save...
+		function success(pi){
+			pi.saveField('sharingPreference', {sharedWith: prefs}, callback);
+		}
+
+		function fail(){
+			console.error('failed to get page info');
+		}
+
+		var ntiid = LocationProvider.currentNTIID;
+		if(saveToRoot){
+			ntiid = Library.getLineage(ntiid).last();
+		}
+		$AppConfig.service.getPageInfo(ntiid, success, fail, this);
+
+	},
+
+
 	getStoreForPageItems: function(containerId, success, failure, scope){
 		console.log('CID=', containerId);
 		var me = this,
@@ -67,6 +86,8 @@ Ext.define('NextThought.controller.Library', {
 
 		//when the pageinfo comes back, we want to set up the page item store
 		function pageInfoSuccess(pi){
+			LocationProvider.updatePreferences(pi);
+
 			if (!ps){
 				ps = Ext.create(
 					'NextThought.store.PageItem',
@@ -76,6 +97,8 @@ Ext.define('NextThought.controller.Library', {
 				ps.proxy.url = pi.getLink(Globals.USER_GENERATED_DATA);
 				me.pageStores[containerId] = ps;
 			}
+
+
 			Ext.callback(success, scope, [ps]);
 		}
 

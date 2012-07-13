@@ -105,14 +105,19 @@ Ext.define('NextThought.controller.Annotations', {
 	onShareWithSaveClick: function(btn){
 		var win = btn.up('window'),
 			shbx= win.down('user-list'),
+			v = shbx.getValue(),
 			rec = win.record;
 
 		win.el.mask('Sharing...');
 
-		SharingUtils.setSharedWith(rec,shbx.getValue(),function(newRec,op){
+		SharingUtils.setSharedWith(rec,v,function(newRec,op){
 			if(op.success){
 				rec.fireEvent('updated',newRec);
 				win.close();
+				//update default sharing setting if we have a shareWith:
+				this.getController('Library').saveSharingPrefs(v, function(){
+					console.log('callback pref save', arguments);
+				}, true);
 			}
 			else{
 				console.error('Failed to save object');
@@ -181,7 +186,7 @@ Ext.define('NextThought.controller.Annotations', {
 	},
 
 
-	saveNewNote: function(body, range, callback, opts){
+	saveNewNote: function(body, range, shareWith, callback, opts){
 		//check that our inputs are valid:
 		if (!body || (Ext.isArray(body) && body.length < 1) || !range){
 			console.error('Note creating a note, either missing content or range.');
@@ -195,6 +200,13 @@ Ext.define('NextThought.controller.Annotations', {
 
 		//make sure the body is an array:
 		if(!Ext.isArray(body)){body = [body];}
+
+		//update default sharing setting if we have a shareWith:
+		if (shareWith){
+			this.getController('Library').saveSharingPrefs(shareWith, function(){
+				console.log('callback pref save', arguments);
+			}, true);
+		}
 
 		//define our note object:
 		noteRecord = Ext.create('NextThought.model.Note', {
@@ -217,7 +229,7 @@ Ext.define('NextThought.controller.Annotations', {
 	},
 
 
-	saveNewReply: function(recordRepliedTo, replyBody, sharedWith, callback) {
+	saveNewReply: function(recordRepliedTo, replyBody, shareWith, callback) {
 		//some validation of input:
 		if(!recordRepliedTo){Ext.Error.raise('Must supply a record to reply to');}
 		if (!Ext.isArray(replyBody)){ replyBody = [replyBody];}
@@ -226,6 +238,13 @@ Ext.define('NextThought.controller.Annotations', {
 		//define our note object:
 		var replyRecord = recordRepliedTo.makeReply();
 		replyRecord.set('body', replyBody);
+
+		//update default sharing setting if we have a shareWith:
+		if (shareWith){
+			this.getController('Library').saveSharingPrefs(shareWith, function(){
+				console.log('callback pref save', arguments);
+			}, true);
+		}
 
 		//now save this:
 		replyRecord.save({

@@ -187,7 +187,7 @@ Ext.define('NextThought.model.Base', {
 	 */
 	saveField: function(fieldName, value, successCallback) {
 		//check to make sure we can do this, and we have the info we need
-		if (!this.isModifiable() || !fieldName || !this.hasField(fieldName)){
+		if (!fieldName || !this.hasField(fieldName)){
 			console.error('Cannot save field', this, arguments);
 			Ext.Error.raise('Cannot save field, issues with model?');
 		}
@@ -199,14 +199,16 @@ Ext.define('NextThought.model.Base', {
 		}
 
 		//put together the json we want to save.
-		var json = {}, me=this;
-		json[fieldName] = this.get(fieldName);
-		json = Ext.JSON.encode(json);
+		var json = Ext.JSON.encode(value),
+			me=this;
 
 		Ext.Ajax.request({
-			url: this.getLink('edit'),
+			url: $AppConfig.service.getObjectURL(this.getId(), fieldName),
 			jsonData: json,
 			method: 'PUT',
+			headers: {
+				Accept: 'application/json'
+			},
 			scope: me,
 			callback: function(){ },
 			failure: function(){

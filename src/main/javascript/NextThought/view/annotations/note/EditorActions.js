@@ -17,8 +17,13 @@ Ext.define('NextThought.view.annotations.note.EditorActions',{
 		me.cmp = cmp;
 		me.openWhiteboards = {};
 		me.shareMenu = Ext.widget({xtype: 'share-menu'});
-
+		this.updateShareWithLabel();
 		me.mixins.observable.constructor.call(me);
+
+		cmp.mon(me.shareMenu, {
+			scope: me,
+			changed: me.updateShareWithLabel
+		});
 
 		cmp.mon(new Ext.CompositeElement(editorEl.query('.left .action')),{
 			scope: me,
@@ -45,9 +50,17 @@ Ext.define('NextThought.view.annotations.note.EditorActions',{
 	},
 
 	editorMouseDown: function(e){
+		var s = window.getSelection();
 		if(e.getTarget('.action')){
-			this.lastRange = window.getSelection().getRangeAt(0);
+			if (s.rangeCount) {
+				this.lastRange = s.getRangeAt(0);
+			}
 		}
+	},
+
+
+	updateShareWithLabel: function(){
+		this.editor.down('.action.share').update(this.shareMenu.getLabel());
 	},
 
 
@@ -189,7 +202,10 @@ Ext.define('NextThought.view.annotations.note.EditorActions',{
 
 
 	getValue: function(){
-		return this.getNoteBody(this.editor.down('.content').getHTML())
+		return {
+			body: this.getNoteBody(this.editor.down('.content').getHTML()),
+			shareWith: this.shareMenu.getValue()
+		};
 	},
 
 
@@ -226,6 +242,11 @@ Ext.define('NextThought.view.annotations.note.EditorActions',{
 	reset: function(){
 		this.editor.down('.content').innerHTML = '';
 		window.getSelection().removeAllRanges();
+	},
+
+	updatePrefs: function(){
+		this.shareMenu.reload();
+		this.updateShareWithLabel();
 	}
 
 
