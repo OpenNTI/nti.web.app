@@ -36,6 +36,18 @@ Ext.define('NextThought.model.Note', {
 		{ name: 'prohibitReSharing', type: 'boolean' }
 	],
 
+	constructor: function(){
+		var r = this.callParent(arguments);
+		this.addEvents('changed');
+		this.enableBubble('changed');
+		return r;
+	},
+
+
+	getBubbleTarget: function(){
+		return this.parent;
+	},
+
 
 	getRoot: function() {
 		var current = this,

@@ -159,6 +159,7 @@ Ext.define('NextThought.controller.Stream', {
 		var cid = change.getItemValue('ContainerId'),
 			me = this;
 
+
 		Ext.each(Library.getLineage(cid),function(cid){
 			me.getStoreForStream(cid,
 				//success
@@ -176,5 +177,9 @@ Ext.define('NextThought.controller.Stream', {
 		//add it to the root stream store, why the heck not?
 		this.getStreamStore().add(change);
 		this.self.fireChange(change);
+
+		//add it to the page items store I guess:
+		var libPageStore = this.getController('Library').pageStores[cid];
+		if (libPageStore){libPageStore.add(change.get('Item'));}
 	}
 });

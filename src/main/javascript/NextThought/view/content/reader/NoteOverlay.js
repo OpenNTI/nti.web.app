@@ -258,7 +258,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		if (o.richEditorActive){
 			v = o.editorActions.getValue();
 			note = v.body;
-			sharing = v.sharedWith;
+			sharing = v.shareWith;
 		}
 
 		me.fireEvent('save-new-note', note, o.lastLine.range, sharing, callback);

@@ -40,7 +40,8 @@ Ext.define('NextThought.store.PageItem',{
 		this.callParent(arguments);
 
 		//find my parent if it's there and add myself to it:
-		var parentId = record.get('inReplyTo');
+		var parentId = record.get('inReplyTo'),
+			grandparent = null;
 		if (parentId) {
 			this.each(function(parent){
 				if (parentId === parent.getId()) {

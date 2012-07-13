@@ -135,9 +135,6 @@ Ext.define('NextThought.view.annotations.note.Main',{
 			this.favorites.addCls('on');
 		}
 
-
-
-
 		var commonAncestor = range.commonAncestorContainer,
 			ancestorText = commonAncestor.innerText,
 			suppressed = r.get('style') === 'suppressed',
@@ -151,6 +148,10 @@ Ext.define('NextThought.view.annotations.note.Main',{
 
 		r.compileBodyContent(function(text){ this.text.update(text); },this);
 		this.up('window').down('note-responses').setReplies(this.record.children);
+
+		this.record.on('changed', function(){
+			this.setRecord(this.record, range)
+		}, this, {single:true});
 	},
 
 

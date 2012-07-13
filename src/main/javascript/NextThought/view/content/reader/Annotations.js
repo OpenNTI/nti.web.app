@@ -340,6 +340,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 			result = this.createAnnotationWidget(cls,item) || false;
 
 			if(result === false){
+
 //				if (replyTo) {
 //					replyTo = Ext.getCmp(IdCache.getComponentId(replyTo, null, this.prefix));
 //					replyTo.addReply(item);

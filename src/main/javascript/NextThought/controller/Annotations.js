@@ -215,6 +215,7 @@ Ext.define('NextThought.controller.Annotations', {
 			applicableRange: rangeDescription,
 			body: body,
 			style: 'suppressed',
+			sharedWith: shareWith,
 			ContainerId: LocationProvider.currentNTIID
 		});
 
