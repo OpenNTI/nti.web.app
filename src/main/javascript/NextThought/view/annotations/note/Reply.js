@@ -131,7 +131,7 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 		this.record = r;
 		var me = this;
 		if(!me.rendered){return;}
-		UserRepository.getUser(r.get('Creator'),me.fillInUser,me);
+		if (!r.placeHolder){UserRepository.getUser(r.get('Creator'),me.fillInUser,me);}
 		me.time.update(r.getRelativeTimeString());
 		me.liked.update(r.getFriendlyLikeCount());
 		if (r.isLiked()){

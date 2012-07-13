@@ -1,4 +1,7 @@
 Ext.define('NextThought.view.annotations.note.EditorActions',{
+	requires: [
+		'NextThought.view.menus.Share'
+	],
 
 	mixins: {
 		observable: 'Ext.util.Observable'
@@ -13,6 +16,7 @@ Ext.define('NextThought.view.annotations.note.EditorActions',{
 		me.editor = editorEl;
 		me.cmp = cmp;
 		me.openWhiteboards = {};
+		me.shareMenu = Ext.widget({xtype: 'share-menu'});
 
 		me.mixins.observable.constructor.call(me);
 
@@ -33,6 +37,11 @@ Ext.define('NextThought.view.annotations.note.EditorActions',{
 			focus: me.editorFocus,
 			blur: me.editorBlur
 		});
+
+		cmp.mon(editorEl.down('.action.share'), {
+			scope: me,
+			click: me.openShareMenu
+		});
 	},
 
 	editorMouseDown: function(e){
@@ -46,6 +55,13 @@ Ext.define('NextThought.view.annotations.note.EditorActions',{
 		e.stopPropagation();//re-enable selection, and prevent the handlers higher up from firing.
 		delete this.lastRange;
 		return true;//re-enable selection
+	},
+
+
+	openShareMenu: function(e){
+		e.stopEvent();
+		this.shareMenu.showBy(this.editor.down('.action.share'),'t-b?');
+		return false;
 	},
 
 
