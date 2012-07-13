@@ -59,4 +59,34 @@ public class TestNavigation extends Navigation {
 		assertTrue(this.elementExists(this.getXPathDivisionPage()));
 	}
 	
+	@Test
+	public void testClickChapterDropDown(){
+		this.clickChapterDropDown();
+		assertTrue(this.getListCount() > 0);
+	}
+	
+	@Test
+	public void testClickOnChapter(){
+		this.clickChapterDropDown();
+		assertTrue(this.getListCount() > 0);
+		String title = this.getListItemTitle(0);
+		this.clickListItem(0);
+		assertEquals(title, this.getNavTestText(XpathUtilsNav.getSectionPageTitle(title)).getText());
+	}
+	
+	@Test
+	public void testClickSectionDropDown(){
+		this.clickSectionDropDown();
+		assertTrue(this.getListCount() > 0);
+	}
+	
+	@Test
+	public void testClickOnSection(){
+		this.clickSectionDropDown();
+		assertTrue(this.getListCount() > 0);
+		String title = this.getListItemTitle(0);
+		this.clickListItem(0);
+		assertEquals(title, this.getNavTestText(XpathUtilsNav.getSectionPageTitle(title)).getText());
+	}
+	
 }
