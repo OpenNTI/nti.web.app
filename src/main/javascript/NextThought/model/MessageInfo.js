@@ -1,5 +1,10 @@
 Ext.define('NextThought.model.MessageInfo', {
 	extend: 'NextThought.model.Base',
+
+	mixins: {
+		bodyContent: 'NextThought.mixins.ModelWithBodyContent'
+	},
+
 	fields: [
 		{ name: 'inReplyTo', type: 'string' },
 		{ name: 'Status', type: 'string' },
