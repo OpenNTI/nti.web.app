@@ -77,7 +77,9 @@ Ext.define( 'NextThought.view.annotations.Base', {
 	getBubbleTarget: function(){return this.ownerCmp; },
 	getItemId: function(){return this.id; },
 	isXType: function(){return false;},
-	getEl: function(){throw 'Needs implementation';},
+	getEl: function(){
+		return Ext.get(this.img);
+	},
 
 
 	createElement: function(tag,parent,cls,css,id){
@@ -201,6 +203,13 @@ Ext.define( 'NextThought.view.annotations.Base', {
 		var me = this;
 		if(!me.record.phantom){return;}
 		me.isSaving = true;
+
+		var p = LocationProvider.getPreferences();
+		p = p ? p.sharing : null;
+
+		if(p){
+			me.record.set('SharedWidth',p);
+		}
 
 		me.record.save({
 			scope: me,
