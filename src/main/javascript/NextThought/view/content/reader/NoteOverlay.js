@@ -159,6 +159,13 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 			lineInfo = LineUtils.findLine(y,this.getDocumentElement());
 			if(lineInfo && (lineInfo !== o.lastLine || !o.lastLine)){
 				o.lastLine = lineInfo;
+
+				if(!lineInfo.range){
+					box.hide();
+					this.noteOverlayMouseOut();
+					return;
+				}
+
 				box.setY( lineInfo.rect.bottom + offsets.top - box.getHeight())
 						.hide()
 						.show();

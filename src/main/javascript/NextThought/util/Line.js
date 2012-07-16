@@ -39,11 +39,11 @@ Ext.define('NextThought.util.Line',{
 	/** @private */
 	buildRangeFromRect: function(rect, node, parentWindow){
 		var s = parentWindow.getSelection(),
-				r, c = 0, step = 'line';
+			me = this, r, c = 0, step = 'word';
 
 		function is(rectA,rectB){
-			return rectA.top === rectB.top
-					&& rectA.height === rectB.height;
+			var y = rectA.top + (rect.height/2);
+			return me.isCloseToMiddle(y,rectB);
 		}
 
 		function setup(step){
@@ -59,19 +59,20 @@ Ext.define('NextThought.util.Line',{
 			c++;
 			r = s.getRangeAt(0);
 			if(is(r.getClientRects()[0],rect)){
+				s.modify('extend', 'forward', 'lineboundary');
 				break;
 			}
 			if(!Ext.fly(node).contains(r.startContainer)){
-				if(step === 'line'){
-					step = 'lineboundary';
-					setup(step);
-				}
-				else {
+//				if(step === 'line'){
+//					step = 'lineboundary';
+//					setup(step);
+//				}
+//				else {
 					s.removeAllRanges();
 					s.selectAllChildren(node);
 					r =  s.getRangeAt(0);
 					break;
-				}
+//				}
 			}
 			r = null;
 
@@ -80,7 +81,7 @@ Ext.define('NextThought.util.Line',{
 			s.modify('extend', 'forward', step);
 		}
 
-		s.removeAllRanges();
+//		s.removeAllRanges();
 		return r;
 	},
 
@@ -117,13 +118,18 @@ Ext.define('NextThought.util.Line',{
 		doc = doc || document;
 		var node = this.resolveNodeAt(y,doc);
 		var rects = this.resolveClientRects( node )||[];
+		var range, bounds;
 		var i=0;
 		for(; i<rects.length; i++){
 			if(this.isCloseToMiddle(y,rects[i])){
-				return {
-					rect: rects[i],
-					range: this.buildRangeFromRect(rects[i],node,doc.parentWindow)
-				};
+				range = this.buildRangeFromRect(rects[i],node,doc.parentWindow);
+				if(range){
+					bounds = range.getBoundingClientRect();
+					if( (bounds.height/rects[i].height) <= 1){
+						return { rect: rects[i], range: range };
+					}
+				}
+				return null;
 			}
 		}
 		return null;
