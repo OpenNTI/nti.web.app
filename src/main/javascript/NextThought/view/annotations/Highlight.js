@@ -108,13 +108,13 @@ Ext.define('NextThought.view.annotations.Highlight', {
 			padding = 2,
 			last = true,
 			offset,
-			walker = document.createTreeWalker(range.commonAncestorContainer);
+			walker = this.doc.createTreeWalker(range.commonAncestorContainer);
 
 		walker.currentNode = range.startContainer;
 		offset = range.startOffset;
 
 		while (walker.currentNode != range.endContainer) {
-			nr = document.createRange();
+			nr = this.doc.createRange();
 			nr.setStart(walker.currentNode,offset);
 			nr.setEnd(walker.currentNode,99999);
 			s = s.concat(RectUtils.merge(nr.getClientRects(),lineHeight,width+1));

@@ -478,13 +478,14 @@ Ext.define('NextThought.util.Anchors', {
 
 			if( node.textContent.indexOf(context.contextText) === adjustedOffset){
 				//console.log('successful match', isStart, node.textContent.indexOf(context.contextText), adjustedOffset);
-				console.log(node.textContent);
+				//console.log(node.textContent);
 				return true;
 			}
+			/*
 			else if ( node.textContent.indexOf(context.contextText) !== -1) {
-				//console.log('UNsuccessful match', isStart, node.textContent.indexOf(context.contextText), adjustedOffset);
+				console.log('UNsuccessful match', isStart, node.textContent.indexOf(context.contextText), adjustedOffset);
 				console.log(node.textContent);
-			}
+			}*/
 			return false;
 		}
 
