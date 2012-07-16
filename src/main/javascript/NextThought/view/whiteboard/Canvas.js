@@ -147,12 +147,13 @@ Ext.define(	'NextThought.view.whiteboard.Canvas',{
 				resultCallback.call(this,data);
 			}
 
-			var El = Ext.Element,
-				div = Ext.DomHelper.append(Ext.getBody(),{tag: 'div', style: 'visibility: hidden; position: absolute;'},true),
+			var div = Ext.DomHelper.append(Ext.getBody(),{tag: 'div', style: 'visibility: hidden; position: absolute;'},true),
 				c;
 
 			c = Ext.widget('whiteboard-canvas',{drawData: scene, renderTo: div, thumbnail: true});
-			c.setSize(1024,768);//fix to 4:3 for preview image
+			c.el.dom.width = 1024;
+			c.el.dom.height = 768;
+			c.setSize(1024,768);
 			c.drawScene(finish);
 		}
 	}
