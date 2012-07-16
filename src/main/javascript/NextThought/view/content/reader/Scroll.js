@@ -44,13 +44,16 @@ Ext.define('NextThought.view.content.reader.Scroll',{
 	scrollToTarget: function(target){
 		var de = this.getDocumentElement(),
 			c = Ext.getCmp(target),
-			e = document.getElementById(target) ||
-				de.getElementById(target) ||
-				Ext.fly(de).query('*[name='+target+']')[0] ||
-				Ext.query('*[name*='+target+']')[0];
+			e = document.getElementById(target) || de.getElementById(target);
 
 		if (!e && c) {
-			e = c.img;
+
+			e = c.getRange();
+			if(e){
+
+				this.scrollTo(e.getBoundingClientRect().top - this.getAnnotationOffsets().top);
+				return;
+			}
 		}
 
 		if(!e) {

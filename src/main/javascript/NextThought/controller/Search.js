@@ -168,7 +168,7 @@ Ext.define('NextThought.controller.Search', {
 		Ext.ComponentQuery.query('library-view-container')[0].activate();
 		LocationProvider.setLocation( cid, function(reader){
 			if (cat === 'Note') {
-				reader.scrollToTarget(IdCache.getIdentifier(result.hitId));
+				reader.scrollToTarget(IdCache.getComponentId(result.hitId,null,'default'));
 			}
 			else {
 				reader.scrollToText(result.term);

@@ -77,9 +77,7 @@ Ext.define( 'NextThought.view.annotations.Base', {
 	getBubbleTarget: function(){return this.ownerCmp; },
 	getItemId: function(){return this.id; },
 	isXType: function(){return false;},
-	getEl: function(){
-		return Ext.get(this.img);
-	},
+	getEl: function(){throw 'Needs implementation';},
 
 
 	createElement: function(tag,parent,cls,css,id){
