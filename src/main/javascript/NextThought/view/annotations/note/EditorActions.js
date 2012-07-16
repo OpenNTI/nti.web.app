@@ -7,9 +7,17 @@ Ext.define('NextThought.view.annotations.note.EditorActions',{
 		observable: 'Ext.util.Observable'
 	},
 
-	wbThumbnailTpm: Ext.DomHelper.createTemplate(
-			'<img src="{0}" id="{1}" class="wb-thumbnail"/>'
-	).compile(),
+	wbThumbnailTpm: Ext.DomHelper.createTemplate( {
+		tag: 'img',
+		src: Ext.BLANK_IMAGE_URL,
+		id: '{1}',
+		style: {
+			backgroundImage: 'url({0});'
+		},
+		cls: 'wb-thumbnail',
+		alt: 'Whiteboard Thumbnail',
+		border: 0
+	} ).compile(),
 
 	constructor: function(cmp, editorEl){
 		var me = this;
@@ -109,7 +117,7 @@ Ext.define('NextThought.view.annotations.note.EditorActions',{
 
 	addWhiteboard: function(){
 		//pop open a whiteboard:
-		var wbWin = Ext.widget({ xtype: 'wb-window', height: '50%', width: '50%' }),
+		var wbWin = Ext.widget({ xtype: 'wb-window', height: '75%', width: '50%' }),
 			guid = guidGenerator(),
 			content = this.editor.down('.content');
 

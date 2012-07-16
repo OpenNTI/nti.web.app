@@ -18,6 +18,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 				var r = this.getContentRoot().getBoundingClientRect();
 				data.left = r.left;
 				data.width = r.width;
+				data.win = this.getDocumentElement().parentWindow;
 			},
 			'afterRender': this.insertNoteOverlay
 		});
@@ -189,6 +190,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		if(o.suspendMoveEvents){
 			return;
 		}
+		o.win.getSelection().removeAllRanges();
 		clearTimeout(o.mouseLeaveTimeout);
 		o.mouseLeaveTimeout = setTimeout(function(){
 			delete o.lastLine;
@@ -279,8 +281,8 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 			this.noteOverlayDeactivateEditor();
 		}
 		else if(k === event.ENTER && !this.noteOverlayData.richEditorActive){
-			this.noteOverlayAcivateRichEditor();
 			event.stopEvent();
+			this.noteOverlayAcivateRichEditor();
 		}
 		return this.noteOverlayEditorKeyPressed(event);
 	},

@@ -7,6 +7,8 @@ Ext.define('NextThought.mixins.ModelWithBodyContent',{
 		Ext.each(o,function(c){
 			if(typeof(c) === 'string'){
 				text.push(c.replace(/<.*?>/g, ' ').replace(/\s+/,' '));
+			} else {
+				text.push('[image]')
 			}
 		});
 
@@ -24,7 +26,10 @@ Ext.define('NextThought.mixins.ModelWithBodyContent',{
 			cls: 'whiteboard-magnifier'
 		},{
 			tag: 'img',
-			src: '{1}',
+			src: Ext.BLANK_IMAGE_URL,
+			style: {
+				backgroundImage: 'url({1});'
+			},
 			onclick: '{2}',
 			cls: 'whiteboard-thumbnail',
 			alt: 'Whiteboard Thumbnail',
