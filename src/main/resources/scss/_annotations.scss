@@ -5,15 +5,17 @@
 	vertical-align: baseline;
 	//vertical-align: initial;
 	display: inline-block;
-	width: 5px;
+	//width: 5px;
+	width: 0px;
 	overflow: hidden;
 	line-height: 23px;
 	height: 24px;
 	text-align: center;
-	padding: 0 0 0 4px;
+	padding: 0 0 0 0px;
+	//padding: 0 0 0 4px;
 
 	background:{
-		image: url(../images/highlights/tip.png);
+		//image: url(../images/highlights/tip.png);
 		position-x: 100%;
 		position-y: 0px;
 		repeat: no-repeat;
