@@ -33,13 +33,25 @@ public class TestChat extends Chat {
 	}
 	
 	@Test
-	public void testAddUserButton(){
+	public void testOpenAddUserPanel(){
 		this.startChat();
 		this.waitForElement(XpathUtilsChat.getChatUser("Test"));
 		String ID1 = this.findElement(XpathUtilsChat.getChatUser("Test")).getAttribute("id");
 		assertTrue(ID1.matches("chat-window-.*"));
 		this.clickAddUserButton("Test");
-		assertTrue(this.elementExists(XpathUtilsChat.getAddUserExpandList("Test")));
+		assertTrue(this.elementExists(XpathUtilsChat.getAddUserExpandList()));
+	}
+	
+	@Test
+	public void testCloseAddUserPanel(){
+		this.startChat();
+		this.waitForElement(XpathUtilsChat.getChatUser("Test"));
+		String ID1 = this.findElement(XpathUtilsChat.getChatUser("Test")).getAttribute("id");
+		assertTrue(ID1.matches("chat-window-.*"));
+		this.clickAddUserButton("Test");
+		assertTrue(this.elementExists(XpathUtilsChat.getAddUserExpandList()));
+		this.clickAddUserButton("Test");
+		assertTrue(this.elementExists(XpathUtilsChat.getAddUserHiddenList()));
 	}
 	
 }

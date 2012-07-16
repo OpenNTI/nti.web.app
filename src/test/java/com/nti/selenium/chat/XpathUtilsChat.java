@@ -84,10 +84,12 @@ public class XpathUtilsChat extends XpathUtilsLogin {
 						   xpathBuilder("img", "data-qtip", "Chat with this group"));
 	}
 	
-	public static String getAddUserExpandList(String username){
-		return buildString(xpathBuilder("div", "class", "x-component gutter-entry x-component-chat-window"),
-						   xpathBuilder("div", "class", "wrapper"),
-						   xpathBuilder("div", "class", "name", username));
+	public static String getAddUserExpandList(){
+		return xpathBuilder("div", "class", "x-window chat-window x-layer x-window-chat-window x-plain x-window-plain x-window-chat-window-plain x-closable x-window-closable x-window-chat-window-closable x-unselectable");
+	}
+	
+	public static String getAddUserHiddenList(){
+		return xpathBuilder("div", "class", "x-window chat-window x-layer x-window-chat-window x-plain x-window-plain x-window-chat-window-plain x-closable x-window-closable x-window-chat-window-closable x-unselectable no-gutter");
 	}
 
 }
