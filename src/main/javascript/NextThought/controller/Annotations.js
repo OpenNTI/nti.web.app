@@ -106,7 +106,8 @@ Ext.define('NextThought.controller.Annotations', {
 		var win = btn.up('window'),
 			shbx= win.down('user-list'),
 			v = shbx.getValue(),
-			rec = win.record;
+			rec = win.record,
+			me = this;
 
 		if (!rec){return;}
 
@@ -117,8 +118,8 @@ Ext.define('NextThought.controller.Annotations', {
 				rec.fireEvent('updated',newRec);
 				win.close();
 				//update default sharing setting if we have a shareWith:
-				this.getController('Library').saveSharingPrefs(v, function(){
-					console.log('callback pref save', arguments);
+				me.getController('Library').saveSharingPrefs(v, function(){
+				console.log('callback pref save', arguments);
 				}, true);
 			}
 			else{
