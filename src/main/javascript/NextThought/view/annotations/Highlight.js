@@ -103,8 +103,10 @@ Ext.define('NextThought.view.annotations.Highlight', {
 
 
 	render: function(){
-		var style = this.record.get('style'),
-			range = this.getRange(),
+		var range = this.getRange();
+		if(!range){return -1;}
+
+		var style = this.getRecordField('style'),
 			bounds = range.getBoundingClientRect(),
 			boundingTop = Math.ceil(bounds.top),
 			boundingLeft = Math.ceil(bounds.left),
