@@ -56,6 +56,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
 
 	cleanup: function(){
 		if (this.rendered) {
+		try{
 			var c = this.rendered.slice();
 			this.rendered = [];
 
@@ -67,6 +68,9 @@ Ext.define('NextThought.view.annotations.Highlight', {
 			Ext.fly(this.canvas).remove();
 			Ext.fly(this.counter).remove();
 			Ext.each(c,this.unwrap,this);
+		} catch(e){
+			console.error(Globals.getError(e));
+		}
 		}
 		return this.callParent(arguments);
 	},
@@ -225,7 +229,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
 	createCounter: function(after){
 		var containingSpan = Ext.get(this.createNonAnchorableSpan()),
 			el = Ext.get(this.createNonAnchorableSpan()),
-			afterWords = after.innerHTML.trim().split(' '),
+			afterWords = after.textContent.trim().split(' '),
 			style = this.record.get('style') || 'plain';
 
 		this.rendered.push(containingSpan.dom);
