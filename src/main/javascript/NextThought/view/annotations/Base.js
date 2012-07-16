@@ -282,8 +282,8 @@ Ext.define( 'NextThought.view.annotations.Base', {
 			scrollTop = this.ownerCmp.getAnnotationOffsets().scrollTop;
 
 		//adjust points
-		xy[0] += this.offsets.left;
-		xy[1] += this.offsets.top - scrollTop;
+		xy[0] += Math.max(this.offsets.left,0);
+		xy[1] += Math.max(this.offsets.top,0) - scrollTop;
 
 		//single annotation
 		menu = this.getMenu();
