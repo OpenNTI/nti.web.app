@@ -16,4 +16,10 @@ public class XpathUtilsChat extends XpathUtilsLogin {
 		return xpathBuilder("div", "class", "x-container contact-card x-container-default");
 	}
 	
+	public static String getChatWindow(String userInChat){
+		return buildString(xpathBuilder("div", "class", "header-body"),
+						   xpathBuilder("span", userInChat),
+						   "/../../..");
+	}
+	
 }

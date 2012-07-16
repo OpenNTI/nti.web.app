@@ -23,10 +23,6 @@ public class Chat extends Groups {
 		this.setActiverDriver(this.driver2);
 		this.addPeopleToGroup(searchUserNames[0]);
 		this.setActiverDriver(driver1);
-		this.findElement(XpathUtilsChat.getGroupsTab()).click();
-		this.waitForElement(XpathUtilsChat.getIndividualGroups());
-		this.findElements(XpathUtilsChat.getIndividualGroups()).get(0).click();
-		System.out.println("end setup");
 	}
 	
 	@After
@@ -45,6 +41,12 @@ public class Chat extends Groups {
 		{
 			selenium2.stop(); 
 		}
+	}
+	
+	public void startChat(){
+		this.findElement(XpathUtilsChat.getGroupsTab()).click();
+		this.waitForElement(XpathUtilsChat.getIndividualGroups());
+		this.findElements(XpathUtilsChat.getIndividualGroups()).get(0).click();
 	}
 	
 }
