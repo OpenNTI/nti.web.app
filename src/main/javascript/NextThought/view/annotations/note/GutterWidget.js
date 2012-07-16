@@ -95,9 +95,8 @@ Ext.define('NextThought.view.annotations.note.GutterWidget',{
 		if (r.isFavorited()){
 			this.favorites.addCls('on');
 		}
-		r.compileBodyContent(function(text){
-			me.text.update(text);
-		});
+
+		me.text.update(r.getBodyText());
 	},
 
 

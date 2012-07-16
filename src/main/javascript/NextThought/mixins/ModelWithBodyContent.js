@@ -6,11 +6,11 @@ Ext.define('NextThought.mixins.ModelWithBodyContent',{
 
 		Ext.each(o,function(c){
 			if(typeof(c) === 'string'){
-				text.push(c.replace(/<.*?>/g, ''));
+				text.push(c.replace(/<.*?>/g, ' ').replace(/\s+/,' '));
 			}
 		});
 
-		return text.join('');
+		return Ext.String.trim( text.join('') );
 	},
 
 
