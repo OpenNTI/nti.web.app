@@ -148,7 +148,8 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 		var me = this,
 			record = AnnotationUtils.selectionToHighlight(range, null, me.getDocumentElement()),
 			menu,
-			w,offset;
+			w,offset,
+			redactionRegex = /USSC-HTML|Howes_converted|USvJones2012_converted/i;
 
 		if(!record) {
 			return;
@@ -174,27 +175,30 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 			}
 		});
 
-		//inject other menu items:
-		menu.add({
-			text: 'Redact Inline',
-			handler: function(){
-				delete w.range; //so that it does not detach it on cleanup
-				var r = NextThought.model.Redaction.createFromHighlight(record);
-				r.set('replacementContent', 'redaction');
-				me.createAnnotationWidget('redaction',r, range);
-				r.save();
-			}
-		});
+		//hack to allow redactions only in legal texts for now...
+		if (redactionRegex.test(LocationProvider.currentNTIID)) {
+			//inject other menu items:
+			menu.add({
+				text: 'Redact Inline',
+				handler: function(){
+					delete w.range; //so that it does not detach it on cleanup
+					var r = NextThought.model.Redaction.createFromHighlight(record);
+					r.set('replacementContent', 'redaction');
+					me.createAnnotationWidget('redaction',r, range);
+					r.save();
+				}
+			});
 
-		menu.add({
-			text: 'Redact Block',
-			handler: function(){
-				delete w.range; //so that it does not detach it on cleanup
-				var r = NextThought.model.Redaction.createFromHighlight(record);
-				me.createAnnotationWidget('redaction',r, range);
-				r.save();
-			}
-		});
+			menu.add({
+				text: 'Redact Block',
+				handler: function(){
+					delete w.range; //so that it does not detach it on cleanup
+					var r = NextThought.model.Redaction.createFromHighlight(record);
+					me.createAnnotationWidget('redaction',r, range);
+					r.save();
+				}
+			});
+		}
 
 		menu.on('hide', function(){
 				if(!w.isSaving){
