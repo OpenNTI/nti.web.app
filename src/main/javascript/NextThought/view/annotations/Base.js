@@ -203,6 +203,14 @@ Ext.define( 'NextThought.view.annotations.Base', {
 		var me = this;
 		if(!me.record.phantom){return;}
 		me.isSaving = true;
+
+		var p = LocationProvider.getPreferences();
+		p = p ? p.sharing : null;
+
+		if(p){
+			me.record.set('SharedWidth',p.sharedWith || []);
+		}
+
 		me.record.save({
 			scope: me,
 			failure:function(){
