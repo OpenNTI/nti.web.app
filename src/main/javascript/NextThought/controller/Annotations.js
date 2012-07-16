@@ -206,9 +206,9 @@ Ext.define('NextThought.controller.Annotations', {
 
 		//update default sharing setting if we have a shareWith:
 		if (shareWith){
-			this.getController('Library').saveSharingPrefs(shareWith, function(){
-				console.log('callback pref save', arguments);
-			}, true);
+			//this.getController('Library').saveSharingPrefs(shareWith, function(){
+			//	console.log('callback pref save', arguments);
+			//}, true);
 		}
 
 		//define our note object:
@@ -246,9 +246,9 @@ Ext.define('NextThought.controller.Annotations', {
 
 		//update default sharing setting if we have a shareWith:
 		if (shareWith){
-			this.getController('Library').saveSharingPrefs(shareWith, function(){
-				console.log('callback pref save', arguments);
-			}, true);
+			//this.getController('Library').saveSharingPrefs(shareWith, function(){
+			//	console.log('callback pref save', arguments);
+			//}, true);
 		}
 
 		//now save this:
