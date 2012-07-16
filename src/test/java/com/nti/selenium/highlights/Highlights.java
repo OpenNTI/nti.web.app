@@ -31,7 +31,7 @@ public class Highlights extends Navigation {
 			element.click();
 			this.removeHighlight();
 		}
-		selenium1.stop();
+		selenium[1].stop();
 	}
 	
 	public void createHighlight(){

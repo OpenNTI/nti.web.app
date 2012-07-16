@@ -11,27 +11,27 @@ public class TestNavigation extends Navigation {
 	public void testOpenLibrary() {
 		this.setLocation("Prealgebra", "Fractions", "Index");
 		this.openLibrary();
-		assertTrue(selenium1.isElementPresent(this.getXPathBook()));
+		assertTrue(selenium[1].isElementPresent(this.getXPathBook()));
 	}
 	
 	@Test
 	public void testOpenBook() {
 		this.setLocation("Prealgebra", "Fractions", "Index");
 		this.openLibrary();
-		assertTrue(selenium1.isElementPresent(this.getXPathBook()));
+		assertTrue(selenium[1].isElementPresent(this.getXPathBook()));
 		this.openBook();
-		assertTrue(selenium1.isElementPresent(this.getXPathChapter()));
+		assertTrue(selenium[1].isElementPresent(this.getXPathChapter()));
 	}
 
 	@Test
 	public void testOpenChapter() {
 		this.setLocation("Prealgebra", "Fractions", "Index");
 		this.openLibrary();
-		assertTrue(selenium1.isElementPresent(this.getXPathBook()));
+		assertTrue(selenium[1].isElementPresent(this.getXPathBook()));
 		this.openBook();
-		assertTrue(selenium1.isElementPresent(this.getXPathChapter()));
+		assertTrue(selenium[1].isElementPresent(this.getXPathChapter()));
 		this.openChapter();
-		assertTrue(selenium1.isElementPresent(this.getXPathSection()));
+		assertTrue(selenium[1].isElementPresent(this.getXPathSection()));
 	}
 	
 	@Test

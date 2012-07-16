@@ -16,32 +16,32 @@ public class Chat extends Groups {
 		super.setUp();
 		credentials = this.getUsersEmails(3);
 		searchUserNames = this.getSearchUserNames(3);
-		this.driver2 = Chat.createDriver(Chat.browser);
-		this.selenium2 = new WebDriverBackedSelenium(driver2, url);
-		this.selenium2.open(url);
-		this.setActiveSelenium(selenium2);
-		this.setActiverDriver(this.driver2);
+		this.driver[2] = Chat.createDriver(Chat.browser);
+		this.selenium[2] = new WebDriverBackedSelenium(driver[2], url);
+		this.selenium[2].open(url);
+		this.setActiveSelenium(selenium[2]);
+		this.setActiverDriver(this.driver[2]);
 		this.doLogin(credentials[1].getUserName(), credentials[1].getPassword());
-		this.driver3 = Chat.createDriver(Chat.browser);
-		this.selenium3 = new WebDriverBackedSelenium(driver3, url);
-		this.selenium3.open(url);
-		this.setActiveSelenium(selenium3);
-		this.setActiverDriver(this.driver3);
+		this.driver[3] = Chat.createDriver(Chat.browser);
+		this.selenium[3] = new WebDriverBackedSelenium(driver[3], url);
+		this.selenium[3].open(url);
+		this.setActiveSelenium(selenium[3]);
+		this.setActiverDriver(this.driver[3]);
 		this.doLogin(credentials[2].getUserName(), credentials[2].getPassword());
-		this.setActiverDriver(this.driver1);
+		this.setActiverDriver(this.driver[1]);
 		this.addPeopleToGroup(searchUserNames[1], searchUserNames[2]);
-		this.setActiverDriver(this.driver2);
+		this.setActiverDriver(this.driver[2]);
 		this.addPeopleToGroup(searchUserNames[0], searchUserNames[2]);
-		this.setActiverDriver(this.driver3);
+		this.setActiverDriver(this.driver[3]);
 		this.addPeopleToGroup(searchUserNames[0], searchUserNames[1]);
- 		this.setActiverDriver(driver1);
- 		this.setActiveSelenium(selenium1);
+ 		this.setActiverDriver(driver[1]);
+ 		this.setActiveSelenium(selenium[1]);
 	}
 	
 	@After
 	public void tearDown() {
 		super.tearDown();
-		this.setActiverDriver(this.driver2);
+		this.setActiverDriver(this.driver[2]);
 		try{ 
 			this.removeGroups();
 		}
@@ -52,9 +52,9 @@ public class Chat extends Groups {
 		}
 		finally 
 		{
-			selenium2.stop(); 
+			selenium[2].stop(); 
 		}
-		this.setActiverDriver(this.driver3);
+		this.setActiverDriver(this.driver[3]);
 		try{ 
 			this.removeGroups();
 		}
@@ -65,7 +65,7 @@ public class Chat extends Groups {
 		}
 		finally 
 		{
-			selenium3.stop(); 
+			selenium[3].stop(); 
 		}
 	}
 	

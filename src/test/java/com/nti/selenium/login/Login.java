@@ -17,7 +17,7 @@ public class Login extends Base {
 	protected void doLogin(final String username, final String password) {
 		this.waitForElement(XpathUtilsLogin.getUsername());
 		for(int tries=0; (!this.elementExists(XpathUtilsLogin.getUsername()) && tries < 5); tries++){
-			this.selenium.refresh();
+			this.selenium[0].refresh();
 		}
 		if(!this.elementExists(XpathUtilsLogin.getUsername())){
 			fail("could not load the web app");

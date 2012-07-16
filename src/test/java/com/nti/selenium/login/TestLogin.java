@@ -11,7 +11,7 @@ public class TestLogin extends Login {
 	@Test
 	public void testLogin(){
 		this.login();
-		assertEquals(selenium1.getTitle(), "NextThought App");
+		assertEquals(selenium[1].getTitle(), "NextThought App");
 	}
 	
 	@Test
@@ -21,20 +21,20 @@ public class TestLogin extends Login {
 			fail("Should have errored for lack of password field");
 		} catch (final Exception e) {
 		} finally {
-			assertEquals(selenium1.getTitle(), "NextThought Login");
+			assertEquals(selenium[1].getTitle(), "NextThought Login");
 		}
 	}
 	
 	@Test
 	public void testIncorrectPasswordLogin(){
 		this.login(credentials[0].getUserName(), "incorrect_password");
-		assertEquals(selenium1.getTitle(), "NextThought Login");
-		assertTrue(selenium1.isElementPresent(XpathUtilsLogin.getLoginProblemMessage()));
+		assertEquals(selenium[1].getTitle(), "NextThought Login");
+		assertTrue(selenium[1].isElementPresent(XpathUtilsLogin.getLoginProblemMessage()));
 	}
 	
 	@Test
 	public void testLogout(){
 		this.logout();
-		assertEquals(selenium1.getTitle(), "NextThought Login");
+		assertEquals(selenium[1].getTitle(), "NextThought Login");
 	}
 }

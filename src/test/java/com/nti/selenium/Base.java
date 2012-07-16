@@ -37,14 +37,8 @@ public class Base {
 	protected static String[] searchUserNames;
 	protected static final Properties propertiesFile = new Properties();
 	
-	protected WebDriver driver;
-	protected WebDriver driver1;
-	protected WebDriver driver2;
-	protected WebDriver driver3;
-	protected Selenium selenium;
-	protected Selenium selenium1;
-	protected Selenium selenium2;
-	protected Selenium selenium3;
+	protected WebDriver[] driver = new WebDriver[4];
+	protected Selenium[] selenium = new Selenium[4];
 	protected boolean isDefault = true;
 	protected String xpathBuilder = null;
 	
@@ -98,24 +92,24 @@ public class Base {
 	
 	@Before
 	public void setUp() throws Exception {
-		driver1 = Base.createDriver(browser);
-		selenium1 = new WebDriverBackedSelenium(driver1, url);
-		selenium1.open(url);
-		driver = driver1;
-		selenium = selenium1;
+		driver[1] = Base.createDriver(browser);
+		selenium[1] = new WebDriverBackedSelenium(driver[1], url);
+		selenium[1].open(url);
+		driver[0] = driver[1];
+		selenium[0] = selenium[1];
 	}
 	
 	@After
 	public void tearDown() throws Exception{
-		selenium1.stop();
+		selenium[1].stop();
 	}
 	
 	public void setActiverDriver(WebDriver driver){
-		this.driver = driver;
+		this.driver[0] = driver;
 	}
 	
 	public void setActiveSelenium(Selenium selenium){
-		this.selenium = selenium;
+		this.selenium[0] = selenium;
 	}
 	
 	public String findContentFrameBodyElement() {
@@ -124,26 +118,26 @@ public class Base {
 	
 	public void switchToIframe() {
 		if (isDefault) {
-			final JavascriptExecutor executor = (JavascriptExecutor) driver;
+			final JavascriptExecutor executor = (JavascriptExecutor) driver[0];
 			final WebElement iframe = (WebElement)executor.executeScript(findContentFrameBodyElement());
-			this.driver.switchTo().frame(iframe);
+			this.driver[0].switchTo().frame(iframe);
 			isDefault = false;
 		}
 	}
 	
 	public void switchToDefault() {
 		if (!isDefault) {
-			this.driver.switchTo().defaultContent();
+			this.driver[0].switchTo().defaultContent();
 			isDefault = true;
 		}
 	}
 	
 	public WebElement findElement(final String xpath) throws NoSuchElementException {
-		return this.driver.findElement(By.xpath(xpath));
+		return this.driver[0].findElement(By.xpath(xpath));
 	}
 	
 	public List<WebElement> findElements(final String xpath) throws NoSuchElementException {
-		return this.driver.findElements(By.xpath(xpath));
+		return this.driver[0].findElements(By.xpath(xpath));
 	}
 	
 	public boolean elementExists(final String xpath) {
@@ -200,7 +194,7 @@ public class Base {
 				"var range = window.document.createRange();  range.setStart(el,start); range.setEnd(el,end); ",
 				"sel.removeAllRanges(); sel.addRange(range);} selectElementContents(window.document.getElementsByTagName ('p')", 
 				"[", Integer.toString(index), "].firstChild,", Integer.toString(start), ",", Integer.toString(end), ")");
-		((JavascriptExecutor)this.driver).executeScript(script);    	
+		((JavascriptExecutor)this.driver[0]).executeScript(script);    	
 		final List<WebElement> elements = this.findElements(this.getPageContent());
 		elements.get(0).click();
 	}
@@ -212,7 +206,7 @@ public class Base {
 				"var range = window.document.createRange();  range.setStart(el,start); range.setEnd(el,end); ",
 				"sel.removeAllRanges(); sel.addRange(range);} selectElementContents(window.document.getElementsByTagName ('i')", 
 				"[", Integer.toString(index), "].firstChild,", Integer.toString(start), ",", Integer.toString(end), ")");
-		((JavascriptExecutor)this.driver).executeScript(script);   
+		((JavascriptExecutor)this.driver[0]).executeScript(script);   
 		final WebElement element = this.findElement("//i"); 
 		element.click();
 	}

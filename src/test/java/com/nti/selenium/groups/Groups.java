@@ -25,7 +25,7 @@ public class Groups extends Navigation {
 	@After 
 	public void tearDown(){ 
 		try{ 
-			this.setActiverDriver(driver1);
+			this.setActiverDriver(driver[1]);
 			this.removeGroups();
 		}
 		catch (Exception e)
@@ -35,7 +35,7 @@ public class Groups extends Navigation {
 		}
 		finally 
 		{
-			selenium1.stop(); 
+			selenium[1].stop(); 
 		}
 	}
 
@@ -202,7 +202,7 @@ public class Groups extends Navigation {
 				System.out.println("no group"); 
 			}
 		}
-		WebElement element2 = this.driver.findElement(By.xpath("//span[text() = 'Finish']/.."));
+		WebElement element2 = this.driver[0].findElement(By.xpath("//span[text() = 'Finish']/.."));
 		element2.click();
 	}
 }

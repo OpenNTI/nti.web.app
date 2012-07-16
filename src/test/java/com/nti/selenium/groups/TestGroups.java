@@ -23,7 +23,7 @@ public class TestGroups extends Groups {
 	@Test 
 	public void testAddPeopleToGroup()
 	{ 
-		this.addOnePersonToGroup(); 
+		this.addOnePersonToGroup(1); 
 	}
 	
 	@Test 
