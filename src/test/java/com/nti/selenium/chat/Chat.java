@@ -18,10 +18,17 @@ public class Chat extends Groups {
 		this.selenium2.open(url);
 		this.setActiverDriver(this.driver2);
 		this.doLogin(credentials[1].getUserName(), credentials[1].getPassword());
+		this.driver3 = Chat.createDriver(Chat.browser);
+		this.selenium3 = new WebDriverBackedSelenium(driver3, url);
+		this.selenium3.open(url);
+		this.setActiverDriver(this.driver3);
+		this.doLogin(credentials[2].getUserName(), credentials[2].getPassword());
 		this.setActiverDriver(this.driver1);
-		this.addPeopleToGroup(searchUserNames[1]);
+		this.addPeopleToGroup(searchUserNames[1], searchUserNames[2]);
 		this.setActiverDriver(this.driver2);
-		this.addPeopleToGroup(searchUserNames[0]);
+		this.addPeopleToGroup(searchUserNames[0], searchUserNames[2]);
+		this.setActiverDriver(this.driver3);
+		this.addPeopleToGroup(searchUserNames[1], searchUserNames[2]);
 		this.setActiverDriver(driver1);
 	}
 	
@@ -41,17 +48,29 @@ public class Chat extends Groups {
 		{
 			selenium2.stop(); 
 		}
+		this.setActiverDriver(this.driver3);
+		try{ 
+			this.removeGroups();
+		}
+		catch (Exception e)
+		{ 
+			System.out.println("Unable to remove groups/deleting test");
+			System.out.println(e.getMessage());
+		}
+		finally 
+		{
+			selenium3.stop(); 
+		}
 	}
 	
 	public void startChat(){
 		this.findElement(XpathUtilsChat.getGroupsTab()).click();
 		this.waitForElement(XpathUtilsChat.getIndividualGroups());
-		this.findElements(XpathUtilsChat.getIndividualGroups()).get(0).click();
+		this.findElements(XpathUtilsChat.getIndividualGroups()).get(1).click();
 	}
 	
 	public void sendMessage(String message){
 		this.findElement(XpathUtilsChat.getChatInputField()).sendKeys(message + "\r");
-//		this.findElement(XpathUtilsChat.getChatInputField()).sendKeys();
 	}
 	
 }

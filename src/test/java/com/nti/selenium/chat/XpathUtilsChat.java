@@ -39,4 +39,8 @@ public class XpathUtilsChat extends XpathUtilsLogin {
 						   xpathBuilder("div", "class", "body-text", message));
 	}
 	
+//	public static String getGroupChatButton(){
+//		
+//	}
+	
 }

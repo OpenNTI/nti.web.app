@@ -7,15 +7,15 @@ import org.junit.Test;
 
 public class TestChat extends Chat {
 
-	@Test
-	public void testBasicChat(){
-		this.startChat();
-		this.waitForElement(XpathUtilsChat.getChatUser("Test"));
-		String ID1 = this.findElement(XpathUtilsChat.getChatUser("Test")).getAttribute("id");
-		assertTrue(ID1.matches("chat-window-.*"));
-		this.setActiverDriver(driver2);
-		assertFalse(this.elementExists(XpathUtilsChat.getChatUser("Test")));
-	}
+//	@Test
+//	public void testBasicChat(){
+//		this.startChat();
+//		this.waitForElement(XpathUtilsChat.getChatUser("Test"));
+//		String ID1 = this.findElement(XpathUtilsChat.getChatUser("Test")).getAttribute("id");
+//		assertTrue(ID1.matches("chat-window-.*"));
+//		this.setActiverDriver(driver2);
+//		assertFalse(this.elementExists(XpathUtilsChat.getChatUser("Test")));
+//	}
 	
 	@Test
 	public void testSendMessageInChat(){
