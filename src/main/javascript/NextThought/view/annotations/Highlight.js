@@ -16,25 +16,18 @@ Ext.define('NextThought.view.annotations.Highlight', {
 			this.range = config.browserRange;
 		}
 		this.content = Ext.fly(this.doc.getElementById('NTIContent')).first(false,true);
-		try {
-			this.getRange(); //get range right her up front, this won't render it yet.
-		}
-		catch (e) {
-			//don't die constructor:
-			console.error(Globals.getError(e));
-		}
-
-		//console.log('build highlight for',this.getRecordField('selectedText'));
+		this.getRange(); //get range right her up front, this won't render it yet.
+		console.log('build highlight for',this.getRecordField('selectedText'));
 		return this;
 	},
 
 
 	getRange: function(){
 		if(!this.range){
-			//console.warn('GET RANGE FOR:', this.getRecordField('applicableRange').getStart().getContexts()[0].getContextText());
 			this.range = Anchors.toDomRange(this.getRecordField('applicableRange'),this.doc);
 			if(!this.range){
-				console.log('bad range?', Ext.encode(this.getRecordField('applicableRange')));
+				console.log('bad range?', this.getRecordField('applicableRange'));
+				Ext.Error.raise('bad range? '+Ext.encode(this.getRecordField('applicableRange')));
 			}
 		}
 		return this.range;
@@ -102,22 +95,11 @@ Ext.define('NextThought.view.annotations.Highlight', {
 			ctx,
 			adjustment,
 			lineHeight = this.getLineHeight(),
-			x, y, w, h, left, r, i, s = [], nr,
+			s = RectUtils.merge(range.getClientRects(),lineHeight,width+1),
+			i = s.length - 1, x, y, w, h, left, r,
 			lastY=0, c, small,
 			padding = 2,
-			last = true,
-			offset,
-			walker = this.doc.createTreeWalker(range.commonAncestorContainer);
-
-		walker.currentNode = range.startContainer;
-		offset = range.startOffset;
-
-		while (walker.currentNode != range.endContainer) {
-			nr = this.doc.createRange();
-			nr.setStart(walker.currentNode,offset);
-			nr.setEnd(walker.currentNode,99999);
-			s = s.concat(RectUtils.merge(nr.getClientRects(),lineHeight,width+1));
-		}
+			last = true;
 
 		if(style === 'suppressed'){
 			return boundingTop;
@@ -144,8 +126,6 @@ Ext.define('NextThought.view.annotations.Highlight', {
 
 		ctx = this.canvas.getContext('2d');
 		ctx.fillStyle = this.compElements.first().getStyle('background-color');
-
-		i = s.length - 1;
 		for(; i>=0; i--){
 			r = s[i];
 
@@ -162,6 +142,8 @@ Ext.define('NextThought.view.annotations.Highlight', {
 			h = r.height + (padding*2);
 
 			if(!last && (Math.abs(y - lastY) < lineHeight || y > lastY )){ continue; }
+			//Remove the possibility of a "just the triangle" line at the end
+			if(last && w < 10) continue; 
 
 			if(last){
 				c = Ext.get(this.counter);
@@ -179,14 +161,13 @@ Ext.define('NextThought.view.annotations.Highlight', {
 				adjustment = 0;
 			}
 
-						if (last) {	
-							w -= 8;
-							ctx.beginPath();
-							ctx.moveTo(x+w,y);
-							ctx.lineTo(x+w,y+h);
-							ctx.lineTo(x+w+8,y);
-							ctx.lineTo(x+w,y);
-						}
+			if (last) {	
+				ctx.beginPath();
+				ctx.moveTo(x+w,y);
+				ctx.lineTo(x+w,y+h);
+				ctx.lineTo(x+w+4,y);
+				ctx.fill();
+			}
 			//TODO: clamp to 24px tall (centered in the rect)
 			ctx.fillRect( x, y, w, h);
 
