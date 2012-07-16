@@ -6,7 +6,7 @@ public class TestChat extends Chat {
 
 	@Test
 	public void testFirst(){
-		this.wait_(20);
+		System.out.println("testing");
 	}
 	
 }

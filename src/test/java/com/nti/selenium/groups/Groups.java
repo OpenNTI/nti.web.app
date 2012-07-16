@@ -21,49 +21,51 @@ public class Groups extends Navigation {
 		credentials = this.getUsersEmails(10);
 		
 	}
-	
+
 	@After 
 	public void tearDown(){ 
 		try{ 
-			
-			int oldGroupCount = 0;
-			
-			for (;;)
-			{
-				this.wait_(1);
-				List <WebElement> buttons = this.findElements(XpathUtilsGroups.getPeopleAndGroupsDeleteButton());
-				List <WebElement> groups = this.findElements(XpathUtilsGroups.getPeopleAndGroups());
-				
-				if (groups.size() <=1)
-				{
-					break; 
-				}
-				
-				else if (oldGroupCount == groups.size())
-				{
-					break;
-				}
-
-				else 
-				{
-					oldGroupCount = groups.size();
-					groups.get(1).click();
-					buttons.get(1).click();
-				}
-			}
+			this.removeGroups();
 		}
 		catch (Exception e)
 		{ 
 			System.out.println("Unable to remove groups/deleting test");
 			System.out.println(e.getMessage());
 		}
-		
 		finally 
 		{
 			selenium1.stop(); 
 		}
+	}
 
+	public void removeGroups(){
+		
+		int oldGroupCount = 0;
+		
+		this.openGroups();
+		for (;;)
+		{
+			this.wait_(1);
+			List <WebElement> buttons = this.findElements(XpathUtilsGroups.getPeopleAndGroupsDeleteButton());
+			List <WebElement> groups = this.findElements(XpathUtilsGroups.getPeopleAndGroups());
 
+			if (groups.size() <=1)
+			{
+				break; 
+			}
+
+			else if (oldGroupCount == groups.size())
+			{
+				break;
+			}
+
+			else 
+			{
+				oldGroupCount = groups.size();
+				groups.get(1).click();
+				buttons.get(1).click();
+			}
+		}
 	}
 
 	public void openGroups()
@@ -140,14 +142,14 @@ public class Groups extends Navigation {
 			this.findElement("//span[text()='Finish']").click();
 		}
 	}
-	
+
 	public void  addOnePersonToGroup(int userSearchNumber)
 	{
 		this.addGroup("TestGroup"); 
 		this.findElement(XpathUtilsGroups.getInputUsername()).sendKeys(credentials[1].getUserName());
 		this.waitForElement(XpathUtilsGroups.getPersonGroupItem(credentials[1].getUserName()));
 		this.findElement(XpathUtilsGroups.getPersonGroupItem(credentials[1].getUserName())).click();
-		 
+
 
 		//		boolean bool = this.elementExists(XpathUtilsGroups.getName("Logan Testi"));
 
