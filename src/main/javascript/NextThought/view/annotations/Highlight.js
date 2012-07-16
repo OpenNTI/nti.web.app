@@ -195,6 +195,8 @@ Ext.define('NextThought.view.annotations.Highlight', {
 			afterWords = after.innerHTML.trim().split(' '),
 			style = this.record.get('style') || 'plain';
 
+		this.rendered.push(containingSpan.dom);
+
 		containingSpan.update(afterWords.pop());
 		Ext.fly(after).update(afterWords.join(' ') + ' ');
 		containingSpan.addCls('counter-container');
