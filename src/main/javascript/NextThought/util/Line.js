@@ -29,7 +29,7 @@ Ext.define('NextThought.util.Line',{
 
 	/** @private */
 	resolveNodeAt: function(y,doc){
-		var limit = doc.querySelector('#NTIContent > .page-contents');//TODO: knowing the selector path feels dirty. Use doc.body instead?
+		var limit = doc.getElementById('NTIContent');
 		var width = limit.getBoundingClientRect().width;
 		var e = this.findBlockParent( this.firstElementOnLine(y,doc,limit,width), doc, limit);
 		return Ext.fly(limit).contains(e) ? e : null;
