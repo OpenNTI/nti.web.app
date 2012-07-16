@@ -170,12 +170,6 @@ Ext.define( 'NextThought.view.annotations.Base', {
 	
 
 	visibilityChanged: function(show){
-		var i = Ext.get(this.img);
-		if(i){
-			if(show) { i.show(); }
-			else { i.hide(); }
-		}
-
 		this.requestRender();
 	},
 	

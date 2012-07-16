@@ -203,6 +203,10 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 
 		Ext.each(Ext.Array.clone(me.registry[prefix]), function(o){
 			try {
+				if(!o.isVisible){
+					return;
+				}
+
 				var y = o.render(), b;
 				if(!y){
 					console.log(o, 'returned a falsy y:',y);
