@@ -39,8 +39,55 @@ public class XpathUtilsChat extends XpathUtilsLogin {
 						   xpathBuilder("div", "class", "body-text", message));
 	}
 	
-//	public static String getGroupChatButton(){
-//		
-//	}
+	public static String getAddPersonButton(String chatName){
+		return buildString(xpathBuilder("span", chatName),
+						   "/..",
+						   xpathBuilder("div", "class", "tools"),
+						   xpathBuilder("img", "class", "tool add-people"));
+	}
 	
+	public static String getMinimizeButton(String chatName){
+		return buildString(xpathBuilder("span", chatName),
+						   "/..",
+						   xpathBuilder("div", "class", "header-body"),
+						   xpathBuilder("div", "class", "controls has-tools"),
+						   xpathBuilder("img", "class", "tool minimize"));
+	}
+	
+	public static String getCloseChatButton(String chatName){
+		return buildString(xpathBuilder("span", chatName),
+						   "/..",
+						   xpathBuilder("div", "class", "header-body"),
+						   xpathBuilder("div", "class", "controls has-tools"),
+						   xpathBuilder("img", "class", "tool close"));
+	}
+	
+	public static String getMinimizedChat(String chatName){
+		return buildString(xpathBuilder("div", "class", "window-minimized"),
+						   xpathBuilder("div", "class", "title"),
+						   xpathBuilder("span", chatName));
+	}
+	
+	public static String getCloseChatMinimized(String chatName){
+		return buildString(xpathBuilder("div", "class", "window-minimized"),
+				   xpathBuilder("div", "class", "title"),
+				   xpathBuilder("span", chatName),
+				   "/../..",
+				   xpathBuilder("div", "class", "closer"),
+				   xpathBuilder("img", "class", "closer-nib"));
+	}
+	
+	public static String getGroupChatButton(String groupName){
+		return buildString(xpathBuilder("span", groupName),
+						   "/../..",
+						   xpathBuilder("div", "class", "x-tool x-box-item x-tool-default x-tool-pressed"),
+						   xpathBuilder("img", "data-qtip", "Chat with this group"));
+	}
+	
+	public static String getAddUserExpandList(String username){
+		return buildString(xpathBuilder("div", "class", "x-component gutter-entry x-component-chat-window"),
+						   xpathBuilder("div", "class", "wrapper"),
+						   xpathBuilder("div", "class", "name", username));
+	}
+
 }

@@ -77,7 +77,27 @@ public class Chat extends Groups {
 	}
 	
 	public void sendMessage(String message){
-		this.findElement(XpathUtilsChat.getChatInputField()).sendKeys(message + "\r");
+		this.findElement(XpathUtilsChat.getChatInputField()).sendKeys(XpathUtilsChat.buildString(message, "\r"));
+	}
+	
+	public void clickAddUserButton(String chatName){
+		this.findElement(XpathUtilsChat.getAddPersonButton(chatName)).click();
+	}
+	
+	public void clickMinimizeButton(String chatName){
+		this.findElement(XpathUtilsChat.getMinimizeButton(chatName)).click();
+	}
+	
+	public void clickMinimizedChat(String chatName){
+		this.findElement(XpathUtilsChat.getMinimizedChat(chatName)).click();
+	}
+	
+	public void clickChatCloseButton(String chatName){
+		this.findElement(XpathUtilsChat.getCloseChatButton(chatName)).click();
+	}
+	
+	public void clickMinimizedChatCloseButton(String chatName){
+		this.findElement(XpathUtilsChat.getCloseChatMinimized(chatName)).click();
 	}
 	
 }

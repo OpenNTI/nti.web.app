@@ -32,4 +32,14 @@ public class TestChat extends Chat {
 		assertTrue(this.elementExists(XpathUtilsChat.getOtherMessage("hello")));
 	}
 	
+	@Test
+	public void testAddUserButton(){
+		this.startChat();
+		this.waitForElement(XpathUtilsChat.getChatUser("Test"));
+		String ID1 = this.findElement(XpathUtilsChat.getChatUser("Test")).getAttribute("id");
+		assertTrue(ID1.matches("chat-window-.*"));
+		this.clickAddUserButton("Test");
+		assertTrue(this.elementExists(XpathUtilsChat.getAddUserExpandList("Test")));
+	}
+	
 }
