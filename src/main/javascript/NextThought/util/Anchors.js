@@ -477,7 +477,13 @@ Ext.define('NextThought.util.Anchors', {
 			}
 
 			if( node.textContent.indexOf(context.contextText) === adjustedOffset){
+				//console.log('successful match', isStart, node.textContent.indexOf(context.contextText), adjustedOffset);
+				console.log(node.textContent);
 				return true;
+			}
+			else if ( node.textContent.indexOf(context.contextText) !== -1) {
+				//console.log('UNsuccessful match', isStart, node.textContent.indexOf(context.contextText), adjustedOffset);
+				console.log(node.textContent);
 			}
 			return false;
 		}
@@ -813,7 +819,7 @@ Ext.define('NextThought.util.Anchors', {
 			ancestor = range.commonAncestorContainer;
 
 		//make sure the common ancestor is anchorable, otherwise we have a problem, climb to one that is
-		while(ancestor && !Anchors.isNodeAnchorable(ancestor)){
+		while(ancestor && (!Anchors.isNodeAnchorable(ancestor) || Ext.isTextNode(ancestor))){
 			ancestor = ancestor.parentNode;
 		}
 		if (!ancestor){

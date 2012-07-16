@@ -16,14 +16,22 @@ Ext.define('NextThought.view.annotations.Highlight', {
 			this.range = config.browserRange;
 		}
 		this.content = Ext.fly(this.doc.getElementById('NTIContent')).first(false,true);
-		this.getRange(); //get range right her up front, this won't render it yet.
-		console.log('build highlight for',this.getRecordField('selectedText'));
+		try {
+			this.getRange(); //get range right her up front, this won't render it yet.
+		}
+		catch (e) {
+			//don't die constructor:
+			console.error(Globals.getError(e));
+		}
+
+		//console.log('build highlight for',this.getRecordField('selectedText'));
 		return this;
 	},
 
 
 	getRange: function(){
 		if(!this.range){
+			//console.warn('GET RANGE FOR:', this.getRecordField('applicableRange').getStart().getContexts()[0].getContextText());
 			this.range = Anchors.toDomRange(this.getRecordField('applicableRange'),this.doc);
 			if(!this.range){
 				console.log('bad range?', this.getRecordField('applicableRange'));
