@@ -41,6 +41,7 @@ public class Base {
 	protected WebDriver driver1;
 	protected WebDriver driver2;
 	protected WebDriver driver3;
+	protected Selenium selenium;
 	protected Selenium selenium1;
 	protected Selenium selenium2;
 	protected Selenium selenium3;
@@ -101,6 +102,7 @@ public class Base {
 		selenium1 = new WebDriverBackedSelenium(driver1, url);
 		selenium1.open(url);
 		driver = driver1;
+		selenium = selenium1;
 	}
 	
 	@After
@@ -110,6 +112,10 @@ public class Base {
 	
 	public void setActiverDriver(WebDriver driver){
 		this.driver = driver;
+	}
+	
+	public void setActiveSelenium(Selenium selenium){
+		this.selenium = selenium;
 	}
 	
 	public String findContentFrameBodyElement() {

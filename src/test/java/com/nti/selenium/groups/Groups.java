@@ -25,6 +25,7 @@ public class Groups extends Navigation {
 	@After 
 	public void tearDown(){ 
 		try{ 
+			this.setActiverDriver(driver1);
 			this.removeGroups();
 		}
 		catch (Exception e)
@@ -133,8 +134,12 @@ public class Groups extends Navigation {
 		String time = Long.toString(System.currentTimeMillis());
 		this.addGroup(time);
 		for(String str: strings){
+			this.waitForElement(XpathUtilsGroups.getInputUsername());
 			this.findElement(XpathUtilsGroups.getInputUsername()).sendKeys(str);
 			this.waitForElement(XpathUtilsGroups.getPersonGroupItem(str));
+			if(!this.elementExists(XpathUtilsGroups.getPersonGroupItem(str))){
+				System.out.println("taking a break");
+			}
 			this.findElement(XpathUtilsGroups.getPersonGroupItem(str)).click();
 			this.waitForElement("//div[text()='" + time + "']");
 			this.findElement("//div[text()='" + time + "']").click();

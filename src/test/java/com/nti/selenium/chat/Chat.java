@@ -1,8 +1,11 @@
 package com.nti.selenium.chat;
 
+import java.util.List;
+
 import org.junit.After;
 import org.junit.Before;
 import org.openqa.selenium.WebDriverBackedSelenium;
+import org.openqa.selenium.WebElement;
 
 import com.nti.selenium.groups.Groups;
 
@@ -16,11 +19,13 @@ public class Chat extends Groups {
 		this.driver2 = Chat.createDriver(Chat.browser);
 		this.selenium2 = new WebDriverBackedSelenium(driver2, url);
 		this.selenium2.open(url);
+		this.setActiveSelenium(selenium2);
 		this.setActiverDriver(this.driver2);
 		this.doLogin(credentials[1].getUserName(), credentials[1].getPassword());
 		this.driver3 = Chat.createDriver(Chat.browser);
 		this.selenium3 = new WebDriverBackedSelenium(driver3, url);
 		this.selenium3.open(url);
+		this.setActiveSelenium(selenium3);
 		this.setActiverDriver(this.driver3);
 		this.doLogin(credentials[2].getUserName(), credentials[2].getPassword());
 		this.setActiverDriver(this.driver1);
@@ -28,8 +33,9 @@ public class Chat extends Groups {
 		this.setActiverDriver(this.driver2);
 		this.addPeopleToGroup(searchUserNames[0], searchUserNames[2]);
 		this.setActiverDriver(this.driver3);
-		this.addPeopleToGroup(searchUserNames[1], searchUserNames[2]);
-		this.setActiverDriver(driver1);
+		this.addPeopleToGroup(searchUserNames[0], searchUserNames[1]);
+ 		this.setActiverDriver(driver1);
+ 		this.setActiveSelenium(selenium1);
 	}
 	
 	@After
@@ -66,7 +72,8 @@ public class Chat extends Groups {
 	public void startChat(){
 		this.findElement(XpathUtilsChat.getGroupsTab()).click();
 		this.waitForElement(XpathUtilsChat.getIndividualGroups());
-		this.findElements(XpathUtilsChat.getIndividualGroups()).get(1).click();
+		List<WebElement> elements = this.findElements(XpathUtilsChat.getIndividualGroups());
+		elements.get(elements.size()-1).click();
 	}
 	
 	public void sendMessage(String message){

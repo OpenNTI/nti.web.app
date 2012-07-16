@@ -2,6 +2,8 @@ package com.nti.selenium.login;
 
 import org.junit.Before;
 
+import static org.junit.Assert.fail;
+
 import com.nti.selenium.Base;
 
 public class Login extends Base {
@@ -14,6 +16,12 @@ public class Login extends Base {
 	
 	protected void doLogin(final String username, final String password) {
 		this.waitForElement(XpathUtilsLogin.getUsername());
+		for(int tries=0; (!this.elementExists(XpathUtilsLogin.getUsername()) && tries < 5); tries++){
+			this.selenium.refresh();
+		}
+		if(!this.elementExists(XpathUtilsLogin.getUsername())){
+			fail("could not load the web app");
+		}
 		this.findElement(XpathUtilsLogin.getUsername()).sendKeys(username);
 		this.waitForElement(XpathUtilsLogin.getPassword());
 		this.findElement(XpathUtilsLogin.getPassword()).sendKeys(password);
