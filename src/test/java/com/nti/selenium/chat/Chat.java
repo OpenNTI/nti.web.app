@@ -49,4 +49,9 @@ public class Chat extends Groups {
 		this.findElements(XpathUtilsChat.getIndividualGroups()).get(0).click();
 	}
 	
+	public void sendMessage(String message){
+		this.findElement(XpathUtilsChat.getChatInputField()).sendKeys(message + "\r");
+//		this.findElement(XpathUtilsChat.getChatInputField()).sendKeys();
+	}
+	
 }
