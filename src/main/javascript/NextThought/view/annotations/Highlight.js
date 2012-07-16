@@ -95,11 +95,20 @@ Ext.define('NextThought.view.annotations.Highlight', {
 			ctx,
 			adjustment,
 			lineHeight = this.getLineHeight(),
-			s = RectUtils.merge(range.getClientRects(),lineHeight,width+1),
 			i = s.length - 1, x, y, w, h, left, r,
 			lastY=0, c, small,
 			padding = 2,
 			last = true;
+		var walker = document.createTreeWalker(range.commonAncestorContainer);
+		walker.currentNode = range.startContainer;
+		var offset = range.startOffset;
+		var s = [];
+		while (walker.currentNode != range.endContainer) {
+			var nr = document.createRange();
+			nr.setStart(walker.currentNode,offset);
+			nr.setEnd(walker.currentNode,99999);
+			s = s.concat(RectUtils.merge(nr.getClientRects(),lineHeight,width+1));
+		}
 
 		if(style === 'suppressed'){
 			return boundingTop;
@@ -123,6 +132,8 @@ Ext.define('NextThought.view.annotations.Highlight', {
 			width: width+(leftOffset*2),
 			height: boundingHeight+(topOffset*2)
 		});
+
+		var walker = document.createTreeWalker(range.commonAncestorContainer);
 
 		ctx = this.canvas.getContext('2d');
 		ctx.fillStyle = this.compElements.first().getStyle('background-color');
@@ -159,6 +170,14 @@ Ext.define('NextThought.view.annotations.Highlight', {
 				adjustment = 0;
 			}
 
+						if (last) {	
+							w -= 8;
+							ctx.beginPath();
+							ctx.moveTo(x+w,y);
+							ctx.lineTo(x+w,y+h);
+							ctx.lineTo(x+w+8,y);
+							ctx.lineTo(x+w,y);
+						}
 			//TODO: clamp to 24px tall (centered in the rect)
 			ctx.fillRect( x, y, w, h);
 
@@ -183,9 +202,11 @@ Ext.define('NextThought.view.annotations.Highlight', {
 			body.parentNode.insertBefore(cnt,body);
 		}
 
-		return this.createElement(
+		a = this.createElement(
 			'canvas', cnt,
 			'highlight-canvas');
+		cnt.style.zIndex = 1;
+		return a
 	},
 
 
@@ -202,7 +223,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
 		containingSpan.addCls('counter-container');
 		el.appendTo(containingSpan);
 		containingSpan.appendTo(after);
-
+			
 		el.addCls([this.highlightCls,'counter', style]);//,'with-count']);
 		el.on('click', this.onClick, this);
 		el.update('&nbsp;');
