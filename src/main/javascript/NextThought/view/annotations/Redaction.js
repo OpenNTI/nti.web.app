@@ -24,10 +24,13 @@ Ext.define('NextThought.view.annotations.Redaction', {
 		});
 
 		//allow edit of content only if this is inline and it's not currently expanded:
-		if (this.isInlineRedaction() && this.actionSpan.hasCls(this.cls)){
+		if (this.isInlineRedaction()){
 			items.push({
 				text : 'Edit Redaction Content',
 				handler: function(menuitem, event){
+					if (!this.actionSpan || !(this.actionSpan.hasCls(this.cls))) {
+						me.toggleRedaction();
+					}
 					me.makeEditableSpanEditable();
 				}
 			});
