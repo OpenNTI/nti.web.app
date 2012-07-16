@@ -227,7 +227,7 @@ Ext.define('NextThought.controller.Annotations', {
 				var success = request.success,
 					rec = success ? record: null;
 				if (success){
-					this.self.events.fireEvent('new-note', rec);
+					this.self.events.fireEvent('new-note', rec, range);
 				}
 				Ext.callback(callback, this, [success, rec]);
 			}

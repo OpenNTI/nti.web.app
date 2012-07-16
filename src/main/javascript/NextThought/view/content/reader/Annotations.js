@@ -263,7 +263,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 	},
 
 
-	onNoteCreated: function(record){
+	onNoteCreated: function(record, browserRange){
 		//check to see if reply is already there, if so, don't do anything...
 		if (Ext.getCmp(IdCache.getComponentId(record,null,this.prefix))) {
 			return;
@@ -275,7 +275,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 //			if (parent){parent.addReply(record);}
 //		}
 //		else {
-			this.createAnnotationWidget('note',record);
+			this.createAnnotationWidget('note',record, browserRange);
 //		}
 	},
 

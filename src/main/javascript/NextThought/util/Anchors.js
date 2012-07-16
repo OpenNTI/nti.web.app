@@ -485,7 +485,8 @@ Ext.define('NextThought.util.Anchors', {
 			else if ( node.textContent.indexOf(context.contextText) !== -1) {
 				console.log('UNsuccessful match', isStart, node.textContent.indexOf(context.contextText), adjustedOffset);
 				console.log(node.textContent);
-			}*/
+			}
+			*/
 			return false;
 		}
 
@@ -850,6 +851,7 @@ Ext.define('NextThought.util.Anchors', {
 		//remove any action or counter spans and their children:
 		(new Ext.CompositeElement(extElement.query('span.application-highlight.counter'))).remove();
 		(new Ext.CompositeElement(extElement.query('span.redactionAction'))).remove();
+		(new Ext.CompositeElement(extElement.query('span.blockRedactionAction'))).remove();
 
 		//loop over elements we need to remove and, well, remove them:
 		Ext.each(extElement.query('[data-non-anchorable]'), function(n){
@@ -878,6 +880,8 @@ Ext.define('NextThought.util.Anchors', {
 
 		//some adjustment if the text nodes are the same then the start offset will be wrong
 		if(startNode === endNode){newStartOffset -= ('['+Anchors.PURIFICATION_TAG+':end]').length;}
+
+		//console.log("DOCFRAG=", docFrag.textContent);
 
 		//build the new range divorced from the dom and return:
 		resultRange = doc.createRange();
