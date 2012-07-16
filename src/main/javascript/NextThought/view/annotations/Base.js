@@ -120,7 +120,7 @@ Ext.define( 'NextThought.view.annotations.Base', {
 		this.record = record;
 
 		record.on('updated',this.attachRecord, this, {single: true});
-		record.on('destroy',this.cleanup, this, {single:true});
+		record.on('destroy',this.onDestroy, this, {single:true});
 
 		if(old.getId() !== record.getId()){
 			console.warn('Annotation:',old, '!==', record);
@@ -128,9 +128,20 @@ Ext.define( 'NextThought.view.annotations.Base', {
 
 		if(old !== record) {
 			old.un('updated', this.attachRecord, this);
-			old.un('destroy',this.cleanup, this);
+			old.un('destroy',this.onDestroy, this);
 		}
 	},
+
+
+	onDestroy: function(){
+		try{
+			this.cleanup();
+		}
+		catch(e){
+			swallow(e);
+		}
+	},
+
 
 	getDisplayName: function(){
 		return this.$displayName || this.$className.split('.').last();
@@ -187,9 +198,7 @@ Ext.define( 'NextThought.view.annotations.Base', {
 
 	
 	remove: function() {
-		this.record.destroy();
-		this.cleanup();
-		this.cleanup = function(){};
+		this.record.destroy();//the destroy event calls cleanup
 	},
 
 

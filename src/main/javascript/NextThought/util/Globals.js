@@ -355,6 +355,8 @@ function(){
 
 	this.handleCache();
 
+	window.swallow = function(e){};
+
 	window.alert = function(title, msg){
 		Globals.removeLoaderSplash();
 		if(arguments.length===1){

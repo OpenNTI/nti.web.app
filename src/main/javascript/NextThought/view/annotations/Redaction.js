@@ -177,8 +177,13 @@ Ext.define('NextThought.view.annotations.Redaction', {
 
 
 	cleanup: function(){
-		if (this.actionSpan){this.actionSpan.remove();}
-		if (this.controlDiv){this.controlDiv.remove();}
+		try{
+			if (this.actionSpan){this.actionSpan.remove();}
+			if (this.controlDiv){this.controlDiv.remove();}
+		}
+		catch(e){
+			console.log(Globals.getError(e));
+		}
 		this.callParent(arguments);
 	},
 
