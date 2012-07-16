@@ -95,16 +95,18 @@ Ext.define('NextThought.view.annotations.Highlight', {
 			ctx,
 			adjustment,
 			lineHeight = this.getLineHeight(),
-			i = s.length - 1, x, y, w, h, left, r,
+			x, y, w, h, left, r, i, s = [], nr,
 			lastY=0, c, small,
 			padding = 2,
-			last = true;
-		var walker = document.createTreeWalker(range.commonAncestorContainer);
+			last = true,
+			offset,
+			walker = document.createTreeWalker(range.commonAncestorContainer);
+
 		walker.currentNode = range.startContainer;
-		var offset = range.startOffset;
-		var s = [];
+		offset = range.startOffset;
+
 		while (walker.currentNode != range.endContainer) {
-			var nr = document.createRange();
+			nr = document.createRange();
 			nr.setStart(walker.currentNode,offset);
 			nr.setEnd(walker.currentNode,99999);
 			s = s.concat(RectUtils.merge(nr.getClientRects(),lineHeight,width+1));
@@ -133,10 +135,10 @@ Ext.define('NextThought.view.annotations.Highlight', {
 			height: boundingHeight+(topOffset*2)
 		});
 
-		var walker = document.createTreeWalker(range.commonAncestorContainer);
-
 		ctx = this.canvas.getContext('2d');
 		ctx.fillStyle = this.compElements.first().getStyle('background-color');
+
+		i = s.length - 1;
 		for(; i>=0; i--){
 			r = s[i];
 
