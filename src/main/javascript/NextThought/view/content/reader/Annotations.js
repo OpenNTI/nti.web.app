@@ -149,22 +149,54 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 			rect = range.getBoundingClientRect(),
 			record = AnnotationUtils.selectionToHighlight(range, null, me.getDocumentElement()),
 			menu,
-			w,offset,
+			offset,
 			redactionRegex = /USSC-HTML|Howes_converted|USvJones2012_converted/i;
+		var boundingBox = me.convertRectToScreen(rect);
+		var text = range.toString();
 
 		if(!record) {
 			return;
 		}
 
-		w = me.createAnnotationWidget('highlight',record, range);
+
 
 		record.set('ContainerId', me.containerId);
 
-		menu = w.getMenu();
+		menu = Ext.widget({
+			xtype:'menu',
+			ui: 'nt',
+			plain: true,
+			showSeparator: false,
+			shadow: false,
+			frame: false,
+			border: false,
+			hideMode: 'display',
+			minWidth: 150,
+			defaults: {ui: 'nt-annotaion', plain: true }
+		});
+
+		if(/^\w+$/i.test(text)){//is it a word
+			menu.add({
+				text: 'Define...',
+				handler:function(){
+					me.fireEvent('define', text, boundingBox );
+					me.clearSelection();
+				}
+			});
+		}
+
+		menu.add({
+			text: 'Save Highlight',
+			handler:function(){
+				me.createAnnotationWidget('highlight',record, range).savePhantom();
+				me.clearSelection();
+			}
+		});
 
 		menu.add({
 			text: 'Add Note',
 			handler: function(){
+				me.clearSelection();
 				Ext.apply(me.noteOverlayData,{
 					lastLine: {
 						rect: rect,
@@ -173,6 +205,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 					},
 					suspendMoveEvents: true
 				});
+
 				me.noteOverlayPositionInputBox();
 				me.noteOverlayActivateRichEditor();
 			}
@@ -184,6 +217,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 			menu.add({
 				text: 'Redact Inline',
 				handler: function(){
+					me.clearSelection();
 					var r = NextThought.model.Redaction.createFromHighlight(record);
 					r.set('replacementContent', 'redaction');
 					var widget = me.createAnnotationWidget('redaction',r, range);
@@ -194,6 +228,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 			menu.add({
 				text: 'Redact Block',
 				handler: function(){
+					me.clearSelection();
 					var r = NextThought.model.Redaction.createFromHighlight(record);
 					var widget = me.createAnnotationWidget('redaction',r, range);
 					widget.savePhantom();
@@ -201,19 +236,15 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 			});
 		}
 
-		menu.on('hide', function(){
-				if(!w.isSaving){
-					delete w.range;
-					w.cleanup();
-					delete me.annotations[w.tempID]; //remove the key from the object
-				}
-			});
+
 
 		offset = me.el.getXY();
 		xy[0] += offset[0];
 		xy[1] += offset[1];
 
 		menu.showAt(xy);
+
+		me.selectRange(range);
 	},
 
 
@@ -529,7 +560,6 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 				e.stopPropagation();
 				e.preventDefault();
 				this.addAnnotation(range, e.getXY());
-				this.clearSelection();
 			}
 		}
 		catch(er){
@@ -554,6 +584,13 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 		console.warn('skipping getSelection() no ranges', selection);
 
 		return null;
+	},
+
+
+	selectRange: function(range){
+		var s = this.getDocumentElement().parentWindow.getSelection();
+		s.removeAllRanges();
+		s.addRange(range);
 	},
 
 

@@ -81,20 +81,10 @@ Ext.define('NextThought.view.annotations.Highlight', {
 
 
 	buildMenu: function(i){
-		var me = this;
 		var items = [];
-		var boundingBox = this.ownerCmp.convertRectToScreen(me.getRange().getBoundingClientRect());
-		var text = me.getRecordField('selectedText');
 
 		if(i){
 			items.push.apply(items,i);
-		}
-
-		if(/^\w+$/i.test(text)){//is it a word
-			items.push({
-				text: 'Define...',
-				handler:function(){ me.ownerCmp.fireEvent('define', text, boundingBox ); }
-			});
 		}
 
 		return this.callParent([items]);
