@@ -128,6 +128,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
 			last = true;
 
 		if(style === 'suppressed'){
+			console.warn('*** style is suppressed, not rendering highlight');
 			return boundingTop || s[0].top;
 		}
 
