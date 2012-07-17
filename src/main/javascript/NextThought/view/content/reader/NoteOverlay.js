@@ -92,7 +92,8 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 		box.hide();
 
-		(new Ext.CompositeElement( box.query('.save'))).on('click', me.noteOverlayEditorSave, me);
+		(new Ext.CompositeElement( box.query('.action.save'))).on('click', me.noteOverlayEditorSave, me);
+		(new Ext.CompositeElement( box.query('.entry .save'))).on('click', me.noteOverlayAcivateRichEditor, me);
 		(new Ext.CompositeElement( box.query('.cancel,.clear'))).on('click', me.noteOverlayEditorCancel, me);
 
 		function sizer(){
@@ -210,7 +211,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		o.richEditorActive = true;
 
 		o.editor.addCls('active');
-		o.editorActions.setValue( t.value, true, true );
+		o.editorActions.setValue( t.value, false, true );
 		t.value = '';
 	},
 
@@ -283,7 +284,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		}
 		else if(k === event.ENTER && !this.noteOverlayData.richEditorActive){
 			event.stopEvent();
-			this.noteOverlayAcivateRichEditor();
+			this.noteOverlayEditorSave(event);
 		}
 		return this.noteOverlayEditorKeyPressed(event);
 	},
