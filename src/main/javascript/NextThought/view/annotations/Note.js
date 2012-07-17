@@ -41,12 +41,6 @@ Ext.define( 'NextThought.view.annotations.Note', {
 	},
 
 
-	render: function(){
-		return this.callParent();
-		//TODO - initally just render the highlight, we want to use styles to not render highlights created from clicking on the left.
-	},
-
-
 	cleanup: function(){
 		if (this.gutterCmp){this.gutterCmp.destroy(); delete this.gutterCmp;}
 		if (this.singleGutterWidget){this.singleGutterWidget.remove(); delete this.singleGutterWidget;}

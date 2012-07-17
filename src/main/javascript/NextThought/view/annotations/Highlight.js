@@ -128,7 +128,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
 			last = true;
 
 		if(style === 'suppressed'){
-			return boundingTop;
+			return boundingTop || s[0].top;
 		}
 
 		if(!this.rendered){
