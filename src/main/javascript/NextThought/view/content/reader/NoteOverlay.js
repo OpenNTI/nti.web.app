@@ -93,7 +93,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		box.hide();
 
 		(new Ext.CompositeElement( box.query('.action.save'))).on('click', me.noteOverlayEditorSave, me);
-		(new Ext.CompositeElement( box.query('.entry .save'))).on('click', me.noteOverlayAcivateRichEditor, me);
+		(new Ext.CompositeElement( box.query('.entry .save'))).on('click', me.noteOverlayActivateRichEditor, me);
 		(new Ext.CompositeElement( box.query('.cancel,.clear'))).on('click', me.noteOverlayEditorCancel, me);
 
 		function sizer(){
@@ -144,14 +144,25 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 	},
 
 
+	noteOverlayPositionInputBox: function(){
+		var o = this.noteOverlayData,
+			offsets = this.getAnnotationOffsets(),
+			box = Ext.get(o.box);
+
+		box.setY(o.lastLine.rect.bottom + offsets.top - box.getHeight())
+			.hide()
+			.show();
+	},
+
+
 	noteOverlayMouseOver: function(evt){
 		evt.stopEvent();
 
 		var o = this.noteOverlayData,
-				offsets = this.getAnnotationOffsets(),
-				y = evt.getY() - offsets.top,
-				box = Ext.get(o.box),
-				lineInfo;
+			offsets = this.getAnnotationOffsets(),
+			y = evt.getY() - offsets.top,
+			box = Ext.get(o.box),
+			lineInfo;
 
 		if(o.suspendMoveEvents){
 			return;
@@ -169,9 +180,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 					return;
 				}
 
-				box.setY( lineInfo.rect.bottom + offsets.top - box.getHeight())
-						.hide()
-						.show();
+				this.noteOverlayPositionInputBox();
 			}
 		}
 		catch(e){
@@ -201,10 +210,11 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 	},
 
 
-	noteOverlayAcivateRichEditor: function(){
+	noteOverlayActivateRichEditor: function(){
 		var o = this.noteOverlayData,
 			t = o.textarea.dom;
 
+		o.suspendMoveEvents = true;
 		if(o.richEditorActive){
 			return;
 		}
@@ -264,6 +274,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		var me = this;
 		var o = me.noteOverlayData;
 		var note = o.textarea.dom.value;
+		var style = o.lastLine.style || 'suppressed';
 		var v, sharing = []; //TODO - load from page??
 
 		if (o.richEditorActive){
@@ -272,7 +283,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 			sharing = v.shareWith;
 		}
 
-		me.fireEvent('save-new-note', note, o.lastLine.range, sharing, callback);
+		me.fireEvent('save-new-note', note, o.lastLine.range, sharing, style, callback);
 		return false;
 	},
 
@@ -313,7 +324,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		//TODO: Use a better way to detect the note has gotten 'complex' and or too long for the line-box.
 		if(h > t.getHeight()) {
 			//transition to rich editor
-			this.noteOverlayAcivateRichEditor();
+			this.noteOverlayActivateRichEditor();
 		}
 	}
 });

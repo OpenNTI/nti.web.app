@@ -135,10 +135,10 @@ Ext.define('NextThought.view.annotations.note.Main',{
 			this.favorites.addCls('on');
 		}
 
-		var commonAncestor = range.commonAncestorContainer,
-			ancestorText = commonAncestor.textContent,
+		var commonAncestor = range ? range.commonAncestorContainer : null,
+			ancestorText = commonAncestor ? commonAncestor.textContent : null,
 			suppressed = r.get('style') === 'suppressed',
-			selectedText = range.toString();
+			selectedText = range ? range.toString() : '';
 
 		if (!suppressed){
 			ancestorText = ancestorText
@@ -164,43 +164,22 @@ Ext.define('NextThought.view.annotations.note.Main',{
 
 
 	editorSaved: function(){
-		if(!this.mainContentEdit){
-			return this.saveReply();
-		}
-
-		var me = this;
-		var v = me.editorActions.getValue();
-		function callback(success, record) {
-			if (success) { me.up('window').close(); }
-		}
-		this.up('window').fireEvent('save-new-note', v.body, me.record.get('applicableRange'), v.shareWith, callback);
-		
-	},
-
-
-	saveReply: function(){
 		var v = this.editorActions.getValue(),
-			me = this;
+			me = this,
+			r = me.record,
+			isMyNote = isMe(r.get('Creator')) || r.phantom;
 
 		function callback(success, record){
 			console.log('save reply was a success?', success, record);
 			if (success) {
 				me.deactivateReplyEditor();
-				me.up('window').down('note-responses').addReply(record);
+				if(isMyNote){
+					me.up('window').down('note-responses').addReply(record);
+				}
 			}
 		}
 
 		this.up('window').fireEvent('save-new-reply', this.record, v.body, v.shareWith, callback);
-	},
-
-
-	activateMainEditor: function(){
-		this.activateReplyEditor();
-		//TODO: update this to build up the whiteboards...
-		this.editorActions.setHTML(this.text.getHTML());
-		this.editorActions.updatePrefs(this.record.get('sharedWith'));
-		this.text.hide();
-		this.mainContentEdit = true;
 	},
 
 

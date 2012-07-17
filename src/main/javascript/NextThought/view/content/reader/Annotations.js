@@ -165,11 +165,16 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 			text: 'Add Note',
 			handler: function(){
 				delete w.range; //so that it does not detach it on cleanup
-				var r = NextThought.model.Note.createFromHighlight(record);
-				r.set('style','plain');
-				var n = me.createAnnotationWidget('note',r, range);
-				n.openWindow(false,true);
-				n.cleanup();
+				Ext.apply(me.noteOverlayData,{
+					lastLine: {
+						rect: range.getBoundingClientRect(),
+						range: range,
+						style: 'plain'
+					},
+					suspendMoveEvents: true
+				});
+				me.noteOverlayPositionInputBox();
+				me.noteOverlayActivateRichEditor();
 			}
 		});
 

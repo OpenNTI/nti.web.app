@@ -64,7 +64,6 @@ Ext.define('NextThought.controller.Annotations', {
 
 			'note-window': {
 				'save-new-reply' : this.saveNewReply,
-				'save-new-note' : this.saveNewNote,
 				'share': this.shareWith
 			},
 
@@ -190,7 +189,7 @@ Ext.define('NextThought.controller.Annotations', {
 	},
 
 
-	saveNewNote: function(body, range, shareWith, callback, opts){
+	saveNewNote: function(body, range, shareWith, style, callback, opts){
 		//check that our inputs are valid:
 		if (!body || (Ext.isArray(body) && body.length < 1) || !range){
 			console.error('Note creating a note, either missing content or range.');
@@ -199,14 +198,9 @@ Ext.define('NextThought.controller.Annotations', {
 
 		//Define our vars and create our content range description:
 		var doc = this.getReader().getDocumentElement(),
-			style = 'suppressed',
-			noteRecord, rangeDescription;
-		if (range instanceof NextThought.model.anchorables.ContentRangeDescription) {
-			style = 'plain';
-			rangeDescription = range;
-			range = null;
-		}
-		else rangeDescription = Anchors.createRangeDescriptionFromRange(range, doc);
+			noteRecord,
+			rangeDescription = Anchors.createRangeDescriptionFromRange(range, doc);
+
 		//make sure the body is an array:
 		if(!Ext.isArray(body)){body = [body];}
 

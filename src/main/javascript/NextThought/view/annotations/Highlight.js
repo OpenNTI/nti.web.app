@@ -14,7 +14,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
 		this.callParent(arguments);
 		if (config.browserRange) {
 			this.range = config.browserRange.cloneRange();
-			config.browserRange.detach();
+			//config.browserRange.detach();
 		}
 		this.content = Ext.fly(this.doc.getElementById('NTIContent')).first(false,true);
 		this.getRange(); //get range right her up front, this won't render it yet.
@@ -176,7 +176,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
 			boundingTop = Math.ceil(bounds.top),
 			boundingLeft = Math.ceil(bounds.left),
 			boundingHeight = Math.ceil(bounds.height),
-			width = Ext.fly(this.content).getWidth(),
+			width = 680,//Ext.fly(this.content).getWidth(),
 			topOffset = 10,
 			leftOffset = 5,
 			ctx,
