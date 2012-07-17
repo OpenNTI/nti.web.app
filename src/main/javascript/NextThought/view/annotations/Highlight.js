@@ -26,9 +26,47 @@ Ext.define('NextThought.view.annotations.Highlight', {
 		if(!this.range){
 			//console.warn('GET RANGE FOR:', this.getRecordField('applicableRange').getStart().getContexts()[0].getContextText());
 			this.range = Anchors.toDomRange(this.getRecordField('applicableRange'),this.doc);
+
+			//TODO - there is most definitly a better and more complicated way to solve this, however in the interest of time,
+			//we will make a best guess if our range gets borked.
+			//So if this range is just now created, remember some stuff for later in case it gets collapsed by other things in the dom.
+			if (!this.hadRange){
+				this.invalidatedRange = this.range.cloneRange();
+				this.invalidateRangeString = this.range.toString();
+			}
+
+			//remember that we've been here before:
+			this.hadRange = true;
+
+			//If we have been here before and our range is a goner, commence freak out:
+			if (!this.range && this.hadRange){
+				//now we know we are fubared, someone fashion a new range:
+				console.warn('Existing valid range object is messed up by something in the dom, falling back to semi-wild guessing.');
+				var parentTextNodes = AnnotationUtils.getTextNodes(this.invalidatedRange.commonAncestorContainer.parentNode),
+					newRange = this.doc.createRange(),
+					foundSubstring = -1;
+
+				//create a new range selecting the parent of the old range as a best guess:
+				newRange.selectNode(this.invalidatedRange.commonAncestorContainer.parentNode);
+
+				//try to find a text node in there that kind of matches:
+				Ext.each(parentTextNodes, function(n){
+					foundSubstring = n.textContent.indexOf(this.invalidateRangeString.substr(0, 8));
+					if (foundSubstring > -1){
+						//this node kind of matches, just cobble a range out of this, if these comments make you nervous, they should...
+						newRange.setStart(n, foundSubstring);
+						newRange.setEnd(n, foundSubstring + 8);
+
+						this.range = newRange;
+						return false;
+					}
+				}, this);
+			}
+
+
 			if(!this.range){
-				//AUTODESTROY: this.record.destroy();
 				console.log('bad range?',this.getRecordField('applicableRange'));
+
 			}
 		}
 		return this.range;
