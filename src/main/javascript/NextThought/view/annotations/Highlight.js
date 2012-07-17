@@ -117,17 +117,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
 		delete this.range;
 		r = this.getRange();
 
-//		var s = this.doc.parentWindow.getSelection();
-//		s.removeAllRanges();
-//		s.addRange(r);
-
-//		s.removeAllRanges();
-//		s.addRange(r);
-//		s.modify('extend', 'forward', 'word');
-//		r = s.getRangeAt(0);
-//		s.removeAllRanges();
-
-		return r? r.getBoundingClientRect().top : -1;
+		return r? r.getBoundingClientRect().top : -2;
 	},
 
 
