@@ -13,13 +13,24 @@ Ext.define('NextThought.view.annotations.Highlight', {
 	constructor: function(config){
 		this.callParent(arguments);
 		if (config.browserRange) {
-			this.range = config.browserRange.cloneRange();
-			//config.browserRange.detach();
+			this.range = config.browserRange;
+			this.setupInvalidationFallback();
 		}
 		this.content = Ext.fly(this.doc.getElementById('NTIContent')).first(false,true);
 		this.getRange(); //get range right her up front, this won't render it yet.
 		//console.log('build highlight for',this.getRecordField('selectedText'));
 		return this;
+	},
+
+
+	setupInvalidationFallback: function(){
+		if (this.range && !this.hadRange){
+			this.invalidatedRange = this.range.cloneRange();
+			this.invalidateRangeString = this.range.toString();
+
+			//remember that we've been here before:
+			this.hadRange = true;
+		}
 	},
 
 
@@ -36,13 +47,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
 			//TODO - there is most definitly a better and more complicated way to solve this, however in the interest of time,
 			//we will make a best guess if our range gets borked.
 			//So if this range is just now created, remember some stuff for later in case it gets collapsed by other things in the dom.
-			if (this.range && !this.hadRange){
-				this.invalidatedRange = this.range.cloneRange();
-				this.invalidateRangeString = this.range.toString();
-
-				//remember that we've been here before:
-				this.hadRange = true;
-			}
+			this.setupInvalidationFallback();
 
 
 			//If we have been here before and our range is a goner, commence freak out:
