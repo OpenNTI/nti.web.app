@@ -136,12 +136,14 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		}
 
 		var commonAncestor = range.commonAncestorContainer,
-			ancestorText = commonAncestor.innerText,
+			ancestorText = commonAncestor.textContent,
 			suppressed = r.get('style') === 'suppressed',
 			selectedText = range.toString();
 
 		if (!suppressed){
-			ancestorText = ancestorText.replace(selectedText, this.highlightTpl.apply([selectedText]));
+			ancestorText = ancestorText
+					? ancestorText.replace(selectedText, this.highlightTpl.apply([selectedText]))
+					: '';
 		}
 
 		this.context.update(ancestorText);
