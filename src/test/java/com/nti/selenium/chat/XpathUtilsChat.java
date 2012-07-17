@@ -83,9 +83,10 @@ public class XpathUtilsChat extends XpathUtilsLogin {
 	}
 	
 	public static String getGroupChatButton(String groupName){
-		return buildString(xpathBuilder("span", groupName),
+		return buildString(xpathBuilder("div", "class", "x-component x-panel-header-text-container x-box-item x-component-default"),
+						   xpathBuilder("span", groupName),
 						   "/../..",
-						   xpathBuilder("div", "class", "x-tool x-box-item x-tool-default x-tool-pressed"),
+						   xpathBuilder("div", "class", "x-tool x-box-item x-tool-default"),
 						   xpathBuilder("img", "data-qtip", "Chat with this group"));
 	}
 	

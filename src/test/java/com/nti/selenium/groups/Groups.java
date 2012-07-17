@@ -130,7 +130,7 @@ public class Groups extends Navigation {
 		//		return bool; 
 	}
 
-	public void addPeopleToGroup(String...strings){
+	public String addPeopleToGroup(String...strings){
 		String time = Long.toString(System.currentTimeMillis());
 		this.addGroup(time);
 		for(String str: strings){
@@ -146,6 +146,7 @@ public class Groups extends Navigation {
 			this.waitForElement("//span[text()='Finish']");
 			this.findElement("//span[text()='Finish']").click();
 		}
+		return time;
 	}
 
 	public void  addOnePersonToGroup(int userSearchNumber)

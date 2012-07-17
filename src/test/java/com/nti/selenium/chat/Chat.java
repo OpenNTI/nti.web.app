@@ -29,11 +29,11 @@ public class Chat extends Groups {
 		this.setActiverDriver(this.driver[3]);
 		this.doLogin(credentials[2].getUserName(), credentials[2].getPassword());
 		this.setActiverDriver(this.driver[1]);
-		this.addPeopleToGroup(searchUserNames[1], searchUserNames[2]);
+		this.groups[1] = this.addPeopleToGroup(searchUserNames[1], searchUserNames[2]);
 		this.setActiverDriver(this.driver[2]);
-		this.addPeopleToGroup(searchUserNames[0], searchUserNames[2]);
+		this.groups[2] = this.addPeopleToGroup(searchUserNames[0], searchUserNames[2]);
 		this.setActiverDriver(this.driver[3]);
-		this.addPeopleToGroup(searchUserNames[0], searchUserNames[1]);
+		this.groups[3] = this.addPeopleToGroup(searchUserNames[0], searchUserNames[1]);
  		this.setActiverDriver(driver[1]);
  		this.setActiveSelenium(selenium[1]);
 	}
@@ -98,6 +98,12 @@ public class Chat extends Groups {
 	
 	public void clickMinimizedChatCloseButton(String chatName){
 		this.findElement(XpathUtilsChat.getCloseChatMinimized(chatName)).click();
+	}
+	
+	public void startGroupChat(String groupName){
+		this.findElement(XpathUtilsChat.getGroupsTab()).click();
+		this.waitForElement(XpathUtilsChat.getIndividualGroups());
+		this.findElement(XpathUtilsChat.getGroupChatButton(groupName)).click();
 	}
 	
 }

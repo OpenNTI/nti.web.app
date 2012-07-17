@@ -8,27 +8,29 @@ import org.junit.Test;
 
 public class TestChat extends Chat {
 
+	private String userTested = "Test";
+	
 	@Test
 	public void testBasicChat(){
 		this.startChat();
-		this.waitForElement(XpathUtilsChat.getChatUser("Test"));
-		String ID1 = this.findElement(XpathUtilsChat.getChatUser("Test")).getAttribute("id");
+		this.waitForElement(XpathUtilsChat.getChatUser(this.userTested));
+		String ID1 = this.findElement(XpathUtilsChat.getChatUser(this.userTested)).getAttribute("id");
 		assertTrue(ID1.matches("chat-window-.*"));
 		this.setActiverDriver(this.driver[2]);
-		assertFalse(this.elementExists(XpathUtilsChat.getChatUser("Test")));
+		assertFalse(this.elementExists(XpathUtilsChat.getChatUser(this.userTested)));
 	}
 	
 	@Test
 	public void testSendMessageInChat(){
 		this.startChat();
-		this.waitForElement(XpathUtilsChat.getChatUser("Test"));
-		String ID1 = this.findElement(XpathUtilsChat.getChatUser("Test")).getAttribute("id");
+		this.waitForElement(XpathUtilsChat.getChatUser(this.userTested));
+		String ID1 = this.findElement(XpathUtilsChat.getChatUser(this.userTested)).getAttribute("id");
 		assertTrue(ID1.matches("chat-window-.*"));
 		this.sendMessage("hello");
 		this.waitForElement(XpathUtilsChat.getMyMessage("hello"));
 		assertTrue(this.elementExists(XpathUtilsChat.getMyMessage("hello")));
 		this.setActiverDriver(this.driver[2]);
-		String ID2 = this.findElement(XpathUtilsChat.getChatUser("Test")).getAttribute("id");
+		String ID2 = this.findElement(XpathUtilsChat.getChatUser(this.userTested)).getAttribute("id");
 		assertTrue(ID2.matches("chat-window-.*"));
 		assertTrue(this.elementExists(XpathUtilsChat.getOtherMessage("hello")));
 	}
@@ -36,67 +38,76 @@ public class TestChat extends Chat {
 	@Test
 	public void testOpenAddUserPanel(){
 		this.startChat();
-		this.waitForElement(XpathUtilsChat.getChatUser("Test"));
-		String ID1 = this.findElement(XpathUtilsChat.getChatUser("Test")).getAttribute("id");
+		this.waitForElement(XpathUtilsChat.getChatUser(this.userTested));
+		String ID1 = this.findElement(XpathUtilsChat.getChatUser(this.userTested)).getAttribute("id");
 		assertTrue(ID1.matches("chat-window-.*"));
-		this.clickAddUserButton("Test");
+		this.clickAddUserButton(this.userTested);
 		assertTrue(this.elementExists(XpathUtilsChat.getAddUserExpandList()));
 	}
 	
 	@Test
 	public void testCloseAddUserPanel(){
 		this.startChat();
-		this.waitForElement(XpathUtilsChat.getChatUser("Test"));
-		String ID1 = this.findElement(XpathUtilsChat.getChatUser("Test")).getAttribute("id");
+		this.waitForElement(XpathUtilsChat.getChatUser(this.userTested));
+		String ID1 = this.findElement(XpathUtilsChat.getChatUser(this.userTested)).getAttribute("id");
 		assertTrue(ID1.matches("chat-window-.*"));
-		this.clickAddUserButton("Test");
+		this.clickAddUserButton(this.userTested);
 		assertTrue(this.elementExists(XpathUtilsChat.getAddUserExpandList()));
-		this.clickAddUserButton("Test");
+		this.clickAddUserButton(this.userTested);
 		assertTrue(this.elementExists(XpathUtilsChat.getAddUserHiddenList()));
 	}
 	
 	@Test
 	public void testMinimizeChat(){
 		this.startChat();
-		this.waitForElement(XpathUtilsChat.getChatUser("Test"));
-		String ID1 = this.findElement(XpathUtilsChat.getChatUser("Test")).getAttribute("id");
+		this.waitForElement(XpathUtilsChat.getChatUser(this.userTested));
+		String ID1 = this.findElement(XpathUtilsChat.getChatUser(this.userTested)).getAttribute("id");
 		assertTrue(ID1.matches("chat-window-.*"));
-		this.clickMinimizeButton("Test");
-		assertEquals("", this.findElement(XpathUtilsChat.getConfirmChatMinimized("Test")).getAttribute("style"));
+		this.clickMinimizeButton(this.userTested);
+		assertEquals("", this.findElement(XpathUtilsChat.getConfirmChatMinimized(this.userTested)).getAttribute("style"));
 	}
 	
 	@Test
 	public void testExpandChat(){
 		this.startChat();
-		this.waitForElement(XpathUtilsChat.getChatUser("Test"));
-		String ID1 = this.findElement(XpathUtilsChat.getChatUser("Test")).getAttribute("id");
+		this.waitForElement(XpathUtilsChat.getChatUser(this.userTested));
+		String ID1 = this.findElement(XpathUtilsChat.getChatUser(this.userTested)).getAttribute("id");
 		assertTrue(ID1.matches("chat-window-.*"));
-		this.clickMinimizeButton("Test");
-		assertEquals("", this.findElement(XpathUtilsChat.getConfirmChatMinimized("Test")).getAttribute("style"));
-		this.clickMinimizedChat("Test");
-		assertEquals("display: none;", this.findElement(XpathUtilsChat.getConfirmChatMinimized("Test")).getAttribute("style"));
+		this.clickMinimizeButton(this.userTested);
+		assertEquals("", this.findElement(XpathUtilsChat.getConfirmChatMinimized(this.userTested)).getAttribute("style"));
+		this.clickMinimizedChat(this.userTested);
+		assertEquals("display: none;", this.findElement(XpathUtilsChat.getConfirmChatMinimized(this.userTested)).getAttribute("style"));
 	}
 	
 	@Test
 	public void testCloseChat(){
 		this.startChat();
-		this.waitForElement(XpathUtilsChat.getChatUser("Test"));
-		String ID1 = this.findElement(XpathUtilsChat.getChatUser("Test")).getAttribute("id");
+		this.waitForElement(XpathUtilsChat.getChatUser(this.userTested));
+		String ID1 = this.findElement(XpathUtilsChat.getChatUser(this.userTested)).getAttribute("id");
 		assertTrue(ID1.matches("chat-window-.*"));
-		this.clickChatCloseButton("Test");
-		assertFalse(this.elementExists(XpathUtilsChat.getChatUser("Test")));
+		this.clickChatCloseButton(this.userTested);
+		assertFalse(this.elementExists(XpathUtilsChat.getChatUser(this.userTested)));
 	}
 	
 	@Test
 	public void testCloseMinimizedChat(){
 		this.startChat();
-		this.waitForElement(XpathUtilsChat.getChatUser("Test"));
-		String ID1 = this.findElement(XpathUtilsChat.getChatUser("Test")).getAttribute("id");
+		this.waitForElement(XpathUtilsChat.getChatUser(this.userTested));
+		String ID1 = this.findElement(XpathUtilsChat.getChatUser(this.userTested)).getAttribute("id");
 		assertTrue(ID1.matches("chat-window-.*"));
-		this.clickMinimizeButton("Test");
-		assertEquals("", this.findElement(XpathUtilsChat.getConfirmChatMinimized("Test")).getAttribute("style"));
-		this.clickMinimizedChatCloseButton("Test");
-		assertFalse(this.elementExists(XpathUtilsChat.getChatUser("Test")));
+		this.clickMinimizeButton(this.userTested);
+		assertEquals("", this.findElement(XpathUtilsChat.getConfirmChatMinimized(this.userTested)).getAttribute("style"));
+		this.clickMinimizedChatCloseButton(this.userTested);
+		assertFalse(this.elementExists(XpathUtilsChat.getChatUser(this.userTested)));
+	}
+	
+	@Test
+	public void testGroupChat(){
+		String groupName = XpathUtilsChat.buildString(this.groups[1], " (2)"); 
+		this.startGroupChat(groupName);
+		this.waitForElement(XpathUtilsChat.getChatUser("Group Chat (2)"));
+		String ID1 = this.findElement(XpathUtilsChat.getChatUser(XpathUtilsChat.buildString("Group Chat (2)"))).getAttribute("id");
+		assertTrue(ID1.matches("chat-window-.*"));
 	}
 	
 }

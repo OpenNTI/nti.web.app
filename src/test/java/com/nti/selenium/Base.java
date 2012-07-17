@@ -39,6 +39,7 @@ public class Base {
 	
 	protected WebDriver[] driver = new WebDriver[4];
 	protected Selenium[] selenium = new Selenium[4];
+	protected String[] groups = new String[4];
 	protected boolean isDefault = true;
 	protected String xpathBuilder = null;
 	
@@ -92,11 +93,12 @@ public class Base {
 	
 	@Before
 	public void setUp() throws Exception {
-		driver[1] = Base.createDriver(browser);
-		selenium[1] = new WebDriverBackedSelenium(driver[1], url);
-		selenium[1].open(url);
-		driver[0] = driver[1];
-		selenium[0] = selenium[1];
+		this.driver[1] = Base.createDriver(browser);
+		this.selenium[1] = new WebDriverBackedSelenium(driver[1], url);
+		this.selenium[1].open(url);
+		this.driver[0] = this.driver[1];
+		this.selenium[0] = this.selenium[1];
+		this.groups[0] = this.groups[1];
 	}
 	
 	@After
@@ -110,6 +112,10 @@ public class Base {
 	
 	public void setActiveSelenium(Selenium selenium){
 		this.selenium[0] = selenium;
+	}
+	
+	public void setActiveGroup(String group){
+		this.groups[0] = group;
 	}
 	
 	public String findContentFrameBodyElement() {
