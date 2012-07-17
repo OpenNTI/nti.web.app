@@ -54,23 +54,19 @@ Ext.define('NextThought.view.annotations.Redaction', {
 
 		if (this.actionSpan){return y;}
 
-		if (this.rendered) {
-			var before = this.rendered[0];
-			
+		if(this.rendered){
 			//Add the redaction action span so the user has something to click on
 			if (this.isInlineRedaction()) {
-				this.actionSpan = this.createActionHandle(before).dom;
+				this.actionSpan = this.createActionHandle(this.rendered[0]).dom;
 			}
-			else { 
-				this.actionSpan = this.createBlockActionHandle(before).dom;
+			else {
+				this.actionSpan = this.createBlockActionHandle(this.rendered[0]).dom;
 			}
-	
+
 			//add the redaction class and the click handlers for redacted spans:
 			this.compElements.addCls(this.redactionCls);
-	
+
 			this.toggleRedaction();
-		} else {
-			console.warn('rendered not defined')
 		}
 		return y;
 	},
