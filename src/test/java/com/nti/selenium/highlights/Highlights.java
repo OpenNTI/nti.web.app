@@ -20,10 +20,7 @@ public class Highlights extends Navigation {
 		try{
 			for (final WebElement element: this.findElements(XpathUtilsHighlights.getCreatedHighlight()))
 			{
-				this.switchToIframe();	
-				element.click();
-				this.switchToDefault();
-				this.removeHighlight();
+				this.removeHighlight(element);
 			}
 		}
 		catch(Exception e){
@@ -40,7 +37,18 @@ public class Highlights extends Navigation {
 		this.findElement(XpathUtilsHighlights.getCreateHighlightButton()).click();
 	}
 	
-	public void removeHighlight(){
+	public void removeHighlight(String xpath){
+		WebElement element = this.findElement(xpath);
+		this.switchToIframe();	
+		element.click();
+		this.switchToDefault();
+		this.findElement(XpathUtilsHighlights.getRemoveHighlight()).click();
+	}
+	
+	public void removeHighlight(WebElement element){
+		this.switchToIframe();	
+		element.click();
+		this.switchToDefault();
 		this.findElement(XpathUtilsHighlights.getRemoveHighlight()).click();
 	}
 }

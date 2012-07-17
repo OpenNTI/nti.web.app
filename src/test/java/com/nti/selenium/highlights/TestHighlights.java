@@ -1,5 +1,7 @@
 package com.nti.selenium.highlights;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
@@ -17,16 +19,18 @@ public class TestHighlights extends Highlights {
 	@Test
 	public void testCreateHighlight(){
 		this.createHighlight();
+		this.selenium[1].refresh();
+		this.navigateTo("Prealgebra", "Fractions", "What is a Fraction?");
 		this.switchToIframe();
-		assertTrue(this.elementExists(XpathUtilsHighlights.getCreatedHighlight()));
+		assertEquals("In Section ", this.findElement(XpathUtilsHighlights.getCreatedHighlight()).getText());
 	}
 	
-//	@Test
-//	public void testRemoveHighlight(){
-//		//this.createHighlight();
-//		//assertTrue(this.elementExists(XpathUtilsHighlights.getCreateHighlightImage()));
-//		//this.wait_(3);
-//		//this.removeHighlight();
-//		//assertFalse(this.elementExists(XpathUtilsHighlights.getCreateHighlightImage()));
-//	}
+	@Test
+	public void testRemoveHighlight(){
+		this.createHighlight();
+		this.switchToIframe();
+		assertTrue(this.elementExists(XpathUtilsHighlights.getCreatedHighlight()));
+		this.removeHighlight(XpathUtilsHighlights.getCreatedHighlight());
+		assertFalse(this.elementExists(XpathUtilsHighlights.getCreatedHighlight()));
+	}
 }
