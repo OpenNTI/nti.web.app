@@ -30,13 +30,14 @@ Ext.define('NextThought.view.annotations.Highlight', {
 			//TODO - there is most definitly a better and more complicated way to solve this, however in the interest of time,
 			//we will make a best guess if our range gets borked.
 			//So if this range is just now created, remember some stuff for later in case it gets collapsed by other things in the dom.
-			if (!this.hadRange){
+			if (this.range && !this.hadRange){
 				this.invalidatedRange = this.range.cloneRange();
 				this.invalidateRangeString = this.range.toString();
+
+				//remember that we've been here before:
+				this.hadRange = true;
 			}
 
-			//remember that we've been here before:
-			this.hadRange = true;
 
 			//If we have been here before and our range is a goner, commence freak out:
 			if (!this.range && this.hadRange){
