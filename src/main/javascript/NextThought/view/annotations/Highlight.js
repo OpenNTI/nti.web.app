@@ -126,7 +126,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
 //		r = s.getRangeAt(0);
 //		s.removeAllRanges();
 
-		return r.getBoundingClientRect().top;
+		return r? r.getBoundingClientRect().top : -1;
 	},
 
 

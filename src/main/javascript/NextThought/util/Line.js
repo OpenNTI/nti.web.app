@@ -114,7 +114,8 @@ Ext.define('NextThought.util.Line',{
 	 * @param [doc]
 	 * @return {*}
 	 */
-	findLine: function(y, doc){
+	findLine: function(y, doc, tolerance){
+		tolerance = tolerance || 1;
 		doc = doc || document;
 		var node = this.resolveNodeAt(y,doc);
 		var rects = this.resolveClientRects( node )||[];
@@ -125,8 +126,11 @@ Ext.define('NextThought.util.Line',{
 				range = this.buildRangeFromRect(rects[i],node,doc.parentWindow);
 				if(range){
 					bounds = range.getBoundingClientRect();
-					if( (bounds.height/rects[i].height) <= 1){
+					if( (bounds.height/rects[i].height) <= tolerance){
 						return { rect: rects[i], range: range };
+					}
+					else {
+						console.log('rejected:', bounds.height/rects[i].height);
 					}
 				}
 				return null;
