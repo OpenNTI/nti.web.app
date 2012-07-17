@@ -123,10 +123,11 @@ div.redaction-control {
     border: 1px solid #c4c4c4;
     border-radius: 4px;
     position: absolute;
+    margin: 9px 0 0 20px;
     display: block; //default
 
     img {
-        background: url(../images/redactions/redact_minus.png) 4px 4px no-repeat;
+        background: url(../images/redactions/redact_plus.png) 4px 4px no-repeat;
         border: 0px solid #c4c4c4;
         border-radius: 4px;
         width: 20px;
@@ -134,7 +135,7 @@ div.redaction-control {
     }
 
     &.redacted img {
-        background-image: url(../images/redactions/redact_plus.png);
+        background-image: url(../images/redactions/redact_minus.png);
     }
 }
 
