@@ -4,19 +4,16 @@ import com.nti.selenium.navigation.XpathUtilsNav;
 
 public class XpathUtilsHighlights extends XpathUtilsNav {
 
-	public static String getCreateHighlight(){
+	public static String getCreateHighlightButton(){
 		return xpathBuilder("div", "Save Highlight");
 	}
 	
 	public static String getRemoveHighlight(){
-		return xpathBuilder("div", "Remove Highlight");
+		return xpathBuilder("div", "Delete Highlight");
 	}
 	
-	public static String getCreateHighlightImage(){
-		return xpathBuilder("img", "class", "action highlight");
-	}
-	
-	public static String getHighlightInList(){
-		return xpathBuilder("span", "Highlight In Section");
+	public static String getCreatedHighlight(){
+		return buildString(xpathBuilder("p", "class", "par"),
+						   xpathBuilder("span", "data-non-anchorable", "true"));
 	}	
 }

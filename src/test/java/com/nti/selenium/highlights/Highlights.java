@@ -16,32 +16,31 @@ public class Highlights extends Navigation {
 	
 	@After
 	public void tearDown(){
-		this.findElement(XpathUtilsHighlights.getCreateHighlightImage()).click();
-		this.switchToIframe();
-		try {
-			this.findElements("//span[text()='Highlight In Section']");
-			this.wait_(3);
-		} catch(final Exception e){
-			System.out.println("errored");
+		this.switchToIframe();		
+		try{
+			for (final WebElement element: this.findElements(XpathUtilsHighlights.getCreatedHighlight()))
+			{
+				this.switchToIframe();	
+				element.click();
+				this.switchToDefault();
+				this.removeHighlight();
+			}
 		}
-		
-		for (final WebElement element: this.findElements(XpathUtilsHighlights.getHighlightInList()))
-		{
-			this.wait_(3);
-			element.click();
-			this.removeHighlight();
+		catch(Exception e){
 		}
-		selenium[1].stop();
+		finally{
+			selenium[1].stop();
+		}
 	}
 	
 	public void createHighlight(){
 		this.switchToIframe();
 		this.selectText(0, 0, 10);
 		this.switchToDefault();
-		this.findElement(XpathUtilsHighlights.getCreateHighlight()).click();
+		this.findElement(XpathUtilsHighlights.getCreateHighlightButton()).click();
 	}
 	
 	public void removeHighlight(){
-		System.out.println("ima test");
+		this.findElement(XpathUtilsHighlights.getRemoveHighlight()).click();
 	}
 }
