@@ -77,4 +77,26 @@ public class TestChat extends Chat {
 		assertEquals("display: none;", this.findElement(XpathUtilsChat.getConfirmChatMinimized("Test")).getAttribute("style"));
 	}
 	
+	@Test
+	public void testCloseChat(){
+		this.startChat();
+		this.waitForElement(XpathUtilsChat.getChatUser("Test"));
+		String ID1 = this.findElement(XpathUtilsChat.getChatUser("Test")).getAttribute("id");
+		assertTrue(ID1.matches("chat-window-.*"));
+		this.clickChatCloseButton("Test");
+		assertFalse(this.elementExists(XpathUtilsChat.getChatUser("Test")));
+	}
+	
+	@Test
+	public void testCloseMinimizedChat(){
+		this.startChat();
+		this.waitForElement(XpathUtilsChat.getChatUser("Test"));
+		String ID1 = this.findElement(XpathUtilsChat.getChatUser("Test")).getAttribute("id");
+		assertTrue(ID1.matches("chat-window-.*"));
+		this.clickMinimizeButton("Test");
+		assertEquals("", this.findElement(XpathUtilsChat.getConfirmChatMinimized("Test")).getAttribute("style"));
+		this.clickMinimizedChatCloseButton("Test");
+		assertFalse(this.elementExists(XpathUtilsChat.getChatUser("Test")));
+	}
+	
 }

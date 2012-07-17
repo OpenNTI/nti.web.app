@@ -56,7 +56,6 @@ public class XpathUtilsChat extends XpathUtilsLogin {
 	public static String getCloseChatButton(String chatName){
 		return buildString(xpathBuilder("span", chatName),
 						   "/..",
-						   xpathBuilder("div", "class", "header-body"),
 						   xpathBuilder("div", "class", "controls has-tools"),
 						   xpathBuilder("img", "class", "tool close"));
 	}
