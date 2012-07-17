@@ -472,12 +472,17 @@ Ext.define('NextThought.util.Anchors', {
 	confidenceOfCurrentNode: function(pointer, treeWalker, startResult ) {
 		function contextMatchNode(context, node, isStart)
 		{
-			var adjustedOffset = context.contextOffset;
+			var adjustedOffset = context.contextOffset,
+				diff;
 			if(isStart){
 				adjustedOffset = node.textContent.length - adjustedOffset;
 			}
 
-			if( node.textContent.indexOf(context.contextText) === adjustedOffset){
+			//allow for some tiny difference for now...
+			diff = node.textContent.indexOf(context.contextText) - adjustedOffset
+
+			//if( node.textContent.indexOf(context.contextText) === adjustedOffset){
+			if (diff < 2 || diff > -2) {
 				//console.log('successful match', isStart, node.textContent.indexOf(context.contextText), adjustedOffset);
 				//console.log(node.textContent);
 				return true;

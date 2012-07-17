@@ -27,7 +27,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
 			//console.warn('GET RANGE FOR:', this.getRecordField('applicableRange').getStart().getContexts()[0].getContextText());
 			this.range = Anchors.toDomRange(this.getRecordField('applicableRange'),this.doc);
 			if(!this.range){
-				console.log('bad range?',Ext.encode(this.getRecordField('applicableRange')));
+				console.log('bad range?',this.getRecordField('applicableRange'));
 			}
 		}
 		return this.range;
@@ -152,7 +152,6 @@ Ext.define('NextThought.view.annotations.Highlight', {
 			last = true;
 
 		if(style === 'suppressed'){
-			console.warn('*** style is suppressed, not rendering highlight');
 			return boundingTop || i>0 ? s[0].top : this.resolveVerticalLocation();
 		}
 
