@@ -211,7 +211,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		o.richEditorActive = true;
 
 		o.editor.addCls('active');
-		o.editorActions.setValue( t.value, false, true );
+		o.editorActions.setValue( t.value, true, true );
 		t.value = '';
 	},
 

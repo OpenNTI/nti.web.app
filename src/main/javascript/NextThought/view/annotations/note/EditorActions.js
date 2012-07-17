@@ -220,19 +220,20 @@ Ext.define('NextThought.view.annotations.note.EditorActions',{
 	setValue: function(text, putCursorAtEnd, focus) {
 		var r,
 			c = this.editor.down('.content').dom,
-			s = window.getSelection();
+			s = window.getSelection(),
+			content;
 		this.setHTML(Ext.String.htmlEncode( text ));
-		if(putCursorAtEnd){
+		content = c.innerHTML;
+		if(putCursorAtEnd && content && content.length>0){
 			try {
 				s.removeAllRanges();
 				r = document.createRange();
-				r.setStart(c.firstChild, c.innerHTML.length);
+				r.setStart(c.firstChild, content.length);
 				r.collapse(true);
 				s.addRange(r);
 			}
 			catch (e){
-				console.warn('focus issue: '+e.message);
-
+				console.warn('focus issue: '+e.message, "\n\n\n", content);
 			}
 		}
 
