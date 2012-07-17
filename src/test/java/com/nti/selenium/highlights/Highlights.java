@@ -2,6 +2,7 @@ package com.nti.selenium.highlights;
 
 import org.junit.After;
 import org.junit.Before;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 
 import com.nti.selenium.navigation.Navigation;
@@ -18,12 +19,12 @@ public class Highlights extends Navigation {
 	public void tearDown(){
 		this.switchToIframe();		
 		try{
-			for (final WebElement element: this.findElements(XpathUtilsHighlights.getCreatedHighlight()))
+			while (this.findElements(XpathUtilsHighlights.getCreatedHighlight()).size() > 0)
 			{
-				this.removeHighlight(element);
+				this.removeHighlight(this.findElements(XpathUtilsHighlights.getCreatedHighlight()).get(0));
 			}
 		}
-		catch(Exception e){
+		catch(NoSuchElementException e){
 		}
 		finally{
 			selenium[1].stop();
