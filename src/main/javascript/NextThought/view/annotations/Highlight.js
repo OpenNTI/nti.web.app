@@ -27,6 +27,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
 			//console.warn('GET RANGE FOR:', this.getRecordField('applicableRange').getStart().getContexts()[0].getContextText());
 			this.range = Anchors.toDomRange(this.getRecordField('applicableRange'),this.doc);
 			if(!this.range){
+				//AUTODESTROY: this.record.destroy();
 				console.log('bad range?',this.getRecordField('applicableRange'));
 			}
 		}
@@ -253,7 +254,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
 	createCounter: function(after){
 		var containingSpan = Ext.get(this.createNonAnchorableSpan()),
 			el = Ext.get(this.createNonAnchorableSpan()),
-			afterWords = after.textContent.trim().split(' '),
+			afterWords = after.textContent.split(' '),
 			style = this.record.get('style') || 'plain';
 
 		this.rendered.push(containingSpan.dom);

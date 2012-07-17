@@ -206,6 +206,8 @@ Ext.define('NextThought.util.Anchors', {
 			contextOffset = textContent.length - contextOffset;
 		}
 
+		//console.log('Created Context, TEXT', "'"+textContent+"'", 'CONTEXT', contextText, 'OFFSET', contextOffset);
+
 		return Ext.create('NextThought.model.anchorables.TextContext', {
 			contextText: contextText,
 			contextOffset: contextOffset
@@ -478,11 +480,7 @@ Ext.define('NextThought.util.Anchors', {
 				adjustedOffset = node.textContent.length - adjustedOffset;
 			}
 
-			//allow for some tiny difference for now...
-			diff = node.textContent.indexOf(context.contextText) - adjustedOffset
-
 			if( node.textContent.indexOf(context.contextText) === adjustedOffset){
-			//if (diff < 2 || diff > -2) {
 				//console.log('successful match', isStart, node.textContent.indexOf(context.contextText), adjustedOffset);
 				//console.log(node.textContent);
 				return true;
@@ -490,9 +488,10 @@ Ext.define('NextThought.util.Anchors', {
 			/*
 			else if ( node.textContent.indexOf(context.contextText) !== -1) {
 				console.log('UNsuccessful match', isStart, node.textContent.indexOf(context.contextText), adjustedOffset);
-				console.log(node.textContent);
+				console.log("'" + node.textContent +"'");
 			}
 			*/
+
 			return false;
 		}
 
