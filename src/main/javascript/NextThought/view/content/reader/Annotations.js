@@ -197,7 +197,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 					var r = NextThought.model.Redaction.createFromHighlight(record);
 					var widget = me.createAnnotationWidget('redaction',r, range);
 					widget.savePhantom()
-					r.save();
+					//r.save();
 				}
 			});
 		}
