@@ -9,9 +9,11 @@ Ext.define('NextThought.view.annotations.Redaction', {
 	cls: 'redacted',
 
 	//Nibs and controls for reference later:
+	/*
 	actionSpan: null,
 	controlDiv: null,
 	editableSpan: null,
+	*/
 
 	buildMenu: function(items){
 		var me = this;
@@ -22,28 +24,28 @@ Ext.define('NextThought.view.annotations.Redaction', {
 				me.toggleRedaction();
 			}
 		});
-
-		//allow edit of content only if this is inline and it's not currently expanded:
-		if (this.isInlineRedaction() && this.actionSpan.hasCls(this.cls)){
-			items.push({
-				text : 'Edit Redaction Content',
-				handler: function(menuitem, event){
-					me.makeEditableSpanEditable();
-				}
-			});
-		}
-
 		return this.callParent([items]);
 	},
 
 
-	makeEditableSpanEditable: function(){
+	makeEditableSpanEditable: function(e){
+		console.log('double click');
+		if (e){
+			if (this.clickTimer){
+				console.log('double click, clear timeout');
+				clearTimeout(this.clickTimer);
+			}
+			e.stopEvent();
+		}
+
 		//make the replacement content editable if it belongs to me.
 		if (this.editableSpan && this.record.isModifiable()){
 			this.editableSpan.dom.setAttribute('contenteditable', 'true');
 			this.editableSpan.on('keydown', this.editableSpanEditorKeyDown, this);
 			this.editableSpan.focus();
 		}
+
+		return false;
 	},
 
 
@@ -54,16 +56,15 @@ Ext.define('NextThought.view.annotations.Redaction', {
 
 		//Add the redaction action span so the user has something to click on
 		if (this.isInlineRedaction()) {
-			this.actionSpan = this.createActionHandle(this.rendered[0]);
+			this.actionSpan = this.createActionHandle(this.rendered[0]).dom;
 		}
 		else {
-			this.actionSpan = this.createBlockActionHandle(this.rendered[0]);
+			this.actionSpan = this.createBlockActionHandle(this.rendered[0]).dom;
 		}
 
 		//add the redaction class and the click handlers for redacted spans:
 		this.compElements.addCls(this.redactionCls);
 
-		this.compElements.add([this.actionSpan]);
 		this.toggleRedaction();
 		return y;
 	},
@@ -77,7 +78,8 @@ Ext.define('NextThought.view.annotations.Redaction', {
 
 
 	createActionHandle: function(before){
-		var masterSpan = Ext.get(this.createNonAnchorableSpan()),
+		var me = this,
+			masterSpan = Ext.get(this.createNonAnchorableSpan()),
 			startDelimiter = Ext.get(this.createNonAnchorableSpan()),
 			endDelimiter = Ext.get(this.createNonAnchorableSpan()),
 			replacementTextNode = this.doc.createTextNode(this.record.get('replacementContent')),
@@ -113,13 +115,25 @@ Ext.define('NextThought.view.annotations.Redaction', {
 		//set up any events:
 		this.mon(masterSpan, {
 			scope: this,
-			mouseup: this.inlineClick
+			//mouseup: this.inlineClick,
+			dblclick: this.makeEditableSpanEditable,
+			click: function(e){
+				if (me.clickTimer){clearTimeout(me.clickTimer);}
+				me.clickTimer = setTimeout(function(){
+					me.onClick(e);
+				}
+				, 400);
+			},
+			mouseup: function(e){
+				e.stopEvent();
+				return false;
+			}
 		});
 
 		return masterSpan;
 	},
 
-
+	/*
 	inlineClick: function(event, cmp, opts){
 		if (this.editableSpan.getAttribute('contenteditable')) {
 			console.log('inline redaction currently being edited, ignoring clicks');
@@ -137,7 +151,7 @@ Ext.define('NextThought.view.annotations.Redaction', {
 
 		return false;
 	},
-
+	*/
 
 	editableSpanEditorKeyDown: function(event, span){
 		var me = this;
@@ -175,7 +189,7 @@ Ext.define('NextThought.view.annotations.Redaction', {
 
 	cleanup: function(){
 		try{
-			if (this.actionSpan){this.actionSpan.remove();}
+			if (this.actionSpan){Ext.get(this.actionSpan).remove();}
 			if (this.controlDiv){this.controlDiv.remove();}
 		}
 		catch(e){
@@ -188,8 +202,11 @@ Ext.define('NextThought.view.annotations.Redaction', {
 	toggleRedaction: function(){
 		//toggle redaction on generated spans:
 		this.compElements.toggleCls(this.cls);
+		Ext.get(this.actionSpan).toggleCls(this.cls);
 		Ext.fly(this.canvas).toggle();
 		if (this.controlDiv){this.controlDiv.toggleCls(this.cls);}
+
+		return false;
 	},
 
 
