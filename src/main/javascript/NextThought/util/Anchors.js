@@ -10,8 +10,9 @@ Ext.define('NextThought.util.Anchors', {
 
 	//TODO - test
 	toDomRange: function(contentRangeDescription, docElement) {
-		   var ancestorNode = contentRangeDescription.getAncestor().locateRangePointInAncestor(docElement).node || docElement;
-		   return Anchors.resolveSpecBeneathAncestor(contentRangeDescription, ancestorNode, docElement);
+		if(!contentRangeDescription){console.warn('nothing to parse?');return null;}
+		var ancestorNode = contentRangeDescription.getAncestor().locateRangePointInAncestor(docElement).node || docElement;
+		return Anchors.resolveSpecBeneathAncestor(contentRangeDescription, ancestorNode, docElement);
 	},
 
 
