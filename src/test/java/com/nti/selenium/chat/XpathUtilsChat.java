@@ -49,7 +49,6 @@ public class XpathUtilsChat extends XpathUtilsLogin {
 	public static String getMinimizeButton(String chatName){
 		return buildString(xpathBuilder("span", chatName),
 						   "/..",
-						   xpathBuilder("div", "class", "header-body"),
 						   xpathBuilder("div", "class", "controls has-tools"),
 						   xpathBuilder("img", "class", "tool minimize"));
 	}
@@ -66,6 +65,13 @@ public class XpathUtilsChat extends XpathUtilsLogin {
 		return buildString(xpathBuilder("div", "class", "window-minimized"),
 						   xpathBuilder("div", "class", "title"),
 						   xpathBuilder("span", chatName));
+	}
+	
+	public static String getConfirmChatMinimized(String chatName){
+		return buildString(xpathBuilder("div", "class", "window-minimized"),
+						   xpathBuilder("div", "class", "title"),
+						   xpathBuilder("span", chatName),
+						   "/../..");
 	}
 	
 	public static String getCloseChatMinimized(String chatName){
