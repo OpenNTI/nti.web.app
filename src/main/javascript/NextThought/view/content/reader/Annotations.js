@@ -146,7 +146,6 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 		}
 
 		var me = this,
-			tRange = range.cloneRange(),
 			rect = range.getBoundingClientRect(),
 			record = AnnotationUtils.selectionToHighlight(range, null, me.getDocumentElement()),
 			menu,
@@ -169,7 +168,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 				Ext.apply(me.noteOverlayData,{
 					lastLine: {
 						rect: rect,
-						range: tRange,
+						range: range,
 						style: 'plain'
 					},
 					suspendMoveEvents: true
@@ -187,7 +186,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 				handler: function(){
 					var r = NextThought.model.Redaction.createFromHighlight(record);
 					r.set('replacementContent', 'redaction');
-					var widget = me.createAnnotationWidget('redaction',r, tRange);
+					var widget = me.createAnnotationWidget('redaction',r, range);
 					widget.savePhantom();
 				}
 			});
@@ -196,7 +195,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 				text: 'Redact Block',
 				handler: function(){
 					var r = NextThought.model.Redaction.createFromHighlight(record);
-					var widget = me.createAnnotationWidget('redaction',r, tRange);
+					var widget = me.createAnnotationWidget('redaction',r, range);
 					widget.savePhantom();
 				}
 			});
@@ -204,6 +203,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 
 		menu.on('hide', function(){
 				if(!w.isSaving){
+					delete w.range;
 					w.cleanup();
 					delete me.annotations[w.tempID]; //remove the key from the object
 				}
