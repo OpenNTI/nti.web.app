@@ -13,7 +13,8 @@ Ext.define('NextThought.view.annotations.Highlight', {
 	constructor: function(config){
 		this.callParent(arguments);
 		if (config.browserRange) {
-			this.range = config.browserRange;
+			this.range = config.browserRange.cloneRange();
+			config.browserRange.detach();
 		}
 		this.content = Ext.fly(this.doc.getElementById('NTIContent')).first(false,true);
 		this.getRange(); //get range right her up front, this won't render it yet.
@@ -23,6 +24,11 @@ Ext.define('NextThought.view.annotations.Highlight', {
 
 
 	getRange: function(){
+		if(this.range && this.range.collapsed){
+			this.range.detach();
+			delete this.range;
+		}
+
 		if(!this.range){
 			//console.warn('GET RANGE FOR:', this.getRecordField('applicableRange').getStart().getContexts()[0].getContextText());
 			this.range = Anchors.toDomRange(this.getRecordField('applicableRange'),this.doc);
@@ -162,9 +168,10 @@ Ext.define('NextThought.view.annotations.Highlight', {
 
 	render: function(){
 		var range = this.getRange();
-		if(!range){return -1;}
+		if(!range){ return -1;}
 
-		var style = this.getRecordField('style'),
+		var me = this,
+			style = this.getRecordField('style'),
 			bounds = range.getBoundingClientRect(),
 			boundingTop = Math.ceil(bounds.top),
 			boundingLeft = Math.ceil(bounds.left),
@@ -181,8 +188,12 @@ Ext.define('NextThought.view.annotations.Highlight', {
 			padding = 2,
 			last = true;
 
+		function getTop(){
+			return boundingTop || i>0 ? s[0].top : me.resolveVerticalLocation();
+		}
+
 		if(style === 'suppressed'){
-			return boundingTop || i>0 ? s[0].top : this.resolveVerticalLocation();
+			return getTop();
 		}
 
 		if(!this.rendered){
@@ -255,7 +266,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
 			lastY = y;
 		}
 
-		return boundingTop;
+		return getTop();
 	},
 
 

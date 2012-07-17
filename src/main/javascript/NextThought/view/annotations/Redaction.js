@@ -50,9 +50,9 @@ Ext.define('NextThought.view.annotations.Redaction', {
 	render: function(){
 		var y = this.callParent(arguments);
 
-
-
-		if (this.actionSpan){return y;}
+		if (this.actionSpan){
+			return this.actionSpan.getBoundingClientRect().top || this.rendered.first().getBoundingClientRect().top || y;
+		}
 
 		if(this.rendered){
 			//Add the redaction action span so the user has something to click on
@@ -74,12 +74,13 @@ Ext.define('NextThought.view.annotations.Redaction', {
 
 	isInlineRedaction: function(){
 		var replacementText = this.record.get('replacementContent');
-		if (replacementText){return true;}
-		return false;
+		return Boolean(replacementText);
 	},
 
 
 	createActionHandle: function(before){
+
+		//Make this look like the template structure instead...
 		var me = this,
 			masterSpan = Ext.get(this.createNonAnchorableSpan()),
 			startDelimiter = Ext.get(this.createNonAnchorableSpan()),
