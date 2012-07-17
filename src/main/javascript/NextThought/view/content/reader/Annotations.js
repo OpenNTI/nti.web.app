@@ -146,6 +146,8 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 		}
 
 		var me = this,
+			tRange = range.cloneRange(),
+			rect = range.getBoundingClientRect(),
 			record = AnnotationUtils.selectionToHighlight(range, null, me.getDocumentElement()),
 			menu,
 			w,offset,
@@ -164,11 +166,10 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 		menu.add({
 			text: 'Add Note',
 			handler: function(){
-				delete w.range; //so that it does not detach it on cleanup
 				Ext.apply(me.noteOverlayData,{
 					lastLine: {
-						rect: range.getBoundingClientRect(),
-						range: range,
+						rect: rect,
+						range: tRange,
 						style: 'plain'
 					},
 					suspendMoveEvents: true
@@ -184,23 +185,19 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 			menu.add({
 				text: 'Redact Inline',
 				handler: function(){
-					delete w.range; //so that it does not detach it on cleanup
 					var r = NextThought.model.Redaction.createFromHighlight(record);
 					r.set('replacementContent', 'redaction');
-					var widget = me.createAnnotationWidget('redaction',r, range);
+					var widget = me.createAnnotationWidget('redaction',r, tRange);
 					widget.savePhantom();
-					//r.save();
 				}
 			});
 
 			menu.add({
 				text: 'Redact Block',
 				handler: function(){
-					delete w.range; //so that it does not detach it on cleanup
 					var r = NextThought.model.Redaction.createFromHighlight(record);
-					var widget = me.createAnnotationWidget('redaction',r, range);
+					var widget = me.createAnnotationWidget('redaction',r, tRange);
 					widget.savePhantom();
-					//r.save();
 				}
 			});
 		}
