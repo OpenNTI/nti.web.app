@@ -29,10 +29,8 @@ Ext.define('NextThought.view.annotations.Redaction', {
 
 
 	makeEditableSpanEditable: function(e){
-		console.log('double click');
 		if (e){
 			if (this.clickTimer){
-				console.log('double click, clear timeout');
 				clearTimeout(this.clickTimer);
 			}
 			e.stopEvent();
@@ -132,6 +130,11 @@ Ext.define('NextThought.view.annotations.Redaction', {
 			}
 		});
 
+		this.mon(this.editableSpan, {
+			scope: this,
+			blur: this.editableSpanBlur
+		});
+
 		return masterSpan;
 	},
 
@@ -176,6 +179,18 @@ Ext.define('NextThought.view.annotations.Redaction', {
 			this.record.save();
 			return handledKey();
 		}
+	},
+
+
+	editableSpanBlur: function(event, span){
+		var me = this;
+
+		event.stopEvent();
+		this.record.set('replacementContent', span.innerText);//just the text, not the formatting
+		this.record.save();
+		me.editableSpan.dom.removeAttribute('contenteditable');
+
+		return false;
 	},
 
 
