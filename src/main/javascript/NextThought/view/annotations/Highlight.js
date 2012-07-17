@@ -106,6 +106,30 @@ Ext.define('NextThought.view.annotations.Highlight', {
 	},
 
 
+	resolveVerticalLocation: function(){
+		var r = this.getRange();
+		if(!r.collapsed){
+			console.log(r.toString(), r.getBoundingClientRect(), r.getClientRects(),r);
+
+		}
+		r.detach();
+		delete this.range;
+		r = this.getRange();
+
+//		var s = this.doc.parentWindow.getSelection();
+//		s.removeAllRanges();
+//		s.addRange(r);
+
+//		s.removeAllRanges();
+//		s.addRange(r);
+//		s.modify('extend', 'forward', 'word');
+//		r = s.getRangeAt(0);
+//		s.removeAllRanges();
+
+		return r.getBoundingClientRect().top;
+	},
+
+
 	render: function(){
 		var range = this.getRange();
 		if(!range){return -1;}
@@ -129,7 +153,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
 
 		if(style === 'suppressed'){
 			console.warn('*** style is suppressed, not rendering highlight');
-			return boundingTop || s[0].top;
+			return boundingTop || i>0 ? s[0].top : this.resolveVerticalLocation();
 		}
 
 		if(!this.rendered){

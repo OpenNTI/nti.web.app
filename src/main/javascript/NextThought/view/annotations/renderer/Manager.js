@@ -151,6 +151,8 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 
 		b.each(function(line,y){
 
+			var widgets = [], siblings;
+
 			line.controls = line.controls || cT.append(g.controls,[],true);
 			line.widgets = line.widgets || wT.append(g.widgets,[],true);
 
@@ -159,10 +161,19 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 			(new Ext.CompositeElement([line.controls,line.widgets])).setTop(y);
 
 			line.each(function(o){
-				var w = o.getGutterWidget(line.length-1);
+				var w = o.getGutterWidget();
 				var c = o.getControl();
 				if( c ){ c.appendTo( line.controls ); }
-				if( w ){ w.appendTo( line.widgets ); }
+				if( w ){ widgets.push( o ); }
+			});
+
+			siblings = widgets.length-1;
+			Ext.each(widgets,function(o){
+				var w = o.getGutterWidget(siblings);
+				if(w){w.appendTo(line.widgets);}
+				else {
+					siblings -= 1;
+				}
 			});
 
 			if(!line.controls.first()){ line.controls.remove(); }
