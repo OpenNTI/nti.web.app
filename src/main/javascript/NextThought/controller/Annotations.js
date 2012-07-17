@@ -64,6 +64,7 @@ Ext.define('NextThought.controller.Annotations', {
 
 			'note-window': {
 				'save-new-reply' : this.saveNewReply,
+				'save-new-note' : this.saveNewNote,
 				'share': this.shareWith
 			},
 
@@ -198,9 +199,14 @@ Ext.define('NextThought.controller.Annotations', {
 
 		//Define our vars and create our content range description:
 		var doc = this.getReader().getDocumentElement(),
-			rangeDescription = Anchors.createRangeDescriptionFromRange(range, doc),
-			noteRecord;
-
+			style = 'suppressed',
+			noteRecord, rangeDescription;
+		if (range instanceof NextThought.model.anchorables.ContentRangeDescription) {
+			style = 'plain';
+			rangeDescription = range;
+			range = null;
+		}
+		else rangeDescription = Anchors.createRangeDescriptionFromRange(range, doc);
 		//make sure the body is an array:
 		if(!Ext.isArray(body)){body = [body];}
 
@@ -215,8 +221,8 @@ Ext.define('NextThought.controller.Annotations', {
 		noteRecord = Ext.create('NextThought.model.Note', {
 			applicableRange: rangeDescription,
 			body: body,
-			style: 'suppressed',
 			sharedWith: shareWith,
+			style: style,
 			ContainerId: LocationProvider.currentNTIID
 		});
 

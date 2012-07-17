@@ -168,12 +168,13 @@ Ext.define('NextThought.view.annotations.note.Main',{
 			return this.saveReply();
 		}
 
-		var v = this.editorActions.getValue();
-
-		this.record.set('body', v.body);
-		this.record.set('sharedWith', v.shareWith);
-		this.record.save();
-		this.up('window').close();
+		var me = this;
+		var v = me.editorActions.getValue();
+		function callback(success, record) {
+			if (success) { me.up('window').close(); }
+		}
+		this.up('window').fireEvent('save-new-note', v.body, me.record.get('applicableRange'), v.shareWith, callback);
+		
 	},
 
 

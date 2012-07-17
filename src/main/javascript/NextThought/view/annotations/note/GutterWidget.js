@@ -83,6 +83,7 @@ Ext.define('NextThought.view.annotations.note.GutterWidget',{
 
 
 	setRecord: function(r){
+		if (r.phantom) return;
 		this.record = r;
 		var me = this;
 		if(!me.rendered){return;}

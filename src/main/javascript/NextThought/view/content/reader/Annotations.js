@@ -168,10 +168,8 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 				var r = NextThought.model.Note.createFromHighlight(record);
 				r.set('style','plain');
 				var n = me.createAnnotationWidget('note',r, range);
-				r.save({success: function(rec){
-					n.attachRecord(rec);
-					n.openWindow(false,true);
-				}});
+				n.openWindow(false,true);
+				n.cleanup();
 			}
 		});
 
