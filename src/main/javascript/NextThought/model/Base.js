@@ -87,7 +87,7 @@ Ext.define('NextThought.model.Base', {
 		var c = this.get('LikeCount');
 		if (c <= 0) {return '';}
 		else if (c >= 1000){ return '999+';}
-		return ''+c;
+		return String(c);
 	},
 
 	getLink: function(rel){

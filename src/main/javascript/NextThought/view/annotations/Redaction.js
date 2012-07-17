@@ -50,6 +50,8 @@ Ext.define('NextThought.view.annotations.Redaction', {
 	render: function(){
 		var y = this.callParent(arguments);
 
+
+
 		if (this.actionSpan){return y;}
 
 		if(this.rendered){

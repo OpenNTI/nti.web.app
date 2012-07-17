@@ -49,7 +49,7 @@ Ext.define( 'NextThought.view.sharing.Window', {
 		this.items = Ext.clone(this.items);
 		var readOnly = this.record ? !this.record.isModifiable() : false,
 			title = this.titleLabel ? this.titleLabel : readOnly ? 'Item Info' : 'Share this...',
-			content = 'This item does not have text';
+			content = 'This item does not have text',
 			u = this.record? this.record.get('Creator') : $AppConfig.username,
 			info = this.items.first();
 

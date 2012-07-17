@@ -184,7 +184,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
 
 			if(!last && (Math.abs(y - lastY) < lineHeight || y > lastY )){ continue; }
 			//Remove the possibility of a "just the triangle" line at the end
-			if(last && w < 10) continue; 
+			if(last && w < 10) {continue;}
 
 			if(last){
 				c = Ext.get(this.counter);
@@ -233,11 +233,9 @@ Ext.define('NextThought.view.annotations.Highlight', {
 			body.parentNode.insertBefore(cnt,body);
 		}
 
-		a = this.createElement(
+		return this.createElement(
 			'canvas', cnt,
 			'highlight-canvas');
-		cnt.style.zIndex = 1;
-		return a
 	},
 
 

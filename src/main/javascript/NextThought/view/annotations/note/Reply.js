@@ -114,7 +114,7 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 		});
 
 		TemplatesForNotes.attachMoreReplyOptionsHandler(me, me.more);
- 		me.editorActions = new NoteEditorActions(me,me.editor);
+		me.editorActions = new NoteEditorActions(me,me.editor);
 
 		me.mon(me.editorActions, {
 			scope: me,

@@ -185,7 +185,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 					var r = NextThought.model.Redaction.createFromHighlight(record);
 					r.set('replacementContent', 'redaction');
 					var widget = me.createAnnotationWidget('redaction',r, range);
-					widget.savePhantom()
+					widget.savePhantom();
 					//r.save();
 				}
 			});
@@ -196,7 +196,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 					delete w.range; //so that it does not detach it on cleanup
 					var r = NextThought.model.Redaction.createFromHighlight(record);
 					var widget = me.createAnnotationWidget('redaction',r, range);
-					widget.savePhantom()
+					widget.savePhantom();
 					//r.save();
 				}
 			});

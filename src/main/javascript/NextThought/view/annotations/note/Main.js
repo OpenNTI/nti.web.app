@@ -152,7 +152,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		this.up('window').down('note-responses').setReplies(this.record.children);
 
 		this.record.on('changed', function(){
-			this.setRecord(this.record, range)
+			this.setRecord(this.record, range);
 		}, this, {single:true});
 	},
 
@@ -207,7 +207,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		var me = this;
 		me.el.addCls('editor-active');
 		me.doComponentLayout();
-		setTimeout(function(){me.editorActions.focus()}, 100);
+		setTimeout(function(){me.editorActions.focus();}, 100);
 	},
 
 	deactivateReplyEditor: function(){
