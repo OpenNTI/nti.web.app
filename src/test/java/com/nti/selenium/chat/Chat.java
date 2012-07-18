@@ -16,24 +16,30 @@ public class Chat extends Groups {
 		super.setUp();
 		credentials = this.getUsersEmails(3);
 		searchUserNames = this.getSearchUserNames(3);
-		this.driver[2] = Chat.createDriver(Chat.browser);
-		this.selenium[2] = new WebDriverBackedSelenium(driver[2], url);
-		this.selenium[2].open(url);
-		this.setActiveSelenium(selenium[2]);
-		this.setActiverDriver(this.driver[2]);
-		this.doLogin(credentials[1].getUserName(), credentials[1].getPassword());
-		this.driver[3] = Chat.createDriver(Chat.browser);
-		this.selenium[3] = new WebDriverBackedSelenium(driver[3], url);
-		this.selenium[3].open(url);
-		this.setActiveSelenium(selenium[3]);
-		this.setActiverDriver(this.driver[3]);
-		this.doLogin(credentials[2].getUserName(), credentials[2].getPassword());
-		this.setActiverDriver(this.driver[1]);
-		this.groups[1] = this.addPeopleToGroup(searchUserNames[1], searchUserNames[2]);
-		this.setActiverDriver(this.driver[2]);
-		this.groups[2] = this.addPeopleToGroup(searchUserNames[0], searchUserNames[2]);
-		this.setActiverDriver(this.driver[3]);
-		this.groups[3] = this.addPeopleToGroup(searchUserNames[0], searchUserNames[1]);
+		
+		for (int i=2; i<=3; i++)
+		{
+			this.driver[i] = Chat.createDriver(Chat.browser);
+			this.selenium[i] = new WebDriverBackedSelenium(driver[i], url);
+			this.selenium[i].open(url);
+			this.setActiveSelenium(this.selenium[i]);
+			this.setActiverDriver(this.driver[i]);
+			this.doLogin(credentials[i-1].getUserName(), credentials[i-1].getPassword());
+		}
+		
+		for (int i=1; i<=3; i++)
+		{
+			this.setActiverDriver(this.driver[i]);
+			final String[] friends = new String[2];
+			for (int j=1, k=0 ; j <=3; j++)
+			{
+				if (j != i) {
+					friends[k++] = searchUserNames[i-1];
+				}
+			}
+			this.groups[i] = this.addPeopleToGroup(friends);
+		}
+
  		this.setActiverDriver(driver[1]);
  		this.setActiveSelenium(selenium[1]);
 	}
@@ -41,69 +47,54 @@ public class Chat extends Groups {
 	@After
 	public void tearDown() {
 		super.tearDown();
-		this.setActiverDriver(this.driver[2]);
-		try{ 
-			this.removeGroups();
-		}
-		catch (Exception e)
-		{ 
-			System.out.println("Unable to remove groups/deleting test");
-			System.out.println(e.getMessage());
-		}
-		finally 
+		for (int i=2; i<=3; i++)
 		{
-			selenium[2].stop(); 
-		}
-		this.setActiverDriver(this.driver[3]);
-		try{ 
-			this.removeGroups();
-		}
-		catch (Exception e)
-		{ 
-			System.out.println("Unable to remove groups/deleting test");
-			System.out.println(e.getMessage());
-		}
-		finally 
-		{
-			selenium[3].stop(); 
+			this.setActiverDriver(this.driver[i]);
+			try{ 
+				this.removeGroups();
+			} catch (final Exception e) { 
+				System.out.println("Unable to remove groups/deleting test");
+				System.out.println(e.getMessage());
+			} finally {
+				selenium[i].stop(); 
+			}
 		}
 	}
 	
-	public void startChat(){
+	public void startChat() {
 		this.findElement(XpathUtilsChat.getGroupsTab()).click();
 		this.waitForElement(XpathUtilsChat.getIndividualGroups());
-		List<WebElement> elements = this.findElements(XpathUtilsChat.getIndividualGroups());
+		final List<WebElement> elements = this.findElements(XpathUtilsChat.getIndividualGroups());
 		elements.get(elements.size()-1).click();
 	}
 	
-	public void sendMessage(String message){
+	public void sendMessage(final String message) {
 		this.findElement(XpathUtilsChat.getChatInputField()).sendKeys(XpathUtilsChat.buildString(message, "\r"));
 	}
 	
-	public void clickAddUserButton(String chatName){
+	public void clickAddUserButton(final String chatName) {
 		this.findElement(XpathUtilsChat.getAddPersonButton(chatName)).click();
 	}
 	
-	public void clickMinimizeButton(String chatName){
+	public void clickMinimizeButton(final String chatName) {
 		this.findElement(XpathUtilsChat.getMinimizeButton(chatName)).click();
 	}
 	
-	public void clickMinimizedChat(String chatName){
+	public void clickMinimizedChat(final String chatName) {
 		this.findElement(XpathUtilsChat.getMinimizedChat(chatName)).click();
 	}
 	
-	public void clickChatCloseButton(String chatName){
+	public void clickChatCloseButton(final String chatName) {
 		this.findElement(XpathUtilsChat.getCloseChatButton(chatName)).click();
 	}
 	
-	public void clickMinimizedChatCloseButton(String chatName){
+	public void clickMinimizedChatCloseButton(String chatName) {
 		this.findElement(XpathUtilsChat.getCloseChatMinimized(chatName)).click();
 	}
 	
-	public void startGroupChat(String groupName){
+	public void startGroupChat(final String groupName) {
 		this.findElement(XpathUtilsChat.getGroupsTab()).click();
 		this.waitForElement(XpathUtilsChat.getIndividualGroups());
 		this.findElement(XpathUtilsChat.getGroupChatButton(groupName)).click();
 	}
-	
 }
