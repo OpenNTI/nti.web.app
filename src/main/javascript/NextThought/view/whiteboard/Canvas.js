@@ -12,8 +12,6 @@ Ext.define(	'NextThought.view.whiteboard.Canvas',{
 
 	autoEl: 'canvas',
 
-	objectNameRe: (/^Canvas(.+?)Shape$/i),
-
 	initComponent: function(){
 		this.callParent(arguments);
 		this.updateData(this.drawData);
@@ -27,29 +25,7 @@ Ext.define(	'NextThought.view.whiteboard.Canvas',{
 
 
 	updateData: function(scene){
-		this.drawData = Ext.clone(scene || {shapeList:[]});
-
-		//maintain z-order since we're looping backwards (for speed)
-		this.drawData.shapeList.reverse();
-
-		var shapes = this.drawData.shapeList,
-			i = shapes.length -1,
-			p = 'NextThought.view.whiteboard.shapes.',
-			c;
-
-		for(; i>=0; i--){
-			//reparent shapes
-			c = this.objectNameRe.exec(shapes[i].Class);
-			if(!c){
-				console.warn('Not a shape: '+JSON.stringify(shapes[i]));
-				continue;
-			}
-
-			if(c[1]==='Polygon' && shapes[i].sides<=2){
-				c[1]='Line';
-			}
-			shapes[i] = Ext.create(p+c[1],shapes[i]);
-		}
+		this.drawData = this.self.updateData(scene);
 	},
 
 
@@ -94,73 +70,104 @@ Ext.define(	'NextThought.view.whiteboard.Canvas',{
 			return;
 		}
 
-		function draw(x,cb){
-			if(x<0){
-				if(cb && cb.call){
-					cb.call(this);
-				}
-				delete me.drawing;
-				return;
-			}
-			ctx.save();
-			shapes[x].draw(ctx, function(){
-				ctx.restore();
-				draw(x-1,cb);
-			});
-		}
-
-		var me = this,
-			c = me.el.dom,
-			w = me.el.getWidth(),
-			h = me.el.getHeight(),
-			d = me.drawData,
-			ctx,
-			shapes = d.shapeList || [],
-			i = shapes.length -1;
-
-		//reset context
-		c.width = 1; c.width = w;
-		c.height = h;
-
-		ctx = c.getContext('2d');
-
-		if(!this.thumbnail){
-			ctx.save();
-			ctx.fillStyle = 'white';
-			ctx.fillRect(0,0,w,h);
-			ctx.restore();
-		}
-
 		this.drawing = true;
-		draw(i,finished);
+
+		var me = this;
+
+		function fin(){
+			delete me.drawing;
+			finished();
+		}
+
+		this.self.drawScene(this.drawData,this.el,fin);
 	},
 
 	statics: {
+		objectNameRe: (/^Canvas(.+?)Shape$/i),
+
+		updateData: function(scene){
+			var drawData = Ext.clone(scene || {shapeList:[]});
+
+			//maintain z-order since we're looping backwards (for speed)
+			drawData.shapeList.reverse();
+
+			var shapes = drawData.shapeList,
+				i = shapes.length -1,
+				p = 'NextThought.view.whiteboard.shapes.',
+				c;
+
+			for(; i>=0; i--){
+				//reparent shapes
+				c = this.objectNameRe.exec(shapes[i].Class);
+				if(!c){
+					console.warn('Not a shape: '+JSON.stringify(shapes[i]));
+					continue;
+				}
+
+				if(c[1]==='Polygon' && shapes[i].sides<=2){
+					c[1]='Line';
+				}
+				shapes[i] = Ext.create(p+c[1],shapes[i]);
+			}
+
+			return drawData;
+		},
+
+
+
+		drawScene: function(data, canvas, finished){
+
+			function draw(x,cb){
+				if(x<0){
+					if(cb && cb.call){
+						cb.call(this);
+					}
+					return;
+				}
+				ctx.save();
+				shapes[x].draw(ctx, function(){
+					ctx.restore();
+					draw(x-1,cb);
+				});
+			}
+
+			var c = canvas.dom,
+				w = canvas.getWidth(),
+				h = canvas.getHeight(),
+				ctx,
+				shapes = data.shapeList || [],
+				i = shapes.length -1;
+
+			//reset context
+			c.width = 1; c.width = w;
+			c.height = h;
+
+			ctx = c.getContext('2d');
+
+			if(!this.thumbnail){
+				ctx.save();
+				ctx.fillStyle = 'white';
+				ctx.fillRect(0,0,w,h);
+				ctx.restore();
+			}
+
+			draw(i,finished);
+		},
+
+
 		getThumbnail: function(scene, resultCallback){
 
 			function finish(){
-				var data = c.el.dom.toDataURL("image/png");
-
-				try { c.destroy(); } catch(e){ console.warn(Globals.getError(e)); }
-				try { div.remove(); }catch(e){ console.warn(Globals.getError(e)); }
-
+				var data = c.dom.toDataURL("image/png");
+				try { c.remove(); }catch(e){ console.warn(Globals.getError(e)); }
 				resultCallback.call(window,data);
 			}
 
-			var div = Ext.DomHelper.append(Ext.getBody(),{tag: 'div', style: {display:'none'}},true),
-				c;
+			var c = Ext.DomHelper.append(Ext.getBody(),{tag: 'canvas', style: {visibility:'hidden',position:'absolute'}},true);
 
-			c = Ext.widget({
-				xtype:'whiteboard-canvas',
-				drawData: scene,
-				renderTo: div,
-				thumbnail: true
-			});
-
-			c.el.dom.width = 1024;
-			c.el.dom.height = 768;
-			c.setSize(1024,768);
-			c.drawScene(finish);
+			c.dom.width = 1024;
+			c.dom.height = 768;
+			this.drawScene(this.updateData(scene),c,finish);
 		}
 	}
 });
