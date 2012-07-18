@@ -15,12 +15,11 @@ Ext.define('NextThought.view.annotations.note.Responses',{
 
 
 	addReply: function(record){
-		var id = IdCache.getComponentId(record, null, 'note-reply');
-		if (this.down('note-reply[id='+id+']')) {
+		if (Ext.getCmp(record.getId())) {
 			console.log('already showing this reply');
 			return;
 		}
-		this.add({record: record, id: id});
+		this.add({record: record, id: record.getId()});
 	},
 
 
