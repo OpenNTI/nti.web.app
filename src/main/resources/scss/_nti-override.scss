@@ -154,19 +154,27 @@
 
 		.subsection,
 		.subsubsection,
-		.paragraph{
+		.paragraph,
+		.subparagraph,
+		.subsubparagraph {
 			&.title {
 				display: block;
 			}
 		}
 		.subsubsection,
-		.paragraph {
+		.paragraph,
+		.subparagraph,
+		.subsubparagraph {
 			&.title {
 				font-weight: bold;
 				padding-left: 85px;
 			}
 		}
 		.subsubsection.title {font-size: 16px;}
-		.paragraph.title {font-size: 14px;}
+		.paragraph.title,
+                .subparagraph.title,
+		.subsubparagraph.title {
+			font-size: 14px;
+		}
 	}
 }
