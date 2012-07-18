@@ -54,6 +54,7 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 		editor: '.respond .editor',
 		replyOptions: '.respond .reply-options',
 		replyButton: '.respond .reply',
+		startChatButton: '.respond .chat',
 		more: '.respond .reply-options .more'
 	},
 
@@ -78,10 +79,15 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 			return;
 		}
 
-		me.mon(me.replyButton,{
+		me.mon(me.startChatButton,{
 			scope: me,
-			click: me.activateReplyEditor
+			click: me.startChat
 		});
+
+		me.mon(me.replyButton,{
+				scope: me,
+				click: me.activateReplyEditor
+			});
 
 		me.mon(me.editor.down('.cancel'),{
 			scope: me,
@@ -226,6 +232,10 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 		}
 
 		r.destroy();
+	},
+
+	startChat: function() {
+		this.fireEvent('chat', this.record);
 	}
 
 });

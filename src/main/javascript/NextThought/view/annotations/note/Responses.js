@@ -15,6 +15,10 @@ Ext.define('NextThought.view.annotations.note.Responses',{
 
 
 	addReply: function(record){
+		if (record.getModelName() !== 'Note') {
+			console.warn('can not at reply, it is not a note and I am not prepared to handle that.');
+			return;
+		}
 		if (Ext.getCmp(record.getId())) {
 			console.log('already showing this reply');
 			return;
@@ -24,7 +28,16 @@ Ext.define('NextThought.view.annotations.note.Responses',{
 
 
 	setReplies: function(children) {
-		this.removeAll();
-		Ext.each(children, this.addReply, this);
+		var me = this;
+
+		me.removeAll();
+
+		Ext.each(children,
+			function(c) {
+				if (c.getModelName()==='Note'){
+					me.addReply(c);
+				}
+			}
+		,this);
 	}
 });

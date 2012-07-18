@@ -42,6 +42,7 @@ Ext.define('NextThought.view.annotations.note.GutterWidget',{
 		editor: '.respond .editor',
 		replyOptions: '.respond .reply-options',
 		replyButton: '.respond .reply',
+		startChatButton: '.respond .chat',
 		more: '.respond .reply-options .more'
 	},
 
@@ -69,10 +70,15 @@ Ext.define('NextThought.view.annotations.note.GutterWidget',{
 			}
 		});
 
+		me.mon(me.startChatButton, {
+			scope: me,
+			click: me.startChat
+		});
+
 		TemplatesForNotes.attachMoreReplyOptionsHandler(me, me.more);
 
 		//Stop div mouseup from opening window when clicking on buttons...
-		me.mon(new Ext.CompositeElement([me.liked, me.favorites]), {
+		me.mon(new Ext.CompositeElement([me.liked, me.favorites, me.startChatButton]), {
 			scope: me,
 			mouseup: function(e){
 				e.stopEvent();
@@ -115,6 +121,11 @@ Ext.define('NextThought.view.annotations.note.GutterWidget',{
 
 	onDelete: function(){
 		this.record.destroy();
+	},
+
+
+	startChat: function(){
+		this.fireEvent('chat', this.record);
 	}
 
 });

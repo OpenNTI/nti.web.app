@@ -55,16 +55,19 @@ Ext.define('NextThought.controller.Annotations', {
 			},
 
 			'note-gutter-widget': {
-				'share': this.shareWith
+				'share': this.shareWith,
+				'chat': this.replyAsChat
 			},
 
 			'note-reply': {
-				'share': this.shareWith
+				'share': this.shareWith,
+				'chat': this.replyAsChat
 			},
 
 			'note-window': {
 				'save-new-reply' : this.saveNewReply,
-				'share': this.shareWith
+				'share': this.shareWith,
+				'chat': this.replyAsChat
 			},
 
 			'note-entry':{
@@ -269,11 +272,18 @@ Ext.define('NextThought.controller.Annotations', {
 	},
 
 	replyAsChat: function(record) {
-		var reply = AnnotationUtils.noteToReply(record),
-				people = Ext.Array.unique([record.get('Creator')].concat(record.get('sharedWith'))),
-				cId = record.get('ContainerId'),
-				parent = reply.get('inReplyTo'),
-				refs = reply.get('references');
+		var top = record;
+
+		//go to the top, it has the info we need:
+		while(top.parent) {
+			top = top.parent;
+		}
+
+
+		var people = Ext.Array.unique([record.get('Creator')].concat(top.get('sharedWith'))),
+			cId = record.get('ContainerId'),
+			parent = record.get('NTIID'),
+			refs = Ext.Array.clone(record.get('references') || []);
 
 		this.getController('Chat').enterRoom(people, {ContainerId: cId, references: refs, inReplyTo: parent});
 	},
