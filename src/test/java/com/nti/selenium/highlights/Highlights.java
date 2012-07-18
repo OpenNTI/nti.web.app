@@ -57,7 +57,7 @@ public class Highlights extends Navigation {
 		this.switchToIframe();
 		this.findElement(xpath).click();
 		this.switchToDefault();
-		this.findElement(XpathUtilsHighlights.getShareWithButton());
+		this.findElement(XpathUtilsHighlights.getShareWithButton()).click();
 	}
 	
 	public void inputSearchForUser(String username){

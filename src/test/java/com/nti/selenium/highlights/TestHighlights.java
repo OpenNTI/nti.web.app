@@ -45,4 +45,13 @@ public class TestHighlights extends Highlights {
 		assertTrue(this.elementExists(XpathUtilsHighlights.getShareWithButton()));
 	}
 	
+	@Test
+	public void testShareHighlight(){
+		this.createHighlight();
+		this.switchToIframe();
+		assertTrue(this.elementExists(XpathUtilsHighlights.getCreatedHighlight()));
+		this.shareHighlight(XpathUtilsHighlights.getCreatedHighlight());
+		assertTrue(this.elementExists(XpathUtilsHighlights.getShareThisTitle()));
+	}
+	
 }

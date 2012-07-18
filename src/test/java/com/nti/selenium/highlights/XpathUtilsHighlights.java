@@ -22,8 +22,7 @@ public class XpathUtilsHighlights extends XpathUtilsNav {
 	}	
 	
 	public static String getShareThisTitle(){
-		return buildString(xpathBuilder("div", "class", "title"),
-						   xpathBuilder("img", " Share this..."));
+		return xpathBuilder("div", "class", "title"," Share this...");
 	}
 	
 	public static String getShareHighlightInputField(){
