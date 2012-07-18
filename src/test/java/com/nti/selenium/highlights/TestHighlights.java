@@ -102,7 +102,7 @@ public class TestHighlights extends Highlights {
 	}
 	
 	@Test
-	public void testShareHighlightEveryoneDropDownItem(){ 
+	public void testShareHighlightWithEveryone(){ 
 		this.createHighlight();
 		this.switchToIframe();
 		assertTrue(this.elementExists(XpathUtilsHighlights.getCreatedHighlight()));
@@ -112,6 +112,21 @@ public class TestHighlights extends Highlights {
 		this.clickEveryoneDropDownItem();
 		this.waitForElement(XpathUtilsHighlights.getEveryoneTokenLabel());
 		assertTrue(this.elementExists(XpathUtilsHighlights.getEveryoneTokenLabel()));
+	}
+	
+	@Test
+	public void testShareHighlightRemoveEveryone(){ 
+		this.createHighlight();
+		this.switchToIframe();
+		assertTrue(this.elementExists(XpathUtilsHighlights.getCreatedHighlight()));
+		this.shareHighlight(XpathUtilsHighlights.getCreatedHighlight());
+		assertTrue(this.elementExists(XpathUtilsHighlights.getShareThisTitle()));
+		this.clickDropDownArrow();
+		this.clickEveryoneDropDownItem();
+		this.waitForElement(XpathUtilsHighlights.getEveryoneTokenLabel());
+		assertTrue(this.elementExists(XpathUtilsHighlights.getEveryoneTokenLabel()));
+		this.clickCloseEveryoneToken();
+		assertFalse(this.elementExists(XpathUtilsHighlights.getEveryoneTokenLabel()));
 	}
 	
 }
