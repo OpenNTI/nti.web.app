@@ -129,4 +129,28 @@ public class TestHighlights extends Highlights {
 		assertFalse(this.elementExists(XpathUtilsHighlights.getEveryoneTokenLabel()));
 	}
 	
+	@Test
+	public void testShareHighlightClickSaveButton(){ 
+		this.createHighlight();
+		this.switchToIframe();
+		assertTrue(this.elementExists(XpathUtilsHighlights.getCreatedHighlight()));
+		this.shareHighlight(XpathUtilsHighlights.getCreatedHighlight());
+		assertTrue(this.elementExists(XpathUtilsHighlights.getShareThisTitle()));
+		this.clickSaveButton();
+		this.waitForElementToDisappear(XpathUtilsHighlights.getShareThisTitle());
+		assertFalse(this.elementExists(XpathUtilsHighlights.getShareThisTitle()));
+	}
+	
+	@Test
+	public void testShareHighlightClickCancelButton(){ 
+		this.createHighlight();
+		this.switchToIframe();
+		assertTrue(this.elementExists(XpathUtilsHighlights.getCreatedHighlight()));
+		this.shareHighlight(XpathUtilsHighlights.getCreatedHighlight());
+		assertTrue(this.elementExists(XpathUtilsHighlights.getShareThisTitle()));
+		this.clickCancelButton();
+		this.waitForElementToDisappear(XpathUtilsHighlights.getShareThisTitle());
+		assertFalse(this.elementExists(XpathUtilsHighlights.getShareThisTitle()));
+	}
+	
 }
