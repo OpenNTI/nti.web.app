@@ -9,10 +9,13 @@ import com.nti.selenium.navigation.Navigation;
 
 public class Highlights extends Navigation {
 
+	protected String[] searchUserNames;
+	
 	@Before
 	public void setUp() throws Exception{
 		super.setUp();
 		this.navigateTo("Prealgebra", "Fractions", "What is a Fraction?");
+		this.searchUserNames = this.getSearchUserNames(2);
 	}
 	
 	@After
