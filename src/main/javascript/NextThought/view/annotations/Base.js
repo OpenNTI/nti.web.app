@@ -289,6 +289,11 @@ Ext.define( 'NextThought.view.annotations.Base', {
 
 
 	onClick: function(e) {
+		if(!this.isVisible){
+			console.debug('DEBUG: Ignoring click on hidden annotation');
+			return;
+		}
+
 		var menu,
 			xy = e.getXY().slice(),
 			scrollTop = this.ownerCmp.getAnnotationOffsets().scrollTop;
