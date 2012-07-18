@@ -30,7 +30,8 @@ public class XpathUtilsHighlights extends XpathUtilsNav {
 	}
 	
 	public static String getShareHighlightInputFieldDropDownArrow(){
-		return xpathBuilder("div", "class", "x-trigger-index-1 x-form-trigger x-menu x-form-trigger-last x-unselectable x-menu-click x-form-trigger-click");
+		return buildString(xpathBuilder("td", "class", "x-trigger-cell"),
+						   xpathBuilder("div", "role", "button"));
 	}
 	
 	public static String getSearchedForUser(String username){
@@ -47,7 +48,7 @@ public class XpathUtilsHighlights extends XpathUtilsNav {
 	}
 	
 	public static String getEveryoneTokenLabel(){
-		return xpathBuilder("div", "class", "nt-token-label", "Everyone");
+		return xpathBuilder("span", "class", "nt-token-label", "Everyone");
 	}
 	
 	public static String getGroupUsernameTokenLabel(String userNameGroupName){
@@ -74,6 +75,10 @@ public class XpathUtilsHighlights extends XpathUtilsNav {
 	public static String getShareHighlightCancelButton(){
 		return buildString(xpathBuilder("button"),
 				   xpathBuilder("span", "Cancel"));
+	}
+	
+	public static String getDropDownDisplay(){
+		return xpathBuilder("div", "style", "width:​ 432px;​ height:​ 151px;​ left:​ 494px;​ top:​ 551px;​ z-index:​ 29000;​ ");
 	}
 	
 }

@@ -101,4 +101,17 @@ public class TestHighlights extends Highlights {
 		assertFalse(this.elementExists(XpathUtilsHighlights.getGroupUsernameTokenLabel(username)));
 	}
 	
+	@Test
+	public void testShareHighlightEveryoneDropDownItem(){ 
+		this.createHighlight();
+		this.switchToIframe();
+		assertTrue(this.elementExists(XpathUtilsHighlights.getCreatedHighlight()));
+		this.shareHighlight(XpathUtilsHighlights.getCreatedHighlight());
+		assertTrue(this.elementExists(XpathUtilsHighlights.getShareThisTitle()));
+		this.clickDropDownArrow();
+		this.clickEveryoneDropDownItem();
+		this.waitForElement(XpathUtilsHighlights.getEveryoneTokenLabel());
+		assertTrue(this.elementExists(XpathUtilsHighlights.getEveryoneTokenLabel()));
+	}
+	
 }
