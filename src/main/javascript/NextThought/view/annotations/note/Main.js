@@ -72,88 +72,87 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		var me = this;
 		me.callParent(arguments);
 
-		me.setRecord(me.record, me.range);
+		try {
+			me.setRecord(me.record, me.range);
 
-		me.mon(me.replyButton,{
-			scope: me,
-			click: me.activateReplyEditor
-		});
+			me.mon(me.replyButton,{ scope: me, click: me.activateReplyEditor });
+			me.mon(me.editor.down('.cancel'),{ scope: me, click: me.deactivateReplyEditor });
+			me.mon(me.editor.down('.save'),{ scope: me, click: me.editorSaved });
 
-		me.mon(me.editor.down('.cancel'),{
-			scope: me,
-			click: me.deactivateReplyEditor
-		});
+			me.mon(me.editor.down('.content'),{
+				scope: me,
+				keypress: me.editorKeyPressed,
+				keydown: me.editorKeyDown
+			});
 
-		me.mon(me.editor.down('.save'),{
-			scope: me,
-			click: me.editorSaved
-		});
+			me.mon(me.liked, { scope: me, click: function(){ me.record.like(me.liked); } });
+			me.mon(me.favorites, { scope: me, click: function(){ me.record.favorite(me.favorites); } });
 
-		me.mon(me.editor.down('.content'),{
-			scope: me,
-			keypress: me.editorKeyPressed,
-			keydown: me.editorKeyDown
-		});
-
-		me.mon(me.liked, {
-			scope: me,
-			click: function(){
-				me.record.like(me.liked);
-			}
-		});
-
-		me.mon(me.favorites, {
-			scope: me,
-			click: function(){
-				me.record.favorite(me.favorites);
-			}
-		});
-
-		TemplatesForNotes.attachMoreReplyOptionsHandler(me, me.more);
-		me.editorActions = new NoteEditorActions(me,me.editor);
-
-		me.mon(me.editorActions, {
-			scope: me,
-			'size-changed': function(){
-				me.doComponentLayout();
-			}
-		});
+			TemplatesForNotes.attachMoreReplyOptionsHandler(me, me.more);
+			me.editorActions = new NoteEditorActions(me,me.editor);
+			me.mon(me.editorActions, { scope: me, 'size-changed': function(){ me.doComponentLayout(); } });
+		}
+		catch(e){
+			console.error(Globals.getError(e));
+		}
 	},
 
 
 	setRecord: function(r, range){
+		var commonAncestor, ancestorText, suppressed, selectedText;
+
 		this.record = r;
 		this.range = range;
 		if(!this.rendered){return;}
-		UserRepository.getUser(r.get('Creator'),this.fillInUser,this);
-		this.time.update(r.getRelativeTimeString());
-		this.liked.update(r.getFriendlyLikeCount());
-		if (r.isLiked()){
-			this.liked.addCls('on');
+		try {
+			UserRepository.getUser(r.get('Creator'),this.fillInUser,this);
+			this.time.update(r.getRelativeTimeString());
+			this.liked.update(r.getFriendlyLikeCount());
+			if (r.isLiked()){
+				this.liked.addCls('on');
+			}
+			if (r.isFavorited()){
+				this.favorites.addCls('on');
+			}
 		}
-		if (r.isFavorited()){
-			this.favorites.addCls('on');
+		catch(e1){
+			console.error(Globals.getError(e1));
 		}
 
-		var commonAncestor = range ? range.commonAncestorContainer : null,
-			ancestorText = commonAncestor ? commonAncestor.textContent : null,
-			suppressed = r.get('style') === 'suppressed',
+		try {
+			commonAncestor = range ? range.commonAncestorContainer : null;
+			ancestorText = commonAncestor ? commonAncestor.textContent : null;
+			suppressed = r.get('style') === 'suppressed';
 			selectedText = range ? range.toString() : '';
 
-		if (!suppressed){
-			ancestorText = ancestorText
-					? ancestorText.replace(selectedText, this.highlightTpl.apply([selectedText]))
-					: '';
+			if (!suppressed){
+				ancestorText = ancestorText
+						? ancestorText.replace(selectedText, this.highlightTpl.apply([selectedText]))
+						: '';
+			}
+
+			this.context.update(ancestorText);
+		}
+		catch(e2){
+			console.error(Globals.getError(e2));
 		}
 
-		this.context.update(ancestorText);
+		try {
+			r.compileBodyContent(function(text){ this.text.update(text); },this);
+			this.up('window').down('note-responses').setReplies(this.record.children);
+		}
+		catch(e3){
+			console.error(Globals.getError(e3));
+		}
 
-		r.compileBodyContent(function(text){ this.text.update(text); },this);
-		this.up('window').down('note-responses').setReplies(this.record.children);
-
-		this.record.on('changed', function(){
-			this.setRecord(this.record, range);
-		}, this, {single:true});
+		try {
+			this.record.on('changed', function(){
+				this.setRecord(this.record, range);
+			}, this, {single:true});
+		}
+		catch(e4){
+			console.error(Globals.getError(e4));
+		}
 	},
 
 
