@@ -160,6 +160,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 	fillInUser: function(user){
 		if(Ext.isArray(user)){user = user[0];}
 		this.name.update(user.getName());
+		TemplatesForNotes.updateMoreReplyOptionsLabels(this.more,user);
 	},
 
 

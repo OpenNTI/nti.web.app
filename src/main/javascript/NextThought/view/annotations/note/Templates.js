@@ -47,12 +47,11 @@ Ext.define('NextThought.view.annotations.note.Templates',{
 						cn: [
 							{ tag: 'li', cls: 'share', html: 'Share' },
 							/*
-							DISABLED UNTIL IMPLEMENTED
-							{ tag: 'li', cls: 'flag',  html: 'Flag for Moderation', disabled: true },
+							{ tag: 'li', cls: 'flag',  html: 'Flag for Moderation' },
 							{ tag: 'li', cls: 'add-contact', html: 'Add to Contacts' },
-							{ tag: 'li', cls: 'follow', html: 'Follow {name}' },
-							{ tag: 'li', cls: 'block', html: 'Block {name}' },
-							*/
+							{ tag: 'li', cls: 'follow', html: 'Follow ...' },
+							{ tag: 'li', cls: 'block', html: 'Block ...' },
+//							{ tag: 'li', cls: 'mute', html: 'Mute?' },*/
 							{ tag: 'li', cls: 'delete', html: 'Delete' }
 						]
 					}]
@@ -74,6 +73,26 @@ Ext.define('NextThought.view.annotations.note.Templates',{
 			}
 		});
 	},
+
+
+	updateMoreReplyOptionsLabels: function(moreEl,user){
+		var add = moreEl.down('li.add-contact');
+		var flag = moreEl.down('li.flag');
+		var follow = moreEl.down('li.follow');
+		var block = moreEl.down('li.block');
+		var name = user.getName();
+
+		function addName(){
+			Ext.each(arguments,function(o){
+				if(o){ o.update(o.dom.textContent.replace(/\.{3}/,name)); } }); }
+
+		function remove(){
+			Ext.each(arguments,function(o){ if(o){o.remove();} }); }
+
+		if(isMe(user)){ remove(add,flag,follow,block); }
+		else { addName(follow,block); }
+	},
+
 
 	replyOptionsClicked: function(e){
 		e.stopEvent();
