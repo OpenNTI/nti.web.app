@@ -7,26 +7,29 @@ import org.openqa.selenium.*;
 
 
 import com.nti.selenium.Credentials;
+import com.nti.selenium.XpathUtils;
 import com.nti.selenium.navigation.Navigation; 
 
 public class Groups extends Navigation { 
 
 
-	//protected static  String [] usernames = {"logan testi", "jessica jenko"}; 
 	protected Credentials[] credentials; 
-	
+
 	@Before 
 	public void setUp() throws Exception{ 
 		super.setUp(); 
 		credentials = this.getUsersEmails(10);
-		
+
 	}
 
 	@After 
 	public void tearDown(){ 
+		
+		this.openGroups();
 		try{ 
 			this.setActiverDriver(driver[1]);
 			this.removeGroups();
+
 		}
 		catch (Exception e)
 		{ 
@@ -34,7 +37,7 @@ public class Groups extends Navigation {
 			System.out.println(e.getMessage());
 		}
 		finally 
-		{
+		{ 
 			selenium[1].stop(); 
 		}
 	}
@@ -108,32 +111,27 @@ public class Groups extends Navigation {
 
 	public void addGroup(String groupname)
 	{
+
 		this.openGroups();
-		//boolean bool= true;
 		WebElement element = this.findElement (XpathUtilsGroups.getInputGroupName()); 
 		element.sendKeys (groupname); 
 		this.findElement (XpathUtilsGroups.getAddButton()).click();
-		this.waitForElement(XpathUtilsGroups.getGroupName(groupname));
-		//
-		//		try
-		//		{ 
-		//			this.findElement(XpathUtilsGroups.getGroupName(groupname));
-		//
-		//		}
-		//		catch (final NoSuchElementException e)
-		//		{ 
-		//			System.out.println("The group was not added"); 
-		//			bool = false; 
-		//		
-		//		}
-		//
-		//		return bool; 
+		this.waitForElement(XpathUtilsGroups.getGroupName(groupname));	 
 	}
 
-	public String addPeopleToGroup(String...strings){
+
+	public String addPeopleToGroup(String...strings)
+	{
 		String time = Long.toString(System.currentTimeMillis());
 		this.addGroup(time);
-		for(String str: strings){
+
+		String user; 
+		int count = 0; 
+		
+		
+
+		for(String str: strings)
+		{
 			this.waitForElement(XpathUtilsGroups.getInputUsername());
 			this.findElement(XpathUtilsGroups.getInputUsername()).sendKeys(str);
 			this.waitForElement(XpathUtilsGroups.getPersonGroupItem(str));
@@ -141,70 +139,44 @@ public class Groups extends Navigation {
 				System.out.println("taking a break");
 			}
 			this.findElement(XpathUtilsGroups.getPersonGroupItem(str)).click();
-			this.waitForElement("//div[text()='" + time + "']");
-			this.findElement("//div[text()='" + time + "']").click();
-			this.waitForElement("//span[text()='Finish']");
-			this.findElement("//span[text()='Finish']").click();
+			
+			this.waitForElement(XpathUtilsGroups.getGroupName(time)); 
+		
+			this.findElement(XpathUtilsGroups.getGroupName(time)).click();
+			this.waitForElement(XpathUtilsGroups.getFinishButton());
+			this.findElement(XpathUtilsGroups.getFinishButton()).click();
 		}
-		return time;
+		return time; 
 	}
-
-	public void  addOnePersonToGroup(int userSearchNumber)
-	{
-		this.addGroup("TestGroup"); 
-		this.findElement(XpathUtilsGroups.getInputUsername()).sendKeys(credentials[1].getUserName());
-		this.waitForElement(XpathUtilsGroups.getPersonGroupItem(credentials[1].getUserName()));
-		this.findElement(XpathUtilsGroups.getPersonGroupItem(credentials[1].getUserName())).click();
-
-
-		//		boolean bool = this.elementExists(XpathUtilsGroups.getName("Logan Testi"));
-
-		//		if (bool == true)
-		//		{
-		//			this.findElement(XpathUtilsGroups.getName ("Logan Testi")).click();
-		//			//this.findElement(XpathUtilsGroups.getFinishButton())
-		//			boolean bool2 = this.elementExists(XpathUtilsGroups.getSelectGroup()); 
-		//			if (bool2 == true)
-		//			{
-		//				this.findElement(XpathUtilsGroups.getSelectGroup()).click();
-		//			}
-		//
-		//			this.wait_(3);
-		//			WebElement element = this.driver.findElement(By.xpath("//span[text() = 'Finish']/.."));
-		//			//this.wait_(5);
-		//			element.click();
-		//			this.wait_(10);
-		//		}
-		//		else 
-		//		{ 
-		//			System.out.println("no name found");
-		//		}
-
+	
+	public void addOnePersonToGroup()
+	{ 
+		String username = credentials[0].getUserName(); 
+		this.addPeopleToGroup(username);
 	}
-
-	public void addMultiplePeopleToGroup()
-	{
-		this.addGroup("TestGroup3"); 
-		WebElement element = this.findElement(XpathUtilsGroups.getInputUsername()); 
-
-		for (Credentials i: credentials)
-		{
-			element.clear();
-			element.sendKeys(i.getUserName()); 
-			this.wait_(3);
-			boolean bool2 = this.elementExists(XpathUtilsGroups.getPersonGroupList()); 
-			if (bool2 == true)
-			{
-				System.out.println("here"); 
-				this.findElement(XpathUtilsGroups.getPersonGroupList()).click();
-			}
-			else 
-			{
-				System.out.println("no group"); 
-			}
+	
+	public void addMultiplePeopleToGroup(int num)
+	{ 
+		String[] usernames = new String[num]; 
+		for ( int i = 0; i < num; i++)
+		{ 
+			usernames[i] = credentials[i].getUserName(); 
 		}
-		WebElement element2 = this.driver[0].findElement(By.xpath("//span[text() = 'Finish']/.."));
-		element2.click();
+		
+		this.addPeopleToGroup(usernames);	
 	}
-}
+	
+	public void removePersonFromGroup()
+	{
+		
+		String time = this.addPeopleToGroup(credentials[0].getUserName(), credentials[1].getUserName()); 
+		this.findElement(XpathUtilsGroups.getGroupsButton()).click();
+		this.findElement(XpathUtilsGroups.getGroupMember("Test-10")).click();
+		this.findElement(XpathUtilsGroups.getGroupMemberDeleteButton()).click(); 	
+		
+	}
+	
+} 
+
+ 
 

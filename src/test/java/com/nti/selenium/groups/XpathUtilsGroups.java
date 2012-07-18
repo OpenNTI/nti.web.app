@@ -59,7 +59,7 @@ public class XpathUtilsGroups extends XpathUtilsNav {
 	
 	public static String getPersonGroupItem(String name)
 	{
-		return xpathBuilder ("div", "class","name", name);
+		return xpathBuilder ("div[(@class = 'card-body')]/div", "class","name");
 	}
 	
 	public static String getPersonGroupItem()
@@ -85,6 +85,38 @@ public class XpathUtilsGroups extends XpathUtilsNav {
 						   getPersonGroupDeleteButton());
 	}
 	
+	public static String getGroupsButton()
+	{ 
+		return xpathBuilder ("em//button//span[text() = 'Groups']/..");
+	}
+	
+	public static String getRemovePersonButton()
+	{ 
+		return xpathBuilder ("img", "Remove this contact from this Group");
+		
+	}
+	public static String getGroupList (String groupname)
+	{ 
+		return xpathBuilder ("my-groups//div[@class = 'contacts-panel']//div[@class ='contact-card']//div[@class = 'card-body']//div[@class = name and text() = '" +  groupname + "']"); 
+		
+	}
+	
+	public static String getGroupMember (String username)
+	{
+		//return xpathBuilder ("div[@id = 'my-groups//div[@class = 'contacts-panel']//div[@class ='contact-card']//div[@class = 'card-body']//div[@class = 'name' and text() = '" +  username + "']");
+	
+		//return xpathBuilder ("div[@class = 'contact-body'//div[@class = 'name' and text() = '" +  username + "']");
+		//return xpathBuilder ("div[@class = 'contact-card']//div[@class = 'contact-body']//div[@class = 'name' and text() = '" +  username + "']");
+		return xpathBuilder ("div[@class = 'contact-body']//div[@class = 'name' and text() = '" +  username + "']");
+		
+	}
+	public static String getGroupMemberDeleteButton() 
+	{ 
+		return xpathBuilder ("img[@class = 'nib']");
+	}
+	
+	
+
 }
 
 

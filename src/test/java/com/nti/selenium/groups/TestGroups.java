@@ -6,13 +6,13 @@ import org.junit.Test;
 
 public class TestGroups extends Groups { 
 	
-	@Test
+	//@Test
 	public void testOpenGroups ()
 	{ 
 		this.openGroups (); 
 	}
 	
-	@Test 
+	//@Test 
 	public void testAddGroup()
 	{ 
 		this.addGroup (Long.toString(System.currentTimeMillis()));
@@ -20,15 +20,23 @@ public class TestGroups extends Groups {
 		this.addGroup (Long.toString(System.currentTimeMillis()));
 	}
 	
-	@Test 
+	//@Test 
 	public void testAddPeopleToGroup()
 	{ 
-		this.addOnePersonToGroup(1); 
+		this.addMultiplePeopleToGroup(2);
+	}
+	
+	//@Test
+	public void testAddOnePersonToGroup()
+	{ 
+		this.addOnePersonToGroup(); 	
 	}
 	
 	@Test 
-	public void testAddMultiplePeopleToGroup()
-	{
-		this.addMultiplePeopleToGroup();
+	public void testRemovePersonFromGroup()
+	{ 
+		
+		this.removePersonFromGroup(); 
 	}
+	
 }
