@@ -141,16 +141,22 @@ Ext.define(	'NextThought.view.whiteboard.Canvas',{
 			function finish(){
 				var data = c.el.dom.toDataURL("image/png");
 
-				c.destroy();
-				div.remove();
+				try { c.destroy(); } catch(e){ console.warn(Globals.getError(e)); }
+				try { div.remove(); }catch(e){ console.warn(Globals.getError(e)); }
 
-				resultCallback.call(this,data);
+				resultCallback.call(window,data);
 			}
 
-			var div = Ext.DomHelper.append(Ext.getBody(),{tag: 'div', style: 'visibility: hidden; position: absolute;'},true),
+			var div = Ext.DomHelper.append(Ext.getBody(),{tag: 'div', style: {display:'none'}},true),
 				c;
 
-			c = Ext.widget('whiteboard-canvas',{drawData: scene, renderTo: div, thumbnail: true});
+			c = Ext.widget({
+				xtype:'whiteboard-canvas',
+				drawData: scene,
+				renderTo: div,
+				thumbnail: true
+			});
+
 			c.el.dom.width = 1024;
 			c.el.dom.height = 768;
 			c.setSize(1024,768);
