@@ -76,7 +76,7 @@ Ext.define(	'NextThought.view.whiteboard.Canvas',{
 
 		function fin(){
 			delete me.drawing;
-			finished();
+			Ext.callback(finished);
 		}
 
 		this.self.drawScene(this.drawData,this.el,fin);
