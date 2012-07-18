@@ -43,13 +43,57 @@ public class Highlights extends Navigation {
 		this.switchToIframe();	
 		element.click();
 		this.switchToDefault();
-		this.findElement(XpathUtilsHighlights.getRemoveHighlight()).click();
+		this.findElement(XpathUtilsHighlights.getRemoveHighlightButton()).click();
 	}
 	
 	public void removeHighlight(WebElement element){
 		this.switchToIframe();	
 		element.click();
 		this.switchToDefault();
-		this.findElement(XpathUtilsHighlights.getRemoveHighlight()).click();
+		this.findElement(XpathUtilsHighlights.getRemoveHighlightButton()).click();
 	}
+	
+	public void shareHighlight(String xpath){
+		this.switchToIframe();
+		this.findElement(xpath).click();
+		this.switchToDefault();
+		this.findElement(XpathUtilsHighlights.getShareWithButton());
+	}
+	
+	public void inputSearchForUser(String username){
+		this.findElement(XpathUtilsHighlights.getShareHighlightInputField()).sendKeys(username);
+	}
+	
+	public void clickSearchResult(String username){
+		this.findElement(XpathUtilsHighlights.getSearchedForUser(username)).click();
+	}
+	
+	public void clickDropDownArrow(){
+		this.findElement(XpathUtilsHighlights.getShareHighlightInputFieldDropDownArrow()).click();
+	}
+	
+	public void clickEveryoneDropDownItem(){
+		this.findElement(XpathUtilsHighlights.getEveryoneDropDownItem()).click();
+	}
+	
+	public void clickGroupDropDownItem(String groupName){
+		this.findElement(XpathUtilsHighlights.getGroupDropDownItem(groupName)).click();
+	}
+	
+	public void clickCloseEveryoneToken(){
+		this.findElement(XpathUtilsHighlights.getEveryoneTokenLabelCloseButton()).click();
+	}
+	
+	public void clickCloseUserGroupToken(String userNameGroupName){
+		this.findElement(XpathUtilsHighlights.getGroupTokenLabelCloseButton(userNameGroupName)).click();
+	}
+	
+	public void clickSaveButton(){
+		this.findElement(XpathUtilsHighlights.getShareHighlightSaveButton()).click();
+	}
+	
+	public void clickCancelButton(){
+		this.findElement(XpathUtilsHighlights.getShareHighlightCancelButton()).click();
+	}
+	
 }

@@ -33,4 +33,16 @@ public class TestHighlights extends Highlights {
 		this.removeHighlight(XpathUtilsHighlights.getCreatedHighlight());
 		assertFalse(this.elementExists(XpathUtilsHighlights.getCreatedHighlight()));
 	}
+	
+	@Test
+	public void testShareHighlightPopUpOption(){
+		this.createHighlight();
+		this.switchToIframe();
+		assertTrue(this.elementExists(XpathUtilsHighlights.getCreatedHighlight()));
+		this.switchToIframe();
+		this.findElement(XpathUtilsHighlights.getCreatedHighlight()).click();
+		this.switchToDefault();
+		assertTrue(this.elementExists(XpathUtilsHighlights.getShareWithButton()));
+	}
+	
 }
