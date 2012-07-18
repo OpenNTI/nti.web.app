@@ -280,7 +280,7 @@ Ext.define('NextThought.controller.Annotations', {
 		}
 
 
-		var people = Ext.Array.unique([record.get('Creator')].concat(top.get('sharedWith'))),
+		var people = Ext.Array.unique([record.get('Creator')].concat(top.get('sharedWith')).concat(top.get('Creator'))),
 			cId = record.get('ContainerId'),
 			parent = record.get('NTIID'),
 			refs = Ext.Array.clone(record.get('references') || []);
