@@ -326,10 +326,18 @@ Ext.define('NextThought.view.annotations.Highlight', {
 		endToStart = nodeRange.compareBoundaryPoints(Range.END_TO_START, range);
 		endToEnd = nodeRange.compareBoundaryPoints(Range.END_TO_END, range);
 
-
-		//Easy case, the node is completely surronded, wrap the node
+		var allowed = ['a','abbr','b','big','dfn','em','font','i','s','small',
+						'strike','strong','tt'];
+		var valid = false;
+		if (node.nodeType == node.TEXT_NODE) valid = true;
+		else if (node.nodeType == node.ELEMENT_NODE) {
+			var tagname = node.tagName.replace(/^\s\s*/,'').replace(/\s\s*$/,'').toLowerCase();
+			if (allowed.indexOf(tagname) >= 0) valid = true;
+			if (node.childNodes.length == 0) valid = true;
+		}
+		//Easy case, the node is completely surronded and valid, wrap the node
 		if( ( startToStart === AFTER || startToStart === SAME )
-			&& ( endToEnd === BEFORE || endToEnd === SAME ) ) {
+			&& ( endToEnd === BEFORE || endToEnd === SAME ) && valid) {
 			newRange = node.ownerDocument.createRange();
 			newRange.selectNode(node);
 			nodeList.push(this.doWrap(newRange));
