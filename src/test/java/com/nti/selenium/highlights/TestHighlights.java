@@ -67,4 +67,20 @@ public class TestHighlights extends Highlights {
 		assertTrue(this.elementExists(XpathUtilsHighlights.getSearchedForUser(username)));
 	}
 	
+	@Test
+	public void testShareHighlightAddUser(){
+		String username = this.searchUserNames[1]; 
+		this.createHighlight();
+		this.switchToIframe();
+		assertTrue(this.elementExists(XpathUtilsHighlights.getCreatedHighlight()));
+		this.shareHighlight(XpathUtilsHighlights.getCreatedHighlight());
+		assertTrue(this.elementExists(XpathUtilsHighlights.getShareThisTitle()));
+		this.inputSearchForUser(username);
+		this.waitForElement(XpathUtilsHighlights.getSearchedForUser(username));
+		assertTrue(this.elementExists(XpathUtilsHighlights.getSearchedForUser(username)));
+		this.clickSearchResult(username);
+		this.waitForElement(XpathUtilsHighlights.getGroupUsernameTokenLabel(username));
+		assertTrue(this.elementExists(XpathUtilsHighlights.getGroupUsernameTokenLabel(username)));
+	}
+	
 }

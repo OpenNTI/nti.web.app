@@ -51,7 +51,7 @@ public class XpathUtilsHighlights extends XpathUtilsNav {
 	}
 	
 	public static String getGroupUsernameTokenLabel(String userNameGroupName){
-		return xpathBuilder("div", "class", "nt-token-label", userNameGroupName);
+		return xpathBuilder("span", "class", "nt-token-label", userNameGroupName);
 	}
 	
 	public static String getEveryoneTokenLabelCloseButton(){
