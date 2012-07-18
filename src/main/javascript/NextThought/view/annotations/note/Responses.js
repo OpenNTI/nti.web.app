@@ -28,16 +28,8 @@ Ext.define('NextThought.view.annotations.note.Responses',{
 
 
 	setReplies: function(children) {
-		var me = this;
+		this.removeAll();
 
-		me.removeAll();
-
-		Ext.each(children,
-			function(c) {
-				if (c.getModelName()==='Note'){
-					me.addReply(c);
-				}
-			}
-		,this);
+		Ext.each(children,this.addReply,this);
 	}
 });

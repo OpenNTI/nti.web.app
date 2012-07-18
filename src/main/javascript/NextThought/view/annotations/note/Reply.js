@@ -146,13 +146,19 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 		if (r.isFavorited()){
 			this.favorites.addCls('on');
 		}
-		r.compileBodyContent(function(text){
-			me.text.update(text);
-			setTimeout(function(){
-				me.doComponentLayout();
-				me.doLayout();
-			},1);
-		});
+		try{
+			r.compileBodyContent(function(text){
+				me.text.update(text);
+				setTimeout(function(){
+					me.doComponentLayout();
+					me.doLayout();
+				},1);
+			});
+		}
+		catch(e){
+			console.error(Globals.getError(e));
+			this.replyBox.remove(); //placeholder
+		}
 		if (r.children) {
 			Ext.each(r.children, me.addReply, me);
 		}

@@ -60,6 +60,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		editor: '.respond .editor',
 		replyOptions: '.respond .reply-options',
 		replyButton: '.respond .reply',
+		startChatButton: '.respond .chat',
 		more: '.respond .reply-options .more'
 	},
 
@@ -225,6 +226,10 @@ Ext.define('NextThought.view.annotations.note.Main',{
 
 	onDelete: function(){
 		this.record.destroy();
+	},
+
+	startChat: function() {
+		this.up('window').fireEvent('chat', this.record);
 	}
 
 });

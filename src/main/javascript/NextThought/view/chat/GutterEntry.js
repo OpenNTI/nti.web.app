@@ -24,8 +24,8 @@ Ext.define('NextThought.view.chat.GutterEntry',{
 		this.renderData = Ext.apply(this.renderData||{}, this.user.data);
 
 		Ext.apply(this.renderData, {
-			name: this.user.getName(),
-			status: 'Idle...'
+			name: this.user.getName()
+			//status: 'Idle...'
 		});
 		this.callParent();
 	}
