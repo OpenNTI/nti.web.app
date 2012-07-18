@@ -107,14 +107,12 @@ Ext.define('NextThought.view.annotations.note.Main',{
 
 	onMouseOver: function(){
 		this.el.addCls('hover');
-		this.doLayout();
-		//this.doComponentLayout();
+		this.doComponentLayout();
 	},
 
 	onMouseOut: function(){
 		this.el.removeCls('hover');
-		this.doLayout();
-		//this.doComponentLayout();
+		this.doComponentLayout();
 	},
 
 
