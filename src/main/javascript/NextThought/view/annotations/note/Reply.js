@@ -66,6 +66,7 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 		var me = this;
 		me.callParent(arguments);
 
+		this.replyBox.hover(this.onMouseOver,this.onMouseOut,this);
 
 		//decide if we are the first in the parent's list:
 		if (me.ownerCt.items.indexOf(me) === 0) {
@@ -132,6 +133,15 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 		});
 	},
 
+	onMouseOver: function(){
+		this.replyBox.addCls('hover');
+		this.doLayout();
+	},
+
+	onMouseOut: function(){
+		this.replyBox.removeCls('hover');
+		this.doLayout();
+	},
 
 	setRecord: function(r){
 		this.record = r;

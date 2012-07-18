@@ -97,10 +97,24 @@ Ext.define('NextThought.view.annotations.note.Main',{
 			TemplatesForNotes.attachMoreReplyOptionsHandler(me, me.more);
 			me.editorActions = new NoteEditorActions(me,me.editor);
 			me.mon(me.editorActions, { scope: me, 'size-changed': function(){ me.doComponentLayout(); } });
+
+			this.el.hover(this.onMouseOver,this.onMouseOut,this);
 		}
 		catch(e){
 			console.error(Globals.getError(e));
 		}
+	},
+
+	onMouseOver: function(){
+		this.el.addCls('hover');
+		this.doLayout();
+		//this.doComponentLayout();
+	},
+
+	onMouseOut: function(){
+		this.el.removeCls('hover');
+		this.doLayout();
+		//this.doComponentLayout();
 	},
 
 
