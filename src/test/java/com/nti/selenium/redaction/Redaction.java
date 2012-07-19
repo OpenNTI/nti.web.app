@@ -7,12 +7,14 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import org.junit.After;
 import org.junit.Before;
 import org.openqa.selenium.*; 
+
+import com.nti.selenium.Credentials;
 import com.nti.selenium.navigation.Navigation;
 import com.thoughtworks.selenium.Selenium;
 
 public class Redaction extends Navigation { 
 
-	String[] searchUserNames;
+	Credentials [] searchUserNames;
 
 	@Before
 	public void setUp() throws Exception{
@@ -20,7 +22,7 @@ public class Redaction extends Navigation {
 		super.setUp();
 		this.driver[1].manage().window().maximize();
 		this.navigateTo("Criminal Procedure", "MIRANDA v. ARIZONA.", "Opinion of the Court");
-		this.searchUserNames = this.getSearchUserNames(1);
+		this.searchUserNames = this.getUsersEmails(2); 
 	}
 
 	@After 
@@ -60,7 +62,11 @@ public class Redaction extends Navigation {
 			
 			WebElement element = this.findElement(XpathUtilsRedaction.setEnterUsername()); 
 				element.click();
-				element.sendKeys(this.searchUserNames[0]);
-				element.sendKeys (Keys.ENTER);
+				element.sendKeys(this.searchUserNames[1].getUserName());
+				this.elementExists("//div[contains (@id, 'boundlist')//ul//li[contains (@class, 'contact-card')]//div[contains (@class, 'card-body')]");
+				this.findElement("//div[contains (@id, 'boundlist')//ul//li[contains (@class, 'contact-card')]//div[contains (@class, 'card-body')]").click(); 
+				this.elementExists ("//div[contains (@id, 'boundlist')//ul//li[contains (@class, 'contact-card')]//div[contains (@class, 'card-body')]"); 
+				this.findElement("//div[contains (@id, 'boundlist')//ul//li[contains (@class, 'contact-card')]//img[contains (@class, 'nib')]").click();
+				//element.sendKeys (Keys.ENTER);
 	}
 }
