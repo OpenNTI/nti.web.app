@@ -82,6 +82,11 @@ Ext.define( 'NextThought.view.annotations.Base', {
 	},
 
 
+	getDocumentElement: function(){
+		return this.ownerCmp.getDocumentElement();
+	},
+
+
 	createElement: function(tag,parent,cls,css,id){
 		var el = document.createElement(tag);
 		if(cls) { Ext.get(el).addCls(cls); }

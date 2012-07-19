@@ -159,51 +159,53 @@ Ext.define('NextThought.view.annotations.Highlight', {
 	},
 
 
+	buildRange: function(){
+		var range = this.getDocumentElement().createRange();
+
+		if(this.rendered){
+			range.setStartBefore(this.rendered.first());
+			range.setEndAfter(this.rendered.last());
+		}
+
+		return range;
+	},
+
+
 	resolveVerticalLocation: function(){
 		var r = this.getRange();
 		if(!r.collapsed){
-			console.log(r.toString(), r.getBoundingClientRect(), r.getClientRects(),r);
-
+			r.detach();
+			delete this.range;
+			r = this.getRange();
 		}
-		r.detach();
-		delete this.range;
-		r = this.getRange();
-
 		return r? r.getBoundingClientRect().top : -2;
 	},
 
 
 	render: function(){
-		var range = this.getRange();
-		if(!range){ return -1;}
-
-		var me = this,
+		var range,
 			style = this.getRecordField('style'),
-			bounds = range.getBoundingClientRect(),
-			boundingTop = Math.ceil(bounds.top),
-			boundingLeft = Math.ceil(bounds.left),
-			boundingHeight = Math.ceil(bounds.height),
-			width = 680,//Ext.fly(this.content).getWidth(),
+			bounds,
+			boundingTop,
+			boundingLeft,
+			boundingHeight,
+			width,
+			lineHeight,
 			topOffset = 10,
 			leftOffset = 5,
 			ctx,
 			adjustment,
-			lineHeight = this.getLineHeight(),
-			s = RectUtils.merge(range.getClientRects(),lineHeight,width+1),
-			i = s.length - 1, x, y, w, h, left, r,
+			s, i, x, y, w, h, left, r,
 			lastY=0, c, small,
 			padding = 2,
 			last = true;
 
-		function getTop(){
-			return boundingTop || i>0 ? s[0].top : me.resolveVerticalLocation();
-		}
-
 		if(style === 'suppressed'){
-			return getTop();
+			return this.resolveVerticalLocation();
 		}
 
 		if(!this.rendered){
+			range = this.getRange();
 			this.rendered = this.wrapRange(range.commonAncestorContainer, range);
 			this.counter = this.createCounter(this.rendered.last());
 			//create a composite element so we can do lots of things at once:
@@ -211,6 +213,16 @@ Ext.define('NextThought.view.annotations.Highlight', {
 			this.compElements.add(this.counter);
 			this.canvas = this.createCanvas();
 		}
+
+		range = this.buildRange();
+		bounds = range.getBoundingClientRect();
+		boundingTop = Math.ceil(bounds.top);
+		boundingLeft = Math.ceil(bounds.left);
+		boundingHeight = Math.ceil(bounds.height);
+		width = 680;//Ext.fly(this.content).getWidth();
+		lineHeight = this.getLineHeight();
+		s = RectUtils.merge(range.getClientRects(),lineHeight,width+1);
+		i = s.length - 1;
 
 
 		Ext.fly(this.canvas).setXY([
@@ -226,8 +238,6 @@ Ext.define('NextThought.view.annotations.Highlight', {
 		ctx.fillStyle = this.compElements.first().getStyle('background-color');
 		for(; i>=0; i--){
 			r = s[i];
-
-
 
 			left = Math.ceil(r.left - boundingLeft + leftOffset - padding );
 			y = Math.ceil(r.top - boundingTop + topOffset - padding );
@@ -273,7 +283,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
 			lastY = y;
 		}
 
-		return getTop();
+		return boundingTop || this.resolveVerticalLocation()
 	},
 
 
