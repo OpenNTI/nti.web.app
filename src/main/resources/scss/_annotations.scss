@@ -208,6 +208,9 @@ div.redaction-control {
 			&.highlight-mouse-over{
 				color: #ffffff;
 				background-color: #3fb3f6;
+				.application-highlight {
+					background-color: transparent;
+				}
 			}
 
 			&.redaction {
