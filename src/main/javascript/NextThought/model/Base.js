@@ -118,6 +118,8 @@ Ext.define('NextThought.model.Base', {
 			prePost = action === 'favorite' ? 'addCls' : 'removeCls',
 			postPost = action === 'favorite' ? 'removeCls' : 'addCls';
 
+		if (this.activePostTos && this.activePostTos[action]){return;}
+
 		widget[prePost]('on');
 
 		this.postTo(action, function(s){
@@ -136,6 +138,8 @@ Ext.define('NextThought.model.Base', {
 			postPost = action === 'like' ? 'removeCls' : 'addCls',
 			polarity = action === 'like' ? 1 : -1;
 
+		if (this.activePostTos && this.activePostTos[action]){return;}
+
 		widget[prePost]('on');
 		me.set('LikeCount', lc + polarity);
 		widget.update(me.getFriendlyLikeCount());
@@ -151,20 +155,26 @@ Ext.define('NextThought.model.Base', {
 
 
 	postTo: function(link, callback){
+		this.activePostTos = this.activePostTos || {};
 		var me = this,
 			l = this.getLink(link);
-		if (l) {
-			Ext.Ajax.request({
+
+
+
+		if (l && !this.activePostTos[link]) {
+			this.activePostTos[link] = Ext.Ajax.request({
 				url: l,
 				jsonData: '',
 				method: 'POST',
 				scope: this,
 				callback: function(r, s, response){
 					me.set(Ext.JSON.decode(response.responseText));
+					delete this.activePostTos[link];
 					Ext.callback(callback, null, [s]);
 				}
 			});
 		}
+		return this.activePostTos[link];
 	},
 
 
