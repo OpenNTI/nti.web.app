@@ -158,6 +158,8 @@ Ext.define('NextThought.view.annotations.note.Main',{
 					s.modify('extend', 'forward', 'line');
 					s.modify('extend', 'forward', 'line');
 					s.modify('extend', 'forward', 'line');
+					s.modify('extend', 'forward', 'line');
+					s.modify('extend', 'forward', 'line');
 					s.modify('extend', 'forward', 'character');
 					s.modify('extend', 'forward', 'word');
 
