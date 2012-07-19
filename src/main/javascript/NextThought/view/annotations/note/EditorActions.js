@@ -21,6 +21,7 @@ Ext.define('NextThought.view.annotations.note.EditorActions',{
 
 	constructor: function(cmp, editorEl){
 		var me = this;
+		var ce = Ext.CompositeElement;
 		me.editor = editorEl;
 		me.cmp = cmp;
 		me.openWhiteboards = {};
@@ -28,12 +29,15 @@ Ext.define('NextThought.view.annotations.note.EditorActions',{
 		this.updateShareWithLabel();
 		me.mixins.observable.constructor.call(me);
 
+
+		(new ce(editorEl.query('.action,.content'))).set({tabIndex:1});
+
 		cmp.mon(me.shareMenu, {
 			scope: me,
 			changed: me.updateShareWithLabel
 		});
 
-		cmp.mon(new Ext.CompositeElement(editorEl.query('.left .action')),{
+		cmp.mon(new ce(editorEl.query('.left .action')),{
 			scope: me,
 			click: me.editorContentAction
 		});
