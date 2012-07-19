@@ -491,12 +491,20 @@
             background: #f8f8f8;
             padding: 10px;
             margin: -11px 0 0 -11px;
-            min-width: 325px;
+            min-width: 270px;
 			z-index: 999;
 
             .mask {
                 display: none;
             }
+
+			.separator, .time, {
+				@include menu-label-text-treatment;
+				display: inline;
+			}
+			.controls{
+				display: block;
+			}
 
             @include meta-row;
 
@@ -570,6 +578,7 @@
 				padding: 2px 0;
 				font-size: 14px;
 				line-height: 32px;
+				white-space: pre-wrap;
 
 				word-wrap: break-word;
 
