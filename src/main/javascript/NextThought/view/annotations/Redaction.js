@@ -115,23 +115,7 @@ Ext.define('NextThought.view.annotations.Redaction', {
 		this.editableSpan.addCls('redactionReplacementText');
 		masterSpan.insertBefore(before);
 
-		//set up any events:
-		this.mon(masterSpan, {
-			scope: this,
-			//mouseup: this.inlineClick,
-			dblclick: this.makeEditableSpanEditable,
-			click: function(e){
-				if (me.clickTimer){clearTimeout(me.clickTimer);}
-				me.clickTimer = setTimeout(function(){
-					me.onClick(e);
-				}
-				, 400);
-			},
-			mouseup: function(e){
-				e.stopEvent();
-				return false;
-			}
-		});
+		this.setupInlineSpanEvents(masterSpan);
 
 		this.mon(this.editableSpan, {
 			scope: this,
@@ -139,6 +123,27 @@ Ext.define('NextThought.view.annotations.Redaction', {
 		});
 
 		return masterSpan;
+	},
+
+	setupInlineSpanEvents: function(masterSpan) {
+		var me = this;
+		//set up any events:
+		me.mon(masterSpan, {
+			scope: this,
+			//mouseup: this.inlineClick,
+			dblclick: this.makeEditableSpanEditable,
+			click: function(e){
+				if (me.clickTimer){clearTimeout(me.clickTimer);}
+				me.clickTimer = setTimeout(function(){
+						me.onClick(e);
+					}
+					, 400);
+			},
+			mouseup: function(e){
+				e.stopEvent();
+				return false;
+			}
+		});
 	},
 
 	/*
@@ -226,6 +231,15 @@ Ext.define('NextThought.view.annotations.Redaction', {
 		Ext.get(this.actionSpan).toggleCls(this.cls);
 		Ext.fly(this.canvas).toggle();
 		if (this.controlDiv){this.controlDiv.toggleCls(this.cls);}
+
+		//if action span is toggled back on and it's inline, make sure it has events:
+		var actionSpan = Ext.fly(this.actionSpan);
+		if(actionSpan.hasCls(this.cls) && actionSpan.hasCls('redactionAction')) {
+			this.setupInlineSpanEvents(actionSpan);
+		}
+		else {
+			this.on('click', this.onClick, this);
+		}
 
 		return false;
 	},
