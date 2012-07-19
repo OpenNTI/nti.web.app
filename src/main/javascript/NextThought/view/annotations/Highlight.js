@@ -397,6 +397,12 @@ Ext.define('NextThought.view.annotations.Highlight', {
 	},
 
 
+	onClick: function(e){
+		if(e.getTarget('a[href]')){ return; }
+		return this.callParent(arguments);
+	},
+
+
 	doWrap: function(range) {
 		var span = this.createNonAnchorableSpan(),
 			style = this.record.get('style') || 'plain';
