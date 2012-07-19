@@ -270,6 +270,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 
 	onDelete: function(){
 		this.record.destroy();
+		this.up('window').close();
 	},
 
 	startChat: function() {

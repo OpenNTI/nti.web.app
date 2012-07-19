@@ -40,22 +40,22 @@ Ext.define('NextThought.model.converters.Users', {
 	},
 
 
-	AVATAR_URL: {
+	AVATARURL: {
 		type: 'AvatarURL',
 		sortType: Ext.data.SortTypes.asUCString,
-		convert: function convert(v,record){
+		convert: function convert(v){
 			var re = convert.re = (convert.re || /https/i);
 			function c(v,i,a){
-				v = v.replace('www.gravatar.com','secure.gravatar.com');
+				v = v.replace('www.gravatar.com','secure.gravatar.com').replace('http:','https:');
 				if(a){a[i] = v;}
 				return v;
 			}
-	//		if(re.test(location.protocol)){
+			if(re.test(location.protocol)){
 				if(!Ext.isArray(v)){ v = c(v,0,null); }
 				else { Ext.each(v,c); }
 				return v;
-	//		}
-	//		return v;
+			}
+			return v;
 		}
 	}
 });
