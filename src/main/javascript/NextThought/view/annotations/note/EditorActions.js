@@ -49,7 +49,8 @@ Ext.define('NextThought.view.annotations.note.EditorActions',{
 			scope: me,
 			selectstart: me.editorSelectionStart,
 			focus: me.editorFocus,
-			blur: me.editorBlur
+			blur: me.editorBlur,
+			keyup: me.maybeResizeContentBox
 		});
 
 		cmp.mon(editorEl.down('.action.share'), {
@@ -95,6 +96,23 @@ Ext.define('NextThought.view.annotations.note.EditorActions',{
 		if(this.lastRange){
 			s.removeAllRanges();
 			s.addRange(this.lastRange);
+		}
+	},
+
+
+	maybeResizeContentBox: function(e) {
+		var p = this.previousEditorHeight || 0,
+			h = this.editor.getHeight();
+
+		this.previousEditorHeight = h;
+
+		if (h !== p) {
+			if(this.cmp.doLayout){
+				this.cmp.doLayout();
+			}
+			else {
+				this.cmp.doComponentLayout();
+			}
 		}
 	},
 
