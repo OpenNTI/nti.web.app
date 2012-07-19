@@ -57,11 +57,20 @@ Ext.define('NextThought.view.annotations.note.Templates',{
 					}]
 				}
 			]
-
 		};
 	},
 
 	attachMoreReplyOptionsHandler: function(cmp, optionsEl){
+		var scroller = optionsEl.up('{overflow=auto}');
+
+		if(scroller){
+			cmp.mon(scroller,{
+				optionsEl: optionsEl,
+				scope: cmp,
+				scroll: this.replyOptionsScroll
+			});
+		}
+
 		cmp.mon(optionsEl, {
 			scope: cmp,
 			click: this.replyOptionsClicked,
@@ -73,6 +82,13 @@ Ext.define('NextThought.view.annotations.note.Templates',{
 			}
 		});
 	},
+
+
+	replyOptionsScroll: function(e,el,opts){
+		var menu = opts.optionsEl;
+		menu.removeCls('active');
+	},
+
 
 
 	updateMoreReplyOptionsLabels: function(moreEl,user){

@@ -42,7 +42,12 @@ Ext.define( 'NextThought.view.annotations.Note', {
 
 
 	cleanup: function(){
-		if (this.gutterCmp){this.gutterCmp.destroy(); delete this.gutterCmp;}
+		if (this.gutterCmp){
+			this.ownerCmp.unRegisterScrollHandler(
+					this.gutterCmp.onParentScroll,this.gutterCmp);
+			this.gutterCmp.destroy();
+			delete this.gutterCmp;
+		}
 		if (this.singleGutterWidget){this.singleGutterWidget.remove(); delete this.singleGutterWidget;}
 		if (this.multiGutterWidget){this.multiGutterWidget.remove(); delete this.multiGutterWidget;}
 
@@ -94,10 +99,12 @@ Ext.define( 'NextThought.view.annotations.Note', {
 
 
 	createSingleGutterWidget: function(){
-		var dom = document.createElement('div');
+		var dom = Ext.get(document.createElement('div'));
 
 		this.gutterCmp = Ext.widget({xtype: 'note-gutter-widget', record: this.getRecord(), renderTo: dom});
 		this.singleGutterWidget = this.attachListeners( Ext.get(dom) );
+
+		this.ownerCmp.registerScrollHandler(this.gutterCmp.onParentScroll,this.gutterCmp);
 	},
 
 

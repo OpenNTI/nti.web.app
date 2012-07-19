@@ -88,6 +88,11 @@ Ext.define('NextThought.view.annotations.note.GutterWidget',{
 	},
 
 
+	onParentScroll: function(event,el){
+		TemplatesForNotes.replyOptionsScroll.call(this,event,el,{optionsEl:this.more});
+	},
+
+
 	setRecord: function(r){
 		if (r.phantom) return;
 		this.record = r;
