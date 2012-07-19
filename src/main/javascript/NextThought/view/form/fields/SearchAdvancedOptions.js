@@ -29,6 +29,7 @@ Ext.define('NextThought.view.form.fields.SearchAdvancedOptions',{
 		{ cls: 'type-filter note', text: 'Notes', model: 'Note' },
 		{ cls: 'type-filter transcript', text: 'Transcripts', model: 'TranscriptSummary' },
 		{ cls: 'type-filter quizresult', text: 'Quiz Results', model: 'QuizResult' },
+		{ cls: 'type-filter redaction', text: 'Redactions', model: 'Redaction' },
 		{ cls: 'type-filter bookmarks', text: 'Bookmarks', model: 'Bookmark' },
 		{ cls: 'type-filter contacts', text: 'Contacts', model: 'Contact' },
 		{ xtype: 'labeledseparator', text: 'Return' },
