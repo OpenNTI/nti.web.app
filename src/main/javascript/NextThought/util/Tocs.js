@@ -72,7 +72,7 @@ Ext.define('NextThought.util.Tocs',{
 				leaf = this.renderLeaf(label, href, ntiid, selected),
 				list;
 
-		if(leaf && topicNode.childNodes.length > 0){
+		if(leaf && topicNode.childNodes.length > 0 && topicNode.getAttribute("levelnum") < 2){
 			list = [];
 			leaf.children = list;
 			this.renderBranch(list,topicNode);
