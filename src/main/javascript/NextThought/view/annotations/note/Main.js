@@ -147,21 +147,19 @@ Ext.define('NextThought.view.annotations.note.Main',{
 					s = commonAncestor.ownerDocument.parentWindow.getSelection();
 					s.removeAllRanges();
 
-					s.selectAllChildren(range.endContainer);
-					/*
-						s.addRange(range);
-						s.modify('move', 'backward', 'character');
-						s.modify('move', 'backward', 'word');
-						s.modify('move', 'backward', 'line');
-						s.modify('move', 'backward', 'line');
+//					s.selectAllChildren(range.endContainer);
+					s.addRange(range);
+					s.modify('move', 'backward', 'character');
+					s.modify('move', 'backward', 'word');
+					s.modify('move', 'backward', 'line');
+					s.modify('move', 'backward', 'line');
 
-						s.modify('extend', 'forward', 'line');
-						s.modify('extend', 'forward', 'line');
-						s.modify('extend', 'forward', 'line');
-						s.modify('extend', 'forward', 'line');
-						s.modify('extend', 'forward', 'character');
-						s.modify('extend', 'forward', 'word');
-					*/
+					s.modify('extend', 'forward', 'line');
+					s.modify('extend', 'forward', 'line');
+					s.modify('extend', 'forward', 'line');
+					s.modify('extend', 'forward', 'line');
+					s.modify('extend', 'forward', 'character');
+					s.modify('extend', 'forward', 'word');
 
 
 					ancestorText = s.getRangeAt(0).toString();
