@@ -206,6 +206,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
 
 		if(!this.rendered){
 			range = this.getRange();
+			if(!range){ return -1; }
 			this.rendered = this.wrapRange(range.commonAncestorContainer, range);
 			this.counter = this.createCounter(this.rendered.last());
 			//create a composite element so we can do lots of things at once:
