@@ -241,8 +241,8 @@ Ext.define('NextThought.view.annotations.note.Main',{
 	},
 
 	deactivateReplyEditor: function(){
-		delete this.mainContentEdit;
 		this.text.show();
+		this.editor.down('.content').update('');
 		this.el.removeCls('editor-active');
 		this.doComponentLayout();
 	},

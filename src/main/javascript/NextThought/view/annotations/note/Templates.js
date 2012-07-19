@@ -133,7 +133,7 @@ Ext.define('NextThought.view.annotations.note.Templates',{
 			}
 		}
 
-		if (!more){return false;}
+		if (!more || !more.dom){return false;}
 
 		y = more.getY();
 		h = more.getHeight();

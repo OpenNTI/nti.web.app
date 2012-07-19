@@ -302,14 +302,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 			return;
 		}
 
-//		var parent = record.get('inReplyTo');
-//		if(parent){
-//			parent = Ext.getCmp(IdCache.getComponentId(parent,null,this.prefix));
-//			if (parent){parent.addReply(record);}
-//		}
-//		else {
-			this.createAnnotationWidget('note',record, browserRange);
-//		}
+		this.createAnnotationWidget('note',record, browserRange);
 	},
 
 

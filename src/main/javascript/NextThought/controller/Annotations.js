@@ -51,7 +51,8 @@ Ext.define('NextThought.controller.Annotations', {
 				'share-with'	: this.actionMap.share,
 				'define'		: this.define,
 				'redact'		: this.redact,
-				'save-new-note' : this.saveNewNote
+				'save-new-note' : this.saveNewNote,
+				'bubble-replys-up':this.replyBubble
 			},
 
 			'note-gutter-widget': {
@@ -130,6 +131,13 @@ Ext.define('NextThought.controller.Annotations', {
 				win.el.unmask();
 			}
 		});
+	},
+
+
+	replyBubble: function(replies){
+		var e = this.self.events;
+		console.log('bubble',arguments);
+		Ext.each(replies,function(r){ r.pruned=true; e.fireEvent('new-note', r, null); });
 	},
 
 

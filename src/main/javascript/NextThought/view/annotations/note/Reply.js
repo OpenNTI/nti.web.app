@@ -207,6 +207,7 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 
 	deactivateReplyEditor: function(){
 		this.replyBox.removeCls('editor-active');
+		this.editor.down('.content').update('');
 		this.doLayout();
 		this.doComponentLayout();
 	},

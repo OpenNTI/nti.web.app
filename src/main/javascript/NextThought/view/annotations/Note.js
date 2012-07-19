@@ -7,37 +7,46 @@ Ext.define( 'NextThought.view.annotations.Note', {
 	],
 
 
-	multiGutterWidgetTmpl: Ext.DomHelper.createTemplate(
-		{
-			cls: 'thumb note-gutter-widget multi',
-			cn: [
-				//{	cls: 'bubble-wrapper',
-				//	cn: [
-						{
-							cls: 'bubble',
-							cn: [
-								{
-									cls: 'meta',
-									cn: [
-										{tag: 'span', cls: 'name', html: '{0}'},
-										' - ',
-										{tag: 'span', cls: 'time', html: '{1}'}
-									]
-								},
-								{cls: 'text', html: '{2}'}
-							]
-						}
-					//]
-				//}
-			]
-		}
-	).compile(),
+	multiGutterWidgetTmpl: Ext.DomHelper.createTemplate({
+		cls: 'thumb note-gutter-widget multi',
+		cn: [
+			//{	cls: 'bubble-wrapper',
+			//	cn: [
+					{
+						cls: 'bubble',
+						cn: [
+							{
+								cls: 'meta',
+								cn: [
+									{tag: 'span', cls: 'name', html: '{0}'},
+									' - ',
+									{tag: 'span', cls: 'time', html: '{1}'}
+								]
+							},
+							{cls: 'text', html: '{2}'}
+						]
+					}
+				//]
+			//}
+		]
+	}).compile(),
 
 	constructor: function(config){
 		this.callParent(arguments);
 
 
 		return this;
+	},
+
+
+	onDestroy: function(){
+		var children = this.getRecord().children || [];
+
+		if(children.length>0){
+			this.ownerCmp.fireEvent('bubble-replys-up', children);
+		}
+
+		return this.callParent(arguments);
 	},
 
 
