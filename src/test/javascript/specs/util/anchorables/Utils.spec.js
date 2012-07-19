@@ -270,14 +270,65 @@ describe("Anchor Utils", function() {
 				n2 = document.createElement('span'),
 				n1 = document.createElement('div');
 
-			n4a.appendChild(n5);
-			n3a.appendChild(n4a);
-			n3.appendChild(n4);
-			n2.appendChild(n3a);
-			n2.appendChild(n3);
 			n1.appendChild(n2);
+				n2.appendChild(n3);
+					n3.appendChild(n4);
+				n2.appendChild(n3a);
+					n3a.appendChild(n4a);
+						n4a.appendChild(n5);
 
-			expect(Anchors.walkDownToLastNode(n1)).toBe(n4);
+			expect(Anchors.walkDownToLastNode(n1)).toBe(n5);
+		});
+	});
+	
+	describe('isNodeChildOfAncestor Tests', function() {
+		it('Node Not Ancestor Of Itself', function() {
+			var d1 = document.createElement('div');
+			var d2 = document.createElement('div');
+			d1.appendChild(d2);
+			expect(Anchors.isNodeChildOfAncestor(d1,d1)).toBe(false);
+		});
+		it('Direct Parent-Child', function() {
+			var d1 = document.createElement('div');
+			var d2 = document.createElement('div');
+			var d3 = document.createElement('div');
+			d1.appendChild(d2);
+			d2.appendChild(d3);
+			expect(Anchors.isNodeChildOfAncestor(d2,d1)).toBe(true);
+			expect(Anchors.isNodeChildOfAncestor(d3,d2)).toBe(true);
+		});
+		it('Grandparent and Beyond', function() {
+			var d1 = document.createElement('div');
+			var d2 = document.createElement('div');
+			var d3 = document.createElement('div');
+			var d4 = document.createElement('div');
+			d1.appendChild(d2);
+			d2.appendChild(d3);
+			d3.appendChild(d4);
+			expect(Anchors.isNodeChildOfAncestor(d3,d1)).toBe(true);
+			expect(Anchors.isNodeChildOfAncestor(d4,d2)).toBe(true);
+			expect(Anchors.isNodeChildOfAncestor(d4,d1)).toBe(true);
+		});
+		it("Siblings and cousins don't match", function() {
+			var d1 = document.createElement('div');
+			var d2 = document.createElement('div');
+			var d3 = document.createElement('div');
+			var d4 = document.createElement('div');
+			d1.appendChild(d2);
+			d1.appendChild(d3);
+			d3.appendChild(d4);
+			expect(Anchors.isNodeChildOfAncestor(d3,d2)).toBe(false);
+			expect(Anchors.isNodeChildOfAncestor(d4,d2)).toBe(false);
+		});
+		it("Backwards relationships don't match", function() {
+			var d1 = document.createElement('div');
+			var d2 = document.createElement('div');
+			var d3 = document.createElement('div');
+			d1.appendChild(d2);
+			d2.appendChild(d3);
+			expect(Anchors.isNodeChildOfAncestor(d1,d2)).toBe(false);
+			expect(Anchors.isNodeChildOfAncestor(d2,d3)).toBe(false);
+			expect(Anchors.isNodeChildOfAncestor(d1,d3)).toBe(false);
 		});
 	});
 
@@ -791,6 +842,32 @@ describe("Anchor Utils", function() {
 			}
 			catch (e) {
 				expect(e.message).toEqual('Must supply a string')
+			}
+		});
+	});
+
+	describe ('containsFullContext tests', function() {
+		it('containsFullContext works fine', function() {
+			function makeContexts(array) {
+				var contexts = [];
+				for (var i = 0; i < array.length; i++) {
+					contexts.push({ contextText: array[i] });
+				}
+				var output = {};
+				output.getContexts = function() { return contexts };
+				return output;
+			}
+			var tests = [];
+			tests.push(makeContexts(['front back','bob','ag','e','hippo','red']));
+			tests.push(makeContexts(['front back','really','long','words']));
+			tests.push(makeContexts(['front back','should','fail']));
+			tests.push(makeContexts(['front back','f','a','i','l']));
+			tests.push(makeContexts(['front back','su','cc','e','e','d']));
+			tests.push(makeContexts(['front back']));
+			tests.push(makeContexts([]));
+			var outputs = [true, true, false, false, true, false, false];
+			for (var i = 0; i < tests.length; i++) {
+				expect(Anchors.containsFullContext(tests[i])).toEqual(outputs[i]);
 			}
 		});
 	});

@@ -8,7 +8,6 @@ Ext.define('NextThought.util.Anchors', {
 
 	PURIFICATION_TAG: 'data-nti-purification-tag',
 
-	//TODO - test
 	toDomRange: function(contentRangeDescription, docElement) {
 		if(!contentRangeDescription){console.warn('nothing to parse?');return null;}
 		var ancestorNode = contentRangeDescription.getAncestor().locateRangePointInAncestor(docElement).node || docElement;
@@ -342,7 +341,7 @@ Ext.define('NextThought.util.Anchors', {
 	},
 
 
-	//TODO - testing
+	/* tested */
 	isNodeChildOfAncestor: function(node, ancestor) {
 			while(node && node.parentNode){
 					if(node.parentNode === ancestor){
@@ -388,9 +387,7 @@ Ext.define('NextThought.util.Anchors', {
 		//If we are looking for the end node.  we want to start
 		//looking where the start node ended.  This is a shortcut
 		//in the event that the found start node is in our reference node
-		if( !isStart
-			&& startResult
-			&& startResult.node
+		if( !isStart && startResult && startResult.node
 			&& Anchors.isNodeChildOfAncestor(startResult.node, referenceNode)){
 
 			treeWalker.currentNode = startResult.node;
@@ -406,22 +403,26 @@ Ext.define('NextThought.util.Anchors', {
 		}
 
 
-		var confidence = 0;
+		var result = {};
 
 		//Array of objects that has a node and confidence
 		var possibleNodes = [];
 
-		while( textNode ) {
-			confidence = Anchors.confidenceOfCurrentNode(pointer, treeWalker, startResult);
-
-			if(confidence > 0){
-				possibleNodes.push({node: treeWalker.currentNode, confidence: confidence});
+		var done = false;
+		while( textNode && !done) {
+			var matches = Anchors.getCurrentNodeMatches(pointer, treeWalker);
+			for (var i = 0; i < matches.length; i++) {
+				result = matches[i];
+				if(matches[i].confidence > 0){
+					possibleNodes.push(matches[i]);
+				}
+				//100% sure, that is the best we can do
+				if(matches[i].confidence === 1){
+					done = true;
+					break;
+				}
 			}
-
-			//100% sure, that is the best we can do
-			if(confidence === 1){
-				break;
-			}
+			if (done) break;
 
 			//Start the context search over in the next textnode
 			textNode = treeWalker.nextNode();
@@ -433,11 +434,10 @@ Ext.define('NextThought.util.Anchors', {
 			return {confidence: 0};
 		}
 
-		var container = null;
+		var node = null;
 		//Did we stop because we found a perfect match?
 		if(possibleNodes[possibleNodes.length - 1].confidence === 1){
-			container = possibleNodes[possibleNodes.length - 1].node;
-			confidence = 1;
+			result = possibleNodes[possibleNodes.length - 1];
 		}
 		else{
 			//Not a perfect match, if we are in a properly
@@ -447,52 +447,64 @@ Ext.define('NextThought.util.Anchors', {
 				return {confidence: 0};
 			}
 			else{
-				//We want the largest range, that means
-				//if we are the start we iterate from the beginning
-				//if we are the end we iterate from the end
-				isStart = (pointer.getRole() === 'start');
-
-				container = isStart ? possibleNodes[0].node : possibleNodes[possibleNodes.length - 1].node;
-				confidence = 1.0/possibleNodes.length;
+				//We want the best match
+				var totalConfidenceScores = 0;
+				if (result == null) result = {confidence: 0}
+				for (var i = 0; i < possibleNodes.length; i++) {
+					totalConfidenceScores += possibleNodes[i].confidence;
+					if (possibleNodes[i].confidence > result.confidence) {
+						result = possibleNodes[i];
+					}
+				}
+				result.confidence *= 1 / totalConfidenceScores;
 			}
 		}
-
-		//We found what we need.  Set the context
-		var primaryContext = pointer.primaryContext();
-
-		var indexOfContext = primaryContext.contextOffset;
-		if(isStart){
-			indexOfContext = container.textContent.length - indexOfContext;
-		}
-		indexOfContext += pointer.getEdgeOffset();
-
-		return {node: container, offset: indexOfContext, confidence: confidence};
+		return result;
 	},
 
+	getCurrentNodeMatches: function(pointer, treeWalker) {
 
-	//TODO - testing
-	confidenceOfCurrentNode: function(pointer, treeWalker, startResult ) {
-		function contextMatchNode(context, node, isStart)
-		{
+		function multiIndexOf(str,tomatch) { 
+			var all = [], next = -2;
+			while (next != -1) {
+				next = str.indexOf(tomatch,next + 1);
+				if (next != -1) all.push(next);
+			}
+			return all;
+		}
+
+		function getPrimaryContextMatches(context, node, isStart) {
+			if (!node) return [];
+			var allmatches = [];
 			var adjustedOffset = context.contextOffset,
 				diff;
 			if(isStart){
 				adjustedOffset = node.textContent.length - adjustedOffset;
 			}
-
-			if( node.textContent.indexOf(context.contextText) === adjustedOffset){
-				//console.log('successful match', isStart, node.textContent.indexOf(context.contextText), adjustedOffset);
-				//console.log(node.textContent);
-				return true;
+			var p = multiIndexOf(node.textContent,context.contextText);
+			for (var i = 0; i < p.length; i++) {
+				//Penalzies score based on disparity between expected
+				//and real offset. For longer paragraphs, which we
+				//expect will have larger and more changes made to them,
+				//we relax the extent of the penalty
+				var f = Math.sqrt(node.textContent.length) * 2 + 1;
+				var score = f / (f + Math.abs(p[i] - adjustedOffset));
+				if (score < 0.25) score = 0.25;
+				allmatches.push({offset: p[i] + pointer.getEdgeOffset(),
+								 node: currentNode,
+								 confidence: score});
 			}
-			/*
-			else if ( node.textContent.indexOf(context.contextText) !== -1) {
-				console.log('UNsuccessful match', isStart, node.textContent.indexOf(context.contextText), adjustedOffset);
-				console.log("'" + node.textContent +"'");
+			return allmatches;
+		}
+		function secondaryContextMatch(context, node, isStart)
+		{
+			if (!node) return 0;
+			var adjustedOffset = context.contextOffset,
+				diff;
+			if(isStart){
+				adjustedOffset = node.textContent.length - adjustedOffset;
 			}
-			*/
-
-			return false;
+			return node.textContent.indexOf(context.contextText) == adjustedOffset;
 		}
 
 		var currentNode = treeWalker.currentNode;
@@ -506,59 +518,44 @@ Ext.define('NextThought.util.Anchors', {
 		//look forward to next nodes
 		var siblingFunction = isStart ? treeWalker.previousNode : treeWalker.nextNode;
 
-		var match = true;
-		var i;
-		for(i = 0; i < pointer.getContexts().length; i++ ){
-			var contextObj = pointer.getContexts()[i];
+		var numContexts = pointer.getContexts().length;
+		var contextObj = pointer.getContexts()[0];
+		var matches = getPrimaryContextMatches(contextObj, lookingAtNode, isStart);
 
-			//Right now, if we don't have all the nodes we need to have
-			//for the contexts, we fail.  In the future this
-			//probably changes but that requires looking ahead to
-			//see if there is another node that makes us ambiguous
-			//if we don't apply all the context
-			if(!lookingAtNode){
-				match = false;
-				break;
-			}
-			//If we don't match this context with high enough confidence
-			//we fail
-			if( !contextMatchNode(contextObj, lookingAtNode, isStart) ){
-				match = false;
-				break;
-			}
+		var confidenceMultiplier = 1;
+		lookingAtNode = siblingFunction.call(treeWalker);
 
-			//That context matched so we continue verifying.
-			lookingAtNode = siblingFunction.call(treeWalker);
+		if (matches.length > 0) {
+			for (var i = 1; i < numContexts; i++ ){
+				var contextObj = pointer.getContexts()[i];
+	
+				var c = secondaryContextMatch(contextObj, lookingAtNode, isStart);
+				if( !c ){
+					confidenceMultiplier *= i / (i+0.5);
+					break;
+				}
+				//That context matched so we continue verifying.
+				lookingAtNode = siblingFunction.call(treeWalker);
+			}
 		}
 
-		var confidence = 0;
 		//If we don't have a full set of contexts.  lookingAtNode
-		//should be null here.  If it is, we are sure this is the match
-		if(match){
-			if(!Anchors.containsFullContext(pointer)){
-				if(!lookingAtNode){
-					confidence = 1;
-				}
-				else{
-					confidence = 0.5; //TODO this is an arbitrary value.  Can we give something better than "maybe"
+		//should be null here.  If it isn't, then we might have a problem
+		if(confidenceMultiplier == 1){
+			if(!Anchors.containsFullContext(pointer) && lookingAtNode){
+				if (lookingAtNode) {
+					confidenceMultiplier *= numContexts / (numContexts + 0.5);
 				}
 			}
-			else{
-				confidence = 1;
-			}
 		}
-		else{
-			//Hmm we expected this to be at the end of ancestor but
-			//its not.  Maybe something was added.
-			confidence = 0;
+		for (var i = 0; i < matches.length; i++) {
+			matches[i].confidence *= confidenceMultiplier;
 		}
-
 		treeWalker.currentNode = currentNode;
-		return confidence;
+		return matches;
 	},
 
 
-	//TODO - testing
 	containsFullContext: function(pointer){
 		//Do we have a primary + 5 additional?
 
@@ -695,29 +692,15 @@ Ext.define('NextThought.util.Anchors', {
 
 
 	/* tested */
-	//TODO - test this for a node which has multiple tree branches, we want it to be the last of the last branch.
 	walkDownToLastNode: function(node){
 		if (!node){Ext.Error.raise('Node cannot be null');}
 
-		//no more kids? return it.
-		if(!node.firstChild){return node;}
-
-		var workingNode = node.firstChild,
-			result = workingNode,
-			next;
+		var workingNode = node,
+			result = workingNode;
 
 		while(workingNode){
-			next = workingNode.nextSibling;
-			if (next === null) {
-				workingNode = workingNode.firstChild;
-			}
-			else {
-				workingNode = next;
-			}
-
-			if(workingNode){
-				result = workingNode;
-			}
+			workingNode = workingNode.lastChild;
+			if(workingNode) result = workingNode;
 		}
 
 		return result;

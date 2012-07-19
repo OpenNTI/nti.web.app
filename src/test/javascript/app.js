@@ -128,6 +128,7 @@ Ext.application({
 			'javascript/specs/util/ParseUtils.spec.js',
 			'javascript/specs/util/Color.spec.js',
 			'javascript/specs/util/anchorables/Anchors.spec.js',
+			'javascript/specs/util/anchorables/ChangingDomAnchors.spec.js',
 			'javascript/specs/util/anchorables/Utils.spec.js'],
 		go);
 	}
