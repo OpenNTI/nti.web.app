@@ -233,6 +233,7 @@ Ext.define('NextThought.view.annotations.Redaction', {
 		if (this.controlDiv){this.controlDiv.toggleCls(this.cls);}
 
 		//if action span is toggled back on and it's inline, make sure it has events:
+		/*
 		var actionSpan = Ext.fly(this.actionSpan);
 		if(actionSpan.hasCls(this.cls) && actionSpan.hasCls('redactionAction')) {
 			this.setupInlineSpanEvents(actionSpan);
@@ -240,7 +241,7 @@ Ext.define('NextThought.view.annotations.Redaction', {
 		else {
 			this.on('click', this.onClick, this);
 		}
-
+*/
 		return false;
 	},
 

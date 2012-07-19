@@ -130,7 +130,7 @@ describe("Anchor Utils", function() {
 			range.setStart(nonTxtNode1, 1);
 			range.setEnd(txtNode2, 5);
 
-			expect(Anchors.nodeThatIsEdgeOfRange(range, true).tagName).toEqual('SPAN');
+			expect(Anchors.nodeThatIsEdgeOfRange(range, true).tagName).toEqual('P');
 		});
 
 		it ('Range of Non Text Nodes, end', function(){
@@ -150,6 +150,24 @@ describe("Anchor Utils", function() {
 			range.setEnd(nonTxtNode1, 2);
 
 			expect(Anchors.nodeThatIsEdgeOfRange(range, false).tagName).toEqual('SPAN');
+		});
+
+
+		it ('Range of Mixed Nodes', function(){
+			var range = document.createRange(),
+				div = document.createElement('div'),
+				p = document.createElement('p'),
+				t = document.createTextNode('Text node');
+
+			p.appendChild(t);
+			div.appendChild(p);
+			testBody.appendChild(div);
+
+			range.setStart(p, 0);
+			range.setEnd(t, 6);
+
+			expect(Ext.isTextNode(Anchors.nodeThatIsEdgeOfRange(range, true))).not.toBeTruthy();
+			expect(Anchors.nodeThatIsEdgeOfRange(range, true).tagName).toEqual('P');
 		});
 
 
