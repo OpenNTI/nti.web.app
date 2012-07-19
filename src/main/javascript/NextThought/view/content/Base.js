@@ -9,8 +9,7 @@ Ext.define('NextThought.view.content.Base', {
 
 
 	getInsertionPoint: function(){
-		//only call after render!
-		return this.getTargetEl().down('div[id$=targetEl]');
+		return this.getTargetEl();
 	},
 
 
