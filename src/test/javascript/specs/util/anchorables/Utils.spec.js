@@ -130,7 +130,7 @@ describe("Anchor Utils", function() {
 			range.setStart(nonTxtNode1, 1);
 			range.setEnd(txtNode2, 5);
 
-			expect(Anchors.nodeThatIsEdgeOfRange(range, true).tagName).toEqual('P');
+			expect(Anchors.nodeThatIsEdgeOfRange(range, true).tagName).toEqual('SPAN');
 		});
 
 		it ('Range of Non Text Nodes, end', function(){
@@ -166,8 +166,8 @@ describe("Anchor Utils", function() {
 			range.setStart(p, 0);
 			range.setEnd(t, 6);
 
-			expect(Ext.isTextNode(Anchors.nodeThatIsEdgeOfRange(range, true))).not.toBeTruthy();
-			expect(Anchors.nodeThatIsEdgeOfRange(range, true).tagName).toEqual('P');
+			expect(Ext.isTextNode(Anchors.nodeThatIsEdgeOfRange(range, true))).toBeTruthy();
+			expect(Anchors.nodeThatIsEdgeOfRange(range, true)).toBe(t);
 		});
 
 
@@ -1023,7 +1023,7 @@ describe("Anchor Utils", function() {
 				expect(false).toBeTruthy();
 			}
 			catch(e) {
-				expect(e.message).toEqual('Range must contain text containers');
+				expect(e.message).toEqual('Must supply an Id');
 			}
 
 

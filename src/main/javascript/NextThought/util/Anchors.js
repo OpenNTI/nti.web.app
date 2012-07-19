@@ -83,7 +83,8 @@ Ext.define('NextThought.util.Anchors', {
 			parent = container.parentNode;
 
 		if(!Ext.isTextNode(container)){
-			Ext.Error.raise('Range must contain text containers');
+			container = Anchors.nodeThatIsEdgeOfRange(range, (role === 'start'));
+			offset = role === 'start' ? 0 : container.textContent.length;
 		}
 
 		//If we run into a doc fragment here, then we may have to bump out of the fragment:
@@ -725,8 +726,7 @@ Ext.define('NextThought.util.Anchors', {
 			//If we are at the front of the range
 			//the first full node in the range is the containers ith child
 			//where i is the offset
-			if (offset === 0 ) {return container;}
-			return container.childNodes.item(offset - 1);
+			return container.childNodes.item(offset);
 		}
 		else{
 			//At the end the first fully contained node is
