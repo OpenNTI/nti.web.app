@@ -173,7 +173,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
 
 	resolveVerticalLocation: function(){
 		var r = this.getRange();
-		if(!r.collapsed){
+		if(r && !r.collapsed){
 			r.detach();
 			delete this.range;
 			r = this.getRange();
