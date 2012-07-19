@@ -116,8 +116,27 @@ Ext.define('NextThought.view.annotations.note.Main',{
 	},
 
 
+	moveSubstringToWord: function(string, start, left) {
+		var c,
+			inc = left ? -1: 1;
+		try {
+			do{
+				c = string.charAt(start);
+				start += inc;
+			} while(!/\s/.test(c));
+		}
+		catch(e) {
+			//pass boundary
+			return left ? 0: undefined;
+		}
+
+		return start - inc;
+	},
+
+
 	setRecord: function(r, range){
-		var commonAncestor, suppressed, text;
+		var suppressed, text, bodyText, start, end,
+			boundryChars = 200;
 
 		this.record = r;
 		this.range = range;
@@ -140,37 +159,26 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		try {
 			suppressed = r.get('style') === 'suppressed';
 			if(range){
-				commonAncestor = range.commonAncestorContainer;
 				text = range.toString();
-/*
-				if (commonAncestor){
-					s = commonAncestor.ownerDocument.parentWindow.getSelection();
-					s.removeAllRanges();
+				bodyText = range.commonAncestorContainer.ownerDocument.getElementById('NTIContent').textContent;
+				start = bodyText.indexOf(text);
+				end = start + text.length;
+				start = Math.max(start - boundryChars, 0);
+				end += boundryChars;
 
-//					s.selectAllChildren(range.endContainer);
-					s.addRange(range);
-					s.modify('move', 'backward', 'character');
-					s.modify('move', 'backward', 'word');
-					s.modify('move', 'backward', 'line');
-					s.modify('move', 'backward', 'line');
+				//try to find word bounds:
+				start = this.moveSubstringToWord(bodyText, start, true);
+				end = this.moveSubstringToWord(bodyText, end, false);
+				bodyText = Ext.String.trim(bodyText.substring(start, end));
 
-					s.modify('extend', 'forward', 'line');
-					s.modify('extend', 'forward', 'line');
-					s.modify('extend', 'forward', 'line');
-					s.modify('extend', 'forward', 'line');
-					s.modify('extend', 'forward', 'line');
-					s.modify('extend', 'forward', 'line');
-					s.modify('extend', 'forward', 'character');
-					s.modify('extend', 'forward', 'word');
+				if (start){ bodyText = '[...] ' + bodyText;}
+				if (end){ bodyText += ' [...]';}
 
-
-					ancestorText = s.getRangeAt(0).toString();
-					s.removeAllRanges();
-					if(!suppressed){
-						ancestorText = ancestorText.replace(selectedText, this.highlightTpl.apply([selectedText]));
-					}
+				if(!suppressed){
+					bodyText = bodyText.replace(text, this.highlightTpl.apply([text]));
 				}
-*/
+
+				text = bodyText;
 			}
 
 			this.context.update(text);
