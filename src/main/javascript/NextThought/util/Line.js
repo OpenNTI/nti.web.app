@@ -42,7 +42,8 @@ Ext.define('NextThought.util.Line',{
 			me = this, r, c = 0, step = 'word';
 
 		function is(rectA,rectB){
-			var y = rectA.top + (rect.height/2);
+			if(!rectA){return false;}
+			var y = rectA.top + (rectA.height/2);
 			return me.isCloseToMiddle(y,rectB);
 		}
 

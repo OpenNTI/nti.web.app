@@ -147,11 +147,15 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 	noteOverlayPositionInputBox: function(){
 		var o = this.noteOverlayData,
 			offsets = this.getAnnotationOffsets(),
-			box = Ext.get(o.box);
+			box = Ext.get(o.box),
+			oldY = box.getY(),
+			newY = o.lastLine.rect.bottom + offsets.top - box.getHeight();
 
-		box.setY(o.lastLine.rect.bottom + offsets.top - box.getHeight())
-			.hide()
-			.show();
+		if(Math.abs(oldY - newY) > 4){
+			box.setY(o.lastLine.rect.bottom + offsets.top - box.getHeight())
+				.hide()
+				.show();
+		}
 	},
 
 
