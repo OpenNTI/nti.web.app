@@ -84,7 +84,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 			}]
 		};
 
-		container = Ext.DomHelper.insertAfter(me.body.first(),container,true);
+		container = Ext.DomHelper.insertAfter(me.getInsertionPoint().first(),container,true);
 		data.box = box = container.down('.note-here-control-box');
 		data.textarea = txt = box.down('textarea');
 		data.lineEntry = box.down('.entry');
@@ -149,7 +149,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 			offsets = this.getAnnotationOffsets(),
 			box = Ext.get(o.box),
 			oldY = box.getY(),
-			newY = o.lastLine.rect.bottom + offsets.top - box.getHeight();
+			newY = Math.round(o.lastLine.rect.bottom + offsets.top - box.getHeight());
 
 		if(Math.abs(oldY - newY) > 4){
 			box.setY(o.lastLine.rect.bottom + offsets.top - box.getHeight())

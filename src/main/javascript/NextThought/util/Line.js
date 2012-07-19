@@ -64,16 +64,16 @@ Ext.define('NextThought.util.Line',{
 				break;
 			}
 			if(!Ext.fly(node).contains(r.startContainer)){
-//				if(step === 'line'){
-//					step = 'lineboundary';
-//					setup(step);
-//				}
-//				else {
+				if(step === 'word'){
+					step = 'line';
+					setup(step);
+				}
+				else {
 					s.removeAllRanges();
 					s.selectAllChildren(node);
 					r =  s.getRangeAt(0);
 					break;
-//				}
+				}
 			}
 			r = null;
 

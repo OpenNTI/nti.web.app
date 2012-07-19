@@ -58,8 +58,8 @@ Ext.define('NextThought.view.Main', {
 		console.warn("Unsupported features: "+unsupported.join(', '));
 	}
 
-	var v = Ext.getScrollBarWidth(true);
-	if(v > 2){
+	var v = Ext.getScrollbarSize(true);
+	if(v.width > 2){
 		Ext.getBody().addCls('detected-scrollbars');
 	}
 });
