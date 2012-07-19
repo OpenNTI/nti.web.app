@@ -117,7 +117,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 
 
 	setRecord: function(r, range){
-		var commonAncestor, ancestorText, suppressed, selectedText;
+		var commonAncestor, ancestorText, suppressed, selectedText, s;
 
 		this.record = r;
 		this.range = range;
@@ -138,15 +138,22 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		}
 
 		try {
-			commonAncestor = range ? range.commonAncestorContainer : null;
-			ancestorText = commonAncestor ? commonAncestor.textContent : null;
 			suppressed = r.get('style') === 'suppressed';
-			selectedText = range ? range.toString() : '';
+			if(range){
+				commonAncestor = range.commonAncestorContainer;
+				selectedText = range.toString();
 
-			if (!suppressed){
-				ancestorText = ancestorText
-						? ancestorText.replace(selectedText, this.highlightTpl.apply([selectedText]))
-						: '';
+				if (commonAncestor){
+					s = commonAncestor.ownerDocument.parentWindow.getSelection();
+					s.removeAllRanges();
+
+					s.selectAllChildren(range.endContainer);
+
+					ancestorText = s.getRangeAt(0).toString();
+					if(!suppressed){
+						ancestorText = ancestorText.replace(selectedText, this.highlightTpl.apply([selectedText]));
+					}
+				}
 			}
 
 			this.context.update(ancestorText);
