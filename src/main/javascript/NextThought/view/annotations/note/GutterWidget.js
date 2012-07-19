@@ -114,7 +114,7 @@ Ext.define('NextThought.view.annotations.note.GutterWidget',{
 
 	fillInUser: function(user){
 		if(Ext.isArray(user)){user = user[0];}
-		this.name.update(user.getName());
+		this.name.update(Ext.String.ellipsis(user.getName(),18));
 		TemplatesForNotes.updateMoreReplyOptionsLabels(this.more,user);
 	},
 

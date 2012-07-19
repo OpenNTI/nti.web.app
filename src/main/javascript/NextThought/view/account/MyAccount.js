@@ -8,7 +8,7 @@ Ext.define('NextThought.view.account.MyAccount',{
 	renderTpl: [
 		'<div class="my-account-wrapper">',
 			'<div class="settings menu-nib"></div>',
-			'<div class="name">{name}<span class="notifications">{notification-count}</span></div>',
+			'<div class="name">{name:ellipsis(25)}<span class="notifications">{notification-count}</span></div>',
 			'<div class="status">{status}</div>',
 		'</div>'
 	],
