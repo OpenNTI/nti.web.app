@@ -105,10 +105,12 @@ Ext.define('NextThought.view.annotations.Highlight', {
 				this.range.detach();
 				delete this.range;
 			}
-
+			this.compElements.clearListeners();
+			this.compElements.clear();
 			Ext.fly(this.canvas).remove();
 			Ext.fly(this.counter).remove();
 			Ext.each(c,this.unwrap,this);
+
 		} catch(e){
 			console.error(Globals.getError(e));
 		}
@@ -214,6 +216,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
 			this.compElements.add(this.counter);
 			this.canvas = this.createCanvas();
 		}
+
 
 		range = this.buildRange();
 		bounds = range.getBoundingClientRect();
@@ -409,19 +412,16 @@ Ext.define('NextThought.view.annotations.Highlight', {
 
 		span.setAttribute('class', this.highlightCls);
 		Ext.fly(span).addCls(style);
-
-
 		range.surroundContents(span);
-		Ext.fly(span).hover(this.onMouseOver,this.onMouseOut,this);
-		Ext.fly(span).on('click',this.onClick,this);
+		Ext.get(span)
+				.hover(this.onMouseOver,this.onMouseOut,this)
+				.on('click',this.onClick,this);
 		return span;
 	},
 
 
 	unwrap: function(node) {
 		var r, p = node.parentNode;
-
-		Ext.fly(node).un('click',this.onClick,this);
 
 		if(node.firstChild){
 			r = node.ownerDocument.createRange();
