@@ -114,7 +114,7 @@ Ext.define('NextThought.controller.Library', {
 	onAnnotationStoreLoadComplete: function(store, opts){
 		if (!store.onAnnotationsLoadCallback) {return;}
 		var reader = store.onAnnotationsLoadCallback.cmp,
-			containerId = reader.getContainerId();
+			containerId = LocationProvider.currentNTIID;
 
 		if(store.storeId === ('page-store:'+containerId)){
 			reader.objectsLoaded(store.getBins(), store.onAnnotationsLoadCallback.callback);

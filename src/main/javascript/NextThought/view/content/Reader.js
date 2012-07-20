@@ -102,7 +102,7 @@ Ext.define('NextThought.view.content.Reader', {
 		var me = this,
 			service = $AppConfig.service;
 
-		if(ntiid === me.getContainerId()){
+		if(ntiid === LocationProvider.currentNTIID){
 			Ext.callback(callback,null,[me]);
 			return false;
 		}

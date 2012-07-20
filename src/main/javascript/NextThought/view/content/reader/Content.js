@@ -64,11 +64,6 @@ Ext.define('NextThought.view.content.reader.Content',{
 	},
 
 
-	getContainerId: function() {
-		return this.meta.NTIID;
-	},
-
-
 	setContent: function(resp, callback){
 		var me = this,
 			c = me.parseHTML(resp),
@@ -92,8 +87,8 @@ Ext.define('NextThought.view.content.reader.Content',{
 
 		QuizUtils.setupQuiz(me.getDocumentElement(), me);
 
-		containerId = Ext.util.Format.htmlDecode(me.getContainerId()); //handle apostrophe
-		me.loadContentAnnotations(containerId, onFinishLoading);
+		//containerId = Ext.util.Format.htmlDecode(me.getContainerId()); //handle apostrophe
+		me.loadContentAnnotations(LocationProvider.currentNTIID, onFinishLoading);
 	},
 
 
