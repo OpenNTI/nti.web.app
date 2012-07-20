@@ -56,7 +56,7 @@ Ext.define('NextThought.controller.Library', {
 	},
 
 
-	saveSharingPrefs: function(prefs, callback, saveToRoot){
+	saveSharingPrefs: function(prefs, callback){
 		//TODO - check to see if it's actually different before save...
 		function success(pi){
 			pi.saveField('sharingPreference', {sharedWith: prefs}, function(){
@@ -70,11 +70,7 @@ Ext.define('NextThought.controller.Library', {
 			console.error('failed to get page info');
 		}
 
-		var ntiid = LocationProvider.currentNTIID;
-		//if(saveToRoot){
-		//	ntiid = Library.getLineage(ntiid).first();
-		//}
-		$AppConfig.service.getPageInfo(ntiid, success, fail, this);
+		$AppConfig.service.getPageInfo(LocationProvider.currentNTIID, success, fail, this);
 
 	},
 

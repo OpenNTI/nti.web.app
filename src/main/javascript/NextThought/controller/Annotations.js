@@ -109,6 +109,7 @@ Ext.define('NextThought.controller.Annotations', {
 	onShareWithSaveClick: function(btn){
 		var win = btn.up('window'),
 			shbx= win.down('user-list'),
+			saveAsDefault = win.down('checkbox').checked,
 			v = shbx.getValue(),
 			rec = win.record,
 			me = this;
@@ -121,10 +122,12 @@ Ext.define('NextThought.controller.Annotations', {
 			if(op.success){
 				rec.fireEvent('updated',newRec);
 				win.close();
-				//update default sharing setting if we have a shareWith:
-				me.getController('Library').saveSharingPrefs(v, function(){
-					console.log('callback pref save', arguments);
-				}, true);
+				if (saveAsDefault){
+					//update default sharing setting if we have a shareWith:
+					me.getController('Library').saveSharingPrefs(v, function(){
+						console.log('callback pref save', arguments);
+					});
+				}
 			}
 			else{
 				console.error('Failed to save object');

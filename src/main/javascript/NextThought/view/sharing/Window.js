@@ -36,6 +36,13 @@ Ext.define( 'NextThought.view.sharing.Window', {
 			layout:{ type: 'hbox', pack: 'end' },
 			defaults: {ui: 'primary', scale: 'medium'},
 			items: [
+				{
+					xtype: 'container',
+					flex: 1,
+					items: [
+						{xtype: 'checkbox', boxLabel: 'Save as level default', name: 'default'}
+					]
+				},
 				{xtype: 'button', text: 'Save', action: 'save'},
 				{xtype: 'button', text: 'Cancel', action: 'cancel', ui: 'secondary', handler: function(btn){
 					btn.up('window').close();
