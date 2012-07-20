@@ -8,14 +8,14 @@ import org.junit.Test;
 public class TestMyAccount extends MyAccount{
 
 	@Test
-	public void testClickMyAccount(){
+	public void testClickMyAccount() {
 		this.clickOptionsMyAccountButton();
 		assertTrue(this.elementExists(XpathUtilsMyAccount.getRealNameInput()));
 		assertTrue(this.elementExists(XpathUtilsMyAccount.getAliasInput()));
 	}
 	
 	@Test
-	public void testInputRealName(){
+	public void testInputRealName() {
 		this.clickOptionsMyAccountButton();
 		assertTrue(this.elementExists(XpathUtilsMyAccount.getRealNameInput()));
 		assertTrue(this.elementExists(XpathUtilsMyAccount.getAliasInput()));
@@ -23,7 +23,7 @@ public class TestMyAccount extends MyAccount{
 	}
 	
 	@Test
-	public void testInputAlias(){
+	public void testInputAlias() {
 		this.clickOptionsMyAccountButton();
 		assertTrue(this.elementExists(XpathUtilsMyAccount.getRealNameInput()));
 		assertTrue(this.elementExists(XpathUtilsMyAccount.getAliasInput()));
@@ -31,7 +31,7 @@ public class TestMyAccount extends MyAccount{
 	}
 	
 	@Test
-	public void testClickChangePasswordLink(){
+	public void testClickChangePasswordLink() {
 		this.clickOptionsMyAccountButton();
 		assertTrue(this.elementExists(XpathUtilsMyAccount.getRealNameInput()));
 		assertTrue(this.elementExists(XpathUtilsMyAccount.getAliasInput()));
@@ -41,7 +41,7 @@ public class TestMyAccount extends MyAccount{
 	}
 	
 	@Test
-	public void testEnterTextInChangePasswordInput(){
+	public void testEnterTextInChangePasswordInput() {
 		this.clickOptionsMyAccountButton();
 		assertTrue(this.elementExists(XpathUtilsMyAccount.getRealNameInput()));
 		assertTrue(this.elementExists(XpathUtilsMyAccount.getAliasInput()));
@@ -52,7 +52,7 @@ public class TestMyAccount extends MyAccount{
 	}
 	
 	@Test
-	public void testEnterTextInVerifyPasswordInput(){
+	public void testEnterTextInVerifyPasswordInput() {
 		this.clickOptionsMyAccountButton();
 		assertTrue(this.elementExists(XpathUtilsMyAccount.getRealNameInput()));
 		assertTrue(this.elementExists(XpathUtilsMyAccount.getAliasInput()));
@@ -63,7 +63,7 @@ public class TestMyAccount extends MyAccount{
 	}
 	
 	@Test
-	public void testEnterTextInAccepting(){
+	public void testEnterTextInAccepting() {
 		this.clickOptionsMyAccountButton();
 		assertTrue(this.elementExists(XpathUtilsMyAccount.getRealNameInput()));
 		assertTrue(this.elementExists(XpathUtilsMyAccount.getAliasInput()));
@@ -73,7 +73,7 @@ public class TestMyAccount extends MyAccount{
 	}
 	
 	@Test
-	public void testClickAcceptingDropDownArrow(){
+	public void testClickAcceptingDropDownArrow() {
 		this.clickOptionsMyAccountButton();
 		assertTrue(this.elementExists(XpathUtilsMyAccount.getRealNameInput()));
 		assertTrue(this.elementExists(XpathUtilsMyAccount.getAliasInput()));
@@ -82,7 +82,7 @@ public class TestMyAccount extends MyAccount{
 	}
 	
 	@Test
-	public void testAcceptingContact(){
+	public void testAcceptingContact() {
 		this.clickOptionsMyAccountButton();
 		assertTrue(this.elementExists(XpathUtilsMyAccount.getRealNameInput()));
 		assertTrue(this.elementExists(XpathUtilsMyAccount.getAliasInput()));
@@ -94,7 +94,7 @@ public class TestMyAccount extends MyAccount{
 	}
 	
 	@Test
-	public void testAcceptingMultipleContacts(){
+	public void testAcceptingMultipleContacts() {
 		this.clickOptionsMyAccountButton();
 		assertTrue(this.elementExists(XpathUtilsMyAccount.getRealNameInput()));
 		assertTrue(this.elementExists(XpathUtilsMyAccount.getAliasInput()));
@@ -111,7 +111,7 @@ public class TestMyAccount extends MyAccount{
 	}
 	
 	@Test
-	public void testAcceptingRemoveContact(){
+	public void testAcceptingRemoveContact() {
 		this.clickOptionsMyAccountButton();
 		assertTrue(this.elementExists(XpathUtilsMyAccount.getRealNameInput()));
 		assertTrue(this.elementExists(XpathUtilsMyAccount.getAliasInput()));
@@ -125,7 +125,7 @@ public class TestMyAccount extends MyAccount{
 	}
 	
 	@Test
-	public void testAcceptingEveryone(){
+	public void testAcceptingEveryone() {
 		this.clickOptionsMyAccountButton();
 		assertTrue(this.elementExists(XpathUtilsMyAccount.getRealNameInput()));
 		assertTrue(this.elementExists(XpathUtilsMyAccount.getAliasInput()));
@@ -137,7 +137,7 @@ public class TestMyAccount extends MyAccount{
 	}
 	
 	@Test
-	public void testEnterTextInIgnoring(){
+	public void testEnterTextInIgnoring() {
 		this.clickOptionsMyAccountButton();
 		assertTrue(this.elementExists(XpathUtilsMyAccount.getRealNameInput()));
 		assertTrue(this.elementExists(XpathUtilsMyAccount.getAliasInput()));
@@ -147,7 +147,7 @@ public class TestMyAccount extends MyAccount{
 	}
 	
 	@Test
-	public void testClickIgnoringDropDownArrow(){
+	public void testClickIgnoringDropDownArrow() {
 		this.clickOptionsMyAccountButton();
 		assertTrue(this.elementExists(XpathUtilsMyAccount.getRealNameInput()));
 		assertTrue(this.elementExists(XpathUtilsMyAccount.getAliasInput()));
@@ -156,7 +156,7 @@ public class TestMyAccount extends MyAccount{
 	}
 	
 	@Test
-	public void testIgnoringContact(){
+	public void testIgnoringContact() {
 		this.clickOptionsMyAccountButton();
 		assertTrue(this.elementExists(XpathUtilsMyAccount.getRealNameInput()));
 		assertTrue(this.elementExists(XpathUtilsMyAccount.getAliasInput()));
@@ -168,7 +168,7 @@ public class TestMyAccount extends MyAccount{
 	}
 	
 	@Test
-	public void testIgnoringMultipleContacts(){
+	public void testIgnoringMultipleContacts() {
 		this.clickOptionsMyAccountButton();
 		assertTrue(this.elementExists(XpathUtilsMyAccount.getRealNameInput()));
 		assertTrue(this.elementExists(XpathUtilsMyAccount.getAliasInput()));
@@ -185,7 +185,7 @@ public class TestMyAccount extends MyAccount{
 	}
 	
 	@Test
-	public void testIgnoringEveryone(){
+	public void testIgnoringEveryone() {
 		this.clickOptionsMyAccountButton();
 		assertTrue(this.elementExists(XpathUtilsMyAccount.getRealNameInput()));
 		assertTrue(this.elementExists(XpathUtilsMyAccount.getAliasInput()));
@@ -196,7 +196,7 @@ public class TestMyAccount extends MyAccount{
 	}
 	
 	@Test
-	public void testIgnoringRemoveContact(){
+	public void testIgnoringRemoveContact() {
 		this.clickOptionsMyAccountButton();
 		assertTrue(this.elementExists(XpathUtilsMyAccount.getRealNameInput()));
 		assertTrue(this.elementExists(XpathUtilsMyAccount.getAliasInput()));
@@ -210,7 +210,7 @@ public class TestMyAccount extends MyAccount{
 	}
 	
 	@Test
-	public void testSaveButton(){
+	public void testSaveButton() {
 		this.clickOptionsMyAccountButton();
 		assertTrue(this.elementExists(XpathUtilsMyAccount.getRealNameInput()));
 		assertTrue(this.elementExists(XpathUtilsMyAccount.getAliasInput()));
@@ -219,7 +219,7 @@ public class TestMyAccount extends MyAccount{
 	}
 	
 	@Test
-	public void testCancelButton(){
+	public void testCancelButton() {
 		this.clickOptionsMyAccountButton();
 		assertTrue(this.elementExists(XpathUtilsMyAccount.getRealNameInput()));
 		assertTrue(this.elementExists(XpathUtilsMyAccount.getAliasInput()));

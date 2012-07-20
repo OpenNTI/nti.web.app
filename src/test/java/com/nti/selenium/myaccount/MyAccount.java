@@ -10,55 +10,55 @@ public class MyAccount extends Login{
 	String[] searchUserNames;
 	
 	@Before
-	public void setUp() throws Exception{
+	public void setUp() throws Exception {
 		super.setUp();
 		this.login();
 		this.searchUserNames = this.getSearchUserNames(2);
 	}
 	
-	public void clickOptionsMyAccountButton(){
+	public void clickOptionsMyAccountButton() {
 		this.findElement(XpathUtilsLogin.getOptions()).click();
 		this.waitForElement(XpathUtilsMyAccount.getMyAccountButton());
 		this.findElement(XpathUtilsMyAccount.getMyAccountButton()).click();
 	}
 	
-	public void clickChangePasswordLink(){
+	public void clickChangePasswordLink() {
 		this.findElement(XpathUtilsMyAccount.getChangePasswordLink()).click();
 	}
 	
-	public void enterTextInAccepting(String name){
+	public void enterTextInAccepting(final String name) {
 		this.findElements(XpathUtilsMyAccount.getMyAccountOtherPeopleInput()).get(2).sendKeys(name);
 	}
 	
-	public void enterTextInIgnoring(String name){
+	public void enterTextInIgnoring(final String name) {
 		this.findElements(XpathUtilsMyAccount.getMyAccountOtherPeopleInput()).get(3).sendKeys(name);
 	}
 	
-	public void clickAcceptingDropDownArrow(){
+	public void clickAcceptingDropDownArrow() {
 		this.findElements(XpathUtilsMyAccount.getMyAccountOtherPeopleDropDownArrow()).get(2).click();
 	}
 	
-	public void clickIgnoringDropDownArrow(){
+	public void clickIgnoringDropDownArrow() {
 		this.findElements(XpathUtilsMyAccount.getMyAccountOtherPeopleDropDownArrow()).get(3).click();
 	}
 	
-	public void clickContact(String name){
+	public void clickContact(final String name) {
 		this.findElement(XpathUtilsMyAccount.findNameOptions(name)).click();
 	}
 	
-	public void removeContact(String name){
+	public void removeContact(final String name) {
 		this.findElement(XpathUtilsMyAccount.findNameTokenXButton(name)).click();
 	}
 	
-	public void clickEveryoneOption(){
+	public void clickEveryoneOption() {
 		this.findElement(XpathUtilsMyAccount.getMyAccountOtherPeopleEveryoneOption()).click();
 	}
 	
-	public void clickSaveButton(){
+	public void clickSaveButton() {
 		this.findElement(XpathUtilsMyAccount.getSaveButton()).click();
 	}
 	
-	public void clickCancelButton(){
+	public void clickCancelButton() {
 		this.findElement(XpathUtilsMyAccount.getCancelButton()).click();
 	}
 	
