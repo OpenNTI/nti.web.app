@@ -214,55 +214,17 @@ Ext.define('NextThought.util.Anchors', {
 		});
     },
 
-
 	/* tested */
 	lastWordFromString: function(str){
 		if (str === null || str === undefined){Ext.Error.raise('Must supply a string');}
-
-		var word = '',
-			readingWord = false,
-			c, i;
-
-		for(i=str.length - 1; i >= 0; i--){
-			c = str.charAt(i);
-			if(/\s/.test(c)){
-					if(readingWord){
-							break;
-					}
-					word += c;
-			}
-			else{
-					readingWord = true;
-					word += c;
-			}
-		}
-		return word.split("").reverse().join("");
+		return /\S*\s?$/.exec(str)[0]
 	},
-
 
 	/* tested */
 	firstWordFromString: function(str){
 		if (str === null || str === undefined){Ext.Error.raise('Must supply a string');}
-		var word = '',
-			readingWord = false,
-			c, i;
-
-		for(i=0; i < str.length; i++){
-			c = str.charAt(i);
-			if(/\s/.test(c)){
-					if(readingWord){
-							break;
-					}
-					word += c;
-			}
-			else{
-					readingWord = true;
-					word += c;
-			}
-		}
-		return word;
+		return /^\s?\S*/.exec(str)[0]
 	},
-
 
 	/* tested */
 	resolveSpecBeneathAncestor: function(rangeDesc, ancestor, docElement){
