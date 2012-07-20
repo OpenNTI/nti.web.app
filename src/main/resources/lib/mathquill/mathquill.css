@@ -62,6 +62,7 @@
   user-select: text;
   -moz-user-select: text;
   -webkit-user-select: text;
+  display: none;
 }
 
 .mathquill-editable .cursor {
