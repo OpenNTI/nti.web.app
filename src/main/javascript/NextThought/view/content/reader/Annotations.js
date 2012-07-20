@@ -605,13 +605,31 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 	snapSelectionToWord: function() {
 		var sel,
 			doc = this.getDocumentElement(),
-			window = doc.parentWindow;
+			window = doc.parentWindow,
+			selTxt,
+			adjustStart, adjustEnd,
+			trimStart, trimEnd,
+			shouldAdjustRegex = /[a-zA-Z0-9]/,
+			i;
+
 
 		// Check for existence of window.getSelection() and that it has a
 		// modify() method. IE 9 has both selection APIs but no modify() method.
 		if (window.getSelection && (sel = window.getSelection()).modify) {
 			sel = window.getSelection();
 			if (!sel.isCollapsed) {
+
+
+				selTxt = sel.toString();
+				//decide if we have whitespace to trim on the front or end
+				trimStart = /^(\s+)/.exec(selTxt);
+				trimStart = trimStart ? trimStart[0].length : 0;
+				trimEnd = /(\s+)$/.exec(selTxt);
+				trimEnd = trimEnd ? trimEnd[0].length : 0;
+
+				//decide if our start and end points should be adjusted:
+				adjustStart = shouldAdjustRegex.test(selTxt.charAt(0));
+				adjustEnd = shouldAdjustRegex.test(selTxt.charAt(selTxt.length-1));
 
 				// Detect if selection is backwards
 				var range = doc.createRange();
@@ -627,17 +645,37 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 				var direction = [];
 				if (backwards) {
 					direction = ['backward', 'forward'];
+					var t = trimStart;
+					trimStart=trimEnd;
+					trimEnd = t;
+					t = adjustStart;
+					adjustStart = adjustEnd;
+					adjustEnd = t;
+
 				} else {
 					direction = ['forward', 'backward'];
 				}
 
-				sel.modify("move", direction[0], "character");
-				sel.modify("move", direction[1], "word");
+				for (i = 0; i < trimStart; i++){
+					sel.modify("move", direction[0], "character");
+				}
+				if (adjustStart){
+					sel.modify("move", direction[0], "character");
+					sel.modify("move", direction[1], "word");
+				}
+
 				sel.extend(endNode, endOffset);
-				sel.modify("extend", direction[1], "character");
-				sel.modify("extend", direction[0], "word");
+				for (i = 0; i < trimEnd; i++){
+					sel.modify("extend", direction[1], "character");
+				}
+				if (adjustEnd) {
+					sel.modify("extend", direction[1], "character");
+					sel.modify("extend", direction[0], "word");
+				}
 			}
-		} else if ( !!(sel = doc.selection) && sel.type !== "Control") {
+		}
+		//Nothing fancy for the older browsers, just do the best we can...
+		else if ( !!(sel = doc.selection) && sel.type !== "Control") {
 			var textRange = sel.createRange();
 			if (textRange.text) {
 				textRange.expand("word");
