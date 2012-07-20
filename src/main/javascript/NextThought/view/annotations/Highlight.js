@@ -105,8 +105,16 @@ Ext.define('NextThought.view.annotations.Highlight', {
 				this.range.detach();
 				delete this.range;
 			}
-			this.compElements.clearListeners();
-			this.compElements.clear();
+
+			//cleanup listeners if possible:
+			try{
+				this.compElements.clearListeners();
+				this.compElements.clear();
+			}
+			catch (e) {
+				console.warn('tried to clear something', Globals.getError(e));
+			}
+
 			Ext.fly(this.canvas).remove();
 			Ext.fly(this.counter).remove();
 			Ext.each(c,this.unwrap,this);
