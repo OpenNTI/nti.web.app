@@ -293,6 +293,21 @@ Ext.define( 'NextThought.view.annotations.Base', {
 	},
 
 
+	attachEvent: function(event,dom,fn,scope){
+		if(!Ext.isArray(event)){
+			event = [event];
+		}
+		Ext.each(event,function(event){
+			function f(e){
+				e = Ext.EventObject.setEvent(e||event);
+				fn.apply(scope||window,[e,dom]);
+			}
+			if(dom.addEventListener) { dom.addEventListener(event,f,false); }
+			else if(dom.attachEvent) { dom.attachEvent(event,f); }
+		});
+	},
+
+
 	onClick: function(e) {
 		if(!this.isVisible){
 			console.debug('DEBUG: Ignoring click on hidden annotation');

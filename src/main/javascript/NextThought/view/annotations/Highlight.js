@@ -413,9 +413,8 @@ Ext.define('NextThought.view.annotations.Highlight', {
 		span.setAttribute('class', this.highlightCls);
 		Ext.fly(span).addCls(style);
 		range.surroundContents(span);
-		Ext.get(span)
-				.hover(this.onMouseOver,this.onMouseOut,this)
-				.on('click',this.onClick,this);
+		Ext.get(span).hover(this.onMouseOver,this.onMouseOut,this);
+		this.attachEvent('click',span,this.onClick,this);
 		return span;
 	},
 

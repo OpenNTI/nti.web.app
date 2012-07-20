@@ -158,8 +158,7 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 				var t = e.getTarget();
 				if(!t || !(/input|textarea/i).test(t.tagName)){
 					console.log(t);
-					e.preventDefault();
-					e.stopPropagation();
+					e.stopEvent();
 				return false;
 				}
 			}
