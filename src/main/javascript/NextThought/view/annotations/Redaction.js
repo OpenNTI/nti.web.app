@@ -128,17 +128,17 @@ Ext.define('NextThought.view.annotations.Redaction', {
 	setupInlineSpanEvents: function(masterSpan) {
 		var me = this;
 		//set up any events:
-		me.mon(masterSpan, {
-			scope: this,
-			//mouseup: this.inlineClick,
-			dblclick: this.makeEditableSpanEditable,
-			click: function(e){
+		me.attachEvent('click', masterSpan.dom,
+			function(e){
 				if (me.clickTimer){clearTimeout(me.clickTimer);}
 				me.clickTimer = setTimeout(function(){
-						me.onClick(e);
-					}
-					, 400);
-			},
+					me.onClick(e);
+				}, 400)},
+			me);
+
+		this.attachEvent('dblclick', masterSpan.dom, this.makeEditableSpanEditable, this);
+		me.mon(masterSpan, {
+			scope: this,
 			mouseup: function(e){
 				e.stopEvent();
 				return false;
