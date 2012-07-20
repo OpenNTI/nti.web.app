@@ -285,6 +285,7 @@ Ext.define('NextThought.providers.Location', {
 
 		if (!this.preferenceMap){this.preferenceMap = {};}
 		this.preferenceMap[ntiid] = {sharing: sharing};
+		console.log('shareing prefs updated', this.preferenceMap[ntiid]);
 	},
 
 
@@ -294,7 +295,7 @@ Ext.define('NextThought.providers.Location', {
 		if (!this.preferenceMap || !ntiid) {
 			return null;
 		}
-
+		console.log('getting prefs', this.preferenceMap[ntiid]);
 		return this.preferenceMap[ntiid];
 	}
 

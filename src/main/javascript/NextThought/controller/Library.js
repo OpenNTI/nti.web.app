@@ -59,7 +59,11 @@ Ext.define('NextThought.controller.Library', {
 	saveSharingPrefs: function(prefs, callback, saveToRoot){
 		//TODO - check to see if it's actually different before save...
 		function success(pi){
-			pi.saveField('sharingPreference', {sharedWith: prefs}, callback);
+			pi.saveField('sharingPreference', {sharedWith: prefs}, function(){
+				//always happens if success only:
+				LocationProvider.updatePreferences(pi);
+				Ext.callback(callback, null, []);
+			});
 		}
 
 		function fail(){
@@ -68,7 +72,7 @@ Ext.define('NextThought.controller.Library', {
 
 		var ntiid = LocationProvider.currentNTIID;
 		if(saveToRoot){
-			ntiid = Library.getLineage(ntiid).last();
+			ntiid = Library.getLineage(ntiid).first();
 		}
 		$AppConfig.service.getPageInfo(ntiid, success, fail, this);
 

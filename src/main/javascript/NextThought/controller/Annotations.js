@@ -123,7 +123,7 @@ Ext.define('NextThought.controller.Annotations', {
 				win.close();
 				//update default sharing setting if we have a shareWith:
 				me.getController('Library').saveSharingPrefs(v, function(){
-				console.log('callback pref save', arguments);
+					console.log('callback pref save', arguments);
 				}, true);
 			}
 			else{
