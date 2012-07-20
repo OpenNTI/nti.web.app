@@ -357,7 +357,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
 		else if (node.nodeType == node.ELEMENT_NODE) {
 			var display = node.ownerDocument.parentWindow.getComputedStyle(node).display;
 			if (['inline','inline-block','none'].indexOf(display) >= 0) valid = true;
-			if (node.className.indexOf('mathjax') >= 0) valid = true;
+			if (node.className.indexOf && node.className.indexOf('mathjax') >= 0) valid = true;
 			if (node.childNodes.length == 0) valid = true;
 		}
 		//Easy case, the node is completely surronded and valid, wrap the node
