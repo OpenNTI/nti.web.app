@@ -8,7 +8,7 @@ public class XpathUtilsLogin extends XpathUtils {
 		return xpathBuilder("title", "id", "loading");
 	}
 	
-	public static String getUsername() {
+	public static String getUserName() {
 		return xpathBuilder("input", "name", "username");
 	}
 	

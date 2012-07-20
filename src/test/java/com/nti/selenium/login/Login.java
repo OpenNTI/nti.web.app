@@ -9,20 +9,21 @@ import com.nti.selenium.Base;
 public class Login extends Base {
 	
 	@Before
-	public void setUp() throws Exception{
+	public void setUp() throws Exception {
 		super.setUp();
 		credentials = this.getUsersEmails(1);
 	}
 	
 	protected void doLogin(final String username, final String password) {
-		this.waitForElement(XpathUtilsLogin.getUsername());
-		for(int tries=0; (!this.elementExists(XpathUtilsLogin.getUsername()) && tries < 5); tries++){
+		this.waitForElement(XpathUtilsLogin.getUserName());
+		for (int tries=0; (!this.elementExists(XpathUtilsLogin.getUserName()) && tries < 5); tries++)
+		{
 			this.selenium[0].refresh();
 		}
-		if(!this.elementExists(XpathUtilsLogin.getUsername())){
+		if (!this.elementExists(XpathUtilsLogin.getUserName())){
 			fail("could not load the web app");
 		}
-		this.findElement(XpathUtilsLogin.getUsername()).sendKeys(username);
+		this.findElement(XpathUtilsLogin.getUserName()).sendKeys(username);
 		this.waitForElement(XpathUtilsLogin.getPassword());
 		this.findElement(XpathUtilsLogin.getPassword()).sendKeys(password);
 		this.waitForElement(XpathUtilsLogin.getLoginButton());
