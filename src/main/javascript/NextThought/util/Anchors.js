@@ -500,12 +500,13 @@ Ext.define('NextThought.util.Anchors', {
 		function secondaryContextMatch(context, node, isStart)
 		{
 			if (!node) return 0;
+			if (node.nodeType == node.ELEMENT_NODE) return context.contextText == '';
 			var adjustedOffset = context.contextOffset,
 				diff;
 			if(isStart){
 				adjustedOffset = node.textContent.length - adjustedOffset;
 			}
-			return node.textContent.indexOf(context.contextText) == adjustedOffset;
+			return node.textContent.substr(adjustedOffset).indexOf(context.contextText) == 0;
 		}
 
 		var currentNode = treeWalker.currentNode;
