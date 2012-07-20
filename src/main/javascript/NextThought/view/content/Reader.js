@@ -17,8 +17,7 @@ Ext.define('NextThought.view.content.Reader', {
 	layout: {
 		type: 'hbox',
 		pack: 'end',
-		manageOverflow: 1,
-		reserveScrollbar: !Ext.isWebKit
+		reserveScrollbar: true
 	},
 	prefix: 'default',
 
