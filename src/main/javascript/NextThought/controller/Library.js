@@ -71,25 +71,9 @@ Ext.define('NextThought.controller.Library', {
 		}
 
 		var ntiid = LocationProvider.currentNTIID;
-		if(saveToRoot){
-			ntiid = Library.getLineage(ntiid).first();
-
-
-			//TODO - hack to recover from explicit root sharing, need to do this right...
-			Ext.each(Library.getLineage(ntiid), function(id){
-				$AppConfig.service.getPageInfo(id,
-					function (pi){
-								pi.saveField('sharingPreference', {sharedWith: []}, function(){
-									console.log('sharing reset');
-								});
-							},
-					Ext.emptyFn(),
-					this)
-			});
-			//TODO - end hacky hack
-
-
-		}
+		//if(saveToRoot){
+		//	ntiid = Library.getLineage(ntiid).first();
+		//}
 		$AppConfig.service.getPageInfo(ntiid, success, fail, this);
 
 	},
