@@ -44,7 +44,7 @@ Ext.define('NextThought.view.content.reader.Scroll',{
 	scrollToTarget: function(target){
 		var de = this.getDocumentElement(),
 			c = Ext.getCmp(target),
-			e = document.getElementById(target) || de.getElementById(target);
+			e = document.getElementById(target) || de.getElementById(target) || de.getElementsByName(target)[0];
 
 		if (!e && c) {
 
