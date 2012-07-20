@@ -31,7 +31,7 @@ public class Navigation extends Login {
 		this.findElement(xpath).click();
 	}
 
-	public void openLevelClick(final String xpath){
+	public void openLevelClick(final String xpath) {
 		this.switchToDefault();
 		this.waitForElement(xpath);
 		this.findElement(xpath).click();
@@ -73,7 +73,7 @@ public class Navigation extends Login {
 		this.waitForLoading();
 	}
 
-	public void clickRelatedItem(final String item){
+	public void clickRelatedItem(final String item) {
 		this.setRelatedItem(item);
 		this.switchToIframe();
 		this.findElement(this.getXPathRelatedItem()).click();
@@ -105,7 +105,7 @@ public class Navigation extends Login {
 			}
 			this.waitForLoading();
 		}
-		catch (NoSuchElementException e){
+		catch (NoSuchElementException e) {
 			fail("unable to navigate to specified location");
 		}
 	}
@@ -145,52 +145,54 @@ public class Navigation extends Login {
 		return XpathUtilsNav.getSectionPageTitle(this.relatedItem);
 	}
 
-	public boolean isChecked(String name){
-		WebElement element = this.findElement(XpathUtilsSearch.getSearchTextBoxExpandMenuItem(name));
-		String clazz = element.getAttribute("class");
+	public boolean isChecked(String name) {
+		final WebElement element = this.findElement(XpathUtilsSearch.getSearchTextBoxExpandMenuItem(name));
+		final String clazz = element.getAttribute("class");
 		return !(clazz.matches(".*unchecked.*"));
 	}
 
-	public void clickChapterDropDown(){
+	public void clickChapterDropDown() {
 		this.switchToDefault();
 		this.findElement(XpathUtilsMisc.dropDownChapter()).click();
 	}
 
-	public void clickSectionDropDown(){
+	public void clickSectionDropDown() {
 		this.switchToDefault();
 		this.findElements(XpathUtilsMisc.dropDownSection()).get(0).click();
 	}
 
-	private WebElement[] getElementArray(WebElement[] allElements){
-		List<WebElement> chapterElements = new ArrayList<WebElement>();
+	private WebElement[] getElementArray(final WebElement... allElements) {
+		final List<WebElement> chapterElements = new ArrayList<WebElement>();
 		this.wait_(1);
-		for(WebElement element: allElements){
-			if(element.getAttribute("id").matches("menu(check)?item-\\d{4,}")){
+		for(final WebElement element: allElements)
+		{
+			if (element.getAttribute("id").matches("menu(check)?item-\\d{4,}")) {
 				chapterElements.add(element);
 			}
 		}
 		return chapterElements.toArray(new WebElement[chapterElements.size()]);
 	}
 
-	public int getListCount(){
-		List<WebElement> allElements = this.findElements(XpathUtilsMisc.dropDownList());
-		WebElement[] elements = new WebElement[allElements.size()];
+	public int getListCount() {
+		final List<WebElement> allElements = this.findElements(XpathUtilsMisc.dropDownList());
+		final WebElement[] elements = new WebElement[allElements.size()];
 		return this.getElementArray(allElements.toArray(elements)).length;
 	}
 
-	public String getListItemTitle(int chapterNum){
-		List<WebElement> allElements = this.findElements(XpathUtilsMisc.dropDownList());
-		WebElement[] elements = new WebElement[allElements.size()];
-		WebElement element = this.getElementArray(allElements.toArray(elements))[chapterNum];
+	public String getListItemTitle(final int chapterNum) {
+		final List<WebElement> allElements = this.findElements(XpathUtilsMisc.dropDownList());
+		final WebElement[] elements = new WebElement[allElements.size()];
+		final WebElement element = this.getElementArray(allElements.toArray(elements))[chapterNum];
 		return element.getText();
 	}
 
-	public void clickListItem(String itemName){
-		List<WebElement> allElements = this.findElements(XpathUtilsMisc.dropDownList());
-		WebElement[] elements = new WebElement[allElements.size()];
-		WebElement[] selectableElements = this.getElementArray(allElements.toArray(elements));
-		for(WebElement element: selectableElements){
-			if(element.getText().equals(itemName)){
+	public void clickListItem(final String itemName) {
+		final List<WebElement> allElements = this.findElements(XpathUtilsMisc.dropDownList());
+		final WebElement[] elements = new WebElement[allElements.size()];
+		final WebElement[] selectableElements = this.getElementArray(allElements.toArray(elements));
+		for (final WebElement element: selectableElements) 
+		{
+			if (element.getText().equals(itemName)) {
 				element.click();
 				break;
 			}
@@ -198,10 +200,10 @@ public class Navigation extends Login {
 		this.waitForLoading();
 	}
 
-	public void clickListItem(int chapterNum){
-		List<WebElement> allElements = this.findElements(XpathUtilsMisc.dropDownList());
-		WebElement[] elements = new WebElement[allElements.size()];
-		WebElement element = this.getElementArray(allElements.toArray(elements))[chapterNum];
+	public void clickListItem(final int chapterNum) {
+		final List<WebElement> allElements = this.findElements(XpathUtilsMisc.dropDownList());
+		final WebElement[] elements = new WebElement[allElements.size()];
+		final WebElement element = this.getElementArray(allElements.toArray(elements))[chapterNum];
 		element.click();
 		this.waitForLoading();
 	}
