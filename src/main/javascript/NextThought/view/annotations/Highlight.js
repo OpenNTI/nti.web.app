@@ -165,8 +165,14 @@ Ext.define('NextThought.view.annotations.Highlight', {
 		var range = this.getDocumentElement().createRange();
 
 		if(this.rendered){
-			range.setStartBefore(this.rendered.first());
-			range.setEndAfter(this.rendered.last());
+			try {
+				range.setStartBefore(this.rendered.first());
+				range.setEndAfter(this.rendered.last());
+			}
+			catch (e) {
+				console.log('rendered', this.rendered);
+				console.error(Globals.getError(e));
+			}
 		}
 
 		return range;
