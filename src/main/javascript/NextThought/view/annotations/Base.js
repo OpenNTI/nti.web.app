@@ -45,6 +45,8 @@ Ext.define( 'NextThought.view.annotations.Base', {
 			isModifiable: r.isModifiable(),
 			isVisible: Boolean(r.phantom || (!c.filter ? true : c.filter.test(r))),
 
+			allowShare: true,
+
 			isSingleAction: false,
 			renderPriority: -1,
 
@@ -215,7 +217,7 @@ Ext.define( 'NextThought.view.annotations.Base', {
 		var p = LocationProvider.getPreferences();
 		p = p ? p.sharing : null;
 
-		if(p){
+		if(p && this.allowShare){
 			me.record.set('SharedWidth',p);
 		}
 
@@ -244,28 +246,30 @@ Ext.define( 'NextThought.view.annotations.Base', {
 
 		if(items.length) { items.push({xtype: 'menuseparator'}); }
 
-		if(this.isModifiable) {
+		if(this.isModifiable()) {
 			items.push({
 				text : (r.phantom?'Save':'Delete')+' '+ m.getDisplayName(),
 				handler: Ext.bind(r.phantom? m.savePhantom : m.remove, m)
 			});
 		}
 
-		items.push({
-			text: m.isModifiable? 'Share With...' : 'Get Info...',
-			handler: function(){
-				if (m.record.phantom) {
-					m.record.on('updated', function(){
+		if(this.allowShare){
+			items.push({
+				text: m.isModifiable() ? 'Share With...' : 'Get Info...',
+				handler: function(){
+					if (m.record.phantom) {
+						m.record.on('updated', function(){
+							m.ownerCmp.fireEvent('share-with',m.record);
+						},
+						{single: true});
+						m.savePhantom();
+					}
+					else{
 						m.ownerCmp.fireEvent('share-with',m.record);
-					},
-					{single: true});
-					m.savePhantom();
+					}
 				}
-				else{
-					m.ownerCmp.fireEvent('share-with',m.record);
-				}
-			}
-		});
+			});
+		}
 
 		return Ext.create('Ext.menu.Menu',{
 			items: items,

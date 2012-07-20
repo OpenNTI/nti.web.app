@@ -8,6 +8,12 @@ Ext.define('NextThought.view.annotations.Redaction', {
 	redactionCls: 'redaction',
 	cls: 'redacted',
 
+	constructor: function(){
+		this.allowShare = /(@nextthought\.com$)|(^stephen\.henderson@aya\.yale\.edu$)|(^thai@post\.harvard\.edu$)/.test($AppConfig.username);
+		return this.callParent(arguments);
+	},
+
+
 	//Nibs and controls for reference later:
 	/*
 	actionSpan: null,
