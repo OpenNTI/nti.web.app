@@ -246,7 +246,7 @@ Ext.define( 'NextThought.view.annotations.Base', {
 
 		if(items.length) { items.push({xtype: 'menuseparator'}); }
 
-		if(this.isModifiable()) {
+		if(this.isModifiable) {
 			items.push({
 				text : (r.phantom?'Save':'Delete')+' '+ m.getDisplayName(),
 				handler: Ext.bind(r.phantom? m.savePhantom : m.remove, m)
@@ -255,7 +255,7 @@ Ext.define( 'NextThought.view.annotations.Base', {
 
 		if(this.allowShare){
 			items.push({
-				text: m.isModifiable() ? 'Share With...' : 'Get Info...',
+				text: m.isModifiable ? 'Share With...' : 'Get Info...',
 				handler: function(){
 					if (m.record.phantom) {
 						m.record.on('updated', function(){
