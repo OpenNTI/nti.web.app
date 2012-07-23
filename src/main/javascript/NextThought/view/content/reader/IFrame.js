@@ -29,9 +29,9 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 		return {
 			xtype: 'box',
 //			anchor: '100%',
-			width: 760,
+			width: 700,
 			autoEl: {
-				width: 760,
+				width: 700,
 				tag: 'iframe',
 				name: 'iframe-' + guidGenerator() + '-content',
 				src: secureProtocol + ':',

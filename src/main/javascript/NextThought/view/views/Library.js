@@ -24,7 +24,7 @@ Ext.define( 'NextThought.view.views.Library', {
 				xtype: 'reader-panel',
 				id: 'readerPanel'
 			},
-			margin: '0 100px 0 0'
+			margin: '0 10px 0 0'
 		}
 	],
 

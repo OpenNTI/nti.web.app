@@ -55,3 +55,22 @@ body.x-border-layout-ct { background: white; }
 :-moz-placeholder {
    @include placeholder-style();
 }
+
+
+#nav-coll-handle,.nav-collapser {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	width: 40px;
+	height: 27px;
+	z-index: 9999;
+	background: url(../images/nav_toggle_sprite.png) 0px -27px no-repeat;
+	opacity: 0.4;
+	&.closed {
+		background-position-y: 0px;
+	}
+	
+	&:hover {
+		opacity: 1;
+	}
+}

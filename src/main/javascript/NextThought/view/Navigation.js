@@ -62,5 +62,28 @@ Ext.define('NextThought.view.Navigation',{
 				}
 			]
 		}
-	]
+	],
+
+	afterRender: function(){
+		var r = this.callParent(arguments);
+		var nav = this;
+
+		var d = Ext.DomHelper.createTemplate({
+			id: 'nav-coll-handle',cls: 'nav-collapser'}).append(Ext.getBody(),null,true);
+		this.mon( d,{
+				scope: this,
+				click: function(){
+					if( nav.isVisible() ){
+						nav.hide();
+						d.addCls('closed');
+					}
+					else {
+						nav.show();
+						d.removeCls('closed');
+					}
+				}
+			});
+
+		return r;
+	}
 });
