@@ -7,30 +7,6 @@ Ext.define('NextThought.view.annotations.note.GutterWidget',{
 		'NextThought.view.annotations.note.Templates'
 	],
 
-	renderTpl: Ext.DomHelper.createTemplate([
-		{
-			cls: 'note-gutter-widget single',
-			cn: [{
-				cls: 'meta',
-				cn: [{
-					cls: 'controls',
-					cn: [{ cls: 'favorite' },{ cls: 'like' }]
-				},{
-					tag: 'span',
-					cls: 'name'
-				},
-					{tag: 'span', cls: 'separator', html: ' - '},
-					{tag: 'span', cls: 'time'}
-				]
-			},{ cls: 'text' },{
-				cls: 'respond',
-				cn: [
-					TemplatesForNotes.getReplyOptions()
-				]
-			},
-			{cls: 'mask'}]
-		}
-	]).compile(),
 
 	renderSelectors: {
 		liked: '.meta .controls .like',
@@ -133,4 +109,29 @@ Ext.define('NextThought.view.annotations.note.GutterWidget',{
 		this.fireEvent('chat', this.record);
 	}
 
+},function(){
+	this.prototype.renderTpl = Ext.DomHelper.createTemplate([
+		{
+			cls: 'note-gutter-widget single',
+			cn: [{
+				cls: 'meta',
+				cn: [{
+					cls: 'controls',
+					cn: [{ cls: 'favorite' },{ cls: 'like' }]
+				},{
+					tag: 'span',
+					cls: 'name'
+				},
+					{tag: 'span', cls: 'separator', html: ' - '},
+					{tag: 'span', cls: 'time'}
+				]
+			},{ cls: 'text' },{
+				cls: 'respond',
+				cn: [
+					TemplatesForNotes.getReplyOptions()
+				]
+			},
+			{cls: 'mask'}]
+		}
+	]).compile();
 });
