@@ -2,26 +2,34 @@ Ext.define('NextThought.util.Line',{
 	singleton: true,
 
 	/** @private */
-	blockElementRe: /(inline.*)|(none)|(fixed)/i,
+	inlineElementRe: /(inline.*)|(none)/i,
+
+	getStyle: function(node,prop){
+		if(!node){return '';}
+		var view = node.ownerDocument.defaultView;
+		return view.getComputedStyle(node,undefined).getPropertyValue(prop);
+	},
 
 	/** @private */
-	firstElementOnLine: function (y,doc, limit, width){
-		var right = width,
+	firstElementOnLine: function (y, doc, limit){
+		var right = doc.getElementsByTagName('body')[0].getBoundingClientRect().right,
+			el, x = right;
+		for(; !el && x >= 0; x-=10) {
+			el = doc.elementFromPoint(x,y);
+			if(el && (el.parentNode === limit || el === limit || !Ext.fly(limit).contains(el))){
 				el = null;
-		while(right > 0 && (!el || el === limit || !Ext.fly(limit).contains(el))){
-			el = doc.elementFromPoint(right,y);
-			right -= 2;
+			}
 		}
 		return el;
 	},
 
 
 	/** @private */
-	findBlockParent: function(e,doc,limit){
+	findBlockParent: function(e,limit){
 		if(!e || e===limit){return null;}
-		var d = doc.defaultView.getComputedStyle(e).getPropertyValue('display');
-		if(this.blockElementRe.test(d)){
-			return this.findBlockParent(e.parentNode,doc, limit);
+		var d = this.getStyle(e,'display');
+		if(this.inlineElementRe.test(d)){
+			return this.findBlockParent(e.parentNode, limit);
 		}
 		return e;
 	},
@@ -30,81 +38,135 @@ Ext.define('NextThought.util.Line',{
 	/** @private */
 	resolveNodeAt: function(y,doc){
 		var limit = doc.getElementById('NTIContent');
-		var width = limit.getBoundingClientRect().width;
-		var e = this.findBlockParent( this.firstElementOnLine(y,doc,limit,width), doc, limit);
-		return Ext.fly(limit).contains(e) ? e : null;
+		return this.findBlockParent(
+				this.firstElementOnLine(y,doc,limit),
+				limit);
 	},
 
 
 	/** @private */
-	buildRangeFromRect: function(rect, node, parentWindow){
-		var s = parentWindow.getSelection(),
-			me = this, r, c = 0, step = 'word';
+	buildRange: function(y, node){
+		if(!node){ return null; }
 
-		function is(rectA,rectB){
-			if(!rectA){return false;}
-			var y = rectA.top + (rectA.height/2);
-			return me.isCloseToMiddle(y,rectB);
+		var me = this,
+			d = node.ownerDocument,
+			s = d.parentWindow.getSelection(),
+			rect, r;
+			//line = parseFloat(this.getStyle(node,'line-height'));
+
+		function rr(){ return me.getRects(s.getRangeAt(0)).last(); }
+		function f(fn,key){
+			fn = fn || function(){return s.getRangeAt(0).getBoundingClientRect() };
+			key = key || 'bottom';
+			return Math.ceil(fn()[key]);
 		}
 
-		function setup(step){
-			s.removeAllRanges();
-			s.selectAllChildren(node);
+
+		function selectLine(){
+
+			var tolerance = 6,
+				bottom, newBottom;
+
+			if(!s.isCollapsed){ s.collapseToStart(); }
+			s.modify('extend', 'forward', 'character');
+			s.modify('move','forward','character');
+			s.modify('move', 'backward', 'lineboundary');
 			s.collapseToStart();
-			s.modify('extend', 'forward', step);
+			s.modify('extend','forward','character');
+			bottom = f();
+
+			do {
+				s.modify('extend', 'forward', 'lineboundary');
+				s.modify('extend', 'forward', 'word');
+				newBottom = f();
+			}
+			while(Math.abs(bottom - newBottom) <= tolerance);
+
+
+			do {
+				s.modify('extend','backward','character');
+				newBottom = f(rr);
+			}
+			while(Math.abs(bottom - newBottom) > tolerance);
 		}
 
-		setup(step);
+		function step(){
+			var t = f(null,'top'), tt, limit = 100;
+			do{
+				s.collapseToStart();
+				s.modify('move', 'forward', 'line');
+				s.modify('move', 'forward', 'character');
+				s.modify('extend', 'forward', 'character');
+				tt = f(null,'top');
+				limit --;
+			}
+			while(t >= tt && limit>0);
+			if(limit===0){
+				console.log('woops');
+			}
+			selectLine();
+		}
 
-		while(!r && c < 100) {
-			c++;
+		function setup(){
+			var range = d.createRange();
+			s.removeAllRanges();
+
+			range.setStartBefore(node);
+			range.setEndBefore(node);
+			s.addRange(range);
+
+			s.collapseToStart();
+			s.modify('move','forward','character');
+			s.modify('extend','forward','character');
+			selectLine();
+		}
+
+		setup();
+
+		var c = 100;
+		do {
 			r = s.getRangeAt(0);
-			if(is(r.getClientRects()[0],rect)){
-				s.modify('extend', 'forward', 'lineboundary');
+			rect = this.getRects(r);
+			rect = rect[1]||rect[0];//if they are more than one rects the first one is the Bounding rect...not useful if it spans lines. So we attempt to get the first rect that represents the line.
+			if(this.isCloseToMiddle(y, rect)){
 				break;
 			}
-			if(!Ext.fly(node).contains(r.startContainer)){
-				if(step === 'word'){
-					step = 'line';
-					setup(step);
-				}
-				else {
-					s.removeAllRanges();
-					s.selectAllChildren(node);
-					r =  s.getRangeAt(0);
-					break;
-				}
+			else if(!rect || rect.top > y){
+				break;
 			}
-			r = null;
 
-			s.collapseToStart();
-			s.modify('move', 'forward', 'line');
-			s.modify('extend', 'forward', step);
+			step();
+			r = null;
+			c--;
 		}
+		while(!r && c>0);
 
 		s.removeAllRanges();
 		return r;
 	},
 
 
-	/** @private */
-	isCloseToMiddle: function(y,rect){
-		var m = rect.top + (rect.height/2);
-		return Math.abs((m - y)/rect.height) < 1;
+	getRects: function(r){
+		var rects = Array.prototype.slice.call(r.getClientRects()),
+			c = rects.length- 1, r;
+
+		for(;c>=0; c--){
+			r = rects[c];
+			if(!r.width || !r.height){
+				rects.splice(c,1);//remove collapsed rects
+			}
+		}
+
+		return rects;
 	},
 
 
 	/** @private */
-	resolveClientRects: function(node){
-		if(!node){return null;}
-		var doc = node.ownerDocument,
-				range = doc.createRange(),
-				rects;
-
-		range.selectNode(node);
-		rects = Array.prototype.slice.call(range.getClientRects());
-		range.detach();
-		return rects.length > 1 ? rects.splice(1) : rects;
+	isCloseToMiddle: function(y,rect){
+//		console.log(y,rect?rect.top:NaN, rect?rect.height:NaN);
+		if(!rect){return false;}
+		var m = rect.top + (rect.height/2);
+		return Math.abs((m - y)/rect.height) < 1;
 	},
 
 
@@ -116,26 +178,13 @@ Ext.define('NextThought.util.Line',{
 	 * @return {*}
 	 */
 	findLine: function(y, doc, tolerance){
-		tolerance = tolerance || 1;
+		y = Math.round(y);
 		doc = doc || document;
-		var node = this.resolveNodeAt(y,doc);
-		var rects = this.resolveClientRects( node )||[];
-		var range, bounds;
-		var i=0;
-		for(; i<rects.length; i++){
-			if(this.isCloseToMiddle(y,rects[i])){
-				range = this.buildRangeFromRect(rects[i],node,doc.parentWindow);
-				if(range){
-					bounds = range.getBoundingClientRect();
-					if( (bounds.height/rects[i].height) <= tolerance){
-						return { rect: rects[i], range: range };
-					}
-					else {
-						console.log('rejected:', bounds.height/rects[i].height);
-					}
-				}
-				return null;
-			}
+
+		var range = this.buildRange( y, this.resolveNodeAt(y,doc));
+
+		if(range){
+			return { rect: range.getBoundingClientRect(), range: range };
 		}
 		return null;
 	}
