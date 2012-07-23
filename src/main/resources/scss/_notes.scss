@@ -93,11 +93,13 @@
 				white-space: pre;
 				padding: 2px 0 0 0;
 				color: #757474;
-				font: italic 14px 'Droid Serif';
+				font: italic 14px 'Droid Serif' !important;
 				overflow: auto;
 				min-height: 50px;
 				margin-bottom: 46px;
 				max-height: 200px;
+				white-space: normal;
+				word-wrap: normal;
 
 				img.wb-thumbnail {
 					height: auto;
