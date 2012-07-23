@@ -227,6 +227,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		o.editor.addCls('active');
 		o.editorActions.setValue( t.value, true, true );
 		t.value = '';
+		o.editor.scrollIntoView(this.body);
 	},
 
 
@@ -238,10 +239,10 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 			return;
 		}
 
-
 		o.suspendMoveEvents = true;
 		o.lineEntry.addCls('active');
 		o.textarea.focus().dom.value = "";
+		o.textarea.scrollIntoView(this.body);
 		return false;//stop the click in IE
 	},
 
