@@ -147,6 +147,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 
 		var me = this,
 			rect = range.getBoundingClientRect(),
+			rect2 = RectUtils.getFirstNonBoundingRect(range),
 			record = AnnotationUtils.selectionToHighlight(range, null, me.getDocumentElement()),
 			menu,
 			offset,
@@ -157,8 +158,6 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 		if(!record) {
 			return;
 		}
-
-
 
 		record.set('ContainerId', me.containerId);
 
@@ -199,7 +198,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 				me.clearSelection();
 				Ext.apply(me.noteOverlayData,{
 					lastLine: {
-						rect: rect,
+						rect: rect2,
 						range: range,
 						style: 'plain'
 					},
@@ -208,6 +207,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 
 				me.noteOverlayPositionInputBox();
 				me.noteOverlayActivateRichEditor();
+				me.noteOverlayScrollEditorIntoView();
 			}
 		});
 

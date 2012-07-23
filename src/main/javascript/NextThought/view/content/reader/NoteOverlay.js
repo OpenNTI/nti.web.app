@@ -214,6 +214,18 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 	},
 
 
+	noteOverlayScrollEditorIntoView: function(){
+		var o = this.noteOverlayData, e = o.textarea;
+		if(!o.suspendMoveEvents){ return; }
+
+		if(o.richEditorActive){
+			e = o.editor;
+		}
+
+		e.scrollIntoView(this.body)
+	},
+
+
 	noteOverlayActivateRichEditor: function(){
 		var o = this.noteOverlayData,
 			t = o.textarea.dom;
@@ -227,7 +239,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		o.editor.addCls('active');
 		o.editorActions.setValue( t.value, true, true );
 		t.value = '';
-		o.editor.scrollIntoView(this.body);
+		this.noteOverlayScrollEditorIntoView();
 	},
 
 
@@ -242,7 +254,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		o.suspendMoveEvents = true;
 		o.lineEntry.addCls('active');
 		o.textarea.focus().dom.value = "";
-		o.textarea.scrollIntoView(this.body);
+		this.noteOverlayScrollEditorIntoView();
 		return false;//stop the click in IE
 	},
 

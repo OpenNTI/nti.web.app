@@ -2,6 +2,32 @@ Ext.define('NextThought.util.Rects',{
 	singleton: true,
 
 
+	getFirstNonBoundingRect: function(range){
+		var bound = range.getBoundingClientRect(),
+			rects = Array.prototype.slice.call(range.getClientRects()) || [],
+			i = rects.length - 1, r;
+
+		//trim the empty ones
+		for(; i>=0; i--){
+			r = rects[i];
+			if(!r.height || !r.width){ rects.splice(i,1); }
+		}
+
+		//i === 0 now
+		for(; i<rects.length; i++){
+			r = rects[i];
+			if(r && (r.top !== bound.top
+			|| r.bottom !== bound.bottom
+			|| r.left !== bound.left
+			|| r.right !== bound.right )){
+				return r;
+			}
+		}
+
+		return bound;
+	},
+
+
 	merge: function(rects,lineHeight,clientWidth){
 		rects = this.trimCrazies(rects, lineHeight, clientWidth);
 		var r=[], ri,
