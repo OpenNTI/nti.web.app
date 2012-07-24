@@ -144,6 +144,13 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 	},
 
 
+
+	noteOverlayXYAllowed: function(x,y){
+		//test to see if line is occupied
+		return true;
+	},
+
+
 	noteOverlayPositionInputBox: function(){
 		var o = this.noteOverlayData,
 			offsets = this.getAnnotationOffsets(),
@@ -166,7 +173,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 			offsets = this.getAnnotationOffsets(),
 			y = evt.getY() - offsets.top,
 			box = Ext.get(o.box),
-			lineInfo;
+			lineInfo, el;
 
 		if(o.suspendMoveEvents){
 			return;
@@ -174,6 +181,9 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 		clearTimeout(o.mouseLeaveTimeout);
 		try {
+			if(!this.noteOverlayXYAllowed.apply(this,evt.getXY())){
+				return;
+			}
 			lineInfo = LineUtils.findLine(y,this.getDocumentElement());
 			if(lineInfo && (lineInfo !== o.lastLine || !o.lastLine)){
 				o.lastLine = lineInfo;

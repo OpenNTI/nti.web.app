@@ -11,8 +11,9 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 	gutter: {},
 	buckets: {},
 
-	controlLineTmpl: Ext.DomHelper.createTemplate( '<div class="controlContainer"></div>' ).compile(),
-	widgetLineTmpl: Ext.DomHelper.createTemplate( '<div class="widgetContainer"></div>' ).compile(),
+	controlLineTmpl: Ext.DomHelper.createTemplate( { cls:'controlContainer'} ).compile(),
+	widgetLineTmpl: Ext.DomHelper.createTemplate( {cls:'widgetContainer'} ).compile(),
+	addNoteToOccupiedLineTmpl: Ext.DomHelper.createTemplate( {cls:'thumb note-gutter-widget add-note {0}'} ).compile(),
 
 
 	/**
@@ -136,6 +137,7 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 
 
 	layoutBuckets: function(prefix){
+		var addTpl = this.addNoteToOccupiedLineTmpl;
 		var r = this.getReader(prefix);
 		var o = r.getAnnotationOffsets();
 		var g = this.gutter[prefix];
@@ -178,6 +180,12 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 
 			if(!line.controls.first()){ line.controls.remove(); }
 			if(!line.widgets.first()){ line.widgets.remove(); }
+			else{
+				addTpl.insertFirst(
+						line.widgets,[
+							siblings ? 'collapsed':'expanded'
+						],true);
+			}
 		});
 	},
 

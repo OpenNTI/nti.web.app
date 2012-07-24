@@ -50,6 +50,16 @@
 			.thumb {
 				float: right;
 				clear: left;
+
+				&:last-of-type {
+					border: 0 solid black;
+					border-radius: 3px 0 0 3px;
+				}
+
+				&:first-of-type {
+					border: 0 solid black;
+					border-radius: 0 3px 3px 0;
+				}
 			}
 		}
 		.controlContainer{

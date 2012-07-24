@@ -382,6 +382,40 @@
 
 .note-gutter-widget {
 
+	&.add-note {
+		height: 30px;
+		width: 30px;
+		position: relative;
+		opacity: 0.8;
+
+		&::after {
+			content: ' ';
+			position: absolute;
+			top: 2px; left: 1px;
+			width: 29px;
+			height: 26px;
+			background: url(../images/notes/add_note_sprite.png) 0 0 no-repeat;
+		}
+
+		&:hover {
+			opacity: 1;
+		}
+		&:active::after,
+		&:focus::after {
+			background-position-y: -26px;
+		}
+
+		&.expanded{
+		}
+		&.collapsed{
+			box-shadow: inset 0 0 0 1px #ececec;
+			background: #f6f6f6;
+			&:hover {
+				background: #fdfdfd;
+			}
+		}
+	}
+
 	&.multi {
 		background-size: cover;
         overflow: visible;
@@ -443,8 +477,9 @@
 	}
 
 	&.single {
-		position: relative;
-		//top: -5px;
+		position: absolute;
+		right: 30px;
+		left: 0;
 
         //default turn these off
         .separator, .time, .respond, .controls {
