@@ -16,7 +16,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
 			this.range = config.browserRange;
 			this.setupInvalidationFallback();
 		}
-		this.content = Ext.fly(this.doc.getElementById('NTIContent')).first(false,true);
+
 		this.getRange(); //get range right her up front, this won't render it yet.
 		//console.log('build highlight for',this.getRecordField('selectedText'));
 		return this;
@@ -231,13 +231,20 @@ Ext.define('NextThought.view.annotations.Highlight', {
 			this.canvas = this.createCanvas();
 		}
 
+		if(!this.content || !this.content.dom){
+			try{
+				this.content = Ext.get(this.doc.getElementById('NTIContent')).first();
+			}catch(e){
+				console.log('no content');
+			}
+		}
 
 		range = this.buildRange();
 		bounds = range.getBoundingClientRect();
 		boundingTop = Math.ceil(bounds.top);
 		boundingLeft = Math.ceil(bounds.left);
 		boundingHeight = Math.ceil(bounds.height);
-		width = 680;//Ext.fly(this.content).getWidth();
+		width = this.content ? this.content.getWidth() : 680;
 		lineHeight = this.getLineHeight();
 		s = RectUtils.merge(range.getClientRects(),lineHeight,width+1);
 		i = s.length - 1;
