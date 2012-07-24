@@ -54,8 +54,8 @@ Ext.define('NextThought.view.annotations.note.EditorActions',{
 			selectstart: me.editorSelectionStart,
 			focus: me.editorFocus,
 			blur: me.editorBlur,
-			keyup: me.maybeResizeContentBox//,
-//			paste: me.handlePaste
+			keyup: me.maybeResizeContentBox,
+			paste: me.handlePaste
 		});
 
 		cmp.mon(editorEl.down('.action.share'), {
@@ -69,12 +69,26 @@ Ext.define('NextThought.view.annotations.note.EditorActions',{
 	 *  @see http://stackoverflow.com/questions/2176861/javascript-get-clipboard-data-on-paste-event-cross-browser/
 	 */
 	handlePaste: function(e,elem) {
-	    var savedcontent = elem.innerHTML;
-		var be = e.browserEvent;
-		var cd = be ? be.clipboardData : null;
+		elem = e.getTarget('.content');
+		var be = e.browserEvent,
+			cd = be ? be.clipboardData : null,
+			sel = window.getSelection(),
+			savedRange = sel.getRangeAt(0),
+			savedcontent;
+
+		savedRange = {
+			startContainer: savedRange.startContainer,
+			startOffset: savedRange.startOffset,
+			endContainer: savedRange.endContainer,
+			endOffset: savedRange.endOffset
+		};
+
+		sel.selectAllChildren(elem);
+		savedcontent = sel.getRangeAt(0).extractContents();
 
 	    // Webkit - get data from clipboard, put into editdiv, cleanup, then cancel event
 	    if(cd && cd.getData) {
+			e.stopEvent();
 	        if(/text\/html/.test(cd.types)) {
 	            elem.innerHTML = cd.getData('text/html');
 	        }
@@ -84,38 +98,61 @@ Ext.define('NextThought.view.annotations.note.EditorActions',{
 	        else {
 	            elem.innerHTML = "";
 	        }
-	        this.waitForPasteData(elem, savedcontent);
-			e.stopEvent();
+	        this.waitForPasteData(elem, savedcontent, savedRange);
 	        return false;
 	    }
 	    // Everything else - empty editdiv and allow browser to paste content into it, then cleanup
 	    else {
 	        elem.innerHTML = "";
-	        this.waitForPasteData(elem, savedcontent);
+	        this.waitForPasteData(elem, savedcontent, savedRange);
 	        return true;
 	    }
 	},
 
-	waitForPasteData: function (elem, savedcontent,callCount) {
+	waitForPasteData: function (elem, savedcontent, savedRange, callCount) {
 		callCount = callCount || 0;
 	    if (elem.childNodes && elem.childNodes.length > 0) {
-	        this.processPaste(elem, savedcontent);
+	        this.processPaste(elem, savedcontent, savedRange);
 	    }
 	    else if(callCount < 100){
 			var me = this;
-	        setTimeout(function(){me.waitForPasteData(elem, savedcontent, callCount+1); },20);
+	        setTimeout(function(){me.waitForPasteData(elem, savedcontent, savedRange, callCount+1); },20);
 	    }
 		else {
 			console.log('timedout waiting for paste');
 		}
 	},
 
-	processPaste: function(elem, savedcontent) {
+	processPaste: function(elem, savedcontent, rangeDesc) {
+		var range = document.createRange();
 	    var pasteddata = elem.innerHTML;
-	    elem.innerHTML = savedcontent;
+		var gcc;
+		var frag;
 
-	    // Do whatever with gathered data;
-		console.log(pasteddata);
+		elem.innerHTML = '';
+	    elem.appendChild(savedcontent);
+
+		try {
+			range.setStart(rangeDesc.startContainer,rangeDesc.startOffset);
+			range.setEnd(rangeDesc.endContainer,rangeDesc.endOffset);
+			gcc = range.commonAncestorContainer;
+			if(elem === gcc || Ext.fly(elem).contains(gcc)){
+				range.deleteContents();
+			}
+		} catch(e){
+			range.selectNodeContents(elem);
+		}
+
+		range.collapse(false);
+
+		try {
+			pasteddata = pasteddata.replace(/\s*(style|class)=".+?"\s*/ig,' ').replace(/<span\s>&nbsp;<\/span>/ig,'&nbsp;');
+			frag = range.createContextualFragment(pasteddata);
+			range.insertNode(frag);
+		}
+		catch(e){
+			console.log(pasteddata);
+		}
 	},
 
 
