@@ -53,7 +53,7 @@ Ext.define('NextThought.mixins.ModelWithBodyContent',{
 				result.call(scope,text.join(''));
 			}
 			else if(typeof(o) === 'string'){
-				text.push(o.replace(/\s*(style|class)=".+?"\s*/ig,' ').replace(/<span\s>&nbsp;<\/span>/ig,'&nbsp;'));
+				text.push(o.replace(/\s*(style|class)=".+?"\s*/ig,' ').replace(/<span.*?>&nbsp;<\/span>/ig,'&nbsp;'));
 				render(i-1);
 			}
 			else {

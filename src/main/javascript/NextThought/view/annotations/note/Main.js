@@ -188,7 +188,10 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		}
 
 		try {
-			r.compileBodyContent(function(text){ this.text.update(text); },this);
+			r.compileBodyContent(function(text){
+				this.text.update(text);
+				this.text.select('a[href]',true).set({target:'_blank'});
+			},this);
 			this.up('window').down('note-responses').setReplies(this.record.children);
 		}
 		catch(e3){

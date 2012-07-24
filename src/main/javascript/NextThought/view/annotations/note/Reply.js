@@ -175,6 +175,7 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 		try{
 			r.compileBodyContent(function(text){
 				me.text.update(text);
+				me.text.select('a[href]',true).set({target:'_blank'});
 				setTimeout(function(){
 					me.doComponentLayout();
 					me.doLayout();

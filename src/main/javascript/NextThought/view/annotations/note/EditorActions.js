@@ -146,7 +146,7 @@ Ext.define('NextThought.view.annotations.note.EditorActions',{
 		range.collapse(false);
 
 		try {
-			pasteddata = pasteddata.replace(/\s*(style|class)=".+?"\s*/ig,' ').replace(/<span\s>&nbsp;<\/span>/ig,'&nbsp;');
+			pasteddata = pasteddata.replace(/\s*(style|class)=".+?"\s*/ig,' ').replace(/<span.*?>&nbsp;<\/span>/ig,'&nbsp;').replace(/<meta.*?>/ig,'');
 			frag = range.createContextualFragment(pasteddata);
 			range.insertNode(frag);
 		}
