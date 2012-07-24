@@ -535,6 +535,13 @@
 
     .note-responses{
         padding-bottom: 45px;
+
+		.note-reply.first {
+			box-shadow: inset 0 1px 0 0 #ffffff;
+		}
+		.note-replies .note-reply.first {
+			box-shadow: none;
+		}
     }
 
 	.carousel {
@@ -631,6 +638,7 @@
 	}
 
     .note-reply {
+		border-bottom-width: 0px;
         &.first{
             background-image: url(../images/reply-arrow.png);
             background-position: 18px 15px;
@@ -639,6 +647,7 @@
         position: relative;
         padding-left: 30px;
         &.hover {
+			box-shadow: none;
             .meta .controls {
                 display: block;
             }
@@ -653,6 +662,9 @@
             font-size: 10px;
             .controls {
                 display: none;
+				.favorite {
+					margin-top: 0px;
+				}
             }
         }
         .body {
