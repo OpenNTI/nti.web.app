@@ -1,5 +1,10 @@
 Ext.define('NextThought.view.account.contacts.Panel',{
 	extend: 'Ext.panel.Panel',
+	requires: [
+		'NextThought.layout.component.TemplatedContainer',
+		'NextThought.view.account.contacts.Card'
+	],
+
 	alias: 'widget.contacts-panel',
 	ui: 'contacts-panel',
 	cls: 'contacts-panel',
@@ -7,8 +12,6 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 	collapsible: true,
 	hideCollapseTool: true,
 	collapsedCls: 'collapsed',
-
-//	componentLayout: 'body',
 
 	frame: false,
 	border: false,

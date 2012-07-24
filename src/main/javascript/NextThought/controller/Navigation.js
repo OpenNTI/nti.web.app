@@ -40,7 +40,27 @@ Ext.define('NextThought.controller.Navigation', {
 		var callback = Ext.emptyFn();
 		if (scrollToTargetId) {
 			callback = function(reader) {
-				reader.scrollToTarget(IdCache.getComponentId(scrollToTargetId, null, reader.prefix));
+				function cid(id){ return IdCache.getComponentId(id, null, reader.prefix); }
+
+				var id = '';
+				if(Ext.isArray(scrollToTargetId)){
+					Ext.each(scrollToTargetId,function(i){
+						var c = null;
+						if(IdCache.hasIdentifier(i)){
+							id = cid(i);
+							c = Ext.getCmp(id);
+							if(c){
+								c.fireEvent('open',scrollToTargetId.last());
+								return false; //stop iteration
+							}
+						}
+					})
+				}
+				else {
+					id = cid(scrollToTargetId);
+				}
+
+				reader.scrollToTarget(id);
 			};
 		}
 		LocationProvider.setLocation(ntiid, callback, this);

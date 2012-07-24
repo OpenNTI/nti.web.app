@@ -232,10 +232,19 @@ $over-color: #f4f3f3;
 		margin: 12px 0;
 		font-size: 8pt;
 		color: #b8b8b8;
-		padding: 0 0 0 25px;
+		padding: 0 40px 0 25px;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
 		&.comment{	background: url(../images/activity-comment.png) 0 2px no-repeat;}
 		&.highlight{background: url(../images/activity-highlight.png) 0 3px no-repeat;}
 		&.note{		background: url(../images/activity-note.png) 4px 0 no-repeat;}
+
+		div.fade-mask {
+			@include fade-mask();
+			right: 33px;
+			z-index: 1;
+		}
 	}
 }
 

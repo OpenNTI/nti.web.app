@@ -143,8 +143,18 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 		this.doLayout();
 	},
 
+
+	scrollIntoView: function(){
+		var scroller = this.up('note-responses').ownerCt.getEl();
+		this.replyBox.addCls('hover');
+		this.getEl().scrollIntoView(scroller);
+		this.doLayout();
+	},
+
+
 	setRecord: function(r){
 		this.record = r;
+		this.guid = IdCache.getIdentifier(r.getId());
 		var me = this;
 		if(!me.rendered){return;}
 		if (!r.placeHolder){UserRepository.getUser(r.get('Creator'),me.fillInUser,me);}

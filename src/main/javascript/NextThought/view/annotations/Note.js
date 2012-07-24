@@ -33,8 +33,11 @@ Ext.define( 'NextThought.view.annotations.Note', {
 
 	constructor: function(config){
 		this.callParent(arguments);
-
-
+		this.on('open',function(scrollTo){
+			var reply = this.openWindow().down(
+				Ext.String.format('[guid={0}]',IdCache.getIdentifier(scrollTo)));
+			reply.scrollIntoView();
+		},this);
 		return this;
 	},
 
@@ -89,12 +92,17 @@ Ext.define( 'NextThought.view.annotations.Note', {
 		return el;
 	},
 
+	getEl: function(){
+		return Ext.get(this.activeWidget);
+	},
+
 
 	getGutterWidget: function(numberOfSiblings){
 		if (numberOfSiblings > 0){//siblings... there is "this" and n others
 			if (!this.multiGutterWidget){
 				this.createMultiGutterWidget();
 			}
+			this.activeWidget = this.multiGutterWidget;
 			return this.multiGutterWidget;
 
 		}
@@ -102,6 +110,7 @@ Ext.define( 'NextThought.view.annotations.Note', {
 			if (!this.singleGutterWidget){
 				this.createSingleGutterWidget();
 			}
+			this.activeWidget = this.singleGutterWidget;
 			return this.singleGutterWidget;
 		}
 	},

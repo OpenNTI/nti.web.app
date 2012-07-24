@@ -54,7 +54,8 @@ Ext.define('NextThought.view.annotations.note.EditorActions',{
 			selectstart: me.editorSelectionStart,
 			focus: me.editorFocus,
 			blur: me.editorBlur,
-			keyup: me.maybeResizeContentBox
+			keyup: me.maybeResizeContentBox,
+			paste: me.handlePaste
 		});
 
 		cmp.mon(editorEl.down('.action.share'), {
@@ -62,6 +63,62 @@ Ext.define('NextThought.view.annotations.note.EditorActions',{
 			click: me.openShareMenu
 		});
 	},
+
+
+	/**
+	 *  @see http://stackoverflow.com/questions/2176861/javascript-get-clipboard-data-on-paste-event-cross-browser/
+	 */
+	handlePaste: function(e,elem) {
+	    var savedcontent = elem.innerHTML;
+		var be = e.browserEvent;
+		var cd = be ? be.clipboardData : null;
+
+	    // Webkit - get data from clipboard, put into editdiv, cleanup, then cancel event
+	    if(cd && cd.getData) {
+	        if(/text\/html/.test(cd.types)) {
+	            elem.innerHTML = cd.getData('text/html');
+	        }
+	        else if(/text\/plain/.test(cd.types)) {
+	            elem.innerHTML = cd.getData('text/plain');
+	        }
+	        else {
+	            elem.innerHTML = "";
+	        }
+	        this.waitForPasteData(elem, savedcontent);
+			e.stopEvent();
+	        return false;
+	    }
+	    // Everything else - empty editdiv and allow browser to paste content into it, then cleanup
+	    else {
+	        elem.innerHTML = "";
+	        this.waitForPasteData(elem, savedcontent);
+	        return true;
+	    }
+	},
+
+	waitForPasteData: function (elem, savedcontent,callCount) {
+		callCount = callCount || 0;
+	    if (elem.childNodes && elem.childNodes.length > 0) {
+	        this.processPaste(elem, savedcontent);
+	    }
+	    else if(callCount < 100){
+			var me = this;
+	        setTimeout(function(){me.waitForPasteData(elem, savedcontent, callCount+1); },20);
+	    }
+		else {
+			console.log('timedout waiting for paste');
+		}
+	},
+
+	processPaste: function(elem, savedcontent) {
+	    var pasteddata = elem.innerHTML;
+	    elem.innerHTML = savedcontent;
+
+	    // Do whatever with gathered data;
+		console.log(pasteddata);
+	},
+
+
 
 	editorMouseDown: function(e){
 		var s = window.getSelection();

@@ -20,5 +20,17 @@ Ext.define('NextThought.layout.component.TemplatedContainer', {
 			c = ownerContext.target,
 			m = c.el.getMargin();
         return width + c.el.getWidth() + (m.left + m.right);
+    },
+
+	publishInnerWidth: function(ownerContext, width){
+		var innerWidth = width - ownerContext.getFrameInfo().width,
+			targetContext = ownerContext.targetContext;
+
+		if (targetContext != ownerContext) {
+			innerWidth -= (ownerContext.getPaddingInfo().width + ownerContext.getMarginInfo().width);
+		}
+
+		ownerContext.bodyContext.setWidth(innerWidth, !ownerContext.widthModel.natural);
+
     }
 });
