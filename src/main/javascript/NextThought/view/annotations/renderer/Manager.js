@@ -151,9 +151,11 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 		g.controls.setLeft(width-50);
 		g.widgets.setRight(50);
 
+		r.noteOverlayClearRestrictedRanges();
+
 		b.each(function(line,y){
 
-			var widgets = [], siblings;
+			var widgets = [], siblings, block;
 
 			line.controls = line.controls || cT.append(g.controls,[],true);
 			line.widgets = line.widgets || wT.append(g.widgets,[],true);
@@ -178,14 +180,21 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 				}
 			});
 
-			if(!line.controls.first()){ line.controls.remove(); }
-			if(!line.widgets.first()){ line.widgets.remove(); }
+			if(!line.controls.first()){ line.controls.remove(); delete line.controls; }
+			if(!line.widgets.first()){ line.widgets.remove(); delete line.widgets; }
 			else{
-				addTpl.insertFirst(
-						line.widgets,[
-							siblings ? 'collapsed':'expanded'
-						],true);
+				r.noteOverlayRegisterAddNoteNib(
+					addTpl.insertFirst(
+							line.widgets,[
+								siblings ? 'collapsed':'expanded'
+							],true));
 			}
+
+			block = line.widgets || line.controls || null;
+			if(block){
+				r.noteOverlayAddRestrictedRange(block.dom.getBoundingClientRect());
+			}
+
 		});
 	},
 

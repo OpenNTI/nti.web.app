@@ -146,9 +146,33 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 
 	noteOverlayXYAllowed: function(x,y){
+		var o = this.noteOverlayData, r = o.restrictedRanges;
+		if(r && r[y]){
+			return false;
+		}
+
 		//test to see if line is occupied
 		return true;
 	},
+
+
+	noteOverlayClearRestrictedRanges: function(){
+		delete this.noteOverlayData.restrictedRanges;
+	},
+
+
+	noteOverlayAddRestrictedRange: function(rect){
+		var o = this.noteOverlayData,
+			y = rect? rect.bottom :0,
+			l = rect? rect.top : 0;
+		o.restrictedRanges = o.restrictedRanges || [];
+		for(; y>l; y--){
+			o.restrictedRanges[y] = true;
+		}
+	},
+
+
+	noteOverlayRegisterAddNoteNib: function(nib){},
 
 
 	noteOverlayPositionInputBox: function(){
@@ -182,6 +206,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		clearTimeout(o.mouseLeaveTimeout);
 		try {
 			if(!this.noteOverlayXYAllowed.apply(this,evt.getXY())){
+				box.hide();
 				return;
 			}
 			lineInfo = LineUtils.findLine(y,this.getDocumentElement());
@@ -220,7 +245,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		o.mouseLeaveTimeout = setTimeout(function(){
 			delete o.lastLine;
 			o.box.hide();
-		},500);
+		},100);
 	},
 
 
