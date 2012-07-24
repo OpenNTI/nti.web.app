@@ -213,7 +213,7 @@ Ext.define('NextThought.model.Base', {
 			me=this;
 
 		Ext.Ajax.request({
-			url: $AppConfig.service.getObjectURL(this.getId(), fieldName),
+			url: $AppConfig.service.getObjectURL(this.get('OID'), fieldName),
 			jsonData: json,
 			method: 'PUT',
 			headers: {
