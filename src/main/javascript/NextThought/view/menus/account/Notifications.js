@@ -32,9 +32,9 @@ Ext.define('NextThought.view.menus.account.Notifications',{
 	},
 
 
-	initComponent: function(){
-		this.callParent(arguments);
+	constructor: function(){
 		Ext.getStore('Stream').on('datachanged', this.setupRenderData, this);
+		return this.callParent(arguments);
 	},
 
 
@@ -77,10 +77,12 @@ Ext.define('NextThought.view.menus.account.Notifications',{
 			if(!item){return;}//skip it
 
 			UserRepository.getUser(change.get('Creator'), function(u){
+				var targets = (item.get('references') || []).slice();
+				targets.push(item.getId());
 				this.notifications.push({'name' :u[0].get('realname'), 'message': m, 'guid': guid});
 				this.notificationData[guid] = {
 					containerId: item.get('ContainerId'),
-					id: item.getId()
+					id: targets
 				};
 				this.renderData.notificationcount = this.notifications.length;
 				//only add this to actual render data if we have few enough
@@ -117,10 +119,10 @@ Ext.define('NextThought.view.menus.account.Notifications',{
 			c = is ? f : f.up(css),
 			guid = c.id,
 			containerId = this.notificationData[guid].containerId,
-			recordId = this.notificationData[guid].id;
+			targets = this.notificationData[guid].id;
 
 
-		this.fireEvent('navigation-selected', containerId, recordId);
+		this.fireEvent('navigation-selected', containerId, targets);
 	},
 
 	showAllNotifications: function(event) {
