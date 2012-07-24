@@ -137,9 +137,13 @@ Ext.define('NextThought.cache.UserRepository', {
 	makeRequest: function(username, callbacks) {
 		var me = this,
 			result = null,
-			s = me.getStore(),
 			url = $AppConfig.service.getUserSearchURL(username),
 			options;
+
+		if(!username){
+			console.error('no user to look up');
+			return null;
+		}
 
 		function callback(o,success,r) {
 
