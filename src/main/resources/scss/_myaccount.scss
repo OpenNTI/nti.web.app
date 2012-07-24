@@ -1,21 +1,21 @@
+.my-account-menu{ overflow: visible !important;}
 .my-account-wrapper {
+	background: #ffffff;
 	position: relative;
 	width: 250px;
 	margin: 10px;
 	margin-bottom: 0;
+	height: 71px;
+	overflow: hidden;
 
 	border: 1px solid white;
 	padding: 10px 5px 20px 20px;
 	cursor: pointer;
-
+	box-shadow: 3px 3px 3px -3px rgba(0,0,0,0)  !important;
 	.menu-visible &,
 	&:hover{
 		border-color: #dcdcdc;
-		box-shadow: 1px 1px 6px -3px #000000 !important;//TODO: fix to be a sane value (use RGBA to lighten the shadow, not the spread... 10px is too high, and -5px is too low. those values should be something like 2px and 1px or 0)
-			// REFRESHER: box-shadow syntax is:
-			// box-shadow:  none | <shadow> [,<shadow>]*
-			//	where <shadow> is defined as:
-			//		inset? && [ <offset-x> <offset-y> <blur-radius>? <spread-radius>? <color>? ]
+		box-shadow: 3px 3px 3px -3px rgba(0,0,0,0.3)  !important;
 		.settings.menu-nib {
 			background-position: 0 -17px
 		}
@@ -26,11 +26,7 @@
 		}
 	}
 	.menu-visible &{
-		box-shadow: 1px 5px 6px -3px #000000 !important;//TODO: fix to be a sane value (use RGBA to lighten the shadow, not the spread... 10px is too high, and -5px is too low. those values should be something like 2px and 1px or 0)
-			// REFRESHER: box-shadow syntax is:
-			// box-shadow:  none | <shadow> [,<shadow>]*
-			//	where <shadow> is defined as:
-			//		inset? && [ <offset-x> <offset-y> <blur-radius>? <spread-radius>? <color>? ]
+		box-shadow: 3px 8px 3px -3px rgba(0,0,0,0.3)  !important;
 	}
 
 	.settings.menu-nib{

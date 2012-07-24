@@ -75,7 +75,7 @@
 .x-menu-nt,
 .x-panel-nt {
 	@include animate(fadeIn,0.5s);
-	box-shadow: 1px 1px 6px -3px #000000 !important;//TODO: fix to be a sane value (use RGBA to lighten the shadow, not the blur & spread)
+	box-shadow: 3px 3px 3px -3px rgba(0,0,0,0.3) !important;//TODO: fix to be a sane value (use RGBA to lighten the shadow, not the blur & spread)
 	// REFRESHER: box-shadow syntax is:
 	// box-shadow:  none | <shadow> [,<shadow>]*
 	//	where <shadow> is defined as:

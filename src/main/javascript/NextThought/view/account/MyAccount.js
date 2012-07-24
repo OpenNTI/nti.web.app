@@ -4,6 +4,7 @@ Ext.define('NextThought.view.account.MyAccount',{
 	requires: [
 		'NextThought.view.menus.MyAccount'
 	],
+	cls: 'my-account-menu',
 
 	renderTpl: [
 		'<div class="my-account-wrapper">',
@@ -57,10 +58,10 @@ Ext.define('NextThought.view.account.MyAccount',{
 
 	setNotificationCountValue: function(count){
 		if (!this.rendered) {
-			this.renderData['notification-count'] = count || '';
+			this.renderData['notification-count'] = count || '&nbsp;';
 		}
 		else {
-			this.notificationCount.update(count || '');
+			this.notificationCount.update(count || '&nbsp;');
 		}
 	},
 
