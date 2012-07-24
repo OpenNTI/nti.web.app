@@ -380,6 +380,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
 			else if (node.className.indexOf && node.className.indexOf('mathjax') >= 0) valid = true;
 			else if (node.className.indexOf && node.className.indexOf('mathquill') >= 0) valid = true;
 			else if (node.childNodes.length == 0) valid = true;
+			if (node.tagName == 'P') valid = false;
 		}
 		//Easy case, the node is completely surronded and valid, wrap the node
 		if( ( startToStart === AFTER || startToStart === SAME )
