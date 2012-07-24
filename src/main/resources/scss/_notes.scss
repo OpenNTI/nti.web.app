@@ -406,6 +406,11 @@
 		}
 
 		&.expanded{
+			display: none;
+			.widgetContainer:hover &{
+				display: block;
+			}
+
 		}
 		&.collapsed{
 			box-shadow: inset 0 0 0 1px #ececec;
