@@ -27,7 +27,7 @@ Ext.define('NextThought.view.account.MyAccount',{
 		me.callParent(arguments);
 		me.renderData = Ext.apply(me.renderData||{},{
 			name: $AppConfig.userObject.getName(),
-			'notification-count': me.currentNotificationCount || '',
+			'notification-count': me.currentNotificationCount || '&nbsp;',
 			status: 'Placeholder text for status'
 		});
 		me.menu = Ext.widget({xtype: 'my-account-menu', xhooks:{
