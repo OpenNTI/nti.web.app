@@ -275,6 +275,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
 			h = r.height + (padding*2);
 
 			if(!last && (Math.abs(y - lastY) < lineHeight || y > lastY )){ continue; }
+			if(!last && r.height <= lineHeight) { continue; }
 			//Remove the possibility of a "just the triangle" line at the end
 			if(last && w < 10) {continue;}
 
@@ -351,7 +352,6 @@ Ext.define('NextThought.view.annotations.Highlight', {
 		return el.dom;
 	},
 
-
 	wrapRange: function(node, range){
 		var nodeList = [],
 			newRange,
@@ -367,26 +367,26 @@ Ext.define('NextThought.view.annotations.Highlight', {
 			AFTER = 1;
 
 		nodeRange.selectNodeContents(node);
-
 		startToStart = nodeRange.compareBoundaryPoints(Range.START_TO_START, range);
-		startToEnd = nodeRange.compareBoundaryPoints(Range.START_TO_END, range);
+		startToEnd =  nodeRange.compareBoundaryPoints(Range.START_TO_END, range);
 		endToStart = nodeRange.compareBoundaryPoints(Range.END_TO_START, range);
-		endToEnd = nodeRange.compareBoundaryPoints(Range.END_TO_END, range);
+		endToEnd =  nodeRange.compareBoundaryPoints(Range.END_TO_END, range);
 
 		var valid = false;
 		if (node.nodeType == node.TEXT_NODE) valid = true;
 		else if (node.nodeType == node.ELEMENT_NODE) {
 			var display = node.ownerDocument.parentWindow.getComputedStyle(node).display;
 			if (['inline','inline-block','none'].indexOf(display) >= 0) valid = true;
-			if (node.className.indexOf && node.className.indexOf('mathjax') >= 0) valid = true;
-			if (node.childNodes.length == 0) valid = true;
+			else if (node.className.indexOf && node.className.indexOf('mathjax') >= 0) valid = true;
+			else if (node.className.indexOf && node.className.indexOf('mathquill') >= 0) valid = true;
+			else if (node.childNodes.length == 0) valid = true;
 		}
 		//Easy case, the node is completely surronded and valid, wrap the node
 		if( ( startToStart === AFTER || startToStart === SAME )
 			&& ( endToEnd === BEFORE || endToEnd === SAME ) && valid) {
-			newRange = node.ownerDocument.createRange();
-			newRange.selectNode(node);
-			nodeList.push(this.doWrap(newRange));
+				newRange = node.ownerDocument.createRange();
+				newRange.selectNode(node);
+				nodeList.push(this.doWrap(newRange));
 		}
 
 		//If the node overlaps with the range in anyway we need to work on it's children
