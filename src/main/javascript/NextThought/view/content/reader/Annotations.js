@@ -239,7 +239,8 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 
 
 		offset = me.el.getXY();
-		xy[0] += offset[0];
+		innerDocOffset = document.getElementsByTagName('iframe')[0].offsetLeft;
+		xy[0] += offset[0] + innerDocOffset;
 		xy[1] += offset[1];
 
 		menu.showAt(xy);
