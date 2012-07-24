@@ -1,5 +1,6 @@
 Ext.define('NextThought.view.annotations.note.EditorActions',{
 	requires: [
+		'NextThought.util.Ranges',
 		'NextThought.view.menus.Share'
 	],
 
@@ -73,15 +74,8 @@ Ext.define('NextThought.view.annotations.note.EditorActions',{
 		var be = e.browserEvent,
 			cd = be ? be.clipboardData : null,
 			sel = window.getSelection(),
-			savedRange = sel.getRangeAt(0),
+			savedRange = RangeUtils.saveRange(sel.getRangeAt(0)),
 			savedcontent;
-
-		savedRange = {
-			startContainer: savedRange.startContainer,
-			startOffset: savedRange.startOffset,
-			endContainer: savedRange.endContainer,
-			endOffset: savedRange.endOffset
-		};
 
 		sel.selectAllChildren(elem);
 		savedcontent = sel.getRangeAt(0).extractContents();
@@ -124,7 +118,7 @@ Ext.define('NextThought.view.annotations.note.EditorActions',{
 	},
 
 	processPaste: function(elem, savedcontent, rangeDesc) {
-		var range = document.createRange();
+		var range;
 	    var pasteddata = elem.innerHTML;
 		var gcc;
 		var frag;
@@ -133,13 +127,13 @@ Ext.define('NextThought.view.annotations.note.EditorActions',{
 	    elem.appendChild(savedcontent);
 
 		try {
-			range.setStart(rangeDesc.startContainer,rangeDesc.startOffset);
-			range.setEnd(rangeDesc.endContainer,rangeDesc.endOffset);
+			range = RangeUtils.restoreSavedRange(rangeDesc);
 			gcc = range.commonAncestorContainer;
 			if(elem === gcc || Ext.fly(elem).contains(gcc)){
 				range.deleteContents();
 			}
 		} catch(e){
+			range = document.createRange();
 			range.selectNodeContents(elem);
 		}
 
