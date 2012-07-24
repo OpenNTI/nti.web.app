@@ -93,7 +93,7 @@
 				white-space: pre;
 				padding: 2px 0 0 0;
 				color: #757474;
-				font: italic 14px 'Droid Serif' !important;
+				font: 14px 'Droid Serif';
 				overflow: auto;
 				min-height: 50px;
 				margin-bottom: 46px;
@@ -327,7 +327,7 @@
 			textarea {
 				display: none;
 
-				font: italic 14px 'Droid Serif';
+				font: 14px 'Droid Serif';
 				color: #757474;
 				border: none;
 				background: transparent;
@@ -636,7 +636,7 @@
 
 		.body {
 			color: #757474;
-			font: 16px/24px 'Droid Serif' normal;
+			font: italic 16px/24px 'Droid Serif';
 		}
 
 		&.editor-active .respond{
@@ -687,11 +687,11 @@
                 display: block;
             }
             .respond {
-     			display: block;
+     			visibility: visible;
             }
         }
         .respond {
-   			display: none;
+   			visibility: hidden;
         }
         .meta {
             font-size: 10px;
