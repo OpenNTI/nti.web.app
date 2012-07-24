@@ -219,6 +219,23 @@ div.redaction-control {
 			background-color: #e1f4fe;
 			overflow: hidden;
 
+			&.shared-with-me {
+				background: none;
+				color: #757474;
+
+				border-bottom: 1px solid #9fd9fa;
+
+				&.highlight-mouse-over{
+					color: inherit;
+					background: none;
+					border-bottom-color: #9fd9fa;
+				}
+
+				.application-highlight.shared-with-me {
+					border-bottom: none;
+				}
+			}
+
 			& .counter-container {
 				display: inline-block;
 				white-space: nowrap;

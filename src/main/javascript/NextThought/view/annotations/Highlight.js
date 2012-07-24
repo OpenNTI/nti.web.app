@@ -17,6 +17,12 @@ Ext.define('NextThought.view.annotations.Highlight', {
 			this.setupInvalidationFallback();
 		}
 
+		this.isModifiable = false;
+
+		if(!this.isModifiable){
+			this.highlightCls += ' shared-with-me';
+		}
+
 		this.getRange(); //get range right her up front, this won't render it yet.
 		//console.log('build highlight for',this.getRecordField('selectedText'));
 		return this;
@@ -146,6 +152,8 @@ Ext.define('NextThought.view.annotations.Highlight', {
 			this.render();
 		}
 	},
+
+
 	onMouseOut: function(){
 		var me = this;
 		function off(){
@@ -228,8 +236,13 @@ Ext.define('NextThought.view.annotations.Highlight', {
 			//create a composite element so we can do lots of things at once:
 			this.compElements = new Ext.dom.CompositeElement(this.rendered);
 			this.compElements.add(this.counter);
-			this.canvas = this.createCanvas();
+			//highlights that are not ours do not get a marked over treatment...so don't create the canvas
+			if(this.isModifiable){
+				this.canvas = this.createCanvas();
+			}
 		}
+
+		if(!this.canvas){return;}
 
 		if(!this.content || !this.content.dom){
 			try{
