@@ -64,7 +64,7 @@ Ext.define('NextThought.util.Line',{
 
 		function selectLine(){
 
-			var tolerance = 6,
+			var tolerance = 6, string,
 				bottom, newBottom;
 
 			if(!s.isCollapsed){ s.collapseToStart(); }
@@ -76,9 +76,15 @@ Ext.define('NextThought.util.Line',{
 			bottom = f();
 
 			do {
+				string = s.toString();
 				s.modify('extend', 'forward', 'lineboundary');
 				s.modify('extend', 'forward', 'word');
 				newBottom = f();
+
+				if(string === s.toString()){
+					console.log('end?');
+					break;
+				}
 			}
 			while(Math.abs(bottom - newBottom) <= tolerance);
 
@@ -91,7 +97,7 @@ Ext.define('NextThought.util.Line',{
 		}
 
 		function step(){
-			var t = f(null,'top'), tt, limit = 100;
+			var t = f(null,'top'), tt, limit = 50;
 			do{
 				s.collapseToStart();
 				s.modify('move', 'forward', 'line');
@@ -102,7 +108,7 @@ Ext.define('NextThought.util.Line',{
 			}
 			while(t >= tt && limit>0);
 			if(limit===0){
-				console.log('woops');
+				throw 'limit';
 			}
 			selectLine();
 		}
@@ -135,7 +141,12 @@ Ext.define('NextThought.util.Line',{
 				break;
 			}
 
-			step();
+			try {
+				step();
+			}
+			catch(e){
+				break;
+			}
 			r = null;
 			c--;
 		}
