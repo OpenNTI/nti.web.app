@@ -189,6 +189,15 @@ div.redaction-control {
 			//do nothing special when range is suppressed.
 		}
 
+		& + li.part,
+		& + li.exercise { 
+			&::before, &::after { z-index: 1; color: #076da7 }
+		}
+		&.highlight-mouse-over {
+			& + li.part, & + li.exercise { 
+				&::before, &::after { color: #ffffff; }
+			}
+		}
 		&.plain {
 
 			&, * {
@@ -253,3 +262,4 @@ div.redaction-control {
 }
 
 #annotation-container { &, .highlight-canvas { position: absolute; z-index: 1; } }
+
