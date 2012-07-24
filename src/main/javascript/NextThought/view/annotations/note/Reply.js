@@ -218,6 +218,7 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 		this.replyBox.addCls('editor-active');
 		this.doLayout();
 		this.doComponentLayout();
+		this.scrollIntoView();
 	},
 
 
