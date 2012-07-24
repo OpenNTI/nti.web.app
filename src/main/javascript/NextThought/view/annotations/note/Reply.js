@@ -77,6 +77,7 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 
 		if (this.record.placeHolder) {
 			this.replyBox.remove();
+			delete this.replyBox;
 			return;
 		}
 
@@ -134,6 +135,9 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 	},
 
 	onMouseOver: function(){
+		Ext.each(Ext.ComponentQuery.query('note-reply'),function(r){
+			if(r.replyBox){r.replyBox.removeCls('hover');}
+		});
 		this.replyBox.addCls('hover');
 		this.doLayout();
 	},
@@ -146,7 +150,9 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 
 	scrollIntoView: function(){
 		var scroller = this.up('note-responses').ownerCt.getEl();
-		this.replyBox.addCls('hover');
+		if( this.replyBox ){
+			this.replyBox.addCls('hover');
+		}
 		this.getEl().scrollIntoView(scroller);
 		this.doLayout();
 	},
