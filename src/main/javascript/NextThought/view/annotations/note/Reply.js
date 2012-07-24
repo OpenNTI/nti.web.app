@@ -135,7 +135,7 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 	},
 
 	onMouseOver: function(){
-		Ext.each(Ext.ComponentQuery.query('note-reply'),function(r){
+		Ext.each(this.up('window').query('note-reply'),function(r){
 			if(r.replyBox){r.replyBox.removeCls('hover');}
 		});
 		this.replyBox.addCls('hover');
