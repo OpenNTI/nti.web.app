@@ -3,6 +3,7 @@ Ext.define('NextThought.view.Window',{
 	alias: 'widget.nti-window',
 
 	requires: [
+		'NextThought.util.Ranges',
 		'NextThought.view.WindowHeader',
 		'NextThought.view.WindowManager'
 	],
@@ -106,6 +107,34 @@ Ext.define('NextThought.view.Window',{
 	},
 
 
+	show: function(){
+		var s = window.getSelection(), r,
+			c = Ext.WindowManager.getActive();
+		if( c ){
+			if( !c || !c.modal ){ c = null; }
+			else {
+				r = RangeUtils.saveRange( s.getRangeAt(0) );
+			}
+		}
+
+		this.callParent(arguments);
+
+		if(c){
+			c.toFront();
+			r = RangeUtils.restoreSavedRange(r);
+			if(r){
+				setTimeout(function(){
+					c = r.commonAncestorContainer;
+					c = c.focus? c:c.parentNode;
+					c.focus();
+					s.removeAllRanges();
+					s.addRange(r);
+				},50);
+			}
+		}
+
+		return this;
+	},
 
 
 
