@@ -54,8 +54,8 @@ Ext.define('NextThought.view.annotations.note.EditorActions',{
 			selectstart: me.editorSelectionStart,
 			focus: me.editorFocus,
 			blur: me.editorBlur,
-			keyup: me.maybeResizeContentBox,
-			paste: me.handlePaste
+			keyup: me.maybeResizeContentBox//,
+//			paste: me.handlePaste
 		});
 
 		cmp.mon(editorEl.down('.action.share'), {
