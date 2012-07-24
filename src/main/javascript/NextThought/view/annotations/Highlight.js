@@ -17,8 +17,6 @@ Ext.define('NextThought.view.annotations.Highlight', {
 			this.setupInvalidationFallback();
 		}
 
-		this.isModifiable = false;
-
 		if(!this.isModifiable){
 			this.highlightCls += ' shared-with-me';
 		}
