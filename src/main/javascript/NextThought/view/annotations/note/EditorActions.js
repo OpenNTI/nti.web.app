@@ -46,7 +46,7 @@ Ext.define('NextThought.view.annotations.note.EditorActions',{
 			scope: me,
 			mousedown: me.editorMouseDown,
 			selectstart: me.editorSelectionStart,
-			click: function(e){me.down('.content').focus();}
+			click: function(e){editorEl.down('.content').focus();}
 		});
 
 		cmp.mon(editorEl.down('.content'),{
