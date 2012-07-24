@@ -215,16 +215,20 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 
 
 	activateReplyEditor: function(){
-		this.replyBox.addCls('editor-active');
-		this.doLayout();
-		this.doComponentLayout();
-		this.scrollIntoView();
+		if(this.replyBox){
+			this.replyBox.addCls('editor-active');
+			this.doLayout();
+			this.doComponentLayout();
+			this.scrollIntoView();
+		}
 	},
 
 
 	deactivateReplyEditor: function(){
-		this.replyBox.removeCls('editor-active');
-		this.editor.down('.content').update('');
+		if(this.replyBox){
+			this.replyBox.removeCls('editor-active');
+			this.editor.down('.content').update('');
+		}
 		this.doLayout();
 		this.doComponentLayout();
 	},
