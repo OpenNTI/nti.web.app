@@ -138,6 +138,7 @@ div.redaction-control {
     position: absolute;
     margin: 9px 0 0 20px;
     display: block; //default
+	z-index: 9999;
 
     img {
         background: url(../images/redactions/redact_plus.png) 4px 4px no-repeat;
@@ -146,6 +147,7 @@ div.redaction-control {
         width: 20px;
         height: 20px;
 		cursor: pointer;
+
     }
 
     &.redacted img {
