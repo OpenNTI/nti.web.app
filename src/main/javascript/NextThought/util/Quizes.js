@@ -70,6 +70,13 @@ Ext.define('NextThought.util.Quizes', {
 
 			//Add events for the math panel
 			this.attachMathSymbolToMathquillObjects(q);
+
+			//Attach a keydown event to the iframe that modifies the value 
+			//of the textbox to something and then sets it back again. It
+			//appears that the MathQuill code is triggered by the textbox
+			//changing its value and standard text input sometimes fails 
+			//to trigger this for some reason.
+			document.getElementsByTagName('iframe')[0].contentWindow.document.onkeydown = function(e) { e.target.value = '0'; e.target.value = '' }
 		}
 		catch(e){
 			console.error('unable to setup quiz ',e.stack||e.toString());
