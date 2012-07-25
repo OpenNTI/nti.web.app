@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.assessments.QHint', {
+Ext.define('NextThought.model.assessments.Hint', {
 	extend: 'NextThought.model.Base',
 	fields: [
 	]

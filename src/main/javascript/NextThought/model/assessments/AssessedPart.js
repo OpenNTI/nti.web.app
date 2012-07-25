@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.assessments.QAssessedPart', {
+Ext.define('NextThought.model.assessments.AssessedPart', {
 	extend: 'NextThought.model.Base',
 	fields: [
 		{ name: 'submittedResponse', type: 'auto' },
