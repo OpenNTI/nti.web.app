@@ -43,6 +43,7 @@
 		.controlContainer,
 		.widgetContainer {
 			text-align: right;
+			* {text-align: initial;}
 			position: absolute;
 			height: 30px;
 			width: 100%;

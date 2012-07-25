@@ -406,9 +406,9 @@
 		}
 
 		&.expanded{
-			display: none;
-			.widgetContainer:hover &{
-				display: block;
+			.annotation-gutter .column .widgetcontainer & {display: none;}
+			.annotation-gutter .column .widgetContainer:hover &{
+				display: inline-block;
 			}
 
 		}
