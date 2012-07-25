@@ -42,7 +42,7 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 				seamless: true,
 				transparent: true,
 				allowTransparency: true,
-				style: 'overflow: hidden;'
+				style: 'overflow: hidden; z-index: 1;'
 			},
 			listeners: {
 				scope: this,
@@ -66,14 +66,6 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 		doc.close();
 		doc.parentWindow.location.replace(jsPrefix+':');
 		me.loadedResources = {};
-
-		if(Ext.isIE9){
-			this.getIframe().setStyle({
-				'position': 'relative',
-				'z-index': '1'
-			});
-		}
-
 
 		delete this.contentDocumentElement;
 
@@ -163,6 +155,10 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 				}
 			}
 		});
+		on(doc,['mouseover','mousemove'],function(e){
+			e = Ext.EventObject.setEvent(e||event);
+			if(e.getX() < 80){ me.setGutterClickThrough(); }
+		});
 		on(doc,'mousedown',function(){ Ext.menu.Manager.hideAll(); });
 		on(doc,'contextmenu',function(e){
 			e = Ext.EventObject.setEvent(e||event);
@@ -197,6 +193,18 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 			clearInterval(me.syncInterval);
 		}
 		me.syncInterval = setInterval( me.checkFrame, Ext.isIE? 500 : 100 );
+	},
+
+
+	setGutterClickThrough: function setGutterClickThrough(){
+		var fn = setGutterClickThrough,
+			me = this;
+
+		clearTimeout(fn.timoutout);
+		fn.timeout = setTimeout(function(){
+			me.getIframe().setStyle({pointerEvents: ''});
+		},1000);
+		me.getIframe().setStyle({pointerEvents: 'none'});
 	},
 
 
@@ -358,7 +366,8 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 	updateContent: function(html) {
 		var doc = this.getDocumentElement(),
 			body = Ext.get(doc.body),
-			head = doc.getElementsByTagName('head')[0];
+			head = doc.getElementsByTagName('head')[0],
+			me = this;
 		this.getIframe().setHeight(0);
 
 		body.update(html);
@@ -375,7 +384,9 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 			head.appendChild(e);
 		});
 
-		this.checkContentFrames();
+		setTimeout(function(){
+			me.checkContentFrames();
+		},10);
 
 		clearInterval(this.syncInterval);
 		this.syncInterval = setInterval(this.checkFrame,100);

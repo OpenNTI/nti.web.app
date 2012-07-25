@@ -10,6 +10,8 @@ Ext.define('NextThought.view.content.Base', {
 
 	getInsertionPoint: function(){
 		return this.getTargetEl();
+//		return Ext.get(this.getEl().id+'-innerCt');
+//		return Ext.get(this.getEl().id+'-targetEl');
 	},
 
 
