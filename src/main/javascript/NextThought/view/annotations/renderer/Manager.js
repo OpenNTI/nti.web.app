@@ -183,8 +183,9 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 			if(!line.controls.first()){ line.controls.remove(); delete line.controls; }
 			if(!line.widgets.first()){ line.widgets.remove(); delete line.widgets; }
 			else{
+
 				r.noteOverlayRegisterAddNoteNib(
-					addTpl.insertFirst(
+					addTpl.append(
 							line.widgets,[
 								siblings ? 'collapsed':'expanded'
 							],true));
