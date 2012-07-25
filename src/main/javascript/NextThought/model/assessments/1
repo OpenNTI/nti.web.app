@@ -1,0 +1,206 @@
+IQuestionMap.js
+Ext.define('NextThought.model.assessments.QuestionMap', {
+	extend: 'NextThought.model.Base',
+	fields: [
+	]
+});
+QAssessedPart.js
+Ext.define('NextThought.model.assessments.QAssessedPart', {
+	extend: 'NextThought.model.Base',
+	fields: [
+		{ name: 'submittedResponse', type: 'auto' },
+		{ name: 'assessedValue', type: 'float' }
+	]
+});
+QAssessedQuestion.js
+Ext.define('NextThought.model.assessments.QAssessedQuestion', {
+	extend: 'NextThought.model.Base',
+	fields: [
+		{ name: 'questionId', type: 'auto' },
+		{ name: 'parts', type: 'auto' }
+	]
+});
+QAssessedQuestionSet.js
+Ext.define('NextThought.model.assessments.QAssessedQuestionSet', {
+	extend: 'NextThought.model.Base',
+	fields: [
+		{ name: 'questions', type: 'auto' },
+		{ name: 'questionSetId', type: 'string' }
+	]
+});
+QDictResponse.js
+Ext.define('NextThought.model.assessments.QDictResponse', {
+	extend: 'NextThought.model.assessments.QResponse',
+	fields: [
+		{ name: 'value', type: 'auto' }
+	]
+});
+QFreeResponsePart.js
+Ext.define('NextThought.model.assessments.QFreeResponsePart', {
+	extend: 'NextThought.model.assessments.QPart',
+	fields: [
+	]
+});
+QFreeResponseSolution.js
+Ext.define('NextThought.model.assessments.QFreeResponseSolution', {
+	extend: 'NextThought.model.assessments.QSingleValuedSolution',
+	fields: [
+		{ name: 'value', type: 'string' }
+	]
+});
+QHint.js
+Ext.define('NextThought.model.assessments.QHint', {
+	extend: 'NextThought.model.Base',
+	fields: [
+		{ name: 'value', type: 'auto' }
+	]
+});
+QLatexSymbolicMathSolution.js
+Ext.define('NextThought.model.assessments.QLatexSymbolicMathSolution', {
+	extend: 'NextThought.model.assessments.QSolution',
+	fields: [
+		{ name: 'value', type: 'string' }
+	]
+});
+QMatchingPart.js
+Ext.define('NextThought.model.assessments.QMatchingPart', {
+	extend: 'NextThought.model.assessments.QPart',
+	fields: [
+		{ name: 'labels', type: 'auto' },
+		{ name: 'values', type: 'auto' }
+	]
+});
+QMatchingSolution.js
+Ext.define('NextThought.model.assessments.QMatchingSolution', {
+	extend: 'NextThought.model.assessments.QSolution',
+	fields: [
+		{ name: 'value', type: 'auto' }
+	]
+});
+QMathPart.js
+Ext.define('NextThought.model.assessments.QMathPart', {
+	extend: 'NextThought.model.assessments.QPart',
+	fields: [
+	]
+});
+QMathSolution.js
+Ext.define('NextThought.model.assessments.QMathSolution', {
+	extend: 'NextThought.model.assessments.QSolution',
+	fields: [
+	]
+});
+QMultipleChoicePart.js
+Ext.define('NextThought.model.assessments.QMultipleChoicePart', {
+	extend: 'NextThought.model.assessments.QPart',
+	fields: [
+		{ name: 'solutions', type: 'auto' },
+		{ name: 'choices', type: 'auto' }
+	]
+});
+QMultipleChoiceSolution.js
+Ext.define('NextThought.model.assessments.QMultipleChoiceSolution', {
+	extend: 'NextThought.model.assessments.QSingleValuedSolution',
+	fields: [
+		{ name: 'value', type: 'float' }
+	]
+});
+QNumericMathPart.js
+Ext.define('NextThought.model.assessments.QNumericMathPart', {
+	extend: 'NextThought.model.assessments.QMathPart',
+	fields: [
+	]
+});
+QNumericMathSolution.js
+Ext.define('NextThought.model.assessments.QNumericMathSolution', {
+	extend: 'NextThought.model.assessments.QMathSolution',
+	fields: [
+		{ name: 'value', type: 'float' }
+	]
+});
+QPart.js
+Ext.define('NextThought.model.assessments.QPart', {
+	extend: 'NextThought.model.Base',
+	fields: [
+		{ name: 'content', type: 'auto' },
+		{ name: 'hints', type: 'auto' },
+		{ name: 'solutions', type: 'auto' },
+		{ name: 'explanation', type: 'auto' }
+	]
+});
+QResponse.js
+Ext.define('NextThought.model.assessments.QResponse', {
+	extend: 'NextThought.model.Base',
+	fields: [
+	]
+});
+QSingleValuedSolution.js
+Ext.define('NextThought.model.assessments.QSingleValuedSolution', {
+	extend: 'NextThought.model.assessments.QSolution',
+	fields: [
+		{ name: 'value', type: 'auto' }
+	]
+});
+QSolution.js
+Ext.define('NextThought.model.assessments.QSolution', {
+	extend: 'NextThought.model.Base',
+	fields: [
+		{name:'weight', type:'float'}
+	]
+});
+QSymbolicMathPart.js
+Ext.define('NextThought.model.assessments.QSymbolicMathPart', {
+	extend: 'NextThought.model.assessments.QMathPart',
+	fields: [
+	]
+});
+QSymbolicMathSolution.js
+Ext.define('NextThought.model.assessments.QSymbolicMathSolution', {
+	extend: 'NextThought.model.assessments.QMathSolution',
+	fields: [
+	]
+});
+QTextHint.js
+Ext.define('NextThought.model.assessments.QTextHint', {
+	extend: 'NextThought.model.assessments.QHint',
+	fields: [
+		{ name: 'value', type: 'auto' }
+	]
+});
+QTextResponse.js
+Ext.define('NextThought.model.assessments.QTextResponse', {
+	extend: 'NextThought.model.assessments.QResponse',
+	fields: [
+		{ name: 'value', type: 'string' }
+	]
+});
+Question.js
+Ext.define('NextThought.model.assessments.Question', {
+	extend: 'NextThought.model.Base',
+	fields: [
+		{ name: 'content', type: 'auto' },
+		{ name: 'parts', type: 'auto' }
+	]
+});
+QuestionSet.js
+Ext.define('NextThought.model.assessments.QuestionSet', {
+	extend: 'NextThought.model.Base',
+	fields: [
+		{ name: 'questions', type: 'auto' }
+	]
+});
+QuestionSetSubmission.js
+Ext.define('NextThought.model.assessments.QuestionSetSubmission', {
+	extend: 'NextThought.model.Base',
+	fields: [
+		{ name: 'questionSetId', type: 'string' },
+		{ name: 'questions', type: 'auto' }
+	]
+});
+QuestionSubmission.js
+Ext.define('NextThought.model.assessments.QuestionSubmission', {
+	extend: 'NextThought.model.Base',
+	fields: [
+		{ name: 'questionId', type: 'string' },
+		{ name: 'parts', type: 'auto' }
+	]
+});
