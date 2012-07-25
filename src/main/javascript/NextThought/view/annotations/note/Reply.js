@@ -134,7 +134,19 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 		});
 	},
 
+
+	getCarouselIfNear: function(){
+		var c = this.up('window').down('note-carousel').getEl();
+
+		return c.dom.getBoundingClientRect().bottom >=
+				this.el.dom.getBoundingClientRect().top ? c : null;
+	},
+
 	onMouseOver: function(){
+		//if this reply is near the top from scrolling... toggle the carousel's clsses
+		var s = this.getCarouselIfNear();
+		if(s){ s.addCls('hover'); }
+
 		Ext.each(this.up('window').query('note-reply'),function(r){
 			if(r.replyBox){r.replyBox.removeCls('hover');}
 		});
@@ -143,6 +155,9 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 	},
 
 	onMouseOut: function(){
+		//if this reply is near the top from scrolling... toggle the carousel's clsses
+		var s = this.getCarouselIfNear();
+		if(s){ s.removeCls('hover'); }
 		this.replyBox.removeCls('hover');
 		this.doLayout();
 	},

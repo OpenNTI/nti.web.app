@@ -106,11 +106,13 @@ Ext.define('NextThought.view.annotations.note.Main',{
 	},
 
 	onMouseOver: function(){
+		this.up('window').down('note-carousel').getEl().addCls('hover');
 		this.el.addCls('hover');
 		this.doComponentLayout();
 	},
 
 	onMouseOut: function(){
+		this.up('window').down('note-carousel').getEl().removeCls('hover');
 		this.el.removeCls('hover');
 		this.doComponentLayout();
 	},
@@ -238,6 +240,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 
 	activateReplyEditor: function(){
 		var me = this;
+		this.up('window').down('note-carousel').addCls('editor-active');
 		me.el.addCls('editor-active');
 		me.doComponentLayout();
 		setTimeout(function(){me.editorActions.focus();}, 100);
@@ -246,6 +249,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 	deactivateReplyEditor: function(){
 		this.text.show();
 		this.editor.down('.content').update('');
+		this.up('window').down('note-carousel').removeCls('editor-active');
 		this.el.removeCls('editor-active');
 		this.doComponentLayout();
 	},

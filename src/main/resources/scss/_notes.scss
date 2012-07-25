@@ -583,10 +583,51 @@
     }
 
 	.carousel {
-		background: #e6e6e6;
+		background: url(../images/notes/carousel.png) -350px 0px no-repeat;
 		border: 1px solid #c5c5c5;
+		border-bottom-width: 0;
 		border-left-width: 0;
 		border-right-width: 0;
+		//when the main/reply view is hovered/editor-active it should set the same classes onto the carousel
+		&.editor-active, &.hover {
+			background-color: #f8f8f8;
+		}
+		
+		.slide-nav {
+			position: absolute;
+			top: 0;
+			bottom: 0;
+			width: 50px;
+			opacity: 0.4;
+			cursor: pointer;
+			&:hover {
+				opacity: 1;
+			}
+			
+			&.disabled {
+				&,&:hover{ opacity: 0.15; cursor: default; }
+			}
+
+			&::after{
+				position: absolute;
+				top: 0; bottom: 0;
+				left: 15px;
+				content: '';
+				background: url(../images/notes/prev-next.png) 0px 50% no-repeat;
+				width: 20px;
+
+			}
+
+			&.forward{
+				&::after{ background-position-x: -20px; }
+				right: 0;
+			}
+			&.backward{
+				&::after{ background-position-x: 0px; }
+				left: 0;
+			}
+		}
+
 	}
 
     .note-reply,
@@ -606,10 +647,6 @@
 		}
 
 		.context {
-			background: #ffffff;
-			box-shadow: 0 0 5px 8px #ffffff;
-			border-radius: 3px;
-
 			text-rendering: optimizeLegibility;//fallback
 			text-rendering: geometricPrecision;
 
@@ -684,7 +721,7 @@
         }
         position: relative;
         padding-left: 30px;
-        &.hover {
+        &.editor-active,&.hover {
 			box-shadow: none;
             .meta .controls {
                 display: block;
