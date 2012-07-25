@@ -40,15 +40,25 @@ Ext.define('NextThought.util.Parsing',{
 
 	getReaderForModel: function(modelName) {
 		this.readers = this.readers || [];
-
-		if (!NextThought.model.hasOwnProperty(modelName)){
-			console.error('no model for NextThought.model.' + modelName);
+		function recurse(dir, modelName) {
+			for (var sub in dir) {
+				if (sub == modelName) {
+					return dir[sub];
+				}
+				if (!dir[sub].hasOwnProperty('$className')) {
+					var child = recurse(dir[sub],modelName);
+					if (child) return child;
+				}
+			}
+		}
+		var o = recurse(NextThought.model,modelName);
+		if (!o) {
+			console.error('no model found for ' + modelName);
 			return;
 		}
-
 		if (!this.readers[modelName]) {
 			this.readers[modelName] = Ext.create('reader.json',{
-				model: 'NextThought.model.'+modelName, proxy: 'nti'
+				model: o.$className, proxy: 'nti'
 			});
 		}
 
