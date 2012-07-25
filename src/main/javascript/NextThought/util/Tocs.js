@@ -45,13 +45,18 @@ Ext.define('NextThought.util.Tocs',{
 		if(!node) {
 			return;
 		}
+
+		var topicNum = 0;
 		Ext.each(node.childNodes,function(v){
 			try {
 				var leaf;
 				if(v.nodeName==="#text" || v.nodeName==='xml' || !v.getAttribute('ntiid') ) {
 					return;
 				}
-				leaf = this.renderLeafFromTopic(v, v===selectedNode);
+				else{
+				    topicNum = topicNum + 1;
+				}			
+				leaf = this.renderLeafFromTopic(v, v===selectedNode, topicNum);
 				if(leaf){
 					leafs.push(leaf);
 				}
@@ -64,9 +69,9 @@ Ext.define('NextThought.util.Tocs',{
 
 
 	/** @private */
-	renderLeafFromTopic: function(topicNode, selected) {
+	    renderLeafFromTopic: function(topicNode, selected, topicNum) {
 
-		var label = topicNode.getAttribute("label"),
+	    var label = topicNum.toString() + ". " + topicNode.getAttribute("label"),
 				href = topicNode.getAttribute("href"),
 				ntiid = topicNode.getAttribute('ntiid'),
 				leaf = this.renderLeaf(label, href, ntiid, selected),

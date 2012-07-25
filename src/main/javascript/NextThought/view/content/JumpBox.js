@@ -72,7 +72,8 @@ Ext.define('NextThought.view.content.JumpBox',{
 			sections = [],
 			chapters = [],
 			currentChapter,
-			currentSection;
+		    currentSection,
+		    topicNum;
 
 		if(!loc || !loc.NTIID){
 			this.canShow = false;
@@ -91,19 +92,23 @@ Ext.define('NextThought.view.content.JumpBox',{
 		currentSection = isChapter? null : currentNode;
 
 		if (node){
+		    topicNum = 0;
 			for(;node.nextSibling; node = node.nextSibling){
 				if(!/topic/i.test(node.tagName)){continue;}
+				topicNum = topicNum + 1;
 				sections.push({
-					text	: node.getAttribute('label'),
+					text	: topicNum.toString() + ". " + node.getAttribute('label'),
 					ntiid	: node.getAttribute('ntiid'),
 					cls		: node===currentSection?'current':''
 				});
 			}
 		}
 
+		topicNum = 0;
 		Ext.each(Ext.query('toc > topic[href]',loc.toc),function(o){
+			topicNum = topicNum + 1;
 			chapters.push({
-				text	: o.getAttribute('label'),
+				text	: topicNum.toString() + ". " + o.getAttribute('label'),
 				ntiid	: o.getAttribute('ntiid'),
 				cls		: o===currentChapter?'current':''
 			});
