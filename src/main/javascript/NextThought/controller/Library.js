@@ -91,7 +91,7 @@ Ext.define('NextThought.controller.Library', {
 			if (!ps){
 				ps = Ext.create(
 					'NextThought.store.PageItem',
-					{ storeId:'page-store:'+containerId }
+					{ storeId:LocationProvider.getStoreId(containerId) }
 				);
 				ps.on('load', me.onAnnotationStoreLoadComplete, me, {containerId: containerId});
 				ps.proxy.url = pi.getLink(Globals.USER_GENERATED_DATA);

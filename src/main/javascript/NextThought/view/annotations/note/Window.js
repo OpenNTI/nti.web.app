@@ -46,6 +46,7 @@ Ext.define('NextThought.view.annotations.note.Window',{
 	initComponent: function(){
 		this.callParent(arguments);
 		this.down('note-main-view').setRecord(this.annotation.getRecord(), this.annotation.getRange());
+		console.log(LocationProvider.getStore());
 	},
 
 	afterRender: function(){

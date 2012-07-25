@@ -74,7 +74,6 @@ Ext.define( 'NextThought.view.annotations.Note', {
 		return Ext.widget({
 			xtype: 'note-window',
 			annotation: this,
-			activeAnnotations: [],
 			isReply: isReply && !isEdit,
 			isEdit: isEdit
 		}).show();

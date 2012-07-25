@@ -25,6 +25,16 @@ Ext.define('NextThought.providers.Location', {
 	},
 
 
+	getStoreId: function(ntiid){
+		return 'page-store:'+(ntiid||this.currentNTIID);
+	},
+
+
+	getStore: function(ntiid){
+		return Ext.getStore(this.getStoreId(ntiid));
+	},
+
+
 	/**
 	 *
 	 * @param ntiid
