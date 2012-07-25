@@ -76,7 +76,10 @@ Ext.define('NextThought.util.Quizes', {
 			//appears that the MathQuill code is triggered by the textbox
 			//changing its value and standard text input sometimes fails 
 			//to trigger this for some reason.
-			document.getElementsByTagName('iframe')[0].contentWindow.document.onkeydown = function(e) { e.target.value = '0'; e.target.value = '' }
+			document.getElementsByTagName('iframe')[0].contentWindow.document.onkeydown = function(e) {
+				 e.target.value += '0';
+				 e.target.value = e.target.value.substring(0,e.target.value.length - 1);
+			}
 		}
 		catch(e){
 			console.error('unable to setup quiz ',e.stack||e.toString());
