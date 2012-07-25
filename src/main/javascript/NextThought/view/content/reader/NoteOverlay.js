@@ -19,7 +19,6 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 				r = r ? r.getBoundingClientRect() : {left:0,width:0};
 				data.left = r.left;
 				data.width = r.width;
-				data.win = this.getDocumentElement().parentWindow;
 			},
 			'afterRender': this.insertNoteOverlay
 		});
@@ -99,6 +98,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		function sizer(){
 			try {
 				var o = me.getAnnotationOffsets();
+				me.noteOverlayDeactivateEditor();
 				if(o){
 					width = o.gutter + o.contentLeftPadding;
 					container.setWidth(width);
@@ -172,7 +172,54 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 	},
 
 
-	noteOverlayRegisterAddNoteNib: function(nib){},
+	noteOverlayRegisterAddNoteNib: function(nib){
+		nib.on('click',this.noteOverlayAddNoteNibClicked,this);
+		//should keep track of this and cleanup if its detected to not be in the dom any more.
+	},
+
+
+	noteOverlayAddNoteNibClicked: function(e){
+		var o = this.noteOverlayData,
+			w = e.getTarget('.widgetContainer',null,true);
+		if(w){
+			e.stopEvent();
+//			w.hide();
+
+			delete o.lastLine;
+			Ext.get(o.box).setY(0);
+
+			this.noteOverlayTrackLineAtEvent(e);
+			this.noteOverlayActivateRichEditor();
+			this.noteOverlayScrollEditorIntoView();
+			return false;
+		}
+	},
+
+
+	noteOverlayTrackLineAtEvent:function(e){
+		var o = this.noteOverlayData,
+			offsets = this.getAnnotationOffsets(),
+			y = e.getY() - offsets.top, lineInfo,
+			box = Ext.get(o.box);
+
+		try {
+			clearTimeout(o.mouseLeaveTimeout);
+			lineInfo = LineUtils.findLine(y,this.getDocumentElement());
+			if(lineInfo && (lineInfo !== o.lastLine || !o.lastLine)){
+				o.lastLine = lineInfo;
+				e.stopEvent();
+				if(!lineInfo.range){
+					box.hide();
+					this.noteOverlayMouseOut();
+					return;
+				}
+
+				this.noteOverlayPositionInputBox();
+			}
+		} catch(e){
+			console.warn(Globals.getError(e));
+		}
+	},
 
 
 	noteOverlayPositionInputBox: function(){
@@ -191,40 +238,17 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 
 	noteOverlayMouseOver: function(evt){
-		evt.stopEvent();
-
-		var o = this.noteOverlayData,
-			offsets = this.getAnnotationOffsets(),
-			y = evt.getY() - offsets.top,
-			box = Ext.get(o.box),
-			lineInfo, el;
+		var o = this.noteOverlayData;
 
 		if(o.suspendMoveEvents){
 			return;
 		}
-
-		clearTimeout(o.mouseLeaveTimeout);
-		try {
-			if(!this.noteOverlayXYAllowed.apply(this,evt.getXY())){
-				box.hide();
-				return;
-			}
-			lineInfo = LineUtils.findLine(y,this.getDocumentElement());
-			if(lineInfo && (lineInfo !== o.lastLine || !o.lastLine)){
-				o.lastLine = lineInfo;
-
-				if(!lineInfo.range){
-					box.hide();
-					this.noteOverlayMouseOut();
-					return;
-				}
-
-				this.noteOverlayPositionInputBox();
-			}
+		else if(!this.noteOverlayXYAllowed.apply(this,evt.getXY())){
+			Ext.get(o.box).hide();
+			return;
 		}
-		catch(e){
-			console.warn(Globals.getError(e));
-		}
+
+		return this.noteOverlayTrackLineAtEvent(evt);
 	},
 
 
@@ -240,7 +264,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		if(o.suspendMoveEvents){
 			return;
 		}
-		o.win.getSelection().removeAllRanges();
+		this.getDocumentElement().parentWindow.getSelection().removeAllRanges();
 		clearTimeout(o.mouseLeaveTimeout);
 		o.mouseLeaveTimeout = setTimeout(function(){
 			delete o.lastLine;
