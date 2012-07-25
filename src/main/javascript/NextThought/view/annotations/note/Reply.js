@@ -39,7 +39,7 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 		},
 		{ id: '{id}-body',
 		  cls: 'note-replies',
-		  text: '{%this.renderContainer(out,values)%}'
+		  tpl: new Ext.XTemplate('{%this.renderContainer(out,values)%}')
 		}
 	]).compile(),
 
