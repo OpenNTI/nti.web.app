@@ -34,12 +34,29 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 		this.callParent(arguments);
 		this.store = LocationProvider.getStore();
 
+		this.load();
+	},
+
+
+	load: function(filter){
 		var me = this;
+		me.removeAll(true);
 		this.store.each(function(item){
-			if(item instanceof NextThought.model.Note && !item.parent){
+			if(item instanceof NextThought.model.Note && !item.parent && (!filter || filter(item))){
 				me.add({record: item});
 			}
 		});
+	},
+
+
+	filterChanged: function(filter,value){
+		var f = this[filter];
+		this.load(f?f(value):null);
+		f = this.items.first();
+		if(f){
+			this.setRecord(f.record);
+		}
+		else { this.updateWith(null); }
 	},
 
 
@@ -156,6 +173,20 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 		if(newSel && newSel.record){
 			this.setRecord(newSel.record);
 		}
+	},
+
+
+	mostPopular: function(value){
+		return function(item){
+			return item && item.getReplyCount() > 0;
+		};
+	},
+
+
+	highestRated: function(value){
+		return function(item){
+			return item && item.get('LikeCount') > 0;
+		};
 	}
 
 });
