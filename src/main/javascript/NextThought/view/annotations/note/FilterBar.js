@@ -33,5 +33,15 @@ Ext.define('NextThought.view.annotations.note.FilterBar',{
 		xtype: 'simpletext',
 		width: 150,
 		placeholder: 'Search...'
-	}]
+	}],
+
+	afterRender: function(){
+		this.callParent(arguments);
+		this.mon(this.down('simpletext'),'commit', this.search, this);
+	},
+
+
+	search: function(searchTerm){
+		console.log(searchTerm);
+	}
 });
