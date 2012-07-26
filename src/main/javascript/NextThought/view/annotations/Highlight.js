@@ -194,13 +194,18 @@ Ext.define('NextThought.view.annotations.Highlight', {
 
 
 	resolveVerticalLocation: function(){
-		var r = this.getRange();
-		if(r && !r.collapsed){
-			r.detach();
-			delete this.range;
+		var r;
+
+		if (this.rendered){
+			r = this.buildRange();
+		}
+		else {
 			r = this.getRange();
 		}
-		return r? r.getBoundingClientRect().top : -2;
+
+		r = r ? r.getBoundingClientRect() : null;
+
+		return r ? r.top : -2;
 	},
 
 
@@ -251,7 +256,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
 		}
 
 		range = this.buildRange();
-		bounds = range.getBoundingClientRect();
+		bounds = range.getBoundingClientRect() || this.lastGoodClientRect; //safety catch for safari 5
 		boundingTop = Math.ceil(bounds.top);
 		boundingLeft = Math.ceil(bounds.left);
 		boundingHeight = Math.ceil(bounds.height);

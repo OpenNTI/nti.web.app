@@ -80,6 +80,17 @@ Ext.define('NextThought.view.annotations.Redaction', {
 	},
 
 
+	buildRange: function(){
+		var r = this.callParent(arguments);
+
+		if (r.getBoundingClientRect()){
+			this.lastGoodClientRect = r.getBoundingClientRect();
+		}
+
+		return r;
+	},
+
+
 	isInlineRedaction: function(){
 		var replacementText = this.record.get('replacementContent');
 		return Boolean(replacementText);
