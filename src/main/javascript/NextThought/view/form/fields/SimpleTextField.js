@@ -39,6 +39,7 @@ Ext.define('NextThought.view.form.fields.SimpleTextField',{
 		e.removeCls('error-saving');
 		this.clearEl.hide();
 		this.keyPressed(new Ext.EventObjectImpl());
+		this.fireEvent('clear');
 	},
 
 

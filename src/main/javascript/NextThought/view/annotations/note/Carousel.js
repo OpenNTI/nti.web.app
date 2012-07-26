@@ -189,6 +189,14 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 		return function(item){
 			return item && item.get('LikeCount') > 0;
 		};
+	},
+
+
+	search: function(value){
+		return function(item){
+
+			return true;
+		};
 	}
 
 });

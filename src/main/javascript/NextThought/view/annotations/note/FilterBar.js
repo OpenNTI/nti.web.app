@@ -22,6 +22,7 @@ Ext.define('NextThought.view.annotations.note.FilterBar',{
 			scale: '',
 			handler: function(btn){
 				btn.up('window').down('note-carousel').filterChanged(btn.filter);
+				//clear search box?
 			}
 		},
 		items: [
@@ -37,11 +38,15 @@ Ext.define('NextThought.view.annotations.note.FilterBar',{
 
 	afterRender: function(){
 		this.callParent(arguments);
-		this.mon(this.down('simpletext'),'commit', this.search, this);
+		this.mon(this.down('simpletext'),{
+			scope: this,
+			commit:this.search,
+			clear: this.search
+		});
 	},
 
 
 	search: function(searchTerm){
-		console.log(searchTerm);
+		this.up('window').down('note-carousel').filterChanged('search',searchTerm);
 	}
 });
