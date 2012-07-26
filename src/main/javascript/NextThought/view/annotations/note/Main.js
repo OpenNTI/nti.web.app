@@ -25,7 +25,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		}
 	).compile(),
 
-	renderTpl: Ext.DomHelper.createTemplate([
+	renderTpl: Ext.DomHelper.markup([
 		{
 			cls: 'meta',
 			cn: [{
@@ -47,7 +47,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 				TemplatesForNotes.getEditorTpl()
 			]
 		}
-	]).compile(),
+	]),
 
 	renderSelectors: {
 		liked: '.meta .controls .like',

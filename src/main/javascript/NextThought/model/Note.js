@@ -80,5 +80,16 @@ Ext.define('NextThought.model.Note', {
 		reply.set('references', refs);
 
 		return reply;
+	},
+
+	/**
+	 * This depends on the linking of models by annotation...
+	 */
+	getReplyCount: function(){
+		if(!this.children) {return NaN;}
+
+		return this.children.reduce(function(sum,child){
+			return sum + 1 + child.getReplyCount();
+		},0);
 	}
 });

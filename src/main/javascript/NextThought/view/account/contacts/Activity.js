@@ -2,11 +2,11 @@ Ext.define('NextThought.view.account.contacts.Activity',{
 	extend: 'Ext.Component',
 	alias: 'widget.contact-activity',
 
-	renderTpl: Ext.DomHelper.createTemplate({
+	renderTpl: Ext.DomHelper.markup({
 		cls:"activity {type}",
 		html: '{message}',
 		cn: [{cls: 'fade-mask'}]
-	}).compile(),
+	}),
 
 	initComponent: function(){
 		this.callParent(arguments);

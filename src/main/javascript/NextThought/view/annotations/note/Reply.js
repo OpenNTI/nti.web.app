@@ -14,8 +14,9 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 	componentLayout: 'templated-container',
 	defaultType: 'note-reply',
 	childEls: ['body'],
+	getTargetEl: function () { return this.body; },
 
-	renderTpl: Ext.DomHelper.createTemplate([
+	renderTpl: Ext.DomHelper.markup([
 		{
 			cls: 'note-reply',
 			cn: [{
@@ -41,7 +42,7 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 		  cls: 'note-replies',
 		  tpl: new Ext.XTemplate('{%this.renderContainer(out,values)%}')
 		}
-	]).compile(),
+	]),
 
 	renderSelectors: {
 		replyBox: '.note-reply',
@@ -56,10 +57,6 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 		replyButton: '.respond .reply',
 		startChatButton: '.respond .chat',
 		more: '.respond .reply-options .more'
-	},
-
-	getTargetEl: function () {
-		return this.body;
 	},
 
 	afterRender: function(){

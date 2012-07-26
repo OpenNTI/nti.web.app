@@ -110,7 +110,7 @@ Ext.define('NextThought.view.annotations.note.GutterWidget',{
 	}
 
 },function(){
-	this.prototype.renderTpl = Ext.DomHelper.createTemplate([
+	this.prototype.renderTpl = Ext.DomHelper.markup([
 		{
 			cls: 'note-gutter-widget single',
 			cn: [{
@@ -133,5 +133,5 @@ Ext.define('NextThought.view.annotations.note.GutterWidget',{
 			},
 			{cls: 'mask'}]
 		}
-	]).compile();
+	]);
 });
