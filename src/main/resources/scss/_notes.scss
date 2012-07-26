@@ -731,6 +731,10 @@
 			font-size: 12px;
 		}
 
+		.search-term {
+			background: #F9DD0A !important;
+		}
+
 		.context {
 			text-rendering: optimizeLegibility;//fallback
 			text-rendering: geometricPrecision;
@@ -760,10 +764,6 @@
 		.body {
 			color: #757474;
 			font: 16px/24px 'Droid Serif';
-
-			.search-term {
-				background: #F9DD0A;
-			}
 		}
 
 		&.editor-active .respond{
