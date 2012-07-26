@@ -83,9 +83,10 @@ Ext.define('NextThought.view.form.fields.SimpleTextField',{
 	keyPressed: function(event){
 		var e = this.inputEl,
 			k = event.getKey(),
-			v = this.getValue();
+			v = this.getValue(),
+			c = this.clearEl;
 
-		if(v){ this.clearEl.show(); }
+		c[v?'show':'hide']();
 
 		if (k === event.ENTER || k === event.ESC ) {
 			this.fireEvent('commit', v );
