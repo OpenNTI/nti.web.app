@@ -52,6 +52,7 @@ Ext.define('NextThought.view.account.MyAccount',{
 
 	updateNotificationCount: function(store, records) {
 		this.currentNotificationCount+=records.length;
+        $AppConfig.userObject.set('NotificationCount', this.currentNotificationCount);  //Update current notification of the userobject.
 		this.setNotificationCountValue(this.currentNotificationCount);
 	},
 

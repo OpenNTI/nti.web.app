@@ -58,7 +58,7 @@ Ext.define('NextThought.view.menus.account.Notifications',{
 
 		//setup render data
 		this.renderData = Ext.apply(this.renderData||{},{
-			'notificationcount': 0,
+			'notificationcount': $AppConfig.userObject.get('NotificationCount') || 0,
 			'notifications': [],
 			hideSeeAll: true
 		});
@@ -84,7 +84,7 @@ Ext.define('NextThought.view.menus.account.Notifications',{
 					containerId: item.get('ContainerId'),
 					id: targets
 				};
-				this.renderData.notificationcount = this.notifications.length;
+//				this.renderData.notificationcount = this.notifications.length;
 				//only add this to actual render data if we have few enough
 				if (this.notifications.length <= this.NOTIFICATIONS_TO_SHOW_AT_FIRST) {
 					this.renderData.notifications.push(this.notifications.last());
