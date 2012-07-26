@@ -29,7 +29,8 @@ Ext.define('NextThought.model.Base', {
 
 	constructor: function(data,id,raw){
 		var c, f = this.fields,
-			cName = this.self.getName().replace(/^.*?model\./,''),
+			cName = this.self.getName().split('.').pop(),
+			mimeExtension = this.self.getName().replace(/^.*?model\./,'').toLowerCase(),
 			cField = f.getByKey('Class');
 //			openedGroup = false;
 
@@ -38,7 +39,7 @@ Ext.define('NextThought.model.Base', {
 		}
 
 		if(!(new RegExp(cName,'i')).test(this.mimeType)){
-			this.mimeType += '.'+cName.toLowerCase();
+			this.mimeType += '.'+mimeExtension;
 		}
 		else{
 			console.warn('using self declared mimeTime:', this.mimeType);
