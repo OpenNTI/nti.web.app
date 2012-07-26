@@ -1,6 +1,7 @@
 Ext.define('NextThought.view.content.reader.Content',{
 	requires: [
-		'NextThought.util.Quizes'
+		'NextThought.util.Quizes',
+		'NextThought.assessment.Main'
 	],
 
 	constructor: function(){
@@ -87,8 +88,16 @@ console.log('setting content...');
 				this.buildPath(resp.request.options.url));
 
 
-		QuizUtils.setupQuiz(me.getDocumentElement(), me);
-
+		ntiContent = document.getElementsByTagName('iframe')[0].contentWindow.document.getElementById('NTIContent');
+		wst = ntiContent.querySelector('.worksheet-title');
+		if (wst && wst.id && wst.id.indexOf('mathcounts' >= 0)) {
+			console.log('Setup type is QuizUtils')
+			QuizUtils.setupQuiz(me.getDocumentElement(), me);
+		}
+		else {
+			console.log('Setup type is AssessmentUtils')
+			AssessmentUtils.setupAssessment(me.getDocumentElement(), me);
+		}
 		console.log('setting content... set, loading annotations');
 		//containerId = Ext.util.Format.htmlDecode(me.getContainerId()); //handle apostrophe
 		me.loadContentAnnotations(LocationProvider.currentNTIID, onFinishLoading);
