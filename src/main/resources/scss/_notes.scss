@@ -559,7 +559,8 @@
 .note-window {
 	@extend .nti-window;
 	@include reset-window-border-radius(3px);
-	box-shadow: 0 0 50px 5px rgba(0, 0, 0, 0.3);
+	box-shadow: 0 0 50px 5px rgba(0, 0, 0, 0.3),
+				0 0 0 110px transparent;
 
 	&,.nti-window-header{
 		background-color: #ffffff;
@@ -608,6 +609,14 @@
 				&,&:hover{ opacity: 0.15; cursor: default; }
 			}
 
+			.circle {
+				position: fixed;
+				background: url(../images/notes/prev-next-circles.png) 0 0 no-repeat;
+				width: 77px;
+				height: 77px;
+				margin-top: 125px;
+			}
+
 			&::after{
 				position: absolute;
 				top: 0; bottom: 0;
@@ -621,10 +630,18 @@
 			&.forward{
 				&::after{ background-position-x: -20px; }
 				right: 0;
+				.circle {
+					margin-left: 75px;
+					background-position-x: -77px;
+				}
 			}
 			&.backward{
 				&::after{ background-position-x: 0px; }
 				left: 0;
+
+				.circle {
+					margin-left: -100px;
+				}
 			}
 		}
 
