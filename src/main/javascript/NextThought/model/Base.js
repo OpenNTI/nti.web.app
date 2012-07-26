@@ -29,7 +29,7 @@ Ext.define('NextThought.model.Base', {
 
 	constructor: function(data,id,raw){
 		var c, f = this.fields,
-			cName = this.self.getName().split('.').pop(),
+			cName = this.self.getName().replace(/^.*?model\./,''),
 			cField = f.getByKey('Class');
 //			openedGroup = false;
 

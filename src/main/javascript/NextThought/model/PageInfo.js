@@ -4,7 +4,7 @@ Ext.define('NextThought.model.PageInfo', {
 	requires: [
 		'NextThought.model.converters.Items',
 		'NextThought.util.Parsing',
-		'NextThought.model.assessments.Question'
+		'NextThought.model.assessment.Question'
 	],
 	fields: [
 		{ name: 'AssessmentItems', type: 'arrayItem' },

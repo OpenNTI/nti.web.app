@@ -1,4 +1,4 @@
-Ext.define('NextThought.model.assessments.Part', {
+Ext.define('NextThought.model.assessment.Part', {
 	extend: 'NextThought.model.Base',
 	requires: [
 		'NextThought.model.converters.Items',
