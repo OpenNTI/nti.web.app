@@ -55,5 +55,10 @@ Ext.define('NextThought.view.annotations.note.Window',{
 		if(this.isReply) {
 			this.down('note-main-view').activateReplyEditor();
 		}
+	},
+
+
+	getSearchTerm: function(){
+		return this.down('note-filter-bar').down('simpletext').getValue();
 	}
 });

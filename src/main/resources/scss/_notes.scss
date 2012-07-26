@@ -736,7 +736,7 @@
 			text-rendering: geometricPrecision;
 
 			span{
-				color: #494949;
+				color: #b8b8b8;
 				padding: 2px 0;
 				font-size: 14px;
 				line-height: 32px;
@@ -750,9 +750,7 @@
 				hyphens: auto;
 
 				&.highlight {
-					color: #136ea5;
-					background: #e1f4fe;
-					.tip { @include highlight-tip; }
+					color: #494949;
 				}
 			}
 
@@ -762,6 +760,10 @@
 		.body {
 			color: #757474;
 			font: 16px/24px 'Droid Serif';
+
+			.search-term {
+				background: #F9DD0A;
+			}
 		}
 
 		&.editor-active .respond{

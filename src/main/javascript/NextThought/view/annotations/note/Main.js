@@ -189,6 +189,13 @@ Ext.define('NextThought.view.annotations.note.Main',{
 
 		try {
 			r.compileBodyContent(function(text){
+				var search = this.up('window').getSearchTerm(), re;
+				if(search){
+					search = Ext.String.htmlEncode( search );
+					re = new RegExp( RegExp.escape( search ), 'ig');
+					text = text.replace(re,'<span class="search-term">'+search+'</span>');
+				}
+
 				this.text.update(text);
 				this.text.select('a[href]',true).set({target:'_blank'});
 			},this);
