@@ -43,7 +43,7 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 		me.removeAll(true);
 		this.store.each(function(item){
 			if(item instanceof NextThought.model.Note && !item.parent && (!filter || filter(item))){
-				me.add({record: item});
+				me.add({record: item, autoRender:Boolean(me.rendered)});
 			}
 		});
 	},
@@ -108,10 +108,18 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 
 
 	updateWith: function(item){
-		var hasNext, hasPrev;
+		var hasNext, hasPrev,
+			me = this;
 		function t(el,s){ el[(s?'remove':'add')+'Cls']('disabled'); }
 
-		item.getEl().scrollIntoView(this.body,true);
+		if(item && !item.rendered){
+			setTimeout(function(){ me.updateWith(item); },10);
+			return;
+		}
+
+		if( item ){
+			item.getEl().scrollIntoView(this.body,true);
+		}
 
 		this.centerBackgroundOn(item);
 
@@ -194,8 +202,7 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 
 	search: function(value){
 		return function(item){
-
-			return true;
+			return item && item.hasTerm(value);
 		};
 	}
 

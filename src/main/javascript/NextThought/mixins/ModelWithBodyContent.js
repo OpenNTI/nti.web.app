@@ -73,6 +73,24 @@ Ext.define('NextThought.mixins.ModelWithBodyContent',{
 		}
 
 		render(body.length-1);
-	}
+	},
 
+	hasTerm: function(term){
+		var found = false,
+			c = this.children||[],
+			i = c.length - 1,
+			b = (this.get('body')||[]).join('\n');
+
+		if(b.indexOf(term) >= 0){
+			return true;
+		}
+
+		for(;i>=0 && !found; i--){
+			if(c[i].hasTerm){
+				found = c[i].hasTerm(term);
+			}
+		}
+
+		return found;
+	}
 });
