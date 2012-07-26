@@ -40,10 +40,37 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 			var s = o.record===rec;
 			o.markSelected(s);
 			if(s){
-				try{
-					console.log(o.getEl().dom.getBoundingClientRect());
-				}catch(e){}
+				if(me.rendered){ setTimeout(function(){ me.centerBackgroundOn(o); },10); }
+				else { me.selected = o; }
 			}
 		});
+	},
+
+
+	afterRender: function(){
+		var me = this, o = me.selected;
+		me.callParent(arguments);
+		if( o ){
+			setTimeout(function(){ me.centerBackgroundOn(o); },10);
+			delete me.selected;
+		}
+	},
+
+
+	centerBackgroundOn: function(item){
+		var cr = this.getEl().dom.getBoundingClientRect();
+		var ir = item.getEl().dom.getBoundingClientRect();
+		var cm = Math.round(cr.left + (cr.width/2));
+		var im = Math.round(ir.left + (ir.width/2));
+		var bgW = 1400;//the background image is 1400px wide
+
+		var start = (cr.width - bgW)/2;
+
+		var offset = im - cm;
+
+		this.getEl().setStyle({
+			backgroundPositionX: (start+offset)+'px'
+		});
 	}
+
 });
