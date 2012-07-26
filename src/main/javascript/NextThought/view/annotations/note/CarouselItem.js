@@ -32,7 +32,8 @@ Ext.define('NextThought.view.annotations.note.CarouselItem',{
 
 
 	markSelected: function(state){
-		this[state?'addCls':'removeCls'].call(this,['selected']);
+		this.selected = Boolean(state);
+		this[this.selected?'addCls':'removeCls'].call(this,['selected']);
 	},
 
 

@@ -12,6 +12,9 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 	childEls: ['body'],
 	getTargetEl: function () { return this.body; },
 
+	PREV: {},//treat as const/final/read-only - the value is not important. We are creating a label that we can identify using the identity comparison operator (===). Think of this as an enum.
+	NEXT: {},//treat as const/final/read-only - the value is not important. We are creating a label that we can identify using the identity comparison operator (===). Think of this as an enum.
+
 	renderTpl: Ext.DomHelper.markup([
 			{
 				id: '{id}-body',
@@ -21,6 +24,11 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 			{ cls: 'slide-nav backward disabled', cn:[{cls: 'circle'}] },
 			{ cls: 'slide-nav forward disabled', cn:[{cls: 'circle'}] }
 		]),
+
+	renderSelectors: {
+		navNext: '.slide-nav.forward',
+		navPrev: '.slide-nav.backward'
+	},
 
 	initComponent: function(){
 		this.callParent(arguments);
@@ -40,7 +48,9 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 			var s = o.record===rec;
 			o.markSelected(s);
 			if(s){
-				if(me.rendered){ setTimeout(function(){ me.centerBackgroundOn(o); },10); }
+				if(me.rendered){
+					setTimeout(function(){ me.updateWith(o); },10);
+				}
 				else { me.selected = o; }
 			}
 		});
@@ -51,26 +61,80 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 		var me = this, o = me.selected;
 		me.callParent(arguments);
 		if( o ){
-			setTimeout(function(){ me.centerBackgroundOn(o); },10);
+			setTimeout(function(){ me.updateWith(o); },10);
 			delete me.selected;
 		}
+
+		this.navNext.on('click',this.selectNext,this);
+		this.navPrev.on('click',this.selectPrev,this);
+	},
+
+
+	updateWith: function(item){
+		var hasNext, hasPrev;
+		function t(el,s){ el[s?'removeCls':'addCls'].call(el,'disabled'); }
+
+		this.centerBackgroundOn(item);
+
+		hasNext = item && item.next();
+		hasPrev = item && item.prev();
+
+
+		t(this.navNext,hasNext);
+		t(this.navPrev,hasPrev);
 	},
 
 
 	centerBackgroundOn: function(item){
+		var ir = item ? item.getEl().dom.getBoundingClientRect() : {left:0,width:0};
+
 		var cr = this.getEl().dom.getBoundingClientRect();
-		var ir = item.getEl().dom.getBoundingClientRect();
 		var cm = Math.round(cr.left + (cr.width/2));
 		var im = Math.round(ir.left + (ir.width/2));
+
 		var bgW = 1400;//the background image is 1400px wide
 
 		var start = (cr.width - bgW)/2;
-
 		var offset = im - cm;
 
+		var pos = item ? start+offset : 0;
+
 		this.getEl().setStyle({
-			backgroundPositionX: (start+offset)+'px'
+			backgroundPositionX: pos+'px'
 		});
+	},
+
+
+	selectNext: function(){
+		this.moveSelection(this.NEXT,this.navNext);
+	},
+
+
+	selectPrev: function(){
+		this.moveSelection(this.PREV,this.navPrev);
+	},
+
+
+	moveSelection: function(dir,el){
+		//nice shortcut to reduce calculations if its ultimatly not going to fire because we've disabled it.
+		if(el && el.hasCls('disabled')){return;}
+
+		var newSel;
+		var sel = this.down('note-carousel-item[selected]');
+		var fn = !sel
+				? null
+				: dir === this.NEXT
+					? sel.next
+					: dir === this.PREV
+						? sel.prev
+						: null;
+
+		if(!fn || !sel){ return; }
+
+		newSel = fn.call(sel);
+		if(newSel && newSel.record){
+			this.setRecord(newSel.record);
+		}
 	}
 
 });
