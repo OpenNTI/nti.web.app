@@ -230,6 +230,7 @@ Ext.define( 'NextThought.view.annotations.Base', {
 			success:function(newRecord){
 				me.record.fireEvent('updated', newRecord);
 				me.record = newRecord;
+				LocationProvider.getStore().add(newRecord);
 				if (callback) {
 					Ext.callback(callback);
 				}
