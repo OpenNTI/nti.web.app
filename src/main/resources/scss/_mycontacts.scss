@@ -7,37 +7,6 @@
 	text-transform: uppercase;
 }
 
-@mixin text-box-style {
-	padding: 5px;
-	color: #757474;
-	height: 30px;
-	font-family: 'Open Sans', sans-serif;
-	//font-size: 15pt;
-	width: 100%;
-	border-radius: 3px;
-	border: 1px solid #a0a0a0;
-	box-shadow: inset 3px 3px 10px -5px #a0a0a0;//TODO: fix to be a sane value (use RGBA to lighten the shadow, not the blur & spread)
-	// REFRESHER: box-shadow syntax is:
-	// box-shadow:  none | <shadow> [,<shadow>]*
-	//	where <shadow> is defined as:
-	//		inset? && [ <offset-x> <offset-y> <blur-radius>? <spread-radius>? <color>? ]
-
-	$value: background-color 0.5s, color 0.5s;
-
-	@include experimental(transition, $value);
-
-	&.error-saving {
-		@include experimental(transition, $value);
-		border-color: red;
-		background-color: #ffc0c0;
-	}
-
-	&.empty,
-	&.x-form-empty-field {
-		font-style: italic !important;
-	}
-}
-
 $over-color: #f4f3f3;
 
 .my-contacts-tab-bar{
@@ -422,7 +391,6 @@ $over-color: #f4f3f3;
 						box-shadow: none;
 						background: transparent;
 						padding: 0;
-						font-style: italic;
 						height: auto;
 
 						$value: text-shadow 0.5s, color 0.5s;

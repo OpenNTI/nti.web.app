@@ -30,7 +30,8 @@ Ext.define('NextThought.view.annotations.note.FilterBar',{
 			{ text: 'Highest Rated', filter: 'highestRated'}
 		]
 	},{
-		xtype: 'textfield',
-		width: 150
+		xtype: 'simpletext',
+		width: 150,
+		placeholder: 'Search...'
 	}]
 });

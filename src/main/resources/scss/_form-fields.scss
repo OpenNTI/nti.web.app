@@ -79,3 +79,22 @@
 		}
 	}
 }
+
+
+.textbox-base {
+	position: relative;
+	
+	input {
+		@include text-box-style();
+	}
+	.clear {
+		cursor: pointer;
+		position: absolute;
+		display: none;
+		right: 4px;
+		top: 7px;
+		width: 16px;
+		height: 16px;
+		background: url(../images/tools/clear-line.png) 0 0 no-repeat;
+	}
+}
