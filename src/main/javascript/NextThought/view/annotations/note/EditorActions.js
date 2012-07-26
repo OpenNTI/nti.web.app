@@ -144,7 +144,7 @@ Ext.define('NextThought.view.annotations.note.EditorActions',{
 			frag = range.createContextualFragment(pasteddata);
 			range.insertNode(frag);
 		}
-		catch(e){
+		catch(e2){
 			console.log(pasteddata);
 		}
 	},

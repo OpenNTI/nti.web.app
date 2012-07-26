@@ -8,7 +8,7 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 	renderTpl: Ext.DomHelper.createTemplate([
 			{
 				id: '{id}-body',
-			  	tpl: new Ext.XTemplate('{%this.renderContainer(out,values)%}')
+				tpl: new Ext.XTemplate('{%this.renderContainer(out,values)%}')
 			},
 			{ cls: 'slide-nav backward' },
 			{ cls: 'slide-nav forward' }

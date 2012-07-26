@@ -54,7 +54,7 @@ Ext.define('NextThought.controller.Navigation', {
 								return false; //stop iteration
 							}
 						}
-					})
+					});
 				}
 				else {
 					id = cid(scrollToTargetId);

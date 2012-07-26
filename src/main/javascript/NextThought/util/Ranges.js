@@ -1,7 +1,7 @@
 Ext.define('NextThought.util.Ranges',{
 	singleton: true,
 
- 	saveRange: function(r){
+	saveRange: function(r){
 		if(!r){ return null; }
 		return{
 			startContainer: r.startContainer,

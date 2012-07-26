@@ -40,17 +40,26 @@ Ext.define('NextThought.util.Parsing',{
 
 	getReaderForModel: function(modelName) {
 		this.readers = this.readers || [];
+
 		function recurse(dir, modelName) {
-			for (var sub in dir) {
-				if (sub == modelName) {
-					return dir[sub];
-				}
-				if (!dir[sub].hasOwnProperty('$className')) {
-					var child = recurse(dir[sub],modelName);
-					if (child) return child;
+			var sub, o = dir[modelName];
+
+			if(o) {
+				return o;
+			}
+
+			for( sub in dir ) {
+				if( dir.hasOwnProperty(sub) ){
+					if(!dir[sub].$isClass) {
+						o = recurse(dir[sub], modelName);
+						if(o){return o;}
+					}
 				}
 			}
+
+			return null;
 		}
+
 		var o = recurse(NextThought.model,modelName);
 		if (!o) {
 			console.error('no model found for ' + modelName);

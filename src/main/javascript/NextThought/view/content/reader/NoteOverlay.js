@@ -216,8 +216,8 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 				this.noteOverlayPositionInputBox();
 			}
-		} catch(e){
-			console.warn(Globals.getError(e));
+		} catch(er){
+			console.warn(Globals.getError(er));
 		}
 	},
 
@@ -281,7 +281,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 			e = o.editor;
 		}
 
-		e.scrollIntoView(this.body)
+		e.scrollIntoView(this.body);
 	},
 
 

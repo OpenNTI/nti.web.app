@@ -123,8 +123,8 @@ Ext.define('NextThought.view.annotations.Highlight', {
 			Ext.fly(this.counter).remove();
 			Ext.each(c,this.unwrap,this);
 
-		} catch(e){
-			console.error(Globals.getError(e));
+		} catch(e2){
+			console.error(Globals.getError(e2));
 		}
 		}
 		return this.callParent(arguments);
@@ -320,7 +320,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
 			lastY = y;
 		}
 
-		return boundingTop || this.resolveVerticalLocation()
+		return boundingTop || this.resolveVerticalLocation();
 	},
 
 
@@ -384,14 +384,14 @@ Ext.define('NextThought.view.annotations.Highlight', {
 		endToEnd =  nodeRange.compareBoundaryPoints(Range.END_TO_END, range);
 
 		var valid = false;
-		if (node.nodeType == node.TEXT_NODE) valid = true;
-		else if (node.nodeType == node.ELEMENT_NODE) {
+		if (node.nodeType === node.TEXT_NODE) { valid = true; }
+		else if (node.nodeType === node.ELEMENT_NODE) {
 			var display = node.ownerDocument.parentWindow.getComputedStyle(node).display;
-			if (['inline','inline-block','none'].indexOf(display) >= 0) valid = true;
-			else if (node.className.indexOf && node.className.indexOf('mathjax') >= 0) valid = true;
-			else if (node.className.indexOf && node.className.indexOf('mathquill') >= 0) valid = true;
-			if (node.tagName == 'P') valid = false;
-			if (node.childNodes.length == 0) valid = true;
+			if (['inline','inline-block','none'].indexOf(display) >= 0) { valid = true; }
+			else if (node.className.indexOf && node.className.indexOf('mathjax') >= 0) { valid = true; }
+			else if (node.className.indexOf && node.className.indexOf('mathquill') >= 0) { valid = true; }
+			if (node.tagName === 'P') { valid = false; }
+			if (node.childNodes.length === 0) { valid = true; }
 		}
 		//Easy case, the node is completely surronded and valid, wrap the node
 		if( ( startToStart === AFTER || startToStart === SAME )

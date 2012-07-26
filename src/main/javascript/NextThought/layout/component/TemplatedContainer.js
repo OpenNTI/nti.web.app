@@ -26,7 +26,7 @@ Ext.define('NextThought.layout.component.TemplatedContainer', {
 		var innerWidth = width - ownerContext.getFrameInfo().width,
 			targetContext = ownerContext.targetContext;
 
-		if (targetContext != ownerContext) {
+		if (targetContext !== ownerContext) {
 			innerWidth -= (ownerContext.getPaddingInfo().width + ownerContext.getMarginInfo().width);
 		}
 

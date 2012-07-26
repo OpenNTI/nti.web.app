@@ -79,7 +79,7 @@ Ext.define('NextThought.util.Quizes', {
 			document.getElementsByTagName('iframe')[0].contentWindow.document.onkeydown = function(e) {
 				 e.target.value += '0';
 				 e.target.value = e.target.value.substring(0,e.target.value.length - 1);
-			}
+			};
 		}
 		catch(e){
 			console.error('unable to setup quiz ',e.stack||e.toString());

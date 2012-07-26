@@ -141,7 +141,7 @@ Ext.define('NextThought.view.annotations.Redaction', {
 				if (me.clickTimer){clearTimeout(me.clickTimer);}
 				me.clickTimer = setTimeout(function(){
 					me.onClick(e);
-				}, 400)},
+				}, 400);},
 			me);
 
 		this.attachEvent('dblclick', masterSpan.dom, this.makeEditableSpanEditable, this);

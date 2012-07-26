@@ -56,7 +56,7 @@ Ext.define('NextThought.util.Line',{
 
 		function rr(){ return me.getRects(s.getRangeAt(0)).last(); }
 		function f(fn,key){
-			fn = fn || function(){return s.getRangeAt(0).getBoundingClientRect() };
+			fn = fn || function(){return s.getRangeAt(0).getBoundingClientRect(); };
 			key = key || 'bottom';
 			return Math.ceil(fn()[key]);
 		}
@@ -159,11 +159,11 @@ Ext.define('NextThought.util.Line',{
 
 	getRects: function(r){
 		var rects = Array.prototype.slice.call(r.getClientRects()),
-			c = rects.length- 1, r;
+			c = rects.length- 1, o;
 
 		for(;c>=0; c--){
-			r = rects[c];
-			if(!r.width || !r.height){
+			o = rects[c];
+			if(!o.width || !o.height){
 				rects.splice(c,1);//remove collapsed rects
 			}
 		}
