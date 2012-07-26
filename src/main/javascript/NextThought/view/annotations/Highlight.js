@@ -256,7 +256,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
 		}
 
 		range = this.buildRange();
-		bounds = range.getBoundingClientRect() || this.lastGoodClientRect; //safety catch for safari 5
+		bounds = range.getBoundingClientRect() || this.getAlternateBoundingRect();
 		boundingTop = Math.ceil(bounds.top);
 		boundingLeft = Math.ceil(bounds.left);
 		boundingHeight = Math.ceil(bounds.height);

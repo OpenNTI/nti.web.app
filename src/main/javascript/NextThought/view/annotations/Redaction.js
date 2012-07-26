@@ -76,18 +76,18 @@ Ext.define('NextThought.view.annotations.Redaction', {
 
 			this.toggleRedaction();
 		}
+
+		console.log('rendering redaction, returning', y);
+
 		return y;
 	},
 
 
-	buildRange: function(){
-		var r = this.callParent(arguments);
-
-		if (r.getBoundingClientRect()){
-			this.lastGoodClientRect = r.getBoundingClientRect();
-		}
-
-		return r;
+	getAlternateBoundingRect: function(){
+		var b = Ext.fly(this.actionSpan).getBox()
+		b.top = b.y;
+		b.bottom = b.y + b.height;
+		return b;
 	},
 
 
