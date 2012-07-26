@@ -42,6 +42,13 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 		});
 	},
 
+
+	destroy: function(){
+		if(this.keyMap){this.keyMap.destroy();}
+		return this.callParent(arguments);
+	},
+
+
 	setRecord: function(rec){
 		var me = this;
 		this.items.each(function(o){
@@ -65,23 +72,37 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 			delete me.selected;
 		}
 
-		this.navNext.on('click',this.selectNext,this);
-		this.navPrev.on('click',this.selectPrev,this);
+		this.mon(this.navNext,'click',this.selectNext,this);
+		this.mon(this.navPrev,'click',this.selectPrev,this);
+
+		this.keyMap = new Ext.util.KeyMap({
+			target: document,
+			binding: [{
+				key: Ext.EventObject.RIGHT,
+				fn: this.selectNext,
+				scope: this
+			},{
+				key: Ext.EventObject.LEFT,
+				fn: this.selectPrev,
+				scope: this
+			}]
+		});
 	},
 
 
 	updateWith: function(item){
 		var hasNext, hasPrev;
-		function t(el,s){ el[s?'removeCls':'addCls'].call(el,'disabled'); }
+		function t(el,s){ el[(s?'remove':'add')+'Cls']('disabled'); }
 
 		this.centerBackgroundOn(item);
 
 		hasNext = item && item.next();
 		hasPrev = item && item.prev();
 
-
 		t(this.navNext,hasNext);
 		t(this.navPrev,hasPrev);
+
+		this.up('window').down('note-main-view').setRecord(item?item.record:null);
 	},
 
 

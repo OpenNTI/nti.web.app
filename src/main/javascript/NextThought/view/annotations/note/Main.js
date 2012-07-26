@@ -15,13 +15,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		{
 			tag: 'span',
 			cls: 'highlight',
-			cn: [
-				'{0}',
-				{
-					tag: 'span',
-					cls: 'tip'
-				}
-			]
+			html: '{0}'
 		}
 	).compile(),
 
@@ -74,7 +68,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		me.callParent(arguments);
 
 		try {
-			me.setRecord(me.record, me.range);
+			me.setRecord(me.record);
 
 			me.mon(me.replyButton,{ scope: me, click: me.activateReplyEditor });
 			me.mon(me.editor.down('.cancel'),{ scope: me, click: me.deactivateReplyEditor });
@@ -91,8 +85,8 @@ Ext.define('NextThought.view.annotations.note.Main',{
 				keydown: me.editorKeyDown
 			});
 
-			me.mon(me.liked, { scope: me, click: function(){ me.record.like(me.liked); } });
-			me.mon(me.favorites, { scope: me, click: function(){ me.record.favorite(me.favorites); } });
+			me.mon( this.liked, 'click', function(){ me.getRecord().like(me.liked); },this);
+			me.mon( this.favorites, 'click', function(){ me.getRecord().favorite(me.favorites); },this);
 
 			TemplatesForNotes.attachMoreReplyOptionsHandler(me, me.more);
 			me.editorActions = new NoteEditorActions(me,me.editor);
@@ -136,23 +130,22 @@ Ext.define('NextThought.view.annotations.note.Main',{
 	},
 
 
-	setRecord: function(r, range){
-		var suppressed, text, bodyText, start, end,
-			boundryChars = 200;
+	getRecord: function(){return this.record;},
+
+
+	setRecord: function(r){
+		var suppressed, text, bodyText, start, end, range, doc,
+			boundryChars = 50;
 
 		this.record = r;
-		this.range = range;
-		if(!this.rendered){return;}
+		if(!this.rendered || !r){return;}
+
 		try {
 			UserRepository.getUser(r.get('Creator'),this.fillInUser,this);
 			this.time.update(r.getRelativeTimeString());
 			this.liked.update(r.getFriendlyLikeCount());
-			if (r.isLiked()){
-				this.liked.addCls('on');
-			}
-			if (r.isFavorited()){
-				this.favorites.addCls('on');
-			}
+			this.liked[(r.isLiked()?'add':'remove')+'Cls']('on');
+			this.favorites[(r.isFavorited()?'add':'remove')+'Cls']('on');
 		}
 		catch(e1){
 			console.error(Globals.getError(e1));
@@ -160,8 +153,11 @@ Ext.define('NextThought.view.annotations.note.Main',{
 
 		try {
 			suppressed = r.get('style') === 'suppressed';
+			doc = ReaderPanel.get(this.prefix).getDocumentElement();
+			range = Anchors.toDomRange(r.get('applicableRange'),doc);
 			if(range){
 				text = range.toString();
+				console.log(text);
 				bodyText = range.commonAncestorContainer.ownerDocument.getElementById('NTIContent').textContent;
 				start = bodyText.indexOf(text);
 				end = start + text.length;
@@ -176,11 +172,9 @@ Ext.define('NextThought.view.annotations.note.Main',{
 				if (start){ bodyText = '[...] ' + bodyText;}
 				if (end){ bodyText += ' [...]';}
 
-				if(!suppressed){
-					bodyText = bodyText.replace(text, this.highlightTpl.apply([text]));
-				}
-
-				text = bodyText;
+				text = bodyText.replace(text, this.highlightTpl.apply([text]));
+			} else {
+				text = r.get('selectedText');
 			}
 
 			this.context.update(text);
@@ -202,7 +196,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 
 		try {
 			this.record.on('changed', function(){
-				this.setRecord(this.record, range);
+				this.setRecord(this.record);
 			}, this, {single:true});
 		}
 		catch(e4){

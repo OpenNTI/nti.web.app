@@ -44,9 +44,10 @@ Ext.define('NextThought.view.annotations.note.Window',{
 
 
 	initComponent: function(){
+		var a = this.annotation;
 		this.callParent(arguments);
-		this.down('note-carousel').setRecord(this.annotation.getRecord());
-		this.down('note-main-view').setRecord(this.annotation.getRecord(), this.annotation.getRange());
+		this.down('note-main-view').prefix = a.prefix;
+		this.down('note-carousel').setRecord(a.getRecord());
 	},
 
 	afterRender: function(){
