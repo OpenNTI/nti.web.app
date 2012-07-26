@@ -111,6 +111,8 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 		var hasNext, hasPrev;
 		function t(el,s){ el[(s?'remove':'add')+'Cls']('disabled'); }
 
+		item.getEl().scrollIntoView(this.body,true);
+
 		this.centerBackgroundOn(item);
 
 		hasNext = item && item.next();

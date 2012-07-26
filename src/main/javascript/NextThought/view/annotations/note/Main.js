@@ -119,6 +119,10 @@ Ext.define('NextThought.view.annotations.note.Main',{
 			do{
 				c = string.charAt(start);
 				start += inc;
+
+				if(start < 0 || start > string.length) {
+					return left ? 0: undefined;
+				}
 			} while(!/\s/.test(c));
 		}
 		catch(e) {
