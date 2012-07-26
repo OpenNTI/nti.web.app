@@ -90,13 +90,11 @@ console.log('setting content...');
 
 		ntiContent = document.getElementsByTagName('iframe')[0].contentWindow.document.getElementById('NTIContent');
 		wst = ntiContent.querySelector('.worksheet-title');
-		if (wst && wst.id && wst.id.indexOf('mathcounts' >= 0)) {
-			console.log('Setup type is QuizUtils')
-			QuizUtils.setupQuiz(me.getDocumentElement(), me);
+		if (wst && wst.innerHTML == 'Workbook Questions') {
+			AssessmentUtils.setupAssessment(me.getDocumentElement(), me);
 		}
 		else {
-			console.log('Setup type is AssessmentUtils')
-			AssessmentUtils.setupAssessment(me.getDocumentElement(), me);
+			QuizUtils.setupQuiz(me.getDocumentElement(), me);
 		}
 		console.log('setting content... set, loading annotations');
 		//containerId = Ext.util.Format.htmlDecode(me.getContainerId()); //handle apostrophe
