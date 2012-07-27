@@ -206,8 +206,8 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		}
 
 		try {
-			this.record.on('changed', function(){
-				this.setRecord(this.record);
+			this.record.on('changed', function(rec){
+				if(this.record === r){ this.setRecord(rec); }
 			}, this, {single:true});
 		}
 		catch(e4){
