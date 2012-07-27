@@ -41,12 +41,14 @@ Ext.define('NextThought.view.annotations.Highlight', {
 		if(this.range && this.range.collapsed){
 			this.range.detach();
 			delete this.range;
+			console.log('cleaning up collapsed range');
 		}
 
 
 		if(!this.range){
 			//console.warn('GET RANGE FOR:', this.getRecordField('applicableRange').getStart().getContexts()[0].getContextText());
 			this.range = Anchors.toDomRange(this.getRecordField('applicableRange'),this.doc);
+			console.log(this.id,': ',(this.get('body')||[]).join('|'), ': got range from description:', this.range);
 
 			//TODO - there is most definitly a better and more complicated way to solve this, however in the interest of time,
 			//we will make a best guess if our range gets borked.
@@ -87,7 +89,10 @@ Ext.define('NextThought.view.annotations.Highlight', {
 
 
 			if(!this.range){
-				console.log('bad range?',this.getRecordField('applicableRange'));
+				console.log('bad range?',
+					this.getRecordField('applicableRange'),
+					'hadRange:',this.hadRange
+				);
 
 			}
 		}
