@@ -283,6 +283,7 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 		var r = this.record;
 		if (r.children && r.children.length > 0){
 			this.replyBox.remove();
+			r.placeHolder = true;
 		}
 		else {
 			this.destroy();

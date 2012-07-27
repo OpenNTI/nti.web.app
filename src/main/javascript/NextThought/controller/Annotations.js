@@ -145,9 +145,19 @@ Ext.define('NextThought.controller.Annotations', {
 
 
 	replyBubble: function(replies){
-		var e = this.self.events;
-		console.log('bubble',arguments);
-		Ext.each(replies,function(r){ r.pruned=true; e.fireEvent('new-note', r, null); });
+		var me = this,
+			e = this.self.events;
+
+		Ext.each(replies,function(r){
+			if(!r.placeHolder && r.store && r.stores.length > 0){
+				delete r.parent;
+				r.pruned = true;
+				e.fireEvent('new-note', r, null);
+			}
+			else if(r.children){
+				me.replyBubble(r.children);
+			}
+		});
 	},
 
 
