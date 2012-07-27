@@ -18,7 +18,17 @@ Ext.define('NextThought.view.whiteboard.editor.ShapeOptions',{
 		cls: 'shape-picker',
 		defaults: {
 			xtype: 'wb-tool-option',
-			toggleGroup: 'shape-selected-'
+			toggleGroup: 'shape-selected-',
+            handler: function(btn){
+                var fill = btn.up('wb-tool-shape-options').down('color-picker-button[fillSelect]');
+                if(btn.sides===1){
+                    fill.setValue();
+                    fill.disable();
+                }else{
+                    fill.setValue('ACACAC');
+                    fill.enable();
+                }
+            }
 		},
 		items: [
 			{ option: 'line shape', sides: 1, pressed: true },
@@ -37,7 +47,7 @@ Ext.define('NextThought.view.whiteboard.editor.ShapeOptions',{
 		},
 		items: [
 			'Fill',
-			{ xtype: 'color-picker-button', fillSelect: true, value: 'ACACAC' },
+			{ xtype: 'color-picker-button', fillSelect: true, value: 'NONE', disabled: true },
 			'Stroke',
 			{ xtype: 'stroke-select', value: 3 },
 			{ xtype: 'color-picker-button', strokeSelect: true, value: '333333' }
