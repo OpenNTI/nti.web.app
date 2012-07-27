@@ -2,7 +2,6 @@ Ext.define( 'NextThought.view.annotations.Base', {
 
 	requires: [
 		'NextThought.view.annotations.renderer.Manager',
-		'NextThought.ux.Spotlight',
 		'Ext.String'
 	],
 
@@ -116,8 +115,6 @@ Ext.define( 'NextThought.view.annotations.Base', {
 
 	getSortValue: function(){console.warn('Implement me!!');},
 
-	getBlockWidth: function(){ return NaN; },
-	getRects: null,//implement in subclasses
 	getRecord: function(){ return this.record || {get:Ext.emptyFn}; },
 	getRecordField: function(field){ return this.getRecord().get(field); },
 
