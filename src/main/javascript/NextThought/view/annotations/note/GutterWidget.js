@@ -90,7 +90,7 @@ Ext.define('NextThought.view.annotations.note.GutterWidget',{
 			scope: this,
 			single: true,
 			updated: this.setRecord,
-			changed: this.setRecord
+			changed: function(){me.setRecord(me.record);}
 		});
 	},
 
