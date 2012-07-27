@@ -227,10 +227,6 @@ Ext.define('NextThought.view.annotations.Highlight', {
 			padding = 2,
 			last = true;
 
-		if(style === 'suppressed'){
-			return this.resolveVerticalLocation();
-		}
-
 		if(!this.rendered){
 			range = this.getRange();
 			if(!range){ return -1; }
@@ -240,7 +236,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
 			this.compElements = new Ext.dom.CompositeElement(this.rendered);
 			this.compElements.add(this.counter);
 			//highlights that are not ours do not get a marked over treatment...so don't create the canvas
-			if(this.isModifiable){
+			if(this.isModifiable && style !== 'suppressed'){
 				this.canvas = this.createCanvas();
 			}
 		}
