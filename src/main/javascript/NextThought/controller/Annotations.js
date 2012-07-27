@@ -98,11 +98,15 @@ Ext.define('NextThought.controller.Annotations', {
 			this.definition.close();
 			delete this.definition;
 		}
-
 		this.definition = Ext.widget({
 			xtype: 'definition-window',
 			src:url,
-			pointTo: boundingScreenBox}).show();
+			pointTo: boundingScreenBox
+		}).show();
+		setTimeout(
+		"var head = document.querySelector('iframe.definition');"+
+		"head.style.overflowX = 'hidden';"+
+		"head.style.overflowY = 'scroll';",250);
 	},
 
 
