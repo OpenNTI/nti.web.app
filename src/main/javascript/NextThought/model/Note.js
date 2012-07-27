@@ -86,10 +86,8 @@ Ext.define('NextThought.model.Note', {
 	 * This depends on the linking of models by annotation...
 	 */
 	getReplyCount: function(){
-		if(!this.children) {return 0;}
-
-		return this.children.reduce(function(sum,child){
-			return sum + 1 + child.getReplyCount ? child.getReplyCount() : 0;
+		return (this.children||[]).reduce(function(sum,child){
+			return sum + 1 + (child.getReplyCount ? (child.getReplyCount()||0) : 0);
 		},0);
 	}
 });

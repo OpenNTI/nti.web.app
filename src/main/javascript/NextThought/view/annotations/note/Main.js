@@ -281,8 +281,9 @@ Ext.define('NextThought.view.annotations.note.Main',{
 
 
 	onDelete: function(){
-		console.log(this.record);
-		this.record.destroy();
+		if( this.record && this.record.destroy){
+			this.record.destroy();
+		}
 		this.up('window').close();
 	},
 
