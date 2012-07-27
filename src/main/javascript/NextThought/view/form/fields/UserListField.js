@@ -78,7 +78,7 @@ Ext.define('NextThought.view.form.fields.UserListField', {
 		var me = this, i=(value?value.length:0)-1;
 		me.value = value;
 		//trim empty's...
-		for(;i>0;i--){if(!value[i]){value.splice(i,1);}}
+		for(;i>=0;i--){if(!value[i]){value.splice(i,1);}}
 
 		me.checkChange();
 		me.initValue();
