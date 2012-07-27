@@ -103,9 +103,7 @@ Ext.define('NextThought.assessment.Main', {
 			for (i=0; i < mc.length; i++) {
 				if (mc[i].alt.indexOf('{tabular}') >= 0) {
 					tabletext = mc[i].alt.replace(/^.*?{tabular}{cc}/,'').replace(/\\end{tabular}.*?$/,'');
-					console.log(tabletext);
 					rows = tabletext.split('\\\\'); //Actually just two slashes
-					console.log(rows);
 					cells = [], values = [];
 					j = 0;
 					for (;j < rows.length; j++) {
@@ -114,11 +112,97 @@ Ext.define('NextThought.assessment.Main', {
 							values.push(-1);
 						}
 					}
-					console.log(cells);
 					hidden = doc.createElement('span');
+					hidden.className = 'hidden-data-span';
 					hidden.style.display = 'none';
 					hidden.innerHTML = '{"selected":0,"values":'+JSON.stringify(values)+'}';
-					//mc.parentNode.insertBefore(
+					//Make existing elements invisible
+					mc[i].style.display = 'none';
+					questionObj = mc[i];
+					while (questionObj && questionObj.className.indexOf('naquestionpart') == -1) {
+						questionObj = questionObj.parentNode;
+					}
+					questionObj.querySelector('input').style.display = 'none';
+					//Hidden element stores the current selection
+					mc[i].parentNode.insertBefore(hidden,mc[i]);
+					table = doc.createElement('table');
+					mc[i].parentNode.insertBefore(table,mc[i]);
+					//Draws connecting lines on the canvas
+					function drawLine(canvas,leftTd,rightTd) {
+						var getCumulativeOffset = function (obj) {
+							var left, top;
+							left = top = 0;
+							if (obj.offsetParent) {
+								do {
+									left += obj.offsetLeft;
+									top  += obj.offsetTop;
+								} while (obj = obj.offsetParent);
+							}
+   							return {
+								x : left,
+   								y : top
+  							};
+						};
+						var lo = getCumulativeOffset(leftTd),
+							ro = getCumulativeOffset(rightTd);
+						var co = getCumulativeOffset(canvas);
+						ctx = canvas.getContext('2d');
+						ctx.beginPath();
+						ctx.moveTo(lo.x - co.x + leftTd.offsetWidth, lo.y - co.y + leftTd.offsetHeight/2);
+						ctx.lineTo(ro.x - co.x, ro.y - co.y + leftTd.offsetHeight / 2);
+						ctx.stroke();
+					}
+					for (j = 0; j < cells.length; j++) {
+						row = doc.createElement('tr');
+						table.appendChild(row);
+						left = doc.createElement('td');
+						left.innerHTML = cells[j][0];
+						left.id = mc[i].parentNode.id+'-left:'+j;
+						left.onclick = function(e){
+							//cell -> row -> table -> mc[i].parentNode
+							localRoot = this.parentNode.parentNode.parentNode;
+							hiddenSpan = localRoot.querySelector('.hidden-data-span');
+							obj = JSON.parse(hiddenSpan.innerHTML);
+							obj.selected = parseInt(this.id.replace(/^.*:/,''));
+							hiddenSpan.innerHTML = JSON.stringify(obj);
+						}
+						row.appendChild(left);
+						middle = doc.createElement('td');
+						middle.width='25';
+						row.appendChild(middle);
+						right = doc.createElement('td');
+						right.innerHTML = cells[j][1];
+						right.id = mc[i].parentNode.id+'-right:'+j;
+						right.onclick = function(e){
+							//cell -> row -> table -> mc[i].parentNode
+							hiddenSpan = this.parentNode.parentNode.parentNode.querySelector('.hidden-data-span');
+							obj = JSON.parse(hiddenSpan.innerHTML);
+							if (obj.selected >= 0) {
+								obj.values[obj.selected] = parseInt(this.id.replace(/^.*:/,''));
+							}
+							obj.selected = -1;
+							hiddenSpan.innerHTML = JSON.stringify(obj);
+							var canvas = localRoot.querySelector('canvas');
+							table = localRoot.querySelector('table');
+							canvas.width = canvas.width; //Clear canvas
+							k = 0;
+							for (;k < obj.values.length; k++) {
+								if (obj.values[k] >= 0) {
+									drawLine(canvas,table.childNodes[k].firstChild,table.childNodes[obj.values[k]].lastChild);
+								}
+							}
+						}
+						row.appendChild(right);
+					}
+					var canvas = doc.createElement('canvas');
+					canvas.width = 300;
+					canvas.height = 300;
+					canvas.style.zIndex = -1;
+					var canvasdiv = doc.createElement('div');
+					canvasdiv.style.zIndex = -1;
+					canvasdiv.style.position = 'absolute';
+					mc[i].parentNode.insertBefore(canvasdiv,mc[i].parentNode.firstChild);
+					canvasdiv.appendChild(canvas);
 				}
 			}
 			//Add submit buttons to all questions
@@ -265,7 +349,6 @@ Ext.define('NextThought.assessment.Main', {
 		var q, i;
 
 		for (i = 0; i < questions.length; i++) {
-			console.log(questions[i].parentNode.getAttribute('data-ntiid'),questionId);
 			if (questions[i].parentNode.getAttribute('data-ntiid') === questionId) {
 				q = questions[i];
 				break;
@@ -280,7 +363,21 @@ Ext.define('NextThought.assessment.Main', {
 		for (p = 0; p < parts.length; p++) {
 			var input = parts[p].querySelector('input');
 			//TODO: support dict responses for Matching questions
-			if (input.className.indexOf('answerblank') >= 0) {
+			if (parts[p].querySelectorAll('canvas').length === 1) {
+				data = JSON.parse(parts[p].querySelector('.hidden-data-span').innerHTML).values;
+				dict = {}, i = 0;
+				for (; i < data.length; i++) {
+					dict[i] = data[i];
+				}
+				items.push(dict);
+				//Do we even want to reset a matching question after a solution?
+				/*emptyValues = [];
+				for (i = 0; i < data.length; i++) {
+					emptyValues.push(-1);
+				}
+				parts[p].querySelector('.hidden-data-span').innerHTML = '{"selected":-1,"values":'+JSON.stringify(emptyValues)+'}';*/
+			}
+			else if (input.className.indexOf('answerblank') >= 0) {
 				items.push(input.value);
 			}
 			else {
@@ -291,9 +388,6 @@ Ext.define('NextThought.assessment.Main', {
 				}
 				items.push(i);
 			}
-			/*items.push(Ext.create('NextThought.model.assessment.TextResponse', {
-				value: input.value
-			}));*/
 		}
 		var submission = Ext.create('NextThought.model.assessment.QuestionSubmission', {
 			ContainerId: ntiid,
@@ -360,22 +454,32 @@ Ext.define('NextThought.assessment.Main', {
 			Ext.getDom(pte.down('input')).value = '';
 
 			//r = pt.data
+				
+			prefix = (typeof pt.submittedResponse !== 'string') ? '' :
+				('"' + pt.submittedResponse + '" is ')
 			
-			if (pt.submittedResponse === '') {
+			ptnull = pt.submittedResponse === '';
+			if (typeof pt.submittedResponse === 'object') {
+				ptnull = true;
+				for (var v in pt.submittedResponse) {
+					if (pt.submittedResponse[v] !== -1) ptnull = false;
+				}
+			}
+			if (ptnull) {
 				html = 'Question not answered.';
 				bgcolor = 'transparent';
 			}
 			else if (!pt.assessedValue) {
-				html = '"'+pt.submittedResponse+'" is incorrect';
+				html = prefix + (prefix ? 'i' : 'I') + 'ncorrect';
 				bgcolor = '#F88';
 			}
 			else if (pt.assessedValue < 1) {
 				percent = Math.floor(pt.assessedValue * 100);
-				html = '"'+pt.submittedResponse+'" is ' + percent + '% correct';
+				html = prefix + percent + '% correct';
 				bgcolor = '#FF0';
 			}
 			else {
-				html = '"'+pt.submittedResponse+'" is correct';
+				html = prefix + (prefix ? 'c' : 'C') + 'orrect';
 				bgcolor = '#8F8';
 			}
 			s.setStyle('background-color',bgcolor);
