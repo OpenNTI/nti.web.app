@@ -6,6 +6,6 @@ Ext.define('NextThought.model.assessment.QuestionSubmission', {
 	],
 	fields: [
 		{ name: 'questionId', type: 'string' },
-		{ name: 'parts', type: 'arrayItem' }
+		{ name: 'parts', type: 'auto' }
 	]
 });

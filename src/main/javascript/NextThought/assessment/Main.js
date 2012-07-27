@@ -89,12 +89,37 @@ Ext.define('NextThought.assessment.Main', {
 				p = le.querySelector('p');
 				radioButton.type = 'radio';
 				radioButton.name = le.parentNode.querySelector('a').name;
-				radioButton.value = p.innerHTML;
+				r = doc.createRange();
+				r.selectNodeContents(p);
+				radioButton.value = r.toString().replace(/\s*$/,'');
 				p.style.display = 'inline';
 				le.insertBefore(radioButton,p);
 				le.insertBefore(doc.createTextNode('  '),p);
 				//replacement.innerHTML = le.querySelector('p').innerHTML;
 				//le.parentNode.removeChild(le);
+			}
+			//Substitute multiple choice with usable multiple choice
+			mc = doc.querySelectorAll('.nti_resource_image');
+			for (i=0; i < mc.length; i++) {
+				if (mc[i].alt.indexOf('{tabular}') >= 0) {
+					tabletext = mc[i].alt.replace(/^.*?{tabular}{cc}/,'').replace(/\\end{tabular}.*?$/,'');
+					console.log(tabletext);
+					rows = tabletext.split('\\\\'); //Actually just two slashes
+					console.log(rows);
+					cells = [], values = [];
+					j = 0;
+					for (;j < rows.length; j++) {
+						if (rows[j].indexOf('&') >= 0) {
+							cells.push(rows[j].split('&'));
+							values.push(-1);
+						}
+					}
+					console.log(cells);
+					hidden = doc.createElement('span');
+					hidden.style.display = 'none';
+					hidden.innerHTML = '{"selected":0,"values":'+JSON.stringify(values)+'}';
+					//mc.parentNode.insertBefore(
+				}
 			}
 			//Add submit buttons to all questions
 			questions = doc.querySelectorAll('.naquestion');
@@ -103,7 +128,9 @@ Ext.define('NextThought.assessment.Main', {
 				//submit.href='#'
 				submit.id=questions[i].parentNode.getAttribute('data-ntiid')+':submit';
 				submit.className = 'submitbutton';
-				submit.onclick=function(e){ window.AssessmentUtils.submitAnswersHandler(e,this.id.replace(':submit',''),me); };
+				submit.onclick=function(e){ 
+					window.AssessmentUtils.submitAnswersHandler(e,this.id.replace(':submit',''),me);
+				 };
 				submit.innerHTML = 'Submit';
 				questions[i].appendChild(submit);
 			}
@@ -253,18 +280,30 @@ Ext.define('NextThought.assessment.Main', {
 		for (p = 0; p < parts.length; p++) {
 			var input = parts[p].querySelector('input');
 			//TODO: support dict responses for Matching questions
-			items.push(Ext.create('NextThought.model.assessment.TextResponse', {
+			if (input.className.indexOf('answerblank') >= 0) {
+				items.push(input.value);
+			}
+			else {
+				inputs = parts[p].querySelectorAll('input');
+				var i;
+				for (i = 0; i < inputs.length; i++) {
+					if (inputs[i].checked) break;
+				}
+				items.push(i);
+			}
+			/*items.push(Ext.create('NextThought.model.assessment.TextResponse', {
 				value: input.value
-			}));
+			}));*/
 		}
 		var submission = Ext.create('NextThought.model.assessment.QuestionSubmission', {
+			ContainerId: ntiid,
 			questionId: questionId,
 			parts: items
 		});
-		console.log(submission);
 
 		me.pullMathQuillValues(doc);
 
+		console.log(submission);
 		vp.mask('Grading...');
 
 		submission.save({
@@ -287,12 +326,12 @@ Ext.define('NextThought.assessment.Main', {
 		var mathCls = 'mathjax tex2jax_process ',
 			ntiid = LocationProvider.currentNTIID;
 
-
-		if(ntiid !== quizResult.get('ContainerId')){
+		console.log(result);
+		if(ntiid !== result.get('ContainerId')){
 			Ext.Error.raise('Result does not match the page!');
 		}
 
-		var questions = doc.querySelector('.naquestion')
+		var questions = doc.querySelectorAll('.naquestion')
 		
 		var question, i;
 
@@ -303,72 +342,54 @@ Ext.define('NextThought.assessment.Main', {
 			}
 		}
 
-		var partElements = question.querySelector('.naquestionpart');
-		var parts = result.parts;
-		
+		var partElements = question.querySelectorAll('.naquestionpart');
+		var parts = result.data.parts;
+		console.log(partElements);	
 		for (i = 0; i < parts.length; i++) {
-			r = partElements[i];
-			r.removeCls('hidden');
+			
+			pte = Ext.get(partElements[i]);
+			pt = parts[i];
+			s = pte.down('.result');
+			if (s) s.remove();
 
-			r.createChild({
+			s = pte.createChild({
 			  	tag: 'span',
 			   	cls: 'result'
 			});
-			s = r.down('.result');
 
-			if (parts[i].submittedResponse !== '')
-			{
-				s.addCls((parts[i].value ? 'incorrect':'correct'));
-				s.createChild({
-					tag: 'span',
-					cls: 'rightwrongbox-inverse ' + (qqr.get('Assessment')?'rightbox':'wrongbox') + '-inverted'
-				});
+			Ext.getDom(pte.down('input')).value = '';
 
-				s.createChild({
-					tag : 'span',
-					html: '"\\('+qqr.get('Response')+'\\)" is ' + (qqr.get('Assessment')?'':'in')+'correct',
-					cls: mathCls+'response' + ' answer-text'
-				});
-
-				if (! qqr.get('Assessment')){
-					r.createChild({
-					tag : 'a',
-					html : 'Why?',
-					cls: 'why',
-					href: '#',
-					onclick: "var state=$(this).hasClass('bubble');$('a.why').removeClass('bubble');if (!state) {$(this).addClass('bubble');}",
-					cn: { tag: 'span', cls: 'bubble'}
-					});
-
-					s = r.down('span.bubble');
-					s.createChild({
-					tag: 'span',
-					html: 'Solution',
-					cls: 'bubble-title'
-					});
-
-					s.createChild({
-						tag : 'span',
-						html: q.get('Answers').join(', ').replace(/\$(.+?)\$/ig,'\\($1\\)'),
-						cls: mathCls+'bubble-text'
-					});
-				}
+			//r = pt.data
+			
+			if (pt.submittedResponse === '') {
+				html = 'Question not answered.';
+				bgcolor = 'transparent';
 			}
-			else
-			{
-				s.addCls('noanswer');
-				s.createChild({
-					tag : 'span',
-					html: 'Question not answered.',
-					cls: mathCls+'response' + ' answer-text'
-				});
+			else if (!pt.assessedValue) {
+				html = '"'+pt.submittedResponse+'" is incorrect';
+				bgcolor = '#F88';
 			}
+			else if (pt.assessedValue < 1) {
+				percent = Math.floor(pt.assessedValue * 100);
+				html = '"'+pt.submittedResponse+'" is ' + percent + '% correct';
+				bgcolor = '#FF0';
+			}
+			else {
+				html = '"'+pt.submittedResponse+'" is correct';
+				bgcolor = '#8F8';
+			}
+			s.setStyle('background-color',bgcolor);
+			s.setStyle('padding','4');
+			s.createChild({
+				tag : 'span',
+				html: html,
+				cls: mathCls+'response' + ' answer-text'
+			});
 		}
 
 		doc.parentWindow.postMessage('MathJax.reRender()',location.href);
 
 		Ext.get(doc.getElementById('submit')).update('Reset');
-		this.scrollUp();
 	},
 
 	resetAssessment: function(doc) {
