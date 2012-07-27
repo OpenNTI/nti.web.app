@@ -167,9 +167,11 @@ Ext.define('NextThought.controller.State', {
 		};
 
 		try {
+			console.log('local state found', window.localStorage.getItem(this.getStateKey()));
 			return Ext.decode( window.localStorage.getItem(this.getStateKey()) ) || defaultState;
 		}
 		catch(e){
+			console.error('failed to decode local state, use default.', Globals.getError(e), window.localStorage);
 			window.localStorage.removeItem(this.getStateKey());
 			return defaultState;
 		}
