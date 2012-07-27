@@ -82,7 +82,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
 				}
 			}
 			catch (e){
-
+				console.log('what?', e.message, e.stack);
 			}
 
 
