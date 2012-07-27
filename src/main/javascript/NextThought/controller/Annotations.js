@@ -109,10 +109,17 @@ Ext.define('NextThought.controller.Annotations', {
 	onShareWithSaveClick: function(btn){
 		var win = btn.up('window'),
 			shbx= win.down('user-list'),
-			saveAsDefault = win.down('checkbox').checked,
+			cb = win.down('checkbox'),
+			saveAsDefault = cb ? cb.checked : false,
 			v = shbx.getValue(),
 			rec = win.record,
 			me = this;
+
+		//extra check here for a close...
+		if (btn.text === 'Close'){
+			win.close();
+			return;
+		}
 
 		if (!rec){return;}
 

@@ -119,7 +119,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
 				console.warn('tried to clear something', Globals.getError(e));
 			}
 
-			Ext.fly(this.canvas).remove();
+			if (this.canvas){Ext.fly(this.canvas).remove();}
 			Ext.fly(this.counter).remove();
 			Ext.each(c,this.unwrap,this);
 
