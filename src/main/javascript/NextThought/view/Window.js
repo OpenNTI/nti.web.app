@@ -113,7 +113,12 @@ Ext.define('NextThought.view.Window',{
 		if( c ){
 			if( !c || !c.modal ){ c = null; }
 			else if(s.rangeCount){
-				r = RangeUtils.saveRange( s.getRangeAt(0) );
+				try {
+					r = RangeUtils.saveRange( s.getRangeAt(0) );
+				}
+				catch (e){
+					//no range to save, like a note to a chat for example...
+				}
 			}
 			else {
 				c = null;
