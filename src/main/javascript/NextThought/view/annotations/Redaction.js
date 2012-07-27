@@ -248,7 +248,7 @@ Ext.define('NextThought.view.annotations.Redaction', {
 		//toggle redaction on generated spans:
 		this.compElements.toggleCls(this.cls);
 		Ext.get(this.actionSpan).toggleCls(this.cls);
-		Ext.fly(this.canvas).toggle();
+		if (this.canvas){Ext.fly(this.canvas).toggle();}
 		if (this.controlDiv){this.controlDiv.toggleCls(this.cls);}
 
 		//if action span is toggled back on and it's inline, make sure it has events:
