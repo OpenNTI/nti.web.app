@@ -245,7 +245,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
 			}
 		}
 
-		if(!this.canvas){return;}
+		if(!this.canvas){return this.resolveVerticalLocation();}
 
 		if(!this.content || !this.content.dom){
 			try{
