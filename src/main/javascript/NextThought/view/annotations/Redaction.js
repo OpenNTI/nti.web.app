@@ -201,8 +201,7 @@ Ext.define('NextThought.view.annotations.Redaction', {
 			return handledKey();
 		}
 		else if(k === event.ENTER){
-			//TODO: REVIEW: make sure we fully intend innerText here and not textContent
-			this.record.set('replacementContent', span.innerText);//just the text, not the formatting
+			this.record.set('replacementContent', span.textContent);
 			this.record.save();
 			return handledKey();
 		}
