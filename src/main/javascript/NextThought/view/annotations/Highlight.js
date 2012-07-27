@@ -142,18 +142,6 @@ Ext.define('NextThought.view.annotations.Highlight', {
 	},
 
 
-	getLineHeight: function(){
-		var s = this.getRange(), m,
-			n = s.commonAncestorContainer;
- 
-		if(n.nodeType===n.TEXT_NODE){
-			n = n.parentNode;
-		}
-		m = new Ext.util.TextMetrics(n);
-		return m.getHeight("TEST");
-	},
-
-
 	onMouseOver: function(){
 		clearTimeout(this.mouseOutTimout);
 		if(!this.compElements.first().hasCls(this.mouseOverCls)){
@@ -268,7 +256,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
 		boundingLeft = Math.ceil(bounds.left);
 		boundingHeight = Math.ceil(bounds.height);
 		width = this.content ? this.content.getWidth() : 680;
-		lineHeight = this.getLineHeight();
+		lineHeight = parseInt(this.compElements.first().getStyle('line-height'),10);
 		s = RectUtils.merge(range.getClientRects(),lineHeight,width+1);
 		i = s.length - 1;
 

@@ -116,7 +116,6 @@ Ext.define( 'NextThought.view.annotations.Base', {
 
 	getSortValue: function(){console.warn('Implement me!!');},
 
-	getLineHeight: function(){ return NaN; },
 	getBlockWidth: function(){ return NaN; },
 	getRects: null,//implement in subclasses
 	getRecord: function(){ return this.record || {get:Ext.emptyFn}; },
