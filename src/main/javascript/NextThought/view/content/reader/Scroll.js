@@ -50,8 +50,12 @@ Ext.define('NextThought.view.content.reader.Scroll',{
 
 			e = c.getRange();
 			if(e){
-
-				c.getEl().scrollIntoView(this.body, true);
+				try{
+					c.getEl().scrollIntoView(this.body, true);
+				}
+				catch(excp) {
+					c.compElements.last().scrollIntoView(this.body, true);
+				}
 				//this.scrollTo(e.getBoundingClientRect().top - this.getAnnotationOffsets().top);
 				return;
 			}
