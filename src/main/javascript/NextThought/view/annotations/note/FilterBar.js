@@ -41,7 +41,7 @@ Ext.define('NextThought.view.annotations.note.FilterBar',{
 		this.mon(this.down('simpletext'),{
 			scope: this,
 			commit:this.search,
-			clear: this.search
+			clear: function(){this.search('');}
 		});
 	},
 
