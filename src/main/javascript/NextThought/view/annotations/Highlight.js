@@ -143,11 +143,14 @@ Ext.define('NextThought.view.annotations.Highlight', {
 
 
 	getLineHeight: function(){
-		if(!this.rendered){
-			return 17;//default
+		var s = this.getRange(), m,
+			n = s.commonAncestorContainer;
+ 
+		if(n.nodeType===n.TEXT_NODE){
+			n = n.parentNode;
 		}
-
-		return parseInt(this.compElements.first().getStyle('line-height'),10);
+		m = new Ext.util.TextMetrics(n);
+		return m.getHeight("TEST");
 	},
 
 

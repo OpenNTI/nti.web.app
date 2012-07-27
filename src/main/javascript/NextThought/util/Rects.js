@@ -29,6 +29,7 @@ Ext.define('NextThought.util.Rects',{
 
 
 	merge: function(rects,lineHeight,clientWidth){
+		console.log('ORIGINAL',rects);
 		rects = this.trimCrazies(rects, lineHeight, clientWidth);
 		var r=[], ri,
 			x,xx,y,yy, w,h,
@@ -48,14 +49,18 @@ Ext.define('NextThought.util.Rects',{
 			var tolerance = 3;
 
 			b = Math.floor((y+h/2) / tolerance);//center line of the rect
+			console.log('B',i,bins,r.length,x,y,xx,yy,b);
 
 			if(!bins[b] && !bins[b+1]){
 				r.push( { left:x, top:y, right:xx, bottom:yy, width:w, height:h } );
+				//Each bin points to the rectangle occupying it,
+				//+1 to overcome the problem of falsy values
 				bins[b] = r.length;
-				bins[b+1] = r.length; //Each bin points to the rectangle occupying it
+				bins[b+1] = r.length; 
 			}
 			else {
                 b = r[(bins[b] || bins[b+1]) - 1];
+				console.log(b);
 				b.left = b.left < x? b.left : x;
 				b.top = b.top < y? b.top : y;
 				b.right = b.right > xx ? b.right : xx;
@@ -63,6 +68,7 @@ Ext.define('NextThought.util.Rects',{
 
 				b.width = b.right - b.left;
 				b.height = b.bottom - b.top;
+				console.log(b);
 			}
 
 		}
@@ -74,12 +80,20 @@ Ext.define('NextThought.util.Rects',{
 	trimCrazies: function(rects, lineHeight, clientWidth){
 		function flip(a,i){ return Ext.apply({},a[i]); }
 
-		function acceptableHeight(h){
-			if(lineHeight){
-				if (h < lineHeight){return false;}
-				else if(lineHeight/h < 0.6) {return false;}
+		function notTooShort(h) {
+			return !lineHeight || h >= lineHeight;
+		}
+		function notTooTall(h) {
+			return !lineHeight || h < lineHeight * 1.8;
+		}
+		function isCovered(i) {
+			var j = 0;
+			for (;j < rects.length; j++) {
+				if (rects[j].top > rects[i].top && rects[j].bottom < rects[i].bottom) {
+					return true;
+				}
 			}
-			return true;
+			return false;
 		}
 
 		var rs = Array.prototype.slice.call(rects),
@@ -93,7 +107,7 @@ Ext.define('NextThought.util.Rects',{
 			if (o.height < lineHeight){o.height = lineHeight;} //round up to look nice
 			h = o.height;
 			w = o.width;
-			if( h > 0 && h < lh2 && w > 0 && (w <= clientWidth || !clientWidth) && acceptableHeight(h)) {
+			if( w > 0 && (w <= clientWidth || !clientWidth) && notTooShort(h) && (notTooTall(h) || !isCovered(i))) {
 				out.push(o);
 			}
 		}
