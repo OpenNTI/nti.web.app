@@ -188,7 +188,7 @@ Ext.define('NextThought.util.Line',{
 	 * @param [doc]
 	 * @return {*}
 	 */
-	findLine: function(y, doc, tolerance){
+	findLine: function(y, doc){
 		y = Math.round(y);
 		doc = doc || document;
 

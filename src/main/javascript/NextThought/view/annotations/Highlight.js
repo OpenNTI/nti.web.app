@@ -44,6 +44,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
 			delete this.range;
 		}
 
+
 		if(!this.range){
 			//console.warn('GET RANGE FOR:', this.getRecordField('applicableRange').getStart().getContexts()[0].getContextText());
 			this.range = Anchors.toDomRange(this.getRecordField('applicableRange'),this.doc);
@@ -54,29 +55,35 @@ Ext.define('NextThought.view.annotations.Highlight', {
 			this.setupInvalidationFallback();
 
 
-			//If we have been here before and our range is a goner, commence freak out:
-			if (!this.range && this.hadRange){
-				//now we know we are fubared, someone fashion a new range:
-				console.warn('Existing valid range object is messed up by something in the dom, falling back to semi-wild guessing.');
-				var parentTextNodes = AnnotationUtils.getTextNodes(this.invalidatedRange.commonAncestorContainer.parentNode),
-					newRange = this.doc.createRange(),
-					foundSubstring = -1;
+			try {
+				//If we have been here before and our range is a goner, commence freak out:
+				if (!this.range && this.hadRange){
+					//TODO - find a way to get rid of this..
+					//now we know we are fubared, someone fashion a new range:
+					console.warn('Existing valid range object is messed up by something in the dom, falling back to semi-wild guessing.');
+					var parentTextNodes = AnnotationUtils.getTextNodes(this.invalidatedRange.commonAncestorContainer.parentNode),
+						newRange = this.doc.createRange(),
+						foundSubstring = -1;
 
-				//create a new range selecting the parent of the old range as a best guess:
-				newRange.selectNode(this.invalidatedRange.commonAncestorContainer.parentNode);
+					//create a new range selecting the parent of the old range as a best guess:
+					newRange.selectNode(this.invalidatedRange.commonAncestorContainer.parentNode);
 
-				//try to find a text node in there that kind of matches:
-				Ext.each(parentTextNodes, function(n){
-					foundSubstring = n.textContent.indexOf(this.invalidateRangeString.substr(0, 8));
-					if (foundSubstring > -1){
-						//this node kind of matches, just cobble a range out of this, if these comments make you nervous, they should...
-						newRange.setStart(n, foundSubstring);
-						newRange.setEnd(n, foundSubstring + 8);
+					//try to find a text node in there that kind of matches:
+					Ext.each(parentTextNodes, function(n){
+						foundSubstring = n.textContent.indexOf(this.invalidateRangeString.substr(0, 8));
+						if (foundSubstring > -1){
+							//this node kind of matches, just cobble a range out of this, if these comments make you nervous, they should...
+							newRange.setStart(n, foundSubstring);
+							newRange.setEnd(n, foundSubstring + 8);
 
-						this.range = newRange;
-						return false;
-					}
-				}, this);
+							this.range = newRange;
+							return false;
+						}
+					}, this);
+				}
+			}
+			catch (e){
+
 			}
 
 
@@ -448,7 +455,9 @@ Ext.define('NextThought.view.annotations.Highlight', {
 		Ext.fly(span).addCls(style);
 		range.surroundContents(span);
 		Ext.get(span).hover(this.onMouseOver,this.onMouseOut,this);
-		this.attachEvent('click',span,this.onClick,this);
+		if(style !== 'suppressed'){
+			this.attachEvent('click',span,this.onClick,this);
+		}
 		return span;
 	},
 

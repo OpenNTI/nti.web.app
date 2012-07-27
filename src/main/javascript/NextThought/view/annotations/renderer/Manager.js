@@ -118,9 +118,17 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 
 
 	getBucket: function(prefix, line){
-		var lineInfo = LineUtils.findLine(line,this.getDoc(prefix), 30);
+
+		var lineInfo,
+			originalLine = line;
+
+		while(!lineInfo && (originalLine - line) <= 100){
+			lineInfo = LineUtils.findLine(line,this.getDoc(prefix));
+			line-=5	;
+		}
+
 		if(!lineInfo){
-			console.error('could not resolve a line for '+prefix+' @'+line+'.');
+			console.error('could not resolve a line for '+prefix+' @'+line+', original line was ' + originalLine);
 			return;
 		}
 
