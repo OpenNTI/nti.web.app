@@ -112,14 +112,17 @@ Ext.define('NextThought.view.Window',{
 			c = Ext.WindowManager.getActive();
 		if( c ){
 			if( !c || !c.modal ){ c = null; }
-			else {
+			else if(s.rangeCount){
 				r = RangeUtils.saveRange( s.getRangeAt(0) );
+			}
+			else {
+				c = null;
 			}
 		}
 
 		this.callParent(arguments);
 
-		if(c){
+		if(c && !this.modal){
 			c.toFront();
 			r = RangeUtils.restoreSavedRange(r);
 			if(r){
