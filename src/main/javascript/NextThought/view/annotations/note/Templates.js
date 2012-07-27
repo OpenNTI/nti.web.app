@@ -96,6 +96,7 @@ Ext.define('NextThought.view.annotations.note.Templates',{
 		var flag = moreEl.down('li.flag');
 		var follow = moreEl.down('li.follow');
 		var block = moreEl.down('li.block');
+		var del = moreEl.down('li.delete');
 		var name = user.getName();
 
 		function addName(){
@@ -106,7 +107,7 @@ Ext.define('NextThought.view.annotations.note.Templates',{
 			Ext.each(arguments,function(o){ if(o){o.remove();} }); }
 
 		if(isMe(user)){ remove(add,flag,follow,block); }
-		else { addName(follow,block); }
+		else { addName(follow,block); remove(del); }
 	},
 
 
