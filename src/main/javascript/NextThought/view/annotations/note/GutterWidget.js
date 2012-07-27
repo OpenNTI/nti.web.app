@@ -85,6 +85,13 @@ Ext.define('NextThought.view.annotations.note.GutterWidget',{
 		}
 
 		me.text.update(r.getBodyText());
+
+		r.on({
+			scope: this,
+			single: true,
+			updated: this.setRecord,
+			changed: this.setRecord
+		});
 	},
 
 

@@ -172,6 +172,9 @@ Ext.define('NextThought.model.Base', {
 					me.set(Ext.JSON.decode(response.responseText));
 					delete this.activePostTos[link];
 					Ext.callback(callback, null, [s]);
+					if(s){
+						this.fireEvent('updated',this);
+					}
 				}
 			});
 		}
