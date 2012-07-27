@@ -42,7 +42,7 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 				seamless: true,
 				transparent: true,
 				allowTransparency: true,
-				style: 'overflow: hidden; z-index: 1;'
+				style: 'overflow: hidden; z-index: 2;'
 			},
 			listeners: {
 				scope: this,

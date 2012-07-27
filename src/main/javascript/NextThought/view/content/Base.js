@@ -8,7 +8,11 @@ Ext.define('NextThought.view.content.Base', {
 	defaults: {frame: false, border: false},
 
 
-	getInsertionPoint: function(){
+	getInsertionPoint: function(subElPostfix){
+		if (subElPostfix){
+			return Ext.get(this.getEl().id+'-'+subElPostfix);
+		}
+
 		return this.getTargetEl();
 //		return Ext.get(this.getEl().id+'-innerCt');
 //		return Ext.get(this.getEl().id+'-targetEl');

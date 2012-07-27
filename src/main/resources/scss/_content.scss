@@ -79,6 +79,7 @@
 	$experimental-support-for-svg: true;
 	@include background-image(linear-gradient(right, rgba(255,255,255,1) 0%,rgba(255,255,255,1) 88%,rgba(255,255,255,0) 100%));
 	pointer-events: none;
+    z-index: 1;
 	.x-ie9 & {
 		display: none;
 	}
