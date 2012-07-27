@@ -264,7 +264,9 @@
 	position: absolute;
 	top: 0;
 	left: 0;
-	//border-right: 1px solid #eee;
+	right: 620px !important;
+	width: auto;
+	border-right: 1px solid #eee;
 
 	.note-here-control-box {
 		//$t: top 0s, opacity 0.1s;
@@ -274,11 +276,11 @@
 		cursor: text;
 		position: absolute;
 		left: 0;
+		right: 0;
 		height: 26px;
 		border: none;
 		margin: 0 5px 0 15px;
 		padding: 0;
-		opacity: 1;
 		display: block;
 
 		&.note-overlay-hidden{
@@ -316,7 +318,7 @@
 
 		.entry {
 			&.active {
-				textarea, .clear, .save {
+				textarea, .clear, .advanced {
 					display: block;
 				}
 				.shadow-text{
@@ -326,7 +328,6 @@
 
 			textarea {
 				display: none;
-
 				font: 14px 'Droid Serif';
 				color: #757474;
 				border: none;
@@ -343,7 +344,7 @@
 
 			.clear {
 				display: none;
-
+				z-index: 10;
 				cursor: pointer;
 				position: absolute;
 				bottom: 4px; right: 38px;
@@ -354,9 +355,9 @@
 					opacity: 1;
 				}
 			}
-			.save {
+			.advanced {
 				display: none;
-
+				z-index: 10;
 				cursor: pointer;
 				position: absolute;
 				top: 0; right: 0;
@@ -671,7 +672,7 @@
 			opacity: 0.4;
 			cursor: pointer;
 			&:hover {
-				opacity: 1;
+				opacity: 0.6;
 			}
 			
 			&.disabled {

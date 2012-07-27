@@ -50,14 +50,11 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 	insertNoteOverlay: function(){
 		var me = this,
 			data = me.noteOverlayData,
-			o = me.getAnnotationOffsets(),
-			width = o.gutter + 'px',
 			box, txt;
 
 		var container = {
 			cls:'note-gutter',
 			style: {
-				width: width,
 				height: me.getHeight()
 			},
 			cn: [{
@@ -67,7 +64,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 					cn: [{
 						cls: 'clear', html: '&nbsp;'
 					},{
-						cls: 'save', html: '&nbsp;'
+						cls: 'advanced', html: '&nbsp;'
 					},{
 						tag: 'textarea',
 						cls: 'note-input'
@@ -95,27 +92,16 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		(new Ext.CompositeElement( box.query('.entry .save'))).on('click', me.noteOverlayActivateRichEditor, me);
 		(new Ext.CompositeElement( box.query('.cancel,.clear'))).on('click', me.noteOverlayEditorCancel, me);
 
-		function sizer(){
-			try {
-				var o = me.getAnnotationOffsets();
-				me.noteOverlayDeactivateEditor();
-				if(o){
-					width = o.gutter + o.contentLeftPadding;
-					container.setWidth(width);
-					box.setWidth(width-box.getMargin('lr'));
-				}
-			}
-			catch(er){
-				console.error(er.stack);
-			}
+		function onResize(){
+			me.noteOverlayDeactivateEditor();
 		}
 
 		me.on({
 			scope: me,
 			destroy: function(){ container.remove(); },
-			resize: sizer,
+			resize: onResize,
 			'sync-height': function(h){ container.setHeight(h); },
-			'content-updated': sizer
+			'content-updated': onResize
 		});
 
 		me.mon(data.editor.down('.content'),{
