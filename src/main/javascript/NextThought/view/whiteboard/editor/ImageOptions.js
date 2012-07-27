@@ -136,17 +136,19 @@ Ext.define('NextThought.view.whiteboard.editor.ImageOptions',{
 	insertImage: function(dataUrl){
 		var image = new Image(),
 			e = this.up('whiteboard-editor'),
-			c = e.canvas;
+			c = e.canvas,
+            width,
+            height;
 
-		image.onload = function(){
+		function addImageToWhiteboard(){
 			var m = new NTMatrix(),
 				canvasWidth = c.getWidth(),
 				s = e.addShape('Url'),
-				max = Math.max(image.width,image.height),
+				max = Math.max(width,height),
 				scale = (max > canvasWidth) ? (canvasWidth*0.75)/max : 1;
 
 			s.url = dataUrl;
-			m.translate(canvasWidth/2, (scale*image.height/2)+(canvasWidth/10) );
+			m.translate(canvasWidth/2, (scale*height/2)+(canvasWidth/10) );
 			m.scale(scale);
 
 			m.scaleAll(1/canvasWidth);//do this after
@@ -154,8 +156,52 @@ Ext.define('NextThought.view.whiteboard.editor.ImageOptions',{
 			s.transform = m.toTransform();
 
 			c.drawScene();
-		};
-		image.src = dataUrl;
+		}
+
+        function scaleImage (maxW, maxH) {
+            var aspectRatio = 1.0,
+                nw, nh,
+                cs = Ext.DomHelper.append(Ext.getBody(),{tag: 'canvas', style: {visibility:'hidden',position:'absolute'}}),
+                ctx = cs.getContext('2d');
+
+            if(width > height) {
+                aspectRatio = width/height;
+                nw = maxW;
+                nh = Math.round(maxH/aspectRatio);
+            }
+            else{
+                aspectRatio = height/width;
+                nw = Math.round(maxW/aspectRatio);
+                nh = maxH;
+            }
+
+            //Now we want to create a new scaled image
+            cs.width = nw;
+            cs.height = nh;
+            ctx.drawImage(image, 0, 0, width, height, 0, 0, nw, nh);
+
+            width = nw;
+            height = nh;
+            dataUrl = cs.toDataURL("image/png");
+            Ext.fly(cs).remove();    //clean up
+
+        }
+
+        image.onload = function () {
+            var maxImgH = 500,
+                maxImgW = 500;
+
+            width = image.width;
+            height = image.height;
+
+            if(width > maxImgW || height > maxImgH){
+                scaleImage(maxImgW, maxImgH);
+            }
+
+            addImageToWhiteboard();
+        };
+
+        image.src = dataUrl;
 	},
 
 	getOptions: function() {
