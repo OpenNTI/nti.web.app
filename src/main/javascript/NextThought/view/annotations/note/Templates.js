@@ -98,16 +98,30 @@ Ext.define('NextThought.view.annotations.note.Templates',{
 		var block = moreEl.down('li.block');
 		var del = moreEl.down('li.delete');
 		var name = user.getName();
+		var mine = isMe(user);
+		var fnA, fnB;
 
 		function addName(){
 			Ext.each(arguments,function(o){
-				if(o){ o.update(o.dom.textContent.replace(/\.{3}/,name)); } }); }
+				if(o){
+					o.originalValue = o.originalValue || o.dom.textContent;
+					o.update(
+						o.originalValue.replace(/\.{3}/,name)); } }); }
 
-		function remove(){
-			Ext.each(arguments,function(o){ if(o){o.remove();} }); }
+		function make(action,list){
+			Ext.each(list,function(o){
+				if(o){o.setVisibilityMode(Ext.Element.DISPLAY);o[action]();} }); }
 
-		if(isMe(user)){ remove(add,flag,follow,block); }
-		else { addName(follow,block); remove(del); }
+		function remove(){ make('hide',arguments); }
+		function reset(){ make('show',arguments); }
+
+		addName(follow,block);
+
+		fnA = mine ? remove : reset;
+		fnB = mine ? reset : remove;
+
+		fnA(add,flag,follow,block);
+		fnB(del);
 	},
 
 
