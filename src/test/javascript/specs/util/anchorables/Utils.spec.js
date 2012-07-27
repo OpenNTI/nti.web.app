@@ -629,6 +629,25 @@ describe("Anchor Utils", function() {
 			expect(result.confidence).toEqual(0);
 			expect(result.node).toBeFalsy();
 		});
+
+		it('Correctly returns when root', function(){
+			var div = document.createElement('div'),
+				p = document.createElement('p'),
+				t1 = document.createTextNode('text node 1'),
+				result = {};
+
+			p.setAttribute('Id', 'SomeId');
+
+			p.appendChild(t1);
+			div.appendChild(p);
+			testBody.appendChild(div);
+
+			var pointer = Ext.create('NextThought.model.anchorables.ElementDomContentPointer',  {node: p,  role: 'start'} );
+
+			result = Anchors.locateElementDomContentPointer(pointer, p, {});
+			expect(result.confidence).toEqual(1);
+			expect(result.node).toBe(p);
+		});
 	});
 
 	describe('resolveSpecBeneathAncestor Tests', function(){

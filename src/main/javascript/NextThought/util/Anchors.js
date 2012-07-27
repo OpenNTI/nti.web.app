@@ -44,6 +44,14 @@ Ext.define('NextThought.util.Anchors', {
 		});
 	},
 
+	doesElementMatchPointer: function(element, pointer) {
+		if(element.id === pointer.elementId
+			&& element.tagName.toUpperCase() === pointer.elementTagName.toUpperCase() ){
+			return true;
+		}
+		return false;
+	},
+
 
 	//TODO - testing
 	createPointer: function(range, role, node) {
@@ -284,6 +292,11 @@ Ext.define('NextThought.util.Anchors', {
 			Ext.Error.raise('This method expects ElementDomContentPointers only');
 		}
 
+		//In these case of the document body (root) we may be the ancestor
+		if(Anchors.doesElementMatchPointer(ancestor, pointer) ){
+			return {confidence: 1, node: ancestor};
+		}
+
 		var selector = '[Id='+pointer.getElementId()+']',
 			potentials = Ext.query(selector, ancestor),
 			p, i;
@@ -295,7 +308,9 @@ Ext.define('NextThought.util.Anchors', {
 					console.error('Found a potential match to node, but tagnames do not match', p);
 				}
 				else {
-					return {confidence: 1, node: p};
+					if(Anchors.doesElementMatchPointer(p, pointer) ){
+						return {confidence: 1, node: p};
+					}
 				}
 			}
 		}
