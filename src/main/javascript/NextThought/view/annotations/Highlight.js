@@ -256,8 +256,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
 		boundingLeft = Math.ceil(bounds.left);
 		boundingHeight = Math.ceil(bounds.height);
 		width = this.content ? this.content.getWidth() : 680;
-		lineHeight = parseInt(this.compElements.first().getStyle('line-height'),10);
-		s = RectUtils.merge(range.getClientRects(),lineHeight,width+1);
+		s = RectUtils.merge(range.getClientRects(),width+1);
 		i = s.length - 1;
 
 

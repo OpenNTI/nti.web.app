@@ -28,8 +28,15 @@ Ext.define('NextThought.util.Rects',{
 	},
 
 
-	merge: function(rects,lineHeight,clientWidth){
-		console.log('ORIGINAL',rects);
+	merge: function(rects,clientWidth){
+		var heights = [17,24]; //Sane default values for small highlights
+		for (var i = 0; i < rects.length; i++) {
+			if (rects[i].height > 0) { heights.push(rects[i].height) };
+		}
+		heights.sort(function(a,b) { return a-b });
+		//Take the 33rd percentile of nonzero highlights; this seems to
+		//be a fairly good heuristic for the line height
+		lineHeight = heights[Math.floor(heights.length/3)];
 		rects = this.trimCrazies(rects, lineHeight, clientWidth);
 		var r=[], ri,
 			x,xx,y,yy, w,h,
@@ -49,7 +56,6 @@ Ext.define('NextThought.util.Rects',{
 			var tolerance = 3;
 
 			b = Math.floor((y+h/2) / tolerance);//center line of the rect
-			console.log('B',i,bins,r.length,x,y,xx,yy,b);
 
 			if(!bins[b] && !bins[b+1]){
 				r.push( { left:x, top:y, right:xx, bottom:yy, width:w, height:h } );
@@ -60,7 +66,6 @@ Ext.define('NextThought.util.Rects',{
 			}
 			else {
                 b = r[(bins[b] || bins[b+1]) - 1];
-				console.log(b);
 				b.left = b.left < x? b.left : x;
 				b.top = b.top < y? b.top : y;
 				b.right = b.right > xx ? b.right : xx;
@@ -68,7 +73,6 @@ Ext.define('NextThought.util.Rects',{
 
 				b.width = b.right - b.left;
 				b.height = b.bottom - b.top;
-				console.log(b);
 			}
 
 		}
@@ -84,7 +88,7 @@ Ext.define('NextThought.util.Rects',{
 			return !lineHeight || h >= lineHeight;
 		}
 		function notTooTall(h) {
-			return !lineHeight || h < lineHeight * 1.8;
+			return !lineHeight || h < lineHeight * 1.9;
 		}
 		function isCovered(i) {
 			var j = 0;
