@@ -3,8 +3,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
 	alias: 'widget.highlight',
 	requires:[
 		'NextThought.util.Anchors',
-		'NextThought.util.Rects',
-		'Ext.util.TextMetrics'
+		'NextThought.util.Rects'
 	],
 
 	highlightCls: 'application-highlight',
@@ -139,14 +138,11 @@ Ext.define('NextThought.view.annotations.Highlight', {
 
 
 	getLineHeight: function(){
-		var s = this.getRange(), m,
-			n = s.commonAncestorContainer;
-
-		if(n.nodeType===n.TEXT_NODE){
-			n = n.parentNode;
+		if(!this.rendered){
+			return 17;//default
 		}
-		m = new Ext.util.TextMetrics(n);
-		return m.getHeight("TEST");
+
+		return parseInt(this.compElements.first().getStyle('line-height'),10);
 	},
 
 
