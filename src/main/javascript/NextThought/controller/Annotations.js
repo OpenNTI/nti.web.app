@@ -103,10 +103,12 @@ Ext.define('NextThought.controller.Annotations', {
 			src:url,
 			pointTo: boundingScreenBox
 		}).show();
-		setTimeout(
-		"var head = document.querySelector('iframe.definition');"+
-		"head.style.overflowX = 'hidden';"+
-		"head.style.overflowY = 'scroll';",250);
+
+		setTimeout(function(){
+			var head = document.querySelector('iframe.definition');
+			head.style.overflowX = 'hidden';
+			head.style.overflowY = 'scroll';
+		},250);
 	},
 
 
