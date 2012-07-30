@@ -4,7 +4,7 @@ Ext.define('NextThought.view.content.reader.Scroll',{
 	constructor: function(){
 		this.on('afterrender',function(){
 
-			this.body.on('scroll',function(){console.log(arguments);},this);
+//			this.body.on('scroll',function(e,dom){console.log(arguments);},this);
 
 		},this);
 	},
@@ -29,8 +29,6 @@ Ext.define('NextThought.view.content.reader.Scroll',{
 
 
 		if(n) {
-
-
 			cPos = n.getPosition();
 			console.log('cmp pos', cPos, 'offset', offset, 'scrollTop', sTop);
 			this.scrollTo(cPos[1]-offset[1] - 10 + sTop);
