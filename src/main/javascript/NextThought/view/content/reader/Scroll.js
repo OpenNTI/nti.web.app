@@ -1,6 +1,15 @@
 Ext.define('NextThought.view.content.reader.Scroll',{
 
 
+	constructor: function(){
+		this.on('afterrender',function(){
+
+			this.body.on('scroll',function(){console.log(arguments);},this);
+
+		},this);
+	},
+
+
 	registerScrollHandler: function(fn, scope){
 		this.body.on('scroll', fn, scope);
 	},
