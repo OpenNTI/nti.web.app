@@ -148,8 +148,8 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 			e = Ext.EventObject.setEvent(e||event);
 			if(e.getKey() === e.BACKSPACE){
 				var t = e.getTarget();
-				if(!t || (!(/input|textarea/i).test(t.tagName) && !(t.getAttribute('contenteditable') === 'true'))){
-					console.log(t);
+				if(!t || (!(/input|textarea/i).test(t.tagName) && t.getAttribute('contenteditable') !== 'true')){
+					console.log('stopped backspace: ',t);
 					e.stopEvent();
 				return false;
 				}
