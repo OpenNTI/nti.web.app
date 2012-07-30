@@ -8,6 +8,14 @@
             color: #3fb3f6;
         }
 
+		.shared-to{
+			display: inline-block;
+			margin-left: 15px;
+			width: 350px;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+
         .controls {
             position: absolute;
             right: 0;
@@ -611,7 +619,9 @@
 
 		&.x-pressed {
 			border-color: #85b746;
-			color: #85b746;
+			&, .x-btn-inner {
+				color: #85b746;
+			}
 		}
 	}
 
@@ -624,7 +634,7 @@
 		border-right-width: 0;
 		//when the main/reply view is hovered/editor-active it should set the same classes onto the carousel
 		&.editor-active, &.hover {
-			background-color: #f8f8f8;
+			background-color: #fbfbfb;
 		}
 
 		.carousel-body {
@@ -722,12 +732,13 @@
 
     .note-reply,
 	.main-view {
-		border: 0px solid #f1f1f1;
+		border: 0px solid #f2f2f2;
 		border-bottom-width: 1px;
-		padding: 16px 27px 20px 27px;
+		padding: 16px 27px 5px 27px;
 		&.editor-active, &.hover {
+			border-color: #e6e6e6;
 			box-shadow: inset 0 1px 0 0 #ffffff;
-			background-color: #f8f8f8;
+			background-color: #fbfbfb;
 			.respond .reply-options{ opacity: 1; }
 		}
 
@@ -767,7 +778,7 @@
 		}
 
 		.body {
-			color: #757474;
+			color: #494949;
 			font: 16px/24px 'Droid Serif';
 		}
 
@@ -780,7 +791,6 @@
 		.respond {
 			position: relative;
 			overflow: hidden;
-			margin: 12px 0 0 0;
 
 			@include reply-options;
 
@@ -816,7 +826,18 @@
                 display: block;
             }
         }
+		.avatar {
+			float: left;
+			img {
+				border-radius: 2px;
+				margin-left: 4px;
+				background-size: cover;
+				width: 32px;
+				height: auto;
+			}
+		}
         .meta {
+			margin-left: 45px;
             font-size: 10px;
             .controls {
                 display: none;
@@ -826,6 +847,7 @@
             }
         }
         .body {
+			margin-left: 45px;
             font-size: 14px;
             line-height: default;
         }

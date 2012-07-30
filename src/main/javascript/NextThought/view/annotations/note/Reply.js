@@ -20,6 +20,10 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 		{
 			cls: 'note-reply',
 			cn: [{
+				cls: 'avatar',
+				cn:[{tag: 'img', src: Ext.BLANK_IMAGE_URL}]
+			},
+			{
 				cls: 'meta',
 				cn: [{
 					cls: 'controls',
@@ -45,6 +49,7 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 	]),
 
 	renderSelectors: {
+		avatar: '.avatar img',
 		replyBox: '.note-reply',
 		liked: '.meta .controls .like',
 		name: '.meta .name',
@@ -204,6 +209,7 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 	fillInUser: function(user){
 		if(Ext.isArray(user)){user = user[0];}
 		this.name.update(user.getName());
+		this.avatar.setStyle({ backgroundImage: 'url('+user.get('avatarURL')+')' });
 		TemplatesForNotes.updateMoreReplyOptionsLabels(this.more,user);
 	},
 

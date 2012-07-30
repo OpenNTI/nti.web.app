@@ -21,6 +21,10 @@ Ext.define('NextThought.view.annotations.note.Main',{
 
 	renderTpl: Ext.DomHelper.markup([
 		{
+			cls: 'avatar', style: {display:'none'},
+			cn:[{tag: 'img', src: Ext.BLANK_IMAGE_URL}]
+		},
+		{
 			cls: 'meta',
 			cn: [{
 				cls: 'controls',
@@ -30,6 +34,8 @@ Ext.define('NextThought.view.annotations.note.Main',{
 				cls: 'name'
 			},' - ',{
 				tag: 'span', cls: 'time'
+			},' ',{
+				tag: 'span', cls: 'shared-to'
 			}]
 		},{
 			cls: 'context',
@@ -44,8 +50,10 @@ Ext.define('NextThought.view.annotations.note.Main',{
 	]),
 
 	renderSelectors: {
+		avatar: '.avatar img',
 		liked: '.meta .controls .like',
 		favorites: '.meta .controls .favorite',
+		sharedTo: '.shared-to',
 		name: '.meta .name',
 		time: '.meta .time',
 		context: '.context .text',
@@ -147,6 +155,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		try {
 			UserRepository.getUser(r.get('Creator'),this.fillInUser,this);
 			this.time.update(r.getRelativeTimeString());
+			this.sharedTo.update((r.get('sharedWith')||[]).join(', '));
 			this.liked.update(r.getFriendlyLikeCount());
 			this.liked[(r.isLiked()?'add':'remove')+'Cls']('on');
 			this.favorites[(r.isFavorited()?'add':'remove')+'Cls']('on');

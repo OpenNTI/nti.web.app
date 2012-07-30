@@ -186,16 +186,20 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 
 
 	selectNext: function(e){
-		e.stopEvent();
 		this.moveSelection(this.NEXT,this.navNext);
-		return false;
+		if(e && e.stopEvent){
+			e.stopEvent();
+			return false;
+		}
 	},
 
 
 	selectPrev: function(e){
-		e.stopEvent();
 		this.moveSelection(this.PREV,this.navPrev);
-		return false;
+		if(e && e.stopEvent){
+			e.stopEvent();
+			return false;
+		}
 	},
 
 
