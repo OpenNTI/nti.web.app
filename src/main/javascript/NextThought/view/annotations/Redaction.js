@@ -150,9 +150,14 @@ Ext.define('NextThought.view.annotations.Redaction', {
 		me.attachEvent('click', masterSpan.dom,
 			function(e){
 				if (me.clickTimer){clearTimeout(me.clickTimer);}
-				me.clickTimer = setTimeout(function(){
-					me.onClick(e);
-				}, 400);},
+				console.log(masterSpan.dom.ownerDocument.activeElement, masterSpan.dom);
+				if (masterSpan.dom.ownerDocument.activeElement !== masterSpan.dom.querySelector('.redactionReplacementText')) {
+					console.log('400ms to go!');
+					me.clickTimer = setTimeout(function(){
+						me.onClick(e);
+					}, 400);
+				}
+			},
 			me);
 
 		this.attachEvent('dblclick', masterSpan.dom, this.makeEditableSpanEditable, this);
