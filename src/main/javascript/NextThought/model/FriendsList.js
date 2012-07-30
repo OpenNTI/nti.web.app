@@ -5,6 +5,8 @@ Ext.define('NextThought.model.FriendsList', {
 	EVERYONE_USERNAME: 'everyone',
 	SYSTEM_CREATOR: 'zope.security.management.system_user',
 
+	isGroup: true,
+
 	fields: [
 		{ name: 'Username', type: 'string' },
 		{ name: 'alias', type: 'string' },

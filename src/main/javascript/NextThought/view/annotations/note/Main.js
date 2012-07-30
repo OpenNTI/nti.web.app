@@ -155,7 +155,9 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		try {
 			UserRepository.getUser(r.get('Creator'),this.fillInUser,this);
 			this.time.update(r.getRelativeTimeString());
-			this.sharedTo.update((r.get('sharedWith')||[]).join(', '));
+
+			UserRepository.getUser(r.get('sharedWith'),this.fillInShare,this);
+
 			this.liked.update(r.getFriendlyLikeCount());
 			this.liked[(r.isLiked()?'add':'remove')+'Cls']('on');
 			this.favorites[(r.isFavorited()?'add':'remove')+'Cls']('on');
@@ -229,6 +231,28 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		if(Ext.isArray(user)){user = user[0];}
 		this.name.update(user.getName());
 		TemplatesForNotes.updateMoreReplyOptionsLabels(this.more,user);
+	},
+
+
+	fillInShare: function(sharedWith){
+		var val, names = [], custom = false;
+
+		Ext.each(sharedWith,function(u){
+			names.push(u.getName());
+			if(!u.isGroup){
+				custom = true;
+			}
+		});
+
+		if(!custom){
+			val = names.join(',');
+		}
+		else {
+			val = 'Custom';
+		}
+
+		this.sharedTo.update(val);
+		this.sharedTo.set({title:names.join(', ')});
 	},
 
 
