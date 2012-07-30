@@ -10,6 +10,7 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 	sorter: {},
 	gutter: {},
 	buckets: {},
+	rendererSuspended: {},
 
 	controlLineTmpl: Ext.DomHelper.createTemplate( { cls:'controlContainer'} ).compile(),
 	widgetLineTmpl: Ext.DomHelper.createTemplate( {cls:'widgetContainer'} ).compile(),
@@ -206,7 +207,12 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 
 		});
 	},
-
+	suspend: function(prefix) {
+		this.rendererSuspended[prefix] = true;
+	},
+	resume: function(prefix) {
+		delete this.rendererSuspended[prefix];
+	},
 
 	render: function(prefix){
 		var me = this;
@@ -215,7 +221,9 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 			me.events.on('finish',me.render,me,{single:true});
 			return;
 		}
-
+		if (this.rendererSuspended[prefix]) {
+			return;
+		}
 		if(!me.gutter[prefix]){
 			console.warn('no gutter');
 			return;

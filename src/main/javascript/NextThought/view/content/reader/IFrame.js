@@ -144,11 +144,12 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 			function(){ g.loadScript({ url: base+'resources/misc/mathjaxconfig.js', document: doc }); });
 
 
-		on(doc,['keypress','keydown'],function(e){
+		on(doc,['keypress','keydown','keyup'],function(e){
 			e = Ext.EventObject.setEvent(e||event);
 			if(e.getKey() === e.BACKSPACE){
 				var t = e.getTarget();
-				if(!t || (!(/input|textarea/i).test(t.tagName) && t.getAttribute('contenteditable') !== 'true')){
+				e.stopPropagation();
+				if(!t || !(/input|textarea/i).test(t.tagName)){
 					console.log('stopped backspace: ',t);
 					e.stopEvent();
 				return false;

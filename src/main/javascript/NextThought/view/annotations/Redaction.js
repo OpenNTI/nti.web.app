@@ -48,9 +48,10 @@ Ext.define('NextThought.view.annotations.Redaction', {
 		if (this.editableSpan && this.record.isModifiable()){
 			this.editableSpan.dom.setAttribute('contenteditable', 'true');
 			this.editableSpan.on('keydown', this.editableSpanEditorKeyDown, this);
+			this.doc.parentWindow.getSelection().removeAllRanges();
 			this.editableSpan.focus();
 		}
-
+		AnnotationsRenderer.suspend(this.prefix);
 		return false;
 	},
 
@@ -191,7 +192,7 @@ Ext.define('NextThought.view.annotations.Redaction', {
 	*/
 
 	editableSpanEditorKeyDown: function(event, span){
-		var me = this;
+		var me = this, selection, range, cursorStart;
 		function handledKey(){
 			me.editableSpan.dom.removeAttribute('contenteditable');
 			Ext.fly(span).blur();
@@ -203,12 +204,31 @@ Ext.define('NextThought.view.annotations.Redaction', {
 		if(k === event.ESC){
 			//return to orig:
 			span.innerHTML = this.record.get('replacementContent');
+			AnnotationsRenderer.resume(this.prefix);
 			return handledKey();
 		}
 		else if(k === event.ENTER){
 			this.record.set('replacementContent', span.textContent);
 			this.record.save();
+			AnnotationsRenderer.resume(this.prefix);
 			return handledKey();
+		}
+		else if (k === event.BACKSPACE) {
+			event.stopEvent();
+			selection = this.doc.parentWindow.getSelection();
+			console.log(selection);
+			range = selection.getRangeAt(0);
+			cursorStart = range.startOffset;
+			if (!(range.collapsed)) range.deleteContents();
+			else {
+				console.log(range);
+				span.firstChild.data = span.firstChild.data.substring(0,cursorStart - 1) + span.firstChild.data.substring(cursorStart);
+				console.log(range);
+				range.setEnd(range.startContainer,cursorStart - 1);
+				range.setStart(range.startContainer,cursorStart - 1);
+				selection.removeAllRanges();
+				selection.addRange(range);
+			}
 		}
 	},
 
@@ -217,9 +237,10 @@ Ext.define('NextThought.view.annotations.Redaction', {
 		var me = this;
 
 		event.stopEvent();
-		this.record.set('replacementContent', span.innerText);//just the text, not the formatting
+		this.record.set('replacementContent', span.innerHTML.replace(/<.*?>/,''));//just the text, not the formatting
 		this.record.save();
 		me.editableSpan.dom.removeAttribute('contenteditable');
+		AnnotationsRenderer.resume(this.prefix);
 
 		return false;
 	},
