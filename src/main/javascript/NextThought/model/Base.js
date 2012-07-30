@@ -80,7 +80,7 @@ Ext.define('NextThought.model.Base', {
 
 
 	getModelName: function() {
-		return this.fields.getByKey('Class').defaultValue;
+		return this.get('Class');
 	},
 
 
