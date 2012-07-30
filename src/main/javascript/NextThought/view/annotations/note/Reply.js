@@ -23,7 +23,7 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 				cls: 'meta',
 				cn: [{
 					cls: 'controls',
-					cn: [{ cls: 'favorite' },{ cls: 'like' }]
+					cn: [{ cls: 'favorite-spacer' },{ cls: 'like' }]
 				},{
 					tag: 'span',
 					cls: 'name'
@@ -47,7 +47,6 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 	renderSelectors: {
 		replyBox: '.note-reply',
 		liked: '.meta .controls .like',
-		favorites: '.meta .controls .favorite',
 		name: '.meta .name',
 		time: '.meta .time',
 		text: '.body',
@@ -111,12 +110,7 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 			}
 		});
 
-		me.mon(me.favorites, {
-			scope: me,
-			click: function(){
-				me.record.favorite(me.favorites);
-			}
-		});
+		me.replyOptions.down('.share').remove();
 
 		TemplatesForNotes.attachMoreReplyOptionsHandler(me, me.more);
 		me.editorActions = new NoteEditorActions(me,me.editor);
@@ -180,9 +174,6 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 		me.liked.update(r.getFriendlyLikeCount());
 		if (r.isLiked()){
 			this.liked.addCls('on');
-		}
-		if (r.isFavorited()){
-			this.favorites.addCls('on');
 		}
 		try{
 			r.compileBodyContent(function(text){
@@ -271,11 +262,6 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 
 	addReply: function(record) {
 		this.add({record: record});
-	},
-
-
-	onShare: function(){
-		this.fireEvent('share', this.record);
 	},
 
 
