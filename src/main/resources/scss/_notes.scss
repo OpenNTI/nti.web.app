@@ -160,6 +160,7 @@
 
 @mixin reply-options {
 	.reply-options {
+		opacity: 0.4;
 		color: #757474;
 
 		.reply, .chat, .more {
@@ -276,7 +277,7 @@
 		cursor: text;
 		position: absolute;
 		left: 0;
-		right: 0;
+		right: 45px;
 		height: 26px;
 		border: none;
 		margin: 0 5px 0 15px;
@@ -385,14 +386,14 @@
 
 	&.add-note {
 		height: 30px;
-		width: 30px;
+		width: 34px;
 		position: relative;
 		opacity: 0.8;
 
 		&::after {
 			content: ' ';
 			position: absolute;
-			top: 2px; left: 1px;
+			top: 2px; left: 3px;
 			width: 29px;
 			height: 26px;
 			background: url(../images/notes/add_note_sprite.png) 0 0 no-repeat;
@@ -407,11 +408,11 @@
 		}
 
 		&.expanded{
-			.annotation-gutter .column .widgetcontainer & {display: none;}
-			.annotation-gutter .column .widgetContainer:hover &{
-				display: inline-block;
+			&:hover {
+				box-shadow: inset 0 0 0 1px #ECECEC;
+				background: #F6F6F6;
+				border-radius: 3px !important;
 			}
-
 		}
 		&.collapsed{
 			box-shadow: inset 0 0 0 1px #ececec;
@@ -487,6 +488,7 @@
 		right: 30px;
 		left: 0;
         text-align: left;
+		direction: ltr;
 
         //default turn these off
         .separator, .time, .respond, .controls {
@@ -577,12 +579,13 @@
 	}
 
     .note-responses{
-		.note-reply.first {
+		//.note-reply.first {
+		.note-reply {
 			box-shadow: inset 0 1px 0 0 #ffffff;
 		}
-		.note-replies .note-reply.first {
-			box-shadow: none;
-		}
+		//.note-replies .note-reply.first {
+		//	box-shadow: none;
+		//}
     }
 
 	.filter-bar {
@@ -725,7 +728,7 @@
 		&.editor-active, &.hover {
 			box-shadow: inset 0 1px 0 0 #ffffff;
 			background-color: #f8f8f8;
-			.respond .reply-options{ visibility: visible; }
+			.respond .reply-options{ opacity: 1; }
 		}
 
         @include meta-row;
@@ -780,9 +783,6 @@
 			margin: 12px 0 0 0;
 
 			@include reply-options;
-			.reply-options {
-				visibility: hidden;
-			}
 
 			@include note-editor;
 			.editor {
@@ -802,7 +802,7 @@
 	}
 
     .note-reply {
-		border-bottom-width: 0px;
+		//border-bottom-width: 0px;
         &.first{
             background-image: url(../images/reply-arrow.png);
             background-position: 18px 15px;
@@ -815,12 +815,6 @@
             .meta .controls {
                 display: block;
             }
-            .respond {
-     			visibility: visible;
-            }
-        }
-        .respond {
-   			visibility: hidden;
         }
         .meta {
             font-size: 10px;

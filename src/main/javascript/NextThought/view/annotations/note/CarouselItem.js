@@ -26,7 +26,7 @@ Ext.define('NextThought.view.annotations.note.CarouselItem',{
 		this.id = IdCache.getComponentId(m,null, 'carousel-item');
 		this.callParent(arguments);
 
-		this.renderData = {count:m.getReplyCount()};
+		this.renderData = {count:m.getReplyCount()|| '&nbsp;'};
 		UserRepository.getUser(m.get('Creator'),this.fillInUser,this);
 	},
 

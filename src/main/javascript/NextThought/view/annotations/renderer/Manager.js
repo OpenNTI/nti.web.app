@@ -194,7 +194,7 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 			else{
 
 				r.noteOverlayRegisterAddNoteNib(
-					addTpl.append(
+					addTpl.insertFirst(
 							line.widgets,[
 								siblings ? 'collapsed':'expanded'
 							],true));
@@ -207,12 +207,17 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 
 		});
 	},
+
+
 	suspend: function(prefix) {
 		this.rendererSuspended[prefix] = true;
 	},
+
+
 	resume: function(prefix) {
 		delete this.rendererSuspended[prefix];
 	},
+
 
 	render: function(prefix){
 		var me = this;
