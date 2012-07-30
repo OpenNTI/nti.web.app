@@ -26,8 +26,10 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 		]),
 
 	renderSelectors: {
-		navNext: '.slide-nav.forward',
-		navPrev: '.slide-nav.backward'
+		slideLeft: '.slide-nav.backward',
+		slideRight: '.slide-nav.forward',
+		navNext: '.slide-nav.forward .circle',
+		navPrev: '.slide-nav.backward .circle'
 	},
 
 	initComponent: function(){
@@ -91,6 +93,8 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 
 		this.mon(this.navNext,'click',this.selectNext,this);
 		this.mon(this.navPrev,'click',this.selectPrev,this);
+		this.mon(this.slideLeft,'click',this.slideViewLeft,this);
+		this.mon(this.slideRight,'click',this.slideViewRight,this);
 
 		this.keyMap = new Ext.util.KeyMap({
 			target: document,
@@ -133,6 +137,34 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 	},
 
 
+	slide: function(dir){
+		var b = this.body,
+			dom = b.dom,
+			w = dir*(b.getWidth()/2),
+			pValue = dom.scrollLeft,
+			pPos = parseInt(this.getEl().getStyle('background-position-x'),0),
+			value = Math.max( 0,
+						Math.min(
+							dom.scrollLeft + w,
+							dom.scrollWidth - dom.clientWidth));
+
+		var v = pPos + (pValue-value);
+
+		b.animate({ to: {scrollLeft: value} });
+		this.getEl().animate({to:{backgroundPositionX: v+'px'}});
+	},
+
+
+	slideViewLeft: function(){
+		this.slide(-1);
+	},
+
+
+	slideViewRight: function(){
+		this.slide(1);
+	},
+
+
 	centerBackgroundOn: function(item){
 		var ir = item ? item.getEl().dom.getBoundingClientRect() : {left:0,width:0};
 
@@ -153,13 +185,17 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 	},
 
 
-	selectNext: function(){
+	selectNext: function(e){
+		e.stopEvent();
 		this.moveSelection(this.NEXT,this.navNext);
+		return false;
 	},
 
 
-	selectPrev: function(){
+	selectPrev: function(e){
+		e.stopEvent();
 		this.moveSelection(this.PREV,this.navPrev);
+		return false;
 	},
 
 
