@@ -102,7 +102,7 @@ Ext.define('NextThought.Library', {
 	
 	
 	libraryLoaded: function(callback){
-		var me = this, stack = [];
+		var me = this, stack = [], store = this.getStore();
 		//The reason for iteration 1 is to load the stack with the number of TOCs I'm going to load
 		this.each(function(o){
 			if(!o.get||!o.get('index')){ return; }
@@ -119,6 +119,13 @@ Ext.define('NextThought.Library', {
 			if(!o.get||!o.get('index')){ return; }
 			me.loadToc(o.get('index'), function(toc){
 				stack.pop();
+
+				if(!toc){
+					console.log('Could not load "'+o.get('index')+'"... removing form library view');
+					store.remove(o);
+					return;
+				}
+
 				var d = toc.documentElement;
 				o.set('NTIID',d.getAttribute('ntiid'));
 				d.setAttribute('base', o.get('root'));
@@ -142,24 +149,29 @@ Ext.define('NextThought.Library', {
 				url: url,
 				async: !!callback,
 				scope: this,
-				failure: function() {
-					console.error('There was an error loading library', url, arguments);
-				},
-				success: function(r) {
-					this.tocs[index] = this.parseXML(r.responseText);
+				callback: function(q,s,r){
+					if(!s){
+						console.error('There was an error loading part of the library: '+url, arguments);
+						//make sure its falsy
+						delete this.tocs[index];
+					}
+					else {
+						this.tocs[index] = this.parseXML(r.responseText);
+					}
+
 					if(!this.tocs[index]){
 						console.warn('no data for index: '+url);
 					}
-
-					var toRemove = Ext.DomQuery.select('topic:not([ntiid])', this.tocs[index]);
-					Ext.each(toRemove, function(e){
-						if (e.parentNode) {
-							e.parentNode.removeChild(e);
-						}
-						else {
-							console.error('no parent node?', e);
-						}
-					});
+					else {
+						Ext.each(Ext.DomQuery.select('topic:not([ntiid])', this.tocs[index]), function(e){
+							if (e.parentNode) {
+								e.parentNode.removeChild(e);
+							}
+							else {
+								console.error('no parent node?', e);
+							}
+						});
+					}
 
 					if( callback ){
 						callback(this.tocs[index]);
