@@ -309,7 +309,7 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 		}
 
 		i.setHeight(h);
-this.doLayout();
+		this.doLayout();
 		this.lastHeight = h;
 		this.lastFrameSync = Ext.Date.now();
 		this.fireEvent('sync-height',h);
