@@ -98,7 +98,7 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Base', {
 		ctx.fillStyle = this.cacheColor('fill');
 		ctx.strokeStyle = this.cacheColor('stroke');
 
-		ctx.lineWidth = (parseFloat(this.strokeWidth)*w)/scale;
+		ctx.lineWidth = (parseFloat(this.strokeWidth)*w)/scale*(scale<0?-1:1);
 		if(!isFinite(ctx.lineWidth) || isNaN(ctx.lineWidth)){
 			ctx.lineWidth = 0;
 		}
