@@ -218,6 +218,12 @@ div.redaction-control {
 				&::before, &::after { color: #ffffff; }
 			}
 		}
+
+        .counter-container {
+   			display: inline-block;
+   			white-space: nowrap;
+        }
+
 		&.plain {
 
 			&, * {
@@ -244,11 +250,6 @@ div.redaction-control {
 				.application-highlight.shared-with-me {
 					border-bottom: none;
 				}
-			}
-
-			& .counter-container {
-				display: inline-block;
-				white-space: nowrap;
 			}
 
 			&.highlight-mouse-over{

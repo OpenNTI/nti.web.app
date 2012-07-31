@@ -416,6 +416,8 @@
 		}
 
 		&.expanded{
+            z-index: 1;
+            float: right;
 			&:hover {
 				box-shadow: inset 0 0 0 1px #ECECEC;
 				background: #F6F6F6;

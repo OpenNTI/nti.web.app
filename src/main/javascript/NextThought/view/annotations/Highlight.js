@@ -56,7 +56,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
 				this.compElements.clear();
 			}
 			catch (e) {
-				console.warn('tried to clear something', Globals.getError(e));
+				//catch any exceptions if things have changed...
 			}
 
 			if (this.canvas){Ext.fly(this.canvas).remove();}
@@ -274,13 +274,13 @@ Ext.define('NextThought.view.annotations.Highlight', {
 	createCounter: function(after){
 		var containingSpan = Ext.get(this.createNonAnchorableSpan()),
 			el = Ext.get(this.createNonAnchorableSpan()),
-			afterWords = after.textContent.split(' '),
-			style = this.record.get('style') || 'plain';
+			style = this.record.get('style') || 'plain',
+			textToWrap = Anchors.lastWordFromString(after.textContent);;
 
 		this.rendered.push(containingSpan.dom);
 
-		containingSpan.update(afterWords.pop());
-		Ext.fly(after).update(afterWords.join(' ') + ' ');
+		containingSpan.update(textToWrap);
+		Ext.fly(after).update(after.textContent.replace(textToWrap, ''));
 		containingSpan.addCls('counter-container');
 		el.appendTo(containingSpan);
 		containingSpan.appendTo(after);
