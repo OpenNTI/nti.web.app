@@ -675,6 +675,8 @@ describe("Anchor Utils", function() {
 			var div1 = document.createElement('div'),
 				div2 = document.createElement('div'),
 				span = document.createElement('span'),
+				t1 = document.createTextNode('This is text 1 '),
+				t2 = document.createTextNode('This is text 2'),
 				desc = Ext.create('NextThought.model.anchorables.DomContentRangeDescription', {
 					start: Ext.create('NextThought.model.anchorables.ElementDomContentPointer', {
 						role: 'start',
@@ -697,6 +699,8 @@ describe("Anchor Utils", function() {
 			div1.setAttribute('Id', 'Id1');
 			div2.setAttribute('Id', 'Id2');
 			span.setAttribute('Id', 'Span1');
+			div1.appendChild(t1);
+			div2.appendChild(t2);
 			span.appendChild(div1);
 			span.appendChild(div2);
 
@@ -706,8 +710,7 @@ describe("Anchor Utils", function() {
 			result = Anchors.resolveSpecBeneathAncestor(desc, document.body, document);
 			expect(result.collapsed).toBe(false);
 			expect(result.commonAncestorContainer).toBe(span);
-			expect(result.startContainer).toBe(div1);
-			expect(result.endContainer).toBe(div2);
+			expect(result.toString()).toBe(span.textContent);
 		});
 
 		it('Good Description, TextDomContentPointers Used', function(){
