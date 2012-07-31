@@ -231,13 +231,13 @@ Ext.define('NextThought.util.Anchors', {
 	/* tested */
 	lastWordFromString: function(str){
 		if (str === null || str === undefined){Ext.Error.raise('Must supply a string');}
-		return /\S*\s?$/.exec(str)[0]
+		return (/\S*\s?$/).exec(str)[0];
 	},
 
 	/* tested */
 	firstWordFromString: function(str){
 		if (str === null || str === undefined){Ext.Error.raise('Must supply a string');}
-		return /^\s?\S*/.exec(str)[0]
+		return (/^\s?\S*/).exec(str)[0];
 	},
 
 	/* tested */
@@ -251,19 +251,27 @@ Ext.define('NextThought.util.Anchors', {
 
 		//Resolve start and end.
 		var startResult = rangeDesc.getStart().locateRangePointInAncestor(ancestor);
-		console.log('startResult', startResult);
-		if(    !startResult.node
+		if(!startResult.node
 			|| !startResult.hasOwnProperty('confidence')
 			|| startResult.confidence < 0.4){
 			return null;
 		}
+		if(!startResult.node
+			|| !startResult.hasOwnProperty('confidence')
+			|| startResult.confidence !== 1){
+			console.error('startResult has low confidance', startResult.confidence, startResult);
+		}
 
 		var endResult = rangeDesc.getEnd().locateRangePointInAncestor(ancestor, startResult);
-		console.log('endResult', endResult);
-		if(    !endResult.node
+		if(!endResult.node
 			|| !endResult.hasOwnProperty('confidence')
 			|| endResult.confidence < 0.4){
 			return null;
+		}
+		if(!endResult.node
+			|| !endResult.hasOwnProperty('confidence')
+			|| endResult.confidence !== 1){
+			console.error('endResult has low confidance', endResult.confidence, endResult);
 		}
 
 		var startResultLocator = Anchors.toReferenceNodeXpathAndOffset(startResult);
@@ -360,24 +368,36 @@ Ext.define('NextThought.util.Anchors', {
 		//Resolution starts by locating the reference node
 		//for this text anchor.  If it can't be found ancestor is used
 
-		var root = ancestorNode;
+		var root = ancestorNode,
+			referenceNode,
+			foundReferenceNode,
+			isStart,
+			treeWalker,
+			textNode,
+			result = {},
+			possibleNodes = [],
+			done = false,
+			i;
+
+
+
 		if(root.parentNode){
 			root = root.parentNode;
 		}
 
-		var referenceNode = pointer.getAncestor().locateRangePointInAncestor(root).node;
-		var foundReferenceNode = true;
+		referenceNode = pointer.getAncestor().locateRangePointInAncestor(root).node;
+		foundReferenceNode = true;
 		if(!referenceNode){
 			foundReferenceNode = false;
 			referenceNode = ancestorNode;
 		}
 
-		var isStart = pointer.getRole() === 'start';
+		isStart = pointer.getRole() === 'start';
 
 		//We use a tree walker to search beneath the reference node
 		//for textContent matching our contexts
 
-		var treeWalker = document.createTreeWalker( referenceNode, NodeFilter.SHOW_TEXT );
+		treeWalker = document.createTreeWalker( referenceNode, NodeFilter.SHOW_TEXT );
 
 		//If we are looking for the end node.  we want to start
 		//looking where the start node ended.  This is a shortcut
@@ -388,7 +408,6 @@ Ext.define('NextThought.util.Anchors', {
 			treeWalker.currentNode = startResult.node;
 		}
 
-		var textNode;
 		//We may be in the same textNode as start
 		if(treeWalker.currentNode.nodeType === Node.TEXT_NODE){
 			textNode = treeWalker.currentNode;
@@ -397,16 +416,9 @@ Ext.define('NextThought.util.Anchors', {
 			textNode = treeWalker.nextNode();
 		}
 
-
-		var result = {};
-
-		//Array of objects that has a node and confidence
-		var possibleNodes = [];
-
-		var done = false;
 		while( textNode && !done) {
 			var matches = Anchors.getCurrentNodeMatches(pointer, treeWalker);
-			for (var i = 0; i < matches.length; i++) {
+			for (i = 0; i < matches.length; i++) {
 				result = matches[i];
 				if(matches[i].confidence > 0){
 					possibleNodes.push(matches[i]);
@@ -417,7 +429,7 @@ Ext.define('NextThought.util.Anchors', {
 					break;
 				}
 			}
-			if (done) break;
+			if (done){break;}
 
 			//Start the context search over in the next textnode
 			textNode = treeWalker.nextNode();
@@ -444,8 +456,8 @@ Ext.define('NextThought.util.Anchors', {
 			else{
 				//We want the best match
 				var totalConfidenceScores = 0;
-				if (result == null) result = {confidence: 0}
-				for (var i = 0; i < possibleNodes.length; i++) {
+				if (result === null){result = {confidence: 0};}
+				for (i = 0; i < possibleNodes.length; i++) {
 					totalConfidenceScores += possibleNodes[i].confidence;
 					if (possibleNodes[i].confidence > result.confidence) {
 						result = possibleNodes[i];
@@ -461,71 +473,65 @@ Ext.define('NextThought.util.Anchors', {
 
 		function multiIndexOf(str,tomatch) { 
 			var all = [], next = -2;
-			while (next != -1) {
+			while (next !== -1) {
 				next = str.indexOf(tomatch,next + 1);
-				if (next != -1) all.push(next);
+				if (next !== -1){all.push(next);}
 			}
 			return all;
 		}
 
 		function getPrimaryContextMatches(context, node, isStart) {
-			if (!node) return [];
-			var allmatches = [];
-			var adjustedOffset = context.contextOffset,
-				diff;
+			if (!node){return [];}
+
+			var allmatches = [],
+				adjustedOffset = context.contextOffset,
+				i, f, score;
+
+
 			if(isStart){
 				adjustedOffset = node.textContent.length - adjustedOffset;
 			}
 			var p = multiIndexOf(node.textContent,context.contextText);
-			for (var i = 0; i < p.length; i++) {
+			for (i = 0; i < p.length; i++) {
 				//Penalzies score based on disparity between expected
 				//and real offset. For longer paragraphs, which we
 				//expect will have larger and more changes made to them,
 				//we relax the extent of the penalty
-				var f = Math.sqrt(node.textContent.length) * 2 + 1;
-				var score = f / (f + Math.abs(p[i] - adjustedOffset));
-				if (score < 0.25) score = 0.25;
+				f = Math.sqrt(node.textContent.length) * 2 + 1;
+				score = f / (f + Math.abs(p[i] - adjustedOffset));
+				if (score < 0.25){score = 0.25;}
 				allmatches.push({offset: p[i] + pointer.getEdgeOffset(),
 								 node: currentNode,
 								 confidence: score});
 			}
 			return allmatches;
 		}
-		function secondaryContextMatch(context, node, isStart)
-		{
-			if (!node) return 0;
-			if (node.nodeType == node.ELEMENT_NODE) return context.contextText == '';
-			var adjustedOffset = context.contextOffset,
-				diff;
-			if(isStart){
-				adjustedOffset = node.textContent.length - adjustedOffset;
-			}
-			return node.textContent.substr(adjustedOffset).indexOf(context.contextText) == 0;
+		function secondaryContextMatch(context, node, isStart){
+			if (!node){return 0;}
+			if (node.nodeType === node.ELEMENT_NODE){return context.contextText === '';}
+			var adjustedOffset = context.contextOffset;
+
+			if(isStart){adjustedOffset = node.textContent.length - adjustedOffset;}
+			return node.textContent.substr(adjustedOffset).indexOf(context.contextText) === 0;
 		}
 
-		var currentNode = treeWalker.currentNode;
-
-		var lookingAtNode = currentNode;
-
-		var isStart = pointer.getRole() === 'start';
-
-		//If we are working on the start anchor, when checking context
-		//we look back at previous nodes.  if we are looking at end we
-		//look forward to next nodes
-		var siblingFunction = isStart ? treeWalker.previousNode : treeWalker.nextNode;
-
-		var numContexts = pointer.getContexts().length;
-		var contextObj = pointer.getContexts()[0];
-		var matches = getPrimaryContextMatches(contextObj, lookingAtNode, isStart);
+		var currentNode = treeWalker.currentNode,
+			lookingAtNode = currentNode,
+			isStart = pointer.getRole() === 'start',
+			siblingFunction = isStart ? treeWalker.previousNode : treeWalker.nextNode,
+			numContexts = pointer.getContexts().length,
+			contextObj = pointer.getContexts()[0],
+			matches = getPrimaryContextMatches(contextObj, lookingAtNode, isStart),
+			i, c;
 
 		var confidenceMultiplier = 1;
 		lookingAtNode = siblingFunction.call(treeWalker);
 
 		if (matches.length > 0) {
-			for (var i = 1; i < numContexts; i++ ){
-				var contextObj = pointer.getContexts()[i];
+			for (i = 1; i < numContexts; i++ ){
+				contextObj = pointer.getContexts()[i];
 	
-				var c = secondaryContextMatch(contextObj, lookingAtNode, isStart);
+				c = secondaryContextMatch(contextObj, lookingAtNode, isStart);
 				if( !c ){
 					confidenceMultiplier *= i / (i+0.5);
 					break;
@@ -537,14 +543,14 @@ Ext.define('NextThought.util.Anchors', {
 
 		//If we don't have a full set of contexts.  lookingAtNode
 		//should be null here.  If it isn't, then we might have a problem
-		if(confidenceMultiplier == 1){
+		if(confidenceMultiplier === 1){
 			if(!Anchors.containsFullContext(pointer) && lookingAtNode){
 				if (lookingAtNode) {
 					confidenceMultiplier *= numContexts / (numContexts + 0.5);
 				}
 			}
 		}
-		for (var i = 0; i < matches.length; i++) {
+		for (i = 0; i < matches.length; i++) {
 			matches[i].confidence *= confidenceMultiplier;
 		}
 		treeWalker.currentNode = currentNode;
@@ -564,8 +570,9 @@ Ext.define('NextThought.util.Anchors', {
 		}
 
 		//Maybe we have 5 characters of additional context
-		var i;
-		var chars = 0;
+		var i,
+			chars = 0;
+
 		for(i = 1; i< pointer.getContexts().length; i++){
 				chars += pointer.getContexts()[i].contextText.length;
 		}
@@ -696,7 +703,7 @@ Ext.define('NextThought.util.Anchors', {
 
 		while(workingNode){
 			workingNode = workingNode.lastChild;
-			if(workingNode) result = workingNode;
+			if(workingNode){result = workingNode;}
 		}
 
 		return result;
@@ -993,7 +1000,7 @@ Ext.define('NextThought.util.Anchors', {
 	//TODO - testing
 	indexInParentsChildren: function(node){
 		var i = 0;
-		while( (node = node.previousSibling) != null ){
+		while( (node = node.previousSibling) !== null ){
 			i++;
 		}
 		return i;
@@ -1001,15 +1008,17 @@ Ext.define('NextThought.util.Anchors', {
 
 
 	convertStaticResultToLiveDomContainerAndOffset: function( staticResult, isEnd, docElement ) {
-		var result;
-		if(!staticResult){
-			return null;
-		}
+		if(!staticResult){return null;}
 
-		var referenceNode = staticResult.referencePointer.locateRangePointInAncestor(docElement.body).node;
-		if(!referenceNode){
-				return null;
-		}
+		var result,
+			referenceNode = staticResult.referencePointer.locateRangePointInAncestor(docElement.body).node,
+			container,
+			parts,
+			kids,
+			part,
+			lastPart;
+
+		if(!referenceNode){return null;}
 
 		referenceNode.normalize();
 
@@ -1017,8 +1026,8 @@ Ext.define('NextThought.util.Anchors', {
 			return {container: referenceNode};
 		}
 
-		var container = referenceNode;
-		var parts = staticResult.xpath.split('/');
+		container = referenceNode;
+		parts = staticResult.xpath.split('/');
 
 		while( parts.length > 1 ){
 
@@ -1026,10 +1035,10 @@ Ext.define('NextThought.util.Anchors', {
 				console.error('Expected a non text node.  Expect errors', container);
 			}
 
-			var kids = container.childNodes;
-			var part = parts.pop();
+			kids = container.childNodes;
+			part = parseInt(parts.pop(), 10);
 
-			if( !(part < kids.length) ){
+			if(part >= kids.length){
 				console.error('Invalid xpath '+staticResult.xpath+' from node', referenceNode);
 				return null;
 			}
@@ -1038,7 +1047,7 @@ Ext.define('NextThought.util.Anchors', {
 			container = result.container;
 		}
 
-		var lastPart = parts.pop();
+		lastPart = parseInt(parts.pop(), 10);
 		result = Anchors.ithChildAccountingForSyntheticNodes(container, lastPart, staticResult.offset, isEnd);
 
 		return result;
@@ -1051,7 +1060,13 @@ Ext.define('NextThought.util.Anchors', {
 			return null;
 		}
 
-		var childrenWithSyntheticsRemoved = Anchors.childrenIfSyntheticsRemoved( node );
+		var childrenWithSyntheticsRemoved = Anchors.childrenIfSyntheticsRemoved( node),
+			i = 0,
+			child,
+			adjustedIdx = 0,
+			result,
+			testNode,
+			limit;
 
 		//Short circuit the error condition
 		if( idx >= childrenWithSyntheticsRemoved.length ){
@@ -1060,20 +1075,17 @@ Ext.define('NextThought.util.Anchors', {
 
 		//We assume that before synthetic nodes the dom was normalized
 		//That means when iterating here we skip consecutive text nodes
-		var i = 0;
-		var child = null;
-		var adjustedIdx = 0;
-		while( i < childrenWithSyntheticsRemoved.length ){
+		while(i < childrenWithSyntheticsRemoved.length ){
 			child = childrenWithSyntheticsRemoved[i];
 
-			if(adjustedIdx == idx){
+			if(adjustedIdx === idx){
 				break;
 			}
 
 			//If child is a textNode we want to advance to the last
 			//nextnode adjacent to it.
 			if( child.nodeType === Node.TEXT_NODE ){
-				while( i < childrenWithSyntheticsRemoved.length - 1
+				while(i < childrenWithSyntheticsRemoved.length - 1
 					&& childrenWithSyntheticsRemoved[i+1].nodeType === Node.TEXT_NODE ){
 					i++;
 				}
@@ -1084,7 +1096,7 @@ Ext.define('NextThought.util.Anchors', {
 			adjustedIdx++;
 		}
 
-		if(!child || adjustedIdx != idx){
+		if(!child || adjustedIdx !== idx){
 			return null;
 		}
 
@@ -1092,24 +1104,24 @@ Ext.define('NextThought.util.Anchors', {
 		if(offset !== null){
 			//If the container isn't a text node, the offset is the ith child
 			if(child.nodeType !== Node.TEXT_NODE){
-				var result = {container: Anchors.ithChildAccountingForSyntheticNodes( child, offset, null, isEnd)};
+				result = {container: Anchors.ithChildAccountingForSyntheticNodes( child, offset, null, isEnd)};
 				console.log('Returning result from child is not textnode branch', result);
 				return result;
 			}
 			else{
 				while( i < childrenWithSyntheticsRemoved.length){
-					var textNode = childrenWithSyntheticsRemoved[i];
+					textNode = childrenWithSyntheticsRemoved[i];
 					if(textNode.nodeType !== Node.TEXT_NODE){
 						break;
 					}
 
 					//Note <= range can be at the very end (equal to length)
-					var limit = textNode.textContent.length;
+					limit = textNode.textContent.length;
 					if(isEnd){
 						limit++;
 					}
 					if(offset < limit){
-						var result = {container: textNode, offset: offset};
+						result = {container: textNode, offset: offset};
 						return result;
 					}
 
@@ -1129,10 +1141,12 @@ Ext.define('NextThought.util.Anchors', {
 	childrenIfSyntheticsRemoved: function(node){
 		var sanitizedChildren = [];
 
-		var i;
-		var children = node.childNodes;
+		var i,
+			children = node.childNodes,
+			child;
+
 		for( i = 0; i < children.length; i++ ){
-			var child = children[i];
+			child = children[i];
 			if( child.getAttribute && child.getAttribute('data-non-anchorable') ){
 				sanitizedChildren = sanitizedChildren.concat(Anchors.childrenIfSyntheticsRemoved(child));
 			}
