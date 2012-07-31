@@ -11,7 +11,13 @@ Ext.define('NextThought.util.Anchors', {
 	toDomRange: function(contentRangeDescription, docElement) {
 		if(!contentRangeDescription){console.warn('nothing to parse?');return null;}
 		var ancestorNode = contentRangeDescription.getAncestor().locateRangePointInAncestor(docElement).node || docElement;
-		return Anchors.resolveSpecBeneathAncestor(contentRangeDescription, ancestorNode, docElement);
+
+		//Clone and purify the ancestor node, so our range can always build against a clean source:
+		//TODO - consider caching these somewhere for performance
+		var clonedAncestor = ancestorNode.cloneNode(true);
+		Anchors.purifyNode(clonedAncestor);
+
+		return Anchors.resolveSpecBeneathAncestor(contentRangeDescription, clonedAncestor, docElement);
 	},
 
 
@@ -243,43 +249,54 @@ Ext.define('NextThought.util.Anchors', {
 			Ext.Error.raise('Must supply a docElement');
 		}
 
-		//Resolve the start anchor.
-		//see below for details no resolving various
-		//anchor types
+		//Resolve start and end.
 		var startResult = rangeDesc.getStart().locateRangePointInAncestor(ancestor);
-
-		//If we can't even resolve the start anchor there
-		//is no point in resolving the end
+		console.log('startResult', startResult);
 		if(    !startResult.node
 			|| !startResult.hasOwnProperty('confidence')
-			|| startResult.confidence !== 1){
+			|| startResult.confidence < 0.4){
 			return null;
 		}
 
-		//Resolve the end anchor.
-		//see below for details no resolving various
-		//anchor types
 		var endResult = rangeDesc.getEnd().locateRangePointInAncestor(ancestor, startResult);
-
+		console.log('endResult', endResult);
 		if(    !endResult.node
 			|| !endResult.hasOwnProperty('confidence')
-			|| endResult.confidence !== 1){
+			|| endResult.confidence < 0.4){
+			return null;
+		}
+
+		var startResultLocator = Anchors.toReferenceNodeXpathAndOffset(startResult);
+		var endResultLocator = Anchors.toReferenceNodeXpathAndOffset(endResult);
+//		console.log('startResultLocator', startResultLocator, 'endResultLocator', endResultLocator);
+
+		return Anchors.convertContentRangeToDomRange(startResultLocator, endResultLocator, docElement);
+	},
+
+
+	//TODO - testing
+	convertContentRangeToDomRange: function(startResult, endResult, docElement) {
+
+		var liveStartResult = Anchors.convertStaticResultToLiveDomContainerAndOffset(startResult, false, docElement);
+		var liveEndResult = Anchors.convertStaticResultToLiveDomContainerAndOffset(endResult, true, docElement);
+//		console.log('liveStartResult', liveStartResult, 'liveEndResult', liveEndResult);
+		if(!liveStartResult || !liveEndResult){
 			return null;
 		}
 
 		var range = docElement.createRange();
-		if(startResult.hasOwnProperty('confidence')){
-			range.setStart(startResult.node, startResult.offset);
+		if(liveStartResult.hasOwnProperty('offset')){
+			range.setStart(liveStartResult.container, liveStartResult.offset);
 		}
 		else{
-			range.setStartBefore(startResult.node);
+			range.setStartBefore(liveStartResult.container);
 		}
 
-		if(endResult.hasOwnProperty('confidence')){
-			range.setEnd(endResult.node, endResult.offset);
+		if(liveEndResult.hasOwnProperty('offset')){
+			range.setEnd(liveEndResult.container, liveEndResult.offset);
 		}
 		else{
-			range.setEndAfter(endResult.node);
+			range.setEndAfter(liveEndResult.container);
 		}
 		return range;
 	},
@@ -812,31 +829,8 @@ Ext.define('NextThought.util.Anchors', {
 		range.setStart(range.startContainer,origStartOff);
 		range.setEnd(range.endContainer, origEndOff);
 
-		//begin the cleanup:
-		extElement = new Ext.dom.Element(docFrag);
-
-		//remove any action or counter spans and their children:
-		(new Ext.CompositeElement(extElement.query('span.application-highlight.counter'))).remove();
-		(new Ext.CompositeElement(extElement.query('span.redactionAction'))).remove();
-		(new Ext.CompositeElement(extElement.query('span.blockRedactionAction'))).remove();
-
-		//loop over elements we need to remove and, well, remove them:
-		Ext.each(extElement.query('[data-non-anchorable]'), function(n){
-			if (n.parentNode){
-				parentContainer = n.parentNode;
-				nodeToInsertBefore = n;
-					Ext.each(n.childNodes, function(c){
-					parentContainer.insertBefore(c, nodeToInsertBefore);
-				});
-			}
-			else{
-				Ext.Error.raise('Non-Anchorable node has no previous siblings or parent nodes.');
-			}
-
-			//remove non-anchorable node
-			parentContainer.removeChild(nodeToInsertBefore);
-		});
-		docFrag.normalize();
+		//clean the node of undesirable things:
+		Anchors.purifyNode(docFrag);
 
 		//at this point we know the range ancestor is stored in the 'a' variable, now that the data is cleaned and
 		//normalized, we need to find the range's start and end points, and create a fresh range.
@@ -858,6 +852,37 @@ Ext.define('NextThought.util.Anchors', {
 		resultRange.ownerNode = range.commonAncestorContainer.parentNode; //for use whenever someone wants to know where this fits in the doc.
 		return resultRange;
 	},
+
+
+	purifyNode: function(docFrag) {
+		var parentContainer,
+			nodeToInsertBefore;
+
+		//remove any action or counter spans and their children:
+		(new Ext.CompositeElement(Ext.fly(docFrag).query('span.application-highlight.counter'))).remove();
+		(new Ext.CompositeElement(Ext.fly(docFrag).query('span.redactionAction'))).remove();
+		(new Ext.CompositeElement(Ext.fly(docFrag).query('span.blockRedactionAction'))).remove();
+
+		//loop over elements we need to remove and, well, remove them:
+		Ext.each(Ext.fly(docFrag).query('[data-non-anchorable]'), function(n){
+			if (n.parentNode){
+				parentContainer = n.parentNode;
+				nodeToInsertBefore = n;
+					Ext.each(n.childNodes, function(c){
+					parentContainer.insertBefore(c, nodeToInsertBefore);
+				});
+			}
+			else{
+				Ext.Error.raise('Non-Anchorable node has no previous siblings or parent nodes.');
+			}
+
+			//remove non-anchorable node
+			parentContainer.removeChild(nodeToInsertBefore);
+		});
+		docFrag.normalize();
+		return docFrag;
+	},
+
 
 
 	/* tested */
@@ -925,6 +950,197 @@ Ext.define('NextThought.util.Anchors', {
 		}
 
 		return null;
+	},
+
+
+	//TODO - testing
+	toReferenceNodeXpathAndOffset: function( result ){
+		//get a reference node that is NOT a text node...
+		var referenceNode = Anchors.referenceNodeForNode(result.node);
+		while(referenceNode && Ext.isTextNode(referenceNode)){
+			referenceNode = Anchors.referenceNodeForNode(referenceNode.parentNode);
+		}
+		if (!referenceNode) {
+			Ext.Error.raise('Could not locate a valid ancestor');
+		}
+
+
+		//TODO - must be a Node, not txt?
+		var referencePointer = Ext.create('NextThought.model.anchorables.ElementDomContentPointer', {node: referenceNode, role: 'ancestor'});
+
+		var adaptedResult = {};
+
+		adaptedResult.referencePointer = referencePointer;
+		adaptedResult.offset = result.offset;
+
+		if(result.node !== referenceNode){
+			var parts = [];
+
+			var node = result.node;
+
+			while(node && node !== referenceNode){
+				parts.push(Anchors.indexInParentsChildren(node).toString());
+				node = node.parentNode;
+			}
+
+			adaptedResult.xpath = parts.join('/');
+		}
+
+		return adaptedResult;
+	},
+
+
+	//TODO - testing
+	indexInParentsChildren: function(node){
+		var i = 0;
+		while( (node = node.previousSibling) != null ){
+			i++;
+		}
+		return i;
+	},
+
+
+	convertStaticResultToLiveDomContainerAndOffset: function( staticResult, isEnd, docElement ) {
+		var result;
+		if(!staticResult){
+			return null;
+		}
+
+		var referenceNode = staticResult.referencePointer.locateRangePointInAncestor(docElement.body).node;
+		if(!referenceNode){
+				return null;
+		}
+
+		referenceNode.normalize();
+
+		if(!staticResult.xpath){
+			return {container: referenceNode};
+		}
+
+		var container = referenceNode;
+		var parts = staticResult.xpath.split('/');
+
+		while( parts.length > 1 ){
+
+			if(container.nodeType === Node.TEXT_NODE){
+				console.error('Expected a non text node.  Expect errors', container);
+			}
+
+			var kids = container.childNodes;
+			var part = parts.pop();
+
+			if( !(part < kids.length) ){
+				console.error('Invalid xpath '+staticResult.xpath+' from node', referenceNode);
+				return null;
+			}
+
+			result = Anchors.ithChildAccountingForSyntheticNodes(container, part, null, isEnd);
+			container = result.container;
+		}
+
+		var lastPart = parts.pop();
+		result = Anchors.ithChildAccountingForSyntheticNodes(container, lastPart, staticResult.offset, isEnd);
+
+		return result;
+	},
+
+
+	//TODO - testing
+	ithChildAccountingForSyntheticNodes: function( node, idx, offset, isEnd ){
+		if(idx < 0 || !node.firstChild){
+			return null;
+		}
+
+		var childrenWithSyntheticsRemoved = Anchors.childrenIfSyntheticsRemoved( node );
+
+		//Short circuit the error condition
+		if( idx >= childrenWithSyntheticsRemoved.length ){
+			return null;
+		}
+
+		//We assume that before synthetic nodes the dom was normalized
+		//That means when iterating here we skip consecutive text nodes
+		var i = 0;
+		var child = null;
+		var adjustedIdx = 0;
+		while( i < childrenWithSyntheticsRemoved.length ){
+			child = childrenWithSyntheticsRemoved[i];
+
+			if(adjustedIdx == idx){
+				break;
+			}
+
+			//If child is a textNode we want to advance to the last
+			//nextnode adjacent to it.
+			if( child.nodeType === Node.TEXT_NODE ){
+				while( i < childrenWithSyntheticsRemoved.length - 1
+					&& childrenWithSyntheticsRemoved[i+1].nodeType === Node.TEXT_NODE ){
+					i++;
+				}
+			}
+
+			//Advance to the next child
+			i++;
+			adjustedIdx++;
+		}
+
+		if(!child || adjustedIdx != idx){
+			return null;
+		}
+
+		//We've been asked to resolve an offset at the same time
+		if(offset !== null){
+			//If the container isn't a text node, the offset is the ith child
+			if(child.nodeType !== Node.TEXT_NODE){
+				var result = {container: Anchors.ithChildAccountingForSyntheticNodes( child, offset, null, isEnd)};
+				console.log('Returning result from child is not textnode branch', result);
+				return result;
+			}
+			else{
+				while( i < childrenWithSyntheticsRemoved.length){
+					var textNode = childrenWithSyntheticsRemoved[i];
+					if(textNode.nodeType !== Node.TEXT_NODE){
+						break;
+					}
+
+					//Note <= range can be at the very end (equal to length)
+					var limit = textNode.textContent.length;
+					if(isEnd){
+						limit++;
+					}
+					if(offset < limit){
+						var result = {container: textNode, offset: offset};
+						return result;
+					}
+
+					offset = offset - textNode.textContent.length;
+					i++;
+				}
+
+				console.error('Can\'t find offset in joined textNodes');
+				return null;
+			}
+		}
+
+		return {container: child};
+	},
+
+	//TODO -testing
+	childrenIfSyntheticsRemoved: function(node){
+		var sanitizedChildren = [];
+
+		var i;
+		var children = node.childNodes;
+		for( i = 0; i < children.length; i++ ){
+			var child = children[i];
+			if( child.getAttribute && child.getAttribute('data-non-anchorable') ){
+				sanitizedChildren = sanitizedChildren.concat(Anchors.childrenIfSyntheticsRemoved(child));
+			}
+			else{
+				sanitizedChildren.push(child);
+			}
+		}
+		return sanitizedChildren;
 	}
 },
 function(){

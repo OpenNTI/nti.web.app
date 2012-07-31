@@ -11,92 +11,26 @@ Ext.define('NextThought.view.annotations.Highlight', {
 
 	constructor: function(config){
 		this.callParent(arguments);
-		if (config.browserRange) {
-			this.range = config.browserRange;
-			this.setupInvalidationFallback();
-		}
+
+		//TODO hook up browser range for speed, throw away after render
+		//	this.range = config.browserRange;
 
 		if(!this.isModifiable){
 			this.highlightCls += ' shared-with-me';
 		}
-
-		this.getRange(); //get range right her up front, this won't render it yet.
-		//console.log('build highlight for',this.getRecordField('selectedText'));
 		return this;
 	},
 
 
-	setupInvalidationFallback: function(){
-		if (this.range && !this.hadRange){
-			this.invalidatedRange = this.range.cloneRange();
-			this.invalidateRangeString = this.range.toString();
-
-			//remember that we've been here before:
-			this.hadRange = true;
-		}
-	},
-
-
 	getRange: function(){
-		if(this.range && this.range.collapsed){
-			this.range.detach();
-			delete this.range;
-			console.log('cleaning up collapsed range');
+		var range = Anchors.toDomRange(this.getRecordField('applicableRange'),this.doc);
+		console.log(this.id,': ',(this.getRecordField('body')||[]).join('|'), ': got range from description:', range);
+
+		if(!range){
+			console.log('bad range?');
 		}
 
-
-		if(!this.range){
-			//console.warn('GET RANGE FOR:', this.getRecordField('applicableRange').getStart().getContexts()[0].getContextText());
-			this.range = Anchors.toDomRange(this.getRecordField('applicableRange'),this.doc);
-			console.log(this.id,': ',(this.getRecordField('body')||[]).join('|'), ': got range from description:', this.range);
-
-			//TODO - there is most definitly a better and more complicated way to solve this, however in the interest of time,
-			//we will make a best guess if our range gets borked.
-			//So if this range is just now created, remember some stuff for later in case it gets collapsed by other things in the dom.
-			this.setupInvalidationFallback();
-
-
-			try {
-				//If we have been here before and our range is a goner, commence freak out:
-				if (!this.range && this.hadRange){
-					//TODO - find a way to get rid of this..
-					//now we know we are fubared, someone fashion a new range:
-					console.warn('Existing valid range object is messed up by something in the dom, falling back to semi-wild guessing.');
-					var parentTextNodes = AnnotationUtils.getTextNodes(this.invalidatedRange.commonAncestorContainer.parentNode),
-						newRange = this.doc.createRange(),
-						foundSubstring = -1;
-
-					//create a new range selecting the parent of the old range as a best guess:
-					newRange.selectNode(this.invalidatedRange.commonAncestorContainer.parentNode);
-
-					//try to find a text node in there that kind of matches:
-					Ext.each(parentTextNodes, function(n){
-						foundSubstring = n.textContent.indexOf(this.invalidateRangeString.substr(0, 8));
-						if (foundSubstring > -1){
-							//this node kind of matches, just cobble a range out of this, if these comments make you nervous, they should...
-							newRange.setStart(n, foundSubstring);
-							newRange.setEnd(n, foundSubstring + 8);
-
-							this.range = newRange;
-							return false;
-						}
-					}, this);
-				}
-			}
-			catch (e){
-				console.log('what?', e.message, e.stack);
-			}
-
-
-			if(!this.range){
-				console.log('bad range?',
-					this.getRecordField('applicableRange'),
-					'hadRange:',this.hadRange
-				);
-
-			}
-		}
-		return this.range;
+		return range;
 	},
 
 
@@ -115,11 +49,6 @@ Ext.define('NextThought.view.annotations.Highlight', {
 		try{
 			var c = this.rendered.slice();
 			this.rendered = [];
-
-			if( this.range ){
-				this.range.detach();
-				delete this.range;
-			}
 
 			//cleanup listeners if possible:
 			try{
@@ -175,15 +104,15 @@ Ext.define('NextThought.view.annotations.Highlight', {
 
 
 	buildRange: function(){
-		var range = this.getDocumentElement().createRange();
+		var range = this.doc.createRange();
 
 		if(this.rendered){
 			try {
 				range.setStartBefore(this.rendered.first());
 				range.setEndAfter(this.rendered.last());
+
 			}
 			catch (e) {
-				console.log('rendered', this.rendered);
 				console.error(Globals.getError(e));
 			}
 		}
@@ -209,7 +138,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
 
 
 	render: function(){
-		var range,
+		var range = null,
 			style = this.getRecordField('style'),
 			bounds,
 			boundingTop,
@@ -250,7 +179,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
 			}
 		}
 
-		range = this.buildRange();
+		range = range || this.buildRange();
 		bounds = range.getBoundingClientRect() || this.getAlternateBoundingRect();
 		boundingTop = Math.ceil(bounds.top);
 		boundingLeft = Math.ceil(bounds.left);
