@@ -90,7 +90,7 @@ console.log('setting content...');
 
 		ntiContent = document.getElementsByTagName('iframe')[0].contentWindow.document.getElementById('NTIContent');
 		wst = ntiContent.querySelector('.worksheet-title');
-		if (wst && wst.innerHTML == 'Workbook Questions') {
+		if (wst && wst.innerHTML == 'Workbook Questions' || true) {
 			AssessmentUtils.setupAssessment(me.getDocumentElement(), me);
 		}
 		else {

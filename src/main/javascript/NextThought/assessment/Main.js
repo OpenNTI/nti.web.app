@@ -61,7 +61,8 @@ Ext.define('NextThought.assessment.Main', {
 			}
 
 			//the frame has jQuery & MathQuill
-			w.$('input[type=number]').replaceWith(function(){
+			console.log(w.$('.naqsymmathpart'));
+			w.$('.naqsymmathpart input[data-ntitype=naqsymmath]').replaceWith(function(){
 				var id = w.$(this).attr('id');
 				return '<input id="'+id+'" type="hidden"/><span class="quiz-input"></span>';
 			});
@@ -80,9 +81,13 @@ Ext.define('NextThought.assessment.Main', {
 				 e.target.value += '0';
 				 e.target.value = e.target.value.substring(0,e.target.value.length - 1);
 			}
+			//Substitute textboxes for naqsymmathparts with MathQuill boxes
+			listElements = doc.querySelectorAll('.nasymmathpart');
+			var i;
+			for (i=0; i < listElements.length; i++) {
+			}
 			//Substitute lists with radio buttons
 			listElements = doc.querySelectorAll('.naqchoice');
-			var i;
 			for (i=0; i < listElements.length; i++) {
 				var le = listElements[i],
 					radioButton = doc.createElement("input");
@@ -98,10 +103,11 @@ Ext.define('NextThought.assessment.Main', {
 				//replacement.innerHTML = le.querySelector('p').innerHTML;
 				//le.parentNode.removeChild(le);
 			}
-			//Substitute multiple choice with usable multiple choice
+			//Substitute matching with usable matching
 			mc = doc.querySelectorAll('.nti_resource_image');
 			for (i=0; i < mc.length; i++) {
 				if (mc[i].alt.indexOf('{tabular}') >= 0) {
+					console.log(mc[i].alt);
 					tabletext = mc[i].alt.replace(/^.*?{tabular}{cc}/,'').replace(/\\end{tabular}.*?$/,'');
 					rows = tabletext.split('\\\\'); //Actually just two slashes
 					cells = [], values = [];
@@ -119,9 +125,10 @@ Ext.define('NextThought.assessment.Main', {
 					//Make existing elements invisible
 					mc[i].style.display = 'none';
 					questionObj = mc[i];
-					while (questionObj && questionObj.className.indexOf('naquestionpart') == -1) {
+					while (questionObj && questionObj.className && questionObj.className.indexOf('naquestionpart') == -1) {
 						questionObj = questionObj.parentNode;
 					}
+					if (!questionObj || !questionObj.className) break;
 					questionObj.querySelector('input').style.display = 'none';
 					//Hidden element stores the current selection
 					mc[i].parentNode.insertBefore(hidden,mc[i]);
@@ -209,7 +216,6 @@ Ext.define('NextThought.assessment.Main', {
 			questions = doc.querySelectorAll('.naquestion');
 			for (i=0; i < questions.length; i++) {
 				submit = doc.createElement("a");
-				//submit.href='#'
 				submit.id=questions[i].parentNode.getAttribute('data-ntiid')+':submit';
 				submit.className = 'submitbutton';
 				submit.onclick=function(e){ 
@@ -358,10 +364,14 @@ Ext.define('NextThought.assessment.Main', {
 			console.log('Failed to find question for id ' + questionId);
 			return;
 		}
+
+		me.pullMathQuillValues(doc);
+
 		var parts = q.querySelectorAll('.naquestionpart');
 		var items = [], p;
 		for (p = 0; p < parts.length; p++) {
 			var input = parts[p].querySelector('input');
+			console.log('Input!',input, input.value);
 			//TODO: support dict responses for Matching questions
 			if (parts[p].querySelectorAll('canvas').length === 1) {
 				data = JSON.parse(parts[p].querySelector('.hidden-data-span').innerHTML).values;
@@ -377,10 +387,7 @@ Ext.define('NextThought.assessment.Main', {
 				}
 				parts[p].querySelector('.hidden-data-span').innerHTML = '{"selected":-1,"values":'+JSON.stringify(emptyValues)+'}';*/
 			}
-			else if (input.className.indexOf('answerblank') >= 0) {
-				items.push(input.value);
-			}
-			else {
+			else if (input.getAttribute("type") == "radio") {
 				inputs = parts[p].querySelectorAll('input');
 				var i;
 				for (i = 0; i < inputs.length; i++) {
@@ -388,14 +395,16 @@ Ext.define('NextThought.assessment.Main', {
 				}
 				items.push(i);
 			}
+			else {
+				items.push(input.value);
+				console.log(items[items.length-1]);
+			}
 		}
 		var submission = Ext.create('NextThought.model.assessment.QuestionSubmission', {
 			ContainerId: ntiid,
 			questionId: questionId,
 			parts: items
 		});
-
-		me.pullMathQuillValues(doc);
 
 		console.log(submission);
 		vp.mask('Grading...');
@@ -445,6 +454,8 @@ Ext.define('NextThought.assessment.Main', {
 			pt = parts[i];
 			s = pte.down('.result');
 			if (s) s.remove();
+			s = pte.down('.explanation');
+			if (s) s.remove();
 
 			s = pte.createChild({
 			  	tag: 'span',
@@ -455,8 +466,10 @@ Ext.define('NextThought.assessment.Main', {
 
 			//r = pt.data
 				
-			prefix = (typeof pt.submittedResponse !== 'string') ? '' :
-				('"' + pt.submittedResponse + '" is ')
+			prefix = (typeof pt.submittedResponse !== 'string' || 
+					pte.dom.className.indexOf('naqsymmathpart') >= 0)
+				? ''
+				: ('"' + pt.submittedResponse + '" is ');
 			
 			ptnull = pt.submittedResponse === '';
 			if (typeof pt.submittedResponse === 'object') {
@@ -489,15 +502,48 @@ Ext.define('NextThought.assessment.Main', {
 				html: html,
 				cls: mathCls+'response' + ' answer-text'
 			});
+			var pageInfoSuccess = function() {
+				var myi = i;
+				var myquestionId = questionId;
+				var mys = s;
+				this.call = function(e) {
+					console.log(e);
+					var j = 0;
+					for (;j < e.data.AssessmentItems.length; j++) {
+						console.log(e.data.AssessmentItems[j].data.NTIID, myquestionId);
+						if (e.data.AssessmentItems[j].data.NTIID == myquestionId) break;
+					}
+					explanation = e.data.AssessmentItems[j].data.parts[myi].data.explanation;//.replace(/\$/g,'$$$$')
+					child = mys.parent('.naquestionpart').createChild({tag: 'span', html: explanation, cls: mathCls+'response answer-text explanation '});
+					child.setStyle('display','none');
+					mys.dom.onmouseover = function() { this.parentNode.querySelector('.explanation').style.display = 'block' };
+					mys.dom.onmouseout = function() { this.parentNode.querySelector('.explanation').style.display = 'none' };
+				}
+				return this.call;
+			}
+			function pageInfoFailure() {}
+			$AppConfig.service.getPageInfo(LocationProvider.currentNTIID, pageInfoSuccess(), pageInfoFailure, this);
 		}
 
-		doc.parentWindow.postMessage('MathJax.reRender()',location.href);
-
+		setTimeout(function() {doc.parentWindow.postMessage('MathJax.reRender()',location.href)}, 300);
+		/*var interval = function(val) {
+			console.log(doc.parentWindow.$('.explanation math'));
+			doc.parentWindow.$('.explanation math').attr('display','inline');
+			console.log(val);
+			if (val <= 0) return;
+			setTimeout(function() {interval(val-1)},30);
+		}
+		interval(80);*/
 		Ext.get(doc.getElementById('submit')).update('Reset');
+		doc.getElementById('submit').style.display = 'none';
 	},
 
 	resetAssessment: function(doc) {
 		var w = doc.parentWindow;
+		/*var qparts = doc.querySelectorAll('.naquestionpart'); //TODO: Make this function relevant again
+		for (var i = 0; i < qparts.length; i++) {
+			var qresult = qparts.querySelector('.result');
+		}*/
 		doc.getElementById('submit').addClass('submitbutton');
 		var sb = doc.querySelectorAll('.submitbutton'), 
 			i;
