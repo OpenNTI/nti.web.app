@@ -3,12 +3,17 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 		'NextThought.ContentAPIRegistry'
 	],
 
+	baseFrameCheckIntervalInMillis: 500,
+	frameCheckRateChangeFactor: 1.5,
+
 	constructor: function(){
 		this.checkFrame = Ext.bind(this.checkFrame,this);
 		this.checkContentFrames = Ext.Function.createBuffered(this.checkContentFrames,100);
 		if(this.add){
 			this.add(this.getIFrameConfig());
 		}
+
+		this.on('resize',function(){delete this.lastHeight;},this);
 		return this;
 	},
 
@@ -73,10 +78,16 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 			var doc = me.getDocumentElement();
 			if (doc.body || doc.readyState === 'complete') {
 				Ext.TaskManager.stop(task);
-				me.initContentFrame();
-				if(cb){
-					Ext.callback(cb,me);
-				}
+				doc.open();
+				doc.write('<!DOCTYPE html><html><head></head><body></body></html>');
+				doc.close();
+				delete me.contentDocumentElement;
+				setTimeout(function(){
+					me.initContentFrame();
+					if(cb){
+						Ext.callback(cb,me);
+					}
+				},10);
 			}
 		};
 		setTimeout(function(){Ext.TaskManager.start(task);},200);
@@ -114,10 +125,8 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 
 		doc.parentWindow.onerror = function(){console.log('iframe error: ',JSON.stringify(arguments));};
 
-		doc.firstChild.setAttribute('class','x-panel-reset');
-		doc.body.setAttribute('class','x-panel-body');
-
-//		doc.body.setAttribute('contenteditable','true');
+		doc.getElementsByTagName('html')[0].setAttribute('class','x-panel-reset');
+		doc.getElementsByTagName('body')[0].setAttribute('class','x-panel-body');
 
 		meta = doc.createElement('meta');
 		//<meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -156,6 +165,7 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 				}
 			}
 		});
+
 		on(doc,['mouseover','mousemove'],function(e){
 			e = Ext.EventObject.setEvent(e||event);
 			if(e.getX() < 80){ me.setGutterClickThrough(); }
@@ -193,7 +203,7 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 		if(me.syncInterval){
 			clearInterval(me.syncInterval);
 		}
-		me.syncInterval = setInterval( me.checkFrame, Ext.isIE? 500 : 100 );
+		me.syncInterval = setInterval( me.checkFrame, this.baseFrameCheckIntervalInMillis );
 	},
 
 
@@ -213,13 +223,11 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 		var me = this,
 			doc = me.getDocumentElement(),
 			view = me.body,
-			container = doc.getElementById('NTIContent'),
 			scrollTop = view.getScroll().top - 10,
 			viewHeight = view.getHeight(),
 			frames = doc.querySelectorAll('iframe'),
 			bounds = scrollTop + viewHeight,
 			display = 'display:block;',
-//			contentHeight = container.clientHeight,
 			w = doc.parentWindow;
 
 		if(!w.$){
@@ -258,9 +266,7 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 				return;
 			}
 
-			w.$(node).height(height+10);
-
-			//console.log('scrollTop: ',scrollTop, 'frame top: ', top, 'frame height: ',height,f);
+			w.$(node).height(height);
 
 			if(!f.originalSrc){
 				f.originalSrc = f.src;
@@ -272,16 +278,8 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 				f.src = f.originalSrc;
 			}
 			else if(style===display && outOfBounds){
-//				console.log(scrollTop, top, bottom, bounds);
 				f.removeAttribute('style');
 				f.src = 'about:blank';
-//				height = contentHeight-container.clientHeight;
-//				contentHeight = container.clientHeight;
-//				if(top<scrollTop){
-//					scrollTop -= height;
-//					bounds -= height;
-//					view.scrollTo('top',scrollTop);
-//				}
 			}
 
 		});
@@ -290,35 +288,28 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 
 
 	checkFrame: function(){
-		var doc = this.getDocumentElement(),
-			body = Ext.get(doc.getElementById('NTIContent'));
-		if (body) {
-			this.syncFrame(body);
-			if(Ext.Date.now()-this.lastFrameSync > 500){
+		var doc = this.getDocumentElement();
+		if (doc) {
+			this.syncFrame(doc.getElementsByTagName('html')[0]);
+			if(Ext.Date.now()-this.lastFrameSync > 1000){
 				clearInterval(this.syncInterval);
-				this.syncInterval = setInterval(this.checkFrame,500);
+				this.syncInterval = setInterval(this.checkFrame,
+						this.baseFrameCheckIntervalInMillis*this.frameCheckRateChangeFactor);
 			}
 		}
 	},
 
 
-	syncFrame: function(body){
+	syncFrame: function(content){
 		var i = this.getIframe(),
-			h = body.getHeight()+100;
+			h = Math.max(content.getBoundingClientRect().height, this.getEl().getHeight());
 
-		if(h === this.lastHeight && i.getHeight() !== 0 ){
+		if(h === this.lastHeight){
 			return;
 		}
 
-//		console.log('Syncing Frame Height: content:', h, ' view:', this.getEl().getHeight());
-
-		body.hide().show();
-		h = Math.max(h, this.getEl().getHeight());
 		i.setHeight(h);
-
-		this.fireEvent('resize');
-		this.doLayout();
-
+this.doLayout();
 		this.lastHeight = h;
 		this.lastFrameSync = Ext.Date.now();
 		this.fireEvent('sync-height',h);
@@ -369,13 +360,16 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 			body = Ext.get(doc.body),
 			head = doc.getElementsByTagName('head')[0],
 			me = this;
+
 		this.getIframe().setHeight(0);
 
-		body.update(html);
+		body.update(html||'');
 		body.setStyle('background','transparent');
 		doc.normalize();
 
-		this.insertRelatedLinks(body.query('#NTIContent .chapter.title')[0],doc);
+		if(html!==false){
+			this.insertRelatedLinks(body.query('#NTIContent .chapter.title')[0],doc);
+		}
 		this.fireEvent('content-updated');
 
 		//TODO: solidify our story about content scripts (reset the iframe after navigating to a page that has scripts?)
@@ -385,11 +379,10 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 			head.appendChild(e);
 		});
 
-		setTimeout(function(){
-			me.checkContentFrames();
-		},10);
+		setTimeout(function(){ me.checkContentFrames(); },10);
 
 		clearInterval(this.syncInterval);
-		this.syncInterval = setInterval(this.checkFrame,100);
+		delete this.lastHeight;
+		this.syncInterval = setInterval(this.checkFrame,this.baseFrameCheckIntervalInMillis);
 	}
 });

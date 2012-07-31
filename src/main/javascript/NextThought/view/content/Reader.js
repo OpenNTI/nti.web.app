@@ -44,7 +44,7 @@ Ext.define('NextThought.view.content.Reader', {
 
 	setSplash: function(){
 		this.scrollTo(0, false);
-		this.updateContent('');
+		this.updateContent(false);
 		this.meta = {};
 		this.splash.dom.parentNode.appendChild(this.splash.dom);
 		this.splash.show();

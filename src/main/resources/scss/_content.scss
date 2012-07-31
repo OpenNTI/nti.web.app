@@ -261,9 +261,20 @@
 }
 
 
-.x-reader-pane .x-panel-body-reader {
-	@include scrollbar(#ffffff, #b2b2b2, 45px 0);
-};
+#view-ctr {
+	@include hardware-accelerate();
+}
+
+.x-reader-pane {
+
+	&, iframe {
+		@include hardware-accelerate();
+	}
+
+	.x-panel-body-reader {
+		@include scrollbar(#ffffff, #b2b2b2, 45px 0);
+	}
+}
 
 div.no-content-splash {
     position: absolute;
