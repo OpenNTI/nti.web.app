@@ -8,7 +8,8 @@ Ext.define('NextThought.view.content.Pager',{
 	],
 
 	layout: {
-		type: 'hbox'
+		type: 'hbox',
+		pack: 'end'
 	},
 
 	defaults: {

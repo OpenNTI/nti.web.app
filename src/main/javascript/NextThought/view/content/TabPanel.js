@@ -10,7 +10,7 @@ Ext.define('NextThought.view.content.TabPanel',{
 	flex: 1,
 
 	tabBar: {
-		width: 710,
+		width: 700,
 		plain: true,
 		baseCls: 'nti',
 		ui: 'content-tabbar',

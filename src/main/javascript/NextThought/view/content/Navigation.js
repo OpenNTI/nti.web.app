@@ -6,7 +6,6 @@ Ext.define('NextThought.view.content.Navigation',{
 	],
 	ui: 'content-navigation',
 	cls: 'jumpto',
-	minWidth: 40,
 
 	breadcrumbSepTpl: Ext.DomHelper.createTemplate({tag:'span',html:' / '}).compile(),
 	breadcrumbTpl: Ext.DomHelper.createTemplate({tag:'span',cls:'part',html:'{0}'}).compile(),
@@ -49,7 +48,6 @@ Ext.define('NextThought.view.content.Navigation',{
 		var lineage = lp.getLineage(ntiid);
 		var book = lineage[0] ? lp.getLocation(lineage[0]) : null;
 		var	path = me.getBreadcrumbPath();
-		var chapterNum,sectionNum;
 
 		me.cleanupMenus();
 
@@ -78,7 +76,14 @@ Ext.define('NextThought.view.content.Navigation',{
 			path.add(e);
 		});
 
-		this.title.update(loc.label);
+		me.title.clearListeners();
+		me.title.update(me.getContentNumericalAddress(lineage,loc)+loc.label);
+		me.buildMenu(me.title,loc);
+	},
+
+
+	getContentNumericalAddress: function(lineage,loc){
+		return '';
 	},
 
 

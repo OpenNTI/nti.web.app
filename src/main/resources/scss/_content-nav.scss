@@ -1,20 +1,24 @@
 
 
 .x-component-content-navigation {
+	&.x-toolbar-item{margin-top: 5px !important;}
+
 	img.bookcover {
 		background-size: cover;
 		background-repeat: no-repeat;
 		background-position: center center;
 		float: left;
-		width: 54px;
-		height: 64px;
+		width: 64px;
+		height: 74px;
 	}
 
 	.wrapper {
-		margin: 5px 0 0 65px;
+		margin: 0 0 0 70px;
+		display: table;
 	}
 
 	.breadcrumb {
+		display: table-row;
 		&, * {
 			color: #b8b8b8;
 			font-size: 10px;
@@ -33,13 +37,15 @@
 	}
 
 	.title {
-		margin: 3px 0 0 0;
+		display: table-cell;
+		vertical-align: middle;
+		margin: 0 0 0 0;
 		color: #494949;
 		font-size: 21px;
 		font-style: italic;
 		font-weight: normal;
 		overflow: hidden;
 		text-overflow: ellipsis;
-		white-space: nowrap;
+		height: 60px;
 	}
 }

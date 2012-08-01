@@ -2,6 +2,9 @@
 .x-toolbar-content {
 	padding: 0;
 	border: none;
+	.x-toolbar-item {
+		margin: 0 !important;
+	}
 }
 
 
@@ -81,7 +84,7 @@
 			&:last-of-type {
 				border-right-width: 1px !important;
 			}
-			em {margin: 0 10px;}
+			em {padding: 0 15px;}
 			.x-tab-inner {
 				color: #757474;
 				font: 12px/32px 'Open Sans', 'Helvetica', arial, sans-serif !important;
