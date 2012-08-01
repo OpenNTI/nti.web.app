@@ -2,7 +2,7 @@ Ext.define('NextThought.view.content.Toolbar',{
 	extend: 'Ext.toolbar.Toolbar',
 	requires: [
 		'NextThought.view.content.Filter',
-		'NextThought.view.content.JumpBox',
+		'NextThought.view.content.Navigation',
 		'NextThought.view.content.Pager',
 		'NextThought.view.content.Font',
 		'NextThought.view.content.Settings'
@@ -17,24 +17,9 @@ Ext.define('NextThought.view.content.Toolbar',{
 	},
 
 	items: [
-		{ flex: 1 },
-		{ xtype: 'content-jumper', width: 295 },
-		{ xtype: 'content-filter', width: 300 },
-		{ xtype: 'content-pager'},
-		{ width:10 }
-	],
-
-	afterLayout: function(){
-		var result = this.callParent(arguments);
-
-		var jump = this.down('content-jumper');
-		if(this.getWidth()<=570){
-			jump.hide();
-		}
-		else if(!jump.isVisible()){
-			jump.show();
-		}
-
-		return result;
-	}
+		{ xtype: 'content-filter', flex: 1 },
+		{ width: 80 },
+		{ xtype: 'content-navigation', width: 620 },
+		{ xtype: 'content-pager'}
+	]
 });

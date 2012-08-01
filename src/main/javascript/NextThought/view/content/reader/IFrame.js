@@ -33,10 +33,9 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 		var secureProtocol = 'javascript';
 		return {
 			xtype: 'box',
-//			anchor: '100%',
-			width: 700,
+			width: 780,
 			autoEl: {
-				width: 700,
+				width: 780,
 				tag: 'iframe',
 				name: 'iframe-' + guidGenerator() + '-content',
 				src: secureProtocol + ':',

@@ -199,18 +199,18 @@ Ext.define('NextThought.Library', {
 	/**
 	 * TODO: move to NextThought.providers.Location
 	 */
-	findLocationTitle: function(containerId){
-		var l = this.findLocation(containerId);
+	findTitle: function(containerId){
+		var l = this.find(containerId);
 		return l? l.location.getAttribute('label') : 'Not found';
 	},
 
 	/**
 	 * TODO: move to NextThought.providers.Location
 	 */
-	findLocation: function(containerId) {
+	find: function(containerId) {
 		var result = null;
 		this.each(function(o){
-			result = this.resolveLocation(this.getToc( o ), this.getTitle(o), containerId);
+			result = this.resolve(this.getToc( o ), this.getTitle(o), containerId);
 			if (result) {
 				return false;
 			}
@@ -219,64 +219,16 @@ Ext.define('NextThought.Library', {
 		return result;
 	},
 
-	/**
-	 * TODO: move to NextThought.providers.Location
-	 */
-	isOrDecendantOf: function(parentId, potentialChild) {
-		if (parentId === potentialChild) {
-			return true;
-		}
 
-		var child = this.findLocation(potentialChild),
-			l = child ? child.location : null,
-			found = false,
-			id;
-
-		while(l && !found) {
-			id = l.getAttribute? l.getAttribute('ntiid') : null;
-			if (parentId === id){
-				found = true;
-			}
-			l = l.parentNode;
-		}
-
-		return found;
-	},
-
-	/**
-	 * TODO: move to NextThought.providers.Location
-	 */
-	getLineage: function(containerId){
-		var leaf = this.findLocation(containerId) || {},
-			node = leaf.location,
-			lineage = [],
-			id;
-
-		while(node){
-			id = node.getAttribute? node.getAttribute('ntiid') : null;
-			if( id ) {
-				lineage.push(id);
-			}
-			node = node.parentNode;
-		}
-
-		return lineage;
-	},
-
-	/**
-	 * TODO: move to NextThought.providers.Location
-	 */
-	resolveLocation: function(toc, title, containerId) {
+	resolve: function(toc, title, containerId) {
 		if( toc.documentElement.getAttribute( 'ntiid' ) === containerId ) {
 			return {toc:toc, location:toc.documentElement, NTIID: containerId, ContentNTIID: containerId, title: title};
 		}
-		return this.recursiveResolveLocation( containerId, toc, title);
+		return this.recursiveResolve( containerId, toc, title);
 	},
 
-	/**
-	 * TODO: move to NextThought.providers.Location
-	 */
-	recursiveResolveLocation: function recurse( containerId, elt, title ) {
+
+	recursiveResolve: function recurse( containerId, elt, title ) {
 		var elts = elt.getElementsByTagName( 'topic' ), ix, child, cr;
 		for( ix = 0; ix < elts.length; ix++ ) {
 			child = elts.item(ix);

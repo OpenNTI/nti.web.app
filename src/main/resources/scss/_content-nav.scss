@@ -1,0 +1,45 @@
+
+
+.x-component-content-navigation {
+	img.bookcover {
+		background-size: cover;
+		background-repeat: no-repeat;
+		background-position: center center;
+		float: left;
+		width: 54px;
+		height: 64px;
+	}
+
+	.wrapper {
+		margin: 5px 0 0 65px;
+	}
+
+	.breadcrumb {
+		&, * {
+			color: #b8b8b8;
+			font-size: 10px;
+			font-weight: bold;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			text-transform: uppercase;
+			white-space: nowrap;
+		}
+		span.part {
+			cursor: pointer;
+			&:hover{
+				color: #494949;
+			}
+		}
+	}
+
+	.title {
+		margin: 3px 0 0 0;
+		color: #494949;
+		font-size: 21px;
+		font-style: italic;
+		font-weight: normal;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+}

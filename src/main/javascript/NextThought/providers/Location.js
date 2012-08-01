@@ -96,7 +96,7 @@ Ext.define('NextThought.providers.Location', {
 
 		r = me.cache[i];
 		if( !r ) {
-			r = Library.findLocation(i);
+			r = Library.find(i);
 
 			//If still not r, it's not locational content...
 			if (!r) {return null;}
@@ -122,8 +122,26 @@ Ext.define('NextThought.providers.Location', {
 	},
 
 
+	getLineage: function(ntiid){
+		var leaf = Library.find(ntiid||this.currentNTIID) || {},
+			node = leaf.location,
+			lineage = [],
+			id;
+
+		while(node){
+			id = node.getAttribute? node.getAttribute('ntiid') : null;
+			if( id ) {
+				lineage.push(id);
+			}
+			node = node.parentNode;
+		}
+
+		return lineage;
+	},
+
+
 	getNavigationInfo: function(ntiid) {
-		var loc = Library.findLocation(ntiid),
+		var loc = Library.find(ntiid),
 			info = {},
 			topicOrTocRegex = /topic|toc/i,
 			slice = Array.prototype.slice;
@@ -201,7 +219,7 @@ Ext.define('NextThought.providers.Location', {
 	getRelated: function(ntiid){
 		var me = this,
 			map = {},
-			info = Library.findLocation(ntiid || me.currentNTIID),
+			info = Library.find(ntiid || me.currentNTIID),
 			related = info ? info.location.getElementsByTagName('Related') : null;
 
 		function findIcon(n) {
@@ -220,7 +238,7 @@ Ext.define('NextThought.providers.Location', {
 					type = r.getAttribute('type'),
 					qual = r.getAttribute('qualifier'),
 
-					target = tag==='page' ? Library.findLocation(id) : null,
+					target = tag==='page' ? Library.find(id) : null,
 					location = target? target.location : null,
 
 					label = location? location.getAttribute('label') : r.getAttribute('title'),

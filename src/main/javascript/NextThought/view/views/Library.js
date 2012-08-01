@@ -3,28 +3,26 @@ Ext.define( 'NextThought.view.views.Library', {
 	alias: 'widget.library-view-container',
 	requires: [
 		'NextThought.view.content.Reader',
-		'NextThought.view.content.Toolbar'
+		'NextThought.view.content.Toolbar',
+		'NextThought.view.content.TabPanel'
 	],
 	layout: {
 		type: 'vbox',
 		align: 'stretch'
 	},
+	minWidth: 950,
+	margin: '0 140px 0 0',
 
 	items: [
-		{	xtype: 'content-toolbar' },
+		{	xtype: 'content-toolbar', margin: '0 0 0 40px' },
 		{
-			cls: 'x-focus-pane',
-			region: 'center',
-			flex: 1,
-			border: false,
-			frame: false,
-			layout: 'fit',
-			defaults: {border: false, frame: false},
-			items: {
-				xtype: 'reader-panel',
-				id: 'readerPanel'
-			},
-			margin: '0 10px 0 0'
+			xtype: 'content-tabs',
+			items: [
+				{ title: 'Book Content', xtype: 'reader-panel', id: 'readerPanel' },
+				{ title: 'Discussion' },
+				{ title: 'Common Themes' },
+				{ title: 'Key Words' }
+			]
 		}
 	],
 

@@ -5,7 +5,6 @@ Ext.define('NextThought.view.content.Filter',{
 		'NextThought.view.menus.Filter'
 	],
 	ui: 'content-filter',
-	minWidth: 200,
 
 	renderTpl: [
 		'<div class="shrink-wrap">',

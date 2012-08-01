@@ -21,6 +21,7 @@
 
 @import "_window-treatments.scss";
 @import "_content.scss";
+@import "_content-nav.scss";
 @import "_myaccount.scss";
 @import "_mycontacts.scss";
 @import "_masks-and-tips.scss";
@@ -56,20 +57,18 @@ body.x-border-layout-ct { background: white; }
 }
 
 
-#nav-coll-handle,.nav-collapser {
-	position: fixed;
-	bottom: 0;
-	left: 0;
-	width: 40px;
-	height: 27px;
-	z-index: 9999;
-	background: url(../images/nav_toggle_sprite.png) 0px -27px no-repeat;
-	opacity: 0.4;
-	&.closed {
-		background-position-y: 0px;
-	}
-	
-	&:hover {
-		opacity: 1;
+
+.browser-warning {
+    .x-panel-body{
+        height: auto;
+		padding: 0.5em 0.5em 0.5em 3em;
+		background: {
+			image: url(../images/warning.png);
+			position: 10px 0;
+			repeat: no-repeat;
+			/*color: #E64700;*/
+			color: #F9DD0A;
+		}
+		font-size: 2em;
 	}
 }

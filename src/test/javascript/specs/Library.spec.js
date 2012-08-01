@@ -36,7 +36,7 @@ describe('Library Store', function(){
 
 
 	it('can find the section', function(){
-		var l = Library.findLocation('book2-1-1');
+		var l = Library.find('book2-1-1');
 		expect(l).toBeTruthy();
 		expect(l.toc).toBeTruthy();
 		expect(l.NTIID).toBeTruthy();
@@ -54,7 +54,7 @@ describe('Library Store', function(){
 
 
 	it('can find the title of the section', function(){
-		expect(Library.findLocationTitle('book1-1-1')).toBe('section b');
+		expect(Library.findTitle('book1-1-1')).toBe('section b');
 	});
 
 
@@ -65,21 +65,8 @@ describe('Library Store', function(){
 	});
 
 
-	it('can determine if an id is a child of another', function(){
-		expect(Library.isOrDecendantOf('book1-1', 'book1-1-0')).toBeTruthy();
-		expect(Library.isOrDecendantOf('book1-1', 'book2-1-1')).toBeFalsy();
-		//good ids but backwards
-		expect(Library.isOrDecendantOf('book1-1-1', 'book1-1')).toBeFalsy();
-		expect(Library.isOrDecendantOf('book2-1-1', 'book1-1')).toBeFalsy();
-		//bad ids
-		expect(Library.isOrDecendantOf('book4-1', 'book2-3-0')).toBeFalsy();
-	});
-
-
 	it('can handle Structured NTI IDs', function(){
-		var n = Library.findLocation('tag:nextthought.com,2011-07-14:AOPS-HTML-prealgebra-69');
-
-		expect(n).toBeTruthy();
+		expect(Library.find('tag:nextthought.com,2011-07-14:AOPS-HTML-prealgebra-69')).toBeTruthy();
 	});
 
 });

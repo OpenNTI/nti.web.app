@@ -73,7 +73,7 @@ Ext.define('NextThought.controller.Stream', {
 		var as = Ext.getCmp('activity-stream'),
 			ss = this.getStreamStore(),
 			friendsToChangeMap = {},
-			masterId = Library.getLineage(containerId).last();
+			masterId = LocationProvider.getLineage(containerId).last();
 
 		function addUsers(m, activityStream) {
 			var user;
@@ -90,7 +90,7 @@ Ext.define('NextThought.controller.Stream', {
 		}
 
 		function addToChangeMap(mid, change, m) {
-			var itemContainerId = Library.getLineage(change.get('Item').get('ContainerId')).last(),
+			var itemContainerId = LocationProvider.getLineage(change.get('Item').get('ContainerId')).last(),
 				creator;
 			if (mid !== itemContainerId) {
 				return;
@@ -127,7 +127,7 @@ Ext.define('NextThought.controller.Stream', {
 			ps = stores[containerId];
 
 		//root all streams to the book...
-		containerId = Library.getLineage(containerId).last();
+		containerId = LocationProvider.getLineage(containerId).last();
 
 		function pageInfoSuccess(pageInfo) {
 			var link = pageInfo.getLink(Globals.RECURSIVE_STREAM);
@@ -160,7 +160,7 @@ Ext.define('NextThought.controller.Stream', {
 			me = this;
 
 
-		Ext.each(Library.getLineage(cid),function(cid){
+		Ext.each(LocationProvider.getLineage(cid),function(cid){
 			me.getStoreForStream(cid,
 				//success
 				function(s){

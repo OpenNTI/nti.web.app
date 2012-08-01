@@ -68,12 +68,12 @@ Ext.define('NextThought.controller.Navigation', {
 
 
 	track: function(view){
-		var query = 'view-select button[title='+Ext.String.capitalize(view)+'], view-select button[viewId='+view+']',
-			menus = Ext.getCmp('navigation-menu-container');
+		var query = 'view-select button[title='+Ext.String.capitalize(view)+'], view-select button[viewId='+view+']';
+//			menus = Ext.getCmp('navigation-menu-container');
 		try {
 
 			Ext.ComponentQuery.query(query)[0].toggle(true);
-			menus.getLayout().setActiveItem(menus.down(view+'-menu'));
+//			menus.getLayout().setActiveItem(menus.down(view+'-menu'));
 
 		}
 		catch(e){

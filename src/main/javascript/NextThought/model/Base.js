@@ -34,9 +34,8 @@ Ext.define('NextThought.model.Base', {
 			cField = f.getByKey('Class');
 //			openedGroup = false;
 
-		if(!cField.defaultValue) {
-			cField.defaultValue = cName;
-		}
+		cField.defaultValue = cName;
+		cField.value = cName;
 
 		if(!(new RegExp(cName,'i')).test(this.mimeType)){
 			this.mimeType += '.'+mimeExtension;

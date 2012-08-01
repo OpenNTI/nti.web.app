@@ -5,7 +5,7 @@ Ext.define('NextThought.view.ViewSelect', {
 
 	cls: 'view-switcher',
 	layout: {
-		type: 'hbox',
+		type: 'vbox',
 		pack: 'start'
 	},
 
@@ -24,27 +24,23 @@ Ext.define('NextThought.view.ViewSelect', {
 			pressed: true,
 			iconCls: 'home',
 			title: 'Home',
-			tooltip: 'Home/Profile',
-			renderData: {text: '<span class="right cap"></span>'}
+			tooltip: 'Home/Profile'
 		},
 		{
 			iconCls: 'library',
 			title: 'Library',
-			tooltip: 'Library',
-			renderData: {text: '<span class="left cap"></span><span class="right cap"></span>'}
+			tooltip: 'Library'
 		},
 		{
 			disabled: true,
 			iconCls: 'classroom',
 			title: 'Classroom',
-			tooltip: 'Classroom',
-			renderData: {text: '<span class="left cap"></span><span class="right cap"></span>'}
+			tooltip: 'Classroom'
 		},
 		{
 			iconCls: 'search',
 			title: 'Search',
-			tooltip: 'Search',
-			renderData: {text: '<span class="left cap"></span>'}
+			tooltip: 'Search'
 		}
 	]
 });
