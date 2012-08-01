@@ -158,23 +158,31 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 	},
 
 
-	noteOverlayRegisterAddNoteNib: function(nib){
-		nib.on('click',this.noteOverlayAddNoteNibClicked,this);
+	noteOverlayRegisterAddNoteNib: function(applicableRange, nib){
+		nib.on('click',this.noteOverlayAddNoteNibClicked,this, {applicableRange: applicableRange});
 		//should keep track of this and cleanup if its detected to not be in the dom any more.
 	},
 
 
-	noteOverlayAddNoteNibClicked: function(e){
+	noteOverlayAddNoteNibClicked: function(e, dom, options){
 		var o = this.noteOverlayData,
-			w = e.getTarget('.widgetContainer',null,true);
+			w = e.getTarget('.widgetContainer',null,true),
+			r = options.applicableRange;
 		if(w){
 			e.stopEvent();
 //			w.hide();
 
-			delete o.lastLine;
+			r = Anchors.toDomRange(r, this.getDocumentElement());
+
+			o.lastLine = {
+				range: r,
+				rect:r.getBoundingClientRect()
+			};
+
 			Ext.get(o.box).setY(0);
 
-			this.noteOverlayTrackLineAtEvent(e);
+			//this.noteOverlayTrackLineAtEvent(e);
+			this.noteOverlayPositionInputBox();
 			this.noteOverlayActivateRichEditor();
 			this.noteOverlayScrollEditorIntoView();
 			return false;

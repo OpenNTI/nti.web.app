@@ -16,7 +16,6 @@ Ext.define('NextThought.util.Anchors', {
 		//TODO - consider caching these somewhere for performance
 		var clonedAncestor = ancestorNode.cloneNode(true);
 		Anchors.purifyNode(clonedAncestor);
-
 		return Anchors.resolveSpecBeneathAncestor(contentRangeDescription, clonedAncestor, docElement);
 	},
 
@@ -276,7 +275,7 @@ Ext.define('NextThought.util.Anchors', {
 
 		var startResultLocator = Anchors.toReferenceNodeXpathAndOffset(startResult);
 		var endResultLocator = Anchors.toReferenceNodeXpathAndOffset(endResult);
-//		console.log('startResultLocator', startResultLocator, 'endResultLocator', endResultLocator);
+		//console.log('startResultLocator', startResultLocator, 'endResultLocator', endResultLocator);
 
 		return Anchors.convertContentRangeToDomRange(startResultLocator, endResultLocator, docElement);
 	},
@@ -470,7 +469,6 @@ Ext.define('NextThought.util.Anchors', {
 	},
 
 	getCurrentNodeMatches: function(pointer, treeWalker) {
-
 		function multiIndexOf(str,tomatch) { 
 			var all = [], next = -2;
 			while (next !== -1) {
@@ -1144,6 +1142,14 @@ Ext.define('NextThought.util.Anchors', {
 		var i,
 			children = node.childNodes,
 			child;
+
+		if (Ext.fly(node).is('span.application-highlight.counter') ||
+			Ext.fly(node).is('span.redactionAction') ||
+			Ext.fly(node).is('span.blockRedactionAction')) {
+			//ignore children:
+			//console.log('ignoring children of', node, 'when finding non synthetic kids');
+			return [];
+		}
 
 		for( i = 0; i < children.length; i++ ){
 			child = children[i];

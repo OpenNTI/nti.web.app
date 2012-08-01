@@ -44,6 +44,16 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 		};
 
 		this.get = function(key){ return this.values[key]; };
+
+		this.first = function(){
+			var key;
+			for (key in this.values){
+				if (this.values.hasOwnProperty(key)){
+					return this.get(key);
+				}
+			}
+			return null;
+		};
 	},
 
 
@@ -119,27 +129,37 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 
 
 	getBucket: function(prefix, line){
+//		var lineInfo,
+//			originalLine = line;
 
-		var lineInfo,
-			originalLine = line;
+		//while(!lineInfo && (originalLine - line) <= 100){
+		//	lineInfo = LineUtils.findLine(line,this.getDoc(prefix));
+		//	line-=5	;
+		//}
 
-		while(!lineInfo && (originalLine - line) <= 100){
-			lineInfo = LineUtils.findLine(line,this.getDoc(prefix));
-			line-=5	;
-		}
-
-		if(!lineInfo){
-			console.error('could not resolve a line for '+prefix+' @'+line+', original line was ' + originalLine);
-			return;
-		}
+//		if(!lineInfo){
+//			console.error('could not resolve a line for '+prefix+' @'+line+', original line was ' + originalLine);
+//			return;
+//		}
 
 		var c = this.buckets[prefix],
-			l = lineInfo.rect.top,//normalize lines
-			b = c? c.get(l) : null;
-		if(!b && c) {
-			b = new this.Bucket();
-			c.put(b,l);
-			b.height = lineInfo.rect.height;
+			lineTolerance = 32,
+//			l = line.rect.top,//normalize lines
+			b = c? c.get(line) : null;
+
+		if (!b && c) {
+			c.each(function(value, key){
+				var keyNum = parseInt(key, 10);
+				if (line >= keyNum && (keyNum + lineTolerance) > line){
+					b = value;
+					return false;
+				}
+			});
+
+			if (!b) {
+				b = new this.Bucket();
+				c.put(b,line);
+			}
 		}
 		return b;
 	},
@@ -169,8 +189,6 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 			line.controls = line.controls || cT.append(g.controls,[],true);
 			line.widgets = line.widgets || wT.append(g.widgets,[],true);
 
-			y = parseInt(y,10) + (Math.ceil(line.height/2)-18);
-
 			(new Ext.CompositeElement([line.controls,line.widgets])).setTop(y);
 
 			line.each(function(o){
@@ -194,6 +212,7 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 			else{
 
 				r.noteOverlayRegisterAddNoteNib(
+					line.first().getRecord().get('applicableRange'),
 					addTpl.insertFirst(
 							line.widgets,[
 								siblings ? 'collapsed':'expanded'
@@ -262,7 +281,7 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 					console.log(o, 'returned a falsy y:',y);
 				}
 				else {
-					b = me.getBucket(prefix,y);
+					b = me.getBucket(prefix,Math.ceil(y));
 				}
 				if(b){
 					b.put(o);

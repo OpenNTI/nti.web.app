@@ -24,7 +24,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
 
 	getRange: function(){
 		var range = Anchors.toDomRange(this.getRecordField('applicableRange'),this.doc);
-		console.log(this.id,': ',(this.getRecordField('body')||[]).join('|'), ': got range from description:', range);
+		console.log(this.id,': ',(this.getRecordField('body')||[]).join('|'), ': got range from description:', range, range.toString());
 
 		if(!range){
 			console.log('bad range?');
@@ -59,8 +59,10 @@ Ext.define('NextThought.view.annotations.Highlight', {
 				//catch any exceptions if things have changed...
 			}
 
+			//canvas and counter may not exist if suppressed:
 			if (this.canvas){Ext.fly(this.canvas).remove();}
-			Ext.fly(this.counter).remove();
+			if (this.counter){Ext.fly(this.counter).remove();}
+
 			Ext.each(c,this.unwrap,this);
 
 		} catch(e2){
@@ -159,7 +161,12 @@ Ext.define('NextThought.view.annotations.Highlight', {
 			range = this.getRange();
 			if(!range){ return -1; }
 			this.rendered = this.wrapRange(range.commonAncestorContainer, range);
-			this.counter = this.createCounter(this.rendered.last());
+
+			//don't create counter when suppressed:
+			if (style !== 'suppressed'){
+				this.counter = this.createCounter(this.rendered.last());
+			}
+
 			//create a composite element so we can do lots of things at once:
 			this.compElements = new Ext.dom.CompositeElement(this.rendered);
 			this.compElements.add(this.counter);

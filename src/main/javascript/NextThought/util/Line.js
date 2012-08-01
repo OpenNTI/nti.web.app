@@ -1,183 +1,10 @@
 Ext.define('NextThought.util.Line',{
 	singleton: true,
 
-	/** @private */
-	inlineElementRe: /(inline.*)|(none)/i,
-
 	getStyle: function(node,prop){
 		if(!node){return '';}
 		var view = node.ownerDocument.defaultView;
 		return view.getComputedStyle(node,undefined).getPropertyValue(prop);
-	},
-
-	/** @private */
-	firstElementOnLine: function (y, doc, limit){
-		var right = doc.getElementsByTagName('body')[0].getBoundingClientRect().right,
-			el, x = right;
-		for(; !el && x >= 0; x-=10) {
-			el = doc.elementFromPoint(x,y);
-			if(el && (el.parentNode === limit || el === limit || !Ext.fly(limit).contains(el))){
-				el = null;
-			}
-		}
-		return el;
-	},
-
-
-	/** @private */
-	findBlockParent: function(e,limit){
-		if(!e || e===limit){return null;}
-		var d = this.getStyle(e,'display');
-		if(this.inlineElementRe.test(d)){
-			return this.findBlockParent(e.parentNode, limit);
-		}
-		return e;
-	},
-
-
-	/** @private */
-	resolveNodeAt: function(y,doc){
-		var limit = doc.getElementById('NTIContent');
-		return this.findBlockParent(
-				this.firstElementOnLine(y,doc,limit),
-				limit);
-	},
-
-
-	/** @private */
-	buildRange: function(y, node){
-		if(!node){ return null; }
-
-		var me = this,
-			d = node.ownerDocument,
-			s = d.parentWindow.getSelection(),
-			rect, r;
-			//line = parseFloat(this.getStyle(node,'line-height'));
-
-		function rr(){ return me.getRects(s.getRangeAt(0)).last(); }
-		function f(fn,key){
-			fn = fn || function(){return s.getRangeAt(0).getBoundingClientRect(); };
-			key = key || 'bottom';
-			return Math.ceil(fn()[key]);
-		}
-
-
-		function selectLine(){
-
-			var tolerance = 6, string,
-				bottom, newBottom;
-
-			if(!s.isCollapsed){ s.collapseToStart(); }
-			s.modify('extend', 'forward', 'character');
-			s.modify('move','forward','character');
-			s.modify('move', 'backward', 'lineboundary');
-			s.collapseToStart();
-			s.modify('extend','forward','character');
-			bottom = f();
-
-			do {
-				string = s.toString();
-				s.modify('extend', 'forward', 'lineboundary');
-				s.modify('extend', 'forward', 'word');
-				newBottom = f();
-
-				if(string === s.toString()){
-					console.log('end?');
-					break;
-				}
-			}
-			while(Math.abs(bottom - newBottom) <= tolerance);
-
-
-			do {
-				s.modify('extend','backward','character');
-				newBottom = f(rr);
-			}
-			while(Math.abs(bottom - newBottom) > tolerance);
-		}
-
-		function step(){
-			var t = f(null,'top'), tt, limit = 50;
-			do{
-				s.collapseToStart();
-				s.modify('move', 'forward', 'line');
-				s.modify('move', 'forward', 'character');
-				s.modify('extend', 'forward', 'character');
-				tt = f(null,'top');
-				limit --;
-			}
-			while(t >= tt && limit>0);
-			if(limit===0){
-				throw 'limit';
-			}
-			selectLine();
-		}
-
-		function setup(){
-			var range = d.createRange();
-			s.removeAllRanges();
-
-			range.setStartBefore(node);
-			range.setEndBefore(node);
-			s.addRange(range);
-
-			s.collapseToStart();
-			s.modify('move','forward','character');
-			s.modify('extend','forward','character');
-			selectLine();
-		}
-
-		setup();
-
-		var c = 100;
-		do {
-			r = s.getRangeAt(0);
-			rect = this.getRects(r);
-			rect = rect[1]||rect[0];//if they are more than one rects the first one is the Bounding rect...not useful if it spans lines. So we attempt to get the first rect that represents the line.
-			if(this.isCloseToMiddle(y, rect)){
-				break;
-			}
-			else if(!rect || rect.top > y){
-				break;
-			}
-
-			try {
-				step();
-			}
-			catch(e){
-				break;
-			}
-			r = null;
-			c--;
-		}
-		while(!r && c>0);
-
-		s.removeAllRanges();
-		return r;
-	},
-
-
-	getRects: function(r){
-		var rects = Array.prototype.slice.call(r.getClientRects()),
-			c = rects.length- 1, o;
-
-		for(;c>=0; c--){
-			o = rects[c];
-			if(!o.width || !o.height){
-				rects.splice(c,1);//remove collapsed rects
-			}
-		}
-
-		return rects;
-	},
-
-
-	/** @private */
-	isCloseToMiddle: function(y,rect){
-//		console.log(y,rect?rect.top:NaN, rect?rect.height:NaN);
-		if(!rect){return false;}
-		var m = rect.top + (rect.height/2);
-		return Math.abs((m - y)/rect.height) < 1;
 	},
 
 
@@ -192,12 +19,129 @@ Ext.define('NextThought.util.Line',{
 		y = Math.round(y);
 		doc = doc || document;
 
-		var range = this.buildRange( y, this.resolveNodeAt(y,doc));
+		var range;
+
+		if (doc.caretRangeFromPoint){
+			range = this.rangeForLineByPoint(y, doc);
+		}
+		else {
+			range = this.rangeForLineBySelection(y, doc);
+		}
 
 		if(range){
 			return { rect: range.getBoundingClientRect(), range: range };
 		}
 		return null;
+	},
+
+
+	/** @private */
+	rangeForLineByPoint: function(y, doc) {
+		var xStart = 0,
+			xEnd = doc.querySelector('#NTIContent .page-contents').getBoundingClientRect().width,
+			range = doc.caretRangeFromPoint(xStart, y),
+			rangeEnd = doc.caretRangeFromPoint(xEnd, y);
+
+		//If we managed to grab an end, use it to expand the range, otherwise, just stick with the
+		//first word...
+		if(rangeEnd) {
+			range.setEnd(rangeEnd.endContainer, rangeEnd.endOffset);
+		}
+		else {range.expand('word');}
+
+		//testing, show ranges:
+		//doc.parentWindow.getSelection().removeAllRanges();
+		//doc.parentWindow.getSelection().addRange(range);
+
+		return range;
+	},
+
+
+	/** @private */
+	rangeForLineBySelection: function(y, doc){
+		var sel = doc.parentWindow.getSelection(),
+			elem,
+			iterationCount = 0,
+			range,
+			x = 80;
+
+			//clear ranges and get the node on this y
+			sel.removeAllRanges();
+		    elem = Anchors.referenceNodeForNode(doc.elementFromPoint(x, y)); //TODO - dynamically figure out the number 80?
+
+			//check to make sure this node is selectable, if not, then return null:
+			if (!this.isNodeAnchorable(elem)){return null;}
+
+			//we probably got a block node, select children and prepare to start looking for the correct y:
+			sel.selectAllChildren(elem);
+			sel.collapseToStart();
+
+			//If there is no range here, skip this line:
+			if (sel.rangeCount === 0){return null;}
+
+			//Go line by line until we get one on the correct y, quit trying after 100 tries:
+			while(iterationCount < 100 && sel.getRangeAt(0).getBoundingClientRect().bottom < y){
+				sel.modify('extend', 'forward', 'line');
+				iterationCount++;
+			}
+
+			//minor adjustment to move/extend selection to last line only:
+			sel.modify('extend', 'backward', 'line');
+			sel.collapseToEnd();
+			sel.modify('extend', 'forward', 'line');
+
+			//detect weirdness where sometimes extending to a line causes entire paragraphs to be selected.
+			/* TODO finish
+			while(sel.getRangeAt(0).getBoundingClientRect().height > 35) {
+				sel.modify('extend', 'backward', 'word');
+			}
+			*/
+
+			//get the range, clear the selection, and return the range:
+			range = sel.getRangeAt(0);
+
+			//for testing, comment next line to show ranges
+			//sel.removeAllRanges();
+
+			return range;
+	},
+
+
+	/** @private */
+	isNodeAnchorable: function(node){
+		if (!node){return false;}
+		var nonAnchorableNodeClasses = [
+				'page-contents',
+				'label',
+				'injected-related-items'],
+			nonAnchorableNodeNames = [
+				'HTML'
+			],
+			nonAnchorableIds = [
+				'NTIContent'
+			],
+			result = true;
+
+		//it is not anchorable if it has one of the listed classes:
+		Ext.each(nonAnchorableNodeClasses, function(c){
+			if (Ext.fly(node).hasCls(c)){
+				result = false;
+			}
+		});
+
+		//it is not anchorable if it has one of the listed classes:
+		Ext.each(nonAnchorableIds, function(c){
+			if (node.getAttribute('id') === c){
+				result = false;
+			}
+		});
+
+		//it is not anchorable if it is a node with the name:
+		if(Ext.Array.contains(nonAnchorableNodeNames, node.tagName)){result = false;}
+
+		console.log('node', node, 'anchorable?', result);
+
+		return result;
 	}
 
 }, function(){
