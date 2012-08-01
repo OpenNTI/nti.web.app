@@ -31,7 +31,11 @@ Ext.define( 'NextThought.view.views.Library', {
 	initComponent: function(){
 		this.callParent(arguments);
 		this.reader = Ext.getCmp('readerPanel');
-		LocationProvider.on('navigate',this.reader.loadPage,this.reader);
+		LocationProvider.on({
+			scope: this.reader,
+			navigate: this.reader.onNavigate,
+			navigateComplete: this.reader.onNavigateComplete
+		});
 	},
 
 

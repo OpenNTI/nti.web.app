@@ -98,52 +98,48 @@ Ext.define('NextThought.view.content.Reader', {
 	},
 
 
-	loadPage: function(ntiid, callback) {
-		var me = this,
-			service = $AppConfig.service;
+	onNavigate: function(ntiid, callback) {
 
 		if(ntiid === LocationProvider.currentNTIID){
-			Ext.callback(callback,null,[me]);
+			Ext.callback(callback,null,[this]);
 			return false;
 		}
 
-		me.clearAnnotations();
+		this.clearAnnotations();
 
-		function success(pageInfo){
-			function f(resp){
-				me.splash.hide();
-				me.setContent(resp, callback);
-			}
-
-			Ext.Ajax.request({
-			    url: pageInfo.getLink('content'),
-			    success: f,
-			    failure: function(response, opts) {
-			        console.log('server-side failure with status code ' + response.status);
-			    }
-			});
-		}
-
-		function failure(q,r){
-			console.error(arguments);
-			Ext.callback(callback,null,[me,{req:q,error:r}]);
-			if(r && r.responseText){
-				me.splash.hide();
-				me.updateContent(r.responseText);
-			}
-			me.relayout();
-		}
-
-		if(ntiid) {
-			me.request = service.getPageInfo(ntiid, success, failure, me);
-		}
-		else {
+		if(!ntiid) {
 			this.setSplash();
 			this.relayout();
-			Ext.callback(callback,null,[me]);
+			Ext.callback(callback,null,[this]);
 		}
 
 		return true;
+	},
+
+
+	onNavigateComplete: function(pageInfo, callback){
+		var me = this;
+		function f(resp){
+			me.splash.hide();
+			me.setContent(resp, callback);
+		}
+
+		if(!pageInfo.isModel){
+			if(pageInfo.responseText){
+				me.splash.hide();
+				me.updateContent(pageInfo.responseText);
+			}
+			me.relayout();
+		}
+		else {
+			Ext.Ajax.request({
+				url: pageInfo.getLink('content'),
+				success: f,
+				failure: function(r) {
+					console.log('server-side failure with status code ' + r.status+': Message: '+ r.responseText);
+				}
+			});
+		}
 	},
 
 

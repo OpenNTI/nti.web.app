@@ -9,6 +9,7 @@ Ext.define('NextThought.providers.Location', {
 	constructor: function(){
 		this.addEvents({
 			navigate: true,
+			navigateComplete: true,
 			change : true,
 			changed : true
 		});
@@ -44,6 +45,13 @@ Ext.define('NextThought.providers.Location', {
 		var me = this,e = Ext.getCmp('viewport').getEl();
 
 		function finish(){
+			if(finish.called){
+				console.warn('finish navitation called twice');
+				return;
+			}
+
+			finish.called = true;
+
 			if(e.isMasked()){
 				e.unmask();
 			}
@@ -64,10 +72,32 @@ Ext.define('NextThought.providers.Location', {
 			if(!me.fireEvent('navigate',ntiid,finish)){
 				return false;
 			}
+
+			me.resolvePageInfo(ntiid,finish);
+
 			me.currentNTIID = ntiid;
 			me.fireEvent('change', ntiid);
 		},1);
 	},
+
+
+	resolvePageInfo: function(ntiid, callback){
+		var me = this,
+			service = $AppConfig.service;
+
+		function success(pageInfo){
+			me.fireEvent('navigateComplete',pageInfo,callback);
+		}
+
+		function failure(q,r){
+			console.error(arguments);
+			Ext.callback(callback,null,[me,{req:q,error:r}]);
+			me.fireEvent('navigateComplete',r);
+		}
+
+		service.getPageInfo(ntiid, success, failure, me);
+	},
+
 
 	/**
 	 *
