@@ -36,9 +36,160 @@ Ext.define('NextThought.assessment.Main', {
 		});
 	},
 
+	addFreeResponseBox: function(div,part) {
+		input = div.ownerDocument.createElement('input');
+		input.className = 'answerblank ';
+		input.setAttribute('data-ntitype','naqfreeresponse');
+		input.style.marginTop = '12px';
+		input.style.marginBottom = '15px';
+		div.appendChild(input);
+	},
+	addSymmathBox: function(div,part) {
+		input = div.ownerDocument.createElement('input');
+		input.className = 'answerblank ';
+		input.setAttribute('data-ntitype','naqsymmath');
+		div.appendChild(input);
+		w = div.ownerDocument.parentWindow;
+		input.type = 'hidden';
+		span = div.ownerDocument.createElement('span');
+		span.className = 'quiz-input';
+		input.parentNode.insertBefore(span,input.nextSibling);
+		q = w.$(span).mathquill('editable');
+		AssessmentUtils.attachMathSymbolToMathquillObjects(q);
+	},
+	addMultipleChoice: function(div,part) {
+		doc = div.ownerDocument;
+		extdiv = Ext.get(div);
+		ol = extdiv.createChild({tag: 'ol', cls: 'naqchoices'});
+		var i = 0;
+		for (;i < part.data.choices.length; i++) {
+			li = ol.createChild({tag: 'li', cls: 'naqchoice'});
+			radio = li.createChild({
+				tag: 'input',
+				type: 'radio',
+				name: div.getAttribute('name'),
+				value: part.data.choices[i]
+			});
+			option = li.createChild({
+				tag: 'p',
+				html: part.data.choices[i]
+			});
+			option.setStyle('display','inline');
+		}
+	},
+	addMatching: function(div,part) {
+		//TODO: Make this work with actual questions
+		doc = div.ownerDocument;
+		extdiv = Ext.get(div);
+		table = extdiv.createChild({tag: 'table'});
+		var i = 0, values = [], j;
+		tabletext = div.querySelector('img').alt.replace(/^.*?{tabular}{cc}/,'').replace(/\\end{tabular}.*?$/,'');
+		rows = tabletext.split('\\\\'); //Actually just two slashes
+		cells = [];
+		j = 0;
+		part.data.labels = [];
+		part.data.values = [];
+		for (;j < rows.length; j++) {
+			if (rows[j].indexOf('&') >= 0) {
+				part.data.labels.push(rows[j].split('&')[0]);
+				part.data.values.push(rows[j].split('&')[1]);
+			}
+		}
+		//Create a table
+		for (; i < part.data.labels.length; i++) {
+			trdom = doc.createElement('tr');
+			table.dom.appendChild(trdom);
+			tr = Ext.get(trdom);
+			tdl = tr.createChild({
+				tag: 'td',
+				html: part.data.labels[i]
+			});
+			tdl.dom.name = 'left:'+i;
+			tdm = tr.createChild({
+				tag: 'td',
+				width: '25'
+			});
+			tdr = tr.createChild({
+				tag: 'td',
+				html: part.data.values[i]
+			});
+			tdr.dom.name = 'right:'+i;
+			values.push(-1);
+		}
+		hidden = doc.createElement('span');
+		hidden.className = 'hidden-data-span';
+		hidden.style.display = 'none';
+		hidden.innerHTML = '{"selected":0,"values":'+JSON.stringify(values)+'}';
+		//Hidden element stores the current selection
+		div.insertBefore(hidden,table.dom);
+		//Draws connecting lines on the canvas
+		function drawLine(canvas,leftTd,rightTd) {
+			var getCumulativeOffset = function (obj) {
+				var left, top;
+				left = top = 0;
+				if (obj.offsetParent) {
+					do {
+						left += obj.offsetLeft;
+						top  += obj.offsetTop;
+					} while (obj = obj.offsetParent);
+				}
+   				return {
+					x : left,
+   					y : top
+  				};
+			};
+			var lo = getCumulativeOffset(leftTd),
+				ro = getCumulativeOffset(rightTd);
+			var co = getCumulativeOffset(canvas);
+			ctx = canvas.getContext('2d');
+			ctx.beginPath();
+			ctx.moveTo(lo.x - co.x + leftTd.offsetWidth, lo.y - co.y + leftTd.offsetHeight/2);
+			ctx.lineTo(ro.x - co.x, ro.y - co.y + leftTd.offsetHeight / 2);
+			ctx.stroke();
+		}
+		//Onclick methods: clicking on something on the left sets a
+		//memory variable, then clicking on something on the right
+		//records the relationship in values and redraws the lines
+		for (j = 0; j < table.dom.childNodes.length; j++) {
+			left = table.dom.childNodes[j].childNodes[0];
+			right = table.dom.childNodes[j].childNodes[2];
+			left.onclick = function(e){
+				hiddenSpan = div.querySelector('.hidden-data-span');
+				obj = JSON.parse(hiddenSpan.innerHTML);
+				obj.selected = parseInt(this.name.replace(/^.*:/,''));
+				hiddenSpan.innerHTML = JSON.stringify(obj);
+			}
+			right.onclick = function(e){
+				hiddenSpan = div.querySelector('.hidden-data-span');
+				obj = JSON.parse(hiddenSpan.innerHTML);
+				if (obj.selected >= 0) {
+					obj.values[obj.selected] = parseInt(this.name.replace(/^.*:/,''));
+				}
+				obj.selected = -1;
+				hiddenSpan.innerHTML = JSON.stringify(obj);
+				var canvas = div.querySelector('canvas');
+				canvas.width = canvas.width; //Clear canvas
+				k = 0;
+				for (;k < obj.values.length; k++) {
+					if (obj.values[k] >= 0) {
+						drawLine(canvas,table.dom.childNodes[k].firstChild,table.dom.childNodes[obj.values[k]].lastChild);
+					}
+				}
+			}
+		}
+		var canvas = doc.createElement('canvas');
+		canvas.width = 300;
+		canvas.height = 300;
+		canvas.style.zIndex = -1;
+		var canvasdiv = doc.createElement('div');
+		canvasdiv.style.zIndex = -1;
+		canvasdiv.style.position = 'absolute';
+		div.insertBefore(canvasdiv,div.firstChild);
+		canvasdiv.appendChild(canvas);
+	},
+
 
 	setupAssessment: function(doc, reader){
-		try{
 			var me = this,
 				inputs = doc.querySelectorAll('input'),
 				quiz = inputs.length>0,
@@ -59,175 +210,99 @@ Ext.define('NextThought.assessment.Main', {
 				me.hookedScrollUp = true;
 				reader.registerScrollHandler(me.contentScrollHandler, me);
 			}
-
-			//the frame has jQuery & MathQuill
-			console.log(w.$('.naqsymmathpart'));
-			w.$('.naqsymmathpart input[data-ntitype=naqsymmath]').replaceWith(function(){
-				var id = w.$(this).attr('id');
-				return '<input id="'+id+'" type="hidden"/><span class="quiz-input"></span>';
-			});
-
-			q = w.$('span.quiz-input').mathquill('editable');
-
-			//Add events for the math panel
-			this.attachMathSymbolToMathquillObjects(q);
-
-			//Attach a keydown event to the iframe that modifies the value 
-			//of the textbox to something and then sets it back again. It
-			//appears that the MathQuill code is triggered by the textbox
-			//changing its value and standard text input sometimes fails 
-			//to trigger this for some reason.
-			document.getElementsByTagName('iframe')[0].contentWindow.document.onkeydown = function(e) {
-				 e.target.value += '0';
-				 e.target.value = e.target.value.substring(0,e.target.value.length - 1);
-			}
-			//Substitute textboxes for naqsymmathparts with MathQuill boxes
-			listElements = doc.querySelectorAll('.nasymmathpart');
-			var i;
-			for (i=0; i < listElements.length; i++) {
-			}
-			//Substitute lists with radio buttons
-			listElements = doc.querySelectorAll('.naqchoice');
-			for (i=0; i < listElements.length; i++) {
-				var le = listElements[i],
-					radioButton = doc.createElement("input");
-				p = le.querySelector('p');
-				radioButton.type = 'radio';
-				radioButton.name = le.parentNode.querySelector('a').name;
-				r = doc.createRange();
-				r.selectNodeContents(p);
-				radioButton.value = r.toString().replace(/\s*$/,'');
-				p.style.display = 'inline';
-				le.insertBefore(radioButton,p);
-				le.insertBefore(doc.createTextNode('  '),p);
-				//replacement.innerHTML = le.querySelector('p').innerHTML;
-				//le.parentNode.removeChild(le);
-			}
-			//Substitute matching with usable matching
-			mc = doc.querySelectorAll('.nti_resource_image');
-			for (i=0; i < mc.length; i++) {
-				if (mc[i].alt.indexOf('{tabular}') >= 0) {
-					console.log(mc[i].alt);
-					tabletext = mc[i].alt.replace(/^.*?{tabular}{cc}/,'').replace(/\\end{tabular}.*?$/,'');
-					rows = tabletext.split('\\\\'); //Actually just two slashes
-					cells = [], values = [];
-					j = 0;
-					for (;j < rows.length; j++) {
-						if (rows[j].indexOf('&') >= 0) {
-							cells.push(rows[j].split('&'));
-							values.push(-1);
+			//Get all naquestion divs
+			var questions = doc.querySelectorAll('.naquestion');
+			$AppConfig.service.getPageInfo(LocationProvider.currentNTIID, pageInfoSuccess, pageInfoFailure, this);
+			//TODO: Figure out how to get pageinfo without the hints, solutions or explanation so the quizzes
+			//can't be hacked by someone putting in JS breakpoints and reading everything we're doing
+			function pageInfoFailure() {
+				console.log('Could not load page info!');
+			};
+			function pageInfoSuccess(pageInfo) {
+				var i = 0;
+				for (;i < questions.length; i++) {
+					var j = 0,
+						qdiv = questions[i],
+						question;
+					for (;j < questions.length; j++) {
+						if (qdiv.parentNode.getAttribute('data-ntiid') == 
+								pageInfo.data.AssessmentItems[j].data.NTIID) break;
+					}
+					question = pageInfo.data.AssessmentItems[j];
+					var partdivs = qdiv.querySelectorAll('.naquestionpart');
+					for (j = 0; j < question.data.parts.length; j++) {
+						if (partdivs.length <= j) break;
+						//Stopgap measure until we find some way to pass figures or links thereto through
+						//the pageInfo or some other object; TODO: do something better
+						var figure = partdivs[j].querySelector('.figure') || partdivs[j].querySelector('.tabular');
+						//Another stopgap because symmathparts look exactly like free response parts in
+						//the pageInfo; TODO: do something better
+						var isSymMath = partdivs[j].className.indexOf('naqsymmathpart') >= 0;
+						//Third stopgap to test the matching questions
+						var isMatching = figure && figure.querySelector('img').alt.indexOf('tabular') >= 0 && 
+									LocationProvider.currentNTIID.indexOf('MN') >= 0;
+						//Remove everything, we'll start from scratch
+						while (partdivs[j].firstChild) {
+							partdivs[j].removeChild(partdivs[j].firstChild);
 						}
-					}
-					hidden = doc.createElement('span');
-					hidden.className = 'hidden-data-span';
-					hidden.style.display = 'none';
-					hidden.innerHTML = '{"selected":0,"values":'+JSON.stringify(values)+'}';
-					//Make existing elements invisible
-					mc[i].style.display = 'none';
-					questionObj = mc[i];
-					while (questionObj && questionObj.className && questionObj.className.indexOf('naquestionpart') == -1) {
-						questionObj = questionObj.parentNode;
-					}
-					if (!questionObj || !questionObj.className) break;
-					questionObj.querySelector('input').style.display = 'none';
-					//Hidden element stores the current selection
-					mc[i].parentNode.insertBefore(hidden,mc[i]);
-					table = doc.createElement('table');
-					mc[i].parentNode.insertBefore(table,mc[i]);
-					//Draws connecting lines on the canvas
-					function drawLine(canvas,leftTd,rightTd) {
-						var getCumulativeOffset = function (obj) {
-							var left, top;
-							left = top = 0;
-							if (obj.offsetParent) {
-								do {
-									left += obj.offsetLeft;
-									top  += obj.offsetTop;
-								} while (obj = obj.offsetParent);
-							}
-   							return {
-								x : left,
-   								y : top
-  							};
-						};
-						var lo = getCumulativeOffset(leftTd),
-							ro = getCumulativeOffset(rightTd);
-						var co = getCumulativeOffset(canvas);
-						ctx = canvas.getContext('2d');
-						ctx.beginPath();
-						ctx.moveTo(lo.x - co.x + leftTd.offsetWidth, lo.y - co.y + leftTd.offsetHeight/2);
-						ctx.lineTo(ro.x - co.x, ro.y - co.y + leftTd.offsetHeight / 2);
-						ctx.stroke();
-					}
-					for (j = 0; j < cells.length; j++) {
-						row = doc.createElement('tr');
-						table.appendChild(row);
-						left = doc.createElement('td');
-						left.innerHTML = cells[j][0];
-						left.id = mc[i].parentNode.id+'-left:'+j;
-						left.onclick = function(e){
-							//cell -> row -> table -> mc[i].parentNode
-							localRoot = this.parentNode.parentNode.parentNode;
-							hiddenSpan = localRoot.querySelector('.hidden-data-span');
-							obj = JSON.parse(hiddenSpan.innerHTML);
-							obj.selected = parseInt(this.id.replace(/^.*:/,''));
-							hiddenSpan.innerHTML = JSON.stringify(obj);
+						Ext.get(partdivs[j]).createChild({
+							tag: 'a',
+							html: question.data.parts[j].data.content,
+							style: 'display:block',
+							cls: 'mathjax tex2jax_process'
+						});
+						//Temporary measure to deal with unwanted outside text in question content
+						if (partdivs[j].parentNode.firstChild.data && 
+								partdivs[j].parentNode.firstChild.data.replace(/\s*$/,'') == 
+										question.data.parts[j].data.content.replace(/\x*$/,'')) {
+							 partdivs[j].parentNode.firstChild.data = '';
 						}
-						row.appendChild(left);
-						middle = doc.createElement('td');
-						middle.width='25';
-						row.appendChild(middle);
-						right = doc.createElement('td');
-						right.innerHTML = cells[j][1];
-						right.id = mc[i].parentNode.id+'-right:'+j;
-						right.onclick = function(e){
-							//cell -> row -> table -> mc[i].parentNode
-							hiddenSpan = this.parentNode.parentNode.parentNode.querySelector('.hidden-data-span');
-							obj = JSON.parse(hiddenSpan.innerHTML);
-							if (obj.selected >= 0) {
-								obj.values[obj.selected] = parseInt(this.id.replace(/^.*:/,''));
-							}
-							obj.selected = -1;
-							hiddenSpan.innerHTML = JSON.stringify(obj);
-							var canvas = localRoot.querySelector('canvas');
-							table = localRoot.querySelector('table');
-							canvas.width = canvas.width; //Clear canvas
-							k = 0;
-							for (;k < obj.values.length; k++) {
-								if (obj.values[k] >= 0) {
-									drawLine(canvas,table.childNodes[k].firstChild,table.childNodes[obj.values[k]].lastChild);
-								}
-							}
+						if (figure) { partdivs[j].appendChild(figure) }
+						breaker = doc.createElement('div');
+						breaker.style.margin = '10px';
+						partdivs[j].appendChild(breaker);
+						//Adding the question bits	
+						var func = function(){
+							console.log('Question type not recognized - see Main.js/setupAssessment');
 						}
-						row.appendChild(right);
+						if (isMatching) {
+							func = this.addMatching;
+						}
+						else if (question.data.parts[j].data.Class == 'FreeResponsePart') { 
+							func = isSymMath ? me.addSymmathBox : me.addFreeResponseBox;
+						}
+						else if (question.data.parts[j].data.Class == 'MultipleChoicePart') {
+							func = this.addMultipleChoice;
+						}
+						func(partdivs[j],question.data.parts[j]) 
 					}
-					var canvas = doc.createElement('canvas');
-					canvas.width = 300;
-					canvas.height = 300;
-					canvas.style.zIndex = -1;
-					var canvasdiv = doc.createElement('div');
-					canvasdiv.style.zIndex = -1;
-					canvasdiv.style.position = 'absolute';
-					mc[i].parentNode.insertBefore(canvasdiv,mc[i].parentNode.firstChild);
-					canvasdiv.appendChild(canvas);
+					endbreaker = doc.createElement('div');
+					endbreaker.style.margin = '10px';
+					qdiv.appendChild(endbreaker);
+					submit = doc.createElement("a");
+					submit.id=qdiv.parentNode.getAttribute('data-ntiid')+':submit';
+					//TODO: don't hardcode this, and figure out a good way to have different button styles
+					submit.className = LocationProvider.currentNTIID.indexOf('mathcounts.2012') >= 0 ? 
+						'x-btn x-btn-submit x-btn-primary-medium x-btn-primary-medium-noicon x-btn-noicon submitbutton' : 
+						'submitbutton';
+					submit.onclick=function(e){ 
+						window.AssessmentUtils.submitAnswersHandler(e,this.id.replace(':submit',''),me);
+					 };
+					submit.innerHTML = 'Submit';
+					qdiv.appendChild(submit);
+					qdiv.style.margin = '1em';
+				}
+
+				//Attach a keydown event to the iframe that modifies the value 
+				//of the textbox to something and then sets it back again. It
+				//appears that the MathQuill code is triggered by the textbox
+				//changing its value and standard text input sometimes fails 
+				//to trigger this for some reason.
+				document.getElementsByTagName('iframe')[0].contentWindow.document.onkeydown = function(e) {
+					 e.target.value += '0';
+					 e.target.value = e.target.value.substring(0,e.target.value.length - 1);
 				}
 			}
-			//Add submit buttons to all questions
-			questions = doc.querySelectorAll('.naquestion');
-			for (i=0; i < questions.length; i++) {
-				submit = doc.createElement("a");
-				submit.id=questions[i].parentNode.getAttribute('data-ntiid')+':submit';
-				submit.className = 'submitbutton';
-				submit.onclick=function(e){ 
-					window.AssessmentUtils.submitAnswersHandler(e,this.id.replace(':submit',''),me);
-				 };
-				submit.innerHTML = 'Submit';
-				questions[i].appendChild(submit);
-			}
-		}
-		catch(e){
-			console.error('unable to setup quiz ',e.stack||e.toString());
-		}
 	},
 
 
@@ -371,7 +446,6 @@ Ext.define('NextThought.assessment.Main', {
 		var items = [], p;
 		for (p = 0; p < parts.length; p++) {
 			var input = parts[p].querySelector('input');
-			console.log('Input!',input, input.value);
 			//TODO: support dict responses for Matching questions
 			if (parts[p].querySelectorAll('canvas').length === 1) {
 				data = JSON.parse(parts[p].querySelector('.hidden-data-span').innerHTML).values;
@@ -397,7 +471,6 @@ Ext.define('NextThought.assessment.Main', {
 			}
 			else {
 				items.push(input.value);
-				console.log(items[items.length-1]);
 			}
 		}
 		var submission = Ext.create('NextThought.model.assessment.QuestionSubmission', {
@@ -406,7 +479,7 @@ Ext.define('NextThought.assessment.Main', {
 			parts: items
 		});
 
-		console.log(submission);
+		console.log('Sending to server',submission);
 		vp.mask('Grading...');
 
 		submission.save({
@@ -429,7 +502,7 @@ Ext.define('NextThought.assessment.Main', {
 		var mathCls = 'mathjax tex2jax_process ',
 			ntiid = LocationProvider.currentNTIID;
 
-		console.log(result);
+		console.log('Got back from server', result);
 		if(ntiid !== result.get('ContainerId')){
 			Ext.Error.raise('Result does not match the page!');
 		}
@@ -462,9 +535,9 @@ Ext.define('NextThought.assessment.Main', {
 			   	cls: 'result'
 			});
 
-			Ext.getDom(pte.down('input')).value = '';
-
-			//r = pt.data
+			if (pte.down('input')) {
+				Ext.getDom(pte.down('input')).value = '';
+			}
 				
 			prefix = (typeof pt.submittedResponse !== 'string' || 
 					pte.dom.className.indexOf('naqsymmathpart') >= 0)
@@ -495,8 +568,10 @@ Ext.define('NextThought.assessment.Main', {
 				html = prefix + (prefix ? 'c' : 'C') + 'orrect';
 				bgcolor = '#8F8';
 			}
-			s.setStyle('background-color',bgcolor);
-			s.setStyle('padding','4');
+			styles = {'background-color': bgcolor, 'padding': '8px', 'border-radius': '3px', 'margin-left': '4px'}
+			for (var style in styles) {
+			  s.setStyle(style, styles[style]);
+			}
 			s.createChild({
 				tag : 'span',
 				html: html,
@@ -510,7 +585,6 @@ Ext.define('NextThought.assessment.Main', {
 					console.log(e);
 					var j = 0;
 					for (;j < e.data.AssessmentItems.length; j++) {
-						console.log(e.data.AssessmentItems[j].data.NTIID, myquestionId);
 						if (e.data.AssessmentItems[j].data.NTIID == myquestionId) break;
 					}
 					explanation = e.data.AssessmentItems[j].data.parts[myi].data.explanation;//.replace(/\$/g,'$$$$')
