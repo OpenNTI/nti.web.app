@@ -130,7 +130,7 @@ Ext.define('NextThought.view.content.Navigation',{
 		m = menus[key] = Ext.widget(Ext.apply({},cfg));
 
 		pathPartEl.on('mouseenter', function(){
-			m.showBy(pathPartEl,'tl-bl?', [-10,5]);
+			m.showBy(pathPartEl,'tl-bl?', [-10,0]);
 		});
 
 		this.menuMap = menus;
