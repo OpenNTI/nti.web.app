@@ -153,11 +153,11 @@ Ext.define('NextThought.view.annotations.note.EditorActions',{
 
 	editorMouseDown: function(e){
 		var s = window.getSelection();
-		if(e.getTarget('.action')){
+//		if(e.getTarget('.action')){
 			if (s.rangeCount) {
 				this.lastRange = s.getRangeAt(0);
 			}
-		}
+//		}
 	},
 
 
@@ -168,7 +168,6 @@ Ext.define('NextThought.view.annotations.note.EditorActions',{
 
 	editorSelectionStart: function(e){
 		e.stopPropagation();//re-enable selection, and prevent the handlers higher up from firing.
-		delete this.lastRange;
 		return true;//re-enable selection
 	},
 
@@ -219,7 +218,7 @@ Ext.define('NextThought.view.annotations.note.EditorActions',{
 			}
 			else {
 				action = t.getAttribute('class').split(' ').pop();
-				document.execCommand(action);
+				document.execCommand(action, null, null);
 			}
 		}
 		return false;
