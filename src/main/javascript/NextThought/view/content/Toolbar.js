@@ -11,7 +11,7 @@ Ext.define('NextThought.view.content.Toolbar',{
 	ui: 'content',
 
 
-	height: 85,
+	height: 75,
 	defaults: {
 		xtype: 'tbspacer'
 	},

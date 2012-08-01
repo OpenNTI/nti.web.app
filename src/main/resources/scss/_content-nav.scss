@@ -4,21 +4,20 @@
 	&.x-toolbar-item{margin-top: 5px !important;}
 
 	img.bookcover {
-		background-size: cover;
+		background: grey;
+		background-size: 50% 50%;
 		background-repeat: no-repeat;
 		background-position: center center;
 		float: left;
-		width: 64px;
-		height: 74px;
+		width: 53px;
+		height: 65px;
 	}
 
 	.wrapper {
-		margin: 0 0 0 70px;
-		display: table;
+		margin: 1px 0 0 65px;
 	}
 
 	.breadcrumb {
-		display: table-row;
 		&, * {
 			color: #b8b8b8;
 			font-size: 10px;
@@ -37,15 +36,14 @@
 	}
 
 	.title {
-		display: table-cell;
-		vertical-align: middle;
-		margin: 0 0 0 0;
 		color: #494949;
-		font-size: 21px;
+		font-size: 20px;
 		font-style: italic;
 		font-weight: normal;
+		line-height: 24px;
+		margin: 0 0 0 0;
 		overflow: hidden;
 		text-overflow: ellipsis;
-		height: 60px;
+		height: 50px;
 	}
 }
