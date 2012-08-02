@@ -13,6 +13,7 @@ Ext.define('NextThought.view.chat.Window',{
 	minWidth: 250,
 	minHeight: 200,
 	height: 200,
+	width: 250,
 
 	title: 'chat',
 

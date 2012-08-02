@@ -170,8 +170,8 @@
 						color: #757474;
 					}
 					&::before{
-						left: initial;
-						top: initial;
+						left: inherit;
+						top: inherit;
 						bottom: 4px;
 						right: -9px;
 						content: url(../images/my-bubble-tip.png);
