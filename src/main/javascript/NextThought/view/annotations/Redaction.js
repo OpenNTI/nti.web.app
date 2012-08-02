@@ -37,6 +37,7 @@ Ext.define('NextThought.view.annotations.Redaction', {
 
 
 	makeEditableSpanEditable: function(e){
+		console.log('make editable span editable');
 		if (e){
 			if (this.clickTimer){
 				clearTimeout(this.clickTimer);
