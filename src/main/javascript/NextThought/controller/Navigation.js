@@ -6,9 +6,12 @@ Ext.define('NextThought.controller.Navigation', {
 	],
 
 	views: [
+		'Navigation',
 		'ViewSelect',
 		'Views',
-		'menus.account.Notifications'
+		'menus.account.Notifications',
+		'menus.Navigation'//,
+//		'menus.navigation.'
 	],
 
 	init: function() {

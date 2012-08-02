@@ -1,12 +1,136 @@
 
 .x-panel-navigation-menu{
-	padding: 0 3px 0 5px;
-	.x-panel-body-navigation-menu{
+	padding: 0 3px 0 3px;
+	background: none;
+	.x-panel-body-navigation-menu {
 		padding: 0;
 		margin: 0;
-		box-shadow: -2px 0 3px 0 rgba(0,0,0,0.2);
-		background: #f9f9f9;
+		box-shadow: -1px 0 3px 0 rgba(0, 0, 0, 0.2);
+		background: #f9f9f9 !important;
 		border: 0px solid #99c14f;
 		border-right-width: 3px !important;
+	}
+}
+
+
+.x-component-navigation-collection {
+	//&.x-menu-item{}
+	background: #f9f9f9;
+	border: 1px solid #d2d2d2 !important;
+	border-top-width: 0 !important;
+	border-right-width: 0 !important;
+
+	box-shadow: inset 1px 0 0 0 #ffffff,
+				0 3px 0 0 #eaeaea;
+	margin-bottom: 3px;
+
+	padding: 0 6px;
+
+	.stratum {
+		padding: 10px;
+		border: none !important;
+		border-bottom: 1px solid #e4e4e4 !important;
+		&:last-of-type {
+			border-bottom: none !important;
+		}
+	}
+
+	.settings {
+		cursor: pointer;
+		position: absolute;
+		top: 12px;
+		right: 10px;
+		width: 14px;
+		height: 14px;
+		background: url(../images/nav-sprite.png) -36px 0 no-repeat;
+	}
+
+	.count {
+		color: #73cdfb;
+		font:{ size: 10px; style: italic; weight: bold; }
+		text-transform: uppercase;
+		display: inline-block;
+		position: relative;
+		margin-left: 3px;
+		top: -6px;
+	}
+
+	.drawer {
+		cursor: pointer;
+		position: relative;
+		color: #757474;
+		font:{ size: 10px; weight: bold; }
+		text-transform: uppercase;
+		padding-left: 36px;
+
+		&::after {
+			position: absolute;
+			content: ' ';
+			width: 18px;
+			height: 13px;
+			background: url(../images/nav-sprite.png) 0 0 no-repeat;
+			top: 10px;
+			left: 12px;
+		}
+
+		&.documents::after{background-position-x: -18px;}
+		&.dashboard::after{background-position-x: 0px;}
+	}
+
+	.collection-name {
+		color: #abaaaa;
+		font:{
+			size: 14px;
+			weight: 600;
+		}
+		text-transform: uppercase;
+	}
+
+	.item {
+		cursor: pointer;
+		position: relative;
+		overflow: hidden;
+
+		&.selected, &.x-item-selected {
+			background-color: #ebebeb;
+			box-shadow: inset 0 -2px 0 0px #D4D4D4,
+						inset 0  2px 0 0px #D4D4D4,
+						inset -3px 0 0 0px #D4D4D4,
+						inset  3px 0 0 0px #D4D4D4;
+		}
+
+		img.bookcover {
+			background:{
+				size: cover;
+				position: center center;
+				repeat: no-repeat;
+			}
+			box-shadow: -1px 1px 3px 0 rgba(0,0,0,0.35);
+			border-radius: 1px;
+			float: left;
+			width: 53px;
+			height: 65px;
+		}
+
+		.wrap {
+			margin-left: 75px;
+
+			.title, .author {
+				color: #494949;
+				font-size: 14px;
+				font-style: italic;
+				font-weight: 500;
+				text-overflow: ellipsis;
+				overflow: hidden;
+			}
+
+			.author {
+				color: #ababab;//757474
+				font-size: 10px;
+				font-style: normal;
+				font-weight: normal;
+				white-space: nowrap;
+			}
+		}
 	}
 }

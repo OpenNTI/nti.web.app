@@ -25,6 +25,7 @@ Ext.define('NextThought.Library', {
 				host = server.host;
 
 			this.store = Ext.create('Ext.data.Store',{
+				id: 'library',
 				model: 'NextThought.model.Title',
 				proxy: {
 					type: 'ajax',

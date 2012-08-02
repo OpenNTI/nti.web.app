@@ -3,7 +3,8 @@ Ext.define('NextThought.view.ViewSelect', {
 	alias : 'widget.view-select',
 
 	requires: [
-		'NextThought.view.menus.Navigation'
+		'NextThought.view.menus.Navigation',
+		'NextThought.view.menus.navigation.Collection'
 	],
 
 	cls: 'view-switcher',
@@ -33,7 +34,7 @@ Ext.define('NextThought.view.ViewSelect', {
 			iconCls: 'library',
 			title: 'Library',
 			tooltip: 'Library',
-			menu: {xtype: 'navigation-menu'}
+			menu: {xtype: 'navigation-menu', items:[{xtype:'navigation-collection'}]}
 		},
 		{
 			disabled: true,
