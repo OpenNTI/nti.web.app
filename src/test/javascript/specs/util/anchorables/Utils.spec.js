@@ -114,6 +114,7 @@ describe("Anchor Utils", function() {
 			expect(Anchors.nodeThatIsEdgeOfRange(range, false).textContent).toEqual(txtNode2.textContent);
 		});
 
+
 		it ('Range of Non Text Nodes, start', function(){
 			var range = document.createRange(),
 				nonTxtNode1 = document.createElement('div'),
@@ -1261,6 +1262,42 @@ describe("Anchor Utils", function() {
 		});
 	});
 
+
+	describe('cleanRangeFromBadStartAndEndContainers Tests', function(){
+		it ('Clean Range of nodes with interleaved empty space nodes, start and end', function(){
+			var li = document.createElement('li'),
+				a = document.createElement('a'),
+				s1 = document.createTextNode(' '),
+				s2 = document.createTextNode(' '),
+				s3 = document.createTextNode(' '),
+				p = document.createElement('p'),
+				t = document.createTextNode('an increase from 100 to 130 '),
+				div = document.createElement('div'),
+				range = document.createRange();
+
+			//set up ids and heirarchy
+			div.setAttribute('id', 'nti-content');
+			li.setAttribute('Id', 'a0000003697');
+			a.setAttribute('name', '95faafa5cbec328f1283c2167db1a3de');
+			p.setAttribute('Id', '95faafa5cbec328f1283c2167db1a3de');
+			p.appendChild(t);
+			li.appendChild(s1);
+			li.appendChild(a);
+			li.appendChild(s2);
+			li.appendChild(p);
+			li.appendChild(s3);
+			div.appendChild(li);
+			testBody.appendChild(div);
+
+			range.setStart(s1, 0);
+			range.setEnd(t, 27);
+
+			expect(Anchors.cleanRangeFromBadStartAndEndContainers(range, true).startContainer).toEqual(t);
+			expect(Anchors.cleanRangeFromBadStartAndEndContainers(range, false).endContainer).toEqual(t);
+		});
+
+	});
+
 	describe('Integration Tests', function(){
 		//TODO - write a unit test for 3 identical txt nodes where the anchor ends on teh end of the second
 		it('Ancestor Spanning Identical Text Node Bug', function(){
@@ -1377,6 +1414,57 @@ describe("Anchor Utils", function() {
 			expect(recreatedRange.endContainer).toBe(range.endContainer);
 			expect(recreatedRange.commonAncestorContainer).toBe(range.commonAncestorContainer);
 			expect(recreatedRange.toString()).toEqual(expectedRangeToString);
+		});
+
+		it('Weird line in an li does not result in good resolution', function(){
+			/*
+			<li class="part" id="a0000003697" partnum="(a)">
+				<a name="95faafa5cbec328f1283c2167db1a3de"></a>
+				<p class="par" id="95faafa5cbec328f1283c2167db1a3de">an increase from 100 to 130 </p>
+			</li>
+			 */
+
+
+			var li = document.createElement('li'),
+				a = document.createElement('a'),
+				s1 = document.createTextNode(' '),
+				s2 = document.createTextNode(' '),
+				s3 = document.createTextNode(' '),
+				p = document.createElement('p'),
+				t = document.createTextNode('an increase from 100 to 130 '),
+				div = document.createElement('div'),
+				range, desc, recreatedRange;
+
+			//set up ids and heirarchy
+			div.setAttribute('id', 'nti-content');
+			li.setAttribute('Id', 'a0000003697');
+			a.setAttribute('name', '95faafa5cbec328f1283c2167db1a3de');
+			p.setAttribute('Id', '95faafa5cbec328f1283c2167db1a3de');
+			p.appendChild(t);
+			li.appendChild(s1);
+			li.appendChild(a);
+			li.appendChild(s2);
+			li.appendChild(p);
+			li.appendChild(s3);
+			div.appendChild(li);
+			testBody.appendChild(div);
+
+			//create a range now starting at the first char of t1 and the last of t2
+			range = document.createRange();
+			range.setStart(s1, 0);
+			range.setEnd(t, 27);
+
+			//now turn that into a description, and check a few assumptions
+			desc = Anchors.createRangeDescriptionFromRange(range, document);
+			expect(desc).toBeTruthy();
+			expect(desc.getAncestor()).toBeTruthy();
+
+			//now round trip back to a range, verify that it is the same range as before
+			recreatedRange = Anchors.toDomRange(desc, document);
+			expect(recreatedRange).toBeTruthy();
+			expect(recreatedRange.startContainer).toBe(range.startContainer);
+			expect(recreatedRange.endContainer).toBe(range.endContainer);
+			expect(recreatedRange.commonAncestorContainer).toBe(range.commonAncestorContainer);
 		});
 	});
 });

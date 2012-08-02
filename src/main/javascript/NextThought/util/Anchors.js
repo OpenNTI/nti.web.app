@@ -26,6 +26,7 @@ Ext.define('NextThought.util.Anchors', {
 			Ext.Error.raise('Cannot create anchorable, range missing or collapsed');
 		}
 
+		Anchors.cleanRangeFromBadStartAndEndContainers(range);
 		range = Anchors.makeRangeAnchorable(range, docElement);
 		var pureRange = Anchors.purifyRange(range, docElement),
 			ancestorNode = range.commonAncestorContainer;
@@ -60,14 +61,14 @@ Ext.define('NextThought.util.Anchors', {
 
 	//TODO - testing
 	createPointer: function(range, role, node) {
-		var endEdgeNode = node || Anchors.nodeThatIsEdgeOfRange(range, (role === 'start'));
+		var edgeNode = node || Anchors.nodeThatIsEdgeOfRange(range, (role === 'start'));
 
-		if (Ext.isTextNode(endEdgeNode)) {
+		if (Ext.isTextNode(edgeNode)) {
 			return Anchors.createTextPointerFromRange(range, role);
 		}
-		else if (Ext.isElement(endEdgeNode)) {
-			var id = endEdgeNode.getAttribute('Id'),
-				tagName = endEdgeNode.tagName;
+		else if (Ext.isElement(edgeNode)) {
+			var id = edgeNode.getAttribute('Id'),
+				tagName = edgeNode.tagName;
 			return Ext.create('NextThought.model.anchorables.ElementDomContentPointer', {
 				elementTagName: tagName,
 				elementId: id,
@@ -718,7 +719,7 @@ Ext.define('NextThought.util.Anchors', {
 			offset = start ? range.startOffset : range.endOffset;
 
 		//If the container is a textNode look no further, that node is the edge
-		if( container.nodeType === Node.TEXT_NODE ){
+		if(Ext.isTextNode(container)){
 			return container;
 		}
 
@@ -1161,6 +1162,45 @@ Ext.define('NextThought.util.Anchors', {
 			}
 		}
 		return sanitizedChildren;
+	},
+
+
+	/* tested */
+	cleanRangeFromBadStartAndEndContainers: function(range){
+		function isBlankTextNode(n){
+			return (Ext.isTextNode(n) && n.textContent.trim().length===0);
+		}
+
+		var startContainer = range.startContainer,
+			endContainer = range.endContainer,
+			txtNodes = AnnotationUtils.getTextNodes(range.commonAncestorContainer),
+			index = 0, i;
+
+
+		if (isBlankTextNode(startContainer)) {
+			console.log('found a range with a starting node that is nothing but whitespace');
+
+			index = Ext.Array.indexOf(txtNodes, startContainer);
+			for(i = index; i < txtNodes.length; i++){
+				 if (!isBlankTextNode(txtNodes[i])) {
+					 range.setStart(txtNodes[i], 0);
+					 break;
+				 }
+			}
+		}
+
+		if (isBlankTextNode(endContainer)) {
+			console.log('found a range with a end node that is nothing but whitespace');
+			txtNodes = AnnotationUtils.getTextNodes(ancestor);
+			index = Ext.Array.indexOf(txtNodes, endContainer);
+			for(i = index; i >= 0; i--){
+				 if (!isBlankTextNode(txtNodes[i])) {
+					 range.setEnd(txtNodes[i], txtNodes[i].length);
+					 break;
+				 }
+			}
+		}
+		return range;
 	}
 },
 function(){
