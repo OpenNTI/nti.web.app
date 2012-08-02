@@ -260,6 +260,7 @@
 					&.add-contact::after { background-position-y: -36px; }
 					&.follow::after { background-position-y: -54px; }
 					&.block::after { background-position-y: -72px; }
+					&.mute::after { background-position-y: -100px; }
 					&.delete::after { background-position-y: -100px; }
 				}
 			}
@@ -534,6 +535,11 @@
 		}
 
         &:hover {
+
+			.narrow-gutter &{
+				right: inherit;
+			}
+
             border: 1px solid #dcdcdc;
             box-shadow: inset 0 1px 0 0 #ffffff,
                 1px 1px 2px 0 rgba(0, 0, 0, 0.1);
@@ -541,6 +547,8 @@
             padding: 10px;
             margin: -11px 0 0 -11px;
             min-width: 270px;
+			max-width: 600px;
+			max-heigt: 400px;
 			z-index: 999;
 
             .mask {
@@ -553,6 +561,10 @@
 			}
 			.controls{
 				display: block;
+			}
+
+			.text {
+				white-space: normal;
 			}
 
             @include meta-row;

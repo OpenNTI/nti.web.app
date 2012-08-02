@@ -173,14 +173,21 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 		var b = this.buckets[prefix];
 		var cT = this.controlLineTmpl;
 		var wT = this.widgetLineTmpl;
+		var cls = '';
 
 		var width = o.gutter + o.contentLeftPadding;
+
+		if(width <= 355){
+			cls = 'narrow-gutter';
+		}
 
 		g.setWidth(width);
 		g.controls.setLeft(width-50);
 		g.widgets.setRight(50);
 
 		r.noteOverlayClearRestrictedRanges();
+
+
 
 		b.each(function(line,y){
 
@@ -201,7 +208,10 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 			siblings = widgets.length-1;
 			Ext.each(widgets,function(o){
 				var w = o.getGutterWidget(siblings);
-				if(w){w.appendTo(line.widgets);}
+				if(w){
+					w.appendTo(line.widgets);
+					w.addCls(cls);
+				}
 				else {
 					siblings -= 1;
 				}
