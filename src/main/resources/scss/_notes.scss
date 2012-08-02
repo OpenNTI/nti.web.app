@@ -200,7 +200,7 @@
 			position: relative;
 			margin-right: 0;
 			width: 32px;
-			overflow: hidden;
+			//overflow: hidden;
 			background: url(../images/more-options.png) -27px center no-repeat;
 			border: 1px solid rgba(0,0,0,0);
 			border-radius: 2px;
@@ -235,7 +235,7 @@
 				border: 1px solid #dcdcdc;
 				box-shadow: 1px 1px 2px 0 rgba(0,0,0,0.09);
 				display: none;
-				position: fixed;
+				position: absolute;
 				margin: -8px 0 0 -1px;
 				padding: 5px 0 10px 0;
                 z-index: 9999;
@@ -560,10 +560,13 @@
             .respond {
             	position: relative;
                 display: block;
-          		overflow: hidden;
+          		//overflow: hidden;
           		margin: 12px 0 0 0;
 
           		@include reply-options;
+				.reply-options {
+					opacity: 1
+				};
           	}
         }
 	}
@@ -795,6 +798,7 @@
 			overflow: hidden;
 
 			@include reply-options;
+			.reply-options .more.active ol{ position: fixed; }
 
 			@include note-editor;
 			.editor {
