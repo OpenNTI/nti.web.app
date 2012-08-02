@@ -42,6 +42,8 @@ Ext.define('NextThought.util.Line',{
 			range = doc.caretRangeFromPoint(xStart, y),
 			rangeEnd = doc.caretRangeFromPoint(xEnd, y);
 
+		if (!range){return null;}
+
 		//If we managed to grab an end, use it to expand the range, otherwise, just stick with the
 		//first word...
 		if(rangeEnd) {

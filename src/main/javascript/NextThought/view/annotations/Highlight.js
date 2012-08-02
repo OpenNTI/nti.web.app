@@ -24,12 +24,13 @@ Ext.define('NextThought.view.annotations.Highlight', {
 
 	getRange: function(){
 		var range = Anchors.toDomRange(this.getRecordField('applicableRange'),this.doc);
-		console.log(this.id,': ',(this.getRecordField('body')||[]).join('|'), ': got range from description:', range, range.toString());
 
 		if(!range){
-			console.log('bad range?');
+			console.error('bad range', this.getRecord());
+			return null;
 		}
 
+		console.log(this.id,': ',(this.getRecordField('body')||[]).join('|'), ': got range from description:', range, range.toString());
 		return range;
 	},
 

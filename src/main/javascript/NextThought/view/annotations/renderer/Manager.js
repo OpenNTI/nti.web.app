@@ -277,6 +277,10 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 				}
 
 				var y = o.render(), b;
+
+				//uncomment for testing
+				//console.log('Rendered', o.getRecord().get('body')[0], y);
+
 				if(!y){
 					console.log(o, 'returned a falsy y:',y);
 				}
