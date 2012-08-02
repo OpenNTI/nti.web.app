@@ -18,6 +18,14 @@
 		margin-top: 33px;
 		.view-button {
 
+			em.x-btn-arrow{
+				&, &.x-btn-arrow-left, .x-btn-arrow-right{
+				padding: 0;
+				display: inline;
+				background: none;
+				}
+			}
+
 			button { @include view-button-def; overflow: visible; }
 			@include view-button-def;
 			

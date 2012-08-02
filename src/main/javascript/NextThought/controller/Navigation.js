@@ -6,7 +6,6 @@ Ext.define('NextThought.controller.Navigation', {
 	],
 
 	views: [
-		'menus.Flyout',
 		'ViewSelect',
 		'Views',
 		'menus.account.Notifications'

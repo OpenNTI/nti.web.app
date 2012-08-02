@@ -18,7 +18,6 @@ Ext.define('NextThought.controller.Search', {
 
 	views: [
 		'form.fields.SearchField',
-		'menus.Search',
 		'menus.search.ResultCategory',
 		'menus.search.Result',
 		'menus.search.More',
