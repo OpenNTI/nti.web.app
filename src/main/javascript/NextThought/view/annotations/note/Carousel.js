@@ -12,6 +12,8 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 	childEls: ['body'],
 	getTargetEl: function () { return this.body; },
 
+	BACKGROUND_WIDTH: 1400,
+
 	PREV: {},//treat as const/final/read-only - the value is not important. We are creating a label that we can identify using the identity comparison operator (===). Think of this as an enum.
 	NEXT: {},//treat as const/final/read-only - the value is not important. We are creating a label that we can identify using the identity comparison operator (===). Think of this as an enum.
 
@@ -149,6 +151,9 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 							dom.scrollWidth - dom.clientWidth));
 
 		var v = pPos + (pValue-value);
+		var min = this.getEl().dom.getBoundingClientRect().width - this.BACKGROUND_WIDTH;
+
+		v = Ext.Number.constrain(v,min,0);
 
 		b.animate({ to: {scrollLeft: value} });
 		this.getEl().animate({to:{backgroundPositionX: v+'px'}});
@@ -172,9 +177,7 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 		var cm = Math.round(cr.left + (cr.width/2));
 		var im = Math.round(ir.left + (ir.width/2));
 
-		var bgW = 1400;//the background image is 1400px wide
-
-		var start = (cr.width - bgW)/2;
+		var start = (cr.width - this.BACKGROUND_WIDTH)/2;
 		var offset = im - cm;
 
 		var pos = item ? start+offset : 0;
