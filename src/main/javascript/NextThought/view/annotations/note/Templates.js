@@ -164,7 +164,7 @@ Ext.define('NextThought.view.annotations.note.Templates',{
 				function(){
 					more.removeCls('active');
 				}
-			,1500);
+			,500);
 		}
 	},
 

@@ -261,7 +261,7 @@
 					&.follow::after { background-position-y: -54px; }
 					&.block::after { background-position-y: -72px; }
 					&.mute::after { background-position-y: -100px; }
-					&.delete::after { background-position-y: -100px; }
+					&.delete::after { background-position: 0 -72px; }
 				}
 			}
 		}
