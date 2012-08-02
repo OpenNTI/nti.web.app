@@ -34,7 +34,9 @@ Ext.define('NextThought.view.ViewSelect', {
 			iconCls: 'library',
 			title: 'Library',
 			tooltip: 'Library',
-			menu: {xtype: 'navigation-menu', items:[{xtype:'navigation-collection'}]}
+			menu: {xtype: 'navigation-menu', items:[
+				{xtype:'navigation-collection'}
+			]}
 		},
 		{
 			disabled: true,

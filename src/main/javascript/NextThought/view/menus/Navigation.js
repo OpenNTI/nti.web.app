@@ -6,6 +6,10 @@ Ext.define('NextThought.view.menus.Navigation',{
 
 	defaultAlign: 'r-l?',
 
+	layout: 'auto',
+	overflowX: 'hidden',
+	overflowY: 'scroll',
+
 	ignoreParentClicks: true,
 	plain: true,
 	showSeparator: false,
