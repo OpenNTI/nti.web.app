@@ -16,38 +16,6 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 	childEls: ['body'],
 	getTargetEl: function () { return this.body; },
 
-	renderTpl: Ext.DomHelper.markup([
-		{
-			cls: 'note-reply',
-			cn: [{
-				cls: 'avatar',
-				cn:[{tag: 'img', src: Ext.BLANK_IMAGE_URL}]
-			},
-			{
-				cls: 'meta',
-				cn: [{
-					cls: 'controls',
-					cn: [{ cls: 'favorite-spacer' },{ cls: 'like' }]
-				},{
-					tag: 'span',
-					cls: 'name'
-				},' - ',{
-					tag: 'span', cls: 'time'
-				}]
-			},{ cls: 'body' },{
-				cls: 'respond',
-				cn: [
-					TemplatesForNotes.getReplyOptions(),
-					TemplatesForNotes.getEditorTpl()
-				]
-			}]
-		},
-		{ id: '{id}-body',
-		  cls: 'note-replies',
-		  tpl: new Ext.XTemplate('{%this.renderContainer(out,values)%}')
-		}
-	]),
-
 	renderSelectors: {
 		avatar: '.avatar img',
 		replyBox: '.note-reply',
@@ -288,4 +256,37 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 		this.fireEvent('chat', this.record);
 	}
 
+},
+function(){
+	this.prototype.renderTpl = Ext.DomHelper.markup([
+			{
+				cls: 'note-reply',
+				cn: [{
+					cls: 'avatar',
+					cn:[{tag: 'img', src: Ext.BLANK_IMAGE_URL}]
+				},
+				{
+					cls: 'meta',
+					cn: [{
+						cls: 'controls',
+						cn: [{ cls: 'favorite-spacer' },{ cls: 'like' }]
+					},{
+						tag: 'span',
+						cls: 'name'
+					},' - ',{
+						tag: 'span', cls: 'time'
+					}]
+				},{ cls: 'body' },{
+					cls: 'respond',
+					cn: [
+						TemplatesForNotes.getReplyOptions(),
+						TemplatesForNotes.getEditorTpl()
+					]
+				}]
+			},
+			{ id: '{id}-body',
+			  cls: 'note-replies',
+			  tpl: new Ext.XTemplate('{%this.renderContainer(out,values)%}')
+			}
+		]);
 });

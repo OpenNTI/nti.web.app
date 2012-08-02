@@ -19,36 +19,6 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		}
 	).compile(),
 
-	renderTpl: Ext.DomHelper.markup([
-		{
-			cls: 'avatar', style: {display:'none'},
-			cn:[{tag: 'img', src: Ext.BLANK_IMAGE_URL}]
-		},
-		{
-			cls: 'meta',
-			cn: [{
-				cls: 'controls',
-				cn: [{ cls: 'favorite' },{ cls: 'like' }]
-			},{
-				tag: 'span',
-				cls: 'name'
-			},' - ',{
-				tag: 'span', cls: 'time'
-			},' ',{
-				tag: 'span', cls: 'shared-to'
-			}]
-		},{
-			cls: 'context',
-			cn: [{tag: 'span', cls: 'text'}]
-		},{ cls: 'body' },{
-			cls: 'respond',
-			cn: [
-				TemplatesForNotes.getReplyOptions(),
-				TemplatesForNotes.getEditorTpl()
-			]
-		}
-	]),
-
 	renderSelectors: {
 		avatar: '.avatar img',
 		liked: '.meta .controls .like',
@@ -324,4 +294,35 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		this.up('window').fireEvent('chat', this.record);
 	}
 
+},
+function(){
+	this.prototype.renderTpl = Ext.DomHelper.markup([
+			{
+				cls: 'avatar', style: {display:'none'},
+				cn:[{tag: 'img', src: Ext.BLANK_IMAGE_URL}]
+			},
+			{
+				cls: 'meta',
+				cn: [{
+					cls: 'controls',
+					cn: [{ cls: 'favorite' },{ cls: 'like' }]
+				},{
+					tag: 'span',
+					cls: 'name'
+				},' - ',{
+					tag: 'span', cls: 'time'
+				},' ',{
+					tag: 'span', cls: 'shared-to'
+				}]
+			},{
+				cls: 'context',
+				cn: [{tag: 'span', cls: 'text'}]
+			},{ cls: 'body' },{
+				cls: 'respond',
+				cn: [
+					TemplatesForNotes.getReplyOptions(),
+					TemplatesForNotes.getEditorTpl()
+				]
+			}
+		]);
 });
