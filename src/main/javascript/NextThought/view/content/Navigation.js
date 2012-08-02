@@ -44,6 +44,7 @@ Ext.define('NextThought.view.content.Navigation',{
 	locationChanged: function(ntiid){
 		var me = this;
 		var lp = LocationProvider;
+		var c;
 		var loc = lp.getLocation(ntiid);
 		var lineage = lp.getLineage(ntiid);
 		var book = lineage[0] ? lp.getLocation(lineage[0]) : null;
@@ -56,29 +57,27 @@ Ext.define('NextThought.view.content.Navigation',{
 
 		this.bookcover.setStyle({backgroundImage: Ext.String.format('url({0})',book.icon)});
 
-		//re-order and remove the "current" location from the end
-		lineage.reverse();
-		lineage.pop();
-
-		path.add(me.breadcrumbTpl.append(me.breadcrumb, ['Library']));
-		path.add(me.breadcrumbSepTpl.append(me.breadcrumb));
-		path.add(me.breadcrumbTpl.append(me.breadcrumb, ['All Books']));
-
-		Ext.each(lineage,function(i,x){
+		c = lp.getLocation(lineage.shift());
+		Ext.each(lineage,function(i){
 			var l = lp.getLocation(i);
+			var e = me.breadcrumbTpl.insertFirst(me.breadcrumb, [l.label], true);
+			path.add(me.breadcrumbSepTpl.insertFirst(me.breadcrumb));
 
-			path.add(me.breadcrumbSepTpl.append(me.breadcrumb));
-
-			var e = me.breadcrumbTpl.append(me.breadcrumb, [l.label], true);
-
-			me.buildMenu(e,l);
-
+			me.buildMenu(e,c);
+			c = l;
 			path.add(e);
 		});
 
+		path.add(me.buildMenu(
+				me.breadcrumbTpl.insertFirst(me.breadcrumb, ['All Books'], true),
+				c
+		));
+
+		path.add(me.breadcrumbSepTpl.insertFirst(me.breadcrumb));
+		path.add(me.breadcrumbTpl.insertFirst(me.breadcrumb, ['Library']));
+
 		me.title.clearListeners();
 		me.title.update(me.getContentNumericalAddress(lineage,loc)+loc.label);
-		me.buildMenu(me.title,loc);
 	},
 
 
@@ -118,7 +117,7 @@ Ext.define('NextThought.view.content.Navigation',{
 			key = locationInfo? locationInfo.ntiid : null,
 			currentNode = locationInfo ? locationInfo.location: null;
 
-		if(!currentNode){ return; }
+		if(!currentNode){ return pathPartEl; }
 
 		if(currentNode.tagName === 'toc'){
 			this.enumerateBookSiblings(locationInfo,cfg.items);
@@ -134,6 +133,8 @@ Ext.define('NextThought.view.content.Navigation',{
 		});
 
 		this.menuMap = menus;
+
+		return pathPartEl;
 	},
 
 
@@ -152,6 +153,11 @@ Ext.define('NextThought.view.content.Navigation',{
 
 	enumerateTopicSiblings: function(node,items){
 		var current = node, num = 0;
+
+		if(!current.parentNode){
+			console.warn('null parentNode in toc');
+			return;
+		}
 
 		while(Ext.fly(node).prev()){
 			node = Ext.fly(node).prev(null,true);
