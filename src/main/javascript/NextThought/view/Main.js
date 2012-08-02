@@ -1,4 +1,5 @@
-Ext.Loader.setPath('Ext.env', Ext.Loader.getPath('Ext')+'/core/src/env');
+
+Ext.Loader.setPath('Ext.env', document.getElementById('ext-js-library').src.replace(/\/ext[^\/]*\.js$/,'/')+'/src/core/src/env');
 
 Ext.define('NextThought.view.Main', {
 	extend: 'Ext.container.Viewport',
