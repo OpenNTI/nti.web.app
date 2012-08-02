@@ -221,7 +221,11 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 			offsets = this.getAnnotationOffsets(),
 			box = Ext.get(o.box),
 			oldY = box.getY(),
+			newY = 0;
+
+		if (o.lastLine && o.lastLine.rect){
 			newY = Math.round(o.lastLine.rect.bottom + offsets.top - box.getHeight());
+		}
 
 		//check for minute scroll changes to prevent jitter:
 		if(Math.abs(oldY - newY) > 4){
