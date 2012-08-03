@@ -26,7 +26,6 @@ Ext.define('NextThought.view.form.fields.SearchField', {
 		this.callParent(arguments);
 
 		var parentMenu = this.up('menu');
-		console.log(parentMenu);
 
 		this.triggerEl.on('click',this.triggerMenu,this);
 		this.triggerEl.addCls(Ext.baseCSSPrefix + 'menu');//make clicks on this not hide the menu
