@@ -132,13 +132,10 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 
 	noteOverlayXYAllowed: function(x,y){
-		var o = this.noteOverlayData, r = o.restrictedRanges;
-		if(r && r[y]){
-			return false;
-		}
-
+		var o = this.noteOverlayData,
+			r = o.restrictedRanges;
 		//test to see if line is occupied
-		return true;
+		return ! (r && r[y]===true);
 	},
 
 
@@ -152,7 +149,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 			y = rect? rect.bottom :0,
 			l = rect? rect.top : 0;
 		o.restrictedRanges = o.restrictedRanges || [];
-		for(; y>l; y--){
+		for(; y>l && y>=0; y--){
 			o.restrictedRanges[y] = true;
 		}
 	},
@@ -209,6 +206,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 				}
 
 				this.noteOverlayPositionInputBox();
+				return true;
 			}
 		} catch(er){
 			console.warn(Globals.getError(er));
@@ -237,12 +235,14 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 
 	noteOverlayMouseOver: function(evt){
-		var o = this.noteOverlayData;
+		var o = this.noteOverlayData, xy = evt.getXY().splice();
+
+		xy[1] += this.body.getScroll().top;
 
 		if(o.suspendMoveEvents){
 			return;
 		}
-		else if(!this.noteOverlayXYAllowed.apply(this,evt.getXY())){
+		else if(!this.noteOverlayXYAllowed.apply(this,xy)){
 			Ext.get(o.box).hide();
 			return;
 		}
@@ -303,12 +303,14 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 	noteOverlayActivateEditor: function(evt){
 		evt.stopEvent();
-		this.noteOverlayMouseOver(evt);
+		if(!this.noteOverlayMouseOver(evt)){
+			return;
+		}
 		var o = this.noteOverlayData;
 		if(o.suspendMoveEvents){
 			return;
 		}
-		if (o && o.lastLine && o.lastLine.range && o.lastLine.range.collapsed) {
+		if (!o.lastLine || !o.lastLine.range || o.lastLine.range.collapsed) {
 			return;
 		}
 
