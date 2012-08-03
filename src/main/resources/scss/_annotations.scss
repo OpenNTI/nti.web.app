@@ -299,5 +299,5 @@ div.redaction-control {
 	}
 }
 
-#annotation-container { &, .highlight-canvas { position: absolute; z-index: 1; } }
+#annotation-container { &, .highlight-canvas { position: absolute; /*z-index: 1; */} }
 
