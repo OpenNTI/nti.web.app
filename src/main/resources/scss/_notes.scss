@@ -810,7 +810,7 @@
 			overflow: hidden;
 
 			@include reply-options;
-			.reply-options .more.active ol{ position: fixed; }
+			.reply-options .more ol{ position: fixed; }
 
 			@include note-editor;
 			.editor {

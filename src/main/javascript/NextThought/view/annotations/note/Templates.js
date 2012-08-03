@@ -150,6 +150,12 @@ Ext.define('NextThought.view.annotations.note.Templates',{
 
 		if (!more || !more.dom){return false;}
 
+        if (more.down('ol').getStyle('position') === "fixed"){
+            y = more.getY();
+            h = more.getHeight();
+            more.down('ol').setStyle({'top': (y + h) + 'px'});
+        }
+
 		//toggle it on or off:
 		more.toggleCls('active');
 
