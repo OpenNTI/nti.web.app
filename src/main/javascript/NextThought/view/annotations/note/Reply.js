@@ -205,11 +205,6 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 			this.doLayout();
 			this.doComponentLayout();
 			this.scrollIntoView();
-
-			var win = this.up('win');
-			if (win){
-				win.doLayout();
-			}
 		}
 		return false;
 	},
