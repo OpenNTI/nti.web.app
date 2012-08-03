@@ -68,6 +68,7 @@ Ext.define('NextThought.view.annotations.Redaction', {
 			//Add the redaction action span so the user has something to click on
 			if (this.isInlineRedaction()) {
 				this.actionSpan = this.createActionHandle(this.rendered[0]).dom;
+				this.setupInlineSpanEvents();
 			}
 			else {
 				this.actionSpan = this.createBlockActionHandle(this.rendered[0]).dom;
@@ -86,7 +87,7 @@ Ext.define('NextThought.view.annotations.Redaction', {
 
 
 	getAlternateBoundingRect: function(){
-		var b = Ext.fly(this.actionSpan).getBox()
+		var b = Ext.fly(this.actionSpan).getBox();
 		b.top = b.y;
 		b.bottom = b.y + b.height;
 		return b;
@@ -136,8 +137,6 @@ Ext.define('NextThought.view.annotations.Redaction', {
 		this.editableSpan.addCls('redactionReplacementText');
 		masterSpan.insertBefore(before);
 
-		this.setupInlineSpanEvents(masterSpan);
-
 		this.mon(this.editableSpan, {
 			scope: this,
 			blur: this.editableSpanBlur
@@ -146,14 +145,15 @@ Ext.define('NextThought.view.annotations.Redaction', {
 		return masterSpan;
 	},
 
-	setupInlineSpanEvents: function(masterSpan) {
+	setupInlineSpanEvents: function() {
 		var me = this;
+
 		//set up any events:
-		me.attachEvent('click', masterSpan.dom,
+		me.attachEvent('click', this.actionSpan,
 			function(e){
 				if (me.clickTimer){clearTimeout(me.clickTimer);}
-				console.log(masterSpan.dom.ownerDocument.activeElement, masterSpan.dom);
-				if (masterSpan.dom.ownerDocument.activeElement !== masterSpan.dom.querySelector('.redactionReplacementText')) {
+				console.log(this.actionSpan.ownerDocument.activeElement, this.actionSpan);
+				if (this.actionSpan.ownerDocument.activeElement !== this.actionSpan.querySelector('.redactionReplacementText')) {
 					console.log('400ms to go!');
 					me.clickTimer = setTimeout(function(){
 						me.onClick(e);
@@ -162,8 +162,8 @@ Ext.define('NextThought.view.annotations.Redaction', {
 			},
 			me);
 
-		this.attachEvent('dblclick', masterSpan.dom, this.makeEditableSpanEditable, this);
-		me.mon(masterSpan, {
+		this.attachEvent('dblclick', this.actionSpan, this.makeEditableSpanEditable, this);
+		me.mon(Ext.get(this.actionSpan), {
 			scope: this,
 			mouseup: function(e){
 				e.stopEvent();
