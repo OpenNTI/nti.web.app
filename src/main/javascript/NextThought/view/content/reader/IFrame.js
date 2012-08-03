@@ -124,8 +124,8 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 
 		doc.parentWindow.onerror = function(){console.log('iframe error: ',JSON.stringify(arguments));};
 
-		doc.getElementsByTagName('html')[0].setAttribute('class','x-panel-reset');
-		doc.getElementsByTagName('body')[0].setAttribute('class','x-panel-body');
+		//Move classes down from main body to sub-iframe body for content rendering reference:
+		Ext.fly(doc.getElementsByTagName('body')[0]).addCls(this.getTopBodyStyles());
 
 		meta = doc.createElement('meta');
 		//<meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -215,6 +215,20 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 			me.getIframe().setStyle({pointerEvents: ''});
 		},1000);
 		me.getIframe().setStyle({pointerEvents: 'none'});
+	},
+
+
+	getTopBodyStyles: function(){
+		var mainBodyStyleString = Ext.getBody().getAttribute('class'),
+			mainBodyStyleList = mainBodyStyleString.split(' '),
+			styleBlacklist = [
+				'x-container',
+				'x-reset',
+				'x-unselectable',
+				'x-border-layout-ct'
+			];
+
+		return Ext.Array.difference(mainBodyStyleList, styleBlacklist);
 	},
 
 
