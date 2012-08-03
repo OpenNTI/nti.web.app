@@ -19,10 +19,6 @@ Ext.define('NextThought.view.menus.Navigation',{
 	hideMode: 'display',
 	width: 290,
 
-	items: [
-		' '
-	],
-
 	initComponent: function(){
 		this.callParent(arguments);
 		this.setHeight(Ext.Element.getViewportHeight());
@@ -42,6 +38,6 @@ Ext.define('NextThought.view.menus.Navigation',{
 	},
 
 	//override this so as not to mess up scrolling that menus do by default.
-	setActiveItem: Ext.EmptyFn
+	setActiveItem: Ext.emptyFn
 
 });

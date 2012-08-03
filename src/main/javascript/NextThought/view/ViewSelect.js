@@ -47,7 +47,19 @@ Ext.define('NextThought.view.ViewSelect', {
 		{
 			iconCls: 'search',
 			title: 'Search',
-			tooltip: 'Search'
+			tooltip: 'Search',
+			menu: {
+				xtype: 'navigation-menu',
+				layout: {type: 'vbox', align: 'stretch'},
+				overflowX: 'hidden',
+				overflowY: 'hidden',
+				items:[
+					{ xtype: 'searchfield' },
+					{ xtype: 'container',
+						id: 'search-results',
+						hideMode: 'display' }
+				]
+			}
 		}
 	]
 });

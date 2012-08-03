@@ -4,6 +4,20 @@
 	height: 78px;
 }
 
+.browser-warning {
+    .x-panel-body{
+        height: auto;
+		padding: 0.5em 0.5em 0.5em 3em;
+		background: {
+			image: url(../images/warning.png);
+			position: 10px 0;
+			repeat: no-repeat;
+			/*color: #E64700;*/
+			color: #F9DD0A;
+		}
+		font-size: 2em;
+	}
+}
 
 .main-navigation {
 	background: #efefef;
