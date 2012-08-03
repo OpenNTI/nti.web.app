@@ -5,14 +5,16 @@ Ext.define('NextThought.view.form.fields.SearchField', {
 		'NextThought.view.form.fields.SearchAdvancedOptions'
 	],
 
-	renderTpl: [
-		'<div class="search-field-wrap">',
-			'<div class="search-field">',
-				'<input type="text" placeholder="Search">',
-				'<a href="#" class="trigger"></a>',
-			'</div>',
-		'</div>'
-	],
+	renderTpl: Ext.DomHelper.markup({
+		cls:'search-field-wrap',
+		cn: [{
+			cls:'search-field',
+			cn: [
+				{tag:'input', type:'text', placeholder:'Search'},
+				{tag:'a', href:'#', cls:'trigger'}
+			]
+		}]
+	}),
 
 	renderSelectors: {
 		boxEl: 'div.search-field',

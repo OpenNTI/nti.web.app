@@ -56,8 +56,12 @@ Ext.define('NextThought.view.ViewSelect', {
 				items:[
 					{ xtype: 'searchfield' },
 					{ xtype: 'container',
+						overflowX: 'hidden',
+						overflowY: 'scroll',
+						reserveScrollbar: true,
 						id: 'search-results',
-						hideMode: 'display' }
+						hideMode: 'display',
+						flex: 1 }
 				]
 			}
 		}
