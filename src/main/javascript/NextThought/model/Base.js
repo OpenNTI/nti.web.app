@@ -67,6 +67,8 @@ Ext.define('NextThought.model.Base', {
 		delete this.parent;
 		delete this.children;
 
+		Ext.each(cn,function(c){c.parent=p;});
+
 		if(p && p.children){
 			i = Ext.Array.indexOf(p.children,this);
 			if(i!==-1){
