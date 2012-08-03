@@ -48,7 +48,7 @@ Ext.define('NextThought.view.menus.navigation.Collection',{
 		var last = LocationProvider.getLineage(ntiid).last();
 		var r = this.store.findRecord('NTIID',last);
 		if(r){
-			this.getSelectionModel().select(r);
+			this.getSelectionModel().select(r,false, true);
 		}
 	},
 

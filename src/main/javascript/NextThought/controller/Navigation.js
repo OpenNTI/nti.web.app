@@ -16,8 +16,10 @@ Ext.define('NextThought.controller.Navigation', {
 
 	init: function() {
 		this.control({
-			'nav-flyout': {
-				'navigation-selected': function(ntiid){
+			'navigation-collection': {
+				'select': function(sm,rec){
+					var ntiid = rec.get('NTIID');
+					//TODO: lookup last location under this tree
 					LocationProvider.setLocation(ntiid);
 				}
 			},
