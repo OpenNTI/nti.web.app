@@ -141,7 +141,6 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 //			console.error('could not resolve a line for '+prefix+' @'+line+', original line was ' + originalLine);
 //			return;
 //		}
-
 		if (line < 0){
 			//bad line, don't render:
 			console.error('Annotation cannot be rendered in gutter');
@@ -149,7 +148,7 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 		}
 
 		var c = this.buckets[prefix],
-			lineTolerance = 32,
+			lineTolerance = 30,
 //			l = line.rect.top,//normalize lines
 			b = c? c.get(line) : null;
 
