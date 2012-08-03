@@ -259,7 +259,7 @@ Ext.define('NextThought.util.Anchors', {
 		if(!startResult.node
 			|| !startResult.hasOwnProperty('confidence')
 			|| startResult.confidence !== 1){
-			console.error('startResult has low confidance', startResult.confidence, startResult, ancestor, 'ancestor kids', ancestor.childNodes.length, ancestor.textContent);
+			console.error('startResult has low confidance', startResult.confidence, startResult, ancestor, rangeDesc);
 		}
 
 		var endResult = rangeDesc.getEnd().locateRangePointInAncestor(ancestor, startResult);
@@ -271,7 +271,7 @@ Ext.define('NextThought.util.Anchors', {
 		if(!endResult.node
 			|| !endResult.hasOwnProperty('confidence')
 			|| endResult.confidence !== 1){
-			console.error('endResult has low confidance', endResult.confidence, endResult, ancestor, 'ancestor kids', ancestor.childNodes.length, ancestor.textContent);
+			console.error('endResult has low confidance', endResult.confidence, endResult, ancestor, rangeDesc);
 		}
 
 		var startResultLocator = Anchors.toReferenceNodeXpathAndOffset(startResult);
