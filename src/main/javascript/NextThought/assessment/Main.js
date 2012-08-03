@@ -271,6 +271,9 @@ Ext.define('NextThought.assessment.Main', {
 						else if (question.data.parts[j].data.Class == 'FreeResponsePart') { 
 							func = isSymMath ? me.addSymmathBox : me.addFreeResponseBox;
 						}
+						else if (question.data.parts[j].data.Class == 'SymbolicMathPart') {
+							func = me.addSymmathBox;
+						}
 						else if (question.data.parts[j].data.Class == 'MultipleChoicePart') {
 							func = this.addMultipleChoice;
 						}
