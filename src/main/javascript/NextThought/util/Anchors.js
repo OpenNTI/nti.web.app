@@ -1134,6 +1134,7 @@ Ext.define('NextThought.util.Anchors', {
 	},
 
 	//TODO -testing
+	//TODO - this can probably somehow be replaced with a purifiedNode call, rather than the logic that skips text nodes and subtracts offsets etc.
 	childrenIfSyntheticsRemoved: function(node){
 		var sanitizedChildren = [];
 
