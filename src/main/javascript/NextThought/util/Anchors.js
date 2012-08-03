@@ -285,8 +285,8 @@ Ext.define('NextThought.util.Anchors', {
 	//TODO - testing
 	convertContentRangeToDomRange: function(startResult, endResult, docElement) {
 
-		var liveStartResult = Anchors.convertStaticResultToLiveDomContainerAndOffset(startResult, false, docElement);
-		var liveEndResult = Anchors.convertStaticResultToLiveDomContainerAndOffset(endResult, true, docElement);
+		var liveStartResult = Anchors.convertStaticResultToLiveDomContainerAndOffset(startResult, docElement);
+		var liveEndResult = Anchors.convertStaticResultToLiveDomContainerAndOffset(endResult, docElement);
 //		console.log('liveStartResult', liveStartResult, 'liveEndResult', liveEndResult);
 		if(!liveStartResult || !liveEndResult){
 			return null;
@@ -1006,7 +1006,7 @@ Ext.define('NextThought.util.Anchors', {
 	},
 
 
-	convertStaticResultToLiveDomContainerAndOffset: function( staticResult, isEnd, docElement ) {
+	convertStaticResultToLiveDomContainerAndOffset: function( staticResult, docElement ) {
 		if(!staticResult){return null;}
 
 		var result,
@@ -1042,29 +1042,29 @@ Ext.define('NextThought.util.Anchors', {
 				return null;
 			}
 
-			result = Anchors.ithChildAccountingForSyntheticNodes(container, part, null, isEnd);
+			result = Anchors.ithChildAccountingForSyntheticNodes(container, part, null);
 			container = result.container;
 		}
 
 		lastPart = parseInt(parts.pop(), 10);
-		result = Anchors.ithChildAccountingForSyntheticNodes(container, lastPart, staticResult.offset, isEnd);
+		result = Anchors.ithChildAccountingForSyntheticNodes(container, lastPart, staticResult.offset);
 
 		return result;
 	},
 
 
 	//TODO - testing
-	ithChildAccountingForSyntheticNodes: function( node, idx, offset, isEnd ){
+	ithChildAccountingForSyntheticNodes: function( node, idx, offset){
 		if(idx < 0 || !node.firstChild){
 			return null;
 		}
 
-		var childrenWithSyntheticsRemoved = Anchors.childrenIfSyntheticsRemoved( node),
+		var childrenWithSyntheticsRemoved = Anchors.childrenIfSyntheticsRemoved(node),
 			i = 0,
 			child,
 			adjustedIdx = 0,
 			result,
-			testNode,
+			textNode,
 			limit;
 
 		//Short circuit the error condition
@@ -1103,7 +1103,7 @@ Ext.define('NextThought.util.Anchors', {
 		if(offset !== null){
 			//If the container isn't a text node, the offset is the ith child
 			if(child.nodeType !== Node.TEXT_NODE){
-				result = {container: Anchors.ithChildAccountingForSyntheticNodes( child, offset, null, isEnd)};
+				result = {container: Anchors.ithChildAccountingForSyntheticNodes( child, offset, null)};
 				console.log('Returning result from child is not textnode branch', result);
 				return result;
 			}
@@ -1116,15 +1116,12 @@ Ext.define('NextThought.util.Anchors', {
 
 					//Note <= range can be at the very end (equal to length)
 					limit = textNode.textContent.length;
-					if(isEnd){
-						limit++;
-					}
-					if(offset < limit){
+					if(offset <= limit){
 						result = {container: textNode, offset: offset};
 						return result;
 					}
 
-					offset = offset - textNode.textContent.length;
+					offset = offset - limit;
 					i++;
 				}
 
