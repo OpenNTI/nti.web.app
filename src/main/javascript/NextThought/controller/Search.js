@@ -72,10 +72,29 @@ Ext.define('NextThought.controller.Search', {
 			result = result.items;
 
 			Ext.each(group.children, function(hit){
-				loc = LocationProvider.getLocation(hit.get('ContainerId'));
+				var id = hit.get('ContainerId');
+				var lin = LocationProvider.getLineage(id);
+				var chap = [];
+
+
+
+				lin.pop(); //remove root, we will already have it after resolving "id"
+				lin.shift();//remove the first item as its identical as id.
+
+				Ext.each(lin,function(c){
+					var i = LocationProvider.getLocation(c);
+					if(!i){
+						console.warn(c+" could not be resolved");
+						return;
+					}
+					chap.unshift(i.label);//the lineage is ordered leaf->root...this list needs to be in reverse order.
+				});
+
+				loc = LocationProvider.getLocation(id);
 				result.push( {
-					xtype: 'search-result',
+					name: hit.get('Creator'),
 					title: loc ? loc.title.get('title') : 'Untitled',
+					chapter: chap.join(' / '),
 					section: loc ? loc.label : 'Unlabeled',
 					snippet: hit.get('Snippet'),
 					term: searchVal,

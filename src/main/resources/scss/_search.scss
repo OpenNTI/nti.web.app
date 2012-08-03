@@ -7,9 +7,6 @@
 	border-left-width: 0 !important;
 	padding: 0;
 
-	box-shadow: inset 1px 0 0 0 #ffffff,
-				inset 0 -1px 0 0 #d2d2d2;
-
 	.search-field {
 		position: absolute;
 		top: 13px;
@@ -65,9 +62,9 @@
 	.body {
 		.search-result {
 			white-space: normal;
-			margin: 0 0 20px 90px;
+			margin: 0 0 20px 70px;
 			.title, .section {
-				display: inline;
+				white-space: nowrap;
 				text-overflow: ellipsis;
 				overflow: hidden;
 				color: #b8b8b8;
@@ -76,8 +73,24 @@
 				font-weight: 700;
 			}
 
-			.title::after {
-				content: ' / ';
+			.chapter {
+				display: inline;
+			}
+
+			.section {
+				text-transform: none;
+				font-style: italic;
+				font-size: 14px;
+				font-weight: 600;
+				padding-left: 2px;
+			}
+
+			.wrap {
+				margin-top: 1em;
+			}
+
+			.name {
+				@include menu-label-text-treatment;
 			}
 
 			.snippet {
@@ -85,7 +98,7 @@
 				margin-top: 2px;
 				color: #494949;
 				font-style: italic;
-				font-size: 11pt;
+				font-size: 15px;
 				span, .term {
 					background: #fcff13;
 					display: inline-block;
@@ -105,13 +118,14 @@
 	.label {
 		text-align: right;
 		float: left;
-		width: 80px;
+		width: 60px;
 		color: #767676;
 		font-size: 7.5pt;
 		text-transform: uppercase;
 		font-weight: 700;
 		white-space: nowrap;
 		overflow: hidden;
+		text-overflow: ellipsis;
 	}
 }
 

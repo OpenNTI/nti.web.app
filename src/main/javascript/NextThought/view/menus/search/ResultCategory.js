@@ -16,6 +16,8 @@ Ext.define('NextThought.view.menus.search.ResultCategory',{
 
 	getTargetEl: function () { return this.body; },
 
+	defaultType: 'search-result',
+
 	MAX_RESULTS_AT_FIRST: 2,
 	childEls: ['body'],
 

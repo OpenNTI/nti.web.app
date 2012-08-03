@@ -209,5 +209,8 @@ Ext.define('NextThought.cache.UserRepository', {
 },
 function(){
 	window.UserRepository = this;
-	this.prefetchUser = Ext.Function.alias(this, 'getUser');
+	this.prefetchUser = function(){
+		console.error('Deprecated function: UserRepository.prefetchUser()');
+		this.getUser.apply(this,arguments);
+	}
 });

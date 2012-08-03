@@ -4,14 +4,44 @@ Ext.define('NextThought.view.menus.search.Result',{
 	cls: 'search-result',
 
 	renderTpl: Ext.DomHelper.markup([
-		{cls:'title',html:'{title}'},
-		{tag:'tpl', 'if':'section',cn:[{cls:'section', html:'{section}'}]},
-		{cls:'snippet',html:'{snippet}'}
+		{cls:'title',html:'{title}',cn:[
+			{tag:'tpl', 'if':'chapter',cn:[' / ',{cls:'chapter', html:'{chapter}'}]},
+			{tag:'tpl', 'if':'section',cn:[{cls:'section', html:'{section}'}]}
+		]},
+		{
+			cls:'wrap',
+			cn:[
+				{tag:'tpl', 'if':'name',cn:[{cls:'name',html:'{name}'}]},
+				{cls:'snippet',html:'{snippet}'}
+			]
+		}
 	]),
 
+	renderSelectors: {
+		name: '.name'
+	},
+
 	initComponent: function(){
-		this.callParent(arguments);
-		this.renderData = Ext.copyTo({},this,'title,section,snippet');
+		var me = this;
+		me.callParent(arguments);
+		me.renderData = Ext.copyTo({},me,'title,chapter,name,section,snippet');
+
+		if(isMe(this.name)){
+			me.renderData.name = 'me';
+			return;
+		}
+
+		if(me.name){
+			UserRepository.getUser(me.name,function(users){
+				var n = users[0]? users[0].getName() : '';
+				if(me.rendered && me.name){
+					me.name.update(n);
+					return;
+				}
+
+				me.renderData.name = n;
+			});
+		}
 	},
 
 	beforeRender: function() {
