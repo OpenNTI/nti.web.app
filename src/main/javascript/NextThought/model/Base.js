@@ -63,7 +63,21 @@ Ext.define('NextThought.model.Base', {
 
 
 	destroy: function(){
+		var p = this.parent, cn = (this.children||[]).slice(), i;
+		delete this.parent;
+		delete this.children;
+
+		if(p && p.children){
+			i = Ext.Array.indexOf(p.children,this);
+			if(i!==-1){
+				cn.unshift(i,1);
+				cn.splice.apply(p.children,cn);
+			}
+		}
+
 		this.fireEvent('destroy', this);
+
+
 		return this.callParent(arguments);
 	},
 
