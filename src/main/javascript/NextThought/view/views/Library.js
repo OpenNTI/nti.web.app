@@ -19,9 +19,9 @@ Ext.define( 'NextThought.view.views.Library', {
 			xtype: 'content-tabs',
 			items: [
 				{ title: 'Book Content', xtype: 'reader-panel', id: 'readerPanel' },
-				{ title: 'Discussion' },
-				{ title: 'Common Themes' },
-				{ title: 'Key Words' }
+				{ title: 'Discussion', disabled: true},
+				{ title: 'Common Themes', disabled: true },
+				{ title: 'Key Words', disabled: true }
 			]
 		}
 	],
