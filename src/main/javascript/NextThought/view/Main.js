@@ -1,12 +1,9 @@
-
-Ext.Loader.setPath('Ext.env', document.getElementById('ext-js-library').src.replace(/\/ext[^\/]*\.js$/,'/')+'/src/core/src/env');
-
 Ext.define('NextThought.view.Main', {
 	extend: 'Ext.container.Viewport',
 	alias: 'widget.master-view',
 
 	requires: [
-		'Ext.env.FeatureDetector',
+//		'Ext.env.FeatureDetector',
 		'Ext.layout.container.HBox',
 		'Ext.layout.container.VBox',
 		'NextThought.view.Navigation',
@@ -34,13 +31,12 @@ Ext.define('NextThought.view.Main', {
 	}
 
 }, function(){
-	//'CSSTransitions','CSSAnimations',
-	var features = ['Canvas','CSSTransforms','SVG','Video'],f,
+	var features = ['Canvas','CSS3DTransform','Range','CSS3BoxShadow','CSS3BorderRadius','Placeholder'],f,
 		unsupported = [],
 		proto = this.prototype;
 
 	while(!!(f = features.pop())){
-		if(!Ext.features.has(f)) {
+		if(!Ext.supports[f]) {
 			unsupported.push(f);
 		}
 	}
