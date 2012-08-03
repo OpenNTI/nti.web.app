@@ -22,8 +22,8 @@ Ext.define('NextThought.util.Anchors', {
 
 	/* tested */
 	createRangeDescriptionFromRange: function(range, docElement) {
-		if(!range || range.collapsed){
-			Ext.Error.raise('Cannot create anchorable, range missing or collapsed');
+		if(!range){
+			Ext.Error.raise('Cannot create anchorable, range missing.');
 		}
 
 		Anchors.cleanRangeFromBadStartAndEndContainers(range);
@@ -84,8 +84,8 @@ Ext.define('NextThought.util.Anchors', {
 
 	/* tested */
 	createTextPointerFromRange: function(range, role){
-		if (!range || range.collapsed) {
-			Ext.Error.raise('Cannot proceed without range or with a collapsed range');
+		if (!range) {
+			Ext.Error.raise('Cannot proceed without range');
 		}
 
 		var start = role === 'start',
@@ -1173,13 +1173,13 @@ Ext.define('NextThought.util.Anchors', {
 
 		var startContainer = range.startContainer,
 			endContainer = range.endContainer,
-			txtNodes = AnnotationUtils.getTextNodes(range.commonAncestorContainer),
+			ancestor = Ext.isTextNode(range.commonAncestorContainer) ? range.commonAncestorContainer.parentNode : range.commonAncestorContainer,
+			txtNodes = AnnotationUtils.getTextNodes(ancestor),
 			index = 0, i;
 
 
 		if (isBlankTextNode(startContainer)) {
 			console.log('found a range with a starting node that is nothing but whitespace');
-
 			index = Ext.Array.indexOf(txtNodes, startContainer);
 			for(i = index; i < txtNodes.length; i++){
 				 if (!isBlankTextNode(txtNodes[i])) {
@@ -1191,11 +1191,10 @@ Ext.define('NextThought.util.Anchors', {
 
 		if (isBlankTextNode(endContainer)) {
 			console.log('found a range with a end node that is nothing but whitespace');
-			txtNodes = AnnotationUtils.getTextNodes(ancestor);
 			index = Ext.Array.indexOf(txtNodes, endContainer);
 			for(i = index; i >= 0; i--){
 				 if (!isBlankTextNode(txtNodes[i])) {
-					 range.setEnd(txtNodes[i], txtNodes[i].length);
+					 range.setEnd(txtNodes[i], txtNodes[i].textContent.length);
 					 break;
 				 }
 			}

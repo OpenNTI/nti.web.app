@@ -1010,15 +1010,7 @@ describe("Anchor Utils", function() {
 				expect(false).toBeTruthy();
 			}
 			catch(e) {
-				expect(e.message).toEqual('Cannot proceed without range or with a collapsed range');
-			}
-
-			try {
-				Anchors.createTextPointerFromRange(document.createRange(), 'start');
-				expect(false).toBeTruthy();
-			}
-			catch(e) {
-				expect(e.message).toEqual('Cannot proceed without range or with a collapsed range');
+				expect(e.message).toEqual('Cannot proceed without range');
 			}
 		});
 
