@@ -12,6 +12,10 @@ Ext.define('NextThought.util.Anchors', {
 		if(!contentRangeDescription){console.warn('nothing to parse?');return null;}
 		var ancestorNode = contentRangeDescription.getAncestor().locateRangePointInAncestor(docElement).node || docElement;
 
+		if (!ancestorNode){
+			console.error('Failed to get ancestor node for description', contentRangeDescription);
+		}
+
 		//Clone and purify the ancestor node, so our range can always build against a clean source:
 		//TODO - consider caching these somewhere for performance
 		var clonedAncestor = ancestorNode.cloneNode(true);
@@ -861,6 +865,8 @@ Ext.define('NextThought.util.Anchors', {
 
 
 	purifyNode: function(docFrag) {
+		if (!docFrag){Ext.Error.raise('must pass a node to purify.');}
+
 		var parentContainer,
 			nodeToInsertBefore;
 
