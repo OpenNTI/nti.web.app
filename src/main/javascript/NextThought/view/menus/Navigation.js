@@ -39,6 +39,9 @@ Ext.define('NextThought.view.menus.Navigation',{
 
 	showBy: function(cmp){
 		this.callParent([cmp,this.defaultAlign]);
-	}
+	},
+
+	//override this so as not to mess up scrolling that menus do by default.
+	setActiveItem: Ext.EmptyFn
 
 });
