@@ -283,6 +283,7 @@ Ext.define('NextThought.assessment.Main', {
 							func = this.addMultipleChoice;
 						}
 						func(pdiv,part) 
+						pdiv.setAttribute("attempts","0");
 					}
 					endbreaker = doc.createElement('div');
 					endbreaker.style.margin = '10px';
@@ -296,7 +297,7 @@ Ext.define('NextThought.assessment.Main', {
 						'submitbutton';
 					submit.onclick=function(e){ 
 						window.AssessmentUtils.submitAnswersHandler(e,this.id.replace(':submit',''),me);
-					 };
+					};
 					submit.innerHTML = 'Submit';
 					qdiv.appendChild(submit);
 					qdiv.style.margin = '1em';
@@ -463,12 +464,6 @@ Ext.define('NextThought.assessment.Main', {
 					dict[i] = data[i];
 				}
 				items.push(dict);
-				//Do we even want to reset a matching question after a solution?
-				/*emptyValues = [];
-				for (i = 0; i < data.length; i++) {
-					emptyValues.push(-1);
-				}
-				parts[p].querySelector('.hidden-data-span').innerHTML = '{"selected":-1,"values":'+JSON.stringify(emptyValues)+'}';*/
 			}
 			else if (input.getAttribute("type") == "radio") {
 				inputs = parts[p].querySelectorAll('input');
@@ -577,7 +572,12 @@ Ext.define('NextThought.assessment.Main', {
 				html = prefix + (prefix ? 'c' : 'C') + 'orrect';
 				bgcolor = '#8F8';
 			}
-			styles = {'background-color': bgcolor, 'padding': '8px', 'border-radius': '3px', 'margin-left': '4px'}
+			styles = {
+				'background-color': bgcolor,
+				 'padding': '8px',
+				 'border-radius': '3px',
+				 'margin-left': '4px'
+			}
 			for (var style in styles) {
 			  s.setStyle(style, styles[style]);
 			}
@@ -590,17 +590,29 @@ Ext.define('NextThought.assessment.Main', {
 				var myi = i;
 				var myquestionId = questionId;
 				var mys = s;
+				var amICorrect = pt.assessedValue > 0; //Consider switching to = 1
 				this.call = function(e) {
 					console.log(e);
-					var j = 0;
+					var j = 0, mydata, qpart, attempts, html = '';
 					for (;j < e.data.AssessmentItems.length; j++) {
 						if (e.data.AssessmentItems[j].data.NTIID == myquestionId) break;
 					}
-					explanation = e.data.AssessmentItems[j].data.parts[myi].data.explanation;//.replace(/\$/g,'$$$$')
-					child = mys.parent('.naquestionpart').createChild({tag: 'span', html: explanation, cls: mathCls+'response answer-text explanation '});
-					child.setStyle('display','none');
-					mys.dom.onmouseover = function() { this.parentNode.querySelector('.explanation').style.display = 'block' };
-					mys.dom.onmouseout = function() { this.parentNode.querySelector('.explanation').style.display = 'none' };
+					mydata = e.data.AssessmentItems[j].data.parts[myi].data;
+					qpart = mys.parent('.naquestionpart').dom;
+					attempts = parseInt(qpart.getAttribute('attempts'));
+					if (!amICorrect) {
+						if (attempts < mydata.hints.length) {
+							html = mydata.hints[attempts].data.value;
+						}
+						else html = mydata.explanation;
+					}
+					qpart.setAttribute('attempts',''+(attempts+1));
+					child = mys.parent('.naquestionpart').createChild({
+						tag: 'span',
+						 html: html,
+						 cls: mathCls+'response answer-text explanation '
+					});
+					child.setStyle('display','block');
 				}
 				return this.call;
 			}
