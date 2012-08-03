@@ -24,13 +24,12 @@ Ext.define('NextThought.view.SideBar',{
 
 	initComponent: function(){
 		this.callParent(arguments);
-		this.toggle = this.toggleTpl.append(Ext.getBody(), [], true);
+		this.toggle = this.toggleTpl.append(Ext.getBody(), [], true).hide();
 		this.mon(this.toggle, {
 			scope: this,
 			'click': this.toggleFlyover
 		});
 		Ext.EventManager.onWindowResize(this.viewportMonitor,this);
-		//this.viewportMonitor(Ext.Element.getViewportWidth());
 	},
 
 
@@ -102,9 +101,15 @@ Ext.define('NextThought.view.SideBar',{
 
 
 	onAdded: function(o){
-		console.log('added');
 		this.myOwner = o;
 		o.floatingItems = o.floatingItems || new Ext.util.MixedCollection();
 		return this.callParent(arguments);
+	},
+
+
+	afterRender: function(){
+		this.callParent(arguments);
+		this.viewportMonitor(Ext.Element.getViewportWidth());
 	}
+
 });
