@@ -78,11 +78,11 @@ Ext.define('NextThought.assessment.Main', {
 		}
 	},
 	addMatching: function(div,part) {
-		//TODO: Make this work with actual questions
 		doc = div.ownerDocument;
 		extdiv = Ext.get(div);
 		table = extdiv.createChild({tag: 'table'});
 		var i = 0, values = [], j;
+		//Remove below once we have real matching questions to work with
 		tabletext = div.querySelector('img').alt.replace(/^.*?{tabular}{cc}/,'').replace(/\\end{tabular}.*?$/,'');
 		rows = tabletext.split('\\\\'); //Actually just two slashes
 		cells = [];
@@ -95,6 +95,7 @@ Ext.define('NextThought.assessment.Main', {
 				part.data.values.push(rows[j].split('&')[1]);
 			}
 		}
+		//Don't remove further
 		//Create a table
 		for (; i < part.data.labels.length; i++) {
 			trdom = doc.createElement('tr');
@@ -172,7 +173,9 @@ Ext.define('NextThought.assessment.Main', {
 				k = 0;
 				for (;k < obj.values.length; k++) {
 					if (obj.values[k] >= 0) {
-						drawLine(canvas,table.dom.childNodes[k].firstChild,table.dom.childNodes[obj.values[k]].lastChild);
+						drawLine(canvas,
+								table.dom.childNodes[k].firstChild,
+								table.dom.childNodes[obj.values[k]].lastChild);
 					}
 				}
 			}
@@ -212,7 +215,9 @@ Ext.define('NextThought.assessment.Main', {
 			}
 			//Get all naquestion divs
 			var questions = doc.querySelectorAll('.naquestion');
-			$AppConfig.service.getPageInfo(LocationProvider.currentNTIID, pageInfoSuccess, pageInfoFailure, this);
+			$AppConfig.service.getPageInfo(LocationProvider.currentNTIID, 
+											pageInfoSuccess, 
+											pageInfoFailure, this);
 			//TODO: Figure out how to get pageinfo without the hints, solutions or explanation so the quizzes
 			//can't be hacked by someone putting in JS breakpoints and reading everything we're doing
 			function pageInfoFailure() {
@@ -232,59 +237,60 @@ Ext.define('NextThought.assessment.Main', {
 					var partdivs = qdiv.querySelectorAll('.naquestionpart');
 					for (j = 0; j < question.data.parts.length; j++) {
 						if (partdivs.length <= j) break;
-						//Stopgap measure until we find some way to pass figures or links thereto through
-						//the pageInfo or some other object; TODO: do something better
-						var figure = partdivs[j].querySelector('.figure') || partdivs[j].querySelector('.tabular');
-						//Another stopgap because symmathparts look exactly like free response parts in
-						//the pageInfo; TODO: do something better
-						var isSymMath = partdivs[j].className.indexOf('naqsymmathpart') >= 0;
-						//Third stopgap to test the matching questions
+						var pdiv = partdivs[j],
+							part = question.data.parts[j];
+						//Stopgap measure until we find some way to pass figures or 
+						//links thereto through the pageInfo or some other object; 
+						// TODO: do something better
+						var figure = pdiv.querySelector('.figure') || pdiv.querySelector('.tabular');
+						//Another stopgap to test the matching questions
 						var isMatching = figure && figure.querySelector('img').alt.indexOf('tabular') >= 0 && 
 									LocationProvider.currentNTIID.indexOf('MN') >= 0;
 						//Remove everything, we'll start from scratch
-						while (partdivs[j].firstChild) {
-							partdivs[j].removeChild(partdivs[j].firstChild);
+						while (pdiv.firstChild) {
+							pdiv.removeChild(pdiv.firstChild);
 						}
-						Ext.get(partdivs[j]).createChild({
+						Ext.get(pdiv).createChild({
 							tag: 'a',
-							html: question.data.parts[j].data.content,
+							html: part.data.content,
 							style: 'display:block',
 							cls: 'mathjax tex2jax_process'
 						});
 						//Temporary measure to deal with unwanted outside text in question content
-						if (partdivs[j].parentNode.firstChild.data && 
-								partdivs[j].parentNode.firstChild.data.replace(/\s*$/,'') == 
-										question.data.parts[j].data.content.replace(/\x*$/,'')) {
-							 partdivs[j].parentNode.firstChild.data = '';
+						toptext = pdiv.parentNode.firstChild;
+						if (toptext.data && toptext.data.replace(/\s*$/,'') == 
+											part.data.content.replace(/\x*$/,'')) {
+							 toptext.data = '';
 						}
-						if (figure) { partdivs[j].appendChild(figure) }
+						if (figure) { pdiv.appendChild(figure) }
 						breaker = doc.createElement('div');
 						breaker.style.margin = '10px';
-						partdivs[j].appendChild(breaker);
+						pdiv.appendChild(breaker);
 						//Adding the question bits	
 						var func = function(){
-							console.log('Question type not recognized - see Main.js/setupAssessment');
+							console.log('Question type not recognized');
 						}
 						if (isMatching) {
 							func = this.addMatching;
 						}
-						else if (question.data.parts[j].data.Class == 'FreeResponsePart') { 
-							func = isSymMath ? me.addSymmathBox : me.addFreeResponseBox;
+						else if (part.data.Class == 'FreeResponsePart') { 
+							func = me.addFreeResponseBox;
 						}
-						else if (question.data.parts[j].data.Class == 'SymbolicMathPart') {
+						else if (part.data.Class == 'SymbolicMathPart') {
 							func = me.addSymmathBox;
 						}
-						else if (question.data.parts[j].data.Class == 'MultipleChoicePart') {
+						else if (part.data.Class == 'MultipleChoicePart') {
 							func = this.addMultipleChoice;
 						}
-						func(partdivs[j],question.data.parts[j]) 
+						func(pdiv,part) 
 					}
 					endbreaker = doc.createElement('div');
 					endbreaker.style.margin = '10px';
 					qdiv.appendChild(endbreaker);
 					submit = doc.createElement("a");
 					submit.id=qdiv.parentNode.getAttribute('data-ntiid')+':submit';
-					//TODO: don't hardcode this, and figure out a good way to have different button styles
+					//TODO: don't hardcode this, and figure out a good way to 
+					//have different button styles
 					submit.className = LocationProvider.currentNTIID.indexOf('mathcounts.2012') >= 0 ? 
 						'x-btn x-btn-submit x-btn-primary-medium x-btn-primary-medium-noicon x-btn-noicon submitbutton' : 
 						'submitbutton';
@@ -301,7 +307,7 @@ Ext.define('NextThought.assessment.Main', {
 				//appears that the MathQuill code is triggered by the textbox
 				//changing its value and standard text input sometimes fails 
 				//to trigger this for some reason.
-				document.getElementsByTagName('iframe')[0].contentWindow.document.onkeydown = function(e) {
+				doc.onkeydown = function(e) {
 					 e.target.value += '0';
 					 e.target.value = e.target.value.substring(0,e.target.value.length - 1);
 				}
@@ -616,44 +622,7 @@ Ext.define('NextThought.assessment.Main', {
 	},
 
 	resetAssessment: function(doc) {
-		var w = doc.parentWindow;
-		/*var qparts = doc.querySelectorAll('.naquestionpart'); //TODO: Make this function relevant again
-		for (var i = 0; i < qparts.length; i++) {
-			var qresult = qparts.querySelector('.result');
-		}*/
-		doc.getElementById('submit').addClass('submitbutton');
-		var sb = doc.querySelectorAll('.submitbutton'), 
-			i;
-		for (i = 0; i < sb.length; i++) {
-			Ext.get(sb[i]).update('Submit');
-			console.log('Gotten ',i);
-		}
-
-		this.getProblemElementMap(doc,
-			function(id,v,c){
-				v.dom.value='';
-				w.$('span.quiz-input').replaceWith('<span class="quiz-input"></span>');
-				w.$('span.quiz-input').mathquill('editable');
-
-				this.attachMathSymbolToMathquillObjects(w.$('span.quiz-input'));
-
-				var r = c.parent().next('.result'),
-					resp, ans;
-
-				r.addCls('hidden');
-				r.removeCls(['correct','incorrect']);
-
-				resp = r.down('span.result');
-				ans = r.down('a.why');
-
-				if (resp){resp.remove();}
-				if (ans){ans.remove();}
-
-				v.show();
-			},
-			this);
-
-		this.scrollUp();
+		//TODO: Make this function relevant again
 	},
 
 
