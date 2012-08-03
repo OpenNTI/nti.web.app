@@ -765,6 +765,7 @@
 			font-size: 12px;
 		}
 
+
 		.search-term {
 			background: #fcff13 !important;
 		}
@@ -869,6 +870,15 @@
 			margin-left: 45px;
             font-size: 14px;
             line-height: default;
+        }
+
+        &.deleted-reply {
+            padding-bottom: 11px;
+            .meta {
+                .time {
+                    font-style: italic;
+                }
+            }
         }
     }
 

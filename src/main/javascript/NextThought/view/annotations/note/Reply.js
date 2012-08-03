@@ -46,8 +46,9 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 		me.setRecord(me.record);
 
 		if (this.record.placeHolder) {
-			this.replyBox.remove();
-			delete this.replyBox;
+            this.replyBox.toggleCls("deleted-reply");
+            this.time.update("THIS MESSAGE HAS BEEN DELETED");
+            this.responseBox.remove();
 			return;
 		}
 
@@ -245,14 +246,18 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 	onDelete: function(){
 		var r = this.record;
 		if (r.children && r.children.length > 0){
-			this.replyBox.remove();
 			r.placeHolder = true;
+            this.time.update("THIS MESSAGE HAS BEEN DELETED");
+            this.text.remove();
+            this.responseBox.remove();
+            this.avatar.remove();
+            this.replyBox.toggleCls("deleted-reply");
 		}
 		else {
 			this.destroy();
 		}
 
-		r.destroy();
+        r.destroy();
 	},
 
 	startChat: function() {
