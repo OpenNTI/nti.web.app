@@ -277,6 +277,7 @@ Ext.define('NextThought.view.annotations.Redaction', {
 		if (this.canvas){Ext.fly(this.canvas).toggle();}
 		if (this.controlDiv){this.controlDiv.toggleCls(this.cls);}
 
+		this.requestRender();
 		//if action span is toggled back on and it's inline, make sure it has events:
 		/*
 		var actionSpan = Ext.fly(this.actionSpan);
