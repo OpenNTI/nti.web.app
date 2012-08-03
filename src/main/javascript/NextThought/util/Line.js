@@ -141,7 +141,7 @@ Ext.define('NextThought.util.Line',{
 		//it is not anchorable if it is a node with the name:
 		if(Ext.Array.contains(nonAnchorableNodeNames, node.tagName)){result = false;}
 
-		console.log('node', node, 'anchorable?', result);
+		//console.log('node', node, 'anchorable?', result);
 
 		return result;
 	}
