@@ -308,6 +308,9 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		if(o.suspendMoveEvents){
 			return;
 		}
+		if (o && o.lastLine && o.lastLine.range && o.lastLine.range.collapsed) {
+			return;
+		}
 
 		o.suspendMoveEvents = true;
 		o.lineEntry.addCls('active');
