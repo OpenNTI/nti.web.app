@@ -71,6 +71,17 @@ Ext.define('NextThought.controller.Annotations', {
 				'chat': this.replyAsChat
 			},
 
+			'note-window note-responses': {
+				'add': function(o){
+					o.up('note-window').syncSize();
+				}
+			},
+			'note-window note-responses note-reply': {
+				'add': function(o){
+					o.up('note-window').syncSize();
+				}
+			},
+
 			'note-entry':{
 				'action': this.onNoteAction,
 				'load-transcript': this.onLoadTranscript,

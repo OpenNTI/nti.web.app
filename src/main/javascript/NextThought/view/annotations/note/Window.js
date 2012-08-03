@@ -27,6 +27,7 @@ Ext.define('NextThought.view.annotations.note.Window',{
 		{xtype: 'note-filter-bar' },
 		{xtype: 'note-carousel' },
 		{
+			noteWindowBody: true,
 			xtype: 'container',
 			cls: 'note-content-container',
 			autoScroll: true,
@@ -48,13 +49,33 @@ Ext.define('NextThought.view.annotations.note.Window',{
 		this.callParent(arguments);
 		this.down('note-main-view').prefix = a.prefix;
 		this.down('note-carousel').setRecord(a.getRecord());
+
+		this.syncSize = Ext.Function.createBuffered(this.syncSize,10,this,null);
+	},
+
+
+	syncSize: function(){
+		this.callParent(arguments);
+
+		var f = this.query('nti-window-header,note-filter-bar,note-carousel,note-main-view,note-responses');
+		if(!f || !f[0].rendered){return;}
+
+		var h = 2;
+		Ext.each(f,function(o){h+= o.getHeight(); });
+
+		if(this.getHeight() > h){
+			this.setHeight(h);
+			this.center();
+		}
 	},
 
 	afterRender: function(){
-		this.callParent(arguments);
-		if(this.isReply) {
-			this.down('note-main-view').activateReplyEditor();
+		var me = this;
+		me.callParent(arguments);
+		if(me.isReply) {
+			me.down('note-main-view').activateReplyEditor();
 		}
+		setTimeout(function(){me.syncSize();},1);
 	},
 
 

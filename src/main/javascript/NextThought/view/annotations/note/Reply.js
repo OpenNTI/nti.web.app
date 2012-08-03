@@ -31,6 +31,7 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 		more: '.respond .reply-options .more'
 	},
 
+
 	afterRender: function(){
 		var me = this;
 		me.callParent(arguments);

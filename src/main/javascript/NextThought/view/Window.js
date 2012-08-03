@@ -155,7 +155,6 @@ Ext.define('NextThought.view.Window',{
 		size.width	= Math.floor( w || size.width );//NaN is falsy
 		size.height	= Math.floor( h || size.height );
 
-		console.log('syncing size');
 		this.setSize(size,undefined);
 		this.center();
 	},
