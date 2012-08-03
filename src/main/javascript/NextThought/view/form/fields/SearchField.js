@@ -24,9 +24,13 @@ Ext.define('NextThought.view.form.fields.SearchField', {
 
 	afterRender: function(){
 		this.callParent(arguments);
+
+		var parentMenu = this.up('menu');
+		console.log(parentMenu);
+
 		this.triggerEl.on('click',this.triggerMenu,this);
 		this.triggerEl.addCls(Ext.baseCSSPrefix + 'menu');//make clicks on this not hide the menu
-		this.menu = Ext.widget({xtype: 'search-advanced-menu', width: this.boxEl.getWidth()});
+		this.menu = Ext.widget({xtype: 'search-advanced-menu', width: this.boxEl.getWidth(), parentMenu: parentMenu});
 		this.mon(this.inputEl,{
 			scope: this,
 			keypress: this.keyPressed,
