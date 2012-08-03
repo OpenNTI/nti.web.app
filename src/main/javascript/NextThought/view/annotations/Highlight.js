@@ -243,6 +243,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
 			}
 
 			if (last) {	
+				w -= 4;
 				ctx.beginPath();
 				ctx.moveTo(x+w,y);
 				ctx.lineTo(x+w,y+h);
