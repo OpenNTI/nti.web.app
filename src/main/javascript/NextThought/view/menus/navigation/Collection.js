@@ -3,6 +3,7 @@ Ext.define('NextThought.view.menus.navigation.Collection',{
 	alias: 'widget.navigation-collection',
 
 	requires: [
+		'NextThought.providers.Location',
 		'NextThought.Library'
 	],
 
@@ -38,7 +39,25 @@ Ext.define('NextThought.view.menus.navigation.Collection',{
 	initComponent: function(){
 		this.store = Library.getStore();
 		this.callParent(arguments);
+
+		this.mon(LocationProvider,'navigate',this.updateSelection,this);
 	},
+
+
+	updateSelection: function(ntiid){
+		var last = LocationProvider.getLineage(ntiid).last();
+		var r = this.store.findRecord('NTIID',last);
+		if(r){
+			this.getSelectionModel().select(r);
+		}
+	},
+
+
+	afterRender: function(){
+		this.callParent(arguments);
+		this.updateSelection();
+	},
+
 
 	collectData: function(){
 		var data = {items: this.callParent(arguments)};
