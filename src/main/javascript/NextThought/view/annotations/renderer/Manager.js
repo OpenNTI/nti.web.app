@@ -181,7 +181,7 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 		var wT = this.widgetLineTmpl;
 		var cls = '';
 
-		var width = o.gutter + o.contentLeftPadding;
+		var width = o.gutter + 80;
 
 		if(width <= 355){
 			cls = 'narrow-gutter';
