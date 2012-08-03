@@ -170,6 +170,7 @@ Ext.define( 'NextThought.view.annotations.Base', {
 			c.removeAnnotation(id);
 		}
 
+		this.clearManagedListeners();
 		this.requestRender();
 	},
 	

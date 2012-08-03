@@ -137,6 +137,16 @@ Ext.define( 'NextThought.view.annotations.Note', {
 		//now create the ext object:
 		el = this.multiGutterWidget = this.attachListeners( Ext.get(dom) );
 
+
+		el.hover(function(){
+			var b = el.down('.bubble');
+			var left = b.dom.getBoundingClientRect().left;
+			if(left < 75) {
+				left = 75 - el.getX();
+				b.setStyle({left:left+'px'});
+			}
+		}, function(){ el.down('.bubble').setStyle({left:null});});
+
 		UserRepository.getUser(creator, function(u){
 			var url = u[0].get('avatarURL'),
 				name = u[0].getName();
