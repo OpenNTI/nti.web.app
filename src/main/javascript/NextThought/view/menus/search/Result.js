@@ -2,11 +2,12 @@ Ext.define('NextThought.view.menus.search.Result',{
 	extend: 'Ext.Component',
 	alias: 'widget.search-result',
 	cls: 'search-result',
-	renderTpl: [
-		'<div class="title">{title}</div>',
-		'<tpl if="section"><div class="section">{section}</div></tpl>',
-		'<div class="snippet">{snippet}</div>'
-	],
+
+	renderTpl: Ext.DomHelper.markup([
+		{cls:'title',html:'{title}'},
+		{tag:'tpl', 'if':'section',cn:[{cls:'section', html:'{section}'}]},
+		{cls:'snippet',html:'{snippet}'}
+	]),
 
 	initComponent: function(){
 		this.callParent(arguments);

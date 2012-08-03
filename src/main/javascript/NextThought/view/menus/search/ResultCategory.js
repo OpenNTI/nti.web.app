@@ -2,19 +2,22 @@ Ext.define('NextThought.view.menus.search.ResultCategory',{
 	extend: 'Ext.container.Container',
 	alias: 'widget.search-result-category',
 	requires: [
-		'NextThought.view.menus.search.Result'
+		'NextThought.view.menus.search.Result',
+		'NextThought.layout.component.TemplatedContainer'
 	],
 	cls: 'search-result-category',
-	renderTpl: [
-			'<div class="label">{category}</div>',
-			'<div class="body">{%this.renderContainer(out,values);%}</div>'
-	],
+
+	layout: 'auto',
+	componentLayout: 'templated-container',
+	renderTpl: Ext.DomHelper.markup([
+		{cls:'label', html:'{category}'},
+		{cls:'body', id:'{id}-body', cn:['{%this.renderContainer(out,values);%}']}
+	]),
+
+	getTargetEl: function () { return this.body; },
 
 	MAX_RESULTS_AT_FIRST: 2,
-
-	renderSelectors: {
-		frameBody: 'div.body'
-	},
+	childEls: ['body'],
 
 	initComponent: function(){
 		this.fullResults = this.items.slice();
