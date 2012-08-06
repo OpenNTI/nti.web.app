@@ -39,9 +39,10 @@ Ext.define('NextThought.view.form.fields.SearchField', {
 
 
 	specialKeys: {
-		27: true,	//Ext.EventObject.prototype.ESC
-		8: true,	//Ext.EventObject.prototype.BACKSPACE
-		46: true	//Ext.EventObject.prototype.DELETE
+		8: true,	//Ext.EventObject.BACKSPACE
+		27: true,	//Ext.EventObject.ESC
+		32: true,	//Ext.EventObject.SPACE
+		46: true	//Ext.EventObject.DELETE
 	},
 
 
@@ -58,6 +59,7 @@ Ext.define('NextThought.view.form.fields.SearchField', {
 
 
 	keyPressed: function(event){
+		event.stopPropagation();
 		var k = event.getKey();
 		if (k === event.ENTER || k === event.ESC) {
 			this.fireSearchEvent();
