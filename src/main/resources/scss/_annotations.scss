@@ -229,14 +229,12 @@ div.redaction-control {
 
 			&.shared-with-me {
 				background: none;
-				color: #757474;
-
-				border-bottom: 1px solid #c5e8fc;
+				color: #494949;
+				border-bottom: 1px solid #9fd9fa;
 
 				&.highlight-mouse-over{
-					color: inherit;
-					background: none;
-					border-bottom-color: #9fd9fa;
+					color: #ffffff;
+					background-color: #3fb3f6;
 				}
 
 				.application-highlight.shared-with-me {
