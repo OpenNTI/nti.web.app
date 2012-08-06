@@ -103,7 +103,6 @@ Ext.define('NextThought.controller.Annotations', {
 	},
 
 	define: function(term, boundingScreenBox){
-		var url = $AppConfig.server.host + '/dictionary/' + encodeURIComponent(term);
 
 		if(this.definition){
 			this.definition.close();
@@ -111,7 +110,7 @@ Ext.define('NextThought.controller.Annotations', {
 		}
 		this.definition = Ext.widget({
 			xtype: 'definition-window',
-			src:url,
+			term: term,
 			pointTo: boundingScreenBox
 		}).show();
 
