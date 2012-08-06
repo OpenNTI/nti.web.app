@@ -31,7 +31,8 @@ Ext.define('NextThought.view.Main', {
 	}
 
 }, function(){
-	var features = ['Canvas','CSS3DTransform','Range','CSS3BoxShadow','CSS3BorderRadius','Placeholder'],f,
+	//firefox doesn't report supporting: CSS3DTransform, so we'll omit it.
+	var features = ['Canvas','Range','CSS3BoxShadow','CSS3BorderRadius','Placeholder'],f,
 		unsupported = [],
 		proto = this.prototype;
 
