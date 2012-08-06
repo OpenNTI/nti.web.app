@@ -46,7 +46,11 @@ if(window['MathJax']){
                 bm: ['\\boldsymbol{#1}', 1],
                 textsuperscript: ['^{\\text{#1}}', 1]
             }
-        }
+        },
+		tex2jax: {
+			inlineMath: [['$','$'], ['\\(','\\)']],
+			processEscapes: true
+		}
     });
 
     MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {

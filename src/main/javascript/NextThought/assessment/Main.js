@@ -252,16 +252,16 @@ Ext.define('NextThought.assessment.Main', {
 						}
 						Ext.get(pdiv).createChild({
 							tag: 'a',
-							html: part.data.content,
+							html: part.data.content.replace(/\\\%\\/g,'%'),
 							style: 'display:block',
 							cls: 'mathjax tex2jax_process'
 						});
 						//Temporary measure to deal with unwanted outside text in question content
-						toptext = pdiv.parentNode.firstChild;
+						/*toptext = pdiv.parentNode.firstChild;
 						if (toptext.data && toptext.data.replace(/\s*$/,'') == 
 											part.data.content.replace(/\x*$/,'')) {
 							 toptext.data = '';
-						}
+						}*/
 						if (figure) { pdiv.appendChild(figure) }
 						breaker = doc.createElement('div');
 						breaker.style.margin = '10px';
@@ -302,7 +302,6 @@ Ext.define('NextThought.assessment.Main', {
 					qdiv.appendChild(submit);
 					qdiv.style.margin = '1em';
 				}
-
 				//Attach a keydown event to the iframe that modifies the value 
 				//of the textbox to something and then sets it back again. It
 				//appears that the MathQuill code is triggered by the textbox
@@ -312,6 +311,8 @@ Ext.define('NextThought.assessment.Main', {
 					 e.target.value += '0';
 					 e.target.value = e.target.value.substring(0,e.target.value.length - 1);
 				}
+				doc.parentWindow.postMessage('MathJax.reRender()',location.href);
+				//document.postMessage('MathJax.reRender()',location.href);
 			}
 	},
 
@@ -529,14 +530,15 @@ Ext.define('NextThought.assessment.Main', {
 			
 			pte = Ext.get(partElements[i]);
 			pt = parts[i];
-			s = pte.down('.result');
-			if (s) s.remove();
-			s = pte.down('.explanation');
-			if (s) s.remove();
+			s = pte.down('.answer-text');
+			while (s) {
+				s.remove();
+				s = pte.down('.answer-text');
+			}
 
 			s = pte.createChild({
 			  	tag: 'span',
-			   	cls: 'result'
+			   	cls: 'result answer-text'
 			});
 
 			if (pte.down('input')) {
@@ -584,7 +586,7 @@ Ext.define('NextThought.assessment.Main', {
 			s.createChild({
 				tag : 'span',
 				html: html,
-				cls: mathCls+'response' + ' answer-text'
+				cls: mathCls+'result' + ' answer-text'
 			});
 			var pageInfoSuccess = function() {
 				var myi = i;
@@ -602,17 +604,23 @@ Ext.define('NextThought.assessment.Main', {
 					attempts = parseInt(qpart.getAttribute('attempts'));
 					if (!amICorrect) {
 						if (attempts < mydata.hints.length) {
-							html = mydata.hints[attempts].data.value;
+							html = mydata.hints[attempts].data.value.replace(/\\\%\\/g,'%');
+							cls = 'hint answer-text ';
 						}
-						else html = mydata.explanation;
+						else {
+							html = mydata.explanation.replace(/\\\%\\/g,'%');
+							cls = 'explanation answer-text ';
+						}
 					}
 					qpart.setAttribute('attempts',''+(attempts+1));
 					child = mys.parent('.naquestionpart').createChild({
-						tag: 'span',
-						 html: html,
-						 cls: mathCls+'response answer-text explanation '
+						tag: 'a',
+						html: html,
+						cls: mathCls + cls
 					});
 					child.setStyle('display','block');
+					child.setStyle('color','#000');
+					doc.parentWindow.postMessage('MathJax.reRender()',location.href);
 				}
 				return this.call;
 			}
@@ -620,21 +628,11 @@ Ext.define('NextThought.assessment.Main', {
 			$AppConfig.service.getPageInfo(LocationProvider.currentNTIID, pageInfoSuccess(), pageInfoFailure, this);
 		}
 
-		setTimeout(function() {doc.parentWindow.postMessage('MathJax.reRender()',location.href)}, 300);
-		/*var interval = function(val) {
-			console.log(doc.parentWindow.$('.explanation math'));
-			doc.parentWindow.$('.explanation math').attr('display','inline');
-			console.log(val);
-			if (val <= 0) return;
-			setTimeout(function() {interval(val-1)},30);
-		}
-		interval(80);*/
-		Ext.get(doc.getElementById('submit')).update('Reset');
 		doc.getElementById('submit').style.display = 'none';
 	},
 
 	resetAssessment: function(doc) {
-		//TODO: Make this function relevant again
+		//TODO: Make this function relevant again or just get rid of it
 	},
 
 
