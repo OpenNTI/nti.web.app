@@ -103,6 +103,7 @@ Ext.define('NextThought.view.annotations.note.EditorActions',{
 	    }
 	},
 
+
 	waitForPasteData: function (elem, savedcontent, savedRange, callCount) {
 		callCount = callCount || 0;
 	    if (elem.childNodes && elem.childNodes.length > 0) {
@@ -116,6 +117,7 @@ Ext.define('NextThought.view.annotations.note.EditorActions',{
 			console.log('timedout waiting for paste');
 		}
 	},
+
 
 	processPaste: function(elem, savedcontent, rangeDesc) {
 		var range;
@@ -148,7 +150,6 @@ Ext.define('NextThought.view.annotations.note.EditorActions',{
 			console.log(pasteddata);
 		}
 	},
-
 
 
 	editorMouseDown: function(e){
@@ -316,6 +317,11 @@ Ext.define('NextThought.view.annotations.note.EditorActions',{
 
 	focus: function(){
 		this.editor.down('.content').focus();
+	},
+
+
+	editBody: function(body){
+		console.log('body?',body);
 	},
 
 

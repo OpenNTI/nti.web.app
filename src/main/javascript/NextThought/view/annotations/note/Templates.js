@@ -45,6 +45,7 @@ Ext.define('NextThought.view.annotations.note.Templates',{
 					cn:[{
 						tag: 'ol',
 						cn: [
+							{ tag: 'li', cls: 'edit', html: 'Edit' },
 							{ tag: 'li', cls: 'share', html: 'Share' },
 							/*
 							{ tag: 'li', cls: 'flag',  html: 'Flag for Moderation' },
@@ -93,6 +94,7 @@ Ext.define('NextThought.view.annotations.note.Templates',{
 
 	updateMoreReplyOptionsLabels: function(moreEl,user){
 		var add = moreEl.down('li.add-contact');
+		var edit = moreEl.down('li.edit');
 		var flag = moreEl.down('li.flag');
 		var follow = moreEl.down('li.follow');
 		var block = moreEl.down('li.block');
@@ -121,7 +123,7 @@ Ext.define('NextThought.view.annotations.note.Templates',{
 		fnB = mine ? reset : remove;
 
 		fnA(add,flag,follow,block);
-		fnB(del);
+		fnB(del,edit);
 	},
 
 

@@ -256,6 +256,7 @@
 					padding: 0 10px 0 37px;
 
 					&.share::after { background-position-y: 0; }
+					&.edit::after { background-position-y: -100px; }
 					&.flag::after { background-position-y: -18px; }
 					&.add-contact::after { background-position-y: -36px; }
 					&.follow::after { background-position-y: -54px; }

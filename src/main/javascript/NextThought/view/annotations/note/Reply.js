@@ -201,7 +201,7 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 
 
 	activateReplyEditor: function(e){
-		e.stopEvent();
+		if(e){e.stopEvent();}
 		if(this.replyBox){
 			this.replyBox.addCls('editor-active');
 			this.doLayout();
@@ -219,6 +219,7 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 		}
 		this.doLayout();
 		this.doComponentLayout();
+		delete this.editMode;
 	},
 
 
@@ -240,6 +241,13 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 
 	addReply: function(record) {
 		this.add({record: record});
+	},
+
+
+	onEdit: function(){
+		this.editMode = true;
+		this.editorActions.editBody(this.record.get('body'));
+		this.activateReplyEditor();
 	},
 
 

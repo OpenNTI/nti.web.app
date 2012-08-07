@@ -231,7 +231,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
             this.replyBox.addCls('hover');
         }
         this.editor.scrollIntoView(scroller);
-        this.doLayout();
+        this.doComponentLayout();
     },
 
 
@@ -270,6 +270,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		this.up('window').down('note-carousel').removeCls('editor-active');
 		this.el.removeCls('editor-active');
 		this.doComponentLayout();
+		delete this.editMode;
 	},
 
 
@@ -287,6 +288,14 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		//control+enter & command+enter submit?
 		//document.queryCommandState('bold')
 	},
+
+
+	onEdit: function(){
+		this.editMode = true;
+		this.editorActions.editBody(this.record.get('body'));
+		this.activateReplyEditor();
+	},
+
 
 	onShare: function(){
 		this.up('window').fireEvent('share', this.record);
