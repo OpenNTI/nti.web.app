@@ -10,24 +10,6 @@ Ext.define('NextThought.assessment.Main', {
 
 	idToVar: {},
 
-	sendLaTeXCommand: function(mq, tex, root) {
-		root = root || Ext.getCmp('library').down('reader-panel').getDocumentElement();
-		var w = root.parentWindow;
-
-		if (mq) {
-			mq = w.$(mq);
-
-			if(!mq.is('.quiz-input')) {
-				mq = mq.parents('.quiz-input');
-			}
-
-			//write the latex, then refocus since it's probably been lost...
-			mq.mathquill('write', tex);
-			mq.trigger('focus');
-			mq.trigger('focusin');
-		}
-	},
-
 
 	contentScrollHandler: function(){
 		Ext.Object.each(this.idToVar, function(key, vars){
@@ -594,13 +576,6 @@ Ext.define('NextThought.assessment.Main', {
 
 		doc.getElementById('submit').style.display = 'none';
 	},
-
-	scrollUp: function(){
-		var p = Ext.getCmp('readerPanel');
-		p.relayout();
-		p.scrollTo(0);
-	},
-
 
 	submitAnswersHandler: function(e,id,me){
 		e = Ext.EventObject.setEvent(e||event);
