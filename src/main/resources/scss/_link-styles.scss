@@ -3,5 +3,6 @@ a{
 		@include content-link-def;
 		&:active, &:hover, &:visited { @include content-link-def; }
 	}
-	#NTIContent &{ @include content-link-def; }
+
+	#NTIContent &{ @include content-link-def; line-height: inherit; }
 }
