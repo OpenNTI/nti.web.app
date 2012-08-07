@@ -55,18 +55,22 @@ Ext.define('NextThought.view.annotations.note.Window',{
 
 
 	syncSize: function(){
-		this.callParent(arguments);
-
+		var size = this.callParent(arguments);
 		var f = this.query('nti-window-header,note-filter-bar,note-carousel,note-main-view,note-responses');
-		if(!f || !f[0].rendered){return;}
-
 		var h = 2;
-		Ext.each(f,function(o){h+= o.getHeight(); });
 
-		if(this.getHeight() > h){
-			this.setHeight(h);
-			this.center();
+		if(f && f[0].rendered){
+
+			Ext.each(f,function(o){h+= o.getHeight(); });
+
+			if(size.height > h){
+				size.height = h;
+				this.setHeight(h);
+				this.center();
+			}
 		}
+
+		return size;
 	},
 
 	afterRender: function(){

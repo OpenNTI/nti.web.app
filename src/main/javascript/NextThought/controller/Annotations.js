@@ -307,9 +307,10 @@ Ext.define('NextThought.controller.Annotations', {
 					rec = success ? record: null,
 					store;
 				if (success){
-					this.self.events.fireEvent('new-note', rec);
 					store = this.getController('Library').pageStores[rec.get('ContainerId')];
 					if (store){store.add(rec);}
+					this.self.events.fireEvent('new-note', rec);
+					(rec.parent?rec:recordRepliedTo).fireEvent('changed');
 				}
 				Ext.callback(callback, this, [success, rec]);
 			}

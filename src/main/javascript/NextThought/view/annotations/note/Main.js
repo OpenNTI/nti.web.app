@@ -41,6 +41,13 @@ Ext.define('NextThought.view.annotations.note.Main',{
 	},
 
 
+	destroy: function(){
+		if( this.record ){
+			this.record.un('change',this.recordChanged,this);
+		}
+		return this.callParent(arguments);
+	},
+
 	afterRender: function(){
 		var me = this;
 		me.callParent(arguments);
@@ -119,7 +126,26 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		var suppressed, text, bodyText, start, end, range, doc,
 			boundryChars = 50;
 
+		try {
+			if(this.record) {
+				this.record.un('changed', this.recordChanged, this);
+			}
+		}
+		catch(errorUnlistening){
+			console.log(errorUnlistening.message);
+		}
+
 		this.record = r;
+
+		try {
+			if(this.record){
+				this.record.on('changed', this.recordChanged, this, {single:true});
+			}
+		}
+		catch(errorListening){
+			console.error(errorListening.message);
+		}
+
 		if(!this.rendered || !r){return;}
 
 		try {
@@ -180,21 +206,16 @@ Ext.define('NextThought.view.annotations.note.Main',{
 				this.text.update(text);
 				this.text.select('a[href]',true).set({target:'_blank'});
 			},this);
-			this.up('window').down('note-responses').setReplies(this.record.children);
 		}
 		catch(e3){
 			console.error(Globals.getError(e3));
 		}
 
-		try {
-			this.record.on('changed', function(){
-				if(this.record === r){ this.setRecord(r); }
-			}, this, {single:true});
-		}
-		catch(e4){
-			console.error(Globals.getError(e4));
-		}
+		this.up('window').down('note-responses').setReplies(this.record.children);
 	},
+
+
+	recordChanged: Ext.Function.createBuffered( function(){ this.setRecord(this.record); }, 10),
 
 
 	fillInUser: function(user){
@@ -231,23 +252,18 @@ Ext.define('NextThought.view.annotations.note.Main',{
             this.replyBox.addCls('hover');
         }
         this.editor.scrollIntoView(scroller);
-        this.doComponentLayout();
     },
 
 
 	editorSaved: function(){
 		var v = this.editorActions.getValue(),
 			me = this,
-			r = me.record,
-			isMyNote = isMe(r.get('Creator')) || r.phantom;
+			r = me.record;
 
 		function callback(success, record){
 			console.log('save reply was a success?', success, record);
 			if (success) {
 				me.deactivateReplyEditor();
-				if(isMyNote){
-					me.up('window').down('note-responses').addReply(record);
-				}
 			}
 		}
 
@@ -270,7 +286,6 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		this.up('window').down('note-carousel').removeCls('editor-active');
 		this.el.removeCls('editor-active');
 		this.doComponentLayout();
-		delete this.editMode;
 	},
 
 
@@ -288,14 +303,6 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		//control+enter & command+enter submit?
 		//document.queryCommandState('bold')
 	},
-
-
-	onEdit: function(){
-		this.editMode = true;
-		this.editorActions.editBody(this.record.get('body'));
-		this.activateReplyEditor();
-	},
-
 
 	onShare: function(){
 		this.up('window').fireEvent('share', this.record);

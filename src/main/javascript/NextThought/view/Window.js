@@ -157,6 +157,7 @@ Ext.define('NextThought.view.Window',{
 
 		this.setSize(size,undefined);
 		this.center();
+		return size;
 	},
 
 

@@ -192,7 +192,6 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 			console.log('save reply was a success?', success, record);
 			if (success) {
 				me.deactivateReplyEditor();
-				me.addReply(record);
 			}
 		}
 
