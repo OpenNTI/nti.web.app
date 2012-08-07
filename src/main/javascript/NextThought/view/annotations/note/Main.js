@@ -225,6 +225,15 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		this.sharedTo.set({title:names.join(', ')});
 	},
 
+    scrollIntoView: function(){
+        var scroller = this.ownerCt.getEl();
+        if( this.replyBox ){
+            this.replyBox.addCls('hover');
+        }
+        this.editor.scrollIntoView(scroller);
+        this.doLayout();
+    },
+
 
 	editorSaved: function(){
 		var v = this.editorActions.getValue(),
@@ -251,6 +260,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		this.up('window').down('note-carousel').addCls('editor-active');
 		me.el.addCls('editor-active');
 		me.doComponentLayout();
+        me.scrollIntoView();
 		setTimeout(function(){me.editorActions.focus();}, 100);
 	},
 
