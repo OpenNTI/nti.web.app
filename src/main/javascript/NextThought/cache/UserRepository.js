@@ -212,5 +212,5 @@ function(){
 	this.prefetchUser = function(){
 		console.error('Deprecated function: UserRepository.prefetchUser()');
 		this.getUser.apply(this,arguments);
-	}
+	};
 });

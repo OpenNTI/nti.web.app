@@ -29,19 +29,26 @@ Ext.define('NextThought.util.Rects',{
 
 
 	merge: function(rects,clientWidth){
-		var heights = [17,24]; //Sane default values for small highlights
-		for (var i = 0; i < rects.length; i++) {
-			if (rects[i].height > 0) { heights.push(rects[i].height) };
+		var i = rects.length-1,
+			lineHeight,
+			heights = [17,24]; //Sane default values for small highlights
+		//faster to decrement in js
+		for (; i >= 0; i--) {
+			if (rects[i].height > 0) {
+				heights.push(rects[i].height);
+			}
 		}
-		heights.sort(function(a,b) { return a-b });
+
+		heights.sort(function(a,b) { return a-b; });
 		//Take the 33rd percentile of nonzero highlights; this seems to
 		//be a fairly good heuristic for the line height
 		lineHeight = heights[Math.floor(heights.length/3)];
 		rects = this.trimCrazies(rects, lineHeight, clientWidth);
 		var r=[], ri,
 			x,xx,y,yy, w,h,
-			b, bins={},
-			i = rects.length-1;
+			b, bins={};
+
+		i = rects.length-1;
 
 		for(; i>=0; i--){
 			ri = rects[i];

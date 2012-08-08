@@ -238,7 +238,7 @@ Ext.define('NextThought.view.annotations.note.EditorActions',{
 
 	addWhiteboard: function(data){
 		//pop open a whiteboard:
-		data = data?data:(function(){})(); //force the falsy value of data to always be undefinded.
+		data = data?data:(function(){}()); //force the falsy value of data to always be undefinded.
 
 		var me = this,
 			wbWin = Ext.widget({ xtype: 'wb-window', height: '75%', width: '50%', value: data }),

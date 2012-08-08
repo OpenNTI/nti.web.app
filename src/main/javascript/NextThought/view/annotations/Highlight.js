@@ -284,7 +284,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
 		var containingSpan = Ext.get(this.createNonAnchorableSpan()),
 			el = Ext.get(this.createNonAnchorableSpan()),
 			style = this.record.get('style') || 'plain',
-			textToWrap = Anchors.lastWordFromString(after.textContent);;
+			textToWrap = Anchors.lastWordFromString(after.textContent);
 
 		this.rendered.push(containingSpan.dom);
 

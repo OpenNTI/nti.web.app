@@ -69,7 +69,9 @@ Ext.define('NextThought.view.content.reader.Content',{
 		var me = this,
 			c = me.parseHTML(resp),
 			containerId;
-console.log('setting content...');
+
+		console.log('setting content...');
+
 		function onFinishLoading() {
 			console.log('setting content...finished');
 			me.relayout();
@@ -87,15 +89,6 @@ console.log('setting content...');
 				resp.responseText.match(/<body([^>]*)>/i),
 				this.buildPath(resp.request.options.url));
 
-
-		ntiContent = document.getElementsByTagName('iframe')[0].contentWindow.document.getElementById('NTIContent');
-		wst = ntiContent.querySelector('.worksheet-title');
-		if (wst && wst.innerHTML == 'Workbook Questions' || true) {
-			AssessmentUtils.setupAssessment(me.getDocumentElement(), me);
-		}
-		else {
-			QuizUtils.setupQuiz(me.getDocumentElement(), me);
-		}
 		console.log('setting content... set, loading annotations');
 		//containerId = Ext.util.Format.htmlDecode(me.getContainerId()); //handle apostrophe
 		me.loadContentAnnotations(LocationProvider.currentNTIID, onFinishLoading);

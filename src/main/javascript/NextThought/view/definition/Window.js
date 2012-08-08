@@ -16,8 +16,7 @@ Ext.define('NextThought.view.definition.Window', {
 		cls: 'definition',
 		autoEl: {
 			tag: 'iframe',
-			//src: url, expected now
-            src: 'javascript:',
+            src: Globals.EMPTY_WRITABLE_IFRAME_SRC,
 			frameBorder: 0,
 			marginWidth: 0,
 			marginHeight: 0,

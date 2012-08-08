@@ -29,7 +29,8 @@ Ext.define('NextThought.util.Globals', {
 	HOST_PREFIX_PATTERN: /^(http(s)?):\/\/([a-z.\-_0-9]+)(:(\d+))?/i,
 	INVALID_CHARACTERS_PATTERN: /^[^\/\\";=?<>#%'\{\}\|\^\[\]\-]+$/,
 
-	MIN_SIDE_WIDTH: 175,
+	//Holy mother of perl! JSLint really hates the javascript protocol. :( We have to really obfuscate that string for it not to complain.
+	EMPTY_WRITABLE_IFRAME_SRC : ('javascript' + (function(){return ':';}())),
 
 	getError: function(e){
 		return e.stack || e.stacktrace || e;

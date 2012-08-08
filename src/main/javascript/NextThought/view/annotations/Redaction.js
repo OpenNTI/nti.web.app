@@ -220,7 +220,9 @@ Ext.define('NextThought.view.annotations.Redaction', {
 			console.log(selection);
 			range = selection.getRangeAt(0);
 			cursorStart = range.startOffset;
-			if (!(range.collapsed)) range.deleteContents();
+			if (!(range.collapsed)) {
+				range.deleteContents();
+			}
 			else {
 				console.log(range);
 				span.firstChild.data = span.firstChild.data.substring(0,cursorStart - 1) + span.firstChild.data.substring(cursorStart);
