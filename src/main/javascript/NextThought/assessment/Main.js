@@ -663,12 +663,12 @@ Ext.define('NextThought.assessment.Main', {
 }, function(){
 	window.AssessmentUtils = this;
 
-	ContentAPIRegistry.register('NTIHintNavigation',LocationProvider.setLocation,LocationProvider);
-	ContentAPIRegistry.register('NTISubmitAnswers',this.submitAnswersHandler,this);
-	ContentAPIRegistry.register('togglehint',function(e) {
-		e = Ext.EventObject.setEvent(e||event);
-
-		Ext.get(e.getTarget().nextSibling).toggleCls("hidden");
-		return false;
-	});
+//	ContentAPIRegistry.register('NTIHintNavigation',LocationProvider.setLocation,LocationProvider);
+//	ContentAPIRegistry.register('NTISubmitAnswers',this.submitAnswersHandler,this);
+//	ContentAPIRegistry.register('togglehint',function(e) {
+//		e = Ext.EventObject.setEvent(e||event);
+//
+//		Ext.get(e.getTarget().nextSibling).toggleCls("hidden");
+//		return false;
+//	});
 });
