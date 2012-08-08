@@ -56,7 +56,8 @@ Ext.define('NextThought.view.annotations.note.EditorActions',{
 			focus: me.editorFocus,
 			blur: me.editorBlur,
 			keyup: me.maybeResizeContentBox,
-			paste: me.handlePaste
+			paste: me.handlePaste,
+			click: me.handleClick
 		});
 
 		cmp.mon(editorEl.down('.action.share'), {
@@ -225,55 +226,64 @@ Ext.define('NextThought.view.annotations.note.EditorActions',{
 		return false;
 	},
 
+	handleClick: function(e,dom){
+		var guid;
+		var t = e.getTarget('img.wb-thumbnail');
 
-	addWhiteboard: function(){
+		if(t){
+			guid = t.getAttribute('id');
+			this.openWhiteboards[guid].show();
+		}
+	},
+
+	addWhiteboard: function(data){
 		//pop open a whiteboard:
-		var wbWin = Ext.widget({ xtype: 'wb-window', height: '75%', width: '50%' }),
+		data = data?data:(function(){})(); //force the falsy value of data to always be undefinded.
+
+		var me = this,
+			wbWin = Ext.widget({ xtype: 'wb-window', height: '75%', width: '50%', value: data }),
 			guid = guidGenerator(),
-			content = this.editor.down('.content');
+			content = me.editor.down('.content');
 
 		//remember the whiteboard window:
 		wbWin.guid = guid;
 		this.openWhiteboards[guid] = wbWin;
 
+		if(data){
+			me.insertWhiteboardThumbnail(content, guid, wbWin.down('whiteboard-editor'));
+		}
+
 		//hook into the window's save and cancel operations:
 		this.cmp.mon(wbWin, {
-			scope: this,
 			save: function(win, wb, e){
-				this.insertWhiteboardThumbnail(content, guid, wb);
+				me.insertWhiteboardThumbnail(content, guid, wb);
 				wbWin.hide();
 			},
 			cancel: function(win, wb, e){
-				console.log('cancel', arguments);
-				this.cleanOpenWindows(win.guid);
-				wbWin.close();
+				//if we haven't added the wb to the editor, then clean up, otherwise let the window handle it.
+				if(!Ext.get(guid)){
+					me.cleanOpenWindows(win.guid);
+					wbWin.close();
+				}
 			}
 		});
 
-		wbWin.show();
+		if(!data){
+			wbWin.show();
+		}
 	},
 
 
 	insertWhiteboardThumbnail: function(content, guid, wb){
 		var me = this;
+		var el = content.query('[id='+guid+']')[0];
+
+		if(!el){
+			el = me.wbThumbnailTpm.append(content, [Ext.BLANK_IMAGE_URL, guid]);
+		}
 
 		wb.getThumbnail(function(data){
-			var existingImg = content.query('[id='+guid+']'),
-				el;
-
-			if (existingImg.length === 1) {
-				el = existingImg[0];
-				el.src = data;
-			}
-			else {
-				el = Ext.fly(me.wbThumbnailTpm.append(content, [data, guid]));
-				//listen on clicks and do stuff:
-				el.on('click', function(evt, img, opt){
-					var w = me.openWhiteboards[guid];
-					if (w) {w.show();}
-					else {Ext.Error.raise('No whiteboard for' + guid);}
-				});
-			}
+			Ext.fly(el).setStyle({ backgroundImage: 'url('+data+')' });
 			me.editor.repaint();
 			me.fireEvent('size-changed');
 		});
@@ -321,7 +331,17 @@ Ext.define('NextThought.view.annotations.note.EditorActions',{
 
 
 	editBody: function(body){
-		console.log('body?',body);
+		var me = this,
+			c = this.editor.down('.content').dom;
+
+		Ext.each(body, function(part){
+			if(typeof part === 'string'){
+				c.innerHTML += part;
+			}
+			else {
+				me.addWhiteboard(part);
+			}
+		});
 	},
 
 

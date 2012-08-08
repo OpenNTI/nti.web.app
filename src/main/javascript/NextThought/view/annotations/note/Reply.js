@@ -37,6 +37,7 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 		me.callParent(arguments);
 
 		this.replyBox.hover(this.onMouseOver,this.onMouseOut,this);
+		me.text.setVisibilityMode(Ext.dom.Element.DISPLAY);
 
 		//decide if we are the first in the parent's list:
 		if (me.ownerCt.items.indexOf(me) === 0) {
@@ -186,16 +187,28 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 
 	saveReply: function(){
 		var v = this.editorActions.getValue(),
-			me = this;
+			me = this,
+			r = this.record;
 
-		function callback(success, record){
-			console.log('save reply was a success?', success, record);
+		function callback(success){
 			if (success) {
 				me.deactivateReplyEditor();
 			}
 		}
 
-		this.up('window').fireEvent('save-new-reply', this.record, v.body, v.shareWith, callback);
+		if(this.editMode){
+			r.set('body',v.body);
+			//todo: r.set('sharedWith',v.shareWith); -- only do this if the user changed it.
+			r.save({callback: function(record, request){
+				var success = request.success,
+				rec = success ? record: null;
+				if(success){r.fireEvent('changed');}
+				Ext.callback(callback,me,[success,rec]);
+			}});
+			return;
+		}
+
+		this.up('window').fireEvent('save-new-reply', r, v.body, v.shareWith, callback);
 	},
 
 
@@ -218,6 +231,9 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 		}
 		this.doLayout();
 		this.doComponentLayout();
+		if(this.editMode){
+			this.text.show();
+		}
 		delete this.editMode;
 	},
 

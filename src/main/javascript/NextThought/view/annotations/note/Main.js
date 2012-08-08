@@ -51,7 +51,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 	afterRender: function(){
 		var me = this;
 		me.callParent(arguments);
-
+		me.text.setVisibilityMode(Ext.dom.Element.DISPLAY);
 		try {
 			me.setRecord(me.record);
 
@@ -261,13 +261,24 @@ Ext.define('NextThought.view.annotations.note.Main',{
 			r = me.record;
 
 		function callback(success, record){
-			console.log('save reply was a success?', success, record);
 			if (success) {
 				me.deactivateReplyEditor();
 			}
 		}
 
-		this.up('window').fireEvent('save-new-reply', this.record, v.body, v.shareWith, callback);
+		if(this.editMode){
+			r.set('body',v.body);
+			//todo: r.set('sharedWith',v.shareWith); -- only do this if the user changed it.
+			r.save({callback: function(record, request){
+				var success = request.success,
+				rec = success ? record: null;
+				if(success){r.fireEvent('changed');}
+				Ext.callback(callback,me,[success,rec]);
+			}});
+			return;
+		}
+
+		this.up('window').fireEvent('save-new-reply', r, v.body, v.shareWith, callback);
 	},
 
 
@@ -286,6 +297,10 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		this.up('window').down('note-carousel').removeCls('editor-active');
 		this.el.removeCls('editor-active');
 		this.doComponentLayout();
+		if(this.editMode){
+			this.text.show();
+		}
+		delete this.editMode;
 	},
 
 
@@ -303,6 +318,15 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		//control+enter & command+enter submit?
 		//document.queryCommandState('bold')
 	},
+
+
+	onEdit: function(){
+		this.text.hide();
+		this.editMode = true;
+		this.editorActions.editBody(this.record.get('body'));
+		this.activateReplyEditor();
+	},
+
 
 	onShare: function(){
 		this.up('window').fireEvent('share', this.record);

@@ -37,7 +37,17 @@ Ext.define('NextThought.view.annotations.note.Window',{
 				align: 'stretch'
 			},
 			items: [
-				{xtype: 'note-main-view' },
+				{xtype: 'note-main-view', xhooks: {
+						scrollIntoView: function(){
+							this.up('window').syncSize();
+							this.callParent();
+						},
+						deactivateReplyEditor: function(){
+							this.callParent();
+							this.up('window').syncSize();
+						}
+					}
+				},
 				{xtype: 'note-responses' }
 			]
 		}
