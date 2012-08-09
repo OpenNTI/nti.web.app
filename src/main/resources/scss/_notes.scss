@@ -724,13 +724,15 @@
 				top: 0; bottom: 0;
 				left: 15px;
 				content: '';
-				background: url(../images/notes/prev-next.png) 0px 50% no-repeat;
 				width: 20px;
 
 			}
 
 			&.forward{
-				&::after{ background-position-x: -20px; }
+				&::after{
+					background-position-x: 0px;
+					background: url(../images/notes/next.png) 0px 50% no-repeat;
+ 				}
 				right: 0;
 				.circle {
 					margin-left: 75px;
@@ -738,7 +740,10 @@
 				}
 			}
 			&.backward{
-				&::after{ background-position-x: 0px; }
+				&::after{
+					background-position-x: 0px;
+					background: url(../images/notes/prev.png) 0px 50% no-repeat;
+ 				}
 				left: 0;
 
 				.circle {
