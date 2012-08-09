@@ -9,24 +9,6 @@ Ext.define('NextThought.assessment.Main', {
 
 	idToVar: {},
 
-	sendLaTeXCommand: function(mq, tex, root) {
-		root = root || Ext.getCmp('library').down('reader-panel').getDocumentElement();
-		var w = root.parentWindow;
-
-		if (mq) {
-			mq = w.$(mq);
-
-			if(!mq.is('.quiz-input')) {
-				mq = mq.parents('.quiz-input');
-			}
-
-			//write the latex, then refocus since it's probably been lost...
-			mq.mathquill('write', tex);
-			mq.trigger('focus');
-			mq.trigger('focusin');
-		}
-	},
-
 
 	contentScrollHandler: function(){
 		Ext.Object.each(this.idToVar, function(key, vars){
@@ -61,20 +43,19 @@ Ext.define('NextThought.assessment.Main', {
 		doc = div.ownerDocument;
 		extdiv = Ext.get(div);
 		ol = extdiv.createChild({tag: 'ol', cls: 'naqchoices'});
-		var i = 0;
+		var i = 0, j;
 		for (;i < part.data.choices.length; i++) {
 			li = ol.createChild({tag: 'li', cls: 'naqchoice'});
 			radio = li.createChild({
 				tag: 'input',
 				type: 'radio',
 				name: div.getAttribute('name'),
-				value: part.data.choices[i]
 			});
 			option = li.createChild({
 				tag: 'p',
+				style: 'display: inline',
 				html: part.data.choices[i]
 			});
-			option.setStyle('display','inline');
 		}
 	},
 	addMatching: function(div,part) {
@@ -82,20 +63,6 @@ Ext.define('NextThought.assessment.Main', {
 		extdiv = Ext.get(div);
 		table = extdiv.createChild({tag: 'table'});
 		var i = 0, values = [], j;
-		//Remove below once we have real matching questions to work with
-		tabletext = div.querySelector('img').alt.replace(/^.*?{tabular}{cc}/,'').replace(/\\end{tabular}.*?$/,'');
-		rows = tabletext.split('\\\\'); //Actually just two slashes
-		cells = [];
-		j = 0;
-		part.data.labels = [];
-		part.data.values = [];
-		for (;j < rows.length; j++) {
-			if (rows[j].indexOf('&') >= 0) {
-				part.data.labels.push(rows[j].split('&')[0]);
-				part.data.values.push(rows[j].split('&')[1]);
-			}
-		}
-		//Don't remove further
 		//Create a table
 		for (; i < part.data.labels.length; i++) {
 			trdom = doc.createElement('tr');
@@ -239,30 +206,14 @@ Ext.define('NextThought.assessment.Main', {
 						if (partdivs.length <= j) break;
 						var pdiv = partdivs[j],
 							part = question.data.parts[j];
-						//Stopgap measure until we find some way to pass figures or 
-						//links thereto through the pageInfo or some other object; 
-						// TODO: do something better
-						var figure = pdiv.querySelector('.figure') || pdiv.querySelector('.tabular');
-						//Another stopgap to test the matching questions
-						var isMatching = figure && figure.querySelector('img').alt.indexOf('tabular') >= 0 && 
-									LocationProvider.currentNTIID.indexOf('MN') >= 0;
 						//Remove everything, we'll start from scratch
 						while (pdiv.firstChild) {
 							pdiv.removeChild(pdiv.firstChild);
 						}
 						Ext.get(pdiv).createChild({
-							tag: 'a',
-							html: part.data.content.replace(/\\\%\\/g,'%'),
-							style: 'display:block',
-							cls: 'mathjax tex2jax_process'
+							tag: 'div',
+							html: part.data.content
 						});
-						//Temporary measure to deal with unwanted outside text in question content
-						/*toptext = pdiv.parentNode.firstChild;
-						if (toptext.data && toptext.data.replace(/\s*$/,'') == 
-											part.data.content.replace(/\x*$/,'')) {
-							 toptext.data = '';
-						}*/
-						if (figure) { pdiv.appendChild(figure) }
 						breaker = doc.createElement('div');
 						breaker.style.margin = '10px';
 						pdiv.appendChild(breaker);
@@ -270,8 +221,8 @@ Ext.define('NextThought.assessment.Main', {
 						var func = function(){
 							console.log('Question type not recognized');
 						}
-						if (isMatching) {
-							func = this.addMatching;
+						if (part.data.Class == 'MatchingPart') {
+							func = me.addMatching;
 						}
 						else if (part.data.Class == 'FreeResponsePart') { 
 							func = me.addFreeResponseBox;
@@ -280,7 +231,7 @@ Ext.define('NextThought.assessment.Main', {
 							func = me.addSymmathBox;
 						}
 						else if (part.data.Class == 'MultipleChoicePart') {
-							func = this.addMultipleChoice;
+							func = me.addMultipleChoice;
 						}
 						func(pdiv,part) 
 						pdiv.setAttribute("attempts","0");
@@ -311,8 +262,24 @@ Ext.define('NextThought.assessment.Main', {
 					 e.target.value += '0';
 					 e.target.value = e.target.value.substring(0,e.target.value.length - 1);
 				}
-				doc.parentWindow.postMessage('MathJax.reRender()',location.href);
-				//document.postMessage('MathJax.reRender()',location.href);
+				function f(r) {
+					start = r.request.options.url.replace(/[^\/]*$/,'');
+					els = doc.querySelectorAll('*');
+					for (i = 0; i < els.length; i++) {
+						src = els[i].getAttribute("src");
+						if (src && src.substring(0,9) === 'resources') {
+							els[i].setAttribute("src",start+src);
+						}
+					}
+					console.log(start);
+				}
+				Ext.Ajax.request({
+					url: pageInfo.getLink('content'),
+					success: f,
+					failure: function(r) {
+						console.log('server-side failure with status code ' + r.status+': Message: '+ r.responseText);
+					}
+				});
 			}
 	},
 
@@ -530,12 +497,14 @@ Ext.define('NextThought.assessment.Main', {
 			
 			pte = Ext.get(partElements[i]);
 			pt = parts[i];
+			console.log('pte',pte, pte.dom.querySelectorAll('.answer-text'))
 			s = pte.down('.answer-text');
 			while (s) {
 				s.remove();
 				s = pte.down('.answer-text');
 			}
-
+			console.log('down',pte.dom.querySelectorAll('.answer-text'))
+			
 			s = pte.createChild({
 			  	tag: 'span',
 			   	cls: 'result answer-text'
@@ -604,23 +573,22 @@ Ext.define('NextThought.assessment.Main', {
 					attempts = parseInt(qpart.getAttribute('attempts'));
 					if (!amICorrect) {
 						if (attempts < mydata.hints.length) {
-							html = mydata.hints[attempts].data.value.replace(/\\\%\\/g,'%');
+							html = mydata.hints[attempts].data.value;
 							cls = 'hint answer-text ';
 						}
 						else {
-							html = mydata.explanation.replace(/\\\%\\/g,'%');
+							html = mydata.explanation;
 							cls = 'explanation answer-text ';
 						}
+						child = mys.parent('.naquestionpart').createChild({
+							tag: 'a',
+							cls: cls
+						});
+						child.dom.innerHTML = html;
+						child.setStyle('display','block');
+						child.setStyle('color','#000');
 					}
 					qpart.setAttribute('attempts',''+(attempts+1));
-					child = mys.parent('.naquestionpart').createChild({
-						tag: 'a',
-						html: html,
-						cls: mathCls + cls
-					});
-					child.setStyle('display','block');
-					child.setStyle('color','#000');
-					doc.parentWindow.postMessage('MathJax.reRender()',location.href);
 				}
 				return this.call;
 			}
