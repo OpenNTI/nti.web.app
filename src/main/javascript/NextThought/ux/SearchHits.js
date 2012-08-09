@@ -7,7 +7,7 @@ Ext.define('NextThought.ux.SearchHits', {
 		Ext.apply(me, {
 			selections: config.hits || [],
 			ownerCmp: config.owner,
-			container: config.owner.body.dom,
+			container: config.owner.getInsertionPoint('innerCt').dom,
 			canvas: null,
 			canvasId: 'search-highlight-'+guidGenerator()
 		});
@@ -17,8 +17,12 @@ Ext.define('NextThought.ux.SearchHits', {
 
 		me.render = Ext.Function.createBuffered(me.render,100,me,[true]);
 
-		me.ownerCmp.component.on('resize', me.canvasResize, me);
-		me.canvasResize();
+		me.ownerCmp.on('resize', me.canvasResize, me);
+
+		if(this.ownerCmp.getIframe().getSize().height !== 0){
+			me.canvasResize(); }
+		else{ setTimeout( function(){me.canvasResize();}, 200 ); }
+
 		return me;
 	},
 
@@ -45,13 +49,13 @@ Ext.define('NextThought.ux.SearchHits', {
 		return this.createElement(
 			'canvas',
 			this.container,
-			'search-highlight-object unselectable','position: absolute; pointer-events: none; top: 0; left: 0;',
+			'search-highlight-object unselectable','position: absolute; pointer-events: none; top: 0; left: 0; z-index: 999',
 			this.canvasId
 			);
 	},
 
 
-	canvasResize: function(){
+	canvasResize: Ext.Function.createBuffered( function(){
 		var c = Ext.get(this.canvas || this.canvasId),
 			cont = Ext.get(this.ownerCmp.getIframe()),
 			pos = cont.getXY(),
@@ -62,7 +66,7 @@ Ext.define('NextThought.ux.SearchHits', {
 			height: size.height
 		});
 		this.render();
-	},
+	}, 100),
 
 	render: function(){
 		if(!this.selections || !this.canvas){

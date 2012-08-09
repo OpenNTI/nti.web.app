@@ -85,7 +85,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 
 	showRanges: function(ranges) {
 		this.clearSearchRanges();
-		this.searchAnnotations = Ext.widget({xtype: 'SearchHits', hits: ranges, owner: this});
+		this.searchAnnotations = Ext.widget({xtype: 'search-hits', hits: ranges, owner: this});
 	},
 
 
