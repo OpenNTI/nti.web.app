@@ -51,20 +51,17 @@ Ext.define('NextThought.Library', {
 
 
 	getTitle: function(index){
-		var title = null;
+		var field = 'id';
 
 		if(index instanceof Ext.data.Model){
 			index = index.getId();
 		}
+		else if(ParseUtils.parseNtiid(index) !== null){
+			field = 'NTIID';
+		}
 
-		this.each(function(t){
-			if(t && t.get && t.get('index') === index) {
-				title = t;
-				return false;
-			}
-		});
 
-		return title;
+		return this.getStore().findRecord(field, index);
 	},
 
 

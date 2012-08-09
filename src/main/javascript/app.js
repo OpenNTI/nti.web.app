@@ -26,7 +26,8 @@ Ext.application({
 		'Search',
 		'Session',
 		'State',
-		'Stream'
+		'Stream',
+		'Quiz'
 	],
 
 	launch: function(){

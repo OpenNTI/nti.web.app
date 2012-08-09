@@ -38,9 +38,8 @@ Ext.define('NextThought.util.Parsing',{
 		return results;
 	},
 
-	getReaderForModel: function(modelName) {
-		this.readers = this.readers || [];
 
+	findModel: function(name){
 		function recurse(dir, modelName) {
 			var sub, o = dir[modelName];
 
@@ -60,18 +59,26 @@ Ext.define('NextThought.util.Parsing',{
 			return null;
 		}
 
-		var o = recurse(NextThought.model,modelName);
+		return recurse(NextThought.model,name);
+	},
+
+
+	getReaderForModel: function(modelName) {
+		this.readers = this.readers || [];
+
+		var o = this.findModel(modelName);
 		if (!o) {
 			console.error('no model found for ' + modelName);
 			return;
 		}
-		if (!this.readers[modelName]) {
-			this.readers[modelName] = Ext.create('reader.json',{
+
+		if (!this.readers[o.$className]) {
+			this.readers[o.$className] = Ext.create('reader.json',{
 				model: o.$className, proxy: 'nti'
 			});
 		}
 
-		return this.readers[modelName];
+		return this.readers[o.$className];
 
 	},
 

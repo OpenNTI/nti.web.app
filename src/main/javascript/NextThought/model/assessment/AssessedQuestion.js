@@ -7,5 +7,18 @@ Ext.define('NextThought.model.assessment.AssessedQuestion', {
 	fields: [
 		{ name: 'questionId', type: 'string' },
 		{ name: 'parts', type: 'arrayItem' }
-	]
+	],
+
+
+	isCorrect: function(){
+		var p = this.get('parts')||[];
+		var i = p.length-1;
+		for(; i>=0; i--){
+			if(!p[i].isCorrect()){
+				return false;
+			}
+		}
+
+		return true;
+	}
 });

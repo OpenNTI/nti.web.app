@@ -74,33 +74,6 @@
 		background-color: rgba(235, 235, 235, 0.3) !important;
    }
 
-   .quiz-input {
-   	       min-width: 80px;
-   }  
-
-	.worksheet-problems {
-		li{
-			clear: both;
-		}
-		.problem {
-			overflow: visible;
-			display: block;
-			border: none;
-			text-align: left;
-			padding: 0;
-			position: static;
-			margin: 0;
-			background: none;
-			white-space: normal;
-			&::after {
-				display: none;
-			}
-		}
-		.result {
-			clear: both;
-		}
-	}
-
 	div {
 		&.mathjax{
 			&.answer,

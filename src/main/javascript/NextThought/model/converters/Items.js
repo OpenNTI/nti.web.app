@@ -6,7 +6,7 @@ Ext.define('NextThought.model.converters.Items', {
 		type: 'singleItem',
 		convert: function(v) {
 			if (v instanceof Object) {
-				return !v ? null : ParseUtils.parseItems([v], {ignoreIfExists: true})[0];
+				return !v ? null : ParseUtils.parseItems([v])[0];
 			}
 			else {
 				if(v){ console.warn('unexpected value', v); }
@@ -24,7 +24,7 @@ Ext.define('NextThought.model.converters.Items', {
 		type: 'arrayItem',
 		convert: function(v) {
 			if (Ext.isArray(v)) {
-				return ParseUtils.parseItems(v, {ignoreIfExists: true});
+				return ParseUtils.parseItems(v);
 			}
 			else {
 				if(v){ console.warn('unexpected value', v); }
@@ -48,7 +48,7 @@ Ext.define('NextThought.model.converters.Items', {
 						values.push(v[key]);
 					}
 				}
-				return ParseUtils.parseItems(values, {ignoreIfExists: true}) ;
+				return ParseUtils.parseItems(values) ;
 			}
 			else {
 				if(v){ console.warn('unexpected value', v); }

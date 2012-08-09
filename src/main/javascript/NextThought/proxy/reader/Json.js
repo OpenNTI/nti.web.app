@@ -47,15 +47,10 @@ Ext.define('NextThought.proxy.reader.Json', {
 				record = result.records[i];
 				try{
 					if(record instanceof NextThought.model.Base) {
-						modelName = 'NextThought.model.'+record.get('Class');
-						if(record.modelName !== modelName){
-	//						console.debug('converting model:',modelName, 'from:', record.modelName);
-							result.records[i] = Ext.create(
-									modelName,
-									Ext.clone(record.raw),
-									record.getId(),
-									record.raw
-							);
+						modelName = record.get('Class');
+						if(record.modelName.substr(-modelName.length) !== modelName){
+							result.records[i] = ParseUtils.findModel(modelName).create( record.raw, record.getId() );
+							delete record.raw;
 						}
 					}
 				}

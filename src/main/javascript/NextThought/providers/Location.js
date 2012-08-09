@@ -69,7 +69,8 @@ Ext.define('NextThought.providers.Location', {
 
 		//make this happen out of this function's flow, so that the mask shows immediately.
 		setTimeout(function(){
-			if(!me.fireEvent('navigate',ntiid,finish)){
+			if(!me.fireEvent('navigate',ntiid)){
+				finish();
 				return false;
 			}
 
@@ -167,6 +168,14 @@ Ext.define('NextThought.providers.Location', {
 		}
 
 		return lineage;
+	},
+
+
+	getContentRoot: function(ntiid){
+		var bookId = LocationProvider.getLineage(ntiid||this.currentNTIID).last();
+		var title = Library.getTitle( bookId );
+
+		return title? title.get('root') : null;
 	},
 
 

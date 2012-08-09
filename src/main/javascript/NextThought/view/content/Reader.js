@@ -6,6 +6,7 @@ Ext.define('NextThought.view.content.Reader', {
 	],
 	mixins:{
 		annotations: 'NextThought.view.content.reader.Annotations',
+		assessments: 'NextThought.view.content.reader.AssessmentOverlay',
 		content: 'NextThought.view.content.reader.Content',
 		iframe: 'NextThought.view.content.reader.IFrame',
 		scroll: 'NextThought.view.content.reader.Scroll',
@@ -31,6 +32,7 @@ Ext.define('NextThought.view.content.Reader', {
 		this.mixins.iframe.constructor.apply(this,arguments);
 		this.mixins.scroll.constructor.apply(this,arguments);
 		this.mixins.annotations.constructor.apply(this,arguments);
+		this.mixins.assessments.constructor.apply(this,arguments);
 		this.mixins.noteOverlay.constructor.apply(this,arguments);
 	},
 
@@ -98,10 +100,9 @@ Ext.define('NextThought.view.content.Reader', {
 	},
 
 
-	onNavigate: function(ntiid, callback) {
+	onNavigate: function(ntiid) {
 
 		if(ntiid === LocationProvider.currentNTIID){
-			Ext.callback(callback,null,[this]);
 			return false;
 		}
 
@@ -110,7 +111,6 @@ Ext.define('NextThought.view.content.Reader', {
 		if(!ntiid) {
 			this.setSplash();
 			this.relayout();
-			Ext.callback(callback,null,[this]);
 		}
 
 		return true;
@@ -121,7 +121,7 @@ Ext.define('NextThought.view.content.Reader', {
 		var me = this;
 		function f(resp){
 			me.splash.hide();
-			me.setContent(resp, callback);
+			me.setContent(resp, pageInfo.get('AssessmentItems'), callback);
 		}
 
 		if(!pageInfo.isModel){

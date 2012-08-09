@@ -139,18 +139,6 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 		//hide all sub-iframes initially.
 		addCSS("iframe{display:none;}");
 
-		//Quiz Dependencies: Load MathQuill
-		g.loadStyleSheet({ url: base+'resources/lib/mathquill/mathquill.css', document: doc });
-		g.loadScript({url: '//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js', document: doc},
-			function(){
-				g.loadScript({ url: base+'resources/lib/mathquill/mathquill.min.js', document: doc }); });
-
-		//Quiz Dependencies: Load MathJax 1.1 (2.0 buggy)
-		g.loadScript(
-			{ url: 'https://c328740.ssl.cf1.rackcdn.com/mathjax/1.1-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML', document: doc },
-			function(){ g.loadScript({ url: base+'resources/misc/mathjaxconfig.js', document: doc }); });
-
-
 		on(doc,['keypress','keydown','keyup'],function(e){
 			e = Ext.EventObject.setEvent(e||event);
 			if(e.getKey() === e.BACKSPACE){

@@ -26,6 +26,10 @@ Ext.define('NextThought.model.Base', {
 		{ name: 'LikeCount', type: 'int' }
 	],
 
+	onClassExtended: function(cls, data) {
+		data.proxy = {type:'nti', model: cls};
+	},
+
 
 	constructor: function(data,id,raw){
 		var c, f = this.fields,

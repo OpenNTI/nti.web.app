@@ -1,8 +1,4 @@
 Ext.define('NextThought.view.content.reader.Content',{
-	requires: [
-		'NextThought.util.Quizes',
-		'NextThought.assessment.Main'
-	],
 
 	constructor: function(){
 		this.loadedResources = {};
@@ -65,7 +61,7 @@ Ext.define('NextThought.view.content.reader.Content',{
 	},
 
 
-	setContent: function(resp, callback){
+	setContent: function(resp, assessmentItems, callback){
 		var me = this,
 			c = me.parseHTML(resp),
 			containerId;
@@ -83,6 +79,7 @@ Ext.define('NextThought.view.content.reader.Content',{
 		me.updateContent('<div id="NTIContent">'+c+'</div>');
 		me.scrollTo(0, false);
 
+		me.injectAssessments(assessmentItems);
 
 		//apply any styles that may be on the content's body, to the NTIContent div:
 		this.applyBodyStyles(

@@ -6,7 +6,6 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 		'NextThought.model.TranscriptSummary',
 		'NextThought.model.QuizResult',
 		'NextThought.util.Annotations',
-		'NextThought.util.Quizes',
 		'NextThought.ux.SearchHits',
 		'NextThought.view.annotations.renderer.Manager',
 		'NextThought.view.annotations.Redaction',

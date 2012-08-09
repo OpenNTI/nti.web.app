@@ -21,14 +21,11 @@ Ext.define('NextThought.cache.UserRepository', {
 	updateUser: function(refreshedUser) {
 		var s = this.getStore(),
 			uid = refreshedUser.getId(),
-			u = s.getById(uid), //user from the store
-			raw = refreshedUser.raw,
-			ignoreNewInstance = (raw && raw.hasOwnProperty('ignoreIfExists'));
+			u = s.getById(uid); //user from the store
 
 		//if the store had the user
 		// AND it was not equal to the refreshedUser (the user resolved from the server)
-		//	OR we were asked NOT to ignore new instances...
-		if (u && (!ignoreNewInstance || !u.equal(refreshedUser))) {
+		if (u && !u.equal(refreshedUser)) {
 			//If we have a current user, and the user from the store is that user (compared by ID)
 			if ($AppConfig.userObject && isMe(u) ){
 				//If the INSTANCE of the user from the store does not match the instance of the current user object
@@ -83,7 +80,7 @@ Ext.define('NextThought.cache.UserRepository', {
 				}
 				else {
 					//JSON representation of User
-					r = ParseUtils.parseItems(o, {ignoreIfExists: true})[0];
+					r = ParseUtils.parseItems(o)[0];
 					if(!r || !r.getModelName){
 						Ext.Error.raise({message: 'Unknown result', object: r});
 					}
@@ -158,7 +155,7 @@ Ext.define('NextThought.cache.UserRepository', {
 			}
 
 			var json = Ext.decode(r.responseText),
-				list = ParseUtils.parseItems(json.Items, {ignoreIfExists: true});
+				list = ParseUtils.parseItems(json.Items);
 
 			if(list && list.length>1){
 				console.warn('many matching users: "', username, '"', list);

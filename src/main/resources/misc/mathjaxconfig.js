@@ -2,21 +2,19 @@
  * $Revision: 1576 $
  **/
 if(window['MathJax']){
+	if(window.top !== window){
+		//We get loaded in an iframe that has already had
+		//its onload method called.  Mathjax relies on this
+		//to start processing things on the Hub queue so
+		//we trigger the onload call manually
+		MathJax.Hub.Startup.onload();
 
-	//We get loaded in an iframe that has already had
-	//its onload method called.  Mathjax relies on this
-	//to start processing things on the Hub queue so
-	//we trigger the onload call manually
-	MathJax.Hub.Startup.onload();
+		window.addEventListener("message", function(e){
+			if(e.data === '[MathJax.rerender]') { MathJax.rerender(); }
+		}, false);
+	}
 
-	window.addEventListener("message", function(e){
-		if(e.data === 'MathJax.reRender()') {
-			MathJax.reRender();
-		}
-	}, false);
-
-
-	MathJax.reRender = function(){
+	MathJax.rerender = function(){
 		try{
 		//Have mathjax display the new math that is in the content div
 			MathJax.Hub.Queue(["Typeset",MathJax.Hub, "NTIContent"]);
