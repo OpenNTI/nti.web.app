@@ -68,6 +68,9 @@
 								font-weight: 600;
 							}
 							padding-left: 38px;
+							input.answer-field {
+								left: 38px;
+							}
 							&::after {
 								display: block;
 							}
