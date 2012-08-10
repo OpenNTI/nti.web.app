@@ -68,7 +68,7 @@ Ext.define('NextThought.view.menus.account.Notifications',{
 		store.each(function(change){
 			var item = change.get('Item');
 			var loc = item? LocationProvider.getLocation(item.get('ContainerId')) : null,
-				bookTitle = loc ? loc.title.get('title') : null,
+				bookTitle = loc && loc.title ? loc.title.get('title') : null,
 				m = this.generateMessage(change, bookTitle),
 				guid = guidGenerator();
 
