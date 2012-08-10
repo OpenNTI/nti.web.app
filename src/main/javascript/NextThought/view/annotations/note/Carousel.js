@@ -23,13 +23,13 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 				cls: 'carousel-body',
 				cn:'{%this.renderContainer(out,values)%}'
 			},
-			{ cls: 'slide-nav backward disabled', cn:[{cls: 'circle'}] },
-			{ cls: 'slide-nav forward disabled', cn:[{cls: 'circle'}] }
+			{ cls: 'slide-nav backward', cn:[{cls: 'circle'},{cls: 'slide backward disabled'}] },
+			{ cls: 'slide-nav forward', cn:[{cls: 'circle'},{cls: 'slide forward disabled'}] }
 		]),
 
 	renderSelectors: {
-		slideLeft: '.slide-nav.backward',
-		slideRight: '.slide-nav.forward',
+		slideLeft: '.slide-nav.backward .slide',
+		slideRight: '.slide-nav.forward .slide',
 		navNext: '.slide-nav.forward .circle',
 		navPrev: '.slide-nav.backward .circle'
 	},
