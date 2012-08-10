@@ -51,7 +51,7 @@ Ext.define('NextThought.Library', {
 
 
 	getTitle: function(index){
-		var field = 'id';
+		var field = 'index';
 
 		if(index instanceof Ext.data.Model){
 			index = index.getId();
@@ -59,7 +59,6 @@ Ext.define('NextThought.Library', {
 		else if(ParseUtils.parseNtiid(index) !== null){
 			field = 'NTIID';
 		}
-
 
 		return this.getStore().findRecord(field, index);
 	},
