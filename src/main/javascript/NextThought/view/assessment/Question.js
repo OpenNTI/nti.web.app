@@ -58,7 +58,10 @@ Ext.define('NextThought.view.assessment.Question',{
 
 	afterRender: function(){
 		this.callParent(arguments);
-		this.getTargetEl().select('img').on('load',function(){this.updateLayout();},this,{single:true});
+		this.getTargetEl().select('img').on('load',function(){
+			this.updateLayout();
+			this.syncElementHeight();
+		},this,{single:true});
 		this.syncTop();
 	},
 
