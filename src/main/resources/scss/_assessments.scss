@@ -187,6 +187,9 @@
 			border-bottom-width: 1px !important;
 			padding: 11px 10px 6px 10px;
 
+			&.correct{ font-style: italic; color: #8eb737; }
+			&.incorrect{ font-style: italic; color: #f35252; }
+
 			.title, .status {
 				display: inline;
 			}
@@ -194,10 +197,6 @@
 			.status {
 				text-transform: uppercase;
 				padding-left: 10px;
-				font-style: italic;
-
-				&.correct{ color: #8eb737; }
-				&.incorrect{ color: #f35252; }
 			}
 		}
 	}

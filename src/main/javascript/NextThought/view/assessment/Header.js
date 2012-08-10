@@ -42,14 +42,17 @@ Ext.define('NextThought.view.assessment.Header',{
 
 
 	markCorrect: function(){
-		this.status.removeCls('incorrect').addCls('correct').update('Correct!');
+		this.el.removeCls('incorrect').addCls('correct');
+		this.status.update('Correct!');
 	},
 
 	markIncorrect: function(){
-		this.status.removeCls('correct').addCls('incorrect').update('Incorrect');
+		this.el.removeCls('correct').addCls('incorrect');
+		this.status.update('Incorrect');
 	},
 
 	reset: function(){
-		this.status.removeCls('incorrect','correct').update('');
+		this.el.removeCls('incorrect','correct');
+		this.status.update('');
 	}
 });
