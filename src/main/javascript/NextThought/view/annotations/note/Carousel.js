@@ -134,31 +134,43 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 
 		t(this.navNext,hasNext);
 		t(this.navPrev,hasPrev);
-
+		this.updateSlide();
 		this.up('window').down('note-main-view').setRecord(item?item.record:null);
-	},
 
+		var bgx = parseInt(this.getEl().getStyle('background-position-x'),0);
+		//The "difference" is a sum because the pointer coordinate is
+		//actually the background's negative offset coordinate
+		this.pointerCoordDifference = bgx + dom.scrollLeft; 
+	},
+	
+	updateSlide: function(pos) {
+		dom = this.body.dom;
+		if (!pos && pos != 0) { pos = dom.scrollLeft }
+
+		function t(el,s){ el[(s?'remove':'add')+'Cls']('disabled') }
+
+		canSlideLeft = pos > 0;
+		canSlideRight = pos < dom.scrollWidth - dom.clientWidth;
+
+		t(this.slideLeft,canSlideLeft);
+		t(this.slideRight,canSlideRight);
+
+		if (pos == dom.scrollLeft) { return; }
+
+		var value = Ext.Number.constrain(pos,0,dom.scrollWidth - dom.clientWidth),
+			shift = value - dom.scrollLeft,
+			min = this.getEl().dom.getBoundingClientRect().width - this.BACKGROUND_WIDTH;
+
+		var newBgx = Ext.Number.constrain(this.pointerCoordDifference - value,min,0);
+		
+		this.body.animate({ to: {scrollLeft: value} });
+		this.getEl().animate({to:{backgroundPositionX: newBgx+'px'}});
+	},
 
 	slide: function(dir){
-		var b = this.body,
-			dom = b.dom,
-			w = dir*(b.getWidth()/2),
-			pValue = dom.scrollLeft,
-			pPos = parseInt(this.getEl().getStyle('background-position-x'),0),
-			value = Math.max( 0,
-						Math.min(
-							dom.scrollLeft + w,
-							dom.scrollWidth - dom.clientWidth));
-
-		var v = pPos + (pValue-value);
-		var min = this.getEl().dom.getBoundingClientRect().width - this.BACKGROUND_WIDTH;
-
-		v = Ext.Number.constrain(v,min,0);
-
-		b.animate({ to: {scrollLeft: value} });
-		this.getEl().animate({to:{backgroundPositionX: v+'px'}});
+		var b = this.body, me = this;
+		this.updateSlide(dir*(b.getWidth()/2) + b.dom.scrollLeft);
 	},
-
 
 	slideViewLeft: function(){
 		this.slide(-1);
