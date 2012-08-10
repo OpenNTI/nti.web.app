@@ -155,6 +155,11 @@
 								weight: 700;
 							}
 
+							&.wrong {
+								background: #F35252;
+								border-color: #F35252;
+							}
+
 							&.disabled {
 								cursor: default;
 								border-color: #d0d0d0;

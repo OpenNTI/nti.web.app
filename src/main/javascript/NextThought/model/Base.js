@@ -66,7 +66,7 @@ Ext.define('NextThought.model.Base', {
 	},
 
 
-	destroy: function(){
+	tearDownLinks: function(){
 		var p = this.parent, cn = (this.children||[]).slice(), i;
 		delete this.parent;
 		delete this.children;
@@ -82,8 +82,11 @@ Ext.define('NextThought.model.Base', {
 		}
 
 		this.fireEvent('destroy', this);
+	},
 
 
+	destroy: function(){
+		this.tearDownLinks();
 		return this.callParent(arguments);
 	},
 

@@ -122,18 +122,20 @@ Ext.define('NextThought.view.assessment.input.Base',{
 
 	markCorrect: function(){
 		this.footer.hide();
+		this.checkItBtn.removeCls('wrong');
 		this.inputBox.removeCls('incorrect').addCls('correct');
 		this.updateLayout();
 	},
 
 	markIncorrect: function(){
+		this.checkItBtn.addCls('wrong');
 		this.inputBox.removeCls('correct').addCls('incorrect');
 	},
 
 	reset: function(){
 		this.submitted = false;
 		this.footer.show();
-		this.checkItBtn.update('Check It!');
+		this.checkItBtn.removeCls('wrong').update('Check It!');
 		this.inputBox.removeCls('incorrect','correct');
 		this.updateLayout();
 		this.disableSubmission();
