@@ -137,7 +137,7 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 			document: doc });
 
 		//hide all sub-iframes initially.
-		//addCSS("iframe{display:none;}");
+		addCSS("iframe{display:none;}");
 
 		on(doc,['keypress','keydown','keyup'],function(e){
 			e = Ext.EventObject.setEvent(e||event);
@@ -230,10 +230,6 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 			display = 'display:block;',
 			w = doc.parentWindow;
 
-		if(!w.$){
-			setTimeout(function(){me.checkContentFrames();},50);
-			return;
-		}
 
 		function getTop(x) {
 			var curtop = 0;
@@ -266,7 +262,7 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 				return;
 			}
 
-			w.$(node).height(height);
+			Ext.fly(node).setHeight(height);
 
 			if(!f.originalSrc){
 				f.originalSrc = f.src;
