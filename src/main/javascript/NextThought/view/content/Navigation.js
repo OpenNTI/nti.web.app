@@ -56,9 +56,13 @@ Ext.define('NextThought.view.content.Navigation',{
 		if(!loc || !loc.NTIID || !book){ me.hide(); return; }
 		else if(me.isHidden()){ me.show(); }
 
-		iconPath = Ext.String.format('url({0}{1})',book.root,book.icon);
+		iconPath = book.icon;
+		if(iconPath.substr(0,book.root.length) !== book.root ){
+			iconPath = book.root+book.icon;
+		}
+
 		this.bookcover.setStyle({
-			backgroundImage: iconPath.replace(book.root+book.root, book.root)
+			backgroundImage: Ext.String.format('url({0})',iconPath)
 		});
 
 		c = lp.getLocation(lineage.shift());
