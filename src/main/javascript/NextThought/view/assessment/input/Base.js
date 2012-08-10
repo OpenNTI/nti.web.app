@@ -104,6 +104,7 @@ Ext.define('NextThought.view.assessment.input.Base',{
 	},
 
 	checkit: function(){
+		if(this.submissionDisabled){return;}
 		if(this.submitted){
 			this.reset();
 			return;
@@ -135,15 +136,18 @@ Ext.define('NextThought.view.assessment.input.Base',{
 		this.checkItBtn.update('Check It!');
 		this.inputBox.removeCls('incorrect','correct');
 		this.updateLayout();
+		this.disableSubmission();
 	},
 
 
 	enableSubmission: function(){
+		delete this.submissionDisabled;
 		this.checkItBtn.removeCls('disabled');
 	},
 
 
 	disableSubmission: function(){
+		this.submissionDisabled = true;
 		this.checkItBtn.addCls('disabled');
 	},
 
