@@ -701,14 +701,18 @@
 			top: 0;
 			bottom: 0;
 			width: 50px;
-			opacity: 0.4;
-			cursor: pointer;
-			&:hover {
-				opacity: 0.6;
-			}
-			
-			&.disabled {
-				&,&:hover{ opacity: 0.15; cursor: default; }
+
+			.slide {
+				position: absolute;
+				top: 0;
+				bottom: 0;
+				left: 15px;
+				width: 20px;
+				opacity: 0.4;
+				cursor: pointer;
+				&:hover {
+					opacity: 0.7;
+				}
 			}
 
 			.circle {
@@ -717,22 +721,18 @@
 				width: 77px;
 				height: 77px;
 				margin-top: 125px;
+				opacity: 0.4;
+				cursor: pointer;
+				&:hover {
+					opacity: 0.63;
+				}
 			}
-
-			&::after{
-				position: absolute;
-				top: 0; bottom: 0;
-				left: 15px;
-				content: '';
-				width: 20px;
-
+			
+			.disabled {
+				&,&:hover{ opacity: 0.10; cursor: default; }
 			}
 
 			&.forward{
-				&::after{
-					background-position-x: 0px;
-					background: url(../images/notes/next.png) 0px 50% no-repeat;
- 				}
 				right: 0;
 				.circle {
 					margin-left: 75px;
@@ -740,16 +740,20 @@
 				}
 			}
 			&.backward{
-				&::after{
-					background-position-x: 0px;
-					background: url(../images/notes/prev.png) 0px 50% no-repeat;
- 				}
 				left: 0;
 
 				.circle {
 					margin-left: -100px;
 				}
 			}
+			.forward{
+				background-position-x: 0px;
+				background: url(../images/notes/next.png) 0px 50% no-repeat;
+ 			}
+			.backward{
+				background-position-x: 0px;
+				background: url(../images/notes/prev.png) 0px 50% no-repeat;
+ 			}
 		}
 
 	}
