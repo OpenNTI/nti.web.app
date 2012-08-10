@@ -67,7 +67,8 @@ Ext.define('NextThought.model.Base', {
 
 
 	tearDownLinks: function(){
-		var p = this.parent, cn = (this.children||[]).slice(), i;
+		var p = this.parent, cn = (this.children||[]),
+			i, splice = Array.prototype.splice;
 		delete this.parent;
 		delete this.children;
 
@@ -76,8 +77,8 @@ Ext.define('NextThought.model.Base', {
 		if(p && p.children){
 			i = Ext.Array.indexOf(p.children,this);
 			if(i!==-1){
-				cn.unshift(i,1);
-				cn.splice.apply(p.children,cn);
+				cn.unshift(i,1);//add the index to our children list so it now looks like [i, 1, note, note, ...]
+				splice.apply(p.children,cn);//use cn as the args of splice
 			}
 		}
 

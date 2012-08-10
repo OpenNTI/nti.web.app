@@ -273,8 +273,9 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 		var r = this.record;
 		r.set('blod',['deleted']);
 		r.clearListeners();
+		r.placeHolder = true;
+
 		if (r.children && r.children.length > 0){
-			r.placeHolder = true;
             this.time.update("THIS MESSAGE HAS BEEN DELETED");
             this.text.remove();
             this.responseBox.remove();
@@ -285,7 +286,6 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 			this.destroy();
 		}
 
-		r.placeHolder = true;
 		if(r.isModifiable()){
         	r.destroy();
 		}
