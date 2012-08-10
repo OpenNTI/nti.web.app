@@ -276,18 +276,18 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 		r.placeHolder = true;
 
 		if (r.children && r.children.length > 0){
-            this.time.update("THIS MESSAGE HAS BEEN DELETED");
-            this.text.remove();
-            this.responseBox.remove();
-            this.avatar.remove();
-            this.replyBox.toggleCls("deleted-reply");
+			this.time.update("THIS MESSAGE HAS BEEN DELETED");
+			this.text.remove();
+			this.responseBox.remove();
+			this.avatar.remove();
+			this.replyBox.toggleCls("deleted-reply");
 		}
 		else {
 			this.destroy();
 		}
 
 		if(r.isModifiable()){
-        	r.destroy();
+			r.destroy();
 		}
 		else {
 			r.tearDownLinks();
