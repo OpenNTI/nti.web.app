@@ -49,13 +49,17 @@ Ext.define('NextThought.view.content.Navigation',{
 		var lineage = lp.getLineage(ntiid);
 		var book = lineage[0] ? lp.getLocation(lineage[0]) : null;
 		var	path = me.getBreadcrumbPath();
+		var iconPath;
 
 		me.cleanupMenus();
 
 		if(!loc || !loc.NTIID || !book){ me.hide(); return; }
 		else if(me.isHidden()){ me.show(); }
 
-		this.bookcover.setStyle({backgroundImage: Ext.String.format('url({0}{1})',book.root,book.icon)});
+		iconPath = Ext.String.format('url({0}{1})',book.root,book.icon);
+		this.bookcover.setStyle({
+			backgroundImage: iconPath.replace(book.root+book.root, book.root)
+		});
 
 		c = lp.getLocation(lineage.shift());
 		Ext.each(lineage,function(i){
