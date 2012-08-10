@@ -13,6 +13,7 @@ Ext.define('NextThought.view.assessment.Question',{
 	},
 
 	plain: true,
+	autoRender: true,
 	cls: 'question',
 	ui: 'assessment',
 
@@ -35,36 +36,29 @@ Ext.define('NextThought.view.assessment.Question',{
 	},
 
 
-	getBubbleTarget: function(){
-		return this.reader;
+	initComponent: function(){
+		this.callParent(arguments);
+		//TODO: this is a shortcut, assuming there is only one part to the question.
+		var part = this.questionPart = this.question.get('parts').first();
+		this.down('question-response').setQuestionAndPart(this.question,part);
+		this.setQuestionContent();
+		this.setupContentElement();
 	},
 
 
-	initComponent: function(){
-		this.callParent(arguments);
-
-		var content;
+	setQuestionContent: function(){
 		var root = LocationProvider.getContentRoot();
-		//TODO: this is a shortcut, assuming there is only one part to the question.
-		var part = this.question.get('parts').first();
-
-		this.down('question-response').setQuestionAndPart(this.question,part);
-
-		this.setupContentElement();
-
-		content = part.get('content');
-
 		function fixRef(original,attr,url) {
 			return (/^data:/i.test(url)) ? original : attr+'="'+root+url+'"'; }
 
-		content = content.replace(/(src)="(.*?)"/igm, fixRef);
-
-		this.update(content);
+		this.update(this.questionPart.get('content').replace(/(src)="(.*?)"/igm, fixRef));
+		this.updateLayout();
 	},
 
 
 	afterRender: function(){
 		this.callParent(arguments);
+		this.getTargetEl().select('img').on('load',function(){this.updateLayout();},this,{single:true});
 		this.syncTop();
 	},
 

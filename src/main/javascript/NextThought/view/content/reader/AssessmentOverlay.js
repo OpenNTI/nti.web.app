@@ -14,6 +14,7 @@ Ext.define('NextThought.view.content.reader.AssessmentOverlay', {
 		this.activeAssessments = {};
 	},
 
+
 	insertAssessmentOverlay: function(){
 		var container = Ext.DomHelper.append(this.getInsertionPoint('innerCt'), { cls:'assessment-overlay' }, true);
 		this.on('destroy' , function(){ container.remove(); });
