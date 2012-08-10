@@ -83,7 +83,6 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 			if(this.selected.transform.initial){
 				this.deleteSelected();
 			}
-			this.canvas.drawData.redoList = [];
 			this.canvas.drawScene();
 		}
 	},

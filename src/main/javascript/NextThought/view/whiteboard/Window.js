@@ -43,12 +43,10 @@ Ext.define('NextThought.view.whiteboard.Window',{
 				{
 					flex: 2,
 					layout: { type: 'hbox', pack: 'center' },
-					defaults: { xtype: 'button', scale: 'medium', disabled: false },
+					defaults: { xtype: 'button', scale: 'medium', disabled: true },
 					items: [
-						{iconCls: 'undo', ui: 'history', action: 'undo', tooltip: 'Undo', 
-							handler: function(b){b.up('window').undo(b)} },
-						{iconCls: 'redo', ui: 'history', action: 'redo', tooltip: 'Redo',
-							handler: function(b){b.up('window').redo(b)} }
+						{iconCls: 'undo', ui: 'history', action: 'undo', tooltip: 'Undo' },
+						{iconCls: 'redo', ui: 'history', action: 'redo', tooltip: 'Redo' }
 					]
 				},
 				{
@@ -62,18 +60,6 @@ Ext.define('NextThought.view.whiteboard.Window',{
 			]
 		}
 	],
-
-	undo: function(btn) {
-		var win = btn.up('window'),
-			wc = win.down('whiteboard-canvas');
-		wc.undo();
-	},
-
-	redo: function(btn) {
-		var win = btn.up('window'),
-			wc = win.down('whiteboard-canvas');
-		wc.redo();
-	},
 
 	constructor: function(config){
 		//ensure we're dealing with a local instance copy instead of prototype instance

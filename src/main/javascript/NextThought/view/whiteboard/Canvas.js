@@ -50,18 +50,6 @@ Ext.define(	'NextThought.view.whiteboard.Canvas',{
 		return data;
 	},
 
-	undo: function() {
-		if (!this.drawData.redoList) { this.drawData.redoList = [] }
-		this.drawData.redoList.push(this.drawData.shapeList.splice(0,1)[0]);
-		this.drawScene();
-	},
-
-	redo: function() {
-		if (!this.drawData.redoList || !this.drawData.redoList.length) { return }
-		this.drawData.shapeList.splice(0,0,this.drawData.redoList.pop());
-		this.drawScene();
-	},
-
 
 	afterRender: function(){
 		this.callParent();
