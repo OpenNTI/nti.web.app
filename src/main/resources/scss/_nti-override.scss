@@ -1,3 +1,13 @@
+.x-gecko li {
+            margin-top: 0.5em;
+            margin-bottom: 0.5em;
+}
+
+.x-gecko li > p.par {
+            display: inline;
+}
+
+
 #NTIContent {
 	&, * {
 		text-rendering: optimizeLegibility;//fallback
