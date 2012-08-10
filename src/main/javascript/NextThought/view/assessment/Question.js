@@ -88,7 +88,7 @@ Ext.define('NextThought.view.assessment.Question',{
 	syncTop: function(){
 		var o = this.reader.getAnnotationOffsets();
 		var myTop = Ext.fly(this.contentElement).getY();
-		var ctTop = this.el.up('.x-reader-pane').dom.getBoundingClientRect().top;
+		var ctTop = this.el.up('.x-reader-pane').getY();
 		var top = (myTop + ctTop) - o.scrollTop;
 		this.el.setY(top);
 	},
