@@ -46,6 +46,6 @@ Ext.define('NextThought.view.assessment.input.SymbolicMath',{
 		this.callParent(arguments);
 		this.inputField.dom.removeAttribute('readOnly');
 		this.inputField.dom.value = '';
-		this.inputField.focus();
+//		this.inputField.focus();
 	}
 });
