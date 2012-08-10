@@ -80,8 +80,8 @@
 			left: 12px;
 		}
 
-		&.documents::after{background-position-x: -18px;}
-		&.dashboard::after{background-position-x: 0px;}
+		&.documents::after{background-position: -18px 0;}
+		&.dashboard::after{background-position: 0 0;}
 	}
 
 	.collection-name {
