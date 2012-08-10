@@ -13,6 +13,7 @@ Ext.define('NextThought.controller.Quiz', {
 		'assessment.FreeResponsePart',
 		'assessment.FreeResponseSolution',
 		'assessment.Hint',
+		'assessment.HTMLHint',
 		'assessment.LatexSymbolicMathSolution',
 		'assessment.MatchingPart',
 		'assessment.MatchingSolution',
