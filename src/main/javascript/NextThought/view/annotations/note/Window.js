@@ -76,12 +76,27 @@ Ext.define('NextThought.view.annotations.note.Window',{
 			if(size.height > h){
 				size.height = h;
 				this.setHeight(h);
-				this.center();
 			}
 		}
 
 		return size;
 	},
+
+
+	center: function(){
+		var me = this,
+			xy,
+			top = Math.floor(Ext.Element.getViewportHeight()*0.15);
+
+		if (me.isVisible()) {
+			xy = me.el.getAlignToXY(me.container, 't-t',[0,top]);
+			me.setPagePosition(xy);
+		} else {
+			me.needsCenter = true;
+		}
+		return me;
+	},
+
 
 	afterRender: function(){
 		var me = this;

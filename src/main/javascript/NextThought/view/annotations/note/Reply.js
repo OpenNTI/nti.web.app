@@ -95,7 +95,7 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 			scope: me,
 			'size-changed': function(){
 				setTimeout(function(){
-					me.doLayout();
+					me.updateLayout();
 					me.doComponentLayout();},1);
 			}
 		});
@@ -118,7 +118,7 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 			if(r.replyBox){r.replyBox.removeCls('hover');}
 		});
 		this.replyBox.addCls('hover');
-		this.doLayout();
+		this.updateLayout();
 	},
 
 	onMouseOut: function(){
@@ -126,7 +126,7 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 		var s = this.getCarouselIfNear();
 		if(s){ s.removeCls('hover'); }
 		this.replyBox.removeCls('hover');
-		this.doLayout();
+		this.updateLayout();
 	},
 
 
@@ -136,7 +136,7 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 			this.replyBox.addCls('hover');
 		}
 		this.getEl().scrollIntoView(scroller);
-		this.doLayout();
+		this.updateLayout();
 	},
 
 
@@ -163,7 +163,7 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 				me.text.select('a[href]',true).set({target:'_blank'});
 				setTimeout(function(){
 					me.doComponentLayout();
-					me.doLayout();
+					me.updateLayout();
 				},1);
 			});
 		}
@@ -216,7 +216,7 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 		if(e){e.stopEvent();}
 		if(this.replyBox){
 			this.replyBox.addCls('editor-active');
-			this.doLayout();
+			this.updateLayout();
 			this.doComponentLayout();
 			this.scrollIntoView();
 		}
@@ -229,7 +229,7 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 			this.replyBox.removeCls('editor-active');
 			this.editor.down('.content').update('');
 		}
-		this.doLayout();
+		this.updateLayout();
 		this.doComponentLayout();
 		if(this.editMode){
 			this.text.show();

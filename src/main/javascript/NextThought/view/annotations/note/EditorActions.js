@@ -200,12 +200,7 @@ Ext.define('NextThought.view.annotations.note.EditorActions',{
 		this.previousEditorHeight = h;
 
 		if (h !== p) {
-			if(this.cmp.doLayout){
-				this.cmp.doLayout();
-			}
-			else {
-				this.cmp.doComponentLayout();
-			}
+			this.cmp.updateLayout();
 		}
 	},
 

@@ -75,7 +75,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 
 			TemplatesForNotes.attachMoreReplyOptionsHandler(me, me.more);
 			me.editorActions = new NoteEditorActions(me,me.editor);
-			me.mon(me.editorActions, { scope: me, 'size-changed': function(){ me.doComponentLayout(); } });
+			me.mon(me.editorActions, { scope: me, 'size-changed': function(){ me.updateLayout(); } });
 
 			this.el.hover(this.onMouseOver,this.onMouseOut,this);
 		}
@@ -87,13 +87,13 @@ Ext.define('NextThought.view.annotations.note.Main',{
 	onMouseOver: function(){
 		this.up('window').down('note-carousel').getEl().addCls('hover');
 		this.el.addCls('hover');
-		this.doComponentLayout();
+		this.updateLayout();
 	},
 
 	onMouseOut: function(){
 		this.up('window').down('note-carousel').getEl().removeCls('hover');
 		this.el.removeCls('hover');
-		this.doComponentLayout();
+		this.updateLayout();
 	},
 
 
@@ -286,7 +286,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		var me = this;
 		this.up('window').down('note-carousel').addCls('editor-active');
 		me.el.addCls('editor-active');
-		me.doComponentLayout();
+		me.updateLayout();
         me.scrollIntoView();
 		setTimeout(function(){me.editorActions.focus();}, 100);
 	},
@@ -296,7 +296,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		this.editor.down('.content').update('');
 		this.up('window').down('note-carousel').removeCls('editor-active');
 		this.el.removeCls('editor-active');
-		this.doComponentLayout();
+		this.updateLayout();
 		if(this.editMode){
 			this.text.show();
 		}
