@@ -330,7 +330,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 			cid = item? item.get('ContainerId') : null,
 			creator = item? item.get('Creator') : null,
 			delAction = /deleted/i.test(type),
-			cmp = Ext.getCmp(IdCache.getComponentId(oid, null, this.prefix)),
+			cmps = Ext.ComponentQuery.query(Ext.String.format('[recordIdHash={0}]' ,IdCache.getIdentifier(oid)))||[],
 			cls, replyTo, result,
 			contribNS = Globals.getViewIdFromComponent(this);
 
@@ -358,33 +358,24 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 			}
 		}
 
-		//found the component, it's not top level
-		else if (cmp) {
+		Ext.each(cmps,function(cmp){
 			//delete it
 			if (delAction) {
-				cmp.annotation.cleanup();
+				cmp.onDelete();
 			}
-			//update it
 			else {
-				cmp.annotation.getRecord().fireEvent('updated',item);
+				cmp.getRecord().fireEvent('changed');
 			}
+		});
 
-		}
 		//if not exists, add
-		else if(!delAction){
+		if(!delAction){
 			cls = item.get('Class');
-			replyTo = item.get('inReplyTo');
+//			replyTo = item.get('inReplyTo');
 			result = this.createAnnotationWidget(cls,item) || false;
 
 			if(result === false){
-
-//				if (replyTo) {
-//					replyTo = Ext.getCmp(IdCache.getComponentId(replyTo, null, this.prefix));
-//					replyTo.addReply(item);
-//				}
-//				else {
-					console.error('ERROR: Do not know what to do with this item',item);
-//				}
+				console.error('ERROR: Do not know what to do with this item',item);
 			}
 		}
 	},

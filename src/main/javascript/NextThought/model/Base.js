@@ -206,7 +206,7 @@ Ext.define('NextThought.model.Base', {
 
 	isModifiable: function(){
 		try{
-			return this.phantom||this.getLink('edit')!==null;
+			return this.phantom||(this.getLink('edit')!==null&&isMe(this.get('Creator')));
 		}
 		catch(e){
 			console.warn('No getLink()!');

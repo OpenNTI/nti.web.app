@@ -146,6 +146,9 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 		var me = this;
 		if(!me.rendered){return;}
 		if (!r.placeHolder){UserRepository.getUser(r.get('Creator'),me.fillInUser,me);}
+
+		me.recordIdHash = IdCache.getIdentifier(r.getId());
+
 		me.time.update(r.getRelativeTimeString());
 		me.liked.update(r.getFriendlyLikeCount());
 		if (r.isLiked()){
@@ -268,6 +271,8 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 
 	onDelete: function(){
 		var r = this.record;
+		r.set('blod',['deleted']);
+		r.clearListeners();
 		if (r.children && r.children.length > 0){
 			r.placeHolder = true;
             this.time.update("THIS MESSAGE HAS BEEN DELETED");
@@ -280,7 +285,13 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 			this.destroy();
 		}
 
-        r.destroy();
+		r.placeHolder = true;
+		if(r.isModifiable()){
+        	r.destroy();
+		}
+		else {
+			r.tearDownLinks();
+		}
 	},
 
 	startChat: function() {
