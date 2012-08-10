@@ -208,7 +208,7 @@
 			&.active {
 				border-color: #dcdcdc;
 				background-color: #ffffff;
-				background-position: 5px center;
+				background-position-x: 5px;
 				box-shadow: 1px 1px 2px 0 rgba(0,0,0,0.09);
 
 				ol {
@@ -241,7 +241,7 @@
                 z-index: 9999;
 
 				li {
-					&:hover { background-color: #efefef; &::after { background-position: -20px 0; } }
+					&:hover { background-color: #efefef; &::after { background-position-x: -20px; } }
 					&::after {
 						content: ' ';
 						width: 18px;
@@ -255,13 +255,13 @@
 					position: relative;
 					padding: 0 10px 0 37px;
 
-					&.share::after { background-position: 0 0; }
-					&.edit::after { background-position: 0 -100px; }
-					&.flag::after { background-position: 0 -18px; }
-					&.add-contact::after { background-position: 0 -36px; }
-					&.follow::after { background-position: 0 -54px; }
-					&.block::after { background-position: 0 -72px; }
-					&.mute::after { background-position: 0 -100px; }
+					&.share::after { background-position-y: 0; }
+					&.edit::after { background-position-y: -100px; }
+					&.flag::after { background-position-y: -18px; }
+					&.add-contact::after { background-position-y: -36px; }
+					&.follow::after { background-position-y: -54px; }
+					&.block::after { background-position-y: -72px; }
+					&.mute::after { background-position-y: -100px; }
 					&.delete::after { background-position: 0 -100px; }
 				}
 			}
@@ -414,7 +414,7 @@
 		}
 		&:active::after,
 		&:focus::after {
-			background-position: 0 -26px;
+			background-position-y: -26px;
 		}
 
 		&.expanded{
@@ -736,7 +736,7 @@
 				right: 0;
 				.circle {
 					margin-left: 75px;
-					background-position: 0 -77px;
+					background-position: -77px 0px;
 				}
 			}
 			&.backward{
@@ -747,10 +747,12 @@
 				}
 			}
 			.forward{
-				background: url(../images/notes/next.png) 0 50% no-repeat;
+				background-position-x: 0px;
+				background: url(../images/notes/next.png) 0px 50% no-repeat;
  			}
 			.backward{
-				background: url(../images/notes/prev.png) 0 50% no-repeat;
+				background-position-x: 0px;
+				background: url(../images/notes/prev.png) 0px 50% no-repeat;
  			}
 		}
 
@@ -831,7 +833,7 @@
 				.footer {
 					.action {
 						&.whiteboard {
-							background-position: 2px 0;
+							background-position-x: 2px;
 						}
 					}
 				}
@@ -894,7 +896,7 @@
         .note-reply-container {
             .note-reply {
                 padding-left: 60px;
-                background-position: 48px 0;
+                background-position-x: 48px;
             }
             .note-reply-container {
                 .note-reply.first {
