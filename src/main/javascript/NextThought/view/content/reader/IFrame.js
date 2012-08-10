@@ -137,7 +137,7 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 			document: doc });
 
 		//hide all sub-iframes initially.
-		addCSS("iframe{display:none;}");
+		//addCSS("iframe{display:none;}");
 
 		on(doc,['keypress','keydown','keyup'],function(e){
 			e = Ext.EventObject.setEvent(e||event);
