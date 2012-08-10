@@ -23,8 +23,17 @@ Ext.define('NextThought.view.assessment.input.SymbolicMath',{
 			keyup: function(e,dom){
 				if(dom.value===''){ this.disableSubmission(); }
 				else { this.enableSubmission(); }
-			}
+			},
+			keydown: this.enterKeyFilter
 		});
+	},
+
+	enterKeyFilter: function(e){
+		if(e.getKey()=== e.ENTER){
+			this.checkit();
+			e.stopEvent();
+			return false;
+		}
 	},
 
 
