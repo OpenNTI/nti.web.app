@@ -118,7 +118,7 @@ Ext.define( 'NextThought.view.annotations.Note', {
 	createSingleGutterWidget: function(){
 		var dom = Ext.get(document.createElement('div'));
 
-		this.gutterCmp = Ext.widget({xtype: 'note-gutter-widget', record: this.getRecord(), renderTo: dom});
+		this.gutterCmp = Ext.widget({xtype: 'note-gutter-widget', annotation: this, record: this.getRecord(), renderTo: dom});
 		this.singleGutterWidget = this.attachListeners( Ext.get(dom) );
 
 		this.ownerCmp.registerScrollHandler(this.gutterCmp.onParentScroll,this.gutterCmp);

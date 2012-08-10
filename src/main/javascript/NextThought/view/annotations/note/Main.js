@@ -210,6 +210,9 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		catch(e3){
 			console.error(Globals.getError(e3));
 		}
+		if(this.editMode){
+			this.onEdit();
+		}
 
 		this.up('window').down('note-responses').setReplies(this.record.children);
 	},

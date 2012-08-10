@@ -55,9 +55,13 @@ Ext.define('NextThought.view.annotations.note.Window',{
 
 
 	initComponent: function(){
-		var a = this.annotation;
+		var a = this.annotation, m;
 		this.callParent(arguments);
-		this.down('note-main-view').prefix = a.prefix;
+		m = this.down('note-main-view');
+		m.prefix = a.prefix;
+		if(this.isEdit){
+			m.editMode = this.isEdit;
+		}
 		this.down('note-carousel').setRecord(a.getRecord());
 
 		this.syncSize = Ext.Function.createBuffered(this.syncSize,10,this,null);

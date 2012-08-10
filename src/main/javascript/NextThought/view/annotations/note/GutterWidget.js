@@ -102,6 +102,10 @@ Ext.define('NextThought.view.annotations.note.GutterWidget',{
 	},
 
 
+	onEdit: function(){
+		this.annotation.openWindow(false,true);
+	},
+
 	onShare: function(){
 		this.fireEvent('share', this.record);
 	},
