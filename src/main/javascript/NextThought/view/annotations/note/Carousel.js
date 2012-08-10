@@ -137,7 +137,7 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 		this.updateSlide();
 		this.up('window').down('note-main-view').setRecord(item?item.record:null);
 
-		var bgx = parseInt(this.getEl().getStyle('background-position-x'),0);
+		var bgx = parseInt(this.getEl().getStyle('background-position').match(/-?[0-9]+/g)[0],0);
 		//The "difference" is a sum because the pointer coordinate is
 		//actually the background's negative offset coordinate
 		this.pointerCoordDifference = bgx + dom.scrollLeft; 
@@ -165,6 +165,8 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 		
 		this.body.animate({ to: {scrollLeft: value} });
 		this.getEl().animate({to:{backgroundPositionX: newBgx+'px'}});
+		var me = this;
+		setTimeout(function() { me.getEl().setStyle('background-position',newBgx+'px 0px') }, 250);
 	},
 
 	slide: function(dir){
@@ -195,7 +197,7 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 		var pos = item ? start+offset : 0;
 
 		this.getEl().setStyle({
-			backgroundPositionX: pos+'px'
+			backgroundPosition: pos+'px 0px'
 		});
 	},
 
