@@ -52,10 +52,10 @@ Ext.define('NextThought.view.content.Navigation',{
 
 		me.cleanupMenus();
 
-		if(!loc || !loc.NTIID){ me.hide(); return; }
+		if(!loc || !loc.NTIID || !book){ me.hide(); return; }
 		else if(me.isHidden()){ me.show(); }
 
-		this.bookcover.setStyle({backgroundImage: Ext.String.format('url({0})',book.icon)});
+		this.bookcover.setStyle({backgroundImage: Ext.String.format('url({0}{1})',book.root,book.icon)});
 
 		c = lp.getLocation(lineage.shift());
 		Ext.each(lineage,function(i){
