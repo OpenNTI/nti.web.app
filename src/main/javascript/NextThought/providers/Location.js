@@ -255,10 +255,11 @@ Ext.define('NextThought.providers.Location', {
 	},
 
 
-	getRelated: function(ntiid){
+	getRelated: function(givenNtiid){
 		var me = this,
+			ntiid = givenNtiid || me.currentNTIID,
 			map = {},
-			info = Library.find(ntiid || me.currentNTIID),
+			info = Library.find(ntiid),
 			related = info ? info.location.getElementsByTagName('Related') : null;
 
 		function findIcon(n) {
@@ -284,6 +285,11 @@ Ext.define('NextThought.providers.Location', {
 					href = (location? location : r ).getAttribute('href');
 
 				if(!map[id]){
+					if(!info || !info.title){
+						console.warn('skipping related item: '+id+' because we could not resolve the ntiid '+ntiid+' to a book');
+						return;
+					}
+
 					map[id] = {
 						id: id,
 						type: type,
