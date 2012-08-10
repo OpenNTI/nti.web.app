@@ -717,7 +717,6 @@
 
 			.circle {
 				position: fixed;
-				background: url(../images/notes/prev-next-circles.png) 0 0 no-repeat;
 				width: 77px;
 				height: 77px;
 				margin-top: 125px;
@@ -735,6 +734,7 @@
 			&.forward{
 				right: 0;
 				.circle {
+					background: url(../images/notes/next-circle.png) 0 0 no-repeat;
 					margin-left: 75px;
 					background-position-x: -77px;
 				}
@@ -743,6 +743,7 @@
 				left: 0;
 
 				.circle {
+					background: url(../images/notes/prev-circle.png) 0 0 no-repeat;
 					margin-left: -100px;
 				}
 			}
