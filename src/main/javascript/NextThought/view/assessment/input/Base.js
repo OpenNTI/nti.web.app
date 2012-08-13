@@ -167,14 +167,14 @@ Ext.define('NextThought.view.assessment.input.Base',{
 	},
 
 	hideSolution: function(){
-		this.showSolutionBtn.update('Show Answer');
+		this.showSolutionBtn.update('Show Solution');
 		this.solutionBox.hide();
 		this.inputBox.show();
 		this.updateLayout();
 	},
 
 	showSolution: function(){
-		this.showSolutionBtn.update('Hide Answer');
+		this.showSolutionBtn.update('Hide Solution');
 		this.inputBox.hide();
 		this.solutionBox.show();
 		this.updateLayout();
