@@ -16,5 +16,9 @@ Ext.define('NextThought.view.assessment.input.SingleChoice',{
 		this.getEl().select('.choice .control').removeCls('checked');
 
 		c.down('.control').addCls('checked');
+	},
+	
+	getSolutionHtml: function(solution,part) {
+		return part.get('choices')[solution.get('value')];
 	}
 });

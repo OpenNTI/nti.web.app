@@ -60,7 +60,11 @@ Ext.define('NextThought.view.assessment.input.Base',{
 			data.renderTpl = data.renderTpl.replace('{super}',tpl);
 		}
 	},
-
+	
+	//Encapsulate this for the sake of multiple choice questions, matching, etc
+	getSolutionHtml: function(solution,part) {
+		return solution.get('value');
+	},
 
 	initComponent: function(){
 		this.callParent(arguments);
@@ -70,13 +74,14 @@ Ext.define('NextThought.view.assessment.input.Base',{
 
 	afterRender: function(){
 		this.callParent(arguments);
+		var me = this;
 		var p = this.part;
 		var a = this.solutionAnswerBox;
 		var e = this.solutionExplanationBox;
 		var solutions = [];
 
 		Ext.each(p.get('solutions'),function(s){
-			solutions.push(s.get('value'));
+			solutions.push(me.getSolutionHtml(s,p));
 		});
 
 		a.update(solutions.join('<br/> or: '));
