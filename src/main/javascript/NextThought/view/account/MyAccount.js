@@ -16,7 +16,8 @@ Ext.define('NextThought.view.account.MyAccount',{
 
 	renderSelectors: {
 		boxEl: 'div.my-account-wrapper',
-		notificationCount: 'span.notifications'
+		notificationCount: 'span.notifications',
+		name: 'div.name'
 	},
 
 	initComponent: function(){
@@ -34,6 +35,11 @@ Ext.define('NextThought.view.account.MyAccount',{
 			hide: function(){ this.callParent(arguments); clearTimeout(t); me.getEl().removeCls(cls);},
 			show: function(){ this.callParent(arguments); t=setTimeout(function(){me.getEl().addCls(cls);},600);}
 		}});
+
+		this.mon($AppConfig.userObject,{
+			scope: this,
+			'changed': function(r){this.name.update(r.getName());}
+		});
 
 		//When something is added to the stream store, ONLY added, we need to adjust the counter.
 		//We DO NOT adjust on datachanged because we get the original not count from the user obj.

@@ -63,6 +63,7 @@ Ext.define('NextThought.controller.Account', {
 			if(!op.success){
 				console.error('FAILURE:',arguments);
 			}
+			u.fireEvent('changed', record);
 		}
 
 		if(!form.getForm().isValid()){

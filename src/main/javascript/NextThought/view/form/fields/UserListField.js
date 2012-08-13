@@ -89,7 +89,7 @@ Ext.define('NextThought.view.form.fields.UserListField', {
 	initValue: function(){
 		var m = this;
 		if (m.value && m.value.length > 0) {
-			UserRepository.prefetchUser(m.value, function(users){
+			UserRepository.getUser(m.value, function(users){
 				Ext.each(users, function(u){
 					m.addSelection(u);
 				});

@@ -59,10 +59,7 @@ Ext.define('NextThought.model.Base', {
 
 		f.getByKey('MimeType').defaultValue = this.mimeType;
 
-		c = this.callParent(arguments);
-		this.enforceMutability();
-
-		return c;
+		return this.callParent(arguments);
 	},
 
 
@@ -100,7 +97,6 @@ Ext.define('NextThought.model.Base', {
 			});
 		}
 	},
-
 
 	getModelName: function() {
 		return this.get('Class');
@@ -325,7 +321,7 @@ Ext.define('NextThought.model.Base', {
 					return;
 				}
 				me.set(Ext.JSON.decode(resp.responseText));
-//				me.enforceMutability();
+				me.enforceMutability();
 				me.dirty = false;
 				me.modified = {};
 			}
