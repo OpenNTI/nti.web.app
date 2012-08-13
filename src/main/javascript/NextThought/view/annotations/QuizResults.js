@@ -9,5 +9,8 @@ Ext.define( 'NextThought.view.annotations.QuizResults', {
 
 
 		return this;
+	},
+	render: function(){
+		return this;
 	}
 });
