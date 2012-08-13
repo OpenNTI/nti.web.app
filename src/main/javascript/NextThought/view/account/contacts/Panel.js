@@ -51,15 +51,20 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 
 	setTitle: function(title){
 		var itemsShown = 0;
+
+		this.title = title;
+
 		Ext.each(this.items.items, function(x){
 			if (!x.hidden){itemsShown++;}
 		}, this);
 
 		if(this.showCount){
-			title = Ext.String.format('{0} ({1})',title,itemsShown);
+			this.title = Ext.String.format('{0} ({1})',title,itemsShown);
 		}
 
-		this.callParent([title]);
+		if (this.rendered) {
+			this.getHeader().setTitle(this.title);
+		}
 
 		return itemsShown===0 ? this.hide() : this.show();
 	},

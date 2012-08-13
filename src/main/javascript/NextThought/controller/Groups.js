@@ -113,7 +113,7 @@ Ext.define('NextThought.controller.Groups', {
 			}
 
 			var name = group.getName();
-			UserRepository.prefetchUser(friends,function(users){
+			UserRepository.getUser(friends,function(users){
 				groups.add({title: name, associatedGroup: group}).setUsers(users);
 			});
 		});
@@ -126,7 +126,7 @@ Ext.define('NextThought.controller.Groups', {
 			online = Ext.getCmp('online-contacts'),
 			u;
 
-		UserRepository.prefetchUser(name, function(users) {
+		UserRepository.getUser(name, function(users) {
 			u = users[0];
 			if (presence.toLowerCase()==='online') {
 				//remove from offline, add to online
