@@ -136,6 +136,21 @@
 						.action { float: right; }
 					}
 
+
+					.mathsymbol {
+						cursor: pointer;
+						width: 36px;
+						height: 36px;
+						background: url(../images/symbols/math_symbols_sprite.png) 0 0 no-repeat;
+						float: left;
+
+						&.sqrt { background-position: -2px -2px; }
+						&.square { background-position: -42px -2px; }
+						&.parens { background-position: -82px -2px; }
+						&.approx { background-position: -122px -2px; }
+						&.pi { background-position: -162px -2px; }
+					}
+
 					.action {
 						color: #757474;
 						cursor: pointer;

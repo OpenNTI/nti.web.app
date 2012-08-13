@@ -9,6 +9,14 @@ Ext.define('NextThought.view.assessment.input.SymbolicMath',{
 		cls: 'answer-field'
 	}),
 
+	toolbarTpl: Ext.DomHelper.markup([
+		{ cls: 'mathsymbol sqrt', 'data-latex': '\\\\surd' },
+		{ cls: 'mathsymbol square', 'data-latex': 'x^2' },
+		{ cls: 'mathsymbol parens', 'data-latex': '(x)'},
+		{ cls: 'mathsymbol approx', 'data-latex': '\\\\approx' },
+		{ cls: 'mathsymbol pi', 'data-latex': '\\\\pi' }
+	]),
+
 	renderSelectors: {
 		inputField: '.answer-field'
 	},
@@ -26,7 +34,19 @@ Ext.define('NextThought.view.assessment.input.SymbolicMath',{
 			},
 			keydown: this.enterKeyFilter
 		});
+
+		this.mon(this.getEl().select('.mathsymbol'),{
+			scope: this,
+			click: this.mathSymbolClicked
+		});
 	},
+
+
+	mathSymbolClicked: function(e){
+		var t = e.getTarget();
+		this.inputField.dom.value += t.getAttribute('data-latex');
+	},
+
 
 	enterKeyFilter: function(e){
 		if(e.getKey()=== e.ENTER){
