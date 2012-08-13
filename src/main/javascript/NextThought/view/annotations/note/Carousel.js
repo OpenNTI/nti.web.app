@@ -112,8 +112,9 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 		});
 	},
 
-
-	t:function(el,s){ el[(s?'remove':'add')+'Cls']('disabled'); },
+	t: function(el,s){
+		el[(s?'remove':'add')+'Cls']('disabled'); 
+	},
 
 	updateWith: function(item){
 		var hasNext, hasPrev,
@@ -135,47 +136,52 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 
 		me.t(this.navNext,hasNext);
 		me.t(this.navPrev,hasPrev);
-
+		this.updateSlide();
 		this.up('window').down('note-main-view').setRecord(item?item.record:null);
+
+		var bgx = parseInt(this.getEl().getStyle('background-position').match(/-?[0-9]+/g)[0],0);
+		//The "difference" is a sum because the pointer coordinate is
+		//actually the background's negative offset coordinate
+		this.pointerCoordDifference = bgx + dom.scrollLeft; 
 	},
+	
+	updateSlide: function(pos) {
+		dom = this.body.dom;
+		if (!pos && pos !== 0) { pos = dom.scrollLeft; }
 
+		canSlideLeft = pos > 0;
+		canSlideRight = pos < dom.scrollWidth - dom.clientWidth;
 
-	slide: function(dir){
-		var b = this.body,
-			dom = b.dom,
-			w = dir*(b.getWidth()/2),
-			pValue = dom.scrollLeft,
-			pPos = parseInt(this.getEl().getStyle('background-position').split(' ')[0],0),
-			value = Math.max( 0,
-						Math.min(
-							dom.scrollLeft + w,
-							dom.scrollWidth - dom.clientWidth));
+		this.t(this.slideLeft,canSlideLeft);
+		this.t(this.slideRight,canSlideRight);
 
-		var v = pPos + (pValue-value);
-		var min = this.getEl().dom.getBoundingClientRect().width - this.BACKGROUND_WIDTH;
+		if (pos === dom.scrollLeft) { return; }
 
-		v = Ext.Number.constrain(v,min,0);
+		var value = Ext.Number.constrain(pos,0,dom.scrollWidth - dom.clientWidth),
+			shift = value - dom.scrollLeft,
+			min = this.getEl().dom.getBoundingClientRect().width - this.BACKGROUND_WIDTH;
 
-		b.animate({ to: {scrollLeft: value} });
-		this.getEl().animate({to:{backgroundPosition: v+'px 0'}});
-
-		this.t(this.slideLeft, this.isOverflowing() && v > min );
-		this.t(this.slideRight,this.isOverflowing() && v < 0 );
+		var newBgx = Ext.Number.constrain(this.pointerCoordDifference - value,min,0);
+		
+		this.body.animate({ to: {scrollLeft: value} });
+		console.log(newBgx);
+		if (Ext.isGecko) { 
+			this.getEl().setStyle('background-position','0 0');
+		}
+		else {
+			this.getEl().animate({to:{backgroundPositionX: newBgx+'px'}});
+		}
 	},
-
-	isOverflowing: function(){
-		var b = this.body.dom;
-		return b.scrollWidth > Ext.fly(b).getWidth();
-	},
-
 
 	slideViewLeft: function(){
-		this.slide(-1);
+		var b = this.body, me = this;
+		this.updateSlide(-(b.getWidth()/2) + b.dom.scrollLeft);
 	},
 
 
 	slideViewRight: function(){
-		this.slide(1);
+		var b = this.body, me = this;
+		this.updateSlide((b.getWidth()/2) + b.dom.scrollLeft);
 	},
 
 
