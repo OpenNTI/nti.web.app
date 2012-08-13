@@ -1,4 +1,4 @@
-Ext.define('NextThought.controller.Quiz', {
+Ext.define('NextThought.controller.Assessment', {
 	extend: 'Ext.app.Controller',
 
 	requires: [

@@ -24,8 +24,10 @@ Ext.define('NextThought.view.assessment.Question',{
 
 	setupContentElement: function(){
 		var el = Ext.get(this.contentElement);
-
-		el.down('.naqsolutions').remove();
+		var sol = el.down('.naqsolutions');
+		if(sol){
+			sol.remove();
+		}
 
 		el.setStyle({
 			overflow: 'hidden',

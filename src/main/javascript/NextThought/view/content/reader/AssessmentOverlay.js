@@ -39,8 +39,9 @@ Ext.define('NextThought.view.content.reader.AssessmentOverlay', {
 			return;
 		}
 
+		//TODO: Remove all content based submit buttons
 		new Ext.dom.CompositeElement(
-			this.getDocumentElement().querySelectorAll('.x-btn-submit')).remove();
+			this.getDocumentElement().querySelectorAll('.x-btn-submit,[onclick^=NTISubmitAnswers]')).remove();
 
 		Ext.Array.sort(items, function(ar,br){
 			var a = ar.getId();

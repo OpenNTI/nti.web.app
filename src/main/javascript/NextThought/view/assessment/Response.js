@@ -3,6 +3,9 @@ Ext.define('NextThought.view.assessment.Response',{
 	alias: 'widget.question-response',
 
 	requires: [
+		'NextThought.view.assessment.input.FreeResponse',
+		'NextThought.view.assessment.input.Matching',
+		'NextThought.view.assessment.input.MultipleChoice',
 		'NextThought.view.assessment.input.SymbolicMath'//...add all the possible input types here
 	],
 
@@ -14,7 +17,12 @@ Ext.define('NextThought.view.assessment.Response',{
 	setQuestionAndPart: function(question,part){
 		this.removeAll(true);
 		var type = 'question-input-'+part.get('Class').toLowerCase();
-		this.add({xtype: type, question: question, part: part});
+		try {
+			this.add({xtype: type, question: question, part: part});
+		}
+		catch(e){
+			console.warn('missing question type: '+type);
+		}
 	},
 
 

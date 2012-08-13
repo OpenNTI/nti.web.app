@@ -16,6 +16,7 @@ Ext.application({
 		'Account',
 		'Annotations',
 		'Application',
+		'Assessment',
 		'Chat',
 		'Classroom',
 		'FilterControl',
@@ -26,8 +27,7 @@ Ext.application({
 		'Search',
 		'Session',
 		'State',
-		'Stream',
-		'Quiz'
+		'Stream'
 	],
 
 	launch: function(){

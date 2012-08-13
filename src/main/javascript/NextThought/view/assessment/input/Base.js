@@ -43,10 +43,13 @@ Ext.define('NextThought.view.assessment.input.Base',{
 
 
 	onClassExtended: function(cls, data) {
-		Ext.applyIf(data.renderSelectors,cls.superclass.renderSelectors);
+		data.renderSelectors = Ext.applyIf(data.renderSelectors||{},cls.superclass.renderSelectors);
+
+		data.inputTpl = data.inputTpl || cls.superclass.inputTpl || false;
+		data.toolbarTpl = data.toolbarTpl || cls.superclass.toolbarTpl || false;
 
 		//merge in subclass's input template
-		var tpl = cls.superclass.renderTpl
+		var tpl = this.prototype.renderTpl
 				.replace('{input}',data.inputTpl||'')
 				.replace('{toolbar}',data.toolbarTpl||'');
 
