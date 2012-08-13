@@ -97,6 +97,70 @@
 						}
 					}
 
+					.choice {
+						@extend .assessment-content;
+						cursor: pointer;
+						position: relative;
+						color: #494949;
+						vertical-align: middle;
+						min-height: 38px;
+						background: #ffffff;
+						border: 0px solid #b8b8b8;
+						border-bottom-width: 1px;
+						&:last-of-type { border-bottom-width: 0px; }
+						padding-left: 54px;
+
+						span {
+							line-height: 38px;
+						}
+
+						.label {
+							height: 38px;
+							font-weight: bold;
+							margin-right: 10px;
+						}
+						.control {
+							position: absolute;
+							top: 0; left: 0;
+							display: inline-block;
+							width: 54px;
+							height: 38px;
+							border: none;
+							border-left: 6px solid white;
+							background: url(../images/quiz/sprite.png) -1000px -1000px no-repeat;
+							&.checked {
+								border-color: #3fb3f6;
+							}
+						}
+
+						&.correct .control { &,&.checked{
+							border-color: #9ac73c;
+							background-position: -105px -5px;
+						}}
+						&.incorrect .control{ &,&.checked{
+							border-color: #9ac73c;
+							background-position: -105px -55px;
+						}}
+					}
+
+					.multi .choice {
+						&:hover .control,
+						.control {
+							background-position: -55px -55px;
+							&.checked { background-position: -55px -105px; }
+						}
+
+						.control { background-position: -55px -5px; }
+					}
+
+					.single .choice {
+						&:hover .control{ background-position: -5px -55px; }
+						.control {
+							background-position: -5px -5px;
+							&.checked { background-position: -5px -105px; }
+						}
+					}
+
 					.solution {
 						@extend .assessment-content;
 						padding: 10px 20px 15px 20px;
