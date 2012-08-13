@@ -336,6 +336,11 @@ Ext.define('NextThought.view.annotations.note.Main',{
 	},
 
 
+	onFlag: function(){
+		this.record.flag(this);
+	},
+
+
 	onDelete: function(){
 		if( this.record && this.record.destroy){
 			this.record.destroy();

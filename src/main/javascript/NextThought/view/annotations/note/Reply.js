@@ -296,6 +296,11 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 
 	startChat: function() {
 		this.fireEvent('chat', this.record);
+	},
+
+
+	onFlag: function() {
+		this.record.flag(this);
 	}
 
 },

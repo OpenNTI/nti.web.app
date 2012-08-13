@@ -137,6 +137,32 @@ Ext.define('NextThought.model.Base', {
 	},
 
 
+	isFlagged: function(){
+		//If you have an unlike link, you have already liked it.
+		var f = this.getLink('flag.metoo');
+		if (f) {return true;}
+		return false;
+	},
+
+
+	flag: function(widget){
+		var action = this.isFlagged() ? 'flag.metoo' : 'flag',
+			prePost = action === 'flag' ? 'addCls' : 'removeCls',
+			postPost = action === 'flag' ? 'removeCls' : 'addCls';
+
+		if (this.activePostTos && this.activePostTos[action]){return;}
+
+		widget[prePost]('on');
+
+		this.postTo(action, function(s){
+			if (!s) {
+				widget[postPost]('on');
+			}
+		});
+	},
+
+
+
 	favorite: function(widget){
 		var action = this.isFavorited() ? 'unfavorite' : 'favorite',
 			prePost = action === 'favorite' ? 'addCls' : 'removeCls',

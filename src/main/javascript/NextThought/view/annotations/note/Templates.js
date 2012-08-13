@@ -47,12 +47,11 @@ Ext.define('NextThought.view.annotations.note.Templates',{
 						cn: [
 							{ tag: 'li', cls: 'edit', html: 'Edit' },
 							{ tag: 'li', cls: 'share', html: 'Share' },
-							/*
 							{ tag: 'li', cls: 'flag',  html: 'Flag for Moderation' },
 							{ tag: 'li', cls: 'add-contact', html: 'Add to Contacts' },
 							{ tag: 'li', cls: 'follow', html: 'Follow ...' },
 							{ tag: 'li', cls: 'block', html: 'Block ...' },
-//							{ tag: 'li', cls: 'mute', html: 'Mute?' },*/
+							{ tag: 'li', cls: 'mute', html: 'Mute?' },
 							{ tag: 'li', cls: 'delete', html: 'Delete' }
 						]
 					}]
@@ -98,6 +97,7 @@ Ext.define('NextThought.view.annotations.note.Templates',{
 		var flag = moreEl.down('li.flag');
 		var follow = moreEl.down('li.follow');
 		var block = moreEl.down('li.block');
+		var mute = moreEl.down('li.mute');
 		var del = moreEl.down('li.delete');
 		var name = user.getName();
 		var mine = isMe(user);
@@ -122,7 +122,7 @@ Ext.define('NextThought.view.annotations.note.Templates',{
 		fnA = mine ? remove : reset;
 		fnB = mine ? reset : remove;
 
-		fnA(add,flag,follow,block);
+		fnA(add,follow,block, mute);
 		fnB(del,edit);
 	},
 

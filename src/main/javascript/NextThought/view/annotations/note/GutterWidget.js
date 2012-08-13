@@ -111,6 +111,11 @@ Ext.define('NextThought.view.annotations.note.GutterWidget',{
 	},
 
 
+	onFlag: function(){
+		this.record.flag(this);
+	},
+
+
 	onDelete: function(){
 		this.record.destroy();
 	},
