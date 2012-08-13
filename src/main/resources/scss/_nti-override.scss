@@ -54,10 +54,10 @@
     div.review-problems,
     div.exercises{
         &::before{
-            background: none !important;
+            background: none;
         }
         & > span.headingtext {
-          position: static !important;
+          position: static;
           top: initial;
           left: initial;
       }
@@ -80,9 +80,9 @@
    .warning,
    .game,
    .sidebar{
-		padding: 1em !important;
-		background-image: none !important;
-		background-color: rgba(235, 235, 235, 0.3) !important;
+		padding: 1em;
+		background-image: none;
+		background-color: rgba(235, 235, 235, 0.3);
    }
 
 	div {
@@ -90,7 +90,7 @@
 			&.answer,
 			&.response {
 				clear: both;
-				display: block !important;
+				display: block;
 				margin: 1.2em;
 			}
 		}
@@ -109,8 +109,8 @@
 	.page-contents {
 		color: #757474;
 		margin-left: 80px;
-		font-size: 14px !important;
-		font-weight: normal !important;
+		font-size: 14px;
+		font-weight: normal;
 
 		.chapter.title,
 		.title {
@@ -119,7 +119,7 @@
 			display: block;
 			font-size: 31px;
 			font-weight: 200;
-			border: none !important;
+			border: none;
 			span.ref{
 				display: block;
 				width: 65px;
@@ -130,8 +130,8 @@
 			span.label {
 				font-size: inherit;
 				margin-left: 80px;
-				border: none !important;
-				padding: 0 !important;
+				border: none;
+				padding: 0;
 				display: block;
 			}
 		}
