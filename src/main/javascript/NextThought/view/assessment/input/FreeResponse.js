@@ -15,7 +15,11 @@ Ext.define('NextThought.view.assessment.input.FreeResponse',{
 
 
 	afterRender: function(){
+		this.solutionAnswerBox.insertFirst(['Answer: ',{tag: 'span'}]);
+		this.solutionAnswerBox = this.solutionAnswerBox.down('span');
+
 		this.callParent(arguments);
+
 
 		this.mon(this.inputField,{
 			scope: this,

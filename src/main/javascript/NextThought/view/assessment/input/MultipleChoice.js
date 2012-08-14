@@ -21,15 +21,14 @@ Ext.define('NextThought.view.assessment.input.MultipleChoice',{
 
 
 	initComponent: function(){
+		var me = this;
 		this.callParent(arguments);
 		this.choices = (this.part.get('choices')||[]).slice();
 
 		//clean out markup
 		Ext.each(this.choices,function(v,i,a){
-			a[i] = v.replace(/<\/?(html|body|a|p).*?>/ig, '')
-					.replace(/^\s+/,'')
-					.replace(/\s+$/,'');
-			console.debug('Choice pruned HTML:',a[i]);
+			a[i] = me.filterHTML(v);
+			//console.debug('Choice pruned HTML:',a[i]);
 		});
 
 		this.renderData = Ext.apply(this.renderData||{},{
@@ -40,8 +39,6 @@ Ext.define('NextThought.view.assessment.input.MultipleChoice',{
 
 
 	afterRender: function(){
-		this.solutionAnswerBox = this.solutionAnswerBox.up('.answer');
-
 		this.callParent(arguments);
 
 		this.mon(this.getEl().select('.choice'),{

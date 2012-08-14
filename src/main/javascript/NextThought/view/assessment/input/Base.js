@@ -11,7 +11,7 @@ Ext.define('NextThought.view.assessment.input.Base',{
 				{ cls: 'inputbox', html: '{input}' },
 				{ cls: 'solution', cn:[
 					{ cls: 'close' },
-					{ cls: 'answer', cn:['Answer: ',{tag: 'span'}] },
+					{ cls: 'answer', cn:[{tag: 'span'}] },
 					{ cls: 'explanation'}
 				] }
 			]
@@ -23,7 +23,7 @@ Ext.define('NextThought.view.assessment.input.Base',{
 				cls: 'right',
 				cn: [
 					{cls:'action check'},
-					{cls:'action solution'}
+					{cls:'action solution', html: 'Show Solution'}
 				]
 			}]
 		}
@@ -62,6 +62,13 @@ Ext.define('NextThought.view.assessment.input.Base',{
 	},
 
 
+	filterHTML: function(html){
+		return html.replace(/<\/?(html|body|a|p).*?>/ig, '')
+				.replace(/^\s+/,'')
+				.replace(/\s+$/,'');
+	},
+
+
 	getSolutionContent: function(part) {
 		var solutions = [];
 		Ext.each(part.get('solutions'),function(s){
@@ -80,17 +87,6 @@ Ext.define('NextThought.view.assessment.input.Base',{
 
 	afterRender: function(){
 		this.callParent(arguments);
-		var me = this;
-		var p = this.part;
-		var a = this.solutionAnswerBox;
-		var e = this.solutionExplanationBox;
-
-		a.update(me.getSolutionContent(p));
-		e.update(p.get('explanation'));
-
-		if(e.getHTML()==='' && a.getHTML()===''){
-			this.showSolutionBtn.hide();
-		}
 
 		this.mon(this.showSolutionBtn, {
 			scope: this,
@@ -107,10 +103,10 @@ Ext.define('NextThought.view.assessment.input.Base',{
 			click: this.hideSolution
 		});
 
+		this.solutionAnswerBox.setVisibilityMode(Ext.dom.Element.DISPLAY);
 		this.inputBox.setVisibilityMode(Ext.dom.Element.DISPLAY);
 		this.solutionBox.setVisibilityMode(Ext.dom.Element.DISPLAY);
 		this.footer.setVisibilityMode(Ext.dom.Element.DISPLAY);
-		this.hideSolution();
 		this.reset();
 		this.disableSubmission();
 	},
@@ -134,6 +130,37 @@ Ext.define('NextThought.view.assessment.input.Base',{
 	},
 
 
+	updateSolutionButton: function(){
+		var p = this.part;
+		var a = this.solutionAnswerBox;
+		var b = this.showSolutionBtn;
+		var e = this.solutionExplanationBox;
+
+		var answer = this.el.down('.answer');
+		var label = b.getHTML().replace(/(solution|hint)$/i,'{0}');
+
+		answer.setVisibilityMode(Ext.dom.Element.DISPLAY);
+
+		b.update(label.replace('{0}', this.hintActive? 'Hint' : 'Solution'));
+
+		if(this.hintActive){
+			answer.hide();
+			e.update(this.filterHTML( p.get('hints')[this.currentHint || 0].get('value') ));
+		}
+		else if(this.submitted){
+			answer.show();
+			a.update(this.getSolutionContent(p));
+			e.update(p.get('explanation'));
+		}
+		else {
+			a.update('');
+			e.update('');
+		}
+
+		if(e.getHTML()==='' && a.getHTML()===''){ b.hide(); } else { b.show(); }
+	},
+
+
 	markCorrect: function(){
 		this.footer.hide();
 		this.checkItBtn.removeCls('wrong');
@@ -143,15 +170,21 @@ Ext.define('NextThought.view.assessment.input.Base',{
 
 	markIncorrect: function(){
 		this.checkItBtn.addCls('wrong');
+		this.hintActive = false;
+		this.updateSolutionButton();
 	},
 
 
 	reset: function(){
 		this.submitted = false;
+		this.hintActive = (this.part.get('hints').length > 0);
+		this.currentHint = 0;
+		this.updateSolutionButton();
 		this.footer.show();
 		this.checkItBtn.removeCls('wrong').update('Check It!');
-		this.updateLayout();
+		this.hideSolution();
 		this.disableSubmission();
+		this.updateLayout();
 	},
 
 
@@ -178,7 +211,8 @@ Ext.define('NextThought.view.assessment.input.Base',{
 
 
 	hideSolution: function(){
-		this.showSolutionBtn.update('Show Solution');
+		var label = this.showSolutionBtn.getHTML();
+		this.showSolutionBtn.update(label.replace('Hide','Show'));
 		this.solutionBox.hide();
 		this.inputBox.show();
 		this.updateLayout();
@@ -186,7 +220,12 @@ Ext.define('NextThought.view.assessment.input.Base',{
 
 
 	showSolution: function(){
-		this.showSolutionBtn.update('Hide Solution');
+		var label = this.showSolutionBtn.getHTML();
+
+		this.updateSolutionButton();
+		this.currentHint = ((this.currentHint+1) % (this.part.get('hints').length || 1));
+
+		this.showSolutionBtn.update(label.replace('Show','Hide'));
 		this.inputBox.hide();
 		this.solutionBox.show();
 		this.updateLayout();
