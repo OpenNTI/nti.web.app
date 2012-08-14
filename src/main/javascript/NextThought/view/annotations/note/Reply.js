@@ -50,9 +50,10 @@ Ext.define('NextThought.view.annotations.note.Reply',{
             this.setPlaceholderContent();
 			return;
 		}
+
 		else if (this.record.isFlagged()) {
 			this.setFlaggedContent();
-			return;
+			console.log('TODO - this is flagged, consider an indicator, or remove this log.');
 		}
 
 		me.mon(me.startChatButton,{
