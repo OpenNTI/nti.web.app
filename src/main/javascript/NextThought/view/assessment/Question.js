@@ -22,18 +22,22 @@ Ext.define('NextThought.view.assessment.Question',{
 		{ dock: 'bottom', xtype: 'question-response'}
 	],
 
+
+	removeContent: function(selector){
+		var el = Ext.get(this.contentElement);
+		el.select(selector).remove();
+	},
+
+
 	setupContentElement: function(){
 		var el = Ext.get(this.contentElement);
-		var sol = el.down('.naqsolutions');
-		if(sol){
-			sol.remove();
-		}
+		this.removeContent('.naqsolutions,.naqchoices,.rightwrongbox,.hidden,INPUT,p.par');
 
 		el.setStyle({
 			overflow: 'hidden',
 			display: 'block',
-			visibility: 'hidden',
-			margin: '30px auto'
+			margin: '30px auto',
+			'white-space': 'nowrap'
 		});
 	},
 
