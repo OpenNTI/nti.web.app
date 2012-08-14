@@ -37,6 +37,7 @@ Ext.define('NextThought.view.assessment.Question',{
 			overflow: 'hidden',
 			display: 'block',
 			margin: '30px auto',
+			opacity: 0,
 			'white-space': 'nowrap'
 		});
 	},
