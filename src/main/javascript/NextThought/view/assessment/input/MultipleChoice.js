@@ -26,7 +26,10 @@ Ext.define('NextThought.view.assessment.input.MultipleChoice',{
 
 		//clean out markup
 		Ext.each(this.choices,function(v,i,a){
-			a[i] = v.replace(/<.*?>/g, '').replace(/^\s+/,'').replace(/\s+$/,'');
+			a[i] = v.replace(/<\/?(html|body|a|p).*?>/ig, '')
+					.replace(/^\s+/,'')
+					.replace(/\s+$/,'');
+			console.debug('Choice pruned HTML:',a[i]);
 		});
 
 		this.renderData = Ext.apply(this.renderData||{},{
