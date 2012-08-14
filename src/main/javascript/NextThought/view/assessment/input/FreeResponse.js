@@ -46,18 +46,21 @@ Ext.define('NextThought.view.assessment.input.FreeResponse',{
 
 	markCorrect: function(){
 		this.callParent(arguments);
+		this.inputBox.removeCls('incorrect').addCls('correct');
 		this.inputField.set({readOnly:true});
 	},
 
 
 	markIncorrect: function(){
 		this.callParent(arguments);
+		this.inputBox.removeCls('correct').addCls('incorrect');
 		this.inputField.set({readOnly:true});
 	},
 
 
 	reset: function(){
 		this.callParent(arguments);
+		this.inputBox.removeCls('incorrect','correct');
 		this.inputField.dom.removeAttribute('readOnly');
 		this.inputField.dom.value = '';
 //		this.inputField.focus();

@@ -90,7 +90,6 @@ Ext.define('NextThought.view.assessment.input.MultipleChoice',{
 
 
 	mark: function(){
-		this.inputBox.removeCls(['incorrect','correct']);
 		var c = {};
 		Ext.each(this.part.get('solutions'),function(s){c[s.get('value')]=true;});
 
