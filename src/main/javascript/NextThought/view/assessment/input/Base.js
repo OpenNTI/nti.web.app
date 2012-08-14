@@ -60,11 +60,17 @@ Ext.define('NextThought.view.assessment.input.Base',{
 			data.renderTpl = data.renderTpl.replace('{super}',tpl);
 		}
 	},
-	
-	//Encapsulate this for the sake of multiple choice questions, matching, etc
-	getSolutionHtml: function(solution,part) {
-		return solution.get('value');
+
+
+	getSolutionContent: function(part) {
+		var solutions = [];
+		Ext.each(part.get('solutions'),function(s){
+			solutions.push(s.get('value'));
+		});
+
+		return solutions.join('<br/> or: ');
 	},
+
 
 	initComponent: function(){
 		this.callParent(arguments);
@@ -78,14 +84,8 @@ Ext.define('NextThought.view.assessment.input.Base',{
 		var p = this.part;
 		var a = this.solutionAnswerBox;
 		var e = this.solutionExplanationBox;
-		var solutions = [];
 
-		Ext.each(p.get('solutions'),function(s){
-			solutions.push(me.getSolutionHtml(s,p));
-		});
-
-		a.update(solutions.join('<br/> or: '));
-
+		a.update(me.getSolutionContent(p));
 		e.update(p.get('explanation'));
 
 		this.mon(this.showSolutionBtn, {
@@ -111,6 +111,7 @@ Ext.define('NextThought.view.assessment.input.Base',{
 		this.disableSubmission();
 	},
 
+
 	checkit: function(){
 		if(this.submissionDisabled){return;}
 		if(this.submitted){
@@ -122,6 +123,7 @@ Ext.define('NextThought.view.assessment.input.Base',{
 		this.checkItBtn.update('Try again');
 		this.fireEvent('check-answer',this.up('assement-question'), this.question, this.part, this.getValue());
 	},
+
 
 	getValue: function(){
 		console.log(this.$className+' does not implement the getValue function');
@@ -135,10 +137,12 @@ Ext.define('NextThought.view.assessment.input.Base',{
 		this.updateLayout();
 	},
 
+
 	markIncorrect: function(){
 		this.checkItBtn.addCls('wrong');
 		this.inputBox.removeCls('correct').addCls('incorrect');
 	},
+
 
 	reset: function(){
 		this.submitted = false;
@@ -171,12 +175,14 @@ Ext.define('NextThought.view.assessment.input.Base',{
 		}
 	},
 
+
 	hideSolution: function(){
 		this.showSolutionBtn.update('Show Solution');
 		this.solutionBox.hide();
 		this.inputBox.show();
 		this.updateLayout();
 	},
+
 
 	showSolution: function(){
 		this.showSolutionBtn.update('Hide Solution');

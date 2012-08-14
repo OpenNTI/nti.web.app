@@ -14,6 +14,12 @@ Ext.define('NextThought.view.assessment.input.MultipleChoice',{
 	]}),
 
 
+	solTpl: Ext.DomHelper.createTemplate({
+		cls: 'multiple-choice-solution',
+		cn: ['{0}. ',{tag: 'span', cls: 'solution-choice-text', html:'{1}'}]
+	}).compile(),
+
+
 	initComponent: function(){
 		this.callParent(arguments);
 		this.choices = (this.part.get('choices')||[]).slice();
@@ -31,6 +37,8 @@ Ext.define('NextThought.view.assessment.input.MultipleChoice',{
 
 
 	afterRender: function(){
+		this.solutionAnswerBox = this.solutionAnswerBox.up('.answer');
+
 		this.callParent(arguments);
 
 		this.mon(this.getEl().select('.choice'),{
@@ -45,5 +53,19 @@ Ext.define('NextThought.view.assessment.input.MultipleChoice',{
 		if(!c){return;}
 
 		c.down('.control').toggleCls('checked');
+	},
+
+
+	getSolutionContent: function(part) {
+		var choices = this.choices,
+			out = [], tpl = this.solTpl;
+
+		Ext.each(part.get('solutions'),function(s){
+			var x = s.get('value');
+			out.push( tpl.apply( [String.fromCharCode(65+x), choices[x]]) );
+
+		});
+
+		return out.join('');
 	}
 });

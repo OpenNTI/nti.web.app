@@ -180,6 +180,11 @@
 						.answer {
 							font-weight: 600;
 							color: #8eb737;
+
+							.solution-choice-text {
+								font-weight: normal;
+								margin-left: 10px;
+							}
 						}
 						.explanation {
 							color: #757474;
