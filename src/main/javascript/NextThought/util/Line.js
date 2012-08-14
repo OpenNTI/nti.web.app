@@ -92,6 +92,10 @@ Ext.define('NextThought.util.Line',{
 			sel.collapseToEnd();
 			sel.modify('extend', 'forward', 'line');
 
+			//detect weirdness, if we have not been able to select anything by this point,
+			//do not allow anchoring:
+			if (sel.toString().trim().length === 0){return false;}
+
 			//detect weirdness where sometimes extending to a line causes entire paragraphs to be selected.
 			/* TODO finish
 			while(sel.getRangeAt(0).getBoundingClientRect().height > 35) {
@@ -103,7 +107,7 @@ Ext.define('NextThought.util.Line',{
 			range = sel.getRangeAt(0);
 
 			//for testing, comment next line to show ranges
-			//sel.removeAllRanges();
+			sel.removeAllRanges();
 
 			return range;
 	},
