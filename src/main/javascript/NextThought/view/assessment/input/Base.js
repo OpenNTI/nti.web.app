@@ -88,6 +88,10 @@ Ext.define('NextThought.view.assessment.input.Base',{
 		a.update(me.getSolutionContent(p));
 		e.update(p.get('explanation'));
 
+		if(e.getHTML()==='' && a.getHTML()===''){
+			this.showSolutionBtn.hide();
+		}
+
 		this.mon(this.showSolutionBtn, {
 			scope: this,
 			click: this.toggleSolution
