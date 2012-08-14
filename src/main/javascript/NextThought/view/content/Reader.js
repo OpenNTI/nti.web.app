@@ -102,10 +102,6 @@ Ext.define('NextThought.view.content.Reader', {
 
 	onNavigate: function(ntiid) {
 
-		if(ntiid === LocationProvider.currentNTIID){
-			return false;
-		}
-
 		this.clearAnnotations();
 
 		if(!ntiid) {

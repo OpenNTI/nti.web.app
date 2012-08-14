@@ -63,14 +63,14 @@ Ext.define('NextThought.providers.Location', {
 			me.fireEvent('changed', ntiid);
 		}
 
-		if(me.currentNTIID && ntiid !== me.currentNTIID){
+//		if(me.currentNTIID && ntiid !== me.currentNTIID){
 			e.mask('Loading...');
-		}
+		//}
 
 		//make this happen out of this function's flow, so that the mask shows immediately.
 		setTimeout(function(){
 			if(!me.fireEvent('navigate',ntiid)){
-				finish();
+//				finish();
 				return false;
 			}
 
