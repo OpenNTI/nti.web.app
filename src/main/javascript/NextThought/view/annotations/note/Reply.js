@@ -52,7 +52,6 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 		}
 
 		else if (this.record.isFlagged()) {
-			this.setFlaggedContent();
 			console.log('TODO - this is flagged, consider an indicator, or remove this log.');
 		}
 
@@ -294,11 +293,6 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 	},
 
 
-	setFlaggedContent: function(){
-		this.wipeOutContent("THIS MESSAGE HAS BEEN FLAGGED FOR MODERATION")
-	},
-
-
 	setPlaceholderContent: function() {
 		this.wipeOutContent("THIS MESSAGE HAS BEEN DELETED");
 	},
@@ -321,7 +315,6 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 
 	onFlag: function() {
 		this.record.flag(this);
-		this.setFlaggedContent();
 	}
 
 },
