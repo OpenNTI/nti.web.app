@@ -133,14 +133,19 @@
 							}
 						}
 
-						&.correct .control { &,&.checked{
-							border-color: #9ac73c;
-							background-position: -105px -5px;
-						}}
-						&.incorrect .control{ &,&.checked{
-							border-color: #9ac73c;
-							background-position: -105px -55px;
-						}}
+						&.correct .control {
+							&,&.checked{
+								border-color: #9ac73c;
+								background-position: -105px -55px !important;
+							}
+						}
+
+						&.incorrect .control{
+							&,&.checked{
+								border-color: #f35252;
+								background-position: -105px -5px !important;
+							}
+						}
 					}
 
 					.multi .choice {

@@ -49,10 +49,26 @@ Ext.define('NextThought.view.assessment.input.MultipleChoice',{
 
 
 	choiceClicked: function(e){
+		if(this.submitted){return;}
+
 		var c = e.getTarget('.choice',null,true);
 		if(!c){return;}
 
 		c.down('.control').toggleCls('checked');
+
+		if(!this.getEl().query('.control.checked').length){ this.disableSubmission(); }
+		else { this.enableSubmission(); }
+	},
+
+
+	getValue: function(){
+		var val = [];
+
+		Ext.each(this.getEl().query('.control.checked'),function(e){
+			val.push(parseInt(e.getAttribute('data-index'),10));
+		});
+
+		return val;
 	},
 
 
@@ -67,5 +83,40 @@ Ext.define('NextThought.view.assessment.input.MultipleChoice',{
 		});
 
 		return out.join('');
+	},
+
+
+	mark: function(){
+		this.inputBox.removeCls(['incorrect','correct']);
+		var c = {};
+		Ext.each(this.part.get('solutions'),function(s){c[s.get('value')]=true;});
+
+		this.getEl().select('.choice').removeCls(['correct','incorrect']);
+
+		Ext.each(this.getEl().query('.control.checked'),function(e){
+			var x = parseInt(e.getAttribute('data-index'),10);
+			var cls = c[x]===true?'correct':'incorrect';
+
+			Ext.fly(e).up('.choice').addCls(cls);
+		});
+	},
+
+
+	markCorrect: function(){
+		this.callParent();
+		this.mark();
+	},
+
+
+	markIncorrect: function(){
+		this.callParent();
+		this.mark();
+	},
+
+
+	reset: function(){
+		this.getEl().select('.choice').removeCls(['correct','incorrect']);
+		this.getEl().select('.control').removeCls('checked');
+		this.callParent();
 	}
 });
