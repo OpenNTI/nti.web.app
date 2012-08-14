@@ -291,6 +291,11 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 					return;
 				}
 
+				if (o.getRecord().isFlagged()){
+					console.log('Top level annotation is flagged for moderation, not rendering');
+					return;
+				}
+
 				var y = o.render(), b;
 
 				//uncomment for testing

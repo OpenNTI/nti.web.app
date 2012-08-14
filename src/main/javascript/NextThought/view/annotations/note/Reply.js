@@ -47,9 +47,11 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 		me.setRecord(me.record);
 
 		if (this.record.placeHolder) {
-            this.replyBox.toggleCls("deleted-reply");
-            this.time.update("THIS MESSAGE HAS BEEN DELETED");
-            this.responseBox.remove();
+            this.setPlaceholderContent();
+			return;
+		}
+		else if (this.record.isFlagged()) {
+			this.setFlaggedContent();
 			return;
 		}
 
@@ -276,11 +278,7 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 		r.placeHolder = true;
 
 		if (r.children && r.children.length > 0){
-			this.time.update("THIS MESSAGE HAS BEEN DELETED");
-			this.text.remove();
-			this.responseBox.remove();
-			this.avatar.remove();
-			this.replyBox.toggleCls("deleted-reply");
+			this.setPlaceholderContent();
 		}
 		else {
 			this.destroy();
@@ -294,6 +292,27 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 		}
 	},
 
+
+	setFlaggedContent: function(){
+		this.wipeOutContent("THIS MESSAGE HAS BEEN FLAGGED FOR MODERATION")
+	},
+
+
+	setPlaceholderContent: function() {
+		this.wipeOutContent("THIS MESSAGE HAS BEEN DELETED");
+	},
+
+
+	wipeOutContent: function(replacementText) {
+		this.time.update(replacementText);
+		this.text.remove();
+		this.responseBox.remove();
+		this.avatar.remove();
+		this.liked.remove();
+		this.replyBox.toggleCls("deleted-reply");
+	},
+
+
 	startChat: function() {
 		this.fireEvent('chat', this.record);
 	},
@@ -301,6 +320,7 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 
 	onFlag: function() {
 		this.record.flag(this);
+		this.setFlaggedContent();
 	}
 
 },
