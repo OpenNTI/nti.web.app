@@ -25,6 +25,7 @@ Ext.define('NextThought.util.Globals', {
 	USER_SEARCH_REL: 'UserSearch',
 	USER_GENERATED_DATA_SEARCH_REL: 'UGDSearch',
 	USER_UNIFIED_SEARCH_REL: 'UnifiedSearch',
+	CONTENT_ROOT: 'tag:nextthought.com,2011-10:Root',
 
 	HOST_PREFIX_PATTERN: /^(http(s)?):\/\/([a-z.\-_0-9]+)(:(\d+))?/i,
 	INVALID_CHARACTERS_PATTERN: /^[^\/\\";=?<>#%'\{\}\|\^\[\]\-]+$/,

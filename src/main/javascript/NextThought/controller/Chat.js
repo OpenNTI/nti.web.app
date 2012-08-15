@@ -209,11 +209,9 @@ Ext.define('NextThought.controller.Chat', {
 		var users = [], k, ri, roomCfg;
 
 		//chat rooms need a containerId, make sure we add these, let them get overridden later if it's a persistant room
-		options.ContainerId = options.ContainerId || LocationProvider.currentNTIID;
+		options.ContainerId = options.ContainerId || LocationProvider.currentNTIID || Globals.CONTENT_ROOT;
 		if (!options.ContainerId){
-			//TODO: figure out what to do when there's no container ID?
 			delete options.ContainerId;
-			console.error('Chat room entered and no current location is set, this chat will not be visible as a transcript.');
 		}
 
 		if (usersOrList.get && usersOrList.get('friends')) {

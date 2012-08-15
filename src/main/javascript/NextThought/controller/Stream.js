@@ -54,7 +54,7 @@ Ext.define('NextThought.controller.Stream', {
 		var ss = this.getStreamStore();
 		ss.on('add', this.updateStreamStore, this);
 
-		$AppConfig.service.getPageInfo('tag:nextthought.com,2011-10:Root',
+		$AppConfig.service.getPageInfo(Globals.CONTENT_ROOT,
 			//success:
 			function(pageInfo){
 				ss.getProxy().url = pageInfo.getLink(Globals.RECURSIVE_STREAM);
