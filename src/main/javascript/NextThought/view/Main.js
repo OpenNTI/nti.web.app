@@ -42,7 +42,8 @@ Ext.define('NextThought.view.Main', {
 		}
 	}
 
-	if(unsupported.length!==0){
+	//TODO: Make the IE9 message work without breaking
+	/*if(unsupported.length!==0){
 		proto.items.push(
 			{
 				region: 'north',
@@ -54,7 +55,7 @@ Ext.define('NextThought.view.Main', {
 		);
 		unsupported.reverse();
 		console.warn("Unsupported features: "+unsupported.join(', '));
-	}
+	}*/
 
 	var v = Ext.getScrollbarSize(true);
 	if(v.width > 2){
