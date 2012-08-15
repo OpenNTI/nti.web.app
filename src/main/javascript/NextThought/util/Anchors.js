@@ -133,7 +133,7 @@ Ext.define('NextThought.util.Anchors', {
 		var maxSubsequentContextObjects = 5;
 		var maxCollectedChars = 15;
 
-		var walker = document.createTreeWalker( referenceNode, NodeFilter.SHOW_TEXT );
+		var walker = document.createTreeWalker( referenceNode, NodeFilter.SHOW_TEXT, null, false );
 		walker.currentNode = container;
 
 		var nextSiblingFunction = start ? walker.previousNode : walker.nextNode;
@@ -401,7 +401,7 @@ Ext.define('NextThought.util.Anchors', {
 		//We use a tree walker to search beneath the reference node
 		//for textContent matching our contexts
 
-		treeWalker = document.createTreeWalker( referenceNode, NodeFilter.SHOW_TEXT );
+		treeWalker = document.createTreeWalker( referenceNode, NodeFilter.SHOW_TEXT, null, false );
 
 		//If we are looking for the end node.  we want to start
 		//looking where the start node ended.  This is a shortcut
