@@ -30,6 +30,7 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 
 
 	getIFrameConfig: function(){
+		var me = this;
 		return {
 			xtype: 'box',
 			width: 780,
@@ -50,7 +51,7 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 			listeners: {
 				scope: this,
 				afterRender: function(){
-					this.resetFrame();
+					this.resetFrame(function(){me.fireEvent('iframe-ready');});
 					this.body.on('scroll',this.checkContentFrames,this);
 				}
 			}

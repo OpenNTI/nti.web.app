@@ -17,7 +17,7 @@ Ext.define('NextThought.controller.Application', {
 				console.error('Loading View: ', Globals.getError(e1));
 			}
 			try{
-				Library.load();
+				Ext.getCmp('readerPanel').on('iframe-ready', Library.load, Library, {single: true});
 			}
 			catch(e2){
 				console.error('Loading Library: ', Globals.getError(e2));
