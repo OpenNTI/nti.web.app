@@ -75,7 +75,7 @@ Ext.define('NextThought.view.definition.Window', {
 
     queryDefinition: function(cb, scope){
         Ext.Ajax.request({
-            url: $AppConfig.server.host + this.url + encodeURIComponent(this.term),
+            url: getURL(this.url + encodeURIComponent(this.term)),
             async: true,
             scope: this,
             callback: function(q,s,r){
@@ -94,7 +94,7 @@ Ext.define('NextThought.view.definition.Window', {
         }
 
         Ext.Ajax.request({
-            url: $AppConfig.server.host + me.xslUrl,
+            url: getURL(me.xslUrl),
             async: true,
             scope: me,
             callback: function(q,s,r){

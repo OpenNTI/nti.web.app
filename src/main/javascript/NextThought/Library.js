@@ -20,9 +20,7 @@ Ext.define('NextThought.Library', {
 
 	getStore: function(){
 		if(!this.store){
-			var server = $AppConfig.server,
-				service = $AppConfig.service,
-				host = server.host;
+			var service = $AppConfig.service;
 
 			this.store = Ext.create('Ext.data.Store',{
 				id: 'library',
@@ -33,7 +31,7 @@ Ext.define('NextThought.Library', {
 						'Accept': 'application/vnd.nextthought.collection+json',
 						'Content-Type': 'application/json'
 					},
-					url : host + service.getMainLibrary().href,
+					url : getURL(service.getMainLibrary().href),
 					reader: {
 						type: 'json',
 						root: 'titles'
@@ -115,19 +113,21 @@ Ext.define('NextThought.Library', {
 		this.each(function(o){
 			if(!o.get||!o.get('index')){ return; }
 			me.loadToc(o.get('index'), function(toc){
+				var d;
 				stack.pop();
 
 				if(!toc){
 					console.log('Could not load "'+o.get('index')+'"... removing form library view');
 					store.remove(o);
-					return;
+				}
+				else {
+					d = toc.documentElement;
+					o.set('NTIID',d.getAttribute('ntiid'));
+					d.setAttribute('base', o.get('root'));
+					d.setAttribute('icon', o.get('icon'));
+					d.setAttribute('title', o.get('title'));
 				}
 
-				var d = toc.documentElement;
-				o.set('NTIID',d.getAttribute('ntiid'));
-				d.setAttribute('base', o.get('root'));
-				d.setAttribute('icon', o.get('icon'));
-				d.setAttribute('title', o.get('title'));
 				if(stack.length===0 && callback){
 					callback.call(this);
 				}
@@ -141,7 +141,7 @@ Ext.define('NextThought.Library', {
 			Ext.Error.raise('The library has not loaded yet, should not be making a synchronous call');
 		}
 		try{
-			var url = $AppConfig.server.host+index;
+			var url = getURL(index);
 			Ext.Ajax.request({
 				url: url,
 				async: !!callback,

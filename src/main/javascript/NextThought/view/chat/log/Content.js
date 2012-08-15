@@ -44,7 +44,7 @@ Ext.define('NextThought.view.chat.log.Content', {
 
 	update: function(){
 		var me = this,
-			href = $AppConfig.server.host,
+			href,
 			icon, root;
 
 		if(this.location){
@@ -61,7 +61,7 @@ Ext.define('NextThought.view.chat.log.Content', {
 			}
 		}
 		else {
-			href += $AppConfig.service.getCollection('Objects', 'Global').href + '/' + this.ntiid;
+			href = getURL($AppConfig.service.getCollection('Objects', 'Global').href + '/' + this.ntiid);
 		}
 
 		me.renderData.time = Ext.Date.format(new Date(), 'g:i:sa');

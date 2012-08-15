@@ -97,8 +97,7 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 			scope: me,
 			'size-changed': function(){
 				setTimeout(function(){
-					me.updateLayout();
-					me.doComponentLayout();},1);
+					me.updateLayout();},1);
 			}
 		});
 	},
@@ -137,7 +136,7 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 		if( this.replyBox ){
 			this.replyBox.addCls('hover');
 		}
-		this.getEl().scrollIntoView(scroller);
+		//this.getEl().scrollIntoView(scroller);
 		this.updateLayout();
 	},
 
@@ -167,7 +166,6 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 				me.text.update(text);
 				me.text.select('a[href]',true).set({target:'_blank'});
 				setTimeout(function(){
-					me.doComponentLayout();
 					me.updateLayout();
 				},1);
 			});
@@ -221,8 +219,7 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 		if(e){e.stopEvent();}
 		if(this.replyBox){
 			this.replyBox.addCls('editor-active');
-			this.updateLayout();
-			this.doComponentLayout();
+			//this.updateLayout();
 			this.scrollIntoView();
 		}
 		return false;
@@ -235,7 +232,6 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 			this.editor.down('.content').update('');
 		}
 		this.updateLayout();
-		this.doComponentLayout();
 		if(this.editMode){
 			this.text.show();
 		}
@@ -260,7 +256,21 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 
 
 	addReply: function(record) {
-		this.add({record: record});
+		var guid = IdCache.getComponentId(record, null, 'reply');
+
+		if (record.getModelName() !== 'Note') {
+			console.warn('can not at reply, it is not a note and I am not prepared to handle that.');
+			return;
+		}
+
+		if (Ext.getCmp(guid)) {
+			console.log('already showing this reply');
+			return;
+		}
+
+		console.log('*** should add reply', record, this.getHeight());
+
+		this.add({record: record, id: guid});
 	},
 
 

@@ -35,8 +35,7 @@ Ext.define('NextThought.proxy.Rest', {
 	},
 
 	buildUrl: function(request) {
-		var host = $AppConfig.server.host,
-			action = request.operation.action,
+		var action = request.operation.action,
 			records= request.records,
 			record = records? records[0] : null,
 			mimeType = record? record.mimeType || record.get('MimeType') : 'application/vnd.nextthought',
@@ -68,7 +67,7 @@ Ext.define('NextThought.proxy.Rest', {
 			if (!collection.href) {
 				Ext.Error.raise('No HREF found for mimetype ' + mimeType);
 			}
-			href = host + Globals.ensureSlash(collection.href, true);
+			href = getURL(Globals.ensureSlash(collection.href, true));
 		}
 		else if(action === 'read') {
 			href = record.get('href');

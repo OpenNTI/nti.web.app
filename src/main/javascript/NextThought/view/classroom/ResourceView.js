@@ -57,17 +57,10 @@ Ext.define('NextThought.view.classroom.ResourceView', {
 
 		imgURL: function(values){
 			if((/image/i).test(values.type)){
-				return this.getLink(values.href);
+				return getURL(values.href);
 			}
 
 			return Ext.BLANK_IMAGE_URL;
-		},
-
-		getLink: function(ref){
-			if(!(/^http:/i).test(ref)){
-				return $AppConfig.server.host + ref;
-			}
-			return ref;
 		}
 	},
 
@@ -163,7 +156,7 @@ Ext.define('NextThought.view.classroom.ResourceView', {
 
 		var me = this,
 			id = this.record.getId(),
-			href = $AppConfig.server.host + this.record.get('href');
+			href = getURL(this.record.get('href'));
 
 		this.record.self.load(id, {url:href, callback:function(r, o){
 			if (o.success) {
@@ -211,7 +204,7 @@ Ext.define('NextThought.view.classroom.ResourceView', {
 			r = this.getRecord(Ext.fly(dom).up(this.itemSelector, this.getEl()));
 
 		Ext.Ajax.request({
-			url: $AppConfig.server.host + r.get('href'),
+			url: getURL(r.get('href')),
 			method: 'DELETE',
 			callback: function(req,success){
 				if(success){
@@ -276,7 +269,7 @@ Ext.define('NextThought.view.classroom.ResourceView', {
 			file = files[i];
 
 			UploadUtils.postFile( file,
-					$AppConfig.server.host+this.postURL,
+					getURL(this.postURL),
 					this.onProgress,
 					this.onFinish,
 					this);
@@ -295,7 +288,7 @@ Ext.define('NextThought.view.classroom.ResourceView', {
 
 		if(form.isValid()){
 			form.submit({
-				url: $AppConfig.server.host+this.postURL,
+				url: getURL(this.postURL),
 				waitMsg: 'Uploading your file...',
 				success: function() {
 					me.reload();

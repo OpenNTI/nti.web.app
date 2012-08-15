@@ -27,12 +27,11 @@ Ext.define('NextThought.controller.Session', {
 
 			function showLogin(timedout){
 				var me = this,
-					host = $AppConfig.server.host,
 					url = Ext.String.urlAppend(
 							Ext.String.urlAppend(
 									$AppConfig.server.login,
 									"return="+encodeURIComponent(location.toString())),
-							"host=" + encodeURIComponent(host));
+							"host=" + encodeURIComponent(getURL()));
 
 				if(timedout){
 					alert('a request timed out');
@@ -48,7 +47,7 @@ Ext.define('NextThought.controller.Session', {
 		attemptLogin: function(successCallback, failureCallback){
 			var m = this,
 				s = $AppConfig.server,
-				h = s.host, d = s.data, ping = 'logon.ping',
+				d = s.data, ping = 'logon.ping',
 				u  = decodeURIComponent( Ext.util.Cookies.get('username') );
 			
 			function getLink(o, relName){
@@ -63,7 +62,7 @@ Ext.define('NextThought.controller.Session', {
 
 			Ext.Ajax.request({
 				timeout: 60000,
-				url: h + d + ping,
+				url: getURL(d + ping),
 				callback: function(q,s,r){
 					var l = getLink(r,'logon.handshake');
 					if(!s || !l){
@@ -75,7 +74,7 @@ Ext.define('NextThought.controller.Session', {
 					Ext.Ajax.request({
 						method: 'POST',
 						timeout: 60000,
-						url: h + l,
+						url: getURL(l),
 						params : {
 							username: u
 						},
@@ -106,7 +105,7 @@ Ext.define('NextThought.controller.Session', {
 
 			try{
 				Ext.Ajax.request({
-					url: s.host + s.data,
+					url: getURL(s.data),
 					timeout: 20000,
 					headers:{
 						'Accept': 'application/vnd.nextthought.workspace+json'
@@ -165,9 +164,9 @@ Ext.define('NextThought.controller.Session', {
 
 	handleLogout: function() {
 		var s = $AppConfig.server,
-			url = Ext.String.urlAppend(
-					s.host + this.self.logoutURL,
-					'success='+encodeURIComponent(location.href));
+			url = getURL(Ext.String.urlAppend(
+					this.self.logoutURL,
+					'success='+encodeURIComponent(location.href)));
 		//Log here to help address #550.
 		console.log('logout, redirect to ' + url);
 		Socket.tearDownSocket();

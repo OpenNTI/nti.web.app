@@ -63,7 +63,7 @@ Ext.define('NextThought.controller.Groups', {
 
 		store.on('datachanged', this.publishContacts, this);
 
-		store.proxy.url = $AppConfig.server.host+coll.href;
+		store.proxy.url = getURL(coll.href);
 		store.load();
 	},
 

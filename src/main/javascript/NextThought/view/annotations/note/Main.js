@@ -168,7 +168,6 @@ Ext.define('NextThought.view.annotations.note.Main',{
 			range = Anchors.toDomRange(r.get('applicableRange'),doc);
 			if(range){
 				text = range.toString();
-				console.log(text);
 				bodyText = range.commonAncestorContainer.ownerDocument.getElementById('NTIContent').textContent;
 				start = bodyText.indexOf(text);
 				end = start + text.length;

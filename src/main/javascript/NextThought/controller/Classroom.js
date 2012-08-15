@@ -123,7 +123,6 @@ Ext.define('NextThought.controller.Classroom', {
 	onSessionReady: function(){
 		var app = this.application,
 			s = $AppConfig.service,
-			host = $AppConfig.server.host,
 			pStore = this.getProvidersStore(),
 			sStore = this.getSectionsStore(),
 			pColl = s.getCollection('OU', 'providers'),
@@ -134,8 +133,8 @@ Ext.define('NextThought.controller.Classroom', {
 		if(pColl) {
 			app.registerInitializeTask(pToken);
 			pStore.on('load', function(s){ app.finishInitializeTask(pToken); }, this, {single: true});
-			pStore.proxy.url = host+pColl.href;
-			pStore.load({url:host+pColl.href});
+			pStore.proxy.url = getURL(pColl.href);
+			pStore.load({url:getURL(pColl.href)});
 		}
 		else {
 			console.warn('NO providers workspace!');
@@ -144,8 +143,8 @@ Ext.define('NextThought.controller.Classroom', {
 		if(sColl) {
 			app.registerInitializeTask(sToken);
 			sStore.on('load', function(s){ app.finishInitializeTask(sToken); }, this, {single: true});
-			sStore.proxy.url = host+sColl.href;
-			sStore.load({url: host+sColl.href});
+			sStore.proxy.url = getURL(sColl.href);
+			sStore.load({url: getURL(sColl.href)});
 		}
 		else {
 			console.warn('NO providers workspace!');
@@ -390,7 +389,7 @@ Ext.define('NextThought.controller.Classroom', {
 
 
 	onResourceSelectedInClassroom: function(r, cmp) {
-		var href = $AppConfig.server.host + r.get('href'),
+		var href = getURL(r.get('href')),
 			name = ClassroomUtils.getNameFromHref(href),
 			mime = r.get('type'),
 			ntiid = r.get('ntiid'),
@@ -422,7 +421,7 @@ Ext.define('NextThought.controller.Classroom', {
 
 
 	onResourceSelected: function(r) {
-		var href = $AppConfig.server.host + r.get('href'),
+		var href = getURL(r.get('href')),
 			mime = r.get('type'),
 			name = ClassroomUtils.getNameFromHref(href);
 
@@ -497,7 +496,7 @@ Ext.define('NextThought.controller.Classroom', {
 			scriptName = reg.down('textfield').value,
 			v = html.getValue(),
 			r = html.record,
-			href = (!r || r.phantom) ? $AppConfig.server.host + ed.down('classroom-resource-view').record.get('href') : null,
+			href = (!r || r.phantom) ? getURL(ed.down('classroom-resource-view').record.get('href')) : null,
 			cs;
 
 		ed.el.mask('Saving...');

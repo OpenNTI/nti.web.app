@@ -89,7 +89,7 @@ describe("Annotation Utils", function() {
 		var flag = false;
 
 		runs(function() {
-			req.open('GET',$AppConfig.server.host+'/annotation-test.html',true);
+			req.open('GET',getURL('/annotation-test.html'),true);
 			req.onreadystatechange = function(){if(req.readyState === 4){ flag = true; }};
 			req.send('');
 		});

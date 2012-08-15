@@ -113,7 +113,7 @@ Ext.define('NextThought.model.Base', {
 	getLink: function(rel){
 		var links = this.get('Links') || Ext.data.Types.LINKS.convert( this.raw.Links || [] ),
 			ref = links ? links.getRelHref(rel) : null;
-		return ref? $AppConfig.server.host + Globals.ensureSlash(ref, true) : null;
+		return ref? getURL(ref) : null;
 	},
 
 
@@ -313,7 +313,7 @@ Ext.define('NextThought.model.Base', {
 		}
 
 		Ext.Ajax.request({
-			url: $AppConfig.server.host + href,
+			url: getURL(href),
 			async: false,
 			callback: function(req, success, resp){
 				if(!success){

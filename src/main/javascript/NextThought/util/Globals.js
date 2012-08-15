@@ -346,12 +346,21 @@ Ext.define('NextThought.util.Globals', {
 				throw 'stop';
 			}
 		};
+	},
+
+	getURL: function(u) {
+		if (!u){u = '';}
+		if(!Globals.HOST_PREFIX_PATTERN.test(u)){
+			return $AppConfig.server.host + u;
+		}
+		return u;
 	}
 },
 function(){
 	window.Globals = this;
 	window.guidGenerator = this.guidGenerator;
 	window.isMe = this.isMe;
+	window.getURL = this.getURL;
 
 	this.stopBackspace(document);
 

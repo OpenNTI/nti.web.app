@@ -28,7 +28,7 @@ Ext.define('NextThought.model.Service', {
 			return null;
 		}
 
-		return $AppConfig.server.host + this.forceTrailingSlash(l) + (username?username:'');
+		return getURL(this.forceTrailingSlash(l) + (username?username:''));
 	},
 
 
@@ -40,7 +40,7 @@ Ext.define('NextThought.model.Service', {
 			return null;
 		}
 
-		return $AppConfig.server.host + this.forceTrailingSlash(l);
+		return getURL(this.forceTrailingSlash(l));
 	},
 
 
@@ -52,22 +52,20 @@ Ext.define('NextThought.model.Service', {
 			return null;
 		}
 
-		return $AppConfig.server.host + this.forceTrailingSlash(l);
+		return getURL(this.forceTrailingSlash(l));
 	},
 
 
 	getSearchURL : function(containerId){
-		var h = $AppConfig.server.host,
-			c = containerId ? containerId : 'prealgebra';
-		return h+'/'+c+'/Search/';
+		var c = containerId ? containerId : 'prealgebra';
+		return getURL('/'+c+'/Search/');
 	},
 
 
 	getQuizSubmitURL: function(ntiid){
-		var h = $AppConfig.server.host,
-			u = $AppConfig.username;
+		var u = $AppConfig.username;
 
-		return  h+'/dataserver/users/'+u+'/quizresults/'+ntiid;
+		return  getURL('/dataserver/users/'+u+'/quizresults/'+ntiid);
 	},
 
 
@@ -214,18 +212,16 @@ Ext.define('NextThought.model.Service', {
 			f = Ext.String.format("/++fields++{0}", field);
 		}
 
-		return Ext.String.format("{0}{1}/{2}{3}",
-			$AppConfig.server.host,
+		return getURL(Ext.String.format("{0}/{1}{2}",
 			this.getCollection('Objects', 'Global').href,
 			encodeURIComponent(ntiid),
-			f);
+			f));
 	},
 
 
 	getObjectRaw: function (ntiid, success, failure, scope){
 		var url = this.getObjectURL(ntiid),
-			q = {},
-			host = $AppConfig.server.host;
+			q = {};
 
 		if(!ParseUtils.parseNtiid(ntiid)){
 			Ext.callback(failure,scope, ['']);
@@ -264,7 +260,7 @@ Ext.define('NextThought.model.Service', {
 					var href;
 					if(s){
 						href = Ext.JSON.decode(resp.responseText).href;
-						continueRequest(host+href);
+						continueRequest(getURL(href));
 					} else {
 						Ext.callback(failure,scope, [req,resp]);
 					}

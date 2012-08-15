@@ -133,6 +133,7 @@ Ext.define('NextThought.view.content.Reader', {
 				success: f,
 				failure: function(r) {
 					console.log('server-side failure with status code ' + r.status+': Message: '+ r.responseText);
+					me.splash.hide();
 				}
 			});
 		}

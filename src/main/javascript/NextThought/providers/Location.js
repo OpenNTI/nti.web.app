@@ -341,7 +341,7 @@ Ext.define('NextThought.providers.Location', {
 				title: m.label,
 				modal: true,
 				src:[{
-					src: $AppConfig.server.host+m.root+m.href,
+					src: getURL(m.root+m.href),
 					type: 'video/mp4'
 				}]
 			}).show();

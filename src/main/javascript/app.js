@@ -39,7 +39,7 @@ Ext.application({
 		if(!Globals.validateConfig()){
 			return;
 		}
-		Globals.loadScript($AppConfig.server.host+'/socket.io/static/socket.io.js');
+		Globals.loadScript(getURL('/socket.io/static/socket.io.js'));
 
 		window.app = this;
 		var g = this.getController('Google');

@@ -76,7 +76,7 @@ Ext.define('NextThought.proxy.Socket', {
 		this.tearDownSocket();
 
 		var me = this,
-			socket = io.connect($AppConfig.server.host),
+			socket = io.connect(getURL()),
 			k;
 
 		if(this.isDebug){
