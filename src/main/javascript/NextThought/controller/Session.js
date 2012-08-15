@@ -20,21 +20,18 @@ Ext.define('NextThought.controller.Session', {
 
 	statics: {
 		login: function(app){
-			console.log(6);
 			function success(){
 				app.fireEvent('session-ready');
 				NextThought.controller.Application.launch();
 			}
 
 			function showLogin(timedout){
-				console.log(12);
 				var me = this,
-					host = $AppConfig.server.host,
 					url = Ext.String.urlAppend(
 							Ext.String.urlAppend(
 									$AppConfig.server.login,
 									"return="+encodeURIComponent(location.toString())),
-							"host=" + encodeURIComponent(host));
+							"host=" + encodeURIComponent(getURL()));
 
 				if(timedout){
 					alert('a request timed out');
@@ -50,7 +47,7 @@ Ext.define('NextThought.controller.Session', {
 		attemptLogin: function(successCallback, failureCallback){
 			var m = this,
 				s = $AppConfig.server,
-				h = s.host, d = s.data, ping = 'logon.ping',
+				d = s.data, ping = 'logon.ping',
 				u  = decodeURIComponent( Ext.util.Cookies.get('username') );
 			
 			function getLink(o, relName){
@@ -61,17 +58,13 @@ Ext.define('NextThought.controller.Session', {
 				for(;i>=0; i--){ if(l[i].rel === relName){ return l[i].href; } }
 				return null;
 			}
-			console.log(18);
 			try{
-			console.log(h+d+ping);
-			
+
 			Ext.Ajax.request({
-				timeout: 120000,
-				url: h + d + ping,
+				timeout: 60000,
+				url: getURL(d + ping),
 				callback: function(q,s,r){
-					console.log('Response!');
 					var l = getLink(r,'logon.handshake');
-					console.log(q,s,r,l);
 					if(!s || !l){
 						if(r.timedout){
 							console.log('Request timed out: ', r.request.options.url);
@@ -81,12 +74,11 @@ Ext.define('NextThought.controller.Session', {
 					Ext.Ajax.request({
 						method: 'POST',
 						timeout: 60000,
-						url: h + l,
+						url: getURL(l),
 						params : {
 							username: u
 						},
 						callback: function(q,s,r){
-							console.log('Success!');
 							l = getLink(r,'logon.continue');
 							if(!s || !l){
 								if(r.timedout){
@@ -113,7 +105,7 @@ Ext.define('NextThought.controller.Session', {
 
 			try{
 				Ext.Ajax.request({
-					url: s.host + s.data,
+					url: getURL(s.data),
 					timeout: 20000,
 					headers:{
 						'Accept': 'application/vnd.nextthought.workspace+json'
@@ -172,9 +164,9 @@ Ext.define('NextThought.controller.Session', {
 
 	handleLogout: function() {
 		var s = $AppConfig.server,
-			url = Ext.String.urlAppend(
-					s.host + this.self.logoutURL,
-					'success='+encodeURIComponent(location.href));
+			url = getURL(Ext.String.urlAppend(
+					this.self.logoutURL,
+					'success='+encodeURIComponent(location.href)));
 		//Log here to help address #550.
 		console.log('logout, redirect to ' + url);
 		Socket.tearDownSocket();

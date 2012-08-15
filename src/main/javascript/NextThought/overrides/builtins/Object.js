@@ -25,7 +25,7 @@ Ext.define('NextThought.overrides.builtins.Object',{
 	}
 
 },function(){
-	window.NTO = this;
+
 
 	this.defineAttributes($AppConfig,{
 		username: {
