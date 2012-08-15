@@ -809,6 +809,8 @@ Ext.define('NextThought.util.Anchors', {
 			tempRange = doc.createRange(),
 			parentContainer,
 			nodeToInsertBefore,
+			origStartNode = range.startContainer,
+			origEndNode = range.endContainer,
 			origStartOff = range.startOffset,
 			origEndOff = range.endOffset,
 			resultRange,
@@ -826,18 +828,22 @@ Ext.define('NextThought.util.Anchors', {
 		ancestor.normalize();
 
 		//apply tags to start and end:
-		Anchors.tagNode(range.startContainer, 'start');
-		Anchors.tagNode(range.endContainer, 'end');
+		Anchors.tagNode(origStartNode, 'start');
+		Anchors.tagNode(origEndNode, 'end');
+		if (Ext.isIE9) { //IE9 bumps up the nodes of these ranges to their parents when they're tagged
+			range.setStart(origStartNode, origStartOff);
+			range.setEnd(origEndNode, origEndOff);
+		}
 
 		//setup our copy range
 		tempRange.selectNode(ancestor);
 		docFrag = tempRange.cloneContents();
 
 		//return original range back to it's original form:
-		Anchors.cleanNode(range.startContainer, 'start');
-		Anchors.cleanNode(range.endContainer, 'end');
-		range.setStart(range.startContainer,origStartOff);
-		range.setEnd(range.endContainer, origEndOff);
+		Anchors.cleanNode(origStartNode, 'start');
+		Anchors.cleanNode(origEndNode, 'end');
+		range.setStart(origStartNode, origStartOff);
+		range.setEnd(origEndNode, origEndOff);
 
 		//clean the node of undesirable things:
 		Anchors.purifyNode(docFrag);
