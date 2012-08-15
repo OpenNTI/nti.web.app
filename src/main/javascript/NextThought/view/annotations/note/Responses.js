@@ -8,10 +8,7 @@ Ext.define('NextThought.view.annotations.note.Responses',{
 
 	cls: 'note-responses',
 
-	layout: {
-		type: 'vbox',
-		align: 'stretch'
-	},
+	layout: 'auto',
 
 	defaults: {
 		xtype: 'note-reply'
@@ -21,7 +18,6 @@ Ext.define('NextThought.view.annotations.note.Responses',{
 		this.removeAll(true);
 
 		Ext.each(children,this.addReply,this);
-		console.log('*** height = ', this.getHeight());
 	}
 },
 function(){

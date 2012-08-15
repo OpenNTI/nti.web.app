@@ -70,11 +70,11 @@ Ext.define('NextThought.view.annotations.note.Window',{
 
 	syncSize: function(){
 		var size = this.callParent(arguments);
+
 		var f = this.query('nti-window-header,note-filter-bar,note-carousel,note-main-view,note-responses');
 		var h = 2;
 
-		if(f && f[0].rendered){
-
+		if(f && f.length > 0 && f[0].rendered){
 			Ext.each(f,function(o){h+= o.getHeight(); });
 
 			if(size.height > h){

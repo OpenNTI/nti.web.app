@@ -136,7 +136,7 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 		if( this.replyBox ){
 			this.replyBox.addCls('hover');
 		}
-		//this.getEl().scrollIntoView(scroller);
+		this.getEl().scrollIntoView(scroller);
 		this.updateLayout();
 	},
 
@@ -219,7 +219,6 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 		if(e){e.stopEvent();}
 		if(this.replyBox){
 			this.replyBox.addCls('editor-active');
-			//this.updateLayout();
 			this.scrollIntoView();
 		}
 		return false;
