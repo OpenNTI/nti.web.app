@@ -298,12 +298,15 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 
 
 	syncFrame: function(content){
-		var i = this.getIframe(), h,
+		var i = this.getIframe(), h, contentHeight = 150;
 			//We need the buffer because otherwise the end of the doc would go offscreen
+		if (Ext.isIE9) {
 			contentHeight = 150; 
-		for (var ii = 0; ii < content.childNodes.length; ii++) {
-			contentHeight += content.childNodes[ii].offsetHeight;
+			for (var ii = 0; ii < content.childNodes.length; ii++) {
+				contentHeight += content.childNodes[ii].offsetHeight;
+			}
 		}
+		else contentHeight = content.getBoundingClientRect().height;
 		h = Math.max(this.getEl().getHeight(),contentHeight);
 
 		if(h === this.lastHeight){
