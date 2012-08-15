@@ -390,6 +390,12 @@ Ext.define('NextThought.view.annotations.Highlight', {
 		return span;
 	},
 
+	getScrollPosition: function(currentPosition){
+		var el = Ext.get(this.compElements.first());
+		var dh = 100;
+
+		return currentPosition > el.getTop() ? currentPosition - el.getTop(): el.getTop() - currentPosition - dh;
+	},
 
 	unwrap: function(node) {
 		var r, p = node.parentNode;

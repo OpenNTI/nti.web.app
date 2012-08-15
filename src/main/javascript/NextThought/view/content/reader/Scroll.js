@@ -54,18 +54,13 @@ Ext.define('NextThought.view.content.reader.Scroll',{
 			e = document.getElementById(target) || de.getElementById(target) || de.getElementsByName(target)[0];
 
 		if (!e && c) {
-
-			e = c.getRange();
-			if(e){
-				try{
-					c.getEl().scrollIntoView(this.body, true);
-				}
-				catch(excp) {
-					c.compElements.last().scrollIntoView(this.body, true);
-				}
-				//this.scrollTo(e.getBoundingClientRect().top - this.getAnnotationOffsets().top);
-				return;
+			try{
+				this.scrollTo(c.getScrollPosition(this.body.getScroll().top));
 			}
+			catch(excp) {
+				console.log("Could not scroll to ",c);
+			}
+			return;
 		}
 
 		if(!e) {
