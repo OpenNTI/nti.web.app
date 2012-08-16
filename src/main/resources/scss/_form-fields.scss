@@ -40,7 +40,7 @@
 	color: #757474;
 	font-family: 'Open Sans', sans-serif;
 	//font-size: 15pt;
-	width: 100%;
+	display: block;
 	border-radius: 3px;
 	border: 1px solid #a0a0a0;
 	box-shadow: inset 3px 3px 10px -5px #a0a0a0; //TODO: fix to be a sane value (use RGBA to lighten the shadow, not the blur & spread)
@@ -52,7 +52,8 @@
 	position: relative;
 
 	.user-search-field {
-		display: inline-block;
+		display: inline-table;
+		//width: 100px;
 		margin: 5px 0 0 0;
 		input {
 			border: none !important;
@@ -62,6 +63,7 @@
 		}
 		.x-form-item-body {
 			position: static;
+			//width: 100px !important;
 		}
 		.x-trigger-cell {
 			&.hidden {
