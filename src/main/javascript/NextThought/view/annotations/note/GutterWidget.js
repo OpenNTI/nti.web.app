@@ -23,16 +23,17 @@ Ext.define('NextThought.view.annotations.note.GutterWidget',{
 	},
 
 	afterRender: function(){
-		var me = this;
+		var me = this,
+			r = me.record;
 		me.callParent(arguments);
 
-		me.setRecord(me.record);
+		me.setRecord(r);
 
 		me.mon(me.liked, {
 			scope: me,
 			click: function(e){
 				e.stopEvent();
-				me.record.like(me.liked);
+				r.like(me.liked);
 				return false;
 			}
 		});
@@ -41,15 +42,16 @@ Ext.define('NextThought.view.annotations.note.GutterWidget',{
 			scope: me,
 			click: function(e){
 				e.stopEvent();
-				me.record.favorite(me.favorites);
+				r.favorite(me.favorites);
 				return false;
 			}
 		});
 
-		me.mon(me.startChatButton, {
-			scope: me,
-			click: me.startChat
-		});
+		me.mon(me.startChatButton, 'click', me.startChat, me);
+
+		me.liked.update(r.getFriendlyLikeCount());
+		me.liked[(r.isLiked()?'add':'remove')+'Cls']('on');
+		me.favorites[(r.isFavorited()?'add':'remove')+'Cls']('on');
 
 		TemplatesForNotes.attachMoreReplyOptionsHandler(me, me.more);
 
