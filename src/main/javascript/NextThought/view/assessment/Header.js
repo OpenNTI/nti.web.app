@@ -16,7 +16,9 @@ Ext.define('NextThought.view.assessment.Header',{
 
 	renderSelectors: {
 		myTitle: '.title',
-		status: '.status'
+		status: '.status',
+		liked: '.controls .like',
+		favorites: '.controls .favorite'
 	},
 
 
@@ -25,9 +27,24 @@ Ext.define('NextThought.view.assessment.Header',{
 	},
 
 
+	afterRender: function(){
+		this.callParent(arguments);
+		var r = this.question,
+			l = this.liked,
+			f = this.favorites;
+
+		this.mon(l, 'click', function(){ r.like(l); }, this);
+		this.mon(f, 'click', function(){ r.favorite(f); }, this);
+		l.update(r.getFriendlyLikeCount());
+		l[(r.isLiked()?'add':'remove')+'Cls']('on');
+		f[(r.isFavorited()?'add':'remove')+'Cls']('on');
+	},
+
+
 	onAdded: function(assessmentParent){
 		var id = '?unresolved title?';
 		try {
+			this.question = assessmentParent.question;
 			//HACK: there should be a more correct way to get the problem name/number...
 			id = assessmentParent.question.getId().split('.').last() + '.';
 		}
