@@ -57,7 +57,7 @@ Ext.define('NextThought.view.assessment.Question',{
 			c += '<br/>';
 		}
 
-		this.update(c + this.questionPart.get('content').replace(/(src)="(.*?)"/igm, fixRef));
+		this.update((c + this.questionPart.get('content')).replace(/(src)="(.*?)"/igm, fixRef));
 		this.updateLayout();
 	},
 
