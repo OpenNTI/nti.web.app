@@ -48,6 +48,7 @@ Ext.define('NextThought.view.annotations.Redaction', {
 		//make the replacement content editable if it belongs to me.
 		if (this.editableSpan && this.record.isModifiable()){
 			this.editableSpan.dom.setAttribute('contenteditable', 'true');
+			this.editableSpan.un('keydown', this.editableSpanEditorKeyDown, this);
 			this.editableSpan.on('keydown', this.editableSpanEditorKeyDown, this);
 			this.doc.parentWindow.getSelection().removeAllRanges();
 			this.editableSpan.focus();
@@ -146,15 +147,15 @@ Ext.define('NextThought.view.annotations.Redaction', {
 	},
 
 	setupInlineSpanEvents: function() {
+		console.log(123);
 		var me = this;
 
 		//set up any events:
 		me.attachEvent('click', this.actionSpan,
 			function(e){
 				if (me.clickTimer){clearTimeout(me.clickTimer);}
-				console.log(this.actionSpan.ownerDocument.activeElement, this.actionSpan);
-				if (this.actionSpan.ownerDocument.activeElement !== this.actionSpan.querySelector('.redactionReplacementText')) {
-					console.log('400ms to go!');
+				var rText = this.actionSpan.querySelector('.redactionReplacementText');
+				if (!rText || rText.getAttribute('contenteditable') != 'true') {
 					me.clickTimer = setTimeout(function(){
 						me.onClick(e);
 					}, 400);
@@ -217,18 +218,16 @@ Ext.define('NextThought.view.annotations.Redaction', {
 		else if (k === event.BACKSPACE) {
 			event.stopEvent();
 			selection = this.doc.parentWindow.getSelection();
-			console.log(selection);
 			range = selection.getRangeAt(0);
+			rangeContainer = range.startContainer;
 			cursorStart = range.startOffset;
 			if (!(range.collapsed)) {
 				range.deleteContents();
 			}
 			else {
-				console.log(range);
 				span.firstChild.data = span.firstChild.data.substring(0,cursorStart - 1) + span.firstChild.data.substring(cursorStart);
-				console.log(range);
-				range.setEnd(range.startContainer,cursorStart - 1);
-				range.setStart(range.startContainer,cursorStart - 1);
+				range.setEnd(rangeContainer,cursorStart - 1);
+				range.setStart(rangeContainer,cursorStart - 1);
 				selection.removeAllRanges();
 				selection.addRange(range);
 			}
