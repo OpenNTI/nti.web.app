@@ -27,8 +27,8 @@ Ext.define('NextThought.view.form.fields.UserListField', {
 
 		me.inputField = me.add({xtype: 'usersearchinput', xhooks: {
 			alignPicker: function(){
-				var o = this.inputEl;
-				var b = this.bodyEl;
+				var o = this.inputEl,
+					b = this.bodyEl;
 				this.bodyEl = this.inputEl = me.getEl();
 				this.callParent();
 				this.inputEl = o;
@@ -49,21 +49,13 @@ Ext.define('NextThought.view.form.fields.UserListField', {
 		var me = this;
 		me.callParent();
 		me.inputField.ref = me.el;
-		me.el.on('click',function(){
-			me.inputField.focus();
-		});
+		me.mon(me.el,'click',function(){ me.inputField.focus(); });
 	},
 
 
 	setReadOnly: function(readOnly){
 		this.readOnly = readOnly;
-		if(readOnly) {
-			this.inputField.hide();
-		}
-		else {
-			this.inputField.show();
-		}
-
+		this.inputField[readOnly?'hide':'show']();
 		this.items.each(function(token){ token.setReadOnly(readOnly); },this);
 	},
 
@@ -78,7 +70,7 @@ Ext.define('NextThought.view.form.fields.UserListField', {
 		var me = this, i=(value?value.length:0)-1;
 		me.value = value;
 		//trim empty's...
-		for(;i>=0;i--){if(!value[i]){value.splice(i,1);}}
+		for(i;i>=0;i--){if(!value[i]){value.splice(i,1);}}
 
 		me.checkChange();
 		me.initValue();
@@ -129,7 +121,8 @@ Ext.define('NextThought.view.form.fields.UserListField', {
 		Ext.each(
 			this.selections,
 			function(o){
-				return !(found=(o.getId()===id));
+				found=(o.getId()===id);
+				return !found;
 			},
 			this
 		);
