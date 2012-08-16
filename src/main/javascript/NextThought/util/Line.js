@@ -21,7 +21,10 @@ Ext.define('NextThought.util.Line',{
 
 		var range;
 
-		if (doc.caretRangeFromPoint){
+		if (Ext.isIE9) {
+			range = this.rangeByRecursiveSearch(y,doc);
+		}
+		else if (doc.caretRangeFromPoint){
 			range = this.rangeForLineByPoint(y, doc);
 		}
 		else {
@@ -34,7 +37,51 @@ Ext.define('NextThought.util.Line',{
 		return null;
 	},
 
-
+	/** @private */
+	rangeByRecursiveSearch: function(y,doc) {
+		y -= 15; //Correction
+		var curNode = doc.documentElement;
+		//First text node ending past y
+		var loops = 0; //stopgap measure to kill infinite loops
+		while (curNode && curNode.nodeType == curNode.ELEMENT_NODE && loops < 3) {
+			var i;
+			for (i = 0; i < curNode.childNodes.length && curNode.nodeType == curNode.ELEMENT_NODE; i++) {
+				var range = doc.createRange(), rect;
+				range.selectNode(curNode.childNodes[i]);
+				rect = range.getBoundingClientRect();
+				if (rect.bottom > y) {
+					curNode = curNode.childNodes[i];
+					i = 0;
+					loops = 0;
+				}
+			}
+			loops++;
+			if (!curNode) return null;
+		}
+		if (!curNode) return null;
+		var range = doc.createRange();
+		var left = 0, right = curNode.data.length, center, rect;
+		// First single character ending past y
+		while (right-left > 1) {
+			center = Math.floor((left+right)/2);
+			range.setStart(curNode,center - 1); //We want to bias the algorithm to the right a bit
+			range.setEnd(curNode,right);
+			rect = range.getBoundingClientRect();
+			if (rect.top < y) { left = center; }
+			else { right = center; }
+		}
+		//Extend as long as height remains the same, another binary search
+		var h = rect.height;
+		var ll = left + 1, rr = curNode.data.length;
+		while (rr - ll > 1) {
+			center = Math.floor((ll+rr)/2);
+			range.setEnd(curNode,center);
+			rect = range.getBoundingClientRect();
+			if (rect.height > h) rr = center;
+			else ll = center;
+		}
+		return range;
+	},
 	/** @private */
 	rangeForLineByPoint: function(y, doc) {
 		var xStart = 0,
