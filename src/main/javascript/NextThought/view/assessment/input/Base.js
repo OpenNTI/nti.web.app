@@ -103,10 +103,12 @@ Ext.define('NextThought.view.assessment.input.Base',{
 			click: this.hideSolution
 		});
 
+		this.checkItBtn.setVisibilityMode(Ext.dom.Element.DISPLAY);
 		this.solutionAnswerBox.setVisibilityMode(Ext.dom.Element.DISPLAY);
 		this.inputBox.setVisibilityMode(Ext.dom.Element.DISPLAY);
 		this.solutionBox.setVisibilityMode(Ext.dom.Element.DISPLAY);
 		this.footer.setVisibilityMode(Ext.dom.Element.DISPLAY);
+
 		this.reset();
 		this.disableSubmission();
 	},
@@ -131,13 +133,13 @@ Ext.define('NextThought.view.assessment.input.Base',{
 
 
 	updateSolutionButton: function(){
-		var p = this.part;
-		var a = this.solutionAnswerBox;
-		var b = this.showSolutionBtn;
-		var e = this.solutionExplanationBox;
+		var p = this.part,
+			a = this.solutionAnswerBox,
+			b = this.showSolutionBtn,
+			e = this.solutionExplanationBox,
 
-		var answer = this.el.down('.answer');
-		var label = b.getHTML().replace(/(solution|hint)$/i,'{0}');
+			answer = this.el.down('.answer'),
+			label = b.getHTML().replace(/(solution|hint)$/i,'{0}');
 
 		answer.setVisibilityMode(Ext.dom.Element.DISPLAY);
 
@@ -181,6 +183,9 @@ Ext.define('NextThought.view.assessment.input.Base',{
 		this.currentHint = 0;
 		this.updateSolutionButton();
 		this.footer.show();
+		if(this.questionSet){
+			this.checkItBtn.hide();
+		}
 		this.checkItBtn.removeCls('wrong').update('Check It!');
 		this.hideSolution();
 		this.disableSubmission();
@@ -191,12 +196,18 @@ Ext.define('NextThought.view.assessment.input.Base',{
 	enableSubmission: function(){
 		delete this.submissionDisabled;
 		this.checkItBtn.removeCls('disabled');
+		if( this.questionSet ){
+			this.questionSet.fireEvent('answered',this.part, true);
+		}
 	},
 
 
 	disableSubmission: function(){
 		this.submissionDisabled = true;
 		this.checkItBtn.addCls('disabled');
+		if( this.questionSet ){
+			this.questionSet.fireEvent('answered',this.part, false);
+		}
 	},
 
 

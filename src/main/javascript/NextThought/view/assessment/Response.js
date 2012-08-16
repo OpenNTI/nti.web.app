@@ -15,11 +15,11 @@ Ext.define('NextThought.view.assessment.Response',{
 	ui: 'assessment',
 
 
-	setQuestionAndPart: function(question,part){
+	setQuestionAndPart: function(question,part,questionSet){
 		this.removeAll(true);
 		var type = 'question-input-'+part.get('Class').toLowerCase();
 		try {
-			this.add({xtype: type, question: question, part: part});
+			this.add({xtype: type, question: question, part: part, questionSet: questionSet});
 		}
 		catch(e){
 			console.warn('missing question type: '+type);

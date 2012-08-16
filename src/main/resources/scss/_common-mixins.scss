@@ -292,3 +292,27 @@
 	}
 }
 
+
+@mixin arrow($pointFrom:bottom,$width:7px,$height:4px,$color:#666){
+	/*
+	* In Internet Explorer, The"border-style: dashed" will never be
+	* rendered unless "(width * 5) >= border-width" is true.
+	* Since "width" is set to "0", the "dashed-border" remains
+	* invisible to the user, which renders the border just like how
+	* "border-color: transparent" renders.
+	*/
+	border-style: dashed;
+	border-color: transparent;
+	border-width: 0.6em;
+	display: -moz-inline-box;
+	display: inline-block;
+	/* Use font-size to control the size of the arrow. */
+	font-size: $width;
+	vertical-align: middle;
+	height: 0;
+	line-height: 0;
+	width: 0;
+	border-#{$pointFrom}-width: $height;
+	border-#{$pointFrom}-style: solid;
+	border-#{$pointFrom}-color: $color;
+}

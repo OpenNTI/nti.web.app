@@ -1,7 +1,9 @@
 Ext.define('NextThought.view.content.reader.AssessmentOverlay', {
 
 	requires: [
-		'NextThought.view.assessment.Question'
+		'NextThought.view.assessment.Scoreboard',
+		'NextThought.view.assessment.Question',
+		'NextThought.view.assessment.QuizSubmission'
 	],
 
 	constructor: function(){
@@ -34,9 +36,36 @@ Ext.define('NextThought.view.content.reader.AssessmentOverlay', {
 
 
 	injectAssessments: function(items){
+		var me = this,
+			c = this.assessmentOverlay;
+
 		//nothing to do.
 		if(!items || items.length < 1){
 			return;
+		}
+
+		function makeQuestion(q,set){
+			me.activeAssessments[q.getId()] = Ext.widget('assessment-question',{
+				reader: me,
+				question: q,
+				renderTo: c,
+				questionSet: set || null,
+				contentElement: me.getAssessmentElement('object','data-ntiid', q.getId())
+			});
+		}
+
+		function makeQuiz(set){
+			var guid = guidGenerator();
+			me.activeAssessments[guid+'scoreboard'] = Ext.widget('assessment-scoreboard',{
+				reader: me, renderTo: c, questionSet: set
+			});
+
+			me.activeAssessments[guid+'submission'] = Ext.widget('assessment-quiz-submission',{
+				reader: me, renderTo: c, questionSet: set
+			});
+
+			Ext.each(set.get('questions'),function(q){makeQuestion(q,set);});
+
 		}
 
 		//TODO: Remove all content based submit buttons
@@ -44,33 +73,25 @@ Ext.define('NextThought.view.content.reader.AssessmentOverlay', {
 			this.getDocumentElement().querySelectorAll('.x-btn-submit,[onclick^=NTISubmitAnswers]')).remove();
 
 		Ext.Array.sort(items, function(ar,br){
-			var a = ar.getId();
-			var b = br.getId();
+			var a = ar.getId(),
+				b = br.getId();
 			return ( ( a === b ) ? 0 : ( ( a > b ) ? 1 : -1 ) );
 		});
 
-		var me = this,
-			c = this.assessmentOverlay;
-
 		Ext.each(items,function(q){
-			me.activeAssessments[q.getId()] = Ext.widget({
-				xtype: 'assement-question',
-				reader: me,
-				question: q,
-				renderTo: c,
-				contentElement: me.getAssessmentElement('object','data-ntiid', q.getId())
-			});
+			if(q.isSet){ makeQuiz(q); }
+			else { makeQuestion(q); }
 		});
 	},
 
 
 	getAssessmentElement: function(tagName, attribute, value){
-		var doc = this.getDocumentElement();
-		var tags = doc.getElementsByTagName(tagName);
-		var i = tags.length-1;
-		var vRe = new RegExp( '^'+RegExp.escape( value )+'$', 'ig');
+		var doc = this.getDocumentElement(),
+			tags = doc.getElementsByTagName(tagName),
+			i = tags.length - 1,
+			vRe = new RegExp( '^'+RegExp.escape( value )+'$', 'ig');
 
-		for(;i>=0; i--){
+		for(i; i >= 0; i--) {
 			if(vRe.test(tags[i].getAttribute(attribute))){
 				return tags[i];
 			}

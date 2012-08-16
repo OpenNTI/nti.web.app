@@ -56,7 +56,7 @@ $button-text-weights: bold,bolder,normal;
 			border: 1px $border solid;
 			border-radius: 4px;
 			box-shadow: inset 0px 1px 1px $shadow;
-			padding: 2px+(4px*$i) 10px+(15px*$i);
+			padding: 2px+(4px*$i) 10px+(5px*$i);
 
 			@include background-image( linear-gradient(top,
 					$startColor 0%,
