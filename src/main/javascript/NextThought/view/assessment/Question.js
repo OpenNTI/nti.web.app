@@ -25,9 +25,25 @@ Ext.define('NextThought.view.assessment.Question',{
 		this.callParent(arguments);
 		//TODO: this is a shortcut, assuming there is only one part to the question.
 		var part = this.questionPart = this.question.get('parts').first();
-		this.down('question-response').setQuestionAndPart(this.question,part,this.questionSet);
+		this.down('question-response').setQuestionAndPart(
+				this.question,
+				part,
+				this.questionSet,
+				this.canSubmitIndividually());
+
 		this.setQuestionContent();
 		this.setupContentElement();
+	},
+
+
+	canSubmitIndividually: function(){
+		var c = this.contentElement;
+		function resolve(){
+			var el = Ext.get(c).down('param[name=canindividual]');
+			return !el || el.getValue() !== 'false';
+		}
+		//don't dig into the dom if we already have an answer
+		return this.questionSet || !c || resolve();
 	},
 
 

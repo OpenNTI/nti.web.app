@@ -57,15 +57,7 @@ Ext.define('NextThought.view.content.reader.AssessmentOverlay', {
 			QuestionSet = Ext.ModelManager.getModel('NextThought.model.assessment.QuestionSet'),
 			c = me.assessmentOverlay,
 			guid = guidGenerator(),
-
-		/// FAKE IT 'TIL YOU MAKE IT!!!
-			questions = Ext.isArray(set)? set : set.get('questions');
-
-		if(Ext.isArray(set)){
-			set = new QuestionSet({questions:set});
-		}
-		/// FAKE IT 'TIL YOU MAKE IT!!! (end)
-
+			questions = set.get('questions');
 
 		me.activeAssessments[guid+'scoreboard'] = Ext.widget('assessment-scoreboard',{
 			reader: me, renderTo: c, questionSet: set
@@ -99,15 +91,11 @@ Ext.define('NextThought.view.content.reader.AssessmentOverlay', {
 			return ( ( a === b ) ? 0 : ( ( a > b ) ? 1 : -1 ) );
 		});
 
-		/// FAKE IT 'TIL YOU MAKE IT!!!
-		me.makeAssessmentQuiz(items);
-
-		/*
 		Ext.each(items,function(q){
+			console.log(q);
 			if(q.isSet){ me.makeAssessmentQuiz(q); }
 			else { me.makeAssessmentQuestion(q); }
 		});
-		*/
 	},
 
 
