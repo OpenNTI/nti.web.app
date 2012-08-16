@@ -42,6 +42,22 @@ Ext.define('NextThought.view.assessment.Panel',{
 	},
 
 
+	hide: function(){
+		var c = Ext.get(this.contentElement);
+		c.setVisibilityMode(Ext.dom.Element.DISPLAY);
+		c.hide();console.log('test hide');
+		this.callParent(arguments);
+	},
+
+
+	show: function(){
+		var c = Ext.get(this.contentElement);
+		c.setVisibilityMode(Ext.dom.Element.DISPLAY);
+		c.show();console.log('test show');
+		this.callParent(arguments);
+	},
+
+
 	setupContentElement: function(){
 		var el = Ext.get(this.contentElement);
 		this.removeContent('.naqsolutions,.naqchoices,.rightwrongbox,.hidden,INPUT,p.par');

@@ -27,6 +27,7 @@ Ext.define('NextThought.view.assessment.Scoreboard',{
 
 	initComponent: function(){
 		this.callParent(arguments);
+		this.hide();//we have to pre-render then hide. We hide until after grading, or preset the previously taken quiz.
 	},
 
 
