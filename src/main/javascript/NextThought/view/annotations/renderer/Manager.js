@@ -201,7 +201,7 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 			line.controls = line.controls || cT.append(g.controls,[],true);
 			line.widgets = line.widgets || wT.append(g.widgets,[],true);
 
-			(new Ext.CompositeElement([line.controls,line.widgets])).setTop(y);
+			(new Ext.CompositeElement([line.controls,line.widgets])).setTop(y+'px');
 
 			line.each(function(o){
 				var w = o.getGutterWidget();
