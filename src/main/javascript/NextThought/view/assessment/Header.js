@@ -5,7 +5,14 @@ Ext.define('NextThought.view.assessment.Header',{
 	cls: 'header',
 	ui: 'assessment',
 
-	renderTpl: Ext.DomHelper.markup([{cls:'title',html:'{title}'},{cls: 'status {status}',html:'{status}'}]),
+	renderTpl: Ext.DomHelper.markup([
+		{
+			cls: 'controls',
+			cn: [{ cls: 'favorite' },{ cls: 'like' }]
+		},
+		{cls:'title',html:'{title}'},
+		{cls: 'status {status}',html:'{status}'}
+	]),
 
 	renderSelectors: {
 		myTitle: '.title',

@@ -438,6 +438,13 @@
 				display: inline;
 			}
 
+			.controls {
+				@include like-and-favorite;
+				position: absolute;
+				right: 0;
+				top: 0;
+			}
+
 			.status {
 				text-transform: uppercase;
 				padding-left: 5px;
