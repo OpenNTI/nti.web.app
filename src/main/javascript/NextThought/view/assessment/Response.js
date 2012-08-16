@@ -16,8 +16,11 @@ Ext.define('NextThought.view.assessment.Response',{
 
 
 	setQuestionAndPart: function(question,part,questionSet){
-		this.removeAll(true);
 		var type = 'question-input-'+part.get('Class').toLowerCase();
+		this.removeAll(true);
+
+		this[questionSet?'addCls':'removeCls']('part-of-set');
+
 		try {
 			this.add({xtype: type, question: question, part: part, questionSet: questionSet});
 		}
