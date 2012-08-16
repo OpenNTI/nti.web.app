@@ -29,9 +29,15 @@ Ext.define('NextThought.view.content.reader.AssessmentOverlay', {
 		this.activeAssessments = {};
 
 		Ext.Object.each(active,function(k, v){
-			delete active[k];
 			v.destroy();
+			delete active[k];
 		});
+
+		Ext.each(
+			Ext.ComponentQuery.query('assessment-panel'),
+			function(o){
+				o.destroy();
+			});
 	},
 
 
@@ -76,6 +82,8 @@ Ext.define('NextThought.view.content.reader.AssessmentOverlay', {
 
 	injectAssessments: function(items){
 		var me = this;
+
+		me.clearAssessments();
 
 		//nothing to do.
 		if(!items || items.length < 1){
