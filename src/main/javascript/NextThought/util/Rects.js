@@ -60,7 +60,7 @@ Ext.define('NextThought.util.Rects',{
 			xx = ri.right || (x + ri.height);
 			yy = ri.bottom || (y + ri.width);
 
-			var tolerance = 3;
+			var tolerance = 8;
 
 			b = Math.floor((y+h/2) / tolerance);//center line of the rect
 

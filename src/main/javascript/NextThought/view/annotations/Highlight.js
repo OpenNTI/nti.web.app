@@ -194,6 +194,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
 		boundingHeight = Math.ceil(bounds.height);
 		width = this.content ? this.content.getWidth() : 680;
 		s = RectUtils.merge(range.getClientRects(),width+1);
+		s.sort(function(a,b) { return a.top + a.bottom - b.top - b.bottom });
 		i = s.length - 1;
 
 
@@ -220,13 +221,13 @@ Ext.define('NextThought.view.annotations.Highlight', {
 					: (width-x);
 
 			h = r.height + (padding*2);
-
 			if(!last && (Math.abs(y - lastY) < lineHeight || y > lastY )){ continue; }
 			if(!last && r.height <= lineHeight) { continue; }
-			//Remove the possibility of a "just the triangle" line at the end
+			//Remove some really small rects
 			if(last && w < 10) {continue;}
+			if (!last && h < 8) { continue;}
 
-			if(last){
+			if(last && !Ext.isIE9){
 				c = Ext.get(this.counter);
 				adjustment = this.adjustedBy || (r.top - c.getY());
 				h = c.getHeight() + padding;
