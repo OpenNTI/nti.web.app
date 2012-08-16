@@ -18,7 +18,7 @@ Ext.define('NextThought.view.assessment.QuizSubmission',{
 			{cls: 'reset', html: 'Start Over'},
 			{cls: 'submit', html: 'I\'m Finished!'}
 		] },
-		{ cls: 'status ready', html: 'All questions answered' }
+		{ cls: 'status' }
 	]),
 
 	renderSelectors: {
@@ -28,21 +28,58 @@ Ext.define('NextThought.view.assessment.QuizSubmission',{
 	},
 
 	initComponent: function(){
+		var answeredMap = {};
+
 		this.callParent(arguments);
+
+		this.mon(this.questionSet,'answered',this.updateStatus,this);
+
+		Ext.each(this.questionSet.get('questions'),function(q){
+			answeredMap[q.getId()] = false;
+		});
+
+		this.answeredMap = answeredMap;
 	},
 
 
 	afterRender: function(){
 		this.callParent(arguments);
-
+		this.reflectStateChange();
 		this.mon(this.resetBtn,'click',this.resetClicked,this);
 		this.mon(this.submitBtn,'click',this.submitClicked,this);
 	},
 
 
 
+	updateStatus: function(question, part, status){
+		this.answeredMap[question.getId()] = Boolean(status);
+		this.reflectStateChange();
+	},
+
+
+	reflectStateChange: function(){
+		var unanswered = 0;
+		if(!this.rendered){ return; }
+
+		Ext.Object.each(this.answeredMap,function(k,v){ if(!v){unanswered++;} });
+		this.statusMessage.update(unanswered===0
+				? 'All questions answered'
+				: Ext.String.format('{0} questions unanswered',unanswered)
+		);
+
+		this.statusMessage[((unanswered===0)?'add':'remove')+'Cls']('ready');
+	},
+
+
 	resetClicked: function(){
-		console.log('reset!');
+		var q = this.questionSet;
+		if( q.fireEvent('beforereset') ){
+			q.fireEvent('reset');
+			console.log('fired reset');
+		}
+		else {
+			console.log('reset aborted');
+		}
 	},
 
 
