@@ -5,7 +5,7 @@ Ext.define('NextThought.view.assessment.ScoreboardTally',{
 	cls: 'tally-box',
 
 	renderTpl: Ext.DomHelper.markup([
-		{ cls: 'message', html: 'Great Job! You’re well on your way...' },
+		{ cls: 'message', html: 'Great Job! You&rsquo;re well on your way...' },
 		{ cls: 'tally', cn: [
 			{cls: 'stat correct', cn:[{tag: 'span', cls:'count'},' correct'] },
 			{cls: 'stat incorrect', cn:[{tag: 'span', cls:'count'},' incorrect'] }
