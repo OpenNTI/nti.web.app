@@ -100,6 +100,7 @@ Ext.define('NextThought.view.content.reader.AssessmentOverlay', {
 
 
 	getAssessmentElement: function(tagName, attribute, value){
+		try {
 		var doc = this.getDocumentElement(),
 			tags = doc.getElementsByTagName(tagName),
 			i = tags.length - 1,
@@ -110,7 +111,10 @@ Ext.define('NextThought.view.content.reader.AssessmentOverlay', {
 				return tags[i];
 			}
 		}
-
+		}
+		catch(er){
+			console.error(er.stack);
+		}
 		return null;
 	}
 
