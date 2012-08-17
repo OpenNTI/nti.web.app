@@ -148,6 +148,8 @@ Ext.define('NextThought.view.annotations.note.Main',{
 
 		if(!this.rendered || !r){return;}
 
+		this.ownerCt.getEl().dom.scrollTop = 0;
+
 		try {
 			UserRepository.getUser(r.get('Creator'),this.fillInUser,this);
 			this.time.update(r.getRelativeTimeString());
