@@ -146,7 +146,7 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 				var t = e.getTarget();
 				e.stopPropagation();
 				if(!t || !(/input|textarea/i).test(t.tagName)){
-					console.log('stopped backspace: ',t);
+					//console.log('stopped backspace: ',t);
 					e.stopEvent();
 				return false;
 				}
