@@ -44,10 +44,13 @@ Ext.define('NextThought.view.assessment.input.MultipleChoice',{
 
 		this.mon(this.getEl().select('.choice'),{
 			scope: this,
-			click: this.choiceClicked
+			click: this.choiceClicked,
+			keydown: this.keyDown
 		});
 	},
-
+	keyDown: function(e) {
+		if (e.getKey() == e.ENTER) { this.choiceClicked(e); }
+	},
 
 	choiceClicked: function(e){
 		if(this.submitted){return;}
