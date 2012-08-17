@@ -36,39 +36,35 @@ Ext.define('NextThought.view.assessment.Panel',{
 
 	destroy: function(){
 		if(this.insertedElement){
-			Ext.get(this.contentElement).remove();
+			Ext.fly(this.contentElement).remove();
 		}
 		this.callParent(arguments);
 	},
 
 
 	hide: function(){
-		var c = Ext.get(this.contentElement);
-		c.setVisibilityMode(Ext.dom.Element.DISPLAY);
-		c.hide();console.log('test hide');
+		Ext.fly(this.contentElement).setStyle({display:'none'});
+		console.log('test hide');
 		this.callParent(arguments);
 	},
 
 
 	show: function(){
-		var c = Ext.get(this.contentElement);
-		c.setVisibilityMode(Ext.dom.Element.DISPLAY);
-		c.show();console.log('test show');
+		Ext.fly(this.contentElement).setStyle({display:'block'});
+		console.log('test show');
 		this.callParent(arguments);
 	},
 
 
 	setupContentElement: function(){
-		var el = Ext.get(this.contentElement);
-		this.removeContent('.naqsolutions,.naqchoices,.rightwrongbox,.hidden,INPUT,p.par');
-
-		el.setStyle({
+		Ext.fly(this.contentElement).setStyle({
 			overflow: 'hidden',
 			display: 'block',
 			margin: '30px auto',
 			opacity: 0,
 			'white-space': 'nowrap'
 		});
+		this.removeContent('.naqsolutions,.naqchoices,.rightwrongbox,.hidden,INPUT,p.par');
 	},
 
 
@@ -91,7 +87,7 @@ Ext.define('NextThought.view.assessment.Panel',{
 	syncElementHeight: function(){
 		var h = this.getHeight();
 		try {
-		Ext.get(this.contentElement).setHeight(h);
+		Ext.fly(this.contentElement).setHeight(h);
 		}
 		catch(e){
 			console.log('no contentElement');
