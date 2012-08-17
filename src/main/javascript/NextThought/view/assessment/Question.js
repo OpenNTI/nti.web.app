@@ -96,7 +96,9 @@ Ext.define('NextThought.view.assessment.Question',{
 	setQuestionContent: function(){
 		var root = LocationProvider.getContentRoot(),c;
 		function fixRef(original,attr,url) {
-			return (/^data:/i.test(url)) ? original : attr+'="'+root+url+'"'; }
+			return (/^data:/i.test(url)||Globals.HOST_PREFIX_PATTERN.test(url))
+					? original
+					: attr+'="'+root+url+'"'; }
 
 		c = this.question.get('content') || '';
 		//don't append a break unless there is actual content
