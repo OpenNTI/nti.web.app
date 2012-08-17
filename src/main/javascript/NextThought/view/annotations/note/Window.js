@@ -69,10 +69,9 @@ Ext.define('NextThought.view.annotations.note.Window',{
 
 
 	syncSize: function(){
-		var size = this.callParent(arguments);
-
-		var f = this.query('nti-window-header,note-filter-bar,note-carousel,note-main-view,note-responses');
-		var h = 2;
+		var size = this.callParent(arguments),
+			h = 2,
+			f = this.query('nti-window-header,note-filter-bar,note-carousel,note-main-view,note-responses');
 
 		if(f && f.length > 0 && f[0].rendered){
 			Ext.each(f,function(o){h+= o.getHeight(); });
@@ -108,6 +107,7 @@ Ext.define('NextThought.view.annotations.note.Window',{
 		if(me.isReply) {
 			me.down('note-main-view').activateReplyEditor();
 		}
+
 		setTimeout(function(){me.syncSize();},1);
 	},
 
