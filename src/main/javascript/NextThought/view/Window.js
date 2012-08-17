@@ -26,7 +26,7 @@ Ext.define('NextThought.view.Window',{
 	layout: { type: 'vbox', align: 'stretch' },
 	items: [
 		{xtype:'nti-window-header' },
-		{xtype:'container', flex: 1}
+		{xtype:'container', flex: 1, windowContentWrapper:true}
 	],
 
 
@@ -103,6 +103,18 @@ Ext.define('NextThought.view.Window',{
 		this.titleBar = this.down('nti-window-header');
 		if(!this.modal && !this.dialog){
 			this.manager.register(this);
+		}
+	},
+
+
+	afterRender: function(){
+		this.callParent(arguments);
+		var c = this.down('container[windowContentWrapper]');
+
+		if(c){
+			this.mon( Ext.get(c.getId()+'-innerCt'), 'scroll', function(e,dom){
+				dom.scrollLeft = 0;
+			});
 		}
 	},
 
