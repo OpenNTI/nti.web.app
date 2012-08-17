@@ -19,7 +19,7 @@ Ext.define('NextThought.view.assessment.Response',{
 		var type = 'question-input-'+part.get('Class').toLowerCase();
 		this.removeAll(true);
 
-		this[individual?'addCls':'removeCls']('part-of-set');
+		this[individual?'removeCls':'addCls']('part-of-set');
 
 		try {
 			this.add({

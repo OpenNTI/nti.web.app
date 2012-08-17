@@ -92,8 +92,9 @@ Ext.define('NextThought.view.content.reader.AssessmentOverlay', {
 		});
 
 
-		Ext.each(this.cleanQuestionsThatAreInQuestionSets(items),function(q){
-			if(q.isSet){ me.makeAssessmentQuiz(q); }
+//		Ext.each(this.cleanQuestionsThatAreInQuestionSets(items),function(q){
+		Ext.each(items,function(q){
+			if(q.isSet){ /*me.makeAssessmentQuiz(q);*/ }
 			else { me.makeAssessmentQuestion(q); }
 		});
 	},
