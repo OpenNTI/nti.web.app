@@ -53,7 +53,8 @@ Ext.define('NextThought.view.assessment.Question',{
 			return (/^data:/i.test(url)) ? original : attr+'="'+root+url+'"'; }
 
 		c = this.question.get('content') || '';
-		if(c){
+		//don't append a break unless there is actual content
+		if(c.replace(/<.*?>|\s+/g,'')){
 			c += '<br/>';
 		}
 
