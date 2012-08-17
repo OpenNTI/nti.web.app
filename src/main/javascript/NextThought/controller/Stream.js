@@ -177,6 +177,7 @@ Ext.define('NextThought.controller.Stream', {
 
 		//add it to the root stream store, why the heck not?
 		this.getStreamStore().add(change);
+		this.getStreamStore().filter();
 		this.self.fireChange(change);
 
 		//add it to the page items store I guess:
