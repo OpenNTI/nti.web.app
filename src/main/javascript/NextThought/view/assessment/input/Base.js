@@ -121,9 +121,14 @@ Ext.define('NextThought.view.assessment.input.Base',{
 			return;
 		}
 
+		this.setSubmitted();
+		this.fireEvent('check-answer',this.up('assessment-question'), this.question, this.part, this.getValue());
+	},
+
+
+	setSubmitted: function(){
 		this.submitted = true;
 		this.checkItBtn.update('Try again');
-		this.fireEvent('check-answer',this.up('assessment-question'), this.question, this.part, this.getValue());
 	},
 
 

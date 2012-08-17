@@ -62,6 +62,7 @@ Ext.define('NextThought.view.assessment.Question',{
 	gatherQuestionResponse: function(questionSet,collection){
 		var id =  this.question.getId(), values = [];
 		Ext.each(this.query('abstract-question-input'),function(p){
+			p.setSubmitted();
 			values[p.getOrdinal()] = p.getValue();
 		});
 
