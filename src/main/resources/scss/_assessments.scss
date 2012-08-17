@@ -199,10 +199,10 @@
 
 			&.part-of-set > .x-panel-body-assessment {
 				padding-bottom: 0;
-
-				.footer .action.check {
-					display: none;
-				}
+				.footer .action.check { display: none; }
+			}
+			&.correct.part-of-set > .x-panel-body-assessment {
+				padding-bottom: 20px;
 			}
 
 			& > .x-panel-body-assessment {
