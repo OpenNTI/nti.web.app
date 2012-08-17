@@ -243,7 +243,9 @@ div.redaction-control {
                 }
 
 				.application-highlight.shared-with-me {
-					border-bottom: none;
+                    &,.math {
+					    border-bottom: none;
+                    }
 				}
 			}
 
