@@ -25,7 +25,10 @@ Ext.define('NextThought.view.menus.JumpTo',{
 		if(!item || !item.ntiid){
 			return;
 		}
-
+		if (item.rememberLastLocation){
+			LocationProvider.setLastLocationOrRoot(item.ntiid);
+			return;
+		}
 		LocationProvider.setLocation(item.ntiid);
 	}
 });

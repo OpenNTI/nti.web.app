@@ -36,17 +36,25 @@ Ext.define('NextThought.providers.Location', {
 	},
 
 
+	setLastLocationOrRoot: function(ntiid) {
+		var lastNtiid = localStorage[ntiid] || ntiid;
+		this.setLocation(lastNtiid);
+	},
+
+
 	/**
 	 *
 	 * @param ntiid
 	 * @param [callback]
 	 */
 	setLocation: function(ntiid, callback, fromHistory){
-		var me = this,e = Ext.getCmp('viewport').getEl();
+		var me = this,
+			e = Ext.getCmp('viewport').getEl(),
+			rootId = this.getLineage(ntiid).last();
 
 		function finish(){
 			if(finish.called){
-				console.warn('finish navitation called twice');
+				console.warn('finish navigation called twice');
 				return;
 			}
 
@@ -60,6 +68,10 @@ Ext.define('NextThought.providers.Location', {
 			if(fromHistory!==true){
 				history.pushState({location: ntiid}, "");
 			}
+
+			//remember last ntiid for this book
+			localStorage[rootId] = ntiid;
+
 			me.fireEvent('changed', ntiid);
 		}
 

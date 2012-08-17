@@ -150,6 +150,7 @@ Ext.define('NextThought.view.content.Navigation',{
 		Library.each(function(o){
 			var id = o.get('NTIID');
 			items.push({
+				rememberLastLocation: true,
 				text	: Ext.String.ellipsis(o.get('title'),30,false),
 				ntiid	: id,
 				cls		: id===locInfo.ntiid?'current':''

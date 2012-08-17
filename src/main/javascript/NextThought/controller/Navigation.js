@@ -19,8 +19,7 @@ Ext.define('NextThought.controller.Navigation', {
 			'navigation-collection': {
 				'select': function(sm,rec){
 					var ntiid = rec.get('NTIID');
-					//TODO: lookup last location under this tree
-					LocationProvider.setLocation(ntiid);
+					LocationProvider.setLastLocationOrRoot(ntiid);
 				}
 			},
 			'notifications-menuitem': {
