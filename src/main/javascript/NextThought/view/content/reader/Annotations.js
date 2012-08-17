@@ -617,6 +617,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 			sel = window.getSelection();
 			if (!sel.isCollapsed) {
 
+				Anchors.expandSelectionToIncludeMath(sel);
 
 				selTxt = sel.toString();
 				//decide if we have whitespace to trim on the front or end

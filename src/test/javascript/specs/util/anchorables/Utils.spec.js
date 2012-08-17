@@ -1254,7 +1254,6 @@ describe("Anchor Utils", function() {
 		});
 	});
 
-
 	describe('cleanRangeFromBadStartAndEndContainers Tests', function(){
 		it ('Clean Range of nodes with interleaved empty space nodes, start and end', function(){
 			var li = document.createElement('li'),
@@ -1288,6 +1287,189 @@ describe("Anchor Utils", function() {
 			expect(Anchors.cleanRangeFromBadStartAndEndContainers(range, false).endContainer).toEqual(t);
 		});
 
+	});
+
+	describe('isMathChild Tests', function(){
+		it('Is Null', function(){
+			expect(Anchors.isMathChild(null)).toBeFalsy();
+		});
+
+		it('Is Math', function(){
+			var elem = Ext.get(document.createElement('span'));
+			elem.addCls('math');
+			expect(Anchors.isMathChild(elem.dom)).toEqual(false);
+			expect(Anchors.isMathChild(elem)).toEqual(false);
+		});
+
+		it('Is Not Math', function(){
+			var elem = document.createElement('span');
+			expect(Anchors.isMathChild(Ext.get(elem))).toEqual(false);
+			expect(Anchors.isMathChild(elem)).toEqual(false);
+		});
+
+		it('Is Math Child', function(){
+			var elem = Ext.get(document.createElement('span')),
+				child = document.createElement('span'),
+				text = document.createTextNode('math');
+			elem.addCls('math');
+			child.appendChild(text);
+			elem.dom.appendChild(child);
+			expect(Anchors.isMathChild(text)).toBe(true);
+			expect(Anchors.isMathChild(child)).toBe(true);
+			expect(Anchors.isMathChild(elem)).toBe(false);
+		});
+	});
+
+	describe('expandRangeToIncludeMath Tests', function(){
+		it('Null Range', function(){
+			expect(Anchors.expandRangeToIncludeMath(null)).toBeFalsy();
+		});
+
+		it('Range With No Math', function(){
+			var div = document.createElement('div'),
+				span1 = document.createElement('span'),
+				text1 = document.createTextNode('Text 1'),
+				mathDiv1 = document.createElement('div'),
+				text2 = document.createTextNode('Text 2'),
+				middleText = document.createTextNode('Middle Text'),
+				mathDiv2 = document.createElement('div'),
+				text3 = document.createTextNode('Text 3'),
+				span2 = document.createElement('span'),
+				text4 = document.createTextNode('Text 4'),
+				range = document.createRange();
+
+			span1.appendChild(text1);
+			Ext.fly(mathDiv1).addCls('math');
+			mathDiv1.appendChild(text2);
+			Ext.fly(mathDiv2).addCls('math');
+			mathDiv2.appendChild(text3);
+			span2.appendChild(text4);
+			div.appendChild(span1);
+			div.appendChild(mathDiv1);
+			div.appendChild(middleText);
+			div.appendChild(mathDiv2);
+			div.appendChild(span2);
+			testBody.appendChild(div);
+
+			range.setStart(text1, 0);
+			range.setEnd(text4, 1);
+
+			Anchors.expandRangeToIncludeMath(range);
+			expect(range.commonAncestorContainer).toBe(div);
+			expect(range.startContainer).toBe(text1);
+			expect(range.endContainer).toBe(text4);
+		});
+
+		it('Range With Start Math Child', function(){
+			var div = document.createElement('div'),
+				span1 = document.createElement('span'),
+				text1 = document.createTextNode('Text 1'),
+				mathDiv1 = document.createElement('div'),
+				text2 = document.createTextNode('Text 2'),
+				middleText = document.createTextNode('Middle Text'),
+				mathDiv2 = document.createElement('div'),
+				text3 = document.createTextNode('Text 3'),
+				span2 = document.createElement('span'),
+				text4 = document.createTextNode('Text 4'),
+				range = document.createRange();
+
+			span1.appendChild(text1);
+			Ext.fly(mathDiv1).addCls('math');
+			mathDiv1.appendChild(text2);
+			Ext.fly(mathDiv2).addCls('math');
+			mathDiv2.appendChild(text3);
+			span2.appendChild(text4);
+			div.appendChild(span1);
+			div.appendChild(mathDiv1);
+			div.appendChild(middleText);
+			div.appendChild(mathDiv2);
+			div.appendChild(span2);
+			testBody.appendChild(div);
+
+			range.setStart(text2, 2);
+			range.setEnd(text4, 2);
+
+			Anchors.expandRangeToIncludeMath(range);
+
+			expect(range.commonAncestorContainer).toBe(div);
+			expect(range.startContainer).toBe(div);
+			expect(range.startOffset).toBe(1);
+			expect(range.endContainer).toBe(text4);
+		});
+
+		it('Range With End Math', function(){
+			var div = document.createElement('div'),
+				span1 = document.createElement('span'),
+				text1 = document.createTextNode('Text 1'),
+				mathDiv1 = document.createElement('div'),
+				text2 = document.createTextNode('Text 2'),
+				middleText = document.createTextNode('Middle Text'),
+				mathDiv2 = document.createElement('div'),
+				text3 = document.createTextNode('Text 3'),
+				span2 = document.createElement('span'),
+				text4 = document.createTextNode('Text 4'),
+				range = document.createRange();
+
+			span1.appendChild(text1);
+			Ext.fly(mathDiv1).addCls('math');
+			mathDiv1.appendChild(text2);
+			Ext.fly(mathDiv2).addCls('math');
+			mathDiv2.appendChild(text3);
+			span2.appendChild(text4);
+			div.appendChild(span1);
+			div.appendChild(mathDiv1);
+			div.appendChild(middleText);
+			div.appendChild(mathDiv2);
+			div.appendChild(span2);
+			testBody.appendChild(div);
+
+			range.setStart(text1, 0);
+			range.setEnd(text3, 1);
+
+			Anchors.expandRangeToIncludeMath(range);
+			expect(range.commonAncestorContainer).toBe(div);
+			expect(range.startContainer).toBe(text1);
+			expect(range.endContainer).toBe(div);
+			expect(range.endOffset).toBe(4);
+		});
+
+		it('Range With Both Start and End Math', function(){
+			var div = document.createElement('div'),
+				span1 = document.createElement('span'),
+				text1 = document.createTextNode('Text 1'),
+				mathDiv1 = document.createElement('div'),
+				text2 = document.createTextNode('Text 2'),
+				middleText = document.createTextNode('Middle Text'),
+				mathDiv2 = document.createElement('div'),
+				text3 = document.createTextNode('Text 3'),
+				span2 = document.createElement('span'),
+				text4 = document.createTextNode('Text 4'),
+				range = document.createRange();
+
+			span1.appendChild(text1);
+			Ext.fly(mathDiv1).addCls('math');
+			mathDiv1.appendChild(text2);
+			Ext.fly(mathDiv2).addCls('math');
+			mathDiv2.appendChild(text3);
+			span2.appendChild(text4);
+			div.appendChild(span1);
+			div.appendChild(mathDiv1);
+			div.appendChild(middleText);
+			div.appendChild(mathDiv2);
+			div.appendChild(span2);
+			testBody.appendChild(div);
+
+			range.setStart(text2, 0);
+			range.setEnd(text3, 1);
+
+			Anchors.expandRangeToIncludeMath(range);
+			expect(range.commonAncestorContainer).toBe(div);
+			expect(range.startContainer).toBe(div);
+			expect(range.startOffset).toBe(1);
+			expect(range.endContainer).toBe(div);
+			expect(range.endOffset).toBe(4);
+
+		});
 	});
 
 	describe('Integration Tests', function(){

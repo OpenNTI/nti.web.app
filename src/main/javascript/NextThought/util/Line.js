@@ -82,6 +82,8 @@ Ext.define('NextThought.util.Line',{
 		}
 		return range;
 	},
+
+
 	/** @private */
 	rangeForLineByPoint: function(y, doc) {
 		var xStart = 0,

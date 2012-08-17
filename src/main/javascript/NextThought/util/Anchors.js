@@ -1217,6 +1217,42 @@ Ext.define('NextThought.util.Anchors', {
 			}
 		}
 		return range;
+	},
+
+
+	isMathChild: function(node) {
+		if (!node){return false;}
+		if(!Ext.isTextNode(node) && Ext.fly(node).hasCls('math')) {
+			//top level math is not a math child :)
+			return false;
+		}
+
+		return !!Ext.fly(node).up('.math');
+	},
+
+
+	expandRangeToIncludeMath: function(range) {
+		if (!range){return null;}
+
+		if(Anchors.isMathChild(range.startContainer)){
+			range.setStartBefore(Ext.fly(range.startContainer).up('.math').dom);
+		}
+
+		if(Anchors.isMathChild(range.endContainer)){
+			range.setEndAfter(Ext.fly(range.endContainer).up('.math').dom);
+		}
+	},
+
+
+	expandSelectionToIncludeMath: function(sel){
+		var range = sel.getRangeAt(0);
+		if (range){
+			sel.removeAllRanges();
+			Anchors.expandRangeToIncludeMath(range);
+			sel.addRange(range);
+		}
+
+		return sel;
 	}
 },
 function(){
