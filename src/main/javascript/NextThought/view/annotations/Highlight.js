@@ -194,7 +194,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
 		boundingHeight = Math.ceil(bounds.height);
 		width = this.content ? this.content.getWidth() : 680;
 		s = RectUtils.merge(range.getClientRects(),width+1);
-		s.sort(function(a,b) { return a.top + a.bottom - b.top - b.bottom });
+		s.sort(function(a,b) { return a.top + a.bottom - b.top - b.bottom; });
 		i = s.length - 1;
 
 

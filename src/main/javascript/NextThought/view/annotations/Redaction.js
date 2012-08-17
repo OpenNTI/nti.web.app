@@ -155,7 +155,7 @@ Ext.define('NextThought.view.annotations.Redaction', {
 			function(e){
 				if (me.clickTimer){clearTimeout(me.clickTimer);}
 				var rText = this.actionSpan.querySelector('.redactionReplacementText');
-				if (!rText || rText.getAttribute('contenteditable') != 'true') {
+				if (!rText || rText.getAttribute('contenteditable') !== 'true') {
 					me.clickTimer = setTimeout(function(){
 						me.onClick(e);
 					}, 400);

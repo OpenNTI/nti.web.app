@@ -40,13 +40,13 @@ Ext.define('NextThought.util.Line',{
 	/** @private */
 	rangeByRecursiveSearch: function(y,doc) {
 		y -= 35; //Correction
-		var curNode = doc.documentElement;
+		var curNode = doc.documentElement, range, rect;
 		//First text node ending past y
 		var loops = 0; //stopgap measure to kill infinite loops
-		while (curNode && curNode.nodeType == curNode.ELEMENT_NODE && loops < 3) {
+		while (curNode && curNode.nodeType === curNode.ELEMENT_NODE && loops < 3) {
 			var i;
-			for (i = 0; i < curNode.childNodes.length && curNode.nodeType == curNode.ELEMENT_NODE; i++) {
-				var range = doc.createRange(), rect;
+			for (i = 0; i < curNode.childNodes.length && curNode.nodeType === curNode.ELEMENT_NODE; i++) {
+				range = doc.createRange();
 				range.selectNode(curNode.childNodes[i]);
 				rect = range.getBoundingClientRect();
 				if (rect.bottom > y) {
@@ -56,11 +56,11 @@ Ext.define('NextThought.util.Line',{
 				}
 			}
 			loops++;
-			if (!curNode) return null;
+			if (!curNode) { return null; }
 		}
-		if (!curNode) return null;
-		var range = doc.createRange();
-		var left = 0, right = curNode.data.length, center, rect;
+		if (!curNode) { return null; }
+		range = doc.createRange();
+		var left = 0, right = curNode.data.length, center;
 		// First single character ending past y
 		while (right-left > 1) {
 			center = Math.floor((left+right)/2);
@@ -77,8 +77,8 @@ Ext.define('NextThought.util.Line',{
 			center = Math.floor((ll+rr)/2);
 			range.setEnd(curNode,center);
 			rect = range.getBoundingClientRect();
-			if (rect.height > h) rr = center;
-			else ll = center;
+			if (rect.height > h) { rr = center; }
+			else { ll = center; }
 		}
 		return range;
 	},

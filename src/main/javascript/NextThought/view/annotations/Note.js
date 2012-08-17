@@ -106,7 +106,7 @@ Ext.define( 'NextThought.view.annotations.Note', {
 
 		}
 		else {
-			if (!this.singleGutterWidget || (this.singleGutterWidget.dom.innerHTML == '')){
+			if (!this.singleGutterWidget || (this.singleGutterWidget.dom.innerHTML === '')){
 				this.createSingleGutterWidget();
 			}
 			this.activeWidget = this.singleGutterWidget;
