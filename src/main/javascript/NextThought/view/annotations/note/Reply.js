@@ -95,10 +95,7 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 
 		me.mon(me.editorActions, {
 			scope: me,
-			'size-changed': function(){
-				setTimeout(function(){
-					me.updateLayout();},1);
-			}
+			'size-changed': function(){ me.updateLayout(); }
 		});
 	},
 
@@ -165,9 +162,7 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 				}
 				me.text.update(text);
 				me.text.select('a[href]',true).set({target:'_blank'});
-				setTimeout(function(){
-					me.updateLayout();
-				},1);
+				me.updateLayout();
 			});
 		}
 		catch(e){
