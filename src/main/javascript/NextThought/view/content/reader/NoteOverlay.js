@@ -265,11 +265,12 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 
 	noteOverlayMouseOut: function(){
-		var o = this.noteOverlayData;
+		var o = this.noteOverlayData,
+			sel = this.getDocumentElement().parentWindow.getSelection();
 		if(o.suspendMoveEvents){
 			return;
 		}
-		this.getDocumentElement().parentWindow.getSelection().removeAllRanges();
+		if (sel) { sel.removeAllRanges(); }
 		clearTimeout(o.mouseLeaveTimeout);
 		o.mouseLeaveTimeout = setTimeout(function(){
 			delete o.lastLine;
