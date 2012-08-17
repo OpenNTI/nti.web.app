@@ -131,6 +131,14 @@ Ext.define('NextThought.view.assessment.input.Base',{
 	},
 
 
+	getOrdinal: function(){
+		if(!Ext.isNumber(this.ordinal)){
+			Ext.Error.raise('The question part\'s ordinal was not set or incorrectly set.');
+		}
+		return this.ordinal;
+	},
+
+
 	getValue: function(){
 		console.log(this.$className+' does not implement the getValue function');
 	},

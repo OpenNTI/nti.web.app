@@ -52,6 +52,10 @@ Ext.define('NextThought.controller.Assessment', {
 		this.control({
 			'abstract-question-input':{
 				'check-answer': this.checkAnswer
+			},
+
+			'assessment-quiz-submission': {
+				'grade-it': this.grade
 			}
 		});
 	},
@@ -82,6 +86,39 @@ Ext.define('NextThought.controller.Assessment', {
 				else {
 					questionWidget.markIncorrect();
 				}
+			}
+		});
+	},
+
+
+	grade: function(submissionWidget,questionSet,submissionData){
+
+		var q = this.getAssessmentQuestionSubmissionModel(),
+			s = this.getAssessmentQuestionSetSubmissionModel(),
+			data = {
+				ContainerId: LocationProvider.currentNTIID,
+				questionSetId: questionSet.getId(),
+				questions: []
+			};
+
+		Ext.Object.each(submissionData,function(k,v){
+			data.questions.push(q.create({
+				ContainerId: LocationProvider.currentNTIID,
+				questionId: k,
+				parts: v
+			}));
+		});
+
+		s.create(data).save({
+			scope: this,
+			callback: function(){},
+			failure: function(){
+				console.error('FAIL', arguments);
+				alert('There was a problem grading your quiz');
+			},
+			success: function(self,op){
+				var result = op.getResultSet().records;
+				console.log(result);
 			}
 		});
 	}

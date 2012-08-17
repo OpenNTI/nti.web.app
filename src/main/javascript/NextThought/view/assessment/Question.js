@@ -28,11 +28,31 @@ Ext.define('NextThought.view.assessment.Question',{
 		this.down('question-response').setQuestionAndPart(
 				this.question,
 				part,
+				0,
 				this.questionSet,
 				this.canSubmitIndividually());
 
+		if( this.questionSet ){
+			this.mon(this.questionSet,'beforesubmit',this.gatherQuestionResponse,this);
+		}
+
 		this.setQuestionContent();
 		this.setupContentElement();
+	},
+
+
+	gatherQuestionResponse: function(questionSet,collection){
+		var id =  this.question.getId(), values = [];
+		Ext.each(this.query('abstract-question-input'),function(p){
+			values[p.getOrdinal()] = p.getValue();
+		});
+
+		if(collection.hasOwnProperty(id)){
+			console.error('duplicate id in submission!',id);
+			return false;
+		}
+
+		collection[id] = values;
 	},
 
 

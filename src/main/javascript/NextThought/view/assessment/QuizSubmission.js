@@ -84,7 +84,16 @@ Ext.define('NextThought.view.assessment.QuizSubmission',{
 
 
 	submitClicked: function(){
-		console.log('submit!');
+		var q = this.questionSet,
+			submission = {};
+		if( !q.fireEvent('beforesubmit',q,submission) ){
+			console.log('submit aborted');
+			return;
+		}
+
+		console.log('submission data',submission);
+
+		this.fireEvent('grade-it',this,q,submission);
 	}
 
 
