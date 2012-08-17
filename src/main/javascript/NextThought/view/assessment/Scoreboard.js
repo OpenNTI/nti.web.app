@@ -4,7 +4,8 @@ Ext.define('NextThought.view.assessment.Scoreboard',{
 	requires: [
 		'NextThought.view.assessment.Score',
 		'NextThought.view.assessment.ScoreboardHeader',
-		'NextThought.view.assessment.ScoreboardTally'
+		'NextThought.view.assessment.ScoreboardTally',
+		'NextThought.view.assessment.QuizSubmission'
 	],
 
 	cls: 'scoreboard',
@@ -21,7 +22,12 @@ Ext.define('NextThought.view.assessment.Scoreboard',{
 	items: [
 		{ xtype:'assessment-score' },
 		{ xtype: 'assessment-tally', flex: 1 },
-		{ xtype: 'button', text: 'I can do better!', ui: 'secondary', scale: 'large' }
+		{ xtype: 'button',
+			text: 'I can do better!',
+			ui: 'secondary',
+			scale: 'large',
+			handler: function(b){b.up('assessment-scoreboard').resetClicked();}
+		}
 	],
 
 
@@ -29,7 +35,17 @@ Ext.define('NextThought.view.assessment.Scoreboard',{
 		this.callParent(arguments);
 		this.hide();//we have to pre-render then hide. We hide until after grading, or preset the previously taken quiz.
 
-		this.mon(this.questionSet,'graded',this.updateWithResults,this);
+		this.mon(this.questionSet,{
+			scope: this,
+			'graded':this.updateWithResults,
+			'reset': this.doReset
+		});
+	},
+
+
+	doReset:function(){
+		this.hide();
+		this.reader.scrollTo(0);
 	},
 
 
@@ -50,7 +66,11 @@ Ext.define('NextThought.view.assessment.Scoreboard',{
 	},
 
 
+
 	afterRender: function(){
 		this.callParent(arguments);
 	}
+
+}, function(){
+	this.borrow(NextThought.view.assessment.QuizSubmission, ['resetClicked']);
 });

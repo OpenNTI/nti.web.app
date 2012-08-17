@@ -64,7 +64,7 @@ Ext.define('NextThought.view.assessment.input.FreeResponse',{
 
 	reset: function(){
 		this.callParent(arguments);
-		this.inputBox.removeCls('incorrect','correct');
+		this.inputBox.removeCls(['incorrect','correct']);
 		this.inputField.dom.removeAttribute('readOnly');
 		this.inputField.dom.value = '';
 //		this.inputField.focus();

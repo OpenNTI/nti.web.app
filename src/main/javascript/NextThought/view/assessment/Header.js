@@ -77,7 +77,7 @@ Ext.define('NextThought.view.assessment.Header',{
 	},
 
 	reset: function(){
-		this.el.removeCls('incorrect','correct');
+		this.el.removeCls(['incorrect','correct']);
 		this.status.update('');
 	}
 });
