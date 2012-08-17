@@ -103,7 +103,6 @@ Ext.define('NextThought.view.content.reader.AssessmentOverlay', {
 		if (!this.hasOwnProperty('questionObjs') || this.questionObjs.length === 0 || typeof this.questionObjs[0] == 'string'){
 			this.questionObjs = Array.prototype.slice.call(this.getDocumentElement().getElementsByTagName('object'));
 		}
-		console.log(this.questionObjs);
 		Ext.Array.sort(items, function(ar,br){
 			a = me.questionObjs.indexOf(me.getRelatedElement(ar));
 			b = me.questionObjs.indexOf(me.getRelatedElement(br));
