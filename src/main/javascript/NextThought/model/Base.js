@@ -11,19 +11,19 @@ Ext.define('NextThought.model.Base', {
 	mimeType: 'application/vnd.nextthought',
 	proxy: { type: 'nti' },
 	fields: [
-		{ name: 'Class', type: 'string' },
+		{ name: 'Class', type: 'string', persist: false },
 		{ name: 'ContainerId', type: 'string' },
-		{ name: 'CreatedTime', type: 'date', dateFormat: 'timestamp', defaultValue: new Date() },
-		{ name: 'Creator', type: 'string' },
-		{ name: 'ID', type: 'string' },
-		{ name: 'Last Modified', type: 'date', dateFormat: 'timestamp', defaultValue: new Date() },
-		{ name: 'Links', type: 'links', defaultValue: [] },
+		{ name: 'CreatedTime', type: 'date', persist: false, dateFormat: 'timestamp', defaultValue: new Date() },
+		{ name: 'Creator', type: 'string', persist: false },
+		{ name: 'ID', type: 'string', persist: false },
+		{ name: 'Last Modified', type: 'date', persist: false, dateFormat: 'timestamp', defaultValue: new Date() },
+		{ name: 'Links', type: 'links', persist: false, defaultValue: [] },
 		{ name: 'MimeType', type: 'string' },
 		{ name: 'NTIID', type: 'string' },
-		{ name: 'OID', type: 'string' },
-		{ name: 'accepts', type: 'auto', defaultValue: [] },
-		{ name: 'href', type: 'string' },
-		{ name: 'LikeCount', type: 'int' }
+		{ name: 'OID', type: 'string', persist: false },
+		{ name: 'accepts', type: 'auto', persist: false, defaultValue: [] },
+		{ name: 'href', type: 'string', persist: false },
+		{ name: 'LikeCount', type: 'int', persist: false }
 	],
 
 	onClassExtended: function(cls, data) {
@@ -394,6 +394,7 @@ Ext.define('NextThought.model.Base', {
 
 		this.fields.each(
 			function(f){
+				if(!f.persist){return;}
 				var x = me.get(f.name);
 				if (Ext.isDate(x)) {
 					x = x.getTime()/1000;
