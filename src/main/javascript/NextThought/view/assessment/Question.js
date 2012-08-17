@@ -81,7 +81,11 @@ Ext.define('NextThought.view.assessment.Question',{
 			return !el || el.getValue() !== 'false';
 		}
 		//don't dig into the dom if we already have an answer
-		return this.questionSet || !c || resolve();
+		if(this.questionSet){
+			return false;
+		}
+
+		return !c || resolve();
 	},
 
 
