@@ -1,6 +1,7 @@
 Ext.define('NextThought.view.content.reader.AssessmentOverlay', {
 
 	requires: [
+		'NextThought.util.TabIndexTracker',
 		'NextThought.view.assessment.Scoreboard',
 		'NextThought.view.assessment.Question',
 		'NextThought.view.assessment.QuizSubmission'
@@ -13,6 +14,7 @@ Ext.define('NextThought.view.content.reader.AssessmentOverlay', {
 			'afterRender': this.insertAssessmentOverlay
 		});
 
+		this.assessmentTabIndexer = new NextThought.util.TabIndexTracker();
 		this.activeAssessments = {};
 	},
 
@@ -27,6 +29,8 @@ Ext.define('NextThought.view.content.reader.AssessmentOverlay', {
 	clearAssessments: function(){
 		var active = this.activeAssessments;
 		this.activeAssessments = {};
+
+		this.assessmentTabIndexer.reset(10);
 
 		Ext.Object.each(active,function(k, v){
 			v.destroy();
@@ -47,6 +51,7 @@ Ext.define('NextThought.view.content.reader.AssessmentOverlay', {
 			question: q,
 			renderTo: this.assessmentOverlay,
 			questionSet: set || null,
+			tabIndexTracker: this.assessmentTabIndexer,
 			contentElement: this.getAssessmentElement('object','data-ntiid', q.getId())
 		});
 	},
@@ -60,11 +65,13 @@ Ext.define('NextThought.view.content.reader.AssessmentOverlay', {
 			questions = set.get('questions');
 
 		me.activeAssessments[guid+'scoreboard'] = Ext.widget('assessment-scoreboard',{
-			reader: me, renderTo: c, questionSet: set
+			reader: me, renderTo: c, questionSet: set,
+			tabIndexTracker: this.assessmentTabIndexer
 		});
 
 		me.activeAssessments[guid+'submission'] = Ext.widget('assessment-quiz-submission',{
-			reader: me, renderTo: c, questionSet: set
+			reader: me, renderTo: c, questionSet: set,
+			tabIndexTracker: this.assessmentTabIndexer
 		});
 
 		Ext.each(questions,function(q){me.makeAssessmentQuestion(q,set);});

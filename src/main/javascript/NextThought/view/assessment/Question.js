@@ -25,12 +25,15 @@ Ext.define('NextThought.view.assessment.Question',{
 		this.callParent(arguments);
 		//TODO: this is a shortcut, assuming there is only one part to the question.
 		var part = this.questionPart = this.question.get('parts').first();
+
+		//TODO: addDockedItem instead?
 		this.down('question-response').setQuestionAndPart(
 				this.question,
 				part,
 				0,
 				this.questionSet,
-				this.canSubmitIndividually());
+				this.canSubmitIndividually(),
+				this.tabIndexTracker);
 
 		if( this.questionSet ){
 			this.mon(this.questionSet,{

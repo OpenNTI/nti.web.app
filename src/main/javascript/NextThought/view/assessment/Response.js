@@ -15,7 +15,7 @@ Ext.define('NextThought.view.assessment.Response',{
 	ui: 'assessment',
 
 
-	setQuestionAndPart: function(question,part,ordinal,questionSet,individual){
+	setQuestionAndPart: function(question,part,ordinal,questionSet,individual, tabIndexTracker){
 		var type = 'question-input-'+part.get('Class').toLowerCase();
 		this.removeAll(true);
 
@@ -27,7 +27,8 @@ Ext.define('NextThought.view.assessment.Response',{
 				question: question,
 				part: part,
 				ordinal: ordinal,
-				questionSet: questionSet
+				questionSet: questionSet,
+				tabIndexTracker: tabIndexTracker
 			});
 		}
 		catch(e){

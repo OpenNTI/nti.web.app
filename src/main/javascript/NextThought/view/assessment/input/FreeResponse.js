@@ -6,11 +6,21 @@ Ext.define('NextThought.view.assessment.input.FreeResponse',{
 		tag: 'input',
 		type: 'text',
 		placeholder: 'Answer',
-		cls: 'answer-field'
+		tabIndex: '{tabIndex}',
+		cls: 'answer-field tabable'
 	}),
 
 	renderSelectors: {
 		inputField: '.answer-field'
+	},
+
+
+	initComponent: function(){
+		this.renderData = Ext.apply(this.renderData || {}, {
+			tabIndex: this.tabIndexTracker.getNext()
+		});
+
+		this.callParent(arguments);
 	},
 
 
@@ -34,9 +44,19 @@ Ext.define('NextThought.view.assessment.input.FreeResponse',{
 	},
 
 
-	enterKeyFilter: function(e){
+	enterKeyFilter: function(e,dom){
+		var i, x, next;
 		if(e.getKey()=== e.ENTER){
-			this.checkit();
+
+			if(this.questionSet){
+				i = this.el.up('.assessment-overlay').query('.tabable');
+				x = i.length-1;
+				for(x; x>=0; x--){ if(i[x]===dom){ next = i[x+1]||i[0]; break; } }
+				next.focus();
+			}
+			else{
+				this.checkit();
+			}
 			e.stopEvent();
 			return false;
 		}

@@ -15,8 +15,8 @@ Ext.define('NextThought.view.assessment.QuizSubmission',{
 	 */
 	html: Ext.DomHelper.markup([
 		{ cls: 'buttons', cn: [
-			{cls: 'reset', html: 'Start Over'},
-			{cls: 'submit', html: 'I\'m Finished!'}
+			{tag: 'a', href:'#', cls: 'reset tabable', html: 'Start Over'},
+			{tag: 'a', href:'#', cls: 'submit tabable', html: 'I\'m Finished!'}
 		] },
 		{ cls: 'status' }
 	]),
@@ -47,6 +47,13 @@ Ext.define('NextThought.view.assessment.QuizSubmission',{
 		this.reflectStateChange();
 		this.mon(this.resetBtn,'click',this.resetClicked,this);
 		this.mon(this.submitBtn,'click',this.submitClicked,this);
+		var r = this.resetBtn,
+			s = this.submitBtn,
+			t = this.tabIndexTracker;
+		setTimeout(function(){
+			r.set({tabIndex:t.getNext()});
+			s.set({tabIndex:t.getNext()});
+		},1);
 	},
 
 
@@ -71,7 +78,7 @@ Ext.define('NextThought.view.assessment.QuizSubmission',{
 	},
 
 
-	resetClicked: function(){
+	resetClicked: function(e){
 		var q = this.questionSet;
 		if( q.fireEvent('beforereset') ){
 			q.fireEvent('reset');
@@ -80,10 +87,15 @@ Ext.define('NextThought.view.assessment.QuizSubmission',{
 		else {
 			console.log('reset aborted');
 		}
+
+		if( e ){
+			e.stopEvent();
+			return false;
+		}
 	},
 
 
-	submitClicked: function(){
+	submitClicked: function( e ){
 		var q = this.questionSet,
 			submission = {};
 		if( !q.fireEvent('beforesubmit',q,submission) ){
@@ -92,6 +104,11 @@ Ext.define('NextThought.view.assessment.QuizSubmission',{
 		}
 
 		this.fireEvent('grade-it',this,q,submission);
+
+		if( e ){
+			e.stopEvent();
+			return false;
+		}
 	},
 
 
