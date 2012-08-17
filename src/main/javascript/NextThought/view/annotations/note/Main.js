@@ -183,6 +183,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 				if (end){ bodyText += ' [...]';}
 
 				text = bodyText.replace(text, this.highlightTpl.apply([text]));
+				text = this.replaceMathNodes(text, range.commonAncestorContainer);
 			} else {
 				text = r.get('selectedText');
 			}
@@ -214,6 +215,26 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		}
 
 		this.up('window').down('note-responses').setReplies(this.record.children);
+	},
+
+
+	replaceMathNodes: function(rangeString, node){
+		var maths = [], tempNode;
+		Ext.each(Ext.dom.Query.select('div', node), function(div){
+			if (Ext.fly(div).hasCls('math')) {
+				tempNode = div.cloneNode(true);
+				Anchors.purifyNode(tempNode);
+				maths.push(tempNode);
+			}
+		});
+
+		Ext.each(maths, function(m){
+			if (rangeString.indexOf(m.textContent) >= 0) {
+				rangeString = rangeString.replace(m.textContent, m.outerHTML);
+			}
+		});
+
+		return rangeString;
 	},
 
 
