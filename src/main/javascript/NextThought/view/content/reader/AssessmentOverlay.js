@@ -91,13 +91,39 @@ Ext.define('NextThought.view.content.reader.AssessmentOverlay', {
 			return ( ( a === b ) ? 0 : ( ( a > b ) ? 1 : -1 ) );
 		});
 
-		Ext.each(items,function(q){
-			console.log(q);
+
+		Ext.each(this.cleanQuestionsThatAreInQuestionSets(items),function(q){
 			if(q.isSet){ me.makeAssessmentQuiz(q); }
 			else { me.makeAssessmentQuestion(q); }
 		});
 	},
 
+
+	cleanQuestionsThatAreInQuestionSets: function(items){
+		var result = [], questionsInSets = [], push = Array.prototype.push;
+
+		function inSet(id){
+			var i = questionsInSets.length-1;
+			for(i; i>=0; i--){
+				if(id === questionsInSets[i].getId()){
+					return true;
+				}
+			}
+			return false;
+		}
+
+		//get sets
+		Ext.each(items,function(i){if(i.isSet){ push.apply(questionsInSets, i.get('questions')); }});
+
+
+		Ext.each(items,function(i){
+			if(i.isSet || !inSet(i.getId())){
+				result.push(i);
+			}
+		});
+
+		return result;
+	},
 
 	getAssessmentElement: function(tagName, attribute, value){
 		try {
