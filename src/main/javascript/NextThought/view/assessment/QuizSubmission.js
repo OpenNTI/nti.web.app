@@ -91,8 +91,6 @@ Ext.define('NextThought.view.assessment.QuizSubmission',{
 			return;
 		}
 
-		console.log('submission data',submission);
-
 		this.fireEvent('grade-it',this,q,submission);
 	},
 
