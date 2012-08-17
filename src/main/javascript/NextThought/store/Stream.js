@@ -24,34 +24,5 @@ Ext.define('NextThought.store.Stream',{
 			property : 'Last Modified',
 			direction: 'DESC'
 		}
-	],
-
-	constructor: function(){
-		this.callParent(arguments);
-
-		var me = this,
-			fn = function(item){
-				var a = item.get('Item'),
-					aid = a.getId(),
-					ct = item.get('ChangeType'),
-					result = true,
-					ac = item.get('Last Modified');
-
-				me.data.each(function(change){
-					var b = change.get('Item');
-					if(aid === b.getId() && change.get('ChangeType') === ct && (ac - change.get('Last Modified') > 0 )){
-						//This means that we've already displayed this particular item.
-						result = false;
-					}
-				});
-				return result;
-			};
-
-
-		me.isChangeItemNew = fn;
-
-		me.filter({ scope: me, filterFn:fn});
-		return me;
-	}
-
+	]
 });
