@@ -102,11 +102,14 @@ Ext.define('NextThought.controller.Assessment', {
 			};
 
 		Ext.Object.each(submissionData,function(k,v){
-			data.questions.push(q.create({
+			data.questions.push({
+				'Class':'QuestionSubmission',
+				MimeType:'application/vnd.nextthought.assessment.questionsubmission',
 				ContainerId: LocationProvider.currentNTIID,
+				NTIID: k,
 				questionId: k,
 				parts: v
-			}).asJSON());
+			});
 		});
 
 		s.create(data).save({
@@ -118,7 +121,7 @@ Ext.define('NextThought.controller.Assessment', {
 			},
 			success: function(self,op){
 				var result = op.getResultSet().records;
-				console.log(result);
+				submissionWidget.setGradingResult(result);
 			}
 		});
 	}
