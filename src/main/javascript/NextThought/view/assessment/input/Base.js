@@ -121,7 +121,7 @@ Ext.define('NextThought.view.assessment.input.Base',{
 	checkit: function(){
 		if(this.submissionDisabled){return;}
 		if(this.submitted){
-			this.up('assement-question').reset();
+			this.up('assessment-question').reset();
 			return;
 		}
 
