@@ -147,7 +147,6 @@ Ext.define('NextThought.view.annotations.Redaction', {
 	},
 
 	setupInlineSpanEvents: function() {
-		console.log(123);
 		var me = this;
 
 		//set up any events:
