@@ -306,7 +306,9 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 				contentHeight += content.childNodes[ii].offsetHeight;
 			}
 		}
-		else contentHeight = content.getBoundingClientRect().height;
+		else {
+			contentHeight = content.getBoundingClientRect().height;
+		}
 		h = Math.max(this.getEl().getHeight(),contentHeight);
 
 		if(h === this.lastHeight){
