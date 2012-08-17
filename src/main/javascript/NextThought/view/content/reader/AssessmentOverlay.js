@@ -93,8 +93,8 @@ Ext.define('NextThought.view.content.reader.AssessmentOverlay', {
 			this.getDocumentElement().querySelectorAll('.x-btn-submit,[onclick^=NTISubmitAnswers]')).remove();
 
 		Ext.Array.sort(items, function(ar,br){
-			var a = ar.getId(),
-				b = br.getId();
+			var a = parseInt(ar.getId().split('.').last(),10),
+				b = parseInt(br.getId().split('.').last(),10);
 			return ( ( a === b ) ? 0 : ( ( a > b ) ? 1 : -1 ) );
 		});
 
@@ -107,8 +107,9 @@ Ext.define('NextThought.view.content.reader.AssessmentOverlay', {
 
 
 	cleanQuestionsThatAreInQuestionSets: function(items){
-		var result = [], questionsInSets = [], push = Array.prototype.push, sets = {};
-
+		var result = [], questionsInSets = [], push = Array.prototype.push, sets = {}, usedQuestions = {},
+			slice = Array.prototype.slice,
+			objects = slice.call(this.getDocumentElement().getElementsByTagName('object'));
 		function inSet(id){
 			var i = questionsInSets.length-1;
 			for(i; i>=0; i--){
@@ -118,10 +119,17 @@ Ext.define('NextThought.view.content.reader.AssessmentOverlay', {
 			}
 			return false;
 		}
+		function hasElement(id) {
+			var i;
+			for (i=0; i < objects.length; i++) {
+				if (typeof objects[i] !== 'string') { objects[i] = objects[i].getAttribute('data-ntiid'); }
+				if (objects[i] === id) return true;
+			}
+			return false;
+		}
 
 		//get sets
 		Ext.each(items,function(i){if(i.isSet){ push.apply(questionsInSets, i.get('questions')); }});
-
 
 		Ext.each(items,function(i){
 			//work around dups
@@ -129,9 +137,9 @@ Ext.define('NextThought.view.content.reader.AssessmentOverlay', {
 				if(sets[i.getId()]){return;}
 				sets[i.getId()] = true;
 			}
-
-			if(i.isSet || !inSet(i.getId())){
+			if(i.isSet || (!inSet(i.getId()) && i.getId && !usedQuestions[i.getId()] && hasElement(i.getId()))) {
 				result.push(i);
+				usedQuestions[i.getId()] = true;
 			}
 		});
 
@@ -152,7 +160,7 @@ Ext.define('NextThought.view.content.reader.AssessmentOverlay', {
 		}
 		}
 		catch(er){
-			console.error(er.stack);
+			console.error(er.message);
 		}
 		return null;
 	}
