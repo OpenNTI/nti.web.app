@@ -11,6 +11,7 @@
 		display: inline;
 }
 
+
 #NTIContent {
 	&, * {
 		text-rendering: optimizeLegibility;//fallback
@@ -27,6 +28,10 @@
 		-moz-box-sizing: border-box;
 		-ms-box-sizing: border-box;
 		-webkit-box-sizing: border-box;
+	}
+
+	.math {
+		line-height: normal;
 	}
 
 	&.x-repaint {
