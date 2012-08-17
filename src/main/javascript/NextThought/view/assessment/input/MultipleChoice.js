@@ -6,7 +6,7 @@ Ext.define('NextThought.view.assessment.input.MultipleChoice',{
 		tag: 'tpl', 'for': 'choices', cn: [{
 			cls: 'choice',
 			cn:[
-				{ tag: 'span', cls: 'control tabable', tabIndex:'{[xindex-1+tabIndex]}', 'data-index':'{[xindex-1]}'},//xindex is 1 based
+				{ tag: 'span', cls: 'control tabable', tabIndex:'{[xindex-1+parent.tabIndex]}', 'data-index':'{[xindex-1]}'},//xindex is 1 based
 				{ tag: 'span', cls: 'label', html:'{[String.fromCharCode(64+xindex)]}.' },
 				{ tag: 'span', html:'{.}'  }
 			]
