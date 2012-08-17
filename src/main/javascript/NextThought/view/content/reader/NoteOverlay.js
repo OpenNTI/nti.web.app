@@ -16,7 +16,6 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 			scope: this,
 			'content-updated': function(){
 				var r = this.getContentRoot();
-				console.log(r);
 				try {
 					r = r.getBoundingClientRect();
 				}

@@ -164,7 +164,6 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 		var newBgx = Ext.Number.constrain(this.pointerCoordDifference - value,min,0);
 		
 		this.body.animate({ to: {scrollLeft: value} });
-		console.log(newBgx);
 		if (Ext.isGecko) { 
 			this.getEl().setStyle('background-position','0 0');
 		}
