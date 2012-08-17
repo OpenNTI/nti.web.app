@@ -39,7 +39,7 @@ Ext.define('NextThought.util.Line',{
 
 	/** @private */
 	rangeByRecursiveSearch: function(y,doc) {
-		y -= 15; //Correction
+		y -= 35; //Correction
 		var curNode = doc.documentElement;
 		//First text node ending past y
 		var loops = 0; //stopgap measure to kill infinite loops
