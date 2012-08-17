@@ -58,7 +58,6 @@ Ext.define('NextThought.controller.Assessment', {
 
 
 	checkAnswer: function(questionWidget,question,part,answerValue){
-		console.log('qw',questionWidget);
 
 		var submission = this.getAssessmentQuestionSubmissionModel().create({
 			ContainerId: LocationProvider.currentNTIID,
