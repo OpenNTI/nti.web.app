@@ -106,7 +106,7 @@ Ext.define('NextThought.controller.Assessment', {
 				ContainerId: LocationProvider.currentNTIID,
 				questionId: k,
 				parts: v
-			}));
+			}).asJSON());
 		});
 
 		s.create(data).save({
