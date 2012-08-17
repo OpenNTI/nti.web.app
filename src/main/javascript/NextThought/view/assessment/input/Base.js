@@ -127,7 +127,7 @@ Ext.define('NextThought.view.assessment.input.Base',{
 
 		this.submitted = true;
 		this.checkItBtn.update('Try again');
-		this.fireEvent('check-answer',this.up('assement-question'), this.question, this.part, this.getValue());
+		this.fireEvent('check-answer',this.up('assessment-question'), this.question, this.part, this.getValue());
 	},
 
 
