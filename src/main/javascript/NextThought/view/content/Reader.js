@@ -149,5 +149,12 @@ Ext.define('NextThought.view.content.Reader', {
 }, function(){
 	window.ReaderPanel = this;
 
+	ContentAPIRegistry.register('NTIHintNavigation',LocationProvider.setLocation,LocationProvider);
+	ContentAPIRegistry.register('togglehint',function(e) {
+		e = Ext.EventObject.setEvent(e||event);
+		Ext.get(e.getTarget().nextSibling).toggleCls("hidden");
+		return false;
+	});
+
 });
 
