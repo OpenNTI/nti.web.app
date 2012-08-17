@@ -17,7 +17,7 @@ Ext.define('NextThought.view.annotations.note.Window',{
 	modal: true,
 	title: 'Comments',
 	width: 670,
-	height: '85%',
+	height: '70%',
 
 	layout: {
 		type: 'vbox',
