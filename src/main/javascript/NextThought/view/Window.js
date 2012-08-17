@@ -109,10 +109,11 @@ Ext.define('NextThought.view.Window',{
 
 	afterRender: function(){
 		this.callParent(arguments);
-		var c = this.down('container[windowContentWrapper]');
+		var c = this.down('container[windowContentWrapper]'),
+			el = c ? Ext.get(c.getId()+'-innerCt') : null;
 
-		if(c){
-			this.mon( Ext.get(c.getId()+'-innerCt'), 'scroll', function(e,dom){
+		if(el){
+			this.mon( el, 'scroll', function(e,dom){
 				dom.scrollLeft = 0;
 			});
 		}
