@@ -33,13 +33,31 @@ Ext.define('NextThought.view.assessment.Question',{
 				this.canSubmitIndividually());
 
 		if( this.questionSet ){
-			this.mon(this.questionSet,'beforesubmit',this.gatherQuestionResponse,this);
+			this.mon(this.questionSet,{
+				scope: this,
+				'beforesubmit':this.gatherQuestionResponse,
+				'graded':this.updateWithResults,
+				'reset':this.reset
+			});
 		}
 
 		this.setQuestionContent();
 		this.setupContentElement();
 	},
 
+
+	updateWithResults: function(assessedQuestionSet){
+		var q, id = this.question.getId();
+
+		Ext.each(assessedQuestionSet.get('questions'),function(i){
+			if(i.getId()===id){ q = i; return false; }
+			console.log(i.raw);
+		});
+
+		if(!q){ Ext.Error.raise('Couldn\'t find my question? :('); }
+
+		this[q.isCorrect()?'markCorrect':'markIncorrect']();
+	},
 
 	gatherQuestionResponse: function(questionSet,collection){
 		var id =  this.question.getId(), values = [];

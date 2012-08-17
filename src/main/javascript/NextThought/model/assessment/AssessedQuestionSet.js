@@ -4,6 +4,7 @@ Ext.define('NextThought.model.assessment.AssessedQuestionSet', {
 		'NextThought.model.converters.Items',
 		'NextThought.util.Parsing'
 	],
+	idProperty: 'questionSetId',
 	fields: [
 		{ name: 'questions', type: 'arrayItem' },
 		{ name: 'questionSetId', type: 'string' }
