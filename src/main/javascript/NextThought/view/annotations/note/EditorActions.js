@@ -381,7 +381,8 @@ Ext.define('NextThought.view.annotations.note.EditorActions',{
 
 	reset: function(){
 		this.editor.down('.content').innerHTML = '';
-		window.getSelection().removeAllRanges();
+		try { window.getSelection().removeAllRanges(); }
+		catch(e) { console.log("Removing all ranges from selection failed: ",e.message); }
 	},
 
 	updatePrefs: function(v){
