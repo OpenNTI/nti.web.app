@@ -92,16 +92,15 @@ Ext.define('NextThought.view.content.reader.AssessmentOverlay', {
 		});
 
 
-//		Ext.each(this.cleanQuestionsThatAreInQuestionSets(items),function(q){
-		Ext.each(items,function(q){
-			if(q.isSet){ /*me.makeAssessmentQuiz(q);*/ }
+		Ext.each(this.cleanQuestionsThatAreInQuestionSets(items),function(q){
+			if(q.isSet){ me.makeAssessmentQuiz(q); }
 			else { me.makeAssessmentQuestion(q); }
 		});
 	},
 
 
 	cleanQuestionsThatAreInQuestionSets: function(items){
-		var result = [], questionsInSets = [], push = Array.prototype.push;
+		var result = [], questionsInSets = [], push = Array.prototype.push, sets = {};
 
 		function inSet(id){
 			var i = questionsInSets.length-1;
@@ -118,6 +117,12 @@ Ext.define('NextThought.view.content.reader.AssessmentOverlay', {
 
 
 		Ext.each(items,function(i){
+			//work around dups
+			if(i.isSet){
+				if(sets[i.getId()]){return;}
+				sets[i.getId()] = true;
+			}
+
 			if(i.isSet || !inSet(i.getId())){
 				result.push(i);
 			}
