@@ -862,10 +862,17 @@ Ext.define('NextThought.util.Anchors', {
 
 		//build the new range divorced from the dom and return:
 		resultRange = doc.createRange();
-		resultRange.selectNodeContents(docFrag);
-		resultRange.setStart(startNode, newStartOffset + origStartOff);
-		resultRange.setEnd(endNode, newEndOffset + origEndOff);
-		resultRange.ownerNode = range.commonAncestorContainer.parentNode; //for use whenever someone wants to know where this fits in the doc.
+		if (!startNode && !Ext.isTextNode(endNode)){
+			resultRange.selectNodeContents(endNode);
+		}
+		else {
+			resultRange.selectNodeContents(docFrag);
+			resultRange.setStart(startNode, newStartOffset + origStartOff);
+			resultRange.setEnd(endNode, newEndOffset + origEndOff);
+		}
+
+		//for use whenever someone wants to know where this fits in the doc.
+		resultRange.ownerNode = range.commonAncestorContainer.parentNode;
 		return resultRange;
 	},
 
@@ -919,7 +926,7 @@ Ext.define('NextThought.util.Anchors', {
 	/* tested */
 	cleanNode: function(node, tag){
 		var attr = Anchors.PURIFICATION_TAG,
-			i,tagSelector, offset;
+			tagSelector, offset;
 
 		//generic protection:
 		if (!node){return null;}
