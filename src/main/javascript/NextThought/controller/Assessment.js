@@ -120,7 +120,7 @@ Ext.define('NextThought.controller.Assessment', {
 				alert('There was a problem grading your quiz');
 			},
 			success: function(self,op){
-				var result = op.getResultSet().records;
+				var result = op.getResultSet().records.first();
 				submissionWidget.setGradingResult(result);
 			}
 		});

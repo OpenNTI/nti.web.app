@@ -28,6 +28,25 @@ Ext.define('NextThought.view.assessment.Scoreboard',{
 	initComponent: function(){
 		this.callParent(arguments);
 		this.hide();//we have to pre-render then hide. We hide until after grading, or preset the previously taken quiz.
+
+		this.mon(this.questionSet,'graded',this.updateWithResults,this);
+	},
+
+
+	updateWithResults: function(assessedQuestionSet){
+		var questions = assessedQuestionSet.get('questions'),
+			correct = 0, total = questions.length;
+
+		Ext.each(questions,function(q){
+			if(q.isCorrect()){ correct ++; }
+		});
+
+
+		this.down('assessment-tally').setTally(correct,total);
+		this.down('assessment-score').setValue(Math.floor(100*correct/total));
+
+		this.show();
+		this.reader.scrollTo(0);
 	},
 
 

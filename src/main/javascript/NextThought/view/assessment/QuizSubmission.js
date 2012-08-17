@@ -97,6 +97,6 @@ Ext.define('NextThought.view.assessment.QuizSubmission',{
 
 
 	setGradingResult: function(assessedQuestionSet){
-		console.log('graded quiz:',assessedQuestionSet);
+		this.questionSet.fireEvent('graded',assessedQuestionSet);
 	}
 });

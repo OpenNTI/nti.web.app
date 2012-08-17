@@ -25,5 +25,13 @@ Ext.define('NextThought.view.assessment.ScoreboardTally',{
 		this.callParent(arguments);
 		this.correctCount.update('16');
 		this.incorrectCount.update('4');
+	},
+
+
+
+	setTally: function(correct,total){
+		this.correctCount.update(correct);
+		this.incorrectCount.update(total-correct);
 	}
+
 });
