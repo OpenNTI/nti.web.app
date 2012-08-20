@@ -165,7 +165,7 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 			var tgt, sel;
 			if (this.cnvMousedown) {
 				tgt = doc.elementFromPoint(e.clientX,e.clientY);
-				if (tgt.tagName == 'CANVAS') {
+				if (tgt.tagName === 'CANVAS') {
 					sel = doc.parentWindow.getSelection();
 					console.log(sel.anchorNode,sel.anchorOffset);
 					sel.removeAllRanges();
