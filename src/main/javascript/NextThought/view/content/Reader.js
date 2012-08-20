@@ -82,14 +82,24 @@ Ext.define('NextThought.view.content.Reader', {
 	getAnnotationOffsets: function(){
 		var f = this.getIframe();
 		var l = f.getLeft()-this.getEl().getLeft(),
-			e = Ext.get(this.getContentRoot());
+			e = Ext.get(this.getContentRoot()),
+			contentPadding = 0;
+
+		try {
+			if(e){
+				contentPadding = e.getMargin('l') + e.getPadding('l')
+			}
+		}
+		catch(e){
+			console.error(Globals.getError(e));
+		}
 		return {
 			top: f.getTop(),
 			left: f.getLeft(),
 			height: f.getHeight(),
 			width: f.getWidth(),
 			gutter: l+f.getMargin('l'),
-			contentLeftPadding: e? (e.getMargin('l') + e.getPadding('l')) : 0,
+			contentLeftPadding: contentPadding,
 			scrollTop: this.body.getScroll().top
 		};
 	},
