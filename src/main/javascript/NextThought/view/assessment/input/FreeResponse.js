@@ -39,12 +39,12 @@ Ext.define('NextThought.view.assessment.input.FreeResponse',{
 				if(dom.value===''){ this.disableSubmission(); }
 				else { this.enableSubmission(); }
 			},
-			keydown: this.enterKeyFilter
+			keydown: this.keyFilter
 		});
 	},
 
 
-	enterKeyFilter: function(e,dom){
+	keyFilter: function(e,dom){
 		var i, x, next;
 		if(e.getKey()=== e.ENTER){
 

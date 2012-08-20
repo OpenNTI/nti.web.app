@@ -6,6 +6,7 @@ Ext.define('NextThought.view.assessment.Response',{
 		'NextThought.view.assessment.input.FreeResponse',
 		'NextThought.view.assessment.input.Matching',
 		'NextThought.view.assessment.input.MultipleChoice',
+		'NextThought.view.assessment.input.NumericMath',
 		'NextThought.view.assessment.input.SingleChoice',
 		'NextThought.view.assessment.input.SymbolicMath'//...add all the possible input types here
 	],
