@@ -228,6 +228,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 					r.set('replacementContent', 'redaction');
 					var widget = me.createAnnotationWidget('redaction',r, range);
 					widget.savePhantom();
+					me.scrollTo(range.getBoundingClientRect().top);
 				}
 			});
 
@@ -238,6 +239,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 					var r = NextThought.model.Redaction.createFromHighlight(record);
 					var widget = me.createAnnotationWidget('redaction',r, range);
 					widget.savePhantom();
+					me.scrollTo(range.getBoundingClientRect().top);
 				}
 			});
 		}
