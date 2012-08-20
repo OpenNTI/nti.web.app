@@ -289,8 +289,10 @@ Ext.define('NextThought.view.annotations.Highlight', {
 				var tgt = me.ownerDocument.elementFromPoint(e.clientX,e.clientY);
 				tgt.dispatchEvent(evt);
 				me.style.visibility = "visible";
-			}
+			};
 			canvas.onmouseup = canvas.onmousedown;
+			canvas.onclick = canvas.onmousedown;
+			canvas.ondblclick = canvas.onmousedown;
 			canvas.onmouseover = canvas.onmousedown;
 		}
 		return canvas;

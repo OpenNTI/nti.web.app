@@ -199,18 +199,26 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 				var mouseUp = caretRangeFromMouseEvent(e);
 				if (mouseUp) {
 					var r = doc.createRange();
-					if (mouseUp.compareBoundaryPoints(Range.START_TO_START,this.cnvMousedown) == 1) {
+					var cmp = mouseUp.compareBoundaryPoints(Range.START_TO_START,this.cnvMousedown);
+					if (cmp === 1) {
 						r.setStart(this.cnvMousedown.startContainer,this.cnvMousedown.startOffset);
 						r.setEnd(mouseUp.startContainer,mouseUp.startOffset);
 					}
 					else {
-						r.setEnd(this.cnvMousedown.startContainer,this.cnvMousedown.startOffset);
 						r.setStart(mouseUp.startContainer,mouseUp.startOffset);
+						if (cmp === 0 && new Date().getTime() - this.lastMouseup < 400) { 
+							r.setEnd(this.cnvMousedown.startContainer,this.cnvMousedown.startOffset+1);
+						}
+						else {
+							r.setEnd(this.cnvMousedown.startContainer,this.cnvMousedown.startOffset);
+						}
 					}
 					doc.parentWindow.getSelection().removeAllRanges();
-					doc.parentWindow.getSelection().addRange(r);
+					doc.parentWindow.getSelection().collapse(r.startContainer,r.startOffset);
+					doc.parentWindow.getSelection().extend(r.endContainer,r.endOffset);
 					this.cnvMousedown = null;
 				}
+				this.lastMouseup = new Date().getTime();
 			}
 			var fakeEvent = Ext.EventObject.setEvent(e||event),
 				t = me.body.getScroll().top;
