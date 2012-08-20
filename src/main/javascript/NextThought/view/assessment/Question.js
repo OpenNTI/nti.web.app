@@ -54,7 +54,7 @@ Ext.define('NextThought.view.assessment.Question',{
 
 		Ext.each(assessedQuestionSet.get('questions'),function(i){
 			if(i.getId()===id){ q = i; return false; }
-			console.log(i.raw);
+//			console.log(i.raw);
 		});
 
 		if(!q){ Ext.Error.raise('Couldn\'t find my question? :('); }

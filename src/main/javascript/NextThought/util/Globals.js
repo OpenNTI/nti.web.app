@@ -9,6 +9,7 @@ Ext.define('NextThought.util.Globals', {
 		'NextThought.overrides.data.proxy.Server',
 		'NextThought.overrides.data.Connection',
 		'NextThought.overrides.dom.Element',
+		'NextThought.overrides.draw.engine.Svg',
 		'NextThought.overrides.JSON',
 		'NextThought.overrides.layout.container.Container',
 		'NextThought.overrides.panel.Panel',

@@ -1,11 +1,14 @@
 Ext.define('NextThought.view.assessment.Score',{
 	extend: 'Ext.container.Container',
 	alias: 'widget.assessment-score',
+	requires: [
+		'NextThought.chart.series.Score'
+	],
 
 	initComponent: function(){
 		this.store = Ext.create('Ext.data.JsonStore', {fields: ['p']});
 		this.callParent(arguments);
-		this.add({
+		var c = this.add({
 			xtype: 'chart',
 			width: 75,
 			height: 75,
@@ -16,17 +19,7 @@ Ext.define('NextThought.view.assessment.Score',{
 			shadow: false,
 			legend: false,
 
-			series: [{
-				type: 'pie',
-				donut: 65,
-				angleField: 'p',
-				colorSet: ['#a5c959','#d9d9d9'],
-				style: {
-					"stroke-width": 2,
-					"stroke-opacity": 1,
-					stroke: '#fff'
-				}
-			}]
+			series: [{ type: 'score', angleField: 'p' }]
 		});
 
 		this.setValue(this.value || 80);
@@ -34,7 +27,22 @@ Ext.define('NextThought.view.assessment.Score',{
 
 
 	setValue: function(value){
+		var data = [{p:value},{p:(100-value)}],
+			s = this.down('chart').series.first();
+
+		if( s.setValue ){
+			s.setValue(value);
+		}
+		else {
+			s.scoreValue = value;
+		}
+
 		this.value = value;
-		this.store.loadRawData([{p:value},{p:(100-value)}],false);
+
+		if(value === 0){
+			data.shift();
+		}
+
+		this.store.loadRawData(data,false);
 	}
 });
