@@ -1472,6 +1472,56 @@ describe("Anchor Utils", function() {
 		});
 	});
 
+	describe('expandSelectionBy Tests', function(){
+		it('Test It', function(){
+			var pretext = document.createTextNode('This is some text that belongs before my div'),
+				posttext = document.createTextNode('This is some text that belongs after my div'),
+				div = document.createElement('div'),
+				span1 = document.createElement('span'),
+				text1 = document.createTextNode('Text 1'),
+				mathDiv1 = document.createElement('div'),
+				text2 = document.createTextNode('Text 2'),
+				middleText = document.createTextNode('Middle Text'),
+				mathDiv2 = document.createElement('div'),
+				text3 = document.createTextNode('Text 3'),
+				span2 = document.createElement('span'),
+				text4 = document.createTextNode('Text 4'),
+				range,
+				sel;
+
+			span1.appendChild(text1);
+			Ext.fly(mathDiv1).addCls('math');
+			mathDiv1.appendChild(text2);
+			Ext.fly(mathDiv2).addCls('math');
+			mathDiv2.appendChild(text3);
+			span2.appendChild(text4);
+			div.appendChild(span1);
+			div.appendChild(mathDiv1);
+			div.appendChild(middleText);
+			div.appendChild(mathDiv2);
+			div.appendChild(span2);
+			testBody.appendChild(pretext);
+			testBody.appendChild(div);
+			testBody.appendChild(posttext);
+
+			range = document.createRange();
+
+			sel = window.getSelection();
+			range.setStart(text2, 2);
+			range.setEnd(text4, 2);
+			sel.removeAllRanges();
+			sel.addRange(range);
+
+
+console.log('before expand', sel.toString(), ',', range.toString());
+			Anchors.expandSelectionBy(sel, 50, true);
+console.log('after  expand', sel.toString(), ',', range.toString());
+			console.log(sel.toString());
+			expect(sel.toString().indexOf('is some text that belongs before my div')).toBe(0);
+			expect(sel.toString().indexOf('This is some text that belongs after my div')).toBe(80);
+		});
+	});
+
 	describe('Integration Tests', function(){
 		//TODO - write a unit test for 3 identical txt nodes where the anchor ends on teh end of the second
 		it('Ancestor Spanning Identical Text Node Bug', function(){

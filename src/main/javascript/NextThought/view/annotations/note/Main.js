@@ -123,8 +123,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 
 
 	setRecord: function(r){
-		var suppressed, text, bodyText, start, end, range, doc,
-			boundryChars = 50;
+		var suppressed, text, bodyText, sel, range, doc, start, end;
 
 		try {
 			if(this.record) {
@@ -169,28 +168,44 @@ Ext.define('NextThought.view.annotations.note.Main',{
 			doc = ReaderPanel.get(this.prefix).getDocumentElement();
 			range = Anchors.toDomRange(r.get('applicableRange'),doc);
 			if(range){
-				text = range.toString();
-				bodyText = range.commonAncestorContainer.ownerDocument.getElementById('NTIContent').textContent;
-				start = bodyText.indexOf(text);
-				end = start + text.length;
-				start = Math.max(start - boundryChars, 0);
-				end += boundryChars;
+				if(Ext.isGecko){
+					text = range.toString();
+					bodyText = range.commonAncestorContainer.ownerDocument.getElementById('NTIContent').textContent;
+					start = bodyText.indexOf(text);
+					end = start + text.length;
+					start = Math.max(start - 50, 0);
+					end += 50;
 
-				//try to find word bounds:
-				start = this.moveSubstringToWord(bodyText, start, true);
-				end = this.moveSubstringToWord(bodyText, end, false);
-				bodyText = Ext.String.trim(bodyText.substring(start, end));
+					//try to find word bounds:
+					start = this.moveSubstringToWord(bodyText, start, true);
+					end = this.moveSubstringToWord(bodyText, end, false);
+					bodyText = Ext.String.trim(bodyText.substring(start, end));
 
-				if (start){ bodyText = '[...] ' + bodyText;}
-				if (end){ bodyText += ' [...]';}
+					if (start){ bodyText = '[...] ' + bodyText;}
+					if (end){ bodyText += ' [...]';}
 
-				text = bodyText.replace(text, this.highlightTpl.apply([text]));
-				text = this.replaceMathNodes(text, range.commonAncestorContainer);
+					text = bodyText.replace(text, this.highlightTpl.apply([text]));
+					text = this.replaceMathNodes(text, range.commonAncestorContainer);
+				}
+				else{
+					text = range.toString();
+					sel = doc.getSelection();
+					sel.removeAllRanges();
+					sel.addRange(range);
+					Anchors.expandSelectionBy(sel, 50, true);
+					Anchors.snapSelectionToWord(doc);
+					range = sel.getRangeAt(0);
+					bodyText = range.toString();
+					sel.removeAllRanges();
+					text = bodyText.replace(text, this.highlightTpl.apply([text]));
+					text = this.replaceMathNodes(text, range.commonAncestorContainer);
+					text = '[...] '+text+' [...]';
+				}
 			} else {
 				text = r.get('selectedText');
 			}
-
 			this.context.update(text);
+
 		}
 		catch(e2){
 			console.error(Globals.getError(e2));

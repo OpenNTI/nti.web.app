@@ -1253,7 +1253,126 @@ Ext.define('NextThought.util.Anchors', {
 		}
 
 		return sel;
+	},
+
+	expandSelectionBy: function(sel, characterSize, includeMath) {
+		var i,
+			originalLength = sel.getRangeAt(0).toString().length;
+
+		//move back N chars
+		for(i=0; i<characterSize; i++){
+			sel.modify('move', 'backward', 'character');
+		}
+
+		//extent the original amt:
+		for(i=0; i<originalLength + characterSize; i++){
+			sel.modify('extend', 'forward', 'character');
+		}
+
+		//Now add the characters on end:
+		for (i=0; i<characterSize; i++) {
+			sel.modify('extend', 'forward', 'character');
+		}
+
+		if(includeMath){
+			Anchors.expandSelectionToIncludeMath(sel);
+		}
+
+		return sel;
+	},
+
+	/*
+	 * Snap the selection to whole words as opposed to partial words.  This code is taken and only
+	 * minimally adjusted, from here:
+	 * http://stackoverflow.com/questions/10964016/how-do-i-extend-selection-to-word-boundary-using-javascript-once-only/10964743#10964743
+	 */
+	snapSelectionToWord: function(doc) {
+		var sel,
+			window = doc.parentWindow,
+			selTxt,
+			adjustStart, adjustEnd,
+			trimStart, trimEnd,
+			shouldAdjustRegex = /[a-zA-Z0-9]/,
+			i;
+
+
+		// Check for existence of window.getSelection() and that it has a
+		// modify() method. IE 9 has both selection APIs but no modify() method.
+		if (window.getSelection && (sel = window.getSelection()).modify) {
+			sel = window.getSelection();
+			if (!sel.isCollapsed) {
+
+				Anchors.expandSelectionToIncludeMath(sel);
+
+				selTxt = sel.toString();
+				//decide if we have whitespace to trim on the front or end
+				trimStart = /^(\s+)/.exec(selTxt);
+				trimStart = trimStart ? trimStart[0].length : 0;
+				trimEnd = /(\s+)$/.exec(selTxt);
+				trimEnd = trimEnd ? trimEnd[0].length : 0;
+
+				//decide if our start and end points should be adjusted:
+				adjustStart = shouldAdjustRegex.test(selTxt.charAt(0));
+				adjustEnd = shouldAdjustRegex.test(selTxt.charAt(selTxt.length-1));
+
+				// Detect if selection is backwards
+				var range = doc.createRange();
+				range.setStart(sel.anchorNode, sel.anchorOffset);
+				range.setEnd(sel.focusNode, sel.focusOffset);
+				var backwards = range.collapsed;
+				range.detach();
+
+				// modify() works on the focus of the selection
+				var endNode = sel.focusNode, endOffset = sel.focusOffset;
+				sel.collapse(sel.anchorNode, sel.anchorOffset);
+
+				var direction = [];
+				if (backwards) {
+					direction = ['backward', 'forward'];
+					var t = trimStart;
+					trimStart=trimEnd;
+					trimEnd = t;
+					t = adjustStart;
+					adjustStart = adjustEnd;
+					adjustEnd = t;
+
+				} else {
+					direction = ['forward', 'backward'];
+				}
+
+				for (i = 0; i < trimStart; i++){
+					sel.modify("move", direction[0], "character");
+				}
+				if (adjustStart){
+					sel.modify("move", direction[0], "character");
+					sel.modify("move", direction[1], "word");
+				}
+
+				sel.extend(endNode, endOffset);
+				for (i = 0; i < trimEnd; i++){
+					sel.modify("extend", direction[1], "character");
+				}
+				if (adjustEnd) {
+					sel.modify("extend", direction[1], "character");
+					sel.modify("extend", direction[0], "word");
+				}
+			}
+		}
+		//Nothing fancy for the older browsers, just do the best we can...
+		else if ( !!(sel = doc.selection) && sel.type !== "Control") {
+			var textRange = sel.createRange();
+			if (textRange.text) {
+				textRange.expand("word");
+				// Move the end back to not include the word's trailing space(s),
+				// if necessary
+				while (/\s$/.test(textRange.text)) {
+					textRange.moveEnd("character", -1);
+				}
+				textRange.select();
+			}
+		}
 	}
+
 },
 function(){
 	window.Anchors = this;
