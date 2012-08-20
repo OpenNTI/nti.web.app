@@ -809,6 +809,11 @@
 		.body {
 			color: #494949;
 			font: 16px/24px 'Droid Serif';
+
+			.body-divider .whiteboard-thumbnail{
+			  width: 580px;
+			  height: 450px !important;
+			}
 		}
 
 		&.editor-active .respond{

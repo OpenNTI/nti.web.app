@@ -142,7 +142,12 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 		var bgx = parseInt(this.getEl().getStyle('background-position').match(/-?[0-9]+/g)[0],0);
 		//The "difference" is a sum because the pointer coordinate is
 		//actually the background's negative offset coordinate
-		this.pointerCoordDifference = bgx + dom.scrollLeft; 
+		this.pointerCoordDifference = bgx + dom.scrollLeft;
+
+		//setTimeout(function() {
+		me.up('note-window').syncSize();
+		//	}, 30);
+
 	},
 	
 	updateSlide: function(pos) {
