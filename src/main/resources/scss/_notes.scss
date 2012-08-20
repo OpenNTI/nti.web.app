@@ -241,7 +241,6 @@
                 z-index: 9999;
 
 				li {
-					&:hover { background-color: #efefef; &::after { background-position: -20px 0; } }
 					&::after {
 						content: ' ';
 						width: 18px;
@@ -255,14 +254,26 @@
 					position: relative;
 					padding: 0 10px 0 37px;
 
+					&:hover {
+						background-color: #efefef;
+						&.share::after { background-position: -20px 0; }
+						&.edit::after { background-position: -20px -90px; }
+						&.flag::after { background-position: -20px -18px; }
+						&.add-contact::after { background-position: -20px -36px; }
+						&.follow::after { background-position: -20px -54px; }
+						&.block::after { background-position: -20px -72px; }
+						&.mute::after { background-position: -20px -126px; }
+						&.delete::after { background-position: -20px -108px; }
+					}
+
 					&.share::after { background-position: 0 0; }
-					&.edit::after { background-position: 0 -100px; }
+					&.edit::after { background-position: 0 -90px; }
 					&.flag::after { background-position: 0 -18px; }
 					&.add-contact::after { background-position: 0 -36px; }
 					&.follow::after { background-position: 0 -54px; }
 					&.block::after { background-position: 0 -72px; }
-					&.mute::after { background-position: 0 -100px; }
-					&.delete::after { background-position: 0 -100px; }
+					&.mute::after { background-position: 0 -126px; }
+					&.delete::after { background-position: 0 -108px; }
 				}
 			}
 		}
