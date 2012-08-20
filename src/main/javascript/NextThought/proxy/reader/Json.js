@@ -26,8 +26,8 @@ Ext.define('NextThought.proxy.reader.Json', {
 						continue;
 					}
 
-					if(!item.Class || !NextThought.model.hasOwnProperty(item.Class)){
-						console.warn('IGNORING: Received object that does not match a model');
+					if(!item.Class || !ParseUtils.findModel(item.Class)){
+						console.warn('IGNORING: Received object that does not match a model',item);
 						continue;
 					}
 
@@ -43,7 +43,7 @@ Ext.define('NextThought.proxy.reader.Json', {
 			result = this.callParent([records]);
 
 			i = result.records.length-1;
-			for(; i>=0; i--){
+			for(i; i>=0; i--){
 				record = result.records[i];
 				try{
 					if(record instanceof NextThought.model.Base) {
