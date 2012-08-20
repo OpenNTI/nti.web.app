@@ -168,43 +168,24 @@ Ext.define('NextThought.view.annotations.note.Main',{
 			doc = ReaderPanel.get(this.prefix).getDocumentElement();
 			range = Anchors.toDomRange(r.get('applicableRange'),doc);
 			if(range){
-				if(Ext.isGecko || Ext.isIE9){
-					text = range.toString();
-					bodyText = range.commonAncestorContainer.ownerDocument.getElementById('NTIContent').textContent;
-					start = bodyText.indexOf(text);
-					end = start + text.length;
-					start = Math.max(start - 50, 0);
-					end += 50;
-
-					//try to find word bounds:
-					start = this.moveSubstringToWord(bodyText, start, true);
-					end = this.moveSubstringToWord(bodyText, end, false);
-					bodyText = Ext.String.trim(bodyText.substring(start, end));
-
-					if (start){ bodyText = '[...] ' + bodyText;}
-					if (end){ bodyText += ' [...]';}
-
-					text = bodyText.replace(text, this.highlightTpl.apply([text]));
-					text = this.replaceMathNodes(text, range.commonAncestorContainer);
-				}
-				else{
-					text = range.toString();
-					sel = doc.getSelection();
-					sel.removeAllRanges();
-					sel.addRange(range);
-					Anchors.expandSelectionBy(sel, 50, true);
-					Anchors.snapSelectionToWord(doc);
+					doc.getSelection().removeAllRanges();
+					doc.getSelection().addRange(range);
+					sel = rangy.getSelection(doc);
 					range = sel.getRangeAt(0);
-					bodyText = range.toString();
+					text = range.toString();
+					range.moveStart('character', -50);
+					range.moveEnd('character', 50);
+					range.expand('word');
+					sel.setSingleRange(range);
+					Anchors.expandSelectionToIncludeMath(sel);
+					bodyText = sel.getRangeAt(0).toString();
 					sel.removeAllRanges();
 					text = bodyText.replace(text, this.highlightTpl.apply([text]));
 					text = this.replaceMathNodes(text, range.commonAncestorContainer);
-					text = '[...] '+text+' [...]';
-				}
 			} else {
 				text = r.get('selectedText');
 			}
-			this.context.update(text);
+			this.context.update('[...] '+text+' [...]');
 
 		}
 		catch(e2){
