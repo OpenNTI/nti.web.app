@@ -168,7 +168,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 			doc = ReaderPanel.get(this.prefix).getDocumentElement();
 			range = Anchors.toDomRange(r.get('applicableRange'),doc);
 			if(range){
-				if(Ext.isGecko){
+				if(Ext.isGecko || Ext.isIE9){
 					text = range.toString();
 					bodyText = range.commonAncestorContainer.ownerDocument.getElementById('NTIContent').textContent;
 					start = bodyText.indexOf(text);
