@@ -1,12 +1,13 @@
-//Ext.Loader.setPath('rangy', 'resources/lib/rangy-1.3alpha.681/rangy-core.js');
-//Ext.Loader.setPath('TextRange', 'resources/lib/rangy-1.3alpha.681/rangy-textrange.js');
+Ext.Loader.setPath('rangy', 'resources/lib/rangy-1.3alpha.681/rangy-core.js');
+Ext.Loader.setPath('rangy.modules.TextRange', 'resources/lib/rangy-1.3alpha.681/rangy-textrange.js');
 
 Ext.define('NextThought.util.Anchors', {
 	requires: [
 		'NextThought.model.anchorables.TextDomContentPointer',
 		'NextThought.model.anchorables.ElementDomContentPointer',
 		'NextThought.model.anchorables.DomContentPointer',
-		//'rangy'
+		'rangy',
+		'rangy.modules.TextRange'
 	],
 	singleton: true,
 
