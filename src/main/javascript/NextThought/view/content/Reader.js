@@ -130,6 +130,22 @@ Ext.define('NextThought.view.content.Reader', {
 			me.setContent(resp, pageInfo.get('AssessmentItems'), callback);
 		}
 
+		function jsonp(script){
+			f({
+				responseText: me.self.getContent(script),
+				request: {
+					options: {
+						url: pageInfo.getLink('content')
+					}
+				}
+			});
+			Ext.fly(script).remove();
+		}
+
+		function onError(){
+			console.error('PROBLEMS!', pageInfo);
+		}
+
 		if(!pageInfo.isModel){
 			if(pageInfo.responseText){
 				me.splash.hide();
@@ -138,6 +154,11 @@ Ext.define('NextThought.view.content.Reader', {
 			me.relayout();
 		}
 		else {
+			if ($AppConfig.server.jsonp){
+				var url = pageInfo.getLink('content') + '.jsonp';
+				Globals.loadScript(url, jsonp, onError, this);
+				return;
+			}
 			Ext.Ajax.request({
 				url: pageInfo.getLink('content'),
 				success: f,
@@ -151,13 +172,36 @@ Ext.define('NextThought.view.content.Reader', {
 
 
 	statics : {
+		bufferedContent: {},
+
 		get: function(prefix){
 			return Ext.ComponentQuery.query(
 					Ext.String.format('reader-panel[prefix={0}]',prefix))[0];
+		},
+		getContent: function(ntiid){
+			console.log('getContent called...(should be after receiveContent)');
+			return this.bufferedContent[ntiid];
+		},
+		receiveContent: function(content){
+			console.log('receiveContent called...');
+			var decodedContent;
+			//expects: {content:?, contentEncoding:?, NTIID:?, version: ?}
+			//1) decode content
+			if(/Base64/.test(content.contentEncoding)){
+				decodedContent = btoa(content.content);
+			}
+			else {
+				Ext.Error.raise('not handing content encoding ' + content.contentEncoding);
+			}
+
+			//2) put in bucket
+			this.bufferedContent[content.ntiid] = decodedContent;
 		}
+
 	}
 }, function(){
 	window.ReaderPanel = this;
+	window.foo = Ext.bind(this, this.receiveContent);
 
 	ContentAPIRegistry.register('NTIHintNavigation',LocationProvider.setLocation,LocationProvider);
 	ContentAPIRegistry.register('togglehint',function(e) {
@@ -165,6 +209,7 @@ Ext.define('NextThought.view.content.Reader', {
 		Ext.get(e.getTarget().nextSibling).toggleCls("hidden");
 		return false;
 	});
+
 
 });
 
