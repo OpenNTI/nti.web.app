@@ -49,7 +49,7 @@ Ext.define('NextThought.view.assessment.input.MultipleChoice',{
 		});
 	},
 	keyDown: function(e) {
-		if (e.getKey() === e.ENTER) { this.choiceClicked(e); }
+		if (e.getKey() == e.ENTER) { this.choiceClicked(e); }
 	},
 
 	choiceClicked: function(e){
