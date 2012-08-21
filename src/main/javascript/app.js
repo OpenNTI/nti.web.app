@@ -1,3 +1,6 @@
+//disable script cache-busting _dc=... get string args
+Ext.Loader.setConfig('disableCaching', false);
+
 Ext.application({
 	name: 'NextThought',
 	appFolder: 'javascript/NextThought',
