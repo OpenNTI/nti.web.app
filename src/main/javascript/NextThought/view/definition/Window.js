@@ -31,7 +31,8 @@ Ext.define('NextThought.view.definition.Window', {
 	xslUrl: '/dictionary/static/style.xsl',
 
 	initComponent: function(){
-		var me = this;
+		var me = this, p, nib = 20, top, y, x;
+
 		me.callParent(arguments);
 
 		if(!me.term){
@@ -45,7 +46,6 @@ Ext.define('NextThought.view.definition.Window', {
 					domtree = new DOMParser().parseFromString(dom,"text/xml");
 					outputtree = processor.transformToDocument(domtree); 
 					o = new XMLSerializer().serializeToString(outputtree);
-					if(o.indexOf('&lt;/a&gt;') >= 0){ o = Ext.String.htmlDecode(o); }
 				}
 				else {
 					domtree = new ActiveXObject("Msxml2.DOMDocument");
@@ -53,9 +53,14 @@ Ext.define('NextThought.view.definition.Window', {
 					processor.input = domtree;
 					processor.transform();
 					o = processor.output;
-					if(o.indexOf('&lt;/a&gt;') >= 0){ o = Ext.String.htmlDecode(o); }
 				}
-				doc = this.down('[cls=definition]').el.dom.contentDocument.open();
+
+				if( o.indexOf('&lt;/a&gt;') >= 0 ){
+					o = Ext.String.htmlDecode(o);
+				}
+
+				doc = this.getDocumentElement().open();
+
 				doc.write(o);
 				doc.close();
 				me.show();
@@ -64,16 +69,23 @@ Ext.define('NextThought.view.definition.Window', {
 
 
 		//figure out xy
-		var p = this.pointTo || {};
-		var nib = 20;
-		var top = Ext.Element.getViewportHeight() < (p.bottom + this.getHeight() + nib),
-			y = Math.round(top ? p.top - nib - this.getHeight() : p.bottom + nib),
+		p = this.pointTo;
+		if(p){
+			top = Ext.Element.getViewportHeight() < (p.bottom + this.getHeight() + nib);
+			y = Math.round(top ? p.top - nib - this.getHeight() : p.bottom + nib);
 			x = Math.round((p.left + (p.width/2)) - (this.getWidth()/2));
 
-		if(this.pointTo){
-			this.setPosition(x,y);
-			this.addCls(top?'south':'north');
+			me.setPosition(x,y);
+			me.addCls(top?'south':'north');
 		}
+	},
+
+
+
+	getDocumentElement: function(){
+		var iframe = this.down('[cls=definition]').el.dom;
+		return iframe.contentDocument
+				|| (iframe.contentWindow || window.frames[iframe.name]).document;
 	},
 
 
