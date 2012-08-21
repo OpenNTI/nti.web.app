@@ -547,12 +547,16 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 
 	onContextMenuHandler: function(e) {
 		try{
+			var origSelection = window.rangy.getSelection(this.getDocumentElement()).toString();
 			var range = this.getSelection();
 
 			if( range && !range.collapsed ) {
 				e.stopPropagation();
 				e.preventDefault();
-				this.addAnnotation(range, e.getXY());
+				if (origSelection.length > 0 || (window.lastClick && new Date().getTime() < window.lastClick + 400)) { 
+					this.addAnnotation(range, e.getXY())
+				};
+				window.lastClick = new Date().getTime();
 			}
 		}
 		catch(er){
