@@ -17,6 +17,10 @@
 			margin-bottom: 0 !important;
 		}
 	}
+
+	&.x-panel.x-layer.x-menu{
+		overflow: visible;
+	}
 }
 
 
@@ -137,6 +141,18 @@
 				font-style: normal;
 				font-weight: normal;
 				white-space: nowrap;
+			}
+		}
+
+		&:hover {
+			.title {
+				background-color: #ebebeb;
+				position: fixed;
+				text-overflow: inherit;
+				z-index: 99999;
+			}
+			.author {
+				padding-top: 19px;
 			}
 		}
 	}
