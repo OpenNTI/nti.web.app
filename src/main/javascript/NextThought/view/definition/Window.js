@@ -16,7 +16,7 @@ Ext.define('NextThought.view.definition.Window', {
 		cls: 'definition',
 		autoEl: {
 			tag: 'iframe',
-			src: Globals.EMPTY_WRITABLE_IFRAME_SRC,
+			src: Ext.SSL_SECURE_URL,
 			frameBorder: 0,
 			marginWidth: 0,
 			marginHeight: 0,
@@ -57,11 +57,11 @@ Ext.define('NextThought.view.definition.Window', {
 					processor.transform();
 					o = processor.output;
 					if(o.indexOf('&lt;/a&gt;') >= 0){ o = Ext.String.htmlDecode(o); }
-					var maindiv = this.down('[cls=definition]').el.dom.parentNode;
-					maindiv.innerHTML = o;
-					//Some manipulation to get the heading back
-					maindiv.querySelector('h1').style.position = 'static';
-					maindiv.querySelector('.scroll-body').style.marginTop = '0px';		
+					var iframe = this.down('[cls=definition]').el.dom;
+					var win = iframe.contentWindow || window.frames[iframe.name];
+					var doc = iframe.contentDocument || win.document;
+					doc.write(o);
+					doc.close();
 				}
 				me.show();
 			});
