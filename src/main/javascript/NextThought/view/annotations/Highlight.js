@@ -275,27 +275,9 @@ Ext.define('NextThought.view.annotations.Highlight', {
 			body.parentNode.insertBefore(cnt,body);
 		}
 
-		var canvas = this.createElement(
+		return this.createElement(
 			'canvas', cnt,
 			'highlight-canvas');
-		if (Ext.isChrome) {
-			canvas.onmousedown = function(e) {
-				e.preventDefault();
-				e.stopPropagation();
-				var me = e.target;
-				me.style.visibility = "hidden";
-				var evt = document.createEvent("MouseEvents");
-				evt.initMouseEvent(e.type, true, true, me.ownerDocument.parentWindow, 1, e.screenX, e.screenY,e.clientX,e.clientY,false,false,false,false,0,null);
-				var tgt = me.ownerDocument.elementFromPoint(e.clientX,e.clientY);
-				tgt.dispatchEvent(evt);
-				me.style.visibility = "visible";
-			};
-			canvas.onmouseup = canvas.onmousedown;
-			canvas.onclick = canvas.onmousedown;
-			canvas.ondblclick = canvas.onmousedown;
-			canvas.onmouseover = canvas.onmousedown;
-		}
-		return canvas;
 	},
 
 

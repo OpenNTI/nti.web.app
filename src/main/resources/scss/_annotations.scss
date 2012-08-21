@@ -297,9 +297,7 @@ div.redaction-control {
 	}
 }
 
+div.section-problem .highlight-mouse-over .MathJax_Display { color: #076da7 }
 
-:not(.x-chrome) {
-	div.section-problem .highlight-mouse-over .MathJax_Display { color: #076da7 }
-	#annotation-container { &, .highlight-canvas { position: absolute; /*z-index: 1;*/ } }
-}
-.x-chrome #annotation-container { &, .highlight-canvas { position: absolute; z-index: 1; } }
+#annotation-container { &, .highlight-canvas { position: absolute; /*z-index: 1; */} }
+

@@ -90,6 +90,7 @@ Ext.define('NextThought.util.Rects',{
 
 	trimCrazies: function(rects, lineHeight, clientWidth){
 		function flip(a,i){ return Ext.apply({},a[i]); }
+
 		function notTooShort(h) {
 			return !lineHeight || h >= lineHeight;
 		}
@@ -115,7 +116,7 @@ Ext.define('NextThought.util.Rects',{
 		for(;i>=0;i--){
 			o = flip(rs,i);
 			if (o.height < lineHeight){o.height = lineHeight;} //round up to look nice
-			h = o.bottom - o.top;
+			h = o.height;
 			w = o.width;
 			if( w > 0 && (w <= clientWidth || !clientWidth) && notTooShort(h) && (notTooTall(h) || !isCovered(i))) {
 				out.push(o);

@@ -152,37 +152,12 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 				}
 			}
 		});
-		function caretRangeFromMouseEvent(e) {
-			var r = null;
-			if (doc.caretRangeFromPoint) { 
-				return doc.caretRangeFromPoint(e.clientX,e.clientY); 
-			}
-			//TODO: Add support for other browsers (Firefox's rangeParent/Offset don't
-			//get added to artificial events for some reason)
-			return r;
-		}
+
 		on(doc,['mouseover','mousemove'],function(e){
-			var tgt, sel;
-			if (this.cnvMousedown) {
-				tgt = doc.elementFromPoint(e.clientX,e.clientY);
-				if (tgt.tagName === 'CANVAS') {
-					sel = doc.parentWindow.getSelection();
-					console.log(sel.anchorNode,sel.anchorOffset);
-					sel.removeAllRanges();
-				}
-			}
 			e = Ext.EventObject.setEvent(e||event);
 			if(e.getX() < 80){ me.setGutterClickThrough(); }
 		});
-		on(doc,['mouseout'],function(e){
-			var sel = doc.parentWindow.getSelection();
-			try { sel.collapse(this.cnvMousedown.startContainer,this.cnvMousedown.startOffset); }
-			catch(er) { }
-		});
-		on(doc,'mousedown',function(e){ 
-			this.cnvMousedown = caretRangeFromMouseEvent(e);
-			Ext.menu.Manager.hideAll();
-		 });
+		on(doc,'mousedown',function(){ Ext.menu.Manager.hideAll(); });
 		on(doc,'contextmenu',function(e){
 			e = Ext.EventObject.setEvent(e||event);
 			e.stopPropagation();
@@ -195,31 +170,6 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 			if(target){ me.onClick(evt, target); }
 		});
 		on(doc,'mouseup',function(e){
-			if (this.cnvMousedown) {
-				var mouseUp = caretRangeFromMouseEvent(e);
-				if (mouseUp) {
-					var r = doc.createRange();
-					var cmp = mouseUp.compareBoundaryPoints(Range.START_TO_START,this.cnvMousedown);
-					if (cmp === 1) {
-						r.setStart(this.cnvMousedown.startContainer,this.cnvMousedown.startOffset);
-						r.setEnd(mouseUp.startContainer,mouseUp.startOffset);
-					}
-					else {
-						r.setStart(mouseUp.startContainer,mouseUp.startOffset);
-						if (cmp === 0 && new Date().getTime() - this.lastMouseup < 400) { 
-							r.setEnd(this.cnvMousedown.startContainer,this.cnvMousedown.startOffset+1);
-						}
-						else {
-							r.setEnd(this.cnvMousedown.startContainer,this.cnvMousedown.startOffset);
-						}
-					}
-					doc.parentWindow.getSelection().removeAllRanges();
-					doc.parentWindow.getSelection().collapse(r.startContainer,r.startOffset);
-					doc.parentWindow.getSelection().extend(r.endContainer,r.endOffset);
-					this.cnvMousedown = null;
-				}
-				this.lastMouseup = new Date().getTime();
-			}
 			var fakeEvent = Ext.EventObject.setEvent(e||event),
 				t = me.body.getScroll().top;
 			me.onContextMenuHandler({
