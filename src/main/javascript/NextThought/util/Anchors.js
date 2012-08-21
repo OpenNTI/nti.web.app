@@ -6,9 +6,12 @@ Ext.define('NextThought.util.Anchors', {
 		'NextThought.model.anchorables.TextDomContentPointer',
 		'NextThought.model.anchorables.ElementDomContentPointer',
 		'NextThought.model.anchorables.DomContentPointer',
-		'rangy',
+		'rangy'
+	],
+	uses: [
 		'rangy.modules.TextRange'
 	],
+
 	singleton: true,
 
 	PURIFICATION_TAG: 'data-nti-purification-tag',
