@@ -553,10 +553,9 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 			if( range && !range.collapsed ) {
 				e.stopPropagation();
 				e.preventDefault();
-				if (origSelection.length > 0 || (window.lastClick && new Date().getTime() < window.lastClick + 400)) { 
-					this.addAnnotation(range, e.getXY())
-				};
-				window.lastClick = new Date().getTime();
+				if (origSelection.length > 0) {
+					this.addAnnotation(range, e.getXY());
+				}
 			}
 		}
 		catch(er){
