@@ -45,22 +45,10 @@ Ext.define('NextThought.view.menus.search.Result',{
 	},
 
 	beforeRender: function() {
-		var re = new RegExp([
-			'(.*)\\b(',
-			RegExp.escape(this.term),
-			')(.*)'
-		].join(''), 'igm');
+		var re = new RegExp([ '([^\\W]*', RegExp.escape(this.term), '[^\\W]*)' ].join(''), 'ig');
 
-		function fn(original,before,group,after){
-			var context = 15;
-			return [
-				before.length > context ? '...'+before.substring(before.length-context) : before,
-				'<span>',group,'</span>',
-				Ext.String.ellipsis(after,context,true)
-			].join('');
-		}
 
-		this.renderData.snippet = this.snippet.replace(re, fn);
+		this.renderData.snippet = this.snippet.replace(re, '<span>$1</span>');
 		return this.callParent(arguments);
 	},
 
