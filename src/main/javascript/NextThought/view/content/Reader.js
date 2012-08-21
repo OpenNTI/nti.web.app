@@ -87,11 +87,11 @@ Ext.define('NextThought.view.content.Reader', {
 
 		try {
 			if(e){
-				contentPadding = e.getMargin('l') + e.getPadding('l')
+				contentPadding = e.getMargin('l') + e.getPadding('l');
 			}
 		}
-		catch(e){
-			console.error(Globals.getError(e));
+		catch(er){
+			console.error(Globals.getError(er));
 		}
 		return {
 			top: f.getTop(),

@@ -100,7 +100,7 @@ Ext.define('NextThought.view.content.reader.AssessmentOverlay', {
 		new Ext.dom.CompositeElement(
 			this.getDocumentElement().querySelectorAll('.x-btn-submit,[onclick^=NTISubmitAnswers]')).remove();
 
-		if (!this.hasOwnProperty('questionObjs') || this.questionObjs.length === 0 || typeof this.questionObjs[0] == 'string'){
+		if (!this.hasOwnProperty('questionObjs') || this.questionObjs.length === 0 || typeof this.questionObjs[0] === 'string'){
 			this.questionObjs = Array.prototype.slice.call(this.getDocumentElement().getElementsByTagName('object'));
 		}
 		Ext.Array.sort(items, function(ar,br){
@@ -134,7 +134,7 @@ Ext.define('NextThought.view.content.reader.AssessmentOverlay', {
 			var i;
 			for (i=0; i < objects.length; i++) {
 				if (typeof objects[i] !== 'string') { objects[i] = objects[i].getAttribute('data-ntiid'); }
-				if (objects[i] === id) return true;
+				if (objects[i] === id) { return true; }
 			}
 			return false;
 		}

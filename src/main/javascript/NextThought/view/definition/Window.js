@@ -40,29 +40,24 @@ Ext.define('NextThought.view.definition.Window', {
 
 		me.queryDefinition(function(dom){
 			me.getXSLTProcessor(function(processor){
-				var o;
+				var o, domtree, outputtree, doc;
 				if (!Ext.isIE9) { 
-					var domtree = new DOMParser().parseFromString(dom,"text/xml");
-					var outputtree = processor.transformToDocument(domtree); 
+					domtree = new DOMParser().parseFromString(dom,"text/xml");
+					outputtree = processor.transformToDocument(domtree); 
 					o = new XMLSerializer().serializeToString(outputtree);
 					if(o.indexOf('&lt;/a&gt;') >= 0){ o = Ext.String.htmlDecode(o); }
-					var doc = this.down('[cls=definition]').el.dom.contentDocument.open();
-					doc.write(o);
-					doc.close();
 				}
 				else {
-					var domtree = new ActiveXObject("Msxml2.DOMDocument");
+					domtree = new ActiveXObject("Msxml2.DOMDocument");
 					domtree.loadXML(dom);
 					processor.input = domtree;
 					processor.transform();
 					o = processor.output;
 					if(o.indexOf('&lt;/a&gt;') >= 0){ o = Ext.String.htmlDecode(o); }
-					var iframe = this.down('[cls=definition]').el.dom;
-					var win = iframe.contentWindow || window.frames[iframe.name];
-					var doc = iframe.contentDocument || win.document;
-					doc.write(o);
-					doc.close();
 				}
+				doc = this.down('[cls=definition]').el.dom.contentDocument.open();
+				doc.write(o);
+				doc.close();
 				me.show();
 			});
 		});
@@ -107,22 +102,21 @@ Ext.define('NextThought.view.definition.Window', {
 			async: true,
 			scope: me,
 			callback: function(q,s,r){
+				var xsldoc, xslt, dom, p;
 				if (Ext.isIE9) {
-					var xsldoc = new ActiveXObject("Msxml2.FreeThreadedDOMDocument")
+					xsldoc = new ActiveXObject("Msxml2.FreeThreadedDOMDocument");
 					xsldoc.loadXML(r.responseText);
-					var xslt = new ActiveXObject("Msxml2.XSLTemplate");
+					xslt = new ActiveXObject("Msxml2.XSLTemplate");
 					xslt.stylesheet = xsldoc;
-					var p = xslt.createProcessor();
-					me.self.xsltProcessor = p;
-					Ext.callback(cb, scope || me, [ p ]);
+					p = xslt.createProcessor();
 				}
 				else {
-					var dom = new DOMParser().parseFromString(r.responseText,"text/xml");
-					var p = new XSLTProcessor();
-					me.self.xsltProcessor = p;
+					dom = new DOMParser().parseFromString(r.responseText,"text/xml");
+					p = new XSLTProcessor();
 					p.importStylesheet(dom);
-					Ext.callback(cb, scope || me, [ p ]);
 				}
+				me.self.xsltProcessor = p;
+				Ext.callback(cb, scope || me, [ p ]);
 			}});
 	}
 });
