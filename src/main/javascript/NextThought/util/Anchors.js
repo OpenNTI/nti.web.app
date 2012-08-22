@@ -54,7 +54,6 @@ Ext.define('NextThought.util.Anchors', {
 			node: ancestorNode,
 			role: 'ancestor'
 		});
-
 		return Ext.create('NextThought.model.anchorables.DomContentRangeDescription', {
 			start: Anchors.createPointer(pureRange, 'start'),
 			end: Anchors.createPointer(pureRange, 'end'),
@@ -853,6 +852,9 @@ Ext.define('NextThought.util.Anchors', {
 		range.setStart(origStartNode, origStartOff);
 		range.setEnd(origEndNode, origEndOff);
 
+		//Somehow, this makes IE9 highlighting under certain conditions work correctly...
+		try { discard = docFrag.childNodes[0].childNodes[0].innerHTML + ' | ' + docFrag.childNodes[0].childNodes[1].innerHTML; } catch(e){}
+
 		//clean the node of undesirable things:
 		Anchors.purifyNode(docFrag);
 
@@ -864,9 +866,9 @@ Ext.define('NextThought.util.Anchors', {
 		var newEndOffset = Anchors.cleanNode(endNode, 'end');
 
 		//some adjustment if the text nodes are the same then the start offset will be wrong
-		if(startNode === endNode){newStartOffset -= ('['+Anchors.PURIFICATION_TAG+':end]').length;}
-
-		//console.log("DOCFRAG=", docFrag.textContent);
+		if (origStartNode === origEndNode) {
+			newStartOffset -= ('['+Anchors.PURIFICATION_TAG+':end]').length;
+		}
 
 		//build the new range divorced from the dom and return:
 		resultRange = doc.createRange();
