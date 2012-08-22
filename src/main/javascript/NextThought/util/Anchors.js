@@ -287,7 +287,7 @@ Ext.define('NextThought.util.Anchors', {
 
 		var startResultLocator = Anchors.toReferenceNodeXpathAndOffset(startResult);
 		var endResultLocator = Anchors.toReferenceNodeXpathAndOffset(endResult);
-		//console.log('startResultLocator', startResultLocator, 'endResultLocator', endResultLocator);
+		//console.log('startResultLocator ', startResultLocator, ' endResultLocator ', endResultLocator);
 
 		return Anchors.convertContentRangeToDomRange(startResultLocator, endResultLocator, docElement);
 	},
@@ -495,13 +495,20 @@ Ext.define('NextThought.util.Anchors', {
 
 			var allmatches = [],
 				adjustedOffset = context.contextOffset,
+				nodeContent = node.textContent,
 				i, f, score;
 
 
 			if(isStart){
 				adjustedOffset = node.textContent.length - adjustedOffset;
 			}
-			var p = multiIndexOf(node.textContent,context.contextText);
+			// IE9 sometimes splits text nodes arbitrarily, but we can at least force the split
+			// to be along the whole word boundary
+			if (Ext.isIE && node.nextSibling && node.nextSibling.nodeType === node.TEXT_NODE) {
+				nodeContent += node.nextSibling.textContent.substring(0,(node.nextSibling.textContent+' ').indexOf(' ')+1);
+			}
+			var p = multiIndexOf(nodeContent,context.contextText);
+			//try {console.log(node.parentNode.childNodes[5]) } catch (er) { }
 			for (i = 0; i < p.length; i++) {
 				//Penalzies score based on disparity between expected
 				//and real offset. For longer paragraphs, which we
