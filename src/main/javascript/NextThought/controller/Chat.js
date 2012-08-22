@@ -64,7 +64,8 @@ Ext.define('NextThought.controller.Chat', {
 			'chat-view chat-entry' : {
 				//'classroom': this.classroom,
 				//'compose': this.compose,
-				'send': this.send
+				'send': this.send,
+				'send-whiteboard': this.sendWhiteboard
 			},
 
 			'contacts-panel': {
@@ -323,6 +324,30 @@ Ext.define('NextThought.controller.Chat', {
 		this.postMessage(room, val, mid, channel, recipients);
 
 		f.focus();
+	},
+
+
+	sendWhiteboard: function(chatEntryWidget, mid, channel, recipients) {
+		var me = this,
+			room = ClassroomUtils.getRoomInfoFromComponent(chatEntryWidget),
+			wbWin = Ext.widget({ xtype: 'wb-window', height: '75%', width: '50%'}),
+			wbData;
+
+		//hook into the window's save and cancel operations:
+		chatEntryWidget.mon(wbWin, {
+			save: function(win, wb, e){
+				wbData = wb.getValue();
+				me.postMessage(room, [wbData], mid, channel, recipients);
+				wbWin.close();
+			},
+			cancel: function(win, wb, e){
+				//if we haven't added the wb to the editor, then clean up, otherwise let the window handle it.
+				wbWin.close();
+			}
+		});
+
+		//show window:
+		wbWin.show();
 	},
 
 

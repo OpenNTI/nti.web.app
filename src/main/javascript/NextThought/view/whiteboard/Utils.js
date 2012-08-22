@@ -64,7 +64,7 @@ Ext.define('NextThought.view.whiteboard.Utils',{
 
 
 	display: function(src){
-
+		//TODO - update this old crap
 		var w = Ext.Element.getViewportWidth(),
 			h = Ext.Element.getViewportHeight(),
 			win = Ext.widget('window',{
