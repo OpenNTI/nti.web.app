@@ -74,7 +74,10 @@ Ext.define('NextThought.providers.Location', {
 
 			me.fireEvent('changed', ntiid);
 		}
-
+			if (Ext.isIE) { 
+				if (!fromHistory) { window.lastTimeLocationSet = new Date().getTime(); }
+				window.location.hash = ntiid;
+			}
 //		if(me.currentNTIID && ntiid !== me.currentNTIID){
 			e.mask('Loading...');
 		//}

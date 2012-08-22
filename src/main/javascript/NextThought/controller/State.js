@@ -35,6 +35,17 @@ Ext.define('NextThought.controller.State', {
 
 
 	onSessionReady: function(){
+		window.onhashchange = function() {
+			var hash = window.location.hash.substring(1);
+			if (hash && window.lastTimeLocationSet && new Date().getTime() - window.lastTimeLocationSet > 1000) {
+				function fin(){
+					var token = {};
+					app.registerInitializeTask(token);
+					return function(){ app.finishInitializeTask(token); };
+				}
+				LocationProvider.setLocation(hash,fin(),true);
+			}
+		}
 		var me = this,
 			history = window.history,
 			push = history.pushState || function(){};
@@ -76,7 +87,6 @@ Ext.define('NextThought.controller.State', {
 		if(!NextThought.isInitialised || this.isHangout){
 			return;
 		}
-
 		var s = e?e.state:null;
 		if (s) {
 			this.fireEvent('restore', s);
