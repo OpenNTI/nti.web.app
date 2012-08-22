@@ -8,6 +8,7 @@
 
 	<link rel="stylesheet" id="ext-base" type="text/css"
 		  href="https://extjs.cachefly.net/ext-4.1.1-gpl/resources/css/ext-all-gray.css">
+	<link rel="stylesheet" id="mathquill-stylesheet" type="text/css" href="resources/lib/mathquill/mathquill.css">
     <link rel="stylesheet" id="main-stylesheet" type="text/css" href="resources/css/main.css">
 	<script type="text/javascript" src="resources/misc/base64.min.js"></script>
 	<!--[if gte IE 9]>
@@ -30,10 +31,14 @@
 	<script type="text/javascript" src="resources/misc/mathjaxconfig.js"></script>
 
 	<!-- using the CDN version -->
-	<script type="text/javascript" src="https://extjs.cachefly.net/ext-4.1.1-gpl/ext-all.js"
+	<script type="text/javascript" src="/ext-4.1.1-gpl/ext-debug.js"
 			id="ext-js-library"></script>
 
+	<!-- jQuery library, for use with mathquill only -->
+	<script type="text/javascript" src="resources/lib/jQuery-1.8.0min.js"></script>
+
 	<script type="text/javascript">
+		jQuery.noConflict();
 		Ext.Loader.setConfig('enabled',true);
 	</script>
 
