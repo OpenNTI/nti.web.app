@@ -196,6 +196,11 @@ div.redaction-control {
         }
     }
 
+
+    .math .application-highlight.plain {
+        display: inline-block;
+    }
+
     .application-highlight {
 		&.suppressed {
 			//do nothing special when range is suppressed.
