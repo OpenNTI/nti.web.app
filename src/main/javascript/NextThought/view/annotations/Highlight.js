@@ -284,13 +284,13 @@ Ext.define('NextThought.view.annotations.Highlight', {
 	createCounter: function(after){
 		var containingSpan = Ext.get(this.createNonAnchorableSpan()),
 			el = Ext.get(this.createNonAnchorableSpan()),
-			style = this.record.get('style') || 'plain',
-			textToWrap = Anchors.lastWordFromString(after.textContent);
+			afterWords = after.textContent.split(' '),
+			style = this.record.get('style') || 'plain';
 
 		this.rendered.push(containingSpan.dom);
 
-		containingSpan.update(textToWrap);
-		Ext.fly(after).update(after.textContent.replace(textToWrap, ''));
+		containingSpan.update(afterWords.pop());
+		Ext.fly(after).update(afterWords.join(' ') + ' ');
 		containingSpan.addCls('counter-container');
 		el.appendTo(containingSpan);
 		containingSpan.appendTo(after);
