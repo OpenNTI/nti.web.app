@@ -1,6 +1,16 @@
+Ext.Loader.setPath('jQuery.fn.mathquill', 'resources/lib/mathquill/mathquill.min.js');
+
+
 Ext.define('NextThought.view.assessment.input.SymbolicMath',{
 	extend: 'NextThought.view.assessment.input.FreeResponse',
+
+	requires: [
+		'jQuery.fn.mathquill'
+	],
+
 	alias: 'widget.question-input-symbolicmathpart',
+
+	spanTpl: Ext.DomHelper.createTemplate({tag: 'span'}).compile(),
 
 	toolbarTpl: Ext.DomHelper.markup([
 		{ cls: 'mathsymbol sqrt', 'data-latex': '\\\\surd' },
@@ -18,11 +28,20 @@ Ext.define('NextThought.view.assessment.input.SymbolicMath',{
 			scope: this,
 			click: this.mathSymbolClicked
 		});
+
+		var s = this.mathquillSpan = this.spanTpl.insertAfter(this.inputField);
+		jQuery(s).mathquill('editable');
+		this.inputField.hide();
 	},
 
 
 	mathSymbolClicked: function(e){
 		var t = e.getTarget();
-		this.inputField.dom.value += t.getAttribute('data-latex');
+		jQuery(this.mathquillSpan).mathquill('write', t.getAttribute('data-latex'));
+	},
+
+
+	getValue: function(){
+		return jQuery(this.mathquillSpan).mathquill('latex');
 	}
 });
