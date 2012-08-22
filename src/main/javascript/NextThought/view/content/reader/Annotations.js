@@ -13,6 +13,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 		'NextThought.view.annotations.Note',
 		'NextThought.view.annotations.Transcript',
 		'NextThought.view.annotations.QuizResults',
+		'NextThought.view.assessment.Scoreboard',
 		'NextThought.cache.IdCache',
 		'NextThought.providers.Contributors'
 	],
@@ -414,7 +415,9 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 		if (foundBins) {
 			this.buildAnnotationTree(bins.Note, tree);
 			this.buildAnnotationTree(bins.TranscriptSummary, tree);
-			this.buildAnnotationTree(bins.QuizResult, tree);
+
+			//Handle prior assessments
+			this.setAssessedQuestions(bins.AssessedQuestionSet);
 
 			this.prunePlaceholders(tree);
 			items = Ext.Object.getValues(tree).concat(bins.Highlight||[]).concat(bins.Redaction||[]);
@@ -435,6 +438,23 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 		}
 		Ext.each(c, function(i){ if(i && Ext.String.trim(i) !== '') { cont.push(i); } });
 		return cont;
+	},
+
+
+	setAssessedQuestions: function(sets) {
+		if (!sets || sets.length === 0) {
+			//do nothing if we have no prior sets
+			return;
+		}
+
+		var scoreboard = Ext.ComponentQuery.query('assessment-scoreboard')[0];
+
+		if (!scoreboard){
+			console.error('Got prior assessments back but there is no scoreboard to associate with', sets);
+			return;
+		}
+
+		scoreboard.setPriorResults(sets);
 	},
 
 

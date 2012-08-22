@@ -44,14 +44,12 @@ Ext.define('NextThought.view.assessment.Panel',{
 
 	hide: function(){
 		Ext.fly(this.contentElement).setStyle({display:'none'});
-		console.log('test hide');
 		this.callParent(arguments);
 	},
 
 
 	show: function(){
 		Ext.fly(this.contentElement).setStyle({display:'block'});
-		console.log('test show');
 		this.callParent(arguments);
 	},
 

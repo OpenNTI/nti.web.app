@@ -15,10 +15,6 @@ Ext.define('NextThought.view.assessment.Scoreboard',{
 		align: 'middle'
 	},
 
-	dockedItems: [
-		{ dock: 'top', xtype: 'assessment-scoreboard-header'}
-	],
-
 	items: [
 		{ xtype:'assessment-score' },
 		{ xtype: 'assessment-tally', flex: 1 },
@@ -33,6 +29,8 @@ Ext.define('NextThought.view.assessment.Scoreboard',{
 
 	initComponent: function(){
 		this.callParent(arguments);
+		this.addDocked({ dock: 'top', xtype: 'assessment-scoreboard-header', questionSet: this.questionSet});
+
 		this.hide();//we have to pre-render then hide. We hide until after grading, or preset the previously taken quiz.
 
 		this.mon(this.questionSet,{
@@ -66,6 +64,19 @@ Ext.define('NextThought.view.assessment.Scoreboard',{
 	},
 
 
+	setPriorResults: function(assessedQuestionSet) {
+		//Sort by date, so that the latest is as 0, and the oldest is at N:
+		var sortedSets = Ext.Array.sort(assessedQuestionSet, function(a, b){
+			var aDate = a.get('Last Modified').getTime(),
+				bDate = b.get('Last Modified').getTime();
+			if (aDate < bDate){return 1;}
+		    if (aDate > bDate){return -1;}
+		    return 0;
+		});
+
+		//Ask header to add menu items for each:
+		this.down('assessment-scoreboard-header').setPriorResults(sortedSets);
+	},
 
 	afterRender: function(){
 		this.callParent(arguments);
