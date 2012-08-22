@@ -53,7 +53,7 @@ Ext.define('NextThought.view.whiteboard.Window',{
 					layout: { type: 'hbox', pack: 'end' },
 					defaults: {xtype: 'button', ui: 'primary', scale: 'medium'},
 					items: [
-						{text: 'Cancel', ui: 'secondary', handler: function(b){b.up('window').cancel(b);} },
+						{text: 'Cancel', action: 'cancel', ui: 'secondary', handler: function(b){b.up('window').cancel(b);} },
 						{text: 'Save', action: 'save', handler: function(b){b.up('window').save(b);} }
 					]
 				}
@@ -68,10 +68,19 @@ Ext.define('NextThought.view.whiteboard.Window',{
 		//see parent class as to why there is an extra level of items...
 		Ext.copyTo(this.items[1].items[0],config,'value');
 
-		return this.callParent(arguments);
+		var r = this.callParent(arguments);
+
+		//in readonly mode, remove buttons that do stuff, except for cancel, call it close:
+		if(config.readonly){
+			this.down('button[action=save]').destroy();
+			this.down('[action=undo]').destroy();
+			this.down('[action=redo]').destroy();
+			this.down('[action=new-page]').destroy();
+			this.down('button[action=cancel]').setText('Close');
+		}
+
+		return r;
 	},
-
-
 
 
 	save: function (btn) {

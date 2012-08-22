@@ -110,7 +110,10 @@ Ext.define('NextThought.view.chat.log.Entry', {
 			if(!target.is('img')){
 				target = target.parent().first('img');
 			}
-			NextThought.view.whiteboard.Utils.display(target.getAttribute('src'));
+
+			//open readonly wb editor for now...
+			var w = Ext.widget({ xtype: 'wb-window', height: '75%', width: '50%', value:this.message.get('body')[0], readonly: true});
+			w.show();
 		}
 	},
 

@@ -30,6 +30,11 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 	afterRender: function(){
 		this.callParent(arguments);
 
+		var parentWin = this.up('window');
+		if (parentWin && parentWin.readonly) {
+			this.toolbar.disable();
+		}
+
 		this.initMixin(this.toolbar, this.canvas);
 	},
 

@@ -60,34 +60,6 @@ Ext.define('NextThought.view.whiteboard.Utils',{
 		var dx = x2 - x1,
 			dy = y2 - y1;
 		return Math.sqrt(dx*dx + dy*dy);
-	},
-
-
-	display: function(src){
-		//TODO - update this old crap
-		var w = Ext.Element.getViewportWidth(),
-			h = Ext.Element.getViewportHeight(),
-			win = Ext.widget('window',{
-			constrain: true,
-			closeAction: 'destroy',
-			hideMode: 'display',
-			width: w*0.8,
-			height: h*0.8,
-			layout: 'fit',
-			maximizable: true,
-			title: 'Whiteboard Viewer',
-			items: {
-				layout: 'anchor',
-				autoScroll: true,
-				items:{
-					anchor: '100%',
-					xtype: 'image',
-					src: src
-				}
-			}
-		});
-
-		win.show();
 	}
 
 },function(){
