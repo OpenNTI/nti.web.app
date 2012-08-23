@@ -42,23 +42,22 @@ Ext.define('NextThought.util.Line',{
 		y -= 35; //Correction
 		var curNode = doc.documentElement, range, rect;
 		//First text node ending past y
-		var loops = 0; //stopgap measure to kill infinite loops
-		while (curNode && curNode.nodeType === curNode.ELEMENT_NODE && loops < 3) {
-			var i;
-			for (i = 0; i < curNode.childNodes.length && curNode.nodeType === curNode.ELEMENT_NODE; i++) {
-				range = doc.createRange();
-				range.selectNode(curNode.childNodes[i]);
-				rect = range.getBoundingClientRect();
-				if (rect.bottom > y && curNode.innerText.length > 10) {
-					curNode = curNode.childNodes[i];
-					i = 0;
-					loops = 0;
-				}
+		var i, cn;
+		for (i = 0; curNode.nodeType === curNode.ELEMENT_NODE && i < curNode.childNodes.length; i++) {
+			cn = curNode.childNodes;
+			range = doc.createRange();
+			range.selectNode(cn[i]);
+			rect = range.getBoundingClientRect();
+			if (rect.bottom > y && (cn[i].data || cn[i].innerText || '').length > 1) {
+				curNode = cn[i];
+				i = 0;
 			}
-			loops++;
-			if (!curNode) { return null; }
 		}
-		if (!curNode) { return null; }
+		if (!curNode) { console.log('rangeByRecursiveSearch failed'); return null; }
+		//If a non-text node ends past y but none of the textnodes contained inside of it do, go for the last
+		while (curNode.childNodes.length > 0) {
+			curNode = curNode.childNodes[curNode.childNodes.length - 1];
+		}
 		range = doc.createRange();
 		var left = 0, right = curNode.data.length, center;
 		// First single character ending past y
