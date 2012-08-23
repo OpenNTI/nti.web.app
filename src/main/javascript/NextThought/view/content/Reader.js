@@ -132,7 +132,7 @@ Ext.define('NextThought.view.content.Reader', {
 
 		function jsonp(script){
 			f({
-				responseText: me.self.getContent(script),
+				responseText: me.self.getContent(LocationProvider.currentNTIID),
 				request: {
 					options: {
 						url: pageInfo.getLink('content')
@@ -142,7 +142,8 @@ Ext.define('NextThought.view.content.Reader', {
 			Ext.fly(script).remove();
 		}
 
-		function onError(){
+		function onError(script){
+			Ext.fly(script).remove();
 			console.error('PROBLEMS!', pageInfo);
 		}
 
@@ -155,7 +156,7 @@ Ext.define('NextThought.view.content.Reader', {
 		}
 		else {
 			if ($AppConfig.server.jsonp){
-				var url = pageInfo.getLink('content') + '.jsonp';
+				var url = pageInfo.getLink('jsonp_content');
 				Globals.loadScript(url, jsonp, onError, this);
 				return;
 			}
@@ -187,11 +188,11 @@ Ext.define('NextThought.view.content.Reader', {
 			var decodedContent;
 			//expects: {content:?, contentEncoding:?, NTIID:?, version: ?}
 			//1) decode content
-			if(/Base64/.test(content.contentEncoding)){
-				decodedContent = btoa(content.content);
+			if(/base64/i.test(content['Content-Encoding'])){
+				decodedContent = atob(content.content);
 			}
 			else {
-				Ext.Error.raise('not handing content encoding ' + content.contentEncoding);
+				Ext.Error.raise('not handing content encoding ' + content['Content-Encoding']);
 			}
 
 			//2) put in bucket
@@ -201,7 +202,7 @@ Ext.define('NextThought.view.content.Reader', {
 	}
 }, function(){
 	window.ReaderPanel = this;
-	window.foo = Ext.bind(this, this.receiveContent);
+	window.jsonpContent = Ext.bind(this.receiveContent, this);
 
 	ContentAPIRegistry.register('NTIHintNavigation',LocationProvider.setLocation,LocationProvider);
 	ContentAPIRegistry.register('togglehint',function(e) {
@@ -212,4 +213,3 @@ Ext.define('NextThought.view.content.Reader', {
 
 
 });
-

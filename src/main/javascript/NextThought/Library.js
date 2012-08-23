@@ -5,6 +5,7 @@ Ext.define('NextThought.Library', {
 		'NextThought.model.Title'
 	],
 
+	bufferedToc: {},
 	
 	constructor: function(config) {
 		this.tocs = {};
@@ -67,6 +68,7 @@ Ext.define('NextThought.Library', {
 			index = index.getId();
 		}
 		if(index && !this.tocs[index]){
+			console.error('we should never be here...');
 			this.loadToc(index);
 		}
 
@@ -112,7 +114,7 @@ Ext.define('NextThought.Library', {
 		//Iteration 2 loads TOC async, so once the last one loads, callback if available
 		this.each(function(o){
 			if(!o.get||!o.get('index')){ return; }
-			me.loadToc(o.get('index'), function(toc){
+			me.loadToc(o.get('index'), o.get('NTIID'), function(toc){
 				var d;
 				stack.pop();
 
@@ -136,44 +138,64 @@ Ext.define('NextThought.Library', {
 	},
 	
 	
-	loadToc: function(index, callback){
+	loadToc: function(index, ntiid, callback){
+		var me = this, url;
 		if(!this.loaded && !callback){
 			Ext.Error.raise('The library has not loaded yet, should not be making a synchronous call');
 		}
+
+		function fn(q,s,r){
+			if(!s){
+				console.error('There was an error loading part of the library: '+url, arguments);
+				//make sure its falsy
+				delete this.tocs[index];
+			}
+			else {
+				this.tocs[index] = this.parseXML(r.responseText);
+			}
+
+			if(!this.tocs[index]){
+				console.warn('no data for index: '+url);
+			}
+			else {
+				Ext.each(Ext.DomQuery.select('topic:not([ntiid])', this.tocs[index]), function(e){
+					if (e.parentNode) {
+						e.parentNode.removeChild(e);
+					}
+					else {
+						console.error('no parent node?', e);
+					}
+				});
+			}
+
+			if( callback ){
+				callback(this.tocs[index]);
+			}
+		}
+
+
+		function jsonp(script){
+			fn.call(me,{},true,{ responseText: me.getContent(ntiid) });
+			Ext.fly(script).remove();
+		}
+
+		function jsonpError(script){
+			fn.call(me,{},false,{});
+			Ext.fly(script).remove();
+		}
+
 		try{
-			var url = getURL(index);
+			url = getURL(index);
+			if($AppConfig.server.jsonp){
+				url += '.jsonp';
+				Globals.loadScript(url, jsonp, jsonpError, this);
+				return;
+			}
 			Ext.Ajax.request({
 				url: url,
 				async: !!callback,
 				scope: this,
-				callback: function(q,s,r){
-					if(!s){
-						console.error('There was an error loading part of the library: '+url, arguments);
-						//make sure its falsy
-						delete this.tocs[index];
-					}
-					else {
-						this.tocs[index] = this.parseXML(r.responseText);
-					}
-
-					if(!this.tocs[index]){
-						console.warn('no data for index: '+url);
-					}
-					else {
-						Ext.each(Ext.DomQuery.select('topic:not([ntiid])', this.tocs[index]), function(e){
-							if (e.parentNode) {
-								e.parentNode.removeChild(e);
-							}
-							else {
-								console.error('no parent node?', e);
-							}
-						});
-					}
-
-					if( callback ){
-						callback(this.tocs[index]);
-					}
-				}
+				callback: fn
 			});
 		}
 		catch(e){
@@ -246,10 +268,35 @@ Ext.define('NextThought.Library', {
 			}
 		}
 		return null;
+	},
+
+
+	getContent: function(ntiid){
+		console.log('TOC getContent called...(should be after receiveContent)');
+		return this.bufferedToc[ntiid];
+	},
+
+
+	receiveContent: function(content){
+		console.log('TOC receiveContent called...');
+		var decodedContent;
+		//expects: {content:?, contentEncoding:?, NTIID:?, version: ?}
+		//1) decode content
+		if(/base64/i.test(content['Content-Encoding'])){
+			decodedContent = atob(content.content);
+		}
+		else {
+			Ext.Error.raise('not handing content encoding ' + content['Content-Encoding']);
+		}
+
+		//2) put in bucket
+		this.bufferedToc[content.ntiid] = decodedContent;
 	}
 
-},
-function(){
-	window.Library = this;
-}
+	},
+	function(){
+		window.Library = this;
+		window.jsonpToc = Ext.bind(this.receiveContent, this);
+		console.log(jsonpToc);
+	}
 );
