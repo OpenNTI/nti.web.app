@@ -353,7 +353,8 @@ Ext.define('NextThought.util.Globals', {
 	getURL: function(u) {
 		if (!u){u = '';}
 		if(!Globals.HOST_PREFIX_PATTERN.test(u) && u.indexOf('//') !== 0){
-			return $AppConfig.server.host + u;
+			//return $AppConfig.server.host + u;
+			return '//' + document.domain + u;
 		}
 		return u;
 	}
