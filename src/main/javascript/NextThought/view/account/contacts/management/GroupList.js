@@ -48,7 +48,8 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
 				ul.addCls('disallowSelection');
 			}
 
-			Ext.fly(this.getNode(0)).setStyle({display:'none'});
+			try { Ext.fly(this.getNode(0)).setStyle({display:'none'}); } 
+			catch(er){ console.log('Setting display of group list to none failed for some reason'); }
 
 			Ext.each( el.query('img.delete-group'),
 				function(dom){Ext.fly(dom).on('click',this.deleteGroup, this);},
