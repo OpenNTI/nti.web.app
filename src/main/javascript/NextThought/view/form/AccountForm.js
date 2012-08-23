@@ -81,11 +81,19 @@ Ext.define('NextThought.view.form.AccountForm', {
 							items:[
 								{
 									xtype: 'textfield',
+									name: 'old_password',
+									fieldLabel: 'Current Password',
+									inputType: 'password',
+									allowBlank: false,
+									margin: '5px 5px 5px 0px',
+									minLength: 1
+								},{
+									xtype: 'textfield',
 									name: 'password',
 									fieldLabel: 'New Password',
 									inputType: 'password',
 									allowBlank: false,
-									margin: '5px 5px 5px 0px',
+									margin: '5px 0px 5px 0px',
 									minLength: 1
 								}, {
 									xtype: 'textfield',

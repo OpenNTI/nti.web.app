@@ -72,6 +72,7 @@ Ext.define('NextThought.controller.Account', {
 
 		if(values.password){
 			fire = true;
+			u.fields.add(new Ext.data.Field({name: 'old_password', type:'string'}));
 			u.fields.add(new Ext.data.Field({name: 'password', type:'string'}));
 		}
 		for(key in values){
