@@ -99,7 +99,7 @@ Ext.define('NextThought.Library', {
 	
 	
 	libraryLoaded: function(callback){
-		var me = this, stack = [], store = this.getStore();
+		var me = this, stack = [], store = this.getStore(), url;
 		//The reason for iteration 1 is to load the stack with the number of TOCs I'm going to load
 		this.each(function(o){
 			if(!o.get||!o.get('index')){ return; }
@@ -113,13 +113,14 @@ Ext.define('NextThought.Library', {
 
 		//Iteration 2 loads TOC async, so once the last one loads, callback if available
 		this.each(function(o){
-			if(!o.get||!o.get('index')){ return; }
-			me.loadToc(o.get('index'), o.get('NTIID'), function(toc){
+			if(!o.get||!o.get('index')||($AppConfig.server.jsonp&&!o.get('index_jsonp'))){ return; }
+			url = $AppConfig.server.jsonp ? o.get('index_jsonp') : o.get('index');
+			me.loadToc(o.get('index'), url, o.get('NTIID'), function(toc){
 				var d;
 				stack.pop();
 
 				if(!toc){
-					console.log('Could not load "'+o.get('index')+'"... removing form library view');
+					console.log('Could not load "'+ o.get('index')+'"... removing form library view');
 					store.remove(o);
 				}
 				else {
@@ -138,7 +139,7 @@ Ext.define('NextThought.Library', {
 	},
 	
 	
-	loadToc: function(index, ntiid, callback){
+	loadToc: function(index, url, ntiid, callback){
 		var me = this, url;
 		if(!this.loaded && !callback){
 			Ext.Error.raise('The library has not loaded yet, should not be making a synchronous call');
@@ -185,9 +186,8 @@ Ext.define('NextThought.Library', {
 		}
 
 		try{
-			url = getURL(index);
+			url = getURL(url);
 			if($AppConfig.server.jsonp){
-				url += '.jsonp';
 				Globals.loadScript(url, jsonp, jsonpError, this);
 				return;
 			}

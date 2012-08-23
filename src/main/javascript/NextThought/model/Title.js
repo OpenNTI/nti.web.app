@@ -8,6 +8,7 @@ Ext.define('NextThought.model.Title', {
 		{ name: 'archive', type: 'string' },
 		{ name: 'icon', type: 'string' },
 		{ name: 'index', type: 'string' },
+		{ name: 'index_jsonp', type: 'string' },
 		{ name: 'installable', type: 'bool' },
 		{ name: 'root', type: 'string' },
 		{ name: 'title', type: 'string' },
