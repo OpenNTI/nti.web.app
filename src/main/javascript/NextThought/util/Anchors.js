@@ -503,7 +503,6 @@ Ext.define('NextThought.util.Anchors', {
 				adjustedOffset = node.textContent.length - adjustedOffset;
 			}
 			var p = multiIndexOf(nodeContent,context.contextText);
-			//try {console.log(node.parentNode.childNodes[5]) } catch (er) { }
 			for (i = 0; i < p.length; i++) {
 				//Penalzies score based on disparity between expected
 				//and real offset. For longer paragraphs, which we
@@ -911,14 +910,18 @@ Ext.define('NextThought.util.Anchors', {
 			//remove non-anchorable node
 			parentContainer.removeChild(nodeToInsertBefore);
 		});
-		//For some reason, without this text nodes get arbitrarily split up sometimes,
-		//preventing highlights from being made around notes at the beginning of a
-		//paragraph, and with it everything works fine
-		var touchEveryNode = function(node) {
-			var i;
-			for (i = 0; i < node.childNodes.length; i++) { touchEveryNode(node.childNodes[i]); }
+		function fallbackNormalize(node) {
+			var i = 0, nc = node.childNodes;
+			while (i < nc.length) {
+				while (nc[i].nodeType === node.TEXT_NODE && i+1 < nc.length && nc[i+1].nodeType === node.TEXT_NODE) {
+					nc[i].data += nc[i+1].data;	
+					node.removeChild(nc[i+1]);
+				}
+				fallbackNormalize(nc[i]);
+				i += 1;
+			}
 		};
-		if (Ext.isIE9) { touchEveryNode(docFrag); }
+		if (Ext.isIE9) { fallbackNormalize(docFrag); }
 		docFrag.normalize();
 		return docFrag;
 	},
