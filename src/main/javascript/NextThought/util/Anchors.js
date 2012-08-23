@@ -502,11 +502,6 @@ Ext.define('NextThought.util.Anchors', {
 			if(isStart){
 				adjustedOffset = node.textContent.length - adjustedOffset;
 			}
-			// IE9 sometimes splits text nodes arbitrarily, but we can at least force the split
-			// to be along the whole word boundary
-			if (Ext.isIE && node.nextSibling && node.nextSibling.nodeType === node.TEXT_NODE) {
-				nodeContent += node.nextSibling.textContent.substring(0,(node.nextSibling.textContent+' ').indexOf(' ')+1);
-			}
 			var p = multiIndexOf(nodeContent,context.contextText);
 			//try {console.log(node.parentNode.childNodes[5]) } catch (er) { }
 			for (i = 0; i < p.length; i++) {
@@ -859,9 +854,6 @@ Ext.define('NextThought.util.Anchors', {
 		range.setStart(origStartNode, origStartOff);
 		range.setEnd(origEndNode, origEndOff);
 
-		//Somehow, this makes IE9 highlighting under certain conditions work correctly...
-		try { discard = docFrag.childNodes[0].childNodes[0].innerHTML + ' | ' + docFrag.childNodes[0].childNodes[1].innerHTML; } catch(e){}
-
 		//clean the node of undesirable things:
 		Anchors.purifyNode(docFrag);
 
@@ -893,12 +885,10 @@ Ext.define('NextThought.util.Anchors', {
 		return resultRange;
 	},
 
-
 	purifyNode: function(docFrag) {
 		if (!docFrag){Ext.Error.raise('must pass a node to purify.');}
 
-		var parentContainer,
-			nodeToInsertBefore;
+		var parentContainer, nodeToInsertBefore;
 
 		//remove any action or counter spans and their children:
 		(new Ext.CompositeElement(Ext.fly(docFrag).query('span.application-highlight.counter'))).remove();
@@ -921,6 +911,14 @@ Ext.define('NextThought.util.Anchors', {
 			//remove non-anchorable node
 			parentContainer.removeChild(nodeToInsertBefore);
 		});
+		//For some reason, without this text nodes get arbitrarily split up sometimes,
+		//preventing highlights from being made around notes at the beginning of a
+		//paragraph, and with it everything works fine
+		var touchEveryNode = function(node) {
+			var i;
+			for (i = 0; i < node.childNodes.length; i++) { touchEveryNode(node.childNodes[i]); }
+		};
+		if (Ext.isIE9) { touchEveryNode(docFrag); }
 		docFrag.normalize();
 		return docFrag;
 	},
