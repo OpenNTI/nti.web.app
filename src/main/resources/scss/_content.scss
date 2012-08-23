@@ -330,3 +330,19 @@ div.no-content-splash {
 	z-index: 99;
 	background-color: white;
 }
+
+.searchHit-overlay {
+  	position: absolute;
+  	right: 0;
+  	top: 0;
+  	bottom: 0;
+  	width: 780px;
+
+  	.searchHit-entry {
+		position: absolute;
+		background-color: #FCFF13;
+		z-index: 999;
+		box-shadow: 0 0 0 4px #FCFF13,1px 1px 2px 4px rgba(0, 0, 0, 0.2);
+		opacity: 0.5;
+  	}
+}
