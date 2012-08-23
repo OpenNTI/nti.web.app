@@ -59,9 +59,12 @@ Ext.define('NextThought.controller.Account', {
 			key;
 
 		function callback(record, op){
-			win.close();
 			if(!op.success){
 				console.error('FAILURE:',arguments);
+				win.el.down('[name=pw_error]').setStyle('display','inline');
+			}
+			else {
+				win.close();
 			}
 			u.fireEvent('changed', record);
 		}

@@ -110,6 +110,11 @@ Ext.define('NextThought.view.form.AccountForm', {
 							]
 						},
 						{
+							xtype: 'box',
+							changePassword: true,
+							autoEl: {tag: 'span', name: 'pw_error', html: 'Error', style: 'color: red; display: none;'}
+						},
+						{
 							border: false,
 							margin: '10px 0px',
 							defaults: {
