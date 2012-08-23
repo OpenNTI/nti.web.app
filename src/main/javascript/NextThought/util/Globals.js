@@ -76,10 +76,11 @@ Ext.define('NextThought.util.Globals', {
 			return false;
 		}
 
-
-		if($AppConfig.server.host && $AppConfig.server.host.length > 0 && !HOST_PATTERN.test($AppConfig.server.host)){
-			alert('Bad Server Config, your host does not validate the pattern:'+HOST_PATTERN);
-			return false;
+		if(!HOST_PATTERN.test($AppConfig.server.host)){
+			if ($AppConfig.server.host) {
+				console.warn('Bad host config',$AppConfig.server.host,'using domain', document.domain);
+			}
+			$AppConfig.server.host = '//'+document.domain;
 		}
 
 		if(!/^\/.+\/$/.test($AppConfig.server.data)){
@@ -353,9 +354,6 @@ Ext.define('NextThought.util.Globals', {
 	getURL: function(u) {
 		if (!u){u = '';}
 		if(!Globals.HOST_PREFIX_PATTERN.test(u) && u.indexOf('//') !== 0){
-			if(!$AppConfig.server.host){
-				return '//' + document.domain + u;
-			}
 			return $AppConfig.server.host + u;
 		}
 		return u;
