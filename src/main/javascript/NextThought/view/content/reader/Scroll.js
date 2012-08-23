@@ -112,6 +112,10 @@ Ext.define('NextThought.view.content.reader.Scroll',{
 
 		text = text.toLowerCase();
 
+		//FIXME: Right now we're ignoring matching single or double quotes,
+		// since the backend isn't checking respecting them either. It will need to change very soon.
+		text  = text.replace(/^["'\s]+|["'\s]+$/ig,'');
+
 		var me = this,
 			doc = me.getDocumentElement(),
 			ranges = [],

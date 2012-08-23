@@ -45,8 +45,8 @@ Ext.define('NextThought.view.menus.search.Result',{
 	},
 
 	beforeRender: function() {
-		var re = new RegExp([ '([^\\W]*', RegExp.escape(this.term), '[^\\W]*)' ].join(''), 'ig');
-
+		var searchTerm = this.term.replace(/^["'\s]+|["'\s]+$/ig,'');
+			re = new RegExp([ '([^\\W]*', RegExp.escape(searchTerm), '[^\\W]*)' ].join(''), 'ig');
 
 		this.renderData.snippet = this.snippet.replace(re, '<span>$1</span>');
 		return this.callParent(arguments);
