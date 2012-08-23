@@ -77,7 +77,7 @@ Ext.define('NextThought.util.Globals', {
 		}
 
 
-		if(!HOST_PATTERN.test($AppConfig.server.host)){
+		if($AppConfig.server.host && $AppConfig.server.host.length > 0 && !HOST_PATTERN.test($AppConfig.server.host)){
 			alert('Bad Server Config, your host does not validate the pattern:'+HOST_PATTERN);
 			return false;
 		}
@@ -86,7 +86,7 @@ Ext.define('NextThought.util.Globals', {
 			alert('Bad Server Config, your data path does not validate the pattern: /.+/');
 			return false;
 		}
-
+/*
 		var hostInfo = HOST_PATTERN.exec($AppConfig.server.host);
 
 		Ext.apply($AppConfig.server,{
@@ -94,7 +94,7 @@ Ext.define('NextThought.util.Globals', {
 			domain: hostInfo[HOST_PATTERN_DOMAIN_MATCH_GROUP],
 			port: parseInt(hostInfo[HOST_PATTERN_PORT_MATCH_GROUP],10)
 		});
-
+*/
 		return true;
 	},
 
@@ -353,8 +353,10 @@ Ext.define('NextThought.util.Globals', {
 	getURL: function(u) {
 		if (!u){u = '';}
 		if(!Globals.HOST_PREFIX_PATTERN.test(u) && u.indexOf('//') !== 0){
-			//return $AppConfig.server.host + u;
-			return '//' + document.domain + u;
+			if(!$AppConfig.server.host){
+				return '//' + document.domain + u;
+			}
+			return $AppConfig.server.host + u;
 		}
 		return u;
 	}
