@@ -11,11 +11,11 @@ Ext.define('NextThought.view.content.PageWidgets',{
 
 	renderTpl: Ext.DomHelper.markup([
 		{
-			cls: 'meta',
-			cn: [{
-				cls: 'controls',
-				cn: [{ cls: 'favorite' },{ cls: 'like' }]
-			}]
+			cls: 'meta'//,
+//			cn: [{
+//				cls: 'controls',
+//				cn: [{ cls: 'favorite' },{ cls: 'like' }]
+//			}]
 		},'{%this.renderContainer(out,values)%}'
 	]),
 
@@ -29,17 +29,17 @@ Ext.define('NextThought.view.content.PageWidgets',{
 	initComponent: function(){
 		this.callParent(arguments);
 
-		LocationProvider.on('navigateComplete',this.updateMeta, this);
+		//LocationProvider.on('navigateComplete',this.updateMeta, this);
 	},
 
 
 	afterRender: function(){
 		var me = this;
 		this.callParent(arguments);
-		this.updateMeta(this.pageInfo);
+		//this.updateMeta(this.pageInfo);
 
-		this.mon( this.like, 'click', function(){ if(me.pageInfo){me.pageInfo.like(me.like);}},this);
-		this.mon( this.favorite, 'click', function(){ if(me.pageInfo){me.pageInfo.favorite(me.favorite);}},this);
+		//this.mon( this.like, 'click', function(){ if(me.pageInfo){me.pageInfo.like(me.like);}},this);
+		//this.mon( this.favorite, 'click', function(){ if(me.pageInfo){me.pageInfo.favorite(me.favorite);}},this);
 	},
 
 

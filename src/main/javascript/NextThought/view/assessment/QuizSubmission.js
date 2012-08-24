@@ -64,7 +64,6 @@ Ext.define('NextThought.view.assessment.QuizSubmission',{
 
 
 	updateStatus: function(question, part, status){
-		console.log('answered...', arguments);
 		this.answeredMap[question.getId()] = Boolean(status);
 		this.reflectStateChange();
 	},
