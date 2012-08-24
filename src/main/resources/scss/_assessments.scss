@@ -264,6 +264,13 @@
 							background: url(../images/quiz/sprite.png) -116px -16px no-repeat;
 						}
 
+					  	.mathquill-editable {
+							border: none;
+							min-height: 38px;
+							min-width: 100%;
+							padding: 13px 8px 5px 8px !important;
+						}
+
 						&.correct, &.incorrect{
 							&, input.answer-field {
 								color: #f35252;

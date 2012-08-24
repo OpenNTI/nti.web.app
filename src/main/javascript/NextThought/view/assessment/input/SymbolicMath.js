@@ -29,9 +29,33 @@ Ext.define('NextThought.view.assessment.input.SymbolicMath',{
 			click: this.mathSymbolClicked
 		});
 
-		var s = this.mathquillSpan = this.spanTpl.insertAfter(this.inputField);
-		jQuery(s).mathquill('editable');
+		var s = this.mathquillSpan = this.spanTpl.insertAfter(this.inputField),
+			me = this,
+			r = jQuery(s).mathquill('editable'),
+			timer;
+
+		//bind on kepress so we can adjust size:
+		r.bind('keypress.mathquill', function(){
+			clearTimeout(timer);
+			timer = setTimeout(function(){
+				me.adjustSize();
+			}, 100);
+
+		});
+
+		//console.log('mathquill returned:', r);
 		this.inputField.hide();
+	},
+
+
+	adjustSize: function(){
+		var currentHeight = this.inputBox.getHeight();
+
+		if (currentHeight !== this.lastHeight){
+			this.updateLayout();
+		}
+
+		this.lastHeight = currentHeight;
 	},
 
 
@@ -47,7 +71,12 @@ Ext.define('NextThought.view.assessment.input.SymbolicMath',{
 
 
 	setValue: function(latex){
-		console.log('does this clear it first???');
 		jQuery(this.mathquillSpan).mathquill('latex', latex);
+		this.adjustSize();
+	},
+
+	reset: function(){
+		this.callParent(arguments);
+		this.setValue('');
 	}
 });
