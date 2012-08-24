@@ -30,7 +30,7 @@ Ext.define('NextThought.view.account.MyAccount',{
 		me.renderData = Ext.apply(me.renderData||{},{
 			name: $AppConfig.userObject.getName(),
 			'notification-count': me.currentNotificationCount || '&nbsp;',
-			status: $AppConfig.userObject.get('status')||'Staring at a screen.'
+			status: $AppConfig.userObject.get('status')
 		});
 		me.menu = Ext.widget({xtype: 'my-account-menu', xhooks:{
 			hide: function(){ this.callParent(arguments); clearTimeout(t); me.getEl().removeCls(cls);},
