@@ -48,7 +48,7 @@ Ext.define('NextThought.view.assessment.input.FreeResponse',{
 		var i, x, next, nextTabIndex = String(parseInt(dom.getAttribute('tabIndex'),10)+1);
 		if(e.getKey()=== e.ENTER){
 
-			if(this.questionSet){
+			if(this.questionSet || this.question.get('parts').length > 1){
 				i = this.el.up('.assessment-overlay').query('.tabable');
 				x = i.length-1;
 				for(x; x>=0; x--){
