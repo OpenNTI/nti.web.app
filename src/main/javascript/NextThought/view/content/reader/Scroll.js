@@ -1,5 +1,6 @@
 Ext.define('NextThought.view.content.reader.Scroll',{
 
+	requires: ['NextThought.util.Search'],
 
 	constructor: function(){
 		this.on('afterrender',function(){
@@ -110,49 +111,31 @@ Ext.define('NextThought.view.content.reader.Scroll',{
 			return;
 		}
 
-		text = text.toLowerCase();
-
-		//FIXME: Right now we're ignoring matching single or double quotes,
-		// since the backend isn't checking respecting them either. It will need to change very soon.
-		text  = text.replace(/^["'\s]+|["'\s]+$/ig,'');
-
 		var me = this,
 			doc = me.getDocumentElement(),
 			ranges = [],
-			created = {},
 			texts,
-			textLength = text.length,
-			tokens = text.trim().split(' '), re, i, t = [], match;
-
-		//FIXME: remove match of less than 4 chars, (to match the dataserver). It could be done better.
-		for(i=0; i<tokens.length; i++){
-			if(tokens[i].length > 3){ t.push(tokens[i]); }
-		}
-
-		re = new RegExp([ '([^\\W]*', t.join('|'), '[^\\W]*)' ].join(''), 'ig');
+			re = SearchUtils.searchRe(text),
+			match;
 
 		texts = AnnotationUtils.getTextNodes(doc);
 
 		Ext.each(texts, function(node) {
-				var nv = node.nodeValue.toLowerCase(),
-					indexes = [],
-					r;
+			var nv = node.nodeValue,
+				indexes = [],
+				r;
 
-				while (match = re.exec(nv))
-					indexes.push( {'start':match.index, 'end': match.index+match[0].length } );
+			while (match = re.exec(nv))
+				indexes.push( {'start':match.index, 'end': match.index+match[0].length } );
 
-				Ext.each(indexes, function(index){
-					r = doc.createRange();
-					r.setStart(node, index.start);
-					r.setEnd(node, index.end);
-					if (!created[nv] || !created[nv][index.start]) {
-						created[nv] = created[nv] || {} ;
-						created[nv][index.start] = true;
-						ranges.push(r);
-					}
-				});
-			},
-			this);
+			Ext.each(indexes, function(index){
+				r = doc.createRange();
+				r.setStart(node, index.start);
+				r.setEnd(node, index.end);
+				ranges.push(r);
+			});
+		},
+		this);
 
 		me.showRanges(ranges);
 		if (ranges.length > 0) { me.scrollTo(ranges[0].getClientRects()[0].top - 150); }

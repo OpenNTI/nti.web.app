@@ -3,6 +3,8 @@ Ext.define('NextThought.view.menus.search.Result',{
 	alias: 'widget.search-result',
 	cls: 'search-result',
 
+	requires: ['NextThought.util.Search'],
+
 	renderTpl: Ext.DomHelper.markup([
 		{cls:'title',html:'{title}',cn:[
 			{tag:'tpl', 'if':'chapter',cn:[' / ',{cls:'chapter', html:'{chapter}'}]},
@@ -45,15 +47,7 @@ Ext.define('NextThought.view.menus.search.Result',{
 	},
 
 	beforeRender: function() {
-		var searchTerm = this.term.replace(/^["'\s]+|["'\s]+$/ig,''),
-			tokens = searchTerm.trim().split(' '), re, i, t = [];
-
-		//FIXME: remove match of less than 4 chars, (to match the dataserver). It could be done better.
-		for(i= 0; i<tokens.length; i++){
-			if(tokens[i].length > 3){ t.push(tokens[i]); }
-		}
-
-		re = new RegExp([ '([^\\W]*', t.join('|'), '[^\\W]*)' ].join(''), 'ig');
+		var re = SearchUtils.searchRe(this.term);
 		this.renderData.snippet = this.snippet.replace(re,  '<span>$1</span>');
 
 		return this.callParent(arguments);
