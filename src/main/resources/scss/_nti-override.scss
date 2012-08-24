@@ -131,6 +131,7 @@
 			display: block;
 			font-size: 31px;
 			font-weight: 200;
+			margin-top: 0.5em;	
 			border: none;
 			span.ref{
 				display: block;
@@ -168,7 +169,6 @@
 		.subsubparagraph {
 			&.title {
 				font-weight: bold;
-				padding-left: 85px;
 			}
 		}
 		.subsubsection.title {font-size: 16px;}
@@ -177,5 +177,9 @@
 		.subsubparagraph.title {
 			font-size: 14px;
 		}
+		.bibitem > p.par {
+			 display: inline;
+		}
+		.placeholder {display: none;}
 	}
 }
