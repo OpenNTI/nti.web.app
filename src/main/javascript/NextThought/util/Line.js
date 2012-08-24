@@ -54,9 +54,10 @@ Ext.define('NextThought.util.Line',{
 				i = -1;
 			}
 			//If recursive search takes us to a bad node, depth-first search forward from there
-			while (curNode.nodeType != curNode.TEXT_NODE && (i+1) >= curNode.childNodes.length && curNode.parentNode) {
-				i = 0, sibling = curNode;
-				while ( (sibling = sibling.previousSibling) != null ) { i += 1; }
+			while (curNode.nodeType !== curNode.TEXT_NODE && (i+1) >= curNode.childNodes.length && curNode.parentNode) {
+				i = 0;
+				sibling = curNode;
+				while ( (sibling = sibling.previousSibling) !== null ) { i += 1; }
 				curNode = curNode.parentNode;
 			}
 		}

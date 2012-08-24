@@ -38,14 +38,13 @@ Ext.define('NextThought.controller.State', {
 		window.onhashchange = function() {
 			var hash = window.location.hash.substring(1);
 			if (hash && window.lastTimeLocationSet && new Date().getTime() - window.lastTimeLocationSet > 1000) {
-				function fin(){
+				LocationProvider.setLocation(hash,function() {
 					var token = {};
 					app.registerInitializeTask(token);
 					return function(){ app.finishInitializeTask(token); };
-				}
-				LocationProvider.setLocation(hash,fin(),true);
+				}(),true);
 			}
-		}
+		};
 		var me = this,
 			history = window.history,
 			push = history.pushState || function(){};
