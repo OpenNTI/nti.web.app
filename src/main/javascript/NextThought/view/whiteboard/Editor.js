@@ -34,8 +34,9 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 		if (parentWin && parentWin.readonly) {
 			this.toolbar.disable();
 		}
-
-		this.initMixin(this.toolbar, this.canvas);
+		else{
+			this.initMixin(this.toolbar, this.canvas);
+		}
 	},
 
 	reset: function(){
