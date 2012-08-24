@@ -36,47 +36,32 @@ Ext.define('NextThought.controller.Library', {
 
 
 	onAnnotationsLoad: function(cmp, containerId, callback) {
-		//clear the contributors for this page.  in case there are none.
-		//ContributorsProvider.clearContributors(Globals.getViewIdFromComponent(cmp));
-		var me = this;
+		var me = this,
+			ps = me.getStoreForPageItems(containerId);
 
-		function success(ps){
-			ps.onAnnotationsLoadCallback = {callback: callback, cmp: cmp};
-			ps.load();
+		ps.onAnnotationsLoadCallback = {callback: callback, cmp: cmp};
 
-			//if we make it this far, also notify the stream controller
-			me.getController('Stream').containerIdChanged(containerId);
-		}
+		ps.load();
 
-		function failure(){
-			Ext.callback(callback,null,[cmp]);
-		}
-
-		me.getStoreForPageItems(containerId, success, me);
+		//if we make it this far, also notify the stream controller
+		me.getController('Stream').containerIdChanged(containerId);
 	},
 
 
 	saveSharingPrefs: function(prefs, callback){
 		//TODO - check to see if it's actually different before save...
-		function success(pi){
+		var pi = LocationProvider.currentPageInfo;
+		if (pi){
 			pi.saveField('sharingPreference', {sharedWith: prefs}, function(){
 				//always happens if success only:
 				LocationProvider.updatePreferences(pi);
 				Ext.callback(callback, null, []);
 			});
 		}
-
-		function fail(){
-			console.error('failed to get page info');
-		}
-
-		$AppConfig.service.getPageInfo(LocationProvider.currentNTIID, success, fail, this);
-
 	},
 
 
-	getStoreForPageItems: function(containerId, success, failure, scope){
-		console.log('CID=', containerId);
+	getStoreForPageItems: function(containerId){
 		var me = this,
 			ps = this.pageStores[containerId];
 
@@ -84,30 +69,16 @@ Ext.define('NextThought.controller.Library', {
 			Ext.Error.raise('Cannot get store page items without containerId.', arguments);
 		}
 
-		//when the pageinfo comes back, we want to set up the page item store
-		function pageInfoSuccess(pi){
-			LocationProvider.updatePreferences(pi);
-
-			if (!ps){
-				ps = Ext.create(
-					'NextThought.store.PageItem',
-					{ storeId:LocationProvider.getStoreId(containerId) }
-				);
-				ps.on('load', me.onAnnotationStoreLoadComplete, me, {containerId: containerId});
-				ps.proxy.url = pi.getLink(Globals.USER_GENERATED_DATA);
-				me.pageStores[containerId] = ps;
-			}
-
-
-			Ext.callback(success, scope, [ps]);
+		if (!ps){
+			ps = Ext.create(
+				'NextThought.store.PageItem',
+				{ storeId:LocationProvider.getStoreId(containerId) }
+			);
+			ps.on('load', me.onAnnotationStoreLoadComplete, me, {containerId: containerId});
+			ps.proxy.url = LocationProvider.currentPageInfo.getLink(Globals.USER_GENERATED_DATA);
+			me.pageStores[containerId] = ps;
 		}
-
-		function pageInfoFail(){
-			console.error('Failed to load page info for', containerId);
-			Ext.callback(failure, scope, []);
-		}
-
-		$AppConfig.service.getPageInfo(containerId, pageInfoSuccess, pageInfoFail, this);
+		return ps;
 	},
 
 

@@ -102,6 +102,8 @@ Ext.define('NextThought.providers.Location', {
 			service = $AppConfig.service;
 
 		function success(pageInfo){
+			me.currentPageInfo = pageInfo;
+			me.updatePreferences(pageInfo);
 			me.fireEvent('navigateComplete',pageInfo,callback);
 		}
 
