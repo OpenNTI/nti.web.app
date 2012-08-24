@@ -39,7 +39,7 @@ Ext.define('NextThought.util.Line',{
 
 	/** @private */
 	rangeByRecursiveSearch: function(y,doc) {
-		y -= 35; //Correction
+		y -= 30; //Correction
 		var curNode = doc.documentElement, range, rect;
 		//First text node ending past y
 		var i, cn;
@@ -48,9 +48,9 @@ Ext.define('NextThought.util.Line',{
 			range = doc.createRange();
 			range.selectNode(cn[i]);
 			rect = range.getBoundingClientRect();
-			if (rect.bottom > y && (cn[i].data || cn[i].innerText || '').length > 1) {
+			if (rect.bottom > y && (cn[i].data || cn[i].innerText || '  ').length > 1) {
 				curNode = cn[i];
-				i = 0;
+				i = -1;
 			}
 		}
 		if (!curNode) { console.log('rangeByRecursiveSearch failed'); return null; }
