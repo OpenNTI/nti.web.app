@@ -21,7 +21,8 @@ Ext.define('NextThought.util.Line',{
 
 		var range;
 
-		if (Ext.isIE9) {
+		//The "IE9" search is actually more accurate for assessment pages
+		if (Ext.isIE9 || document.querySelectorAll('.x-component-assessment').length > 0) {
 			range = this.rangeByRecursiveSearch(y,doc);
 		}
 		else if (doc.caretRangeFromPoint){
