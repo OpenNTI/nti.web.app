@@ -82,6 +82,11 @@ Ext.define('NextThought.view.assessment.input.FreeResponse',{
 	},
 
 
+	setValue: function(str) {
+		this.inputField.dom.value = str;
+	},
+
+
 	markCorrect: function(){
 		this.callParent(arguments);
 		this.inputBox.removeCls('incorrect').addCls('correct');

@@ -145,6 +145,11 @@ Ext.define('NextThought.view.assessment.input.Base',{
 	},
 
 
+	setValue: function(){
+		console.log(this.$className+' does not implement the setValue function');
+	},
+
+
 	updateSolutionButton: function(){
 		var p = this.part,
 			a = this.solutionAnswerBox,
@@ -173,6 +178,15 @@ Ext.define('NextThought.view.assessment.input.Base',{
 		}
 
 		if(e.getHTML()==='' && a.getHTML()===''){ b.hide(); } else { b.show(); }
+	},
+
+
+	updateWithResults: function(assessedQuestion){
+		var parts = assessedQuestion.get('parts'),
+			part = parts[this.ordinal];
+
+		part.isCorrect() ? this.markCorrect() : this.markIncorrect();
+		this.setValue(part.get('submittedResponse'));
 	},
 
 

@@ -3,6 +3,7 @@ Ext.define('NextThought.view.assessment.Parts',{
 	alias: 'widget.question-parts',
 
 	requires: [
+		'NextThought.view.assessment.PartContent',
 		'NextThought.view.assessment.input.FreeResponse',
 		'NextThought.view.assessment.input.Matching',
 		'NextThought.view.assessment.input.MultipleChoice',
@@ -12,22 +13,35 @@ Ext.define('NextThought.view.assessment.Parts',{
 	],
 
 	plain: true,
-	cls: 'response',
+	cls: 'parts',
 	ui: 'assessment',
 
 
-	setQuestionAndPart: function(question,part,ordinal,questionSet,individual, tabIndexTracker){
-		var type = 'question-input-'+part.get('Class').toLowerCase();
+	setQuestionAndPart: function(question,questionSet,individual, tabIndexTracker){
+		var parts = question.get('parts'),
+			multiPart = (parts.length > 1);
+
 		this.removeAll(true);
 
 		this[individual?'removeCls':'addCls']('part-of-set');
 
+		if(multiPart) {
+			this.setMultiPart(question, questionSet, parts, tabIndexTracker);
+			return;
+		}
+
+		this.setSinglePart(question, questionSet, parts.first(), tabIndexTracker);
+	},
+
+
+	setSinglePart: function(question, questionSet, part, tabIndexTracker) {
+		var type = 'question-input-'+part.get('Class').toLowerCase();
 		try {
 			this.add({
 				xtype: type,
 				question: question,
 				part: part,
-				ordinal: ordinal,
+				ordinal: 0,
 				questionSet: questionSet,
 				tabIndexTracker: tabIndexTracker
 			});
@@ -38,15 +52,47 @@ Ext.define('NextThought.view.assessment.Parts',{
 	},
 
 
-	markCorrect: function(){
-		this.down('abstract-question-input').markCorrect();
+	setMultiPart: function(question, questionSet, parts, tabIndexTracker) {
+		var type, part, items, i;
+
+		this.addCls('multipart');
+
+		for (i=0; i < parts.length; i++){
+			part = parts[i];
+			items = [];
+			type = 'question-input-'+part.get('Class').toLowerCase();
+			items.push({xtype: 'part-content', part: part, ordinal:i});
+			items.push({
+				xtype: type,
+				question: question,
+				part: part,
+				ordinal: i,
+				questionSet: questionSet,
+				tabIndexTracker: tabIndexTracker
+			});
+
+			try {
+				this.add({
+					xtype: 'container',
+					layout: 'auto',
+					cls: 'part-container',
+					items: items
+				});
+			}
+			catch(e){
+				console.warn('missing question type: '+type);
+			}
+		}
 	},
 
-	markIncorrect: function(){
-		this.down('abstract-question-input').markIncorrect();
+
+	updateWithResults: function(assessedQuestion) {
+		var parts = this.query('[question]');
+		Ext.each(parts, function(part){part.updateWithResults(assessedQuestion);});
 	},
 
 	reset: function(){
-		this.down('abstract-question-input').reset();
+		var inputs = this.query('abstract-question-input');
+		Ext.each(inputs, function(input){input.reset();});
 	}
 });

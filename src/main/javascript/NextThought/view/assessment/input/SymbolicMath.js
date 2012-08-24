@@ -43,5 +43,11 @@ Ext.define('NextThought.view.assessment.input.SymbolicMath',{
 
 	getValue: function(){
 		return jQuery(this.mathquillSpan).mathquill('latex');
+	},
+
+
+	setValue: function(latex){
+		console.log('does this clear it first???');
+		jQuery(this.mathquillSpan).mathquill('latex', latex);
 	}
 });

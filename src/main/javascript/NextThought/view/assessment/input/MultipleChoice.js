@@ -76,6 +76,15 @@ Ext.define('NextThought.view.assessment.input.MultipleChoice',{
 	},
 
 
+	setValue: function(checkedIndexes){
+		Ext.each(this.getEl().query('.control'),function(e){
+			if(Ext.Array.contains(checkedIndexes, parseInt(e.getAttribute('data-index'),10))) {
+				e.addCls('checked');
+			}
+		});
+	},
+
+
 	getSolutionContent: function(part) {
 		var choices = this.choices,
 			out = [], tpl = this.solTpl;

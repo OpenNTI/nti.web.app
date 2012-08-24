@@ -23,14 +23,12 @@ Ext.define('NextThought.view.assessment.Question',{
 
 	initComponent: function(){
 		this.callParent(arguments);
-		//TODO: this is a shortcut, assuming there is only one part to the question.
-		var part = this.questionPart = this.question.get('parts').first();
+		var parts = this.question.get('parts'),
+			multiPart = (parts.length > 1);
 
 		//TODO: addDockedItem instead?
 		this.down('question-parts').setQuestionAndPart(
 				this.question,
-				part,
-				0,
 				this.questionSet,
 				this.canSubmitIndividually(),
 				this.tabIndexTracker);
@@ -44,7 +42,7 @@ Ext.define('NextThought.view.assessment.Question',{
 			});
 		}
 
-		this.setQuestionContent();
+		this.setQuestionContent(multiPart?null:parts.first());
 		this.setupContentElement();
 	},
 
@@ -60,6 +58,7 @@ Ext.define('NextThought.view.assessment.Question',{
 		if(!q){ Ext.Error.raise('Couldn\'t find my question? :('); }
 
 		this[q.isCorrect()?'markCorrect':'markIncorrect']();
+		this.down('question-parts').updateWithResults(q);
 	},
 
 	gatherQuestionResponse: function(questionSet,collection){
@@ -93,20 +92,22 @@ Ext.define('NextThought.view.assessment.Question',{
 	},
 
 
-	setQuestionContent: function(){
-		var root = LocationProvider.getContentRoot(),c;
+	setQuestionContent: function(part){
+		var root = LocationProvider.getContentRoot(), c, p;
 		function fixRef(original,attr,url) {
 			return (/^data:/i.test(url)||Globals.HOST_PREFIX_PATTERN.test(url))
 					? original
 					: attr+'="'+root+url+'"'; }
 
 		c = this.question.get('content') || '';
+		p = part ? part.get('content'): '';
+
 		//don't append a break unless there is actual content
 		if(c.replace(/<.*?>|\s+/g,'')){
 			c += '<br/>';
 		}
 
-		this.update((c + this.questionPart.get('content')).replace(/(src)="(.*?)"/igm, fixRef));
+		this.update((c + p).replace(/(src)="(.*?)"/igm, fixRef));
 		this.updateLayout();
 	},
 
@@ -123,13 +124,11 @@ Ext.define('NextThought.view.assessment.Question',{
 
 	markCorrect: function(){
 		this.down('question-header').markCorrect();
-		this.down('question-parts').markCorrect();
 	},
 
 
 	markIncorrect: function(){
 		this.down('question-header').markIncorrect();
-		this.down('question-parts').markIncorrect();
 	},
 
 
