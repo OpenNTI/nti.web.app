@@ -39,7 +39,7 @@ Ext.define('NextThought.view.account.contacts.management.Person',{
 			blank: Ext.BLANK_IMAGE_URL,
 			avatarURL: this.user.get('avatarURL'),
 			name: this.user.getName(),
-			status: 'Current Status'
+			status: this.user.get('status')
 		});
 
 		this.groupsList = this.down('management-group-list');

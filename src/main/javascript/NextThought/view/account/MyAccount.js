@@ -17,7 +17,8 @@ Ext.define('NextThought.view.account.MyAccount',{
 	renderSelectors: {
 		boxEl: 'div.my-account-wrapper',
 		notificationCount: 'span.notifications',
-		name: 'div.name'
+		name: 'div.name',
+		status: 'div.status'
 	},
 
 	initComponent: function(){
@@ -29,7 +30,7 @@ Ext.define('NextThought.view.account.MyAccount',{
 		me.renderData = Ext.apply(me.renderData||{},{
 			name: $AppConfig.userObject.getName(),
 			'notification-count': me.currentNotificationCount || '&nbsp;',
-			status: 'Placeholder text for status'
+			status: $AppConfig.userObject.get('status')||'Staring at a screen.'
 		});
 		me.menu = Ext.widget({xtype: 'my-account-menu', xhooks:{
 			hide: function(){ this.callParent(arguments); clearTimeout(t); me.getEl().removeCls(cls);},
@@ -38,7 +39,10 @@ Ext.define('NextThought.view.account.MyAccount',{
 
 		this.mon($AppConfig.userObject,{
 			scope: this,
-			'changed': function(r){this.name.update(r.getName());}
+			'changed': function(r){
+				this.name.update(r.getName());
+				this.status.update(r.get('status'));
+			}
 		});
 
 		//When something is added to the stream store, ONLY added, we need to adjust the counter.

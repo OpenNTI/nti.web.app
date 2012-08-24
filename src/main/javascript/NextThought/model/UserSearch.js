@@ -6,9 +6,11 @@ Ext.define(	'NextThought.model.UserSearch', {
 	idProperty: 'Username',
 	fields: [
 		{ name: 'Username', type: 'string' },
+		{ name: 'affiliation', type: 'string', persist:false },
 		{ name: 'alias', type: 'string' },
 		{ name: 'realname', type: 'string' },
-		{ name: 'avatarURL', type: 'AvatarURL' }
+		{ name: 'avatarURL', type: 'AvatarURL' },
+		{ name: 'status', type: 'string' }
 	],
 
 

@@ -68,7 +68,7 @@ Ext.define('NextThought.view.account.contacts.Card',{
 			blank: Ext.BLANK_IMAGE_URL,
 			avatarURL: this.user.get('avatarURL'),
 			name: this.user.getName(),
-			status: 'Current Status',
+			status: this.user.get('status'),
 			from: this.group ? 'this Group' : 'my contacts'
 		});
 

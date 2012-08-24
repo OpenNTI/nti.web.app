@@ -7,11 +7,13 @@ Ext.define(	'NextThought.model.User', {
 		{ name: 'NotificationCount', type: 'int' },
 		{ name: 'Username', type: 'string' },
 		{ name: 'Presence', type: 'string' },
+		{ name: 'affiliation', type: 'string' },
 		{ name: 'alias', type: 'string' },
 		{ name: 'realname', type: 'string' },
 		{ name: 'avatarURL', type: 'AvatarURL' },
 		{ name: 'accepting', type: 'UserList' },
 		{ name: 'ignoring', type: 'UserList' },
+		{ name: 'status', type: 'string' },
 		{ name: 'following', type: 'UserList' },
 		{ name: 'Communities', type: 'UserList' }
 	],
