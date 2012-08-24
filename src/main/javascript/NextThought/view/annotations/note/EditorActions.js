@@ -261,16 +261,8 @@ Ext.define('NextThought.view.annotations.note.EditorActions',{
 			}
 			else {
 				action = t.getAttribute('class').split(' ').pop();
-				if (!Ext.isIE) {
-					sel = window.rangy.getSelection();
-					range = sel.rangeCount > 0 ? sel.getRangeAt(0) : window.rangy.createRange();
-					sn = range.startContainer, so = range.startOffset;
-					en = range.endContainer, eo = range.endOffset;
+				if (!Ext.isIE && !Ext.isGecko) {
 					document.execCommand(action, null, null);
-					sel.removeAllRanges();
-					range.setStart(sn,so);
-					range.setEnd(en,eo);
-					sel.addRange(range);
 				}
 				else {
 					this.editorStylingFallback(action,t.dom.ownerDocument);
