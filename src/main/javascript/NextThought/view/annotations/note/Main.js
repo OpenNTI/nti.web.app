@@ -123,7 +123,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 
 
 	setRecord: function(r){
-		var suppressed, text, bodyText, sel, range, doc, start, end;
+		var suppressed, text, bodyText, sel, range, doc, start, end, maxExpanded = false;
 
 		try {
 			if(this.record) {
@@ -173,9 +173,13 @@ Ext.define('NextThought.view.annotations.note.Main',{
 					sel = rangy.getSelection(doc);
 					range = sel.getRangeAt(0);
 					text = range.toString();
-					range.moveStart('character', -50);
+					try { range.moveStart('character', -50); }
+					catch(e) {
+						try { while(1) { range.moveStart('character',-1); } }
+						catch(e) { maxExpanded = true; }
+					}
 					range.moveEnd('character', 50);
-					range.expand('word');
+					if (!maxExpanded) { range.expand('word') };
 					sel.setSingleRange(range);
 					Anchors.expandSelectionToIncludeMath(sel);
 					bodyText = sel.getRangeAt(0).toString();
