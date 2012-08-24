@@ -264,7 +264,8 @@
 							background: url(../images/quiz/sprite.png) -116px -16px no-repeat;
 						}
 
-					  	.mathquill-editable {
+					  	.mathquill-editable,
+						.mathquill-rendered-math {
 							border: none;
 							min-height: 38px;
 							min-width: 100%;

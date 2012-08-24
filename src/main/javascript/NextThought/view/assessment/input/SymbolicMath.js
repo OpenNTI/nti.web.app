@@ -75,8 +75,28 @@ Ext.define('NextThought.view.assessment.input.SymbolicMath',{
 		this.adjustSize();
 	},
 
+
 	reset: function(){
 		this.callParent(arguments);
 		this.setValue('');
+		jQuery(this.mathquillSpan).mathquill('revert').mathquill('editable');
+	},
+
+
+	markCorrect: function(){
+		this.callParent(arguments);
+		this.disableMathquillEditable();
+	},
+
+
+	markIncorrect: function(){
+		this.callParent(arguments);
+		this.disableMathquillEditable();
+	},
+
+	disableMathquillEditable: function(){
+		console.log('disabling');
+		jQuery(this.mathquillSpan).mathquill('revert').mathquill();
 	}
+
 });
