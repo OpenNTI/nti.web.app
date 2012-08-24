@@ -41,7 +41,7 @@ Ext.define('NextThought.util.Line',{
 	/** @private */
 	rangeByRecursiveSearch: function(y,doc) {
 		y -= 30; //Correction
-		var curNode = doc.documentElement, range, rect;
+		var curNode = doc.documentElement, range, rect, sibling;
 		//First text node ending past y
 		var i, cn;
 		for (i = 0; curNode.nodeType === curNode.ELEMENT_NODE && i < curNode.childNodes.length; i++) {
@@ -53,12 +53,14 @@ Ext.define('NextThought.util.Line',{
 				curNode = cn[i];
 				i = -1;
 			}
+			//If recursive search takes us to a bad node, depth-first search forward from there
+			while (curNode.nodeType != curNode.TEXT_NODE && (i+1) >= curNode.childNodes.length && curNode.parentNode) {
+				i = 0, sibling = curNode;
+				while ( (sibling = sibling.previousSibling) != null ) { i += 1; }
+				curNode = curNode.parentNode;
+			}
 		}
 		if (!curNode) { console.log('rangeByRecursiveSearch failed'); return null; }
-		//If a non-text node ends past y but none of the textnodes contained inside of it do, go for the last
-		while (curNode.childNodes.length > 0) {
-			curNode = curNode.childNodes[curNode.childNodes.length - 1];
-		}
 		range = doc.createRange();
 		var left = 0, right = curNode.data.length, center;
 		// First single character ending past y
