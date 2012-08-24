@@ -25,6 +25,7 @@ Ext.define('NextThought.view.ViewSelect', {
 	},
 	items: [
 		{
+			disabled: true,
 			pressed: true,
 			iconCls: 'home',
 			title: 'Home',
