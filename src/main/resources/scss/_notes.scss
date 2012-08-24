@@ -830,7 +830,10 @@
 		&.editor-active .respond{
 			display: block;
 			.reply-options{display: none;}
-			.editor { display: block; }
+			.editor {
+			    display: block;
+			  	.action.share {display: none !important;}
+			}
 		}
 
 		.respond {
