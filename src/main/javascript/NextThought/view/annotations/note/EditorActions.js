@@ -204,18 +204,18 @@ Ext.define('NextThought.view.annotations.note.EditorActions',{
 		}
 	},
 	editorStylingFallback: function(action,doc) {
-		tags = {bold: 'b', italic: 'i', underline: 'u'}
+		tags = {bold: 'b', italic: 'i', underline: 'u'};
 		var tb = this.editor.dom.querySelector('[contenteditable=true]');
 		var selection = window.rangy.getSelection();
+		function getStyleAtPoint(node, given) {
+			if (!given) { given = {bold: false, italic: false, underline: false}; }
+			if (!node || node.contentEditable === 'true') { return given; }
+			if (node.tagName === 'B') { given.bold = true; }
+			if (node.tagName === 'I') { given.italic = true; }
+			if (node.tagName === 'U') { given.underline = true; } 
+			return getStyleAtPoint(node.parentNode,given);
+		}
 		if (selection.rangeCount > 0) {
-			function getStyleAtPoint(node, given) {
-				if (!given) { given = {bold: false, italic: false, underline: false}; }
-				if (!node || node.contentEditable == 'true') { return given; }
-				if (node.tagName == 'B') { given.bold = true; }
-				if (node.tagName == 'I') { given.italic = true; }
-				if (node.tagName == 'U') { given.underline = true; } 
-				return getStyleAtPoint(node.parentNode,given);
-			}
 			//Wrap the existing selection
 			newNode = document.createElement(tags[action] || 'span');
 			newNode.innerHTML = selection.toHtml();

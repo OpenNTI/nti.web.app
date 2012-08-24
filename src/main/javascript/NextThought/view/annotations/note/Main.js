@@ -179,8 +179,8 @@ Ext.define('NextThought.view.annotations.note.Main',{
 						range.expand('word');
 					}
 					catch(e) {
-						try { while(1) { range.moveStart('character',-1); } }
-						catch(e) { range.moveStart('character',1); }
+						try { while(true) { range.moveStart('character',-1); } }
+						catch(er) { range.moveStart('character',1); }
 					}
 					sel.setSingleRange(range);
 					Anchors.expandSelectionToIncludeMath(sel);

@@ -194,7 +194,8 @@ Ext.define('NextThought.view.assessment.input.Base',{
 		var parts = assessedQuestion.get('parts'),
 			part = parts[this.ordinal];
 
-		part.isCorrect() ? this.markCorrect() : this.markIncorrect();
+		if (part.isCorrect()) { this.markCorrect(); }
+		else {this.markIncorrect(); }
 		this.setValue(part.get('submittedResponse'));
 	},
 

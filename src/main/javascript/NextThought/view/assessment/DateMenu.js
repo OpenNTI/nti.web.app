@@ -43,7 +43,7 @@ Ext.define('NextThought.view.assessment.DateMenu',{
 
 
 	formatLabel: function(assessment) {
-		if (assessment){return Ext.Date.format(assessment.get('Last Modified'), 'm/d/y g:ia')};
+		if (assessment){ return Ext.Date.format(assessment.get('Last Modified'), 'm/d/y g:ia'); }
 		return '';
 	},
 

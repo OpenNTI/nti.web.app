@@ -100,7 +100,7 @@ Ext.define('NextThought.view.form.AccountForm', {
 											sim = this.up('window').down('account-form').similarity;
 										if (value.length < 6) { return 'Password too short'; }
 										else if (sim(oldpw,value) > 0.6) { return 'New password too similar'; }
-										else return true;
+										else { return true; }
 									}
 								}, {
 									xtype: 'textfield',
@@ -163,7 +163,7 @@ Ext.define('NextThought.view.form.AccountForm', {
 	similarity: function(a,b) {
 		//Produces equivalent results to those given out by the serverside string similarity algorithm
 		//Basically the Levenshtein distance with substitution cost of 2 divided by the sum of the lengths
-		table = [], i = 0, j = 0, d = 0;
+		var table = [], i = 0, j = 0, d = 0;
 		for (i = 0; i <= a.length; i++) {
 			table.push([]);
 			for (j = 0; j <= b.length; j++) { table[table.length-1].push(i+j); }

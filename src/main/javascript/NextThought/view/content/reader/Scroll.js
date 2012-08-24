@@ -125,8 +125,9 @@ Ext.define('NextThought.view.content.reader.Scroll',{
 				indexes = [],
 				r;
 
-			while (match = re.exec(nv))
+			while (match = re.exec(nv)) {
 				indexes.push( {'start':match.index, 'end': match.index+match[0].length } );
+			}
 
 			Ext.each(indexes, function(index){
 				r = doc.createRange();
