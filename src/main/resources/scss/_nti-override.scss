@@ -182,91 +182,93 @@
 			 display: inline;
 		}
 		.placeholder {display: none;}
-		.tiny         {font-size: x-small;}
-		.scriptsize   {font-size: smaller;}
-		.footnotesize {font-size: small;}
-		.small        {font-size: small;}
-		.normalsize   {font-size: 100%;}
-		.large        {font-size: 120%; line-height: 1.3em;}
-		.xlarge       {font-size: 130%; line-height: 1.4em;}
-		.xxlarge      {font-size: 140%; line-height: 1.5em;}
-		.huge         {font-size: 150%; line-height: 1.6em;}
-		.xhuge        {font-size: 160%; line-height: 1.7em;}
-		.raise15 {margin-bottom: 10px;}
-		.raise14 {margin-bottom: 10px;}
-		.raise13 {margin-bottom: 10px;}
-		.raise12 {margin-bottom: 10px;}
-		.raise11 {margin-bottom: 10px;}
-		.raise10 {margin-bottom: 10px;}
-		.raise9  {margin-bottom: 9px;}
-		.raise8  {margin-bottom: 8px;}
-		.raise7  {margin-bottom: 7px;}
-		.raise6  {margin-bottom: 6px;}
-		.raise5  {margin-bottom: 5px;}
-		.raise4  {margin-bottom: 4px;}
-		.raise3  {margin-bottom: 3px;}
-		.raise2  {margin-bottom: 2px;}
-		.raise1  {margin-bottom: 1px;}
-		.raise0  {margin-bottom: 0px;}
-		.lower0  {margin-bottom: -0px;}
-		.lower1  {margin-bottom: -1px;}
-		.lower2  {margin-bottom: -2px;}
-		.lower3  {margin-bottom: -3px;}
-		.lower4  {margin-bottom: -4px;}
-		.lower5  {margin-bottom: -5px;}
-		.lower6  {margin-bottom: -6px;}
-		.lower7  {margin-bottom: -7px;}
-		.lower8  {margin-bottom: -8px;}
-		.lower10 {margin-bottom: -10px;}
-		.lower11 {margin-bottom: -11px;}
-		.lower12 {margin-bottom: -12px;}
-		.lower13 {margin-bottom: -13px;}
-		.lower14 {margin-bottom: -14px;}
-		.lower15 {margin-bottom: -15px;}
-		.lower16 {margin-bottom: -16px;}
-		.lower17 {margin-bottom: -17px;}
-		.lower18 {margin-bottom: -18px;}
-		.lower19 {margin-bottom: -19px;}
-		.lower20 {margin-bottom: -20px;}
-		.lower21 {margin-bottom: -21px;}
-		.lower22 {margin-bottom: -22px;}
-		.lower23 {margin-bottom: -23px;}
-		.lower24 {margin-bottom: -24px;}
-		.lower25 {margin-bottom: -25px;}
-		.lower26 {margin-bottom: -26px;}
-		.lower27 {margin-bottom: -27px;}
-		.lower28 {margin-bottom: -28px;}
-		.lower29 {margin-bottom: -29px;}
-		.lower30 {margin-bottom: -20px;}
-		.lower20 {margin-bottom: -20px;}
-
-		.subfloat {
-			  display: inline-table;
-			  padding: 1em 3em 1em 3em;
-			  text-align: center
-		}
-
-		.rightpic, .leftpic {margin: 1.5em;}
-
-		.align-center {text-align: center;}
-		.align-left {text-align: left;}
-		.align-right{text-align: right;}
-		.align-bottom {vertical-align:top;}
-
-		.bigskip {
-			 margin: 0;
-			 padding: 0;
-			 margin-bottom: 24pt;
-		}
-		.medskip {
-			 margin: 0;
-			 padding: 0;
-			 margin-bottom: 12pt;
-		}
-		.smallskip {
-			   margin: 0;
-			   padding: 0;
-			   margin-bottom: 6pt;
-		}
 	}
+
+	.tiny         {font-size: x-small;}
+	.scriptsize   {font-size: smaller;}
+	.footnot	esize {font-size: small;}
+	.small        {font-size: small;}
+	.normalsize   {font-size: 100%;}
+	.large        {font-size: 120%; line-height: 1.3em;}
+	.xlarge       {font-size: 130%; line-height: 1.4em;}
+	.xxlarge      {font-size: 140%; line-height: 1.5em;}
+	.huge         {font-size: 150%; line-height: 1.6em;}
+	.xhuge        {font-size: 160%; line-height: 1.7em;}
+	.raise15 {margin-bottom: 10px;}
+	.raise14 {margin-bottom: 10px;}
+	.raise13 {margin-bottom: 10px;}
+	.raise12 {margin-bottom: 10px;}
+	.raise11 {margin-bottom: 10px;}
+	.raise10 {margin-bottom: 10px;}
+	.raise9  {margin-bottom: 9px;}
+	.raise8  {margin-bottom: 8px;}
+	.raise7  {margin-bottom: 7px;}
+	.raise6  {margin-bottom: 6px;}
+	.raise5  {margin-bottom: 5px;}
+	.raise4  {margin-bottom: 4px;}
+	.raise3  {margin-bottom: 3px;}
+	.raise2  {margin-bottom: 2px;}
+	.raise1  {margin-bottom: 1px;}
+	.raise0  {margin-bottom: 0px;}
+	.lower0  {margin-bottom: -0px;}
+	.lower1  {margin-bottom: -1px;}
+	.lower2  {margin-bottom: -2px;}
+	.lower3  {margin-bottom: -3px;}
+	.lower4  {margin-bottom: -4px;}
+	.lower5  {margin-bottom: -5px;}
+	.lower6  {margin-bottom: -6px;}
+	.lower7  {margin-bottom: -7px;}
+	.lower8  {margin-bottom: -8px;}
+	.lower10 {margin-bottom: -10px;}
+	.lower11 {margin-bottom: -11px;}
+	.lower12 {margin-bottom: -12px;}
+	.lower13 {margin-bottom: -13px;}
+	.lower14 {margin-bottom: -14px;}
+	.lower15 {margin-bottom: -15px;}
+	.lower16 {margin-bottom: -16px;}
+	.lower17 {margin-bottom: -17px;}
+	.lower18 {margin-bottom: -18px;}
+	.lower19 {margin-bottom: -19px;}
+	.lower20 {margin-bottom: -20px;}
+	.lower21 {margin-bottom: -21px;}
+	.lower22 {margin-bottom: -22px;}
+	.lower23 {margin-bottom: -23px;}
+	.lower24 {margin-bottom: -24px;}
+	.lower25 {margin-bottom: -25px;}
+	.lower26 {margin-bottom: -26px;}
+	.lower27 {margin-bottom: -27px;}
+	.lower28 {margin-bottom: -28px;}
+	.lower29 {margin-bottom: -29px;}
+	.lower30 {margin-bottom: -20px;}
+	.lower20 {margin-bottom: -20px;}
+
+	.subfloat {
+		  display: inline-table;
+		  padding: 1em 3em 1em 3em;
+		  text-align: center
+	}
+
+	.rightpic, .leftpic {margin: 1.5em;}
+
+	.align-center {text-align: center;}
+	.align-left {text-align: left;}
+	.align-right{text-align: right;}
+	.align-bottom {vertical-align:top;}
+
+	.bigskip {
+		 margin: 0;
+		 padding: 0;
+		 margin-bottom: 24pt;
+	}
+	.medskip {
+		 margin: 0;
+		 padding: 0;
+		 margin-bottom: 12pt;
+	}
+	.smallskip {
+		 margin: 0;
+		 padding: 0;
+		 margin-bottom: 6pt;
+	}
+
 }
