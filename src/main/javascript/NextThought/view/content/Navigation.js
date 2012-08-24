@@ -22,6 +22,10 @@ Ext.define('NextThought.view.content.Navigation',{
 		}
 	]),
 
+	levelLabels: {
+		1: 'Select a section'
+	},
+
 	renderSelectors: {
 		bookcover: 'img.bookcover',
 		breadcrumb: '.breadcrumb',
@@ -51,6 +55,21 @@ Ext.define('NextThought.view.content.Navigation',{
 		var	path = me.getBreadcrumbPath();
 		var iconPath;
 
+		function buildPathPart(i){
+			var l = lp.getLocation(i),
+				label = l.label,
+				level = parseInt(l.location.getAttribute('levelnum'), 10);
+			if (i === ntiid) {
+				label = me.levelLabels[level] || label;
+			}
+			var e = me.breadcrumbTpl.insertFirst(me.breadcrumb, [label], true);
+			path.add(me.breadcrumbSepTpl.insertFirst(me.breadcrumb));
+
+			me.buildMenu(e,c);
+			c = l;
+			path.add(e);
+		}
+
 		me.cleanupMenus();
 
 		if(!loc || !loc.NTIID || !book){ me.hide(); return; }
@@ -66,15 +85,11 @@ Ext.define('NextThought.view.content.Navigation',{
 		});
 
 		c = lp.getLocation(lineage.shift());
-		Ext.each(lineage,function(i){
-			var l = lp.getLocation(i);
-			var e = me.breadcrumbTpl.insertFirst(me.breadcrumb, [l.label], true);
-			path.add(me.breadcrumbSepTpl.insertFirst(me.breadcrumb));
-
-			me.buildMenu(e,c);
-			c = l;
-			path.add(e);
-		});
+		if(this.hasChildren(c.location)) {
+			lineage.unshift(c.NTIID);
+			c = lp.getLocation(Ext.fly(c.location).first('topic', true).getAttribute('ntiid'));
+		}
+		Ext.each(lineage,buildPathPart, this);
 
 		path.add(me.buildMenu(
 				me.breadcrumbTpl.insertFirst(me.breadcrumb, ['All Books'], true),
@@ -183,6 +198,20 @@ Ext.define('NextThought.view.content.Navigation',{
 		}
 	},
 
+	hasChildren: function(n){
+		var num = 0,
+			node = n;
+
+		node = Ext.fly(node).first('topic', true);
+
+		if (!node) { return false; }
+
+		for(;node.nextSibling; node = node.nextSibling){
+			if(!/topic/i.test(node.tagName) || parseInt(node.getAttribute('levelnum'), 10) > 2){ continue; }
+			num++;
+		}
+		return (num > 0);
+	},
 
 	clicked: function(me,dom){}
 });
