@@ -40,7 +40,7 @@ Ext.define('NextThought.view.assessment.input.SymbolicMath',{
 			timer = setTimeout(function(){
 				me.adjustSize();
 				if(!me.getValue()){ me.disableSubmission(); }
-				else { me.enableSubmission(); }
+				else { console.log('enable something');me.enableSubmission(); }
 			}, 100);
 
 		});

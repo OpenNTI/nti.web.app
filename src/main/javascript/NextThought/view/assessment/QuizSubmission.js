@@ -32,7 +32,12 @@ Ext.define('NextThought.view.assessment.QuizSubmission',{
 
 		this.callParent(arguments);
 
-		this.mon(this.questionSet,'answered',this.updateStatus,this);
+		this.mon(this.questionSet, {
+			scope: this,
+			'answered': this.updateStatus,
+			'reset': this.reset,
+			'graded': this.graded
+		});
 
 		Ext.each(this.questionSet.get('questions'),function(q){
 			answeredMap[q.getId()] = false;
@@ -59,6 +64,7 @@ Ext.define('NextThought.view.assessment.QuizSubmission',{
 
 
 	updateStatus: function(question, part, status){
+		console.log('answered...', arguments);
 		this.answeredMap[question.getId()] = Boolean(status);
 		this.reflectStateChange();
 	},
@@ -75,6 +81,18 @@ Ext.define('NextThought.view.assessment.QuizSubmission',{
 		);
 
 		this.statusMessage[((unanswered===0)?'add':'remove')+'Cls']('ready');
+	},
+
+
+	reset: function(){
+		this.submitBtn.removeCls('disabled');
+		delete this.submitted;
+	},
+
+
+	graded: function(){
+		this.submitted = true;
+		this.submitBtn.addCls('disabled');
 	},
 
 
@@ -96,6 +114,7 @@ Ext.define('NextThought.view.assessment.QuizSubmission',{
 
 
 	submitClicked: function( e ){
+		if(this.submitted){return;}
 		var q = this.questionSet,
 			submission = {};
 		if( !q.fireEvent('beforesubmit',q,submission) ){
