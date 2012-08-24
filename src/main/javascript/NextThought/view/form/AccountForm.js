@@ -94,7 +94,14 @@ Ext.define('NextThought.view.form.AccountForm', {
 									inputType: 'password',
 									allowBlank: false,
 									margin: '5px 0px 5px 0px',
-									minLength: 1
+									minLength: 1,
+									validator: function(value) {
+										var oldpw = this.previousSibling('[name=old_password]').getValue(),
+											sim = this.up('window').down('account-form').similarity;
+										if (value.length < 6) { return 'Password too short'; }
+										else if (sim(oldpw,value) > 0.6) { return 'New password too similar'; }
+										else return true;
+									}
 								}, {
 									xtype: 'textfield',
 									name: 'password-verify',
@@ -112,7 +119,12 @@ Ext.define('NextThought.view.form.AccountForm', {
 						{
 							xtype: 'box',
 							changePassword: true,
-							autoEl: {tag: 'span', name: 'pw_error', html: 'Error', style: 'color: red; display: none;'}
+							autoEl: {
+								tag: 'span',
+								 name: 'pw_error',
+								 html: 'Current password incorrect',
+								 style: 'color: red; display: none;'
+							}
 						},
 						{
 							border: false,
@@ -148,6 +160,24 @@ Ext.define('NextThought.view.form.AccountForm', {
 		}
 	],
 
+	similarity: function(a,b) {
+		//Produces equivalent results to those given out by the serverside string similarity algorithm
+		//Basically the Levenshtein distance with substitution cost of 2 divided by the sum of the lengths
+		table = [], i = 0, j = 0, d = 0;
+		for (i = 0; i <= a.length; i++) {
+			table.push([]);
+			for (j = 0; j <= b.length; j++) { table[table.length-1].push(i+j); }
+		}
+		for (d = 2; d <= a.length + b.length; d++) {
+			for (j = 1; j < d; j++) {
+				i = d - j;
+				if (i >= 1 && j >= 1 && i <= a.length && j <= b.length) {
+					table[i][j] = Math.min(table[i-1][j-1] + (a[i-1] !== b[j-1]) * 2,table[i][j-1] + 1,table[i-1][j] + 1);
+				}
+			}
+		}
+		return 1.0 - table[a.length][b.length] / (a.length + b.length);
+	},
 
 	initComponent: function(){
 		this.callParent(arguments);
