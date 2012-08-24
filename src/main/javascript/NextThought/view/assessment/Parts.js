@@ -53,11 +53,13 @@ Ext.define('NextThought.view.assessment.Parts',{
 
 
 	setMultiPart: function(question, questionSet, parts, tabIndexTracker) {
-		var type, part, items, i;
+		var type, part, items, i, classes;
 
 		this.addCls('multipart');
 
 		for (i=0; i < parts.length; i++){
+			classes = ['part-container'];
+			if (i === parts.length-1){classes.push('last');}
 			part = parts[i];
 			items = [];
 			type = 'question-input-'+part.get('Class').toLowerCase();
@@ -75,7 +77,7 @@ Ext.define('NextThought.view.assessment.Parts',{
 				this.add({
 					xtype: 'container',
 					layout: 'auto',
-					cls: 'part-container',
+					cls: classes.join(' '),
 					items: items
 				});
 			}
