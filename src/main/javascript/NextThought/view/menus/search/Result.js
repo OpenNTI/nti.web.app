@@ -45,10 +45,17 @@ Ext.define('NextThought.view.menus.search.Result',{
 	},
 
 	beforeRender: function() {
-		var searchTerm = this.term.replace(/^["'\s]+|["'\s]+$/ig,'');
-			re = new RegExp([ '([^\\W]*', RegExp.escape(searchTerm), '[^\\W]*)' ].join(''), 'ig');
+		var searchTerm = this.term.replace(/^["'\s]+|["'\s]+$/ig,''),
+			tokens = searchTerm.trim().split(' '), re, i, t = [];
 
-		this.renderData.snippet = this.snippet.replace(re, '<span>$1</span>');
+		//FIXME: remove match of less than 4 chars, (to match the dataserver). It could be done better.
+		for(i= 0; i<tokens.length; i++){
+			if(tokens[i].length > 3){ t.push(tokens[i]); }
+		}
+
+		re = new RegExp([ '([^\\W]*', t.join('|'), '[^\\W]*)' ].join(''), 'ig');
+		this.renderData.snippet = this.snippet.replace(re,  '<span>$1</span>');
+
 		return this.callParent(arguments);
 	},
 

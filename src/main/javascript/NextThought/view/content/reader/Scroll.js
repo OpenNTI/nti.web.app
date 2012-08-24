@@ -121,27 +121,37 @@ Ext.define('NextThought.view.content.reader.Scroll',{
 			ranges = [],
 			created = {},
 			texts,
-			textLength = text.length;
+			textLength = text.length,
+			tokens = text.trim().split(' '), re, i, t = [], match;
+
+		//FIXME: remove match of less than 4 chars, (to match the dataserver). It could be done better.
+		for(i=0; i<tokens.length; i++){
+			if(tokens[i].length > 3){ t.push(tokens[i]); }
+		}
+
+		re = new RegExp([ '([^\\W]*', t.join('|'), '[^\\W]*)' ].join(''), 'ig');
 
 		texts = AnnotationUtils.getTextNodes(doc);
 
 		Ext.each(texts, function(node) {
 				var nv = node.nodeValue.toLowerCase(),
-					index = nv.indexOf(text),
+					indexes = [],
 					r;
 
-				while(index >= 0) {
+				while (match = re.exec(nv))
+					indexes.push( {'start':match.index, 'end': match.index+match[0].length } );
+
+				Ext.each(indexes, function(index){
 					r = doc.createRange();
-					r.setStart(node, index);
-					r.setEnd(node, index + textLength);
+					r.setStart(node, index.start);
+					r.setEnd(node, index.end);
 
 					if (!created[nv] || !created[nv][index]) {
 						created[nv] = created[nv] || {} ;
 						created[nv][index] = true;
 						ranges.push(r);
 					}
-					index = nv.indexOf(text, index + 1);
-				}
+				});
 			},
 			this);
 
