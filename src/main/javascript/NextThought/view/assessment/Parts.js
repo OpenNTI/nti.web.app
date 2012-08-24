@@ -4,6 +4,7 @@ Ext.define('NextThought.view.assessment.Parts',{
 
 	requires: [
 		'NextThought.view.assessment.PartContent',
+		'NextThought.view.assessment.MultiPartSubmission',
 		'NextThought.view.assessment.input.FreeResponse',
 		'NextThought.view.assessment.input.Matching',
 		'NextThought.view.assessment.input.MultipleChoice',
@@ -27,6 +28,15 @@ Ext.define('NextThought.view.assessment.Parts',{
 
 		if(multiPart) {
 			this.setMultiPart(question, questionSet, parts, tabIndexTracker);
+			if(individual){
+				this.add(
+					{
+						xtype:'assessment-multipart-submission',
+						question: question,
+						tabIndexTracker: tabIndexTracker
+					}
+				);
+			}
 			return;
 		}
 
@@ -53,13 +63,11 @@ Ext.define('NextThought.view.assessment.Parts',{
 
 
 	setMultiPart: function(question, questionSet, parts, tabIndexTracker) {
-		var type, part, items, i, classes;
+		var type, part, items, i;
 
 		this.addCls('multipart');
 
 		for (i=0; i < parts.length; i++){
-			classes = ['part-container'];
-			if (i === parts.length-1){classes.push('last');}
 			part = parts[i];
 			items = [];
 			type = 'question-input-'+part.get('Class').toLowerCase();
@@ -77,7 +85,7 @@ Ext.define('NextThought.view.assessment.Parts',{
 				this.add({
 					xtype: 'container',
 					layout: 'auto',
-					cls: classes.join(' '),
+					cls: 'part-container',
 					items: items
 				});
 			}
@@ -94,7 +102,14 @@ Ext.define('NextThought.view.assessment.Parts',{
 	},
 
 	reset: function(){
-		var inputs = this.query('abstract-question-input');
+		var inputs = this.query('abstract-question-input,assessment-multipart-submission');
 		Ext.each(inputs, function(input){input.reset();});
+	},
+
+	afterRender: function(){
+		this.callParent(arguments);
+		var me = this;
+		//updatelayout because sometimes this can render before other things, causing overlap
+		setTimeout(function(){me.updateLayout();}, 500);
 	}
 });

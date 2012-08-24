@@ -50,7 +50,7 @@ Ext.define('NextThought.controller.Assessment', {
 
 	init: function() {
 		this.control({
-			'abstract-question-input':{
+			'assessment-question':{
 				'check-answer': this.checkAnswer
 			},
 
@@ -61,12 +61,12 @@ Ext.define('NextThought.controller.Assessment', {
 	},
 
 
-	checkAnswer: function(questionWidget,question,part,answerValue){
+	checkAnswer: function(questionWidget,question,answerValues){
 
 		var submission = this.getAssessmentQuestionSubmissionModel().create({
 			ContainerId: LocationProvider.currentNTIID,
 			questionId: question.getId(),
-			parts: [answerValue]
+			parts: answerValues
 		});
 
 		questionWidget.mask('Grading...');
@@ -79,13 +79,8 @@ Ext.define('NextThought.controller.Assessment', {
 				alert('There was a problem grading your question');
 			},
 			success: function(self,op){
-				var result = op.getResultSet().records.first().isCorrect();
-				if(result){
-					questionWidget.markCorrect();
-				}
-				else {
-					questionWidget.markIncorrect();
-				}
+				var result = op.getResultSet().records.first();
+				questionWidget.updateWithResults(result);
 			}
 		});
 	},

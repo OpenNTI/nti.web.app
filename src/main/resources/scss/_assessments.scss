@@ -209,6 +209,10 @@
 			&.part-of-set > .x-panel-body-assessment {
 				padding-bottom: 0;
 				.footer .action.check { display: none; }
+			  	.multipart-submission .footer .action.check {
+					display: block;
+					border-radius: 0 0 3px 0;
+				}
 			}
             &.correct.multipart > .x-panel-body-assessment,
 			&.correct.part-of-set > .x-panel-body-assessment {
@@ -221,10 +225,6 @@
 			  	.part-container {
 					padding: 30px 60px;
 					border-bottom: 1px solid #e4e4e4;
-
-					&.last {
-					    border-bottom: none;
-					}
 
 					.part-content {
 					  	position: relative;

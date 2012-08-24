@@ -41,19 +41,38 @@ Ext.define('NextThought.view.assessment.Question',{
 				'reset':this.reset
 			});
 		}
+		this.mon(this, {
+			'enable-submission':this.determineSubmissionState,
+			'disable-submission':this.determineSubmissionState
+		});
 
 		this.setQuestionContent(multiPart?null:parts.first());
 		this.setupContentElement();
 	},
 
 
+	determineSubmissionState: function(){
+		var d = this.query('[submissionDisabled=true]'),
+			multi = this.down('assessment-multipart-submission');
+		this.submissionDisabled = (d.length !== 0);
+
+		if(multi) {
+			multi[this.submissionDisabled?'disableSubmission':'enableSubmission']();
+		}
+	},
+
+
 	updateWithResults: function(assessedQuestionSet){
 		var q, id = this.question.getId();
 
-		Ext.each(assessedQuestionSet.get('questions'),function(i){
-			if(i.getId()===id){ q = i; return false; }
-//			console.log(i.raw);
-		});
+		if(assessedQuestionSet.isSet){
+			Ext.each(assessedQuestionSet.get('questions'),function(i){
+				if(i.getId()===id){ q = i; return false; }
+			});
+		}
+		else {
+			q = assessedQuestionSet;
+		}
 
 		if(!q){ Ext.Error.raise('Couldn\'t find my question? :('); }
 
@@ -124,16 +143,39 @@ Ext.define('NextThought.view.assessment.Question',{
 
 	markCorrect: function(){
 		this.down('question-header').markCorrect();
+		var sub = this.down('assessment-multipart-submission');
+		if (sub){sub.disableSubmission();}
 	},
 
 
 	markIncorrect: function(){
 		this.down('question-header').markIncorrect();
+		var sub = this.down('assessment-multipart-submission');
+		if (sub){sub.disableSubmission();}
 	},
 
 
 	reset: function(){
 		this.down('question-header').reset();
 		this.down('question-parts').reset();
+		var sub = this.down('assessment-multipart-submission');
+		if (sub){sub.enableSubmission();}
+	},
+
+
+	checkIt: function(){
+		if (this.submissionDisabled){
+			return;
+		}
+
+		if(this.submitted) {
+			this.reset();
+			delete this.submitted;
+			return;
+		}
+		this.submitted = true;
+		var coll = {};
+		this.gatherQuestionResponse(null, coll);
+		this.fireEvent('check-answer', this, this.question, coll[this.question.getId()]);
 	}
 });

@@ -81,9 +81,18 @@ Ext.define('NextThought.view.assessment.input.Base',{
 
 	initComponent: function(){
 		this.callParent(arguments);
-		this.addEvents({ 'check-answer':true });
+		this.addEvents({
+			'enable-submission':true,
+			'disable-submission':true
+		});
+		this.enableBubble(['enable-submission','disable-submission']);
 	},
 
+/*
+	getBubbleTarget: function(){
+		return this.up('assessment-question');
+	},
+*/
 
 	afterRender: function(){
 		this.callParent(arguments);
@@ -122,7 +131,7 @@ Ext.define('NextThought.view.assessment.input.Base',{
 		}
 
 		this.setSubmitted();
-		this.fireEvent('check-answer',this.up('assessment-question'), this.question, this.part, this.getValue());
+		this.up('assessment-question').checkIt();
 	},
 
 
@@ -225,6 +234,7 @@ Ext.define('NextThought.view.assessment.input.Base',{
 		if( this.questionSet ){
 			this.questionSet.fireEvent('answered', this.question, this.part, true);
 		}
+		this.fireEvent('enable-submission', this.ordinal);
 	},
 
 
@@ -234,6 +244,7 @@ Ext.define('NextThought.view.assessment.input.Base',{
 		if( this.questionSet ){
 			this.questionSet.fireEvent('answered', this.question, this.part, false);
 		}
+		this.fireEvent('disable-submission', this.ordinal);
 	},
 
 
