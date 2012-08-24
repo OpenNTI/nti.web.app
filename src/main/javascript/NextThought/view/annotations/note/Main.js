@@ -192,6 +192,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 				text = r.get('selectedText');
 			}
 			this.context.update('[...] '+text+' [...]');
+			if (Ext.isGecko || Ext.isIE9) { this.resizeMathJax(this.context); }
 
 		}
 		catch(e2){
@@ -239,6 +240,10 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		});
 
 		return rangeString;
+	},
+	resizeMathJax: function(node) {
+		var e = Ext.select('div.equation .mi').add(Ext.select('div.equation .mn')).add(Ext.select('div.equation .mo'));
+		e.setStyle('font-size','13px');
 	},
 
 
