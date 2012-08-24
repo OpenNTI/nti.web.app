@@ -1,12 +1,12 @@
 @mixin meta-row {
-    .meta {
-        @include menu-label-text-treatment;
-        font-size: 12px;
-        font-weight: bold;
-        white-space: nowrap;
-        .name {
-            color: #3fb3f6;
-        }
+	.meta {
+		@include menu-label-text-treatment;
+		font-size: 12px;
+		font-weight: bold;
+		white-space: nowrap;
+		.name {
+			color: #3fb3f6;
+		}
 
 		.shared-to{
 			display: inline-block;
@@ -16,15 +16,15 @@
 			text-overflow: ellipsis;
 		}
 
-        .controls {
-            position: absolute;
-            right: 0;
-            top: 0;
-            //background: blue;
+		.controls {
+			position: absolute;
+			right: 0;
+			top: 0;
+			//background: blue;
 
-            @include like-and-favorite;
-        }
-    }
+			@include like-and-favorite;
+		}
+	}
 }
 
 @mixin note-editor {
@@ -238,7 +238,7 @@
 				position: absolute;
 				margin: -8px 0 0 -1px;
 				padding: 5px 0 10px 0;
-                z-index: 9999;
+				z-index: 9999;
 
 				li {
 					&::after {
@@ -429,8 +429,8 @@
 		}
 
 		&.expanded{
-            z-index: 1;
-            float: right;
+			z-index: 1;
+			float: right;
 			&:hover {
 				box-shadow: inset 0 0 0 1px #ECECEC;
 				background: #F6F6F6;
@@ -448,75 +448,75 @@
 
 	&.multi {
 		background-size: cover;
-        overflow: visible;
-        position: relative;
+		overflow: visible;
+		position: relative;
 		height: 30px;
 		width: 30px;
 
-        .bubble {
-            display: none;
-            position: absolute;
-            overflow: hidden;
-            bottom: 46px;
-            left: -175px;
-            max-width: 430px;
-            min-width: 250px;
-            max-height: 250px;
-            padding: 15px 13px 20px 13px;
-            background: #ffffff;
-            border: 1px solid #dcdcdc;
-            border-radius: 3px;
-            box-shadow: 1px 1px 2px 0 rgba(0, 0, 0, 0.1);
+		.bubble {
+			display: none;
+			position: absolute;
+			overflow: hidden;
+			bottom: 46px;
+			left: -175px;
+			max-width: 430px;
+			min-width: 250px;
+			max-height: 250px;
+			padding: 15px 13px 20px 13px;
+			background: #ffffff;
+			border: 1px solid #dcdcdc;
+			border-radius: 3px;
+			box-shadow: 1px 1px 2px 0 rgba(0, 0, 0, 0.1);
 
-            @include meta-row;
-            .meta {
-                font-size: 10px;
-            }
+			@include meta-row;
+			.meta {
+				font-size: 10px;
+			}
 
-            .text {
-                overflow: hidden;
-                text-overflow: ellipsis;
-                color: #757474;
-                font: 14px/22px 'Droid Serif' normal;
-            }
-        }
+			.text {
+				overflow: hidden;
+				text-overflow: ellipsis;
+				color: #757474;
+				font: 14px/22px 'Droid Serif' normal;
+			}
+		}
 
-        &::after {
-             content: url(../images/notes/bubble-tip.png);
-             display: none;
-             position: absolute;
-             top: -18px;
-             left: -14px;
-             width: 34px;
-             height: 15px;
-        }
+		&::after {
+			 content: url(../images/notes/bubble-tip.png);
+			 display: none;
+			 position: absolute;
+			 top: -18px;
+			 left: -14px;
+			 width: 34px;
+			 height: 15px;
+		}
 
 
-        &:hover {
-            box-shadow:
-              inset 0 0 0 2px #ffffff,
-              0 2px 5px 2px rgba(0,0,0,.3);
-            z-index: 10;
-            .bubble {
-                display: block;
-            }
-            &::after {
-                display: block;
-            }
-        }
+		&:hover {
+			box-shadow:
+			  inset 0 0 0 2px #ffffff,
+			  0 2px 5px 2px rgba(0,0,0,.3);
+			z-index: 10;
+			.bubble {
+				display: block;
+			}
+			&::after {
+				display: block;
+			}
+		}
 	}
 
 	&.single {
 		position: absolute;
 		right: 30px;
 		left: 0;
-        text-align: left;
+		text-align: left;
 		direction: ltr;
 
-        //default turn these off
-        .separator, .time, .respond, .controls {
-            display: none;
-        }
+		//default turn these off
+		.separator, .time, .respond, .controls {
+			display: none;
+		}
 
 		.name {
 			@include menu-label-text-treatment;
@@ -546,26 +546,26 @@
 			z-index: 9999 !important;
 		}
 
-        &:hover {
+		&:hover {
 
 			.narrow-gutter &{
 				right: inherit;
 			}
 
-            border: 1px solid #dcdcdc;
-            box-shadow: inset 0 1px 0 0 #ffffff,
-                1px 1px 2px 0 rgba(0, 0, 0, 0.1);
-            background: #f8f8f8;
-            padding: 10px;
-            margin: -11px 0 0 -11px;
-            min-width: 270px;
+			border: 1px solid #dcdcdc;
+			box-shadow: inset 0 1px 0 0 #ffffff,
+				1px 1px 2px 0 rgba(0, 0, 0, 0.1);
+			background: #f8f8f8;
+			padding: 10px;
+			margin: -11px 0 0 -11px;
+			min-width: 270px;
 			max-width: 600px;
 			max-heigt: 400px;
 			z-index: 999;
 
-            .mask {
-                display: none;
-            }
+			.mask {
+				display: none;
+			}
 
 			.separator, .time, {
 				@include menu-label-text-treatment;
@@ -580,20 +580,20 @@
 				font-style: normal;
 			}
 
-            @include meta-row;
+			@include meta-row;
 
-            .respond {
-            	position: relative;
-                display: block;
-          		//overflow: hidden;
-          		margin: 12px 0 0 0;
+			.respond {
+				position: relative;
+				display: block;
+		  		//overflow: hidden;
+		  		margin: 12px 0 0 0;
 
-          		@include reply-options;
+		  		@include reply-options;
 				.reply-options {
 					opacity: 1
 				};
-          	}
-        }
+		  	}
+		}
 	}
 }
 
@@ -616,7 +616,7 @@
 		}
 	}
 
-    .note-responses{
+	.note-responses{
 		//.note-reply.first {
 		.note-reply {
 			box-shadow: inset 0 1px 0 0 #ffffff;
@@ -624,7 +624,7 @@
 		//.note-replies .note-reply.first {
 		//	box-shadow: none;
 		//}
-    }
+	}
 
 	.filter-bar {
 		margin: 0 10px;
@@ -767,7 +767,7 @@
 
 	}
 
-    .note-reply,
+	.note-reply,
 	.main-view {
 		border: 0px solid #f2f2f2;
 		border-bottom-width: 1px;
@@ -779,7 +779,7 @@
 			.respond .reply-options{ opacity: 1; }
 		}
 
-        @include meta-row;
+		@include meta-row;
 		.meta {
 			font-size: 12px;
 		}
@@ -808,9 +808,9 @@
 				hyphens: auto;
 
 				&.highlight {
-                   &,span{
-					  color: #494949;
-                   }
+					&,span{
+						color: #494949;
+					}
 				}
 			}
 
@@ -828,7 +828,7 @@
 		}
 
 		&.editor-active .respond{
-            display: block;
+			display: block;
 			.reply-options{display: none;}
 			.editor { display: block; }
 		}
@@ -857,21 +857,21 @@
 		}
 	}
 
-    .note-reply {
+	.note-reply {
 		//border-bottom-width: 0px;
-        &.first{
-            background-image: url(../images/reply-arrow.png);
-            background-position: 18px 15px;
-            background-repeat: no-repeat;
-        }
-        position: relative;
-        padding-left: 30px;
-        &.editor-active,&.hover {
+		&.first{
+			background-image: url(../images/reply-arrow.png);
+			background-position: 18px 15px;
+			background-repeat: no-repeat;
+		}
+		position: relative;
+		padding-left: 30px;
+		&.editor-active,&.hover {
 			box-shadow: none;
-            .meta .controls {
-                display: block;
-            }
-        }
+			.meta .controls {
+				display: block;
+			}
+		}
 		.avatar {
 			float: left;
 			img {
@@ -882,43 +882,43 @@
 				height: auto;
 			}
 		}
-        .meta {
+		.meta {
 			margin-left: 45px;
-            font-size: 10px;
-            .controls {
-                display: none;
+			font-size: 10px;
+			.controls {
+				display: none;
 				.favorite {
 					margin-top: 0px;
 				}
-            }
-        }
-        .body {
+			}
+		}
+		.body {
 			margin-left: 45px;
-            font-size: 14px;
-            line-height: default;
-        }
+			font-size: 14px;
+			line-height: default;
+		}
 
-        &.deleted-reply {
-            padding-bottom: 11px;
-            .meta {
-                .time {
-                    font-style: italic;
-                }
-            }
-        }
-    }
+		&.deleted-reply {
+			padding-bottom: 11px;
+			.meta {
+				.time {
+					font-style: italic;
+				}
+			}
+		}
+	}
 
-    .note-reply-container {
-        .note-reply-container {
-            .note-reply {
-                padding-left: 60px;
-                background-position: 48px 0;
-            }
-            .note-reply-container {
-                .note-reply.first {
-                    background-image: none;
-                }
-            }
-        }
-    }
+	.note-reply-container {
+		.note-reply-container {
+			.note-reply {
+				padding-left: 60px;
+				background-position: 48px 0;
+			}
+			.note-reply-container {
+				.note-reply.first {
+					background-image: none;
+				}
+			}
+		}
+	}
 }
