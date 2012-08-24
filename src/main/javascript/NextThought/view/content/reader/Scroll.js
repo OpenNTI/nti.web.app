@@ -145,10 +145,9 @@ Ext.define('NextThought.view.content.reader.Scroll',{
 					r = doc.createRange();
 					r.setStart(node, index.start);
 					r.setEnd(node, index.end);
-
-					if (!created[nv] || !created[nv][index]) {
+					if (!created[nv] || !created[nv][index.start]) {
 						created[nv] = created[nv] || {} ;
-						created[nv][index] = true;
+						created[nv][index.start] = true;
 						ranges.push(r);
 					}
 				});
