@@ -194,6 +194,7 @@ Ext.define('NextThought.controller.Search', {
 			}
 			else {
 				reader.scrollToText(result.term);
+				reader.on('sync-height',function() { reader.scrollToText(result.term); });
 				result.on('destroy', reader.clearSearchRanges,reader,{single:true});
 			}
 		});

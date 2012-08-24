@@ -155,6 +155,6 @@ Ext.define('NextThought.view.content.reader.Scroll',{
 			this);
 
 		me.showRanges(ranges);
-		me.scrollTo(ranges[0].getClientRects()[0].top - 150);
+		if (ranges.length > 0) { me.scrollTo(ranges[0].getClientRects()[0].top - 150); }
 	}
 });
