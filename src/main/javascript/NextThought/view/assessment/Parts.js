@@ -1,6 +1,6 @@
-Ext.define('NextThought.view.assessment.Response',{
+Ext.define('NextThought.view.assessment.Parts',{
 	extend: 'Ext.panel.Panel',
-	alias: 'widget.question-response',
+	alias: 'widget.question-parts',
 
 	requires: [
 		'NextThought.view.assessment.input.FreeResponse',

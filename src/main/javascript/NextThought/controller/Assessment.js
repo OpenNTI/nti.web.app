@@ -41,7 +41,7 @@ Ext.define('NextThought.controller.Assessment', {
 	views: [
 		'assessment.Header',
 		'assessment.Question',
-		'assessment.Response',
+		'assessment.Parts',
 		'assessment.input.Base',
 		'assessment.input.SymbolicMath'
 	],

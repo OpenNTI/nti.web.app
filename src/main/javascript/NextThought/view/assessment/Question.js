@@ -4,14 +4,14 @@ Ext.define('NextThought.view.assessment.Question',{
 
 	requires: [
 		'NextThought.view.assessment.Header',
-		'NextThought.view.assessment.Response'
+		'NextThought.view.assessment.Parts'
 	],
 
 	cls: 'question',
 
 	dockedItems: [
 		{ dock: 'top', xtype: 'question-header'},
-		{ dock: 'bottom', xtype: 'question-response'}
+		{ dock: 'bottom', xtype: 'question-parts'}
 	],
 
 
@@ -27,7 +27,7 @@ Ext.define('NextThought.view.assessment.Question',{
 		var part = this.questionPart = this.question.get('parts').first();
 
 		//TODO: addDockedItem instead?
-		this.down('question-response').setQuestionAndPart(
+		this.down('question-parts').setQuestionAndPart(
 				this.question,
 				part,
 				0,
@@ -123,18 +123,18 @@ Ext.define('NextThought.view.assessment.Question',{
 
 	markCorrect: function(){
 		this.down('question-header').markCorrect();
-		this.down('question-response').markCorrect();
+		this.down('question-parts').markCorrect();
 	},
 
 
 	markIncorrect: function(){
 		this.down('question-header').markIncorrect();
-		this.down('question-response').markIncorrect();
+		this.down('question-parts').markIncorrect();
 	},
 
 
 	reset: function(){
 		this.down('question-header').reset();
-		this.down('question-response').reset();
+		this.down('question-parts').reset();
 	}
 });
