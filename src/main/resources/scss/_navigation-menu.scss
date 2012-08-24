@@ -1,4 +1,3 @@
-
 .x-panel-navigation-menu{
 	padding: 0 3px 0 3px;
 	background: none;
@@ -144,15 +143,16 @@
 			}
 		}
 
-		&:hover {
-			.title {
-				background-color: #ebebeb;
-				text-overflow: inherit;
-				z-index: 99999;
-			}
-			.author {
-				padding-top: 19px;
-			}
-		}
+		//&:hover {
+			//.title {
+			//	background-color: #ebebeb;
+			//	position: absolute;
+			//	text-overflow: inherit;
+			//	z-index: 99999;
+			//}
+			//.author {
+			//	padding-top: 19px;
+			//}
+		//}
 	}
 }
