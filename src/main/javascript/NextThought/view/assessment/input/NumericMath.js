@@ -2,20 +2,31 @@ Ext.define('NextThought.view.assessment.input.NumericMath',{
 	extend: 'NextThought.view.assessment.input.FreeResponse',
 	alias: 'widget.question-input-numericmathpart',
 
+	allowKeys: {},
+
 	keyFilter: function(e,d){
-		var chr,
-			r = this.callParent(arguments),
-			COMMA = 188,
-			PERIOD = 190;
+		var chr = e.getCharCode(),
+			mod=e.altKey||e.ctrlKey||e.shiftKey,
+			r = this.callParent(arguments);
 
-		if(r===false){return r;}
+		if(mod || r===false){return r;}
 
-		chr = e.getCharCode();
-
-		if((chr < e.ZERO || chr > e.NINE) && chr !== COMMA && chr !== PERIOD ){
-			console.log('char:',chr);
+		if(!this.allowKeys[chr]){
 			e.stopEvent();
 			return false;
 		}
 	}
+}, function(){
+	function range(a,b){ var i = m.min(a,b), e = m.max(a,b); for(e;e>=i;e--){ me.allowKeys[e]=1; } }
+	function set(){ var i = arguments.length; for(i;i>=0;i--){me.allowKeys[arguments[i]]=1;} }
+
+	var me = this.prototype,
+		m = Math,
+		c = Ext.EventObject;
+
+
+	range(c.PAGE_UP, c.NINE);//number keys accross the top of keyboard, and home/page/etc...
+	range(c.NUM_ZERO, c.NUM_DIVISION);//num pad keys
+	range(c.SHIFT, c.ALT);
+	set(c.BACKSPACE,c.ENTER,c.TAB,c.NUM_CENTER,188/*Comma*/,190/*Period*/);
 });
