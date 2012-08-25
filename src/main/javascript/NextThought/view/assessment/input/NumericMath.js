@@ -9,6 +9,8 @@ Ext.define('NextThought.view.assessment.input.NumericMath',{
 			mod=e.altKey||e.ctrlKey||e.shiftKey,
 			r = this.callParent(arguments);
 
+		console.log('typed', chr);
+
 		if(mod || r===false){return r;}
 
 		if(!this.allowKeys[chr]){
@@ -28,5 +30,6 @@ Ext.define('NextThought.view.assessment.input.NumericMath',{
 	range(c.PAGE_UP, c.NINE);//number keys accross the top of keyboard, and home/page/etc...
 	range(c.NUM_ZERO, c.NUM_DIVISION);//num pad keys
 	range(c.SHIFT, c.ALT);
-	set(c.BACKSPACE,c.ENTER,c.TAB,c.NUM_CENTER,188/*Comma*/,190/*Period*/);
+	range(187, 191);
+	set(c.BACKSPACE,c.ENTER,c.TAB,c.NUM_CENTER,188/*Comma*/,190/*Period*/,106/*astrix*/);
 });
