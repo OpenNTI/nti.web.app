@@ -12,6 +12,11 @@ Ext.define('NextThought.ux.SearchHits', {
 			container: config.owner.getInsertionPoint('innerCt').dom
 		});
 
+		this.mon(this.ownerCmp, {
+			scope:this,
+			'navigateComplete':this.cleanup
+		});
+
 		this.insertSearchHitsOverlay();
 		return me;
 	},
