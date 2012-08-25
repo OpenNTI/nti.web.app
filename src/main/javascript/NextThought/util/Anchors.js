@@ -1282,6 +1282,9 @@ Ext.define('NextThought.util.Anchors', {
 		var sel = rangy.getSelection(doc),
 			r = sel.getRangeAt(0);
 
+		//if selection is collapsed, don't expand.
+		if (r.collapsed){return;}
+
 		r.expand('word');
 		Anchors.expandRangeToIncludeMath(r);
 		sel.setSingleRange(r);
