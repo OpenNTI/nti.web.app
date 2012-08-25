@@ -119,22 +119,25 @@ Ext.define('NextThought.view.content.reader.Scroll',{
 			match;
 
 		texts = AnnotationUtils.getTextNodes(doc);
+		//texts = texts.concat(AnnotationUtils.getTextNodes(this.el.down('.assessment-overlay').dom));
 
 		Ext.each(texts, function(node) {
 			var nv = node.nodeValue,
 				indexes = [],
 				r;
 
-			while (match = re.exec(nv)) {
-				indexes.push( {'start':match.index, 'end': match.index+match[0].length } );
-			}
+			if( !Ext.fly(node).parent('.naquestionpart',true) ){
+				while (match = re.exec(nv)) {
+					indexes.push( {'start':match.index, 'end': match.index+match[0].length } );
+				}
 
-			Ext.each(indexes, function(index){
-				r = doc.createRange();
-				r.setStart(node, index.start);
-				r.setEnd(node, index.end);
-				ranges.push(r);
-			});
+				Ext.each(indexes, function(index){
+					r = doc.createRange();
+					r.setStart(node, index.start);
+					r.setEnd(node, index.end);
+					ranges.push(r);
+				});
+			}
 		},
 		this);
 
