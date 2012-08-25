@@ -34,6 +34,18 @@ Ext.define('NextThought.view.assessment.input.SymbolicMath',{
 			r = jQuery(s).mathquill('editable'),
 			timer;
 
+		this.attachKeyListeners(s);
+
+		this.inputField.hide();
+	},
+
+
+	attachKeyListeners: function(span){
+		var s = span || this.mathquillSpan,
+			me = this,
+			r = jQuery(s),
+			timer;
+
 		//bind on kepress so we can adjust size:
 		r.bind('keypress.mathquill', function(){
 			clearTimeout(timer);
@@ -44,9 +56,6 @@ Ext.define('NextThought.view.assessment.input.SymbolicMath',{
 			}, 100);
 
 		});
-
-		//console.log('mathquill returned:', r);
-		this.inputField.hide();
 	},
 
 
@@ -82,6 +91,7 @@ Ext.define('NextThought.view.assessment.input.SymbolicMath',{
 		this.callParent(arguments);
 		this.setValue('');
 		jQuery(this.mathquillSpan).mathquill('revert').mathquill('editable');
+		this.attachKeyListeners();
 	},
 
 
