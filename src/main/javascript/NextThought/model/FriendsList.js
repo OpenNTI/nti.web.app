@@ -33,7 +33,7 @@ Ext.define('NextThought.model.FriendsList', {
 
 
 	getName: function(){
-		return this.get('realname') || this.get('alias');
+		return this.get('realname') || this.get('alias') || this.get('Username');
 	},
 
 
