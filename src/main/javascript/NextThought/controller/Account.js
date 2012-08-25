@@ -132,7 +132,7 @@ Ext.define('NextThought.controller.Account', {
 
 	showPrivacy: function(item){
 		if (!this.privacyWin) {
-			this.privacyWin = this.createWin('Privacy', 'https://docs.google.com/document/pub?id=1W9R8s1jIHWTp38gvacXOStsfmUz5TjyDYYy3CVJ2SmM');
+			this.privacyWin = this.createWin('Privacy', 'https://docs.google.com/document/pub?id=1W9R8s1jIHWTp38gvacXOStsfmUz5TjyDYYy3CVJ2SmM&embedded=true');
 		}
 		this.privacyWin.show();
 	},
