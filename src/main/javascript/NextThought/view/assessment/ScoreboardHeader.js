@@ -47,6 +47,7 @@ Ext.define('NextThought.view.assessment.ScoreboardHeader',{
 	setPriorResults: function(sortedAssessmentSets) {
 		this.menu.setResults(sortedAssessmentSets);
 		this.menuItemClicked(this.menu);
+		this.maybeHideTime();
 	},
 
 	addResult: function(assessment, opts) {
@@ -56,6 +57,19 @@ Ext.define('NextThought.view.assessment.ScoreboardHeader',{
 
 		this.menu.addResult(assessment);
 		this.time.update(this.menu.getSelectedText());
+		this.maybeHideTime();
+	},
+
+	maybeHideTime: function(){
+		//only show time if there's a dropdown...
+		if (this.menu.items.length < 2){
+			this.time.hide();
+			this.arrow.hide();
+		}
+		else {
+			this.time.show();
+			this.arrow.show();
+		}
 	}
 
 });
