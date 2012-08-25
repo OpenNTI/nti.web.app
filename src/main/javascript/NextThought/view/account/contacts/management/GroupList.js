@@ -90,9 +90,15 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
 
 
 	getInnerTpl: function(displayField){
+		if (displayField !== 'realname'){
+			console.warn('displayField is not realname');
+		}
 		return ['<div class="name">',
 				'<img src="',Ext.BLANK_IMAGE_URL,'" class="delete-group" alt="Delete Group"/>',
-				'{',displayField,'}',
+				'<tpl if="realname == \'\'">{Username}' +
+					'<tpl else>',
+						'{realname}',
+				'</tpl>',
 				'</div>'
 		].join('');
 	},

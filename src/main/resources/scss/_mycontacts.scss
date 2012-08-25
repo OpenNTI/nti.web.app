@@ -348,13 +348,6 @@ $over-color: #f4f3f3;
 					padding: 5px 5px 5px 60px;
 					background: transparent url(../images/forms/check_box.png) no-repeat 35px 7px;
 
-					&:first-of-type{
-						opacity: 0.6;
-						&.selection-item-over{
-							img.delete-group { display: none !important; }
-						}
-					}
-
 					&.selection-item-over{
 						background-color: $over-color;
 						color: #767676 !important;
