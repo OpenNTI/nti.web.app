@@ -37,7 +37,7 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
 	refresh: function(){
 		var el = this.getEl(), ul, link;
 
-		if(this.allowSelect){
+		if(this.allowSelect && this.getSelectionModel().getCount() > 0){
 			this.getSelectionModel().select(0,true,true);
 		}
 		this.callParent(arguments);
