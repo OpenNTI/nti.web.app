@@ -27,8 +27,7 @@ Ext.define('NextThought.model.Service', {
 		if(!l) {
 			return null;
 		}
-
-		return getURL(this.forceTrailingSlash(l) + (username?username:''));
+		return getURL(this.forceTrailingSlash(l) + (username?encodeURIComponent(username):''));
 	},
 
 

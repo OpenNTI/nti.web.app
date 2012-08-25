@@ -161,7 +161,7 @@ Ext.define('NextThought.cache.UserRepository', {
 				console.warn('many matching users: "', username, '"', list);
 			}
 
-			result = list ? list[0] : null;
+			Ext.each(list,function(u){ if(u.get('Username')===username){result=u;return false;}});
 
 			if(result && callbacks && callbacks.success){
 				callbacks.success.call(callbacks.scope || this, result);
