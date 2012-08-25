@@ -60,18 +60,15 @@ Ext.define('NextThought.mixins.ModelWithBodyContent',{
 				id = guidGenerator();
 				Canvas.getThumbnail(o, function(thumbnail){
 					text.push(
-						'\u200b',
 							me.WHITEBOARD_THUMBNAIL_TPL.apply([
 								id,
 								thumbnail,
-								clickHandlerMaker.call(scope,id)]),
-						'\u200b'
+								clickHandlerMaker.call(scope,id)])
 					);
 					render(i-1);
 				});
 			}
 		}
-
 		render(body.length-1);
 	},
 

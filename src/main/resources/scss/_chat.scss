@@ -152,6 +152,12 @@
 				clear: right;
 				position: relative;
 
+			  	//whiteboards inside chat:
+			  	img {
+					width: 100px;
+				  	margin: 0;
+				}
+
 				&::before {
 					top: 0;
 					left: -9px;
