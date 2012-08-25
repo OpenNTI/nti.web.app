@@ -36,6 +36,15 @@ Ext.define('NextThought.view.form.AccountForm', {
 			defaults: {ui: 'account',defaults: {ui: 'account'}}
 		}
 	},
+
+	gravatarTpl: new Ext.XTemplate(
+		'<div style="font-weight: bold; margin: 5px 0">Change your avatar at <a href="http://gravatar.com" target="_blank">gravatar.com</a>.</div>',
+		'We\'re using {Username}. It may take time for changes made on gravatar.com to appear here.',
+		{
+			compiled: true,
+			disableFormats: true
+		}),
+
 	items: [
 		{
 			layout: 'hbox',
@@ -118,13 +127,17 @@ Ext.define('NextThought.view.form.AccountForm', {
 						},
 						{
 							xtype: 'box',
-							changePassword: true,
 							autoEl: {
 								tag: 'span',
 								 name: 'pw_error',
 								 html: 'Current password incorrect',
 								 style: 'color: red; display: none;'
 							}
+						},
+						{
+							border: false,
+							changeAvatar: true,
+							margin: '10px 0px'
 						},
 						{
 							border: false,
@@ -195,6 +208,7 @@ Ext.define('NextThought.view.form.AccountForm', {
 		this.setFieldValue('ignoring');
 		this.setFieldValue('Communities');
 
+		this.down('panel[changeAvatar]').update(this.gravatarTpl.apply(this.account.data));
 	},
 
 
