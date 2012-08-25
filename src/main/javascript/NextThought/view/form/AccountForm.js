@@ -1,3 +1,6 @@
+/**
+ * @deprecated This class heavily needs redesigning. Its filled with bad-practices and hacks.
+ */
 Ext.define('NextThought.view.form.AccountForm', {
 	extend:'Ext.form.Panel',
 	alias: 'widget.account-form',
@@ -63,7 +66,10 @@ Ext.define('NextThought.view.form.AccountForm', {
 							xtype: 'textfield',
 							allowBlank: false,
 							emptyText: 'Real name',
-							name: 'realname'
+							name: 'realname',
+							validator: function(value) {//don't allow "only-whitespace" values
+								return (value||'').replace(/^["'\s]+|["'\s]+$/ig,'').length>0;
+							}
 						},
 						{
 							xtype: 'textfield',
@@ -73,7 +79,10 @@ Ext.define('NextThought.view.form.AccountForm', {
 							fieldLabel: 'Alias',
 							padding: 0,
 							margin: '10px 10px 10px 0px',
-							anchor: '50%'
+							anchor: '50%',
+							validator: function(value) {//don't allow "only-whitespace" values
+								return (value||'').replace(/^["'\s]+|["'\s]+$/ig,'').length>0;
+							}
 						},
 						{
 							margin: '20px 0px',
