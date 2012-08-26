@@ -161,11 +161,6 @@ Ext.define('NextThought.view.content.Navigation',{
 			'mouseenter':m.stopHide
 		});
 
-		pathPartEl.on('mouseenter', function(){
-			m.showBy(pathPartEl,'tl-bl?', [-10,0]);
-			m.leaveTimer = setTimeout(function(){m.hide()}, 2000);
-		});
-
 		this.menuMap = menus;
 
 		return pathPartEl;
