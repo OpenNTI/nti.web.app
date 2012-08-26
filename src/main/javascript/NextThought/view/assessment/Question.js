@@ -158,6 +158,7 @@ Ext.define('NextThought.view.assessment.Question',{
 	reset: function(){
 		this.down('question-header').reset();
 		this.down('question-parts').reset();
+		delete this.submitted;
 	//	var sub = this.down('assessment-multipart-submission');
 	//	if (sub){sub.enableSubmission();}
 	},
