@@ -53,10 +53,23 @@ Ext.define(	'NextThought.view.whiteboard.Canvas',{
 
 	afterRender: function(){
 		this.callParent();
-		if(!this.thumbnail){
-			this.drawScene();
-			this.on('resize', this.drawScene, this);
-		}
+		this.mon(this,'resize', this.hasResized, this);
+	},
+
+	hasResized: function(cmp,width,height){
+
+		this.el.set({
+			width: width,
+			height: width
+		});
+		this.el.setStyle({
+			width: width+'px',
+			height: width+'px'
+		});
+		var me = this;
+		setTimeout(function(){
+			me.drawScene();
+		},1);
 	},
 
 
@@ -165,8 +178,8 @@ Ext.define(	'NextThought.view.whiteboard.Canvas',{
 
 			var c = Ext.DomHelper.append(Ext.getBody(),{tag: 'canvas', style: {visibility:'hidden',position:'absolute'}},true);
 
-			c.dom.width = 1024;
-			c.dom.height = 768;
+			c.dom.width = 300;
+			c.dom.height = 300;
 			this.drawScene(this.updateData(scene),c,finish);
 		}
 	}
