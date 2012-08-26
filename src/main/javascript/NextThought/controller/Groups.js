@@ -213,7 +213,6 @@ Ext.define('NextThought.controller.Groups', {
 		}
 
 		Ext.Object.each(data,function(key,info){
-
 			var record = info.record,
 				field = 'friends',
 				list;
@@ -222,6 +221,12 @@ Ext.define('NextThought.controller.Groups', {
 				record = $AppConfig.userObject;
 				field = 'following';
 			}
+
+			//update user object's following:
+			debugger;
+			var uf = $AppConfig.userObject.get('following').slice();
+			push.apply(uf, info.people);
+			$AppConfig.userObject.set('following', uf);
 
 			list = record.get(field).slice();//clone list
 			push.apply(list, info.people); //add users
