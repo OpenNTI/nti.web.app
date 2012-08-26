@@ -207,7 +207,10 @@ Ext.define('NextThought.controller.Groups', {
 			}
 		}
 
-		panel.getEl().mask();
+		//only mask if there's work to do...
+		if(Object.keys(data).length > 0) {
+			panel.getEl().mask();
+		}
 
 		Ext.Object.each(data,function(key,info){
 
