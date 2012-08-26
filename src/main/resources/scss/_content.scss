@@ -152,6 +152,8 @@
 	}
 }
 
+
+
 .selection-nt,
 .x-menu-nt,
 .x-panel-nt {
@@ -229,6 +231,28 @@
 						overflow: hidden;
 					}
 				}
+			}
+		}
+
+		.x-box-scroller-bottom .x-menu-scroll-bottom {
+			background-image: url(../images/menu-arrow-down-active.png);
+			opacity: 0.5;
+			&.x-menu-scroll-bottom-hover {
+				opacity: 1;
+			}
+			&.x-menu-scroll-bottom-disabled {
+				opacity: 0 !important;
+			}
+		}
+
+		.x-box-scroller-top .x-menu-scroll-top {
+			background-image: url(../images/menu-arrow-up-active.png);
+			opacity: 0.5;
+			&.x-menu-scroll-top-hover {
+				opacity: 1;
+			}
+			&.x-menu-scroll-top-disabled {
+				opacity: 0 !important;
 			}
 		}
 	}

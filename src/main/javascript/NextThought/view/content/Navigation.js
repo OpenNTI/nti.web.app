@@ -46,23 +46,24 @@ Ext.define('NextThought.view.content.Navigation',{
 
 
 	locationChanged: function(ntiid){
-		var me = this;
-		var lp = LocationProvider;
-		var c;
-		var loc = lp.getLocation(ntiid);
-		var lineage = lp.getLineage(ntiid);
-		var book = lineage[0] ? lp.getLocation(lineage[0]) : null;
-		var	path = me.getBreadcrumbPath();
-		var iconPath;
+		var me = this,
+			lp = LocationProvider,
+			c,
+			loc = lp.getLocation(ntiid),
+			lineage = lp.getLineage(ntiid),
+			book = lineage[0] ? lp.getLocation(lineage[0]) : null,
+			path = me.getBreadcrumbPath(),
+			iconPath;
 
 		function buildPathPart(i){
-			var l = lp.getLocation(i),
+			var e,
+				l = lp.getLocation(i),
 				label = l.label,
 				level = parseInt(l.location.getAttribute('levelnum'), 10);
 			if (i === ntiid) {
 				label = me.levelLabels[level] || label;
 			}
-			var e = me.breadcrumbTpl.insertFirst(me.breadcrumb, [label], true);
+			e = me.breadcrumbTpl.insertFirst(me.breadcrumb, [label], true);
 			path.add(me.breadcrumbSepTpl.insertFirst(me.breadcrumb));
 
 			me.buildMenu(e,c);
@@ -131,7 +132,7 @@ Ext.define('NextThought.view.content.Navigation',{
 		var m = this.menuMap;
 		delete this.menuMap;
 
-		//
+		//TODO: clean them out
 	},
 
 
@@ -154,14 +155,10 @@ Ext.define('NextThought.view.content.Navigation',{
 		m = menus[key] = Ext.widget(Ext.apply({},cfg));
 
 		//evt handlers to hide menu on mouseout (w/o click) so they don't stick around forever...
-		this.mon(m, {
-			scope: this,
-			'mouseleave': function(){
-				m.leaveTimer = setTimeout(function(){m.hide()}, 500);
-			},
-			'mouseenter': function(){
-				clearTimeout(m.leaveTimer);
-			}
+		m.mon(pathPartEl, {
+			scope: m,
+			'mouseleave':m.startHide,
+			'mouseenter':m.stopHide
 		});
 
 		pathPartEl.on('mouseenter', function(){

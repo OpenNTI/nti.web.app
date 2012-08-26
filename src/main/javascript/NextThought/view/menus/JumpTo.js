@@ -30,5 +30,25 @@ Ext.define('NextThought.view.menus.JumpTo',{
 			return;
 		}
 		LocationProvider.setLocation(item.ntiid);
-	}
+	},
+
+
+	afterRender: function(){
+		this.callParent(arguments);
+		this.mon(this, {
+			scope: this,
+			'mouseleave':this.startHide,
+			'mouseenter':this.stopHide
+		});
+	},
+
+
+	startHide: function(){
+		var me = this;
+		me.stopHide();
+		me.leaveTimer = setTimeout(function(){me.hide();}, 500);
+	},
+
+
+	stopHide: function(){ clearTimeout(this.leaveTimer); }
 });
