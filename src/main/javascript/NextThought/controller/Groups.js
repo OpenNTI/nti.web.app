@@ -223,7 +223,6 @@ Ext.define('NextThought.controller.Groups', {
 			}
 
 			//update user object's following:
-			debugger;
 			var uf = $AppConfig.userObject.get('following').slice();
 			push.apply(uf, info.people);
 			$AppConfig.userObject.set('following', uf);
