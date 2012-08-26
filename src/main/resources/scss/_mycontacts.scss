@@ -173,7 +173,11 @@ $over-color: #f4f3f3;
 	&.x-menu-item-over,
 	&.card-over {
 		img.nib{
+			opacity: 0.5;
 			display: block;
+			&:active {
+				opacity: 1;
+			}
 		}
 	}
 
