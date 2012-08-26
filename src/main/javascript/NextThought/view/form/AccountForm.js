@@ -42,7 +42,7 @@ Ext.define('NextThought.view.form.AccountForm', {
 
 	gravatarTpl: new Ext.XTemplate(
 		'<div style="font-weight: bold; margin: 5px 0">Change your avatar at <a href="http://gravatar.com" target="_blank">gravatar.com</a>.</div>',
-		'We\'re using {Username}. It may take time for changes made on gravatar.com to appear here.',
+		'We\'re using {email}. It may take time for changes made on gravatar.com to appear here.',
 		{
 			compiled: true,
 			disableFormats: true
