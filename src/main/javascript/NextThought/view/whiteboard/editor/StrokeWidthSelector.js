@@ -10,9 +10,9 @@ Ext.define('NextThought.view.whiteboard.editor.StrokeWidthSelector',{
 		data : [
 			{'size': 1, 'size-class': 'fine'},
 			{'size': 2, 'size-class': 'thin'},
-			{'size': 3, 'size-class': 'medium'},
-			{'size': 4, 'size-class': 'heavy'},
-			{'size': 5, 'size-class': 'thick'}
+			{'size': 5, 'size-class': 'medium'},
+			{'size': 9, 'size-class': 'heavy'},
+			{'size': 14, 'size-class': 'thick'}
 		]
 	}),
 
