@@ -20,7 +20,8 @@ Ext.define('NextThought.view.whiteboard.editor.ShapeOptions',{
 			xtype: 'wb-tool-option',
 			toggleGroup: 'shape-selected-',
             handler: function(btn){
-                var fill = btn.up('wb-tool-shape-options').down('color-picker-button[fillSelect]');
+                var me = btn.up('wb-tool-shape-options'),
+					fill = me.down('color-picker-button[fillSelect]');
                 if(btn.sides===1){
                     fill.setValue();
                     fill.disable();

@@ -445,7 +445,7 @@
 	input.x-form-text {
 		height: 32px;
 		text-indent: -1000px;
-		background: url(../images/whiteboard/sprite.png) 1000 1000 no-repeat;
+		background: url(../images/whiteboard/sprite.png) no-repeat;
 
 		&[value="fine"] { background-position: -16px -732px; }
 		&[value="thin"] { background-position: -116px -732px; }

@@ -48,5 +48,6 @@ Ext.define('NextThought.view.whiteboard.editor.StrokeWidthSelector',{
 		this.on('select',function(me,val){
 			me.inputEl.dom.setAttribute('value',val[0].get(me.displayField));
 		},this);
+		this.setValue(1);
 	}
 });
