@@ -153,6 +153,17 @@ Ext.define('NextThought.view.content.Navigation',{
 
 		m = menus[key] = Ext.widget(Ext.apply({},cfg));
 
+		//evt handlers to hide menu on mouseout (w/o click) so they don't stick around forever...
+		this.mon(m, {
+			scope: this,
+			'mouseleave': function(){
+				m.leaveTimer = setTimeout(function(){m.hide()}, 500);
+			},
+			'mouseenter': function(){
+				clearTimeout(m.leaveTimer);
+			}
+		});
+
 		pathPartEl.on('mouseenter', function(){
 			m.showBy(pathPartEl,'tl-bl?', [-10,0]);
 		});
