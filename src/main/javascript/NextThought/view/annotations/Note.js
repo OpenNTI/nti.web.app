@@ -54,6 +54,16 @@ Ext.define( 'NextThought.view.annotations.Note', {
 
 
 	cleanup: function(){
+		this.removeWidget();
+		if (this.multiGutterWidget){
+			this.multiGutterWidget.remove();
+			delete this.multiGutterWidget;
+		}
+		return this.callParent(arguments);
+	},
+
+
+	removeWidget: function(){
 		if (this.gutterCmp){
 			this.ownerCmp.unRegisterScrollHandler(
 					this.gutterCmp.onParentScroll,this.gutterCmp);
@@ -61,13 +71,7 @@ Ext.define( 'NextThought.view.annotations.Note', {
 			delete this.gutterCmp;
 		}
 		if (this.singleGutterWidget){this.singleGutterWidget.remove(); delete this.singleGutterWidget;}
-		if (this.multiGutterWidget){this.multiGutterWidget.remove(); delete this.multiGutterWidget;}
-
-		return this.callParent(arguments);
 	},
-
-	//Notes don't have controls
-	//getControl: function(){},
 
 
 	openWindow: function(isReply, isEdit){
@@ -106,9 +110,8 @@ Ext.define( 'NextThought.view.annotations.Note', {
 
 		}
 		else {
-			if (!this.singleGutterWidget || (this.singleGutterWidget.dom.innerHTML === '')){
-				this.createSingleGutterWidget();
-			}
+			this.removeWidget();
+			this.createSingleGutterWidget();
 			this.activeWidget = this.singleGutterWidget;
 			return this.singleGutterWidget;
 		}
