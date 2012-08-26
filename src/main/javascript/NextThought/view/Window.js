@@ -117,6 +117,10 @@ Ext.define('NextThought.view.Window',{
 				dom.scrollLeft = 0;
 			});
 		}
+
+		this.mon(this.el,{
+			contextmenu: function(e){e.stopEvent();return false;}
+		});
 	},
 
 
