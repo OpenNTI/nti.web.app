@@ -26,6 +26,18 @@ Ext.define('NextThought.view.account.contacts.management.ContactList',{
 		this.store.on('add',this.onContactAdded,this);
 		this.store.on('clear',this.onContactsCleared,this);
 		this.store.on('datachanged',this.onChange,this);
+		this.mon(this,'groups-changed',this.updateFinish,this);
+	},
+
+
+	updateFinish: function(){
+		var canFinsh = false;
+		this.items.each(function(s){
+			canFinsh = (s.getSelected().groups.length!==0);
+			return canFinsh;
+		});
+
+		this.finishButton[canFinsh?'enable':'disable']();
 	},
 
 

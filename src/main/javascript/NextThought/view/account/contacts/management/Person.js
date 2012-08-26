@@ -42,7 +42,17 @@ Ext.define('NextThought.view.account.contacts.management.Person',{
 			status: this.user.get('status')
 		});
 
+		this.addEvents({'groups-changed':true});
+		this.enableBubble(['groups-changed']);
+
 		this.groupsList = this.down('management-group-list');
+
+		this.mon(this.groupsList,'selectionchange',this.groupSelectionChange,this);
+	},
+
+
+	groupSelectionChange: function(view,selection){
+		this.fireEvent('groups-changed',selection.length!==0);
 	},
 
 
@@ -58,11 +68,19 @@ Ext.define('NextThought.view.account.contacts.management.Person',{
 		this.callParent(arguments);
 		this.getEl().addClsOnOver('selection-item-over');
 		this.getEl().down('.contact-card').on('click', this.toggle, this);
-		this.getEl().down('.nib').on('click', this.destroy, this);
+		this.getEl().down('.nib').on('click', this.removeClick, this);
+	},
+
+
+	removeClick: function(e){
+		e.stopEvent();
+		this.destroy();
+		return false;
 	},
 
 
 	toggle: function(){
+		if(!this.el){return;}
 		if(this.groupsList.isVisible()){
 			this.collapse();
 			return;

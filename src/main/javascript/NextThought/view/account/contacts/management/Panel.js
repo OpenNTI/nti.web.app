@@ -69,6 +69,9 @@ Ext.define('NextThought.view.account.contacts.management.Panel',{
 			addBtn = me.down('button[text=Add]'),
 			userSearch = me.down('usersearchinput');
 
+		contactList.finishButton = this.down('button[action=finish]');
+		contactList.updateFinish();
+
 		me.mon( contactList, 'change', me.onContactListChanged, me);
 		me.mon( addBtn, 'click', me.addGroup, me);
 		me.mon( me.down('simpletext'),{
