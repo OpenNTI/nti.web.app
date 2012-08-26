@@ -17,6 +17,8 @@
 		text-rendering: optimizeLegibility;//fallback
 		text-rendering: geometricPrecision;
 
+		position: relative;
+
 		word-wrap: break-word;
 
 		-webkit-hyphens: auto;
@@ -32,6 +34,16 @@
 
 	.math {
 		line-height: normal;
+	}
+
+	.pre {
+		width: 100%;
+		font-size: 90%;
+		background-color: #f0f0f0;
+		padding-top: 5px;
+		padding-bottom: 5px;
+		font-family: Monaco, "Courier New", Courier, fixed;
+		padding-left: 4ex;
 	}
 
 	&.x-repaint {
