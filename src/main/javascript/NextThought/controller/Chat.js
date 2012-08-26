@@ -109,12 +109,15 @@ Ext.define('NextThought.controller.Chat', {
 			roomInfos = me.getAllRoomInfosFromSessionStorage(),
 			w;
 		Ext.each(roomInfos, function(ri) {
+			/*
+			testing trying to get messages here...
 			console.log('existing room info...', ri);
 			$AppConfig.service.getObject(ri.getId(), function(){
 				console.log('success', arguments);
 			}, function(){
 				console.log('failure', arguments);
 			}, this);
+			*/
 			me.onEnteredRoom(ri);
 			w = me.getChatWindow(ri);
 			w.show();
