@@ -93,7 +93,7 @@ Ext.define('NextThought.controller.Account', {
 			xtype: 'nti-window',
 			id: 'account-window',
 			width: '40%',
-			height: '75%',
+			height: '50%',
 			dialog: true,
 			layout: 'fit',
 			items: {

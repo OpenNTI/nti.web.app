@@ -163,6 +163,7 @@ Ext.define('NextThought.view.form.AccountForm', {
 						},
 						{
 							border: false,
+							hidden: true,
 							margin: '10px 0px',
 							defaults: {
 								ui: '',
