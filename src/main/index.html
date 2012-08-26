@@ -8,16 +8,20 @@
 
 	<link rel="stylesheet" id="ext-base" type="text/css"
 		  href="https://extjs.cachefly.net/ext-4.1.1-gpl/resources/css/ext-all-gray.css">
-	<link rel="stylesheet" id="mathquill-stylesheet" type="text/css" href="resources/lib/mathquill/mathquill.css">
+	<link rel="stylesheet" type="text/css"
+		  href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"/>
+	<link rel="stylesheet" type="text/css"
+		  href="//fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic"/>
+	<link rel="stylesheet" id="mathquill-stylesheet" type="text/css"
+		  href="resources/lib/mathquill/mathquill.css">
     <link rel="stylesheet" id="main-stylesheet" type="text/css" href="resources/css/main.css">
+
 	<script type="text/javascript" src="resources/misc/base64.min.js"></script>
 	<!--[if gte IE 9]>
-	  <style type="text/css">
-	    .gradient { filter: none; }
-	  </style>
-
+	<style type="text/css">
+		.gradient { filter: none; }
+	</style>
 	<![endif]-->
-
 </head>
 <body>
 	<div id="loading-mask">
@@ -27,37 +31,20 @@
 
 	<script type="text/javascript" src="config.js"></script>
 
-	<script type="text/javascript" src="https://c328740.ssl.cf1.rackcdn.com/mathjax/1.1-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-	<script type="text/javascript" src="resources/misc/mathjaxconfig.js"></script>
-
-	<!-- using the CDN version -->
-	<script type="text/javascript" src="https://extjs.cachefly.net/ext-4.1.1-gpl/ext-all.js"
-			id="ext-js-library"></script>
-
 	<!-- jQuery library, for use with mathquill only -->
 	<script type="text/javascript" src="resources/lib/jQuery-1.8.0min.js"></script>
+	<script type="text/javascript"> jQuery.noConflict(); </script>
 
-	<script type="text/javascript">
-		jQuery.noConflict();
-		Ext.Loader.setConfig('enabled',true);
-	</script>
+	<!-- using the CDN version -->
+	<!-- on deploy: change ext-all.js to ext.js  -->
+	<script type="text/javascript"
+			src="https://extjs.cachefly.net/ext-4.1.1-gpl/ext-all.js"
+			id="ext-js-library"></script>
 
 	<!-- application main entry -->
+	<!-- on deply: change to the concatinated & minified code file, put a version/date query string arg -->
 	<script type="text/javascript" src="javascript/app.js"></script>
 
-
-	<!-- Google Analytics code -->
-	<!--
-	<script type="text/javascript">
-		var _gaq = _gaq || [];
-		_gaq.push(['_setAccount', 'UA-22943650-2']);
-		_gaq.push(['_trackPageview']);
-		(function() {
-			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-		})();
-	</script>
-	-->
+	<!--[analytics code here]-->
 </body>
 </html>
