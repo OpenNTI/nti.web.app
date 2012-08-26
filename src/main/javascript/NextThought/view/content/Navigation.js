@@ -158,7 +158,10 @@ Ext.define('NextThought.view.content.Navigation',{
 		m.mon(pathPartEl, {
 			scope: m,
 			'mouseleave':m.startHide,
-			'mouseenter':m.stopHide
+			'mouseenter':function(){
+				m.stopHide();
+				m.showBy(pathPartEl,'tl-bl?', [-10,0]);
+			}
 		});
 
 		this.menuMap = menus;
