@@ -106,6 +106,8 @@ Ext.define('NextThought.util.Line',{
 		//If we have selected a range that is still collapsed.  No anchor.
 		if (range.collapsed){return null;}
 
+		if (!this.isNodeAnchorable(range.commonAncestorContainer)){return null;}
+
 		//testing, show ranges:
 		//doc.parentWindow.getSelection().removeAllRanges();
 		//doc.parentWindow.getSelection().addRange(range);
@@ -171,8 +173,15 @@ Ext.define('NextThought.util.Line',{
 
 
 	/** @private */
-	isNodeAnchorable: function(node){
-		if (!node){return false;}
+	isNodeAnchorable: function(n){
+		if (!n){return false;}
+
+		var node = Anchors.referenceNodeForNode(n);
+
+		if (Ext.isTextNode(node) && node.nodeValue.trim().length > 0) {
+			return true;
+		}
+
 		var nonAnchorableNodeClasses = [
 				'page-contents',
 				'label',
