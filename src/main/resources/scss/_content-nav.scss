@@ -27,11 +27,12 @@
 			text-transform: uppercase;
 			white-space: nowrap;
 		}
-		span.part {
+		span.part:not(.no-hover) {
 			cursor: pointer;
 			&:hover{
 				color: #494949;
 			}
+
 		}
 	}
 

@@ -99,6 +99,8 @@ Ext.define('NextThought.view.content.Navigation',{
 		path.add(me.breadcrumbSepTpl.insertFirst(me.breadcrumb));
 		path.add(me.breadcrumbTpl.insertFirst(me.breadcrumb, ['Library']));
 
+		me.breadcrumb.first().addCls('no-hover');
+
 		me.title.clearListeners();
 		me.title.update(me.getContentNumericalAddress(lineage,loc)+loc.label);
 	},
