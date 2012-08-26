@@ -16,12 +16,20 @@
 	height: auto;
 	margin: 0;
 	div{
+		border: none;
 	    padding: 1em 1em 1em 1.3em;
-        background-position: left center;
         margin: 1em;
+		font-size: 18px;
+		background: {
+			repeat: no-repeat;
+			image: $loading-indicator !important;
+			color: transparent;
+			position: left center;
+		};
 	}
 }
 
+.nt-mask-msg,
 .x-mask-msg{
     border: none !important;
 	background: transparent;
@@ -40,13 +48,21 @@
 
 	div {
 		border: none;
-		padding: 1em 0 1.5em 1em;
-		font-size: 18px;
 		background: {
+			repeat: no-repeat;
 			image: $loading-indicator !important;
 			color: transparent;
-			position: center bottom;
+			position: left center;
 		};
+	}
+
+	&.navigation{
+		div {
+			border: none;
+			padding: 1em 0 1.5em 1em;
+			font-size: 18px;
+			background-position: center bottom;
+		}
 	}
 
 }
@@ -57,6 +73,7 @@
 	padding: 0 !important;
 }
 
+.nt-mask,
 .x-mask { background: rgba(255,255,255,0.85); }
 
 .x-tip { background-color: white; }

@@ -79,7 +79,7 @@ Ext.define('NextThought.providers.Location', {
 				window.location.hash = ntiid;
 			}
 //		if(me.currentNTIID && ntiid !== me.currentNTIID){
-			e.mask('Loading...');
+			e.mask('Loading...','navigation');
 		//}
 
 		//make this happen out of this function's flow, so that the mask shows immediately.

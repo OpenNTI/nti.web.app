@@ -23,6 +23,7 @@ Ext.define( 'NextThought.view.form.fields.UserSearchInputField', {
 	listConfig: {
 		loadingHeight: 140,
 		loadingText: 'Searching...',
+		loadingCls: 'search',
 		ui: 'nt',
 		plain: true,
 		shadow: false,
