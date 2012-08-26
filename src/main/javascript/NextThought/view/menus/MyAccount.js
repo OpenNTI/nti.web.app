@@ -27,6 +27,7 @@ Ext.define('NextThought.view.menus.MyAccount',{
 		{text: 'About', href: 'http://www.nextthought.com/', hrefTarget: '_blank'},
 		{text: 'Help', href: 'mailto:alpha-support@nextthought.com', hrefTarget: '_blank'},
 		{text: 'Privacy', action: 'privacy'},
+		{text: 'Terms of Service', action: 'terms'},
 		{xtype: 'menuseparator'},
 		{text: 'Sign out', action: 'logout'}
 	]

@@ -37,6 +37,10 @@ Ext.define('NextThought.controller.Account', {
 				'click': this.showPrivacy
 			},
 
+			'my-account-menu menuitem[action=terms]' : {
+				'click': this.showTerms
+			},
+
 			'my-account-menu menuitem[action=account]' : {
 				'click': this.showAccount
 			}
@@ -138,6 +142,15 @@ Ext.define('NextThought.controller.Account', {
 	},
 
 
+	showTerms: function(item){
+		if (!this.termsWin) {
+			this.termsWin = this.createWin('Terms of Service',
+					'https://docs.google.com/document/pub?id=1rM40we-bbPNvq8xivEKhkoLE7wmIETmO4kerCYmtISM&embedded=true');
+		}
+		this.termsWin.show();
+	},
+
+
 	createWin: function(title, url) {
 		return Ext.widget('nti-window',{
 			title: title,
@@ -145,6 +158,7 @@ Ext.define('NextThought.controller.Account', {
 			width: '60%',
 			height: '75%',
 			layout: 'fit',
+			modal: true,
 			items: {
 				xtype: 'component',
 				cls: 'padded',
