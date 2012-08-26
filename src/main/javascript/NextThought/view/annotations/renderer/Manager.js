@@ -117,9 +117,16 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 
 
 	clearBuckets: function(prefix){
+		function clear(d){
+			while(d && d.firstChild){
+				d.removeChild(d.firstChild);
+			}
+		}
+
 		var g = this.gutter[prefix];
-		g.controls.dom.innerHTML = '';
-		g.widgets.dom.innerHTML = '';
+
+		clear(g.controls.dom);
+		clear(g.widgets.dom);
 
 		if( this.buckets[prefix] ){
 			this.buckets[prefix].free();
