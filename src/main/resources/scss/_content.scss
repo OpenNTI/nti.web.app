@@ -103,19 +103,6 @@
 	}
 }
 
-.scroll-shadow {
-	position: absolute;
-	top: 0; left: 0; right: 0;
-	height: 30px;
-	$experimental-support-for-svg: true;
-	@include background-image(linear-gradient(top, rgba(255,255,255,1) 0%,rgba(255,255,255,0) 100%));
-	z-index: 9999;
-	pointer-events: none;
-	.x-ie9 & {
-		display: none;
-	}
-}
-
 .gutter-shadow {
 	position: absolute;
 	top: 0; right: 0;
