@@ -54,16 +54,12 @@ Ext.define( 'NextThought.view.annotations.Note', {
 
 
 	cleanup: function(){
-		this.removeWidget();
-		if (this.multiGutterWidget){
-			this.multiGutterWidget.remove();
-			delete this.multiGutterWidget;
-		}
+		this.removeWidgets();
 		return this.callParent(arguments);
 	},
 
 
-	removeWidget: function(){
+	removeWidgets: function(){
 		if (this.gutterCmp){
 			this.ownerCmp.unRegisterScrollHandler(
 					this.gutterCmp.onParentScroll,this.gutterCmp);
@@ -71,6 +67,10 @@ Ext.define( 'NextThought.view.annotations.Note', {
 			delete this.gutterCmp;
 		}
 		if (this.singleGutterWidget){this.singleGutterWidget.remove(); delete this.singleGutterWidget;}
+		if (this.multiGutterWidget){
+			this.multiGutterWidget.remove();
+			delete this.multiGutterWidget;
+		}
 	},
 
 
@@ -110,7 +110,7 @@ Ext.define( 'NextThought.view.annotations.Note', {
 
 		}
 		else {
-			this.removeWidget();
+			this.removeWidgets();
 			this.createSingleGutterWidget();
 			this.activeWidget = this.singleGutterWidget;
 			return this.singleGutterWidget;
