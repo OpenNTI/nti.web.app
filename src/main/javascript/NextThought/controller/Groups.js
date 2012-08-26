@@ -69,8 +69,14 @@ Ext.define('NextThought.controller.Groups', {
 
 
 
-	getContacts: function(user,callback){
-		var names = user.get('following') || [];
+	getContacts: function(callback){
+		var names = [];
+
+		this.getFriendsListStore().each(function(g){
+			names.push.apply(names,g.get('friends'));
+		});
+
+		names = Ext.Array.sort(Ext.Array.unique(names));
 
 		UserRepository.getUser(names,function(u){
 			var friends = {Online: {}, Offline: {}};
@@ -87,7 +93,6 @@ Ext.define('NextThought.controller.Groups', {
 
 	publishContacts: function(){
 		var me = this,
-			user = $AppConfig.userObject,
 			store = me.getFriendsListStore(),
 			groups = Ext.getCmp('my-groups');
 
@@ -96,7 +101,7 @@ Ext.define('NextThought.controller.Groups', {
 			return;
 		}
 
-		this.getContacts(user,function(friends){
+		this.getContacts(function(friends){
 			Ext.getCmp('offline-contacts').setUsers(friends.Offline);
 			Ext.getCmp('online-contacts').setUsers(friends.Online);
 		});
@@ -105,14 +110,14 @@ Ext.define('NextThought.controller.Groups', {
 
 		store.each(function(group){
 			var id = ParseUtils.parseNtiid(group.getId()),
-				friends = group.get('friends');
+				friends = group.get('friends'), name;
 
 			if(friends.length === 1 && friends[0] === 'Everyone'
 			&& id.specific.provider === 'zope.security.management.system_user'){
 				return;
 			}
 
-			var name = group.getName();
+			name = group.getName();
 			UserRepository.getUser(friends,function(users){
 				groups.add({title: name, associatedGroup: group}).setUsers(users);
 			});
