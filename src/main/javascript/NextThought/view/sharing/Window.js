@@ -40,7 +40,7 @@ Ext.define( 'NextThought.view.sharing.Window', {
 					xtype: 'container',
 					flex: 1,
 					items: [
-						{xtype: 'checkbox', boxLabel: 'Save as level default', name: 'default'}
+						{xtype: 'checkbox', boxLabel: 'make sharing default', name: 'default'}
 					]
 				},
 				{xtype: 'button', text: 'Save', action: 'save'},
@@ -104,12 +104,28 @@ Ext.define( 'NextThought.view.sharing.Window', {
 		this.callParent(arguments);
 
 		//any down calls below this:
+		var chkDefaultSharing = true;
 		if (this.record){
-			this.setValue(this.record.get('sharedWith'));
+			if (this.record.get('sharedWith').length > 0){
+				this.setValue();
+				chkDefaultSharing = false;
+			}
 		}
 		else if (this.value) {
 			this.setValue(this.value);
+			chkDefaultSharing = false;
 		}
+		if (chkDefaultSharing) {
+			try{
+				var prefs = LocationProvider.getPreferences();
+				if (prefs && prefs.sharing && prefs.sharing.sharedWith) {
+					this.setValue(prefs.sharing.sharedWith);
+				}
+
+			}
+			catch(e){}
+		}
+
 	},
 
 	getValue: function(){

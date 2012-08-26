@@ -370,17 +370,16 @@ Ext.define('NextThought.providers.Location', {
 	},
 
 	updatePreferences: function(pi) {
-		var ntiid = pi.get('NTIID'),
-			sharing = pi.get('sharingPreference');
+		var sharing = pi.get('sharingPreference');
 
 		if(sharing === ''){
 			return;
 		}
 
 		if (!this.preferenceMap){this.preferenceMap = {};}
-		this.preferenceMap[ntiid] = {sharing: sharing};
+		this.preferenceMap[pi.getId()] = {sharing: sharing};
 
-		console.log('shareing prefs updated', this.preferenceMap[ntiid]);
+		console.log('shareing prefs updated', this.preferenceMap[pi.getId()]);
 	},
 
 

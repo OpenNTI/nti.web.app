@@ -51,13 +51,24 @@ Ext.define('NextThought.controller.Library', {
 	saveSharingPrefs: function(prefs, callback){
 		//TODO - check to see if it's actually different before save...
 		var pi = LocationProvider.currentPageInfo;
-		if (pi){
-			pi.saveField('sharingPreference', {sharedWith: prefs}, function(){
-				//always happens if success only:
-				LocationProvider.updatePreferences(pi);
-				Ext.callback(callback, null, []);
-			});
-		}
+
+		//get parent:
+		$AppConfig.service.getPageInfo(LocationProvider.getLineage(pi.getId()).last(),
+			function(topPi){
+				if (topPi){
+					pi.saveField('sharingPreference', {sharedWith: prefs}, function(){
+						//always happens if success only:
+						LocationProvider.updatePreferences(pi);
+						Ext.callback(callback, null, []);
+					});
+				}
+			},
+			function(){
+				console.error('failed to save default sharing');
+			},
+		this);
+
+
 	},
 
 

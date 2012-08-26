@@ -57,7 +57,6 @@ Ext.define('NextThought.view.menus.Share',{
 
 
 	reload: function(value){
-
 		this.removeAll(true);
 
 		var sharedWith, p;
