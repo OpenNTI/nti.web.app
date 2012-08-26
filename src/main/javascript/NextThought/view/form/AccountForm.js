@@ -85,6 +85,19 @@ Ext.define('NextThought.view.form.AccountForm', {
 							}
 						},
 						{
+							xtype: 'textfield',
+							emptyText: 'Email Address',
+							allowBlank: false,
+							name: 'email',
+							fieldLabel: 'Email',
+							padding: 0,
+							margin: '10px 10px 10px 0px',
+							anchor: '50%',
+							validator: function(value) {//don't allow "only-whitespace" values
+								return (value||'').replace(/^["'\s]+|["'\s]+$/ig,'').length>0;
+							}
+						},
+						{
 							margin: '20px 0px',
 							xtype: 'box',
 							changePassword: true,
@@ -212,6 +225,7 @@ Ext.define('NextThought.view.form.AccountForm', {
 
 		this.setFieldValue('realname');
 		this.setFieldValue('alias');
+		this.setFieldValue('email');
 		this.setFieldValue('accepting');
 		this.setFieldValue('following');
 		this.setFieldValue('ignoring');

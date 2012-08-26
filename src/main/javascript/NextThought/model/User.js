@@ -9,6 +9,7 @@ Ext.define(	'NextThought.model.User', {
 		{ name: 'Presence', type: 'string' },
 		{ name: 'affiliation', type: 'string' },
 		{ name: 'alias', type: 'string' },
+		{ name: 'email', type: 'string' },
 		{ name: 'realname', type: 'string' },
 		{ name: 'avatarURL', type: 'AvatarURL' },
 		{ name: 'accepting', type: 'UserList' },
