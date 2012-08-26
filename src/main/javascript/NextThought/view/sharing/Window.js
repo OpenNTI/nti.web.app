@@ -55,10 +55,11 @@ Ext.define( 'NextThought.view.sharing.Window', {
 	initComponent: function(){
 		this.items = Ext.clone(this.items);
 		var readOnly = this.record ? !this.record.isModifiable() : false,
-			title = this.titleLabel ? this.titleLabel : readOnly ? 'Item Info' : 'Share this...',
+			title = this.titleLabel || (readOnly ? 'Item Info' : 'Share this...'),
 			content = 'This item does not have text',
 			u = this.record? this.record.get('Creator') : $AppConfig.username,
-			info = this.items.first();
+			info = this.items.first(),
+			useDefaultSharing = true, prefs;
 
 		if (this.record && this.record.getBodyText) {
 			content = this.record.getBodyText();
@@ -104,20 +105,17 @@ Ext.define( 'NextThought.view.sharing.Window', {
 		this.callParent(arguments);
 
 		//any down calls below this:
-		var chkDefaultSharing = true;
-		if (this.record){
-			if (this.record.get('sharedWith').length > 0){
-				this.setValue();
-				chkDefaultSharing = false;
-			}
+		if (this.record && !this.record.phantom){
+			useDefaultSharing = false;
+			this.setValue(this.record.get('sharedWith'));
 		}
 		else if (this.value) {
 			this.setValue(this.value);
-			chkDefaultSharing = false;
+			useDefaultSharing = false;
 		}
-		if (chkDefaultSharing) {
+		if (useDefaultSharing) {
 			try{
-				var prefs = LocationProvider.getPreferences();
+				prefs = LocationProvider.getPreferences();
 				if (prefs && prefs.sharing && prefs.sharing.sharedWith) {
 					this.setValue(prefs.sharing.sharedWith);
 				}
