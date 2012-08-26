@@ -36,8 +36,8 @@ Ext.define('NextThought.view.menus.Filter',{
 		items.push({ cls: 'type-filter everything', text: 'Everything', checked: true, allowUncheck:false, isEverything: true});
 		items.push({ cls: 'type-filter highlight', text: 'Highlights', model: 'NextThought.model.Highlight' });
 		items.push({ cls: 'type-filter note', text: 'Notes', model: 'NextThought.model.Note' });
-		items.push({ cls: 'type-filter transcript', text: 'Transcripts', model: 'NextThought.model.TranscriptSummary' });
-		items.push({ cls: 'type-filter quizresult', text: 'Quiz Results', model: 'NextThought.model.QuizResult' });
+//		items.push({ cls: 'type-filter transcript', text: 'Transcripts', model: 'NextThought.model.TranscriptSummary' });
+//		items.push({ cls: 'type-filter quizresult', text: 'Quiz Results', model: 'NextThought.model.QuizResult' });
 		items.push({ xtype: 'labeledseparator', text: 'From' });
 		items.push({ cls: 'group-filter everyone', text: 'Everyone', checked: true, allowUncheck:false, isEveryone:true });
 		items.push({ cls: 'group-filter', text: 'Me', isMe: true, isGroup: true });

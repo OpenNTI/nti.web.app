@@ -25,6 +25,7 @@ Ext.define('NextThought.view.ViewSelect', {
 	},
 	items: [
 		{
+			hidden: true,
 			disabled: true,
 			pressed: true,
 			iconCls: 'home',
@@ -40,6 +41,7 @@ Ext.define('NextThought.view.ViewSelect', {
 			]}
 		},
 		{
+			hidden: true,
 			disabled: true,
 			iconCls: 'classroom',
 			title: 'Classroom',

@@ -29,10 +29,10 @@ Ext.define('NextThought.view.menus.navigation.Collection',{
 					{ cls: 'author', html: '{author}' }
 				]}
 			]}
-		]},
+		]}//,
 
-		{ cls: 'stratum drawer documents', cn:['Course Documents',{cls:'count',html: '&nbsp;'}] },
-		{ cls: 'stratum drawer dashboard', cn:['Dashboard',{cls:'count',html: '&nbsp;'}] }
+//		{ cls: 'stratum drawer documents', cn:['Course Documents',{cls:'count',html: '&nbsp;'}] },
+//		{ cls: 'stratum drawer dashboard', cn:['Dashboard',{cls:'count',html: '&nbsp;'}] }
 	]),
 
 
