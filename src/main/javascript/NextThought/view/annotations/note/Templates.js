@@ -158,6 +158,9 @@ Ext.define('NextThought.view.annotations.note.Templates',{
 
 		if (!more || !more.dom){return false;}
 
+		//TODO:
+		//In IE setting position to "fixed" does not pop it out of the clipping rect of it's parent's box. So this menu (the OL node)
+		// needs to be (for IE9 only-maybe 10) popped out to the document's body node and positioned when shown, then pushed back to this node on hide.
         if (more.down('ol').getStyle('position') === "fixed"){
             y = more.getY();
             h = more.getHeight();
