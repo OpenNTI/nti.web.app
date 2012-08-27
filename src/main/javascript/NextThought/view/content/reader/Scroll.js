@@ -127,7 +127,7 @@ Ext.define('NextThought.view.content.reader.Scroll',{
 				r;
 
 			if( !Ext.fly(node).parent('.naquestionpart',true) ){
-				while (match = re.exec(nv)) {
+				while (Boolean(match = re.exec(nv))) {
 					indexes.push( {'start':match.index, 'end': match.index+match[0].length } );
 				}
 

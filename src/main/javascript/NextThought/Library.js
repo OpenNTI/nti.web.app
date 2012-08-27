@@ -140,7 +140,7 @@ Ext.define('NextThought.Library', {
 	
 	
 	loadToc: function(index, url, ntiid, callback){
-		var me = this, url;
+		var me = this;
 		if(!this.loaded && !callback){
 			Ext.Error.raise('The library has not loaded yet, should not be making a synchronous call');
 		}
