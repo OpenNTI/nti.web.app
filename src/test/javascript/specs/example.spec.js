@@ -12,8 +12,11 @@ describe("Basic Assumptions", function() {
 	});
 
 
-	it("does not have jQuery loaded", function(){
-		expect(typeof jQuery).toBe('undefined');
+
+	it("jQuery loaded, but in no conflict mode", function(){
+		//NOTE: We have to add jQuery back in because of mathquill for now...
+		expect(typeof $).toBe('undefined');
+		expect(typeof jQuery).toBeTruthy();
 	});
 
 });
