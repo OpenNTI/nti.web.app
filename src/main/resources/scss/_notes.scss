@@ -362,6 +362,11 @@
 				position: absolute;
 				left: 0;
 				height: 22px;
+
+				.x-ie9 & {
+					width: 80%;
+					overflow: hidden;
+				}
 			}
 
 			.clear {
