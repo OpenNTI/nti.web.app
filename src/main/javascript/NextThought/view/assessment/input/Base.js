@@ -130,7 +130,6 @@ Ext.define('NextThought.view.assessment.input.Base',{
 			return;
 		}
 
-		this.hideSolution();
 		this.setSubmitted();
 		this.up('assessment-question').checkIt();
 	},
@@ -202,6 +201,7 @@ Ext.define('NextThought.view.assessment.input.Base',{
 
 
 	markCorrect: function(){
+		this.hideSolution();
 		this.footer.hide();
 		this.up('question-parts').removeCls('incorrect').addCls('correct');
 		this.checkItBtn.removeCls('wrong');
@@ -210,6 +210,7 @@ Ext.define('NextThought.view.assessment.input.Base',{
 
 
 	markIncorrect: function(){
+		this.hideSolution();
 		this.checkItBtn.addCls('wrong');
 		this.hintActive = false;
 		this.updateSolutionButton();
