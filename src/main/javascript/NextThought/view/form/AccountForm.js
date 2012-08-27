@@ -66,11 +66,12 @@ Ext.define('NextThought.view.form.AccountForm', {
 						},{
 							cls: 'account-form-username',
 							username: true
-						},
-						{
+						},{
 							cls: 'x-real-name-field',
 							xtype: 'textfield',
+							fieldLabel: 'Real name',
 							allowBlank: false,
+							readOnly: true,
 							emptyText: 'Real name',
 							name: 'realname',
 							validator: function(value) {//don't allow "only-whitespace" values
@@ -82,6 +83,7 @@ Ext.define('NextThought.view.form.AccountForm', {
 							emptyText: 'Alias',
 							allowBlank: false,
 							name: 'alias',
+							readOnly: true,
 							fieldLabel: 'Alias',
 							padding: 0,
 							margin: '10px 10px 10px 0px',
