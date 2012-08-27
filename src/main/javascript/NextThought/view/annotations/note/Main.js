@@ -293,10 +293,13 @@ Ext.define('NextThought.view.annotations.note.Main',{
 			r = me.record;
 
 		function callback(success, record){
+			me.el.unmask();
 			if (success) {
 				me.deactivateReplyEditor();
 			}
 		}
+
+		me.el.mask('Saving...');
 
 		if(this.editMode){
 			r.set('body',v.body);

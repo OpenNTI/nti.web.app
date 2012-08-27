@@ -351,6 +351,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		e.stopEvent();
 
 		function callback(success, record){
+			o.editor.unmask();
 			if(success){
 				me.noteOverlayDeactivateEditor();
 			}
@@ -362,6 +363,8 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		var note = o.textarea.dom.value;
 		var style = o.lastLine.style || 'suppressed';
 		var v, sharing = []; //TODO - load from page??
+
+		o.editor.mask('Saving...');
 
 		if (o.richEditorActive){
 			v = o.editorActions.getValue();
