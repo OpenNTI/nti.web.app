@@ -55,10 +55,12 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 			console.log('TODO - this is flagged, consider an indicator, or remove this log.');
 		}
 
-		me.mon(me.startChatButton,{
-			scope: me,
-			click: me.startChat
-		});
+		if( me.startChatButton ){
+			me.mon(me.startChatButton,{
+				scope: me,
+				click: me.startChat
+			});
+		}
 
 		me.mon(me.replyButton,{
 				scope: me,

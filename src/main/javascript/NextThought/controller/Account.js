@@ -54,7 +54,7 @@ Ext.define('NextThought.controller.Account', {
 
 
 	contactCardClicked: function(cmp,username){
-		this.getController('Chat').enterRoom(username);
+//		this.getController('Chat').enterRoom(username);
 	},
 
 

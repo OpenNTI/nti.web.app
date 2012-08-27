@@ -59,10 +59,12 @@ Ext.define('NextThought.view.annotations.note.Main',{
 			me.mon(me.editor.down('.cancel'),{ scope: me, click: me.deactivateReplyEditor });
 			me.mon(me.editor.down('.save'),{ scope: me, click: me.editorSaved });
 
-			me.mon(me.startChatButton,{
-				scope: me,
-				click: me.startChat
-			});
+			if( me.startChatButton ) {
+				me.mon(me.startChatButton,{
+					scope: me,
+					click: me.startChat
+				});
+			}
 
 			me.mon(me.editor.down('.content'),{
 				scope: me,

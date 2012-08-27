@@ -47,7 +47,9 @@ Ext.define('NextThought.view.annotations.note.GutterWidget',{
 			}
 		});
 
-		me.mon(me.startChatButton, 'click', me.startChat, me);
+		if( me.startChatButton ){
+			me.mon(me.startChatButton, 'click', me.startChat, me);
+		}
 
 		me.liked.update(r.getFriendlyLikeCount());
 		me.liked[(r.isLiked()?'add':'remove')+'Cls']('on');

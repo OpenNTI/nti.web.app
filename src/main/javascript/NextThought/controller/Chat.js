@@ -69,7 +69,7 @@ Ext.define('NextThought.controller.Chat', {
 			},
 
 			'contacts-panel': {
-				'group-chat': this.enterRoom
+//				'group-chat': this.enterRoom
 			},
 
 			'chat-window': {
