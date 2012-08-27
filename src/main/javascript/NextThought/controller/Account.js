@@ -37,6 +37,10 @@ Ext.define('NextThought.controller.Account', {
 				'click': this.showPrivacy
 			},
 
+			'my-account-menu menuitem[action=help]' : {
+				'click': this.openHelp
+			},
+
 			'my-account-menu menuitem[action=terms]' : {
 				'click': this.showTerms
 			},
@@ -131,6 +135,11 @@ Ext.define('NextThought.controller.Account', {
 		event.preventDefault();
 		window.open(item.href, item.hrefTarget);
 		return false;
+	},
+
+
+	openHelp: function(){
+		LocationProvider.setLocation('tag:nextthought.com,2011-10:NextThought-HTML-NextThoughtHelpCenter.nextthought_help_center');
 	},
 
 

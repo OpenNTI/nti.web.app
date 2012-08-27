@@ -25,7 +25,7 @@ Ext.define('NextThought.view.menus.MyAccount',{
 		{text: 'My Account', action: 'account' },
 		{text: 'Settings',  disabled: true}, //TODO - re-enable when we have something for this
 		{text: 'About', href: 'http://www.nextthought.com/', hrefTarget: '_blank'},
-		{text: 'Help', href: 'mailto:alpha-support@nextthought.com', hrefTarget: '_blank'},
+		{text: 'Help', action: 'help'},
 		{text: 'Privacy', action: 'privacy'},
 		{text: 'Terms of Service', action: 'terms'},
 		{xtype: 'menuseparator'},
