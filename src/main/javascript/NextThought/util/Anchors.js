@@ -739,7 +739,13 @@ Ext.define('NextThought.util.Anchors', {
 			//If we are at the front of the range
 			//the first full node in the range is the containers ith child
 			//where i is the offset
-			return container.childNodes.item(offset);
+			var cont = container.childNodes.item(offset);
+			if (Ext.isTextNode(cont) && cont.textContent.trim().length < 1) {
+				return container;
+			}
+			else {
+				return container.childNodes.item(offset);
+			}
 		}
 		else{
 			//At the end the first fully contained node is
