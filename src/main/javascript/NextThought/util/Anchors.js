@@ -610,49 +610,48 @@ Ext.define('NextThought.util.Anchors', {
 	makeRangeAnchorable: function(range, docElement) {
 		if (!range){Ext.Error.raise('Range cannot be null');}
 
-		var startEdgeNode = Anchors.nodeThatIsEdgeOfRange(range, true);
-		var endEdgeNode = Anchors.nodeThatIsEdgeOfRange(range, false);
+		var startEdgeNode = Anchors.nodeThatIsEdgeOfRange(range, true),
+			endEdgeNode = Anchors.nodeThatIsEdgeOfRange(range, false),
+			newRange,
+			startOffset = range.startOffset,
+			endOffset = range.endOffset;
 
 		//If both anchors are already anchorable, we are done here.
 		if(Anchors.isNodeAnchorable(startEdgeNode) && Anchors.isNodeAnchorable(endEdgeNode)){
 			return range;
 		}
 
-         var newRange = docElement.createRange();
+		//Clean up either end by looking for anchorable nodes inward or outward:
+		if(!Anchors.isNodeAnchorable(startEdgeNode) ){
+			startEdgeNode = Anchors.searchFromRangeStartInwardForAnchorableNode(startEdgeNode);
+			startOffset = 0;
+		}
+		if(!Anchors.isNodeAnchorable(endEdgeNode) ){
+			endEdgeNode = Anchors.searchFromRangeEndInwardForAnchorableNode(endEdgeNode);
+			if(Ext.isTextNode(endEdgeNode)){endOffset = endEdgeNode.nodeValue.length;}
+		}
 
-         if( Anchors.isNodeAnchorable(startEdgeNode) ){
-                 newRange.setStart(range.startContainer, range.startOffset);
-         }
-         else{
-                 var adjustedStartNode = Anchors.searchFromRangeStartInwardForAnchorableNode(startEdgeNode);
-                 if(!adjustedStartNode){
-                         return null;
-                 }
-                 if( adjustedStartNode.nodeType === Node.TEXT_NODE ){
-                         newRange.setStart(adjustedStartNode, 0);
-                 }
-                 else{
-                         newRange.setStartBefore(adjustedStartNode);
-                 }
-         }
+		//If we still have nothing, give up:
+		if (!startEdgeNode || !endEdgeNode) {return null;}
 
-         if( Anchors.isNodeAnchorable(endEdgeNode) ){
-                 newRange.setEnd(range.endContainer, range.endOffset);
-         }
-         else{
-                 var adjustedEndNode = Anchors.searchFromRangeEndInwardForAnchorableNode(endEdgeNode);
-                 if(!adjustedEndNode){
-                         return null;
-                 }
-                 if( adjustedEndNode.nodeType === Node.TEXT_NODE ){
-                         newRange.setEnd(adjustedEndNode, adjustedEndNode.nodeValue.length);
-                 }
-                 else{
-                         newRange.setEndAfter(adjustedEndNode);
-                 }
-         }
+		//If we get here, we got good nodes, figure out the best way to create the range now:
+		newRange = docElement.createRange();
 
-         return newRange;
+		//case 1: a single node
+		if (startEdgeNode === endEdgeNode) {
+			newRange.selectNodeContents(startEdgeNode);
+		}
+		//case2: nodes are different, handle each:
+		else {
+			//start:
+			if(Ext.isTextNode(startEdgeNode)){newRange.setStart(startEdgeNode, startOffset);}
+	        else{newRange.setStartBefore(startEdgeNode);}
+			//end:
+			if(Ext.isTextNode(endEdgeNode)){newRange.setEnd(endEdgeNode, endOffset);}
+			else{newRange.setEndAfter(endEdgeNode);}
+		}
+
+        return newRange;
  },
 
 
@@ -668,7 +667,7 @@ Ext.define('NextThought.util.Anchors', {
 		//If we get here we know we are going to have to search for one.  So get the first child
 		//or the next sibling
 		recurseOn = startNode.firstChild;
-		if(!recurseOn){ recurseOn = startNode.nextSibling; }
+		if(!recurseOn){ recurseOn = startNode.nextSibling || (startNode.parentNode) ? startNode.parentNode.nextSibling : null; }
 
 		//Try to recurse, until we find something or don't
 		return Anchors.searchFromRangeStartInwardForAnchorableNode(recurseOn);
@@ -740,7 +739,10 @@ Ext.define('NextThought.util.Anchors', {
 			//the first full node in the range is the containers ith child
 			//where i is the offset
 			var cont = container.childNodes.item(offset);
-			if (Ext.isTextNode(cont) && cont.textContent.trim().length < 1) {
+			if(!cont) {
+				return container;
+			}
+			else if (Ext.isTextNode(cont) && cont.textContent.trim().length < 1) {
 				return container;
 			}
 			else {
@@ -754,12 +756,13 @@ Ext.define('NextThought.util.Anchors', {
 				if(container.previousSibling){
 					return container.previousSibling;
 				}
-				while(!container.previousSibling && container.parentNode){
+				while(!container.previousSibling && container.parentNode && offset !== 0){
 					container = container.parentNode;
 				}
 
 				if (!container.previousSibling){
-					Ext.Error.raise('No possible node');
+					//Ext.Error.raise('No possible node');
+					return container;
 				}
 				else {
 					return container.previousSibling;

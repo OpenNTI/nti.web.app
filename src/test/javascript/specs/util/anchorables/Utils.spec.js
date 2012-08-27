@@ -249,6 +249,24 @@ describe("Anchor Utils", function() {
 			result = Anchors.searchFromRangeStartInwardForAnchorableNode(div);
 			expect(result).toBeNull();
 		});
+
+		it('Non Anchorable Node, Requires parent traversal', function(){
+			var div = document.createElement('div'),
+				s1 = document.createElement('span'),
+				s2 = document.createElement('span'),
+				t1 = document.createTextNode(' '),
+				t2 = document.createTextNode('Anchorable Text Node'),
+				result;
+
+			//setup heirarchy
+			s1.appendChild(t1);
+			s2.appendChild(t2);
+			div.appendChild(s1);
+			div.appendChild(s2);
+
+			result = Anchors.searchFromRangeStartInwardForAnchorableNode(t1);
+			expect(result).toBe(t2);
+		});
 	});
 
 	describe('walkDownToLastNode Tests', function(){
