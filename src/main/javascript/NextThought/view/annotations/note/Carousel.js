@@ -112,8 +112,8 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 		});
 	},
 
-	t: function(el,s){
-		el[(s?'remove':'add')+'Cls']('disabled'); 
+	disableArrow: function(el,s){
+		el[(s?'remove':'add')+'Cls']('disabled');
 	},
 
 	updateWith: function(item){
@@ -134,8 +134,8 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 		hasNext = item && item.next();
 		hasPrev = item && item.prev();
 
-		me.t(this.navNext,hasNext);
-		me.t(this.navPrev,hasPrev);
+		me.disableArrow(this.navNext,hasNext);
+		me.disableArrow(this.navPrev,hasPrev);
 		this.updateSlide();
 		this.up('window').down('note-main-view').setRecord(item?item.record:null);
 
@@ -149,16 +149,18 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 		//	}, 30);
 
 	},
-	
+
 	updateSlide: function(pos) {
-		dom = this.body.dom;
+		var dom = this.body.dom,
+			count = this.items.getCount();
+
 		if (!pos && pos !== 0) { pos = dom.scrollLeft; }
 
-		canSlideLeft = pos > 0;
-		canSlideRight = pos < dom.scrollWidth - dom.clientWidth;
+		var canSlideLeft = count > 11 && pos > 0,
+			canSlideRight = count > 11 && pos < dom.scrollWidth - dom.clientWidth;
 
-		this.t(this.slideLeft,canSlideLeft);
-		this.t(this.slideRight,canSlideRight);
+		this.disableArrow(this.slideLeft,canSlideLeft);
+		this.disableArrow(this.slideRight,canSlideRight);
 
 		if (pos === dom.scrollLeft) { return; }
 
