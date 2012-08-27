@@ -130,6 +130,7 @@ Ext.define('NextThought.view.assessment.input.Base',{
 			return;
 		}
 
+		this.hideSolution();
 		this.setSubmitted();
 		this.up('assessment-question').checkIt();
 	},
