@@ -32,7 +32,7 @@ Ext.define('NextThought.view.Main', {
 
 }, function(){
 	//firefox doesn't report supporting: CSS3DTransform, so we'll omit it.
-	var features = ['Canvas','Range','CSS3BoxShadow','CSS3BorderRadius','Placeholder'],f,
+	var features = ['Canvas','Range','CSS3BoxShadow','CSS3BorderRadius'],f,
 		unsupported = [],
 		proto = this.prototype;
 
@@ -43,7 +43,7 @@ Ext.define('NextThought.view.Main', {
 	}
 
 	//TODO: Make the IE9 message work without breaking
-	/*if(unsupported.length!==0){
+	if(unsupported.length!==0){
 		proto.items.push(
 			{
 				region: 'north',
@@ -55,10 +55,6 @@ Ext.define('NextThought.view.Main', {
 		);
 		unsupported.reverse();
 		console.warn("Unsupported features: "+unsupported.join(', '));
-	}*/
-
-	var v = Ext.getScrollbarSize(true);
-	if(v.width > 2){
-		Ext.getBody().addCls('detected-scrollbars');
 	}
+
 });

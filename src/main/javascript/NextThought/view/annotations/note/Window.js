@@ -81,7 +81,8 @@ Ext.define('NextThought.view.annotations.note.Window',{
 
 			}
 			//For some reason the height isn't being updated, so we change it slightly, and it works.
-			this.setHeight(size.height-1);
+			this.setHeight(size.height-2);
+			this.setHeight(size.height);
 		}
 		return size;
 	},
