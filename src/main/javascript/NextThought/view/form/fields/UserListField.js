@@ -133,7 +133,7 @@ Ext.define('NextThought.view.form.fields.UserListField', {
 	removeLastToken: function(){
 		if (this.selections.length > 0) {
 			var lastSelection = this.selections.last();
-			this.down('[modelId='+lastSelection.getId()+']').destroy();
+			this.down('[modelId='+IdCache.getIdentifier(lastSelection.getId())+']').destroy();
 			this.selections = this.selections.splice(0, this.selections.length -1);
 		}
 	},
@@ -167,7 +167,7 @@ Ext.define('NextThought.view.form.fields.UserListField', {
 				xtype: 'token',
 				readOnly: this.readOnly,
 				model: model,
-				modelId: model.getId(),
+				modelId: IdCache.getIdentifier(model.getId()),
 				text: text,
 				listeners: {
 					scope: this,
