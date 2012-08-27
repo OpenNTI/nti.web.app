@@ -95,17 +95,17 @@ Ext.define('NextThought.view.annotations.note.Templates',{
 
 
 	updateMoreReplyOptionsLabels: function(moreEl,user){
-		var add = moreEl.down('li.add-contact');
-		var edit = moreEl.down('li.edit');
-		var flag = moreEl.down('li.flag');
-		var follow = moreEl.down('li.follow');
-		var block = moreEl.down('li.block');
-		var mute = moreEl.down('li.mute');
-		var del = moreEl.down('li.delete');
-		var share = moreEl.down('li.share');
-		var name = user.getName();
-		var mine = isMe(user);
-		var fnA, fnB;
+		var add = moreEl.down('li.add-contact'),
+			edit = moreEl.down('li.edit'),
+			flag = moreEl.down('li.flag'),
+			follow = moreEl.down('li.follow'),
+			block = moreEl.down('li.block'),
+			mute = moreEl.down('li.mute'),
+			del = moreEl.down('li.delete'),
+			share = moreEl.down('li.share'),
+			name = user.getName(),
+			mine = isMe(user),
+			fnA, fnB;
 
 		function addName(){
 			Ext.each(arguments,function(o){
@@ -182,7 +182,7 @@ Ext.define('NextThought.view.annotations.note.Templates',{
 		}
 	},
 
-	replyOptionsMouseIn: function(e) {
+	replyOptionsMouseIn: function() {
 		clearTimeout(this.moreReplyOptionsMouseOutTimer);
 	}
 
