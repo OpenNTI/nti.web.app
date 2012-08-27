@@ -506,7 +506,7 @@
 
 	a.whiteboard-magnifier {
 		display: none;
-		background: $magnifying-glass;
+		background: none; /*$magnifying-glass*/
   		width: 24px;
   		height: 24px;
   		position: absolute;
