@@ -17,8 +17,8 @@ Ext.define('NextThought.view.content.Reader', {
 	ui: 'reader',
 	layout: {
 		type: 'hbox',
-		pack: 'end'
-//		reserveScrollbar: true
+		pack: 'end',
+		reserveScrollbar: true
 	},
 	prefix: 'default',
 
