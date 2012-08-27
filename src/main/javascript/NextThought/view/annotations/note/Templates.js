@@ -101,6 +101,7 @@ Ext.define('NextThought.view.annotations.note.Templates',{
 		var block = moreEl.down('li.block');
 		var mute = moreEl.down('li.mute');
 		var del = moreEl.down('li.delete');
+		var share = moreEl.down('li.share');
 		var name = user.getName();
 		var mine = isMe(user);
 		var fnA, fnB;
@@ -118,6 +119,8 @@ Ext.define('NextThought.view.annotations.note.Templates',{
 
 		function remove(){ make('hide',arguments); }
 		function reset(){ make('show',arguments); }
+
+		if (!mine){share.update('Get Info');}
 
 		addName(follow,block);
 
