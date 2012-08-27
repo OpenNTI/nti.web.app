@@ -23,10 +23,10 @@ Ext.define('NextThought.view.whiteboard.editor.Tools',{
 		xtype:'toolbar',
 		defaults: { xtype: 'wb-tool' },
 		items: [
-			{ tool: 'move', disabled: true },
+			{ tool: 'move', disabled: true, hidden: true },
 			{ tool: 'pencil', pressed: true },
 			{ tool: 'shape' },
-			{ tool: 'text', disabled: true},
+			{ tool: 'text', disabled: true, hidden: true },
 			{ tool: 'image' }
 			//{ tool: 'eraser', disabled: true }
 		]
