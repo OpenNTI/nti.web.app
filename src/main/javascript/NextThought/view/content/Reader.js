@@ -149,6 +149,7 @@ Ext.define('NextThought.view.content.Reader', {
 		if(!pageInfo.isModel){
 			if(pageInfo.responseText){
 				me.splash.hide();
+				//TODO: make a fun-light-spirited "Oh no!" page.
 				me.updateContent(pageInfo.responseText);
 			}
 			me.relayout();
