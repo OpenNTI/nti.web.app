@@ -155,8 +155,7 @@ Ext.define('NextThought.view.content.Reader', {
 		}
 		else {
 			if ($AppConfig.server.jsonp){
-				var url = pageInfo.getLink('jsonp_content');
-				Globals.loadScript(url, jsonp, onError, this);
+				Globals.loadScript(pageInfo.getLink('jsonp_content'), jsonp, onError, this);
 				return;
 			}
 			Ext.Ajax.request({
