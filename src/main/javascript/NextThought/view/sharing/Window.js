@@ -105,9 +105,11 @@ Ext.define( 'NextThought.view.sharing.Window', {
 		this.callParent(arguments);
 
 		//any down calls below this:
-		if (this.record && !this.record.phantom){
-			useDefaultSharing = false;
-			this.setValue(this.record.get('sharedWith'));
+		if (this.record){
+			if (this.record.get('sharedWith').length > 0) {
+				useDefaultSharing = false;
+				this.setValue(this.record.get('sharedWith'));
+			}
 		}
 		else if (this.value) {
 			this.setValue(this.value);
