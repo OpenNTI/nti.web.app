@@ -23,15 +23,23 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 				cls: 'carousel-body',
 				cn:'{%this.renderContainer(out,values)%}'
 			},
-			{ cls: 'slide-nav backward', cn:[{cls: 'circle'},{cls: 'slide backward'}] },
-			{ cls: 'slide-nav forward', cn:[{cls: 'circle'},{cls: 'slide forward'}] }
+			{ cls: 'slide-nav backward', cn:[{cls: 'slide backward'}] },
+			{ cls: 'slide-nav forward', cn:[{cls: 'slide forward'}] }
 		]),
+
+	navTpl: Ext.DomHelper.createTemplate({
+		cls: 'nav-helper',
+		cn: [
+			{cls: 'nav circle backward'},
+			{cls: 'nav circle forward'}
+		]
+	}),
 
 	renderSelectors: {
 		slideLeft: '.slide-nav.backward .slide',
-		slideRight: '.slide-nav.forward .slide',
-		navNext: '.slide-nav.forward .circle',
-		navPrev: '.slide-nav.backward .circle'
+		slideRight: '.slide-nav.forward .slide'
+//		navNext: '.slide-nav.forward .circle',
+//		navPrev: '.slide-nav.backward .circle'
 	},
 
 	initComponent: function(){
@@ -39,6 +47,19 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 		this.store = LocationProvider.getStore();
 
 		this.load();
+		this.navContainer = this.navTpl.append(Ext.getBody(),[],true);
+		this.navNext = this.navContainer.down('.forward.circle');
+		this.navPrev = this.navContainer.down('.backward.circle');
+		this.on('move',this.syncIt,this);
+	},
+
+
+	syncIt: function(){
+		var s = this.getSize(),
+			o = this.navContainer;
+		o.setXY(this.el.getXY());
+		o.setWidth(s.width);
+		o.setHeight(s.height);
 	},
 
 
@@ -65,7 +86,8 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 
 
 	destroy: function(){
-		if(this.keyMap){this.keyMap.destroy();}
+		this.navContainer.remove();
+		if(this.keyMap){this.keyMap.destroy(false);}
 		return this.callParent(arguments);
 	},
 
@@ -81,7 +103,7 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 				}
 				else { me.selected = o; }
 			}
-		});
+		},this);
 	},
 
 
@@ -117,7 +139,7 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 	},
 
 	updateWith: function(item){
-		var hasNext, hasPrev,
+		var hasNext, hasPrev, bgx,
 			me = this;
 
 		if(item && !item.rendered){
@@ -139,36 +161,34 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 		this.updateSlide();
 		this.up('window').down('note-main-view').setRecord(item?item.record:null);
 
-		var bgx = parseInt(this.getEl().getStyle('background-position').match(/-?[0-9]+/g)[0],0);
+		bgx = parseInt(this.getEl().getStyle('background-position').match(/-?[0-9]+/g)[0],0);
 		//The "difference" is a sum because the pointer coordinate is
 		//actually the background's negative offset coordinate
-		this.pointerCoordDifference = bgx + dom.scrollLeft;
+		this.pointerCoordDifference = bgx + this.body.dom.scrollLeft;
 
-		//setTimeout(function() {
 		me.up('note-window').syncSize();
-		//	}, 30);
-
 	},
 
 	updateSlide: function(pos) {
 		var dom = this.body.dom,
-			count = this.items.getCount();
+			count = this.items.getCount(),
+			canSlideLeft, canSlideRight, value, min, newBgx;//, shift;
 
 		if (!pos && pos !== 0) { pos = dom.scrollLeft; }
 
-		var canSlideLeft = count > 11 && pos > 0,
-			canSlideRight = count > 11 && pos < dom.scrollWidth - dom.clientWidth;
+		canSlideLeft = count > 11 && pos > 0;
+		canSlideRight = count > 11 && pos < dom.scrollWidth - dom.clientWidth;
 
 		this.disableArrow(this.slideLeft,canSlideLeft);
 		this.disableArrow(this.slideRight,canSlideRight);
 
 		if (pos === dom.scrollLeft) { return; }
 
-		var value = Ext.Number.constrain(pos,0,dom.scrollWidth - dom.clientWidth),
-			shift = value - dom.scrollLeft,
-			min = this.getEl().dom.getBoundingClientRect().width - this.BACKGROUND_WIDTH;
+		value = Ext.Number.constrain(pos,0,dom.scrollWidth - dom.clientWidth);
+		//shift = value - dom.scrollLeft;
+		min = this.getEl().dom.getBoundingClientRect().width - this.BACKGROUND_WIDTH;
 
-		var newBgx = Ext.Number.constrain(this.pointerCoordDifference - value,min,0);
+		newBgx = Ext.Number.constrain(this.pointerCoordDifference - value,min,0);
 		
 		this.body.animate({ to: {scrollLeft: value} });
 		if (Ext.isGecko) { 
@@ -180,28 +200,28 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 	},
 
 	slideViewLeft: function(){
-		var b = this.body, me = this;
+		var b = this.body;
 		this.updateSlide(-(b.getWidth()/2) + b.dom.scrollLeft);
 	},
 
 
 	slideViewRight: function(){
-		var b = this.body, me = this;
+		var b = this.body;
 		this.updateSlide((b.getWidth()/2) + b.dom.scrollLeft);
 	},
 
 
 	centerBackgroundOn: function(item){
-		var ir = item ? item.getEl().dom.getBoundingClientRect() : {left:0,width:0};
+		var ir = item ? item.getEl().dom.getBoundingClientRect() : {left:0,width:0},
 
-		var cr = this.getEl().dom.getBoundingClientRect();
-		var cm = Math.round(cr.left + (cr.width/2));
-		var im = Math.round(ir.left + (ir.width/2));
+			cr = this.getEl().dom.getBoundingClientRect(),
+			cm = Math.round(cr.left + (cr.width/2)),
+			im = Math.round(ir.left + (ir.width/2)),
 
-		var start = (cr.width - this.BACKGROUND_WIDTH)/2;
-		var offset = im - cm;
+			start = (cr.width - this.BACKGROUND_WIDTH)/ 2,
+			offset = im - cm,
 
-		var pos = item ? start+offset : 0;
+			pos = item ? start+offset : 0;
 
 		this.getEl().setStyle({
 			backgroundPosition: pos+'px 0'
@@ -231,9 +251,9 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 		//nice shortcut to reduce calculations if its ultimatly not going to fire because we've disabled it.
 		if(el && el.hasCls('disabled')){return;}
 
-		var newSel;
-		var sel = this.down('note-carousel-item[selected]');
-		var fn = !sel
+		var newSel,
+			sel = this.down('note-carousel-item[selected]'),
+			fn = !sel
 				? null
 				: dir === this.NEXT
 					? sel.next
@@ -250,14 +270,14 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 	},
 
 
-	mostPopular: function(value){
+	mostPopular: function(){
 		return function(item){
 			return item && item.getReplyCount() > 0;
 		};
 	},
 
 
-	highestRated: function(value){
+	highestRated: function(){
 		return function(item){
 			return item && item.get('LikeCount') > 0;
 		};

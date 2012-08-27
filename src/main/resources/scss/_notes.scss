@@ -731,36 +731,15 @@
 				}
 			}
 
-			.circle {
-				position: fixed;
-				background: url(../images/notes/prev-next-circles.png) 0 0 no-repeat;
-				width: 77px;
-				height: 77px;
-				margin-top: 125px;
-				opacity: 0.4;
-				cursor: pointer;
-				&:hover {
-					opacity: 0.63;
-				}
-			}
-			
 			.disabled {
 				&,&:hover{ opacity: 0.10; cursor: default; }
 			}
 
 			&.forward{
 				right: 0;
-				.circle {
-					margin-left: 75px;
-					background-position: -77px 0;
-				}
 			}
 			&.backward{
 				left: 0;
-
-				.circle {
-					margin-left: -100px;
-				}
 			}
 			.forward{
 				background: url(../images/notes/next.png) 0 50% no-repeat;
@@ -927,6 +906,37 @@
 					background-image: none;
 				}
 			}
+		}
+	}
+}
+
+
+.nav-helper {
+	position: absolute;
+	z-index: 99999;
+	.circle {
+		position: absolute;
+		background: url(../images/notes/prev-next-circles.png) 0 0 no-repeat;
+		width: 77px;
+		height: 77px;
+		margin-top: 125px;
+		opacity: 0.4;
+		cursor: pointer;
+		&:hover {
+			opacity: 0.63;
+		}
+		&.disabled {
+			&,&:hover{ opacity: 0.10; cursor: default; }
+		}
+
+		&.forward{
+			right: -100px;
+			margin-left: 75px;
+			background-position: -77px 0;
+		}
+		&.backward{
+			left: 0;
+			margin-left: -100px;
 		}
 	}
 }
