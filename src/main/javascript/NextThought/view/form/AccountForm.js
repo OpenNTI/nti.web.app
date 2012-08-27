@@ -62,6 +62,12 @@ Ext.define('NextThought.view.form.AccountForm', {
 					flex: 1,
 					items:[
 						{
+							html: 'Username:'
+						},{
+							cls: 'account-form-username',
+							username: true
+						},
+						{
 							cls: 'x-real-name-field',
 							xtype: 'textfield',
 							allowBlank: false,
@@ -221,6 +227,7 @@ Ext.define('NextThought.view.form.AccountForm', {
 
 	afterRender: function(){
 		this.callParent(arguments);
+		this.down('component[username]').update(this.account.get('Username'));
 		this.down('component[avatar]').el.dom.src = this.account.get('avatarURL').replace(/s=\d+/i, 's=128');
 		this.down('component[changePassword]').el.on('click',this.revealPassword,this);
 
