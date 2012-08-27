@@ -1,3 +1,6 @@
+$font: 'Open Sans', 'Helvetica', arial, sans-serif;
+
+
 @import "compass";
 @import "_animate.scss";
 
@@ -37,7 +40,7 @@ body.x-border-layout-ct { background: white; }
 .x-form-item,
 .x-form-field,
 .x-body {
-	font-family: 'Open Sans', 'Helvetica', arial, sans-serif !important;
+	font-family: $font !important;
 }
 
 ::-webkit-input-placeholder {
