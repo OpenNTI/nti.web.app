@@ -37,7 +37,7 @@ Ext.define('NextThought.view.whiteboard.Window',{
 				{
 					defaults: { xtype: 'button', scale: 'medium', disabled: true },
 					items: [
-						{iconCls: 'new-page', ui: 'new', action: 'new-page', tooltip: 'New Page' }
+						{iconCls: 'new-page', ui: 'new', action: 'new-page', tooltip: 'New Page',hidden: true }
 					]
 				},
 				{
@@ -45,8 +45,8 @@ Ext.define('NextThought.view.whiteboard.Window',{
 					layout: { type: 'hbox', pack: 'center' },
 					defaults: { xtype: 'button', scale: 'medium', disabled: true },
 					items: [
-						{iconCls: 'undo', ui: 'history', action: 'undo', tooltip: 'Undo' },
-						{iconCls: 'redo', ui: 'history', action: 'redo', tooltip: 'Redo' }
+						{iconCls: 'undo', ui: 'history', action: 'undo', tooltip: 'Undo', hidden: true },
+						{iconCls: 'redo', ui: 'history', action: 'redo', tooltip: 'Redo',hidden: true }
 					]
 				},
 				{
