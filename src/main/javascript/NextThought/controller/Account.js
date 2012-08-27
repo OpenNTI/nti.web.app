@@ -130,7 +130,7 @@ Ext.define('NextThought.controller.Account', {
 	},
 
 
-	openHref: function(item){
+	openHref: function(item, event){
 		event.stopPropagation();
 		event.preventDefault();
 		window.open(item.href, item.hrefTarget);
