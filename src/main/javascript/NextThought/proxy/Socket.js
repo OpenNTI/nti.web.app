@@ -79,11 +79,12 @@ Ext.define('NextThought.proxy.Socket', {
 			socket = io.connect(getURL()),
 			k;
 
-		if(this.isDebug){
+		if(this.isDebug && !socket.emit.chained) {
 			socket.emit = Ext.Function.createSequence(
 				socket.emit,
 				function(){console.debug('socket.emit:',arguments);}
 			);
+			socket.emit.chained = true;
 
 			socket.onPacket = Ext.Function.createSequence(
 				function(){ console.debug('socket.onPacket: args:'+JSON.stringify(arguments)); },
