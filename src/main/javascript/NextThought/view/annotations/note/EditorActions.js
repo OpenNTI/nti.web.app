@@ -50,6 +50,8 @@ Ext.define('NextThought.view.annotations.note.EditorActions',{
 			click: function(e){editorEl.down('.content').focus();}
 		});
 
+		editorEl.down('.content').selectable();
+
 		cmp.mon(editorEl.down('.content'),{
 			scope: me,
 			selectstart: me.editorSelectionStart,
@@ -203,53 +205,7 @@ Ext.define('NextThought.view.annotations.note.EditorActions',{
 			this.cmp.updateLayout();
 		}
 	},
-	editorStylingFallback: function(action,doc) {
-		tags = {bold: 'b', italic: 'i', underline: 'u'};
-		var tb = this.editor.dom.querySelector('[contenteditable=true]');
-		var selection = window.rangy.getSelection();
-		function getStyleAtPoint(node, given) {
-			if (!given) { given = {bold: false, italic: false, underline: false}; }
-			if (!node || node.contentEditable === 'true') { return given; }
-			if (node.tagName === 'B') { given.bold = true; }
-			if (node.tagName === 'I') { given.italic = true; }
-			if (node.tagName === 'U') { given.underline = true; } 
-			return getStyleAtPoint(node.parentNode,given);
-		}
-		if (selection.rangeCount > 0) {
-			//Wrap the existing selection
-			newNode = document.createElement(tags[action] || 'span');
-			newNode.innerHTML = selection.toHtml();
-			selection.deleteFromDocument();
-			selection.getRangeAt(0).insertNode(newNode);
-			setTimeout(function(){
-				//Create our new environment
-				origNode = selection.getRangeAt(0).startContainer;
-				origOffset = selection.getRangeAt(0).startOffset;
-				selection.removeAllRanges();
-				preRange = window.rangy.createRange();
-				preRange.selectNodeContents(tb);
-				preRange.setEnd(origNode,origOffset);
-				left = preRange.toHtml();
-				postRange = window.rangy.createRange();
-				postRange.selectNodeContents(tb);
-				postRange.setStart(origNode,origOffset);
-				right = postRange.toHtml();
-				style = getStyleAtPoint(origNode);
-				style[action] = !(style[action]);
-				id = new Date().getTime();
-				mid = '<span id="'+id+'"></span>';
-				if (style.bold) { mid = '<b>' + mid + '</b>'; }
-				if (style.italic) { mid = '<i>' + mid + '</i>'; }
-				if (style.underline) { mid = '<u>' + mid + '</u>'; }
-				tb.innerHTML = left + mid + right;
-				setTimeout(function(){
-					selectRange = window.rangy.createRange();
-					selectRange.selectNodeContents(doc.getElementById(id));
-					selection.addRange(selectRange);
-				},1);
-			},1);
-		}
-	},
+
 
 	editorContentAction: function(e){
 		e.stopEvent();
@@ -261,13 +217,8 @@ Ext.define('NextThought.view.annotations.note.EditorActions',{
 			}
 			else {
 				action = t.getAttribute('class').split(' ').pop();
-				if (!Ext.isIE && !Ext.isGecko) {
-					document.execCommand(action, null, null);
-				}
-				else {
-					this.editorStylingFallback(action,t.dom.ownerDocument);
-					this.editor.dom.querySelector('[contenteditable=true]').focus();
-				}
+				document.execCommand(action, null, null);
+				this.editor.dom.querySelector('[contenteditable=true]').focus();
 			}
 		}
 		return false;

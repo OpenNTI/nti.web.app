@@ -18,6 +18,7 @@ Ext.define('NextThought.view.annotations.note.Templates',{
 				},{
 					cls: 'content',
 					contentEditable: true,
+					tabIndex: 0,
 					unselectable: 'off',
 					html: '&nbsp;'
 				}]
