@@ -462,9 +462,9 @@ Ext.define('NextThought.controller.Chat', {
 
 
 	sendChangeMessages: function(oldRoomInfo, newRoomInfo) {
-		var oldOccupants = oldRoomInfo.get('Occupants'),
+		var oldOccupants = oldRoomInfo?oldRoomInfo.get('Occupants'):[],
 			newOccupants = newRoomInfo.get('Occupants'),
-			oldMods = oldRoomInfo.get('Moderators'),
+			oldMods = oldRoomInfo?oldRoomInfo.get('Moderators'):[],
 			newMods = newRoomInfo.get('Moderators'),
 			left = Ext.Array.difference(oldOccupants, newOccupants),
 			added = Ext.Array.difference(newOccupants, oldOccupants),
