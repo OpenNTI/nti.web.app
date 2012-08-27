@@ -44,7 +44,7 @@ Ext.define('NextThought.view.SideBar',{
 			this.hide();
 		}
 
-		if (w < 1300) {
+		if (w < 1278) {
 			if (!this.floating) {
 				//this.hide();
 				this.collapse();
