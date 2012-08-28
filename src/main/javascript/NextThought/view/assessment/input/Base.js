@@ -63,9 +63,16 @@ Ext.define('NextThought.view.assessment.input.Base',{
 
 
 	filterHTML: function(html){
+		var root = LocationProvider.getContentRoot();
+		function fixRef(original,attr,url) {
+			return (/^data:/i.test(url)||Globals.HOST_PREFIX_PATTERN.test(url))
+					? original
+					: attr+'="'+root+url+'"'; }
+
 		return html.replace(/<\/?(html|body|a|p).*?>/ig, '')
 				.replace(/^\s+/,'')
-				.replace(/\s+$/,'');
+				.replace(/\s+$/,'')
+				.replace(/(src)="(.*?)"/igm, fixRef);
 	},
 
 
@@ -75,7 +82,7 @@ Ext.define('NextThought.view.assessment.input.Base',{
 			solutions.push(s.get('value'));
 		});
 
-		return solutions.join('<br/> or: ');
+		return this.filterHTML(solutions.join('<br/> or: '));
 	},
 
 
