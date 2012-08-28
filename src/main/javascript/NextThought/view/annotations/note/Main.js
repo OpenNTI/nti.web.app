@@ -130,6 +130,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		try {
 			if(this.record) {
 				this.record.un('changed', this.recordChanged, this);
+				this.record.un('updated', this.recordChanged, this);
 			}
 		}
 		catch(errorUnlistening){
@@ -141,6 +142,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		try {
 			if(this.record){
 				this.record.on('changed', this.recordChanged, this, {single:true});
+				this.record.on('updated', this.recordChanged, this, {single:true});
 			}
 		}
 		catch(errorListening){
@@ -249,7 +251,9 @@ Ext.define('NextThought.view.annotations.note.Main',{
 	},
 
 
-	recordChanged: Ext.Function.createBuffered( function(){ this.setRecord(this.record); }, 10),
+	recordChanged: Ext.Function.createBuffered(function(newRecord){
+		this.setRecord(newRecord);
+	}, 10),
 
 
 	fillInUser: function(user){
