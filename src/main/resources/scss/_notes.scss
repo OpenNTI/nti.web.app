@@ -914,8 +914,8 @@
 
 .nav-helper {
 	position: absolute;
-	z-index: 99999;
 	.circle {
+	  	z-index: 99999;
 		position: absolute;
 		background: url(../images/notes/prev-next-circles.png) 0 0 no-repeat;
 		width: 77px;
