@@ -161,6 +161,12 @@ Ext.define('NextThought.view.content.Navigation',{
 			'mouseenter':function(){
 				m.stopHide();
 				m.showBy(pathPartEl,'tl-bl?', [-10,0]);
+			},
+			'click': function(){
+				if (!m.isVisible()){
+					m.stopHide();
+					m.showBy(pathPartEl,'tl-bl?', [-10,0]);
+				}
 			}
 		});
 
