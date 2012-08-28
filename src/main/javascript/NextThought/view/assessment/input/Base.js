@@ -186,7 +186,7 @@ Ext.define('NextThought.view.assessment.input.Base',{
 		else if(this.submitted){
 			answer.show();
 			a.update(this.getSolutionContent(p));
-			e.update(p.get('explanation'));
+			e.update(this.filterHTML(p.get('explanation')));
 		}
 		else {
 			a.update('');
