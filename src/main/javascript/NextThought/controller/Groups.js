@@ -151,17 +151,12 @@ Ext.define('NextThought.controller.Groups', {
 
 	addGroup: function(newGroupName, callback, scope){
 		var rec = this.getFriendsListModel().create(),
-			store = this.getFriendsListStore(),
+			store = this.getFriendsListStore();//,
 			username = newGroupName
-				.replace(/[^0-9A-Za-z\-@]/g, '.')
-				.replace(/^[\.\-_]+/g, '');
+				.replace(/[^0-9A-Z\-@\+\._]/ig, '')
+				+'-'+ $AppConfig.username+'_'+guidGenerator();
 
-		if(!Globals.INVALID_CHARACTERS_PATTERN.test(newGroupName)){
-			return Ext.callback(callback,scope, [false]);
-		}
-
-		rec.set('Username',username+'@nextthought.com');
-
+		rec.set('Username',username);
 		rec.set('realname', newGroupName);
 		rec.set('friends', []);
 		rec.save({
