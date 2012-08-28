@@ -92,6 +92,9 @@ Ext.define(	'NextThought.view.whiteboard.Canvas',{
 			Ext.callback(finished);
 		}
 
+		//Ensure that w === h to obey  a 1-1 drawing model.
+		me.el.setHeight(me.el.getWidth());
+
 		this.self.drawScene(this.drawData,this.el,fin);
 	},
 
