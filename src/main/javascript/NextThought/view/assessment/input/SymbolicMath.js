@@ -47,10 +47,11 @@ Ext.define('NextThought.view.assessment.input.SymbolicMath',{
 			timer;
 
 		//bind on kepress so we can adjust size:
-		r.bind('keypress.mathquill', function(){
+		r.bind('keyup.mathquill', function(){
 			clearTimeout(timer);
 			timer = setTimeout(function(){
 				me.adjustSize();
+				console.log('keypress', 'disable?', !me.getValue());
 				if(!me.getValue()){ me.disableSubmission(); }
 				else { console.log('enable something');me.enableSubmission(); }
 			}, 100);
