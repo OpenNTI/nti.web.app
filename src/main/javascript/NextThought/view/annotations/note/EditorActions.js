@@ -248,7 +248,8 @@ Ext.define('NextThought.view.annotations.note.EditorActions',{
 		this.openWhiteboards[guid] = wbWin;
 
 		//Hide note nav-helper - to avoid it from being on top of the WB
-		Ext.fly(Ext.query('.nav-helper')[0]).hide();
+		if( Ext.query('.nav-helper')[0] ){ Ext.fly(Ext.query('.nav-helper')[0]).hide(); }
+
 
 		if(data){
 			me.insertWhiteboardThumbnail(content, guid, wbWin.down('whiteboard-editor'));
@@ -258,7 +259,7 @@ Ext.define('NextThought.view.annotations.note.EditorActions',{
 		this.cmp.mon(wbWin, {
 			save: function(win, wb, e){
 				me.insertWhiteboardThumbnail(content, guid, wb);
-				Ext.fly(Ext.query('.nav-helper')[0]).show();
+				if( Ext.query('.nav-helper')[0] ) { Ext.fly(Ext.query('.nav-helper')[0]).show(); }
 				wbWin.hide();
 			},
 			cancel: function(win, wb, e){
