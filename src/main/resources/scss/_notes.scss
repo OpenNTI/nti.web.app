@@ -111,7 +111,7 @@
 
 				img.wb-thumbnail {
 					height: auto;
-					max-height: 450px;
+					//max-height: 450px;
 					width: 100%;//100% of width of container
 					display: block;
 					clear: both;
@@ -807,7 +807,8 @@
 
 			.body-divider .whiteboard-thumbnail{
 			  width: 580px;
-			  height: 450px !important;
+			  height: 580px !important;
+			  max-height: 580px !important;
 			}
 		}
 
