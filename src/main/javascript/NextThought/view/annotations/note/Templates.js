@@ -130,6 +130,10 @@ Ext.define('NextThought.view.annotations.note.Templates',{
 
 		fnA(add,follow,block, mute);
 		fnB(del,edit);
+
+		if(!$AppConfig.service.canShare()){
+			remove(share);
+		}
 	},
 
 
