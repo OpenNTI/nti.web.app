@@ -343,12 +343,13 @@ Ext.define('NextThought.model.Service', {
 
 
 	canCanvasURL: function() {
-		var coll = $AppConfig.service.getCollectionFor("application/vnd.nextthought.canvasurlshape", 'Pages');
+		var coll = $AppConfig.service.getCollectionFor('application/vnd.nextthought.canvasurlshape', 'Pages');
+		return !!coll;
+	},
+
+
+	canRedact: function() {
+		var coll = $AppConfig.service.getCollectionFor('application/vnd.nextthought.redaction', 'Pages');
 		return !!coll;
 	}
-
-
-
-
-
 });

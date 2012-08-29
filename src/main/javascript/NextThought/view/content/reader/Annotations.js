@@ -218,6 +218,8 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 			}
 		});
 
+		//TODO - official way of redaction feature enablement:
+		//if($AppConfig.service.canRedact()){
 		//hack to allow redactions only in legal texts for now...
 		if (redactionRegex.test(LocationProvider.currentNTIID)) {
 			//inject other menu items:
