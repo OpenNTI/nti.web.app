@@ -66,8 +66,7 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 		if (this.rendered) {
 			this.getHeader().setTitle(this.title);
 		}
-		return this;
-//		return itemsShown===0 ? this.hide() : this.show();
+		return itemsShown===0 ? this.hide() : this.show();
 	},
 
 	updateTitle: function(){
