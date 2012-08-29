@@ -52,7 +52,6 @@ Ext.define('NextThought.controller.Stream', {
 	onSessionReady: function(){
 		//Load page and root stream stores...
 		var ss = this.getStreamStore();
-		ss.on('add', this.updateStreamStore, this);
 
 		$AppConfig.service.getPageInfo(Globals.CONTENT_ROOT,
 			//success:
@@ -69,56 +68,9 @@ Ext.define('NextThought.controller.Stream', {
 
 
 	//called by the Library controller when navigation occurs
-	containerIdChanged: function(containerId) {
-		var as = Ext.getCmp('activity-stream'),
-			ss = this.getStreamStore(),
-			friendsToChangeMap = {},
-			masterId = LocationProvider.getLineage(containerId).last();
-
-		function addUsers(m, activityStream) {
-			var user;
-
-			function update(u){
-				activityStream.addUser(u[0], m[u[0].get('Username')], true);
-			}
-
-			for (user in m) {
-				if (m.hasOwnProperty(user)){
-					UserRepository.getUser(user, update, this);
-				}
-			}
-		}
-
-		function addToChangeMap(mid, change, m) {
-			var itemContainerId = LocationProvider.getLineage(change.get('Item').get('ContainerId')).last(),
-				creator;
-			if (mid !== itemContainerId) {
-				return;
-			}
-
-			creator = change.get('Creator');
-			if (!m[creator]){
-				m[creator] = [];
-			}
-			m[creator].push(change);
-		}
-
-		ss.each(
-			function(change) {
-				addToChangeMap(masterId, change, friendsToChangeMap);
-			}
-			,this);
-
-		addUsers(friendsToChangeMap, as);
-	},
+	containerIdChanged: function(containerId) {},
 
 
-	updateStreamStore: function(store, records) {
-		var as = Ext.getCmp('activity-stream');
-		Ext.each(records, function(r){
-			as.addActivity(r.get('Creator'), r);
-		}, this);
-	},
 
 
 	getStoreForStream: function(containerId, success, failure, scope) {

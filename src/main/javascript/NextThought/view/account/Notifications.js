@@ -1,6 +1,7 @@
-Ext.define('NextThought.view.menus.account.Notifications',{
-	extend: 'Ext.menu.Item',
-	alias: 'widget.notifications-menuitem',
+Ext.define('NextThought.view.account.Notifications',{
+	extend: 'Ext.Component',
+	alias: 'widget.notifications',
+
 	cls: 'notifications',
 
 	NOTIFICATIONS_TO_SHOW_AT_FIRST: 5,
@@ -11,24 +12,24 @@ Ext.define('NextThought.view.menus.account.Notifications',{
 		'User': 'Added you to a group'
 	},
 
-	renderTpl: [
-		'Notifications <tpl if="notificationcount &gt; 0">({notificationcount})</tpl>',
-		'<div class="notification-scroll-container">',
-			'<tpl for="notifications">',
-				'<div class="notification-item" id="{guid}">',
-					'<div class="name">{name}</div>',
-					'<div class="message">{message}</div>',
-				'</div>',
-			'</tpl>',
-		'</div>',
-		'<tpl if="!hideSeeAll">',
-			'<a href="#" class="notification-see-all">See All</a>',
-		'</tpl>'
-	],
+	renderTpl: Ext.DomHelper.markup([
+		'Notifications',
+		{cls:'notification-scroll-container', cn:[
+			{tag:'tpl', 'for':'notifications', cn:[
+				{cls:'notification-item', id:'{guid}', cn:[
+					{cls:"name",html:'{name}'},
+					{cls:'message',html:'{message}'}
+				]}
+			]}
+		]},
+		{tag:'tpl', 'if':'!hideSeeAll', cn:[
+			{tag:'a', href:"#", cls:'notification-see-all', html:'See All'}
+		]}
+	]),
 
 	renderSelectors: {
-		seeAll: 'a.notification-see-all',
-		scrollBox: 'div.notification-scroll-container'
+		seeAll: '.notification-see-all',
+		scrollBox: '.notification-scroll-container'
 	},
 
 
@@ -38,14 +39,10 @@ Ext.define('NextThought.view.menus.account.Notifications',{
 	},
 
 
-	onAdded: function(){
-		this.parentMenu.on('beforeshow', function(){this.setupRenderData();}, this);
-	},
-
-
 	afterRender: function(){
 		this.callParent(arguments);
 		this.el.on('click', this.clicked, this);
+		this.setupRenderData();
 	},
 
 
@@ -105,7 +102,6 @@ Ext.define('NextThought.view.menus.account.Notifications',{
 	renderSpecial: function(rd) {
 		this.el.update(this.renderTpl.apply(rd));
 		this.seeAll = this.el.select(this.renderSelectors.seeAll);
-		this.parentMenu.doLayout();
 		if (this.seeAll) {
 			this.seeAll.on('click', this.showAllNotifications, this);
 		}

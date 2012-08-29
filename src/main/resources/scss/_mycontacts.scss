@@ -113,7 +113,7 @@ $over-color: #f4f3f3;
 }
 
 .x-panel.contacts-panel {
-	margin: 0 0 20px 20px;
+	margin: 0 0 20px 10px;
 
 	&.x-collapsed .x-panel-header{
 		background-position: 0 -15px;
@@ -123,6 +123,7 @@ $over-color: #f4f3f3;
 		background: url(../images/collapse-expand.png) no-repeat 0 3px;
 		cursor: pointer;
 		padding-left: 10px;
+		padding-right: 10px;
 		@include contact-header;
 
 		.x-tool {
@@ -194,30 +195,6 @@ $over-color: #f4f3f3;
 	.status {
 		color: #b8b8b8;
 		font: { size: 8pt; weight: 500; }
-	}
-
-	.activities {
-	}
-
-	.activity {
-		position: relative;
-		left: -2px;
-		margin: 12px 0;
-		font-size: 8pt;
-		color: #b8b8b8;
-		padding: 0 40px 0 25px;
-		overflow: hidden;
-		text-overflow: ellipsis;
-		white-space: nowrap;
-		&.comment{	background: url(../images/activity-comment.png) 0 2px no-repeat;}
-		&.highlight{background: url(../images/activity-highlight.png) 0 3px no-repeat;}
-		&.note{		background: url(../images/activity-note.png) 4px 0 no-repeat;}
-
-		div.fade-mask {
-			@include fade-mask();
-			right: 33px;
-			z-index: 1;
-		}
 	}
 }
 
@@ -431,5 +408,29 @@ $over-color: #f4f3f3;
 		border: none;
 		border-width: 0;
 		border-top: 1px solid #dcdcdc;
+	}
+}
+
+.contacts-view {
+	@include side-panel-view-title;
+	.view-title {
+		.manage {
+			background: url(../images/add_btn.png) 0 0 no-repeat;
+			position: absolute;
+			width: 24px;
+			height: 24px;
+			top: 30px;
+			right: 20px;
+
+			&:active,&.active {
+				&,&:hover {
+					background-position: -56px 0;
+				}
+			}
+
+			&:hover {
+				background-position: -28px 0;
+			}
+		}
 	}
 }

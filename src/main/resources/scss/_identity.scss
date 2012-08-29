@@ -1,0 +1,45 @@
+
+.x-component.identity {
+	.undocked & {
+		background: #ffffff;
+	}
+
+	border-top: 1px solid #eaeaea !important;
+	overflow: hidden;
+	padding: 10px 17px;
+
+	img.avatar{
+		float: left;
+		width: 48px;
+		height: 48px;
+		border-radius: 3px;
+	}
+
+	div.wrap {
+		margin-left: 55px;
+
+
+		.name {
+			color: #494949;
+			font: { size: 14px; weight: 500; }
+			padding-right: 35px;
+			overflow: hidden;
+			text-oveflow: ellipsis;
+
+			.notifications {
+				margin: auto 5px;
+				color: #3fb3f6;
+				vertical-align: super;
+				font-style: italic;
+			}
+		}
+		.status {
+			text-overflow: ellipsis;
+			max-width: 190px;
+			white-space: nowrap;
+			overflow: hidden;
+			color: #757474;
+			font: { size: 12px; weight: 500; }
+		}
+	}
+}

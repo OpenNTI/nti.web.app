@@ -34,9 +34,15 @@ Ext.define( 'NextThought.view.annotations.Note', {
 	constructor: function(config){
 		this.callParent(arguments);
 		this.on('open',function(scrollTo){
-			var reply = this.openWindow().down(
-				Ext.String.format('[guid={0}]',IdCache.getIdentifier(scrollTo)));
-			reply.scrollIntoView();
+			var reply, w = this.openWindow();
+			if( scrollTo !== this.getRecord().getId() ){
+				reply = w.down(
+					Ext.String.format('[guid={0}]',IdCache.getIdentifier(scrollTo)));
+
+				if( reply ){
+					reply.scrollIntoView();
+				}
+			}
 		},this);
 		return this;
 	},

@@ -66,8 +66,8 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 		if (this.rendered) {
 			this.getHeader().setTitle(this.title);
 		}
-
-		return itemsShown===0 ? this.hide() : this.show();
+		return this;
+//		return itemsShown===0 ? this.hide() : this.show();
 	},
 
 	updateTitle: function(){
@@ -90,112 +90,11 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 	},
 
 	removeUser: function(user) {
-		var existing = this.getUser(user);
+		var existing = this.down('[username='+user.get('Username')+']');
 		if (existing){
 			this.remove(existing, true);
 			this.updateTitle();
 		}
-	},
-
-	addUser: function(user, changes, hideIfNoActivity) {
-		var widget,
-			group = this.associatedGroup;
-
-		if (!this.getUser(user)) {
-			widget = { group: group, user: user, username: user.get('Username'), items:[]};
-
-			if (!changes) {changes = [];}
-			Ext.each(changes, function(c){
-				var item, ct, elapsed, cid;
-				ct = c.get('ChangeType');
-				item = c.get('Item');
-				cid = item.get('ContainerId');
-				elapsed = item ? Ext.Date.getElapsed(item.get('Last Modified')) : null;
-				if (ct !== 'Circled' && ct !== 'Deleted' && elapsed && elapsed <=  1800000) { //newer than 30 min
-					widget.items.push({
-						item: item,
-						type: item.getModelName(),
-						message: this.getMessage(c),
-						ContainerId: cid,
-						ContainerIdHash: IdCache.getIdentifier(cid)
-					});
-				}
-			}, this);
-
-			//So now we have the widgets created and in the card, we need to sort them so newest first:
-			Ext.Array.sort(widget.items, function(a, b){
-				var k = 'Last Modified';
-				return Number(b.item.get(k) - a.item.get(k));
-			});
-
-			//if this widget has no activity, hide it but still add it so we can find it later
-			if (hideIfNoActivity && widget.items.length === 0) {
-				widget.hidden = true;
-			}
-
-			//Add and update title
-			this.add(widget);
-			this.updateTitle();
-		}
-	},
-
-	getUser: function(user) {
-		return this.down('[username='+user.get('Username')+']');
-	},
-
-
-	getMessage: function(change) {
-		var item = change.get('Item'), loc, bookTitle;
-		if (!item){return 'unknown';}
-
-		if (item.getModelName() === 'Highlight') {
-			loc = LocationProvider.getLocation(item.get('ContainerId'));
-			return loc ? loc.label : 'Unknown';
-		}
-		else if (item.getModelName() === 'Note'){
-			return item.getBodyText();
-		}
-		else {
-			console.error('Not sure what activity text to use for ', item, change);
-			return 'Unknown';
-		}
-	},
-
-
-	addActivity: function(username, change) {
-		var me = this,
-			widget = me.down('[username='+username+']'),
-			item = change.get('Item'),
-			cid = item ? item.get('ContainerId') : null,
-			id = IdCache.getIdentifier(cid),
-			ct = change.get('ChangeType'), cmp;
-
-		if (!widget) {
-			UserRepository.getUser(username, function(u){
-				me.addUser(u[0], [change], true);
-			});
-			return;
-		}
-
-		if (ct === 'Deleted') {
-			cmp = widget.down('[ContainerIdHash='+id+']');
-			if (cmp) {
-				widget.remove(cmp);
-			}
-		}
-		else if (ct!=='Circled'){
-			widget.insert(0, {
-				item: item,
-				type: item.getModelName(),
-				message: this.getMessage(change),
-				ContainerId: cid,
-				ContainerIdHash: id
-			});
-			this.insert(0, widget);//move?
-			widget.setVisible(true);
-
-		}
 	}
-
 
 });

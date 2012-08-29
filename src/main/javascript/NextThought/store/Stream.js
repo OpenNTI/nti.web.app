@@ -19,6 +19,9 @@ Ext.define('NextThought.store.Stream',{
 		},
 		model: 'NextThought.model.Change'
 	},
+
+	groupField: 'EventTime',
+
 	sorters: [
 		{
 			property : 'Last Modified',

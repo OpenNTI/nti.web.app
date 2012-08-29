@@ -297,6 +297,5 @@ Ext.define('NextThought.Library', {
 	function(){
 		window.Library = this;
 		window.jsonpToc = Ext.bind(this.receiveContent, this);
-		console.log(jsonpToc);
 	}
 );

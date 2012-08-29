@@ -15,7 +15,7 @@ Ext.define('NextThought.controller.Session', {
 
 	views: [
 		'Window',
-		'menus.MyAccount'
+		'account.Account'
 	],
 
 	statics: {

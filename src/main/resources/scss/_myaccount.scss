@@ -1,82 +1,36 @@
-.my-account-menu{ overflow: visible !important;}
-.my-account-wrapper {
-	background: #ffffff;
-	position: relative;
-	width: 250px;
-	margin: 10px;
-	margin-bottom: 0;
-	height: 71px;
-	overflow: hidden;
+.account-view {
+	color: #757474;
+	font: {size: 16px; style: normal; weight: 4;}
+	line-height: 25px;
+	@include side-panel-view-title;
 
-	border: 1px solid white;
-	padding: 10px 5px 20px 20px;
-	cursor: pointer;
-	box-shadow: 3px 3px 3px -3px rgba(0,0,0,0)  !important;
-	.menu-visible &,
-	&:hover{
-		border-color: #dcdcdc;
-		box-shadow: 3px 3px 3px -3px rgba(0,0,0,0.3)  !important;
-		.settings.menu-nib {
-			background-position: 0 -17px
-		}
-		.name {
-			.notifications{
-				color: #b3b3b3;
-			}
-		}
+	.view-title { margin-bottom: 10px; }
+	
+	.item {
+		min-height: 25px;
+		margin-left: 20px;
+
+		&.x-item-disabled { opacity: 0.5; cursor: default; &:hover{color:#757474;}}
+		.x-mask { display: none; }
 	}
-	.menu-visible &{
-		box-shadow: 3px 8px 3px -3px rgba(0,0,0,0.3)  !important;
+	a.item {
+		cursor: pointer;
+
+		&:hover { color: #b8b8b8; }
+		&:active { color: #424242; }
 	}
 
-	.settings.menu-nib{
-		position: absolute;
-		width: 28px;
-		height: 17px;
-		top: 23px;
-		right: 13px;
-		background: url(../images/settings.png) no-repeat 0 0;
-	}
 
-	.name {
-		color: #747474;
-		font: { size: 10.5pt; weight: 500; }
-		padding-right: 35px;
-		overflow: hidden;
-		text-oveflow: ellipsis;
-
-		.notifications {
-			margin: auto 5px;
-			color: #3fb3f6;
-			vertical-align: super;
-			font-style: italic;
-		}
-	}
-	.status {
-		text-overflow: ellipsis;
-		max-width: 190px;
-		white-space: nowrap;
-		overflow: hidden;
-		color: #b8b8b8;
-		font: { size: 8pt; weight: 500; }
-	}
-}
-
-.x-panel-nt.my-account-menu {
-	.x-menu-body {
-		padding-bottom: 15px !important;
-	}
-	.x-menu-item {
-		color: #747474;
-		padding-left: 20px !important;
-	}
 	.notifications {
-        cursor: default;
+		min-height: 50px;
+		line-height: normal;
+		margin-left: 20px;
+		cursor: default;
 
-        .notification-scroll-container {
-            overflow: auto;
-            position: relative;
-        }
+		.notification-scroll-container {
+			overflow: auto;
+			position: relative;
+		}
 
 		a {
 			font-size: 8.5pt;
@@ -90,12 +44,9 @@
 			}
 		}
 
-		background: white !important;
-
 		.notification-item {
-			&:hover{
-				//hover state
-			}
+			line-height: normal;
+			&:hover{ }
 			cursor: pointer;
 			margin: 15px 0 15px 3px;
 			padding: 0 0 0 12px !important;
@@ -103,7 +54,8 @@
 			border-left: 3px solid #f0f0f0;
 
 			.name {
-				font-size: 7.5pt;
+				line-height: normal;
+				font-size: 10px;
 				font-weight: 800;
 				color: #3fb3f6;
 				text-transform: uppercase;
@@ -112,7 +64,8 @@
 			}
 			.message {
 				color: #adadad;
-				font-size: 8.5pt;
+				line-height: normal;
+				font-size: 11px;
 				font-weight: 300;
 				text-overflow: ellipsis;
 				overflow: hidden;
@@ -120,7 +73,6 @@
 		}
 	}
 }
-
 
 .account-form-username .x-panel-body-account{
 	font-size: 20px;

@@ -1,44 +1,26 @@
 Ext.define('NextThought.view.account.contacts.Card',{
-	extend: 'Ext.container.Container',
+	extend: 'Ext.Component',
 	alias: 'widget.contact-card',
-	requires: [
-		'NextThought.layout.component.TemplatedContainer',
-		'NextThought.view.account.contacts.Activity'
-	],
 	mixins: {
-		shareableTarget: 'NextThought.mixins.ShareableTarget'
+//		shareableTarget: 'NextThought.mixins.ShareableTarget'
 	},
 	cls: 'contact-card',
-	layout: 'auto',
-	componentLayout: 'templated-container',
-	renderTpl: [
-		'<tpl if="!hideNib">',
-			'<img class="nib" src="{blank}" alt="Remove this contact from {from}">',
-		'</tpl>',
-		'<img src="{avatarURL}">',
-		'<div class="card-body">',
-			'<div class="name">{name}</div>',
-			'<div class="status">{status}</div>',
-			'<div id="{id}-body" class="activities">',
-				'{%this.renderContainer(out,values)%}',
-			'</div>',
-		'</div>'
-	],
+	renderTpl: Ext.DomHelper.markup([
+		{tag:'tpl', 'if':'!hideNib', cn:[
+			{tag:'img', cls:'nib', src:'{blank}', alt:'Remove this contact from {from}'}]},
+		{tag:'img', src:'{avatarURL}'},
+		{ cls:'card-body', cn:[
+			{cls:'name', html:'{name}'},
+			{cls:'status', html:'{status}'}
+		]}
+	]),
 
-
-	childEls: ['body'],
 
 
 	constructor: function(){
-		this.mixins.shareableTarget.constructor.call(this);
+//		this.mixins.shareableTarget.constructor.call(this);
 		return this.callParent(arguments);
 	},
-
-	getTargetEl: function () {
-		return this.body;
-	},
-
-	defaultType: 'contact-activity',
 
 	initComponent: function(){
 		this.clickBlocker = Globals.buildBlocker(this);
@@ -76,13 +58,13 @@ Ext.define('NextThought.view.account.contacts.Card',{
 
 
 	afterRender: function(){
-		var el = this.getEl();
-		var nib = el.down('img.nib');
-		var tip;
+		var el = this.getEl(),
+			nib = el.down('img.nib'),
+			tip;
 
 		el.on('click', this.clicked, this);
 		el.addClsOnOver('card-over');
-		this.mixins.shareableTarget.afterRender.call(this);
+//		this.mixins.shareableTarget.afterRender.call(this);
 		this.callParent(arguments);
 
 		if(nib){
@@ -95,15 +77,16 @@ Ext.define('NextThought.view.account.contacts.Card',{
 	clicked: function(e){
 		if(e.getTarget('img.nib')){
 			this.fireEvent('remove-contact-from', this.contactContainer, this.user);
+			return;
 		}
-		else {
-			try{
-				this.clickBlocker();
-				this.fireEvent('click', this, this.user.getId());
-			}
-			catch(er){
-				this.fireEvent('blocked-click', this, this.user.getId());
-			}
+
+
+		try{
+			this.clickBlocker();
+			this.fireEvent('click', this, this.user.getId());
+		}
+		catch(er){
+			this.fireEvent('blocked-click', this, this.user.getId());
 		}
 	}
 

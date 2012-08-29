@@ -22,12 +22,14 @@ Ext.define('NextThought.view.Main', {
 	items:[
 		{xtype: 'main-navigation', region: 'west'},
 		{xtype: 'main-views', id: 'view-ctr', region: 'center'},
-		{xtype: 'main-sidebar', region: 'east'}
+		{xtype: 'container', region: 'east', weight: 30, minWidth:260}
 	],
 
 	constructor: function(){
 		this.hidden = Boolean(NextThought.phantomRender);
-		return this.callParent(arguments);
+		this.callParent(arguments);
+		Ext.widget({xtype: 'main-sidebar', host: this.down('[region=east]')});
+		return this;
 	}
 
 }, function(){

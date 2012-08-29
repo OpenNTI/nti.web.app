@@ -94,57 +94,58 @@ Ext.define('NextThought.controller.Groups', {
 	publishContacts: function(){
 		var me = this,
 			store = me.getFriendsListStore(),
-			groups = Ext.getCmp('my-groups');
+			groups = Ext.getCmp('my-groups'),
+			offline;
 
 		if(!groups){
 			setTimeout(function(){ me.publishContacts(); },10);
 			return;
 		}
 
-		this.getContacts(function(friends){
-			Ext.getCmp('offline-contacts').setUsers(friends.Offline);
-			Ext.getCmp('online-contacts').setUsers(friends.Online);
-		});
-
 		groups.removeAll(true);
+		this.getContacts(function(friends){
 
-		store.each(function(group){
-			var id = ParseUtils.parseNtiid(group.getId()),
-				friends = group.get('friends'), name;
+			store.each(function(group){
+				var id = ParseUtils.parseNtiid(group.getId()),
+					list = group.get('friends'), name,
+					online = [];
 
-			if(friends.length === 1 && friends[0] === 'Everyone'
-			&& id.specific.provider === 'zope.security.management.system_user'){
-				return;
-			}
+				if(list.length === 1 && list[0] === 'Everyone'
+				&& id.specific.provider === 'zope.security.management.system_user'){
+					return;
+				}
 
-			name = group.getName();
-			UserRepository.getUser(friends,function(users){
-				groups.add({title: name, associatedGroup: group}).setUsers(users);
+				name = group.getName();
+
+				Ext.each(list,function(n){
+					var o = friends.Online[n];
+					if(o){online.push(o);} });
+
+				groups.add({title: name, associatedGroup: group}).setUsers(online);
 			});
+
+			offline = groups.add({ title: 'Offline', collapsed: true, offline:true });
+
+			offline.setUsers(friends.Offline);
+
 		});
+
 
 	},
 
 
 	incomingPresenceChange: function(name, presence){
-		var offline = Ext.getCmp('offline-contacts'),
-			online = Ext.getCmp('online-contacts'),
-			u;
+		var me = this,
+			groups = Ext.getCmp('my-groups').items;
 
-		UserRepository.getUser(name, function(users) {
-			u = users[0];
-			if (presence.toLowerCase()==='online') {
-				//remove from offline, add to online
-				online.addUser(u);
-				offline.removeUser(u);
-			}
-			else if (presence.toLowerCase()==='offline') {
-				online.removeUser(u);
-				offline.addUser(u);
-			}
-			else {
-				console.error('Got a weird presence notification.', name, presence);
-			}
+		function groupAction(a,b,user){
+			groups.each(function(g){ g[g.offline?b:a](user); },me);
+		}
+
+		UserRepository.getUser(name, function(u) {
+			var a = ['addUser','removeUser'];
+			if(presence.toLowerCase()==='online'){a.reverse();}
+			groupAction(a[0],a[1],u[0]);
 		});
 	},
 

@@ -9,9 +9,7 @@ Ext.define('NextThought.controller.Navigation', {
 		'Navigation',
 		'ViewSelect',
 		'Views',
-		'menus.account.Notifications',
-		'menus.Navigation'//,
-//		'menus.navigation.'
+		'menus.Navigation'
 	],
 
 	init: function() {
@@ -25,7 +23,7 @@ Ext.define('NextThought.controller.Navigation', {
 			'notifications-menuitem': {
 				'navigation-selected': this.navigate
 			},
-			'contact-activity': {
+			'activity-item': {
 				'navigation-selected': this.navigate
 			},
 			'main-views': {

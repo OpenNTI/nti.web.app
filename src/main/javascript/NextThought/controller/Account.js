@@ -29,23 +29,23 @@ Ext.define('NextThought.controller.Account', {
 				'click': this.contactCardClicked
 			},
 
-			'my-account-menu menuitem[href]' : {
+			'account-view box[isMenuItem][href]' : {
 				'click': this.openHref
 			},
 
-			'my-account-menu menuitem[action=privacy]' : {
+			'account-view box[isMenuItem][action=privacy]' : {
 				'click': this.showPrivacy
 			},
 
-			'my-account-menu menuitem[action=help]' : {
+			'account-view box[isMenuItem][action=help]' : {
 				'click': this.openHelp
 			},
 
-			'my-account-menu menuitem[action=terms]' : {
+			'account-view box[isMenuItem][action=terms]' : {
 				'click': this.showTerms
 			},
 
-			'my-account-menu menuitem[action=account]' : {
+			'account-view box[isMenuItem][action=account]' : {
 				'click': this.showAccount
 			}
 
@@ -135,11 +135,8 @@ Ext.define('NextThought.controller.Account', {
 	},
 
 
-	openHref: function(item, event){
-		event.stopPropagation();
-		event.preventDefault();
+	openHref: function(item){
 		window.open(item.href, item.hrefTarget);
-		return false;
 	},
 
 

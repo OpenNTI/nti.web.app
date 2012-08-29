@@ -1,35 +1,54 @@
 Ext.define('NextThought.view.SideBar',{
-	extend: 'Ext.container.Container',
+	extend: 'Ext.panel.Panel',
 	alias: 'widget.main-sidebar',
 
 	requires: [
-		'NextThought.view.account.MyAccount',
-		'NextThought.view.account.MyContacts'
+		'NextThought.view.SideBarTabPanel',
+		'NextThought.view.account.Account',
+		'NextThought.view.account.Activity',
+		'NextThought.view.account.Identity',
+		'NextThought.view.account.Contacts'
 	],
 
-	width: 275,
-	layout: 'vbox',
-	floating: false,
+	width: 260,
+	layout: {
+		type:'vbox',
+		align: 'stretch'
+	},
+	floating: true,
 	autoShow: true,
+	constrain: true,
+	frame: false,
+	plain: true,
 	shadow: false,
-	cls: 'main-sidebar',
+	ui: 'sidebar',
+	cls: 'sidebar',
+
 
 	items: [
-		{xtype: 'my-account'},
-		{xtype: 'my-contacts', flex:1}
+		{ xtype: 'box', cls: 'gripper', autoEl: { html: '&nbsp;' } },
+		{ xtype: 'identity'},
+		{ xtype: 'sidebar-tabpanel',
+			flex: 1,
+			items: [
+				{xtype: 'contacts-view'},
+				{xtype: 'activity-view', id: 'activity-stream'},
+				{iconCls: 'history'},
+				{xtype: 'account-view'}
+			]}
 	],
-
-	toggleTpl: Ext.DomHelper.createTemplate({cls: 'sidebar-toggle'}).compile(),
 
 
 	initComponent: function(){
 		this.callParent(arguments);
-		this.toggle = this.toggleTpl.append(Ext.getBody(), [], true).hide();
-		this.mon(this.toggle, {
-			scope: this,
-			'click': this.toggleFlyover
-		});
-		Ext.EventManager.onWindowResize(this.viewportMonitor,this);
+		this.gripper = this.down('[cls=gripper]');
+		this.mon(this.host,'afterlayout', this.syncUp, this);
+		Ext.EventManager.onWindowResize(this.viewportMonitor,this,null);
+
+		this.on('activate',function(){
+			console.log('sss');
+			Ext.WindowManager.sendToBack(this);
+		},this);
 	},
 
 
@@ -40,76 +59,41 @@ Ext.define('NextThought.view.SideBar',{
 
 
 	viewportMonitor: function(w){
-		if (this.floating) {
-			this.hide();
-		}
-
+		var cls = 'undocked';
 		if (w < 1278) {
-			if (!this.floating) {
-				//this.hide();
-				this.collapse();
-				this.toggle.show();
-			}
+			this.host.hide();
+			this.gripper.show();
+			this.addCls(cls);
 		}
-		else if(this.floating){
-			this.expand();
-			this.toggle.hide();
+		else{
+			this.gripper.hide();
+			this.host.show();
+			this.removeCls(cls);
 		}
-	},
-
-
-	collapse: function(){
-		if (!this.floating){
-			this.myOwner.items.remove(this);
-			this.myOwner.floatingItems.add(this);
-			this.hide();
-			this.floating = true;
-			this.hidden = true;
-			this.wrapPrimaryEl(this.el.dom);
-		}
-	},
-
-
-	expand: function(){
-		this.myOwner.items.add(this);
-		this.myOwner.floatingItems.remove(this);
-
-		this.floating = false;
-		this.el.removeCls('x-layer');
-		this.show();
-	},
-
-
-	toggleFlyover: function(){
-		var visible = this.isVisible(),
-			h = Ext.Element.getViewportHeight(),
-			w = Ext.Element.getViewportWidth();
-		if (visible) {
-			this.hide();
-			return;
-		}
-		this.setHeight(h);
-		this.showAt(w-this.width, 0);
-		this.doLayout();
-	},
-
-
-	toFront: function(){
-		this.callParent(arguments);
-		this.toggle.setStyle({zIndex: this.el.zindex+1});
-	},
-
-
-	onAdded: function(o){
-		this.myOwner = o;
-		o.floatingItems = o.floatingItems || new Ext.util.MixedCollection();
-		return this.callParent(arguments);
+		this.syncUp();
 	},
 
 
 	afterRender: function(){
 		this.callParent(arguments);
 		this.viewportMonitor(Ext.Element.getViewportWidth());
+	},
+
+
+	syncUp: function(){
+
+		var x = Ext.Element.getViewportWidth()-this.getWidth(),
+			y = 0,
+			size = this.host.getSize();
+
+		if(!this.host.isVisible()){
+			size = {height: Ext.Element.getViewportHeight()-100};
+			y = 101;
+			x -= 100;
+		}
+
+		this.setHeight(size.height);
+		this.setPagePosition(x,y);
 	}
 
 });
