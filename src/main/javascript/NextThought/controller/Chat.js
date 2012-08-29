@@ -69,7 +69,7 @@ Ext.define('NextThought.controller.Chat', {
 			},
 
 			'contacts-panel': {
-//				'group-chat': this.enterRoom
+				'group-chat': this.enterRoom
 			},
 
 			'chat-window': {
@@ -215,6 +215,11 @@ Ext.define('NextThought.controller.Chat', {
 
 
 	enterRoom: function(usersOrList, options) {
+		if (!$AppConfig.service.canChat()) {
+			console.log('User not permissioned to chat.');
+			return;
+		}
+
 		options = options || {};
 		var users = [], k, ri, roomCfg;
 
@@ -510,7 +515,6 @@ Ext.define('NextThought.controller.Chat', {
 
 
 	occupantClicked: function(u) {
-		//open a new tab to chat with this user...
 		this.enterRoom(u);
 	},
 

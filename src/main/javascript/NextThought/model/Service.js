@@ -325,7 +325,8 @@ Ext.define('NextThought.model.Service', {
 	},
 
 	canChat: function() {
-		return this.hasCapability('nti.platform.p2p.chat');
+		//return this.hasCapability('nti.platform.p2p.chat');
+		return false;
 	},
 
 

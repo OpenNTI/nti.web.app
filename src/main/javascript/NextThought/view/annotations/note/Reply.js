@@ -55,11 +55,14 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 			console.log('TODO - this is flagged, consider an indicator, or remove this log.');
 		}
 
-		if( me.startChatButton ){
+		if( $AppConfig.service.canChat() ){
 			me.mon(me.startChatButton,{
 				scope: me,
 				click: me.startChat
 			});
+		}
+		else {
+			this.startChatButton.remove();
 		}
 
 		me.mon(me.replyButton,{
@@ -319,6 +322,7 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 
 	startChat: function() {
 		this.fireEvent('chat', this.record);
+		return;
 	},
 
 

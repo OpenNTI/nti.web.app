@@ -59,11 +59,14 @@ Ext.define('NextThought.view.annotations.note.Main',{
 			me.mon(me.editor.down('.cancel'),{ scope: me, click: me.deactivateReplyEditor });
 			me.mon(me.editor.down('.save'),{ scope: me, click: me.editorSaved });
 
-			if( me.startChatButton ) {
+			if( $AppConfig.service.canChat() ) {
 				me.mon(me.startChatButton,{
 					scope: me,
 					click: me.startChat
 				});
+			}
+			else {
+				this.startChatButton.remove();
 			}
 
 			me.mon(me.editor.down('.content'),{
@@ -388,6 +391,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 
 	startChat: function() {
 		this.up('window').fireEvent('chat', this.record);
+		return;
 	}
 
 },

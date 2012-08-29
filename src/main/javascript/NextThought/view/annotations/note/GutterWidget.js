@@ -24,7 +24,8 @@ Ext.define('NextThought.view.annotations.note.GutterWidget',{
 
 	afterRender: function(){
 		var me = this,
-			r = me.record;
+			r = me.record
+			mouseUpDivs = [me.liked, me.favorites];
 		me.callParent(arguments);
 
 		me.setRecord(r);
@@ -47,8 +48,12 @@ Ext.define('NextThought.view.annotations.note.GutterWidget',{
 			}
 		});
 
-		if( me.startChatButton ){
+		if(false && $AppConfig.service.canChat()){
 			me.mon(me.startChatButton, 'click', me.startChat, me);
+			mouseUpDivs.push(me.startChatButton);
+		}
+		else {
+			me.startChatButton.remove();
 		}
 
 		me.liked.update(r.getFriendlyLikeCount());
@@ -58,7 +63,7 @@ Ext.define('NextThought.view.annotations.note.GutterWidget',{
 		TemplatesForNotes.attachMoreReplyOptionsHandler(me, me.more);
 
 		//Stop div mouseup from opening window when clicking on buttons...
-		me.mon(new Ext.CompositeElement([me.liked, me.favorites, me.startChatButton]), {
+		me.mon(new Ext.CompositeElement(mouseUpDivs), {
 			scope: me,
 			mouseup: function(e){
 				e.stopEvent();
@@ -127,6 +132,7 @@ Ext.define('NextThought.view.annotations.note.GutterWidget',{
 
 	startChat: function(){
 		this.fireEvent('chat', this.record);
+		return;
 	}
 
 },function(){

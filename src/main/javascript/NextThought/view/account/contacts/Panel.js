@@ -29,7 +29,8 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 	}],
 
 	initComponent: function(){
-		if(!this.associatedGroup){
+		if(!this.associatedGroup || !$AppConfig.service.canChat()){
+			//note, not able to chat will remove ALL tools, which right now is just chat...
 			this.tools = null;
 		}
 		this.callParent(arguments);

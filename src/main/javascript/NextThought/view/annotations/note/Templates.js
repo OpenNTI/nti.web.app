@@ -41,7 +41,7 @@ Ext.define('NextThought.view.annotations.note.Templates',{
 			cls: 'reply-options',
 			cn: [
 				{ cls: 'reply', html: 'Reply' },
-//				{ cls: 'chat', html: 'Start a chat' },
+				{ cls: 'chat', html: 'Start a chat' },
 				{ cls: 'more', title: 'Options', html: '&nbsp;',
 					cn:[{
 						tag: 'ol',

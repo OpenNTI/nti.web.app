@@ -54,7 +54,12 @@ Ext.define('NextThought.controller.Account', {
 
 
 	contactCardClicked: function(cmp,username){
-//		this.getController('Chat').enterRoom(username);
+		if ($AppConfig.service.canChat()){
+			this.getController('Chat').enterRoom(username);
+		}
+		else {
+			console.log('Chat requested but user is not permissioned.');
+		}
 	},
 
 
