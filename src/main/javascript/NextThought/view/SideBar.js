@@ -46,7 +46,6 @@ Ext.define('NextThought.view.SideBar',{
 		Ext.EventManager.onWindowResize(this.viewportMonitor,this,null);
 
 		this.on('activate',function(){
-			console.log('sss');
 			Ext.WindowManager.sendToBack(this);
 		},this);
 	},
