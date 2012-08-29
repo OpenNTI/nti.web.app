@@ -156,7 +156,7 @@ Ext.define('NextThought.controller.Session', {
 
 	init: function() {
 		this.control({
-			'my-account-menu [action=logout]' : {
+			'account-view [action=logout]' : {
 				'click': this.handleLogout
 			}
 		},{});
