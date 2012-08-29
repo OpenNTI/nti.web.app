@@ -89,6 +89,14 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 		this.updateTitle();
 	},
 
+	addUser: function(user){
+		var existing = this.down('[username='+user.get('Username')+']');
+		if(!existing){
+			this.add({user: user, group: this.associatedGroup});
+			this.updateTitle();
+		}
+	},
+
 	removeUser: function(user) {
 		var existing = this.down('[username='+user.get('Username')+']');
 		if (existing){

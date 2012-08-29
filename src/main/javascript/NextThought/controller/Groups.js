@@ -136,10 +136,23 @@ Ext.define('NextThought.controller.Groups', {
 
 	incomingPresenceChange: function(name, presence){
 		var me = this,
-			groups = Ext.getCmp('my-groups').items;
+			groups = Ext.getCmp('my-groups'),
+			offline = groups.down('[offline]'),isContact=false;
 
 		function groupAction(a,b,user){
-			groups.each(function(g){ g[g.offline?b:a](user); },me);
+			groups.items.each(function(g){
+				var o = g.associatedGroup;
+				if(o && Ext.Array.contains(o.get('friends'),name)){
+					isContact=true;
+					g[a](user);
+				}
+			},me);
+			if(isContact){
+				offline[b](user);
+			}
+			else {
+				console.log('Ignoring presense from: '+name+', it is not in any groups');
+			}
 		}
 
 		UserRepository.getUser(name, function(u) {
