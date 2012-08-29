@@ -34,9 +34,13 @@ Ext.define('NextThought.view.account.Notifications',{
 	},
 
 
-	constructor: function(){
-		Ext.getStore('Stream').on('datachanged', this.setupRenderData, this);
-		return this.callParent(arguments);
+	initComponent: function(){
+		this.callParent(arguments);
+		this.mon(Ext.getStore('Stream'), {
+			scope: this,
+			'add': this.updateNotificationCount,
+			'datachanged': this.setupRenderData
+		});
 	},
 
 
@@ -117,16 +121,29 @@ Ext.define('NextThought.view.account.Notifications',{
 	},
 
 
+
+	updateNotificationCount: function(store,records){
+		var u = $AppConfig.userObject,
+			c = (u.get('NotificationCount') || 0) + records.length;
+
+		//Update current notification of the userobject.
+		u.set('NotificationCount', c);
+		u.fireEvent('changed',u);
+	},
+
+
 	clicked: function(event, element){
 		var me = this,
+			u = $AppConfig.userObject,
 			t = event.getTarget('.notification-item',null,true),
 			guid = t.id,
 			containerId = this.notificationData[guid].containerId,
 			targets = this.notificationData[guid].id;
 
-		$AppConfig.userObject.saveField('lastLoginTime', new Date(), function(){
+		u.saveField('lastLoginTime', new Date(), function(){
 			me.setupRenderData();
 		});
+		u.saveField('NotificationCount', 0);
 
 		this.fireEvent('navigation-selected', containerId, targets);
 	},
