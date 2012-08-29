@@ -10,8 +10,7 @@ Ext.define('NextThought.view.account.Identity',{
 		{
 			cls: 'wrap',
 			cn: [{
-				cls: 'name', html: '{realname:ellipsis(30)}', cn: [{
-					tag:'span', cls:'notifications',html:'{notification-count}'}]
+				cls: 'name', html: '{realname:ellipsis(30)}'
 			},{
 				cls: 'status', html: '{status}'
 			}]
@@ -27,14 +26,9 @@ Ext.define('NextThought.view.account.Identity',{
 	initComponent: function(){
 		var me = this, t;
 
-		me.currentNotificationCount = $AppConfig.userObject.get('NotificationCount') || 0;
-
 		me.callParent(arguments);
 
-		me.renderData = Ext.apply(
-				Ext.apply(me.renderData||{}, $AppConfig.userObject.data), {
-					'notification-count': me.currentNotificationCount || '&nbsp;'
-				});
+		me.renderData = Ext.apply(me.renderData||{}, $AppConfig.userObject.data);
 
 		this.mon($AppConfig.userObject,{
 			scope: this,
@@ -43,31 +37,5 @@ Ext.define('NextThought.view.account.Identity',{
 				this.status.update(r.get('status'));
 			}
 		});
-
-		//When something is added to the stream store, ONLY added, we need to adjust the counter.
-		//We DO NOT adjust on datachanged because we get the original not count from the user obj.
-		Ext.getStore('Stream').on('add', this.updateNotificationCount, this);
-	},
-
-	updateNotificationCount: function(store, records) {
-		this.currentNotificationCount+=records.length;
-		$AppConfig.userObject.set('NotificationCount', this.currentNotificationCount);  //Update current notification of the userobject.
-		this.setNotificationCountValue(this.currentNotificationCount);
-	},
-
-
-	setNotificationCountValue: function(count){
-		if (!this.rendered) {
-			this.renderData['notification-count'] = count || '&nbsp;';
-		}
-		else {
-			this.notificationCount.update(count || '&nbsp;');
-		}
-	},
-
-	resetNotificationCount: function(){
-		$AppConfig.userObject.saveField('NotificationCount', 0);
-		this.currentNotificationCount = 0;
-		this.setNotificationCountValue(null);
 	}
 });

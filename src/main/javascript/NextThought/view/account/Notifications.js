@@ -7,6 +7,7 @@ Ext.define('NextThought.view.account.Notifications',{
 	NOTIFICATIONS_TO_SHOW_AT_FIRST: 5,
 
 	messagePrefixes: {
+		'deleted': 'Deleted',
 		'Highlight': 'Highlighted',
 		'Note': 'Commented',
 		'User': 'Added you to a group'
@@ -16,7 +17,7 @@ Ext.define('NextThought.view.account.Notifications',{
 		'Notifications',
 		{cls:'notification-scroll-container', cn:[
 			{tag:'tpl', 'for':'notifications', cn:[
-				{cls:'notification-item', id:'{guid}', cn:[
+				{cls:'notification-item {unread}', id:'{guid}', cn:[
 					{cls:"name",html:'{name}'},
 					{cls:'message',html:'{message}'}
 				]}
@@ -63,25 +64,33 @@ Ext.define('NextThought.view.account.Notifications',{
 		this.notificationData = {};
 
 		store.each(function(change){
-			var item = change.get('Item');
-			var loc = item? LocationProvider.getLocation(item.get('ContainerId')) : null,
+			var item = change.get('Item'),
+				loc = item? LocationProvider.getLocation(item.get('ContainerId')) : null,
 				bookTitle = loc && loc.title ? loc.title.get('title') : null,
 				m = this.generateMessage(change, bookTitle),
 				guid = guidGenerator();
 
-			//update counter so we know when we are done:
-			itemsToLoad--;
-			if(!item){return;}//skip it
 
 			UserRepository.getUser(change.get('Creator'), function(u){
-				var targets = (item.get('references') || []).slice();
-				targets.push(item.getId());
-				this.notifications.push({'name' :u[0].get('realname'), 'message': m, 'guid': guid});
+				var targets = item ? (item.get('references') || []).slice() : [];
+				if(item){
+					targets.push(item.getId());
+				}
+
+				this.notifications.push({
+					'name' :u[0].getName(),
+					'message': m,
+					'guid': guid,
+					'unread': change.get('Last Modified') > $AppConfig.userObject.get('lastLoginTime') ? 'unread' : ''
+				});
 				this.notificationData[guid] = {
-					containerId: item.get('ContainerId'),
+					containerId: item?item.get('ContainerId'):undefined,
 					id: targets
 				};
-//				this.renderData.notificationcount = this.notifications.length;
+
+				//update counter so we know when we are done:
+				itemsToLoad--;
+
 				//only add this to actual render data if we have few enough
 				if (this.notifications.length <= this.NOTIFICATIONS_TO_SHOW_AT_FIRST) {
 					this.renderData.notifications.push(this.notifications.last());
@@ -109,14 +118,15 @@ Ext.define('NextThought.view.account.Notifications',{
 
 
 	clicked: function(event, element){
-		var css = '[class=notification-item]',
-			f = Ext.fly(element),
-			is = f.is(css),
-			c = is ? f : f.up(css),
-			guid = c.id,
+		var me = this,
+			t = event.getTarget('.notification-item',null,true),
+			guid = t.id,
 			containerId = this.notificationData[guid].containerId,
 			targets = this.notificationData[guid].id;
 
+		$AppConfig.userObject.saveField('lastLoginTime', new Date(), function(){
+			me.setupRenderData();
+		});
 
 		this.fireEvent('navigation-selected', containerId, targets);
 	},
@@ -142,7 +152,7 @@ Ext.define('NextThought.view.account.Notifications',{
 		var item = change.get('Item'),
 			it = item?item.getModelName():'deleted',
 			p = this.messagePrefixes[it],
-			end = bookTitle ? ' in ' + bookTitle : '';
+			end = bookTitle ? (' in ' + bookTitle) : '';
 
 		//catchall in case new changetypes are added and we don't hear about it
 		if (!p) {

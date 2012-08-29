@@ -281,6 +281,8 @@ Ext.define('NextThought.model.Base', {
 				if (successCallback){
 					Ext.callback(successCallback, me, [fieldName, sanitizedValue, me]);
 				}
+
+				me.fireEvent('changed',me);
 			}
 		});
 	},

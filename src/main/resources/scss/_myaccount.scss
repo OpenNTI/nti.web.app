@@ -53,6 +53,10 @@
 			border-width: 0;
 			border-left: 3px solid #f0f0f0;
 
+			&.unread {
+				border-left-color: #3fb3f6;
+			}
+
 			.name {
 				line-height: normal;
 				font-size: 10px;
