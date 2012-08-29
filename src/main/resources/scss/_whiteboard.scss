@@ -92,19 +92,19 @@
 			content: url(../images/flyout-nib.png);
 			width: 12px;
 			height: 8px;
-			top: -11px;
-			left: 84px;
+			top: -12px;
+			left: 73px;
 			z-index: 1;
 		}
 	}
 }
 
 .color-palette {
-	.x-panel-nt .x-menu-body &.x-menu-item { padding: 5; margin: 0; }
+	.x-panel-nt .x-menu-body &.x-menu-item { padding: 5px; margin: 0; }
 	.color { float: left; clear: right; padding: 5px; }
 
 	overflow: hidden;
-	width: 175px;
+	width: 155px;
 	height: 118px;
 	margin: 0;
 }
@@ -504,15 +504,6 @@
         }
 	}
 
-	a.whiteboard-magnifier {
-		display: none;
-		background: none; /*$magnifying-glass*/
-  		width: 24px;
-  		height: 24px;
-  		position: absolute;
-  		top: 0;
-  		left: 125px;
-	}
 
 	&:hover {
 	    a.whiteboard-magnifier {
