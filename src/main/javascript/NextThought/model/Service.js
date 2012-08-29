@@ -324,6 +324,8 @@ Ext.define('NextThought.model.Service', {
 		);
 	},
 
+
+	/* The following methods are for deciding when things can or cannot happen*/
 	canChat: function() {
 		return this.hasCapability('nti.platform.p2p.chat');
 	},
@@ -337,6 +339,12 @@ Ext.define('NextThought.model.Service', {
 	hasCapability: function(c){
 		var caps = this.get('CapabilityList') || [];
 		return Ext.Array.contains(caps, c);
+	},
+
+
+	canCanvasURL: function() {
+		var coll = $AppConfig.service.getCollectionFor("application/vnd.nextthought.canvasurlshape", 'Pages');
+		return !!coll;
 	}
 
 

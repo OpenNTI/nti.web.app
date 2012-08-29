@@ -53,7 +53,11 @@ Ext.define('NextThought.view.whiteboard.editor.ImageOptions',{
 
 	afterRender: function(){
 		this.callParent(arguments);
-		this.enableImageDropping();
+
+		//only enable canvas dropping if allowed...
+		if($AppConfig.service.canCanvasURL()){
+			this.enableImageDropping();
+		}
 	},
 
 

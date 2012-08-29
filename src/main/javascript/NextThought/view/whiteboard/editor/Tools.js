@@ -51,7 +51,34 @@ Ext.define('NextThought.view.whiteboard.editor.Tools',{
 	initComponent: function(){
 		var me = this;
 		me.callParent(arguments);
+
+		me.maybeRemoveImageFeature();
+
+		//attach click handlers:
 		Ext.each(me.query('button[tool]'),function(b){b.on('click',me.switchMenus,me);});
+	},
+
+
+	maybeRemoveImageFeature: function(){
+		if($AppConfig.service.canCanvasURL()){
+			return; //images approved, no delete...
+		}
+
+		var toolbar = this.down('toolbar'),
+			viewContainer = this.down('container'),
+			button, view;
+
+		//remove image tool if it's not allowed...
+		button = this.down('button[tool=image]');
+		view = this.down('wb-tool-image-options');
+
+		if (button){
+			button.un('click',this.switchMenus,this);
+			toolbar.remove(button, true);
+		}
+		if (view){
+			viewContainer.remove(view, true);
+		}
 	},
 
 
