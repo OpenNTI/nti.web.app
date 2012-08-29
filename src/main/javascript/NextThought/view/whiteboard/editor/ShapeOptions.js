@@ -29,7 +29,6 @@ Ext.define('NextThought.view.whiteboard.editor.ShapeOptions',{
 					fill.hide();
 					lbl.hide();
                 }else{
-                    fill.setValue('ACACAC');
 					fill.show();
 					lbl.show();
 					fill.enable();
