@@ -26,7 +26,8 @@ Ext.define('NextThought.view.SideBar',{
 
 
 	items: [
-		{ xtype: 'box', cls: 'gripper', autoEl: { html: '&nbsp;' } },
+		{ xtype: 'box', cls: 'gripper', autoEl: { html: '&nbsp;', cn:[
+			{tag: 'img', src:Ext.BLANK_IMAGE_URL,cls:'tool minimize' }]}},
 		{ xtype: 'identity'},
 		{ xtype: 'sidebar-tabpanel',
 			flex: 1,
