@@ -77,18 +77,22 @@ Ext.define('NextThought.view.content.reader.AssessmentOverlay', {
 		Ext.each(questions,function(q){me.makeAssessmentQuestion(q,set);});
 
 	},
-	getRelatedElement: function(q) {
+
+
+	getRelatedElement: function(q, questionObjs) {
 		var i;
-		for (i = 0; i < this.questionObjs.length; i++) {
-			if (!(this.questionObjs[i].getAttribute)) { continue; }
-			if (this.questionObjs[i].getAttribute('data-ntiid') === q.data.NTIID) {
-				return this.questionObjs[i];
+		for (i = 0; i < questionObjs.length; i++) {
+			if (!(questionObjs[i].getAttribute)) { continue; }
+			if (questionObjs[i].getAttribute('data-ntiid') === q.data.NTIID) {
+				return questionObjs[i];
 			}
 		}
 	},
 
+
 	injectAssessments: function(items){
-		var me = this;
+		var me = this,
+			questionObjs;
 
 		me.clearAssessments();
 
@@ -100,27 +104,25 @@ Ext.define('NextThought.view.content.reader.AssessmentOverlay', {
 		new Ext.dom.CompositeElement(
 			this.getDocumentElement().querySelectorAll('.x-btn-submit,[onclick^=NTISubmitAnswers]')).remove();
 
-		if (!this.hasOwnProperty('questionObjs') || this.questionObjs.length === 0 || typeof this.questionObjs[0] === 'string'){
-			this.questionObjs = Array.prototype.slice.call(this.getDocumentElement().getElementsByTagName('object'));
-		}
+		questionObjs = Array.prototype.slice.call(this.getDocumentElement().getElementsByTagName('object'));
+
 		Ext.Array.sort(items, function(ar,br){
-			a = me.questionObjs.indexOf(me.getRelatedElement(ar));
-			b = me.questionObjs.indexOf(me.getRelatedElement(br));
+			a = questionObjs.indexOf(me.getRelatedElement(ar, questionObjs));
+			b = questionObjs.indexOf(me.getRelatedElement(br, questionObjs));
 			return ( ( a === b ) ? 0 : ( ( a > b ) ? 1 : -1 ) );
 		});
 
 
-		Ext.each(this.cleanQuestionsThatAreInQuestionSets(items),function(q){
+		Ext.each(this.cleanQuestionsThatAreInQuestionSets(items, questionObjs),function(q){
 			if(q.isSet){ me.makeAssessmentQuiz(q); }
 			else { me.makeAssessmentQuestion(q); }
 		});
 	},
 
 
-	cleanQuestionsThatAreInQuestionSets: function(items){
-		var result = [], questionsInSets = [], push = Array.prototype.push, sets = {}, usedQuestions = {},
-			slice = Array.prototype.slice,
-			objects = this.questionObjs;
+	cleanQuestionsThatAreInQuestionSets: function(items, objects){
+		var result = [], questionsInSets = [], push = Array.prototype.push, sets = {}, usedQuestions = {};
+
 		function inSet(id){
 			var i = questionsInSets.length-1;
 			for(i; i>=0; i--){
