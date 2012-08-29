@@ -72,9 +72,13 @@ Ext.define('NextThought.view.account.ActivityItem',{
 
 		if (!item){return 'Unknown';}
 
-		if (item.getModelName() === 'Highlight') {
+		if (item.getModelName() === 'User') {
+			return item.getName() + (/circled/i).test(type)
+					? ' added you to a group' : '?';
+		}
+		else if (item.getModelName() === 'Highlight') {
 			loc = LocationProvider.getLocation(item.get('ContainerId'));
-			return loc ? loc.label : 'Unknown';
+			return 'shared a highlight' +(loc ? (' in '+loc.label): '');
 		}
 		else if (item.getModelName() === 'Note'){
 			return Ext.String.format('&ldquo;{0}&rdquo;',item.getBodyText());

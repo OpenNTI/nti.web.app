@@ -24,6 +24,7 @@
 			background: url(../images/activity-icons.png) 0 0 no-repeat;
 		}
 
+		&.user::after,
 		&.comment::after { background-position: 0 -20px; }
 		&.highlight::after { background-position: 0 0; }
 		&.note{
