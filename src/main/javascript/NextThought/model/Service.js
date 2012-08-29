@@ -6,7 +6,8 @@ Ext.define('NextThought.model.Service', {
 	idProperty: 'Class',
 	fields: [
 		{ name: 'Items', type: 'auto', defaultValue: {Items:[]}},
-		{ name: 'Class', type: 'string', defaultValue: 'Service'}
+		{ name: 'Class', type: 'string', defaultValue: 'Service'},
+		{ name: 'CapabilityList', type: 'auto'}
 	],
 
 
@@ -321,6 +322,21 @@ Ext.define('NextThought.model.Service', {
 				},
 				this
 		);
+	},
+
+	canChat: function() {
+		return this.hasCapability('nti.platform.p2p.chat');
+	},
+
+
+	canShare: function(){
+		return this.hasCapability('nti.platform.p2p.sharing');
+	},
+
+
+	hasCapability: function(c){
+		var caps = this.get('CapabilityList') || [];
+		return Ext.Array.contains(caps, c);
 	}
 
 
