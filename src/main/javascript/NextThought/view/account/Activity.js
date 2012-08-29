@@ -48,10 +48,10 @@ Ext.define('NextThought.view.account.Activity',{
 			items = [];
 
 		function doGroup(group){
-			if(group.name){
-				items.push({ xtype: 'box', html:group.name, cls: 'divider' });
+			var label = (group.name||'').substring(2);
+			if(label){
+				items.push({ xtype: 'box', html:label, cls: 'divider' });
 			}
-
 			Ext.each(group.children,function(c){items.push({change:c});});
 		}
 
