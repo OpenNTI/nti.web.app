@@ -181,8 +181,9 @@ Ext.define(	'NextThought.view.whiteboard.Canvas',{
 
 			var c = Ext.DomHelper.append(Ext.getBody(),{tag: 'canvas', style: {visibility:'hidden',position:'absolute'}},true);
 
-			c.dom.width = 300;
-			c.dom.height = 300;
+			c.dom.width = 580;
+			c.dom.height = 580;
+
 			this.drawScene(this.updateData(scene),c,finish);
 		}
 	}
