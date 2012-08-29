@@ -19,6 +19,7 @@ Ext.define('NextThought.view.account.Activity',{
 	items: [
 		{xtype: 'box', cls: 'view-title', autoEl: {html: 'Recent Activity'}},
 		{
+			activitiesHolder: 1,
 			xtype: 'container',
 			flex: 1,
 			autoScroll: true,
@@ -31,7 +32,6 @@ Ext.define('NextThought.view.account.Activity',{
 
 	initComponent: function(){
 		this.callParent(arguments);
-		this.container = this.down('container');
 		this.store = Ext.getStore('Stream');
 		this.mon(this.store,{
 			scope: this,
@@ -44,20 +44,26 @@ Ext.define('NextThought.view.account.Activity',{
 	},
 
 	reloadActivity: function(store){
-		var container = this.container,
+		var container = this.down('container[activitiesHolder]'),
 			items = [];
 
 		function doGroup(group){
-			var label = (group.name||'').substring(2);
+			var label = (group.name||'').replace(/^[A-Z]\d{0,}\s/,'') || false;
 			if(label){
 				items.push({ xtype: 'box', html:label, cls: 'divider' });
 			}
+
 			Ext.each(group.children,function(c){items.push({change:c});});
 		}
 
 		Ext.each(store.getGroups(),doGroup,this);
-		container.removeAll(true);
-		container.add(items);
+
+		try{
+			container.removeAll(true);
+			container.add(items);
+		}catch(er){
+			console.error(container, 'is not what we expected');
+		}
 	},
 
 	newActivity: function(){
