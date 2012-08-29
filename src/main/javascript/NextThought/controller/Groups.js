@@ -157,7 +157,7 @@ Ext.define('NextThought.controller.Groups', {
 
 		UserRepository.getUser(name, function(u) {
 			var a = ['addUser','removeUser'];
-			if(presence.toLowerCase()==='online'){a.reverse();}
+			if(presence.toLowerCase()!=='online'){a.reverse();}
 			groupAction(a[0],a[1],u[0]);
 		});
 	},
