@@ -8,8 +8,7 @@ Ext.define('NextThought.proxy.Socket', {
 		me.mixins.observable.constructor.call(me);
 		Ext.apply(me, {
 			disconnectStats: {
-				count:0,
-				timer: null
+				count:0
 			},
 			socket: null,
 			control: {
@@ -19,6 +18,10 @@ Ext.define('NextThought.proxy.Socket', {
 				'disconnect': function() {me.onDisconnect.apply(me, arguments);}
 			}
 		});
+
+		window.onbeforeunload = Ext.Function.createSequence(
+			window.onbeforeunload || function(){},
+			function(){ me.tearDownSocket(); });
 	},
 
 	/**
@@ -34,8 +37,8 @@ Ext.define('NextThought.proxy.Socket', {
 		task = {
 			run: function(){
 				if (window.io) {
-					this.setup();
 					Ext.TaskManager.stop(task);
+					this.setup();
 				}
 			},
 			scope: this,
@@ -73,8 +76,6 @@ Ext.define('NextThought.proxy.Socket', {
 			return;
 		}
 
-		this.tearDownSocket();
-
 		var me = this,
 			socket = io.connect(getURL()),
 			k;
@@ -99,10 +100,6 @@ Ext.define('NextThought.proxy.Socket', {
 		}
 
 		this.socket = socket;
-
-		window.onbeforeunload = Ext.Function.createSequence(
-				window.onbeforeunload || function(){},
-				function(){ me.tearDownSocket(); });
 	},
 
 	emit: function() {
@@ -118,44 +115,13 @@ Ext.define('NextThought.proxy.Socket', {
 	 * Destroy the socket.
 	 */
 	tearDownSocket: function(){
-		var s = this.socket,
-			m = this,
-			e;
+		var s = this.socket;
 
 		if(s) {
 			delete this.socket;
-			for(e in s.$events){
-				if(s.$events.hasOwnProperty(e)) {
-					s.removeAllListeners(e);
-				}
-			}
-
+			s.removeAllListeners();
 			s.disconnect();
-
-			//we were asked to shut down... if we reconnect, just shutdown again.
-			s.onPacket = function(){ try{
-				if(m.isDebug) {
-					console.debug('onPacket from a dead socket??? '+JSON.stringify(arguments));
-				}
-				s.disconnect();
-				s.socket.disconnectSync();
-			} catch(e){ console.warn('potential leaking sockets'); } };
-		}
-	},
-
-
-	maybeReconfigureSocket: function() {
-		var ds = this.disconnectStats;
-
-		ds.count ++;
-		ds.reconfigure = true;
-
-		if(this.isDebug) {
-			console.debug('maybeReconfigureSocket: ',ds.count);
-		}
-
-		if (ds.count > 3){
-			this.setup.apply(this);
+			//also can use s.socket.disconnectSync to synchronously disconnect, if you get extra messages after.
 		}
 	},
 
@@ -174,10 +140,11 @@ Ext.define('NextThought.proxy.Socket', {
 	},
 
 	onDisconnect: function() {
+		var ds = this.disconnectStats;
+		ds.count ++;
 		if(this.isDebug) {
-			console.debug('Disconnected '+JSON.stringify(arguments));
+			console.debug('Socket Disconnect ' + JSON.stringify(arguments) + ' count '+ds.count);
 		}
-		this.maybeReconfigureSocket();
 	}
 
 },
