@@ -12,7 +12,7 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 	autoScroll: true,
 	border: false,
 	ui: 'whiteboard-editor',
-	layout: 'fit',
+	layout: 'anchor',
 	dockedItems: [
 		{ xtype: 'whiteboard-tools', dock: 'top' }
 	],
