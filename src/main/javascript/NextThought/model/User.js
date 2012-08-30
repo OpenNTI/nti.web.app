@@ -16,7 +16,8 @@ Ext.define(	'NextThought.model.User', {
 		{ name: 'ignoring', type: 'UserList' },
 		{ name: 'status', type: 'string' },
 		{ name: 'following', type: 'UserList' },
-		{ name: 'Communities', type: 'UserList' }
+		{ name: 'Communities', type: 'UserList' },
+		{ name: 'displayName', convert: function(v,r){return r.getName();}}
 	],
 
 	constructor: function() {

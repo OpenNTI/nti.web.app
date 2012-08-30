@@ -38,7 +38,7 @@ Ext.define( 'NextThought.view.form.fields.UserSearchInputField', {
 				'<img class="nib" src="',Ext.BLANK_IMAGE_URL,'">',
 				'<img src="{avatarURL}">',
 				'<div class="card-body">',
-					'<div class="name">{realname}</div>',
+					'<div class="name">{displayName}</div>',
 					'<div class="status">{affiliation}</div>',
 				'</div>'
 			].join('');
