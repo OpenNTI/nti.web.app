@@ -72,10 +72,10 @@ Ext.define('NextThought.view.account.Account',{
 
 	onAdded: function(){
 		this.callParent(arguments);
-		var me = this;
 		//sigh
-		setTimeout(function(){
-			me.setNotificationCountValue(me.monitoredInstance.get('NotificationCount'));
-		},1);
+		Ext.defer(function(){
+			this.setNotificationCountValue(
+					this.monitoredInstance.get('NotificationCount'));
+		}, 1, this);
 	}
 });
