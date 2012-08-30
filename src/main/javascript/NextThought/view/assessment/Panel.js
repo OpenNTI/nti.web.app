@@ -60,7 +60,6 @@ Ext.define('NextThought.view.assessment.Panel',{
 
 			if(isNaN(sameCount) || sameCount> 5 ){
 				clearInterval(me.interval);
-				console.log('stopping');
 			}
 		},500);
 	},
