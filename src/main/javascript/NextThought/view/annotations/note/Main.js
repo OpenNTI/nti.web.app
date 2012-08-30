@@ -43,7 +43,12 @@ Ext.define('NextThought.view.annotations.note.Main',{
 
 	destroy: function(){
 		if( this.record ){
-			this.record.un('change',this.recordChanged,this);
+			try{
+				this.record.un('change',this.recordChanged,this);
+			}
+			catch(e){
+				console.log(this.record, e.message);
+			}
 		}
 		return this.callParent(arguments);
 	},
