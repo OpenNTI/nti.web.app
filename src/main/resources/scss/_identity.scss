@@ -24,7 +24,8 @@
 			font: { size: 14px; weight: 500; }
 			padding-right: 35px;
 			overflow: hidden;
-			text-oveflow: ellipsis;
+			text-overflow: ellipsis;
+			white-space: nowrap;
 		}
 		.status {
 			text-overflow: ellipsis;
