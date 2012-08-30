@@ -44,10 +44,12 @@ Ext.define('NextThought.view.assessment.Header',{
 	onAdded: function(assessmentParent){
 		var id = '?unresolved title?';
 		try {
-//			this.question = assessmentParent.question;
+			this.question = assessmentParent.question;
+
+			this.question.getVideos();
 
 			//HACK: there should be a more correct way to get the problem name/number...
-			id = assessmentParent.question.getId().split('.').last() + '.';
+			id = this.question.getId().split('.').last() + '.';
 		}
 		catch(e){
 			console.warn(Globals.getError(e));

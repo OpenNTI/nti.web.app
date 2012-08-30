@@ -92,6 +92,7 @@ Ext.define('NextThought.view.content.reader.AssessmentOverlay', {
 
 	injectAssessments: function(items){
 		var me = this,
+			slice = Array.prototype.slice,
 			questionObjs;
 
 		me.clearAssessments();
@@ -104,14 +105,13 @@ Ext.define('NextThought.view.content.reader.AssessmentOverlay', {
 		new Ext.dom.CompositeElement(
 			this.getDocumentElement().querySelectorAll('.x-btn-submit,[onclick^=NTISubmitAnswers]')).remove();
 
-		questionObjs = Array.prototype.slice.call(this.getDocumentElement().getElementsByTagName('object'));
+		questionObjs = slice.call(this.getDocumentElement().querySelectorAll('object[type$=naquestion][data-ntiid]'));
 
 		Ext.Array.sort(items, function(ar,br){
-			a = questionObjs.indexOf(me.getRelatedElement(ar, questionObjs));
-			b = questionObjs.indexOf(me.getRelatedElement(br, questionObjs));
+			var a = questionObjs.indexOf(me.getRelatedElement(ar, questionObjs)),
+				b = questionObjs.indexOf(me.getRelatedElement(br, questionObjs));
 			return ( ( a === b ) ? 0 : ( ( a > b ) ? 1 : -1 ) );
 		});
-
 
 		Ext.each(this.cleanQuestionsThatAreInQuestionSets(items, questionObjs),function(q){
 			if(q.isSet){ me.makeAssessmentQuiz(q); }
@@ -135,7 +135,9 @@ Ext.define('NextThought.view.content.reader.AssessmentOverlay', {
 		function hasElement(id) {
 			var i;
 			for (i=0; i < objects.length; i++) {
-				if (typeof objects[i] !== 'string') { objects[i] = objects[i].getAttribute('data-ntiid'); }
+				if (objects[i] && typeof objects[i] !== 'string') {
+					objects[i] = objects[i].getAttribute('data-ntiid');
+				}
 				if (objects[i] === id) { return true; }
 			}
 			return false;

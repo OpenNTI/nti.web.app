@@ -32,5 +32,13 @@ Ext.define('NextThought.model.assessment.Question', {
 	fields: [
 		{ name: 'content', type: 'auto' },
 		{ name: 'parts', type: 'arrayItem' }
-	]
+	],
+
+	getVideos: function(){
+		var all = NextThought.model.assessment.Part.prototype.getVideos.call(this);
+		Ext.each(this.get('parts'),function(p){
+			all.push.apply(all,p.getVideos());
+		});
+		return all;
+	}
 });

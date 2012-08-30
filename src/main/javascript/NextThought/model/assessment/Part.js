@@ -9,5 +9,16 @@ Ext.define('NextThought.model.assessment.Part', {
 		{ name: 'hints', type: 'arrayItem' },
 		{ name: 'solutions', type: 'arrayItem' },
 		{ name: 'explanation', type: 'string' }
-	]
+	],
+
+
+	getVideos: function(){
+		var out = [],
+			dom = new DOMParser().parseFromString(this.get('content'),"text/xml"),
+			objects = dom.querySelectorAll('object.naqvideo');
+
+
+
+		return out;
+	}
 });
