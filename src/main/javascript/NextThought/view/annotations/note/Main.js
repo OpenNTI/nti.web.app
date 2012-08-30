@@ -43,12 +43,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 
 	destroy: function(){
 		if( this.record ){
-			try{
-				this.record.un('change',this.recordChanged,this);
-			}
-			catch(e){
-				console.log(this.record, e.message);
-			}
+			this.record.un('change',this.recordChanged,this);
 		}
 		return this.callParent(arguments);
 	},
@@ -258,11 +253,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		e.setStyle('font-size','13px');
 	},
 
-
-	recordChanged: Ext.Function.createBuffered(function(newRecord){
-		this.setRecord(newRecord);
-	}, 10),
-
+	recordChanged: Ext.Function.createBuffered( function(){ this.setRecord(this.record); }, 10),
 
 	fillInUser: function(user){
 		if(Ext.isArray(user)){user = user[0];}
