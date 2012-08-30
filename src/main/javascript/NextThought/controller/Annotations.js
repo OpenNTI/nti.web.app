@@ -251,12 +251,10 @@ Ext.define('NextThought.controller.Annotations', {
 		//make sure the body is an array:
 		if(!Ext.isArray(body)){body = [body];}
 
-		//update default sharing setting if we have a shareWith:
-//		if (shareWith){
-//			this.getController('Library').saveSharingPrefs(shareWith, function(){
-//				console.log('callback pref save', arguments);
-//			}, true);
-//		}
+		//If a user it not allowed to share, remove any shared with fields
+		if (!$AppConfig.server.canShare()){
+			shareWith = [];
+		}
 
 		//define our note object:
 		noteRecord = Ext.create('NextThought.model.Note', {
@@ -292,12 +290,6 @@ Ext.define('NextThought.controller.Annotations', {
 		var replyRecord = recordRepliedTo.makeReply();
 		replyRecord.set('body', replyBody);
 
-		//update default sharing setting if we have a shareWith:
-//		if (shareWith){
-//			this.getController('Library').saveSharingPrefs(shareWith, function(){
-//				console.log('callback pref save', arguments);
-//			}, true);
-//		}
 
 		//now save this:
 		replyRecord.save({
