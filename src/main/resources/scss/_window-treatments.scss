@@ -108,10 +108,13 @@
 
 
 #window-tracker{
+	pointer-events: none;
+	z-index: 29001;
 	position: fixed;
+	background: none;
 	right: 0;
 	bottom: 0;
-	width: 100%;
+	left: 0;
 
 	.wrapper {
 		float: right;
@@ -134,6 +137,7 @@
 	}
 
 	.window-minimized{
+		pointer-events: auto;
 		float: right;
 		white-space: nowrap;
 		margin: 6px;
