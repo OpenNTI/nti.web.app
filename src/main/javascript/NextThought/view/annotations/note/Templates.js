@@ -48,7 +48,7 @@ Ext.define('NextThought.view.annotations.note.Templates',{
 						cn: [
 							{ tag: 'li', cls: 'edit', html: 'Edit' },
 							{ tag: 'li', cls: 'share', html: 'Share' },
-							{ tag: 'li', cls: 'flag',  html: 'Flag for Moderation' },
+							{ tag: 'li', cls: 'flag',  html: 'Flag as Inappropriate' },
 							/*
 							{ tag: 'li', cls: 'add-contact', html: 'Add to Contacts' },
 							{ tag: 'li', cls: 'follow', html: 'Follow ...' },
