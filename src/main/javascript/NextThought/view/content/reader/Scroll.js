@@ -142,6 +142,33 @@ Ext.define('NextThought.view.content.reader.Scroll',{
 		this);
 
 		me.showRanges(ranges);
+
+		//If we found no ranged, try again not in iframe in case of assessments,
+		//this is a bit of a hack to get it working for MC
+		if(!ranges || ranges.length === 0){
+			texts = AnnotationUtils.getTextNodes(document);
+			Ext.each(texts, function(node) {
+					var nv = node.nodeValue,
+						indexes = [],
+						r;
+
+					if( !Ext.fly(node).parent('.naquestionpart',true) ){
+						while (Boolean(match = re.exec(nv))) {
+							indexes.push( {'start':match.index, 'end': match.index+match[0].length } );
+						}
+
+						Ext.each(indexes, function(index){
+							r = document.createRange();
+							r.setStart(node, index.start);
+							r.setEnd(node, index.end);
+							ranges.push(r);
+						});
+					}
+				},
+				this);
+		}
+
+
 		if (ranges.length > 0) { me.scrollTo(ranges[0].getClientRects()[0].top - 150); }
 	}
 });
