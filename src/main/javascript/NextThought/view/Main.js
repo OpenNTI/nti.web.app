@@ -3,9 +3,9 @@ Ext.define('NextThought.view.Main', {
 	alias: 'widget.master-view',
 
 	requires: [
-//		'Ext.env.FeatureDetector',
 		'Ext.layout.container.HBox',
 		'Ext.layout.container.VBox',
+		'NextThought.view.MessageBox',
 		'NextThought.view.Navigation',
 		'NextThought.view.SideBar',
 		'NextThought.view.Views'
