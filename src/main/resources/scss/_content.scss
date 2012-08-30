@@ -148,7 +148,7 @@
 	.selection-list-ct,
 	.x-menu-list-ct,
 	.x-menu-body {
-		background: #ffffff !important;//ExtJS's theme marks this important, so to override, we must also be important and more specific
+		background: #ffffff;
 
 		li.x-menu-item {
 			border-bottom: 1px solid #dcdcdc;
