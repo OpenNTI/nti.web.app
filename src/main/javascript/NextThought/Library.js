@@ -159,7 +159,7 @@ Ext.define('NextThought.Library', {
 				console.warn('no data for index: '+url);
 			}
 			else {
-				Ext.each(Ext.DomQuery.select('topic:not([ntiid])', this.tocs[index]), function(e){
+				Ext.each(Ext.DomQuery.select('topic:not([ntiid]),topic:not([thumbnail])', this.tocs[index]), function(e){
 					if (e.parentNode) {
 						e.parentNode.removeChild(e);
 					}
