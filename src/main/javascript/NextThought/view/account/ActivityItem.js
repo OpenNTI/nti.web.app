@@ -35,11 +35,16 @@ Ext.define('NextThought.view.account.ActivityItem',{
 	afterRender: function() {
 		this.callParent(arguments);
 		this.box.on('click', function(e){
+			if (this.item && this.item.get('Class') === 'User'){
+				console.log('no nav for user items...');
+				return;
+			}
 			var targets = (this.item.get('references') || []).slice();
 			e.stopEvent();
 			try{
 				targets.push( this.item.getId() );
 				console.log('nav to', targets);
+				debugger;
 				this.fireEvent('navigation-selected', this.ContainerId, targets);
 			}
 			catch(er){

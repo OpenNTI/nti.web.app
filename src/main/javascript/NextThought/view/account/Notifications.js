@@ -146,7 +146,10 @@ Ext.define('NextThought.view.account.Notifications',{
 		});
 		u.saveField('NotificationCount', 0);
 
-		this.fireEvent('navigation-selected', containerId, targets);
+		if (this.notificationData[guid].containerId !== 'Users'){
+			console.log('no navigation for users...')
+			this.fireEvent('navigation-selected', containerId, targets);
+		}
 	},
 
 	showAllNotifications: function(event) {
