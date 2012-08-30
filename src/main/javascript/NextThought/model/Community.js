@@ -10,7 +10,8 @@ Ext.define('NextThought.model.Community', {
 		{ name: 'Username', type: 'string' },
 		{ name: 'alias', type: 'string' },
 		{ name: 'realname', type: 'string' },
-		{ name: 'avatarURL', type: 'AvatarURL' }
+		{ name: 'avatarURL', type: 'AvatarURL' },
+		{ name: 'displayName', convert: function(v,r){return r.getName();}}
 	],
 	
 	constructor: function() {
