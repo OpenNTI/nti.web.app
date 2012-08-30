@@ -80,6 +80,10 @@ Ext.define('NextThought.view.account.ActivityItem',{
 			loc = LocationProvider.getLocation(item.get('ContainerId'));
 			return 'shared a highlight' +(loc ? (' in '+loc.label): '');
 		}
+		else if (item.getModelName() === 'Redaction') {
+			loc = LocationProvider.getLocation(item.get('ContainerId'));
+			return 'shared a redaction' +(loc ? (' in '+loc.label): '');
+		}
 		else if (item.getModelName() === 'Note'){
 			return Ext.String.format('&ldquo;{0}&rdquo;',item.getBodyText());
 		}

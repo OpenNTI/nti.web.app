@@ -10,6 +10,7 @@ Ext.define('NextThought.view.account.Notifications',{
 		'deleted': 'Deleted',
 		'Highlight': 'Highlighted',
 		'Note': 'Commented',
+		'Redaction': 'Redacted',
 		'User': 'Added you to a group'
 	},
 
