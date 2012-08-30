@@ -45,17 +45,8 @@ Ext.define('NextThought.view.Main', {
 	}
 
 	//TODO: Make the IE9 message work without breaking
-	if(unsupported.length!==0){
-		proto.items.push(
-			{
-				region: 'north',
-				id: 'browser-warning',
-				cls: 'browser-warning',
-				height: 50,
-				html: 'Your browser is not supported, here is a list of <a href="https://docs.google.com/document/pub?id=1dUvxe-n1VBuGpFV5CrBrVeaGJ_hH4kzPRiaGN2cWxsg">browsers we support</a>.'
-			}
-		);
-		unsupported.reverse();
+	if(unsupported.length!==0 || Ext.isOpera){
+		location.replace('notsupported.html');
 		console.warn("Unsupported features: "+unsupported.join(', '));
 	}
 
