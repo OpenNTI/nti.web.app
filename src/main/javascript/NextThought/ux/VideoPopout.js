@@ -1,5 +1,6 @@
 Ext.define('NextThought.ux.VideoPopout',{
 	extend: 'Ext.panel.Panel',
+	alias: 'widget.video-lightbox',
 	requires: [
 		'Ext.data.Store',
 		'Ext.view.View'
