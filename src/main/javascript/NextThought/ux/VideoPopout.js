@@ -101,7 +101,27 @@ Ext.define('NextThought.ux.VideoPopout',{
 			})
 		});
 		this.mon(this.others,'selectionChange',this.selection,this);
+
+		this.task = {
+			scope: this,
+			interval: 300,
+			run: function(){
+				var m = Ext.getBody().down('.x-mask');
+				if (m) {
+					Ext.TaskManager.stop(this.task);
+					Ext.getBody().appendChild(m);
+				}
+			}
+		};
+
+		Ext.TaskManager.start(this.task);
 		return this;
+	},
+
+
+	destroy: function(){
+		Ext.TaskManager.stop(this.task);
+		this.callParent(arguments);
 	},
 
 
@@ -124,4 +144,5 @@ Ext.define('NextThought.ux.VideoPopout',{
 			click: this.close
 		});
 	}
+
 });
