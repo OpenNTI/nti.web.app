@@ -39,12 +39,32 @@ Ext.define('NextThought.view.definition.Window', {
 			Ext.Error.raise('definition term required');
 		}
 
+		me.loadDefinition(me.term);
+
+
+		//figure out xy
+		p = this.pointTo;
+		if(p){
+			top = Ext.Element.getViewportHeight() < (p.bottom + this.getHeight() + nib);
+			y = Math.round(top ? p.top - nib - this.getHeight() : p.bottom + nib);
+			x = Math.round((p.left + (p.width/2)) - (this.getWidth()/2));
+
+			me.setPosition(x,y);
+			me.addCls(top?'south':'north');
+		}
+	},
+
+
+	loadDefinition: function(term){
+		var me = this;
+		me.term = term;
+
 		me.queryDefinition(function(dom){
 			me.getXSLTProcessor(function(processor){
 				var o, domtree, outputtree, doc;
-				if (!Ext.isIE9) { 
+				if (!Ext.isIE9) {
 					domtree = new DOMParser().parseFromString(dom,"text/xml");
-					outputtree = processor.transformToDocument(domtree); 
+					outputtree = processor.transformToDocument(domtree);
 					o = new XMLSerializer().serializeToString(outputtree);
 				}
 				else {
@@ -66,26 +86,18 @@ Ext.define('NextThought.view.definition.Window', {
 				doc.onclick = function(e){
 					e = Ext.EventObject.setEvent(e||event);
 					e.stopEvent();
-					console.log(e.getTarget());
+					var t = e.getTarget('a[href]',null,true);
+
+					if(t){
+						me.loadDefinition( decodeURIComponent(t.getAttribute('href')) );
+					}
+
 					return false;
 				};
 				me.show();
 			});
 		});
-
-
-		//figure out xy
-		p = this.pointTo;
-		if(p){
-			top = Ext.Element.getViewportHeight() < (p.bottom + this.getHeight() + nib);
-			y = Math.round(top ? p.top - nib - this.getHeight() : p.bottom + nib);
-			x = Math.round((p.left + (p.width/2)) - (this.getWidth()/2));
-
-			me.setPosition(x,y);
-			me.addCls(top?'south':'north');
-		}
 	},
-
 
 
 	getDocumentElement: function(){
