@@ -522,6 +522,7 @@
 
 
 				.video {
+					opacity: 0.8;
 					position: relative;
 					margin: 9px 10px 0 0;
 					padding: 0 0 0 26px;
@@ -529,17 +530,16 @@
 					color: #494949;
 					float: right;
 					font-size: 14px;
-					font-weight: 100;
-					font-style: italic;
+					font-weight: normal;
 					white-space: nowrap;
 					
-					&:hover::after { opacity: 1; }
+					&:hover { opacity: 1; }
 
 					&::after {
 						position: absolute;
 						left: 0;
 						top: 3px;
-						opacity: 0.8;
+
 						content: ' ';
 						width: 16px;
 						height: 12px;
