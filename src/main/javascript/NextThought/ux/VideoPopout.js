@@ -45,25 +45,29 @@ Ext.define('NextThought.ux.VideoPopout',{
 
 
 	constructor: function(config){
-		var store = config ? (config.store||undefined) : undefined;
+		var store = config ? (config.store||undefined) : undefined,
+			data = config ? (config.data||undefined) : undefined;
 		this.callParent(arguments);
 
 		this.iframe = this.down('box[name=video]');
 
-
-		this.store = store || Ext.create('Ext.data.Store',{
-			fields: [
-				{name:'video', type:'string'},
-				{name:'thumb', type:'string'}
-			],
-			data : [
+		if(!data){
+			data = [
 				 {video: 'https://www.youtube.com/embed/S4knArgz7cA?rel=0&wmode=opaque',
 				  thumb: 'http://img.youtube.com/vi/S4knArgz7cA/2.jpg'},
 				 {video: 'https://www.youtube.com/embed/yY2NVw-aXqY?rel=0&wmode=opaque',
 				  thumb: 'http://img.youtube.com/vi/yY2NVw-aXqY/2.jpg'},
 				 {video: 'https://www.youtube.com/embed/j-EB1O-vRS4?rel=0&wmode=opaque',
 				  thumb: 'http://img.youtube.com/vi/j-EB1O-vRS4/2.jpg'}
-			 ]
+			 ];
+		}
+
+		this.store = store || Ext.create('Ext.data.Store',{
+			fields: [
+				{name:'video', type:'string'},
+				{name:'thumb', type:'string'}
+			],
+			data : data
 		});
 
 		this.others = this.add({
@@ -95,6 +99,7 @@ Ext.define('NextThought.ux.VideoPopout',{
 	selection: function(v,s){
 		this.iframe.el.dom.setAttribute('src',s[0].get('video'));
 	},
+
 
 	onShow: function(){
 		this.others.getSelectionModel().select(0);
