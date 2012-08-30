@@ -252,7 +252,7 @@ Ext.define('NextThought.controller.Annotations', {
 		if(!Ext.isArray(body)){body = [body];}
 
 		//If a user it not allowed to share, remove any shared with fields
-		if (!$AppConfig.server.canShare()){
+		if (!$AppConfig.service.canShare()){
 			shareWith = [];
 		}
 

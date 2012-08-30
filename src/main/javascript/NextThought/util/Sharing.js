@@ -12,7 +12,7 @@ Ext.define('NextThought.util.Sharing',{
 	setSharedWith: function(sharable, sharedTo, callback){
 		var success = true;
 
-		if ($AppConfig.server.canShare()){
+		if ($AppConfig.service.canShare()){
 			sharable.set('sharedWith', sharedTo);
 		}
 		sharable.save({
