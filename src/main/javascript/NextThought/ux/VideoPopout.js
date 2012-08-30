@@ -62,6 +62,14 @@ Ext.define('NextThought.ux.VideoPopout',{
 				  thumb: 'http://img.youtube.com/vi/j-EB1O-vRS4/2.jpg'}
 			 ];
 		}
+		else{
+			//CUTZ we have a paraity mismatch between the good content param names
+			//and what we are expecting here
+			Ext.each(data, function(videoObj){
+				videoObj.video = videoObj.url || videoObj.video;
+				videoObj.thumb = videoObj.thumbnail || videoObject.thumb;
+			});
+		}
 
 		this.store = store || Ext.create('Ext.data.Store',{
 			fields: [

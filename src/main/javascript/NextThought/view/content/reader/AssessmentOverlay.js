@@ -46,13 +46,32 @@ Ext.define('NextThought.view.content.reader.AssessmentOverlay', {
 
 
 	makeAssessmentQuestion: function(q,set){
+		var contentElement = this.getAssessmentElement('object','data-ntiid', q.getId());
+		function getVideosFromDom()
+		{
+			var videoObjects = [];
+			Ext.each(contentElement.querySelectorAll('object .naqvideo'),function(v){
+				var videoObj = {};
+				Ext.each(v.querySelectorAll('param'), function(p){
+					videoObj[p.name] = p.value;
+				});
+				videoObjects.push(videoObj);
+			});
+			return videoObjects;
+		}
+
+		//CUTZ override getVideos to pull things from the dom for now.
+		//The model expects the videos in the assessment json which doesn't
+		//sound like its going to happen anytime soon.
+		q.getVideos = getVideosFromDom;
+
 		this.activeAssessments[q.getId()] = Ext.widget('assessment-question',{
 			reader: this,
 			question: q,
 			renderTo: this.assessmentOverlay,
 			questionSet: set || null,
 			tabIndexTracker: this.assessmentTabIndexer,
-			contentElement: this.getAssessmentElement('object','data-ntiid', q.getId())
+			contentElement: contentElement
 		});
 	},
 
