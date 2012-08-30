@@ -20,7 +20,7 @@ Ext.define('NextThought.controller.Navigation', {
 					LocationProvider.setLastLocationOrRoot(ntiid);
 				}
 			},
-			'notifications-menuitem': {
+			'notifications': {
 				'navigation-selected': this.navigate
 			},
 			'activity-item': {
