@@ -28,18 +28,17 @@ Ext.define('NextThought.view.menus.Navigation',{
 		this.mon(this, {
 			scope: this,
 			mouseleave: this.startHide,
-			mouseenter: this.stopHide
+			mouseenter: this.cancelDeferHide
 		});
 	},
 
 	startHide: function(){
-		var me = this;
-		me.stopHide();
-		me.leaveTimer = setTimeout(function(){me.hide();}, 500);
+		this.cancelDeferHide();
+		this.leaveTimer = Ext.defer(this.hide,500,this);
 	},
 
-
-	stopHide: function(){ clearTimeout(this.leaveTimer); },
+//menu's call this on mouseover to their parent menuitems...so we named it to match.
+	cancelDeferHide: function(){ clearTimeout(this.leaveTimer); },
 
 	destroy: function(){
 		Ext.EventManager.removeResizeListener(this.viewportMonitor,this);
