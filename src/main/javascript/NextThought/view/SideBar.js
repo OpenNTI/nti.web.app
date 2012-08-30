@@ -61,6 +61,7 @@ Ext.define('NextThought.view.SideBar',{
 	viewportMonitor: function(w){
 		var cls = 'undocked';
 		if (w < 1278) {
+			delete this.popstate;
 			this.host.hide();
 			this.gripper.show();
 			this.addCls(cls);
@@ -77,23 +78,35 @@ Ext.define('NextThought.view.SideBar',{
 	afterRender: function(){
 		this.callParent(arguments);
 		this.viewportMonitor(Ext.Element.getViewportWidth());
+		this.mon(this.gripper.el,'click',this.togglePopup,this);
 	},
 
 
 	syncUp: function(){
 
-		var x = Ext.Element.getViewportWidth()-this.getWidth(),
+		var h = Ext.Element.getViewportHeight(),
+			x = Ext.Element.getViewportWidth()-this.getWidth(),
 			y = 0,
-			size = this.host.getSize();
+			size = this.host.getSize(),
+			animate = false,
+			up = 100,
+			down = h - this.gripper.getHeight();
 
 		if(!this.host.isVisible()){
-			size = {height: Ext.Element.getViewportHeight()-100};
-			y = 101;
+			animate = true;
+			size = {height: h-100};
+			y = (this.popstate? up:down)+1;
 			x -= 100;
 		}
 
 		this.setHeight(size.height);
-		this.setPagePosition(x,y);
+		this.setPagePosition(x,y,animate);
+	},
+
+
+	togglePopup: function(){
+		this.popstate = !this.popstate;
+		this.syncUp();
 	}
 
 });
