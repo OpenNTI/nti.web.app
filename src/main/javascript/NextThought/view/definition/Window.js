@@ -63,6 +63,12 @@ Ext.define('NextThought.view.definition.Window', {
 
 				doc.write(o);
 				doc.close();
+				doc.onclick = function(e){
+					e = Ext.EventObject.setEvent(e||event);
+					e.stopEvent();
+					console.log(e.getTarget());
+					return false;
+				};
 				me.show();
 			});
 		});
