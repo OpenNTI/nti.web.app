@@ -49,6 +49,7 @@ Ext.define('NextThought.util.Line',{
 			range = doc.createRange();
 			range.selectNode(cn[i]);
 			rect = range.getBoundingClientRect();
+			if (!rect){ rect = range.getClientRects()[0];}
 			if (rect.bottom > y && (cn[i].data || cn[i].innerText || '  ').length > 1) {
 				curNode = cn[i];
 				i = -1;
