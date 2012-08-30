@@ -10,6 +10,7 @@ Ext.define('NextThought.view.assessment.Scoreboard',{
 
 	cls: 'scoreboard',
 
+	hidden: true,
 	layout: {
 		type: 'hbox',
 		align: 'middle'

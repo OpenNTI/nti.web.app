@@ -6,6 +6,7 @@ Ext.define('NextThought.view.assessment.QuizSubmission',{
 
 	cls: 'submission-panel',
 	appendPlaceholder: true,
+	hidden: true,
 
 	/* Because we're inheriting from a "Panel" to get the special handling provided by the super class, we can't use
 	 * our typical renderTpl. Instead we're going to take advantage of the Ext.panal.Panel's html config property...
@@ -31,7 +32,7 @@ Ext.define('NextThought.view.assessment.QuizSubmission',{
 		var answeredMap = {};
 
 		this.callParent(arguments);
-
+		this.hide();
 		this.mon(this.questionSet, {
 			scope: this,
 			'answered': this.updateStatus,
@@ -133,5 +134,11 @@ Ext.define('NextThought.view.assessment.QuizSubmission',{
 
 	setGradingResult: function(assessedQuestionSet){
 		this.questionSet.fireEvent('graded',assessedQuestionSet);
+	},
+
+
+	syncTop: function(){
+		this.show();
+		this.callParent();
 	}
 });

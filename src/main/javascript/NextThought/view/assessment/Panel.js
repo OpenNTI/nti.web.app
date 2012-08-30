@@ -38,7 +38,31 @@ Ext.define('NextThought.view.assessment.Panel',{
 		if(this.insertedElement){
 			Ext.fly(this.contentElement).remove();
 		}
+		clearInterval(this.interval);
 		this.callParent(arguments);
+	},
+
+
+	afterRender: function(){
+		var me = this, lastY = 0, sameCount = 0;
+		me.callParent(arguments);
+		this.interval = setInterval(function(){
+			var y;
+			me.syncTop();
+
+			if(!me.el || !me.el.dom){ sameCount = NaN; }
+			else {
+				y = me.el.getY();
+				if(y === lastY){ sameCount ++; }
+				else { sameCount = 0; }
+				lastY = y;
+			}
+
+			if(isNaN(sameCount) || sameCount> 5 ){
+				clearInterval(me.interval);
+				console.log('stopping');
+			}
+		},500);
 	},
 
 
