@@ -43,7 +43,7 @@ Ext.define('NextThought.view.menus.Group',{
 
 			items.push({
 				cls: 'group-filter',
-				text: v.get('realname'),
+				text: v.getName(),
 				record: v,
 				isGroup: true
 			});

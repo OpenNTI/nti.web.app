@@ -160,7 +160,7 @@ Ext.define('NextThought.view.form.fields.UserListField', {
 
 	addToken: function(model){
 		var c = this.items,
-			text = model.get('realname') || model.get('Username');
+			text = model.getName();
 
 		this.insert(c.length-1,//indexOf(saerchbox)-1
 			{

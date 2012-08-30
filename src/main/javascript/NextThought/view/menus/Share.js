@@ -95,7 +95,7 @@ Ext.define('NextThought.view.menus.Share',{
 
 			items.push({
 				cls: 'share-with',
-				text: v.get('realname'),
+				text: v.getName(),
 				record: v,
 				isGroup: true,
 				checked: chkd

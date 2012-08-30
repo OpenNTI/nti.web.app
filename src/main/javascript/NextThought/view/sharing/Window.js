@@ -92,7 +92,7 @@ Ext.define( 'NextThought.view.sharing.Window', {
 				}
 				else {
 					info.avatar.set({src: users[0].get('avatarURL')});
-					info.name.update(users[0].get('realname'));
+					info.name.update(users[0].getName());
 				}
 
 			}, this);
