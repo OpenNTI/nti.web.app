@@ -10,7 +10,7 @@ Ext.define('NextThought.view.account.Identity',{
 		{
 			cls: 'wrap',
 			cn: [{
-				cls: 'name', html: '{realname:ellipsis(30)}'
+				cls: 'name', html: '{displayName:ellipsis(30)}'
 			},{
 				cls: 'status', html: '{status}'
 			}]
