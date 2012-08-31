@@ -285,9 +285,17 @@
 
 	}
 
-	&.x-over {
+	&.x-over, &:hover {
 		.x-btn-icon{
 			opacity: 0.5;
+		}
+	}
+
+	&.x-disabled {
+		&,&:hover{
+			.x-btn-icon{
+				opacity: 0.1;
+			}
 		}
 	}
 

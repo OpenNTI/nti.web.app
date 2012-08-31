@@ -35,18 +35,24 @@ Ext.define('NextThought.view.content.Pager',{
 			nextBtn = this.down('[cls=next]'),
 			prevBtn = this.down('[cls=prev]');
 
-		nextBtn.disable();
-		delete nextBtn.ntiid;
+
 		if(info.next) {
 			nextBtn.enable();
 			nextBtn.ntiid = info.next;
 		}
+		else{
+			nextBtn.disable();
+			delete nextBtn.ntiid;
+		}
 
-		prevBtn.disable();
-		delete prevBtn.ntiid;
+
 		if(info.previous){
 			prevBtn.enable();
 			prevBtn.ntiid = info.previous;
+		}
+		else{
+			prevBtn.disable();
+			delete prevBtn.ntiid;
 		}
 	}
 });
