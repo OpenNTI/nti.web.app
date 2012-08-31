@@ -94,7 +94,7 @@ Ext.define('NextThought.controller.Session', {
 			});
 			}
 			catch(err){
-				alert(err.message);
+				alert('Could not request handshake from Server.\n'+err.message);
 			}
 		},
 

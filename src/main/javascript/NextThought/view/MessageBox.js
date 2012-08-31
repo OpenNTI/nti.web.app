@@ -51,6 +51,7 @@ Ext.define('NextThought.view.MessageBox',{
 	setTitle: function(){ this.callParent(['&#160;']); },
 
 	show: function(cfg){
+		cfg.msg = cfg.msg.replace(/\n/,'<br/>');
 		Ext.applyIf(cfg,{
 			title:'nonsense',
 			icon: Ext.MessageBox.WARNING
