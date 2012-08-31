@@ -103,6 +103,16 @@
 	}
 }
 
+.scroll-shadow {
+	border-top: 1px solid #F1F1F1 !important;
+	position: absolute;
+	top: 0; left: 10px; right: 720px;
+	height: 1px;
+
+	z-index: 9999;
+}
+
+
 .gutter-shadow {
 	position: absolute;
 	top: 0; right: 0;

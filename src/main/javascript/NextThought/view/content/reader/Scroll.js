@@ -12,12 +12,12 @@ Ext.define('NextThought.view.content.reader.Scroll',{
 
 
 	registerScrollHandler: function(fn, scope){
-		this.body.on('scroll', fn, scope);
+		this.mon(this.body,'scroll', fn, scope);
 	},
 
 
 	unRegisterScrollHandler: function(fn, scope){
-		this.body.un('scroll', fn, scope);
+		this.mun(this.body,'scroll', fn, scope);
 	},
 
 

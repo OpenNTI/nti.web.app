@@ -40,6 +40,14 @@ Ext.define('NextThought.view.content.Reader', {
 	afterRender: function(){
 		this.callParent();
 		this.splash = this.body.insertHtml('beforeEnd','<div class="no-content-splash"></div>',true);
+		this.scrollShadow = this.getEl().insertHtml('beforeEnd','<div class="scroll-shadow"></div>',true);
+		this.mon(this.body,'scroll', this.scrollShadowMonitor, this);
+	},
+
+
+	scrollShadowMonitor: function(e,dom){
+		var el = this.scrollShadow;
+		el[dom.scrollTop?'addCls':'removeCls']('active');
 	},
 
 
