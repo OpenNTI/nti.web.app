@@ -113,8 +113,8 @@ Ext.define('NextThought.view.whiteboard.Window',{
 	clearAll: function(){
 		var me = this;
 		Ext.Msg.show({
-				msg: 'All your current progress will be lost',
-				buttons: 10,
+				msg: 'All your current progress<br/>will be lost',
+				buttons: (Ext.MessageBox.OK | Ext.MessageBox.CANCEL),
 				scope: me,
 				fn: function(str){
 					if(str.toLowerCase() === 'yes'){

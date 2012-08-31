@@ -7,6 +7,23 @@ Ext.define('NextThought.view.MessageBox',{
 	shadow: false,
 	ui: 'nti-alert',
 	cls: 'nti-alert',
+	minWidth: 370,
+
+	CANCEL : 1,
+	NO : 2,
+	YES : 4,
+	OK : 8,
+
+	buttonText: {
+		ok: 'Ok',
+		yes: 'Yes',
+		no: 'No',
+		cancel: 'Cancel'
+	},
+
+	buttonIds: [
+		'cancel', 'no', 'yes', 'ok'
+	],
 
 	makeButton: function(btnIdx) {
 		var btnId = this.buttonIds[btnIdx];
@@ -26,7 +43,8 @@ Ext.define('NextThought.view.MessageBox',{
 	initComponent: function(){
 		this.callParent(arguments);
 		this.bottomTb.layout.pack='end';
-		this.iconComponent.setWidth(75);
+		this.iconComponent.setWidth(65);
+
 	},
 
 

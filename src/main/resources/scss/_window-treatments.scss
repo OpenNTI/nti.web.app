@@ -303,7 +303,7 @@
 
 		.x-message-box-warning {
 			width: 75px;
-			background: url(../images/warning-icon.png) top right no-repeat;
+			background: url(../images/warning-icon.png) 30px 5px no-repeat;
 			margin-right: 10px;
 		}
 	}
@@ -320,6 +320,7 @@
 
 
 	.x-btn {
+		min-width: 88px;
 		border-radius: 3px;
 		border: 1px solid #000000;
 		background-color: rgb(70,70,70);
@@ -334,7 +335,7 @@
 			color: #ffffff;
 			font: {
 				size: 14px;
-				weight: 500;
+				weight: 400;
 			}
 			text-shadow: 0 1px 0 rgba(44,44,44,0.75);
 		}
