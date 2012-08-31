@@ -16,7 +16,7 @@ Ext.define('NextThought.view.assessment.QuizSubmission',{
 	 */
 	html: Ext.DomHelper.markup([
 		{ cls: 'buttons', cn: [
-			{tag: 'a', href:'#', cls: 'reset tabable', html: 'Start Over'},
+			{tag: 'a', href:'#', cls: 'reset', html: 'Start Over'},
 			{tag: 'a', href:'#', cls: 'submit tabable', html: 'I\'m Finished!'}
 		] },
 		{ cls: 'status' }

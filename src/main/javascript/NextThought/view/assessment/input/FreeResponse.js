@@ -45,32 +45,8 @@ Ext.define('NextThought.view.assessment.input.FreeResponse',{
 
 
 	keyFilter: function(e,dom){
-		var i, x, next, nextTabIndex = String(parseInt(dom.getAttribute('tabIndex'),10)+1);
 		if(e.getKey()=== e.ENTER){
-
-			if(this.questionSet || this.question.get('parts').length > 1){
-				i = this.el.up('.assessment-overlay').query('.tabable');
-				x = i.length-1;
-				for(x; x>=0; x--){
-					if(i[x].getAttribute('tabIndex')===nextTabIndex){
-						next = i[x];
-						break;
-					}
-				}
-				if(!next){
-					x = i.length-1;
-					for(x; x>=0; x--){
-						if(i[x]===dom){
-							next = i[x+1]||i[0];
-							break;
-						}
-					}
-				}
-				next.focus();
-			}
-			else{
-				this.checkit();
-			}
+			this.submitOrTabNext(dom);
 			e.stopEvent();
 			return false;
 		}

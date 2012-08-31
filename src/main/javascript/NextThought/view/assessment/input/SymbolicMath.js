@@ -10,7 +10,7 @@ Ext.define('NextThought.view.assessment.input.SymbolicMath',{
 
 	alias: 'widget.question-input-symbolicmathpart',
 
-	spanTpl: Ext.DomHelper.createTemplate({tag: 'span'}).compile(),
+	spanTpl: Ext.DomHelper.createTemplate({tag: 'span', cls: 'tabable'}).compile(),
 
 	toolbarTpl: Ext.DomHelper.markup([
 		{ cls: 'mathsymbol sqrt', 'data-latex': '\\\\surd' },
@@ -34,9 +34,16 @@ Ext.define('NextThought.view.assessment.input.SymbolicMath',{
 			r = jQuery(s).mathquill('editable'),
 			timer;
 
+		s.focus = function(){
+			if (this.focusing){return;}
+			this.focusing = true;
+			jQuery(this).focus();
+			delete this.focusing;
+		};
+
 		this.attachKeyListeners(s);
 
-		this.inputField.hide();
+		this.inputField.hide().removeCls('tabable');
 	},
 
 
@@ -47,7 +54,12 @@ Ext.define('NextThought.view.assessment.input.SymbolicMath',{
 			timer;
 
 		//bind on kepress so we can adjust size:
-		r.bind('keyup.mathquill', function(){
+		r.bind('keyup.mathquill', function(e){
+			//if enter:
+			if(e.which === 13) {
+				me.submitOrTabNext(s);
+			}
+
 			clearTimeout(timer);
 			timer = setTimeout(function(){
 				me.adjustSize();
