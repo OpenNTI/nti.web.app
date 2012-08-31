@@ -109,19 +109,24 @@ Ext.define('NextThought.controller.Chat', {
 			roomInfos = me.getAllRoomInfosFromSessionStorage(),
 			w;
 		Ext.each(roomInfos, function(ri) {
-			/*
-			testing trying to get messages here...
-			console.log('existing room info...', ri);
-			$AppConfig.service.getObject(ri.getId(), function(){
-				console.log('success', arguments);
-			}, function(){
-				console.log('failure', arguments);
-			}, this);
-			*/
 			me.onEnteredRoom(ri);
 			w = me.getChatWindow(ri);
 			w.show();
 			w.minimize();
+
+			//This chunk will try to recover the history and insert it into the chat again...
+			ViewUtils.getTranscript(ri.getId(),
+				ri.get('Last Modified'),
+				function(transcript){
+					var messages = transcript.get('Messages');
+					Ext.each(messages, function(m){
+						me.onMessage(m);
+					}, me)
+				},
+				function(){
+					console.error('Could not recover chat history.');
+				}, this);
+
 		});
 
 	},

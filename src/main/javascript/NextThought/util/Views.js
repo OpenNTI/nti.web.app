@@ -48,14 +48,19 @@ Ext.define('NextThought.util.Views',{
 			console.error('failed to resolve transcript for', arguments);
 		}
 
-		var id = ParseUtils.parseNtiid(m.get('ContainerId'));
+		this.getTranscript(m.get('ContainerId'), m.get('Last Modified'), success, failure, this);
+	},
+
+
+	getTranscript: function(roomInfoId, lastMod, success, failure, scope) {
+		var id = ParseUtils.parseNtiid(roomInfoId);
+		scope = scope || this;
 
 		//Swizzle the NTIID
-		id.authority.date = Ext.Date.format(m.get('Last Modified'), 'Y-m-d');
+		id.authority.date = Ext.Date.format(lastMod, 'Y-m-d');
 		id.specific.provider = $AppConfig.username;
 		id.specific.type = 'Transcript';
-
-		$AppConfig.service.getObject(id, success, failure, this);
+		$AppConfig.service.getObject(id, success, failure, scope);
 	}
 
 
