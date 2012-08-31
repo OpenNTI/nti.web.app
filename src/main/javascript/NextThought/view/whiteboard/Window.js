@@ -114,10 +114,10 @@ Ext.define('NextThought.view.whiteboard.Window',{
 		var me = this;
 		Ext.Msg.show({
 				msg: 'All your current progress\nwill be lost',
-				buttons: (Ext.MessageBox.OK | Ext.MessageBox.CANCEL),
+				buttons: 9, // bitwise result of: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
 				scope: me,
 				fn: function(str){
-					if(str.toLowerCase() === 'yes'){
+					if(str === 'ok'){
 						me.down('whiteboard-editor').clear();
 					}
 				}
