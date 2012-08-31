@@ -117,7 +117,7 @@ Ext.define('NextThought.view.whiteboard.Window',{
 				buttons: (Ext.MessageBox.OK | Ext.MessageBox.CANCEL),
 				scope: me,
 				fn: function(str){
-					if(str.toLowerCase() === 'yes' || str.toLowerCase() === 'ok'){
+					if(str.toLowerCase() === 'yes'){
 						me.down('whiteboard-editor').clear();
 					}
 				}
