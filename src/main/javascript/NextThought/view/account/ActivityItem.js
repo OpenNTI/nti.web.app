@@ -24,7 +24,7 @@ Ext.define('NextThought.view.account.ActivityItem',{
 		me.renderData = Ext.applyIf(me.renderData||{},me.initialConfig);
 
 		UserRepository.getUser(me.change.get('Creator'),function(u){
-			me.renderData.name = u[0].getName();
+			me.renderData.name =  u[0] ? u[0].getName() : '';
 			if(me.rendered){
 				me.name.update(me.renderData.name);
 			}
