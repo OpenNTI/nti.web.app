@@ -182,7 +182,7 @@ Ext.define('NextThought.controller.Account', {
 					seamless: true,
 					transparent: true,
 					allowTransparency: true,
-					style: 'overflow-x: hidden; overflow-y:auto',
+					style: 'overflow-x: hidden; overflow-y:auto'
 				}
 			}
 		});
