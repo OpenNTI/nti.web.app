@@ -33,18 +33,11 @@ Ext.define('NextThought.view.Main', {
 	}
 
 }, function(){
-	//firefox doesn't report supporting: CSS3DTransform, so we'll omit it.
-	var features = ['Canvas','Range','CSS3BoxShadow','CSS3BorderRadius'],f,
-		unsupported = [],
-		proto = this.prototype;
+	var unsupported = [];
+	Ext.each(//firefox doesn't report supporting: CSS3DTransform, so we'll omit it.
+			['Canvas','Range','CSS3BoxShadow','CSS3BorderRadius'],
+			function(f){ if(!Ext.supports[f]) { unsupported.push(f); } });
 
-	while(!!(f = features.pop())){
-		if(!Ext.supports[f]) {
-			unsupported.push(f);
-		}
-	}
-
-	//TODO: Make the IE9 message work without breaking
 	if(unsupported.length!==0 || Ext.isOpera){
 		location.replace('notsupported.html');
 		console.warn("Unsupported features: "+unsupported.join(', '));
