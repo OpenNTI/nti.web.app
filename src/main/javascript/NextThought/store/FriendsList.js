@@ -33,7 +33,7 @@ Ext.define('NextThought.store.FriendsList',{
 			}
 		},
 		{
-			property : 'realname',
+			property : 'displayName',
 			direction: 'ACE'
 		}
 	]
