@@ -165,8 +165,6 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 		//The "difference" is a sum because the pointer coordinate is
 		//actually the background's negative offset coordinate
 		this.pointerCoordDifference = bgx + this.body.dom.scrollLeft;
-
-		me.up('note-window').syncSize();
 	},
 
 	updateSlide: function(pos) {

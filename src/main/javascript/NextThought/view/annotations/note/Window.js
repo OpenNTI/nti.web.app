@@ -17,7 +17,7 @@ Ext.define('NextThought.view.annotations.note.Window',{
 	modal: true,
 	title: 'Comments',
 	width: 670,
-	height: '70%',
+	height: '80%',
 
 	layout: {
 		type: 'vbox',
@@ -37,17 +37,7 @@ Ext.define('NextThought.view.annotations.note.Window',{
 				align: 'stretch'
 			},
 			items: [
-				{xtype: 'note-main-view', xhooks: {
-						scrollIntoView: function(){
-							this.up('window').syncSize();
-							this.callParent();
-						},
-						deactivateReplyEditor: function(){
-							this.callParent();
-							this.up('window').syncSize();
-						}
-					}
-				},
+				{xtype: 'note-main-view' },
 				{xtype: 'note-responses' }
 			]
 		}
@@ -63,43 +53,6 @@ Ext.define('NextThought.view.annotations.note.Window',{
 			m.editMode = this.isEdit;
 		}
 		this.down('note-carousel').setRecord(a.getRecord());
-
-		this.syncSize = Ext.Function.createBuffered(this.syncSize,10,this,null);
-	},
-
-
-	syncSize: function(){
-		var size = this.callParent(arguments),
-			h = 2,
-			f = this.query('nti-window-header,note-filter-bar,note-carousel,note-main-view,note-responses');
-
-		if(f && f.length > 0 && f[0].rendered){
-			Ext.each(f,function(o){h+= o.getHeight(); });
-
-			if(size.height > h){
-				size.height = h;
-
-			}
-			//For some reason the height isn't being updated, so we change it slightly, and it works.
-			this.setHeight(size.height-2);
-			this.setHeight(size.height);
-		}
-		return size;
-	},
-
-
-	center: function(){
-		var me = this,
-			xy,
-			top = Math.floor(Ext.Element.getViewportHeight()*0.15);
-
-		if (me.isVisible()) {
-			xy = me.el.getAlignToXY(me.container, 't-t',[0,top]);
-			me.setPagePosition(xy);
-		} else {
-			me.needsCenter = true;
-		}
-		return me;
 	},
 
 
@@ -109,8 +62,6 @@ Ext.define('NextThought.view.annotations.note.Window',{
 		if(me.isReply) {
 			me.down('note-main-view').activateReplyEditor();
 		}
-
-		setTimeout(function(){me.syncSize();},1);
 	},
 
 
