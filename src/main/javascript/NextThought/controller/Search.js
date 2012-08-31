@@ -189,7 +189,7 @@ Ext.define('NextThought.controller.Search', {
 				rid = IdCache.getComponentId(getParent(hit),null,'default');
 
 			function getParent(item){
-				if(item.parent){ return getParentCt(item.parent); }
+				if(item.parent){ return getParent(item.parent); }
 				return item;
 			}
 
