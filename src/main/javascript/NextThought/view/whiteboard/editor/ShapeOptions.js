@@ -24,8 +24,6 @@ Ext.define('NextThought.view.whiteboard.editor.ShapeOptions',{
 					fill = me.down('color-picker-button[fillSelect]'),
 					lbl = me.down('tbtext[fillLabel]');
                 if(btn.sides===1){
-                    fill.setValue();
-                    fill.disable();
 					fill.hide();
 					lbl.hide();
                 }else{
@@ -52,7 +50,7 @@ Ext.define('NextThought.view.whiteboard.editor.ShapeOptions',{
 		},
 		items: [
 			{ xtype: 'tbtext', text: 'Fill', fillLabel: true, hidden: true },
-			{ xtype: 'color-picker-button', fillSelect: true, value: 'NONE', disabled: true, hidden: true },
+			{ xtype: 'color-picker-button', fillSelect: true, value: 'ACACAC', hidden: true },
 			'Stroke',
 			{ xtype: 'stroke-select', value: 3 },
 			{ xtype: 'color-picker-button', strokeSelect: true, value: '333333' }
