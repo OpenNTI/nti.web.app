@@ -176,7 +176,7 @@ Ext.define('NextThought.view.content.Reader', {
 
 		get: function(prefix){
 			return Ext.ComponentQuery.query(
-					Ext.String.format('reader-panel[prefix={0}]',prefix))[0];
+					Ext.String.format('reader-panel[prefix={0}]',prefix||'default'))[0];
 		},
 		getContent: function(ntiid){
 			console.log('getContent called...(should be after receiveContent)');

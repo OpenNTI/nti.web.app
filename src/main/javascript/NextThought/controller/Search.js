@@ -178,15 +178,8 @@ Ext.define('NextThought.controller.Search', {
 		var cid = result.containerId,
 			cat = result.up('search-result-category').category;
 
-		if (!cid) {
-			console.error('No container ID taged on search result, cannot navigate.');
-			return;
-		}
-
-		Ext.ComponentQuery.query('library-view-container')[0].activate();
-		LocationProvider.setLocation( cid, function(reader){
-			var hit = LocationProvider.getStore().getById(result.hitId),
-				rid = IdCache.getComponentId(getParent(hit),null,'default');
+		function showHit(reader){
+			var hit = LocationProvider.getStore().getById(result.hitId), rid;
 
 			function getParent(item){
 				if(item.parent){ return getParent(item.parent); }
@@ -194,6 +187,7 @@ Ext.define('NextThought.controller.Search', {
 			}
 
 			if (cat !== 'Books') {
+				rid = IdCache.getComponentId(getParent(hit),null,'default')
 				reader.scrollToTarget(rid);
 				if(cat === "Note"){
 					Ext.getCmp(rid).openWindow();
@@ -204,7 +198,22 @@ Ext.define('NextThought.controller.Search', {
 				reader.on('sync-height',function() { reader.scrollToText(result.term); });
 				result.on('destroy', reader.clearSearchRanges,reader,{single:true});
 			}
-		});
+		}
+
+		if (!cid) {
+			console.error('No container ID taged on search result, cannot navigate.');
+			return;
+		}
+
+		Ext.ComponentQuery.query('library-view-container')[0].activate();
+
+
+		if(LocationProvider.currentNTIID === cid) {
+			showHit(ReaderPanel.get());
+			return;
+		}
+
+		LocationProvider.setLocation( cid, showHit);
 	},
 
 
