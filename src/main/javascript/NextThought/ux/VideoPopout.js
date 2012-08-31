@@ -53,28 +53,22 @@ Ext.define('NextThought.ux.VideoPopout',{
 		this.iframe = this.down('box[name=video]');
 
 		if(!data){
-			data = [
-				 {video: 'https://www.youtube.com/embed/S4knArgz7cA?rel=0&wmode=opaque',
-				  thumb: 'http://img.youtube.com/vi/S4knArgz7cA/2.jpg'},
-				 {video: 'https://www.youtube.com/embed/yY2NVw-aXqY?rel=0&wmode=opaque',
-				  thumb: 'http://img.youtube.com/vi/yY2NVw-aXqY/2.jpg'},
-				 {video: 'https://www.youtube.com/embed/j-EB1O-vRS4?rel=0&wmode=opaque',
-				  thumb: 'http://img.youtube.com/vi/j-EB1O-vRS4/2.jpg'}
-			 ];
-		}
-		else{
-			//CUTZ we have a paraity mismatch between the good content param names
-			//and what we are expecting here
-			Ext.each(data, function(videoObj){
-				videoObj.video = videoObj.url || videoObj.video;
-				videoObj.thumb = videoObj.thumbnail || videoObject.thumb;
-			});
+			data = [{
+				thumbnail	: 'http://img.youtube.com/vi/S4knArgz7cA/2.jpg',
+				url			: 'https://www.youtube.com/embed/S4knArgz7cA?rel=0&wmode=opaque'
+			},{
+				thumbnail	: 'http://img.youtube.com/vi/yY2NVw-aXqY/2.jpg',
+				url			: 'https://www.youtube.com/embed/yY2NVw-aXqY?rel=0&wmode=opaque'
+			},{
+				thumbnail	: 'http://img.youtube.com/vi/j-EB1O-vRS4/2.jpg',
+				url			: 'https://www.youtube.com/embed/j-EB1O-vRS4?rel=0&wmode=opaque'
+			}];
 		}
 
 		this.store = store || Ext.create('Ext.data.Store',{
 			fields: [
-				{name:'video', type:'string'},
-				{name:'thumb', type:'string'}
+				{name:'url', type:'string'},
+				{name:'thumbnail', type:'string'}
 			],
 			data : data
 		});
@@ -95,7 +89,7 @@ Ext.define('NextThought.ux.VideoPopout',{
 						cls:'item',
 						tag: 'img',
 						src: Ext.BLANK_IMAGE_URL,
-						style:{ backgroundImage: 'url({thumb})' }
+						style:{ backgroundImage: 'url({thumbnail})' }
 					}]
 				}]
 			})
@@ -126,7 +120,8 @@ Ext.define('NextThought.ux.VideoPopout',{
 
 
 	selection: function(v,s){
-		this.iframe.el.dom.setAttribute('src',s[0].get('video'));
+		this.iframe.el.dom.setAttribute('src',
+				(s && s[0])? s[0].get('url') : Ext.SSL_SECURE_URL );
 	},
 
 

@@ -17,10 +17,11 @@ Ext.define('NextThought.model.assessment.Part', {
 			dom = new DOMParser().parseFromString(this.get('content'),"text/xml");
 
 		Ext.each(dom.querySelectorAll('object.naqvideo'),function(i){
-			out.push({
-				video: i.getElementsByName('url')[0].getAttribute('value'),
-				thumb: i.getElementsByName('thumbnail')[0].getAttribute('value')
+			var o = {};
+			Ext.each(i.getElementsByTagName('param'),function(p){
+				o[p.getAttribute('name')] = p.getAttribute('value');
 			});
+			out.push(o);
 		});
 
 		return out;
