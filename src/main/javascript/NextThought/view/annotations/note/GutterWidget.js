@@ -24,7 +24,7 @@ Ext.define('NextThought.view.annotations.note.GutterWidget',{
 
 	afterRender: function(){
 		var me = this,
-			r = me.record
+			r = me.record,
 			mouseUpDivs = [me.liked, me.favorites];
 		me.callParent(arguments);
 
@@ -48,7 +48,7 @@ Ext.define('NextThought.view.annotations.note.GutterWidget',{
 			}
 		});
 
-		if(false && $AppConfig.service.canChat()){
+		if($AppConfig.service.canChat()){
 			me.mon(me.startChatButton, 'click', me.startChat, me);
 			mouseUpDivs.push(me.startChatButton);
 		}

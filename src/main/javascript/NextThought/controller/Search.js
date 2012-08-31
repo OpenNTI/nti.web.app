@@ -187,7 +187,7 @@ Ext.define('NextThought.controller.Search', {
 			}
 
 			if (cat !== 'Books') {
-				rid = IdCache.getComponentId(getParent(hit),null,'default')
+				rid = IdCache.getComponentId(getParent(hit),null,'default');
 				reader.scrollToTarget(rid);
 				if(cat === "Note"){
 					Ext.getCmp(rid).openWindow();

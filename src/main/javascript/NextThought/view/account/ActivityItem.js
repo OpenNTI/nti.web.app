@@ -44,7 +44,6 @@ Ext.define('NextThought.view.account.ActivityItem',{
 			try{
 				targets.push( this.item.getId() );
 				console.log('nav to', targets);
-				debugger;
 				this.fireEvent('navigation-selected', this.ContainerId, targets);
 			}
 			catch(er){
