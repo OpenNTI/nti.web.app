@@ -176,8 +176,7 @@ Ext.define('NextThought.controller.Search', {
 
 	searchResultClicked: function(result){
 		var cid = result.containerId,
-			cat = result.up('search-result-category').category,
-			rid = IdCache.getComponentId(result.hitId,null,'default');
+			cat = result.up('search-result-category').category;
 
 		if (!cid) {
 			console.error('No container ID taged on search result, cannot navigate.');
@@ -186,6 +185,14 @@ Ext.define('NextThought.controller.Search', {
 
 		Ext.ComponentQuery.query('library-view-container')[0].activate();
 		LocationProvider.setLocation( cid, function(reader){
+			var hit = LocationProvider.getStore().getById(result.hitId),
+				rid = IdCache.getComponentId(getParent(hit),null,'default');
+
+			function getParent(item){
+				if(item.parent){ return getParentCt(item.parent); }
+				return item;
+			}
+
 			if (cat !== 'Books') {
 				reader.scrollToTarget(rid);
 				if(cat === "Note"){
