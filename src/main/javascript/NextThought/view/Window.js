@@ -197,7 +197,7 @@ Ext.define('NextThought.view.Window',{
 					constrainTo: Ext.getBody(),
 					el: this.el,
 					tolerance: this.dragStartTolerance,
-					delegate: this.titleBar.getEl()
+					delegate: '.nti-window-header'
 				});
 				this.relayEvents(this.dd, ['dragstart', 'drag', 'dragend']);
 				this.mon(this.dd,{
