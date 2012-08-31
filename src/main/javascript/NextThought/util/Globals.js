@@ -371,12 +371,13 @@ function(){
 
 	window.swallow = function(e){};
 
-	window.alert = function(title, msg){
+	window.alert = function(msg){
 		Globals.removeLoaderSplash();
-		if(arguments.length===1){
-			msg = title;
-			title = null;
-		}
-		Ext.MessageBox.alert(title||'Alert', msg );
+		Ext.MessageBox.alert({
+			icon: Ext.Msg.WARNING,
+			title: 'Alert',
+			msg:msg,
+			buttons: Ext.Msg.OK
+		});
 	};
 });
