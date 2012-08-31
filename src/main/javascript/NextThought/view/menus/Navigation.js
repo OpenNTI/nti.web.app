@@ -32,7 +32,12 @@ Ext.define('NextThought.view.menus.Navigation',{
 		});
 	},
 
-	startHide: function(){
+	startHide: function(menu, event){
+		var box = menu.getBox();
+		//If the X coordinate of this "mouseleave" event is less than our RIGHT side, we left the box on the
+		// left. (and we don't want to close the menu in that case)
+		if(event.getXY()[0] < (box.x+box.width)){return;}
+
 		this.cancelDeferHide();
 		this.leaveTimer = Ext.defer(this.hide,500,this);
 	},

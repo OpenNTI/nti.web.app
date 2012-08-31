@@ -65,7 +65,12 @@ Ext.define('NextThought.view.ViewSelect', {
 						id: 'search-results',
 						hideMode: 'display',
 						flex: 1 }
-				]
+				],
+				listeners:{
+					show: function(m){
+						m.down('searchfield').focus(true, true);
+					}
+				}
 			}
 		}
 	]

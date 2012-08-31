@@ -49,7 +49,9 @@ Ext.define('NextThought.view.form.fields.SearchField', {
 		8: true,	//Ext.EventObject.BACKSPACE
 		27: true,	//Ext.EventObject.ESC
 		32: true,	//Ext.EventObject.SPACE
-		46: true	//Ext.EventObject.DELETE
+		46: true,	//Ext.EventObject.DELETE
+		37: true,	//Ext.EventObject.LEFT
+		39: true 	//Ext.EventObject.RIGHT
 	},
 
 
@@ -112,5 +114,11 @@ Ext.define('NextThought.view.form.fields.SearchField', {
 
 	getValue: function() {
 		return this.inputEl.getValue();
+	},
+
+	getFocusEl: function(){
+		return this.inputEl;
 	}
+
+
 });
