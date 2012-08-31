@@ -113,6 +113,9 @@ Ext.define('NextThought.view.menus.Filter',{
 			if (!this.query('[isGroup][checked=true]').length){
 				this.query('[isEveryone]').first().setChecked(true,true);
 			}
+			if (!this.query('[model][checked=true]').length){
+				this.query('[isEverything]').first().setChecked(true,true);
+			}
 		}
 
 		this.fireEvent('changed',this);
