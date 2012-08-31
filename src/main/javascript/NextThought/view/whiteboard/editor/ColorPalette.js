@@ -9,9 +9,9 @@ Ext.define('NextThought.view.whiteboard.editor.ColorPalette', {
 
     colors : [
 		{ name: 'black',	value: '333333' },
-		{ name: 'grey1',	value: '707070' },
-		{ name: 'grey2',	value: 'ACACAC' },
-		{ name: 'grey3',	value: 'E1E1E1' },
+		{ name: 'grey1',	value: '858585' },
+		{ name: 'grey2',	value: 'E1E1E1' },
+		{ name: 'grey3',	value: 'FFFFFF' },
 		{ name: 'red',		value: 'D34F39' },
 		{ name: 'blue',		value: '2B89C5' },
 		{ name: 'green',	value: 'A0C94C' },
