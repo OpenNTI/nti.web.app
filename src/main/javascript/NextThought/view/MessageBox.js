@@ -60,5 +60,5 @@ Ext.define('NextThought.view.MessageBox',{
 	}
 
 }, function(){
-	Ext.MessageBox = Ext.Msg = new this();
+	Ext.MessageBox = Ext.Msg = new NextThought.view.MessageBox();
 });
