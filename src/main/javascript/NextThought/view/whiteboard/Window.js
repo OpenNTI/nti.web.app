@@ -35,9 +35,9 @@ Ext.define('NextThought.view.whiteboard.Window',{
 			},
 			items: [
 				{
-					defaults: { xtype: 'button', scale: 'medium', disabled: true },
+					defaults: { xtype: 'button', scale: 'medium', enabled: true },
 					items: [
-						{iconCls: 'new-page', ui: 'new', action: 'new-page', tooltip: 'New Page',hidden: true }
+						{iconCls: 'new-page', ui: 'new', action: 'new-page', tooltip: 'Clear Page', handler: function(b){b.up('window').clearAll();} }
 					]
 				},
 				{
@@ -107,5 +107,21 @@ Ext.define('NextThought.view.whiteboard.Window',{
 
 	getValue: function(){
 		return this.down('whiteboard-editor').getValue();
+	},
+
+
+	clearAll: function(){
+		var me = this;
+		Ext.Msg.show({
+				msg: 'Are you current progress will be lost',
+				buttons: 10,
+				scope: me,
+				fn: function(str){
+					if(str.toLowerCase() === 'yes'){
+						me.down('whiteboard-editor').clear();
+					}
+				}
+			});
 	}
+
 });
