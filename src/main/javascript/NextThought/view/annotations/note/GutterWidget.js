@@ -101,8 +101,8 @@ Ext.define('NextThought.view.annotations.note.GutterWidget',{
 		//If we specify both a title and a data-qtip we can get multiple
 		//tips displayed when transitioning from an element showing a native
 		//tooltip.  It's not clear to me which method we prefer.
-		likeTooltip = r.isLiked() ? 'Unlike' : 'Like';
-		favoriteTooltip = r.isFavorited() ? 'Unfavorite' : 'Favorite';
+		likeTooltip = r.isLiked() ? 'Liked' : 'Like';
+		favoriteTooltip = r.isFavorited() ? 'Bookmarked' : 'Add to bookmarks';
 		this.liked.set({'title': likeTooltip});
 		this.favorites.set({'title': favoriteTooltip});
 

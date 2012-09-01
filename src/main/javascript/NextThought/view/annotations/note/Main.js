@@ -166,8 +166,8 @@ Ext.define('NextThought.view.annotations.note.Main',{
 			this.liked[(r.isLiked()?'add':'remove')+'Cls']('on');
 			this.favorites[(r.isFavorited()?'add':'remove')+'Cls']('on');
 
-			likeTooltip = r.isLiked() ? 'Unlike' : 'Like';
-			favoriteTooltip = r.isFavorited() ? 'Unfavorite' : 'Favorite';
+			likeTooltip = r.isLiked() ? 'Liked' : 'Like';
+			favoriteTooltip = r.isFavorited() ? 'Bookmarked' : 'Add to bookmarks';
 			this.liked.set({'title': likeTooltip});
 			this.favorites.set({'title': favoriteTooltip});
 		}
