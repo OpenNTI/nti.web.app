@@ -79,6 +79,7 @@ Ext.define('NextThought.view.annotations.note.GutterWidget',{
 
 
 	setRecord: function(r){
+		var likeTooltip, favoriteTooltip;
 		if (r.phantom) { return; }
 		this.record = r;
 		var me = this;
@@ -92,6 +93,14 @@ Ext.define('NextThought.view.annotations.note.GutterWidget',{
 		if (r.isFavorited()){
 			this.favorites.addCls('on');
 		}
+
+		//CUTZ Seems unfortunate that this must be here and in Main.js.
+		//It doesn't seem like there is any shared code between the two
+		//that could be doing this.  Hopefully I am just missing it?
+		likeTooltip = r.isLiked() ? 'Unlike' : 'Like';
+		favoriteTooltip = r.isFavorited() ? 'Unfavorite' : 'Favorite';
+		this.liked.set({'title': likeTooltip, 'data-qtip': likeTooltip});
+		this.favorites.set({'title': favoriteTooltip, 'data-qtip': favoriteTooltip});
 
 		me.text.update(r.getBodyText());
 

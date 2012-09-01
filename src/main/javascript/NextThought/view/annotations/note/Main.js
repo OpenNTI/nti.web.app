@@ -128,7 +128,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 
 
 	setRecord: function(r){
-		var suppressed, text, bodyText, sel, range, doc, start, end;
+		var suppressed, text, bodyText, sel, range, doc, start, end, likeTooltip, favoriteTooltip;
 
 		try {
 			if(this.record) {
@@ -165,6 +165,11 @@ Ext.define('NextThought.view.annotations.note.Main',{
 			this.liked.update(r.getFriendlyLikeCount());
 			this.liked[(r.isLiked()?'add':'remove')+'Cls']('on');
 			this.favorites[(r.isFavorited()?'add':'remove')+'Cls']('on');
+
+			likeTooltip = r.isLiked() ? 'Unlike' : 'Like';
+			favoriteTooltip = r.isFavorited() ? 'Unfavorite' : 'Favorite';
+			this.liked.set({'title': likeTooltip, 'data-qtip': likeTooltip});
+			this.favorites.set({'title': favoriteTooltip, 'data-qtip': favoriteTooltip});
 		}
 		catch(e1){
 			console.error(Globals.getError(e1));
@@ -180,7 +185,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 					sel = rangy.getSelection(doc);
 					range = sel.getRangeAt(0);
 					text = range.toString();
-					try { 
+					try {
 						range.moveEnd('character', 50);
 						range.moveStart('character', -50);
 						range.expand('word');
