@@ -7,7 +7,7 @@ Ext.define('NextThought.view.account.contacts.Card',{
 	cls: 'contact-card',
 	renderTpl: Ext.DomHelper.markup([
 		{tag:'tpl', 'if':'!hideNib', cn:[
-			{tag:'img', cls:'nib', src:'{blank}', alt:'Remove this contact from {from}'}]},
+			{tag:'img', cls:'nib', src:'{blank}', alt:'Menu', title:'Options'}]},
 		{tag:'img', src:'{avatarURL}'},
 		{ cls:'card-body', cn:[
 			{cls:'name', html:'{name}'},

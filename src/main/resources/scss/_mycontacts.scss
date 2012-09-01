@@ -113,16 +113,20 @@ $over-color: #f4f3f3;
 }
 
 .x-panel.contacts-panel {
-	margin: 0 0 20px 10px;
+	//padding: 0 10px 20px 10px;
 
 	&.x-collapsed .x-panel-header{
-		background-position: 0 -15px;
+		background-position: 10px -15px;
+	}
+
+	.x-panel-body{
+		padding: 0 10px 20px 10px;
 	}
 
 	.x-panel-header {
-		background: url(../images/collapse-expand.png) no-repeat 0 3px;
+		background: url(../images/collapse-expand.png) no-repeat 10px 3px;
 		cursor: pointer;
-		padding-left: 10px;
+		padding-left: 20px;
 		padding-right: 10px;
 		@include contact-header;
 
@@ -153,18 +157,18 @@ $over-color: #f4f3f3;
 		margin-top: 2px;
 
 		&.nib {
-			background: transparent url(../images/add_remove_gry.png) -2px -2px no-repeat;
+			background: transparent url(../images/contact_options.png) 0px 0px no-repeat;
 			display: none;
-			margin-top: 10px;
+			margin-top: 7px;
 			border: none !important;
 			float: right;
-			width: 14px;
-			height: 14px;
+			width: 20px;
+			height: 20px;
 			cursor: pointer;
 
 			.contacts-panel & {
-				background-position: -20px -2px;
-				margin-right: 5px;
+				background-position: 0px 0px;
+				margin-right: 4px;
 			}
 		}
 	}
@@ -173,18 +177,22 @@ $over-color: #f4f3f3;
 	&.selection-item-over,
 	&.x-menu-item-over,
 	&.card-over {
+
+		border-radius: 1px;
+		box-shadow: 0 0 0 4px #f1f1f1;
+		background-color: #f1f1f1;
+
 		img.nib{
-			opacity: 0.5;
 			display: block;
-			&:active {
-				opacity: 1;
+			&:active,&:hover {
+				background-position: -20px 0;
 			}
 		}
 	}
 
 
 	.card-body {
-		margin-left: 50px;
+		margin-left: 44px;
 	}
 
 
