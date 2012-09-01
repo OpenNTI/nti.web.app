@@ -215,29 +215,6 @@ Ext.define('NextThought.Library', {
 		return undefined;
 	},
 
-	/**
-	 * TODO: move to NextThought.providers.Location
-	 */
-	findTitle: function(containerId){
-		var l = this.find(containerId);
-		return l? l.location.getAttribute('label') : 'Not found';
-	},
-
-	/**
-	 * TODO: move to NextThought.providers.Location
-	 */
-	find: function(containerId) {
-		var result = null;
-		this.each(function(o){
-			result = this.resolve(this.getToc( o ), this.getTitle(o), containerId);
-			if (result) {
-				return false;
-			}
-		}, this);
-
-		return result;
-	},
-
 
 	resolve: function(toc, title, containerId) {
 		if( toc.documentElement.getAttribute( 'ntiid' ) === containerId ) {

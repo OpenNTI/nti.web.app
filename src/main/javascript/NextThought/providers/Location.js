@@ -74,18 +74,25 @@ Ext.define('NextThought.providers.Location', {
 
 			me.fireEvent('changed', ntiid);
 		}
-			if (Ext.isIE) { 
-				if (!fromHistory) { window.lastTimeLocationSet = new Date().getTime(); }
-				window.location.hash = ntiid;
-			}
-//		if(me.currentNTIID && ntiid !== me.currentNTIID){
+
+		if(this.find(ntiid)){
+			alert('You don\'t have access to that content.');
+			return;
+		}
+
+		if (Ext.isIE) {
+			if (!fromHistory) { window.lastTimeLocationSet = new Date().getTime(); }
+			window.location.hash = ntiid;
+		}
+
+		if(me.currentNTIID && ntiid !== me.currentNTIID){
 			e.mask('Loading...','navigation');
-		//}
+		}
 
 		//make this happen out of this function's flow, so that the mask shows immediately.
 		setTimeout(function(){
 			if(!me.fireEvent('navigate',ntiid)){
-//				finish();
+				finish();
 				return false;
 			}
 
@@ -144,7 +151,7 @@ Ext.define('NextThought.providers.Location', {
 
 		r = me.cache[i];
 		if( !r ) {
-			r = Library.find(i);
+			r = this.find(i);
 
 			//If still not r, it's not locational content...
 			if (!r) {return null;}
@@ -170,8 +177,28 @@ Ext.define('NextThought.providers.Location', {
 	},
 
 
+
+	findTitle: function(containerId){
+		var l = this.find(containerId);
+		return l? l.location.getAttribute('label') : 'Not found';
+	},
+
+
+	find: function(containerId) {
+		var result = null;
+		Library.each(function(o){
+			result = Library.resolve( Library.getToc( o ), o, containerId);
+			if (result) {
+				return false;
+			}
+		});
+
+		return result;
+	},
+
+
 	getLineage: function(ntiid){
-		var leaf = Library.find(ntiid||this.currentNTIID) || {},
+		var leaf = this.find(ntiid||this.currentNTIID) || {},
 			node = leaf.location,
 			lineage = [],
 			id;
@@ -197,7 +224,7 @@ Ext.define('NextThought.providers.Location', {
 
 
 	getNavigationInfo: function(ntiid) {
-		var loc = Library.find(ntiid),
+		var loc = this.find(ntiid),
 			info = {},
 			topicOrTocRegex = /topic|toc/i,
 			slice = Array.prototype.slice;
@@ -276,7 +303,7 @@ Ext.define('NextThought.providers.Location', {
 		var me = this,
 			ntiid = givenNtiid || me.currentNTIID,
 			map = {},
-			info = Library.find(ntiid),
+			info = this.find(ntiid),
 			related = info ? info.location.getElementsByTagName('Related') : null;
 
 		function findIcon(n) {
@@ -295,7 +322,7 @@ Ext.define('NextThought.providers.Location', {
 					type = r.getAttribute('type'),
 					qual = r.getAttribute('qualifier'),
 
-					target = tag==='page' ? Library.find(id) : null,
+					target = tag==='page' ? this.find(id) : null,
 					location = target? target.location : null,
 
 					label = location? location.getAttribute('label') : r.getAttribute('title'),

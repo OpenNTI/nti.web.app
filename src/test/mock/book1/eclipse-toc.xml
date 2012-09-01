@@ -1,6 +1,6 @@
 <toc href="file1" label="book1" ntiid="book1">
-    <topic href="file2" label="chapter1" ntiid="book1-1">
-        <topic href="file3" label="section a" ntiid="book1-1-0"/>
-        <topic href="file4" label="section b" ntiid="book1-1-1"/>
+    <topic href="file2" label="chapter1" ntiid="book1-1" thumbnail="donttrimme">
+        <topic href="file3" label="section a" ntiid="book1-1-0" thumbnail="donttrimme"/>
+        <topic href="file4" label="section b" ntiid="book1-1-1" thumbnail="donttrimme"/>
     </topic>
 </toc>

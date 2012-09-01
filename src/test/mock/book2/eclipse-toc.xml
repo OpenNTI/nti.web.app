@@ -1,7 +1,7 @@
 <toc href="file1" label="book2" ntiid="book2">
-    <topic href="file2" label="a" ntiid="book2-1">
-        <topic href="file3" label="b" ntiid="book2-1-0"/>
-        <topic href="file4" label="c" ntiid="book2-1-1"/>
-        <topic href="file4" label="c" ntiid="book2-1-2"/>
+    <topic href="file2" label="a" ntiid="book2-1" thumbnail="donttrimme">
+        <topic href="file3" label="b" ntiid="book2-1-0" thumbnail="donttrimme"/>
+        <topic href="file4" label="c" ntiid="book2-1-1" thumbnail="donttrimme"/>
+        <topic href="file4" label="c" ntiid="book2-1-2" thumbnail="donttrimme"/>
     </topic>
 </toc> 

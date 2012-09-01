@@ -31,7 +31,40 @@ describe('Library Store', function(){
 
 		expect(n.nextRef).toBeTruthy();
 		expect(n.previousRef).toBeTruthy();
+	});
 
 
+	it('can find the section', function(){
+		var l = LocationProvider.find('book2-1-1');
+		expect(l).toBeTruthy();
+		expect(l.toc).toBeTruthy();
+		expect(l.NTIID).toBeTruthy();
+		expect(l.ContentNTIID).toBeTruthy();
+		expect(typeof l.NTIID === 'string').toBeTruthy();
+		expect(typeof l.ContentNTIID === 'string').toBeTruthy();
+
+		expect(Object.prototype.toString.call(l.toc)).toBe('[object Document]');
+		expect(Object.prototype.toString.call(l.location)).toBe('[object Element]');
+
+		isTopicElement(l.location);
+	});
+
+
+
+
+	it('can find the title of the section', function(){
+		expect(LocationProvider.findTitle('book1-1-1')).toBe('section b');
+	});
+
+
+
+	it('can find the title of the book', function(){
+		var t = LocationProvider.getTitle('/book2/eclipse-toc.xml');
+		expect(t.get('title')).toBe('book2');
+	});
+
+
+	it('can handle Structured NTI IDs', function(){
+		expect(LocationProvider.find('tag:nextthought.com,2011-07-14:AOPS-HTML-prealgebra-69')).toBeTruthy();
 	});
 });

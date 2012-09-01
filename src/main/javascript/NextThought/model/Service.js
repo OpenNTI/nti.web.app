@@ -187,7 +187,7 @@ Ext.define('NextThought.model.Service', {
 
 	resolveTopContainer: function resolve(containerId, success, failure, scope){
 
-		var o = Library.find(containerId),
+		var o = LocationProvider.find(containerId),
 			me = scope || this;
 
 		function step(container){
