@@ -29,5 +29,23 @@ Ext.define(	'NextThought.model.User', {
 
 	getName: function(){
 		return this.get('alias') || this.get('realname') || this.get('Username');
+	},
+
+
+	statics: {
+
+		getUnresolved: function(username){
+			return new NextThought.model.User({
+				Username: username,
+				avatarURL: 'resources/images/unresolved-user.png',
+				affiliation: 'Unknown',
+				status: 'Unresolved',
+				Presence: 'Offline'
+			},username);
+		}
+
 	}
+
+},function(){
+	window.User = this;
 });

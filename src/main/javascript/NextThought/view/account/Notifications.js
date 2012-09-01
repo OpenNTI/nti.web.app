@@ -82,17 +82,8 @@ Ext.define('NextThought.view.account.Notifications',{
 					targets.push(item.getId());
 				}
 
-				//CMU Oh boy.  Our new fancy usersearch rules mean
-				//we won't always be able to search for a user, even if
-				//we have the full username.  I assume this busts several
-				//other assumptions lurking throughout the app.  I fixed one
-				//here and one in AsssesmentItem.js.  Note in the case we don't
-				//resolve we blank the username field.  My first instinct was
-				//to display the raw username but who knows what coppa rules that could
-				//potentially violate.
-
 				this.notifications.push({
-					'name' : u[0] ? u[0].getName() : '',
+					'name' : u.getName(),
 					'message': m,
 					'guid': guid,
 					'unread': change.get('Last Modified') > $AppConfig.userObject.get('lastLoginTime') ? 'unread' : ''

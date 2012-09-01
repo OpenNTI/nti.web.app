@@ -157,8 +157,8 @@ Ext.define( 'NextThought.view.annotations.Note', {
 		}, function(){ el.down('.bubble').setStyle({left:null});});
 
 		UserRepository.getUser(creator, function(u){
-			var url = u[0].get('avatarURL'),
-				name = u[0].getName();
+			var url = u.get('avatarURL'),
+				name = u.getName();
 			el.setStyle({backgroundImage: "url("+url+")"});
 			el.down('.name').update(name);
 

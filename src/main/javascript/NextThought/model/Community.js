@@ -1,5 +1,5 @@
 /**
- * See UserRepository#prefetchUser() on how these are resolved.
+ * See UserRepository#getUser() on how these are resolved.
  *
  * DO NOT let these be queried for by the user search/ UserRepository resolver methods. (Bad things will happen)
  */

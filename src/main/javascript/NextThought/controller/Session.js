@@ -139,8 +139,7 @@ Ext.define('NextThought.controller.Session', {
 			var me = this;
 			Socket.setup();
 
-			UserRepository.getUser(username, function(users){
-				var user = users[0];
+			UserRepository.getUser(username, function(user){
 				if(user){
 					user.data.Presence = 'Online';
 					$AppConfig.userObject = user;

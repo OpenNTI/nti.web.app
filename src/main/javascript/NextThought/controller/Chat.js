@@ -685,9 +685,8 @@ Ext.define('NextThought.controller.Chat', {
 		var win = (cmp ? cmp.up('window') : null),
 			msg = (cmp ? cmp.message : null);
 
-		UserRepository.getUser(msg.get('Creator'), function(users){
-			var u = users[0],
-				name = u ? u.getName() : null,
+		UserRepository.getUser(msg.get('Creator'), function(u){
+			var name = u ? u.getName() : null,
 				i = u ? u.get('avatarURL'): null,
 				b, c;
 
@@ -780,7 +779,7 @@ Ext.define('NextThought.controller.Chat', {
 		Ext.each(peopleWhoLeft, function(p){
 			if (!isMe(p)){
 				UserRepository.getUser(p, function(u){
-					var name = u[0].get('alias');
+					var name = u.getName();
 					log.addNotification(name + ' has left the chat...');
 				}, this);
 			}
@@ -789,7 +788,7 @@ Ext.define('NextThought.controller.Chat', {
 		Ext.each(peopleWhoArrived, function(p){
 			if (!isMe(p)){
 				UserRepository.getUser(p, function(u){
-					var name = u[0].get('alias');
+					var name = u.getName();
 					log.addNotification(name + ' entered the chat...');
 				}, this);
 			}

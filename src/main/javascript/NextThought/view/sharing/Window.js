@@ -83,16 +83,16 @@ Ext.define( 'NextThought.view.sharing.Window', {
 				name: 'resolving...'
 			};
 
-			UserRepository.getUser(u, function(users){
+			UserRepository.getUser(u, function(user){
 				if (!info.rendered) {
 					Ext.apply(info.renderData, {
-						avatarURL: users[0].get('avatarURL'),
-						name: users[0].getName()
+						avatarURL: user.get('avatarURL'),
+						name: user.getName()
 					});
 				}
 				else {
-					info.avatar.set({src: users[0].get('avatarURL')});
-					info.name.update(users[0].getName());
+					info.avatar.set({src: user.get('avatarURL')});
+					info.name.update(user.getName());
 				}
 
 			}, this);

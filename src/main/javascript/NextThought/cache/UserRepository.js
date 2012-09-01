@@ -54,6 +54,7 @@ Ext.define('NextThought.cache.UserRepository', {
 	getUser: function(username, callback, scope) {
 		if (!Ext.isArray(username)) {
 			username = [username];
+			username.returnSingle = true;
 		}
 
 		var s = this.getStore(),
@@ -62,6 +63,9 @@ Ext.define('NextThought.cache.UserRepository', {
 			async = false;
 
 		function finish() {
+			if(username.returnSingle){
+				result = result[0];
+			}
 			Ext.callback(callback,scope, [result]);
 		}
 
@@ -100,6 +104,7 @@ Ext.define('NextThought.cache.UserRepository', {
 					failure: function(){
 						l--; //dec length so we still hit our finish state when a failure occurs.
 						if (l === 0) {
+							result.push(User.getUnresolved(name));
 							finish();
 						}
 					},
@@ -206,8 +211,4 @@ Ext.define('NextThought.cache.UserRepository', {
 },
 function(){
 	window.UserRepository = this;
-	this.prefetchUser = function(){
-		console.error('Deprecated function: UserRepository.prefetchUser()');
-		this.getUser.apply(this,arguments);
-	};
 });

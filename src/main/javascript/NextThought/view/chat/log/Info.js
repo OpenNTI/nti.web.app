@@ -39,13 +39,12 @@ Ext.define('NextThought.view.chat.log.Info', {
 		me.renderData.name = 'resolving...';
 		me.renderData.body = m;
 
-		UserRepository.prefetchUser(person, function(users){
-			var u = users[0];
+		UserRepository.getUser(person, function(u){
 			if (!u) {
 				console.error('failed to resolve user', person, m);
 				return;
 			}
-				me.fillInUser(u);
+			me.fillInUser(u);
 		},
 		this);
 

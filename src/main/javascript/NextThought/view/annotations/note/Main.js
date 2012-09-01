@@ -256,7 +256,6 @@ Ext.define('NextThought.view.annotations.note.Main',{
 	recordChanged: Ext.Function.createBuffered( function(){ this.setRecord(this.record); }, 10),
 
 	fillInUser: function(user){
-		if(Ext.isArray(user)){user = user[0];}
 		this.name.update(user.getName());
 		TemplatesForNotes.updateMoreReplyOptionsLabels(this.more,user);
 	},

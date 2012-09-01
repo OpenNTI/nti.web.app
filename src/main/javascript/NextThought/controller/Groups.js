@@ -78,9 +78,9 @@ Ext.define('NextThought.controller.Groups', {
 
 		names = Ext.Array.sort(Ext.Array.unique(names));
 
-		UserRepository.getUser(names,function(u){
+		UserRepository.getUser(names,function(users){
 			var friends = {Online: {}, Offline: {}};
-			Ext.each(u,function(user){
+			Ext.each(users,function(user){
 				var p = user.get('Presence');
 				if(p){ friends[p][user.getId()] = user; }
 			});
@@ -158,7 +158,7 @@ Ext.define('NextThought.controller.Groups', {
 		UserRepository.getUser(name, function(u) {
 			var a = ['addUser','removeUser'];
 			if(presence.toLowerCase()!=='online'){a.reverse();}
-			groupAction(a[0],a[1],u[0]);
+			groupAction(a[0],a[1],u);
 		});
 	},
 

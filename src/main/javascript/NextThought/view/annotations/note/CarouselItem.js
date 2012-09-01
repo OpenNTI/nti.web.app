@@ -38,8 +38,6 @@ Ext.define('NextThought.view.annotations.note.CarouselItem',{
 
 
 	fillInUser: function(user){
-		if(Ext.isArray(user)){user = user[0];}
-
 		this.avatarImage = 'url('+user.get('avatarURL')+')';
 		if(this.rendered){
 			this.image.setStyle({ backgroundImage: this.avatarImage });

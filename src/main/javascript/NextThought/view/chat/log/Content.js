@@ -45,7 +45,7 @@ Ext.define('NextThought.view.chat.log.Content', {
 	update: function(){
 		var me = this,
 			href,
-			icon, root;
+			icon, root, username;
 
 		if(this.location){
 			icon = this.location.icon;
@@ -69,13 +69,13 @@ Ext.define('NextThought.view.chat.log.Content', {
 		me.renderData.body = this.location ? this.location.label || this.location.title : '';
 		me.renderData.locationicon = href;
 
-		UserRepository.prefetchUser(this.message.get('Creator'), function(users){
-			var u = users[0];
+		username = this.message.get('Creator');
+		UserRepository.getUser(username, function(u){
 			if (!u) {
-				console.error('failed to resolve user', person, m);
+				console.error('failed to resolve user', username, m);
 				return;
 			}
-				me.fillInUser(u);
+			me.fillInUser(u);
 		},
 		this);
 

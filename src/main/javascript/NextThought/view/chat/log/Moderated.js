@@ -98,8 +98,7 @@ Ext.define('NextThought.view.chat.log.Moderated', {
 		});
 
 		if(s){
-			UserRepository.prefetchUser(s, function(users){
-				var u = users[0];
+			UserRepository.getUser(s, function(u){
 				if (!u) {
 					console.error('failed to resolve user', s, m);
 					return;

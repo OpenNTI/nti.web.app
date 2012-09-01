@@ -34,8 +34,8 @@ Ext.define('NextThought.view.menus.search.Result',{
 		}
 
 		if(me.name){
-			UserRepository.getUser(me.name,function(users){
-				var n = users[0]? users[0].getName() : '';
+			UserRepository.getUser(me.name,function(user){
+				var n = user.getName();
 				if(me.rendered && me.name){
 					me.name.update(n);
 					return;
