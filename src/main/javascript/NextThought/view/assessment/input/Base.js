@@ -119,6 +119,11 @@ Ext.define('NextThought.view.assessment.input.Base',{
 			click: this.hideSolution
 		});
 
+		this.mon(this.inputBox, {
+			scope: this,
+			click: this.checkit
+		});
+
 		this.checkItBtn.setVisibilityMode(Ext.dom.Element.DISPLAY);
 		this.solutionAnswerBox.setVisibilityMode(Ext.dom.Element.DISPLAY);
 		this.inputBox.setVisibilityMode(Ext.dom.Element.DISPLAY);
