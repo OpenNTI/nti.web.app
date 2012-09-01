@@ -106,9 +106,9 @@
 .scroll-shadow {
 	border-top: 1px solid #F1F1F1 !important;
 	position: absolute;
-	top: 0; left: 10px; right: 720px;
+	top: 0; right: 0px;
 	height: 1px;
-
+	width: 700px;
 	z-index: 9999;
 }
 
