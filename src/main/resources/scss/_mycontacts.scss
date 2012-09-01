@@ -148,8 +148,43 @@ $over-color: #f4f3f3;
 
 .contact-card {
 	margin: 7px 0 0 10px;
-
 	overflow: hidden;
+
+
+	.x-menu-list-ct &,
+	.selection-nt &{
+		margin-left: 0;
+		img {
+			&.nib {
+				background: transparent url(../images/add_remove_gry.png) -2px -2px no-repeat;
+				margin-top: 10px;
+				border: none !important;
+				float: right;
+				width: 14px;
+				height: 14px;
+
+				.contacts-panel & {
+					background-position: -20px -2px;
+					margin-right: 5px;
+				}
+			}
+		}
+	}
+
+	&.x-menu-item-over,
+	&.selection-item-over,
+	.selection-item-over &
+	{
+		img.nib{
+			opacity: 0.5;
+			display: block;
+			&:active {
+				opacity: 1;
+			}
+		}
+	}
+
+
 	img {
 		float: left;
 		width: 32px;
@@ -165,17 +200,9 @@ $over-color: #f4f3f3;
 			width: 20px;
 			height: 20px;
 			cursor: pointer;
-
-			.contacts-panel & {
-				background-position: 0px 0px;
-				margin-right: 4px;
-			}
 		}
 	}
 
-	.selection-item-over &,
-	&.selection-item-over,
-	&.x-menu-item-over,
 	&.card-over {
 
 		border-radius: 1px;
