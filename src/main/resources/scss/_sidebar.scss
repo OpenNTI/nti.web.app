@@ -45,6 +45,10 @@
 		width: 44px;
 		height: 44px;
 
+		&,&.x-tab-top {
+			background: none;
+		}
+
 		button{
 			position: static;
 			.x-tab-inner {
