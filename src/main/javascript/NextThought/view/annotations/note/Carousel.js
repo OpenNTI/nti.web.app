@@ -139,6 +139,12 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 
 	disableArrow: function(el,s){
 		el[(s?'remove':'add')+'Cls']('disabled');
+		if(!s){
+			el.dom.removeAttribute('title');
+		}
+		else{
+			el.dom.setAttribute('title', el === this.navNext ? 'Next note' : 'Previous note');
+		}
 	},
 
 	updateWith: function(item){
@@ -190,9 +196,9 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 		min = this.getEl().dom.getBoundingClientRect().width - this.BACKGROUND_WIDTH;
 
 		newBgx = Ext.Number.constrain(this.pointerCoordDifference - value,min,0);
-		
+
 		this.body.animate({ to: {scrollLeft: value} });
-		if (Ext.isGecko) { 
+		if (Ext.isGecko) {
 			this.getEl().setStyle('background-position','0 0');
 		}
 		else {
