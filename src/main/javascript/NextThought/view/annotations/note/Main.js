@@ -168,8 +168,8 @@ Ext.define('NextThought.view.annotations.note.Main',{
 
 			likeTooltip = r.isLiked() ? 'Unlike' : 'Like';
 			favoriteTooltip = r.isFavorited() ? 'Unfavorite' : 'Favorite';
-			this.liked.set({'data-qtip': likeTooltip});
-			this.favorites.set({'data-qtip': favoriteTooltip});
+			this.liked.set({'title': likeTooltip});
+			this.favorites.set({'title': favoriteTooltip});
 		}
 		catch(e1){
 			console.error(Globals.getError(e1));
