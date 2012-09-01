@@ -7,16 +7,23 @@ Ext.define('NextThought.util.Search',{
 
 	trimRe: /^["'\s]+|["'\s]+$/ig,
 
-	searchRe: function(string){
+	/**
+	 *
+	 * @param string
+	 * @param partial Set true to match the entire word not just the substring.
+	 * @return {RegExp}
+	 */
+	searchRe: function(string,partial){
 		var tokens, str;
 		string = string.replace(this.trimRe,'');
 		str = string.replace(this.ignoredWordsRe,'');
-		tokens = Ext.Array.map(str.split(this.splitWhitespaceRe), RegExp.escape);
+		tokens = Ext.Array.map(str.split(this.splitWhitespaceRe), RegExp.escape),
+		bound = partial?'[^\\s\\)\\(\\.]*':'';
 		
 		tokens = Ext.Array.clean(tokens);
 		if(tokens.length === 0){ tokens.push(string); } //Avoid searching for an empty string.
-		 
-		return new RegExp([ '([^\\W]*', tokens.join('|'), '[?^\\W]*)' ].join(''), 'ig');
+
+		return new RegExp([ '(',bound,'(', tokens.join('|'), ')',bound,')' ].join(''), 'ig');
 	}
 
 
