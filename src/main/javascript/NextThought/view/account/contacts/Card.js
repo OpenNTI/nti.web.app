@@ -58,19 +58,19 @@ Ext.define('NextThought.view.account.contacts.Card',{
 
 
 	afterRender: function(){
-		var el = this.getEl(),
-			nib = el.down('img.nib'),
-			tip;
+		var el = this.getEl();
+//			nib = el.down('img.nib'),
+//			tip;
 
 		el.on('click', this.clicked, this);
 		el.addClsOnOver('card-over');
 //		this.mixins.shareableTarget.afterRender.call(this);
 		this.callParent(arguments);
 
-		if(nib){
-			tip = Ext.widget({ xtype: 'tooltip', target: nib, html: nib.getAttribute('alt') });
-			this.on('destroy',function(){ tip.destroy(); });
-		}
+//		if(nib){
+//			tip = Ext.widget({ xtype: 'tooltip', target: nib, html: nib.getAttribute('alt') });
+//			this.on('destroy',function(){ tip.destroy(); });
+//		}
 	},
 
 
