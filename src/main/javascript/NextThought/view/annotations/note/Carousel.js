@@ -111,7 +111,10 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 		var me = this, o = me.selected;
 		me.callParent(arguments);
 		if( o ){
-			setTimeout(function(){ me.updateWith(o); },10);
+			setTimeout(function(){
+				me.updateWith(o);
+				me.syncIt();
+			},10);
 			delete me.selected;
 		}
 
