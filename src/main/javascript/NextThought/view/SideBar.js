@@ -34,7 +34,7 @@ Ext.define('NextThought.view.SideBar',{
 			items: [
 				{xtype: 'contacts-view'},
 				{xtype: 'activity-view', id: 'activity-stream'},
-				{iconCls: 'history', tooltip: 'History'},
+				{iconCls: 'history', tooltip: 'History', hidden: true},
 				{xtype: 'account-view'}
 			]}
 	],
