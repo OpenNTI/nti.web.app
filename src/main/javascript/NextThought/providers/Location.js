@@ -75,7 +75,7 @@ Ext.define('NextThought.providers.Location', {
 			me.fireEvent('changed', ntiid);
 		}
 
-		if(this.find(ntiid)){
+		if(!this.find(ntiid)){
 			alert('You don\'t have access to that content.');
 			return;
 		}
