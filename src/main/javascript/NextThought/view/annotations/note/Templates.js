@@ -10,10 +10,10 @@ Ext.define('NextThought.view.annotations.note.Templates',{
 					cls: 'toolbar',
 					cn: [{
 						cls: 'left',
-						cn: [{cls: 'action bold'},{cls:'action italic'},{cls:'action underline'}]
+						cn: [{cls: 'action bold', title: 'Bold'},{cls:'action italic', title: 'Italic'},{cls:'action underline', title: 'Underline'}]
 					},{
 						cls: 'right',
-						cn: [{cls: 'action share', html: 'Only Me'}]
+						cn: [{cls: 'action share', html: 'Only Me', title: 'Shared with'}]
 					}]
 				},{
 					cls: 'content',
@@ -26,7 +26,7 @@ Ext.define('NextThought.view.annotations.note.Templates',{
 				cls: 'footer',
 				cn: [{
 					cls: 'left',
-					cn: [{cls: 'action whiteboard'}]
+					cn: [{cls: 'action whiteboard', title: 'Create a whiteboard'}]
 				},{
 					cls: 'right',
 					cn: [{cls:'action save', html: 'Save'},{cls:'action cancel', html: 'Cancel'}]
