@@ -96,7 +96,7 @@ Ext.define('NextThought.view.SideBar',{
 			animate = true;
 			size = {height: h-100};
 			y = (this.popstate? up:down)+1;
-			x -= 100;
+			x -= 10;
 		}
 
 		this.setHeight(size.height);
