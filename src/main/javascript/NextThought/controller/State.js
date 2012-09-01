@@ -178,7 +178,8 @@ Ext.define('NextThought.controller.State', {
 		}
 
 		var defaultState = {
-			active: 'library'
+			active: 'library',
+			location : Ext.util.Cookies.get('nti.landing_page') || undefined
 		};
 
 		try {
