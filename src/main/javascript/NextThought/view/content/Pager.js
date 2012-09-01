@@ -33,8 +33,24 @@ Ext.define('NextThought.view.content.Pager',{
 	updateState: function(ntiid){
 		var info = LocationProvider.getNavigationInfo(ntiid),
 			nextBtn = this.down('[cls=next]'),
-			prevBtn = this.down('[cls=prev]');
+			prevBtn = this.down('[cls=prev]'),
+			nextTitle = LocationProvider.findTitle(info.next, null),
+			prevTitle = LocationProvider.findTitle(info.previous, null);
 
+
+		if(nextTitle){
+			nextBtn.btnEl.dom.setAttribute('title', 'Go forward to "' + nextTitle +'"');
+		}
+		else{
+			nextBtn.btnEl.dom.removeAttribute('title');
+		}
+
+		if(prevTitle){
+			prevBtn.btnEl.dom.setAttribute('title', 'Go back to "' + prevTitle + '"' );
+		}
+		else{
+			prevBtn.btnEl.dom.removeAttribute('title');
+		}
 
 		if(info.next) {
 			nextBtn.enable();

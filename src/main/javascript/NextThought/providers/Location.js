@@ -173,9 +173,12 @@ Ext.define('NextThought.providers.Location', {
 
 
 
-	findTitle: function(containerId){
+	findTitle: function(containerId, defaultTitle){
 		var l = this.find(containerId);
-		return l? l.location.getAttribute('label') : 'Not found';
+		if(defaultTitle === undefined){
+			defaultTitle = "Not found";
+		}
+		return l ? l.location.getAttribute('label') : defaultTitle;
 	},
 
 
