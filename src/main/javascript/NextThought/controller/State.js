@@ -45,6 +45,8 @@ Ext.define('NextThought.controller.State', {
 				}()),true);
 			}
 		};
+
+
 		var me = this,
 			history = window.history,
 			push = history.pushState || function(){};
@@ -66,6 +68,10 @@ Ext.define('NextThought.controller.State', {
 			console.log('push state', arguments);
 			if (this.updateState(s)) {
 				push.apply(history, arguments);
+				if (Ext.isIE) {
+					window.lastTimeLocationSet = new Date().getTime();
+					window.location.hash = me.getState().location;
+				}
 			}
 		};
 
