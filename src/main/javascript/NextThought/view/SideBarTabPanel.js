@@ -2,7 +2,6 @@
 Ext.define('NextThought.view.SideBarTabPanel',{
 	extend: 'Ext.tab.Panel',
 	alias: 'widget.sidebar-tabpanel',
-
 	ui: 'sidebar',
 	plain: true,
 	cls: 'sidebar-panel-container',
@@ -12,7 +11,8 @@ Ext.define('NextThought.view.SideBarTabPanel',{
 		ui: 'sidebar',
 		defaults: {
 			plain: true,
-			ui: 'sidebar'
+			ui: 'sidebar',
+			tooltipType: 'title'
 		}
 	}
 

@@ -6,6 +6,7 @@ Ext.define('NextThought.view.account.Account',{
 	],
 
 	iconCls: 'account',
+	tooltip: 'My Account',
 	ui: 'account',
 	cls: 'account-view',
 	plain: true,

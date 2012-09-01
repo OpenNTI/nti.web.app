@@ -6,7 +6,7 @@ Ext.define('NextThought.view.account.Activity',{
 	],
 
 	iconCls: 'activity',
-
+	tooltip: 'Recent Activity',
 	ui: 'activity',
 	cls: 'activity-view',
 	plain: true,

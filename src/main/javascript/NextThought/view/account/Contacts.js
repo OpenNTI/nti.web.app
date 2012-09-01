@@ -6,7 +6,7 @@ Ext.define('NextThought.view.account.Contacts',{
 		'NextThought.view.account.contacts.Card',
 		'NextThought.view.account.contacts.Panel'
 	],
-
+	tooltip: 'Contacts',
 	iconCls: 'contacts',
 	ui: 'contacts',
 	cls: 'contacts-view',
