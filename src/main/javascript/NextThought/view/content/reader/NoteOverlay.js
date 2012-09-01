@@ -69,7 +69,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 					cn: [{
 						cls: 'clear', html: '&nbsp;'
 					},{
-						cls: 'advanced', html: '&nbsp;'
+						cls: 'advanced', html: '&nbsp;', title: 'Advanced'
 					},{
 						tag: 'textarea',
 						cls: 'note-input'
