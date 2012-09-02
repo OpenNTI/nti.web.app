@@ -52,6 +52,7 @@ Ext.define('NextThought.controller.Groups', {
 
 
 	onSessionReady: function(){
+		debugger;
 		var app = this.application,
 			store = this.getFriendsListStore(),
 			mime = (new store.model()).mimeType,
@@ -62,6 +63,8 @@ Ext.define('NextThought.controller.Groups', {
 		store.on('load', function(s){ app.finishInitializeTask(token); }, this, {single: true});
 
 		store.on('datachanged', this.publishContacts, this);
+
+		if(!coll || !coll.href){return;}
 
 		store.proxy.url = getURL(coll.href);
 		store.load();
