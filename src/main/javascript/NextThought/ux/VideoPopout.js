@@ -101,9 +101,10 @@ Ext.define('NextThought.ux.VideoPopout',{
 			scope: this,
 			interval: 300,
 			run: function(){
-				var m = Ext.getBody().down('.x-mask');
+				var m = Ext.getBody().down('.x-mask',true);
 				if (m) {
 					Ext.TaskManager.stop(this.task);
+					Ext.getBody().dom.removeChild(m);
 					Ext.getBody().appendChild(m);
 				}
 			}
