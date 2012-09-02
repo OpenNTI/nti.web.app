@@ -67,7 +67,6 @@ Ext.define('NextThought.view.menus.Share',{
 		}
 		sharedWith = p ? p.sharedWith : value;
 
-
 		this.custom.setValue(sharedWith);
 
 		if (!Ext.isArray(sharedWith)){sharedWith = [];}

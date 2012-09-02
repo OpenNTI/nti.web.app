@@ -363,6 +363,9 @@ Ext.define('NextThought.view.annotations.note.EditorActions',{
 			content;
 		this.setHTML(Ext.String.htmlEncode( text ));
 		content = c.innerHTML;
+
+		this.updatePrefs();
+
 		if(putCursorAtEnd && content && content.length>0){
 			try {
 				s.removeAllRanges();
@@ -397,7 +400,6 @@ Ext.define('NextThought.view.annotations.note.EditorActions',{
 		this.shareMenu.reload(v);
 		this.updateShareWithLabel();
 	}
-
 
 
 }, function(){

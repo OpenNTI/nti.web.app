@@ -71,7 +71,7 @@ Ext.define('NextThought.view.form.fields.UserListField', {
 		me.value = value;
 		//trim empty's...
 		for(i;i>=0;i--){if(!value[i]){value.splice(i,1);}}
-
+		this.clearTokens();
 		me.checkChange();
 		me.initValue();
 		return me;
@@ -138,6 +138,12 @@ Ext.define('NextThought.view.form.fields.UserListField', {
 		}
 	},
 
+
+	clearTokens: function(){
+		Ext.each(this.query('token'), function(t){
+			this.removeToken(t, t.model);
+		}, this);
+	},
 
 	removeToken: function(token, model){
 		token.destroy();
