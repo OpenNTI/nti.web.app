@@ -26,7 +26,18 @@ Ext.define('NextThought.view.account.Activity',{
 			layout: { type: 'vbox', align: 'stretch' },
 			defaults: {
 				xtype: 'activity-item'
-			}
+			},
+			items: [
+				{xtype: 'box',
+					autoEl:{
+						cls:"activity loading",
+						cn: [
+							{cls: 'name', tag: 'span', html: 'Loading...'},
+							' please wait.'
+						]
+					}
+				}
+			]
 		}
 	],
 
@@ -37,9 +48,9 @@ Ext.define('NextThought.view.account.Activity',{
 			scope: this,
 			add: this.newActivity,
 			datachanged: this.reloadActivity,
-			clear: function(){console.log('clear',arguments);},
-			remove: function(){console.log('remove',arguments);},
-			update: function(){console.log('update',arguments);}
+			clear: function(){console.log('stream clear',arguments);},
+			remove: function(){console.log('stream remove',arguments);},
+			update: function(){console.log('stream update',arguments);}
 		});
 	},
 
