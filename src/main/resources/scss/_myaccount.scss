@@ -57,6 +57,10 @@
 				border-left-color: #3fb3f6;
 			}
 
+			&.loading {
+				background: $loading-indicator 100px center no-repeat;
+			}
+
 			.name {
 				line-height: normal;
 				font-size: 10px;

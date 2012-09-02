@@ -17,6 +17,12 @@ Ext.define('NextThought.view.account.Notifications',{
 	renderTpl: Ext.DomHelper.markup([
 		'Notifications',
 		{cls:'notification-scroll-container', cn:[
+			{tag:'tpl', 'if':'notifications.length == 0', cn:[
+				{cls:'notification-item unread loading', cn:[
+					{cls:"name",html:'Loading...'},
+					{cls:'message',html:'Please wait'}
+				]}
+			]},
 			{tag:'tpl', 'for':'notifications', cn:[
 				{cls:'notification-item {unread}', id:'{guid}', cn:[
 					{cls:"name",html:'{name}'},
@@ -37,25 +43,24 @@ Ext.define('NextThought.view.account.Notifications',{
 
 	initComponent: function(){
 		this.callParent(arguments);
+		console.log('Loading...', Ext.getStore('Stream').loading);
 		this.mon(Ext.getStore('Stream'), {
 			scope: this,
 			'add': this.updateNotificationCount,
 			'datachanged': this.setupRenderData
 		});
+		this.setupRenderData();
 	},
 
 
 	afterRender: function(){
 		this.callParent(arguments);
 		this.el.on('click', this.clicked, this);
-		this.setupRenderData();
 	},
 
 
-	setupRenderData: function(store, records, success) {
+	setupRenderData: function(store) {
 		if(!store) {store = Ext.getStore('Stream');}
-
-		if(!this.rendered){return;}
 
 		var itemsToLoad = store.getCount();
 
@@ -114,6 +119,7 @@ Ext.define('NextThought.view.account.Notifications',{
 
 
 	renderSpecial: function(rd) {
+		if(!this.rendered){return;}
 		this.el.update(this.renderTpl.apply(rd));
 		this.seeAll = this.el.select(this.renderSelectors.seeAll);
 		if (this.seeAll) {
