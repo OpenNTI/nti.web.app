@@ -7,14 +7,15 @@ Ext.define('NextThought.view.WindowHeader', {
 	renderTpl: [
 		'<div id="{id}-body" class="header-body">',
 			'<div class="controls {hasTools}">',
-				'<img src="{[Ext.BLANK_IMAGE_URL]}"	class="tool close" />',
-				'<img src="{[Ext.BLANK_IMAGE_URL]}" class="tool minimize" />',
+				'<img src="{[Ext.BLANK_IMAGE_URL]}"	class="tool close" title="Close" />',
+				'<img src="{[Ext.BLANK_IMAGE_URL]}" class="tool minimize" title="Minimize"/>',
 			'</div>',
 
 			'<div class="tools">',
 				//TODO: render tool images here AND add CSS rules
 				'<tpl for="tools">',
-					'<img src="{[Ext.BLANK_IMAGE_URL]}" class="tool {tool}" alt="{tip}" />',
+					//Note we don't obey tooltip and tooltipType
+					'<img src="{[Ext.BLANK_IMAGE_URL]}" class="tool {tool}" alt="{tip}" title="{tip}" />',
 				'</tpl>',
 			'</div>',
 

@@ -8,7 +8,7 @@ Ext.define('NextThought.view.chat.Entry',{
 
 	renderTpl: [
 		'<div>',
-			'<img src="{[Ext.BLANK_IMAGE_URL]}" class="add-whiteboard" alt="Draw">',
+			'<img src="{[Ext.BLANK_IMAGE_URL]}" class="add-whiteboard" alt="Create a whiteboard" title="Create a whiteboard">',
 			'<div><input type="text" value=""></div>',
 		'</div>'
 	],

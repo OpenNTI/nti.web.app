@@ -23,8 +23,8 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 				cls: 'carousel-body',
 				cn:'{%this.renderContainer(out,values)%}'
 			},
-			{ cls: 'slide-nav backward', cn:[{cls: 'slide backward'}] },
-			{ cls: 'slide-nav forward', cn:[{cls: 'slide forward'}] }
+			{ cls: 'slide-nav backward', cn:[{cls: 'slide backward'}], title: 'Slide left' },
+			{ cls: 'slide-nav forward', cn:[{cls: 'slide forward'}], title: 'Slide right'}
 		]),
 
 	navTpl: Ext.DomHelper.createTemplate({
@@ -139,11 +139,14 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 
 	disableArrow: function(el,s){
 		el[(s?'remove':'add')+'Cls']('disabled');
-		if(!s){
+	},
+
+	maybeShowToolTip: function(el, show, tip){
+		if(!show){
 			el.dom.removeAttribute('title');
 		}
 		else{
-			el.dom.setAttribute('title', el === this.navNext ? 'Next note' : 'Previous note');
+			el.dom.setAttribute('title', tip);
 		}
 	},
 
@@ -164,9 +167,15 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 
 		hasNext = item && item.next();
 		hasPrev = item && item.prev();
-
+		me.maybeShowToolTip(this.navNext, hasNext, 'Next note');
+		me.maybeShowToolTip(this.navPrev, hasPrev, 'Previous note');
 		me.disableArrow(this.navNext,hasNext);
 		me.disableArrow(this.navPrev,hasPrev);
+
+		if(hasNext){
+			this.navNext
+		}
+
 		this.updateSlide();
 		this.up('window').down('note-main-view').setRecord(item?item.record:null);
 
@@ -186,6 +195,8 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 		canSlideLeft = count > 11 && pos > 0;
 		canSlideRight = count > 11 && pos < dom.scrollWidth - dom.clientWidth;
 
+		this.maybeShowToolTip(this.slideLeft, canSlideLeft, 'Slide left');
+		this.maybeShowToolTip(this.slideRight, canSlideRight, 'Slide right');
 		this.disableArrow(this.slideLeft,canSlideLeft);
 		this.disableArrow(this.slideRight,canSlideRight);
 

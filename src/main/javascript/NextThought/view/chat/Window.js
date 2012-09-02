@@ -33,7 +33,7 @@ Ext.define('NextThought.view.chat.Window',{
 
 	tools: {
 		'add-people': {
-			tip: 'Add someone to this conversation',
+			tip: 'View occupants',
 			handler: 'addPeople'
 		}
 	},
