@@ -21,7 +21,9 @@ Ext.define('NextThought.view.annotations.note.FilterBar',{
 			ui: 'note-filter',
 			scale: '',
 			handler: function(btn){
-				btn.up('window').down('note-carousel').filterChanged(btn.filter);
+				Ext.defer(function(){
+					btn.up('window').down('note-carousel').filterChanged(btn.filter);
+				},1);
 				//clear search box?
 			}
 		},
