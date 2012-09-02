@@ -58,13 +58,11 @@ Ext.define('NextThought.controller.Groups', {
 			coll = $AppConfig.service.getCollectionFor(mime,'FriendsLists'),
 			token = {};
 
-		app.registerInitializeTask(token);
-		store.on('load', function(s){ app.finishInitializeTask(token); }, this, {single: true});
-
-		store.on('datachanged', this.publishContacts, this);
-
 		if(!coll || !coll.href){return;}
 
+		app.registerInitializeTask(token);
+		store.on('load', function(s){ app.finishInitializeTask(token); }, this, {single: true});
+		store.on('datachanged', this.publishContacts, this);
 		store.proxy.url = getURL(coll.href);
 		store.load();
 	},
