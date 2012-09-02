@@ -128,7 +128,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 
 
 	setRecord: function(r){
-		var suppressed, text, bodyText, sel, range, doc, start, end, likeTooltip, favoriteTooltip;
+		var suppressed, text, bodyText, sel, range, doc, start, end, likeTooltip, favoriteTooltip, objectInnerText, obj;
 
 		try {
 			if(this.record) {
@@ -180,30 +180,44 @@ Ext.define('NextThought.view.annotations.note.Main',{
 			doc = ReaderPanel.get(this.prefix).getDocumentElement();
 			range = Anchors.toDomRange(r.get('applicableRange'),doc);
 			if(range){
+					obj = Ext.fly(range.commonAncestorContainer).up('Object');
+					objectInnerText = obj ? obj.dom.innerText : null;
 					doc.getSelection().removeAllRanges();
 					doc.getSelection().addRange(range);
 					sel = rangy.getSelection(doc);
 					range = sel.getRangeAt(0);
-					text = range.toString();
-					try {
-						range.moveEnd('character', 50);
-						range.moveStart('character', -50);
-						range.expand('word');
+					text = bodyText = range.toString();
+					if(!objectInnerText){
+						//only expand it we are not inside an object node
+						try {
+							range.moveEnd('character', 50);
+							range.moveStart('character', -50);
+							range.expand('word');
+						}
+						catch(e) {
+							try { while(true) { range.moveStart('character',-1); } }
+							catch(er) { range.moveStart('character',1); }
+						}
+						sel.setSingleRange(range);
+						Anchors.expandSelectionToIncludeMath(sel);
+						bodyText = sel.getRangeAt(0).toString();
+						sel.removeAllRanges();
 					}
-					catch(e) {
-						try { while(true) { range.moveStart('character',-1); } }
-						catch(er) { range.moveStart('character',1); }
+					else {
+						text = bodyText = objectInnerText;
 					}
-					sel.setSingleRange(range);
-					Anchors.expandSelectionToIncludeMath(sel);
-					bodyText = sel.getRangeAt(0).toString();
-					sel.removeAllRanges();
-					text = bodyText.replace(text, this.highlightTpl.apply([text]));
-					text = this.replaceMathNodes(text, range.commonAncestorContainer);
-			} else {
+				text = bodyText.replace(text, this.highlightTpl.apply([text]));
+				text = this.replaceMathNodes(text, objectInnerText ? obj.dom : range.commonAncestorContainer);
+			}
+			else {
 				text = r.get('selectedText');
 			}
-			this.context.update('[...] '+text+' [...]');
+
+			if (!objectInnerText){
+				text = '[...] '+text+' [...]';
+			}
+
+			this.context.update(text);
 			if (Ext.isGecko || Ext.isIE9) { this.resizeMathJax(this.context); }
 
 		}
