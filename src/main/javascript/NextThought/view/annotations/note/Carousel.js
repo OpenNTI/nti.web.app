@@ -78,13 +78,14 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 		var el = this.el;
 		el.mask('');
 		Ext.defer(function(){
-			var f = this[filter];
+			var f = this[filter], rec = this.record;
 			this.load(f?f(value):null);
-			f = this.items.first();
-			if(f){
-				this.setRecord(f.record);
+			if(this.items.findBy(function(o){return o.record === rec;})){
+				this.setRecord(rec);
 			}
-			else { this.updateWith(null); }
+			else {
+				this.updateWith(null);
+			}
 			el.unmask();
 		},1,this);
 	},
@@ -99,6 +100,7 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 
 	setRecord: function(rec){
 		var me = this;
+		me.record = rec;
 		this.items.each(function(o){
 			var s = o.record===rec;
 			o.markSelected(s);
