@@ -67,7 +67,8 @@ Ext.define('NextThought.view.account.contacts.Card',{
 			handler: this.startChat,
 			itemId: 'start-chat',
 			ui: 'nt-menuitem', plain: true,
-			hidden: !$AppConfig.service.canChat()
+			hidden: !$AppConfig.service.canChat(),
+			disabled: this.user.get('Presence')==='Offline'
 		});
 
 		this.menu = Ext.widget('menu',{
@@ -90,6 +91,7 @@ Ext.define('NextThought.view.account.contacts.Card',{
 
 	afterRender: function(){
 		var el = this.getEl();
+
 		el.on('click', this.clicked, this);
 		el.addClsOnOver('card-over');
 		this.callParent(arguments);
