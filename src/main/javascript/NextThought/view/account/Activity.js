@@ -58,13 +58,21 @@ Ext.define('NextThought.view.account.Activity',{
 		var container = this.down('container[activitiesHolder]'),
 			items = [];
 
+		function p(i){
+			if(i.length>30){
+				if(p.last().xtype === 'box'){ items.pop(); }
+				return;
+			}
+			items.push(i);
+		}
+
 		function doGroup(group){
 			var label = (group.name||'').replace(/^[A-Z]\d{0,}\s/,'') || false;
 			if(label){
-				items.push({ xtype: 'box', html:label, cls: 'divider' });
+				p({ xtype: 'box', html:label, cls: 'divider' });
 			}
 
-			Ext.each(group.children,function(c){items.push({change:c});});
+			Ext.each(group.children,function(c){ p({change:c}); });
 		}
 
 		Ext.each(store.getGroups(),doGroup,this);
