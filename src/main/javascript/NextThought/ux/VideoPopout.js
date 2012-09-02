@@ -81,6 +81,7 @@ Ext.define('NextThought.ux.VideoPopout',{
 			store: this.store,
 			cls: 'carousel',
 			singleSelect: true,
+			allowDeselect: false,
 			overItemCls: 'over',
 			itemSelector: 'div.item-wrap',
 			tpl: Ext.DomHelper.markup(
