@@ -1,6 +1,10 @@
 Ext.define('NextThought.view.account.contacts.Card',{
 	extend: 'Ext.Component',
 	alias: 'widget.contact-card',
+	requires: [
+		'Ext.Action'
+	],
+
 	cls: 'contact-card x-menu',
 	renderTpl: Ext.DomHelper.markup([
 		{tag:'tpl', 'if':'!hideNib', cn:[
@@ -49,6 +53,23 @@ Ext.define('NextThought.view.account.contacts.Card',{
 			from: this.group ? 'this Group' : 'my contacts'
 		});
 
+		this.removeContactAction = new Ext.Action({
+		    text: 'Remove Contact',
+			scope: this,
+		    handler: this.removeContact,
+		    itemId: 'remove-contact',
+			ui: 'nt-menuitem', plain: true
+		});
+
+		this.startChatAction = new Ext.Action({
+			text: 'Start a Chat',
+			scope: this,
+			handler: this.startChat,
+			itemId: 'start-chat',
+			ui: 'nt-menuitem', plain: true,
+			hidden: !$AppConfig.service.canChat()
+		});
+
 		this.menu = Ext.widget('menu',{
 			ui: 'nt',
 			plain: true,
@@ -57,11 +78,10 @@ Ext.define('NextThought.view.account.contacts.Card',{
 			frame: false,
 			border: false,
 			hideMode: 'display',
-			defaults: {ui: 'nt-menuitem', plain: true },
 			parentItem: this,
 			items: [
-				{text: 'Remove Contact'},
-				{text:'Start a Chat', hidden: !$AppConfig.service.canChat()}
+				this.removeContactAction,
+				this.startChatAction
 			]
 		});
 
@@ -70,26 +90,32 @@ Ext.define('NextThought.view.account.contacts.Card',{
 
 	afterRender: function(){
 		var el = this.getEl();
-
 		el.on('click', this.clicked, this);
 		el.addClsOnOver('card-over');
 		this.callParent(arguments);
 	},
 
 
+	removeContact: function(){
+		this.fireEvent('remove-contact-from', this.contactContainer, this.user);
+	},
+
+
+	startChat: function(){
+		this.fireEvent('click', this, this.user.getId());
+	},
+
+
 	clicked: function(e){
 		var nib = e.getTarget('img.nib');
-		if(nib){
-			//this.fireEvent('remove-contact-from', this.contactContainer, this.user);
-			this.menu.showBy(nib,'tr-tl',[10,0]);
-
-			return;
-		}
-
-
 		try{
 			this.clickBlocker();
-			this.fireEvent('click', this, this.user.getId());
+			if(nib){
+				this.menu.showBy(nib,'tr-tl',[10,0]);
+			}
+			else {
+				this.startChat();
+			}
 		}
 		catch(er){
 			this.fireEvent('blocked-click', this, this.user.getId());
