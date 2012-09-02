@@ -121,7 +121,7 @@ Ext.define('NextThought.view.assessment.input.Base',{
 
 		this.mon(this.inputBox, {
 			scope: this,
-			click: this.checkit
+			click: this.editAnswer
 		});
 
 		this.checkItBtn.setVisibilityMode(Ext.dom.Element.DISPLAY);
@@ -138,12 +138,23 @@ Ext.define('NextThought.view.assessment.input.Base',{
 	checkit: function(){
 		if(this.submissionDisabled){return;}
 		if(this.submitted){
-			this.up('assessment-question').reset();
+			this.editAnswer();
 			return;
 		}
 
 		this.setSubmitted();
 		this.up('assessment-question').checkIt();
+	},
+
+	editAnswer: function(){
+		var ans;
+		if(this.submitted){
+			ans = this.getValue();
+			this.up('assessment-question').reset();
+			this.setValue(ans);
+			this.focus();
+			this.enableSubmission();
+		}
 	},
 
 

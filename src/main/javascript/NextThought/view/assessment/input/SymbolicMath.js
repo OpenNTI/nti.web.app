@@ -122,6 +122,10 @@ Ext.define('NextThought.view.assessment.input.SymbolicMath',{
 	disableMathquillEditable: function(){
 		console.log('disabling');
 		jQuery(this.mathquillSpan).mathquill('revert').mathquill();
+	},
+
+	focus: function(){
+		this.mathquillSpan.focus();
 	}
 
 });
