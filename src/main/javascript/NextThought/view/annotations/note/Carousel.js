@@ -75,13 +75,18 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 
 
 	filterChanged: function(filter,value){
-		var f = this[filter];
-		this.load(f?f(value):null);
-		f = this.items.first();
-		if(f){
-			this.setRecord(f.record);
-		}
-		else { this.updateWith(null); }
+		var el = this.el;
+		el.mask('');
+		Ext.defer(function(){
+			var f = this[filter];
+			this.load(f?f(value):null);
+			f = this.items.first();
+			if(f){
+				this.setRecord(f.record);
+			}
+			else { this.updateWith(null); }
+			el.unmask();
+		},1,this);
 	},
 
 
