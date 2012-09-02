@@ -264,16 +264,28 @@ Ext.define('NextThought.controller.Groups', {
 	},
 
 	removeContact: function(contactContainer, contact){
-		var store = this.getFriendsListStore();
-		var userId = typeof contact === 'string' ? contact : contact.getId();
-		var record = contactContainer.record;
-		var field = contactContainer.field;
-		var list = record.get(field);
+		var store = this.getFriendsListStore(),
+			userId = typeof contact === 'string' ? contact : contact.getId(),
+			record = contactContainer.record,
+			field = contactContainer.field || 'friends',
+			count = store.getCount();
 
-		list = Ext.Array.remove(list,userId);
+		function finish(){
+			count--;
+			if(count<=0){ store.load(); }
+		}
 
-		record.saveField(field, list, function() {
-			store.load();
-		});
+		function remove(record){
+			var list = Ext.Array.remove(record.get(field),userId);
+			record.saveField(field, list, finish);
+		}
+
+		if(record){
+			count = 1;
+			remove(record);
+		}
+		else {
+			store.each(remove);
+		}
 	}
 });
