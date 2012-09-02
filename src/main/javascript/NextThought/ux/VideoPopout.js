@@ -120,8 +120,9 @@ Ext.define('NextThought.ux.VideoPopout',{
 
 
 	selection: function(v,s){
-		this.iframe.el.dom.setAttribute('src',
-				(s && s[0])? s[0].get('url') : Ext.SSL_SECURE_URL );
+		if(s && s[0]){
+			this.iframe.el.dom.setAttribute('src', s[0].get('url'));
+		}
 	},
 
 
