@@ -1,10 +1,7 @@
 Ext.define('NextThought.view.account.contacts.Card',{
 	extend: 'Ext.Component',
 	alias: 'widget.contact-card',
-	mixins: {
-//		shareableTarget: 'NextThought.mixins.ShareableTarget'
-	},
-	cls: 'contact-card',
+	cls: 'contact-card x-menu',
 	renderTpl: Ext.DomHelper.markup([
 		{tag:'tpl', 'if':'!hideNib', cn:[
 			{tag:'img', cls:'nib', src:'{blank}', alt:'Menu', title:'Options'}]},
@@ -18,7 +15,6 @@ Ext.define('NextThought.view.account.contacts.Card',{
 
 
 	constructor: function(){
-//		this.mixins.shareableTarget.constructor.call(this);
 		return this.callParent(arguments);
 	},
 
@@ -28,17 +24,16 @@ Ext.define('NextThought.view.account.contacts.Card',{
 		//convenience interface class. This will abstract the user object and the friendslist record so we can just have
 		// a record and a field to remove the contact from the list and save.
 		function ContactContainer(group){
-			this.record = group || $AppConfig.userObject;
-			this.field = group ? 'friends' : 'following';
+			this.record = group;
+			this.field = group ? 'friends' : '';
 		}
 		//store the data for the event of clicking on the nib...
 		this.contactContainer = new ContactContainer(this.group);
 
-
 		this.callParent(arguments);
+
 		if(!this.user){
-			console.error('No user specified');
-			return;
+			Ext.Error.raise('No user specified');
 		}
 
 		//for querying later:
@@ -54,29 +49,40 @@ Ext.define('NextThought.view.account.contacts.Card',{
 			from: this.group ? 'this Group' : 'my contacts'
 		});
 
+		this.menu = Ext.widget('menu',{
+			ui: 'nt',
+			plain: true,
+			showSeparator: false,
+			shadow: false,
+			frame: false,
+			border: false,
+			hideMode: 'display',
+			defaults: {ui: 'nt-menuitem', plain: true },
+			parentItem: this,
+			items: [
+				{text: 'Remove Contact'},
+				{text:'Start a Chat', hidden: !$AppConfig.service.canChat()}
+			]
+		});
+
 	},
 
 
 	afterRender: function(){
 		var el = this.getEl();
-//			nib = el.down('img.nib'),
-//			tip;
 
 		el.on('click', this.clicked, this);
 		el.addClsOnOver('card-over');
-//		this.mixins.shareableTarget.afterRender.call(this);
 		this.callParent(arguments);
-
-//		if(nib){
-//			tip = Ext.widget({ xtype: 'tooltip', target: nib, html: nib.getAttribute('alt') });
-//			this.on('destroy',function(){ tip.destroy(); });
-//		}
 	},
 
 
 	clicked: function(e){
-		if(e.getTarget('img.nib')){
-			this.fireEvent('remove-contact-from', this.contactContainer, this.user);
+		var nib = e.getTarget('img.nib');
+		if(nib){
+			//this.fireEvent('remove-contact-from', this.contactContainer, this.user);
+			this.menu.showBy(nib,'tr-tl',[10,0]);
+
 			return;
 		}
 
