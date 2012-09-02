@@ -169,6 +169,8 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 				me.text.select('a[href]',true).set({target:'_blank'});
 				me.updateLayout();
 			});
+
+			this.responseBox[r.get('sharedWith').length===0?'removeCls':'addCls']('shared');
 		}
 		catch(e){
 			console.error(Globals.getError(e));

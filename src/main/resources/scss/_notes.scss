@@ -192,6 +192,7 @@
 		}
 
 		.chat {
+			display: none;
 			padding-left: 28px;
 			background: url(../images/start-chat.png) 0 8px no-repeat;
 		}
@@ -827,6 +828,10 @@
 
 			@include reply-options;
 			.reply-options .more ol{ position: fixed; }
+
+			&.shared .reply-options .chat {
+				display: inline-block;
+			}
 
 			@include note-editor;
 			.editor {

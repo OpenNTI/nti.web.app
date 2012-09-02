@@ -269,6 +269,8 @@ Ext.define('NextThought.view.annotations.note.Main',{
 	fillInShare: function(sharedWith){
 		var val, names = [], custom = false;
 
+		this.responseBox[sharedWith.length===0?'removeCls':'addCls']('shared');
+
 		Ext.each(sharedWith,function(u){
 			names.push(u.getName());
 			if(!u.isGroup){
