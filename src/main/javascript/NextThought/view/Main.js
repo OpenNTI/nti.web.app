@@ -36,7 +36,7 @@ Ext.define('NextThought.view.Main', {
 	var unsupported = [];
 	Ext.each(//firefox doesn't report supporting: CSS3DTransform, so we'll omit it.
 			['Canvas','Range','CSS3BoxShadow','CSS3BorderRadius'],
-			function(f){ if(!Ext.supports[f]) { unsupported.push(f); } });
+			function(f){ Boolean(Ext.supports[f] && unsupported.push(f)); });
 
 	if(unsupported.length!==0 || Ext.isOpera){
 		location.replace('notsupported.html');
