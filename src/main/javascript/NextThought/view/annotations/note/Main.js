@@ -180,8 +180,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 			doc = ReaderPanel.get(this.prefix).getDocumentElement();
 			range = Anchors.toDomRange(r.get('applicableRange'),doc);
 			if(range){
-					obj = Ext.fly(range.commonAncestorContainer).up('Object');
-					objectInnerText = obj ? obj.dom.innerText : null;
+					objectInnerText = Ext.fly(range.commonAncestorContainer).up('Object') ? Ext.fly(range.commonAncestorContainer).up('Object').dom.textContent : null;
 					doc.getSelection().removeAllRanges();
 					doc.getSelection().addRange(range);
 					sel = rangy.getSelection(doc);
@@ -207,7 +206,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 						text = bodyText = objectInnerText;
 					}
 				text = bodyText.replace(text, this.highlightTpl.apply([text]));
-				text = this.replaceMathNodes(text, objectInnerText ? obj.dom : range.commonAncestorContainer);
+				text = this.replaceMathNodes(text, objectInnerText ? Ext.fly(range.commonAncestorContainer).up('Object').dom : range.commonAncestorContainer);
 			}
 			else {
 				text = r.get('selectedText');
