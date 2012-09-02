@@ -53,7 +53,7 @@ Ext.define('NextThought.view.assessment.Panel',{
 			if(!me.el || !me.el.dom){ sameCount = NaN; }
 			else {
 				y = me.el.getY();
-				if(y === lastY){ sameCount ++; }
+				if(Math.abs(y-lastY)<2){ sameCount ++; }
 				else { sameCount = 0; }
 				lastY = y;
 			}
@@ -61,7 +61,7 @@ Ext.define('NextThought.view.assessment.Panel',{
 			if(isNaN(sameCount) || sameCount> 5 ){
 				clearInterval(me.interval);
 			}
-		},500);
+		},200);
 	},
 
 
