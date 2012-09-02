@@ -125,6 +125,7 @@ Ext.define('NextThought.view.account.Notifications',{
 		if (this.seeAll) {
 			this.seeAll.on('click', this.showAllNotifications, this);
 		}
+		this.updateLayout();
 	},
 
 
@@ -139,13 +140,17 @@ Ext.define('NextThought.view.account.Notifications',{
 	},
 
 
-	clicked: function(event, element){
+	clicked: function(event){
 		var me = this,
 			u = $AppConfig.userObject,
 			t = event.getTarget('.notification-item',null,true),
-			guid = t.id,
-			containerId = this.notificationData[guid].containerId,
-			targets = this.notificationData[guid].id;
+			guid = t? (t.id || null) : null,
+			containerId = guid? this.notificationData[guid].containerId : null,
+			targets = guid? this.notificationData[guid].id : null;
+
+		if(!guid){
+			return;
+		}
 
 		u.saveField('lastLoginTime', new Date(), function(){
 			me.setupRenderData();
