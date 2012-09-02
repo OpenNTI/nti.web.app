@@ -40,7 +40,6 @@ Ext.define('NextThought.view.Main', {
 
 	if(unsupported.length!==0 || Ext.isOpera){
 		location.replace('notsupported.html');
-		console.warn("Unsupported features: "+unsupported.join(', '));
 	}
 
 	if(Ext.getScrollbarSize(true).width > 2){
