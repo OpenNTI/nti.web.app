@@ -17,7 +17,7 @@ Ext.define('NextThought.view.account.Notifications',{
 	renderTpl: Ext.DomHelper.markup([
 		'Notifications',
 		{cls:'notification-scroll-container', cn:[
-			{tag:'tpl', 'if':'notifications.length == 0', cn:[
+			{tag:'tpl', 'if':'loading', cn:[
 				{cls:'notification-item unread loading', cn:[
 					{cls:"name",html:'Loading...'},
 					{cls:'message',html:'Please wait'}
@@ -42,11 +42,12 @@ Ext.define('NextThought.view.account.Notifications',{
 
 
 	initComponent: function(){
+		this.autoEl = 'div';
 		this.callParent(arguments);
-		console.log('Loading...', Ext.getStore('Stream').loading);
 		this.mon(Ext.getStore('Stream'), {
 			scope: this,
 			'add': this.updateNotificationCount,
+			'load': this.setupRenderData,
 			'datachanged': this.setupRenderData
 		});
 		this.setupRenderData();
@@ -60,15 +61,22 @@ Ext.define('NextThought.view.account.Notifications',{
 
 
 	setupRenderData: function(store) {
-		if(!store) {store = Ext.getStore('Stream');}
+		var loading = false,
+			itemsToLoad;
 
-		var itemsToLoad = store.getCount();
+		if(!store) {
+			store = Ext.getStore('Stream');
+			loading = true;
+		}
+
+		itemsToLoad = store.getCount();
 
 		//setup render data
 		this.renderData = Ext.apply(this.renderData||{},{
 			'notificationcount': $AppConfig.userObject.get('NotificationCount') || 0,
 			'notifications': [],
-			hideSeeAll: true
+			hideSeeAll: true,
+			loading: loading
 		});
 		this.notifications = [];
 		this.notificationData = {};
@@ -132,7 +140,7 @@ Ext.define('NextThought.view.account.Notifications',{
 
 	updateNotificationCount: function(store,records){
 		var u = $AppConfig.userObject,
-			c = (u.get('NotificationCount') || 0) + records.length;
+			c = (u.get('NotificationCount') || 0) + ((records||{}).length||0);
 
 		//Update current notification of the userobject.
 		u.set('NotificationCount', c);

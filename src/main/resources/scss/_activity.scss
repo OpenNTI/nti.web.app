@@ -24,6 +24,17 @@
 			background: url(../images/activity-icons.png) 0 0 no-repeat;
 		}
 
+		&.nothing{
+			&::after{display: none;}
+			text-align: center;
+			font-style: italic;
+			color: #757474;
+			padding: 0px;
+			margin: 0px;
+			border-top: none;
+			box-shadow: none;
+		}
+
 		&.loading::after {
 			background: $loading-indicator 0 0 no-repeat;
 			width: 16px; height: 16px;
