@@ -35,6 +35,8 @@
 	.x-panel-assessment {
 		z-index: 3;
 		margin: 0 5px;
+		position: absolute;
+		width: 690px;
 
 		&.question { //main frame of the question
 			background: #fbfbfb;
@@ -532,7 +534,7 @@
 					font-size: 14px;
 					font-weight: normal;
 					white-space: nowrap;
-					
+
 					&:hover { opacity: 1; }
 
 					&::after {
