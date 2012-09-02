@@ -59,8 +59,8 @@ Ext.define('NextThought.view.account.Activity',{
 			items = [];
 
 		function p(i){
-			if(i.length>30){
-				if(p.last().xtype === 'box'){ items.pop(); }
+			if(items.length>30){
+				if(items.last().xtype === 'box'){ items.pop(); }
 				return;
 			}
 			items.push(i);
