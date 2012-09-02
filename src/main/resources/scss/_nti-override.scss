@@ -13,6 +13,8 @@
 
 
 #NTIContent {
+	padding-bottom: 10em;
+
 	&, * {
 		text-rendering: optimizeLegibility;//fallback
 		text-rendering: geometricPrecision;
