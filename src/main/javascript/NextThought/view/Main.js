@@ -10,8 +10,8 @@ Ext.define('NextThought.view.Main', {
 		'NextThought.view.SideBar',
 		'NextThought.view.Views'
 	],
-	
-	border: false, 
+
+	border: false,
 	frame: false,
 	defaults:{ border: false, frame: false },
 	layout: 'border',
@@ -36,7 +36,7 @@ Ext.define('NextThought.view.Main', {
 	var unsupported = [];
 	Ext.each(//firefox doesn't report supporting: CSS3DTransform, so we'll omit it.
 			['Canvas','Range','CSS3BoxShadow','CSS3BorderRadius'],
-			function(f){ Boolean(Ext.supports[f] && unsupported.push(f)); });
+		function(f){ Boolean(!Ext.supports[f] && unsupported.push(f)); });
 
 	if(unsupported.length!==0 || Ext.isOpera){
 		location.replace('notsupported.html');
