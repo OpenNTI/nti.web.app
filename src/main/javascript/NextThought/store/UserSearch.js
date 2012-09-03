@@ -8,5 +8,11 @@ Ext.define('NextThought.store.UserSearch',{
 	proxy: {
 		type: 'usersearch',
 		model: 'NextThought.model.UserSearch'
+	},
+
+	filters:{
+		fn: function(rec){
+			return !isMe(rec);
+		}
 	}
 });
