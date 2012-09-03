@@ -36,7 +36,7 @@ Ext.define('NextThought.view.account.Contacts',{
 			items: [
 				{ id: 'my-groups' },
 				{ id: 'manage-contacts', xtype: 'contacts-management-panel' },
-				{html: '-- wording for hidden contacts feature here --'}
+				{ id: 'disabled-contacts-view' }
 			]
 		}
 	],
