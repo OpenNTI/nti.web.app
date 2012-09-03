@@ -113,6 +113,7 @@ Ext.define('NextThought.controller.Session', {
 					scope: this,
 					callback: function(q,success,r){
 						if(!success){
+							alert('Oh No! Could not talk to the server!');
 							console.log('Could not resolve service document\nrequest:',q,'\n\nresponse:',r,'\n\n');
 							return;
 						}
