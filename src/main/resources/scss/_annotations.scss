@@ -19,6 +19,7 @@
 	position: absolute;
 	top: 0; left: 0;//fill the space
 	overflow: visible;
+	z-index: 2;
 
 	.column {
 		position: absolute;
