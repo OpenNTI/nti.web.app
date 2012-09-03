@@ -32,9 +32,9 @@ Ext.define('NextThought.view.form.fields.SearchAdvancedOptions',{
 //		{ cls: 'type-filter redaction', text: 'Redactions', model: 'Redaction' },
 //		{ cls: 'type-filter bookmarks', text: 'Bookmarks', model: 'Bookmark' },
 //		{ cls: 'type-filter contacts', text: 'Contacts', model: 'Contact' },
-		{ xtype: 'labeledseparator', text: 'Return' },
+		{ xtype: 'labeledseparator', text: 'Return', hidden: true },
 //		{ cls: 'return-type', group: 'return-type', hideOnClick: false, text: 'Exact Matches', checked: true },
-		{ cls: 'return-type', group: 'return-type', hideOnClick: false, text: 'Partial Matches', doPartialSearch: true }
+		{ cls: 'return-type', group: 'return-type', hideOnClick: false, text: 'Partial Matches', doPartialSearch: true, hidden: true }
 	],
 
 	initComponent: function(){
