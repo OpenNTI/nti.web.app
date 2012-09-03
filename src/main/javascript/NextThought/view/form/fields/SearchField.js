@@ -47,6 +47,7 @@ Ext.define('NextThought.view.form.fields.SearchField', {
 
 	specialKeys: {
 		8: true,	//Ext.EventObject.BACKSPACE
+		13: true,       //Ext.EventObject.ENTER
 		27: true,	//Ext.EventObject.ESC
 		32: true,	//Ext.EventObject.SPACE
 		46: true,	//Ext.EventObject.DELETE
@@ -85,7 +86,7 @@ Ext.define('NextThought.view.form.fields.SearchField', {
 		if(!val){
 			this.fireEvent('clear-search');
 		}
-		else if(val.length > 3) {
+		else{
 			this.fireEvent('search', val);
 		}
 	},
@@ -93,7 +94,11 @@ Ext.define('NextThought.view.form.fields.SearchField', {
 	fireSearchEventBuffered: function(){
 		var me = this;
 		clearTimeout(this.searchEventDelayId);
-		this.searchEventDelayId = setTimeout(function(){ me.fireSearchEvent(); }, 500);
+		this.searchEventDelayId = setTimeout(function(){
+			if(me.getValue().length > 3){
+				me.fireSearchEvent();
+			}
+		}, 500);
 	},
 
 	triggerMenu: function(e){
