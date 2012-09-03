@@ -30,6 +30,7 @@ Ext.define( 'NextThought.view.form.fields.UserSearchInputField', {
 		frame: false,
 		border: false,
 		cls: 'x-menu',
+		maxHeight: 2000,
 		baseCls: 'x-menu',
 		itemCls: 'x-menu-item contact-card',
 		emptyText: '<div class="x-menu-item">No results</div>',
