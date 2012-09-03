@@ -102,7 +102,6 @@ Ext.define('NextThought.controller.Account', {
 
 	showAccount: function(){
 		var me = this;
-debugger;
 		if (me.acctWin) {
 			me.acctWin.show();
 			return;
