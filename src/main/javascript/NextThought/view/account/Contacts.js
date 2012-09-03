@@ -37,12 +37,22 @@ Ext.define('NextThought.view.account.Contacts',{
 				{ id: 'my-groups' },
 				{
 					id: 'manage-contacts',
-					xtype: 'contacts-management-panel',
-					iconCls: 'manage-groups'
-				}
+					xtype: 'contacts-management-panel'
+//					iconCls: 'manage-groups'
+				},
+				{html: '-- wording for hidden contacts feature here --'}
 			]
 		}
 	],
+
+
+	initComponent: function(){
+		this.callParent(arguments);
+		if(!$AppConfig.service.canShare()){
+			this.down('box[cls=view-title]').autoEl = null;
+			this.down('container').getLayout().setActiveItem(2);
+		}
+	},
 
 
 	afterRender: function(){
@@ -50,7 +60,9 @@ Ext.define('NextThought.view.account.Contacts',{
 		var el = this.el.down('.view-title .manage');
 		this.manageBtn = el;
 		this.activeView = 0;
-		this.mon(el,'click',this.toggleManagement,this);
+		if(el){
+			this.mon(el,'click',this.toggleManagement,this);
+		}
 	},
 
 
