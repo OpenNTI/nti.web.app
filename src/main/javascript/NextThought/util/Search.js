@@ -13,13 +13,16 @@ Ext.define('NextThought.util.Search',{
 	 * @param partial Set true to match the entire word not just the substring.
 	 * @return {RegExp}
 	 */
-	searchRe: function(string,partial){
+	searchRe: function(string,partial,wholeWordOnly){
 		var tokens, str;
 		string = string.replace(this.trimRe,'');
 		str = string.replace(this.ignoredWordsRe,'');
 		tokens = Ext.Array.map(str.split(this.splitWhitespaceRe), RegExp.escape),
 		bound = partial?'[^\\s\\)\\(\\.]*':'';
-		
+		if(wholeWordOnly){
+			bound = '\\b';
+		}
+
 		tokens = Ext.Array.clean(tokens);
 		if(tokens.length === 0){ tokens.push(string); } //Avoid searching for an empty string.
 
