@@ -10,7 +10,7 @@ Ext.define('NextThought.view.content.reader.Content',{
 
 	insertRelatedLinks: function(position,doc){
 		var tpl = this.relatedTemplate, last = null,
-			related = LocationProvider.getRelated(),
+			related = LocationProvider.getRelated(),c = 0,
 			container = {
 				tag: 'div',
 				cls:'injected-related-items',
@@ -25,13 +25,11 @@ Ext.define('NextThought.view.content.reader.Content',{
 			container = Ext.DomHelper.insertAfter(position,container);
 		}
 		catch(e){
-			console.warn('no header? okay...');
 			try {
 				position = Ext.fly(doc.body).query('#NTIContent .page-contents')[0];
 				container = Ext.DomHelper.insertFirst(position,container);
 			}
 			catch(ffs){
-				console.error('what now?!',e, ffs);
 				return;
 			}
 		}
@@ -39,19 +37,27 @@ Ext.define('NextThought.view.content.reader.Content',{
 		container = Ext.DomHelper.append(container,{tag: 'span',cls:'related'});
 
 		if(!tpl){
-			tpl = Ext.DomHelper.createTemplate(
-					'<a href="{0}" onclick="NTIRelatedItemHandler(this);return false;" class="related">{1}</a>, '
-			).compile();
+			tpl = Ext.DomHelper.createTemplate({
+				tag:'a', href:'{0}',
+				onclick:'NTIRelatedItemHandler(this);return false;',
+				cls:'related c{2}', html:'{1}'}).compile();
+
 			this.relatedTemplate = tpl;
 		}
 
 		Ext.Object.each(related,function(key,value){
-			last = tpl.append(container,[key,value.label]);
-			last.previousSibling.relatedInfo = value;
+			c++;
+			last = tpl.append(container,[key,value.label,c]);
+			last.relatedInfo = value;
 		});
+
 		if(last){
-			container.removeChild(last);
 			container = container.parentNode;
+
+			if(c > 10){
+				Ext.DomHelper.append(container,{tag: 'span',cls:'more',html:'Show more'});
+			}
+
 			Ext.fly(container).on('click',function(){
 				Ext.fly(container).removeAllListeners().addCls('showall');
 			});
