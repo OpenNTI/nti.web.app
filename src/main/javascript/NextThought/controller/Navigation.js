@@ -23,7 +23,7 @@ Ext.define('NextThought.controller.Navigation', {
 			'notifications': {
 				'navigation-selected': this.navigate
 			},
-			'activity-item': {
+			'activity-view': {
 				'navigation-selected': this.navigate
 			},
 			'main-views': {
