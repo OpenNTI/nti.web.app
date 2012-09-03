@@ -46,7 +46,7 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 				seamless: true,
 				transparent: true,
 				allowTransparency: true,
-				style: 'overflow: hidden; z-index: 2;'
+				style: 'overflow: hidden; z-index: 1;'
 			},
 			listeners: {
 				scope: this,
@@ -153,10 +153,7 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 			}
 		});
 
-		on(doc,['mouseover','mousemove'],function(e){
-			e = Ext.EventObject.setEvent(e||event);
-			if(e.getX() < 80){ me.setGutterClickThrough(); }
-		});
+
 		on(doc,'mousedown',function(){ Ext.menu.Manager.hideAll(); });
 		on(doc,'contextmenu',function(e){
 			e = Ext.EventObject.setEvent(e||event);
@@ -191,18 +188,6 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 			clearInterval(me.syncInterval);
 		}
 		me.syncInterval = setInterval( me.checkFrame, this.baseFrameCheckIntervalInMillis );
-	},
-
-
-	setGutterClickThrough: function setGutterClickThrough(){
-		var fn = setGutterClickThrough,
-			me = this;
-
-		clearTimeout(fn.timoutout);
-		fn.timeout = setTimeout(function(){
-			me.getIframe().setStyle({pointerEvents: ''});
-		},1000);
-		me.getIframe().setStyle({pointerEvents: 'none'});
 	},
 
 

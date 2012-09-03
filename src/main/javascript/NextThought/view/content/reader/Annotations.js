@@ -32,11 +32,8 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 				{ cls:'annotation-gutter', cn:[{cls:'column widgets'},{cls:'column controls'}] },
 				true);
 
-		var splashHide = Ext.DomHelper.append(me.getInsertionPoint('innerCt'), { cls:'gutter-shadow' }, true);
-
 		me.on('destroy' , function(){
 			container.remove();
-			splashHide.remove();
 		},me);
 
 		AnnotationsRenderer.registerGutter(container, me);
