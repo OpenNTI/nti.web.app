@@ -102,9 +102,8 @@ Ext.define('NextThought.cache.UserRepository', {
 				this.makeRequest(name, {
 					scope: this,
 					failure: function(){
-						l--; //dec length so we still hit our finish state when a failure occurs.
-						if (l === 0) {
-							result.push(User.getUnresolved(name));
+						result.push(User.getUnresolved(name));
+						if (result.length === l) {
 							finish();
 						}
 					},
