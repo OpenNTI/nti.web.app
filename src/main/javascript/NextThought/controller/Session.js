@@ -114,6 +114,7 @@ Ext.define('NextThought.controller.Session', {
 					callback: function(q,success,r){
 						if(!success){
 							alert('Oh No! Could not talk to the server!');
+							m.handleLogout();
 							console.log('Could not resolve service document\nrequest:',q,'\n\nresponse:',r,'\n\n');
 							return;
 						}
