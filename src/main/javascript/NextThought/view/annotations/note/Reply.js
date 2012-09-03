@@ -142,8 +142,18 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 		this.updateLayout();
 	},
 
+	updateLikeToolState: function(){
+		this.liked.set({'title':  this.record.isLiked() ? 'Liked' : 'Like'});
+	},
 
 	setRecord: function(r){
+		var likeTooltip;
+
+		//Remove the old listener
+		if(this.record){
+			this.mun(this.record, 'updated', this.updateLikeToolState, this);
+		}
+
 		this.record = r;
 		this.guid = IdCache.getIdentifier(r.getId());
 		var me = this;
@@ -179,6 +189,9 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 		if (r.children) {
 			Ext.each(r.children, me.addReply, me);
 		}
+		this.updateLikeToolState();
+		this.mon(r, 'updated', this.updateLikeToolState, this);
+
 	},
 
 
