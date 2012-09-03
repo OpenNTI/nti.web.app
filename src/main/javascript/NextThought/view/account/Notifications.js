@@ -61,12 +61,13 @@ Ext.define('NextThought.view.account.Notifications',{
 
 
 	setupRenderData: function(store) {
-		var loading = false,
+		var loading = this.loading || false,
 			itemsToLoad;
 
-		if(!store) {
+		if(!store && this.loading !== false) {
 			store = Ext.getStore('Stream');
 			loading = true;
+			this.loading = false;
 		}
 
 		itemsToLoad = store.getCount();
