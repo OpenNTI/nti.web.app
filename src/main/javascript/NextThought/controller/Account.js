@@ -102,7 +102,13 @@ Ext.define('NextThought.controller.Account', {
 
 	showAccount: function(){
 		var me = this;
-		var win = Ext.widget({
+debugger;
+		if (me.acctWin) {
+			me.acctWin.show();
+			return;
+		}
+
+		me.acctWin = Ext.widget({
 			xtype: 'nti-window',
 			id: 'account-window',
 			width: '40%',
@@ -126,12 +132,13 @@ Ext.define('NextThought.controller.Account', {
 					}},
 					{xtype: 'button', text: 'Cancel', ui: 'secondary', handler: function(btn){
 						btn.up('window').close();
+						delete me.acctWin;
 					}}
 				]
 			}]
 		});
 
-		win.show();
+		me.acctWin.show();
 	},
 
 
