@@ -35,11 +35,6 @@ Ext.define('NextThought.view.account.Notifications',{
 		]}
 	]),
 
-	renderSelectors: {
-		seeAll: '.notification-see-all',
-		scrollBox: '.notification-scroll-container'
-	},
-
 
 	initComponent: function(){
 		this.autoEl = 'div';
@@ -130,10 +125,6 @@ Ext.define('NextThought.view.account.Notifications',{
 	renderSpecial: function(rd) {
 		if(!this.rendered){return;}
 		this.el.update(this.renderTpl.apply(rd));
-		this.seeAll = this.el.select(this.renderSelectors.seeAll);
-		if (this.seeAll) {
-			this.seeAll.on('click', this.showAllNotifications, this);
-		}
 		this.updateLayout();
 	},
 
@@ -158,6 +149,11 @@ Ext.define('NextThought.view.account.Notifications',{
 			targets = guid? this.notificationData[guid].id : null;
 
 		if(!guid){
+
+			if(event.getTarget('.notification-see-all')){
+				this.showAllNotifications(event);
+			}
+
 			return;
 		}
 
@@ -176,15 +172,12 @@ Ext.define('NextThought.view.account.Notifications',{
 		event.preventDefault();
 		event.stopPropagation();
 
-		var height = this.el.getHeight() - 30;
-
 		this.el.update(this.renderTpl.apply({
 			'notifications': this.notifications,
 			hideShowAll: true
 		}));
 
-		this.applyRenderSelectors();
-		this.scrollBox.setHeight(height);
+		this.updateLayout();
 		return false;
 	},
 
