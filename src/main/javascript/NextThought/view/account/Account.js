@@ -22,7 +22,7 @@ Ext.define('NextThought.view.account.Account',{
 			xtype: 'container',
 			flex: 1,
 			autoScroll: true,
-			layout: { type: 'vbox', align: 'stretch' },
+			layout: 'auto',//{ type: 'vbox', align: 'stretch' },
 			defaults: {
 				xtype: 'box',
 				autoEl: 'a',
