@@ -451,7 +451,7 @@ $over-color: #f4f3f3;
 	@include side-panel-view-title;
 	.view-title {
 		.manage {
-			background: url(../images/add_btn.png) 0 0 no-repeat;
+			background: url(../images/contacts_sprite.png) 0 0 no-repeat;
 			position: absolute;
 			width: 24px;
 			height: 24px;
@@ -459,8 +459,9 @@ $over-color: #f4f3f3;
 			right: 20px;
 
 			&:active,&.active {
-				&,&:hover {
-					background-position: -56px 0;
+				background-position: -56px 0;
+				&:hover{
+					background-position: -84px 0;
 				}
 			}
 
