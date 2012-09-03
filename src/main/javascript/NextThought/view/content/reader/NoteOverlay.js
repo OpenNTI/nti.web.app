@@ -357,7 +357,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 			if(!me.noteOverlayData.richEditorActive){
 				me.noteOverlayDeactivateEditor();
 			}
-		}, 10);
+		}, 300);
 	},
 
 
