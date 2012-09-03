@@ -336,6 +336,11 @@ Ext.define('NextThought.model.Service', {
 	},
 
 
+	canFriend: function(){
+		return this.hasCapability('nti.platform.p2p.friendslists');
+	},
+
+
 	hasCapability: function(c){
 		var caps = this.get('CapabilityList') || [];
 		return Ext.Array.contains(caps, c);
