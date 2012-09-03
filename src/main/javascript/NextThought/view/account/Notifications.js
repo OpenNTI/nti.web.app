@@ -95,6 +95,7 @@ Ext.define('NextThought.view.account.Notifications',{
 					'name' : u.getName(),
 					'message': m,
 					'guid': guid,
+					'date': change.get('Last Modified'),
 					'unread': change.get('Last Modified') > $AppConfig.userObject.get('lastLoginTime') ? 'unread' : ''
 				});
 				this.notificationData[guid] = {
@@ -156,6 +157,10 @@ Ext.define('NextThought.view.account.Notifications',{
 
 			return;
 		}
+
+		Ext.each(this.notifications,function(o){
+			o.unread = o.date > u.get('lastLoginTime') ? 'unread' : '';
+		});
 
 		u.saveField('lastLoginTime', new Date(), function(){
 			me.setupRenderData();
