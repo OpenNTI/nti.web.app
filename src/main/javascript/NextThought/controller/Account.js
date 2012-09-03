@@ -69,6 +69,7 @@ Ext.define('NextThought.controller.Account', {
 			values = form.getForm().getFieldValues(false),
 			u = $AppConfig.userObject,
 			fire = false,
+			me = this,
 			key;
 
 		function callback(record, op){
@@ -78,6 +79,7 @@ Ext.define('NextThought.controller.Account', {
 			}
 			else {
 				win.close();
+				delete me.acctWin;
 			}
 			u.fireEvent('changed', record);
 		}
