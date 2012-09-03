@@ -165,6 +165,7 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
 			delete this.suppressBlur;
 			return;
 		}
+
 		this.submitNewGroup(e.getTarget().value);
 	},
 
@@ -202,6 +203,11 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
 	submitNewGroup: function(groupName){
 		var input = this.getEl().down('li > input'),
 			me = this;
+
+		if((groupName||'').length === 0){
+			return;
+		}
+
 
 		this.fireEvent('add-group', groupName, function(success){
 			if(!success){ input.addCls('error'); }
