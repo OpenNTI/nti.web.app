@@ -120,8 +120,18 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 			scope: me,
 			keypress: me.noteOverlayEditorKeyPressed,
 			keydown: me.noteOverlayEditorKeyDown,
-			keyup: me.noteOverlayEditorKeyUp
+			keyup: me.noteOverlayEditorKeyUp,
+			blur: me.noteOverlayDeactivedOnBlur
 		});
+
+		me.registerScrollHandler( function(e, dom){
+			var me = this,
+		 		t = data.box.dom.getBoundingClientRect().top;
+
+			if( t < 0 || t > me.getHeight()){
+				me.noteOverlayDeactivedOnBlur(e, dom);
+			}
+		}, me);
 
 		me.mon(container,{
 			scope: me,
@@ -337,6 +347,17 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		o.editor.removeCls('active');
 		o.editorActions.reset();
 		this.noteOverlayMouseOut();
+	},
+
+
+	noteOverlayDeactivedOnBlur: function(e, el){
+		e.stopEvent();
+		var me  = this;
+		setTimeout(function() {
+			if(!me.noteOverlayData.richEditorActive){
+				me.noteOverlayDeactivateEditor();
+			}
+		}, 10);
 	},
 
 
