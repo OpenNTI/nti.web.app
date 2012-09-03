@@ -7,14 +7,15 @@ Ext.define('NextThought.ux.SearchHits', {
 		var me = this;
 		me.mixins.observable.constructor.call(this);
 		Ext.apply(me, {
-			selections: config.hits || [],
+			selections: (config.hits || []).slice(),
 			ownerCmp: config.owner,
 			container: config.owner.getInsertionPoint('innerCt').dom
 		});
 
 		this.mon(this.ownerCmp, {
 			scope:this,
-			'navigateComplete':this.cleanup
+			'navigateComplete':this.cleanup,
+			'sync-height' : this.reLayout
 		});
 
 		this.insertSearchHitsOverlay();
@@ -56,15 +57,25 @@ Ext.define('NextThought.ux.SearchHits', {
 
 	},
 
-	cleanup: function(){
+	removeOverlay: function(){
 		try{
 			Ext.fly(this.searchHitsOverlay).remove();
 		}
 		catch(e){
 			console.error(e);
 		}
+	},
+
+	reLayout: function(){
+		this.removeOverlay();
+		this.insertSearchHitsOverlay();
+	},
+
+	cleanup: function(){
+		this.removeOverlay();
 		delete this.selections;
 		this.clearListeners();
+		this.clearManagedListeners();
 	}
 
 });

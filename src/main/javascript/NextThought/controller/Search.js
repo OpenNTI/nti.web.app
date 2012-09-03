@@ -149,7 +149,6 @@ Ext.define('NextThought.controller.Search', {
 		s.load();
 	},
 
-
 	clearSearchResults: function() {
 		Ext.getCmp('search-results').removeAll(true);
 	},
@@ -173,7 +172,6 @@ Ext.define('NextThought.controller.Search', {
 		this.searchForValue(searchValue);
 	},
 
-
 	searchResultClicked: function(result){
 		var cid = result.containerId,
 			cat = result.up('search-result-category').category;
@@ -195,7 +193,6 @@ Ext.define('NextThought.controller.Search', {
 			}
 			else {
 				reader.scrollToText(result.term);
-				reader.on('sync-height',function() { reader.scrollToText(result.term); });
 				result.on('destroy', reader.clearSearchRanges,reader,{single:true});
 			}
 		}
