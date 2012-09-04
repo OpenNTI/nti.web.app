@@ -118,6 +118,9 @@ Ext.define('NextThought.view.annotations.note.GutterWidget',{
 
 
 	fillInUser: function(user){
+		if(!this.rendered){
+			return;
+		}
 		this.name.update(Ext.String.ellipsis(user.getName(),18));
 		TemplatesForNotes.updateMoreReplyOptionsLabels(this.more,user);
 	},

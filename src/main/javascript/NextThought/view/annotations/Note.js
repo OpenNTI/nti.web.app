@@ -159,9 +159,10 @@ Ext.define( 'NextThought.view.annotations.Note', {
 
 		UserRepository.getUser(creator, function(u){
 			var url = u.get('avatarURL'),
-				name = u.getName();
-			el.setStyle({backgroundImage: "url("+url+")"});
-			el.down('.name').update(name);
+				name = u.getName(),
+				localEl = Ext.get(dom);
+			localEl.setStyle({backgroundImage: "url("+url+")"});
+			localEl.down('.name').update(name);
 
 		}, this);
 	}
