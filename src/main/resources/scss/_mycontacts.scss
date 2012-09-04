@@ -470,4 +470,33 @@ $over-color: #f4f3f3;
 			}
 		}
 	}
+	.disabled-contacts-view{
+	//	padding: 10px;
+		padding-top: 0px;
+		color: #757474;
+
+		.disabled-message-div{
+			background-color: #f1f1f1;
+			padding: 15px;
+
+			.disabled-title{
+				color: #494949;
+				padding-bottom: 3px;
+				font-size: 16px;
+				font-style: italic;
+			&:active,&.active {
+				background-position: -56px 0;
+				&:hover{
+					background-position: -84px 0;
+				}
+			}
+
+			&:hover {
+				background-position: -28px 0;
+			}
+		}
+		}
+
+
+	}
 }
