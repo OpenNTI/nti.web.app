@@ -154,13 +154,12 @@ Ext.define( 'NextThought.view.annotations.Note', {
 				left = b.dom.getBoundingClientRect().left;
 
 			el[(rect.top < 170)?'addCls':'removeCls']('show-under');
-			console.log(rect.top);
 
 			if(left < 75) {
 				left = 75 - el.getX();
-				b.setStyle({left:left+'px'});
+				b.setStyle({left:left+'px', 'z-index': '9999'});
 			}
-		}, function(){ el.down('.bubble').setStyle({left:null});});
+		}, function(){ el.down('.bubble').setStyle({left:null, 'z-index': '99'});});
 
 		UserRepository.getUser(creator, function(u){
 			var url = u.get('avatarURL'),
