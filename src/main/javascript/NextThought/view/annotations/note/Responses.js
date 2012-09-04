@@ -17,6 +17,8 @@ Ext.define('NextThought.view.annotations.note.Responses',{
 	setReplies: function(children) {
 		this.removeAll(true);
 
+		Ext.Array.sort(children,Globals.SortModelsBy('CreatedTime',null,null));
+
 		Ext.each(children,this.addReply,this);
 	}
 },
