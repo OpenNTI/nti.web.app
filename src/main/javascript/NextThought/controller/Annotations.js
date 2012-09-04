@@ -85,6 +85,10 @@ Ext.define('NextThought.controller.Annotations', {
 				'click': this.onShareWithSaveClick
 			},
 
+			'share-window button[action=save]':{
+				'click': this.onShareSettingsSaveClick
+			},
+
 			'chat-log-view': {
 				'load-transcript': this.onLoadTranscript
 			}
@@ -111,14 +115,28 @@ Ext.define('NextThought.controller.Annotations', {
 	},
 
 
-	onShareWithSaveClick: function(btn){
+	onShareSettingsSaveClick: function(btn){
 		var win = btn.up('window'),
 			shbx= win.down('user-list'),
 			cb = win.down('checkbox'),
 			saveAsDefault = cb ? cb.checked : false,
 			v = shbx.getValue(),
-			rec = win.record,
 			me = this;
+
+		cb.setValue(false);
+
+		if (saveAsDefault){
+			//update default sharing setting if we have a shareWith:
+			me.getController('Library').saveSharingPrefs(v, function(){});
+		}
+	},
+
+
+	onShareWithSaveClick: function(btn){
+		var win = btn.up('window'),
+			shbx= win.down('user-list'),
+			v = shbx.getValue(),
+			rec = win.record;
 
 		//extra check here for a close...
 		if (btn.text === 'Close'){
@@ -134,10 +152,6 @@ Ext.define('NextThought.controller.Annotations', {
 			if(op.success){
 				rec.fireEvent('updated',newRec);
 				win.close();
-				if (saveAsDefault){
-					//update default sharing setting if we have a shareWith:
-					me.getController('Library').saveSharingPrefs(v, function(){});
-				}
 			}
 			else{
 				console.error('Failed to save object');
