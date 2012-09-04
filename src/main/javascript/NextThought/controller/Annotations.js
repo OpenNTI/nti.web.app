@@ -136,13 +136,12 @@ Ext.define('NextThought.controller.Annotations', {
 				win.close();
 				if (saveAsDefault){
 					//update default sharing setting if we have a shareWith:
-					me.getController('Library').saveSharingPrefs(v, function(){
-						console.log('callback pref save', arguments);
-					});
+					me.getController('Library').saveSharingPrefs(v, function(){});
 				}
 			}
 			else{
 				console.error('Failed to save object');
+				alert('Opps!\nCould not save');
 				win.el.unmask();
 			}
 		});
