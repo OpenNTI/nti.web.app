@@ -148,9 +148,10 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 	noteOverlayXYAllowed: function(x,y){
 		var o = this.noteOverlayData,
-			r = o.restrictedRanges;
-		//test to see if line is occupied
-		return ! (r && r[y]===true);
+			r = o.restrictedRanges, v = y + this.getAnnotationOffsets().scrollTop;
+
+		//test to see if line is occupied'
+		return ! (r && r[v]===true);
 	},
 
 
@@ -164,7 +165,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 			y = rect? rect.bottom :0,
 			l = rect? rect.top : 0;
 		o.restrictedRanges = o.restrictedRanges || [];
-		for(; y>l && y>=0; y--){
+		for(; y>=l && y>=0; y--){
 			o.restrictedRanges[y] = true;
 		}
 	},
@@ -214,7 +215,9 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 			if(lineInfo && (lineInfo !== o.lastLine || !o.lastLine)){
 				o.lastLine = lineInfo;
 				e.stopEvent();
-				if(!lineInfo.range){
+
+				// We need to check if the new line doesn't overlap with a current lineInfo (which contains notes)
+				if(!lineInfo.range || !this.noteOverlayXYAllowed.apply(this, [0, lineInfo.rect.top + offsets.top])){
 					box.hide();
 					this.noteOverlayMouseOut();
 					return;
@@ -250,9 +253,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 
 	noteOverlayMouseOver: function(evt){
-		var o = this.noteOverlayData, xy = evt.getXY().splice();
-
-		xy[1] += this.body.getScroll().top;
+		var o = this.noteOverlayData, xy = evt.getXY().slice();
 
 		if(o.suspendMoveEvents){
 			return;
@@ -391,6 +392,10 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 			v = o.editorActions.getValue();
 			note = v.body;
 			sharing = v.shareWith;
+		}
+
+		if(!note || note === "" || (Ext.isArray(note) && note.length < 1)){
+			return this.noteOverlayEditorCancel(e);
 		}
 
 		me.fireEvent('save-new-note', note, o.lastLine.range, sharing, style, callback);
