@@ -48,6 +48,10 @@ Ext.define('NextThought.view.annotations.note.GutterWidget',{
 			}
 		});
 
+		if( !$AppConfig.service.canShare() ){
+			me.replyButton.remove();
+		}
+
 		if($AppConfig.service.canChat()){
 			me.mon(me.startChatButton, 'click', me.startChat, me);
 			mouseUpDivs.push(me.startChatButton);

@@ -65,10 +65,15 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 			this.startChatButton.remove();
 		}
 
-		me.mon(me.replyButton,{
+		if( $AppConfig.service.canShare() ){
+			me.mon(me.replyButton,{
 				scope: me,
 				click: me.activateReplyEditor
 			});
+		}
+		else{
+			me.replyButton.remove();
+		}
 
 		me.mon(me.editor.down('.cancel'),{
 			scope: me,

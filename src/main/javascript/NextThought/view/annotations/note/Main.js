@@ -55,7 +55,13 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		try {
 			me.setRecord(me.record);
 
-			me.mon(me.replyButton,{ scope: me, click: me.activateReplyEditor });
+			if( $AppConfig.service.canShare() ){
+				me.mon(me.replyButton,{ scope: me, click: me.activateReplyEditor });
+			}
+			else{
+				me.replyButton.remove();
+			}
+
 			me.mon(me.editor.down('.cancel'),{ scope: me, click: me.deactivateReplyEditor });
 			me.mon(me.editor.down('.save'),{ scope: me, click: me.editorSaved });
 
