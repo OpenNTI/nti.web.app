@@ -459,6 +459,19 @@
 		height: 30px;
 		width: 30px;
 
+		&.show-under {
+			.bubble {
+				bottom: auto;
+				top: 46px;
+			}
+
+			&::after {
+				content: url(../images/notes/bubble-tip-top.png);
+				top: auto;
+				bottom: -18px
+			}
+		}
+
 		.bubble {
 			display: none;
 			position: absolute;

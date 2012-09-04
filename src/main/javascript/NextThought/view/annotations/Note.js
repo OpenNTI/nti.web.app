@@ -149,8 +149,13 @@ Ext.define( 'NextThought.view.annotations.Note', {
 
 
 		el.hover(function(){
-			var b = el.down('.bubble');
-			var left = b.dom.getBoundingClientRect().left;
+			var b = el.down('.bubble'),
+				rect = el.dom.getBoundingClientRect(),
+				left = b.dom.getBoundingClientRect().left;
+
+			el[(rect.top < 170)?'addCls':'removeCls']('show-under');
+			console.log(rect.top);
+
 			if(left < 75) {
 				left = 75 - el.getX();
 				b.setStyle({left:left+'px'});
