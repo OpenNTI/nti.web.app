@@ -37,13 +37,22 @@ Ext.application({
 			NextThought.isReady = true;
 		}
 
+		var unsupported = [], g;
+		Ext.each(//firefox doesn't report supporting: CSS3DTransform, so we'll omit it.
+				['Canvas','Range','CSS3BoxShadow','CSS3BorderRadius'],
+			function(f){ Boolean(!Ext.supports[f] && unsupported.push(f)); });
+
+		if(unsupported.length!==0 || Ext.isOpera){
+			location.replace('notsupported.html');
+		}
+
 		if(!Globals.validateConfig()){
 			return;
 		}
 		Globals.loadScript(getURL('/socket.io/static/socket.io.js'));
 
 		window.app = this;
-		var g = this.getController('Google');
+		g = this.getController('Google');
 
 
 		if(g.isHangout()){

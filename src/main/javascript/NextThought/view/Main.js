@@ -33,15 +33,6 @@ Ext.define('NextThought.view.Main', {
 	}
 
 }, function(){
-	var unsupported = [];
-	Ext.each(//firefox doesn't report supporting: CSS3DTransform, so we'll omit it.
-			['Canvas','Range','CSS3BoxShadow','CSS3BorderRadius'],
-		function(f){ Boolean(!Ext.supports[f] && unsupported.push(f)); });
-
-	if(unsupported.length!==0 || Ext.isOpera){
-		location.replace('notsupported.html');
-	}
-
 	if(Ext.getScrollbarSize(true).width > 2){
 		Ext.getBody().addCls('detected-scrollbars');
 	}
