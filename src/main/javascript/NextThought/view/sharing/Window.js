@@ -59,7 +59,7 @@ Ext.define( 'NextThought.view.sharing.Window', {
 			content = 'This item does not have text',
 			u = this.record? this.record.get('Creator') : $AppConfig.username,
 			info = this.items.first(),
-			useDefaultSharing = true, prefs;
+			useDefaultSharing = true, prefs, buttons;
 
 		if (this.record && this.record.getBodyText) {
 			content = this.record.getBodyText();
@@ -71,8 +71,13 @@ Ext.define( 'NextThought.view.sharing.Window', {
 		//if it is readonly, don't let people select more people they can't share with.
 		if (readOnly){
 			this.items[1].items.readOnly = true;
-			this.items.last().items[1].text = 'Close';
-			delete this.items.last().items[0];
+			buttons = this.items.last();
+			buttons.items.shift();
+			buttons.items.shift();
+			Ext.apply(buttons.items[0],{
+				text: 'Close',
+				ui: 'primary'
+			});
 		}
 
 		if (this.record){
