@@ -81,6 +81,7 @@ Ext.define( 'NextThought.view.annotations.Note', {
 
 
 	openWindow: function(isReply, isEdit){
+		Ext.each(Ext.ComponentQuery.query('note-window'),function(w){w.destroy();});
 		return Ext.widget({
 			xtype: 'note-window',
 			annotation: this,
