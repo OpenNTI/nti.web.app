@@ -236,6 +236,7 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 		if(e){e.stopEvent();}
 		if(this.replyBox){
 			this.replyBox.addCls('editor-active');
+			this.editorActions.activate();
 			this.scrollIntoView();
 		}
 		return false;
@@ -245,6 +246,7 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 	deactivateReplyEditor: function(){
 		if(this.replyBox){
 			this.replyBox.removeCls('editor-active');
+			this.editorActions.deactivate();
 			this.editor.down('.content').update('');
 		}
 		this.updateLayout();

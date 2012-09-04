@@ -57,7 +57,7 @@ Ext.define( 'NextThought.view.form.fields.UserSearchInputField', {
 		var me = this;
 		me.store = Ext.getStore('UserSearch');
 		me.callParent(arguments);
-		me.menu = Ext.widget({xtype: 'group-menu'});
+		me.menu = Ext.widget('group-menu');
 
 		me.menu.on('selected',function(record, item){
 			me.fireEvent('select',me,[record]);

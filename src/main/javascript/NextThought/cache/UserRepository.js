@@ -200,6 +200,16 @@ Ext.define('NextThought.cache.UserRepository', {
 		return result;
 	},
 
+
+	getTheEveryoneEntity: function(){
+		var w = this.getStore().getById('Everyone');
+		if(!w){
+			//We should NEVER hit this... but just in case, make it synchronous so its obvoius.
+			w = this.makeRequest('Everyone',undefined);
+		}
+		return w;
+	},
+
 	presenceChanged: function(username, presence) {
 		var u = this.getStore().getById(username);
 		if (u) {

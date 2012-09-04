@@ -21,24 +21,24 @@ Ext.define('NextThought.view.annotations.note.EditorActions',{
 	} ).compile(),
 
 	constructor: function(cmp, editorEl){
-		var me = this;
-		var ce = Ext.CompositeElement;
+		var me = this,
+			Ce = Ext.CompositeElement;
 		me.editor = editorEl;
 		me.cmp = cmp;
 		me.openWhiteboards = {};
-		me.shareMenu = Ext.widget({xtype: 'share-menu'});
+		me.shareMenu = Ext.widget('share-menu');
 		this.updateShareWithLabel();
 		me.mixins.observable.constructor.call(me);
 
 
-		(new ce(editorEl.query('.action,.content'))).set({tabIndex:1});
+		(new Ce(editorEl.query('.action,.content'))).set({tabIndex:1});
 
 		cmp.mon(me.shareMenu, {
 			scope: me,
 			changed: me.updateShareWithLabel
 		});
 
-		cmp.mon(new ce(editorEl.query('.left .action')),{
+		cmp.mon(new Ce(editorEl.query('.left .action')),{
 			scope: me,
 			click: me.editorContentAction
 		});
@@ -47,7 +47,7 @@ Ext.define('NextThought.view.annotations.note.EditorActions',{
 			scope: me,
 			mousedown: me.editorMouseDown,
 			selectstart: me.editorSelectionStart,
-			click: function(e){editorEl.down('.content').focus();}
+			click: function(){editorEl.down('.content').focus();}
 		});
 
 		editorEl.down('.content').selectable();
@@ -69,6 +69,17 @@ Ext.define('NextThought.view.annotations.note.EditorActions',{
 	},
 
 
+	activate: function(){
+		this.updatePrefs();
+		this.editor.addCls('active');
+	},
+
+
+	deactivate: function(){
+		this.editor.removeCls('active');
+	},
+
+
 	/**
 	 *  @see http://stackoverflow.com/questions/2176861/javascript-get-clipboard-data-on-paste-event-cross-browser/
 	 */
@@ -77,9 +88,9 @@ Ext.define('NextThought.view.annotations.note.EditorActions',{
 		var be = e.browserEvent,
 			cd = be ? be.clipboardData : null,
 			sel = window.getSelection(),
-			savedRange = RangeUtils.saveRange(sel.getRangeAt(0));
+			savedRange = RangeUtils.saveRange(sel.getRangeAt(0)),
+			offScreenBuffer = document.createElement('div');
 
-		var offScreenBuffer = document.createElement('div');
 		document.body.appendChild(offScreenBuffer);
 		offScreenBuffer.style.position = 'absolute';
 		offScreenBuffer.style.left = '-1000px';
@@ -128,9 +139,7 @@ Ext.define('NextThought.view.annotations.note.EditorActions',{
 
 
 	processPaste: function(offScreenBuffer, savedRange, elem) {
-		var range;
-	    var pasteddata = offScreenBuffer.innerHTML;
-		var frag;
+	    var pasteddata = offScreenBuffer.innerHTML,range, frag;
 
 		try {
 			range = RangeUtils.restoreSavedRange(savedRange);
@@ -157,7 +166,7 @@ Ext.define('NextThought.view.annotations.note.EditorActions',{
 	},
 
 
-	editorMouseDown: function(e){
+	editorMouseDown: function(){
 		var s = window.getSelection();
 //		if(e.getTarget('.action')){
 			if (s.rangeCount) {
@@ -197,7 +206,7 @@ Ext.define('NextThought.view.annotations.note.EditorActions',{
 	},
 
 
-	maybeResizeContentBox: function(e) {
+	maybeResizeContentBox: function() {
 		var p = this.previousEditorHeight || 0,
 			h = this.editor.getHeight();
 
@@ -226,9 +235,8 @@ Ext.define('NextThought.view.annotations.note.EditorActions',{
 		return false;
 	},
 
-	handleClick: function(e,dom){
-		var guid;
-		var t = e.getTarget('img.wb-thumbnail');
+	handleClick: function(e){
+		var guid, t = e.getTarget('img.wb-thumbnail');
 
 		if(t){
 			guid = t.getAttribute('id');
@@ -238,10 +246,10 @@ Ext.define('NextThought.view.annotations.note.EditorActions',{
 
 	addWhiteboard: function(data){
 		//pop open a whiteboard:
-		data = data?data:(function(){}()); //force the falsy value of data to always be undefinded.
+		data = data||(function(){}()); //force the falsy value of data to always be undefinded.
 
 		var me = this,
-			wbWin = Ext.widget({ xtype: 'wb-window', height: '75%', width: '50%', value: data }),
+			wbWin = Ext.widget('wb-window',{height: '75%', width: '50%', value: data }),
 			guid = guidGenerator(),
 			content = me.editor.down('.content');
 
@@ -259,12 +267,12 @@ Ext.define('NextThought.view.annotations.note.EditorActions',{
 
 		//hook into the window's save and cancel operations:
 		this.cmp.mon(wbWin, {
-			save: function(win, wb, e){
+			save: function(win, wb){
 				me.insertWhiteboardThumbnail(content, guid, wb);
 				if( Ext.query('.nav-helper')[0] ) { Ext.fly(Ext.query('.nav-helper')[0]).show(); }
 				wbWin.hide();
 			},
-			cancel: function(win, wb, e){
+			cancel: function(win){
 				//if we haven't added the wb to the editor, then clean up, otherwise let the window handle it.
 				if(!Ext.get(guid)){
 					me.cleanOpenWindows(win.guid);
@@ -280,8 +288,8 @@ Ext.define('NextThought.view.annotations.note.EditorActions',{
 
 
 	insertWhiteboardThumbnail: function(content, guid, wb){
-		var me = this;
-		var el = content.query('[id='+guid+']')[0];
+		var me = this,
+			el = content.query('[id='+guid+']')[0];
 
 		if(!el){
 			el = me.wbThumbnailTpm.append(content, [Ext.BLANK_IMAGE_URL, guid]);
@@ -397,6 +405,7 @@ Ext.define('NextThought.view.annotations.note.EditorActions',{
 		try { window.getSelection().removeAllRanges(); }
 		catch(e) { console.log("Removing all ranges from selection failed: ",e.message); }
 	},
+
 
 	updatePrefs: function(v){
 		this.shareMenu.reload(v);

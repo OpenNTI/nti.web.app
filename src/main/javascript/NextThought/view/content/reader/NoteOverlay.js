@@ -126,7 +126,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 		me.registerScrollHandler( function(e, dom){
 			var me = this,
-		 		t = data.box.dom.getBoundingClientRect().top;
+				t = data.box.dom.getBoundingClientRect().top;
 
 			if( t < 0 || t > me.getHeight()){
 				me.noteOverlayDeactivedOnBlur(e, dom);
@@ -269,8 +269,10 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 	noteOverlayLocationChanged: function(ntiid) {
 		var o = this.noteOverlayData;
-
 		if (o.editorActions) {o.editorActions.updatePrefs();}
+		else {
+			console.warn('ignored location change, default sharing prefs ignored?')
+		}
 	},
 
 
@@ -311,7 +313,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		}
 		o.richEditorActive = true;
 
-		o.editor.addCls('active');
+		o.editorActions.activate();
 		o.editorActions.setValue( t.value, true, true );
 		t.value = '';
 		this.noteOverlayScrollEditorIntoView();
@@ -345,7 +347,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		delete o.richEditorActive;
 		o.textarea.dom.value = "";
 		o.lineEntry.removeCls('active');
-		o.editor.removeCls('active');
+		o.editorActions.deactivate();
 		o.editorActions.reset();
 		this.noteOverlayMouseOut();
 	},

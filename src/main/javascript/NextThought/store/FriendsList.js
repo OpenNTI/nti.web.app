@@ -27,8 +27,8 @@ Ext.define('NextThought.store.FriendsList',{
 		{
 			//Sort system groups to the front
 			sorterFn: function(a,b){
-				var ac = a.isSystem();
-				var bc = b.isSystem();
+				var ac = a.isSystem(),
+					bc = b.isSystem();
 				return ac === bc ? 0 : ac ? -1 : 1;
 			}
 		},

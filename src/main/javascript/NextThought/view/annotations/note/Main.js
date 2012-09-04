@@ -346,6 +346,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		var me = this;
 		this.up('window').down('note-carousel').addCls('editor-active');
 		me.el.addCls('editor-active');
+		me.editorActions.activate();
 		me.updateLayout();
         me.scrollIntoView();
 		setTimeout(function(){me.editorActions.focus();}, 100);
@@ -357,6 +358,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		this.text.show();
 		this.editor.down('.content').update('');
 		this.up('window').down('note-carousel').removeCls('editor-active');
+		this.editorActions.deactivate();
 		this.el.removeCls('editor-active');
 		this.updateLayout();
 		if(this.editMode){

@@ -17,7 +17,9 @@ Ext.define('NextThought.view.menus.Group',{
 		xtype: 'menuitem',
 		plain: true,
 		listeners: {
-			'click':function(item){ item.ownerCt.fireEvent('selected',item.record, item); }
+			'click':function(item){
+				item.ownerCt.fireEvent('selected',item.record, item);
+			}
 		}
 	},
 
@@ -33,14 +35,10 @@ Ext.define('NextThought.view.menus.Group',{
 		this.removeAll(true);
 
 		var items = [];
-		items.push({ cls: 'group-filter everyone', text: 'Everyone', isEveryone:true });
+		items.push({ cls: 'group-filter everyone', text: 'Everyone', isEveryone:true, record: UserRepository.getTheEveryoneEntity()});
+
 		items.push({xtype: 'menuseparator'});
 		this.store.each(function(v){
-			if(/everyone/i.test(v.get('ID'))){
-				items[0].record = v;
-				return;
-			}
-
 			items.push({
 				cls: 'group-filter',
 				text: v.getName(),

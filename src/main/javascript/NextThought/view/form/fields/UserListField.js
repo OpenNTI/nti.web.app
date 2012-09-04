@@ -117,6 +117,8 @@ Ext.define('NextThought.view.form.fields.UserListField', {
 
 
 	containsToken: function(model){
+		if(!model){return true;}
+
 		var id = model.getId(), found = false;
 		Ext.each(
 			this.selections,

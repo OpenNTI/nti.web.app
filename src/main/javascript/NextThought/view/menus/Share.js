@@ -26,26 +26,32 @@ Ext.define('NextThought.view.menus.Share',{
 	},
 
 	initComponent: function(){
-		this.callParent(arguments);
+		var me = this;
+		me.callParent(arguments);
 
 		//set up custom save win:
-		this.custom = Ext.widget({xtype: 'share-window', closeAction: 'hide'});
-		this.mon(this.custom.down('button[action=save]'), {
-			scope: this,
-			click: function(){
-				this.previousValue = this.getValue();
-				this.custom.close();
+		me.custom = Ext.widget('share-window', {closeAction: 'hide'});
+
+		me.mon(me.custom.down('button[action=save]'), {
+			scope: me,
+			click: function(btn){
+				btn.up('window').close();
+				me.updateValue( me.custom.getValue() );
 			}
 		});
-		this.mon(this.custom.down('button[action=cancel]'), {
-			scope: this,
-			click: this.revert
+
+		me.mon(me.custom.down('button[action=cancel]'), 'click', me.revert, me);
+
+		me.store = Ext.getStore('FriendsList');
+		me.mon(me.store,{
+			scope: me,
+			'datachanged':me.reloadFromStore,
+			'load':me.reloadFromStore
 		});
 
-		this.store = Ext.getStore('FriendsList');
-		this.store.on('load', this.reload, this);
-		this.on('click',this.handleClick,this);
-		this.reload();
+		me.on('click',me.handleClick, me);
+
+		me.reloadFromStore();
 	},
 
 
@@ -55,41 +61,73 @@ Ext.define('NextThought.view.menus.Share',{
 		return this.callParent(arguments);
 	},
 
+	resolveValue: function(value){
+		var p = LocationProvider.getPreferences(),
+			result = null;
+		//If we are not given a value, pull it from the location's preferences...
+		if (!Ext.isArray(value)){
+			p = LocationProvider.getPreferences();
+			//we may not have preferences.
+			p = p ? p.sharing : null;
+			//we may not have sharing preferences, guard from error.
+			result = p ? p.sharedWith : null;
+		}
+
+		//if there are no results yet, fall back to the given value (it may be blank as well)
+		result = result || value;
+
+		//if we don't have anything, just return an empty list.
+		if (!Ext.isArray(result)){return [];}
+
+		//clone the result to make sure we don't mess anything up when modifiying the list.
+		return result.slice();
+	},
+
+
+	reloadFromStore: function(){
+		this.reload();
+	},
+
 
 	reload: function(value){
 		this.removeAll(true);
 
-		var sharedWith, p;
-		if (!Ext.isArray(value)){
-			p = LocationProvider.getPreferences();
-			p = p ? p.sharing : null;
-			value = null;
-		}
-		sharedWith = p ? p.sharedWith : value;
+		var sharedWith = this.resolveValue(value),
+			items = [],
+			customChecked = false,
+			onlyMeChecked,
+			everyone = UserRepository.getTheEveryoneEntity();
 
 		this.custom.setValue(sharedWith);
 
-		if (!Ext.isArray(sharedWith)){sharedWith = [];}
-		sharedWith = sharedWith.slice(); //clone
-		var items = [],
-			onlyMeChecked = sharedWith.length === 0;
-		//items.push('Share With');
-		items.push({ cls: 'share-with everyone', text: 'Everyone', allowUncheck:false, isEveryone:true });
-		items.push({ cls: 'share-with only-me', text: 'Only Me', isMe: true, isGroup: true,
+		onlyMeChecked = sharedWith.length === 0;
+
+		items.push({
+			cls: 'share-with everyone',
+			text: 'Everyone',
+			allowUncheck:false,
+			isEveryone:true,
+			record: everyone,
+			checked: Ext.Array.contains(sharedWith, everyone.get('Username'))
+		});
+
+		items.push({
+			cls: 'share-with only-me',
+			text: 'Only Me',
+			allowUncheck:false,
+			isMe: true,
+			isGroup: true,
 			checked: onlyMeChecked
 		});
 
+		sharedWith = Ext.Array.remove(sharedWith, everyone.get('Username'));
 
 		this.store.each(function(v){
-			var chkd =  Ext.Array.contains(sharedWith, v.get('Username'));
-			if (chkd){
-				sharedWith = Ext.Array.remove(sharedWith, v.get('Username'));
-			}
+			var id=v.get('Username'),
+				chkd =  Ext.Array.contains(sharedWith, id);
 
-			if(/everyone/i.test(v.get('ID'))){
-				items[0].record = v;
-				items[0].checked = chkd;
-				return;
+			if (chkd){
+				sharedWith = Ext.Array.remove(sharedWith, id);
 			}
 
 			items.push({
@@ -101,7 +139,6 @@ Ext.define('NextThought.view.menus.Share',{
 			});
 		});
 
-		var customChecked = false;
 		if (sharedWith.length) {
 			Ext.each(items, function(i){
 				delete i.checked;
@@ -115,7 +152,7 @@ Ext.define('NextThought.view.menus.Share',{
 	},
 
 
-	handleClick: function(menu, item, e){
+	handleClick: function(menu, item){
 		if(!item){return;}
 
 		var c = item.checked,
@@ -123,9 +160,10 @@ Ext.define('NextThought.view.menus.Share',{
 			me = this.query('[isMe]')[0],
 			custom = this.query('[isCustom]')[0];
 
+
 		if(item.isEveryone){
 			Ext.each(this.query('[isGroup]'),function(o){
-				o.setChecked(true,true);
+				o.setChecked(false,true);
 			});
 			custom.setChecked(false, true);
 			me.setChecked(false, true);
@@ -146,10 +184,19 @@ Ext.define('NextThought.view.menus.Share',{
 			this.custom.show();
 			this.hide();
 		}
+		else {
+			this.custom.setValue(this.getValue());
+		}
 
 
+		this.updateValue(this.getValue());
+	},
+
+
+	updateValue: function( value ){
+		this.reload(value);
+		this.previousValue = value;
 		this.fireEvent('changed',this);
-		this.previousValue = this.getValue();
 	},
 
 
@@ -167,7 +214,8 @@ Ext.define('NextThought.view.menus.Share',{
 	getValue: function(){
 		var e = this.query('[isEveryone]')[0],
 			m = this.query('[isMe]')[0],
-			c = this.query('[isCustom]')[0];
+			c = this.query('[isCustom]')[0],
+			result = [];
 
 		if (e.checked) {
 			return [e.record.get('Username')];
@@ -179,7 +227,6 @@ Ext.define('NextThought.view.menus.Share',{
 			return this.custom.getValue();
 		}
 
-		var result = [];
 
 		Ext.each(this.query('[checked]'), function(c){
 			result.push(c.record.get('Username'));
@@ -188,7 +235,6 @@ Ext.define('NextThought.view.menus.Share',{
 	},
 
 	revert: function(){
-		this.reload(this.previousValue);
-		this.fireEvent('changed',this);
+		this.updateValue(this.previousValue);
 	}
 });
