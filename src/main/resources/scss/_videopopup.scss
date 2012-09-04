@@ -9,15 +9,17 @@
 		opacity: 0.75;
 		background: #000;
 	}
-	
+
 	.close {
 		top: -34px;
 		right: -34px;
 		position: absolute;
 		width: 34px;
 		height: 34px;
-		background: url(../images/close-popup.png) 0 0 no-repeat;
+		background: rgba(0,0,0,0.1) url(../images/close-popup.png) 0 0 no-repeat;
 		cursor: pointer;
+		box-shadow: 0 0 30px 0 rgba(0,0,0,0.85);
+		border-radius: 90px;
 	}
 
 	.carousel {
