@@ -55,9 +55,8 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 	insertNoteOverlay: function(){
 		var me = this,
 			data = me.noteOverlayData,
-			box, txt;
-
-		var container = {
+			box, txt,
+			container = {
 			cls:'note-gutter',
 			style: {
 				height: me.getHeight()
@@ -165,7 +164,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 			y = rect? rect.bottom + 10  :0,
 			l = rect? rect.top - 10 : 0;
 		o.restrictedRanges = o.restrictedRanges || [];
-		for(; y>=l && y>=0; y--){
+		for(y; y>=l && y>=0; y--){
 			o.restrictedRanges[y] = true;
 		}
 	},
@@ -267,11 +266,11 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 	},
 
 
-	noteOverlayLocationChanged: function(ntiid) {
+	noteOverlayLocationChanged: function() {
 		var o = this.noteOverlayData;
 		if (o.editorActions) {o.editorActions.updatePrefs();}
 		else {
-			console.warn('ignored location change, default sharing prefs ignored?')
+			console.warn('ignored location change, default sharing prefs ignored?');
 		}
 	},
 
@@ -382,11 +381,12 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		}
 
 
-		var me = this;
-		var o = me.noteOverlayData;
-		var note = o.textarea.dom.value;
-		var style = o.lastLine.style || 'suppressed';
-		var v, sharing = []; //TODO - load from page??
+		var me = this,
+			p = (LocationProvider.getPreferences() || {}).sharing || {},
+			o = me.noteOverlayData,
+			note = o.textarea.dom.value,
+			style = o.lastLine.style || 'suppressed',
+			v, sharing = p.sharedWith || [];
 
 		if (o.richEditorActive){
 			v = o.editorActions.getValue();
