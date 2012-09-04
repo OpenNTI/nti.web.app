@@ -27,6 +27,7 @@ Ext.define('NextThought.view.menus.Filter',{
 		this.store = Ext.getStore('FriendsList');
 		this.store.on('load', this.reload, this);
 		this.on('click',this.handleClick,this);
+		this.reload();
 	},
 
 	reload: function(){
@@ -39,14 +40,11 @@ Ext.define('NextThought.view.menus.Filter',{
 //		items.push({ cls: 'type-filter transcript', text: 'Transcripts', model: 'NextThought.model.TranscriptSummary' });
 //		items.push({ cls: 'type-filter quizresult', text: 'Quiz Results', model: 'NextThought.model.QuizResult' });
 		items.push({ xtype: 'labeledseparator', text: 'From' });
-		items.push({ cls: 'group-filter everyone', text: 'Everyone', checked: true, allowUncheck:false, isEveryone:true });
+		items.push({ cls: 'group-filter everyone', text: 'Everyone', checked: true,
+			allowUncheck:false, isEveryone:true, record: UserRepository.getTheEveryoneEntity() });
 		items.push({ cls: 'group-filter', text: 'Me', isMe: true, isGroup: true });
 
 		this.store.each(function(v){
-			if(/everyone/i.test(v.get('ID'))){
-				return;
-			}
-
 			items.push({
 				cls: 'group-filter',
 				text: v.getName(),
