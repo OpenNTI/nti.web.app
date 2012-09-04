@@ -50,7 +50,7 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
 
 			Ext.each(ul.query('li'), function(li){
 				var r = this.getRecord(li);
-				if(Ext.Array.contains(this.blocked, r.get('Username'))){
+				if(Ext.Array.contains(this.blocked||[], r.get('Username'))){
 					Ext.fly(li).setStyle({display: 'none'});
 				}
 				if (!r.isModifiable()){
