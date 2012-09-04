@@ -79,8 +79,22 @@ Ext.define('NextThought.view.menus.Share',{
 		//if we don't have anything, just return an empty list.
 		if (!Ext.isArray(result)){return [];}
 
+
+
 		//clone the result to make sure we don't mess anything up when modifiying the list.
-		return result.slice();
+		result = result.slice();
+
+		Ext.each(result,function(r,i,a){
+			if(ParseUtils.parseNtiid(r)){
+				a[i] = UserRepository.getStore().findRecord('NTIID',r) || r; //HACK!!
+				if(!Ext.isString(a[i])){
+					a[i] = a[i].get('Username');
+				}
+			}
+		});
+
+
+		return result;
 	},
 
 
@@ -120,7 +134,7 @@ Ext.define('NextThought.view.menus.Share',{
 			checked: onlyMeChecked
 		});
 
-		sharedWith = Ext.Array.remove(sharedWith, everyone.get('Username'));
+		Ext.Array.remove(sharedWith, everyone.get('Username'));
 
 		this.store.each(function(v){
 			var id=v.get('Username'),
