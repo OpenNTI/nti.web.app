@@ -82,6 +82,32 @@ Ext.define('NextThought.view.assessment.input.SymbolicMath',{
 		this.lastHeight = currentHeight;
 	},
 
+	updateSolutionButton: function(){
+		var solutions, solutionNode, ab, orNode;
+		this.callParent(arguments);
+		if(!this.submitted){
+			return;
+		}
+
+		ab = this.solutionAnswerBox;
+		ab.update('');
+
+		solutions = this.part.get('solutions');
+		Ext.each(solutions, function(s, idx){
+			solutionNode = document.createElement('span');
+			ab.appendChild(solutionNode);
+			solutionNode.innerHTML = s.get('value');
+			jQuery(solutionNode).mathquill();
+
+			if(idx < solutions.length - 1){
+				ab.appendChild(document.createElement('br'));
+				//WTF extjs why cant I just create and append a textnode
+				orNode = document.createElement('span');
+				orNode.innerHTML = ' or: ';
+				ab.appendChild(orNode);
+			}
+		});
+	},
 
 	mathSymbolClicked: function(e){
 		var t = e.getTarget();
