@@ -388,8 +388,6 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		var style = o.lastLine.style || 'suppressed';
 		var v, sharing = []; //TODO - load from page??
 
-		o.editor.mask('Saving...');
-
 		if (o.richEditorActive){
 			v = o.editorActions.getValue();
 			note = v.body;
@@ -401,6 +399,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 			return false;
 		}
 
+		o.editor.mask('Saving...');
 		me.fireEvent('save-new-note', note, o.lastLine.range, sharing, style, callback);
 		return false;
 	},
