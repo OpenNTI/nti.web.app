@@ -274,7 +274,7 @@ Ext.define('NextThought.model.Base', {
 				console.error("field save fail", arguments);
 			},
 			success: function(resp){
-				var newMe = ParseUtils.parseItems( Ext.decode(resp.responseText)),
+				var newMe = ParseUtils.parseItems( Ext.decode(resp.responseText))[0],
 					sanitizedValue = newMe.get(fieldName);
 
 				me.set(fieldName,sanitizedValue);
