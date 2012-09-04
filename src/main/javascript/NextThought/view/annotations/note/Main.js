@@ -154,6 +154,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 
 		if(!this.rendered || !r){return;}
 
+		this.deactivateReplyEditor();
 		this.ownerCt.getEl().dom.scrollTop = 0;
 
 		try {
@@ -351,6 +352,8 @@ Ext.define('NextThought.view.annotations.note.Main',{
 	},
 
 	deactivateReplyEditor: function(){
+		if(!this.el.hasCls('editor-active')){return;}
+
 		this.text.show();
 		this.editor.down('.content').update('');
 		this.up('window').down('note-carousel').removeCls('editor-active');

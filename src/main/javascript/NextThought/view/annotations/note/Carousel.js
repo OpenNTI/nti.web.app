@@ -80,7 +80,7 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 		Ext.defer(function(){
 			var f = this[filter], rec = this.record;
 			this.load(f?f(value):null);
-			if(this.items.findBy(function(o){return o.record === rec;})){
+			if(this.items.findBy(function(o){return o.record === rec;})>=0){
 				this.setRecord(rec);
 			}
 			else {
