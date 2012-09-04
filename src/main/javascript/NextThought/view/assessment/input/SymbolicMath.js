@@ -110,6 +110,7 @@ Ext.define('NextThought.view.assessment.input.SymbolicMath',{
 	},
 
 	mathSymbolClicked: function(e){
+		if(this.submitted){return;}
 		var t = e.getTarget();
 		jQuery(this.mathquillSpan).mathquill('write', t.getAttribute('data-latex'));
 		this.mathquillSpan.focus();
