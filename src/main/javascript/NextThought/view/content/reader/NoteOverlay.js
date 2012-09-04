@@ -130,6 +130,8 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 			if( t < 0 || t > me.getHeight()){
 				me.noteOverlayDeactivedOnBlur(e, dom);
 			}
+
+			data.editorActions.shareMenu.hide();
 		}, me);
 
 		me.mon(container,{
