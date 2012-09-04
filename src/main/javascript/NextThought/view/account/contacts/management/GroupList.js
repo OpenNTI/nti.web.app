@@ -49,7 +49,11 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
 			}
 
 			Ext.each(ul.query('li'), function(li){
-				if (!this.getRecord(li).isModifiable()){
+				var r = this.getRecord(li);
+				if(Ext.Array.contains(this.blocked, r.get('Username'))){
+					Ext.fly(li).setStyle({display: 'none'});
+				}
+				if (!r.isModifiable()){
 					//Ext.fly(li).down('img.delete-group').remove();
 					Ext.fly(li).setStyle({display:'none'});
 				}
@@ -80,6 +84,12 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
 				});
 			}
 		}
+	},
+
+
+	block: function(username){
+		this.blocked = Ext.isArray(username) ? username : [username];
+		this.refresh();
 	},
 
 

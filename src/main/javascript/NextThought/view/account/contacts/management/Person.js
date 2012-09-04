@@ -46,6 +46,7 @@ Ext.define('NextThought.view.account.contacts.management.Person',{
 		this.enableBubble(['groups-changed']);
 
 		this.groupsList = this.down('management-group-list');
+		this.groupsList.block(this.user.get('Username'));
 
 		this.mon(this.groupsList,'selectionchange',this.groupSelectionChange,this);
 	},
