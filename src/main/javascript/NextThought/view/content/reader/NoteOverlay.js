@@ -147,8 +147,8 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 
 	noteOverlayXYAllowed: function(x,y){
-		var o = this.noteOverlayData,
-			r = o.restrictedRanges, v = y + this.getAnnotationOffsets().scrollTop;
+		var o = this.noteOverlayData, z = Math.round(y),
+		r = o.restrictedRanges, v = z + this.getAnnotationOffsets().scrollTop;
 
 		//test to see if line is occupied'
 		return ! (r && r[v]===true);
@@ -162,8 +162,8 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 	noteOverlayAddRestrictedRange: function(rect){
 		var o = this.noteOverlayData,
-			y = rect? rect.bottom :0,
-			l = rect? rect.top : 0;
+			y = rect? rect.bottom + 10  :0,
+			l = rect? rect.top - 10 : 0;
 		o.restrictedRanges = o.restrictedRanges || [];
 		for(; y>=l && y>=0; y--){
 			o.restrictedRanges[y] = true;
