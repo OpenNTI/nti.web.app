@@ -64,7 +64,14 @@ Ext.define('NextThought.controller.Navigation', {
 				reader.scrollToTarget(id);
 			};
 		}
-		LocationProvider.setLocation(ntiid, callback, this);
+
+
+		if(LocationProvider.currentNTIID !== ntiid){
+			LocationProvider.setLocation(ntiid, callback, this);
+		}
+		else {
+			Ext.callback(callback,this,[ReaderPanel.get()]);
+		}
 	},
 
 

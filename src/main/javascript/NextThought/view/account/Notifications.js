@@ -63,6 +63,11 @@ Ext.define('NextThought.view.account.Notifications',{
 			store = Ext.getStore('Stream');
 			loading = true;
 			this.loading = false;
+
+			if(!store){
+				console.error('WOH! no store! abort!');
+				return;
+			}
 		}
 
 		itemsToLoad = store.getCount();
@@ -167,8 +172,7 @@ Ext.define('NextThought.view.account.Notifications',{
 		});
 		u.saveField('NotificationCount', 0);
 
-		if (this.notificationData[guid].containerId !== 'Users'){
-			console.log('no navigation for users...');
+		if (targets && containerId){
 			this.fireEvent('navigation-selected', containerId, targets);
 		}
 	},
