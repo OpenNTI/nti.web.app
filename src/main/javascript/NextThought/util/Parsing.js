@@ -95,7 +95,7 @@ Ext.define('NextThought.util.Parsing',{
 			result = {};
 
 		if(parts.length < 3){
-			console.warn('"'+id+'" is not an NTIID');
+//			console.warn('"'+id+'" is not an NTIID');
 			return null;
 		}
 
