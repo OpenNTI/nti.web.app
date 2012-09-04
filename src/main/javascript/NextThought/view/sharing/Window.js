@@ -59,7 +59,7 @@ Ext.define( 'NextThought.view.sharing.Window', {
 			content = 'This item does not have text',
 			u = this.record? this.record.get('Creator') : $AppConfig.username,
 			info = this.items.first(),
-			useDefaultSharing = true, prefs, buttons;
+			buttons;
 
 		if (this.record && this.record.getBodyText) {
 			content = this.record.getBodyText();
@@ -112,25 +112,12 @@ Ext.define( 'NextThought.view.sharing.Window', {
 		//any down calls below this:
 		if (this.record){
 			if (this.record.get('sharedWith').length > 0) {
-				useDefaultSharing = false;
 				this.setValue(this.record.get('sharedWith'));
 			}
 		}
 		else if (this.value) {
 			this.setValue(this.value);
-			useDefaultSharing = false;
 		}
-		if (useDefaultSharing) {
-			try{
-				prefs = LocationProvider.getPreferences();
-				if (prefs && prefs.sharing && prefs.sharing.sharedWith) {
-					this.setValue(prefs.sharing.sharedWith);
-				}
-
-			}
-			catch(e){}
-		}
-
 	},
 
 	getValue: function(){
