@@ -77,81 +77,83 @@ Ext.define('NextThought.view.annotations.note.EditorActions',{
 		var be = e.browserEvent,
 			cd = be ? be.clipboardData : null,
 			sel = window.getSelection(),
-			savedRange = RangeUtils.saveRange(sel.getRangeAt(0)),
-			savedcontent;
+			savedRange = RangeUtils.saveRange(sel.getRangeAt(0));
 
-		sel.selectAllChildren(elem);
-		savedcontent = sel.getRangeAt(0).extractContents();
+		var offScreenBuffer = document.createElement('div');
+		document.body.appendChild(offScreenBuffer);
+		offScreenBuffer.style.position = 'absolute';
+		offScreenBuffer.style.left = '-1000px';
+		offScreenBuffer.style.top = '-1000px';
+		offScreenBuffer.contentEditable = true;
+		offScreenBuffer.focus();
 
 	    // Webkit - get data from clipboard, put into editdiv, cleanup, then cancel event
 	    if(cd && cd.getData) {
 			e.stopEvent();
 	        if(/text\/html/.test(cd.types)) {
-	            elem.innerHTML = cd.getData('text/html');
+	            offScreenBuffer.innerHTML = cd.getData('text/html');
 	        }
 	        else if(/text\/plain/.test(cd.types)) {
-	            elem.innerHTML = cd.getData('text/plain');
+	            offScreenBuffer.innerHTML = cd.getData('text/plain');
 	        }
 	        else {
-	            elem.innerHTML = "";
+	            offScreenBuffer.innerHTML = "";
 	        }
-	        this.waitForPasteData(elem, savedcontent, savedRange);
+	        this.waitForPasteData(offScreenBuffer, savedRange, elem);
 	        return false;
 	    }
-	    // Everything else - empty editdiv and allow browser to paste content into it, then cleanup
+	    // Everything else allow browser to paste content into it, then cleanup
 	    else {
-	        elem.innerHTML = "";
-	        this.waitForPasteData(elem, savedcontent, savedRange);
+	        offScreenBuffer.innerHTML = "";
+	        this.waitForPasteData(offScreenBuffer, savedRange, elem);
 	        return true;
 	    }
 	},
 
 
-	waitForPasteData: function (elem, savedcontent, savedRange, callCount) {
+	waitForPasteData: function (offScreenBuffer, savedRange, elem, callCount) {
+		var me = this;
 		callCount = callCount || 0;
-	    if (elem.childNodes && elem.childNodes.length > 0) {
-	        this.processPaste(elem, savedcontent, savedRange);
+	    if (offScreenBuffer.childNodes && offScreenBuffer.childNodes.length > 0) {
+	        setTimeout(function(){me.processPaste(offScreenBuffer, savedRange, elem);}, 20);
 	    }
 	    else if(callCount < 100){
-			var me = this;
-	        setTimeout(function(){me.waitForPasteData(elem, savedcontent, savedRange, callCount+1); },20);
+	        setTimeout(function(){me.waitForPasteData(offScreenBuffer, savedRange, elem, callCount+1); },20);
 	    }
 		else {
 			console.log('timedout waiting for paste');
+			document.body.removeChild(offScreenBuffer);
 		}
 	},
 
 
-	processPaste: function(elem, savedcontent, rangeDesc) {
+	processPaste: function(offScreenBuffer, savedRange, elem) {
 		var range;
-	    var pasteddata = elem.innerHTML;
-		var gcc;
+	    var pasteddata = offScreenBuffer.innerHTML;
 		var frag;
 
-		elem.innerHTML = '';
-	    elem.appendChild(savedcontent);
-
 		try {
-			range = RangeUtils.restoreSavedRange(rangeDesc);
-			gcc = range.commonAncestorContainer;
-			if(elem === gcc || Ext.fly(elem).contains(gcc)){
-				range.deleteContents();
-			}
+			range = RangeUtils.restoreSavedRange(savedRange);
 		} catch(e){
-			range = document.createRange();
-			range.selectNodeContents(elem);
+			console.log('Error recreating rangeDesc during processPaste.', rangeDesc, pasteddata);
+			document.body.removeChild(offScreenBuffer);
+			return;
 		}
-
-		range.collapse(false);
 
 		try {
 			pasteddata = pasteddata.replace(/\s*(style|class)=".+?"\s*/ig,' ').replace(/<span.*?>&nbsp;<\/span>/ig,'&nbsp;').replace(/<meta.*?>/ig,'');
 			frag = range.createContextualFragment(pasteddata);
+			range.deleteContents();
 			range.insertNode(frag);
+			range.collapse(false);
+			//Note this I think this breaks badily in IE < 9
+			window.getSelection().addRange(range);
 		}
 		catch(e2){
-			console.log(pasteddata);
+			console.log(pasteddata, e2);
 		}
+		elem.focus();
+		document.body.removeChild(offScreenBuffer);
 	},
 
 
