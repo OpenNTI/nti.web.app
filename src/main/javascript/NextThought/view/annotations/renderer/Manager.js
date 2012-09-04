@@ -203,7 +203,7 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 
 		b.each(function(line,y){
 
-			var widgets = [], siblings, block;
+			var widgets = [], siblings, block, rect, t;
 
 			line.controls = line.controls || cT.append(g.controls,[],true);
 			line.widgets = line.widgets || wT.append(g.widgets,[],true);
@@ -243,7 +243,11 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 
 			block = line.widgets || line.controls || null;
 			if(block){
-				r.noteOverlayAddRestrictedRange(block.dom.getBoundingClientRect());
+				t = block.dom.getBoundingClientRect();
+				rect = { top:t.top, bottom:t.bottom, left:t.left, right:t.right, height:t.height, width:t.width }
+				rect.top = rect.top + r.getAnnotationOffsets().scrollTop;
+				rect.bottom = rect.bottom + r.getAnnotationOffsets().scrollTop;
+				r.noteOverlayAddRestrictedRange(rect);
 			}
 
 		});

@@ -397,7 +397,8 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		}
 
 		if(!note || note === "" || (Ext.isArray(note) && note.length < 1)){
-			return this.noteOverlayEditorCancel(e);
+			this.noteOverlayDeactivateEditor();
+			return false;
 		}
 
 		me.fireEvent('save-new-note', note, o.lastLine.range, sharing, style, callback);
