@@ -62,6 +62,9 @@ Ext.define('NextThought.view.annotations.note.EditorActions',{
 			click: me.handleClick
 		});
 
+		if(!$AppConfig.service.canShare()){
+			editorEl.down('.action.share').hide();
+		}
 		cmp.mon(editorEl.down('.action.share'), {
 			scope: me,
 			click: me.openShareMenu
