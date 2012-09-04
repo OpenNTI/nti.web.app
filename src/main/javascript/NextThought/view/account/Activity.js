@@ -82,7 +82,6 @@ Ext.define('NextThought.view.account.Activity',{
 
 		if(!this.rendered){
 			this.on('afterrender',this.reloadActivity,this,{single:true});
-			console.log('hit before rendered');
 			return;
 		}
 
