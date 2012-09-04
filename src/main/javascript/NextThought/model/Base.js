@@ -274,12 +274,17 @@ Ext.define('NextThought.model.Base', {
 				console.error("field save fail", arguments);
 			},
 			success: function(resp){
+				var newMe = ParseUtils.parseItems( Ext.decode(resp.responseText)),
+					sanitizedValue = newMe.get(fieldName);
+
+				me.set(fieldName,sanitizedValue);
+
 				//it worked, reset the dirty flag, and reset the field
 				//because the server may have sanitized it.
 				this.dirty = false;
-				var sanitizedValue = Ext.JSON.decode(resp.responseText)[fieldName];
+
 				if (successCallback){
-					Ext.callback(successCallback, me, [fieldName, sanitizedValue, me]);
+					Ext.callback(successCallback, me, [fieldName, sanitizedValue, me, newMe]);
 				}
 
 				me.fireEvent('changed',me);
