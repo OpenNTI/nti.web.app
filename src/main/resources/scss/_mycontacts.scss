@@ -249,7 +249,6 @@ $over-color: #f4f3f3;
 	.user-search-field {
 		margin: 7px 0;
 		input {
-			background: none;
 			@include text-box-style;
 		}
 		.x-form-item-body {
