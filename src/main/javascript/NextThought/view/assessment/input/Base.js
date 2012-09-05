@@ -253,7 +253,8 @@ Ext.define('NextThought.view.assessment.input.Base',{
 
 	markCorrect: function(){
 		this.hideSolution();
-		this.footer.hide();
+		this.updateSolutionButton();
+		this.checkItBtn.hide();
 		this.up('question-parts').removeCls('incorrect').addCls('correct');
 		this.checkItBtn.removeCls('wrong');
 		this.updateLayout();
