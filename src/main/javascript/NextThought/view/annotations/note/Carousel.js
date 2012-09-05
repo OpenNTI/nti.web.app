@@ -83,6 +83,9 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 			if(this.items.findBy(function(o){return o.record === rec;})>=0){
 				this.setRecord(rec);
 			}
+			else if(filter==='search'){
+				this.setRecord(this.items.first().record);
+			}
 			else {
 				this.updateWith(null);
 			}
