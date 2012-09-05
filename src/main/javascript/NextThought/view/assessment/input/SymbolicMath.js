@@ -46,6 +46,16 @@ Ext.define('NextThought.view.assessment.input.SymbolicMath',{
 		this.inputField.hide().removeCls('tabable');
 	},
 
+	updateSubmission: function(){
+		console.log('keypress', 'disable?', !this.getValue());
+		if(!this.getValue()){
+			this.disableSubmission();
+		}
+		else{
+			console.log('enable something');
+			this.enableSubmission();
+		}
+	},
 
 	attachKeyListeners: function(span){
 		var s = span || this.mathquillSpan,
@@ -63,9 +73,7 @@ Ext.define('NextThought.view.assessment.input.SymbolicMath',{
 			clearTimeout(timer);
 			timer = setTimeout(function(){
 				me.adjustSize();
-				console.log('keypress', 'disable?', !me.getValue());
-				if(!me.getValue()){ me.disableSubmission(); }
-				else { console.log('enable something');me.enableSubmission(); }
+				me.updateSubmission();
 			}, 100);
 
 		});
@@ -114,6 +122,7 @@ Ext.define('NextThought.view.assessment.input.SymbolicMath',{
 		var t = e.getTarget();
 		jQuery(this.mathquillSpan).mathquill('write', t.getAttribute('data-latex'));
 		this.mathquillSpan.focus();
+		this.updateSubmission();
 	},
 
 
