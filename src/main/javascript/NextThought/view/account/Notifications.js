@@ -167,9 +167,6 @@ Ext.define('NextThought.view.account.Notifications',{
 			o.unread = o.date > u.get('lastLoginTime') ? 'unread' : '';
 		});
 
-		u.saveField('lastLoginTime', new Date(), function(){
-			me.setupRenderData();
-		});
 		u.saveField('NotificationCount', 0);
 
 		if (targets && containerId){
