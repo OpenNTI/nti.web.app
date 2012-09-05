@@ -130,9 +130,19 @@ Ext.define('NextThought.view.assessment.input.SymbolicMath',{
 		return jQuery(this.mathquillSpan).mathquill('latex');
 	},
 
+	sanitizeForMathquill: function(latex){
+		//Mathquill will produce latex it can't consume.
+		//Specifically we see issues arround the spacing
+		//comands \; \: and \,. We could probably patch this
+		//particular issue with a small change in mathquills
+		//symbol.js and cursor.js but for now this seems
+		//safest and fastest
+
+		return latex.replace(/\\[;:,]/g, ' ');
+	},
 
 	setValue: function(latex){
-		jQuery(this.mathquillSpan).mathquill('latex', latex);
+		jQuery(this.mathquillSpan).mathquill('latex', this.sanitizeForMathquill(latex));
 		this.adjustSize();
 	},
 
