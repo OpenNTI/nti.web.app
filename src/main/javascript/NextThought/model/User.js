@@ -27,6 +27,19 @@ Ext.define(	'NextThought.model.User', {
 	},
 
 
+	getCommunities: function(){
+		var r = [];
+
+		Ext.each($AppConfig.userObject.get('Communities'),function(c){
+			if(!/^everyone$/i.test(c)){
+				r.push(UserRepository.store.findRecord('Username',c));
+			}
+		});
+
+		return r;
+	},
+
+
 	getName: function(){
 		return this.get('alias') || this.get('realname') || this.get('Username');
 	},

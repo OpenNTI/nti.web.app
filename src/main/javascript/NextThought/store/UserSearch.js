@@ -16,7 +16,7 @@ Ext.define('NextThought.store.UserSearch',{
 		}
 	},{
 		fn: function(rec){
-			return !rec.isEveryone();
+			return !rec.isEveryone || !rec.isEveryone();
 		}
 	}]
 });

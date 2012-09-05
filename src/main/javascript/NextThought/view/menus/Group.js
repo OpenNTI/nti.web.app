@@ -34,10 +34,23 @@ Ext.define('NextThought.view.menus.Group',{
 	reload: function(){
 		this.removeAll(true);
 
-		var items = [];
-		items.push({ cls: 'group-filter everyone', text: 'Everyone', isEveryone:true, record: UserRepository.getTheEveryoneEntity()});
+		var items = [],
+			communities = $AppConfig.userObject.getCommunities();
 
-		items.push({xtype: 'menuseparator'});
+		//items.push({ cls: 'group-filter everyone', text: 'Everyone', isEveryone:true, record: UserRepository.getTheEveryoneEntity()});
+
+		if(communities.length>0){
+			Ext.each(communities,function(c){
+				items.push({
+					cls: 'group-filter',
+					text: c.getName(),
+					record: c,
+					isGroup: true
+				});
+			});
+		}
+
+		items.push({ xtype: 'labeledseparator', text: 'Groups' });
 		this.store.each(function(v){
 			items.push({
 				cls: 'group-filter',

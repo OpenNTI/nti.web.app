@@ -108,6 +108,7 @@ Ext.define('NextThought.view.menus.Share',{
 
 		var sharedWith = this.resolveValue(value),
 			items = [],
+			communities = $AppConfig.userObject.getCommunities(),
 			customChecked = false,
 			onlyMeChecked,
 			everyone = UserRepository.getTheEveryoneEntity();
@@ -116,14 +117,15 @@ Ext.define('NextThought.view.menus.Share',{
 
 		onlyMeChecked = sharedWith.length === 0;
 
-		items.push({
-			cls: 'share-with everyone',
-			text: 'Everyone',
-			allowUncheck:false,
-			isEveryone:true,
-			record: everyone,
-			checked: Ext.Array.contains(sharedWith, everyone.get('Username'))
-		});
+//		items.push({
+//			cls: 'share-with everyone',
+//			text: 'Everyone',
+//			allowUncheck:false,
+//			isEveryone:true,
+//			record: everyone,
+//			checked: Ext.Array.contains(sharedWith, everyone.get('Username'))
+//		});
+//		Ext.Array.remove(sharedWith, everyone.get('Username'));
 
 		items.push({
 			cls: 'share-with only-me',
@@ -134,8 +136,27 @@ Ext.define('NextThought.view.menus.Share',{
 			checked: onlyMeChecked
 		});
 
-		Ext.Array.remove(sharedWith, everyone.get('Username'));
+		if(communities.length>0){
+			items.push({ xtype: 'labeledseparator', text: 'Communities' });
+			Ext.each(communities,function(c){
+				var id=c.get('Username'),
+					chkd =  Ext.Array.contains(sharedWith, id);
 
+				if (chkd){
+					sharedWith = Ext.Array.remove(sharedWith, id);
+				}
+
+				items.push({
+					cls: 'group-filter',
+					text: c.getName(),
+					record: c,
+					isGroup: true,
+					checked: chkd
+				});
+			});
+		}
+
+		items.push({ xtype: 'labeledseparator', text: 'Groups' });
 		this.store.each(function(v){
 			var id=v.get('Username'),
 				chkd =  Ext.Array.contains(sharedWith, id);
@@ -226,15 +247,11 @@ Ext.define('NextThought.view.menus.Share',{
 
 
 	getValue: function(){
-		var e = this.query('[isEveryone]')[0],
-			m = this.query('[isMe]')[0],
+		var m = this.query('[isMe]')[0],
 			c = this.query('[isCustom]')[0],
 			result = [];
 
-		if (e.checked) {
-			return [e.record.get('Username')];
-		}
-		else if (m.checked){
+		if (m.checked){
 			return [];
 		}
 		else if (c.checked) {

@@ -5,6 +5,9 @@
  */
 Ext.define('NextThought.model.Community', {
 	extend: 'NextThought.model.Base',
+
+	mixins: { groupLike: 'NextThought.mixins.GroupLike' },
+
 	idProperty: 'Username',
 	fields: [
 		{ name: 'Username', type: 'string' },
@@ -13,7 +16,7 @@ Ext.define('NextThought.model.Community', {
 		{ name: 'avatarURL', type: 'AvatarURL' },
 		{ name: 'displayName', convert: function(v,r){return r.getName();}}
 	],
-	
+
 	constructor: function() {
 		this.callParent(arguments);
 		UserRepository.updateUser(this);

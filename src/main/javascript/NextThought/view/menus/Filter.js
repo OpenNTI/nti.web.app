@@ -33,7 +33,7 @@ Ext.define('NextThought.view.menus.Filter',{
 	reload: function(){
 		this.removeAll(true);
 
-		var items = [];
+		var items = [], communities = [];//$AppConfig.userObject.getCommunities();
 		items.push({ cls: 'type-filter everything', text: 'Everything', checked: true, allowUncheck:false, isEverything: true});
 		items.push({ cls: 'type-filter highlight', text: 'Highlights', model: 'NextThought.model.Highlight' });
 		items.push({ cls: 'type-filter note', text: 'Notes', model: 'NextThought.model.Note' });
@@ -44,14 +44,30 @@ Ext.define('NextThought.view.menus.Filter',{
 			allowUncheck:false, isEveryone:true, record: UserRepository.getTheEveryoneEntity() });
 		items.push({ cls: 'group-filter', text: 'Me', isMe: true, isGroup: true });
 
-		this.store.each(function(v){
-			items.push({
-				cls: 'group-filter',
-				text: v.getName(),
-				record: v,
-				isGroup: true
+
+		if(communities.length>0){
+			items.push({ xtype: 'labeledseparator', text: 'From Communities' });
+			Ext.each(communities,function(c){
+				items.push({
+					cls: 'group-filter',
+					text: c.getName(),
+					record: c,
+					isGroup: true
+				});
 			});
-		});
+		}
+
+		if(this.store.getCount()>0){
+			items.push({ xtype: 'labeledseparator', text: 'From Groups' });
+			this.store.each(function(v){
+				items.push({
+					cls: 'group-filter',
+					text: v.getName(),
+					record: v,
+					isGroup: true
+				});
+			});
+		}
 
 		this.add(items);
 		this.fireEvent('filter-control-loaded',this);
