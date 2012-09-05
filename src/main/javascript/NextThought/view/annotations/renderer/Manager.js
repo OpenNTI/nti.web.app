@@ -14,7 +14,7 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 
 	controlLineTmpl: Ext.DomHelper.createTemplate( { cls:'controlContainer'} ).compile(),
 	widgetLineTmpl: Ext.DomHelper.createTemplate( {cls:'widgetContainer'} ).compile(),
-	addNoteToOccupiedLineTmpl: Ext.DomHelper.createTemplate( {cls:'thumb note-gutter-widget add-note {0}'} ).compile(),
+	addNoteToOccupiedLineTmpl: Ext.DomHelper.createTemplate( {cls:'thumb note-gutter-widget add-note {0}', title:'Add Note'} ).compile(),
 
 
 	/**
