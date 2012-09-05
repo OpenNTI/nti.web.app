@@ -11,6 +11,18 @@
 		display: inline;
 }
 
+.x-gecko .x-win .math {
+		font-size: 113%;
+}	
+
+.x-chrome .x-win .math {
+		font-size: 113%;
+}	
+
+.x-chrome .x-mac .math {
+		font-size: 102%;
+}	
+
 
 #NTIContent {
 	padding-bottom: 10em;
