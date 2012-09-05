@@ -177,7 +177,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		}
 
 		if(!this.rendered || !r){
-			if(this.up('window').getSearchTerm()){
+			if(!r && this.up('window').getSearchTerm() !== ""){
 				this.el.hide();
 				this.up('window').down('note-responses').hide();
 			}
