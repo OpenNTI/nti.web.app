@@ -3,6 +3,7 @@ Ext.define('NextThought.view.Main', {
 	alias: 'widget.master-view',
 
 	requires: [
+		'Ext.layout.container.Border',
 		'Ext.layout.container.HBox',
 		'Ext.layout.container.VBox',
 		'NextThought.view.MessageBox',
