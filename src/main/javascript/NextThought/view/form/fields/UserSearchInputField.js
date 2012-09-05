@@ -34,16 +34,29 @@ Ext.define( 'NextThought.view.form.fields.UserSearchInputField', {
 		baseCls: 'x-menu',
 		itemCls: 'x-menu-item contact-card',
 		emptyText: '<div class="x-menu-item">No results</div>',
-		getInnerTpl: function() {
-			return [
+		itemTpl: new Ext.XTemplate(
 				'<img class="nib" src="',Ext.BLANK_IMAGE_URL,'">',
 				'<img src="{avatarURL}">',
-				'<div class="card-body">',
+				'<div class="card-body {[this.getType(values)]}">',
 					'<div class="name">{displayName}</div>',
 					'<div class="status">{affiliation}</div>',
-				'</div>'
-			].join('');
-		},
+			'</div>',
+		{
+			getType: function(model){
+				if (!model){return 'person';}
+				var	m = ((model && model.Class) || '').toLowerCase(),
+					u = model.Username.toLowerCase();
+
+				//Tweak logic slightly if our type is community or
+				//our user is public or everyone make it look public
+				if((/public|everyone/i).test(u) || (/community/i).test(m)){
+					return 'public';
+				}
+
+				//else is it a group or person
+				return 	(/friendslist|group/i).test(m)||!/@/.test(u) ? 'group' : 'person';
+			}
+		}),
 		xhooks: {
 			initComponent: function(){
 				this.callParent(arguments);
