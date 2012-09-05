@@ -1,7 +1,7 @@
 Ext.define('NextThought.view.form.util.Token', {
 	extend: 'Ext.Component',
 	alias: 'widget.token',
-	
+
 	clsPrefix: 'nt-token',
 	cls: this.clsPrefix+'-wrapper',
 
@@ -20,9 +20,14 @@ Ext.define('NextThought.view.form.util.Token', {
 					m = ((model.raw && model.raw.Class) || model.getModelName()).toLowerCase(),
 					u = model.get('Username').toLowerCase();
 
+				//Tweak logic slightly if our type is community or
+				//our user is public or everyone make it look public
+				if((/public|everyone/i).test(u) || (/community/i).test(m)){
+					return 'public';
+				}
 
-				return (/public|everyone/i).test(u) ? 'public' :
-					/friendslist|community|group/i.test(m)||!/@/.test(u) ? 'group' : 'person';
+				//else is it a group or person
+				return 	(/friendslist|group/i).test(m)||!/@/.test(u) ? 'group' : 'person';
 			}
 		}
 	),
