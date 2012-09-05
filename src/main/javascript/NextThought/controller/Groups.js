@@ -16,6 +16,8 @@ Ext.define('NextThought.controller.Groups', {
 		'account.contacts.management.Panel'
 	],
 
+	MY_CONTACTS_PREFIX_PATTERN: 'mycontacts-{0}',
+
 	init: function() {
 		this.application.on('session-ready', this.onSessionReady, this);
 
@@ -62,6 +64,7 @@ Ext.define('NextThought.controller.Groups', {
 
 		app.registerInitializeTask(token);
 		store.on('load', function(s){ app.finishInitializeTask(token); }, this, {single: true});
+		store.on('load', this.ensureContactsGroup, this);
 		store.on('datachanged', this.publishContacts, this);
 		store.proxy.url = getURL(coll.href);
 		store.load();
@@ -89,6 +92,27 @@ Ext.define('NextThought.controller.Groups', {
 		});
 	},
 
+
+	getMyContactsId: function(){
+		return Ext.String.format(this.MY_CONTACTS_PREFIX_PATTERN,$AppConfig.username);
+	},
+
+
+	ensureContactsGroup: function(){
+		var store = this.getFriendsListStore(),
+			id = this.getMyContactsId(),
+			rec = store.findRecord('Username',id),
+			contacts = [];
+
+		function finish(){
+			store.reload();
+		}
+
+		if(!rec){
+			store.each(function(g){contacts.push.apply(contacts,g.get('friends'));});
+			this.createGroupUnguarded('My Contacts',id,Ext.Array.unique(contacts),finish);
+		}
+	},
 
 
 	publishContacts: function(){
@@ -164,15 +188,22 @@ Ext.define('NextThought.controller.Groups', {
 
 
 	addGroup: function(newGroupName, callback, scope){
-		var rec = this.getFriendsListModel().create(),
-			store = this.getFriendsListStore();//,
-			username = newGroupName
+		var username = newGroupName
 				.replace(/[^0-9A-Z\-@\+\._]/ig, '')
 				+'-'+ $AppConfig.username+'_'+guidGenerator();
 
+		this.createGroupUnguarded(newGroupName,username,[],callback,this);
+	},
+
+
+
+	createGroupUnguarded: function(displayName, username, friends, callback, scope){
+		var rec = this.getFriendsListModel().create(),
+			store = this.getFriendsListStore();
+
 		rec.set('Username',username);
-		rec.set('realname', newGroupName);
-		rec.set('friends', []);
+		rec.set('realname', displayName);
+		rec.set('friends', friends||[]);
 		rec.save({
 			scope: this,
 			success: function(){
