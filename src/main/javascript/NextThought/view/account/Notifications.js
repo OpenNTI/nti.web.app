@@ -52,22 +52,30 @@ Ext.define('NextThought.view.account.Notifications',{
 	afterRender: function(){
 		this.callParent(arguments);
 		this.el.on('click', this.clicked, this);
+		this.mon(this.up('account-view'), {
+			scope: this,
+			'deactivate': this.resetNotificationCount
+		});
 	},
 
 
 	setupRenderData: function(store) {
 		var loading = this.loading || false,
-			itemsToLoad;
+			itemsToLoad, notificationCount;
+
+		if(!store){
+			store = Ext.getStore('Stream');
+		}
 
 		if(!store && this.loading !== false) {
 			store = Ext.getStore('Stream');
 			loading = true;
 			this.loading = false;
+		}
 
-			if(!store){
-				console.error('WOH! no store! abort!');
-				return;
-			}
+		if(!store){
+			console.error('WOH! no store! abort!');
+			return;
 		}
 
 		itemsToLoad = store.getCount();
@@ -81,14 +89,13 @@ Ext.define('NextThought.view.account.Notifications',{
 		});
 		this.notifications = [];
 		this.notificationData = {};
-
-		store.each(function(change){
+		notificationCount = $AppConfig.userObject.get('NotificationCount');
+		store.data.each(function(change, idx){
 			var item = change.get('Item'),
 				loc = item? LocationProvider.getLocation(item.get('ContainerId')) : null,
 				bookTitle = loc && loc.title ? loc.title.get('title') : null,
 				m = this.generateMessage(change, bookTitle),
 				guid = guidGenerator();
-
 
 			UserRepository.getUser(change.get('Creator'), function(u){
 				var targets = item ? (item.get('references') || []).slice() : [];
@@ -101,10 +108,10 @@ Ext.define('NextThought.view.account.Notifications',{
 					'message': m,
 					'guid': guid,
 					'date': change.get('Last Modified'),
-					'unread': change.get('Last Modified') > $AppConfig.userObject.get('lastLoginTime') ? 'unread' : ''
+					'unread': idx < notificationCount ? 'unread' : ''
 				});
 				this.notificationData[guid] = {
-					containerId: item?item.get('ContainerId'):undefined,
+					containerId: item && change.get('ChangeType') !== 'Circled' ? item.get('ContainerId'):undefined,
 					id: targets
 				};
 
@@ -134,7 +141,20 @@ Ext.define('NextThought.view.account.Notifications',{
 		this.updateLayout();
 	},
 
+	resetNotificationCount: function(){
+		var me = this;
 
+		Ext.each(this.notifications, function(notification){
+			notification.unread = '';
+		});
+
+		$AppConfig.userObject.saveField('NotificationCount', 0, function(){
+			//It seems inefficent to be recalling renderData here
+			//we really just want to update certain lines. But lets not
+			//not change things that we don't know why they exist
+			me.setupRenderData();
+		});
+	},
 
 	updateNotificationCount: function(store,records){
 		var u = $AppConfig.userObject,
@@ -155,19 +175,12 @@ Ext.define('NextThought.view.account.Notifications',{
 			targets = guid? this.notificationData[guid].id : null;
 
 		if(!guid){
-
 			if(event.getTarget('.notification-see-all')){
 				this.showAllNotifications(event);
 			}
 
 			return;
 		}
-
-		Ext.each(this.notifications,function(o){
-			o.unread = o.date > u.get('lastLoginTime') ? 'unread' : '';
-		});
-
-		u.saveField('NotificationCount', 0);
 
 		if (targets && containerId){
 			this.fireEvent('navigation-selected', containerId, targets);
