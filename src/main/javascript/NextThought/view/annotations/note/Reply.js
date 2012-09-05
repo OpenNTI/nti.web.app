@@ -193,7 +193,7 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 		}
 		if (r.children) {
 			Ext.Array.sort(r.children,Globals.SortModelsBy('CreatedTime',null,null));
-			Ext.each(r.children, me.addReply, me);
+			me.addReplies(r.children);
 		}
 		this.updateLikeToolState();
 		this.mon(r, 'updated', this.updateLikeToolState, this);
@@ -284,25 +284,27 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 		//document.queryCommandState('bold')
 	},
 
+	addReplies: function(records){
+		var toAdd = [];
+		Ext.each(records, function(record){
+			var guid = IdCache.getComponentId(record, null, 'reply');
+			var add = true;
+			if (record.getModelName() !== 'Note') {
+				console.warn('can not at reply, it is not a note and I am not prepared to handle that.');
+				add=false;
+			}
 
-	addReply: function(record) {
-		var guid = IdCache.getComponentId(record, null, 'reply');
+			if (Ext.getCmp(guid)) {
+				console.log('already showing this reply');
+				add=false;
+			}
 
-		if (record.getModelName() !== 'Note') {
-			console.warn('can not at reply, it is not a note and I am not prepared to handle that.');
-			return;
-		}
-
-		if (Ext.getCmp(guid)) {
-			console.log('already showing this reply');
-			return;
-		}
-
-		console.log('*** should add reply', record, this.getHeight());
-
-		this.add({record: record, id: guid});
+			if(add){
+				toAdd.push({record: record, id: guid});
+			}
+		});
+		this.add(toAdd);
 	},
-
 
 	onEdit: function(){
 		this.editMode = true;

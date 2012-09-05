@@ -19,9 +19,9 @@ Ext.define('NextThought.view.annotations.note.Responses',{
 
 		Ext.Array.sort(children,Globals.SortModelsBy('CreatedTime',null,null));
 
-		Ext.each(children,this.addReply,this);
+		this.addReplies(children);
 	}
 },
 function(){
-	this.borrow(NextThought.view.annotations.note.Reply, ['addReply']);
+	this.borrow(NextThought.view.annotations.note.Reply, ['addReplies']);
 });
