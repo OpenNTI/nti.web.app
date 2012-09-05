@@ -17,7 +17,7 @@ Ext.define('NextThought.view.SideBarTabPanel',{
 				afterRender: function(){
 					this.callParent(arguments);
 					if(this.tooltip){
-						var attr = this.tooltipType == 'qtip' ? 'data-qtip' : 'title';
+						var attr = this.tooltipType === 'qtip' ? 'data-qtip' : 'title';
 						this.el.dom.setAttribute(attr, this.tooltip);
 					}
 				}
