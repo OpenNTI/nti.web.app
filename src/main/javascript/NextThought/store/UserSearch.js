@@ -10,9 +10,13 @@ Ext.define('NextThought.store.UserSearch',{
 		model: 'NextThought.model.UserSearch'
 	},
 
-	filters:{
+	filters:[{
 		fn: function(rec){
 			return !isMe(rec);
 		}
-	}
+	},{
+		fn: function(rec){
+			return !rec.isEveryone();
+		}
+	}]
 });

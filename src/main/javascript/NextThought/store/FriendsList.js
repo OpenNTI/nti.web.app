@@ -23,6 +23,12 @@ Ext.define('NextThought.store.FriendsList',{
 		model: 'NextThought.model.FriendsList'
 	},
 
+	filters: {
+		fn: function(rec){
+			return !rec.isEveryone();
+		}
+	},
+
 	sorters: [
 		{
 			//Sort system groups to the front
