@@ -177,7 +177,7 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 				var search =  me.up('window').getSearchTerm(), re;
 				if(search){
 					search = Ext.String.htmlEncode( search );
-					re = new RegExp( RegExp.escape( search ), 'ig');
+					re = new RegExp(['(\\>{0,1}[^\\<\\>]*?)(',RegExp.escape( search ),')([^\\<\\>]*?\\<{0,1})'].join(''), 'ig');
 					text = text.replace(re,'<span class="search-term">'+search+'</span>');
 				}
 				me.text.update(text);

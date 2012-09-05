@@ -250,10 +250,11 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		try {
 			r.compileBodyContent(function(text){
 				var search = this.up('window').getSearchTerm(), re;
+				console.log('search?', search);
 				if(search){
 					search = Ext.String.htmlEncode( search );
-					re = new RegExp( RegExp.escape( search ), 'ig');
-					text = text.replace(re,'<span class="search-term">'+search+'</span>');
+					re = new RegExp(['(\\>{0,1}[^\\<\\>]*?)(',RegExp.escape( search ),')([^\\<\\>]*?\\<{0,1})'].join(''), 'ig');
+					text = text.replace(re,'$1<span class="search-term">$2</span>$3');
 				}
 
 				this.text.update(text);
