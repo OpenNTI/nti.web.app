@@ -157,6 +157,7 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 		//Remove the old listener
 		if(this.record){
 			this.mun(this.record, 'updated', this.updateLikeToolState, this);
+			this.mun(this.record, 'child-added', this.addNewChild, this);
 		}
 
 		this.record = r;
@@ -197,6 +198,7 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 		}
 		this.updateLikeToolState();
 		this.mon(r, 'updated', this.updateLikeToolState, this);
+		this.mon(r, 'child-added', this.addNewChild, this);
 
 	},
 
@@ -283,6 +285,12 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 		//control+enter & command+enter submit?
 		//document.queryCommandState('bold')
 	},
+
+
+	addNewChild: function(child){
+		this.addReplies([child]);
+	},
+
 
 	addReplies: function(records){
 		var toAdd = [];

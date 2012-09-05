@@ -68,8 +68,8 @@ Ext.define('NextThought.store.PageItem',{
 					if (!parent.children){parent.children = [];}
 					parent.children.push(record);
 					//fire events for anyone who cares:
-					parent.fireEvent('changed');
-					record.fireEvent('changed');
+					parent.fireEvent('child-added',record);
+					record.fireEvent('parent-set',parent);
 				}
 			});
 		}

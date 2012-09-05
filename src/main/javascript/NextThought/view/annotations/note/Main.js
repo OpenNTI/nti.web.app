@@ -156,6 +156,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 			if(this.record) {
 				this.record.un('changed', this.recordChanged, this);
 				this.record.un('updated', this.recordChanged, this);
+				this.mun(this.record,'child-added',this.addNewChild,this);
 			}
 		}
 		catch(errorUnlistening){
@@ -168,6 +169,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 			if(this.record){
 				this.record.on('changed', this.recordChanged, this, {single:true});
 				this.record.on('updated', this.recordChanged, this, {single:true});
+				this.mon(this.record,'child-added',this.addNewChild,this);
 			}
 		}
 		catch(errorListening){
@@ -269,6 +271,11 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		}
 
 		this.up('window').down('note-responses').setReplies(this.record.children);
+	},
+
+
+	addNewChild: function(child){
+		this.up('window').down('note-responses').addReplies([child]);
 	},
 
 

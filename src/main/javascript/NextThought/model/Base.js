@@ -38,6 +38,7 @@ Ext.define('NextThought.model.Base', {
 			cField = f.getByKey('Class');
 //			openedGroup = false;
 
+
 		cField.defaultValue = cName;
 		cField.value = cName;
 
@@ -59,7 +60,10 @@ Ext.define('NextThought.model.Base', {
 
 		f.getByKey('MimeType').defaultValue = this.mimeType;
 
-		return this.callParent(arguments);
+		this.callParent(arguments);
+		this.addEvents('changed','child-added','parent-set');
+		this.enableBubble('changed','child-added','parent-set');
+		return this;
 	},
 
 
@@ -80,6 +84,24 @@ Ext.define('NextThought.model.Base', {
 		}
 
 		this.fireEvent('destroy', this);
+	},
+
+
+	getBubbleParent: function(){
+		return this.parent;
+	},
+
+
+	getRoot: function() {
+		var current = this,
+			currentParent = current.parent;
+
+		while(currentParent && currentParent.parent){
+			current = currentParent;
+			currentParent = currentParent.parent;
+		}
+
+		return current;
 	},
 
 
