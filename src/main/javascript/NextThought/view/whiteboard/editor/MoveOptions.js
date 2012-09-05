@@ -3,6 +3,10 @@ Ext.define('NextThought.view.whiteboard.editor.MoveOptions',{
 	extend: 'Ext.toolbar.Toolbar',
 	ui: 'options',
 
+	requires: [
+		'Ext.toolbar.Spacer'
+	],
+
 	defaults: {
 		ui: 'option',
 		scale: 'large'
