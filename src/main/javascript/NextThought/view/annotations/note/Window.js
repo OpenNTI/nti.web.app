@@ -47,6 +47,8 @@ Ext.define('NextThought.view.annotations.note.Window',{
 	initComponent: function(){
 		var a = this.annotation, m;
 		this.callParent(arguments);
+		this._editorActive = false;
+
 		m = this.down('note-main-view');
 		m.prefix = a.prefix;
 		if(this.isEdit){
@@ -64,6 +66,27 @@ Ext.define('NextThought.view.annotations.note.Window',{
 		}
 	},
 
+	editorActive: function(){
+		return this._editorActive;
+	},
+
+	setEditorActive: function(active){
+		console.log('Will mark window as having an ' + (active ? 'active' : 'inactive') + ' editor');
+		if(this._editorActive === active){
+			console.warn('Window already has an ' + (active ? 'active' : 'inactive') + ' editor. Unbalanced calls?');
+			return;
+		}
+		this._editorActive = active;
+		this.fireEvent(active ? 'editorActivated' : 'editorDeactivated', this);
+	},
+
+	checkAndMarkAsActive: function(){
+		if(!this.editorActive()){
+			this.setEditorActive(true);
+			return true;
+		}
+		return false;
+	},
 
 	getSearchTerm: function(){
 		return this.down('note-filter-bar').down('simpletext').getValue();

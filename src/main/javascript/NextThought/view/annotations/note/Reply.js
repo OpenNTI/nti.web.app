@@ -240,7 +240,8 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 
 	activateReplyEditor: function(e){
 		if(e){e.stopEvent();}
-		if(this.replyBox){
+
+		if(this.replyBox && this.up('window').checkAndMarkAsActive()){
 			this.replyBox.addCls('editor-active');
 			this.editorActions.activate();
 			this.scrollIntoView();
@@ -250,7 +251,11 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 
 
 	deactivateReplyEditor: function(){
+		var myWindow = this.up('window');
 		if(this.replyBox){
+			if(!myWindow.editorActive()){
+				console.warn('editor already deactivated?');
+			}
 			this.replyBox.removeCls('editor-active');
 			this.editorActions.deactivate();
 			this.editor.down('.content').update('');
@@ -260,6 +265,7 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 			this.text.show();
 		}
 		delete this.editMode;
+		myWindow.setEditorActive(false);
 	},
 
 

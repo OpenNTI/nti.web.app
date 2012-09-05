@@ -89,6 +89,15 @@ Ext.define('NextThought.view.annotations.note.Main',{
 			me.mon(me.editorActions, { scope: me, 'size-changed': function(){ me.updateLayout(); } });
 
 			this.el.hover(this.onMouseOver,this.onMouseOut,this);
+
+			this.mon(this.up('window'), 'editorDeactivated', function(w){
+				var bRecord = me.bufferedRecord;
+				if(bRecord){
+					console.log('Setting buffered record');
+					me.bufferedRecord = null;
+					me.setRecord(bRecord);
+				}
+			});
 		}
 		catch(e){
 			console.error(Globals.getError(e));
@@ -135,6 +144,13 @@ Ext.define('NextThought.view.annotations.note.Main',{
 
 	setRecord: function(r){
 		var suppressed, text, bodyText, sel, range, doc, start, end, likeTooltip, favoriteTooltip, objectInnerText, obj;
+
+		//If we have an editor active for god sake don't blast it away
+		if(this.up('window').editorActive()){
+			console.log('Need to buffer set record', r);
+			this.bufferedRecord = r;
+			return;
+		}
 
 		try {
 			if(this.record) {
@@ -349,6 +365,11 @@ Ext.define('NextThought.view.annotations.note.Main',{
 
 
 	activateReplyEditor: function(){
+
+		if(!this.up('window').checkAndMarkAsActive()){
+			return;
+		}
+
 		var me = this;
 		this.up('window').down('note-carousel').addCls('editor-active');
 		me.el.addCls('editor-active');
@@ -359,7 +380,10 @@ Ext.define('NextThought.view.annotations.note.Main',{
 	},
 
 	deactivateReplyEditor: function(){
-		if(!this.el.hasCls('editor-active')){return;}
+		var myWindow = this.up('window');
+		if(!myWindow.editorActive()){
+			return;
+		}
 
 		this.text.show();
 		this.editor.down('.content').update('');
@@ -371,6 +395,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 			this.text.show();
 		}
 		delete this.editMode;
+		myWindow.setEditorActive(false);
 	},
 
 
