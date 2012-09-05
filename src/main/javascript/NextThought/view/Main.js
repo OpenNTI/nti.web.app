@@ -29,7 +29,7 @@ Ext.define('NextThought.view.Main', {
 	constructor: function(){
 		this.hidden = Boolean(NextThought.phantomRender);
 		this.callParent(arguments);
-		Ext.widget({xtype: 'main-sidebar', host: this.down('[region=east]')});
+		Ext.widget('main-sidebar', {host: this.down('[region=east]')});
 		return this;
 	}
 
