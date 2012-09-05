@@ -63,7 +63,7 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 	},
 
 
-	load: function(filter){
+	load: function(filter, filterName){
 		var me = this, m =[];
 		me.removeAll(true);
 		this.store.each(function(item){
@@ -71,6 +71,17 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 				m.push({record: item, autoRender:Boolean(me.rendered)});
 			}
 		});
+
+		if(filterName === "mostPopular"){
+			m = Ext.Array.sort(m, function(a,b){
+				return b.record.getReplyCount() - a.record.getReplyCount();
+			});
+		}
+		else if(filterName === "highestRated"){
+			m = Ext.Array.sort(m, function(a,b){
+				return b.record.get('LikeCount') - a.record.get('LikeCount');
+			});
+		}
 		me.add(m);
 	},
 
@@ -80,9 +91,9 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 		el.mask('');
 		Ext.defer(function(){
 			var f = this[filter], rec = this.record;
-			this.load(f?f(value):null);
+			this.load(f?f(value):null, filter);
 
-			if(filter==='search'){
+			if(filter && filter!==''){
 				if(this.items.length <=0){
 					if(!this.notfoundEl || this.body.query('no-search-found').length <= 0){
 						this.notfoundEl = Ext.DomHelper.append(this.body, { xtype:'box', cls:"no-search-found", html:"No match found"}, true);
@@ -95,6 +106,7 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 				}
 			}
 			else if(this.items.findBy(function(o){return o.record === rec;})>=1){
+				if(this.notfoundEl){ this.notfoundEl.remove(); }
 				this.setRecord(rec);
 			}
 			else {
