@@ -64,13 +64,14 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 
 
 	load: function(filter){
-		var me = this;
+		var me = this, m =[];
 		me.removeAll(true);
 		this.store.each(function(item){
 			if(item instanceof NextThought.model.Note && !item.parent && (!filter || filter(item))){
-				me.add({record: item, autoRender:Boolean(me.rendered)});
+				m.push({record: item, autoRender:Boolean(me.rendered)});
 			}
 		});
+		me.add(m);
 	},
 
 
@@ -80,11 +81,11 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 		Ext.defer(function(){
 			var f = this[filter], rec = this.record;
 			this.load(f?f(value):null);
-			if(this.items.findBy(function(o){return o.record === rec;})>=0){
-				this.setRecord(rec);
-			}
-			else if(filter==='search'){
+			if(filter==='search'){
 				this.setRecord(this.items.first().record);
+			}
+			else if(this.items.findBy(function(o){return o.record === rec;})>=0){
+				this.setRecord(rec);
 			}
 			else {
 				this.updateWith(null);

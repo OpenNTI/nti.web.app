@@ -179,7 +179,7 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 				if(search){
 					search = Ext.String.htmlEncode( search );
 					re = new RegExp(['(\\>{0,1}[^\\<\\>]*?)(',RegExp.escape( search ),')([^\\<\\>]*?\\<{0,1})'].join(''), 'ig');
-					text = text.replace(re,'<span class="search-term">'+search+'</span>');
+					text = text.replace(re,'$1<span class="search-term">$2</span>$3');
 				}
 				me.text.update(text);
 				me.text.select('a[href]',true).set({target:'_blank'});
