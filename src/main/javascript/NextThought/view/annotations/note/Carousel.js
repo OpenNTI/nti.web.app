@@ -95,7 +95,7 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 
 			if(filter && filter!==''){
 				if(this.items.length <=0){
-					if(!this.notfoundEl || this.body.query('no-search-found').length <= 0){
+					if(!this.notfoundEl || this.body.query('.no-search-found').length <= 0){
 						this.notfoundEl = Ext.DomHelper.append(this.body, { xtype:'box', cls:"no-search-found", html:"No match found"}, true);
 					}
 					this.updateWith(null);
