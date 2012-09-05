@@ -155,14 +155,15 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 		}
 
 		var c = this.buckets[prefix],
-			lineTolerance = 30,
+			lineTolerance = 40,
 //			l = line.rect.top,//normalize lines
-			b = c? c.get(line) : null;
+			b = c? c.get(line) : null,
+			a = Math.round( line- (lineTolerance / 2)), z = Math.round( line + (lineTolerance / 2));
 
 		if (!b && c) {
 			c.each(function(value, key){
 				var keyNum = parseInt(key, 10);
-				if (line >= keyNum && (keyNum + lineTolerance) > line){
+				if ( keyNum >=a && keyNum <= z){
 					b = value;
 					return false;
 				}
