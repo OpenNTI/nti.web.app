@@ -102,7 +102,12 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 
 
 	setRecord: function(rec){
-		var me = this;
+		var me = this,
+		myWindow = me.up('window');
+		if(myWindow && myWindow.editorActive()){
+			return;
+		}
+
 		me.record = rec;
 		this.items.each(function(o){
 			var s = o.record===rec;
@@ -133,6 +138,16 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 		this.mon(this.slideLeft,'click',this.slideViewLeft,this);
 		this.mon(this.slideRight,'click',this.slideViewRight,this);
 
+		function updateOnEditorChange(w){
+			var item = me.down('note-carousel-item[selected]');
+			if(item){
+			    me.updateBigArrows(item);
+			}
+		}
+
+		this.mon(this.up('window'), 'editorActivated', updateOnEditorChange);
+		this.mon(this.up('window'), 'editorDeactivated', updateOnEditorChange);
+
 		this.keyMap = new Ext.util.KeyMap({
 			target: document,
 			binding: [{
@@ -160,9 +175,23 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 		}
 	},
 
+	updateBigArrows: function(item){
+		var hasNext, hasPrev,
+			me = this,
+			editorActive = this.up('window').editorActive();
+
+		hasNext = item && item.next() && !editorActive;
+		hasPrev = item && item.prev() && !editorActive;
+		me.maybeShowToolTip(this.navNext, hasNext, 'Next note');
+		me.maybeShowToolTip(this.navPrev, hasPrev, 'Previous note');
+		me.disableArrow(this.navNext,hasNext);
+		me.disableArrow(this.navPrev,hasPrev);
+
+	},
+
 	updateWith: function(item){
 		var hasNext, hasPrev, bgx,
-			me = this;
+		me = this;
 
 		if(item && !item.rendered){
 			setTimeout(function(){ me.updateWith(item); },10);
@@ -175,16 +204,8 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 
 		this.centerBackgroundOn(item);
 
-		hasNext = item && item.next();
-		hasPrev = item && item.prev();
-		me.maybeShowToolTip(this.navNext, hasNext, 'Next note');
-		me.maybeShowToolTip(this.navPrev, hasPrev, 'Previous note');
-		me.disableArrow(this.navNext,hasNext);
-		me.disableArrow(this.navPrev,hasPrev);
+		this.updateBigArrows(item);
 
-		if(hasNext){
-			this.navNext
-		}
 
 		this.updateSlide();
 		this.up('window').down('note-main-view').setRecord(item?item.record:null);
