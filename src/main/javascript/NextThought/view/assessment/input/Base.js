@@ -275,6 +275,7 @@ Ext.define('NextThought.view.assessment.input.Base',{
 		this.hintActive = (this.part.get('hints').length > 0);
 		this.currentHint = 0;
 		this.updateSolutionButton();
+		this.checkItBtn.show();
 		this.footer.show();
 		this.checkItBtn.removeCls('wrong').update('Check It!');
 		this.hideSolution();
