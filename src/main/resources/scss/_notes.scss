@@ -691,6 +691,13 @@
 			text-align: center;
 			overflow: hidden;
 			white-space: nowrap;
+
+		  	.no-search-found{
+				margin: 20px 15px;
+				color: #9A9A9A;
+				font-size: 16px;
+				font-family: inherit;
+			}
 		}
 
 		.carousel-item{

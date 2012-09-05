@@ -176,7 +176,17 @@ Ext.define('NextThought.view.annotations.note.Main',{
 			console.error(errorListening.message);
 		}
 
-		if(!this.rendered || !r){return;}
+		if(!this.rendered || !r){
+			if(this.up('window').getSearchTerm()){
+				this.el.hide();
+				this.up('window').down('note-responses').hide();
+			}
+			return;
+		}
+		if(r && !this.getEl().isVisible()){
+			this.el.show();
+			this.up('window').down('note-responses').show();
+		}
 
 		this.deactivateReplyEditor();
 		this.ownerCt.getEl().dom.scrollTop = 0;

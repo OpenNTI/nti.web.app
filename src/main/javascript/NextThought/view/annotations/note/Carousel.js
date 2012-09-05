@@ -81,10 +81,20 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 		Ext.defer(function(){
 			var f = this[filter], rec = this.record;
 			this.load(f?f(value):null);
+
 			if(filter==='search'){
-				this.setRecord(this.items.first().record);
+				if(this.items.length <=0){
+					if(!this.notfoundEl || this.body.query('no-search-found').length <= 0){
+						this.notfoundEl = Ext.DomHelper.append(this.body, { xtype:'box', cls:"no-search-found", html:"No match found"}, true);
+					}
+					this.updateWith(null);
+				}
+				else {
+					if(this.notfoundEl){ this.notfoundEl.remove(); }
+					this.setRecord(this.items.first().record);
+				}
 			}
-			else if(this.items.findBy(function(o){return o.record === rec;})>=0){
+			else if(this.items.findBy(function(o){return o.record === rec;})>=1){
 				this.setRecord(rec);
 			}
 			else {
