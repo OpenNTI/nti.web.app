@@ -1,5 +1,7 @@
 Ext.define('NextThought.mixins.ShareableTarget', {
 	requires: [
+		'Ext.dd.DragSource',
+		'Ext.dd.DragZone',
 		'NextThought.util.Sharing'
 	],
 
