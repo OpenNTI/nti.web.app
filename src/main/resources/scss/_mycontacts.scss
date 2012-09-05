@@ -449,23 +449,27 @@ $over-color: #f4f3f3;
 .contacts-view {
 	@include side-panel-view-title;
 	.view-title {
-		.manage {
-			background: url(../images/contacts_sprite.png) 0 0 no-repeat;
+		.search {
+			background: url(../images/search.png) 11px 8px no-repeat;
 			position: absolute;
-			width: 24px;
-			height: 24px;
+			width: 39px;
+			height: 32px;
 			top: 30px;
-			right: 20px;
+			right: 0;
 
-			&:active,&.active {
-				background-position: -56px 0;
+			&:active,
+			&.active {
+				background-position: 10px 7px;
+				border: 1px solid #ededed;
+				border-right-width: 0;
+				border-bottom-width: 0;
+				background-color: #ffffff;
+
 				&:hover{
-					background-position: -84px 0;
 				}
 			}
 
 			&:hover {
-				background-position: -28px 0;
 			}
 		}
 	}

@@ -2,7 +2,7 @@ Ext.define('NextThought.view.account.Contacts',{
 	extend: 'Ext.container.Container',
 	alias: 'widget.contacts-view',
 	requires: [
-		'NextThought.view.account.contacts.management.Panel',
+		'NextThought.view.account.contacts.Search',
 		'NextThought.view.account.contacts.Card',
 		'NextThought.view.account.contacts.Panel'
 	],
@@ -56,23 +56,55 @@ Ext.define('NextThought.view.account.Contacts',{
 			this.down('box[cls=view-title]').autoEl = null;
 			this.down('container').getLayout().setActiveItem(2);
 		}
+		this.contactSearch = Ext.widget('contact-search',{floatParent:this});
+		this.mon(this.contactSearch,{
+			scope: this,
+			show: this.onSearchShow,
+			hide: this.onSearchHide
+		});
+	},
+
+
+	onSearchShow: function(cmp){
+		var b = this.searchBtn;
+		if( !b ){ return; }
+		b.addCls('active');
+
+		cmp.alignTo(b,'tr-br',[0,0]);
+		cmp.setHeight(Ext.Element.getViewportHeight()-cmp.getPosition()[1]);
+	},
+
+
+	onSearchHide: function(){
+		if( this.searchBtn ){
+			this.searchBtn.removeCls('active');
+		}
 	},
 
 
 	afterRender: function(){
 		this.callParent(arguments);
 		var el = this.el.down('.view-title .search');
-		this.manageBtn = el;
+		this.searchBtn = el;
 		this.activeView = 0;
 		if(el){
-//			this.mon(el,'click',this.toggleManagement,this);
+			this.mon(el,'click',this.toggleSearch,this);
 		}
 	},
 
 
-	toggleManagement: function(){
-		this.activeView = (this.activeView+1)%2;
-		this.down('container').getLayout().setActiveItem(this.activeView);
-		this.manageBtn[this.activeView?'addCls':'removeCls']('active');
+	afterLayout: function(){
+		this.callParent(arguments);
+		var cmp = this.contactSearch;
+		cmp.setWidth(this.getWidth());
+	},
+
+
+	toggleSearch: function(){
+//		this.activeView = (this.activeView+1)%2;
+//		this.down('container').getLayout().setActiveItem(this.activeView);
+//		this.manageBtn[this.activeView?'addCls':'removeCls']('active');
+		var p = this.contactSearch;
+		p[p.isVisible()?'hide':'show']();
 	}
 });
