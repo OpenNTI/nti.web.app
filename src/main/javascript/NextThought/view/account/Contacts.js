@@ -18,7 +18,7 @@ Ext.define('NextThought.view.account.Contacts',{
 	},
 
 	items: [
-		{xtype: 'box', cls: 'view-title', autoEl: {html: 'Contacts',cn:[{cls: 'manage'}]}},
+		{xtype: 'box', cls: 'view-title', autoEl: {html: 'Contacts',cn:[{cls: 'search'}]}},
 		{
 			xtype: 'container',
 			flex: 1,
@@ -34,9 +34,17 @@ Ext.define('NextThought.view.account.Contacts',{
 				}
 			},
 			items: [
+
 				{ id: 'my-groups' },
-				{ id: 'manage-contacts', xtype: 'contacts-management-panel' },
-				{ cls: "disabled-contacts-view", html: "<div class='disabled-message-div'><div class='disabled-title'>Social Features Disabled...</div>We need your parent's permission to give you more features.  Ask your parent to email us.</div>"}
+
+				{ xtype: 'box' },
+
+				{ cls: "disabled-contacts-view", xtype: 'box',
+					autoEl: {cls:'disabled-message-div',cn:[
+						{cls:'disabled-title', html:'Social Features Disabled...'},
+						'We need your parent\'s permission to give you more features.&nbsp; Ask your parent to email us.'
+					]}
+				}
 			]
 		}
 	],
@@ -53,11 +61,11 @@ Ext.define('NextThought.view.account.Contacts',{
 
 	afterRender: function(){
 		this.callParent(arguments);
-		var el = this.el.down('.view-title .manage');
+		var el = this.el.down('.view-title .search');
 		this.manageBtn = el;
 		this.activeView = 0;
 		if(el){
-			this.mon(el,'click',this.toggleManagement,this);
+//			this.mon(el,'click',this.toggleManagement,this);
 		}
 	},
 
