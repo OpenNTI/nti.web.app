@@ -364,6 +364,10 @@ Ext.define('NextThought.view.annotations.note.Main',{
 			}
 		}
 
+		if( Ext.isArray(v.body) && (v.body.length === 0 || v.body[0].replace(/(&nbsp;)*/g,"").trim() === "")){
+			me.deactivateReplyEditor();
+			return;
+		}
 		me.el.mask('Saving...');
 
 		if(this.editMode){
