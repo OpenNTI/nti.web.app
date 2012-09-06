@@ -54,17 +54,13 @@ Ext.define('NextThought.view.annotations.note.Window',{
 		if(this.isEdit){
 			m.editMode = this.isEdit;
 		}
+
+		if(this.isReply){
+			m.isReply = true;
+		}
 		this.down('note-carousel').setRecord(a.getRecord());
 	},
 
-
-	afterRender: function(){
-		var me = this;
-		me.callParent(arguments);
-		if(me.isReply) {
-			me.down('note-main-view').activateReplyEditor();
-		}
-	},
 
 	editorActive: function(){
 		return this._editorActive;

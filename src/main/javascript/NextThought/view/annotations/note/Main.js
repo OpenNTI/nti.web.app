@@ -280,6 +280,9 @@ Ext.define('NextThought.view.annotations.note.Main',{
 			this.onEdit();
 		}
 
+		if(this.isReply){
+			this.activateReplyEditor();
+		}
 		this.up('window').down('note-responses').setReplies(this.record.children);
 	},
 
