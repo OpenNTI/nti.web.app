@@ -38,9 +38,13 @@ Ext.define('NextThought.view.form.fields.SearchAdvancedOptions',{
 	],
 
 	initComponent: function(){
+		var me = this;
 		this.callParent(arguments);
 		this.filterChanged = false;
 		this.on('click',this.handleClick,this);
+		this.on('mouseleave', function(e){
+			me.hide();
+		});
 		this.fireEvent('changed', this);//set the intial filter
 	},
 

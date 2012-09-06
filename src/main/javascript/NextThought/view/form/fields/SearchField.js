@@ -106,7 +106,7 @@ Ext.define('NextThought.view.form.fields.SearchField', {
 		e.preventDefault();
 
 		if(!this.menu.isVisible()){
-			this.menu.showBy(this.boxEl,'tl-bl?',[0,5]);
+			this.menu.showBy(this.boxEl,'tr-br?',[0,5]);
 		}
 		else {
 			this.menu.hide();
