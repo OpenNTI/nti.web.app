@@ -119,10 +119,13 @@ Ext.define('NextThought.view.account.contacts.Search',{
 
 
 	detectBlur: function(e){
-		if(e.getTarget('.search')){
+		if(e.getTarget('.search') || e.getTarget('.contact-search')){
 			return;
 		}
-		this.hide();
+
+		if(!this.down('simpletext').getValue()){
+			this.hide();
+		}
 	},
 
 

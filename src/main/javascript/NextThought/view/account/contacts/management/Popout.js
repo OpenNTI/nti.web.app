@@ -50,6 +50,9 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 	afterRender: function(){
 		var me = this;
 		me.callParent(arguments);
+
+		me.mon(this.el,'click',function(e){e.stopPropagation();},me);
+
 		Ext.defer(function(){Ext.getBody().on('click',me.detectBlur,me);},1);
 	},
 
