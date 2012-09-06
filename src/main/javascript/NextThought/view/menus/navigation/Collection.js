@@ -46,7 +46,7 @@ Ext.define('NextThought.view.menus.navigation.Collection',{
 
 	updateSelection: function(ntiid){
 		var last = LocationProvider.getLineage(ntiid).last();
-		var r = this.store.findRecord('NTIID',last);
+		var r = this.store.findRecord('NTIID',last,0,false,true,true);
 		if(r){
 			this.getSelectionModel().select(r,false, true);
 		}

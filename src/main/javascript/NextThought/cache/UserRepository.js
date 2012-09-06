@@ -91,7 +91,7 @@ Ext.define('NextThought.cache.UserRepository', {
 					name = r.getId();
 				}
 
-				r = s.getById(name) || s.findRecord('NTIID',name);
+				r = s.getById(name) || s.findRecord('NTIID',name,0,false,true,true);
 				if (r && r.raw){
 					result.push(r);
 					return;

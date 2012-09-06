@@ -598,7 +598,7 @@ Ext.define('NextThought.controller.Classroom', {
 	 */
 	compileResources: function(cid, roomId) {
 		var sStore = this.getSectionsStore(),
-			secIndex = sStore.find('NTIID', cid),
+		secIndex = sStore.find('NTIID', cid, 0, false, true, true),
 			sec = secIndex > -1 ? sStore.getAt(secIndex) : null;
 
 		if (sec) {

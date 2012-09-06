@@ -6,7 +6,7 @@ Ext.define('NextThought.Library', {
 	],
 
 	bufferedToc: {},
-	
+
 	constructor: function(config) {
 		this.tocs = {};
 		this.addEvents({
@@ -59,7 +59,7 @@ Ext.define('NextThought.Library', {
 			field = 'NTIID';
 		}
 
-		return this.getStore().findRecord(field, index);
+		return this.getStore().findRecord(field, index, 0, false, true, true);
 	},
 
 
@@ -96,8 +96,8 @@ Ext.define('NextThought.Library', {
 			console.error('FAILED: load library');
 		}
 	},
-	
-	
+
+
 	libraryLoaded: function(callback){
 		var me = this, stack = [], store = this.getStore(), url;
 		//The reason for iteration 1 is to load the stack with the number of TOCs I'm going to load
@@ -137,8 +137,8 @@ Ext.define('NextThought.Library', {
 			});
 		});
 	},
-	
-	
+
+
 	loadToc: function(index, url, ntiid, callback){
 		var me = this;
 		if(!this.loaded && !callback){
@@ -202,7 +202,7 @@ Ext.define('NextThought.Library', {
 			console.error('Error loading the TOC:',e, e.message, e.stack);
 		}
 	},
-	
+
 
 	parseXML: function(xml) {
 		try{

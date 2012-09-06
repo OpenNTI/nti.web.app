@@ -36,7 +36,7 @@ Ext.define(	'NextThought.model.User', {
 				//are ntiids.  We can't seem to find them in the below lookup
 				//and we end up with null in the return value.  That creates
 				//all sorts of issues later on so as a quick fix don't add them
-				u = UserRepository.store.findRecord('Username',c);
+				u = UserRepository.store.findRecord('Username',c,0,false,true,true);
 				if(u){
 					r.push(u);
 				}
@@ -45,7 +45,6 @@ Ext.define(	'NextThought.model.User', {
 				}
 			}
 		});
-
 		return r;
 	},
 

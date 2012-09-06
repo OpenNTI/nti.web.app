@@ -86,7 +86,7 @@ Ext.define('NextThought.view.menus.Share',{
 
 		Ext.each(result,function(r,i,a){
 			if(ParseUtils.parseNtiid(r)){
-				a[i] = UserRepository.getStore().findRecord('NTIID',r) || r; //HACK!!
+				a[i] = UserRepository.getStore().findRecord('NTIID',r,0,false,true,true) || r; //HACK!!
 				if(!Ext.isString(a[i])){
 					a[i] = a[i].get('Username');
 				}
@@ -145,7 +145,6 @@ Ext.define('NextThought.view.menus.Share',{
 				if (chkd){
 					sharedWith = Ext.Array.remove(sharedWith, id);
 				}
-
 				items.push({
 					cls: 'group-filter',
 					text: c.getName(),

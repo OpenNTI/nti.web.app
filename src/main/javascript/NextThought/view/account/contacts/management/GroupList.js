@@ -143,7 +143,7 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
 			return;
 		}
 		try {
-			record = this.store.find(this.displayField,groupName);
+			record = this.store.find(this.displayField,groupName, 0, false, true, true);
 			if(typeof record === 'number' && record !== -1){
 				s.select(record,true,true);
 				this.fireEvent('selectionchange',this, s.getSelection());
