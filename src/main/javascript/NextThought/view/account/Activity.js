@@ -90,6 +90,7 @@ Ext.define('NextThought.view.account.Activity',{
 		var me = this;
 
 		$AppConfig.userObject.saveField('NotificationCount', 0);
+		this.setNotificationCountValue(0);
 	},
 
 	updateNotificationCount: function(u) {
