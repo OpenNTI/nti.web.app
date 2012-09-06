@@ -144,6 +144,7 @@ Ext.define('NextThought.view.account.Activity',{
 			var totalExpected;
 			var label = (group.name||'').replace(/^[A-Z]\d{0,}\s/,'') || false;
 			var me = this;
+
 			if(label){
 				p({ label: label });
 			}
@@ -165,6 +166,11 @@ Ext.define('NextThought.view.account.Activity',{
 				});
 
 			},this);
+		}
+
+		if(store.getGroups().length === 0){
+			this.feedTpl.overwrite(container.getEl(), []);
+			container.updateLayout();
 		}
 
 		Ext.each(store.getGroups(),doGroup,this);
