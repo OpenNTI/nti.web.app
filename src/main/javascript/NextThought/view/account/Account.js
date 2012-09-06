@@ -35,7 +35,7 @@ Ext.define('NextThought.view.account.Account',{
 				}
 			},
 			items:[
-			{xtype: 'notifications', cls: 'notifications'},
+//			{xtype: 'notifications', cls: 'notifications'},
 
 			{html: ' ', autoEl: 'div'},
 //			{html: 'Account Settings', action: 'account' },
