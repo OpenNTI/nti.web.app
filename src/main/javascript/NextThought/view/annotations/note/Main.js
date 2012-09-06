@@ -480,7 +480,7 @@ function(){
 				{ cls: 'shared-to' }
 			]
 		},
-
+		{ cls: 'clear' },
 		{ cls: 'context', cn: [{tag: 'span', cls: 'text'}] },
 
 		{ cls: 'body' },

@@ -381,7 +381,7 @@ function(){
 					},{
 						tag: 'span',
 						cls: 'name'
-					},' - ',{
+					},{
 						tag: 'span', cls: 'time'
 					}]
 				},{ cls: 'body' },{
