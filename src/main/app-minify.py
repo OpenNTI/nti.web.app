@@ -26,6 +26,13 @@ def _fixProjectFile( projectFile ):
 		if 'mathquill' in item['path']:
 			(((projectFile['builds'])[0])['files']).remove(item)
 
+	# Added ext.js as the first source item
+	item = {}
+	item['path'] = 'https://extjs.cachefly.net/ext-4.1.1-gpl/'
+	item['name'] = 'ext.js'
+	item['clsName'] = 'Ext'
+	(((projectFile['builds'])[0])['files']).insert(0, item)
+
 	# Fix build target
 	((projectFile['builds'])[1])['target'] = "javascript/app.min.js"
 
@@ -45,18 +52,7 @@ def _buildProjectFile( app_entry, projectFileName ):
 def _cacheExtJSFiles( projectFile ):
 	host = 'https://extjs.cachefly.net'
 
-	# Check ext.js
-	path = '../ext-4.1.1-gpl'
-	name = 'ext.js'
-	if not os.path.exists( os.path.join(path, name) ):
-		print('%s is not cached.' % (os.path.join(path, name), ))
-		if not os.path.exists( path ):
-			os.makedirs(path, 0755)
-		r = urllib.urlopen('/'.join([ host, path.replace('../', ''), name ]))
-		with open( os.path.join(path, name), 'wb' ) as file:
-			file.write(r.read())
-
-	# Check everything else
+	# Check for missing files
 	for item in ((projectFile['builds'])[0])['files']:
 		if 'ext-4.1.1' in item['path']:
 			if not os.path.exists( os.path.join(item['path'], item['name'])):
@@ -176,9 +172,8 @@ def _closure_minify( projectFile ):
 	optimization_level = 'WHITESPACE_ONLY'
 	output_file = 'javascript/app.min.js'
 
-	command = [cmd, "-jar", "../../closure-compiler.jar", "--compilation_level", optimization_level, "--js_output_file", "javascript/app.min.js"]
+	command = [cmd, "-jar", "../../closure-compiler.jar", "--compilation_level", optimization_level, "--js_output_file", ((projectFile['builds'])[1])['target']]
 
-	command.extend(['--js', '../ext-4.1.1-gpl/ext.js'])
 	for item in ((projectFile['builds'])[0])['files']:
 		if 'https://extjs.cachefly.net/ext-4.1.1-gpl' in item['path']:
 			item['path'] = (item['path']).replace('https://extjs.cachefly.net/ext-4.1.1-gpl','../ext-4.1.1-gpl')
@@ -206,8 +201,8 @@ def main():
 	_buildMinifyIndexHTML()
 
 	# Clean-up
-	#os.remove( projectfilename )
-	#os.remove('index-ref.html')
+	os.remove( projectfilename )
+	os.remove('index-ref.html')
 
 if __name__ == '__main__':
         main()
