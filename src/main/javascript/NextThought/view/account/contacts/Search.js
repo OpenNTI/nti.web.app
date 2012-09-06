@@ -89,14 +89,48 @@ Ext.define('NextThought.view.account.contacts.Search',{
 		this.mon(this.down('simpletext'),{
 			scope: this,
 			changed: this.search,
-			clear: this.clear,
-			blur: function(input){
-				if(!input.getValue()){
-					this.hide();
-				}
-			}
+			clear: this.clear
+//			blur: function(input){
+//				if(!input.getValue()){
+//					this.hide();
+//				}
+//			}
 		});
 	},
+
+
+
+
+
+
+
+
+	destroy: function(){
+		Ext.getBody().un('click',this.detectBlur,this);
+		this.callParent(arguments);
+	},
+
+
+	afterRender: function(){
+		var me = this;
+		me.callParent(arguments);
+		Ext.defer(function(){Ext.getBody().on('click',me.detectBlur,me);},1);
+	},
+
+
+	detectBlur: function(e){
+		if(e.getTarget('.search')){
+			return;
+		}
+		this.hide();
+	},
+
+
+
+
+
+
+
 
 
 
