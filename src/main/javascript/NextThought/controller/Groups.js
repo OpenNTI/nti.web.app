@@ -222,15 +222,28 @@ Ext.define('NextThought.controller.Groups', {
 	addContact: function(username, groupList){
 		var store = this.getFriendsListStore(),
 			contactsId = this.getMyContactsId(),
-			contacts = store.findRecord('Username',contactsId);
+			contacts = store.findRecord('Username',contactsId),
+			tracker = Globals.getAsynchronousTaskQueueForList(groupList);
+
+		tracker.push({});//add one just in case the contacts group is already in the list...
+
+		function finish(){
+			if(!tracker.pop()){
+				store.reload();
+			}
+		}
 
 		if(!Ext.Array.contains(contacts.get('friends'),username)){
-			contacts.addFriend(username).save();
+			contacts.addFriend(username).save({callback:finish});
 		}
 
 		Ext.each(groupList,function(g) {
 			if( g.get('Username') !== contactsId ){
-				g.addFriend(username).save();
+				g.addFriend(username).save({callback:finish});
+			}
+			else {
+				//skip it, we did this up front.
+				finish();
 			}
 		});
 	},

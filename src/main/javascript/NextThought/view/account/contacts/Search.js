@@ -56,12 +56,11 @@ Ext.define('NextThought.view.account.contacts.Search',{
 				}]
 			}),{
 				isContact: function(username){
-					if(!this.contactCache){
-						this.contactCache = Ext.getStore('FriendsList').getContacts();
+					if( !this.contactsList || (new Date() - (this.lastUsed||0)) > 0 ){
+						this.contactsList = Ext.getStore('FriendsList').getContacts();
+						this.lastUsed = new Date();
 					}
-					var s = Ext.Array.contains(this.contactCache,username) ? 'my-contact':'not-in-contacts';
-					console.log(s);
-					return s;
+					return Ext.Array.contains(this.contactsList,username) ? 'my-contact':'not-in-contacts';
 				}
 			})
 		}
@@ -77,6 +76,12 @@ Ext.define('NextThought.view.account.contacts.Search',{
 		this.mon(this.view,{
 			scope: this,
 			itemclick: this.itemClicked
+		});
+
+		this.mon(Ext.getStore('FriendsList'),{
+			scope: this.view,
+			load: this.view.refresh,
+			datachanged: this.view.refresh
 		});
 
 		this.mon(this.down('simpletext'),{
