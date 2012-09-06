@@ -4,14 +4,14 @@
 # then, use that list to read our files into Google Closure compiler to minify our code.
 from __future__ import print_function, unicode_literals
 
+import httplib
 import json
 import os
 import re
 import subprocess
 import sys
 import time
-
-SENCHA = "/Applications/SenchaSDKTools-2.0.0-beta3/sencha"
+import urllib2 as urllib
 
 def _readSenchaProjectFile( filename ):
 	data = None
@@ -21,8 +21,8 @@ def _readSenchaProjectFile( filename ):
 	return data
 
 def _fixProjectFile( projectFile ):
-	# Remove MathQuill from the project
 	for item in ((projectFile['builds'])[0])['files']:
+		# Remove MathQuill from the project
 		if 'mathquill' in item['path']:
 			(((projectFile['builds'])[0])['files']).remove(item)
 
@@ -36,11 +36,36 @@ def _fixProjectFile( projectFile ):
 	
 	return projectFile
 
-def _buildProjectFile( app_entry, projectfile ):
+def _buildProjectFile( app_entry, projectFileName ):
 	phantomjs_script = '../../phantomjs-jsb.js'
-	command = ['/usr/bin/env', 'phantomjs', '--debug=yes', phantomjs_script, '--app-entry', app_entry, '--project', projectfile]
+	command = ['/usr/bin/env', 'phantomjs', '--debug=yes', phantomjs_script, '--app-entry', app_entry, '--project', projectFileName]
 	
 	subprocess.call(command)
+
+def _cacheExtJSFiles( projectFile ):
+	host = 'https://extjs.cachefly.net'
+
+	# Check ext.js
+	path = '../ext-4.1.1-gpl'
+	name = 'ext.js'
+	if not os.path.exists( os.path.join(path, name) ):
+		print('%s is not cached.' % (os.path.join(path, name), ))
+		if not os.path.exists( path ):
+			os.makedirs(path, 0755)
+		r = urllib.urlopen('/'.join([ host, path.replace('../', ''), name ]))
+		with open( os.path.join(path, name), 'wb' ) as file:
+			file.write(r.read())
+
+	# Check everything else
+	for item in ((projectFile['builds'])[0])['files']:
+		if 'ext-4.1.1' in item['path']:
+			if not os.path.exists( os.path.join(item['path'], item['name'])):
+				print('%s is not cached.' % (os.path.join(item['path'], item['name']), ))
+				if not os.path.exists( item['path']):
+					os.makedirs(item['path'], 0755)
+				r = urllib.urlopen('/'.join([ host, (item['path']).replace('../', ''), item['name'] ]))
+				with open( os.path.join(item['path'], item['name']), 'wb' ) as file:
+					file.write(r.read())
 
 def _buildRefIndexHTML():
 	contents = """<!DOCTYPE html>
@@ -66,7 +91,7 @@ def _buildRefIndexHTML():
 	<script type="text/javascript" src="resources/lib/mathquill/mathquill.min.js"></script>
 
         <script type="text/javascript"
-                        src="/ext-4.1.1-gpl/ext.js"
+                        src="https://extjs.cachefly.net/ext-4.1.1-gpl/ext.js"
                         id="ext-js-library"></script>
 
 	<!-- application main entry -->
@@ -82,6 +107,21 @@ def _buildRefIndexHTML():
 
 def _buildMinifyIndexHTML():
 	buildtime = time.strftime('%Y%m%d%H%M%S')
+
+	analytics = """        <script type="text/javascript">
+
+	        var _gaq = _gaq || [];
+                _gaq.push(['_setAccount', '%s']);
+                _gaq.push(['_trackPageview']);
+                (function() {
+	                var ga = document.createElement('script');
+                        ga.type = 'text/javascript';
+                        ga.async = true;
+                        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + 
+                                '.google-analytics.com/ga.js';
+                        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+                })();
+        </script>""" % ('UA-22943650-2', )
 
 	contents = """<!DOCTYPE html>
 <html lang="en">
@@ -123,9 +163,10 @@ def _buildMinifyIndexHTML():
 	<script type="text/javascript" src="javascript/app.min.js?_dc=%s"></script>
 
 	<!--[analytics code here]-->
+%s
 </body>
 </html>
-""" % (buildtime, buildtime, buildtime, buildtime, buildtime, buildtime, buildtime, buildtime)
+""" % (buildtime, buildtime, buildtime, buildtime, buildtime, buildtime, buildtime, buildtime, analytics)
 
 	with open( 'index-minify.html', 'wb' ) as file:
 		file.write(contents)
@@ -139,19 +180,14 @@ def _closure_minify( projectFile ):
 
 	command.extend(['--js', '../ext-4.1.1-gpl/ext.js'])
 	for item in ((projectFile['builds'])[0])['files']:
+		if 'https://extjs.cachefly.net/ext-4.1.1-gpl' in item['path']:
+			item['path'] = (item['path']).replace('https://extjs.cachefly.net/ext-4.1.1-gpl','../ext-4.1.1-gpl')
 		command.extend(['--js', os.path.join(item['path'], item['name'])])
 	command.extend(['--js', 'javascript/app.js'])
 
+	_cacheExtJSFiles( projectFile )
+
 	subprocess.call(command)
-
-
-def _sencha_minify( projectfile ):
-
-	with open('minify.jsb3', 'wb') as file:
-		json.dump(projectfile, file, indent=0)
-
-	args = "build -p minify.jsb3 -d ."
-	subprocess.check_call((SENCHA, args))
 
 def main():
 	_buildRefIndexHTML()
@@ -168,8 +204,8 @@ def main():
 	_buildMinifyIndexHTML()
 
 	# Clean-up
-	os.remove( projectfilename )
-	os.remove('index-ref.html')
+	#os.remove( projectfilename )
+	#os.remove('index-ref.html')
 
 if __name__ == '__main__':
         main()
