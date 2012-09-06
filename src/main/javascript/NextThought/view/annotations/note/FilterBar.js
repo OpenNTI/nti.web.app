@@ -28,9 +28,9 @@ Ext.define('NextThought.view.annotations.note.FilterBar',{
 			}
 		},
 		items: [
-			{ text: 'Show All', pressed: true},
-			{ text: 'Most Popular', filter: 'mostPopular'},
-			{ text: 'Highest Rated', filter: 'highestRated'}
+			{ text: 'All Threads', pressed: true},
+			{ text: 'Most Commented', filter: 'mostPopular'},
+			{ text: 'Most Liked', filter: 'highestRated'}
 		]
 	},{
 		xtype: 'simpletext',
