@@ -387,7 +387,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		if(!this.up('window').checkAndMarkAsActive()){
 			return;
 		}
-
+		this.isReply = false;
 		var me = this;
 		this.up('window').down('note-carousel').addCls('editor-active');
 		me.el.addCls('editor-active');
