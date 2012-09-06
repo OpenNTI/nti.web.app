@@ -465,6 +465,20 @@
 
 .note-gutter-widget {
 
+	.reply-count {
+		position: relative;
+		float: right;
+		padding-left: 18px;
+		margin-left: 19px;
+		top: -7px;
+		right: -3px;
+		background: url(../images/notes/ico_comment_indicator.png) 0 0 no-repeat;
+		font-size: 11px;
+		font-weight: semibold;
+		font-style: italic;
+		color: #787878;
+  	}
+
 	&.add-note {
 		height: 30px;
 		width: 34px;
@@ -553,20 +567,6 @@
 				color: #757474;
 				font: 14px/22px 'Droid Serif' normal;
 			}
-
-		  	.reply-count {
-				position: relative;
-				float: right;
-				padding-left: 18px;
-				margin-left: 19px;
-				top: -7px;
-				right: -3px;
-				background: url(../images/notes/ico_comment_indicator.png) 0 0 no-repeat;
-				font-size: 11px;
-				font-weight: semibold;
-				font-style: italic;
-				color: #787878;
-			}
 		}
 
 		&::after {
@@ -603,7 +603,7 @@
 		direction: ltr;
 
 		//default turn these off
-		.separator, .time, .respond, .controls {
+		.separator, .time, .respond, .controls, .reply-count{
 			display: none;
 		}
 
@@ -659,7 +659,7 @@
 				@include menu-label-text-treatment;
 				display: inline;
 			}
-			.controls{
+			.controls, .reply-count {
 				display: block;
 			}
 
