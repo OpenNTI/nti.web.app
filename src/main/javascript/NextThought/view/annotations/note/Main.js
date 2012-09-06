@@ -243,7 +243,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 				text = '[...] '+text+' [...]';
 			}
 
-			this.context.update(text);
+			this.context.update(text.replace(SearchUtils.trimRe,''));
 			if (Ext.isGecko || Ext.isIE9) { this.resizeMathJax(this.context); }
 
 		}
