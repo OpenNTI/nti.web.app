@@ -150,11 +150,6 @@ Ext.define( 'NextThought.view.annotations.Note', {
 		//now create the ext object:
 		el = this.multiGutterWidget = this.attachListeners( Ext.get(dom) );
 
-		//if no reply count or count is 0, remove the indicator...
-		if (!replyCt) {
-			this.multiGutterWidget.down('.reply-count').remove();
-		}
-
 		el.hover(function(){
 			var b = el.down('.bubble'),
 				rect = el.dom.getBoundingClientRect(),
