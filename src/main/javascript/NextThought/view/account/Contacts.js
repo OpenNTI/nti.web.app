@@ -106,8 +106,8 @@ Ext.define('NextThought.view.account.Contacts',{
 
 		});
 
-		var el = this.el.down('.view-title .search');
-		this.searchBtn = el;
+		var el = this.el.down('.view-title');
+		this.searchBtn = el.down('.search');
 		this.activeView = 0;
 		if(el){
 			this.mon(el,'click',this.toggleSearch,this);
@@ -122,11 +122,17 @@ Ext.define('NextThought.view.account.Contacts',{
 	},
 
 
-	toggleSearch: function(){
+	toggleSearch: function(e){
 //		this.activeView = (this.activeView+1)%2;
 //		this.down('container').getLayout().setActiveItem(this.activeView);
 //		this.manageBtn[this.activeView?'addCls':'removeCls']('active');
+
 		var p = this.contactSearch;
-		p[p.isVisible()?'hide':'show']();
+		if(e.getTarget('.search')){
+			p[p.isVisible()?'hide':'show']();
+		}
+		else {
+			p.hide();
+		}
 	}
 });
