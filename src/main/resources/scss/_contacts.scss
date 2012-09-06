@@ -91,6 +91,14 @@ $over-color: #f4f3f3;
 		height: 32px;
 		margin-top: 2px;
 
+		&.public,
+		&.group {
+			background: url(../images/dark_sprite.png) 0 0 no-repeat;
+		}
+		&.group {
+			background-position: -32px 0;
+		}
+
 		&.nib {
 			background: transparent url(../images/contact_options.png) 0px 0px no-repeat;
 			display: none;

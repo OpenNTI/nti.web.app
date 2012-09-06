@@ -36,25 +36,33 @@ Ext.define( 'NextThought.view.form.fields.UserSearchInputField', {
 		emptyText: '<div class="x-menu-item">No results</div>',
 		itemTpl: new Ext.XTemplate(
 				'<img class="nib" src="',Ext.BLANK_IMAGE_URL,'">',
-				'<img src="{avatarURL}">',
+				'<img src="{[this.getIcon(values)]}" class="{[this.getType(values)]}">',
 				'<div class="card-body {[this.getType(values)]}">',
 					'<div class="name">{displayName}</div>',
-					'<div class="status">{affiliation-dontshowthis}</div>',
+					'<div class="status">{affiliation-dontshowthis}{[values.Class.replace("FriendsList","Group")]}</div>',
 			'</div>',
 		{
+			getIcon: function(model){
+				var t = this.getType(model);
+				return t==='person'? model.avatarURL : Ext.BLANK_IMAGE_URL;
+			},
+
 			getType: function(model){
 				if (!model){return 'person';}
+				if(model.type){ return model.type; }
 				var	m = ((model && model.Class) || '').toLowerCase(),
-					u = model.Username.toLowerCase();
+					u = model.Username.toLowerCase(),
+					v;
+
 
 				//Tweak logic slightly if our type is community or
 				//our user is public or everyone make it look public
-				if((/public|everyone/i).test(u) || (/community/i).test(m)){
-					return 'public';
-				}
-
-				//else is it a group or person
-				return 	(/friendslist|group/i).test(m)||!/@/.test(u) ? 'group' : 'person';
+				v = ((/public|everyone/i).test(u) || (/community/i).test(m))
+						? 'public'
+						//else is it a group or person
+						: (/friendslist|group/i).test(m)||!/@/.test(u) ? 'group' : 'person';
+				model.type = v;
+				return v;
 			}
 		}),
 		xhooks: {
