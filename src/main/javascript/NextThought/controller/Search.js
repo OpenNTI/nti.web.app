@@ -21,6 +21,7 @@ Ext.define('NextThought.controller.Search', {
 		'menus.search.ResultCategory',
 		'menus.search.Result',
 		'menus.search.More',
+		'menus.search.NoResults',
 		'form.fields.SearchAdvancedOptions'
 	],
 
@@ -66,6 +67,10 @@ Ext.define('NextThought.controller.Search', {
 			result, loc, results = [],
 			menu = Ext.getCmp('search-results');
 
+		if(resultGroups.length === 0){
+			results.push({xtype:'search-result-category', category: '', items:[{xtype: 'search-noresults'}]});
+		}
+
 		Ext.each(resultGroups, function(group){
 			result = {xtype:'search-result-category', category: this.sanitizeCategoryName(group.name), items:[]};
 			results.push(result);
@@ -102,6 +107,7 @@ Ext.define('NextThought.controller.Search', {
 					hitId: hit.getId()
 				});
 			}, this);
+
 		}, this);
 
 		menu.removeAll(true);
