@@ -62,6 +62,18 @@ Ext.define('NextThought.view.account.Contacts',{
 			show: this.onSearchShow,
 			hide: this.onSearchHide
 		});
+		Ext.EventManager.onWindowResize(this.viewportMonitor,this,null);
+	},
+
+
+	destroy: function(){
+		Ext.EventManager.removeResizeListener(this.viewportMonitor,this);
+		return this.callParent();
+	},
+
+
+	viewportMonitor: function(){
+		this.contactSearch.hide();
 	},
 
 
