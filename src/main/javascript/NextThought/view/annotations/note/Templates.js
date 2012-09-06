@@ -121,7 +121,7 @@ Ext.define('NextThought.view.annotations.note.Templates',{
 		function remove(){ make('hide',arguments); }
 		function reset(){ make('show',arguments); }
 
-		if (!mine){share.update('Get Info');}
+		if (!mine && share){share.update('Get Info');}
 
 		addName(follow,block);
 
