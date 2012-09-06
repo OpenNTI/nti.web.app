@@ -21,6 +21,26 @@ Ext.define('NextThought.model.FriendsList', {
 		this.callParent(arguments);
 	},
 
+
+	addFriend: function(username){
+		var list = this.get('friends') || [];
+		if(Ext.Array.contains(list,username)){
+			return;
+		}
+		list.push(username);
+		this.set('friends',list);
+		return this;
+	},
+
+
+	removeFriend: function(username){
+		var list = this.get('friends') || [];
+		this.set('friends',Ext.Array.remove(list,username));
+		return this;
+	},
+
+
+
 	drawIcon: function(canvas){
 
 		var ctx = canvas.getContext('2d'),

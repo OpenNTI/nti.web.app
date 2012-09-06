@@ -219,9 +219,20 @@ Ext.define('NextThought.controller.Groups', {
 	},
 
 
-	addContact: function(user, groups){
+	addContact: function(username, groupList){
+		var store = this.getFriendsListStore(),
+			contactsId = this.getMyContactsId(),
+			contacts = store.findRecord('Username',contactsId);
 
-		console.log('Add Contact events hooked up, TODO: make the updates to the records, and put to the server',arguments);
+		if(!Ext.Array.contains(contacts.get('friends'),username)){
+			contacts.addFriend(username).save();
+		}
+
+		Ext.each(groupList,function(g) {
+			if( g.get('Username') !== contactsId ){
+				g.addFriend(username).save();
+			}
+		});
 	},
 
 

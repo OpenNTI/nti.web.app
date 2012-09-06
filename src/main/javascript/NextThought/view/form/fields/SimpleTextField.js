@@ -61,6 +61,11 @@ Ext.define('NextThought.view.form.fields.SimpleTextField',{
 	},
 
 
+	getFocusEl: function(){
+		return this.inputEl;
+	},
+
+
 	specialKeys: {
 		27: true,	//Ext.EventObject.prototype.ESC
 		8: true,	//Ext.EventObject.prototype.BACKSPACE

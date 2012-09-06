@@ -72,6 +72,7 @@ Ext.define('NextThought.view.account.Contacts',{
 
 		cmp.alignTo(b,'tr-br',[0,0]);
 		cmp.setHeight(Ext.Element.getViewportHeight()-cmp.getPosition()[1]);
+		Ext.defer(function(){ cmp.down('simpletext').focus(); },10);
 	},
 
 

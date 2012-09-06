@@ -40,7 +40,7 @@ Ext.define('NextThought.view.account.contacts.Search',{
 				cn: [{
 					cls:'item-wrap',
 					cn:[{
-						cls:'item {% this.isContact(values.Username) %}',
+						cls:'item {[this.isContact(values.Username)]}',
 						cn: [
 							{tag: 'img', src: '{avatarURL}'},
 							{tag: 'img', src: Ext.BLANK_IMAGE_URL, cls: 'add'},
@@ -59,7 +59,9 @@ Ext.define('NextThought.view.account.contacts.Search',{
 					if(!this.contactCache){
 						this.contactCache = Ext.getStore('FriendsList').getContacts();
 					}
-					return Ext.Array.contains(this.contactCache,username) ? 'my-contact':'not-in-contacts';
+					var s = Ext.Array.contains(this.contactCache,username) ? 'my-contact':'not-in-contacts';
+					console.log(s);
+					return s;
 				}
 			})
 		}

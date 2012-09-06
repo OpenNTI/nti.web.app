@@ -59,10 +59,6 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
 				}
 			}, this);
 
-			Ext.each( el.query('img.delete-group'),
-				function(dom){Ext.fly(dom).on('click',this.deleteGroup, this);},
-				this);
-
 			if(this.allowSelect){
 				link = Ext.DomHelper.append( ul,
 					{
@@ -104,7 +100,6 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
 			console.warn('displayField is not realname');
 		}
 		return ['<div class="name">',
-				'<img src="',Ext.BLANK_IMAGE_URL,'" class="delete-group" alt="Delete Group"/>',
 				'<tpl if="realname == \'\'">{Username}' +
 					'<tpl else>',
 						'{realname}',
@@ -228,17 +223,5 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
 
 			}
 		});
-	},
-
-
-	deleteGroup: function(evt, dom){
-		evt.preventDefault();
-		evt.stopPropagation();
-
-		var r = this.getRecord(Ext.fly(dom).up(this.itemSelector, this.getEl()));
-
-
-		this.fireEvent('delete-group', r);
 	}
-
 });
