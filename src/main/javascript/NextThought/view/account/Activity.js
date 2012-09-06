@@ -96,22 +96,33 @@ Ext.define('NextThought.view.account.Activity',{
 		}
 
 		function doGroup(group){
+			var totalExpected;
 			var label = (group.name||'').replace(/^[A-Z]\d{0,}\s/,'') || false;
+			var me = this;
 			if(label){
 				p({ label: label });
 			}
 
+			//We use a similar strategy to the one that Notifications uses
+			totalExpected = group.children.length;
 			Ext.each(group.children,function(c){
 				var item = this.changeToActivity(c);
-				p(item);
+
+				UserRepository.getUser(item.name, function(u){
+					item.name = u.getName();
+					p(item);
+					totalExpected--;
+					if(totalExpected === 0){
+						me.feedTpl.overwrite(container.getEl(),items);
+						container.updateLayout();
+					}
+
+				});
+
 			},this);
 		}
 
 		Ext.each(store.getGroups(),doGroup,this);
-
-
-		this.feedTpl.overwrite(container.getEl(),items);
-		container.updateLayout();
 
 	},
 
