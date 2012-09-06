@@ -14,7 +14,7 @@ Ext.define('NextThought.view.menus.navigation.Collection',{
 	itemSelector: '.stratum.item',
 	tpl: Ext.DomHelper.markup([
 		{ cls: 'stratum collection-name', cn: [
-			{ cls: 'settings' },
+			{ cls: 'settings', hidden: true },
 			'{name}',
 			{cls:'count',html: '&nbsp;'}
 		]},
