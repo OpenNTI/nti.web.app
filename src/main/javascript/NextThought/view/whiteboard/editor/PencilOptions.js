@@ -41,7 +41,7 @@ Ext.define('NextThought.view.whiteboard.editor.PencilOptions',{
 			{ color: 'black', stroke: '#333333', pressed: true },
 			{ color: 'grey1', stroke: '#858585' },
 			{ color: 'grey2', stroke: '#E1E1E1' },
-			{ color: 'grey3', stroke: '#ffffff' },
+			{ color: 'white', stroke: '#ffffff' },
 			{ color: 'red', stroke: '#d34f39' },
 			{ color: 'blue', stroke: '#2b89c5' },
 			{ color: 'green', stroke: '#a0c94c' },
