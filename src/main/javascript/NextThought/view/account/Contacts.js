@@ -62,6 +62,8 @@ Ext.define('NextThought.view.account.Contacts',{
 			show: this.onSearchShow,
 			hide: this.onSearchHide
 		});
+
+		this.mon(this,'deactivate',this.contactSearch.hide,this.contactSearch);
 	},
 
 
