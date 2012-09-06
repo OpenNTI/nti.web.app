@@ -89,6 +89,9 @@ Ext.define('NextThought.view.account.contacts.Search',{
 			changed: this.search,
 			clear: this.clear
 		});
+
+
+
 	},
 
 
@@ -98,6 +101,7 @@ Ext.define('NextThought.view.account.contacts.Search',{
 
 		pop.show();
 		pop.alignTo(Ext.fly(item).down('.add'),'tr-tl',[-10,-25]);
+		pop.mon(this,'hide',pop.destroy,pop,{signle: true});//if we hide, make the popover listen and destroy
 	},
 
 
