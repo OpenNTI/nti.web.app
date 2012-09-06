@@ -13,7 +13,7 @@ Ext.define('NextThought.view.annotations.note.CarouselItem',{
 		cls: 'item-body',
 		cn: [
 			{tag: 'img', src: Ext.BLANK_IMAGE_URL},
-			{cls: 'count', html: '{count}'}
+			{cls: 'count', cn:[{tag:'span', html: '{count}'}]}
 		]
 	}),
 
