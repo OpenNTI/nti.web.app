@@ -212,6 +212,32 @@ Ext.define('NextThought.providers.Location', {
 		return lineage;
 	},
 
+	getSortIndexes: function(ntiid){
+		var leaf = this.find(ntiid||this.currentNTIID) || {},
+			node = leaf.location,
+			indexes = [],
+			id, i, cn, j, t;
+
+		while(node){
+			id = node.getAttribute? node.getAttribute('ntiid') : null;
+			if( id && node.parentNode ) {
+				cn = node.parentNode.childNodes;
+				i=0, j=0;
+				while( i<cn.length){
+					t=cn[i].getAttribute ? cn[i].getAttribute('ntiid'): null;
+					if(t===id){
+						indexes.push(j);
+						break;
+					}
+					if(t) j++;
+					i++;
+				}
+			}
+			node = node.parentNode;
+		}
+
+		return indexes;
+	},
 
 	getContentRoot: function(ntiid){
 		var bookId = LocationProvider.getLineage(ntiid||this.currentNTIID).last();

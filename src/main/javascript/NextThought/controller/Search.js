@@ -70,7 +70,7 @@ Ext.define('NextThought.controller.Search', {
 		//get the groups storted by type, cause the display to chunk them.
 		var resultGroups = store.getGroups(),
 			result, loc, results = [],
-			menu = Ext.getCmp('search-results');
+			menu = Ext.getCmp('search-results'), me = this;
 
 		if(resultGroups.length === 0){
 			results.push({xtype:'search-result-category', category: '', items:[{xtype: 'search-noresults'}]});
@@ -84,9 +84,12 @@ Ext.define('NextThought.controller.Search', {
 			Ext.each(group.children, function(hit){
 				var id = hit.get('ContainerId');
 				var lin = LocationProvider.getLineage(id);
-				var chap = [];
+				var chap = [], sortIndexes = LocationProvider.getSortIndexes(id);
 
+				sortIndexes.pop();
+				sortIndexes.reverse();
 
+				console.log(sortIndexes, id);
 
 				lin.pop(); //remove root, we will already have it after resolving "id"
 				lin.shift();//remove the first item as its identical as id.
@@ -109,13 +112,20 @@ Ext.define('NextThought.controller.Search', {
 					snippet: hit.get('Snippet'),
 					term: searchVal,
 					containerId: hit.get('ContainerId'),
-					hitId: hit.getId()
+					hitId: hit.getId(),
+					sortId:sortIndexes
 				});
-			}, this);
+			},	this);
+
+
+				result = Ext.Array.sort(result, me.sortSearchHits, me);
+				console.log(result);
+
 
 		}, this);
 
 		menu.removeAll(true);
+
 		menu.add(results);
 		//show results...
 		menu.hide().show();
@@ -128,6 +138,26 @@ Ext.define('NextThought.controller.Search', {
 		}
 		return n;
 	},
+
+	sortSearchHits: function(a,b){
+
+		function compareIndices(i, j){
+			if(i===j) return 0;
+			return i < j ? -1: 1;
+		}
+
+		var a= a.sortId, b= b.sortId, max = a.length < b.length ? a.length : b.length, i, r;
+
+		for(i=0; i<max; i++){
+			r = compareIndices(a[i], b[i]);
+			if(r !== 0) { return r;}
+		}
+
+		if(a.length === b.length){ return 0;}
+		return a.length > b.length ? 1: -1;
+	},
+
+
 
 
 	searchForValue: function(value) {
