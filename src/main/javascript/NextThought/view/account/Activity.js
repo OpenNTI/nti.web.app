@@ -149,7 +149,7 @@ Ext.define('NextThought.view.account.Activity',{
 
 		if (item.getModelName() === 'User') {
 			return item.getName() + (/circled/i).test(type)
-					? ' added you to a group' : '?';
+					? ' added you to a contacts list' : '?';
 		}
 		else if (item.getModelName() === 'Highlight') {
 			loc = LocationProvider.getLocation(item.get('ContainerId'));

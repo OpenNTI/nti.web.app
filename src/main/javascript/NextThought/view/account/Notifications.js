@@ -11,7 +11,7 @@ Ext.define('NextThought.view.account.Notifications',{
 		'Highlight': 'Highlighted',
 		'Note': 'Commented',
 		'Redaction': 'Redacted',
-		'User': 'Added you to a group'
+		'User': 'Has added you to a contacts list'
 	},
 
 	renderTpl: Ext.DomHelper.markup([
