@@ -75,7 +75,7 @@ Ext.define('NextThought.ux.VideoPopout',{
 
 		this.others = this.add({
 			xtype: 'dataview',
-			overflowX: 'scroll',
+			overflowX: 'auto',
 			overflowY: 'hidden',
 			height: 115,
 			store: this.store,
