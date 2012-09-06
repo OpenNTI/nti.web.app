@@ -50,7 +50,7 @@ Ext.define('NextThought.view.menus.Group',{
 			});
 		}
 
-		items.push({ xtype: 'labeledseparator', text: 'Groups' });
+		items.push({ xtype: 'labeledseparator', text: 'Groups', cls: 'doublespaced' });
 		this.store.each(function(v){
 			items.push({
 				cls: 'group-filter',

@@ -137,7 +137,7 @@ Ext.define('NextThought.view.menus.Share',{
 		});
 
 		if(communities.length>0){
-			items.push({ xtype: 'labeledseparator', text: 'Communities' });
+			items.push({ xtype: 'labeledseparator', text: 'Communities', cls: 'doublespaced' });
 			Ext.each(communities,function(c){
 				var id=c.get('Username'),
 					chkd =  Ext.Array.contains(sharedWith, id);
@@ -156,7 +156,7 @@ Ext.define('NextThought.view.menus.Share',{
 			});
 		}
 
-		items.push({ xtype: 'labeledseparator', text: 'Groups' });
+		items.push({ xtype: 'labeledseparator', text: 'Groups', cls: 'doublespaced' });
 		this.store.each(function(v){
 			var id=v.get('Username'),
 				chkd =  Ext.Array.contains(sharedWith, id);
@@ -181,6 +181,7 @@ Ext.define('NextThought.view.menus.Share',{
 			customChecked = true;
 		}
 
+		items.push({xtype: 'menuseparator'});
 		items.push({ cls: 'share-with custom', text: 'Custom', allowUncheck:false, isCustom:true, checked: customChecked });
 
 		this.add(items);

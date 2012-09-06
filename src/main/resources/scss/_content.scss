@@ -215,6 +215,17 @@
 						overflow: hidden;
 					}
 				}
+
+				&.doublespaced{
+					margin-bottom: 37px !important;
+
+					.label span {
+						top: 10px;
+						color: #8a8989;
+						font-size: 10px;
+						font-weight: bold;
+					}
+				}
 			}
 		}
 
