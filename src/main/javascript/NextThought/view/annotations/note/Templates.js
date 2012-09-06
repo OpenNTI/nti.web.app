@@ -94,7 +94,7 @@ Ext.define('NextThought.view.annotations.note.Templates',{
 
 
 
-	updateMoreReplyOptionsLabels: function(moreEl,user){
+	updateMoreReplyOptionsLabels: function(moreEl,user, currentlyFlagged){
 		var add = moreEl.down('li.add-contact'),
 			edit = moreEl.down('li.edit'),
 			flag = moreEl.down('li.flag'),
@@ -121,7 +121,12 @@ Ext.define('NextThought.view.annotations.note.Templates',{
 		function remove(){ make('hide',arguments); }
 		function reset(){ make('show',arguments); }
 
+		//if you cannot share, the share with can still be shown, but not edited.
+		//text should be Get Info.
 		if (!mine && share){share.update('Get Info');}
+		//if it's already flagged, make it say so.  Clicking on it won't have
+		//any further effect.
+		if(flag && currentlyFlagged){flag.update('Flagged');}
 
 		addName(follow,block);
 

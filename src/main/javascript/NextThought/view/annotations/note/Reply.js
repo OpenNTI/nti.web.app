@@ -206,7 +206,7 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 	fillInUser: function(user){
 		this.name.update(user.getName());
 		this.avatar.setStyle({ backgroundImage: 'url('+user.get('avatarURL')+')' });
-		TemplatesForNotes.updateMoreReplyOptionsLabels(this.more,user);
+		TemplatesForNotes.updateMoreReplyOptionsLabels(this.more,user, this.record.isFlagged());
 	},
 
 

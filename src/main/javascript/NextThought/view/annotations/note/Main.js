@@ -319,7 +319,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 
 	fillInUser: function(user){
 		this.name.update(user.getName());
-		TemplatesForNotes.updateMoreReplyOptionsLabels(this.more,user);
+		TemplatesForNotes.updateMoreReplyOptionsLabels(this.more, user, this.record.isFlagged());
 	},
 
 

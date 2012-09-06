@@ -126,7 +126,7 @@ Ext.define('NextThought.view.annotations.note.GutterWidget',{
 			return;
 		}
 		this.name.update(Ext.String.ellipsis(user.getName(),18));
-		TemplatesForNotes.updateMoreReplyOptionsLabels(this.more,user);
+		TemplatesForNotes.updateMoreReplyOptionsLabels(this.more, user, this.record.isFlagged());
 	},
 
 
