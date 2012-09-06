@@ -218,6 +218,8 @@ Ext.define('NextThought.providers.Location', {
 			indexes = [],
 			id, i, cn, j, t;
 
+		if(leaf === {}){ return [0, Infinity];}
+
 		while(node){
 			id = node.getAttribute? node.getAttribute('ntiid') : null;
 			if( id && node.parentNode ) {
