@@ -38,7 +38,10 @@ Ext.define(	'NextThought.model.User', {
 				//all sorts of issues later on so as a quick fix don't add them
 				u = UserRepository.store.findRecord('Username',c);
 				if(u){
-					r.push();
+					r.push(u);
+				}
+				else{
+					console.warn('dropping unresolvable community', c);
 				}
 			}
 		});
