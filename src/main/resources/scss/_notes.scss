@@ -507,6 +507,18 @@
 				color: #757474;
 				font: 14px/22px 'Droid Serif' normal;
 			}
+
+		  	.reply-count {
+				position: absolute;
+				padding-left: 18px;
+				top: 10px;
+				right: 10px;
+				background: url(../images/notes/ico_comment_indicator.png) 0 0 no-repeat;
+				font-size: 11px;
+				font-weight: semibold;
+				font-style: italic;
+				color: #787878;
+			}
 		}
 
 		&::after {

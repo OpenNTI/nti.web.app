@@ -15,6 +15,7 @@ Ext.define( 'NextThought.view.annotations.Note', {
 					{
 						cls: 'bubble',
 						cn: [
+							{tag: 'div', cls: 'reply-count', html: '{3}'},
 							{
 								cls: 'meta',
 								cn: [
@@ -137,16 +138,22 @@ Ext.define( 'NextThought.view.annotations.Note', {
 
 	createMultiGutterWidget: function(){
 		var creator = this.record.get('Creator'),
+			replyCt = this.record.getReplyCount(),
 			htmlString = this.multiGutterWidgetTmpl.apply([
 				creator,
 				this.record.getRelativeTimeString(),
-				this.record.getBodyText()]),
+				this.record.getBodyText(),
+				replyCt]),
 			dom = Ext.DomHelper.createDom({html:htmlString}).firstChild,
 			el;
 
 		//now create the ext object:
 		el = this.multiGutterWidget = this.attachListeners( Ext.get(dom) );
 
+		//if no reply count or count is 0, remove the indicator...
+		if (!replyCt) {
+			this.multiGutterWidget.down('.reply-count').remove();
+		}
 
 		el.hover(function(){
 			var b = el.down('.bubble'),
