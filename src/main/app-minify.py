@@ -11,6 +11,8 @@ import subprocess
 import sys
 import time
 
+SENCHA = "/Applications/SenchaSDKTools-2.0.0-beta3/sencha"
+
 def _readSenchaProjectFile( filename ):
 	data = None
 	with open(filename, 'rb') as file:
@@ -34,71 +36,139 @@ def _fixProjectFile( projectFile ):
 	
 	return projectFile
 
-def _buildRefIndexHTML( filename ):
-	lines = []
-	with open( filename, 'rb' ) as file:
-                lines=file.readlines()
+def _buildProjectFile( app_entry, projectfile ):
+	phantomjs_script = '../../phantomjs-jsb.js'
+	command = ['/usr/bin/env', 'phantomjs', '--debug=yes', phantomjs_script, '--app-entry', app_entry, '--project', projectfile]
+	
+	subprocess.call(command)
 
-	result = []
-	for line in lines:
-		line = line.replace('ext-all.js', 'ext.js').replace('https://extjs.cachefly.net', '')
-		
-		if '[analytics code here]' in line:
-			continue
+def _buildRefIndexHTML():
+	contents = """<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>NextThought</title>
+	<meta http-equiv='Content-Type' content='Type=text/html; charset=utf-8'>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-		result.extend([line])
+	<script type="text/javascript" src="resources/misc/base64.min.js"></script>
+	<!--[if gte IE 9]>
+	<style type="text/css">
+		.gradient { filter: none; }
+	</style>
+	<![endif]-->
+</head>
+<body>
+	<script type="text/javascript" src="config.js"></script>
+
+	<!-- jQuery library, for use with mathquill only -->
+	<script type="text/javascript" src="resources/lib/jQuery-1.8.0min.js"></script>
+	<script type="text/javascript"> jQuery.noConflict(); </script>
+	<script type="text/javascript" src="resources/lib/mathquill/mathquill.min.js"></script>
+
+        <script type="text/javascript"
+                        src="/ext-4.1.1-gpl/ext.js"
+                        id="ext-js-library"></script>
+
+	<!-- application main entry -->
+	<script type="text/javascript" src="javascript/app.js"></script>
+
+	<!--[analytics code here]-->
+</body>
+</html>
+"""
 
 	with open( 'index-ref.html', 'wb' ) as file:
-		file.write(''.join(result))
+		file.write(contents)
 
-def _buildMinifyIndexHTML( filename ):
-	lines = []
-	with open( filename, 'rb' ) as file:
-		lines=file.readlines()
-
+def _buildMinifyIndexHTML():
 	buildtime = time.strftime('%Y%m%d%H%M%S')
-	result = []
-	for line in lines:
-		line = line.replace('ext-all.js', 'ext.js')
-		line = line.replace('favicon.ico', 'favicon.ico?_dc=%s' % (buildtime, ))
-		line = line.replace('mathquill.css', 'mathquill.css?_dc=%s' % (buildtime, ))
-		line = line.replace('main.css', 'main.css?_dc=%s' % (buildtime, ))
-		line = line.replace('base64.min.js', 'base64.min.js?_dc=%s' % (buildtime, ))
-		line = line.replace('config.js', 'config.js?_dc=%s' % (buildtime, ))
-		line = line.replace('app.js', 'app.min.js?_dc=%s' % (buildtime, ))
 
-		if 'on deploy' in line:
-			continue
-		elif 'jQuery.noConflict();' in line:
-			line = ''.join([line, '        <script type="text/javascript" src="resources/lib/mathquill/mathquill.min.js?_dc=%s"></script>\n' % (buildtime, )])
+	contents = """<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>NextThought</title>
+	<meta http-equiv='Content-Type' content='Type=text/html; charset=utf-8'>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="shortcut icon" href="resources/images/favicon.ico?_dc=%s">
 
-		result.extend([line])
+	<link rel="stylesheet" id="ext-base" type="text/css"
+		  href="https://extjs.cachefly.net/ext-4.1.1-gpl/resources/css/ext-all-gray.css">
+	<link rel='stylesheet' type='text/css'
+		  href='https://fonts.googleapis.com/css?family=Droid+Serif:400,700,700italic,400italic|Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800'>
+	<link rel="stylesheet" id="mathquill-stylesheet" type="text/css"
+		  href="resources/lib/mathquill/mathquill.css?_dc=%s">
+    <link rel="stylesheet" id="main-stylesheet" type="text/css" href="resources/css/main.css?_dc%s">
+
+	<script type="text/javascript" src="resources/misc/base64.min.js?_dc=%s"></script>
+	<!--[if gte IE 9]>
+	<style type="text/css">
+		.gradient { filter: none; }
+	</style>
+	<![endif]-->
+</head>
+<body>
+	<div id="loading-mask">
+		<div class="x-mask"></div>
+		<div class="x-mask-msg" id="loading"><div>Loading...</div></div>
+	</div>
+
+	<script type="text/javascript" src="config.js?_dc=%s"></script>
+
+	<!-- jQuery library, for use with mathquill only -->
+	<script type="text/javascript" src="resources/lib/jQuery-1.8.0min.js?_dc=%s"></script>
+	<script type="text/javascript"> jQuery.noConflict(); </script>
+	<script type="text/javascript" src="resources/lib/mathquill/mathquill.min.js?_dc=%s"></script>
+
+	<!-- application main entry -->
+	<script type="text/javascript" src="javascript/app.min.js?_dc=%s"></script>
+
+	<!--[analytics code here]-->
+</body>
+</html>
+""" % (buildtime, buildtime, buildtime, buildtime, buildtime, buildtime, buildtime, buildtime)
 
 	with open( 'index-minify.html', 'wb' ) as file:
-		file.write(''.join(result))
+		file.write(contents)
 
-def main():
-	_buildRefIndexHTML( 'index.html' )
+def _closure_minify( projectFile ):	
+	cmd = '/usr/bin/java'
+	optimization_level = 'WHITESPACE_ONLY'
+	output_file = 'javascript/app.min.js'
 
-	sencha = "/Applications/SenchaSDKTools-2.0.0-beta3/sencha"
+	command = [cmd, "-jar", "../../closure-compiler.jar", "--compilation_level", optimization_level, "--js_output_file", "javascript/app.min.js"]
 
-	args = "create jsb -p minify.jsb3 -a http://localhost/NextThoughtWebApp/index-ref.html?_dc=%s" % (time.strftime('%Y%m%d%H%M%S'), )
-	subprocess.check_call((sencha, args))
+	command.extend(['--js', '../ext-4.1.1-gpl/ext.js'])
+	for item in ((projectFile['builds'])[0])['files']:
+		command.extend(['--js', os.path.join(item['path'], item['name'])])
+	command.extend(['--js', 'javascript/app.js'])
 
-	data = _readSenchaProjectFile( 'minify.jsb3' )
-	data = _fixProjectFile(data)
+	subprocess.call(command)
+
+
+def _sencha_minify( projectfile ):
 
 	with open('minify.jsb3', 'wb') as file:
-		json.dump(data, file, indent=0)
+		json.dump(projectfile, file, indent=0)
 
 	args = "build -p minify.jsb3 -d ."
-	subprocess.check_call((sencha, args))
+	subprocess.check_call((SENCHA, args))
 
-	_buildMinifyIndexHTML( 'index.html' )
+def main():
+	_buildRefIndexHTML()
+
+	app_entry = 'http://localhost/NextThoughtWebApp/index-ref.html'
+	projectfilename = 'minify.jsb3'
+	_buildProjectFile( app_entry, projectfilename )
+
+	projectfile = _readSenchaProjectFile( projectfilename )
+	projectfile = _fixProjectFile(projectfile)
+
+	_closure_minify(projectfile)
+
+	_buildMinifyIndexHTML()
 
 	# Clean-up
-	os.remove('all-classes.js')
-	os.remove('minify.jsb3')
+	os.remove( projectfilename )
 	os.remove('index-ref.html')
 
 if __name__ == '__main__':
