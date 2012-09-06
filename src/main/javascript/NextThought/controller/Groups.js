@@ -150,7 +150,7 @@ Ext.define('NextThought.controller.Groups', {
 				groups.add({title: name, associatedGroup: group}).setUsers(online);
 			});
 
-			offline = groups.add({ title: 'Offline', collapsed: true, offline:true });
+			offline = groups.add({ title: 'Offline', offline:true });
 
 			offline.setUsers(friends.Offline);
 
