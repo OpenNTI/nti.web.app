@@ -25,26 +25,38 @@ Ext.define('NextThought.store.FriendsList',{
 
 	filters: {
 		fn: function(rec){
-			return !rec.isEveryone();
+			return !rec.isSystem || !rec.isSystem();
 		}
 	},
 
 	sorters: [
 		{
-			//Sort system groups to the front
+			//Sort into three groups everything else, then my contacts, the offline
 			sorterFn: function(a,b){
-				var ac = a.isSystem(),
-					bc = b.isSystem();
-				return ac === bc ? 0 : ac ? -1 : 1;
+				console.log(a.get('Username'));
+				console.log(b.get('Username'));
+				//This is a pretty fragile way to be doing this.  This is a quick
+				//sort fix though...
+
+				var aIsMyContacts = (/mycontacts-*/).test(a.get('Username'));
+					bIsMyContacts = (/mycontacts-*/).test(b.get('Username'));
+
+				if(aIsMyContacts === bIsMyContacts){
+					return 0;
+				}
+
+				return aIsMyContacts ? 1 : -1;
+
 			}
 		},
 		{
 			property : 'displayName',
-			direction: 'ACE'
+			direction: 'ACE',
+			transform: function(value) {
+                    return value.toLowerCase();
+            }
 		}
 	],
-
-
 
 	getContacts: function(){
 		var names = [];
