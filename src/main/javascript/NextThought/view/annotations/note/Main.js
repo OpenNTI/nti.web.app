@@ -32,7 +32,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		editor: '.respond .editor',
 		replyOptions: '.respond .reply-options',
 		replyButton: '.respond .reply',
-		startChatButton: '.respond .chat',
+		shareButton: '.respond .share',
 		more: '.respond .reply-options .more'
 	},
 
@@ -57,23 +57,15 @@ Ext.define('NextThought.view.annotations.note.Main',{
 
 			if( $AppConfig.service.canShare() ){
 				me.mon(me.replyButton,{ scope: me, click: me.activateReplyEditor });
+				me.mon(me.shareButton,{ scope: me, click: me.onShare });
 			}
 			else{
 				me.replyButton.remove();
+				me.shareButton.remove();
 			}
 
 			me.mon(me.editor.down('.cancel'),{ scope: me, click: me.deactivateReplyEditor });
 			me.mon(me.editor.down('.save'),{ scope: me, click: me.editorSaved });
-
-			if( $AppConfig.service.canChat() ) {
-				me.mon(me.startChatButton,{
-					scope: me,
-					click: me.startChat
-				});
-			}
-			else {
-				this.startChatButton.remove();
-			}
 
 			me.mon(me.editor.down('.content'),{
 				scope: me,
@@ -466,7 +458,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		this.up('window').close();
 	},
 
-	startChat: function() {
+	onChat: function() {
 		this.up('window').fireEvent('chat', this.record);
 		return;
 	}

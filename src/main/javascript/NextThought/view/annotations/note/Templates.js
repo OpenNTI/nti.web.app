@@ -41,13 +41,13 @@ Ext.define('NextThought.view.annotations.note.Templates',{
 			cls: 'reply-options',
 			cn: [
 				{ cls: 'reply', html: 'Reply' },
-				{ cls: 'chat', html: 'Start a chat' },
+				{ cls: 'share', html: 'Share' },
 				{ cls: 'more', title: 'Options', html: '&nbsp;',
 					cn:[{
 						tag: 'ol',
 						cn: [
 							{ tag: 'li', cls: 'edit', html: 'Edit' },
-							{ tag: 'li', cls: 'share', html: 'Share' },
+							{ tag: 'li', cls: 'chat', html: 'Start a chat' },
 							{ tag: 'li', cls: 'flag',  html: 'Flag as Inappropriate' },
 							/*
 							{ tag: 'li', cls: 'add-contact', html: 'Add to Contacts' },
@@ -102,7 +102,7 @@ Ext.define('NextThought.view.annotations.note.Templates',{
 			block = moreEl.down('li.block'),
 			mute = moreEl.down('li.mute'),
 			del = moreEl.down('li.delete'),
-			share = moreEl.down('li.share'),
+			chat = moreEl.down('li.chat'),
 			name = user.getName(),
 			mine = isMe(user),
 			fnA, fnB;
@@ -121,9 +121,6 @@ Ext.define('NextThought.view.annotations.note.Templates',{
 		function remove(){ make('hide',arguments); }
 		function reset(){ make('show',arguments); }
 
-		//if you cannot share, the share with can still be shown, but not edited.
-		//text should be Get Info.
-		if (!mine && share){share.update('Get Info');}
 		//if it's already flagged, make it say so.  Clicking on it won't have
 		//any further effect.
 		if(flag && currentlyFlagged){flag.update('Flagged');}
@@ -134,10 +131,10 @@ Ext.define('NextThought.view.annotations.note.Templates',{
 		fnB = mine ? reset : remove;
 
 		fnA(add,follow,block, mute);
-		fnB(del,edit);
+		fnB(del,edit, chat);
 
-		if(!$AppConfig.service.canShare()){
-			remove(share);
+		if(!$AppConfig.service.canChat()){
+			remove(chat);
 		}
 	},
 

@@ -27,7 +27,6 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 		editor: '.respond .editor',
 		replyOptions: '.respond .reply-options',
 		replyButton: '.respond .reply',
-		startChatButton: '.respond .chat',
 		more: '.respond .reply-options .more'
 	},
 
@@ -53,16 +52,6 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 
 		else if (this.record.isFlagged()) {
 			console.log('TODO - this is flagged, consider an indicator, or remove this log.');
-		}
-
-		if( $AppConfig.service.canChat() ){
-			me.mon(me.startChatButton,{
-				scope: me,
-				click: me.startChat
-			});
-		}
-		else {
-			this.startChatButton.remove();
 		}
 
 		if( $AppConfig.service.canShare() ){
@@ -364,7 +353,7 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 	},
 
 
-	startChat: function() {
+	onChat: function() {
 		this.fireEvent('chat', this.record);
 		return;
 	},

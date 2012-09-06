@@ -18,14 +18,14 @@ Ext.define('NextThought.view.annotations.note.GutterWidget',{
 		editor: '.respond .editor',
 		replyOptions: '.respond .reply-options',
 		replyButton: '.respond .reply',
-		startChatButton: '.respond .chat',
+		shareButton: '.respond .share',
 		more: '.respond .reply-options .more'
 	},
 
 	afterRender: function(){
 		var me = this,
 			r = me.record,
-			mouseUpDivs = [me.liked, me.favorites];
+			mouseUpDivs = [me.liked, me.favorites, me.shareButton];
 		me.callParent(arguments);
 
 		me.setRecord(r);
@@ -48,16 +48,18 @@ Ext.define('NextThought.view.annotations.note.GutterWidget',{
 			}
 		});
 
+		me.mon(me.shareButton, {
+			scope: me,
+			click: function(e){
+				e.stopEvent();
+				this.onShare();
+				return false;
+			}
+		});
+
 		if( !$AppConfig.service.canShare() ){
 			me.replyButton.remove();
-		}
-
-		if($AppConfig.service.canChat()){
-			me.mon(me.startChatButton, 'click', me.startChat, me);
-			mouseUpDivs.push(me.startChatButton);
-		}
-		else {
-			me.startChatButton.remove();
+			me.shareButton.remove();
 		}
 
 		me.liked.update(r.getFriendlyLikeCount());
@@ -149,7 +151,7 @@ Ext.define('NextThought.view.annotations.note.GutterWidget',{
 	},
 
 
-	startChat: function(){
+	onChat: function(){
 		this.fireEvent('chat', this.record);
 		return;
 	}

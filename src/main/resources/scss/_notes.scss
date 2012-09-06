@@ -171,7 +171,7 @@
 		opacity: 0.4;
 		color: #757474;
 
-		.reply, .chat, .more {
+		.reply, .share, .more {
 			display: inline-block;
 			font-weight: 700;
 			font-size: 12px;
@@ -191,12 +191,17 @@
 			background: url(../images/reply.png) 0 8px no-repeat;
 		}
 
+	  	.share {
+			padding-left: 24px;
+			background: url(../images/ico_share.png) 0 8px no-repeat;
+		}
+/*
 		.chat {
 			display: none;
 			padding-left: 28px;
 			background: url(../images/start-chat.png) 0 8px no-repeat;
 		}
-
+*/
 		.more {
 			position: relative;
 			margin-right: 0;
@@ -257,7 +262,9 @@
 
 					&:hover {
 						background-color: #efefef;
-						&.share::after { background-position: -20px 0; }
+						&.chat::after {
+						  	//background: url(../images/start-chat.png) 0 0 no-repeat;
+						}
 						&.edit::after { background-position: -20px -90px; }
 						&.flag::after { background-position: -20px -18px; }
 						&.add-contact::after { background-position: -20px -36px; }
@@ -267,7 +274,9 @@
 						&.delete::after { background-position: -20px -108px; }
 					}
 
-					&.share::after { background-position: 0 0; }
+					&.chat::after {
+					  	background: url(../images/start-chat.png) 0 0 no-repeat;
+					}
 					&.edit::after { background-position: 0 -90px; }
 					&.flag::after { background-position: 0 -18px; }
 					&.add-contact::after { background-position: 0 -36px; }
