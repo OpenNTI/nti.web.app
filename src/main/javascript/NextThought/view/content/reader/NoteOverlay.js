@@ -403,7 +403,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 		//Avoid saving empty notes or just returns.
 		if(!note || note === "" || (Ext.isArray(note) && (note.length < 1)
-			|| Ext.isString(note[0]) && note[0].replace(re,"").trim() === "")){
+			|| Ext.isString(note[0]) && note[0].replace(re,"").trim() === "" && note.length===1)){
 			this.noteOverlayDeactivateEditor();
 			return false;
 		}

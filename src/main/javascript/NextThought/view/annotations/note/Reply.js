@@ -213,7 +213,7 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 		}
 
 		if( Ext.isArray(v.body) && (v.body.length === 0) ||
-			Ext.isString(v.body[0]) && v.body[0].replace(re,"").trim() === ""){
+			Ext.isString(v.body[0]) && v.body[0].replace(re,"").trim() === "" && v.body.length === 1){
 			me.deactivateReplyEditor();
 			return;
 		}
