@@ -22,6 +22,7 @@ Ext.define('NextThought.controller.Search', {
 		'menus.search.Result',
 		'menus.search.More',
 		'menus.search.NoResults',
+		'menus.search.Error',
 		'form.fields.SearchAdvancedOptions'
 	],
 
@@ -61,68 +62,70 @@ Ext.define('NextThought.controller.Search', {
 
 
 	storeLoad: function(store, records, success, opts, searchVal){
+		var results = [], menu = Ext.getCmp('search-results');
 		Ext.getCmp('search-results').el.unmask();
 		if (!success) {
 			console.error('Store did not load correctly!, Do something, no results???');
-			return;
+			results.push({xtype:'search-result-category', category: '', items:[{xtype: 'search-error'}]});
 		}
+		else{
+			//get the groups storted by type, cause the display to chunk them.
+			var resultGroups = store.getGroups(),
+			result, loc,
+			me = this;
 
-		//get the groups storted by type, cause the display to chunk them.
-		var resultGroups = store.getGroups(),
-			result, loc, results = [],
-			menu = Ext.getCmp('search-results'), me = this;
+			if(resultGroups.length === 0){
+				results.push({xtype:'search-result-category', category: '', items:[{xtype: 'search-noresults'}]});
+			}
 
-		if(resultGroups.length === 0){
-			results.push({xtype:'search-result-category', category: '', items:[{xtype: 'search-noresults'}]});
-		}
+			Ext.each(resultGroups, function(group){
+				result = {xtype:'search-result-category', category: this.sanitizeCategoryName(group.name), items:[]};
+				results.push(result);
+				result = result.items;
 
-		Ext.each(resultGroups, function(group){
-			result = {xtype:'search-result-category', category: this.sanitizeCategoryName(group.name), items:[]};
-			results.push(result);
-			result = result.items;
+				Ext.each(group.children, function(hit){
+					var id = hit.get('ContainerId');
+					var lin = LocationProvider.getLineage(id);
+					var chap = [], sortIndexes = LocationProvider.getSortIndexes(id);
 
-			Ext.each(group.children, function(hit){
-				var id = hit.get('ContainerId');
-				var lin = LocationProvider.getLineage(id);
-				var chap = [], sortIndexes = LocationProvider.getSortIndexes(id);
+					sortIndexes.pop();
+					sortIndexes.reverse();
 
-				sortIndexes.pop();
-				sortIndexes.reverse();
+					console.log(sortIndexes, id);
 
-				console.log(sortIndexes, id);
+					lin.pop(); //remove root, we will already have it after resolving "id"
+					lin.shift();//remove the first item as its identical as id.
 
-				lin.pop(); //remove root, we will already have it after resolving "id"
-				lin.shift();//remove the first item as its identical as id.
+					Ext.each(lin,function(c){
+						var i = LocationProvider.getLocation(c);
+						if(!i){
+							console.warn(c+" could not be resolved");
+							return;
+						}
+						chap.unshift(i.label);//the lineage is ordered leaf->root...this list needs to be in reverse order.
+					});
 
-				Ext.each(lin,function(c){
-					var i = LocationProvider.getLocation(c);
-					if(!i){
-						console.warn(c+" could not be resolved");
-						return;
-					}
-					chap.unshift(i.label);//the lineage is ordered leaf->root...this list needs to be in reverse order.
-				});
-
-				loc = LocationProvider.getLocation(id);
-				result.push( {
-					name: hit.get('Creator'),
-					title: loc ? loc.title.get('title') : 'Untitled',
-					chapter: chap.join(' / '),
-					section: loc ? loc.label : 'Unlabeled',
-					snippet: hit.get('Snippet'),
-					term: searchVal,
-					containerId: hit.get('ContainerId'),
-					hitId: hit.getId(),
-					sortId:sortIndexes
-				});
-			},	this);
+					loc = LocationProvider.getLocation(id);
+					result.push( {
+						name: hit.get('Creator'),
+						title: loc ? loc.title.get('title') : 'Untitled',
+						chapter: chap.join(' / '),
+						section: loc ? loc.label : 'Unlabeled',
+						snippet: hit.get('Snippet'),
+						term: searchVal,
+						containerId: hit.get('ContainerId'),
+						hitId: hit.getId(),
+						sortId:sortIndexes
+					});
+				},	this);
 
 
 				result = Ext.Array.sort(result, me.sortSearchHits, me);
 				console.log(result);
 
 
-		}, this);
+			}, this);
+		}
 
 		menu.removeAll(true);
 
