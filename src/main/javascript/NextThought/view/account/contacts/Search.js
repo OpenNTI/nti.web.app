@@ -89,7 +89,12 @@ Ext.define('NextThought.view.account.contacts.Search',{
 		this.mon(this.down('simpletext'),{
 			scope: this,
 			changed: this.search,
-			clear: this.clear
+			clear: this.clear,
+			blur: function(input){
+				if(!input.getValue()){
+					this.hide();
+				}
+			}
 		});
 
 
