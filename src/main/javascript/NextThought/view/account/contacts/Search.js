@@ -3,7 +3,8 @@ Ext.define('NextThought.view.account.contacts.Search',{
 	extend: 'Ext.container.Container',
 	alias: 'widget.contact-search',
 	requires: [
-		'NextThought.view.form.fields.SimpleTextField'
+		'NextThought.view.form.fields.SimpleTextField',
+		'NextThought.view.account.contacts.management.Popout'
 	],
 	floating: true,
 
@@ -71,11 +72,25 @@ Ext.define('NextThought.view.account.contacts.Search',{
 		this.view = this.down('dataview');
 		this.view.bindStore( this.store );
 
+		this.mon(this.view,{
+			scope: this,
+			itemclick: this.itemClicked
+		});
+
 		this.mon(this.down('simpletext'),{
 			scope: this,
 			changed: this.search,
 			clear: this.clear
 		});
+	},
+
+
+	itemClicked: function(view,record,item,index, e){
+//		var clickedAdd = Boolean(e.getTarget('.add'));
+		var pop = Ext.widget('add-contact-popout',{record: record});
+
+		pop.show();
+		pop.alignTo(Ext.fly(item).down('.add'),'tr-tl',[-10,-20]);
 	},
 
 

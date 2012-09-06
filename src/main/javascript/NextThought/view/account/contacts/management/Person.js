@@ -8,10 +8,10 @@ Ext.define('NextThought.view.account.contacts.management.Person',{
 	layout: 'auto',
 	componentLayout: 'templated-container',
 	cls: 'add-person-card',
+
 	renderTpl: [
 		'<div class="contact-card-wrapper">',
 		'<div class="contact-card">',
-			'<img class="nib" src="{blank}" alt="Unselect this contact">',
 			'<img src="{avatarURL}">',
 			'<div class="card-body">',
 				'<div class="name">{name}</div>',
@@ -24,7 +24,7 @@ Ext.define('NextThought.view.account.contacts.management.Person',{
 		'</div>'
 	],
 	items: [
-		{xtype: 'management-group-list', allowSelect: true, hidden: true}
+		{xtype: 'management-group-list', allowSelect: true}
 	],
 
 	childEls: ['body'],
@@ -47,13 +47,6 @@ Ext.define('NextThought.view.account.contacts.management.Person',{
 
 		this.groupsList = this.down('management-group-list');
 		this.groupsList.block(this.user.get('Username'));
-
-		this.mon(this.groupsList,'selectionchange',this.groupSelectionChange,this);
-	},
-
-
-	groupSelectionChange: function(view,selection){
-		this.fireEvent('groups-changed',selection.length!==0);
 	},
 
 
@@ -62,42 +55,5 @@ Ext.define('NextThought.view.account.contacts.management.Person',{
 			user: this.user.getId(),
 			groups: this.groupsList.getSelected()
 		};
-	},
-
-
-	afterRender: function(){
-		this.callParent(arguments);
-		this.getEl().addClsOnOver('selection-item-over');
-		this.getEl().down('.contact-card').on('click', this.toggle, this);
-		this.getEl().down('.nib').on('click', this.removeClick, this);
-	},
-
-
-	removeClick: function(e){
-		e.stopEvent();
-		this.destroy();
-		return false;
-	},
-
-
-	toggle: function(){
-		if(!this.el){return;}
-		if(this.groupsList.isVisible()){
-			this.collapse();
-			return;
-		}
-		this.expand();
-	},
-
-
-	collapse: function(){
-		this.removeCls('expanded');
-		this.groupsList.hide();
-	},
-
-	expand: function(){
-		this.fireEvent('beforeexpand',this);
-		this.addCls('expanded');
-		this.groupsList.show();
 	}
 });
