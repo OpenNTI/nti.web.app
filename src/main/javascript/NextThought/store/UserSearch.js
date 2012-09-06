@@ -12,7 +12,6 @@ Ext.define('NextThought.store.UserSearch',{
 
 	filters:[
 		{ fn: function(rec){ return !isMe(rec); } },
-		{ fn: function(rec){ return !rec.isGroup; } },
 		{ fn: function(rec){ return (!rec.isEveryone || !rec.isEveryone()); } }
 	],
 

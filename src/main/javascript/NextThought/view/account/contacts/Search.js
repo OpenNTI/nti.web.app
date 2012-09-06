@@ -70,6 +70,7 @@ Ext.define('NextThought.view.account.contacts.Search',{
 	initComponent: function(){
 		this.callParent(arguments);
 		this.store = new NextThought.store.UserSearch();
+		this.store.filter({ fn: function(rec){ return !rec.isGroup; } });
 		this.view = this.down('dataview');
 		this.view.bindStore( this.store );
 
