@@ -106,7 +106,7 @@
 
 	background: #f8f8f8;
 	border: 1px solid #cecece;
-	box-shadow: 0 2px 20px 5px rgba(0,0,0,0.14), inset 0 2px 0 0 rgba(255,255,255,0.5);
+	box-shadow: 0 2px 10px 0 rgba(0,0,0,0.14), inset 0 2px 0 0 rgba(255,255,255,0.5);
 	&::after{
 		content: url(../images/add_contact_pointer2.png);
 		position: absolute;

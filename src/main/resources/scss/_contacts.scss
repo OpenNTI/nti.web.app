@@ -9,108 +9,6 @@
 
 $over-color: #f4f3f3;
 
-.my-contacts-tab-bar{
-	padding: 0 0 10px 30px;
-
-	.my-contacts-tab-bar-body{
-		padding-top: 20px !important;
-		border: none;
-		border-width: 0;
-		border-top: 1px solid #dcdcdc;
-		width: 215px !important;
-		margin-right: 30px;
-		background: url(../images/contact-under-divider.png) repeat-x 1px 49px;
-		.x-gecko & {
-			background-position: 1px 51px;
-		}
-	}
-}
-
-.x-tab-my-contacts {
-	&.x-tab {
-		background: none !important;
-		height: auto;
-		margin-right: 10px;
-
-		&.x-tab-top-active{
-			button {
-				color: #7d7d7d;
-				border-bottom: 2px solid #7d7d7d !important;
-				.x-ie & {
-					padding-bottom: 0;
-				}
-			}
-		}
-
-		em { padding: 0; line-height: normal; }
-
-		button {
-			color: #c4c4c4;
-			font-family: $font !important;
-			font-size: 13.5pt;
-			font-weight: 200;
-			border-bottom: 2px solid #ebebeb;
-			overflow: hidden !important;
-			padding-bottom: 5px;
-			.x-ie & {
-				border-bottom: none;
-				padding-bottom: 2px;
-			}
-		}
-
-		&.x-icon {
-			margin-left: 50px;
-			margin-right: 0;
-			&.x-tab-top-active{
-				.x-tab-icon{
-					&.manage-groups {
-						background-position: -56px 0 !important;
-					}
-				}
-			}
-			&.x-over{
-				.x-tab-icon{
-					&.manage-groups {
-						background-position: -28px 0;
-					}
-				}
-			}
-
-			button{
-				height: 31px !important;
-				padding: 0 !important;
-				.x-gecko & {
-					height: 33px;
-				}
-
-				.x-tab-inner {
-					display: none;
-				}
-
-				.x-tab-icon{
-					position: static;
-					display: inline-block;
-					width: 24px;
-					height: 24px;
-
-					&.manage-groups{
-						background: url(../images/add_btn.png) 0 0 no-repeat;
-						&:hover {
-							background-position: -28px 0;
-						}
-					}
-				}
-			}
-		}
-	}
-}
-
-.x-panel-body-my-contacts {
-	.x-tabpanel-child {
-		padding-right: 30px;
-		@include animate(bounceInRight, 0.5s);
-	}
-}
 
 .x-panel.contacts-panel {
 	//padding: 0 10px 20px 10px;
@@ -235,214 +133,105 @@ $over-color: #f4f3f3;
 
 
 
-.contacts-management {
-	padding: 0 30px;
+.add-contact-popout .add-person-card .group-selection-list {
+	background: #ffffff;
 
-	.label {
-		@include contact-header;
-		margin-top: 20px;
-		&.group {
-			margin-top: 40px;
+	.selection-list-ct {
+		&::before{
+			color: #8a8989;
+			font-size: 10px;
+			font-weight: bold;
+			content: 'SELECT GROUPS';
+			display: block;
+			margin: 20px 0 5px 35px;
 		}
-	}
 
-	.user-search-field {
-		margin: 7px 0;
-		input {
-			@include text-box-style;
-		}
-		.x-form-item-body {
-			position: static;
-		}
-		.x-trigger-cell {
-			&.hidden {
-				display: none;
-			}
-		}
-	}
-
-	input {
 		background: none;
-		@include text-box-style;
-	}
+		ul {
+			padding-bottom: 10px;
 
-	.contact-selection-list {
-		margin: 10px 0;
-		$value: opacity 0.5s;
-		@include experimental(transition, $value);
-
-		&.fade-out {
-			opacity: 0.2;
-		}
-
-		overflow: visible;
-		border-radius: 3px;
-		background: #ffffff;
-
-		div.add-person-card {
-			background: #ffffff;
-			box-shadow: 1px 1px 3px -1px rgba(100, 100, 100, 0.4);
-			border: 1px solid #dcdcdc;
-			border-bottom-width: 0;
-			overflow: hidden;
-
-			&.expanded,
-			&.selection-item-over{
-				cursor: pointer;
-			}
-
-			&:first-of-type{
-				border-radius: 3px 3px 0 0;
-			}
-
-			&.last-item {
-				border-bottom-width: 1px;
-				border-radius: 0 0 3px 3px;
-			}
-
-			&.expanded {
-				margin-bottom: 10px;
-				&.last-item {
-					margin-bottom: 0;
-				}
-				border-bottom-width: 1px;
-
-				&, & * {
-					border-radius: 0 0 3px 3px;
-				}
-
-			}
-
-			.group-selection-list {
-				margin-top: 0px;
-				ul:first-of-type:before {
-					margin-top: 10px;
-					padding: 5px 5px 5px 60px;
-					content: 'Select Groups';
-					display: block;
-					@include menu-label-text-treatment;
-				}
-			}
-
-			.selection-nt .selection-list-ct {
-				border-top: 1px solid #dcdcdc;
-				li.selection-item-over {
-					background-color: transparent !important;
-					//img.delete-group { display: none !important; }
-				}
-			}
-
-			.contact-card-wrapper {
-				padding-right: 5px;
-				.contact-card {
-					margin: 7px 10px;
-					img.nib{
-						background-position: -20px -2px;
-					}
-				}
-			}
-		}
-	}
-
-
-	.group-selection-list {
-		margin-top: 10px;
-
-		.selection-list-ct {
-			background: none;
-			ul {
-				padding-bottom: 10px;
-
-				&.disallowSelection{
-					li.selection-list-item {
-						background: none !important;
-						padding: 5px;
-					}
-				}
-
+			&.disallowSelection{
 				li.selection-list-item {
-					padding: 5px 5px 5px 60px;
-					background: transparent url(../images/forms/check_box.png) no-repeat 35px 7px;
+					background: none !important;
+					padding: 5px;
+				}
+			}
 
-					&.selection-item-over{
-						background-color: $over-color;
-						color: #767676 !important;
-						pointer: default;
+			li.selection-list-item {
+				padding: 5px 5px 5px 35px;
+				color: #767676 !important;
+				background: transparent url(../images/forms/check_box.png) no-repeat 12px 7px;
+
+				&.selection-item-over{
+					background-color: $over-color;
+					color: #767676 !important;
+					pointer: default;
+				}
+
+
+				&.selection-selected {
+					background: transparent url(../images/forms/check_mark_a.png) no-repeat 15px 10px;
+					&:active {
+						background-image: url(../images/forms/check_mark_b.png);
 					}
+				}
 
 
-					&.selection-selected {
-						background: transparent url(../images/forms/check_mark_a.png) no-repeat 38px 10px;
-						&:active {
-							background-image: url(../images/forms/check_mark_b.png);
-						}
+				&.add-group-action {
+					background: none;
+				}
+
+				a {
+					&:active, &:visited, &:link{
+						border: 0 dotted #767676;
+						border-bottom-width: 2px;
+						color: #767676;
+						display: inline-block;
+						font-style: italic;
+						padding: 0px 2px;
+						text-decoration: none;
 					}
+				}
 
+				input {
+					border: none;
+					box-shadow: none;
+					background: transparent;
+					padding: 0;
+					height: auto;
 
-					&.add-group-action {
-						background: none;
-					}
+					$value: text-shadow 0.5s, color 0.5s;
 
-					a {
-						&:active, &:visited, &:link{
-							border: 0 dotted #767676;
-							border-bottom-width: 2px;
-							color: #767676;
-							display: inline-block;
-							font-style: italic;
-							padding: 0px 2px;
-							text-decoration: none;
-						}
-					}
+					@include experimental(transition, $value);
 
-					input {
-						border: none;
-						box-shadow: none;
-						background: transparent;
-						padding: 0;
-						height: auto;
-
-						$value: text-shadow 0.5s, color 0.5s;
-
+					&.error {
 						@include experimental(transition, $value);
-
-						&.error {
-							@include experimental(transition, $value);
-							@include animate(shake);
-							color: red;
-							text-shadow: 2px 2px 2px #ffc0c0;
-						}
+						@include animate(shake);
+						color: red;
+						text-shadow: 2px 2px 2px #ffc0c0;
 					}
+				}
 
-					img.delete-group {
-						display: none;
-						background: transparent url(../images/add_remove_gry.png) -20px -2px no-repeat;
-						margin-top: 3px;
-						border: none !important;
-						float: right;
-						width: 14px;
-						height: 14px;
-						cursor: pointer;
-						opacity: 0.5;
-						&:active {
-							opacity: 1;
-						}
+				img.delete-group {
+					display: none;
+					background: transparent url(../images/add_remove_gry.png) -20px -2px no-repeat;
+					margin-top: 3px;
+					border: none !important;
+					float: right;
+					width: 14px;
+					height: 14px;
+					cursor: pointer;
+					opacity: 0.5;
+					&:active {
+						opacity: 1;
 					}
+				}
 
-					&.selection-item-over {
-						img.delete-group { display: block !important; }
-					}
+				&.selection-item-over {
+					img.delete-group { display: block !important; }
 				}
 			}
 		}
-	}
-
-	.add-contacts-finish-box {
-		margin-top: 20px !important;
-		padding-top: 10px !important;
-		border: none;
-		border-width: 0;
-		border-top: 1px solid #dcdcdc;
 	}
 }
 
