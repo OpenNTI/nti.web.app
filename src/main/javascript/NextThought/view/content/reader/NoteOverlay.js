@@ -139,7 +139,9 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 			mousemove: me.noteOverlayMouseOver,
 			mouseover: me.noteOverlayMouseOver,
 			mouseout: me.noteOverlayMouseOut,
-			click: me.noteOverlayActivateEditor
+			//removed for mathcounts rollout to avoid apparent confusion. for now.
+			//click: me.noteOverlayActivateEditor
+			click: me.noteOverlayActivateRichEditor
 		});
 
 		data.editorActions = new NoteEditorActions(me, data.editor);
