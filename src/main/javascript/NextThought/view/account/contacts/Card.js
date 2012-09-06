@@ -85,8 +85,21 @@ Ext.define('NextThought.view.account.contacts.Card',{
 		});
 
 		this.menu.on('click',this.changeGrouping,this);
+		this.mon(this.menu, {
+			scope: this,
+			'mouseleave': this.startHide,
+			'mouseenter': this.stopHide
+		});
 	},
 
+	startHide: function(){
+		var me = this;
+		me.stopHide();
+		me.leaveTimer = setTimeout(function(){me.menu.hide();}, 500);
+	},
+
+
+	stopHide: function(){ clearTimeout(this.leaveTimer); },
 
 	changeGrouping: function(menu,item){
 		var group = item.record;

@@ -66,6 +66,12 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 				this.groupChatAction
 			]
 		});
+
+		this.mon(this.menu, {
+			scope: this,
+			'mouseleave': this.startHide,
+			'mouseenter': this.stopHide
+		});
 	},
 
 
@@ -85,6 +91,16 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 			}
 			,this);
 	},
+
+	startHide: function(){
+		var me = this;
+		me.stopHide();
+		me.leaveTimer = setTimeout(function(){me.menu.hide();}, 500);
+	},
+
+
+	stopHide: function(){ clearTimeout(this.leaveTimer); },
+
 
 	setTitle: function(title){
 		var itemsShown = 0;
