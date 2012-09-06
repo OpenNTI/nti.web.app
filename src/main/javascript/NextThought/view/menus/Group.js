@@ -27,6 +27,12 @@ Ext.define('NextThought.view.menus.Group',{
 		this.callParent(arguments);
 		this.store = Ext.getStore('FriendsList');
 		this.store.on('datachanged', this.reload, this);
+
+		if(this.checklist){
+			this.defaults = Ext.clone(this.defaults);
+			this.defaults.xtype = 'menucheckitem';
+		}
+
 		this.reload();
 	},
 
@@ -35,11 +41,13 @@ Ext.define('NextThought.view.menus.Group',{
 		this.removeAll(true);
 
 		var items = [],
+			special = 'mycontacts-'+$AppConfig.username,
+			hideMyContacts = this.hideMyContacts,
 			communities = $AppConfig.userObject.getCommunities();
 
 		//items.push({ cls: 'group-filter everyone', text: 'Everyone', isEveryone:true, record: UserRepository.getTheEveryoneEntity()});
 
-		if(communities.length>0){
+		if(!this.hideCommunities && communities.length>0){
 			Ext.each(communities,function(c){
 				items.push({
 					cls: 'group-filter',
@@ -48,10 +56,14 @@ Ext.define('NextThought.view.menus.Group',{
 					isGroup: true
 				});
 			});
+
+			items.push({ xtype: 'labeledseparator', text: 'Groups', cls: 'doublespaced' });
 		}
 
-		items.push({ xtype: 'labeledseparator', text: 'Groups', cls: 'doublespaced' });
 		this.store.each(function(v){
+			if(v.get('Username')===special && hideMyContacts){
+				return;
+			}
 			items.push({
 				cls: 'group-filter',
 				text: v.getName(),

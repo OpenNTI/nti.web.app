@@ -83,7 +83,12 @@ Ext.define('NextThought.view.account.contacts.Card',{
 			items: [
 				this.removeContactAction,
 				this.deleteContactAction,
-				this.startChatAction
+				this.startChatAction,
+				{
+					text: 'Manage Groups',
+					ui: 'nt-menuitem', plain: true,
+					menu: Ext.widget('group-menu',{hideCommunities:true, checklist:true, hideMyContacts:true})
+				}
 			]
 		});
 
