@@ -40,10 +40,10 @@ Ext.define('NextThought.view.account.Contacts',{
 				{ xtype: 'box' },
 
 				{ cls: "disabled-contacts-view", xtype: 'box',
-					autoEl: {cls:'disabled-message-div',cn:[
+				  autoEl:{cn:[ {cls:'disabled-message-div',cn:[
 						{cls:'disabled-title', html:'Social Features Disabled...'},
 						'We need your parent\'s permission to give you more features.&nbsp; Ask your parent to email us.'
-					]}
+				  ]}]}
 				}
 			]
 		}
