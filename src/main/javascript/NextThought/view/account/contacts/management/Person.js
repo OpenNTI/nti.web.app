@@ -19,7 +19,7 @@ Ext.define('NextThought.view.account.contacts.management.Person',{
 					cls: 'text-wrap',
 					cn: [
 						{cls: 'name', html: '{name}'},
-						{cls: 'affiliation', html: '{affiliation}affiliation'}
+						{cls: 'affiliation', html: '{affiliation-dontshowthis}'}
 					]
 				}
 			]

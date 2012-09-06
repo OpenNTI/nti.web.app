@@ -48,7 +48,7 @@ Ext.define('NextThought.view.account.contacts.Search',{
 								cls: 'text-wrap',
 								cn: [
 									{cls: 'name', html: '{displayName}'},
-									{cls: 'affiliation', html: '{affiliation}testing'}
+									{cls: 'affiliation', html: '{affiliation-dontshowthis}'}
 								]
 							}
 						]

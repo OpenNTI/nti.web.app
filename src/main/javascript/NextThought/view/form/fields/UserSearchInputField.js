@@ -39,7 +39,7 @@ Ext.define( 'NextThought.view.form.fields.UserSearchInputField', {
 				'<img src="{avatarURL}">',
 				'<div class="card-body {[this.getType(values)]}">',
 					'<div class="name">{displayName}</div>',
-					'<div class="status">{affiliation}</div>',
+					'<div class="status">{affiliation-dontshowthis}</div>',
 			'</div>',
 		{
 			getType: function(model){
