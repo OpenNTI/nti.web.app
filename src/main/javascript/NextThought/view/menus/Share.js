@@ -210,7 +210,7 @@ Ext.define('NextThought.view.menus.Share',{
 			item.setChecked(c, true);
 		}
 		else {
-			everyone.setChecked(false, true);
+//			everyone.setChecked(false, true);
 			me.setChecked(false, true);
 			custom.setChecked(false, true);
 		}
