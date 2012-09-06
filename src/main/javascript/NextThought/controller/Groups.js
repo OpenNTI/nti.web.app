@@ -250,21 +250,21 @@ Ext.define('NextThought.controller.Groups', {
 			contacts = store.findRecord('Username',contactsId,0,false,true,true),
 			tracker = Globals.getAsynchronousTaskQueueForList(groupList);
 
-		tracker.push({});//add one just in case the contacts group is already in the list...
-
 		function finish(){
 			if(!tracker.pop()){
 				store.reload();
 			}
 		}
 
-		if(!Ext.Array.contains(contacts.get('friends'),username)){
-			contacts.addFriend(username).save({callback:finish});
+		if(!contacts.hasFriend(username) ){
+			//add one just in case the contacts group is already in the list...
+			tracker.push({});
+			contacts.addFriend(username).saveField('friends',null,finish);
 		}
 
 		Ext.each(groupList,function(g) {
-			if( g.get('Username') !== contactsId ){
-				g.addFriend(username).save({callback:finish});
+			if( g.get('Username') !== contactsId && !g.hasFriend(username) ){
+				g.addFriend(username).saveField('friends',null,finish);
 			}
 			else {
 				//skip it, we did this up front.
@@ -275,38 +275,33 @@ Ext.define('NextThought.controller.Groups', {
 
 
 	deleteContact: function(user){
-		var store = this.getFriendsListStore(),
-			username = user.get('Username'),
-			tracker = Globals.getAsynchronousTaskQueueForList(store.getCount());
-
-		function finish(){
-			if(!tracker.pop()){
-				store.reload();
-			}
-		}
-
-		store.each(function(g) {
-			g.removeFriend(username).save({callback:finish});
-		});
+		this.removeContact(null,user.get('Username'));
 	},
 
 
 	removeContact: function(record, contact){
 		var store = this.getFriendsListStore(),
 			userId = typeof contact === 'string' ? contact : contact.get('Username'),
-			count = store.getCount();
+			count = Globals.getAsynchronousTaskQueueForList(store.getCount()),
+			modified = false;
 
 		function finish(){
-			count--;
-			if(count<=0){ store.load(); }
+			if(!count.pop() && modified){
+				store.load();
+			}
 		}
 
 		function remove(record){
-			record.removeContact(userId).save({callback:finish});
+			if( record.hasFriend(userId) ){
+				modified = true;
+				record.removeFriend(userId).saveField('friends',null,finish);
+			} else {
+				finish();
+			}
 		}
 
 		if(record){
-			count = 1;
+			count = Globals.getAsynchronousTaskQueueForList(1);
 			remove(record);
 		}
 		else {

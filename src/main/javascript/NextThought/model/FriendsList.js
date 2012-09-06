@@ -40,6 +40,10 @@ Ext.define('NextThought.model.FriendsList', {
 	},
 
 
+	hasFriend: function(username){
+		return Ext.Array.contains(this.get('friends'),username);
+	},
+
 
 	drawIcon: function(canvas){
 
