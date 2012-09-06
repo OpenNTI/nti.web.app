@@ -17,7 +17,14 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 			xtype: 'container',
 			cls: 'add-button',
 			layout: 'fit',
-			items: { xtype: 'button', ui: 'primary', text: 'Add to Contacts' }
+			items: {
+				xtype: 'button',
+				ui: 'primary',
+				text: 'Add to Contacts',
+				handler: function(btn){
+					btn.up('.add-contact-popout').addContact();
+				}
+			}
 		}
 	],
 
@@ -29,7 +36,6 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 
 	initComponent: function(){
 		this.callParent(arguments);
-
 		this.on('blur',this.destroy,this);
 	},
 
@@ -51,5 +57,12 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 		if(!e.getTarget('.add-contact-popout')){
 			this.fireEvent('blur');
 		}
+	},
+
+
+
+	addContact: function(){
+		console.log('do it!');
+		this.destroy();
 	}
 });
