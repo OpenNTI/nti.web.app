@@ -96,10 +96,10 @@ Ext.define('NextThought.view.account.contacts.Search',{
 				}
 			}
 		});
-
-
-
 	},
+
+
+
 
 
 	itemClicked: function(view,record,item,index, e){
@@ -117,11 +117,13 @@ Ext.define('NextThought.view.account.contacts.Search',{
 			this.clear();
 		}
 		else {
+			this.setHeight(Ext.Element.getViewportHeight()-this.getPosition()[1]);
 			this.store.search(value);
 		}
 	},
 
 	clear: function(){
+		this.setHeight(52);
 		this.store.removeAll();
 	}
 });
