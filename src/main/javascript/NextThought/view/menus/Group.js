@@ -27,11 +27,7 @@ Ext.define('NextThought.view.menus.Group',{
 		this.callParent(arguments);
 		this.store = Ext.getStore('FriendsList');
 		this.store.on('datachanged', this.reload, this);
-
-		if(this.checklist){
-			this.defaults = Ext.clone(this.defaults);
-			this.defaults.xtype = 'menucheckitem';
-		}
+		this.store.on('load', this.reload, this);
 
 		this.reload();
 	},
@@ -43,6 +39,8 @@ Ext.define('NextThought.view.menus.Group',{
 		var items = [],
 			special = 'mycontacts-'+$AppConfig.username,
 			hideMyContacts = this.hideMyContacts,
+			check = this.checklist,
+			name = this.username,
 			communities = $AppConfig.userObject.getCommunities();
 
 		if(this.actions){
@@ -54,6 +52,7 @@ Ext.define('NextThought.view.menus.Group',{
 		if(!this.hideCommunities && communities.length>0){
 			Ext.each(communities,function(c){
 				items.push({
+					xtype: check ? 'menucheckitem': undefined,
 					cls: 'group-filter',
 					text: c.getName(),
 					record: c,
@@ -68,11 +67,15 @@ Ext.define('NextThought.view.menus.Group',{
 			if(v.get('Username')===special && hideMyContacts){
 				return;
 			}
+
+
 			items.push({
+				xtype: check ? 'menucheckitem': undefined,
 				cls: 'group-filter',
 				text: v.getName(),
 				record: v,
-				isGroup: true
+				isGroup: true,
+				checked: check && Ext.Array.contains(v.get('friends'),name)
 			});
 		});
 

@@ -75,6 +75,7 @@ Ext.define('NextThought.view.account.contacts.Card',{
 			hideCommunities:true,
 			checklist:true,
 			hideMyContacts:true,
+			username: this.username,
 			actions: [
 				this.removeContactAction,
 				this.deleteContactAction,
@@ -83,6 +84,16 @@ Ext.define('NextThought.view.account.contacts.Card',{
 			]
 		});
 
+		this.menu.on('click',this.changeGrouping,this);
+	},
+
+
+	changeGrouping: function(menu,item){
+		var group = item.record;
+		if(!group){
+			return;
+		}
+		group[item.checked?'addFriend':'removeFriend'](this.username).save();
 	},
 
 
@@ -91,6 +102,18 @@ Ext.define('NextThought.view.account.contacts.Card',{
 
 		el.on('click', this.clicked, this);
 		el.addClsOnOver('card-over');
+		this.callParent(arguments);
+	},
+
+
+	destroy: function(){
+		if(this.menu.isVisible()){
+			this.menu.on('hide',this.menu.destroy,this.menu);
+		}
+		else {
+			this.menu.destroy();
+		}
+
 		this.callParent(arguments);
 	},
 
