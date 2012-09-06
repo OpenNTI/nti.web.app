@@ -26,7 +26,7 @@ Ext.define('NextThought.view.annotations.note.CarouselItem',{
 		this.id = IdCache.getComponentId(m,null, 'carousel-item');
 		this.callParent(arguments);
 
-		this.renderData = {count:m.getReplyCount()|| '&nbsp;'};
+		this.renderData = {count:m.getReplyCount()|| false};
 		UserRepository.getUser(m.get('Creator'),this.fillInUser,this);
 	},
 
@@ -50,7 +50,9 @@ Ext.define('NextThought.view.annotations.note.CarouselItem',{
 		if(this.avatarImage){
 			this.image.setStyle({ backgroundImage: this.avatarImage });
 		}
-
+		if(!this.renderData.count){
+			this.el.down('.count').update('&nbsp;');
+		}
 		this.el.on('click', this.clicked, this);
 	},
 
