@@ -71,24 +71,15 @@ Ext.define('NextThought.view.account.contacts.Card',{
 			disabled: this.user.get('Presence')==='Offline'
 		});
 
-		this.menu = Ext.widget('menu',{
-			ui: 'nt',
-			plain: true,
-			showSeparator: false,
-			shadow: false,
-			frame: false,
-			border: false,
-			hideMode: 'display',
-			parentItem: this,
-			items: [
+		this.menu = Ext.widget('group-menu',{
+			hideCommunities:true,
+			checklist:true,
+			hideMyContacts:true,
+			actions: [
 				this.removeContactAction,
 				this.deleteContactAction,
 				this.startChatAction,
-				{
-					text: 'Manage Groups',
-					ui: 'nt-menuitem', plain: true,
-					menu: Ext.widget('group-menu',{hideCommunities:true, checklist:true, hideMyContacts:true})
-				}
+				{ xtype: 'labeledseparator', text: 'Select Groups', cls: 'doublespaced' }
 			]
 		});
 

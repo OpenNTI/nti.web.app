@@ -38,12 +38,16 @@ Ext.define('NextThought.view.menus.Group',{
 
 
 	reload: function(){
-		this.removeAll(true);
+		this.removeAll();
 
 		var items = [],
 			special = 'mycontacts-'+$AppConfig.username,
 			hideMyContacts = this.hideMyContacts,
 			communities = $AppConfig.userObject.getCommunities();
+
+		if(this.actions){
+			items.push.apply(items,this.actions);
+		}
 
 		//items.push({ cls: 'group-filter everyone', text: 'Everyone', isEveryone:true, record: UserRepository.getTheEveryoneEntity()});
 
