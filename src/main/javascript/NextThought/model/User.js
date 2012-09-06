@@ -28,11 +28,18 @@ Ext.define(	'NextThought.model.User', {
 
 
 	getCommunities: function(){
-		var r = [];
+		var r = [], u;
 
 		Ext.each($AppConfig.userObject.get('Communities'),function(c){
 			if(!/^everyone$/i.test(c)){
-				r.push(UserRepository.store.findRecord('Username',c));
+				//FIXME dfls come back in communities but there usernames
+				//are ntiids.  We can't seem to find them in the below lookup
+				//and we end up with null in the return value.  That creates
+				//all sorts of issues later on so as a quick fix don't add them
+				u = UserRepository.store.findRecord('Username',c);
+				if(u){
+					r.push();
+				}
 			}
 		});
 
