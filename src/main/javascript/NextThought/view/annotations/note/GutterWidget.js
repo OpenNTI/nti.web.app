@@ -60,6 +60,7 @@ Ext.define('NextThought.view.annotations.note.GutterWidget',{
 		if( !$AppConfig.service.canShare() ){
 			me.replyButton.remove();
 			me.shareButton.remove();
+			mouseUpDivs.pop();
 		}
 
 		me.liked.update(r.getFriendlyLikeCount());
