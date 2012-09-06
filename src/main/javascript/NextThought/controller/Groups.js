@@ -13,7 +13,8 @@ Ext.define('NextThought.controller.Groups', {
 	],
 
 	views: [
-		'account.contacts.management.Panel'
+		'account.contacts.management.GroupList',
+		'account.contacts.management.Person'
 	],
 
 	MY_CONTACTS_PREFIX_PATTERN: 'mycontacts-{0}',
@@ -73,11 +74,7 @@ Ext.define('NextThought.controller.Groups', {
 
 
 	getContacts: function(callback){
-		var names = [];
-
-		this.getFriendsListStore().each(function(g){
-			names.push.apply(names,g.get('friends'));
-		});
+		var names = this.getFriendsListStore().getContacts();
 
 		names = Ext.Array.sort(Ext.Array.unique(names));
 

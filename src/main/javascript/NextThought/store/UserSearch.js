@@ -18,5 +18,14 @@ Ext.define('NextThought.store.UserSearch',{
 		fn: function(rec){
 			return !rec.isEveryone || !rec.isEveryone();
 		}
-	}]
+	}],
+
+
+	search: function(query){
+		this.load({
+			params: {
+				query: encodeURIComponent(query)
+			}
+		});
+	}
 });

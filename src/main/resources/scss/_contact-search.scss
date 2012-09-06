@@ -1,0 +1,97 @@
+
+
+.contact-search {
+	&.x-box-layout-ct {
+		&, & > .x-box-inner {
+			overflow: visible;
+		}
+	}
+
+	.search-field {
+		background: #ffffff;
+		border-top: 1px solid #ededed;
+		//border-left: 1px solid #cacaca;
+		border-bottom: 1px solid #d5d5d5;
+		box-shadow: 0 1px 1px -1px rgba(0,0,0,0.2);
+		padding: 10px;
+
+		&::after{
+			content: ' ';
+			position: absolute;
+			width: 38px;
+			height: 10px;
+			background: #ffffff;
+			top: -5px;
+			right: 0;
+		}
+	}
+
+
+	.search-results {
+		box-shadow: inset 0 0 0 -1px #ffffff;
+		//border: 1px solid #cacaca;
+
+		.x-item-selected,
+		.over {
+			.item {
+				border-radius: 1px;
+				box-shadow: 0 0 0 4px #f1f1f1;
+				background-color: #f1f1f1;
+
+				img.add {
+					background-position: -18px 0;
+				}
+			}
+		}
+
+		.item {
+			posititon: relative;
+			overflow: hidden;
+			padding: 5px 8px 3px 20px;
+
+			img {
+				width: 32px;
+				height: 32px;
+				float: left;
+
+				&.add {
+					margin-top: 7px;
+					float: right;
+					cursor: pointer;
+					background: url(../images/add_contact.png) 0 0 no-repeat;
+					width: 18px;
+					height: 17px;
+					&:hover {
+						background-position: -18px 0;
+					}
+				}
+
+			}
+
+			.text-wrap {
+				margin: 0 33px 0 46px;
+
+				.name {
+					@include menu-label-text-treatment;
+					color: #3fb3f6;
+				}
+				.affiliation {
+					color: #757474;
+					font: { size: 12px; weight: 400; }
+				}
+			}
+
+			.not-in-contacts {
+
+			}
+
+			&.my-contact {
+				img.add {display: none;}
+				.text-wrap {
+					margin-right: 0;
+				}
+			}
+		}
+
+	}
+}

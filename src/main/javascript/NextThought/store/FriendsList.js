@@ -42,5 +42,13 @@ Ext.define('NextThought.store.FriendsList',{
 			property : 'displayName',
 			direction: 'ACE'
 		}
-	]
+	],
+
+
+
+	getContacts: function(){
+		var names = [];
+		this.each(function(g){ names.push.apply(names,g.get('friends')); });
+		return Ext.Array.sort(Ext.Array.unique(names));
+	}
 });

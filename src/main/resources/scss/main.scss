@@ -15,7 +15,6 @@ $font: 'Open Sans', 'Helvetica', arial, sans-serif;
 @import "_content.scss";
 @import "_content-nav.scss";
 @import "_myaccount.scss";
-@import "_mycontacts.scss";
 @import "_masks-and-tips.scss";
 @import "_file-uploader.scss";
 @import "_nti-override.scss";
@@ -37,6 +36,8 @@ $font: 'Open Sans', 'Helvetica', arial, sans-serif;
 @import "_identity.scss";
 @import "_activity.scss";
 @import "_videopopup.scss";
+@import "_contact-search.scss";
+@import "_contacts.scss";
 
 body.x-border-layout-ct { background: white; }
 
