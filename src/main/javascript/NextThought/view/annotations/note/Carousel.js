@@ -95,18 +95,17 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 
 			if(filter && filter!==''){
 				if(this.items.length <=0){
+					this.updateWith(null);
+
 					if(!this.notfoundEl || this.body.query('.no-search-found').length <= 0){
 						this.notfoundEl = Ext.DomHelper.append(this.body, { xtype:'box', cls:"no-search-found", html:"No match found"}, true);
 					}
-					this.updateWith(null);
 				}
 				else {
-					if(this.notfoundEl){ this.notfoundEl.remove(); }
 					this.setRecord(this.items.first().record);
 				}
 			}
 			else if(this.items.findBy(function(o){return o.record === rec;})>=1){
-				if(this.notfoundEl){ this.notfoundEl.remove(); }
 				this.setRecord(rec);
 			}
 			else {
@@ -216,6 +215,7 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 		var hasNext, hasPrev, bgx,
 		me = this;
 
+		if(this.notfoundEl){ this.notfoundEl.remove(); }
 		if(item && !item.rendered){
 			setTimeout(function(){ me.updateWith(item); },10);
 			return;
