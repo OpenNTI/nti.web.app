@@ -20,7 +20,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 	).compile(),
 
 	renderSelectors: {
-		avatar: '.avatar img',
+		avatar: 'img.avatar',
 		liked: '.meta .controls .like',
 		favorites: '.meta .controls .favorite',
 		sharedTo: '.shared-to',
@@ -311,31 +311,33 @@ Ext.define('NextThought.view.annotations.note.Main',{
 
 	fillInUser: function(user){
 		this.name.update(user.getName());
+		this.avatar.setStyle({backgroundImage: 'url('+user.get('avatarURL')+')'});
 		TemplatesForNotes.updateMoreReplyOptionsLabels(this.more, user, this.record.isFlagged());
 	},
 
 
 	fillInShare: function(sharedWith){
-		var val, names = [], custom = false;
+		var val, names = [], others;
 
 		this.responseBox[sharedWith.length===0?'removeCls':'addCls']('shared');
 
 		Ext.each(sharedWith,function(u){
 			names.push(u.getName());
-			if(!u.isGroup){
-				custom = true;
-			}
+			return names.join(',').length <= 150;
 		});
 
-		if(!custom){
-			val = names.join(',');
+		others = sharedWith.length - names.length;
+		if(others){
+			names.push(Ext.String.format('and {0} others.',others));
 		}
-		else {
-			val = 'Custom';
+		else if(names.length > 1){
+			names.push(' and '+names.pop());
 		}
 
+		val = names.length? ('Shared with '+names.join(', ')) : '';
+
 		this.sharedTo.update(val);
-		this.sharedTo.set({title:names.join(', ')});
+		this.sharedTo.set({title:val});
 	},
 
     scrollIntoView: function(){
@@ -466,32 +468,29 @@ Ext.define('NextThought.view.annotations.note.Main',{
 },
 function(){
 	this.prototype.renderTpl = Ext.DomHelper.markup([
-			{
-				cls: 'avatar', style: {display:'none'},
-				cn:[{tag: 'img', src: Ext.BLANK_IMAGE_URL}]
-			},
-			{
-				cls: 'meta',
-				cn: [{
-					cls: 'controls',
-					cn: [{ cls: 'favorite' },{ cls: 'like' }]
-				},{
-					tag: 'span',
-					cls: 'name'
-				},' - ',{
-					tag: 'span', cls: 'time'
-				},' ',{
-					tag: 'span', cls: 'shared-to'
-				}]
-			},{
-				cls: 'context',
-				cn: [{tag: 'span', cls: 'text'}]
-			},{ cls: 'body' },{
-				cls: 'respond',
-				cn: [
-					TemplatesForNotes.getReplyOptions(),
-					TemplatesForNotes.getEditorTpl()
-				]
-			}
-		]);
+		{
+			cls: 'avatar',
+			tag: 'img', src: Ext.BLANK_IMAGE_URL
+		},
+		{
+			cls: 'meta',
+			cn: [
+				{ cls: 'controls', cn: [{ cls: 'favorite' },{ cls: 'like' }] },
+				{ tag: 'span', cls: 'name' },{ tag: 'span', cls: 'time' },
+				{ cls: 'shared-to' }
+			]
+		},
+
+		{ cls: 'context', cn: [{tag: 'span', cls: 'text'}] },
+
+		{ cls: 'body' },
+
+		{
+			cls: 'respond',
+			cn: [
+				TemplatesForNotes.getReplyOptions(),
+				TemplatesForNotes.getEditorTpl()
+			]
+		}
+	]);
 });

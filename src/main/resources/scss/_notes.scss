@@ -27,6 +27,44 @@
 	}
 }
 
+
+@mixin meta-row-window {
+	.meta {
+		color: #757474;
+		margin-top: 10px;
+		font-size: 12px;
+		font-weight: normal;
+
+		.name {
+			color: #3fb3f6;
+			font-size: 24px;
+		}
+
+		.time {
+			margin-left: 8px;
+			font-size: 12px;
+			font-style: italic;
+		}
+
+		.shared-to{
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+
+
+		.controls {
+			position: absolute;
+			right: 0;
+			top: 0;
+			//background: blue;
+
+			@include like-and-favorite;
+		}
+	}
+}
+
+
+
 @mixin note-editor {
 	.editor {
 		&.active {
@@ -804,9 +842,17 @@
 			.respond .reply-options{ opacity: 1; }
 		}
 
-		@include meta-row;
+		img.avatar {
+			float: left;
+			width: 60px;
+			height: 60px;
+			border-radius: 5px;
+			background-size: cover;
+		}
+
+		@include meta-row-window;
 		.meta {
-			font-size: 12px;
+			margin-left: 70px;
 		}
 
 
@@ -815,6 +861,7 @@
 		}
 
 		.context {
+			clear: both;
 			text-rendering: optimizeLegibility;//fallback
 			text-rendering: geometricPrecision;
 
