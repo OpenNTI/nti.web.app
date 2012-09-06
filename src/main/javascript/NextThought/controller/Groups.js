@@ -161,9 +161,12 @@ Ext.define('NextThought.controller.Groups', {
 
 
 			groups.add({
-				cls: "tip!",
+				cls: "populate-contacts",
 				xtype: 'box',
-				html: 'Search tip goes here'
+				autoEl: { cn: [
+					{cls: 'title', html: 'Welcome to NextThought!'},
+					'Search for friends to add to your contact list.'
+				] }
 			});
 
 		}
