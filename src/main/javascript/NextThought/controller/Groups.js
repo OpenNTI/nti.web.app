@@ -157,6 +157,18 @@ Ext.define('NextThought.controller.Groups', {
 		});
 
 
+		if(store.getContacts().length === 0){
+
+
+			groups.add({
+				cls: "tip!",
+				xtype: 'box',
+				html: 'Search tip goes here'
+			});
+
+		}
+
+
 	},
 
 
