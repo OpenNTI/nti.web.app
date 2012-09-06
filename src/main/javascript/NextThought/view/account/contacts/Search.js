@@ -71,6 +71,7 @@ Ext.define('NextThought.view.account.contacts.Search',{
 		this.callParent(arguments);
 		this.store = new NextThought.store.UserSearch();
 		this.store.filter({ fn: function(rec){ return !rec.isGroup; } });
+		this.store.filter({ fn: function(rec){ return !rec.isCommunity; }});
 		this.view = this.down('dataview');
 		this.view.bindStore( this.store );
 
