@@ -183,7 +183,7 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 			this.replyBox.remove(); //placeholder
 		}
 		if (r.children) {
-			Ext.Array.sort(r.children,Globals.SortModelsBy('CreatedTime',null,null));
+			Ext.Array.sort(r.children || [],Globals.SortModelsBy('CreatedTime',null,null));
 			me.addReplies(r.children);
 		}
 		this.updateToolState();

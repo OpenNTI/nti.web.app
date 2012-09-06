@@ -59,6 +59,8 @@ Ext.define('NextThought.view.annotations.note.Window',{
 			m.isReply = true;
 		}
 		this.down('note-carousel').setRecord(a.getRecord());
+
+		this.mon(LocationProvider, 'navigateComplete', this.destroy, this);
 	},
 
 
