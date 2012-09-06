@@ -62,18 +62,19 @@ Ext.define('NextThought.view.account.Contacts',{
 			show: this.onSearchShow,
 			hide: this.onSearchHide
 		});
-		Ext.EventManager.onWindowResize(this.viewportMonitor,this,null);
 	},
 
 
-	destroy: function(){
-		Ext.EventManager.removeResizeListener(this.viewportMonitor,this);
-		return this.callParent();
-	},
-
-
-	viewportMonitor: function(){
+	hideSearch: function(willAnimate){
+		this.needsSyncUp = this.needsSyncUp || (!willAnimate && this.contactSearch.isVisible());
 		this.contactSearch.hide();
+	},
+
+
+	resyncSearch: function(){
+		if(!this.needsSyncUp){return;}
+		delete this.needsSyncUp;
+		Ext.defer(function(){this.contactSearch.show();},100,this);
 	},
 
 
@@ -97,6 +98,14 @@ Ext.define('NextThought.view.account.Contacts',{
 
 	afterRender: function(){
 		this.callParent(arguments);
+
+		this.mon(this.up('main-sidebar'),{
+			scope: this,
+			beforemove: this.hideSearch,
+			move: this.resyncSearch
+
+		});
+
 		var el = this.el.down('.view-title .search');
 		this.searchBtn = el;
 		this.activeView = 0;

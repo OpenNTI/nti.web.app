@@ -61,12 +61,12 @@ Ext.define('NextThought.view.SideBar',{
 	viewportMonitor: function(w){
 		var cls = 'undocked';
 		if (w < 1278) {
-			delete this.popstate;
 			this.host.hide();
 			this.gripper.show();
 			this.addCls(cls);
 		}
 		else{
+			delete this.popstate;
 			this.gripper.hide();
 			this.host.show();
 			this.removeCls(cls);
@@ -100,6 +100,7 @@ Ext.define('NextThought.view.SideBar',{
 		}
 
 		this.setHeight(size.height);
+		this.fireEvent('beforemove',animate);
 		this.setPagePosition(x,y,animate);
 	},
 
