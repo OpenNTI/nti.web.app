@@ -1,6 +1,7 @@
 Ext.define('NextThought.view.account.contacts.Panel',{
 	extend: 'Ext.panel.Panel',
 	requires: [
+		'Ext.Action',
 		'NextThought.layout.component.TemplatedContainer',
 		'NextThought.view.account.contacts.Card'
 	],
@@ -19,22 +20,57 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 	showCount: true,
 	defaultType: 'contact-card',
 	tools:[{
-	    type:'chat',
-		width: 22,
-	    tooltip: 'Chat with this group',
-	    handler: function(event, toolEl, panel){
-			var p = panel.up('contacts-panel');
-			p.fireEvent('group-chat', p.associatedGroup);
-	    }
+	    type:'options',
+		width: 20,
+		height: 20,
+	    tooltip: 'Options',
+	    handler: function(event, toolEl, panel){ panel.up('contacts-panel').showMenu(toolEl); }
 	}],
 
 	initComponent: function(){
-		if(!this.associatedGroup || !$AppConfig.service.canChat()){
-			//note, not able to chat will remove ALL tools, which right now is just chat...
+		if(!this.associatedGroup){
 			this.tools = null;
 		}
 		this.callParent(arguments);
 		this.setTitle(this.title);
+
+		this.deleteGroupAction = new Ext.Action({
+			text: 'Delete Group',
+			scope: this,
+			handler: this.deleteGroup,
+			itemId: 'delete-group',
+			ui: 'nt-menuitem', plain: true
+		});
+
+
+		this.groupChatAction = new Ext.Action({
+			text: 'Group Chat',
+			scope: this,
+			handler: this.chatWithGroup,
+			itemId: 'group-chat',
+			ui: 'nt-menuitem', plain: true,
+			hidden: !$AppConfig.service.canChat()
+		});
+
+		this.menu = Ext.widget('menu',{
+			ui: 'nt',
+			plain: true,
+			showSeparator: false,
+			shadow: false,
+			frame: false,
+			border: false,
+			hideMode: 'display',
+			parentItem: this,
+			items: [
+				this.deleteGroupAction,
+				this.groupChatAction
+			]
+		});
+	},
+
+
+	showMenu: function(toolEl){
+		this.menu.showBy(toolEl,'tr-tl',[10,0]);
 	},
 
 
@@ -102,6 +138,16 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 			this.remove(existing, true);
 			this.updateTitle();
 		}
+	},
+
+
+	deleteGroup: function(){
+		this.fireEvent('delete-group',this.associatedGroup);
+	},
+
+
+	chatWithGroup: function(){
+		this.fireEvent('group-chat', this.associatedGroup);
 	}
 
 });

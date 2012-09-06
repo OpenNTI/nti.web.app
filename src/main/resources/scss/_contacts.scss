@@ -1,8 +1,9 @@
 
 @mixin contact-header {
 	color: #8a8989;
-	font-size: 7.5pt;
+	font-size: 10px;
 	font-weight: 700;
+	line-height: 20px;
 	padding-bottom: 2px;
 	text-transform: uppercase;
 }
@@ -14,7 +15,7 @@ $over-color: #f4f3f3;
 	//padding: 0 10px 20px 10px;
 
 	&.x-collapsed .x-panel-header{
-		background-position: 10px -15px;
+		background-position: 10px -11px;
 	}
 
 	.x-panel-body{
@@ -22,20 +23,21 @@ $over-color: #f4f3f3;
 	}
 
 	.x-panel-header {
-		background: url(../images/collapse-expand.png) no-repeat 10px 3px;
+		background: url(../images/collapse-expand.png) no-repeat 10px 7px;
 		cursor: pointer;
 		padding-left: 20px;
 		padding-right: 10px;
 		@include contact-header;
 
 		.x-tool {
+			height: 20px;
 			margin-left: 0px;
 
-			.x-tool-chat {
-				width: 22px;
-				height: 15px;
+			.x-tool-options {
+				width: 20px;
+				height: 20px;
 				opacity: 0.5;
-				background: url(../images/start-chat.png);
+				background: url(../images/contact_options.png) 0px 0px no-repeat;
 				&:hover {
 					opacity: 1;
 				}

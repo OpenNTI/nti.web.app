@@ -280,7 +280,7 @@ Ext.define('NextThought.model.Base', {
 		}
 
 		//put together the json we want to save.
-		var json = Ext.JSON.encode(value),
+		var json = Ext.JSON.encode(value||this.get(fieldName)),
 			me=this;
 
 		Ext.Ajax.request({

@@ -25,15 +25,6 @@ Ext.define('NextThought.view.account.contacts.Card',{
 	initComponent: function(){
 		this.clickBlocker = Globals.buildBlocker(this);
 
-		//convenience interface class. This will abstract the user object and the friendslist record so we can just have
-		// a record and a field to remove the contact from the list and save.
-		function ContactContainer(group){
-			this.record = group;
-			this.field = group ? 'friends' : '';
-		}
-		//store the data for the event of clicking on the nib...
-		this.contactContainer = new ContactContainer(this.group);
-
 		this.callParent(arguments);
 
 		if(!this.user){
@@ -54,10 +45,19 @@ Ext.define('NextThought.view.account.contacts.Card',{
 		});
 
 		this.removeContactAction = new Ext.Action({
-		    text: 'Remove Contact',
+		    text: 'Remove from Group',
 			scope: this,
-		    handler: this.removeContact,
-		    itemId: 'remove-contact',
+		    handler: this.removeFromGroup,
+		    itemId: 'remove-from-group',
+			ui: 'nt-menuitem', plain: true,
+			hidden: !this.group
+		});
+
+		this.deleteContactAction = new Ext.Action({
+		    text: 'Delete Contact',
+			scope: this,
+		    handler: this.deleteContact,
+		    itemId: 'delete-contact',
 			ui: 'nt-menuitem', plain: true
 		});
 
@@ -82,6 +82,7 @@ Ext.define('NextThought.view.account.contacts.Card',{
 			parentItem: this,
 			items: [
 				this.removeContactAction,
+				this.deleteContactAction,
 				this.startChatAction
 			]
 		});
@@ -98,8 +99,13 @@ Ext.define('NextThought.view.account.contacts.Card',{
 	},
 
 
-	removeContact: function(){
-		this.fireEvent('remove-contact-from', this.contactContainer, this.user);
+	deleteContact: function(){
+		this.fireEvent('delete-contact',this.user);
+	},
+
+
+	removeFromGroup: function(){
+		this.fireEvent('remove-contact-from', this.group, this.user);
 	},
 
 

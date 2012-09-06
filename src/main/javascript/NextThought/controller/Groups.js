@@ -32,7 +32,12 @@ Ext.define('NextThought.controller.Groups', {
 				'add-group': this.addGroup
 			},
 
+			'contacts-panel':{
+				'delete-group': this.deleteGroup
+			},
+
 			'contact-card': {
+				'delete-contact': this.deleteContact,
 				'remove-contact-from': this.removeContact
 			},
 
@@ -79,7 +84,7 @@ Ext.define('NextThought.controller.Groups', {
 			var friends = {Online: {}, Offline: {}};
 			Ext.each(users,function(user){
 				var p = user.get('Presence');
-				if(p){ friends[p][user.getId()] = user; }
+				if(p){ friends[p][user.get('Username')] = user; }
 			});
 
 			Ext.callback(callback,null,[friends]);
@@ -113,6 +118,7 @@ Ext.define('NextThought.controller.Groups', {
 		var me = this,
 			store = me.getFriendsListStore(),
 			groups = Ext.getCmp('my-groups'),
+			contactsId = this.getMyContactsId(),
 			offline;
 
 		if(!groups){
@@ -139,6 +145,8 @@ Ext.define('NextThought.controller.Groups', {
 					var o = friends.Online[n];
 					if(o){online.push(o);} });
 
+				//don't associate the 'my contacts' group to the ui element...let it think its a "meta group"
+				if(group.get('Username')===contactsId){ group = null; }
 				groups.add({title: name, associatedGroup: group}).setUsers(online);
 			});
 
@@ -213,9 +221,11 @@ Ext.define('NextThought.controller.Groups', {
 
 	deleteGroup: function(record){
 		var store = this.getFriendsListStore();
-		record.destroy({callback: function(){
-			store.load();
-		}});
+		if(record.get('Username') !== this.getMyContactsId()){
+			record.destroy({callback: function(){
+				store.load();
+			}});
+		}
 	},
 
 
@@ -249,11 +259,26 @@ Ext.define('NextThought.controller.Groups', {
 	},
 
 
-	removeContact: function(contactContainer, contact){
+	deleteContact: function(user){
 		var store = this.getFriendsListStore(),
-			userId = typeof contact === 'string' ? contact : contact.getId(),
-			record = contactContainer.record,
-			field = contactContainer.field || 'friends',
+			username = user.get('Username'),
+			tracker = Globals.getAsynchronousTaskQueueForList(store.getCount());
+
+		function finish(){
+			if(!tracker.pop()){
+				store.reload();
+			}
+		}
+
+		store.each(function(g) {
+			g.removeFriend(username).save({callback:finish});
+		});
+	},
+
+
+	removeContact: function(record, contact){
+		var store = this.getFriendsListStore(),
+			userId = typeof contact === 'string' ? contact : contact.get('Username'),
 			count = store.getCount();
 
 		function finish(){
@@ -262,8 +287,7 @@ Ext.define('NextThought.controller.Groups', {
 		}
 
 		function remove(record){
-			var list = Ext.Array.remove(record.get(field),userId);
-			record.saveField(field, list, finish);
+			record.removeContact(userId).save({callback:finish});
 		}
 
 		if(record){
