@@ -54,21 +54,65 @@ Ext.define('NextThought.view.account.Activity',{
 		this.store = Ext.getStore('Stream');
 		this.mon(this.store,{
 			scope: this,
-			add: this.newActivity,
+			add: this.updateNotificationCountFromStore,
 			datachanged: this.reloadActivity,
 			load: this.reloadActivity,
 			clear: function(){console.log('stream clear',arguments);},
 			remove: function(){console.log('stream remove',arguments);},
 			update: function(){console.log('stream update',arguments);}
 		});
+
+		this.monitoredInstance = $AppConfig.userObject;
+		this.mon($AppConfig.userObject, 'changed', this.updateNotificationCount, this);
 	},
 
 
 	afterRender: function(){
 		this.callParent(arguments);
 		this.mon(this.el,'click',this.itemClick,this);
+		this.mon(this, {
+			scope: this,
+			'deactivate': this.resetNotificationCount
+		});
 	},
 
+	updateNotificationCountFromStore: function(store, records){
+		var u = $AppConfig.userObject,
+			c = (u.get('NotificationCount') || 0) + ((records||{}).length||0);
+
+		//Update current notification of the userobject.
+		u.set('NotificationCount', c);
+		u.fireEvent('changed',u);
+	},
+
+
+	resetNotificationCount: function(){
+		var me = this;
+
+		$AppConfig.userObject.saveField('NotificationCount', 0);
+	},
+
+	updateNotificationCount: function(u) {
+		if(u !== this.monitoredInstance && u === $AppConfig.userObject){
+			this.mun(this.monitoredInstance,'changed', this.updateNotificationCount,this);
+			this.monitoredInstance = u;
+			this.mon(this.monitoredInstance,'changed', this.updateNotificationCount,this);
+		}
+		this.setNotificationCountValue(u.get('NotificationCount'));
+	},
+
+	setNotificationCountValue: function(count){
+		this.tab.setText(count || '&nbsp;');
+	},
+
+	onAdded: function(){
+		this.callParent(arguments);
+		//sigh
+		Ext.defer(function(){
+			this.setNotificationCountValue(
+					this.monitoredInstance.get('NotificationCount'));
+		}, 1, this);
+	},
 
 	reloadActivity: function(store){
 		var container = this.down('box[activitiesHolder]'),
@@ -125,11 +169,6 @@ Ext.define('NextThought.view.account.Activity',{
 		Ext.each(store.getGroups(),doGroup,this);
 
 	},
-
-	newActivity: function(){
-		console.log('!');
-	},
-
 
 
 	changeToActivity: function(c){

@@ -33,8 +33,6 @@ Ext.define('NextThought.store.FriendsList',{
 		{
 			//Sort into three groups everything else, then my contacts, the offline
 			sorterFn: function(a,b){
-				console.log(a.get('Username'));
-				console.log(b.get('Username'));
 				//This is a pretty fragile way to be doing this.  This is a quick
 				//sort fix though...
 

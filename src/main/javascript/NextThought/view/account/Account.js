@@ -49,34 +49,5 @@ Ext.define('NextThought.view.account.Account',{
 			{html: 'Sign out', action: 'logout'}
 			]
 		}
-	],
-
-
-	initComponent: function(){
-		this.callParent(arguments);
-		this.monitoredInstance = $AppConfig.userObject;
-		this.mon($AppConfig.userObject, 'changed', this.updateNotificationCount, this);
-	},
-
-	updateNotificationCount: function(u) {
-		if(u !== this.monitoredInstance && u === $AppConfig.userObject){
-			this.mun(this.monitoredInstance,'changed', this.updateNotificationCount,this);
-			this.monitoredInstance = u;
-			this.mon(this.monitoredInstance,'changed', this.updateNotificationCount,this);
-		}
-		this.setNotificationCountValue(u.get('NotificationCount'));
-	},
-
-	setNotificationCountValue: function(count){
-		this.tab.setText(count || '&nbsp;');
-	},
-
-	onAdded: function(){
-		this.callParent(arguments);
-		//sigh
-		Ext.defer(function(){
-			this.setNotificationCountValue(
-					this.monitoredInstance.get('NotificationCount'));
-		}, 1, this);
-	}
+	]
 });

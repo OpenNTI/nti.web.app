@@ -41,10 +41,13 @@ Ext.define('NextThought.view.account.Notifications',{
 		this.callParent(arguments);
 		this.mon(Ext.getStore('Stream'), {
 			scope: this,
-			'add': this.updateNotificationCount,
 			'load': this.setupRenderData,
 			'datachanged': this.setupRenderData
 		});
+
+		this.monitoredInstance = $AppConfig.userObject;
+		this.mon($AppConfig.userObject, 'changed', this.updateNotificationCount, this);
+
 		this.setupRenderData();
 	},
 
@@ -52,10 +55,6 @@ Ext.define('NextThought.view.account.Notifications',{
 	afterRender: function(){
 		this.callParent(arguments);
 		this.el.on('click', this.clicked, this);
-		this.mon(this.up('account-view'), {
-			scope: this,
-			'deactivate': this.resetNotificationCount
-		});
 	},
 
 
@@ -141,30 +140,14 @@ Ext.define('NextThought.view.account.Notifications',{
 		this.updateLayout();
 	},
 
-	resetNotificationCount: function(){
-		var me = this;
-
-		Ext.each(this.notifications, function(notification){
-			notification.unread = '';
-		});
-
-		$AppConfig.userObject.saveField('NotificationCount', 0, function(){
-			//It seems inefficent to be recalling renderData here
-			//we really just want to update certain lines. But lets not
-			//not change things that we don't know why they exist
-			me.setupRenderData();
-		});
+	updateNotificationCount: function(u) {
+		if(u !== this.monitoredInstance && u === $AppConfig.userObject){
+			this.mun(this.monitoredInstance,'changed', this.updateNotificationCount,this);
+			this.monitoredInstance = u;
+			this.mon(this.monitoredInstance,'changed', this.updateNotificationCount,this);
+		}
+		this.setupRenderData();
 	},
-
-	updateNotificationCount: function(store,records){
-		var u = $AppConfig.userObject,
-			c = (u.get('NotificationCount') || 0) + ((records||{}).length||0);
-
-		//Update current notification of the userobject.
-		u.set('NotificationCount', c);
-		u.fireEvent('changed',u);
-	},
-
 
 	clicked: function(event){
 		var me = this,
