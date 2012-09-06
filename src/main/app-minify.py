@@ -182,6 +182,8 @@ def _closure_minify( projectFile ):
 	for item in ((projectFile['builds'])[0])['files']:
 		if 'https://extjs.cachefly.net/ext-4.1.1-gpl' in item['path']:
 			item['path'] = (item['path']).replace('https://extjs.cachefly.net/ext-4.1.1-gpl','../ext-4.1.1-gpl')
+		elif '../../extjs.cachefly.net/ext-4.1.1-gpl' in item['path']:
+			item['path'] = (item['path']).replace('../../extjs.cachefly.net/ext-4.1.1-gpl','../ext-4.1.1-gpl')
 		command.extend(['--js', os.path.join(item['path'], item['name'])])
 	command.extend(['--js', 'javascript/app.js'])
 
