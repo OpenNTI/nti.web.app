@@ -357,6 +357,8 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 	noteOverlayDeactivedOnBlur: function(e, el){
 		e.stopEvent();
 		var me  = this;
+		if(!this.noteOverlayData.suspendMoveEvents){ return; }
+
 		clearTimeout(me.blurTimer);
 		me.blurTimer = setTimeout(function() {
 			if(!me.noteOverlayData.richEditorActive){
