@@ -53,10 +53,15 @@ Ext.define('NextThought.controller.Search', {
 				'changed': this.searchFilterChanged
 			}
 		},{});
+
+		this.getHitStore().on('beforeload', function(){
+			Ext.getCmp('search-results').el.mask('Searching...');
+		});
 	},
 
 
 	storeLoad: function(store, records, success, opts, searchVal){
+		Ext.getCmp('search-results').el.unmask();
 		if (!success) {
 			console.error('Store did not load correctly!, Do something, no results???');
 			return;

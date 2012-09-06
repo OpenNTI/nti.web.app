@@ -107,6 +107,7 @@
 						1px 1px 2px 4px rgba(0,0,0,0.2);
 				}
 			}
+
 		}
 
 		.see-all, .see-all a {
@@ -135,4 +136,8 @@
 	//@include animate(fadeInDown);
 	overflow-x: hidden;
 	overflow-y: scroll;
+
+	.x-mask-msg {
+		top: 25px !important;
+	}
 }
