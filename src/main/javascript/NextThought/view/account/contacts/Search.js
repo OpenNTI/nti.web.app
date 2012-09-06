@@ -69,7 +69,7 @@ Ext.define('NextThought.view.account.contacts.Search',{
 
 	initComponent: function(){
 		this.callParent(arguments);
-		this.store = Ext.getStore('UserSearch');
+		this.store = new NextThought.store.UserSearch();
 		this.view = this.down('dataview');
 		this.view.bindStore( this.store );
 
