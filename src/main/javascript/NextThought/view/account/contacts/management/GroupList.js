@@ -19,6 +19,8 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
 		this.callParent(arguments);
 		this.itemSelector = '.selection-list-item';
 
+		this.block('mycontacts-'+$AppConfig.username);
+
 		this.allowSelect = this.allowSelect || false;
 
 		this.mon(this.getSelectionModel(), {
@@ -26,6 +28,7 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
 			beforedeselect: this.onBeforeDeselect,
 			scope: this
 		});
+
 	},
 
 
@@ -35,11 +38,8 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
 
 
 	refresh: function(){
-		var el = this.getEl(), ul, link;
+		var el = this.getEl(), ul, link, blocked = this.blocked;
 
-		if(this.allowSelect && this.getSelectionModel().getCount() > 0){
-			this.getSelectionModel().select(0,true,true);
-		}
 		this.callParent(arguments);
 
 		if(this.rendered){
@@ -50,7 +50,7 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
 
 			Ext.each(ul.query('li'), function(li){
 				var r = this.getRecord(li);
-				if(Ext.Array.contains(this.blocked||[], r.get('Username'))){
+				if(Ext.Array.contains(blocked||[], r.get('Username'))){
 					Ext.fly(li).setStyle({display: 'none'});
 				}
 				if (!r.isModifiable()){
@@ -84,7 +84,9 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
 
 
 	block: function(username){
-		this.blocked = Ext.isArray(username) ? username : [username];
+		this.blocked = Ext.Array.merge(
+				this.blocked||[],
+				Ext.isArray(username) ? username : [username]);
 		this.refresh();
 	},
 
