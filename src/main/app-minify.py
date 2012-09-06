@@ -40,14 +40,14 @@ def _fixProjectFile( projectFile ):
 	for item in ((projectFile['builds'])[1])['files']:
 		if 'app.js' in item['name']:
 			item['path'] = "javascript/"
-	
+
 	return projectFile
 
 def _buildProjectFile( app_entry, projectFileName ):
 	phantomjs_script = '../../phantomjs-jsb.js'
 	command = ['/usr/bin/env', 'phantomjs', '--debug=yes', phantomjs_script, '--app-entry', app_entry, '--project', projectFileName]
-	
-	subprocess.call(command)
+
+	subprocess.check_call(command)
 
 def _cacheExtJSFiles( projectFile ):
 	host = 'https://extjs.cachefly.net'
@@ -113,7 +113,7 @@ def _buildMinifyIndexHTML():
 	                var ga = document.createElement('script');
                         ga.type = 'text/javascript';
                         ga.async = true;
-                        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + 
+                        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') +
                                 '.google-analytics.com/ga.js';
                         var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
                 })();
@@ -167,7 +167,7 @@ def _buildMinifyIndexHTML():
 	with open( 'index-minify.html', 'wb' ) as file:
 		file.write(contents)
 
-def _closure_minify( projectFile ):	
+def _closure_minify( projectFile ):
 	cmd = '/usr/bin/java'
 	optimization_level = 'WHITESPACE_ONLY'
 	output_file = 'javascript/app.min.js'
