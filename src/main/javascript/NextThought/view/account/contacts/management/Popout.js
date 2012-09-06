@@ -21,6 +21,7 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 				xtype: 'button',
 				ui: 'primary',
 				text: 'Add to Contacts',
+				scale: 'large',
 				handler: function(btn){
 					btn.up('.add-contact-popout').addContact();
 				}

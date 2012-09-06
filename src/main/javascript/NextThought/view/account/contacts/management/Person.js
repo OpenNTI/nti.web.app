@@ -9,20 +9,23 @@ Ext.define('NextThought.view.account.contacts.management.Person',{
 	componentLayout: 'templated-container',
 	cls: 'add-person-card',
 
-	renderTpl: [
-		'<div class="contact-card-wrapper">',
-		'<div class="contact-card">',
-			'<img src="{avatarURL}">',
-			'<div class="card-body">',
-				'<div class="name">{name}</div>',
-				'<div class="status">{status}</div>',
-			'</div>',
-		'</div>',
-		'</div>',
-		'<div id="{id}-body">',
-			'{%this.renderContainer(out,values)%}',
-		'</div>'
-	],
+	renderTpl: Ext.DomHelper.markup([{
+		cls:'card-wrap',
+		cn:[{
+			cls:'contact-card',
+			cn: [
+				{tag: 'img', src: '{avatarURL}'},
+				{
+					cls: 'text-wrap',
+					cn: [
+						{cls: 'name', html: '{name}'},
+						{cls: 'affiliation', html: '{affiliation}affiliation'}
+					]
+				}
+			]
+		}]
+	},{id: '{id}-body', html: '{%this.renderContainer(out,values)%}'}]),
+
 	items: [
 		{xtype: 'management-group-list', allowSelect: true}
 	],
@@ -39,7 +42,7 @@ Ext.define('NextThought.view.account.contacts.management.Person',{
 			blank: Ext.BLANK_IMAGE_URL,
 			avatarURL: this.user.get('avatarURL'),
 			name: this.user.getName(),
-			status: this.user.get('status')
+			affiliation: this.user.get('affiliation')
 		});
 
 		this.addEvents({'groups-changed':true});

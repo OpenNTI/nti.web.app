@@ -90,7 +90,7 @@ Ext.define('NextThought.view.account.contacts.Search',{
 		var pop = Ext.widget('add-contact-popout',{record: record});
 
 		pop.show();
-		pop.alignTo(Ext.fly(item).down('.add'),'tr-tl',[-10,-20]);
+		pop.alignTo(Ext.fly(item).down('.add'),'tr-tl',[-10,-25]);
 	},
 
 
