@@ -136,8 +136,9 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 		this.updateLayout();
 	},
 
-	updateLikeToolState: function(){
+	updateToolState: function(){
 		this.liked.set({'title':  this.record.isLiked() ? 'Liked' : 'Like'});
+		if (this.record.isFlagged()){this.replyOptions.down('.flag').setHTML('Flagged');}
 	},
 
 	setRecord: function(r){
@@ -145,7 +146,7 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 
 		//Remove the old listener
 		if(this.record){
-			this.mun(this.record, 'updated', this.updateLikeToolState, this);
+			this.mun(this.record, 'updated', this.updateToolState, this);
 			this.mun(this.record, 'child-added', this.addNewChild, this);
 		}
 
@@ -185,8 +186,8 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 			Ext.Array.sort(r.children,Globals.SortModelsBy('CreatedTime',null,null));
 			me.addReplies(r.children);
 		}
-		this.updateLikeToolState();
-		this.mon(r, 'updated', this.updateLikeToolState, this);
+		this.updateToolState();
+		this.mon(r, 'updated', this.updateToolState, this);
 		this.mon(r, 'child-added', this.addNewChild, this);
 
 	},
