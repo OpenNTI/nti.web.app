@@ -24,11 +24,8 @@ Ext.define('NextThought.controller.Groups', {
 
 		this.control({
 
-			'contacts-management-panel button[action=cancel]': {
-				'click': this.cancelGroupAdditions
-			},
-			'contacts-management-panel button[action=finish]': {
-				'click': this.saveGroupAdditions
+			'add-contact-popout':{
+				'add-contact': this.addContact
 			},
 
 			'contacts-management-panel': {
@@ -222,74 +219,11 @@ Ext.define('NextThought.controller.Groups', {
 	},
 
 
-	cancelGroupAdditions: function(btn){
-		btn.up('contacts-management-panel').reset();
+	addContact: function(user, groups){
+
+		console.log('Add Contact events hooked up, TODO: make the updates to the records, and put to the server',arguments);
 	},
 
-
-	saveGroupAdditions: function(btn){
-		var store = this.getFriendsListStore(),
-			panel = btn.up('contacts-management-panel'),
-			data = panel.getData(),
-			active = Globals.getAsynchronousTaskQueueForList(Object.keys(data)),
-			push = Array.prototype.push,
-			hasErrors = false,
-			failedGroups = [];
-
-		function complete(){
-			panel.getEl().unmask();
-
-			if( !hasErrors ){
-				panel.reset();
-				store.load();
-			}
-			else {
-				//tell the panel which groups failed
-				console.log('some failures');
-			}
-		}
-
-		//only mask if there's work to do...
-		if(Object.keys(data).length > 0) {
-			panel.getEl().mask();
-		}
-
-		Ext.Object.each(data,function(key,info){
-			var record = info.record,
-				field = 'friends',
-				list;
-
-			if(record.isEveryone()){
-				record = $AppConfig.userObject;
-				field = 'following';
-			}
-
-			//update user object's following:
-			var uf = $AppConfig.userObject.get('following').slice();
-			push.apply(uf, info.people);
-			$AppConfig.userObject.set('following', uf);
-
-			list = record.get(field).slice();//clone list
-			push.apply(list, info.people); //add users
-			record.set(field, list); //reassign the list back
-
-			record.save({
-				callback: function(newRecord,operation){
-					var failed = !operation || !operation.success;
-
-					hasErrors = hasErrors || failed;
-					if(failed){
-						failedGroups.push(record);
-					}
-
-					active.pop();
-					if(active.length===0){
-						complete();
-					}
-				}
-			});
-		});
-	},
 
 	removeContact: function(contactContainer, contact){
 		var store = this.getFriendsListStore(),

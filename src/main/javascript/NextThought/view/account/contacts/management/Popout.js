@@ -62,7 +62,9 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 
 
 	addContact: function(){
-		console.log('do it!');
+		var data = this.down('add-person-card').getSelected();
+
+		this.fireEvent('add-contact', data.user, data.groups);
 		this.destroy();
 	}
 });
