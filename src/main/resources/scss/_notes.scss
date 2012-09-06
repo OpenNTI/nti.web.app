@@ -31,7 +31,6 @@
 @mixin meta-row-window {
 	.meta {
 		color: #757474;
-		margin-top: 10px;
 		font-size: 12px;
 		font-weight: 300;
 
@@ -52,6 +51,9 @@
 			text-overflow: ellipsis;
 		}
 
+		.time,.shared-to{
+			font-weight: 400;
+		}
 
 		.controls {
 			position: absolute;
