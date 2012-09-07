@@ -19,9 +19,9 @@ Ext.define('NextThought.util.Search',{
 		str = string.replace(this.ignoredWordsRe,'');
 		tokens = Ext.Array.map(str.split(this.splitWhitespaceRe), RegExp.escape),
 		bound = partial?'[^\\s\\)\\(\\.]*':'';
-	//	if(wholeWordOnly){
-	//		bound = '\\b';
-	//	}
+		if(wholeWordOnly){
+			bound = '\\b';
+		}
 
 		tokens = Ext.Array.clean(tokens);
 		if(tokens.length === 0){ tokens.push(string); } //Avoid searching for an empty string.
