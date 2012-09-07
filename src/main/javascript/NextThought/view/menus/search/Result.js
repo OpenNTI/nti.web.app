@@ -47,7 +47,7 @@ Ext.define('NextThought.view.menus.search.Result',{
 	},
 
 	beforeRender: function() {
-		var re = SearchUtils.searchRe(this.term, true, true);
+		var re = SearchUtils.searchRe(this.term, false, false);
 		this.renderData.snippet = this.snippet.replace(re,  '<span>$1</span>');
 
 		return this.callParent(arguments);

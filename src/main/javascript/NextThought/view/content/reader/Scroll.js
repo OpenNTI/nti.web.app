@@ -115,7 +115,7 @@ Ext.define('NextThought.view.content.reader.Scroll',{
 			doc = me.getDocumentElement(),
 			ranges = [],
 			texts,
-			re = SearchUtils.searchRe(text, true, true),
+			re = SearchUtils.searchRe(text, false, false),
 			match;
 
 		texts = AnnotationUtils.getTextNodes(doc);
