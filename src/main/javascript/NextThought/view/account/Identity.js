@@ -3,6 +3,10 @@ Ext.define('NextThought.view.account.Identity',{
 	extend: 'Ext.Component',
 	alias: 'widget.identity',
 
+    requires: [
+        'NextThought.view.menus.Settings'
+    ],
+
 	cls: 'identity',
 
 	renderTpl: Ext.DomHelper.markup([
@@ -43,8 +47,11 @@ Ext.define('NextThought.view.account.Identity',{
 
 	},
 
+
     afterRender: function(){
         this.callParent(arguments);
-        this.mon(this.menu, 'click', function(){console.log('will show menu soon');});
+        this.mon(this.menu, 'click', function(){
+            Ext.widget('settings-menu',{}).showBy(this);
+        });
     }
 });

@@ -37,16 +37,7 @@ Ext.define('NextThought.view.account.Account',{
 			items:[
 //			{xtype: 'notifications', cls: 'notifications'},
 
-			{html: ' ', autoEl: 'div'},
-//			{html: 'Account Settings', action: 'account' },
-			{html: 'About', href: 'http://www.nextthought.com/', hrefTarget: '_blank'},
-			{html: 'Help', action: 'help'},
-			{html: 'Privacy', action: 'privacy'},
-			{html: 'Terms of Service', action: 'terms'},
-
-			{html: ' ', autoEl: 'div'},
-
-			{html: 'Sign out', action: 'logout'}
+			{html: ' ', autoEl: 'div'}
 			]
 		}
 	]

@@ -14,7 +14,8 @@ Ext.define('NextThought.controller.Account', {
 
 	views: [
 		'form.AccountForm',
-		'account.contacts.Card'
+		'account.contacts.Card',
+        'menus.Settings'
 	],
 
 	refs: [],
@@ -29,23 +30,23 @@ Ext.define('NextThought.controller.Account', {
 				'click': this.contactCardClicked
 			},
 
-			'account-view box[isMenuItem][href]' : {
+			'settings-menu [href]' : {
 				'click': this.openHref
 			},
 
-			'account-view box[isMenuItem][action=privacy]' : {
+			'settings-menu [action=privacy]' : {
 				'click': this.showPrivacy
 			},
 
-			'account-view box[isMenuItem][action=help]' : {
+			'settings-menu [action=help]' : {
 				'click': this.openHelp
 			},
 
-			'account-view box[isMenuItem][action=terms]' : {
+			'settings-menu [action=terms]' : {
 				'click': this.showTerms
 			},
 
-			'account-view box[isMenuItem][action=account]' : {
+			'settings-menu [action=account]' : {
 				'click': this.showAccount
 			}
 
