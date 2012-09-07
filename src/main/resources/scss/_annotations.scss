@@ -217,10 +217,6 @@ div.redaction-control {
 			}
 		}
 
-        .counter-container {
-   			display: inline-block;
-   			white-space: nowrap;
-        }
 
 		&.plain {
 
@@ -275,7 +271,6 @@ div.redaction-control {
 				color: #757474;
 				font-family: $font !important;
 				font-weight: bold;
-
 
 				@include highlight-tip;
 

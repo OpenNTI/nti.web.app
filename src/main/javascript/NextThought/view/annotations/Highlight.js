@@ -283,23 +283,13 @@ Ext.define('NextThought.view.annotations.Highlight', {
 
 
 	createCounter: function(after){
-		var containingSpan = Ext.get(this.createNonAnchorableSpan()),
-			el = Ext.get(this.createNonAnchorableSpan()),
-			style = this.record.get('style') || 'plain',
-			textToWrap = Anchors.lastWordFromString(after.textContent),
-			rTextToWrap = RegExp(RegExp.escape(textToWrap)+'$');
+		var el = Ext.get(this.createNonAnchorableSpan()),
+			style = this.record.get('style') || 'plain';
 
-		this.rendered.push(containingSpan.dom);
-
-		containingSpan.update(textToWrap);
-		Ext.fly(after).update(after.textContent.replace(rTextToWrap, ''));
-		containingSpan.addCls('counter-container');
-		el.appendTo(containingSpan);
-		containingSpan.appendTo(after);
-			
 		el.addCls([this.highlightCls,'counter', style]);//,'with-count']);
 		el.on('click', this.onClick, this);
 		el.update('&nbsp;');
+        after.appendChild(el.dom);
 		return el.dom;
 	},
 
@@ -334,7 +324,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
 			if (node.childNodes.length === 0) { valid = true; }
 		}
 		//Easy case, the node is completely surronded and valid, wrap the node
-		if( ( startToStart === AFTER || startToStart === SAME )
+		if(( startToStart === AFTER || startToStart === SAME )
 			&& ( endToEnd === BEFORE || endToEnd === SAME ) && valid) {
 				newRange = node.ownerDocument.createRange();
 				newRange.selectNode(node);
