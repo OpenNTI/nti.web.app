@@ -7,6 +7,7 @@ Ext.define('NextThought.view.account.Identity',{
 
 	renderTpl: Ext.DomHelper.markup([
 		{ tag: 'img', src: '{avatarURL}', cls: 'avatar'},
+        { tag: 'div', class: 'menu'},
 		{
 			cls: 'wrap',
 			cn: [{
@@ -20,6 +21,7 @@ Ext.define('NextThought.view.account.Identity',{
 	renderSelectors: {
 		notificationCount: 'span.notifications',
 		name: 'div.name',
+        menu: 'div.menu',
 		status: 'div.status'
 	},
 
@@ -37,5 +39,12 @@ Ext.define('NextThought.view.account.Identity',{
 				this.status.update(r.get('status'));
 			}
 		});
-	}
+
+
+	},
+
+    afterRender: function(){
+        this.callParent(arguments);
+        this.mon(this.menu, 'click', function(){console.log('will show menu soon');});
+    }
 });
