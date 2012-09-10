@@ -15,7 +15,7 @@ Ext.define('NextThought.util.Search',{
 	 */
 	searchRe: function(string,partial,wholeWordOnly){
 		var tokens, str;
-		string = string.replace(this.trimRe,'');
+		str = string.replace(this.trimRe,'');
 		str = string.replace(this.ignoredWordsRe,'');
 		tokens = Ext.Array.map(str.split(this.splitWhitespaceRe), RegExp.escape),
 		bound = partial?'[^\\s\\)\\(\\.]*':'';
