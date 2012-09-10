@@ -299,7 +299,7 @@ Ext.define('NextThought.view.annotations.note.EditorActions',{
 		}
 
 		//We need empty divs to allow to insert text before or after a WB.
-		emptyDiv = Ext.DomHelper.createDom({tag: 'div', cls: 'emptyDiv-cls', html:'<br>'});
+		emptyDiv = Ext.DomHelper.createDom({cn:[{tag: 'br'}]});
 
 		wb.getThumbnail(function(data){
 			Ext.fly(el).setStyle({ backgroundImage: 'url('+data+')' });
