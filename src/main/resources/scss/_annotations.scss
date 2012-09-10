@@ -1,3 +1,5 @@
+@import "_variables.scss";
+
 @mixin highlight-tip {
 	position: relative;
 	top: 0;
@@ -93,7 +95,7 @@
 	.snippet {
 		margin: 10px;
 		font-size: 8pt;
-		color: #b8b8b8;
+		color: $tertiary-grey;
 		padding: 0 0 0 25px;
 		.comment & {	background: url(../images/activity-comment.png) 0 2px no-repeat;}
 		.highlight & {	background: url(../images/activity-highlight.png) 0 3px no-repeat;}
@@ -232,7 +234,7 @@ div.redaction-control {
 			&.shared-with-me {
                 &,.math {
                     background: none;
-                    color: #494949;
+                    color: $primary-grey;
                     border-bottom: 1px solid #9fd9fa;
                 }
 
@@ -240,7 +242,7 @@ div.redaction-control {
 				&.highlight-mouse-over {
                     &,.math {
                         color: #ffffff;
-                        background-color: #3fb3f6;
+                        background-color: $primary-blue;
                     }
                 }
 
@@ -253,7 +255,7 @@ div.redaction-control {
 
 			&.highlight-mouse-over{
 				color: #ffffff;
-				background-color: #3fb3f6;
+				background-color: $primary-blue;
 				.application-highlight {
 					background-color: transparent;
 				}
@@ -268,7 +270,7 @@ div.redaction-control {
 			}
 
 			&.counter {
-				color: #757474;
+				color: $secondary-grey;
 				font-family: $font !important;
 				font-weight: bold;
 

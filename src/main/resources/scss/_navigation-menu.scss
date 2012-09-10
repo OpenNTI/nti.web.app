@@ -1,3 +1,5 @@
+@import "_variables.scss";
+
 .x-panel-navigation-menu{
 	padding: 0 3px 0 3px;
 	background: none;
@@ -68,7 +70,7 @@
 	.drawer {
 		cursor: pointer;
 		position: relative;
-		color: #757474;
+		color: $secondary-grey;
 		font:{ size: 10px; weight: bold; }
 		text-transform: uppercase;
 		padding-left: 36px;
@@ -126,7 +128,7 @@
 			margin-left: 75px;
 
 			.title, .author {
-				color: #494949;
+				color: $primary-grey;
 				font-size: 14px;
 				font-style: italic;
 				font-weight: 500;

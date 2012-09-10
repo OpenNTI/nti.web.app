@@ -1,5 +1,7 @@
+@import "_variables.scss";
+
 .account-view {
-	color: #757474;
+	color: $secondary-grey;
 	font: {size: 16px; style: normal; weight: 4;}
 	line-height: 25px;
 	@include side-panel-view-title;
@@ -11,13 +13,13 @@
 		min-height: 25px;
 		margin-left: 20px;
 
-		&.x-item-disabled { opacity: 0.5; cursor: default; &:hover{color:#757474;}}
+		&.x-item-disabled { opacity: 0.5; cursor: default; &:hover{color:$secondary-grey;}}
 		.x-mask { display: none; }
 	}
 	a.item {
 		cursor: pointer;
 
-		&:hover { color: #b8b8b8; }
+		&:hover { color: $tertiary-grey; }
 		&:active { color: #424242; }
 
 		&:last-of-type {
@@ -45,7 +47,7 @@
 			color: #747474;
 			margin-left: 18px;
 			&:hover {
-				color: #3fb3f6;
+				color: $primary-blue;
 			}
 		}
 
@@ -59,7 +61,7 @@
 			border-left: 3px solid #f0f0f0;
 
 			&.unread {
-				border-left-color: #3fb3f6;
+				border-left-color: $primary-blue;
 			}
 
 			&.loading {
@@ -70,7 +72,7 @@
 				line-height: normal;
 				font-size: 10px;
 				font-weight: 800;
-				color: #3fb3f6;
+				color: $primary-blue;
 				text-transform: uppercase;
 				text-overflow: ellipsis;
 				overflow: hidden;

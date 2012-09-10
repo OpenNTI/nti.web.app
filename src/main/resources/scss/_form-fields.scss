@@ -1,3 +1,4 @@
+@import "_variables.scss";
 
 .nt-combobox {
 	.x-form-trigger-wrap {
@@ -37,7 +38,7 @@
 
 .user-list-field {
 	padding: 5px 25px 5px 5px;
-	color: #757474;
+	color: $secondary-grey;
 	font-family: $font;
 	//font-size: 15pt;
 	display: block;

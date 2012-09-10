@@ -1,11 +1,7 @@
-$font: 'Open Sans', 'Helvetica', arial, sans-serif;
-
-
 @import "compass";
 @import "_animate.scss";
 
 @import "_variables.scss";
-@import "_common-mixins.scss";
 
 //Add any extra fonts
 @import "_fonts.scss";
@@ -34,6 +30,7 @@ $font: 'Open Sans', 'Helvetica', arial, sans-serif;
 @import "_search.scss";
 @import "_assessments.scss";
 @import "_identity.scss";
+
 @import "_activity.scss";
 @import "_videopopup.scss";
 @import "_contact-search.scss";

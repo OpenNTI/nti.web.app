@@ -1,3 +1,4 @@
+@import "_variables.scss";
 
 .search-field-wrap{
 	height: 62px;
@@ -67,7 +68,7 @@
 				white-space: nowrap;
 				text-overflow: ellipsis;
 				overflow: hidden;
-				color: #b8b8b8;
+				color: $tertiary-grey;
 				font-size: 10px;
 				text-transform: uppercase;
 				font-weight: 700;
@@ -96,7 +97,7 @@
 			.snippet, .noresults {
 				white-space: normal;
 				margin-top: 2px;
-				color: #494949;
+				color: $primary-grey;
 				font-style: italic;
 				font-size: 15px;
 				span, .term {
@@ -111,7 +112,7 @@
 		}
 
 		.see-all, .see-all a {
-			color: #3fb3f6;
+			color: $primary-blue;
 			text-decoration: none;
 			font-size: 11pt;
 		}
@@ -120,7 +121,7 @@
 		text-align: right;
 		float: left;
 		width: 60px;
-		color: #767676;
+		color: $secondary-grey;
 		font-size: 10px;
 		text-transform: uppercase;
 		font-weight: 700;

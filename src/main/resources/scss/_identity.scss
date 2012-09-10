@@ -1,3 +1,4 @@
+@import "_variables.scss";
 
 .x-component.identity {
 	.undocked & {
@@ -33,7 +34,7 @@
 
 
 		.name {
-			color: #494949;
+			color: $primary-grey;
 			font: { size: 14px; weight: 500; }
 			padding-right: 35px;
 			overflow: hidden;
@@ -45,7 +46,7 @@
 			max-width: 190px;
 			white-space: nowrap;
 			overflow: hidden;
-			color: #757474;
+			color: $secondary-grey;
 			font: { size: 12px; weight: 500; }
 		}
 	}

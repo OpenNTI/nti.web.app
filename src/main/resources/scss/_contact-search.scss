@@ -1,3 +1,5 @@
+@import "_variables.scss";
+
 @mixin contact-card {
 	posititon: relative;
 	overflow: hidden;
@@ -14,10 +16,10 @@
 
 		.name {
 			@include menu-label-text-treatment;
-			color: #3fb3f6;
+			color: $primary-blue;
 		}
 		.affiliation {
-			color: #757474;
+			color: $secondary-grey;
 			font: { size: 12px; weight: 400; }
 			margin-left: 2px;
 		}
@@ -34,7 +36,7 @@
 	padding: 30px 20px 20px 20px;
 	font-size: 14px;
 	font-weight: regular;
-	color: #757474;
+	color: $secondary-grey;
 
 	.title {
 		font-size: 18px;

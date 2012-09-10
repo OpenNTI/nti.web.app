@@ -1,3 +1,5 @@
+@import "_variables.scss";
+
 @mixin meta-row {
 	.meta {
 		@include menu-label-text-treatment;
@@ -5,7 +7,7 @@
 		font-weight: bold;
 		white-space: nowrap;
 		.name {
-			color: #3fb3f6;
+			color: $primary-blue;
 		}
 
 		.shared-to{
@@ -30,17 +32,17 @@
 
 @mixin meta-row-window {
 	.meta {
-		color: #757474;
+		color: $secondary-grey;
 		font-size: 12px;
 		font-weight: 300;
 
 		.name {
-			color: #3fb3f6;
+			color: $primary-blue;
 			font-size: 24px;
 		}
 
 		.time {
-			color: #b8b8b8;
+			color: $tertiary-grey;
 			margin-left: 8px;
 			font-size: 12px;
 			font-style: italic;
@@ -93,7 +95,7 @@
 			height: 24px;
 			cursor: pointer;
 			display: inline-block;
-			color: #767676;
+			color: $secondary-grey;
 		}
 
 		.main {
@@ -145,7 +147,7 @@
 				}
 				white-space: pre;
 				padding: 2px 0 0 0;
-				color: #757474;
+				color: $secondary-grey;
 				font: 14px 'Droid Serif';
 				overflow: auto;
 				min-height: 50px;
@@ -184,7 +186,7 @@
 				line-height: 45px;
 				font-size: 14px;
 				text-align: center;
-				color: #757474;
+				color: $secondary-grey;
 				margin: -1px;
 
 				&.whiteboard {
@@ -201,7 +203,7 @@
 					font-weight: bold;
 					font-style: italic;
 					color: #ffffff;
-					background: #3fb3f6 url(../images/notes/comment-icon-white.png) 15px 8px no-repeat;
+					background: $primary-blue url(../images/notes/comment-icon-white.png) 15px 8px no-repeat;
 					border: 1px solid #39a1dd;
 					padding: 0 0 0 24px;
 				}
@@ -214,7 +216,7 @@
 @mixin reply-options {
 	.reply-options {
 		opacity: 0.4;
-		color: #757474;
+		color: $secondary-grey;
 
 		.reply, .share, .more {
 			display: inline-block;
@@ -406,7 +408,7 @@
 			textarea {
 				display: none;
 				font: 14px 'Droid Serif';
-				color: #757474;
+				color: $secondary-grey;
 				border: none;
 				background: transparent;
 				padding: 0 0 0 4px;
@@ -564,7 +566,7 @@
 			.text {
 				overflow: hidden;
 				text-overflow: ellipsis;
-				color: #757474;
+				color: $secondary-grey;
 				font: 14px/22px 'Droid Serif' normal;
 			}
 		}
@@ -609,7 +611,7 @@
 
 		.name {
 			@include menu-label-text-treatment;
-			color: #3fb3f6;
+			color: $primary-blue;
 		}
 
 		.text {
@@ -623,7 +625,7 @@
 				content: '"';
 			}
 			font: italic 12px 'Droid Serif';
-			color: #494949;
+			color: $primary-grey;
 			overflow: hidden;
 			white-space: nowrap;
 		}
@@ -887,7 +889,7 @@
 			text-rendering: geometricPrecision;
 
 			span{
-				color: #494949;
+				color: $primary-grey;
 				font-size: 14px;
 				line-height: 32px;
 				white-space:normal;
@@ -901,14 +903,14 @@
 
 				&.highlight {
 					&,span{
-						color: #494949;
+						color: $primary-grey;
 					}
 				}
 			}
 		}
 
 		.body {
-			color: #494949;
+			color: $primary-grey;
 			font: 16px/24px 'Droid Serif';
 
 			.body-divider .whiteboard-thumbnail{

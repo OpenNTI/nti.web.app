@@ -1,3 +1,4 @@
+@import "_variables.scss";
 
 @mixin contact-header {
 	color: #8a8989;
@@ -133,10 +134,10 @@ $over-color: #f4f3f3;
 
 	.name {
 		@include menu-label-text-treatment;
-		color: #3fb3f6;
+		color: $primary-blue;
 	}
 	.status {
-		color: #b8b8b8;
+		color: $tertiary-grey;
 		font: { size: 8pt; weight: 500; }
 	}
 }
@@ -169,12 +170,12 @@ $over-color: #f4f3f3;
 
 			li.selection-list-item {
 				padding: 5px 5px 5px 35px;
-				color: #767676 !important;
+				color: $secondary-grey !important;
 				background: transparent url(../images/forms/check_box.png) no-repeat 12px 7px;
 
 				&.selection-item-over{
 					background-color: $over-color;
-					color: #767676 !important;
+					color: $secondary-grey !important;
 					pointer: default;
 				}
 
@@ -193,9 +194,9 @@ $over-color: #f4f3f3;
 
 				a {
 					&:active, &:visited, &:link{
-						border: 0 dotted #767676;
+						border: 0 dotted $secondary-grey;
 						border-bottom-width: 2px;
-						color: #767676;
+						color: $secondary-grey;
 						display: inline-block;
 						font-style: italic;
 						padding: 0px 2px;
@@ -276,14 +277,14 @@ $over-color: #f4f3f3;
 	.disabled-contacts-view{
 	//	padding: 10px;
 		padding-top: 0px;
-		color: #757474;
+		color: $secondary-grey;
 
 		.disabled-message-div{
 			background-color: #f1f1f1;
 			padding: 15px;
 
 			.disabled-title{
-				color: #494949;
+				color: $primary-grey;
 				padding-bottom: 3px;
 				font-size: 16px;
 				font-style: italic;

@@ -1,3 +1,5 @@
+@import "_variables.scss";
+
 .x-gecko li {
             margin-top: 0.5em;
             margin-bottom: 0.5em;
@@ -166,7 +168,7 @@
 	}
 
 	.page-contents {
-		color: #757474;
+		color: $secondary-grey;
 		margin-top: 50px;
 		margin-left: 80px;
 		font-size: 14px;

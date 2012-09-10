@@ -1,3 +1,4 @@
+@import "_variables.scss";
 
 .x-toolbar-content {
 	padding: 0;
@@ -19,7 +20,7 @@
 		&.over {
 			.label { color: #585858; }
 			.menu {
-				color: #767676;
+				color: $secondary-grey;
 				span {
 					background-image: url(../images/menu-arrow-down-active.png);
 				}
@@ -38,7 +39,7 @@
 	}
 	.menu {
 		max-width: 450px;
-		color: #b2b2b2;
+		color: $tertiary-grey;
 		font-size: 11pt;
 		font-weight: 400;
 		overflow: hidden;
@@ -86,7 +87,7 @@
 			}
 			em {padding: 0 15px;}
 			.x-tab-inner {
-				color: #757474;
+				color: $secondary-grey;
 				font: 12px/32px $font !important;
 				text-transform: uppercase;
 			}
@@ -157,7 +158,7 @@
 
 		.selection-list-item,
 		.x-menu-item {
-			color: #767676 !important;
+			color: $secondary-grey !important;
 			font-size: 11pt;
 			font-weight: 400;
 			background: none;
@@ -343,7 +344,7 @@
 	}
 
 	.x-panel-body-reader {
-		@include scrollbar(#ffffff, #b2b2b2, 45px 0);
+		@include scrollbar(#ffffff, $tertiary-grey, 45px 0);
 	}
 }
 

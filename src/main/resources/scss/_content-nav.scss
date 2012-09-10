@@ -1,4 +1,4 @@
-
+@import "_variables.scss";
 
 .x-component-content-navigation {
 	&.x-toolbar-item{margin-top: 5px !important;}
@@ -20,7 +20,7 @@
 
 	.breadcrumb {
 		&, * {
-			color: #b8b8b8;
+			color: $tertiary-grey;
 			font-size: 10px;
 			font-weight: bold;
 			overflow: hidden;
@@ -31,14 +31,14 @@
 		span.part:not(.no-hover) {
 			cursor: pointer;
 			&:hover{
-				color: #494949;
+				color: $primary-grey;
 			}
 
 		}
 	}
 
 	.title {
-		color: #494949;
+		color: $primary-grey;
 		font-size: 20px;
 		font-style: italic;
 		font-weight: normal;

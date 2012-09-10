@@ -7,6 +7,7 @@
 	user-select: none;
 }
 
+
 @mixin allow-select {
 	-moz-user-select: text;
 	-webkit-user-select: text;
@@ -15,6 +16,7 @@
 	-o-user-select: text;
 	user-select: text;
 }
+
 
 @mixin hardware-accelerate() {
 	-webkit-transform: translate3d(0, 0, 0);
@@ -99,7 +101,7 @@
 
 @mixin placeholder-style(){
 	font-style: italic;
-	color: #b8b8b8;
+	color: $tertiary-grey;
 }
 
 
@@ -119,7 +121,7 @@
 
 @mixin side-panel-view-title{
 	.view-title {
-		color: #b8b8b8;
+		color: $tertiary-grey;
 		font:{size: 30px; style: italic; weight: 300;}
 		padding: 20px 18px 15px;
 	}
@@ -133,7 +135,7 @@
 	box-shadow: inset 2px 2px 6px -2px rgba(0, 0, 0, 0.3);
 
 	input {
-		color: #767676;
+		color: $primary-grey;
 		padding: 0 12px;
 		font-size: 14px;
 		border-radius: 3px;
@@ -157,7 +159,7 @@
 @mixin text-box-style {
 	background: #ffffff;
 	padding: 5px;
-	color: #757474;
+	color: $secondary-grey;
 	height: 30px;
 	font-family: $font;
 	//font-size: 15pt;
@@ -191,7 +193,7 @@
 	}
 
 	.like{
-		color: #3fb3f6;
+		color: $primary-blue;
 		margin: 8px;
 		padding: 0 0 0 20px;
 		white-space: nowrap;
@@ -225,6 +227,7 @@
 	}
 }
 
+
 @mixin menu-label-text-treatment {
 	color: #8a8989;
 	font-size: 10px;
@@ -237,13 +240,14 @@
 
 
 @mixin system-link-def {
-	color: $ui-link-color;
+	color: $secondary-grey;
 	text-decoration: underline;
 	cursor: pointer;
 }
 
+
 @mixin content-link-def{
-	color: $external-link-color;
+	color: $secondary-grey;
 	text-decoration: none;
 	cursor: pointer;
 	line-height: 1.5em;
@@ -251,7 +255,7 @@
 
 
 @mixin data-view {
-	background: $panel-background;
+	background: #ffffff;
 	font: 11px Arial, Helvetica, sans-serif;
 	.item-wrap {
 		float: left;
@@ -303,7 +307,7 @@
 }
 
 
-@mixin arrow($pointFrom:bottom,$width:7px,$height:4px,$color:#666){
+@mixin arrow($pointFrom:bottom,$width:7px,$height:4px,$color:$primary-grey){
 	/*
 	* In Internet Explorer, The"border-style: dashed" will never be
 	* rendered unless "(width * 5) >= border-width" is true.

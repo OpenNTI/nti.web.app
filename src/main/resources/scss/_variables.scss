@@ -1,3 +1,6 @@
+$font: 'Open Sans', 'Helvetica', arial, sans-serif;
+
+
 //icons
 $uploading-file-icon-generic: url(../images/upload.png);
 $file-type-unknown:			url(../images/file-types/unknown.png);
@@ -35,11 +38,14 @@ $whiteboard-color-none-sm:	url(../images/draw/nofill-sm.png);
 $magnifying-glass:			url(../images/zoom_preview_24.png);
 
 //colors
-$panel-background: white;
-$ui-link-color: #222;
-$external-link-color:  #7889A3;
-$border-color: #ccc;
+$primary-grey: #494949;
+$secondary-grey: #757474;
+$tertiary-grey: #b8b8b8;
 
-$timestamp-color: #7a7a7a;
-$name-label-color: #7889A3;
-$transcript-placeholder-text-color:#444;
+$primary-blue: #3fb3f6;
+
+$primary-green: #8eb737;
+
+
+
+@import "_common-mixins.scss";
