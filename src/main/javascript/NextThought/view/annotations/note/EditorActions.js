@@ -292,14 +292,22 @@ Ext.define('NextThought.view.annotations.note.EditorActions',{
 
 	insertWhiteboardThumbnail: function(content, guid, wb){
 		var me = this,
-			el = content.query('[id='+guid+']')[0];
+			el = content.query('[id='+guid+']')[0], emptyDiv;
 
 		if(!el){
 			el = me.wbThumbnailTpm.append(content, [Ext.BLANK_IMAGE_URL, guid]);
 		}
 
+		//We need empty divs to allow to insert text before or after a WB.
+		emptyDiv = Ext.DomHelper.createDom({tag: 'div', cls: 'emptyDiv-cls', html:'<br>'});
+
 		wb.getThumbnail(function(data){
 			Ext.fly(el).setStyle({ backgroundImage: 'url('+data+')' });
+			if(content.dom.firstChild === Ext.select('img.wb-thumbnail').elements[0]){
+				content.insertFirst(emptyDiv);
+			}
+			content.dom.appendChild(Ext.clone(emptyDiv));
+
 			me.editor.repaint();
 			me.fireEvent('size-changed');
 		});
