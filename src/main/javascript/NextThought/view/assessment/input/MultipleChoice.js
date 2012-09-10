@@ -83,7 +83,7 @@ Ext.define('NextThought.view.assessment.input.MultipleChoice',{
 
 		Ext.each(this.getEl().query('.control'),function(e){
 			if(Ext.Array.contains(checkedIndexes, parseInt(e.getAttribute('data-index'),10))) {
-				e.addCls('checked');
+				Ext.fly(e).addCls('checked');
 			}
 		});
 	},
