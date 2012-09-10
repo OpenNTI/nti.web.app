@@ -31,19 +31,23 @@ Ext.define(	'NextThought.model.User', {
 		var r = [], u;
 
 		Ext.each($AppConfig.userObject.get('Communities'),function(c){
-			if(!/^everyone$/i.test(c)){
-				//FIXME dfls come back in communities but there usernames
-				//are ntiids.  We can't seem to find them in the below lookup
-				//and we end up with null in the return value.  That creates
-				//all sorts of issues later on so as a quick fix don't add them
-				u = UserRepository.store.findRecord('Username',c,0,false,true,true);
-				if(u){
-					r.push(u);
-				}
-				else{
-					console.warn('dropping unresolvable community', c);
-				}
+			var field = 'Username';
+
+			if(/^everyone$/i.test(c)){ return; }
+
+			//DFLs come back in communities but there usernames are ntiids.
+			if(ParseUtils.parseNtiid(c)){
+				field = 'NTIID';
 			}
+
+			u = UserRepository.store.findRecord(field,c,0,false,true,true);
+			if(u){
+				r.push(u);
+			}
+			else{
+				console.warn('Dropping unresolvable community: '+Ext.encode(c));
+			}
+
 		});
 		return r;
 	},
