@@ -60,5 +60,13 @@ Ext.define('NextThought.store.FriendsList',{
 		var names = [];
 		this.each(function(g){ names.push.apply(names,g.get('friends')); });
 		return Ext.Array.sort(Ext.Array.unique(names));
+	},
+
+
+	isContact: function(username){
+		if(username && username.isModel){
+			username = username.get('Username');
+		}
+		return Ext.Array.contains(this.getContacts(),username);
 	}
 });

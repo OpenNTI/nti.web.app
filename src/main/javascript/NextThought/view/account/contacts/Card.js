@@ -44,70 +44,27 @@ Ext.define('NextThought.view.account.contacts.Card',{
 			from: this.group ? 'this Group' : 'my contacts'
 		});
 
-		this.removeContactAction = new Ext.Action({
-		    text: 'Remove from Group',
-			scope: this,
-		    handler: this.removeFromGroup,
-		    itemId: 'remove-from-group',
-			ui: 'nt-menuitem', plain: true,
-			hidden: !this.group
-		});
 
-		this.deleteContactAction = new Ext.Action({
-		    text: 'Delete Contact',
-			scope: this,
-		    handler: this.deleteContact,
-		    itemId: 'delete-contact',
-			ui: 'nt-menuitem', plain: true
-		});
 
-		this.startChatAction = new Ext.Action({
-			text: 'Start a Chat',
-			scope: this,
-			handler: this.startChat,
-			itemId: 'start-chat',
-			ui: 'nt-menuitem', plain: true,
-			hidden: !$AppConfig.service.canChat(),
-			disabled: this.user.get('Presence')==='Offline'
-		});
-
-		this.menu = Ext.widget('group-menu',{
-			hideCommunities:true,
-			checklist:true,
-			hideMyContacts:true,
-			username: this.username,
-			actions: [
-				this.removeContactAction,
-				this.deleteContactAction,
-				this.startChatAction,
-				{ xtype: 'labeledseparator', text: 'Select Groups', cls: 'doublespaced' }
-			]
-		});
-
-		this.menu.on('click',this.changeGrouping,this);
-		this.mon(this.menu, {
-			scope: this,
-			'mouseleave': this.startHide,
-			'mouseenter': this.stopHide
-		});
-	},
-
-	startHide: function(){
-		var me = this;
-		me.stopHide();
-		me.leaveTimer = setTimeout(function(){me.menu.hide();}, 500);
+//		this.startChatAction = new Ext.Action({
+//			text: 'Start a Chat',
+//			scope: this,
+//			handler: this.startChat,
+//			itemId: 'start-chat',
+//			ui: 'nt-menuitem', plain: true,
+//			hidden: !$AppConfig.service.canChat(),
+//			disabled: this.user.get('Presence')==='Offline'
+//		});
 	},
 
 
-	stopHide: function(){ clearTimeout(this.leaveTimer); },
-
-	changeGrouping: function(menu,item){
-		var group = item.record;
-		if(!group){
-			return;
-		}
-		group[item.checked?'addFriend':'removeFriend'](this.username).save();
-	},
+//	changeGrouping: function(menu,item){
+//		var group = item.record;
+//		if(!group){
+//			return;
+//		}
+//		group[item.checked?'addFriend':'removeFriend'](this.username).save();
+//	},
 
 
 	afterRender: function(){
@@ -120,13 +77,6 @@ Ext.define('NextThought.view.account.contacts.Card',{
 
 
 	destroy: function(){
-		if(this.menu.isVisible()){
-			this.menu.on('hide',this.menu.destroy,this.menu);
-		}
-		else {
-			this.menu.destroy();
-		}
-
 		this.callParent(arguments);
 	},
 
@@ -151,7 +101,7 @@ Ext.define('NextThought.view.account.contacts.Card',{
 		try{
 			this.clickBlocker();
 			if(nib){
-				this.menu.showBy(nib,'tr-tl',[10,0]);
+				this.showPopout(this.user,nib);
 			}
 			else {
 				this.startChat();
@@ -160,6 +110,34 @@ Ext.define('NextThought.view.account.contacts.Card',{
 		catch(er){
 			this.fireEvent('blocked-click', this, this.user.getId());
 		}
+	},
+
+
+	showPopout: function(record, nib){
+		function show(){
+			var pop = Ext.widget('contact-popout',{record: record}),
+					alignment = 'tr-tl',
+					offsets = [-10,-25],
+					play = Ext.dom.Element.getViewportHeight() - Ext.fly(nib).getTop();
+
+			if(pop.isDestroyed){return;}
+
+			pop.show().hide();
+
+			if( pop.getHeight() > play ){
+				pop.addCls('bottom-aligned');
+				alignment = 'br-bl';
+				offsets[1] = -offsets[1];
+			}
+
+			pop.show();
+			pop.alignTo(nib,alignment,offsets);
+		}
+
+//		Ext.fly(item).scrollIntoView(
+//				item.parentNode,false,{diration: 500});
+
+		Ext.defer(show,500,this);
 	}
 
 });

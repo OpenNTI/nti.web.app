@@ -50,6 +50,9 @@ Ext.define('NextThought.view.account.contacts.management.Person',{
 
 		this.groupsList = this.down('management-group-list');
 		this.groupsList.block(this.user.get('Username'));
+		if(this.liveEdit){
+			this.groupsList.setUser(this.user);
+		}
 	},
 
 

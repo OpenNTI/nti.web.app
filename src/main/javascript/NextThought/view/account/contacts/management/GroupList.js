@@ -38,47 +38,55 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
 
 
 	refresh: function(){
-		var el = this.getEl(), ul, link, blocked = this.blocked;
+		var el = this.getEl(),
+			ul, link,
+			selection = this.getSelectionModel(),
+			blocked = this.blocked;
 
 		this.callParent(arguments);
 
-		if(this.rendered){
-			ul = el.down('ul');
-			if(!this.allowSelect){
-				ul.addCls('disallowSelection');
+		if(!this.rendered){
+			return;
+		}
+
+		ul = el.down('ul');
+		if(!this.allowSelect){
+			ul.addCls('disallowSelection');
+		}
+
+		Ext.each(ul.query('li'), function(li){
+			var r = this.getRecord(li);
+			if(Ext.Array.contains(blocked||[], r.get('Username'))){
+				Ext.fly(li).setStyle({display: 'none'});
+			}
+			if (!r.isModifiable()){
+				//Ext.fly(li).down('img.delete-group').remove();
+				Ext.fly(li).setStyle({display:'none'});
 			}
 
-			Ext.each(ul.query('li'), function(li){
-				var r = this.getRecord(li);
-				if(Ext.Array.contains(blocked||[], r.get('Username'))){
-					Ext.fly(li).setStyle({display: 'none'});
-				}
-				if (!r.isModifiable()){
-					//Ext.fly(li).down('img.delete-group').remove();
-					Ext.fly(li).setStyle({display:'none'});
-				}
-			}, this);
-
-			if(this.allowSelect){
-				link = Ext.DomHelper.append( ul,
-					{
-						tag: 'li',
-						cls: 'add-group-action selection-list-item',
-						role: 'button',
-						children: [
-							{ tag: 'a', href: '#', html: 'Add Group' },
-							{ tag: 'input', type: 'text', cls: 'new-group-input', style: 'display: none;'  }
-						]
-					}, true);
-
-				link.down('a').on('click', this.addGroupClicked, this);
-				link.down('input').on({
-					scope: this,
-					blur: this.newGroupBlurred,
-					keypress: this.newGroupKeyPressed,
-					keydown: this.newGroupKeyDown
-				});
+			if(this.username && r.hasFriend(this.username)){
+				selection.select([r],true,true);
 			}
+		}, this);
+
+		if(this.allowSelect){
+			link = Ext.DomHelper.append( ul,
+				{
+					tag: 'li',
+					cls: 'add-group-action selection-list-item',
+					role: 'button',
+					children: [
+						{ tag: 'a', href: '#', html: 'Add Group' },
+						{ tag: 'input', type: 'text', cls: 'new-group-input', style: 'display: none;'  }
+					]
+				}, true);
+
+			link.down('a').on('click', this.addGroupClicked, this);
+			link.down('input').on({
+				scope: this,
+				keypress: this.newGroupKeyPressed,
+				keydown: this.newGroupKeyDown
+			});
 		}
 	},
 
@@ -87,6 +95,15 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
 		this.blocked = Ext.Array.merge(
 				this.blocked||[],
 				Ext.isArray(username) ? username : [username]);
+		this.refresh();
+	},
+
+
+	setUser: function(user){
+		if(user && user.isModel){
+			user = user.get('Username');
+		}
+		this.username = user;
 		this.refresh();
 	},
 
@@ -112,15 +129,11 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
 
 
 	onBeforeSelect: function(list,model){
-		if(!this.allowSelect || !model.isModifiable()){
-			return false;
-		}
+		return (this.allowSelect && model.isModifiable());
 	},
 
 	onBeforeDeselect: function(list,model){
-		if(this.allowSelect && !model.isModifiable()){
-			return false;
-		}
+		return (!this.allowSelect || model.isModifiable());
 	},
 
 
@@ -167,16 +180,6 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
 	},
 
 
-	newGroupBlurred: function(e){
-		if(this.suppressBlur){
-			delete this.suppressBlur;
-			return;
-		}
-
-		this.submitNewGroup(e.getTarget().value);
-	},
-
-
 	newGroupKeyDown: function(event) {
 		var specialKeys = {
 			27: true,	//Ext.EventObject.prototype.ESC
@@ -196,10 +199,10 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
 	newGroupKeyPressed: function(event){
 		var k = event.getKey();
 		if(k === event.ESC){
-			return this.reset();
+			this.reset();
+			return;
 		}
 		else if (k === event.ENTER) {
-			this.suppressBlur = true;
 			this.submitNewGroup(event.getTarget().value);
 		}
 

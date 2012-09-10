@@ -18,7 +18,7 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 			xtype: 'container',
 			cls: 'add-button',
 			layout: 'fit',
-			items: {
+			items: [{
 				xtype: 'button',
 				ui: 'primary',
 				text: 'Add to Contacts',
@@ -26,19 +26,30 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 				handler: function(btn){
 					btn.up('.contact-popout').addContact();
 				}
-			}
+			}]
 		}
 	],
 
-	constructor: function(config){
-		this.items = Ext.clone(this.items);
-		this.items[0].user = config.record;
-		return this.callParent(arguments);
-	},
+	buttonEvent: 'add-contact',
 
-	initComponent: function(){
-		this.callParent(arguments);
-		this.on('blur',this.destroy,this);
+	constructor: function(config){
+		var isContact = Ext.getStore('FriendsList').isContact(config.record);
+		this.items = Ext.clone(this.items);
+
+		Ext.apply(this.items[0],{
+			user: config.record,
+			liveEdit: isContact
+		});
+
+		if(isContact){
+			this.buttonEvent = 'remove-contact';
+			Ext.apply(this.items[1].items[0],{
+				ui: 'secondary',
+				text: 'Remove Contact'
+			});
+		}
+
+		return this.callParent(arguments);
 	},
 
 
@@ -52,7 +63,10 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 		var me = this;
 		me.callParent(arguments);
 
-		me.mon(this.el,'click',function(e){e.stopPropagation();},me);
+		me.mon(me.el,'click',function(e){e.stopPropagation();},me);
+
+		me.on('blur',me.destroy,me);
+
 
 		Ext.defer(function(){Ext.getBody().on('click',me.detectBlur,me);},1);
 	},
@@ -69,7 +83,7 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 	addContact: function(){
 		var data = this.down('person-card').getSelected();
 
-		this.fireEvent('add-contact', data.user, data.groups);
+		this.fireEvent(this.buttonEvent, data.user, data.groups);
 		this.destroy();
 	}
 });

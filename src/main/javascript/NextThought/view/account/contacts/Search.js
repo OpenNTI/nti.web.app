@@ -142,25 +142,33 @@ Ext.define('NextThought.view.account.contacts.Search',{
 
 
 	itemClicked: function(view,record,item){
-		var pop = Ext.widget('contact-popout',{record: record}),
-			add = Ext.fly(item).down('.add'),
-			alignment = 'tr-tl',
-			offsets = [-10,-25],
-			play = Ext.dom.Element.getViewportHeight() - add.getTop();
-
-		pop.show().hide();
-		pop.mon(this,'hide',pop.destroy,pop,{signle: true});//if we hide, make the popover listen and destroy
+		var add = Ext.fly(item).down('.add');
 
 
+		function show(){
+			var pop = Ext.widget('contact-popout',{record: record}),
+				alignment = 'tr-tl',
+				offsets = [-10,-25],
+				play = Ext.dom.Element.getViewportHeight() - add.getTop();
 
-		if( pop.getHeight() > play ){
-			pop.addCls('bottom-aligned');
-			alignment = 'br-bl';
-			offsets[1] = -offsets[1];
+			if(pop.isDestroyed){return;}
+
+			pop.show().hide();
+
+			if( pop.getHeight() > play ){
+				pop.addCls('bottom-aligned');
+				alignment = 'br-bl';
+				offsets[1] = -offsets[1];
+			}
+
+			pop.show();
+			pop.alignTo(add,alignment,offsets);
 		}
 
-		pop.show();
-		pop.alignTo(add,alignment,offsets);
+		Ext.fly(item).scrollIntoView(
+				item.parentNode,false,{diration: 500});
+
+		Ext.defer(show,500,this);
 	},
 
 
