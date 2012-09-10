@@ -24,15 +24,14 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 				text: 'Add to Contacts',
 				scale: 'large',
 				handler: function(btn){
-					btn.up('.contact-popout').addContact();
+					btn.up('.contact-popout').actOnContact();
 				}
 			}]
 		}
 	],
 
-	buttonEvent: 'add-contact',
-
 	constructor: function(config){
+		this.buttonEvent = 'add-contact';
 		var isContact = Ext.getStore('FriendsList').isContact(config.record);
 		this.items = Ext.clone(this.items);
 
@@ -91,7 +90,7 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 
 
 
-	addContact: function(){
+	actOnContact: function(){
 		var data = this.down('person-card').getSelected();
 		this.fireEvent(this.buttonEvent, data.user, data.groups);
 		this.destroy();

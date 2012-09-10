@@ -79,7 +79,8 @@ Ext.define('NextThought.view.account.contacts.Search',{
 
 		this.mon(this.view,{
 			scope: this,
-			itemclick: this.itemClicked
+			itemclick: this.itemClicked,
+			containerclick: this.escape
 		});
 
 		this.mon(Ext.getStore('FriendsList'),{
@@ -92,11 +93,6 @@ Ext.define('NextThought.view.account.contacts.Search',{
 			scope: this,
 			changed: this.search,
 			clear: this.clear
-//			blur: function(input){
-//				if(!input.getValue()){
-//					this.hide();
-//				}
-//			}
 		});
 	},
 
@@ -128,6 +124,11 @@ Ext.define('NextThought.view.account.contacts.Search',{
 		if(!this.down('simpletext').getValue()){
 			this.hide();
 		}
+	},
+
+
+	escape: function(){
+		this.hide();
 	},
 
 

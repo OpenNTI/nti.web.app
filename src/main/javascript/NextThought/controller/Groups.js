@@ -249,7 +249,9 @@ Ext.define('NextThought.controller.Groups', {
 
 		if(!contacts.hasFriend(username) ){
 			//add one just in case the contacts group is already in the list...
-			tracker.push({});
+			if(groupList.length){
+				tracker.push({});
+			}
 			contacts.addFriend(username).saveField('friends',null,finish);
 		}
 
