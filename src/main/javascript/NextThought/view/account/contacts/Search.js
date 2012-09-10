@@ -141,7 +141,7 @@ Ext.define('NextThought.view.account.contacts.Search',{
 
 	itemClicked: function(view,record,item,index, e){
 //		var clickedAdd = Boolean(e.getTarget('.add'));
-		var pop = Ext.widget('add-contact-popout',{record: record});
+		var pop = Ext.widget('contact-popout',{record: record});
 
 		pop.show();
 		pop.alignTo(Ext.fly(item).down('.add'),'tr-tl',[-10,-25]);

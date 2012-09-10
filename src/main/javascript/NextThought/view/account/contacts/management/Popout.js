@@ -1,6 +1,6 @@
 Ext.define('NextThought.view.account.contacts.management.Popout',{
 	extend: 'Ext.container.Container',
-	alias: 'widget.add-contact-popout',
+	alias: 'widget.contact-popout',
 
 	requires: [
 		'NextThought.view.account.contacts.management.Person'
@@ -9,10 +9,10 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 	floating: true,
 
 	width: 255,
-	cls: 'add-contact-popout',
+	cls: 'contact-popout',
 
 	items: [
-		{xtype: 'add-person-card'},
+		{xtype: 'person-card'},
 		{
 			xtype: 'container',
 			cls: 'add-button',
@@ -23,7 +23,7 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 				text: 'Add to Contacts',
 				scale: 'large',
 				handler: function(btn){
-					btn.up('.add-contact-popout').addContact();
+					btn.up('.contact-popout').addContact();
 				}
 			}
 		}
@@ -58,7 +58,7 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 
 
 	detectBlur: function(e){
-		if(!e.getTarget('.add-contact-popout')){
+		if(!e.getTarget('.contact-popout')){
 			this.fireEvent('blur');
 		}
 	},
@@ -66,7 +66,7 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 
 
 	addContact: function(){
-		var data = this.down('add-person-card').getSelected();
+		var data = this.down('person-card').getSelected();
 
 		this.fireEvent('add-contact', data.user, data.groups);
 		this.destroy();

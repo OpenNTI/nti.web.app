@@ -1,13 +1,13 @@
 Ext.define('NextThought.view.account.contacts.management.Person',{
 	extend: 'Ext.container.Container',
-	alias: 'widget.add-person-card',
+	alias: 'widget.person-card',
 	requires: [
 		'NextThought.layout.component.TemplatedContainer',
 		'NextThought.view.account.contacts.management.GroupList'
 	],
 	layout: 'auto',
 	componentLayout: 'templated-container',
-	cls: 'add-person-card',
+	cls: 'person-card',
 
 	renderTpl: Ext.DomHelper.markup([{
 		cls:'card-wrap',

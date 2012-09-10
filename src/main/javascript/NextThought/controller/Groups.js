@@ -24,7 +24,7 @@ Ext.define('NextThought.controller.Groups', {
 
 		this.control({
 
-			'add-contact-popout':{
+			'contact-popout':{
 				'add-contact': this.addContact
 			},
 

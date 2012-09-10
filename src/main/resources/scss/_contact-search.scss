@@ -127,7 +127,7 @@
 }
 
 
-.add-contact-popout {
+.contact-popout {
 	&.x-layer {
 		overflow: visible;
 	}
@@ -142,7 +142,7 @@
 		right: -12px;
 	}
 
-	.add-person-card {
+	.person-card {
 
 		.contact-card{
 			@include contact-card;
