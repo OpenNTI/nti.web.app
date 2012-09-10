@@ -11,7 +11,7 @@ Ext.define('NextThought.view.account.Identity',{
 
 	renderTpl: Ext.DomHelper.markup([
 		{ tag: 'img', src: '{avatarURL}', cls: 'avatar'},
-        { tag: 'div', class: 'menu'},
+        { tag: 'div', cls: 'menu'},
 		{
 			cls: 'wrap',
 			cn: [{
@@ -30,7 +30,7 @@ Ext.define('NextThought.view.account.Identity',{
 	},
 
 	initComponent: function(){
-		var me = this, t;
+		var me = this;
 
 		me.callParent(arguments);
 
