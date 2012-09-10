@@ -34,6 +34,5 @@ Ext.define('NextThought.view.menus.Settings',{
 
         //add!
         this.add(items);
-    },
-
+    }
 });
