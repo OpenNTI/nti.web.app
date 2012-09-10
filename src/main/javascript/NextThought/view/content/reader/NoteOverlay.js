@@ -319,6 +319,11 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		o.editorActions.activate();
 		o.editorActions.setValue( t.value, true, true );
 		t.value = '';
+
+		if(!o.editor.isVisible()){
+			this.noteOverlayDeactivateEditor();
+			return;
+		}
 		this.noteOverlayScrollEditorIntoView();
 	},
 
