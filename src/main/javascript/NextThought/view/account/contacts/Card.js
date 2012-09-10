@@ -43,28 +43,7 @@ Ext.define('NextThought.view.account.contacts.Card',{
 			status: this.user.get('status'),
 			from: this.group ? 'this Group' : 'my contacts'
 		});
-
-
-
-//		this.startChatAction = new Ext.Action({
-//			text: 'Start a Chat',
-//			scope: this,
-//			handler: this.startChat,
-//			itemId: 'start-chat',
-//			ui: 'nt-menuitem', plain: true,
-//			hidden: !$AppConfig.service.canChat(),
-//			disabled: this.user.get('Presence')==='Offline'
-//		});
 	},
-
-
-//	changeGrouping: function(menu,item){
-//		var group = item.record;
-//		if(!group){
-//			return;
-//		}
-//		group[item.checked?'addFriend':'removeFriend'](this.username).save();
-//	},
 
 
 	afterRender: function(){
@@ -78,16 +57,6 @@ Ext.define('NextThought.view.account.contacts.Card',{
 
 	destroy: function(){
 		this.callParent(arguments);
-	},
-
-
-	deleteContact: function(){
-		this.fireEvent('delete-contact',this.user);
-	},
-
-
-	removeFromGroup: function(){
-		this.fireEvent('remove-contact-from', this.group, this.user);
 	},
 
 

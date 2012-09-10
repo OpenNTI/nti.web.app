@@ -42,12 +42,23 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 		});
 
 		if(isContact){
-			this.buttonEvent = 'remove-contact';
+			this.buttonEvent = 'delete-contact';
 			Ext.apply(this.items[1].items[0],{
 				ui: 'secondary',
 				text: 'Remove Contact'
 			});
 		}
+
+
+//		this.startChatAction = new Ext.Action({
+//			text: 'Start a Chat',
+//			scope: this,
+//			handler: this.startChat,
+//			itemId: 'start-chat',
+//			ui: 'nt-menuitem', plain: true,
+//			hidden: !$AppConfig.service.canChat(),
+//			disabled: this.user.get('Presence')==='Offline'
+//		});
 
 		return this.callParent(arguments);
 	},
@@ -82,7 +93,6 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 
 	addContact: function(){
 		var data = this.down('person-card').getSelected();
-
 		this.fireEvent(this.buttonEvent, data.user, data.groups);
 		this.destroy();
 	}

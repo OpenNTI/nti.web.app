@@ -25,7 +25,8 @@ Ext.define('NextThought.controller.Groups', {
 		this.control({
 
 			'contact-popout':{
-				'add-contact': this.addContact
+				'add-contact': this.addContact,
+				'delete-contact': this.deleteContact
 			},
 
 			'contacts-management-panel': {
@@ -34,11 +35,6 @@ Ext.define('NextThought.controller.Groups', {
 
 			'contacts-panel':{
 				'delete-group': this.deleteGroup
-			},
-
-			'contact-card': {
-				'delete-contact': this.deleteContact,
-				'remove-contact-from': this.removeContact
 			},
 
 			'management-group-list': {
@@ -118,8 +114,7 @@ Ext.define('NextThought.controller.Groups', {
 		var me = this,
 			store = me.getFriendsListStore(),
 			groups = Ext.getCmp('my-groups'),
-			contactsId = this.getMyContactsId(),
-			offline;
+			contactsId = this.getMyContactsId();
 
 		if(!groups){
 			setTimeout(function(){ me.publishContacts(); },10);
@@ -127,6 +122,19 @@ Ext.define('NextThought.controller.Groups', {
 		}
 
 		groups.removeAll(true);
+
+		if(store.getContacts().length === 0){
+			groups.add({
+				cls: "populate-contacts",
+				xtype: 'box',
+				autoEl: { cn: [
+					{cls: 'title', html: 'Welcome to NextThought!'},
+					'Search for friends to add to your contact list.'
+				] }
+			});
+			return;
+		}
+
 		this.getContacts(function(friends){
 
 			store.each(function(group){
@@ -142,36 +150,19 @@ Ext.define('NextThought.controller.Groups', {
 				name = group.getName();
 
 				Ext.each(list,function(n){
-					var o = friends.Online[n];
+					var o = friends.Online[n] || friends.Offline[n];
 					if(o){online.push(o);} });
 
 				//don't associate the 'my contacts' group to the ui element...let it think its a "meta group"
 				if(group.get('Username')===contactsId){ group = null; }
+
 				groups.add({title: name, associatedGroup: group}).setUsers(online);
 			});
 
-			offline = groups.add({ title: 'Offline', offline:true });
-
-			offline.setUsers(friends.Offline);
+			groups.add({ title: 'Online', offline:true }).setUsers(friends.Online);
+			groups.add({ title: 'Offline', offline:true }).setUsers(friends.Offline);
 
 		});
-
-
-		if(store.getContacts().length === 0){
-
-
-			groups.add({
-				cls: "populate-contacts",
-				xtype: 'box',
-				autoEl: { cn: [
-					{cls: 'title', html: 'Welcome to NextThought!'},
-					'Search for friends to add to your contact list.'
-				] }
-			});
-
-		}
-
-
 	},
 
 
@@ -275,7 +266,8 @@ Ext.define('NextThought.controller.Groups', {
 
 
 	deleteContact: function(user){
-		this.removeContact(null,user.get('Username'));
+		var username = (user && user.isModel) ? user.get('Username') : user;
+		this.removeContact(null,username);
 	},
 
 

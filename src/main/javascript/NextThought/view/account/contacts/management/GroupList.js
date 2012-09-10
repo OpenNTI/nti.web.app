@@ -26,6 +26,8 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
 		this.mon(this.getSelectionModel(), {
 			beforeselect: this.onBeforeSelect,
 			beforedeselect: this.onBeforeDeselect,
+			deselect: this.onDeselect,
+			select: this.onSelect,
 			scope: this
 		});
 
@@ -134,6 +136,15 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
 
 	onBeforeDeselect: function(list,model){
 		return (!this.allowSelect || model.isModifiable());
+	},
+
+
+	onDeselect: function(view,group){
+		group.removeFriend(this.username).save();
+	},
+
+	onSelect: function(view,group){
+		group.addFriend(this.username).save();
 	},
 
 
