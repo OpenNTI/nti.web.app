@@ -77,6 +77,10 @@ Ext.define('NextThought.view.assessment.input.MultipleChoice',{
 
 
 	setValue: function(checkedIndexes){
+		if(!Ext.isArray(checkedIndexes)){
+			checkedIndexes = [checkedIndexes];
+		}
+
 		Ext.each(this.getEl().query('.control'),function(e){
 			if(Ext.Array.contains(checkedIndexes, parseInt(e.getAttribute('data-index'),10))) {
 				e.addCls('checked');
