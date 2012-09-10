@@ -70,8 +70,10 @@ Ext.define('NextThought.view.account.contacts.Search',{
 	initComponent: function(){
 		this.callParent(arguments);
 		this.store = new NextThought.store.UserSearch();
-		this.store.filter({ fn: function(rec){ return !rec.isGroup; } });
-		this.store.filter({ fn: function(rec){ return !rec.isCommunity; }});
+		this.store.filter([
+			{ fn: function(rec){ return !rec.isGroup; } },
+			{ fn: function(rec){ return !rec.isCommunity; }}
+		]);
 		this.view = this.down('dataview');
 		this.view.bindStore( this.store );
 
@@ -139,13 +141,26 @@ Ext.define('NextThought.view.account.contacts.Search',{
 
 
 
-	itemClicked: function(view,record,item,index, e){
-//		var clickedAdd = Boolean(e.getTarget('.add'));
-		var pop = Ext.widget('contact-popout',{record: record});
+	itemClicked: function(view,record,item){
+		var pop = Ext.widget('contact-popout',{record: record}),
+			add = Ext.fly(item).down('.add'),
+			alignment = 'tr-tl',
+			offsets = [-10,-25],
+			play = Ext.dom.Element.getViewportHeight() - add.getTop();
+
+		pop.show().hide();
+		pop.mon(this,'hide',pop.destroy,pop,{signle: true});//if we hide, make the popover listen and destroy
+
+
+
+		if( pop.getHeight() > play ){
+			pop.addCls('bottom-aligned');
+			alignment = 'br-bl';
+			offsets[1] = -offsets[1];
+		}
 
 		pop.show();
-		pop.alignTo(Ext.fly(item).down('.add'),'tr-tl',[-10,-25]);
-		pop.mon(this,'hide',pop.destroy,pop,{signle: true});//if we hide, make the popover listen and destroy
+		pop.alignTo(add,alignment,offsets);
 	},
 
 

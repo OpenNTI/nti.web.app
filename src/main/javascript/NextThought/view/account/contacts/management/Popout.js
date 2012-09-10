@@ -10,6 +10,7 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 
 	width: 255,
 	cls: 'contact-popout',
+	hideMode: 'visibility',
 
 	items: [
 		{xtype: 'person-card'},

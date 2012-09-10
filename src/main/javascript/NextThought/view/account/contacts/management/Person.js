@@ -24,7 +24,7 @@ Ext.define('NextThought.view.account.contacts.management.Person',{
 				}
 			]
 		}]
-	},{id: '{id}-body', html: '{%this.renderContainer(out,values)%}'}]),
+	},{id: '{id}-body', cls:'person-card-body', html: '{%this.renderContainer(out,values)%}'}]),
 
 	items: [
 		{xtype: 'management-group-list', allowSelect: true}
