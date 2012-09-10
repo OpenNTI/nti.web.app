@@ -2,6 +2,7 @@ Ext.define('NextThought.view.account.Contacts',{
 	extend: 'Ext.container.Container',
 	alias: 'widget.contacts-view',
 	requires: [
+		'NextThought.view.SecondaryTabPanel',
 		'NextThought.view.account.contacts.Search',
 		'NextThought.view.account.contacts.Card',
 		'NextThought.view.account.contacts.Panel'
@@ -21,29 +22,46 @@ Ext.define('NextThought.view.account.Contacts',{
 		{xtype: 'box', cls: 'view-title', autoEl: {html: 'Contacts',cn:[{cls: 'search'}]}},
 		{
 			xtype: 'container',
-			flex: 1,
 			layout: 'card',
+			flex: 1,
+			id: 'contacts-view-panel',
 			defaults :{
 				autoScroll: true,
 				overflowX: 'hidden',
 				xtype: 'container',
 				defaults: {
 					layout: 'anchor',
-					anchor: '100%',
-					xtype: 'contacts-panel'
+					anchor: '100%'
 				}
 			},
 			items: [
+				{
+					xtype: 'secondary-tabpanel',
+					defaults: {defaults: {xtype: 'contacts-panel'}},
+					items: [
+						{ id: 'contact-list', title: 'People'},
+						{ id: 'my-groups', title: 'Groups'}
+					]
+				},
 
-				{ id: 'my-groups' },
+				{
+					cls: "populate-contacts",
+					xtype: 'box',
+					autoEl: { cn: [
+						{cls: 'title', html: 'Welcome to NextThought!'},
+						'Search for friends to add to your contact list.'
+					] }
+				},
 
-				{ xtype: 'box' },
-
-				{ cls: "disabled-contacts-view", xtype: 'box',
-				  autoEl:{cn:[ {cls:'disabled-message-div',cn:[
-						{cls:'disabled-title', html:'Social Features Disabled...'},
-						'We need your parent\'s permission to give you more features.&nbsp; Ask your parent to email us.'
-				  ]}]}
+				{
+					cls: "disabled-contacts-view",
+					xtype: 'box',
+					autoEl: { cn: [
+						{ cls:'disabled-message-div',cn: [
+							{ cls:'disabled-title', html:'Social Features Disabled...'},
+							'We need your parent\'s permission to give you more features.&nbsp; Ask your parent to email us.'
+						]}
+					]}
 				}
 			]
 		}
@@ -54,7 +72,7 @@ Ext.define('NextThought.view.account.Contacts',{
 		this.callParent(arguments);
 		if(!$AppConfig.service.canFriend()){
 			this.down('box[cls=view-title]').autoEl = null;
-			this.down('container').getLayout().setActiveItem(2);
+			Ext.getCmp('contacts-view-panel').getLayout().setActiveItem(2);
 		}
 		this.contactSearch = Ext.widget('contact-search',{floatParent:this});
 		this.mon(this.contactSearch,{
@@ -124,10 +142,6 @@ Ext.define('NextThought.view.account.Contacts',{
 
 
 	toggleSearch: function(e){
-//		this.activeView = (this.activeView+1)%2;
-//		this.down('container').getLayout().setActiveItem(this.activeView);
-//		this.manageBtn[this.activeView?'addCls':'removeCls']('active');
-
 		var p = this.contactSearch;
 		if(e.getTarget('.search')){
 			p[p.isVisible()?'hide':'show']();

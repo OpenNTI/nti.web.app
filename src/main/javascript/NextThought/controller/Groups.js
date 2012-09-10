@@ -113,6 +113,8 @@ Ext.define('NextThought.controller.Groups', {
 	publishContacts: function(){
 		var me = this,
 			store = me.getFriendsListStore(),
+			ct = Ext.getCmp('contacts-view-panel'),
+			people = Ext.getCmp('contact-list'),
 			groups = Ext.getCmp('my-groups'),
 			contactsId = this.getMyContactsId();
 
@@ -122,20 +124,19 @@ Ext.define('NextThought.controller.Groups', {
 		}
 
 		groups.removeAll(true);
+		people.removeAll(true);
 
 		if(store.getContacts().length === 0){
-			groups.add({
-				cls: "populate-contacts",
-				xtype: 'box',
-				autoEl: { cn: [
-					{cls: 'title', html: 'Welcome to NextThought!'},
-					'Search for friends to add to your contact list.'
-				] }
-			});
+			ct.getLayout().setActiveItem( $AppConfig.service.canFriend() ? 1:2 );
 			return;
 		}
 
+		ct.getLayout().setActiveItem(0);
+
 		this.getContacts(function(friends){
+
+			people.add({ title: 'Online', offline:true }).setUsers(friends.Online);
+			people.add({ title: 'Offline', offline:true }).setUsers(friends.Offline);
 
 			store.each(function(group){
 				var id = ParseUtils.parseNtiid(group.getId()),
@@ -154,14 +155,14 @@ Ext.define('NextThought.controller.Groups', {
 					if(o){online.push(o);} });
 
 				//don't associate the 'my contacts' group to the ui element...let it think its a "meta group"
-				if(group.get('Username')===contactsId){ group = null; }
+				if(group.get('Username')===contactsId){
+					group = null;
+					//lets just not show this in the view we now have the overall view in place.
+					return;
+				}
 
 				groups.add({title: name, associatedGroup: group}).setUsers(online);
 			});
-
-			groups.add({ title: 'Online', offline:true }).setUsers(friends.Online);
-			groups.add({ title: 'Offline', offline:true }).setUsers(friends.Offline);
-
 		});
 	},
 
