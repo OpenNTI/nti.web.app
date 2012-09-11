@@ -95,7 +95,7 @@
 			$experimental-support-for-svg: true;
 			@include background-image(linear-gradient(top, #6dae1d 0%,#8fd03f 100%));
 
-			box-shadow: inset 1px 1px 3px 0 rgba(0,0,0,0.5);
+			box-shadow: inset 0px 1px 3px 0px rgba(0,0,0,0.5);
 
 			.x-tab-inner {
 				color: #ffffff;
@@ -123,7 +123,7 @@
 
 		.x-tab-inner {
 			display: inline-block;
-			padding: 10px 15px;
+			padding: 7px 15px 8px 15px;
 			text-transform: uppercase;
 			color: $primary-grey;
 			font-size: 10px;
