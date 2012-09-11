@@ -138,13 +138,22 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
 		return (!this.allowSelect || model.isModifiable());
 	},
 
+	onMaskBeforeShow: function(){
+		this.ignoreSelection = true;
+		this.callParent(arguments);
+		delete this.ignoreSelection;
+	},
 
 	onDeselect: function(view,group){
-		group.removeFriend(this.username).save();
+		if(this.username && !this.ignoreSelection){
+			this.fireEvent('remove-contact',group,this.username);
+		}
 	},
 
 	onSelect: function(view,group){
-		group.addFriend(this.username).save();
+		if(this.username && !this.ignoreSelection){
+			this.fireEvent('add-contact',this.username,[group]);
+		}
 	},
 
 
@@ -229,10 +238,9 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
 			return;
 		}
 
-
 		this.fireEvent('add-group', groupName, function(success){
 			if(!success){ input.addCls('error'); }
-			else {
+			else if(!this.username){//don't check the new group if we're editing a user
 				me.store.on('datachanged',function(){
 					me.selectNewGroup(groupName);
 				},me,{single:true});

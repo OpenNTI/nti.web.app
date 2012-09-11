@@ -29,17 +29,15 @@ Ext.define('NextThought.controller.Groups', {
 				'delete-contact': this.deleteContact
 			},
 
-			'contacts-management-panel': {
-				'add-group': this.addGroup
-			},
-
 			'contacts-panel':{
 				'delete-group': this.deleteGroup
 			},
 
 			'management-group-list': {
 				'add-group': this.addGroup,
-				'delete-group': this.deleteGroup
+				'delete-group': this.deleteGroup,
+				'add-contact': this.addContact,
+				'remove-contact': this.removeContact
 			}
 
 		},{});
@@ -158,7 +156,7 @@ Ext.define('NextThought.controller.Groups', {
 				if(group.get('Username')===contactsId){
 					group = null;
 					//lets just not show this in the view we now have the overall view in place.
-					return;
+//					return;
 				}
 
 				groups.add({title: name, associatedGroup: group}).setUsers(online);
@@ -201,7 +199,7 @@ Ext.define('NextThought.controller.Groups', {
 				.replace(/[^0-9A-Z\-@\+\._]/ig, '')
 				+'-'+ $AppConfig.username+'_'+guidGenerator();
 
-		this.createGroupUnguarded(newGroupName,username,[],callback,this);
+		this.createGroupUnguarded(newGroupName,username,[],callback,scope||this);
 	},
 
 
@@ -216,8 +214,8 @@ Ext.define('NextThought.controller.Groups', {
 		rec.save({
 			scope: this,
 			success: function(){
-				store.load();
 				Ext.callback(callback,scope, [true]);
+				store.load();
 			},
 			failed: function(){
 				Ext.callback(callback,scope, [false]);
@@ -255,12 +253,13 @@ Ext.define('NextThought.controller.Groups', {
 			}
 			contacts.addFriend(username).saveField('friends',null,finish);
 		}
-
+console.log(username,groupList);
 		Ext.each(groupList,function(g) {
 			if( g.get('Username') !== contactsId && !g.hasFriend(username) ){
 				g.addFriend(username).saveField('friends',null,finish);
 			}
 			else {
+				console.log('skipped',g);
 				//skip it, we did this up front.
 				finish();
 			}

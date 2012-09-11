@@ -24,11 +24,10 @@ Ext.define('NextThought.model.FriendsList', {
 
 	addFriend: function(username){
 		var list = this.get('friends') || [];
-		if(Ext.Array.contains(list,username)){
-			return;
+		if(!Ext.Array.contains(list,username)){
+			list.push(username);
+			this.set('friends',list);
 		}
-		list.push(username);
-		this.set('friends',list);
 		return this;
 	},
 
