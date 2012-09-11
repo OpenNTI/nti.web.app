@@ -225,7 +225,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 				handler: function(){
 					me.clearSelection();
 					var r = NextThought.model.Redaction.createFromHighlight(record);
-					r.set('replacementContent', 'redaction');
+					r.set('replacementContent', '***');
 					var widget = me.createAnnotationWidget('redaction',r, range);
 					widget.savePhantom();
 					me.scrollTo(range.getBoundingClientRect().top);

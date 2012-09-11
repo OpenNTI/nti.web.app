@@ -102,7 +102,6 @@ Ext.define('NextThought.view.annotations.Redaction', {
 
 
 	createActionHandle: function(before){
-
 		//Make this look like the template structure instead...
 		var me = this,
 			masterSpan = Ext.get(this.createNonAnchorableSpan()),
@@ -110,9 +109,9 @@ Ext.define('NextThought.view.annotations.Redaction', {
 			endDelimiter = Ext.get(this.createNonAnchorableSpan()),
 			replacementTextNode = this.doc.createTextNode(this.record.get('replacementContent')),
 			openingEllipsesSpan = Ext.get(this.doc.createElement('span')),
-			openingEllipsesTextNode = this.doc.createTextNode('...'),
+			openingEllipsesTextNode = this.doc.createTextNode(']'),
 			endingEllipsesSpan = Ext.get(this.doc.createElement('span')),
-			endingEllipsesTextNode = this.doc.createTextNode('...');
+			endingEllipsesTextNode = this.doc.createTextNode('[');
 
 		this.editableSpan = Ext.get(this.doc.createElement('span'));
 
@@ -125,16 +124,16 @@ Ext.define('NextThought.view.annotations.Redaction', {
 
 		//create the tree:
 		masterSpan.insertFirst(openingEllipsesSpan);
-		masterSpan.insertFirst(endDelimiter);
+		//masterSpan.insertFirst(endDelimiter);
 		masterSpan.insertFirst(this.editableSpan);
-		masterSpan.insertFirst(startDelimiter);
+		//masterSpan.insertFirst(startDelimiter);
 		masterSpan.insertFirst(endingEllipsesSpan);
 
 		masterSpan.addCls('redactionAction');
 		openingEllipsesSpan.addCls('redactionEllipses');
 		endingEllipsesSpan.addCls('redactionEllipses');
-		endDelimiter.addCls('redactionDelimiter');
-		startDelimiter.addCls('redactionDelimiter');
+		//endDelimiter.addCls('redactionDelimiter');
+		//startDelimiter.addCls('redactionDelimiter');
 		this.editableSpan.addCls('redactionReplacementText');
 		masterSpan.insertBefore(before);
 
@@ -145,6 +144,7 @@ Ext.define('NextThought.view.annotations.Redaction', {
 
 		return masterSpan;
 	},
+
 
 	setupInlineSpanEvents: function() {
 		var me = this;
@@ -172,6 +172,7 @@ Ext.define('NextThought.view.annotations.Redaction', {
 		});
 	},
 
+
 	/*
 	inlineClick: function(event, cmp, opts){
 		if (this.editableSpan.getAttribute('contenteditable')) {
@@ -191,6 +192,7 @@ Ext.define('NextThought.view.annotations.Redaction', {
 		return false;
 	},
 	*/
+
 
 	editableSpanEditorKeyDown: function(event, span){
 		var me = this, selection, range, cursorStart;
