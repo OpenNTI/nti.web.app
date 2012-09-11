@@ -144,20 +144,14 @@ Ext.define('NextThought.view.annotations.Highlight', {
 	render: function(){
 		var range = null,
 			style = this.getRecordField('style'),
-			bounds,
-			boundingTop,
-			boundingLeft,
-			boundingHeight,
-			width,
-			lineHeight,
-			topOffset = 10,
-			leftOffset = 5,
-			ctx,
-			adjustment,
-			s, i, x, y, w, h, left, r,
-			lastY=0, c, small,
-			padding = 2,
-			last = true;
+            bounds,
+            boundingTop,
+            boundingLeft,
+            boundingHeight,
+            width = this.content ? this.content.getWidth() : 680,
+            topOffset = 10,
+            leftOffset = 5,
+			boundingTop;
 
 		if(!this.rendered){
 			range = this.getRange();
@@ -189,75 +183,21 @@ Ext.define('NextThought.view.annotations.Highlight', {
 		}
 
 		range = range || this.buildRange();
-		bounds = range.getBoundingClientRect() || this.getAlternateBoundingRect();
-		boundingTop = Math.ceil(bounds.top);
-		boundingLeft = Math.ceil(bounds.left);
-		boundingHeight = Math.ceil(bounds.height);
-		width = this.content ? this.content.getWidth() : 680;
-		s = RectUtils.merge(range.getClientRects(),width+1);
-		s.sort(function(a,b) { return a.top + a.bottom - b.top - b.bottom; });
-		i = s.length - 1;
-
-
-		Ext.fly(this.canvas).setXY([
-			boundingLeft-leftOffset,
-			boundingTop-topOffset
-		]);
-		Ext.fly(this.canvas).set({
-			width: width+(leftOffset*2),
-			height: boundingHeight+(topOffset*2)
-		});
-
-		ctx = this.canvas.getContext('2d');
-		ctx.fillStyle = this.compElements.first().getStyle('background-color');
-		for(; i>=0; i--){
-			r = s[i];
-
-			left = Math.ceil(r.left - boundingLeft + leftOffset - padding );
-			y = Math.ceil(r.top - boundingTop + topOffset - padding );
-			small = (r.width/width) < 0.5 && i===0;
-			x = i===0 || small ? left : 0;
-			w = last || small
-					? (r.width + (x ? 0: left) + (padding*(last?1:2)) )
-					: (width-x);
-
-			h = r.height + (padding*2);
-			if(!last && (Math.abs(y - lastY) < lineHeight || y > lastY )){ continue; }
-			if(!last && r.height <= lineHeight) { continue; }
-			//Remove some really small rects
-			if(last && w < 10) {continue;}
-			if (!last && h < 8) { continue;}
-
-			if(last && !Ext.isIE9){
-				c = Ext.get(this.counter);
-				adjustment = this.adjustedBy || (r.top - c.getY());
-				h = c.getHeight() + padding;
-
-				if(adjustment < 2){ y += adjustment; }
-				if(!this.adjusted){
-					this.adjusted = true;
-					this.adjustedBy = adjustment;
-					return this.render();
-				}
-			}
-			else {
-				adjustment = 0;
-			}
-
-			if (last) {	
-				w -= 4;
-				ctx.beginPath();
-				ctx.moveTo(x+w,y);
-				ctx.lineTo(x+w,y+h);
-				ctx.lineTo(x+w+4,y);
-				ctx.fill();
-			}
-			//TODO: clamp to 24px tall (centered in the rect)
-			ctx.fillRect( x, y, w, h);
-
-			last = false;
-			lastY = y;
-		}
+        bounds = range.getBoundingClientRect(),
+        boundingTop = Math.ceil(bounds.top),
+        boundingLeft = Math.ceil(bounds.left),
+        boundingHeight = Math.ceil(bounds.height),
+        Ext.fly(this.canvas).setXY([
+            boundingLeft-leftOffset,
+            boundingTop-topOffset
+        ]);
+        Ext.fly(this.canvas).set({
+            width: width+(leftOffset*2),
+            height: boundingHeight+(topOffset*2)
+        });
+		boundingTop = AnnotationUtils.drawCanvas(this.canvas,
+            this.content, range, this.compElements.first().getStyle('background-color'),
+            [leftOffset, topOffset]);
 
 		return boundingTop || this.resolveVerticalLocation();
 	},
@@ -292,6 +232,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
         after.appendChild(el.dom);
 		return el.dom;
 	},
+
 
 	wrapRange: function(node, range){
 		var nodeList = [],
@@ -351,7 +292,6 @@ Ext.define('NextThought.view.annotations.Highlight', {
 					newRange.setEnd(range.endContainer, range.endOffset);
 					range = newRange;
 				}
-
 
 
 				if(startToEnd !== BEFORE && endToStart !== AFTER) {

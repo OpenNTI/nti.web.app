@@ -21,6 +21,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 
 	renderSelectors: {
 		avatar: 'img.avatar',
+        canvas: 'canvas',
 		liked: '.meta .controls .like',
 		favorites: '.meta .controls .favorite',
 		sharedTo: '.shared-to',
@@ -36,6 +37,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		more: '.respond .reply-options .more'
 	},
 
+
 	initComponent: function(){
 		this.callParent(arguments);
 	},
@@ -47,6 +49,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		}
 		return this.callParent(arguments);
 	},
+
 
 	afterRender: function(){
 		var me = this;
@@ -96,11 +99,13 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		}
 	},
 
+
 	onMouseOver: function(){
 		this.up('window').down('note-carousel').getEl().addCls('hover');
 		this.el.addCls('hover');
 		this.updateLayout();
 	},
+
 
 	onMouseOut: function(){
 		this.up('window').down('note-carousel').getEl().removeCls('hover');
@@ -207,43 +212,23 @@ Ext.define('NextThought.view.annotations.note.Main',{
 			doc = ReaderPanel.get(this.prefix).getDocumentElement();
 			range = Anchors.toDomRange(r.get('applicableRange'),doc);
 			if(range){
-					objectInnerText = Ext.fly(range.commonAncestorContainer).up('Object') ? Ext.fly(range.commonAncestorContainer).up('Object').dom.textContent : null;
-					doc.getSelection().removeAllRanges();
-					doc.getSelection().addRange(range);
-					sel = rangy.getSelection(doc);
-					range = sel.getRangeAt(0);
-					text = bodyText = range.toString();
-					if(!objectInnerText){
-						//only expand it we are not inside an object node
-						try {
-							range.moveEnd('character', 50);
-							range.moveStart('character', -50);
-							range.expand('word');
-						}
-						catch(e) {
-							try { while(true) { range.moveStart('character',-1); } }
-							catch(er) { range.moveStart('character',1); }
-						}
-						sel.setSingleRange(range);
-						Anchors.expandSelectionToIncludeMath(sel);
-						bodyText = sel.getRangeAt(0).toString();
-						sel.removeAllRanges();
-					}
-					else {
-						text = bodyText = objectInnerText;
-					}
-				text = bodyText.replace(text, this.highlightTpl.apply([text]));
-				text = this.replaceMathNodes(text, objectInnerText ? Ext.fly(range.commonAncestorContainer).up('Object').dom : range.commonAncestorContainer);
-			}
-			else {
-				text = r.get('selectedText');
+                this.context.setHTML('');
+                this.context.insertFirst(RangeUtils.expandRange(range, doc));
+                this.context.insertHtml('afterBegin', '[...] ');
+                this.context.insertHtml('beforeEnd', ' [...]');
+
+                Ext.each(this.context.query('.application-highlight'), function(h){
+                    if(this.record.isModifiable()){
+                        Ext.fly(h).addCls('highlight-mouse-over');
+                    }
+                }, this);
+                //for now, don't draw the stupid canvas...
+                //this.canvas.width = Ext.fly(this.canvas).getWidth();
+                //this.canvas.height = Ext.fly(this.canvas).getHeight();
+                //AnnotationUtils.drawCanvas(this.canvas, this.context, range,
+                //    this.context.down('.application-highlight').getStyle('background-color'), [-20, 30]);
 			}
 
-			if (!objectInnerText){
-				text = '[...] '+text+' [...]';
-			}
-
-			this.context.update(text.replace(SearchUtils.trimRe,''));
 			if (Ext.isGecko || Ext.isIE9) { this.resizeMathJax(this.context); }
 
 		}
@@ -302,12 +287,16 @@ Ext.define('NextThought.view.annotations.note.Main',{
 
 		return rangeString;
 	},
+
+
 	resizeMathJax: function(node) {
 		var e = Ext.select('div.equation .mi').add(Ext.select('div.equation .mn')).add(Ext.select('div.equation .mo'));
 		e.setStyle('font-size','13px');
 	},
 
+
 	recordChanged: Ext.Function.createBuffered( function(){ this.setRecord(this.record); }, 10),
+
 
 	fillInUser: function(user){
 		this.name.update(user.getName());
@@ -339,6 +328,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		this.sharedTo.update(val);
 		this.sharedTo.set({title:val});
 	},
+
 
     scrollIntoView: function(){
         var scroller = this.ownerCt.getEl();
@@ -398,6 +388,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
         me.scrollIntoView();
 		setTimeout(function(){me.editorActions.focus();}, 100);
 	},
+
 
 	deactivateReplyEditor: function(){
 		var myWindow = this.up('window');
@@ -460,6 +451,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		this.up('window').close();
 	},
 
+
 	onChat: function() {
 		this.up('window').fireEvent('chat', this.record);
 		return;
@@ -481,8 +473,10 @@ function(){
 			]
 		},
 		{ cls: 'clear' },
-		{ cls: 'context', cn: [{tag: 'span', cls: 'text'}] },
-
+		{ cls: 'context', cn: [
+            {tag: 'canvas'},
+            {tag: 'span', cls: 'text'}]
+        },
 		{ cls: 'body' },
 
 		{

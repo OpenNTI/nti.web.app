@@ -26,7 +26,39 @@ Ext.define('NextThought.util.Ranges',{
 			console.error(e.message);
 		}
 		return r;
-	}
+	},
+
+
+    expandRange: function(range, doc){
+        if(Ext.fly(range.commonAncestorContainer).up('object')) {
+            console.log('Range is inside an object, just return the contents of Object');
+            return range.commonAncestorContainer;
+        }
+
+
+        var r = this.getRangyRange(range, doc),
+            sel = rangy.getSelection(doc);
+
+        r.moveEnd('character', 50);
+        r.moveStart('character', -50);
+        r.expand('word');
+
+        sel.setSingleRange(r);
+        Anchors.expandSelectionToIncludeMath(sel);
+        r = sel.getRangeAt(0);
+        sel.removeAllRanges();
+
+        return r.cloneContents();
+    },
+
+
+    getRangyRange: function(range, doc) {
+        doc.getSelection().removeAllRanges();
+        doc.getSelection().addRange(range);
+        var sel = rangy.getSelection(doc);
+        return sel.getRangeAt(0);
+    }
+
 
 },function(){
 	window.RangeUtils = this;

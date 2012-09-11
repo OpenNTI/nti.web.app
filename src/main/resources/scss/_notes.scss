@@ -611,7 +611,7 @@
 		direction: ltr;
 
 		//default turn these off
-		.separator, .time, .respond, .controls, .reply-count{
+		.seperator, .shared-to, .time, .respond, .controls, .reply-count{
 			display: none;
 		}
 
@@ -658,6 +658,8 @@
 			min-width: 280px;
 			max-heigt: 400px;
 			z-index: 999;
+
+		  	@include meta-row-window;
 
 			.mask {
 				display: none;
@@ -886,6 +888,7 @@
 		}
 
 		.context {
+		  	position: relative;
 			margin: 20px 0;
 			padding: 20px;
 			background: #ffffff;
@@ -894,7 +897,22 @@
 			text-rendering: optimizeLegibility;//fallback
 			text-rendering: geometricPrecision;
 
-			span{
+		  	.mathjax {
+			    line-height: normal;
+				white-space: nowrap;
+			}
+
+		    & > canvas {
+				position: absolute;
+			  	top: 0;
+			  	left: 0;
+			  	width: 100%;
+			  	height: 100%;
+			}
+
+			& > span.text{
+			  	position: relative;
+			  	z-index: 1;
 				color: $primary-grey;
 				font-size: 14px;
 				line-height: 32px;
@@ -906,12 +924,6 @@
 				-moz-hyphens: auto;
 				-ms-hyphens: auto;
 				hyphens: auto;
-
-				&.highlight {
-					&,span{
-						color: $primary-grey;
-					}
-				}
 			}
 		}
 

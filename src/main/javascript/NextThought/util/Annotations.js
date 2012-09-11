@@ -153,7 +153,82 @@ Ext.define('NextThought.util.Annotations',{
 		}
 		getNodes(root.body || root);
 		return textNodes;
-	}
+    },
+
+
+    drawCanvas: function(canvas, content, range, backgroundColor, offset) {
+        var bounds = range.getBoundingClientRect(),
+            boundingTop = Math.ceil(bounds.top),
+            boundingLeft = Math.ceil(bounds.left),
+            boundingHeight = Math.ceil(bounds.height),
+            width = content ? content.getWidth() : 680,
+            lineHeight,
+            topOffset = offset[1],
+            leftOffset = offset[0],
+            ctx,
+            adjustment,
+            i, x, y, w, h, left, r,
+            lastY=0, c, small,
+            padding = 2,
+            last = true,
+            s = RectUtils.merge(range.getClientRects(),width+1);
+
+        s.sort(function(a,b) { return a.top + a.bottom - b.top - b.bottom; });
+        i = s.length - 1;
+
+        ctx = Ext.fly(canvas).dom.getContext('2d');
+        ctx.fillStyle = backgroundColor;
+        for(; i>=0; i--){
+            r = s[i];
+
+            left = Math.ceil(r.left - boundingLeft + leftOffset - padding );
+            y = Math.ceil(r.top - boundingTop + topOffset - padding );
+            small = (r.width/width) < 0.5 && i===0;
+            x = i===0 || small ? left : 0;
+            w = last || small
+                ? (r.width + (x ? 0: left) + (padding*(last?1:2)) )
+                : (width-x);
+
+            h = r.height + (padding*2);
+            if(!last && (Math.abs(y - lastY) < lineHeight || y > lastY )){ continue; }
+            if(!last && r.height <= lineHeight) { continue; }
+            //Remove some really small rects
+            if(last && w < 10) {continue;}
+            if (!last && h < 8) { continue;}
+
+            /*
+            if(last && !Ext.isIE9){
+                c = Ext.get(this.counter);
+                adjustment = this.adjustedBy || (r.top - c.getY());
+                h = c.getHeight() + padding;
+
+                if(adjustment < 2){ y += adjustment; }
+                if(!this.adjusted){
+                    this.adjusted = true;
+                    this.adjustedBy = adjustment;
+                    return this.render();
+                }
+            }
+            else {
+                adjustment = 0;
+            }
+            */
+            if (last) {
+                w -= 4;
+                ctx.beginPath();
+                ctx.moveTo(x+w,y);
+                ctx.lineTo(x+w,y+h);
+                ctx.lineTo(x+w+4,y);
+                ctx.fill();
+            }
+            //TODO: clamp to 24px tall (centered in the rect)
+            ctx.fillRect( x, y, w, h);
+
+            last = false;
+            lastY = y;
+        }
+        return boundingTop;
+    }
 },
 function(){
 	window.AnnotationUtils = this;
