@@ -84,7 +84,7 @@
 			background: #ffffff;
 		}
 
-		@include animate(fadeIn,0.5s);
+		@include animate(fadeIn,0.3s);
 		display: none;
 		overflow: hidden;
 		min-width: 320px;
