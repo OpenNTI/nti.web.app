@@ -156,7 +156,7 @@ Ext.define('NextThought.controller.Groups', {
 				if(group.get('Username')===contactsId){
 					group = null;
 					//lets just not show this in the view we now have the overall view in place.
-//					return;
+					return;
 				}
 
 				groups.add({title: name, associatedGroup: group}).setUsers(online);
@@ -253,13 +253,12 @@ Ext.define('NextThought.controller.Groups', {
 			}
 			contacts.addFriend(username).saveField('friends',null,finish);
 		}
-console.log(username,groupList);
+
 		Ext.each(groupList,function(g) {
 			if( g.get('Username') !== contactsId && !g.hasFriend(username) ){
 				g.addFriend(username).saveField('friends',null,finish);
 			}
 			else {
-				console.log('skipped',g);
 				//skip it, we did this up front.
 				finish();
 			}
