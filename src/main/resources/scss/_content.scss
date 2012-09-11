@@ -18,9 +18,8 @@
 
 		&.active,
 		&.over {
-			.label { color: #585858; }
+			.label { color: $primary-grey; }
 			.menu {
-				color: $secondary-grey;
 				span {
 					background-image: url(../images/menu-arrow-down-active.png);
 				}
@@ -29,19 +28,23 @@
 	}
 
 	.label {
-		color: #8a8989;
+		color: $tertiary-grey;
 		font-size: 10px;
-		text-transform: uppercase;
 		font-weight: 800;
+		font-style: normal;
+		font-family: $font;
 		white-space: nowrap;
 		overflow: hidden;
+		text-transform: uppercase;
 		text-overflow: ellipsis;
 	}
 	.menu {
 		max-width: 450px;
-		color: $tertiary-grey;
+		color: $primary-grey;
 		font-size: 11pt;
 		font-weight: 400;
+		font-style: normal;
+		font-family: $font;
 		overflow: hidden;
 		text-overflow: ellipsis;
 		margin-bottom: 6px;
