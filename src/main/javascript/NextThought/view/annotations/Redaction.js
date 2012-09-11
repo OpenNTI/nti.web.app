@@ -51,6 +51,12 @@ Ext.define('NextThought.view.annotations.Redaction', {
 			this.editableSpan.un('keydown', this.editableSpanEditorKeyDown, this);
 			this.editableSpan.on('keydown', this.editableSpanEditorKeyDown, this);
 			this.doc.parentWindow.getSelection().removeAllRanges();
+
+            //select content in editable span
+            var range = this.doc.createRange();
+            range.selectNodeContents(this.editableSpan.dom);
+            this.doc.parentWindow.getSelection().addRange(range);
+
 			this.editableSpan.focus();
 		}
 		AnnotationsRenderer.suspend(this.prefix);
