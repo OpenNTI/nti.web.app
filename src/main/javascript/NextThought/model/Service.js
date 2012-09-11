@@ -41,18 +41,6 @@ Ext.define('NextThought.model.Service', {
 	},
 
 
-	getUserDataSearchURL: function(){
-		var w = this.getWorkspace($AppConfig.username) || {},
-			l = this.getLinkFrom(w.Links||[], Globals.USER_GENERATED_DATA_SEARCH_REL);
-
-		if(!l) {
-			return null;
-		}
-
-		return getURL(this.forceTrailingSlash(l));
-	},
-
-
 	getUserUnifiedSearchURL: function(){
 		var w = this.getWorkspace($AppConfig.username) || {},
 			l = this.getLinkFrom(w.Links||[], Globals.USER_UNIFIED_SEARCH_REL);
@@ -62,19 +50,6 @@ Ext.define('NextThought.model.Service', {
 		}
 
 		return getURL(this.forceTrailingSlash(l));
-	},
-
-
-	getSearchURL : function(containerId){
-		var c = containerId ? containerId : 'prealgebra';
-		return getURL('/'+c+'/Search/');
-	},
-
-
-	getQuizSubmitURL: function(ntiid){
-		var u = $AppConfig.username;
-
-		return  getURL('/dataserver/users/'+u+'/quizresults/'+ntiid);
 	},
 
 
@@ -89,7 +64,7 @@ Ext.define('NextThought.model.Service', {
 
 	getLinkFrom: function(links, rel){
 		var i=links.length-1, o;
-		for(;i>=0; i--){
+		for(i;i>=0; i--){
 			o = links[i] || {};
 			if(o.rel === rel) {
 				return o.href;
@@ -164,9 +139,7 @@ Ext.define('NextThought.model.Service', {
 					}
 				}
 			}
-			if (collection) {
-				return false;
-			}
+			return !Boolean(collection);
 		});
 
 		return Ext.clone(collection);
@@ -194,27 +167,6 @@ Ext.define('NextThought.model.Service', {
 	},
 
 
-	resolveTopContainer: function resolve(containerId, success, failure, scope){
-
-		var o = LocationProvider.find(containerId),
-			me = scope || this;
-
-		function step(container){
-			return resolve(
-					container.get('ContainerId'),
-					success,
-					failure,
-					me);
-		}
-
-		if(o){
-			return Ext.callback(success,null,[o]);
-		}
-
-		me.getObject(containerId, step, failure, me);
-	},
-
-
 	getObjectURL: function(ntiid, field){
 		var f = '';
 		if (field) {
@@ -223,7 +175,7 @@ Ext.define('NextThought.model.Service', {
 
 		return getURL(Ext.String.format("{0}/{1}{2}",
 			this.getCollection('Objects', 'Global').href,
-			encodeURIComponent(ntiid),
+			encodeURIComponent(ntiid||''),
 			f));
 	},
 
@@ -234,7 +186,7 @@ Ext.define('NextThought.model.Service', {
 
 		if(!ParseUtils.parseNtiid(ntiid)){
 			Ext.callback(failure,scope, ['']);
-			return;
+			return null;
 		}
 
 		function continueRequest(resolvedUrl){
@@ -290,7 +242,7 @@ Ext.define('NextThought.model.Service', {
 
 			if(!ParseUtils.parseNtiid(ntiid)){
 				Ext.callback(failure,scope, ['']);
-				return;
+				return null;
 			}
 
 			try{
@@ -334,7 +286,12 @@ Ext.define('NextThought.model.Service', {
 	},
 
 
-	/* The following methods are for deciding when things can or cannot happen*/
+
+	/*
+	 *	The following methods are for deciding when things can or cannot happen
+	 */
+
+
 	canChat: function() {
 		return this.hasCapability('nti.platform.p2p.chat');
 	},
