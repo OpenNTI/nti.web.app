@@ -41,7 +41,7 @@ Ext.define('NextThought.view.account.Activity',{
 				id: '{guid}',
 				cn: [{cls: 'name', tag: 'span', html: '{name}'},' {message} ',{tag:'tpl', 'if':'with', cn:['with-name']}]
 			}]},
-			{tag:'tpl', 'if':'!activity', cn:[{
+			{tag:'tpl', 'if':'label', cn:[{
 				cls: 'divider', html: '{label}'
 			}]}
 		]}
@@ -87,8 +87,6 @@ Ext.define('NextThought.view.account.Activity',{
 
 
 	resetNotificationCount: function(){
-		var me = this;
-
 		$AppConfig.userObject.saveField('NotificationCount', 0);
 		this.setNotificationCountValue(0);
 	},
@@ -117,6 +115,7 @@ Ext.define('NextThought.view.account.Activity',{
 
 	reloadActivity: function(store){
 		var container = this.down('box[activitiesHolder]'),
+			totalExpected,
 			items = [];
 
 		if(store && !store.isStore){
@@ -124,6 +123,8 @@ Ext.define('NextThought.view.account.Activity',{
 		}
 
 		this.store = store = store||this.store;
+
+		totalExpected = store.getCount();
 
 		if(!this.rendered){
 			this.on('afterrender',this.reloadActivity,this,{single:true});
@@ -133,7 +134,7 @@ Ext.define('NextThought.view.account.Activity',{
 		this.stream = {};
 
 		function p(i){
-			if(items.length>30){
+			if(items.length>100){
 				if(!items.last().activity){ items.pop(); }
 				return;
 			}
@@ -141,16 +142,14 @@ Ext.define('NextThought.view.account.Activity',{
 		}
 
 		function doGroup(group){
-			var totalExpected;
-			var label = (group.name||'').replace(/^[A-Z]\d{0,}\s/,'') || false;
-			var me = this;
+			var label = (group.name||'').replace(/^[A-Z]\d{0,}\s/,'') || false,
+				me = this;
 
 			if(label){
 				p({ label: label });
 			}
 
 			//We use a similar strategy to the one that Notifications uses
-			totalExpected = group.children.length;
 			Ext.each(group.children,function(c){
 				var item = this.changeToActivity(c);
 
@@ -234,7 +233,7 @@ Ext.define('NextThought.view.account.Activity',{
 			targets;
 
 		if (!rec || rec.get('Class') === 'User'){
-			return;
+			return false;
 		}
 
 		targets = (rec.get('references') || []).slice();

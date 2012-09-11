@@ -63,6 +63,7 @@
 
 
 	.divider {
+		position: relative;
 		color: $secondary-grey;
 		font: {
 			size: 10px;
@@ -86,7 +87,7 @@
 			left: 0;
 		}
 
-		& + div.x-component > .activity {
+		& + div.activity {
 			box-shadow: none;
 		}
 	}
