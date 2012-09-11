@@ -150,7 +150,7 @@ Ext.define('NextThought.controller.Account', {
 
 
 	openHelp: function(){
-		LocationProvider.setLocation('tag:nextthought.com,2011-10:NextThought-HTML-NextThoughtHelpCenter.nextthought_help_center');
+		LocationProvider.setLocation('tag:nextthought.com,2011-10:NextThought-HTML-NextThoughtHelpCenter.tableofcontents');
 	},
 
 
