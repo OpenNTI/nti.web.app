@@ -133,7 +133,7 @@ Ext.define('NextThought.controller.Groups', {
 
 		this.getContacts(function(friends){
 
-			people.add({ title: 'Online', offline:true }).setUsers(friends.Online);
+			people.add({ title: 'Online', online:true }).setUsers(friends.Online);
 			people.add({ title: 'Offline', offline:true }).setUsers(friends.Offline);
 
 			store.each(function(group){
@@ -166,30 +166,28 @@ Ext.define('NextThought.controller.Groups', {
 
 
 	incomingPresenceChange: function(name, presence){
-		var me = this,
-			groups = Ext.getCmp('my-groups'),
-			offline = groups.down('[offline]'),isContact=false;
+		var contacts = Ext.getCmp('contact-list'),
+			offline = contacts.down('[offline]'),
+			online = contacts.down('[online]'),
+			map = { offline: offline, online: online };
 
-		function groupAction(a,b,user){
-			groups.items.each(function(g){
-				var o = g.associatedGroup;
-				if(o && Ext.Array.contains(o.get('friends'),name)){
-					isContact=true;
-					g[a](user);
-				}
-			},me);
-			if(isContact){
-				offline[b](user);
-			}
-			else {
-				console.log('Ignoring presense from: '+name+', it is not in any groups');
-			}
+		if(!Ext.Array.contains(this.getFriendsListStore().getContacts(),name)){
+			console.log('Ignoring presense from: '+name+', it is not in any groups');
+			return;
 		}
 
+		offline.removeUser(name);
+		online.removeUser(name);
+
 		UserRepository.getUser(name, function(u) {
-			var a = ['addUser','removeUser'];
-			if(presence.toLowerCase()!=='online'){a.reverse();}
-			groupAction(a[0],a[1],u);
+
+			var panel = map[presence.toLowerCase()];
+			if(panel){
+				panel.addUser(u);
+			}
+			else {
+				console.log('No panel for presence: ',presence);
+			}
 		});
 	},
 

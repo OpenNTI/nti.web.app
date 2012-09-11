@@ -149,7 +149,8 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 	},
 
 	removeUser: function(user) {
-		var existing = this.down('[username='+user.get('Username')+']');
+		var name = (user && user.isModel) ? user.get('Username') : user,
+			existing = this.down('[username='+name+']');
 		if (existing){
 			this.remove(existing, true);
 			this.updateTitle();
