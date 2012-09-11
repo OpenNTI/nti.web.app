@@ -76,7 +76,7 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 
 
 	showMenu: function(toolEl){
-		this.menu.showBy(toolEl,'tr-tl',[10,0]);
+		this.menu.showBy(toolEl,'tr-tl',[0,0]);
 	},
 
 
