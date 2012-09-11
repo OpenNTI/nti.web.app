@@ -31,6 +31,15 @@ Ext.define('NextThought.model.Service', {
 		return getURL(this.forceTrailingSlash(l) + (username?encodeURIComponent(username):''));
 	},
 
+	getResolveUserURL: function(username){
+		var w = this.getWorkspace('Global') || {},
+			l = this.getLinkFrom(w.Links||[], Globals.USER_RESOLVE_REL);
+		if(!l) {
+			return null;
+		}
+		return getURL(this.forceTrailingSlash(l) + (username?encodeURIComponent(username):''));
+	},
+
 
 	getUserDataSearchURL: function(){
 		var w = this.getWorkspace($AppConfig.username) || {},

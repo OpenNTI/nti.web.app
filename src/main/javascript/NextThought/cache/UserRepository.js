@@ -138,7 +138,7 @@ Ext.define('NextThought.cache.UserRepository', {
 	makeRequest: function(username, callbacks) {
 		var me = this,
 			result = null,
-			url = $AppConfig.service.getUserSearchURL(username),
+			url = $AppConfig.service.getResolveUserURL(username),
 			options;
 
 		if(!username){
@@ -187,7 +187,7 @@ Ext.define('NextThought.cache.UserRepository', {
 					function(){
 						callback.apply(me,arguments);
 					}, me);
-			return;
+			return null;
 		}
 
 		this.activeRequests[username] = Ext.Ajax.request({

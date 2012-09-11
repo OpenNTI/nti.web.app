@@ -24,6 +24,7 @@ Ext.define('NextThought.util.Globals', {
 	RECURSIVE_STREAM: 'RecursiveStream',
 	USER_GENERATED_DATA: 'UserGeneratedData',
 	USER_SEARCH_REL: 'UserSearch',
+	USER_RESOLVE_REL: 'ResolveUser',
 	USER_GENERATED_DATA_SEARCH_REL: 'UGDSearch',
 	USER_UNIFIED_SEARCH_REL: 'UnifiedSearch',
 	CONTENT_ROOT: 'tag:nextthought.com,2011-10:Root',
