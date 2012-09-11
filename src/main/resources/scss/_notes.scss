@@ -665,11 +665,7 @@
 				display: none;
 			}
 
-			.separator, .time, {
-				@include menu-label-text-treatment;
-				display: inline;
-			}
-			.controls, .reply-count {
+		  	.controls, .reply-count {
 				display: block;
 			}
 
@@ -677,6 +673,20 @@
 				white-space: normal;
 				font-style: normal;
 			}
+
+		  	.meta{
+
+				.name {
+					font-weight: 300;
+					font-size: 17px;
+				}
+
+				.time, {
+		  		    display: inline;
+				  	font-size: 12px;
+				}
+
+			  }
 
 			@include meta-row;
 
