@@ -317,12 +317,13 @@ Ext.define( 'NextThought.view.annotations.Base', {
 		}
 
 		var menu,
-			xy = e.getXY().slice(),
-			scrollTop = this.ownerCmp.getAnnotationOffsets().scrollTop;
+			xy = e.getXY().slice();
+
+		this.offsets = this.ownerCmp.getAnnotationOffsets();
 
 		//adjust points
-		xy[0] += Math.max(this.offsets.left,0);
-		xy[1] += Math.max(this.offsets.top,0) - scrollTop;
+		xy[0] += this.offsets.left;
+		xy[1] += this.offsets.top;
 
 		//single annotation
 		menu = this.getMenu();
