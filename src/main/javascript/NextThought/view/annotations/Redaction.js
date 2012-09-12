@@ -119,7 +119,14 @@ Ext.define('NextThought.view.annotations.Redaction', {
             scope: this,
             blur: this.editableSpanBlur
         });
-        this.mon(this.masterSpan.down('.controls'), 'click', this.onControlClick, this);
+
+        if (this.record.isModifiable()){
+            this.mon(this.masterSpan.down('.controls'), 'click', this.onControlClick, this);
+        }
+        else {
+            this.masterSpan.down('.controls').remove();
+        }
+
         return this.masterSpan;
 	},
 
