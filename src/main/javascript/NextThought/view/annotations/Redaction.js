@@ -32,7 +32,7 @@ Ext.define('NextThought.view.annotations.Redaction', {
 
 
 	buildMenu: function(items){
-		if (this.masterSpan){return;} //disable menu in this case
+		if (Ext.fly(this.masterSpan).down('.delimiter')){return;} //disable menu in this case
 
         //leave menu when block redactions for now...
         var me = this;
@@ -225,13 +225,13 @@ Ext.define('NextThought.view.annotations.Redaction', {
 
 
 	createBlockActionHandle: function(before){
-		var masterSpan = Ext.get(this.createNonAnchorableSpan());
+		this.masterSpan = Ext.get(this.createNonAnchorableSpan());
 
-		masterSpan.update('&nbsp;');
-		masterSpan.addCls('blockRedactionAction');
-		masterSpan.insertBefore(before);
+        this.masterSpan.update('&nbsp;');
+        this.masterSpan.addCls('blockRedactionAction');
+        this.masterSpan.insertBefore(before);
 		//masterSpan.on('click', this.toggleRedaction, this);
-		return masterSpan;
+		return this.masterSpan;
 	},
 
 
