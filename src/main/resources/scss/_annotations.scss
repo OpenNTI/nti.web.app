@@ -184,6 +184,11 @@ div.redaction-control {
         overflow: hidden;
         display: inline-block;
 
+		&.redacted{
+			.delimiter{display: inline-block;}
+			.controls{display: none;}
+		}
+
         span.editableSpan {
 		  	border: 1px solid $border-grey;
 		  	background: white;
@@ -199,9 +204,6 @@ div.redaction-control {
 
 	  	.delimiter {
 			display: none;
-			&.redacted {
-			  display: inline-block;
-			}
 		}
 
 		.controls {

@@ -232,12 +232,9 @@ Ext.define('NextThought.view.annotations.Redaction', {
 	toggleRedaction: function(){
 		//toggle redaction on generated spans:
 		this.compElements.toggleCls(this.cls);
-		//Ext.get(this.actionSpan).toggleCls(this.cls);
-		if (this.canvas){Ext.fly(this.canvas).toggle();}
-		if (this.controlDiv){this.controlDiv.toggleCls(this.cls);}
-        Ext.each(this.masterSpan.query('.delimiter'), function(d) {
-            Ext.fly(d).toggleCls(this.cls);
-        }, this);
+
+		if(this.canvas){Ext.fly(this.canvas).toggle();}
+		if(this.masterSpan){this.masterSpan.toggleCls(this.cls);}
 
 		this.requestRender();
 		return false;
