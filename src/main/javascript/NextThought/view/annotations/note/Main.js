@@ -226,6 +226,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
                 this.context.insertHtml('afterBegin', '[...] ');
                 this.context.insertHtml('beforeEnd', ' [...]');
 
+				this.context.select('a[href]',true).set({target:'_blank'});
                 Ext.each(this.context.query('.application-highlight'), function(h){
                     if(this.record.isModifiable()){
                         Ext.fly(h).addCls('highlight-mouse-over');
