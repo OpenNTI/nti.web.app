@@ -194,6 +194,7 @@ div.redaction-control {
 		  	margin-left: 3px;
 		  	padding: 4px 6px;
 		  	font-style: italic;
+			max-height: 24px;
         }
 
 	  	.delimiter {
@@ -204,33 +205,37 @@ div.redaction-control {
 		}
 
 		.controls {
-			display: inline-block;
+			display: inline-table;
 		  	margin-right: 3px;
-		  	width: 75px;
+			vertical-align: middle;
 
 			span {
-			  	&.edit{
-					background: url(../images/redactions/spr_redaction.png) 5px 3px no-repeat;
-				}
-				&.share{
-				  	background: url(../images/redactions/spr_redaction.png) -19px 3px no-repeat;
-				}
-				&.delete{
-				  	background: url(../images/redactions/spr_redaction.png) -43px 3px no-repeat;
-				}
-			  	&.delete:hover {
-					background-color: red;
-				}
+				position: relative;
 			 	border: 1px solid $border-grey;
 			  	border-left-width: 0;
-			  	display: inline-table;
+			  	display: table-cell;
 				height: 24px;
 				width: 24px;
-			  	vertical-align: middle;
 
-			  	&:hover {
+				&::after {
+					background: url(../images/redactions/spr_redaction.png) 0 0 no-repeat;
+					content: ' ';
+					width: 16px;
+					height: 16px;
+					position: absolute;
+					top: 4px; left: 4px;
+				}
+				&.edit::after{ background-position: 0 0 }
+				&.share::after{ background-position: -16px 0; }
+				&.delete::after{ background-position: -32px 0; }
+
+				&:hover {
 					background-color: $primary-blue;
-					background-position-y: -15px;
+					&.delete{ background-color: red; }
+					&.edit::after{ background-position: 0 -16px }
+					&.share::after{ background-position: -16px -16px; }
+					&.delete::after{ background-position: -32px -16px; }
+
 				}
 			}
 		}
