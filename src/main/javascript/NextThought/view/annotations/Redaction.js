@@ -8,6 +8,21 @@ Ext.define('NextThought.view.annotations.Redaction', {
 	redactionCls: 'redaction',
 	cls: 'redacted',
 
+
+    inlineTpl: new Ext.XTemplate(Ext.DomHelper.markup([
+        {tag:'span', cls: 'inlineRedactionAction', cn: [
+                {tag: 'span', cls: 'delimiter', html: '...'},
+                {tag: 'span', cls: 'editableSpan', html: '{replacementContent}'},
+                {tag: 'span', cls: 'controls', cn:[
+                    {tag: 'span', cls: 'edit', title: 'edit'},
+                    {tag: 'span', cls: 'share', title: 'share'},
+                    {tag: 'span', cls: 'delete', title: 'delete'}
+                ]},
+                {tag: 'span', cls: 'delimiter', html: '...'}
+            ]
+        }])),
+
+
 	constructor: function(){
 		//TODO - this is a temporary measure to prevent anyone other than nextthought employees or the 2 law professors access to share a redaction,
 		//       until permissioning of actions can be accomplished.
@@ -16,23 +31,8 @@ Ext.define('NextThought.view.annotations.Redaction', {
 	},
 
 
-	//Nibs and controls for reference later:
-	/*
-	actionSpan: null,
-	controlDiv: null,
-	editableSpan: null,
-	*/
-
 	buildMenu: function(items){
-		var me = this;
-
-		items.push({
-			text : 'Toggle Redaction',
-			handler: function(){
-				me.toggleRedaction();
-			}
-		});
-		return this.callParent([items]);
+		return; //disable menu in this case
 	},
 
 
@@ -109,96 +109,47 @@ Ext.define('NextThought.view.annotations.Redaction', {
 
 
 	createActionHandle: function(before){
-		//Make this look like the template structure instead...
-		var me = this,
-			masterSpan = Ext.get(this.createNonAnchorableSpan()),
-			startDelimiter = Ext.get(this.createNonAnchorableSpan()),
-			endDelimiter = Ext.get(this.createNonAnchorableSpan()),
-			replacementTextNode = this.doc.createTextNode(this.record.get('replacementContent')),
-			openingEllipsesSpan = Ext.get(this.doc.createElement('span')),
-			openingEllipsesTextNode = this.doc.createTextNode(']'),
-			endingEllipsesSpan = Ext.get(this.doc.createElement('span')),
-			endingEllipsesTextNode = this.doc.createTextNode('[');
+        var masterSpan = this.inlineTpl.insertBefore(before, {
+            replacementContent: this.record.get('replacementContent')
+        }, true);
 
-		this.editableSpan = Ext.get(this.doc.createElement('span'));
+        this.editableSpan = masterSpan.down('.editableSpan');
 
-		//add texts:
-		startDelimiter.update('&nbsp');
-		endDelimiter.update('&nbsp');
-		openingEllipsesSpan.dom.appendChild(openingEllipsesTextNode);
-		endingEllipsesSpan.dom.appendChild(endingEllipsesTextNode);
-		this.editableSpan.dom.appendChild(replacementTextNode);
-
-		//create the tree:
-		masterSpan.insertFirst(openingEllipsesSpan);
-		//masterSpan.insertFirst(endDelimiter);
-		masterSpan.insertFirst(this.editableSpan);
-		//masterSpan.insertFirst(startDelimiter);
-		masterSpan.insertFirst(endingEllipsesSpan);
-
-		masterSpan.addCls('redactionAction');
-		openingEllipsesSpan.addCls('redactionEllipses');
-		endingEllipsesSpan.addCls('redactionEllipses');
-		//endDelimiter.addCls('redactionDelimiter');
-		//startDelimiter.addCls('redactionDelimiter');
-		this.editableSpan.addCls('redactionReplacementText');
-		masterSpan.insertBefore(before);
-
-		this.mon(this.editableSpan, {
-			scope: this,
-			blur: this.editableSpanBlur
-		});
-
-		return masterSpan;
+        this.mon(this.editableSpan, {
+            scope: this,
+            blur: this.editableSpanBlur
+        });
+        this.mon(masterSpan.down('.controls'), 'click', this.onControlClick, this);
+        return masterSpan;
 	},
+
+
+    onControlClick: function(e, span) {
+        //stop event
+        e.preventDefault();
+        e.stopPropagation();
+
+        //handle click
+        if (Ext.fly(span).hasCls('edit')){
+            console.log('edit');
+            this.makeEditableSpanEditable();
+        }
+        else if (Ext.fly(span).hasCls('share')){
+            console.log('share');
+            this.ownerCmp.fireEvent('share-with',this.record);
+        }
+        else if (Ext.fly(span).hasCls('delete')){
+            console.log('delete');
+            this.remove();
+        }
+
+        return false; //for ie
+    },
 
 
 	setupInlineSpanEvents: function() {
-		var me = this;
-
-		//set up any events:
-		me.attachEvent('click', this.actionSpan,
-			function(e){
-				if (me.clickTimer){clearTimeout(me.clickTimer);}
-				var rText = this.actionSpan.querySelector('.redactionReplacementText');
-				if (!rText || rText.getAttribute('contenteditable') !== 'true') {
-					me.clickTimer = setTimeout(function(){
-						me.onClick(e);
-					}, 400);
-				}
-			},
-			me);
-
-		this.attachEvent('dblclick', this.actionSpan, this.makeEditableSpanEditable, this);
-		me.mon(Ext.get(this.actionSpan), {
-			scope: this,
-			mouseup: function(e){
-				e.stopEvent();
-				return false;
-			}
-		});
+		this.attachEvent('click', this.actionSpan, this.toggleRedaction, this);
 	},
-
-
-	/*
-	inlineClick: function(event, cmp, opts){
-		if (this.editableSpan.getAttribute('contenteditable')) {
-			console.log('inline redaction currently being edited, ignoring clicks');
-			return;
-		}
-
-		event.stopEvent();
-		if (event.button === 0){
-			//left mouse button
-			this.toggleRedaction();
-		}
-		else if (event.button === 2){
-			this.onClick(event);
-		}
-
-		return false;
-	},
-	*/
 
 
 	editableSpanEditorKeyDown: function(event, span){
@@ -281,21 +232,11 @@ Ext.define('NextThought.view.annotations.Redaction', {
 	toggleRedaction: function(){
 		//toggle redaction on generated spans:
 		this.compElements.toggleCls(this.cls);
-		Ext.get(this.actionSpan).toggleCls(this.cls);
+		//Ext.get(this.actionSpan).toggleCls(this.cls);
 		if (this.canvas){Ext.fly(this.canvas).toggle();}
 		if (this.controlDiv){this.controlDiv.toggleCls(this.cls);}
 
 		this.requestRender();
-		//if action span is toggled back on and it's inline, make sure it has events:
-		/*
-		var actionSpan = Ext.fly(this.actionSpan);
-		if(actionSpan.hasCls(this.cls) && actionSpan.hasCls('redactionAction')) {
-			this.setupInlineSpanEvents(actionSpan);
-		}
-		else {
-			this.on('click', this.onClick, this);
-		}
-*/
 		return false;
 	},
 

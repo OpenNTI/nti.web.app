@@ -179,25 +179,54 @@ div.redaction-control {
          }
     }
 
-    .redactionAction {
+    .inlineRedactionAction {
         margin: 0 2px 0 2px;
         overflow: hidden;
-        display: none;
+        display: inline-block;
 
-        span.redactionReplacementText {
-            color: #a1a1a1;
+        span.editableSpan {
+		  	border: 1px solid $border-grey;
+		  	background: white;
+		  	text-transform: uppercase;
+		  	font-size: 10px;
+		  	color: $secondary-grey;
+		  	font-weight: 600;
+		  	margin-left: 3px;
+		  	padding: 6px 6px;
+		  	font-style: italic;
         }
 
-        span.redactionDelimiter {
-            display: inline-block;
-            height: 33px;
-            width: 9px;
-            background: url(../images/redactions/inline-delimiter.png) 0 0 no-repeat;
-        }
+		.controls {
+			display: inline-block;
+		  	margin-right: 3px;
+		  	width: 75px;
 
-        &.redacted {
-           display: inline;
-        }
+			span {
+			  	&.edit{
+					background: url(../images/redactions/spr_redaction.png) 5px 3px no-repeat;
+				}
+				&.share{
+				  	background: url(../images/redactions/spr_redaction.png) -19px 3px no-repeat;
+				}
+				&.delete{
+				  	background: url(../images/redactions/spr_redaction.png) -43px 3px no-repeat;
+				}
+			  	&.delete:hover {
+					background-color: red;
+				}
+			 	border: 1px solid $border-grey;
+			  	border-left-width: 0;
+			  	display: inline-table;
+				height: 24px;
+				width: 24px;
+			  	vertical-align: middle;
+
+			  	&:hover {
+					background-color: $primary-blue;
+					background-position-y: -15px;
+				}
+			}
+		}
     }
 
 
@@ -266,8 +295,8 @@ div.redaction-control {
 				&.redacted {
 					display: none;
 				}
-				background: #bbbbbb;
-				color: inherit;
+				background: #efefef;
+				color: $secondary-grey;
 			}
 
 			&.counter {

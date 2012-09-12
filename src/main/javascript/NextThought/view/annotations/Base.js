@@ -287,9 +287,11 @@ Ext.define( 'NextThought.view.annotations.Base', {
 	getMenu: function(isLeaf){
 		var m = this.buildMenu([]);
 
-		m.on('hide', function(){
+        if (m) {
+		    m.on('hide', function(){
 			if(!isLeaf) { m.destroy(); }
 		});
+        }
 
 		return m;
 	},
@@ -327,14 +329,15 @@ Ext.define( 'NextThought.view.annotations.Base', {
 
 		//single annotation
 		menu = this.getMenu();
-		if(this.isSingleAction){
-			menu.items.first().handler.call(menu);
-			return;
-		}
+        if (menu){
+            if(this.isSingleAction){
+                menu.items.first().handler.call(menu);
+                return;
+            }
 
-		menu.showAt.apply(menu,xy);
-		menu.setPosition(xy[0]-menu.getWidth()/2,xy[1]+10);
-
+            menu.showAt.apply(menu,xy);
+            menu.setPosition(xy[0]-menu.getWidth()/2,xy[1]+10);
+        }
 		e.stopEvent();
 		return false;//IE :(
 	},

@@ -2,8 +2,9 @@ Ext.define('NextThought.util.Rects',{
 	singleton: true,
 
 
-	getFirstNonBoundingRect: function(range){
-		var bound = range.getBoundingClientRect(),
+	getFirstNonBoundingRect: function(r){
+		var range = r.nativeRange ? r.nativeRange : r,
+            bound = range.getBoundingClientRect(),
 			rects = Array.prototype.slice.call(range.getClientRects()) || [],
 			i = rects.length - 1, r;
 
