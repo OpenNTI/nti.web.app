@@ -37,7 +37,7 @@ Ext.define('NextThought.view.account.contacts.View',{
 			items: [
 				{
 					xtype: 'secondary-tabpanel',
-					defaults: {defaults: {xtype: 'contacts-panel'}},
+					defaults: {autoScroll: true, defaults: {xtype: 'contacts-panel'}},
 					items: [
 						{ id: 'contact-list', title: 'People'},
 						{ id: 'my-groups', title: 'Groups'}
