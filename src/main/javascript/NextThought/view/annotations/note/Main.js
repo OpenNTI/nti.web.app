@@ -39,6 +39,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 
 
 	initComponent: function(){
+		this.readOnlyWBsData = {};
 		this.callParent(arguments);
 	},
 
@@ -99,6 +100,14 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		}
 	},
 
+	click: function(e){
+		var t = e.getTarget('img.whiteboard-thumbnail'), guid = t.parentNode.getAttribute('id');
+		console.log(guid);
+		if(t && this.readOnlyWBsData[guid]){
+			var w = Ext.widget({ xtype: 'wb-window', height: '75%', width: '50%', value: this.readOnlyWBsData[guid], readonly: true});
+			w.show();
+		}
+	},
 
 	onMouseOver: function(){
 		this.up('window').down('note-carousel').getEl().addCls('hover');
@@ -140,7 +149,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 
 
 	setRecord: function(r){
-		var suppressed, text, bodyText, sel, range, doc, start, end, likeTooltip, favoriteTooltip, objectInnerText, obj;
+		var suppressed, text, bodyText, sel, range, doc, start, end, likeTooltip, favoriteTooltip, objectInnerText, obj, me = this;
 
 		//If we have an editor active for god sake don't blast it away
 		if(this.up('window').editorActive()){
@@ -248,7 +257,18 @@ Ext.define('NextThought.view.annotations.note.Main',{
 
 				this.text.update(text);
 				this.text.select('a[href]',true).set({target:'_blank'});
-			},this);
+			},this, function(id,data){
+				this.readOnlyWBsData[id] = data;
+				console.log("whiteboard id: ", id);
+				return '';
+			});
+
+			setTimeout(function(){
+				readOnlyWBs = me.el.query('.whiteboard-thumbnail');
+				Ext.each(readOnlyWBs, function(wb){
+					Ext.fly(wb).on('click', me.click, me);
+				});
+			}, 1);
 		}
 		catch(e3){
 			console.error(Globals.getError(e3));

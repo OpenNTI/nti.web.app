@@ -33,6 +33,7 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 
 	afterRender: function(){
 		var me = this;
+		this.readOnlyWBsData = {};
 		me.callParent(arguments);
 
 		this.replyBox.hover(this.onMouseOver,this.onMouseOut,this);
@@ -98,6 +99,14 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 		});
 	},
 
+	click: function(e){
+		var t = e.getTarget('img.whiteboard-thumbnail'), guid = t.parentNode.getAttribute('id');
+		console.log(guid);
+		if(t && this.readOnlyWBsData[guid]){
+			var w = Ext.widget({ xtype: 'wb-window', height: '75%', width: '50%', value: this.readOnlyWBsData[guid], readonly: true});
+			w.show();
+		}
+	},
 
 	getCarouselIfNear: function(){
 		var c = this.up('window').down('note-carousel').getEl();
@@ -174,6 +183,10 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 				me.text.update(text);
 				me.text.select('a[href]',true).set({target:'_blank'});
 				me.updateLayout();
+			}, this, function(id,data){
+				this.readOnlyWBsData[id] = data;
+				console.log("whiteboard id: ", id);
+				return '';
 			});
 
 			this.responseBox[r.get('sharedWith').length===0?'removeCls':'addCls']('shared');
@@ -190,6 +203,11 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 		this.mon(r, 'updated', this.updateToolState, this);
 		this.mon(r, 'child-added', this.addNewChild, this);
 
+		setTimeout(function(){
+			Ext.each(me.el.query('.whiteboard-thumbnail'), function(wb){
+				Ext.fly(wb).on('click', me.click, me);
+			});
+		}, 1);
 	},
 
 

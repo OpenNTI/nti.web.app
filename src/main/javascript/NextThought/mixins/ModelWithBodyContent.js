@@ -63,7 +63,7 @@ Ext.define('NextThought.mixins.ModelWithBodyContent',{
 							me.WHITEBOARD_THUMBNAIL_TPL.apply([
 								id,
 								thumbnail,
-								clickHandlerMaker.call(scope,id)])
+								clickHandlerMaker.call(scope,id,o)])
 					);
 					render(i-1);
 				});
