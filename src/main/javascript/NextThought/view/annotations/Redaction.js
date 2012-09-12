@@ -55,7 +55,8 @@ Ext.define('NextThought.view.annotations.Redaction', {
             //select content in editable span
             var range = this.doc.createRange();
             range.selectNodeContents(this.editableSpan.dom);
-            this.doc.parentWindow.getSelection().addRange(range);
+			range.collapse(false);
+			this.doc.parentWindow.getSelection().addRange(range);
 
 			this.editableSpan.focus();
 		}
@@ -246,8 +247,7 @@ Ext.define('NextThought.view.annotations.Redaction', {
 		var me = this;
 
 		event.stopEvent();
-		this.record.set('replacementContent', span.innerHTML.replace(/<.*?>/,''));//just the text, not the formatting
-		this.record.save();
+		span.innerHTML = this.record.get('replacementContent');
 		me.editableSpan.dom.removeAttribute('contenteditable');
 		AnnotationsRenderer.resume(this.prefix);
 
