@@ -32,7 +32,18 @@ Ext.define('NextThought.view.annotations.Redaction', {
 
 
 	buildMenu: function(items){
-		return; //disable menu in this case
+		if (this.masterSpan){return;} //disable menu in this case
+
+        //leave menu when block redactions for now...
+        var me = this;
+
+        items.push({
+            text : 'Toggle Redaction',
+            handler: function(){
+                me.toggleRedaction();
+            }
+        });
+        return this.callParent([items]);
 	},
 
 
