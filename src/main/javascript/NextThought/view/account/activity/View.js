@@ -280,7 +280,7 @@ Ext.define('NextThought.view.account.activity.View',{
 			popout = NextThought.view.account.contacts.management.Popout;
 		}
 
-		popout.popup(rec,target);
+		popout.popup(rec,target,[-10,-12],0.5);
 	},
 
 

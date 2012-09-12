@@ -99,13 +99,14 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 
 	statics: {
 
-		popup: function(record, el){
+		popup: function(record, el, offsets, flipFactor){
 			var pop,
 				alignment = 'tr-tl',
-				offsets = [-10,-25],
-				play = Ext.dom.Element.getViewportHeight() - el.getTop(),
+				play = Ext.dom.Element.getViewportHeight() - Ext.fly(el).getTop(),
 				id = record.getId(),
 				open = false;
+
+			offsets = offsets || [0,0];
 
 			Ext.each(Ext.ComponentQuery.query('activity-popout,contact-popout'),function(o){
 				if(o.record.getId()!==id || record.modelName !== o.record.modelName){ o.destroy(); }
@@ -120,7 +121,7 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 			if( pop.getHeight() > play ){
 				pop.addCls('bottom-aligned');
 				alignment = 'br-bl';
-				offsets[1] = -offsets[1];
+				offsets[1] = Math.floor((flipFactor||-1)*offsets[1]);
 			}
 
 			pop.show();

@@ -274,6 +274,24 @@ $over-color: #f4f3f3;
 		}
 	}
 
+
+	.nti-secondary-tabbar-plain {
+		div.x-tab{
+			width: 110px;
+			text-align: center;
+
+			.x-tab-inner{
+				&, &:first-of-type, &:last-of-type {
+					text-align: center;
+					padding: 7px auto 8px auto !important;
+				}
+			}
+		}
+	}
+
+
+
+
 	.disabled-contacts-view{
 	//	padding: 10px;
 		padding-top: 0px;
