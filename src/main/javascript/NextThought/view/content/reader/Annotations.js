@@ -149,19 +149,8 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 			return;
 		}
 
-        var key, a, newrange;
-        for(key in this.annotations){
-            a = this.annotations[key];
-            if (range && a.range) {
-                newrange = range.intersection(a.range);
-                if (newrange) {
-                    console.log('INTERSECTION');
-                }
-            }
-        }
-
 		var me = this,
-			rect = RangeUtils.getBoundingClientRect(range),
+			rect = range.getBoundingClientRect(),
 			rect2 = RectUtils.getFirstNonBoundingRect(range),
 			record = AnnotationUtils.selectionToHighlight(range, null, me.getDocumentElement()),
 			menu,
@@ -240,7 +229,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 					var widget = me.createAnnotationWidget('redaction',r, range);
 					widget.savePhantom();
 					me.scrollTo(range.getBoundingClientRect().top);
-               	}
+				}
 			});
 
 			menu.add({
@@ -603,8 +592,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 
 		Anchors.snapSelectionToWord(doc);
 
-		selection = rangy.getSelection(win);
-        //selection = win.getSelection();
+		selection = win.getSelection();
 		if (selection.rangeCount > 0) {
 			range = selection.getRangeAt(0);
 
