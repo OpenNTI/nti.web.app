@@ -3,7 +3,8 @@ Ext.define('NextThought.view.account.activity.Popout',{
 	alias: 'widget.activity-popout',
 
 	requires: [
-		'NextThought.view.account.contacts.management.Person'
+		'NextThought.view.account.contacts.management.Person',
+		'NextThought.view.account.activity.Preview'
 	],
 
 	floating: true,
@@ -15,29 +16,15 @@ Ext.define('NextThought.view.account.activity.Popout',{
 
 	constructor: function(config){
 		var isContact = Ext.getStore('FriendsList').isContact(config.user);
-		this.items = [
-			{
-				xtype: 'person-card',
-				hideGroups: true,
-				user: config.user,
-				isContact: isContact
-			},{
-				xtype: 'container',
-				cls: 'reply-options',
-				layout: 'fit',
-				items: [{
-				}]
-			}];
-
-
-		if(isContact){
-			this.buttonEvent = 'delete-contact';
-			Ext.apply(this.items[1].items[0],{
-				ui: 'secondary',
-				text: 'Remove Contact'
-			});
-		}
-
+		this.items = [ {
+			xtype: 'person-card',
+			hideGroups: true,
+			user: config.user,
+			isContact: isContact
+		}, {
+			xtype: 'activity-preview',
+			record: config.record
+		} ];
 		return this.callParent(arguments);
 	},
 
