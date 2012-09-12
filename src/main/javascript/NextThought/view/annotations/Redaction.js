@@ -109,18 +109,18 @@ Ext.define('NextThought.view.annotations.Redaction', {
 
 
 	createActionHandle: function(before){
-        var masterSpan = this.inlineTpl.insertBefore(before, {
+        this.masterSpan = this.inlineTpl.insertBefore(before, {
             replacementContent: this.record.get('replacementContent')
         }, true);
 
-        this.editableSpan = masterSpan.down('.editableSpan');
+        this.editableSpan = this.masterSpan.down('.editableSpan');
 
         this.mon(this.editableSpan, {
             scope: this,
             blur: this.editableSpanBlur
         });
-        this.mon(masterSpan.down('.controls'), 'click', this.onControlClick, this);
-        return masterSpan;
+        this.mon(this.masterSpan.down('.controls'), 'click', this.onControlClick, this);
+        return this.masterSpan;
 	},
 
 
@@ -235,6 +235,9 @@ Ext.define('NextThought.view.annotations.Redaction', {
 		//Ext.get(this.actionSpan).toggleCls(this.cls);
 		if (this.canvas){Ext.fly(this.canvas).toggle();}
 		if (this.controlDiv){this.controlDiv.toggleCls(this.cls);}
+        Ext.each(this.masterSpan.query('.delimiter'), function(d) {
+            Ext.fly(d).toggleCls(this.cls);
+        }, this);
 
 		this.requestRender();
 		return false;

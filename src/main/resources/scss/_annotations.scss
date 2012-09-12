@@ -192,9 +192,16 @@ div.redaction-control {
 		  	color: $secondary-grey;
 		  	font-weight: 600;
 		  	margin-left: 3px;
-		  	padding: 6px 6px;
+		  	padding: 4px 6px;
 		  	font-style: italic;
         }
+
+	  	.delimiter {
+			display: none;
+			&.redacted {
+			  display: inline-block;
+			}
+		}
 
 		.controls {
 			display: inline-block;
