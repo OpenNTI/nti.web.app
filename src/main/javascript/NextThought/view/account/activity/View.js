@@ -2,6 +2,11 @@ Ext.define('NextThought.view.account.activity.View',{
 	extend: 'Ext.container.Container',
 	alias: 'widget.activity-view',
 
+	requires: [
+		'NextThought.view.account.activity.Popout',
+		'NextThought.view.account.contacts.management.Popout'
+	],
+
 	iconCls: 'activity',
 	tooltip: 'Recent Activity',
 	ui: 'activity',
@@ -69,12 +74,18 @@ Ext.define('NextThought.view.account.activity.View',{
 
 	afterRender: function(){
 		this.callParent(arguments);
-		this.mon(this.el,'click',this.itemClick,this);
+		this.mon(this.el,{
+			scope: this,
+			'click':this.itemClick,
+			'mouseover': this.itemHover,
+			'mouseout': this.itemHoverOff
+		});
 		this.mon(this, {
 			scope: this,
 			'deactivate': this.resetNotificationCount
 		});
 	},
+
 
 	updateNotificationCountFromStore: function(store, records){
 		var u = $AppConfig.userObject,
@@ -91,6 +102,7 @@ Ext.define('NextThought.view.account.activity.View',{
 		this.setNotificationCountValue(0);
 	},
 
+
 	updateNotificationCount: function(u) {
 		if(u !== this.monitoredInstance && u === $AppConfig.userObject){
 			this.mun(this.monitoredInstance,'changed', this.updateNotificationCount,this);
@@ -100,9 +112,11 @@ Ext.define('NextThought.view.account.activity.View',{
 		this.setNotificationCountValue(u.get('NotificationCount'));
 	},
 
+
 	setNotificationCountValue: function(count){
 		this.tab.setText(count || '&nbsp;');
 	},
+
 
 	onAdded: function(){
 		this.callParent(arguments);
@@ -112,6 +126,7 @@ Ext.define('NextThought.view.account.activity.View',{
 					this.monitoredInstance.get('NotificationCount'));
 		}, 1, this);
 	},
+
 
 	reloadActivity: function(store){
 		var container = this.down('box[activitiesHolder]'),
@@ -224,6 +239,7 @@ Ext.define('NextThought.view.account.activity.View',{
 		}
 	},
 
+
 	itemClick: function(e){
 
 		var target = e.getTarget('div.activity',null,true),
@@ -248,5 +264,29 @@ Ext.define('NextThought.view.account.activity.View',{
 			console.error(Globals.getError(er));
 		}
 		return false;
+	},
+
+
+	itemHover: function(e){
+		var target = e.getTarget('div.activity',null,true),
+			guid = (target||{}).id,
+			item = this.stream[guid],
+			rec = (item||{}).record,
+			popout = NextThought.view.account.activity.Popout;
+
+		if(!rec){return;}
+
+		if (rec.get('Class') === 'User'){
+			popout = NextThought.view.account.contacts.management.Popout;
+		}
+
+		popout.popup(rec,target);
+	},
+
+
+	itemHoverOff: function(e){
+		Ext.each(Ext.ComponentQuery.query('activity-popout,contact-popout'),
+				function(o){o.destroy();});
 	}
+
 });

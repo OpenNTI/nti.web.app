@@ -37,7 +37,7 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 
 		Ext.apply(this.items[0],{
 			user: config.record,
-			liveEdit: isContact
+			isContact: isContact
 		});
 
 		if(isContact){
@@ -94,5 +94,38 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 		var data = this.down('person-card').getSelected();
 		this.fireEvent(this.buttonEvent, data.user, data.groups);
 		this.destroy();
+	},
+
+
+	statics: {
+
+		popup: function(record, el){
+			var pop,
+				alignment = 'tr-tl',
+				offsets = [-10,-25],
+				play = Ext.dom.Element.getViewportHeight() - el.getTop(),
+				id = record.getId(),
+				open = false;
+
+			Ext.each(Ext.ComponentQuery.query('activity-popout,contact-popout'),function(o){
+				if(o.record.getId()!==id || record.modelName !== o.record.modelName){ o.destroy(); }
+				else { open = true; }
+			});
+
+			if(open){return;}
+
+			pop = this.create({record: record});
+			pop.show().hide();
+
+			if( pop.getHeight() > play ){
+				pop.addCls('bottom-aligned');
+				alignment = 'br-bl';
+				offsets[1] = -offsets[1];
+			}
+
+			pop.show();
+			pop.alignTo(el,alignment,offsets);
+		}
+
 	}
 });

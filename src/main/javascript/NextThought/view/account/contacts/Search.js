@@ -147,23 +147,7 @@ Ext.define('NextThought.view.account.contacts.Search',{
 
 
 		function show(){
-			var pop = Ext.widget('contact-popout',{record: record}),
-				alignment = 'tr-tl',
-				offsets = [-10,-25],
-				play = Ext.dom.Element.getViewportHeight() - add.getTop();
-
-			if(pop.isDestroyed){return;}
-
-			pop.show().hide();
-
-			if( pop.getHeight() > play ){
-				pop.addCls('bottom-aligned');
-				alignment = 'br-bl';
-				offsets[1] = -offsets[1];
-			}
-
-			pop.show();
-			pop.alignTo(add,alignment,offsets);
+			NextThought.view.account.contacts.management.Popout.popup(record,add);
 		}
 
 		Ext.fly(item).scrollIntoView(

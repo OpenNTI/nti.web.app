@@ -26,15 +26,13 @@ Ext.define('NextThought.view.account.contacts.management.Person',{
 		}]
 	},{id: '{id}-body', cls:'person-card-body', html: '{%this.renderContainer(out,values)%}'}]),
 
-	items: [
-		{xtype: 'management-group-list', allowSelect: true}
-	],
 
 	childEls: ['body'],
 
 	getTargetEl: function () {
 		return this.body;
 	},
+
 
 	initComponent: function(){
 		this.callParent(arguments);
@@ -48,18 +46,25 @@ Ext.define('NextThought.view.account.contacts.management.Person',{
 		this.addEvents({'groups-changed':true});
 		this.enableBubble(['groups-changed']);
 
-		this.groupsList = this.down('management-group-list');
-		this.groupsList.block(this.user.get('Username'));
-		if(this.liveEdit){
-			this.groupsList.setUser(this.user);
+		if(!this.hideGroups){
+			this.groupsList = this.add({xtype: 'management-group-list', allowSelect: true});
+			this.groupsList.block(this.user.get('Username'));
+			if(this.isContact){
+				this.groupsList.setUser(this.user);
+			}
+		}
+		else if(this.isContact){
+			//show nib
+			console.log('hi');
 		}
 	},
 
 
 	getSelected: function(){
+		var l = this.groupsList;
 		return {
 			user: this.user.getId(),
-			groups: this.groupsList.getSelected()
+			groups: l? l.getSelected() : []
 		};
 	}
 });
