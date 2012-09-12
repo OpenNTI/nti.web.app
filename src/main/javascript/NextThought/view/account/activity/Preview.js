@@ -33,8 +33,8 @@ Ext.define('NextThought.view.account.activity.Preview',{
 		this.renderData = Ext.apply(this.renderData||{},{
 			location: location,
 			path: lineage.join(' / '),
-			contextText: this.record.get('selectedText'),
-			textContent: this.record.getBodyText()
+			contextText: this.record.get('selectedText'),//TODO: better context text
+			textContent: this.record.getBodyText ? this.record.getBodyText() : ''
 		});
 	},
 
@@ -51,14 +51,14 @@ Ext.define('NextThought.view.account.activity.Preview',{
 
 }, function(){
 	this.prototype.renderTpl = Ext.DomHelper.markup([
-			{cls: 'path'},
-			{cls: 'location-label'},
+			{cls: 'path', html:'{path}'},
+			{cls: 'location-label', html:'{location}'},
 			{cls: 'context', cn:[
 				{tag: 'canvas'},
-				{cls: 'text',html: 'sup'}
+				{cls: 'text',html: '{contextText}'}
 			]},
 			{cls: 'footer', cn: [
-				{cls: 'body'},
+				{cls: 'body', html: '{textContent}'},
 				TemplatesForNotes.getReplyOptions()
 			]}
 		]);
