@@ -285,8 +285,8 @@ Ext.define('NextThought.view.account.activity.View',{
 
 
 	itemHoverOff: function(e){
-		Ext.each(Ext.ComponentQuery.query('activity-popout,contact-popout'),
-				function(o){o.destroy();});
+//		Ext.each(Ext.ComponentQuery.query('activity-popout,contact-popout'),
+//				function(o){o.destroy();});
 	}
 
 });
