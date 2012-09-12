@@ -23,7 +23,8 @@ Ext.define('NextThought.view.account.activity.Popout',{
 			isContact: isContact
 		}, {
 			xtype: 'activity-preview',
-			record: config.record
+			record: config.record,
+			user: config.user
 		} ];
 		return this.callParent(arguments);
 	},

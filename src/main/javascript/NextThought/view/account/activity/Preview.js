@@ -22,10 +22,17 @@ Ext.define('NextThought.view.account.activity.Preview',{
 		more: '.footer .reply-options .more'
 	},
 
+	initComponent: function(){
+		this.callParent(arguments);
+	},
+
+
+
 	afterRender: function(){
 		this.callParent(arguments);
 
 		TemplatesForNotes.attachMoreReplyOptionsHandler(this, this.more);
+		TemplatesForNotes.updateMoreReplyOptionsLabels(this.more,this.user);
 	}
 
 }, function(){
