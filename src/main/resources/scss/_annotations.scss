@@ -191,6 +191,8 @@ div.redaction-control {
 		}
 
         span.editableSpan {
+			display: inline-table;
+			position: relative;
 		  	border: 1px solid $border-grey;
 		  	background: white;
 		  	text-transform: uppercase;
@@ -200,7 +202,12 @@ div.redaction-control {
 		  	margin-left: 3px;
 		  	padding: 4px 6px;
 		  	font-style: italic;
-			max-height: 24px;
+			line-height: 14px;
+			height: 22px;
+
+			&:focus {
+				outline: none;
+			}
         }
 
 	  	.delimiter {
