@@ -195,22 +195,27 @@ Ext.define('NextThought.providers.Location', {
 	},
 
 
-	getLineage: function(ntiid){
+	getLineage: function(ntiid, justLabels){
 		var leaf = this.find(ntiid||this.currentNTIID) || {},
 			node = leaf.location,
 			lineage = [],
 			id;
 
 		while(node){
-			id = node.getAttribute? node.getAttribute('ntiid') : null;
+
+			id = node.getAttribute? node.getAttribute(justLabels?'label':'ntiid') : null;
 			if( id ) {
 				lineage.push(id);
+			}
+			else {
+				console.warn(node, 'no id');
 			}
 			node = node.parentNode;
 		}
 
 		return lineage;
 	},
+
 
 	getSortIndexes: function(ntiid){
 		var leaf = this.find(ntiid||this.currentNTIID) || {},

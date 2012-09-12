@@ -24,6 +24,18 @@ Ext.define('NextThought.view.account.activity.Preview',{
 
 	initComponent: function(){
 		this.callParent(arguments);
+
+		var lineage = LocationProvider.getLineage(this.record.get('ContainerId'),true),
+			location = lineage.shift();
+
+		lineage.reverse();
+
+		this.renderData = Ext.apply(this.renderData||{},{
+			location: location,
+			path: lineage.join(' / '),
+			contextText: this.record.get('selectedText'),
+			textContent: this.record.getBodyText()
+		});
 	},
 
 
@@ -34,6 +46,8 @@ Ext.define('NextThought.view.account.activity.Preview',{
 		TemplatesForNotes.attachMoreReplyOptionsHandler(this, this.more);
 		TemplatesForNotes.updateMoreReplyOptionsLabels(this.more,this.user);
 	}
+
+
 
 }, function(){
 	this.prototype.renderTpl = Ext.DomHelper.markup([
