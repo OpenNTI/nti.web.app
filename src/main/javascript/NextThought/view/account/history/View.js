@@ -1,5 +1,5 @@
 //Styles defined in _history-view.scss
-Ext.define('NextThought.view.account.History',{
+Ext.define('NextThought.view.account.history.View',{
 	extend: 'Ext.container.Container',
 	alias: 'widget.history-view',
 	requires: [

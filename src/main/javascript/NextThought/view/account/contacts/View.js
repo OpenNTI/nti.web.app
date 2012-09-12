@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.account.Contacts',{
+Ext.define('NextThought.view.account.contacts.View',{
 	extend: 'Ext.container.Container',
 	alias: 'widget.contacts-view',
 	requires: [

@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.account.Activity',{
+Ext.define('NextThought.view.account.activity.View',{
 	extend: 'Ext.container.Container',
 	alias: 'widget.activity-view',
 

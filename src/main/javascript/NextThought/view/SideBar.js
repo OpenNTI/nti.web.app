@@ -4,11 +4,11 @@ Ext.define('NextThought.view.SideBar',{
 
 	requires: [
 		'NextThought.view.SideBarTabPanel',
-		'NextThought.view.account.Account',
-		'NextThought.view.account.Activity',
-		'NextThought.view.account.History',
-		'NextThought.view.account.Identity',
-		'NextThought.view.account.Contacts'
+		'NextThought.view.account.View',
+		'NextThought.view.account.activity.View',
+		'NextThought.view.account.contacts.View',
+		'NextThought.view.account.history.View',
+		'NextThought.view.account.Identity'
 	],
 
 	width: 260,
