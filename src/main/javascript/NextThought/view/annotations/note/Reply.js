@@ -329,6 +329,7 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 	},
 
 	onEdit: function(){
+		this.text.hide();
 		this.editMode = true;
 		this.editorActions.editBody(this.record.get('body'));
 		this.activateReplyEditor();
