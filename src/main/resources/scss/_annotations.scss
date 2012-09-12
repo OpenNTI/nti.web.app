@@ -180,6 +180,7 @@ div.redaction-control {
     }
 
     .inlineRedactionAction {
+		vertical-align: top;//fix alignment in firefox
         margin: 0 2px 0 2px;
         overflow: hidden;
         display: inline-block;
@@ -210,6 +211,7 @@ div.redaction-control {
 			display: inline-table;
 		  	margin-right: 3px;
 			vertical-align: middle;
+			position: relative;
 
 			span {
 				position: relative;
@@ -225,7 +227,8 @@ div.redaction-control {
 					width: 16px;
 					height: 16px;
 					position: absolute;
-					top: 4px; left: 4px;
+					//top: 4px; left: 4px;
+					margin: 4px 0 0 4px; //fix positioning in firefox
 				}
 				&.edit::after{ background-position: 0 0 }
 				&.share::after{ background-position: -16px 0; }
