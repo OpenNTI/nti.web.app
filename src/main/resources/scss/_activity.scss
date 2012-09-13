@@ -100,17 +100,66 @@
 	.activity-preview{
 		@include reply-options;//in _note.scss
 
-		.context {
+		.header {
 			background: #ffffff;
 			padding: 16px 10px;
-			position: relative;
-			overflow: hidden;
-			canvas { position: absolute; top:0; right:0; bottom:0;left:0; }
+
+			.path,.location-label {
+				color: $tertiary-grey;
+				font-family: $font;
+			}
+
+			.path {
+				font-size: 10px;
+				font-weight: 600;
+				text-transform: uppercase;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+			}
+
+			.location-label {
+				font-size: 14px;
+				font-weight: 500;
+				font-style: italic;
+				margin: 2px 0 8px;
+			}
+
+			.context {
+				color: #136ea5;
+				font-family: $font;
+				font-size: 14px;
+				margin: 0 10px 0 25px;
+				position: relative;
+				overflow: hidden;
+				canvas { position: absolute; top:0; left:0; width: 100%; height: 100%; }
+				.text {
+					display: inline;
+					background: #e1f2fc;
+					line-height: 25px;
+				}
+			}
 		}
 
 		.footer {
+			background: #f8f8f8;
 			border-top: 1px solid #e6e6e6;
 			box-shadow: inset 0 1px 0 0 #fdfdfd;
+			min-height: 65px;
+
+			.body {
+				padding: 15px 15px 15px 32px;
+				font-family: 'Droid Serif' serif !important;
+				font-size: 14px;
+				font-weight: normal;
+				color: $primary-grey;
+				background: url(../images/ldquo.png) 15px 15px no-repeat;
+
+				&::after{
+					content: url(../images/rdquo.png);
+					display: inline-block;
+					margin-left: 5px;
+				}
+			}
 
 			.reply-options {
 				opacity: 1;

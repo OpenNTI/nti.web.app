@@ -51,15 +51,19 @@ Ext.define('NextThought.view.account.activity.Preview',{
 
 }, function(){
 	this.prototype.renderTpl = Ext.DomHelper.markup([
-			{cls: 'path', html:'{path}'},
-			{cls: 'location-label', html:'{location}'},
-			{cls: 'context', cn:[
-				{tag: 'canvas'},
-				{cls: 'text',html: '{contextText}'}
-			]},
-			{cls: 'footer', cn: [
+			{
+				cls: 'header',
+				cn:[
+					{cls: 'path', html:'{path}'},
+					{cls: 'location-label', html:'{location}'},
+					{cls: 'context', cn:[
+						{tag: 'canvas'},
+						{cls: 'text',html: '{contextText}'}
+					]}
+				]
+			},
+			{ cls: 'footer', cn: [
 				{cls: 'body', html: '{textContent}'},
-				TemplatesForNotes.getReplyOptions()
-			]}
+				TemplatesForNotes.getReplyOptions() ] }
 		]);
 });
