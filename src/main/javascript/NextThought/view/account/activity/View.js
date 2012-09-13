@@ -149,10 +149,10 @@ Ext.define('NextThought.view.account.activity.View',{
 		this.stream = {};
 
 		function p(i){
-			if(items.length>100){
+			/*if(items.length>100){
 				if(!items.last().activity){ items.pop(); }
-				return;
-			}
+				return; //FIXME this looks wrong... -cmu
+			}*/
 			items.push(i);
 		}
 
