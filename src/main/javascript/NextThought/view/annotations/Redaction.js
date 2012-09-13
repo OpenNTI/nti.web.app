@@ -145,6 +145,10 @@ Ext.define('NextThought.view.annotations.Redaction', {
 
 		this.mon(this.masterSpan, 'click', this.onClick, this);
 
+		if(!this.allowShare){
+			this.masterSpan.down('.share').remove();
+		}
+
         if (!this.record.isModifiable()){
             this.masterSpan.down('.controls').remove();
         }
@@ -176,7 +180,9 @@ Ext.define('NextThought.view.annotations.Redaction', {
 			}
         }
         else if (e.getTarget('.share')){
-            this.ownerCmp.fireEvent('share-with',this.record);
+			if(this.allowShare){
+            	this.ownerCmp.fireEvent('share-with',this.record);
+			}
         }
         else if (e.getTarget('.delete')){
             this.remove();
@@ -255,7 +261,7 @@ Ext.define('NextThought.view.annotations.Redaction', {
 			if (this.actionSpan){Ext.fly(this.actionSpan).remove();}
 		}
 		catch(e){
-			console.warns(Globals.getError(e));
+			console.warn(Globals.getError(e));
 		}
 		this.callParent(arguments);
 	},
