@@ -12,14 +12,18 @@ Ext.define('NextThought.model.Redaction', {
 	],
 
 	statics: {
-		createFromHighlight: function(hl){
-			return Ext.create('NextThought.model.Redaction', {
+
+		DEFAULT_TEXT: '<big>***</big>',
+
+		createFromHighlight: function(hl, block){
+			return this.create({
 				ContainerId: hl.get('ContainerId'),
 				sharedWith: hl.get('sharedWith'),
 				prohibitReSharing: hl.get('prohibitReSharing'),
 				tags: hl.get('tags'),
 				selectedText: hl.get('selectedText'),
-				applicableRange: hl.get('applicableRange')
+				applicableRange: hl.get('applicableRange'),
+				replacementContent: block ? null : this.DEFAULT_TEXT
 			});
 		}
 	},

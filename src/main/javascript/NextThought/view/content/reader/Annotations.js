@@ -225,9 +225,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 				handler: function(){
 					me.clearSelection();
 					var widget,
-						r = NextThought.model.Redaction.createFromHighlight(record);
-
-					r.set('replacementContent', '***');
+						r = NextThought.model.Redaction.createFromHighlight(record,false);
 
 					widget = me.createAnnotationWidget('redaction',r, range);
 					widget.savePhantom();
@@ -239,7 +237,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 				text: 'Redact Block',
 				handler: function(){
 					me.clearSelection();
-					var r = NextThought.model.Redaction.createFromHighlight(record),
+					var r = NextThought.model.Redaction.createFromHighlight(record,true),
 						widget = me.createAnnotationWidget('redaction',r, range);
 
 					widget.savePhantom();

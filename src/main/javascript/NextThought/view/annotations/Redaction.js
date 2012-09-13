@@ -60,6 +60,10 @@ Ext.define('NextThought.view.annotations.Redaction', {
 		s.set({'contenteditable':'true'}).on('keydown', this.editableSpanEditorKeyDown, this);
 		s.focus();
 
+		if(s.getHTML()===NextThought.model.Redaction.DEFAULT_TEXT){
+			s.update('***');
+		}
+
 		//select content in editable span
 		range = this.doc.createRange();
 		range.selectNodeContents(s.dom);
