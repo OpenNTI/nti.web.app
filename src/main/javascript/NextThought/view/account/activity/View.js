@@ -167,10 +167,9 @@ Ext.define('NextThought.view.account.activity.View',{
 			//We use a similar strategy to the one that Notifications uses
 			Ext.each(group.children,function(c){
 				var item = this.changeToActivity(c);
-
+     			p(item);
 				UserRepository.getUser(item.name, function(u){
 					item.name = u.getName();
-					p(item);
 					totalExpected--;
 					if(totalExpected === 0){
 						me.feedTpl.overwrite(container.getEl(),items);
