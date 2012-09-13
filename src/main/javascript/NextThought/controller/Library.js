@@ -7,6 +7,7 @@ Ext.define('NextThought.controller.Library', {
 	],
 
 	models: [
+		'GenericObject',
 		'PageInfo'
 	],
 
