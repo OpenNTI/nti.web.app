@@ -38,7 +38,7 @@ Ext.define('NextThought.view.content.Reader', {
 
 
 	afterRender: function(){
-		this.callParent();
+		this.callParent(arguments);
 		this.splash = this.body.insertHtml('beforeEnd','<div class="no-content-splash"></div>',true);
 		this.scrollShadow = this.getEl().insertHtml('beforeEnd','<div class="scroll-shadow"></div>',true);
 		this.mon(this.body,'scroll', this.scrollShadowMonitor, this);
@@ -87,8 +87,8 @@ Ext.define('NextThought.view.content.Reader', {
 
 
 	getAnnotationOffsets: function(){
-		var f = this.getIframe();
-		var l = f.getLeft()-this.getEl().getLeft(),
+		var f = this.getIframe(),
+			l = f.getLeft()-this.getEl().getLeft(),
 			e = Ext.get(this.getContentRoot()),
 			contentPadding = 0;
 
@@ -131,7 +131,7 @@ Ext.define('NextThought.view.content.Reader', {
 
 
 	onNavigateComplete: function(pageInfo, callback){
-		var me = this;
+		var me = this, cls = this.self;
 		function f(resp){
 			me.splash.hide();
 			me.setContent(resp, pageInfo.get('AssessmentItems'), callback);
@@ -139,7 +139,7 @@ Ext.define('NextThought.view.content.Reader', {
 
 		function jsonp(script){
 			f({
-				responseText: me.self.getContent(LocationProvider.currentNTIID),
+				responseText: cls.getContent(LocationProvider.currentNTIID),
 				request: {
 					options: {
 						url: pageInfo.getLink('content')

@@ -188,12 +188,14 @@ div.redaction-control {
 		&.redacted{
 			.delimiter{display: inline-block;}
 			.controls{display: none;}
+			span.editableSpan{ border-right-width: 1px; }
 		}
 
         span.editableSpan {
 			display: inline-block;
 			position: relative;
 		  	border: 1px solid $border-grey;
+			border-right-width: 0;
 		  	background: white;
 		  	text-transform: uppercase;
 		  	font-size: 10px;
@@ -219,13 +221,14 @@ div.redaction-control {
 		  	margin-right: 3px;
 			vertical-align: middle;
 			position: relative;
+			//table-layout: fixed;
+			border-collapse: collapse;
 
 			span {
 				position: relative;
 			 	border: 1px solid $border-grey;
-			  	border-left-width: 0;
 			  	display: table-cell;
-				height: 24px;
+				height: 23px;
 				width: 24px;
 
 				&::after {
@@ -240,6 +243,23 @@ div.redaction-control {
 				&.edit::after{ background-position: 0 0 }
 				&.share::after{ background-position: -16px 0; }
 				&.delete::after{ background-position: -32px 0; }
+
+				&.edit.save{
+					border-color: #369AD3;
+					background-color: $primary-blue;
+					width: 32px;
+					&::after{
+						width: auto;
+						content: 'Save';
+						background: none;
+						font-family: $font !important;
+						font-size: 10px;
+						font-weight: 600;
+						text-transform: uppercase;
+						color: white;
+						top: -8px;
+					}
+				}
 
 				&:hover {
 					background-color: $primary-blue;

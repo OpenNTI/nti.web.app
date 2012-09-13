@@ -32,9 +32,6 @@ Ext.define('NextThought.view.annotations.Redaction', {
 
 
 	buildMenu: function(items){
-		if (Ext.fly(this.masterSpan).down('.delimiter')){return;} //disable menu in this case
-
-        //leave menu when block redactions for now...
         var me = this;
 
         items.push({
@@ -48,31 +45,42 @@ Ext.define('NextThought.view.annotations.Redaction', {
 
 
 	makeEditableSpanEditable: function(e){
-		console.log('make editable span editable');
-		if (e){
-			if (this.clickTimer){
-				clearTimeout(this.clickTimer);
-			}
-			e.stopEvent();
+		e.stopEvent();
+		var s = this.editableSpan, range, save = this.masterSpan.down('.edit'),
+			sel = this.doc.parentWindow.getSelection();
+
+		if (!s || !this.record.isModifiable()){
+			return false;
 		}
 
-		//make the replacement content editable if it belongs to me.
-		if (this.editableSpan && this.record.isModifiable()){
-			this.editableSpan.dom.setAttribute('contenteditable', 'true');
-			this.editableSpan.un('keydown', this.editableSpanEditorKeyDown, this);
-			this.editableSpan.on('keydown', this.editableSpanEditorKeyDown, this);
-			this.doc.parentWindow.getSelection().removeAllRanges();
+		save.addCls('save');
 
-            //select content in editable span
-            var range = this.doc.createRange();
-            range.selectNodeContents(this.editableSpan.dom);
-			range.collapse(false);
-			this.doc.parentWindow.getSelection().addRange(range);
+		s.clearListeners();
+		s.set({'contenteditable':'true'}).on('keydown', this.editableSpanEditorKeyDown, this);
+		s.focus();
 
-			this.editableSpan.focus();
-		}
+		//select content in editable span
+		range = this.doc.createRange();
+		range.selectNodeContents(s.dom);
+		sel.removeAllRanges();
+		sel.addRange(range);
+
 		AnnotationsRenderer.suspend(this.prefix);
 		return false;
+	},
+
+
+
+	makeEditableSpanNotEditable: function(){
+		var s = this.editableSpan, save = this.masterSpan.down('.edit');
+		if (!s || !this.record.isModifiable()){
+			return;
+		}
+
+		save.removeCls('save');
+
+		s.clearListeners();
+		s.set({'contenteditable':undefined});
 	},
 
 
@@ -87,7 +95,6 @@ Ext.define('NextThought.view.annotations.Redaction', {
 			//Add the redaction action span so the user has something to click on
 			if (this.isInlineRedaction()) {
 				this.actionSpan = this.createActionHandle(this.rendered[0]).dom;
-				this.setupInlineSpanEvents();
 			}
 			else {
 				this.actionSpan = this.createBlockActionHandle(this.rendered[0]).dom;
@@ -99,18 +106,16 @@ Ext.define('NextThought.view.annotations.Redaction', {
 			this.toggleRedaction();
 		}
 
-		console.log('rendering redaction, returning', y);
-
 		return y;
 	},
 
 
-	getAlternateBoundingRect: function(){
-		var b = Ext.fly(this.actionSpan).getBox();
-		b.top = b.y;
-		b.bottom = b.y + b.height;
-		return b;
-	},
+//	getAlternateBoundingRect: function(){
+//		var b = Ext.fly(this.actionSpan).getBox();
+//		b.top = b.y;
+//		b.bottom = b.y + b.height;
+//		return b;
+//	},
 
 
 	isInlineRedaction: function(){
@@ -124,17 +129,17 @@ Ext.define('NextThought.view.annotations.Redaction', {
             replacementContent: this.record.get('replacementContent')
         }, true);
 
+		this.mon(this.masterSpan,{
+			scope: this,
+			'click':this.onControlClick,
+			'mouseup': function(e){e.stopEvent();return false;}
+		});
+
         this.editableSpan = this.masterSpan.down('.editableSpan');
 
-        this.mon(this.editableSpan, {
-            scope: this,
-            blur: this.editableSpanBlur
-        });
+		this.mon(this.masterSpan, 'click', this.onClick, this);
 
-        if (this.record.isModifiable()){
-            this.mon(this.masterSpan.down('.controls'), 'click', this.onControlClick, this);
-        }
-        else {
+        if (!this.record.isModifiable()){
             this.masterSpan.down('.controls').remove();
         }
 
@@ -142,55 +147,69 @@ Ext.define('NextThought.view.annotations.Redaction', {
 	},
 
 
-    onControlClick: function(e, span) {
+	onClick: function(e){
+		if(this.isInlineRedaction()){
+			return undefined;
+		}
+
+		return this.callParent(arguments);
+	},
+
+
+    onControlClick: function(e) {
         //stop event
-        e.preventDefault();
-        e.stopPropagation();
+        e.stopEvent();
 
         //handle click
-        if (Ext.fly(span).hasCls('edit')){
-            console.log('edit');
-            this.makeEditableSpanEditable();
+        if (e.getTarget('.edit')){
+			if(!e.getTarget('.save')){
+				this.makeEditableSpanEditable(e);
+			}
+			else {
+				this.saveEditorContent();
+			}
         }
-        else if (Ext.fly(span).hasCls('share')){
-            console.log('share');
+        else if (e.getTarget('.share')){
             this.ownerCmp.fireEvent('share-with',this.record);
         }
-        else if (Ext.fly(span).hasCls('delete')){
-            console.log('delete');
+        else if (e.getTarget('.delete')){
             this.remove();
         }
+		else if(!this.editableSpan.dom.hasAttribute('contenteditable')){
+			this.toggleRedaction(e);
+		}
 
         return false; //for ie
     },
 
 
-	setupInlineSpanEvents: function() {
-		this.attachEvent('click', this.actionSpan, this.toggleRedaction, this);
+	saveEditorContent: function(){
+		this.makeEditableSpanNotEditable();
+		this.record.set('replacementContent', this.editableSpan.dom.textContent);
+		this.record.save();
+		AnnotationsRenderer.resume(this.prefix);
+	},
+
+	resetEditorContent: function(){
+		this.makeEditableSpanNotEditable();
+		this.editableSpan.update( this.record.get('replacementContent') );
+		AnnotationsRenderer.resume(this.prefix);
 	},
 
 
 	editableSpanEditorKeyDown: function(event, span){
-		var me = this, selection, range, cursorStart;
-		function handledKey(){
-			me.editableSpan.dom.removeAttribute('contenteditable');
-			Ext.fly(span).blur();
-			return false;
-		}
+		var selection, range, cursorStart, rangeContainer,
+			k = event.getKey();
+
 
 		event.stopPropagation();
-		var k = event.getKey();
+
+
 		if(k === event.ESC){
-			//return to orig:
-			span.innerHTML = this.record.get('replacementContent');
-			AnnotationsRenderer.resume(this.prefix);
-			return handledKey();
+			this.resetEditorContent();
 		}
 		else if(k === event.ENTER){
-			this.record.set('replacementContent', span.textContent);
-			this.record.save();
-			AnnotationsRenderer.resume(this.prefix);
-			return handledKey();
+			this.saveEditorContent();
 		}
 		else if (k === event.BACKSPACE) {
 			event.stopEvent();
@@ -209,16 +228,6 @@ Ext.define('NextThought.view.annotations.Redaction', {
 				selection.addRange(range);
 			}
 		}
-	},
-
-
-	editableSpanBlur: function(event, span){
-		var me = this;
-
-		event.stopEvent();
-		span.innerHTML = this.record.get('replacementContent');
-		me.editableSpan.dom.removeAttribute('contenteditable');
-		AnnotationsRenderer.resume(this.prefix);
 
 		return false;
 	},
@@ -237,17 +246,16 @@ Ext.define('NextThought.view.annotations.Redaction', {
 
 	cleanup: function(){
 		try{
-			if (this.actionSpan){Ext.get(this.actionSpan).remove();}
-			if (this.controlDiv){this.controlDiv.remove();}
+			if (this.actionSpan){Ext.fly(this.actionSpan).remove();}
 		}
 		catch(e){
-			console.log(Globals.getError(e));
+			console.warns(Globals.getError(e));
 		}
 		this.callParent(arguments);
 	},
 
 
-	toggleRedaction: function(){
+	toggleRedaction: function(e){
 		//toggle redaction on generated spans:
 		this.compElements.toggleCls(this.cls);
 
@@ -255,6 +263,10 @@ Ext.define('NextThought.view.annotations.Redaction', {
 		if(this.masterSpan){this.masterSpan.toggleCls(this.cls);}
 
 		this.requestRender();
+
+		if( e ){
+			e.stopEvent();
+		}
 		return false;
 	},
 
@@ -277,8 +289,4 @@ Ext.define('NextThought.view.annotations.Redaction', {
 
 		return this.controlDiv;
 	}
-
-
-	//no gutter widget for redactions, no need to do this
-	//getGutterWidget: function(numberOfSiblings){}
 });

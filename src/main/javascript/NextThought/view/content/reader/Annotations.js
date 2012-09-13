@@ -27,8 +27,8 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 
 
 	insertAnnotationGutter: function(){
-		var me = this;
-		var container = Ext.DomHelper.insertAfter(me.getInsertionPoint().first(),
+		var me = this,
+			container = Ext.DomHelper.insertAfter(me.getInsertionPoint().first(),
 				{ cls:'annotation-gutter', cn:[{cls:'column widgets'},{cls:'column controls'}] },
 				true);
 
@@ -82,7 +82,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 
 	showRanges: function(ranges) {
 		this.clearSearchRanges();
-		this.searchAnnotations = Ext.widget({xtype: 'search-hits', hits: ranges, owner: this});
+		this.searchAnnotations = Ext.widget('search-hits', {hits: ranges, owner: this});
 	},
 
 
@@ -155,9 +155,10 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 			record = AnnotationUtils.selectionToHighlight(range, null, me.getDocumentElement()),
 			menu,
 			offset,
-			redactionRegex = /USSC-HTML|Howes_converted|USvJones2012_converted/i;
-		var boundingBox = me.convertRectToScreen(rect);
-		var text = range.toString();
+			redactionRegex = /USSC-HTML|Howes_converted|USvJones2012_converted/i,
+			boundingBox = me.convertRectToScreen(rect),
+			text = range.toString(),
+			innerDocOffset;
 
 		if(!record) {
 			return;
@@ -165,8 +166,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 
 		record.set('ContainerId', me.containerId);
 
-		menu = Ext.widget({
-			xtype:'menu',
+		menu = Ext.widget('menu',{
 			ui: 'nt',
 			plain: true,
 			showSeparator: false,
@@ -224,9 +224,12 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 				text: 'Redact Inline',
 				handler: function(){
 					me.clearSelection();
-					var r = NextThought.model.Redaction.createFromHighlight(record);
+					var widget,
+						r = NextThought.model.Redaction.createFromHighlight(record);
+
 					r.set('replacementContent', '***');
-					var widget = me.createAnnotationWidget('redaction',r, range);
+
+					widget = me.createAnnotationWidget('redaction',r, range);
 					widget.savePhantom();
 					me.scrollTo(range.getBoundingClientRect().top);
 				}
@@ -236,8 +239,9 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 				text: 'Redact Block',
 				handler: function(){
 					me.clearSelection();
-					var r = NextThought.model.Redaction.createFromHighlight(record);
-					var widget = me.createAnnotationWidget('redaction',r, range);
+					var r = NextThought.model.Redaction.createFromHighlight(record),
+						widget = me.createAnnotationWidget('redaction',r, range);
+
 					widget.savePhantom();
 					me.scrollTo(range.getBoundingClientRect().top);
 				}
@@ -279,7 +283,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 		}
 
 		try {
-			w = Ext.widget({xtype: type.toLowerCase(), browserRange: browserRange, record: record, reader: this});
+			w = Ext.widget(type.toLowerCase(), {browserRange: browserRange, record: record, reader: this});
 
 			if (!oid) {
 				oid = type.toUpperCase()+'-TEMP-OID';
@@ -333,7 +337,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 			creator = item? item.get('Creator') : null,
 			delAction = /deleted/i.test(type),
 			cmps = Ext.ComponentQuery.query(Ext.String.format('[recordIdHash={0}]' ,IdCache.getIdentifier(oid)))||[],
-			cls, replyTo, result,
+			cls, result,
 			contribNS = Globals.getViewIdFromComponent(this);
 
 		if (!item || !this.containerId || this.containerId !== cid) {
@@ -566,8 +570,8 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 
 	onContextMenuHandler: function(e) {
 		try{
-			var origSelection = window.rangy.getSelection(this.getDocumentElement()).toString();
-			var range = this.getSelection();
+			var origSelection = window.rangy.getSelection(this.getDocumentElement()).toString(),
+				range = this.getSelection();
 
 			if( range && !range.collapsed ) {
 				e.stopPropagation();
