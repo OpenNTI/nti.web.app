@@ -5,7 +5,7 @@
 	top: 0;
 
 	vertical-align: baseline;
-	//vertical-align: initial;
+//vertical-align: initial;
 	display: inline-block;
 	width: 5px;
 	width: 0px;
@@ -130,28 +130,28 @@
 }
 
 div.redaction-control {
-    width: 20px;
-    height: 20px;
-    border: 1px solid #c4c4c4;
-    border-radius: 4px;
-    position: absolute;
-    margin: 9px 0 0 20px;
-    display: block; //default
+	width: 20px;
+	height: 20px;
+	border: 1px solid #c4c4c4;
+	border-radius: 4px;
+	position: absolute;
+	margin: 9px 0 0 20px;
+	display: block; //default
 	z-index: 9999;
 
-    img {
-        background: url(../images/redactions/redact_plus.png) 4px 4px no-repeat;
-        border: 0px solid #c4c4c4;
-        border-radius: 4px;
-        width: 20px;
-        height: 20px;
+	img {
+		background: url(../images/redactions/redact_plus.png) 4px 4px no-repeat;
+		border: 0px solid #c4c4c4;
+		border-radius: 4px;
+		width: 20px;
+		height: 20px;
 		cursor: pointer;
 
-    }
+	}
 
-    &.redacted img {
-        background-image: url(../images/redactions/redact_minus.png);
-    }
+	&.redacted img {
+		background-image: url(../images/redactions/redact_minus.png);
+	}
 }
 
 .body-divider {
@@ -168,22 +168,22 @@ div.redaction-control {
 .note-window .main-view .context,
 #NTIContent {
 
-    .blockRedactionAction {
-        clear: both;
-        display: none;
-        width: 100%;
-        background: url(../images/redactions/dash.png) 0 -8px repeat-x;
+	.blockRedactionAction {
+		clear: both;
+		display: none;
+		width: 100%;
+		background: url(../images/redactions/dash.png) 0 -8px repeat-x;
 
-         &.redacted {
-             display: block;
-         }
-    }
+		&.redacted {
+			display: block;
+		}
+	}
 
-    .inlineRedactionAction {
+	.inlineRedactionAction {
 		vertical-align: top;//fix alignment in firefox
-        margin: 0 2px 0 2px;
-        overflow: hidden;
-        display: inline-block;
+		margin: 0 2px 0 2px;
+		overflow: hidden;
+		display: inline-block;
 
 		&.redacted{
 			.delimiter{display: inline-block;}
@@ -191,34 +191,36 @@ div.redaction-control {
 			span.editableSpan{ border-right-width: 1px; }
 		}
 
-        span.editableSpan {
+		span.editableSpan {
 			display: inline-block;
 			position: relative;
-		  	border: 1px solid $border-grey;
+			vertical-align: middle;
+			border: 1px solid $border-grey;
 			border-right-width: 0;
-		  	background: white;
-		  	text-transform: uppercase;
-		  	font-size: 10px;
-		  	color: $secondary-grey;
-		  	font-weight: 600;
-		  	margin-left: 3px;
-		  	padding: 4px 6px;
-		  	font-style: italic;
+			background: white;
+			text-transform: uppercase;
+			font-size: 10px;
+			color: $secondary-grey;
+			font-weight: 600;
+			margin-left: 3px;
+			padding: 4px 6px;
+			font-style: italic;
 			line-height: 14px;
 			height: 24px;
 
 			&:focus {
 				outline: none;
 			}
-        }
+		}
 
-	  	.delimiter {
+		.delimiter {
 			display: none;
+			vertical-align: middle;
 		}
 
 		.controls {
 			display: inline-table;
-		  	margin-right: 3px;
+			margin-right: 3px;
 			vertical-align: middle;
 			position: relative;
 			//table-layout: fixed;
@@ -226,8 +228,8 @@ div.redaction-control {
 
 			span {
 				position: relative;
-			 	border: 1px solid $border-grey;
-			  	display: table-cell;
+				border: 1px solid $border-grey;
+				display: table-cell;
 				height: 23px;
 				width: 24px;
 
@@ -271,24 +273,24 @@ div.redaction-control {
 				}
 			}
 		}
-    }
+	}
 
 
-    .math .application-highlight.plain {
-        display: inline-block;
-    }
+	.math .application-highlight.plain {
+		display: inline-block;
+	}
 
-    .application-highlight {
+	.application-highlight {
 		&.suppressed {
 			//do nothing special when range is suppressed.
 		}
 
 		& + li.part,
-		& + li.exercise { 
+		& + li.exercise {
 			&::before, &::after { z-index: 1; color: #076da7 }
 		}
 		&.highlight-mouse-over {
-			& + li.part, & + li.exercise { 
+			& + li.part, & + li.exercise {
 				&::before, &::after { color: #ffffff; }
 			}
 		}
@@ -306,24 +308,24 @@ div.redaction-control {
 			overflow: hidden;
 
 			&.shared-with-me {
-                &,.math {
-                    background: none;
-                    color: $primary-grey;
-                    border-bottom: 1px solid #9fd9fa;
-                }
+				&,.math {
+					background: none;
+					color: $primary-grey;
+					border-bottom: 1px solid #9fd9fa;
+				}
 
 
 				&.highlight-mouse-over {
-                    &,.math {
-                        color: #ffffff;
-                        background-color: $primary-blue;
-                    }
-                }
+					&,.math {
+						color: #ffffff;
+						background-color: $primary-blue;
+					}
+				}
 
 				.application-highlight.shared-with-me {
-                    &,.math {
-					    border-bottom: none;
-                    }
+					&,.math {
+						border-bottom: none;
+					}
 				}
 			}
 
