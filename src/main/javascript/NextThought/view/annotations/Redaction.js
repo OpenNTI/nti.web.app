@@ -53,6 +53,7 @@ Ext.define('NextThought.view.annotations.Redaction', {
 			return false;
 		}
 
+		this.masterSpan.addCls('editing');
 		save.addCls('save');
 
 		s.clearListeners();
@@ -77,6 +78,7 @@ Ext.define('NextThought.view.annotations.Redaction', {
 			return;
 		}
 
+		this.masterSpan.removeCls('editing');
 		save.removeCls('save');
 
 		s.clearListeners();

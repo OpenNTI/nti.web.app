@@ -191,6 +191,16 @@ div.redaction-control {
 			span.editableSpan{ border-right-width: 1px; }
 		}
 
+		&.editing {
+			.controls {
+				span {
+					&.share,&.delete{
+						display: none;
+					}
+				}
+			}
+		}
+
 		span.editableSpan {
 			display: inline-block;
 			position: relative;
@@ -214,7 +224,7 @@ div.redaction-control {
 		}
 
 		.delimiter {
-			display: none;
+			//display: none;
 			vertical-align: middle;
 		}
 
@@ -249,17 +259,18 @@ div.redaction-control {
 				&.edit.save{
 					border-color: #369AD3;
 					background-color: $primary-blue;
-					width: 32px;
+					width: 75px;
 					&::after{
 						width: auto;
-						content: 'Save';
+						content: 'Save Title';
 						background: none;
 						font-family: $font !important;
 						font-size: 10px;
 						font-weight: 600;
 						text-transform: uppercase;
 						color: white;
-						top: -8px;
+						top: -4px;
+						margin: 0 0 0 10px;
 					}
 				}
 
