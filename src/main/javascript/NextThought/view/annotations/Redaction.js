@@ -11,14 +11,14 @@ Ext.define('NextThought.view.annotations.Redaction', {
 
     inlineTpl: new Ext.XTemplate(Ext.DomHelper.markup([
         {tag:'span', cls: 'inlineRedactionAction', cn: [
-                {tag: 'span', cls: 'delimiter', html: '...'},
+                {tag: 'span', cls: 'delimiter'},
                 {tag: 'span', cls: 'editableSpan', html: '{replacementContent}'},
                 {tag: 'span', cls: 'controls', cn:[
                     {tag: 'span', cls: 'edit', title: 'edit'},
                     {tag: 'span', cls: 'share', title: 'share'},
                     {tag: 'span', cls: 'delete', title: 'delete'}
                 ]},
-                {tag: 'span', cls: 'delimiter', html: '...'}
+                {tag: 'span', cls: 'delimiter'}
             ]
         }])),
 
