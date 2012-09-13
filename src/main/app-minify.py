@@ -22,7 +22,7 @@ def _readSenchaProjectFile( filename ):
 
 	return data
 
-def _fixProjectFile( projectFile ):
+def _fixSenchaProjectFile( projectFile ):
 	for item in ((projectFile['builds'])[0])['files']:
 		# Remove MathQuill from the project
 		if 'mathquill' in item['path']:
@@ -45,12 +45,19 @@ def _fixProjectFile( projectFile ):
 	
 	return projectFile
 
-def _buildProjectFile( app_entry, projectFileName ):
+def _buildProjectFile( app_entry ):
 	print('Building Project File')
 	phantomjs_script = '../../phantomjs-jsb.js'
-	command = ['/usr/bin/env', 'phantomjs', '--debug=yes', phantomjs_script, '--app-entry', app_entry, '--project', projectFileName]
+	project_file_name = 'minify.jsb3'
+	command = ['/usr/bin/env', 'phantomjs', '--debug=yes', phantomjs_script, '--app-entry', app_entry, '--project', project_file_name]
 	
-	subprocess.check_call(command)
+	try:
+		subprocess.check_call(command)
+		project_file = _fixSenchaProjectFile( _readSenchaProjectFile( project_file_name ) )
+	finally:
+		os.remove( project_file_name )
+
+	return project_file
 
 def _cacheExtJSFiles( projectFile ):
 	host = 'https://extjs.cachefly.net'
@@ -106,8 +113,13 @@ def _buildIndexHtml( version, analytics_key ):
 	<script type="text/javascript" src="resources/lib/mathquill/mathquill.min.js?_dc=%s"></script>
 """ % (BUILDTIME, BUILDTIME, BUILDTIME)
 
-	part5 = """        <script type="text/javascript"
+	part5a = """        <script type="text/javascript"
                         src="https://extjs.cachefly.net/ext-4.1.1-gpl/ext.js"
+                        id="ext-js-library"></script>
+
+"""
+	part5b = """        <script type="text/javascript"
+                        src="https://extjs.cachefly.net/ext-4.1.1-gpl/ext-all.js"
                         id="ext-js-library"></script>
 
 """
@@ -125,6 +137,7 @@ def _buildIndexHtml( version, analytics_key ):
         <script type="text/javascript">
 	        var _gaq = _gaq || [];
                 _gaq.push(['_setAccount', '%s']);
+                _gaq.push(['_setDomainName', 'nextthought.com']);
                 _gaq.push(['_trackPageview']);
                 (function() {
 	                var ga = document.createElement('script');
@@ -138,9 +151,11 @@ def _buildIndexHtml( version, analytics_key ):
 """ % (analytics_key, )
 
 	if version == 'ref':
-		return part1 + part3 + part4 + part5 + part6a + part7
+		return part1 + part3 + part4 + part5a + part6a + part7
 	elif version == 'minify':
 		return part1 + part2 + part3 + part4 + part6b + analytics + part7
+	elif version == 'unminify':
+		return part1 + part2 + part3 + part4 + part5b + part6a + analytics + part7
 	else:
 		return ''
 
@@ -156,7 +171,13 @@ def _buildMinifyIndexHtml(analytics_key):
 	with open( 'index-minify.html', 'wb' ) as file:
 		file.write(contents)
 
-def _closure_minify( projectFile ):
+def _buildUnminifyIndexHtml(analytics_key):
+	contents = _buildIndexHtml( 'unminify', analytics_key )
+
+	with open( 'index-unminify.html', 'wb' ) as file:
+		file.write(contents)
+
+def _closureMinify( projectFile ):
 	print('Minifying Project')
 	cmd = '/usr/bin/java'
 	optimization_level = 'WHITESPACE_ONLY'
@@ -185,19 +206,16 @@ def main():
 	_buildRefIndexHtml()
 
 	app_entry = 'index-ref.html'
-	projectfilename = 'minify.jsb3'
-	_buildProjectFile( app_entry, projectfilename )
 
-	projectfile = _readSenchaProjectFile( projectfilename )
-	projectfile = _fixProjectFile(projectfile)
+	try:
+		projectfile = _buildProjectFile( app_entry )
+	finally:
+		os.remove('index-ref.html')
 
-	_closure_minify(projectfile)
+	_closureMinify(projectfile)
 
 	_buildMinifyIndexHtml(args.analytics_key)
-
-	# Clean-up
-	os.remove( projectfilename )
-	os.remove('index-ref.html')
+	_buildUnminifyIndexHtml(args.analytics_key)
 
 if __name__ == '__main__':
         main()
