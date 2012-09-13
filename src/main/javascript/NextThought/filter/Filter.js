@@ -14,10 +14,11 @@ Ext.define('NextThought.filter.Filter',{
 
 	/**
 	 * Limit value to the list, if the value isn't in the list, use the first option in the list.
-	 * @private */
+	 * @protected
+	 */
 	clamp: function(options,value){
 		var i=options.length-1;
-		for(;i>=0;i--){ if(options[i]===value){ return value; } }
+		for(i;i>=0;i--){ if(options[i]===value){ return value; } }
 		return options[0];
 	},
 
@@ -50,11 +51,9 @@ Ext.define('NextThought.filter.Filter',{
 				? t.call(obj)
 				: t===undefined && obj.get
 					? obj.get(f)
-					: t) === v;
+					: t);
 
-		if(v==='Everyone' && f === 'Creator'){
-			t = true;
-		}
+		t = (v==='Everyone' && f === 'Creator') || this.compareValue(v,t);
 
 //		console.debug(t,this.toString());
 
@@ -63,6 +62,23 @@ Ext.define('NextThought.filter.Filter',{
 				: o === this.self.OPERATION_INCLUDE
 					? t
 					: Ext.Error.raise('Invalid filter operation');
+	},
+
+
+	compareValue: function(value, testedValue){
+		var result = false;
+
+		if(value.isModel && value.isGroup){
+			value = value.get('friends');
+		}
+		if(Ext.isArray(value)){
+			result = Ext.Array.contains(value, testedValue);
+		}
+		else {
+			result = value === testedValue;
+		}
+
+		return Boolean(result);
 	}
 
 });

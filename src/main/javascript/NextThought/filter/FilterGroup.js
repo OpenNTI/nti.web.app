@@ -7,9 +7,11 @@ Ext.define('NextThought.filter.FilterGroup',{
 		OPERATION_INTERSECTION: 20
 	},
 
+	isFilterGroup: true,
+
 	constructor: function(scope, operation, filteres){
 		var me = this;
-		me.callParent();
+		me.callParent(null);
 		me.operation = this.clamp([this.self.OPERATION_INTERSECTION,this.self.OPERATION_UNION],operation);
 		me.value = [];
 		me.scope = scope;
@@ -38,7 +40,7 @@ Ext.define('NextThought.filter.FilterGroup',{
 				return false;
 			}
 			var i = a.length-1;
-			for(;i>=0;i--){
+			for(i;i>=0;i--){
 				if(!m.contains.call(b,a[i])){ return false; }
 			}
 			return true;
@@ -60,7 +62,7 @@ Ext.define('NextThought.filter.FilterGroup',{
 	contains: function(filter){
 		var v = this.value||this,//or 'this' allows us to call this on arrays.
 			i = v.length-1;
-		for(; i>=0; i--){
+		for(i; i>=0; i--){
 			if(v[i].equals(filter)){ return true; }
 		}
 		return false;
@@ -87,7 +89,7 @@ Ext.define('NextThought.filter.FilterGroup',{
 			return this.testUnion(obj);
 		}
 
-		Ext.Error.raise('Invalid set operation');
+		return Ext.Error.raise('Invalid set operation');//i know it doesn't return, this makes the lint/validator happy
 	},
 
 
@@ -95,7 +97,7 @@ Ext.define('NextThought.filter.FilterGroup',{
 	testIntersection: function(obj){
 		var v = this.value,
 			i = v.length-1;
-		for(;i>=0;i--){
+		for(i;i>=0;i--){
 			if(!v[i].test(obj)){
 				return false;
 			}
@@ -106,9 +108,8 @@ Ext.define('NextThought.filter.FilterGroup',{
 
 	testUnion: function(obj){
 		var v = this.value,
-			i = v.length-1,
-			t;
-		for(;i>=0;i--){
+			i = v.length-1;
+		for(i;i>=0;i--){
 			if(v[i].test(obj)){
 				return true;
 			}

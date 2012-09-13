@@ -47,6 +47,11 @@ Ext.define('NextThought.filter.FilterManager',{
 		var o = this.getScope(scope);
 		o.fireEvent('change',filter);
 		o.current = filter;
+	},
+
+
+	getCurrentFilter: function(scope){
+		return this.getScope(scope).current;
 	}
 
 },function(){

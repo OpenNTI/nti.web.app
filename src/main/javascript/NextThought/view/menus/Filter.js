@@ -18,7 +18,8 @@ Ext.define('NextThought.view.menus.Filter',{
 		xtype: 'menucheckitem',
 		plain: true,
 		listeners: {
-			'beforecheckchange':function(item, checked){ return checked || item.allowUncheck!==false; }
+			'beforecheckchange':function(item, checked){ return checked || item.allowUncheck!==false; },
+			'checkchange': function(item){item.up('menu').handleClick(item);}
 		}
 	},
 
@@ -26,7 +27,6 @@ Ext.define('NextThought.view.menus.Filter',{
 		this.callParent(arguments);
 		this.store = Ext.getStore('FriendsList');
 		this.store.on('load', this.reload, this);
-		this.on('click',this.handleClick,this);
 		this.reload();
 	},
 
@@ -42,7 +42,7 @@ Ext.define('NextThought.view.menus.Filter',{
 		items.push({ xtype: 'labeledseparator', text: 'From' });
 		items.push({ cls: 'group-filter everyone', text: 'Everyone', checked: true,
 			allowUncheck:false, isEveryone:true, record: UserRepository.getTheEveryoneEntity() });
-		items.push({ cls: 'group-filter', text: 'Me', isMe: true, isGroup: true });
+		items.push({ cls: 'group-filter', text: 'Me', isMe: true, record: $AppConfig.userObject, isGroup: true });
 
 
 		if(communities.length>0){
@@ -102,7 +102,8 @@ Ext.define('NextThought.view.menus.Filter',{
 	},
 
 
-	handleClick: function(menu, item, e){
+	handleClick: function(item){
+
 		if(!item){return;}
 
 		if(item.checked){

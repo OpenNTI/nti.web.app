@@ -4,8 +4,6 @@ Ext.define('NextThought.model.FriendsList', {
 
 	mixins: { groupLike: 'NextThought.mixins.GroupLike' },
 
-	isGroup: true,
-
 	fields: [
 		{ name: 'Username', type: 'string' },
 		{ name: 'alias', type: 'string' },
@@ -22,30 +20,7 @@ Ext.define('NextThought.model.FriendsList', {
 	},
 
 
-	addFriend: function(username){
-		var list = this.get('friends') || [];
-		if(!Ext.Array.contains(list,username)){
-			list.push(username);
-			this.set('friends',list);
-		}
-		return this;
-	},
-
-
-	removeFriend: function(username){
-		var list = this.get('friends') || [];
-		this.set('friends',Ext.Array.remove(list,username));
-		return this;
-	},
-
-
-	hasFriend: function(username){
-		return Ext.Array.contains(this.get('friends'),username);
-	},
-
-
 	drawIcon: function(canvas){
-
 		var ctx = canvas.getContext('2d'),
 			urls = this.get('CompositeGravatars').slice(),
 			grid = Math.ceil(Math.sqrt(urls.length)),

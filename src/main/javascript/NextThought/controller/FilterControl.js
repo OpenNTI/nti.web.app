@@ -38,8 +38,69 @@ Ext.define('NextThought.controller.FilterControl', {
 			return;
 		}
 
-		cmp.down('[isEveryone]').setChecked(true);
-		cmp.down('[isEverything]').setChecked(true);
+		function process(f){
+			var query, val = f.value, item;
+			if(!f.isFilterGroup){
+				query = queries[f.fieldName];
+				if(!Ext.isArray(query)){
+					query = queries[f.fieldName] = cmp.query(query);
+				}
+
+				Ext.each(query,function(item,i,a){
+					var test = item.model;
+
+					if(!Ext.isPrimitive(val)){
+						val = val.get('Username');
+					}
+
+					if(!test) {
+						test = item.record.get('Username');
+					}
+
+
+					if(test === val){
+						item.setChecked(true,true);
+						a.splice(i,1);
+						return false;
+					}
+					return true;
+				});
+			}
+			else {
+				Ext.each(f.value,process);
+			}
+		}
+
+
+		var current = FilterManager.getCurrentFilter(cmp.getId()),
+			everyone = cmp.down('[isEveryone]'),
+			everything = cmp.down('[isEverything]'),
+			queries = { 'Creator': '[isGroup]', '$className': '[model]' },
+			models;
+
+		if(!current){
+			everyone.setChecked(true,true);
+			everything.setChecked(true,true);
+		}
+		else {
+			everyone.setChecked(false,true);
+			everything.setChecked(false,true);
+
+			process(current);
+
+			//all unchecked, then check "everyone"...leave it be otherwise
+			if(Ext.each(cmp.query('[isGroup]'),function(c){ return !c.checked; })){
+				everyone.setChecked(true,false);
+			}
+
+			models = cmp.query('[model]');
+			//All checked or All unchecked, check the "everything", otherwise leave it be
+			if(models.length === Ext.Array.filter(models,function(i){return !i.checked;}).length
+			|| models.length === Ext.Array.filter(models,function(i){return i.checked;}).length){
+				everything.setChecked(true,false);
+			}
+
+		}
 
 		this.rebuildFilter(cmp);
 	},
@@ -80,9 +141,7 @@ Ext.define('NextThought.controller.FilterControl', {
 					return;
 				}
 
-				Ext.each(g.record.get('friends'),function(f){
-					people.addFilter(new Filter('Creator',Filter.OPERATION_INCLUDE, f));
-				});
+				people.addFilter(new Filter('Creator',Filter.OPERATION_INCLUDE, g.record));
 			},
 			this);
 
