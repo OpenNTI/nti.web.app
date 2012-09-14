@@ -127,6 +127,8 @@ Ext.define('NextThought.proxy.Socket', {
 
 
 	onError: function() {
+		//TODO if we get called during handshake thats it, the socket is kaput.
+		//Attempt to reconnect with an exponential backoff.
 		if(this.isDebug) {
 			console.error('ERROR: socket error'+JSON.stringify(arguments));
 		}
