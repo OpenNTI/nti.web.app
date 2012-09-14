@@ -20,7 +20,7 @@
 	// box-shadow:  none | <shadow> [,<shadow>]*
 	//	where <shadow> is defined as:
 	//		inset? && [ <offset-x> <offset-y> <blur-radius>? <spread-radius>? <color>? ]
-	border: 1px solid #dbdbdb;
+	border: 1px solid $border-grey;
 	overflow: hidden;
 
 	iframe {
