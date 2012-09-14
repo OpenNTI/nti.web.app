@@ -207,6 +207,7 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 			Ext.each(me.el.query('.whiteboard-thumbnail'), function(wb){
 				Ext.fly(wb).on('click', me.click, me);
 			});
+			me.updateLayout();
 		}, 1);
 	},
 

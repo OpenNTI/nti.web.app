@@ -269,6 +269,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 				Ext.each(readOnlyWBs, function(wb){
 					Ext.fly(wb).on('click', me.click, me);
 				});
+				me.updateLayout();
 			}, 1);
 		}
 		catch(e3){
