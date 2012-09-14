@@ -171,6 +171,10 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
 
 
 	selectNewGroup: function(groupName){
+		if(this.username && !this.ignoreSelection){
+			return;
+		}
+
 		var record,s = this.getSelectionModel();
 		if(!this.allowSelect){
 			return;
@@ -240,12 +244,10 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
 
 		this.fireEvent('add-group', groupName, function(success){
 			if(!success){ input.addCls('error'); }
-			else if(!this.username){//don't check the new group if we're editing a user
-				me.store.on('datachanged',function(){
-					me.selectNewGroup(groupName);
-				},me,{single:true});
+			me.store.on('datachanged',function(){
+				me.selectNewGroup(groupName);
+			},me,{single:true});
 
-			}
 		});
 	}
 });

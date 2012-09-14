@@ -100,7 +100,7 @@ Ext.define('NextThought.Library', {
 
 
 	libraryLoaded: function(callback){
-		var me = this, stack = [], store = this.getStore(), url;
+		var me = this, stack = [], store = this.getStore(), url, toRemove = [];
 		//The reason for iteration 1 is to load the stack with the number of TOCs I'm going to load
 		this.each(function(o){
 			if(!o.get||!o.get('index')){ return; }
@@ -114,7 +114,10 @@ Ext.define('NextThought.Library', {
 
 		//Iteration 2 loads TOC async, so once the last one loads, callback if available
 		this.each(function(o){
-			if(!o.get||!o.get('index')||($AppConfig.server.jsonp&&!o.get('index_jsonp'))){ return; }
+			if(!o.get||!o.get('index')||($AppConfig.server.jsonp&&!o.get('index_jsonp'))){
+				toRemove.push(o);
+				stack.pop(); return;
+			}
 			url = $AppConfig.server.jsonp ? o.get('index_jsonp') : o.get('index');
 			me.loadToc(o.get('index'), url, o.get('NTIID'), function(toc){
 				var d;
@@ -137,6 +140,8 @@ Ext.define('NextThought.Library', {
 				}
 			});
 		});
+
+		this.getStore().remove(toRemove);
 	},
 
 
@@ -250,13 +255,11 @@ Ext.define('NextThought.Library', {
 
 
 	getContent: function(ntiid){
-		console.log('TOC getContent called...(should be after receiveContent)');
 		return this.bufferedToc[ntiid];
 	},
 
 
 	receiveContent: function(content){
-		console.log('TOC receiveContent called...');
 		var decodedContent;
 		//expects: {content:?, contentEncoding:?, NTIID:?, version: ?}
 		//1) decode content

@@ -1,3 +1,8 @@
+/**
+ * original source: http://www.webtoolkit.info/javascript-base64.html
+ *
+ * TODO: de-lint
+ */
 Ext.define('NextThought.util.Base64',{
 	alternateClassName: 'Base64',
 	singleton: true,

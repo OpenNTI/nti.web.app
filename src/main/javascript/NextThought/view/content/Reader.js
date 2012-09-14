@@ -2,7 +2,8 @@ Ext.define('NextThought.view.content.Reader', {
 	extend:'NextThought.view.content.Base',
 	alias: 'widget.reader-panel',
 	requires: [
-		'NextThought.providers.Location'
+		'NextThought.providers.Location',
+		'NextThought.util.Base64'
 	],
 	mixins:{
 		annotations: 'NextThought.view.content.reader.Annotations',
