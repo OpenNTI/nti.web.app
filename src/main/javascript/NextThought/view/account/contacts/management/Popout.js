@@ -108,7 +108,7 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 
 		popup: function(record, el, offsets, flipFactor){
 			var pop,
-				alignment = 'tr-tl',
+				alignment = 'tr-tl?',
 				play = Ext.dom.Element.getViewportHeight() - Ext.fly(el).getTop(),
 				id = record.getId(),
 				open = false;
@@ -127,7 +127,7 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 
 			if( pop.getHeight() > play ){
 				pop.addCls('bottom-aligned');
-				alignment = 'br-bl';
+				alignment = 'br-bl?';
 				offsets[1] = Math.floor((flipFactor||-1)*offsets[1]);
 			}
 

@@ -77,7 +77,7 @@ Ext.define('NextThought.view.account.activity.Popout',{
 
 			UserRepository.getUser(record.get('Creator'),function(user){
 				var pop = this.create({record: record, user: user, refEl: Ext.get(el)}),
-					alignment = 'tr-tl',
+					alignment = 'tr-tl?',
 					play = Ext.dom.Element.getViewportHeight() - Ext.fly(el).getTop();
 
 				if(pop.isDestroyed){return;}
@@ -86,7 +86,7 @@ Ext.define('NextThought.view.account.activity.Popout',{
 
 				if( pop.getHeight() > play ){
 					pop.addCls('bottom-aligned');
-					alignment = 'br-bl';
+					alignment = 'br-bl?';
 					offsets[1] = Math.floor((flipFactor||-1)*offsets[1]);
 				}
 
