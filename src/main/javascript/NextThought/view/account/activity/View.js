@@ -187,12 +187,23 @@ Ext.define('NextThought.view.account.activity.View',{
 				cid = item? item.get('ContainerId') : undefined,
 				guid = guidGenerator();
 
+		function getType(item){
+			if(!item){return '';}
+			var type = item.getModelName().toLowerCase();
+
+			if(item.get('inReplyTo')){
+				type = 'comment';
+			}
+
+			return type;
+		}
+
 		this.stream[guid] = {
 			activity: true,
 			guid: guid,
 			name: c.get('Creator'),
 			record: item,
-			type: item? item.getModelName().toLowerCase() : '',
+			type: getType(item),
 			message: this.getMessage(c),
 			ContainerId: cid,
 			ContainerIdHash: cid? IdCache.getIdentifier(cid): undefined
@@ -221,7 +232,10 @@ Ext.define('NextThought.view.account.activity.View',{
 			return 'shared a redaction' +(loc ? (' in '+loc.label): '');
 		}
 		else if (item.getModelName() === 'Note'){
-			return Ext.String.format('&ldquo;{0}&rdquo;',item.getBodyText());
+			return Ext.String.format('{1}&ldquo;{0}&rdquo;',
+					Ext.String.ellipsis(item.getBodyText(),50,true),
+					(item.get('inReplyTo') ? 'said ':'')
+			);
 		}
 		else {
 			console.error('Not sure what activity text to use for ', item, change);
@@ -247,7 +261,7 @@ Ext.define('NextThought.view.account.activity.View',{
 		e.stopEvent();
 		try{
 			targets.push( rec.getId() );
-			this.fireEvent('navigation-selected', item.ContainerId, targets);
+			this.fireEvent('navigation-selected', item.ContainerId, targets, false);
 		}
 		catch(er){
 			console.error(Globals.getError(er));

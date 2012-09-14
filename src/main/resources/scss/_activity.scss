@@ -43,7 +43,7 @@
 			top: 12px;
 		}
 
-		&.user::after,
+		&.user::after{ background-position: -20px -20px; }
 		&.comment::after { background-position: 0 -20px; }
 		&.highlight::after { background-position: 0 0; }
 		&.note{
