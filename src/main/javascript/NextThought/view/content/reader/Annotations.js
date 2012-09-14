@@ -224,11 +224,13 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 				text: 'Redact Inline',
 				handler: function(){
 					me.clearSelection();
-					var widget,
-						r = NextThought.model.Redaction.createFromHighlight(record,false);
-
-					widget = me.createAnnotationWidget('redaction',r, range);
-					widget.savePhantom();
+					var r = NextThought.model.Redaction.createFromHighlight(record,false);
+					try{
+						me.createAnnotationWidget('redaction',r, range).savePhantom();
+					}
+					catch(e){
+						alert('Coud not save redaction');
+					}
 					me.scrollTo(range.getBoundingClientRect().top);
 				}
 			});
@@ -237,10 +239,14 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 				text: 'Redact Block',
 				handler: function(){
 					me.clearSelection();
-					var r = NextThought.model.Redaction.createFromHighlight(record,true),
-						widget = me.createAnnotationWidget('redaction',r, range);
+					var r = NextThought.model.Redaction.createFromHighlight(record,true);
 
-					widget.savePhantom();
+					try{
+						me.createAnnotationWidget('redaction',r, range).savePhantom();
+					}
+					catch(e){
+						alert('Coud not save redaction');
+					}
 					me.scrollTo(range.getBoundingClientRect().top);
 				}
 			});
