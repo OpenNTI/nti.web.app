@@ -7,9 +7,14 @@ Ext.define('NextThought.model.Note', {
 
 	statics: {
 		createFromHighlight: function(hl){
+
+			var p = LocationProvider.getPreferences();
+			p = p ? p.sharing : null;
+			p = p ? p.sharedWith || [] : null;
+
 			return this.create({
 				ContainerId: hl.get('ContainerId'),
-				sharedWith: hl.get('sharedWith'),
+				sharedWith: p || hl.get('sharedWith'),
 				prohibitReSharing: hl.get('prohibitReSharing'),
 				tags: hl.get('tags'),
 				selectedText: hl.get('selectedText'),
