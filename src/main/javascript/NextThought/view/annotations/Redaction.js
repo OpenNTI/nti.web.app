@@ -9,7 +9,7 @@ Ext.define('NextThought.view.annotations.Redaction', {
 	cls: 'redacted',
 
 
-	inlineTpl: new Ext.XTemplate(Ext.DomHelper.markup([
+	inlineTpl: Ext.DomHelper.createTemplate([
 		{tag:'span', cls: 'inlineRedactionAction', cn: [
 			{tag: 'span', cls: 'delimiter'},
 			{tag: 'span', cls: 'editableSpan', html: '{replacementContent}'},
@@ -20,14 +20,17 @@ Ext.define('NextThought.view.annotations.Redaction', {
 			]},
 			{tag: 'span', cls: 'delimiter'}
 		]
-		}])),
+		}]).compile(),
 
 
 	constructor: function(){
+		this.callParent(arguments);
+
 		//TODO - this is a temporary measure to prevent anyone other than nextthought employees or the 2 law professors access to share a redaction,
 		//       until permissioning of actions can be accomplished.
 		this.allowShare = /(@nextthought\.com$)|(^stephen\.henderson@aya\.yale\.edu$)|(^thai@post\.harvard\.edu$)/.test($AppConfig.username);
-		return this.callParent(arguments);
+
+		return this;
 	},
 
 
