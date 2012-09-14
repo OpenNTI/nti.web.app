@@ -60,7 +60,7 @@ Ext.define('NextThought.view.account.activity.Popout',{
 
 	statics: {
 
-		popup: function(record, el, offsets, flipFactor){
+		popup: function(record, alignmentEl, el, offsets, flipFactor){
 			var id = record.getId(), open = false;
 			Ext.each(Ext.ComponentQuery.query('activity-popout,contact-popout'),function(o){
 				if(o.record.getId()!==id || record.modelName !== o.record.modelName){
@@ -91,7 +91,7 @@ Ext.define('NextThought.view.account.activity.Popout',{
 				}
 
 				pop.show();
-				pop.alignTo(el,alignment,offsets);
+				pop.alignTo(alignmentEl,alignment,offsets);
 			},this);
 		}
 

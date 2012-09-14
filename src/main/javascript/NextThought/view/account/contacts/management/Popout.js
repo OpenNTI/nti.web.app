@@ -105,7 +105,7 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 
 	statics: {
 
-		popup: function(record, el, offsets, flipFactor){
+		popup: function(record, alignmentEl, el, offsets, flipFactor){
 			var pop,
 				alignment = 'tr-tl?',
 				play = Ext.dom.Element.getViewportHeight() - Ext.fly(el).getTop(),
@@ -131,7 +131,7 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 			}
 
 			pop.show();
-			pop.alignTo(el,alignment,offsets);
+			pop.alignTo(alignmentEl,alignment,offsets);
 		}
 
 	}

@@ -147,7 +147,7 @@ Ext.define('NextThought.view.account.contacts.Search',{
 
 
 //		function show(){
-			NextThought.view.account.contacts.management.Popout.popup(record,add,[-10,-18]);
+			NextThought.view.account.contacts.management.Popout.popup(record,add,item,[-10,-18]);
 //		}
 //
 //		Ext.fly(item).scrollIntoView(

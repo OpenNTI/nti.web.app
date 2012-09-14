@@ -83,7 +83,7 @@ Ext.define('NextThought.view.account.contacts.Card',{
 
 
 	showPopout: function(record, nib){
-		NextThought.view.account.contacts.management.Popout.popup(record,this.el.down('img:not(.nib)'),[-10,-18]);
+		NextThought.view.account.contacts.management.Popout.popup(record,this.el.down('img:not(.nib)'),this.el,[-10,-18]);
 	}
 
 });
