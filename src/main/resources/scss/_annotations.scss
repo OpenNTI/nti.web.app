@@ -168,18 +168,61 @@ div.redaction-control {
 .note-window .main-view .context,
 #NTIContent {
 
-	.blockRedactionAction {
-		clear: both;
-		display: none;
-		width: 100%;
-		background: url(../images/redactions/dash.png) 0 -8px repeat-x;
 
-		&.redacted {
-			display: block;
+	.block-redaction {
+		display: block;
+		clear: both;
+		width: 100%;
+		margin: 25px 0;
+
+		&.head{
+			border-top: 1px solid $border-grey;
+			overflow: visible;
+
+			&.redacted {
+				border-color: white;
+				&::after {
+					position: absolute;
+					content: '';
+					background: url(../images/redactions/div_block_redaction.png) 0 0 repeat-x;
+					top: -6px; left: 0;
+					width: 100%;
+					height: 11px;
+				}
+			}
+		}
+
+		&.redacted .redactionAction{
+			.controls{display: none;}
+			span.editableSpan{ border-right-width: 1px; }
 		}
 	}
 
-	.inlineRedactionAction {
+	.block-redaction, .redactionAction {
+		&.editing {
+			span.editableSpan {
+				cursor: text;
+			}
+			.controls {
+				span {
+					&.share,&.delete{
+						display: none;
+					}
+				}
+			}
+		}
+	}
+
+	.redactionAction {
+
+		&.block {
+			position: absolute;
+			top: -12px;
+			left: -20px;
+			z-index: 5;
+		}
+
+
 		font-size: 10px;
 		line-height: 14px;
 
@@ -198,18 +241,6 @@ div.redaction-control {
 			span.editableSpan{ border-right-width: 1px; }
 		}
 
-		&.editing {
-			span.editableSpan {
-				cursor: text;
-			}
-			.controls {
-				span {
-					&.share,&.delete{
-						display: none;
-					}
-				}
-			}
-		}
 
 		span.editableSpan {
 			display: inline-block;
@@ -274,8 +305,8 @@ div.redaction-control {
 						font-weight: 600;
 						text-transform: uppercase;
 						color: white;
-						top: -4px;
-						margin: 0 0 0 10px;
+						top: 4px;
+						margin: 0 0 0 13px;
 					}
 				}
 

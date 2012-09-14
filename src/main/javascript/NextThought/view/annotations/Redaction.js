@@ -9,18 +9,6 @@ Ext.define('NextThought.view.annotations.Redaction', {
 	cls: 'redacted',
 
 
-	inlineTpl: Ext.DomHelper.createTemplate([
-		{tag:'span', cls: 'inlineRedactionAction', cn: [
-			{tag: 'span', cls: 'editableSpan', html: '{replacementContent}'},
-			{tag: 'span', cls: 'controls', cn:[
-				{tag: 'span', cls: 'edit', title: 'edit'},
-				{tag: 'span', cls: 'share', title: 'share'},
-				{tag: 'span', cls: 'delete', title: 'delete'}
-			]}
-		]
-		}]).compile(),
-
-
 	constructor: function(){
 		this.callParent(arguments);
 
@@ -76,7 +64,6 @@ Ext.define('NextThought.view.annotations.Redaction', {
 	},
 
 
-
 	makeEditableSpanNotEditable: function(){
 		var s = this.editableSpan, save = this.masterSpan.down('.edit');
 		if (!s || !this.record.isModifiable()){
@@ -92,19 +79,19 @@ Ext.define('NextThought.view.annotations.Redaction', {
 
 
 	render: function(){
-		var y = this.callParent(arguments);
+
+		var y = this.callParent(arguments),
+			isBlock = this.isBlockRedaction();
 
 		if (this.actionSpan){
-			return this.actionSpan.getBoundingClientRect().top || this.rendered.first().getBoundingClientRect().top || y;
+			return this.actionSpan.getBoundingClientRect().top || this.rendered[0].getBoundingClientRect().top || y;
 		}
 
 		if(this.rendered){
 			//Add the redaction action span so the user has something to click on
-			if (this.isInlineRedaction()) {
-				this.actionSpan = this.createActionHandle(this.rendered[0]).dom;
-			}
-			else {
-				this.actionSpan = this.createBlockActionHandle(this.rendered[0]).dom;
+			this.actionSpan = this.createActionHandle(this.rendered[0], isBlock);
+			if(isBlock){
+				this.insertFooter(this.rendered.last());
 			}
 
 			//add the redaction class and the click handlers for redacted spans:
@@ -134,15 +121,19 @@ Ext.define('NextThought.view.annotations.Redaction', {
 //	},
 
 
-	isInlineRedaction: function(){
-		var replacementText = this.record.get('replacementContent');
-		return Boolean(replacementText);
+	isBlockRedaction: function(){
+		return Boolean(this.record.get('redactionExplanation'));
+		//kind of hacky... as soon as you blank out this field, the redaction will become "inline" and there is no way
+		// to go back, nor is this obvious. TODO: expose a "style" much like highlights/notes. (I'm actually surprised
+		// style wasn't accepted already)
 	},
 
 
-	createActionHandle: function(before){
-		this.masterSpan = this.inlineTpl.insertBefore(before, {
-			replacementContent: this.record.get('replacementContent')
+	createActionHandle: function(before, block){
+		this.masterSpan = this.actionTpl.insertBefore(before, {
+			replacementContent: this.record.get('replacementContent'),
+			block: Boolean(block),
+			style: block ? 'block':'inline'
 		}, true);
 
 		this.mon(this.masterSpan,{
@@ -163,17 +154,16 @@ Ext.define('NextThought.view.annotations.Redaction', {
 			this.masterSpan.down('.controls').remove();
 		}
 
-		return this.masterSpan;
+		return this.masterSpan.dom;
 	},
 
 
-	onClick: function(e){
-		if(this.isInlineRedaction()){
-			return undefined;
-		}
+	insertFooter: function(after){
 
-		return this.callParent(arguments);
 	},
+
+
+	onClick: function(){},
 
 
 	onControlClick: function(e) {
@@ -255,17 +245,6 @@ Ext.define('NextThought.view.annotations.Redaction', {
 	},
 
 
-	createBlockActionHandle: function(before){
-		this.masterSpan = Ext.get(this.createNonAnchorableSpan());
-
-		this.masterSpan.update('&nbsp;');
-		this.masterSpan.addCls('blockRedactionAction');
-		this.masterSpan.insertBefore(before);
-		//masterSpan.on('click', this.toggleRedaction, this);
-		return this.masterSpan;
-	},
-
-
 	cleanup: function(){
 		try{
 			if (this.actionSpan){Ext.fly(this.actionSpan).remove();}
@@ -291,5 +270,27 @@ Ext.define('NextThought.view.annotations.Redaction', {
 		}
 		return false;
 	}
+
+}, function(){
+
+	var p = this.prototype,
+			tpl = {tag:'span', 'data-non-anchorable':'true', cls: 'redactionAction {style}', cn: [
+					{tag: 'span', cls: 'editableSpan', html: '{replacementContent}'},
+					{tag: 'span', cls: 'controls', cn:[
+						{tag: 'span', cls: 'edit', title: 'edit'},
+						{tag: 'span', cls: 'share', title: 'share'},
+						{tag: 'span', cls: 'delete', title: 'delete'}
+					]}
+				]};
+
+	p.actionTpl = new Ext.XTemplate(Ext.DomHelper.markup([
+		{tag: 'tpl', 'if':'block', cn:[
+			{tag:'span', cls:'block-redaction head', 'data-non-anchorable':true,cn:[Ext.clone(tpl)]}
+		]},
+		{tag: 'tpl', 'if':'!block', cn:[ tpl ]}
+	]));
+
+
+
 
 });

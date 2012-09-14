@@ -27,19 +27,22 @@ Ext.define('NextThought.model.Redaction', {
 				tags: hl.get('tags'),
 				selectedText: hl.get('selectedText'),
 				applicableRange: hl.get('applicableRange'),
-				replacementContent: block ? null : this.DEFAULT_TEXT
+				replacementContent: this.DEFAULT_TEXT,
+				style: block? 'block':'inline',
+				redactionExplanation: block? 'Why was this redacted?' : null
 			});
 		}
 	},
 
 	fields: [
-		{ name: 'sharedWith', type: 'UserList'},
-		{ name: 'prohibitReSharing', type: 'boolean' },
 		{ name: 'AutoTags', type: 'Auto'},
-		{ name: 'tags', type: 'Auto'},
-		{ name: 'selectedText', type: 'string'},
+		{ name: 'applicableRange', type: 'ContentRangeDescription'},
+		{ name: 'prohibitReSharing', type: 'boolean' },
 		{ name: 'replacementContent', type: 'string'},
 		{ name: 'redactionExplanation', type: 'string'},
-		{ name: 'applicableRange', type: 'ContentRangeDescription'}
+		{ name: 'selectedText', type: 'string'},
+		{ name: 'sharedWith', type: 'UserList'},
+		{ name: 'style', type: 'string'},
+		{ name: 'tags', type: 'Auto'}
 	]
 });
