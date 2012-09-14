@@ -140,26 +140,17 @@ Ext.define('NextThought.model.Base', {
 
 
 	isFavorited: function(){
-		//If you have an unfavorite link, you have already favorited it.
-		var f = this.getLink('unfavorite');
-		if (f) {return true;}
-		return false;
+		return Boolean(this.getLink('unfavorite'));
 	},
 
 
 	isLiked: function(){
-		//If you have an unlike link, you have already liked it.
-		var f = this.getLink('unlike');
-		if (f) {return true;}
-		return false;
+		return Boolean(this.getLink('unlike'));
 	},
 
 
 	isFlagged: function(){
-		//If you have an unlike link, you have already liked it.
-		var f = this.getLink('flag.metoo');
-		if (f) {return true;}
-		return false;
+		return Boolean(this.getLink('flag.metoo'));
 	},
 
 

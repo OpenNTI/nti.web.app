@@ -77,13 +77,18 @@ Ext.define('NextThought.util.Annotations',{
 			Ext.Error.raise('Cannot create highlight from null or collapsed range');
 		}
 
+//		var p = LocationProvider.getPreferences();
+//		p = p ? p.sharing : null;
+//		p = p ? p.sharedWith || [] : null;
+
 		var text = range.toString(),
 			contentRangeDescription = Anchors.createRangeDescriptionFromRange(range, root);
 
 		return Ext.create('NextThought.model.Highlight', {
 			style: style,
 			applicableRange: contentRangeDescription,
-			selectedText: text
+			selectedText: text//,
+//			sharedWith: p
 		});
 	},
 

@@ -30,7 +30,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
 			return null;
 		}
 
-		console.log(this.id,': ',(this.getRecordField('body')||[]).join('|'), ': got range from description:', range, range.toString());
+		//console.log(this.id,': ',(this.getRecordField('body')||[]).join('|'), ': got range from description:', range, range.toString());
 		Anchors.expandRangeToIncludeMath(range);
 		return range;
 	},
