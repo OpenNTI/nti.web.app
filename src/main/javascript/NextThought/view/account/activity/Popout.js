@@ -30,23 +30,29 @@ Ext.define('NextThought.view.account.activity.Popout',{
 	},
 
 
-	destroy: function(){
-		Ext.getBody().un('click',this.detectBlur,this);
-		this.callParent(arguments);
-	},
-
-
 	afterRender: function(){
-		this.callParent(arguments);
-		this.mon(this.el,'click',function(e){e.stopPropagation();},this);
-		this.on('blur',this.destroy,this);
-		Ext.defer(function(){Ext.getBody().on('click',this.detectBlur,this);},1,this);
+		var me = this;
+		me.callParent(arguments);
+		me.mon(me.el,'click',function(e){e.stopPropagation();},me);
+
+		me.on('blur',me.destroy,me);
+
+		Ext.defer(function(){
+			me.mon(Ext.fly(window),{
+				scope: me,
+				'click':me.detectBlur,
+				'mouseover':me.detectBlur
+			});
+		},1);
 	},
 
 
 	detectBlur: function(e){
-		if(!e.getTarget('.activity-popout')){
-			this.fireEvent('blur');
+		if(!e.getTarget('.'+this.cls) && !e.getTarget('#'+this.refEl.id)){
+			this.hideTimer = Ext.defer(function(){this.fireEvent('blur');},500,this);
+		}
+		else {
+			clearTimeout(this.hideTimer);
 		}
 	},
 
@@ -70,7 +76,7 @@ Ext.define('NextThought.view.account.activity.Popout',{
 			offsets = offsets||[0,0];
 
 			UserRepository.getUser(record.get('Creator'),function(user){
-				var pop = this.create({record: record, user: user}),
+				var pop = this.create({record: record, user: user, refEl: Ext.get(el)}),
 					alignment = 'tr-tl',
 					play = Ext.dom.Element.getViewportHeight() - Ext.fly(el).getTop();
 

@@ -72,19 +72,26 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 	afterRender: function(){
 		var me = this;
 		me.callParent(arguments);
-
 		me.mon(me.el,'click',function(e){e.stopPropagation();},me);
 
 		me.on('blur',me.destroy,me);
 
-
-		Ext.defer(function(){Ext.getBody().on('click',me.detectBlur,me);},1);
+		Ext.defer(function(){
+			me.mon(Ext.fly(window),{
+				scope: me,
+				'click':me.detectBlur,
+				'mouseover':me.detectBlur
+			});
+		},1);
 	},
 
 
 	detectBlur: function(e){
-		if(!e.getTarget('.contact-popout')){
-			this.fireEvent('blur');
+		if(!e.getTarget('.'+this.cls) && !e.getTarget('#'+this.refEl.id)){
+			this.hideTimer = Ext.defer(function(){this.fireEvent('blur');},500,this);
+		}
+		else {
+			clearTimeout(this.hideTimer);
 		}
 	},
 
@@ -115,7 +122,7 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 
 			if(open){return;}
 
-			pop = this.create({record: record});
+			pop = this.create({record: record, refEl: Ext.get(el)});
 			pop.show().hide();
 
 			if( pop.getHeight() > play ){

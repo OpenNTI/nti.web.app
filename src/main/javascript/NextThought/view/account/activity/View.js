@@ -77,8 +77,7 @@ Ext.define('NextThought.view.account.activity.View',{
 		this.mon(this.el,{
 			scope: this,
 			'click':this.itemClick,
-			'mouseover': this.itemHover,
-			'mouseout': this.itemHoverOff
+			'mouseover': this.itemHover
 		});
 		this.mon(this, {
 			scope: this,
@@ -89,7 +88,7 @@ Ext.define('NextThought.view.account.activity.View',{
 
 	updateNotificationCountFromStore: function(store, records){
 		var u = $AppConfig.userObject,
-			c = (u.get('NotificationCount') || 0) + ((records||{}).length||0);
+				c = (u.get('NotificationCount') || 0) + ((records||{}).length||0);
 
 		//Update current notification of the userobject.
 		u.set('NotificationCount', c);
@@ -130,8 +129,8 @@ Ext.define('NextThought.view.account.activity.View',{
 
 	reloadActivity: function(store){
 		var container = this.down('box[activitiesHolder]'),
-			totalExpected,
-			items = [];
+				totalExpected,
+				items = [];
 
 		if(store && !store.isStore){
 			store = null;
@@ -148,26 +147,18 @@ Ext.define('NextThought.view.account.activity.View',{
 
 		this.stream = {};
 
-		function p(i){
-			/*if(items.length>100){
-				if(!items.last().activity){ items.pop(); }
-				return; //FIXME this looks wrong... -cmu
-			}*/
-			items.push(i);
-		}
-
 		function doGroup(group){
 			var label = (group.name||'').replace(/^[A-Z]\d{0,}\s/,'') || false,
-				me = this;
+					me = this;
 
 			if(label){
-				p({ label: label });
+				items.push({ label: label });
 			}
 
 			//We use a similar strategy to the one that Notifications uses
 			Ext.each(group.children,function(c){
 				var item = this.changeToActivity(c);
-     			p(item);
+				items.push(item);
 				UserRepository.getUser(item.name, function(u){
 					item.name = u.getName();
 					totalExpected--;
@@ -193,8 +184,8 @@ Ext.define('NextThought.view.account.activity.View',{
 
 	changeToActivity: function(c){
 		var item = c.get('Item'),
-			cid = item? item.get('ContainerId') : undefined,
-			guid = guidGenerator();
+				cid = item? item.get('ContainerId') : undefined,
+				guid = guidGenerator();
 
 		this.stream[guid] = {
 			activity: true,
@@ -212,8 +203,8 @@ Ext.define('NextThought.view.account.activity.View',{
 
 	getMessage: function(change) {
 		var item = change.get('Item'),
-			type = change.get('ChangeType'),
-			loc;
+				type = change.get('ChangeType'),
+				loc;
 
 		if (!item){return 'Unknown';}
 
@@ -242,10 +233,10 @@ Ext.define('NextThought.view.account.activity.View',{
 	itemClick: function(e){
 
 		var target = e.getTarget('div.activity',null,true),
-			guid = (target||{}).id,
-			item = this.stream[guid],
-			rec = (item||{}).record,
-			targets;
+				guid = (target||{}).id,
+				item = this.stream[guid],
+				rec = (item||{}).record,
+				targets;
 
 		if (!rec || rec.get('Class') === 'User'){
 			return false;
@@ -256,7 +247,6 @@ Ext.define('NextThought.view.account.activity.View',{
 		e.stopEvent();
 		try{
 			targets.push( rec.getId() );
-//			console.log('nav to', item.ContainerId, targets);
 			this.fireEvent('navigation-selected', item.ContainerId, targets);
 		}
 		catch(er){
@@ -267,25 +257,32 @@ Ext.define('NextThought.view.account.activity.View',{
 
 
 	itemHover: function(e){
-		var target = e.getTarget('div.activity',null,true),
-			guid = (target||{}).id,
-			item = this.stream[guid],
-			rec = (item||{}).record,
-			popout = NextThought.view.account.activity.Popout;
+		var me = this,
+				target = e.getTarget('div.activity',null,true),
+				guid = (target||{}).id,
+				item = me.stream[guid],
+				rec = (item||{}).record,
+				popout = NextThought.view.account.activity.Popout;
 
 		if(!rec){return;}
 
-		if (rec.get('Class') === 'User'){
-			popout = NextThought.view.account.contacts.management.Popout;
+		function killShow(){
+			clearTimeout(me.hoverTimeout);
 		}
 
-		popout.popup(rec,target,[-10,-12],0.5);
-	},
 
+		clearTimeout(me.hoverTimeout);
+		me.hoverTimeout = Ext.defer(function(){
+			target.un('mouseout',killShow,me,{single:true});
+			
+			if (rec.get('Class') === 'User'){
+				popout = NextThought.view.account.contacts.management.Popout;
+			}
 
-	itemHoverOff: function(e){
-//		Ext.each(Ext.ComponentQuery.query('activity-popout,contact-popout'),
-//				function(o){o.destroy();});
+			popout.popup(rec,target,[-10,-12],0.5);
+
+		},500);
+
+		target.on('mouseout',killShow,me,{single:true});
 	}
-
 });
