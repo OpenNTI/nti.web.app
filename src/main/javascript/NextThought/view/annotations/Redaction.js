@@ -289,25 +289,6 @@ Ext.define('NextThought.view.annotations.Redaction', {
 			e.stopEvent();
 		}
 		return false;
-	},
-
-
-	getControl: function(){
-		//We only want a control if its a block annotation:
-		if (this.isInlineRedaction()){
-			return undefined;
-		}
-
-		if (!this.controlDiv){
-			this.controlDiv = Ext.get(this.doc.createElement('div'));
-			this.controlDiv.update('<img src="'+Ext.BLANK_IMAGE_URL+'"/>');
-			this.controlDiv.addCls('redaction-control');
-			this.mon(this.controlDiv,{
-				scope: this,
-				click: this.toggleRedaction
-			});
-		}
-
-		return this.controlDiv;
 	}
+
 });
