@@ -298,7 +298,6 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 				w.tempID = oid;
 				record.on('updated',function(r){
 					this.annotations[r.get('NTIID')] = this.annotations[oid];
-					this.annotations[oid] = undefined;
 					delete this.annotations[oid];
 					delete w.tempID;
 				}, this);
@@ -307,7 +306,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 			this.annotations[oid] = w;
 		}
 		catch(e){
-			console.error(e.stack);
+			console.error(e);
 		}
 		return w;
 	},

@@ -72,7 +72,9 @@ Ext.define( 'NextThought.view.annotations.Base', {
 		me.attachRecord(r);
 
 		AnnotationsRenderer.register(me);
-		Ext.ComponentManager.register(this);
+		if(this.getItemId()){
+			Ext.ComponentManager.register(this);
+		}
 	},
 
 	getBubbleTarget: function(){return this.ownerCmp; },
@@ -160,7 +162,9 @@ Ext.define( 'NextThought.view.annotations.Base', {
 		delete me.record;
 
 		r.clearListeners();
-		Ext.ComponentManager.unregister(me);
+		if(me.getItemId()){
+			Ext.ComponentManager.unregister(me);
+		}
 		AnnotationsRenderer.unregister(me);
 
 		c.un('afterlayout', this.requestRender, me);
