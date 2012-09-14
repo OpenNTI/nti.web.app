@@ -3,6 +3,7 @@ Ext.define('NextThought.providers.Location', {
 	mixins: { observable: 'Ext.util.Observable' },
 	requires: [
 		'NextThought.Library',
+		'NextThought.ContentAPIRegistry',
 		'NextThought.view.video.Window'
 	],
 
@@ -110,7 +111,7 @@ Ext.define('NextThought.providers.Location', {
 		}
 
 		function failure(q,r){
-			console.error(arguments);
+			console.error('resolvePageInfo Failure: ',arguments);
 			Ext.callback(callback,null,[me,{req:q,error:r}]);
 			me.fireEvent('navigateComplete',r);
 		}
@@ -207,8 +208,8 @@ Ext.define('NextThought.providers.Location', {
 			if( id ) {
 				lineage.push(id);
 			}
-			else {
-				console.warn(node, 'no id');
+			else if( node.nodeType !== Node.DOCUMENT_NODE ){
+				console.warn( node, 'no id');
 			}
 			node = node.parentNode;
 		}
@@ -229,7 +230,7 @@ Ext.define('NextThought.providers.Location', {
 			id = node.getAttribute? node.getAttribute('ntiid') : null;
 			if( id && node.parentNode ) {
 				cn = node.parentNode.childNodes;
-				i=0, j=0;
+				i=0; j=0;
 				while( i<cn.length){
 					t=cn[i].getAttribute ? cn[i].getAttribute('ntiid'): null;
 					if(t===id){
@@ -279,7 +280,6 @@ Ext.define('NextThought.providers.Location', {
 		//returns the NTIID attribute of the node, or null if it's not there.
 		function getRef(node){
 			if(!node || !node.getAttribute){
-				console.warn('Unable to get ntiid from node, might have navved to root?', node);
 				return null;
 			}
 
@@ -437,7 +437,7 @@ Ext.define('NextThought.providers.Location', {
 		if (!this.preferenceMap){this.preferenceMap = {};}
 		this.preferenceMap[pi.getId()] = {sharing: sharing};
 
-		console.log('shareing prefs updated', this.preferenceMap[pi.getId()]);
+		console.debug('shareing prefs updated', this.preferenceMap[pi.getId()]);
 	},
 
 
