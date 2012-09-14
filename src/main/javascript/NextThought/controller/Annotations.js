@@ -55,6 +55,12 @@ Ext.define('NextThought.controller.Annotations', {
 				'bubble-replys-up':this.replyBubble
 			},
 
+
+			'activity-preview': {
+				'share': this.shareWith,
+				'chat': this.replyAsChat
+			},
+
 			'note-gutter-widget': {
 				'share': this.shareWith,
 				'chat': this.replyAsChat

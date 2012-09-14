@@ -34,8 +34,8 @@ Ext.define( 'NextThought.view.annotations.Note', {
 
 	constructor: function(config){
 		this.callParent(arguments);
-		this.on('open',function(scrollTo){
-			var reply, w = this.openWindow();
+		this.on('open',function(scrollTo, replyTo){
+			var reply, w = this.openWindow(Boolean(replyTo));
 			if( scrollTo !== this.getRecord().getId() ){
 				reply = w.down(
 					Ext.String.format('[guid={0}]',IdCache.getIdentifier(scrollTo)));

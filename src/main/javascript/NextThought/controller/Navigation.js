@@ -26,6 +26,9 @@ Ext.define('NextThought.controller.Navigation', {
 			'activity-view': {
 				'navigation-selected': this.navigate
 			},
+			'activity-preview': {
+				'navigation-selected': this.navigate
+			},
 			'main-views': {
 				'activate-view': this.track
 			},
@@ -37,7 +40,7 @@ Ext.define('NextThought.controller.Navigation', {
 
 
 
-	navigate: function(ntiid, scrollToTargetId) {
+	navigate: function(ntiid, scrollToTargetId, reply) {
 		var callback = Ext.emptyFn();
 		if (scrollToTargetId) {
 			callback = function(reader) {
@@ -51,7 +54,7 @@ Ext.define('NextThought.controller.Navigation', {
 							id = cid(i);
 							c = Ext.getCmp(id);
 							if(c){
-								c.fireEvent('open',scrollToTargetId.last());
+								c.fireEvent('open',scrollToTargetId.last(), reply? scrollToTargetId: undefined);
 								return false; //stop iteration
 							}
 						}

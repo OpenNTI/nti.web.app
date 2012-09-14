@@ -43,8 +43,45 @@ Ext.define('NextThought.view.account.activity.Preview',{
 	afterRender: function(){
 		this.callParent(arguments);
 
+		this.mon(this.replyButton, 'click', this.onReply, this);
+		this.mon(this.shareButton, 'click', this.onShare, this);
+		this.el.on('click',this.onReply,this);
 		TemplatesForNotes.attachMoreReplyOptionsHandler(this, this.more);
 		TemplatesForNotes.updateMoreReplyOptionsLabels(this.more,this.user);
+	},
+
+
+	onReply: function(){
+		var rec = this.record, targets;
+
+		if (!rec || rec.get('Class') === 'User'){
+			return;
+		}
+
+		targets = (rec.get('references') || []).slice();
+
+		try{
+			targets.push( rec.getId() );
+			this.fireEvent('navigation-selected', rec.get('ContainerId'), targets);
+		}
+		catch(er){
+			console.error(Globals.getError(er));
+		}
+	},
+
+
+	onShare: function(){
+		this.fireEvent('share', this.record);
+	},
+
+
+	onFlag: function(){
+		this.record.flag(this);
+	},
+
+
+	onChat: function() {
+		this.fireEvent('chat', this.record);
 	}
 
 
