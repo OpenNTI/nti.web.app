@@ -5,7 +5,9 @@ Ext.define('NextThought.view.content.reader.Scroll',{
 	constructor: function(){
 		this.on('afterrender',function(){
 
-//			this.body.on('scroll',function(e,dom){console.log(arguments);},this);
+			this.body.on('scroll',function(){
+				Ext.menu.Manager.hideAll();
+			},this);
 
 		},this);
 	},
