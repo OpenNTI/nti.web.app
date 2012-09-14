@@ -31,9 +31,9 @@ Ext.define('NextThought.view.account.activity.Preview',{
 		lineage.reverse();
 
 		this.renderData = Ext.apply(this.renderData||{},{
-			location: location,
+			location: Ext.String.ellipsis(location,70,false),
 			path: lineage.join(' / '),
-			contextText: this.record.get('selectedText'),//TODO: better context text
+			contextText: this.record.get('selectedText'),
 			textContent: this.record.getBodyText ? this.record.getBodyText() : ''
 		});
 	},
@@ -63,7 +63,8 @@ Ext.define('NextThought.view.account.activity.Preview',{
 				]
 			},
 			{ cls: 'footer', cn: [
-				{cls: 'body', html: '{textContent}'},
+				{tag: 'tpl', 'if':'textContent', cn:[{cls: 'body', html: '{textContent}'}]},
+				{tag: 'tpl', 'if':'!textContent', cn:[{cls: 'filler'}]},
 				TemplatesForNotes.getReplyOptions() ] }
 		]);
 });
