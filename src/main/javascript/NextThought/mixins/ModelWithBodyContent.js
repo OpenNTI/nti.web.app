@@ -78,11 +78,11 @@ Ext.define('NextThought.mixins.ModelWithBodyContent',{
 			i = c.length - 1,
 			b = (this.get('body')||[]).join('\n');
 
-		if(b.indexOf(term) >= 0){
+		if( (new RegExp(RegExp.escape(term),'i')).test(b) ){
 			return true;
 		}
 
-		for(;i>=0 && !found; i--){
+		for(i;i>=0 && !found; i--){
 			if(c[i].hasTerm){
 				found = c[i].hasTerm(term);
 			}
