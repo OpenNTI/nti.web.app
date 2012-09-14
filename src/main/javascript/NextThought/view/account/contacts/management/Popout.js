@@ -64,7 +64,6 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 
 
 	destroy: function(){
-		Ext.getBody().un('click',this.detectBlur,this);
 		this.callParent(arguments);
 	},
 
