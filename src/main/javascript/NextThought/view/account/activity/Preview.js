@@ -45,6 +45,11 @@ Ext.define('NextThought.view.account.activity.Preview',{
 
 		this.mon(this.replyButton, 'click', this.onReply, this);
 		this.mon(this.shareButton, 'click', this.onShare, this);
+
+		if(!this.record.canReply){
+			this.replyButton.hide();
+		}
+
 		this.el.on('click',this.onReply,this);
 		TemplatesForNotes.attachMoreReplyOptionsHandler(this, this.more);
 		TemplatesForNotes.updateMoreReplyOptionsLabels(this.more,this.user);

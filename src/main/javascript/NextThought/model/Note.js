@@ -28,6 +28,9 @@ Ext.define('NextThought.model.Note', {
 		'NextThought.model.converters.ContentRangeDescription'
 	],
 
+
+	canReply: true,
+
 	fields: [
 		{ name: 'inReplyTo', type: 'string' },
 		{ name: 'references', type: 'auto', defaultValue: [] },
