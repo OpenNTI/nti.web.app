@@ -112,7 +112,6 @@ Ext.define('NextThought.view.annotations.note.GutterWidget',{
 
 	onChat: function(){
 		this.fireEvent('chat', this.record);
-		return;
 	}
 
 },function(){
