@@ -91,7 +91,6 @@ def _buildIndexHtml( version, analytics_key ):
 		  href="resources/lib/mathquill/mathquill.css?_dc=%s">
         <link rel="stylesheet" id="main-stylesheet" type="text/css" href="resources/css/main.css?_dc%s">
 
-	<script type="text/javascript" src="resources/misc/base64.min.js?_dc=%s"></script>
 """ % (BUILDTIME, BUILDTIME, BUILDTIME, BUILDTIME)
 	part3 ="""	<!--[if gte IE 9]>
 	<style type="text/css">

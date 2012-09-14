@@ -2,7 +2,8 @@ Ext.define('NextThought.Library', {
 	singleton: true,
 	mixins: { observable: 'Ext.util.Observable' },
 	requires:[
-		'NextThought.model.Title'
+		'NextThought.model.Title',
+		'NextThought.util.Base64'
 	],
 
 	bufferedToc: {},
@@ -260,7 +261,7 @@ Ext.define('NextThought.Library', {
 		//expects: {content:?, contentEncoding:?, NTIID:?, version: ?}
 		//1) decode content
 		if(/base64/i.test(content['Content-Encoding'])){
-			decodedContent = atob(content.content);
+			decodedContent = Base64.decode(content.content);
 		}
 		else {
 			Ext.Error.raise('not handing content encoding ' + content['Content-Encoding']);

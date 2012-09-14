@@ -196,7 +196,7 @@ Ext.define('NextThought.view.content.Reader', {
 			//expects: {content:?, contentEncoding:?, NTIID:?, version: ?}
 			//1) decode content
 			if(/base64/i.test(content['Content-Encoding'])){
-				decodedContent = atob(content.content);
+				decodedContent = Base64.decode(content.content);
 			}
 			else {
 				Ext.Error.raise('not handing content encoding ' + content['Content-Encoding']);
