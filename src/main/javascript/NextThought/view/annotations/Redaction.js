@@ -203,8 +203,7 @@ Ext.define('NextThought.view.annotations.Redaction', {
 
 
 	editableSpanEditorKeyDown: function(e, span){
-		var selection, range, cursorStart, rangeContainer,
-				k = e.getKey();
+		var k = e.getKey();
 
 
 		e.stopPropagation();
