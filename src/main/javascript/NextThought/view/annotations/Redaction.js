@@ -9,18 +9,18 @@ Ext.define('NextThought.view.annotations.Redaction', {
 	cls: 'redacted',
 
 
-    inlineTpl: new Ext.XTemplate(Ext.DomHelper.markup([
-        {tag:'span', cls: 'inlineRedactionAction', cn: [
-                {tag: 'span', cls: 'delimiter'},
-                {tag: 'span', cls: 'editableSpan', html: '{replacementContent}'},
-                {tag: 'span', cls: 'controls', cn:[
-                    {tag: 'span', cls: 'edit', title: 'edit'},
-                    {tag: 'span', cls: 'share', title: 'share'},
-                    {tag: 'span', cls: 'delete', title: 'delete'}
-                ]},
-                {tag: 'span', cls: 'delimiter'}
-            ]
-        }])),
+	inlineTpl: new Ext.XTemplate(Ext.DomHelper.markup([
+		{tag:'span', cls: 'inlineRedactionAction', cn: [
+			{tag: 'span', cls: 'delimiter'},
+			{tag: 'span', cls: 'editableSpan', html: '{replacementContent}'},
+			{tag: 'span', cls: 'controls', cn:[
+				{tag: 'span', cls: 'edit', title: 'edit'},
+				{tag: 'span', cls: 'share', title: 'share'},
+				{tag: 'span', cls: 'delete', title: 'delete'}
+			]},
+			{tag: 'span', cls: 'delimiter'}
+		]
+		}])),
 
 
 	constructor: function(){
@@ -32,22 +32,22 @@ Ext.define('NextThought.view.annotations.Redaction', {
 
 
 	buildMenu: function(items){
-        var me = this;
+		var me = this;
 
-        items.push({
-            text : 'Toggle Redaction',
-            handler: function(){
-                me.toggleRedaction();
-            }
-        });
-        return this.callParent([items]);
+		items.push({
+			text : 'Toggle Redaction',
+			handler: function(){
+				me.toggleRedaction();
+			}
+		});
+		return this.callParent([items]);
 	},
 
 
 	makeEditableSpanEditable: function(e){
 		e.stopEvent();
 		var s = this.editableSpan, range, save = this.masterSpan.down('.edit'),
-			sel = this.doc.parentWindow.getSelection();
+				sel = this.doc.parentWindow.getSelection();
 
 		if (!s || !this.record.isModifiable()){
 			return false;
@@ -116,6 +116,15 @@ Ext.define('NextThought.view.annotations.Redaction', {
 	},
 
 
+	visibilityChanged: function(show){
+		if(this.actionSpan){
+			Ext.fly(this.actionSpan).setVisibilityMode(Ext.dom.Element.DISPLAY);
+			Ext.fly(this.actionSpan)[show?'show':'hide']();
+		}
+		return this.callParent(arguments);
+	},
+
+
 //	getAlternateBoundingRect: function(){
 //		var b = Ext.fly(this.actionSpan).getBox();
 //		b.top = b.y;
@@ -131,9 +140,9 @@ Ext.define('NextThought.view.annotations.Redaction', {
 
 
 	createActionHandle: function(before){
-        this.masterSpan = this.inlineTpl.insertBefore(before, {
-            replacementContent: this.record.get('replacementContent')
-        }, true);
+		this.masterSpan = this.inlineTpl.insertBefore(before, {
+			replacementContent: this.record.get('replacementContent')
+		}, true);
 
 		this.mon(this.masterSpan,{
 			scope: this,
@@ -141,7 +150,7 @@ Ext.define('NextThought.view.annotations.Redaction', {
 			'mouseup': function(e){e.stopEvent();return false;}
 		});
 
-        this.editableSpan = this.masterSpan.down('.editableSpan');
+		this.editableSpan = this.masterSpan.down('.editableSpan');
 
 		this.mon(this.masterSpan, 'click', this.onClick, this);
 
@@ -149,11 +158,11 @@ Ext.define('NextThought.view.annotations.Redaction', {
 			this.masterSpan.down('.share').remove();
 		}
 
-        if (!this.record.isModifiable()){
-            this.masterSpan.down('.controls').remove();
-        }
+		if (!this.record.isModifiable()){
+			this.masterSpan.down('.controls').remove();
+		}
 
-        return this.masterSpan;
+		return this.masterSpan;
 	},
 
 
@@ -166,33 +175,33 @@ Ext.define('NextThought.view.annotations.Redaction', {
 	},
 
 
-    onControlClick: function(e) {
-        //stop event
-        e.stopEvent();
+	onControlClick: function(e) {
+		//stop event
+		e.stopEvent();
 
-        //handle click
-        if (e.getTarget('.edit')){
+		//handle click
+		if (e.getTarget('.edit')){
 			if(!e.getTarget('.save')){
 				this.makeEditableSpanEditable(e);
 			}
 			else {
 				this.saveEditorContent();
 			}
-        }
-        else if (e.getTarget('.share')){
+		}
+		else if (e.getTarget('.share')){
 			if(this.allowShare){
-            	this.ownerCmp.fireEvent('share-with',this.record);
+				this.ownerCmp.fireEvent('share-with',this.record);
 			}
-        }
-        else if (e.getTarget('.delete')){
-            this.remove();
-        }
+		}
+		else if (e.getTarget('.delete')){
+			this.remove();
+		}
 		else if(!this.editableSpan.dom.hasAttribute('contenteditable')){
 			this.toggleRedaction(e);
 		}
 
-        return false; //for ie
-    },
+		return false; //for ie
+	},
 
 
 	saveEditorContent: function(){
@@ -211,7 +220,7 @@ Ext.define('NextThought.view.annotations.Redaction', {
 
 	editableSpanEditorKeyDown: function(event, span){
 		var selection, range, cursorStart, rangeContainer,
-			k = event.getKey();
+				k = event.getKey();
 
 
 		event.stopPropagation();
@@ -248,9 +257,9 @@ Ext.define('NextThought.view.annotations.Redaction', {
 	createBlockActionHandle: function(before){
 		this.masterSpan = Ext.get(this.createNonAnchorableSpan());
 
-        this.masterSpan.update('&nbsp;');
-        this.masterSpan.addCls('blockRedactionAction');
-        this.masterSpan.insertBefore(before);
+		this.masterSpan.update('&nbsp;');
+		this.masterSpan.addCls('blockRedactionAction');
+		this.masterSpan.insertBefore(before);
 		//masterSpan.on('click', this.toggleRedaction, this);
 		return this.masterSpan;
 	},

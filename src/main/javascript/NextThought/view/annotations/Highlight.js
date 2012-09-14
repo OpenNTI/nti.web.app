@@ -96,14 +96,14 @@ Ext.define('NextThought.view.annotations.Highlight', {
 
 
 	visibilityChanged: function(show){
-		var c = this.compElements;
-		var fn = show ? 'addCls' : 'removeCls';
+		var c = this.compElements,
+			fn = show ? 'addCls' : 'removeCls';
 		if(c){
 			c[fn].call(c,this.highlightCls);
 			this.render();
 		}
 
-		return this.callParent();
+		return this.callParent(arguments);
 	},
 
 
