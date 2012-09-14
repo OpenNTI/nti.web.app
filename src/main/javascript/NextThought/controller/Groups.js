@@ -166,10 +166,15 @@ Ext.define('NextThought.controller.Groups', {
 
 
 	incomingPresenceChange: function(name, presence){
-		var contacts = Ext.getCmp('contact-list'),
+		var contacts = Ext.getCmp('contact-list') || {down:Ext.emptyFn},
 			offline = contacts.down('[offline]'),
 			online = contacts.down('[online]'),
 			map = { offline: offline, online: online };
+
+		if(!online || !offline){
+			//ui not ready
+			return;
+		}
 
 		if(!Ext.Array.contains(this.getFriendsListStore().getContacts(),name)){
 			console.log('Ignoring presense from: '+name+', it is not in any groups');
