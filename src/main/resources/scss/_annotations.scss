@@ -217,6 +217,10 @@ div.redaction-control {
 			font-style: italic;
 			line-height: 14px;
 			height: 24px;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			max-width: 600px;
 
 			&:focus {
 				outline: none;
