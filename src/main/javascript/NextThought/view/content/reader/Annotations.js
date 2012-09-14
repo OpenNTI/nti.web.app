@@ -231,7 +231,6 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 					catch(e){
 						alert('Coud not save redaction');
 					}
-					me.scrollTo(range.getBoundingClientRect().top);
 				}
 			});
 
@@ -247,7 +246,6 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 					catch(e){
 						alert('Coud not save redaction');
 					}
-					me.scrollTo(range.getBoundingClientRect().top);
 				}
 			});
 		}
