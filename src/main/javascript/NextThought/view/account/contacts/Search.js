@@ -143,11 +143,11 @@ Ext.define('NextThought.view.account.contacts.Search',{
 
 
 	itemClicked: function(view,record,item){
-		var add = Ext.fly(item).down('.add');
+		var add = Ext.fly(item).down('img:not(.add)');
 
 
 //		function show(){
-			NextThought.view.account.contacts.management.Popout.popup(record,add,[-10,-25]);
+			NextThought.view.account.contacts.management.Popout.popup(record,add,[-10,-18]);
 //		}
 //
 //		Ext.fly(item).scrollIntoView(
