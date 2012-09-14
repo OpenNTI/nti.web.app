@@ -113,14 +113,6 @@ Ext.define('NextThought.view.annotations.Redaction', {
 	},
 
 
-//	getAlternateBoundingRect: function(){
-//		var b = Ext.fly(this.actionSpan).getBox();
-//		b.top = b.y;
-//		b.bottom = b.y + b.height;
-//		return b;
-//	},
-
-
 	isBlockRedaction: function(){
 		return Boolean(this.record.get('redactionExplanation'));
 		//kind of hacky... as soon as you blank out this field, the redaction will become "inline" and there is no way
@@ -202,6 +194,7 @@ Ext.define('NextThought.view.annotations.Redaction', {
 		AnnotationsRenderer.resume(this.prefix);
 	},
 
+
 	resetEditorContent: function(){
 		this.makeEditableSpanNotEditable();
 		this.editableSpan.update( this.record.get('replacementContent') );
@@ -209,39 +202,29 @@ Ext.define('NextThought.view.annotations.Redaction', {
 	},
 
 
-	editableSpanEditorKeyDown: function(event, span){
+	editableSpanEditorKeyDown: function(e, span){
 		var selection, range, cursorStart, rangeContainer,
-				k = event.getKey();
+				k = e.getKey();
 
 
-		event.stopPropagation();
+		e.stopPropagation();
 
 
-		if(k === event.ESC){
+		if(k === e.ESC){
 			this.resetEditorContent();
 		}
-		else if(k === event.ENTER){
+		else if(k === e.ENTER){
 			this.saveEditorContent();
 		}
-		else if (k === event.BACKSPACE) {
-			event.stopEvent();
-			selection = this.doc.parentWindow.getSelection();
-			range = selection.getRangeAt(0);
-			rangeContainer = range.startContainer;
-			cursorStart = range.startOffset;
-			if (!(range.collapsed)) {
-				range.deleteContents();
-			}
-			else if(cursorStart > 0) {
-				span.firstChild.data = span.firstChild.data.substring(0,cursorStart - 1) + span.firstChild.data.substring(cursorStart);
-				range.setEnd(rangeContainer,cursorStart - 1);
-				range.setStart(rangeContainer,cursorStart - 1);
-				selection.removeAllRanges();
-				selection.addRange(range);
+		else if (k === e.BACKSPACE) {
+
+			if(this.editableSpan.dom.innerHTML === ''){
+				e.stopEvent();
+				return false;
 			}
 		}
 
-		return false;
+		return true;
 	},
 
 
