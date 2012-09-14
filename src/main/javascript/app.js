@@ -19,7 +19,7 @@ Ext.application({
 		'Application',
 		'Assessment',
 		'Chat',
-		'Classroom',
+//		'Classroom',
 		'FilterControl',
 		'Google',
 		'Groups',
