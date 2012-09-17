@@ -32,7 +32,7 @@ Ext.define('NextThought.util.Ranges',{
     expandRange: function(range, doc){
         if(Ext.fly(range.commonAncestorContainer).up('object')) {
             console.log('Range is inside an object, just return the contents of Object');
-            return range.commonAncestorContainer;
+            return Ext.fly(range.commonAncestorContainer).up('object').down('.naquestionpart').dom;
         }
 
 
@@ -57,7 +57,22 @@ Ext.define('NextThought.util.Ranges',{
         doc.getSelection().addRange(range);
         var sel = rangy.getSelection(doc);
         return sel.getRangeAt(0);
+    },
+
+
+    /**
+     * Takes a range or a rangy range and returns the bounding rect
+     * @param r - either a browser range or a rangy range
+     */
+    getBoundingClientRect: function(r) {
+        if (r.nativeRange) {
+            return r.nativeRange.getBoundingClientRect();
+        }
+        return r.getBoundingClientRect();
     }
+
+
+
 
 
 },function(){

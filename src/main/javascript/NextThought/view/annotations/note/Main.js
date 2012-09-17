@@ -223,9 +223,10 @@ Ext.define('NextThought.view.annotations.note.Main',{
 			if(range){
                 this.context.setHTML('');
                 this.context.insertFirst(RangeUtils.expandRange(range, doc));
-                this.context.insertHtml('afterBegin', '[...] ');
-                this.context.insertHtml('beforeEnd', ' [...]');
-
+                if (!this.context.first().is('div')){
+                    this.context.insertHtml('afterBegin', '[...] ');
+                    this.context.insertHtml('beforeEnd', ' [...]');
+                }
 				this.context.select('a[href]',true).set({target:'_blank'});
                 Ext.each(this.context.query('.application-highlight'), function(h){
                     if(this.record.isModifiable()){
