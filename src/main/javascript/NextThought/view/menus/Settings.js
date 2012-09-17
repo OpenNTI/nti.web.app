@@ -30,6 +30,7 @@ Ext.define('NextThought.view.menus.Settings',{
         items.push({ action: 'terms', text: 'Terms of Service'});
         items.push({ xtype:'menuseparator' });
         //items.push({ action: 'account', text: 'My Account'});
+        items.push({ action: 'resetpassword', text: 'Reset Password'});
         items.push({ action: 'logout', text: 'Sign Out'});
 
         //add!
