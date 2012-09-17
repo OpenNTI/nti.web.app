@@ -95,8 +95,12 @@ Ext.define( 'NextThought.view.form.fields.UserSearchInputField', {
 
 	afterRender: function(){
 		this.callParent();
-		this.mon( this.inputEl, 'mousedown', function(e){ e.dragTracked = true; });
+		this.mon( this.inputEl, {
+			'mousedown':function(e){ e.dragTracked = true; },
+			'keydown':function(e){if(e.getKey() !== e.ESC){e.stopPropagation();}}
+		});
 		this.inputEl.setStyle({width: null});
+
 		this.triggerEl.first().parent().addCls('hidden');
 	},
 
