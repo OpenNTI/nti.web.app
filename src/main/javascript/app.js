@@ -32,8 +32,9 @@ Ext.application({
 	],
 
 	launch: function(){
+        var me = this;
 		function start() {
-			NextThought.controller.Session.login(app);
+			me.getController('Session').login(app);
 			NextThought.isReady = true;
 		}
 
@@ -51,8 +52,8 @@ Ext.application({
 		}
 		Globals.loadScript(getURL('/socket.io/static/socket.io.js'));
 
-		window.app = this;
-		g = this.getController('Google');
+		window.app = me;
+		g = me.getController('Google');
 
 
 		if(g.isHangout()){
