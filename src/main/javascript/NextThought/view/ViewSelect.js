@@ -61,7 +61,6 @@ Ext.define('NextThought.view.ViewSelect', {
 					{ xtype: 'container',
 						overflowX: 'hidden',
 						overflowY: 'scroll',
-//						reserveScrollbar: true,
 						id: 'search-results',
 						hideMode: 'display',
 						flex: 1 }

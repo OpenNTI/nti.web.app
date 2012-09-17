@@ -34,7 +34,7 @@ Ext.define('NextThought.view.Main', {
 	}
 
 }, function(){
-	if(Ext.getScrollbarSize(true).width > 2){
-		Ext.getBody().addCls('detected-scrollbars');
+	if(Ext.getScrollbarSize().width > 2){
+//		Ext.getBody().addCls('detected-scrollbars');
 	}
 });

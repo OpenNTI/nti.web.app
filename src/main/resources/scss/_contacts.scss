@@ -75,7 +75,7 @@ $over-color: #f4f3f3;
 	&.x-menu-item-over,
 	&.selection-item-over,
 	.selection-item-over &
-	{
+		{
 		img.nib{
 			opacity: 0.5;
 			display: block;
@@ -280,17 +280,21 @@ $over-color: #f4f3f3;
 			width: 110px;
 			text-align: center;
 
-		  	.x-tab-center {
-				height: 28px;
+			button {
+				.x-strict .x-ie9 &, & {
+					overflow: hidden;
+					height: 29px;
+				}
+			}
 
-				.x-tab-inner{
-				  &, &:first-of-type, &:last-of-type {
+			.x-tab-inner{
+				&, &:first-of-type, &:last-of-type {
 					text-align: center;
 					padding: 7px auto 8px auto !important;
 
-				  }
 				}
 			}
+
 		}
 	}
 
@@ -298,7 +302,7 @@ $over-color: #f4f3f3;
 
 
 	.disabled-contacts-view{
-	//	padding: 10px;
+		//	padding: 10px;
 		padding-top: 0px;
 		color: $secondary-grey;
 
@@ -311,17 +315,17 @@ $over-color: #f4f3f3;
 				padding-bottom: 3px;
 				font-size: 16px;
 				font-style: italic;
-			&:active,&.active {
-				background-position: -56px 0;
-				&:hover{
-					background-position: -84px 0;
+				&:active,&.active {
+					background-position: -56px 0;
+					&:hover{
+						background-position: -84px 0;
+					}
+				}
+
+				&:hover {
+					background-position: -28px 0;
 				}
 			}
-
-			&:hover {
-				background-position: -28px 0;
-			}
-		}
 		}
 
 

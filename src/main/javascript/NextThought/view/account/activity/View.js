@@ -12,10 +12,13 @@ Ext.define('NextThought.view.account.activity.View',{
 	ui: 'activity',
 	cls: 'activity-view',
 	plain: true,
+	overflowY: 'hidden',
+	overflowX: 'hidden',
 
 	layout: {
 		type: 'vbox',
-		align: 'stretch'
+		align: 'stretch',
+		reserveScrollbar: false
 	},
 
 	items: [
@@ -24,7 +27,8 @@ Ext.define('NextThought.view.account.activity.View',{
 			activitiesHolder: 1,
 			xtype: 'box',
 			flex: 1,
-			autoScroll: true,
+			overflowX: 'hidden',
+			overflowY: 'auto',
 			autoEl:{
 				cn:[{
 					cls:"activity loading",
