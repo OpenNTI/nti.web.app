@@ -283,7 +283,20 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		if(this.isReply){
 			this.activateReplyEditor();
 		}
-		this.up('window').down('note-responses').setReplies(this.record.children);
+
+
+		if(r.getReplyCount()){
+			this.loadReplies(r);
+		}
+	},
+
+
+	loadReplies: function(record){
+//		this.up('window').down('note-responses').setReplies(this.record.children);
+
+		Ext.Ajax.request({
+			url: record.getLink('replies')
+		});
 	},
 
 

@@ -336,7 +336,7 @@ Ext.define('NextThought.controller.UserData', {
 
 
 	shareWith: function(record){
-		var options = {};
+		var options = {}, w;
 
 		if (Ext.ComponentQuery.query('share-window[record]').length > 0) {
 			//already a share with window, they are modal, just don't do this:
