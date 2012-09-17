@@ -128,6 +128,7 @@ Ext.define('NextThought.view.Window',{
 		var s = window.getSelection(), r,
 			c = Ext.WindowManager.getActive();
 		if( c ){
+			c.fireEvent('deactivate');
 			if( !c || !c.modal ){ c = null; }
 			else if(s.rangeCount){
 				try {

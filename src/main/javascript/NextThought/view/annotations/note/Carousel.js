@@ -170,7 +170,9 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 		this.mon(this.up('window'),{
 			scope: this,
 			'editorActivated': updateOnEditorChange,
-			'editorDeactivated': updateOnEditorChange
+			'editorDeactivated': updateOnEditorChange,
+			'activate': function(){ if(me.keyMap){me.keyMap.enable();} },
+			'deactivate': function(){ if(me.keyMap){me.keyMap.disable();} }
 		});
 
 		this.keyMap = new Ext.util.KeyMap({
