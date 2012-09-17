@@ -280,10 +280,15 @@ $over-color: #f4f3f3;
 			width: 110px;
 			text-align: center;
 
-			.x-tab-inner{
-				&, &:first-of-type, &:last-of-type {
+		  	.x-tab-center {
+				height: 28px;
+
+				.x-tab-inner{
+				  &, &:first-of-type, &:last-of-type {
 					text-align: center;
 					padding: 7px auto 8px auto !important;
+
+				  }
 				}
 			}
 		}
