@@ -24,7 +24,6 @@ Ext.application({
 		'Google',
 		'Groups',
 		'Navigation',
-		'Library',
 		'Search',
 		'Session',
 		'State',

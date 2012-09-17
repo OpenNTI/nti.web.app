@@ -4,10 +4,13 @@ Ext.define('NextThought.store.PageItem',{
 		'NextThought.proxy.reader.Json'
 	],
 	model: 'NextThought.model.GenericObject',
+
 	autoLoad: false,
+
 	groupField: 'Class',
 	groupDir  : 'ASC',
 	proxy: {
+		url: 'tbd',
 		type: 'rest',
 		reader: {
 			type: 'nti',

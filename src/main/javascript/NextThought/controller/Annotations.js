@@ -3,10 +3,13 @@ Ext.define('NextThought.controller.Annotations', {
 
 	requires: [
 		'NextThought.cache.IdCache',
-		'NextThought.util.Sharing'
+		'NextThought.util.Sharing',
+		'NextThought.providers.Location'
 	],
 
 	models: [
+		'GenericObject',
+		'PageInfo',
 		'Highlight',
 		'Note',
 		'QuizQuestion',
@@ -16,13 +19,20 @@ Ext.define('NextThought.controller.Annotations', {
 		'Transcript'
 	],
 
+
+	stores: [
+		'PageItem'
+	],
+
 	views: [
+		'Views',
 		'annotations.Highlight',
 		'annotations.Note',
 		'annotations.note.Window',
-		'sharing.Window',
 		'content.Reader',
 		'definition.Window',
+		'sharing.Window',
+		'views.Library',
 		'whiteboard.Window'
 	],
 
@@ -35,17 +45,12 @@ Ext.define('NextThought.controller.Annotations', {
 	},
 
 	init: function() {
-
-		this.actionMap = {
-			'chat'  : this.replyAsChat,
-			'mute' : this.toggleMuteConversation,
-			'share' : this.shareWith
-		};
-
+		this.pageStores = {};
 
 		this.control({
 			'reader-panel':{
-				'share-with'	: this.actionMap.share,
+				'annotations-load': this.onAnnotationsLoad,
+				'share-with'	: this.shareWith,
 				'define'		: this.define,
 				'redact'		: this.redact,
 				'save-new-note' : this.saveNewNote,
@@ -74,12 +79,6 @@ Ext.define('NextThought.controller.Annotations', {
 				'chat': this.replyAsChat
 			},
 
-			'note-entry':{
-				'action': this.onNoteAction,
-				'load-transcript': this.onLoadTranscript,
-				'unmute': this.toggleMuteConversation
-			},
-
 
 			'share-window[record] button[action=save]':{
 				'click': this.onShareWithSaveClick
@@ -94,6 +93,47 @@ Ext.define('NextThought.controller.Annotations', {
 			}
 		},{});
 	},
+
+
+
+
+	onAnnotationsLoad: function(cmp, containerId, callback) {
+		var ps = NextThought.store.PageItem.create();
+
+		LocationProvider.currentPageStore = ps;
+		ps.proxy.url = LocationProvider.currentPageInfo.getLink(Globals.USER_GENERATED_DATA);
+		ps.on('load', function(){ cmp.objectsLoaded(ps.getBins(), callback); }, this, { single: true });
+		ps.load();
+
+		this.getController('Stream').containerIdChanged(containerId);
+	},
+
+
+	saveSharingPrefs: function(prefs, callback){
+		//TODO - check to see if it's actually different before save...
+		var pi = LocationProvider.currentPageInfo;
+
+		//get parent:
+		$AppConfig.service.getPageInfo(LocationProvider.getLineage(pi.getId()).last(),
+			function(topPi){
+				if (topPi){
+					pi.saveField('sharingPreference', {sharedWith: prefs}, function(){
+						//always happens if success only:
+						LocationProvider.updatePreferences(pi);
+						Ext.callback(callback, null, []);
+					});
+				}
+			},
+			function(){
+				console.error('failed to save default sharing');
+			},
+		this);
+
+
+	},
+
+
+
 
 	define: function(term, boundingScreenBox){
 
@@ -178,18 +218,6 @@ Ext.define('NextThought.controller.Annotations', {
 		});
 	},
 
-
-	onNoteAction: function(action, note){
-		var a = note.annotation,
-			rec = a.getRecord();
-
-		if(/delete/i.test(action)){
-			a.remove();
-		}
-		else if(this.actionMap.hasOwnProperty(action)){
-			this.actionMap[action].call(this, rec, note);
-		}
-	},
 
 
 	onLoadTranscript: function(record, cmp) {
@@ -299,40 +327,6 @@ Ext.define('NextThought.controller.Annotations', {
 		refs = Ext.Array.clone(record.get('references') || []);
 
 		this.getController('Chat').enterRoom(people, {ContainerId: cId, references: refs, inReplyTo: parent});
-	},
-
-
-	toggleMuteConversation: function(record, panel, unmute) {
-		var me = this,
-			data,
-			url = $AppConfig.userObject.getLink('edit');
-
-		if (unmute){
-			data = {unmute_conversation: record.get('OID')};
-		}
-		else {
-			data = {mute_conversation: record.get('OID')};
-		}
-
-		Ext.Ajax.request({
-			url: url,
-			jsonData: Ext.JSON.encode(data),
-			method: 'PUT',
-			scope: me,
-			callback: function(){ },
-			failure: function(){
-				console.error("mute fail", arguments);
-			},
-			success: function(r){
-				console.log('mute success', arguments);
-				if (unmute){
-					panel.enable();
-				}
-				else {
-					panel.disable();
-				}
-			}
-		});
 	},
 
 

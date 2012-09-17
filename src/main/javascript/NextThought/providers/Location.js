@@ -27,13 +27,9 @@ Ext.define('NextThought.providers.Location', {
 	},
 
 
-	getStoreId: function(ntiid){
-		return 'page-store:'+(ntiid||this.currentNTIID);
-	},
-
-
-	getStore: function(ntiid){
-		return Ext.getStore(this.getStoreId(ntiid));
+	getStore: function(){
+		function bad(){ console.error('There is no current page store'); }
+		return this.currentPageStore || { add: bad, getById: bad };
 	},
 
 
@@ -92,6 +88,7 @@ Ext.define('NextThought.providers.Location', {
 				return false;
 			}
 
+			delete me.currentPageStore;
 			me.resolvePageInfo(ntiid,finish);
 
 			me.currentNTIID = ntiid;

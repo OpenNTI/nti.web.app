@@ -209,11 +209,11 @@ Ext.define( 'NextThought.view.annotations.Base', {
 
 
 	savePhantom: function(callback){
-		var me = this;
+		var me = this, p;
 		if(!me.record.phantom){return;}
 		me.isSaving = true;
 
-		var p = LocationProvider.getPreferences();
+		p = LocationProvider.getPreferences();
 		p = p ? p.sharing : null;
 
 		if(p && this.allowShare){
