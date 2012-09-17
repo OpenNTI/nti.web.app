@@ -6,24 +6,7 @@ Ext.define('NextThought.controller.Application', {
 	
 	views: ['Main'],
 
-	statics: {
-		launchToken: {},
-
-		launch: function(){
-			try{
-				Ext.widget({xtype: 'master-view'});
-			}
-			catch(e1){
-				console.error('Loading View: ', Globals.getError(e1));
-			}
-			try{
-				Ext.getCmp('readerPanel').on('iframe-ready', Library.load, Library, {single: true});
-			}
-			catch(e2){
-				console.error('Loading Library: ', Globals.getError(e2));
-			}
-		}
-	},
+	launchToken: {},
 
 	init: function() {
 		this.application.registerInitializeTask(this.self.launchToken);
@@ -45,5 +28,22 @@ Ext.define('NextThought.controller.Application', {
 		}
 		this.application.finishInitializeTask(this.self.launchToken);
 
+	},
+
+
+	openViewport: function(){
+		try{
+			Ext.widget('master-view');
+		}
+		catch(e1){
+			console.error('Loading View: ', Globals.getError(e1));
+		}
+		try{
+			Ext.getCmp('readerPanel').on('iframe-ready', Library.load, Library, {single: true});
+		}
+		catch(e2){
+			console.error('Loading Library: ', Globals.getError(e2));
+		}
 	}
+
 });

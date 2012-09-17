@@ -44,7 +44,7 @@ Ext.define('NextThought.controller.Session', {
     login: function(app){
         function success(){
             app.fireEvent('session-ready');
-            NextThought.controller.Application.launch();
+            app.getController('Application').openViewport();
         }
 
         function showLogin(timedout){

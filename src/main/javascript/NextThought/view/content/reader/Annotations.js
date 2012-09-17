@@ -41,7 +41,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 
 
 	constructor: function(){
-		var me = this;
+		var me = this, c = NextThought.controller;
 		Ext.apply(me,{
 			annotations: {},
 			filter: null,
@@ -50,9 +50,13 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 
 		me.addEvents('share-with','create-note');
 
-		NextThought.controller.Annotations.events.on('new-note',this.onNoteCreated,this);
-		NextThought.controller.Annotations.events.on('new-redaction',this.onRedactionCreated,this);
-		NextThought.controller.Stream.registerChangeListener(me.onNotification, me);
+		this.mon(c.Annotations.events,{
+			scope: this,
+			'new-note':this.onNoteCreated,
+			'new-redaction':this.onRedactionCreated
+		});
+
+		c.Stream.registerChangeListener(me.onNotification, me);
 
 		me.on({
 			scope: this,

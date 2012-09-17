@@ -21,7 +21,7 @@ Ext.define('NextThought.controller.Stream', {
 
 	statics:{
 		eventName: 'changed',
-		evtRouter: Ext.create('Ext.util.Observable'),
+		evtRouter: new Ext.util.Observable(),
 
 		registerChangeListener: function(callback, scope){
 			this.evtRouter.on(this.eventName, callback, scope||window);

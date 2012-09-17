@@ -38,8 +38,6 @@ Ext.define('NextThought.controller.Annotations', {
 
 		this.actionMap = {
 			'chat'  : this.replyAsChat,
-			'edit'  : this.editNote,
-			'reply' : this.replyToNote,
 			'mute' : this.toggleMuteConversation,
 			'share' : this.shareWith
 		};
@@ -47,7 +45,6 @@ Ext.define('NextThought.controller.Annotations', {
 
 		this.control({
 			'reader-panel':{
-				'create-note'   : this.addNote,
 				'share-with'	: this.actionMap.share,
 				'define'		: this.define,
 				'redact'		: this.redact,
@@ -83,9 +80,6 @@ Ext.define('NextThought.controller.Annotations', {
 				'unmute': this.toggleMuteConversation
 			},
 
-			//'noteeditor button[action=save]':{ 'click': this.onSaveNote },
-			'noteeditor button[action=discuss]':{ 'click': this.onDiscussNote },
-			//'noteeditor button[action=cancel]':{ 'click': this.onCancelNote },
 
 			'share-window[record] button[action=save]':{
 				'click': this.onShareWithSaveClick
@@ -103,12 +97,12 @@ Ext.define('NextThought.controller.Annotations', {
 
 	define: function(term, boundingScreenBox){
 
-		if(this.definition){
+		if( this.definition ){
 			this.definition.close();
 			delete this.definition;
 		}
-		this.definition = Ext.widget({
-			xtype: 'definition-window',
+		this.definition = Ext.widget(
+			'definition-window',{
 			term: term,
 			pointTo: boundingScreenBox
 		}).show();
@@ -185,9 +179,8 @@ Ext.define('NextThought.controller.Annotations', {
 	},
 
 
-	onNoteAction: function(action, note, event){
-		var r = note.owner,
-			a = note.annotation,
+	onNoteAction: function(action, note){
+		var a = note.annotation,
 			rec = a.getRecord();
 
 		if(/delete/i.test(action)){
@@ -199,7 +192,7 @@ Ext.define('NextThought.controller.Annotations', {
 	},
 
 
-	onLoadTranscript: function(record, cmp, eOpts) {
+	onLoadTranscript: function(record, cmp) {
 		var model = this.getModel('Transcript'),
 			id = record.get('RoomInfo').getId();
 
@@ -217,34 +210,7 @@ Ext.define('NextThought.controller.Annotations', {
 	},
 
 
-	onDiscussNote: function(btn, event){
-		var win = btn.up('window'),
-			record = win.record,
-			me = this;
-
-		record.on('updated', function(r){
-				r.on('updated', function(r){
-						me.replyAsChat(r);
-					},
-					this,
-					{single:true});
-
-				me.shareWith(r, true);
-			},
-			this,
-			{single: true});
-
-		//start the process
-		this.onSaveNote(btn, event);
-
-
-		//1) present sharewith selector
-		//2) save note
-		//3) open chat with saved with group
-	},
-
-
-	saveNewNote: function(body, range, shareWith, style, callback, opts){
+	saveNewNote: function(body, range, shareWith, style, callback){
 		//check that our inputs are valid:
 		if (!body || (Ext.isArray(body) && body.length < 1) || !range){
 			console.error('Note creating a note, either missing content or range.');
@@ -265,7 +231,7 @@ Ext.define('NextThought.controller.Annotations', {
 		}
 
 		//define our note object:
-		noteRecord = Ext.create('NextThought.model.Note', {
+		noteRecord = this.getNoteModel().create({
 			applicableRange: rangeDescription,
 			body: body,
 			sharedWith: shareWith,
@@ -318,7 +284,8 @@ Ext.define('NextThought.controller.Annotations', {
 	},
 
 	replyAsChat: function(record) {
-		var top = record;
+		var top = record,
+			people, cId, parent, refs;
 
 		//go to the top, it has the info we need:
 		while(top.parent) {
@@ -326,16 +293,12 @@ Ext.define('NextThought.controller.Annotations', {
 		}
 
 
-		var people = Ext.Array.unique([record.get('Creator')].concat(top.get('sharedWith')).concat(top.get('Creator'))),
-			cId = record.get('ContainerId'),
-			parent = record.get('NTIID'),
-			refs = Ext.Array.clone(record.get('references') || []);
+		people = Ext.Array.unique([record.get('Creator')].concat(top.get('sharedWith')).concat(top.get('Creator')));
+		cId = record.get('ContainerId');
+		parent = record.get('NTIID');
+		refs = Ext.Array.clone(record.get('references') || []);
 
 		this.getController('Chat').enterRoom(people, {ContainerId: cId, references: refs, inReplyTo: parent});
-	},
-
-	replyToNote: function(record){
-		this.editNote(AnnotationUtils.noteToReply(record));
 	},
 
 
@@ -391,20 +354,6 @@ Ext.define('NextThought.controller.Annotations', {
 		Ext.widget(Ext.apply({xtype: 'share-window',record: record}, options)).show();
 	},
 
-	editNote: function(record){
-		Ext.widget({xtype:'noteeditor', record: record}).show();
-	},
-
-	addNote: function(range){
-		if(!range) {
-			return;
-		}
-
-		var note = AnnotationUtils.selectionToNote(range, this.getReader().getDocumentElement());
-		note.set('ContainerId', LocationProvider.currentNTIID);
-
-		this.editNote(note);
-	},
 
 	redact: function(record){
 		if(!record) {

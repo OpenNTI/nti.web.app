@@ -55,15 +55,12 @@ Ext.define('NextThought.controller.Chat', {
 
 		this.control({
 
-			'noteeditor button[action=send]':{ 'click': this.sendComposed },
-
 			'chat-log-view':{'approve': function(ids){this.approveMessages(ids);}},
 			'chat-log-view button[action]':{'click': this.toolClicked},
 			'chat-log-view tool[action]':{'click': this.toolClicked},
 
 			'chat-view chat-entry' : {
 				//'classroom': this.classroom,
-				//'compose': this.compose,
 				'send': this.send,
 				'send-whiteboard': this.sendWhiteboard
 			},
@@ -289,47 +286,6 @@ Ext.define('NextThought.controller.Chat', {
 
 
 	/* CLIENT EVENTS */
-	compose: function(textField, replyToId, channel, recipients){
-		var room = ClassroomUtils.getRoomInfoFromComponent(textField),
-			record = Ext.create('NextThought.model.MessageInfo',{
-			inReplyTo: replyToId,
-			channel: channel,
-			recipients: recipients
-		}),
-			win = Ext.widget({
-				xtype: 'noteeditor',
-				record: record,
-				room: room,
-				closable: true,
-				closeAction: 'destroy',
-				title: 'Compose Message',
-				modal: true,
-				bbar: [
-					'->',
-					{ xtype: 'button', text: 'Send',	action: 'send' },
-					{ xtype: 'button', text: 'Cancel',	action: 'cancel' }
-				]});
-
-		win.show();
-
-	},
-
-
-	sendComposed: function(btn){
-		var win = btn.up('window'),
-			rec = win.record,
-			room = win.room;
-
-		this.postMessage(
-				room,
-				win.getValue(),
-				rec.get('inReplyTo'),
-				rec.get('channel'),
-				rec.get('recipients'));
-
-		win.close();
-	},
-
 
 	send: function(f, mid, channel, recipients) {
 		var room = ClassroomUtils.getRoomInfoFromComponent(f),
