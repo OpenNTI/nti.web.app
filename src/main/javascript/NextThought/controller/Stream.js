@@ -111,7 +111,7 @@ Ext.define('NextThought.controller.Stream', {
 		var me = this,
 			item = change.get('Item'),
 			cid = change.getItemValue('ContainerId'),
-			libPageStore = this.getController('Library').pageStores[cid];
+			pageStore;
 
 		Ext.each(LocationProvider.getLineage(cid),function(cid){
 			me.getStoreForStream(cid,
@@ -132,15 +132,14 @@ Ext.define('NextThought.controller.Stream', {
 		this.self.fireChange(change);
 
 		//add it to the page items store I guess:
-		if (libPageStore){
-			if(!/deleted/i.test(change.get('ChangeType'))){
-				libPageStore.add(item);
-			}
-			else {
-				item = libPageStore.getById(item.getId());
-				if(item){
-					libPageStore.remove(item);
-				}
+		pageStore = LocationProvider.getStore();
+		if(!/deleted/i.test(change.get('ChangeType'))){
+			pageStore.add(item);
+		}
+		else {
+			item = pageStore.getById(item.getId());
+			if(item){
+				pageStore.remove(item);
 			}
 		}
 	}

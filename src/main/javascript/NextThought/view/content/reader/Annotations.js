@@ -50,7 +50,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 
 		me.addEvents('share-with','create-note');
 
-		this.mon(c.Annotations.events,{
+		this.mon(c.UserData.events,{
 			scope: this,
 			'new-note':this.onNoteCreated,
 			'new-redaction':this.onRedactionCreated

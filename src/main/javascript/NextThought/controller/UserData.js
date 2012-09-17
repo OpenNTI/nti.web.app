@@ -1,4 +1,4 @@
-Ext.define('NextThought.controller.Annotations', {
+Ext.define('NextThought.controller.UserData', {
 	extend: 'Ext.app.Controller',
 
 	requires: [
@@ -45,7 +45,6 @@ Ext.define('NextThought.controller.Annotations', {
 	},
 
 	init: function() {
-		this.pageStores = {};
 
 		this.control({
 			'reader-panel':{
@@ -99,11 +98,15 @@ Ext.define('NextThought.controller.Annotations', {
 
 	onAnnotationsLoad: function(cmp, containerId, callback) {
 		var ps = NextThought.store.PageItem.create();
-
 		LocationProvider.currentPageStore = ps;
+
 		ps.proxy.url = LocationProvider.currentPageInfo.getLink(Globals.USER_GENERATED_DATA);
 		ps.on('load', function(){ cmp.objectsLoaded(ps.getBins(), callback); }, this, { single: true });
-		ps.load();
+		ps.load({
+			params: {
+				filter:'TopLevel'
+			}
+		});
 
 		this.getController('Stream').containerIdChanged(containerId);
 	},
@@ -167,7 +170,7 @@ Ext.define('NextThought.controller.Annotations', {
 
 		if (saveAsDefault){
 			//update default sharing setting if we have a shareWith:
-			me.getController('Library').saveSharingPrefs(v, function(){});
+			me.saveSharingPrefs(v, function(){});
 		}
 	},
 
@@ -301,8 +304,10 @@ Ext.define('NextThought.controller.Annotations', {
 					rec = success ? record: null,
 					store;
 				if (success){
-					store = this.getController('Library').pageStores[rec.get('ContainerId')];
-					if (store){store.add(rec);}
+					store = LocationProvider.getStore();
+					if( store && store.containerId === record.get('containerId') ){
+						store.add(rec);
+					}
 					this.self.events.fireEvent('new-note', rec);
 					(rec.parent?rec:recordRepliedTo).fireEvent('child-added',rec);
 				}

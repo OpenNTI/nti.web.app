@@ -15,7 +15,7 @@ Ext.application({
 
 	controllers: [
 		'Account',
-		'Annotations',
+		'UserData',
 		'Application',
 		'Assessment',
 		'Chat',

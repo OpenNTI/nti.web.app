@@ -27,9 +27,18 @@ Ext.define('NextThought.providers.Location', {
 	},
 
 
+	clearStore: function(){
+		var s = this.currentPageStore;
+		delete this.currentPageStore;
+		if(s){
+			s.clearListeners();
+			s.removeAll(true);
+		}
+	},
+
 	getStore: function(){
 		function bad(){ console.error('There is no current page store'); }
-		return this.currentPageStore || { add: bad, getById: bad };
+		return this.currentPageStore || { add: bad, getById: bad, remove: bad };
 	},
 
 
@@ -88,7 +97,7 @@ Ext.define('NextThought.providers.Location', {
 				return false;
 			}
 
-			delete me.currentPageStore;
+			me.clearStore();
 			me.resolvePageInfo(ntiid,finish);
 
 			me.currentNTIID = ntiid;
