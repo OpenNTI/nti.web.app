@@ -108,7 +108,7 @@ Ext.define('NextThought.view.content.reader.Content',{
 	parseHTML: function(request){
 		function toObj(a,k,v){
 			var i=a.length-1, o = {};
-			for(; i>=0; i--){ o[k.exec(a[i])[2]] = v.exec(a[i])[1]; }
+			for(i; i>=0; i--){ o[k.exec(a[i])[2]] = v.exec(a[i])[1]; }
 			return o;
 		}
 
@@ -118,7 +118,7 @@ Ext.define('NextThought.view.content.reader.Content',{
 
 		function cssObj(m){
 			var i = m.length-1, k=/href="([^"]*)"/i, o, c = {};
-			for(; i>=0; i--){
+			for(i; i>=0; i--){
 				o = k.test(m[i]) ? basePath + k.exec(m[i])[1] : m[i];
 				c[o] = {};
 				if(!rc[o]) {
