@@ -686,12 +686,6 @@ Ext.define('NextThought.controller.Chat', {
 			cid = m.get('ContainerId'),
 			w = this.getChatWindow(cid);
 
-		if (this.getClassroom().isClassroom(m) &&
-			this.getClassroom().onMessage(m, {})){
-			return;
-		}
-
-
 		if(!w) {
 			this.rebuildWindow(cid, function(){
 				me.onMessage.apply(me,args);
