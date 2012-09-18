@@ -94,7 +94,7 @@ Ext.define('NextThought.providers.Location', {
 		setTimeout(function(){
 			if(!me.fireEvent('navigate',ntiid)){
 				finish();
-				return false;
+				return;
 			}
 
 			me.clearStore();
@@ -193,9 +193,7 @@ Ext.define('NextThought.providers.Location', {
 		var result = null;
 		Library.each(function(o){
 			result = Library.resolve( Library.getToc( o ), o, containerId);
-			if (result) {
-				return false;
-			}
+			return !result;
 		});
 
 		return result;
@@ -225,12 +223,13 @@ Ext.define('NextThought.providers.Location', {
 
 
 	getSortIndexes: function(ntiid){
-		var leaf = this.find(ntiid||this.currentNTIID) || {},
+		var noLeaf = {},
+			leaf = this.find(ntiid||this.currentNTIID) || noLeaf,
 			node = leaf.location,
 			indexes = [],
 			id, i, cn, j, t;
 
-		if(leaf === {}){ return [0, Infinity];}
+		if(leaf === noLeaf){ return [0, Infinity];}
 
 		while(node){
 			id = node.getAttribute? node.getAttribute('ntiid') : null;
@@ -243,7 +242,7 @@ Ext.define('NextThought.providers.Location', {
 						indexes.push(j);
 						break;
 					}
-					if(t) j++;
+					if(t){ j++; }
 					i++;
 				}
 			}
@@ -254,8 +253,8 @@ Ext.define('NextThought.providers.Location', {
 	},
 
 	getContentRoot: function(ntiid){
-		var bookId = LocationProvider.getLineage(ntiid||this.currentNTIID).last();
-		var title = Library.getTitle( bookId );
+		var bookId = LocationProvider.getLineage(ntiid||this.currentNTIID).last(),
+			title = Library.getTitle( bookId );
 
 		return title? title.get('root') : null;
 	},
@@ -363,7 +362,7 @@ Ext.define('NextThought.providers.Location', {
 					location = target? target.location : null,
 
 					label = location? location.getAttribute('label') : r.getAttribute('title'),
-					href = (location? location : r ).getAttribute('href');
+					href = (location || r ).getAttribute('href');
 
 				if(!map[id]){
 					if(!info || !info.title){
@@ -382,7 +381,7 @@ Ext.define('NextThought.providers.Location', {
 					};
 				}
 			}
-			while(!!(r = r.nextSibling));
+			while(Boolean(r = r.nextSibling));
 
 		},this);
 
@@ -418,7 +417,7 @@ Ext.define('NextThought.providers.Location', {
 			}).show();
 		}
 		else if(m.type==='video'){
-			Ext.create('widget.video-window', {
+			Ext.widget('widget.video-window', {
 				title: m.label,
 				modal: true,
 				src:[{
