@@ -21,3 +21,45 @@
 	}
 
 }
+
+.share-menu {
+  	.x-menu-item{
+		&.share-with  {
+		  	padding-left: 30px;
+			&.current,
+			&.selection-item-over,
+			&.x-menu-item-over,
+			&.x-menu-item-active {
+				background-color: $primary-blue;
+				color: white !important;
+			}
+		}
+
+
+		&.share-with::after {
+		 	content: ' ';
+		  	width: 16px;
+		  	height: 16px;
+		    position: absolute;
+		  	top: 8px;
+		  	left: 8px;
+		  	background: url(../images/spr_share_options.png) 0 2px no-repeat;
+		}
+
+		&.onlyme-menu-item::after {
+			background-position-x: -48px;
+		}
+		&.community-menu-item::after {
+		  	background-position-x: -17px;
+		}
+		&.contact-menu-item::after {
+		  	background-position-x: -32px;
+		}
+		&.custom-menu-item::after {
+		  	background-position-x: -1px;
+		}
+		&.share-with:hover::after {
+		  background-position-y: -14px;
+		}
+	}
+}

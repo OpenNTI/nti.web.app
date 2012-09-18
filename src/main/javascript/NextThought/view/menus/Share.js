@@ -15,14 +15,11 @@ Ext.define('NextThought.view.menus.Share',{
 	border: false,
 	hideMode: 'display',
 	minWidth: 150,
+    cls: 'share-menu',
 
 	defaults: {
 		ui: 'nt-menuitem',
-		xtype: 'menucheckitem',
-		plain: true,
-		listeners: {
-			'beforecheckchange':function(item, checked){ return checked || item.allowUncheck!==false; }
-		}
+		plain: true
 	},
 
 	initComponent: function(){
@@ -109,13 +106,13 @@ Ext.define('NextThought.view.menus.Share',{
 		var sharedWith = this.resolveValue(value),
 			items = [],
 			communities = $AppConfig.userObject.getCommunities(),
-			customChecked = false,
-			onlyMeChecked,
+			customSelected = false,
+			onlyMeSelected,
 			everyone = UserRepository.getTheEveryoneEntity();
 
 		this.custom.setValue(sharedWith);
 
-		onlyMeChecked = sharedWith.length === 0;
+		onlyMeSelected = sharedWith.length === 0;
 
 //		items.push({
 //			cls: 'share-with everyone',
@@ -123,21 +120,21 @@ Ext.define('NextThought.view.menus.Share',{
 //			allowUncheck:false,
 //			isEveryone:true,
 //			record: everyone,
-//			checked: Ext.Array.contains(sharedWith, everyone.get('Username'))
+//			selected: Ext.Array.contains(sharedWith, everyone.get('Username'))
 //		});
 //		Ext.Array.remove(sharedWith, everyone.get('Username'));
 
 		items.push({
-			cls: 'share-with only-me',
+			cls: 'share-with only-me onlyme-menu-item',
 			text: 'Only Me',
 			allowUncheck:false,
 			isMe: true,
 			isGroup: true,
-			checked: onlyMeChecked
+            selected: onlyMeSelected
 		});
 
 		if(communities.length>0){
-			items.push({ xtype: 'labeledseparator', text: 'Communities', cls: 'doublespaced' });
+			//items.push({ xtype: 'labeledseparator', text: 'Communities'});
 			Ext.each(communities,function(c){
 				var id=c.get('Username'),
 					chkd =  Ext.Array.contains(sharedWith, id);
@@ -146,16 +143,20 @@ Ext.define('NextThought.view.menus.Share',{
 					sharedWith = Ext.Array.remove(sharedWith, id);
 				}
 				items.push({
-					cls: 'group-filter',
+					cls: 'group-filter community-menu-item',
 					text: c.getName(),
 					record: c,
 					isGroup: true,
-					checked: chkd
+					selected: chkd
 				});
 			});
 		}
 
-		items.push({ xtype: 'labeledseparator', text: 'Groups', cls: 'doublespaced' });
+        //add the custom thing
+        items.push({ cls: 'share-with custom custom-menu-item', text: 'Custom', allowUncheck:false, isCustom:true});
+
+        //add any groups
+        items.push({ xtype: 'labeledseparator', text: 'Contacts'});
 		this.store.each(function(v){
 			var id=v.get('Username'),
 				chkd =  Ext.Array.contains(sharedWith, id);
@@ -165,23 +166,21 @@ Ext.define('NextThought.view.menus.Share',{
 			}
 
 			items.push({
-				cls: 'share-with',
+				cls: 'share-with contact-menu-item',
 				text: v.getName(),
 				record: v,
 				isGroup: true,
-				checked: chkd
+                selected: chkd
 			});
 		});
 
-		if (sharedWith.length) {
-			Ext.each(items, function(i){
-				delete i.checked;
-			});
-			customChecked = true;
-		}
-
-		items.push({xtype: 'menuseparator'});
-		items.push({ cls: 'share-with custom', text: 'Custom', allowUncheck:false, isCustom:true, checked: customChecked });
+        //if nothing left, set custom
+        if (sharedWith.length) {
+            Ext.each(items, function(i){
+                if (i.isCustom){i.selected = true;}
+                else {delete i.selected;}
+            });
+        }
 
 		this.add(items);
 	},
@@ -190,30 +189,11 @@ Ext.define('NextThought.view.menus.Share',{
 	handleClick: function(menu, item){
 		if(!item){return;}
 
-		var c = item.checked,
-			everyone = this.query('[isEveryone]')[0],
-			me = this.query('[isMe]')[0],
-			custom = this.query('[isCustom]')[0];
-
-
-		if(item.isEveryone){
-			Ext.each(this.query('[isGroup]'),function(o){
-				o.setChecked(false,true);
-			});
-			custom.setChecked(false, true);
-			me.setChecked(false, true);
-		}
-		else if(item.isMe || item.isCustom){
-			Ext.each(this.query('menucheckitem'),function(o){
-				o.setChecked(false,true);
-			});
-			item.setChecked(c, true);
-		}
-		else {
-//			everyone.setChecked(false, true);
-			me.setChecked(false, true);
-			custom.setChecked(false, true);
-		}
+        //mark others as unselected, selection as selected
+        Ext.each(this.items.items, function(i){
+            delete i.selected;
+        });
+        item.selected = true;
 
 		if (item.isCustom){
 			this.custom.show();
@@ -223,8 +203,8 @@ Ext.define('NextThought.view.menus.Share',{
 			this.custom.setValue(this.getValue());
 		}
 
-
 		this.updateValue(this.getValue());
+        menu.hide();
 	},
 
 
@@ -238,9 +218,10 @@ Ext.define('NextThought.view.menus.Share',{
 	getLabel: function(){
 		var result = [];
 
-		Ext.each(this.query('[checked]'), function(c){
+		Ext.each(this.query('[selected=true]'), function(c){
 			result.push(c.text);
 		});
+
 
 		return result.join(', ');
 	},
@@ -251,15 +232,15 @@ Ext.define('NextThought.view.menus.Share',{
 			c = this.query('[isCustom]')[0],
 			result = [];
 
-		if (m.checked){
+		if (m.selected){
 			return [];
 		}
-		else if (c.checked) {
+		else if (c.selected) {
 			return this.custom.getValue();
 		}
 
 
-		Ext.each(this.query('[checked]'), function(c){
+		Ext.each(this.query('[selected=true]'), function(c){
 			result.push(c.record.get('Username'));
 		});
 		return result;
