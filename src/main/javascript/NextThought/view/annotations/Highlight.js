@@ -199,6 +199,9 @@ Ext.define('NextThought.view.annotations.Highlight', {
             this.content, range, this.compElements.first().getStyle('background-color'),
             [leftOffset, topOffset]);
 
+
+        this.range = range;
+
 		return boundingTop || this.resolveVerticalLocation();
 	},
 
