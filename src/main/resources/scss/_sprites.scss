@@ -1,0 +1,39 @@
+@mixin dropdown-share-menu-sprite {
+	background: url(../images/spr_share_options.png);
+}
+@mixin sprite-lock {
+	width: 9px;
+	height: 11px;
+	background-position: -48px -2px;
+}
+@mixin sprite-lock-active {
+	@include sprite-lock;
+	background-position: -48px -17px;
+}
+@mixin sprite-globe {
+	width: 12px;
+	height: 12px;
+	background-position: -17px -2px;
+}
+@mixin sprite-globe-active {
+	@include sprite-globe;
+	background-position: -17px -17px;
+}
+@mixin sprite-groups {
+	width: 15px;
+	height: 10px;
+	background-position: -32px -2px;
+}
+@mixin sprite-groups-active {
+	@include sprite-groups;
+	background-position: -32px -17px;
+}
+@mixin sprite-gear {
+	width: 13px;
+	height: 13px;
+	background-position: -2px -2px;
+}
+@mixin sprite-gear-active {
+	@include sprite-gear;
+	background-position: -2px -17px;
+}

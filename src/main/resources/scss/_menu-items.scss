@@ -23,9 +23,9 @@
 }
 
 .share-menu {
-  	.x-menu-item{
+	.x-menu-item{
 		&.share-with  {
-		  	padding-left: 30px;
+			padding-left: 30px;
 			&.current,
 			&.selection-item-over,
 			&.x-menu-item-over,
@@ -37,29 +37,44 @@
 
 
 		&.share-with::after {
-		 	content: ' ';
-		  	width: 16px;
-		  	height: 16px;
-		    position: absolute;
-		  	top: 8px;
-		  	left: 8px;
-		  	background: url(../images/spr_share_options.png) 0 2px no-repeat;
+			@include dropdown-share-menu-sprite;
+			content: ' ';
+			top: 0;
+			left: 0;
+			position: absolute;
 		}
 
 		&.onlyme-menu-item::after {
-			background-position-x: -48px;
+			top: 12px;
+			left: 12px;
+			@include sprite-lock;
+		}
+		&.onlyme-menu-item:hover::after {
+			@include sprite-lock-active;
 		}
 		&.community-menu-item::after {
-		  	background-position-x: -17px;
+			top: 8px;
+			left: 11px;
+			@include sprite-globe;
+		}
+		&.community-menu-item:hover::after {
+			@include sprite-globe-active;
 		}
 		&.contact-menu-item::after {
-		  	background-position-x: -32px;
+			top: 13px;
+			left: 10px;
+			@include sprite-groups;
+		}
+		&.contact-menu-item:hover::after {
+			@include sprite-groups-active;
 		}
 		&.custom-menu-item::after {
-		  	background-position-x: -1px;
+			top: 11px;
+			left: 11px;
+			@include sprite-gear;
 		}
-		&.share-with:hover::after {
-		  background-position-y: -14px;
+		&.custom-menu-item:hover::after {
+			@include sprite-gear-active;
 		}
 	}
 }
