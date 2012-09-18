@@ -182,7 +182,8 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 			defaults: {ui: 'nt-annotaion', plain: true }
 		});
 
-		if(/^\w+$/i.test(text)){//is it a word
+        if(/^\w+$|^\w+\s+\w+$/i.test(text)){//it is one or two words
+		//if(/^\w+$/i.test(text)){//is it a word
 			menu.add({
 				text: 'Define...',
 				handler:function(){

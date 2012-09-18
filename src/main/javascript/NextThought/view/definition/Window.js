@@ -27,7 +27,7 @@ Ext.define('NextThought.view.definition.Window', {
 		}
 	},
 
-	url: '/dictionary/',
+	fallbackURL: '/dictionary/',
 	xslUrl: '/dictionary/static/style.xsl',
 
 	initComponent: function(){
@@ -108,8 +108,13 @@ Ext.define('NextThought.view.definition.Window', {
 
 
 	queryDefinition: function(cb, scope){
+        var u = LocationProvider.currentPageInfo.getLink('Glossary');
+
+        if (!u){u=this.fallbackURL;}
+        else{u+='/';}
+
 		Ext.Ajax.request({
-			url: getURL(this.url + encodeURIComponent(this.term)),
+			url: getURL(u + encodeURIComponent(this.term)),
 			async: true,
 			scope: this,
 			callback: function(q,s,r){
