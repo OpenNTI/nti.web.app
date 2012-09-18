@@ -178,6 +178,11 @@ Ext.define('NextThought.util.Annotations',{
 
         ctx = Ext.fly(canvas).dom.getContext('2d');
         ctx.fillStyle = backgroundColor;
+
+        if (ctx.fillStyle === '#000000' || !backgroundColor) {
+            return boundingTop;
+        }
+
         for(; i>=0; i--){
             r = s[i];
 
