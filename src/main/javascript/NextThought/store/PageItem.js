@@ -66,7 +66,7 @@ Ext.define('NextThought.store.PageItem',{
 
 
 	getItems: function(otherBins){
-		var bins = otherBins||this.getBins(),
+		var bins = otherBins||this.getBins()|| {},
 			tree = this.buildThreads(bins);
 
 		return Ext.Object.getValues(tree).concat(bins.Highlight||[]).concat(bins.Redaction||[]);

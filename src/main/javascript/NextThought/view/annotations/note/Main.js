@@ -285,12 +285,8 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		}
 
 
-		if(r.getReplyCount()){
-			this.loadReplies(r);
-		}
-		else {
-			me.up('window').down('note-responses').removeAll(true);
-		}
+		me.up('window').down('note-responses').removeAll(true);
+		this.loadReplies(r);
 	},
 
 
