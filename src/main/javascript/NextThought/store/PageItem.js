@@ -23,6 +23,14 @@ Ext.define('NextThought.store.PageItem',{
 	},
 
 
+	GETTERS : {
+		'Highlight': function(r){return r;},
+		'Note': function(r){return r;},
+		'TranscriptSummary': function(r){return r.get('RoomInfo');},
+		'QuizResult': function(r){return r;}
+	},
+
+
 	constructor: function(){
 		var r = this.callParent(arguments);
 
@@ -44,15 +52,118 @@ Ext.define('NextThought.store.PageItem',{
 	getBins: function(){
 		var groups = this.getGroups(),
 			bins = {},
-			k;
+			k,b = null;
 
 		for(k in groups){
 			if(groups.hasOwnProperty(k)) {
-				bins[groups[k].name] = groups[k].children;
+				b = groups[k].name;
+				bins[b] = Ext.Array.sort(groups[k].children,Globals.SortModelsBy(k,this.GETTERS[b]));
 			}
 		}
 
-		return bins;
+		return b ? bins : null;
+	},
+
+
+	getItems: function(otherBins){
+		var bins = otherBins||this.getBins(),
+			tree = this.buildThreads(bins);
+
+		return Ext.Object.getValues(tree).concat(bins.Highlight||[]).concat(bins.Redaction||[]);
+	},
+
+
+	buildThreads: function(bins){
+		var tree = {};
+		if(bins){
+			Ext.Object.each(bins,function(k,o){
+				if(o && o[0].isThreadable){
+					this.buildItemTree(o, tree); } }, this);
+
+			this.prune(tree);
+		}
+
+		return tree;
+	},
+
+
+
+	buildItemTree: function(list, tree){
+		var me = this;
+
+		Ext.each(list, function buildTree(r){
+			var g = me.GETTERS[r.getModelName()](r),
+					oid = g.getId(),
+					parent = g.get('inReplyTo'),
+					p;
+
+
+			r.children = r.children || [];
+
+			if(!tree.hasOwnProperty(oid)) {
+				tree[oid] = r;
+			}
+
+			if(parent){
+				p = tree[parent];
+				if(!p) {
+					p = (tree[parent] = getID(parent));
+				}
+				if(!p){
+					p = (tree[parent] = AnnotationUtils.replyToPlaceHolder(g));
+					buildTree(p);
+				}
+
+				p.children = p.children || [];
+				p.children.push(r);
+
+				r.parent = p;
+			}
+		});
+
+		function getID(id) {
+			var r = null,
+					f = function(o)
+					{
+						if( o && o.get && o.getId() === id ) {
+							r = o;
+							return false;
+						}
+						return true;
+					};
+			Ext.each(list,f);
+			if( !r ) {
+				Ext.each(tree,f);
+			}
+			return r;
+		}
+	},
+
+
+	prune: function(tree){
+
+		function canPrune(o){
+			return o!==null && (!o.parent && o.placeHolder);
+		}
+
+		function needsPruning(){
+			var k;
+			for(k in tree){ if(tree.hasOwnProperty(k) && canPrune(tree[k])) { return true; } }
+			return false;
+		}
+
+		function prune(k,o){
+			if(!canPrune(o)) { return; }
+			delete tree[k];
+			Ext.each(o.children, function(c){
+				delete c.parent;
+				c.pruned = true;
+			});
+		}
+
+		while(needsPruning()){
+			Ext.Object.each(tree, prune);
+		}
 	},
 
 

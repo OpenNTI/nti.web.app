@@ -29,6 +29,7 @@ Ext.define('NextThought.model.Note', {
 	],
 
 
+	isThreadable: true,
 	canReply: true,
 
 	fields: [

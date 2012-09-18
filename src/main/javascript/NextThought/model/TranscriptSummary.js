@@ -5,6 +5,8 @@ Ext.define('NextThought.model.TranscriptSummary', {
 		{ name: 'Contributors', type: 'auto' }
 	],
 
+//	isThreadable: true,
+
 	getId: function(){
 		try {
 			return this.get('RoomInfo').getId();

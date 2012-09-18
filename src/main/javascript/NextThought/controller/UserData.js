@@ -101,7 +101,11 @@ Ext.define('NextThought.controller.UserData', {
 		LocationProvider.currentPageStore = ps;
 
 		ps.proxy.url = LocationProvider.currentPageInfo.getLink(Globals.USER_GENERATED_DATA);
-		ps.on('load', function(){ cmp.objectsLoaded(ps.getBins(), callback); }, this, { single: true });
+		ps.on('load', function(){
+				var bins = ps.getBins();
+				cmp.objectsLoaded(ps.getItems(bins), bins, callback);
+			}, this, { single: true });
+
 		ps.load({
 			params: {
 				filter:'TopLevel'

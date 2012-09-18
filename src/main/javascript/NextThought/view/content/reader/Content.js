@@ -78,7 +78,6 @@ Ext.define('NextThought.view.content.reader.Content',{
 			console.log('setting content...finished');
 			me.relayout();
 			me.el.repaint();
-			Ext.callback(callback,null,[me]);
 			me.fireEvent('loaded', containerId);
 		}
 
@@ -91,6 +90,8 @@ Ext.define('NextThought.view.content.reader.Content',{
 		this.applyBodyStyles(
 				resp.responseText.match(/<body([^>]*)>/i),
 				this.buildPath(resp.request.options.url));
+
+		Ext.callback(callback,null,[me]);
 
 		console.log('setting content... set, loading annotations');
 		//containerId = Ext.util.Format.htmlDecode(me.getContainerId()); //handle apostrophe

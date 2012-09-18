@@ -292,11 +292,20 @@ Ext.define('NextThought.view.annotations.note.Main',{
 
 
 	loadReplies: function(record){
-//		this.up('window').down('note-responses').setReplies(this.record.children);
+		var me = this,
+			store = NextThought.store.PageItem.create(),
+			responses = me.up('window').down('note-responses');
 
-		Ext.Ajax.request({
-			url: record.getLink('replies')
-		});
+		me.mask();
+
+		function setReplies(){
+			responses.setReplies(store.getItems());
+			me.unmask();
+		}
+
+		store.proxy.url = record.getLink('replies');
+		store.on('load', setReplies, me, { single: true });
+		store.load({});
 	},
 
 
