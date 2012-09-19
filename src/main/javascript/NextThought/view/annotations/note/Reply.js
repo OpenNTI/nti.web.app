@@ -103,8 +103,7 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 		var t = e.getTarget('img.whiteboard-thumbnail'), guid = t.parentNode.getAttribute('id');
 		console.log(guid);
 		if(t && this.readOnlyWBsData[guid]){
-			var w = Ext.widget({ xtype: 'wb-window', height: '75%', width: '50%', value: this.readOnlyWBsData[guid], readonly: true});
-			w.show();
+			Ext.widget('wb-window', {height: '75%', width: '50%', value: this.readOnlyWBsData[guid], readonly: true}).show();
 		}
 	},
 
@@ -182,7 +181,8 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 				}
 				me.text.update(text);
 				me.text.select('a[href]',true).set({target:'_blank'});
-				me.updateLayout();
+				//TODO: actually detect when the whiteboard images finish loading and then run updateLayout instead of just arbitrarily setting a timeout.
+				Ext.defer(me.updateLayout,100,me);
 			}, this, function(id,data){
 				this.readOnlyWBsData[id] = data;
 				console.log("whiteboard id: ", id);

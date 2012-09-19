@@ -250,7 +250,6 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		try {
 			r.compileBodyContent(function(text){
 				var search = this.up('window').getSearchTerm(), re;
-				console.log('search?', search);
 				if(search){
 					search = Ext.String.htmlEncode( search );
 					re = new RegExp(['(\\>{0,1}[^\\<\\>]*?)(',RegExp.escape( search ),')([^\\<\\>]*?\\<{0,1})'].join(''), 'ig');
@@ -259,6 +258,8 @@ Ext.define('NextThought.view.annotations.note.Main',{
 
 				this.text.update(text);
 				this.text.select('a[href]',true).set({target:'_blank'});
+				//TODO: actually detect when the whiteboard images finish loading and then run updateLayout instead of just arbitrarily setting a timeout.
+				Ext.defer(me.updateLayout,100,me);
 			},this, function(id,data){
 				this.readOnlyWBsData[id] = data;
 				console.log("whiteboard id: ", id);
