@@ -55,8 +55,12 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 
 
 	syncIt: function(){
-		var s = this.getSize(),
+		var s = this.getEl() ? this.getSize() : null,
 			o = this.navContainer;
+        if (!s) {
+            Ext.defer(this.syncIt, 100, this);
+            return;
+        }
 		o.setXY(this.el.getXY());
 		o.setWidth(s.width);
 		o.setHeight(s.height);
