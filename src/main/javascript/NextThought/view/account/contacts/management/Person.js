@@ -53,10 +53,9 @@ Ext.define('NextThought.view.account.contacts.management.Person',{
 				this.groupsList.setUser(this.user);
 			}
 		}
-		else if(this.isContact){
+//		else if(this.isContact){
 			//show nib
-			console.log('hi');
-		}
+//		}
 	},
 
 
