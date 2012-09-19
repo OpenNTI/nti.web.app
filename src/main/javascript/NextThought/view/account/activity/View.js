@@ -229,11 +229,13 @@ Ext.define('NextThought.view.account.activity.View',{
 		}
 		else if (item.getModelName() === 'Highlight') {
 			loc = LocationProvider.getLocation(item.get('ContainerId'));
-			return 'shared a highlight' +(loc ? (' in '+loc.label): '');
+			return Ext.String.format('Shared a highlight {0}&rdquo;',
+				Ext.String.ellipsis( (loc ? (' in &ldquo;'+loc.label): '&ldquo;'),50,true));
 		}
 		else if (item.getModelName() === 'Redaction') {
 			loc = LocationProvider.getLocation(item.get('ContainerId'));
-			return 'shared a redaction' +(loc ? (' in '+loc.label): '');
+			return Ext.String.format('Shared a redaction {0}&rdquo;',
+				Ext.String.ellipsis( (loc ? (' in &ldquo;'+loc.label): '&ldquo;'),50,true));
 		}
 		else if (item.getModelName() === 'Note'){
 			return Ext.String.format('{1}&ldquo;{0}&rdquo;',
