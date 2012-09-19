@@ -216,9 +216,9 @@ Ext.define( 'NextThought.view.annotations.Base', {
 		p = LocationProvider.getPreferences();
 		p = p ? p.sharing : null;
 
-		if(p && this.allowShare){
-			me.record.set('SharedWidth',p);
-		}
+		p = this.allowShare? p : null;
+
+		me.record.set('SharedWidth',p);
 
 		me.record.save({
 			scope: me,

@@ -18,6 +18,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
 		if(!this.isModifiable){
 			this.highlightCls += ' shared-with-me';
 		}
+		this.allowShare = false;
 		return this;
 	},
 
