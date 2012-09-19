@@ -131,7 +131,7 @@ Ext.define(	'NextThought.view.whiteboard.Canvas',{
 
 
 
-		drawScene: function(data, canvas, finished){
+		drawScene: function(data, canvas, finished, thumbnail){
 
 			function draw(x,cb){
 				if(x<0){
@@ -160,7 +160,7 @@ Ext.define(	'NextThought.view.whiteboard.Canvas',{
 
 			ctx = c.getContext('2d');
 
-			if(!this.thumbnail){
+			if(!thumbnail){
 				ctx.save();
 				ctx.fillStyle = 'white';
 				ctx.fillRect(0,0,w,h);
@@ -175,16 +175,18 @@ Ext.define(	'NextThought.view.whiteboard.Canvas',{
 
 			function finish(){
 				var data = c.dom.toDataURL("image/png");
-				try { c.remove(); }catch(e){ console.warn(Globals.getError(e)); }
 				resultCallback.call(window,data);
 			}
 
-			var c = Ext.DomHelper.append(Ext.getBody(),{tag: 'canvas', style: {visibility:'hidden',position:'absolute'}},true);
+			var c = this.thumbnailCanvas;
 
 			c.dom.width = 580;
 			c.dom.height = 580;
 
-			this.drawScene(this.updateData(scene),c,finish);
+			this.drawScene(this.updateData(scene),c,finish, true);
 		}
 	}
+},
+function(){
+    this.thumbnailCanvas = Ext.DomHelper.append(Ext.getBody(),{tag: 'canvas', style: {zIndex: -999, visibility:'hidden',position:'absolute'}},true);
 });

@@ -10,11 +10,8 @@ Ext.define('NextThought.view.annotations.note.EditorActions',{
 
 	wbThumbnailTpm: Ext.DomHelper.createTemplate( {
 		tag: 'img',
-		src: Ext.BLANK_IMAGE_URL,
+		src: '{0}',
 		id: '{1}',
-		style: {
-			backgroundImage: 'url({0});'
-		},
 		cls: 'wb-thumbnail',
 		alt: 'Whiteboard Thumbnail',
 		border: 0
@@ -292,24 +289,32 @@ Ext.define('NextThought.view.annotations.note.EditorActions',{
 
 	insertWhiteboardThumbnail: function(content, guid, wb){
 		var me = this,
-			el = content.query('[id='+guid+']')[0], emptyDiv;
+			el = Ext.get(guid), placeholder, p;
+
+        //We need empty divs to allow to insert text before or after a WB.
+        placeholder = Ext.DomHelper.createTemplate({cn:[{tag: 'br'}]});
 
 		if(!el){
-			el = me.wbThumbnailTpm.append(content, [Ext.BLANK_IMAGE_URL, guid]);
+			el = me.wbThumbnailTpm.append(content, ['', guid]);
+
+            if(content.dom.firstChild === Ext.select('img.wb-thumbnail').elements[0]){
+                placeholder.insertBefore(el);
+            }
+            placeholder.insertAfter(el);
 		}
 
-		//We need empty divs to allow to insert text before or after a WB.
-		emptyDiv = Ext.DomHelper.createDom({cn:[{tag: 'br'}]});
 
 		wb.getThumbnail(function(data){
-			Ext.fly(el).setStyle({ backgroundImage: 'url('+data+')' });
-			if(content.dom.firstChild === Ext.select('img.wb-thumbnail').elements[0]){
-				content.insertFirst(emptyDiv);
-			}
-			content.dom.appendChild(Ext.clone(emptyDiv));
+            el = Ext.get(guid);
+            var p = placeholder.insertBefore(el);
+            el.remove();
 
-			me.editor.repaint();
-			me.fireEvent('size-changed');
+            //recreate image with data
+            me.wbThumbnailTpm.insertBefore(p, [data, guid]);
+            Ext.fly(p).remove();
+
+            me.editor.repaint();
+            me.fireEvent('size-changed');
 		});
 	},
 
