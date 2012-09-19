@@ -156,7 +156,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 			offset,
 			redactionRegex = /USSC-HTML|Howes_converted|USvJones2012_converted/i,
 			boundingBox = me.convertRectToScreen(rect),
-			text = range.toString(),
+			text = range.toString().trim(),
 			innerDocOffset;
 
 		if(!record) {
