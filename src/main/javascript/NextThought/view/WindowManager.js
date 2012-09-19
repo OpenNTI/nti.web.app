@@ -14,12 +14,9 @@ Ext.define('NextThought.view.WindowManager',{
 			cls: 'window-tracker'
 		}, true);
 
-		var me = this;
-		var task = {
-			interval: 600,
-			run: function(){ me.organizeSnappedWindows(); }
-		};
-		var spec = {
+		var me = this,
+			task = { interval: 600, run: function(){ me.organizeSnappedWindows(); } },
+			spec = {
 			cls: 'wrapper',
 			children: [
 				{ cls: 'window-placeholder' },
@@ -54,7 +51,8 @@ Ext.define('NextThought.view.WindowManager',{
 			dragend: this.handleDragEnd,
 			drag: this.handleDrag,
 			move: this.handleMove,
-			resize: this.handleResize
+			resize: this.handleResize,
+			show: this.handleRestore
 		};
 
 		Ext.TaskManager.start(task);
@@ -111,8 +109,8 @@ Ext.define('NextThought.view.WindowManager',{
 
 
 	handleButtonClicked: function(e){
-		var id = e.getTarget('.window-minimized',null,true).id;
-		var m = this.buttonMap;
+		var id = e.getTarget('.window-minimized',null,true).id,
+			m = this.buttonMap;
 
 		if(e.getTarget('.closer')){
 			m[id].close();
@@ -168,18 +166,18 @@ Ext.define('NextThought.view.WindowManager',{
 
 
 	handleDrag: function(dd,e){
-		var me = this;
-		var win = dd.comp;
-		var wrap = win.trackWrapper.dom;
-		var p = this.tracker.dom;
-		var x = e.getXY()[0];
+		var me = this,
+			win = dd.comp,
+			wrap = win.trackWrapper.dom,
+			p = this.tracker.dom,
+			x = e.getXY()[0];
 
 		Ext.each(me.registry,function(w){
 			if(w === win ){return;}
 
-			var t = w.trackWrapper;
-			var b = t.getPageBox();
-			var n = t.dom;
+			var t = w.trackWrapper,
+				b = t.getPageBox(),
+				n = t.dom;
 
 			if(b.left <= x && x <= b.right){
 				if(wrap.previousSibling){ p.insertBefore(wrap, n); }
@@ -222,8 +220,8 @@ Ext.define('NextThought.view.WindowManager',{
 		var me = this;
 
 		Ext.Array.sort(me.registry,function(a,b){
-			var as = a.trackWrapper.getPageBox().right;
-			var bs = b.trackWrapper.getPageBox().right;
+			var as = a.trackWrapper.getPageBox().right,
+				bs = b.trackWrapper.getPageBox().right;
 			return as === bs ? 0 : as < bs ? 1 : -1; //smaller is greater in this case (0 = MAX, width of screen = MIN)
 		});
 
