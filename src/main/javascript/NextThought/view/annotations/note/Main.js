@@ -247,36 +247,8 @@ Ext.define('NextThought.view.annotations.note.Main',{
 			console.error(Globals.getError(e2));
 		}
 
-		try {
-			r.compileBodyContent(function(text){
-				var search = this.up('window').getSearchTerm(), re;
-				if(search){
-					search = Ext.String.htmlEncode( search );
-					re = new RegExp(['(\\>{0,1}[^\\<\\>]*?)(',RegExp.escape( search ),')([^\\<\\>]*?\\<{0,1})'].join(''), 'ig');
-					text = text.replace(re,'$1<span class="search-term">$2</span>$3');
-				}
+		r.compileBodyContent(this.setContent, this, this.generateClickHandler, 226 );
 
-				this.text.update(text);
-				this.text.select('a[href]',true).set({target:'_blank'});
-				//TODO: actually detect when the whiteboard images finish loading and then run updateLayout instead of just arbitrarily setting a timeout.
-				Ext.defer(me.updateLayout,100,me);
-			},this, function(id,data){
-				this.readOnlyWBsData[id] = data;
-				console.log("whiteboard id: ", id);
-				return '';
-			});
-
-			setTimeout(function(){
-				readOnlyWBs = me.el.query('.whiteboard-thumbnail');
-				Ext.each(readOnlyWBs, function(wb){
-					Ext.fly(wb).on('click', me.click, me);
-				});
-				me.updateLayout();
-			}, 1);
-		}
-		catch(e3){
-			console.error(Globals.getError(e3));
-		}
 		if(this.editMode){
 			this.onEdit();
 		}
@@ -288,6 +260,30 @@ Ext.define('NextThought.view.annotations.note.Main',{
 
 		me.up('window').down('note-responses').removeAll(true);
 		this.loadReplies(r);
+	},
+
+
+	setContent: function(text){
+		var search = this.up('window').getSearchTerm(), re;
+		if(search){
+			search = Ext.String.htmlEncode( search );
+			re = new RegExp(['(\\>{0,1}[^\\<\\>]*?)(',RegExp.escape( search ),')([^\\<\\>]*?\\<{0,1})'].join(''), 'ig');
+			text = text.replace(re,'$1<span class="search-term">$2</span>$3');
+		}
+
+		this.text.update(text);
+		this.text.select('a[href]',true).set({target:'_blank'});
+
+		Ext.each(this.text.query('.whiteboard-thumbnail'),
+				function(wb){ Ext.fly(wb).on('click', this.click, this); },
+				this);
+
+		this.updateLayout();
+	},
+
+	generateClickHandler: function(id,data){
+		this.readOnlyWBsData[id] = data;
+		console.log("whiteboard id: ", id);
 	},
 
 
@@ -387,17 +383,17 @@ Ext.define('NextThought.view.annotations.note.Main',{
 	editorSaved: function(){
 		var v = this.editorActions.getValue(),
 			me = this,
-			r = me.record, re = /(&nbsp;)|(<br>)|(<div>)|(<\/div>)*/g;
+			r = me.record, re = /\w|(&nbsp;)|(<br>)|(<div>)|(<\/div>)*/g;
 
 		function callback(success, record){
 			me.el.unmask();
 			if (success) {
+				me.setRecord(r);
 				me.deactivateReplyEditor();
 			}
 		}
 
-		if( Ext.isArray(v.body) && (v.body.length === 0) ||
-			Ext.isString(v.body[0]) && v.body[0].replace(re,"").trim() === ""  && v.body.length === 1){
+		if( !Ext.isArray(v.body) || v.body.join('').replace(re,"") === "" ){
 			me.deactivateReplyEditor();
 			return;
 		}

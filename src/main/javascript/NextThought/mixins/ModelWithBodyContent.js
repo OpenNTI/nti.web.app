@@ -22,9 +22,6 @@ Ext.define('NextThought.mixins.ModelWithBodyContent',{
 		id: '{0}',
 		cls: 'body-divider',
 		cn: [{
-			tag: 'a',
-			cls: 'whiteboard-magnifier'
-		},{
 			tag: 'img',
 			src: Ext.BLANK_IMAGE_URL,
 			style: {
@@ -33,11 +30,13 @@ Ext.define('NextThought.mixins.ModelWithBodyContent',{
 			onclick: '{2}',
 			cls: 'whiteboard-thumbnail',
 			alt: 'Whiteboard Thumbnail',
-			border: 0
+			border: 0,
+			width: '{3}',
+			height: '{3}'
 		}]
 	}).compile(),
 
-	compileBodyContent: function(result,scope,clickHandlerMaker){
+	compileBodyContent: function(result,scope,clickHandlerMaker,size){
 
 		var me = this,
 			Canvas = NextThought.view.whiteboard.Canvas,
@@ -63,7 +62,9 @@ Ext.define('NextThought.mixins.ModelWithBodyContent',{
 							me.WHITEBOARD_THUMBNAIL_TPL.apply([
 								id,
 								thumbnail,
-								clickHandlerMaker.call(scope,id,o)])
+								clickHandlerMaker.call(scope,id,o)||'',
+								size||''
+							])
 					);
 					render(i-1);
 				});

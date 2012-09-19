@@ -72,7 +72,7 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 
 		me.mon(me.editor.down('.save'),{
 			scope: me,
-			click: me.saveReply
+			click: me.editorSaved
 		});
 
 		me.mon(me.editor.down('.content'),{
@@ -150,7 +150,8 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 	},
 
 	setRecord: function(r){
-		var likeTooltip;
+		var me = this,
+			likeTooltip;
 
 		//Remove the old listener
 		if(this.record){
@@ -160,7 +161,6 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 
 		this.record = r;
 		this.guid = IdCache.getIdentifier(r.getId());
-		var me = this;
 		if(!me.rendered){return;}
 		if (!r.placeHolder){UserRepository.getUser(r.get('Creator'),me.fillInUser,me);}
 
@@ -172,23 +172,7 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 			this.liked.addCls('on');
 		}
 		try{
-			r.compileBodyContent(function(text){
-				var search =  me.up('window').getSearchTerm(), re;
-				if(search){
-					search = Ext.String.htmlEncode( search );
-					re = new RegExp(['(\\>{0,1}[^\\<\\>]*?)(',RegExp.escape( search ),')([^\\<\\>]*?\\<{0,1})'].join(''), 'ig');
-					text = text.replace(re,'$1<span class="search-term">$2</span>$3');
-				}
-				me.text.update(text);
-				me.text.select('a[href]',true).set({target:'_blank'});
-				//TODO: actually detect when the whiteboard images finish loading and then run updateLayout instead of just arbitrarily setting a timeout.
-				Ext.defer(me.updateLayout,100,me);
-			}, this, function(id,data){
-				this.readOnlyWBsData[id] = data;
-				console.log("whiteboard id: ", id);
-				return '';
-			});
-
+			r.compileBodyContent(this.setContent, this, this.generateClickHandler, 226);
 			this.responseBox[r.get('sharedWith').length===0?'removeCls':'addCls']('shared');
 		}
 		catch(e){
@@ -202,56 +186,6 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 		this.updateToolState();
 		this.mon(r, 'updated', this.updateToolState, this);
 		this.mon(r, 'child-added', this.addNewChild, this);
-
-		setTimeout(function(){
-			Ext.each(me.el.query('.whiteboard-thumbnail'), function(wb){
-				Ext.fly(wb).on('click', me.click, me);
-			});
-			me.updateLayout();
-		}, 1);
-	},
-
-
-	fillInUser: function(user){
-		this.name.update(user.getName());
-		this.avatar.setStyle({ backgroundImage: 'url('+user.get('avatarURL')+')' });
-		TemplatesForNotes.updateMoreReplyOptionsLabels(this.more,user, this.record.isFlagged());
-	},
-
-
-	saveReply: function(){
-		var v = this.editorActions.getValue(),
-			me = this,
-			r = this.record, re = /(&nbsp;)|(<br>)|(<div>)|(<\/div>)*/g;
-
-		function callback(success){
-			me.el.unmask();
-			if (success) {
-				me.deactivateReplyEditor();
-			}
-		}
-
-		if( Ext.isArray(v.body) && (v.body.length === 0) ||
-			Ext.isString(v.body[0]) && v.body[0].replace(re,"").trim() === "" && v.body.length === 1){
-			me.deactivateReplyEditor();
-			return;
-		}
-
-		me.el.mask('Saving...');
-
-		if(this.editMode){
-			r.set('body',v.body);
-			//todo: r.set('sharedWith',v.shareWith); -- only do this if the user changed it.
-			r.save({callback: function(record, request){
-				var success = request.success,
-				rec = success ? record: null;
-				if(success){r.fireEvent('changed');}
-				Ext.callback(callback,me,[success,rec]);
-			}});
-			return;
-		}
-
-		this.up('window').fireEvent('save-new-reply', r, v.body, v.shareWith, callback);
 	},
 
 
@@ -376,7 +310,6 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 
 	onChat: function() {
 		this.fireEvent('chat', this.record);
-		return;
 	},
 
 
@@ -386,6 +319,15 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 
 },
 function(){
+	this.borrow(NextThought.view.annotations.note.Main, [
+		'setContent',
+		'generateClickHandler',
+		'fillInUser',
+		'fillInShare',
+		'editorSaved'
+	]);
+
+
 	this.prototype.renderTpl = Ext.DomHelper.markup([
 			{
 				cls: 'note-reply',
