@@ -49,6 +49,7 @@ Ext.define('NextThought.view.account.activity.Popout',{
 
 	detectBlur: function(e){
 		if(!e.getTarget('.'+this.cls) && !e.getTarget('#'+this.refEl.id)){
+			clearTimeout(this.hideTimer);
 			this.hideTimer = Ext.defer(function(){this.fireEvent('blur');},500,this);
 		}
 		else {
@@ -83,11 +84,9 @@ Ext.define('NextThought.view.account.activity.Popout',{
                 pop.show().hide();
 
                 if(viewRef) {
-                    pop.mon(
-                        pop.getEl(),
-                        'mouseover', function(){
-                            viewRef.cancelPopupTimeout();
-                        });
+                    pop.mon( pop.getEl(), 'mouseover', function(){
+						viewRef.cancelPopupTimeout();
+					});
                 }
 
                 if( pop.getHeight() > play ){

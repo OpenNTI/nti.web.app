@@ -277,6 +277,7 @@ Ext.define('NextThought.view.account.activity.View',{
 
 
     cancelPopupTimeout: function(){
+		console.log(this.hoverTimeout,"canceled");
         clearTimeout(this.hoverTimeout);
     },
 
@@ -291,7 +292,7 @@ Ext.define('NextThought.view.account.activity.View',{
 
 		if(!rec){return;}
 
-		clearTimeout(me.hoverTimeout);
+		me.cancelPopupTimeout();
 		me.hoverTimeout = Ext.defer(function(){
 			target.un('mouseout',me.cancelPopupTimeout,me,{single:true});
 			
@@ -302,6 +303,7 @@ Ext.define('NextThought.view.account.activity.View',{
 			popout.popup(rec,target,target,[-10,-12],0.5, me);
 
 		},500);
+		console.log(this.hoverTimeout,"started");
 
 		target.on('mouseout',me.cancelPopupTimeout,me,{single:true});
 	}

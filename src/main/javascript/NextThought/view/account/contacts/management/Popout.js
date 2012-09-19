@@ -87,6 +87,7 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 
 	detectBlur: function(e){
 		if(!e.getTarget('.'+this.cls) && !e.getTarget('#'+this.refEl.id)){
+			clearTimeout(this.hideTimer);
 			this.hideTimer = Ext.defer(function(){this.fireEvent('blur');},500,this);
 		}
 		else {
@@ -123,13 +124,14 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 
 			pop = this.create({record: record, refEl: Ext.get(el)});
 
+
+			pop.show().hide();
+
             if(viewRef) {
-                pop.on('mouseover', function(){
+                pop.mon(pop.getEl(), 'mouseover', function(){
                     viewRef.cancelPopupTimeout();
                 });
             }
-
-			pop.show().hide();
 
 			if( pop.getHeight() > play ){
 				pop.addCls('bottom-aligned');
