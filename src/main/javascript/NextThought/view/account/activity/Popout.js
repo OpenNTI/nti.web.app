@@ -80,15 +80,17 @@ Ext.define('NextThought.view.account.activity.Popout',{
 					alignment = 'tr-tl?',
 					play = Ext.dom.Element.getViewportHeight() - Ext.fly(el).getTop();
 
+                pop.show().hide();
+
                 if(viewRef) {
-                    pop.on('mouseover', function(){
-                        viewRef.cancelPopupTimeout();
-                    });
+                    pop.mon(
+                        pop.getEl(),
+                        'mouseover', function(){
+                            viewRef.cancelPopupTimeout();
+                        });
                 }
 
-				pop.show().hide();
-
-				if( pop.getHeight() > play ){
+                if( pop.getHeight() > play ){
 					pop.addCls('bottom-aligned');
 					alignment = 'br-bl?';
 					offsets[1] = Math.floor((flipFactor||-1)*offsets[1]);
