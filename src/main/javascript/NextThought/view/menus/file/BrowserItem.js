@@ -13,8 +13,9 @@ Ext.define('NextThought.view.menus.file.BrowserItem',{
 	},
 
 	onClick: function(e){
-		e.stopEvent = Ext.emptyFn;
+        this.href = true;
 		this.callParent(arguments);
+        delete this.href;
 	},
 
 	onRender: function(){
