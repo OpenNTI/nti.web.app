@@ -67,7 +67,7 @@ Ext.define('NextThought.view.content.reader.Content',{
 	},
 
 
-	setContent: function(resp, assessmentItems, callback){
+	setContent: function(resp, assessmentItems, finish, hasCallback){
 		var me = this,
 			c = me.parseHTML(resp),
 			containerId;
@@ -79,6 +79,9 @@ Ext.define('NextThought.view.content.reader.Content',{
 			me.relayout();
 			me.el.repaint();
 			me.fireEvent('loaded', containerId);
+			if(hasCallback){
+				Ext.callback(finish,null,[me]);
+			}
 		}
 
 		me.updateContent('<div id="NTIContent">'+c+'</div>');
@@ -91,7 +94,9 @@ Ext.define('NextThought.view.content.reader.Content',{
 				resp.responseText.match(/<body([^>]*)>/i),
 				this.buildPath(resp.request.options.url));
 
-		Ext.callback(callback,null,[me]);
+		if(!hasCallback){
+			Ext.callback(finish,null,[me]);
+		}
 
 		console.log('setting content... set, loading annotations');
 		//containerId = Ext.util.Format.htmlDecode(me.getContainerId()); //handle apostrophe

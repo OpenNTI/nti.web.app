@@ -131,11 +131,11 @@ Ext.define('NextThought.view.content.Reader', {
 	},
 
 
-	onNavigateComplete: function(pageInfo, callback){
+	onNavigateComplete: function(pageInfo, finish, hasCallback){
 		var me = this, cls = this.self;
 		function f(resp){
 			me.splash.hide();
-			me.setContent(resp, pageInfo.get('AssessmentItems'), callback);
+			me.setContent(resp, pageInfo.get('AssessmentItems'), finish, hasCallback);
 		}
 
 		function jsonp(script){

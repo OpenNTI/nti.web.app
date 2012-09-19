@@ -98,7 +98,7 @@ Ext.define('NextThought.providers.Location', {
 			}
 
 			me.clearStore();
-			me.resolvePageInfo(ntiid,finish);
+			me.resolvePageInfo(ntiid,finish, Boolean(callback));
 
 			me.currentNTIID = ntiid;
 			me.fireEvent('change', ntiid);
@@ -106,19 +106,19 @@ Ext.define('NextThought.providers.Location', {
 	},
 
 
-	resolvePageInfo: function(ntiid, callback){
+	resolvePageInfo: function(ntiid, finish, hasCallback){
 		var me = this,
 			service = $AppConfig.service;
 
 		function success(pageInfo){
 			me.currentPageInfo = pageInfo;
 			me.updatePreferences(pageInfo);
-			me.fireEvent('navigateComplete',pageInfo,callback);
+			me.fireEvent('navigateComplete',pageInfo,finish, hasCallback);
 		}
 
 		function failure(q,r){
 			console.error('resolvePageInfo Failure: ',arguments);
-			Ext.callback(callback,null,[me,{req:q,error:r}]);
+			Ext.callback(finish,null,[me,{req:q,error:r}]);
 			me.fireEvent('navigateComplete',r);
 		}
 
