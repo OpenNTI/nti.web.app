@@ -60,7 +60,7 @@ Ext.define('NextThought.view.account.activity.Popout',{
 
 	statics: {
 
-		popup: function(record, alignmentEl, el, offsets, flipFactor){
+		popup: function(record, alignmentEl, el, offsets, flipFactor, viewRef){
 			var id = record.getId(), open = false;
 			Ext.each(Ext.ComponentQuery.query('activity-popout,contact-popout'),function(o){
 				if(o.record.getId()!==id || record.modelName !== o.record.modelName){
@@ -80,7 +80,11 @@ Ext.define('NextThought.view.account.activity.Popout',{
 					alignment = 'tr-tl?',
 					play = Ext.dom.Element.getViewportHeight() - Ext.fly(el).getTop();
 
-				if(pop.isDestroyed){return;}
+                if(viewRef) {
+                    pop.on('mouseover', function(){
+                        viewRef.cancelPopupTimeout();
+                    });
+                }
 
 				pop.show().hide();
 

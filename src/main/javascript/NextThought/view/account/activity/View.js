@@ -276,6 +276,11 @@ Ext.define('NextThought.view.account.activity.View',{
 	},
 
 
+    cancelPopupTimeout: function(){
+        clearTimeout(this.hoverTimeout);
+    },
+
+
 	itemHover: function(e){
 		var me = this,
 				target = e.getTarget('div.activity',null,true),
@@ -286,23 +291,18 @@ Ext.define('NextThought.view.account.activity.View',{
 
 		if(!rec){return;}
 
-		function killShow(){
-			clearTimeout(me.hoverTimeout);
-		}
-
-
 		clearTimeout(me.hoverTimeout);
 		me.hoverTimeout = Ext.defer(function(){
-			target.un('mouseout',killShow,me,{single:true});
+			target.un('mouseout',me.cancelPopupTimeout,me,{single:true});
 			
 			if (rec.get('Class') === 'User'){
 				popout = NextThought.view.account.contacts.management.Popout;
 			}
 
-			popout.popup(rec,target,target,[-10,-12],0.5);
+			popout.popup(rec,target,target,[-10,-12],0.5, me);
 
 		},500);
 
-		target.on('mouseout',killShow,me,{single:true});
+		target.on('mouseout',me.cancelPopupTimeout,me,{single:true});
 	}
 });

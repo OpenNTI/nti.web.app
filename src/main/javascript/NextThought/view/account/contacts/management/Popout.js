@@ -105,7 +105,7 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 
 	statics: {
 
-		popup: function(record, alignmentEl, el, offsets, flipFactor){
+		popup: function(record, alignmentEl, el, offsets, flipFactor, viewRef){
 			var pop,
 				alignment = 'tr-tl?',
 				play = Ext.dom.Element.getViewportHeight() - Ext.fly(el).getTop(),
@@ -122,6 +122,13 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 			if(open){return;}
 
 			pop = this.create({record: record, refEl: Ext.get(el)});
+
+            if(viewRef) {
+                pop.on('mouseover', function(){
+                    viewRef.cancelPopupTimeout();
+                });
+            }
+
 			pop.show().hide();
 
 			if( pop.getHeight() > play ){
