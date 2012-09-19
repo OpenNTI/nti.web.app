@@ -46,8 +46,12 @@ Ext.define('NextThought.view.account.activity.Preview',{
 		this.mon(this.replyButton, 'click', this.onReply, this);
 		this.mon(this.shareButton, 'click', this.onShare, this);
 
-		if(!this.record.canReply){
+		if(!this.record.canReply || !$AppConfig.service.canShare()){
 			this.replyButton.hide();
+		}
+
+		if(!$AppConfig.service.canShare()){
+			this.shareButton.hide();
 		}
 
 		this.el.on('click',this.onReply,this);
@@ -67,7 +71,7 @@ Ext.define('NextThought.view.account.activity.Preview',{
 
 		try{
 			targets.push( rec.getId() );
-			this.fireEvent('navigation-selected', rec.get('ContainerId'), targets);
+			this.fireEvent('navigation-selected', rec.get('ContainerId'), targets, $AppConfig.service.canShare());
 		}
 		catch(er){
 			console.error(Globals.getError(er));
