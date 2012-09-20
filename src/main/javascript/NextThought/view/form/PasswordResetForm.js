@@ -11,7 +11,7 @@ Ext.define('NextThought.view.form.PasswordResetForm', {
 
 	layout: {
 		type: 'vbox',
-		align: 'stretch',
+		align: 'stretch'
 
 	},
 
