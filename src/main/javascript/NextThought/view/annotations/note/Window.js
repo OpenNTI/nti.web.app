@@ -87,6 +87,7 @@ Ext.define('NextThought.view.annotations.note.Window',{
 	},
 
 	getSearchTerm: function(){
-		return this.down('note-filter-bar').down('simpletext').getValue();
+		var search = this.down('note-filter-bar').down('simpletext');
+		return search ? search.getValue() : '';
 	}
 });

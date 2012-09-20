@@ -33,18 +33,25 @@ Ext.define('NextThought.view.annotations.note.FilterBar',{
 			{ text: 'Most Liked', filter: 'highestRated'}
 		]
 	},{
-		xtype: 'simpletext',
+//		xtype: 'simpletext',
+		xtype: 'box',
 		width: 150,
 		placeholder: 'Search...'
 	}],
 
 	afterRender: function(){
-		this.callParent(arguments);
-		this.mon(this.down('simpletext'),{
-			scope: this,
-			commit:this.search,
-			clear: function(){this.search('');}
-		});
+		var me = this, search;
+
+		me.callParent(arguments);
+
+		search = me.down('simpletext');
+		if(search){
+			me.mon(search,{
+				scope: me,
+				commit:me.search,
+				clear: function(){me.search('');}
+			});
+		}
 	},
 
 
