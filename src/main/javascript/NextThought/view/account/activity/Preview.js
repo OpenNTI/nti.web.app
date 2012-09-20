@@ -56,7 +56,7 @@ Ext.define('NextThought.view.account.activity.Preview',{
 
 		this.el.on('click',this.onReply,this);
 		TemplatesForNotes.attachMoreReplyOptionsHandler(this, this.more);
-		TemplatesForNotes.updateMoreReplyOptionsLabels(this.more,this.user);
+		TemplatesForNotes.updateMoreReplyOptionsLabels(this.more,this.user, this.record.isFlagged());
 	},
 
 
