@@ -131,7 +131,7 @@ Ext.define(	'NextThought.view.whiteboard.Canvas',{
 
 
 
-		drawScene: function(data, canvas, finished, thumbnail){
+		drawScene: function(data, canvas, finished){
 
 			function draw(x,cb){
 				if(x<0){
@@ -160,12 +160,10 @@ Ext.define(	'NextThought.view.whiteboard.Canvas',{
 
 			ctx = c.getContext('2d');
 
-			if(!thumbnail){
-				ctx.save();
-				ctx.fillStyle = 'white';
-				ctx.fillRect(0,0,w,h);
-				ctx.restore();
-			}
+			ctx.save();
+			ctx.fillStyle = 'white';
+			ctx.fillRect(0,0,w,h);
+			ctx.restore();
 
 			draw(i,finished);
 		},
@@ -183,7 +181,7 @@ Ext.define(	'NextThought.view.whiteboard.Canvas',{
 			c.dom.width = 580;
 			c.dom.height = 580;
 
-			this.drawScene(this.updateData(scene),c,finish, true);
+			this.drawScene(this.updateData(scene),c,finish);
 		}
 	}
 },
