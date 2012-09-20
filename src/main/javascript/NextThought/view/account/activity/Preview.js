@@ -60,7 +60,10 @@ Ext.define('NextThought.view.account.activity.Preview',{
 	},
 
 
-	onReply: function(){
+	onReply: function(event){
+		event.preventDefault();
+		event.stopPropagation();
+
 		var rec = this.record, targets;
 
 		if (!rec || rec.get('Class') === 'User'){
@@ -79,7 +82,9 @@ Ext.define('NextThought.view.account.activity.Preview',{
 	},
 
 
-	onShare: function(){
+	onShare: function(event){
+		event.preventDefault();
+		event.stopPropagation();
 		this.fireEvent('share', this.record);
 	},
 
