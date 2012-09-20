@@ -217,46 +217,20 @@ Ext.define('NextThought.controller.Search', {
 	},
 
 	searchResultClicked: function(result){
-		var cid = result.containerId,
+		var nav = this.getController('Navigation'),
+			cid = result.containerId,
 			cat = result.up('search-result-category').category;
 
-		function showHit(reader){
-			var hit = LocationProvider.getStore().getById(result.hitId);
+		function success(obj){
+			var refs = (obj.get('references')||[]).slice();
+			refs.push(obj.getId());
+			nav.navigate(cid,refs);
+		}
 
-
-			function success(hitReply){
-				var refs = hitReply.get('references'), targetId = LocationProvider.getStore().getById(hitReply), rid;
-
-				if(!targetId){
-					Ext.each(refs, function(item){
-						if(LocationProvider.getStore().getById(item)){
-							targetId = item;
-							return;
-						}
-					});
-				}
-
-				rid = IdCache.getComponentId(targetId, null,'default');
-				reader.scrollToTarget(rid);
-				if(cat === "Note"){
-					Ext.getCmp(rid).openWindow();
-				}
-			}
-
-			function failure(){
-				console.log("Could not retrieve rawData for: ",result.hitId);
-				console.log("Error: ", arguments);
-			}
-
-			if(cat !== 'Books'){
-				//Load rawdata if we don't have a hit.
-				hit ? success(hit) : $AppConfig.service.getObject(result.hitId, success, failure);
-			}
-			else{
-				reader.scrollToText(result.term);
-				result.on('destroy', reader.clearSearchRanges,reader,{single:true});
-			}
-
+		function failure(){
+			console.log("Could not retrieve rawData for: ",result.hitId);
+			console.log("Error: ", arguments);
+			alert('Ooops :(\nI could not do that, Dave.');
 		}
 
 		if (!cid) {
@@ -266,13 +240,12 @@ Ext.define('NextThought.controller.Search', {
 
 		Ext.ComponentQuery.query('library-view-container')[0].activate();
 
-
-		if(LocationProvider.currentNTIID === cid) {
-			showHit(ReaderPanel.get());
+		if(cat==='Books'){
+			nav.navigateAndScrollToTerm(cid,result.term);
 			return;
 		}
 
-		LocationProvider.setLocation( cid, showHit);
+		$AppConfig.service.getObject(result.hitId, success, failure);
 	},
 
 

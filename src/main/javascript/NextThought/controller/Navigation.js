@@ -48,6 +48,7 @@ Ext.define('NextThought.controller.Navigation', {
 
 				var id = '';
 				if(Ext.isArray(scrollToTargetId)){
+
 					Ext.each(scrollToTargetId,function(i){
 						var c = null;
 						if(IdCache.hasIdentifier(i)){
@@ -68,6 +69,21 @@ Ext.define('NextThought.controller.Navigation', {
 			};
 		}
 
+
+		if(LocationProvider.currentNTIID !== ntiid){
+			LocationProvider.setLocation(ntiid, callback, this);
+		}
+		else {
+			Ext.callback(callback,this,[ReaderPanel.get()]);
+		}
+	},
+
+
+
+	navigateAndScrollToTerm: function(ntiid,term){
+		function callback(reader){
+			reader.scrollToText(term);
+		}
 
 		if(LocationProvider.currentNTIID !== ntiid){
 			LocationProvider.setLocation(ntiid, callback, this);
