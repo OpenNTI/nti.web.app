@@ -20,17 +20,21 @@ Ext.define('NextThought.view.form.PasswordResetForm', {
             xtype: 'simpletext',
             name: 'old_password',
             inputType: 'password',
-			placeholder: 'Current'
+			placeholder: 'Current',
+			allowBlank: false
         },{
             xtype: 'simpletext',
             name: 'password',
             placeholder: 'New',
-            inputType: 'password'
+            inputType: 'password',
+			allowBlank: false,
+			minLength: 5
         }, {
             xtype: 'simpletext',
             name: 'password-verify',
             placeholder: 'Confirm New',
             inputType: 'password',
+			allowBlank: false,
             validator: function(value) {
                 var password = this.previousSibling('[name=password]').getValue();
                 return (value === password) ? true : 'Passwords do not match.';
@@ -44,9 +48,40 @@ Ext.define('NextThought.view.form.PasswordResetForm', {
 			},
 			defaultType: 'button',
 			items: [
-				{text: 'Cancel', ui: 'text' },
-				{text: 'Save', ui: 'primary', scale: 'medium', disabled: true }
+				{text: 'Cancel', ui: 'text', handler: function(b){b.up('password-reset-form').reset();} },
+				{text: 'Save', save:1, ui: 'primary', scale: 'medium', disabled: true }
 			]
 		}
-    ]
+    ],
+
+
+	reset: function(){
+		Ext.each(this.inputs,function(o){o.clearValue();});
+		this.down('button[save]').disable();
+	},
+
+
+	getValues: function(){
+		return {
+			current: this.down('[name=old_password]').getValue(),
+			new: this.down('[name=password]').getValue()
+		};
+	},
+
+	afterRender: function(){
+		this.callParent(arguments);
+
+		this.inputs = this.query('simpletext');
+		Ext.each(this.inputs,function(i){
+			this.mon(i,'changed',this.checkValidity,this,{buffer: 500});
+		},this);
+	},
+
+
+	checkValidity: function(value, input){
+		input.validate();
+
+		var v = this.inputs.reduce(function(accum,o){ return accum && o.validate(true); }, true);
+		this.down('button[save]')[v?'enable':'disable']();
+	}
 });

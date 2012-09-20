@@ -62,6 +62,7 @@ Ext.define('NextThought.view.form.fields.SimpleTextField',{
 			keydown: this.keyDown //keypress does not always fire for escape
 		});
 		this.mon(this.clearEl,'click',this.clearValue,this);
+		this.lastValue = this.getValue();
 	},
 
 
@@ -99,16 +100,38 @@ Ext.define('NextThought.view.form.fields.SimpleTextField',{
 		c[v?'show':'hide']();
 
 		if (k === event.ENTER || k === event.ESC ) {
-			this.fireEvent('commit', v );
+			this.fireEvent('commit', v, this );
 		}
 
 		if( this.lastValue !== v ){
 			this.lastValue = v;
 			e[(v===''?'add':'remove')+'Cls']('empty');
-			this.fireEvent('changed', v );
+			this.fireEvent('changed', v, this );
 		}
-	}
+	},
 
+
+
+	validate: function(silent){
+		var msg,valid,
+				val = this.getValue()||'';
+
+		valid = (this.allowBlank===false) ? (val.length >= (this.minLength||1)) : true
+
+		if(valid && this.validator){
+			msg = this.validator(val);
+			if(msg !== true){
+				this.errorMessage = msg;
+				valid = false;
+			}
+		}
+
+		if(!silent && !valid){
+			this.setError();
+		}
+
+		return valid;
+	}
 
 });
 

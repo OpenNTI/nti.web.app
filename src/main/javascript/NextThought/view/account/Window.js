@@ -15,7 +15,7 @@ Ext.define('NextThought.view.account.Window',{
 	dialog: true,
 
 	width: 520,
-	top: '10%',
+	y: 80,
 
 	layout: {
 		type: 'vbox',

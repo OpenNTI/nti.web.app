@@ -131,8 +131,20 @@
 			&, input { font-size: 14px;}
 
 			input {
-				padding: 10px;
+				padding: 10px 20px 10px 10px;
 				height: 35px;
+			}
+			.clear {
+				top: 10px;
+				right: 5px;
+			}
+		}
+
+		.x-btn-text-small {
+			.x-btn-inner {
+				font-size: 14px;
+				font-weight: 400;
+				color: $tertiary-grey;
 			}
 		}
 	}
