@@ -160,16 +160,30 @@ Ext.define('NextThought.view.account.activity.View',{
 			}
 
 			//We use a similar strategy to the one that Notifications uses
+			
+			function maybeFinish(){
+				totalExpected--;
+				if(totalExpected === 0){
+					me.feedTpl.overwrite(container.getEl(),items);
+					container.updateLayout();
+				}
+			}
 			Ext.each(group.children,function(c){
+				//FIXME we were asked to not show deletes
+				//in the activity so we strip that here.
+				//However this potentially means our notification count
+				//is wrong. It comes from the server so it will
+				//include deleted changes
+				if(/deleted/i.test(c.get('ChangeType'))){
+					maybeFinish();
+					return;
+				}
+
 				var item = this.changeToActivity(c);
 				items.push(item);
 				UserRepository.getUser(item.name, function(u){
 					item.name = u.getName();
-					totalExpected--;
-					if(totalExpected === 0){
-						me.feedTpl.overwrite(container.getEl(),items);
-						container.updateLayout();
-					}
+					maybeFinish();
 
 				});
 
