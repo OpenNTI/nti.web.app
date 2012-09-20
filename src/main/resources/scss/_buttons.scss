@@ -67,8 +67,17 @@ $button-text-weights: bold,bolder,normal;
 
 			&.x-over {}
 			&.x-disabled{
+				box-shadow: none;
 				background: #e4e4e4;
-				color: #adadad;
+				border-color: #e4e4e4;
+				//color: #adadad;
+
+				.x-btn-inner{
+					box-shadow: none;
+					text-shadow: none;
+					font-weight: lighter;
+					color: $secondary-grey;
+				}
 			}
 			&.x-pressed {
 				box-shadow: inset 0px -1px 1px $shadow;
@@ -82,7 +91,7 @@ $button-text-weights: bold,bolder,normal;
 			}
 
 			.x-btn-inner {
-				font-size: 10px + (2px*$i) !important;
+				font-size: 10px + (4px*$i) !important;
 				font-weight: $font-weight;
 				color: $color;
 				text-shadow: 0 $direction -1px $text-shadow;

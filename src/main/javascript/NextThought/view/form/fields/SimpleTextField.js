@@ -5,7 +5,7 @@ Ext.define('NextThought.view.form.fields.SimpleTextField',{
 	cls: 'textbox-base',
 
 	renderTpl: Ext.DomHelper.markup([
-		{ tag: 'input', type:'text', placeholder: '{placeholder}' },
+		{ tag: 'input', type:'{type}', placeholder: '{placeholder}' },
 		{ tag: 'span', cls: 'clear' }]),
 
 	renderSelectors: {
@@ -22,7 +22,10 @@ Ext.define('NextThought.view.form.fields.SimpleTextField',{
 
 
 	initComponent: function(){
-		this.renderData = { placeholder: this.placeholder };
+		this.renderData = {
+			type: this.inputType || 'text',
+			placeholder: this.placeholder
+		};
 	},
 
 

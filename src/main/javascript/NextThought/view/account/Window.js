@@ -2,14 +2,20 @@ Ext.define('NextThought.view.account.Window',{
 	extend: 'NextThought.view.Window',
 	alias: 'widget.account-window',
 
+	requires: [
+		'NextThought.view.form.PasswordResetForm'
+	],
+
 	cls: 'account-window',
 	ui: 'account-window',
 	minimizable: false,
+	constrain: true,
 	closable: true,
 	modal: true,
 	dialog: true,
 
 	width: 520,
+	top: '10%',
 
 	layout: {
 		type: 'vbox',
@@ -60,12 +66,20 @@ Ext.define('NextThought.view.account.Window',{
 				layout: { type: 'hbox', align: 'stretch' },
 
 				items: [
-					{text: 'Change Password'},
-					{text: 'Edit Profile Picture'}
+					{text: 'Change Password', associatedPanel: 'password-reset-form'},
+					{text: 'Edit Profile Picture', associatedPanel: 'avatar-thingy-rename-when-we-have-this', disabled: true}
 				]
 			},{
-				hidden: true
-				// forms
+				name: 'settings',
+				xtype: 'container',
+				hidden: true,
+				layout: {
+					type: 'card'
+				},
+				items: [
+					{ xtype: 'password-reset-form' },
+					{ xtype: 'panel' }
+				]
 			}];
 
 		return this.callParent(arguments);
@@ -80,6 +94,12 @@ Ext.define('NextThought.view.account.Window',{
 
 
 	changeView: function(btn){
-		console.log('toggle');
+		var c = this.down('[name=settings]'),
+			p = c.down(btn.associatedPanel);
+
+		c.getLayout().setActiveItem(p);
+		c[btn.pressed?'show':'hide']();
+
+		this.updateLayout();
 	}
 });

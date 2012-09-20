@@ -1,49 +1,52 @@
 Ext.define('NextThought.view.form.PasswordResetForm', {
-    extend:'Ext.form.Panel',
+    extend:'Ext.container.Container',
     alias: 'widget.password-reset-form',
 
     requires: [
-        'Ext.form.field.Text',
-        'Ext.form.FieldSet'
+        'NextThought.view.form.fields.SimpleTextField'
     ],
 
+	cls: 'reset-password',
     ui: 'account',
 
-    defaults: {
-        margin: '5px'
-    },
+	layout: {
+		type: 'vbox',
+		align: 'stretch',
+
+	},
 
     items: [
         {
-            xtype: 'textfield',
+            xtype: 'simpletext',
             name: 'old_password',
-            fieldLabel: 'Current Password',
             inputType: 'password',
-            allowBlank: false,
-            minLength: 1
+			placeholder: 'Current'
         },{
-            xtype: 'textfield',
+            xtype: 'simpletext',
             name: 'password',
-            fieldLabel: 'New Password',
-            inputType: 'password',
-            allowBlank: false,
-            minLength: 1,
-            validator: function(value) {
-                var oldpw = this.previousSibling('[name=old_password]').getValue(),
-                    sim = this.up('window').down('account-form').similarity;
-                if (value.length < 6) { return 'Password too short'; }
-                else if (sim(oldpw,value) > 0.6) { return 'New password too similar'; }
-                else { return true; }
-            }
+            placeholder: 'New',
+            inputType: 'password'
         }, {
-            xtype: 'textfield',
+            xtype: 'simpletext',
             name: 'password-verify',
-            fieldLabel: 'Verify Password',
+            placeholder: 'Confirm New',
             inputType: 'password',
-            allowBlank: false,
             validator: function(value) {
                 var password = this.previousSibling('[name=password]').getValue();
                 return (value === password) ? true : 'Passwords do not match.';
-            }        }
+            }
+		}, {
+			xtype: 'container',
+			layout: {
+				type: 'hbox',
+				pack: 'end',
+				align: 'middle'
+			},
+			defaultType: 'button',
+			items: [
+				{text: 'Cancel', ui: 'text' },
+				{text: 'Save', ui: 'primary', scale: 'medium', disabled: true }
+			]
+		}
     ]
 });

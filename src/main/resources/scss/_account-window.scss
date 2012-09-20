@@ -120,6 +120,20 @@
 				}
 			}
 		}
+	}
 
+
+	.reset-password {
+		margin: 15px 110px;
+
+		.textbox-base, .x-container {
+			margin: 5px 0;
+			&, input { font-size: 14px;}
+
+			input {
+				padding: 10px;
+				height: 35px;
+			}
+		}
 	}
 }
