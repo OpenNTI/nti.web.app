@@ -24,8 +24,6 @@ Ext.define('NextThought.view.menus.Settings',{
 
         //setup fields:
         var items = [];
-        items.push({ action: 'account', text: 'My Account'});
-        items.push({ xtype:'menuseparator' });
         items.push({ action: 'about', text: 'About', href: 'http://www.nextthought.com/', hrefTarget: '_blank'});
         items.push({ action: 'help', text: 'Help'});
         items.push({ action: 'privacy', text: 'Privacy'});
