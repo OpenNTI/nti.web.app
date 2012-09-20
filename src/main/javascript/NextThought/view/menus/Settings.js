@@ -24,13 +24,13 @@ Ext.define('NextThought.view.menus.Settings',{
 
         //setup fields:
         var items = [];
+        items.push({ action: 'account', text: 'My Account'});
+        items.push({ xtype:'menuseparator' });
         items.push({ action: 'about', text: 'About', href: 'http://www.nextthought.com/', hrefTarget: '_blank'});
         items.push({ action: 'help', text: 'Help'});
         items.push({ action: 'privacy', text: 'Privacy'});
         items.push({ action: 'terms', text: 'Terms of Service'});
         items.push({ xtype:'menuseparator' });
-        //items.push({ action: 'account', text: 'My Account'});
-        items.push({ action: 'resetpassword', text: 'Reset Password'});
         items.push({ action: 'logout', text: 'Sign Out'});
 
         //add!

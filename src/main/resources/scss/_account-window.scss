@@ -1,0 +1,125 @@
+@import "_variables.scss";
+
+.account-window {
+	@extend .nti-window;
+	overflow: hidden;
+	@include reset-window-border-radius(3px);
+	border: 1px solid #bcbcbc;
+
+	.close {
+		opacity: 0.5;
+		cursor: pointer;
+		position: absolute;
+		top: 10px;
+		right: 10px;
+		width: 10px;
+		height: 10px;
+		background: url(../images/window_controls.png) -59px -9px no-repeat;
+		
+		&:hover{
+			opacity: 1;
+		}
+	}
+
+	.x-btn-account-small {
+		&, button {
+			height: 35px;
+		}
+
+		&:first-of-type {
+			border-radius: 0 0 0 3px;
+		}
+
+		&:last-of-type {
+			border-radius: 0 0 3px 0;
+		}
+
+		border-bottom: 1px solid #ebebeb !important;
+
+		& + .x-btn-account-small {
+			border-left: 1px solid #ebebeb !important;
+		}
+
+		&.x-pressed {
+			.x-btn-inner {
+				color: $primary-green;
+			}
+		}
+
+		.x-btn-inner {
+			text-transform: uppercase;
+			font-size: 12px;
+			font-weight: 600;
+			color: $secondary-grey;
+		}
+	}
+
+
+	.identity {
+		border-radius: 3px 3px 0 0;
+		background: #ffffff;
+		border-bottom: 1px solid #ebebeb !important;
+		position: relative;
+		overflow: hidden;
+		padding: 15px 15px 18px 15px;
+
+		img.avatar {
+			float: left;
+			width: 81px;
+			height: 81px;
+			border-radius: 3px;
+			border: 1px solid #e5e5e5;
+		}
+
+		.wrap {
+			margin: 15px 0 0 100px;
+			font-size: 14px;
+			font-weight: 400;
+			color: $secondary-grey;
+
+			.name {
+				font-size: 18px;
+				font-weight: 600;
+				color: $primary-grey;
+			}
+
+			.identities{
+				white-space: nowrap;
+				overflow: hidden;
+				text-overflow: ellipsis;
+			}
+
+			.username, .email {
+				max-width: 150px;
+				display: inline-block;
+				position: relative;
+				overflow: hidden;
+				white-space: nowrap;
+				text-overflow: ellipsis;
+				padding-left: 20px;
+
+				&::after{
+					content: ' ';
+					position: absolute;
+					top: 3px; left: 0;
+					width: 13px;
+					height: 12px;
+					background: url(../images/spr_account_page.png) 0 0 no-repeat;
+				}
+			}
+
+			.email {
+				max-width: 198px;
+				width: 198px;
+				margin-left: 40px;
+				padding-left: 25px;
+				&::after {
+					top: 4px;
+					width: 15px; height: 11px;
+					background-position: -16px 0;
+				}
+			}
+		}
+
+	}
+}
