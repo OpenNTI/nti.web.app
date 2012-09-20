@@ -40,12 +40,12 @@ Ext.define('NextThought.view.account.Window',{
 							cls: 'wrap',
 							cn: [
 								{ cls: 'name', html: me.getName()},
-								{ cls: 'affiliation', html: me.get('affiliation')||'affiliation'},
+								{ cls: 'affiliation', html: me.get('affiliation')},
 								{
 									cls: 'identities',
 									cn: [
-										{tag: 'span', cls: 'username', html: me.get('Username')||'Username?'},
-										{tag: 'span', cls: 'email', html: me.get('email')||'no email'}
+										{tag: 'span', cls: 'username', html: me.get('Username')},
+										{tag: 'span', cls: 'email', html: me.get('email')}
 									]
 								}
 							]

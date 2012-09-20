@@ -98,6 +98,7 @@
 				text-overflow: ellipsis;
 				padding-left: 20px;
 
+				&:empty{ display: none; }
 				&::after{
 					content: ' ';
 					position: absolute;
@@ -113,6 +114,7 @@
 				width: 198px;
 				margin-left: 40px;
 				padding-left: 25px;
+
 				&::after {
 					top: 4px;
 					width: 15px; height: 11px;
