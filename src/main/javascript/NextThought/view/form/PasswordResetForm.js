@@ -56,7 +56,7 @@ Ext.define('NextThought.view.form.PasswordResetForm', {
 
 
 	reset: function(){
-		Ext.each(this.inputs,function(o){o.clearValue();});
+		Ext.each(this.inputs,function(o){o.clearValue(true);});
 		this.down('button[save]').disable();
 	},
 
@@ -83,5 +83,6 @@ Ext.define('NextThought.view.form.PasswordResetForm', {
 
 		var v = this.inputs.reduce(function(accum,o){ return accum && o.validate(true); }, true);
 		this.down('button[save]')[v?'enable':'disable']();
+		this.updateLayout();
 	}
 });
