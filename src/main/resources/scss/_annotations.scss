@@ -286,7 +286,7 @@ div.redaction-control {
 					width: 16px;
 					height: 16px;
 					position: absolute;
-					margin: 4px 0 0 5px; //fix positioning in firefox
+					top: 4px; left: 5px;
 				}
 				&.edit::after{ background-position: 0 0 }
 				&.share::after{ background-position: -16px 0; }
