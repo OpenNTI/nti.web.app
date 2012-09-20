@@ -64,7 +64,7 @@ Ext.define('NextThought.view.form.PasswordResetForm', {
 	getValues: function(){
 		return {
 			old_password: this.down('[name=old_password]').getValue(),
-			new_password: this.down('[name=password]').getValue()
+			password: this.down('[name=password]').getValue()
 		};
 	},
 

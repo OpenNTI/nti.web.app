@@ -46,6 +46,10 @@ Ext.define('NextThought.controller.Account', {
 
 			'settings-menu [action=account]' : {
                 'click': this.showAccount
+            },
+
+            'password-reset-form [text=Save]' : {
+                'click': this.changePassword
             }
 
 
@@ -144,7 +148,37 @@ Ext.define('NextThought.controller.Account', {
 	},
 
 
-	openHref: function(item){
+    changePassword: function(btn){
+        debugger;
+        var form=btn.up('password-reset-form'),
+            values = form.getValues(),
+            u = $AppConfig.userObject,
+            me = this;
+
+        function callback(record, op){
+            if(!op.success){
+                console.error('FAILURE:',arguments);
+                form.el.down('[name=pw_error]').setStyle('display','inline');
+            }
+            else {
+                form.reset();
+            }
+        }
+
+
+        u.fields.add(new Ext.data.Field({name: 'old_password', type:'string'}));
+        u.fields.add(new Ext.data.Field({name: 'password', type:'string'}));
+
+        for(key in values){
+            if(values.hasOwnProperty(key)) {
+                u.set(key, values[key]);
+            }
+        }
+        u.save({callback: callback});
+    },
+
+
+    openHref: function(item){
 		window.open(item.href, item.hrefTarget);
 	},
 
