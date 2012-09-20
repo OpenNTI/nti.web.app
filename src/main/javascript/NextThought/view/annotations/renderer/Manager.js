@@ -151,7 +151,7 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 		if (line < 0){
 			//bad line, don't render:
 			console.error('Annotation cannot be rendered in gutter');
-			return;
+			return null;
 		}
 
 		var c = this.buckets[prefix],
@@ -167,6 +167,7 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 					b = value;
 					return false;
 				}
+				return true;
 			});
 
 			if (!b) {
@@ -179,16 +180,15 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 
 
 	layoutBuckets: function(prefix){
-		var addTpl = this.addNoteToOccupiedLineTmpl;
-		var r = this.getReader(prefix);
-		var o = r.getAnnotationOffsets();
-		var g = this.gutter[prefix];
-		var b = this.buckets[prefix];
-		var cT = this.controlLineTmpl;
-		var wT = this.widgetLineTmpl;
-		var cls = '';
-
-		var width = o.gutter + 80;
+		var addTpl = this.addNoteToOccupiedLineTmpl,
+			r = this.getReader(prefix),
+			o = r.getAnnotationOffsets(),
+			g = this.gutter[prefix],
+			b = this.buckets[prefix],
+			cT = this.controlLineTmpl,
+			wT = this.widgetLineTmpl,
+			cls = '',
+			width = o.gutter + 80;
 
 		if(width <= 355){
 			cls = 'narrow-gutter';
@@ -212,8 +212,9 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 			(new Ext.CompositeElement([line.controls,line.widgets])).setTop(y+'px');
 
 			line.each(function(o){
-				var w = o.getGutterWidget();
-				var c = o.getControl();
+				var w = o.getGutterWidget(),
+					c = o.getControl();
+
 				if( c ){ c.appendTo( line.controls ); }
 				if( w ){ widgets.push( o ); }
 			});
@@ -245,7 +246,7 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 			block = line.widgets || line.controls || null;
 			if(block){
 				t = block.dom.getBoundingClientRect();
-				rect = { top:t.top, bottom:t.bottom, left:t.left, right:t.right, height:t.height, width:t.width }
+				rect = { top:t.top, bottom:t.bottom, left:t.left, right:t.right, height:t.height, width:t.width };
 				rect.top = rect.top + r.getAnnotationOffsets().scrollTop;
 				rect.bottom = rect.bottom + r.getAnnotationOffsets().scrollTop;
 				r.noteOverlayAddRestrictedRange(rect);

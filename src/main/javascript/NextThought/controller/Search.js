@@ -142,14 +142,17 @@ Ext.define('NextThought.controller.Search', {
 		return n;
 	},
 
-	sortSearchHits: function(a,b){
+	sortSearchHits: function(aa,bb){
 
 		function compareIndices(i, j){
-			if(i===j) return 0;
+			if(i===j) { return 0; }
 			return i < j ? -1: 1;
 		}
 
-		var a= a.sortId, b= b.sortId, max = a.length < b.length ? a.length : b.length, i, r;
+		var a = aa.sortId,
+			b = bb.sortId,
+			max = (a.length < b.length) ? a.length : b.length,
+			i, r;
 
 		for(i=0; i<max; i++){
 			r = compareIndices(a[i], b[i]);

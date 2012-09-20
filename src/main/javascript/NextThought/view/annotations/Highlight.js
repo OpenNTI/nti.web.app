@@ -151,8 +151,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
             boundingHeight,
             width = this.content ? this.content.getWidth() : 680,
             topOffset = 10,
-            leftOffset = 5,
-			boundingTop;
+            leftOffset = 5;
 
 		if(!this.rendered){
 			range = this.getRange();
@@ -184,10 +183,10 @@ Ext.define('NextThought.view.annotations.Highlight', {
 		}
 
 		range = range || this.buildRange();
-        bounds = range.getBoundingClientRect(),
-        boundingTop = Math.ceil(bounds.top),
-        boundingLeft = Math.ceil(bounds.left),
-        boundingHeight = Math.ceil(bounds.height),
+        bounds = range.getBoundingClientRect();
+        boundingTop = Math.ceil(bounds.top);
+        boundingLeft = Math.ceil(bounds.left);
+        boundingHeight = Math.ceil(bounds.height);
         Ext.fly(this.canvas).setXY([
             boundingLeft-leftOffset,
             boundingTop-topOffset
@@ -250,7 +249,10 @@ Ext.define('NextThought.view.annotations.Highlight', {
 
 			BEFORE = -1,
 			SAME = 0,
-			AFTER = 1;
+			AFTER = 1,
+
+			valid = false,
+			display;
 
 		nodeRange.selectNodeContents(node);
 		startToStart = nodeRange.compareBoundaryPoints(Range.START_TO_START, range);
@@ -258,10 +260,9 @@ Ext.define('NextThought.view.annotations.Highlight', {
 		endToStart = nodeRange.compareBoundaryPoints(Range.END_TO_START, range);
 		endToEnd =  nodeRange.compareBoundaryPoints(Range.END_TO_END, range);
 
-		var valid = false;
 		if (node.nodeType === node.TEXT_NODE) { valid = true; }
 		else if (node.nodeType === node.ELEMENT_NODE) {
-			var display = node.ownerDocument.parentWindow.getComputedStyle(node).display;
+			display = node.ownerDocument.parentWindow.getComputedStyle(node).display;
 			if (['inline','inline-block','none'].indexOf(display) >= 0) { valid = true; }
 			else if (node.className.indexOf && node.className.indexOf('mathjax') >= 0) { valid = true; }
 			else if (node.className.indexOf && node.className.indexOf('mathquill') >= 0) { valid = true; }
@@ -308,7 +309,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
 
 
 	onClick: function(e){
-		if(e.getTarget('a[href]')){ return; }
+		if(e.getTarget('a[href]')){ return null; }
 		return this.callParent(arguments);
 	},
 
@@ -328,8 +329,8 @@ Ext.define('NextThought.view.annotations.Highlight', {
 	},
 
 	getScrollPosition: function(currentPosition){
-		var el = Ext.get(this.compElements.first());
-		var dh = 100;
+		var el = Ext.get(this.compElements.first()),
+			dh = 100;
 
 		return currentPosition > el.getTop() ? currentPosition - el.getTop(): el.getTop() - currentPosition - dh;
 	},

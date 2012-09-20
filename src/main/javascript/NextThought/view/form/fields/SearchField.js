@@ -47,12 +47,12 @@ Ext.define('NextThought.view.form.fields.SearchField', {
 
 	specialKeys: {
 		8: true,	//Ext.EventObject.BACKSPACE
-		13: true,       //Ext.EventObject.ENTER
+		13: true,	//Ext.EventObject.ENTER
 		27: true,	//Ext.EventObject.ESC
 		32: true,	//Ext.EventObject.SPACE
 		46: true,	//Ext.EventObject.DELETE
 		37: true,	//Ext.EventObject.LEFT
-		39: true 	//Ext.EventObject.RIGHT
+		39: true	//Ext.EventObject.RIGHT
 	},
 
 

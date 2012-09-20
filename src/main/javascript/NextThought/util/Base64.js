@@ -66,10 +66,10 @@ Ext.define('NextThought.util.Base64',{
 
 			output = output + String.fromCharCode(chr1);
 
-			if (enc3 != 64) {
+			if (enc3 !== 64) {
 				output = output + String.fromCharCode(chr2);
 			}
-			if (enc4 != 64) {
+			if (enc4 !== 64) {
 				output = output + String.fromCharCode(chr3);
 			}
 
@@ -84,11 +84,11 @@ Ext.define('NextThought.util.Base64',{
 	// private method for UTF-8 encoding
 	_utf8_encode : function (string) {
 		string = string.replace(/\r\n/g,"\n");
-		var utftext = "";
+		var utftext = "", n, c;
 
-		for (var n = 0; n < string.length; n++) {
+		for (n = 0; n < string.length; n++) {
 
-			var c = string.charCodeAt(n);
+			c = string.charCodeAt(n);
 
 			if (c < 128) {
 				utftext += String.fromCharCode(c);
@@ -110,9 +110,9 @@ Ext.define('NextThought.util.Base64',{
 
 	// private method for UTF-8 decoding
 	_utf8_decode : function (utftext) {
-		var string = "";
-		var i = 0;
-		var c = c1 = c2 = 0;
+		var string = "",
+			i = 0, c3 = 0, c2 = 0,
+			c = 0;
 
 		while ( i < utftext.length ) {
 

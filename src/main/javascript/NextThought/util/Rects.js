@@ -2,20 +2,20 @@ Ext.define('NextThought.util.Rects',{
 	singleton: true,
 
 
-	getFirstNonBoundingRect: function(r){
-		var range = r.nativeRange ? r.nativeRange : r,
+	getFirstNonBoundingRect: function(ra){
+		var range = ra.nativeRange || ra,
             bound = range.getBoundingClientRect(),
 			rects = Array.prototype.slice.call(range.getClientRects()) || [],
 			i = rects.length - 1, r;
 
 		//trim the empty ones
-		for(; i>=0; i--){
+		for(i; i>=0; i--){
 			r = rects[i];
 			if(!r.height || !r.width){ rects.splice(i,1); }
 		}
 
 		//i === 0 now
-		for(; i<rects.length; i++){
+		for(i; i<rects.length; i++){
 			r = rects[i];
 			if(r && (r.top !== bound.top
 			|| r.bottom !== bound.bottom

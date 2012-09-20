@@ -118,7 +118,7 @@ Ext.define('NextThought.controller.Chat', {
 					var messages = transcript.get('Messages');
 					Ext.each(messages, function(m){
 						me.onMessage(m);
-					}, me)
+					}, me);
 				},
 				function(){
 					console.error('Could not recover chat history.');

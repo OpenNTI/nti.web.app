@@ -104,8 +104,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		var t = e.getTarget('img.whiteboard-thumbnail'), guid = t.parentNode.getAttribute('id');
 		console.log(guid);
 		if(t && this.readOnlyWBsData[guid]){
-			var w = Ext.widget({ xtype: 'wb-window', height: '75%', width: '50%', value: this.readOnlyWBsData[guid], readonly: true});
-			w.show();
+			Ext.widget('wb-window',{height: '75%', width: '50%', value: this.readOnlyWBsData[guid], readonly: true}).show();
 		}
 	},
 

@@ -50,9 +50,9 @@ Ext.define( 'NextThought.view.form.fields.UserSearchInputField', {
 			getType: function(model){
 				if (!model){return 'person';}
 				if(model.type){ return model.type; }
-				var	m = ((model && model.Class) || '').toLowerCase(),
-					u = model.Username.toLowerCase(),
-					v;
+
+				var v, m = ((model && model.Class) || '').toLowerCase(),
+					u = model.Username.toLowerCase();
 
 
 				//Tweak logic slightly if our type is community or

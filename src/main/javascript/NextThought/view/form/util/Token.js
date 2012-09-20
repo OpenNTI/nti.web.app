@@ -27,7 +27,7 @@ Ext.define('NextThought.view.form.util.Token', {
 				}
 
 				//else is it a group or person
-				return 	(/friendslist|group/i).test(m)||!/@/.test(u) ? 'group' : 'person';
+				return (/friendslist|group/i).test(m)||!/@/.test(u) ? 'group' : 'person';
 			}
 		}
 	),

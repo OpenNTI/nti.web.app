@@ -14,11 +14,11 @@ Ext.define('NextThought.util.Search',{
 	 * @return {RegExp}
 	 */
 	searchRe: function(string,partial,wholeWordOnly){
-		var tokens, str;
-		str = string.replace(this.trimRe,'');
-		str = string.replace(this.ignoredWordsRe,'');
-		tokens = Ext.Array.map(str.split(this.splitWhitespaceRe), RegExp.escape),
-		bound = partial?'[^\\s\\)\\(\\.]*':'';
+		var tokens, str, bound = partial?'[^\\s\\)\\(\\.]*':'';
+
+		str = string.replace(this.trimRe,'').replace(this.ignoredWordsRe,'');
+		tokens = Ext.Array.map(str.split(this.splitWhitespaceRe), RegExp.escape);
+
 		if(wholeWordOnly){
 			bound = '\\b';
 		}

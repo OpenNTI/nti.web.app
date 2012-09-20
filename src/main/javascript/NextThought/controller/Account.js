@@ -116,8 +116,8 @@ Ext.define('NextThought.controller.Account', {
 
 
         //put together the json we want to save.
-        json = Ext.JSON.encode({'old_password': old, 'password': pw}),
-        url = u.getLink('edit')+'/++fields++\password';
+        json = Ext.JSON.encode({'old_password': old, 'password': pw});
+        url = u.getLink('edit')+'/++fields++password';
 
 
         Ext.Ajax.request({
