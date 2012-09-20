@@ -79,9 +79,9 @@ Ext.define('NextThought.view.content.reader.Content',{
 			me.relayout();
 			me.el.repaint();
 			me.fireEvent('loaded', containerId);
-			if(hasCallback){
+//			if(hasCallback){
 				Ext.callback(finish,null,[me]);
-			}
+//			}
 		}
 
 		me.updateContent('<div id="NTIContent">'+c+'</div>');
@@ -94,9 +94,9 @@ Ext.define('NextThought.view.content.reader.Content',{
 				resp.responseText.match(/<body([^>]*)>/i),
 				this.buildPath(resp.request.options.url));
 
-		if(!hasCallback){
-			Ext.callback(finish,null,[me]);
-		}
+//		if(!hasCallback){
+//			Ext.callback(finish,null,[me]);
+//		}
 
 		console.log('setting content... set, loading annotations');
 		//containerId = Ext.util.Format.htmlDecode(me.getContainerId()); //handle apostrophe
