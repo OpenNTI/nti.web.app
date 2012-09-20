@@ -269,6 +269,7 @@ Ext.define('NextThought.controller.UserData', {
 		noteRecord = this.getNoteModel().create({
 			applicableRange: rangeDescription,
 			body: body,
+            selectedText: range.toString(),
 			sharedWith: shareWith,
 			style: style,
 			ContainerId: LocationProvider.currentNTIID

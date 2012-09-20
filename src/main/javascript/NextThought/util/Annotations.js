@@ -67,7 +67,8 @@ Ext.define('NextThought.util.Annotations',{
 		var contentRangeDescription = Anchors.createRangeDescriptionFromRange(range, documentElement);
 
 		return Ext.create('NextThought.model.Note', {
-			applicableRange: contentRangeDescription
+			applicableRange: contentRangeDescription,
+            selectedText: range.toString()
 		});
 	},
 
