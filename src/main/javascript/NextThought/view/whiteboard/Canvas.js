@@ -173,10 +173,11 @@ Ext.define(	'NextThought.view.whiteboard.Canvas',{
 
 			function finish(){
 				var data = c.dom.toDataURL("image/png");
+				try { c.remove(); }catch(e){ console.warn(Globals.getError(e)); }
 				resultCallback.call(window,data);
 			}
 
-			var c = this.thumbnailCanvas;
+			var c = Ext.DomHelper.append(Ext.getBody(),{tag: 'canvas', style: {visibility:'hidden',position:'absolute'}},true);
 
 			c.dom.width = 580;
 			c.dom.height = 580;
@@ -184,7 +185,4 @@ Ext.define(	'NextThought.view.whiteboard.Canvas',{
 			this.drawScene(this.updateData(scene),c,finish);
 		}
 	}
-},
-function(){
-    this.thumbnailCanvas = Ext.DomHelper.append(Ext.getBody(),{tag: 'canvas', style: {zIndex: -999, visibility:'hidden',position:'absolute'}},true);
 });
