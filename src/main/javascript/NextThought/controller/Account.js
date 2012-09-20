@@ -149,16 +149,15 @@ Ext.define('NextThought.controller.Account', {
 
 
     changePassword: function(btn){
-        debugger;
         var form=btn.up('password-reset-form'),
             values = form.getValues(),
             u = $AppConfig.userObject,
-            me = this;
+            me = this, key;
 
         function callback(record, op){
             if(!op.success){
                 console.error('FAILURE:',arguments);
-                form.el.down('[name=pw_error]').setStyle('display','inline');
+				alert('not good');
             }
             else {
                 form.reset();
