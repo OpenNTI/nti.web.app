@@ -90,6 +90,15 @@ Ext.define('NextThought.view.account.Window',{
 		this.callParent(arguments);
 
 		this.mon( this.el.down('.close'), 'click', this.close, this);
+
+		this.mon(this.down('password-reset-form button[cancel]'),'click',this.hideForms,this);
+	},
+
+
+	hideForms: function(){
+		Ext.each(this.query('[associatedPanel]'),function(o){ o.toggle(false,true); });
+		this.down('[name=settings]').hide();
+		this.updateLayout();
 	},
 
 

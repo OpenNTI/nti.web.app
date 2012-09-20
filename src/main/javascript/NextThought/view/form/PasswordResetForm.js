@@ -48,7 +48,7 @@ Ext.define('NextThought.view.form.PasswordResetForm', {
 			},
 			defaultType: 'button',
 			items: [
-				{text: 'Cancel', ui: 'text', handler: function(b){b.up('password-reset-form').reset();} },
+				{text: 'Cancel', cancel:1, ui: 'text', handler: function(b){b.up('password-reset-form').reset();} },
 				{text: 'Save', save:1, ui: 'primary', scale: 'medium', disabled: true }
 			]
 		}
