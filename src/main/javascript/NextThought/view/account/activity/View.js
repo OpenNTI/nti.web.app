@@ -92,7 +92,17 @@ Ext.define('NextThought.view.account.activity.View',{
 
 	updateNotificationCountFromStore: function(store, records){
 		var u = $AppConfig.userObject,
-				c = (u.get('NotificationCount') || 0) + ((records||{}).length||0);
+				newCount = 0,
+				c = (u.get('NotificationCount') || 0);
+
+
+		Ext.each(records, function(record){
+			if(!/deleted/i.test(record.get('ChangeType'))){
+				newCount++;
+			}
+		});
+
+		c += newCount;
 
 		//Update current notification of the userobject.
 		u.set('NotificationCount', c);
@@ -169,11 +179,6 @@ Ext.define('NextThought.view.account.activity.View',{
 				}
 			}
 			Ext.each(group.children,function(c){
-				//FIXME we were asked to not show deletes
-				//in the activity so we strip that here.
-				//However this potentially means our notification count
-				//is wrong. It comes from the server so it will
-				//include deleted changes
 				if(/deleted/i.test(c.get('ChangeType'))){
 					maybeFinish();
 					return;
