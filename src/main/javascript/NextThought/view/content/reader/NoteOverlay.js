@@ -306,7 +306,14 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 	},
 
 
-	noteOverlayActivateRichEditor: function(){
+	noteOverlayActivateRichEditor: function(evt){
+		if(evt){
+			evt.stopEvent();
+			if(evt && !this.noteOverlayMouseOver(evt)){
+				return;
+			}
+		}
+
 		var o = this.noteOverlayData,
 			t = o.textarea.dom;
 
