@@ -51,6 +51,9 @@ Ext.define('NextThought.view.account.contacts.Card',{
 
 		el.on('click', this.clicked, this);
 		el.addClsOnOver('card-over');
+
+        if(this.user.get('Presence') !== 'Online'){this.addCls('offline');}
+
 		this.callParent(arguments);
 	},
 

@@ -131,6 +131,11 @@ $over-color: #f4f3f3;
 		margin-left: 44px;
 	}
 
+	&.offline{
+		.name {
+			color: $secondary-grey;
+		}
+	}
 
 	.name {
 		@include menu-label-text-treatment;
