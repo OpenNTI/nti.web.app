@@ -296,6 +296,10 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		function setReplies(){
 			responses.setReplies(store.getItems());
 			me.unmask();
+			if(me.hasCallback){
+				Ext.callback(me.hasCallback);
+				delete me.hasCallback;
+			}
 		}
 
 		store.proxy.url = record.getLink('replies');
