@@ -108,8 +108,7 @@ Ext.define('NextThought.controller.UserData', {
 
 		ps.load({
 			params: {
-				filter:'TopLevel',
-				batchSize: 1000000
+				filter:'TopLevel'
 			}
 		});
 
