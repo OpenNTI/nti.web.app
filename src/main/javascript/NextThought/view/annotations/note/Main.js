@@ -291,6 +291,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		me.mask();
 
 		function setReplies(){
+			record.set('ReferencedByCount',store.getCount());//update the count for next time the carousel renders
 			responses.setReplies(store.getItems());
 			me.unmask();
 			if(me.hasCallback){
@@ -306,11 +307,13 @@ Ext.define('NextThought.view.annotations.note.Main',{
 
 
 	addNewChild: function(child){
-		if(child.get('inReplyTo') === this.record.getId()){
+		var r = this.record;
+
+		if(child.get('inReplyTo') === r.getId()){
 			this.up('window').down('note-responses').addReplies([child]);
 		}
 		else {
-			console.log('[top] ignoring, child does not directly belong to this item', child);
+			console.log('[top] ignoring, child does not directly belong to this item:\n', r.getId(), '\n', child.get('inReplyTo'));
 		}
 	},
 

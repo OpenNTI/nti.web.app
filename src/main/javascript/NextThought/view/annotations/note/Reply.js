@@ -224,7 +224,7 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 			this.addReplies([child]);
 		}
 		else {
-			console.log('[reply] ignoring, child does not directly belong to this item', child);
+			console.log('[reply] ignoring, child does not directly belong to this item '+this.record.getId(), child);
 		}
 	},
 
