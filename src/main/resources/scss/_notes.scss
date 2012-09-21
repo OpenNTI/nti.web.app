@@ -1061,6 +1061,8 @@
 	}
 
 	.note-reply-container {
+		background: #ffffff;
+
 		.note-reply-container {
 			.note-reply {
 				padding-left: 60px;
@@ -1071,6 +1073,21 @@
 					background-image: none;
 				}
 			}
+		}
+	}
+
+	.note-footer, .note-content-container.scrollbody {
+		background: #FBFBFB;
+	}
+	.note-footer {
+		position: relative;
+		height: 200px;
+		text-align: center;
+		padding: 20px;
+		color: $tertiary-grey;
+
+		&::after{
+			content: 'End';
 		}
 	}
 }

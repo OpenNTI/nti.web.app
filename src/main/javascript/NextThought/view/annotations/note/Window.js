@@ -15,6 +15,7 @@ Ext.define('NextThought.view.annotations.note.Window',{
 	minimizable: false,
 	closable: true,
 	modal: true,
+	resizable: false,
 	title: 'Comments',
 	width: 670,
 	height: '80%',
@@ -29,7 +30,7 @@ Ext.define('NextThought.view.annotations.note.Window',{
 		{
 			noteWindowBody: true,
 			xtype: 'container',
-			cls: 'note-content-container',
+			cls: 'note-content-container scrollbody',
 			autoScroll: true,
 			flex: 1,
 			layout: {
@@ -38,7 +39,8 @@ Ext.define('NextThought.view.annotations.note.Window',{
 			},
 			items: [
 				{xtype: 'note-main-view' },
-				{xtype: 'note-responses' }
+				{xtype: 'note-responses' },
+				{xtype: 'box', cls: 'note-footer'}
 			]
 		}
 	],
