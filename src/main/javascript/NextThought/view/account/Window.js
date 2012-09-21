@@ -13,6 +13,7 @@ Ext.define('NextThought.view.account.Window',{
 	closable: true,
 	modal: true,
 	dialog: true,
+    resizable: false,
 
 	width: 520,
 	y: 80,
