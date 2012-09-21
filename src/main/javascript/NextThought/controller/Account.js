@@ -59,7 +59,7 @@ Ext.define('NextThought.controller.Account', {
 
 
 	contactCardClicked: function(cmp,username){
-		if ($AppConfig.service.canChat()){
+		if ($AppConfig.service.canChat() && !isMe(username)){
 			this.getController('Chat').enterRoom(username);
 		}
 		else {
