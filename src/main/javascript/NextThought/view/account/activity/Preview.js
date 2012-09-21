@@ -31,7 +31,7 @@ Ext.define('NextThought.view.account.activity.Preview',{
 		lineage.reverse();
 
 		this.renderData = Ext.apply(this.renderData||{},{
-			location: Ext.String.ellipsis(location,70,false),
+			location: location,
 			path: lineage.join(' / '),
 			contextText: this.record.get('selectedText'),
 			textContent: this.record.getBodyText ? this.record.getBodyText() : ''
@@ -106,15 +106,15 @@ Ext.define('NextThought.view.account.activity.Preview',{
 				cls: 'header',
 				cn:[
 					{cls: 'path', html:'{path}'},
-					{cls: 'location-label', html:'{location}'},
+					{cls: 'location-label', html:'{location:ellipsis(150)}'},
 					{cls: 'context', cn:[
 						{tag: 'canvas'},
-						{cls: 'text',html: '{contextText}'}
+						{cls: 'text',html: '{contextText:ellipsis(400)}'}
 					]}
 				]
 			},
 			{ cls: 'footer', cn: [
-				{tag: 'tpl', 'if':'textContent', cn:[{cls: 'body', html: '{textContent}'}]},
+				{tag: 'tpl', 'if':'textContent', cn:[{cls: 'body', html: '{textContent:ellipsis(200)}'}]},
 				{tag: 'tpl', 'if':'!textContent', cn:[{cls: 'filler'}]},
 				TemplatesForNotes.getReplyOptions() ] }
 		]);
