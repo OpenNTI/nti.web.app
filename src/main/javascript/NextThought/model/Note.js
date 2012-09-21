@@ -72,7 +72,7 @@ Ext.define('NextThought.model.Note', {
 	 */
 	getReplyCount: function(){
 		if(this.raw.hasOwnProperty('ReferencedByCount')){
-			return (this.get('ReferencedByCount')||1) - 1; //this appears to be inclusive instead of exclusive. (the count counts itself as well as replies)
+			return this.get('ReferencedByCount') || 0;
 		}
 
 		return (this.children||[]).reduce(function(sum,child){
