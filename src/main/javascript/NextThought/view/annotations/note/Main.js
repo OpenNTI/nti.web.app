@@ -216,11 +216,11 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		}
 
 		try {
+			this.context.setHTML('');
 			suppressed = r.get('style') === 'suppressed';
 			doc = ReaderPanel.get(this.prefix).getDocumentElement();
 			range = Anchors.toDomRange(r.get('applicableRange'),doc);
 			if(range){
-                this.context.setHTML('');
                 this.context.insertFirst(RangeUtils.expandRange(range, doc));
                 if (!this.context.first().is('div')){
                     this.context.insertHtml('afterBegin', '[...] ');
