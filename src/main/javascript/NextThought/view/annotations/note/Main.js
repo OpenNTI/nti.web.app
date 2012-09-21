@@ -386,7 +386,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 	editorSaved: function(){
 		var v = this.editorActions.getValue(),
 			me = this,
-			r = me.record, re = /\w|(&nbsp;)|(<br>)|(<div>)|(<\/div>)*/g;
+			r = me.record, re = /(&nbsp;)|(<br>)|(<div>)|(<\/div>)*/g;
 
 		function callback(success, record){
 			me.el.unmask();
