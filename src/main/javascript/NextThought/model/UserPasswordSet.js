@@ -15,14 +15,23 @@ Ext.define('NextThought.model.UserPasswordSet',{
 	proxy: { type: 'nti' },
 	fields: [
 		{ name: 'Links', type: 'links', persist: false, defaultValue: [] },
-		{ name: 'Class', type:'string', defaultValue: 'User' },
 		{ name: 'old_password', type:'string' },
 		{ name: 'password', type:'string' }
 	],
 
+	save: function(ops){
+
+		Ext.Ajax.request(Ext.apply({
+			url: this.getLink('edit')+'/++fields++password',
+			method: 'PUT',
+			jsonData: this.getData()
+		},ops));
+
+	},
+
 	statics : {
 		fromUser: function(user){
-			return this.create( {Links: $AppConfig.userObject.raw.Links}, user.get('Username'));
+			return this.create( {Links: Ext.clone($AppConfig.userObject.raw.Links)}, user.get('Username'));
 		}
 	}
 

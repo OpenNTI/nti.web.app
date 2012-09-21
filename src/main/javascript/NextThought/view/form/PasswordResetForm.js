@@ -61,6 +61,12 @@ Ext.define('NextThought.view.form.PasswordResetForm', {
 	},
 
 
+	setError: function(errorJson){
+		console.log(errorJson);
+		alert(errorJson.message);
+	},
+
+
 	getValues: function(){
 		return {
 			old_password: this.down('[name=old_password]').getValue(),

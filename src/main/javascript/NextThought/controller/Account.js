@@ -85,10 +85,9 @@ Ext.define('NextThought.controller.Account', {
         var form=btn.up('password-reset-form'),
             u = this.getUserPasswordSetModel().fromUser($AppConfig.userObject);
 
-        function callback(record, op){
-            if(!op.success){
-                console.error('FAILURE:',op);
-				alert('Sorry, no good.');
+        function callback(req, success, resp){
+            if(!success){
+                form.setError(Ext.decode(resp.responseText));
             }
             else {
                 form.reset();
