@@ -5,7 +5,8 @@ Ext.define('NextThought.controller.Account', {
 		'FriendsList',
 		'UnresolvedFriend',
 		'UserSearch',
-		'User'
+		'User',
+		'UserPasswordSet'
 	],
 
 	stores: [
@@ -67,74 +68,6 @@ Ext.define('NextThought.controller.Account', {
 	},
 
 
-    resetPasswordWindow: function(){
-        var me = this,
-            win;
-
-       win = Ext.widget( 'nti-window',{
-            id: 'password-reset-window',
-
-            closeAction: 'destroy',
-            modal: true,
-            dialog: true,
-            layout: 'fit',
-            items: {
-                xtype: 'password-reset-form'
-            },
-
-            dockedItems: [ {
-                dock: 'bottom',
-                xtype: 'container',
-                cls: 'buttons',
-                layout:{ type: 'hbox', pack: 'end' },
-                defaults: {ui: 'primary', scale: 'medium'},
-                items: [
-                    {xtype: 'button', text: 'Save', action: 'save', handler: me.resetPassword},
-                    {xtype: 'button', text: 'Cancel', ui: 'secondary', handler: function(btn){
-                        win.close();
-                    }}
-                ]
-            }]
-        });
-
-        win.show();
-    },
-
-
-    resetPassword: function(btn, event){
-        var u = $AppConfig.userObject,
-            win = btn.up('window'),
-            old = win.down('[name=old_password]').getValue(),
-            pw = win.down('[name=password]').getValue(),
-            pwver = win.down('[name=password-verify]').getValue(),
-            json, url;
-
-        if (pw !== pwver) {
-            console.error('password and password verify do not match.');
-            return;
-        }
-
-
-        //put together the json we want to save.
-        json = Ext.JSON.encode({'old_password': old, 'password': pw});
-        url = u.getLink('edit')+'/++fields++password';
-
-
-        Ext.Ajax.request({
-            url: url,
-            jsonData: json,
-            method: 'PUT',
-            headers: { Accept: 'application/json' },
-            failure: function(){
-                console.error("field save fail", arguments);
-            },
-            success: function(){
-                win.close();
-            }
-        });
-    },
-
-
 	showAccount: function(){
 		var me = this;
 		if (me.acctWin && !me.acctWin.isDestroyed) {
@@ -150,29 +83,20 @@ Ext.define('NextThought.controller.Account', {
 
     changePassword: function(btn){
         var form=btn.up('password-reset-form'),
-            values = form.getValues(),
-            u = $AppConfig.userObject,
-            me = this, key;
+            u = this.getUserPasswordSetModel().fromUser($AppConfig.userObject);
 
         function callback(record, op){
             if(!op.success){
-                console.error('FAILURE:',arguments);
-				alert('not good');
+                console.error('FAILURE:',op);
+				alert('Sorry, no good.');
+				debugger;
             }
             else {
                 form.reset();
             }
         }
 
-
-        u.fields.add(new Ext.data.Field({name: 'old_password', type:'string'}));
-        u.fields.add(new Ext.data.Field({name: 'password', type:'string'}));
-
-        for(key in values){
-            if(values.hasOwnProperty(key)) {
-                u.set(key, values[key]);
-            }
-        }
+		u.set(form.getValues());
         u.save({callback: callback});
     },
 

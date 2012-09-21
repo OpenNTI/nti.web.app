@@ -1,12 +1,18 @@
 Ext.define('NextThought.model.Base', {
 	extend: 'Ext.data.Model',
 	requires: [
+		'NextThought.mixins.HasLinks',
 		'NextThought.model.converters.Links',
 		'NextThought.model.converters.Items',
 		'NextThought.model.converters.Users',
 		'NextThought.util.Parsing',
 		'NextThought.proxy.Rest'
 	],
+
+	mixins: {
+		hasLinks: 'NextThought.mixins.HasLinks'
+	},
+
 	idProperty: 'NTIID',
 	mimeType: 'application/vnd.nextthought',
 	proxy: { type: 'nti' },
@@ -130,12 +136,6 @@ Ext.define('NextThought.model.Base', {
 		if (c <= 0) {return '';}
 		else if (c >= 1000){ return '999+';}
 		return String(c);
-	},
-
-	getLink: function(rel){
-		var links = this.get('Links') || Ext.data.Types.LINKS.convert( this.raw.Links || [] ),
-			ref = links ? links.getRelHref(rel) : null;
-		return ref? getURL(ref) : null;
 	},
 
 
