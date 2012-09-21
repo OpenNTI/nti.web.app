@@ -89,7 +89,6 @@ Ext.define('NextThought.controller.Account', {
             if(!op.success){
                 console.error('FAILURE:',op);
 				alert('Sorry, no good.');
-				debugger;
             }
             else {
                 form.reset();
