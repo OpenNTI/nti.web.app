@@ -301,13 +301,8 @@ Ext.define('NextThought.controller.UserData', {
 			scope: this,
 			callback:function(record, request){
 				var success = request.success,
-					rec = success ? record: null,
-					store;
+					rec = success ? record: null;
 				if (success){
-					store = LocationProvider.getStore();
-					if( store && store.containerId === record.get('containerId') ){
-						store.add(rec);
-					}
 					this.self.events.fireEvent('new-note', rec);
 					(rec.parent?rec:recordRepliedTo).fireEvent('child-added',rec);
 				}
