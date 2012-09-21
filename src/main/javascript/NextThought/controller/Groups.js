@@ -14,7 +14,8 @@ Ext.define('NextThought.controller.Groups', {
 
 	views: [
 		'account.contacts.management.GroupList',
-		'account.contacts.management.Person'
+		'account.contacts.management.Person',
+		'account.contacts.management.AddGroup'
 	],
 
 	MY_CONTACTS_PREFIX_PATTERN: 'mycontacts-{0}',
@@ -38,6 +39,10 @@ Ext.define('NextThought.controller.Groups', {
 				'delete-group': this.deleteGroup,
 				'add-contact': this.addContact,
 				'remove-contact': this.removeContact
+			},
+
+			'add-group' : {
+				'add-group': this.addGroup
 			}
 
 		},{});
@@ -161,6 +166,9 @@ Ext.define('NextThought.controller.Groups', {
 
 				groups.add({title: name, associatedGroup: group}).setUsers(online);
 			});
+
+			//Add the addGroup link on the groups
+			groups.add({xtype: 'add-group'});
 		});
 	},
 

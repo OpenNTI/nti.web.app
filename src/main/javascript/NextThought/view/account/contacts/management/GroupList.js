@@ -1,7 +1,7 @@
 Ext.define('NextThought.view.account.contacts.management.GroupList',{
 	extend: 'Ext.view.BoundList',
 	alias: 'widget.management-group-list',
-
+	mixins: ['NextThought.mixins.AddGroup'],
 	ui: 'nt',
 	plain: true,
 	shadow: false,
@@ -72,23 +72,7 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
 		}, this);
 
 		if(this.allowSelect){
-			link = Ext.DomHelper.append( ul,
-				{
-					tag: 'li',
-					cls: 'add-group-action selection-list-item',
-					role: 'button',
-					children: [
-						{ tag: 'a', href: '#', html: 'Add Group' },
-						{ tag: 'input', type: 'text', cls: 'new-group-input', style: 'display: none;'  }
-					]
-				}, true);
-
-			link.down('a').on('click', this.addGroupClicked, this);
-			link.down('input').on({
-				scope: this,
-				keypress: this.newGroupKeyPressed,
-				keydown: this.newGroupKeyDown
-			});
+			this.attachAddGroupControl( ul, 'li' );
 		}
 	},
 
@@ -191,63 +175,11 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
 		}
 	},
 
-
-	addGroupClicked: function(e){
-		var a = Ext.get(e.getTarget('a',undefined,true));
-
-		a.next('input').setStyle('display','').focus();
-		a.remove();
-
-		e.preventDefault();
-		e.stopPropagation();
-		return false;
-	},
-
-
-	newGroupKeyDown: function(event) {
-		var specialKeys = {
-			27: true,	//Ext.EventObject.prototype.ESC
-			8: true,	//Ext.EventObject.prototype.BACKSPACE
-			46: true	//Ext.EventObject.prototype.DELETE
-		};
-
-		Ext.fly(event.getTarget()).removeCls('error');
-		event.stopPropagation();
-
-		if(specialKeys[event.getKey()]){
-			this.newGroupKeyPressed(event);
-		}
-	},
-
-
-	newGroupKeyPressed: function(event){
-		var k = event.getKey();
-		if(k === event.ESC){
-			this.reset();
-			return;
-		}
-		else if (k === event.ENTER) {
-			this.submitNewGroup(event.getTarget().value);
-		}
-
-		event.stopPropagation();
-	},
-
-
-	submitNewGroup: function(groupName){
-		var input = this.getEl().down('li > input'),
-			me = this;
-
-		if((groupName||'').length === 0){
-			return;
-		}
-
-		this.fireEvent('add-group', groupName, function(success){
-			if(!success){ input.addCls('error'); }
+	afterGroupAdd: function(groupName){
+		var me = this;
 			me.store.on('datachanged',function(){
 				me.selectNewGroup(groupName);
 			},me,{single:true});
-
-		});
 	}
+
 });
