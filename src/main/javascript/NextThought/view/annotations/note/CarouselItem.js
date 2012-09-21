@@ -22,9 +22,8 @@ Ext.define('NextThought.view.annotations.note.CarouselItem',{
 	},
 
 	initComponent: function(){
-		var m = this.record;
-		this.id = IdCache.getComponentId(m,null, 'carousel-item');
 		this.callParent(arguments);
+		var m = this.record;
 
 		this.renderData = {count:m.getReplyCount()|| false};
 		UserRepository.getUser(m.get('Creator'),this.fillInUser,this);
