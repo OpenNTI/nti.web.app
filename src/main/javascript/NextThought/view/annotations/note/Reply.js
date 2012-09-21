@@ -220,15 +220,20 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 
 
 	addNewChild: function(child){
-		this.addReplies([child]);
+		if(child.get('inReplyTo') === this.record.getId()){
+			this.addReplies([child]);
+		}
+		else {
+			console.log('[reply] ignoring, child does not directly belong to this item', child);
+		}
 	},
 
 
 	addReplies: function(records){
 		var toAdd = [];
 		Ext.each(records, function(record){
-			var guid = IdCache.getComponentId(record, null, 'reply');
-			var add = true;
+			var guid = IdCache.getComponentId(record, null, 'reply'),
+				add = true;
 			if (record.getModelName() !== 'Note') {
 				console.warn('can not at reply, it is not a note and I am not prepared to handle that.');
 				add=false;

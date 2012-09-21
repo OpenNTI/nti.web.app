@@ -306,7 +306,12 @@ Ext.define('NextThought.view.annotations.note.Main',{
 
 
 	addNewChild: function(child){
-		this.up('window').down('note-responses').addReplies([child]);
+		if(child.get('inReplyTo') === this.record.getId()){
+			this.up('window').down('note-responses').addReplies([child]);
+		}
+		else {
+			console.log('[top] ignoring, child does not directly belong to this item', child);
+		}
 	},
 
 
@@ -336,7 +341,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 	},
 
 
-	recordChanged: Ext.Function.createBuffered( function(){ this.setRecord(this.record); }, 10),
+	recordChanged: Ext.Function.createBuffered( function(){ this.setRecord(this.record); }, 100),
 
 
 	fillInUser: function(user){
