@@ -43,8 +43,9 @@ Ext.define('NextThought.mixins.AddGroup', {
 	newGroupKeyPressed: function(event){
 		var k = event.getKey();
 		if(k === event.ESC){
+			event.stopEvent();
 			this.reset();
-			return;
+			return false;
 		}
 		else if (k === event.ENTER) {
 			event.stopEvent();
