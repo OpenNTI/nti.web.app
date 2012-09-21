@@ -63,7 +63,7 @@ Ext.define('NextThought.mixins.AddGroup', {
 		if((groupName||'').length === 0){
 			return;
 		}
-
+		input.blur();
 		this.fireEvent('add-group', groupName, function(success){
 			if(!success){ input.addCls('error'); }
 			me.afterGroupAdd(groupName);
