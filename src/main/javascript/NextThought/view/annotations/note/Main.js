@@ -313,7 +313,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 			this.up('window').down('note-responses').addReplies([child]);
 		}
 		else {
-			console.log('[top] ignoring, child does not directly belong to this item:\n', r.getId(), '\n', child.get('inReplyTo'));
+			console.log('[top] ignoring, child does not directly belong to this item:\n', r.getId(), '\n', child.get('inReplyTo'), ' <- new child');
 		}
 	},
 
