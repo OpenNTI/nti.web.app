@@ -82,7 +82,6 @@ Ext.define('NextThought.view.annotations.note.Main',{
 
 			TemplatesForNotes.attachMoreReplyOptionsHandler(me, me.more);
 			me.editorActions = new NoteEditorActions(me,me.editor);
-			me.mon(me.editorActions, { scope: me, 'size-changed': function(){ me.updateLayout(); } });
 
 			this.el.hover(this.onMouseOver,this.onMouseOut,this);
 
@@ -111,14 +110,12 @@ Ext.define('NextThought.view.annotations.note.Main',{
 	onMouseOver: function(){
 		this.up('window').down('note-carousel').getEl().addCls('hover');
 		this.el.addCls('hover');
-		this.updateLayout();
 	},
 
 
 	onMouseOut: function(){
 		this.up('window').down('note-carousel').getEl().removeCls('hover');
 		this.el.removeCls('hover');
-		this.updateLayout();
 	},
 
 
@@ -273,7 +270,6 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		this.text.update(text);
 		this.text.select('a[href]',true).set({target:'_blank'});
 
-		Ext.defer(this.updateLayout,1,this);
 
 		Ext.each(this.text.query('.whiteboard-thumbnail'),
 				function(wb){ Ext.fly(wb).on('click', this.click, this); },
@@ -376,11 +372,11 @@ Ext.define('NextThought.view.annotations.note.Main',{
 
 
     scrollIntoView: function(){
-        var scroller = this.ownerCt.getEl();
+        var scroller = this.el.up('.note-content-container.scrollbody');
         if( this.replyBox ){
             this.replyBox.addCls('hover');
         }
-        this.editor.scrollIntoView(scroller);
+        this.responseBox.scrollIntoView(scroller);
     },
 
 
@@ -429,7 +425,6 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		this.up('window').down('note-carousel').addCls('editor-active');
 		me.el.addCls('editor-active');
 		me.editorActions.activate();
-		me.updateLayout();
         me.scrollIntoView();
 		setTimeout(function(){me.editorActions.focus();}, 100);
 	},
@@ -446,7 +441,6 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		this.up('window').down('note-carousel').removeCls('editor-active');
 		this.editorActions.deactivate();
 		this.el.removeCls('editor-active');
-		this.updateLayout();
 		if(this.editMode){
 			this.text.show();
 		}

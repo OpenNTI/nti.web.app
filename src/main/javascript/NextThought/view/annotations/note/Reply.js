@@ -92,11 +92,6 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 
 		TemplatesForNotes.attachMoreReplyOptionsHandler(me, me.more);
 		me.editorActions = new NoteEditorActions(me,me.editor);
-
-		me.mon(me.editorActions, {
-			scope: me,
-			'size-changed': function(){ me.updateLayout(); }
-		});
 	},
 
 	click: function(e){
@@ -123,7 +118,6 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 			if(r.replyBox){r.replyBox.removeCls('hover');}
 		});
 		this.replyBox.addCls('hover');
-		this.updateLayout();
 	},
 
 	onMouseOut: function(){
@@ -131,18 +125,8 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 		var s = this.getCarouselIfNear();
 		if(s){ s.removeCls('hover'); }
 		this.replyBox.removeCls('hover');
-		this.updateLayout();
 	},
 
-
-	scrollIntoView: function(){
-		var scroller = this.up('note-responses').ownerCt.getEl();
-		if( this.replyBox ){
-			this.replyBox.addCls('hover');
-		}
-		this.getEl().scrollIntoView(scroller);
-		this.updateLayout();
-	},
 
 	updateToolState: function(){
 		this.liked.set({'title':  this.record.isLiked() ? 'Liked' : 'Like'});
@@ -211,7 +195,6 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 			this.editorActions.deactivate();
 			this.editor.down('.content').update('');
 		}
-		this.updateLayout();
 		if(this.editMode){
 			this.text.show();
 		}
@@ -324,7 +307,8 @@ function(){
 		'generateClickHandler',
 		'fillInUser',
 		'fillInShare',
-		'editorSaved'
+		'editorSaved',
+		'scrollIntoView'
 	]);
 
 

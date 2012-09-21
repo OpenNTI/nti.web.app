@@ -33,10 +33,7 @@ Ext.define('NextThought.view.annotations.note.Window',{
 			cls: 'note-content-container scrollbody',
 			autoScroll: true,
 			flex: 1,
-			layout: {
-				type: 'vbox',
-				align: 'stretch'
-			},
+			layout: 'auto',
 			items: [
 				{xtype: 'note-main-view' },
 				{xtype: 'note-responses' },

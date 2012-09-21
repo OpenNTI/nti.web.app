@@ -19,7 +19,6 @@ Ext.define('NextThought.controller.UserData', {
 		'Transcript'
 	],
 
-
 	stores: [
 		'PageItem'
 	],
@@ -36,9 +35,7 @@ Ext.define('NextThought.controller.UserData', {
 		'whiteboard.Window'
 	],
 
-	refs: [
-		{ ref: 'reader', selector: 'reader-panel'}
-	],
+	refs: [],
 
 	statics: {
 		events: new Ext.util.Observable()
@@ -141,7 +138,6 @@ Ext.define('NextThought.controller.UserData', {
 
 
 
-
 	define: function(term, boundingScreenBox){
 
 		if( this.definition ){
@@ -226,7 +222,6 @@ Ext.define('NextThought.controller.UserData', {
 	},
 
 
-
 	onLoadTranscript: function(record, cmp) {
 		var model = this.getModel('Transcript'),
 			id = record.get('RoomInfo').getId();
@@ -253,7 +248,7 @@ Ext.define('NextThought.controller.UserData', {
 		}
 
 		//Define our vars and create our content range description:
-		var doc = this.getReader().getDocumentElement(),
+		var doc = ReaderPanel.get().getDocumentElement(),
 			noteRecord,
 			rangeDescription = Anchors.createRangeDescriptionFromRange(range, doc);
 
@@ -320,6 +315,7 @@ Ext.define('NextThought.controller.UserData', {
 			}
 		});
 	},
+
 
 	replyAsChat: function(record) {
 		var top = record,
