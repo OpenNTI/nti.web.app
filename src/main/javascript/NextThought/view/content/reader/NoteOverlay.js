@@ -154,7 +154,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		r = o.restrictedRanges, v = z + this.getAnnotationOffsets().scrollTop;
 
 		//test to see if line is occupied'
-		return ! (r && r[v]===true);
+		return !(r && r[v]===true) && v > 120;
 	},
 
 
