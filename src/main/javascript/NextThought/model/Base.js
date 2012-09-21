@@ -255,7 +255,6 @@ Ext.define('NextThought.model.Base', {
 	isModifiable: function(){
         //note: a note is no longer modifable if it's been referenced, like it has a reply.  This is because of reasons
         //which are beyond my understanding, and since I am incredibly smart, those reasons probably don't make sense.
-        debugger;
         var refedBy = 0;
         if (this.get('ReferencedByCount')){refedBy = this.get('ReferencedByCount');}
         if (this.children && this.children.length > 0){refedBy = this.children.length;}
