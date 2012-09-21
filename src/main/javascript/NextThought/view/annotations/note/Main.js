@@ -273,11 +273,12 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		this.text.update(text);
 		this.text.select('a[href]',true).set({target:'_blank'});
 
+		Ext.defer(this.updateLayout,1,this);
+
 		Ext.each(this.text.query('.whiteboard-thumbnail'),
 				function(wb){ Ext.fly(wb).on('click', this.click, this); },
 				this);
 
-		this.updateLayout();
 	},
 
 	generateClickHandler: function(id,data){
