@@ -257,7 +257,11 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 		xy[0] += offset[0] + innerDocOffset;
 		xy[1] += offset[1];
 
-		menu.showAt(xy);
+
+        if (LocationProvider.currentNTIID.indexOf('mathcounts') < 0) {
+            console.debug('hack alert, annotation context menu not showing while in mathcounts content...');
+		    menu.showAt(xy);
+        }
 
 		me.selectRange(range);
 	},
