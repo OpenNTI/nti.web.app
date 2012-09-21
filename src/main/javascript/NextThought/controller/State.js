@@ -199,6 +199,6 @@ Ext.define('NextThought.controller.State', {
 		if (!username){
 			console.error('unknown username for state mgmt.');
 		}
-		return btoa('state-' + username);
+		return Base64.encode('state-' + username);
 	}
 });
