@@ -25,7 +25,6 @@ Ext.define('NextThought.mixins.AddGroup', {
 
 	newGroupKeyDown: function(event) {
 		var specialKeys = {
-			13: true,
 			27: true,	//Ext.EventObject.prototype.ESC
 			8: true,	//Ext.EventObject.prototype.BACKSPACE
 			46: true	//Ext.EventObject.prototype.DELETE
@@ -50,6 +49,7 @@ Ext.define('NextThought.mixins.AddGroup', {
 		else if (k === event.ENTER) {
 			event.stopEvent();
 			this.submitNewGroup(event.getTarget().value);
+			return false;
 		}
 
 		event.stopPropagation();
