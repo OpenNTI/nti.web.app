@@ -73,6 +73,18 @@ Ext.define('NextThought.model.Base', {
 	},
 
 
+
+	isTopLevel: function(){
+		var notAReply = !this.get('inReplyTo'),
+			noReferences = (this.get('references')||[]).length===0,
+			noParent = !this.parent;
+
+		console.log('record is toplevel? ', notAReply, noReferences, noParent, this.raw);
+
+		return notAReply && noReferences && noParent;
+	},
+
+
 	tearDownLinks: function(){
 		var p = this.parent, cn = (this.children||[]),
 			i, splice = Array.prototype.splice;

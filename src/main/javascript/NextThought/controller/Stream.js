@@ -133,6 +133,10 @@ Ext.define('NextThought.controller.Stream', {
 
 		//add it to the page items store I guess:
 		pageStore = LocationProvider.getStore();
+		if(!pageStore || LocationProvider.currentNTIID !== cid || (item && !item.isTopLevel())){
+			return;
+		}
+
 		if(!/deleted/i.test(change.get('ChangeType'))){
 			pageStore.add(item);
 		}
