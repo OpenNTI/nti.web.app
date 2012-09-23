@@ -41,7 +41,8 @@ Ext.define('NextThought.util.Anchors', {
 		Anchors.cleanRangeFromBadStartAndEndContainers(range);
 		range = Anchors.makeRangeAnchorable(range, docElement);
 		var pureRange = Anchors.purifyRange(range, docElement),
-			ancestorNode = range.commonAncestorContainer;
+			ancestorNode = range.commonAncestorContainer,
+            result = {};
 
 		//If the ancestorcontainer is a text node, we want a containing element as per the docs
 		//NOTE: use range, not pureRange here because the pureRange's ancestor is probably a doc fragment.
@@ -50,16 +51,40 @@ Ext.define('NextThought.util.Anchors', {
 		}
 		ancestorNode = Anchors.referenceNodeForNode(ancestorNode);
 
+        result.container = this.getContainerNtiid(ancestorNode);
+
 		var ancestorAnchor = Ext.create('NextThought.model.anchorables.ElementDomContentPointer', {
 			node: ancestorNode,
 			role: 'ancestor'
 		});
-		return Ext.create('NextThought.model.anchorables.DomContentRangeDescription', {
+
+		result.description = Ext.create('NextThought.model.anchorables.DomContentRangeDescription', {
 			start: Anchors.createPointer(pureRange, 'start'),
 			end: Anchors.createPointer(pureRange, 'end'),
 			ancestor: ancestorAnchor
 		});
+        return result;
 	},
+
+
+    getContainerNtiid: function(node){
+        var n = Ext.get(node),
+            a = 'data-ntiid',
+            s = '['+a+']',
+            up = n.up(s);
+
+        if (n.is(s)){
+            return n.getAttribute(a);
+        }
+        else if (up) {
+            return up.getAttribute(a);
+        }
+        else {
+            return LocationProvider.currentNTIID;
+        }
+
+    },
+
 
 	doesElementMatchPointer: function(element, pointer) {
 		if(element.id === pointer.elementId

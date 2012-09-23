@@ -38,7 +38,7 @@ describe("Anchor Utils", function() {
 			range.setStartBefore(p);
 			range.setEndAfter(a);
 
-			result = Anchors.createRangeDescriptionFromRange(range, document);
+			result = Anchors.createRangeDescriptionFromRange(range, document).description;
 			expect(result.getAncestor().getElementId()).toEqual(div.getAttribute('Id'));
 		});
 	});
@@ -1572,7 +1572,7 @@ describe("Anchor Utils", function() {
 			expect(range.toString()).toEqual(t1.textContent+t2.textContent);
 
 			//now turn that into a description, and check a few assumptions
-			desc = Anchors.createRangeDescriptionFromRange(range, document);
+			desc = Anchors.createRangeDescriptionFromRange(range, document).description;
 			expect(desc).toBeTruthy();
 			expect(desc.getAncestor()).toBeTruthy();
 			expect(desc.getAncestor().getElementId()).toEqual(root.getAttribute('Id'));
@@ -1643,7 +1643,7 @@ describe("Anchor Utils", function() {
 			expect(range.toString()).toEqual(expectedRangeToString);
 
 			//now turn that into a description, and check a few assumptions
-			desc = Anchors.createRangeDescriptionFromRange(range, document);
+			desc = Anchors.createRangeDescriptionFromRange(range, document).description;
 			expect(desc).toBeTruthy();
 			expect(desc.getAncestor()).toBeTruthy();
 			expect(desc.getAncestor().getElementId()).toEqual(p.getAttribute('Id'));
@@ -1696,7 +1696,7 @@ describe("Anchor Utils", function() {
 			range.setEnd(t, 27);
 
 			//now turn that into a description, and check a few assumptions
-			desc = Anchors.createRangeDescriptionFromRange(range, document);
+			desc = Anchors.createRangeDescriptionFromRange(range, document).description;
 			expect(desc).toBeTruthy();
 			expect(desc.getAncestor()).toBeTruthy();
 

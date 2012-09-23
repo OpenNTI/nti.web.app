@@ -94,11 +94,20 @@ Ext.define('NextThought.controller.UserData', {
 
 
 	onAnnotationsLoad: function(cmp, containerId, subContainers, callback) {
+        function merge(a, b) {
+            var k;
+            for(k in b) {
+                if(b.hasOwnProperty(k)){
+                    a[k] = (a[k]||[]).concat(b[k]);
+                }
+            }
+            return a;
+        }
 
 		function loaded(store,records,success){
 			stores.pop();
 
-			var bins = success? Ext.Object.merge(allBins,store.getBins()) : allBins;
+			var bins = success? merge(allBins,store.getBins()) : allBins;
 
 			if(stores.length===0){
 				cmp.objectsLoaded(store.getItems(bins), bins, callback);
@@ -285,12 +294,12 @@ Ext.define('NextThought.controller.UserData', {
 
 		//define our note object:
 		noteRecord = this.getNoteModel().create({
-			applicableRange: rangeDescription,
+			applicableRange: rangeDescription.description,
 			body: body,
             selectedText: range.toString(),
 			sharedWith: shareWith,
 			style: style,
-			ContainerId: LocationProvider.currentNTIID
+			ContainerId: rangeDescription.container
 		});
 
 		//now save this:

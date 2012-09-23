@@ -44,7 +44,7 @@ describe("Tests with Changing Documents", function() {
 				var p = addElement(div,'p',{});
 					var t1 = addTextNode(p,'This is some somewhat but not particularly long text for readers with short attention spans.');
 			range = makeRange(t1,13,t1,47);
-			rangeDescription = Anchors.createRangeDescriptionFromRange(range, document);
+			rangeDescription = Anchors.createRangeDescriptionFromRange(range, document).description;
 			start = rangeDescription.getStart()
 			expect(start.getContexts()[0].contextOffset).toEqual(84);
 			t1.data = 'This is some somewhat but not particularly long text for readers with short attention spans. Here are some extra words.';
@@ -60,7 +60,7 @@ describe("Tests with Changing Documents", function() {
                 var p2 = addElement(div,'p',{});                                          
                     var t2 = addTextNode(p2,'This is some more text containing many, many uninteresting words.');
             range = makeRange(t1,13,t2,22);                                               
-            rangeDescription = Anchors.createRangeDescriptionFromRange(range, document);  
+            rangeDescription = Anchors.createRangeDescriptionFromRange(range, document).description;
             var start = rangeDescription.getStart();                                      
             var startWalker = document.createTreeWalker(div, NodeFilter.SHOW_TEXT);       
             startWalker.currentNode = t1;                                                 
@@ -84,7 +84,7 @@ describe("Tests with Changing Documents", function() {
 				var p2 = addElement(div,'p',{});
                 	var t2 = addTextNode(p2,'This is some more text containing many, many uninteresting words.');
 			range = makeRange(t1,13,t2,22);
-			rangeDescription = Anchors.createRangeDescriptionFromRange(range, document);
+			rangeDescription = Anchors.createRangeDescriptionFromRange(range, document).description;
 			var start = rangeDescription.getStart();
 			var startWalker = document.createTreeWalker(div, NodeFilter.SHOW_TEXT);
 			startWalker.currentNode = t1;
@@ -112,7 +112,7 @@ describe("Tests with Changing Documents", function() {
 				var p2 = addElement(div,'p',{});
                 	var t2 = addTextNode(p2,'This is some more text containing many, many uninteresting words.');
 			range = makeRange(t1,13,t2,22);
-			rangeDescription = Anchors.createRangeDescriptionFromRange(range, document);
+			rangeDescription = Anchors.createRangeDescriptionFromRange(range, document).description;
 			var start = rangeDescription.getStart();
 			var startWalker = document.createTreeWalker(div, NodeFilter.SHOW_TEXT);
 			startWalker.currentNode = t1;
@@ -154,7 +154,7 @@ describe("Tests with Changing Documents", function() {
 						var t2 = addTextNode(p2,'This is some more text containing many uninteresting words.');
 
 			range = makeRange(t1,13,t1,47);
-			result = Anchors.createRangeDescriptionFromRange(range, document);
+			result = Anchors.createRangeDescriptionFromRange(range, document).description;
 			bk = Anchors.toDomRange(result,document);
 			expect(""+bk).toEqual("somewhat but not particularly long");
 			t1.data = 'This is some somewhat but not particularly long text for readers with short attention spans. Here are some extra words.';
