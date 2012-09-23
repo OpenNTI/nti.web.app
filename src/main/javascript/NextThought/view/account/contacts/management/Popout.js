@@ -63,7 +63,7 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 	},
 
 
-	destroy: function(){
+	destroy: function(e){
 		this.callParent(arguments);
 	},
 
@@ -76,7 +76,7 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 		me.on('blur',me.destroy,me);
 
 		Ext.defer(function(){
-			me.mon(Ext.fly(window),{
+			me.mon(me.el.up('body'),{
 				scope: me,
 				'click':me.detectBlur,
 				'mouseover':me.detectBlur
@@ -88,7 +88,7 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 	detectBlur: function(e){
 		if(!e.getTarget('.'+this.cls) && !e.getTarget('#'+this.refEl.id) && !e.getTarget('.x-mask')){
 			clearTimeout(this.hideTimer);
-			this.hideTimer = Ext.defer(function(){this.fireEvent('blur');},500,this);
+			this.hideTimer = Ext.defer(function(){this.fireEvent('blur', e);},500,this);
 		}
 		else {
 			clearTimeout(this.hideTimer);
