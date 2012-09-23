@@ -157,6 +157,8 @@
 				font-size: 14px;
 				font-weight: normal;
 				color: $primary-grey;
+				word-break: break-all;
+				word-wrap: break-word;
 				background: url(../images/ldquo.png) 15px 15px no-repeat;
 
 				&::after{

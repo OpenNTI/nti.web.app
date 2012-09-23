@@ -625,10 +625,10 @@
 			text-rendering: geometricPrecision;
 
 			&::before{
-				content: '"';
+				content: '\201C';
 			}
 			&::after{
-				content: '"';
+				content: '\201D';
 			}
 			font: italic 12px 'Droid Serif';
 			color: $primary-grey;
@@ -670,6 +670,8 @@
 			}
 
 			.text {
+				word-break: break-all;
+				word-wrap: break-word;
 				white-space: normal;
 				font-style: normal;
 			}
@@ -944,6 +946,11 @@
 		.body {
 			color: $primary-grey;
 			font: 16px/24px 'Droid Serif';
+
+			a {
+				word-break: break-all;
+				word-wrap: break-word;
+			}
 
 			.body-divider .whiteboard-thumbnail{
 			  width: 40% !important;
