@@ -10,5 +10,14 @@ Ext.define('NextThought.model.PageInfo', {
 		{ name: 'AssessmentItems', type: 'arrayItem' },
 		{ name: 'sharingPreference', type: 'auto' },
 		{ name: 'dataFilterPreference', type: 'auto' }
-	]
+	],
+
+
+	getSubContainerURL: function(rel,id){
+		var url = this.getLink(rel),
+			enCi = encodeURIComponent(this.get('NTIID')),
+			enId = encodeURIComponent(id);
+
+		return url.replace(enCi,enId);
+	}
 });

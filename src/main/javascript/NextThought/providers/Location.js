@@ -113,7 +113,7 @@ Ext.define('NextThought.providers.Location', {
 		function success(pageInfo){
 			me.currentPageInfo = pageInfo;
 			me.updatePreferences(pageInfo);
-			me.fireEvent('navigateComplete',pageInfo,finish, hasCallback);
+			me.fireEvent('navigateComplete', pageInfo, finish, hasCallback);
 		}
 
 		function failure(q,r){

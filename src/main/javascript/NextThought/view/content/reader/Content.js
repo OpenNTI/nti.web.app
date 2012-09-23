@@ -67,10 +67,31 @@ Ext.define('NextThought.view.content.reader.Content',{
 	},
 
 
+	resolveContainers: function(){
+		var d = this.getDocumentElement(),
+			els, containers = [];
+		//TODO: get all ntiids on the page.
+		//els = d.querySelectorAll('[data-ntiid],[ntiid]');
+
+		//for now just get object tags (assessment items)
+		els = d.querySelectorAll('[data-ntiid]');
+
+		Ext.each(els,function(el){
+			var id = el.getAttribute('data-ntiid') || el.getAttribute('ntiid');
+			if(!/tag:/i.test(id)){return;}
+			containers.push(id);
+		});
+
+		// these should already be in the order of the dom.
+		return containers;
+	},
+
+
 	setContent: function(resp, assessmentItems, finish, hasCallback){
 		var me = this,
 			c = me.parseHTML(resp),
-			containerId;
+			containerId,
+			subContainers;
 
 		console.log('setting content...');
 
@@ -99,8 +120,10 @@ Ext.define('NextThought.view.content.reader.Content',{
 //		}
 
 		console.log('setting content... set, loading annotations');
-		//containerId = Ext.util.Format.htmlDecode(me.getContainerId()); //handle apostrophe
-		me.loadContentAnnotations(LocationProvider.currentNTIID, onFinishLoading);
+
+		subContainers = me.resolveContainers();
+
+		me.loadContentAnnotations(LocationProvider.currentNTIID, subContainers, onFinishLoading);
 	},
 
 

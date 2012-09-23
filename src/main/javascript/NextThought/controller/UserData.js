@@ -93,23 +93,46 @@ Ext.define('NextThought.controller.UserData', {
 
 
 
-	onAnnotationsLoad: function(cmp, containerId, callback) {
-		var ps = NextThought.store.PageItem.create();
+	onAnnotationsLoad: function(cmp, containerId, subContainers, callback) {
+
+		function loaded(store,records,success){
+			stores.pop();
+
+			var bins = success? Ext.Object.merge(allBins,store.getBins()) : allBins;
+
+			if(stores.length===0){
+				cmp.objectsLoaded(store.getItems(bins), bins, callback);
+			}
+		}
+
+
+		function make(url){
+			var ps = NextThought.store.PageItem.create();
+			ps.proxy.url = url;
+			ps.on('load', loaded, this, { single: true });
+			return ps;
+		}
+
+
+		var rel = Globals.USER_GENERATED_DATA,
+			pi = LocationProvider.currentPageInfo,
+			stores = [],
+			allBins = {},
+			ps = make( pi.getLink(rel) );
+
 		LocationProvider.currentPageStore = ps;
 
-		ps.proxy.url = LocationProvider.currentPageInfo.getLink(Globals.USER_GENERATED_DATA);
-		ps.on('load', function(){
-				var bins = ps.getBins();
-				cmp.objectsLoaded(ps.getItems(bins), bins, callback);
-			}, this, { single: true });
-
-		ps.load({
-			params: {
-				filter:'TopLevel'
-			}
+		stores.push(ps);
+		Ext.each(subContainers,function(id){
+			var p = make(pi.getSubContainerURL(rel,id));
+			stores.push(p);
 		});
 
-		this.getController('Stream').containerIdChanged(containerId);
+		Ext.each(stores,function(s){
+			s.load({ params: {
+				filter:'TopLevel'
+			} });
+		});
 	},
 
 

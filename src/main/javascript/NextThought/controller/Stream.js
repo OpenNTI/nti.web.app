@@ -67,12 +67,6 @@ Ext.define('NextThought.controller.Stream', {
 	},
 
 
-	//called by the Library controller when navigation occurs
-	containerIdChanged: function(containerId) {},
-
-
-
-
 	getStoreForStream: function(containerId, success, failure, scope) {
 		var me = this,
 			stores = me.streamStores,

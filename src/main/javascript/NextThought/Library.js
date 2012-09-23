@@ -152,32 +152,26 @@ Ext.define('NextThought.Library', {
 		}
 
 		function fn(q,s,r){
-			if(!s){
+			var xml;
+
+			function strip(e){ Ext.fly(e).remove(); }
+
+			delete this.tocs[index];
+
+			if(s){
+				xml = this.tocs[index] = this.parseXML(r.responseText);
+				if(xml){
+					Ext.each(Ext.DomQuery.select('topic:not([ntiid]),topic:not([thumbnail])', xml), strip);
+				}
+				else {
+					console.warn('no data for index: '+url);
+				}
+			}
+			else {
 				console.error('There was an error loading part of the library: '+url, arguments);
-				//make sure its falsy
-				delete this.tocs[index];
-			}
-			else {
-				this.tocs[index] = this.parseXML(r.responseText);
 			}
 
-			if(!this.tocs[index]){
-				console.warn('no data for index: '+url);
-			}
-			else {
-				Ext.each(Ext.DomQuery.select('topic:not([ntiid]),topic:not([thumbnail])', this.tocs[index]), function(e){
-					if (e.parentNode) {
-						e.parentNode.removeChild(e);
-					}
-					else {
-						console.error('no parent node?', e);
-					}
-				});
-			}
-
-			if( callback ){
-				callback(this.tocs[index]);
-			}
+			Ext.callback(callback,this,[xml]);
 		}
 
 

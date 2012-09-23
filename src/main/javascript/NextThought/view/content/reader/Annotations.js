@@ -14,8 +14,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 		'NextThought.view.annotations.Transcript',
 		'NextThought.view.annotations.QuizResults',
 		'NextThought.view.assessment.Scoreboard',
-		'NextThought.cache.IdCache',
-		'NextThought.providers.Contributors'
+		'NextThought.cache.IdCache'
 	],
 
 
@@ -349,15 +348,6 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 			return;
 		}
 
-		//do some contributor updates
-		if (delAction) {
-			ContributorsProvider.remove(creator, contribNS);
-		}
-		else {
-			ContributorsProvider.add(creator, contribNS);
-		}
-
-
 		//if exists, update
 		if(this.annotations.hasOwnProperty(oid)) {
 			if(delAction){
@@ -392,17 +382,15 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 	},
 
 
-	loadContentAnnotations: function(containerId, callback){
+	loadContentAnnotations: function(containerId, subContainers, callback){
 		this.containerId = containerId;
+		this.containersOnPage = subContainers;
 		this.clearAnnotations();
-		this.fireEvent('annotations-load', this, containerId, callback);
+		this.fireEvent('annotations-load', this, containerId, subContainers, callback);
 	},
 
 
 	objectsLoaded: function(items, bins, callback) {
-		var contributors = [],
-			contribNS = Globals.getViewIdFromComponent(this);
-
 		if (!this.containerId) {
 			return;
 		}
@@ -413,22 +401,10 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 		}
 
 		if (items) {
-			contributors = this.buildAnnotations(items);
+			this.buildAnnotations(items);
 		}
 
-		ContributorsProvider.set(contributors, contribNS);
 		AnnotationUtils.callbackAfterRender(callback,this);
-	},
-
-
-	getContributors: function(record){
-		var cont = [],
-			c = record.get('Creator') || record.get('Contributors');
-		if(!Ext.isArray(c)) {
-			c = [c];
-		}
-		Ext.each(c, function(i){ if(i && Ext.String.trim(i) !== '') { cont.push(i); } });
-		return cont;
 	},
 
 
@@ -450,14 +426,13 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 
 
 	buildAnnotations: function(list){
-		var me = this, contributors = [];
+		var me = this;
 		Ext.each(list,
 			function(r){
 				if(!r) {
 					return;
 				}
 				try{
-					Ext.Array.insert(contributors, 0, me.getContributors(r));
 					me.createAnnotationWidget(r.getModelName(),r);
 					AnnotationsRenderer.aboutToRender = true;
 				}
@@ -466,8 +441,6 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 				}
 			}, this
 		);
-
-		return contributors;
 	},
 
 
