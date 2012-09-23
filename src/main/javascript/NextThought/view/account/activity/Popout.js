@@ -38,7 +38,7 @@ Ext.define('NextThought.view.account.activity.Popout',{
 		me.on('blur',me.destroy,me);
 
 		Ext.defer(function(){
-			me.mon(Ext.fly(window),{
+			me.mon(me.el.up('body'),{
 				scope: me,
 				'click':me.detectBlur,
 				'mouseover':me.detectBlur
