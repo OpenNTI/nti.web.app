@@ -2,7 +2,8 @@ Ext.define('NextThought.view.menus.Filter',{
 	extend: 'Ext.menu.Menu',
 	alias: 'widget.filter-menu',
 	requires: [
-		'NextThought.view.menus.LabeledSeparator'
+		'NextThought.view.menus.LabeledSeparator',
+        'NextThought.providers.Location'
 	],
 	ui: 'nt',
 	plain: true,
@@ -27,15 +28,20 @@ Ext.define('NextThought.view.menus.Filter',{
 		this.callParent(arguments);
 		this.store = Ext.getStore('FriendsList');
 		this.store.on('load', this.reload, this);
-		this.reload();
-	},
+        LocationProvider.on('navigateComplete', this.reload, this);
+    },
+
 
 	reload: function(){
 		this.removeAll(true);
 
 		var items = [], communities = [];//$AppConfig.userObject.getCommunities();
 		items.push({ cls: 'type-filter everything', text: 'Everything', checked: true, allowUncheck:false, isEverything: true});
-		items.push({ cls: 'type-filter highlight', text: 'Highlights', model: 'NextThought.model.Highlight' });
+
+        if (!LocationProvider.currentNTIID || LocationProvider.currentNTIID.indexOf('mathcounts') < 0) {
+            items.push({ cls: 'type-filter highlight', text: 'Highlights', model: 'NextThought.model.Highlight' });
+        }
+        else {console.debug('hack alert, annotation context menu not showing while in mathcounts content...');}
 		items.push({ cls: 'type-filter note', text: 'Notes', model: 'NextThought.model.Note' });
 //		items.push({ cls: 'type-filter transcript', text: 'Transcripts', model: 'NextThought.model.TranscriptSummary' });
 //		items.push({ cls: 'type-filter quizresult', text: 'Quiz Results', model: 'NextThought.model.QuizResult' });
