@@ -51,6 +51,13 @@ Ext.define( 'NextThought.view.annotations.Note', {
 				}
 			}
 		},this);
+
+		this.record.on({
+			scope: this,
+			updated: this.recordUpdated,
+			changed: function(){this.recordUpdated(this.record)}
+		});
+
 		return this;
 	},
 
@@ -117,7 +124,7 @@ Ext.define( 'NextThought.view.annotations.Note', {
 	getGutterWidget: function(numberOfSiblings){
 		if (numberOfSiblings > 0){//siblings... there is "this" and n others
 			if (!this.multiGutterWidget){
-				this.createMultiGutterWidget();
+				this.multiGutterWidget = this.createMultiGutterWidget();
 			}
 			this.activeWidget = this.multiGutterWidget;
 			return this.multiGutterWidget;
@@ -141,20 +148,8 @@ Ext.define( 'NextThought.view.annotations.Note', {
 		this.ownerCmp.registerScrollHandler(this.gutterCmp.onParentScroll,this.gutterCmp);
 	},
 
-
-	createMultiGutterWidget: function(){
-		var creator = this.record.get('Creator'),
-			replyCt = this.record.getReplyCount(),
-			htmlString = this.multiGutterWidgetTmpl.apply([
-				creator,
-				this.record.getRelativeTimeString(),
-				this.record.getBodyText(),
-				replyCt]),
-			dom = Ext.DomHelper.createDom({html:htmlString}).firstChild,
-			el;
-
-		//now create the ext object:
-		el = this.multiGutterWidget = this.attachListeners( Ext.get(dom) );
+	setupMultiGutterDom: function(dom){
+		var el = this.attachListeners( Ext.get(dom) );
 
 		el.hover(function(){
 			var b = el.down('.bubble'),
@@ -169,6 +164,40 @@ Ext.define( 'NextThought.view.annotations.Note', {
 			}
 		}, function(){ el.down('.bubble').setStyle({left:null, 'z-index': '99'});});
 
+
+		return el;
+	},
+
+	recordUpdated: function(record){
+		var isActive = this.activeWidget === this.multiGutterWidget,
+			oldWidget;
+		if(!this.multiGutterWidget){
+			return;
+		}
+
+		console.log('Need to update multi gutter widget');
+		oldWidget = this.multiGutterWidget;
+		
+		this.multiGutterWidget = this.createMultiGutterWidget();
+		if(isActive){
+			this.activeWidget = this.multiGutterWidget;
+		}
+		this.multiGutterWidget.replace(oldWidget);
+	},
+
+	createMultiGutterWidget: function(){
+		var creator = this.record.get('Creator'),
+			replyCt = this.record.getReplyCount(),
+			htmlString = this.multiGutterWidgetTmpl.apply([
+				creator,
+				this.record.getRelativeTimeString(),
+				this.record.getBodyText(),
+				replyCt]),
+			dom = Ext.DomHelper.createDom({html:htmlString}).firstChild,
+			el;
+
+		el = this.setupMultiGutterDom(dom);
+
 		UserRepository.getUser(creator, function(u){
 			var url = u.get('avatarURL'),
 				name = u.getName(),
@@ -177,6 +206,8 @@ Ext.define( 'NextThought.view.annotations.Note', {
 			localEl.down('.name').update(name);
 
 		}, this);
+
+		return el;
 	}
 
 
