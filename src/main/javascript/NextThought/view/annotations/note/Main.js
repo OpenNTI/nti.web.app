@@ -249,7 +249,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 			this.onEdit();
 		}
 
-		if(this.isReply){
+		if(this.replyToId === this.record.getId()){
 			this.activateReplyEditor();
 		}
 
@@ -291,8 +291,20 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		me.mask();
 
 		function setReplies(){
+			var cmpId, cmp;
+
 			record.set('ReferencedByCount',store.getCount());//update the count for next time the carousel renders
 			responses.setReplies(store.getItems());
+
+			if(this.replyToId){
+				cmpId = IdCache.getComponentId(this.replyToId, null, 'reply');
+				cmp = Ext.getCmp(cmpId);
+				if(cmp){
+					cmp.activateReplyEditor();
+					this.replyToId = null;
+				}
+			}
+
 			me.unmask();
 			if(me.hasCallback){
 				Ext.callback(me.hasCallback);
@@ -428,7 +440,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		if(!this.up('window').checkAndMarkAsActive()){
 			return;
 		}
-		this.isReply = false;
+		this.replyToId = null;
 		var me = this;
 		this.up('window').down('note-carousel').addCls('editor-active');
 		me.el.addCls('editor-active');

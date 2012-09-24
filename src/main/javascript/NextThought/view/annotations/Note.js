@@ -35,8 +35,8 @@ Ext.define( 'NextThought.view.annotations.Note', {
 	constructor: function(config){
 		var me = this;
 		me.callParent(arguments);
-		me.on('open',function(scrollTo, replyTo){
-			var reply, w = me.openWindow(Boolean(replyTo)), m;
+		me.on('open',function(scrollTo, replyToId){
+			var reply, w = me.openWindow(replyToId), m;
 
 			function cb(){
 				reply = w.down( Ext.String.format('[guid={0}]',IdCache.getIdentifier(scrollTo)));
@@ -95,11 +95,15 @@ Ext.define( 'NextThought.view.annotations.Note', {
 	},
 
 
-	openWindow: function(isReply, isEdit){
+	openWindow: function(replyToId, isEdit){
+		if(Ext.isArray(replyToId)){
+			replyToId = replyToId.slice(-1);
+			replyToId = replyToId.length > 0 ? replyToId[0] :  null;
+		}
 		Ext.each(Ext.ComponentQuery.query('note-window'),function(w){w.destroy();});
 		return Ext.widget('note-window', {
 			annotation: this,
-			isReply: isReply && !isEdit,
+			replyToId: replyToId && !isEdit ? replyToId : null,
 			isEdit: isEdit
 		}).show();
 	},
@@ -110,7 +114,7 @@ Ext.define( 'NextThought.view.annotations.Note', {
 		el.on({
 			click: function(e){e.stopEvent();return false;},
 			mouseup: function(e){
-				me.openWindow(Boolean(e.getTarget('.reply')));
+				me.openWindow(e.getTarget('.reply') ? me.getRecord().getId(): null);
 			}
 		});
 		return el;

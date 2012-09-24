@@ -64,7 +64,7 @@ Ext.define('NextThought.view.account.activity.Preview',{
 		event.preventDefault();
 		event.stopPropagation();
 
-		var rec = this.record, targets;
+		var rec = this.record;
 
 		if (!rec || rec.get('Class') === 'User'){
 			return;

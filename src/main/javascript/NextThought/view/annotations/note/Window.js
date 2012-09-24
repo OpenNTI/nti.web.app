@@ -54,8 +54,8 @@ Ext.define('NextThought.view.annotations.note.Window',{
 			m.editMode = this.isEdit;
 		}
 
-		if(this.isReply){
-			m.isReply = true;
+		if(this.replyToId){
+			m.replyToId = this.replyToId;
 		}
 		this.down('note-carousel').setRecord(a.getRecord());
 
