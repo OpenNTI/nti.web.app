@@ -4,7 +4,8 @@ Ext.define('NextThought.controller.UserData', {
 	requires: [
 		'NextThought.cache.IdCache',
 		'NextThought.util.Sharing',
-		'NextThought.providers.Location'
+		'NextThought.providers.Location',
+        'NextThought.proxy.Socket'
 	],
 
 	models: [
@@ -42,7 +43,7 @@ Ext.define('NextThought.controller.UserData', {
 	},
 
 	init: function() {
-
+        var me = this;
 		this.control({
 			'reader-panel':{
 				'annotations-load': this.onAnnotationsLoad,
@@ -88,9 +89,59 @@ Ext.define('NextThought.controller.UserData', {
 				'load-transcript': this.onLoadTranscript
 			}
 		},{});
+
+        Socket.register({
+            'data_noticeIncomingChange': function(){me.incomingChange.apply(me, arguments);}
+        });
 	},
 
 
+    incomingChange: function(change) {
+        change = ParseUtils.parseItems([change])[0];
+        var me = this,
+            item = change.get('Item'),
+            cid = change.getItemValue('ContainerId'),
+            pageStore;
+
+        //add it to the page items store I guess:
+        pageStore = LocationProvider.getStore();
+        if(!pageStore || LocationProvider.currentNTIID !== cid || (item && !item.isTopLevel())){
+            this.maybeFireChildAdded(item);
+            return;
+        }
+
+        if(!/deleted/i.test(change.get('ChangeType'))){
+            pageStore.add(item);
+        }
+        else {
+            item = pageStore.getById(item.getId());
+            if(item){
+                pageStore.remove(item);
+            }
+        }
+    },
+
+
+    maybeFireChildAdded: function(item) {
+        if (!item){return;}
+
+        var refs = item.get('references') || [], guid, parent, main;
+        if(refs.length===0){return;}
+
+        //look for reply
+        guid = IdCache.getComponentId(refs.last(), null, 'reply'),
+        parent = Ext.getCmp(guid);
+
+        //attempt for find main
+        if (!parent){
+            main = Ext.ComponentQuery.query('note-main-view').last();
+            if (Ext.Array.contains(refs, main.record.getId())){
+                 parent = main;
+            }
+        }
+
+        if (parent){parent.record.fireEvent('child-added', item);}
+    },
 
 
 	onAnnotationsLoad: function(cmp, containerId, subContainers, callback) {
@@ -108,6 +159,11 @@ Ext.define('NextThought.controller.UserData', {
 			stores.pop();
 
 			var bins = success? merge(allBins,store.getBins()) : allBins;
+
+            if(store!==ps){
+                console.log('loading', ps.isLoading());
+                ps.loadData(store.data.items, true);
+            }
 
 			if(stores.length===0){
 				cmp.objectsLoaded(store.getItems(bins), bins, callback);

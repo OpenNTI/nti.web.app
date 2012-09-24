@@ -85,6 +85,9 @@ Ext.define('NextThought.model.Base', {
 	},
 
 
+
+
+
 	tearDownLinks: function(){
 		var p = this.parent, cn = (this.children||[]),
 			i, splice = Array.prototype.splice;
