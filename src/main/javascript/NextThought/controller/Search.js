@@ -98,7 +98,8 @@ Ext.define('NextThought.controller.Search', {
 						term: searchVal,
 						containerId: hit.get('ContainerId'),
 						hitId: hit.getId(),
-						sortId:sortIndexes
+						sortId:sortIndexes,
+						fragments: hit.get('Fragments')
 					});
 				},	this);
 

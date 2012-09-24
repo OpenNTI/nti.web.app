@@ -71,10 +71,50 @@ Ext.define('NextThought.view.menus.search.Result',{
         }, me);
 	},
 
-	beforeRender: function() {
-		var re = SearchUtils.searchRe(this.term, false, false);
-		this.renderData.snippet = this.snippet.replace(re,  '<span>$1</span>');
+	wrapFragmentHits: function(){
+		var fragmentSeparator = '...',
+			wrappedSnippets = '';
 
+		if(this.fragments.length == 0){
+			console.warn('No fragments for term', this.term, ' and snippet ', this.snippet);
+			this.renderData.snippet = this.snippet;
+			return;
+		}
+
+		Ext.each(this.fragments, function(fragment, index){
+			var fIdx = 0, wrappedText;
+			if(!fragment.matches || fragment.matches.length == 0 || !fragment.text){
+				console.warn('No matches or text for fragment. Dropping', fragment);
+			}
+			else{
+			
+				wrappedText = fragment.text;
+
+				//Sort the matches backwards so we can do string replaces without invalidating
+				fragment.matches.sort(function(a, b){return b[0] - a[0];});
+				Ext.each(fragment.matches, function(match){
+					var newString = '';
+					newString += wrappedText.slice(0, match[0]);
+					newString += '<span>';
+					newString += wrappedText.slice(match[0], match[1]);
+					newString += '</span>';
+					newString += wrappedText.slice(match[1]);
+					wrappedText = newString;
+				});
+
+				wrappedSnippets += wrappedText;
+				if(index < fragment.length-1){
+					wrappedSnippets += fragmentSeparator;
+				}
+			}
+		});
+
+		this.renderData.snippet = wrappedSnippets ? wrappedSnippets : this.snippet;
+		
+	},
+
+	beforeRender: function() {
+		this.wrapFragmentHits();
 		return this.callParent(arguments);
 	},
 

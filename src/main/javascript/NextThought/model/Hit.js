@@ -5,6 +5,7 @@ Ext.define('NextThought.model.Hit', {
 		{ name: 'Snippet', type: 'string' },
 		{ name: 'TargetOID', type: 'string' },
 		{ name: 'Title', type: 'string' },
-		{ name: 'Type', type: 'string' }
+		{ name: 'Type', type: 'string' },
+		{ name: 'Fragments', type: 'auto'}
 	]
 });
