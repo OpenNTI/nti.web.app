@@ -85,7 +85,7 @@ Ext.define('NextThought.view.assessment.Panel',{
 			opacity: 0,
 			'white-space': 'nowrap'
 		});
-		this.removeContent('.naqsolutions,.naqchoices,.rightwrongbox,.hidden,INPUT,p.par');
+		this.removeContent('.naqsolutions,.naqchoices,.rightwrongbox,.hidden,INPUT,p.par,IMG');
 	},
 
 
