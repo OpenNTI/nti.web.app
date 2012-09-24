@@ -131,6 +131,12 @@ Ext.define('NextThought.view.content.Reader', {
 	},
 
 
+    onNavigationAborted: function() {
+        this.setSplash();
+        this.relayout();
+    },
+
+
 	onNavigateComplete: function(pageInfo, finish, hasCallback){
 		var me = this, cls = this.self;
 		function f(resp){

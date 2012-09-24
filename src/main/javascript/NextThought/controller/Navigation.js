@@ -68,8 +68,9 @@ Ext.define('NextThought.controller.Navigation', {
 				else {
 					id = cid(scrollToTargetId);
 				}
-
-				reader.scrollToTarget(id);
+                if (reader.scrollToTarget){
+				    reader.scrollToTarget(id);
+                }
 			};
 		}
 

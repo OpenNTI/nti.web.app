@@ -10,9 +10,9 @@ Ext.define('NextThought.providers.Location', {
 	constructor: function(){
 		this.addEvents({
 			navigate: true,
+            navigateAbort: true,
 			navigateComplete: true,
-			change : true,
-			changed : true
+			change : true
 		});
 
 		Ext.apply(this,{
@@ -82,13 +82,6 @@ Ext.define('NextThought.providers.Location', {
 
 			//remember last ntiid for this book
 			localStorage[rootId] = ntiid;
-
-			me.fireEvent('changed', ntiid);
-		}
-
-		if(!this.find(ntiid)){
-			alert('You don\'t have access to that content.');
-			return;
 		}
 
 		if(me.currentNTIID && ntiid !== me.currentNTIID){
@@ -106,7 +99,6 @@ Ext.define('NextThought.providers.Location', {
 			me.resolvePageInfo(ntiid,finish, Boolean(callback));
 
 			me.currentNTIID = ntiid;
-			me.fireEvent('change', ntiid);
 		},1);
 	},
 
@@ -119,11 +111,19 @@ Ext.define('NextThought.providers.Location', {
 			me.currentPageInfo = pageInfo;
 			me.updatePreferences(pageInfo);
 			me.fireEvent('navigateComplete', pageInfo, finish, hasCallback);
+            me.fireEvent('change', ntiid);
 		}
 
 		function failure(q,r){
 			console.error('resolvePageInfo Failure: ',arguments);
-			Ext.callback(finish,null,[me,{req:q,error:r}]);
+            me.fireEvent('change', undefined);
+            Ext.callback(finish,null,[me,{req:q,error:r}]);
+            if (r.status === 403) {
+                me.fireEvent('navigationAbort');
+                alert('You don\'t have access to that content.');
+                delete me.currentNTIID;
+                return;
+            }
 			me.fireEvent('navigateComplete',r);
 		}
 
@@ -442,8 +442,8 @@ Ext.define('NextThought.providers.Location', {
             piId = pi.getId(),
             rootId = this.getLineage(piId).last();
 
-		if(sharing === '' || (!/set/i.test(sharing.State) && piId !== rootId)){
-            console.debug('Not setting prefs', sharing, sharing.State);
+		if(!sharing || (!/set/i.test(sharing.State) && piId !== rootId)){
+            console.debug('Not setting prefs', sharing, (sharing||{}).State);
 			return;
 		}
 
