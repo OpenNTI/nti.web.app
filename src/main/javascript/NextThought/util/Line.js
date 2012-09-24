@@ -20,7 +20,6 @@ Ext.define('NextThought.util.Line',{
 		doc = doc || document;
 
 		var range;
-
 		//The "IE9" search is actually more accurate for assessment pages
 		if (Ext.isIE9) {
 			range = this.rangeByRecursiveSearch(y,doc);
@@ -132,7 +131,16 @@ Ext.define('NextThought.util.Line',{
 
 			//clear ranges and get the node on this y
 			sel.removeAllRanges();
-		    elem = Anchors.referenceNodeForNode(doc.elementFromPoint(x, y)); //TODO - dynamically figure out the number 80?
+                             debugger;
+            elem = doc.elementFromPoint(x, y); //TODO - dynamically figure out the number 80?
+            if (Ext.fly(elem).is('object')) {
+                sel.selectAllChildren(Ext.fly(elem).down('.naquestionpart').dom);
+                range = sel.getRangeAt(0);
+                sel.removeAllRanges();
+                return range;
+            }
+
+		    elem = Anchors.referenceNodeForNode(elem); //TODO - dynamically figure out the number 80?
 
 			//check to make sure this node is selectable, if not, then return null:
 			if (!this.isNodeAnchorable(elem)){return null;}
