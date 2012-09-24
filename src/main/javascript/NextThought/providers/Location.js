@@ -110,17 +110,20 @@ Ext.define('NextThought.providers.Location', {
 		function success(pageInfo){
 			me.currentPageInfo = pageInfo;
 			me.updatePreferences(pageInfo);
+			me.currentNTIID = pageInfo.getId();
 			me.fireEvent('navigateComplete', pageInfo, finish, hasCallback);
-            me.fireEvent('change', ntiid);
+            me.fireEvent('change', me.currentNTIID);
 		}
 
 		function failure(q,r){
 			console.error('resolvePageInfo Failure: ',arguments);
             me.fireEvent('change', undefined);
             Ext.callback(finish,null,[me,{req:q,error:r}]);
-            if (r.status === 403) {
-                me.fireEvent('navigationAbort');
-                alert('You don\'t have access to that content.');
+            if (r.status === 403 || !r.responseText) {
+                me.fireEvent('navigateAbort');
+                alert(r.status === 403
+						? 'You don\'t have access to that content.'
+						: 'Oops!\nSomething went wrong.');
                 delete me.currentNTIID;
                 return;
             }

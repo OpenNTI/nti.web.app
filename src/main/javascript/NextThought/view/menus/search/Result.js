@@ -31,7 +31,7 @@ Ext.define('NextThought.view.menus.search.Result',{
         });
 
         LocationMeta.getMeta(this.ntiid, function(meta){
-            var lin = LocationProvider.getLineage(meta.NTIID),
+            var lin = meta ? LocationProvider.getLineage(meta.NTIID) : [],
                 chap = [];
 
             lin.pop(); //remove root, we will already have it after resolving "id"
@@ -51,9 +51,6 @@ Ext.define('NextThought.view.menus.search.Result',{
                 chapter: chap.join(' / '),
                 section: meta ? meta.label : 'Unlabeled'
             });
-
-            console.log('renderData', me.renderData);
-
 
             if(isMe(this.name)){
                 me.renderData.name = 'me';

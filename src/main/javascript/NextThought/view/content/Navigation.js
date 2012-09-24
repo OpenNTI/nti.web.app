@@ -46,6 +46,8 @@ Ext.define('NextThought.view.content.Navigation',{
 
 
 	locationChanged: function(ntiid){
+
+		console.log('location changed to:',ntiid);
 		var me = this,
 			lp = LocationProvider,
 			c,
