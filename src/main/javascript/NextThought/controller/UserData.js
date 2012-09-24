@@ -129,7 +129,7 @@ Ext.define('NextThought.controller.UserData', {
         if(refs.length===0){return;}
 
         //look for reply
-        guid = IdCache.getComponentId(refs.last(), null, 'reply'),
+        guid = IdCache.getComponentId(refs.last(), null, 'reply');
         parent = Ext.getCmp(guid);
 
         //attempt for find main

@@ -33,29 +33,30 @@ Ext.define( 'NextThought.view.annotations.Note', {
 	}).compile(),
 
 	constructor: function(config){
-		this.callParent(arguments);
-		this.on('open',function(scrollTo, replyTo){
-			var reply, w = this.openWindow(Boolean(replyTo)), m;
+		var me = this;
+		me.callParent(arguments);
+		me.on('open',function(scrollTo, replyTo){
+			var reply, w = me.openWindow(Boolean(replyTo)), m;
 
-			if( scrollTo !== this.getRecord().getId() ){
-				function cb(){
-					reply = w.down( Ext.String.format('[guid={0}]',IdCache.getIdentifier(scrollTo)));
-					if( reply ){
-						reply.scrollIntoView();
-					}
+			function cb(){
+				reply = w.down( Ext.String.format('[guid={0}]',IdCache.getIdentifier(scrollTo)));
+				if( reply ){
+					reply.scrollIntoView();
 				}
+			}
 
+			if( scrollTo !== me.getRecord().getId() ){
 				m = w.down('note-main-view');
 				if(m){
 					w.down('note-main-view').hasCallback = cb;
 				}
 			}
-		},this);
+		},me);
 
-		this.record.on({
-			scope: this,
-			updated: this.recordUpdated,
-			changed: function(){this.recordUpdated(this.record)}
+		me.record.on({
+			scope: me,
+			updated: me.recordUpdated,
+			changed: me.recordUpdated
 		});
 
 		return this;
@@ -96,8 +97,7 @@ Ext.define( 'NextThought.view.annotations.Note', {
 
 	openWindow: function(isReply, isEdit){
 		Ext.each(Ext.ComponentQuery.query('note-window'),function(w){w.destroy();});
-		return Ext.widget({
-			xtype: 'note-window',
+		return Ext.widget('note-window', {
 			annotation: this,
 			isReply: isReply && !isEdit,
 			isEdit: isEdit
@@ -142,7 +142,7 @@ Ext.define( 'NextThought.view.annotations.Note', {
 	createSingleGutterWidget: function(){
 		var dom = Ext.get(document.createElement('div'));
 
-		this.gutterCmp = Ext.widget({xtype: 'note-gutter-widget', annotation: this, record: this.getRecord(), renderTo: dom});
+		this.gutterCmp = Ext.widget('note-gutter-widget', {annotation: this, record: this.getRecord(), renderTo: dom});
 		this.singleGutterWidget = this.attachListeners( Ext.get(dom) );
 
 		this.ownerCmp.registerScrollHandler(this.gutterCmp.onParentScroll,this.gutterCmp);
@@ -168,7 +168,7 @@ Ext.define( 'NextThought.view.annotations.Note', {
 		return el;
 	},
 
-	recordUpdated: function(record){
+	recordUpdated: function(){
 		var isActive = this.activeWidget === this.multiGutterWidget,
 			oldWidget;
 		if(!this.multiGutterWidget){
