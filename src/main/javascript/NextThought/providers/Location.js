@@ -58,6 +58,11 @@ Ext.define('NextThought.providers.Location', {
 			e = Ext.getCmp('viewport').getEl(),
 			rootId = this.getLineage(ntiid).last();
 
+		if(me.currentNTIID === ntiid){
+			Ext.callback(callback);
+			return;
+		}
+
 		function finish(){
 			if(finish.called){
 				console.warn('finish navigation called twice');

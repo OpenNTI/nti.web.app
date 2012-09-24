@@ -44,12 +44,15 @@ Ext.define('NextThought.controller.Navigation', {
 		var callback = Ext.emptyFn();
 		if (scrollToTargetId) {
 			callback = function(reader) {
-				function cid(id){ return IdCache.getComponentId(id, null, reader.prefix); }
+				reader = (reader||ReaderPanel.get());
+				var id = '',
+					prefix = reader.prefix;
 
-				var id = '';
+				function cid(id){ return IdCache.getComponentId(id, null, prefix); }
+
 				if(Ext.isArray(scrollToTargetId)){
 
-					Ext.each(scrollToTargetId,function(i){
+					Ext.each(scrollToTargetId, function(i){
 						var c = null;
 						if(IdCache.hasIdentifier(i)){
 							id = cid(i);
@@ -59,6 +62,7 @@ Ext.define('NextThought.controller.Navigation', {
 								return false; //stop iteration
 							}
 						}
+						return true;
 					});
 				}
 				else {
@@ -70,27 +74,17 @@ Ext.define('NextThought.controller.Navigation', {
 		}
 
 
-		if(LocationProvider.currentNTIID !== ntiid){
-			LocationProvider.setLocation(ntiid, callback, this);
-		}
-		else {
-			Ext.callback(callback,this,[ReaderPanel.get()]);
-		}
+		LocationProvider.setLocation(ntiid, callback, this);
 	},
 
 
 
 	navigateAndScrollToTerm: function(ntiid,term){
 		function callback(reader){
-			reader.scrollToText(term);
+			(reader||ReaderPanel.get()).scrollToText(term);
 		}
 
-		if(LocationProvider.currentNTIID !== ntiid){
-			LocationProvider.setLocation(ntiid, callback, this);
-		}
-		else {
-			Ext.callback(callback,this,[ReaderPanel.get()]);
-		}
+		LocationProvider.setLocation(ntiid, callback, this);
 	},
 
 
