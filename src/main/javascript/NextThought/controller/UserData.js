@@ -156,14 +156,20 @@ Ext.define('NextThought.controller.UserData', {
 
 		function loaded(store,records,success){
 			stores.pop();
-
+            records = records || [];
 			var bins = success? merge(allBins,store.getBins()) : allBins;
 
-            if(store!==ps){
-                console.log('loading', ps.isLoading());
-                ps.loadData(store.data.items, true);
+            if (ps.isLoading() && store !== ps){
+                buffer.push.apply(buffer, records);
             }
-
+            else if(store!==ps){
+                console.log('loading', ps.isLoading());
+                ps.loadData(records, true);
+            }
+            else {
+                console.log('buffered load', buffer);
+                ps.loadData(buffer, true);
+            }
 			if(stores.length===0){
 				cmp.objectsLoaded(store.getItems(bins), bins, callback);
 			}
@@ -182,7 +188,8 @@ Ext.define('NextThought.controller.UserData', {
 			pi = LocationProvider.currentPageInfo,
 			stores = [],
 			allBins = {},
-			ps = make( pi.getLink(rel) );
+			ps = make( pi.getLink(rel)),
+            buffer = [];
 
 		LocationProvider.currentPageStore = ps;
 
@@ -192,8 +199,9 @@ Ext.define('NextThought.controller.UserData', {
 			stores.push(p);
 		});
 
+        ps.loading = true;
 		Ext.each(stores,function(s){
-			s.load({ params: {
+        	s.load({ params: {
 				filter:'TopLevel'
 			} });
 		});
