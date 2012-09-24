@@ -28,11 +28,6 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 			'afterRender': this.insertNoteOverlay
 		});
 
-		this.mon(LocationProvider, {
-			scope: this,
-			changed: this.noteOverlayLocationChanged
-		});
-
 		return this;
 	},
 
@@ -270,15 +265,6 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 	},
 
 
-	noteOverlayLocationChanged: function() {
-		var o = this.noteOverlayData;
-		if (o.editorActions) {o.editorActions.updatePrefs();}
-		else {
-			console.warn('ignored location change, default sharing prefs ignored?');
-		}
-	},
-
-
 	noteOverlayMouseOut: function(){
 		var o = this.noteOverlayData,
 			sel = this.getDocumentElement().parentWindow.getSelection();
@@ -322,7 +308,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 			return;
 		}
 		o.richEditorActive = true;
-
+		o.editorActions.updatePrefs();
 		o.editorActions.activate();
 		o.editorActions.setValue( t.value, true, true );
 		t.value = '';

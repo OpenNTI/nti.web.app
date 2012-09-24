@@ -209,9 +209,9 @@ Ext.define('NextThought.controller.UserData', {
 		$AppConfig.service.getPageInfo(LocationProvider.getLineage(pi.getId()).last(),
 			function(topPi){
 				if (topPi){
-					topPi.saveField('sharingPreference', {sharedWith: prefs}, function(){
+					topPi.saveField('sharingPreference', {sharedWith: prefs}, function(fieldName, sanitizedValue, pi, refreshedPageInfo){
 						//always happens if success only:
-						LocationProvider.updatePreferences(pi);
+						LocationProvider.updatePreferences(refreshedPageInfo);
 						Ext.callback(callback, null, []);
 					});
 				}
