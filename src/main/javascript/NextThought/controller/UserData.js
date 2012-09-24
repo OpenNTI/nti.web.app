@@ -134,7 +134,7 @@ Ext.define('NextThought.controller.UserData', {
         //attempt for find main
         if (!parent){
             main = Ext.ComponentQuery.query('note-main-view').last();
-            if (Ext.Array.contains(refs, main.record.getId())){
+            if (main && Ext.Array.contains(refs, main.record.getId())){
                  parent = main;
             }
         }
