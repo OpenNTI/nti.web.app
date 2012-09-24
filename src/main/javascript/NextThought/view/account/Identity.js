@@ -25,7 +25,7 @@ Ext.define('NextThought.view.account.Identity',{
 	renderSelectors: {
 		notificationCount: 'span.notifications',
 		name: 'div.name',
-        menu: 'div.menu',
+        menuBtn: 'div.menu',
 		status: 'div.status'
 	},
 
@@ -51,9 +51,10 @@ Ext.define('NextThought.view.account.Identity',{
 
 
     afterRender: function(){
-        this.callParent(arguments);
-        this.mon(this.menu, 'click', function(){
-            this.menu.showBy(this);
+		var me = this;
+        me.callParent(arguments);
+        me.mon(me.menuBtn, 'click', function(){
+            me.menu.showBy(me.menuBtn);
         });
     }
 });
