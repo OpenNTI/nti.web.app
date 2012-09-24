@@ -107,7 +107,6 @@ Ext.define('NextThought.view.content.reader.Scroll',{
 		this.body.scrollTo('top', top, animate!==false);
 	},
 
-
 	scrollToText: function(text) {
 		if (!text) {
 			return;
@@ -118,7 +117,8 @@ Ext.define('NextThought.view.content.reader.Scroll',{
 			ranges = [],
 			texts,
 			re = SearchUtils.searchRe(text, false, false),
-			match;
+			match,
+			rangeToScrollTo;
 
 		texts = AnnotationUtils.getTextNodes(doc);
 		//texts = texts.concat(AnnotationUtils.getTextNodes(this.el.down('.assessment-overlay').dom));
@@ -170,7 +170,20 @@ Ext.define('NextThought.view.content.reader.Scroll',{
 				this);
 		}
 
+		//We may get ranges in our list that don't have any client rects.  A good example
+		//is a node that is currently display none so make sure we account for that.  The
+		//related topics list is one example of where we have seen this occur
+		
+		Ext.each(ranges, function(possibleRange){
+			if(possibleRange.getClientRects().length > 0){
+				rangeToScrollTo = possibleRange;
+				return false; //Break
+			}
+			return true; //keep going
+		});
 
-		if (ranges.length > 0) { me.scrollTo(ranges[0].getClientRects()[0].top - 150); }
+		if(rangeToScrollTo){
+			me.scrollTo(rangeToScrollTo.getClientRects()[0].top - 150);
+		}
 	}
 });
