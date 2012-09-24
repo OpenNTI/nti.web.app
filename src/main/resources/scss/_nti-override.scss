@@ -74,6 +74,14 @@
 		vertical-align: sub;
 	}
 
+	.underline {
+		text-decoration: underline;
+	}
+
+	.overline {
+		text-decoration: overline;
+	}
+
 	&.x-repaint {
 		display: none;
 	}
