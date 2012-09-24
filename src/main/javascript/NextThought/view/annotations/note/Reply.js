@@ -6,6 +6,7 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 		'NextThought.layout.component.TemplatedContainer',
 		'NextThought.cache.UserRepository',
 		'NextThought.view.annotations.note.EditorActions',
+		'NextThought.view.annotations.note.Main',
 		'NextThought.view.annotations.note.Templates'
 	],
 
