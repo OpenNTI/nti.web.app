@@ -461,8 +461,8 @@ Ext.define('NextThought.providers.Location', {
 			return null;
 		}
 
-        var lineage = this.getLineage(ntiid), result;
-        Ext.each(lineage, function(l){return !(result = this.preferenceMap[l]); }, this);
+        var lineage = this.getLineage(ntiid), result=null;
+        Ext.each(lineage, function(l){return !Boolean(result = this.preferenceMap[l]); }, this);
         return result;
 	}
 
