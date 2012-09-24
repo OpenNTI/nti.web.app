@@ -36,6 +36,8 @@ Ext.define('NextThought.view.account.Identity',{
 
 		me.renderData = Ext.apply(me.renderData||{}, $AppConfig.userObject.data);
 
+		this.menu = Ext.widget('settings-menu');
+
 		this.mon($AppConfig.userObject,{
 			scope: this,
 			'changed': function(r){
@@ -51,7 +53,7 @@ Ext.define('NextThought.view.account.Identity',{
     afterRender: function(){
         this.callParent(arguments);
         this.mon(this.menu, 'click', function(){
-            Ext.widget('settings-menu',{}).showBy(this);
+            this.menu.showBy(this);
         });
     }
 });
