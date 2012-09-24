@@ -296,14 +296,17 @@ Ext.define('NextThought.view.annotations.note.Main',{
 			record.set('ReferencedByCount',store.getCount());//update the count for next time the carousel renders
 			responses.setReplies(store.getItems());
 
-			if(this.replyToId){
-				cmpId = IdCache.getComponentId(this.replyToId, null, 'reply');
-				cmp = Ext.getCmp(cmpId);
-				if(cmp){
-					cmp.activateReplyEditor();
-					this.replyToId = null;
-				}
-			}
+			function maybeOpenReplyEditor(){
+                if(this.replyToId){
+                    cmpId = IdCache.getComponentId(this.replyToId, null, 'reply');
+                    cmp = Ext.getCmp(cmpId);
+                    if(cmp){
+                        cmp.activateReplyEditor();
+                        this.replyToId = null;
+                    }
+                }
+            }
+            Ext.defer(maybeOpenReplyEditor, 1, this);
 
 			me.unmask();
 			if(me.hasCallback){

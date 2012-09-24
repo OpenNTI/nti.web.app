@@ -31,8 +31,11 @@ Ext.define('NextThought.util.Ranges',{
 
     expandRange: function(range, doc){
         if(Ext.fly(range.commonAncestorContainer).up('object')) {
-            console.log('Range is inside an object, just return the contents of Object');
             return Ext.fly(range.commonAncestorContainer).up('object').down('.naquestionpart').dom.cloneNode(true);
+        }
+
+        if(Ext.fly(range.startContainer).up('object')) {
+            return Ext.fly(range.startContainer).up('object').down('.naquestionpart').dom.cloneNode(true);
         }
 
 
