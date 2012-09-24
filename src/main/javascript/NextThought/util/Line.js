@@ -84,6 +84,10 @@ Ext.define('NextThought.util.Line',{
 			if (rect.height > h) { rr = center; }
 			else { ll = center; }
 		}
+
+		if (range.collapsed){return null;}
+		if (!this.isNodeAnchorable(range.commonAncestorContainer)){return null;}
+
 		return range;
 	},
 

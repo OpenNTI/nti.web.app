@@ -101,7 +101,11 @@ Ext.define( 'NextThought.view.annotations.Base', {
 
 
 	createNonAnchorableSpan: function(){
-		return Ext.DomHelper.createDom({tag: 'span','data-non-anchorable':'true'});
+		//NOTE: it is very important to make sure we create the span
+		// in the same doc as the range it will surround.
+		var span = this.doc.createElement('span');
+		span.setAttribute('data-non-anchorable', 'true');
+		return span;
 	},
 
 
