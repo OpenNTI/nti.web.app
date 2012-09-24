@@ -438,16 +438,19 @@ Ext.define('NextThought.providers.Location', {
 	},
 
 	updatePreferences: function(pi) {
-		var sharing = pi.get('sharingPreference');
+		var sharing = pi.get('sharingPreference'),
+            piId = pi.getId(),
+            rootId = this.getLineage(piId).last();
 
-		if(sharing === ''){
+		if(sharing === '' || (!/set/i.test(sharing.State) && piId !== rootId)){
+            console.debug('Not setting prefs', sharing, sharing.State);
 			return;
 		}
 
 		if (!this.preferenceMap){this.preferenceMap = {};}
-		this.preferenceMap[pi.getId()] = {sharing: sharing};
+		this.preferenceMap[piId] = {sharing: sharing};
 
-		console.debug('shareing prefs updated', this.preferenceMap[pi.getId()]);
+		console.debug('shareing prefs updated', this.preferenceMap[piId]);
 	},
 
 
@@ -457,7 +460,10 @@ Ext.define('NextThought.providers.Location', {
 		if (!this.preferenceMap || !ntiid) {
 			return null;
 		}
-		return this.preferenceMap[ntiid];
+
+        var lineage = this.getLineage(ntiid), result;
+        Ext.each(lineage, function(l){return !(result = this.preferenceMap[l]); }, this);
+        return result;
 	}
 
 
