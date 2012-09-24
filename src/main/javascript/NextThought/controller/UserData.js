@@ -98,8 +98,7 @@ Ext.define('NextThought.controller.UserData', {
 
     incomingChange: function(change) {
         change = ParseUtils.parseItems([change])[0];
-        var me = this,
-            item = change.get('Item'),
+        var item = change.get('Item'),
             cid = change.getItemValue('ContainerId'),
             pageStore;
 
@@ -420,7 +419,7 @@ Ext.define('NextThought.controller.UserData', {
 
 
 	shareWith: function(record){
-		var options = {}, w;
+		var options = {};
 
 		if (Ext.ComponentQuery.query('share-window[record]').length > 0) {
 			//already a share with window, they are modal, just don't do this:
@@ -434,7 +433,7 @@ Ext.define('NextThought.controller.UserData', {
 			};
 		}
 
-		Ext.widget(Ext.apply({xtype: 'share-window',record: record}, options)).show();
+		Ext.widget('share-window',Ext.apply({record: record}, options)).show();
 	},
 
 
