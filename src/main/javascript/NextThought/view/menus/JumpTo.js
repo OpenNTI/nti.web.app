@@ -25,6 +25,15 @@ Ext.define('NextThought.view.menus.JumpTo',{
 		if(!item || !item.ntiid){
 			return;
 		}
+
+		//FIXME we do this in some other locations.   We
+		//should consider doing the check and noop inside of
+		//LocationProvider.setLocation.  I'm not sure everything
+		//would be kosher with that right now...
+		if(LocationProvider.currentNTIID === item.ntiid){
+			return;
+		}
+
 		if (item.rememberLastLocation){
 			LocationProvider.setLastLocationOrRoot(item.ntiid);
 			return;
