@@ -3,6 +3,7 @@ Ext.define('NextThought.controller.Search', {
 
 	requires: [
 		'NextThought.providers.Location',
+        'NextThought.cache.LocationMeta',
 		'NextThought.util.Views',
 		'NextThought.filter.FilterGroup',
 		'NextThought.filter.Filter'
@@ -84,33 +85,15 @@ Ext.define('NextThought.controller.Search', {
 				result = result.items;
 
 				Ext.each(group.children, function(hit){
-					var id = hit.get('ContainerId');
-					var lin = LocationProvider.getLineage(id);
-					var chap = [], sortIndexes = LocationProvider.getSortIndexes(id);
+					var id = hit.get('ContainerId'),
+					    sortIndexes = LocationProvider.getSortIndexes(id);
 
 					sortIndexes.pop();
 					sortIndexes.reverse();
 
-					console.log(sortIndexes, id);
-
-					lin.pop(); //remove root, we will already have it after resolving "id"
-					lin.shift();//remove the first item as its identical as id.
-
-					Ext.each(lin,function(c){
-						var i = LocationProvider.getLocation(c);
-						if(!i){
-							console.warn(c+" could not be resolved");
-							return;
-						}
-						chap.unshift(i.label);//the lineage is ordered leaf->root...this list needs to be in reverse order.
-					});
-
-					loc = LocationProvider.getLocation(id);
 					result.push( {
+                        ntiid: id,
 						name: hit.get('Creator'),
-						title: loc ? loc.title.get('title') : 'Untitled',
-						chapter: chap.join(' / '),
-						section: loc ? loc.label : 'Unlabeled',
 						snippet: hit.get('Snippet'),
 						term: searchVal,
 						containerId: hit.get('ContainerId'),
@@ -121,9 +104,6 @@ Ext.define('NextThought.controller.Search', {
 
 
 				result = Ext.Array.sort(result, me.sortSearchHits, me);
-				console.log(result);
-
-
 			}, this);
 		}
 

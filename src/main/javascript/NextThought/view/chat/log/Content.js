@@ -4,6 +4,7 @@ Ext.define('NextThought.view.chat.log.Content', {
 
 
 	requires: [
+        'NextThought.cache.LocationMeta'
 	],
 
 
@@ -32,14 +33,17 @@ Ext.define('NextThought.view.chat.log.Content', {
 
 
 	initComponent: function(){
-		this.callParent(arguments);
+        var me = this;
+		me.callParent(arguments);
 
 		//request the location that has been sent, save it for use later
-		this.ntiid = this.message.get('body').ntiid;
-		this.location = LocationProvider.getLocation(this.ntiid);
-		this.clickable = this.location ? true : false;
+		me.ntiid = me.message.get('body').ntiid;
 
-		this.update();
+        LocationMeta.getMeta(this.ntiid, function(meta){
+            me.location = meta;
+            me.clickable = me.location ? true : false;
+            me.update();
+        });
 	},
 
 	update: function(){
@@ -69,28 +73,32 @@ Ext.define('NextThought.view.chat.log.Content', {
 		me.renderData.body = this.location ? this.location.label || this.location.title : '';
 		me.renderData.locationicon = href;
 
+        if(me.rendered){
+            me.renderTpl.overwrite(me.el, me.renderData);
+            me.applyRenderSelectors();
+            me.attachClick();
+        }
+
 		username = this.message.get('Creator');
-		UserRepository.getUser(username, function(u){
-			if (!u) {
-				console.error('failed to resolve user', username, m);
-				return;
-			}
-			me.fillInUser(u);
-		},
-		this);
+		UserRepository.getUser(username, me.fillInUser, me);
 
 		me.addCls('nooid');
 	},
 
 	afterRender: function(){
 		this.callParent(arguments);
-		if (this.clickable) {
-			this.el.on('click', function(){this.fireEvent('click', this);}, this);
-		}
+		this.attachClick();
 	},
 
 
-	fillInUser: function(u) {
+    attachClick: function(){
+        if (this.clickable) {
+            this.el.on('click', function(){this.fireEvent('click', this);}, this);
+        }
+    },
+
+
+    fillInUser: function(u) {
 		var name = u.get('alias') || u.get('Username'),
 			i = u.get('avatarURL');
 

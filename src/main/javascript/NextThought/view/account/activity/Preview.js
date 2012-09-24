@@ -3,7 +3,8 @@ Ext.define('NextThought.view.account.activity.Preview',{
 	alias: 'widget.activity-preview',
 
 	requires: [
-		'NextThought.view.annotations.note.Templates'
+		'NextThought.view.annotations.note.Templates',
+        'NextThought.cache.LocationMeta'
 	],
 
 	cls: 'activity-preview',
@@ -15,6 +16,8 @@ Ext.define('NextThought.view.account.activity.Preview',{
 		sharedTo: '.shared-to',
 		context: '.context .text',
 		text: '.body',
+        path: '.path',
+        location: '.location-label',
 
 		replyOptions: '.footer .reply-options',
 		replyButton: '.footer .reply',
@@ -23,20 +26,33 @@ Ext.define('NextThought.view.account.activity.Preview',{
 	},
 
 	initComponent: function(){
-		this.callParent(arguments);
-
-		var lineage = LocationProvider.getLineage(this.record.get('ContainerId'),true),
-			location = lineage.shift();
-
-		lineage.reverse();
+        var me = this;
+		me.callParent(arguments);
 
 		this.renderData = Ext.apply(this.renderData||{},{
-			location: location,
-			path: lineage.join(' / '),
+			location: 'Resolving...',
+			path: 'Resolving...',
 			contextText: this.record.get('selectedText'),
 			textContent: this.record.getBodyText ? this.record.getBodyText() : ''
 		});
-	},
+
+        LocationMeta.getMeta(this.record.get('ContainerId'),function(meta){
+            var lineage = LocationProvider.getLineage(meta.NTIID,true),
+                location = lineage.shift();
+
+            lineage.reverse();
+
+            Ext.apply(me.renderData, {
+                location: location,
+                path: lineage.join(' / ')
+            });
+
+            if (me.rendered) {
+                me.path.update(lineage.join(' / '));
+                me.location.update(location);
+            }
+        }, this);
+    },
 
 
 

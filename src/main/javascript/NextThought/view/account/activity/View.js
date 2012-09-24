@@ -169,6 +169,10 @@ Ext.define('NextThought.view.account.activity.View',{
 				items.push({ label: label });
 			}
 
+            function extend(){
+                totalExpected++;
+            }
+
 			//We use a similar strategy to the one that Notifications uses
 			
 			function maybeFinish(){
@@ -184,7 +188,7 @@ Ext.define('NextThought.view.account.activity.View',{
 					return;
 				}
 
-				var item = this.changeToActivity(c);
+				var item = this.changeToActivity(c, maybeFinish, extend);
 				items.push(item);
 				UserRepository.getUser(item.name, function(u){
 					item.name = u.getName();
@@ -205,7 +209,7 @@ Ext.define('NextThought.view.account.activity.View',{
 	},
 
 
-	changeToActivity: function(c){
+	changeToActivity: function(c, maybeFinish, extend){
 		var item = c.get('Item'),
 				cid = item? item.get('ContainerId') : undefined,
 				guid = guidGenerator();
@@ -227,7 +231,7 @@ Ext.define('NextThought.view.account.activity.View',{
 			name: c.get('Creator'),
 			record: item,
 			type: getType(item),
-			message: this.getMessage(c),
+			message: this.getMessage(c, cid, guid, maybeFinish, extend),
 			ContainerId: cid,
 			ContainerIdHash: cid? IdCache.getIdentifier(cid): undefined
 		};
@@ -235,10 +239,27 @@ Ext.define('NextThought.view.account.activity.View',{
 	},
 
 
-	getMessage: function(change) {
+	getMessage: function(change, cid, guid, maybeFinish, extend) {
 		var item = change.get('Item'),
 				type = change.get('ChangeType'),
-				loc;
+				stream = this.stream;
+
+        function getName(type){
+
+            function resolve(meta){
+                stream[guid] = Ext.String.format('Shared a {0} {1}&rdquo;', type,
+                    Ext.String.ellipsis( (meta ? (' in &ldquo'+meta.label): '&ldquo;'),50,true));
+                Ext.callback(maybeFinish);
+            }
+
+            Ext.callback(extend);
+            if(cid){
+                LocationMeta.getMeta(cid,resolve);
+                return;
+            }
+            resolve(null);
+        }
+
 
 		if (!item){return 'Unknown';}
 
@@ -247,14 +268,10 @@ Ext.define('NextThought.view.account.activity.View',{
 					? ' added you as a contact.' : '?';
 		}
 		else if (item.getModelName() === 'Highlight') {
-			loc = LocationProvider.getLocation(item.get('ContainerId'));
-			return Ext.String.format('Shared a highlight {0}&rdquo;',
-				Ext.String.ellipsis( (loc ? (' in &ldquo;'+loc.label): '&ldquo;'),50,true));
+			Ext.defer(getName,1,this,['highlight']);
 		}
 		else if (item.getModelName() === 'Redaction') {
-			loc = LocationProvider.getLocation(item.get('ContainerId'));
-			return Ext.String.format('Shared a redaction {0}&rdquo;',
-				Ext.String.ellipsis( (loc ? (' in &ldquo;'+loc.label): '&ldquo;'),50,true));
+            Ext.defer(getName,1,this,['redaction']);
 		}
 		else if (item.getModelName() === 'Note'){
 			return Ext.String.format('{1}&ldquo;{0}&rdquo;',
@@ -266,6 +283,8 @@ Ext.define('NextThought.view.account.activity.View',{
 			console.error('Not sure what activity text to use for ', item, change);
 			return 'Unknown';
 		}
+
+        return '...';
 	},
 
 

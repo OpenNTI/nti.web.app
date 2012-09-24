@@ -91,45 +91,47 @@ Ext.define('NextThought.view.account.Notifications',{
 		notificationCount = $AppConfig.userObject.get('NotificationCount');
 		store.data.each(function(change, idx){
 			var item = change.get('Item'),
-				loc = item? LocationProvider.getLocation(item.get('ContainerId')) : null,
-				bookTitle = loc && loc.title ? loc.title.get('title') : null,
-				m = this.generateMessage(change, bookTitle),
 				guid = guidGenerator();
 
-			UserRepository.getUser(change.get('Creator'), function(u){
-				var targets = item ? (item.get('references') || []).slice() : [];
-				if(item){
-					targets.push(item.getId());
-				}
+            LocationMeta.getMeta(item ? item.get('ContainerId') : null, function(meta){
+                var bookTitle = meta && meta.title ? meta.title.get('title') : null,
+                    m = this.generateMessage(change, bookTitle);
 
-				this.notifications.push({
-					'name' : u.getName(),
-					'message': m,
-					'guid': guid,
-					'date': change.get('Last Modified'),
-					'unread': idx < notificationCount ? 'unread' : ''
-				});
-				this.notificationData[guid] = {
-					containerId: item && change.get('ChangeType') !== 'Circled' ? item.get('ContainerId'):undefined,
-					id: targets
-				};
+                UserRepository.getUser(change.get('Creator'), function(u){
+                    var targets = item ? (item.get('references') || []).slice() : [];
+                    if(item){
+                        targets.push(item.getId());
+                    }
 
-				//update counter so we know when we are done:
-				itemsToLoad--;
+                    this.notifications.push({
+                        'name' : u.getName(),
+                        'message': m,
+                        'guid': guid,
+                        'date': change.get('Last Modified'),
+                        'unread': idx < notificationCount ? 'unread' : ''
+                    });
+                    this.notificationData[guid] = {
+                        containerId: item && change.get('ChangeType') !== 'Circled' ? item.get('ContainerId'):undefined,
+                        id: targets
+                    };
 
-				//only add this to actual render data if we have few enough
-				if (this.notifications.length <= this.NOTIFICATIONS_TO_SHOW_AT_FIRST) {
-					this.renderData.notifications.push(this.notifications.last());
-				}
-				else {
-					this.renderData.hideSeeAll = false;
-				}
+                    //update counter so we know when we are done:
+                    itemsToLoad--;
 
-				//render if necessary
-				if (itemsToLoad === 0 && this.rendered) {
-					this.renderSpecial(this.renderData);
-				}
-			}, this);
+                    //only add this to actual render data if we have few enough
+                    if (this.notifications.length <= this.NOTIFICATIONS_TO_SHOW_AT_FIRST) {
+                        this.renderData.notifications.push(this.notifications.last());
+                    }
+                    else {
+                        this.renderData.hideSeeAll = false;
+                    }
+
+                    //render if necessary
+                    if (itemsToLoad === 0 && this.rendered) {
+                        this.renderSpecial(this.renderData);
+                    }
+                }, this);
+            }, this);
 		}, this);
 	},
 
