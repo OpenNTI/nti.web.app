@@ -105,6 +105,7 @@ Ext.define('NextThought.model.Base', {
 		}
 
 		this.fireEvent('destroy', this);
+
 	},
 
 
@@ -127,8 +128,13 @@ Ext.define('NextThought.model.Base', {
 
 
 	destroy: function(){
-		this.tearDownLinks();
-		return this.callParent(arguments);
+		var me = this;
+		me.tearDownLinks();
+		me.callParent(arguments);
+
+		if(me.stores){
+			Ext.each(me.stores.slice(),function(s){ s.remove(me); });
+		}
 	},
 
 
