@@ -20,6 +20,8 @@ Ext.define('NextThought.util.Anchors', {
 		if(!contentRangeDescription){console.warn('nothing to parse?');return null;}
 		var ancestorNode = contentRangeDescription.getAncestor().locateRangePointInAncestor(docElement).node || docElement;
 
+        //TODO - if an ancestor doesn't exist, do some better logging here, something like below
+
 		if (!ancestorNode){
 			console.error('Failed to get ancestor node for description', contentRangeDescription);
 		}
