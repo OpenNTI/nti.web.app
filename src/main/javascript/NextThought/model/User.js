@@ -12,6 +12,7 @@ Ext.define(	'NextThought.model.User', {
 		{ name: 'email', type: 'string' },
 		{ name: 'realname', type: 'string' },
 		{ name: 'avatarURL', type: 'AvatarURL' },
+		{ name: 'AvatarURLChoices', type: 'AvatarURLList' },
 		{ name: 'accepting', type: 'UserList' },
 		{ name: 'ignoring', type: 'UserList' },
 		{ name: 'status', type: 'string' },

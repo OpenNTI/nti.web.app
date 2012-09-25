@@ -3,7 +3,8 @@ Ext.define('NextThought.view.account.Window',{
 	alias: 'widget.account-window',
 
 	requires: [
-		'NextThought.view.form.PasswordResetForm'
+		'NextThought.view.form.PasswordResetForm',
+		'NextThought.view.account.settings.AvatarPicker'
 	],
 
 	cls: 'account-window',
@@ -15,7 +16,7 @@ Ext.define('NextThought.view.account.Window',{
 	dialog: true,
     resizable: false,
 
-	width: 520,
+	width: 535,
 	y: 80,
 
 	layout: {
@@ -58,17 +59,18 @@ Ext.define('NextThought.view.account.Window',{
 				defaultType: 'button',
 				defaults: {
 					ui: 'account',
-					flex: 1,
 					enableToggle: true,
 					toggleGroup: 'account-buttons',
+					width: 150,
 					handler: function(btn){ btn.up('window').changeView(btn); }
 				},
 
-				layout: { type: 'hbox', align: 'stretch' },
+				layout: { type: 'hbox', align: 'stretch', pack: 'start' },
 
 				items: [
+					{text: 'Change Avatar', associatedPanel: 'avatar-picker'},
 					{text: 'Change Password', associatedPanel: 'password-reset-form'},
-					{text: 'Edit Profile Picture', associatedPanel: 'avatar-thingy-rename-when-we-have-this', disabled: true}
+					{ disabled:true, flex: 1 }
 				]
 			},{
 				name: 'settings',
@@ -78,8 +80,8 @@ Ext.define('NextThought.view.account.Window',{
 					type: 'card'
 				},
 				items: [
-					{ xtype: 'password-reset-form' },
-					{ xtype: 'panel' }
+					{ xtype: 'avatar-picker' },
+					{ xtype: 'password-reset-form' }
 				]
 			}];
 

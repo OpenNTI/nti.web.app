@@ -1,0 +1,45 @@
+@import "variables";
+
+.avatar-picker {
+	margin-bottom: 14px;
+	padding: 14px 0 0 14px;
+
+	.item-wrap {
+		position: relative;
+		display: inline-block;
+		margin-right: 10px;
+		height: 54px;
+		width: 54px;
+		margin: 4px 20px 4px 0;
+		box-shadow: 2px 2px 3px 0 rgba(0, 0, 0, 0.2);
+		border: 1px solid $tertiary-grey;
+		vertical-align: top;
+
+		img{
+			height: 100%;
+			width: 100%;
+		}
+
+		&.x-item-selected {
+			margin: 0 16px 0 -4px;
+			border: 4px solid #89be3c;// $primary-green?
+			border-radius: 5px;
+			box-shadow: none;
+			height: 62px;
+			width: 62px;
+
+			&::before,
+			&::after{
+				content: ' ';
+				position: absolute;
+				z-index: 1999;
+				top: -9px;
+				right: -9px;
+				width: 18px; height: 18px;
+				background: url(../images/green-check.png) 0 0 no-repeat;
+			}
+		}
+	}
+
+
+}

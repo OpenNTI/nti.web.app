@@ -57,5 +57,17 @@ Ext.define('NextThought.model.converters.Users', {
 			}
 			return v;
 		}
+	},
+
+
+	AVATARURLLIST: {
+		type: 'AvatarURLList',
+		sortType: Ext.data.SortTypes.asUCString,
+		convert: function convert(v){
+			Ext.each(v,function(o,i,a){
+				a[i] = Ext.data.Types.AVATARURL.convert(o);
+			});
+			return v;
+		}
 	}
 });
