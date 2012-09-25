@@ -42,7 +42,6 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 				frameBorder: 0,
 				marginWidth: 0,
 				marginHeight: 0,
-				scrolling: 'no',
 				seamless: true,
 				transparent: true,
 				allowTransparency: true,
@@ -294,7 +293,7 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 		else {
 			contentHeight = content.getBoundingClientRect().height;
 		}
-		h = Math.max(this.getEl().getHeight(),contentHeight);
+		h = Math.ceil(Math.max(this.getEl().getHeight(),contentHeight));
 
 		if(h === this.lastHeight){
 			return;
