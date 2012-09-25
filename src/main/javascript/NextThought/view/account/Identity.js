@@ -11,7 +11,7 @@ Ext.define('NextThought.view.account.Identity',{
 
 	renderTpl: Ext.DomHelper.markup([
 		{ tag: 'img', src: '{avatarURL}', cls: 'avatar'},
-        { tag: 'div', cls: 'menu'},
+        { tag: 'div', cls: 'menu', title: 'Settings'},
 		{
 			cls: 'wrap',
 			cn: [{
