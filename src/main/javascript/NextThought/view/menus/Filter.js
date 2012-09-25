@@ -33,8 +33,9 @@ Ext.define('NextThought.view.menus.Filter',{
 
 
 	reload: function(){
-		this.removeAll(true);
+		var currentSelections = Ext.Array.filter(this.items.items, function(a){ return a.checked }, this);
 
+		this.removeAll(true);
 		var items = [], communities = [];//$AppConfig.userObject.getCommunities();
 		items.push({ cls: 'type-filter everything', text: 'Everything', checked: true, allowUncheck:false, isEverything: true});
 
@@ -75,10 +76,25 @@ Ext.define('NextThought.view.menus.Filter',{
 			});
 		}
 
+		this.resetCurrentSelections(items, currentSelections);
+
 		this.add(items);
 		this.fireEvent('filter-control-loaded',this);
 	},
 
+	resetCurrentSelections: function(items, currentSelections){
+		if(currentSelections.length > 0){
+			//Unselect current selection
+			Ext.each(items, function(i){
+				if(i.checked){	i.checked = false; }
+			});
+		}
+
+		Ext.each(currentSelections, function(sel){
+			var a = Ext.Array.filter(items, function(i){ return i.text === sel.text }, this);
+			Ext.each(a, function(item){ item.checked = true });
+		});
+	},
 
 	getDescription: function(){
 		function toStrings(list){
