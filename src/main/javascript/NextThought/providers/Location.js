@@ -445,14 +445,16 @@ Ext.define('NextThought.providers.Location', {
             piId = pi.getId(),
             rootId = this.getLineage(piId).last();
 
-		if(!sharing || (!/set/i.test(sharing.State) && piId !== rootId)){
+        if (!this.preferenceMap){this.preferenceMap = {};}
+
+        if (sharing && /inherited/i.test(sharing.State) && rootId == sharing.Provenance) {
+            //got a sharing value from the root id, add it to the map
+            piId = rootId;
+        }
+        else if(!sharing || (!/set/i.test(sharing.State) && piId !== rootId)){
             console.debug('Not setting prefs', sharing, (sharing||{}).State);
-			return;
-		}
-
-		if (!this.preferenceMap){this.preferenceMap = {};}
-		this.preferenceMap[piId] = {sharing: sharing};
-
+            return;
+        }		this.preferenceMap[piId] = {sharing: sharing};
 		console.debug('shareing prefs updated', this.preferenceMap[piId]);
 	},
 
