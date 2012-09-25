@@ -71,6 +71,8 @@ Ext.define('NextThought.view.menus.search.Result',{
         }, me);
 	},
 
+	//This code assumes matches within fragments don't overlap, which I was told can be guarenteed
+	//Maybe we should code defensively here and strip overlapping matches in case the server dorks up
 	wrapFragmentHits: function(){
 		var fragmentSeparator = '...',
 			wrappedSnippets = '';
