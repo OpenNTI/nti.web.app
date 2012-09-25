@@ -76,6 +76,10 @@ Ext.define('NextThought.view.assessment.input.SymbolicMath',{
 				me.updateSubmission();
 			}, 100);
 
+		}).bind('paste', function(e){
+			e.stopPropagation();
+			e.preventDefault();
+			return false;
 		});
 	},
 
