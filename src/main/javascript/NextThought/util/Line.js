@@ -140,7 +140,12 @@ Ext.define('NextThought.util.Line',{
                 return range;
             }
 
-		    elem = Anchors.referenceNodeForNode(elem); //TODO - dynamically figure out the number 80?
+            //Do something interesting, if we aren't a txt node, dig to a paragraph?
+            if (!Ext.isTextNode(elem)){
+                elem = Ext.fly(elem).down('p', true) || elem;
+            }
+
+		    elem = Anchors.referenceNodeForNode(elem);
 
 			//check to make sure this node is selectable, if not, then return null:
 			if (!this.isNodeAnchorable(elem)){return null;}
