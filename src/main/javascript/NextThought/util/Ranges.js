@@ -1,6 +1,10 @@
 Ext.define('NextThought.util.Ranges',{
 	singleton: true,
 
+    nonContextWorthySelectors: [
+        'object'
+    ],
+
 	saveRange: function(r){
 		if(!r){ return null; }
 		return{
@@ -51,7 +55,24 @@ Ext.define('NextThought.util.Ranges',{
         r = sel.getRangeAt(0);
         sel.removeAllRanges();
 
-        return r.cloneContents();
+        return this.clearNonContextualGarbage(r.cloneContents());
+    },
+
+
+    /**
+     * Removes any nodes we don't want to show up in the context, for now that is assessment objects nodes, which have
+     * a size but no display, so it looks like a bunch of emopty space in the note window.
+     *
+     * @param dom - the dom you want cleaned, make sure it's a clone or you will delete stuff from the dom it belongs to.
+     */
+    clearNonContextualGarbage: function(dom){
+        Ext.each(this.nonContextWorthySelectors, function(sel){
+            Ext.each(Ext.fly(dom).query(sel), function(remove){
+                console.log('removing', remove);
+                Ext.fly(remove).remove();
+            }, this);
+        }, this);
+        return dom;
     },
 
 
