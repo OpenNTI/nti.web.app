@@ -42,6 +42,7 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 				frameBorder: 0,
 				marginWidth: 0,
 				marginHeight: 0,
+                scrolling: 'no',
 				seamless: true,
 				transparent: true,
 				allowTransparency: true,
