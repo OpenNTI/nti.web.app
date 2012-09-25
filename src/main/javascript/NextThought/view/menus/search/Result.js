@@ -72,7 +72,6 @@ Ext.define('NextThought.view.menus.search.Result',{
 	},
 
 	//This code assumes matches within fragments don't overlap, which I was told can be guarenteed
-	//Maybe we should code defensively here and strip overlapping matches in case the server dorks up
 	wrapFragmentHits: function(){
 		var fragmentSeparator = '...',
 			wrappedSnippets = '';
@@ -93,8 +92,16 @@ Ext.define('NextThought.view.menus.search.Result',{
 				wrappedText = fragment.text;
 
 				//Sort the matches backwards so we can do string replaces without invalidating
-				fragment.matches.sort(function(a, b){return a[0] - b[0];});
-				Ext.each(fragment.matches, function(match){
+				fragment.matches.sort(function(a, b){return b[0] - a[0];});
+				Ext.each(fragment.matches, function(match, idx){
+
+					//Attempt to detect bad data from the server
+					var next = idx + 1 < fragment.matches.length ? fragment.matches[idx + 1] : [0, 0] ;
+					if(next[1] > match[1]){
+						console.warn('Found a match that is a subset of a previous match.  Server breaking its promise?', fragment.matches);
+						return true; //continue
+					}
+					lastGood = match;
 					var newString = '';
 					newString += wrappedText.slice(0, match[0]);
 					newString += '<span>';
