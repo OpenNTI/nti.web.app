@@ -137,14 +137,14 @@ Ext.define('NextThought.controller.Groups', {
 		ct.getLayout().setActiveItem(0);
 
 		this.getContacts(function(friends){
+			var componentsToAdd = [];
 
 			people.add({ title: 'Online', online:true }).setUsers(friends.Online);
 			people.add({ title: 'Offline', offline:true }).setUsers(friends.Offline);
 
 			store.each(function(group){
 				var id = ParseUtils.parseNtiid(group.getId()),
-					list = group.get('friends'), name,
-					online = [];
+					list = group.get('friends'), name;
 
 				if(list.length === 1 && list[0] === 'Everyone'
 				&& id.specific.provider === 'zope.security.management.system_user'){
@@ -153,10 +153,6 @@ Ext.define('NextThought.controller.Groups', {
 
 				name = group.getName();
 
-				Ext.each(list,function(n){
-					var o = friends.Online[n] || friends.Offline[n];
-					if(o){online.push(o);} });
-
 				//don't associate the 'my contacts' group to the ui element...let it think its a "meta group"
 				if(group.get('Username')===contactsId){
 					group = null;
@@ -164,11 +160,30 @@ Ext.define('NextThought.controller.Groups', {
 					return;
 				}
 
-				groups.add({title: name, associatedGroup: group}).setUsers(online);
+				componentsToAdd.push({title: name, associatedGroup: group});
 			});
 
+			groups.suspendLayout = true;
+
 			//Add the addGroup link on the groups
-			groups.add({xtype: 'add-group'});
+			componentsToAdd.push({xtype: 'add-group'});
+
+			var addedCmps = groups.add(componentsToAdd);
+			Ext.each(addedCmps, function(cmp){
+				if(cmp.setUsers && cmp.associatedGroup){
+					var list = cmp.associatedGroup.get('friends'),
+					online=[]; 
+					Ext.each(list,function(n){
+						var o = friends.Online[n] || friends.Offline[n];
+						if(o){online.push(o);} 
+					});
+
+					cmp.setUsers(online);
+				}
+			});
+
+			groups.suspendLayout = false;
+			groups.doLayout();
 		});
 	},
 
