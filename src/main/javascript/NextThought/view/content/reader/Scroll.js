@@ -184,7 +184,13 @@ Ext.define('NextThought.view.content.reader.Scroll',{
 		});
 
 		if(rangeToScrollTo){
-			me.scrollTo(rangeToScrollTo.getClientRects()[0].top - 150);
+			var nodeTop = rangeToScrollTo.getClientRects()[0].top;
+			var a = nodeTop + this.body.getScroll().top, dh = 150;
+			try{
+				me.scrollTo(a - dh);
+			} catch(e){
+				console.log("Could not scrollTo: ", a-dh, e.message);
+			}
 		}
 	}
 });
