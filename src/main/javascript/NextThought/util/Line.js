@@ -189,6 +189,11 @@ Ext.define('NextThought.util.Line',{
 	isNodeAnchorable: function(n){
 		if (!n){return false;}
 
+        //check for figured inside assessments:
+        if (Ext.fly(n).is('.figure') && Ext.fly(n).up('object')){
+            return null;
+        }
+
 		var node = Anchors.referenceNodeForNode(n);
 
 		if (Ext.isTextNode(node) && node.nodeValue.trim().length > 0) {

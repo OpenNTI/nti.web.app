@@ -31,11 +31,11 @@ Ext.define('NextThought.util.Ranges',{
 
     expandRange: function(range, doc){
         if(Ext.fly(range.commonAncestorContainer).up('object')) {
-            return Ext.fly(range.commonAncestorContainer).up('object').down('.naquestionpart').dom.cloneNode(true);
+            return Ext.fly(range.commonAncestorContainer).up('object').down('.naquestion').dom.cloneNode(true);
         }
 
         if(Ext.fly(range.startContainer).up('object')) {
-            return Ext.fly(range.startContainer).up('object').down('.naquestionpart').dom.cloneNode(true);
+            return Ext.fly(range.startContainer).up('object').down('.naquestion').dom.cloneNode(true);
         }
 
 
