@@ -41,7 +41,7 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
 
 	refresh: function(){
 		var el = this.getEl(),
-			ul, link,
+			ul,
 			selection = this.getSelectionModel(),
 			blocked = this.blocked;
 
@@ -95,7 +95,9 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
 
 
 	reset: function(){
-		this.getSelectionModel().deselectAll();
+		if(!this.username){
+			this.getSelectionModel().deselectAll();
+		}
 		this.refresh();
 	},
 
@@ -114,6 +116,13 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
 	},
 
 
+	handleEvent: function(e){
+		if(e.getTarget('li[role=option]')){
+			this.callParent(arguments);
+		}
+	},
+
+
 	onBeforeSelect: function(list,model){
 		return (this.allowSelect && model.isModifiable());
 	},
@@ -129,13 +138,13 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
 	},
 
 	onDeselect: function(view,group){
-		if(this.username && !this.ignoreSelection){
+		if(this.username && !this.ignoreSelection && group && group.hasFriend(this.username)){
 			this.fireEvent('remove-contact',group,this.username);
 		}
 	},
 
 	onSelect: function(view,group){
-		if(this.username && !this.ignoreSelection){
+		if(this.username && !this.ignoreSelection && group && !group.hasFriend(this.username)){
 			this.fireEvent('add-contact',this.username,[group]);
 		}
 	},
