@@ -194,15 +194,21 @@ Ext.define('NextThought.view.annotations.note.EditorActions',{
 	},
 
 
-	editorBlur: function(){},
+	editorBlur: function(){
+        console.log('editor blur');
+        var s = window.getSelection();
+        if (s.rangeCount){this.lastRange = s.getRangeAt(0);}
+    },
 
 
 	editorFocus: function(){
-		var s = window.getSelection();
-		if(this.lastRange){
-			s.removeAllRanges();
-			s.addRange(this.lastRange);
-		}
+        Ext.defer(function(){
+            var s = window.getSelection();
+            if(this.lastRange){
+                s.removeAllRanges();
+                s.addRange(this.lastRange);
+            }
+        }, 10, this);
 	},
 
 
