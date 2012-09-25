@@ -54,11 +54,12 @@ Ext.define('NextThought.view.content.reader.Scroll',{
 	scrollToTarget: function(target){
 		var de = this.getDocumentElement(),
 			c = Ext.getCmp(target),
-			e = document.getElementById(target) || de.getElementById(target) || de.getElementsByName(target)[0];
+			e = document.getElementById(target) || de.getElementById(target) || de.getElementsByName(target)[0],
+			topMargin = 75;
 
 		if (!e && c) {
 			try{
-				this.scrollTo(c.getScrollPosition(this.body.getScroll().top));
+					this.scrollTo(c.getScrollPosition(this.body.getTop() - topMargin));
 			}
 			catch(excp) {
 				console.log("Could not scroll to ",c);
