@@ -46,9 +46,14 @@ Ext.define('NextThought.util.Ranges',{
         var r = this.getRangyRange(range, doc),
             sel = rangy.getSelection(doc);
 
-        r.moveEnd('character', 50);
-        r.moveStart('character', -50);
-        r.expand('word');
+        try {
+            r.moveEnd('character', 50);
+            r.moveStart('character', -50);
+            r.expand('word');
+        }
+        catch(e){
+            //we might overflow boundries, that's okay, get what we can...
+        }
 
         sel.setSingleRange(r);
         Anchors.expandSelectionToIncludeMath(sel);
