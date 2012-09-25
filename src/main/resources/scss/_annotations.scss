@@ -384,10 +384,12 @@ div.redaction-control {
 			}
 
 			&.highlight-mouse-over{
-				color: #ffffff;
-				background-color: $primary-blue;
-				.application-highlight {
-					background-color: transparent;
+				&,a {
+					color: #ffffff;
+					background-color: $primary-blue;
+					.application-highlight {
+						background-color: transparent;
+					}
 				}
 			}
 

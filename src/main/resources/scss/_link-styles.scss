@@ -1,4 +1,4 @@
-@import "_variables.scss";
+@import "variables";
 
 a{
     &.internal-link {
@@ -6,5 +6,9 @@ a{
 		&:active, &:hover, &:visited { @include content-link-def; }
 	}
 
-	#NTIContent &{ @include content-link-def; line-height: inherit; }
+	#NTIContent &{
+		@include content-link-def;
+		line-height: inherit;
+		color: $primary-blue;
+	}
 }
