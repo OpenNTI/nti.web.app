@@ -90,11 +90,22 @@ Ext.define('NextThought.view.account.Window',{
 
 
 	afterRender: function(){
-		this.callParent(arguments);
+		var me = this;
+		me.callParent(arguments);
 
-		this.mon( this.el.down('.close'), 'click', this.close, this);
+		me.mon( me.el.down('.close'), 'click', me.close, this);
 
-		this.mon(this.down('password-reset-form button[cancel]'),'click',this.hideForms,this);
+		me.mon(me.down('password-reset-form button[cancel]'),'click',me.hideForms,this);
+
+		me.mon($AppConfig.userObject,{
+			scope: me,
+			'changed': function(r){
+				var el = me.el;
+				el.down('.identity div.name').update(r.getName());
+				el.down('.identity div.affiliation').update(r.get('affiliation'));
+				el.down('.identity img.avatar').set({src:r.get('avatarURL')});
+			}
+		});
 	},
 
 

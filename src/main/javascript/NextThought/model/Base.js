@@ -284,7 +284,7 @@ Ext.define('NextThought.model.Base', {
 	 * @param fieldName - name of the field that we want to save
 	 * @param [value] - optional value to save (also set it on model)
 	 */
-	saveField: function(fieldName, value, successCallback) {
+	saveField: function(fieldName, value, successCallback, failCallback) {
 		//check to make sure we can do this, and we have the info we need
 		if (!fieldName || !this.hasField(fieldName)){
 			console.error('Cannot save field', this, arguments);
@@ -312,6 +312,7 @@ Ext.define('NextThought.model.Base', {
 			callback: function(){ },
 			failure: function(){
 				console.error("field save fail", arguments);
+				Ext.callback(failCallback);
 			},
 			success: function(resp){
 				var newMe = ParseUtils.parseItems( Ext.decode(resp.responseText))[0],
@@ -324,7 +325,7 @@ Ext.define('NextThought.model.Base', {
 				this.dirty = false;
 
 				if (successCallback){
-					Ext.callback(successCallback, me, [fieldName, sanitizedValue, me, newMe]);
+					Ext.callback(successCallback, null, [fieldName, sanitizedValue, me, newMe]);
 				}
 
 				me.fireEvent('changed',me);

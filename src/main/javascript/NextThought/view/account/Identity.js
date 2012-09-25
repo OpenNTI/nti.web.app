@@ -26,7 +26,8 @@ Ext.define('NextThought.view.account.Identity',{
 		notificationCount: 'span.notifications',
 		name: 'div.name',
         menuBtn: 'div.menu',
-		status: 'div.status'
+		status: 'div.status',
+		avatar: 'img.avatar'
 	},
 
 	initComponent: function(){
@@ -43,6 +44,7 @@ Ext.define('NextThought.view.account.Identity',{
 			'changed': function(r){
 				this.name.update(r.getName());
 				this.status.update(r.get('status'));
+				this.avatar.set({src:r.get('avatarURL')});
 			}
 		});
 
