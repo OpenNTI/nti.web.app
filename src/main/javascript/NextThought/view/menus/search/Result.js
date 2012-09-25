@@ -91,7 +91,7 @@ Ext.define('NextThought.view.menus.search.Result',{
 				wrappedText = fragment.text;
 
 				//Sort the matches backwards so we can do string replaces without invalidating
-				fragment.matches.sort(function(a, b){return b[0] - a[0];});
+				fragment.matches.sort(function(a, b){return a[0] - b[0];});
 				Ext.each(fragment.matches, function(match){
 					var newString = '';
 					newString += wrappedText.slice(0, match[0]);
