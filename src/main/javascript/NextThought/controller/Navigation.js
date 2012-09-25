@@ -74,10 +74,29 @@ Ext.define('NextThought.controller.Navigation', {
 			};
 		}
 
-
-		LocationProvider.setLocation(ntiid, callback, this);
+		this.maybeLoadNewPage(ntiid, callback);
 	},
 
+	maybeLoadNewPage: function(id, cb){
+
+		function loadPageId(pi){
+			var pageId = pi.getId();
+
+			if(LocationProvider.currentNTIID === pageId){
+				Ext.callback(cb, this);
+			}
+			else {
+				LocationProvider.setLocation(id, cb, this);
+			}
+		}
+
+		function fail(){
+			console.error('fail', arguments);
+			Ext.callback(cb, this);
+		}
+
+		$AppConfig.service.getPageInfo(id, loadPageId, fail, this);
+	},
 
 
 	navigateAndScrollToTerm: function(ntiid,term){
