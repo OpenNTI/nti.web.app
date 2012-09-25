@@ -5,7 +5,6 @@ Ext.define('NextThought.controller.Session', {
 		'NextThought.cache.UserRepository',
 		'NextThought.proxy.Socket',
 		'Ext.util.Cookies'
-
 	],
 
 	models: [
@@ -18,21 +17,50 @@ Ext.define('NextThought.controller.Session', {
         'menus.Settings'
 	],
 
+	sessionTrackerCookie: 'sidt',
 
 	init: function() {
-		this.control({
+		var me = this;
+
+		me.control({
 			'settings-menu [action=logout]' : {
-				'click': this.handleLogout
+				'click': me.handleLogout
 			}
 		},{});
+
+
+		me.sessionId = guidGenerator();
+
+		me.sessionTracker = Ext.TaskManager.newTask({
+
+			interval: 5000, //5 seconds
+			run: function(){
+				var v = Ext.util.Cookies.get(me.sessionTrackerCookie);
+				if(v !== me.sessionId){
+					me.sessionTracker.stop();
+
+					Ext.MessageBox.alert({
+						icon: Ext.Msg.WARNING,
+						title: 'Alert',
+						msg:'You\'re using the application in another tab. This session has been invalidated.',
+						buttons: Ext.Msg.OK,
+						fn:function(){
+							me.handleLogout();
+						}
+					});
+				}
+			}
+		});
 	},
 
 
 	handleLogout: function() {
-		var s = $AppConfig.server,
-			url = getURL(Ext.String.urlAppend(
+		var url = getURL(Ext.String.urlAppend(
 					this.logoutURL,
 					'success='+encodeURIComponent(location.href)));
+
+		Ext.util.Cookies.clear(this.sessionTrackerCookie);
+
 		//Log here to help address #550.
 		console.log('logout, redirect to ' + url);
 		Socket.tearDownSocket();
@@ -43,13 +71,14 @@ Ext.define('NextThought.controller.Session', {
 
     login: function(app){
         function success(){
+			Ext.util.Cookies.set(me.sessionTrackerCookie,me.sessionId);
+			me.sessionTracker.start();
             app.fireEvent('session-ready');
             app.getController('Application').openViewport();
         }
 
         function showLogin(timedout){
-            var me = this,
-                url = Ext.String.urlAppend(
+            var url = Ext.String.urlAppend(
                     Ext.String.urlAppend(
                         $AppConfig.server.login,
                         "return="+encodeURIComponent(location.toString())),
@@ -62,7 +91,8 @@ Ext.define('NextThought.controller.Session', {
             location.replace( url );
         }
 
-        this.attemptLogin(success,showLogin);
+		var me = this;
+        me.attemptLogin(success,showLogin);
     },
 
 
