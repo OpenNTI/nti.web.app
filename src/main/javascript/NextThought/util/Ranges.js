@@ -73,7 +73,6 @@ Ext.define('NextThought.util.Ranges',{
     clearNonContextualGarbage: function(dom){
         Ext.each(this.nonContextWorthySelectors, function(sel){
             Ext.each(Ext.fly(dom).query(sel), function(remove){
-                console.log('removing', remove);
                 Ext.fly(remove).remove();
             }, this);
         }, this);
