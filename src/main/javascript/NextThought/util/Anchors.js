@@ -629,15 +629,15 @@ Ext.define('NextThought.util.Anchors', {
 
 
 	/* tested */
-	referenceNodeForNode: function(node){
+	referenceNodeForNode: function(node, allowsUnsafeAnchors){
 		if(!node){
 			return null;
 		}
-		if( Anchors.isNodeAnchorable(node)){
+		if( Anchors.isNodeAnchorable(node, allowsUnsafeAnchors)){
 			return node;
 		}
 		else{
-			return Anchors.referenceNodeForNode(node.parentElement);
+			return Anchors.referenceNodeForNode(node.parentElement, allowsUnsafeAnchors);
 		}
 	},
 
@@ -810,7 +810,7 @@ Ext.define('NextThought.util.Anchors', {
 
 
 	/* tested */
-	isNodeAnchorable: function(node){
+	isNodeAnchorable: function(node, allowUnsafeAnchors){
 		//obviously not if node is not there
 		if (!node) {return false;}
 
@@ -844,7 +844,7 @@ Ext.define('NextThought.util.Anchors', {
 			return false;
 		}
 
-        else if (id && /^a[0-9]*$/.test(id)) {
+        else if (!allowUnsafeAnchors && id && /^a[0-9]*$/.test(id)) {
             return false; //ugly non reliable anchor
         }
 
@@ -1052,9 +1052,9 @@ Ext.define('NextThought.util.Anchors', {
 	//TODO - testing
 	toReferenceNodeXpathAndOffset: function( result ){
 		//get a reference node that is NOT a text node...
-		var referenceNode = Anchors.referenceNodeForNode(result.node);
+		var referenceNode = Anchors.referenceNodeForNode(result.node, true);
 		while(referenceNode && Ext.isTextNode(referenceNode)){
-			referenceNode = Anchors.referenceNodeForNode(referenceNode.parentNode);
+			referenceNode = Anchors.referenceNodeForNode(referenceNode.parentNode, true);
 		}
 		if (!referenceNode) {
 			Ext.Error.raise('Could not locate a valid ancestor');
