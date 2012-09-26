@@ -97,7 +97,8 @@ Ext.define('NextThought.util.Anchors', {
 
 
 	doesElementMatchPointer: function(element, pointer) {
-		if(element.id === pointer.elementId
+		if( (element.id === pointer.elementId 
+			 || (element.getAttribute && element.getAttribute('data-ntiid') === pointer.elementId))
 			&& element.tagName.toUpperCase() === pointer.elementTagName.toUpperCase() ){
 			return true;
 		}
@@ -368,13 +369,9 @@ Ext.define('NextThought.util.Anchors', {
 			return {confidence: 1, node: ancestor};
 		}
 
-		var selector = '[Id='+pointer.getElementId()+']',
-            selector2 = '[data-ntiid='+pointer.getElementId()+']',
+		var selector = '['+(pointer.getElementId().indexOf('tag:nextthought.com') >= 0 ? 'data-ntiid' : 'Id')+'="'+pointer.getElementId()+'"]',
 			potentials = Ext.query(selector, ancestor),
-            potentials2 = Ext.query(selector2, ancestor),
 			p, i;
-
-        potentials = potentials.concat(potentials2);
 
 		for(i in potentials){
 			if (potentials.hasOwnProperty(i)){
