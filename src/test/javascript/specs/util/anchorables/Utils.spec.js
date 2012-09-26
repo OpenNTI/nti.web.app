@@ -286,6 +286,36 @@ describe("Anchor Utils", function() {
 			result = Anchors.searchFromRangeStartInwardForAnchorableNode(t1);
 			expect(result).toBe(t2);
 		});
+
+        it('Interesting mathcounts case, firefox uses empty txt nodes', function(){
+            /*
+             <div id="a0000000044" class="naquestionpart naqsymmathpart">
+                 <a name="a0000000044">
+                    <span> What is the product of the digits of 7! ? </span>
+                 </a>
+             </div>
+             */
+            var div = document.createElement('div'),
+                a = document.createElement('a'),
+                s = document.createElement('span'),
+                t = document.createTextNode(' What is the product of the digits of 7! ? '),
+                empty = document.createTextNode(' '),
+                result;
+
+            div.setAttribute('Id', 'a0000000044');
+            a.setAttribute('name', 'a0000000044');
+
+            //setup heirarchy
+            s.appendChild(t);
+            a.appendChild(s);
+            div.appendChild(a);
+            div.appendChild(a);
+
+            result = Anchors.searchFromRangeStartInwardForAnchorableNode(div);
+            expect(result).toBeTruthy();
+            expect(result).toBe(t);
+        });
+
 	});
 
 	describe('walkDownToLastNode Tests', function(){

@@ -249,7 +249,12 @@ Ext.define('NextThought.util.Anchors', {
 			offset = range.endOffset;
 		}
 
-		//For the primary context we want a word on each side of the
+        if(!Ext.isTextNode(container)){
+            container = Anchors.nodeThatIsEdgeOfRange(range, (role === 'start'));
+            offset = role === 'start' ? 0 : container.textContent.length;
+        }
+
+        //For the primary context we want a word on each side of the
 		//range
 		var textContent = container.textContent;
 		if (!textContent || textContent.length ===0 ) {
@@ -693,6 +698,7 @@ Ext.define('NextThought.util.Anchors', {
 
 	/* tested */
 	searchFromRangeStartInwardForAnchorableNode: function(startNode) {
+        if(Ext.fly(startNode)){Ext.fly(startNode).clean();}
 		//resolve some initials, do we have a node and is it already anchorable?
 		if(!startNode){return null;}
 		if( Anchors.isNodeAnchorable(startNode) ) { return startNode; }
