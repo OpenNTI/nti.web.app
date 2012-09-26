@@ -38,15 +38,13 @@ Ext.define('NextThought.controller.Session', {
 				var v = Ext.util.Cookies.get(me.sessionTrackerCookie);
 				if(v !== me.sessionId){
 					me.sessionTracker.stop();
+					Socket.tearDownSocket();
 
 					Ext.MessageBox.alert({
 						icon: Ext.Msg.WARNING,
 						title: 'Alert',
 						msg:'You\'re using the application in another tab. This session has been invalidated.',
-						buttons: Ext.Msg.OK,
-						fn:function(){
-							me.handleLogout();
-						}
+						closable: false
 					});
 				}
 			}
@@ -54,12 +52,14 @@ Ext.define('NextThought.controller.Session', {
 	},
 
 
-	handleLogout: function() {
+	handleLogout: function(keepTracker) {
 		var url = getURL(Ext.String.urlAppend(
 					this.logoutURL,
 					'success='+encodeURIComponent(location.href)));
 
-		Ext.util.Cookies.clear(this.sessionTrackerCookie);
+		if(!keepTracker){
+			Ext.util.Cookies.clear(this.sessionTrackerCookie);
+		}
 
 		//Log here to help address #550.
 		console.log('logout, redirect to ' + url);
