@@ -102,22 +102,25 @@ Ext.define('NextThought.controller.UserData', {
             cid = change.getItemValue('ContainerId'),
             pageStore;
 
-        //add it to the page items store I guess:
-        pageStore = LocationProvider.getStore();
-        if(!pageStore || LocationProvider.currentNTIID !== cid || (item && !item.isTopLevel())){
-            this.maybeFireChildAdded(item);
-            return;
-        }
+		LocationMeta.getMeta(cid,function(meta){
+			//add it to the page items store I guess:
+			pageStore = LocationProvider.getStore();
+			if(!pageStore || LocationProvider.currentNTIID !== meta.NTIID || (item && !item.isTopLevel())){
+				this.maybeFireChildAdded(item);
+				return;
+			}
 
-        if(!/deleted/i.test(change.get('ChangeType'))){
-            pageStore.add(item);
-        }
-        else {
-            item = pageStore.getById(item.getId());
-            if(item){
-                pageStore.remove(item);
-            }
-        }
+			if(!/deleted/i.test(change.get('ChangeType'))){
+				pageStore.add(item);
+			}
+			else {
+				item = pageStore.getById(item.getId());
+				if(item){
+					pageStore.remove(item);
+				}
+			}
+		});
+
     },
 
 

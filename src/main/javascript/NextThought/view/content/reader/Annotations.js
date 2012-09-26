@@ -338,13 +338,19 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 			type = change.get('ChangeType'),
 			oid = item? item.getId() : null,
 			cid = item? item.get('ContainerId') : null,
-			creator = item? item.get('Creator') : null,
 			delAction = /deleted/i.test(type),
 			cmps = Ext.ComponentQuery.query(Ext.String.format('[recordIdHash={0}]' ,IdCache.getIdentifier(oid)))||[],
 			cls, result,
-			contribNS = Globals.getViewIdFromComponent(this);
+			found = cid === LocationProvider.currentNTIID;
 
-		if (!item || !this.containerId || this.containerId !== cid) {
+		if(!found){
+			Ext.each(this.getDocumentElement().querySelectorAll('[data-ntiid]'),function(o){
+				found = o.getAttribute('data-ntiid')===cid;
+				return !found;
+			});
+		}
+
+		if (!item || !cid || !found) {
 			return;
 		}
 
