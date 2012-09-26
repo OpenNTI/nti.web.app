@@ -322,9 +322,13 @@ Ext.define('NextThought.view.annotations.note.Main',{
 
 
 	addNewChild: function(child){
-		var r = this.record;
+		var r = this.record, c = 'ReferencedByCount';
 
 		if(child.get('inReplyTo') === r.getId()){
+
+			//update the count for next time the carousel renders (and to make share dialog readonly)
+			r.set(c, (r.get(c)||0)+1);
+
 			this.up('window').down('note-responses').addReplies([child]);
 		}
 		else {
