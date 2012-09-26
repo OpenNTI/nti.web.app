@@ -128,7 +128,6 @@ Ext.define('NextThought.view.content.reader.Content',{
 
 
 	buildPath: function(s){
-		console.log('Path given:',s);
 		var p = s.split('/'); p.splice(-1,1,'');
 		return p.join('/');
 	},
@@ -224,8 +223,6 @@ Ext.define('NextThought.view.content.reader.Content',{
 				anchor = firstChar === '#',
 				external = me.externalUriRegex.test(url),
 				host = absolute?getURL():basePath;
-
-console.log('Path parts: ', host, url);
 
 			if(/src/i.test(attr) && /youtube/i.test(url)){
 				return Ext.String.format('src="{0}&wmode={1}"',url.replace(/http:/i,'https:'), 'opaque');
