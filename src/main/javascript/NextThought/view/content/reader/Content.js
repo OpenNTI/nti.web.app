@@ -224,7 +224,9 @@ Ext.define('NextThought.view.content.reader.Content',{
 				anchor = firstChar === '#',
 				external = me.externalUriRegex.test(url),
 				host = absolute?getURL():basePath;
-console.log('Path stuff: ',absolute,host,basePath);
+
+console.log('Path parts: ', host, url);
+
 			if(/src/i.test(attr) && /youtube/i.test(url)){
 				return Ext.String.format('src="{0}&wmode={1}"',url.replace(/http:/i,'https:'), 'opaque');
 			}
