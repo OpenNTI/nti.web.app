@@ -224,27 +224,10 @@ Ext.define('NextThought.view.content.reader.Content',{
 				anchor = firstChar === '#',
 				external = me.externalUriRegex.test(url),
 				host = absolute?getURL():basePath;
-
-/*
-turn off html5 player
-			if(/src/i.test(attr) && /youtube/i.test(url)){
-				match = url.match(/youtube.com\/embed\/([^\?&#]+)/i);
-				return "src=resources/wrappers/youtube.html?host=" +
-						encodeURIComponent(getURL()) +
-						'&videoId='+encodeURIComponent(match[1]) +
-						'&original='+encodeURIComponent(url) +
-						'&_dc='+Ext.Date.now();
-			}
-*/
+console.log('Path stuff: ',absolute,host,basePath);
 			if(/src/i.test(attr) && /youtube/i.test(url)){
 				return Ext.String.format('src="{0}&wmode={1}"',url.replace(/http:/i,'https:'), 'opaque');
 			}
-/*
-			if(url.indexOf('http:')===0){
-				console.log('WARNING: referencing external url via insecure protocol: '+url+' Assuming naive https string substitution.');
-				original = original.replace(/http:/i,'https:');
-			}
-*/
 
 			//inline
 			return (anchor || external || /^data:/i.test(url)) ?
