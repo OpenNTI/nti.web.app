@@ -169,8 +169,8 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 	},
 
 
-	noteOverlayRegisterAddNoteNib: function(applicableRange, nib){
-		nib.on('click',this.noteOverlayAddNoteNibClicked,this, {applicableRange: applicableRange});
+	noteOverlayRegisterAddNoteNib: function(applicableRange, nib, containerId){
+		nib.on('click',this.noteOverlayAddNoteNibClicked,this, {applicableRange: applicableRange, containerId: containerId});
 		//should keep track of this and cleanup if its detected to not be in the dom any more.
 	},
 
@@ -178,12 +178,13 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 	noteOverlayAddNoteNibClicked: function(e, dom, options){
 		var o = this.noteOverlayData,
 			w = e.getTarget('.widgetContainer',null,true),
-			r = options.applicableRange;
+			r = options.applicableRange,
+			c = options.containerId;
 		if(w){
 			e.stopEvent();
 //			w.hide();
 
-			r = Anchors.toDomRange(r, this.getDocumentElement());
+			r = Anchors.toDomRange(r, this.getDocumentElement(), c);
 
 			o.lastLine = {
 				range: r,

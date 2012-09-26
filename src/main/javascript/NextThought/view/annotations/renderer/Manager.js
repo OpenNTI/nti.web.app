@@ -240,7 +240,7 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 					addTpl.insertFirst(
 							line.widgets,[
 								siblings ? 'collapsed':'expanded'
-							],true));
+							],true), line.first().getRecord().get('ContainerId'));
 			}
 
 			block = line.widgets || line.controls || null;

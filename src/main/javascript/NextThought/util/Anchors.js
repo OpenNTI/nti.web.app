@@ -16,7 +16,8 @@ Ext.define('NextThought.util.Anchors', {
 
 	PURIFICATION_TAG: 'data-nti-purification-tag',
 
-	toDomRange: function(contentRangeDescription, docElement) {
+	toDomRange: function(contentRangeDescription, docElement, containerId) {
+		if(!containerId){console.warn('No container id provided will assume page container (body element)');}
 		if(!contentRangeDescription){console.warn('nothing to parse?');return null;}
 		var ancestorNode = contentRangeDescription.getAncestor().locateRangePointInAncestor(docElement).node || docElement.body;
 
@@ -75,7 +76,6 @@ Ext.define('NextThought.util.Anchors', {
 		});
         return result;
 	},
-
 
     getContainerNtiid: function(node){
         var n = Ext.get(node),
