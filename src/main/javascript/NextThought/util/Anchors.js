@@ -28,9 +28,17 @@ Ext.define('NextThought.util.Anchors', {
 
 		//Clone and purify the ancestor node, so our range can always build against a clean source:
 		//TODO - consider caching these somewhere for performance
-		var clonedAncestor = ancestorNode.cloneNode(true);
+		var clonedAncestor = ancestorNode.cloneNode(true),
+            resultRange;
 		Anchors.purifyNode(clonedAncestor);
-		return Anchors.resolveSpecBeneathAncestor(contentRangeDescription, clonedAncestor, docElement);
+		resultRange = Anchors.resolveSpecBeneathAncestor(contentRangeDescription, clonedAncestor, docElement);
+        if (!resultRange) {
+            console.warn('could not generate range, trying again from body');
+            clonedAncestor = docElement.body.cloneNode(true);
+            Anchors.purifyNode(clonedAncestor);
+            resultRange = Anchors.resolveSpecBeneathAncestor(contentRangeDescription, clonedAncestor, docElement);
+        }
+        return resultRange;
 	},
 
 
