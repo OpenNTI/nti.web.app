@@ -1643,7 +1643,7 @@ describe("Anchor Utils", function() {
                 range, desc, recreatedRange;
 
             //set up ids and heirarchy
-            root.setAttribute('data-ntiid', '123242354543523');
+            root.setAttribute('data-ntiid', 'tag:nextthought.com-123242354543523'); //Note this needs to look like an ntiid
             p1.setAttribute('position', 1);
             p1.appendChild(t1);
             p2.setAttribute('position', 2);
@@ -1668,7 +1668,7 @@ describe("Anchor Utils", function() {
             desc = Anchors.createRangeDescriptionFromRange(range, document).description;
             expect(desc).toBeTruthy();
             expect(desc.getAncestor()).toBeTruthy();
-            expect(desc.getAncestor().getElementId()).toEqual(root.getAttribute('Id'));
+            expect(desc.getAncestor().getElementId()).toEqual(root.getAttribute('data-ntiid'));
 
             //now round trip back to a range, verify that it is the same range as before
             recreatedRange = Anchors.toDomRange(desc, document);
