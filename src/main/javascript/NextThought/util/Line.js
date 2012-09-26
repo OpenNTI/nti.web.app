@@ -144,7 +144,7 @@ Ext.define('NextThought.util.Line',{
                      */
             //Do something interesting, if we aren't a txt node, dig to a paragraph?
             if (!Ext.isTextNode(elem)){
-                var e = AnnotationUtils.getTextNodes(elem).first()
+                var e = AnnotationUtils.getTextNodes(elem).first();
                 //var e = Ext.fly(elem).down('p', true);
                 //if (e){e = e.firstChild();}
                 elem = e || elem;
