@@ -56,7 +56,7 @@ Ext.define('NextThought.util.Anchors', {
 			searchWithin = docElement.body;
 			console.warn('Unable to resolve containerId will fallback to root ', containerId, searchWithin);
 		}
-		console.log('Will perform resolution of', contentRangeDescription,  'within', searchWithin);
+		//console.log('Will perform resolution of', contentRangeDescription,  'within', searchWithin);
 
 		var ancestorNode = contentRangeDescription.getAncestor().locateRangePointInAncestor(searchWithin).node || searchWithin;
 
@@ -377,7 +377,7 @@ Ext.define('NextThought.util.Anchors', {
 
 		//Resolve start and end.
 		var startResult = rangeDesc.getStart().locateRangePointInAncestor(ancestor);
-		console.log('Resolution of start result was', startResult);
+		//console.log('Resolution of start result was', startResult);
 		if(!startResult.node
 			|| !startResult.hasOwnProperty('confidence')
 			|| startResult.confidence < 0.4){
@@ -390,7 +390,7 @@ Ext.define('NextThought.util.Anchors', {
 		}
 
 		var endResult = rangeDesc.getEnd().locateRangePointInAncestor(ancestor, startResult);
-		console.log('Resolution of end result was', endResult);
+		//console.log('Resolution of end result was', endResult);
 		if(!endResult.node
 			|| !endResult.hasOwnProperty('confidence')
 			|| endResult.confidence < 0.4){
@@ -404,7 +404,7 @@ Ext.define('NextThought.util.Anchors', {
 
 		var startResultLocator = Anchors.toReferenceNodeXpathAndOffset(startResult);
 		var endResultLocator = Anchors.toReferenceNodeXpathAndOffset(endResult);
-		console.log('startResultLocator ', startResultLocator, ' endResultLocator ', endResultLocator);
+		//console.log('startResultLocator ', startResultLocator, ' endResultLocator ', endResultLocator);
 
 		return Anchors.convertContentRangeToDomRange(startResultLocator, endResultLocator, docElement);
 	},
@@ -1285,7 +1285,7 @@ Ext.define('NextThought.util.Anchors', {
 			//If the container isn't a text node, the offset is the ith child
 			if(child.nodeType !== Node.TEXT_NODE){
 				result = {container: Anchors.ithChildAccountingForSyntheticNodes( child, offset, null)};
-				console.log('Returning result from child is not textnode branch', result);
+				//console.log('Returning result from child is not textnode branch', result);
 				return result;
 			}
 			else{
