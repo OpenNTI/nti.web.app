@@ -1,4 +1,4 @@
-@import "_variables.scss";
+@import "variables";
 
 .sidebar{
 
@@ -15,7 +15,9 @@
 	.gripper {
 		border-radius: 5px 5px 0 0;
 		min-height: 28px;
-
+		line-height: 28px;
+		@include menu-label-text-treatment;
+		padding-left: 15px;
 
 		img.tool.minimize {
 			position: absolute;
