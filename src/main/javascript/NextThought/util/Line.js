@@ -133,7 +133,7 @@ Ext.define('NextThought.util.Line',{
 			sel.removeAllRanges();
 
             elem = doc.elementFromPoint(x, y); //TODO - dynamically figure out the number 80?
-
+                   /*
             if (Ext.fly(elem).is('object:not(.naqvideo)') || Ext.fly(elem).parent('object:not(.naqvideo)')) {
 				elem = Ext.fly(elem).parent('object') || elem;
                 sel.selectAllChildren(Ext.fly(elem).down('div.naquestionpart').dom);
@@ -141,10 +141,13 @@ Ext.define('NextThought.util.Line',{
                 sel.removeAllRanges();
                 return range;
             }
-
+                     */
             //Do something interesting, if we aren't a txt node, dig to a paragraph?
             if (!Ext.isTextNode(elem)){
-                elem = Ext.fly(elem).down('p', true) || elem;
+                var e = AnnotationUtils.getTextNodes(elem).first()
+                //var e = Ext.fly(elem).down('p', true);
+                //if (e){e = e.firstChild();}
+                elem = e || elem;
             }
 
 		    elem = Anchors.referenceNodeForNode(elem);
