@@ -71,19 +71,32 @@ describe("Anchor Utils", function() {
 
         it('Anchor with name but no id', function(){
             var node = document.createElement('a');
-            node.setAttribute('name', 'a000120323423');
+            node.setAttribute('name', '00120323423');
             expect(Anchors.isNodeAnchorable(node)).toBeFalsy();
+        });
+
+        it('Anchor with invalidId id', function(){
+            var node = document.createElement('a');
+            node.setAttribute('Id', 'a12309841');
+            expect(Anchors.isNodeAnchorable(node)).toBeFalsy();
+        });
+
+
+        it('node with data-ntiid attr', function(){
+            var node = document.createElement('div');
+            node.setAttribute('data-ntiid', 'something-great');
+            expect(Anchors.isNodeAnchorable(node)).toBeTruthy();
         });
 
 		it('Node with Id', function(){
 			var node = document.createElement('span');
-			node.setAttribute('Id', 'a1234567');
+			node.setAttribute('Id', '1234dfkdljl2j31lk3j');
 			expect(Anchors.isNodeAnchorable(node)).toBeTruthy();
 		});
 
 		it('Node with Id and data-non-anchorable Attribute', function(){
 			var node = document.createElement('span');
-			node.setAttribute('Id', 'a1234567');
+			node.setAttribute('Id', 'sddfkja;sfkje;ljr;3');
 			node.setAttribute('data-non-anchorable', 'true');
 			expect(Anchors.isNodeAnchorable(node)).toBeFalsy();
 		});
@@ -234,7 +247,7 @@ describe("Anchor Utils", function() {
 				result;
 
 			//setup heirarchy
-			a.setAttribute('id', 'a12345');
+			a.setAttribute('id', '12345');
 			p.appendChild(a);
 			div.appendChild(p);
 
@@ -1556,7 +1569,7 @@ describe("Anchor Utils", function() {
 				range, desc, recreatedRange;
 
 			//set up ids and heirarchy
-			root.setAttribute('Id', 'a123242354543523');
+			root.setAttribute('Id', '123242354543523');
 			p1.setAttribute('position', 1);
 			p1.appendChild(t1);
 			p2.setAttribute('position', 2);
@@ -1591,7 +1604,52 @@ describe("Anchor Utils", function() {
 			expect(recreatedRange.commonAncestorContainer).toBe(range.commonAncestorContainer);
 		});
 
-		it('Ambigious Model Causing Incorrect Highlight Bug', function(){
+        it('Ancestor Spanning Identical Text Node Bug with data-ntiids', function(){
+            var root = document.createElement('div'), //this should be the ancestor
+                p1 = document.createElement('p'),
+                t1 = document.createTextNode('This is some text.'), //same as t2
+                p2 = document.createElement('p'),
+                t2 = document.createTextNode('This is some text.'),
+                range, desc, recreatedRange;
+
+            //set up ids and heirarchy
+            root.setAttribute('data-ntiid', '123242354543523');
+            p1.setAttribute('position', 1);
+            p1.appendChild(t1);
+            p2.setAttribute('position', 2);
+            p2.appendChild(t2);
+            root.appendChild(p1);
+            root.appendChild(p2);
+            testBody.appendChild(root);
+
+            //create a range now starting at the first char of t1 and the last of t2
+            range = document.createRange();
+            range.setStart(t1, 0);
+            range.setEnd(t2, t2.length);
+
+            //double check that my range has different nodes and is set up correctly
+            expect(range.startContainer).toBe(t1);
+            expect(range.endContainer).toBe(t2);
+            expect(t1).not.toBe(t2);
+            expect(range.startContainer).not.toBe(range.endContainer);
+            expect(range.toString()).toEqual(t1.textContent+t2.textContent);
+
+            //now turn that into a description, and check a few assumptions
+            desc = Anchors.createRangeDescriptionFromRange(range, document).description;
+            expect(desc).toBeTruthy();
+            expect(desc.getAncestor()).toBeTruthy();
+            expect(desc.getAncestor().getElementId()).toEqual(root.getAttribute('Id'));
+
+            //now round trip back to a range, verify that it is the same range as before
+            recreatedRange = Anchors.toDomRange(desc, document);
+            expect(recreatedRange).toBeTruthy();
+            expect(recreatedRange.startContainer).toBe(range.startContainer);
+            expect(recreatedRange.endContainer).toBe(range.endContainer);
+            expect(recreatedRange.commonAncestorContainer).toBe(range.commonAncestorContainer);
+        });
+
+
+        it('Ambigious Model Causing Incorrect Highlight Bug', function(){
 			/*
 			From the documentation:, this does not highlight correctly
 			<p id="id">

@@ -113,7 +113,7 @@ Ext.define('NextThought.util.Anchors', {
 			return Anchors.createTextPointerFromRange(range, role);
 		}
 		else if (Ext.isElement(edgeNode)) {
-			var id = edgeNode.getAttribute('Id'),
+			var id = edgeNode.getAttribute('data-ntiid') || edgeNode.getAttribute('Id'),
 				tagName = edgeNode.tagName;
 			return Ext.create('NextThought.model.anchorables.ElementDomContentPointer', {
 				elementTagName: tagName,
@@ -369,8 +369,12 @@ Ext.define('NextThought.util.Anchors', {
 		}
 
 		var selector = '[Id='+pointer.getElementId()+']',
+            selector2 = '[data-ntiid='+pointer.getElementId()+']',
 			potentials = Ext.query(selector, ancestor),
+            potentials2 = Ext.query(selector2, ancestor),
 			p, i;
+
+        potentials = potentials.concat(potentials2);
 
 		for(i in potentials){
 			if (potentials.hasOwnProperty(i)){
@@ -815,6 +819,7 @@ Ext.define('NextThought.util.Anchors', {
 
 		//distill the possible ids into an id var for easier reference later
 		var id = node.id || (node.getAttribute ? node.getAttribute('id') : null),
+            ntiid = node.getAttribute ? node.getAttribute('data-ntiid') : null,
 			nonAnchorable = node.getAttribute ? node.getAttribute('data-non-anchorable'): false;
 
 		if (nonAnchorable) {return false;}
@@ -828,6 +833,9 @@ Ext.define('NextThought.util.Anchors', {
 			return true;
 		}
 
+        if (ntiid) {
+            return true;
+        }
 
 		//no mathjax ids allowd
 		else if (id && id.indexOf("MathJax") !== -1) {
@@ -838,6 +846,10 @@ Ext.define('NextThought.util.Anchors', {
 		else if (id && id.indexOf("ext-gen") !== -1) {
 			return false;
 		}
+
+        else if (id && /^a[0-9]*$/.test(id)) {
+            return false; //ugly non reliable anchor
+        }
 
 		//If this node had an id and a tagName, then yay node!
 		else if (id && node.tagName){
