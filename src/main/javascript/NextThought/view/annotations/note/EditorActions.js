@@ -77,6 +77,7 @@ Ext.define('NextThought.view.annotations.note.EditorActions',{
 
 	deactivate: function(){
 		this.editor.removeCls('active');
+		this.lastRange = null;
 	},
 
 
@@ -202,13 +203,7 @@ Ext.define('NextThought.view.annotations.note.EditorActions',{
 
 
 	editorFocus: function(){
-        Ext.defer(function(){
-            var s = window.getSelection();
-            if(this.lastRange){
-                s.removeAllRanges();
-                s.addRange(this.lastRange);
-            }
-        }, 10, this);
+		Ext.defer( function(){ this.focus();}, 10, this);
 	},
 
 

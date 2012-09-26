@@ -453,7 +453,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		me.el.addCls('editor-active');
 		me.editorActions.activate();
         me.scrollIntoView();
-		setTimeout(function(){me.editorActions.focus();}, 100);
+		setTimeout(function(){me.editorActions.focus();}, 500);
 	},
 
 
