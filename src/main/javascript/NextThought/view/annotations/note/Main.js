@@ -440,7 +440,12 @@ Ext.define('NextThought.view.annotations.note.Main',{
 			return;
 		}
 
-		this.up('window').fireEvent('save-new-reply', r, v.body, v.shareWith, callback);
+        try {
+		    this.up('window').fireEvent('save-new-reply', r, v.body, v.shareWith, callback);
+        }
+        catch(e){
+            me.el.unmask();
+        }
 	},
 
 

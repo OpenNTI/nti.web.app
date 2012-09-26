@@ -248,7 +248,9 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 
 
 		this.updateSlide();
-		this.up('window').down('note-main-view').setRecord(item?item.record:null);
+        if (item){
+		    this.up('window').down('note-main-view').setRecord(item.record);
+        }
 
 		bgx = parseInt(this.getEl().getStyle('background-position').match(/-?[0-9]+/g)[0],0);
 		//The "difference" is a sum because the pointer coordinate is
