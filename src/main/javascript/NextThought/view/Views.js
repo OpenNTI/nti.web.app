@@ -6,8 +6,8 @@ Ext.define( 'NextThought.view.Views', {
 	requires: [
 		'Ext.layout.container.Card',
 		'NextThought.view.views.Home',
-		'NextThought.view.views.Library',
-		'NextThought.view.views.Classroom'
+		'NextThought.view.views.Library'
+//		'NextThought.view.views.Classroom'
 	],
 	
 	// plain: true,
@@ -20,8 +20,8 @@ Ext.define( 'NextThought.view.Views', {
 	activeItem: 1,
 	items:[
 		{id: 'home',   xtype: 'home-view-container'},
-		{id: 'library', xtype: 'library-view-container'},
-		{id: 'classroom', xtype: 'classroom-view-container'}
+		{id: 'library', xtype: 'library-view-container'}
+//		{id: 'classroom', xtype: 'classroom-view-container'}
 	],
 	
 	getActive: function() {

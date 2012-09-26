@@ -30,13 +30,14 @@ Ext.application({
 	],
 
 	launch: function(){
-        var me = this;
 		function start() {
 			me.getController('Session').login(app);
 			NextThought.isReady = true;
 		}
 
-		var unsupported = [], g;
+        var me = this,
+			unsupported = [], g;
+
 		Ext.each(//firefox doesn't report supporting: CSS3DTransform, so we'll omit it.
 				['Canvas','Range','CSS3BoxShadow','CSS3BorderRadius'],
 			function(f){ Boolean(!Ext.supports[f] && unsupported.push(f)); });
