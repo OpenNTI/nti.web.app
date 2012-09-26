@@ -69,6 +69,12 @@ describe("Anchor Utils", function() {
 			expect(Anchors.isNodeAnchorable(node)).toBeFalsy();
 		});
 
+        it('Anchor with name but no id', function(){
+            var node = document.createElement('a');
+            node.setAttribute('name', 'a000120323423');
+            expect(Anchors.isNodeAnchorable(node)).toBeFalsy();
+        });
+
 		it('Node with Id', function(){
 			var node = document.createElement('span');
 			node.setAttribute('Id', 'a1234567');
