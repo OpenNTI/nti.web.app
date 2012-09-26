@@ -49,7 +49,7 @@ Ext.define('NextThought.controller.Chat', {
 			'chat_recvMessage': function(){me.onMessage.apply(me, arguments);},
 //			'chat_recvMessageForAttention' : function(){me.onMessageForAttention.apply(me, arguments);},
 //			'chat_recvMessageForModeration' : function(){me.onModeratedMessage.apply(me, arguments);},
-			'chat_recvMessageForShadow' : function(){me.onMessage.apply(me, arguments);},
+			'chat_recvMessageForShadow' : function(){me.onMessage.apply(me, arguments);}
 //			'chat_failedToEnterRoom' : function(){me.onFailedToEnterRoom.apply(me, arguments);}
 		});
 
