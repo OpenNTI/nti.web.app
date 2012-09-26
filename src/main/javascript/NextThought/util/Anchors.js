@@ -377,6 +377,7 @@ Ext.define('NextThought.util.Anchors', {
 
 		//Resolve start and end.
 		var startResult = rangeDesc.getStart().locateRangePointInAncestor(ancestor);
+		console.log('Resolution of start result was', startResult);
 		if(!startResult.node
 			|| !startResult.hasOwnProperty('confidence')
 			|| startResult.confidence < 0.4){
@@ -389,6 +390,7 @@ Ext.define('NextThought.util.Anchors', {
 		}
 
 		var endResult = rangeDesc.getEnd().locateRangePointInAncestor(ancestor, startResult);
+		console.log('Resolution of end result was', endResult);
 		if(!endResult.node
 			|| !endResult.hasOwnProperty('confidence')
 			|| endResult.confidence < 0.4){
@@ -402,7 +404,7 @@ Ext.define('NextThought.util.Anchors', {
 
 		var startResultLocator = Anchors.toReferenceNodeXpathAndOffset(startResult);
 		var endResultLocator = Anchors.toReferenceNodeXpathAndOffset(endResult);
-		//console.log('startResultLocator ', startResultLocator, ' endResultLocator ', endResultLocator);
+		console.log('startResultLocator ', startResultLocator, ' endResultLocator ', endResultLocator);
 
 		return Anchors.convertContentRangeToDomRange(startResultLocator, endResultLocator, docElement);
 	},
