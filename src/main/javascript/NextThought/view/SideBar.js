@@ -28,7 +28,7 @@ Ext.define('NextThought.view.SideBar',{
 
 	items: [
 		{ xtype: 'box', cls: 'gripper', autoEl: { html: 'My Account&nbsp;', cn:[
-			{tag: 'img', src:Ext.BLANK_IMAGE_URL,cls:'tool minimize' }]}},
+			{tag: 'img', src:Ext.BLANK_IMAGE_URL,cls:'tool maximize' }]}},
 		{ xtype: 'identity'},
 		{ xtype: 'sidebar-tabpanel',
 			flex: 1,
@@ -69,6 +69,7 @@ Ext.define('NextThought.view.SideBar',{
 		else{
 			delete this.popstate;
 			this.gripper.hide();
+			this.tool.addCls('maximize');
 			this.host.show();
 			this.removeCls(cls);
 		}
@@ -78,6 +79,7 @@ Ext.define('NextThought.view.SideBar',{
 
 	afterRender: function(){
 		this.callParent(arguments);
+		this.tool = this.gripper.getEl().down('img.tool');
 		this.viewportMonitor(Ext.Element.getViewportWidth());
 		this.mon(this.gripper.el,'click',this.togglePopup,this);
 	},
@@ -108,6 +110,7 @@ Ext.define('NextThought.view.SideBar',{
 
 	togglePopup: function(){
 		this.popstate = !this.popstate;
+		this.tool[this.popstate?'removeCls':'addCls']('maximize');
 		this.syncUp();
 	}
 

@@ -19,15 +19,19 @@
 		@include menu-label-text-treatment;
 		padding-left: 15px;
 
-		img.tool.minimize {
+		img.tool {
 			position: absolute;
 			top: 0; right: 5px;
 			opacity: 0.5;
 			width: 27px; height: 27px;
 			cursor: pointer;
-			background: url(../images/window_controls.png) -27px -2px no-repeat;
+			background: url(../images/window_controls.png) -30px -2px no-repeat;
 
 			&:hover{ opacity: 1; }
+
+			&.maximize {
+				background-position: -80px -2px;
+			}
 		}
 
 	}
