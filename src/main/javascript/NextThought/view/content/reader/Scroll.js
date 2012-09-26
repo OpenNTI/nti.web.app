@@ -109,6 +109,31 @@ Ext.define('NextThought.view.content.reader.Scroll',{
 	},
 
 	scrollToText: function(text) {
+
+		function findRanges(allNodes, aDoc){
+			var re = SearchUtils.searchRe(text, false, false), match;
+
+			Ext.each(allNodes, function(node) {
+					var nv = node.nodeValue,
+						indexes = [],
+						r;
+
+					if( !Ext.fly(node).parent('.naquestion',true) ){
+						while (Boolean(match = re.exec(nv))) {
+							indexes.push( {'start':match.index, 'end': match.index+match[0].length } );
+						}
+
+						Ext.each(indexes, function(index){
+							r = aDoc.createRange();
+							r.setStart(node, index.start);
+							r.setEnd(node, index.end);
+							ranges.push(r);
+						});
+					}
+				},
+				this);
+		}
+
 		if (!text) {
 			return;
 		}
@@ -117,58 +142,19 @@ Ext.define('NextThought.view.content.reader.Scroll',{
 			doc = me.getDocumentElement(),
 			ranges = [],
 			texts,
-			re = SearchUtils.searchRe(text, false, false),
-			match,
 			rangeToScrollTo;
 
 		texts = AnnotationUtils.getTextNodes(doc);
 		//texts = texts.concat(AnnotationUtils.getTextNodes(this.el.down('.assessment-overlay').dom));
 
-		Ext.each(texts, function(node) {
-			var nv = node.nodeValue,
-				indexes = [],
-				r;
-
-			if( !Ext.fly(node).parent('.naquestionpart',true) ){
-				while (Boolean(match = re.exec(nv))) {
-					indexes.push( {'start':match.index, 'end': match.index+match[0].length } );
-				}
-
-				Ext.each(indexes, function(index){
-					r = doc.createRange();
-					r.setStart(node, index.start);
-					r.setEnd(node, index.end);
-					ranges.push(r);
-				});
-			}
-		},
-		this);
-
+		findRanges(texts, doc);
 		me.showRanges(ranges);
 
 		//If we found no ranged, try again not in iframe in case of assessments,
 		//this is a bit of a hack to get it working for MC
 		if(!ranges || ranges.length === 0){
 			texts = AnnotationUtils.getTextNodes(document);
-			Ext.each(texts, function(node) {
-					var nv = node.nodeValue,
-						indexes = [],
-						r;
-
-					if( !Ext.fly(node).parent('.naquestionpart',true) ){
-						while (Boolean(match = re.exec(nv))) {
-							indexes.push( {'start':match.index, 'end': match.index+match[0].length } );
-						}
-
-						Ext.each(indexes, function(index){
-							r = document.createRange();
-							r.setStart(node, index.start);
-							r.setEnd(node, index.end);
-							ranges.push(r);
-						});
-					}
-				},
-				this);
+			findRanges(texts, document);
 		}
 
 		//We may get ranges in our list that don't have any client rects.  A good example
