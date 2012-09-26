@@ -127,14 +127,16 @@ Ext.define('NextThought.util.Line',{
 			elem,
 			iterationCount = 0,
 			range,
-			x = 80;
+			x = 81;
 
 			//clear ranges and get the node on this y
 			sel.removeAllRanges();
 
             elem = doc.elementFromPoint(x, y); //TODO - dynamically figure out the number 80?
-            if (Ext.fly(elem).is('object')) {
-                sel.selectAllChildren(Ext.fly(elem).down('.naquestionpart').dom);
+
+            if (Ext.fly(elem).is('object:not(.naqvideo)') || Ext.fly(elem).parent('object:not(.naqvideo)')) {
+				elem = Ext.fly(elem).parent('object') || elem;
+                sel.selectAllChildren(Ext.fly(elem).down('div.naquestionpart').dom);
                 range = sel.getRangeAt(0);
                 sel.removeAllRanges();
                 return range;

@@ -52,6 +52,12 @@
 		-webkit-box-sizing: border-box;
 	}
 
+	object[type$=naquestion] {
+		img {
+			display: none;
+		}
+	}
+
 	.math {
 		line-height: normal;
 	}
