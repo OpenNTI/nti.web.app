@@ -113,11 +113,6 @@ Ext.define('NextThought.Library', {
 			return;
 		}
 
-		function buildPath(s){
-			var p = s.split('/'); p.splice(-1,1,'');
-			return p.join('/');
-		}
-
 		//Iteration 2 loads TOC async, so once the last one loads, callback if available
 		this.each(function(o){
 			if(!o.get||!o.get('index')||($AppConfig.server.jsonp&&!o.get('index_jsonp'))){
@@ -125,10 +120,6 @@ Ext.define('NextThought.Library', {
 				stack.pop(); return;
 			}
 			url = $AppConfig.server.jsonp ? o.get('index_jsonp') : o.get('index');
-
-			o.set('root', buildPath(getURL(url)));
-			console.log(o.get('root'));
-
 			me.loadToc(o.get('index'), url, o.get('NTIID'), function(toc){
 				var d;
 				stack.pop();
