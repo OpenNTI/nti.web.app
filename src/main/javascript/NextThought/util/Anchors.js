@@ -16,7 +16,7 @@ Ext.define('NextThought.util.Anchors', {
 
 	PURIFICATION_TAG: 'data-nti-purification-tag',
 
-	toDomRange: function(contentRangeDescription, docElement, containerId) {
+/*	toDomRange: function(contentRangeDescription, docElement, containerId) {
 		if(!containerId){console.warn('No container id provided will assume page container (body element)');}
 		if(!contentRangeDescription){console.warn('nothing to parse?');return null;}
 		var ancestorNode = contentRangeDescription.getAncestor().locateRangePointInAncestor(docElement).node || docElement.body;
@@ -40,7 +40,60 @@ Ext.define('NextThought.util.Anchors', {
             resultRange = Anchors.resolveSpecBeneathAncestor(contentRangeDescription, clonedAncestor, docElement);
         }
         return resultRange;
+	},*/
+
+	toDomRange: function(contentRangeDescription, docElement, containerId) {
+		if(!containerId){console.warn('No container id provided will assume page container (body element)');}
+		if(!contentRangeDescription){console.warn('nothing to parse?');return null;}
+
+		//Todo resolve the containerId to the node we want to restrict our search within
+		var searchWithin = this.getContainerNode(containerId, docElement);
+
+		if(!searchWithin){
+			//TODO if the container is not the page id but we can't find it we could
+			//just skip to the end now.  Maybe we decide there is no point searching the whole body.
+			//that may allow us to skip some work in some cases
+			searchWithin = docElement.body;
+			console.warn('Unable to resolve containerId will fallback to root ', containerId, searchWithin);
+		}
+		console.log('Will perform resolution of', contentRangeDescription,  'within', searchWithin);
+
+		var ancestorNode = contentRangeDescription.getAncestor().locateRangePointInAncestor(searchWithin).node || searchWithin;
+
+        //TODO - if an ancestor doesn't exist, do some better logging here, something like below
+
+		if (!ancestorNode){
+			console.error('Failed to get ancestor node for description.', contentRangeDescription,'This should happen b/c we should default to ', searchWithin);
+			//TODO return here, raise exception, or just let the below potentially explode
+		}
+
+		//Clone and purify the ancestor node, so our range can always build against a clean source:
+		//TODO - consider caching these somewhere for performance
+		var clonedAncestor = ancestorNode.cloneNode(true),
+            resultRange;
+
+		Anchors.purifyNode(clonedAncestor);
+		resultRange = Anchors.resolveSpecBeneathAncestor(contentRangeDescription, clonedAncestor, docElement);
+
+        if (!resultRange && ancestorNode !== searchWithin) {
+            console.warn('could not generate range, will try again from ', searchWithin);
+            clonedAncestor = searchWithin.cloneNode(true);
+            Anchors.purifyNode(clonedAncestor);
+            resultRange = Anchors.resolveSpecBeneathAncestor(contentRangeDescription, clonedAncestor, docElement);
+        }
+
+		/*//All our fallbacks failed
+		  if(!resultRange){
+			//TOOD if we can't recreate the range but we have a containerId, should
+			//we just create a range that is the entire container.  This may be ok
+			//for something like a note that is only renderd in the gutter, but it
+			//could be bad news for something like highlights.  The caller
+			//would probably need to request this behavior
+		}*/
+
+        return resultRange;
 	},
+
 
 
 	/* tested */
@@ -75,6 +128,27 @@ Ext.define('NextThought.util.Anchors', {
 			ancestor: ancestorAnchor
 		});
         return result;
+	},
+
+	getContainerNode: function(containerId, root){
+		if(!containerId){
+			return null;
+		}
+
+		var selector = '['+(containerId.indexOf('tag:nextthought.com') >= 0 ? 'data-ntiid' : 'Id')+'="'+containerId+'"]',
+			potentials = Ext.query(selector, root);
+		
+		if(!potentials || potentials.length === 0){
+			console.warn('Unable to find container', containerId);
+			return null;
+		}
+
+		if(potentials.length > 1){
+			//TODO what do we actually do here?
+			console.warn('Found several matches for container. Will return first', containerId, potentials);
+		}
+
+		return potentials[0];
 	},
 
     getContainerNtiid: function(node){
