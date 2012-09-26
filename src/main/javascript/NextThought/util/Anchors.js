@@ -579,6 +579,15 @@ Ext.define('NextThought.util.Anchors', {
 			//resolved reference node we want the thing that
 			//makes us the largest range.  If not we fail to resolve
 			if(!foundReferenceNode){
+				//TODO hmm so if we failed to resolve the reference node and we fell back
+				//to looking in the ancestor we don't do any partial matching.  We should
+				//reevaluate this decision.  In something like the mathcounts case where we have stuff anchored
+				//to non stable ids that have changed we end up never partial matching.
+				//Instead of doing that maybe instead of not trying to partial match we just take a 
+				//deduciton from the overal confidence.
+				console.warn('Ignoring fuzzy matching because we could not resolve the pointers ancestor', pointer, 
+							 'and we fell back to just looking in the whole descriptions ancestor', ancestorNode);
+				console.warn('Possible matches were', possibleNodes);
 				return {confidence: 0};
 			}
 			else{
