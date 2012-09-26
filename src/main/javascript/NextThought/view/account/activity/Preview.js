@@ -36,20 +36,31 @@ Ext.define('NextThought.view.account.activity.Preview',{
 			textContent: this.record.getBodyText ? this.record.getBodyText() : ''
 		});
 
-        LocationMeta.getMeta(this.record.get('ContainerId'),function(meta){
-            var lineage = LocationProvider.getLineage(meta.NTIID,true),
-                location = lineage.shift();
+        LocationMeta.getMeta(me.record.get('ContainerId'),function(meta){
+			var lineage = [],
+				location = '';
 
-            lineage.reverse();
+			if(!meta){
+				console.warn('No meta for '+me.record.get('ContainerId'));
+				Ext.apply(me.renderData, {
+					location: 'Unresolved',
+					path: 'Resolve failed'
+				});
+			}
+			else {
+				lineage = LocationProvider.getLineage(meta.NTIID,true);
+				location = lineage.shift();
+				lineage.reverse();
 
-            Ext.apply(me.renderData, {
-                location: location,
-                path: lineage.join(' / ')
-            });
+				Ext.apply(me.renderData, {
+					location: location,
+					path: lineage.join(' / ')
+				});
+			}
 
             if (me.rendered) {
-                me.path.update(lineage.join(' / '));
-                me.location.update(location);
+                me.path.update(me.renderData.path);
+                me.location.update(me.renderData.location);
             }
         }, this);
     },

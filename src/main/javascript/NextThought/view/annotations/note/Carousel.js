@@ -109,7 +109,7 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 					this.setRecord(this.items.first().record);
 				}
 			}
-			else if(this.items.findBy(function(o){return o.record === rec;})>=1){
+			else if(this.items.findBy(function(o){return o.record === rec;},null)>=1){
 				this.setRecord(rec);
 			}
 			else {
@@ -130,13 +130,15 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 	setRecord: function(rec){
 		var me = this,
 		myWindow = me.up('window');
+
 		if(myWindow && myWindow.editorActive()){
 			return;
 		}
 
 		me.record = rec;
-		this.items.each(function(o){
-			var s = o.record===rec;
+
+		me.items.each(function(o){
+			var s = o.record.get('NTIID')===rec.get('NTIID');
 			o.markSelected(s);
 			if(s){
 				if(me.rendered){
@@ -149,15 +151,15 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 
 
 	afterRender: function(){
-		var me = this, o = me.selected;
+		var me = this,
+			o = me.selected||null;
 		me.callParent(arguments);
-		if( o ){
-			setTimeout(function(){
-				me.updateWith(o);
-				me.syncIt();
-			},10);
-			delete me.selected;
-		}
+
+		setTimeout(function(){
+			me.updateWith(o);
+			me.syncIt();
+		},10);
+		delete me.selected;
 
 		this.mon(this.navNext,'click',this.selectNext,this);
 		this.mon(this.navPrev,'click',this.selectPrev,this);
@@ -227,7 +229,7 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 	},
 
 	updateWith: function(item){
-		var hasNext, hasPrev, bgx,
+		var bgx,
 		me = this;
 
 		if(this.notfoundEl){ this.notfoundEl.remove(); }
