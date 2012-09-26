@@ -95,8 +95,6 @@ Ext.define('NextThought.view.account.Window',{
 
 		me.mon( me.el.down('.close'), 'click', me.close, this);
 
-		me.mon(me.down('password-reset-form button[cancel]'),'click',me.hideForms,this);
-
 		me.mon($AppConfig.userObject,{
 			scope: me,
 			'changed': function(r){

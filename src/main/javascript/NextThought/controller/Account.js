@@ -49,7 +49,7 @@ Ext.define('NextThought.controller.Account', {
                 'click': this.showAccount
             },
 
-            'password-reset-form [text=Save]' : {
+            'password-reset-form button[save]' : {
                 'click': this.changePassword
             }
 
@@ -90,6 +90,7 @@ Ext.define('NextThought.controller.Account', {
                 form.setError(Ext.decode(resp.responseText));
             }
             else {
+				form.setSuccess();
                 form.reset();
             }
         }

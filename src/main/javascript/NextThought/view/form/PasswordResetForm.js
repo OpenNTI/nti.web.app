@@ -12,58 +12,79 @@ Ext.define('NextThought.view.form.PasswordResetForm', {
 	layout: {
 		type: 'vbox',
 		align: 'stretch'
-
 	},
 
-    items: [
-        {
-            xtype: 'simpletext',
-            name: 'old_password',
-            inputType: 'password',
-			placeholder: 'Current',
-			allowBlank: false
-        },{
-            xtype: 'simpletext',
-            name: 'password',
-            placeholder: 'New',
-            inputType: 'password',
-			allowBlank: false,
-			minLength: 5
-        }, {
-            xtype: 'simpletext',
-            name: 'password-verify',
-            placeholder: 'Confirm New',
-            inputType: 'password',
-			allowBlank: false,
-            validator: function(value) {
-                var password = this.previousSibling('[name=password]').getValue();
-                return (value === password) ? true : 'Passwords do not match.';
-            }
-		}, {
+	items: [{
+		xtype: 'container',
+		layout: {
+			type: 'hbox',
+			align: 'stretch'
+		},
+		items:[{
 			xtype: 'container',
-			layout: {
-				type: 'hbox',
-				pack: 'end',
-				align: 'middle'
+			flex: 1,
+			defaults: {
+				cls: 'password-box',
+				inputType: 'password',
+				xtype: 'simpletext',
+				allowBlank: false
 			},
-			defaultType: 'button',
 			items: [
-				{text: 'Cancel', cancel:1, ui: 'text', handler: function(b){b.up('password-reset-form').reset();} },
-				{text: 'Save', save:1, ui: 'primary', scale: 'medium', disabled: true }
-			]
-		}
-    ],
+				{
+					name: 'old_password',
+					placeholder: 'Old Password'
+				},{
+					name: 'password',
+					placeholder: 'New Password',
+					minLength: 5
+				}, {
+					name: 'password-verify',
+					placeholder: 'Verify New Password',
+					validator: function(value) {
+						var password = this.previousSibling('[name=password]').getValue();
+						if (value === password) {
+							return true;
+						}
+						throw 'Passwords do not match.';
+					}
+				}]
+		},{
+			flex: 1,
+			xtype: 'box',
+			message:1,
+			cls: 'message-box',
+			autoEl: {
+				cn:[{cls:'text'}]
+			}
+		}]
+	}, {
+		xtype: 'container',
+		cls: 'footer',
+		layout: {
+			type: 'hbox',
+			pack: 'end',
+			align: 'middle'
+		},
+		defaultType: 'button',
+		items: [
+			{text: 'Save Password', save:1, ui: 'flat-blue', scale: 'medium', disabled: true }
+		]
+	}],
 
 
-	reset: function(){
-		Ext.each(this.inputs,function(o){o.clearValue(true);});
-		this.down('button[save]').disable();
+	setMessage: function(msg,error){
+		var el = this.down('box[message]').getEl().down('.text');
+		el[error?'addCls':'removeCls']('error');
+		el.update(msg||'');
 	},
-
 
 	setError: function(errorJson){
-		console.log(errorJson);
-		alert(errorJson.message);
+		this.setMessage(errorJson.message,true);
+	},
+
+
+	setSuccess: function(){
+		this.setMessage('You\'re password has\nbeen changed.');
 	},
 
 
@@ -85,10 +106,27 @@ Ext.define('NextThought.view.form.PasswordResetForm', {
 
 
 	checkValidity: function(value, input){
-		input.validate();
 
-		var v = this.inputs.reduce(function(accum,o){ return accum && o.validate(true); }, true);
-		this.down('button[save]')[v?'enable':'disable']();
-		this.updateLayout();
+		function val(i,s){
+			try {
+				return i.validate(!!s);
+			}
+			catch(msg){
+				input.setError();
+				me.setError({message: msg});
+			}
+			return false;
+		}
+
+		var me = this,
+			v = false;
+
+		if( val(input) ){
+			me.setMessage();
+			v = me.inputs.reduce( function(accum,o){ return accum && val(o,true); }, true);
+		}
+
+		me.down('button[save]')[v?'enable':'disable']();
+		me.updateLayout();
 	}
 });

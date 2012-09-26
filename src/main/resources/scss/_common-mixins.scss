@@ -172,7 +172,7 @@
 
 	@include experimental(transition, $value);
 
-	&.error-saving {
+	&.error {
 		@include experimental(transition, $value);
 		border-color: red;
 		background-color: #ffc0c0;

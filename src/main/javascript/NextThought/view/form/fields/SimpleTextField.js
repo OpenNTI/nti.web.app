@@ -31,15 +31,15 @@ Ext.define('NextThought.view.form.fields.SimpleTextField',{
 
 	setError: function(){
 		var e = this.inputEl;
-		e.addCls('error-saving');
-		setTimeout(function(){ e.removeCls('error-saving'); },750);
+		e.removeCls('error');//if there is an animation, we have to remove the class before it will play again.
+		e.addCls('error');
 	},
 
 
 	clearValue: function(silent){
 		var e = this.inputEl;
 		e.dom.value = '';
-		e.removeCls('error-saving');
+		e.removeCls('error');
 		this.lastValue = this.getValue();
 		this.clearEl.hide();
 		this.keyPressed(new Ext.EventObjectImpl());
@@ -102,6 +102,8 @@ Ext.define('NextThought.view.form.fields.SimpleTextField',{
 
 		c[v?'show':'hide']();
 
+		e.removeCls('error');
+
 		if (k === event.ENTER || k === event.ESC ) {
 			this.fireEvent('commit', v, this );
 		}
@@ -116,17 +118,13 @@ Ext.define('NextThought.view.form.fields.SimpleTextField',{
 
 
 	validate: function(silent){
-		var msg,valid,
-				val = this.getValue()||'';
+		var valid,
+			val = this.getValue()||'';
 
 		valid = (this.allowBlank===false) ? (val.length >= (this.minLength||1)) : true;
 
 		if(valid && this.validator){
-			msg = this.validator(val);
-			if(msg !== true){
-				this.errorMessage = msg;
-				valid = false;
-			}
+			valid = Boolean(this.validator(val));
 		}
 
 		if(!silent && !valid){
