@@ -84,7 +84,7 @@ Ext.define('NextThought.view.form.PasswordResetForm', {
 
 
 	setSuccess: function(){
-		this.setMessage('You\'re password has\nbeen changed.');
+		this.setMessage('Your password has\nbeen changed.');
 	},
 
 
