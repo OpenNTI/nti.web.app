@@ -36,6 +36,19 @@
 			vertical-align: sub;
 		}
 
+		.nobreak {
+			white-space: nowrap;
+		}
+
+		.vfrac {
+			white-space: nowrap;
+
+			.divider {
+				 font-size: 140%;
+				 vertical-align: -4%;
+			}
+		}
+
 		.underline {
 			text-decoration: underline;
 		}
