@@ -18,7 +18,7 @@ Ext.define('NextThought.util.Anchors', {
 
 	toDomRange: function(contentRangeDescription, docElement) {
 		if(!contentRangeDescription){console.warn('nothing to parse?');return null;}
-		var ancestorNode = contentRangeDescription.getAncestor().locateRangePointInAncestor(docElement).node || docElement;
+		var ancestorNode = contentRangeDescription.getAncestor().locateRangePointInAncestor(docElement).node || docElement.body;
 
         //TODO - if an ancestor doesn't exist, do some better logging here, something like below
 
