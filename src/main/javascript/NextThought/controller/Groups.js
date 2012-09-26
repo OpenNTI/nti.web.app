@@ -204,6 +204,13 @@ Ext.define('NextThought.controller.Groups', {
 			return;
 		}
 
+
+		Ext.each(
+				Ext.ComponentQuery.query(Ext.String.format('contact-card[username={0}]',name)),
+				function(u){
+					u[/offline/i.test(presence)? 'addCls':'removeCls']('offline');
+				});
+
 		offline.removeUser(name);
 		online.removeUser(name);
 
