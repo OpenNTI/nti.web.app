@@ -913,6 +913,36 @@
 				vertical-align: super;
 			}
 
+			sub {
+				vertical-align: sub;
+			}
+
+			.nobreak {
+				 white-space: nowrap;
+			}
+
+			.vfrac {
+			       white-space: nowrap;
+
+			       .divider {
+				 	font-size: 140%;
+				 	vertical-align: -4%;
+				}
+			}
+
+			.underline {
+				   text-decoration: underline;
+			}
+
+			.overline {
+				  text-decoration: overline;
+			}
+
+			em,
+			.mathname {
+				  font-style: italic;
+			}
+
 		  	.mathjax {
 			    line-height: normal;
 				white-space: nowrap;
