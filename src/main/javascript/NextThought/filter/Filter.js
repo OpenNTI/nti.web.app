@@ -22,8 +22,16 @@ Ext.define('NextThought.filter.Filter',{
 		return options[0];
 	},
 
+	flatten: function(){ return [this]; },
+
 	toString: function(){
-		return Ext.String.format('{0} {1} {2}',this.fieldName, this.operation, this.value);
+		return Ext.String.format('{"{0}":"{1}", "operation": "{2}"}',
+				this.fieldName, this.value,
+				this.operation === this.self.OPERATION_EXCLUDE
+						? 'exclude'
+						: this.operation === this.self.OPERATION_INCLUDE
+							? 'include'
+							: 'unknown');
 	},
 
 	equals: function(o){

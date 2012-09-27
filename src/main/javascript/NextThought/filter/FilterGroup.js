@@ -30,6 +30,30 @@ Ext.define('NextThought.filter.FilterGroup',{
 	},
 
 
+	flatten: function(){
+		var filters = [];
+		Ext.each(this.value,function(f){
+			filters.push.apply(filters, f.flatten());
+		});
+		return filters;
+	},
+
+
+	toString: function(){
+		if(this.value.length ===1){
+			return this.value[0].toString();
+		}
+
+		return Ext.String.format('{"operation":"{0}", "filters":[{1}]}',
+				(this.operation===this.self.OPERATION_UNION
+						? 'union'
+						: this.operation===this.self.OPERATION_INTERSECTION
+							? 'intersection'
+							: 'unknown' ),
+				this.value);
+	},
+
+
 	equals: function(o){
 		if(!o){
 			return false;

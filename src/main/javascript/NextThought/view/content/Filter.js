@@ -23,6 +23,7 @@ Ext.define('NextThought.view.content.Filter',{
 		var me = this;
 		me.callParent(arguments);
 		me.menu = Ext.widget('filter-menu',{
+			id: 'default-filter-control',
 			ownerButton: me,
 			listeners: {
 				scope: me,

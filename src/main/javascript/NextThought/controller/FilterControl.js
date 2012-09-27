@@ -154,8 +154,9 @@ Ext.define('NextThought.controller.FilterControl', {
 		this);
 
 		//auto passthrough
-		models.addFilter(new Filter('$className',Filter.OPERATION_INCLUDE, 'NextThought.model.Change'));
-		models.addFilter(new Filter('$className',Filter.OPERATION_INCLUDE, 'NextThought.model.Hit'));
+		//why?
+//		models.addFilter(new Filter('$className',Filter.OPERATION_INCLUDE, 'NextThought.model.Change'));
+//		models.addFilter(new Filter('$className',Filter.OPERATION_INCLUDE, 'NextThought.model.Hit'));
 		models.addFilter(new Filter('$className',Filter.OPERATION_INCLUDE, 'String'));
 		models.addFilter(new Filter('$className',Filter.OPERATION_INCLUDE, 'NextThought.model.Redaction'));
 

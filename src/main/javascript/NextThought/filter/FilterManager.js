@@ -43,7 +43,6 @@ Ext.define('NextThought.filter.FilterManager',{
 
 
 	setFilter: function(scope, filter){
-//		console.debug('set filter ',scope, filter);
 		var o = this.getScope(scope);
 		o.fireEvent('change',filter);
 		o.current = filter;
@@ -51,8 +50,51 @@ Ext.define('NextThought.filter.FilterManager',{
 
 
 	getCurrentFilter: function(scope){
-		return this.getScope(scope).current;
+		return this.getScope(scope||'default-filter-control').current;
+	},
+
+
+	/**
+	 * This will naively iterate the filters and grab all $className filters and add them to the result, as well as
+	 * determin which filter to use. ie OnlyMe,FollowingAndMe, Following.
+	 *
+	 * All union/intersection/include/exclude data will be dropped.
+	 *
+	 * @param scope - id of the filter menu this filter is associated to.
+	 */
+	getServerListParams: function(scope){
+		var filter = this.getCurrentFilter(scope).flatten(),
+			params = {};
+
+		Ext.each(filter,function(f){
+			var m;
+
+			if(f.fieldName==='Creator'){
+				if(isMe(f.value)){ params.me = true; }
+				else { params.groups = true; }
+				return;
+			}
+			try{
+				m = Ext.ClassManager.get(f.value);
+				if(!m || !m.prototype || !m.prototype.mimeType ){return;}
+				params[f.fieldName] = params[f.fieldName] || [];
+				params[f.fieldName].push(m.prototype.mimeType);
+			}
+			catch(e){
+				console.error(e.message,e);
+			}
+		});
+
+		if(Ext.isArray(params.$className)){
+			params.Accepts = params.$className.join(',');
+			delete params.$className;
+		}
+
+		return params;
 	}
+
+
+
 
 },function(){
 	window.FilterManager = this;
