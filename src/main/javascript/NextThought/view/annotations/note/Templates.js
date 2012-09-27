@@ -84,7 +84,8 @@ Ext.define('NextThought.view.annotations.note.Templates',{
 	replyOptionsClicked: function(e, t, opts){
 		e.stopEvent();
 
-		var more = e.getTarget('.more', undefined, true), editItem, chatItem, flagItem, deleteItem, menu, items=[], mine, options = opts.options;
+		var more = e.getTarget('.more', undefined, true), editItem, chatItem, flagItem, deleteItem, menu, items=[], mine,
+			options = opts.options, menuTimer;
 
 		if (!more || !more.dom){return false;}
 
@@ -158,6 +159,11 @@ Ext.define('NextThought.view.annotations.note.Templates',{
 			parentItem: this,
 			items: items
 		});
+
+		menu.on('mouseleave', function(){
+			menuTimer = setTimeout(function(){ menu.hide(); }, 500);
+		});
+		menu.on('mouseenter', function(){ clearTimeout(menuTimer); });
 
 		menu.showBy(more, 'tl-bl?', [2, -7]);
 
