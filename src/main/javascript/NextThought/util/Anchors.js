@@ -783,21 +783,28 @@ Ext.define('NextThought.util.Anchors', {
 
 	/* tested */
 	searchFromRangeStartInwardForAnchorableNode: function(startNode) {
-        if(Ext.fly(startNode)){Ext.fly(startNode).clean();}
-		//resolve some initials, do we have a node and is it already anchorable?
-		if(!startNode){return null;}
-		if( Anchors.isNodeAnchorable(startNode) ) { return startNode; }
+        if (!startNode){return null;}
 
-		//declare some vars we will use from here on out
-		var recurseOn;
 
-		//If we get here we know we are going to have to search for one.  So get the first child
-		//or the next sibling
-		recurseOn = startNode.firstChild;
-		if(!recurseOn){ recurseOn = startNode.nextSibling || (startNode.parentNode) ? startNode.parentNode.nextSibling : null; }
+        var walker = document.createTreeWalker(startNode, NodeFilter.SHOW_ALL, null, null),
+            temp = startNode, t;
 
-		//Try to recurse, until we find something or don't
-		return Anchors.searchFromRangeStartInwardForAnchorableNode(recurseOn);
+        while (temp){
+            if (Anchors.isNodeAnchorable(temp)){
+                return temp;
+            }
+            //advance:
+            t = walker.nextNode()
+            if (!t){
+                t = temp.parentNode ? temp.parentNode.nextSibling : null;
+                if (t){walker.currentNode = t;}
+                temp = t;
+            }
+            else{ temp = t; }
+        }
+
+        //if we got here, we found nada:
+        return null;
 	 },
 
 
@@ -978,6 +985,7 @@ Ext.define('NextThought.util.Anchors', {
 
 		//start by normalizing things, just to make sure it's normalized from the beginning:
 		ancestor.normalize();
+        //Ext.fly(ancestor).clean(); TODO - maybe clean and remove whitespace?
 
 		//apply tags to start and end:
 		Anchors.tagNode(origStartNode, 'start');
