@@ -89,10 +89,6 @@ Ext.define('NextThought.view.annotations.note.Templates',{
 
 		if (!more || !more.dom){return false;}
 
-		if(opts.scope.el.down('.single')){
-			opts.scope.el.down('.single').addCls('menu-open');
-		}
-
 		function moreMenuClick(item, e){
 			e.stopEvent();
 
@@ -164,18 +160,25 @@ Ext.define('NextThought.view.annotations.note.Templates',{
 			items: items
 		});
 
+		menu.on('mouseover', function(){
+			if(opts.scope.el && opts.scope.el.down('.single') && !opts.scope.el.down('.menu-open')){
+				opts.scope.el.down('.single').addCls('menu-open');
+			}
+		});
+
 		menu.on('mouseleave', function(){
 			menuTimer = setTimeout(function(){
 				menu.hide();
-				if(opts.scope.el.down('.single')){
+				if(opts.scope.el && opts.scope.el.down('.single')){
 					opts.scope.el.down('.single').removeCls('menu-open');
 				}
-			}, 500);
+			}, 100);
 		});
 		menu.on('mouseenter', function(){ clearTimeout(menuTimer); });
 
 		menu.showBy(more, 'tl-bl?', [2, -7]);
 
+		menuTimer = setTimeout(function(){ menu.hide(); }, 1500);
 		return false;
 	},
 
