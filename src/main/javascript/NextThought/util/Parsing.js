@@ -94,7 +94,7 @@ Ext.define('NextThought.util.Parsing',{
 			specific = (parts[2] || '').split('-'),
 			result = {};
 
-		if(parts.length < 3){
+		if(parts.length < 3 || parts[0] !== 'tag'){
 //			console.warn('"'+id+'" is not an NTIID');
 			return null;
 		}
