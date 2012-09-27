@@ -266,6 +266,12 @@ Ext.define('NextThought.model.Base', {
 		return false;
 	},
 
+	getFieldEditURL: function(editLink,field){
+		var f = Ext.String.format("/++fields++{0}", field);
+
+		return getURL(Ext.String.format("{0}/{1}",
+			editLink,f));
+	},
 
 	/**
 	 * Save a specific field of this model, optionally set a value and save it if value is sent.
@@ -274,10 +280,15 @@ Ext.define('NextThought.model.Base', {
 	 * @param [value] - optional value to save (also set it on model)
 	 */
 	saveField: function(fieldName, value, successCallback, failCallback) {
+		var editLink = this.getLink('edit');
 		//check to make sure we can do this, and we have the info we need
 		if (!fieldName || !this.hasField(fieldName)){
 			console.error('Cannot save field', this, arguments);
 			Ext.Error.raise('Cannot save field, issues with model?');
+		}
+		if(!editLink){
+			console.error('Can\'t save field on uneditable object', this);
+			Ext.Error.raise('Can\'t save field on uneditable object');
 		}
 
 		//If there's a value, set it on the model
@@ -291,7 +302,7 @@ Ext.define('NextThought.model.Base', {
 			me=this;
 
 		Ext.Ajax.request({
-			url: $AppConfig.service.getObjectURL(this.get('NTIID'), fieldName),
+			url: this.getFieldEditURL(editLink, fieldName),
 			jsonData: json,
 			method: 'PUT',
 			headers: {
