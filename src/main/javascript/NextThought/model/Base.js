@@ -14,7 +14,6 @@ Ext.define('NextThought.model.Base', {
 	},
 
 	idProperty: 'NTIID',
-	mimeType: 'application/vnd.nextthought',
 	proxy: { type: 'nti' },
 	fields: [
 		{ name: 'Class', type: 'string', persist: false },
@@ -34,26 +33,14 @@ Ext.define('NextThought.model.Base', {
 
 	onClassExtended: function(cls, data) {
 		data.proxy = {type:'nti', model: cls};
+		data.mimeType = 'application/vnd.nextthought.'+data.$className.replace(/^.*?model\./,'').toLowerCase();
 	},
 
 
 	constructor: function(data,id,raw){
-		var c, f = this.fields,
+		var f = this.fields,
 			cName = this.self.getName().split('.').pop(),
-			mimeExtension = this.self.getName().replace(/^.*?model\./,'').toLowerCase(),
 			cField = f.getByKey('Class');
-//			openedGroup = false;
-
-
-		cField.defaultValue = cName;
-		cField.value = cName;
-
-		if(!(new RegExp(cName,'i')).test(this.mimeType)){
-			this.mimeType += '.'+mimeExtension;
-		}
-		else{
-			console.warn('using self declared mimeTime:', this.mimeType);
-		}
 
 		//Workaround for objects that don't have an NTIID yet.
 		if (data && this.idProperty==='NTIID' && id && raw) {
@@ -64,6 +51,8 @@ Ext.define('NextThought.model.Base', {
 			}
 		}
 
+		cField.defaultValue = cName;
+		cField.value = cName;
 		f.getByKey('MimeType').defaultValue = this.mimeType;
 
 		this.callParent(arguments);
