@@ -44,8 +44,6 @@ Ext.define('NextThought.view.annotations.note.GutterWidget',{
 			mouseUpDivs.pop();
 		}
 
-		TemplatesForNotes.attachMoreReplyOptionsHandler(me, me.more);
-
 		//Stop div mouseup from opening window when clicking on buttons...
 		me.mon(new Ext.CompositeElement(mouseUpDivs), {
 			scope: me,
@@ -87,7 +85,7 @@ Ext.define('NextThought.view.annotations.note.GutterWidget',{
 			return;
 		}
 		this.name.update(Ext.String.ellipsis(user.getName(),18));
-		TemplatesForNotes.updateMoreReplyOptionsLabels(this.more, user, this.record.isFlagged());
+		TemplatesForNotes.attachMoreReplyOptionsHandler(this, this.more, user, this.record.isFlagged());
 	},
 
 

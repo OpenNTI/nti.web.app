@@ -42,28 +42,12 @@ Ext.define('NextThought.view.annotations.note.Templates',{
 			cn: [
 				{ cls: 'reply', html: 'Reply' },
 				{ cls: 'share', html: 'Share' },
-				{ cls: 'more', title: 'Options', html: '&nbsp;',
-					cn:[{
-						tag: 'ol',
-						cn: [
-							{ tag: 'li', cls: 'edit', html: 'Edit' },
-							{ tag: 'li', cls: 'chat', html: 'Start a chat' },
-							{ tag: 'li', cls: 'flag',  html: 'Flag as Inappropriate' },
-							/*
-							{ tag: 'li', cls: 'add-contact', html: 'Add to Contacts' },
-							{ tag: 'li', cls: 'follow', html: 'Follow ...' },
-							{ tag: 'li', cls: 'block', html: 'Block ...' },
-							{ tag: 'li', cls: 'mute', html: 'Mute?' },
-							*/
-							{ tag: 'li', cls: 'delete', html: 'Delete' }
-						]
-					}]
-				}
+				{ cls: 'more', title: 'Options', html: '&nbsp;'}
 			]
 		};
 	},
 
-	attachMoreReplyOptionsHandler: function(cmp, optionsEl){
+	attachMoreReplyOptionsHandler: function(cmp, optionsEl, user, currentlyFlagged){
 		var scroller = optionsEl.up('{overflow=auto}');
 
 		if(scroller){
@@ -82,6 +66,10 @@ Ext.define('NextThought.view.annotations.note.Templates',{
 			mouseup: function(e){
 				e.stopEvent();
 				return false;
+			},
+			options: {
+				user: user,
+				currentlyFlagged: currentlyFlagged
 			}
 		});
 	},
@@ -93,89 +81,85 @@ Ext.define('NextThought.view.annotations.note.Templates',{
 	},
 
 
-
-	updateMoreReplyOptionsLabels: function(moreEl,user, currentlyFlagged){
-		var add = moreEl.down('li.add-contact'),
-			edit = moreEl.down('li.edit'),
-			flag = moreEl.down('li.flag'),
-			follow = moreEl.down('li.follow'),
-			block = moreEl.down('li.block'),
-			mute = moreEl.down('li.mute'),
-			del = moreEl.down('li.delete'),
-			chat = moreEl.down('li.chat'),
-			name = user.getName(),
-			mine = isMe(user),
-			fnA, fnB;
-
-		function addName(){
-			Ext.each(arguments,function(o){
-				if(o){
-					o.originalValue = o.originalValue || o.dom.textContent;
-					o.update(
-						o.originalValue.replace(/\.{3}/,name)); } }); }
-
-		function make(action,list){
-			Ext.each(list,function(o){
-				if(o){o.setVisibilityMode(Ext.Element.DISPLAY);o[action]();} }); }
-
-		function remove(){ make('hide',arguments); }
-		function reset(){ make('show',arguments); }
-
-		//if it's already flagged, make it say so.  Clicking on it won't have
-		//any further effect.
-		if(flag && currentlyFlagged){flag.update('Flagged');}
-
-		addName(follow,block);
-
-		fnA = mine ? remove : reset;
-		fnB = mine ? reset : remove;
-
-		fnA(add,follow,block, mute);
-		fnB(del,edit, chat);
-
-		if(!$AppConfig.service.canChat()){
-			remove(chat);
-		}
-	},
-
-
-	replyOptionsClicked: function(e){
+	replyOptionsClicked: function(e, t, opts){
 		e.stopEvent();
 
-		var menuItem = e.getTarget('li', undefined, true),
-			more = e.getTarget('.more', undefined, true),
-			y, h, menuCls,
-			re = /\-([a-z])/igm;
+		var more = e.getTarget('.more', undefined, true), editItem, chatItem, flagItem, deleteItem, menu, items=[], mine, options = opts.options;
 
-		//handle any menu items clicked:
-		if (menuItem) {
-			menuCls = menuItem.getAttribute('class');
-			menuCls = menuCls.replace(re, function(o, c){
-				return c.toUpperCase();
-			});
-			menuCls = 'on' + Ext.String.capitalize(menuCls);
+		if (!more || !more.dom){return false;}
+
+		function moreMenuClick(item, e){
+			e.stopEvent();
+
+			menuCls = 'on' + item.itemId;
 			if (this[menuCls]){
 				this[menuCls].call(this);
 			}
 			else {
-				console.warn('unimplemented method', menuCls, 'on component', this.$className);
+				console.warn('unimplemented method', item.itemId, 'on component', this.$className);
 			}
 		}
 
-		if (!more || !more.dom){return false;}
+		editItem = new Ext.Action({
+			text: 'Edit',
+			cls: 'reply-option edit',
+			itemId: 'Edit',
+			scope: this,
+			ui: 'nt-menuitem', plain: true,
+			handler: moreMenuClick
+		});
 
-		//TODO:
-		//In IE setting position to "fixed" does not pop it out of the clipping rect of it's parent's box. So this menu (the OL node)
-		// needs to be (for IE9 only-maybe 10) popped out to the document's body node and positioned when shown, then pushed back to this node on hide.
-        if (more.down('ol').getStyle('position') === "fixed"){
-            y = more.getY();
-            h = more.getHeight();
-            more.down('ol').setStyle({'top': (y + h) + 'px'});
-        }
+		chatItem = new Ext.Action({
+			text: 'Start a chat',
+			cls: 'reply-option chat',
+			itemId: 'Chat',
+			scope: this,
+			ui: 'nt-menuitem', plain: true,
+			handler: moreMenuClick
+		});
 
-		//toggle it on or off:
-		more.toggleCls('active');
+		flagItem = new Ext.Action({
+			text: 'Flag as Inappropriate',
+			cls: 'reply-option flag',
+			itemId: 'Flag',
+			scope: this,
+			ui: 'nt-menuitem', plain: true,
+			handler:moreMenuClick
+		});
 
+		deleteItem = new Ext.Action({
+			text: 'Delete',
+			cls: 'reply-option delete',
+			itemId: 'Delete',
+			scope: this,
+			ui: 'nt-menuitem', plain: true,
+			handler: moreMenuClick
+		});
+
+		mine = isMe(options.user);
+		mine ? items.push(editItem):null;
+		$AppConfig.service.canChat() && !mine ? items.push(chatItem):null;
+		if( options.currentlyFlagged ){
+			flagItem.setText('Flagged');
+		}
+		items.push(flagItem);
+		mine ? items.push(deleteItem): null;
+
+
+		menu = Ext.widget('menu',{
+			ui: 'nt',
+			plain: true,
+			cls: 'reply-options-menu',
+			showSeparator: false,
+			shadow: false,
+			frame: false,
+			border: false,
+			closeAction: 'destroy',
+			parentItem: this,
+			items: items
+		});
+
+		menu.showBy(more, 'tl-bl?', [2, -7]);
 
 		return false;
 	},
