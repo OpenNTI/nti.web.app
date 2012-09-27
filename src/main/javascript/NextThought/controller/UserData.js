@@ -102,6 +102,13 @@ Ext.define('NextThought.controller.UserData', {
             cid = change.getItemValue('ContainerId'),
             pageStore;
 
+		//Don't even try this for Circled events.
+		//White list is probably safer in the long term
+		if(/circled/i.test(change.get('ChangeType'))){
+			return;
+		}
+
+
 		LocationMeta.getMeta(cid,function(meta){
 			try{
 				if(!meta){
