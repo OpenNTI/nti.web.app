@@ -42,7 +42,7 @@ Ext.application({
 				['Canvas','Range','CSS3BoxShadow','CSS3BorderRadius'],
 			function(f){ Boolean(!Ext.supports[f] && unsupported.push(f)); });
 
-		if(unsupported.length!==0 || Ext.isOpera){
+		if(unsupported.length!==0 || (!Ext.isIE && !Ext.isGecko && !Ext.isWebKit)){
 			location.replace('notsupported.html');
 		}
 
