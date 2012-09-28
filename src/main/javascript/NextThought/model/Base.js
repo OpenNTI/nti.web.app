@@ -281,6 +281,12 @@ Ext.define('NextThought.model.Base', {
 	 */
 	saveField: function(fieldName, value, successCallback, failCallback) {
 		var editLink = this.getLink('edit');
+
+        //special case, pageInfos are not editable (no link), but can take sharedPrefs
+        if (!editLink && /^PageInfo$/.test(this.get('Class')) && fieldName && fieldName === 'sharingPreference') {
+            editLink = $AppConfig.service.getObjectURL(this.getId());
+        }
+
 		//check to make sure we can do this, and we have the info we need
 		if (!fieldName || !this.hasField(fieldName)){
 			console.error('Cannot save field', this, arguments);
