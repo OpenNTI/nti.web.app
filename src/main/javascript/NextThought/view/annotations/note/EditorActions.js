@@ -53,7 +53,6 @@ Ext.define('NextThought.view.annotations.note.EditorActions',{
 			scope: me,
 			selectstart: me.editorSelectionStart,
 			focus: me.editorFocus,
-			blur: me.editorBlur,
 			keyup: me.maybeResizeContentBox,
 			paste: me.handlePaste,
 			click: me.handleClick
@@ -167,13 +166,13 @@ Ext.define('NextThought.view.annotations.note.EditorActions',{
 	},
 
 
-	editorMouseDown: function(){
+	editorMouseDown: function(e){
 		var s = window.getSelection();
-//		if(e.getTarget('.action')){
+		if(e.getTarget('.action',undefined,true)){
 			if (s.rangeCount) {
 				this.lastRange = s.getRangeAt(0);
 			}
-//		}
+		}
 	},
 
 
@@ -203,7 +202,16 @@ Ext.define('NextThought.view.annotations.note.EditorActions',{
 
 
 	editorFocus: function(){
-		Ext.defer( function(){ this.focus();}, 10, this);
+		var s = window.getSelection();
+		if(this.lastRange){
+			s.removeAllRanges();
+			s.addRange(this.lastRange);
+		}
+		else if(s.rangeCount > 0){
+			this.lastRange = s.getRangeAt(0);
+			s.removeAllRanges();
+			s.addRange(this.lastRange);
+		}
 	},
 
 
@@ -220,7 +228,6 @@ Ext.define('NextThought.view.annotations.note.EditorActions',{
 
 
 	editorContentAction: function(e){
-		e.stopEvent();
 		var t = e.getTarget('.action',undefined,true), action;
 		if(t){
 			this.editorFocus();//reselect
@@ -233,6 +240,7 @@ Ext.define('NextThought.view.annotations.note.EditorActions',{
 				this.editor.dom.querySelector('[contenteditable=true]').focus();
 			}
 		}
+		e.stopEvent();
 		return false;
 	},
 
