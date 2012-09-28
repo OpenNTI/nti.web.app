@@ -130,6 +130,12 @@ Ext.define('NextThought.view.assessment.input.Base',{
 		this.solutionBox.setVisibilityMode(Ext.dom.Element.DISPLAY);
 		this.footer.setVisibilityMode(Ext.dom.Element.DISPLAY);
 
+        //if there are images, after they load, update layout.
+        this.solutionBox.select('img').on('load',function(){
+            this.updateLayout();
+            this.syncElementHeight();
+        },this,{single:true});
+
 		this.reset();
 		this.disableSubmission();
 	},
