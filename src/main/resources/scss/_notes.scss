@@ -1022,6 +1022,14 @@
 				word-wrap: break-word;
 			}
 
+			strong, em strong {
+				font-weight: bold !important;
+			}
+
+			em, strong em {
+				font-style: italic !important;
+			}
+
 			.body-divider .whiteboard-thumbnail{
 			  width: 40% !important;
 			  display: block;
