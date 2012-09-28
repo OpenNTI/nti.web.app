@@ -229,22 +229,27 @@ Ext.define('NextThought.util.Globals', {
 
 
 	handleCache: function(){
-		var ac = window.applicationCache;
-		if(!ac) { return; }
+		try{
+			var ac = window.applicationCache;
+			if(!ac) { return; }
 
-		ac.addEventListener('updateready', function(e) {
-			if (ac.status === ac.UPDATEREADY) {
-				ac.swapCache();
-				Ext.MessageBox.confirm(
-						'Update Available',
-						'A new version of this site is available. Load it now?',
-						function(btn){
-							if (btn === 'yes'){ window.location.reload(); }
-						}
-				);
-			}
-			//else: Manifest didn't changed. Nothing new to do.
-		}, false);
+			ac.addEventListener('updateready', function(e) {
+									if (ac.status === ac.UPDATEREADY) {
+										ac.swapCache();
+										Ext.MessageBox.confirm(
+											'Update Available',
+											'A new version of this site is available. Load it now?',
+											function(btn){
+												if (btn === 'yes'){ window.location.reload(); }
+											}
+										);
+									}
+									//else: Manifest didn't changed. Nothing new to do.
+								}, false);
+		}
+		catch(error){
+			console.error('Error handling html5 app cache', error);
+		}
 	},
 
 
