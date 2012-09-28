@@ -43,7 +43,7 @@ Ext.application({
 			function(f){ Boolean(!Ext.supports[f] && unsupported.push(f)); });
 
 		if(unsupported.length!==0 || (!Ext.isIE && !Ext.isGecko && !Ext.isWebKit)){
-			location.replace('notsupported.html');
+			location.replace($AppConfig.server.login+'unsupported.html');
 		}
 
 		if(!Globals.validateConfig()){
