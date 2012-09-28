@@ -28,21 +28,21 @@ Ext.define('NextThought.view.menus.Filter',{
 		this.callParent(arguments);
 		this.store = Ext.getStore('FriendsList');
 		this.store.on('load', this.reload, this);
-        LocationProvider.on('navigateComplete', this.reload, this);
+		LocationProvider.on('navigateComplete', this.maybeChangeVisibiltiy, this);
     },
 
 
 	reload: function(){
-		var currentSelections = Ext.Array.filter(this.items.items, function(a){ return a.checked }, this);
+		var items = [], communities = [];//$AppConfig.userObject.getCommunities();
 
 		this.removeAll(true);
-		var items = [], communities = [];//$AppConfig.userObject.getCommunities();
 		items.push({ cls: 'type-filter everything', text: 'Everything', checked: true, allowUncheck:false, isEverything: true});
-
-        if (!LocationProvider.currentNTIID || LocationProvider.currentNTIID.indexOf('mathcounts') < 0) {
-            items.push({ cls: 'type-filter highlight', text: 'Highlights', model: 'NextThought.model.Highlight' });
-        }
-        else {console.debug('hack alert, annotation context menu not showing while in mathcounts content...');}
+		items.push({
+			cls: 'type-filter highlight',
+			text: 'Highlights',
+			model: 'NextThought.model.Highlight',
+			hidden: /mathcounts/i.test(LocationProvider.currentNTIID)
+		});
 		items.push({ cls: 'type-filter note', text: 'Notes', model: 'NextThought.model.Note' });
 //		items.push({ cls: 'type-filter transcript', text: 'Transcripts', model: 'NextThought.model.TranscriptSummary' });
 //		items.push({ cls: 'type-filter quizresult', text: 'Quiz Results', model: 'NextThought.model.QuizResult' });
@@ -76,23 +76,47 @@ Ext.define('NextThought.view.menus.Filter',{
 			});
 		}
 
-		this.resetCurrentSelections(items, currentSelections);
-
 		this.add(items);
+		this.resetCurrentSelections();
 		this.fireEvent('filter-control-loaded',this);
 	},
 
-	resetCurrentSelections: function(items, currentSelections){
-		if(currentSelections.length > 0){
-			//Unselect current selection
-			Ext.each(items, function(i){
-				if(i.checked){	i.checked = false; }
-			});
+	maybeChangeVisibiltiy: function(){
+		var i = this.down('[model=NextThought.model.Highlight]'),
+			show = /mathcounts/i.test(LocationProvider.currentNTIID);
+		if(!i){ return; }
+		i[show?'hide':'show']();
+		if(show && i.checked){
+			i.setChecked(false);
 		}
+	},
 
-		Ext.each(currentSelections, function(sel){
-			var a = Ext.Array.filter(items, function(i){ return i.text === sel.text }, this);
-			Ext.each(a, function(item){ item.checked = true });
+	resetCurrentSelections: function(){
+		var me = this,
+			current = FilterManager.getScope(me.getId()).current;
+		if(!current){
+			return;
+		}
+		current = current.flatten();
+
+		Ext.each(current,function(o){
+			var i;
+			if(o.fieldName === '$className'){
+				i = me.down('[model='+o.value+']');
+				if(i){i.setChecked(true,true);}
+			}
+			else if(o.fieldName === 'Creator'){
+				if(isMe(o.value)){
+					me.down('[isMe]').setChecked(true,true);
+				}
+				else if(o.value.isModel){
+					Ext.each(me.query('[isGroup]'),function(g){
+						if(g.record === o.value){
+							g.setChecked(true,true);
+						}
+					});
+				}
+			}
 		});
 	},
 
