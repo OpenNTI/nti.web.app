@@ -28,6 +28,7 @@ Ext.define('NextThought.view.menus.Filter',{
 		this.callParent(arguments);
 		this.store = Ext.getStore('FriendsList');
 		this.store.on('load', this.reload, this);
+		this.reload();
 		LocationProvider.on('navigateComplete', this.maybeChangeVisibiltiy, this);
     },
 
