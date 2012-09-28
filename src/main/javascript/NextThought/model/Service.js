@@ -322,5 +322,9 @@ Ext.define('NextThought.model.Service', {
 	canRedact: function() {
 		var coll = $AppConfig.service.getCollectionFor('application/vnd.nextthought.redaction', 'Pages');
 		return !!coll;
-	}
+	},
+
+    isPotentiallyCoppa: function(){
+        return /mathcounts/i.test(window.location.hostname);
+    }
 });

@@ -34,8 +34,12 @@ Ext.define('NextThought.controller.Account', {
 			},
 
 			'settings-menu [action=privacy]' : {
-				'click': this.showPrivacy
-			},
+                'click': this.showPrivacy
+            },
+
+            'settings-menu [action=childrens-privacy]' : {
+                'click': this.showChildrensPrivacy
+            },
 
 			'settings-menu [action=help]' : {
 				'click': this.openHelp
@@ -108,6 +112,14 @@ Ext.define('NextThought.controller.Account', {
 	openHelp: function(){
 		LocationProvider.setLocation('tag:nextthought.com,2011-10:NextThought-HTML-NextThoughtHelpCenter.tableofcontents');
 	},
+
+
+    showChildrensPrivacy: function(item){
+        if (!this.childPrivacyWin) {
+            this.childPrivacyWin = this.createWin('Children\'s Privacy', 'https://docs.google.com/document/pub?id=1kNo6hwwKwWdhq7jzczAysUWhnsP9RfckIet11pWPW6k');
+        }
+        this.childPrivacyWin.show();
+    },
 
 
 	showPrivacy: function(item){
