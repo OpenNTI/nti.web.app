@@ -100,6 +100,7 @@ Ext.define('NextThought.controller.UserData', {
         change = ParseUtils.parseItems([change])[0];
         var item = change.get('Item'),
             cid = change.getItemValue('ContainerId'),
+		    me = this,
             pageStore;
 
 		//Don't even try this for Circled events.
@@ -118,7 +119,7 @@ Ext.define('NextThought.controller.UserData', {
 				//add it to the page items store I guess:
 				pageStore = LocationProvider.getStore();
 				if(!pageStore || LocationProvider.currentNTIID !== meta.NTIID || (item && !item.isTopLevel())){
-					this.maybeFireChildAdded(item);
+					me.maybeFireChildAdded(item);
 					return;
 				}
 
