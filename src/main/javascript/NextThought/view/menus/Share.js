@@ -143,7 +143,7 @@ Ext.define('NextThought.view.menus.Share',{
 					sharedWith = Ext.Array.remove(sharedWith, id);
 				}
 				items.push({
-					cls: 'group-filter community-menu-item',
+					cls: 'share-with group-filter community-menu-item',
 					text: c.getName(),
 					record: c,
 					isGroup: true,
