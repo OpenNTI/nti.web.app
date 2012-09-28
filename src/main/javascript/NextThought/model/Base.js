@@ -463,49 +463,44 @@ Ext.define('NextThought.model.Base', {
 		return data;
 	},
 
-	getRelativeTimeString: function(){
-		//yanked & modifed from: http://stackoverflow.com/questions/6108819/javascript-timestamp-to-relative-time-eg-2-seconds-ago-one-week-ago-etc-best
-		function timeDifference(current, previous) {
-		    var msPerMinute = 60 * 1000;
-		    var msPerHour = msPerMinute * 60;
-		    var msPerDay = msPerHour * 24;
-		    var msPerMonth = msPerDay * 30;
-		    var elapsed = current - previous;
+    //yanked & modifed from: http://stackoverflow.com/questions/6108819/javascript-timestamp-to-relative-time-eg-2-seconds-ago-one-week-ago-etc-best
+    timeDifference: function(current, previous) {
+        var msPerMinute = 60 * 1000;
+        var msPerHour = msPerMinute * 60;
+        var msPerDay = msPerHour * 24;
+        var msPerMonth = msPerDay * 30;
+        var elapsed = current - previous;
+        var result;
 
-			//dumb pluralization. right now all the words we
-			//use simply need to append an s. TODO Extjs does look like
-			//it has a pluralizer but it seems overkill for here
-			function maybeAddS(num, text){
-				num = Math.abs(num);
-				if(num === 1){
-					return text;
-				}
-				return text+'s';
-			}
+        if (elapsed < msPerMinute) {
+            result = Math.round(elapsed/1000) + ' seconds ago';
+        }
 
-		    if (elapsed < msPerMinute) {
-				var seconds =  Math.round(elapsed/1000);
-		        return seconds + maybeAddS(seconds, ' second') + ' ago';
-		    }
+        else if (elapsed < msPerHour) {
+            result = Math.round(elapsed/msPerMinute) + ' minutes ago';
+        }
 
-		    else if (elapsed < msPerHour) {
-				 var minutes = Math.round(elapsed/msPerMinute);
-		         return  minutes + maybeAddS(minutes, ' minute') + ' ago';
-		    }
+        else if (elapsed < msPerDay ) {
+            result = Math.round(elapsed/msPerHour ) + ' hours ago';
+        }
 
-		    else if (elapsed < msPerDay ) {
-				var hours = Math.round(elapsed/msPerHour);
-		        return hours + maybeAddS(hours, ' hour') + ' ago';
-		    }
+        else if (elapsed < msPerMonth) {
+            result = Math.round(elapsed/msPerDay) + ' days ago';
+        }
 
-		    else if (elapsed < msPerMonth) {
-				var days =  Math.round(elapsed/msPerDay);
-		        return days + mabyeAddS(days, ' day') +' ago';
-		    }
+        if (!result) {
+            return Ext.Date.format(previous, 'M j, Y, g:i a');
+        }
+        else {
+            if(/^1\s/.test(result)){
+                result = result.replace('s ago', ' ago');
+            }
+            return result;
+        }
+    },
 
-			return Ext.Date.format(previous, 'M j, Y, g:i a');
-		}
 
-		return timeDifference(Ext.Date.now(),this.get('CreatedTime'));
+    getRelativeTimeString: function(){
+		return this.timeDifference(Ext.Date.now(),this.get('CreatedTime'));
 	}
 });
