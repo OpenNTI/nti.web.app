@@ -91,7 +91,6 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 
 		me.replyOptions.down('.share').remove();
 
-		TemplatesForNotes.attachMoreReplyOptionsHandler(me, me.more);
 		me.editorActions = new NoteEditorActions(me,me.editor);
 	},
 

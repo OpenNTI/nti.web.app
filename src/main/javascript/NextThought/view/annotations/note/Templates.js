@@ -137,7 +137,10 @@ Ext.define('NextThought.view.annotations.note.Templates',{
 			handler: moreMenuClick
 		});
 
-		mine = isMe(options.user);
+		if(options.user){ mine = isMe(options.user); }
+		else{
+			console.log("Error: user is null. The note/reply  owner is undefined, opts:", options);
+		}
 		mine ? items.push(editItem):null;
 		$AppConfig.service.canChat() && !mine ? items.push(chatItem):null;
 		if( options.currentlyFlagged ){
