@@ -472,20 +472,35 @@ Ext.define('NextThought.model.Base', {
 		    var msPerMonth = msPerDay * 30;
 		    var elapsed = current - previous;
 
+			//dumb pluralization. right now all the words we
+			//use simply need to append an s. TODO Extjs does look like
+			//it has a pluralizer but it seems overkill for here
+			function maybeAddS(num, text){
+				num = Math.abs(num);
+				if(num === 1){
+					return text;
+				}
+				return text+'s';
+			}
+
 		    if (elapsed < msPerMinute) {
-		         return Math.round(elapsed/1000) + ' seconds ago';
+				var seconds =  Math.round(elapsed/1000);
+		        return seconds + maybeAddS(seconds, ' second') + ' ago';
 		    }
 
 		    else if (elapsed < msPerHour) {
-		         return Math.round(elapsed/msPerMinute) + ' minutes ago';
+				 var minutes = Math.round(elapsed/msPerMinute);
+		         return  minutes + maybeAddS(minutes, ' minute') + ' ago';
 		    }
 
 		    else if (elapsed < msPerDay ) {
-		         return Math.round(elapsed/msPerHour ) + ' hours ago';
+				var hours = Math.round(elapsed/msPerHour);
+		        return hours + maybeAddS(hours, ' hour') + ' ago';
 		    }
 
 		    else if (elapsed < msPerMonth) {
-		        return Math.round(elapsed/msPerDay) + ' days ago';
+				var days =  Math.round(elapsed/msPerDay);
+		        return days + mabyeAddS(days, ' day') +' ago';
 		    }
 
 			return Ext.Date.format(previous, 'M j, Y, g:i a');
