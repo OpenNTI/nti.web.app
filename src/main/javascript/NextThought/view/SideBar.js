@@ -67,13 +67,14 @@ Ext.define('NextThought.view.SideBar',{
 			this.addCls(cls);
 		}
 		else{
+            this.stopAnimation();
 			delete this.popstate;
 			this.gripper.hide();
 			this.tool.addCls('maximize');
 			this.host.show();
 			this.removeCls(cls);
 		}
-		this.syncUp();
+        Ext.defer(this.syncUp, 1, this);
 	},
 
 
