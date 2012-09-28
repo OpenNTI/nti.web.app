@@ -130,7 +130,12 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 
 	updateToolState: function(){
 		this.liked.set({'title':  this.record.isLiked() ? 'Liked' : 'Like'});
-		if (this.record.isFlagged()){this.replyOptions.down('.flag').setHTML('Flagged');}
+		if (this.record.isFlagged()){
+			var flagItem = 	this.replyOptions.down('.flag');
+			if(flagItem){
+				flagItem.setHTML('Flagged');
+			}
+		}
 	},
 
 	setRecord: function(r){
