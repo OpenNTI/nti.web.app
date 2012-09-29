@@ -335,6 +335,12 @@ Ext.define('NextThought.view.assessment.input.Base',{
 		this.updateSolutionButton();
 		this.currentHint = ((this.currentHint+1) % (this.part.get('hints').length || 1));
 
+        //if there are images, after they load, update layout.
+        this.solutionBox.select('img').on('load',function(){
+            this.updateLayout();
+            this.syncElementHeight();
+        },this,{single:true});
+
 		this.showSolutionBtn.update(label.replace('Show','Hide'));
 		this.inputBox.hide();
 		this.solutionBox.show();
