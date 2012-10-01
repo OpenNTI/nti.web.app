@@ -44,9 +44,6 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 
 	initComponent: function(){
 		this.callParent(arguments);
-		this.store = LocationProvider.getStore();
-
-		this.load();
 		this.navContainer = this.navTpl.append(Ext.getBody(),[],true);
 		this.navNext = this.navContainer.down('.forward.circle');
 		this.navPrev = this.navContainer.down('.backward.circle');
@@ -71,7 +68,7 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 		var me = this, m =[];
 		me.removeAll(true);
 		this.store.each(function(item){
-			if(item instanceof NextThought.model.Note && !item.parent && (!filter || filter(item))){
+			if(item instanceof NextThought.model.Note && (!filter || filter(item))){
 				m.push({record: item, autoRender:Boolean(me.rendered)});
 			}
 		});
@@ -134,6 +131,10 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 		if(myWindow && myWindow.editorActive()){
 			return;
 		}
+
+		this.store = LocationProvider.getStore(rec.get('ContainerId'));
+		this.mon(this.store,'datachanged',this.load,this);
+		this.load();
 
 		me.record = rec;
 

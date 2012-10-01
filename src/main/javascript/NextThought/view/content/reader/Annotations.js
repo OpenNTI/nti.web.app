@@ -18,22 +18,6 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 	],
 
 
-
-
-	insertAnnotationGutter: function(){
-		var me = this,
-			container = Ext.DomHelper.insertAfter(me.getInsertionPoint().first(),
-				{ cls:'annotation-gutter', cn:[{cls:'column widgets'},{cls:'column controls'}] },
-				true);
-
-		me.on('destroy' , function(){
-			container.remove();
-		},me);
-
-		AnnotationsRenderer.registerGutter(container, me);
-	},
-
-
 	constructor: function(){
 		var me = this, c = NextThought.controller;
 		Ext.apply(me,{
@@ -62,19 +46,115 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 	},
 
 
+	insertAnnotationGutter: function(){
+		var me = this,
+				container = Ext.DomHelper.insertAfter(me.getInsertionPoint().first(),
+						{ cls:'annotation-gutter', cn:[{cls:'column widgets'},{cls:'column controls'}] },
+						true);
+
+		me.on('destroy' , function(){
+			container.remove();
+		},me);
+
+		AnnotationsRenderer.registerGutter(container, me);
+	},
+
+
+
+	loadContentAnnotations: function(containerId, subContainers){
+		this.containersOnPage = subContainers;
+		this.clearAnnotations();
+		this.fireEvent('annotations-load', this, containerId, subContainers);
+	},
+
+
+	objectsLoaded: function(items, bins, containerId) {
+		var a = AnnotationsRenderer,
+			me = this,
+			cb = function(){ me.fireEvent('loaded', containerId); };
+
+		me.setAssessedQuestions((bins||{}).AssessedQuestionSet);
+
+		if (items) {
+			me.buildAnnotations(items);
+		}
+
+
+		if(a.rendering || a.aboutToRender){
+			a.events.on('finish',cb,null,{single: true});
+		}
+		else {
+			cb();
+		}
+	},
+
+
+	onNotification: function(change){
+		if(!change || !change.get) {
+			return;//abandon ship!!
+		}
+
+		var item = change.get('Item'),
+				type = change.get('ChangeType'),
+				oid = item? item.getId() : null,
+				cid = item? item.get('ContainerId') : null,
+				delAction = /deleted/i.test(type),
+				cmps = Ext.ComponentQuery.query(Ext.String.format('[recordIdHash={0}]' ,IdCache.getIdentifier(oid)))||[],
+				cls, result,
+				found = cid === LocationProvider.currentNTIID;
+
+		if(!found){
+			Ext.each(this.getDocumentElement().querySelectorAll('[data-ntiid]'),function(o){
+				found = o.getAttribute('data-ntiid')===cid;
+				return !found;
+			});
+		}
+
+		if (!item || !cid || !found) {
+			return;
+		}
+
+		//if exists, update
+		if(this.annotations.hasOwnProperty(oid)) {
+			if(delAction){
+				this.annotations[oid].cleanup();
+				delete this.annotations[oid];
+			}
+			else {
+				this.annotations[oid].getRecord().fireEvent('updated',item);
+			}
+		}
+
+		Ext.each(cmps,function(cmp){
+			//delete it
+			if (delAction) {
+				cmp.onDelete();
+			}
+			else {
+				cmp.getRecord().fireEvent('changed');
+			}
+		});
+
+		//if not exists, add
+		if(!delAction){
+			cls = item.get('Class');
+			//			replyTo = item.get('inReplyTo');
+			result = this.createAnnotationWidget(cls,item) || false;
+
+			if(result === false){
+				console.error('ERROR: Do not know what to do with this item',item);
+			}
+		}
+	},
+
+
 	applyFilter: function(newFilter){
 		// console.debug('applyFilter:', newFilter);
 		var $a = this.annotations, a;
 
 		this.filter = newFilter;
-		for(a in $a) {
-			if($a.hasOwnProperty(a) && $a[a]) {
-				try {
-					$a[a].updateFilterState(this.filter);
-				}
-				catch(e) { console.error('Annotation Filter Error: ', $a, a, newFilter); }
-			}
-		}
+		this.clearAnnotations();
+		this.fireEvent('filter-annotations',this);
 	},
 
 
@@ -148,21 +228,22 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 		}
 
 		var me = this,
-			rect = range.getBoundingClientRect(),
-			rect2 = RectUtils.getFirstNonBoundingRect(range),
-			record = AnnotationUtils.selectionToHighlight(range, null, me.getDocumentElement()),
-			menu,
-			offset,
-			redactionRegex = /USSC-HTML|Howes_converted|USvJones2012_converted/i,
-			boundingBox = me.convertRectToScreen(rect),
-			text = range.toString().trim(),
-			innerDocOffset;
+				rect = range.getBoundingClientRect(),
+				rect2 = RectUtils.getFirstNonBoundingRect(range),
+				record = AnnotationUtils.selectionToHighlight(range, null, me.getDocumentElement()),
+				menu,
+				offset,
+				redactionRegex = /USSC-HTML|Howes_converted|USvJones2012_converted/i,
+				boundingBox = me.convertRectToScreen(rect),
+				text = range.toString().trim(),
+				innerDocOffset;
 
 		if(!record) {
 			return;
 		}
 
-		record.set('ContainerId', me.containerId);
+		//Default container, this should be replaced with the local container.
+		record.set('ContainerId', LocationProvider.currentNTIID);
 
 		menu = Ext.widget('menu',{
 			ui: 'nt',
@@ -176,8 +257,8 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 			defaults: {ui: 'nt-annotaion', plain: true }
 		});
 
-        if(/^\w+$|^\w+\s+\w+$/i.test(text)){//it is one or two words
-		//if(/^\w+$/i.test(text)){//is it a word
+		if(/^\w+$|^\w+\s+\w+$/i.test(text)){//it is one or two words
+			//if(/^\w+$/i.test(text)){//is it a word
 			menu.add({
 				text: 'Define...',
 				handler:function(){
@@ -257,10 +338,10 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 		xy[1] += offset[1];
 
 
-        if (LocationProvider.currentNTIID.indexOf('mathcounts') < 0) {
-            console.debug('hack alert, annotation context menu not showing while in mathcounts content...');
-		    menu.showAt(xy);
-        }
+		if (LocationProvider.currentNTIID.indexOf('mathcounts') < 0) {
+			console.debug('hack alert, annotation context menu not showing while in mathcounts content...');
+			menu.showAt(xy);
+		}
 
 		me.selectRange(range);
 	},
@@ -276,8 +357,8 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 	 */
 	createAnnotationWidget: function(type, record, browserRange){
 		var oid = record.getId(),
-			style = record.get('style'),
-			w;
+				style = record.get('style'),
+				w;
 
 		if(!record.pruned && (record.get('inReplyTo') || record.parent)){
 			return false;
@@ -329,91 +410,6 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 	},
 
 
-	onNotification: function(change){
-		if(!change || !change.get) {
-			return;//abandon ship!!
-		}
-
-		var item = change.get('Item'),
-			type = change.get('ChangeType'),
-			oid = item? item.getId() : null,
-			cid = item? item.get('ContainerId') : null,
-			delAction = /deleted/i.test(type),
-			cmps = Ext.ComponentQuery.query(Ext.String.format('[recordIdHash={0}]' ,IdCache.getIdentifier(oid)))||[],
-			cls, result,
-			found = cid === LocationProvider.currentNTIID;
-
-		if(!found){
-			Ext.each(this.getDocumentElement().querySelectorAll('[data-ntiid]'),function(o){
-				found = o.getAttribute('data-ntiid')===cid;
-				return !found;
-			});
-		}
-
-		if (!item || !cid || !found) {
-			return;
-		}
-
-		//if exists, update
-		if(this.annotations.hasOwnProperty(oid)) {
-			if(delAction){
-				this.annotations[oid].cleanup();
-				delete this.annotations[oid];
-			}
-			else {
-				this.annotations[oid].getRecord().fireEvent('updated',item);
-			}
-		}
-
-		Ext.each(cmps,function(cmp){
-			//delete it
-			if (delAction) {
-				cmp.onDelete();
-			}
-			else {
-				cmp.getRecord().fireEvent('changed');
-			}
-		});
-
-		//if not exists, add
-		if(!delAction){
-			cls = item.get('Class');
-//			replyTo = item.get('inReplyTo');
-			result = this.createAnnotationWidget(cls,item) || false;
-
-			if(result === false){
-				console.error('ERROR: Do not know what to do with this item',item);
-			}
-		}
-	},
-
-
-	loadContentAnnotations: function(containerId, subContainers, callback){
-		this.containerId = containerId;
-		this.containersOnPage = subContainers;
-		this.clearAnnotations();
-		this.fireEvent('annotations-load', this, containerId, subContainers, callback);
-	},
-
-
-	objectsLoaded: function(items, bins, callback) {
-		if (!this.containerId) {
-			return;
-		}
-
-		if(bins){
-			//Handle prior assessments
-			this.setAssessedQuestions(bins.AssessedQuestionSet);
-		}
-
-		if (items) {
-			this.buildAnnotations(items);
-		}
-
-		AnnotationUtils.callbackAfterRender(callback,this);
-	},
-
-
 	setAssessedQuestions: function(sets) {
 		if (!sets || sets.length === 0) {
 			//do nothing if we have no prior sets
@@ -434,27 +430,26 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 	buildAnnotations: function(list){
 		var me = this;
 		Ext.each(list,
-			function(r){
-				if(!r) {
-					return;
-				}
-				try{
-					me.createAnnotationWidget(r.getModelName(),r);
-					AnnotationsRenderer.aboutToRender = true;
-				}
-				catch(e) {
-					console.error('Could not build '+r.getModelName()+' from record:', r, 'because: ', e, e.stack);
-				}
-			}, this
+				function(r){
+					if(!r) {
+						return;
+					}
+					try{
+						AnnotationsRenderer.aboutToRender = true;
+						me.createAnnotationWidget(r.getModelName(),r);
+					}
+					catch(e) {
+						console.error('Could not build '+r.getModelName()+' from record:', r, 'because: ', e, e.stack);
+					}
+				}, this
 		);
 	},
-
 
 
 	onContextMenuHandler: function(e) {
 		try{
 			var origSelection = window.rangy.getSelection(this.getDocumentElement()).toString(),
-				range = this.getSelection();
+					range = this.getSelection();
 
 			if( range && !range.collapsed ) {
 				e.stopPropagation();
@@ -474,8 +469,8 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 
 
 		var doc = this.getDocumentElement(),
-			win = doc.parentWindow,
-			range, selection;
+				win = doc.parentWindow,
+				range, selection;
 
 		Anchors.snapSelectionToWord(doc);
 
@@ -500,9 +495,9 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 
 	clearSelection: function(){
 		var doc = this.getDocumentElement(),
-			win = doc.parentWindow;
+				win = doc.parentWindow;
 		try {
-				win.getSelection().removeAllRanges();
+			win.getSelection().removeAllRanges();
 		}
 		catch(e){console.warn(e.stack||e.toString());}
 	}

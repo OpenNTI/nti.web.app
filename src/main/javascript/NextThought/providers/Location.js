@@ -28,17 +28,21 @@ Ext.define('NextThought.providers.Location', {
 
 
 	clearStore: function(){
-		var s = this.currentPageStore;
-		delete this.currentPageStore;
-		if(s){
-			s.clearListeners();
-			s.removeAll(true);
-		}
+		var stores = this.currentPageStores;
+		delete this.currentPageStores;
+		Ext.Object.each(stores,function(id,s){
+			if(s){
+				s.clearListeners();
+				s.removeAll(true);
+			}
+		});
 	},
 
-	getStore: function(){
-		function bad(){ console.error('There is no current page store'); }
-		return this.currentPageStore || { add: bad, getById: bad, remove: bad };
+	getStore: function(id){
+		if(!id){ Ext.Error.raise('ID required'); }
+
+		function bad(){ console.error('There is no store for id: '+id); }
+		return this.currentPageStores[id] || { add: bad, getById: bad, remove: bad };
 	},
 
 

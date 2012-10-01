@@ -6,15 +6,20 @@ Ext.define('NextThought.store.PageItem',{
 	model: 'NextThought.model.GenericObject',
 
 	autoLoad: false,
+	pageSize: 10,
 
 	groupField: 'Class',
 	groupDir  : 'ASC',
 	proxy: {
 		url: 'tbd',
 		type: 'rest',
+		limitParam: 'batchSize',
+		pageParam: undefined,
+		startParam: 'batchStart',
 		reader: {
 			type: 'nti',
-			root: 'Items'
+			root: 'Items',
+			totalProperty: 'TotalItemCount'
 		},
 		headers: {
 			'Accept': 'application/vnd.nextthought.collection+json'

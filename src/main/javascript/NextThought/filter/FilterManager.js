@@ -60,13 +60,14 @@ Ext.define('NextThought.filter.FilterManager',{
 	 *
 	 * All union/intersection/include/exclude data will be dropped.
 	 *
-	 * @param scope - id of the filter menu this filter is associated to.
+	 * @param [scope] - id of the filter menu this filter is associated to.
 	 */
 	getServerListParams: function(scope){
-		var filter = this.getCurrentFilter(scope).flatten(),
+		var filter = this.getCurrentFilter(scope),
+			list = filter? filter.flatten() : [],
 			params = {};
 
-		Ext.each(filter,function(f){
+		Ext.each(list,function(f){
 			var m;
 
 			if(f.fieldName==='Creator'){
@@ -86,8 +87,21 @@ Ext.define('NextThought.filter.FilterManager',{
 		});
 
 		if(Ext.isArray(params.$className)){
-			params.Accepts = params.$className.join(',');
+			params.accept = params.$className.join(',');
 			delete params.$className;
+		}
+
+		if(params.me && params.groups){
+			//both true
+			params.filter = 'IFollowAndMe';
+		}
+		else if(params.groups){
+			//groups true
+			params.filter = 'IFollow';
+		}
+		else if(params.me){
+			//only me
+			params.filter = 'MeOnly';
 		}
 
 		return params;

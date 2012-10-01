@@ -8,24 +8,6 @@ Ext.define('NextThought.util.Annotations',{
 	singleton: true,
 
 
-	callbackAfterRender: function(fn,scope){
-		var a = AnnotationsRenderer;
-
-		function cb(){
-			Ext.callback(fn,scope);
-		}
-
-		if(a.rendering || a.aboutToRender){
-			a.events.on('finish',cb,null,{single: true});
-			return;
-		}
-		console.log('wasn\'t rendering');
-		cb();
-	},
-
-
-
-
 //tested
 	/**
 	 * From a reply, build its absent parent

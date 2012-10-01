@@ -85,6 +85,11 @@ Ext.define( 'NextThought.view.annotations.Base', {
 	},
 
 
+	getContainerId: function(){
+		return this.getRecord().get('ContainerId');
+	},
+
+
 	getDocumentElement: function(){
 		return this.ownerCmp.getDocumentElement();
 	},

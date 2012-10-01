@@ -47,6 +47,8 @@ Ext.define('NextThought.controller.UserData', {
 		this.control({
 			'reader-panel':{
 				'annotations-load': this.onAnnotationsLoad,
+				'filter-annotations': this.onAnnotationsFilter,
+
 				'share-with'	: this.shareWith,
 				'define'		: this.define,
 				'redact'		: this.redact,
@@ -163,68 +165,80 @@ Ext.define('NextThought.controller.UserData', {
     },
 
 
-	onAnnotationsLoad: function(cmp, containerId, subContainers, callback) {
-        function merge(a, b) {
-            var k;
-            for(k in b) {
-                if(b.hasOwnProperty(k)){
-                    a[k] = (a[k]||[]).concat(b[k]);
-                }
-            }
-            return a;
-        }
+	continueLoading: function(store){
+		store.on('load', function(s,r,c){ if(c){ this.continueLoading(s); } }, this,{single: true});
+		store.nextPage({addRecords: true});
+	},
+
+
+	onAnnotationsFilter: function(cmp){
+		var stores = LocationProvider.currentPageStores,
+			listParams = FilterManager.getServerListParams(),
+			filter = ['TopLevel',listParams.filter];
+
+		if(!stores){ return; }
 
 		function loaded(store,records,success){
-			stores.pop();
-            records = records || [];
-			var bins = success? merge(allBins,store.getBins()) : allBins;
+			var bins = store.getBins();
 
-            if (ps.isLoading() && store !== ps){
-                buffer.push.apply(buffer, records);
-            }
-            else if(store!==ps){
-                console.log('loading', ps.isLoading());
-                ps.loadData(records, true);
-            }
-            else {
-                console.log('buffered load', buffer);
-                ps.loadData(buffer, true);
-            }
-			if(stores.length===0){
-				cmp.objectsLoaded(store.getItems(bins), bins, callback);
+			if(!success){
+				return;
 			}
+
+			//continue loading the store.
+			this.continueLoading(store);
+
+			cmp.objectsLoaded(store.getItems(bins), bins, store.containerId);
 		}
 
 
-		function make(url){
+		Ext.Object.each(stores,function(k,s){
+			s.on('load', loaded, this, { single: true });
+
+			s.proxy.extraParams = Ext.apply(s.proxy.extraParams||{},{
+				filter: filter.join(',').replace(/,+$/,''),
+				accept: listParams.accept,
+				sortOn: 'lastModified',
+				sortOrder: 'descending'
+			});
+
+			s.removeAll();
+			s.loadPage(1);
+		}, this);
+	},
+
+
+	onAnnotationsLoad: function(cmp, containerId, subContainers) {
+
+		function make(url,id){
 			var ps = NextThought.store.PageItem.create();
+			ps.containerId = id;
 			ps.proxy.url = url;
-			ps.on('load', loaded, this, { single: true });
+			ps.clearOnPageLoad = false;
+
+			ps.on('guaranteedrange',function(range, start){
+				console.log('hey',arguments);
+					ps.loadRecords(range, { start: start }); });
+
 			return ps;
 		}
-
 
 		var rel = Globals.USER_GENERATED_DATA,
 			pi = LocationProvider.currentPageInfo,
 			stores = [],
-			allBins = {},
-			ps = make( pi.getLink(rel)),
-            buffer = [];
+			ps = make(pi.getLink(rel),containerId),
+			map = { root: ps };
 
-		LocationProvider.currentPageStore = ps;
+		LocationProvider.currentPageStores = map;
 
 		stores.push(ps);
 		Ext.each(subContainers,function(id){
-			var p = make(pi.getSubContainerURL(rel,id));
+			var p = make(pi.getSubContainerURL(rel,id),id);
 			stores.push(p);
+			map[id]=p;
 		});
 
-        ps.loading = true;
-		Ext.each(stores,function(s){
-        	s.load({ params: {
-				filter:'TopLevel'
-			} });
-		});
+		this.onAnnotationsFilter(cmp);
 	},
 
 
@@ -365,7 +379,8 @@ Ext.define('NextThought.controller.UserData', {
 		//Define our vars and create our content range description:
 		var doc = ReaderPanel.get().getDocumentElement(),
 			noteRecord,
-			rangeDescription = Anchors.createRangeDescriptionFromRange(range, doc);
+			rangeDescription = Anchors.createRangeDescriptionFromRange(range, doc),
+			container = rangeDescription.container;
 
 		//make sure the body is an array:
 		if(!Ext.isArray(body)){body = [body];}
@@ -382,7 +397,7 @@ Ext.define('NextThought.controller.UserData', {
             selectedText: range.toString(),
 			sharedWith: shareWith,
 			style: style,
-			ContainerId: rangeDescription.container
+			ContainerId: container
 		});
 
 		//now save this:
@@ -392,7 +407,7 @@ Ext.define('NextThought.controller.UserData', {
 				var success = request.success,
 					rec = success ? record: null;
 				if (success){
-					LocationProvider.getStore().add(record);
+					LocationProvider.getStore(container).add(record);
 					this.self.events.fireEvent('new-note', rec, range);
 				}
 				Ext.callback(callback, this, [success, rec]);

@@ -179,27 +179,20 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 	},
 
 
-	layoutBuckets: function(prefix){
+	layoutBuckets: function(prefix, width){
 		var addTpl = this.addNoteToOccupiedLineTmpl,
 			r = this.getReader(prefix),
-			o = r.getAnnotationOffsets(),
 			g = this.gutter[prefix],
 			b = this.buckets[prefix],
 			cT = this.controlLineTmpl,
 			wT = this.widgetLineTmpl,
-			cls = '',
-			width = o.gutter + 80;
-
-		if(width <= 355){
-			cls = 'narrow-gutter';
-		}
+			cls = (width <= 355)? 'narrow-gutter': '';
 
 		g.setWidth(width);
 		g.controls.setLeft(width-50);
 		g.widgets.setRight(50);
 
 		r.noteOverlayClearRestrictedRanges();
-
 
 
 		b.each(function(line,y){
@@ -267,7 +260,11 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 
 
 	render: function(prefix){
-		var me = this;
+		var me = this, containers = {},
+			r = this.getReader(prefix),
+			width = r.getAnnotationOffsets().gutter + 80,
+			maxAnnotations = Math.floor(width / 34) - 2;
+
 		if(me.rendering){
 			console.warn('Render called while rendering...');
 			me.events.on('finish',me.render,me,{single:true});
@@ -304,7 +301,17 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 					return;
 				}
 
-				var y = o.render(), b;
+				var y, b,
+					c = containers[o.getContainerId()] = (containers[o.getContainerId()]||[]);
+
+				if(c.length >= maxAnnotations){
+					//render an endcap
+					return;
+				}
+
+				c.push(o);
+
+				y = o.render();
 
 				//uncomment for testing
 				//console.log('Rendered', o.getRecord().get('body')[0], y);
@@ -324,7 +331,8 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 			}
 		});
 
-		me.layoutBuckets(prefix);
+		console.log(maxAnnotations,containers);
+		me.layoutBuckets(prefix, width);
 
 		me.rendering = false;
 		me.events.fireEvent('finish');

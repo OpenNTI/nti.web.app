@@ -46,7 +46,7 @@ Ext.define('NextThought.view.annotations.note.Window',{
 	initComponent: function(){
 		var a = this.annotation, m;
 		this.callParent(arguments);
-		this._editorActive = false;
+		this.isEditorActive = false;
 
 		m = this.down('note-main-view');
 		m.prefix = a.prefix;
@@ -64,16 +64,16 @@ Ext.define('NextThought.view.annotations.note.Window',{
 
 
 	editorActive: function(){
-		return this._editorActive;
+		return this.isEditorActive;
 	},
 
 	setEditorActive: function(active){
 		console.log('Will mark window as having an ' + (active ? 'active' : 'inactive') + ' editor');
-		if(this._editorActive === active){
+		if(this.isEditorActive === active){
 			console.warn('Window already has an ' + (active ? 'active' : 'inactive') + ' editor. Unbalanced calls?');
 			return;
 		}
-		this._editorActive = active;
+		this.isEditorActive = active;
 		this.fireEvent(active ? 'editorActivated' : 'editorDeactivated', this);
 	},
 

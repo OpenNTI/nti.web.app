@@ -87,23 +87,12 @@ Ext.define('NextThought.view.content.reader.Content',{
 	},
 
 
-	setContent: function(resp, assessmentItems, finish, hasCallback){
+	setContent: function(resp, assessmentItems, finish){
 		var me = this,
 			c = me.parseHTML(resp),
-			containerId,
 			subContainers;
 
 		console.log('setting content...');
-
-		function onFinishLoading() {
-			console.log('setting content...finished');
-			me.relayout();
-			me.el.repaint();
-			me.fireEvent('loaded', containerId);
-//			if(hasCallback){
-				Ext.callback(finish,null,[me]);
-//			}
-		}
 
 		me.updateContent('<div id="NTIContent">'+c+'</div>');
 		me.scrollTo(0, false);
@@ -115,15 +104,13 @@ Ext.define('NextThought.view.content.reader.Content',{
 				resp.responseText.match(/<body([^>]*)>/i),
 				this.buildPath(resp.request.options.url));
 
-//		if(!hasCallback){
-//			Ext.callback(finish,null,[me]);
-//		}
+		Ext.callback(finish,null,[me]);
 
 		console.log('setting content... set, loading annotations');
 
 		subContainers = me.resolveContainers();
 
-		me.loadContentAnnotations(LocationProvider.currentNTIID, subContainers, onFinishLoading);
+		me.loadContentAnnotations(LocationProvider.currentNTIID, subContainers);
 	},
 
 
