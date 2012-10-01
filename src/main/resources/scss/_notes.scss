@@ -282,7 +282,7 @@
 					display: block;
 				}
 			}
-			
+
 			ol {
 				&::before{
 					position: absolute;
@@ -329,6 +329,7 @@
 						&.edit::after { background-position: -20px -90px; }
 						&.flag::after { background-position: -20px -18px; }
 						&.add-contact::after { background-position: -20px -36px; }
+						&.chat::after { background-position: 0 -144px; }
 						&.follow::after { background-position: -20px -54px; }
 						&.block::after { background-position: -20px -72px; }
 						&.mute::after { background-position: -20px -126px; }
@@ -341,6 +342,7 @@
 					&.edit::after { background-position: 0 -90px; }
 					&.flag::after { background-position: 0 -18px; }
 					&.add-contact::after { background-position: 0 -36px; }
+					&.chat::after { background-position: 0 -144px; }
 					&.follow::after { background-position: 0 -54px; }
 					&.block::after { background-position: 0 -72px; }
 					&.mute::after { background-position: 0 -126px; }
@@ -375,6 +377,7 @@
 			&.edit::after{ background-position: 0 -90px; }
 			&.flag::after{ background-position: 0 -18px; }
 			&.add-contact::after{ background-position: 0 -36px; }
+			&.chat::after { background-position: 0 -144px; }
 			&.follow::after{ background-position: 0 -54px; }
 			&.block::after{ background-position: 0 -72px; }
 			&.mute::after{ background-position: 0 -126px; }
@@ -866,7 +869,7 @@
 				}
 			}
 		}
-		
+
 		.slide-nav {
 			position: absolute;
 			top: 0;
