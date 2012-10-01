@@ -179,12 +179,14 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 
 
 	activateReplyEditor: function(e){
+		var me = this;
 		if(e){e.stopEvent();}
 
-		if(this.replyBox && this.up('window').checkAndMarkAsActive()){
-			this.replyBox.addCls('editor-active');
-			this.editorActions.activate();
-			this.scrollIntoView();
+		if(me.replyBox && me.up('window').checkAndMarkAsActive()){
+			me.replyBox.addCls('editor-active');
+			me.editorActions.activate();
+			me.scrollIntoView();
+			setTimeout(function(){me.editorActions.focus(true);}, 300);
 		}
 		return false;
 	},

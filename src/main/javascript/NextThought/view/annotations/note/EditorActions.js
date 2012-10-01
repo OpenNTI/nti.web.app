@@ -363,8 +363,30 @@ Ext.define('NextThought.view.annotations.note.EditorActions',{
 	},
 
 
-	focus: function(){
+	focus: function(collapse){
+		var me = this;
+
+		function collapseToEnd(){
+			var s, content, c = me.editor.down('.content').dom, r;
+			if(c.innerHTML){
+				try {
+					s = window.getSelection();
+					r = document.createRange();
+					r.selectNodeContents(c.lastChild);
+					s.removeAllRanges();
+					r.collapse(false);
+					s.addRange(r);
+				}
+				catch (e){
+					console.warn('focus issue: '+e.message, "\n\n\n", content);
+				}
+			}
+		}
+
 		this.editor.down('.content').focus();
+		if(collapse){
+			collapseToEnd();
+		}
 	},
 
 
