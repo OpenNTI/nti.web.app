@@ -160,7 +160,7 @@ Ext.define('NextThought.view.content.reader.Scroll',{
 		//We may get ranges in our list that don't have any client rects.  A good example
 		//is a node that is currently display none so make sure we account for that.  The
 		//related topics list is one example of where we have seen this occur
-		
+
 		Ext.each(ranges, function(possibleRange){
 			if(possibleRange.getClientRects().length > 0){
 				rangeToScrollTo = possibleRange;
@@ -171,7 +171,7 @@ Ext.define('NextThought.view.content.reader.Scroll',{
 
 		if(rangeToScrollTo){
 			var nodeTop = rangeToScrollTo.getClientRects()[0].top;
-			var a = nodeTop + this.body.getScroll().top, dh = 150;
+			var a = nodeTop, dh = 150;
 			try{
 				me.scrollTo(a - dh);
 			} catch(e){
