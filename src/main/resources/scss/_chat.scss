@@ -64,17 +64,17 @@
 
 	.chat-view {
 		border-radius: 0 5px 5px 0;
-		box-shadow: -2px 0px 9px -5px #333333;//TODO: fix to be a sane value (use RGBA to lighten the shadow, not the blur & spread)
+		box-shadow: -2px 0px 9px -5px #333333;
+		//TODO: fix to be a sane value (use RGBA to lighten the shadow, not the blur & spread)
 		// REFRESHER: box-shadow syntax is:
 		// box-shadow:  none | <shadow> [,<shadow>]*
 		//	where <shadow> is defined as:
 		//		inset? && [ <offset-x> <offset-y> <blur-radius>? <spread-radius>? <color>? ]
 
-		.x-box-inner{
+		.x-box-inner {
 
 		}
 	}
-
 
 	&.no-gutter {
 		.chat-log-view {
@@ -83,7 +83,7 @@
 					display: inline-block;
 				}
 
-				div.message-bounding-box{
+				div.message-bounding-box {
 					margin-left: 40px;
 					overflow: hidden;
 					position: relative;
@@ -98,34 +98,35 @@
 		}
 	}
 
-
 	.chat-log-view {
 		border-radius: 0 5px 0 0;
 		border-bottom: 1px solid #cfcfcf !important;
-		box-shadow: inset  0px -7px 7px -7px #f7f7f7;//TODO: fix to be a sane value (use RGBA to lighten the shadow, not the blur & spread)
+		box-shadow: inset  0px -7px 7px -7px #f7f7f7;
+		//TODO: fix to be a sane value (use RGBA to lighten the shadow, not the blur & spread)
 		// REFRESHER: box-shadow syntax is:
 		// box-shadow:  none | <shadow> [,<shadow>]*
 		//	where <shadow> is defined as:
 		//		inset? && [ <offset-x> <offset-y> <blur-radius>? <spread-radius>? <color>? ]
 
-        .log-notification-wrapper {
-            clear: both;
-            text-align: center;
-            color: #cacaca;
-            font-size: 12px;
-            font-style: italic;
-            font-weight: 600;
-        }
+		.log-notification-wrapper {
+			clear: both;
+			text-align: center;
+			color: #cacaca;
+			font-size: 12px;
+			font-style: italic;
+			font-weight: 600;
+		}
 
 		.log-entry-wrapper {
 			overflow: hidden;
 			position: relative;
 
-
 			&.me {
 				.name,
-                .avatar,
-				  { display: none; }
+				.avatar,
+					{
+					display: none;
+				}
 
 			}
 
@@ -138,10 +139,11 @@
 				display: none;
 			}
 
-			.log-entry{
+			.log-entry {
 				background: $primary-blue;
 				border-radius: 5px;
-				box-shadow: 1px 1px 10px -1px #999;//TODO: fix to be a sane value (use RGBA to lighten the shadow, not the blur & spread)
+				box-shadow: 1px 1px 10px -1px #999;
+				//TODO: fix to be a sane value (use RGBA to lighten the shadow, not the blur & spread)
 				// REFRESHER: box-shadow syntax is:
 				// box-shadow:  none | <shadow> [,<shadow>]*
 				//	where <shadow> is defined as:
@@ -153,11 +155,11 @@
 				clear: right;
 				position: relative;
 
-			  	//whiteboards inside chat:
-			  	img {
+				//whiteboards inside chat:
+				img {
 					display: inline-block;
 					width: 100px;
-				  	margin: 0;
+					margin: 0;
 					padding: 0;
 				}
 
@@ -175,11 +177,13 @@
 					background: #fefefe;
 					border: 2px solid #e3e3e3;
 					margin: 14px;
-					.name {display: none;}
+					.name {
+						display: none;
+					}
 					.body-text {
 						color: $secondary-grey;
 					}
-					&::before{
+					&::before {
 						left: inherit;
 						top: inherit;
 						bottom: 4px;
@@ -199,7 +203,7 @@
 					font-size: 10pt;
 					font-weight: 700;
 					color: #ffffff;
-				  	word-break: break-word;
+					word-break: break-word;
 				}
 			}
 		}
@@ -212,12 +216,13 @@
 
 		div {
 			margin: 12px 8px 10px 8px;
-			img {
+			.add-whiteboard {
 				width: 28px;
 				height: 21px;
 				float: left;
 				margin: 4px;
-				background: url(../images/whiteboard/icon.png);
+				background: url(../images/whiteboard/icon.png) 0px 0px no-repeat;
+				cursor: pointer;
 			}
 
 			div {
@@ -231,7 +236,8 @@
 					width: 100%;
 					border-radius: 3px;
 					border: 1px solid #a0a0a0;
-					box-shadow: inset 3px 3px 10px -5px #a0a0a0;//TODO: fix to be a sane value (use RGBA to lighten the shadow, not the blur & spread)
+					box-shadow: inset 3px 3px 10px -5px #a0a0a0;
+					//TODO: fix to be a sane value (use RGBA to lighten the shadow, not the blur & spread)
 					// REFRESHER: box-shadow syntax is:
 					// box-shadow:  none | <shadow> [,<shadow>]*
 					//	where <shadow> is defined as:

@@ -1,51 +1,64 @@
-Ext.define('NextThought.view.chat.Entry',{
-	extend: 'Ext.Component',
-	alias: 'widget.chat-entry',
+Ext.define('NextThought.view.chat.Entry', {
+	extend:'Ext.Component',
+	alias:'widget.chat-entry',
 
-	height: 51,
-	ui: 'chat-entry',
-	cls: 'chat-entry',
+	height:51,
+	ui:'chat-entry',
+	cls:'chat-entry',
 
-	renderTpl: [
-		'<div>',
-			'<img src="{[Ext.BLANK_IMAGE_URL]}" class="add-whiteboard" alt="Create a whiteboard" title="Create a whiteboard">',
-			'<div><input type="text" value=""></div>',
-		'</div>'
-	],
+	renderTpl:Ext.DomHelper.markup([
+		{
+			cn:[
+				{
+					cls:'add-whiteboard', title:'Create a whiteboard'
+				},
+				{
+					cn:[
+						{ tag:'input', type:'text'}
+					]
+				}
+			]
+		}
+	]),
 
-	chanel: 'DEFAULT',
+	chanel:'DEFAULT',
 
-	renderSelectors: {
-		buttonEl: 'img',
-		inputEl: 'input'
+	renderSelectors:{
+		buttonEl:'.add-whiteboard',
+		inputEl:'input'
 	},
 
-	afterRender: function(){
+	afterRender:function () {
 		this.callParent(arguments);
 		this.inputEl.selectable();
 		this.inputEl.on({
-			scope: this,
-			keydown: this.keyDown
+			scope:this,
+			keydown:this.keyDown
 		});
 
-		this.buttonEl.on('click',this.addWhiteboard,this);
+		var me = this;
+		setTimeout(function () {
+			me.focus();
+		}, 100);
+
+		this.buttonEl.on('click', this.addWhiteboard, this);
 	},
 
-	keyDown: function(e){
+	keyDown:function (e) {
 		var k = e.getKey();
-		if(e.ESC === k){
+		if (e.ESC === k) {
 			this.inputEl.set({value:''});
 		}
-		else if(e.ENTER === k){
-			this.fireEvent('send',this, this.replyTo, this.chanel, this.recipients);
+		else if (e.ENTER === k) {
+			this.fireEvent('send', this, this.replyTo, this.chanel, this.recipients);
 		}
 	},
 
-	focus: function(){
+	focus:function () {
 		this.inputEl.focus();
 	},
 
-	getValue: function(){
+	getValue:function () {
 		var e = this.inputEl,
 			v = e.getValue();
 		e.dom.value = '';
@@ -53,7 +66,7 @@ Ext.define('NextThought.view.chat.Entry',{
 	},
 
 
-	addWhiteboard: function(){
-		this.fireEvent('send-whiteboard',this, this.replyTo, this.chanel, this.recipients);
+	addWhiteboard:function () {
+		this.fireEvent('send-whiteboard', this, this.replyTo, this.chanel, this.recipients);
 	}
 });
