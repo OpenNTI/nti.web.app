@@ -144,14 +144,33 @@ Ext.define('NextThought.view.annotations.note.Templates',{
 
 		if(mine){
 			items.push(editItem);
-		}		
-
-		if(	$AppConfig.service.canChat() && !mine ){
-			items.push(chatItem);
 		}
 
-		if( options.record && options.record.isFlagged && options.record.isFlagged() ){
-			flagItem.setText('Flagged');
+		if(options.record){
+			var involved = options.record.get('sharedWith') || [];
+			var shared = involved.length > 0;
+
+			function hasUser(users, name){
+				var found = false;
+				Ext.each(users, function(user){
+					if(user === name || ( user.get && user.get('Username') === name) ){
+						found = true;
+						return false;
+					}
+				});
+				return found;
+			}
+
+			if(options.user){involved.push(options.user);}
+			if(	$AppConfig.service.canChat() 
+				&& shared
+				&& hasUser(involved, $AppConfig.username) ){
+				items.push(chatItem);
+			}
+
+			if( options.record.isFlagged && options.record.isFlagged() ){
+				flagItem.setText('Flagged');
+			}
 		}
 		items.push(flagItem);
 		if(mine){
