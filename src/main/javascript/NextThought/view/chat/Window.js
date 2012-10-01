@@ -118,7 +118,7 @@ Ext.define('NextThought.view.chat.Window', {
 
 		Ext.each(users, function (u) {
 			if (!isMe(u)) {
-				title.push(Ext.String.ellipsis(u.getName(), 20, false));
+				title.push(u.getName());
 			}
 		});
 
