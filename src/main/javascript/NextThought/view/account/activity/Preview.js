@@ -82,7 +82,7 @@ Ext.define('NextThought.view.account.activity.Preview',{
 		}
 
 		this.el.on('click',this.onReply,this);
-		TemplatesForNotes.attachMoreReplyOptionsHandler(this, this.more, this.user, this.record.isFlagged());
+		TemplatesForNotes.attachMoreReplyOptionsHandler(this, this.more, this.user, this.record);
 	},
 
 

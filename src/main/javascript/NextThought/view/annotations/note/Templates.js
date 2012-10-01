@@ -47,7 +47,7 @@ Ext.define('NextThought.view.annotations.note.Templates',{
 		};
 	},
 
-	attachMoreReplyOptionsHandler: function(cmp, optionsEl, user, currentlyFlagged){
+	attachMoreReplyOptionsHandler: function(cmp, optionsEl, user, record){
 		var scroller = optionsEl.up('{overflow=auto}');
 
 		if(scroller){
@@ -69,7 +69,7 @@ Ext.define('NextThought.view.annotations.note.Templates',{
 			},
 			options: {
 				user: user,
-				currentlyFlagged: currentlyFlagged
+				record: record
 			}
 		});
 	},
@@ -141,13 +141,22 @@ Ext.define('NextThought.view.annotations.note.Templates',{
 		else{
 			console.log("Error: user is null. The note/reply  owner is undefined, opts:", options);
 		}
-		mine ? items.push(editItem):null;
-		$AppConfig.service.canChat() && !mine ? items.push(chatItem):null;
-		if( options.currentlyFlagged ){
+
+		if(mine){
+			items.push(editItem);
+		}		
+
+		if(	$AppConfig.service.canChat() && !mine ){
+			items.push(chatItem);
+		}
+
+		if( options.record && options.record.isFlagged && options.record.isFlagged() ){
 			flagItem.setText('Flagged');
 		}
 		items.push(flagItem);
-		mine ? items.push(deleteItem): null;
+		if(mine){
+			items.push(deleteItem);
+		}
 
 
 		menu = Ext.widget('menu',{

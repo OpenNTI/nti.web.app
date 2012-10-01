@@ -371,7 +371,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		this.name.update(user.getName());
 		this.avatar.setStyle({backgroundImage: 'url('+user.get('avatarURL')+')'});
 		//NOTE: this is probably not the best place where to set the more options menu.
-		TemplatesForNotes.attachMoreReplyOptionsHandler(this, this.more, user, this.record.isFlagged());
+		TemplatesForNotes.attachMoreReplyOptionsHandler(this, this.more, user, this.record);
 	},
 
 
