@@ -142,6 +142,33 @@ Ext.define('NextThought.view.annotations.note.Main',{
 
 	getRecord: function(){return this.record;},
 
+	//NOTE right now we are assuming the anchorable data won't change.
+	//That is true in practice and it would be expensive to pull it everytime
+	//some other part of this record is updated
+	updateFromRecord: function(){
+		var r = this.record, likeTooltip, favoriteTooltip;
+
+		try {
+			UserRepository.getUser(r.get('Creator'),this.fillInUser,this);
+			this.time.update(r.getRelativeTimeString());
+
+			UserRepository.getUser(r.get('sharedWith').slice(),this.fillInShare,this);
+
+			this.liked.update(r.getFriendlyLikeCount());
+			this.liked[(r.isLiked()?'add':'remove')+'Cls']('on');
+			this.favorites[(r.isFavorited()?'add':'remove')+'Cls']('on');
+
+			likeTooltip = r.isLiked() ? 'Liked' : 'Like';
+			favoriteTooltip = r.isFavorited() ? 'Bookmarked' : 'Add to bookmarks';
+			this.liked.set({'title': likeTooltip});
+			this.favorites.set({'title': favoriteTooltip});
+		}
+		catch(e1){
+			console.error(Globals.getError(e1));
+		}
+
+		r.compileBodyContent(this.setContent, this, this.generateClickHandler, 226 );
+	},
 
 	setRecord: function(r){
 		var suppressed, text, bodyText, sel, range, doc, start, end, likeTooltip, favoriteTooltip, objectInnerText, obj, me = this;
@@ -156,7 +183,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		try {
 			if(this.record) {
 				this.record.un('changed', this.recordChanged, this);
-				this.record.un('updated', this.recordChanged, this);
+				this.record.un('updated', this.recordUpdated, this);
 				this.mun(this.record,'child-added',this.addNewChild,this);
 			}
 		}
@@ -169,7 +196,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		try {
 			if(this.record){
 				this.record.on('changed', this.recordChanged, this, {single:true});
-				this.record.on('updated', this.recordChanged, this, {single:true});
+				this.record.on('updated', this.recordUpdated, this, {single:true});
 				this.mon(this.record,'child-added',this.addNewChild,this);
 			}
 		}
@@ -191,25 +218,6 @@ Ext.define('NextThought.view.annotations.note.Main',{
 
 		this.deactivateReplyEditor();
 		this.ownerCt.getEl().dom.scrollTop = 0;
-
-		try {
-			UserRepository.getUser(r.get('Creator'),this.fillInUser,this);
-			this.time.update(r.getRelativeTimeString());
-
-			UserRepository.getUser(r.get('sharedWith'),this.fillInShare,this);
-
-			this.liked.update(r.getFriendlyLikeCount());
-			this.liked[(r.isLiked()?'add':'remove')+'Cls']('on');
-			this.favorites[(r.isFavorited()?'add':'remove')+'Cls']('on');
-
-			likeTooltip = r.isLiked() ? 'Liked' : 'Like';
-			favoriteTooltip = r.isFavorited() ? 'Bookmarked' : 'Add to bookmarks';
-			this.liked.set({'title': likeTooltip});
-			this.favorites.set({'title': favoriteTooltip});
-		}
-		catch(e1){
-			console.error(Globals.getError(e1));
-		}
 
 		try {
 			this.context.setHTML('');
@@ -244,7 +252,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 			console.error(Globals.getError(e2));
 		}
 
-		r.compileBodyContent(this.setContent, this, this.generateClickHandler, 226 );
+		this.updateFromRecord();
 
 		if(this.editMode){
 			this.onEdit();
@@ -323,6 +331,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 
 
 	addNewChild: function(child){
+		console.log('Adding new child', child);
 		var r = this.record, c = 'ReferencedByCount';
 
 		if(child.get('inReplyTo') === r.getId()){
@@ -364,7 +373,8 @@ Ext.define('NextThought.view.annotations.note.Main',{
 	},
 
 
-	recordChanged: Ext.Function.createBuffered( function(){ this.setRecord(this.record); }, 100),
+	recordChanged: Ext.Function.createBuffered( function(){ this.updateFromRecord(); }, 100),
+	recordUpdated: Ext.Function.createBuffered( function(){ this.updateFromRecord(); }, 100),
 
 
 	fillInUser: function(user){
@@ -417,8 +427,9 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		function callback(success, record){
 			me.el.unmask();
 			if (success) {
-				me.setRecord(r);
 				me.deactivateReplyEditor();
+				me.recordUpdated(r);
+				
 			}
 		}
 
