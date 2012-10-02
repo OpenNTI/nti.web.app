@@ -1,23 +1,26 @@
 Ext.define('NextThought.view.annotations.note.EditorActions', {
-	requires:[
-		'NextThought.util.Ranges', 'NextThought.view.menus.Share'
+	requires: [
+		'NextThought.util.Ranges',
+		'NextThought.view.menus.Share'
 	],
 
-	mixins:{
-		observable:'Ext.util.Observable'
+	mixins: {
+		observable: 'Ext.util.Observable'
 	},
 
-	wbThumbnailTpm:Ext.DomHelper.createTemplate({
-		tag:'img',
-		src:'{0}',
-		id:'{1}',
-		cls:'wb-thumbnail',
-		alt:'Whiteboard Thumbnail',
-		border:0
+	wbThumbnailTpm: Ext.DomHelper.createTemplate({
+		tag   : 'img',
+		src   : '{0}',
+		id    : '{1}',
+		cls   : 'wb-thumbnail',
+		alt   : 'Whiteboard Thumbnail',
+		border: 0
 	}).compile(),
 
-	constructor:function (cmp, editorEl) {
-		var me = this, Ce = Ext.CompositeElement;
+	constructor: function (cmp, editorEl) {
+		var me = this,
+			Ce = Ext.CompositeElement;
+
 		me.editor = editorEl;
 		me.cmp = cmp;
 		me.openWhiteboards = {};
@@ -26,23 +29,23 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 		me.mixins.observable.constructor.call(me);
 
 
-		(new Ce(editorEl.query('.action,.content'))).set({tabIndex:1});
+		(new Ce(editorEl.query('.action,.content'))).set({tabIndex: 1});
 
 		cmp.mon(me.shareMenu, {
-			scope:me,
-			changed:me.updateShareWithLabel
+			scope  : me,
+			changed: me.updateShareWithLabel
 		});
 
 		cmp.mon(new Ce(editorEl.query('.left .action')), {
-			scope:me,
-			click:me.editorContentAction
+			scope: me,
+			click: me.editorContentAction
 		});
 
 		cmp.mon(editorEl, {
-			scope:me,
-			mousedown:me.editorMouseDown,
-			selectstart:me.editorSelectionStart,
-			click:function () {
+			scope      : me,
+			mousedown  : me.editorMouseDown,
+			selectstart: me.editorSelectionStart,
+			click      : function () {
 				editorEl.down('.content').focus();
 			}
 		});
@@ -50,31 +53,31 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 		editorEl.down('.content').selectable();
 
 		cmp.mon(editorEl.down('.content'), {
-			scope:me,
-			selectstart:me.editorSelectionStart,
-			focus:me.editorFocus,
-			keyup:me.maybeResizeContentBox,
-			paste:me.handlePaste,
-			click:me.handleClick
+			scope      : me,
+			selectstart: me.editorSelectionStart,
+			focus      : me.editorFocus,
+			keyup      : me.maybeResizeContentBox,
+			paste      : me.handlePaste,
+			click      : me.handleClick
 		});
 
 		if (!$AppConfig.service.canShare()) {
 			editorEl.down('.action.share').hide();
 		}
 		cmp.mon(editorEl.down('.action.share'), {
-			scope:me,
-			click:me.openShareMenu
+			scope: me,
+			click: me.openShareMenu
 		});
 	},
 
 
-	activate:function () {
+	activate: function () {
 		this.updatePrefs();
 		this.editor.addCls('active');
 	},
 
 
-	deactivate:function () {
+	deactivate: function () {
 		this.editor.removeCls('active');
 		this.lastRange = null;
 	},
@@ -83,9 +86,13 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 	/**
 	 *  @see http://stackoverflow.com/questions/2176861/javascript-get-clipboard-data-on-paste-event-cross-browser/
 	 */
-	handlePaste:function (e, elem) {
+	handlePaste: function (e, elem) {
 		elem = e.getTarget('.content');
-		var be = e.browserEvent, cd = be ? be.clipboardData : null, sel = window.getSelection(), savedRange = RangeUtils.saveRange(sel.getRangeAt(0)), offScreenBuffer = document.createElement('div');
+		var be = e.browserEvent,
+		cd = be ? be.clipboardData : null,
+		sel = window.getSelection(),
+		savedRange = RangeUtils.saveRange(sel.getRangeAt(0)),
+		offScreenBuffer = document.createElement('div');
 
 		document.body.appendChild(offScreenBuffer);
 		offScreenBuffer.style.position = 'absolute';
@@ -99,9 +106,11 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 			e.stopEvent();
 			if (/text\/html/.test(cd.types)) {
 				offScreenBuffer.innerHTML = cd.getData('text/html');
-			} else if (/text\/plain/.test(cd.types)) {
+			}
+			else if (/text\/plain/.test(cd.types)) {
 				offScreenBuffer.innerHTML = cd.getData('text/plain');
-			} else {
+			}
+			else {
 				offScreenBuffer.innerHTML = "";
 			}
 			this.waitForPasteData(offScreenBuffer, savedRange, elem);
@@ -116,25 +125,27 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 	},
 
 
-	waitForPasteData:function (offScreenBuffer, savedRange, elem, callCount) {
+	waitForPasteData: function (offScreenBuffer, savedRange, elem, callCount) {
 		var me = this;
 		callCount = callCount || 0;
 		if (offScreenBuffer.childNodes && offScreenBuffer.childNodes.length > 0) {
 			setTimeout(function () {
 				me.processPaste(offScreenBuffer, savedRange, elem);
 			}, 20);
-		} else if (callCount < 100) {
+		}
+		else if (callCount < 100) {
 			setTimeout(function () {
 				me.waitForPasteData(offScreenBuffer, savedRange, elem, callCount + 1);
 			}, 20);
-		} else {
+		}
+		else {
 			console.log('timedout waiting for paste');
 			document.body.removeChild(offScreenBuffer);
 		}
 	},
 
 
-	processPaste:function (offScreenBuffer, savedRange, elem) {
+	processPaste: function (offScreenBuffer, savedRange, elem) {
 		var pasteddata = offScreenBuffer.innerHTML, range, frag;
 
 		try {
@@ -155,7 +166,8 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 			window.getSelection().removeAllRanges();
 			this.lastRange = range;
 			window.getSelection().addRange(range);
-		} catch (e2) {
+		}
+		catch (e2) {
 			console.log(pasteddata, e2);
 		}
 		elem.focus();
@@ -163,7 +175,7 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 	},
 
 
-	editorMouseDown:function (e) {
+	editorMouseDown: function (e) {
 		var s = window.getSelection();
 		if (e.getTarget('.action', undefined, true)) {
 			if (s.rangeCount) {
@@ -173,25 +185,25 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 	},
 
 
-	updateShareWithLabel:function () {
+	updateShareWithLabel: function () {
 		this.editor.down('.action.share').update(this.shareMenu.getLabel());
 	},
 
 
-	editorSelectionStart:function (e) {
+	editorSelectionStart: function (e) {
 		e.stopPropagation();//re-enable selection, and prevent the handlers higher up from firing.
 		return true;//re-enable selection
 	},
 
 
-	openShareMenu:function (e) {
+	openShareMenu: function (e) {
 		e.stopEvent();
 		this.shareMenu.showBy(this.editor.down('.action.share'), 't-b?');
 		return false;
 	},
 
 
-	editorBlur:function () {
+	editorBlur: function () {
 		console.log('editor blur');
 		var s = window.getSelection();
 		if (s.rangeCount) {
@@ -200,12 +212,13 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 	},
 
 
-	editorFocus:function () {
+	editorFocus: function () {
 		var s = window.getSelection();
 		if (this.lastRange) {
 			s.removeAllRanges();
 			s.addRange(this.lastRange);
-		} else if (s.rangeCount > 0) {
+		}
+		else if (s.rangeCount > 0) {
 			this.lastRange = s.getRangeAt(0);
 			s.removeAllRanges();
 			s.addRange(this.lastRange);
@@ -213,8 +226,9 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 	},
 
 
-	maybeResizeContentBox:function () {
-		var p = this.previousEditorHeight || 0, h = this.editor.getHeight();
+	maybeResizeContentBox: function () {
+		var p = this.previousEditorHeight || 0,
+				h = this.editor.getHeight();
 
 		this.previousEditorHeight = h;
 
@@ -224,13 +238,14 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 	},
 
 
-	editorContentAction:function (e) {
+	editorContentAction: function (e) {
 		var t = e.getTarget('.action', undefined, true), action;
 		if (t) {
 			this.editorFocus();//reselect
 			if (t.is('.whiteboard')) {
 				this.addWhiteboard();
-			} else {
+			}
+			else {
 				action = t.getAttribute('class').split(' ').pop();
 				this.editor.dom.querySelector('[contenteditable=true]').focus();
 				document.execCommand(action, null, null);
@@ -240,7 +255,7 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 		return false;
 	},
 
-	handleClick:function (e) {
+	handleClick: function (e) {
 		var guid, t = e.getTarget('img.wb-thumbnail');
 
 		if (t) {
@@ -249,12 +264,15 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 		}
 	},
 
-	addWhiteboard:function (data) {
+	addWhiteboard: function (data) {
 		//pop open a whiteboard:
 		data = data || (function () {
 		}()); //force the falsy value of data to always be undefinded.
 
-		var me = this, wbWin = Ext.widget('wb-window', {height:'75%', width:'50%', value:data }), guid = guidGenerator(), content = me.editor.down('.content');
+		var me = this,
+				wbWin = Ext.widget('wb-window', {height: '75%', width: '50%', value: data }),
+				guid = guidGenerator(),
+				content = me.editor.down('.content');
 
 		//remember the whiteboard window:
 		wbWin.guid = guid;
@@ -272,14 +290,14 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 
 		//hook into the window's save and cancel operations:
 		this.cmp.mon(wbWin, {
-			save:function (win, wb) {
+			save  : function (win, wb) {
 				me.insertWhiteboardThumbnail(content, guid, wb);
 				if (Ext.query('.nav-helper')[0]) {
 					Ext.fly(Ext.query('.nav-helper')[0]).show();
 				}
 				wbWin.hide();
 			},
-			cancel:function (win) {
+			cancel: function (win) {
 				//if we haven't added the wb to the editor, then clean up, otherwise let the window handle it.
 				if (!Ext.get(guid)) {
 					me.cleanOpenWindows(win.guid);
@@ -294,12 +312,13 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 	},
 
 
-	insertWhiteboardThumbnail:function (content, guid, wb) {
-		var me = this, el = Ext.get(guid), placeholder, p;
+	insertWhiteboardThumbnail: function (content, guid, wb) {
+		var me = this,
+			el = Ext.get(guid), placeholder, p;
 
 		//We need empty divs to allow to insert text before or after a WB.
-		placeholder = Ext.DomHelper.createTemplate({cn:[
-			{tag:'br'}
+		placeholder = Ext.DomHelper.createTemplate({cn: [
+			{tag: 'br'}
 		]});
 
 		if (!el) {
@@ -327,7 +346,7 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 	},
 
 
-	cleanOpenWindows:function (guids) {
+	cleanOpenWindows: function (guids) {
 		var me = this;
 
 		if (!Ext.isArray(guids)) {
@@ -340,8 +359,12 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 	},
 
 
-	getNoteBody:function (str) {
-		var r = [], regex = /<img.*?>/gi, splits, whiteboards, s, w = 0, t, wbid;
+	getNoteBody: function (str) {
+		var r = [],
+			regex = /<img.*?>/gi,
+			splits,
+			whiteboards,
+			s, w = 0, t, wbid;
 
 		//split it up, then interleave:
 		splits = str.split(regex);
@@ -364,7 +387,7 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 	},
 
 
-	focus:function (collapse) {
+	focus: function (collapse) {
 		var me = this;
 
 		function collapseToEnd() {
@@ -377,7 +400,8 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 					s.removeAllRanges();
 					r.collapse(false);
 					s.addRange(r);
-				} catch (e) {
+				}
+				catch (e) {
 					console.warn('focus issue: ' + e.message, "\n\n\n", content);
 				}
 			}
@@ -390,29 +414,34 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 	},
 
 
-	editBody:function (body) {
-		var me = this, c = this.editor.down('.content').dom;
+	editBody: function (body) {
+		var me = this,
+				c = this.editor.down('.content').dom;
 
 		Ext.each(body, function (part) {
 			if (typeof part === 'string') {
 				c.innerHTML += part;
-			} else {
+			}
+			else {
 				me.addWhiteboard(part);
 			}
 		});
 	},
 
 
-	getValue:function () {
+	getValue: function () {
 		return {
-			body:this.getNoteBody(this.editor.down('.content').getHTML()),
-			shareWith:this.shareMenu.getValue()
+			body     : this.getNoteBody(this.editor.down('.content').getHTML()),
+			shareWith: this.shareMenu.getValue()
 		};
 	},
 
 
-	setValue:function (text, putCursorAtEnd, focus) {
-		var r, c = this.editor.down('.content').dom, s = window.getSelection(), content;
+	setValue: function (text, putCursorAtEnd, focus) {
+		var r,
+			c = this.editor.down('.content').dom,
+			s = window.getSelection(),
+			content;
 		this.setHTML(Ext.String.htmlEncode(text));
 		content = c.innerHTML;
 
@@ -425,7 +454,8 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 				r.setStart(c.firstChild, content.length);
 				r.collapse(true);
 				s.addRange(r);
-			} catch (e) {
+			}
+			catch (e) {
 				console.warn('focus issue: ' + e.message, "\n\n\n", content);
 			}
 		}
@@ -436,23 +466,24 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 	},
 
 
-	setHTML:function (html) {
+	setHTML: function (html) {
 		this.editor.down('.content').dom.innerHTML = html;
 	},
 
 
-	reset:function () {
+	reset: function () {
 		this.editor.down('.content').innerHTML = '';
 		try {
 			window.getSelection().removeAllRanges();
 			this.lastRange = null;
-		} catch (e) {
+		}
+		catch (e) {
 			console.log("Removing all ranges from selection failed: ", e.message);
 		}
 	},
 
 
-	updatePrefs:function (v) {
+	updatePrefs: function (v) {
 		this.shareMenu.reload(v);
 		this.updateShareWithLabel();
 	}
