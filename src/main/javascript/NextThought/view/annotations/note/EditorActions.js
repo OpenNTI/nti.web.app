@@ -1,7 +1,6 @@
 Ext.define('NextThought.view.annotations.note.EditorActions', {
 	requires:[
-		'NextThought.util.Ranges',
-		'NextThought.view.menus.Share'
+		'NextThought.util.Ranges', 'NextThought.view.menus.Share'
 	],
 
 	mixins:{
@@ -18,8 +17,7 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 	}).compile(),
 
 	constructor:function (cmp, editorEl) {
-		var me = this,
-			Ce = Ext.CompositeElement;
+		var me = this, Ce = Ext.CompositeElement;
 		me.editor = editorEl;
 		me.cmp = cmp;
 		me.openWhiteboards = {};
@@ -87,11 +85,7 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 	 */
 	handlePaste:function (e, elem) {
 		elem = e.getTarget('.content');
-		var be = e.browserEvent,
-			cd = be ? be.clipboardData : null,
-			sel = window.getSelection(),
-			savedRange = RangeUtils.saveRange(sel.getRangeAt(0)),
-			offScreenBuffer = document.createElement('div');
+		var be = e.browserEvent, cd = be ? be.clipboardData : null, sel = window.getSelection(), savedRange = RangeUtils.saveRange(sel.getRangeAt(0)), offScreenBuffer = document.createElement('div');
 
 		document.body.appendChild(offScreenBuffer);
 		offScreenBuffer.style.position = 'absolute';
@@ -105,11 +99,9 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 			e.stopEvent();
 			if (/text\/html/.test(cd.types)) {
 				offScreenBuffer.innerHTML = cd.getData('text/html');
-			}
-			else if (/text\/plain/.test(cd.types)) {
+			} else if (/text\/plain/.test(cd.types)) {
 				offScreenBuffer.innerHTML = cd.getData('text/plain');
-			}
-			else {
+			} else {
 				offScreenBuffer.innerHTML = "";
 			}
 			this.waitForPasteData(offScreenBuffer, savedRange, elem);
@@ -131,13 +123,11 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 			setTimeout(function () {
 				me.processPaste(offScreenBuffer, savedRange, elem);
 			}, 20);
-		}
-		else if (callCount < 100) {
+		} else if (callCount < 100) {
 			setTimeout(function () {
 				me.waitForPasteData(offScreenBuffer, savedRange, elem, callCount + 1);
 			}, 20);
-		}
-		else {
+		} else {
 			console.log('timedout waiting for paste');
 			document.body.removeChild(offScreenBuffer);
 		}
@@ -162,9 +152,10 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 			range.insertNode(frag);
 			range.collapse(false);
 			//Note this I think this breaks badily in IE < 9
+			window.getSelection().removeAllRanges();
+			this.lastRange = range;
 			window.getSelection().addRange(range);
-		}
-		catch (e2) {
+		} catch (e2) {
 			console.log(pasteddata, e2);
 		}
 		elem.focus();
@@ -214,8 +205,7 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 		if (this.lastRange) {
 			s.removeAllRanges();
 			s.addRange(this.lastRange);
-		}
-		else if (s.rangeCount > 0) {
+		} else if (s.rangeCount > 0) {
 			this.lastRange = s.getRangeAt(0);
 			s.removeAllRanges();
 			s.addRange(this.lastRange);
@@ -224,8 +214,7 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 
 
 	maybeResizeContentBox:function () {
-		var p = this.previousEditorHeight || 0,
-			h = this.editor.getHeight();
+		var p = this.previousEditorHeight || 0, h = this.editor.getHeight();
 
 		this.previousEditorHeight = h;
 
@@ -241,8 +230,7 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 			this.editorFocus();//reselect
 			if (t.is('.whiteboard')) {
 				this.addWhiteboard();
-			}
-			else {
+			} else {
 				action = t.getAttribute('class').split(' ').pop();
 				this.editor.dom.querySelector('[contenteditable=true]').focus();
 				document.execCommand(action, null, null);
@@ -266,10 +254,7 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 		data = data || (function () {
 		}()); //force the falsy value of data to always be undefinded.
 
-		var me = this,
-			wbWin = Ext.widget('wb-window', {height:'75%', width:'50%', value:data }),
-			guid = guidGenerator(),
-			content = me.editor.down('.content');
+		var me = this, wbWin = Ext.widget('wb-window', {height:'75%', width:'50%', value:data }), guid = guidGenerator(), content = me.editor.down('.content');
 
 		//remember the whiteboard window:
 		wbWin.guid = guid;
@@ -310,8 +295,7 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 
 
 	insertWhiteboardThumbnail:function (content, guid, wb) {
-		var me = this,
-			el = Ext.get(guid), placeholder, p;
+		var me = this, el = Ext.get(guid), placeholder, p;
 
 		//We need empty divs to allow to insert text before or after a WB.
 		placeholder = Ext.DomHelper.createTemplate({cn:[
@@ -357,11 +341,7 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 
 
 	getNoteBody:function (str) {
-		var r = [],
-			regex = /<img.*?>/gi,
-			splits,
-			whiteboards,
-			s, w = 0, t, wbid;
+		var r = [], regex = /<img.*?>/gi, splits, whiteboards, s, w = 0, t, wbid;
 
 		//split it up, then interleave:
 		splits = str.split(regex);
@@ -397,8 +377,7 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 					s.removeAllRanges();
 					r.collapse(false);
 					s.addRange(r);
-				}
-				catch (e) {
+				} catch (e) {
 					console.warn('focus issue: ' + e.message, "\n\n\n", content);
 				}
 			}
@@ -412,14 +391,12 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 
 
 	editBody:function (body) {
-		var me = this,
-			c = this.editor.down('.content').dom;
+		var me = this, c = this.editor.down('.content').dom;
 
 		Ext.each(body, function (part) {
 			if (typeof part === 'string') {
 				c.innerHTML += part;
-			}
-			else {
+			} else {
 				me.addWhiteboard(part);
 			}
 		});
@@ -435,10 +412,7 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 
 
 	setValue:function (text, putCursorAtEnd, focus) {
-		var r,
-			c = this.editor.down('.content').dom,
-			s = window.getSelection(),
-			content;
+		var r, c = this.editor.down('.content').dom, s = window.getSelection(), content;
 		this.setHTML(Ext.String.htmlEncode(text));
 		content = c.innerHTML;
 
@@ -451,8 +425,7 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 				r.setStart(c.firstChild, content.length);
 				r.collapse(true);
 				s.addRange(r);
-			}
-			catch (e) {
+			} catch (e) {
 				console.warn('focus issue: ' + e.message, "\n\n\n", content);
 			}
 		}
@@ -473,8 +446,7 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 		try {
 			window.getSelection().removeAllRanges();
 			this.lastRange = null;
-		}
-		catch (e) {
+		} catch (e) {
 			console.log("Removing all ranges from selection failed: ", e.message);
 		}
 	},
