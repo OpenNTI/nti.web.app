@@ -1,0 +1,167 @@
+@import "_variables.scss";
+
+.coppa-window {
+	@extend .nti-window;
+
+	@include reset-window-border-radius(3px);
+
+	box-shadow: 0 0 50px 5px rgba(0, 0, 0, 0.3),
+	0 0 0 110px transparent;
+
+	background-color: $quad-grey;
+
+	.coppa-header-view {
+		margin-bottom: 24px;
+		.avatar {
+			float: left;
+			img {
+				height: 70px;
+				width: 70px;
+			}
+		}
+		.text{
+			color: $secondary-grey;
+			margin-right: 25px;
+			margin-left: 110px;
+
+			.title {
+				font-weight: 400;
+				font-size: 20px;
+				font-style: italic;
+			}
+			.detail {
+				font-size: 14px;
+			}
+		}
+	}
+
+	.coppa-main-view {
+		color: $secondary-grey;
+
+		* {
+			font-size: 14px;
+		}
+
+		h3 {
+			margin-bottom: 5px;
+		}
+
+		h3, .what-school {
+			margin-top: 40px;
+		}
+
+		.input-wrapper {
+			margin-left: 110px;
+			margin-right: 75px;
+		}
+
+		.input-box {
+			position: relative;
+		}
+
+		.input-box, .combo-box {
+			margin: 5px 0;
+			&, input, .x-form-item { font-size: 14px;}
+
+			.x-form-cb-label-after {
+				margin-left: 10px;
+			}
+
+			&.error {
+				input, input:focus {
+					box-shadow: -4px 0 0 0 $primary-red;
+				}
+			}
+
+			input {
+				&:focus {
+					outline: none;
+					box-shadow: -4px 0 0 0 $primary-blue;
+				}
+
+				&.empty,
+				&.x-form-empty-field {
+					font-style: italic !important;
+				}
+
+				//vertical-align: bottom;
+				color: $secondary-grey;
+				font-size: 14px;
+				font-weight: 500;
+				line-height: 25px;
+				border: 1px solid $border-grey;//#dcdcdc;
+				border-left-width: 0px;
+				background: #ffffff;
+				padding: 6px 10px;
+				margin: 0;
+				min-height: 39px;
+				width: -webkit-calc(100% - 8px);
+				width: -moz-calc(100% - 8px);
+				width: calc(100% - 8px);
+
+				position: relative;
+				left: 4px;
+				box-shadow: -4px 0 0 0 $border-grey;
+			}
+			.clear {
+				top: 10px;
+				right: 15px;
+
+				cursor: pointer;
+				position: absolute;
+				display: none;
+				width: 16px;
+				height: 16px;
+				background: url(../images/tools/clear-line.png) 0 0 no-repeat;
+			}
+		}
+
+		.combo-box {
+			input {
+				box-shadow: none;
+				left: 0;
+				border-left-width: 1px;
+
+				&:focus {
+					outline: none;
+					box-shadow: none;
+				}
+			}
+		}
+
+		.error-box {
+			position: relative;
+			overflow: hidden;
+			background-color: $primary-red;
+			margin-top: 40px;
+			font-weight: 600;
+			font-size: 14px;
+
+			.error-field {
+				text-transform: capitalize;
+				color: $secondary-red;
+				text-align: right;
+				float: left;
+				width: 100px;
+				height: 70px;
+				padding: 20px 0 0 0;
+
+				&::after{
+					content: ':';
+				}
+			}
+
+			.error-desc {
+				margin-left: 110px;
+				color: white;
+				padding: 20px 10px 0 0;
+			}
+		}
+
+		.submit {
+			background-color: #f3f3f3;
+			padding: 15px 10px;
+		}
+
+	}
+}

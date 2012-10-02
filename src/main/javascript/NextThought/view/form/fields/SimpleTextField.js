@@ -55,6 +55,11 @@ Ext.define('NextThought.view.form.fields.SimpleTextField',{
 	},
 
 
+    update: function(v){
+        this.inputEl.set({value:v});
+    },
+
+
 	afterRender: function(){
 		this.callParent(arguments);
 		var e = this.inputEl;

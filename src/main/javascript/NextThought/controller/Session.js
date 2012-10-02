@@ -69,11 +69,43 @@ Ext.define('NextThought.controller.Session', {
 	},
 
 
+    maybeShowCoppaWindow: function(){
+        var user = $AppConfig.userObject,
+            showWindow = user.getLink('account.profile.needs.updated'),
+            url = user.getLink('account.profile');
+
+        if (!showWindow){return;}
+
+        Ext.Ajax.request({
+            url: getURL(url),
+            timeout: 20000,
+            scope: this,
+            callback: function(q,success,r){
+                if(!success){
+                    console.log('Could not get acct rel schema for coppa window. Window will not show');
+                    return;
+                }
+                try{
+                    var o = Ext.decode(r.responseText);
+                    Ext.create('NextThought.view.account.coppa.Window', {schema:o.ProfileSchema}).show();
+                }
+                catch(e){
+                    console.error(Globals.getError(e));
+                }
+            }
+        });
+
+        console.log('get data from ' + url + ' and show coppa window...');
+    },
+
+
     login: function(app){
         function success(){
 			Ext.util.Cookies.set(me.sessionTrackerCookie,me.sessionId);
 			me.sessionTracker.start();
             app.fireEvent('session-ready');
+            app.on('finished-loading', me.maybeShowCoppaWindow, me);
+
             app.getController('Application').openViewport();
         }
 

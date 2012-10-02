@@ -18,7 +18,8 @@ Ext.define('NextThought.controller.Account', {
 		'form.AccountForm',
         'form.PasswordResetForm',
 		'account.contacts.Card',
-        'menus.Settings'
+        'menus.Settings',
+        'account.coppa.Main'
 	],
 
 	refs: [],
@@ -55,8 +56,10 @@ Ext.define('NextThought.controller.Account', {
 
             'password-reset-form button[save]' : {
                 'click': this.changePassword
+            },
+            'coppa-main-view button[name=submit]' : {
+                'click': this.submitCoppaInfo
             }
-
 
 		},{});
 	},
@@ -101,6 +104,47 @@ Ext.define('NextThought.controller.Account', {
 
 		u.set(form.getValues());
         u.save({callback: callback});
+    },
+
+
+    submitCoppaInfo: function(btn) {
+        var view = btn.up('coppa-main-view'),
+            values = view.getValues(),
+            linkToDelete = $AppConfig.userObject.getLink('account.profile.needs.updated'),
+            key;
+
+        function callback(req, success, resp){
+            if(!success){
+                view.setError(Ext.decode(resp.responseText));
+            }
+            else {
+                view.up('window').close();
+                if (linkToDelete){
+                    //we need to delete the link now.
+                    Ext.Ajax.request({
+                        url: getURL(linkToDelete),
+                        timeout: 20000,
+                        scope: this,
+                        method: 'DELETE',
+                        callback: function(q,success,r){
+                            if(!success){
+                                console.log('Could not delete the needs.updated link');
+                                return;
+                            }
+                        }
+                    });
+                }
+
+            }
+        }
+
+        for (key in values){
+            if (values.hasOwnProperty(key) && values[key] !== null) {
+                $AppConfig.userObject.set(key, values[key]);
+            }
+        }
+
+        $AppConfig.userObject.save({callback: callback});
     },
 
 

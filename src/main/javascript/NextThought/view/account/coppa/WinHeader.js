@@ -1,4 +1,4 @@
-Ext.define('NextThought.view.coppa.Header',{
+Ext.define('NextThought.view.account.coppa.Header',{
     extend: 'Ext.Component',
     alias: 'widget.coppa-header-view',
     requires: [
@@ -8,7 +8,7 @@ Ext.define('NextThought.view.coppa.Header',{
     {
         cls: 'coppa-header-view',
         cn:[
-            {cls: 'avatar', cn:[
+            {cls: 'avatar', tag:'span', cn:[
                 {tag: 'img', src: '{img}'}
             ]},
             {cls: 'text', cn:[

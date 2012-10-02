@@ -1,32 +1,35 @@
-Ext.define('NextThought.view.coppa.Window',{
+Ext.define('NextThought.view.account.coppa.Window',{
     extend: 'NextThought.view.Window',
     alias: 'widget.coppa-window',
 
     requires: [
-        'NextThought.view.coppa.Header'
+        'NextThought.view.account.coppa.Header',
+        'NextThought.view.account.coppa.Main'
     ],
 
     cls: 'coppa-window',
-    ui: 'coppa-window',
+    ui: 'nt-window',
     minimizable: false,
     constrain: true,
-    closable: true,
+    modal: true,
+    closable: false,
     resizable: false,
 
-    width: 535,
+    width: 480,
 
     layout: {
         type: 'vbox',
         align: 'stretch'
     },
 
-    items: [],
+    items: [
+        {xtype: 'coppa-header-view'},
+        {xtype: 'coppa-main-view'}
+    ],
 
-    constructor: function(){
-        this.items = [
-            {xtype: 'coppa-header-view'}
-        ];
+    initComponent: function(){
+        this.callParent(arguments);
 
-        return this.callParent(arguments);
+        this.down('coppa-main-view').setSchema(this.schema);
     }
 });

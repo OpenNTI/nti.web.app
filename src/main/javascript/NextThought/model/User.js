@@ -16,6 +16,7 @@ Ext.define(	'NextThought.model.User', {
 		{ name: 'accepting', type: 'UserList' },
 		{ name: 'ignoring', type: 'UserList' },
 		{ name: 'status', type: 'string' },
+        { name: 'opt_in_email_communication', type: 'boolean' },
 		{ name: 'following', type: 'UserList' },
 		{ name: 'Communities', type: 'UserList' },
 		{ name: 'displayName', convert: function(v,r){return r.getName();}}
@@ -57,6 +58,15 @@ Ext.define(	'NextThought.model.User', {
 	getName: function(){
 		return this.get('alias') || this.get('realname') || this.get('Username');
 	},
+
+
+    save: function(ops){
+        Ext.Ajax.request(Ext.apply({
+            url: this.getLink('edit'),
+            method: 'PUT',
+            jsonData: this.getData()
+        },ops));
+    },
 
 
 	statics: {
