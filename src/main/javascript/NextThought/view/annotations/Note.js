@@ -6,6 +6,7 @@ Ext.define( 'NextThought.view.annotations.Note', {
 		'NextThought.view.annotations.note.GutterWidget'
 	],
 
+	hasGutterWidgets: true,
 
 	multiGutterWidgetTmpl: Ext.DomHelper.createTemplate({
 		cls: 'thumb note-gutter-widget multi',
@@ -35,6 +36,9 @@ Ext.define( 'NextThought.view.annotations.Note', {
 	constructor: function(config){
 		var me = this;
 		me.callParent(arguments);
+
+		me.hasSpecificRange = this.getRecordField('style') !== 'suppressed';
+
 		me.on('open',function(scrollTo, replyToId){
 			var reply, w = me.openWindow(replyToId), m;
 
@@ -122,6 +126,15 @@ Ext.define( 'NextThought.view.annotations.Note', {
 
 	getEl: function(){
 		return Ext.get(this.activeWidget);
+	},
+
+
+	render: function(){
+		if(this.hasSpecificRange){
+			return this.callParent(arguments);
+		}
+
+		return this.resolveVerticalLocation();
 	},
 
 

@@ -309,7 +309,9 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 					return;
 				}
 
-				c.push(o);
+				if(o.hasGutterWidgets){
+					c.push(o);
+				}
 
 				y = o.render();
 

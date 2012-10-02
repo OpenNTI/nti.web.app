@@ -23,6 +23,7 @@ Ext.define( 'NextThought.view.annotations.Base', {
 		};
 	},
 
+	hasGutterWidgets: false,
 
 	constructor: function(config) {
 		var me = this,
