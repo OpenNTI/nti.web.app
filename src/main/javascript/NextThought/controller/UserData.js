@@ -220,11 +220,6 @@ Ext.define('NextThought.controller.UserData', {
 			ps.containerId = id;
 			ps.proxy.url = url;
 			ps.clearOnPageLoad = false;
-
-			ps.on('guaranteedrange',function(range, start){
-				console.log('hey',arguments);
-					ps.loadRecords(range, { start: start }); });
-
 			return ps;
 		}
 
