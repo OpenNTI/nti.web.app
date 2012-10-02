@@ -6,7 +6,7 @@ Ext.define('NextThought.store.PageItem',{
 	model: 'NextThought.model.GenericObject',
 
 	autoLoad: false,
-	pageSize: 10,
+	pageSize: 20,
 
 	groupField: 'Class',
 	groupDir  : 'ASC',

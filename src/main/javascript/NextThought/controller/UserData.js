@@ -1,12 +1,14 @@
 Ext.define('NextThought.controller.UserData', {
 	extend: 'Ext.app.Controller',
 
+
 	requires: [
 		'NextThought.cache.IdCache',
 		'NextThought.util.Sharing',
 		'NextThought.providers.Location',
         'NextThought.proxy.Socket'
 	],
+
 
 	models: [
 		'GenericObject',
@@ -20,9 +22,11 @@ Ext.define('NextThought.controller.UserData', {
 		'Transcript'
 	],
 
+
 	stores: [
 		'PageItem'
 	],
+
 
 	views: [
 		'Views',
@@ -36,11 +40,14 @@ Ext.define('NextThought.controller.UserData', {
 		'whiteboard.Window'
 	],
 
+
 	refs: [],
+
 
 	statics: {
 		events: new Ext.util.Observable()
 	},
+
 
 	init: function() {
         var me = this;
@@ -165,20 +172,6 @@ Ext.define('NextThought.controller.UserData', {
     },
 
 
-	continueLoading: function(store, cmp){
-		store.on('load', function(s,r,c){ if(c && r.length === s.pageSize){ this.continueLoading(s,cmp); } }, this,{single: true});
-
-		console.log('continued');
-
-		var bins = store.getBins();
-		delete bins.Note;
-		cmp.objectsLoaded(store.getItems(bins), bins, store.containerId);
-
-
-		store.nextPage({addRecords: true});
-	},
-
-
 	onAnnotationsFilter: function(cmp){
 		var stores = LocationProvider.currentPageStores,
 			listParams = FilterManager.getServerListParams(),
@@ -194,10 +187,6 @@ Ext.define('NextThought.controller.UserData', {
 			}
 
 			cmp.objectsLoaded(store.getItems(bins), bins, store.containerId);
-
-			if(records.length===store.pageSize){
-				this.continueLoading(store,cmp);
-			}
 		}
 
 
@@ -220,10 +209,11 @@ Ext.define('NextThought.controller.UserData', {
 	onAnnotationsLoad: function(cmp, containerId, subContainers) {
 
 		function make(url,id){
-			var ps = NextThought.store.PageItem.create();
-			ps.containerId = id;
+			var ps = NextThought.store.PageItem.create({
+				clearOnPageLoad: false,
+				containerId: id
+			});
 			ps.proxy.url = url;
-			ps.clearOnPageLoad = false;
 			return ps;
 		}
 
@@ -268,7 +258,6 @@ Ext.define('NextThought.controller.UserData', {
 
 
 	},
-
 
 
 	define: function(term, boundingScreenBox){

@@ -66,6 +66,9 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 
 	load: function(filter, filterName){
 		var me = this, m =[];
+
+		filter = Ext.isFunction(filter)? filter : null;
+
 		me.removeAll(true);
 		this.store.each(function(item){
 			if(item instanceof NextThought.model.Note && (!filter || filter(item))){
@@ -126,7 +129,7 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 
 	setRecord: function(rec){
 		var me = this,
-		myWindow = me.up('window');
+			myWindow = me.up('window');
 
 		if(myWindow && myWindow.editorActive()){
 			return;
@@ -134,6 +137,7 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 
 		this.store = LocationProvider.getStore(rec.get('ContainerId'));
 		this.mon(this.store,'datachanged',this.load,this);
+		this.prefetchNext();
 		this.load();
 
 		me.record = rec;
@@ -148,6 +152,15 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 				else { me.selected = o; }
 			}
 		},this);
+	},
+
+
+	prefetchNext: function(){
+		var s = this.store,
+			max = s.getPageFromRecordIndex(s.getTotalCount());
+		if(s.currentPage < max){
+			s.nextPage();
+		}
 	},
 
 
@@ -277,11 +290,11 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 		if (pos === dom.scrollLeft) { return; }
 
 		value = Ext.Number.constrain(pos,0,dom.scrollWidth - dom.clientWidth);
-		//shift = value - dom.scrollLeft;
 		min = this.getEl().dom.getBoundingClientRect().width - this.BACKGROUND_WIDTH;
 
 		newBgx = Ext.Number.constrain(this.pointerCoordDifference - value,min,0);
 
+		this.prefetchNext();
 		this.body.animate({ to: {scrollLeft: value} });
 		if (Ext.isGecko) {
 			this.getEl().setStyle('background-position','0 0');
@@ -327,6 +340,7 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 			e.stopEvent();
 			return false;
 		}
+		return true;
 	},
 
 
@@ -336,6 +350,7 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 			e.stopEvent();
 			return false;
 		}
+		return true;
 	},
 
 
