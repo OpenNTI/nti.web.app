@@ -166,11 +166,14 @@ Ext.define('NextThought.controller.UserData', {
 
 
 	continueLoading: function(store, cmp){
-		store.on('load', function(s,r,c){ if(c){ this.continueLoading(s,cmp); } }, this,{single: true});
+		store.on('load', function(s,r,c){ if(c && r.length === s.pageSize){ this.continueLoading(s,cmp); } }, this,{single: true});
+
+		console.log('continued');
 
 		var bins = store.getBins();
 		delete bins.Note;
 		cmp.objectsLoaded(store.getItems(bins), bins, store.containerId);
+
 
 		store.nextPage({addRecords: true});
 	},
@@ -192,8 +195,9 @@ Ext.define('NextThought.controller.UserData', {
 
 			cmp.objectsLoaded(store.getItems(bins), bins, store.containerId);
 
-			//continue loading the store.
-			this.continueLoading(store, cmp);
+			if(records.length===store.pageSize){
+				this.continueLoading(store,cmp);
+			}
 		}
 
 
