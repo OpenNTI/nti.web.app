@@ -50,6 +50,10 @@ Ext.define('NextThought.cache.UserRepository', {
 		}
 	},
 
+	resolveFromStore: function(key){
+		var s = this.getStore();
+		return s.getById(key) || s.findRecord('Username', key, 0, false, true, true) || s.findRecord('NTIID',key,0,false,true,true);
+	},
 
 	getUser: function(username, callback, scope) {
 		if (!Ext.isArray(username)) {
@@ -91,7 +95,7 @@ Ext.define('NextThought.cache.UserRepository', {
 					name = r.getId();
 				}
 
-				r = s.getById(name) || s.findRecord('NTIID',name,0,false,true,true);
+				r = this.resolveFromStore(name);
 				if (r && r.raw){
 					result.push(r);
 					return;
@@ -108,7 +112,12 @@ Ext.define('NextThought.cache.UserRepository', {
 						}
 					},
 					success: function(u){
-						//s.add(u); not necessary since the user model calls update
+						//not necessary since the user model calls update
+						//except that it only happens for users, we want to cache
+						//groups here also
+						if(!this.resolveFromStore(name)){
+							s.add(u);
+						}
 						result.push(u);
 
 						//our list of results is as expected, finish
