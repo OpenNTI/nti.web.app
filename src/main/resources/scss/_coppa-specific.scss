@@ -11,18 +11,40 @@
 	background-color: $quad-grey;
 
 	.coppa-header-view {
-		margin-bottom: 24px;
+		margin: 24px 0;
 		.avatar {
+			position: relative;
+			box-shadow: 0 0 0 1px #e5e5e5;
+			border-radius: 5px;
+			margin-left: 20px;
+			margin-top: 5px;
 			float: left;
+			display: block;
+			border: 4px solid white;
+			height: 62px;
+			width: 62px;
+
 			img {
-				height: 70px;
-				width: 70px;
+				border-radius: 5px;
+				height: 100%;
+				width: 100%;
 			}
+
+			&:after {
+				content: ' ';
+				position: absolute;
+				z-index: 1999;
+				bottom: -9px;
+				right: -9px;
+				width: 18px; height: 18px;
+				background: url(../images/green-check.png) 0 0 no-repeat;
+			}
+
 		}
 		.text{
 			color: $secondary-grey;
 			margin-right: 25px;
-			margin-left: 110px;
+			margin-left: 100px;
 
 			.title {
 				font-weight: 400;
@@ -51,8 +73,9 @@
 		}
 
 		.input-wrapper {
-			margin-left: 110px;
+			margin-left: 100px;
 			margin-right: 75px;
+			margin-bottom: 40px;
 		}
 
 		.input-box {
@@ -142,7 +165,7 @@
 				color: $secondary-red;
 				text-align: right;
 				float: left;
-				width: 100px;
+				width: 90px;
 				height: 70px;
 				padding: 20px 0 0 0;
 
@@ -152,13 +175,14 @@
 			}
 
 			.error-desc {
-				margin-left: 110px;
+				margin-left: 100px;
 				color: white;
 				padding: 20px 10px 0 0;
 			}
 		}
 
 		.submit {
+			@include top-etch($dark: #e2e2e2, $light: #fafafa);
 			background-color: #f3f3f3;
 			padding: 15px 10px;
 		}

@@ -119,6 +119,12 @@
 }
 
 
+@mixin top-etch( $dark: #ebebeb, $light: #f8f8f8 ){
+	box-shadow: inset 0px 1px 0px 0px $light;
+	border-top: 1px solid $dark !important;
+}
+
+
 @mixin side-panel-view-title{
 	.view-title {
 		color: $tertiary-grey;

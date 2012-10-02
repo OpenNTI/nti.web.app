@@ -14,6 +14,7 @@ Ext.define('NextThought.view.account.coppa.Window',{
     modal: true,
     closable: false,
     resizable: false,
+    dialog: true,
 
     width: 480,
 
