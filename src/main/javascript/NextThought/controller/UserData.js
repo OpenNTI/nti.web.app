@@ -214,6 +214,11 @@ Ext.define('NextThought.controller.UserData', {
 				containerId: id
 			});
 			ps.proxy.url = url;
+			if(!/mathcounts/i.test(containerId)){
+				ps.proxy.limitParam = undefined;
+				ps.proxy.startParam = undefined;
+				delete ps.pageSize;
+			}
 			return ps;
 		}
 
