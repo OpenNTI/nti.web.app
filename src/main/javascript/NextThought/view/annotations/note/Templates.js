@@ -147,7 +147,7 @@ Ext.define('NextThought.view.annotations.note.Templates',{
 		}
 
 		if(options.record){
-			var involved = options.record.get('sharedWith') || [];
+			var involved = (options.record.get('sharedWith') || []).slice();
 			var shared = involved.length > 0;
 
 			function hasUser(users, name){
