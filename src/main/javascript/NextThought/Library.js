@@ -39,7 +39,17 @@ Ext.define('NextThought.Library', {
 						type: 'json',
 						root: 'titles'
 					}
-				}
+				},
+				sorters: [{sorterFn: function(a, b){
+							   if(/nextthough/i.test(a.get('author'))){
+								   return 1;
+							   }
+							   if(/nextthough/i.test(b.get('author'))){
+								   return -1;
+							   }
+							   return 0;
+						   }},
+						  {property: 'title', direction: 'asc'}]
 			});
 		}
 		return this.store;
