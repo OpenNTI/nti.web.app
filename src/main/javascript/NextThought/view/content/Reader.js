@@ -26,8 +26,8 @@ Ext.define('NextThought.view.content.Reader', {
 	initComponent: function() {
 		this.callParent(arguments);
 
-		this.addEvents('loaded','finished-restore','content-updated');
-		this.enableBubble('loaded','finished-restore');
+		this.addEvents('finished-restore','content-updated');
+		this.enableBubble('finished-restore');
 
 		this.mixins.content.constructor.apply(this,arguments);
 		this.mixins.iframe.constructor.apply(this,arguments);

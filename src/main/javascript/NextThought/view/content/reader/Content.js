@@ -92,8 +92,6 @@ Ext.define('NextThought.view.content.reader.Content',{
 			c = me.parseHTML(resp),
 			subContainers;
 
-		console.log('setting content...');
-
 		me.updateContent('<div id="NTIContent">'+c+'</div>');
 		me.scrollTo(0, false);
 
@@ -105,8 +103,6 @@ Ext.define('NextThought.view.content.reader.Content',{
 				this.buildPath(resp.request.options.url));
 
 		Ext.callback(finish,null,[me]);
-
-		console.log('setting content... set, loading annotations');
 
 		subContainers = me.resolveContainers();
 

@@ -62,30 +62,16 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 
 
 	loadContentAnnotations: function(containerId, subContainers){
-		this.containersOnPage = subContainers;
 		this.clearAnnotations();
 		this.fireEvent('annotations-load', this, containerId, subContainers);
 	},
 
 
 	objectsLoaded: function(items, bins, containerId) {
-		var a = AnnotationsRenderer,
-			me = this,
-			cb = function(){ me.fireEvent('loaded', containerId); };
+		var me = this;
 
 		me.setAssessedQuestions((bins||{}).AssessedQuestionSet);
-
-		if (items) {
-			me.buildAnnotations(items);
-		}
-
-
-		if(a.rendering || a.aboutToRender){
-			a.events.on('finish',cb,null,{single: true});
-		}
-		else {
-			cb();
-		}
+		me.buildAnnotations(items);
 	},
 
 
@@ -149,9 +135,6 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 
 
 	applyFilter: function(newFilter){
-		// console.debug('applyFilter:', newFilter);
-		var $a = this.annotations, a;
-
 		this.filter = newFilter;
 		this.clearAnnotations();
 		this.fireEvent('filter-annotations',this);
@@ -429,20 +412,16 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 
 	buildAnnotations: function(list){
 		var me = this;
-		Ext.each(list,
-				function(r){
-					if(!r) {
-						return;
-					}
-					try{
-						AnnotationsRenderer.aboutToRender = true;
-						me.createAnnotationWidget(r.getModelName(),r);
-					}
-					catch(e) {
-						console.error('Could not build '+r.getModelName()+' from record:', r, 'because: ', e, e.stack);
-					}
-				}, this
-		);
+		Ext.each(list||[], function(r){
+			if(!r) { return; }
+			try{
+				me.createAnnotationWidget(r.getModelName(),r);
+			}
+			catch(e) {
+				console.error('Could not build '+r.getModelName()+' from record:', r, 'because: ', e, e.stack);
+			}
+
+		}, this );
 	},
 
 

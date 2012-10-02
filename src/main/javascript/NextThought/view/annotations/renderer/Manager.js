@@ -282,7 +282,6 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 			return;//nothing to do
 		}
 
-		me.aboutToRender = false;
 		me.rendering = true;
 		me.events.fireEvent('rendering');
 
@@ -333,7 +332,6 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 			}
 		});
 
-		console.log(maxAnnotations,containers);
 		me.layoutBuckets(prefix, width);
 
 		me.rendering = false;
