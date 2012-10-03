@@ -19,7 +19,8 @@ Ext.define('NextThought.controller.Account', {
         'form.PasswordResetForm',
 		'account.contacts.Card',
         'menus.Settings',
-        'account.coppa.Main'
+        'account.coppa.Main',
+        'account.recovery.Email'
 	],
 
 	refs: [],
@@ -57,8 +58,13 @@ Ext.define('NextThought.controller.Account', {
             'password-reset-form button[save]' : {
                 'click': this.changePassword
             },
+
             'coppa-main-view button[name=submit]' : {
                 'click': this.submitCoppaInfo
+            },
+
+            'recovery-email-view button': {
+                'click': this.fixEmail
             }
 
 		},{});
@@ -104,6 +110,46 @@ Ext.define('NextThought.controller.Account', {
 
 		u.set(form.getValues());
         u.save({callback: callback});
+    },
+
+
+    fixEmail: function(btn){
+        var view = btn.up('recovery-email-view'),
+            value = view.getValue(),
+            linkToDelete = $AppConfig.userObject.getLink(value.linkName),
+            email = value.email,
+            fieldName = value.fieldName;
+
+
+        function callback(req, success, resp){
+            if(!success){
+                view.setError(Ext.decode(resp.responseText));
+            }
+            else {
+                view.up('window').close();
+                if (linkToDelete){
+                    //we need to delete the link now.
+                    Ext.Ajax.request({
+                        url: getURL(linkToDelete),
+                        timeout: 20000,
+                        scope: this,
+                        method: 'DELETE',
+                        callback: function(q,success,r){
+                            if(!success){
+                                console.log('Could not delete the needs.updated link');
+                                return;
+                            }
+                        }
+                    });
+                }
+
+            }
+        }
+
+        if (fieldName && email){
+            $AppConfig.userObject.set(fieldName, email);
+            $AppConfig.userObject.save({callback: callback});
+        }
     },
 
 

@@ -28,11 +28,28 @@ Ext.define('NextThought.view.account.coppa.Header',{
     initComponent: function(){
         this.callParent(arguments);
 
+        var iconURL;
+         /*
+        if (this.icon === 'alert'){
+            iconURL = Ext.BLANK_IMAGE_URL;
+        }
+        */
         this.renderData = Ext.apply(this.renderData||{},{
-            img: $AppConfig.userObject.get('avatarURL'),
-            title: 'Congratulations!',
-            detail: 'We received concent for you to use social features on our site. Please provide the following information to update your account.'
+            img: iconURL || $AppConfig.userObject.get('avatarURL'),
+            title: this.title || 'Congratulations!',
+            detail: this.detail || 'We received concent for you to use social features on our site. Please provide the following information to update your account.'
         });
+    },
+
+
+    afterRender: function(){
+        this.callParent(arguments);
+        /*
+        if (this.icon === 'alert') {
+            this.el.down('.avatar').addCls('alert');
+            this.el.down('.avatar img').remove();
+        }
+        */
     }
 
 });

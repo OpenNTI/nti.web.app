@@ -99,15 +99,22 @@ Ext.define('NextThought.controller.Session', {
     },
 
 
+    showEmailRecoveryWindow: function(fieldName, linkName){
+        var user = $AppConfig.userObject;
+
+        Ext.create('NextThought.view.account.recovery.Window', {fieldName:fieldName, linkName: linkName}).show();
+    },
+
+
     immediateAction: function(){
         if (this.coppaWindow){
             this.maybeShowCoppaWindow();
         }
         else if (this.bouncedContact){
-            console.log('bounced contact win');
+            this.showEmailRecoveryWindow('contact_email', 'state-bounced-contact-email');
         }
         else if (this.bouncedEmail){
-            console.log('bounced email');
+            this.showEmailRecoveryWindow('email', 'state-bounced-email');
         }
     },
 

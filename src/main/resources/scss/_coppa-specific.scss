@@ -1,5 +1,6 @@
 @import "_variables.scss";
 
+.recovery-email-window,
 .coppa-window {
 	@extend .nti-window;
 
@@ -10,6 +11,7 @@
 
 	background-color: $quad-grey;
 
+	.recovery-header-view,
 	.coppa-header-view {
 		margin: 24px 0;
 		.avatar {
@@ -57,6 +59,7 @@
 		}
 	}
 
+	.recovery-email-view,
 	.coppa-main-view {
 		color: $secondary-grey;
 
