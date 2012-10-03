@@ -747,10 +747,11 @@ Ext.define('NextThought.controller.Chat', {
 
 
 	onMessageDefaultChannel: function(msg, opts) {
-		var	cid = msg.get('ContainerId'),
-			win = this.getChatWindow(cid),
-			moderated = Boolean(opts && opts.hasOwnProperty('moderated')),
-			log;
+		var cid, win, moderated, log;
+
+		cid = msg.get('ContainerId');
+		win = this.getChatWindow(cid);
+		moderated = Boolean(opts && opts.hasOwnProperty('moderated'));
 
 		log = win.down('chat-log-view[moderated=true]');
 		win.down('chat-log-view[moderated='+moderated+']').addMessage(msg);

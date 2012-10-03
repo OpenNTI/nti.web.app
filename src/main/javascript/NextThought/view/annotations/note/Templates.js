@@ -85,20 +85,30 @@ Ext.define('NextThought.view.annotations.note.Templates',{
 		e.stopEvent();
 
 		var more = e.getTarget('.more', undefined, true), editItem, chatItem, flagItem, deleteItem, menu, items=[], mine,
-			options = opts.options, menuTimer;
+			options = opts.options, menuTimer, involved, shared;
 
 		if (!more || !more.dom){return false;}
 
 		function moreMenuClick(item, e){
 			e.stopEvent();
-
-			menuCls = 'on' + item.itemId;
+			var menuCls = 'on' + item.itemId;
 			if (this[menuCls]){
 				this[menuCls].call(this);
 			}
 			else {
 				console.warn('unimplemented method', item.itemId, 'on component', this.$className);
 			}
+		}
+
+		function hasUser(users, name){
+			var found = false;
+			Ext.each(users, function(user){
+				if(user === name || ( user.get && user.get('Username') === name) ){
+					found = true;
+				}
+				return !found;
+			});
+			return found;
 		}
 
 		editItem = new Ext.Action({
@@ -147,19 +157,8 @@ Ext.define('NextThought.view.annotations.note.Templates',{
 		}
 
 		if(options.record){
-			var involved = (options.record.get('sharedWith') || []).slice();
-			var shared = involved.length > 0;
-
-			function hasUser(users, name){
-				var found = false;
-				Ext.each(users, function(user){
-					if(user === name || ( user.get && user.get('Username') === name) ){
-						found = true;
-						return false;
-					}
-				});
-				return found;
-			}
+			involved = (options.record.get('sharedWith') || []).slice();
+			shared = involved.length > 0;
 
 			if(options.user){involved.push(options.user);}
 			if(	$AppConfig.service.canChat() 

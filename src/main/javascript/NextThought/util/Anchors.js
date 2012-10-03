@@ -44,6 +44,7 @@ Ext.define('NextThought.util.Anchors', {
 	},*/
 
 	toDomRange: function(contentRangeDescription, docElement, containerId) {
+		var ancestorNode, clonedAncestor, resultRange, searchWithin;
 		if(!containerId){
 			console.warn('No container id provided will assume page container (body element)');
 		}
@@ -53,7 +54,7 @@ Ext.define('NextThought.util.Anchors', {
 		}
 
 		//Todo resolve the containerId to the node we want to restrict our search within
-		var searchWithin = this.getContainerNode(containerId, docElement);
+		searchWithin = this.getContainerNode(containerId, docElement);
 		if(!searchWithin){
 			//TODO if the container is not the page id but we can't find it we could
 			//just skip to the end now.  Maybe we decide there is no point searching the whole body.
@@ -68,7 +69,7 @@ Ext.define('NextThought.util.Anchors', {
 			&& !contentRangeDescription.ancestor)
 		{
 			console.log('Given an empty content range description, returning a range wrapping the container', contentRangeDescription, searchWithin);
-			var resultRange = docElement.createRange();
+			resultRange = docElement.createRange();
 			//Hmm, selectNode or selectNodeContents
 			resultRange.selectNodeContents(searchWithin);
 			return resultRange;
@@ -76,7 +77,7 @@ Ext.define('NextThought.util.Anchors', {
 		
 		//console.log('Will perform resolution of', contentRangeDescription,  'within', searchWithin);
 
-		var ancestorNode = contentRangeDescription.getAncestor().locateRangePointInAncestor(searchWithin).node || searchWithin;
+		ancestorNode = contentRangeDescription.getAncestor().locateRangePointInAncestor(searchWithin).node || searchWithin;
 
         //TODO - if an ancestor doesn't exist, do some better logging here, something like below
 
@@ -87,8 +88,7 @@ Ext.define('NextThought.util.Anchors', {
 
 		//Clone and purify the ancestor node, so our range can always build against a clean source:
 		//TODO - consider caching these somewhere for performance
-		var clonedAncestor = ancestorNode.cloneNode(true),
-            resultRange;
+		clonedAncestor = ancestorNode.cloneNode(true);
 
 		Anchors.purifyNode(clonedAncestor);
 		resultRange = Anchors.resolveSpecBeneathAncestor(contentRangeDescription, clonedAncestor, docElement);
@@ -813,7 +813,7 @@ Ext.define('NextThought.util.Anchors', {
                 return temp;
             }
             //advance:
-            t = walker.nextNode()
+            t = walker.nextNode();
             if (!t){
                 t = temp.parentNode ? temp.parentNode.nextSibling : null;
                 if (t){walker.currentNode = t;}

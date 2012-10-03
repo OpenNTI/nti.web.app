@@ -114,8 +114,8 @@ Ext.define('NextThought.view.account.coppa.Main',{
             field = this.down('[name='+error.field+']');
 
         //make main error field show up
-        box.el.down('.error-field').update(error.field),
-        box.el.down('.error-desc').update(error.message),
+        box.el.down('.error-field').update(error.field);
+        box.el.down('.error-desc').update(error.message);
         box.show();
 
         //set error state on specific field

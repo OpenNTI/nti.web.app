@@ -325,6 +325,6 @@ Ext.define('NextThought.model.Service', {
 	},
 
     isPotentiallyCoppa: function(){
-        return /mathcounts/i.test(window.location.hostname);
+        return (/mathcounts/i).test(window.location.hostname);
     }
 });

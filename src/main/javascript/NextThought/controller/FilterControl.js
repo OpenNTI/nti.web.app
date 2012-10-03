@@ -89,7 +89,7 @@ Ext.define('NextThought.controller.FilterControl', {
 			process(current);
 
 			//all unchecked, then check "everyone"...leave it be otherwise
-			if(Ext.Array.filter(cmp.query('[isGroup]'), function(a){ return a.checked }).length === 0){
+			if(Ext.Array.filter(cmp.query('[isGroup]'), function(a){ return a.checked; }).length === 0){
 				everyone.setChecked(true,false);
 			}
 

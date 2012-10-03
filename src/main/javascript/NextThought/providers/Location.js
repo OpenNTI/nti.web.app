@@ -56,6 +56,7 @@ Ext.define('NextThought.providers.Location', {
 	 *
 	 * @param ntiid
 	 * @param [callback]
+	 * @param [fromHistory]
 	 */
 	setLocation: function(ntiid, callback, fromHistory){
 		var me = this,
@@ -451,7 +452,7 @@ Ext.define('NextThought.providers.Location', {
 
         if (!this.preferenceMap){this.preferenceMap = {};}
 
-        if (sharing && /inherited/i.test(sharing.State) && rootId == sharing.Provenance) {
+        if (sharing && /inherited/i.test(sharing.State) && rootId === sharing.Provenance) {
             //got a sharing value from the root id, add it to the map
             piId = rootId;
         }

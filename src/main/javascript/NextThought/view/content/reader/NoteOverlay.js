@@ -410,8 +410,8 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
         try {
 		    me.fireEvent('save-new-note', note, o.lastLine.range, sharing, style, callback);
         }
-        catch (e) {
-            console.error('Error saving note - ' + Globals.getError(e));
+        catch (error) {
+            console.error('Error saving note - ' + Globals.getError(error));
             alert('There was an error saving your note.');
             o.editor.unmask();
             //lets not remove, at least give user change to recover their text

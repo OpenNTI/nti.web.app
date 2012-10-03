@@ -76,15 +76,15 @@ Ext.define('NextThought.view.menus.search.Result',{
 		var fragmentSeparator = '...',
 			wrappedSnippets = '';
 
-		if(this.fragments.length == 0){
+		if(this.fragments.length === 0){
 			console.warn('No fragments for term', this.term, ' and snippet ', this.snippet);
 			this.renderData.snippet = this.snippet;
 			return;
 		}
 
 		Ext.each(this.fragments, function(fragment, index){
-			var fIdx = 0, wrappedText;
-			if(!fragment.matches || fragment.matches.length == 0 || !fragment.text){
+			var wrappedText;
+			if(!fragment.matches || fragment.matches.length === 0 || !fragment.text){
 				console.warn('No matches or text for fragment. Dropping', fragment);
 			}
 			else{
@@ -96,13 +96,13 @@ Ext.define('NextThought.view.menus.search.Result',{
 				Ext.each(fragment.matches, function(match, idx){
 
 					//Attempt to detect bad data from the server
-					var next = idx + 1 < fragment.matches.length ? fragment.matches[idx + 1] : [0, 0] ;
+					var next = idx + 1 < fragment.matches.length ? fragment.matches[idx + 1] : [0, 0],
+						newString = '';
 					if(next[1] > match[1]){
 						console.warn('Found a match that is a subset of a previous match.  Server breaking its promise?', fragment.matches);
 						return true; //continue
 					}
-					lastGood = match;
-					var newString = '';
+
 					newString += wrappedText.slice(0, match[0]);
 					newString += '<span>';
 					newString += wrappedText.slice(match[0], match[1]);
@@ -118,7 +118,7 @@ Ext.define('NextThought.view.menus.search.Result',{
 			}
 		});
 
-		this.renderData.snippet = wrappedSnippets ? wrappedSnippets : this.snippet;
+		this.renderData.snippet = wrappedSnippets || this.snippet;
 		
 	},
 
