@@ -1588,6 +1588,45 @@ describe("Anchor Utils", function() {
 		});
 	});
 
+	describe('Empty range description optimization tests', function(){
+		it('Produce empty descriptions for null ranges', function(){
+			var empty = Anchors.createRangeDescriptionFromRange(null, document);
+			expect(empty).toBeTruthy();
+			expect(empty.getAncestor).toBe(undefined);
+		  	expect(empty.getStart).toBe(undefined);
+		   	expect(empty.getEnd).toBe(undefined);
+		});
+
+		it('Wraps the container for empty ranges', function(){
+			var emptyDesc = Anchors.createRangeDescriptionFromRange(null, document),
+			    root = document.createElement('div'), //this should be the ancestor
+				p1 = document.createElement('p'),
+				t1 = document.createTextNode('This is some text.'), //same as t2
+				p2 = document.createElement('p'),
+				t2 = document.createTextNode('This is some text.'),
+				range, desc, recreatedRange;
+
+			//set up ids and heirarchy
+			p1.setAttribute('position', 1);
+			p1.appendChild(t1);
+			p2.setAttribute('position', 2);
+			p2.appendChild(t2);
+			root.appendChild(p1);
+			root.appendChild(p2);
+			testBody.appendChild(root);
+
+			recreatedRange = Anchors.toDomRange(emptyDesc, document);
+			expect(recreatedRange).toBeTruthy();
+			expect(recreatedRange.commonAncestorContainer).toBe(document.body);
+
+			root.setAttribute('Id', '123242354543523');
+			recreatedRange = Anchors.toDomRange(emptyDesc, document, '123242354543523');
+			expect(recreatedRange).toBeTruthy();
+			expect(recreatedRange.commonAncestorContainer).toBe(root);
+		});
+
+	});
+
 	describe('Integration Tests', function(){
 		//TODO - write a unit test for 3 identical txt nodes where the anchor ends on teh end of the second
 		it('Ancestor Spanning Identical Text Node Bug', function(){

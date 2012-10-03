@@ -6,6 +6,7 @@ Ext.define('NextThought.util.Anchors', {
 		'NextThought.model.anchorables.TextDomContentPointer',
 		'NextThought.model.anchorables.ElementDomContentPointer',
 		'NextThought.model.anchorables.DomContentPointer',
+		'NextThought.model.anchorables.ContentRangeDescription',
 		'rangy'
 	],
 	uses: [
@@ -43,12 +44,16 @@ Ext.define('NextThought.util.Anchors', {
 	},*/
 
 	toDomRange: function(contentRangeDescription, docElement, containerId) {
-		if(!containerId){console.warn('No container id provided will assume page container (body element)');}
-		if(!contentRangeDescription){console.warn('nothing to parse?');return null;}
+		if(!containerId){
+			console.warn('No container id provided will assume page container (body element)');
+		}
+		if(!contentRangeDescription){
+			console.warn('nothing to parse?');
+			return null;
+		}
 
 		//Todo resolve the containerId to the node we want to restrict our search within
 		var searchWithin = this.getContainerNode(containerId, docElement);
-
 		if(!searchWithin){
 			//TODO if the container is not the page id but we can't find it we could
 			//just skip to the end now.  Maybe we decide there is no point searching the whole body.
@@ -56,6 +61,19 @@ Ext.define('NextThought.util.Anchors', {
 			searchWithin = docElement.body;
 			console.warn('Unable to resolve containerId will fallback to root ', containerId, searchWithin);
 		}
+
+		//TODO need a better way to detect the empty description
+		if (   !contentRangeDescription.start 
+			&& !contentRangeDescription.end 
+			&& !contentRangeDescription.ancestor)
+		{
+			console.log('Given an empty content range description, returning a range wrapping the container', contentRangeDescription, searchWithin);
+			var resultRange = docElement.createRange();
+			//Hmm, selectNode or selectNodeContents
+			resultRange.selectNodeContents(searchWithin);
+			return resultRange;
+		}
+		
 		//console.log('Will perform resolution of', contentRangeDescription,  'within', searchWithin);
 
 		var ancestorNode = contentRangeDescription.getAncestor().locateRangePointInAncestor(searchWithin).node || searchWithin;
@@ -99,7 +117,8 @@ Ext.define('NextThought.util.Anchors', {
 	/* tested */
 	createRangeDescriptionFromRange: function(range, docElement) {
 		if(!range){
-			Ext.Error.raise('Cannot create anchorable, range missing.');
+			console.log('Returning empty ContentRangeDescription for null range');
+			return Ext.create('NextThought.model.anchorables.ContentRangeDescription', {});
 		}
 
 		Anchors.cleanRangeFromBadStartAndEndContainers(range);
