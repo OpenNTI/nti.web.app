@@ -91,7 +91,7 @@ $button-text-weights: bold,bolder,normal;
 			}
 
 			.x-btn-inner {
-				font-size: 10px + (4px*$i) !important;
+				font-size: 10px + (2px*$i) !important;
 				font-weight: $font-weight;
 				color: $color;
 				text-shadow: 0 $direction -1px $text-shadow;
