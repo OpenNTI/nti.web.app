@@ -106,6 +106,20 @@ Ext.define('NextThought.view.annotations.Redaction', {
 		return y;
 	},
 
+	getRestrictedRange: function(){
+		var rect, t, rtop, rr;
+		if(this.masterSpan.hasCls(this.cls)){
+			t = this.actionSpan.getBoundingClientRect();
+			rect = { top:t.top, bottom:t.bottom, left:t.left, right:t.right, height:t.height, width:t.width };
+			rr = AnnotationsRenderer.getReader().getAnnotationOffsets();
+			rtop = rr.scrollTop + rr.top;
+			rect.top = rect.top + rtop;
+			rect.bottom = rect.bottom + rtop;
+			return rect;
+		}
+		return null;
+	},
+
 
 	visibilityChanged: function(show){
 		if(this.actionSpan){
@@ -246,7 +260,11 @@ Ext.define('NextThought.view.annotations.Redaction', {
 		this.compElements.toggleCls(this.cls);
 
 		if(this.canvas){Ext.fly(this.canvas).toggle();}
-		if(this.masterSpan){this.masterSpan.toggleCls(this.cls);}
+		if(this.masterSpan){
+			//Sometimes we run into cases where the redaction span in null.
+			if(!this.masterSpan.dom){ this.masterSpan.dom = this.actionSpan; }
+			this.masterSpan.toggleCls(this.cls);
+		}
 
 		this.requestRender();
 

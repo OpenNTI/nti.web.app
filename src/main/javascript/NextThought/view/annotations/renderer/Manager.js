@@ -208,6 +208,7 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 				var w = o.getGutterWidget(),
 					c = o.getControl();
 
+				r.noteOverlayAddRestrictedRange(o.getRestrictedRange());
 				if( c ){ c.appendTo( line.controls ); }
 				if( w ){ widgets.push( o ); }
 			});

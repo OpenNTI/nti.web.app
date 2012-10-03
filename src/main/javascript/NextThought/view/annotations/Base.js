@@ -217,6 +217,9 @@ Ext.define( 'NextThought.view.annotations.Base', {
 		this.record.destroy();//the destroy event calls cleanup
 	},
 
+	getRestrictedRange: function(){
+		return null;
+	},
 
 	savePhantom: function(callback){
 		var me = this, p;

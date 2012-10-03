@@ -159,9 +159,11 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 
 	noteOverlayAddRestrictedRange: function(rect){
+		if(!rect){return;}
+
 		var o = this.noteOverlayData,
-			y = rect? rect.bottom + 10  :0,
-			l = rect? rect.top - 10 : 0;
+			y = rect? Math.round(rect.bottom) + 10  :0,
+			l = rect? Math.round(rect.top) - 10 : 0;
 		o.restrictedRanges = o.restrictedRanges || [];
 		for(y; y>=l && y>=0; y--){
 			o.restrictedRanges[y] = true;
