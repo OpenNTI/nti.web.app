@@ -159,10 +159,10 @@ Ext.define('NextThought.controller.Session', {
             if (getLink(r, 'account.profile.needs.updated')){
                 m.coppaWindow = true;
             }
-            else if (getLink(r, 'state.bounced.contact.email')){
+            else if (getLink(r, 'state-bounced-contact-email')){
                 m.bouncedContact = true;
             }
-            else if (getLink(r, 'state.bounced.email')){
+            else if (getLink(r, 'state-bounced-email')){
                 m.bouncedEmail = true;
             }
         }
