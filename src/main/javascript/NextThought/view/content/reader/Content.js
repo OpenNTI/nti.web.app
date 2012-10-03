@@ -17,7 +17,7 @@ Ext.define('NextThought.view.content.reader.Content',{
 				html:'Related Topics: '
 			};
 
-		if(Object.keys(related).length === 0){
+		if(Ext.Object.getKeys(related).length === 0){
 			return;
 		}
 
