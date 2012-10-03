@@ -8,7 +8,7 @@ Ext.define('NextThought.view.account.coppa.Main',{
 
     items: [
         {xtype: 'container', layout: 'anchor', cls: 'input-wrapper', items:[
-            {xtype:'container', hidden: true, name: 'realname', layout: 'hbox',
+            {xtype:'container', name: 'realname', layout: 'hbox',
                 defaults: {
                     xtype: 'simpletext',
                     flex: 1

@@ -99,12 +99,25 @@ Ext.define('NextThought.controller.Session', {
     },
 
 
+    immediateAction: function(){
+        if (this.coppaWindow){
+            this.maybeShowCoppaWindow();
+        }
+        else if (this.bouncedContact){
+            console.log('bounced contact win');
+        }
+        else if (this.bouncedEmail){
+            console.log('bounced email');
+        }
+    },
+
+
     login: function(app){
         function success(){
 			Ext.util.Cookies.set(me.sessionTrackerCookie,me.sessionId);
 			me.sessionTracker.start();
             app.fireEvent('session-ready');
-            app.on('finished-loading', me.maybeShowCoppaWindow, me);
+            app.on('finished-loading', me.immediateAction, me);
 
             app.getController('Application').openViewport();
         }
@@ -142,6 +155,18 @@ Ext.define('NextThought.controller.Session', {
             for(;i>=0; i--){ if(l[i].rel === relName){ return l[i].href; } }
             return null;
         }
+        function maybeTakeImmediateAction(r){
+            if (getLink(r, 'account.profile.needs.updated')){
+                m.coppaWindow = true;
+            }
+            else if (getLink(r, 'state.bounced.contact.email')){
+                m.bouncedContact = true;
+            }
+            else if (getLink(r, 'state.bounced.email')){
+                m.bouncedEmail = true;
+            }
+        }
+
         try{
 
             Ext.Ajax.request({
@@ -170,6 +195,7 @@ Ext.define('NextThought.controller.Session', {
                                 }
                                 return failureCallback.call(m,r.timedout);
                             }
+                            maybeTakeImmediateAction(r);
                             m.logoutURL = getLink(r,'logon.logout');
                             m.resolveService(successCallback,failureCallback);
                         }

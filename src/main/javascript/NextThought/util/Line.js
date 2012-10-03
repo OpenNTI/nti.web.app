@@ -187,7 +187,7 @@ Ext.define('NextThought.util.Line',{
 			range = sel.getRangeAt(0);
 
 			//for testing, comment next line to show ranges
-			sel.removeAllRanges();
+			//sel.removeAllRanges();
 
 			return range;
 	},
