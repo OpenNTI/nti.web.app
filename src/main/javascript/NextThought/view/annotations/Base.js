@@ -218,10 +218,6 @@ Ext.define('NextThought.view.annotations.Base', {
 		AnnotationsRenderer.render(this.prefix);
 	},
 
-	getRestrictedRanges:function () {
-		return null;
-	},
-
 
 	remove:function () {
 		this.record.destroy();//the destroy event calls cleanup

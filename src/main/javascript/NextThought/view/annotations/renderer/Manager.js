@@ -213,7 +213,6 @@ Ext.define('NextThought.view.annotations.renderer.Manager', {
 			line.each(function (o) {
 				var w = o.getGutterWidget(), c = o.getControl();
 
-				o.getRestrictedRanges
 				if (c) {
 					c.appendTo(line.controls);
 				}

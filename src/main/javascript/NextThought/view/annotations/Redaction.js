@@ -239,7 +239,6 @@ Ext.define('NextThought.view.annotations.Redaction', {
 
 
 	toggleRedaction:function (e) {
-		var rect, r, t;
 		//toggle redaction on generated spans:
 		this.compElements.toggleCls(this.cls);
 
@@ -251,31 +250,6 @@ Ext.define('NextThought.view.annotations.Redaction', {
 		}
 
 		this.requestRender();
-
-		//Add this line to restricted ranges
-		if (this.actionSpan) {
-			t = this.actionSpan.getBoundingClientRect();
-			if (t) {
-				rect = { top:t.top, bottom:t.bottom, left:t.left, right:t.right, height:t.height, width:t.width };
-				r = AnnotationsRenderer.getReader();
-				console.log("rect : ", rect, "reader scrollTop: ", r.getAnnotationOffsets().scrollTop);
-				rect.top = rect.top + r.getAnnotationOffsets().scrollTop;
-				rect.bottom = rect.bottom + r.getAnnotationOffsets().scrollTop + 30;
-
-				if (this.masterSpan.hasCls(this.cls)) {
-					r.noteOverlayAddRestrictedRange(rect);
-					console.log("The span is collapsed");
-				} else {
-					r.noteOverlayRemoveRestrictedRange(rect);
-					console.log("The span is expanded");
-				}
-
-				console.log(rect);
-			}
-		}
-
-		this.requestRender();
-
 
 		if (e) {
 			e.stopEvent();
