@@ -428,8 +428,9 @@ Ext.define('NextThought.view.annotations.note.Main',{
 			me.el.unmask();
 			if (success) {
 				me.deactivateReplyEditor();
-				me.recordUpdated(r);
-				
+				if (me.recordUpdated) {
+					me.recordUpdated(r);
+				}
 			}
 		}
 

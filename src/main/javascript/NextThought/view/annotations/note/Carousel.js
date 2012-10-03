@@ -156,8 +156,13 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 
 
 	prefetchNext: function(){
-		var s = this.store,
-			max = s.getPageFromRecordIndex(s.getTotalCount());
+		var s = this.store, max;
+
+		if (!s.hasOwnProperty('data')) {
+			return;
+		}
+
+		max = s.getPageFromRecordIndex(s.getTotalCount());
 		if(s.currentPage < max){
 			s.nextPage();
 		}

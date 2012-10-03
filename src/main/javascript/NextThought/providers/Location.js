@@ -42,7 +42,7 @@ Ext.define('NextThought.providers.Location', {
 		if(!id){ Ext.Error.raise('ID required'); }
 
 		function bad(){ console.error('There is no store for id: '+id); }
-		return this.currentPageStores[id] || { add: bad, getById: bad, remove: bad };
+		return this.currentPageStores[id] || { add: bad, getById: bad, remove: bad, on:bad, each:bad, un:bad };
 	},
 
 
