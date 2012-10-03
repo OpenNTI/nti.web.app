@@ -39,10 +39,18 @@ Ext.define('NextThought.providers.Location', {
 	},
 
 	getStore: function(id){
+		var theStore, root;
 		if(!id){ Ext.Error.raise('ID required'); }
 
 		function bad(){ console.error('There is no store for id: '+id); }
-		return this.currentPageStores[id] || { add: bad, getById: bad, remove: bad, on:bad, each:bad, un:bad };
+		theStore =  this.currentPageStores[id];
+		if(!theStore){
+			root = this.currentPageStores.root;
+			if(id === root.containerId){
+				theStore = root;
+			}
+		}
+		return theStore || { add: bad, getById: bad, remove: bad, on:bad, each:bad, un:bad };
 	},
 
 
