@@ -36,13 +36,13 @@ Ext.application({
 		}
 
         var me = this,
-			unsupported = [], g;
+			unsupported = [], g, geckoRev = /rv:(\d+\.\d+)/.exec(Ext.userAgent)||[];
 
 		Ext.each(//firefox doesn't report supporting: CSS3DTransform, so we'll omit it.
 				['Canvas','Range','CSS3BoxShadow','CSS3BorderRadius'],
 			function(f){ Boolean(!Ext.supports[f] && unsupported.push(f)); });
 
-		if(unsupported.length!==0 || (!Ext.isIE && !Ext.isGecko && !Ext.isWebKit)){
+		if(unsupported.length!==0 || (!Ext.isIE && !(Ext.isGecko && parseFloat(geckoRev[1]) > 4.9 ) && !Ext.isWebKit)){
 			location.replace($AppConfig.server.login+'unsupported.html');
 		}
 
