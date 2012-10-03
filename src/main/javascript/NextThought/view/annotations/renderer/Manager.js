@@ -1,62 +1,54 @@
-Ext.define('NextThought.view.annotations.renderer.Manager', {
-	singleton:true,
+Ext.define('NextThought.view.annotations.renderer.Manager',{
+	singleton: true,
 
-	requires:[
+	requires: [
 		'NextThought.util.Line'
 	],
 
-	events           :new Ext.util.Observable(),
-	registry         :{},
-	sorter           :{},
-	gutter           :{},
-	buckets          :{},
-	rendererSuspended:{},
+	events: new Ext.util.Observable(),
+	registry: {},
+	sorter: {},
+	gutter: {},
+	buckets: {},
+	rendererSuspended: {},
 
-	controlLineTmpl          :Ext.DomHelper.createTemplate({ cls:'controlContainer'}).compile(),
-	widgetLineTmpl           :Ext.DomHelper.createTemplate({cls:'widgetContainer'}).compile(),
-	addNoteToOccupiedLineTmpl:Ext.DomHelper.createTemplate({cls:'thumb note-gutter-widget add-note {0}', title:'Add Note'}).compile(),
+	controlLineTmpl: Ext.DomHelper.createTemplate( { cls:'controlContainer'} ).compile(),
+	widgetLineTmpl: Ext.DomHelper.createTemplate( {cls:'widgetContainer'} ).compile(),
+	addNoteToOccupiedLineTmpl: Ext.DomHelper.createTemplate( {cls:'thumb note-gutter-widget add-note {0}', title:'Add Note'} ).compile(),
 
 
 	/**
 	 * @constructor Inner class
 	 */
-	Bucket:function () {
+	Bucket: function(){
 		this.values = {};
 		this.length = 0;
 
-		this.free = function () {
-			this.each(function (v, k, o) {
-				delete o[k];
-			}, this);
-			Ext.Object.each(this, function (k, o, me) {
-				delete me[k];
-			});
+		this.free = function(){
+			this.each(function(v,k,o){ delete o[k]; },this);
+			Ext.Object.each(this,function(k,o,me){ delete me[k]; });
 		};
 
-		this.put = function (o, key) {
-			key = typeof key === 'number' ? key : guidGenerator();
-			if (this.values[key]) {
-				throw 'existing value';
-			}
+		this.put = function(o,key){
+			key = typeof key === 'number'? key : guidGenerator();
+			if(this.values[key]){throw 'existing value';}
 			this.values[key] = o;
 			this.length += 1;
 			return key;
 		};
 
-		this.each = function (cb, s) {
-			Ext.Object.each(this.values, function (key, value, o) {
-				Ext.callback(cb, s, [value, key, o]);
+		this.each = function(cb,s){
+			Ext.Object.each(this.values,function(key,value,o){
+				Ext.callback(cb,s,[value,key,o]);
 			});
 		};
 
-		this.get = function (key) {
-			return this.values[key];
-		};
+		this.get = function(key){ return this.values[key]; };
 
-		this.first = function () {
+		this.first = function(){
 			var key;
-			for (key in this.values) {
-				if (this.values.hasOwnProperty(key)) {
+			for (key in this.values){
+				if (this.values.hasOwnProperty(key)){
 					return this.get(key);
 				}
 			}
@@ -65,12 +57,10 @@ Ext.define('NextThought.view.annotations.renderer.Manager', {
 	},
 
 
-	registerGutter:function (el, reader) {
+	registerGutter: function(el, reader){
 		var p = reader.prefix;
-		if (!p) {
-			Ext.Error.raise('Prefix required');
-		}
-		if (this.gutter[p]) {
+		if(!p){ Ext.Error.raise('Prefix required'); }
+		if(this.gutter[p]){
 			console.warn('replacing exisiting gutter?', this.gutter[p]);
 		}
 		this.gutter[p] = el;
@@ -82,9 +72,9 @@ Ext.define('NextThought.view.annotations.renderer.Manager', {
 	},
 
 
-	register:function (o) {
+	register: function(o){
 		var p = o.prefix;
-		if (!this.registry[p]) {
+		if(!this.registry[p]){
 			this.registry[p] = [];
 		}
 		this.registry[p].push(o);
@@ -92,48 +82,43 @@ Ext.define('NextThought.view.annotations.renderer.Manager', {
 	},
 
 
-	unregister:function (o) {
+	unregister: function(o){
 		var p = o.prefix, r;
 		r = this.registry[p];
-		if (r) {
-			this.registry[p] = Ext.Array.remove(r, o);
-			if (this.registry[p].legend === 0) {
+		if(r){
+			this.registry[p] = Ext.Array.remove(r,o);
+			if(this.registry[p].legend===0){
 				this.sorter[p] = null;
 			}
 		}
 	},
 
 
-	getReader:function (prefix) {
+	getReader: function(prefix){
 		var cache = this.readerPanels, c;
-		if (!cache) {
-			cache = this.readerPanels = {};
-		}
+		if(!cache ){ cache = this.readerPanels = {}; }
 
 		c = cache[prefix];
-		if (!c) {
+		if(!c){
 			c = cache[prefix] = ReaderPanel.get(prefix);
-			c.on('destroy', function () {
-				delete cache[prefix];
-			});
+			c.on('destroy',function(){ delete cache[prefix]; });
 		}
 
 		return c;
 	},
 
 
-	getDoc:function (prefix) {
+	getDoc: function(prefix){
 		return this.getReader(prefix).getDocumentElement();
 	},
 
 
-	buildSorter:function (prefix) {
-	},
+	buildSorter: function(prefix){},
 
 
-	clearBuckets:function (prefix) {
-		function clear(d) {
-			while (d && d.firstChild) {
+	clearBuckets: function(prefix){
+		function clear(d){
+			while(d && d.firstChild){
 				d.removeChild(d.firstChild);
 			}
 		}
@@ -143,39 +128,42 @@ Ext.define('NextThought.view.annotations.renderer.Manager', {
 		clear(g.controls.dom);
 		clear(g.widgets.dom);
 
-		if (this.buckets[prefix]) {
+		if( this.buckets[prefix] ){
 			this.buckets[prefix].free();
 		}
 		this.buckets[prefix] = new this.Bucket();
 	},
 
 
-	getBucket:function (prefix, line) {
-		//		var lineInfo,
-		//			originalLine = line;
+	getBucket: function(prefix, line){
+//		var lineInfo,
+//			originalLine = line;
 
 		//while(!lineInfo && (originalLine - line) <= 100){
 		//	lineInfo = LineUtils.findLine(line,this.getDoc(prefix));
 		//	line-=5	;
 		//}
 
-		//		if(!lineInfo){
-		//			console.error('could not resolve a line for '+prefix+' @'+line+', original line was ' + originalLine);
-		//			return;
-		//		}
-		if (line < 0) {
+//		if(!lineInfo){
+//			console.error('could not resolve a line for '+prefix+' @'+line+', original line was ' + originalLine);
+//			return;
+//		}
+		if (line < 0){
 			//bad line, don't render:
 			console.error('Annotation cannot be rendered in gutter');
 			return null;
 		}
 
-		var c = this.buckets[prefix], lineTolerance = 40, //			l = line.rect.top,//normalize lines
-			b = c ? c.get(line) : null, a = Math.round(line - (lineTolerance / 2)), z = Math.round(line + (lineTolerance / 2));
+		var c = this.buckets[prefix],
+			lineTolerance = 40,
+//			l = line.rect.top,//normalize lines
+			b = c? c.get(line) : null,
+			a = Math.round( line- (lineTolerance / 2)), z = Math.round( line + (lineTolerance / 2));
 
 		if (!b && c) {
-			c.each(function (value, key) {
+			c.each(function(value, key){
 				var keyNum = parseInt(key, 10);
-				if (keyNum >= a && keyNum <= z) {
+				if ( keyNum >=a && keyNum <= z){
 					b = value;
 					return false;
 				}
@@ -184,70 +172,72 @@ Ext.define('NextThought.view.annotations.renderer.Manager', {
 
 			if (!b) {
 				b = new this.Bucket();
-				c.put(b, line);
+				c.put(b,line);
 			}
 		}
 		return b;
 	},
 
 
-	layoutBuckets:function (prefix, width) {
-		var addTpl = this.addNoteToOccupiedLineTmpl, r = this.getReader(prefix), g = this.gutter[prefix], b = this.buckets[prefix], cT = this.controlLineTmpl, wT = this.widgetLineTmpl, cls = (width <= 355) ? 'narrow-gutter' : '';
+	layoutBuckets: function(prefix, width){
+		var addTpl = this.addNoteToOccupiedLineTmpl,
+			r = this.getReader(prefix),
+			g = this.gutter[prefix],
+			b = this.buckets[prefix],
+			cT = this.controlLineTmpl,
+			wT = this.widgetLineTmpl,
+			cls = (width <= 355)? 'narrow-gutter': '';
 
 		g.setWidth(width);
-		g.controls.setLeft(width - 50);
+		g.controls.setLeft(width-50);
 		g.widgets.setRight(50);
 
 		r.noteOverlayClearRestrictedRanges();
 
 
-		b.each(function (line, y) {
+		b.each(function(line,y){
 
 			var widgets = [], siblings, block, rect, t;
 
-			line.controls = line.controls || cT.append(g.controls, [], true);
-			line.widgets = line.widgets || wT.append(g.widgets, [], true);
+			line.controls = line.controls || cT.append(g.controls,[],true);
+			line.widgets = line.widgets || wT.append(g.widgets,[],true);
 
-			(new Ext.CompositeElement([line.controls, line.widgets])).setTop(y + 'px');
+			(new Ext.CompositeElement([line.controls,line.widgets])).setTop(y+'px');
 
-			line.each(function (o) {
-				var w = o.getGutterWidget(), c = o.getControl();
+			line.each(function(o){
+				var w = o.getGutterWidget(),
+					c = o.getControl();
 
-				if (c) {
-					c.appendTo(line.controls);
-				}
-				if (w) {
-					widgets.push(o);
-				}
+				if( c ){ c.appendTo( line.controls ); }
+				if( w ){ widgets.push( o ); }
 			});
 
-			siblings = widgets.length - 1;
-			Ext.each(widgets, function (o) {
+			siblings = widgets.length-1;
+			Ext.each(widgets,function(o){
 				var w = o.getGutterWidget(siblings);
-				if (w) {
+				if(w){
 					w.appendTo(line.widgets);
 					w.addCls(cls);
-				} else {
+				}
+				else {
 					siblings -= 1;
 				}
 			});
 
-			if (!line.controls.first()) {
-				line.controls.remove();
-				delete line.controls;
-			}
-			if (!line.widgets.first()) {
-				line.widgets.remove();
-				delete line.widgets;
-			} else {
+			if(!line.controls.first()){ line.controls.remove(); delete line.controls; }
+			if(!line.widgets.first()){ line.widgets.remove(); delete line.widgets; }
+			else{
 
-				r.noteOverlayRegisterAddNoteNib(line.first().getRecord().get('applicableRange'), addTpl.insertFirst(line.widgets, [
-					siblings ? 'collapsed' : 'expanded'
-				], true), line.first().getRecord().get('ContainerId'));
+				r.noteOverlayRegisterAddNoteNib(
+					line.first().getRecord().get('applicableRange'),
+					addTpl.insertFirst(
+							line.widgets,[
+								siblings ? 'collapsed':'expanded'
+							],true), line.first().getRecord().get('ContainerId'));
 			}
 
 			block = line.widgets || line.controls || null;
-			if (block) {
+			if(block){
 				t = block.dom.getBoundingClientRect();
 				rect = { top:t.top, bottom:t.bottom, left:t.left, right:t.right, height:t.height, width:t.width };
 				rect.top = rect.top + r.getAnnotationOffsets().scrollTop;
@@ -259,33 +249,36 @@ Ext.define('NextThought.view.annotations.renderer.Manager', {
 	},
 
 
-	suspend:function (prefix) {
+	suspend: function(prefix) {
 		this.rendererSuspended[prefix] = true;
 	},
 
 
-	resume:function (prefix) {
+	resume: function(prefix) {
 		delete this.rendererSuspended[prefix];
 	},
 
 
-	render:function (prefix) {
-		var me = this, containers = {}, r = this.getReader(prefix), width = r.getAnnotationOffsets().gutter + 80, maxAnnotations = Math.floor(width / 34) - 2;
+	render: function(prefix){
+		var me = this, containers = {},
+			r = this.getReader(prefix),
+			width = r.getAnnotationOffsets().gutter + 80,
+			maxAnnotations = Math.floor(width / 34) - 2;
 
-		if (me.rendering) {
+		if(me.rendering){
 			console.warn('Render called while rendering...');
-			me.events.on('finish', me.render, me, {single:true});
+			me.events.on('finish',me.render,me,{single:true});
 			return;
 		}
 		if (this.rendererSuspended[prefix]) {
 			return;
 		}
-		if (!me.gutter[prefix]) {
+		if(!me.gutter[prefix]){
 			console.warn('no gutter');
 			return;
 		}
 
-		if (!me.registry[prefix]) {
+		if(!me.registry[prefix]){
 			return;//nothing to do
 		}
 
@@ -295,26 +288,27 @@ Ext.define('NextThought.view.annotations.renderer.Manager', {
 		me.registry[prefix] = Ext.Array.unique(me.registry[prefix]);
 
 		me.sorter[prefix] = me.sorter[prefix] || me.buildSorter(prefix);
-		if (me.sorter[prefix]) {
+		if(me.sorter[prefix]){
 			Ext.Array.sort(me.registry[prefix], me.sorter[prefix]);
 		}
 
 		me.clearBuckets(prefix);
 
-		Ext.each(Ext.Array.clone(me.registry[prefix]), function (o) {
+		Ext.each(Ext.Array.clone(me.registry[prefix]), function(o){
 			try {
-				if (!o.isVisible) {
+				if(!o.isVisible){
 					return;
 				}
 
-				var y, b, c = containers[o.getContainerId()] = (containers[o.getContainerId()] || []);
+				var y, b,
+					c = containers[o.getContainerId()] = (containers[o.getContainerId()]||[]);
 
-				if (c.length >= maxAnnotations) {
+				if(c.length >= maxAnnotations){
 					//render an endcap
 					return;
 				}
 
-				if (o.hasGutterWidgets) {
+				if(o.hasGutterWidgets){
 					c.push(o);
 				}
 
@@ -323,16 +317,18 @@ Ext.define('NextThought.view.annotations.renderer.Manager', {
 				//uncomment for testing
 				//console.log('Rendered', o.getRecord().get('body')[0], y);
 
-				if (!y) {
-					console.log(o, 'returned a falsy y:', y);
-				} else {
-					b = me.getBucket(prefix, Math.ceil(y));
+				if(!y){
+					console.log(o, 'returned a falsy y:',y);
 				}
-				if (b) {
+				else {
+					b = me.getBucket(prefix,Math.ceil(y));
+				}
+				if(b){
 					b.put(o);
 				}
-			} catch (e) {
-				console.error(o.$className, Globals.getError(e));
+			}
+			catch(e){
+				console.error(o.$className,Globals.getError(e));
 			}
 		});
 
@@ -342,19 +338,19 @@ Ext.define('NextThought.view.annotations.renderer.Manager', {
 		me.events.fireEvent('finish');
 	}
 
-}, function () {
+}, function(){
 	window.AnnotationsRenderer = this;
 
-	var me = this, fn = this.render, timerId = {};
+	var me = this,
+		fn = this.render,
+		timerId = {};
 
-	this.render = (function () {
-		return function (prefix) {
+	this.render = (function() {
+		return function(prefix) {
 			if (timerId[prefix]) {
 				clearTimeout(timerId[prefix]);
 			}
-			timerId[prefix] = setTimeout(function () {
-				fn.call(me, prefix);
-			}, 100);
+			timerId[prefix] = setTimeout(function(){ fn.call(me, prefix); }, 100);
 		};
 
 	}());
