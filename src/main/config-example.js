@@ -5,3 +5,7 @@ var $AppConfig = {
 		"login": "/login/"
     }
 };
+
+window.onerror = function(){
+	window.location.replace($AppConfig.server.login+'unsupported.html');
+};
