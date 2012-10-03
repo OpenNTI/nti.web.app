@@ -49,6 +49,10 @@ Ext.application({
 		if(!Globals.validateConfig()){
 			return;
 		}
+
+		//if we get this far, we're good... no need to redirect to the unsupoprted page.
+		delete window.onerror;
+
 		Globals.loadScript(getURL('/socket.io/static/socket.io.js'));
 
 		window.app = me;
