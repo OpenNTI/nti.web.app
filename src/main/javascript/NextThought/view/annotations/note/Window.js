@@ -42,6 +42,11 @@ Ext.define('NextThought.view.annotations.note.Window',{
 		}
 	],
 
+	constructor: function(){
+		Ext.each(Ext.ComponentQuery.query('note-window'),function(w){w.destroy();});
+		return this.callParent(arguments);
+	},
+
 
 	initComponent: function(){
 		var a = this.annotation, m;
@@ -57,6 +62,7 @@ Ext.define('NextThought.view.annotations.note.Window',{
 		if(this.replyToId){
 			m.replyToId = this.replyToId;
 		}
+		m.setRecord(a.getRecord());
 		this.down('note-carousel').setRecord(a.getRecord());
 
 		this.mon(LocationProvider, 'navigateComplete', this.destroy, this);

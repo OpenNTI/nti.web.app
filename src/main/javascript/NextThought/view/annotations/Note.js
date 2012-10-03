@@ -104,7 +104,7 @@ Ext.define( 'NextThought.view.annotations.Note', {
 			replyToId = replyToId.slice(-1);
 			replyToId = replyToId.length > 0 ? replyToId[0] :  null;
 		}
-		Ext.each(Ext.ComponentQuery.query('note-window'),function(w){w.destroy();});
+
 		return Ext.widget('note-window', {
 			annotation: this,
 			replyToId: replyToId && !isEdit ? replyToId : null,

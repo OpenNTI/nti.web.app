@@ -76,6 +76,21 @@ Ext.define('NextThought.view.content.reader.Scroll',{
 	},
 
 
+	scrollToContainer: function(containerId){
+		var de = this.getDocumentElement(),
+			e = de.getElementById(containerId) || de.getElementsByName(containerId)[0];
+
+		Ext.each(de.querySelectorAll('[data-ntiid],[ntiid]'), function(o){
+			var a = o.getAttribute('data-ntiid')||o.getAttribute('ntiid');
+			if(a===containerId){ e = o; }
+			return !e;
+		});
+
+		if(!e){ return; }
+		this.scrollToNode(e,true,0);
+	},
+
+
 	/**
 	 * Scroll to some element, but allow options to decide whether or not to scroll.
 	 *

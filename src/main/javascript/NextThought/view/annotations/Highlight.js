@@ -329,10 +329,15 @@ Ext.define('NextThought.view.annotations.Highlight', {
 	},
 
 	getScrollPosition: function(currentPosition){
-		var el = Ext.get(this.compElements.first()),
-			dh = 100;
+		var dh = 100,
+			range = this.getRange(), top;
 
-		return currentPosition > el.getTop() ? currentPosition - el.getTop(): el.getTop() - currentPosition - dh;
+		if(range){
+			top = Math.floor(range.getBoundingClientRect().top);
+			return currentPosition > top ? currentPosition - top: top - currentPosition - dh;
+		}
+
+		return 0;
 	},
 
 	unwrap: function(node) {

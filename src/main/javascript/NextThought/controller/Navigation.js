@@ -40,62 +40,80 @@ Ext.define('NextThought.controller.Navigation', {
 
 
 
+	scrollToObject: function(target, reply){
+		target = Ext.isArray(target)? target : [target];
+
+		var me = this;
+
+
+		function findExisting(prefix) {
+			function cid(id){ return IdCache.getComponentId(id, null, prefix); }
+			var id = null;
+			Ext.each(target, function(i){
+				var c = cid(i);
+				if(IdCache.hasIdentifier(i) && Ext.getCmp(c)){
+					id = c;
+				}
+				return !id;
+			});
+			return id;
+		}
+
+
+		function localCondition(id,reader){
+			var c = Ext.getCmp(id);
+			if(c){
+				c.fireEvent('open',target.last(), reply? target: undefined);
+			}
+
+			if (reader.scrollToTarget){
+				reader.scrollToTarget(id);
+			}
+		}
+
+
+
+		return function(reader) {
+			reader = (reader||ReaderPanel.get());
+			var id = findExisting(reader.prefix),
+				service = $AppConfig.service;
+
+			function loaded(object){
+				var c = object.get('ContainerId'),
+					s = LocationProvider.getStore(c).hasOwnProperty('data');
+
+				if(!s){
+					console.warn('\n\n\n\n\n\n\nNo Store for: '+c+'\n\n\n\n\n\n');
+				}
+
+				Ext.widget('note-window', { annotation: {getRecord:function(){return object;}}}).show();
+
+				reader.scrollToContainer(c);
+			}
+
+
+			function fail(){
+				console.warn('failed?', arguments);
+			}
+
+
+			if(id){
+				localCondition(id,reader);
+				return;
+			}
+
+			service.getObject(target.last(), loaded, fail, me);
+		};
+	},
+
+
 	navigate: function(ntiid, scrollToTargetId, reply) {
 		var callback = Ext.emptyFn();
 		if (scrollToTargetId) {
-			callback = function(reader) {
-				reader = (reader||ReaderPanel.get());
-				var id = '',
-					prefix = reader.prefix;
-
-				function cid(id){ return IdCache.getComponentId(id, null, prefix); }
-
-				if(Ext.isArray(scrollToTargetId)){
-
-					Ext.each(scrollToTargetId, function(i){
-						var c = null;
-						if(IdCache.hasIdentifier(i)){
-							id = cid(i);
-							c = Ext.getCmp(id);
-							if(c){
-								c.fireEvent('open',scrollToTargetId.last(), reply? scrollToTargetId: undefined);
-								return false; //stop iteration
-							}
-						}
-						return true;
-					});
-				}
-				else {
-					id = cid(scrollToTargetId);
-				}
-                if (reader.scrollToTarget){
-				    reader.scrollToTarget(id);
-                }
-			};
+			callback = this.scrollToObject(scrollToTargetId, reply);
 		}
 
 		this.maybeLoadNewPage(ntiid, callback);
-	},
-
-	maybeLoadNewPage: function(id, cb){
-
-		function loadPageId(pi){
-			var pageId = pi.getId();
-
-			if(LocationProvider.currentNTIID === pageId){
-				Ext.callback(cb, this);
-			}
-			else {
-				LocationProvider.setLocation(id, cb, this);
-			}
-		}
-
-		function fail(){
-			console.error('fail', arguments);
-			Ext.callback(cb, this);
-		}
-
-		$AppConfig.service.getPageInfo(id, loadPageId, fail, this);
 	},
 
 
@@ -105,6 +123,28 @@ Ext.define('NextThought.controller.Navigation', {
 		}
 
 		LocationProvider.setLocation(ntiid, callback, this);
+	},
+
+
+	maybeLoadNewPage: function(id, cb){
+
+		function loadPageId(pi){
+			var pageId = pi.getId();
+
+			if(LocationProvider.currentNTIID === pageId){
+				Ext.callback(cb);
+			}
+			else {
+				LocationProvider.setLocation(id, cb);
+			}
+		}
+
+		function fail(){
+			console.error('fail', arguments);
+			Ext.callback(cb);
+		}
+
+		$AppConfig.service.getPageInfo(id, loadPageId, fail, this);
 	},
 
 
