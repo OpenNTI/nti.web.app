@@ -92,6 +92,11 @@ Ext.define('NextThought.view.annotations.note.Main',{
 					me.setRecord(bRecord);
 				}
 			});
+
+			if(this.editorActions && this.replyToId === this.record.getId()){
+				this.activateReplyEditor();
+			}
+
 		}
 		catch(e){
 			console.error(Globals.getError(e));
@@ -257,13 +262,11 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		if(this.editMode){
 			this.onEdit();
 		}
-
-		if(this.replyToId === this.record.getId()){
+		
+		if(this.editorActions && this.replyToId === this.record.getId()){
 			this.activateReplyEditor();
 		}
 
-
-		me.up('window').down('note-responses').removeAll(true);
 		this.loadReplies(r);
 	},
 
@@ -293,10 +296,15 @@ Ext.define('NextThought.view.annotations.note.Main',{
 
 
 	loadReplies: function(record){
+		if(this.repliesLoaded){return;}
+
 		var me = this,
 			store = NextThought.store.PageItem.create(),
 			responses = me.up('window').down('note-responses');
 
+		me.up('window').down('note-responses').removeAll(true);
+		console.log('loading replies');
+		this.repliesLoaded = true;
 		me.mask();
 
 		function setReplies(){
@@ -427,7 +435,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		function callback(success, record){
 			me.el.unmask();
 			if (success) {
-				me.deactivateReplyEditor();
+					me.deactivateReplyEditor();
 				if (me.recordUpdated) {
 					me.recordUpdated(r);
 				}
@@ -446,7 +454,9 @@ Ext.define('NextThought.view.annotations.note.Main',{
 			r.save({callback: function(record, request){
 				var success = request.success,
 				rec = success ? record: null;
-				if(success){r.fireEvent('changed');}
+				if(success){
+					r.fireEvent('changed');
+				}
 				Ext.callback(callback,me,[success,rec]);
 			}});
 			return;
