@@ -39,12 +39,8 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 				name: 'iframe-' + guidGenerator() + '-content',
 				src: Globals.EMPTY_WRITABLE_IFRAME_SRC,
 				frameBorder: 0,
-				marginWidth: 0,
-				marginHeight: 0,
                 scrolling: 'no',
 				seamless: true,
-				transparent: true,
-				allowTransparency: true,
 				style: 'overflow: hidden; z-index: 1;'
 			},
 			listeners: {
@@ -95,7 +91,11 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 		var me = this,
 			base = location.pathname.toString().replace('index.html',''),
 			doc = me.getDocumentElement(),
+			con = console,
 			meta, g = Globals;
+
+		//Hack...
+		Ext.util.Cookies.set('PREF', 'f2=40000000', Ext.Date.add(new Date(),'mo',1),'/','.youtube.com');
 
 		function on(dom,event,fn){
 			if(!Ext.isArray(event)){
@@ -107,20 +107,7 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 			});
 		}
 
-		function addCSS(cssStr){
-			var el= doc.createElement('style');
-
-			el.type= 'text/css';
-			el.media= 'screen';
-
-			if(el.styleSheet){ el.styleSheet.cssText= cssStr; }// IE method
-			else { el.appendChild(document.createTextNode(cssStr)); } // others
-
-			doc.getElementsByTagName('head')[0].appendChild(el);
-			return el;
-		}
-
-		doc.parentWindow.onerror = function(){console.log('iframe error: ',JSON.stringify(arguments));};
+		me.getIframe().win.onerror = function(){con.warn('iframe error: ',JSON.stringify(arguments));};
 
 		//Move classes down from main body to sub-iframe body for content rendering reference:
 		Ext.fly(doc.getElementsByTagName('body')[0]).addCls(this.getTopBodyStyles());
@@ -295,11 +282,11 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 		this.fireEvent('content-updated');
 
 		//TODO: solidify our story about content scripts (reset the iframe after navigating to a page that has scripts?)
-		Ext.each(body.query('script'),function(s){
-			s.parentNode.removeChild(s);
-			var e = doc.createElement('script'); e.src = s.src;
-			head.appendChild(e);
-		});
+//		Ext.each(body.query('script'),function(s){
+//			s.parentNode.removeChild(s);
+//			var e = doc.createElement('script'); e.src = s.src;
+//			head.appendChild(e);
+//		});
 
 		clearInterval(this.syncInterval);
 		delete this.lastHeight;
