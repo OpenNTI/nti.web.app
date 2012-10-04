@@ -769,6 +769,12 @@
 		}
 	}
 
+	//experiment to kill links in note window
+	a {
+		pointer-events: none;
+		cursor: default;
+	}
+
 	.note-responses{
 		//.note-reply.first {
 		.note-reply {
