@@ -89,7 +89,7 @@ Ext.define('NextThought.controller.State', {
 
 
 	onPopState: function(e) {
-		if(!NextThought.isInitialised || this.isHangout){
+		if(!NextThought.isInitialized || this.isHangout){
 			return;
 		}
 		var s = e?e.state:null;
@@ -100,7 +100,7 @@ Ext.define('NextThought.controller.State', {
 
 
 	track: function(viewId){
-		if(this.currentState.active !== viewId && NextThought.isInitialised){
+		if(this.currentState.active !== viewId && NextThought.isInitialized){
 			//console.debug(this.currentState.active, modeId);
 			this.currentState.active = viewId;
 			window.history.pushState(this.currentState, 'NextThought: '+viewId);

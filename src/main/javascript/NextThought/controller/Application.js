@@ -13,7 +13,7 @@ Ext.define('NextThought.controller.Application', {
 
 		Library.on('loaded', this.restore, this);
 		this.application.on('finished-loading', function(){
-			NextThought.isInitialised = true;
+			NextThought.isInitialized = true;
 			Globals.removeLoaderSplash();
 		});
 	},
