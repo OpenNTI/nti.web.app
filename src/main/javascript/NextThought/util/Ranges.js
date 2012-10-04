@@ -32,16 +32,23 @@ Ext.define('NextThought.util.Ranges',{
 		return r;
 	},
 
+	nodeIfObjectOrInObject: function(node){
+		var selector = 'object', n;
+		if(!node){
+			return null;
+		}
+		n = Ext.fly(node);
+		if(n.is(selector)){
+			return n;
+		}
+		return n.up(selector);
+	},
 
     expandRange: function(range, doc){
-        if(Ext.fly(range.commonAncestorContainer).up('object')) {
-            return Ext.fly(range.commonAncestorContainer).up('object').down('.naquestion').dom.cloneNode(true);
+		var object = this.nodeIfObjectOrInObject(range.commonAncestorContainer) || this.nodeIfObjectOrInObject(range.startContainer);
+        if(object) {
+            return object.down('.naquestion').dom.cloneNode(true);
         }
-
-        if(Ext.fly(range.startContainer).up('object')) {
-            return Ext.fly(range.startContainer).up('object').down('.naquestion').dom.cloneNode(true);
-        }
-
 
         var r = this.getRangyRange(range, doc),
             sel = rangy.getSelection(doc);
