@@ -12,5 +12,5 @@ window.onerror = function(){
 	if((NextThought || {}).isInitialized){
 		return;	
 	}
-	window.location.replace($AppConfig.server.login+'unsupported.html');
+	window.location.replace($AppConfig.server.unsupported);
 };
