@@ -118,7 +118,7 @@ Ext.define('NextThought.util.Anchors', {
 	createRangeDescriptionFromRange: function(range, docElement) {
 		if(!range){
 			console.log('Returning empty ContentRangeDescription for null range');
-			return Ext.create('NextThought.model.anchorables.ContentRangeDescription', {});
+			return {description: Ext.create('NextThought.model.anchorables.ContentRangeDescription', {})};
 		}
 
 		Anchors.cleanRangeFromBadStartAndEndContainers(range);

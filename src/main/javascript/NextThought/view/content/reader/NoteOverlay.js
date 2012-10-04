@@ -377,6 +377,32 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		return false;
 	},
 
+	//This function is full of assumptions.  For now
+	//we want to optimize notes on assessment questions by anchoring
+	//them to the container and a null range.  We only want to do this
+	//if they were created from the gutter since in theory eventually
+	//we allow selecting text and highlighting/noteing on parts of the question.
+	//Right now we identify created from the gutter by a style of surpressed, 
+	//and we determine it is in an assessment if the ranges ancestor is or is contained in an
+	//assessment object tag
+	rangeForLastLineInfo: function(lastLine, style){
+		var ancestor = lastLine.range.commonAncestorContainer ? Ext.fly(lastLine.range.commonAncestorContainer) : null,
+		questionSelector = 'object[type="application/vnd.nextthought.naquestion"]',
+		question, c;
+
+		if(style !== 'suppressed'){
+			return {range: lastLine.range, container: null};
+		}
+
+		
+		//OK we are style suppressed
+		question = ancestor.is(questionSelector) ? ancestor : ancestor.up(questionSelector);
+		c = question ? question.getAttribute('data-ntiid') : null;
+		if(question && c){
+			return {range: null, container: c};
+		}
+		return {range: lastLine.range, container: null};
+	},
 
 	noteOverlayEditorSave: function(e){
 		e.stopEvent();
@@ -394,7 +420,8 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 			o = me.noteOverlayData,
 			note = o.textarea.dom.value,
 			style = o.lastLine.style || 'suppressed',
-			v, sharing = p.sharedWith || [], re = /(&nbsp;)|(<br>)|(<div>)|(<\/div>)*/g;
+			v, sharing = p.sharedWith || [], re = /(&nbsp;)|(<br>)|(<div>)|(<\/div>)*/g,
+			rangeInfo;
 
 		if (o.richEditorActive){
 			v = o.editorActions.getValue();
@@ -410,7 +437,8 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 		o.editor.mask('Saving...');
         try {
-		    me.fireEvent('save-new-note', note, o.lastLine.range, sharing, style, callback);
+			rangeInfo = this.rangeForLastLineInfo(o.lastLine, style);
+		    me.fireEvent('save-new-note', note, rangeInfo.range, rangeInfo.container, sharing, style, callback);
         }
         catch (error) {
             console.error('Error saving note - ' + Globals.getError(error));

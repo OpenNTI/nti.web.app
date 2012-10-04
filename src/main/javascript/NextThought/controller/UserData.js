@@ -367,18 +367,22 @@ Ext.define('NextThought.controller.UserData', {
 	},
 
 
-	saveNewNote: function(body, range, shareWith, style, callback){
+	saveNewNote: function(body, range, c, shareWith, style, callback){
 		//check that our inputs are valid:
-		if (!body || (Ext.isArray(body) && body.length < 1) || !range){
-			console.error('Note creating a note, either missing content or range.');
+		if (!body || (Ext.isArray(body) && body.length < 1)){
+			console.error('Note creating a note missing content');
 			return;
+		}
+
+		if(!range){
+			console.log('No range supplied, note will be anchored to container only');
 		}
 
 		//Define our vars and create our content range description:
 		var doc = ReaderPanel.get().getDocumentElement(),
 			noteRecord,
 			rangeDescription = Anchors.createRangeDescriptionFromRange(range, doc),
-			container = rangeDescription.container;
+			container = rangeDescription.container || c;
 
 		//make sure the body is an array:
 		if(!Ext.isArray(body)){body = [body];}
@@ -392,7 +396,7 @@ Ext.define('NextThought.controller.UserData', {
 		noteRecord = this.getNoteModel().create({
 			applicableRange: rangeDescription.description,
 			body: body,
-            selectedText: range.toString(),
+            selectedText: range ? range.toString() : '',
 			sharedWith: shareWith,
 			style: style,
 			ContainerId: container
