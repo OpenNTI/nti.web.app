@@ -8,7 +8,6 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 
 	constructor: function(){
 		this.checkFrame = Ext.bind(this.checkFrame,this);
-		this.checkContentFrames = Ext.Function.createBuffered(this.checkContentFrames,100);
 		if(this.add){
 			this.add(this.getIFrameConfig());
 		}
@@ -52,7 +51,6 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 				scope: this,
 				afterRender: function(){
 					this.resetFrame(function(){me.fireEvent('iframe-ready');});
-					this.body.on('scroll',this.checkContentFrames,this);
 				}
 			}
 		};
@@ -137,9 +135,6 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 			url: base+document.getElementById('main-stylesheet').getAttribute('href'),
 			document: doc });
 
-		//hide all sub-iframes initially.
-		addCSS("iframe{display:none;}");
-
 		on(doc,['keypress','keydown','keyup'],function(e){
 			e = Ext.EventObject.setEvent(e||event);
 			if(e.getKey() === e.BACKSPACE){
@@ -202,70 +197,6 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 			];
 
 		return Ext.Array.difference(mainBodyStyleList, styleBlacklist);
-	},
-
-
-	checkContentFrames: function(){
-		var me = this,
-			doc = me.getDocumentElement(),
-			view = me.body,
-			scrollTop = view.getScroll().top - 10,
-			viewHeight = view.getHeight(),
-			frames = doc.querySelectorAll('iframe'),
-			bounds = scrollTop + viewHeight,
-			display = 'display:block;',
-			w = doc.parentWindow;
-
-
-		function getTop(x) {
-			var curtop = 0;
-			if (x.offsetParent) {
-				do {
-					if (x.currentStyle) {
-						curtop += +parseInt(x.currentStyle['margin-top'],10);
-					}
-					else if (w.getComputedStyle) {
-						curtop += +parseInt(doc.defaultView.getComputedStyle(x,null).getPropertyValue('margin-top'),10);
-					}
-					curtop += x.offsetTop;
-					x = x.offsetParent;
-				} while (x);
-			}
-			return curtop;
-		}
-
-		Ext.each(frames,function(f){
-			var style = f.getAttribute('style'),
-				node = f.parentNode,
-				height = +f.height,
-				top = getTop(node),
-				bottom = top+height,
-				inBounds = (top >= scrollTop && top <= bounds) || (bottom >= scrollTop && bottom <= bounds),
-				outOfBounds = (top > bounds || bottom < scrollTop);
-
-			if(f.previousSibling || f.nextSibling){
-				console.log('WARNING: iframe is not the sole child element of a DIV. ', f.outerHTML);
-				return;
-			}
-
-			Ext.fly(node).setHeight(height);
-
-			if(!f.originalSrc){
-				f.originalSrc = f.src;
-				f.src = 'about:blank';
-			}
-
-			if( style!==display && inBounds){
-				f.setAttribute('style',display);
-				f.src = f.originalSrc;
-			}
-			else if(style===display && outOfBounds){
-				f.removeAttribute('style');
-				f.src = 'about:blank';
-			}
-
-		});
-
 	},
 
 
@@ -369,8 +300,6 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 			var e = doc.createElement('script'); e.src = s.src;
 			head.appendChild(e);
 		});
-
-		setTimeout(function(){ me.checkContentFrames(); },10);
 
 		clearInterval(this.syncInterval);
 		delete this.lastHeight;
