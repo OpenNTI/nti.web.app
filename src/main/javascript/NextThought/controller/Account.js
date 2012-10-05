@@ -184,6 +184,18 @@ Ext.define('NextThought.controller.Account', {
             }
         }
 
+        if (!values.firstname){
+            view.setError({field: 'firstname', message:'First Name is required'});
+            return;
+        }
+        if (!values.lastname){
+            view.setError({field: 'lastname', message:'Last Name is required'});
+            return;
+        }
+
+        delete values.firstname;
+        delete values.lastname;
+
         for (key in values){
             if (values.hasOwnProperty(key) && values[key] !== null) {
                 $AppConfig.userObject.set(key, values[key]);

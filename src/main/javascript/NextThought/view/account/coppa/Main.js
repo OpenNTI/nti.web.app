@@ -102,6 +102,8 @@ Ext.define('NextThought.view.account.coppa.Main',{
 
         return {
             email: email,
+            firstname: firstname,
+            lastname: lastname,
             realname: firstname + ' ' + lastname,
             opt_in_email_communication: check,
             affiliation: affiliation
@@ -111,7 +113,11 @@ Ext.define('NextThought.view.account.coppa.Main',{
 
     setError: function(error) {
         var box = this.down('[name=error]'),
-            field = this.down('[name='+error.field+']');
+            field = this.down('[name='+error.field+']'),
+            allFields = this.query('[name]');
+
+        //clear all errors:
+        Ext.each(allFields, function(f){f.removeCls('error')});
 
         //make main error field show up
         box.el.down('.error-field').update(error.field);
