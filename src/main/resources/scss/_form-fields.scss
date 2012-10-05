@@ -112,6 +112,10 @@
 
 	input {
 		@include experimental-value(width, calc(100% - 50px));
+		.x-opera &,
+		.x-safari5 & {
+			width: 70%;
+		}
 		line-height: 20px;
 		padding: 2px 25px 2px 5px;
 		height: 24px;
