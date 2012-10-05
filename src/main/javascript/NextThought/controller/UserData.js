@@ -404,12 +404,17 @@ Ext.define('NextThought.controller.UserData', {
 		//now save this:
 		noteRecord.save({
 			scope: this,
-			callback:function(record, request){
-				var success = request.success,
-					rec = success ? record: null;
-				if (success){
-					LocationProvider.getStore(container).add(record);
-					this.self.events.fireEvent('new-note', rec, range);
+			callback:function(record, operation){
+				try{
+					var success = operation.success,
+						rec = success ? ParseUtils.parseItems(operation.response.responseText)[0] : null;
+					if (success){
+						LocationProvider.getStore(container).add(record);
+						this.self.events.fireEvent('new-note', rec, range);
+					}
+				}
+				catch(err){
+					console.error('Something went teribly wrong... ',err);
 				}
 				Ext.callback(callback, this, [success, rec]);
 			}
