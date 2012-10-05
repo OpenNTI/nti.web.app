@@ -409,7 +409,7 @@ Ext.define('NextThought.controller.UserData', {
 					var success = operation.success,
 						rec = success ? ParseUtils.parseItems(operation.response.responseText)[0] : null;
 					if (success){
-						LocationProvider.getStore(container).add(record);
+						LocationProvider.getStore(container).add(rec);
 						this.self.events.fireEvent('new-note', rec, range);
 					}
 				}
