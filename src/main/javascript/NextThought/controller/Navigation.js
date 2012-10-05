@@ -78,17 +78,36 @@ Ext.define('NextThought.controller.Navigation', {
 			var id = findExisting(reader.prefix),
 				service = $AppConfig.service;
 
+
+
 			function loaded(object){
-				var c = object.get('ContainerId'),
-					s = LocationProvider.getStore(c).hasOwnProperty('data');
+                var c = object.get('ContainerId'),
+                    inReplyTo = object.get('inReplyTo'),
+                    s = LocationProvider.getStore(c).hasOwnProperty('data'),
+                    ref, scrollToReplyId;
 
-				if(!s){
-					console.warn('\n\n\n\n\n\n\nNo Store for: '+c+'\n\n\n\n\n\n');
-				}
+                function afterLoadedAgain(){
+                    if(!s){
+                        console.warn('\n\n\n\n\n\n\nNo Store for: '+c+'\n\n\n\n\n\n');
+                    }
 
-				Ext.widget('note-window', { annotation: {getRecord:function(){return object;}}}).show();
+                    Ext.widget('note-window', { replyToId: scrollToReplyId, annotation: {getRecord:function(){return object;}}}).show();
 
-				reader.scrollToContainer(c);
+                    reader.scrollToContainer(c);
+                }
+
+                //in cases where we are scrolling to a reply, attempt to reload here with the root.
+                if (inReplyTo){
+                    scrollToReplyId = object.getId();
+                    ref = object.get('references').first();
+                    if (!ref){
+                         console.warn('inReplyTo set but no references found');
+                    }
+                    service.getObject(ref, afterLoadedAgain, fail, me);
+                }
+                else {
+                    afterLoadedAgain();
+                }
 			}
 
 
