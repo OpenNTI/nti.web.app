@@ -304,10 +304,15 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 				var y, b,
 					c = containers[o.getContainerId()] = (containers[o.getContainerId()]||[]);
 
+				//FIXME this optimization is flawed.  We can't just arbitrarily trim by the number
+				//of annotations in the container.  What we really want is the number of annotations on a
+				//given line.  These happen to be equivalent for the majority of mathcounts but it
+				//leads to unexpeted/buggy behavour in other content.  This needs to be rethought.
+				/*
 				if(c.length >= maxAnnotations){
 					//render an endcap
 					return;
-				}
+				}*/
 
 				if(o.hasGutterWidgets){
 					c.push(o);
