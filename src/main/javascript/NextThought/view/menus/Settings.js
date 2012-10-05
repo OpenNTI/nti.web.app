@@ -26,7 +26,10 @@ Ext.define('NextThought.view.menus.Settings',{
         var items = [];
         items.push({ action: 'account', text: 'My Account'});
         items.push({ action: 'about', text: 'About', href: 'http://www.nextthought.com/', hrefTarget: '_blank'});
-        items.push({ action: 'help', text: 'Help'});
+
+        //disable help because there are now 3 seperate help documents for different environments.  ugh!
+        //items.push({ action: 'help', text: 'Help'});
+
         items.push({ action: 'privacy', text: 'Privacy'});
         if($AppConfig.service.isPotentiallyCoppa()){
             items.push({ action: 'childrens-privacy', text: 'Children\'s Privacy'});
