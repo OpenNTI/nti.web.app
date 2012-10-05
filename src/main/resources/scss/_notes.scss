@@ -769,12 +769,6 @@
 		}
 	}
 
-	//experiment to kill links in note window
-	a {
-		pointer-events: none;
-		cursor: default;
-	}
-
 	.note-responses{
 		//.note-reply.first {
 		.note-reply {
@@ -1019,6 +1013,12 @@
 				-moz-hyphens: auto;
 				-ms-hyphens: auto;
 				hyphens: auto;
+			}
+
+			//experiment to kill links in note window
+			a {
+				pointer-events: none;
+				cursor: default;
 			}
 		}
 
