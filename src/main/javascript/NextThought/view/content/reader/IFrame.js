@@ -97,6 +97,7 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 		//Hack...
 		Ext.util.Cookies.set('PREF', 'f2=40000000', Ext.Date.add(new Date(),'mo',1),'/','.youtube.com');
 
+
 		function on(dom,event,fn){
 			if(!Ext.isArray(event)){
 				event = [event];
