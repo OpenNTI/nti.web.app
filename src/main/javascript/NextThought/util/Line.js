@@ -127,7 +127,9 @@ Ext.define('NextThought.util.Line',{
 			elem,
 			iterationCount = 0,
 			range,
-			x = 81;
+			x = 340; //was 81 but the object tags in mathcounts seem to have an additional 30 px margin.
+					 //shoot for the middle of the content.  //TODO sure wish we could dynamically determine this
+					 //as mentioned below
 
 			//clear ranges and get the node on this y
 			sel.removeAllRanges();
@@ -187,7 +189,7 @@ Ext.define('NextThought.util.Line',{
 			range = sel.getRangeAt(0);
 
 			//for testing, comment next line to show ranges
-			//sel.removeAllRanges();
+			sel.removeAllRanges();
 
 			return range;
 	},
