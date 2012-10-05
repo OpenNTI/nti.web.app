@@ -21,6 +21,17 @@ Ext.define('NextThought.Library', {
 	},
 
 
+	getFirstPage: function(){
+		var first = this.getStore().getAt(0);
+
+		if(first){
+			return first.get('NTIID');
+		}
+
+		return null;
+	},
+
+
 	getStore: function(){
 		if(!this.store){
 			var service = $AppConfig.service;

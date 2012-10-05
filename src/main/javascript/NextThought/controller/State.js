@@ -121,7 +121,13 @@ Ext.define('NextThought.controller.State', {
 		function fin(){
 			var token = {};
 			app.registerInitializeTask(token);
-			return function(){ app.finishInitializeTask(token); };
+			return function(a,errorDetails){
+				var land = Ext.util.Cookies.get('nti.landing_page') || Library.getFirstPage();
+				app.finishInitializeTask(token);
+				if((errorDetails||{}).error && land){
+					LocationProvider.setLocation( land, null, true);
+				}
+			};
 		}
 
 		if(stateObject === PREVIOUS_STATE){
