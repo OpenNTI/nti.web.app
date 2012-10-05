@@ -153,12 +153,11 @@ Ext.define('NextThought.controller.UserData', {
     maybeFireChildAdded: function(item) {
         if (!item){return;}
 
-        var refs = item.get('references') || [], guid, parent, main;
+        var refs = item.get('references') || [], parent, main;
         if(refs.length===0){return;}
 
         //look for reply
-        guid = IdCache.getComponentId(refs.last(), null, 'reply');
-        parent = Ext.getCmp(guid);
+        parent = Ext.getCmp(IdCache.getComponentId(refs.last(), null, 'reply'));
 
         //attempt for find main
         if (!parent){

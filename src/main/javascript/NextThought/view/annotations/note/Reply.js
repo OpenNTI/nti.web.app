@@ -243,7 +243,6 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 			var guid = IdCache.getComponentId(record, null, 'reply'),
 				add = true;
 
-            console.log('guid', guid, 'record', record);
 			if (record.getModelName() !== 'Note') {
 				console.warn('can not at reply, it is not a note and I am not prepared to handle that.');
 				add=false;

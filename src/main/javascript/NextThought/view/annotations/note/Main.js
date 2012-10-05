@@ -305,7 +305,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		
 
 		function setReplies(theStore){
-			var cmpId, cmp;
+			var cmp;
 			console.log('Store load args', arguments);
 			console.log('Setting replies to ', theStore.getItems());
 			record.set('ReferencedByCount',theStore.getCount());//update the count for next time the carousel renders
@@ -313,8 +313,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 
 			function maybeOpenReplyEditor(){
                 if(this.replyToId){
-                    cmpId = IdCache.getComponentId(this.replyToId, null, 'reply');
-                    cmp = Ext.getCmp(cmpId);
+                    cmp = Ext.getCmp(IdCache.getComponentId(this.replyToId, null, 'reply'));
                     if(cmp){
                         cmp.activateReplyEditor();
                         this.replyToId = null;

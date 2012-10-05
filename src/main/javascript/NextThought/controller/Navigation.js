@@ -51,7 +51,7 @@ Ext.define('NextThought.controller.Navigation', {
 			var id = null;
 			Ext.each(target, function(i){
 				var c = cid(i);
-				if(IdCache.hasIdentifier(i) && Ext.getCmp(c)){
+				if(Ext.getCmp(c)){
 					id = c;
 				}
 				return !id;

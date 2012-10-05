@@ -2,26 +2,13 @@ Ext.define('NextThought.cache.IdCache', {
 	alias: 'IdCache',
 	singleton: true,
 	requires: [
-
+		'NextThought.util.Base64'
 	],
 
-	constructor: function() {
-		Ext.apply(this,{
-			ids: {}
-		});
-	},
 
 	getIdentifier: function(id)
 	{
-		if (id && !this.ids.hasOwnProperty(id)) {
-			this.ids[id] = guidGenerator();
-		}
-		return this.ids[id];
-	},
-
-	hasIdentifier: function(id)
-	{
-		return (this.ids[id]);
+		return Base64.encode(id);
 	},
 
 	getComponentId: function (rec, subRecordField, prefix) {
