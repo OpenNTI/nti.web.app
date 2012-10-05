@@ -242,7 +242,12 @@ Ext.define('NextThought.view.content.reader.Content',{
 		//pop out links that point to external resources
 		if(!ParseUtils.parseNtiid(r) && m.externalUriRegex.test(r) && r.indexOf(whref) < 0 ){
 			//popup a leaving platform notice here...
-			window.open(r, guidGenerator());
+			try {
+				window.open(r, '_blank');
+			}
+			catch(er){
+				window.location.href = r;
+			}
 			return;
 		}
 
