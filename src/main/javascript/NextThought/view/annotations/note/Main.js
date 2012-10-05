@@ -57,7 +57,8 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		me.callParent(arguments);
 		me.text.setVisibilityMode(Ext.dom.Element.DISPLAY);
 		try {
-			me.setRecord(me.record);
+            me.editorActions = new NoteEditorActions(me,me.editor);
+            me.setRecord(me.record);
 
 			if( $AppConfig.service.canShare() ){
 				me.mon(me.replyButton,{ scope: me, click: me.activateReplyEditor });
@@ -79,8 +80,6 @@ Ext.define('NextThought.view.annotations.note.Main',{
 
 			me.mon( this.liked, 'click', function(){ me.getRecord().like(me.liked); },this);
 			me.mon( this.favorites, 'click', function(){ me.getRecord().favorite(me.favorites); },this);
-
-			me.editorActions = new NoteEditorActions(me,me.editor);
 
 			this.el.hover(this.onMouseOver,this.onMouseOut,this);
 
@@ -176,7 +175,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 	},
 
 	setRecord: function(r){
-		var suppressed, text, bodyText, sel, range, doc, start, end, likeTooltip, favoriteTooltip, objectInnerText, obj, me = this;
+		var suppressed, context;
 
 		//If we have an editor active for god sake don't blast it away
 		if(this.up('window').editorActive()){
@@ -231,7 +230,8 @@ Ext.define('NextThought.view.annotations.note.Main',{
 			range = Anchors.toDomRange(r.get('applicableRange'), doc, r.get('ContainerId'));
 			if(range){
                 this.context.insertFirst(RangeUtils.expandRange(range, doc));
-                if (!this.context.first().is('div')){
+                context = this.context.first();
+                if (!context || !context.is('div')){ //context may be null if child is a text node
                     this.context.insertHtml('afterBegin', '[...] ');
                     this.context.insertHtml('beforeEnd', ' [...]');
                 }
