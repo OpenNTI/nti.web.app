@@ -210,10 +210,8 @@ $over-color: #f4f3f3;
 				}
 
 				input {
-					border: none;
 					box-shadow: none;
 					background: transparent;
-					padding: 0;
 					height: auto;
 
 					$value: text-shadow 0.5s, color 0.5s;
@@ -339,35 +337,32 @@ $over-color: #f4f3f3;
 }
 
 div.add-group-action{
-	padding: 0 0	30px 15px;
+	padding: 0 0 30px 15px;
 	a {
 		&:active, &:visited, &:link{
-		border: 0 dotted $secondary-grey;
-		border-bottom-width: 2px;
-		color: $secondary-grey;
-		display: inline-block;
-		font-style: italic;
-		padding: 0px 2px;
-		text-decoration: none;
+			border: 0 dotted $secondary-grey;
+			border-bottom-width: 2px;
+			color: $secondary-grey;
+			display: inline-block;
+			font-style: italic;
+			padding: 0px 2px;
+			text-decoration: none;
+		}
 	}
-				}
 
-				input {
-					border: none;
-					box-shadow: none;
-					background: transparent;
-					padding: 0;
-					height: auto;
+	input {
+		box-shadow: none;
+		background: transparent;
+		height: auto;
 
-					$value: text-shadow 0.5s, color 0.5s;
+		$value: text-shadow 0.5s, color 0.5s;
+		@include experimental(transition, $value);
 
-					@include experimental(transition, $value);
-
-					&.error {
-						@include experimental(transition, $value);
-						@include animate(shake);
-						color: red;
-						text-shadow: 2px 2px 2px #ffc0c0;
-					}
-				}
+		&.error {
+			@include experimental(transition, $value);
+			@include animate(shake);
+			color: red;
+			text-shadow: 2px 2px 2px #ffc0c0;
+		}
+	}
 }

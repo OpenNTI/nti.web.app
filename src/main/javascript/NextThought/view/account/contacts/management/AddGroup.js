@@ -27,7 +27,6 @@ Ext.define('NextThought.view.account.contacts.management.AddGroup',{
 	reset: function(){
 		this.el.update('');
 		this.attachAddGroupControl(this.el, 'div');
-		this.el.down('input').on('blur', this.reset, this);
 		Ext.defer(this.updateLayout, 1, this);
 	},
 
