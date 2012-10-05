@@ -6,7 +6,7 @@ Ext.define('NextThought.mixins.ModelWithBodyContent',{
 
 		Ext.each(o,function(c){
 			if(typeof(c) === 'string'){
-				text.push(c.replace(/<.*?>/g, ' ').replace(/\s+/,' '));
+				text.push(c.replace(/<.*?>/g, '').replace(/\s+/,' '));
 			} else {
 				text.push('[image]');
 			}
