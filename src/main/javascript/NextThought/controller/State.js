@@ -116,7 +116,7 @@ Ext.define('NextThought.controller.State', {
 		this.restoringState = true;
 		var app = this.application,
 			history = window.history,
-			replaceState = false, c, key, stateScoped;
+			replaceState = false, c, key, stateScoped, me = this;
 
 		function fin(){
 			var token = {};
@@ -125,6 +125,8 @@ Ext.define('NextThought.controller.State', {
 				var land = Ext.util.Cookies.get('nti.landing_page') || Library.getFirstPage();
 				app.finishInitializeTask(token);
 				if((errorDetails||{}).error && land){
+					me.currentState.location = land;
+					window.localStorage.setItem(me.getStateKey(),JSON.stringify(me.currentState));
 					LocationProvider.setLocation( land, null, true);
 				}
 			};
