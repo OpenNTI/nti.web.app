@@ -262,9 +262,9 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		if(this.editMode){
 			this.onEdit();
 		}
-		
+
 		if(this.editorActions && this.replyToId === this.record.getId()){
-			this.activateReplyEditor();
+			 this.activateReplyEditor();
 		}
 
 		this.loadReplies(r);
@@ -304,11 +304,12 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		me.mask();
 		
 
-		function setReplies(){
+		function setReplies(theStore){
 			var cmpId, cmp;
-
-			record.set('ReferencedByCount',store.getCount());//update the count for next time the carousel renders
-			responses.setReplies(store.getItems());
+			console.log('Store load args', arguments);
+			console.log('Setting replies to ', theStore.getItems());
+			record.set('ReferencedByCount',theStore.getCount());//update the count for next time the carousel renders
+			responses.setReplies(theStore.getItems());
 
 			function maybeOpenReplyEditor(){
                 if(this.replyToId){
