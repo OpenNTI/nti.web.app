@@ -316,10 +316,18 @@ Ext.define('NextThought.view.annotations.note.Main',{
                     cmp = Ext.getCmp(IdCache.getComponentId(this.replyToId, null, 'reply'));
                     if(cmp){
                         cmp.activateReplyEditor();
-                        this.replyToId = null;
+                        delete this.replyToId;
+                    }
+                }
+                else if(this.scrollToId) {
+                    cmp = Ext.getCmp(IdCache.getComponentId(this.scrollToId, null, 'reply'));
+                    if(cmp){
+                        cmp.scrollIntoView();
+                        delete this.scrollToId;
                     }
                 }
             }
+
             Ext.defer(maybeOpenReplyEditor, 1, this);
 
 			me.unmask();
@@ -330,6 +338,11 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		}
 
 		store.proxy.url = record.getLink('replies');
+        if (!store.proxy.url){
+            //me.unmask();
+            console.error('I think we are showing a deleted note.');
+            return;
+        }
 		store.on('load', setReplies, me, { single: true });
 		store.load({});
 	},

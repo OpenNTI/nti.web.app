@@ -214,7 +214,7 @@ Ext.define('NextThought.controller.Search', {
 		function failure(){
 			console.log("Could not retrieve rawData for: ",result.hitId);
 			console.log("Error: ", arguments);
-			alert('Ooops :(\nI could not do that, Dave.');
+			alert('An unexpected error has occured.');
 		}
 
 		if (!cid) {

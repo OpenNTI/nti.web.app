@@ -84,14 +84,14 @@ Ext.define('NextThought.controller.Navigation', {
                 var c = object.get('ContainerId'),
                     inReplyTo = object.get('inReplyTo'),
                     s = LocationProvider.getStore(c).hasOwnProperty('data'),
-                    ref, scrollToReplyId;
+                    ref, scrollToReplyId = undefined;
 
-                function afterLoadedAgain(){
+                function afterLoadedAgain(object){
                     if(!s){
                         console.warn('\n\n\n\n\n\n\nNo Store for: '+c+'\n\n\n\n\n\n');
                     }
 
-                    Ext.widget('note-window', { replyToId: scrollToReplyId, annotation: {getRecord:function(){return object;}}}).show();
+                    Ext.widget('note-window', { scrollToId: scrollToReplyId, annotation: {getRecord:function(){return object;}}}).show();
 
                     reader.scrollToContainer(c);
                 }
@@ -103,10 +103,13 @@ Ext.define('NextThought.controller.Navigation', {
                     if (!ref){
                          console.warn('inReplyTo set but no references found');
                     }
-                    service.getObject(ref, afterLoadedAgain, fail, me);
+                    service.getObject(ref, afterLoadedAgain, function(){
+                        afterLoadedAgain(object);
+                        console.log('Root note unresolvable, using reply instead.');
+                    }, me);
                 }
                 else {
-                    afterLoadedAgain();
+                    afterLoadedAgain(object);
                 }
 			}
 

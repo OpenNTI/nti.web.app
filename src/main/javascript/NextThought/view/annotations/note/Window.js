@@ -62,6 +62,9 @@ Ext.define('NextThought.view.annotations.note.Window',{
 		if(this.replyToId){
 			m.replyToId = this.replyToId;
 		}
+        if (this.scrollToId) {
+            m.scrollToId = this.scrollToId;
+        }
 		m.setRecord(a.getRecord());
 		this.down('note-carousel').setRecord(a.getRecord());
 
