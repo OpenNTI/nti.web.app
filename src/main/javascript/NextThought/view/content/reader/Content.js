@@ -102,11 +102,11 @@ Ext.define('NextThought.view.content.reader.Content',{
 				resp.responseText.match(/<body([^>]*)>/i),
 				this.buildPath(resp.request.options.url));
 
-		Ext.callback(finish,null,[me]);
-
 		subContainers = me.resolveContainers();
 
 		me.loadContentAnnotations(LocationProvider.currentNTIID, subContainers);
+
+		Ext.callback(finish,null,[me]);
 	},
 
 
