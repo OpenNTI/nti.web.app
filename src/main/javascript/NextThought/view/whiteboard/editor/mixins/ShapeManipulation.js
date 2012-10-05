@@ -21,6 +21,9 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 			mousedown: this.onMouseDown,
 			mousemove: this.onMouseMove,
 			mouseup: this.onMouseUp,
+
+            mouseout: this.onMouseUp,
+
 			click: this.onClick
 		});
 	},
