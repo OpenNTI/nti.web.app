@@ -379,7 +379,7 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 
 		newSel = fn.call(sel);
 		if(newSel && newSel.record){
-			this.setRecord(newSel.record);
+			this.setRecord(newSel.record, newSel);
 		}
 	},
 
