@@ -302,14 +302,14 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		me.up('window').down('note-responses').removeAll(true);
 		console.log('loading replies');
 		me.mask();
-		
+
 
 		function setReplies(theStore){
-			var cmp;
+			var cmp, items = theStore.getItems();
 			console.log('Store load args', arguments);
-			console.log('Setting replies to ', theStore.getItems());
+			console.log('Setting replies to ', items);
 			record.set('ReferencedByCount',theStore.getCount());//update the count for next time the carousel renders
-			responses.setReplies(theStore.getItems());
+			responses.setReplies(items);
 
 			function maybeOpenReplyEditor(){
                 if(this.replyToId){

@@ -120,8 +120,10 @@ Ext.define('NextThought.store.PageItem',{
 				}
 
 				p.children = p.children || [];
-				p.children.push(r);
-
+				if(Ext.Array.indexOf(p.children, r) < 0){
+					p.children.push(r);
+				}
+				
 				r.parent = p;
 			}
 		});
