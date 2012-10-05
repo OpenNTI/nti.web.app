@@ -37,7 +37,7 @@ Ext.define('NextThought.view.account.coppa.Header',{
         this.renderData = Ext.apply(this.renderData||{},{
             img: iconURL || $AppConfig.userObject.get('avatarURL'),
             title: this.title || 'Congratulations!',
-            detail: this.detail || 'We received concent for you to use social features on our site. Please provide the following information to update your account.'
+            detail: this.detail || 'We received consent for you to use social features on our site. Please provide the following information to update your account.'
         });
     },
 
