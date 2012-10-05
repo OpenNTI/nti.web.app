@@ -77,7 +77,7 @@ Ext.define('NextThought.mixins.AddGroup', {
 
 
 	submitNewGroup: function(groupName){
-		var input = this.getEl().down(this.addGroupTag + ' > input'),
+		var input = this.addGroupDom.down('input'),
 			me = this;
 
 		if((groupName||'').length === 0){

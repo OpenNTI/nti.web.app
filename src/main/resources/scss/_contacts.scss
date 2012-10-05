@@ -195,6 +195,10 @@ $over-color: #f4f3f3;
 
 				&.add-group-action {
 					background: none;
+
+					.input-wrap {
+						left: -5px;
+					}
 				}
 
 				a {
