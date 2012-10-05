@@ -208,9 +208,8 @@ Ext.define('NextThought.view.content.reader.Content',{
 				host = absolute?getURL():basePath;
 
 			if(/src/i.test(attr) && /youtube/i.test(url)){
-				return Ext.String.format('src="{0}&wmode={1}"',
-						url.replace(/http:/i,'https:').replace('rel=0','html5=1'),
-						'opaque');
+				return Ext.String.format('src="{0}?html5=1&rel=0&wmode=opaque"',
+						url.replace(/http:/i,'https:').replace(/\?.*/i,''));
 			}
 
 			//inline
