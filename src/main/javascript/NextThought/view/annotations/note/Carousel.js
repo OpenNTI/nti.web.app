@@ -265,9 +265,8 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 
 		this.updateBigArrows(item);
 
-
 		this.updateSlide();
-        if (item && sender === item){
+        if (item && sender && sender.isCarouselItem){
 		    this.up('window').down('note-main-view').setRecord(item.record);
         }
 

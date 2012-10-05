@@ -21,6 +21,8 @@ Ext.define('NextThought.view.annotations.note.CarouselItem',{
 		image: 'img'
 	},
 
+	isCarouselItem: true,
+
 	initComponent: function(){
 		this.callParent(arguments);
 		var m = this.record;
