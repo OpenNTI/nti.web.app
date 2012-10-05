@@ -296,16 +296,13 @@ Ext.define('NextThought.view.annotations.note.Main',{
 
 
 	loadReplies: function(record){
-		if(this.repliesLoaded){return;}
-
 		var me = this,
 			store = NextThought.store.PageItem.create(),
 			responses = me.up('window').down('note-responses');
-
 		me.up('window').down('note-responses').removeAll(true);
 		console.log('loading replies');
-		this.repliesLoaded = true;
 		me.mask();
+		
 
 		function setReplies(){
 			var cmpId, cmp;
