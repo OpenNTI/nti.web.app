@@ -135,10 +135,13 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 			return;
 		}
 
-		this.store = LocationProvider.getStore(rec.get('ContainerId'));
-		this.mon(this.store,'datachanged',this.load,this);
-		this.prefetchNext();
-		this.load();
+
+        if (!this.store){
+            this.store = LocationProvider.getStore(rec.get('ContainerId'));
+            this.mon(this.store,'datachanged',this.load,this);
+            this.prefetchNext();
+            this.load();
+        }
 
 		me.record = rec;
 
