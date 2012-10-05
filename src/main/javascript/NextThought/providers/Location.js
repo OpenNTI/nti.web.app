@@ -76,7 +76,7 @@ Ext.define('NextThought.providers.Location', {
 			return;
 		}
 
-		function finish(){
+		function finish(a,errorDetails){
 			if(finish.called){
 				console.warn('finish navigation called twice');
 				return;
@@ -88,6 +88,12 @@ Ext.define('NextThought.providers.Location', {
 				e.unmask();
 			}
 			Ext.callback(callback,null,arguments);
+
+			if((errorDetails||{}).error){
+				//blank it out
+				localStorage[rootId] = null;
+				return;
+			}
 
 			if(fromHistory!==true){
 				history.pushState({location: ntiid}, "");
@@ -131,7 +137,7 @@ Ext.define('NextThought.providers.Location', {
 		function failure(q,r){
 			console.error('resolvePageInfo Failure: ',arguments);
             me.fireEvent('change', undefined);
-            Ext.callback(finish,null,[me,{req:q,error:r}]);
+            Ext.callback(finish,null,[me,{failure:true,req:q,error:r}]);
             if (r.status === 403 || !r.responseText) {
                 me.fireEvent('navigateAbort');
                 alert(r.status === 403
