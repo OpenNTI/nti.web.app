@@ -127,7 +127,7 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 	},
 
 
-	setRecord: function(rec){
+	setRecord: function(rec, sender){
 		var me = this,
 			myWindow = me.up('window');
 
@@ -147,7 +147,7 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 			o.markSelected(s);
 			if(s){
 				if(me.rendered){
-					setTimeout(function(){ me.updateWith(o); },10);
+					setTimeout(function(){ me.updateWith(o, sender); },10);
 				}
 				else { me.selected = o; }
 			}
@@ -247,13 +247,13 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 
 	},
 
-	updateWith: function(item){
+	updateWith: function(item, sender){
 		var bgx,
 		me = this;
 
 		if(this.notfoundEl){ this.notfoundEl.remove(); }
 		if(item && !item.rendered){
-			setTimeout(function(){ me.updateWith(item); },10);
+			setTimeout(function(){ me.updateWith(item, sender); },10);
 			return;
 		}
 
@@ -267,7 +267,7 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 
 
 		this.updateSlide();
-        if (item){
+        if (item && sender === item){
 		    this.up('window').down('note-main-view').setRecord(item.record);
         }
 

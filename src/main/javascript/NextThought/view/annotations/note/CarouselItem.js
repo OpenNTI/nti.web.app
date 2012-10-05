@@ -57,6 +57,6 @@ Ext.define('NextThought.view.annotations.note.CarouselItem',{
 
 
 	clicked: function(e){
-		this.up('note-carousel').setRecord(this.record);
+		this.up('note-carousel').setRecord(this.record, this);
 	}
 });

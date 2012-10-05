@@ -123,7 +123,10 @@ Ext.define('NextThought.store.PageItem',{
 				if(Ext.Array.indexOf(p.children, r) < 0){
 					p.children.push(r);
 				}
-				
+				else{
+					console.warn('Ignoring duplicate record in child list', r, p.children);
+				}
+
 				r.parent = p;
 			}
 		});
