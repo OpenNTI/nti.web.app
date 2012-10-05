@@ -65,14 +65,15 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 
 
 	load: function(filter, filterName){
-		var me = this, m =[];
-
+		var me = this, m =[],
+			selectedRecordId = me.record ? me.record.getId() : null,
+			selectedNode;
 		filter = Ext.isFunction(filter)? filter : null;
 
 		me.removeAll(true);
 		this.store.each(function(item){
 			if(item instanceof NextThought.model.Note && (!filter || filter(item))){
-				m.push({record: item, autoRender:Boolean(me.rendered)});
+				m.push({record: item, autoRender:Boolean(me.rendered), selected: item.getId() === selectedRecordId});
 			}
 		});
 
@@ -87,6 +88,11 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 			});
 		}
 		me.add(m);
+		selectedNode = me.down('[selected]');
+		if(selectedNode){
+			selectedNode.markSelected(true);
+			me.updateWith(selectedNode);
+		}
 	},
 
 
@@ -94,28 +100,18 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 		var el = this.el;
 		el.mask('');
 		Ext.defer(function(){
-			var f = this[filter], rec = this.record;
+			var f = this[filter], rec = this.record, selected;
 			this.load(f?f(value):null, filter);
-
+			el.unmask();
+			selected = this.items.findBy(function(o){return o.record.getId() === rec.getId();},null);
 			if(filter && filter!==''){
 				if(this.items.length <=0){
 					this.updateWith(null);
-
-					if(!this.notfoundEl || this.body.query('.no-search-found').length <= 0){
-						this.notfoundEl = Ext.DomHelper.append(this.body, { xtype:'box', cls:"no-search-found", html:"No match found"}, true);
-					}
-				}
-				else {
-					this.setRecord(this.items.first().record);
+					this.add( { xtype:'box', cls:"no-search-found", html:"No match found"});
+					return;
 				}
 			}
-			else if(this.items.findBy(function(o){return o.record === rec;},null)>=1){
-				this.setRecord(rec);
-			}
-			else {
-				this.updateWith(null);
-			}
-			el.unmask();
+			this.updateWith(selected);
 		},1,this);
 	},
 
@@ -254,9 +250,11 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 		var bgx,
 		me = this;
 
-		if(this.notfoundEl){ this.notfoundEl.remove(); }
+		
+
 		if(item && !item.rendered){
-			setTimeout(function(){ me.updateWith(item, sender); },10);
+		//	setTimeout(function(){ me.updateWith(item, sender); },10);
+			console.log('Short circuiting updateWith because item not rendered', item);
 			return;
 		}
 
