@@ -27,6 +27,13 @@ Ext.define('NextThought.store.PageItem',{
 		model: 'NextThought.model.GenericObject'
 	},
 
+	sorters: [
+		{
+			property : 'Last Modified',
+			direction: 'DESC'
+		}
+	],
+
 
 	GETTERS : {
 		'Highlight': function(r){return r;},
