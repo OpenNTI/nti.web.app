@@ -126,7 +126,7 @@ Ext.define('NextThought.controller.UserData', {
 				}
 
 				//add it to the page items store I guess:
-				pageStore = LocationProvider.getStore();
+				pageStore = LocationProvider.getStore(cid);
 				if(!pageStore || LocationProvider.currentNTIID !== meta.NTIID || (item && !item.isTopLevel())){
 					me.maybeFireChildAdded(item);
 					return;
