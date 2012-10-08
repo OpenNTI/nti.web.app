@@ -15,7 +15,7 @@ $button-end-colors: #384EA9,#87b133,#c8c8c8,#eb4a4a;
 
 $button-text-colors: #ffffff,#ffffff,#707070,#ffffff;
 $button-text-shadows: #12236a,#688b23,#ffffff,#587818;
-$button-text-weights: 800,600,400,600;
+$button-text-weights: 800,600,400,400;
 
 @each $skin in $skins {
 	$experimental-support-for-svg: true;
