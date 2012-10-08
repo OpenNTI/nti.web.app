@@ -207,13 +207,13 @@ Ext.define('NextThought.controller.UserData', {
 
 	onAnnotationsLoad: function(cmp, containerId, subContainers) {
 
-		function make(url,id){
+		function make(url,id,disablePaging){
 			var ps = NextThought.store.PageItem.create({
 				clearOnPageLoad: false,
 				containerId: id
 			});
 			ps.proxy.url = url;
-			if(!/mathcounts/i.test(containerId)){
+			if(disablePaging){
 				ps.proxy.limitParam = undefined;
 				ps.proxy.startParam = undefined;
 				delete ps.pageSize;
@@ -224,7 +224,7 @@ Ext.define('NextThought.controller.UserData', {
 		var rel = Globals.USER_GENERATED_DATA,
 			pi = LocationProvider.currentPageInfo,
 			stores = [],
-			ps = make(pi.getLink(rel),containerId),
+			ps = make(pi.getLink(rel),containerId,true),
 			map = { root: ps };
 
 		LocationProvider.currentPageStores = map;
