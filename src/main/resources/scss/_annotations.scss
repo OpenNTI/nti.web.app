@@ -53,6 +53,12 @@
 			.thumb {
 				display: inline-block;
 
+				&.nib-stack{
+					background: url(../images/notes/margin_note_endcap.png) right center no-repeat;
+					width: 10px;
+					height: 30px;
+				}
+
 				&:first-of-type {
 					border: 0 solid black;
 					border-radius: 0 3px 3px 0;

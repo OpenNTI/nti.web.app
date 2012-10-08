@@ -14,7 +14,8 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 
 	controlLineTmpl: Ext.DomHelper.createTemplate( { cls:'controlContainer'} ).compile(),
 	widgetLineTmpl: Ext.DomHelper.createTemplate( {cls:'widgetContainer'} ).compile(),
-	addNoteToOccupiedLineTmpl: Ext.DomHelper.createTemplate( {cls:'thumb note-gutter-widget add-note {0}', title:'Add Note'} ).compile(),
+	stackTmpl: Ext.DomHelper.createTemplate( {cls:'thumb note-gutter-widget nib-stack'} ).compile(),
+	addNoteToOccupiedLineTmpl: Ext.DomHelper.createTemplate( {cls:'thumb add-note {0}', title:'Add Note'} ).compile(),
 
 
 	/**
@@ -186,6 +187,7 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 			b = this.buckets[prefix],
 			cT = this.controlLineTmpl,
 			wT = this.widgetLineTmpl,
+			sT = this.stackTmpl,
 			width = r.getAnnotationOffsets().gutter + 80,
 			cls = (width <= 355)? 'narrow-gutter': '',
 			maxAnnotations = Math.floor(width / 34) - 2;
@@ -207,34 +209,31 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 			(new Ext.CompositeElement([line.controls,line.widgets])).setTop(y+'px');
 
 			line.each(function(o){
-				var w = o.getGutterWidget(),
-					c = o.getControl();
-
-				if(!c&&!w) { return true; }//continue loop
-
 				r.noteOverlayAddRestrictedRange(o.getRestrictedRange());
-
-				if(count < maxAnnotations){
-					count++;
-					if( c ){ c.appendTo( line.controls ); }
-					if( w ){ widgets.push( o ); }
-				}
-				else {
-					//draw stack
-					return false;//end loop
-				}
-				return true;//continue loop...
+				var c = o.getControl();
+				if( c ){ c.appendTo( line.controls ); }
+				if( o.hasGutterWidgets ){ widgets.push( o ); }
 			});
 
 			siblings = widgets.length-1;
 			Ext.each(widgets,function(o){
-				var w = o.getGutterWidget(siblings);
-				if(w){
-					w.appendTo(line.widgets);
-					w.addCls(cls);
+				var w;
+				if(count < maxAnnotations){
+					count++;
+					w = o.getGutterWidget(siblings);
+					if(w){
+						w.appendTo(line.widgets);
+						w.addCls(cls);
+					}
+					else {
+						console.warn('Annotation lied about having a gutter widget',o);
+					}
 				}
 				else {
-					siblings -= 1;
+					try{
+					sT.append(line.widgets);
+					}
+					catch(e){console.error(e.message);}
 				}
 			});
 
