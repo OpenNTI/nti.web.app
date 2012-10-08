@@ -43,7 +43,7 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 		if(isContact){
 			this.buttonEvent = 'delete-contact';
 			Ext.apply(this.items[1].items[0],{
-				ui: 'secondary',
+				ui: 'caution',
 				text: 'Remove Contact'
 			});
 		}
