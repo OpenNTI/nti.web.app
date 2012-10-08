@@ -179,14 +179,16 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 	},
 
 
-	layoutBuckets: function(prefix, width){
+	layoutBuckets: function(prefix){
 		var addTpl = this.addNoteToOccupiedLineTmpl,
 			r = this.getReader(prefix),
 			g = this.gutter[prefix],
 			b = this.buckets[prefix],
 			cT = this.controlLineTmpl,
 			wT = this.widgetLineTmpl,
-			cls = (width <= 355)? 'narrow-gutter': '';
+			width = r.getAnnotationOffsets().gutter + 80,
+			cls = (width <= 355)? 'narrow-gutter': '',
+			maxAnnotations = Math.floor(width / 34) - 2;
 
 		g.setWidth(width);
 		g.controls.setLeft(width-50);
@@ -197,7 +199,7 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 
 		b.each(function(line,y){
 
-			var widgets = [], siblings, block, rect, t;
+			var widgets = [], siblings, block, rect, t, count=0;
 
 			line.controls = line.controls || cT.append(g.controls,[],true);
 			line.widgets = line.widgets || wT.append(g.widgets,[],true);
@@ -208,9 +210,20 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 				var w = o.getGutterWidget(),
 					c = o.getControl();
 
+				if(!c&&!w) { return true; }//continue loop
+
 				r.noteOverlayAddRestrictedRange(o.getRestrictedRange());
-				if( c ){ c.appendTo( line.controls ); }
-				if( w ){ widgets.push( o ); }
+
+				if(count < maxAnnotations){
+					count++;
+					if( c ){ c.appendTo( line.controls ); }
+					if( w ){ widgets.push( o ); }
+				}
+				else {
+					//draw stack
+					return false;//end loop
+				}
+				return true;//continue loop...
 			});
 
 			siblings = widgets.length-1;
@@ -261,10 +274,7 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 
 
 	render: function(prefix){
-		var me = this, containers = {},
-			r = this.getReader(prefix),
-			width = r.getAnnotationOffsets().gutter + 80,
-			maxAnnotations = Math.floor(width / 34) - 2;
+		var me = this, containers = {};
 
 		if(me.rendering){
 			console.warn('Render called while rendering...');
@@ -304,16 +314,6 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 				var y, b,
 					c = containers[o.getContainerId()] = (containers[o.getContainerId()]||[]);
 
-				//FIXME this optimization is flawed.  We can't just arbitrarily trim by the number
-				//of annotations in the container.  What we really want is the number of annotations on a
-				//given line.  These happen to be equivalent for the majority of mathcounts but it
-				//leads to unexpeted/buggy behavour in other content.  This needs to be rethought.
-				/*
-				if(c.length >= maxAnnotations){
-					//render an endcap
-					return;
-				}*/
-
 				if(o.hasGutterWidgets){
 					c.push(o);
 				}
@@ -338,7 +338,7 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 			}
 		});
 
-		me.layoutBuckets(prefix, width);
+		me.layoutBuckets(prefix);
 
 		me.rendering = false;
 		me.events.fireEvent('finish');
