@@ -49,12 +49,22 @@ Ext.define('NextThought.proxy.Socket', {
 	},
 
 	register: function(control) {
-		var k, x;
+		var k, x, f;
 		for (k in control) {
 			if (control.hasOwnProperty(k)) {
+				//We don't want uncaught errors killing the sequence
+				f = function(){
+					try{
+						control[k].apply(this, arguments);
+					}
+					catch(e){
+						console.error('Caught an uncaught exception when taking action on', k, Globals.getError(e));
+					}
+				};
+				
 				//if there's already a callback registered, sequence it.
 				x = this.control[k];
-				this.control[k] = x ? Ext.Function.createSequence(x, control[k]) : control[k];
+				this.control[k] = x ? Ext.Function.createSequence(x, f) : f;
 
 				if(this.socket) {
 					this.socket.on(k, control[k]);
