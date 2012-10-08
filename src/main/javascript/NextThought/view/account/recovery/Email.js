@@ -16,7 +16,7 @@ Ext.define('NextThought.view.account.recovery.Email',{
                 {cls: 'error-desc'}
             ]}
         },
-        {xtype: 'container', cls: 'submit',  layout:{type: 'hbox', pack: 'end'}, items: [
+        {xtype: 'container', cls: 'submit', name:'buttons', layout:{type: 'hbox', pack: 'end'}, items: [
             {xtype: 'button', ui: 'primary', scale: 'medium', name: 'submit', text:'Submit'}
         ]}
     ],
@@ -33,7 +33,8 @@ Ext.define('NextThought.view.account.recovery.Email',{
 
     setError: function(error) {
         var box = this.down('[name=error]'),
-            field = this.down('[name='+error.field+']');
+            field = this.down('[name='+error.field+']'),
+            bContainer = this.down('[name=buttons]');
 
         //make main error field show up
         box.el.down('.error-field').update(error.field),
@@ -42,6 +43,14 @@ Ext.define('NextThought.view.account.recovery.Email',{
 
         //set error state on specific field
         field.addCls('error');
+
+        if (error.code === 'AttemptingToResendConsentEmailTooSoon'){
+            //remove submit:
+            bContainer.down('button').destroy();
+            bContainer.add({xtype: 'button', ui: 'primary', scale: 'medium', name: 'cancel', text:'Cancel', handler: function(b){
+                b.up('window').close();
+            }});
+        }
 
         this.up('window').updateLayout();
     }

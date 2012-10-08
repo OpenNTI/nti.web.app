@@ -63,7 +63,7 @@ Ext.define('NextThought.controller.Account', {
                 'click': this.submitCoppaInfo
             },
 
-            'recovery-email-view button': {
+            'recovery-email-view button[name=submit]': {
                 'click': this.fixEmail
             }
 
