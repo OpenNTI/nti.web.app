@@ -14,8 +14,8 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 
 	controlLineTmpl: Ext.DomHelper.createTemplate( { cls:'controlContainer'} ).compile(),
 	widgetLineTmpl: Ext.DomHelper.createTemplate( {cls:'widgetContainer'} ).compile(),
-	stackTmpl: Ext.DomHelper.createTemplate( {cls:'thumb note-gutter-widget nib-stack'} ).compile(),
-	addNoteToOccupiedLineTmpl: Ext.DomHelper.createTemplate( {cls:'thumb add-note {0}', title:'Add Note'} ).compile(),
+	stackTmpl: Ext.DomHelper.createTemplate( {cls:'thumb nib-stack'} ).compile(),
+	addNoteToOccupiedLineTmpl: Ext.DomHelper.createTemplate( {cls:'thumb note-gutter-widget add-note {0}', title:'Add Note'} ).compile(),
 
 
 	/**
@@ -190,7 +190,7 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 			sT = this.stackTmpl,
 			width = r.getAnnotationOffsets().gutter + 80,
 			cls = (width <= 355)? 'narrow-gutter': '',
-			maxAnnotations = Math.floor(width / 34) - 2;
+			maxAnnotations = Math.floor(width / 34) - 3;
 
 		g.setWidth(width);
 		g.controls.setLeft(width-50);
@@ -230,11 +230,10 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 					}
 				}
 				else {
-					try{
 					sT.append(line.widgets);
-					}
-					catch(e){console.error(e.message);}
+					return false;//stop
 				}
+				return true; //continue
 			});
 
 			if(!line.controls.first()){ line.controls.remove(); delete line.controls; }
