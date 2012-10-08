@@ -48,26 +48,30 @@ Ext.define('NextThought.proxy.Socket', {
 		Ext.TaskManager.start(task);
 	},
 
-	register: function(control) {
+
+	wrapHandler: function(handler, name){
+		return function(){
+				try{
+					handler.apply(this, arguments);
+				}
+				catch(e){
+					console.error('Caught an uncaught exception when taking action on', name, Globals.getError(e));
+				}
+		};
+	},
+
+	register: function(newControl) {
 		var k, x, f;
-		for (k in control) {
-			if (control.hasOwnProperty(k)) {
+		for (k in newControl) {
+			if (newControl.hasOwnProperty(k)) {
 				//We don't want uncaught errors killing the sequence
-				f = function(){
-					try{
-						control[k].apply(this, arguments);
-					}
-					catch(e){
-						console.error('Caught an uncaught exception when taking action on', k, Globals.getError(e));
-					}
-				};
-				
+				f = this.wrapHandler(newControl[k], k);
 				//if there's already a callback registered, sequence it.
 				x = this.control[k];
 				this.control[k] = x ? Ext.Function.createSequence(x, f) : f;
 
 				if(this.socket) {
-					this.socket.on(k, control[k]);
+					this.socket.on(k, this.control[k]);
 				}
 			}
 		}
