@@ -381,7 +381,6 @@ function(){
 		Globals.removeLoaderSplash();
 		Ext.MessageBox.alert({
 			icon: Ext.Msg.WARNING,
-			title: 'Alert',
 			msg:msg,
 			buttons: Ext.Msg.OK
 		});

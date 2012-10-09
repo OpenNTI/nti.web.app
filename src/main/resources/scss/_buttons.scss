@@ -15,7 +15,7 @@ $button-end-colors: #384EA9,#87b133,#c8c8c8,#eb4a4a;
 
 $button-text-colors: #ffffff,#ffffff,#707070,#ffffff;
 $button-text-shadows: #12236a,#688b23,#ffffff,#587818;
-$button-text-weights: 800,600,400,400;
+$button-text-weights: 500,500,600,500;
 
 @each $skin in $skins {
 	$experimental-support-for-svg: true;
@@ -60,7 +60,7 @@ $button-text-weights: 800,600,400,400;
 			border: 1px $border solid;
 			border-radius: 4px;
 			box-shadow: inset 0px 1px 1px $shadow;
-			padding: 2px+(4px*$i) 10px+(5px*$i);
+			padding: (4px*$i) 10px+(5px*$i);
 
 			@include background-image( linear-gradient(top,
 					$startColor 0%,
@@ -87,9 +87,6 @@ $button-text-weights: 800,600,400,400;
 									$endColor 0%,
 									$startColor 100%
 									));
-				.x-btn-inner {
-					text-shadow: 0 -$direction 0 $text-shadow;
-				}
 			}
 
 			.x-btn-inner {

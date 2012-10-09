@@ -7,15 +7,18 @@ Ext.define('NextThought.view.MessageBox',{
 	shadow: false,
 	ui: 'nti-alert',
 	cls: 'nti-alert',
-	minWidth: 370,
+	minWidth: 390,
+	maxWidth: 400,
 
 	CANCEL : 1,
 	NO : 2,
 	YES : 4,
 	OK : 8,
 
+	iconHeight: 75,
+
 	buttonText: {
-		ok: 'Ok',
+		ok: 'OK',
 		yes: 'Yes',
 		no: 'No',
 		cancel: 'Cancel'
@@ -31,11 +34,27 @@ Ext.define('NextThought.view.MessageBox',{
 		return new Ext.button.Button({
 			handler: this.btnCallback,
 			itemId: btnId,
-			ui: 'alert',
-			scale: 'medium',
+			ui: 'secondary',
+			scale: 'large',
 			scope: this,
-			margin: 10,
-			text: this.buttonText[btnId]
+			text: this.buttonText[btnId],
+
+			xhooks: {
+				setText: function(text){
+					if(/delete/i.test(text)){
+						this.setUI('caution');
+					}
+					else if(/accept/i.test(text)){
+						this.setUI('primary');
+					}
+					else {
+						console.log('hey!',arguments);
+						this.setUI('secondary');
+					}
+
+					return this.callParent(arguments);
+				}
+			}
 		});
 	},
 
@@ -43,7 +62,7 @@ Ext.define('NextThought.view.MessageBox',{
 	initComponent: function(){
 		this.callParent(arguments);
 		this.bottomTb.layout.pack='end';
-		this.iconComponent.setWidth(65);
+		this.iconComponent.setWidth(80);
 
 	},
 
@@ -51,11 +70,13 @@ Ext.define('NextThought.view.MessageBox',{
 	setTitle: function(){ this.callParent(['&#160;']); },
 
 	show: function(cfg){
-		cfg.msg = cfg.msg.replace(/\n/,'<br/>');
 		Ext.applyIf(cfg,{
-			title:'nonsense',
+			title:'Attention...',
 			icon: Ext.MessageBox.WARNING
 		});
+
+		cfg.msg = cfg.title+'<div class="message">'+cfg.msg+'</div>';
+		cfg.msg = cfg.msg.replace(/\n/,'<br/>');
 		return this.callParent([cfg]);
 	}
 
