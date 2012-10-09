@@ -146,6 +146,8 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 		if(this.record){
 			this.mun(this.record, 'updated', this.updateToolState, this);
 			this.mun(this.record, 'child-added', this.addNewChild, this);
+            this.mun(this.record, 'changed', this.recordChanged, this);
+            this.mun(this.record, 'updated', this.recordUpdated, this);
 		}
 
 		this.record = r;
@@ -155,13 +157,8 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 
 		me.recordIdHash = IdCache.getIdentifier(r.getId());
 
-		me.time.update(r.getRelativeTimeString());
-		me.liked.update(r.getFriendlyLikeCount());
-		if (r.isLiked()){
-			this.liked.addCls('on');
-		}
-		try{
-			r.compileBodyContent(this.setContent, this, this.generateClickHandler, 226);
+        try{
+            this.updateFromRecord();
 			this.responseBox[r.get('sharedWith').length===0?'removeCls':'addCls']('shared');
 		}
 		catch(e){
@@ -175,6 +172,8 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 		this.updateToolState();
 		this.mon(r, 'updated', this.updateToolState, this);
 		this.mon(r, 'child-added', this.addNewChild, this);
+        this.mon(r, 'changed', this.recordChanged, this, {single:true});
+        this.mon(r, 'updated', this.recordUpdated, this, {single:true});
 	},
 
 
@@ -320,9 +319,11 @@ function(){
 		'setContent',
 		'generateClickHandler',
 		'fillInUser',
-		'fillInShare',
 		'editorSaved',
-		'scrollIntoView'
+		'scrollIntoView',
+        'updateFromRecord',
+        'recordChanged',
+        'recordUpdated'
 	]);
 
 

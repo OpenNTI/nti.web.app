@@ -150,22 +150,26 @@ Ext.define('NextThought.view.annotations.note.Main',{
 	//That is true in practice and it would be expensive to pull it everytime
 	//some other part of this record is updated
 	updateFromRecord: function(){
-		var r = this.record, likeTooltip, favoriteTooltip;
+		var r = this.record;
 
 		try {
-			UserRepository.getUser(r.get('Creator'),this.fillInUser,this);
-			this.time.update(r.getRelativeTimeString());
+            UserRepository.getUser(r.get('Creator'),this.fillInUser,this);
+            this.time.update(r.getRelativeTimeString());
 
-			UserRepository.getUser(r.get('sharedWith').slice(),this.fillInShare,this);
+            if (this.fillInShare){
+			    UserRepository.getUser(r.get('sharedWith').slice(),this.fillInShare,this);
+            }
 
-			this.liked.update(r.getFriendlyLikeCount());
-			this.liked[(r.isLiked()?'add':'remove')+'Cls']('on');
-			this.favorites[(r.isFavorited()?'add':'remove')+'Cls']('on');
+            if (this.liked){
+                this.liked.update(r.getFriendlyLikeCount());
+                this.liked[(r.isLiked()?'add':'remove')+'Cls']('on');
+                this.liked.set({'title': r.isLiked() ? 'Liked' : 'Like'});
+            }
 
-			likeTooltip = r.isLiked() ? 'Liked' : 'Like';
-			favoriteTooltip = r.isFavorited() ? 'Bookmarked' : 'Add to bookmarks';
-			this.liked.set({'title': likeTooltip});
-			this.favorites.set({'title': favoriteTooltip});
+            if(this.favorites){
+                this.favorites[(r.isFavorited()?'add':'remove')+'Cls']('on');
+    			this.favorites.set({'title': r.isFavorited() ? 'Bookmarked' : 'Add to bookmarks'});
+            }
 		}
 		catch(e1){
 			console.error(Globals.getError(e1));
@@ -391,10 +395,6 @@ Ext.define('NextThought.view.annotations.note.Main',{
 	},
 
 
-	recordChanged: Ext.Function.createBuffered( function(){ this.updateFromRecord(); }, 100),
-	recordUpdated: Ext.Function.createBuffered( function(){ this.updateFromRecord(); }, 100),
-
-
 	fillInUser: function(user){
 		this.name.update(user.getName());
 		this.avatar.setStyle({backgroundImage: 'url('+user.get('avatarURL')+')'});
@@ -564,6 +564,12 @@ Ext.define('NextThought.view.annotations.note.Main',{
 
 },
 function(){
+    var p = this.prototype,
+        ufr = p.updateFromRecord;
+    Ext.apply(p, {
+        recordChanged: Ext.Function.createBuffered(ufr, 100),
+        recordUpdated: Ext.Function.createBuffered(ufr, 100)
+    });
 	this.prototype.renderTpl = Ext.DomHelper.markup([
 		{
 			cls: 'avatar',
