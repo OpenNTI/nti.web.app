@@ -1451,12 +1451,14 @@ Ext.define('NextThought.util.Anchors', {
 	 */
 	snapSelectionToWord: function(doc) {
 		var sel = rangy.getSelection(doc),
-			r = sel.getRangeAt(0);
+			r = sel.getRangeAt(0),
+            rString = r.toString();
 
 		//if selection is collapsed, don't expand.
 		if (r.collapsed){return;}
 
-		r.expand('word');
+        r.expand('word', {wordRegex: /[“‘]*[a-z0-9]+('[a-z0-9]+)*[’”.,;:]*/gi});
+
 		Anchors.expandRangeToIncludeMath(r);
 		sel.setSingleRange(r);
 	}
