@@ -157,7 +157,8 @@ Ext.define('NextThought.view.content.reader.Scroll',{
 			doc = me.getDocumentElement(),
 			ranges = [],
 			texts,
-			rangeToScrollTo;
+			rangeToScrollTo,
+			nodeTop, scrollOffset, a, pos, assessmentAdjustment = 0;
 
 		texts = AnnotationUtils.getTextNodes(doc);
 		//texts = texts.concat(AnnotationUtils.getTextNodes(this.el.down('.assessment-overlay').dom));
@@ -170,6 +171,7 @@ Ext.define('NextThought.view.content.reader.Scroll',{
 		if(!ranges || ranges.length === 0){
 			texts = AnnotationUtils.getTextNodes(document);
 			findRanges(texts, document);
+			assessmentAdjustment = 150;
 		}
 
 		//We may get ranges in our list that don't have any client rects.  A good example
@@ -185,12 +187,16 @@ Ext.define('NextThought.view.content.reader.Scroll',{
 		});
 
 		if(rangeToScrollTo){
-			var nodeTop = rangeToScrollTo.getClientRects()[0].top;
-			var a = nodeTop, dh = 150;
+			nodeTop = rangeToScrollTo.getClientRects()[0].top;
+			//Assessment items aren't in the iframe so they don't take into account scroll
+			scrollOffset = this.body.getScroll().top;
+			scrollOffset = ( assessmentAdjustment > 0 ? scrollOffset : 0);
+			
+			pos = nodeTop - assessmentAdjustment + scrollOffset; 
 			try{
-				me.scrollTo(a - dh);
+				me.scrollTo(pos);
 			} catch(e){
-				console.log("Could not scrollTo: ", a-dh, e.message);
+				console.log("Could not scrollTo: ", pos, e.message);
 			}
 		}
 	}
