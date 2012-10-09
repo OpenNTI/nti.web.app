@@ -30,8 +30,8 @@ Ext.define('NextThought.view.account.activity.Preview',{
 		me.callParent(arguments);
 
 		this.renderData = Ext.apply(this.renderData||{},{
-			location: 'Resolving...',
-			path: 'Resolving...',
+			location: '&nbsp;',
+			path: '&nbsp;',
 			contextText: this.record.get('selectedText'),
 			textContent: this.record.getBodyText ? this.record.getBodyText() : ''
 		});
