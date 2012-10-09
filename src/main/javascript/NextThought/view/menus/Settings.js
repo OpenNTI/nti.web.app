@@ -35,6 +35,10 @@ Ext.define('NextThought.view.menus.Settings',{
             items.push({ action: 'childrens-privacy', text: 'Children\'s Privacy'});
         }
         items.push({ action: 'terms', text: 'Terms of Service'});
+
+        //TODO - turned off until CGI script is ready
+        //items.push({ action: 'contact', text: 'Contact Us'});
+
         items.push({ xtype:'menuseparator' });
         items.push({ action: 'logout', text: 'Sign Out'});
 

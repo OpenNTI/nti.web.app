@@ -20,7 +20,8 @@ Ext.define('NextThought.controller.Account', {
 		'account.contacts.Card',
         'menus.Settings',
         'account.coppa.Main',
-        'account.recovery.Email'
+        'account.recovery.Email',
+        'account.contact.Window'
 	],
 
 	refs: [],
@@ -55,6 +56,10 @@ Ext.define('NextThought.controller.Account', {
                 'click': this.showAccount
             },
 
+            'settings-menu [action=contact]' : {
+                'click': this.showContactUs
+            },
+
             'password-reset-form button[save]' : {
                 'click': this.changePassword
             },
@@ -65,6 +70,10 @@ Ext.define('NextThought.controller.Account', {
 
             'recovery-email-view button[name=submit]': {
                 'click': this.fixEmail
+            },
+
+            'contact-main-view button[name=submit]': {
+                'click': this.contactFormSubmit
             }
 
 		},{});
@@ -94,6 +103,19 @@ Ext.define('NextThought.controller.Account', {
 	},
 
 
+    showContactUs: function(){
+        var me = this;
+        if (me.contactUsWin && !me.contactUsWin.isDestroyed) {
+            me.contactUsWin.show();
+            return;
+        }
+
+        me.contactUsWin = Ext.widget('contact-us-window');
+
+        me.contactUsWin.show();
+    },
+
+
     changePassword: function(btn){
         var form=btn.up('password-reset-form'),
             u = this.getUserPasswordSetModel().fromUser($AppConfig.userObject);
@@ -110,6 +132,40 @@ Ext.define('NextThought.controller.Account', {
 
 		u.set(form.getValues());
         u.save({callback: callback});
+    },
+
+
+    contactFormSubmit: function(btn){
+        var view = btn.up('contact-main-view'),
+            data = view.getValues(),
+            key,
+            url = getURL('/feedback');
+
+        if (window.navigator){
+            for (key in window.navigator) {
+                if (window.navigator.hasOwnProperty(key) && typeof window.navigator[key] !== 'object'){
+                    data[key] = window.navigator[key];
+                }
+            }
+        }
+        else {
+            data.navigatorError = 'window.navigator not available';
+        }
+
+
+        if (window.screen){
+            for (key in window.screen) {
+                if (window.screen.hasOwnProperty(key) && typeof window.screen[key] !== 'object'){
+                    data[key] = window.screen[key];
+                }
+            }
+        }
+        else {
+            data.screenError = 'window.screen not available';
+        }
+
+        console.log('I should send this', data, 'to', url);
+        view.up('window').close();
     },
 
 

@@ -44,6 +44,13 @@ Ext.define('NextThought.view.account.coppa.Header',{
 
     afterRender: function(){
         this.callParent(arguments);
+
+        if(this.noIcon) {
+            this.el.down('.avatar').remove();
+            this.el.down('.text').addCls('full-width');
+            this.updateLayout();
+        }
+
         /*
         if (this.icon === 'alert') {
             this.el.down('.avatar').addCls('alert');
