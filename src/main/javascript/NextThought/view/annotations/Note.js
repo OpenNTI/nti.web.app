@@ -166,14 +166,13 @@ Ext.define( 'NextThought.view.annotations.Note', {
 	},
 
 	setupMultiGutterDom: function(dom){
-		var el = this.attachListeners( Ext.get(dom) );
+		var el = this.attachListeners( Ext.get(dom)),
+            b = el.down('.bubble'),
+            rect = el.dom.getBoundingClientRect();
 
 		el.hover(function(){
-			var b = el.down('.bubble'),
-				rect = el.dom.getBoundingClientRect(),
-				left = b.dom.getBoundingClientRect().left;
-
-			el[(rect.top < 170)?'addCls':'removeCls']('show-under');
+            var left = b.dom.getBoundingClientRect().left;
+            el[(rect.top < 170)?'addCls':'removeCls']('show-under');
 
 			if(left < 75) {
 				left = 75 - el.getX();
