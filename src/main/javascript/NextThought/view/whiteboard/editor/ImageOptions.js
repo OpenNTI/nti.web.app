@@ -41,13 +41,11 @@ Ext.define('NextThought.view.whiteboard.editor.ImageOptions',{
 
 	initComponent: function(){
 		this.callParent(arguments);
-		var me = this;
+		var file = this.down('file-browser-menu-item');
 
 		this.doUpload = this.readFile;
-		Ext.apply(this.down('file-browser-menu-item'), {
-			target: this,
-			disabled: !(window.FileReader)
-		});
+		file.target=this;
+		file[!(window.FileReader)?'disable':'enable']();
 	},
 
 
