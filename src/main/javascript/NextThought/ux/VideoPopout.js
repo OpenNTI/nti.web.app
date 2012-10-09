@@ -47,8 +47,11 @@ Ext.define('NextThought.ux.VideoPopout',{
 
 	constructor: function(config){
 		var store = config ? (config.store||undefined) : undefined,
-			data = config ? (config.data||undefined) : undefined;
+			data = config ? (config.data||undefined) : undefined, me = this;
 		this.callParent(arguments);
+
+		Ext.EventManager.onWindowResize(me.syncSize,me);
+		this.on('destroy',function(){ Ext.EventManager.removeResizeListener(me.syncSize,me);});
 
 		this.iframe = this.down('box[name=video]');
 
@@ -112,6 +115,11 @@ Ext.define('NextThought.ux.VideoPopout',{
 
 		Ext.TaskManager.start(this.task);
 		return this;
+	},
+
+
+	syncSize: function(){
+		this.center();
 	},
 
 
