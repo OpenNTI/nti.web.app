@@ -44,6 +44,9 @@ Ext.define('NextThought.view.chat.Window', {
 		if (!this.roomInfo) {
 			Ext.Error.raise('roomInfo required');
 		}
+		this.on('close', function(){ this.dragMaskOff(); });
+		this.on('hide', function(){ this.dragMaskOff(); });
+		this.on('show', function(){ this.dragMaskOn(); });
 		this.roomInfoChanged(this.roomInfo);
 	},
 

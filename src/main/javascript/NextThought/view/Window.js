@@ -250,12 +250,16 @@ Ext.define('NextThought.view.Window',{
 
 
 	dragMaskOn: function(){
-		Ext.getCmp('viewport').el.mask('','drag-mask');
+		if(Ext.getCmp('viewport')){
+			Ext.getCmp('viewport').el.mask('','drag-mask');
+		}
 	},
 
 
 	dragMaskOff: function(){
-		Ext.getCmp('viewport').el.unmask();
+		if(Ext.getCmp('viewport')){
+			Ext.getCmp('viewport').el.unmask();
+		}
 	},
 
 
