@@ -301,7 +301,7 @@ div.redaction-control {
 				&.edit.save{
 					box-shadow: inset 0 0 0 1px #369AD3;
 					background-color: $primary-blue;
-					width: 75px;
+					width:90px;
 					&::after{
 						width: auto;
 						content: 'Save Title';
