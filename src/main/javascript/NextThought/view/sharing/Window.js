@@ -118,6 +118,10 @@ Ext.define( 'NextThought.view.sharing.Window', {
 		else if (this.value) {
 			this.setValue(this.value);
 		}
+
+		this.on('close', function(){
+			this.dragMaskOff();
+		});
 	},
 
 	getValue: function(){
