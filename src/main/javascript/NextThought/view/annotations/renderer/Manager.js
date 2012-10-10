@@ -114,8 +114,17 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 	},
 
 
-	buildSorter: function(prefix){},
+	buildSorter: function(prefix){
+		//Default sort will sort by lastModified
+		return function(a, b){
+			var c = 0, $a = (a.record || {}).get('Last Modified'), $b = (b.record || {}).get('Last Modified');
+			if($a !== $b){
+				c = $a < $b? 1 : -1;
+			}
 
+			return c;
+		}
+	},
 
 	clearBuckets: function(prefix){
 		function clear(d){
