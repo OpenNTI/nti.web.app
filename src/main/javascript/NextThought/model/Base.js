@@ -293,7 +293,6 @@ Ext.define('NextThought.model.Base', {
             editLink = $AppConfig.service.getObjectURL(this.getId());
         }
 
-        debugger;
 		//check to make sure we can do this, and we have the info we need
 		if (!fieldName || (!this.hasField(fieldName) && !new RegExp('.*'+fieldName+'$').test(fieldName))){
 			console.error('Cannot save field', this, arguments);
