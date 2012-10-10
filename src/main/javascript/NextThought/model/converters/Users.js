@@ -33,10 +33,7 @@ Ext.define('NextThought.model.converters.Users', {
 
 			return u;
 		},
-		sortType: function(v) {
-			console.warn('sort by UserList:',arguments);
-			return '';
-		}
+		sortType: Ext.data.SortTypes.none
 	},
 
 

@@ -22,6 +22,7 @@ Ext.define('NextThought.util.Globals', {
 
 	/* DATASERVER 2 Constants*/
 	RECURSIVE_STREAM: 'RecursiveStream',
+	RECURSIVE_USER_GENERATED_DATA: 'RecursiveUserGeneratedData',
 	USER_GENERATED_DATA: 'UserGeneratedData',
 	USER_SEARCH_REL: 'UserSearch',
 	USER_RESOLVE_REL: 'ResolveUser',

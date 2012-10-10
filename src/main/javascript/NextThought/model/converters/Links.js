@@ -2,7 +2,7 @@ Ext.define('NextThought.model.converters.Links', {
 	override: 'Ext.data.Types',
 	LINKS : {
 		type: 'links',
-		sortType: function(){ return ''; },
+		sortType: Ext.data.SortTypes.none,
 
 		convert: function(v){
 			if (v && v.getRelHref) {

@@ -3,7 +3,8 @@ Ext.define('NextThought.view.account.history.View',{
 	extend: 'Ext.container.Container',
 	alias: 'widget.history-view',
 	requires: [
-		'NextThought.view.SecondaryTabPanel'
+		'NextThought.view.SecondaryTabPanel',
+		'NextThought.view.UserDataPanel'
 	],
 	tooltip: 'History',
 	iconCls: 'history',
@@ -27,11 +28,11 @@ Ext.define('NextThought.view.account.history.View',{
 			items: [
 				{
 					xtype: 'secondary-tabpanel',
-					defaults: {defaults: {xtype: 'contacts-panel'}},
+					defaults: {xtype:'user-data-panel'},
 					items: [
-						{ title: 'Notes' },
-						{ title: 'Bookmarks' },
-						{ title: 'Chats' }
+						{ title: 'Notes', mimeType: 'application/vnd.nextthought.note' },
+						{ title: 'Bookmarks',mimeType: 'application/vnd.nextthought.highlight' },
+						{ title: 'Chats',mimeType: 'application/vnd.nextthought.transcript' }
 					]
 				}
 			]

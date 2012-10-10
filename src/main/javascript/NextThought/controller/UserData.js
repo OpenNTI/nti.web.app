@@ -51,6 +51,9 @@ Ext.define('NextThought.controller.UserData', {
 
 	init: function() {
         var me = this;
+
+		this.application.on('session-ready', this.onSessionReady, this);
+
 		this.control({
 			'reader-panel':{
 				'annotations-load': this.onAnnotationsLoad,
@@ -102,6 +105,31 @@ Ext.define('NextThought.controller.UserData', {
         Socket.register({
             'data_noticeIncomingChange': function(){me.incomingChange.apply(me, arguments);}
         });
+	},
+
+
+	onSessionReady: function(){
+		var app = this.application,
+			me = this,
+			token = {};
+
+		function finish(){ app.finishInitializeTask(token); }
+		function fail(){
+			console.log('Failed to resolve root page info');
+			finish();
+		}
+		function pass(pageInfo){
+			console.log('loaded in UserData Controller');
+			NextThought.store.PageItem.prototype.proxy.url
+					= pageInfo.getLink(Globals.RECURSIVE_STREAM).replace(
+						Globals.RECURSIVE_STREAM,
+						Globals.RECURSIVE_USER_GENERATED_DATA);
+			finish();
+		}
+
+
+		app.registerInitializeTask(token);
+		$AppConfig.service.getPageInfo(Globals.CONTENT_ROOT, pass, fail, this);
 	},
 
 

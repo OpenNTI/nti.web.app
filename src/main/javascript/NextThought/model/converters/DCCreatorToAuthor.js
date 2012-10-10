@@ -7,9 +7,6 @@ Ext.define('NextThought.model.converters.DCCreatorToAuthor', {
 		convert: function(v) {
 			return v.join(', ');
 		},
-		sortType: function(v) {
-			console.warn('sort by Item:',arguments);
-			return '';
-		}
+		sortType: Ext.data.SortTypes.none
 	}
 });

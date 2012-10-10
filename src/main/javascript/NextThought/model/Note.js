@@ -25,7 +25,8 @@ Ext.define('NextThought.model.Note', {
 
 	requires: [
 		'NextThought.model.anchorables.DomContentRangeDescription',
-		'NextThought.model.converters.ContentRangeDescription'
+		'NextThought.model.converters.ContentRangeDescription',
+		'NextThought.model.converters.GroupByTime'
 	],
 
 
@@ -43,7 +44,9 @@ Ext.define('NextThought.model.Note', {
 		{ name: 'selectedText', type: 'string'},
 		{ name: 'style', type: 'string' },
 		{ name: 'sharedWith', type: 'UserList' },
-		{ name: 'prohibitReSharing', type: 'boolean' }
+		{ name: 'prohibitReSharing', type: 'boolean' },
+
+		{ name: 'GroupingField', mapping: 'Last Modified', type: 'groupByTime'}
 	],
 
 	/**

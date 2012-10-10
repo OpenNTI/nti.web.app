@@ -13,10 +13,7 @@ Ext.define('NextThought.model.converters.Items', {
 				return null;
 			}
 		},
-		sortType: function(v) {
-			console.warn('sort by Item:',arguments);
-			return '';
-		}
+		sortType: Ext.data.SortTypes.none
 	},
 
 
@@ -31,10 +28,7 @@ Ext.define('NextThought.model.converters.Items', {
 				return null;
 			}
 		},
-		sortType: function(v) {
-			console.warn('sort by Item:',arguments);
-			return '';
-		}
+		sortType: Ext.data.SortTypes.none
 	},
 
 
@@ -55,10 +49,7 @@ Ext.define('NextThought.model.converters.Items', {
 				return null;
 			}
 		},
-		sortType: function(v) {
-			console.warn('sort by Item:',arguments);
-			return '';
-		}
+		sortType: Ext.data.SortTypes.none
 	}
 
 });
