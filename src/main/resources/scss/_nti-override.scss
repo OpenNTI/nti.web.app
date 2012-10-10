@@ -101,6 +101,20 @@
 		text-decoration: overline;
 	}
 
+	.algorithm-function {
+		text-decoration: overline;
+		background-color: #F0F0F0;
+		padding-top: 0.5em;
+		padding-bottom: 0.5em;
+		padding-left: 4ex;
+		font-family: times;
+		line-height: normal;
+	}
+
+	.algorithm-indent-block {
+		padding-left: 2em;
+	}
+
 	&.x-repaint {
 		display: none;
 	}
