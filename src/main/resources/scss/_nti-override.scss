@@ -115,6 +115,15 @@
 		padding-left: 2em;
 	}
 
+	.minipage {
+		display: inline-block;
+		margin-top: .5em;
+		margin-right: .25em;
+		margin-bottom: .5em;
+		margin-left: .25em;
+		vertical-align:	middle;
+	}
+
 	&.x-repaint {
 		display: none;
 	}
