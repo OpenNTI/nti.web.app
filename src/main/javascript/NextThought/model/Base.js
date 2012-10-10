@@ -267,6 +267,11 @@ Ext.define('NextThought.model.Base', {
 	},
 
 	getFieldEditURL: function(editLink,field){
+        if (/.*\+\+fields\+\+.*/.test(editLink)){
+            //edit link is already edit link for that field
+            return editLink;
+        }
+
 		var f = Ext.String.format("/++fields++{0}", field);
 
 		return getURL(Ext.String.format("{0}/{1}",
@@ -278,17 +283,19 @@ Ext.define('NextThought.model.Base', {
 	 *
 	 * @param fieldName - name of the field that we want to save
 	 * @param [value] - optional value to save (also set it on model)
+     * @param [optionalLinkName] = provide if you want a specific link other than the edit link
 	 */
-	saveField: function(fieldName, value, successCallback, failCallback) {
-		var editLink = this.getLink('edit');
+	saveField: function(fieldName, value, successCallback, failCallback, optionalLinkName) {
+		var editLink = this.getLink(optionalLinkName || 'edit');
 
         //special case, pageInfos are not editable (no link), but can take sharedPrefs
         if (!editLink && /^PageInfo$/.test(this.get('Class')) && fieldName && fieldName === 'sharingPreference') {
             editLink = $AppConfig.service.getObjectURL(this.getId());
         }
 
+        debugger;
 		//check to make sure we can do this, and we have the info we need
-		if (!fieldName || !this.hasField(fieldName)){
+		if (!fieldName || (!this.hasField(fieldName) && !new RegExp('.*'+fieldName+'$').test(fieldName))){
 			console.error('Cannot save field', this, arguments);
 			Ext.Error.raise('Cannot save field, issues with model?');
 		}
@@ -318,7 +325,7 @@ Ext.define('NextThought.model.Base', {
 			callback: function(){ },
 			failure: function(){
 				console.error("field save fail", arguments);
-				Ext.callback(failCallback);
+				Ext.callback(failCallback, this, arguments);
 			},
 			success: function(resp){
 				var newMe = ParseUtils.parseItems( Ext.decode(resp.responseText))[0],

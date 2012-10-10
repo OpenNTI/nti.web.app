@@ -21,7 +21,8 @@ Ext.define('NextThought.controller.Account', {
         'menus.Settings',
         'account.coppa.Main',
         'account.recovery.Email',
-        'account.contact.Window'
+        'account.contact.Window',
+        'account.contacts.View'
 	],
 
 	refs: [],
@@ -74,6 +75,10 @@ Ext.define('NextThought.controller.Account', {
 
             'contact-main-view button[name=submit]': {
                 'click': this.contactFormSubmit
+            },
+
+            'contacts-view': {
+                'resendConsent': this.resendConsent
             }
 
 		},{});
@@ -173,13 +178,27 @@ Ext.define('NextThought.controller.Account', {
     },
 
 
+    resendConsent: function(){
+        if ($AppConfig.userObject.getLink('contact-email-sends-consent-request')){
+            this.getController('Session').showEmailRecoveryWindow('contact_email', 'contact-email-sends-consent-request');
+        }
+    },
+
+
     fixEmail: function(btn){
         var view = btn.up('recovery-email-view'),
             value = view.getValue(),
             linkToDelete = $AppConfig.userObject.getLink(value.linkName),
             email = value.email,
-            fieldName = value.fieldName;
+            fieldName = value.fieldName,
+            optionalLinkName;
 
+
+        if (value.linkName === 'contact-email-sends-consent-request'){
+            //this link does not require delete, but we do want to request a specific link when saving:
+            linkToDelete = null;
+            optionalLinkName = value.linkName
+        }
 
         function callback(req, success, resp){
             if(!success){
@@ -206,9 +225,34 @@ Ext.define('NextThought.controller.Account', {
             }
         }
 
+        function success(){
+            view.up('window').close();
+            if (linkToDelete){
+                //we need to delete the link now.
+                Ext.Ajax.request({
+                    url: getURL(linkToDelete),
+                    timeout: 20000,
+                    scope: this,
+                    method: 'DELETE',
+                    callback: function(q,success,r){
+                        if(!success){
+                            console.log('Could not delete the needs.updated link');
+                            return;
+                        }
+                    }
+                });
+            }
+        }
+
+        function fail(resp){
+            view.setError(Ext.decode(resp.responseText));
+        }
+
         if (fieldName && email){
-            $AppConfig.userObject.set(fieldName, email);
-            $AppConfig.userObject.save({callback: callback});
+            //$AppConfig.userObject.set(fieldName, email);
+            //$AppConfig.userObject.save({callback: callback});
+
+            $AppConfig.userObject.saveField(fieldName, email, success, fail, optionalLinkName);
         }
     },
 

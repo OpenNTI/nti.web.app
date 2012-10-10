@@ -59,7 +59,8 @@ Ext.define('NextThought.view.account.contacts.View',{
 					autoEl: { cn: [
 						{ cls:'disabled-message-div',cn: [
 							{ cls:'disabled-title', html:'Social Features Disabled...'},
-							'We need your parent\'s permission to give you more features.&nbsp; Ask your parent to email us.'
+							'We need your parent\'s permission to give you more features.&nbsp; Ask your parent to email us.  ',
+                            {tag: 'span', cls: 'resend-consent', html:'Resend Consent?', handler: this.resendClicked}
 						]}
 					]}
 				}
@@ -80,7 +81,6 @@ Ext.define('NextThought.view.account.contacts.View',{
 			show: this.onSearchShow,
 			hide: this.onSearchHide
 		});
-
 		this.mon(this,'deactivate',this.contactSearch.hide,this.contactSearch);
 	},
 
@@ -90,6 +90,10 @@ Ext.define('NextThought.view.account.contacts.View',{
 		this.contactSearch.hide();
 	},
 
+
+    resendClicked: function(){
+        this.fireEvent('resendConsent');
+    },
 
 	resyncSearch: function(){
 		if(!this.needsSyncUp){return;}
@@ -131,6 +135,9 @@ Ext.define('NextThought.view.account.contacts.View',{
 		if(el){
 			this.mon(el,'click',this.toggleSearch,this);
 		}
+
+        this.mon(this.el.down('.resend-consent'), 'click', this.resendClicked, this);
+
 	},
 
 

@@ -42,15 +42,25 @@ Ext.define('NextThought.view.account.recovery.Window',{
     afterRender: function(){
         this.callParent(arguments);
 
-        if ( this.linkName.indexOf('-contact-') > 0) {
-            //is contact email
-            Ext.fly(this.down('account-header-view').el.query('.title')[0]).setHTML('Invalid Parent Email...');
-            Ext.fly(this.down('account-header-view').el.query('.detail')[0]).setHTML('Please provide your parent\'s email address to get permission for social features.') ;
+        var headerView = this.down('account-header-view'),
+            emailView = this.down('recovery-email-view');
+
+        if ( this.linkName === 'state-bounced-contact-email') {
+            //is contact email, not cancelable
+            Ext.fly(headerView.el.query('.title')[0]).setHTML('Invalid Parent Email...');
+            Ext.fly(headerView.el.query('.detail')[0]).setHTML('Please provide your parent\'s email address to get permission for social features.');
+            emailView.down('button[name=cancel]').destroy();
+        }
+        else if (this.linkName === 'contact-email-sends-consent-request'){
+            //is request to resent consent email and enter a new consent email
+            Ext.fly(headerView.el.query('.title')[0]).setHTML('Resend Consent Email...');
+            Ext.fly(headerView.el.query('.detail')[0]).setHTML('Please provide your parent\'s email address to get permission for social features.');
         }
         else {
-            //regulat email
-            Ext.fly(this.down('account-header-view').el.query('.title')[0]).setHTML('Invalid Email...');
-            Ext.fly(this.down('account-header-view').el.query('.detail')[0]).setHTML('We couldn\'t deliver your email. Please enter a valid email address.') ;
+            //regular email, not cancelable
+            Ext.fly(headerView.el.query('.title')[0]).setHTML('Invalid Email...');
+            Ext.fly(headerView.el.query('.detail')[0]).setHTML('We couldn\'t deliver your email. Please enter a valid email address.');
+            emailView.down('button[name=cancel]').destroy();
         }
     }
 });
