@@ -357,7 +357,6 @@ div.add-group-action{
 	input {
 		box-shadow: none;
 		background: transparent;
-		height: auto;
 
 		$value: text-shadow 0.5s, color 0.5s;
 		@include experimental(transition, $value);
