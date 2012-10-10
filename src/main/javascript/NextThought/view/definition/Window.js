@@ -41,6 +41,7 @@ Ext.define('NextThought.view.definition.Window', {
 
 		me.loadDefinition(me.term);
 
+		me.on('close', function(){ me.dragMaskOff(); });
 
 		//figure out xy
 		p = this.pointTo;
