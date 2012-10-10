@@ -133,8 +133,7 @@ Ext.define('NextThought.view.content.reader.Scroll',{
 						indexes = [],
 						r;
 
-					if( !Ext.fly(node).parent('.naquestion',true) ){
-						while (Boolean(match = re.exec(nv))) {
+					while (Boolean(match = re.exec(nv))) {
 							indexes.push( {'start':match.index, 'end': match.index+match[0].length } );
 						}
 
@@ -144,7 +143,6 @@ Ext.define('NextThought.view.content.reader.Scroll',{
 							r.setEnd(node, index.end);
 							ranges.push(r);
 						});
-					}
 				},
 				this);
 		}
@@ -160,8 +158,30 @@ Ext.define('NextThought.view.content.reader.Scroll',{
 			rangeToScrollTo,
 			nodeTop, scrollOffset, a, pos, assessmentAdjustment = 0;
 
-		texts = AnnotationUtils.getTextNodes(doc);
-		//texts = texts.concat(AnnotationUtils.getTextNodes(this.el.down('.assessment-overlay').dom));
+		//An optimized version based on AnnotationUtils.getTextNodes
+		//Not going into question nodes here is much better than checking parent
+		//recursively as we iterate the found nodes.  Profiler shows a noticble speed
+		//up with this change
+		function getTextNodes(root) {
+			var textNodes = [];
+			function getNodes(node) {
+				var child;
+
+				if (node.nodeType === 3) { textNodes.push(node); }
+				else if (node.nodeType === 1) {
+					for (child = node.firstChild; child; child = child.nextSibling) {
+						if(!Ext.fly(child).is('.naquestion')){
+							getNodes(child);
+						}
+					}
+				}
+			}
+			getNodes(root.body || root);
+			return textNodes;
+		}
+
+
+		texts = getTextNodes(doc);
 
 		findRanges(texts, doc);
 		me.showRanges(ranges);
@@ -169,7 +189,7 @@ Ext.define('NextThought.view.content.reader.Scroll',{
 		//If we found no ranged, try again not in iframe in case of assessments,
 		//this is a bit of a hack to get it working for MC
 		if(!ranges || ranges.length === 0){
-			texts = AnnotationUtils.getTextNodes(document);
+			texts = getTextNodes(document);
 			findRanges(texts, document);
 			assessmentAdjustment = 150;
 		}
