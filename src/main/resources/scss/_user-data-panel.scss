@@ -41,6 +41,14 @@
 	}
 
 	.history{
+		&.nothing{
+			color: $tertiary-grey;
+			text-align: center;
+			font-family: $font;
+			font-size: 10px;
+			font-weight: 700;
+		}
+
 		&.note{
 			margin: 0 20px;
 
