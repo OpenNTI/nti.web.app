@@ -95,7 +95,7 @@ Ext.define('NextThought.view.UserDataPanel',{
 			me = this;
 
 		function doGroup(group){
-			var label = (group.name||'').replace(/^[A-Z]\d{0,}\s/,'') || false;
+			var label = (group.name||'').replace(/^[A-Z]\d{0,}\s/,'') || 'Today';
 			if( label ){ items.push({ label: label }); }
 
 			Ext.each(group.children,function(c){
