@@ -373,3 +373,27 @@ div.add-group-action{
 		}
 	}
 }
+
+div.group-buttons {
+	@include top-etch();
+	text-transform: uppercase;
+	div.join-group{
+		cursor: pointer;
+		display: inline-block;
+		position: relative;
+		padding-left: 20px;
+		margin-left: 20px;
+		margin-top: 16px;
+		font-weight: 600;
+		font-size: 10px;
+		color: $secondary-grey;
+		&::after {
+			content: ' ';
+			position: absolute;
+			top: 0; left: 0;
+			background: url(../images/add-people.png) 0 0 no-repeat;
+			width: 17px;
+			height: 14px;
+		}
+	}
+}

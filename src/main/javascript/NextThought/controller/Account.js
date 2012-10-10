@@ -20,6 +20,7 @@ Ext.define('NextThought.controller.Account', {
 		'account.contacts.Card',
         'menus.Settings',
         'account.coppa.Main',
+        'account.code.Main',
         'account.recovery.Email',
         'account.contact.Window',
         'account.contacts.View'
@@ -77,8 +78,16 @@ Ext.define('NextThought.controller.Account', {
                 'click': this.contactFormSubmit
             },
 
+            'code-main-view button[name=submit]': {
+                'click': this.groupCodeSubmit
+            },
+
             'contacts-view': {
                 'resendConsent': this.resendConsent
+            },
+
+            'contacts-view group-buttons' : {
+                'click': this.groupButtonClicked
             }
 
 		},{});
@@ -140,6 +149,17 @@ Ext.define('NextThought.controller.Account', {
     },
 
 
+    groupCodeSubmit: function(btn){
+        var view = btn.up('code-main-view'),
+            code = [view.getValue().code],
+            w = view.up('window');
+
+
+
+        console.log('do something with this', code);
+    },
+
+
     contactFormSubmit: function(btn){
         var view = btn.up('contact-main-view'),
             data = view.getValues(),
@@ -182,6 +202,18 @@ Ext.define('NextThought.controller.Account', {
         if ($AppConfig.userObject.getLink('contact-email-sends-consent-request')){
             this.getController('Session').showEmailRecoveryWindow('contact_email', 'contact-email-sends-consent-request');
         }
+    },
+
+
+    groupButtonClicked: function(btn){
+        if (Ext.fly(btn).hasCls('join-group')){
+            this.codeWin = Ext.create('NextThought.view.account.code.Window');
+            this.codeWin.show();
+        }
+        else {
+            console.error('Group button clicked but I do not know what to do', btn);
+        }
+
     },
 
 

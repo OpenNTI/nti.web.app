@@ -2,6 +2,7 @@
 @import "compass";
 
 .contact-us-window,
+.code-window,
 .recovery-email-window,
 .coppa-window {
 	@extend .nti-window;
@@ -65,6 +66,7 @@
 		}
 	}
 
+	.code-main-view,
 	.recovery-email-view,
 	.contact-main-view,
 	.coppa-main-view {
@@ -201,6 +203,7 @@
 
 	}
 
+	.code-main-view,
 	.contact-main-view {
 		.input-wrapper {
 			margin-left: 34px;

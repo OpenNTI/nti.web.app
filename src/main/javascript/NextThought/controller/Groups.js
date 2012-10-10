@@ -139,8 +139,8 @@ Ext.define('NextThought.controller.Groups', {
 		this.getContacts(function(friends){
 			var componentsToAdd = [];
 
-			people.add({ title: 'Online', online:true }).setUsers(friends.Online);
-			people.add({ title: 'Offline', offline:true }).setUsers(friends.Offline);
+			people.add({ xtype: 'contacts-panel', title: 'Online', online:true }).setUsers(friends.Online);
+			people.add({ xtype: 'contacts-panel', title: 'Offline', offline:true }).setUsers(friends.Offline);
 
 			store.each(function(group){
 				var id = ParseUtils.parseNtiid(group.getId()),
@@ -160,7 +160,7 @@ Ext.define('NextThought.controller.Groups', {
 					return;
 				}
 
-				componentsToAdd.push({title: name, associatedGroup: group});
+				componentsToAdd.push({xtype: 'contacts-panel', title: name, associatedGroup: group});
 			});
 
 			groups.suspendLayout = true;

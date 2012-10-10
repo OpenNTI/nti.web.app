@@ -5,7 +5,8 @@ Ext.define('NextThought.view.account.contacts.View',{
 		'NextThought.view.SecondaryTabPanel',
 		'NextThought.view.account.contacts.Search',
 		'NextThought.view.account.contacts.Card',
-		'NextThought.view.account.contacts.Panel'
+		'NextThought.view.account.contacts.Panel',
+        'NextThought.view.account.contacts.GroupButtons'
 	],
 	tooltip: 'Contacts',
 	iconCls: 'contacts',
@@ -37,10 +38,18 @@ Ext.define('NextThought.view.account.contacts.View',{
 			items: [
 				{
 					xtype: 'secondary-tabpanel',
-					defaults: {autoScroll: true, defaults: {xtype: 'contacts-panel'}},
 					items: [
-						{ id: 'contact-list', title: 'All Contacts'},
-						{ id: 'my-groups', title: 'Groups'}
+						{ id: 'contact-list', title: 'All Contacts', autoScroll: true},
+                        { title:'Groups', layout: {
+                            type: 'vbox',
+                            align: 'stretch'
+                            },
+                            items:[
+                            { xtype: 'container', id: 'my-groups', layout: 'auto', flex: 1, autoScroll: true},
+
+                            //TODO - turn on for join group functionality
+                            //{ xtype: 'group-buttons', height: '50px'}
+                        ]}
 					]
 				},
 
