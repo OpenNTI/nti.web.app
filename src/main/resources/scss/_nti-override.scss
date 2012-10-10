@@ -245,6 +245,7 @@
 			font-size: 31px;
 			font-weight: 200;
 			border: none;
+			margin-top: 2em;
 			margin-bottom: 0.5em;
 			span.ref{
 				display: block;
@@ -275,6 +276,7 @@
 		.subsubparagraph {
 			&.title {
 				display: block;
+				margin-top: 2em;
 				margin-bottom: 0.5em;
 			}
 		}
@@ -284,11 +286,13 @@
 		.subsubparagraph {
 			&.title {
 				font-weight: bold;
+				margin-top: 2em;
 				margin-bottom: 0.5em;
 			}
 		}
 		.subsubsection.title {
-			font-size: 16px;
+			font-size: 1.1em;
+			margin-top: 2em;
 			margin-bottom: 0.5em;
 		}
 		.paragraph.title,
@@ -388,6 +392,27 @@
 		 margin: 0;
 		 padding: 0;
 		 margin-bottom: 6pt;
+	}
+
+	#footnotes {
+		 color: $primary-grey;
+		 margin-top: 2em;
+		 margin-left: 80px;
+		 font-size: small;
+		 font-weight: normal;
+		 position: relative;
+
+		 ol {
+			padding-left: 20px;
+		 }
+
+		 li {
+			padding-bottom: 1em;
+		 }
+
+		 .label {
+			font-size: 1rem;
+		 }
 	}
 
 }
