@@ -45,6 +45,7 @@ Ext.define('NextThought.view.UserDataPanel',{
 			m = this.dataMapper = {};
 
 		m[data.Note.prototype.mimeType] = this.getNoteItem;
+		m[data.Highlight.prototype.mimeType] = this.getHighlightItem;
 
 		this.callParent(arguments);
 
@@ -116,6 +117,15 @@ Ext.define('NextThought.view.UserDataPanel',{
 	},
 
 
+
+	getHighlightItem: function(rec){
+
+		rec.getBodyText = function(){
+			return rec.get('selectedText');
+		};
+
+		return this.getNoteItem(rec);
+	},
 
 	getNoteItem: function(rec){
 		var me = this,
