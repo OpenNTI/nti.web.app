@@ -13,12 +13,13 @@ Ext.define('NextThought.view.annotations.note.CarouselItem',{
 		cls: 'item-body',
 		cn: [
 			{tag: 'img', src: Ext.BLANK_IMAGE_URL},
-			{cls: 'count', cn:[{tag:'span', html: '{count}'}]}
+			{cls: 'count', cn:[{tag:'span'}]}
 		]
 	}),
 
 	renderSelectors: {
-		image: 'img'
+		image: 'img',
+		count: '.count span'
 	},
 
 	isCarouselItem: true,
@@ -26,9 +27,8 @@ Ext.define('NextThought.view.annotations.note.CarouselItem',{
 	initComponent: function(){
 		this.callParent(arguments);
 		var m = this.record;
-
-		this.renderData = {count:m.getReplyCount()|| false};
 		UserRepository.getUser(m.get('Creator'),this.fillInUser,this);
+		this.mon(m,'count-updated',this.updateCount,this);
 	},
 
 
@@ -51,12 +51,15 @@ Ext.define('NextThought.view.annotations.note.CarouselItem',{
 		if(this.avatarImage){
 			this.image.setStyle({ backgroundImage: this.avatarImage });
 		}
-		if(!this.renderData.count){
-			this.el.down('.count').update('&nbsp;');
-		}
 		this.el.on('click', this.clicked, this);
+
+		this.updateCount();
 	},
 
+
+	updateCount: function(){
+		this.count.update(this.record.getReplyCount()||'');
+	},
 
 	clicked: function(e){
 		this.up('note-carousel').setRecord(this.record, this);

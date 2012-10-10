@@ -167,8 +167,8 @@ Ext.define('NextThought.view.annotations.note.Main',{
             }
 
             if(this.favorites){
-                this.favorites[(r.isFavorited()?'add':'remove')+'Cls']('on');
-    			this.favorites.set({'title': r.isFavorited() ? 'Bookmarked' : 'Add to bookmarks'});
+	            this.favorites[(r.isFavorited()?'add':'remove')+'Cls']('on');
+	            this.favorites.set({'title': r.isFavorited() ? 'Bookmarked' : 'Add to bookmarks'});
             }
 		}
 		catch(e1){
@@ -313,6 +313,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 			console.log('Store load args', arguments);
 			console.log('Setting replies to ', items);
 			record.set('ReferencedByCount',theStore.getCount());//update the count for next time the carousel renders
+			record.fireEvent('count-updated');
 			responses.setReplies(items);
 
 			function maybeOpenReplyEditor(){

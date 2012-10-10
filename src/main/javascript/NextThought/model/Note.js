@@ -48,7 +48,6 @@ Ext.define('NextThought.model.Note', {
 
 	/**
 	 * From a note, build its reply
-	 * @param {NextThought.model.Note} note
 	 * @return {NextThought.model.Note}
 	 */
 	makeReply: function(){
