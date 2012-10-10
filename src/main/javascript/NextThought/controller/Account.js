@@ -139,33 +139,37 @@ Ext.define('NextThought.controller.Account', {
         var view = btn.up('contact-main-view'),
             data = view.getValues(),
             key,
-            url = getURL('/feedback');
+            feedbackLink = $AppConfig.userObject.getLink('send-feedback');
+            url = getURL(feedbackLink),
+            w = view.up('window');
 
-        if (window.navigator){
-            for (key in window.navigator) {
-                if (window.navigator.hasOwnProperty(key) && typeof window.navigator[key] !== 'object'){
-                    data[key] = window.navigator[key];
+        //first diable the button:
+        btn.addCls('disabled');
+
+        if (!feedbackLink) {
+            console.error('Nowhere to seed feedback to');
+            w.close();
+        }
+
+        Ext.Ajax.request({
+            url: url,
+            scope: this,
+            jsonData: Ext.encode(data),
+            method: 'POST',
+            headers: {
+                Accept: 'application/json'
+            },
+            callback: function(q,success,r){
+                btn.removeCls('disabled');
+                if(!success){
+                    view.setError(Ext.decode(r.responseText));
+                    return;
+                }
+                else {
+                    w.close();
                 }
             }
-        }
-        else {
-            data.navigatorError = 'window.navigator not available';
-        }
-
-
-        if (window.screen){
-            for (key in window.screen) {
-                if (window.screen.hasOwnProperty(key) && typeof window.screen[key] !== 'object'){
-                    data[key] = window.screen[key];
-                }
-            }
-        }
-        else {
-            data.screenError = 'window.screen not available';
-        }
-
-        console.log('I should send this', data, 'to', url);
-        view.up('window').close();
+        });
     },
 
 
