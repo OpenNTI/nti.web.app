@@ -3,7 +3,7 @@ Ext.define('NextThought.view.account.coppa.Window',{
     alias: 'widget.coppa-window',
 
     requires: [
-        'NextThought.view.account.coppa.Header',
+        'NextThought.view.account.Header',
         'NextThought.view.account.coppa.Main'
     ],
 
@@ -24,7 +24,7 @@ Ext.define('NextThought.view.account.coppa.Window',{
     },
 
     items: [
-        {xtype: 'coppa-header-view'},
+        {xtype: 'account-header-view'},
         {xtype: 'coppa-main-view'}
     ],
 

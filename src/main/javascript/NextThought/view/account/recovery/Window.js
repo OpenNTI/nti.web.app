@@ -4,7 +4,7 @@ Ext.define('NextThought.view.account.recovery.Window',{
 
     requires: [
         'NextThought.view.account.recovery.Email',
-        'NextThought.view.account.coppa.Header'
+        'NextThought.view.account.Header'
     ],
 
     cls: 'recovery-email-window',
@@ -25,7 +25,7 @@ Ext.define('NextThought.view.account.recovery.Window',{
 
     items: [
         {
-            xtype: 'coppa-header-view',
+            xtype: 'account-header-view',
             title: 'Email Bounce Notification',
             detail:'The email you supplied is not valid, please reset your email now.',
             icon: 'alert'
@@ -44,13 +44,13 @@ Ext.define('NextThought.view.account.recovery.Window',{
 
         if ( this.linkName.indexOf('-contact-') > 0) {
             //is contact email
-            Ext.fly(this.down('coppa-header-view').el.query('.title')[0]).setHTML('Invalid Parent Email...');
-            Ext.fly(this.down('coppa-header-view').el.query('.detail')[0]).setHTML('Please provide your parent\'s email address to get permission for social features.') ;
+            Ext.fly(this.down('account-header-view').el.query('.title')[0]).setHTML('Invalid Parent Email...');
+            Ext.fly(this.down('account-header-view').el.query('.detail')[0]).setHTML('Please provide your parent\'s email address to get permission for social features.') ;
         }
         else {
             //regulat email
-            Ext.fly(this.down('coppa-header-view').el.query('.title')[0]).setHTML('Invalid Email...');
-            Ext.fly(this.down('coppa-header-view').el.query('.detail')[0]).setHTML('We couldn\'t deliver your email. Please enter a valid email address.') ;
+            Ext.fly(this.down('account-header-view').el.query('.title')[0]).setHTML('Invalid Email...');
+            Ext.fly(this.down('account-header-view').el.query('.detail')[0]).setHTML('We couldn\'t deliver your email. Please enter a valid email address.') ;
         }
     }
 });

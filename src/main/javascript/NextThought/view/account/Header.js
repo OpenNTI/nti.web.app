@@ -1,12 +1,12 @@
-Ext.define('NextThought.view.account.coppa.Header',{
+Ext.define('NextThought.view.account.Header',{
     extend: 'Ext.Component',
-    alias: 'widget.coppa-header-view',
+    alias: 'widget.account-header-view',
     requires: [
     ],
 
     renderTpl: Ext.DomHelper.markup([
     {
-        cls: 'coppa-header-view',
+        cls: 'account-header-view',
         cn:[
             {cls: 'avatar', tag:'span', cn:[
                 {tag: 'img', src: '{img}'}
@@ -20,7 +20,7 @@ Ext.define('NextThought.view.account.coppa.Header',{
 
 
     renderSelectors: {
-        img: '.coppa-header-view .avatar img',
+        img: '.account-header-view .avatar img',
         title: '.text .title',
         detail: '.text .detail'
     },
