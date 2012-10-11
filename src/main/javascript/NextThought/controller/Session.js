@@ -40,7 +40,7 @@ Ext.define('NextThought.controller.Session', {
 					me.sessionTracker.stop();
 					Socket.tearDownSocket();
 
-					Ext.MessageBox.alert({
+					alert({
 						icon: Ext.Msg.WARNING,
 						title: 'Alert',
 						msg:'You\'re using the application in another tab. This session has been invalidated.',

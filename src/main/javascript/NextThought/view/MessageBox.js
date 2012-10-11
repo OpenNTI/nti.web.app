@@ -82,4 +82,19 @@ Ext.define('NextThought.view.MessageBox',{
 
 }, function(){
 	Ext.MessageBox = Ext.Msg = new NextThought.view.MessageBox();
+	window.alert = function(cfg, fn){
+		Globals.removeLoaderSplash();
+		if (!cfg || Ext.isString(cfg)) {
+            cfg = {
+                msg : cfg,
+				icon: Ext.Msg.WARNING,
+				buttons: Ext.Msg.OK
+            };
+        }
+
+		Ext.applyIf(cfg, {
+				fn: Ext.isFunction(fn) ? fn : undefined
+		});
+		Ext.MessageBox.alert(cfg);
+	};
 });

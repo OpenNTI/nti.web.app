@@ -9,7 +9,8 @@ Ext.application({
 	requires: [
 		'NextThought.util.Globals',
 		'NextThought.model.anchorables.ContentPointer',
-		'NextThought.model.anchorables.DomContentPointer'
+		'NextThought.model.anchorables.DomContentPointer',
+		'NextThought.view.MessageBox' //Require this early so we have it if we need it
 	],
 
 	controllers: [
@@ -68,3 +69,4 @@ Ext.application({
 		}
 	}
 });
+
