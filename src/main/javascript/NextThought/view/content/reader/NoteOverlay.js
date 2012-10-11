@@ -213,6 +213,14 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		try {
 			clearTimeout(o.mouseLeaveTimeout);
 			lineInfo = LineUtils.findLine(y,this.getDocumentElement());
+
+           if (e.type === 'click'){debugger;}
+            if (e.type === 'click' && !lineInfo && o.lastLine && Math.abs(y - o.lastLine.rect.bottom) < 50){
+                lineInfo = o.lastLine;
+                delete o.lastLine;
+            }
+
+
 			if(lineInfo && (lineInfo !== o.lastLine || !o.lastLine)){
 				o.lastLine = lineInfo;
 				e.stopEvent();
@@ -246,7 +254,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 		//check for minute scroll changes to prevent jitter:
 		if(Math.abs(oldY - newY) > 4){
-			box.setY(o.lastLine.rect.bottom + offsets.top - box.getHeight());
+			box.setY(newY);
 		}
 		//show thew box:
 		box.hide().show();
@@ -298,7 +306,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 	noteOverlayActivateRichEditor: function(evt){
 		if(evt){
 			evt.stopEvent();
-			if(evt && !this.noteOverlayMouseOver(evt)){
+			if(!this.noteOverlayMouseOver(evt)){
 				return;
 			}
 		}
