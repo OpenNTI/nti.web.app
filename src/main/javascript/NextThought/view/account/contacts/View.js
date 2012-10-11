@@ -45,7 +45,7 @@ Ext.define('NextThought.view.account.contacts.View',{
                             align: 'stretch'
                             },
                             items:[
-                            { xtype: 'container', id: 'my-groups', layout: 'auto', flex: 1, autoScroll: true}
+                            { xtype: 'container', id: 'my-groups', layout: 'auto', flex: 1, autoScroll: true},
                             { xtype: 'group-buttons', height: '50px'}
                         ]}
 					]
@@ -66,8 +66,8 @@ Ext.define('NextThought.view.account.contacts.View',{
 					autoEl: { cn: [
 						{ cls:'disabled-message-div',cn: [
 							{ cls:'disabled-title', html:'Social Features Disabled...'},
-							'We need your parent\'s permission to give you more features.&nbsp; Ask your parent to email us.  ',
-                            {tag: 'span', cls: 'resend-consent', html:'Resend Consent?', handler: this.resendClicked}
+							'We need your parent\'s permission to give you more features.  ',
+                            {tag: 'span', cls: 'resend-consent', html:'Resend Consent Form', handler: this.resendClicked}
 						]}
 					]}
 				}
