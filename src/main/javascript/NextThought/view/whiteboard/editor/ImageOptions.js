@@ -45,7 +45,7 @@ Ext.define('NextThought.view.whiteboard.editor.ImageOptions',{
 
 		this.doUpload = this.readFile;
 		file.target=this;
-		file[!(window.FileReader)?'disable':'enable']();
+		file[(typeof window.FileReader==='undefined')?'disable':'enable']();
 	},
 
 
