@@ -154,7 +154,8 @@
 				margin-bottom: 46px;
 				max-height: 200px;
 				white-space: normal;
-				word-wrap: normal;
+				word-wrap: break-word;
+				word-break: normal;
 
 				em, em strong{
 					font-style: italic !important;
