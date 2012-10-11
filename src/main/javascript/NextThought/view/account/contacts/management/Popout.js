@@ -98,9 +98,10 @@ Ext.define('NextThought.view.account.contacts.management.Popout',{
 
 
 	actOnContact: function(){
-		var data = this.down('person-card').getSelected();
-		this.fireEvent(this.buttonEvent, data.user, data.groups);
-		this.destroy();
+		var data = this.down('person-card').getSelected(), me = this,
+			fin = function(){ me.destroy(); };
+
+		this.fireEvent(this.buttonEvent, data.user, data.groups, fin);
 	},
 
 

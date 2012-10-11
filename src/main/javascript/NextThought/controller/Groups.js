@@ -267,7 +267,7 @@ Ext.define('NextThought.controller.Groups', {
 	},
 
 
-	addContact: function(username, groupList){
+	addContact: function(username, groupList, callback){
 		var store = this.getFriendsListStore(),
 			contactsId = this.getMyContactsId(),
 			contacts = store.findRecord('Username',contactsId,0,false,true,true),
@@ -276,6 +276,10 @@ Ext.define('NextThought.controller.Groups', {
 		function finish(){
 			if(!tracker.pop()){
 				store.reload();
+			}
+
+			if(callback){
+				Ext.callback(callback);
 			}
 		}
 
@@ -299,13 +303,13 @@ Ext.define('NextThought.controller.Groups', {
 	},
 
 
-	deleteContact: function(user){
+	deleteContact: function(user, groups,callback){
 		var username = (user && user.isModel) ? user.get('Username') : user;
-		this.removeContact(null,username);
+		this.removeContact(null,username, callback);
 	},
 
 
-	removeContact: function(record, contact){
+	removeContact: function(record, contact, callback){
 		var store = this.getFriendsListStore(),
 			userId = typeof contact === 'string' ? contact : contact.get('Username'),
 			count = Globals.getAsynchronousTaskQueueForList(store.getCount()),
@@ -313,7 +317,11 @@ Ext.define('NextThought.controller.Groups', {
 
 		function finish(){
 			if(!count.pop() && modified){
-				store.load();
+				store.reload();
+			}
+
+			if(callback){
+				Ext.callback(callback);
 			}
 		}
 
