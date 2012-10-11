@@ -28,8 +28,8 @@ Ext.define('NextThought.view.account.code.Window',{
         {
             xtype: 'account-header-view',
             noIcon: true,
-            title: 'Enter a Code...',
-            detail: 'Enter a code below to join groups.'
+            title: 'Enter a Group Code...',
+            detail: 'Please enter your code to join a specific group or class.'
         },
         {xtype: 'code-main-view'}
     ]

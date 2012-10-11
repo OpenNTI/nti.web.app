@@ -151,12 +151,34 @@ Ext.define('NextThought.controller.Account', {
 
     groupCodeSubmit: function(btn){
         var view = btn.up('code-main-view'),
-            code = [view.getValue().code],
+            data = {invitation_codes: [view.getValue().code]},
+            url = $AppConfig.userObject.getLink('accept-invitations'),
             w = view.up('window');
 
+        if (!url){
+            view.setError({field: 'Code', message:'There was an error applying your Group Code.'});
+            return;
+        }
 
-
-        console.log('do something with this', code);
+        Ext.Ajax.request({
+            url: getURL(url),
+            scope: this,
+            jsonData: Ext.encode(data),
+            method: 'POST',
+            headers: {
+                Accept: 'application/json'
+            },
+            callback: function(q,success,r){
+                btn.removeCls('disabled');
+                if(!success){
+                    view.setError({field:'Code', message: 'That Group Code is not valid.'});
+                    return;
+                }
+                else {
+                    w.close();
+                }
+            }
+        });
     },
 
 

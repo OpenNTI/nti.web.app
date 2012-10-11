@@ -46,9 +46,7 @@ Ext.define('NextThought.view.account.contacts.View',{
                             },
                             items:[
                             { xtype: 'container', id: 'my-groups', layout: 'auto', flex: 1, autoScroll: true}
-
-                            //TODO - turn on for join group functionality
-                            //{ xtype: 'group-buttons', height: '50px'}
+                            { xtype: 'group-buttons', height: '50px'}
                         ]}
 					]
 				},
