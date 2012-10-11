@@ -13,6 +13,8 @@ Ext.define('NextThought.model.Highlight', {
 		{ name: 'tags', type: 'Auto'},
 		{ name: 'selectedText', type: 'string'},
 		{ name: 'style', type: 'string'},
-		{ name: 'applicableRange', type: 'ContentRangeDescription'}
+		{ name: 'applicableRange', type: 'ContentRangeDescription'},
+
+		{ name: 'GroupingField', mapping: 'Last Modified', type: 'groupByTime'}
 	]
 });
