@@ -4,7 +4,9 @@ Ext.define('NextThought.model.converters.GroupByTime',{
 	GROUPBYTIME:{
 		type: 'groupByTime',
 		sortType: Ext.data.SortTypes.asUCString,
-		convert: function(r){
+		convert: function(r,o){
+			if(!r && this.mapping){ r = o.raw[this.mapping]; }
+
 			var now = new Date(),
 				v = new Date(r*1000),
 				today = new Date(now.getFullYear(),now.getMonth(),now.getDate()),
