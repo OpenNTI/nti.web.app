@@ -30,7 +30,7 @@ Ext.define('NextThought.view.account.activity.Preview',{
 		me.callParent(arguments);
 
 		this.renderData = Ext.apply(this.renderData||{},{
-			location: '&nbsp;',
+			location: 'Loading...',
 			path: '&nbsp;',
 			contextText: this.record.get('selectedText'),
 			textContent: this.record.getBodyText ? this.record.getBodyText() : ''
@@ -43,8 +43,8 @@ Ext.define('NextThought.view.account.activity.Preview',{
 			if(!meta){
 				console.warn('No meta for '+me.record.get('ContainerId'));
 				Ext.apply(me.renderData, {
-					location: 'Unresolved',
-					path: 'Resolve failed'
+					location: '',
+					path: ''
 				});
 			}
 			else {
