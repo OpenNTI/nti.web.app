@@ -47,14 +47,14 @@ Ext.define('NextThought.view.account.recovery.Window',{
 
         if ( this.linkName === 'state-bounced-contact-email') {
             //is contact email, not cancelable
-            Ext.fly(headerView.el.query('.title')[0]).setHTML('Invalid Parent Email...');
-            Ext.fly(headerView.el.query('.detail')[0]).setHTML('Please provide your parent\'s email address to get permission for social features.');
+            Ext.fly(headerView.el.query('.title')[0]).setHTML('Resend Consent Form...');
+            Ext.fly(headerView.el.query('.detail')[0]).setHTML('We couldn\'t deliver the form to the email address you provided. Please enter your parent\'s email to get permission for social features.');
             emailView.down('button[name=cancel]').destroy();
         }
         else if (this.linkName === 'contact-email-sends-consent-request'){
             //is request to resent consent email and enter a new consent email
             Ext.fly(headerView.el.query('.title')[0]).setHTML('Resend Consent Form...');
-            Ext.fly(headerView.el.query('.detail')[0]).setHTML('We couldn\'t deliver the form to the email address you provided. Please enter your parent\'s email to get permission for social features.');
+            Ext.fly(headerView.el.query('.detail')[0]).setHTML('Please enter your parent\'s email to get permission for social features.');
         }
         else {
             //regular email, not cancelable
