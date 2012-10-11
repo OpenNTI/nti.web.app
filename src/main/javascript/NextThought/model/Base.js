@@ -274,7 +274,7 @@ Ext.define('NextThought.model.Base', {
 
 		var f = Ext.String.format("/++fields++{0}", field);
 
-		return getURL(Ext.String.format("{0}/{1}",
+		return getURL(Ext.String.format("{0}{1}",
 			editLink,f));
 	},
 
