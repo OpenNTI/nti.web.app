@@ -30,6 +30,25 @@ Ext.define('NextThought.view.UserDataPanel',{
 				]
 			}]},
 
+			{tag:'tpl', 'if':'isFavorite', cn:[
+			{
+				'data-guid': '{guid}',
+				cls: 'history favorite',
+				cn:[
+//					{cls: 'path', html:'{path}'},
+//					{cls: 'location', html:'{location}'}
+				]
+			}]},
+
+
+			{tag:'tpl', 'if':'isChat', cn:[
+			{
+				'data-guid': '{guid}',
+				cls: 'history chat',
+				cn:[
+				]
+			}]},
+
 
 
 			{tag:'tpl', 'if':'label', cn:[{
@@ -46,6 +65,7 @@ Ext.define('NextThought.view.UserDataPanel',{
 
 		m[data.Note.prototype.mimeType] = this.getNoteItem;
 		m[data.Highlight.prototype.mimeType] = this.getHighlightItem;
+		m[data.Transcript.prototype.mimeType] = this.getChatItem;
 
 		this.callParent(arguments);
 
@@ -64,11 +84,15 @@ Ext.define('NextThought.view.UserDataPanel',{
 		var s = this.store = NextThought.store.PageItem.create({groupField:'GroupingField'});
 
 		s.proxy.extraParams = Ext.apply(s.proxy.extraParams||{},{
-			sortOn: 'lastModified',
-			sortOrder: 'descending',
-			filter: 'OnlyMe',
+//			sortOn: 'lastModified',
+//			sortOrder: 'descending',
+			//filter: 'OnlyMe',
 			accept: this.mimeType
 		});
+
+		s.proxy.limitParam = undefined;
+		s.proxy.startParam = undefined;
+		delete s.pageSize;
 
 		this.mon(s,{
 			scope: this,
@@ -172,6 +196,13 @@ Ext.define('NextThought.view.UserDataPanel',{
 		});
 
 		return data;
+	},
+
+
+	getChatItem: function(rec){
+		console.log(rec);
+
+		return {isChat:true};
 	}
 
 });

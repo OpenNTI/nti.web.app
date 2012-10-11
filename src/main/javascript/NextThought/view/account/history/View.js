@@ -32,7 +32,7 @@ Ext.define('NextThought.view.account.history.View',{
 					items: [
 						{ title: 'Notes', mimeType: 'application/vnd.nextthought.note,application/vnd.nextthought.highlight' },
 						{ title: 'Bookmarks',mimeType: 'application/vnd.nextthought.favorite' },
-						{ title: 'Chats',mimeType: 'application/vnd.nextthought.transcript' }
+						{ title: 'Chats',mimeType: 'application/vnd.nextthought.transcriptsummary' }
 					]
 				}
 			]
