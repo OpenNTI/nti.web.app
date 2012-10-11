@@ -33,8 +33,27 @@ Ext.define('NextThought.view.menus.file.BrowserItem',{
 			tag: 'input',
 			type: 'file',
 			size: 1,
-			multiple: !Ext.isIE9 //enable multi-select on FileAPI enabled browsers. (Clue: not IE9)
+			multiple: (typeof window.FileReader !== 'undefined')
 		}).on('change', me.onFileChange, me, {single: true});
+
+		if(me.isDisabled()){
+			me.fileInputEl.set({disabled: true});
+		}
+	},
+
+
+	enable: function(){
+		if(this.fileInputEl){
+			this.fileInputEl.set({disabled: undefined});
+		}
+		return this.callParent(arguments);
+	},
+
+	disable: function(){
+		if(this.fileInputEl){
+			this.fileInputEl.set({disabled: true});
+		}
+		return this.callParent(arguments);
 	},
 
 
