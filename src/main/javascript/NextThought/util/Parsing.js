@@ -99,6 +99,10 @@ Ext.define('NextThought.util.Parsing',{
 			return null;
 		}
 
+		if(parts.length>4){
+			console.warn('Possibly losing data, this ID has more than 4 parts', id);
+		}
+
 		result.authority = {
 			name: authority[0],
 			date: authority[1]
