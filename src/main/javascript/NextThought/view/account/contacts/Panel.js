@@ -28,7 +28,8 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 	}],
 
 	initComponent: function(){
-		if(!this.associatedGroup){
+		var g = this.associatedGroup;
+		if(!g){
 			this.tools = null;
 		}
 		this.callParent(arguments);
@@ -49,7 +50,7 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 			handler: this.chatWithGroup,
 			itemId: 'group-chat',
 			ui: 'nt-menuitem', plain: true,
-			hidden: !$AppConfig.service.canChat()
+			hidden: !$AppConfig.service.canChat() || !g || g.getFriendCount() === 0
 		});
 
 		this.menu = Ext.widget('menu',{
@@ -170,7 +171,9 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 
 
 	chatWithGroup: function(){
-		this.fireEvent('group-chat', this.associatedGroup);
+		if(this.associatedGroup.getFriendCount() > 0){
+			this.fireEvent('group-chat', this.associatedGroup);
+		}
 	}
 
 });

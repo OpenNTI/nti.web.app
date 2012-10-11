@@ -22,6 +22,16 @@ Ext.define('NextThought.mixins.GroupLike',{
 	},
 
 
+	getFriends: function(){
+		return this.get('friends') || [];
+	},
+
+
+	getFriendCount: function(){
+		return (this.get('friends') || []).length;
+	},
+
+
 	addFriend: function(username){
 		var list = this.get('friends') || [];
 		if(!Ext.Array.contains(list,username)){
