@@ -86,7 +86,7 @@ Ext.define('NextThought.view.UserDataPanel',{
 		s.proxy.extraParams = Ext.apply(s.proxy.extraParams||{},{
 //			sortOn: 'lastModified',
 //			sortOrder: 'descending',
-			//filter: 'OnlyMe',
+			filter: 'OnlyMe',
 			accept: this.mimeType
 		});
 
