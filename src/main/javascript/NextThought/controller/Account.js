@@ -185,7 +185,6 @@ Ext.define('NextThought.controller.Account', {
     contactFormSubmit: function(btn){
         var view = btn.up('contact-main-view'),
             data = view.getValues(),
-            key,
             feedbackLink = $AppConfig.userObject.getLink('send-feedback');
             url = getURL(feedbackLink),
             w = view.up('window');
@@ -193,15 +192,25 @@ Ext.define('NextThought.controller.Account', {
         //first diable the button:
         btn.addCls('disabled');
 
+        if(!data.message) {
+            console.log('no message to send.');
+            w.close();
+            return;
+        }
+
         if (!feedbackLink) {
             console.error('Nowhere to seed feedback to');
             w.close();
+            return;
         }
 
         Ext.Ajax.request({
             url: url,
             scope: this,
-            jsonData: Ext.encode(data),
+            jsonData: Ext.encode({
+                    body: ((data.email) ? data.email : '[NO EMAIL SUPPLIED]')
+                    + ' wrote: ' + data.message}
+            ),
             method: 'POST',
             headers: {
                 Accept: 'application/json'

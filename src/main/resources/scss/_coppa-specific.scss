@@ -209,9 +209,17 @@
 			margin-left: 34px;
 			margin-right: 34px;
 		}
+		textarea,
+
 		.input-box {
-			textarea {
+			textarea, input {
 				width: 402px !important;
+				box-shadow: none;
+				border-left: 1px solid $border-grey;
+				&:focus {
+					outline: none;
+					box-shadow: none;
+				}
 			}
 		}
 	}
