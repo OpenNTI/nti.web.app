@@ -135,6 +135,26 @@ Ext.define('NextThought.view.whiteboard.editor.ImageOptions',{
 	},
 
 
+
+	handlePaste:function(event, domEl){
+		var clipboardData = event.clipboardData || {},
+			me = this;
+
+		Ext.each(clipboardData.types || [], function(type, i) {
+			var file, reader;
+			if (type.match(/image\/.*/i)) {
+				file = clipboardData.items[i].getAsFile();
+				reader = new FileReader();
+				reader.onload = function(evt) { me.insertImage(evt.target.result); };
+				reader.readAsDataURL(file);
+				return false;
+			}
+			return true;
+		});
+
+	},
+
+
 	insertImage: function(dataUrl){
 		var image = new Image(),
 			e = this.up('whiteboard-editor'),
