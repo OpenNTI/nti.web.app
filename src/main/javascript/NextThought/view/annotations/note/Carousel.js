@@ -43,11 +43,14 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 	},
 
 	initComponent: function(){
-		this.callParent(arguments);
-		this.navContainer = this.navTpl.append(Ext.getBody(),[],true);
-		this.navNext = this.navContainer.down('.forward.circle');
-		this.navPrev = this.navContainer.down('.backward.circle');
-		this.on('move',this.syncIt,this);
+		var me = this;
+		me.callParent(arguments);
+		me.navContainer = me.navTpl.append(Ext.getBody(),[],true);
+		me.navNext = me.navContainer.down('.forward.circle');
+		me.navPrev = me.navContainer.down('.backward.circle');
+
+		Ext.EventManager.onWindowResize(me.syncIt,me,{buffer: 200});
+		me.on('destroy',function(){ Ext.EventManager.removeResizeListener(me.syncSize,me);});
 	},
 
 
