@@ -502,7 +502,7 @@ describe("Anchor Utils", function() {
 			range.setEnd(t2, 2);
 
 			result = Anchors.makeRangeAnchorable(range, document);
-			expect(result).toBe(range); //should not have changed
+			expect(result.toString()).toBe(range.toString()); //should not have changed
 		});
 
 		it('Range Both Sides Need Digging', function(){

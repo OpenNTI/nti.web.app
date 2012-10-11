@@ -141,11 +141,15 @@ Ext.define('NextThought.util.Anchors', {
 			role: 'ancestor'
 		});
 
+        try{
 		result.description = Ext.create('NextThought.model.anchorables.DomContentRangeDescription', {
 			start: Anchors.createPointer(pureRange, 'start'),
 			end: Anchors.createPointer(pureRange, 'end'),
 			ancestor: ancestorAnchor
 		});
+        } catch (e) {
+            console.warn('There was an error generating the description, hopefully the container will do.');
+        }
         return result;
 	},
 
@@ -762,7 +766,7 @@ Ext.define('NextThought.util.Anchors', {
 			endOffset = range.endOffset;
 
 		//If both anchors are already anchorable, we are done here.
-		if(Anchors.isNodeAnchorable(startEdgeNode) && Anchors.isNodeAnchorable(endEdgeNode)){
+		if(endEdgeNode === range.endContainer && startEdgeNode === range.startContainer && Anchors.isNodeAnchorable(startEdgeNode) && Anchors.isNodeAnchorable(endEdgeNode)){
 			return range;
 		}
 
