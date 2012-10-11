@@ -108,6 +108,10 @@
 		display: block;
 		top: 5px;
 		right: 54px;
+		.x-opera &,
+		.x-safari5 & {
+			right: 60px;
+		}
 	}
 
 	input {
