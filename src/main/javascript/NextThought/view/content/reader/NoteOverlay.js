@@ -214,7 +214,6 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 			clearTimeout(o.mouseLeaveTimeout);
 			lineInfo = LineUtils.findLine(y,this.getDocumentElement());
 
-           if (e.type === 'click'){debugger;}
             if (e.type === 'click' && !lineInfo && o.lastLine && Math.abs(y - o.lastLine.rect.bottom) < 50){
                 lineInfo = o.lastLine;
                 delete o.lastLine;
