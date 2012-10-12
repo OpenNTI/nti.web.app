@@ -30,9 +30,9 @@ Ext.define('NextThought.view.account.history.View',{
 					xtype: 'secondary-tabpanel',
 					defaults: {xtype:'user-data-panel'},
 					items: [
-						{ title: 'Notes', mimeType: 'application/vnd.nextthought.note,application/vnd.nextthought.highlight' },
-						{ title: 'Bookmarks',mimeType: 'application/vnd.nextthought.favorite' },
-						{ title: 'Chats',mimeType: 'application/vnd.nextthought.transcriptsummary' }
+						{ title: 'Notes', mimeType: ['note','highlight'] },
+						{ title: 'Bookmarks', mimeType: ['favorite'] },
+						{ title: 'Chats', mimeType: ['transcriptsummary'] }
 					]
 				}
 			]

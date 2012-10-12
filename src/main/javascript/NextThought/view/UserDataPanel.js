@@ -46,6 +46,14 @@ Ext.define('NextThought.view.UserDataPanel',{
 				'data-guid': '{guid}',
 				cls: 'history chat',
 				cn:[
+                    {cls: 'occupants', cn:[
+                        {tag: 'span', cls: 'names', html: '{occupants}'},
+                        {tag: 'span', cls: 'count', html: '{count}'}
+                    ]},
+                    {cls: 'time', cn:[
+                        '{started} - Lasted ',
+                        {tag: 'span', cls: 'duration', html:'{duration}'}
+                    ]}
 				]
 			}]},
 
@@ -61,15 +69,22 @@ Ext.define('NextThought.view.UserDataPanel',{
 
 	initComponent: function(){
 		var data = NextThought.model,
-			m = this.dataMapper = {};
+			m = this.dataMapper = {},
+            types = [];
 
 		m[data.Note.prototype.mimeType] = this.getNoteItem;
 		m[data.Highlight.prototype.mimeType] = this.getHighlightItem;
-		m[data.Transcript.prototype.mimeType] = this.getChatItem;
+		m[data.TranscriptSummary.prototype.mimeType] = this.getChatItem;
+        m[data.Transcript.prototype.mimeType] = this.getChatItem;
 
 		this.callParent(arguments);
 
+        //create a regex for our filter
+        Ext.each(this.mimeType, function(t){ types.push(RegExp.escape(t)); });
+        this.mimeTypeRe = new RegExp('^application\\/vnd\\.nextthought\\.('+types.join('|')+')$');
 
+
+        this.on('activate', this.onActivate, this);
 		this.initializeStore();
 	},
 
@@ -81,40 +96,91 @@ Ext.define('NextThought.view.UserDataPanel',{
 			return;
 		}
 
-		var s = this.store = NextThought.store.PageItem.create({groupField:'GroupingField'});
+        var s = this.self.store;
 
-		s.proxy.extraParams = Ext.apply(s.proxy.extraParams||{},{
-//			sortOn: 'lastModified',
-//			sortOrder: 'descending',
-			filter: 'OnlyMe',
-			accept: this.mimeType
-		});
+        if (!s){
+            s = this.self.store = NextThought.store.PageItem.create({id:'historyStore', groupField:'GroupingField'});
 
-		s.proxy.limitParam = undefined;
-		s.proxy.startParam = undefined;
-		delete s.pageSize;
+            s.proxy.extraParams = Ext.apply(s.proxy.extraParams||{},{
+                sortOn: 'lastModified',
+                sortOrder: 'descending',
+                filter: 'OnlyMe'
+            });
+
+            s.proxy.limitParam = undefined;
+            s.proxy.startParam = undefined;
+            delete s.pageSize;
+
+        }
 
 		this.mon(s,{
 			scope: this,
-			datachanged: this.redraw
+			datachanged: this.maybeRedraw
 		});
 	},
 
 
+    onActivate: function() {
+        if (this.needsRedraw) {
+            this.redraw();
+            delete this.needsRedraw;
+        }
+    },
+
+
+    maybeRedraw: function(){
+        if (this.isVisible()){
+            this.redraw();
+        }
+        else {
+            this.needsRedraw = true;
+        }
+    },
+
+
+    applyMimeTypeFilter: function(){
+        var s = this.self.store;
+        s.suspendEvents();
+        s.clearFilter();
+        s.filter({
+            property: 'MimeType',
+            value: this.mimeTypeRe
+        });
+        s.resumeEvents();
+    },
+
+
 	afterRender: function(){
 		this.callParent(arguments);
+        var s = this.self.store;
 		try{
-			this.store.load();
+            if (!s.initialLoaded){
+                s.initialLoaded = true;
+			    s.load();
+            }
+
+            if(this.redrawOnRender){
+                delete this.redrawOnRender;
+                this.redraw();
+            }
 		}
 		catch(e){
 			console.error(e.message, e.stack|| e.stacktrace);
 		}
 	},
 
+
 	redraw: function(){
+        if(!this.rendered){
+            this.redrawOnRender = true;
+            return;
+        }
+
+        this.applyMimeTypeFilter();
+
 		var container = this,
 			items = [],
-			store = this.store,
+			store = this.self.store,
 			groups = store.getGroups(),
 			me = this;
 
@@ -150,6 +216,7 @@ Ext.define('NextThought.view.UserDataPanel',{
 
 		return this.getNoteItem(rec);
 	},
+
 
 	getNoteItem: function(rec){
 		var me = this,
@@ -200,9 +267,45 @@ Ext.define('NextThought.view.UserDataPanel',{
 
 
 	getChatItem: function(rec){
-		console.log(rec);
+        var me = this,
+            guid = guidGenerator(),
+            ri = rec.get('RoomInfo'),
+            started = ri.get('CreatedTime'),
+            ended = rec.get('Last Modified'),
+            data = {
+                isChat: true,
+                guid: guid,
+                occupants: rec.get('Contributors'),
+                started: Ext.Date.format(started, 'g:i A'),
+                duration: rec.timeDifference(ended, started).replace(/ ago/i, '')
+            };
 
-		return {isChat:true};
+        UserRepository.getUser(data.occupants, function(users){
+            var names = [],
+                dom;
+            Ext.each(users, function(u){
+                if (!isMe(u) && names.length < 4){
+                    names.push(u.getName().split(/\s/)[0]);
+                }
+            });
+            if (users.length > 5){data.count = '('+(users.length-1)+')';}
+            data.occupants = names.join(', ');
+
+
+            try {
+                dom = me.el.down('[data-guid='+guid+']');
+                if (dom) {
+                    dom.down('.occupants .names').update(data.occupants);
+                    dom.down('.occupants .count').update(data.count || '');
+                }
+            }
+            catch(e){
+                console.log('strange :P', e.message, e.stack);
+            }
+        });
+
+
+		return data;
 	}
 
 });

@@ -1,8 +1,15 @@
 Ext.define('NextThought.model.TranscriptSummary', {
 	extend: 'NextThought.model.Base',
+
+    requires: [
+        'NextThought.model.converters.GroupByTime'
+    ],
+
 	fields: [
 		{ name: 'RoomInfo', type: 'singleItem'},
-		{ name: 'Contributors', type: 'auto' }
+		{ name: 'Contributors', type: 'auto' },
+
+        { name: 'GroupingField', mapping: 'Last Modified', type: 'groupByTime'}
 	],
 
 //	isThreadable: true,

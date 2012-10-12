@@ -49,6 +49,36 @@
 			font-weight: 600;
 		}
 
+		&.chat{
+			margin: 15px;
+			padding-left: 30px;
+			position: relative;
+			overflow: hidden;
+
+			&::after{
+				position: absolute;
+				top: 5px;
+				left: 5px;
+				content: ' ';
+				height: 14px;
+				width: 18px;
+				background: url(../images/activity-icons.png) -2px -24px no-repeat;
+			}
+
+			.occupants {
+				@include menu-label-text-treatment;
+				color: $primary-blue;
+				line-height: 20px;
+			}
+
+			.time {
+				font-size: 12px;
+				font-family: $font;
+				font-weight: normal;
+				color: $secondary-grey;
+			}
+		}
+
 		&.note{
 			margin: 0 20px;
 
