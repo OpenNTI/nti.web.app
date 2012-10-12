@@ -81,7 +81,11 @@ Ext.define('NextThought.view.SideBar',{
 	afterRender: function(){
 		this.callParent(arguments);
 		this.tool = this.gripper.getEl().down('img.tool');
+
+		this.popstate = true;
 		this.viewportMonitor(Ext.Element.getViewportWidth());
+
+
 		this.mon(this.gripper.el,'click',this.togglePopup,this);
 	},
 

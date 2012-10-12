@@ -34,6 +34,8 @@ Ext.define('NextThought.view.Main', {
 
 	afterRender: function(){
 		this.callParent(arguments);
+
+
 		Ext.widget('main-sidebar', {
 			host: this.down('[region=east]'), hidden: this.hidden
 		});
