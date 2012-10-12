@@ -239,7 +239,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
                     this.context.insertHtml('afterBegin', '[...] ');
                     this.context.insertHtml('beforeEnd', ' [...]');
                 }
-				this.context.select('.injected-related-items,.related').remove();
+				this.context.select('.injected-related-items,.related,iframe,object').remove();
 				this.context.select('a[href]').set({target:'_blank'});
 				this.context.select('a[href^=tag]').set({href:undefined,target:undefined});
                 Ext.each(this.context.query('.application-highlight'), function(h){
