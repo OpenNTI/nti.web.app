@@ -39,6 +39,15 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
 	},
 
 
+    onUpdate: function(ds, record){
+        if(Ext.Array.contains(this.blocked, record.get('Username'))){
+            console.log('username blocked', record);
+            return;
+        }
+        this.callParent(arguments);
+    },
+
+
 	refresh: function(){
 		var el = this.getEl(),
 			ul,
