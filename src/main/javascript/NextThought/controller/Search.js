@@ -91,6 +91,7 @@ Ext.define('NextThought.controller.Search', {
 					sortIndexes.pop();
 					sortIndexes.reverse();
 
+					//Refactor to just pas the hit model a
 					result.push( {
                         ntiid: id,
 						name: hit.get('Creator'),
@@ -99,7 +100,8 @@ Ext.define('NextThought.controller.Search', {
 						containerId: hit.get('ContainerId'),
 						hitId: hit.getId(),
 						sortId:sortIndexes,
-						fragments: hit.get('Fragments')
+						fragments: hit.get('Fragments'),
+						hit: hit
 					});
 				},	this);
 
@@ -225,7 +227,7 @@ Ext.define('NextThought.controller.Search', {
 		Ext.ComponentQuery.query('library-view-container')[0].activate();
 
 		if(cat==='Books'){
-			nav.navigateAndScrollToTerm(cid,result.term);
+			nav.navigateAndScrollToSearchHit(cid,result);
 			return;
 		}
 

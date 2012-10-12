@@ -286,25 +286,26 @@ Ext.define('NextThought.view.content.reader.Scroll',{
 		return ranges;
 	},
 
-	scrollToText: function(text) {
+	scrollToSearchHit: function(result) {
 		var me = this,
 			doc = me.getDocumentElement(),
 			ranges = [],
-			texts,
 			rangeToScrollTo,
-			nodeTop, scrollOffset, a, pos, assessmentAdjustment = 0;
+			nodeTop, scrollOffset, a, pos, assessmentAdjustment = 0,
+			regexToHighlight = SearchUtils.contentRegexForSearchHit(result.hit, result.hit.get('PhraseSearch'));
 
-		if (!text) {
+		if (!result || !regexToHighlight) {
 			return;
 		}
 
-		ranges = me.findHighlightRanges(doc, doc, text);
+
+		ranges = me.findHighlightRanges(doc, doc, regexToHighlight);
 		me.showRanges(ranges);
 
 		//If we found no range, try again not in iframe in case of assessments,
 		//this is a bit of a hack to get it working for MC
 		if(!ranges || ranges.length === 0){
-			ranges = me.findHighlightRanges(document, document, text);
+			ranges = me.findHighlightRanges(document, document, regexToHighlight);
 			assessmentAdjustment = 150;
 		}
 
@@ -324,7 +325,7 @@ Ext.define('NextThought.view.content.reader.Scroll',{
 			//Assessment items aren't in the iframe so they don't take into account scroll
 			scrollOffset = this.body.getScroll().top;
 			scrollOffset = ( assessmentAdjustment > 0 ? scrollOffset : 0);
-			
+
 			pos = nodeTop - assessmentAdjustment + scrollOffset; 
 			try{
 				me.scrollTo(pos);

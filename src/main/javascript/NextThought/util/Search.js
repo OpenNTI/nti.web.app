@@ -27,8 +27,77 @@ Ext.define('NextThought.util.Search',{
 		if(tokens.length === 0){ tokens.push(string); } //Avoid searching for an empty string.
 
 		return new RegExp([ '(',bound,'(', tokens.join('|'), ')',bound,')' ].join(''), 'ig');
-	}
+	},
 
+	contentRegexForSearchHit: function(hit, phraseSearch){
+		function isContent(hit){
+			return /content/i.test(hit.get('Type'));
+		}
+		
+		var fragments = hit.get('Fragments'),
+			regexes = [], terms = [], combinedRegex, escapedParts;
+
+		if(!isContent(hit) || !fragments || fragments.length === 0){
+			return null;
+		}
+
+		Ext.each(fragments, function(fragment, index){
+			var fragTerms = [];
+			if(!fragment.matches || fragment.matches.length === 0 || !fragment.text){
+				console.warn('No matches or text for fragment. Dropping', fragment);
+			}
+			else{
+				//Sort the matches backwards so we can do string replaces without invalidating
+				fragment.matches.sort(function(a, b){return b[0] - a[0];});
+				Ext.each(fragment.matches, function(match, idx){
+					var term;
+					//Attempt to detect bad data from the server
+					var next = idx + 1 < fragment.matches.length ? fragment.matches[idx + 1] : [0, 0];
+					if(next[1] > match[1]){
+						console.warn('Found a match that is a subset of a previous match.  Server breaking its promise?', fragment.matches);
+						return true; //continue
+					}
+
+					term = fragment.text.slice(match[0], match[1]);
+					if(term){
+						fragTerms.push(term);
+					}
+					return true;
+				});
+
+				if(!phraseSearch){
+					terms = Ext.Array.merge(terms, fragTerms);
+				}
+				else{
+					//Server doesn't actually highlight like this, but that is what the user expects
+					/*escapedParts = [];
+					Ext.Array.each(fragTerms, function(term){
+						escapedParts.push(term.replace(/[.*+?|()\[\]{}\\$^]/g,'\\$&'));
+					});
+					escapedParts.reverse();
+					regexes.push(escapedParts.join('[\\s\\.,-\\/#!$%\\^&\\*;:{}=\\-_`~()\\?]+'));*/
+
+					//Match the server exactly for the time being even thought it looks wrong
+					terms = Ext.Array.merge(terms, fragTerms);
+				}
+			}
+		});
+
+		if(/*!phraseSearch && */terms.length > 0){
+			terms = Ext.Array.unique(terms);
+			escapedParts = [];
+			Ext.Array.each(terms, function(term){
+				escapedParts.push(term.replace(/[.*+?|()\[\]{}\\$^]/g,'\\$&'));
+			});
+			combinedRegex = new RegExp(escapedParts.join('|'), 'ig');
+		}
+/*		else if(regexes.length > 0){
+			regexes = Ext.Array.unique(regexes);
+			combinedRegex = new RegExp(regexes.join('|'), 'ig');
+		}*/
+
+		return combinedRegex;
+	}
 
 }, function(){
 	window.SearchUtils = this;

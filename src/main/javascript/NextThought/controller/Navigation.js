@@ -139,9 +139,9 @@ Ext.define('NextThought.controller.Navigation', {
 	},
 
 
-	navigateAndScrollToTerm: function(ntiid,term){
+	navigateAndScrollToSearchHit: function(ntiid, result){
 		function callback(reader){
-			(reader||ReaderPanel.get()).scrollToText(term);
+			(reader||ReaderPanel.get()).scrollToSearchHit(result);
 		}
 
 		LocationProvider.setLocation(ntiid, callback, this);
