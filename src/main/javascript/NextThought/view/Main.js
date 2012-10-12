@@ -29,12 +29,13 @@ Ext.define('NextThought.view.Main', {
 	constructor: function(){
 		this.hidden = Boolean(NextThought.phantomRender);
 		this.callParent(arguments);
-		Ext.widget('main-sidebar', {host: this.down('[region=east]')});
 		return this;
-	}
+	},
 
-//}, function(){
-//	if(Ext.getScrollbarSize().width > 2){
-//		Ext.getBody().addCls('detected-scrollbars');
-//	}
+	afterRender: function(){
+		this.callParent(arguments);
+		Ext.widget('main-sidebar', {
+			host: this.down('[region=east]'), hidden: this.hidden
+		});
+	}
 });
