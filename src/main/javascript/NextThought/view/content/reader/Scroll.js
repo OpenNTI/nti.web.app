@@ -292,15 +292,21 @@ Ext.define('NextThought.view.content.reader.Scroll',{
 			ranges = [],
 			rangeToScrollTo,
 			nodeTop, scrollOffset, a, pos, assessmentAdjustment = 0,
-			regexToHighlight = SearchUtils.contentRegexForSearchHit(result.hit, result.hit.get('PhraseSearch'));
+			ps = result.hit.get('PhraseSearch'),
+			regexToHighlight = SearchUtils.contentRegexForSearchHit(result.hit, ps);
 
+		me.clearSearchRanges();
 		if (!result || !regexToHighlight) {
 			return;
 		}
 
 
 		ranges = me.findHighlightRanges(doc, doc, regexToHighlight);
-		me.showRanges(ranges);
+		
+		//Don't highlight phrase search until we get the issues worked out
+		if(!ps){
+			me.showRanges(ranges);
+		}
 
 		//If we found no range, try again not in iframe in case of assessments,
 		//this is a bit of a hack to get it working for MC
