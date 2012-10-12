@@ -26,14 +26,47 @@ Ext.define('NextThought.view.account.coppa.Main',{
                 xtype: 'combobox',
                 name: 'affiliation',
                 typeAhead: true,
+                forceAll: true,
                 valueField: 'school',
                 displayField: 'school',
                 multiSelect: false,
                 enableKeyEvents: true,
-                queryMode: 'local',
+                queryMode: 'remote',
                 cls: 'combo-box',
                 anchor: '100%',
-                hideTrigger: true
+                hideTrigger: true,
+                listConfig: {
+                    ui: 'nt',
+                    plain: true,
+                    showSeparator: false,
+                    shadow: false,
+                    frame: false,
+                    border: false,
+                    cls: 'x-menu',
+                    baseCls: 'x-menu',
+                    itemCls: 'x-menu-item no-border',
+                    emptyText: '<div class="x-menu-item">No results</div>',
+                    xhooks: {
+                        initComponent: function(){
+                            this.callParent(arguments);
+                            this.itemSelector = '.x-menu-item';
+                        }
+                    }
+                },
+                listeners: {
+                    change: function() {
+                        var store = this.store;
+                        store.suspendEvents();
+                        store.clearFilter();
+                        store.resumeEvents();
+                        store.filter({
+                            property: 'school',
+                            anyMatch: true,
+                            value   : this.getValue()
+                        });
+                        this.expand();
+                    }
+                }
             }
         ]},
         {xtype: 'box', hidden: true, name:'error', autoEl: {cls: 'error-box', tag:'div',
