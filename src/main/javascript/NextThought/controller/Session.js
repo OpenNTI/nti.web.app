@@ -164,7 +164,15 @@ Ext.define('NextThought.controller.Session', {
 	getLink: function getLink(o, relName){
         o = o || {};
         o = o.responseText || o;
-        if(typeof o === 'string') { o = Ext.decode(o); }
+        if(typeof o === 'string') {
+            try {
+                o = Ext.decode(o);
+            }
+            catch(e){
+                console.error('could not decode', o);
+                o = {};
+            }
+        }
         var l = o.Links || [], i = l.length-1;
         for(i;i>=0; i--){ if(l[i].rel === relName){ return l[i].href; } }
         return null;
@@ -203,7 +211,11 @@ Ext.define('NextThought.controller.Session', {
 
 	performHandshake: function(link,successCallback,failureCallback){
 		var m = this,
-			u  = decodeURIComponent( Ext.util.Cookies.get('username') );
+			u  = decodeURIComponent( Ext.util.Cookies.get('username')),
+            handshakeTimer = setTimeout(m.handshakeRecovery, 30000);
+
+        //NOTE: handshakeTimer will retry if it doesn't return before 30 seconds because it's been reported that
+        //you can get into a bad state duringn handshake, so we want to interrupt that and try again.
 		Ext.Ajax.request({
 			method: 'POST',
 			timeout: 60000,
@@ -212,12 +224,10 @@ Ext.define('NextThought.controller.Session', {
 				username: u
 			},
 			callback: function(q,s,r){
+                clearTimeout(handshakeTimer);
 				var l = m.getLink(r,'logon.continue');
 				if(!s || !l){
-					if(r.timedout){
-						console.log('Request timed out: ', r.request.options.url);
-					}
-					return failureCallback.call(m,r.timedout);
+					return failureCallback.call(m);
 				}
 				m.maybeTakeImmediateAction(r);
 				m.logoutURL = m.getLink(r,'logon.logout');
@@ -225,6 +235,12 @@ Ext.define('NextThought.controller.Session', {
 			}
 		});
 	},
+
+
+    handshakeRecovery: function(){
+        Ext.util.Cookies.clear('username');
+        location.reload();
+    },
 
 
 
