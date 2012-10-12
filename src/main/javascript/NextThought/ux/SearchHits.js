@@ -32,33 +32,24 @@ Ext.define('NextThought.ux.SearchHits', {
 	showAllHits: function(){
 		var toAppend = [], range;
 		Ext.each(this.selections, function(sel){
-			var s = sel.getClientRects(),
-				i = s.length-1;
-			for(; i>=0; i--){
-				range = s[i];
-				//Instead of appending one element at a time build them into a list and
-				//append the whole thing.  This is a HUGE improvement for the intial rendering performance
-				toAppend.push({
-					cls:'searchHit-entry',
-				  style: {
-					  height: range.height+'px',
-					  width: range.width+'px',
-					  top: range.top+'px',
-					  left: range.left+'px'
-				  }
-				});
+			var range = sel.getBoundingClientRect();
+			//Instead of appending one element at a time build them into a list and
+			//append the whole thing.  This is a HUGE improvement for the intial rendering performance
+			toAppend.push({
+				cls:'searchHit-entry',
+			  style: {
+				  height: range.height+'px',
+				  width: range.width+'px',
+				  top: range.top+'px',
+				  left: range.left+'px'
+			  }
+			});
 
-				//Arbitrarily cap at 100 until we can figure out a solution other than
-				//a bazillion absolutely positioned divs that make anything but chrome
-				//churn.  Maybe showing these things a secion at a time as the page scrolls
-				//is best
-				if(toAppend.length > 100){
-					break;
-				}
-			}
-			//See comment about cap above
+			//Arbitrarily cap at 100 until we can figure out a solution other than
+			//a bazillion absolutely positioned divs that make anything but chrome
+			//churn.  Maybe showing these things a secion at a time as the page scrolls
+			//is best
 			return toAppend.length <= 100;
-
 		}, this);
 		//TODO should we really use dom helper here? I thought in the past we had performance issues
 		//with it
