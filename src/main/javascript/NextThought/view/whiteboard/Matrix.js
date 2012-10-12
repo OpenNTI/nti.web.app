@@ -41,8 +41,9 @@ Ext.define('NextThought.view.whiteboard.Matrix', {
 
 
 	rotate: function(rad) {
-		var c = +Math.cos(rad).toFixed(9),
-			s = +Math.sin(rad).toFixed(9);
+		var c = Math.cos(rad),
+			s = Math.sin(rad);
+
 		this.multiply({m:[c,s,-s,c,0,0]});
 	},
 

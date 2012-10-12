@@ -220,7 +220,7 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Base', {
 		m = new NTMatrix();
 		m.translate(t[0],t[1]);
 		m.scale(s[0],s[1]);
-		m.rotate(WBUtils.getAngle(t[0],t[1], x,y));
+		m.rotate(WBUtils.toRadians(WBUtils.getDegrees([t[0],t[1], x,y])));
 
 		return m.toTransform();
 	},

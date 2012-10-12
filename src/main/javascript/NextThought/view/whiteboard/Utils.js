@@ -14,21 +14,6 @@ Ext.define('NextThought.view.whiteboard.Utils',{
 	},
 
 
-	getAngle: function (x0,y0, x1,y1){
-		if(Ext.isArray(x0)){
-			y1 = x0[3];
-			x1 = x0[2];
-			y0 = x0[1];
-			x0 = x0[0];
-		}
-
-		var dx	= x1-x0,
-			dy	= y1-y0;
-			//a	= dx<0? Math.PI: dy<0? (Math.PI*2): 0;
-		return Math.atan(dy/dx);// + a;
-	},
-
-
 	getDegrees: function(x0,y0, x1,y1){
 		if(Ext.isArray(x0)){
 			y1 = x0[3];

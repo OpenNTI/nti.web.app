@@ -247,7 +247,7 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 		p.push(xy[0],xy[1]);
 		m.translate(t.tx,t.ty);
 		m.scale(WBUtils.getDistance(p));
-		m.rotate(WBUtils.toRadians(WBUtils.getDegrees(p)));
+        m.rotate(WBUtils.toRadians(WBUtils.getDegrees(p)));
 
 		s.transform = m.toTransform();
 		this.canvas.drawScene();
@@ -276,7 +276,7 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 		m = new NTMatrix();
 		m.translate(x,y);
 		m.scale(WBUtils.getDistance(p)*2);
-		m.rotate(WBUtils.getAngle(p));
+		m.rotate(WBUtils.toRadians(WBUtils.getDegrees(p)));
 
 		m.scaleAll(1/w);//do this after
 		s.transform = m.toTransform();
@@ -307,7 +307,7 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 		m = new NTMatrix();
 		m.translate(x,y);
 		m.scale(WBUtils.getDistance(p)*2/shapeBaseScale);
-		m.rotate(WBUtils.getAngle(p));
+		m.rotate(WBUtils.toRadians(WBUtils.getDegrees(p)));
 
 		m.scaleAll(1/w);//do this after
 		s.transform = m.toTransform();
