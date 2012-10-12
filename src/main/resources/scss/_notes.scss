@@ -114,15 +114,35 @@
 					line-height: 32px;
 
 					&.bold {
-						background: url(../images/tools/bold-icon.png) 4px 11px no-repeat;
+						background: url(../images/spr_text_controls.png) 0px 7px no-repeat;
 						margin-right: 5px;
+						margin-top: 4px;
+						height: 28px;
+
+						&.selected{
+							background-position: 0px -13px;
+						}
 					}
 					&.italic {
-						background: url(../images/tools/italic-icon.png) 6px 11px no-repeat;
-						margin-right: 6px;
+						background: url(../images/spr_text_controls.png) -20px 7px no-repeat;
+						margin-right: 5px;
+						margin-top: 4px;
+						height: 28px;
+
+						&.selected{
+							background-position: -20px -13px;
+						}
 					}
 					&.underline {
-						background: url(../images/tools/underline-icon.png) 4px 11px no-repeat;
+						background: url(../images/spr_text_controls.png) -40px 8px no-repeat;
+						margin-top: 4px;
+						height: 28px;
+
+						&.selected{
+							background-position: -40px -15px;
+							margin-top: 7px;
+							height: 25px;
+						}
 					}
 					&.share {
 						width: auto;

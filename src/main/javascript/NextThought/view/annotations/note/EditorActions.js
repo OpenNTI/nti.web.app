@@ -56,7 +56,7 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 			scope      : me,
 			selectstart: me.editorSelectionStart,
 			focus      : me.editorFocus,
-			keyup      : me.maybeResizeContentBox,
+			keyup      : me.handleOnKeyup,
 			paste      : me.handlePaste,
 			click      : me.handleClick
 		});
@@ -225,6 +225,10 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 		}
 	},
 
+	handleOnKeyup: function(e){
+		this.maybeResizeContentBox();
+		this.detectFontStyleAction();
+	},
 
 	maybeResizeContentBox: function () {
 		var p = this.previousEditorHeight || 0,
@@ -249,10 +253,24 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 				action = t.getAttribute('class').split(' ').pop();
 				this.editor.dom.querySelector('[contenteditable=true]').focus();
 				document.execCommand(action, null, null);
+				document.queryCommandState(action) ? t.addCls("selected") : t.removeCls("selected");
+				console.log(action, " is ", document.queryCommandState(action));
 			}
 		}
 		e.stopEvent();
 		return false;
+	},
+
+	detectFontStyleAction: function(){
+		var b =  this.editor.down('.bold'),
+			i =  this.editor.down('.italic'),
+			u = this.editor.down('.underline');
+
+		//console.log("Key down", e);
+		document.queryCommandState("bold") ? b.addCls("selected") : b.removeCls("selected");
+		document.queryCommandState("italic") ? i.addCls("selected") : i.removeCls("selected");
+		document.queryCommandState("underline") ? u.addCls("selected") : u.removeCls("selected");
+		console.log("checked font styles");
 	},
 
 	handleClick: function (e) {
@@ -261,6 +279,9 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 		if (t) {
 			guid = t.getAttribute('id');
 			this.openWhiteboards[guid].show();
+		}
+		else{
+			this.detectFontStyleAction(e);
 		}
 	},
 
