@@ -19,6 +19,7 @@ Ext.define('NextThought.controller.Session', {
 
 	sessionTrackerCookie: 'sidt',
 
+
 	init: function() {
 		var me = this;
 
@@ -99,9 +100,21 @@ Ext.define('NextThought.controller.Session', {
     },
 
 
-    showEmailRecoveryWindow: function(fieldName, linkName){
-        var user = $AppConfig.userObject;
+	maybeTakeImmediateAction: function(r){
+		var m = this;
+        if (m.getLink(r, 'account.profile.needs.updated')){
+            m.coppaWindow = true;
+        }
+        else if (m.getLink(r, 'state-bounced-contact-email')){
+            m.bouncedContact = true;
+        }
+        else if (m.getLink(r, 'state-bounced-email')){
+            m.bouncedEmail = true;
+        }
+    },
 
+
+    showEmailRecoveryWindow: function(fieldName, linkName){
         Ext.create('NextThought.view.account.recovery.Window', {fieldName:fieldName, linkName: linkName}).show();
     },
 
@@ -148,31 +161,20 @@ Ext.define('NextThought.controller.Session', {
     },
 
 
+	getLink: function getLink(o, relName){
+        o = o || {};
+        o = o.responseText || o;
+        if(typeof o === 'string') { o = Ext.decode(o); }
+        var l = o.Links || [], i = l.length-1;
+        for(i;i>=0; i--){ if(l[i].rel === relName){ return l[i].href; } }
+        return null;
+    },
+
+
     attemptLogin: function(successCallback, failureCallback){
         var m = this,
             s = $AppConfig.server,
-            d = s.data, ping = 'logon.ping',
-            u  = decodeURIComponent( Ext.util.Cookies.get('username') );
-
-        function getLink(o, relName){
-            o = o || {};
-            o = o.responseText || o;
-            if(typeof o === 'string') { o = Ext.decode(o); }
-            var l = o.Links || [], i = l.length-1;
-            for(;i>=0; i--){ if(l[i].rel === relName){ return l[i].href; } }
-            return null;
-        }
-        function maybeTakeImmediateAction(r){
-            if (getLink(r, 'account.profile.needs.updated')){
-                m.coppaWindow = true;
-            }
-            else if (getLink(r, 'state-bounced-contact-email')){
-                m.bouncedContact = true;
-            }
-            else if (getLink(r, 'state-bounced-email')){
-                m.bouncedEmail = true;
-            }
-        }
+            d = s.data, ping = 'logon.ping';
 
         try{
 
@@ -180,33 +182,15 @@ Ext.define('NextThought.controller.Session', {
                 timeout: 60000,
                 url: getURL(d + ping),
                 callback: function(q,s,r){
-                    var l = getLink(r,'logon.handshake');
+                    var l = m.getLink(r,'logon.handshake');
                     if(!s || !l){
                         if(r.timedout){
                             console.log('Request timed out: ', r.request.options.url);
                         }
                         return Ext.callback(failureCallback,m,[r.timedout]);
                     }
-                    Ext.Ajax.request({
-                        method: 'POST',
-                        timeout: 60000,
-                        url: getURL(l),
-                        params : {
-                            username: u
-                        },
-                        callback: function(q,s,r){
-                            l = getLink(r,'logon.continue');
-                            if(!s || !l){
-                                if(r.timedout){
-                                    console.log('Request timed out: ', r.request.options.url);
-                                }
-                                return failureCallback.call(m,r.timedout);
-                            }
-                            maybeTakeImmediateAction(r);
-                            m.logoutURL = getLink(r,'logon.logout');
-                            m.resolveService(successCallback,failureCallback);
-                        }
-                    });
+
+	                return m.performHandshake(l,successCallback,failureCallback);
                 }
             });
         }
@@ -214,6 +198,34 @@ Ext.define('NextThought.controller.Session', {
             alert('Could not request handshake from Server.\n'+err.message);
         }
     },
+
+
+
+	performHandshake: function(link,successCallback,failureCallback){
+		var m = this,
+			u  = decodeURIComponent( Ext.util.Cookies.get('username') );
+		Ext.Ajax.request({
+			method: 'POST',
+			timeout: 60000,
+			url: getURL(link),
+			params : {
+				username: u
+			},
+			callback: function(q,s,r){
+				var l = m.getLink(r,'logon.continue');
+				if(!s || !l){
+					if(r.timedout){
+						console.log('Request timed out: ', r.request.options.url);
+					}
+					return failureCallback.call(m,r.timedout);
+				}
+				m.maybeTakeImmediateAction(r);
+				m.logoutURL = m.getLink(r,'logon.logout');
+				return m.resolveService(successCallback,failureCallback);
+			}
+		});
+	},
+
 
 
     resolveService: function(successFn, failureFn){
