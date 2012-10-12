@@ -78,8 +78,9 @@ Ext.define('NextThought.view.menus.Filter',{
 		}
 
 		this.add(items);
-		this.resetCurrentSelections();
-		this.fireEvent('filter-control-loaded',this);
+		if (this.resetCurrentSelections()){
+		    this.fireEvent('filter-control-loaded',this);
+        }
 	},
 
 	maybeChangeVisibiltiy: function(){
@@ -92,16 +93,21 @@ Ext.define('NextThought.view.menus.Filter',{
 		}
 	},
 
+    /**
+     *
+     * @return {Boolean} - true of you need to reload store
+     */
 	resetCurrentSelections: function(){
 		var me = this,
-			current = FilterManager.getScope(me.getId()).current;
+			current = FilterManager.getScope(me.getId()).current,
+            cantCheck = false;
 		if(!current){
-			return;
+			return true;
 		}
 		current = current.flatten();
 
 		Ext.each(current,function(o){
-			var i;
+			var i, checked = false;
 			if(o.fieldName === '$className'){
 				i = me.down('[model='+o.value+']');
 				if(i){i.setChecked(true,true);}
@@ -114,11 +120,14 @@ Ext.define('NextThought.view.menus.Filter',{
 					Ext.each(me.query('[isGroup]'),function(g){
 						if(g.record === o.value){
 							g.setChecked(true,true);
+                            checked = true;
 						}
 					});
+                    cantCheck = cantCheck || !checked;
 				}
 			}
 		});
+        return cantCheck;
 	},
 
 	getDescription: function(){
