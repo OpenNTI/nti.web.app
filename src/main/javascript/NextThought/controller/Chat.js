@@ -442,15 +442,18 @@ Ext.define('NextThought.controller.Chat', {
 
 
 	openChatWindow: function(roomInfo){
-		var w = this.getChatWindow(roomInfo);
+		var w = this.getChatWindow(roomInfo), existingChatWindow;
 		if(!w){
 			w = Ext.widget(
 				'chat-window', {
 				roomInfo: roomInfo
 			});
 		}
+		else{
+			existingChatWindow = true;
+		}
 
-		if(isMe(roomInfo.get('Creator'))){
+		if(isMe(roomInfo.get('Creator')) || existingChatWindow){
 			w.show();
 		}
 	},
