@@ -174,7 +174,9 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		catch(e1){
 			console.error(Globals.getError(e1));
 		}
-
+		//In case compiling the body content fails silently and doesn't call the callback,
+		//blank us out so we don't ghost note bodies onto the wrong note.
+		this.setContent('');
 		r.compileBodyContent(this.setContent, this, this.generateClickHandler, 226 );
 	},
 

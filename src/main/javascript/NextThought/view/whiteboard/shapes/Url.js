@@ -12,6 +12,10 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Url', {
 			x, y, w, h;
 
 		if(!image){
+			if(!me.url){
+				renderCallback.call(me);
+				return;
+			}
 			image = new Image();
 			image.onload = function(){ me.draw(ctx,renderCallback); };
 			image.onerror = function(){ console.log('failed to load: '+me.url); renderCallback.call(me); };
