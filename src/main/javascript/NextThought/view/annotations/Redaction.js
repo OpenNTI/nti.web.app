@@ -14,7 +14,7 @@ Ext.define('NextThought.view.annotations.Redaction', {
 
 		//TODO - this is a temporary measure to prevent anyone other than nextthought employees or the 2 law professors access to share a redaction,
 		//       until permissioning of actions can be accomplished.
-		this.allowShare = /(@nextthought\.com$)|(^stephen\.henderson@aya\.yale\.edu$)|(^thai@post\.harvard\.edu$)/.test($AppConfig.username);
+		this.allowShare = /(@nextthought\.com$)|(^sehenderson@ou\.edu$)|(^stephen\.henderson@aya\.yale\.edu$)|(^thai@post\.harvard\.edu$)/.test($AppConfig.username);
 		if(!this.allowShare){
 			this.record.set('sharedWith',[]);
 		}
