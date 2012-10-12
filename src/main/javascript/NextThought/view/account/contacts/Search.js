@@ -92,7 +92,7 @@ Ext.define('NextThought.view.account.contacts.Search',{
 		this.mon(this.down('simpletext'),{
 			scope: this,
 			changed: this.search,
-			clear: this.clear
+			clear: this.clearResults
 		});
 	},
 
@@ -159,7 +159,7 @@ Ext.define('NextThought.view.account.contacts.Search',{
 
 	search: function(value){
 		if(!value || value.replace(SearchUtils.trimRe,'').length < 2 ){
-			this.clear();
+			this.clearResults();
 		}
 		else {
 			this.setHeight(Ext.Element.getViewportHeight()-this.getPosition()[1]);
@@ -167,7 +167,8 @@ Ext.define('NextThought.view.account.contacts.Search',{
 		}
 	},
 
-	clear: function(){
+	clearResults: function(){
+        debugger;
 		this.setHeight(52);
 		this.store.removeAll();
 	}
