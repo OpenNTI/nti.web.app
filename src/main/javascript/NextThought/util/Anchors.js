@@ -60,7 +60,7 @@ Ext.define('NextThought.util.Anchors', {
 			//just skip to the end now.  Maybe we decide there is no point searching the whole body.
 			//that may allow us to skip some work in some cases
 			searchWithin = docElement.body;
-			console.warn('Unable to resolve containerId will fallback to root ', containerId, searchWithin);
+			console.debug('Unable to resolve containerId will fallback to root ', containerId, searchWithin);
 		}
 
 		//TODO need a better way to detect the empty description
@@ -162,7 +162,7 @@ Ext.define('NextThought.util.Anchors', {
 			potentials = Ext.query(selector, root);
 		
 		if(!potentials || potentials.length === 0){
-			console.warn('Unable to find container', containerId);
+			console.debug('Unable to find container', containerId);
 			return null;
 		}
 

@@ -355,21 +355,14 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 			w = Ext.widget(type.toLowerCase(), {browserRange: browserRange, record: record, reader: this});
 
 			if (!oid) {
-				//NOTE Joe has seen a bug where we get into a state where creating a redaction removes the previous one.
-				//That seems to stem from a me.record being null in Base.savePhantom, this causes an uncaught exception
-				//and the updated event never gets called on the record.  We therefore never replace the temp annotation
-				//with the saved annotation.  When the next annotation comes around
-				//we create the same temp key and remove the previous annotation here.  Maybe add a guid to this id?
-				oid = type.toUpperCase()+'-TEMP-OID';
+				oid = type.toUpperCase()+'-TEMP-OID-' + guidGenerator();
 				if (this.annotations[oid]){
 					this.annotations[oid].cleanup();
 					delete this.annotations[oid];
 				}
-				w.tempID = oid;
 				record.on('updated',function(r){
 					this.annotations[r.get('NTIID')] = this.annotations[oid];
 					delete this.annotations[oid];
-					delete w.tempID;
 				}, this);
 			}
 
