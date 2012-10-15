@@ -498,7 +498,7 @@ Ext.define('NextThought.util.Anchors', {
 		//Right not rangeDescriptions and the virgin content are immutable so stash the locator
 		//on the desc to save work
 		var locatorInfo = {start: startResultLocator, end: endResultLocator, doc: docElement};
-		rangeDesc.locator = locatorInfo;
+		rangeDesc.locatorInfo = locatorInfo;
 		return locatorInfo;
 	},
 
