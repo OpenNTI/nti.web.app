@@ -54,7 +54,7 @@ Ext.define('NextThought.util.Anchors', {
 				return true; //continue
 			}
 			//Optimization shortcut, if we have a cached locator use it
-			if(desc.locatorInfo){
+			if(desc._locatorInfo){
 				console.debug('Using cached locator info to shortcut cloning and purification');
 				return true; //continue
 			}
@@ -109,11 +109,11 @@ Ext.define('NextThought.util.Anchors', {
 		}
 
 		//Optimization shortcut, if we have a cached locator use it
-		if(contentRangeDescription.locatorInfo){
+		if(contentRangeDescription._locatorInfo){
 			console.debug('Using cached locator info to shortcut cloning and purification');
-			return Anchors.convertContentRangeToDomRange(contentRangeDescription.locatorInfo.start,
-														 contentRangeDescription.locatorInfo.end,
-														 contentRangeDescription.locatorInfo.doc);
+			return Anchors.convertContentRangeToDomRange(contentRangeDescription._locatorInfo.start,
+														 contentRangeDescription._locatorInfo.end,
+														 contentRangeDescription._locatorInfo.doc);
 		}
 
 		//Todo resolve the containerId to the node we want to restrict our search within
@@ -460,9 +460,9 @@ Ext.define('NextThought.util.Anchors', {
 			Ext.Error.raise('Must supply a docElement');
 		}
 
-		if(rangeDesc.locatorInfo){
+		if(rangeDesc._locatorInfo){
 			console.debug('Using cached locator info');
-			return rangeDesc.locatorInfo;
+			return rangeDesc._locatorInfo;
 		}
 
 		//Resolve start and end.
@@ -498,7 +498,7 @@ Ext.define('NextThought.util.Anchors', {
 		//Right not rangeDescriptions and the virgin content are immutable so stash the locator
 		//on the desc to save work
 		var locatorInfo = {start: startResultLocator, end: endResultLocator, doc: docElement};
-		rangeDesc.locatorInfo = locatorInfo;
+		rangeDesc._locatorInfo = locatorInfo;
 		return locatorInfo;
 	},
 
