@@ -254,7 +254,12 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 		menu.add({
 			text: 'Save Highlight',
 			handler:function(){
-				me.createAnnotationWidget('highlight',record, range).savePhantom();
+				me.createAnnotationWidget('highlight',record, range).savePhantom(
+                    function(){
+                        var s = Ext.getStore('historyStore');
+                        if (s){s.add(record);}
+                    }
+                );
 				me.clearSelection();
 			}
 		});

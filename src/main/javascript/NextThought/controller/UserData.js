@@ -435,9 +435,11 @@ Ext.define('NextThought.controller.UserData', {
 			callback:function(record, operation){
 				try{
 					var success = operation.success,
-						rec = success ? ParseUtils.parseItems(operation.response.responseText)[0] : null;
+						rec = success ? ParseUtils.parseItems(operation.response.responseText)[0] : null,
+                        s = Ext.getStore('historyStore');
 					if (success){
 						LocationProvider.getStore(container).add(rec);
+                        if (s){s.add(record);}
 						this.self.events.fireEvent('new-note', rec, range);
 					}
 				}
