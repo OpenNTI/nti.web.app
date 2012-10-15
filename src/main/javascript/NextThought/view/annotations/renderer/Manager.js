@@ -302,6 +302,7 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 
 		me.rendering = true;
 		me.events.fireEvent('rendering');
+		Ext.suspendLayouts();
 
 		me.registry[prefix] = Ext.Array.unique(me.registry[prefix]);
 
@@ -358,8 +359,8 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 		});
 
 		me.layoutBuckets(prefix);
-
 		me.rendering = false;
+		Ext.resumeLayouts(true);
 		me.events.fireEvent('finish');
 	}
 
