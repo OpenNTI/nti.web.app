@@ -377,13 +377,4 @@ function(){
 	this.handleCache();
 
 	window.swallow = function(e){};
-
-	window.alert = function(msg){
-		Globals.removeLoaderSplash();
-		Ext.MessageBox.alert({
-			icon: Ext.Msg.WARNING,
-			msg:msg,
-			buttons: Ext.Msg.OK
-		});
-	};
 });
