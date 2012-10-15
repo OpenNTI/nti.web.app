@@ -240,15 +240,8 @@ Ext.define( 'NextThought.view.annotations.Base', {
 				me.cleanup();
 			},
 			success:function(newRecord){
-				//FIXME somehow we can end up here and me.record is null.
-				//How could that be?  I suspect it is a race condition somewhere.
-				//See notes in Annotation.js about how this has manifested itself
-				//in the past
 				me.record.fireEvent('updated', newRecord);
 				me.record = newRecord;
-				//FIXME this is exploding now.  Get store requires an id. 
-				//Even with this exploding things seem to work which makes me nervous about blindly fixing it.
-				LocationProvider.getStore().add(newRecord);
 				if (callback) {
 					Ext.callback(callback);
 				}

@@ -162,7 +162,7 @@ Ext.define('NextThought.util.Anchors', {
 			potentials = Ext.query(selector, root);
 		
 		if(!potentials || potentials.length === 0){
-			console.debug('Unable to find container', containerId);
+			console.debug ('Unable to find container', containerId);
 			return null;
 		}
 
