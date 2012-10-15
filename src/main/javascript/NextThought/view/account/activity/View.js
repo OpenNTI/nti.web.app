@@ -336,7 +336,7 @@ Ext.define('NextThought.view.account.activity.View',{
 			if (rec.get('Class') === 'User'){
 				popout = NextThought.view.account.contacts.management.Popout;
 			}
-
+            activity
 			popout.popup(rec,target,target,[-10,-12],0.5, me);
 
 		},500);

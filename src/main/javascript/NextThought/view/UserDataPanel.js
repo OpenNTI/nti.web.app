@@ -165,7 +165,7 @@ Ext.define('NextThought.view.UserDataPanel',{
             }
 		}
 		catch(e){
-			console.error(e.message, e.stack|| e.stacktrace);
+			console.error(e.message, e.stack|| e.stack);
 		}
 	},
 
@@ -184,6 +184,8 @@ Ext.define('NextThought.view.UserDataPanel',{
 			groups = store.getGroups(),
 			me = this;
 
+        me.dataGuidMap = this.dataGuidMap || {};
+
 		function doGroup(group){
 			var label = (group.name||'').replace(/^[A-Z]\d{0,}\s/,'') || 'Today';
 			if( label ){ items.push({ label: label }); }
@@ -191,6 +193,8 @@ Ext.define('NextThought.view.UserDataPanel',{
 			Ext.each(group.children,function(c){
 				var fn = me.dataMapper[c.mimeType];
 				if( fn ){ items.push(fn.call(me,c)); }
+
+                me.dataGuidMap[items.last().guid] = c;
 			});
 		}
 
@@ -202,6 +206,24 @@ Ext.define('NextThought.view.UserDataPanel',{
 		Ext.each(groups,doGroup,this);
 
 		this.feedTpl.overwrite(container.getEl(),items);
+
+        this.getEl().select('.history').each(function(h){
+            h.on('click', function(e, i){
+                e.stopEvent();
+                var elem, rec, cid, targets;
+                if (Ext.fly(i).is('.history')){elem = Ext.fly(i)}
+                else {elem = Ext.fly(i).up('.history');}
+
+                rec = me.dataGuidMap[elem.getAttribute('data-guid')];
+                cid = rec.get('ContainerId');
+                targets = rec.get('references');
+                targets.push(rec.getId());
+                me.fireEvent('navigation-selected', cid, targets);
+            });
+        });
+
+
+
 
 		container.updateLayout();
 	},

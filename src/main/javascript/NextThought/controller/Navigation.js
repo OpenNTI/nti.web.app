@@ -9,7 +9,8 @@ Ext.define('NextThought.controller.Navigation', {
 		'Navigation',
 		'ViewSelect',
 		'Views',
-		'menus.Navigation'
+		'menus.Navigation',
+        'UserDataPanel'
 	],
 
 	init: function() {
@@ -29,6 +30,9 @@ Ext.define('NextThought.controller.Navigation', {
 			'activity-preview': {
 				'navigation-selected': this.navigate
 			},
+            'user-data-panel': {
+                'navigation-selected': this.navigate
+            },
 			'main-views': {
 				'activate-view': this.track
 			},
