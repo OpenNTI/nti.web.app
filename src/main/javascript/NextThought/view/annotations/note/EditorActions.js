@@ -250,7 +250,7 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 				this.addWhiteboard();
 			}
 			else {
-				action = t.getAttribute('class').split(' ').pop();
+				action = t.getAttribute('class').split(' ')[1];
 				this.editor.dom.querySelector('[contenteditable=true]').focus();
 				document.execCommand(action, null, null);
 				document.queryCommandState(action) ? t.addCls("selected") : t.removeCls("selected");
@@ -266,11 +266,9 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 			i =  this.editor.down('.italic'),
 			u = this.editor.down('.underline');
 
-		//console.log("Key down", e);
 		document.queryCommandState("bold") ? b.addCls("selected") : b.removeCls("selected");
 		document.queryCommandState("italic") ? i.addCls("selected") : i.removeCls("selected");
 		document.queryCommandState("underline") ? u.addCls("selected") : u.removeCls("selected");
-		console.log("checked font styles");
 	},
 
 	handleClick: function (e) {
