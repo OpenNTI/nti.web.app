@@ -17,31 +17,86 @@ Ext.define('NextThought.util.Anchors', {
 
 	PURIFICATION_TAG: 'data-nti-purification-tag',
 
-/*	toDomRange: function(contentRangeDescription, docElement, containerId) {
-		if(!containerId){console.warn('No container id provided will assume page container (body element)');}
-		if(!contentRangeDescription){console.warn('nothing to parse?');return null;}
-		var ancestorNode = contentRangeDescription.getAncestor().locateRangePointInAncestor(docElement).node || docElement.body;
+	preresolveLocatorInfo: function(contentRangeDescriptions, docElement, containers){
+		var virginContentCache = {};
 
-        //TODO - if an ancestor doesn't exist, do some better logging here, something like below
-
-		if (!ancestorNode){
-			console.error('Failed to get ancestor node for description', contentRangeDescription);
+		if(!contentRangeDescriptions || !containers || contentRangeDescriptions.length != containers.length){
+			Ext.Error.raise('toDomRanges requires contentRangeDescriptions and containers to be the same length');
 		}
 
-		//Clone and purify the ancestor node, so our range can always build against a clean source:
-		//TODO - consider caching these somewhere for performance
-		var clonedAncestor = ancestorNode.cloneNode(true),
-            resultRange;
-		Anchors.purifyNode(clonedAncestor);
-		resultRange = Anchors.resolveSpecBeneathAncestor(contentRangeDescription, clonedAncestor, docElement);
-        if (!resultRange) {
-            console.warn('could not generate range, trying again from body');
-            clonedAncestor = docElement.body.cloneNode(true);
-            Anchors.purifyNode(clonedAncestor);
-            resultRange = Anchors.resolveSpecBeneathAncestor(contentRangeDescription, clonedAncestor, docElement);
-        }
-        return resultRange;
-	},*/
+		function getVirginNode(node){
+			var theId = node.getAttribute('Id');
+			var key = theId || node;
+
+			if(!node){
+				return null;
+			}
+
+			var clean = virginContentCache[node];
+			if(!clean){
+				clean = node.cloneNode(true);
+				Anchors.purifyNode(clean);
+				virginContentCache[key] = clean;
+			}
+			return clean;
+		}
+
+		//First step is build all the locators cloning and purifying the least
+		//amount possible.  That is one of the places the profiler indicated problems
+		Ext.each(contentRangeDescriptions, function(desc, idx){
+			var containerId = containers[idx], searchWithin, ancestorNode, virginNode, locator = null;
+			//TODO refactor to share more code with toDomRange where possible
+			if(!containerId){
+				console.warn('No container id provided will assume page container (body element)');
+			}
+			if(!desc){
+				console.warn('nothing to parse?');
+				return true; //continue
+			}
+			//Optimization shortcut, if we have a cached locator use it
+			if(desc.locatorInfo){
+				console.debug('Using cached locator info to shortcut cloning and purification');
+				return true; //continue
+			}
+
+			//Todo resolve the containerId to the node we want to restrict our search within
+			searchWithin = Anchors.getContainerNode(containerId, docElement);
+			if(!searchWithin){
+				//TODO if the container is not the page id but we can't find it we could
+				//just skip to the end now.  Maybe we decide there is no point searching the whole body.
+				//that may allow us to skip some work in some cases
+				searchWithin = docElement.body;
+				if(LocationProvider.currentNTIID != containerId){console.warn('Unable to resolve containerId will fallback to root ', containerId, searchWithin);}
+			}
+
+			//Special case for things with an empty desc.  We push the node instead of the locator
+			//TODO need a better way to detect the empty description
+			if (   !desc.start 
+				&& !desc.end 
+				&& !desc.ancestor)
+			{
+				return true;
+			}
+
+
+			ancestorNode = desc.getAncestor().locateRangePointInAncestor(searchWithin).node || searchWithin;
+			if (!ancestorNode){
+				console.error('Failed to get ancestor node for description.', desc,'This should happen b/c we should default to ', searchWithin);
+				return true;
+			}
+
+			virginNode = getVirginNode(ancestorNode);
+			
+			try{
+				Anchors.resolveCleanLocatorForDesc(desc, virginNode, docElement);
+			}
+			catch(e){
+				console.error('Error resolving locator for desc', desc, Globals.getError(e));
+			}
+
+			return true;
+		});
+	},
 
 	toDomRange: function(contentRangeDescription, docElement, containerId) {
 		var ancestorNode, clonedAncestor, resultRange, searchWithin;
@@ -51,6 +106,14 @@ Ext.define('NextThought.util.Anchors', {
 		if(!contentRangeDescription){
 			console.warn('nothing to parse?');
 			return null;
+		}
+
+		//Optimization shortcut, if we have a cached locator use it
+		if(contentRangeDescription.locatorInfo){
+			console.debug('Using cached locator info to shortcut cloning and purification');
+			return Anchors.convertContentRangeToDomRange(contentRangeDescription.locatorInfo.start,
+														 contentRangeDescription.locatorInfo.end,
+														 contentRangeDescription.locatorInfo.doc);
 		}
 
 		//Todo resolve the containerId to the node we want to restrict our search within
@@ -389,13 +452,17 @@ Ext.define('NextThought.util.Anchors', {
 		return (/^\s?\S*/).exec(str)[0];
 	},
 
-	/* tested */
-	resolveSpecBeneathAncestor: function(rangeDesc, ancestor, docElement){
+	resolveCleanLocatorForDesc: function(rangeDesc, ancestor, docElement){
 		if(!rangeDesc){
 			Ext.Error.raise('Must supply Description');
 		}
 		else if(!docElement){
 			Ext.Error.raise('Must supply a docElement');
+		}
+
+		if(rangeDesc.locatorInfo){
+			console.debug('Using cached locator info');
+			return rangeDesc.locatorInfo;
 		}
 
 		//Resolve start and end.
@@ -427,9 +494,21 @@ Ext.define('NextThought.util.Anchors', {
 
 		var startResultLocator = Anchors.toReferenceNodeXpathAndOffset(startResult);
 		var endResultLocator = Anchors.toReferenceNodeXpathAndOffset(endResult);
-		//console.log('startResultLocator ', startResultLocator, ' endResultLocator ', endResultLocator);
 
-		return Anchors.convertContentRangeToDomRange(startResultLocator, endResultLocator, docElement);
+		//Right not rangeDescriptions and the virgin content are immutable so stash the locator
+		//on the desc to save work
+		var locatorInfo = {start: startResultLocator, end: endResultLocator, doc: docElement};
+		rangeDesc.locator = locatorInfo;
+		return locatorInfo;
+	},
+
+	/* tested */
+	resolveSpecBeneathAncestor: function(rangeDesc, ancestor, docElement){
+		var locator = Anchors.resolveCleanLocatorForDesc(rangeDesc, ancestor, docElement);
+		if(!locator){
+			return null;
+		}
+		return Anchors.convertContentRangeToDomRange(locator.start, locator.end, locator.doc);
 	},
 
 

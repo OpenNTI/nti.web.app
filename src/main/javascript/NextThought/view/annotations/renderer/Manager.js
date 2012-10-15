@@ -312,7 +312,19 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 
 		me.clearBuckets(prefix);
 
-		Ext.each(Ext.Array.clone(me.registry[prefix]), function(o){
+		var cloned = Ext.Array.clone(me.registry[prefix]);
+		var descs = [], cids = [], doc = null;
+		Ext.each(cloned, function(o){
+			var desc = o.getRecordField ? o.getRecordField('applicableRange') : null;
+			var cid = o.getRecordField ? o.getRecordField('ContainerId') : null;
+			if(o.doc){doc = o.doc;}
+			descs.push(desc);
+			cids.push(cid);
+		});
+
+		Anchors.preresolveLocatorInfo(descs, doc, cids);
+
+		Ext.each(cloned, function(o){
 			try {
 				if(!o.isVisible){
 					return;
