@@ -45,8 +45,8 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 			scope      : me,
 			mousedown  : me.editorMouseDown,
 			selectstart: me.editorSelectionStart,
-			click      : function () {
-				editorEl.down('.content').focus();
+			click      : function (e) {
+				if(!e.getTarget('.content')){ editorEl.down('.content').focus(); }
 			}
 		});
 
@@ -68,6 +68,11 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 			scope: me,
 			click: me.openShareMenu
 		});
+
+		//Keep state of text treatments
+		me.bold = false;
+		me.underline = false;
+		me.italic = false;
 	},
 
 
@@ -202,16 +207,6 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 		return false;
 	},
 
-
-	editorBlur: function () {
-		console.log('editor blur');
-		var s = window.getSelection();
-		if (s.rangeCount) {
-			this.lastRange = s.getRangeAt(0);
-		}
-	},
-
-
 	editorFocus: function () {
 		var s = window.getSelection();
 		if (this.lastRange) {
@@ -220,8 +215,6 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 		}
 		else if (s.rangeCount > 0) {
 			this.lastRange = s.getRangeAt(0);
-			s.removeAllRanges();
-			s.addRange(this.lastRange);
 		}
 	},
 
@@ -245,20 +238,41 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 	editorContentAction: function (e) {
 		var t = e.getTarget('.action', undefined, true), action;
 		if (t) {
-			this.editorFocus();//reselect
 			if (t.is('.whiteboard')) {
 				this.addWhiteboard();
 			}
 			else {
 				action = t.getAttribute('class').split(' ')[1];
-				this.editor.dom.querySelector('[contenteditable=true]').focus();
-				document.execCommand(action, null, null);
-				document.queryCommandState(action) ? t.addCls("selected") : t.removeCls("selected");
-				console.log(action, " is ", document.queryCommandState(action));
+
+				if(action === "bold"){ this.bold = !this.bold; }
+				if(action === "italic"){ this.italic = !this.italic; }
+				if(action === "underline"){ this.underline = !this.underline; }
 			}
+			this.applyTextTreatments();
 		}
-		e.stopEvent();
-		return false;
+	},
+
+
+	applyTextTreatments: function(){
+		var b =  this.editor.down('.bold'),
+			i =  this.editor.down('.italic'),
+			u = this.editor.down('.underline');
+
+		this.editor.dom.querySelector('[contenteditable=true]').focus();
+
+		if(this.bold !== document.queryCommandState("bold")){
+			document.execCommand("bold", null, null);
+		}
+		if(this.italic !== document.queryCommandState("italic")){
+			document.execCommand("italic", null, null);
+		}
+		if(this.underline !== document.queryCommandState("underline")){
+			document.execCommand("underline", null, null);
+		}
+
+		document.queryCommandState("bold") ? b.addCls("selected") : b.removeCls("selected");
+		document.queryCommandState("italic") ? i.addCls("selected") : i.removeCls("selected");
+		document.queryCommandState("underline") ? u.addCls("selected") : u.removeCls("selected");
 	},
 
 	detectFontStyleAction: function(){
