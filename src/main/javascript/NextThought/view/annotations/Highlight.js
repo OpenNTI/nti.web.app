@@ -252,7 +252,8 @@ Ext.define('NextThought.view.annotations.Highlight', {
             if (node.tagName === 'P') { return false; }
 			//TODO is this actually safe to cache?
 		//	if(node.ntiInline === undefined){
-				ntiInline = ['inline','inline-block','none'].indexOf(Ext.fly(node).getStyle('display')) >= 0;
+			
+			ntiInline = ['inline','inline-block','none'].indexOf(Ext.fly(node).getStyle('display')) >= 0;
 		//	}
 			if(ntiInline){return true;};
             if(node.className.indexOf && (node.className.indexOf('mathjax') >= 0 || node.className.indexOf('mathquill') >= 0)){
@@ -302,7 +303,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
 		endToStart = nodeRange.compareBoundaryPoints(Range.END_TO_START, range);
 		endToEnd =  nodeRange.compareBoundaryPoints(Range.END_TO_END, range);
 
-		valid = this.validToWrapEntireNodeFaster();
+		valid = this.validToWrapEntireNodeFaster(node);
 
 		//Easy case, the node is completely surronded and valid, wrap the node
 		if(( startToStart === AFTER || startToStart === SAME )
