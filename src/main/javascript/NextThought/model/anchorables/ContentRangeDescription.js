@@ -20,5 +20,22 @@ Ext.define('NextThought.model.anchorables.ContentRangeDescription', {
 			}
 			return cp.createFromObject(o);
 		}
+	},
+
+	locatorKey: function(){
+		return '_locator';
+	},
+
+	attachLocator: function(loc){
+		if(!loc){
+			delete this[this.locatorKey()];
+		}
+		else{
+			this[this.locatorKey()] = loc;
+		}
+	},
+
+	locator: function(){
+		return this[this.locatorKey()];
 	}
 });

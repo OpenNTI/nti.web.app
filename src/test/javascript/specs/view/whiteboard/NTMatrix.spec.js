@@ -33,18 +33,18 @@ describe('Whiteboard Matrix Utility Class Tests', function(){
 
     it('should rotate by 90 degrees',function(){
         var matrix = new NTMatrix();
-
+		var zeroThresh = .0001;
         expect(matrix.toTransform().a).toBe(1);
-        expect(matrix.toTransform().b).toBe(0);
-        expect(matrix.toTransform().c).toBe(0);
+        expect(matrix.toTransform().b).toBeCloseTo(0, zeroThresh);
+        expect(matrix.toTransform().c).toBeCloseTo(0, zeroThresh);
         expect(matrix.toTransform().d).toBe(1);
 
         matrix.rotate(WBUtils.toRadians(90));
 
-        expect(matrix.toTransform().a).toBe(0);
+        expect(matrix.toTransform().a).toBeCloseTo(0, zeroThresh);
         expect(matrix.toTransform().b).toBe(1);
         expect(matrix.toTransform().c).toBe(-1);
-        expect(matrix.toTransform().d).toBe(0);
+        expect(matrix.toTransform().d).toBeCloseTo(0, zeroThresh);;
     });
 
     it('should scale by 2', function(){

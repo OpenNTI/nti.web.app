@@ -303,6 +303,9 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 		me.rendering = true;
 		me.events.fireEvent('rendering');
 		console.log('Rendering annotations');
+		if(console.time){
+			console.time('Annotation render loop');
+		}
 		Ext.suspendLayouts();
 
 		me.registry[prefix] = Ext.Array.unique(me.registry[prefix]);
@@ -364,6 +367,9 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 		me.rendering = false;
 		Ext.resumeLayouts(true);
 		me.events.fireEvent('finish');
+		if(console.timeEnd){
+			console.timeEnd('Annotation render loop');
+		}
 	}
 
 }, function(){

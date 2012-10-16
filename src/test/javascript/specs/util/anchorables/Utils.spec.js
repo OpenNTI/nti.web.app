@@ -1615,12 +1615,12 @@ describe("Anchor Utils", function() {
 			root.appendChild(p2);
 			testBody.appendChild(root);
 
-			recreatedRange = Anchors.toDomRange(emptyDesc, document);
+			recreatedRange = Anchors.toDomRange(emptyDesc.description, document);
 			expect(recreatedRange).toBeTruthy();
 			expect(recreatedRange.commonAncestorContainer).toBe(document.body);
 
 			root.setAttribute('Id', '123242354543523');
-			recreatedRange = Anchors.toDomRange(emptyDesc, document, '123242354543523');
+			recreatedRange = Anchors.toDomRange(emptyDesc.description, document, '123242354543523');
 			expect(recreatedRange).toBeTruthy();
 			expect(recreatedRange.commonAncestorContainer).toBe(root);
 		});
