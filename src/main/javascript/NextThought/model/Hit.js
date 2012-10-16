@@ -1,6 +1,6 @@
 Ext.define('NextThought.model.Hit', {
 	extend: 'NextThought.model.Base',
-
+	idProperty: null,
 	fields: [
 		{ name: 'Snippet', type: 'string' },
 		{ name: 'TargetOID', type: 'string' },
