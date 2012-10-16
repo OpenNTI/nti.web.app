@@ -37,7 +37,8 @@ Ext.define('NextThought.controller.UserData', {
 		'definition.Window',
 		'sharing.Window',
 		'views.Library',
-		'whiteboard.Window'
+		'whiteboard.Window',
+        'UserDataPanel'
 	],
 
 
@@ -99,7 +100,10 @@ Ext.define('NextThought.controller.UserData', {
 
 			'chat-log-view': {
 				'load-transcript': this.onLoadTranscript
-			}
+			},
+            'user-data-panel': {
+                'open-chat-transcript': this.openChatTranscript
+            }
 		},{});
 
         Socket.register({
@@ -196,6 +200,20 @@ Ext.define('NextThought.controller.UserData', {
         }
 
         if (parent){parent.record.fireEvent('child-added', item);}
+    },
+
+
+
+    openChatTranscript: function(rec){
+        console.log('open chat transcript when design is done', arguments);
+        /*
+        var w = Ext.widget(
+            'chat-window', {
+            roomInfo: rec.get('RoomInfo')
+        });
+        w.disableChat();
+        w.show();
+        */
     },
 
 

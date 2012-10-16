@@ -167,7 +167,35 @@ Ext.define('NextThought.view.UserDataPanel',{
 		catch(e){
 			console.error(e.message, e.stack|| e.stack);
 		}
+
+        this.mon(this.el,
+            {scope: this,
+            click: this.onClick
+        });
 	},
+
+
+    onClick: function(evt){
+        var historyElement = evt.getTarget('.history'),
+            data = NextThought.model,
+            rec, cid, targets, mt;
+
+        evt.stopEvent();
+        if (!historyElement){return;}
+
+        rec = this.dataGuidMap[historyElement.getAttribute('data-guid')];
+        mt = rec.get('MimeType');
+
+        if(mt === data.TranscriptSummary.prototype.mimeType || mt === data.Transcript.prototype.mimeType){
+            this.fireEvent('open-chat-transcript', rec);
+        }
+        else {
+            cid = rec.get('ContainerId');
+            targets = rec.get('references');
+            targets.push(rec.getId());
+            this.fireEvent('navigation-selected', cid, targets);
+        }
+    },
 
 
 	redraw: function(){
@@ -206,25 +234,6 @@ Ext.define('NextThought.view.UserDataPanel',{
 		Ext.each(groups,doGroup,this);
 
 		this.feedTpl.overwrite(container.getEl(),items);
-
-        this.getEl().select('.history').each(function(h){
-            h.on('click', function(e, i){
-                e.stopEvent();
-                var elem, rec, cid, targets;
-                if (Ext.fly(i).is('.history')){elem = Ext.fly(i)}
-                else {elem = Ext.fly(i).up('.history');}
-
-                rec = me.dataGuidMap[elem.getAttribute('data-guid')];
-                cid = rec.get('ContainerId');
-                targets = rec.get('references');
-                targets.push(rec.getId());
-                me.fireEvent('navigation-selected', cid, targets);
-            });
-        });
-
-
-
-
 		container.updateLayout();
 	},
 

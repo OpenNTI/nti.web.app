@@ -37,6 +37,14 @@ Ext.define('NextThought.view.account.history.View',{
 				}
 			]
 		}
-	]
+	],
+
+    afterRender: function(){
+        this.callParent(arguments);
+
+        if (!$AppConfig.service.canChat()){
+            this.down('[title=Chats]').destroy();
+        }
+    }
 
 });
