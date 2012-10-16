@@ -5,6 +5,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
 		'NextThought.util.Anchors',
 		'NextThought.util.Rects'
 	],
+	statics: {bgcolor: null},
 
 	highlightCls: 'application-highlight',
 	mouseOverCls: 'highlight-mouse-over',
@@ -195,8 +196,15 @@ Ext.define('NextThought.view.annotations.Highlight', {
             width: width+(leftOffset*2),
             height: boundingHeight+(topOffset*2)
         });
+
+		//Right now this is static for all highlights so we cache it and save
+		//some expensive getComputedStyle calls
+		if(!this.self.bgcolor){
+			this.self.bgcolor = this.compElements.first().getStyle('background-color');
+		}
+
 		boundingTop = AnnotationUtils.drawCanvas(this.canvas,
-            this.content, range, this.compElements.first().getStyle('background-color'),
+            this.content, range, this.self.bgcolor,
             [leftOffset, topOffset]);
 
 
@@ -236,6 +244,40 @@ Ext.define('NextThought.view.annotations.Highlight', {
 		return el.dom;
 	},
 
+	validToWrapEntireNodeFaster: function(node){
+		var ntiInline;
+        if (node.nodeType === node.TEXT_NODE) { return true; }
+        if (node.nodeType === node.ELEMENT_NODE) {
+            if (node.childNodes.length === 0) { return true; }
+            if (node.tagName === 'P') { return false; }
+			//TODO is this actually safe to cache?
+		//	if(node.ntiInline === undefined){
+				ntiInline = ['inline','inline-block','none'].indexOf(Ext.fly(node).getStyle('display')) >= 0;
+		//	}
+			if(ntiInline){return true;};
+            if(node.className.indexOf && (node.className.indexOf('mathjax') >= 0 || node.className.indexOf('mathquill') >= 0)){
+				return true;
+            }
+        }
+        return false;
+    },
+
+
+    validToWrapEntireNode: function(node){
+        var valid = false, display;
+
+        if (node.nodeType === node.TEXT_NODE) { valid = true; }
+        else if (node.nodeType === node.ELEMENT_NODE) {
+            display = node.ownerDocument.parentWindow.getComputedStyle(node).display;
+            if (['inline','inline-block','none'].indexOf(display) >= 0) { valid = true; }
+            else if (node.className.indexOf && node.className.indexOf('mathjax') >= 0) { valid = true; }
+            else if (node.className.indexOf && node.className.indexOf('mathquill') >= 0) { valid = true; }
+            if (node.tagName === 'P') { valid = false; }
+            if (node.childNodes.length === 0) { valid = true; }
+        }
+
+        return valid;
+    },
 
 	wrapRange: function(node, range){
 		var nodeList = [],
@@ -251,7 +293,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
 			SAME = 0,
 			AFTER = 1,
 
-			valid = false,
+			valid,
 			display;
 
 		nodeRange.selectNodeContents(node);
@@ -260,15 +302,8 @@ Ext.define('NextThought.view.annotations.Highlight', {
 		endToStart = nodeRange.compareBoundaryPoints(Range.END_TO_START, range);
 		endToEnd =  nodeRange.compareBoundaryPoints(Range.END_TO_END, range);
 
-		if (node.nodeType === node.TEXT_NODE) { valid = true; }
-		else if (node.nodeType === node.ELEMENT_NODE) {
-			display = node.ownerDocument.parentWindow.getComputedStyle(node).display;
-			if (['inline','inline-block','none'].indexOf(display) >= 0) { valid = true; }
-			else if (node.className.indexOf && node.className.indexOf('mathjax') >= 0) { valid = true; }
-			else if (node.className.indexOf && node.className.indexOf('mathquill') >= 0) { valid = true; }
-			if (node.tagName === 'P') { valid = false; }
-			if (node.childNodes.length === 0) { valid = true; }
-		}
+		valid = this.validToWrapEntireNodeFaster();
+
 		//Easy case, the node is completely surronded and valid, wrap the node
 		if(( startToStart === AFTER || startToStart === SAME )
 			&& ( endToEnd === BEFORE || endToEnd === SAME ) && valid) {
