@@ -168,7 +168,6 @@ Ext.define('NextThought.view.account.contacts.Search',{
 	},
 
 	clearResults: function(){
-        debugger;
 		this.setHeight(52);
 		this.store.removeAll();
 	}
