@@ -241,12 +241,12 @@ Ext.define('NextThought.view.content.reader.Scroll',{
 			textStart, textMiddle, textEnd, range;
 
 		// find entry in indices array (using binary search)
-		function searchForEntry(start, end, lookFor, array){
+		function searchForEntry(start, end, lookFor, array, endEdge){
 			var i;
 			while (start < end) {
 				i = start + end >> 1;
-				if(lookFor < array[i].i){end = i;}
-				else if (lookFor >= array[i+1].i){start = i + 1;}
+				if(lookFor < array[i].i + (endEdge ? 1 : 0)){end = i;}
+				else if (lookFor >= array[i+1].i + (endEdge ? 1 : 0) ){start = i + 1;}
 				else {start = end = i;}
 			}
 			return start;
@@ -270,7 +270,7 @@ Ext.define('NextThought.view.content.reader.Scroll',{
 			iTextEnd = iTextStart + matchingText[which].length;
 
 			iEntryLeft = searchForEntry(0, indices.length, iTextStart, indices);
-			iEntryRight = searchForEntry(iEntryLeft, indices.length, iTextEnd, indices);
+			iEntryRight = searchForEntry(iEntryLeft, indices.length, iTextEnd, indices, true);
 
 			entryLeft = indices[iEntryLeft];
 			entryRight = indices[iEntryRight];
