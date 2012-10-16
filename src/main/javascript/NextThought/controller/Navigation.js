@@ -95,7 +95,9 @@ Ext.define('NextThought.controller.Navigation', {
                         console.warn('\n\n\n\n\n\n\nNo Store for: '+c+'\n\n\n\n\n\n');
                     }
 
-                    Ext.widget('note-window', { scrollToId: scrollToReplyId, annotation: {getRecord:function(){return object;}}}).show();
+	                if( (object.get('MimeType').split('.') || []).pop() === "note" ){
+		                Ext.widget('note-window', { scrollToId: scrollToReplyId, annotation: {getRecord:function(){return object;}}}).show();
+	                }
 
                     reader.scrollToContainer(c);
                 }
