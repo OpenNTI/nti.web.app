@@ -35,7 +35,7 @@ Ext.define('NextThought.util.Search',{
 		}
 		
 		var fragments = hit.get('Fragments'),
-			regexes = [], terms = [], combinedRegex, escapedParts;
+			terms = [], combinedRegex, escapedParts;
 
 		if(!isContent(hit) || !fragments || fragments.length === 0){
 			return null;
@@ -65,25 +65,11 @@ Ext.define('NextThought.util.Search',{
 					return true;
 				});
 
-				if(!phraseSearch){
-					terms = Ext.Array.merge(terms, fragTerms);
-				}
-				else{
-					//Server doesn't actually highlight like this, but that is what the user expects
-					/*escapedParts = [];
-					Ext.Array.each(fragTerms, function(term){
-						escapedParts.push(term.replace(/[.*+?|()\[\]{}\\$^]/g,'\\$&'));
-					});
-					escapedParts.reverse();
-					regexes.push(escapedParts.join('[\\s\\.,-\\/#!$%\\^&\\*;:{}=\\-_`~()\\?]+'));*/
-
-					//Match the server exactly for the time being even thought it looks wrong
-					terms = Ext.Array.merge(terms, fragTerms);
-				}
+				terms = Ext.Array.merge(terms, fragTerms);
 			}
 		});
 
-		if(/*!phraseSearch && */terms.length > 0){
+		if(terms.length > 0){
 			terms = Ext.Array.unique(terms);
 			escapedParts = [];
 			Ext.Array.each(terms, function(term){
@@ -91,10 +77,6 @@ Ext.define('NextThought.util.Search',{
 			});
 			combinedRegex = new RegExp(escapedParts.join('|'), 'ig');
 		}
-/*		else if(regexes.length > 0){
-			regexes = Ext.Array.unique(regexes);
-			combinedRegex = new RegExp(regexes.join('|'), 'ig');
-		}*/
 
 		return combinedRegex;
 	}
