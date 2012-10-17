@@ -83,6 +83,10 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
 		if(this.allowSelect){
 			this.attachAddGroupControl( ul, 'li' );
 		}
+
+		Ext.each(this.pendingGroupsRequests || [], function(i){
+			selection.select(i, true, true);
+		});
 	},
 
 
@@ -155,6 +159,14 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
 	onSelect: function(view,group){
 		if(this.username && !this.ignoreSelection && group && !group.hasFriend(this.username)){
 			this.fireEvent('add-contact',this.username,[group]);
+		}
+		else{
+			if(!group){ return;}
+
+			// FIXME: if this user isn't in our contacts, add this group to the pending groups,
+			// that way if I add the user to my contacts, he gets added to the other selected groups.
+			if(!this.pendingGroupsRequests){ this.pendingGroupsRequests = []; }
+			this.pendingGroupsRequests.push(group);
 		}
 	},
 
