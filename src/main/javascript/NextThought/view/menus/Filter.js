@@ -81,6 +81,24 @@ Ext.define('NextThought.view.menus.Filter',{
 		if (this.resetCurrentSelections()){
 		    this.fireEvent('filter-control-loaded',this);
         }
+
+		this.maybeTurnOnEverything();
+
+	},
+
+	maybeTurnOnEverything: function(){
+		var a = this.query('[model]'),
+			b = Ext.Array.filter(a, function(i){ return i.checked; }, this);
+
+		//Turn on everything and turn off the other options.
+		if(a.length === b.length) {
+			Ext.each(a, function(i){ i.setChecked(false, true); });
+			this.query('[isEverything]').first().setChecked(true,true);
+		}
+		else if(b.length > 0) {
+			//Turn off everything.
+			this.query('[isEverything]').first().setChecked(false,true);
+		}
 	},
 
 	maybeChangeVisibiltiy: function(){
@@ -115,6 +133,9 @@ Ext.define('NextThought.view.menus.Filter',{
 			else if(o.fieldName === 'Creator'){
 				if(isMe(o.value)){
 					me.down('[isMe]').setChecked(true,true);
+					// FIXME: turn everyone options off.
+					// It seems like when 'me' is turned on, 'everyone' isn't.
+					me.query('[isEveryone]').first().setChecked(false,true);
 				}
 				else if(o.value.isModel){
 					Ext.each(me.query('[isGroup]'),function(g){
@@ -169,7 +190,7 @@ Ext.define('NextThought.view.menus.Filter',{
 				});
 			}
 			else if(item.is('[model]')){
-				this.query('[isEverything]').first().setChecked(false,true);
+				this.maybeTurnOnEverything();
 			}
 			else if(item.isEveryone){
 				Ext.each(this.query('[isGroup]'),function(o){
