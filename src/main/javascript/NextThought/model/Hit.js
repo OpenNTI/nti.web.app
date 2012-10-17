@@ -3,7 +3,6 @@ Ext.define('NextThought.model.Hit', {
 	idProperty: null,
 	fields: [
 		{ name: 'Snippet', type: 'string' },
-		{ name: 'TargetOID', type: 'string' },
 		{ name: 'Title', type: 'string' },
 		{ name: 'Type', type: 'string' },
 		{ name: 'Fragments', type: 'auto'},
