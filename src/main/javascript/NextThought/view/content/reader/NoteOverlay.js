@@ -91,9 +91,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		(new Ext.CompositeElement( box.query('.entry .advanced'))).on('click', me.noteOverlayActivateRichEditor, me);
 		(new Ext.CompositeElement( box.query('.cancel,.clear'))).on('click', me.noteOverlayEditorCancel, me);
 
-		function onResize(){
-			me.noteOverlayDeactivateEditor();
-		}
+		function onResize(){}
 
 		me.on({
 			scope: me,
