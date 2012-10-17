@@ -697,6 +697,10 @@
 			color: $primary-grey;
 			overflow: hidden;
 			white-space: nowrap;
+
+			.x-ie9 &{
+				min-height: 18px;
+			}
 		}
 		.mask {
 			@include fade-mask();
