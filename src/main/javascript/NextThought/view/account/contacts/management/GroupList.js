@@ -185,9 +185,10 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
 
 
 	selectNewGroup: function(groupName){
-		if(this.username && !this.ignoreSelection){
-			return;
-		}
+		//FIXME: what's the purpose of ignoreSelection?
+		//if(this.username && !this.ignoreSelection){
+		//	return;
+		//}
 
 		var record,s = this.getSelectionModel();
 		if(!this.allowSelect){
