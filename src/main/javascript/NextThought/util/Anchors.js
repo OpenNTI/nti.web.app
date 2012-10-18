@@ -20,19 +20,20 @@ Ext.define('NextThought.util.Anchors', {
 	preresolveLocatorInfo: function(contentRangeDescriptions, docElement, containers){
 		var virginContentCache = {};
 
-		if(!contentRangeDescriptions || !containers || contentRangeDescriptions.length != containers.length){
+		if(!contentRangeDescriptions || !containers || contentRangeDescriptions.length !== containers.length){
 			Ext.Error.raise('toDomRanges requires contentRangeDescriptions and containers to be the same length');
 		}
 
 		function getVirginNode(node){
-			var theId = node.getAttribute('Id');
-			var key = theId || node;
+			var theId = node.getAttribute('Id'),
+				key = theId || node,
+				clean;
 
 			if(!node){
 				return null;
 			}
 
-			var clean = virginContentCache[node];
+			clean = virginContentCache[node];
 			if(!clean){
 				clean = node.cloneNode(true);
 				Anchors.purifyNode(clean);
@@ -66,7 +67,7 @@ Ext.define('NextThought.util.Anchors', {
 				//just skip to the end now.  Maybe we decide there is no point searching the whole body.
 				//that may allow us to skip some work in some cases
 				searchWithin = docElement.body;
-				if(LocationProvider.currentNTIID != containerId){console.warn('Unable to resolve containerId will fallback to root ', containerId, searchWithin);}
+				if(LocationProvider.currentNTIID !== containerId){console.warn('Unable to resolve containerId will fallback to root ', containerId, searchWithin);}
 			}
 
 			//Special case for things with an empty desc.  We push the node instead of the locator
@@ -1539,8 +1540,14 @@ Ext.define('NextThought.util.Anchors', {
 
 		//if selection is collapsed, don't expand.
 		if (r.collapsed){return;}
+/*
+ * \u2018 = fancy left single quote
+ * \u2019 = fancy right single quote
+ * \u201C = fancy left double quote
+ * \u201D = fancy right double quote
+ */
 
-        r.expand('word', {wordRegex: /[“‘]*[a-z0-9]+('[a-z0-9]+)*[’”.,;:]*/gi});
+        r.expand('word', {wordRegex: /[\u201C\u2018]*[a-z0-9]+('[a-z0-9]+)*[\u2019\u201D\.,;:]*/gi});
 
 		Anchors.expandRangeToIncludeMath(r);
 		sel.setSingleRange(r);

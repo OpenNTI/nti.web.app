@@ -185,7 +185,7 @@ Ext.define('NextThought.controller.Account', {
     contactFormSubmit: function(btn){
         var view = btn.up('contact-main-view'),
             data = view.getValues(),
-            feedbackLink = $AppConfig.userObject.getLink('send-feedback');
+            feedbackLink = $AppConfig.userObject.getLink('send-feedback'),
             url = getURL(feedbackLink),
             w = view.up('window');
 
@@ -208,7 +208,7 @@ Ext.define('NextThought.controller.Account', {
             url: url,
             scope: this,
             jsonData: Ext.encode({
-                    body: ((data.email) ? data.email : '[NO EMAIL SUPPLIED]')
+                    body: data.email || '[NO EMAIL SUPPLIED]'
                     + ' wrote: ' + data.message}
             ),
             method: 'POST',
@@ -219,7 +219,6 @@ Ext.define('NextThought.controller.Account', {
                 btn.removeCls('disabled');
                 if(!success){
                     view.setError(Ext.decode(r.responseText));
-                    return;
                 }
                 else {
                     w.close();
@@ -238,7 +237,7 @@ Ext.define('NextThought.controller.Account', {
 
     groupButtonClicked: function(btn){
         if (Ext.fly(btn).hasCls('join-group')){
-            this.codeWin = Ext.create('NextThought.view.account.code.Window');
+            this.codeWin = Ext.create('code-window');
             this.codeWin.show();
         }
         else {
@@ -260,7 +259,7 @@ Ext.define('NextThought.controller.Account', {
         if (value.linkName === 'contact-email-sends-consent-request'){
             //this link does not require delete, but we do want to request a specific link when saving:
             linkToDelete = null;
-            optionalLinkName = value.linkName
+            optionalLinkName = value.linkName;
         }
 
         function callback(req, success, resp){

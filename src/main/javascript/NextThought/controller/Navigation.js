@@ -88,7 +88,8 @@ Ext.define('NextThought.controller.Navigation', {
                 var c = object.get('ContainerId'),
                     inReplyTo = object.get('inReplyTo'),
                     s = LocationProvider.getStore(c).hasOwnProperty('data'),
-                    ref, scrollToReplyId = undefined;
+                    ref,
+		            scrollToReplyId;
 
                 function afterLoadedAgain(object){
                     if(!s){

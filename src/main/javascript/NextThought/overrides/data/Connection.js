@@ -55,16 +55,16 @@ Ext.define('NextThought.overrides.data.Connection',{
 	//of these getting popped up all at once, however, since clicking ok on any
 	//of them changes the pages location that is probably ok for now
 	Ext.Ajax.on('requestexception', function(conn, response, options) {
-		
+		function onConfirmed(){
+			//TODO better way to send the user to the login page?
+			location.reload();
+		}
+
 		if(response && response.status === 401){
 			//We only want to do this for our stuff.  TODO better way to check this
 			var redirectIf401 = options && options.url && options.url.indexOf(getURL()) >= 0;
 			if(redirectIf401){
 				console.warn('Encountered a 401.  Will send the user to the login page.');
-				function onConfirmed(){
-					//TODO better way to send the user to the login page?
-					location.reload();
-				}
 				alert({
 						  msg: 'Your session has expired.  You must log in to continue.',
 						  buttons: Ext.Msg.OK,
