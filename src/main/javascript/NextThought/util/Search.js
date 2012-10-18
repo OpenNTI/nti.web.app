@@ -33,7 +33,7 @@ Ext.define('NextThought.util.Search',{
 		function isContent(hit){
 			return (/content/i).test(hit.get('Type'));
 		}
-		
+
 		var fragments = hit.get('Fragments'),
 			terms = [], combinedRegex, escapedParts;
 

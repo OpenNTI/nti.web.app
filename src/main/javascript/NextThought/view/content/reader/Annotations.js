@@ -141,13 +141,16 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 	},
 
 
-	showRanges: function(ranges) {
-		this.clearSearchRanges();
-		this.searchAnnotations = Ext.widget('search-hits', {hits: ranges, owner: this});
+	showSearchHit: function(hit) {
+		this.clearSearchHit();
+		this.searchAnnotations = Ext.widget('search-hits', {hit: hit, ps: hit.get('PhraseSearch'), owner: this});
 	},
 
+	getSearchHitLocation: function(){
+		return this.searchAnnotations.firstHitLocation();
+	},
 
-	clearSearchRanges: function() {
+	clearSearchHit: function() {
 		if (!this.searchAnnotations) {
 			return;
 		}
@@ -180,7 +183,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 		}
 
 		this.annotations = {};
-		this.clearSearchRanges();
+		this.clearSearchHit();
 
 		//Catchall for existing annotations that did not get removed properly or are left
 		//hanging like placeholder notes.
