@@ -142,7 +142,7 @@ Ext.define('NextThought.providers.Location', {
                 me.fireEvent('navigateAbort');
                 alert(r.status === 403
 						? 'You don\'t have access to that content.'
-						: 'Oops!\nSomething went wrong.');
+						: 'An error occurred while loading this content. Please try again.');
                 delete me.currentNTIID;
                 return;
             }
