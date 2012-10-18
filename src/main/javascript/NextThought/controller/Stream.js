@@ -56,7 +56,12 @@ Ext.define('NextThought.controller.Stream', {
 		$AppConfig.service.getPageInfo(Globals.CONTENT_ROOT,
 			//success:
 			function(pageInfo){
-				ss.getProxy().url = pageInfo.getLink(Globals.RECURSIVE_STREAM);
+				var p = ss.getProxy();
+				p.extraParams = Ext.apply(p.extraParams||{},{
+		            exclude: 'application/vnd.nextthought.redaction'
+		        });
+				p.url = pageInfo.getLink(Globals.RECURSIVE_STREAM);
+
 				ss.load();
 			},
 			//failure:
