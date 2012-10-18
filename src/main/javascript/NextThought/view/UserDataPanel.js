@@ -96,27 +96,47 @@ Ext.define('NextThought.view.UserDataPanel',{
 			return;
 		}
 
-        var s = this.self.store;
+        var s = this.self.store,
+		    fs = this.self.favStore;
 
         if (!s){
-            s = this.self.store = NextThought.store.PageItem.create({id:'historyStore', groupField:'GroupingField'});
-
-            s.proxy.extraParams = Ext.apply(s.proxy.extraParams||{},{
-                sortOn: 'lastModified',
-                sortOrder: 'descending',
-                filter: 'OnlyMe'
-            });
-
-            s.proxy.limitParam = undefined;
-            s.proxy.startParam = undefined;
-            delete s.pageSize;
-
+            s = this.self.store = this.buildStore('OnlyMe','historyStore','GroupingField');
+        }
+		if (!fs){
+            fs = this.self.favStore = this.buildStore('Favorite','favoriteStore','MimeType');
         }
 
 		this.mon(s,{
 			scope: this,
 			datachanged: this.maybeRedraw
 		});
+
+		this.mon(fs,{
+			scope: this,
+			datachanged: this.maybeRedraw
+		});
+	},
+
+
+	buildStore: function(filter,id,grouping){
+		var s = NextThought.store.PageItem.create({id:id, groupField:grouping});
+
+        s.proxy.extraParams = Ext.apply(s.proxy.extraParams||{},{
+            sortOn: 'lastModified',
+            sortOrder: 'descending',
+            filter: filter
+        });
+
+        s.proxy.limitParam = undefined;
+        s.proxy.startParam = undefined;
+        delete s.pageSize;
+		return s;
+	},
+
+
+	getStore: function(){
+		var favFakeMime = 'application/vnd.nextthought.favorite';
+		return this.mimeTypeRe.test(favFakeMime)? this.self.favStore : this.self.store;
 	},
 
 
@@ -152,7 +172,7 @@ Ext.define('NextThought.view.UserDataPanel',{
 
 	afterRender: function(){
 		this.callParent(arguments);
-        var s = this.self.store;
+        var s = this.getStore();
 		try{
             if (!s.initialLoaded){
                 s.initialLoaded = true;
@@ -230,7 +250,7 @@ Ext.define('NextThought.view.UserDataPanel',{
 
 		var container = this,
 			items = [],
-			store = this.self.store,
+			store = this.getStore(),
 			groups = store.getGroups(),
 			me = this;
 
@@ -238,7 +258,9 @@ Ext.define('NextThought.view.UserDataPanel',{
 
 		function doGroup(group){
 			var label = (group.name||'').replace(/^[A-Z]\d{0,}\s/,'') || 'Today';
-			if( label ){ items.push({ label: label }); }
+				label = label.replace(/^application\/vnd.nextthought\.(.*)$/,'$1s');
+
+			items.push({ label: label });
 
 			Ext.each(group.children,function(c){
 				var fn = me.dataMapper[c.mimeType];
