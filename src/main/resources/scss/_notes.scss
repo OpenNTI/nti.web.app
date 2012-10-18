@@ -684,9 +684,6 @@
 		}
 
 		.text {
-			text-rendering: optimizeLegibility;//fallback
-			text-rendering: geometricPrecision;
-
 			&::before{
 				content: '\201C';
 			}
@@ -987,8 +984,6 @@
 			background: #ffffff;
 			box-shadow: 0 1px 3px 0 rgba(0,0,0,0.2);
 			clear: both;
-			text-rendering: optimizeLegibility;//fallback
-			text-rendering: geometricPrecision;
 
 			sup {
 				vertical-align: super;
