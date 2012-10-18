@@ -40,9 +40,9 @@ Ext.define('NextThought.view.account.recovery.Email',{
             bContainer = this.down('[name=buttons]');
 
         //make main error field show up
-        box.el.down('.error-field').update(error.field),
-            box.el.down('.error-desc').update(error.message),
-            box.show();
+        box.el.down('.error-field').update(error.field);
+        box.el.down('.error-desc').update(error.message);
+        box.show();
 
         //set error state on specific field
         field.addCls('error');

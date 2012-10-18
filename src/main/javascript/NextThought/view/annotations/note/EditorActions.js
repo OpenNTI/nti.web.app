@@ -156,7 +156,7 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 		try {
 			range = RangeUtils.restoreSavedRange(savedRange);
 		} catch (e) {
-			console.log('Error recreating rangeDesc during processPaste.', rangeDesc, pasteddata);
+			console.log('Error recreating rangeDesc during processPaste.', savedRange, pasteddata);
 			document.body.removeChild(offScreenBuffer);
 			return;
 		}
@@ -270,9 +270,9 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 			document.execCommand("underline", null, null);
 		}
 
-		document.queryCommandState("bold") ? b.addCls("selected") : b.removeCls("selected");
-		document.queryCommandState("italic") ? i.addCls("selected") : i.removeCls("selected");
-		document.queryCommandState("underline") ? u.addCls("selected") : u.removeCls("selected");
+		b[document.queryCommandState("bold") ? 'addCls':'removeCls']("selected");
+		i[document.queryCommandState("italic") ? 'addCls' : 'removeCls']("selected");
+		u[document.queryCommandState("underline") ? 'addCls':'removeCls']("selected");
 	},
 
 	detectFontStyleAction: function(){
@@ -280,9 +280,9 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 			i =  this.editor.down('.italic'),
 			u = this.editor.down('.underline');
 
-		document.queryCommandState("bold") ? b.addCls("selected") : b.removeCls("selected");
-		document.queryCommandState("italic") ? i.addCls("selected") : i.removeCls("selected");
-		document.queryCommandState("underline") ? u.addCls("selected") : u.removeCls("selected");
+		b[document.queryCommandState("bold") ? 'addCls':'removeCls']("selected");
+		i[document.queryCommandState("italic") ? 'addCls' : 'removeCls']("selected");
+		u[document.queryCommandState("underline") ? 'addCls':'removeCls']("selected");
 	},
 
 	handleClick: function (e) {

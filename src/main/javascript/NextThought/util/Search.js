@@ -31,7 +31,7 @@ Ext.define('NextThought.util.Search',{
 
 	contentRegexForSearchHit: function(hit, phraseSearch){
 		function isContent(hit){
-			return /content/i.test(hit.get('Type'));
+			return (/content/i).test(hit.get('Type'));
 		}
 		
 		var fragments = hit.get('Fragments'),
@@ -50,9 +50,9 @@ Ext.define('NextThought.util.Search',{
 				//Sort the matches backwards so we can do string replaces without invalidating
 				fragment.matches.sort(function(a, b){return b[0] - a[0];});
 				Ext.each(fragment.matches, function(match, idx){
-					var term;
-					//Attempt to detect bad data from the server
-					var next = idx + 1 < fragment.matches.length ? fragment.matches[idx + 1] : [0, 0];
+					var term,
+						//Attempt to detect bad data from the server
+						next = idx + 1 < fragment.matches.length ? fragment.matches[idx + 1] : [0, 0];
 					if(next[1] > match[1]){
 						console.warn('Found a match that is a subset of a previous match.  Server breaking its promise?', fragment.matches);
 						return true; //continue
@@ -73,7 +73,7 @@ Ext.define('NextThought.util.Search',{
 			terms = Ext.Array.unique(terms);
 			escapedParts = [];
 			Ext.Array.each(terms, function(term){
-				escapedParts.push(term.replace(/[.*+?|()\[\]{}\\$^]/g,'\\$&'));
+				escapedParts.push(term.replace(/[.*+?|()\[\]{}\\$\^]/g,'\\$&'));
 			});
 			combinedRegex = new RegExp(escapedParts.join('|'), 'ig');
 		}

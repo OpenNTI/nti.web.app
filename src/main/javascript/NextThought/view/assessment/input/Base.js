@@ -221,7 +221,7 @@ Ext.define('NextThought.view.assessment.input.Base',{
 
 	submitOrTabNext: function(dom){
 		var i, x, next, nextTabIndex = String(parseInt(dom.getAttribute('tabIndex'),10)+1),
-            partLen = this.question.get('parts').length
+            partLen = this.question.get('parts').length;
 		if(this.questionSet || (partLen > 1 && (partLen-1) !== this.ordinal)){
 			i = this.el.up('.assessment-overlay').query('.tabable');
 			x = i.length-1;

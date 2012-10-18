@@ -57,7 +57,7 @@ Ext.define('NextThought.view.account.contact.Main',{
             allFields = this.query('[name]');
 
         //clear all errors:
-        Ext.each(allFields, function(f){f.removeCls('error')});
+        Ext.each(allFields, function(f){f.removeCls('error');});
 
         //make main error field show up
         box.el.down('.error-field').update(error.field);

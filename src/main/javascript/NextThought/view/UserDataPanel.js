@@ -165,7 +165,7 @@ Ext.define('NextThought.view.UserDataPanel',{
             }
 		}
 		catch(e){
-			console.error(e.message, e.stack|| e.stack);
+			console.error(e.message, e.stack || e.stacktrace);
 		}
 
         this.mon(this.el,

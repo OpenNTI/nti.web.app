@@ -255,7 +255,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
 			
 			ntiInline = ['inline','inline-block','none'].indexOf(Ext.fly(node).getStyle('display')) >= 0;
 		//	}
-			if(ntiInline){return true;};
+			if(ntiInline){return true;}
             if(node.className.indexOf && (node.className.indexOf('mathjax') >= 0 || node.className.indexOf('mathquill') >= 0)){
 				return true;
             }

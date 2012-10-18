@@ -123,7 +123,7 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 			}
 
 			return c;
-		}
+		};
 	},
 
 	clearBuckets: function(prefix){
