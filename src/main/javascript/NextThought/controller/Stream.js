@@ -127,7 +127,9 @@ Ext.define('NextThought.controller.Stream', {
 		});
 
 		//add it to the root stream store, why the heck not?
-		this.getStreamStore().add(change);
+		if(!item || item.mimeType.indexOf('redaction')<0){
+			this.getStreamStore().add(change);
+		}
 		this.self.fireChange(change);
 	}
 });
