@@ -23,6 +23,10 @@ Ext.define('NextThought.view.Window',{
 	liveDrag: true,
 	dragStartTolerance: 5,
 
+	dialog: false,
+	modal: false,
+	managed: true,
+
 	layout: { type: 'vbox', align: 'stretch' },
 	items: [
 		{xtype:'nti-window-header' },
@@ -34,8 +38,8 @@ Ext.define('NextThought.view.Window',{
 		var onBeforeClassCreated = hooks.onBeforeCreated;
 
 		hooks.onBeforeCreated = function(cls, data) {
-			var superCls = cls.prototype.superclass;
-			var frame = Ext.clone(superCls.items),
+			var superCls = cls.prototype.superclass,
+				frame = Ext.clone(superCls.items),
 				layout = Ext.clone(superCls.layout);
 
 			if(data.dialog){
@@ -44,7 +48,8 @@ Ext.define('NextThought.view.Window',{
 			else {
 				Ext.apply(frame.last(),{
 					items: data.items,
-					layout: data.layout
+					layout: data.layout,
+					autoScroll: data.autoScroll
 				});
 
 				Ext.apply(frame.first(),{
@@ -56,6 +61,7 @@ Ext.define('NextThought.view.Window',{
 
 				data.items = frame;
 				data.layout = layout;
+				data.autoScroll = superCls.autoScroll;
 			}
 			onBeforeClassCreated.call(this, cls, data, hooks);
 		};
@@ -101,7 +107,7 @@ Ext.define('NextThought.view.Window',{
 		}
 
 		this.titleBar = this.down('nti-window-header');
-		if(!this.modal && !this.dialog){
+		if(this.managed && !this.modal && !this.dialog){
 			this.manager.register(this);
 		}
 	},

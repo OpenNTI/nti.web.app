@@ -247,3 +247,49 @@
 		}
 	}
 }
+
+.chat-transcript {
+	@include divider;
+	.divider {
+		margin: 20px 15px;
+		&::after {
+			border-bottom: none;
+		}
+		span {
+			color: $tertiary-grey;
+		}
+	}
+
+	.message {
+		margin: 20px 15px;
+		overflow: hidden;
+		position: relative;
+
+		.time {
+			@include menu-label-text-treatment;
+			position: absolute;
+			width: 60px;
+			top: 1.5em;
+			left: 0;
+			text-align: right;
+			font-weight: normal;
+			color: $primary-grey;
+		}
+
+		.wrap {
+			margin-left: 70px;
+			.name {
+				@include menu-label-text-treatment;
+				color: $primary-blue;
+				.me {
+					color: $tertiary-grey;
+				}
+			}
+
+			.body {
+				color: $primary-grey;
+			}
+		}
+	}
+
+}

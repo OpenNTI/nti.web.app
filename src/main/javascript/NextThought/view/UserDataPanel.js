@@ -186,8 +186,8 @@ Ext.define('NextThought.view.UserDataPanel',{
         rec = this.dataGuidMap[historyElement.getAttribute('data-guid')];
         mt = rec.get('MimeType');
 
-        if(mt === data.TranscriptSummary.prototype.mimeType || mt === data.Transcript.prototype.mimeType){
-            this.fireEvent('open-chat-transcript', rec);
+        if(mt === data.TranscriptSummary.prototype.mimeType){
+            this.getTranscriptsForOccupants(rec);
         }
         else {
             cid = rec.get('ContainerId');
@@ -196,6 +196,28 @@ Ext.define('NextThought.view.UserDataPanel',{
             this.fireEvent('navigation-selected', cid, targets);
         }
     },
+
+
+	getTranscriptsForOccupants: function(initialRecord){
+		var records = [initialRecord],
+			occupants = (initialRecord.get('Contributors')||[]).slice(),
+			length = occupants.length;
+		//Lets just assume that we have all of 'em in the map for now. (there is no way to query for these objects so
+		// paging them in is not really in the cards for now.)
+
+		Ext.Object.each(this.dataGuidMap,function(key,obj){
+			var list = (obj.get('Contributors')||[]),
+				len = list.length;
+
+			if(obj !== initialRecord && length === len){
+				if(Ext.Array.intersect(occupants,list).length === length){
+					records.push(obj);
+				}
+			}
+		});
+
+		this.fireEvent('open-chat-transcript', records);
+	},
 
 
 	redraw: function(){

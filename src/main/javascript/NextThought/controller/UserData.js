@@ -33,6 +33,7 @@ Ext.define('NextThought.controller.UserData', {
 		'annotations.Highlight',
 		'annotations.Note',
 		'annotations.note.Window',
+		'chat.transcript.Window',
 		'content.Reader',
 		'definition.Window',
 		'sharing.Window',
@@ -114,6 +115,7 @@ Ext.define('NextThought.controller.UserData', {
 
 	onSessionReady: function(){
 		var app = this.application,
+			me = this,
 			token = {};
 
 		function finish(){ app.finishInitializeTask(token); }
@@ -203,16 +205,10 @@ Ext.define('NextThought.controller.UserData', {
 
 
 
-    openChatTranscript: function(rec){
-        console.log('open chat transcript when design is done', arguments);
-        /*
-        var w = Ext.widget(
-            'chat-window', {
-            roomInfo: rec.get('RoomInfo')
-        });
-        w.disableChat();
-        w.show();
-        */
+    openChatTranscript: function(records){
+        var w = Ext.widget('chat-transcript-window');
+	    if(!Ext.isArray(records)){ records = [records]; }
+	    Ext.each(records,function(r){ this.onLoadTranscript(r,w); }, this);
     },
 
 
