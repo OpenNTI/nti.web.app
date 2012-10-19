@@ -127,9 +127,7 @@ Ext.define('NextThought.view.UserDataPanel',{
             filter: filter
         });
 
-        s.proxy.limitParam = undefined;
-        s.proxy.startParam = undefined;
-        delete s.pageSize;
+        s.pageSize = 20;
 		return s;
 	},
 
@@ -137,6 +135,22 @@ Ext.define('NextThought.view.UserDataPanel',{
 	getStore: function(){
 		var favFakeMime = 'application/vnd.nextthought.favorite';
 		return this.mimeTypeRe.test(favFakeMime)? this.self.favStore : this.self.store;
+	},
+
+
+	prefetchNext: function(){
+		var s = this.getStore(), max;
+
+		if (!s.hasOwnProperty('data')) {
+			return;
+		}
+
+		max = s.getPageFromRecordIndex(s.getTotalCount());
+		if(s.currentPage < max){
+			this.el.mask('Loading...','loading');
+			s.clearOnPageLoad = false;
+			s.nextPage();
+		}
 	},
 
 
@@ -189,10 +203,24 @@ Ext.define('NextThought.view.UserDataPanel',{
 			console.error(e.message, e.stack || e.stacktrace);
 		}
 
-        this.mon(this.el,
-            {scope: this,
-            click: this.onClick
-        });
+		this.mon(this.el, {
+			scope: this,
+			click: this.onClick,
+			scroll: this.onScroll
+		});
+	},
+
+
+	onScroll: function(e,dom){
+		var el = dom.lastChild,
+            offsets = Ext.fly(el).getOffsetsTo(dom),
+            top = offsets[1] + dom.scrollTop,
+            ctBottom = dom.scrollTop + dom.clientHeight;
+
+		if(ctBottom > top){
+			this.prefetchNext();
+		}
+
 	},
 
 
