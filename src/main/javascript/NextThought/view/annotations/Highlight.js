@@ -6,6 +6,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
 		'NextThought.util.Rects'
 	],
 	statics: {bgcolor: null},
+	inheritableStatics: {blockElementRe: /^(address|blockquote|body|center|dir|div|dl|fieldset|form|h[1-6]|hr|isindex|menu|noframes|noscript|ol|p|pre|table|ul|dd|dt|frameset|li|tbody|td|tfoot|th|thead|tr|html)$/i},
 
 	highlightCls: 'application-highlight',
 	mouseOverCls: 'highlight-mouse-over',
@@ -244,17 +245,20 @@ Ext.define('NextThought.view.annotations.Highlight', {
 		return el.dom;
 	},
 
+	isInlineElement: function(node){
+		//getComputedStyle === $$$$
+		//return ['inline','inline-block','none'].indexOf(Ext.fly(node).getStyle('display')) >= 0;
+		return !this.self.blockElementRe.test(node.nodeName);
+	},
+
 	validToWrapEntireNodeFaster: function(node){
 		var ntiInline;
         if (node.nodeType === node.TEXT_NODE) { return true; }
         if (node.nodeType === node.ELEMENT_NODE) {
             if (node.childNodes.length === 0) { return true; }
             if (node.tagName === 'P') { return false; }
-			//TODO is this actually safe to cache?
-		//	if(node.ntiInline === undefined){
-			
-			ntiInline = ['inline','inline-block','none'].indexOf(Ext.fly(node).getStyle('display')) >= 0;
-		//	}
+
+			ntiInline = this.isInlineElement(node);
 			if(ntiInline){return true;}
             if(node.className.indexOf && (node.className.indexOf('mathjax') >= 0 || node.className.indexOf('mathquill') >= 0)){
 				return true;
