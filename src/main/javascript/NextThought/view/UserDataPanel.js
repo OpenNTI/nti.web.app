@@ -169,7 +169,7 @@ Ext.define('NextThought.view.UserDataPanel',{
 
 
     applyMimeTypeFilter: function(){
-        var s = this.self.store;
+        var s = this.self.store;//this store is the only store we need to filter. The favStore is seporate.
         s.suspendEvents();
         s.clearFilter();
         s.filter({
