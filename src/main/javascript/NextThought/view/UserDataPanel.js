@@ -212,7 +212,7 @@ Ext.define('NextThought.view.UserDataPanel',{
         }
         else {
             cid = rec.get('ContainerId');
-            targets = rec.get('references')||[];
+            targets = (rec.get('references')||[]).slice();
             targets.push(rec.getId());
             this.fireEvent('navigation-selected', cid, targets, null);
         }
