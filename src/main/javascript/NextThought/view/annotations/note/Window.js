@@ -69,6 +69,15 @@ Ext.define('NextThought.view.annotations.note.Window',{
 		this.down('note-carousel').setRecord(a.getRecord());
 
 		this.mon(LocationProvider, 'navigateComplete', this.destroy, this);
+
+		this.mon(Ext.getBody(),'click',this.dismissClick, this);
+	},
+
+
+	dismissClick: function(e){
+		if(!e.getTarget('.note-window')){
+			this.destroy();
+		}
 	},
 
 
