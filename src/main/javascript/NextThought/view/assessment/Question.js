@@ -15,12 +15,6 @@ Ext.define('NextThought.view.assessment.Question',{
 	],
 
 
-	removeContent: function(selector){
-		var el = Ext.get(this.contentElement);
-		el.select(selector).remove();
-	},
-
-
 	initComponent: function(){
 		this.callParent(arguments);
 		var parts = this.question.get('parts'),

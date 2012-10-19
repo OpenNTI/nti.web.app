@@ -42,7 +42,6 @@ Ext.define('NextThought.view.assessment.Panel',{
 		this.callParent(arguments);
 	},
 
-
 	afterRender: function(){
 		var me = this, lastY = 0, sameCount = 0;
 		me.callParent(arguments);
@@ -77,6 +76,12 @@ Ext.define('NextThought.view.assessment.Panel',{
 	},
 
 
+	removeContent: function(selector){
+		var el = Ext.get(this.contentElement);
+		el.select(selector).remove();
+	},
+
+
 	setupContentElement: function(){
 		Ext.fly(this.contentElement).setStyle({
 			overflow: 'hidden',
@@ -85,7 +90,7 @@ Ext.define('NextThought.view.assessment.Panel',{
 			opacity: 0,
 			'white-space': 'nowrap'
 		});
-		this.removeContent('.naqsolutions,.naqchoices,.rightwrongbox,.hidden,INPUT,p.par');
+		this.removeContent('.naqsolutions,.naqchoices,.rightwrongbox,.hidden,INPUT,p.par,object,param');
 	},
 
 
