@@ -591,6 +591,10 @@
 	}
 }
 
-.x-ie9 .worksheet-problems > .naquestion {
-	display: none;
+//in the iframe
+.x-ie9 #NTIContent .naquestion {
+	&, * {
+		word-wrap: normal !important;
+		white-space: nowrap !important;
+	}
 }
