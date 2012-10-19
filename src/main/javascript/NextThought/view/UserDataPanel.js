@@ -99,7 +99,7 @@ Ext.define('NextThought.view.UserDataPanel',{
 		var s = this.self;
 
         if(!s.store){
-            s.store = this.buildStore('OnlyMe','historyStore','GroupingField');
+            s.store = this.buildStore('MeOnly','historyStore','GroupingField');
         }
 		if(!s.favStore){
             s.favStore = this.buildStore('Favorite','favoriteStore','MimeType');

@@ -56,7 +56,7 @@ Ext.define('NextThought.filter.FilterManager',{
 
 	/**
 	 * This will naively iterate the filters and grab all $className filters and add them to the result, as well as
-	 * determin which filter to use. ie OnlyMe,FollowingAndMe, Following.
+	 * determin which filter to use. ie MeOnly,FollowingAndMe, Following.
 	 *
 	 * All union/intersection/include/exclude data will be dropped.
 	 *
