@@ -57,7 +57,7 @@ Ext.define('NextThought.model.Note', {
 		var note = this,
 			reply = this.self.create(),
 			parent = note.get('NTIID'),
-			refs = Ext.Array.clone(note.get('references') || []);
+			refs = (note.get('references') || []).slice();
 
 		refs.push(parent);
 

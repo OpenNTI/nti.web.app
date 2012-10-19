@@ -16,7 +16,7 @@ Ext.define('NextThought.util.Annotations',{
 	 */
 	replyToPlaceHolder: function(note){
 		var holder = Ext.create('NextThought.model.Note'),
-			refs = note.get('references') || [];
+			refs = (note.get('references') || []).slice();
 
 		if(refs.length){
 			refs = Ext.Array.clone(refs);

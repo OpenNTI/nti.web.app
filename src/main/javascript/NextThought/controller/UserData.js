@@ -186,7 +186,7 @@ Ext.define('NextThought.controller.UserData', {
     maybeFireChildAdded: function(item) {
         if (!item){return;}
 
-        var refs = item.get('references') || [], parent, main;
+        var refs = (item.get('references') || []).slice(), parent, main;
         if(refs.length===0){return;}
 
         //look for reply
@@ -505,7 +505,7 @@ Ext.define('NextThought.controller.UserData', {
 		people = Ext.Array.unique([record.get('Creator')].concat(top.get('sharedWith')).concat(top.get('Creator')));
 		cId = record.get('ContainerId');
 		parent = record.get('NTIID');
-		refs = Ext.Array.clone(record.get('references') || []);
+		refs = (record.get('references') || []).slice();
 
 		this.getController('Chat').enterRoom(people, {ContainerId: cId, references: refs, inReplyTo: parent});
 	},
