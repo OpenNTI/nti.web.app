@@ -87,17 +87,21 @@ Ext.define('NextThought.ux.SearchHits', {
 			return;
 		}
 		Ext.each(rangesToRender, function(sel){
-			var range = sel.getBoundingClientRect();
+			var rects = sel.getClientRects();
+			rects = RectUtils.merge(rects, null);
+
+			Ext.each(rects, function(range){
+
 			//Instead of appending one element at a time build them into a list and
 			//append the whole thing.  This is a HUGE improvement for the intial rendering performance
 			toAppend.push({
-				cls:'searchHit-entry',
-			  style: {
-				  height: range.height+'px',
-				  width: range.width+'px',
-				  top: range.top+'px',
-				  left: range.left+'px'
-			  }
+					   cls:'searchHit-entry',
+					   style: {
+						  height: range.height+'px',
+						  width: range.width+'px',
+						  top: range.top+'px',
+						  left: range.left+'px'
+					   }});
 			});
 
 			//Arbitrarily cap at 100 until we can figure out a solution other than
