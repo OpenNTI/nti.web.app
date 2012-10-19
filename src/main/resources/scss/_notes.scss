@@ -175,7 +175,6 @@
 				max-height: 200px;
 				white-space: normal;
 				word-wrap: break-word;
-				word-break: normal;
 
 				em, em strong{
 					font-style: italic !important;
@@ -737,7 +736,6 @@
 			.text {
 				overflow: hidden;
 				text-overflow: ellipsis;
-				word-break: normal;
 				word-wrap: normal;
 				white-space: normal;
 				font-style: normal;
@@ -1060,7 +1058,6 @@
 			font: 16px/24px 'Droid Serif';
 
 			a {
-				word-break: break-all;
 				word-wrap: break-word;
 			}
 
