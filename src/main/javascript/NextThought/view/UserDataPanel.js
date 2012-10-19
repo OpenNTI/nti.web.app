@@ -96,22 +96,18 @@ Ext.define('NextThought.view.UserDataPanel',{
 			return;
 		}
 
-        var s = this.self.store,
-		    fs = this.self.favStore;
+		var s = this.self;
 
-        if (!s){
-            s = this.self.store = this.buildStore('OnlyMe','historyStore','GroupingField');
+        if(!s.store){
+            s.store = this.buildStore('OnlyMe','historyStore','GroupingField');
         }
-		if (!fs){
-            fs = this.self.favStore = this.buildStore('Favorite','favoriteStore','MimeType');
+		if(!s.favStore){
+            s.favStore = this.buildStore('Favorite','favoriteStore','MimeType');
         }
 
-		this.mon(s,{
-			scope: this,
-			datachanged: this.maybeRedraw
-		});
-
-		this.mon(fs,{
+		//now that the stores are setup, use getStore to pick the one we care about and setup our event listers on just
+		// that store.
+		this.mon(this.getStore(),{
 			scope: this,
 			datachanged: this.maybeRedraw
 		});
