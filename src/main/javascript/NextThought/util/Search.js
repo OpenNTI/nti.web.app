@@ -73,7 +73,15 @@ Ext.define('NextThought.util.Search',{
 			terms = Ext.Array.unique(terms);
 			escapedParts = [];
 			Ext.Array.each(terms, function(term){
-				escapedParts.push(term.replace(/[.*+?|()\[\]{}\\$\^]/g,'\\$&'));
+				//Do any regex escaping required
+				term = term.replace(/[.*+?|()\[\]{}\\$\^]/g,'\\$&');
+				//to make things like qoutes in the term match unicode apostrophe their
+				//unicode counterparts in our content replace non alpha numeric characters
+				//with a regex group that matches any other non alpha numeric character.
+				//Note this potentially matches court's to court-s but that is such a rare
+				//case this should be ok in practice.
+				term = term.replace(/[^a-zA-Z0-9 ]/g, "[^a-zA-Z0-9 ]");
+				escapedParts.push(term);
 			});
 			combinedRegex = new RegExp(escapedParts.join('|'), 'ig');
 		}

@@ -95,7 +95,7 @@ Ext.define('NextThought.view.form.fields.SearchField', {
 		var me = this;
 		clearTimeout(this.searchEventDelayId);
 		this.searchEventDelayId = setTimeout(function(){
-			if(me.getValue().length > 3){
+			if(!me.getValue() || me.getValue().length > 3){
 				me.fireSearchEvent();
 			}
 		}, 500);
