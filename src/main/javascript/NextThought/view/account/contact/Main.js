@@ -60,7 +60,7 @@ Ext.define('NextThought.view.account.contact.Main',{
         Ext.each(allFields, function(f){f.removeCls('error');});
 
         //make main error field show up
-        box.el.down('.error-field').update(error.field);
+	    box.el.down('.error-field').update(error.field.replace('_',' '));
         box.el.down('.error-desc').update(error.message);
         box.show();
 

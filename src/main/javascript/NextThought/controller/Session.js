@@ -14,6 +14,8 @@ Ext.define('NextThought.controller.Session', {
 
 	views: [
 		'Window',
+		'account.coppa.Window',
+		'account.recovery.Window',
         'menus.Settings'
 	],
 
@@ -88,7 +90,7 @@ Ext.define('NextThought.controller.Session', {
                 }
                 try{
                     var o = Ext.decode(r.responseText);
-                    Ext.create('NextThought.view.account.coppa.Window', {schema:o.ProfileSchema}).show();
+                    Ext.widget('coppa-window', {schema:o.ProfileSchema}).show();
                 }
                 catch(e){
                     console.error(Globals.getError(e));
@@ -115,7 +117,7 @@ Ext.define('NextThought.controller.Session', {
 
 
     showEmailRecoveryWindow: function(fieldName, linkName){
-        Ext.create('NextThought.view.account.recovery.Window', {fieldName:fieldName, linkName: linkName}).show();
+        Ext.widget('recovery-email-window', {fieldName:fieldName, linkName: linkName}).show();
     },
 
 
