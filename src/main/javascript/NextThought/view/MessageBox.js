@@ -85,15 +85,13 @@ Ext.define('NextThought.view.MessageBox',{
 	window.alert = function(cfg, fn){
 		Globals.removeLoaderSplash();
 		if (!cfg || Ext.isString(cfg)) {
-            cfg = {
-                msg : cfg,
-				icon: Ext.Msg.WARNING,
-				buttons: Ext.Msg.OK
-            };
+            cfg = { msg : cfg||'No Message' };
         }
 
 		Ext.applyIf(cfg, {
-				fn: Ext.isFunction(fn) ? fn : undefined
+			icon: Ext.Msg.WARNING,
+			buttons: Ext.Msg.OK,
+			fn: Ext.isFunction(fn) ? fn : undefined
 		});
 		Ext.MessageBox.alert(cfg);
 	};

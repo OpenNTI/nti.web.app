@@ -238,6 +238,7 @@ Ext.define( 'NextThought.view.annotations.Base', {
 			failure:function(){
 				console.error('Failed to save record', me, me.record);
 				me.cleanup();
+				alert({title:'Ooops!', msg:'Something went wrong while saving. Please try again.'});
 			},
 			success:function(newRecord){
 				me.record.fireEvent('updated', newRecord);
