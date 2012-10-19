@@ -177,6 +177,7 @@ Ext.define('NextThought.view.UserDataPanel',{
             if (!s.initialLoaded){
                 s.initialLoaded = true;
 			    s.load();
+	            this.el.mask('Loading...','loading');
             }
 
             if(this.redrawOnRender){
@@ -277,6 +278,7 @@ Ext.define('NextThought.view.UserDataPanel',{
 
 		Ext.each(groups,doGroup,this);
 
+		this.el.unmask();
 		this.feedTpl.overwrite(container.getEl(),items);
 		container.updateLayout();
 	},
