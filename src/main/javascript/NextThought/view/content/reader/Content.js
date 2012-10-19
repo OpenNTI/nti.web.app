@@ -106,7 +106,8 @@ Ext.define('NextThought.view.content.reader.Content',{
 
 		me.loadContentAnnotations(LocationProvider.currentNTIID, subContainers);
 
-		Ext.callback(finish,null,[me]);
+		//Give the content time to settle. TODO: find a way to make an event, or prevent this from being called until the content is settled.
+		Ext.defer(Ext.callback,100,Ext,[finish,null,[me]]);
 	},
 
 

@@ -81,13 +81,16 @@ Ext.define('NextThought.providers.Location', {
 				console.warn('finish navigation called twice');
 				return;
 			}
+			var args = Array.prototype.slice.call(arguments);
 
 			finish.called = true;
 
 			if(e.isMasked()){
 				e.unmask();
 			}
-			Ext.callback(callback,null,arguments);
+
+			//Give the content time to settle. TODO: find a way to make an event, or prevent this from being called until the content is settled.
+			Ext.defer(Ext.callback,500,Ext,[callback,null,args]);
 
 			if((errorDetails||{}).error){
 				//blank it out
