@@ -445,7 +445,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 			}
 		}
 		catch(er){
-			console.warn('onContextMenuHandler: '+er.message+' trace: ', er.stack);
+			console.error('onContextMenuHandler: '+er.message);
 		}
 	},
 

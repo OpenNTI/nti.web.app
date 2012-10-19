@@ -139,9 +139,7 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 
 		on(doc,'mousedown',function(){ Ext.menu.Manager.hideAll(); });
 		on(doc,'contextmenu',function(e){
-			e = Ext.EventObject.setEvent(e||event);
-			e.stopPropagation();
-			e.preventDefault();
+			Ext.EventObject.setEvent(e||event).stopEvent();
 			return false;
 		});
 		on(doc,'click',function(e){
@@ -150,10 +148,12 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 			if(target){ me.onClick(evt, target); }
 		});
 		on(doc,'mouseup',function(e){
+
 			var fakeEvent = Ext.EventObject.setEvent(e||event),
 				t = me.body.getScroll().top;
+
 			me.onContextMenuHandler({
-				getTarget: function(){ return fakeEvent.getTarget(); },
+				getTarget: function(){ return fakeEvent.getTarget.apply(fakeEvent,arguments); },
 				preventDefault: function(){ fakeEvent.preventDefault(); },
 				stopPropagation: function(){ fakeEvent.stopPropagation(); },
 				getXY: function(){

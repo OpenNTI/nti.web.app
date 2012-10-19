@@ -345,7 +345,11 @@ Ext.define('NextThought.view.annotations.Highlight', {
 
 
 	onClick: function(e){
-		if(e.getTarget('a[href]')){ return null; }
+		if(e.getTarget('a[href]') && e.button === 0){
+			return null;
+		}
+		e.stopEvent();
+		this.doc.parentWindow.getSelection().removeAllRanges();
 		return this.callParent(arguments);
 	},
 
@@ -359,7 +363,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
 		range.surroundContents(span);
 		Ext.get(span).hover(this.onMouseOver,this.onMouseOut,this);
 		if(style !== 'suppressed'){
-			this.attachEvent('click',span,this.onClick,this);
+			this.attachEvent(['click','mouseup'],span,this.onClick,this);
 		}
 		return span;
 	},
