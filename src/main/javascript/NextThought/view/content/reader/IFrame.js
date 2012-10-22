@@ -279,7 +279,6 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 
 		if(html!==false){
 			this.insertRelatedLinks(body.query('#NTIContent .chapter.title')[0],doc);
-            debugger;
             LocationProvider.setCurrentlyLoadedContent(body.dom.cloneNode(true));
         }
 		this.fireEvent('content-updated');
