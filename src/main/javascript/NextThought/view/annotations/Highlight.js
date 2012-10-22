@@ -172,19 +172,18 @@ Ext.define('NextThought.view.annotations.Highlight', {
 			this.compElements = new Ext.dom.CompositeElement(this.rendered);
 			this.compElements.add(this.counter);
 
-			if(!this.self.bgcolor){
-				this.self.bgcolor = {};
-				sampleEl = this.compElements.first();
-				this.self.bgcolor.normal = sampleEl.getStyle('background-color');
-				sampleEl.addCls(this.mouseOverCls);
-				this.self.bgcolor.hover = sampleEl.getStyle('background-color');
-				sampleEl.removeCls(this.mouseOverCls);
-			}
-
-			this.compElements.setStyle('background-color','transparent');
-
 			//highlights that are not ours do not get a marked over treatment...so don't create the canvas
 			if(this.isModifiable && style !== 'suppressed'){
+
+				if(!this.self.bgcolor){
+					this.self.bgcolor = {};
+					sampleEl = this.compElements.first();
+					this.self.bgcolor.normal = sampleEl.getStyle('background-color');
+					sampleEl.addCls(this.mouseOverCls);
+					this.self.bgcolor.hover = sampleEl.getStyle('background-color');
+					sampleEl.removeCls(this.mouseOverCls);
+				}
+				//this.compElements.setStyle('background-color','transparent');
 				this.canvas = this.createCanvas();
 			}
 		}
