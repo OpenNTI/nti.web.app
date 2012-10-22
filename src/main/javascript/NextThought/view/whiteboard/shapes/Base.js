@@ -261,8 +261,15 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Base', {
 		a = a || Math.PI*2;
 
 		var xy = m.transformPoint(x,y);
-		if(name!=='rot1' && name !== 'rot2'){ctx.moveTo(xy[0]+r,xy[1]);}
-		ctx.arc(xy[0], xy[1], r, s,a, name!=='rot2');
+		if(name === 'l' || name === 'r' || name === 'b' || name === 't'){
+			ctx.lineWidth = 1;
+			ctx.strokeRect(xy[0]-r/2, xy[1]-r/2, r, r);
+		}
+		else if(name!=='rot1' && name !== 'rot2'){
+			ctx.lineWidth = 2;
+			ctx.moveTo(xy[0]+r,xy[1]);
+			ctx.arc(xy[0], xy[1], r, s,a, name!=='rot2');
+		}
 
 		//if nibData is there, fill it in, otherwise, throw away the data
 		(this.nibData||{})[name] = {
@@ -282,7 +289,7 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Base', {
 
 		var b = this.bbox,
 			m = new NTMatrix(this.transform),
-			r, rot;
+			r, rot, a;
 
 		//scale the normal values to the current size of the canvas
 		m.scaleAll(ctx.canvas.width);
@@ -291,7 +298,8 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Base', {
 
 		ctx.setTransform(1,0,0,1,0,0);
 
-		r = 7;
+		r = 6;  //circle
+		a = 8;  //square
 
 		b.mx = (b.w/2)+b.x;
 		b.my = (b.h/2)+b.y;
@@ -299,35 +307,35 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Base', {
 		b.yy = b.y + b.h;
 
 		ctx.lineWidth = 2;
+		ctx.fillStyle = '#ffffff';
+		ctx.strokeStyle = '#b1b1b1';
 		ctx.beginPath();
 		this.drawNib(ctx, r, b.x,  b.y, m, 't-l');
-		this.drawNib(ctx, r, b.mx, b.y, m, 't');
+
+		this.drawNib(ctx, a, b.mx, b.y, m, 't');
 		this.drawNib(ctx, r, b.xx, b.y, m, 't-r');
 
-		this.drawNib(ctx, r, b.x,  b.my, m, 'l');
-		this.drawNib(ctx, r, b.xx, b.my, m, 'r');
-
+		this.drawNib(ctx, a, b.x,  b.my, m, 'l');
+		this.drawNib(ctx, a, b.xx, b.my, m, 'r');
 		this.drawNib(ctx, r, b.x,  b.yy, m, 'b-l');
-		this.drawNib(ctx, r, b.mx, b.yy, m, 'b');
-		this.drawNib(ctx, r, b.xx, b.yy, m, 'b-r');
 
+		this.drawNib(ctx, a, b.mx, b.yy, m, 'b');
+		this.drawNib(ctx, r, b.xx, b.yy, m, 'b-r');
 		ctx.closePath();
 		ctx.shadowColor = 'None';
-		ctx.strokeStyle = '#004CB3';
-		ctx.fillStyle = '#8ED6FF';
 		ctx.fill();
 		ctx.stroke();
 
 		ctx.lineCap = 'round';
 		ctx.lineWidth *= 2;
 
-		ctx.beginPath();
-		this.drawNib(ctx, r*2, b.xx+((r)/m.getScale(true)), b.my, m, 'rot1', (rot+(Math.PI/3)), (rot-(Math.PI/4)));
-		ctx.stroke();
-
-		ctx.beginPath();
-		this.drawNib(ctx, r*2, b.x-((r)/m.getScale(true)), b.my, m, 'rot2', rot+(2*Math.PI/3), rot-(3*Math.PI/4));
-		ctx.stroke();
+//		ctx.beginPath();
+//		this.drawNib(ctx, r*2, b.xx+((r)/m.getScale(true)), b.my, m, 'rot1', (rot+(Math.PI/3)), (rot-(Math.PI/4)));
+//		ctx.stroke();
+//
+//		ctx.beginPath();
+//		this.drawNib(ctx, r*2, b.x-((r)/m.getScale(true)), b.my, m, 'rot2', rot+(2*Math.PI/3), rot-(3*Math.PI/4));
+//		ctx.stroke();
 
 		ctx.restore();
 

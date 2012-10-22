@@ -92,7 +92,8 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 
 
 	onClick: function(e){
-		console.log('click');
+		var selectedTool = this.toolbar.getCurrentTool().forTool;
+		this.currentTool = selectedTool === 'move' ? "Hand" : selectedTool;
 		if(this.currentTool==='Hand'){
 			this.selectShape(e);
 		}
@@ -144,7 +145,7 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 
 		if(s){
 			delete s.isNew;
-		//	this.activateToolOptions(s.getShapeName());
+//			this.activateToolOptions(s.getShapeName());
 		}
 //		else {
 //			this.activateToolOptions(this.currentTool);
@@ -190,7 +191,7 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 			t,xy,w,p;
 
 
-		console.log('mouseDown?', this.mouseDown);
+		//console.log('mouseDown?', this.mouseDown);
 
 		if(!this.mouseDown){ return; }
 		if(!s || s.Class !== 'CanvasPathShape' || !s.isNew){
@@ -275,8 +276,16 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 
 		m = new NTMatrix();
 		m.translate(x,y);
-		m.scale(WBUtils.getDistance(p)*2);
-		m.rotate(WBUtils.toRadians(WBUtils.getDegrees(p)));
+
+		if(s.sides === 4){
+			m.scale(WBUtils.getDistance(p)* 2 * Math.cos(WBUtils.toRadians(WBUtils.getDegrees(p))));
+		}
+		else{
+			m.scale(WBUtils.getDistance(p)*2);
+		}
+
+		// FIXME: Stop rotating as we draw.
+//		m.rotate(WBUtils.toRadians(WBUtils.getDegrees(p)));
 
 		m.scaleAll(1/w);//do this after
 		s.transform = m.toTransform();
