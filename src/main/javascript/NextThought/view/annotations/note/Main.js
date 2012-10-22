@@ -233,7 +233,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 			this.context.setHTML('');
 			suppressed = r.get('style') === 'suppressed';
 			doc = ReaderPanel.get(this.prefix).getDocumentElement();
-			range = Anchors.toDomRange(r.get('applicableRange'), doc, r.get('ContainerId'));
+			range = Anchors.toDomRange(r.get('applicableRange'), doc, LocationProvider.currentContent, r.get('ContainerId'));
 			if(range){
                 this.context.insertFirst(RangeUtils.expandRange(range, doc));
                 context = this.context.first();

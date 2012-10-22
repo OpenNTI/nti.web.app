@@ -118,7 +118,7 @@ Ext.define('NextThought.providers.Location', {
 			}
 
 			me.clearStore();
-			me.resolvePageInfo(ntiid,finish, Boolean(callback));
+			me.resolvePageInfo(ntiid, finish, Boolean(callback));
 
 			me.currentNTIID = ntiid;
 		},1);
@@ -491,8 +491,12 @@ Ext.define('NextThought.providers.Location', {
         var lineage = this.getLineage(ntiid), result=null;
         Ext.each(lineage, function(l){return !Boolean(result = this.preferenceMap[l]); }, this);
         return result;
-	}
+	},
 
+
+    setCurrentlyLoadedContent: function(frag) {
+        this.currentContent = frag;
+    }
 
 
 }, function(){

@@ -279,8 +279,11 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 
 		if(html!==false){
 			this.insertRelatedLinks(body.query('#NTIContent .chapter.title')[0],doc);
-		}
+            debugger;
+            LocationProvider.setCurrentlyLoadedContent(body.dom.cloneNode(true));
+        }
 		this.fireEvent('content-updated');
+
 
 		//TODO: solidify our story about content scripts (reset the iframe after navigating to a page that has scripts?)
 //		Ext.each(body.query('script'),function(s){

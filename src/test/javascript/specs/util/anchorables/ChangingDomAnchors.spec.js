@@ -155,10 +155,10 @@ describe("Tests with Changing Documents", function() {
 
 			range = makeRange(t1,13,t1,47);
 			result = Anchors.createRangeDescriptionFromRange(range, document).description;
-			bk = Anchors.toDomRange(result,document);
+			bk = Anchors.toDomRange(result,document, document.body);
 			expect(""+bk).toEqual("somewhat but not particularly long");
 			t1.data = 'This is some somewhat but not particularly long text for readers with short attention spans. Here are some extra words.';
-			bk = Anchors.toDomRange(result,document);
+			bk = Anchors.toDomRange(result,document, document.body);
 			expect(""+bk).toEqual("somewhat but not particularly long");
 		});
 	});

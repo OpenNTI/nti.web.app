@@ -1615,12 +1615,12 @@ describe("Anchor Utils", function() {
 			root.appendChild(p2);
 			testBody.appendChild(root);
 
-			recreatedRange = Anchors.toDomRange(emptyDesc.description, document);
+			recreatedRange = Anchors.toDomRange(emptyDesc.description, document, document.body);
 			expect(recreatedRange).toBeTruthy();
 			expect(recreatedRange.commonAncestorContainer).toBe(document.body);
 
 			root.setAttribute('Id', '123242354543523');
-			recreatedRange = Anchors.toDomRange(emptyDesc.description, document, '123242354543523');
+			recreatedRange = Anchors.toDomRange(emptyDesc.description, document, document.body, '123242354543523');
 			expect(recreatedRange).toBeTruthy();
 			expect(recreatedRange.commonAncestorContainer).toBe(root);
 		});
@@ -1666,7 +1666,7 @@ describe("Anchor Utils", function() {
 			expect(desc.getAncestor().getElementId()).toEqual(root.getAttribute('Id'));
 
 			//now round trip back to a range, verify that it is the same range as before
-			recreatedRange = Anchors.toDomRange(desc, document);
+			recreatedRange = Anchors.toDomRange(desc, document, document.body);
 			expect(recreatedRange).toBeTruthy();
 			expect(recreatedRange.startContainer).toBe(range.startContainer);
 			expect(recreatedRange.endContainer).toBe(range.endContainer);
@@ -1710,7 +1710,7 @@ describe("Anchor Utils", function() {
             expect(desc.getAncestor().getElementId()).toEqual(root.getAttribute('data-ntiid'));
 
             //now round trip back to a range, verify that it is the same range as before
-            recreatedRange = Anchors.toDomRange(desc, document);
+            recreatedRange = Anchors.toDomRange(desc, document, document.body);
             expect(recreatedRange).toBeTruthy();
             expect(recreatedRange.startContainer).toBe(range.startContainer);
             expect(recreatedRange.endContainer).toBe(range.endContainer);
@@ -1782,7 +1782,7 @@ describe("Anchor Utils", function() {
 			expect(desc.getAncestor().getElementId()).toEqual(p.getAttribute('Id'));
 
 			//now round trip back to a range, verify that it is the same range as before
-			recreatedRange = Anchors.toDomRange(desc, document);
+			recreatedRange = Anchors.toDomRange(desc, document, document.body);
 			expect(recreatedRange).toBeTruthy();
 			expect(recreatedRange.startContainer).toBe(range.startContainer);
 			expect(recreatedRange.endContainer).toBe(range.endContainer);
@@ -1834,7 +1834,7 @@ describe("Anchor Utils", function() {
 			expect(desc.getAncestor()).toBeTruthy();
 
 			//now round trip back to a range, verify that it is the same range as before
-			recreatedRange = Anchors.toDomRange(desc, document);
+			recreatedRange = Anchors.toDomRange(desc, document, document.body);
 			expect(recreatedRange).toBeTruthy();
 			expect(recreatedRange.startContainer).toBe(range.startContainer);
 			expect(recreatedRange.endContainer).toBe(range.endContainer);
