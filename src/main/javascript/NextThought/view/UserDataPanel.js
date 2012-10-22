@@ -305,6 +305,9 @@ Ext.define('NextThought.view.UserDataPanel',{
 		this.el.unmask();
 		this.feedTpl.overwrite(container.getEl(),items);
 		container.updateLayout();
+
+		//just in case the items in the list don't fill the view.
+		this.onScroll(null,this.el.dom);
 	},
 
 
