@@ -10,8 +10,8 @@
 	width: 5px;
 	width: 0px;
 	overflow: hidden;
-	line-height: 23px;
-	height: 24px;
+	//line-height: 23px;
+	//height: 24px;
 	text-align: center;
 	padding: 0 0 0 4px;
 }
@@ -397,6 +397,10 @@ div.redaction-control {
 						background-color: transparent;
 					}
 				}
+
+				&.counter {
+					background: transparent;
+				}
 			}
 
 			&.redaction {
@@ -411,6 +415,8 @@ div.redaction-control {
 				color: $secondary-grey;
 				font-family: $font !important;
 				font-weight: bold;
+
+				background: transparent;
 
 				@include highlight-tip;
 

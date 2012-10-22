@@ -142,76 +142,99 @@ Ext.define('NextThought.util.Annotations',{
 
 
     drawCanvas: function(canvas, content, range, backgroundColor, offset) {
-        var bounds = range.getBoundingClientRect(),
-            boundingTop = Math.ceil(bounds.top),
-            boundingLeft = Math.ceil(bounds.left),
-            boundingHeight = Math.ceil(bounds.height),
-            width = content ? content.getWidth() : 680,
-            lineHeight,
-            topOffset = offset[1],
-            leftOffset = offset[0],
-            ctx,
-            adjustment,
-            i, x, y, w, h, left, r,
-            lastY=0, c, small,
-            padding = 2,
-            last = true,
-            s = RectUtils.merge(range.getClientRects(),width+1);
+
+	    function getLineHeight(e){
+		    function getNode(e){ return (e.nodeType === Node.TEXT_NODE) ? e.parentNode : e; }
+
+		    var m, tm = Ext.util.TextMetrics;
+		    try {
+			    console.warn('not using cached line height, should only see this once per canvas');
+			    m = tm.measure(getNode(e),'TEST',500);
+			    tm.destroy();
+			    return m.height/2;
+		    }catch(er){
+			    console.error(er.message);
+		    }
+
+		    return NaN;
+	    }
+
+	    function findMinMax(r){
+		    if(r.left < minLeft) {minLeft = r.left;}
+		    if(r.right > maxRight) {maxRight = r.right;}
+	    }
+
+	    var bounds = range.getBoundingClientRect(),
+		    boundingTop = Math.ceil(bounds.top),
+		    boundingLeft = Math.ceil(bounds.left),
+		    boundingRight = Math.ceil(bounds.right),
+		    width = content ? content.getWidth() : 680,
+		    lineHeight = canvas.cachedLineHeightValue || getLineHeight(range.endContainer),
+		    topOffset = offset[1],
+		    leftOffset = offset[0],
+		    ctx,
+		    i, x, y, w, h, left, r,
+		    lastY=0, small,
+		    padding = 2,
+		    last = true,
+		    s = RectUtils.merge(range.getClientRects(),width+1),
+			minLeft = boundingRight,
+			maxRight = boundingLeft;
+
+
+	    Ext.each(s,findMinMax,this,true);
+
+	    if((width - (maxRight - minLeft)) > 50){
+	        width = (maxRight - minLeft);
+	    }
+
+
+	    canvas.cachedLineHeightValue = lineHeight;
+
 
         s.sort(function(a,b) { return a.top + a.bottom - b.top - b.bottom; });
         i = s.length - 1;
 
-        ctx = Ext.fly(canvas).dom.getContext('2d');
+        ctx = canvas.getContext('2d');
         ctx.fillStyle = backgroundColor;
 
         if (ctx.fillStyle === '#000000' || !backgroundColor) {
             return boundingTop;
         }
 
-        for(; i>=0; i--){
+        for(i; i>=0; i--){
             r = s[i];
 
             left = Math.ceil(r.left - boundingLeft + leftOffset - padding );
             y = Math.ceil(r.top - boundingTop + topOffset - padding );
             small = (r.width/width) < 0.5 && i===0;
+
+	        if(r.left === minLeft) { left = 0; }
+
             x = i===0 || small ? left : 0;
-            w = last || small
-                ? (r.width + (x ? 0: left) + (padding*(last?1:2)) )
-                : (width-x);
+	        w = last || small
+                ? (r.width + (x ? 0: left) + (padding*2) )
+                : ((width-x)+(x? (padding*2) : 0));
 
             h = r.height + (padding*2);
             if(!last && (Math.abs(y - lastY) < lineHeight || y > lastY )){ continue; }
             if(!last && r.height <= lineHeight) { continue; }
+
             //Remove some really small rects
             if(last && w < 10) {continue;}
             if (!last && h < 8) { continue;}
 
-            /*
-            if(last && !Ext.isIE9){
-                c = Ext.get(this.counter);
-                adjustment = this.adjustedBy || (r.top - c.getY());
-                h = c.getHeight() + padding;
 
-                if(adjustment < 2){ y += adjustment; }
-                if(!this.adjusted){
-                    this.adjusted = true;
-                    this.adjustedBy = adjustment;
-                    return this.render();
-                }
-            }
-            else {
-                adjustment = 0;
-            }
-            */
             if (last) {
-                w -= 4;
+//                w -= 4;
                 ctx.beginPath();
                 ctx.moveTo(x+w,y);
                 ctx.lineTo(x+w,y+h);
                 ctx.lineTo(x+w+4,y);
+	            ctx.closePath();
                 ctx.fill();
             }
-            //TODO: clamp to 24px tall (centered in the rect)
+
             ctx.fillRect( x, y, w, h);
 
             last = false;

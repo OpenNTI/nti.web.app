@@ -153,7 +153,8 @@ Ext.define('NextThought.view.annotations.Highlight', {
             boundingHeight,
             width = this.content ? this.content.getWidth() : 680,
             topOffset = 10,
-            leftOffset = 5;
+            leftOffset = 5,
+			state = 'normal', sampleEl;
 
 		if(!this.rendered){
 			range = this.getRange();
@@ -165,9 +166,23 @@ Ext.define('NextThought.view.annotations.Highlight', {
 				this.counter = this.createCounter(this.rendered.last());
 			}
 
+
+
 			//create a composite element so we can do lots of things at once:
 			this.compElements = new Ext.dom.CompositeElement(this.rendered);
 			this.compElements.add(this.counter);
+
+			if(!this.self.bgcolor){
+				this.self.bgcolor = {};
+				sampleEl = this.compElements.first();
+				this.self.bgcolor.normal = sampleEl.getStyle('background-color');
+				sampleEl.addCls(this.mouseOverCls);
+				this.self.bgcolor.hover = sampleEl.getStyle('background-color');
+				sampleEl.removeCls(this.mouseOverCls);
+			}
+
+			this.compElements.setStyle('background-color','transparent');
+
 			//highlights that are not ours do not get a marked over treatment...so don't create the canvas
 			if(this.isModifiable && style !== 'suppressed'){
 				this.canvas = this.createCanvas();
@@ -198,14 +213,13 @@ Ext.define('NextThought.view.annotations.Highlight', {
             height: boundingHeight+(topOffset*2)
         });
 
-		//Right now this is static for all highlights so we cache it and save
-		//some expensive getComputedStyle calls
-		if(!this.self.bgcolor){
-			this.self.bgcolor = this.compElements.first().getStyle('background-color');
+
+		if(this.compElements.first().hasCls(this.mouseOverCls)){
+			state = 'hover';
 		}
 
 		boundingTop = AnnotationUtils.drawCanvas(this.canvas,
-            this.content, range, this.self.bgcolor,
+            this.content, range, this.self.bgcolor[state],
             [leftOffset, topOffset]);
 
 
@@ -240,7 +254,6 @@ Ext.define('NextThought.view.annotations.Highlight', {
 
 		el.addCls([this.highlightCls,'counter', style]);//,'with-count']);
 		el.on('click', this.onClick, this);
-		el.update('&nbsp;');
         after.appendChild(el.dom);
 		return el.dom;
 	},
