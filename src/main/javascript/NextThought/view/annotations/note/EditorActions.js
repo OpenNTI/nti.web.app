@@ -69,6 +69,9 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 			click: me.openShareMenu
 		});
 
+		cmp.on('destroy',function(){
+			Ext.Object.each(me.openWhiteboards,function(k,v){v.destroy();}); });
+
 		//Keep state of text treatments
 		me.bold = false;
 		me.underline = false;
