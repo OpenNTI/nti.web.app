@@ -117,7 +117,29 @@ Ext.define('NextThought.util.Anchors', {
 														 contentRangeDescription.locator().doc);
 		}
 
-		//Todo resolve the containerId to the node we want to restrict our search within
+
+		//TODO need a better way to detect the empty description
+		if (   !contentRangeDescription.start 
+			&& !contentRangeDescription.end 
+			&& !contentRangeDescription.ancestor)
+		{
+			//Todo resolve the containerId to the node we want to restrict our search within
+			searchWithin = this.getContainerNode(containerId, docElement);
+			if(!searchWithin){
+				//TODO if the container is not the page id but we can't find it we could
+				//just skip to the end now.  Maybe we decide there is no point searching the whole body.
+				//that may allow us to skip some work in some cases
+				searchWithin = docElement.body ? docElement.body : docElement;
+				console.debug('Unable to resolve containerId will fallback to root ', containerId, searchWithin);
+			}
+
+			console.log('Given an empty content range description, returning a range wrapping the container', contentRangeDescription, searchWithin);
+			resultRange = docElement.createRange();
+			//Hmm, selectNode or selectNodeContents
+			resultRange.selectNodeContents(searchWithin);
+			return resultRange;
+		}
+		
 		searchWithin = this.getContainerNode(containerId, cleanRoot);
 		if(!searchWithin){
 			//TODO if the container is not the page id but we can't find it we could
@@ -126,19 +148,6 @@ Ext.define('NextThought.util.Anchors', {
 			searchWithin = cleanRoot;
 			console.debug('Unable to resolve containerId will fallback to root ', containerId, searchWithin);
 		}
-
-		//TODO need a better way to detect the empty description
-		if (   !contentRangeDescription.start 
-			&& !contentRangeDescription.end 
-			&& !contentRangeDescription.ancestor)
-		{
-			console.log('Given an empty content range description, returning a range wrapping the container', contentRangeDescription, searchWithin);
-			resultRange = docElement.createRange();
-			//Hmm, selectNode or selectNodeContents
-			resultRange.selectNodeContents(searchWithin);
-			return resultRange;
-		}
-		
 		ancestorNode = contentRangeDescription.getAncestor().locateRangePointInAncestor(searchWithin).node || searchWithin;
 
         //TODO - if an ancestor doesn't exist, do some better logging here, something like below
