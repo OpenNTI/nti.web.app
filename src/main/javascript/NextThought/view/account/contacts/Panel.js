@@ -40,7 +40,8 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 			scope: this,
 			handler: this.deleteGroup,
 			itemId: 'delete-group',
-			ui: 'nt-menuitem', plain: true
+			ui: 'nt-menuitem', plain: true,
+			hidden: g && !g.getLink('edit')
 		});
 
 
