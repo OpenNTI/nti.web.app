@@ -51,10 +51,10 @@ Ext.define('NextThought.view.whiteboard.Window',{
 				},
 				{
 					layout: { type: 'hbox', pack: 'end' },
-					defaults: {xtype: 'button', ui: 'primary', scale: 'medium'},
+					defaults: {xtype: 'button', ui: 'primary', scale: 'large'},
 					items: [
-						{text: 'Cancel', action: 'cancel', ui: 'secondary', handler: function(b){b.up('window').cancel(b);} },
-						{text: 'Save', action: 'save', handler: function(b){b.up('window').save(b);} }
+						{text: 'Cancel', action: 'cancel', ui: 'secondary', handler: function(b,e){e.stopEvent();b.up('window').cancel(b);} },
+						{text: 'Save', action: 'save', handler: function(b,e){e.stopEvent();b.up('window').save(b);} }
 					]
 				}
 			]
@@ -79,7 +79,21 @@ Ext.define('NextThought.view.whiteboard.Window',{
 			this.down('button[action=cancel]').setText('Close');
 		}
 
+		this.mon(new Ext.dom.CompositeElement(Ext.query('body > .x-mask')),{
+			scope: this,
+			'click': this.absorbeClick
+		});
 		return r;
+	},
+
+
+
+	absorbeClick: function(e){
+		if(this.isVisible()){
+			e.stopEvent();
+			return false;
+		}
+		return true;
 	},
 
 
