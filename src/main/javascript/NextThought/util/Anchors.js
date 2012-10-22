@@ -17,7 +17,7 @@ Ext.define('NextThought.util.Anchors', {
 
 	PURIFICATION_TAG: 'data-nti-purification-tag',
 
-	preresolveLocatorInfo: function(contentRangeDescriptions, docElement, containers){
+	preresolveLocatorInfo: function(contentRangeDescriptions, docElement, cleanRoot, containers){
 		var virginContentCache = {};
 
 		if(!contentRangeDescriptions || !containers || contentRangeDescriptions.length !== containers.length){
@@ -36,7 +36,6 @@ Ext.define('NextThought.util.Anchors', {
 			clean = virginContentCache[node];
 			if(!clean){
 				clean = node.cloneNode(true);
-				Anchors.purifyNode(clean);
 				virginContentCache[key] = clean;
 			}
 			return clean;
@@ -61,12 +60,12 @@ Ext.define('NextThought.util.Anchors', {
 			}
 
 			//Todo resolve the containerId to the node we want to restrict our search within
-			searchWithin = Anchors.getContainerNode(containerId, docElement);
+			searchWithin = Anchors.getContainerNode(containerId, cleanRoot);
 			if(!searchWithin){
 				//TODO if the container is not the page id but we can't find it we could
 				//just skip to the end now.  Maybe we decide there is no point searching the whole body.
 				//that may allow us to skip some work in some cases
-				searchWithin = docElement.body;
+				searchWithin = cleanRoot.body ? cleanRoot.body : cleanRoot;
 				if(LocationProvider.currentNTIID !== containerId){console.warn('Unable to resolve containerId will fallback to root ', containerId, searchWithin);}
 			}
 

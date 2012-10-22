@@ -47,7 +47,8 @@ Ext.define('NextThought.controller.Session', {
 						icon: Ext.Msg.WARNING,
 						title: 'Alert',
 						msg:'You\'re using the application in another tab. This session has been invalidated.',
-						closable: false
+						closable: false,
+						buttons: null
 					});
 				}
 			}
