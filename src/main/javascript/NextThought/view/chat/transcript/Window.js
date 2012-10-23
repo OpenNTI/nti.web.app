@@ -41,7 +41,7 @@ Ext.define('NextThought.view.chat.transcript.Window',{
 
 		//assume existing is already sorted
 		existing.each(function(v,i){
-			if(v.time >= time){idx = i;}
+			if(v.time < time){idx = i + 1;}
 			console.log(v.time, v, time, i);
 		},this);
 
