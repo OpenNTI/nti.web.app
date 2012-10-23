@@ -327,7 +327,7 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 			cids.push(cid);
 		});
 
-		Anchors.preresolveLocatorInfo(descs, doc, LocationProvider.currentContent, cids);
+		Anchors.preresolveLocatorInfo(descs, doc, ReaderPanel.get().getCleanContent(), cids);
 
 		Ext.each(cloned, function(o){
 			try {
