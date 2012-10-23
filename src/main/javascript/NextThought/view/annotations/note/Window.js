@@ -70,7 +70,10 @@ Ext.define('NextThought.view.annotations.note.Window',{
 
 		this.mon(LocationProvider, 'navigateComplete', this.destroy, this);
 
-		this.mon(Ext.getBody(),'click',this.dismissClick, this);
+        //We can auto close this window if there is a click outside of it, however there are lots of little edge cases
+        //where the window can accidentally close which need to be handled one by one.  This close to the release, I'm going
+        //to take away this functionality, which I think is kind of annoying anyway.
+		//this.mon(Ext.getBody(),'click',this.dismissClick, this);
 	},
 
 
