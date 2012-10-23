@@ -36,11 +36,11 @@ Ext.define('NextThought.proxy.reader.Json', {
 			}
 
             data.Items = records;
+		} else {
+			data = [data];
 		}
 
 		try {
-
-
 
 			result = this.callParent([data]);
 
