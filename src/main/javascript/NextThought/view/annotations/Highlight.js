@@ -5,7 +5,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
 		'NextThought.util.Anchors',
 		'NextThought.util.Rects'
 	],
-	statics: {bgcolor: null},
+	statics: {bgcolor: {}},
 	inheritableStatics: {blockElementRe: /^(address|blockquote|body|center|dir|div|dl|fieldset|form|h[1-6]|hr|isindex|menu|noframes|noscript|ol|p|pre|table|ul|dd|dt|frameset|li|tbody|td|tfoot|th|thead|tr|html)$/i},
 
 	highlightCls: 'application-highlight',
@@ -21,6 +21,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
 			this.highlightCls += ' shared-with-me';
 		}
 		this.allowShare = false;
+
 		return this;
 	},
 
@@ -145,7 +146,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
 
 
 	render: function(){
-		var range = null,
+    	var range = null,
 			style = this.getRecordField('style'),
             bounds,
             boundingTop,
@@ -175,12 +176,12 @@ Ext.define('NextThought.view.annotations.Highlight', {
 			//highlights that are not ours do not get a marked over treatment...so don't create the canvas
 			if(this.isModifiable && style !== 'suppressed'){
 
-				if(!this.self.bgcolor){
-					this.self.bgcolor = {};
+				if(!this.self.bgcolor[this.record.get('Class')]){
+                    this.self.bgcolor[this.record.get('Class')] = {};
 					sampleEl = this.compElements.first();
-					this.self.bgcolor.normal = sampleEl.getStyle('background-color');
+                    this.self.bgcolor[this.record.get('Class')].normal = sampleEl.getStyle('background-color');
 					sampleEl.addCls(this.mouseOverCls);
-					this.self.bgcolor.hover = sampleEl.getStyle('background-color');
+                    this.self.bgcolor[this.record.get('Class')].hover = sampleEl.getStyle('background-color');
 					sampleEl.removeCls(this.mouseOverCls);
 				}
 				//this.compElements.setStyle('background-color','transparent');
@@ -218,7 +219,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
 		}
 
 		boundingTop = AnnotationUtils.drawCanvas(this.canvas,
-            this.content, range, this.self.bgcolor[state],
+            this.content, range, this.self.bgcolor[this.record.get('Class')][state],
             [leftOffset, topOffset]);
 
 
