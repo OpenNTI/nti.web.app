@@ -199,9 +199,10 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
 			if(typeof record === 'number' && record !== -1){
 				s.select(record,true,true);
 				this.fireEvent('selectionchange',this, s.getSelection());
-				if(!this.username){
-					this.pendingGroupsRequests.push(s.getSelection());
-				}
+
+				//WHen multiple New groups are created we want to keep them stacking selection choices.
+				if(!this.pendingGroupsRequests){ this.pendingGroupsRequests = []; }
+				this.pendingGroupsRequests.push(this.getSelected()[0]);
 			}
 		}
 		catch(er){
