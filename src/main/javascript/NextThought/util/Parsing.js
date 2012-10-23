@@ -49,7 +49,7 @@ Ext.define('NextThought.util.Parsing',{
 
 			for( sub in dir ) {
 				if( dir.hasOwnProperty(sub) ){
-					if(!dir[sub].$isClass) {
+					if(!dir[sub].$isClass && !dir[sub].singleton) {
 						o = recurse(dir[sub], modelName);
 						if(o){return o;}
 					}
