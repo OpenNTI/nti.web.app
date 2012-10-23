@@ -83,6 +83,7 @@ Ext.define('NextThought.view.whiteboard.Window',{
 			scope: this,
 			'click': this.absorbeClick
 		});
+
 		return r;
 	},
 
@@ -123,6 +124,11 @@ Ext.define('NextThought.view.whiteboard.Window',{
 		return this.down('whiteboard-editor').getValue();
 	},
 
+
+    afterRender: function(){
+        this.callParent(arguments);
+        this.mon(this.el, 'click', this.absorbeClick, this);
+    },
 
 	clearAll: function(){
 		var me = this;
