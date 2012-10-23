@@ -6,7 +6,10 @@ Ext.define('NextThought.model.events.Bus',{
 	constructor: function(){
 		this.callParent(arguments);
 		this.addEvents({
+			//Known events we fire around the application on models:
 
+
+			'favorate-changed': 1
 		});
 	}
 

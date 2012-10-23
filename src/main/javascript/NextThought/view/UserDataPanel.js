@@ -3,6 +3,7 @@ Ext.define('NextThought.view.UserDataPanel',{
 	alias: 'widget.user-data-panel',
 
 	requires: [
+		'NextThought.model.events.Bus',
 		'NextThought.store.PageItem'
 	],
 
@@ -103,7 +104,20 @@ Ext.define('NextThought.view.UserDataPanel',{
         }
 		if(!s.favStore){
             s.favStore = this.buildStore('Favorite','favoriteStore','MimeType');
+			NextThought.model.events.Bus.on({
+				scope: this,
+				'favorate-changed': function(rec){
+					var store = s.favStore;
+					if(rec.isFavorited()){
+						store.add(rec);
+					}
+					else {
+						store.remove(store.findRecord('NTIID',rec.get('NTIID'),0,false,true,true));
+					}
+				}
+			});
         }
+
 
 		//now that the stores are setup, use getStore to pick the one we care about and setup our event listers on just
 		// that store.
