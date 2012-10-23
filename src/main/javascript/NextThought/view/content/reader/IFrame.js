@@ -279,7 +279,7 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 
 		if(html!==false){
 			this.insertRelatedLinks(body.query('#NTIContent .chapter.title')[0],doc);
-            LocationProvider.setCurrentlyLoadedContent(body.dom.cloneNode(true));
+            this.cleanContent = body.dom.cloneNode(true);
         }
 		this.fireEvent('content-updated');
 
@@ -294,5 +294,10 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 		clearInterval(this.syncInterval);
 		delete this.lastHeight;
 		this.syncInterval = setInterval(this.checkFrame,this.baseFrameCheckIntervalInMillis);
-	}
+	},
+
+
+    getCleanContent: function(){
+        return this.cleanContent;
+    }
 });

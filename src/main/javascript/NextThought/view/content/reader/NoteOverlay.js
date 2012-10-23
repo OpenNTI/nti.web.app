@@ -184,7 +184,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 			e.stopEvent();
 //			w.hide();
 
-			r = Anchors.toDomRange(r, this.getDocumentElement(), LocationProvider.currentContent, c);
+			r = Anchors.toDomRange(r, this.getDocumentElement(), ReaderPanel.get().getCleanContent(), c);
 
 			o.lastLine = {
 				range: r,
