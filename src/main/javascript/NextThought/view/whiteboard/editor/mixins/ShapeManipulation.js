@@ -191,9 +191,6 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 			opts = this.toolbar.getCurrentTool().getOptions(),
 			t,xy,w,p;
 
-
-		console.log('mouseDown?', this.mouseDown);
-
 		if(!this.mouseDown){ return; }
 		if(!s || s.Class !== 'CanvasPathShape' || !s.isNew){
 			w = this.canvas.el.getWidth();
