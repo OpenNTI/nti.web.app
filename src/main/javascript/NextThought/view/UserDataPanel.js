@@ -244,17 +244,16 @@ Ext.define('NextThought.view.UserDataPanel',{
 
 
 	getTranscriptsForOccupants: function(initialRecord){
-		var records = [initialRecord],
+		var records = [],
 			occupants = (initialRecord.get('Contributors')||[]).slice(),
 			length = occupants.length;
 		//Lets just assume that we have all of 'em in the map for now. (there is no way to query for these objects so
 		// paging them in is not really in the cards for now.)
-
 		Ext.Object.each(this.dataGuidMap,function(key,obj){
 			var list = (obj.get('Contributors')||[]),
 				len = list.length;
 
-			if(obj !== initialRecord && length === len){
+			if(length === len){
 				if(Ext.Array.intersect(occupants,list).length === length){
 					records.push(obj);
 				}
@@ -279,7 +278,7 @@ Ext.define('NextThought.view.UserDataPanel',{
 			groups = store.getGroups(),
 			me = this;
 
-        me.dataGuidMap = this.dataGuidMap || {};
+        me.dataGuidMap = {};
 
 		function doGroup(group){
 			var label = (group.name||'').replace(/^[A-Z]\d{0,}\s/,'') || 'Today';

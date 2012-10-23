@@ -34,16 +34,19 @@ Ext.define('NextThought.view.chat.transcript.Window',{
 
 
 	insertTranscript: function(record){
+
 		this.setTitleInfo(record.get('Contributors'));
 		var container = this.down('[windowContentWrapper]'),
 			time = record.get('RoomInfo').get('CreatedTime'),
-		    existing = container.items, idx = existing.getCount();
+		    existing = container.items, idx = 0;
 
 		//assume existing is already sorted
 		existing.each(function(v,i){
 			if(v.time < time){idx = i + 1;}
 			console.log(v.time, v, time, i);
 		},this);
+
+console.error('insert!', idx, existing, record.getId());
 
 		container.insert(idx,{
 			xtype: 'chat-transcript',
