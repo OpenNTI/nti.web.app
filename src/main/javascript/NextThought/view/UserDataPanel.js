@@ -138,7 +138,6 @@ Ext.define('NextThought.view.UserDataPanel',{
             filter: filter
         });
 
-        s.pageSize = 20;
 		return s;
 	},
 

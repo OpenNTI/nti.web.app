@@ -34,13 +34,15 @@ Ext.define('NextThought.proxy.reader.Json', {
 					records.push(items[key]);
 				}
 			}
-		}
-		else {
-			records.push(data);
+
+            data.Items = records;
 		}
 
 		try {
-			result = this.callParent([records]);
+
+
+
+			result = this.callParent([data]);
 
 			i = result.records.length-1;
 			for(i; i>=0; i--){
