@@ -19,21 +19,25 @@ Ext.define('NextThought.mixins.ModelWithBodyContent',{
 	NOTE_BODY_DIVIDER_TPL: Ext.DomHelper.createTemplate({ id: '{0}', cls: 'body-divider', html: '{1}' }).compile(),
 
 	WHITEBOARD_THUMBNAIL_TPL: Ext.DomHelper.createTemplate({
-		id: '{0}',
-		cls: 'body-divider',
 		cn: [{
-			tag: 'img',
-			src: Ext.BLANK_IMAGE_URL,
-			style: {
-				backgroundImage: 'url({1});'
+			tag: 'a',
+			cls: 'whiteboard-magnifier'
 			},
-			onclick: '{2}',
-			cls: 'whiteboard-thumbnail',
-			alt: 'Whiteboard Thumbnail',
-			border: 0,
-			width: '{3}',
-			height: '{3}'
-		}]
+			{
+				tag: 'img',
+				src: Ext.BLANK_IMAGE_URL,
+				style: {
+					backgroundImage: 'url({1});'
+				},
+				onclick: '{2}',
+				cls: 'whiteboard-thumbnail',
+				alt: 'Whiteboard Thumbnail',
+				border: 0,
+				width: '{3}',
+				height: '{3}'
+			}],
+		id: '{0}',
+		cls: 'body-divider'
 	}).compile(),
 
 	compileBodyContent: function(result,scope,clickHandlerMaker,size){

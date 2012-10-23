@@ -506,10 +506,24 @@
         }
 	}
 
+	a.whiteboard-magnifier{
+		display: none;
+		background: $magnifying-glass;
+		background-position: 0 0;
+		background-repeat: no-repeat;
+		width: 24px;
+		height: 20px;
+		position: absolute;
+		top:20px;
+		left:125px;
+	}
+
 
 	&:hover {
 	    a.whiteboard-magnifier {
 			display: block;
+			background-position: 0 -20px;
+
 			.x-chat-log-entry &,
 			.x-chat-log-entry-pinnded &	{
 				display: none;
