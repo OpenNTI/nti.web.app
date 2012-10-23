@@ -95,7 +95,13 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 	},
 
 	click: function(e){
-		var t = e.getTarget('img.whiteboard-thumbnail'), guid = t.parentNode.getAttribute('id');
+		var t = e.getTarget('img.whiteboard-thumbnail'), guid;
+
+		// Get a click on the magnifying glass to expand the note
+		if(!t && Ext.fly(e.target.nextSibling).hasCls('whiteboard-thumbnail') ){ t = e.target.nextSibling; }
+		if(!t){ return; }
+
+		guid = t.parentNode.getAttribute('id');
 		console.log(guid);
 		if(t && this.readOnlyWBsData[guid]){
 			Ext.widget('wb-window', {height: '75%', width: '50%', value: this.readOnlyWBsData[guid], readonly: true}).show();
