@@ -6,7 +6,9 @@ Ext.define('NextThought.model.Base', {
 		'NextThought.model.converters.Items',
 		'NextThought.model.converters.Users',
 		'NextThought.util.Parsing',
-		'NextThought.proxy.Rest'
+		'NextThought.proxy.Rest',
+		'NextThought.model.events.Bus'
+
 	],
 
 	mixins: {
@@ -183,16 +185,21 @@ Ext.define('NextThought.model.Base', {
 
 
 	favorite: function(widget){
-		var action = this.isFavorited() ? 'unfavorite' : 'favorite',
+		var me = this,
+			action = me.isFavorited() ? 'unfavorite' : 'favorite',
 			prePost = action === 'favorite' ? 'addCls' : 'removeCls',
 			postPost = action === 'favorite' ? 'removeCls' : 'addCls';
 
-		if (this.activePostTos && this.activePostTos[action]){return;}
+		if (me.activePostTos && me.activePostTos[action]){return;}
 
 		widget[prePost]('on');
 
-		this.postTo(action, function(s){
-			if (!s) {
+		me.postTo(action, function(s){
+			if (s) {
+				//put "me" in the bookmark view?
+				NextThought.model.events.Bus.fireEvent('favorate-changed',me);
+			}
+			else {
 				widget[postPost]('on');
 			}
 		});
