@@ -5,8 +5,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
 		'NextThought.util.Anchors',
 		'NextThought.util.Rects'
 	],
-	statics: {bgcolor: {}},
-	inheritableStatics: {blockElementRe: /^(address|blockquote|body|center|dir|div|dl|fieldset|form|h[1-6]|hr|isindex|menu|noframes|noscript|ol|p|pre|table|ul|dd|dt|frameset|li|tbody|td|tfoot|th|thead|tr|html)$/i},
+	inheritableStatics: {bgcolor: {}, blockElementRe: /^(address|blockquote|body|center|dir|div|dl|fieldset|form|h[1-6]|hr|isindex|menu|noframes|noscript|ol|p|pre|table|ul|dd|dt|frameset|li|tbody|td|tfoot|th|thead|tr|html)$/i},
 
 	highlightCls: 'application-highlight',
 	mouseOverCls: 'highlight-mouse-over',
@@ -174,18 +173,25 @@ Ext.define('NextThought.view.annotations.Highlight', {
 			this.compElements.add(this.counter);
 
 			//highlights that are not ours do not get a marked over treatment...so don't create the canvas
-			if(this.isModifiable && style !== 'suppressed'){
 
-				if(!this.self.bgcolor[this.record.get('Class')]){
-                    this.self.bgcolor[this.record.get('Class')] = {};
-					sampleEl = this.compElements.first();
-                    this.self.bgcolor[this.record.get('Class')].normal = sampleEl.getStyle('background-color');
-					sampleEl.addCls(this.mouseOverCls);
-                    this.self.bgcolor[this.record.get('Class')].hover = sampleEl.getStyle('background-color');
-					sampleEl.removeCls(this.mouseOverCls);
+			//FIXME Dirty Work around an issue with redactions also being highlighted.  At this point the redaction class
+			//hasn't been aplied to what becomes sampleEl.  It gets applied in the subclass when this returns
+			//therefore here it looks just like a highlight.
+			if(this.record.get('Class') === 'Highlight'){
+
+				if(this.isModifiable && style !== 'suppressed'){
+
+					if(!this.self.bgcolor[this.record.get('Class')]){
+						this.self.bgcolor[this.record.get('Class')] = {};
+						sampleEl = this.compElements.first();
+						this.self.bgcolor[this.record.get('Class')].normal = sampleEl.getStyle('background-color');
+						sampleEl.addCls(this.mouseOverCls);
+						this.self.bgcolor[this.record.get('Class')].hover = sampleEl.getStyle('background-color');
+						sampleEl.removeCls(this.mouseOverCls);
+					}
+					//this.compElements.setStyle('background-color','transparent');
+					this.canvas = this.createCanvas();
 				}
-				//this.compElements.setStyle('background-color','transparent');
-				this.canvas = this.createCanvas();
 			}
 		}
 
