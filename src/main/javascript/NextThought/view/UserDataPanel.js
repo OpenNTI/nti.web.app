@@ -109,7 +109,8 @@ Ext.define('NextThought.view.UserDataPanel',{
 		// that store.
 		this.mon(this.getStore(),{
 			scope: this,
-			datachanged: this.maybeRedraw
+			datachanged: this.maybeRedraw,
+			load: this.maybeRedraw
 		});
 	},
 
@@ -264,7 +265,7 @@ Ext.define('NextThought.view.UserDataPanel',{
 	},
 
 
-	redraw: function(){
+	redraw: Ext.Function.createBuffered( function(){
         if(!this.rendered){
             this.redrawOnRender = true;
             return;
@@ -307,7 +308,7 @@ Ext.define('NextThought.view.UserDataPanel',{
 
 		//just in case the items in the list don't fill the view.
 		this.onScroll(null,this.el.dom);
-	},
+	}, 10),//posibily a tweak point
 
 
 
