@@ -325,7 +325,7 @@ Ext.define('NextThought.view.UserDataPanel',{
 		container.updateLayout();
 
 		//just in case the items in the list don't fill the view.
-        if (this.el.dom.scrollHeight <= this.el.dom.clientHeight){
+        if (!store.isLoading() && this.el.dom.scrollHeight <= this.el.dom.clientHeight){
 		    this.onScroll(null,this.el.dom);
         }
 	}, 10),//posibily a tweak point
