@@ -360,7 +360,8 @@ Ext.define('NextThought.view.UserDataPanel',{
 	getHighlightItem: function(rec){
 
 		rec.getBodyText = function(){
-			return rec.get('selectedText');
+            var t  = rec.get('selectedText');
+			return Ext.String.ellipsis(t, 200, true);
 		};
 
 		var note = this.getNoteItem(rec);
