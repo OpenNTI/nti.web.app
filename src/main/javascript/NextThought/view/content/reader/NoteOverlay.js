@@ -91,14 +91,19 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		(new Ext.CompositeElement( box.query('.entry .advanced'))).on('click', me.noteOverlayActivateRichEditor, me);
 		(new Ext.CompositeElement( box.query('.cancel,.clear'))).on('click', me.noteOverlayEditorCancel, me);
 
-		function onResize(){}
+		function onContentUpdate(){
+            //when content is updated, we need to remove the editor because it will contain a bad range.
+            this.noteOverlayDeactivateEditor();
+        }
+
+        function onResize(){}
 
 		me.on({
 			scope: me,
 			destroy: function(){ container.remove(); },
 			resize: onResize,
 			'sync-height': function(h){ container.setHeight(h); },
-			'content-updated': onResize
+			'content-updated': onContentUpdate
 		});
 
 		me.mon(data.editor.down('.content'),{
