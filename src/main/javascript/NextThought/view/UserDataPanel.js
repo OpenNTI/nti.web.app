@@ -108,6 +108,11 @@ Ext.define('NextThought.view.UserDataPanel',{
 				scope: this,
 				'favorate-changed': function(rec){
 					var store = s.favStore;
+
+                    if (store.isLoading()){
+                       return;
+                    }
+
 					if(rec.isFavorited()){
 						store.add(rec);
 					}
