@@ -5,7 +5,10 @@ Ext.define('NextThought.proxy.UserSearch', {
 	
 	url: '',
 	appendId: false, //default
-	reader: {type: 'nti'},
+	reader: {
+        type: 'nti',
+        root: 'Items'
+    },
 	constructor: function(config) {
 		Ext.copyTo(this.reader, config, 'model');
 		this.callParent(arguments);
