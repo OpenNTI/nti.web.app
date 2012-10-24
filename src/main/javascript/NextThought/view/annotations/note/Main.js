@@ -375,6 +375,10 @@ Ext.define('NextThought.view.annotations.note.Main',{
 			//update the count for next time the carousel renders (and to make share dialog readonly)
 			r.set(c, (r.get(c)||0)+1);
 
+            //update children array so we can use it to decide whether or not to delete.
+            if (!r.children){r.children = [];}
+            r.children.push(child);
+
 			this.up('window').down('note-responses').addReplies([child]);
 		}
 		else {
