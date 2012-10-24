@@ -29,8 +29,22 @@ Ext.define('NextThought.cache.LocationMeta', {
 
     loadMeta: function(ntiid, cb) {
         function pageIdLoaded(pi){
-            this.meta[pi.getId()] = LocationProvider.getLocation(pi.getId());
-            this.ids[ntiid] = pi.getId();
+			var me = this;
+			var assessmentItems = pi.get('AssessmentItems') || [],
+				meta = LocationProvider.getLocation(pi.getId()),
+				theId = pi.getId();
+
+            this.meta[pi.getId()] = meta;
+            this.ids[ntiid] = theId;
+
+			//Also yank out any assessment items and cache them by id.  Note
+			//right now this only works because there is a one-to-one question to
+			//PageInfo mapping.  If I recall that is happening on the server now also
+			//but is probably temporary. IE mashups probably break this
+			Ext.each(assessmentItems, function(assessmentItem){
+				me.ids[assessmentItem.getId()] = theId;
+			});
+
             Ext.callback(cb, this);
         }
 
@@ -38,7 +52,6 @@ Ext.define('NextThought.cache.LocationMeta', {
             console.error('fail', arguments);
             Ext.callback(cb, this);
         }
-
         $AppConfig.service.getPageInfo(ntiid, pageIdLoaded, fail, this);
     }
 
