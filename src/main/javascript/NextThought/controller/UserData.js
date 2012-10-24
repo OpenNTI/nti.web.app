@@ -206,8 +206,8 @@ Ext.define('NextThought.controller.UserData', {
 
 
     openChatTranscript: function(records){
-        var w = Ext.widget('chat-transcript-window');
 	    if(!Ext.isArray(records)){ records = [records]; }
+        var w = Ext.widget('chat-transcript-window',{waitFor: records.length});
 	    Ext.each(records,function(r){ this.onLoadTranscript(r,w); }, this);
     },
 
