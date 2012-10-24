@@ -21,42 +21,42 @@ Ext.define('NextThought.view.UserDataPanel',{
 
 
 			{tag:'tpl', 'if':'isNote', cn:[
-			{
-				'data-guid': '{guid}',
-				cls: 'history note',
-				cn:[
-					{cls: 'path', html:'{path}'},
-					{cls: 'location', html:'{location}'},
-					{cls: 'body', html: '{textContent}'}
-				]
-			}]},
+				{
+					'data-guid': '{guid}',
+					cls: 'history note',
+					cn:[
+						{cls: 'path', html:'{path}'},
+						{cls: 'location', html:'{location}'},
+						{cls: 'body', html: '{textContent}'}
+					]
+				}]},
 
 			{tag:'tpl', 'if':'isFavorite', cn:[
-			{
-				'data-guid': '{guid}',
-				cls: 'history favorite',
-				cn:[
+				{
+					'data-guid': '{guid}',
+					cls: 'history favorite',
+					cn:[
 //					{cls: 'path', html:'{path}'},
 //					{cls: 'location', html:'{location}'}
-				]
-			}]},
+					]
+				}]},
 
 
 			{tag:'tpl', 'if':'isChat', cn:[
-			{
-				'data-guid': '{guid}',
-				cls: 'history chat',
-				cn:[
-                    {cls: 'occupants', cn:[
-                        {tag: 'span', cls: 'names', html: '{occupants}'},
-                        {tag: 'span', cls: 'count', html: '{count}'}
-                    ]},
-                    {cls: 'time', cn:[
-                        '{started} - Lasted ',
-                        {tag: 'span', cls: 'duration', html:'{duration}'}
-                    ]}
-				]
-			}]},
+				{
+					'data-guid': '{guid}',
+					cls: 'history chat',
+					cn:[
+						{cls: 'occupants', cn:[
+							{tag: 'span', cls: 'names', html: '{occupants}'},
+							{tag: 'span', cls: 'count', html: '{count}'}
+						]},
+						{cls: 'time', cn:[
+							'{started} - Lasted ',
+							{tag: 'span', cls: 'duration', html:'{duration}'}
+						]}
+					]
+				}]},
 
 
 
@@ -70,22 +70,22 @@ Ext.define('NextThought.view.UserDataPanel',{
 
 	initComponent: function(){
 		var data = NextThought.model,
-			m = this.dataMapper = {},
-            types = [];
+				m = this.dataMapper = {},
+				types = [];
 
 		m[data.Note.prototype.mimeType] = this.getNoteItem;
 		m[data.Highlight.prototype.mimeType] = this.getHighlightItem;
 		m[data.TranscriptSummary.prototype.mimeType] = this.getChatItem;
-        m[data.Transcript.prototype.mimeType] = this.getChatItem;
+		m[data.Transcript.prototype.mimeType] = this.getChatItem;
 
 		this.callParent(arguments);
 
-        //create a regex for our filter
-        Ext.each(this.mimeType, function(t){ types.push(RegExp.escape(t)); });
-        this.mimeTypeRe = new RegExp('^application\\/vnd\\.nextthought\\.('+types.join('|')+')$');
+		//create a regex for our filter
+		Ext.each(this.mimeType, function(t){ types.push(RegExp.escape(t)); });
+		this.mimeTypeRe = new RegExp('^application\\/vnd\\.nextthought\\.('+types.join('|')+')$');
 
 
-        this.on('activate', this.onActivate, this);
+		this.on('activate', this.onActivate, this);
 		this.initializeStore();
 	},
 
@@ -99,19 +99,19 @@ Ext.define('NextThought.view.UserDataPanel',{
 
 		var s = this.self;
 
-        if(!s.store){
-            s.store = this.buildStore('MeOnly','historyStore','GroupingField');
-        }
+		if(!s.store){
+			s.store = this.buildStore('MeOnly','historyStore','GroupingField');
+		}
 		if(!s.favStore){
-            s.favStore = this.buildStore('Favorite','favoriteStore','MimeType');
+			s.favStore = this.buildStore('Favorite','favoriteStore','MimeType');
 			NextThought.model.events.Bus.on({
 				scope: this,
 				'favorate-changed': function(rec){
 					var store = s.favStore;
 
-                    if (store.isLoading()){
-                       return;
-                    }
+					if (store.isLoading()){
+						return;
+					}
 
 					if(rec.isFavorited()){
 						store.add(rec);
@@ -121,7 +121,7 @@ Ext.define('NextThought.view.UserDataPanel',{
 					}
 				}
 			});
-        }
+		}
 
 
 		//now that the stores are setup, use getStore to pick the one we care about and setup our event listers on just
@@ -137,11 +137,11 @@ Ext.define('NextThought.view.UserDataPanel',{
 	buildStore: function(filter,id,grouping){
 		var s = NextThought.store.PageItem.create({id:id, groupField:grouping});
 
-        s.proxy.extraParams = Ext.apply(s.proxy.extraParams||{},{
-            sortOn: 'lastModified',
-            sortOrder: 'descending',
-            filter: filter
-        });
+		s.proxy.extraParams = Ext.apply(s.proxy.extraParams||{},{
+			sortOn: 'lastModified',
+			sortOrder: 'descending',
+			filter: filter
+		});
 
 		return s;
 	},
@@ -161,7 +161,7 @@ Ext.define('NextThought.view.UserDataPanel',{
 		}
 
 		max = s.getPageFromRecordIndex(s.getTotalCount());
-		if(s.currentPage < max){
+		if(s.currentPage < max && !s.isLoading()){
 			this.el.parent().mask('Loading...','loading');
 			s.clearOnPageLoad = false;
 			s.nextPage();
@@ -169,50 +169,50 @@ Ext.define('NextThought.view.UserDataPanel',{
 	},
 
 
-    onActivate: function() {
-        if (this.needsRedraw) {
-            this.redraw();
-            delete this.needsRedraw;
-        }
-    },
+	onActivate: function() {
+		if (this.needsRedraw) {
+			this.redraw();
+			delete this.needsRedraw;
+		}
+	},
 
 
-    maybeRedraw: function(){
-        if (this.isVisible()){
-            this.redraw();
-        }
-        else {
-            this.needsRedraw = true;
-        }
-    },
+	maybeRedraw: function(){
+		if (this.isVisible()){
+			this.redraw();
+		}
+		else {
+			this.needsRedraw = true;
+		}
+	},
 
 
-    applyMimeTypeFilter: function(){
-        var s = this.self.store;//this store is the only store we need to filter. The favStore is seporate.
-        s.suspendEvents();
-        s.clearFilter();
-        s.filter({
-            property: 'MimeType',
-            value: this.mimeTypeRe
-        });
-        s.resumeEvents();
-    },
+	applyMimeTypeFilter: function(){
+		var s = this.self.store;//this store is the only store we need to filter. The favStore is seporate.
+		s.suspendEvents();
+		s.clearFilter();
+		s.filter({
+			property: 'MimeType',
+			value: this.mimeTypeRe
+		});
+		s.resumeEvents();
+	},
 
 
 	afterRender: function(){
 		this.callParent(arguments);
-        var s = this.getStore();
+		var s = this.getStore();
 		try{
-            if (!s.initialLoaded){
-                s.initialLoaded = true;
-			    s.load();
-	            this.el.parent().mask('Loading...','loading');
-            }
+			if (!s.initialLoaded){
+				s.initialLoaded = true;
+				s.load();
+				this.el.parent().mask('Loading...','loading');
+			}
 
-            if(this.redrawOnRender){
-                delete this.redrawOnRender;
-                this.redraw();
-            }
+			if(this.redrawOnRender){
+				delete this.redrawOnRender;
+				this.redraw();
+			}
 		}
 		catch(e){
 			console.error(e.message, e.stack || e.stacktrace);
@@ -228,9 +228,9 @@ Ext.define('NextThought.view.UserDataPanel',{
 
 	onScroll: function(e,dom){
 		var el = dom.lastChild,
-            offsets = Ext.fly(el).getOffsetsTo(dom),
-            top = offsets[1] + dom.scrollTop,
-            ctBottom = dom.scrollTop + dom.clientHeight;
+				offsets = Ext.fly(el).getOffsetsTo(dom),
+				top = offsets[1] + dom.scrollTop,
+				ctBottom = dom.scrollTop + dom.clientHeight;
 
 		if(ctBottom > top){
 			this.prefetchNext();
@@ -239,38 +239,38 @@ Ext.define('NextThought.view.UserDataPanel',{
 	},
 
 
-    onClick: function(evt){
-        var historyElement = evt.getTarget('.history'),
-            data = NextThought.model,
-            rec, cid, targets, mt;
+	onClick: function(evt){
+		var historyElement = evt.getTarget('.history'),
+				data = NextThought.model,
+				rec, cid, targets, mt;
 
-        evt.stopEvent();
-        if (!historyElement){return;}
+		evt.stopEvent();
+		if (!historyElement){return;}
 
-        rec = this.dataGuidMap[historyElement.getAttribute('data-guid')];
-        mt = rec.get('MimeType');
+		rec = this.dataGuidMap[historyElement.getAttribute('data-guid')];
+		mt = rec.get('MimeType');
 
-        if(mt === data.TranscriptSummary.prototype.mimeType){
-            this.getTranscriptsForOccupants(rec);
-        }
-        else {
-            cid = rec.get('ContainerId');
-            targets = (rec.get('references')||[]).slice();
-            targets.push(rec.getId());
-            this.fireEvent('navigation-selected', cid, targets, null);
-        }
-    },
+		if(mt === data.TranscriptSummary.prototype.mimeType){
+			this.getTranscriptsForOccupants(rec);
+		}
+		else {
+			cid = rec.get('ContainerId');
+			targets = (rec.get('references')||[]).slice();
+			targets.push(rec.getId());
+			this.fireEvent('navigation-selected', cid, targets, null);
+		}
+	},
 
 
 	getTranscriptsForOccupants: function(initialRecord){
 		var records = [],
-			occupants = (initialRecord.get('Contributors')||[]).slice(),
-			length = occupants.length;
+				occupants = (initialRecord.get('Contributors')||[]).slice(),
+				length = occupants.length;
 		//Lets just assume that we have all of 'em in the map for now. (there is no way to query for these objects so
 		// paging them in is not really in the cards for now.)
 		Ext.Object.each(this.dataGuidMap,function(key,obj){
 			var list = (obj.get('Contributors')||[]),
-				len = list.length;
+					len = list.length;
 
 			if(length === len){
 				if(Ext.Array.intersect(occupants,list).length === length){
@@ -284,24 +284,24 @@ Ext.define('NextThought.view.UserDataPanel',{
 
 
 	redraw: Ext.Function.createBuffered( function(){
-        if(!this.rendered){
-            this.redrawOnRender = true;
-            return;
-        }
+		if(!this.rendered){
+			this.redrawOnRender = true;
+			return;
+		}
 
-        this.applyMimeTypeFilter();
+		this.applyMimeTypeFilter();
 
 		var container = this,
-			items = [],
-			store = this.getStore(),
-			groups = store.getGroups(),
-			me = this;
+				items = [],
+				store = this.getStore(),
+				groups = store.getGroups(),
+				me = this;
 
-        me.dataGuidMap = {};
+		me.dataGuidMap = {};
 
 		function doGroup(group){
 			var label = (group.name||'').replace(/^[A-Z]\d{0,}\s/,'') || 'Today';
-				label = label.replace(/^application\/vnd.nextthought\.(.*)$/,'$1s');
+			label = label.replace(/^application\/vnd.nextthought\.(.*)$/,'$1s');
 
 			items.push({ label: label });
 
@@ -309,7 +309,7 @@ Ext.define('NextThought.view.UserDataPanel',{
 				var fn = me.dataMapper[c.mimeType];
 				if( fn ){ items.push(fn.call(me,c)); }
 
-                me.dataGuidMap[items.last().guid] = c;
+				me.dataGuidMap[items.last().guid] = c;
 			});
 		}
 
@@ -325,9 +325,9 @@ Ext.define('NextThought.view.UserDataPanel',{
 		container.updateLayout();
 
 		//just in case the items in the list don't fill the view.
-        if (!store.isLoading() && this.el.dom.scrollHeight <= this.el.dom.clientHeight){
-		    this.onScroll(null,this.el.dom);
-        }
+		if (this.el.dom.scrollHeight <= this.el.dom.clientHeight){
+			this.onScroll(null,this.el.dom);
+		}
 	}, 10),//posibily a tweak point
 
 
@@ -344,19 +344,19 @@ Ext.define('NextThought.view.UserDataPanel',{
 
 	getNoteItem: function(rec){
 		var me = this,
-			guid = guidGenerator(),
-			data = {
-				isNote: true,
-				guid: guid,
-				location: '...',
-				path: '...',
-				textContent: rec.getBodyText()
-			};
+				guid = guidGenerator(),
+				data = {
+					isNote: true,
+					guid: guid,
+					location: '...',
+					path: '...',
+					textContent: rec.getBodyText()
+				};
 
 		LocationMeta.getMeta(rec.get('ContainerId'),function(meta){
 			var lineage = [],
-				location = '',
-				dom;
+					location = '',
+					dom;
 
 			if(!meta){
 				console.warn('No meta for '+rec.get('ContainerId'));
@@ -391,42 +391,42 @@ Ext.define('NextThought.view.UserDataPanel',{
 
 
 	getChatItem: function(rec){
-        var me = this,
-            guid = guidGenerator(),
-            ri = rec.get('RoomInfo'),
-            started = ri.get('CreatedTime'),
-            ended = rec.get('Last Modified'),
-            data = {
-                isChat: true,
-                guid: guid,
-                occupants: rec.get('Contributors'),
-                started: Ext.Date.format(started, 'g:i A'),
-                duration: rec.timeDifference(ended, started).replace(/ ago/i, '')
-            };
+		var me = this,
+				guid = guidGenerator(),
+				ri = rec.get('RoomInfo'),
+				started = ri.get('CreatedTime'),
+				ended = rec.get('Last Modified'),
+				data = {
+					isChat: true,
+					guid: guid,
+					occupants: rec.get('Contributors'),
+					started: Ext.Date.format(started, 'g:i A'),
+					duration: rec.timeDifference(ended, started).replace(/ ago/i, '')
+				};
 
-        UserRepository.getUser(data.occupants, function(users){
-            var names = [],
-                dom;
-            Ext.each(users, function(u){
-                if (!isMe(u) && names.length < 4){
-                    names.push(u.getName().split(/\s/)[0]);
-                }
-            });
-            if (users.length > 5){data.count = '('+(users.length-1)+')';}
-            data.occupants = names.join(', ');
+		UserRepository.getUser(data.occupants, function(users){
+			var names = [],
+					dom;
+			Ext.each(users, function(u){
+				if (!isMe(u) && names.length < 4){
+					names.push(u.getName().split(/\s/)[0]);
+				}
+			});
+			if (users.length > 5){data.count = '('+(users.length-1)+')';}
+			data.occupants = names.join(', ');
 
 
-            try {
-                dom = me.el.down('[data-guid='+guid+']');
-                if (dom) {
-                    dom.down('.occupants .names').update(data.occupants);
-                    dom.down('.occupants .count').update(data.count || '');
-                }
-            }
-            catch(e){
-                console.log('strange :P', e.message, e.stack);
-            }
-        });
+			try {
+				dom = me.el.down('[data-guid='+guid+']');
+				if (dom) {
+					dom.down('.occupants .names').update(data.occupants);
+					dom.down('.occupants .count').update(data.count || '');
+				}
+			}
+			catch(e){
+				console.log('strange :P', e.message, e.stack);
+			}
+		});
 
 
 		return data;
