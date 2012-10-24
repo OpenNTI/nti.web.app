@@ -257,24 +257,36 @@ Ext.define('NextThought.providers.Location', {
 			leaf = this.find(ntiid||this.currentNTIID) || noLeaf,
 			node = leaf.location,
 			indexes = [],
-			id, i, cn, j, t;
+			id, i, cn, j, t, levelnum;
 
 		if(leaf === noLeaf){ return [0, Infinity];}
 
 		while(node){
 			id = node.getAttribute? node.getAttribute('ntiid') : null;
-			if( id && node.parentNode ) {
-				cn = node.parentNode.childNodes;
-				i=0; j=0;
-				while( i<cn.length){
-					t=cn[i].getAttribute ? cn[i].getAttribute('ntiid'): null;
-					if(t===id){
-						indexes.push(j);
-						break;
-					}
-					if(t){ j++; }
-					i++;
+			levelnum = node.getAttribute ? node.getAttribute('levelnum') : null;
+			if( id ) {
+				if( levelnum === "0" ){
+					j = Library.getStore().findBy(function(r){return r.get('NTIID') ===id;});
+					if(j < 0){ j = Infinity ;}
 				}
+				else if( node.parentNode ){
+					cn = node.parentNode.childNodes;
+					i=0; j=0;
+					while( i<cn.length){
+						t=cn[i].getAttribute ? cn[i].getAttribute('ntiid'): null;
+						if(t===id){
+							break;
+						}
+						if(t){ j++; }
+						i++;
+					}
+				}
+				else{
+					console.log('Unable to find postion of ', id,' in parents children');
+					j = Infinity;
+				}
+
+				indexes.push(j);
 			}
 			node = node.parentNode;
 		}

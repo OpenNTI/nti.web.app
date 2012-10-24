@@ -88,7 +88,6 @@ Ext.define('NextThought.controller.Search', {
 					var id = hit.get('ContainerId'),
 					    sortIndexes = LocationProvider.getSortIndexes(id);
 
-					sortIndexes.pop();
 					sortIndexes.reverse();
 
 					//Refactor to just pas the hit model a
