@@ -85,7 +85,7 @@ Ext.define('NextThought.view.annotations.note.Templates',{
 		e.stopEvent();
 
 		var more = e.getTarget('.more', undefined, true), editItem, chatItem, flagItem, deleteItem, menu, items=[], mine,
-			options = opts.options, menuTimer, involved, shared;
+			options = opts.options, menuTimer, involved, shared, hideDelete = false;
 
 		if (!more || !more.dom){return false;}
 
@@ -167,12 +167,16 @@ Ext.define('NextThought.view.annotations.note.Templates',{
 				items.push(chatItem);
 			}
 
+            if(!options.record.isModifiable()){
+                hideDelete = true;
+            }
+
 			if( options.record.isFlagged && options.record.isFlagged() ){
 				flagItem.setText('Flagged');
 			}
 		}
 		items.push(flagItem);
-		if(mine){
+		if(mine && !hideDelete){
 			items.push(deleteItem);
 		}
 
