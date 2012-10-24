@@ -1,4 +1,3 @@
-
 Ext.define('NextThought.proxy.reader.Json', {
 	extend: 'Ext.data.reader.Json',
 	alias : 'reader.nti',
