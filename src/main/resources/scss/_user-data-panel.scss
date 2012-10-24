@@ -44,7 +44,8 @@
 			}
 		}
 
-		&.note{
+		&.note,
+		&.highlight{
 			margin: 0 20px;
 
 			.path,.location {
@@ -82,6 +83,26 @@
 					content: url(../images/rdquo.png);
 					display: inline-block;
 					margin-left: 5px;
+				}
+			}
+		}
+
+		&.highlight{
+			.body {
+				span {
+					color: #136ea5;
+					background: #e1f2fc;
+					line-height: 25px;
+					padding: .25em;
+				}
+
+				background: none;
+				max-height: 300px;
+				overflow-x: hidden;
+				overflow-y: auto;
+				&::after{
+					content: ' ';
+					display: none;
 				}
 			}
 		}

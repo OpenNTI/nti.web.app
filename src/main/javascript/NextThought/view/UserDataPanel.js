@@ -23,11 +23,13 @@ Ext.define('NextThought.view.UserDataPanel',{
 			{tag:'tpl', 'if':'isNote', cn:[
 				{
 					'data-guid': '{guid}',
-					cls: 'history note',
+					cls: 'history {cls}',
 					cn:[
 						{cls: 'path', html:'{path}'},
 						{cls: 'location', html:'{location}'},
-						{cls: 'body', html: '{textContent}'}
+						{cls: 'body', cn:[
+                            {tag: 'span', html: '{textContent}'}
+                        ]}
 					]
 				}]},
 
@@ -361,7 +363,10 @@ Ext.define('NextThought.view.UserDataPanel',{
 			return rec.get('selectedText');
 		};
 
-		return this.getNoteItem(rec);
+		var note = this.getNoteItem(rec);
+        note.cls = 'highlight';
+
+        return note;
 	},
 
 
@@ -373,6 +378,7 @@ Ext.define('NextThought.view.UserDataPanel',{
 					guid: guid,
 					location: '...',
 					path: '...',
+                    cls: 'note',
 					textContent: rec.getBodyText()
 				};
 
