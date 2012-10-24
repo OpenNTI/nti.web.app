@@ -162,7 +162,7 @@ Ext.define('NextThought.view.UserDataPanel',{
 
 		max = s.getPageFromRecordIndex(s.getTotalCount());
 		if(s.currentPage < max){
-			this.el.mask('Loading...','loading');
+			this.el.parent().mask('Loading...','loading');
 			s.clearOnPageLoad = false;
 			s.nextPage();
 		}
@@ -206,7 +206,7 @@ Ext.define('NextThought.view.UserDataPanel',{
             if (!s.initialLoaded){
                 s.initialLoaded = true;
 			    s.load();
-	            this.el.mask('Loading...','loading');
+	            this.el.parent().mask('Loading...','loading');
             }
 
             if(this.redrawOnRender){
@@ -320,7 +320,7 @@ Ext.define('NextThought.view.UserDataPanel',{
 
 		Ext.each(groups,doGroup,this);
 
-		this.el.unmask();
+		this.el.parent().unmask();
 		this.feedTpl.overwrite(container.getEl(),items);
 		container.updateLayout();
 
