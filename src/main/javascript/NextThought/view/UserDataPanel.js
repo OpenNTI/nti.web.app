@@ -188,13 +188,31 @@ Ext.define('NextThought.view.UserDataPanel',{
 
 
 	applyMimeTypeFilter: function(){
-		var s = this.self.store;//this store is the only store we need to filter. The favStore is seporate.
+		var filters = [{ property: 'MimeType', value: this.mimeTypeRe }],
+			s = this.self.store,//this store is the only store we need to filter. The favStore is seporate.
+			seenOccupants = [];
+
 		s.suspendEvents();
 		s.clearFilter();
-		s.filter({
-			property: 'MimeType',
-			value: this.mimeTypeRe
-		});
+
+		if(/transcript/i.test(this.mimeType.join('|'))){
+			filters.push({
+				//Assuming the store is sorted decending (newest to oldest), as we come accross repeated occupants lists,
+				// we can filter them out.
+				filterFn: function(item) {
+					var o = (item.get('Contributors')||[]).slice();
+					o.sort();
+					o = o.join('|');
+					if(Ext.Array.contains(seenOccupants,o)){
+						return false;
+					}
+					seenOccupants.push(o);
+					return true;
+				}
+			});
+		}
+
+		s.filter(filters);
 		s.resumeEvents();
 	},
 
@@ -264,11 +282,16 @@ Ext.define('NextThought.view.UserDataPanel',{
 
 	getTranscriptsForOccupants: function(initialRecord){
 		var records = [],
-				occupants = (initialRecord.get('Contributors')||[]).slice(),
-				length = occupants.length;
+			store = this.getStore(),
+			mimeRe = this.mimeTypeRe,
+			occupants = (initialRecord.get('Contributors')||[]).slice(),
+			length = occupants.length;
+
 		//Lets just assume that we have all of 'em in the map for now. (there is no way to query for these objects so
 		// paging them in is not really in the cards for now.)
-		Ext.Object.each(this.dataGuidMap,function(key,obj){
+		store.snapshot.each(function(obj){
+			if(!mimeRe.test(obj.get('MimeType'))){return;}
+
 			var list = (obj.get('Contributors')||[]),
 					len = list.length;
 
