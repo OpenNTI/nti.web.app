@@ -234,6 +234,8 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 	addNewChild: function(child){
 		if(child.get('inReplyTo') === this.record.getId()){
 			this.addReplies([child]);
+            if (!this.record.children){this.record.children = [];}
+            this.record.children.push(child);
 		}
 		else {
 			console.log('[reply] ignoring, child does not directly belong to this item:\n', this.record.getId(), '\n', child.get('inReplyTo'), ' <- new child');
