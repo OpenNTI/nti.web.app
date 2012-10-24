@@ -275,6 +275,9 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 
 	onDelete: function(){
 		var r = this.record;
+
+        if (!r.isModifiable()){return;}
+
 		r.set('blod',['deleted']);
 		r.clearListeners();
 		r.placeHolder = true;
