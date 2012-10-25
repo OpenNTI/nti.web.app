@@ -481,8 +481,10 @@ Ext.define('NextThought.controller.UserData', {
 			scope: this,
 			callback:function(record, request){
 				var success = request.success,
-					rec = success ? record: null;
+					rec = success ? record: null,
+					s = Ext.getStore('historyStore');
 				if (success){
+					if (s){s.add(record);}
 					this.self.events.fireEvent('new-note', rec);
 					(rec.parent?rec:recordRepliedTo).fireEvent('child-added',rec);
 				}
