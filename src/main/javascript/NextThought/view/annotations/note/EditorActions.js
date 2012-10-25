@@ -301,7 +301,13 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 
 		if (t) {
 			guid = t.getAttribute('id');
-			this.openWhiteboards[guid].show();
+			t = this.openWhiteboards[guid];
+			if( t && !t.isDestroyed ){
+				t.show();
+			}
+			else {
+				alert('No whiteboard');
+			}
 		}
 		else{
 			this.detectFontStyleAction(e);
@@ -315,7 +321,7 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 		}()); //force the falsy value of data to always be undefinded.
 
 		var me = this,
-				wbWin = Ext.widget('wb-window', {height: '75%', width: '50%', value: data }),
+				wbWin = Ext.widget('wb-window', {height: '75%', width: '50%', value: data, closeAction: 'hide' }),
 				guid = guidGenerator(),
 				content = me.editor.down('.content');
 
@@ -336,18 +342,20 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 		//hook into the window's save and cancel operations:
 		this.cmp.mon(wbWin, {
 			save  : function (win, wb) {
+				data = wb.getValue();
 				me.insertWhiteboardThumbnail(content, guid, wb);
 				if (Ext.query('.nav-helper')[0]) {
 					Ext.fly(Ext.query('.nav-helper')[0]).show();
 				}
 				wbWin.hide();
 			},
-			cancel: function (win) {
+			cancel: function() {
 				//if we haven't added the wb to the editor, then clean up, otherwise let the window handle it.
-				if (!Ext.get(guid)) {
-					me.cleanOpenWindows(win.guid);
+				if(!data){
+					me.cleanOpenWindows(guid);
 					wbWin.close();
 				}
+
 			}
 		});
 
@@ -394,12 +402,20 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 	cleanOpenWindows: function (guids) {
 		var me = this;
 
+		if(!guids){
+			guids = Ext.Object.getKeys(me.openWhiteboards);
+		}
+
 		if (!Ext.isArray(guids)) {
 			guids = [guids];
 		}
 
 		Ext.each(guids, function (g) {
+			var w = me.openWhiteboards[g];
 			delete me.openWhiteboards[g];
+			if(w && w.destroy){
+				w.destroy();
+			}
 		});
 	},
 
@@ -521,6 +537,7 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 
 	reset: function () {
 		this.editor.down('.content').innerHTML = '<div>'+this.defaultValue+'</div>';
+		this.cleanOpenWindows();
 		try {
 			window.getSelection().removeAllRanges();
 			this.lastRange = null;
