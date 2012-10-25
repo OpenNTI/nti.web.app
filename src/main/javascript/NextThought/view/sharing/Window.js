@@ -120,6 +120,7 @@ Ext.define( 'NextThought.view.sharing.Window', {
 		}
 
 		this.on('close', function(){
+			this.down('usersearchinput').setValue('');
 			this.dragMaskOff();
 		});
 	},
