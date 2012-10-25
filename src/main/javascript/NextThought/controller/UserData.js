@@ -453,8 +453,8 @@ Ext.define('NextThought.controller.UserData', {
                     s = Ext.getStore('historyStore');
 					if (success){
 						LocationProvider.getStore(container).add(rec);
-                        if (s){s.add(record);}
 						this.self.events.fireEvent('new-note', rec, range);
+                        if (s){s.add(rec);}
 					}
 				}
 				catch(err){
@@ -484,9 +484,9 @@ Ext.define('NextThought.controller.UserData', {
 					rec = success ? record: null,
 					s = Ext.getStore('historyStore');
 				if (success){
-					if (s){s.add(record);}
 					this.self.events.fireEvent('new-note', rec);
 					(rec.parent?rec:recordRepliedTo).fireEvent('child-added',rec);
+					if (s){s.add(rec);}
 				}
 				Ext.callback(callback, this, [success, rec]);
 			}
