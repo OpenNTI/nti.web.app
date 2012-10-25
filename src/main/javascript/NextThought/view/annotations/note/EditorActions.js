@@ -498,8 +498,15 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 		//See http://stackoverflow.com/a/12832455 and http://jsfiddle.net/sathyamoorthi/BmTNP/5/
 		var out =[], sel = this.editor.select('.content > *');
 		sel.each(function(div){
+			var html, tmp;
 			try {
-			out.push(div.getHTML().replace(/\u200B|<br\/?>/g,''));
+				html = div.getHTML().replace(/\u200B|<br\/?>/g,'');
+				if(!html){
+					tmp = document.createElement("div");
+					tmp.appendChild(div.dom);
+					html = tmp.innerHTML;
+				}
+				out.push(html);
 			}
 			catch(er){
 				console.warn('Oops, '+er.message);
