@@ -237,7 +237,7 @@ Ext.define('NextThought.controller.Account', {
 
     groupButtonClicked: function(btn){
         if (Ext.fly(btn).hasCls('join-group')){
-            this.codeWin = Ext.create('code-window');
+            this.codeWin = Ext.create('NextThought.view.account.code.Window');
             this.codeWin.show();
         }
         else {
