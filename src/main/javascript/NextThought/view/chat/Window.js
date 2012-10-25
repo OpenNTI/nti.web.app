@@ -112,6 +112,13 @@ Ext.define('NextThought.view.chat.Window', {
 		} else {
 			list.hide();
 		}
+
+		if(Ext.isWebKit){
+			//changing the visibilty of the gutter causes WebKit to fail to draw the window...lets toggle some stuff to trigger it to come back.
+			this.mask();
+			Ext.defer(this.unmask,100,this);
+		}
+
 		//TODO: actually show an interface to add people to the conversation instead of playing with the gutter.
 	},
 
