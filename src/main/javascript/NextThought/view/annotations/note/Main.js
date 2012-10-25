@@ -250,6 +250,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 				this.context.select('.injected-related-items,.related,iframe,object').remove();
 				this.context.select('a[href]').set({target:'_blank'});
 				this.context.select('a[href^=tag]').set({href:undefined,target:undefined});
+				this.context.select('a[href^=#]').set({href:undefined,target:undefined});
                 Ext.each(this.context.query('.application-highlight'), function(h){
                     if(this.record.isModifiable()){
                         Ext.fly(h).addCls('highlight-mouse-over');
