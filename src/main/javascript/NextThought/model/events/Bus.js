@@ -8,6 +8,7 @@ Ext.define('NextThought.model.events.Bus',{
 		this.addEvents({
 			//Known events we fire around the application on models:
 
+			'item-destroyed': 1,
 
 			'favorate-changed': 1
 		});

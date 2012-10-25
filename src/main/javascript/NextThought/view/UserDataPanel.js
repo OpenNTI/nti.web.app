@@ -103,6 +103,16 @@ Ext.define('NextThought.view.UserDataPanel',{
 
 		if(!s.store){
 			s.store = this.buildStore('MeOnly','historyStore','GroupingField');
+			NextThought.model.events.Bus.on({
+				scope: this,
+				'item-destroyed': function(rec){
+					var store = s.store;
+					if (store.isLoading()){
+						return;
+					}
+					store.remove(store.findRecord('NTIID',rec.get('NTIID'),0,false,true,true));
+				}
+			});
 		}
 		if(!s.favStore){
 			s.favStore = this.buildStore('Favorite','favoriteStore','MimeType');

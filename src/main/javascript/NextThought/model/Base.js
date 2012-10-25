@@ -123,6 +123,8 @@ Ext.define('NextThought.model.Base', {
 		me.tearDownLinks();
 		me.callParent(arguments);
 
+		NextThought.model.events.Bus.fireEvent('item-destroyed',me);
+
 		if(me.stores){
 			Ext.each(me.stores.slice(),function(s){ s.remove(me); });
 		}
