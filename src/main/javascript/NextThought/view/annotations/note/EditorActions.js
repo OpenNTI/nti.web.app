@@ -8,6 +8,9 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 		observable: 'Ext.util.Observable'
 	},
 
+	//default value (allow the cursor into the placeholder div, but don't take any space)
+	defaultValue: '&#8203;',
+
 	wbThumbnailTpm: Ext.DomHelper.createTemplate({
 		tag   : 'img',
 		src   : '{0}',
@@ -119,14 +122,14 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 				offScreenBuffer.innerHTML = cd.getData('text/plain');
 			}
 			else {
-				offScreenBuffer.innerHTML = "";
+				offScreenBuffer.innerHTML = '';
 			}
 			this.waitForPasteData(offScreenBuffer, savedRange, elem);
 			return false;
 		}
 		// Everything else allow browser to paste content into it, then cleanup
 		else {
-			offScreenBuffer.innerHTML = "";
+			offScreenBuffer.innerHTML = '';
 			this.waitForPasteData(offScreenBuffer, savedRange, elem);
 			return true;
 		}
@@ -210,6 +213,7 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 		return false;
 	},
 
+
 	editorFocus: function () {
 		var s = window.getSelection();
 		if (this.lastRange) {
@@ -221,10 +225,12 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 		}
 	},
 
+
 	handleOnKeyup: function(e){
 		this.maybeResizeContentBox();
 		this.detectFontStyleAction();
 	},
+
 
 	maybeResizeContentBox: function () {
 		var p = this.previousEditorHeight || 0,
@@ -247,9 +253,9 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 			else {
 				action = t.getAttribute('class').split(' ')[1];
 
-				if(action === "bold"){ this.bold = !this.bold; }
-				if(action === "italic"){ this.italic = !this.italic; }
-				if(action === "underline"){ this.underline = !this.underline; }
+				if(action === 'bold'){ this.bold = !this.bold; }
+				if(action === 'italic'){ this.italic = !this.italic; }
+				if(action === 'underline'){ this.underline = !this.underline; }
 			}
 			this.applyTextTreatments();
 		}
@@ -263,30 +269,32 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 
 		this.editor.dom.querySelector('[contenteditable=true]').focus();
 
-		if(this.bold !== document.queryCommandState("bold")){
-			document.execCommand("bold", null, null);
+		if(this.bold !== document.queryCommandState('bold')){
+			document.execCommand('bold', null, null);
 		}
-		if(this.italic !== document.queryCommandState("italic")){
-			document.execCommand("italic", null, null);
+		if(this.italic !== document.queryCommandState('italic')){
+			document.execCommand('italic', null, null);
 		}
-		if(this.underline !== document.queryCommandState("underline")){
-			document.execCommand("underline", null, null);
+		if(this.underline !== document.queryCommandState('underline')){
+			document.execCommand('underline', null, null);
 		}
 
-		b[document.queryCommandState("bold") ? 'addCls':'removeCls']("selected");
-		i[document.queryCommandState("italic") ? 'addCls' : 'removeCls']("selected");
-		u[document.queryCommandState("underline") ? 'addCls':'removeCls']("selected");
+		b[document.queryCommandState('bold') ? 'addCls':'removeCls']('selected');
+		i[document.queryCommandState('italic') ? 'addCls' : 'removeCls']('selected');
+		u[document.queryCommandState('underline') ? 'addCls':'removeCls']('selected');
 	},
+
 
 	detectFontStyleAction: function(){
 		var b =  this.editor.down('.bold'),
 			i =  this.editor.down('.italic'),
 			u = this.editor.down('.underline');
 
-		b[document.queryCommandState("bold") ? 'addCls':'removeCls']("selected");
-		i[document.queryCommandState("italic") ? 'addCls' : 'removeCls']("selected");
-		u[document.queryCommandState("underline") ? 'addCls':'removeCls']("selected");
+		b[document.queryCommandState('bold') ? 'addCls':'removeCls']('selected');
+		i[document.queryCommandState('italic') ? 'addCls' : 'removeCls']('selected');
+		u[document.queryCommandState('underline') ? 'addCls':'removeCls']('selected');
 	},
+
 
 	handleClick: function (e) {
 		var guid, t = e.getTarget('img.wb-thumbnail');
@@ -299,6 +307,7 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 			this.detectFontStyleAction(e);
 		}
 	},
+
 
 	addWhiteboard: function (data) {
 		//pop open a whiteboard:
@@ -432,13 +441,13 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 				try {
 					s = window.getSelection();
 					r = document.createRange();
-					r.selectNodeContents(c.lastChild);
+					r.selectNodeContents(c);
 					s.removeAllRanges();
 					r.collapse(false);
 					s.addRange(r);
 				}
 				catch (e) {
-					console.warn('focus issue: ' + e.message, "\n\n\n", content);
+					console.warn('focus issue: ' + e.message, '\n\n\n', content);
 				}
 			}
 		}
@@ -452,11 +461,14 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 
 	editBody: function (body) {
 		var me = this,
-				c = this.editor.down('.content').dom;
+			c = this.editor.down('.content > div').dom;
+
+		c.innerHTML = "";//clear what ever is in there
 
 		Ext.each(body, function (part) {
 			if (typeof part === 'string') {
-				c.innerHTML += part;
+
+				c.innerHTML += part.replace(/\u200B/g,'');
 			}
 			else {
 				me.addWhiteboard(part);
@@ -466,55 +478,55 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 
 
 	getValue: function () {
+		//Sanitize some new line stuff that various browsers produce.
+		//See http://stackoverflow.com/a/12832455 and http://jsfiddle.net/sathyamoorthi/BmTNP/5/
+		var out =[], sel = this.editor.select('.content > *');
+		sel.each(function(div){
+			try {
+			out.push(div.getHTML().replace(/\u200B|<br\/?>/g,''));
+			}
+			catch(er){
+				console.warn('Oops, '+er.message);
+			}
+		});
+
+
+
 		return {
-			body     : this.getNoteBody(this.editor.down('.content').getHTML()),
+			body     : this.getNoteBody(out.join('<br/>')),
 			shareWith: this.shareMenu.getValue()
 		};
 	},
 
 
 	setValue: function (text, putCursorAtEnd, focus) {
-		var r,
-			c = this.editor.down('.content').dom,
-			s = window.getSelection(),
-			content;
+		console.log(text);
 		this.setHTML(Ext.String.htmlEncode(text));
-		content = c.innerHTML;
-
 		this.updatePrefs();
-
-		if (putCursorAtEnd && content && content.length > 0) {
-			try {
-				s.removeAllRanges();
-				r = document.createRange();
-				r.setStart(c.firstChild, content.length);
-				r.collapse(true);
-				s.addRange(r);
-			}
-			catch (e) {
-				console.warn('focus issue: ' + e.message, "\n\n\n", content);
-			}
-		}
-
-		if (focus) {
-			this.focus();
+		if (focus || putCursorAtEnd) {
+			this.focus(putCursorAtEnd);
 		}
 	},
 
 
 	setHTML: function (html) {
+		//if we are given a blank value, or the value doesn't begin with a div, wrap it.
+		if(!html || !/^<div/im.test(html)){
+			//the div wrapper is for IE
+			html = '<div>'+(html||this.defaultValue)+'</div>';
+		}
 		this.editor.down('.content').dom.innerHTML = html;
 	},
 
 
 	reset: function () {
-		this.editor.down('.content').innerHTML = '';
+		this.editor.down('.content').innerHTML = '<div>'+this.defaultValue+'</div>';
 		try {
 			window.getSelection().removeAllRanges();
 			this.lastRange = null;
 		}
 		catch (e) {
-			console.log("Removing all ranges from selection failed: ", e.message);
+			console.log('Removing all ranges from selection failed: ', e.message);
 		}
 	},
 

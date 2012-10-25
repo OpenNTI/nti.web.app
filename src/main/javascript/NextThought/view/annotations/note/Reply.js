@@ -205,7 +205,7 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 			}
 			this.replyBox.removeCls('editor-active');
 			this.editorActions.deactivate();
-			this.editor.down('.content').update('');
+			this.editorActions.setValue('');
 		}
 		if(this.editMode){
 			this.text.show();

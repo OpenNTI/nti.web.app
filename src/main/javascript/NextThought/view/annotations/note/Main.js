@@ -522,7 +522,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		}
 
 		this.text.show();
-		this.editor.down('.content').update('');
+		this.editorActions.setValue('');
 		this.up('window').down('note-carousel').removeCls('editor-active');
 		this.editorActions.deactivate();
 		this.el.removeCls('editor-active');

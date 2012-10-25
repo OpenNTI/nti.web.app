@@ -20,7 +20,9 @@ Ext.define('NextThought.view.annotations.note.Templates',{
 					contentEditable: true,
 					tabIndex: 1,
 					unselectable: 'off',
-					html: '&nbsp;'
+					cn: [{ //inner div for IE
+						html: '&#8203;' //default value (allow the cursor in to this placeholder div, but don't take any space)
+					}]
 				}]
 			},{
 				cls: 'footer',

@@ -1,5 +1,12 @@
 @import "variables";
 
+@mixin text-pre-wrap {
+	white-space: pre-wrap;      /* CSS3 */
+	white-space: -moz-pre-wrap; /* Firefox */
+	white-space: -o-pre-wrap;   /* Opera */
+	word-wrap: break-word;      /* IE */
+}
+
 @mixin meta-row {
 	.meta {
 		@include menu-label-text-treatment;
@@ -165,7 +172,6 @@
 				&, * {
 					@include allow-select;
 				}
-				white-space: pre;
 				padding: 2px 0 0 0;
 				color: $secondary-grey;
 				font: 14px 'Droid Serif';
@@ -173,8 +179,13 @@
 				min-height: 50px;
 				margin-bottom: 46px;
 				max-height: 200px;
-				white-space: normal;
-				word-wrap: break-word;
+
+				width: 99%;
+
+				div {
+				   @include text-pre-wrap;
+				}
+
 
 				em, em strong{
 					font-style: italic !important;
@@ -634,6 +645,9 @@
 			.text {
 				overflow: hidden;
 				text-overflow: ellipsis;
+
+				@include text-pre-wrap;
+
 				color: $secondary-grey;
 				font: 14px/22px 'Droid Serif' normal;
 			}
@@ -736,9 +750,8 @@
 			.text {
 				overflow: hidden;
 				text-overflow: ellipsis;
-				word-wrap: normal;
-				white-space: normal;
 				font-style: normal;
+				@include text-pre-wrap;
 			}
 
 		  	.meta{
@@ -1060,6 +1073,7 @@
 		.body {
 			color: $primary-grey;
 			font: 16px/24px 'Droid Serif';
+			@include text-pre-wrap;
 
 			a {
 				word-wrap: break-word;
