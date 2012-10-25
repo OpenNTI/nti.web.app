@@ -51,7 +51,7 @@ Ext.define('NextThought.view.chat.Gutter',{
 
 
 		ct.addCls('no-gutter');
-		ct.doLayout();
+		ct.updateLayout();
 		r = this.callParent();
 		this.fireEvent('expand',ct,-width);
 		return r;
@@ -81,7 +81,7 @@ Ext.define('NextThought.view.chat.Gutter',{
 
 
 		ct.removeCls('no-gutter');
-		ct.doLayout();
+		ct.updateLayout();
 		r = this.callParent();
 		this.fireEvent('expand',ct,width);
 		return r;

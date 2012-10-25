@@ -3,8 +3,12 @@ Ext.define('NextThought.view.chat.transcript.Window',{
 	alias: 'widget.chat-transcript-window',
 
 	requires: [
-		'NextThought.view.chat.transcript.Main'
+		'NextThought.view.chat.transcript.Main',
+		'NextThought.view.chat.Gutter'
 	],
+
+	cls:'chat-window no-gutter',
+	ui:'chat-window',
 
 	minWidth:350,
 	minHeight:200,
@@ -16,6 +20,10 @@ Ext.define('NextThought.view.chat.transcript.Window',{
 	layout: 'auto', autoScroll: true,
 	titleTpl:'{0} (Chat History)',
 
+	dockedItems:[
+		{xtype:'chat-gutter', dock:'left', hidden:true}
+	],
+
 
 	failedToLoadTranscript: function(){
 		alert('failedToLoadTranscript');
@@ -24,11 +32,18 @@ Ext.define('NextThought.view.chat.transcript.Window',{
 
 
 	setTitleInfo: function(contributors){
-		var me = this;
+		var me = this,
+			list = me.down('chat-gutter');
+
 		UserRepository.getUser(contributors,function(users){
 			var names = [];
-			Ext.each(users, function(u){ if(!isMe(u)){ names.push(u.getName()); } });
-			me.setTitle(Ext.String.format(me.titleTpl,names.join(',')));
+			Ext.each(users, function(u){ if(!isMe(u)){ names.push(u.getName()); }});
+
+			list.updateList(users);
+
+			me.setTitle(list.isHidden()
+					? Ext.String.format(me.titleTpl,names.join(','))
+					: 'Group Chat History');
 		});
 	},
 
