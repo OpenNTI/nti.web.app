@@ -19,7 +19,9 @@ Ext.define(	'NextThought.view.whiteboard.Canvas',{
 
 
 	destroy: function(){
-		this.el.removeAllListeners();
+		if(this.el){
+			this.el.removeAllListeners();
+		}
 		this.callParent(arguments);
 	},
 
@@ -34,16 +36,16 @@ Ext.define(	'NextThought.view.whiteboard.Canvas',{
 			return null;
 		}
 
-		var data = {};
+		var data = {},
+			shapes = this.drawData.shapeList,
+			i = shapes.length -1;
 
 		data.shapeList	= [];
 		data.MimeType	= "application/vnd.nextthought.canvas";
 		data.Class		= 'Canvas';
 
-		var shapes = this.drawData.shapeList,
-			i = shapes.length -1;
 
-		for(; i>=0; i--){
+		for(i; i>=0; i--){
 			data.shapeList.push(shapes[i].getJSON());
 		}
 
@@ -102,17 +104,16 @@ Ext.define(	'NextThought.view.whiteboard.Canvas',{
 		objectNameRe: (/^Canvas(.+?)Shape$/i),
 
 		updateData: function(scene){
-			var drawData = Ext.clone(scene || {shapeList:[]});
+			var shapes, i, c, p = 'NextThought.view.whiteboard.shapes.',
+				drawData = Ext.clone(scene || {shapeList:[]});
 
 			//maintain z-order since we're looping backwards (for speed)
 			drawData.shapeList.reverse();
 
-			var shapes = drawData.shapeList,
-				i = shapes.length -1,
-				p = 'NextThought.view.whiteboard.shapes.',
-				c;
+			shapes = drawData.shapeList;
+			i = shapes.length -1;
 
-			for(; i>=0; i--){
+			for(i; i>=0; i--){
 				//reparent shapes
 				c = this.objectNameRe.exec(shapes[i].Class);
 				if(!c){

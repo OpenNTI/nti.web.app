@@ -430,7 +430,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 			o = me.noteOverlayData,
 			note = o.textarea.dom.value,
 			style = o.lastLine.style || 'suppressed',
-			v, sharing = p.sharedWith || [], re = /(&nbsp;)|(<br>)|(<div>)|(<\/div>)*/g,
+			v, sharing = p.sharedWith || [], re = /((&nbsp;)|(\u200B)|(<br\/?>)|(<\/?div>))*/g,
 			rangeInfo;
 
 		if (o.richEditorActive){
@@ -440,7 +440,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		}
 
 		//Avoid saving empty notes or just returns.
-		if( !Ext.isArray(note) || note.join('').replace(re,"") === "" ){
+		if( !Ext.isArray(note) || note.join('').replace(re,'') === '' ){
 			this.noteOverlayDeactivateEditor();
 			return false;
 		}

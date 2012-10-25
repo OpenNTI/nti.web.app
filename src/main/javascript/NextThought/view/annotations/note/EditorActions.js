@@ -500,13 +500,13 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 		sel.each(function(div){
 			var html, tmp;
 			try {
-				html = div.getHTML().replace(/\u200B|<br\/?>/g,'');
-				if(!html){
+				html = div.getHTML() || '';
+				if(!html && div.dom.tagName === 'IMG'){
 					tmp = document.createElement("div");
 					tmp.appendChild(div.dom);
-					html = tmp.innerHTML;
+					html = tmp.innerHTML || '';
 				}
-				out.push(html);
+				out.push(html.replace(/\u200B|<br\/?>/g,''));
 			}
 			catch(er){
 				console.warn('Oops, '+er.message);

@@ -459,7 +459,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 	editorSaved: function(){
 		var v = this.editorActions.getValue(),
 			me = this,
-			r = me.record, re = /(&nbsp;)|(<br>)|(<div>)|(<\/div>)*/g;
+			r = me.record, re = /((&nbsp;)|(\u200B)|(<br\/?>)|(<\/?div>))*/g;
 
 		function callback(success, record){
 			me.el.unmask();
@@ -471,7 +471,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 			}
 		}
 
-		if( !Ext.isArray(v.body) || v.body.join('').replace(re,"") === "" ){
+		if( !Ext.isArray(v.body) || v.body.join('').replace(re,'') === '' ){
 			me.deactivateReplyEditor();
 			return;
 		}
