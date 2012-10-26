@@ -49,7 +49,7 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 			mousedown  : me.editorMouseDown,
 			selectstart: me.editorSelectionStart,
 			click      : function (e) {
-				if(!e.getTarget('.content')){ editorEl.down('.content').focus(); }
+				if(!e.getTarget('.content')){ editorEl.down('.content > *').focus(); }
 			}
 		});
 
@@ -61,7 +61,8 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 			focus      : me.editorFocus,
 			keyup      : me.handleOnKeyup,
 			paste      : me.handlePaste,
-			click      : me.handleClick
+			click      : me.handleClick,
+			contextmenu: me.handleContext
 		});
 
 		if (!$AppConfig.service.canShare()) {
@@ -91,6 +92,12 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 	deactivate: function () {
 		this.editor.removeCls('active');
 		this.lastRange = null;
+	},
+
+
+	handleContext: function(e){
+		e.stopPropagation();
+		return true;
 	},
 
 
