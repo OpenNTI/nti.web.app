@@ -50,6 +50,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
 	},
 
 	cleanup: function(){
+        this.isDestroyed = true;
 		if (this.rendered) {
 		try{
 			var c = this.rendered.slice();
@@ -145,93 +146,115 @@ Ext.define('NextThought.view.annotations.Highlight', {
 
 
 	render: function(){
-    	var range = null,
-			style = this.getRecordField('style'),
+        if (this.isDestroyed){return;}
+    	var me = this,
+            range = null,
+			style = me.getRecordField('style'),
             bounds,
             boundingTop,
             boundingLeft,
             boundingHeight,
-            width = this.content ? this.content.getWidth() : 680,
+            width = me.content ? me.content.getWidth() : 680,
             topOffset = 10,
             leftOffset = 5,
+            fakeRectRange,
 			state = 'normal', sampleEl;
 
-		if(!this.rendered){
-			range = this.getRange();
+		if(!me.rendered){
+			range = me.getRange();
 			if(!range){ return -1; }
-			this.rendered = this.wrapRange(range.commonAncestorContainer, range);
+			me.rendered = me.wrapRange(range.commonAncestorContainer, range);
 
 			//don't create counter when suppressed:
 			if (style !== 'suppressed'){
-				this.counter = this.createCounter(this.rendered.last());
+				me.counter = me.createCounter(me.rendered.last());
 			}
 
 
 
 			//create a composite element so we can do lots of things at once:
-			this.compElements = new Ext.dom.CompositeElement(this.rendered);
-			this.compElements.add(this.counter);
+			me.compElements = new Ext.dom.CompositeElement(me.rendered);
+			me.compElements.add(me.counter);
 
 			//highlights that are not ours do not get a marked over treatment...so don't create the canvas
 
 			//FIXME Dirty Work around an issue with redactions also being highlighted.  At this point the redaction class
 			//hasn't been aplied to what becomes sampleEl.  It gets applied in the subclass when this returns
 			//therefore here it looks just like a highlight.
-			if(this.record.get('Class') === 'Highlight'){
+			if(me.record.get('Class') === 'Highlight'){
 
-				if(this.isModifiable && style !== 'suppressed'){
+				if(me.isModifiable && style !== 'suppressed'){
 
-					if(!this.self.bgcolor[this.record.get('Class')]){
-						this.self.bgcolor[this.record.get('Class')] = {};
-						sampleEl = this.compElements.first();
-						this.self.bgcolor[this.record.get('Class')].normal = sampleEl.getStyle('background-color');
-						sampleEl.addCls(this.mouseOverCls);
-						this.self.bgcolor[this.record.get('Class')].hover = sampleEl.getStyle('background-color');
-						sampleEl.removeCls(this.mouseOverCls);
+					if(!me.self.bgcolor[me.record.get('Class')]){
+						me.self.bgcolor[me.record.get('Class')] = {};
+						sampleEl = me.compElements.first();
+						me.self.bgcolor[me.record.get('Class')].normal = sampleEl.getStyle('background-color');
+						sampleEl.addCls(me.mouseOverCls);
+						me.self.bgcolor[me.record.get('Class')].hover = sampleEl.getStyle('background-color');
+						sampleEl.removeCls(me.mouseOverCls);
 					}
-					//this.compElements.setStyle('background-color','transparent');
-					this.canvas = this.createCanvas();
+					//me.compElements.setStyle('background-color','transparent');
+					me.canvas = me.createCanvas();
 				}
 			}
 		}
 
-		if(!this.canvas){return this.resolveVerticalLocation();}
+		if(!me.canvas){return me.resolveVerticalLocation();}
 
-		if(!this.content || !this.content.dom){
+		if(!me.content || !me.content.dom){
 			try{
-				this.content = Ext.get(this.doc.getElementById('NTIContent')).first();
+				me.content = Ext.get(me.doc.getElementById('NTIContent')).first();
 			}catch(e){
 				console.log('no content');
 			}
 		}
 
-		range = range || this.buildRange();
+		range = range || me.buildRange();
         bounds = range.getBoundingClientRect();
         boundingTop = Math.ceil(bounds.top);
         boundingLeft = Math.ceil(bounds.left);
         boundingHeight = Math.ceil(bounds.height);
-        Ext.fly(this.canvas).setXY([
+        Ext.fly(me.canvas).setXY([
             boundingLeft-leftOffset,
             boundingTop-topOffset
         ]);
-        Ext.fly(this.canvas).set({
+        Ext.fly(me.canvas).set({
             width: width+(leftOffset*2),
             height: boundingHeight+(topOffset*2)
         });
 
 
-		if(this.compElements.first().hasCls(this.mouseOverCls)){
+		if(me.compElements.first().hasCls(me.mouseOverCls)){
 			state = 'hover';
 		}
 
-		boundingTop = AnnotationUtils.drawCanvas(this.canvas,
-            this.content, range, this.self.bgcolor[this.record.get('Class')][state],
+        //for measurement purposes, make a range that responds to measurement requests but uses the spans instead of the
+        //range rects, which appear to be buggy.
+        fakeRectRange  = {
+            getBoundingClientRect: function(){
+                return range.getBoundingClientRect();
+            },
+            endContainer: range.endContainer,
+            getClientRects: function(){
+                var r = [];
+                me.compElements.each(function(e){
+                    if (e.up('.'+me.highlightCls)){
+                        return;
+                    }
+                    r.push.apply(r, e.dom.getClientRects());
+                });
+                return r;
+            }
+        };
+
+		boundingTop = AnnotationUtils.drawCanvas(me.canvas,
+            me.content, fakeRectRange, me.self.bgcolor[me.record.get('Class')][state],
             [leftOffset, topOffset]);
 
 
-        this.range = range;
+        me.range = range;
 
-		return boundingTop || this.resolveVerticalLocation();
+		return boundingTop || me.resolveVerticalLocation();
 	},
 
 
@@ -363,7 +386,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
 				}
 			}
 		}
-		return nodeList;
+		return Ext.Array.clean(nodeList);
 	},
 
 
@@ -378,16 +401,46 @@ Ext.define('NextThought.view.annotations.Highlight', {
 
 
 	doWrap: function(range) {
-		var span = this.createNonAnchorableSpan(),
-			style = this.record.get('style') || 'plain';
+		var span,
+			style = this.record.get('style') || 'plain',
+            s,
+            rangeString = range.toString(),
+            sc = range.startContainer,
+            selectedNodes = RangeUtils.getSelectedNodes(range);
+
+        if (!rangeString || /^\s+$/.test(rangeString)){
+            if(selectedNodes.length !== 1 || selectedNodes[0].tagName==='LI'){
+                return;
+            }
+        }
+
+        span = this.createNonAnchorableSpan();
+
+        if (sc && !Ext.isTextNode(sc) && sc === range.endContainer){
+            try{
+            s =  Ext.fly(selectedNodes[0]).getStyle('display');
+
+            if(/block/i.test(s)){
+                Ext.fly(span).setStyle({display:s});
+            }
+            }catch(e){
+             //   Ext.fly(span).setStyle({display:'inline-block'});
+            }
+        }
 
 		span.setAttribute('class', this.highlightCls);
 		Ext.fly(span).addCls(style);
 		range.surroundContents(span);
+        if (!span.firstChild){
+            Ext.fly(span).remove();
+            return;
+        }
 		Ext.get(span).hover(this.onMouseOver,this.onMouseOut,this);
 		if(style !== 'suppressed'){
 			this.attachEvent(['click','mouseup'],span,this.onClick,this);
 		}
+
+
 		return span;
 	},
 

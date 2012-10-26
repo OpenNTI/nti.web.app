@@ -188,7 +188,6 @@ Ext.define('NextThought.util.Annotations',{
 	        width = (maxRight - minLeft);
 	    }
 
-
 	    canvas.cachedLineHeightValue = lineHeight;
 
 
@@ -207,7 +206,7 @@ Ext.define('NextThought.util.Annotations',{
 
             left = Math.ceil(r.left - boundingLeft + leftOffset - padding );
             y = Math.ceil(r.top - boundingTop + topOffset - padding );
-            small = (r.width/width) < 0.5 && i===0;
+            small = (r.width/width) < 0.5 || i===0;
 
 	        if(r.left === minLeft) { left = 0; }
 
@@ -219,11 +218,6 @@ Ext.define('NextThought.util.Annotations',{
             h = r.height + (padding*2);
             if(!last && (Math.abs(y - lastY) < lineHeight || y > lastY )){ continue; }
             if(!last && r.height <= lineHeight) { continue; }
-
-            //Remove some really small rects
-            if(last && w < 10) {continue;}
-            if (!last && h < 8) { continue;}
-
 
             if (last) {
 //                w -= 4;

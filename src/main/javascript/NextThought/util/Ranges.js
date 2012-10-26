@@ -104,6 +104,42 @@ Ext.define('NextThought.util.Ranges',{
             return r.nativeRange.getBoundingClientRect();
         }
         return r.getBoundingClientRect();
+    },
+
+
+    getSelectedNodes: function(range){
+        var walker,
+            sc = range.startContainer, ec = range.endContainer,
+            so = range.startOffset, eo = range.endOffset,
+            nodes = [],
+            startAt = Ext.isTextNode(sc) ? sc : sc.childNodes[so],
+            endAt = Ext.isTextNode(ec) ? ec : ec.childNodes[eo],
+            next,
+            parentNodesSeen = [];
+
+        walker = document.createTreeWalker(range.commonAncestorContainer, NodeFilter.SHOW_ELEMENT|NodeFilter.SHOW_TEXT//,
+//            { acceptNode: function(node) {
+//                var seen = false;
+//                Ext.each(parentNodesSeen, function(pn){
+//                    if (pn === node.parentNode){
+//                        seen = true;
+//                    }
+//                });
+//                if (!seen){parentNodesSeen.push(node);}
+//                return seen ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT;
+//            }}
+        );
+        while(walker.nextNode()){
+            if (walker.currentNode === startAt || startAt === true){
+                if (!Ext.isTextNode(walker.currentNode)){nodes.push(walker.currentNode);}
+                startAt = true;
+            }
+            if (walker.currentNode === endAt){
+                break;
+            }
+        }
+      // console.log('nodes from getSelectedNdoes', nodes);
+        return nodes;
     }
 
 

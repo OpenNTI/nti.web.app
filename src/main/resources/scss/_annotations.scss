@@ -446,5 +446,18 @@ div.redaction-control {
 
 div.section-problem .highlight-mouse-over .MathJax_Display { color: #076da7 }
 
-#annotation-container { &, .highlight-canvas { position: absolute; /*z-index: 1; */} }
+#NTIContent ol.parts > li.part::before{
+	z-index: 2;
+}
+#annotation-container {
+	&, .highlight-canvas {
+		position: absolute;
+		z-index: 1;
+		pointer-events: none;
+
+		.x-ie9 & {
+			z-index: 0;
+		}
+	}
+}
 
