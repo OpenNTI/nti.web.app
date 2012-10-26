@@ -37,9 +37,9 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 				var e = evt.browserEvent,
 					from = e.relatedTarget || e.toElement;
 			    if (!from || from.nodeName === "HTML") {
-				    if(this.mouseLeftNoMouseUp){
-				        alert({title:'Color in the Lines!',msg: 'You have just gone too far this time!'});
-				    }
+//				    if(this.mouseLeftNoMouseUp){
+//				        alert({title:'Color in the Lines!',msg: 'You have just gone too far this time!'});
+//				    }
 			        clearFlag.call(this);
 			    }
 			}
