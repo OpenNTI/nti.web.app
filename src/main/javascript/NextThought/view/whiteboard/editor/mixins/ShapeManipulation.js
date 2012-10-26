@@ -22,10 +22,29 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 			mousemove: this.onMouseMove,
 			mouseup: this.onMouseUp,
 
-            mouseout: this.onMouseUp,
+			mouseenter: this.onMouseEnter,
+            mouseout: this.onMouseLeave,
 
 			click: this.onClick
 		});
+
+		function clearFlag(){ delete this.mouseLeftNoMouseUp;console.log('clear!'); }
+		this.mon( Ext.getBody(), {
+			scope: this,
+			mousedown: clearFlag,
+			mouseup: clearFlag,
+			mouseout: function(evt){
+				var e = evt.browserEvent,
+					from = e.relatedTarget || e.toElement;
+			    if (!from || from.nodeName === "HTML") {
+				    if(this.mouseLeftNoMouseUp){
+				        alert({title:'Color in the Lines!',msg: 'You have just gone too far this time!'});
+				    }
+			        clearFlag.call(this);
+			    }
+			}
+		});
+
 	},
 
 
@@ -52,6 +71,18 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 		xy[1] /= w;
 
 		return xy;
+	},
+
+
+	onMouseEnter: function(e){
+		if(this.mouseLeftNoMouseUp){
+			this.onMouseDown(e);
+		}
+	},
+
+	onMouseLeave: function(e){
+		this.mouseLeftNoMouseUp = this.mouseDown;
+		this.onMouseUp(e);
 	},
 
 
