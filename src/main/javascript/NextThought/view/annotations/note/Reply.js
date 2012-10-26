@@ -230,12 +230,21 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 		//document.queryCommandState('bold')
 	},
 
+	canDelete: function(){
+		var r = this.record;
+		if(!r){
+			return true;
+		}
+
+		return r.children === undefined || r.children.length === 0;
+	},
 
 	addNewChild: function(child){
 		if(child.get('inReplyTo') === this.record.getId()){
 			this.addReplies([child]);
             if (!this.record.children){this.record.children = [];}
             this.record.children.push(child);
+			child.parent = this.record;
 		}
 		else {
 			console.log('[reply] ignoring, child does not directly belong to this item:\n', this.record.getId(), '\n', child.get('inReplyTo'), ' <- new child');
@@ -274,6 +283,39 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 		this.activateReplyEditor();
 	},
 
+	decrementRootsReferenceCount: function(r){
+        var cid = r.get('ContainerId'),
+			refs = r.get('references') || [],
+			c = 'ReferencedByCount',
+		    me = this,
+            pageStore, rootid, root;
+
+		LocationMeta.getMeta(cid,function(meta){
+			try{
+				if(!meta){
+					return;
+				}
+
+				//add it to the page items store I guess:
+				pageStore = LocationProvider.getStore(cid);
+				if(!pageStore){
+					return;
+				}
+
+				rootid = refs.length > 0 ? refs[0] : null;
+				if(rootid){
+					root = pageStore.getById(rootid);
+					if(root){
+						root.set(c, Math.max((root.get(c)||0) - 1, 0));
+					}
+				}
+			}
+			catch(error){
+				console.error(Globals.getError(error));
+			}
+		});
+	
+	},
 
 	onDelete: function(){
 		var r = this.record;
@@ -283,7 +325,7 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 		r.set('blod',['deleted']);
 		r.clearListeners();
 		r.placeHolder = true;
-
+		this.decrementRootsReferenceCount(r);
 		if (r.children && r.children.length > 0){
 			this.setPlaceholderContent();
 		}

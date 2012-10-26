@@ -142,8 +142,10 @@ Ext.define('NextThought.controller.UserData', {
         change = ParseUtils.parseItems([change])[0];
         var item = change.get('Item'),
             cid = change.getItemValue('ContainerId'),
-		    me = this,
-            pageStore;
+			me = this,
+			refs = item.get('references') || [],
+			c = 'ReferencedByCount',
+        pageStore, rootid, root;
 
 		//Don't even try this for Circled events.
 		//White list is probably safer in the long term
@@ -162,6 +164,24 @@ Ext.define('NextThought.controller.UserData', {
 				pageStore = LocationProvider.getStore(cid);
 				if(!pageStore || LocationProvider.currentNTIID !== meta.NTIID || (item && !item.isTopLevel())){
 					me.maybeFireChildAdded(item);
+
+					try{
+						if(!pageStore){
+							return;
+						}
+
+						rootid = refs.length > 0 ? refs[0] : null;
+						if(rootid){
+							root = pageStore.getById(rootid);
+							if(root){
+								root.set(c, Math.max((root.get(c)||0) + (1 * (/deleted/i.test(change.get('ChangeType')) ? -1 : 1)), 0));
+							}
+						}
+					}
+					catch(error){
+						console.error(Globals.getError(error));
+					}
+
 					return;
 				}
 

@@ -107,6 +107,9 @@ Ext.define('NextThought.view.annotations.note.GutterWidget',{
 		this.record.destroy();
 	},
 
+	canDelete: function(){
+		return !this.record || this.record.getReplyCount() === 0;
+	},
 
 	onChat: function(){
 		this.fireEvent('chat', this.record);

@@ -169,7 +169,7 @@ Ext.define('NextThought.view.annotations.note.Templates',{
 				items.push(chatItem);
 			}
 
-            if(!options.record.isModifiable()){
+            if(!options.record.isModifiable() || (this.canDelete && !this.canDelete())){
                 hideDelete = true;
             }
 

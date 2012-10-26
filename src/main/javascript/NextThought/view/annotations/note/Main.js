@@ -321,6 +321,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		console.log('loading replies');
 		me.mask();
 
+		this.replyStore = store;
 
 		function setReplies(theStore){
 			var cmp, items = theStore.getItems();
@@ -379,6 +380,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
             //update children array so we can use it to decide whether or not to delete.
             if (!r.children){r.children = [];}
             r.children.push(child);
+			child.parent = r;
 
 			this.up('window').down('note-responses').addReplies([child]);
 		}
@@ -573,6 +575,10 @@ Ext.define('NextThought.view.annotations.note.Main',{
 			this.record.destroy();
 		}
 		this.up('window').close();
+	},
+
+	canDelete: function(){
+		return !this.record || this.record.get('ReferencedByCount') === undefined || this.record.get('ReferencedByCount') === 0;
 	},
 
 
