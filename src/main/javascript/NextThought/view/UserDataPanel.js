@@ -150,7 +150,7 @@ Ext.define('NextThought.view.UserDataPanel',{
 		var s = NextThought.store.PageItem.create({id:id, groupField:grouping});
 
 		s.proxy.extraParams = Ext.apply(s.proxy.extraParams||{},{
-			sortOn: 'lastModified',
+			sortOn: 'createdTime',
 			sortOrder: 'descending',
 			filter: filter
 		});

@@ -155,8 +155,8 @@ Ext.define('NextThought.view.annotations.note.Main',{
 	//NOTE right now we are assuming the anchorable data won't change.
 	//That is true in practice and it would be expensive to pull it everytime
 	//some other part of this record is updated
-	updateFromRecord: function(){
-		var r = this.record;
+	updateFromRecord: function(newRecord){
+		var r = newRecord || this.record;
 
 		try {
             UserRepository.getUser(r.get('Creator'),this.fillInUser,this);
@@ -470,6 +470,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 				if (me.recordUpdated) {
 					me.recordUpdated(r);
 				}
+                AnnotationUtils.updateHistory(record);
 			}
 		}
 
@@ -484,9 +485,10 @@ Ext.define('NextThought.view.annotations.note.Main',{
 			//todo: r.set('sharedWith',v.shareWith); -- only do this if the user changed it.
 			r.save({callback: function(record, request){
 				var success = request.success,
-				rec = success ? record: null;
+				rec = success ? request.records[0]: null;
 				if(success){
-					r.fireEvent('changed');
+					r.fireEvent('updated', rec);
+                    me.setRecord(rec);
 				}
 				Ext.callback(callback,me,[success,rec]);
 			}});

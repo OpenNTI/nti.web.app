@@ -27,13 +27,6 @@ Ext.define('NextThought.store.PageItem',{
 		model: 'NextThought.model.GenericObject'
 	},
 
-	sorters: [
-		{
-			property : 'Last Modified',
-			direction: 'DESC'
-		}
-	],
-
 
 	GETTERS : {
 		'Highlight': function(r){return r;},
@@ -108,6 +101,11 @@ Ext.define('NextThought.store.PageItem',{
 					oid = g.getId(),
 					parent = g.get('inReplyTo'),
 					p;
+
+            //special case:
+            if (r.getModelName() === 'Bookmark') {
+                NextThought.model.events.Bus.fireEvent('bookmark-loaded',r);
+            }
 
 
 			r.children = r.children || [];

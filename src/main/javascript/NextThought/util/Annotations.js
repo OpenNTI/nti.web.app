@@ -235,6 +235,33 @@ Ext.define('NextThought.util.Annotations',{
             lastY = y;
         }
         return boundingTop;
+    },
+
+
+    addToHistory: function(rec){
+        try{
+            var s = Ext.getStore('historyStore'),
+            clone = ParseUtils.parseItems(rec.raw)[0];
+
+            if (s){s.add(clone);}
+        }
+        catch(e) {
+            console.error('Could not add record to history store.', rec);
+        }
+    },
+
+
+    updateHistory: function(rec) {
+        var s = Ext.getStore('historyStore'),
+            found = s.findRecord('NTIID', rec.get('NTIID'), 0, false, false, true),
+            results;
+
+        if (found){
+            results = found.set(rec.asJSON());
+            if (!Ext.isEmpty(results)){
+                s.fireEvent('datachanged', s);
+            }
+        }
     }
 },
 function(){

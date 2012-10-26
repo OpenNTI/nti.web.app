@@ -466,15 +466,14 @@ Ext.define('NextThought.controller.UserData', {
 		noteRecord.save({
 			scope: this,
 			callback:function(record, operation){
-				var success, rec, s;
+				var success, rec;
 				try{
 					success = operation.success;
 					rec = success ? ParseUtils.parseItems(operation.response.responseText)[0] : null;
-                    s = Ext.getStore('historyStore');
 					if (success){
 						LocationProvider.getStore(container).add(rec);
 						this.self.events.fireEvent('new-note', rec, range);
-                        if (s){s.add(rec);}
+                        AnnotationUtils.addToHistory(rec);
 					}
 				}
 				catch(err){
@@ -501,12 +500,11 @@ Ext.define('NextThought.controller.UserData', {
 			scope: this,
 			callback:function(record, request){
 				var success = request.success,
-					rec = success ? record: null,
-					s = Ext.getStore('historyStore');
+					rec = success ? record: null;
 				if (success){
 					this.self.events.fireEvent('new-note', rec);
 					(rec.parent?rec:recordRepliedTo).fireEvent('child-added',rec);
-					if (s){s.add(rec);}
+                    AnnotationUtils.addToHistory(rec);
 				}
 				Ext.callback(callback, this, [success, rec]);
 			}

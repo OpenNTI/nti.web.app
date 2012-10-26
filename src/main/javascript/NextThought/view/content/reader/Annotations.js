@@ -259,8 +259,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 			handler:function(){
 				me.createAnnotationWidget('highlight',record, range).savePhantom(
                     function(){
-                        var s = Ext.getStore('historyStore');
-                        if (s){s.add(record);}
+                       AnnotationUtils.addToHistory(record);
                     }
                 );
 				me.clearSelection();

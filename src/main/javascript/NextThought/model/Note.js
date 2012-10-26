@@ -46,7 +46,7 @@ Ext.define('NextThought.model.Note', {
 		{ name: 'sharedWith', type: 'UserList' },
 		{ name: 'prohibitReSharing', type: 'boolean' },
 
-		{ name: 'GroupingField', mapping: 'Last Modified', type: 'groupByTime'}
+		{ name: 'GroupingField', mapping: 'Last Modified', type: 'groupByTime', persist: false}
 	],
 
 	/**

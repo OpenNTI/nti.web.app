@@ -15,6 +15,6 @@ Ext.define('NextThought.model.Highlight', {
 		{ name: 'style', type: 'string'},
 		{ name: 'applicableRange', type: 'ContentRangeDescription'},
 
-		{ name: 'GroupingField', mapping: 'Last Modified', type: 'groupByTime'}
+		{ name: 'GroupingField', mapping: 'Last Modified', type: 'groupByTime', persist: false}
 	]
 });
