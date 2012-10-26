@@ -6,6 +6,7 @@ Ext.define('NextThought.model.Hit', {
 		{ name: 'Title', type: 'string' },
 		{ name: 'Type', type: 'string' },
 		{ name: 'Fragments', type: 'auto'},
+		{ name: 'Score', type: 'auto'},
 		//This really needs to move up onto a SearchResult object but we don't have that.  The proxy roots at Items
 		{ name: 'PhraseSearch', type: 'auto'}
 	],
