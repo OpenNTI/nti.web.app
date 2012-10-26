@@ -127,15 +127,17 @@ Ext.define('NextThought.view.Window',{
 		if(!Ext.isWebKit){return;}
 		//This will fix a glitch in WebKit: if you try to drag something into the window, it caused it
 		// to scroll sideways off screen.
-		var c = this.down('container[windowContentWrapper]'),
-			el = c ? Ext.get(c.getId()+'-targetEl') : null;
+		var c = this.down('container[windowContentWrapper]');
+		function fixIt(c, sub){
+			var el = Ext.get(c.getId()+'-'+sub);
+			if(el){
+				el.setStyle({ position: 'fixed', top: 'initial', left: 'initial' });
+			}
+		}
 
-		if(el){
-			el.setStyle({
-				position: 'fixed',
-				top: 'initial',
-				left: 'initial'
-			});
+		fixIt(this,'targetEl');
+		if(c){
+			fixIt(c,'targetEl');
 		}
 	},
 
