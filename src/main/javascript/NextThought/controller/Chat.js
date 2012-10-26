@@ -304,7 +304,7 @@ Ext.define('NextThought.controller.Chat', {
 	sendWhiteboard: function(chatEntryWidget, mid, channel, recipients) {
 		var me = this,
 			room = ClassroomUtils.getRoomInfoFromComponent(chatEntryWidget),
-			wbWin = Ext.widget('wb-window', {height: '75%', width: '50%'}),
+			wbWin = Ext.widget('wb-window', {width: 802}),
 			wbData;
 
 		//hook into the window's save and cancel operations:
