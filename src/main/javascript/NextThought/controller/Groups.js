@@ -227,12 +227,12 @@ Ext.define('NextThought.controller.Groups', {
 	},
 
 
-	addGroup: function(newGroupName, callback, scope){
+	addGroup: function(newGroupName, friends, callback, scope){
 		var username = newGroupName
 				.replace(/[^0-9A-Z\-@\+\._]/ig, '')
 				+'-'+ $AppConfig.username+'_'+guidGenerator();
 
-		this.createGroupUnguarded(newGroupName,username,[],callback,scope||this);
+		this.createGroupUnguarded(newGroupName,username,friends||[],callback,scope||this);
 	},
 
 

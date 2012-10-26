@@ -1,7 +1,9 @@
 Ext.define('NextThought.view.account.contacts.management.GroupList',{
 	extend: 'Ext.view.BoundList',
 	alias: 'widget.management-group-list',
-	mixins: ['NextThought.mixins.AddGroup'],
+	mixins: {
+		addgroup:'NextThought.mixins.AddGroup'
+	},
 	ui: 'nt',
 	plain: true,
 	shadow: false,

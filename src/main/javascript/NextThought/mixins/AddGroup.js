@@ -78,13 +78,20 @@ Ext.define('NextThought.mixins.AddGroup', {
 
 	submitNewGroup: function(groupName){
 		var input = this.addGroupDom.down('input'),
-			me = this;
+			me = this,
+			friends = [];
 
 		if((groupName||'').length === 0){
 			return;
 		}
+
+		//if the control has an associated username add it to the new group. (The username is the contact we're showing, not "Me")
+		if(this.username){
+			friends.push(this.username);
+		}
+
 		input.blur();
-		this.fireEvent('add-group', groupName, function(success){
+		this.fireEvent('add-group', groupName, friends, function(success){
 			if(!success){ input.addCls('error'); }
 			me.afterGroupAdd(groupName);
 

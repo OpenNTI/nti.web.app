@@ -2,7 +2,9 @@ Ext.define('NextThought.view.account.contacts.management.AddGroup',{
 	extend: 'Ext.Component',
 	alias: 'widget.add-group',
 
-	mixins: ['NextThought.mixins.AddGroup'],
+	mixins: {
+		addgroup: 'NextThought.mixins.AddGroup'
+	},
 
 	afterRender: function(){
 		this.callParent(arguments);
