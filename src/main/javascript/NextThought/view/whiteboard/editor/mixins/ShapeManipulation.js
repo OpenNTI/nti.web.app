@@ -125,7 +125,9 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 
 
 	onClick: function(e){
-        e.stopEvent();
+		e.stopEvent();
+		var selectedTool = this.toolbar.getCurrentTool().forTool;
+		this.currentTool = selectedTool === 'move' ? "Hand" : selectedTool;
 		if(this.currentTool==='Hand'){
 			this.selectShape(e);
 		}
@@ -305,8 +307,16 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 
 		m = new NTMatrix();
 		m.translate(x,y);
-		m.scale(WBUtils.getDistance(p)*2);
-		m.rotate(WBUtils.toRadians(WBUtils.getDegrees(p)));
+
+		if(s.sides === 4){
+			m.scale(WBUtils.getDistance(p)* 2 * Math.cos(WBUtils.toRadians(WBUtils.getDegrees(p))));
+		}
+		else{
+			m.scale(WBUtils.getDistance(p)*2);
+		}
+
+		// FIXME: Stop rotating as we draw.
+//		m.rotate(WBUtils.toRadians(WBUtils.getDegrees(p)));
 
 		m.scaleAll(1/w);//do this after
 		s.transform = m.toTransform();
