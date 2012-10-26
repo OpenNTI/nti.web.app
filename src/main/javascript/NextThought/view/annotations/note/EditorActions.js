@@ -457,7 +457,7 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 				try {
 					s = window.getSelection();
 					r = document.createRange();
-					r.selectNodeContents(c);
+					r.selectNodeContents(c.firstChild);
 					s.removeAllRanges();
 					r.collapse(false);
 					s.addRange(r);
