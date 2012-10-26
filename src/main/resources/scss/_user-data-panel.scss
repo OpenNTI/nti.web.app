@@ -45,7 +45,8 @@
 		}
 
 		&.note,
-		&.highlight{
+		&.highlight,
+		&.favorite{
 			margin: 0 20px;
 
 			.path,.location {

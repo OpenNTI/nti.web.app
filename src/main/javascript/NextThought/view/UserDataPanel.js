@@ -21,26 +21,26 @@ Ext.define('NextThought.view.UserDataPanel',{
 
 
 			{tag:'tpl', 'if':'isNote', cn:[
-				{
-					'data-guid': '{guid}',
-					cls: 'history {cls}',
-					cn:[
-						{cls: 'path', html:'{path}'},
-						{cls: 'location', html:'{location}'},
-						{cls: 'body', cn:[
+                {
+                    'data-guid': '{guid}',
+                    cls: 'history {cls}',
+                    cn:[
+                        {cls: 'path', html:'{path}'},
+                        {cls: 'location', html:'{location}'},
+                        {cls: 'body', cn:[
                             {tag: 'span', html: '{textContent}'}
                         ]}
-					]
-				}]},
+                    ]
+                }]},
 
 			{tag:'tpl', 'if':'isFavorite', cn:[
 				{
 					'data-guid': '{guid}',
 					cls: 'history favorite',
 					cn:[
-//					{cls: 'path', html:'{path}'},
-//					{cls: 'location', html:'{location}'}
-					]
+                        {cls: 'path', html:'{path}'},
+	    				{cls: 'location', html:'{location}'}
+   					]
 				}]},
 
 
@@ -76,6 +76,7 @@ Ext.define('NextThought.view.UserDataPanel',{
 				types = [];
 
 		m[data.Note.prototype.mimeType] = this.getNoteItem;
+        m[data.Bookmark.prototype.mimeType] = this.getBookmarkItem;
 		m[data.Highlight.prototype.mimeType] = this.getHighlightItem;
 		m[data.TranscriptSummary.prototype.mimeType] = this.getChatItem;
 		m[data.Transcript.prototype.mimeType] = this.getChatItem;
@@ -115,7 +116,7 @@ Ext.define('NextThought.view.UserDataPanel',{
 			});
 		}
 		if(!s.favStore){
-			s.favStore = this.buildStore('Favorite','favoriteStore','MimeType');
+			s.favStore = this.buildStore('Bookmarks','favoriteStore','MimeType');
 			NextThought.model.events.Bus.on({
 				scope: this,
 				'favorate-changed': function(rec){
@@ -379,6 +380,19 @@ Ext.define('NextThought.view.UserDataPanel',{
 
         return note;
 	},
+
+
+    getBookmarkItem: function(rec){
+
+        rec.getBodyText = function(){};
+
+        var note = this.getNoteItem(rec);
+
+        delete note.isNote;
+        note.isFavorite = true;
+
+        return note;
+    },
 
 
 	getNoteItem: function(rec){

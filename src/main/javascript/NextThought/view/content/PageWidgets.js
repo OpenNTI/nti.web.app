@@ -11,11 +11,13 @@ Ext.define('NextThought.view.content.PageWidgets',{
 
 	renderTpl: Ext.DomHelper.markup([
 		{
-			cls: 'meta'//,
-//			cn: [{
-//				cls: 'controls',
-//				cn: [{ cls: 'favorite' },{ cls: 'like' }]
-//			}]
+			cls: 'meta',
+			cn: [{
+				cls: 'controls',
+				cn: [{ cls: 'favorite' }//,
+                //    { cls: 'like' }
+                ]
+			}]
 		},'{%this.renderContainer(out,values)%}'
 	]),
 
@@ -29,26 +31,58 @@ Ext.define('NextThought.view.content.PageWidgets',{
 	initComponent: function(){
 		this.callParent(arguments);
 
-		//LocationProvider.on('navigateComplete',this.updateMeta, this);
+		LocationProvider.on('navigateComplete',this.clearBookmark, this);
+        NextThought.model.events.Bus.on('bookmark-loaded', this.onBookmark, this);
 	},
+
+
+    onBookmark: function(r){
+        var favStore = Ext.getStore('favoriteStore'), found;
+
+        if(LocationProvider.currentNTIID !== r.get('ContainerId')){
+            console.error('Got a bookmark', r, 'but we are on page', LocationProvider.currentNTIID);
+            return;
+        }
+        this.bookmarkModel = r;
+        this.favorite.addCls('on');
+
+        if (favStore) {
+            found = favStore.findRecord('NTIID', this.bookmarkModel.get('NTIID'), 0, false, false, true);
+            //undo fancy URLbuilding hack where favorites are set at highlights to fins an accepts that works.
+            this.bookmarkModel.mimeType = 'application/vnd.nextthought.bookmark';
+            if (!found){favStore.add(this.bookmarkModel);}
+        }
+    },
 
 
 	afterRender: function(){
 		var me = this;
 		this.callParent(arguments);
-		//this.updateMeta(this.pageInfo);
 
-		//this.mon( this.like, 'click', function(){ if(me.pageInfo){me.pageInfo.like(me.like);}},this);
-		//this.mon( this.favorite, 'click', function(){ if(me.pageInfo){me.pageInfo.favorite(me.favorite);}},this);
+		this.mon( this.favorite, 'click', this.onFavoriteClick, this);
 	},
 
+    onFavoriteClick: function(){
+        var favStore = Ext.getStore('favoriteStore'), found;
+        if (this.bookmarkModel) {
+            //currently have a bookmark here, delete it.
+            if (this.bookmarkModel){
+                if (favStore) {
+                    found = favStore.findRecord('NTIID', this.bookmarkModel.get('NTIID'), 0, false, false, true);
+                    if (found){favStore.remove(found);}
+                }
+            }
+            this.bookmarkModel.destroy();
+            this.clearBookmark();
+            return;
+        }
+        //if we are here, it's just creating a new one...
+        this.fireEvent('save-new-bookmark');
+    },
 
-	updateMeta: function(pageInfo){
-		var r = this.pageInfo = pageInfo;
-		if(this.rendered && r){
-			this.like.update(r.getFriendlyLikeCount());
-			this.like[(r.isLiked()?'add':'remove')+'Cls']('on');
-			this.favorite[(r.isFavorited()?'add':'remove')+'Cls']('on');
-		}
+
+	clearBookmark: function(){
+        this.favorite.removeCls('on');
+        delete this.bookmarkModel;
 	}
 });

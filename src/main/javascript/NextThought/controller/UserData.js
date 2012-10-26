@@ -19,7 +19,8 @@ Ext.define('NextThought.controller.UserData', {
 		'QuizQuestionResponse',
 		'QuizResult',
 		'TranscriptSummary',
-		'Transcript'
+		'Transcript',
+        'Bookmark'
 	],
 
 
@@ -35,6 +36,7 @@ Ext.define('NextThought.controller.UserData', {
 		'annotations.note.Window',
 		'chat.transcript.Window',
 		'content.Reader',
+        'content.PageWidgets',
 		'definition.Window',
 		'sharing.Window',
 		'views.Library',
@@ -104,7 +106,11 @@ Ext.define('NextThought.controller.UserData', {
 			},
             'user-data-panel': {
                 'open-chat-transcript': this.openChatTranscript
+            },
+            'content-page-widgets': {
+                'save-new-bookmark': this.saveNewBookmark
             }
+
 		},{});
 
         Socket.register({
@@ -425,6 +431,28 @@ Ext.define('NextThought.controller.UserData', {
 			}
 		});
 	},
+
+
+    saveNewBookmark: function(){
+        //create a bookmark model
+        var bm = this.getBookmarkModel().create({
+            ContainerId: LocationProvider.currentNTIID,
+            applicableRange: Ext.create('NextThought.model.anchorables.ContentRangeDescription')
+        });
+        bm.mimeType = 'application/vnd.nextthought.highlight';
+        //now save this:
+        bm.save({
+            scope: this,
+            callback:function(record, operation){
+                try{
+                    if (operation.success){NextThought.model.events.Bus.fireEvent('bookmark-loaded', record);}
+                }
+                catch(err){
+                    console.error('Something went teribly wrong... ',err);
+                }
+            }
+        });
+    },
 
 
 	saveNewNote: function(body, range, c, shareWith, style, callback){

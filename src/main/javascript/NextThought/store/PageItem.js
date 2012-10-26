@@ -79,7 +79,18 @@ Ext.define('NextThought.store.PageItem',{
 
 
 	buildThreads: function(bins){
-		var tree = {};
+		var tree = {},
+            bms = bins['Bookmark'];
+
+        //handle bookmarks here:
+        if(bms){
+            if (bms.length !== 1) {
+                console.error('Oops, more than 1 bookmark on this page??', bms);
+            }
+            NextThought.model.events.Bus.fireEvent('bookmark-loaded',bms[0]);
+            delete bins['Bookmark'];
+        }
+
 		if(bins){
 			Ext.Object.each(bins,function(k,o){
 				if(o && o[0].isThreadable){
@@ -101,12 +112,6 @@ Ext.define('NextThought.store.PageItem',{
 					oid = g.getId(),
 					parent = g.get('inReplyTo'),
 					p;
-
-            //special case:
-            if (r.getModelName() === 'Bookmark') {
-                NextThought.model.events.Bus.fireEvent('bookmark-loaded',r);
-            }
-
 
 			r.children = r.children || [];
 
