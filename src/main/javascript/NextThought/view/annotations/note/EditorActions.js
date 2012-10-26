@@ -321,7 +321,7 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 		}()); //force the falsy value of data to always be undefinded.
 
 		var me = this,
-				wbWin = Ext.widget('wb-window', {height: '75%', width: '50%', value: data, closeAction: 'hide' }),
+				wbWin = Ext.widget('wb-window', { width: 802, value: data, closeAction: 'hide' }),
 				guid = guidGenerator(),
 				content = me.editor.down('.content');
 

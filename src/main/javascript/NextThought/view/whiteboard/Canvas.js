@@ -28,6 +28,13 @@ Ext.define(	'NextThought.view.whiteboard.Canvas',{
 
 	updateData: function(scene){
 		this.drawData = this.self.updateData(scene);
+
+		if(scene && scene.viewportRatio){
+			this.viewportRatio = scene.viewportRatio;
+		}
+		else{
+			this.viewportRatio = Globals.CANVAS_GOLDEN_RATIO;   //Default to this for new shapes.
+		}
 	},
 
 
@@ -43,6 +50,7 @@ Ext.define(	'NextThought.view.whiteboard.Canvas',{
 		data.shapeList	= [];
 		data.MimeType	= "application/vnd.nextthought.canvas";
 		data.Class		= 'Canvas';
+		data.viewportRatio = this.viewportRatio;
 
 
 		for(i; i>=0; i--){
@@ -59,14 +67,10 @@ Ext.define(	'NextThought.view.whiteboard.Canvas',{
 	},
 
 	hasResized: function(cmp,width,height){
-
-		this.el.set({
-			width: width,
-			height: width
-		});
+		height = Math.round(width / (this.viewportRatio || 1));
 		this.el.setStyle({
 			width: width+'px',
-			height: width+'px'
+			height: height +'px'
 		});
 		var me = this;
 		setTimeout(function(){
@@ -93,9 +97,6 @@ Ext.define(	'NextThought.view.whiteboard.Canvas',{
 			delete me.drawing;
 			Ext.callback(finished);
 		}
-
-		//Ensure that w === h to obey  a 1-1 drawing model.
-		me.el.setHeight(me.el.getWidth());
 
 		this.self.drawScene(this.drawData,this.el,fin);
 	},
@@ -181,7 +182,7 @@ Ext.define(	'NextThought.view.whiteboard.Canvas',{
 			var c = Ext.DomHelper.append(Ext.getBody(),{tag: 'canvas', style: {visibility:'hidden',position:'absolute'}},true);
 
 			c.dom.width = 580;
-			c.dom.height = 580;
+			c.dom.height = 580 / (scene.viewportRatio || 1);
 
 			this.drawScene(this.updateData(scene),c,finish);
 		}

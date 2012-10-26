@@ -197,7 +197,7 @@
 
 				img.wb-thumbnail {
 					height: auto;
-				  	width: 40% !important;
+				  	width: 200px !important;
 					display: block;
 					clear: both;
 					overflow: hidden;
@@ -1088,16 +1088,16 @@
 			}
 
 			.body-divider .whiteboard-thumbnail{
-			  width: 40% !important;
-			  display: block;
-			  clear: both;
-			  overflow: hidden;
-			  background-position: 0 0;
-			  background-repeat: no-repeat;
-			  background-size: 100%;
-			  border: 1px solid #D0D0D0;
-			  border-radius: 5px;
-			  box-shadow: 0px 1px 2px 1px rgba(0, 0, 0, 0.08);
+			  	width: 300px !important;
+			  	display: block;
+			  	clear: both;
+			  	overflow: hidden;
+			  	background-position: 0 0;
+			  	background-repeat: no-repeat;
+			  	background-size: 100%;
+			  	border: 1px solid #D0D0D0;
+			  	border-radius: 5px;
+			  	box-shadow: 0px 1px 2px 1px rgba(0, 0, 0, 0.08);
 
 			}
 		}
@@ -1130,7 +1130,7 @@
 
 				  	.content{
 						img.wb-thumbnail{
-						  width: 20% !important;
+						  	width: 200px !important;
 						}
 					}
 				}

@@ -26,6 +26,10 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 		this.canvas.updateData(this.value);
 	},
 
+	constructor: function(){
+		this.maxHeight = 635; // FIXME: Naturally we shouldn't hardcode this. But we need some kind of maxHeight.
+		return this.callParent(arguments);
+	},
 
 	afterRender: function(){
 		this.callParent(arguments);

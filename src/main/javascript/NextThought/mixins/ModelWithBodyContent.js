@@ -25,16 +25,12 @@ Ext.define('NextThought.mixins.ModelWithBodyContent',{
 			},
 			{
 				tag: 'img',
-				src: Ext.BLANK_IMAGE_URL,
-				style: {
-					backgroundImage: 'url({1});'
-				},
+				src: '{1}',
 				onclick: '{2}',
 				cls: 'whiteboard-thumbnail',
 				alt: 'Whiteboard Thumbnail',
 				border: 0,
-				width: '{3}',
-				height: '{3}'
+				width: '{3}'
 			}],
 		id: '{0}',
 		cls: 'body-divider'

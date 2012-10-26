@@ -13,6 +13,10 @@ Ext.define('NextThought.view.whiteboard.Window',{
 	ui: 'wb-window',
 	minWidth: 750,
 
+	resizable: false,
+	maximizable: false,
+	draggable: true,
+
 	modal: true,
 	layout: 'fit',
 	items: [{ xtype: 'whiteboard-editor' }],
@@ -64,6 +68,9 @@ Ext.define('NextThought.view.whiteboard.Window',{
 	constructor: function(config){
 		//ensure we're dealing with a local instance copy instead of prototype instance
 		this.items = Ext.clone(this.items);
+
+		// We want the height to be auto. So ext component will tell us how tall we should be.
+		delete config.height;
 
 		//see parent class as to why there is an extra level of items...
 		Ext.copyTo(this.items[1].items[0],config,'value');
