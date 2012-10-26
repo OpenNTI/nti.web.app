@@ -241,6 +241,7 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 
 	addNewChild: function(child){
 		if(child.get('inReplyTo') === this.record.getId()){
+			this.adjustRootsReferenceCount(child, 1);
 			this.addReplies([child]);
             if (!this.record.children){this.record.children = [];}
             this.record.children.push(child);
@@ -283,7 +284,7 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 		this.activateReplyEditor();
 	},
 
-	decrementRootsReferenceCount: function(r){
+	adjustRootsReferenceCount: function(r, i){
         var cid = r.get('ContainerId'),
 			refs = r.get('references') || [],
 			c = 'ReferencedByCount',
@@ -306,7 +307,7 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 				if(rootid){
 					root = pageStore.getById(rootid);
 					if(root){
-						root.set(c, Math.max((root.get(c)||0) - 1, 0));
+						root.set(c, Math.max((root.get(c)||0) + i, 0));
 					}
 				}
 			}
@@ -325,7 +326,7 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 		r.set('blod',['deleted']);
 		r.clearListeners();
 		r.placeHolder = true;
-		this.decrementRootsReferenceCount(r);
+		this.adjustRootsReferenceCount(r, -1);
 		if (r.children && r.children.length > 0){
 			this.setPlaceholderContent();
 		}
