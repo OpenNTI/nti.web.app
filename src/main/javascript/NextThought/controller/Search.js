@@ -98,14 +98,14 @@ Ext.define('NextThought.controller.Search', {
 						term: searchVal,
 						containerId: hit.get('ContainerId'),
 						hitId: hit.getId(),
-						sortId:sortIndexes,
+						sortId: sortIndexes,
 						fragments: hit.get('Fragments'),
 						hit: hit
 					});
 				},	this);
 
+				result = Ext.Array.sort(result, me.sortByRelevanceScore, me);
 
-				result = Ext.Array.sort(result, me.sortSearchHits, me);
 			}, this);
 		}
 
@@ -122,6 +122,13 @@ Ext.define('NextThought.controller.Search', {
 			return 'Books';
 		}
 		return n;
+	},
+
+	sortByRelevanceScore: function(a, b){
+		var aScore = a.hit.get('Score') || -Infinity,
+			bScore = b.hit.get('Score') || -Infinity;
+
+		return aScore - bScore;
 	},
 
 	sortSearchHits: function(aa,bb){
@@ -226,7 +233,7 @@ Ext.define('NextThought.controller.Search', {
 		Ext.ComponentQuery.query('library-view-container')[0].activate();
 
 		if(cat==='Books'){
-			nav.navigateAndScrollToSearchHit(cid,result);
+			nav.navigateAndScrollToSearchHit(cid, result);
 			return;
 		}
 
