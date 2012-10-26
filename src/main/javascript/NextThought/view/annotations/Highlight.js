@@ -409,7 +409,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
             selectedNodes = RangeUtils.getSelectedNodes(range);
 
         if (!rangeString || /^\s+$/.test(rangeString)){
-            if(selectedNodes.length !== 1 || selectedNodes[0].tagName==='LI'){
+            if(selectedNodes.length !== 1 || /^(li|p)$/i.test(selectedNodes[0].tagName)){
                 return;
             }
         }
