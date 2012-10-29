@@ -212,22 +212,5 @@ Ext.define('NextThought.store.PageItem',{
 				}
 			});
 		}
-	},
-
-	// Hack for TotalItemCount properties that don't reflect the actually total number
-	// of records to expect.  Note it would be closer to the actual setting of the total property
-	// to do this in onProxyLoaded but doing it here creates a simpler, cleaner, safer hack
-	loadRecords: function(records, options){
-		var total = options.resultSet.total,
-			// Note the presence on limitParam on the proxy drives if we are paging
-			paging = this.proxy.limitParam && options.limit;
-
-		// If we get less items back than we requested in the pageSize consider that the end
-		// page and update the totalCount appropriately.
-		if( paging && total !== records.length && records.length < options.limit ){
-			this.totalCount = (this.currentPage - 1) * this.pageSize + records.length;
-		}
-
-		return this.callParent(arguments);
 	}
 });
