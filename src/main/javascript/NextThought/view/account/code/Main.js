@@ -26,7 +26,7 @@ Ext.define('NextThought.view.account.code.Main',{
 
     getValue: function(){
         var code = this.down('[name=code]').getValue();
-
+		if(code){code = code.trim();}
         return {
             code: code
         };
