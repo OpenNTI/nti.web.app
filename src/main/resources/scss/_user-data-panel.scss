@@ -1,5 +1,61 @@
 @import "variables";
 
+@mixin chat-history-item {
+	margin: 15px;
+	padding-left: 30px;
+	position: relative;
+	overflow: hidden;
+
+	&::after{
+		position: absolute;
+		top: 5px;
+		left: 5px;
+		content: ' ';
+		height: 14px;
+		width: 18px;
+		background: url(../images/activity-icons.png) -2px -24px no-repeat;
+	}
+
+	.occupants {
+		@include menu-label-text-treatment;
+		color: $primary-blue;
+		line-height: 20px;
+	}
+
+	.time {
+		font-size: 12px;
+		font-family: $font;
+		font-weight: normal;
+		color: $secondary-grey;
+	}
+}
+
+.nti-alert {
+	.history {
+		&.chat {
+			@include chat-history-item;
+			background: #fbfbfb;
+			border: 1px solid #eaeaea;
+			border-radius: 6px;
+			padding: 10px 20px 10px 30px;
+			margin-left: 0;
+			&::after {
+				top: 13px;
+				left: 10px;
+			}
+
+			.occupants{
+				font-weight: 700;
+				font-size: 9px;
+			}
+			.time {
+				font-weight: 700;
+				font-size: 9px;
+				.started { display: none; }
+			}
+		}
+	}
+}
 
 .user-data-panel {
 
@@ -15,32 +71,9 @@
 		}
 
 		&.chat{
-			margin: 15px;
-			padding-left: 30px;
-			position: relative;
-			overflow: hidden;
-
-			&::after{
-				position: absolute;
-				top: 5px;
-				left: 5px;
-				content: ' ';
-				height: 14px;
-				width: 18px;
-				background: url(../images/activity-icons.png) -2px -24px no-repeat;
-			}
-
-			.occupants {
-				@include menu-label-text-treatment;
-				color: $primary-blue;
-				line-height: 20px;
-			}
-
+			@include chat-history-item;
 			.time {
-				font-size: 12px;
-				font-family: $font;
-				font-weight: normal;
-				color: $secondary-grey;
+					.date { display: none; }
 			}
 		}
 

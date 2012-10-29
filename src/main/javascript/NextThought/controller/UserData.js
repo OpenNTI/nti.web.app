@@ -231,9 +231,9 @@ Ext.define('NextThought.controller.UserData', {
 
 
 
-    openChatTranscript: function(records){
+    openChatTranscript: function(records, clonedWidgetMarkup){
 	    if(!Ext.isArray(records)){ records = [records]; }
-        var w = Ext.widget('chat-transcript-window',{waitFor: records.length});
+        var w = Ext.widget('chat-transcript-window',{waitFor: records.length, errorMsgSupplement:clonedWidgetMarkup});
 	    Ext.each(records,function(r){ this.onLoadTranscript(r,w); }, this);
     },
 

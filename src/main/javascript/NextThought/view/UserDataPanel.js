@@ -39,8 +39,8 @@ Ext.define('NextThought.view.UserDataPanel',{
 					cls: 'history favorite',
 					cn:[
                         {cls: 'path', html:'{path}'},
-	    				{cls: 'location', html:'{location}'}
-   					]
+						{cls: 'location', html:'{location}'}
+					]
 				}]},
 
 
@@ -54,7 +54,9 @@ Ext.define('NextThought.view.UserDataPanel',{
 							{tag: 'span', cls: 'count', html: '{count}'}
 						]},
 						{cls: 'time', cn:[
-							'{started} - Lasted ',
+							{tag: 'span', cls: 'started', html: '{started}'},
+							{tag: 'span', cls: 'date', html: '{date}'},
+							' - Lasted ',
 							{tag: 'span', cls: 'duration', html:'{duration}'}
 						]}
 					]
@@ -282,7 +284,7 @@ Ext.define('NextThought.view.UserDataPanel',{
 		mt = rec.get('MimeType');
 
 		if(mt === data.TranscriptSummary.prototype.mimeType){
-			this.getTranscriptsForOccupants(rec);
+			this.getTranscriptsForOccupants(rec, historyElement);
 		}
 		else {
 			cid = rec.get('ContainerId');
@@ -293,12 +295,18 @@ Ext.define('NextThought.view.UserDataPanel',{
 	},
 
 
-	getTranscriptsForOccupants: function(initialRecord){
+	getTranscriptsForOccupants: function(initialRecord, dom){
 		var records = [],
 			store = this.getStore(),
 			mimeRe = this.mimeTypeRe,
 			occupants = (initialRecord.get('Contributors')||[]).slice(),
-			length = occupants.length;
+			length = occupants.length,
+			markup,
+			tempDom = document.createElement('div');
+
+		tempDom.appendChild(dom.cloneNode(true));
+		markup = tempDom.innerHTML.replace(/(data-gu)?id="[^"]*"/i,'');
+		console.log(markup);
 
 		//Lets just assume that we have all of 'em in the map for now. (there is no way to query for these objects so
 		// paging them in is not really in the cards for now.)
@@ -315,7 +323,8 @@ Ext.define('NextThought.view.UserDataPanel',{
 			}
 		});
 
-		this.fireEvent('open-chat-transcript', records);
+
+		this.fireEvent('open-chat-transcript', records, markup);
 	},
 
 
@@ -454,6 +463,7 @@ Ext.define('NextThought.view.UserDataPanel',{
 					isChat: true,
 					guid: guid,
 					occupants: rec.get('Contributors'),
+					date: Ext.Date.format(started, 'F j'),
 					started: Ext.Date.format(started, 'g:i A'),
 					duration: rec.timeDifference(ended, started).replace(/ ago/i, '')
 				};

@@ -26,7 +26,10 @@ Ext.define('NextThought.view.chat.transcript.Window',{
 
 
 	failedToLoadTranscript: function(){
-		alert('failedToLoadTranscript');
+		alert({
+			msg:'There was an error loading chat history for:'+(this.errorMsgSupplement||''),
+			width: 450
+		});
 		this.destroy();
 	},
 

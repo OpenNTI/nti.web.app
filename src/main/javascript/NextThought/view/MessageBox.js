@@ -8,7 +8,7 @@ Ext.define('NextThought.view.MessageBox',{
 	ui: 'nti-alert',
 	cls: 'nti-alert',
 	minWidth: 390,
-	maxWidth: 400,
+	maxWidth: 500,
 
 	CANCEL : 1,
 	NO : 2,
