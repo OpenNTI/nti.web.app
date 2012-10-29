@@ -27,7 +27,7 @@ Ext.define('NextThought.view.chat.transcript.Main',{
 			messages: this.formatMessages(this.messages)
 		}),
 
-		t = this.time,
+		t = this.time || 0,
 		now = new Date(),
 		day = t.getDate(),
 		year = t.getFullYear(),

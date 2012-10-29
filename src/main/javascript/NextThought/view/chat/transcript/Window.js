@@ -52,7 +52,7 @@ Ext.define('NextThought.view.chat.transcript.Window',{
 
 		this.setTitleInfo(record.get('Contributors'));
 		var container = this.down('[windowContentWrapper]'),
-			time = record.get('RoomInfo').get('CreatedTime'),
+			time = record.get('RoomInfo').get('CreatedTime') || record.get('CreatedTime'),
 		    existing = container.items, idx = 0, inserted;
 
 		//assume existing is already sorted
