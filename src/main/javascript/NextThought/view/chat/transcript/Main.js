@@ -32,13 +32,24 @@ Ext.define('NextThought.view.chat.transcript.Main',{
 		day = t.getDate(),
 		year = t.getFullYear(),
 		mo = t.getMonth();
-
 		if(now.getDate()===day && now.getMonth()===mo && now.getFullYear() === year){
 			delete d.time;
 			d.today = 'Today';
 		}
 
 		return this.callParent(arguments);
+	},
+
+	afterRender: function(){
+		this.callParent(arguments);
+		Ext.each(this.el.query('.whiteboard-thumbnail'),
+				function(wb){
+					Ext.fly(wb).on('click', this.click, this);
+					if(wb.previousSibling && Ext.fly(wb.previousSibling).hasCls('whiteboard-magnifier')){
+						Ext.fly(wb.previousSibling).on('click', this.click, this);
+					}
+				},
+				this);
 	},
 
 
@@ -89,16 +100,34 @@ Ext.define('NextThought.view.chat.transcript.Main',{
 				}
 
 
-			}, this, this.generateClickHandler, 225);
+			}, me, me.generateClickHandler, 225);
 
 			m.push(o);
 			o = null;
 		});
+
 		return m;
 	},
 
 
 	generateClickHandler: function(id,data){
-		//this.readOnlyWBsData[id] = data;
+		if(this.readOnlyWBsData === undefined){
+			this.readOnlyWBsData = {};
+		}
+		this.readOnlyWBsData[id] = data;
+	},
+
+	click: function(e){
+		var t = e.getTarget('img.whiteboard-thumbnail'), guid;
+
+		// Get a click on the magnifying glass to expand the note
+		if(!t && Ext.fly(e.target.nextSibling).hasCls('whiteboard-thumbnail') ){ t = e.target.nextSibling; }
+		if(!t){ return;}
+
+		guid = t.parentNode.getAttribute('id');
+		console.log(guid);
+		if(t && this.readOnlyWBsData[guid]){
+			Ext.widget('wb-window',{ width: 802, value: this.readOnlyWBsData[guid], readonly: true}).show();
+		}
 	}
 });
