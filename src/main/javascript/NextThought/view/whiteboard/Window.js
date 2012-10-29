@@ -122,7 +122,10 @@ Ext.define('NextThought.view.whiteboard.Window',{
 
 	cancel: function () {
 		this.hide();
-		this.down('whiteboard-editor').reset();
+		var e = this.down('whiteboard-editor');
+		if( e ){
+			e.reset();
+		}
 		this.fireEvent('cancel', this);
 	},
 
