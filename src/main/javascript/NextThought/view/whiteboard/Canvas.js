@@ -101,11 +101,21 @@ Ext.define(	'NextThought.view.whiteboard.Canvas',{
 		this.self.drawScene(this.drawData,this.el,fin);
 	},
 
+
+	makeShape: function(data){
+		return this.self.makeShape(data);
+	},
+
+
+	addShape: function(shape){
+		this.drawData.shapeList.unshift(shape);
+	},
+
 	statics: {
 		objectNameRe: (/^Canvas(.+?)Shape$/i),
 
 		updateData: function(scene){
-			var shapes, i, c, p = 'NextThought.view.whiteboard.shapes.',
+			var shapes, i,
 				drawData = Ext.clone(scene || {shapeList:[]});
 
 			//maintain z-order since we're looping backwards (for speed)
@@ -115,22 +125,26 @@ Ext.define(	'NextThought.view.whiteboard.Canvas',{
 			i = shapes.length -1;
 
 			for(i; i>=0; i--){
-				//reparent shapes
-				c = this.objectNameRe.exec(shapes[i].Class);
-				if(!c){
-					console.warn('Not a shape: '+JSON.stringify(shapes[i]));
-					continue;
-				}
-
-				if(c[1]==='Polygon' && shapes[i].sides<=2){
-					c[1]='Line';
-				}
-				shapes[i] = Ext.create(p+c[1],shapes[i]);
+				shapes[i] = this.makeShape(shapes[i]);
 			}
 
 			return drawData;
 		},
 
+
+		makeShape: function(data){
+			//reparent shapes
+			var c = this.objectNameRe.exec(data.Class);
+			if(!c){
+				console.warn('Not a shape: '+JSON.stringify(data));
+				return null;
+			}
+
+			if(c[1]==='Polygon' && data.sides<=2){
+				c[1]='Line';
+			}
+			return Ext.create('NextThought.view.whiteboard.shapes.'+c[1],data);
+		},
 
 
 		drawScene: function(data, canvas, finished){

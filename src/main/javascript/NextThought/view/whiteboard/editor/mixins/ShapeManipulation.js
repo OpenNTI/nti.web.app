@@ -374,7 +374,7 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 
 	addShape: function(shape){
 		var opts = this.toolbar.getCurrentTool().getOptions(),
-			data = this.canvas.getData() || {'Class': 'Canvas','shapeList':[]},
+			newShape,
 			stroke = opts.strokeWidth/(this.canvas.el.getWidth()),
 			defs = {
 				'Class': 'Canvas'+Ext.String.capitalize(shape.toLowerCase())+'Shape',
@@ -409,11 +409,11 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 			console.debug('implement path');
 		}
 
-		data.shapeList.push(defs);
 
-		this.canvas.updateData(data);
+		newShape = this.canvas.makeShape(defs);
+		this.canvas.addShape(newShape);
 
-		return this.canvas.drawData.shapeList[0];
+		return newShape;
 	}
 
 }, function(){
