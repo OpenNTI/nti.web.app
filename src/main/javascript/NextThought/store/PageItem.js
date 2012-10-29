@@ -19,7 +19,7 @@ Ext.define('NextThought.store.PageItem',{
 		reader: {
 			type: 'nti',
 			root: 'Items',
-			totalProperty: 'TotalItemCount'
+			totalProperty: 'FilteredTotalItemCount'
 		},
 		headers: {
 			'Accept': 'application/vnd.nextthought.collection+json'
