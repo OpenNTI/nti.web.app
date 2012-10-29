@@ -14,7 +14,7 @@
 	left: 0;
 	top: 0;
 	padding: 2px;
-	z-index: 20001;
+	z-index: 999993;
 	height: auto;
 	margin: 0;
 	div{
@@ -36,6 +36,7 @@
     border: none !important;
 	background: transparent;
 	color: #555;
+	z-index: 999992;
 
 	&.body-mask,
 	&.drag-mask {
@@ -89,6 +90,10 @@
 }
 
 .nt-mask,
-.x-mask { background: rgba(255,255,255,0.85); }
+.x-mask {
+	background: rgba(255,255,255,0.85);
+	z-index: 999991;
+	cursor: wait;
+}
 
 .x-tip { background-color: white; }

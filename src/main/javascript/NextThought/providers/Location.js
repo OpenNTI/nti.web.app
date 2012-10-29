@@ -70,7 +70,7 @@ Ext.define('NextThought.providers.Location', {
 	 */
 	setLocation: function(ntiid, callback, fromHistory){
 		var me = this,
-			e = Ext.getCmp('viewport').getEl(),
+			e = Ext.getBody(),
 			rootId = this.getLineage(ntiid).last();
 
 		if(me.currentNTIID === ntiid){
