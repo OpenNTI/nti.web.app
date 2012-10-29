@@ -21,6 +21,8 @@ Ext.define('NextThought.providers.Location', {
 			cache: {}
 		});
 
+        //init the page store.
+        this.currentPageStores = {};
 
 		this.callParent(arguments);
 		this.mixins.observable.constructor.call(this);
