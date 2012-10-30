@@ -172,6 +172,7 @@
 				&, * {
 					@include allow-select;
 				}
+				cursor: text;
 				padding: 2px 0 0 0;
 				color: $secondary-grey;
 				font: 14px 'Droid Serif';
@@ -431,7 +432,7 @@
 		//@include animate(fadeIn,0.1s);
 		//@include experimental(transition, $t);
 
-		cursor: text;
+	//	cursor: text;
 		position: absolute;
 		left: 0;
 		right: 45px;
@@ -476,7 +477,8 @@
 
 		.entry {
 			&.active {
-				textarea, .clear, .advanced {
+				//textarea,
+				.clear, .advanced {
 					display: block;
 				}
 				.shadow-text{

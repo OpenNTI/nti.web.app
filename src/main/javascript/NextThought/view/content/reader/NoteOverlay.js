@@ -84,6 +84,16 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		data.textarea = txt = box.down('textarea');
 		data.lineEntry = box.down('.entry');
 		data.editor = box.down('.editor');
+        data.main = box.down('.main');
+        data.footer = box.down('.footer');
+
+        //Firefox likes to allow you to edit the toolbar, fix that
+        if (data.main){
+            data.main.unselectable();
+        }
+        if (data.footer){
+            data.footer.unselectable();
+        }
 
 		box.hide();
 
@@ -320,16 +330,19 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		if(o.richEditorActive){
 			return;
 		}
+
 		o.richEditorActive = true;
 		o.editorActions.updatePrefs();
 		o.editorActions.activate();
 		o.editorActions.setValue( t.value, true, true );
 		t.value = '';
 
+
 		if(!o.editor.isVisible()){
 			this.noteOverlayDeactivateEditor();
 			return;
 		}
+
 		this.noteOverlayScrollEditorIntoView();
 	},
 
