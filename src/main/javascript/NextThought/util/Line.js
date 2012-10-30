@@ -110,8 +110,6 @@ Ext.define('NextThought.util.Line',{
 		//If we have selected a range that is still collapsed.  No anchor.
 		if (range.collapsed){return null;}
 
-		if (!this.isNodeAnchorable(range.commonAncestorContainer)){return null;}
-
 		//testing, show ranges:
 		//doc.parentWindow.getSelection().removeAllRanges();
 		//doc.parentWindow.getSelection().addRange(range);

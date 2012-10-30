@@ -261,7 +261,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 			newY = 0;
 
 		if (o.lastLine && o.lastLine.rect){
-			newY = Math.round(o.lastLine.rect.bottom + offsets.top - box.getHeight());
+			newY = Math.round(o.lastLine.rect.top + offsets.top);
 		}
 
 		//check for minute scroll changes to prevent jitter:
