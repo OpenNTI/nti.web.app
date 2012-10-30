@@ -116,7 +116,6 @@ Ext.define('NextThought.view.Window',{
 	afterRender: function(){
 		this.callParent(arguments);
 		this.fixScroll();
-		this.on('afterlayout',this.fixScroll,this);
 		this.mon(this.el,{
 			contextmenu: function(e){e.stopEvent();return false;}
 		});
@@ -125,21 +124,54 @@ Ext.define('NextThought.view.Window',{
 
 	fixScroll: function(){
 		if(!Ext.isWebKit){return;}
+
 		//This will fix a glitch in WebKit: if you try to drag something into the window, it caused it
 		// to scroll sideways off screen.
-		var c = this.down('container[windowContentWrapper]');
+		var me = this,
+            target = 'targetEl',
+            c = me.down('container[windowContentWrapper]');
+
+        function getEl(c,sub){ return Ext.get(c.getId()+'-'+sub); }
+
 		function fixIt(c, sub){
-			var el = Ext.get(c.getId()+'-'+sub);
+			var el = getEl(c,sub);
 			if(el){
-				el.setStyle({ position: 'fixed', top: 'initial', left: 'initial' });
+                el.setStyle({ position: 'fixed', top: 'initial', left: 'initial' });
 			}
 		}
 
-		fixIt(this,'targetEl');
+        function fixWidth(){
+            //This is called with various argument lengths, but the last argument is always the one we care about.
+            var o = arguments[arguments.length - 1],
+                cmp = o.cmp,
+                side = 'margin' + Ext.String.capitalize( cmp.dock ),
+                margin = cmp.getWidth() + 'px';
+            //we need a margin here in webkits case because the docked items do not jive with the position fixed.  So,
+            //calculate the margin and which side we need to set and apply.  If it's 0, that's okay.
+            getEl(me,target).setStyle(side,margin);
+        }
+
+		fixIt(me,target);
 		if(c){
-			fixIt(c,'targetEl');
+			fixIt(c,target);
 		}
+
+        //get docked items so we can reset margins because of docked items
+        Ext.each(me.getDockedItems(), function(i){
+            var o = {
+                'show': fixWidth,
+                'hide': fixWidth,
+                'close': fixWidth,
+                'destroy': fixWidth,
+                cmp: i,
+                scope: me
+            };
+
+            me.mon(i, o);
+            fixWidth(o);
+        });
 	},
+
 
 
 	show: function(){
