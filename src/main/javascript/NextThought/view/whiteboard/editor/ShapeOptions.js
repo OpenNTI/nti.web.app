@@ -24,7 +24,6 @@ Ext.define('NextThought.view.whiteboard.editor.ShapeOptions',{
 					fill = me.down('color-picker-button[fillSelect]'),
 					lbl = me.down('tbtext[fillLabel]');
                 if(btn.sides===1){
-                    fill.setValue();
                     fill.disable();
 					fill.hide();
 					lbl.hide();
@@ -52,7 +51,7 @@ Ext.define('NextThought.view.whiteboard.editor.ShapeOptions',{
 		},
 		items: [
 			{ xtype: 'tbtext', text: 'Fill', fillLabel: true, hidden: true },
-			{ xtype: 'color-picker-button', fillSelect: true, value: 'NONE', disabled: true, hidden: true },
+			{ xtype: 'color-picker-button', fillSelect: true, value: 'E1E1E1', disabled: true, hidden: true },
 			'Stroke',
 			{ xtype: 'stroke-select', value: 3 },
 			{ xtype: 'color-picker-button', strokeSelect: true, value: '333333' }
@@ -107,7 +106,7 @@ Ext.define('NextThought.view.whiteboard.editor.ShapeOptions',{
 			stroke, strokeWidth, fill, sides;
 
 		sides = shapeToolbar.sides || shapeToolbar.value || null;
-		fill = fillButton.getValue();
+		fill = sides !== 1 ? fillButton.getValue() : 'NONE';
 		stroke = strokeButton.getValue();
 		strokeWidth = this.down('stroke-select').getValue();
 
