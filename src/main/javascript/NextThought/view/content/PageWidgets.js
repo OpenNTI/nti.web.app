@@ -60,6 +60,9 @@ Ext.define('NextThought.view.content.PageWidgets',{
 		this.callParent(arguments);
 
 		this.mon( this.favorite, 'click', this.onFavoriteClick, this);
+
+        //we need to move the bookmark/favorite widget to the left a bit to handle scrollbars:
+        this.meta.setStyle('right', (Ext.getScrollbarSize().width+3)+'px');
 	},
 
     onFavoriteClick: function(){
