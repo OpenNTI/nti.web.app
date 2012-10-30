@@ -439,7 +439,7 @@ Ext.define('NextThought.controller.UserData', {
             ContainerId: LocationProvider.currentNTIID,
             applicableRange: Ext.create('NextThought.model.anchorables.ContentRangeDescription')
         });
-        bm.mimeType = 'application/vnd.nextthought.highlight';
+
         //now save this:
         bm.save({
             scope: this,

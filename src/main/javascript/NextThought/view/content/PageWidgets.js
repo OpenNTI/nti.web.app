@@ -50,7 +50,7 @@ Ext.define('NextThought.view.content.PageWidgets',{
             found = favStore.findRecord('NTIID', this.bookmarkModel.get('NTIID'), 0, false, false, true);
             //undo fancy URLbuilding hack where favorites are set at highlights to fins an accepts that works.
             this.bookmarkModel.mimeType = 'application/vnd.nextthought.bookmark';
-            if (!found){favStore.add(this.bookmarkModel);}
+            if (!found){favStore.insert(0, this.bookmarkModel);}
         }
     },
 
