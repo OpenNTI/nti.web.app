@@ -204,7 +204,7 @@ Ext.define('NextThought.view.annotations.note.Templates',{
 
 		menu.on('mouseleave', function(){
 			menuTimer = setTimeout(function(){
-				menu.hide();
+				menu.close();
 				if(opts.scope.el && opts.scope.el.down('.single')){
 					opts.scope.el.down('.single').removeCls('menu-open');
 				}
@@ -214,7 +214,7 @@ Ext.define('NextThought.view.annotations.note.Templates',{
 
 		menu.showBy(more, 'tl-bl?', [2, -7]);
 
-		menuTimer = setTimeout(function(){ menu.hide(); }, 1500);
+		menuTimer = setTimeout(function(){ menu.close(); }, 1500);
 		return false;
 	},
 
