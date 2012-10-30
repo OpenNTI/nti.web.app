@@ -243,7 +243,10 @@ Ext.define('NextThought.util.Annotations',{
             var s = Ext.getStore('historyStore'),
             clone = ParseUtils.parseItems(rec.raw)[0];
 
-            if (s){s.add(clone);}
+            if (s){
+                s.add(clone);
+                s.sort('CreatedTime', 'DESC');
+            }
         }
         catch(e) {
             console.error('Could not add record to history store.', rec);

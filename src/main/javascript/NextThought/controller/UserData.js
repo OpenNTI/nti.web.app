@@ -530,12 +530,13 @@ Ext.define('NextThought.controller.UserData', {
 		//now save this:
 		replyRecord.save({
 			scope: this,
-			callback:function(record, request){
-				var success = request.success,
-					rec = success ? record: null;
+			callback:function(record, operation){
+				var success = operation.success,
+					rec;
 				if (success){
+                    rec = success ? ParseUtils.parseItems(operation.response.responseText)[0] : null;
 					this.self.events.fireEvent('new-note', rec);
-					(rec.parent?rec:recordRepliedTo).fireEvent('child-added',rec);
+					(record.parent?record:recordRepliedTo).fireEvent('child-added',rec);
                     AnnotationUtils.addToHistory(rec);
 				}
 				Ext.callback(callback, this, [success, rec]);
