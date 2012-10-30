@@ -5,22 +5,33 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Path', {
 		this.callParent(arguments);
 
 		var p = Ext.clone(this.points),
-			l = p.length, i = 0, x, y,
+			l = p.length, i = 0, po=[], midP=[], p1=[],
 			minx=0, miny=0,
 			maxx=0, maxy=0;
 
 		ctx.beginPath();
 		for(;i<l; i+=2){
-			x = p[i];
-			y = p[i+1];
+			po[0] = p[i];
+			po[1] = p[i+1];
 
-			ctx.lineTo(x,y);
+			if(po[0] > maxx) { maxx = po[0]; }
+			if(po[0] < minx) { minx = po[0]; }
 
-			if(x > maxx) { maxx = x; }
-			if(x < minx) { minx = x; }
+			if(po[1] > maxy) { maxy = po[1]; }
+			if(po[1] < miny) { miny = po[1]; }
 
-			if(y > maxy) { maxy = y; }
-			if(y < miny) { miny = y; }
+			if(i+3 > l){
+				ctx.lineTo(po[0],po[1]);
+			}
+			else{
+				//Note: we're need at least two points.
+				p1[0] = p[i+2];
+				p1[1] = p[i+3];
+				midP[0]=(p1[0]+po[0])/2;
+				midP[1]= (p1[1]+po[1])/2;
+				ctx.moveTo(po[0], po[1]);
+				ctx.quadraticCurveTo(midP[0], midP[1], p1[0], p1[1]);
+			}
 		}
 //		ctx.closePath();
 
