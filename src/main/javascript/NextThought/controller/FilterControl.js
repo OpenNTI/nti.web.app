@@ -120,6 +120,7 @@ Ext.define('NextThought.controller.FilterControl', {
 		var id = cmp.getId(),
 			everyone = cmp.down('[isEveryone]').checked,
 			everything = cmp.down('[isEverything]').checked,
+			nothing = cmp.down('[isNothing]').checked,
 			groups = cmp.query('[isGroup]'),
 			types = cmp.query('[model]'),
 			Filter = NextThought.Filter,
@@ -127,7 +128,7 @@ Ext.define('NextThought.controller.FilterControl', {
 			people = new NextThought.FilterGroup(id,NextThought.FilterGroup.OPERATION_UNION),
 			models = new NextThought.FilterGroup(id,NextThought.FilterGroup.OPERATION_UNION);
 
-		if (!everyone) {
+		if (!everyone && !nothing) {
 			group.addFilter(people);
 		}
 		group.addFilter(models);

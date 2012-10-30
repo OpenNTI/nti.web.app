@@ -37,6 +37,7 @@ Ext.define('NextThought.view.menus.Filter',{
 		var items = [], communities = [];//$AppConfig.userObject.getCommunities();
 
 		this.removeAll(true);
+		items.push({ cls: 'type-filter nothing', text: 'Nothing', checked: false, allowUncheck: true, isNothing: true});
 		items.push({ cls: 'type-filter everything', text: 'Everything', checked: true, allowUncheck:false, isEverything: true});
 		items.push({
 			cls: 'type-filter highlight',
@@ -99,6 +100,7 @@ Ext.define('NextThought.view.menus.Filter',{
 			//Turn off everything.
 			this.query('[isEverything]').first().setChecked(false,true);
 		}
+		this.turnOffNothing();
 	},
 
 	maybeChangeVisibiltiy: function(){
@@ -160,9 +162,14 @@ Ext.define('NextThought.view.menus.Filter',{
 
 		var things = toStrings(this.query('[model][checked=true]')),
 			from = toStrings(this.query('[isGroup][checked=true]')),
+			nothing = this.query('[isNothing][checked=true]'),
 			lastThing = things.pop(),
 			lastFrom = from.pop(),
 			what, who;
+
+		if(nothing && nothing.length > 0){
+			return nothing[0].text;
+		}
 
 		what = (things.length > 0
 				? Ext.String.format('{0} and {1}',things.join(', '),lastThing)
@@ -178,6 +185,28 @@ Ext.define('NextThought.view.menus.Filter',{
 				Ext.String.ellipsis(who,30,true));
 	},
 
+	nothingSelected: function(nothing){
+		Ext.each(this.query('[model]'),function(o){
+			if(o !== nothing){
+				o.setChecked(false,true);
+			}
+		});
+		Ext.each(this.query('[isGroup]'),function(o){
+			o.setChecked(false,true);
+		});
+		this.query('[isEverything]').first().setChecked(false,true);
+		this.query('[isEveryone]').first().setChecked(false,true);
+	},
+
+	turnOffNothing: function(){
+		if (!this.query('[isGroup][checked=true]').length){
+			this.query('[isEveryone]').first().setChecked(true,true);
+		}
+		if (!this.query('[model][checked=true]').length){
+			this.query('[isEverything]').first().setChecked(true,true);
+		}
+		this.query('[isNothing]').first().setChecked(false,true);
+	},
 
 	handleClick: function(item){
 
@@ -188,6 +217,10 @@ Ext.define('NextThought.view.menus.Filter',{
 				Ext.each(this.query('[model]'),function(o){
 					o.setChecked(false,true);
 				});
+				this.turnOffNothing();
+			}
+			else if(item.isNothing){
+				this.nothingSelected(item);
 			}
 			else if(item.is('[model]')){
 				this.maybeTurnOnEverything();
@@ -196,9 +229,11 @@ Ext.define('NextThought.view.menus.Filter',{
 				Ext.each(this.query('[isGroup]'),function(o){
 					o.setChecked(false,true);
 				});
+				this.turnOffNothing();
 			}
 			else if(item.is('[isGroup]')){
 				this.query('[isEveryone]').first().setChecked(false,true);
+				this.turnOffNothing();
 			}
 		}
 		else {

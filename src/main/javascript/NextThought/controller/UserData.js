@@ -241,7 +241,11 @@ Ext.define('NextThought.controller.UserData', {
 	onAnnotationsFilter: function(cmp){
 		var stores = LocationProvider.currentPageStores,
 			listParams = FilterManager.getServerListParams(),
-			filter = ['TopLevel',listParams.filter];
+			filter = ['TopLevel'];
+
+		if(listParams.filter){
+			filter.push(listParams.filter);
+		}
 
 		if(!stores){ return; }
 
