@@ -51,6 +51,9 @@ Ext.application({
 			return;
 		}
 
+		//Uncomment to supress cross domain flash socket message
+		//window.WEB_SOCKET_SUPPRESS_CROSS_DOMAIN_SWF_ERROR = true;
+
 		//if we get this far, we're good... no need to redirect to the unsupoprted page.
 		delete window.onerror;
 		window.onerror = null;
