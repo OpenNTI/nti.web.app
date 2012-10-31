@@ -413,7 +413,7 @@ Ext.define('NextThought.view.UserDataPanel',{
 					location: '...',
 					path: '...',
                     cls: 'note',
-					textContent: rec.getBodyText()
+					textContent: Ext.String.ellipsis(rec.getBodyText(), 200, false)
 				};
 
 		LocationMeta.getMeta(rec.get('ContainerId'),function(meta){
