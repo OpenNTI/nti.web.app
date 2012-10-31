@@ -76,32 +76,53 @@ Ext.define('NextThought.ux.SearchHits', {
 		return this.ranges;
 	},
 
+
 	showAllHits: function(){
 		this.renderRanges(this.getRanges());
 	},
 
+
 	renderRanges: function(rangesToRender){
-		var toAppend = [], range;
+		var toAppend = [], redactionAction, rects;
 
 		if(!rangesToRender){
 			return;
 		}
 		Ext.each(rangesToRender, function(sel){
-			var rects = sel.getClientRects();
-			rects = RectUtils.merge(rects, null);
+            redactionAction = this.getRedactionActionSpan(sel);
+            if (!sel.commonAncestorContainer && redactionAction){
+                redactionAction.addCls('searchHitInside');
+                sel.getClientRects = function(){
+                    var b = redactionAction.getBox();
+                    return [{
+                        bottom:b.bottom,
+                        top:b.y,
+                        left:b.x,
+                        right:b.right,
+                        height:b.height,
+                        width:b.width
+                    }];
+                }
+                sel.noOverlay = true;
+            }
+
+            if(!sel.getClientRects){sel.getClientRects = function(){return [];}}
+			rects = RectUtils.merge(sel.getClientRects(), null);
 
 			Ext.each(rects, function(range){
 
 			//Instead of appending one element at a time build them into a list and
 			//append the whole thing.  This is a HUGE improvement for the intial rendering performance
-			toAppend.push({
-					   cls:'searchHit-entry',
-					   style: {
-						  height: range.height+'px',
-						  width: range.width+'px',
-						  top: range.top+'px',
-						  left: range.left+'px'
-					   }});
+            if(!sel.noOverlay){
+			    toAppend.push({
+                   cls:'searchHit-entry',
+                   style: {
+                      height: range.height+'px',
+                      width: range.width+'px',
+                      top: range.top+'px',
+                      left: range.left+'px'
+                   }});
+            }
 			});
 
 			//Arbitrarily cap at 100 until we can figure out a solution other than

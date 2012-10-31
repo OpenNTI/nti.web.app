@@ -1,6 +1,32 @@
 Ext.define('NextThought.ux.TextRangeFinder', {
 	requires: [],
 
+
+    rangeIsInsideRedaction: function(r){
+        if (r.dom && r.hasCls('redacted')){return r;}
+        else if (r.commonAncestorContainer){return Ext.fly(r.commonAncestorContainer).up('.redacted');}
+        return false;
+    },
+
+
+    getRedactionActionSpan: function(r){
+        var redactionParent = this.rangeIsInsideRedaction(r),
+            redactionAction, blockRedaction;
+        if (!redactionParent){return null;}
+
+
+        redactionAction = redactionParent.prev('.redactionAction');
+        if (!redactionAction){
+            blockRedaction = redactionParent.prev('.block-redaction');
+            if (blockRedaction){
+                redactionAction = blockRedaction.down('.redactionAction');
+            }
+        }
+
+        return redactionAction;
+    },
+
+
 	/** 
 	 * A heavily modified version of Raymond Hill's doHighlight code. Attribution below 
 	 *
@@ -158,9 +184,13 @@ Ext.define('NextThought.ux.TextRangeFinder', {
 			range = document.createRange();
 			range.setStart(entryLeft.n, Math.max(iNodeTextStart, 0));
 			range.setEnd(entryRight.n, iNodeTextEnd);
-			ranges.push(range);
 
-		}
+            var redactionParent = this.rangeIsInsideRedaction(range);
+            if(redactionParent){
+                ranges.push(redactionParent);
+            }
+            ranges.push(range);
+        }
 		return ranges;
 	}
 
