@@ -406,7 +406,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
             s,
             rangeString = range.toString(),
             sc = range.startContainer,
-            selectedNodes = RangeUtils.getSelectedNodes(range);
+        selectedNodes = RangeUtils.getSelectedNodes(range, range.commonAncestorContainer.ownerDocument);
 
         if (!rangeString || /^\s+$/.test(rangeString)){
             if(selectedNodes.length !== 1 || /^(li|p)$/i.test(selectedNodes[0].tagName)){

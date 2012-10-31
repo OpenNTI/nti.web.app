@@ -107,7 +107,7 @@ Ext.define('NextThought.util.Ranges',{
     },
 
 
-    getSelectedNodes: function(range){
+    getSelectedNodes: function(range, doc){
         var walker,
             sc = range.startContainer, ec = range.endContainer,
             so = range.startOffset, eo = range.endOffset,
@@ -115,7 +115,8 @@ Ext.define('NextThought.util.Ranges',{
             startAt = Ext.isTextNode(sc) ? sc : sc.childNodes[so],
             endAt = Ext.isTextNode(ec) ? ec : ec.childNodes[eo],
             next,
-            parentNodesSeen = [];
+        	parentNodesSeen = [],
+			doc = doc || document, node;
 
 //        walker = document.createTreeWalker(range.commonAncestorContainer, NodeFilter.SHOW_ELEMENT|NodeFilter.SHOW_TEXT//,
 //            { acceptNode: function(node) {
@@ -131,8 +132,18 @@ Ext.define('NextThought.util.Ranges',{
 //        );
 
 		//NOTE in every browser but IE the last two params are optional, but IE explodes if they aren't provided
-		walker = document.createTreeWalker(range.commonAncestorContainer, NodeFilter.SHOW_ELEMENT|NodeFilter.SHOW_TEXT, null, false);
-        while(walker.nextNode()){
+
+		walker = doc.createTreeWalker(range.commonAncestorContainer, NodeFilter.SHOW_ELEMENT|NodeFilter.SHOW_TEXT, null, false);
+
+		//NOTE IE also blows up if you call nextNode() on a newly initialized treewalker whose root is a text node.
+		//Use a similar strategy as what is used in Anchors.js
+		if(walker.currentNode.nodeType === Node.TEXT_NODE){
+			node = walker.currentNode;
+		}
+		else{
+			node = walker.nextNode();
+		}
+        while( node ){
             if (walker.currentNode === startAt || startAt === true){
                 if (!Ext.isTextNode(walker.currentNode)){nodes.push(walker.currentNode);}
                 startAt = true;
@@ -140,6 +151,7 @@ Ext.define('NextThought.util.Ranges',{
             if (walker.currentNode === endAt){
                 break;
             }
+			node = walker.nextNode();
         }
       // console.log('nodes from getSelectedNdoes', nodes);
         return nodes;
