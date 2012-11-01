@@ -43,14 +43,58 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Polygon', {
 		renderCallback.call(this);
 	},
 
-//	migrateRect: function(){
-//		var m = new NTMatrix(Ext.clone(this.transform));
-//
-//		m.scale(Math.cos(Math.PI/this.sides));
-//		m.rotate(-Math.PI/this.sides);
-//
-//		this.transform = m.toTransform();
-//	},
+	migrateTriangle: function(ctx){
+/**
+ * Unused func. We might use this function in the future when we need to migrate existing triangles.
+ *
+ * */
+
+		if(this.migrated){ return;}
+		this.migrated = true;
+
+		function triangleCenter(m){
+			var scale = m.getScale(), r, h, c = m.getTranslation(), dc, ct = [],
+				rot = m.getRotation();
+
+			//Take rotation out
+			//m.rotate(-rot);
+			console.log("scale: ", scale);
+			r = scale[0] / 2;
+
+			h = ( r*3*Math.cos(Math.PI/6) ) / Math.sqrt(3);
+			console.log("h: ", h);
+
+			dc = r - h/2;
+
+			ct[0] = c[0];
+			ct[1] = c[1] - dc;
+
+			//m.rotate(rot);
+			console.log("dc: ", dc);
+			console.log("center: ", ct);
+			return ct;
+		}
+
+		function triangleHeight(m){
+			var scale = m.getScale(),
+				r = scale[0] / 2,
+				h = ( r*3*Math.cos(Math.PI/6) ) / Math.sqrt(3);
+			return h;
+		}
+
+		var m = new NTMatrix(Ext.clone(this.transform)),
+			scale, dx, dy, t, ct, nt;
+
+		m.rotate(Math.PI/2);
+		dx = 0;
+		dy= triangleHeight(m) / 6;
+
+		console.log("center dx",dx, "center dy", dy);
+		m.scale( 1, Math.cos(Math.PI/6));
+
+		m.translate(dx,dy);
+		this.transform = m.toTransform();
+	},
 
 	drawRect: function(ctx){
 		var x = -0.5,
@@ -70,6 +114,10 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Polygon', {
 	},
 
 	drawTriangle: function(ctx){
+/**
+ * Unused func. We will use it to draw triangles correctly.
+ *
+ * */
 		var w2 =  0.5,
 			h2 = 0.5;
 

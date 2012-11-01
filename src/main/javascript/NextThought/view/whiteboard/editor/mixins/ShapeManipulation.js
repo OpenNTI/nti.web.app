@@ -28,7 +28,23 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 			click: this.onClick
 		});
 
+		this.mon(this.toolbar.el, {
+			scope: this,
+			click: this.onToolbarClick
+		});
+
+		this.mon(this.toolbar.down('[fillSelectMove]').palette, {
+			scope:this,
+			select: this.onFillColorChange
+		});
+
+		this.mon(this.toolbar.down('[strokeSelectMove]').palette, {
+			scope:this,
+			select: this.onStrokeColorChange
+		});
+
 		function clearFlag(){ delete this.mouseLeftNoMouseUp;console.log('clear!'); }
+
 		this.mon( Ext.getBody(), {
 			scope: this,
 			mousedown: clearFlag,
@@ -73,6 +89,39 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 		return xy;
 	},
 
+	onToolbarClick: function(e){
+		var action, c, me = this;
+		function togglePressed(){
+			var b = Ext.Array.filter(me.toolbar.query('[isEditAction]'), function(b){ return b.pressed});
+			if(b.length > 0){ b[0].toggle();}
+		}
+
+		if( e.getTarget('.move', undefined, true) ){
+			e.stopEvent();
+			action = this.toolbar.getCurrentTool().getActionType();
+
+			if(action){
+				c = this.moveClickHandlerMap[action];
+				if(!c){ return; }
+				c.apply(this, arguments);
+				setTimeout(function(){
+					togglePressed();
+				}, 100);
+			}
+		}
+	},
+
+	onFillColorChange: function(e){
+		if(!e.value){ return; }
+		this.selected.fill = Color.toRGBA('#'+e.value);
+		this.canvas.drawScene();
+	},
+
+	onStrokeColorChange: function(e){
+		if(!e.value){ return; }
+		this.selected.stroke = Color.toRGBA('#'+e.value);
+		this.canvas.drawScene();
+	},
 
 	onMouseEnter: function(e){
 		if(this.mouseLeftNoMouseUp){
@@ -185,6 +234,15 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 //			this.activateToolOptions(this.currentTool);
 //		}
 
+		//Set toolbar Options.
+		if(this.selected){
+			this.toolbar.getCurrentTool().setOptions({
+				fill:this.selected.fill,
+				stroke:this.selected.stroke,
+				strokeWidth:this.selected.strokeWidth
+			});
+		}
+
 		c.drawScene();
 	},
 
@@ -296,7 +354,7 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 			p = this.mouseInitialPoint.slice(),
 			m,
 			x = p[0],
-			y = p[1];
+			y = p[1], max, distY, distX;
 
 		if(!s || s.Class !== 'Canvas'+Ext.String.capitalize(ttype)+'Shape' || !s.isNew){
 			this.selected = this.addShape(ttype);
@@ -309,7 +367,10 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 		m.translate(x,y);
 
 		if(s.sides === 4){
-			m.scale(WBUtils.getDistance(p)* 2 * Math.cos(WBUtils.toRadians(WBUtils.getDegrees(p))));
+			distX = WBUtils.getDistance(p)* 2 * Math.cos(WBUtils.toRadians(WBUtils.getDegrees(p)));
+			distY = WBUtils.getDistance(p)* 2 * Math.sin(WBUtils.toRadians(WBUtils.getDegrees(p)));
+			max = distX > distY ? distX : distY;
+			m.scale(max);
 		}
 		else{
 			m.scale(WBUtils.getDistance(p)*2);
@@ -366,11 +427,47 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 		var c = this.canvas,
 			l = c.drawData.shapeList,
 			i = l.indexOf(this.selected);
-
+		if(!this.selected || !l || l.length === 0){ console.warn("Nothing is selected."); return;}
 		Ext.Array.erase(l,i,1);
 		this.deselectShape();
 	},
 
+	sendSelectedBack: function(){
+		var c = this.canvas,
+			l = c.drawData.shapeList,
+			i = l.indexOf(this.selected);
+
+		if(!this.selected || !l || l.length === 0){ console.warn("Nothing is selected."); return;}
+		Ext.Array.erase(l,i,1);
+		Ext.Array.push(l, this.selected);
+		c.drawScene();
+	},
+
+	sendSelectedFront: function(){
+		var c = this.canvas,
+			l = c.drawData.shapeList,
+			i = l.indexOf(this.selected);
+
+		if(!this.selected || !l || l.length === 0){ console.warn("Nothing is selected."); return;}
+		Ext.Array.erase(l,i,1);
+		c.addShape(this.selected);
+		c.drawScene();
+	},
+
+	duplicateSelected: function(){
+		var c = this.canvas,
+			l = c.drawData.shapeList, i, s = this.selected, w = this.canvas.el.dom.width, sel;
+
+		if(!this.selected || !l || l.length === 0){ console.warn("Nothing is selected."); return;}
+
+		sel = this.selected.selected;
+		this.deselectShape();
+		i = this.copyShape(s);
+		this.selected = i;
+		this.selected.selected = sel;
+		i.translate(40/w, 40/w);
+		setTimeout(function(){ c.drawScene();}, 10);
+	},
 
 	addShape: function(shape){
 		var opts = this.toolbar.getCurrentTool().getOptions(),
@@ -414,6 +511,40 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 		this.canvas.addShape(newShape);
 
 		return newShape;
+	},
+
+	copyShape: function(shape){
+		var newShape,
+			defs = {
+				'Class': shape.Class,
+				'fill': shape.fill,
+				'stroke': shape.stroke,
+				'strokeWidth': shape.strokeWidth,
+				'transform':{
+					'Class':'CanvasAffineTransform',
+					'a':shape.transform.a,
+					'b':shape.transform.b,
+					'c':shape.transform.c,
+					'd':shape.transform.d,
+					'tx':shape.transform.tx,
+					'ty':shape.transform.ty
+				}
+			};
+
+		newShape = this.canvas.makeShape(defs);
+		newShape.cache = {
+			fill: shape.cache.fill,
+			stroke: shape.cache.stroke
+		};
+
+		if(shape.Class === "CanvasPathShape"){
+			newShape.points = Ext.clone(shape.points);
+			newShape.closed = shape.closed;
+		}
+
+		newShape.sides = shape.sides;
+		this.canvas.addShape(newShape);
+		return newShape;
 	}
 
 }, function(){
@@ -427,5 +558,12 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 		'circle':	p.doShape,
 		'polygon':	p.doShape
 	};
+
+	p.moveClickHandlerMap = {
+		'back':         p.sendSelectedBack,
+		'forward':      p.sendSelectedFront,
+		'duplicate':    p.duplicateSelected,
+		'delete':       p.deleteSelected
+	}
 
 });

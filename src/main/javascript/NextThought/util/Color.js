@@ -97,6 +97,27 @@ Ext.define('NextThought.util.Color',{
 	},
 
 
+	rgbaToHex: function(color){
+		/**
+		 * Converts rgba to rgb then to Hex. TODO: this func is ignoring the Alpha component.
+		 * assuming that it is always 1 in our case.
+		 *  Which might change
+		 */
+
+		var a = this.rgbaRe.exec(color), c, rgb, hex;
+		if(!a){ return color; }
+		try{
+			c = a[1].split(',').slice(0,3);
+			rgb = "rgb(" + c.join(',')+")";
+			hex = Ext.draw.Color.toHex(rgb);
+			return hex;
+		}
+		catch(e){
+			console.log("Error: ", e);
+		}
+		return color;
+	},
+
 	/**
 	 * http://ridiculousfish.com/blog/posts/colors.html
 	 * @param idx

@@ -173,6 +173,7 @@
 		}
 
 		&.shape-picker,
+		&.move-action-picker,
 		&.pencil-stroke-options {
 			padding: 0 34px 0 20px;
 		}
@@ -332,6 +333,9 @@
 				width: 32px; height: 32px;
 			}
 
+			&.move{
+				top: 10px !important;
+			}
 
 			.whiteboard-tool-option-icon{
 				@include whiteboard-toolbar-common;
@@ -353,6 +357,13 @@
 					&.triangle { background-position: -334px -434px; }
 					&.poly { background-position: -434px -434px; }
 				}
+
+				&.move {
+					&.back{ background-position: -34px -1634px }
+					&.forward{ background-position: -134px -1634px }
+					&.duplicate{ background-position: -234px -1634px }
+					&.delete{ background-position: -334px -1634px }
+				}
 			}
 
 			&.x-pressed .whiteboard-tool-option-icon{
@@ -369,6 +380,13 @@
 					&.triangle { background-position: -334px -334px !important; }
 					&.poly { background-position: -434px -334px !important; }
 				}
+
+				&.move {
+					&.back{ background-position: -34px -1534px  !important;}
+					&.forward{ background-position: -134px -1534px  !important;}
+					&.duplicate{ background-position: -234px -1534px !important;}
+					&.delete{ background-position: -334px -1534px !important;}
+				}
 			}
 
 			&.x-over .whiteboard-tool-option-icon {
@@ -384,6 +402,13 @@
 					&.circle { background-position: -234px -534px; }
 					&.triangle { background-position: -334px -534px; }
 					&.poly { background-position: -434px -534px; }
+				}
+
+				&.move {
+					&.back{ background-position: -34px -1734px }
+					&.forward{ background-position: -134px -1734px }
+					&.duplicate{ background-position: -234px -1734px }
+					&.delete{ background-position: -334px -1734px }
 				}
 			}
 		}
