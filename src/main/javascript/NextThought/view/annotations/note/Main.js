@@ -26,7 +26,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		favorites: '.meta .controls .favorite',
 		sharedTo: '.shared-to',
 		name: '.meta .name',
-		time: '.meta .time',
+		time: '.time',
 		context: '.context .text',
 		text: '.body',
 		responseBox: '.respond',
@@ -606,7 +606,7 @@ function(){
 			cls: 'meta',
 			cn: [
 				{ cls: 'controls', cn: [{ cls: 'favorite' },{ cls: 'like' }] },
-				{ tag: 'span', cls: 'name' },{ tag: 'span', cls: 'time' },
+				{ tag: 'span', cls: 'name' },
 				{ cls: 'shared-to' }
 			]
 		},
@@ -616,12 +616,12 @@ function(){
             {tag: 'span', cls: 'text'}]
         },
 		{ cls: 'body' },
-
 		{
 			cls: 'respond',
 			cn: [
 				TemplatesForNotes.getReplyOptions(),
-				TemplatesForNotes.getEditorTpl()
+				TemplatesForNotes.getEditorTpl(),
+				{ tag: 'span', cls: 'time' }
 			]
 		}
 	]);

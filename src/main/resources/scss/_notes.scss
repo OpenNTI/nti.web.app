@@ -36,7 +36,6 @@
 	}
 }
 
-
 @mixin meta-row-window {
 	.meta {
 		color: $secondary-grey;
@@ -48,19 +47,13 @@
 			font-size: 24px;
 		}
 
-		.time {
-			color: $tertiary-grey;
-			margin-left: 8px;
-			font-size: 12px;
-			font-style: italic;
-		}
 
 		.shared-to{
 			overflow: hidden;
 			text-overflow: ellipsis;
 		}
 
-		.time,.shared-to{
+		.shared-to{
 			font-weight: 400;
 		}
 
@@ -740,7 +733,6 @@
 			z-index: 999;
 
 		  	@include meta-row-window;
-
 			.mask {
 				display: none;
 			}
@@ -1107,6 +1099,7 @@
 		&.editor-active .respond{
 			display: block;
 			.reply-options{display: none;}
+			.time{display: none;}
 			.editor {
 			    display: block;
 			  	.action.share {display: none !important;}
@@ -1122,6 +1115,16 @@
 
 			&.shared .reply-options .share {
 				display: inline-block;
+			}
+
+			.time {
+				color: $tertiary-grey;
+				position: absolute;
+				right: 0px;
+				top: 8px;
+				font-size: 12px;
+				font-style: italic;
+				font-weight: 400;
 			}
 
 			@include note-editor;

@@ -22,7 +22,7 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 		replyBox: '.note-reply',
 		liked: '.meta .controls .like',
 		name: '.meta .name',
-		time: '.meta .time',
+		time: '.time',
 		text: '.body',
 		responseBox: '.respond',
 		editor: '.respond .editor',
@@ -315,7 +315,7 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 				console.error(Globals.getError(error));
 			}
 		});
-	
+
 	},
 
 	onDelete: function(){
@@ -396,14 +396,13 @@ function(){
 					},{
 						tag: 'span',
 						cls: 'name'
-					},{
-						tag: 'span', cls: 'time'
 					}]
 				},{ cls: 'body' },{
 					cls: 'respond',
 					cn: [
 						TemplatesForNotes.getReplyOptions(),
-						TemplatesForNotes.getEditorTpl()
+						TemplatesForNotes.getEditorTpl(),
+						{ tag: 'span', cls: 'time' }
 					]
 				}]
 			},
