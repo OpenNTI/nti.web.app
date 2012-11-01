@@ -199,7 +199,8 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 			sT = this.stackTmpl,
 			width = r.getAnnotationOffsets().gutter + 80,
 			cls = (width <= 355)? 'narrow-gutter': '',
-			maxAnnotations = Math.floor(width / 34) - 3;
+			maxAnnotations = Math.floor(width / 34) - 3,
+			annotationOffsets = AnnotationsRenderer.getReader().getAnnotationOffsets();
 
 		g.setWidth(width);
 		g.controls.setLeft(width-50);
@@ -218,7 +219,7 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 			(new Ext.CompositeElement([line.controls,line.widgets])).setTop(y+'px');
 
 			line.each(function(o){
-				r.noteOverlayAddRestrictedRange(o.getRestrictedRange());
+				r.noteOverlayAddRestrictedRange(o.getRestrictedRange(annotationOffsets));
 				var c = o.getControl();
 				if( c ){ c.appendTo( line.controls ); }
 				if( o.hasGutterWidgets ){ widgets.push( o ); }

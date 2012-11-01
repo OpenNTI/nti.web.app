@@ -50,8 +50,6 @@ Ext.define( 'NextThought.view.annotations.Base', {
 			isSingleAction: false,
 			renderPriority: -1,
 
-			offsets: c.getAnnotationOffsets(),
-
 			prefix: c.prefix || 'default',
 
 			requestRender: Ext.Function.createBuffered(me.requestRender, 10, me)
@@ -185,7 +183,7 @@ Ext.define( 'NextThought.view.annotations.Base', {
 		this.clearListeners();
 		this.requestRender();
 	},
-	
+
 
 	updateFilterState: function(newFilter){
 		var v = newFilter.test(this.record);
@@ -194,12 +192,12 @@ Ext.define( 'NextThought.view.annotations.Base', {
 			this.visibilityChanged(v);
 		}
 	},
-	
+
 
 	visibilityChanged: function(show){
 		this.requestRender();
 	},
-	
+
 
 	render: function(){
 		console.warn( Ext.String.format(
@@ -212,7 +210,7 @@ Ext.define( 'NextThought.view.annotations.Base', {
 		AnnotationsRenderer.render(this.prefix);
 	},
 
-	
+
 	remove: function() {
 		this.record.destroy();//the destroy event calls cleanup
 	},
@@ -334,13 +332,12 @@ Ext.define( 'NextThought.view.annotations.Base', {
 		}
 
 		var menu,
-			xy = e.getXY().slice();
-
-		this.offsets = this.ownerCmp.getAnnotationOffsets();
+			xy = e.getXY().slice(),
+			offsets = this.ownerCmp.getAnnotationOffsets();
 
 		//adjust points
-		xy[0] += this.offsets.left;
-		xy[1] += this.offsets.top;
+		xy[0] += offsets.left;
+		xy[1] += offsets.top;
 
 		//single annotation
 		menu = this.getMenu();

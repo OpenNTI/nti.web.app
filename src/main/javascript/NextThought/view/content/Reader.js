@@ -45,7 +45,6 @@ Ext.define('NextThought.view.content.Reader', {
 		this.mon(this.body,'scroll', this.scrollShadowMonitor, this);
 	},
 
-
 	scrollShadowMonitor: function(e,dom){
 		var el = this.scrollShadow;
 		el[dom.scrollTop?'addCls':'removeCls']('active');
@@ -95,7 +94,10 @@ Ext.define('NextThought.view.content.Reader', {
 
 		try {
 			if(e){
-				contentPadding = e.getMargin('l') + e.getPadding('l');
+				if(this.contentPaddingCache === undefined){
+					this.contentPaddingCache = e.getMargin('l') + e.getPadding('l');
+				}
+				contentPadding = this.contentPaddingCache;
 			}
 		}
 		catch(er){
@@ -119,6 +121,7 @@ Ext.define('NextThought.view.content.Reader', {
 
 
 	onNavigate: function(ntiid) {
+		delete this.contentPaddingCache;
 
 		this.clearAnnotations();
 

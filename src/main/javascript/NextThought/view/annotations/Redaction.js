@@ -106,12 +106,12 @@ Ext.define('NextThought.view.annotations.Redaction', {
 		return y;
 	},
 
-	getRestrictedRange: function(){
+	getRestrictedRange: function(annotationOffsets){
 		var rect, t, rtop, rr;
 		if(this.masterSpan.hasCls(this.cls)){
 			t = this.actionSpan.getBoundingClientRect();
 			rect = { top:t.top, bottom:t.bottom, left:t.left, right:t.right, height:t.height, width:t.width };
-			rr = AnnotationsRenderer.getReader().getAnnotationOffsets();
+			rr = annotationOffsets || AnnotationsRenderer.getReader().getAnnotationOffsets();
 			rtop = rr.scrollTop + rr.top;
 			rect.top = rect.top + rtop;
 			rect.bottom = rect.bottom + rtop;
