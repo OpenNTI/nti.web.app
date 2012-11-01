@@ -42,14 +42,15 @@ Ext.define('NextThought.view.chat.transcript.Main',{
 
 	afterRender: function(){
 		this.callParent(arguments);
-		Ext.each(this.el.query('.whiteboard-thumbnail'),
+		this.el.on('click', this.click, this);
+		/*Ext.each(this.el.query('.whiteboard-thumbnail'),
 				function(wb){
 					Ext.fly(wb).on('click', this.click, this);
 					if(wb.previousSibling && Ext.fly(wb.previousSibling).hasCls('whiteboard-magnifier')){
 						Ext.fly(wb.previousSibling).on('click', this.click, this);
 					}
 				},
-				this);
+				this);*/
 	},
 
 
@@ -121,7 +122,7 @@ Ext.define('NextThought.view.chat.transcript.Main',{
 		var t = e.getTarget('img.whiteboard-thumbnail'), guid;
 
 		// Get a click on the magnifying glass to expand the note
-		if(!t && Ext.fly(e.target.nextSibling).hasCls('whiteboard-thumbnail') ){ t = e.target.nextSibling; }
+		if(!t && e.target.nextSibling && Ext.fly(e.target.nextSibling).hasCls('whiteboard-thumbnail') ){ t = e.target.nextSibling; }
 		if(!t){ return;}
 
 		guid = t.parentNode.getAttribute('id');
