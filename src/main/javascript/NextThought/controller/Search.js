@@ -219,10 +219,23 @@ Ext.define('NextThought.controller.Search', {
 			nav.navigate(cid,refs);
 		}
 
-		function failure(){
+		function failure(req, resp){
+			var objDisplayType = (result.hit.get('Type') || 'object').toLowerCase(),
+				msgCfg = { msg: 'An unexpected error occurred loading the '+ objDisplayType };
+
+			if(resp && resp.status){
+				if(resp.status === 404){
+					msgCfg.title = 'Not Found!';
+					msgCfg.msg = 'The '+objDisplayType+' you are looking for no longer exists.';
+				}
+				else if(resp.status === 403){
+					msgCfg.title = 'Unauthorized!';
+					msgCfg.msg = 'You do not have access to this '+objDisplayType+'.';
+				}
+			}
 			console.log("Could not retrieve rawData for: ",result.hitId);
 			console.log("Error: ", arguments);
-			alert('An unexpected error has occured.');
+			alert(msgCfg);
 		}
 
 		if (!cid) {
