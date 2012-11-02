@@ -164,14 +164,14 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 			});
 		});
 
-//        on(doc, 'mouseout', function(e){
-//            var evt = Ext.EventObject.setEvent(e||event),
-//                target = evt.getTarget('a.footnote');
-//
-//               if(target){
-//                   me.fireEvent('kill-footnote-hover');
-//               }
-//        });
+        on(doc, 'mouseout', function(e){
+            var evt = Ext.EventObject.setEvent(e||event),
+                target = evt.getTarget('a.footnote');
+
+               if(target){
+                   me.fireEvent('kill-footnote-hover');
+               }
+        });
 
 
 

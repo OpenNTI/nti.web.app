@@ -412,8 +412,7 @@ Ext.define('NextThought.controller.UserData', {
     onKillFootnoteHover: function() {
         var me = this;
         if (me.footnoteWidget){
-            me.footnoteWidget.destroy();
-            delete me.footnoteWidget;
+            me.footnoteWidget.startCloseTimer();
         }
     },
 
@@ -430,8 +429,11 @@ Ext.define('NextThought.controller.UserData', {
         this.footnoteWidget = Ext.widget('footnote-widget', {text: text});
         //adjust position because of scrollTop:
 
+        position[0] = position[0] + offsets.gutter + offsets.contentLeftPadding;
+        position[0] = position[0] - (this.footnoteWidget.width/2);
         position[1] = position[1] - offsets.scrollTop;
-        position[1] = position[1] - (this.footnoteWidget.getHeight()/2) - 10;
+        position[1] = position[1] - (this.footnoteWidget.getHeight()/2) - 40;
+
 
         this.footnoteWidget.showAt(position);
     },
