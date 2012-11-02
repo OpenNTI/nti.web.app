@@ -170,8 +170,7 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Base', {
 		if(this.cache.fill) { ctx.fill(); }
 		if(this.cache.stroke && ctx.lineWidth) { ctx.stroke(); }
 
-		//NOTE: We don't want to make the 'Eraser' path selectable.
-		if(this.selected === 'Hand' && this.cache.stroke !== "rgba(255,255,255,1)"){
+		if(this.selected === 'Hand'){
 			this.showNibs(ctx);
 		}
 	},

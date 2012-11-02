@@ -23,9 +23,7 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 			mouseup: this.onMouseUp,
 
 			mouseenter: this.onMouseEnter,
-            mouseout: this.onMouseLeave,
-
-			click: this.onClick
+            mouseout: this.onMouseLeave
 		});
 
 		this.mon(this.toolbar.el, {
@@ -152,6 +150,9 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 		this.mouseDown = true;
 		this.mouseInitialPoint = this.getRelativeXY(e);
 		this.clickedNib = s? s.isPointInNib(this.mouseInitialPoint) : false;
+
+		//Check selection.
+		this.handleSelection(e);
 	},
 
 
@@ -184,7 +185,7 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 	},
 
 
-	onClick: function(e){
+	handleSelection: function(e){
 		e.stopEvent();
 		var selectedTool = this.toolbar.getCurrentTool().forTool;
 		this.currentTool = selectedTool === 'move' ? "Hand" : selectedTool;
@@ -292,6 +293,9 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 		if(!this.mouseDown){ return; }
 		if(!s || s.Class !== 'CanvasPathShape' || !s.isNew){
 			w = this.canvas.el.getWidth();
+			this.deselectShape();
+			this.currentTool = this.toolbar.getCurrentTool().forTool;
+
 			this.selected = s = this.addShape('path');
 			s.strokeWidth = opts.strokeWidth/w;
 			s.points = [];
@@ -326,6 +330,10 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 		if(!this.mouseDown){ return; }
 		if(!s || s.Class !== 'CanvasPolygonShape' || s.sides !== 1 || !s.isNew){
 			w = this.canvas.el.getWidth();
+
+			this.deselectShape();
+			this.currentTool = this.toolbar.getCurrentTool().forTool;
+
 			this.selected = s = this.addShape('polygon');
 			s.strokeWidth = opts.strokeWidth/w;
 
@@ -364,6 +372,9 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 			y = p[1], max, distY, distX;
 
 		if(!s || s.Class !== 'Canvas'+Ext.String.capitalize(ttype)+'Shape' || !s.isNew){
+			this.deselectShape();
+			this.currentTool = this.toolbar.getCurrentTool().forTool;
+
 			this.selected = this.addShape(ttype);
 			return;
 		}
@@ -405,6 +416,9 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 			shapeBaseScale = s&&s.bbox? s.bbox.w : 1;
 
 		if(!s || s.Class !== 'Canvas'+tool+'Shape' || !s.isNew){
+			this.deselectShape();
+			this.currentTool = this.toolbar.getCurrentTool().forTool;
+
 			this.selected = this.addShape(tool);
 			return;
 		}
