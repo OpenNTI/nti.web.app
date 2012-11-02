@@ -238,7 +238,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 			shadow: false,
 			frame: false,
 			border: false,
-			hideMode: 'display',
+			hideMode: 'destroy',
 			minWidth: 150,
 			defaults: {ui: 'nt-annotaion', plain: true }
 		});
