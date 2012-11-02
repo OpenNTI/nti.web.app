@@ -410,11 +410,11 @@ Ext.define('NextThought.view.annotations.Highlight', {
 			style = this.record.get('style') || 'plain',
             s,
             rangeString = range.toString(),
-            sc = range.startContainer,
-        selectedNodes = RangeUtils.getSelectedNodes(range, range.commonAncestorContainer.ownerDocument);
+        	sc = range.startContainer;
+		 	selectedNodes = RangeUtils.getSelectedNodes(range, range.commonAncestorContainer.ownerDocument);
 
         if (!rangeString || /^\s+$/.test(rangeString)){
-            if(selectedNodes.length !== 1 || /^(li|p)$/i.test(selectedNodes[0].tagName)){
+            if(selectedNodes.length > 0 && /^(li|p)$/i.test(selectedNodes[0].tagName)){
                 return;
             }
         }
