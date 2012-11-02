@@ -55,7 +55,7 @@ Ext.define('NextThought.util.Anchors', {
 			}
 			//Optimization shortcut, if we have a cached locator use it
 			if(desc.locator()){
-				console.debug('Using cached locator info to shortcut cloning and purification');
+				//console.debug('Using cached locator info to shortcut cloning and purification');
 				return true; //continue
 			}
 
@@ -71,8 +71,8 @@ Ext.define('NextThought.util.Anchors', {
 
 			//Special case for things with an empty desc.  We push the node instead of the locator
 			//TODO need a better way to detect the empty description
-			if (   !desc.start 
-				&& !desc.end 
+			if (   !desc.start
+				&& !desc.end
 				&& !desc.ancestor)
 			{
 				return true;
@@ -86,7 +86,7 @@ Ext.define('NextThought.util.Anchors', {
 			}
 
 			virginNode = getVirginNode(ancestorNode);
-			
+
 			try{
 				Anchors.resolveCleanLocatorForDesc(desc, virginNode, docElement);
 			}
@@ -110,7 +110,7 @@ Ext.define('NextThought.util.Anchors', {
 
 		//Optimization shortcut, if we have a cached locator use it
 		if(contentRangeDescription.locator()){
-			console.debug('Using cached locator info to shortcut cloning and purification');
+			//console.debug('Using cached locator info to shortcut cloning and purification');
 			return Anchors.convertContentRangeToDomRange(contentRangeDescription.locator().start,
 														 contentRangeDescription.locator().end,
 														 contentRangeDescription.locator().doc);
@@ -118,8 +118,8 @@ Ext.define('NextThought.util.Anchors', {
 
 
 		//TODO need a better way to detect the empty description
-		if (   !contentRangeDescription.start 
-			&& !contentRangeDescription.end 
+		if (   !contentRangeDescription.start
+			&& !contentRangeDescription.end
 			&& !contentRangeDescription.ancestor)
 		{
 			//Todo resolve the containerId to the node we want to restrict our search within
@@ -138,7 +138,7 @@ Ext.define('NextThought.util.Anchors', {
 			resultRange.selectNodeContents(searchWithin);
 			return resultRange;
 		}
-		
+
 		searchWithin = this.getContainerNode(containerId, cleanRoot);
 		if(!searchWithin){
 			//TODO if the container is not the page id but we can't find it we could
@@ -209,7 +209,7 @@ Ext.define('NextThought.util.Anchors', {
 
 		var selector = '['+(containerId.indexOf('tag:nextthought.com') >= 0 ? 'data-ntiid' : 'Id')+'="'+containerId+'"]',
 			potentials = Ext.query(selector, root);
-		
+
 		if(!potentials || potentials.length === 0){
 			console.debug ('Unable to find container', containerId);
 			return null;
@@ -243,7 +243,7 @@ Ext.define('NextThought.util.Anchors', {
 
 
 	doesElementMatchPointer: function(element, pointer) {
-		if( (element.id === pointer.elementId 
+		if( (element.id === pointer.elementId
 			 || (element.getAttribute && element.getAttribute('data-ntiid') === pointer.elementId))
 			&& element.tagName.toUpperCase() === pointer.elementTagName.toUpperCase() ){
 			return true;
@@ -447,7 +447,7 @@ Ext.define('NextThought.util.Anchors', {
 		}
 
 		if(rangeDesc.locator()){
-			console.debug('Using cached locator info');
+			//console.debug('Using cached locator info');
 			return rangeDesc.locator();
 		}
 
@@ -671,9 +671,9 @@ Ext.define('NextThought.util.Anchors', {
 				//to looking in the ancestor we don't do any partial matching.  We should
 				//reevaluate this decision.  In something like the mathcounts case where we have stuff anchored
 				//to non stable ids that have changed we end up never partial matching.
-				//Instead of doing that maybe instead of not trying to partial match we just take a 
+				//Instead of doing that maybe instead of not trying to partial match we just take a
 				//deduciton from the overal confidence.
-				console.warn('Ignoring fuzzy matching because we could not resolve the pointers ancestor', pointer, 
+				console.warn('Ignoring fuzzy matching because we could not resolve the pointers ancestor', pointer,
 							 'and we fell back to just looking in the whole descriptions ancestor', ancestorNode);
 				console.warn('Possible matches were', possibleNodes);
 				return {confidence: 0};
@@ -695,7 +695,7 @@ Ext.define('NextThought.util.Anchors', {
 	},
 
 	getCurrentNodeMatches: function(pointer, treeWalker) {
-		function multiIndexOf(str,tomatch) { 
+		function multiIndexOf(str,tomatch) {
 			var all = [], next = -2;
 			while (next !== -1) {
 				next = str.indexOf(tomatch,next + 1);
@@ -755,7 +755,7 @@ Ext.define('NextThought.util.Anchors', {
 		if (matches.length > 0) {
 			for (i = 1; i < numContexts; i++ ){
 				contextObj = pointer.getContexts()[i];
-	
+
 				c = secondaryContextMatch(contextObj, lookingAtNode, isStart);
 				if( !c ){
 					confidenceMultiplier *= i / (i+0.5);
@@ -1154,7 +1154,7 @@ Ext.define('NextThought.util.Anchors', {
 			var i = 0, nc = node.childNodes;
 			while (i < nc.length) {
 				while (nc[i].nodeType === node.TEXT_NODE && i+1 < nc.length && nc[i+1].nodeType === node.TEXT_NODE) {
-					nc[i].data += nc[i+1].data;	
+					nc[i].data += nc[i+1].data;
 					node.removeChild(nc[i+1]);
 				}
 				fallbackNormalize(nc[i]);
