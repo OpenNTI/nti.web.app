@@ -419,23 +419,39 @@ Ext.define('NextThought.controller.UserData', {
 
     onFootnoteHover: function(id, text, cmp) {
         var offsets = AnnotationsRenderer.getReader().getAnnotationOffsets(),
-            position = Ext.fly(cmp).getXY();
+            position = Ext.fly(cmp).getXY(),
+            me=this;
 
-        if (this.footnoteWidget){
-            this.footnoteWidget.destroy();
+        function adjustPosition(position){
+            if ((position[1] -offsets.scrollTop) < me.footnoteWidget.getHeight()) {
+                //bottom
+                position[0] = position[0] + offsets.gutter + 80;
+                position[0] = position[0] - (me.footnoteWidget.width/2);
+                position[1] = position[1] - offsets.scrollTop;
+                position[1] = position[1] + (me.footnoteWidget.getHeight()/2);
+            }
+            else{
+                //top
+                position[0] = position[0] + offsets.gutter + 80;
+                position[0] = position[0] - (me.footnoteWidget.width/2);
+                position[1] = position[1] - offsets.scrollTop;
+                position[1] = position[1] - (me.footnoteWidget.getHeight()/2) - 40;
+            }
+            return position;
+        }
+
+        if (me.footnoteWidget){
+            me.footnoteWidget.destroy();
             delete this.footnoteWidget;
         }
 
-        this.footnoteWidget = Ext.widget('footnote-widget', {text: text});
-        //adjust position because of scrollTop:
-
-        position[0] = position[0] + offsets.gutter + offsets.contentLeftPadding;
-        position[0] = position[0] - (this.footnoteWidget.width/2);
-        position[1] = position[1] - offsets.scrollTop;
-        position[1] = position[1] - (this.footnoteWidget.getHeight()/2) - 40;
+        me.footnoteWidget = Ext.widget('footnote-widget', {text: text});
 
 
-        this.footnoteWidget.showAt(position);
+
+
+
+        me.footnoteWidget.showAt(adjustPosition(position));
     },
 
 
