@@ -114,7 +114,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
 	buildRange: function(){
 		var range = this.doc.createRange();
 
-		if(this.rendered){
+		if(this.rendered && this.rendered.length > 0){
 			try {
 				range.setStartBefore(this.rendered.first());
 				range.setEndAfter(this.rendered.last());
@@ -164,6 +164,11 @@ Ext.define('NextThought.view.annotations.Highlight', {
 			range = me.getRange();
 			if(!range){ return -1; }
 			me.rendered = me.wrapRange(range.commonAncestorContainer, range);
+
+			if(!me.rendered || me.rendered.length === 0){
+				console.error('Dropping annotation with no nodes to render', me);
+				return -1;
+			}
 
 			//don't create counter when suppressed:
 			if (style !== 'suppressed'){
