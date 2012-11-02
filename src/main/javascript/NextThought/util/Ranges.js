@@ -144,12 +144,13 @@ Ext.define('NextThought.util.Ranges',{
 			node = walker.nextNode();
 		}
         while( node ){
-            if (walker.currentNode === startAt || startAt === true){
-                if (!Ext.isTextNode(walker.currentNode)){nodes.push(walker.currentNode);}
-                startAt = true;
-            }
+
             if (walker.currentNode === endAt){
                 break;
+            }
+			if (walker.currentNode === startAt || startAt === true){
+                if (!Ext.isTextNode(walker.currentNode)){nodes.push(walker.currentNode);}
+                startAt = true;
             }
 			node = walker.nextNode();
         }
