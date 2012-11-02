@@ -1,5 +1,16 @@
 @import "variables";
 
+.footnote-widget {
+	position: absolute;
+	background-color: #ffffff;
+	color: $secondary-grey;
+	font: 14px/22px 'Droid Serif' normal;
+	padding: 15px;
+	border: 1px solid #dcdcdc;
+	border-radius: 3px;
+	box-shadow: 1px 1px 2px 0 rgba(0, 0, 0, 0.1);
+}
+
 .x-toolbar-content {
 	padding: 0;
 	border: none;

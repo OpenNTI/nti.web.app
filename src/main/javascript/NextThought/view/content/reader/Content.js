@@ -228,8 +228,7 @@ Ext.define('NextThought.view.content.reader.Content',{
 
 
 	onClick: function(e, el){
-		e.stopPropagation();
-		e.preventDefault();
+		e.stopEvent();
 		var m = this,
 			r = el.href,
 			hash = r.split('#'),

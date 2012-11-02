@@ -37,6 +37,7 @@ Ext.define('NextThought.controller.UserData', {
 		'chat.transcript.Window',
 		'content.Reader',
         'content.PageWidgets',
+        'content.FootnoteWidget',
 		'definition.Window',
 		'sharing.Window',
 		'views.Library',
@@ -67,7 +68,9 @@ Ext.define('NextThought.controller.UserData', {
 				'define'		: this.define,
 				'redact'		: this.redact,
 				'save-new-note' : this.saveNewNote,
-				'bubble-replys-up':this.replyBubble
+				'bubble-replys-up':this.replyBubble,
+                'footnote-hover': this.onFootnoteHover,
+                'kill-footnote-hover': this.onKillFootnoteHover
 			},
 
 
@@ -404,6 +407,32 @@ Ext.define('NextThought.controller.UserData', {
 			}
 		});
 	},
+
+
+    onKillFootnoteHover: function() {
+        if (this.footnoteWidget){
+            this.footnoteWidget.destroy();
+            delete this.footnoteWidget;
+        }
+    },
+
+    onFootnoteHover: function(id, text, cmp) {
+        var offsets = AnnotationsRenderer.getReader().getAnnotationOffsets(),
+            position = Ext.fly(cmp).getXY();
+
+        if (this.footnoteWidget){
+            this.footnoteWidget.destroy();
+            delete this.footnoteWidget;
+        }
+
+        this.footnoteWidget = Ext.widget('footnote-widget', {text: text});
+        //adjust position because of scrollTop:
+
+        position[1] = position[1] - offsets.scrollTop;
+        position[1] = position[1] - (this.footnoteWidget.getHeight()/2) - 10;
+
+        this.footnoteWidget.showAt(position);
+    },
 
 
 	replyBubble: function(replies){

@@ -164,6 +164,41 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 			});
 		});
 
+        on(doc, 'mouseout', function(e){
+            var d = doc,
+                evt = Ext.EventObject.setEvent(e||event),
+                target = evt.getTarget('a.footnote'),
+                href;
+
+               if(target){
+                   me.fireEvent('kill-footnote-hover');
+               }
+        });
+
+        on(doc, 'mouseover', function(e){
+            var d = doc,
+                evt = Ext.EventObject.setEvent(e||event),
+                target = evt.getTarget('a.footnote'),
+                href;
+
+            function getId(e){
+                if(!Ext.fly(e).hasCls('footnote')){
+                    e = Ext.fly(e).up('.footnote');
+                }
+                return e.getAttribute('href');
+            }
+
+            function getFootnoteContent(href){
+                var fn = d.querySelector(href);
+                return fn.textContent;
+            }
+
+            if (!target){return;}
+
+            href = getId(target);
+            me.fireEvent('footnote-hover', href, getFootnoteContent(href), target);
+        });
+
 		ContentAPIRegistry.on('update',me.applyContentAPI,me);
 		me.applyContentAPI();
 		me.setSplash();
