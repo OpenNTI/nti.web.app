@@ -189,7 +189,9 @@ Ext.define('NextThought.view.content.reader.IFrame',{
             }
 
             function getFootnoteContent(href){
-                var fn = d.querySelector(href);
+                var fn;
+                try{fn = d.querySelector(href);}
+                catch (e){fn = d.getElementById(href.substring(1));}
                 return fn.textContent;
             }
 
