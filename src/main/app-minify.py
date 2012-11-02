@@ -120,6 +120,7 @@ def _buildIndexHtml( version, analytics_key ):
 	part5b = """        <script type="text/javascript"
                         src="https://extjs.cachefly.net/ext-4.1.1-gpl/ext-all.js"
                         id="ext-js-library"></script>
+        <script type="text/javascript"> Ext.Loader.setConfig('enabled',true); </script>
 
 """
 	part6a = """	<!-- application main entry -->
