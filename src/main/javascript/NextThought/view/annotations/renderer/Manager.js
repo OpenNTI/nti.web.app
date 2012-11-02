@@ -262,8 +262,8 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 			if(block){
 				t = block.dom.getBoundingClientRect();
 				rect = { top:t.top, bottom:t.bottom, left:t.left, right:t.right, height:t.height, width:t.width };
-				rect.top = rect.top + r.getAnnotationOffsets().scrollTop;
-				rect.bottom = rect.bottom + r.getAnnotationOffsets().scrollTop;
+				rect.top = rect.top + annotationOffsets.scrollTop;
+				rect.bottom = rect.bottom + annotationOffsets.scrollTop;
 				r.noteOverlayAddRestrictedRange(rect);
 			}
 

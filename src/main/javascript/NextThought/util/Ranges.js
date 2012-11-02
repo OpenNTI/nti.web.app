@@ -118,19 +118,6 @@ Ext.define('NextThought.util.Ranges',{
         	parentNodesSeen = [],
 			doc = doc || document, node;
 
-//        walker = document.createTreeWalker(range.commonAncestorContainer, NodeFilter.SHOW_ELEMENT|NodeFilter.SHOW_TEXT//,
-//            { acceptNode: function(node) {
-//                var seen = false;
-//                Ext.each(parentNodesSeen, function(pn){
-//                    if (pn === node.parentNode){
-//                        seen = true;
-//                    }
-//                });
-//                if (!seen){parentNodesSeen.push(node);}
-//                return seen ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT;
-//            }}
-//        );
-
 		//NOTE in every browser but IE the last two params are optional, but IE explodes if they aren't provided
 
 		walker = doc.createTreeWalker(range.commonAncestorContainer, NodeFilter.SHOW_ELEMENT|NodeFilter.SHOW_TEXT, null, false);
@@ -145,11 +132,11 @@ Ext.define('NextThought.util.Ranges',{
 		}
         while( node ){
 
-            if (walker.currentNode === endAt){
+            if (node === endAt){
                 break;
             }
-			if (walker.currentNode === startAt || startAt === true){
-                if (!Ext.isTextNode(walker.currentNode)){nodes.push(walker.currentNode);}
+			if (node === startAt || startAt === true){
+                if (!Ext.isTextNode(walker.currentNode)){nodes.push(node);}
                 startAt = true;
             }
 			node = walker.nextNode();
