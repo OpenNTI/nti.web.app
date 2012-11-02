@@ -20,6 +20,9 @@ Ext.define('NextThought.mixins.ModelWithBodyContent',{
 
 	WHITEBOARD_THUMBNAIL_TPL: Ext.DomHelper.createTemplate({
 		cn: [{
+			cls: 'transparentBar'
+			},
+			{
 			tag: 'a',
 			cls: 'whiteboard-magnifier'
 			},
