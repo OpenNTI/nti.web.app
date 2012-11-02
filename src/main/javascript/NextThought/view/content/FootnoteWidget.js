@@ -40,12 +40,12 @@ Ext.define('NextThought.view.content.FootnoteWidget',{
         var me = this;
         this.callParent(arguments);
         this.el.on('mouseenter', function(){clearTimeout(me.closeTimer);});
-        //this.el.on('mouseleave', function(){me.destroy();});
+        this.el.on('mouseleave', function(){me.destroy();});
     },
 
 
     startCloseTimer: function(){
         var me = this;
-        //me.closeTimer = setTimeout(function(){me.destroy();}, 1000);
+        me.closeTimer = setTimeout(function(){me.destroy();}, 1000);
     }
 });
