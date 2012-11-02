@@ -376,7 +376,7 @@ Ext.define('NextThought.controller.UserData', {
 		var win = btn.up('window'),
 			shbx= win.down('user-list'),
 			v = shbx.getValue(),
-			rec = win.record;
+			rec = win.record, b;
 
 		//extra check here for a close...
 		if (btn.text === 'Close'){
@@ -387,6 +387,10 @@ Ext.define('NextThought.controller.UserData', {
 		if (!rec){return;}
 
 		win.el.mask('Sharing...');
+
+		//Clean the body
+		b = Ext.Array.clean(rec.get('body'));
+		rec.set('body', b);
 
 		SharingUtils.setSharedWith(rec,v,function(newRec,op){
 			if(op.success){
