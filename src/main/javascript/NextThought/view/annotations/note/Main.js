@@ -122,6 +122,9 @@ Ext.define('NextThought.view.annotations.note.Main',{
 	},
 
 	shouldShowAddContact: function(username){
+		if(!$AppConfig.service.canFriend()){
+			return false;
+		}
 		return username && username !== $AppConfig.username && !Ext.getStore('FriendsList').isContact(username);
 	},
 
