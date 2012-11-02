@@ -1,21 +1,21 @@
-//styled in _avatar-picker.scss
-Ext.define('NextThought.view.account.settings.AvatarPicker',{
+//styled in _random-gravatar-picker.scss
+Ext.define('NextThought.view.account.settings.RandomGravatarPicker',{
 	extend: 'Ext.view.View',
 
-	alias: 'widget.avatar-picker',
+	alias: 'widget.random-gravatar-picker',
 
 	requires: [
 		'Ext.data.Store'
 	],
 
-	cls: 'avatar-picker',
+	cls: 'random-gravatar-picker',
 	singleSelect: true,
 	allowDeselect: false,
 	autoScroll: true,
 	overItemCls: 'over',
 	itemSelector: 'div.item-wrap',
 
-	maxHeight: 140,
+	maxHeight: 170,
 
 	tpl: Ext.DomHelper.markup(
 		{tag:'tpl', 'for':'.', cn: [
