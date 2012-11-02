@@ -26,6 +26,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		favorites: '.meta .controls .favorite',
 		sharedTo: '.shared-to',
 		name: '.meta .name',
+		addToContacts: '.meta .add-to-contacts',
 		time: '.time',
 		context: '.context .text',
 		text: '.body',
@@ -59,6 +60,8 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		try {
             me.editorActions = new NoteEditorActions(me,me.editor);
             me.setRecord(me.record);
+
+			me.contactsMaybeChanged();
 
 			if( $AppConfig.service.canShare() ){
 				me.mon(me.replyButton,{ scope: me, click: me.activateReplyEditor });
@@ -96,10 +99,57 @@ Ext.define('NextThought.view.annotations.note.Main',{
 				this.activateReplyEditor();
 			}
 
+			me.mon(Ext.getStore('FriendsList'), {scope: me, load: me.contactsMaybeChanged});
+
 		}
 		catch(e){
 			console.error(Globals.getError(e));
 		}
+	},
+
+	contactsMaybeChanged: function(){
+		var me = this;
+		if(me.addToContacts){
+			me.mun(me.addToContacts, 'click');
+		}
+		if(!me.shouldShowAddContact(this.record.get('Creator'))){
+			me.addToContacts.hide();
+		}
+		else{
+			me.addToContacts.show();
+			me.mon(me.addToContacts, {scope: me, click: me.addToContactsClicked});
+		}
+	},
+
+	shouldShowAddContact: function(username){
+		return username && username !== $AppConfig.username && !Ext.getStore('FriendsList').isContact(username);
+	},
+
+	addToContactsClicked: function(e){
+		console.log('Should add to contacts');
+		UserRepository.getUser(this.record.get('Creator'), function(record){
+			var pop,
+				el = e.target,
+				alignmentEl = e.target,
+				alignment = 'tl-tr?',
+				play = Ext.dom.Element.getViewportHeight() - Ext.fly(el).getTop(),
+				id = record.getId(),
+				open = false,
+				offsets = [10, -18];
+
+				Ext.each(Ext.ComponentQuery.query('activity-popout,contact-popout'),function(o){
+					if(o.record.getId()!==id || record.modelName !== o.record.modelName){ o.destroy(); }
+					else { open = true;  o.toFront();}
+				});
+
+			if(open){return;}
+
+			pop = NextThought.view.account.contacts.management.Popout.create({record: record, refEl: Ext.get(el)});
+			pop.addCls('note-add-to-contacts-popout');
+			pop.show();
+			pop.alignTo(alignmentEl,alignment,offsets);
+
+		}, this);
 	},
 
 	click: function(e){
@@ -159,6 +209,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		var r = newRecord || this.record;
 
 		try {
+			this.contactsMaybeChanged();
             UserRepository.getUser(r.get('Creator'),this.fillInUser,this);
             this.time.update(r.getRelativeTimeString());
 
@@ -607,6 +658,7 @@ function(){
 			cn: [
 				{ cls: 'controls', cn: [{ cls: 'favorite' },{ cls: 'like' }] },
 				{ tag: 'span', cls: 'name' },
+				{ cls: 'add-to-contacts', html: 'ADD'},
 				{ cls: 'shared-to' }
 			]
 		},
