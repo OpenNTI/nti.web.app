@@ -129,7 +129,8 @@ Ext.define('NextThought.view.UserDataPanel',{
 					}
 
 					if(rec.isFavorited()){
-						store.add(rec);
+						store.insert(0, rec);
+						store.sort();
 					}
 					else {
 						store.remove(store.findRecord('NTIID',rec.get('NTIID'),0,false,true,true));
@@ -150,7 +151,7 @@ Ext.define('NextThought.view.UserDataPanel',{
 
 
 	buildStore: function(filter,id,grouping){
-		var s = NextThought.store.PageItem.create({id:id, groupField:grouping});
+		var s = NextThought.store.PageItem.create({id:id, groupField:grouping, groupDir: 'ASC'});
 
 		s.proxy.extraParams = Ext.apply(s.proxy.extraParams||{},{
 			sortOn: 'createdTime',
