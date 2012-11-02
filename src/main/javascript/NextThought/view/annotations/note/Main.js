@@ -209,7 +209,9 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		var r = newRecord || this.record;
 
 		try {
-			this.contactsMaybeChanged();
+			if(this.contactsMaybeChanged){
+				this.contactsMaybeChanged();
+			}
             UserRepository.getUser(r.get('Creator'),this.fillInUser,this);
             this.time.update(r.getRelativeTimeString());
 

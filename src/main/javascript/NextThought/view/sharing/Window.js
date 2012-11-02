@@ -5,7 +5,7 @@ Ext.define( 'NextThought.view.sharing.Window', {
 		'NextThought.util.Annotations'
 	],
 	alias : 'widget.share-window',
-	
+
 
 	width: 450,
 	modal: true,
@@ -54,7 +54,7 @@ Ext.define( 'NextThought.view.sharing.Window', {
 
 	initComponent: function(){
 		this.items = Ext.clone(this.items);
-		var readOnly = this.record ? !this.record.isModifiable() : false,
+		var readOnly = this.isReadOnly(),
 			title = this.titleLabel || (readOnly ? 'Item Info' : 'Share this...'),
 			content = 'This item does not have text',
 			u = this.record? this.record.get('Creator') : $AppConfig.username,
@@ -123,6 +123,21 @@ Ext.define( 'NextThought.view.sharing.Window', {
 			this.down('usersearchinput').setValue('');
 			this.dragMaskOff();
 		});
+	},
+
+	isReadOnly: function(){
+		var refCount;
+		if(!this.record){
+			return false;
+		}
+		if(!this.record.isModifiable()){
+			return true;
+		}
+		refCount = this.record.get('ReferencedByCount');
+		if(refCount !== undefined){
+			return refCount > 0;
+		}
+		return this.record.children && this.record.children > 0;
 	},
 
 	getValue: function(){
