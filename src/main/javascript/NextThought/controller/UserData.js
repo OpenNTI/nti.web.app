@@ -410,22 +410,13 @@ Ext.define('NextThought.controller.UserData', {
 
 
     onKillFootnoteHover: function() {
-       // if (!Ext.isGecko){
-            if (this.footnoteWidget){
-                this.footnoteWidget.destroy();
-                delete this.footnoteWidget;
-            }
-//        }
-//        else{
-//            var me = this;
-//            clearTimeout(this.footnoteTimer);
-//            this.footnoteTimer = setTimeout(
-//                function(){
-//                    me.footnoteWidget.destroy();
-//                    delete me.footnoteWidget;
-//                }, 300);
-//        }
+        var me = this;
+        if (me.footnoteWidget){
+            me.footnoteWidget.destroy();
+            delete me.footnoteWidget;
+        }
     },
+
 
     onFootnoteHover: function(id, text, cmp) {
         var offsets = AnnotationsRenderer.getReader().getAnnotationOffsets(),

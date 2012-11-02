@@ -30,14 +30,17 @@ Ext.define('NextThought.view.content.FootnoteWidget',{
 
 
     initComponent: function(){
-        this.renderData.text=this.text;
-        this.callParent(arguments);
+        var me = this;
+        me.renderData.text=me.text;
+        me.callParent(arguments);
+        me.closeTimer = setTimeout(function(){me.destroy();}, 1000);
     },
 
 
-    setPositionToPoint: function(xy){
-        this.setPosition(xy[0], xy[1], false);
+    afterRender: function(){
+        var me = this;
+        this.callParent(arguments);
+        this.el.on('mouseenter', function(){clearTimeout(me.closeTimer);});
+        this.el.on('mouseleave', function(){me.destroy();});
     }
-
-
 });
