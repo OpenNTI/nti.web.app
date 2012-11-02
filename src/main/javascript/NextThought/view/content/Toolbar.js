@@ -5,7 +5,8 @@ Ext.define('NextThought.view.content.Toolbar',{
 		'NextThought.view.content.Navigation',
 		'NextThought.view.content.Pager',
 		'NextThought.view.content.Font',
-		'NextThought.view.content.Settings'
+		'NextThought.view.content.Settings',
+		'Ext.toolbar.Spacer'
 	],
 	alias: 'widget.content-toolbar',
 	ui: 'content',
