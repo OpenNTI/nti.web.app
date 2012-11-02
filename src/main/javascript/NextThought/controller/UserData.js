@@ -410,10 +410,21 @@ Ext.define('NextThought.controller.UserData', {
 
 
     onKillFootnoteHover: function() {
-        if (this.footnoteWidget){
-            this.footnoteWidget.destroy();
-            delete this.footnoteWidget;
-        }
+       // if (!Ext.isGecko){
+            if (this.footnoteWidget){
+                this.footnoteWidget.destroy();
+                delete this.footnoteWidget;
+            }
+//        }
+//        else{
+//            var me = this;
+//            clearTimeout(this.footnoteTimer);
+//            this.footnoteTimer = setTimeout(
+//                function(){
+//                    me.footnoteWidget.destroy();
+//                    delete me.footnoteWidget;
+//                }, 300);
+//        }
     },
 
     onFootnoteHover: function(id, text, cmp) {
