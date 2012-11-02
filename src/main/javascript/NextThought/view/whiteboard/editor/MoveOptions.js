@@ -40,7 +40,7 @@ Ext.define('NextThought.view.whiteboard.editor.MoveOptions',{
 			{ xtype: 'tbtext', text: 'Fill', fillLabel: true},
 			{ xtype: 'color-picker-button', fillSelectMove: true, value: 'E1E1E1'},
 			'Stroke',
-//			{ xtype: 'stroke-select', value: 3 },
+			{ xtype: 'stroke-select', value: 3, editStrokeWidth: true },
 			{ xtype: 'color-picker-button', strokeSelectMove: true, value: '333333'}
 		]
 		}
@@ -77,10 +77,9 @@ Ext.define('NextThought.view.whiteboard.editor.MoveOptions',{
 			val = Color.rgbaToHex(options.fill).substr(1).toUpperCase();
 			fillButton.setValue(val);
 		}
-		//		if (options.strokeWidth) {
-////			this.down('[strokeWidth='+options.strokeWidth+']').toggle(true);
-//			this.down('stroke-select').setValue(options.strokeWidth);
-//		}
+		if (options.strokeWidth) {
+			this.down('[editStrokeWidth]').setSelected( options.strokeWidth );
+		}
 	},
 
 

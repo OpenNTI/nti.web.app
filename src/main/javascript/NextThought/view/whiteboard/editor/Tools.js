@@ -28,8 +28,8 @@ Ext.define('NextThought.view.whiteboard.editor.Tools',{
 			{ tool: 'pencil', pressed: true },
 			{ tool: 'shape' },
 			{ tool: 'text', disabled: true, hidden: true },
-			{ tool: 'image' },
-			{ tool: 'eraser'}
+			{ tool: 'image' }
+//			{ tool: 'eraser'}
 		]
 	},{
 		ui: 'secondary',
@@ -44,8 +44,8 @@ Ext.define('NextThought.view.whiteboard.editor.Tools',{
 			{xtype: 'wb-tool-pencil-options', forTool: 'pencil'},
 			{xtype: 'wb-tool-shape-options', forTool: 'shape'},
 			{xtype: 'wb-tool-text-options', forTool: 'text'},
-			{xtype: 'wb-tool-image-options', forTool: 'image'},
-			{xtype: 'wb-tool-eraser-options', forTool: 'eraser'}
+			{xtype: 'wb-tool-image-options', forTool: 'image'}
+//			{xtype: 'wb-tool-eraser-options', forTool: 'eraser'}
 		]
 	}],
 

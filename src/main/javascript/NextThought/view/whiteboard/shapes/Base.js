@@ -264,6 +264,7 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Base', {
 		var xy = m.transformPoint(x,y);
 		if(name === 'l' || name === 'r' || name === 'b' || name === 't'){
 			ctx.lineWidth = 1;
+			ctx.fillRect(xy[0]-r/2, xy[1]-r/2, r, r);
 			ctx.strokeRect(xy[0]-r/2, xy[1]-r/2, r, r);
 		}
 		else if(name!=='rot1' && name !== 'rot2'){

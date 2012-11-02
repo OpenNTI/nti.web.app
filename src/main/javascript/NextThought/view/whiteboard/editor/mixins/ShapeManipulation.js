@@ -43,6 +43,11 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 			select: this.onStrokeColorChange
 		});
 
+		this.mon(this.toolbar.down('[editStrokeWidth]'), {
+			scope:this,
+			select: this.onStrokeWidthChange
+		});
+
 		function clearFlag(){ delete this.mouseLeftNoMouseUp;console.log('clear!'); }
 
 		this.mon( Ext.getBody(), {
@@ -113,13 +118,19 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 
 	onFillColorChange: function(e){
 		if(!e.value){ return; }
-		this.selected.fill = Color.toRGBA('#'+e.value);
+		this.selected.fill = e.value !== 'NONE' ? Color.toRGBA('#'+e.value): null;
 		this.canvas.drawScene();
 	},
 
 	onStrokeColorChange: function(e){
 		if(!e.value){ return; }
-		this.selected.stroke = Color.toRGBA('#'+e.value);
+		this.selected.stroke = e.value !== 'NONE' ? Color.toRGBA('#'+e.value): null;
+		this.canvas.drawScene();
+	},
+
+	onStrokeWidthChange: function(e){
+		if(!e.value){return;}
+		this.selected.strokeWidth = e.value / this.canvas.el.getWidth();
 		this.canvas.drawScene();
 	},
 
@@ -208,7 +219,7 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 			s = null,
 			cs = this.selected,
 			p = this.getRelativeXY(e),
-			sp = this.scalePoint(p);
+			sp = this.scalePoint(p), l,sw;
 
 		if(cs && cs.isPointInNib.apply(s,p)){
 			return;
@@ -226,20 +237,16 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 
 		this.selected = s;
 
-		if(s){
-			delete s.isNew;
-		//	this.activateToolOptions(s.getShapeName());
-		}
-//		else {
-//			this.activateToolOptions(this.currentTool);
-//		}
+		if(s){ delete s.isNew; }
 
 		//Set toolbar Options.
 		if(this.selected){
+			sw = this.selected.strokeWidth;
+			l = Ext.isString(sw) ?  this.selected.strokeWidth.replace('%', '') : sw;
 			this.toolbar.getCurrentTool().setOptions({
 				fill:this.selected.fill,
 				stroke:this.selected.stroke,
-				strokeWidth:this.selected.strokeWidth
+				strokeWidth: Math.round(l * this.canvas.el.getWidth())
 			});
 		}
 
