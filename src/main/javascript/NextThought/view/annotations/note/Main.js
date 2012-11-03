@@ -522,7 +522,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		function callback(success, record){
 			me.el.unmask();
 			if (success) {
-					me.deactivateReplyEditor();
+				me.deactivateReplyEditor();
 				if (me.recordUpdated) {
 					me.recordUpdated(r);
 				}

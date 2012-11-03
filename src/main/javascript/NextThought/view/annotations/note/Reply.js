@@ -274,6 +274,7 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 				toAdd.push({record: record, id: guid});
 			}
 		});
+		console.log('Adding reply records', toAdd);
 		this.add(toAdd);
 	},
 
