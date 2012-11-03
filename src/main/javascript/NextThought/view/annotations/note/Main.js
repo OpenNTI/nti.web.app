@@ -555,6 +555,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		    this.up('window').fireEvent('save-new-reply', r, v.body, v.shareWith, callback);
         }
         catch(e){
+			console.error(Globals.getError(e));
             me.el.unmask();
         }
 	},
