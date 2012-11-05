@@ -129,6 +129,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 	},
 
 	addToContactsClicked: function(e){
+		var me = this;
 		console.log('Should add to contacts');
 		UserRepository.getUser(this.record.get('Creator'), function(record){
 			var pop,
@@ -148,11 +149,35 @@ Ext.define('NextThought.view.annotations.note.Main',{
 			if(open){return;}
 
 			pop = NextThought.view.account.contacts.management.Popout.create({record: record, refEl: Ext.get(el)});
+
+			me.mon(pop, {scope: me, 'destroy': me.showCarouselArrows, 'show': me.hideCarouselArrows});
+
 			pop.addCls('note-add-to-contacts-popout');
 			pop.show();
 			pop.alignTo(alignmentEl,alignment,offsets);
 
 		}, this);
+	},
+
+	showOrHideArrows: function(show){
+		var car = this.up('window').down('note-carousel'),
+			f = show ? 'show' : 'hide';
+		if(car){
+			if(car.navNext && Ext.isFunction(car.navNext[f])){
+				car.navNext[f]();
+			}
+			if(car.navPrev && Ext.isFunction(car.navPrev[f])){
+				car.navPrev[f]();
+			}
+		}
+	},
+
+	hideCarouselArrows: function(){
+		this.showOrHideArrows(false);
+	},
+
+	showCarouselArrows: function(){
+		this.showOrHideArrows(true);
 	},
 
 	click: function(e){
