@@ -531,10 +531,12 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		}
 
 		if( !Ext.isArray(v.body) || v.body.join('').replace(re,'') === '' ){
+			console.log('Dropping empty note body', v.body);
 			me.deactivateReplyEditor();
 			return;
 		}
 		me.el.mask('Saving...');
+		console.log('Editor saved', v);
 
 		if(this.editMode){
 			r.set('body',v.body);
