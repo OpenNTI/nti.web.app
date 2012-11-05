@@ -7,40 +7,35 @@ Ext.define('NextThought.view.content.FootnoteWidget',{
     renderTo: Ext.getBody(),
     width: 400,
     maxHeight: 200,
-    autoScroll: true,
 
-    //height: 'auto',
-    requires: [
-    ],
-
+    layout: 'fit',
     cls: 'footnote-widget',
-
-    renderTpl: Ext.DomHelper.markup([
-    {
-        cls: 'bubble',
-        cn: [
-            {cls: 'text', html: '{text}'}
-        ]
-    }]),
-
-
-    renderSelectors:{
-        text:'.text'
-    },
 
 
     initComponent: function(){
-        var me = this;
-        me.renderData.text=me.text;
-        me.callParent(arguments);
+        this.callParent(arguments);
+        this.add(
+            {
+                xtype: 'box',
+                autoScroll: true,
+                autoEl:{
+                    cls: 'bubble',
+                    cn: [
+                        {cls: 'text', html: this.text}
+                    ]
+                }
+        });
     },
 
 
     afterRender: function(){
         var me = this;
         this.callParent(arguments);
-        this.el.on('mouseenter', function(){clearTimeout(me.closeTimer);});
-        this.el.on('mouseleave', function(){me.destroy();});
+        this.mon(this.el, {
+            'mouseenter': function(){clearTimeout(me.closeTimer);},
+            'mouseleave': me.startCloseTimer,
+            scope: me
+        });
     },
 
 

@@ -417,9 +417,9 @@ Ext.define('NextThought.controller.UserData', {
     },
 
 
-    onFootnoteHover: function(id, text, cmp) {
+    onFootnoteHover: function(id, text, node) {
         var offsets = AnnotationsRenderer.getReader().getAnnotationOffsets(),
-            position = Ext.fly(cmp).getXY(),
+            position = Ext.fly(node).getXY(),
             me=this;
 
         function adjustPosition(position){
@@ -429,6 +429,7 @@ Ext.define('NextThought.controller.UserData', {
                 position[0] = position[0] - (me.footnoteWidget.width/2);
                 position[1] = position[1] - offsets.scrollTop;
                 position[1] = position[1] + (me.footnoteWidget.getHeight()/2);
+                me.footnoteWidget.addCls('top');
             }
             else{
                 //top
@@ -436,6 +437,7 @@ Ext.define('NextThought.controller.UserData', {
                 position[0] = position[0] - (me.footnoteWidget.width/2);
                 position[1] = position[1] - offsets.scrollTop;
                 position[1] = position[1] - (me.footnoteWidget.getHeight()/2) - 40;
+                me.footnoteWidget.addCls('bottom');
             }
             return position;
         }
@@ -446,11 +448,6 @@ Ext.define('NextThought.controller.UserData', {
         }
 
         me.footnoteWidget = Ext.widget('footnote-widget', {text: text});
-
-
-
-
-
         me.footnoteWidget.showAt(adjustPosition(position));
     },
 
