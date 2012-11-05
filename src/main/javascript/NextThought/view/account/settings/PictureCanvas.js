@@ -228,5 +228,5 @@ Ext.define('NextThought.view.account.settings.PictureCanvas',{
 			};
 			reader.readAsDataURL(file);
 		}
-	},
+	}
 });
