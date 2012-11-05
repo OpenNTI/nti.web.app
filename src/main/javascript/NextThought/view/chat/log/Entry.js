@@ -103,16 +103,11 @@ Ext.define('NextThought.view.chat.log.Entry', {
 	},
 
 	click: function(event, target, eOpts){
-		target = Ext.get(target);
-		if(/whiteboard/i.test(target.getAttribute('class'))){
-			//do lightbox/zoom of whiteboard image
-			if(!target.is('img')){
-				target = target.parent().first('img');
-			}
+		var t = event.getTarget('.whiteboard-wrapper', null, true);
 
-			//open readonly wb editor for now...
-			var w = Ext.widget({ xtype: 'wb-window', width: 802, value:this.message.get('body')[0], readonly: true});
-			w.show();
+		if(!t){ return; }
+		else{
+			Ext.widget({ xtype: 'wb-window', width: 802, value:this.message.get('body')[0], readonly: true}).show();
 		}
 	},
 

@@ -119,14 +119,11 @@ Ext.define('NextThought.view.chat.transcript.Main',{
 	},
 
 	click: function(e){
-		var t = e.getTarget('img.whiteboard-thumbnail'), guid;
+		var t = e.getTarget('.whiteboard-wrapper', null, true), guid;
 
-		// Get a click on the magnifying glass to expand the note
-		if(!t && e.target.nextSibling && Ext.fly(e.target.nextSibling).hasCls('whiteboard-thumbnail') ){ t = e.target.nextSibling; }
 		if(!t){ return;}
 
-		guid = t.parentNode.getAttribute('id');
-		console.log(guid);
+		guid = t.up('.body-divider').getAttribute('id');
 		if(t && this.readOnlyWBsData[guid]){
 			Ext.widget('wb-window',{ width: 802, value: this.readOnlyWBsData[guid], readonly: true}).show();
 		}

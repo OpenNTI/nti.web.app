@@ -194,16 +194,8 @@
 				  	width: 120px !important;
 					display: block;
 					clear: both;
-					overflow: hidden;
-					background-position: 0 0;
-					background-repeat: no-repeat;
-					background-size: 100%;
+					cursor: pointer;
 					border: 1px solid #b2b2b2;
-					box-shadow: 0px 1px 2px 1px rgba(0, 0, 0, 0.12);
-
-				  	&:hover{
-						cursor: pointer;
-					}
 				}
 			}
 		}
@@ -1113,16 +1105,7 @@
 
 			.body-divider .whiteboard-thumbnail{
 			  	width: 240px !important;
-			  	display: block;
 			  	clear: both;
-			  	overflow: hidden;
-			  	background-position: 0 0;
-			  	background-repeat: no-repeat;
-			  	background-size: 100%;
-			  	border: 1px solid #D0D0D0;
-			  	border-radius: 0px;
-			  	box-shadow: 0px 3px 5px 3px rgba(0, 0, 0, 0.05);
-
 			}
 		}
 
@@ -1164,15 +1147,52 @@
 					border-bottom-width: 0;
 
 				  	.content{
-						img.wb-thumbnail{
-						  	width: 120px !important;
-							border-radius: 0 !important;
 
-							&:hover{
-								border: 3px solid #3fb3f6 !important;
-								-moz-box-shadow: 2px 3px rgba(0,0,0,0.12) !important;
-								-webkit-box-shadow: 2px 3px rgba(0,0,0,0.12) !important;
-								box-shadow: 2px 3px rgba(0,0,0,0.12) !important;
+						.whiteboard-wrapper{
+							display: inline-block;
+							position: relative;
+							overflow: hidden;
+							cursor: pointer;
+							padding: 0px;
+							border: 1px solid $border-grey;
+							margin: 5px 2px;
+							box-shadow: 2px 1px 4px 0 rgba(0,0,0,0.12);
+
+							&:hover {
+								border: 3px solid $primary-blue;
+								margin: 3px 0;
+
+								.centerer {display: block;}
+							}
+
+							.centerer{
+								display: none;
+								position:absolute;
+								top: 50%;
+								left: 50%;
+
+								.edit{
+									font-family: $font !important;
+									font-weight: 600;
+									font-size: 11px;
+									position: relative;
+									top: -15px;
+									left: -50%;
+									color: #ffffff;
+									background: rgba(0,0,0,0.6);
+									padding: 5px 15px 5px 30px;
+									border-radius: 90px;
+
+									&::after {
+										content: ' ';
+										position: absolute;
+										top: 5px;
+										left: 12px;
+										background: url(../images/spr_image_options.png) -25px -19px no-repeat;
+										width: 14px;
+										height: 14px;
+									}
+								}
 							}
 						}
 					}

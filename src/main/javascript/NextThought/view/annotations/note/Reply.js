@@ -94,20 +94,6 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 		me.editorActions = new NoteEditorActions(me,me.editor);
 	},
 
-	click: function(e){
-		var t = e.getTarget('img.whiteboard-thumbnail'), guid;
-
-		// Get a click on the magnifying glass to expand the note
-		if(!t && Ext.fly(e.target.nextSibling).hasCls('whiteboard-thumbnail') ){ t = e.target.nextSibling; }
-		if(!t){ return; }
-
-		guid = t.parentNode.getAttribute('id');
-		console.log(guid);
-		if(t && this.readOnlyWBsData[guid]){
-			Ext.widget('wb-window', { width: 802, value: this.readOnlyWBsData[guid], readonly: true}).show();
-		}
-	},
-
 	getCarouselIfNear: function(){
 		var c = this.up('window').down('note-carousel').getEl();
 
@@ -371,6 +357,7 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 },
 function(){
 	this.borrow(NextThought.view.annotations.note.Main, [
+		'click',
 		'setContent',
 		'generateClickHandler',
 		'fillInUser',

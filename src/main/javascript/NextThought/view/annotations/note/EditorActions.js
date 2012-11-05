@@ -12,18 +12,26 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 	defaultValue: '&#8203;',
 
 	wbThumbnailTpm: Ext.DomHelper.createTemplate({
-		cls: 'editWhitebaord',
+		contentEditable: false,
+		cls: 'whiteboard-divider',
 		cn:[{
-				cls:'centerer'
-			},{
+			cls: 'whiteboard-wrapper',
+			cn:[{
 				tag   : 'img',
 				src   : '{0}',
 				id    : '{1}',
 				cls   : 'wb-thumbnail',
 				alt   : 'Whiteboard Thumbnail',
 				border: 0
-			}
-		]
+			},{
+				cls:'centerer',
+				unselectable: 'on',
+				cn: [{
+					cls:'edit',
+					html:'Edit'
+				}]
+			}]
+		}]
 	}).compile(),
 
 	constructor: function (cmp, editorEl) {
@@ -310,10 +318,10 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 
 
 	handleClick: function (e) {
-		var guid, t = e.getTarget('img.wb-thumbnail');
+		var guid, t = e.getTarget('.whiteboard-wrapper');
 
 		if (t) {
-			guid = t.getAttribute('id');
+			guid = Ext.fly(t).down('img').getAttribute('id');
 			t = this.openWhiteboards[guid];
 			if( t && !t.isDestroyed ){
 				t.show();
@@ -383,27 +391,24 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 			el = Ext.get(guid), placeholder, p;
 
 		//We need empty divs to allow to insert text before or after a WB.
-		placeholder = Ext.DomHelper.createTemplate({cn: [
-			{tag: 'br'}
-		]});
+		placeholder = Ext.DomHelper.createTemplate({html: me.defaultValue});
 
 		if (!el) {
-			el = me.wbThumbnailTpm.append(content, ['', guid]);
+			Ext.DomHelper.append(content,placeholder);
 
-			if (content.dom.firstChild === Ext.select('img.wb-thumbnail').elements[0]) {
-				placeholder.insertBefore(el);
-			}
-			placeholder.insertAfter(el);
+			el = me.wbThumbnailTpm.append(content, ['', guid]);
+			Ext.fly(el).unselectable();
+
+			Ext.DomHelper.append(content, placeholder);
 		}
 
 
 		wb.getThumbnail(function (data) {
-			el = Ext.get(guid);
+			el = Ext.get(guid).up('.whiteboard-divider');
 			var p = placeholder.insertBefore(el);
 			el.remove();
-
 			//recreate image with data
-			me.wbThumbnailTpm.insertBefore(p, [data, guid]);
+			Ext.fly(me.wbThumbnailTpm.insertBefore(p, [data, guid])).unselectable();
 			Ext.fly(p).remove();
 
 			me.editor.repaint();
@@ -516,6 +521,11 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 			var html, tmp;
 			try {
 				html = div.getHTML() || '';
+				if(div.is('.whiteboard-divider') || div.is('.whiteboard-wrapper')){
+					html = '';
+					div = div.down('img');
+				}
+
 				if(!html && div.dom.tagName === 'IMG'){
 					tmp = document.createElement("div");
 					tmp.appendChild(div.dom);

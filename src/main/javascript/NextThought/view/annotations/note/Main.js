@@ -156,14 +156,10 @@ Ext.define('NextThought.view.annotations.note.Main',{
 	},
 
 	click: function(e){
-		var t = e.getTarget('img.whiteboard-thumbnail'), guid;
-
-		// Get a click on the magnifying glass to expand the note
-		if(!t && Ext.fly(e.target.nextSibling).hasCls('whiteboard-thumbnail') ){ t = e.target.nextSibling; }
+		var t = e.getTarget('.whiteboard-wrapper', null, true), guid;
 		if(!t){ return;}
 
-		guid = t.parentNode.getAttribute('id');
-		console.log(guid);
+		guid = t.up('.body-divider').getAttribute('id');
 		if(t && this.readOnlyWBsData[guid]){
 			Ext.widget('wb-window',{ width: 802, value: this.readOnlyWBsData[guid], readonly: true}).show();
 		}
@@ -352,22 +348,15 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		this.text.select('a[href]',true).set({target:'_blank'});
 
 
-		Ext.each(this.text.query('.whiteboard-thumbnail'),
+		Ext.each(this.text.query('.whiteboard-wrapper'),
 				function(wb){
 					Ext.fly(wb).on('click', this.click, this);
-					if(wb.previousSibling && Ext.fly(wb.previousSibling).hasCls('whiteboard-magnifier')){
-						Ext.fly(wb.previousSibling).on('click', this.click, this);
-					}
 				},
 				this);
 
 	},
 
-	generateClickHandler: function(id,data){
-		this.readOnlyWBsData[id] = data;
-		console.log("whiteboard id: ", id);
-	},
-
+	generateClickHandler: function(id,data){ this.readOnlyWBsData[id] = data; },
 
 	loadReplies: function(record){
 		var me = this,
