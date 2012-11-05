@@ -12,12 +12,18 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 	defaultValue: '&#8203;',
 
 	wbThumbnailTpm: Ext.DomHelper.createTemplate({
-		tag   : 'img',
-		src   : '{0}',
-		id    : '{1}',
-		cls   : 'wb-thumbnail',
-		alt   : 'Whiteboard Thumbnail',
-		border: 0
+		cls: 'editWhitebaord',
+		cn:[{
+				cls:'centerer'
+			},{
+				tag   : 'img',
+				src   : '{0}',
+				id    : '{1}',
+				cls   : 'wb-thumbnail',
+				alt   : 'Whiteboard Thumbnail',
+				border: 0
+			}
+		]
 	}).compile(),
 
 	constructor: function (cmp, editorEl) {
