@@ -366,7 +366,7 @@ describe("Anchor Utils", function() {
 			expect(Anchors.walkDownToLastNode(n1)).toBe(n5);
 		});
 	});
-	
+
 	describe('isNodeChildOfAncestor Tests', function() {
 		it('Node Not Ancestor Of Itself', function() {
 			var d1 = document.createElement('div');
@@ -1218,6 +1218,44 @@ describe("Anchor Utils", function() {
 			range = document.createRange();
 			range.setStart(t1, 2);
 			range.setEnd(t4, 6);
+
+			//purify the range, the pureRange should not be associated with the old range, or it's contents:
+			pureRange = Anchors.purifyRange(range, document);
+
+			//do some checking of attrs to verify they are clones and not the same refs:
+			expect(range.toString()).toEqual(pureRange.toString()); //expect the range to encompass the same text
+		});
+
+		it('Purify Range Where Endpoints are elements', function(){
+			var div = document.createElement('div'),
+				p = document.createElement('p'),
+				t1 = document.createTextNode('this is a text node, yay!  go us!'),
+				t2 = document.createTextNode('this is also a text node, yay!  go us!'),
+				spanNoAnchors = document.createElement('span'),
+				em = document.createElement('em'),
+				t3 = document.createTextNode('This is more text actually, always more text'),
+				span = document.createElement('span'),
+				t4 = document.createTextNode('This is the final text'),
+				pureRange, range;
+
+			//add some stuff to span, clone it, add some more, see if it worked
+			p.setAttribute('data-non-anchorable', 'true');
+			p.appendChild(t1);
+			p.appendChild(t2);
+			spanNoAnchors.setAttribute('data-non-anchorable', 'true');
+			em.appendChild(t3);
+			spanNoAnchors.appendChild(em);
+			span.appendChild(t4);
+			spanNoAnchors.appendChild(span);
+			p.appendChild(spanNoAnchors);
+			div.setAttribute('Id', 'validId');
+			div.appendChild(p);
+			testBody.appendChild(div);
+
+			//create the initial range:
+			range = document.createRange();
+			range.setStart(spanNoAnchors, 0);
+			range.setEnd(spanNoAnchors, 1);
 
 			//purify the range, the pureRange should not be associated with the old range, or it's contents:
 			pureRange = Anchors.purifyRange(range, document);

@@ -1060,6 +1060,8 @@ Ext.define('NextThought.util.Anchors', {
 			origEndNode = range.endContainer,
 			origStartOff = range.startOffset,
 			origEndOff = range.endOffset,
+			origStartEdgeNode = Anchors.nodeThatIsEdgeOfRange(range, true),
+			origEndEdgeNode = Anchors.nodeThatIsEdgeOfRange(range,false),
 			resultRange,
 			ancestor = range.commonAncestorContainer;
 
@@ -1075,21 +1077,19 @@ Ext.define('NextThought.util.Anchors', {
 		ancestor.normalize();
         //Ext.fly(ancestor).clean(); TODO - maybe clean and remove whitespace?
 
-		//apply tags to start and end:
-		Anchors.tagNode(origStartNode, 'start');
-		Anchors.tagNode(origEndNode, 'end');
-		if (Ext.isIE9) { //IE9 bumps up the nodes of these ranges to their parents when they're tagged
-			range.setStart(origStartNode, origStartOff);
-			range.setEnd(origEndNode, origEndOff);
-		}
+		//apply tags to start and end, note we use the edge nodes so
+		//that we can recreate all the range info including the offset, not just the containers
+
+		Anchors.tagNode(origStartEdgeNode, 'start');
+		Anchors.tagNode(origEndEdgeNode, 'end');
 
 		//setup our copy range
 		tempRange.selectNode(ancestor);
 		docFrag = tempRange.cloneContents();
 
 		//return original range back to it's original form:
-		Anchors.cleanNode(origStartNode, 'start');
-		Anchors.cleanNode(origEndNode, 'end');
+		Anchors.cleanNode(origStartEdgeNode, 'start');
+		Anchors.cleanNode(origEndEdgeNode, 'end');
 		range.setStart(origStartNode, origStartOff);
 		range.setEnd(origEndNode, origEndOff);
 
@@ -1098,25 +1098,37 @@ Ext.define('NextThought.util.Anchors', {
 
 		//at this point we know the range ancestor is stored in the 'a' variable, now that the data is cleaned and
 		//normalized, we need to find the range's start and end points, and create a fresh range.
-		var startNode = Anchors.findTaggedNode(docFrag, 'start');
-		var endNode = Anchors.findTaggedNode(docFrag, 'end');
-		var newStartOffset = Anchors.cleanNode(startNode, 'start');
-		var newEndOffset = Anchors.cleanNode(endNode, 'end');
+		var startEdge = Anchors.findTaggedNode(docFrag, 'start');
+		var endEdge = Anchors.findTaggedNode(docFrag, 'end');
+
+		var newStartOffset = Anchors.cleanNode(startEdge, 'start');
+		var newEndOffset = Anchors.cleanNode(endEdge, 'end');
 
 		//some adjustment if the text nodes are the same then the start offset will be wrong
-		if (origStartNode === origEndNode) {
+		if (newStartOffset !== undefined && origStartNode === origEndNode) {
 			newStartOffset -= ('['+Anchors.PURIFICATION_TAG+':end]').length;
 		}
 
 		//build the new range divorced from the dom and return:
 		resultRange = doc.createRange();
-		if (!startNode && !Ext.isTextNode(endNode)){
-			resultRange.selectNodeContents(endNode);
+		if (!startEdge && !Ext.isTextNode(endEdge)){
+			resultRange.selectNodeContents(endEdge);
 		}
 		else {
 			resultRange.selectNodeContents(docFrag);
-			resultRange.setStart(startNode, newStartOffset + origStartOff);
-			resultRange.setEnd(endNode, newEndOffset + origEndOff);
+			if(Ext.isTextNode(startEdge)){
+				resultRange.setStart(startEdge, newStartOffset + origStartOff);
+			}
+			else{
+				resultRange.setStartBefore(startEdge);
+			}
+
+			if(Ext.isTextNode(endEdge)){
+				resultRange.setEnd(endEdge, newEndOffset + origEndOff);
+			}
+			else{
+				resultRange.setEndAfter(endEdge);
+			}
 		}
 
 		//for use whenever someone wants to know where this fits in the doc.
