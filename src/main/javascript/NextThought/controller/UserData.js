@@ -523,7 +523,7 @@ Ext.define('NextThought.controller.UserData', {
 			console.log('No range supplied, note will be anchored to container only');
 		}
 
-		console.log('Saving new note with body', body, range, c, sharedWith, style, callback);
+		console.log('Saving new note with body', body);
 
 		//Define our vars and create our content range description:
 		var doc = ReaderPanel.get().getDocumentElement(),
