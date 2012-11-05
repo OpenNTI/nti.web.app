@@ -473,7 +473,9 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 					r.selectNodeContents(c.firstChild);
 					s.removeAllRanges();
 					r.collapse(false);
-					s.addRange(r);
+					me.lastRange = r;
+					s.addRange(me.lastRange);
+
 				}
 				catch (e) {
 					console.warn('focus issue: ' + e.message, '\n\n\n', content);
@@ -526,8 +528,6 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 			}
 		});
 
-
-		console.log('Editor actions body parts', out);
 		return {
 			body     : this.getNoteBody(out.join('<br/>')),
 			shareWith: this.shareMenu.getValue()
@@ -536,7 +536,6 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 
 
 	setValue: function (text, putCursorAtEnd, focus) {
-		console.log(text);
 		this.setHTML(Ext.String.htmlEncode(text));
 		this.updatePrefs();
 		if (focus || putCursorAtEnd) {
