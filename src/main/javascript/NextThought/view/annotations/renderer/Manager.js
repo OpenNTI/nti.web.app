@@ -349,7 +349,7 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 				//console.log('Rendered', o.getRecord().get('body')[0], y);
 
 				if(!y){
-					console.log(o, 'returned a falsy y:',y);
+					//console.log(o, 'returned a falsy y:',y);
 				}
 				else {
 					b = me.getBucket(prefix,Math.ceil(y));

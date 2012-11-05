@@ -523,6 +523,8 @@ Ext.define('NextThought.controller.UserData', {
 			console.log('No range supplied, note will be anchored to container only');
 		}
 
+		console.log('Saving new note with body', body, range, c, sharedWith, style, callback);
+
 		//Define our vars and create our content range description:
 		var doc = ReaderPanel.get().getDocumentElement(),
 			noteRecord,
@@ -547,11 +549,13 @@ Ext.define('NextThought.controller.UserData', {
 			ContainerId: container
 		});
 
+		console.log('Saving new record', noteRecord);
 		//now save this:
 		noteRecord.save({
 			scope: this,
 			callback:function(record, operation){
 				var success, rec;
+				console.log('New note save callback', success, operation);
 				try{
 					success = operation.success;
 					rec = success ? ParseUtils.parseItems(operation.response.responseText)[0] : null;

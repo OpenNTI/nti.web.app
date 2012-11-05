@@ -527,7 +527,7 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 		});
 
 
-
+		console.log('Editor actions body parts', out);
 		return {
 			body     : this.getNoteBody(out.join('<br/>')),
 			shareWith: this.shareMenu.getValue()
