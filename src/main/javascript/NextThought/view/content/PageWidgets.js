@@ -3,6 +3,8 @@ Ext.define('NextThought.view.content.PageWidgets',{
 	alias: 'widget.content-page-widgets',
 	ui: 'content-page-widgets',
 
+    cls: 'content-page-widgets',
+
 	layout: {
 		type: 'hbox',
 		pack: 'end'

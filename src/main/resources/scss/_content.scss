@@ -68,8 +68,9 @@
 	}
 }
 
-.x-container-content-page-widgets{
+.content-page-widgets{
 	height: 30px !important;
+	z-index: 999;
 	.meta {
 		position: absolute;
 		right: 0;
