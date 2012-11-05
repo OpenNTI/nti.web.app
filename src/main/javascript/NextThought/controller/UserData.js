@@ -392,7 +392,11 @@ Ext.define('NextThought.controller.UserData', {
 		win.el.mask('Sharing...');
 
 		//Clean the body
-		b = Ext.Array.clean(rec.get('body'));
+		//FIXME seems strange we should have to clean the body here...
+		b = rec.get('body');
+		if(Ext.isArray(b)){
+			b = Ext.Array.clean(b)
+		}
 		rec.set('body', b);
 
 		SharingUtils.setSharedWith(rec,v,function(newRec,op){
