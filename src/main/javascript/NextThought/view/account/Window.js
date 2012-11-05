@@ -5,7 +5,8 @@ Ext.define('NextThought.view.account.Window',{
 	requires: [
 		'NextThought.view.form.PasswordResetForm',
 		'NextThought.view.account.settings.RandomGravatarPicker',
-		'NextThought.view.account.settings.AvatarChoices'
+		'NextThought.view.account.settings.AvatarChoices',
+		'NextThought.view.account.settings.PictureEditor'
 	],
 
 	cls: 'account-window',
@@ -69,7 +70,7 @@ Ext.define('NextThought.view.account.Window',{
 				layout: { type: 'hbox', align: 'stretch', pack: 'start' },
 
 				items: [
-//					{text: 'Change Avatar', associatedPanel: 'avatar-choices'},
+//					{text: 'Edit Profile Picture', associatedPanel: 'avatar-choices', pressed:true},
 					{text: 'Change Avatar', associatedPanel: 'random-gravatar-picker'},
 					{text: 'Change Password', associatedPanel: 'password-reset-form'},
 					{ disabled:true, flex: 1 }
@@ -83,6 +84,7 @@ Ext.define('NextThought.view.account.Window',{
 				},
 				items: [
 					{ xtype: 'avatar-choices' },
+					{ xtype: 'picture-editor'},
 					{ xtype: 'random-gravatar-picker' },
 					{ xtype: 'password-reset-form' }
 				]

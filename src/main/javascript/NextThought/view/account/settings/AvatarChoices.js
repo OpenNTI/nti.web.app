@@ -13,9 +13,9 @@ Ext.define('NextThought.view.account.settings.AvatarChoices',{
 					cn: [
 						{tag: 'h3', cls: 'title', html:'Custom Photo'},
 						{cn:[
-							{tag: 'a', cls: 'edit', href: '#', html: 'Edit'},
+							{tag: 'a', cls: 'editCustom', href: '#edit', html: 'Edit'},
 							' | ',
-							{tag: 'a', cls: 'upload', href: '#', html: 'Upload New Photo'}
+							{tag: 'a', cls: 'uploadCustom', href: '#upload', html: 'Upload New Photo'}
 						]}
 					]
 				}
@@ -27,19 +27,20 @@ Ext.define('NextThought.view.account.settings.AvatarChoices',{
 					cn: [
 						{tag: 'h3', cls: 'title', html:'Randomly Generated'},
 						{cn:[
-							{tag: 'a', cls: 'more-random-choices', href: '#', html: 'Show More'}
+							{tag: 'a', cls: 'more-random-choices', href: '#moreRandom', html: 'Show More'}
 						]}
 					]
 				}
 			]},
-			{tag: 'li', cls: 'gravatar selected', cn: [
+
+			{tag: 'li', cls: 'gravatar hidden', cn: [
 				{tag: 'img', src: '{gravatarUrl}'},
 				{
 					cls: 'wrapper',
 					cn: [
 						{tag: 'h3', cls: 'title', html:'My Gravatar'},
 						{cn:[
-							{tag: 'a', cls: 'change gravatar', href: '#', html: 'Change'}
+							{tag: 'a', cls: 'change gravatar', href: 'http://gravatar.com', html: 'Change', target: '_blank'}
 						]}
 					]
 				}
@@ -51,20 +52,30 @@ Ext.define('NextThought.view.account.settings.AvatarChoices',{
 
 	renderSelectors: {
 		list: 'ul.avatar-choices',
+		customChoice: 'li.custom',
+		randomChoice: 'li.random',
+		gravatarChoice: 'li.gravatar',
 		moreOptions: 'a.more.random.chouces'
 	},
 
 
 	initComponent: function(){
 		var u = (this.user || $AppConfig.userObject),
-			c = u.get('AvatarURLChoices');
+			c = u.get('AvatarURLChoices'),
+			gravatar;
+
+		Ext.each(c,function(url){
+			if(/#gravatar/i.test(url)){gravatar = url;}
+			return !gravatar;
+		});
 
 		this.renderData = Ext.apply(this.renderData||{},{
 			customAvatarUrl: NextThought.model.User.getUnresolved().get('avatarURL'),
 			randomAvatarUrl: c[0],
-			gravatarUrl: u.get('avatarURL')
+			gravatarUrl: gravatar
 		});
 
+		this.hasGravatar = Boolean(gravatar);
 
 		this.callParent(arguments);
 	},
@@ -72,7 +83,10 @@ Ext.define('NextThought.view.account.settings.AvatarChoices',{
 
 	afterRender: function(){
 		this.callParent(arguments);
-
+		if(!this.hasGravatar){
+			this.gravatarChoice.remove();
+			this.updateLayout();
+		}
 		this.mon( this.list, 'click', this.clickHandler, this);
 	},
 
@@ -83,16 +97,30 @@ Ext.define('NextThought.view.account.settings.AvatarChoices',{
 			action = e.getTarget('a', null, true);
 
 		if(action){
-			alert('clicked a link');
+			action = action.getAttribute('href');
+			if(action && this[action.substring(1)]){
+				this[action.substring(1)]();
+			}
 		}
 		else {
 			this.el.select('.selected').removeCls('selected');
 			item.addCls('selected');
 		}
 
-
 		return false;
-	}
+	},
+
+
+	edit: function(){},
+
+	upload: function(){
+		this.up('account-window').changeView({
+			associatedPanel: 'picture-editor',
+			pressed: true
+		});
+	},
+
+	moreRandom: function(){}
 
 
 });

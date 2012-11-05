@@ -54,6 +54,12 @@
 		}
 	}
 
+	.picture-editor {
+		canvas {
+			border: 1px solid #ababab !important;
+			background: #d5d5d5;
+		}
+	}
 
 	.identity {
 		border-radius: 3px 3px 0 0;
@@ -124,6 +130,59 @@
 		}
 	}
 
+	.footer {
+		.x-btn-flat-medium {
+			cursor: pointer;
+			button {
+				background: none;
+				border: none;
+				padding: 12px 20px;
+
+				.x-btn-inner{
+					font: {
+						size: 14px;
+						style: normal;
+						weight: normal;
+					}
+					color: $primary-grey;
+					padding-right: 2px;
+				}
+			}
+		}
+
+		.x-btn-flat-blue-medium {
+			cursor: pointer;
+			button {
+				background: $primary-blue;
+				border: 1px solid #39a1dd;
+				padding: 12px 20px;
+
+				.x-btn-inner{
+					font: {
+						size: 14px;
+						style: italic;
+						weight: 700;
+					}
+					color: #ffffff;
+					padding-right: 2px;
+				}
+			}
+
+
+			&.x-btn-disabled {
+				button {
+					span { opacity: 1; }
+
+					cursor: default;
+					border-color: #d0d0d0;
+					background: rgba(184,184,184,0.5);
+					.x-btn-inner {
+						color: rgba(255,255,255,0.7);
+					}
+				}
+			}
+		}
+	}
 
 	.reset-password {
 		margin: 25px;
@@ -212,40 +271,6 @@
 		.footer {
 			margin-top: 40px;
 			border-top: 1px solid $border-grey !important;
-
-
-			.x-btn-flat-blue-medium {
-				button {
-					background: $primary-blue;
-					border: 1px solid #39a1dd;
-					cursor: pointer;
-					padding: 12px 20px;
-
-					.x-btn-inner{
-						font: {
-							size: 14px;
-							style: italic;
-							weight: 700;
-						}
-						color: #ffffff;
-						padding-right: 2px;
-					}
-				}
-
-
-				&.x-btn-disabled {
-					button {
-						span { opacity: 1; }
-
-						cursor: default;
-						border-color: #d0d0d0;
-						background: rgba(184,184,184,0.5);
-						.x-btn-inner {
-							color: rgba(255,255,255,0.7);
-						}
-					}
-				}
-			}
 		}
 	}
 }
