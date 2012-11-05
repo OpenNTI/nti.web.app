@@ -497,17 +497,16 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 
 	editBody: function (body) {
 		var me = this,
-			c = this.editor.down('.content > div').dom;
-
-		c.innerHTML = "";//clear what ever is in there
+			c = this.editor.down('.content').dom;
 
 		Ext.each(body, function (part) {
+			var d = document.createElement('div');
 			if (typeof part === 'string') {
-
-				c.innerHTML += part.replace(/\u200B/g,'');
+				d.innerHTML += part.replace(/\u200B/g,'');
+				c.appendChild(d);
 			}
 			else {
-				me.addWhiteboard(part);
+				me.addWhiteboard(part, c);
 			}
 		});
 	},

@@ -197,6 +197,54 @@
 					cursor: pointer;
 					border: 1px solid #b2b2b2;
 				}
+
+				.whiteboard-wrapper{
+					display: inline-block;
+					position: relative;
+					overflow: hidden;
+					cursor: pointer;
+					padding: 0px;
+					border: 1px solid $border-grey;
+					margin: 5px 2px;
+					box-shadow: 2px 1px 4px 0 rgba(0,0,0,0.12);
+
+					&:hover {
+						border: 3px solid $primary-blue;
+						margin: 3px 0;
+
+						.centerer {display: block;}
+					}
+
+					.centerer{
+						display: none;
+						position:absolute;
+						top: 50%;
+						left: 50%;
+
+						.edit{
+							font-family: $font !important;
+							font-weight: 600;
+							font-size: 11px;
+							position: relative;
+							top: -15px;
+							left: -50%;
+							color: #ffffff;
+							background: rgba(0,0,0,0.6);
+							padding: 5px 15px 5px 30px;
+							border-radius: 90px;
+
+							&::after {
+								content: ' ';
+								position: absolute;
+								top: 5px;
+								left: 12px;
+								background: url(../images/spr_image_options.png) -25px -19px no-repeat;
+								width: 14px;
+								height: 14px;
+							}
+						}
+					}
+				}
 			}
 		}
 		.footer {
@@ -1148,53 +1196,7 @@
 
 				  	.content{
 
-						.whiteboard-wrapper{
-							display: inline-block;
-							position: relative;
-							overflow: hidden;
-							cursor: pointer;
-							padding: 0px;
-							border: 1px solid $border-grey;
-							margin: 5px 2px;
-							box-shadow: 2px 1px 4px 0 rgba(0,0,0,0.12);
 
-							&:hover {
-								border: 3px solid $primary-blue;
-								margin: 3px 0;
-
-								.centerer {display: block;}
-							}
-
-							.centerer{
-								display: none;
-								position:absolute;
-								top: 50%;
-								left: 50%;
-
-								.edit{
-									font-family: $font !important;
-									font-weight: 600;
-									font-size: 11px;
-									position: relative;
-									top: -15px;
-									left: -50%;
-									color: #ffffff;
-									background: rgba(0,0,0,0.6);
-									padding: 5px 15px 5px 30px;
-									border-radius: 90px;
-
-									&::after {
-										content: ' ';
-										position: absolute;
-										top: 5px;
-										left: 12px;
-										background: url(../images/spr_image_options.png) -25px -19px no-repeat;
-										width: 14px;
-										height: 14px;
-									}
-								}
-							}
-						}
 					}
 				}
 				.footer {
