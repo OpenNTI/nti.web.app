@@ -239,6 +239,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 			frame: false,
 			border: false,
 			hideMode: 'display',
+            closeAction: 'destroy',
 			minWidth: 150,
 			defaults: {ui: 'nt-annotaion', plain: true }
 		});
@@ -319,6 +320,10 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 				}
 			});
 		}
+
+        //on close make sure it get's destroyed.
+        menu.on('hide', function(){menu.close();});
+
 
 
 
