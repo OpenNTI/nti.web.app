@@ -1307,14 +1307,8 @@
 }
 
 .note-add-to-contacts-popout::before{
-	content: url(../images/add_contact_pointer2.png);
+	content: url(../images/add_contact_pointer_left.png);
 	position: absolute;
 	top: 26px;
 	left: -12px;
-	-moz-transform: scaleX(-1);
-    -o-transform: scaleX(-1);
-    -webkit-transform: scaleX(-1);
-    transform: scaleX(-1);
-    filter: FlipH;
-    -ms-filter: "FlipH";
 }
