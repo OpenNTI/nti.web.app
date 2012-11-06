@@ -277,8 +277,8 @@ Ext.define('NextThought.view.annotations.Redaction', {
 }, function(){
 
 	var p = this.prototype,
-			tpl = {tag:'span', 'data-non-anchorable':'true', cls: 'redactionAction {style}', cn: [
-					{tag: 'span', 'data-non-anchorable':'true', 'data-no-anchorable-children': 'true', cls: 'editableSpan', html: '{replacementContent}'},
+	tpl = {tag:'span', 'data-non-anchorable': 'true', 'data-no-anchors-within': 'true', cls: 'redactionAction {style}', cn: [
+					{tag: 'span', 'data-non-anchorable':'true', cls: 'editableSpan', html: '{replacementContent}'},
 					{tag: 'span', 'data-non-anchorable':'true', cls: 'controls', cn:[
 						{tag: 'span', 'data-non-anchorable':'true', cls: 'edit', title: 'edit'},
 						{tag: 'span', 'data-non-anchorable':'true', cls: 'share', title: 'share'},
@@ -288,7 +288,7 @@ Ext.define('NextThought.view.annotations.Redaction', {
 
 	p.actionTpl = new Ext.XTemplate(Ext.DomHelper.markup([
 		{tag: 'tpl', 'if':'block', cn:[
-			{tag:'span', cls:'block-redaction head', 'data-non-anchorable':true,cn:[Ext.clone(tpl)]}
+			{tag:'span', cls:'block-redaction head', 'data-non-anchorable':true, cn:[Ext.clone(tpl)]}
 		]},
 		{tag: 'tpl', 'if':'!block', cn:[ tpl ]}
 	]));

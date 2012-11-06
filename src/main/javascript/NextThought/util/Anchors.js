@@ -16,6 +16,8 @@ Ext.define('NextThought.util.Anchors', {
 	singleton: true,
 
 	PURIFICATION_TAG: 'data-nti-purification-tag',
+	NON_ANCHORABLE_ATTRIBUTE: 'data-non-anchorable',
+	NO_ANCHORABLE_CHILDREN_ATTRIBUTE: 'data-no-anchors-within',
 
 	preresolveLocatorInfo: function(contentRangeDescriptions, docElement, cleanRoot, containers){
 		var virginContentCache = {};
@@ -869,6 +871,8 @@ Ext.define('NextThought.util.Anchors', {
  },
 
 
+	//TODO for these two methods consider skipping over any nodes with 'data-no-anchorable-children'
+	//as an optimization. (Probably minor since those are small parts of the tree right now)
 	/* tested */
 	searchFromRangeStartInwardForAnchorableNode: function(startNode) {
         if (!startNode){return null;}
@@ -996,55 +1000,64 @@ Ext.define('NextThought.util.Anchors', {
 
 
 	/* tested */
-	isNodeAnchorable: function(node, allowUnsafeAnchors){
+	isNodeAnchorable: function(theNode, unsafeAnchorsAllowed){
 		//obviously not if node is not there
-		if (!node) {return false;}
+		if (!theNode) {return false;}
 
-		//distill the possible ids into an id var for easier reference later
-		var id = node.id || (node.getAttribute ? node.getAttribute('id') : null),
+		function isNodeItselfAnchorable(node, allowUnsafeAnchors){
+			//distill the possible ids into an id var for easier reference later
+			var id = node.id || (node.getAttribute ? node.getAttribute('id') : null),
             ntiid = node.getAttribute ? node.getAttribute('data-ntiid') : null,
 			nonAnchorable = node.getAttribute ? node.getAttribute('data-non-anchorable'): false;
 
-		if (nonAnchorable) {return false;}
+			if (nonAnchorable) {return false;}
 
-		//Most common is text
-		if( Ext.isTextNode(node)){
-			//We don't want to try to anchor to empty text nodes
-			if( node.nodeValue.trim().length < 1 ){
+			//Most common is text
+			if( Ext.isTextNode(node)){
+				//We don't want to try to anchor to empty text nodes
+				if( node.nodeValue.trim().length < 1 ){
+					return false;
+				}
+				return true;
+			}
+
+			if (ntiid) {
+				return true;
+			}
+
+			//no mathjax ids allowd
+			else if (id && id.indexOf("MathJax") !== -1) {
 				return false;
 			}
-			return true;
-		}
 
-        if (ntiid) {
-            return true;
-        }
+			//no extjs ids allowd
+			else if (id && id.indexOf("ext-gen") !== -1) {
+				return false;
+			}
 
-		//no mathjax ids allowd
-		else if (id && id.indexOf("MathJax") !== -1) {
+			else if (!allowUnsafeAnchors && id && /^a[0-9]*$/.test(id)) {
+				return false; //ugly non reliable anchor
+			}
+
+			//If this node had an id and a tagName, then yay node!
+			else if (id && node.tagName){
+				return true;
+			}
+
+			//if not a text node, us it missing an id or a tagname?
+			else if(!id || !node.tagName ){
+				return false;
+			}
+
+			//otherwise, assume not
 			return false;
 		}
 
-		//no extjs ids allowd
-		else if (id && id.indexOf("ext-gen") !== -1) {
-			return false;
+		//If the itself is anchorable make sure its not in a parent
+		//that claims nothing is anchorable
+		if(isNodeItselfAnchorable(theNode, unsafeAnchorsAllowed)){
+			return !Ext.fly(theNode).up('['+Anchors.NO_ANCHORABLE_CHILDREN_ATTRIBUTE+']');
 		}
-
-        else if (!allowUnsafeAnchors && id && /^a[0-9]*$/.test(id)) {
-            return false; //ugly non reliable anchor
-        }
-
-		//If this node had an id and a tagName, then yay node!
-		else if (id && node.tagName){
-			return true;
-		}
-
-		//if not a text node, us it missing an id or a tagname?
-		else if(!id || !node.tagName ){
-			return false;
-		}
-
-		//otherwise, assume not
 		return false;
 	},
 
