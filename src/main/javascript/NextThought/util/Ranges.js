@@ -67,7 +67,23 @@ Ext.define('NextThought.util.Ranges',{
         r = sel.getRangeAt(0);
         sel.removeAllRanges();
 
-        return this.clearNonContextualGarbage(r.cloneContents());
+       return this.clearNonContextualGarbage(r.cloneContents());
+    },
+
+
+    expandRangeGetString: function(range, doc){
+        var expanded = this.expandRange(range, doc),
+            tempDiv = document.createElement('div'),
+            str;
+
+        tempDiv.appendChild(expanded);
+        str = tempDiv.innerHTML;
+
+        //cleanup:
+        Ext.fly(tempDiv).destroy();
+
+        //return string clean of ids:
+        return str.replace(/id=".*?"/ig, '');
     },
 
 
@@ -81,8 +97,8 @@ Ext.define('NextThought.util.Ranges',{
         Ext.each(this.nonContextWorthySelectors, function(sel){
             Ext.each(Ext.fly(dom).query(sel), function(remove){
                 Ext.fly(remove).remove();
-            }, this);
-        }, this);
+            });
+        });
         return dom;
     },
 

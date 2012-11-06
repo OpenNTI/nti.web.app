@@ -264,7 +264,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 	},
 
 	setRecord: function(r){
-		var suppressed, context;
+		var suppressed, context, doc, range;
 
 		//If we have an editor active for god sake don't blast it away
 		if(this.up('window').editorActive()){
@@ -316,10 +316,11 @@ Ext.define('NextThought.view.annotations.note.Main',{
 			this.context.setHTML('');
 			suppressed = r.get('style') === 'suppressed';
 			doc = ReaderPanel.get(this.prefix).getDocumentElement();
-			range = Anchors.toDomRange(r.get('applicableRange'), doc, ReaderPanel.get().getCleanContent(), r.get('ContainerId'));
+			range = Anchors.toDomRange(r.get('applicableRange'), doc, ReaderPanel.get(this.prefix).getCleanContent(), r.get('ContainerId'));
 			if(range){
-                this.context.insertFirst(RangeUtils.expandRange(range, doc));
+                this.context.setHTML(RangeUtils.expandRangeGetString(range, doc));
                 context = this.context.first();
+
                 if (!context || !context.is('div')){ //context may be null if child is a text node
                     this.context.insertHtml('afterBegin', '[...] ');
                     this.context.insertHtml('beforeEnd', ' [...]');
@@ -328,11 +329,14 @@ Ext.define('NextThought.view.annotations.note.Main',{
 				this.context.select('a[href]').set({target:'_blank'});
 				this.context.select('a[href^=tag]').set({href:undefined,target:undefined});
 				this.context.select('a[href^=#]').set({href:undefined,target:undefined});
+
                 Ext.each(this.context.query('.application-highlight'), function(h){
                     if(this.record.isModifiable()){
                         Ext.fly(h).addCls('highlight-mouse-over');
                     }
                 }, this);
+
+
                 //for now, don't draw the stupid canvas...
                 //this.canvas.width = Ext.fly(this.canvas).getWidth();
                 //this.canvas.height = Ext.fly(this.canvas).getHeight();
