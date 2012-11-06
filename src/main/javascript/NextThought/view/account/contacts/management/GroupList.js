@@ -191,7 +191,6 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
 		//if(this.username && !this.ignoreSelection){
 		//	return;
 		//}
-		debugger;
 		var record,s = this.getSelectionModel();
 		if(!this.allowSelect){
 			return;
