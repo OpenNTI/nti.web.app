@@ -187,11 +187,11 @@ Ext.define('NextThought.controller.Account', {
             data = view.getValues(),
             feedbackLink = $AppConfig.userObject.getLink('send-feedback'),
             url = getURL(feedbackLink),
-            w = view.up('window');
+            w = view.up('window'),
+            body;
 
         //first diable the button:
         btn.addCls('disabled');
-
         if(!data.message) {
             console.log('no message to send.');
             w.close();
@@ -204,13 +204,13 @@ Ext.define('NextThought.controller.Account', {
             return;
         }
 
+        body = data.email || '[NO EMAIL SUPPLIED]';
+        body += (' wrote: ' + data.message);
+
         Ext.Ajax.request({
             url: url,
             scope: this,
-            jsonData: Ext.encode({
-                    body: data.email || '[NO EMAIL SUPPLIED]'
-                    + ' wrote: ' + data.message}
-            ),
+            jsonData: Ext.encode({body: body}),
             method: 'POST',
             headers: {
                 Accept: 'application/json'
