@@ -58,6 +58,7 @@ Ext.define('NextThought.view.account.settings.AvatarChoices',{
 	renderSelectors: {
 		list: 'ul.avatar-choices',
 		customChoice: 'li.custom',
+		customChoiceImage: 'li.custom img',
 		editCustomChoice: 'li.custom span.editCustom',
 		randomChoice: 'li.random',
 		gravatarChoice: 'li.gravatar',
@@ -67,7 +68,8 @@ Ext.define('NextThought.view.account.settings.AvatarChoices',{
 
 
 	initComponent: function(){
-		var u = (this.user || $AppConfig.userObject),
+		var me = this,
+			u = (me.user || $AppConfig.userObject),
 			c = u.get('AvatarURLChoices'),
 			url = u.get('avatarURL'),
 			gravatar;
@@ -82,15 +84,15 @@ Ext.define('NextThought.view.account.settings.AvatarChoices',{
 		}
 
 
-		this.renderData = Ext.apply(this.renderData||{},{
+		me.renderData = Ext.apply(me.renderData||{},{
 			customAvatarUrl: url || NextThought.model.User.getUnresolved().get('avatarURL'),
 			randomAvatarUrl: url? c.last() : u.get('avatarURL'),
 			gravatarUrl: gravatar
 		});
 
-		this.hasGravatar = Boolean(gravatar);
+		me.hasGravatar = Boolean(gravatar);
 
-		this.moreOptionsMenu = Ext.widget('menu',{
+		me.moreOptionsMenu = Ext.widget('menu',{
 			ui: 'nt',
 			plain: true,
 			showSeparator: false,
@@ -106,7 +108,9 @@ Ext.define('NextThought.view.account.settings.AvatarChoices',{
 			]
 		});
 
-		this.callParent(arguments);
+		me.callParent(arguments);
+
+		me.on('destroy', me.moreOptionsMenu.destroy, me.moreOptionsMenu);
 	},
 
 
@@ -118,21 +122,27 @@ Ext.define('NextThought.view.account.settings.AvatarChoices',{
 			this.updateLayout();
 		}
 
-		var u = $AppConfig.userObject,
+		var me = this,
+			u = $AppConfig.userObject,
 			url = u.get('avatarURL'),
-			selection = this.gravatarChoice || this.randomChoice;
+			selection = me.gravatarChoice || me.randomChoice;
 
 		if(/^data:/i.test(url) || /@@view$/i.test(url)){
-			selection = this.customChoice;
+			selection = me.customChoice;
 		}
 		else {
-			this.editCustomChoice.setVisibilityMode(Ext.dom.Element.DISPLAY);
-			this.editCustomChoice.hide();
+			me.editCustomChoice.setVisibilityMode(Ext.dom.Element.DISPLAY);
+			me.editCustomChoice.hide();
 		}
 
-		this.select(selection);
+		me.select(selection);
 
-		this.mon( this.list, 'click', this.clickHandler, this);
+		me.mon( me.list, 'click', me.clickHandler, me);
+
+		me.mon(me.up('window').down('picture-editor'),'saved',function(url){
+			me.select(me.customChoice);
+			me.customChoiceImage.set({src:url});
+		});
 	},
 
 

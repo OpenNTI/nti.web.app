@@ -62,26 +62,29 @@ Ext.define('NextThought.view.account.settings.PictureEditor',{
 
 
 	buttonHandler: function(btn, isSave){
-		var u = $AppConfig.userObject,
-			c = this.down('picture-canvas');
+		var me = this,
+			u = $AppConfig.userObject,
+			c = me.down('picture-canvas'),
+			w = me.up('account-window'),
+			url;
 
 		if(isSave){
-			u.saveField('avatarURL', c.getValue(),
-				function good(){
+			url = c.getValue();
+			u.saveField('avatarURL', url,
 
+				function good(){
+					me.fireEvent('saved',url);
 				},
+
 				function bad(){
-					alert('Oops!\nSomething went wrong.');
+					alert({title:'Oops!',msg:'Something went wrong.'});
 				}
 			);
 
 
 		}
 
-		this.up('account-window').changeView({
-			associatedPanel: 'avatar-choices',
-			pressed: true
-		});
+		w.changeView({ associatedPanel: 'avatar-choices', pressed: true });
 	}
 
 
