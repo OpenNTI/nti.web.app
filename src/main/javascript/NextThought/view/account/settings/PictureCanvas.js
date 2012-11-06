@@ -29,6 +29,76 @@ Ext.define('NextThought.view.account.settings.PictureCanvas',{
 		}
 		this.createFileInput();
 		this.enableImageDropping();
+
+
+
+		this.mon(this.el, {
+			scope: this,
+			mousedown: this.onMouseDown,
+			mousemove: this.onMouseMove,
+			mouseup: this.onMouseUp
+		});
+	},
+
+
+	onMouseDown: function(e){
+        e.stopEvent();
+		var xy = e.getXY().slice(),
+			start = xy.slice(),
+			origin = this.el.getXY(),
+			mask = this.getMask(),
+			size = this.imageInfo.selection.size;
+
+		xy[0] -= origin[0];
+		xy[1] -= origin[1];
+
+		xy[0] -= mask[0];
+		xy[1] -= mask[1];
+
+		if( xy[0] >= 0 && xy[0] <= size
+		&&  xy[1] >= 0 && xy[1] <= size ){
+			this.mouseDown = true;
+			this.lastPoint = start;
+		}
+
+	},
+
+
+	onMouseMove: function(e){
+		if(!this.mouseDown){ return; }
+
+		function clamp(v,min,max){
+			return v<min
+					? min
+					: v > max
+						? max
+						: v;
+		}
+
+		var xy = e.getXY().slice(),
+			dx,dy,
+			i = this.imageInfo,
+			s = i.selection;
+
+		dx = this.lastPoint[0] - xy[0];
+		dy = this.lastPoint[1] - xy[1];
+
+		s.x -= dx;
+		s.y -= dy;
+
+		//clamp values
+		s.x = clamp(s.x, 0, (i.width - s.size));
+		s.y = clamp(s.y, 0, (i.height - s.size));
+
+		this.lastPoint = xy;
+		this.drawCropTool();
+	},
+
+
+	onMouseUp: function(e){
+        e.stopEvent();
+		delete this.mouseDown;
+		delete this.mouseLeftNoMouseUp;
 	},
 
 
@@ -75,6 +145,8 @@ Ext.define('NextThought.view.account.settings.PictureCanvas',{
 			w = c.width;
 
 		c.width = +w;
+
+		delete this.imageInfo;
 
 		this.createFileInput();
 		this.fireEvent('image-cleared');
@@ -125,20 +197,25 @@ Ext.define('NextThought.view.account.settings.PictureCanvas',{
 	},
 
 
+	getMask: function getMask(size,pixAdj){
+		size = size || 0;
+		pixAdj = pixAdj || 0;
+		var i = this.imageInfo;
+		return [
+			Math.floor(i.x + i.selection.x - size) + pixAdj,
+			Math.floor(i.y + i.selection.y - size) + pixAdj,
+			Math.floor(i.selection.size + (size*2)),
+			Math.floor(i.selection.size + (size*2))
+		];
+	},
+
+
 	drawCropTool: function(){
 		var ctx = this.el.dom.getContext('2d'),
 			i = this.imageInfo;
 
-		function getMask(size,pixAdj){
-			size = size || 0;
-			pixAdj = pixAdj || 0;
-			return [
-				Math.floor(i.x + i.selection.x - size) + pixAdj,
-				Math.floor(i.y + i.selection.y - size) + pixAdj,
-				Math.floor(i.selection.size + (size*2)),
-				Math.floor(i.selection.size + (size*2))
-			];
-		}
+		//erase
+		this.el.dom.width = this.mySize.width;
 
 		function drawCorners(x,y,width,height){
 			ctx.save();
@@ -192,7 +269,7 @@ Ext.define('NextThought.view.account.settings.PictureCanvas',{
 		ctx.save();
 		ctx.fillStyle = '#000';
 		ctx.globalCompositeOperation = 'destination-out';
-		ctx.fillRect.apply(ctx,getMask());
+		ctx.fillRect.apply(ctx,this.getMask());
 		ctx.restore();
 
 		//draw image under mask
@@ -203,11 +280,11 @@ Ext.define('NextThought.view.account.settings.PictureCanvas',{
 
 		//draw border
 		ctx.strokeStyle = '#000';
-		ctx.strokeRect.apply(ctx,getMask(0,0.5));
+		ctx.strokeRect.apply(ctx,this.getMask(0,0.5));
 		ctx.strokeStyle = '#fff';
-		ctx.strokeRect.apply(ctx,getMask(-1,0.5));
+		ctx.strokeRect.apply(ctx,this.getMask(-1,0.5));
 
-		drawCorners.apply(this,getMask(2,0.5));
+		drawCorners.apply(this,this.getMask(2,0.5));
 	},
 
 
@@ -270,6 +347,7 @@ Ext.define('NextThought.view.account.settings.PictureCanvas',{
 
 	},
 
+
 	handlePaste:function(event, domEl){
 		var clipboardData = event.clipboardData || {},
 			me = this;
@@ -289,6 +367,7 @@ Ext.define('NextThought.view.account.settings.PictureCanvas',{
 		});
 
 	},
+
 
 	readFile: function(files){
 		var me = this,
