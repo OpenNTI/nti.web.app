@@ -34,14 +34,31 @@ Ext.define('NextThought.view.account.settings.PictureEditor',{
 			},
 			items: [
 				{text: 'Cancel' },
-				{text: 'Save', save:true, ui: 'flat-blue' }
+				{text: 'Save', save:true, ui: 'flat-blue', disabled: true }
 			]
 		}
 	],
 
 
-	reset: function(){},
-	editMode: function(){},
+	initComponent: function(){
+		var me = this;
+		me.callParent(arguments);
+		me.mon(me.down('picture-canvas'),{
+			'image-loaded': function(){ me.down('button[save]').enable();},
+			'image-cleared': function(){ me.down('button[save]').disable();}
+		});
+	},
+
+
+	reset: function(){
+		this.down('picture-canvas').clear();
+	},
+
+
+	editMode: function(){
+		this.reset();
+		this.down('picture-canvas').setImage($AppConfig.userObject.get('avatarURL'));
+	},
 
 
 	buttonHandler: function(btn, isSave){

@@ -36,7 +36,11 @@ Ext.define('NextThought.view.account.settings.RandomGravatarPicker',{
 			c = u.get('AvatarURLChoices'),
 			data = [];
 
-		Ext.each(c,function(url){ data.push({url:url}); });
+		Ext.each(c,function(url){
+			if(!/^data:/i.test(url) && !/@@view$/i.test(url)){
+				data.push({url:url});
+			}
+		});
 
 		this.store = new Ext.data.Store({ idProperty: 'url', fields:['url'], data : data });
 

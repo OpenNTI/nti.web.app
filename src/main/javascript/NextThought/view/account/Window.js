@@ -62,23 +62,28 @@ Ext.define('NextThought.view.account.Window',{
 				defaults: {
 					ui: 'account',
 					enableToggle: true,
+					allowDepress: false,
 					toggleGroup: 'account-buttons',
 					width: 150,
-					handler: function(btn){ btn.up('window').changeView(btn); }
+					listeners:{
+						toggle: function(btn,pressed){
+							if(pressed){
+								btn.up('window').changeView(btn);
+							}
+						}
+					}
 				},
 
 				layout: { type: 'hbox', align: 'stretch', pack: 'start' },
 
 				items: [
-//					{text: 'Edit Profile Picture', associatedPanel: 'avatar-choices', pressed:true},
-					{text: 'Change Avatar', associatedPanel: 'random-gravatar-picker'},
+					{text: 'Edit Profile Picture', associatedPanel: 'avatar-choices', pressed:true},
 					{text: 'Change Password', associatedPanel: 'password-reset-form'},
 					{ disabled:true, flex: 1 }
 				]
 			},{
 				name: 'settings',
 				xtype: 'container',
-				hidden: true,
 				layout: {
 					type: 'card'
 				},
@@ -112,20 +117,14 @@ Ext.define('NextThought.view.account.Window',{
 	},
 
 
-	hideForms: function(){
-		Ext.each(this.query('[associatedPanel]'),function(o){ o.toggle(false,true); });
-		this.down('[name=settings]').hide();
-		this.updateLayout();
-	},
-
-
 	changeView: function(btn){
 		var c = this.down('[name=settings]'),
 			p = c.down(btn.associatedPanel);
 
-		c.getLayout().setActiveItem(p);
-		c[btn.pressed?'show':'hide']();
-
-		this.updateLayout();
+		if(c.getLayout().getActiveItem() !== p){
+			c.getLayout().setActiveItem(p);
+			c[btn.pressed?'show':'hide']();
+			this.updateLayout();
+		}
 	}
 });

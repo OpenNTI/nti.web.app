@@ -77,14 +77,14 @@ Ext.define('NextThought.view.account.settings.AvatarChoices',{
 			return !gravatar;
 		});
 
-		if(!/^data:/i.test(url) && !/@@view/i.test(url)){
+		if(!/^data:/i.test(url) && !/@@view$/i.test(url)){
 			url = null;
 		}
 
 
 		this.renderData = Ext.apply(this.renderData||{},{
 			customAvatarUrl: url || NextThought.model.User.getUnresolved().get('avatarURL'),
-			randomAvatarUrl: c.last(),
+			randomAvatarUrl: url? c.last() : u.get('avatarURL'),
 			gravatarUrl: gravatar
 		});
 
@@ -122,7 +122,7 @@ Ext.define('NextThought.view.account.settings.AvatarChoices',{
 			url = u.get('avatarURL'),
 			selection = this.gravatarChoice || this.randomChoice;
 
-		if(/^data:/i.test(url) || /@@view/i.test(url)){
+		if(/^data:/i.test(url) || /@@view$/i.test(url)){
 			selection = this.customChoice;
 		}
 		else {
@@ -140,19 +140,29 @@ Ext.define('NextThought.view.account.settings.AvatarChoices',{
 		e.stopEvent();
 		var item = e.getTarget('li', null, true),
 			action = e.getTarget('a', null, true),
-			url;
+			url,
+			changing = false;
 
-		if(item) {
-			this.select(item);
-		}
 
 		if(action){
 			action = action.getAttribute('href');
 			if(action && this[action.substring(1)]){
 				this[action.substring(1)]();
+				return false;
 			}
 		}
-		else {
+
+		if(item === this.customChoice && !this.editCustomChoice.isVisible()){
+			this.upload();
+			return false;
+		}
+
+		if(item) {
+			changing = !item.hasCls('selected');
+			this.select(item);
+		}
+
+		if(changing) {
 			url = item.down('img').getAttribute('src');
 			if(item === this.customChoice){
 				//If we jump back and forth between choices, why can't this be set back to the @@view it was?
@@ -160,6 +170,7 @@ Ext.define('NextThought.view.account.settings.AvatarChoices',{
 				url = this.imgToDataUrl(item.down('img'));
 			}
 			//set basic choice (take the value of the image in the choice)
+			console.log(url);
 			this.makeAChoice(url);
 		}
 
@@ -170,8 +181,8 @@ Ext.define('NextThought.view.account.settings.AvatarChoices',{
 	imgToDataUrl: function(img){
 		img = Ext.getDom(img);
 		var c = document.createElement('canvas');
-		c.width = img.width;
-		c.height=img.height;
+		c.width = img.naturlWidth || img.width;
+		c.height = img.naturlHeight || img.height;
 		c.getContext('2d').drawImage(img,0,0);
 		return c.toDataURL('imge/png');
 	},

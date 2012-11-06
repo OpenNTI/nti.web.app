@@ -57,7 +57,20 @@
 	.picture-editor {
 		canvas {
 			border: 1px solid #ababab !important;
-			background: #d5d5d5;
+			background: #d5d5d5 url(../images/whiteboard/icon.png) center center no-repeat;
+		}
+
+		.file-input {
+			display: block;
+			position: absolute;
+			top: 0;
+			right: 0;
+			filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+			opacity: 0;
+			font-size: 200px;
+			cursor: pointer;
+			width: 600px;
+			height: 400px;
 		}
 	}
 

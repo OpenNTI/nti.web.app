@@ -27,16 +27,70 @@ Ext.define('NextThought.view.account.settings.PictureCanvas',{
 			alert({title:'Sorry, you can\'t use this feature.', msg: 'Please update to the lastest version of your browser', width: 500});
 			return;
 		}
-
+		this.createFileInput();
 		this.enableImageDropping();
 	},
 
 
-	setImage: function(dataUrl){
+	createFileInput : function() {
+		var me = this,
+			old = me.fileInputEl,
+			file = me.fileInputEl = Ext.DomHelper.insertAfter(me.el,{
+			name: 'file1',
+			cls: 'file-input',
+			tag: 'input',
+			type: 'file',
+			accept: 'image/*',
+			size: 1
+		},true);
+
+		if(old){
+			old.remove();
+		}
+
+		file.on('change', me.onFileChange, me, {single: true});
+	},
+
+
+	onFileChange: function(e){
+		if(!e.target.files){
+			alert('TODO: implement legacy code branch');
+			return;
+		}
+
+		this.readFile(this.extractFileInput().files);
+	},
+
+	extractFileInput: function() {
+		var fileInput = this.fileInputEl.dom;
+		this.fileInputEl.remove();
+		return fileInput;
+	},
+
+
+	clear: function(){
+		if(!this.el){return;}
+
+		var c = this.el.dom,
+			w = c.width;
+
+		c.width = +w;
+
+		this.createFileInput();
+		this.fireEvent('image-cleared');
+	},
+
+
+	setImage: function(url){
 		var me = this,
 			img = new Image();
 
+		img.onerror = function(){ me.clear(); };
+
 		img.onload = function ImageLoaded(){
+			if(me.fileInputEl){
+				me.fileInputEl.remove();
+			}
 			var size = me.mySize,
 				h = img.height,
 				w = img.width,
@@ -63,10 +117,11 @@ Ext.define('NextThought.view.account.settings.PictureCanvas',{
 				}
 			};
 
+			me.fireEvent('image-loaded',me.imageInfo);
 			me.drawCropTool();
 		};
 
-		img.src = dataUrl;
+		img.src = url;
 	},
 
 
