@@ -191,7 +191,7 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
 		//if(this.username && !this.ignoreSelection){
 		//	return;
 		//}
-
+		debugger;
 		var record,s = this.getSelectionModel();
 		if(!this.allowSelect){
 			return;
@@ -202,9 +202,11 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
 				s.select(record,true,true);
 				this.fireEvent('selectionchange',this, s.getSelection());
 
-				//WHen multiple New groups are created we want to keep them stacking selection choices.
-				if(!this.pendingGroupsRequests){ this.pendingGroupsRequests = []; }
-				this.pendingGroupsRequests.push(this.getSelected()[0]);
+				//Only adds to pendingList if the user is not in my contacts.
+				if(!this.username){
+					if(!this.pendingGroupsRequests){ this.pendingGroupsRequests = []; }
+					this.pendingGroupsRequests.push(this.getSelected()[0]);
+				}
 			}
 		}
 		catch(er){
