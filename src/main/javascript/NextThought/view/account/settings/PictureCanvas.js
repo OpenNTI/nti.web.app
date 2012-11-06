@@ -10,7 +10,14 @@ Ext.define('NextThought.view.account.settings.PictureCanvas',{
 	},
 
 	syncSizeAttributes: function(){
-		this.el.set(this.getSize());
+		var borders = this.el.getStyle(['border-top-width','border-right-width','border-bottom-width','border-left-width']),
+			size = this.getSize();
+		size.width -= (parseInt(borders['border-left-width'],10) + parseInt(borders['border-right-width'],10));
+		size.height-= (parseInt(borders['border-top-width'],10) + parseInt(borders['border-bottom-width'],10));
+
+		this.mySize = size;
+		this.el.set(size);
+		this.el.setStyle({width: null, height: null});
 	},
 
 
@@ -30,7 +37,7 @@ Ext.define('NextThought.view.account.settings.PictureCanvas',{
 			img = new Image();
 
 		img.onload = function ImageLoaded(){
-			var size = me.getSize(),
+			var size = me.mySize,
 				h = img.height,
 				w = img.width,
 				scale = Math.max(h/size.height, w/size.width),
@@ -67,13 +74,14 @@ Ext.define('NextThought.view.account.settings.PictureCanvas',{
 		var ctx = this.el.dom.getContext('2d'),
 			i = this.imageInfo;
 
-		function getMask(size){
+		function getMask(size,pixAdj){
 			size = size || 0;
+			pixAdj = pixAdj || 0;
 			return [
-				i.x + i.selection.x + size,
-				i.y + i.selection.y + size,
-				i.selection.size - (2*size),
-				i.selection.size - (2*size)
+				Math.floor(i.x + i.selection.x - size) + pixAdj,
+				Math.floor(i.y + i.selection.y - size) + pixAdj,
+				Math.floor(i.selection.size + (size*2)),
+				Math.floor(i.selection.size + (size*2))
 			];
 		}
 
@@ -81,8 +89,10 @@ Ext.define('NextThought.view.account.settings.PictureCanvas',{
 			ctx.save();
 			ctx.fillStyle = '#000';
 			ctx.strokeStyle = '#fff';
-			var cw = (width/2),
-				ch = (height/2);
+			ctx.lineCap = 'round';
+			ctx.lineWidth = 1;
+			var cw = Math.floor(width/2),
+				ch = Math.floor(height/2);
 
 
 			function nib(){
@@ -116,16 +126,18 @@ Ext.define('NextThought.view.account.settings.PictureCanvas',{
 
 		ctx.setTransform(1,0,0,1,0,0);
 		ctx.lineWidth = 1;
-		ctx.lineCap = 'round';
+
 		//mask
+		ctx.save();
 		ctx.fillStyle = 'rgba(0,0,0,0.5)';
 		ctx.fillRect(i.x, i.y, i.width, i.height);
+		ctx.restore();
 
 		//cut out masked area
 		ctx.save();
 		ctx.fillStyle = '#000';
 		ctx.globalCompositeOperation = 'destination-out';
-		ctx.fillRect.apply(ctx,getMask(3));
+		ctx.fillRect.apply(ctx,getMask());
 		ctx.restore();
 
 		//draw image under mask
@@ -136,11 +148,11 @@ Ext.define('NextThought.view.account.settings.PictureCanvas',{
 
 		//draw border
 		ctx.strokeStyle = '#000';
-		ctx.strokeRect.apply(ctx,getMask(2));
+		ctx.strokeRect.apply(ctx,getMask(0,0.5));
 		ctx.strokeStyle = '#fff';
-		ctx.strokeRect.apply(ctx,getMask(3));
+		ctx.strokeRect.apply(ctx,getMask(-1,0.5));
 
-		drawCorners.apply(this,getMask(1));
+		drawCorners.apply(this,getMask(2,0.5));
 	},
 
 
