@@ -499,6 +499,9 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 		var me = this,
 			c = this.editor.down('.content').dom;
 
+		if(body && body.length > 0){
+			c.innerHTML = '';
+		}
 		Ext.each(body, function (part) {
 			var d = document.createElement('div');
 			if (typeof part === 'string') {
