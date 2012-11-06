@@ -698,7 +698,7 @@ Ext.define('NextThought.controller.Chat', {
 
 		this.channelMap[channel].call(this, m, opts||{});
 
-		if(!w.minimized){
+		if(!w.minimized && !w.isVisible()){
 			w.show();
 		}
 		else {
