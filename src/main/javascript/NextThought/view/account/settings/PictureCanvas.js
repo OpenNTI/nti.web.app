@@ -156,6 +156,19 @@ Ext.define('NextThought.view.account.settings.PictureCanvas',{
 	},
 
 
+	getValue: function(){
+
+		var i = this.imageInfo,
+			s = i.selection,
+			c = document.createElement('canvas'),
+			ctx;
+		c.width = c.height = s.size;
+		ctx = c.getContext('2d');
+		ctx.drawImage(i.image, -s.x, -s.y, i.width, i.height);
+		return c.toDataURL("image/png");
+	},
+
+
 	selectImage: function(inputField){
 		var hasFileApi = Boolean(inputField.fileInputEl.dom.files),
 			files = hasFileApi ? inputField.extractFileInput().files : [];

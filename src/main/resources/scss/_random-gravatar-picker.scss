@@ -1,13 +1,13 @@
 @import "variables";
 
 .random-gravatar-picker {
+	white-space: normal !important;
 	margin-bottom: 14px;
-	padding: 14px 0 0 20px;
+	padding: 14px 0 0 20px !important;
 
 	.item-wrap {
 		position: relative;
 		display: inline-block;
-		margin-right: 10px;
 		height: 44px;
 		width: 44px;
 		margin: 4px 20px 4px 0;
@@ -41,5 +41,19 @@
 		}
 	}
 
+	&.mini {
+		padding: 10px 0 0 10px !important;
+		.item-wrap {
+			margin: 4px 10px 4px 0;
+			width: 32px;
+			height: 32px;
+			box-shadow: none;
 
+			&.x-item-selected{
+				margin: 0 6px 0 -4px;
+				height: 40px;
+				width: 40px;
+			}
+		}
+	}
 }

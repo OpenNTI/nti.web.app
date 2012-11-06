@@ -40,8 +40,27 @@ Ext.define('NextThought.view.account.settings.PictureEditor',{
 	],
 
 
+	reset: function(){},
+	editMode: function(){},
+
 
 	buttonHandler: function(btn, isSave){
+		var u = $AppConfig.userObject,
+			c = this.down('picture-canvas');
+
+		if(isSave){
+			u.saveField('avatarURL', c.getValue(),
+				function good(){
+
+				},
+				function bad(){
+					alert('Oops!\nSomething went wrong.');
+				}
+			);
+
+
+		}
+
 		this.up('account-window').changeView({
 			associatedPanel: 'avatar-choices',
 			pressed: true

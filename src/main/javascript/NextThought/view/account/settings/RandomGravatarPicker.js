@@ -11,11 +11,13 @@ Ext.define('NextThought.view.account.settings.RandomGravatarPicker',{
 	cls: 'random-gravatar-picker',
 	singleSelect: true,
 	allowDeselect: false,
-	autoScroll: true,
+	overflowX: 'hidden',
+	overflowY: 'scroll',
 	overItemCls: 'over',
 	itemSelector: 'div.item-wrap',
 
 	maxHeight: 170,
+	minWidth: 533,
 
 	tpl: Ext.DomHelper.markup(
 		{tag:'tpl', 'for':'.', cn: [
