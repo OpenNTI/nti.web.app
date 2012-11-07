@@ -233,18 +233,27 @@ Ext.define( 'NextThought.view.annotations.Base', {
 
 		me.record.save({
 			scope: me,
-			failure:function(){
-				console.error('Failed to save record', me, me.record);
-				me.cleanup();
-				alert({title:'Ooops!', msg:'Something went wrong while saving. Please try again.'});
-			},
-			success:function(newRecord){
-				me.record.fireEvent('updated', newRecord);
-				me.record = newRecord;
-				if (callback) {
-					Ext.callback(callback);
-				}
-			}
+            callback:function(record, operation){
+                var success, rec;
+                try{
+                    success = operation.success;
+                    rec = success ? ParseUtils.parseItems(operation.response.responseText)[0] : null;
+                    if (success){
+                        me.record.fireEvent('updated', rec);
+                        me.record = rec;
+                    }
+                    else{
+                        me.cleanup();
+                        alert({title:'Ooops!', msg:'Something went wrong while saving. Please try again.'});
+                    }
+                }
+                catch(err){
+                    console.error('Something went wrong... ',err);
+                }
+                if (callback) {
+                    Ext.callback(callback, this, [success, rec]);
+                }
+            }
 		});
 	},
 

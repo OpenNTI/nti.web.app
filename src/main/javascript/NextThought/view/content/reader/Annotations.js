@@ -259,8 +259,8 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 			text: 'Save Highlight',
 			handler:function(){
 				me.createAnnotationWidget('highlight',record, range).savePhantom(
-                    function(){
-                       AnnotationUtils.addToHistory(record);
+                    function(success, rec){
+                       AnnotationUtils.addToHistory(rec);
                     }
                 );
 				me.clearSelection();
@@ -310,7 +310,6 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 				handler: function(){
 					me.clearSelection();
 					var r = NextThought.model.Redaction.createFromHighlight(record,true);
-
 					try{
 						me.createAnnotationWidget('redaction',r, range).savePhantom();
 					}
