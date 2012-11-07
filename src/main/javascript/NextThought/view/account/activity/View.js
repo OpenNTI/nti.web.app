@@ -7,13 +7,9 @@ Ext.define('NextThought.view.account.activity.View',{
 		'NextThought.view.account.contacts.management.Popout'
 	],
 
-	iconCls: 'activity',
-	tooltip: 'Recent Activity',
-	ui: 'activity',
-	cls: 'activity-view',
-	plain: true,
 	overflowY: 'hidden',
 	overflowX: 'hidden',
+    cls: 'activity-view',
 
 	layout: {
 		type: 'vbox',
@@ -22,7 +18,6 @@ Ext.define('NextThought.view.account.activity.View',{
 	},
 
 	items: [
-		{xtype: 'box', cls: 'view-title', autoEl: {html: 'Recent Activity'}},
 		{
 			activitiesHolder: 1,
 			xtype: 'box',
@@ -63,16 +58,14 @@ Ext.define('NextThought.view.account.activity.View',{
 		this.store = Ext.getStore('Stream');
 		this.mon(this.store,{
 			scope: this,
-			add: this.updateNotificationCountFromStore,
-			datachanged: this.reloadActivity,
-			load: this.reloadActivity,
+			datachanged: this.maybeReload,
+			load: this.maybeReload,
 			clear: function(){console.log('stream clear',arguments);},
 			remove: function(){console.log('stream remove',arguments);},
 			update: function(){console.log('stream update',arguments);}
 		});
 
-		this.monitoredInstance = $AppConfig.userObject;
-		this.mon($AppConfig.userObject, 'changed', this.updateNotificationCount, this);
+        this.on('activate', this.onActivate, this);
 	},
 
 
@@ -83,65 +76,18 @@ Ext.define('NextThought.view.account.activity.View',{
 			'click':this.itemClick,
 			'mouseover': this.itemHover
 		});
-		this.mon(this, {
-			scope: this,
-			'deactivate': this.resetNotificationCount
-		});
 	},
 
 
-	updateNotificationCountFromStore: function(store, records){
-		var u = $AppConfig.userObject,
-				newCount = 0,
-				c = (u.get('NotificationCount') || 0);
-
-
-		Ext.each(records, function(record){
-			if(!/deleted/i.test(record.get('ChangeType'))){
-				newCount++;
-			}
-		});
-
-		c += newCount;
-
-		//Update current notification of the userobject.
-		u.set('NotificationCount', c);
-		u.fireEvent('changed',u);
-	},
-
-
-	resetNotificationCount: function(){
-		$AppConfig.userObject.saveField('NotificationCount', 0);
-		this.setNotificationCountValue(0);
-	},
-
-
-	updateNotificationCount: function(u) {
-		if(u !== this.monitoredInstance && u === $AppConfig.userObject){
-			this.mun(this.monitoredInstance,'changed', this.updateNotificationCount,this);
-			this.monitoredInstance = u;
-			this.mon(this.monitoredInstance,'changed', this.updateNotificationCount,this);
-		}
-		this.setNotificationCountValue(u.get('NotificationCount'));
-	},
-
-
-	setNotificationCountValue: function(count){
-		this.tab.setText(count || '&nbsp;');
-	},
-
-
-	onAdded: function(){
-		this.callParent(arguments);
-		//sigh
-		Ext.defer(function(){
-			this.setNotificationCountValue(
-					this.monitoredInstance.get('NotificationCount'));
-		}, 1, this);
-	},
+    maybeReload: function(){
+        if (this.isVisible() && !this.dontReload){
+            this.reloadActivity();
+        }
+    },
 
 
 	reloadActivity: function(store){
+        console.log('reloading');
 		var container = this.down('box[activitiesHolder]'),
 				totalExpected,
 				items = [];
@@ -341,5 +287,32 @@ Ext.define('NextThought.view.account.activity.View',{
 		},500);
 
 		target.on('mouseout',me.cancelPopupTimeout,me,{single:true});
-	}
+	},
+
+
+    onActivate: function(){
+        var communities = $AppConfig.userObject.get('Communities'),
+            contains = (this.filter === 'inCommunity');
+
+           var filterFn = function(change){
+            var item = change.get('Item'),
+                sharedWith = item.get('sharedWith'),
+                foundInCommunities = false;
+
+            Ext.Array.each(sharedWith, function(u){
+                if (Ext.Array.contains(communities, u)){
+                    foundInCommunities = true;
+                }
+            });
+
+            return (contains === foundInCommunities);
+        }
+
+        this.dontReload = true;
+        this.store.clearFilter();
+        delete this.dontReload;
+        this.store.filterBy(filterFn);
+
+        //Now the listeners on the store will take care of rendering.
+    }
 });

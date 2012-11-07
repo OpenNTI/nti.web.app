@@ -5,7 +5,7 @@ Ext.define('NextThought.view.SideBar',{
 	requires: [
 		'NextThought.view.SideBarTabPanel',
 		'NextThought.view.account.View',
-		'NextThought.view.account.activity.View',
+        'NextThought.view.account.activity.ActivityTabs',
 		'NextThought.view.account.contacts.View',
 		'NextThought.view.account.history.View',
 		'NextThought.view.account.Identity'
@@ -34,7 +34,7 @@ Ext.define('NextThought.view.SideBar',{
 			flex: 1,
 			items: [
 				{xtype: 'contacts-view'},
-				{xtype: 'activity-view', id: 'activity-stream'},
+				{xtype: 'activity-tab-view'},
 				{xtype: 'history-view' },
 				{xtype: 'account-view', hidden: true}
 			]}

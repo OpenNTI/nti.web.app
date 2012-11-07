@@ -1,97 +1,100 @@
 @import "variables";
 
-.activity-view {
+.activity-tab-view{
 	@include side-panel-view-title;
+	.activity-view {
+		.activity {
+			cursor: pointer;
+			position: relative;
+			border-top: 1px solid #eaeaea;
+			box-shadow: inset 0 1px 0 0 #ffffff;
 
-	.activity {
-		cursor: pointer;
-		position: relative;
-		border-top: 1px solid #eaeaea;
-		box-shadow: inset 0 1px 0 0 #ffffff;
 
-
-		margin: 0 18px 0 20px;
-		padding: 12px 0 12px 25px;
-		font-size: 12px;
-		color: $secondary-grey;
-		overflow: hidden;
-
-		&::after {
-			content: ' ';
-			position: absolute;
-			width: 20px;
-			height: 20px;
-			top: 10px;
-			left: 0;
-			background: url(../images/activity-icons.png) 0 0 no-repeat;
-		}
-
-		&.nothing{
-			&::after{display: none;}
-			text-align: center;
-			font-style: italic;
+			margin: 0 18px 0 20px;
+			padding: 12px 0 12px 25px;
+			font-size: 12px;
 			color: $secondary-grey;
-			padding: 0px;
-			margin: 0px;
-			border-top: none;
-			box-shadow: none;
+			overflow: hidden;
+
+			&::after {
+				content: ' ';
+				position: absolute;
+				width: 20px;
+				height: 20px;
+				top: 10px;
+				left: 0;
+				background: url(../images/activity-icons.png) 0 0 no-repeat;
+			}
+
+			&.nothing{
+				&::after{display: none;}
+				text-align: center;
+				font-style: italic;
+				color: $secondary-grey;
+				padding: 0px;
+				margin: 0px;
+				border-top: none;
+				box-shadow: none;
+			}
+
+			&.loading::after {
+				background: $loading-indicator 0 0 no-repeat;
+				width: 16px; height: 16px;
+				top: 12px;
+			}
+
+			&.user::after{ background-position: -20px -20px; }
+			&.comment::after { background-position: -38px 0; }
+			&.highlight::after { background-position: 0 0; }
+			&.note{
+				&::after{ background-position: -20px 0; }
+
+				font-style: italic;
+			}
+
+			.name, .with {
+				font-style: normal;
+				font-size: 10px;
+				font-weight: bold;
+				color: $primary-blue;
+				text-transform: uppercase;
+			}
 		}
 
-		&.loading::after {
-			background: $loading-indicator 0 0 no-repeat;
-			width: 16px; height: 16px;
-			top: 12px;
-		}
 
-		&.user::after{ background-position: -20px -20px; }
-		&.comment::after { background-position: -38px 0; }
-		&.highlight::after { background-position: 0 0; }
-		&.note{
-			&::after{ background-position: -20px 0; }
-
-			font-style: italic;
-		}
-
-		.name, .with {
-			font-style: normal;
-			font-size: 10px;
-			font-weight: bold;
-			color: $primary-blue;
+		.divider {
+			position: relative;
+			color: $secondary-grey;
+			font: {
+				size: 10px;
+				weight: bold;
+			}
+			text-align: center;
 			text-transform: uppercase;
-		}
-	}
+			line-height: 29px;
+			// IE9 SVG, needs conditional override of 'filter' to 'none'
+			$experimental-support-for-svg: true;
+			@include background-image(linear-gradient(left,  rgba(255,255,255,0) 0%,rgba(255,255,255,1) 26%,rgba(255,255,255,1) 72%,rgba(255,255,255,0) 100%));
 
+			&::after {
+				content: ' ';
+				width: 260px;
+				height: 5px;
+				background: url(../images/bevelshadow.png) center 0 no-repeat;
+				border: 1px soild #000;
+				position: absolute;
+				bottom: -5px;
+				left: 0;
+			}
 
-	.divider {
-		position: relative;
-		color: $secondary-grey;
-		font: {
-			size: 10px;
-			weight: bold;
-		}
-		text-align: center;
-		text-transform: uppercase;
-		line-height: 29px;
-		// IE9 SVG, needs conditional override of 'filter' to 'none'
-		$experimental-support-for-svg: true;
-		@include background-image(linear-gradient(left,  rgba(255,255,255,0) 0%,rgba(255,255,255,1) 26%,rgba(255,255,255,1) 72%,rgba(255,255,255,0) 100%));
-
-		&::after {
-			content: ' ';
-			width: 260px;
-			height: 5px;
-			background: url(../images/bevelshadow.png) center 0 no-repeat;
-			border: 1px soild #000;
-			position: absolute;
-			bottom: -5px;
-			left: 0;
-		}
-
-		& + div.activity {
-			box-shadow: none;
+			& + div.activity {
+				box-shadow: none;
+			}
 		}
 	}
 }
+
+
 
 
 .activity-popout{
