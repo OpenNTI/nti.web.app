@@ -82,9 +82,12 @@ Ext.define('NextThought.view.annotations.Redaction', {
 
 
 	render: function(){
-
 		var y = this.callParent(arguments),
 			isBlock = this.isBlockRedaction();
+
+        if (!this.innerFootnotes){
+            this.innerFootnotes = this.containedFootnotes();
+        }
 
 		if (this.actionSpan){
 			return this.actionSpan.getBoundingClientRect().top || this.rendered[0].getBoundingClientRect().top || y;
@@ -271,8 +274,29 @@ Ext.define('NextThought.view.annotations.Redaction', {
 		if( e ){
 			e.stopEvent();
 		}
+
+        if (this.innerFootnotes){
+            this.innerFootnotes.toggleCls(this.cls);
+            this.innerFootnotes.toggleCls('footnote');
+        }
+
+
 		return false;
-	}
+	},
+
+
+
+    containedFootnotes: function(){
+        var me = this,
+            footnotes = [];
+        this.compElements.each(function(e){
+            var fns = e.query('a.footnote');
+            Ext.Array.each(fns, function(fn){
+                footnotes.push(Ext.DomQuery.select(fn.getAttribute('href'), me.doc)[0]);
+            });
+        });
+        return new Ext.dom.CompositeElement(footnotes);
+    }
 
 }, function(){
 
