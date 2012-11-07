@@ -124,12 +124,36 @@ Ext.define('NextThought.view.account.settings.PictureCanvas',{
 
 	onFileChange: function(e){
 		if(!e.target.files){
-			alert('TODO: implement legacy code branch');
+			this.doLegacyUpload();
 			return;
 		}
 
 		this.readFile(this.extractFileInput().files);
 	},
+
+
+	doLegacyUpload: function(){
+		var form = new Ext.form.Basic(Ext.widget('panel'),{}),
+			fieldCacheKey = '_fields',
+			fields,
+		//TODO: we need a url to post to so we can echo the image back to us in a data url. {img: 'data:...'}
+			url = '/imageEcho';
+
+		fields = form[fieldCacheKey] = new Ext.util.MixedCollection();
+		fields.add(this);
+
+		form.submit({
+			url: url,
+			waitMsg: 'Uploading your file...',
+			success: function() {
+				alert('hey!');
+			},
+			failure: function(){
+				alert('No go');
+			}
+		});
+	},
+
 
 	extractFileInput: function() {
 		var fileInput = this.fileInputEl.dom;
@@ -387,5 +411,14 @@ Ext.define('NextThought.view.account.settings.PictureCanvas',{
 			};
 			reader.readAsDataURL(file);
 		}
-	}
+	},
+
+
+
+	//for Legacy
+	isDirty: function(){ return true; },
+	isFormField: true,
+	isFileUpload: function() { return true; },
+	getSubmitData: function(){ return null; },
+	validate: function(){ return Boolean(this.fileInputEl.dom.value); }
 });
