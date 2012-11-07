@@ -71,8 +71,7 @@ Ext.define('NextThought.view.MessageBox',{
 
 	show: function(cfg){
 		Ext.applyIf(cfg,{
-			title:'Attention...',
-			icon: Ext.MessageBox.WARNING
+			title:'Attention...'
 		});
 
 		cfg.msg = cfg.title+'<div class="message">'+cfg.msg+'</div>';
