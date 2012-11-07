@@ -174,7 +174,7 @@ Ext.define('NextThought.view.content.reader.IFrame',{
                    killFootnote();
                }
         });
-        me.registerScrollHandler(killFootnote());
+        me.registerScrollHandler(killFootnote);
 
 
         on(doc, 'mouseover', function(e){
@@ -244,7 +244,7 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 		var i = this.getIframe(), h, contentHeight = 150, ii;
 			//We need the buffer because otherwise the end of the doc would go offscreen
 		if (Ext.isIE9) {
-			contentHeight = 150; 
+			contentHeight = 150;
 			for (ii = 0; ii < content.childNodes.length; ii++) {
 				contentHeight += content.childNodes[ii].offsetHeight;
 			}
