@@ -103,7 +103,10 @@ Ext.define('NextThought.view.annotations.Redaction', {
 			//add the redaction class and the click handlers for redacted spans:
 			this.compElements.addCls(this.redactionCls);
 
-			this.toggleRedaction();
+			//Sigh, I hate this, but if we don't get this onto the next event loop
+			//it seems to crash IE in certain cases.  Seems to be the perfect combination
+			//of location, overlap with other redactions, and timing...
+			Ext.defer(this.toggleRedaction, 1, this);
 		}
 
 		return y;
