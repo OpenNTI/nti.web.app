@@ -43,22 +43,45 @@ Ext.define('NextThought.view.account.settings.PictureCanvas',{
 
 	onMouseDown: function(e){
         e.stopEvent();
-		var xy = e.getXY().slice(),
+		var xy = e.getXY(),
 			start = xy.slice(),
 			origin = this.el.getXY(),
 			mask = this.getMask(),
-			size = this.imageInfo.selection.size;
+			cornerSize = 16,
+			size = this.imageInfo.selection.size,
+			x = xy[0],
+			y = xy[1],
+			nearLeft,
+			nearRight,
+			nearTop,
+			nearBottom;
 
-		xy[0] -= origin[0];
-		xy[1] -= origin[1];
+		x -= origin[0];
+		y -= origin[1];
 
-		xy[0] -= mask[0];
-		xy[1] -= mask[1];
+		x -= mask[0];
+		y -= mask[1];
 
-		if( xy[0] >= 0 && xy[0] <= size
-		&&  xy[1] >= 0 && xy[1] <= size ){
+
+		if( x >= 0 && x <= size
+		&&  y >= 0 && y <= size ){
 			this.mouseDown = true;
 			this.lastPoint = start;
+
+			nearLeft = x <= cornerSize;
+			nearRight = x > (size-cornerSize);
+			nearTop = y <= cornerSize;
+			nearBottom = y > (size-cornerSize);
+
+			delete this.inCorner;
+
+			//Two bit field.  X Y.  The top left corner moves both X and Y, so it has the field of 11 (or 3),
+			// Top right only moves Y so its bit field is 01 (or 1), the bottom left corner only moves X, so 10 (or 2),
+			// and finally the last corner does not move X or Y, so its bit field is 00.
+			if(nearLeft && nearTop){ this.inCorner = 3; }
+			else if(nearRight && nearTop){ this.inCorner = 1; }
+			else if(nearLeft && nearBottom){ this.inCorner = 2; }
+			else if(nearRight && nearBottom){ this.inCorner = 0; }
 		}
 
 	},
@@ -75,20 +98,59 @@ Ext.define('NextThought.view.account.settings.PictureCanvas',{
 						: v;
 		}
 
+		function doMove(){
+			//clamp values
+			s.x = clamp((s.x - dx), 0, (i.width - s.size));
+			s.y = clamp((s.y - dy), 0, (i.height - s.size));
+		}
+
+		function doSize(corner, anchor){
+			var mX = Boolean(corner & 2),
+				mY = Boolean(corner & 1),
+				origin = el.getXY().slice(),
+				lastSize = s.size,
+				newSize,
+				diff;
+
+			origin[0] = xy[0] - origin[0];
+			origin[1] = xy[1] - origin[1];
+
+			dx = anchor[0] - origin[0];
+			dy = anchor[1] - origin[1];
+			newSize = Math.max(dx,dy);
+
+			if(!mX && !mY){ newSize *= -1; }
+
+			if(newSize < 0){
+				return;
+			}
+
+			diff = lastSize - newSize;
+
+
+			s.size = Math.round(clamp(newSize, 32, (Math.min(i.width, i.height))));
+
+			if(mX){ s.x = clamp((s.x + diff), 0, anchor[0] - s.size); }
+			if(mY){ s.y = clamp((s.y + diff), 0, anchor[1] - s.size); }
+		}
+
+
+
 		var xy = e.getXY().slice(),
 			dx,dy,
+			el = this.el,
 			i = this.imageInfo,
 			s = i.selection;
 
 		dx = this.lastPoint[0] - xy[0];
 		dy = this.lastPoint[1] - xy[1];
 
-		s.x -= dx;
-		s.y -= dy;
-
-		//clamp values
-		s.x = clamp(s.x, 0, (i.width - s.size));
-		s.y = clamp(s.y, 0, (i.height - s.size));
+		if(!this.hasOwnProperty('inCorner')){
+			doMove();
+		}
+		else {
+			doSize(this.inCorner, this.getOppositeCorner(this.inCorner));
+		}
 
 		this.lastPoint = xy;
 		this.drawCropTool();
@@ -133,25 +195,40 @@ Ext.define('NextThought.view.account.settings.PictureCanvas',{
 
 
 	doLegacyUpload: function(){
-		var form = new Ext.form.Basic(Ext.widget('panel'),{}),
+		var me = this,
+			form = new Ext.form.Basic(this,{}),
 			fieldCacheKey = '_fields',
 			fields,
-		//TODO: we need a url to post to so we can echo the image back to us in a data url. {img: 'data:...'}
-			url = '/imageEcho';
+			url = getURL($AppConfig.server.data+'/@@image_to_dataurl');//move this to the service object?
 
 		fields = form[fieldCacheKey] = new Ext.util.MixedCollection();
 		fields.add(this);
 
-		form.submit({
-			url: url,
-			waitMsg: 'Uploading your file...',
-			success: function() {
-				alert('hey!');
-			},
-			failure: function(){
-				alert('No go');
-			}
+		alert({
+			title: '',
+			msg:'Uploading your picture... please wait.',
+			closable: false,
+			progressText: 'Uploading...',
+			width:300,
+			wait:true,
+			waitConfig: {interval:200},
+			icon:null,
+			buttons: 0
 		});
+
+		function fin(f,action){
+			Ext.MessageBox.hide();
+			var url = ((action||{}).result||{}).dataurl || false;//prevent an error, and force false if its not there.
+			if(url){
+				me.setImage(url);
+			}
+			else {
+				me.clear();
+			}
+			form.destroy();
+		}
+
+		form.submit({ url: url, success: fin, failure: fin });
 	},
 
 
@@ -221,15 +298,28 @@ Ext.define('NextThought.view.account.settings.PictureCanvas',{
 	},
 
 
+	getOppositeCorner: function(corner){
+		var i = this.imageInfo,
+			s = i.selection,
+			corners = [
+				[s.x, s.y], //opposite bottom-right
+				[s.x, s.y + s.size], //opposite top-right
+				[s.x + s.size, s.y], //opposite bottom-left
+				[s.x + s.size, s.y + s.size]]; //opposite top-left
+
+		return corners[corner];
+	},
+
+
 	getMask: function getMask(size,pixAdj){
 		size = size || 0;
 		pixAdj = pixAdj || 0;
-		var i = this.imageInfo;
+		var i = this.imageInfo || {selection:{}};
 		return [
-			Math.floor(i.x + i.selection.x - size) + pixAdj,
-			Math.floor(i.y + i.selection.y - size) + pixAdj,
-			Math.floor(i.selection.size + (size*2)),
-			Math.floor(i.selection.size + (size*2))
+			Math.ceil(i.x + i.selection.x - size) + pixAdj,
+			Math.ceil(i.y + i.selection.y - size) + pixAdj,
+			Math.ceil(i.selection.size + (size*2)),
+			Math.ceil(i.selection.size + (size*2))
 		];
 	},
 
@@ -247,9 +337,8 @@ Ext.define('NextThought.view.account.settings.PictureCanvas',{
 			ctx.strokeStyle = '#fff';
 			ctx.lineCap = 'round';
 			ctx.lineWidth = 1;
-			var cw = Math.floor(width/2),
-				ch = Math.floor(height/2);
-
+			var cw = Math.ceil(width/2),
+				ch = Math.ceil(height/2);
 
 			function nib(){
 				ctx.beginPath();
