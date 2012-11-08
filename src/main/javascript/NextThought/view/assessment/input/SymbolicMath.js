@@ -5,7 +5,8 @@ Ext.define('NextThought.view.assessment.input.SymbolicMath',{
 	extend: 'NextThought.view.assessment.input.FreeResponse',
 
 	requires: [
-		'jQuery.fn.mathquill'
+		'jQuery.fn.mathquill',
+		'NextThought.view.menus.SymbolicMathMenuItem'
 	],
 
 	alias: 'widget.question-input-symbolicmathpart',
@@ -129,6 +130,9 @@ Ext.define('NextThought.view.assessment.input.SymbolicMath',{
 		this.updateSubmission();
 	},
 
+	getPreviousMenuItemType: function(){
+		return 'symbolicmath-menuitem';
+	},
 
 	getValue: function(){
 		return jQuery(this.mathquillSpan).mathquill('latex');

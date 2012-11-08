@@ -264,7 +264,7 @@ Ext.define('NextThought.view.assessment.input.Base',{
 		var id = this.up('[question]').question.getId();
 		if(!id){ return false; }
 
-		this.getAnswerHistory(id);
+		this.loadAnswerHistory(id);
 	},
 
 	showHistoryMenu: function(e){
@@ -273,6 +273,7 @@ Ext.define('NextThought.view.assessment.input.Base',{
 		if(!this.historyMenu){
 			this.historyMenu = Ext.widget('answer-history-menu', {
 				width: this.inputBox.getWidth(),
+				ownerCmp: this,
 				items: [{
 					text: 'ANSWER HISTORY', xtype: 'labeledseparator'
 				},{
@@ -283,8 +284,7 @@ Ext.define('NextThought.view.assessment.input.Base',{
 
 		id = this.up('[question]').question.getId();
 		this.historyMenu.showBy(this.inputBox,'tl-bl?',[0,0]);
-
-		this.getAnswerHistory(id);
+		this.loadAnswerHistory(id);
 	},
 
 	buildAnswerHistoryStore: function(id){
@@ -317,17 +317,27 @@ Ext.define('NextThought.view.assessment.input.Base',{
 
 		s.on('load', func);
 		s.on('add', func);
-
+		s.on('changed', function(){ me.loadAnswerHistory(id); });
 	},
 
-	getAnswerHistory: function(id){
+
+	getPreviousMenuItemType: function(){
+		return 'menuitem';
+	},
+
+	loadAnswerHistory: function(id){
 		var me = this;
+
 		function loaded(records){
 			var parts, items = [];
 			Ext.each( records, function(r){
 				parts = r.get('parts');
 				Ext.each(parts, function(p){
-					items.push({'text': p.get('submittedResponse')});
+					var t = p.get('submittedResponse');
+					items.push({
+						xtype: me.getPreviousMenuItemType(),
+						text: t
+					});
 				});
 			});
 
@@ -357,6 +367,7 @@ Ext.define('NextThought.view.assessment.input.Base',{
 		if(!this.historyMenuEl.isVisible()){
 			this.shouldShowAnswerHistory();
 		}
+		this.answerHistStore.fireEvent('changed');
 	},
 
 

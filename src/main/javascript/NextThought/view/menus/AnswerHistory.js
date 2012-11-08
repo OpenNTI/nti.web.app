@@ -19,9 +19,12 @@ Ext.define('NextThought.view.menus.AnswerHistory',{
 		xtype: 'menucheckitem',
 		plain: true,
 		listeners: {
-			//			'beforecheckchange':function(item, checked){ return checked || item.allowUncheck!==false; },
-			//			'checkchange': function(item){item.up('menu').handleClick(item);}
+			'click': function(item){item.up('menu').handleClick(item);}
 		}
+	},
+
+	handleClick: function(item){
+		this.ownerCmp.setValue(item.text);
 	}
 
 });
