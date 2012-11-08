@@ -20,12 +20,15 @@ Ext.define('NextThought.view.menus.AnswerHistory',{
 		xtype: 'menucheckitem',
 		plain: true,
 		listeners: {
+			'beforecheckchange':function(item, checked){ return item.allowUncheck!==false; },
 			'click': function(item){item.up('menu').handleClick(item);}
 		}
 	},
 
 	handleClick: function(item){
-		this.ownerCmp.setValue(item.text);
+		if(item.text !== 'ANSWER HISTORY'){
+			this.ownerCmp.setValue(item.text);
+		}
 	}
 
 });

@@ -275,7 +275,7 @@ Ext.define('NextThought.view.assessment.input.Base',{
 				width: this.inputBox.getWidth(),
 				ownerCmp: this,
 				items: [{
-					text: 'ANSWER HISTORY', xtype: 'labeledseparator'
+					text: 'ANSWER HISTORY', cls:'answer-title', allowUncheck: false
 				},{
 					text: 'loading...'
 				}]
@@ -344,7 +344,7 @@ Ext.define('NextThought.view.assessment.input.Base',{
 			//FIXME: somehow the ds is returning rec in reverse order.
 			if(me.historyMenu && items.length > 0){
 				me.historyMenu.removeAll();
-				me.historyMenu.insert(0, {text: 'ANSWER HISTORY', cls:'answer-title'});
+				me.historyMenu.insert(0, {text: 'ANSWER HISTORY', cls:'answer-title', allowUncheck: false});
 				me.historyMenu.add(items.reverse());
 			}
 		}
