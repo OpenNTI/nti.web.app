@@ -185,7 +185,7 @@ Ext.define('NextThought.view.account.settings.PictureCanvas',{
 
 
 	onFileChange: function(e){
-		if(e.target.files){
+		if(!e.target.files){
 			this.doLegacyUpload();
 			return;
 		}
