@@ -2,6 +2,10 @@ Ext.define('NextThought.view.assessment.input.Base',{
 	extend: 'Ext.Component',
 	alias: 'widget.abstract-question-input',
 
+	requires: [
+		'NextThought.view.menus.AnswerHistory'
+	],
+
 	cls: 'field',
 
 	renderTpl: Ext.DomHelper.markup([
@@ -9,6 +13,7 @@ Ext.define('NextThought.view.assessment.input.Base',{
 			cls: 'response-container',
 			cn:[
 				{ cls: 'inputbox', html: '{input}' },
+				{ cls:'historyMenu' },
 				{ cls: 'solution', cn:[
 					{ cls: 'close' },
 					{ cls: 'answer', cn:[{tag: 'span'}] },
@@ -32,6 +37,7 @@ Ext.define('NextThought.view.assessment.input.Base',{
 
 	renderSelectors: {
 		inputBox: '.response-container .inputbox',
+		historyMenuEl:'.response-container .historyMenu',
 		solutionBox: '.response-container .solution',
 		solutionClose: '.response-container .solution .close',
 		solutionAnswerBox: '.response-container .solution .answer span',
@@ -124,11 +130,17 @@ Ext.define('NextThought.view.assessment.input.Base',{
 			click: this.editAnswer
 		});
 
+		this.mon(this.historyMenuEl, {
+			scope:this,
+			click: this.showHistoryMenu
+		});
+
 		this.checkItBtn.setVisibilityMode(Ext.dom.Element.DISPLAY);
 		this.solutionAnswerBox.setVisibilityMode(Ext.dom.Element.DISPLAY);
 		this.inputBox.setVisibilityMode(Ext.dom.Element.DISPLAY);
 		this.solutionBox.setVisibilityMode(Ext.dom.Element.DISPLAY);
 		this.footer.setVisibilityMode(Ext.dom.Element.DISPLAY);
+		this.historyMenuEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
 
         //if there are images, after they load, update layout.
         this.solutionBox.select('img').on('load',function(){
@@ -138,6 +150,7 @@ Ext.define('NextThought.view.assessment.input.Base',{
 
 		this.reset();
 		this.disableSubmission();
+		this.shouldShowAnswerHistory();
 	},
 
 
@@ -247,6 +260,92 @@ Ext.define('NextThought.view.assessment.input.Base',{
 		}
 	},
 
+	shouldShowAnswerHistory: function(){
+		var id = this.up('[question]').question.getId();
+		if(!id){ return false; }
+
+		this.getAnswerHistory(id);
+	},
+
+	showHistoryMenu: function(e){
+
+		var id;
+		if(!this.historyMenu){
+			this.historyMenu = Ext.widget('answer-history-menu', {
+				width: this.inputBox.getWidth(),
+				items: [{
+					text: 'ANSWER HISTORY', xtype: 'labeledseparator'
+				},{
+					text: 'loading...'
+				}]
+			});
+		}
+
+		id = this.up('[question]').question.getId();
+		this.historyMenu.showBy(this.inputBox,'tl-bl?',[0,0]);
+
+		this.getAnswerHistory(id);
+	},
+
+	buildAnswerHistoryStore: function(id){
+		var s = NextThought.store.PageItem.create({containerid:id}),
+			params = 'application/vnd.nextthought.assessment.assessedquestion', url, root, me = this;
+
+		s.proxy.extraParams = Ext.apply(s.proxy.extraParams||{},{
+			sortOn: 'createdTime',
+			accept: params,
+			sortOrder: 'descending'
+		});
+
+		root = 'tag%3Anextthought.com%2C2011-10%3ARoot';
+		url = s.proxy.url;
+		s.proxy.url = url.replace(root, encodeURIComponent(id));
+
+		this.answerHistStore = s;
+
+
+		function func(store, recs){
+			if(!recs || recs.length === 0){
+				me.historyMenuEl.hide();
+			}
+			else{
+				if(!me.historyMenuEl.isVisible()){
+					me.historyMenuEl.show();
+				}
+			}
+		}
+
+		s.on('load', func);
+		s.on('add', func);
+
+	},
+
+	getAnswerHistory: function(id){
+		var me = this;
+		function loaded(records){
+			var parts, items = [];
+			Ext.each( records, function(r){
+				parts = r.get('parts');
+				Ext.each(parts, function(p){
+					items.push({'text': p.get('submittedResponse')});
+				});
+			});
+
+			//FIXME: somehow the ds is returning rec in reverse order.
+			if(me.historyMenu && items.length > 0){
+				me.historyMenu.removeAll();
+				me.historyMenu.insert(0, {text: 'ANSWER HISTORY', xtype: 'labeledseparator'});
+				me.historyMenu.add(items.reverse());
+			}
+		}
+
+		if(!this.answerHistStore){
+			this.buildAnswerHistoryStore(id);
+			this.answerHistStore.load(loaded);
+		} else{
+			this.answerHistStore.reload();
+		}
+	},
 
 	updateWithResults: function(assessedQuestion){
 		var parts = assessedQuestion.get('parts'),
@@ -255,6 +354,9 @@ Ext.define('NextThought.view.assessment.input.Base',{
 		if (part.isCorrect()) { this.markCorrect(); }
 		else {this.markIncorrect(); }
 		this.setValue(part.get('submittedResponse'));
+		if(!this.historyMenuEl.isVisible()){
+			this.shouldShowAnswerHistory();
+		}
 	},
 
 

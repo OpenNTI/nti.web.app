@@ -360,6 +360,32 @@
 						}
 					}
 
+					.historyMenu{
+						display: inline-block;
+						position: absolute;
+						top: 9px;
+						overflow: hidden;
+						margin-left: 94%;
+						width: 32px;
+						height: 32px;
+
+						&::after{
+							content: ' ';
+							background: url(../images/quiz/spr_answer_history.png) 0 0 no-repeat;
+							position: absolute;
+							width: 30px;
+							height: 18px;
+							top: 0;
+							left: 0;
+						}
+
+						&:hover{
+							&::after{
+								background-position: 0 -20px;
+							}
+						}
+					}
+
 					.choice {
 						@extend .assessment-content;
 						cursor: pointer;

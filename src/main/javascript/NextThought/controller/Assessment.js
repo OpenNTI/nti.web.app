@@ -63,8 +63,9 @@ Ext.define('NextThought.controller.Assessment', {
 
 	checkAnswer: function(questionWidget,question,answerValues){
 
-		var submission = this.getAssessmentQuestionSubmissionModel().create({
-			ContainerId: LocationProvider.currentNTIID,
+		var containerId = questionWidget.canSubmitIndividually() ? question.getId() : LocationProvider.currentNTIID,
+			submission = this.getAssessmentQuestionSubmissionModel().create({
+			ContainerId:  containerId,
 			questionId: question.getId(),
 			parts: answerValues
 		});
