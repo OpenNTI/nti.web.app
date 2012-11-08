@@ -33,7 +33,19 @@ Ext.define('NextThought.view.account.Window',{
 	items: [],
 
 	constructor: function(){
-		var me = $AppConfig.userObject;
+		var me = $AppConfig.userObject,
+            canUploadAvatar = $AppConfig.service.canUploadAvatar(),
+            availablePanels = canUploadAvatar
+                ? [
+                    { xtype: 'avatar-choices' },
+                    { xtype: 'picture-editor'},
+                    { xtype: 'password-reset-form' }
+                ]
+                : [
+                    { xtype: 'random-gravatar-picker' },
+                    { xtype: 'password-reset-form' }
+            ];
+
 		this.items = [{
 				xtype: 'box', autoEl: {
 					cls: 'identity',
@@ -77,7 +89,9 @@ Ext.define('NextThought.view.account.Window',{
 				layout: { type: 'hbox', align: 'stretch', pack: 'start' },
 
 				items: [
-					{text: 'Edit Profile Picture', associatedPanel: 'avatar-choices', pressed:true},
+					canUploadAvatar
+                        ? {text: 'Edit Profile Picture', associatedPanel: 'avatar-choices', pressed:true}
+                        : {text: 'Change Avatar', associatedPanel:'random-gravatar-picker', pressed:true},
 					{text: 'Change Password', associatedPanel: 'password-reset-form'},
 					{ disabled:true, flex: 1 }
 				]
@@ -87,12 +101,7 @@ Ext.define('NextThought.view.account.Window',{
 				layout: {
 					type: 'card'
 				},
-				items: [
-					{ xtype: 'avatar-choices' },
-					{ xtype: 'picture-editor'},
-					{ xtype: 'random-gravatar-picker' },
-					{ xtype: 'password-reset-form' }
-				]
+				items: availablePanels
 			}];
 
 		return this.callParent(arguments);
