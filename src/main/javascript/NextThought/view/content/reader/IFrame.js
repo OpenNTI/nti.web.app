@@ -308,9 +308,24 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 		var doc = this.getDocumentElement(),
 			body = Ext.get(doc.body),
 			head = doc.getElementsByTagName('head')[0],
+			metaNames = ['NTIID', 'last-modified'],
 			me = this;
 
-		this.getIframe().setHeight(0);
+		Ext.select('meta[nti-injected="true"]', false, head).remove();
+
+		//Append some tags to the head
+		if(me.meta){
+			Ext.each(metaNames, function(tag){
+				var meta;
+				if(me.meta.hasOwnProperty(tag)){
+					meta = doc.createElement('meta');
+					meta.setAttribute('name',tag);
+					meta.setAttribute('content', me.meta[tag]);
+					meta.setAttribute('nti-injected', true);
+					head.appendChild(meta);
+				}
+			});
+		}
 
 		body.update(html||'');
 		body.setStyle('background','transparent');

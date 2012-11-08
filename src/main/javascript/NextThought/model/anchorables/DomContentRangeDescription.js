@@ -10,6 +10,8 @@ Ext.define('NextThought.model.anchorables.DomContentRangeDescription', {
 		ancestor: {}
 	},
 
+	isEmpty: false,
+
 	statics: {
 		createFromObject: function(o){
 			var cp = NextThought.model.anchorables.ContentPointer;

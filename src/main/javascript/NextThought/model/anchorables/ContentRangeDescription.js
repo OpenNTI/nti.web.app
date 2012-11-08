@@ -5,6 +5,8 @@ Ext.define('NextThought.model.anchorables.ContentRangeDescription', {
 
 	config: {},
 
+	isEmpty: true,
+
 	constructor: function(o) {
 		this.initConfig(o);
 		this.Class = 'ContentRangeDescription';

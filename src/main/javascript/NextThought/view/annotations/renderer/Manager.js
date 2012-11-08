@@ -328,42 +328,43 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 			cids.push(cid);
 		});
 
-		Anchors.preresolveLocatorInfo(descs, doc, ReaderPanel.get().getCleanContent(), cids);
+		if(cloned && cloned.length > 0 && doc){
+			Anchors.preresolveLocatorInfo(descs, doc, ReaderPanel.get().getCleanContent(), cids);
+			Ext.each(cloned, function(o){
+				try {
+					if(!o.isVisible){
+						return;
+					}
 
-		Ext.each(cloned, function(o){
-			try {
-				if(!o.isVisible){
-					return;
-				}
-
-				var y, b,
+					var y, b,
 					c = containers[o.getContainerId()] = (containers[o.getContainerId()]||[]);
 
-				if(o.hasGutterWidgets){
-					c.push(o);
-				}
+					if(o.hasGutterWidgets){
+						c.push(o);
+					}
 
-				y = o.render();
+					y = o.render();
 
-				//uncomment for testing
-				//console.log('Rendered', o.getRecord().get('body')[0], y);
+					//uncomment for testing
+					//console.log('Rendered', o.getRecord().get('body')[0], y);
 
-				if(!y){
-					//console.log(o, 'returned a falsy y:',y);
+					if(!y){
+						//console.log(o, 'returned a falsy y:',y);
+					}
+					else {
+						b = me.getBucket(prefix,Math.ceil(y));
+					}
+					if(b){
+						b.put(o);
+					}
 				}
-				else {
-					b = me.getBucket(prefix,Math.ceil(y));
+				catch(e){
+					console.error(o.$className,Globals.getError(e));
 				}
-				if(b){
-					b.put(o);
-				}
-			}
-			catch(e){
-				console.error(o.$className,Globals.getError(e));
-			}
-		});
+			});
 
-		me.layoutBuckets(prefix);
+			me.layoutBuckets(prefix);
+		}
 
 		me.rendering = false;
 		Ext.resumeLayouts(true);

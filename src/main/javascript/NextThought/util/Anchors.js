@@ -19,11 +19,15 @@ Ext.define('NextThought.util.Anchors', {
 	NON_ANCHORABLE_ATTRIBUTE: 'data-non-anchorable',
 	NO_ANCHORABLE_CHILDREN_ATTRIBUTE: 'data-no-anchors-within',
 
-	preresolveLocatorInfo: function(contentRangeDescriptions, docElement, cleanRoot, containers){
-		var virginContentCache = {};
+	//FIXME we run into potential problems with this is ContentRangeDescriptions ever occur in different documents
+	//or locations but have the same container id.  That seem unlikely but may Need to figure that out eventually
+	preresolveLocatorInfo: function(contentRangeDescriptions, docElement, cleanRoot, containers, docElementContainerId){
+		var virginContentCache = {},
+			docElementContainerId = docElementContainerId || Anchors.rootContainerIdFromDocument(docElement);
 
-		if(!contentRangeDescriptions || !containers || contentRangeDescriptions.length !== containers.length){
-			Ext.Error.raise('toDomRanges requires contentRangeDescriptions and containers to be the same length');
+
+		if(!contentRangeDescriptions || (containers && contentRangeDescriptions.length !== containers.length)){
+			Ext.Error.raise('toDomRanges requires contentRangeDescriptions and containers to be the same length if containers provided');
 		}
 
 		function getVirginNode(node){
@@ -43,48 +47,29 @@ Ext.define('NextThought.util.Anchors', {
 			return clean;
 		}
 
-		//First step is build all the locators cloning and purifying the least
-		//amount possible.  That is one of the places the profiler indicated problems
-		Ext.each(contentRangeDescriptions, function(desc, idx){
-			var containerId = containers[idx], searchWithin, ancestorNode, virginNode, locator = null;
-			//TODO refactor to share more code with toDomRange where possible
+		function cacheLocatorForDescription(desc, docElement, cleanRoot, containerId, docElementContainerId){
+			var searchWithin, ancestorNode, virginNode, locator = null;
+
 			if(!containerId){
-				console.warn('No container id provided will assume page container (body element)');
+				console.warn('No container id provided will assume root without validating container');
 			}
 			if(!desc){
 				console.warn('nothing to parse?');
-				return true; //continue
-			}
-			//Optimization shortcut, if we have a cached locator use it
-			if(desc.locator()){
-				//console.debug('Using cached locator info to shortcut cloning and purification');
-				return true; //continue
+				return;
 			}
 
-			//Todo resolve the containerId to the node we want to restrict our search within
-			searchWithin = Anchors.getContainerNode(containerId, cleanRoot);
+			if(desc.isEmpty || desc.locator()){
+				return;
+			}
+
+			searchWithin = Anchors.scopedContainerNode(cleanRoot, containerId, docElementContainerId);
 			if(!searchWithin){
-				//TODO if the container is not the page id but we can't find it we could
-				//just skip to the end now.  Maybe we decide there is no point searching the whole body.
-				//that may allow us to skip some work in some cases
-				searchWithin = cleanRoot.body ? cleanRoot.body : cleanRoot;
-				if(LocationProvider.currentNTIID !== containerId){console.warn('Unable to resolve containerId will fallback to root ', containerId, searchWithin);}
+				Ext.Error.raise('Unable to find container '+containerId+ ' in provided doc element');
 			}
-
-			//Special case for things with an empty desc.  We push the node instead of the locator
-			//TODO need a better way to detect the empty description
-			if (   !desc.start
-				&& !desc.end
-				&& !desc.ancestor)
-			{
-				return true;
-			}
-
 
 			ancestorNode = desc.getAncestor().locateRangePointInAncestor(searchWithin).node || searchWithin;
 			if (!ancestorNode){
-				console.error('Failed to get ancestor node for description.', desc,'This should happen b/c we should default to ', searchWithin);
-				return true;
+				Ext.Error.raise('Failed to get ancestor node for description. ' + desc + ' This should happen b/c we should default to ' + searchWithin);
 			}
 
 			virginNode = getVirginNode(ancestorNode);
@@ -95,75 +80,121 @@ Ext.define('NextThought.util.Anchors', {
 			catch(e){
 				console.error('Error resolving locator for desc', desc, Globals.getError(e));
 			}
+		}
 
-			return true;
+		//First step is build all the locators cloning and purifying the least
+		//amount possible.  That is one of the places the profiler indicated problems
+		Ext.each(contentRangeDescriptions, function(desc, idx){
+			var containerId = containers ? containers[idx] : null;
+			try{
+				cacheLocatorForDescription(desc, docElement, cleanRoot, containerId, docElementContainerId);
+			}
+			catch(e){
+				console.error('Unable to generate locator for desc', e);
+				Globals.getError(e);
+			}
 		});
 	},
 
-	toDomRange: function(contentRangeDescription, docElement, cleanRoot, containerId) {
-		var ancestorNode, resultRange, searchWithin;
-		if(!containerId){
-			console.warn('No container id provided will assume page container (body element)');
-		}
-		if(!contentRangeDescription){
-			console.warn('nothing to parse?');
-			return null;
-		}
-
-		//Optimization shortcut, if we have a cached locator use it
-		if(contentRangeDescription.locator()){
-			//console.debug('Using cached locator info to shortcut cloning and purification');
-			return Anchors.convertContentRangeToDomRange(contentRangeDescription.locator().start,
-														 contentRangeDescription.locator().end,
-														 contentRangeDescription.locator().doc);
-		}
-
-
-		//TODO need a better way to detect the empty description
-		if (   !contentRangeDescription.start
-			&& !contentRangeDescription.end
-			&& !contentRangeDescription.ancestor)
-		{
-			//Todo resolve the containerId to the node we want to restrict our search within
-			searchWithin = this.getContainerNode(containerId, docElement);
-			if(!searchWithin){
-				//TODO if the container is not the page id but we can't find it we could
-				//just skip to the end now.  Maybe we decide there is no point searching the whole body.
-				//that may allow us to skip some work in some cases
-				searchWithin = docElement.body ? docElement.body : docElement;
-				console.debug('Unable to resolve containerId will fallback to root ', containerId, searchWithin);
+	toDomRange: function(contentRangeDescription, docElement, cleanRoot, containerId, docElementContainerId) {
+		var ancestorNode, resultRange, searchWithin,
+			docElementContainerId = docElementContainerId || Anchors.rootContainerIdFromDocument(docElement);
+		try{
+			if(!contentRangeDescription){
+				console.warn('nothing to parse?');
+				return null;
 			}
 
-			console.log('Given an empty content range description, returning a range wrapping the container', contentRangeDescription, searchWithin);
-			resultRange = docElement.createRange();
-			//Hmm, selectNode or selectNodeContents
-			resultRange.selectNodeContents(searchWithin);
+			if(!containerId){
+				console.warn('No container id provided will use root without validating container ids');
+			}
+
+			//FIXME we run into potential problems with this is ContentRangeDescriptions ever occur in different documents
+			//or locations but have the same container id.  That seem unlikely but may Need to figure that out eventually
+			//Optimization shortcut, if we have a cached locator use it
+			if(contentRangeDescription.locator()){
+				return Anchors.convertContentRangeToDomRange(contentRangeDescription.locator().start,
+															 contentRangeDescription.locator().end,
+															 contentRangeDescription.locator().doc);
+			}
+
+
+			if ( contentRangeDescription.isEmpty ){
+				return Anchors.createEmptyContentRangeDescription(docElement, containerId, docElementContainerId)
+			}
+
+			if(!cleanRoot){
+				cleanRoot = (docElement.body || docElement).cloneNode(true);
+				Anchors.purifyNode(cleanRoot);
+			}
+
+			searchWithin = Anchors.scopedContainerNode(cleanRoot, containerId, docElementContainerId);
+			if(!searchWithin){
+				Ext.Error.raise('Unable to find container '+containerId+ ' in provided doc element');
+			}
+			ancestorNode = contentRangeDescription.getAncestor().locateRangePointInAncestor(searchWithin).node || searchWithin;
+
+			if (!ancestorNode){
+				Ext.Error.raise('Failed to get ancestor node for description. ' + contentRangeDescription + ' This should happen b/c we should default to ' + searchWithin);
+			}
+
+			resultRange = Anchors.resolveSpecBeneathAncestor(contentRangeDescription, ancestorNode, docElement);
+
 			return resultRange;
 		}
-
-		searchWithin = this.getContainerNode(containerId, cleanRoot);
-		if(!searchWithin){
-			//TODO if the container is not the page id but we can't find it we could
-			//just skip to the end now.  Maybe we decide there is no point searching the whole body.
-			//that may allow us to skip some work in some cases
-			searchWithin = cleanRoot;
-			console.debug('Unable to resolve containerId will fallback to root ', containerId, searchWithin);
+		catch(e){
+			console.warn('Unable to generate range for description', e);
+			Globals.getError(e);
 		}
-		ancestorNode = contentRangeDescription.getAncestor().locateRangePointInAncestor(searchWithin).node || searchWithin;
-
-        //TODO - if an ancestor doesn't exist, do some better logging here, something like below
-
-		if (!ancestorNode){
-			console.error('Failed to get ancestor node for description.', contentRangeDescription,'This should happen b/c we should default to ', searchWithin);
-			//TODO return here, raise exception, or just let the below potentially explode
-		}
-
-		resultRange = Anchors.resolveSpecBeneathAncestor(contentRangeDescription, ancestorNode, docElement);
-
-        return resultRange;
+		return null;
 	},
 
+	createEmptyContentRangeDescription: function(docElement, containerId, rootId){
+		var searchWithin = Anchors.scopedContainerNode(docElement, containerId, rootId);
 
+		if(!searchWithin){
+			Ext.Error.raise('Unable to find container '+containerId+' in provided docElement');
+		}
+
+		//console.debug('Given an empty content range description, returning a range wrapping the container', searchWithin);
+		resultRange = docElement.createRange();
+		resultRange.selectNodeContents(searchWithin);
+		return resultRange;
+	},
+
+	scopedContainerNode: function(fragOrNode, containerId, rootId){
+		var searchWithin,
+			node = fragOrNode.body ? fragOrNode.body : fragOrNode;
+
+		if(!containerId){
+			searchWithin = node;
+		}
+		else{
+			searchWithin = Anchors.getContainerNode(containerId, node, rootId === containerId ? node : null);
+		}
+
+		return searchWithin;
+	},
+
+	rootContainerIdFromDocument: function(doc){
+		var foundContainer, metaNtiidTag;
+		if(doc.head){
+			metaNtiidTag = Ext.query( 'meta[name="NTIID"]', doc.head );
+			if(metaNtiidTag && metaNtiidTag.length > 0){
+				if(metaNtiidTag.length > 1){
+					console.error('Encountered more than one NTIID meta tag. Using first, expect problems', metaNtiidTag);
+				}
+				metaNtiidTag = metaNtiidTag[0];
+			}
+			else{
+				metaNtiidTag = null;
+			}
+			if(metaNtiidTag){
+				foundContainer = metaNtiidTag.content;
+			}
+		}
+		return foundContainer;
+	},
 
 	/* tested */
 	createRangeDescriptionFromRange: function(range, docElement) {
@@ -204,7 +235,7 @@ Ext.define('NextThought.util.Anchors', {
         return result;
 	},
 
-	getContainerNode: function(containerId, root){
+	getContainerNode: function(containerId, root, defaultNode){
 		if(!containerId){
 			return null;
 		}
@@ -213,8 +244,7 @@ Ext.define('NextThought.util.Anchors', {
 			potentials = Ext.query(selector, root);
 
 		if(!potentials || potentials.length === 0){
-			console.debug ('Unable to find container', containerId);
-			return null;
+			return defaultNode;
 		}
 
 		if(potentials.length > 1){
