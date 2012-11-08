@@ -14,6 +14,10 @@ Ext.define('NextThought.view.account.settings.PictureCanvas',{
 			size = this.getSize();
 		size.width -= (parseInt(borders['border-left-width'],10) + parseInt(borders['border-right-width'],10));
 		size.height-= (parseInt(borders['border-top-width'],10) + parseInt(borders['border-bottom-width'],10));
+		if(size.height < 100){
+			console.log('Canvas did not naturally size, calculating required height, given '+size.height+', will change to 75% of '+size.width);
+			size.height = Math.round(size.width * 0.75);
+		}
 
 		this.mySize = size;
 		this.el.set(size);
@@ -23,14 +27,8 @@ Ext.define('NextThought.view.account.settings.PictureCanvas',{
 
 	afterRender: function(){
 		this.callParent(arguments);
-		if(window.FileReader === undefined){
-			alert({title:'Sorry, you can\'t use this feature.', msg: 'Please update to the lastest version of your browser', width: 500});
-			return;
-		}
 		this.createFileInput();
 		this.enableImageDropping();
-
-
 
 		this.mon(this.el, {
 			scope: this,
@@ -42,6 +40,8 @@ Ext.define('NextThought.view.account.settings.PictureCanvas',{
 
 
 	onMouseDown: function(e){
+		if(!this.imageInfo){return;}
+
         e.stopEvent();
 		var xy = e.getXY(),
 			start = xy.slice(),
