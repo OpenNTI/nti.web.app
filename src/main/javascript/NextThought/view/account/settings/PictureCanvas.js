@@ -199,7 +199,7 @@ Ext.define('NextThought.view.account.settings.PictureCanvas',{
 			form = new Ext.form.Basic(this,{}),
 			fieldCacheKey = '_fields',
 			fields,
-			url = getURL($AppConfig.server.data+'/@@image_to_dataurl');//move this to the service object?
+			url = getURL($AppConfig.server.data+'/@@image_to_dataurl_extjs');
 
 		fields = form[fieldCacheKey] = new Ext.util.MixedCollection();
 		fields.add(this);
