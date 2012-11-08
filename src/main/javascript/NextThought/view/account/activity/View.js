@@ -80,7 +80,7 @@ Ext.define('NextThought.view.account.activity.View',{
 
 
     maybeReload: function(){
-        if (this.isVisible() && !this.dontReload){
+        if (this.isVisible() && !this.dontReload && this.rendered){
             this.reloadActivity();
         }
     },
