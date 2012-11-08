@@ -250,7 +250,7 @@ Ext.define('NextThought.view.account.settings.PictureCanvas',{
 	setImage: function(url){
 		var me = this,
 			img = new Image();
-console.time('SetImage');
+
 		img.onerror = function(){ me.clear(); };
 
 		img.onload = function ImageLoaded(){
@@ -282,7 +282,7 @@ console.time('SetImage');
 					size: Math.min(w,h)
 				}
 			};
-			console.timeEnd('SetImage');
+
 			me.fireEvent('image-loaded',me.imageInfo);
 			me.drawCropTool();
 		};
