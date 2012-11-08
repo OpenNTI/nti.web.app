@@ -344,7 +344,7 @@ Ext.define('NextThought.view.assessment.input.Base',{
 			//FIXME: somehow the ds is returning rec in reverse order.
 			if(me.historyMenu && items.length > 0){
 				me.historyMenu.removeAll();
-				me.historyMenu.insert(0, {text: 'ANSWER HISTORY', xtype: 'labeledseparator'});
+				me.historyMenu.insert(0, {text: 'ANSWER HISTORY', cls:'answer-title'});
 				me.historyMenu.add(items.reverse());
 			}
 		}

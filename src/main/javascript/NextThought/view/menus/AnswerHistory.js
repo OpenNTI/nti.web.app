@@ -13,6 +13,7 @@ Ext.define('NextThought.view.menus.AnswerHistory',{
 	border: false,
 	hideMode: 'visibility',
 	minWidth: 300,
+	cls:'answer_history_menu',
 
 	defaults: {
 		ui: 'nt-menuitem',
