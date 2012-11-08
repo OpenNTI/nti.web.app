@@ -185,7 +185,7 @@ Ext.define('NextThought.view.account.settings.PictureCanvas',{
 
 
 	onFileChange: function(e){
-		if(!e.target.files){
+		if(e.target.files){
 			this.doLegacyUpload();
 			return;
 		}
@@ -199,25 +199,15 @@ Ext.define('NextThought.view.account.settings.PictureCanvas',{
 			form = new Ext.form.Basic(this,{}),
 			fieldCacheKey = '_fields',
 			fields,
-			url = getURL($AppConfig.server.data+'/@@image_to_dataurl_extjs');
+			url = getURL($AppConfig.server.data+'@@image_to_dataurl_extjs');
 
 		fields = form[fieldCacheKey] = new Ext.util.MixedCollection();
 		fields.add(this);
 
-		alert({
-			title: '',
-			msg:'Uploading your picture... please wait.',
-			closable: false,
-			progressText: 'Uploading...',
-			width:300,
-			wait:true,
-			waitConfig: {interval:200},
-			icon:null,
-			buttons: 0
-		});
+		Ext.getBody().mask('Uploading...','navigation');
 
 		function fin(f,action){
-			Ext.MessageBox.hide();
+			Ext.getBody().unmask();
 			var url = ((action||{}).result||{}).dataurl || false;//prevent an error, and force false if its not there.
 			if(url){
 				me.setImage(url);
@@ -228,7 +218,10 @@ Ext.define('NextThought.view.account.settings.PictureCanvas',{
 			form.destroy();
 		}
 
-		form.submit({ url: url, success: fin, failure: fin });
+		Ext.defer(function(){
+			//sigh...lets try not to lock up the browser with a synchronous submit >.<
+			form.submit({ url: url, success: fin, failure: fin });
+		},1);
 	},
 
 
@@ -257,7 +250,7 @@ Ext.define('NextThought.view.account.settings.PictureCanvas',{
 	setImage: function(url){
 		var me = this,
 			img = new Image();
-
+console.time('SetImage');
 		img.onerror = function(){ me.clear(); };
 
 		img.onload = function ImageLoaded(){
@@ -289,7 +282,7 @@ Ext.define('NextThought.view.account.settings.PictureCanvas',{
 					size: Math.min(w,h)
 				}
 			};
-
+			console.timeEnd('SetImage');
 			me.fireEvent('image-loaded',me.imageInfo);
 			me.drawCropTool();
 		};
