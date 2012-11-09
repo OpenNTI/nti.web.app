@@ -162,11 +162,6 @@ Ext.define('NextThought.view.account.settings.AvatarChoices',{
 			}
 		}
 
-		if(item === this.customChoice && !this.editCustomChoice.isVisible()){
-			this.upload();
-			return false;
-		}
-
 		if(item) {
 			changing = !item.hasCls('selected');
 			this.select(item);
@@ -201,9 +196,12 @@ Ext.define('NextThought.view.account.settings.AvatarChoices',{
 
 
 	makeAChoice: function(url){
-		$AppConfig.userObject.saveField('avatarURL', url,
+		var u = $AppConfig.userObject;
+		if(Ext.Array.indexOf(u.get('AvatarURLChoices'), url) >= 0 || /^data/i.test(url)){
+			u.saveField('avatarURL', url,
 				function good(){/*no op*/},
 				function bad(){ alert({title:'Oops!',msg:'Something went wrong.'}); });
+		}
 	},
 
 
