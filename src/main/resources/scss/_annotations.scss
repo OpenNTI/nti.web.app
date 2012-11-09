@@ -175,6 +175,51 @@ div.redaction-control {
 .note-window .main-view .context,
 #NTIContent {
 
+	[itemprop~="nti-data-markupenabled"] {
+
+		&:hover {
+			box-shadow: 0 0 0 3px $primary-blue;
+
+			.bar {
+				display: block;
+			}
+		}
+
+		.bar {
+			@include animate(fadeInDown,0.3s,0s);
+			display: none;
+			position: absolute;
+			top: 0; left: 0; right: 0;
+			height: 28px;
+			background: rgba(0,0,0,0.6);
+			z-index: 2;
+
+			a {
+				display: block;
+				float: right;
+				margin: 3px 8px 0 0;
+				background: url(../images/spr_image_options.png) 100px 100px no-repeat;
+				opacity: 0.8;
+				&:hover { opacity: 1; }
+				&.disabled { &, &:hover { opacity: 0.5; cursor: default; } }
+
+				&.mark {
+					background-position: 0 -19px;
+					width: 25px;
+					height: 22px;
+
+				}
+
+				&.zoom {
+					background-position: 0 0;
+					width: 18px;
+					height: 18px;
+				}
+			}
+		}
+
+	}
+
 	/*Sometimes footnotes are redacted, this will hide the actual footnote when that is the case*/
 	li.footnote.redacted {
 		/*

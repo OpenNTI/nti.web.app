@@ -121,7 +121,7 @@
 		vertical-align:	middle;
 	}
 
-	.nti-data-markupenabled {
+	[itemprop~=nti-data-markupenabled] {
 		display: inline-block;
 		overflow: hidden;
 		position: relative;

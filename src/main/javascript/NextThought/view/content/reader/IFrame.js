@@ -152,16 +152,18 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 			var fakeEvent = Ext.EventObject.setEvent(e||event),
 				t = me.body.getScroll().top;
 
-			me.onContextMenuHandler({
-				getTarget: function(){ return fakeEvent.getTarget.apply(fakeEvent,arguments); },
-				preventDefault: function(){ fakeEvent.preventDefault(); },
-				stopPropagation: function(){ fakeEvent.stopPropagation(); },
-				getXY: function(){
-					var xy = fakeEvent.getXY();
-					xy[1] -= t;
-					return xy;
-				}
-			});
+			if(!fakeEvent.getTarget('a')){
+				me.onContextMenuHandler({
+					getTarget: function(){ return fakeEvent.getTarget.apply(fakeEvent,arguments); },
+					preventDefault: function(){ fakeEvent.preventDefault(); },
+					stopPropagation: function(){ fakeEvent.stopPropagation(); },
+					getXY: function(){
+						var xy = fakeEvent.getXY();
+						xy[1] -= t;
+						return xy;
+					}
+				});
+			}
 		});
 
 

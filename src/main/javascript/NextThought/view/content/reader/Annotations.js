@@ -26,7 +26,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 			searchAnnotations: null
 		});
 
-		me.addEvents('share-with','create-note');
+		me.addEvents('share-with','create-note','markupenabled-action');
 
 		this.mon(c.UserData.events,{
 			scope: this,
@@ -39,7 +39,8 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 		me.on({
 			scope: this,
 			added: function(){ FilterManager.registerFilterListener(me, me.applyFilter,me); },
-			afterRender: me.insertAnnotationGutter
+			afterRender: me.insertAnnotationGutter,
+			'markupenabled-action': function(){console.log(arguments);}
 		});
 
 		return this;

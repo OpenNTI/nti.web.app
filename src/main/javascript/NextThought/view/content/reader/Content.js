@@ -87,6 +87,24 @@ Ext.define('NextThought.view.content.reader.Content',{
 	},
 
 
+	activateAnnotatableItems: function(){
+		var d = this.getDocumentElement(),
+			els = d.querySelectorAll('[itemprop~=nti-data-markupenabled]'),
+			tpl = Ext.DomHelper.createTemplate({
+				cls: 'bar',
+				cn: [
+					{tag: 'a', href:'#zoom', title:'Zoom', cls: 'zoom disabled', html: ' '},
+					{tag: 'a', href:'#mark', title:'Make a note', cls: 'mark', html: ' '}
+				]
+			}).compile();
+
+		Ext.each(els,function(el){
+			var p = el.getAttribute('itemprop');
+			tpl.append(el,[p],false);
+		});
+	},
+
+
 	setContent: function(resp, assessmentItems, finish){
 		var me = this,
 			c = me.parseHTML(resp),
@@ -97,12 +115,15 @@ Ext.define('NextThought.view.content.reader.Content',{
 
 		me.injectAssessments(assessmentItems);
 
+
 		//apply any styles that may be on the content's body, to the NTIContent div:
 		this.applyBodyStyles(
 				resp.responseText.match(/<body([^>]*)>/i),
 				this.buildPath(resp.request.options.url));
 
 		subContainers = me.resolveContainers();
+
+		me.activateAnnotatableItems();
 
 		me.loadContentAnnotations(LocationProvider.currentNTIID, subContainers);
 
@@ -237,7 +258,7 @@ Ext.define('NextThought.view.content.reader.Content',{
 			whref = window.location.href.split('#')[0];
 
 		if (el.getAttribute('onclick') || !r || whref+'#' === r) {
-			return;
+			return false;
 		}
 
 		//pop out links that point to external resources
@@ -249,7 +270,17 @@ Ext.define('NextThought.view.content.reader.Content',{
 			catch(er){
 				window.location.href = r;
 			}
-			return;
+			return false;
+		}
+
+
+		if(Ext.fly(el).is('.disabled')){
+			return false;
+		}
+
+		if(/^mark$|^zoom$/i.test(target)){
+			m.fireEvent('markupenabled-action',el,target);
+			return false;
 		}
 
 		if (newLocation.toLowerCase() === whref.toLowerCase() && target) {
