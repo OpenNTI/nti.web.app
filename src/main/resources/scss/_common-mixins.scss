@@ -165,40 +165,16 @@
 
 @mixin divider {
 	.divider {
-		margin: 10px 20px;
-		color: $secondary-grey;
-		text-align: center;
-		font-family: $font;
-		font-size: 10px;
-		font-weight: 700;
-		text-transform: uppercase;
-		text-overflow: ellipsis;
-		overflow: hidden;
-		white-space: nowrap;
-
-		display: block;
 		position: relative;
-		outline: hidden;
-
-		span {
-			background: #fafafa;
-			background: rgba(250, 250, 250, 0.97);
-			position: relative;
-			display: inline-block;
-			z-index: 2;
-			padding: 0 3px;
+		color: $secondary-grey;
+		background-color: #F1F1F1;
+		font: {
+			size: 10px;
+			weight: bold;
 		}
-
-		&::after{
-			content: ' ';
-			position: absolute;
-			width: 100%;
-			background: #eaeaea;
-			border-bottom: 1px solid #ffffff;
-			height: 1px;
-			top: 50%; left: 0;
-			z-index: 1;
-		}
+		text-transform: uppercase;
+		line-height: 29px;
+		padding-left: 22px;
 	}
 }
 

@@ -61,6 +61,11 @@
 
 	@include divider;
 
+	//add some space between all dividers and the first history
+	.divider + .history {
+		padding-top: 12px;
+	}
+
 	.history{
 		&.nothing{
 			color: $tertiary-grey;

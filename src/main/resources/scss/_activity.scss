@@ -61,19 +61,8 @@
 			}
 		}
 
-
-		.divider {
-			position: relative;
-			color: $secondary-grey;
-			background-color: #F1F1F1;
-			font: {
-				size: 10px;
-				weight: bold;
-			}
-			text-transform: uppercase;
-			line-height: 29px;
-			padding-left: 22px;
-		}
+		//add some space between the divider and the next activity
+		@include divider;
 		.divider + .activity {
 			border-top: none;
 			box-shadow: none;
