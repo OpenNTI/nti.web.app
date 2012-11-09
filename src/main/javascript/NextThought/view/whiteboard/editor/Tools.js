@@ -90,6 +90,13 @@ Ext.define('NextThought.view.whiteboard.editor.Tools',{
 	},
 
 
+	setCurrentTool: function(tool){
+		var b = this.down('wb-tool[tool='+tool+']');
+		b.fireEvent('click',b);
+		b.toggle(true);
+	},
+
+
 	getCurrentTool: function(){
 		if (!this.currentTool) {
 			this.currentTool = this.down('container[ui=secondary]').getLayout().getActiveItem();
