@@ -188,7 +188,7 @@ Ext.define('NextThought.controller.Chat', {
 	},
 
 
-	postMessage: function(room, message, replyTo, channel, recipients) {
+	postMessage: function(room, message, replyTo, channel, recipients, ack) {
 
 		if(typeof message === 'string') {
 			message = [message];
@@ -206,7 +206,7 @@ Ext.define('NextThought.controller.Chat', {
 			m.recipients = recipients;
 		}
 
-		Socket.emit('chat_postMessage', m);
+		Socket.emit('chat_postMessage', m, ack);
 	},
 
 
@@ -286,16 +286,27 @@ Ext.define('NextThought.controller.Chat', {
 
 	/* CLIENT EVENTS */
 
+	sendAckHandler: function(result){
+		function isError(result){
+			var errorCode = 'error-type';
+			return result.hasOwnProperty(errorCode) && result[errorCode] === 'client-error';
+		}
+		if(isError(result)){
+			this.onMessageError(result);
+		}
+	},
+
 	send: function(f, mid, channel, recipients) {
 		var room = ClassroomUtils.getRoomInfoFromComponent(f),
-			val = f.getValue();
+			val = f.getValue(),
+			me = this;
 
 		if (!room || Ext.isEmpty(val,false)) {
 			console.error('Cannot send message, room', room, 'values', val);
 			return;
 		}
 
-		this.postMessage(room, val, mid, channel, recipients);
+		this.postMessage(room, val, mid, channel, recipients, Ext.bind(me.sendAckHandler, me));
 
 		f.focus();
 	},
@@ -311,7 +322,7 @@ Ext.define('NextThought.controller.Chat', {
 		chatEntryWidget.mon(wbWin, {
 			save: function(win, wb){
 				wbData = wb.getValue();
-				me.postMessage(room, [wbData], mid, channel, recipients);
+				me.postMessage(room, [wbData], mid, channel, recipients, Ext.bind(me.sendAckHandler, me));
 				wbWin.close();
 			},
 			cancel: function(){
@@ -681,6 +692,9 @@ Ext.define('NextThought.controller.Chat', {
 //		}, this);
 //	},
 
+	onMessageError: function(errorObject){
+		console.warn('Error sending chat message', errorObject);
+	},
 
 	onMessage: function(msg, opts) {
 		var me = this, args = Array.prototype.slice.call(arguments),
