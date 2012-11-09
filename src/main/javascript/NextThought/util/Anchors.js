@@ -205,9 +205,18 @@ Ext.define('NextThought.util.Anchors', {
 
 		Anchors.cleanRangeFromBadStartAndEndContainers(range);
 		range = Anchors.makeRangeAnchorable(range, docElement);
+		if(!range || range.collapsed){
+			console.error('Anchorable range for provided range could not be found', range);
+			Ext.Error.raise('Anchorable range for range could not be found');
+		}
 		var pureRange = Anchors.purifyRange(range, docElement),
 			ancestorNode = range.commonAncestorContainer,
             result = {};
+
+		if(!pureRange || pureRange.collapsed){
+			console.error('Unable to purify anchorable range', range, pureRange);
+			Ext.Error.raise('Unable to purify anchorable range for ContentRangeDescription generation');
+		}
 
 		//If the ancestorcontainer is a text node, we want a containing element as per the docs
 		//NOTE: use range, not pureRange here because the pureRange's ancestor is probably a doc fragment.
@@ -869,7 +878,7 @@ Ext.define('NextThought.util.Anchors', {
 
 		//Clean up either end by looking for anchorable nodes inward or outward:
 		if(!Anchors.isNodeAnchorable(startEdgeNode) ){
-			startEdgeNode = Anchors.searchFromRangeStartInwardForAnchorableNode(startEdgeNode);
+			startEdgeNode = Anchors.searchFromRangeStartInwardForAnchorableNode(startEdgeNode, range.commonAncestorContainer);
 			startOffset = 0;
 		}
 		if(!Anchors.isNodeAnchorable(endEdgeNode) ){
@@ -903,26 +912,23 @@ Ext.define('NextThought.util.Anchors', {
 
 	//TODO for these two methods consider skipping over any nodes with 'data-no-anchorable-children'
 	//as an optimization. (Probably minor since those are small parts of the tree right now)
+	//TODO provide an end we don't go past
 	/* tested */
-	searchFromRangeStartInwardForAnchorableNode: function(startNode) {
+	searchFromRangeStartInwardForAnchorableNode: function(startNode, commonParent) {
         if (!startNode){return null;}
 
 
-        var walker = document.createTreeWalker(startNode, NodeFilter.SHOW_ALL, null, null),
-            temp = startNode, t;
+        var walker = document.createTreeWalker(commonParent, NodeFilter.SHOW_ALL, null, null),
+        	temp;
+
+		walker.currentNode = startNode;
+		temp = walker.currentNode;
 
         while (temp){
             if (Anchors.isNodeAnchorable(temp)){
                 return temp;
             }
-            //advance:
-            t = walker.nextNode();
-            if (!t){
-                t = temp.parentNode ? temp.parentNode.nextSibling : null;
-                if (t){walker.currentNode = t;}
-                temp = t;
-            }
-            else{ temp = t; }
+			temp = walker.nextNode();
         }
 
         //if we got here, we found nada:
@@ -931,6 +937,7 @@ Ext.define('NextThought.util.Anchors', {
 
 
 	/* tested */
+	//TODO provide a node we don't go past
 	searchFromRangeEndInwardForAnchorableNode: function(endNode) {
 		//handle simple cases where we can immediatly return
 		if(!endNode){ return null; }

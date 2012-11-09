@@ -238,7 +238,7 @@ describe("Anchor Utils", function() {
 
 		it('Already Anchorable Node', function(){
 			var anchorable = document.createTextNode('This is a text node, yay'),
-				result = Anchors.searchFromRangeStartInwardForAnchorableNode(anchorable);
+				result = Anchors.searchFromRangeStartInwardForAnchorableNode(anchorable, anchorable);
 
 			expect(result).toBe(anchorable);
 		});
@@ -253,7 +253,7 @@ describe("Anchor Utils", function() {
 			p.appendChild(txt);
 			div.appendChild(p);
 
-			result = Anchors.searchFromRangeStartInwardForAnchorableNode(div);
+			result = Anchors.searchFromRangeStartInwardForAnchorableNode(div, div);
 			expect(result).toBe(txt);
 		});
 
@@ -268,7 +268,7 @@ describe("Anchor Utils", function() {
 			p.appendChild(a);
 			div.appendChild(p);
 
-			result = Anchors.searchFromRangeStartInwardForAnchorableNode(div);
+			result = Anchors.searchFromRangeStartInwardForAnchorableNode(div, div);
 			expect(result).toBe(a);
 		});
 
@@ -282,7 +282,7 @@ describe("Anchor Utils", function() {
 			p.appendChild(a);
 			div.appendChild(p);
 
-			result = Anchors.searchFromRangeStartInwardForAnchorableNode(div);
+			result = Anchors.searchFromRangeStartInwardForAnchorableNode(div, div);
 			expect(result).toBeNull();
 		});
 
@@ -310,7 +310,7 @@ describe("Anchor Utils", function() {
 			testBody.appendChild(div);
 
 
-			anchorableNode = Anchors.searchFromRangeStartInwardForAnchorableNode(replacementText);
+			anchorableNode = Anchors.searchFromRangeStartInwardForAnchorableNode(replacementText, div);
 			expect(anchorableNode).toBe(t2);
 		});
 
@@ -328,7 +328,7 @@ describe("Anchor Utils", function() {
 			div.appendChild(s1);
 			div.appendChild(s2);
 
-			result = Anchors.searchFromRangeStartInwardForAnchorableNode(t1);
+			result = Anchors.searchFromRangeStartInwardForAnchorableNode(t1, div);
 			expect(result).toBe(t2);
 		});
 
@@ -356,7 +356,7 @@ describe("Anchor Utils", function() {
             div.appendChild(a);
             div.appendChild(a);
 
-            result = Anchors.searchFromRangeStartInwardForAnchorableNode(div);
+            result = Anchors.searchFromRangeStartInwardForAnchorableNode(div, div);
             expect(result).toBeTruthy();
             expect(result).toBe(t);
         });
@@ -525,6 +525,33 @@ describe("Anchor Utils", function() {
 			result = Anchors.searchFromRangeEndInwardForAnchorableNode(span1);
             expect(result).toBe(t1);
         });
+
+		it('End digs up out and into prior sibling', function(){
+			var div = document.createElement('div'),
+				p1 = document.createElement('p'),
+				redactionSpan = document.createElement('span'),
+				innerRedactionSpan = document.createElement('span'),
+				big = document.createElement('big'),
+				replacementText = document.createTextNode('***'),
+				p2 = document.createElement('p'),
+				t2 = document.createTextNode('See spot run'),
+				anchorableNode;
+
+			big.appendChild(replacementText);
+			innerRedactionSpan.appendChild(big);
+			redactionSpan.setAttribute('data-no-anchors-within', true);
+			redactionSpan.appendChild(innerRedactionSpan);
+			p1.appendChild(redactionSpan);
+
+			p2.appendChild(t2);
+			div.appendChild(p2);
+			div.appendChild(p1);
+			testBody.appendChild(div);
+
+
+			anchorableNode = Anchors.searchFromRangeEndInwardForAnchorableNode(replacementText, div);
+			expect(anchorableNode).toBe(t2);
+		});
 	});
 
 	describe('makeRangeAnchorable Tests', function(){
