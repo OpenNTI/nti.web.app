@@ -53,10 +53,10 @@ Ext.define('NextThought.view.whiteboard.editor.MoveOptions',{
 		},
 		items: [
 			{ xtype: 'tbtext', text: 'Fill', fillLabel: true},
-			{ xtype: 'color-picker-button', fillSelectMove: true, value: 'E1E1E1'},
+			{ xtype: 'color-picker-button', fillSelectMove: true, value: 'E1E1E1', id:'color-picker-button-1425-btnIconEl-fill-move'},
 			'Stroke',
 			{ xtype: 'stroke-select', value: 3, editStrokeWidth: true },
-			{ xtype: 'color-picker-button', strokeSelectMove: true, value: '333333'}
+			{ xtype: 'color-picker-button', strokeSelectMove: true, value: '333333', id:'color-picker-button-1425-btnIconEl-stroke-move'}
 		]
 		}
 	],
