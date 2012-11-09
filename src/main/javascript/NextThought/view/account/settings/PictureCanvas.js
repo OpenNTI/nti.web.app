@@ -256,6 +256,27 @@ Ext.define('NextThought.view.account.settings.PictureCanvas',{
 	},
 
 
+	rotate: function(){
+		if(!this.imageInfo){
+			return;
+		}
+
+
+		var img = this.imageInfo.image,
+			c = document.createElement('canvas'),
+			ctx = c.getContext('2d'),
+			h = img.height,
+			w = img.width;
+
+		c.width = h;
+		c.height= w;
+
+		ctx.rotate(Math.PI/2);
+		ctx.drawImage(img,0,-h);
+		this.setImage(c.toDataURL('imge/png'));
+	},
+
+
 	setImage: function(url){
 		var me = this,
 			img = new Image();

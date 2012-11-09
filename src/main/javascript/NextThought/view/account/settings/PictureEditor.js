@@ -33,6 +33,10 @@ Ext.define('NextThought.view.account.settings.PictureEditor',{
 				}
 			},
 			items: [
+				{xtype: 'tbspacer', flex: 4},
+				{text: 'Rotate', rotate:true, iconCls: 'rotate', disabled: true,
+					handler: function(b){b.up('picture-editor').rotate();} },
+				{xtype: 'tbspacer', flex: 1},
 				{text: 'Cancel' },
 				{text: 'Save', save:true, ui: 'flat-blue', disabled: true }
 			]
@@ -44,9 +48,20 @@ Ext.define('NextThought.view.account.settings.PictureEditor',{
 		var me = this;
 		me.callParent(arguments);
 		me.mon(me.down('picture-canvas'),{
-			'image-loaded': function(){ me.down('button[save]').enable();},
-			'image-cleared': function(){ me.down('button[save]').disable();}
+			'image-loaded': function(){
+				me.down('button[save]').enable();
+				me.down('button[rotate]').enable();
+			},
+			'image-cleared': function(){
+				me.down('button[save]').disable();
+				me.down('button[rotate]').disable();
+			}
 		});
+	},
+
+
+	rotate: function(){
+		this.down('picture-canvas').rotate();
 	},
 
 
