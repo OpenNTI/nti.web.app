@@ -165,12 +165,20 @@ Ext.define('NextThought.view.whiteboard.editor.ImageOptions',{
 		function addImageToWhiteboard(){
 			var m = new NTMatrix(),
 				canvasWidth = c.getWidth(),
+				canvasHeight = c.getHeight(),
 				s = e.addShape('Url'),
-				max = Math.max(width,height),
-				scale = (max > canvasWidth) ? (canvasWidth*0.75)/max : 1;
+				max = Math.max(width,height), scale;
+
+			if(max === height && max > canvasHeight){
+				scale = canvasHeight * 0.90 / max;
+			}else if(max === width && max > canvasWidth){
+				scale = canvasWidth * 0.90 / max;
+			}else{
+				scale = 1.0;
+			}
 
 			s.url = dataUrl;
-			m.translate(canvasWidth/2, (scale*height/2)+(canvasWidth/10) );
+			m.translate(canvasWidth/2, canvasHeight/2);
 			m.scale(scale);
 
 			m.scaleAll(1/canvasWidth);//do this after
