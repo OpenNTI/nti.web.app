@@ -312,6 +312,7 @@ Ext.define('NextThought.view.account.activity.View',{
         this.store.clearFilter();
         delete this.dontReload;
         this.store.filterBy(filterFn);
+        this.store.sort();
 
         //Now the listeners on the store will take care of rendering.
     }
