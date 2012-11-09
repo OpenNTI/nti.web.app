@@ -29,8 +29,8 @@ Ext.define('NextThought.view.account.activity.ActivityTabs',{
                     xtype: 'secondary-tabpanel',
                     defaults: {xtype:'activity-view'},
                     items: [
-                        {title: 'Community', filter: 'inCommunity'},
-                        {title: 'Contacts', filter: 'notInCommunity'}
+                        {title: 'Contacts', filter: 'notInCommunity'},
+                        {title: 'Community', filter: 'inCommunity'}
                     ]
                 }
             ]

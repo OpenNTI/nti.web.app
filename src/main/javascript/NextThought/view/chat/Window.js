@@ -9,8 +9,9 @@ Ext.define('NextThought.view.chat.Window', {
 
 	cls:'chat-window no-gutter',
 	ui:'chat-window',
+    focusOnToFront: false,
 	minimizable:true,
-	minWidth:250,
+    minWidth:250,
 	minHeight:200,
 	height:200,
 	width:250,
@@ -40,6 +41,8 @@ Ext.define('NextThought.view.chat.Window', {
 
 	initComponent:function () {
 		this.callParent(arguments);
+
+        this.defaultFocus = this.down('chat-entry');
 
 		if (!this.roomInfo) {
 			Ext.Error.raise('roomInfo required');
