@@ -194,7 +194,8 @@ Ext.define('NextThought.controller.Chat', {
 			message = [message];
 		}
 
-		var m = {ContainerId: room.getId(), body: message, Class: 'MessageInfo'};
+		var m = {ContainerId: room.getId(), body: message, Class: 'MessageInfo'},
+			messageRecord;
 
 		if (replyTo) {
 			m.inReplyTo = replyTo;
@@ -207,7 +208,9 @@ Ext.define('NextThought.controller.Chat', {
 		}
 
 		if(ack){
-			ack = Ext.bind(ack, null, [m], true);
+			messageRecord = ParseUtils.parseItems([m]);
+			messageRecord = messageRecord && messageRecord.length > 0 ? messageRecord[0] : null;
+			ack = Ext.bind(ack, null, [messageRecord], true);
 		}
 
 		Socket.emit('chat_postMessage', m, ack);
@@ -300,6 +303,23 @@ Ext.define('NextThought.controller.Chat', {
 		}
 	},
 
+	clearErrorForRoom: function(room){
+		var cid, win, log, view;
+
+		//TODO do we need to do the window rebuilding stuff here
+		//like in onMessage?
+
+		cid = room.getId();
+		win = this.getChatWindow(cid);
+		view = win ? win.down('chat-view') : null;
+		if(view){
+			view.clearError();
+		}
+		else{
+			console.error('Unable to clear error for messages window', msg);
+		}
+	},
+
 	send: function(f, mid, channel, recipients) {
 		var room = ClassroomUtils.getRoomInfoFromComponent(f),
 			val = f.getValue(),
@@ -309,7 +329,7 @@ Ext.define('NextThought.controller.Chat', {
 			console.error('Cannot send message, room', room, 'values', val);
 			return;
 		}
-
+		this.clearErrorForRoom(room);
 		this.postMessage(room, val, mid, channel, recipients, Ext.bind(me.sendAckHandler, me));
 
 		f.focus();
@@ -326,6 +346,7 @@ Ext.define('NextThought.controller.Chat', {
 		chatEntryWidget.mon(wbWin, {
 			save: function(win, wb){
 				wbData = wb.getValue();
+				me.clearErrorForRoom(room);
 				me.postMessage(room, [wbData], mid, channel, recipients, Ext.bind(me.sendAckHandler, me));
 				wbWin.close();
 			},
@@ -696,8 +717,27 @@ Ext.define('NextThought.controller.Chat', {
 //		}, this);
 //	},
 
-	onMessageError: function(errorObject, m){
-		console.warn('Error sending chat message', m, errorObject);
+	onMessageError: function(errorObject, msg){
+		var cid, win, log, view;
+
+		if(!msg){
+			//TODO what to do here, pop up something generic.
+			console.error('No message object tied to error.  Dropping error', errorObject);
+			return;
+		}
+
+		//TODO do we need to do the window rebuilding stuff here
+		//like in onMessage?
+
+		cid = msg.get('ContainerId');
+		win = this.getChatWindow(cid);
+		view = win ? win.down('chat-view') : null;
+		if(view){
+			view.showError(errorObject);
+		}
+		else{
+			console.warn('Error sending chat message but no chat view to show it in', msg, errorObject);
+		}
 	},
 
 	onMessage: function(msg, opts) {

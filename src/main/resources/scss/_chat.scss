@@ -74,6 +74,19 @@
 		.x-box-inner {
 
 		}
+
+		.error-box {
+			position: relative;
+			overflow: hidden;
+			background-color: $primary-red;
+			font-weight: 600;
+			font-size: 12px;
+
+			.error-desc {
+				color: white;
+				padding: 5px;
+			}
+		}
 	}
 
 	&.no-gutter {
