@@ -31,6 +31,21 @@ Ext.define('NextThought.view.whiteboard.editor.MoveOptions',{
 	},{
 		xtype: 'toolbar',
 		ui: 'options',
+		cls: 'pencil-stroke-options',
+		pathSelectStrokeWidth: true,
+		defaults: {
+			xtype: 'wb-tool-option',
+			toggleGroup: 'pencil-stroke-'
+		},
+		items: [
+			{ option: 'fine stroke', strokeWidth: 5, pressed: true },
+			{ option: 'small stroke', strokeWidth: 10 },
+			{ option: 'medium stroke', strokeWidth: 20},
+			{ option: 'large stroke', strokeWidth: 30 }
+		]
+	},{
+		xtype: 'toolbar',
+		ui: 'options',
 		cls: 'shape-options',
 		defaults: {
 			ui: 'option',
@@ -49,9 +64,8 @@ Ext.define('NextThought.view.whiteboard.editor.MoveOptions',{
 	afterRender: function(){
 		this.callParent(arguments);
 
-		this.mon(this.down('toolbar[cls=shape-options]').down('[fillSelectMove]').el, 'select', function(e){
-			console.log("received event in moveOptions");
-		});
+		//By Default hide the path stroke picker
+		this.down('toolbar[cls=pencil-stroke-options]').hide();
 	},
 
 	getToolType: function() {
@@ -67,7 +81,25 @@ Ext.define('NextThought.view.whiteboard.editor.MoveOptions',{
 	setOptions: function(options) {
 		var toolbar = this.down('toolbar[cls=shape-options]'),
 			fillButton = toolbar.down('[fillSelectMove]'),
-			strokeButton = toolbar.down('[strokeSelectMove]'), val;
+			strokeButton = toolbar.down('[strokeSelectMove]'), val, s;
+
+		if(options.shapeType){
+			s = options.shapeType.split('.').pop().toLowerCase();
+
+			if(s === 'path'){
+				this.down('[fillLabel]').hide();
+				this.down('[fillSelectMove]').hide();
+				this.down('[editStrokeWidth]').hide();
+
+				this.down('toolbar[cls=pencil-stroke-options]').show();
+			}else{
+				this.down('[fillLabel]').show();
+				this.down('[fillSelectMove]').show();
+				this.down('[editStrokeWidth]').show();
+
+				this.down('toolbar[cls=pencil-stroke-options]').hide();
+			}
+		}
 
 		if(options.stroke){
 			val = Color.rgbaToHex(options.stroke).substr(1).toUpperCase();
@@ -77,11 +109,27 @@ Ext.define('NextThought.view.whiteboard.editor.MoveOptions',{
 			val = Color.rgbaToHex(options.fill).substr(1).toUpperCase();
 			fillButton.setValue(val);
 		}
-		if (options.strokeWidth) {
-			this.down('[editStrokeWidth]').setSelected( options.strokeWidth );
-		}
+
+		this.setStrokeWidthValue(options.strokeWidth, options.shapeType);
 	},
 
+	setStrokeWidthValue: function(strokeValue, shapeType){
+		var s = shapeType.split('.').pop().toLowerCase(), a, sel, btn;
+
+		if(s !== 'path'){
+			this.down('[editStrokeWidth]').setSelected( strokeValue);
+		}
+		else {
+			a = this.query('[strokeWidth]');
+			Ext.each(a, function(i){
+				if(i.pressed){ i.toggle(); }
+			});
+
+			sel = '[strokeWidth='+strokeValue+']';
+			btn = this.down(sel);
+			if(btn){ btn.toggle(); }
+		}
+	},
 
 	getOptions: function(){
 		var toolbar = this.down('toolbar[cls=shape-options]'),

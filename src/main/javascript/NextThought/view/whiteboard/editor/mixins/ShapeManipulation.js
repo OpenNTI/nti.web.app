@@ -46,6 +46,11 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 			select: this.onStrokeWidthChange
 		});
 
+		this.mon(this.toolbar.down('[pathSelectStrokeWidth]').el, {
+			scope: this,
+			click: this.onPathStrokeWidthChange
+		});
+
 		function clearFlag(){ delete this.mouseLeftNoMouseUp;console.log('clear!'); }
 
 		this.mon( Ext.getBody(), {
@@ -93,7 +98,7 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 	},
 
 	onToolbarClick: function(e){
-		var action, c, me = this;
+		var action, c, me = this, n;
 		function togglePressed(){
 			var b = Ext.Array.filter(me.toolbar.query('[isEditAction]'), function(b){ return b.pressed});
 			if(b.length > 0){ b[0].toggle();}
@@ -115,20 +120,37 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 	},
 
 	onFillColorChange: function(e){
-		if(!e.value){ return; }
+		if(!e.value || !this.selected){ return; }
 		this.selected.fill = e.value !== 'NONE' ? Color.toRGBA('#'+e.value): null;
 		this.canvas.drawScene();
 	},
 
 	onStrokeColorChange: function(e){
-		if(!e.value){ return; }
+		if(!e.value || !this.selected){ return; }
 		this.selected.stroke = e.value !== 'NONE' ? Color.toRGBA('#'+e.value): null;
 		this.canvas.drawScene();
 	},
 
 	onStrokeWidthChange: function(e){
-		if(!e.value){return;}
+		if(!e.value || !this.selected){return;}
 		this.selected.strokeWidth = e.value / this.canvas.el.getWidth();
+		this.canvas.drawScene();
+	},
+
+	onPathStrokeWidthChange: function(e){
+		if(!this.selected){ return; }
+
+		var pressed = this.toolbar.down('[pathSelectStrokeWidth]').query('button[pressed]'), strokeValue = 0, stroke;
+		Ext.each(pressed, function(b){
+			if (b.strokeWidth){
+				strokeValue = b.strokeWidth;
+			}
+			else if (b.stroke) {
+				stroke = b.stroke;
+			}
+		});
+
+		this.selected.strokeWidth = strokeValue / this.canvas.el.getWidth();
 		this.canvas.drawScene();
 	},
 
@@ -247,7 +269,8 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 			this.toolbar.getCurrentTool().setOptions({
 				fill:this.selected.fill,
 				stroke:this.selected.stroke,
-				strokeWidth: Math.round(l * this.canvas.el.getWidth())
+				strokeWidth: Math.round(l * this.canvas.el.getWidth()),
+				shapeType: this.selected.$className
 			});
 		}
 
