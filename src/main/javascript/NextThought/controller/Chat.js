@@ -206,6 +206,10 @@ Ext.define('NextThought.controller.Chat', {
 			m.recipients = recipients;
 		}
 
+		if(ack){
+			ack = Ext.bind(ack, null, [m], true);
+		}
+
 		Socket.emit('chat_postMessage', m, ack);
 	},
 
@@ -286,13 +290,13 @@ Ext.define('NextThought.controller.Chat', {
 
 	/* CLIENT EVENTS */
 
-	sendAckHandler: function(result){
+	sendAckHandler: function(result, m){
 		function isError(result){
 			var errorCode = 'error-type';
 			return result.hasOwnProperty(errorCode) && result[errorCode] === 'client-error';
 		}
 		if(isError(result)){
-			this.onMessageError(result);
+			this.onMessageError(result, m);
 		}
 	},
 
@@ -692,8 +696,8 @@ Ext.define('NextThought.controller.Chat', {
 //		}, this);
 //	},
 
-	onMessageError: function(errorObject){
-		console.warn('Error sending chat message', errorObject);
+	onMessageError: function(errorObject, m){
+		console.warn('Error sending chat message', m, errorObject);
 	},
 
 	onMessage: function(msg, opts) {
