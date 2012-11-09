@@ -76,7 +76,7 @@ Ext.define('NextThought.view.account.Window',{
 					enableToggle: true,
 					allowDepress: false,
 					toggleGroup: 'account-buttons',
-					width: 150,
+					minWidth: 150,
 					listeners:{
 						toggle: function(btn,pressed){
 							if(pressed){

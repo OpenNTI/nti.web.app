@@ -26,14 +26,6 @@
 			height: 35px;
 		}
 
-		&:first-of-type {
-			border-radius: 0 0 0 3px;
-		}
-
-		&:last-of-type {
-			border-radius: 0 0 3px 0;
-		}
-
 		border-bottom: 1px solid #ebebeb !important;
 
 		& + .x-btn-account-small {
@@ -51,6 +43,7 @@
 			font-size: 12px;
 			font-weight: 600;
 			color: $secondary-grey;
+			padding: 0 10px;
 		}
 	}
 
