@@ -149,6 +149,10 @@ Ext.define('NextThought.view.assessment.input.SymbolicMath',{
 		return latex.replace(/\\[;:,]/g, ' ');
 	},
 
+	canHaveAnswerHistory: function(){
+		return true;
+	},
+
 	setValue: function(latex){
 		jQuery(this.mathquillSpan).mathquill('latex', this.sanitizeForMathquill(latex));
 		this.adjustSize();

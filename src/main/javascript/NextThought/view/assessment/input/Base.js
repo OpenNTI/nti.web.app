@@ -130,18 +130,13 @@ Ext.define('NextThought.view.assessment.input.Base',{
 			click: this.editAnswer
 		});
 
-		this.mon(this.historyMenuEl, {
-			scope:this,
-			click: this.showHistoryMenu
-		});
-
 		this.checkItBtn.setVisibilityMode(Ext.dom.Element.DISPLAY);
+
 		this.solutionAnswerBox.setVisibilityMode(Ext.dom.Element.DISPLAY);
 		this.inputBox.setVisibilityMode(Ext.dom.Element.DISPLAY);
 		this.solutionBox.setVisibilityMode(Ext.dom.Element.DISPLAY);
 		this.footer.setVisibilityMode(Ext.dom.Element.DISPLAY);
 		this.historyMenuEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
-
         //if there are images, after they load, update layout.
         this.solutionBox.select('img').on('load',function(){
             this.updateLayout();
@@ -149,8 +144,21 @@ Ext.define('NextThought.view.assessment.input.Base',{
         },this,{single:true});
 
 		this.reset();
+
 		this.disableSubmission();
-		this.shouldShowAnswerHistory();
+
+		if(this.canHaveAnswerHistory()){
+			this.mon(this.historyMenuEl, {
+				scope:this,
+				click: this.showHistoryMenu
+			});
+
+			this.shouldShowAnswerHistory();
+		}
+		else {
+			this.historyMenuEl.remove();
+		}
+
 	},
 
 
@@ -267,6 +275,15 @@ Ext.define('NextThought.view.assessment.input.Base',{
 		this.loadAnswerHistory(id);
 	},
 
+	canHaveAnswerHistory: function(){
+		/**
+		 *  Overridable function to determine whether or not we should have history.
+		 *  The default is no.
+		 */
+
+		return false;
+	},
+
 	showHistoryMenu: function(e){
 
 		var id;
@@ -365,10 +382,12 @@ Ext.define('NextThought.view.assessment.input.Base',{
 		if (part.isCorrect()) { this.markCorrect(); }
 		else {this.markIncorrect(); }
 		this.setValue(part.get('submittedResponse'));
-		if(!this.historyMenuEl.isVisible()){
-			this.shouldShowAnswerHistory();
+		if(this.canHaveAnswerHistory()){
+			if(!this.historyMenuEl.isVisible()){
+				this.shouldShowAnswerHistory();
+			}
+			this.answerHistStore.fireEvent('changed');
 		}
-		this.answerHistStore.fireEvent('changed');
 	},
 
 
@@ -441,7 +460,7 @@ Ext.define('NextThought.view.assessment.input.Base',{
 		this.solutionBox.hide();
 		this.inputBox.show();
 		this.updateLayout();
-		this.historyMenuEl.show();
+		if(this.canHaveAnswerHistory()){ this.historyMenuEl.show(); }
 	},
 
 
@@ -461,6 +480,6 @@ Ext.define('NextThought.view.assessment.input.Base',{
 		this.inputBox.hide();
 		this.solutionBox.show();
 		this.updateLayout();
-		this.historyMenuEl.hide();
+		if(this.canHaveAnswerHistory()){ this.historyMenuEl.hide(); }
 	}
 });
