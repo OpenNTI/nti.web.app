@@ -489,6 +489,7 @@ Ext.define('NextThought.view.account.settings.PictureCanvas',{
 		if(window.FileReader){
 			reader = new FileReader();
 			reader.onload = function(event) {
+				//http://code.google.com/p/jsjpegmeta/source/browse/jpegmeta.js
 				me.setImage(event.target.result);
 			};
 			reader.readAsDataURL(file);

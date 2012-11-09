@@ -174,13 +174,13 @@ Ext.define('NextThought.view.account.settings.AvatarChoices',{
 
 		if(changing) {
 			url = item.down('img').getAttribute('src');
-			if(item === this.customChoice){
+			if(item === this.customChoice && /@@view$/i.test(url)){
 				//If we jump back and forth between choices, why can't this be set back to the @@view it was?
 				// oh, well...regenerate the data,url
 				url = this.imgToDataUrl(item.down('img'));
 			}
 			//set basic choice (take the value of the image in the choice)
-			console.log(url);
+			// console.log(url);
 			this.makeAChoice(url);
 		}
 
@@ -191,8 +191,10 @@ Ext.define('NextThought.view.account.settings.AvatarChoices',{
 	imgToDataUrl: function(img){
 		img = Ext.getDom(img);
 		var c = document.createElement('canvas');
-		c.width = img.naturlWidth || img.width;
-		c.height = img.naturlHeight || img.height;
+		
+		c.width = img.naturalWidth || img.width;
+		c.height = img.naturalHeight || img.height;
+		//hopefully this won't degrade the image quality. (PNG after all)
 		c.getContext('2d').drawImage(img,0,0);
 		return c.toDataURL('imge/png');
 	},
