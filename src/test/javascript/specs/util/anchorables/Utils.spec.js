@@ -286,6 +286,34 @@ describe("Anchor Utils", function() {
 			expect(result).toBeNull();
 		});
 
+		it('Front digs up out and into sibling', function(){
+			var div = document.createElement('div'),
+				p1 = document.createElement('p'),
+				redactionSpan = document.createElement('span'),
+				innerRedactionSpan = document.createElement('span'),
+				big = document.createElement('big'),
+				replacementText = document.createTextNode('***'),
+				p2 = document.createElement('p'),
+				t2 = document.createTextNode('See spot run'),
+				anchorableNode;
+
+			big.appendChild(replacementText);
+			innerRedactionSpan.appendChild(big);
+			redactionSpan.setAttribute('data-no-anchors-within', true);
+			redactionSpan.appendChild(innerRedactionSpan);
+			p1.appendChild(redactionSpan);
+
+			p2.appendChild(t2);
+
+			div.appendChild(p1);
+			div.appendChild(p2);
+			testBody.appendChild(div);
+
+
+			anchorableNode = Anchors.searchFromRangeStartInwardForAnchorableNode(replacementText);
+			expect(anchorableNode).toBe(t2);
+		});
+
 		it('Non Anchorable Node, Requires parent traversal', function(){
 			var div = document.createElement('div'),
 				s1 = document.createElement('span'),
