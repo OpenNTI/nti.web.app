@@ -104,7 +104,7 @@ Ext.define('NextThought.controller.Search', {
 					});
 				},	this);
 
-				result = Ext.Array.sort(result, me.sortByRelevanceScore, me);
+				//result = Ext.Array.sort(result, me.sortByRelevanceScore, me);
 
 			}, this);
 		}
@@ -181,6 +181,11 @@ Ext.define('NextThought.controller.Search', {
 				return filter.test(item); }} ]);
 		}
 		s.proxy.url = url.join('');
+		s.proxy.extraParams = Ext.apply(s.proxy.extraParams||{},{
+			sortOn: 'relevance',
+			sortOrder: 'descending'
+		});
+
 		s.on('load', Ext.bind(this.storeLoad, this, [value], true), this, {single: true});
 		s.load();
 	},
