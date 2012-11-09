@@ -6,6 +6,7 @@ Ext.define('NextThought.view.account.settings.PictureCanvas',{
 
 	initComponent: function(){
 		this.callParent(arguments);
+		this.dragOver = this.dragEnter;
 		this.on('boxready',this.syncSizeAttributes,this);
 	},
 
@@ -27,8 +28,6 @@ Ext.define('NextThought.view.account.settings.PictureCanvas',{
 
 	afterRender: function(){
 		this.callParent(arguments);
-		this.createFileInput();
-		this.enableImageDropping();
 
 		this.mon(this.el, {
 			scope: this,
@@ -36,6 +35,9 @@ Ext.define('NextThought.view.account.settings.PictureCanvas',{
 			mousemove: this.onMouseMove,
 			mouseup: this.onMouseUp
 		});
+
+		this.createFileInput();
+		this.enableImageDropping();
 	},
 
 
@@ -180,7 +182,13 @@ Ext.define('NextThought.view.account.settings.PictureCanvas',{
 			old.remove();
 		}
 
-		file.on('change', me.onFileChange, me, {single: true});
+		file.on({
+			scope: me,
+			'change': me.onFileChange,
+			'drop': me.dropImage,
+			'dragenter': me.dragEnter,
+			'dragover': me.dragOver
+		});
 	},
 
 
@@ -227,6 +235,7 @@ Ext.define('NextThought.view.account.settings.PictureCanvas',{
 
 	extractFileInput: function() {
 		var fileInput = this.fileInputEl.dom;
+		this.fileInputEl.clearListeners();
 		this.fileInputEl.remove();
 		return fileInput;
 	},
@@ -416,39 +425,32 @@ Ext.define('NextThought.view.account.settings.PictureCanvas',{
 
 	enableImageDropping: function(){
 		var me = this,
-			el = me.el,
-			t;
-
-		function over(e) {
-			el.addCls('drop-over');
-			e.stopPropagation();
-			e.preventDefault();
-			if(t){ clearTimeout(t); }
-			t = setTimeout(function(){el.removeCls('drop-over');}, 100);
-			return false; //for IE
-		}
+			el = me.el;
 
 		me.mon(el,{
 			'scope': me,
 			'drop': me.dropImage,
-			'dragenter': over,
-			'dragover': over
+			'dragenter': me.dragEnter,
+			'dragover': me.dragOver
 		});
+	},
+
+	dragEnter: function(e){
+		var b = e.browserEvent,
+			dt = b.dataTransfer;
+		dt.dropEffect = 'copy';
+		e.stopEvent();
+		return false; //for IE
 	},
 
 
 	dropImage: function(e){
-		e.stopPropagation();
-		e.preventDefault();
-
 		var dt = e.browserEvent.dataTransfer;
-
-		if(!dt){
-			alert('Please use the toolbar, your browser does not support drag & drop file uploads.');
-		}
-		else {
+		if(dt){
 			this.readFile(dt.files);
 		}
+
+		e.stopEvent();
 		return false; //for IE
 
 	},
