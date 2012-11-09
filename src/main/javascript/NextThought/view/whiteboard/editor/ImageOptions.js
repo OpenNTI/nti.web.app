@@ -185,6 +185,7 @@ Ext.define('NextThought.view.whiteboard.editor.ImageOptions',{
 
 			s.transform = m.toTransform();
 
+			e.fireEvent('turnOnSelection');
 			c.drawScene();
 		}
 

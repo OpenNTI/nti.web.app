@@ -51,6 +51,8 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 			click: this.onPathStrokeWidthChange
 		});
 
+		this.on('turnOnSelection', this.onTurnOnSelection);
+
 		function clearFlag(){ delete this.mouseLeftNoMouseUp;console.log('clear!'); }
 
 		this.mon( Ext.getBody(), {
@@ -152,6 +154,23 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 
 		this.selected.strokeWidth = strokeValue / this.canvas.el.getWidth();
 		this.canvas.drawScene();
+	},
+
+	onTurnOnSelection: function(){
+		/*
+		*   Occasionally we nay need to turn on selection on demand, rather than when the user clicks
+		*   on the selection tool. i.e when an imageUrl is added to a WB
+		**/
+		var c = this.canvas;
+		if(c.drawData.shapeList.length > 0){
+			this.toolbar.setCurrentTool('move');
+			if(this.selected !== c.drawData.shapeList[0]){
+				this.deselectShape();
+			}
+
+			this.selected = c.drawData.shapeList[0];
+			this.selected.selected = 'Hand';
+		}
 	},
 
 	onMouseEnter: function(e){
