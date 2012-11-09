@@ -243,10 +243,12 @@ Ext.define('NextThought.view.annotations.Highlight', {
             getClientRects: function(){
                 var r = [];
                 me.compElements.each(function(e){
-                    if (e.up('.'+me.highlightCls)){
-                        return;
+                    if (e.dom){
+                        if (e.up('.'+me.highlightCls)){
+                            return;
+                        }
+                        r.push.apply(r, e.dom.getClientRects());
                     }
-                    r.push.apply(r, e.dom.getClientRects());
                 });
                 return r;
             }
