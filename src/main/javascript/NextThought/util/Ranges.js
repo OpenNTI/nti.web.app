@@ -11,9 +11,22 @@ Ext.define('NextThought.util.Ranges',{
 			startContainer: r.startContainer,
 			startOffset: r.startOffset,
 			endContainer: r.endContainer,
-			endOffset: r.endOffset
+			endOffset: r.endOffset,
+            collapsed:r.collapsed
 		};
 	},
+
+
+    saveInputSelection: function(s){
+        if (!s || !s.focusNode || !s.focusNode.firstChild || s.focusNode.firstChild.tagName !== 'INPUT'){return null;}
+        var i = s.focusNode.firstChild;
+
+        return {
+           selectionStart: i.selectionStart,
+           selectionEnd: i.selectionEnd,
+           input: i
+        }
+    },
 
 
 	restoreSavedRange: function(o){

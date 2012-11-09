@@ -173,23 +173,20 @@ Ext.define('NextThought.view.Window',{
 	},
 
 
-
 	show: function(){
 		var s = window.getSelection(), r,
 			c = Ext.WindowManager.getActive();
 		if( c ){
 			c.fireEvent('deactivate');
-			if( !c || !c.modal ){ c = null; }
-			else if(s.rangeCount){
-				try {
-					r = RangeUtils.saveRange( s.getRangeAt(0) );
-				}
-				catch (e){
-					//no range to save, like a note to a chat for example...
-				}
-			}
+			if( !c || (!c.modal && this.focusOnToFront) ){ c = null; }
 			else {
-				c = null;
+                try {
+                    r = RangeUtils.saveRange( s.getRangeAt(0) );
+                    if (r.collapsed){r = RangeUtils.saveInputSelection(s);}
+                }
+                catch (e){
+                    //no range to save, like a note to a chat for example...
+                }
 			}
 		}
 
@@ -197,16 +194,24 @@ Ext.define('NextThought.view.Window',{
 
 		if(c && !this.modal){
 			c.toFront();
-			r = RangeUtils.restoreSavedRange(r);
-			if(r){
-				setTimeout(function(){
-					c = r.commonAncestorContainer;
-					c = c.focus? c:c.parentNode;
-					c.focus();
-					s.removeAllRanges();
-					s.addRange(r);
-				},50);
-			}
+			if (r && r.startContainer) {
+                r = RangeUtils.restoreSavedRange(r);
+                if(r){
+                    setTimeout(function(){
+                        c = r.commonAncestorContainer;
+                        c = c.focus? c:c.parentNode;
+                        c.focus();
+                        s.removeAllRanges();
+                        s.addRange(r);
+                    },50);
+                }
+            }
+            else if (r && r.selectionStart){
+                setTimeout(function(){
+                    r.input.setSelectionRange(r.selectionStart, r.selectionEnd);
+                },50);
+            }
+
 		}
 
 		return this;
