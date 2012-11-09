@@ -1575,11 +1575,10 @@ Ext.define('NextThought.util.Anchors', {
 	 */
 	snapSelectionToWord: function(doc) {
 		var sel = rangy.getSelection(doc),
-			r = sel.getRangeAt(0),
-            rString = r.toString();
+			r = sel.rangeCount?sel.getRangeAt(0):null;
 
 		//if selection is collapsed, don't expand.
-		if (r.collapsed){return;}
+		if (!r || r.collapsed){return;}
 /*
  * \u2018 = fancy left single quote
  * \u2019 = fancy right single quote
