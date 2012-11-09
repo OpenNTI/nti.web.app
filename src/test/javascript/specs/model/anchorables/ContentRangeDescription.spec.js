@@ -25,5 +25,10 @@ describe("ContentRangeDescription Tests", function() {
 			expect(o['_'+'locator']).toBeUndefined();
         });
 
+		it('is empty', function(){
+			var d = createCRD();
+			expect(d.isEmpty).toBeTruthy();
+		});
+
     });
 });

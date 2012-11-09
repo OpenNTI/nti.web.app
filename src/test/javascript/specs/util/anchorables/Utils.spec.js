@@ -11,6 +11,23 @@ describe("Anchor Utils", function() {
 		document.body.removeChild(testBody);
 	});
 
+	describe('rootContainerIdFromDocument Tests', function(){
+		it('Looks in meta tags', function(){
+			var head, meta;
+			expect(Anchors.rootContainerIdFromDocument(document)).toBeFalsy();
+			head = document.getElementsByTagName('head')[0];
+
+			meta = document.createElement('meta');
+			meta.setAttribute('name', 'NTIID');
+			meta.setAttribute('content', 'foobar');
+			head.appendChild(meta);
+
+			expect(Anchors.rootContainerIdFromDocument(document)).toBe('foobar');
+
+			head.removeChild(meta);
+		});
+	});
+
 	describe('createRangeDescriptionFromRange Tests', function(){
 		it('Create Description with non-anchorable', function(){
 			var div = document.createElement('div'),
@@ -534,6 +551,41 @@ describe("Anchor Utils", function() {
 			expect(result.startOffset).toEqual(0);
 			expect(result.endContainer).toBe(t2);
 			expect(result.endOffset).toEqual(11);
+		});
+
+		it('Front digs up out and into sibling', function(){
+			var div = document.createElement('div'),
+				p1 = document.createElement('p'),
+				redactionSpan = document.createElement('span'),
+				innerRedactionSpan = document.createElement('span'),
+				big = document.createElement('big'),
+				replacementText = document.createTextNode('***'),
+				p2 = document.createElement('p'),
+				t2 = document.createTextNode('See spot run'),
+				range, anchorableRange;
+
+			big.appendChild(replacementText);
+			innerRedactionSpan.appendChild(big);
+			redactionSpan.setAttribute('data-no-anchors-within', true);
+			redactionSpan.appendChild(innerRedactionSpan);
+			p1.appendChild(redactionSpan);
+
+			p2.appendChild(t2);
+
+			div.appendChild(p1);
+			div.appendChild(p2);
+			testBody.appendChild(div);
+
+			range = document.createRange();
+			range.setStart(replacementText, 1);
+			range.setEnd(t2, t2.textContent.length);
+
+			anchorableRange = Anchors.makeRangeAnchorable(range, document);
+			expect(anchorableRange).toBeTruthy();
+			expect(anchorableRange.startContainer).toBe(t2);
+			expect(anchorableRange.startOffset).toBe(0);
+			expect(anchorableRange.endContainer).toBe(range.endContainer);
+			expect(anchorableRange.endOffset).toBe(range.endOffset);
 		});
 
 		it ('Null Range', function(){
