@@ -341,11 +341,12 @@ Ext.define('NextThought.view.assessment.input.Base',{
 				});
 			});
 
-			//FIXME: somehow the ds is returning rec in reverse order.
-			if(me.historyMenu && items.length > 0){
+			if(me.historyMenu){
 				me.historyMenu.removeAll();
 				me.historyMenu.insert(0, {text: 'ANSWER HISTORY', cls:'answer-title', allowUncheck: false});
-				me.historyMenu.add(items.reverse());
+				if(items.length > 0){
+					me.historyMenu.add(items);
+				}
 			}
 		}
 
@@ -440,6 +441,7 @@ Ext.define('NextThought.view.assessment.input.Base',{
 		this.solutionBox.hide();
 		this.inputBox.show();
 		this.updateLayout();
+		this.historyMenuEl.show();
 	},
 
 
@@ -459,5 +461,6 @@ Ext.define('NextThought.view.assessment.input.Base',{
 		this.inputBox.hide();
 		this.solutionBox.show();
 		this.updateLayout();
+		this.historyMenuEl.hide();
 	}
 });
