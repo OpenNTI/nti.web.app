@@ -51,10 +51,10 @@ Ext.define('NextThought.view.whiteboard.editor.ShapeOptions',{
 		},
 		items: [
 			{ xtype: 'tbtext', text: 'Fill', fillLabel: true, hidden: true },
-			{ xtype: 'color-picker-button', fillSelect: true, value: 'E1E1E1', disabled: true, hidden: true, id:'color-picker-button-1425-btnIconEl-fill-shape' },
+			{ xtype: 'color-picker-button', fillSelect: true, value: 'E1E1E1', disabled: true, hidden: true },
 			'Stroke',
 			{ xtype: 'stroke-select', value: 3 },
-			{ xtype: 'color-picker-button', strokeSelect: true, value: '333333', id:'color-picker-button-1425-btnIconEl-stroke-shape' }
+			{ xtype: 'color-picker-button', strokeSelect: true, value: '333333' }
 		]
 	}],
 
