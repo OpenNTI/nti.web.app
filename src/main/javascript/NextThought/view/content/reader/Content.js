@@ -4,6 +4,8 @@ Ext.define('NextThought.view.content.reader.Content',{
 		this.loadedResources = {};
 		this.meta = {};
 		this.css = {};
+
+		this.addEvents('markupenabled-action');
 		return this;
 	},
 

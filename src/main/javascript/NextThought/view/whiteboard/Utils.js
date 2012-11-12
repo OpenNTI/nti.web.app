@@ -2,6 +2,10 @@ Ext.define('NextThought.view.whiteboard.Utils',{
 	alternateClassName:'WBUtils',
 	singleton: true,
 
+	requires: [
+		'NextThought.view.whiteboard.Matrix'
+	],
+
 
 	getSlope: function(x0,y0, x1,y1){
 		if(Ext.isArray(x0)){
@@ -45,7 +49,37 @@ Ext.define('NextThought.view.whiteboard.Utils',{
 		var dx = x2 - x1,
 			dy = y2 - y1;
 		return Math.sqrt(dx*dx + dy*dy);
+	},
+
+
+
+	createFromImage: function(img){
+
+		var w = img.naturalWidth || img.width,
+			h = img.naturalHeight || img.height,
+			scale = 1/w,
+			m = new NTMatrix(),
+			data = {
+			shapeList	: [],
+			MimeType	: "application/vnd.nextthought.canvas",
+			Class		: 'Canvas',
+			viewportRatio : (4/3)
+		};
+
+
+		m.translate((scale*w)/2, (scale*h)/2);
+		m.scale(scale);
+
+		data.shapeList.push({
+			Class: 'CanvasUrlShape',
+			url: img.src,
+			transform: m.toTransform()
+		});
+
+		return data;
+
 	}
+
 
 },function(){
 	this.WBUtils = this;

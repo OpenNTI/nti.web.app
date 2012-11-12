@@ -4,7 +4,8 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		'NextThought.util.Line',
 		'NextThought.view.annotations.note.EditorActions',
 		'NextThought.view.annotations.note.Templates',
-		'NextThought.view.whiteboard.Window'
+		'NextThought.view.whiteboard.Window',
+		'NextThought.view.whiteboard.Utils'
 	],
 
 	openWhiteboards: {},
@@ -25,7 +26,9 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 				data.left = r.left;
 				data.width = r.width;
 			},
-			'afterRender': this.insertNoteOverlay
+			'afterRender': this.insertNoteOverlay,
+
+			'markupenabled-action': this.contentDefinedAnnotationAction
 		});
 
 		return this;
@@ -180,6 +183,31 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		o.restrictedRanges = o.restrictedRanges || [];
 		for(y; y>=l && y>=0; y--){
 			o.restrictedRanges[y] = true;
+		}
+	},
+
+
+	contentDefinedAnnotationAction: function(dom,action){
+		var o = this.noteOverlayData,
+			d = Ext.fly(dom).up('[itemprop~=nti-data-markupenabled]').down('[id]:not([id^=ext])'),
+			id = d? d.id : null,
+			img = d && d.is('img') ? d.dom : null,
+			doc = dom ? dom.ownerDocument : null,
+			range;
+
+		if(/mark/i.test(action)){
+			console.log(id, img);
+
+			range = doc.createRange();
+			range.selectNode(img);
+			o.lastLine = {
+				range: range,
+				rect: img.getBoundingClientRect()
+			};
+
+			this.noteOverlayPositionInputBox();
+			this.noteOverlayActivateRichEditor();
+			o.editorActions.addWhiteboard(WBUtils.createFromImage(img));
 		}
 	},
 
