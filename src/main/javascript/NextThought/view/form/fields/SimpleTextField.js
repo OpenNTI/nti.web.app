@@ -1,6 +1,9 @@
 Ext.define('NextThought.view.form.fields.SimpleTextField',{
 	extend: 'Ext.Component',
 	alias: 'widget.simpletext',
+	mixins: {
+		placeholderFix: 'NextThought.view.form.fields.PlaceholderPolyfill'
+	},
 
 	cls: 'textbox-base',
 
@@ -17,7 +20,9 @@ Ext.define('NextThought.view.form.fields.SimpleTextField',{
 		delete config.autoEl;
 		delete config.renderTpl;
 		delete config.renderSelectors;
-		return this.callParent(arguments);
+		this.callParent(arguments);
+		this.mixins.placeholderFix.constructor.call(this);
+		return this;
 	},
 
 
@@ -57,6 +62,7 @@ Ext.define('NextThought.view.form.fields.SimpleTextField',{
 
     update: function(v){
         this.inputEl.set({value:v});
+        this.handleBlur();
     },
 
 
@@ -71,6 +77,8 @@ Ext.define('NextThought.view.form.fields.SimpleTextField',{
 		});
 		this.mon(this.clearEl,'click',function(){this.clearValue();},this);
 		this.lastValue = this.getValue();
+
+		this.renderPlaceholder(e);
 	},
 
 

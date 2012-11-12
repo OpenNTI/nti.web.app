@@ -34,6 +34,15 @@
 			width: 225px;
 		}
 
+		.placeholder {
+			@include placeholder-style;
+			position: absolute;
+			top: 0; left: 0;
+			font: 11pt $font;
+			font-style: italic;
+			margin: 7px 0 0 7px;
+		}
+
 		a.trigger {
 			right:0; top:0;
 			position: absolute;

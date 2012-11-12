@@ -91,6 +91,15 @@
 		@include text-box-style();
 		padding-right: 20px;
 	}
+
+	.placeholder {
+		@include placeholder-style();
+		position: absolute;
+		top: 0;
+		left: 0;
+		padding: 7px 0 0 6px;
+	}
+
 	.clear {
 		cursor: pointer;
 		position: absolute;

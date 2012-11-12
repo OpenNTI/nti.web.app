@@ -151,6 +151,17 @@
 				height: 16px;
 				background: url(../images/tools/clear-line.png) 0 0 no-repeat;
 			}
+
+			.placeholder {
+				@include placeholder-style;
+				position: absolute;
+				top: 0;
+				left: 0;
+				font-weight: 500;
+				line-height: 25px;
+				padding: 7px 14px;
+
+			}
 		}
 
 		.combo-box {

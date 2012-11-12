@@ -4,6 +4,9 @@ Ext.define('NextThought.view.form.fields.SearchField', {
 	requires: [
 		'NextThought.view.form.fields.SearchAdvancedOptions'
 	],
+	mixins: {
+		placeholderFix: 'NextThought.view.form.fields.PlaceholderPolyfill'
+	},
 
 	renderTpl: Ext.DomHelper.markup({
 		cls:'search-field-wrap',
@@ -21,6 +24,14 @@ Ext.define('NextThought.view.form.fields.SearchField', {
 		inputEl: 'input',
 		triggerEl: 'a'
 	},
+
+	constructor: function(){
+		this.callParent(arguments);
+		this.placeholder = 'Search';
+		this.mixins.placeholderFix.constructor.call(this);
+		return this;
+	},
+
 
 	afterRender: function(){
 		this.callParent(arguments);
@@ -42,6 +53,8 @@ Ext.define('NextThought.view.form.fields.SearchField', {
 			keypress: this.keyPressed,
 			keydown: this.keyDown //keypress does not always fire for escape
 		});
+
+		this.renderPlaceholder(this.inputEl);
 	},
 
 
