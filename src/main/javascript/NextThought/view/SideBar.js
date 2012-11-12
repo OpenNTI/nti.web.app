@@ -65,6 +65,7 @@ Ext.define('NextThought.view.SideBar',{
 			this.host.hide();
 			this.gripper.show();
 			this.addCls(cls);
+			this.tool.removeCls('maximize');
 			NextThought.view.WindowManager.setNarrow(true);
 		}
 		else{
