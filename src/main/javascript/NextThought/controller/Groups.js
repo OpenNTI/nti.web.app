@@ -258,8 +258,13 @@ Ext.define('NextThought.controller.Groups', {
 
 
 	deleteGroup: function(record){
-		var store = this.getFriendsListStore();
-		if(record.get('Username') !== this.getMyContactsId()){
+		var store = this.getFriendsListStore(),
+            name = record.get('Username');
+
+        //pop up confirm box
+        alert({title:'Are you sure?', msg:'The group "'+name+'" will be permenantly deleted.'});
+
+		if(name !== this.getMyContactsId()){
 			record.destroy({callback: function(){
 				store.load();
 			}});

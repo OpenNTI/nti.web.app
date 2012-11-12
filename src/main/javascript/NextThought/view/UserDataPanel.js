@@ -72,10 +72,27 @@ Ext.define('NextThought.view.UserDataPanel',{
 
 
 
+    statics: {
+        storeIds: {
+            note: 'noteHighlightStore',
+            highlight: 'noteHighlightStore',
+            favorite: 'favoriteStore',
+            transcriptsummary: 'transcriptSummaryStore'
+        },
+
+        getHistoryStoreForMimeType: function(mt) {
+            var id = this.storeIds[mt.toLowerCase()];
+            return Ext.getStore(id);
+        }
+    },
+
 	initComponent: function(){
 		var data = NextThought.model,
 				m = this.dataMapper = {},
 				types = [];
+
+        //init a mimetypes holder
+        this.mimeTypes = [];
 
 		m[data.Note.prototype.mimeType] = this.getNoteItem;
         m[data.Bookmark.prototype.mimeType] = this.getBookmarkItem;
@@ -86,9 +103,14 @@ Ext.define('NextThought.view.UserDataPanel',{
 		this.callParent(arguments);
 
 		//create a regex for our filter
-		Ext.each(this.mimeType, function(t){ types.push(RegExp.escape(t)); });
+		Ext.each(this.mimeType, function(t){
+            types.push(RegExp.escape(t));
+            this.mimeTypes.push('application/vnd.nextthought.' + RegExp.escape(t));
+        }, this);
 		this.mimeTypeRe = new RegExp('^application\\/vnd\\.nextthought\\.('+types.join('|')+')$');
 
+        //create a mimetypes string we can use for accept headers:
+        this.mimeTypes = this.mimeTypes.join(',');
 
 		this.on('activate', this.onActivate, this);
 		this.initializeStore();
@@ -102,42 +124,53 @@ Ext.define('NextThought.view.UserDataPanel',{
 			return;
 		}
 
-		var s = this.self;
+        var storeId = this.self.storeIds[this.mimeType[0]];
 
-		if(!s.store){
-			s.store = this.buildStore('MeOnly','historyStore','GroupingField');
-			NextThought.model.events.Bus.on({
-				scope: this,
-				'item-destroyed': function(rec){
-					var store = s.store;
-					if (store.isLoading()){
-						return;
-					}
-					store.remove(store.findRecord('NTIID',rec.get('NTIID'),0,false,true,true));
-				}
-			});
-		}
-		if(!s.favStore){
-			s.favStore = this.buildStore('Bookmarks','favoriteStore','MimeType');
-			NextThought.model.events.Bus.on({
-				scope: this,
-				'favorate-changed': function(rec){
-					var store = s.favStore;
+        if (!this.store){
+            if(Ext.Array.contains(this.mimeTypes, 'note')){
+                this.store = this.buildStore('MeOnly',storeId,'GroupingField');
+                NextThought.model.events.Bus.on({
+                    scope: this,
+                    'item-destroyed': function(rec){
+                        var store = this.store;
+                        if (store.isLoading()){
+                            return;
+                        }
+                        store.remove(store.findRecord('NTIID',rec.get('NTIID'),0,false,true,true));
+                    }
+                });
+            }
+            else if (Ext.Array.contains(this.mimeTypes, 'favorite')){
+                this.mimeTypes = this.mimeTypes.replace('favorite', 'bookmark'); //trick because the mimetype is bookmark, not favorite
+                this.store = this.buildStore('Bookmarks',storeId,'MimeType');
+                NextThought.model.events.Bus.on({
+                    scope: this,
+                    'favorate-changed': function(rec){
+                        var store = this.getStore();
 
-					if (store.isLoading()){
-						return;
-					}
+                        if (store.isLoading()){
+                            return;
+                        }
 
-					if(rec.isFavorited()){
-						store.insert(0, rec);
-						store.sort();
-					}
-					else {
-						store.remove(store.findRecord('NTIID',rec.get('NTIID'),0,false,true,true));
-					}
-				}
-			});
-		}
+                        if(rec.isFavorited()){
+                            store.insert(0, rec);
+                            store.sort();
+                        }
+                        else {
+                            store.remove(store.findRecord('NTIID',rec.get('NTIID'),0,false,true,true));
+                        }
+                    }
+                });
+            }
+            else if (Ext.Array.contains(this.mimeTypes, 'transcriptsummary')){
+                this.store = this.buildStore(null,storeId,'MimeType');
+                //TODO - what about adding/deleting?
+                this.mon(this.store, 'datachanged', this.applyTranscriptSummaryMimetypeFilter, this);
+            }
+            else {
+                console.error('Cannot create a store with the following info', this, arguments);
+            }
+        }
 
 
 		//now that the stores are setup, use getStore to pick the one we care about and setup our event listers on just
@@ -156,7 +189,8 @@ Ext.define('NextThought.view.UserDataPanel',{
 		s.proxy.extraParams = Ext.apply(s.proxy.extraParams||{},{
 			sortOn: 'createdTime',
 			sortOrder: 'descending',
-			filter: filter
+			filter: filter,
+            accept: this.mimeTypes
 		});
 
 		return s;
@@ -164,8 +198,7 @@ Ext.define('NextThought.view.UserDataPanel',{
 
 
 	getStore: function(){
-		var favFakeMime = 'application/vnd.nextthought.favorite';
-		return this.mimeTypeRe.test(favFakeMime)? this.self.favStore : this.self.store;
+		return this.store;
 	},
 
 
@@ -203,33 +236,26 @@ Ext.define('NextThought.view.UserDataPanel',{
 	},
 
 
-	applyMimeTypeFilter: function(){
-		var filters = [{ property: 'MimeType', value: this.mimeTypeRe }],
-			s = this.self.store,//this store is the only store we need to filter. The favStore is seporate.
+	applyTranscriptSummaryMimetypeFilter: function(){
+		var s = this.getStore(),
 			seenOccupants = [];
-
-		s.suspendEvents();
-		s.clearFilter();
-
-		if(/transcript/i.test(this.mimeType.join('|'))){
-			filters.push({
-				//Assuming the store is sorted decending (newest to oldest), as we come accross repeated occupants lists,
-				// we can filter them out.
-				filterFn: function(item) {
-					var o = (item.get('Contributors')||[]).slice();
-					o.sort();
-					o = o.join('|');
-					if(Ext.Array.contains(seenOccupants,o)){
-						return false;
-					}
-					seenOccupants.push(o);
-					return true;
-				}
-			});
-		}
-
-		s.filter(filters);
-		s.resumeEvents();
+        s.suspendEvents();
+        s.clearFilter();
+		s.filter({
+            //Assuming the store is sorted decending (newest to oldest), as we come accross repeated occupants lists,
+            // we can filter them out.
+            filterFn: function(item) {
+                var o = (item.get('Contributors')||[]).slice();
+                o.sort();
+                o = o.join('|');
+                if(Ext.Array.contains(seenOccupants,o)){
+                    return false;
+                }
+                seenOccupants.push(o);
+                return true;
+            }
+        });
+        s.resumeEvents();
 	},
 
 
@@ -335,13 +361,11 @@ Ext.define('NextThought.view.UserDataPanel',{
 			return;
 		}
 
-		this.applyMimeTypeFilter();
-
 		var container = this,
-				items = [],
-				store = this.getStore(),
-				groups = store.getGroups(),
-				me = this;
+            items = [],
+            store = this.getStore(),
+            groups = store.getGroups(),
+            me = this;
 
 		me.dataGuidMap = {};
 

@@ -240,7 +240,7 @@ Ext.define('NextThought.util.Annotations',{
 
     addToHistory: function(rec){
         try{
-            var s = Ext.getStore('historyStore'),
+            var s = NextThought.view.UserDataPanel.getHistoryStoreForMimeType(rec.get('Class')),
             clone = ParseUtils.parseItems(rec.raw)[0];
 
             if (s){
@@ -255,7 +255,7 @@ Ext.define('NextThought.util.Annotations',{
 
 
     updateHistory: function(rec) {
-        var s = Ext.getStore('historyStore'),
+        var s = NextThought.view.UserDataPanel.getHistoryStoreForMimeType(rec.get('Class')),
             found = s.findRecord('NTIID', rec.get('NTIID'), 0, false, false, true),
             results;
 
