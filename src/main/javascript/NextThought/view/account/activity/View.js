@@ -120,7 +120,7 @@ Ext.define('NextThought.view.account.activity.View',{
             }
 
 			//We use a similar strategy to the one that Notifications uses
-			
+
 			function maybeFinish(){
 				totalExpected--;
 				if(totalExpected === 0){
@@ -278,7 +278,7 @@ Ext.define('NextThought.view.account.activity.View',{
 		me.cancelPopupTimeout();
 		me.hoverTimeout = Ext.defer(function(){
 			target.un('mouseout',me.cancelPopupTimeout,me,{single:true});
-			
+
 			if (rec.get('Class') === 'User'){
 				popout = NextThought.view.account.contacts.management.Popout;
 			}
@@ -289,23 +289,69 @@ Ext.define('NextThought.view.account.activity.View',{
 		target.on('mouseout',me.cancelPopupTimeout,me,{single:true});
 	},
 
+	//Right now things in the contacts are things shared
+	//directly to you, or creators in the mycontacts group.  Circled change
+	//also belong here
+	belongsInMyContacts: function(change, flStore, communities, noVerify){
+		var belongs = false,
+			username = $AppConfig.username,
+			item = change.get('Item'),
+            sharedWith = item.get('sharedWith') || [],
+			creator = item.get('Creator');
 
-    onActivate: function(){
-        var communities = $AppConfig.userObject.get('Communities'),
-            contains = (this.filter === 'inCommunity');
+		if(/circled/i.test(change.get('ChangeType'))){
+			belongs = true;
+		}
 
-           var filterFn = function(change){
-            var item = change.get('Item'),
-                sharedWith = item.get('sharedWith'),
-                foundInCommunities = false;
+		belongs = belongs || Ext.Array.contains(sharedWith, username);
+		if(!belongs && flStore && flStore.isContact){
+			belongs = flStore.isContact(creator);
+		}
+
+		//Just log an error for now so we know there isn't
+		//a missing condition we didn't consider
+		if(!noVerify && !belongs && !this.belongsInCommunity(change, flStore, communities, true)){
+			console.error('Danger, dropping change that does not pass either filter', change);
+		}
+		return belongs;
+	},
+
+	//If there is a community in the shared with list
+	//it goes in the community tag
+	belongsInCommunity: function(change, flStore, communities, noVerify){
+		var item = change.get('Item'),
+            sharedWith = item.get('sharedWith') || [],
+            foundInCommunities = false;
 
             Ext.Array.each(sharedWith, function(u){
-                if (Ext.Array.contains(communities, u)){
+				if (Ext.Array.contains(communities, u)){
                     foundInCommunities = true;
+					return false;
                 }
-            });
+				return true;
+			});
 
-            return (contains === foundInCommunities);
+		//Just log an error for now so we know there isn't
+		//a missing condition we didn't consider
+		if(!noVerify && !foundInCommunities && !this.belongsInMyContacts(change, flStore, communities, true)){
+			console.error('Danger, dropping change that does not pass either filter', change);
+		}
+		return foundInCommunities;
+	},
+
+    onActivate: function(){
+        var communities = $AppConfig.userObject.get('Communities') || [],
+        	community = (this.filter === 'inCommunity'),
+			flStore = Ext.getStore('FriendsList'),
+			me = this;
+
+        var filterFn = function(change){
+			if(community){
+				return me.belongsInCommunity(change, flStore, communities);
+			}
+			else{
+				return me.belongsInMyContacts(change, flStore, communities);
+			}
         }
 
         this.dontReload = true;
