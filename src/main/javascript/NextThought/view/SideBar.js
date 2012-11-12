@@ -65,6 +65,7 @@ Ext.define('NextThought.view.SideBar',{
 			this.host.hide();
 			this.gripper.show();
 			this.addCls(cls);
+			NextThought.view.WindowManager.setNarrow(true);
 		}
 		else{
             this.stopAnimation();
@@ -73,6 +74,7 @@ Ext.define('NextThought.view.SideBar',{
 			this.tool.addCls('maximize');
 			this.host.show();
 			this.removeCls(cls);
+			NextThought.view.WindowManager.setNarrow(false);
 		}
         Ext.defer(this.syncUp, 1, this);
 	},

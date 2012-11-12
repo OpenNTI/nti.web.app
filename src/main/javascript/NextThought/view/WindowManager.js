@@ -81,6 +81,9 @@ Ext.define('NextThought.view.WindowManager',{
 		btn.on('click',this.handleButtonClicked, this);
 	},
 
+	setNarrow: function(flag){
+		flag ? this.tracker.setStyle({ 'right': '275px'}) : this.tracker.setStyle({	'right': '0' });
+	},
 
 	register: function(win){
 		if(Ext.Array.contains(this.registry,win)){
