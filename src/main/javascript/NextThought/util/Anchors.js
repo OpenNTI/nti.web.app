@@ -894,7 +894,7 @@ Ext.define('NextThought.util.Anchors', {
 
 		//case 1: a single node
 		if (startEdgeNode === endEdgeNode) {
-			newRange.selectNodeContents(startEdgeNode);
+			newRange.selectNode(startEdgeNode);
 		}
 		//case2: nodes are different, handle each:
 		else {
@@ -1110,6 +1110,8 @@ Ext.define('NextThought.util.Anchors', {
 			origEndNode = range.endContainer,
 			origStartOff = range.startOffset,
 			origEndOff = range.endOffset,
+            origStartModifiedOff = range.startOffset,
+            origEndModifiedOff = range.endOffset,
 			origStartEdgeNode = Anchors.nodeThatIsEdgeOfRange(range, true),
 			origEndEdgeNode = Anchors.nodeThatIsEdgeOfRange(range,false),
 			resultRange,
@@ -1130,8 +1132,16 @@ Ext.define('NextThought.util.Anchors', {
 		//apply tags to start and end, note we use the edge nodes so
 		//that we can recreate all the range info including the offset, not just the containers
 
-		Anchors.tagNode(origStartEdgeNode, 'start');
-		Anchors.tagNode(origEndEdgeNode, 'end');
+        if(origStartEdgeNode !== origStartNode){
+            origStartModifiedOff = 0;
+        }
+        if (origEndEdgeNode !== origEndNode){
+            origEndModifiedOff = origEndEdgeNode.textContent.length;
+        }
+
+
+		Anchors.tagNode(origStartEdgeNode, 'start', origStartModifiedOff);
+		Anchors.tagNode(origEndEdgeNode, 'end', (origStartEdgeNode === origEndEdgeNode) ? origEndModifiedOff + 33 : origEndModifiedOff);
 
 		//setup our copy range
 		tempRange.selectNode(ancestor);
@@ -1154,11 +1164,6 @@ Ext.define('NextThought.util.Anchors', {
 		var newStartOffset = Anchors.cleanNode(startEdge, 'start');
 		var newEndOffset = Anchors.cleanNode(endEdge, 'end');
 
-		//some adjustment if the text nodes are the same then the start offset will be wrong
-		if (newStartOffset !== undefined && origStartNode === origEndNode) {
-			newStartOffset -= ('['+Anchors.PURIFICATION_TAG+':end]').length;
-		}
-
 		//build the new range divorced from the dom and return:
 		resultRange = doc.createRange();
 		if (!startEdge && !Ext.isTextNode(endEdge)){
@@ -1167,14 +1172,14 @@ Ext.define('NextThought.util.Anchors', {
 		else {
 			resultRange.selectNodeContents(docFrag);
 			if(Ext.isTextNode(startEdge)){
-				resultRange.setStart(startEdge, newStartOffset + origStartOff);
+				resultRange.setStart(startEdge, newStartOffset);
 			}
 			else{
 				resultRange.setStartBefore(startEdge);
 			}
 
 			if(Ext.isTextNode(endEdge)){
-				resultRange.setEnd(endEdge, newEndOffset + origEndOff);
+				resultRange.setEnd(endEdge, newEndOffset);
 			}
 			else{
 				resultRange.setEndAfter(endEdge);
@@ -1231,14 +1236,17 @@ Ext.define('NextThought.util.Anchors', {
 
 
 	/* tested */
-	tagNode: function(node, tag){
-		var attr = Anchors.PURIFICATION_TAG;
+	tagNode: function(node, tag, textOffset){
+		var attr = Anchors.PURIFICATION_TAG,
+            start, end;
 
 		if (Ext.isTextNode(node)){
-			node.textContent = '['+attr+':'+tag+']' + node.textContent;
+            start = node.textContent.substring(0, textOffset);
+            end = node.textContent.substring(textOffset);
+			node.textContent = start + '['+attr+':'+tag+']' + end;
 		}
 		else {
-			node.setAttribute(attr, tag);
+			node.setAttribute(attr+'-'+tag, 'true');
 		}
 	},
 
@@ -1280,8 +1288,8 @@ Ext.define('NextThought.util.Anchors', {
 				}
 			}
 			else if (temp.getAttribute) {
-				a = temp.getAttribute(attr);
-				if (a && a === tag) {
+				a = temp.getAttribute(attr+'-'+tag);
+				if (a) {
 					return temp;
 				}
 

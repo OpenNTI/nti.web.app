@@ -58,6 +58,29 @@ describe("Anchor Utils", function() {
 			result = Anchors.createRangeDescriptionFromRange(range, document).description;
 			expect(result.getAncestor().getElementId()).toEqual(div.getAttribute('Id'));
 		});
+
+        it('Create Desciption from range of image with id', function(){
+            var img = document.createElement('img'),
+                span = document.createElement('span'),
+               range, result;
+
+            //set up img with data:
+            span.setAttribute('Id', 'sdfasdfsdfasd');
+            img.setAttribute('Id', '234234efjsdlkfjal2j4lkj');
+            img.setAttribute('src', '#');
+
+            span.appendChild(img);
+            testBody.appendChild(span);
+
+            range = document.createRange();
+            range.selectNode(img);
+
+            result =  Anchors.createRangeDescriptionFromRange(range, document);
+            expect(result).toBeTruthy();
+            expect(result.description).toBeTruthy();
+            expect(result.description.getStart()).toBeTruthy();
+            expect(result.description.getEnd()).toBeTruthy();
+        });
 	});
 
 	describe("isNodeAnchorable Tests", function(){
@@ -619,6 +642,8 @@ describe("Anchor Utils", function() {
 				t2 = document.createTextNode('See spot run'),
 				range, anchorableRange;
 
+            div.setAttribute('Id', 'sdfgkljsdflkjslkcms');
+
 			big.appendChild(replacementText);
 			innerRedactionSpan.appendChild(big);
 			redactionSpan.setAttribute('data-no-anchors-within', true);
@@ -636,11 +661,9 @@ describe("Anchor Utils", function() {
 			range.setEnd(t2, t2.textContent.length);
 
 			anchorableRange = Anchors.makeRangeAnchorable(range, document);
+            Anchors.createRangeDescriptionFromRange(range, document);
 			expect(anchorableRange).toBeTruthy();
-			expect(anchorableRange.startContainer).toBe(t2);
-			expect(anchorableRange.startOffset).toBe(0);
-			expect(anchorableRange.endContainer).toBe(range.endContainer);
-			expect(anchorableRange.endOffset).toBe(range.endOffset);
+            expect(anchorableRange.toString()).toEqual(t2.textContent);
 		});
 
 		it ('Null Range', function(){
@@ -1382,7 +1405,7 @@ describe("Anchor Utils", function() {
 			Anchors.tagNode(textNodeWithTag, 'tagged-baby!');
 
 			//check that things were tagged well:
-			expect(nodeWithAttr.getAttribute(Anchors.PURIFICATION_TAG)).toBeTruthy();
+			expect(nodeWithAttr.getAttribute(Anchors.PURIFICATION_TAG+'-tagged')).toBeTruthy();
 			expect(textNodeWithTag.textContent.indexOf(Anchors.PURIFICATION_TAG)).toBeGreaterThan(-1);
 
 			//cleanup and check results
