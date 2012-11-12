@@ -151,6 +151,7 @@ Ext.define('NextThought.view.whiteboard.Window',{
 				msg: 'All your current progress\nwill be lost',
 				buttons: 9, // bitwise result of: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
 				scope: me,
+				icon: Ext.Msg.WARNING,
 				fn: function(str){
 					if(str === 'ok'){
 						me.down('whiteboard-editor').clear();

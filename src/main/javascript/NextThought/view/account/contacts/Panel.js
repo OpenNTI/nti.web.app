@@ -167,7 +167,20 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 
 
 	deleteGroup: function(){
-		this.fireEvent('delete-group',this.associatedGroup);
+		var me = this,
+			msg = 'The group '+ this.associatedGroup.get('displayName') + ' will be permanently deleted...';
+
+		Ext.Msg.show({
+			msg: msg,
+			buttons: 9, // bitwise result of: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
+			scope: me,
+			icon: Ext.Msg.WARNING,
+			fn: function(str){
+				if(str === 'ok'){
+					me.fireEvent('delete-group',me.associatedGroup);
+				}
+			}
+		});
 	},
 
 
