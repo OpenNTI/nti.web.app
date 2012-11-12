@@ -150,7 +150,13 @@
 		background: white;
 	}
 
-	canvas { cursor: crosshair; }
+	canvas { 
+		cursor: crosshair;
+		
+		&.moveSelected{
+			cursor: pointer !important;
+		}
+	}
 
 	.x-toolbar-options {
 		@include whiteboard-toolbar-common;

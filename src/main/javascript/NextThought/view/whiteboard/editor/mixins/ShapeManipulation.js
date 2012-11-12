@@ -118,6 +118,10 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 					togglePressed();
 				}, 100);
 			}
+			if(!this.canvas.hasCls('moveSelected')) { this.canvas.addCls('moveSelected'); }
+		}
+		else {
+			if(this.canvas.hasCls('moveSelected')){ this.canvas.removeCls('moveSelected'); }
 		}
 	},
 
@@ -263,7 +267,7 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 			p = this.getRelativeXY(e),
 			sp = this.scalePoint(p), l,sw;
 
-		if(cs && cs.isPointInNib.apply(s,p)){
+		if(cs && cs.isPointInNib.apply(cs,p)){
 			return;
 		}
 
