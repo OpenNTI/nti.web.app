@@ -42,6 +42,7 @@ Ext.define('NextThought.view.chat.transcript.Main',{
 
 	afterRender: function(){
 		this.callParent(arguments);
+		this.el.down('.reply').remove();
 		this.el.on('click', this.click, this);
 		/*Ext.each(this.el.query('.whiteboard-thumbnail'),
 				function(wb){
@@ -98,6 +99,7 @@ Ext.define('NextThought.view.chat.transcript.Main',{
 				//if this throws an error, o = null, and we've already rendered.
 				catch(er){
 					getEl(guid).down('.body').update(text);
+					getEl(guid).down('.body .reply').remove();
 				}
 
 

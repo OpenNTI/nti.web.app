@@ -106,9 +106,15 @@ Ext.define('NextThought.view.chat.log.Entry', {
 		var t = event.getTarget('.whiteboard-wrapper', null, true);
 
 		if(!t){ return; }
-		else{
-			Ext.widget({ xtype: 'wb-window', width: 802, value:this.message.get('body')[0], readonly: true}).show();
+
+		if(event.getTarget('.reply')){
+			//TODO: make the chat window/entry listen for this:
+			this.fireEvent('reply-to-whiteboard',Ext.clone(this.message.get('body')[0]));
+			return;
 		}
+
+		Ext.widget('wb-window', { width: 802, value:this.message.get('body')[0], readonly: true}).show();
+
 	},
 
 	fillInUser: function(u) {
