@@ -19,7 +19,7 @@ Ext.define('NextThought.util.Anchors', {
 	NON_ANCHORABLE_ATTRIBUTE: 'data-non-anchorable',
 	NO_ANCHORABLE_CHILDREN_ATTRIBUTE: 'data-no-anchors-within',
 
-	IGNORE_WHITESPACE_TEXTNODES : false,
+	IGNORE_WHITESPACE_TEXTNODES : true,
 	IGNORE_WHITESPACE_TEXTNODE_FILTER: {
 		acceptNode: function(node){
 			if(node.nodeType === 3){
