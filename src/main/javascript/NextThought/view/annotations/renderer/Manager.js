@@ -282,7 +282,7 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 
 
 	render: function(prefix){
-		var me = this, containers = {};
+		var me = this, containers = {}, renderedCount = 0;
 
 		if(me.rendering){
 			console.warn('Render called while rendering...');
@@ -303,9 +303,9 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 
 		me.rendering = true;
 		me.events.fireEvent('rendering');
-		console.log('Rendering annotations');
+		console.log('Rendering annotations '+ prefix);
 		if(console.time){
-			console.time('Annotation render loop');
+			console.time('Annotation render loop '+prefix);
 		}
 		Ext.suspendLayouts();
 
@@ -355,6 +355,7 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 						b = me.getBucket(prefix,Math.ceil(y));
 					}
 					if(b){
+						renderedCount++;
 						b.put(o);
 					}
 				}
@@ -362,7 +363,7 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 					console.error(o.$className,Globals.getError(e));
 				}
 			});
-
+			console.log('Rendered '+renderedCount+'/'+cloned.length+' annotations');
 			me.layoutBuckets(prefix);
 		}
 
@@ -370,7 +371,7 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 		Ext.resumeLayouts(true);
 		me.events.fireEvent('finish');
 		if(console.timeEnd){
-			console.timeEnd('Annotation render loop');
+			console.timeEnd('Annotation render loop '+prefix);
 		}
 	}
 

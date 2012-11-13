@@ -1273,6 +1273,53 @@ describe("Anchor Utils", function() {
 			expect(result.getAncestor().getElementId()).toEqual(p2.getAttribute('Id'));
 			expect(result.getContexts().length).toBeGreaterThan(0);
 		});
+
+		it('Skips empty text nodes when generating secondary contexts', function(){
+			var div = document.createElement('div'),
+				span = document.createElement('span'),
+				p = document.createElement('p'),
+				t1 = document.createTextNode('Once upon a time, there lived a BEAST!'),
+				span2 = document.createElement('span'),
+				p2 = document.createElement('p'),
+				t2 = document.createTextNode('The beasts name was, NextThoughtASaurus!'),
+				t3 = document.createTextNode(' '),
+				em = document.createElement('em'),
+
+				a = document.createElement('a'),
+				range, result, ctxs;
+
+			p.setAttribute('Id', 'xzy1232314');
+			p.appendChild(t1);
+			p2.setAttribute('Id', 'xzydasdasae2342');
+			p2.appendChild(t2);
+			span2.appendChild(p2);
+			span.appendChild(p);
+			span.appendChild(span2);
+			em.appendChild(t3);
+			p2.appendChild(em);
+			span.appendChild(a);
+			div.appendChild(span);
+			testBody.appendChild(div);
+			range = document.createRange();
+			range.setStart(t1, 3);
+			range.setEnd(t2, 5);
+
+
+			result = Anchors.createTextPointerFromRange(range, 'end');
+			expect(result).toBeTruthy();
+			expect(result.getRole()).toEqual('end');
+			expect(result.getAncestor().getElementId()).toEqual(p2.getAttribute('Id'));
+			expect(result.getContexts().length).toBeGreaterThan(0);
+
+			var anyEmpty = false;
+			Ext.each(result.getContexts(), function(c){
+				if(Ext.isEmpty(c.contextText.trim())){
+					anyEmpty = true;
+					return false;
+				}
+			});
+			expect(anyEmpty).toEqual(false);
+		})
 	});
 
 	describe('Range Putrification Tests', function(){

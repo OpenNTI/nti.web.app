@@ -19,6 +19,18 @@ Ext.define('NextThought.util.Anchors', {
 	NON_ANCHORABLE_ATTRIBUTE: 'data-non-anchorable',
 	NO_ANCHORABLE_CHILDREN_ATTRIBUTE: 'data-no-anchors-within',
 
+	IGNORE_WHITESPACE_TEXTNODES : false,
+	IGNORE_WHITESPACE_TEXTNODE_FILTER: {
+		acceptNode: function(node){
+			if(node.nodeType === 3){
+				if(Ext.isEmpty(node.textContent.trim())){
+					return NodeFilter.FILTER_REJECT;
+				}
+			}
+			return NodeFilter.FILTER_ACCEPT;
+		}
+	},
+
 	//FIXME we run into potential problems with this is ContentRangeDescriptions ever occur in different documents
 	//or locations but have the same container id.  That seem unlikely but may Need to figure that out eventually
 	preresolveLocatorInfo: function(contentRangeDescriptions, docElement, cleanRoot, containers, docElementContainerId){
@@ -315,7 +327,6 @@ Ext.define('NextThought.util.Anchors', {
 		}
 	},
 
-
 	/* tested */
 	createTextPointerFromRange: function(range, role){
 		if (!range) {
@@ -362,8 +373,8 @@ Ext.define('NextThought.util.Anchors', {
 		var collectedCharacters = 0;
 		var maxSubsequentContextObjects = 5;
 		var maxCollectedChars = 15;
-
-		var walker = document.createTreeWalker( referenceNode, NodeFilter.SHOW_TEXT, null, false );
+		var filter = this.IGNORE_WHITESPACE_TEXTNODE ? this.IGNORE_WHITESPACE_TEXTNODE_FILTER : null;
+		var walker = document.createTreeWalker( referenceNode, NodeFilter.SHOW_TEXT, filter, false );
 		walker.currentNode = container;
 
 		var nextSiblingFunction = start ? walker.previousNode : walker.nextNode;
@@ -653,8 +664,8 @@ Ext.define('NextThought.util.Anchors', {
 
 		//We use a tree walker to search beneath the reference node
 		//for textContent matching our contexts
-
-		treeWalker = document.createTreeWalker( referenceNode, NodeFilter.SHOW_TEXT, null, false );
+		var filter = this.IGNORE_WHITESPACE_TEXTNODE ? this.IGNORE_WHITESPACE_TEXTNODE_FILTER : null;
+		treeWalker = document.createTreeWalker( referenceNode, NodeFilter.SHOW_TEXT, filter, false );
 
 		//If we are looking for the end node.  we want to start
 		//looking where the start node ended.  This is a shortcut
@@ -671,6 +682,29 @@ Ext.define('NextThought.util.Anchors', {
 		}
 		else{
 			textNode = treeWalker.nextNode();
+		}
+
+		//In the past we had contexts with empty contextText
+		//that added no value but made things more fragile.
+		//We don't create those anymore but for old data we filter them out.
+		//Note we do this here for performance reasons.  It is a more localized change
+		//to do this in getCurrentNodeMatches but that gets called for every node we
+		//are iterating over.  Maybe there is a better way to architect this since its probably
+		//a change that stays in place for ever...
+		if(this.IGNORE_WHITESPACE_TEXTNODE){
+			pointer.nonEmptyContexts = Ext.Array.filter(pointer.getContexts(), function(c, i){
+				//Always keep the primary.  It should never be empty, but just in case
+				if(i===0){
+					if(Ext.isEmpty(c.contextText.trim())){
+						console.error('Found a primary context with empty contextText.  Where did that come from?', pointer);
+					}
+					return true;
+				}
+				return !Ext.isEmpty(c.contextText.trim());
+			});
+		}
+		else{
+			pointer.nonEmptyContexts = pointer.getContexts();
 		}
 
 		while( textNode && !done) {
@@ -781,21 +815,26 @@ Ext.define('NextThought.util.Anchors', {
 			return node.textContent.substr(adjustedOffset).indexOf(context.contextText) === 0;
 		}
 
+		if(pointer.nonEmptyContexts === undefined){
+			Ext.Error.raise('nonEmptyContexts not set');
+		}
+
 		var currentNode = treeWalker.currentNode,
 			lookingAtNode = currentNode,
 			isStart = pointer.getRole() === 'start',
 			siblingFunction = isStart ? treeWalker.previousNode : treeWalker.nextNode,
-			numContexts = pointer.getContexts().length,
-			contextObj = pointer.getContexts()[0],
+			contexts = pointer.nonEmptyContexts, //Caller sets this up
+			contextObj = contexts[0],
+			numContexts = contexts.length,
 			matches = getPrimaryContextMatches(contextObj, lookingAtNode, isStart),
-			i, c;
+			i, c, numContexts;
 
 		var confidenceMultiplier = 1;
 		lookingAtNode = siblingFunction.call(treeWalker);
 
 		if (matches.length > 0) {
 			for (i = 1; i < numContexts; i++ ){
-				contextObj = pointer.getContexts()[i];
+				contextObj = contexts[i];
 
 				c = secondaryContextMatch(contextObj, lookingAtNode, isStart);
 				if( !c ){
@@ -810,6 +849,9 @@ Ext.define('NextThought.util.Anchors', {
 		//If we don't have a full set of contexts.  lookingAtNode
 		//should be null here.  If it isn't, then we might have a problem
 		if(confidenceMultiplier === 1){
+			//TODO in our handling of past data we assume that if it had a full context
+			//before we stripped out the empty Context objects it has full context after that.
+			//I think that is the right behaviour for what is intended here.
 			if(!Anchors.containsFullContext(pointer) && lookingAtNode){
 				if (lookingAtNode) {
 					confidenceMultiplier *= numContexts / (numContexts + 0.5);
