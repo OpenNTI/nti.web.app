@@ -333,8 +333,20 @@
 				content: " ";
 				width: 52px;
 				height: 44px;
-				position: absolute; top: 0; left: 14px;
-				background: url(../images/spr_modal_dialogue.png) -67px 0 no-repeat;
+				position: absolute;
+				top: 9px;
+				left: 14px;
+				background: url(../images/spr_modal_dialogue.png) -67px -1px no-repeat;
+			}
+
+			&.warning-red::after{
+				content: " ";
+				width: 52px;
+				height: 44px;
+				position: absolute;
+				top: 9px;
+				left: 14px;
+				background: url(../images/spr_modal_dialogue.png) -67px -50px no-repeat;
 			}
 		}
 	}

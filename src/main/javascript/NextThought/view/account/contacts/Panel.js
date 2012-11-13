@@ -174,7 +174,7 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 			msg: msg,
 			buttons: 9, // bitwise result of: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
 			scope: me,
-			icon: Ext.Msg.WARNING,
+			icon: 'warning-red',
 			buttonText: {'ok': 'Delete'},
 			title: 'Are you sure?',
 			fn: function(str){
