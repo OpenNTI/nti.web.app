@@ -1,0 +1,7 @@
+Spr_modal_dialogue
+
+Green circle check: 31x31 (0, 0)
+Small red warning: 34x30 (33, 1)
+Large Yellow warning: 53x47 (67, 0)
+Large contacts: 60x41 (0, 35)
+Large Red warning: 53x47 (67, 49)
