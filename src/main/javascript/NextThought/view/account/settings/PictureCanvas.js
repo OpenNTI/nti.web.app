@@ -252,6 +252,7 @@ Ext.define('NextThought.view.account.settings.PictureCanvas',{
 		delete this.imageInfo;
 
 		this.createFileInput();
+		this.removeCls('withImage');
 		this.fireEvent('image-cleared');
 	},
 
@@ -287,6 +288,7 @@ Ext.define('NextThought.view.account.settings.PictureCanvas',{
 			if(me.fileInputEl){
 				me.fileInputEl.remove();
 			}
+			me.addCls('withImage');
 			var size = me.mySize,
 				h = img.height,
 				w = img.width,

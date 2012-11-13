@@ -2,9 +2,12 @@
 
 .account-window {
 	@extend .nti-window;
-	overflow: hidden;
-	@include reset-window-border-radius(3px);
-	border: 1px solid #bcbcbc;
+	border: 1px solid #c2c2c2;
+
+	.x-window-body {
+		overflow: hidden;
+		border-radius: 5px;
+	}
 
 	.close {
 		opacity: 0.5;
@@ -48,9 +51,18 @@
 	}
 
 	.picture-editor {
+		border-radius: 0 0 5px 5px;
+		background: #ffffff;
+		.footer {
+			border-top: 1px solid #e7e7e7;
+		}
+
 		canvas {
-			border: 1px solid #ababab !important;
-			background: #d5d5d5 url(../images/whiteboard/icon.png) center center no-repeat;
+			background: #ffffff url(../images/ico_choose_file.png) center center no-repeat;
+			&.withImage {
+				background-color: #d5d5d5;
+			}
+
 		}
 
 		.file-input {
@@ -68,7 +80,7 @@
 	}
 
 	.identity {
-		border-radius: 3px 3px 0 0;
+		border-radius: 5px 5px 0 0;
 		background: #ffffff;
 		border-bottom: 1px solid #ebebeb !important;
 		position: relative;
@@ -165,6 +177,9 @@
 		}
 
 		.x-btn-flat-blue-medium {
+			&, button{
+				border-radius: 0 0 3px 0;
+			}
 			cursor: pointer;
 			button {
 				background: $primary-blue;
