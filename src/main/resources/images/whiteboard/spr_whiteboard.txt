@@ -1,0 +1,16 @@
+spr_whiteboard
+
+move back active - 19x19 (41, 1540)
+move forward active - 19x19 (141, 1540)
+duplicate active - 27x16 (237, 1542)
+trash can active - 13x19 (344, 1540)
+---------------------------------
+move back inactive - 19x19 (41, 1640)
+move forward inactive - 19x19 (141, 1640)
+duplicate inactive - 27x16 (237, 1642)
+Trash can inactive - 13x19 (344, 1640)
+----------------------------------
+move back hover - 19x19 (41, 1740)
+move forward hover - 19x19 (141, 1740)
+duplicate hover - 27x16 (237, 1742)
+trashcan hover - 13x19 (344, 1740)
