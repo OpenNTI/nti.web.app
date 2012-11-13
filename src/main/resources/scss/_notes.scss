@@ -212,14 +212,22 @@
 						border: 3px solid $primary-blue;
 						margin: 3px 0;
 
+						.fill,
 						.centerer {display: block;}
 					}
 
+					.fill {
+						display: none;
+						position:absolute;
+						top: 0; left: 0; right: 0; bottom: 0;
+						background: rgba(0,0,0,0.05);
+					}
 					.centerer{
 						display: none;
 						position:absolute;
 						top: 50%;
 						left: 50%;
+
 
 						.edit{
 							font-family: $font !important;

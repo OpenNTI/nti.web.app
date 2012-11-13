@@ -23,7 +23,7 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 				cls   : 'wb-thumbnail',
 				alt   : 'Whiteboard Thumbnail',
 				border: 0
-			},{
+			},{cls: 'fill'},{
 				cls:'centerer',
 				unselectable: 'on',
 				cn: [{
