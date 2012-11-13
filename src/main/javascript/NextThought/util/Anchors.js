@@ -31,6 +31,10 @@ Ext.define('NextThought.util.Anchors', {
 		}
 	},
 
+	SHOULD_IGNORE_WHITESPACE_TEXTNODES : function(){
+		return this.IGNORE_WHITESPACE_TEXTNODES;
+	},
+
 	//FIXME we run into potential problems with this is ContentRangeDescriptions ever occur in different documents
 	//or locations but have the same container id.  That seem unlikely but may Need to figure that out eventually
 	preresolveLocatorInfo: function(contentRangeDescriptions, docElement, cleanRoot, containers, docElementContainerId){
@@ -373,7 +377,7 @@ Ext.define('NextThought.util.Anchors', {
 		var collectedCharacters = 0;
 		var maxSubsequentContextObjects = 5;
 		var maxCollectedChars = 15;
-		var filter = this.IGNORE_WHITESPACE_TEXTNODE ? this.IGNORE_WHITESPACE_TEXTNODE_FILTER : null;
+		var filter = this.SHOULD_IGNORE_WHITESPACE_TEXTNODES() ? this.IGNORE_WHITESPACE_TEXTNODE_FILTER : null;
 		var walker = document.createTreeWalker( referenceNode, NodeFilter.SHOW_TEXT, filter, false );
 		walker.currentNode = container;
 
@@ -664,7 +668,7 @@ Ext.define('NextThought.util.Anchors', {
 
 		//We use a tree walker to search beneath the reference node
 		//for textContent matching our contexts
-		var filter = this.IGNORE_WHITESPACE_TEXTNODE ? this.IGNORE_WHITESPACE_TEXTNODE_FILTER : null;
+		var filter = this.SHOULD_IGNORE_WHITESPACE_TEXTNODES() ? this.IGNORE_WHITESPACE_TEXTNODE_FILTER : null;
 		treeWalker = document.createTreeWalker( referenceNode, NodeFilter.SHOW_TEXT, filter, false );
 
 		//If we are looking for the end node.  we want to start
@@ -691,7 +695,7 @@ Ext.define('NextThought.util.Anchors', {
 		//to do this in getCurrentNodeMatches but that gets called for every node we
 		//are iterating over.  Maybe there is a better way to architect this since its probably
 		//a change that stays in place for ever...
-		if(this.IGNORE_WHITESPACE_TEXTNODE){
+		if(this.SHOULD_IGNORE_WHITESPACE_TEXTNODES()){
 			pointer.nonEmptyContexts = Ext.Array.filter(pointer.getContexts(), function(c, i){
 				//Always keep the primary.  It should never be empty, but just in case
 				if(i===0){
