@@ -551,6 +551,7 @@
 		}
 
 		.toolbar{
+			@include animate(fadeInDown,0.3s,0s);
 			display: none;
 			position: absolute;
 			top: 0;
@@ -560,11 +561,27 @@
 			background: rgba(0,0,0,0.6);
 			padding: 3px;
 
+			div {
+				display: block;
+				background: url(../images/spr_image_options.png) 100px 100px no-repeat;
+				margin: 3px 8px 0 0;
+				float: right;
+				opacity: 0.8;
+				pointer-events: all;
+				&:hover { opacity: 1; }
+				&.disabled { &, &:hover { opacity: 0.5; cursor: default; pointer-events: none; } }
+			}
+
 			.magnifier{
-				background: url(../images/spr_image_options.png) 0 0 no-repeat;
+				background-position: 0 0;
 				width: 18px;
 				height: 18px;
-				float: right;
+			}
+
+			.reply {
+				background-position: 0 -19px;
+				width: 25px;
+				height: 22px;
 			}
 		}
 	}

@@ -19,6 +19,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		}
 	).compile(),
 
+
 	renderSelectors: {
 		avatar: 'img.avatar',
         canvas: 'canvas',
@@ -107,6 +108,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		}
 	},
 
+
 	contactsMaybeChanged: function(){
 		var me = this;
 		if(me.addToContacts){
@@ -121,12 +123,14 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		}
 	},
 
+
 	shouldShowAddContact: function(username){
 		if(!$AppConfig.service.canFriend()){
 			return false;
 		}
 		return username && username !== $AppConfig.username && !Ext.getStore('FriendsList').isContact(username);
 	},
+
 
 	addToContactsClicked: function(e){
 		var me = this;
@@ -159,6 +163,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		}, this);
 	},
 
+
 	showOrHideArrows: function(show){
 		var car = this.up('window').down('note-carousel'),
 			f = show ? 'show' : 'hide';
@@ -172,13 +177,16 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		}
 	},
 
+
 	hideCarouselArrows: function(){
 		this.showOrHideArrows(false);
 	},
 
+
 	showCarouselArrows: function(){
 		this.showOrHideArrows(true);
 	},
+
 
 	click: function(e){
 		var t = e.getTarget('.whiteboard-wrapper', null, true), guid;
@@ -186,7 +194,13 @@ Ext.define('NextThought.view.annotations.note.Main',{
 
 		guid = t.up('.body-divider').getAttribute('id');
 		if(t && this.readOnlyWBsData[guid]){
-			Ext.widget('wb-window',{ width: 802, value: this.readOnlyWBsData[guid], readonly: true}).show();
+			if(e.getTarget('.reply')){
+				this.activateReplyEditor();
+				this.editorActions.addWhiteboard(Ext.clone(this.readOnlyWBsData[guid]));
+			}
+			else {
+				Ext.widget('wb-window',{ width: 802, value: this.readOnlyWBsData[guid], readonly: true}).show();
+			}
 		}
 	},
 
@@ -262,6 +276,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		this.setContent('');
 		r.compileBodyContent(this.setContent, this, this.generateClickHandler, 226 );
 	},
+
 
 	setRecord: function(r){
 		var suppressed, context, doc, range;
@@ -406,7 +421,9 @@ Ext.define('NextThought.view.annotations.note.Main',{
 
 	},
 
+
 	generateClickHandler: function(id,data){ this.readOnlyWBsData[id] = data; },
+
 
 	loadReplies: function(record){
 		var me = this,
@@ -676,6 +693,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		}
 		this.up('window').close();
 	},
+
 
 	canDelete: function(){
 		return !this.record || this.record.get('ReferencedByCount') === undefined || this.record.get('ReferencedByCount') === 0;

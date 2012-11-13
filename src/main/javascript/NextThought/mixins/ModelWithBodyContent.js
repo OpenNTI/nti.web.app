@@ -27,7 +27,8 @@ Ext.define('NextThought.mixins.ModelWithBodyContent',{
 			cn: [{
 				cls: 'toolbar',
 				cn: [
-					{ cls: 'magnifier' }
+					{ cls: 'magnifier' },
+					{ cls: 'reply' }
 				]
 			},
 				{
