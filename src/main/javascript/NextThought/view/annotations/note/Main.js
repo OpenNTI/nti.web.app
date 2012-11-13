@@ -325,10 +325,15 @@ Ext.define('NextThought.view.annotations.note.Main',{
                     this.context.insertHtml('afterBegin', '[...] ');
                     this.context.insertHtml('beforeEnd', ' [...]');
                 }
+
 				this.context.select('.injected-related-items,.related,iframe,object').remove();
-				this.context.select('a[href]').set({target:'_blank'});
+				this.context.select('[itemprop~=nti-data-markupenabled] .bar').addCls('skip-anchor-descendants');
+				this.context.select('*:not(.skip-anchor-descendants) > a[href]').set({target:'_blank'});
+				this.context.select('*:not(.skip-anchor-descendants) > a[href^=#]').set({href:undefined,target:undefined});
+
+				this.context.select('[itemprop~=nti-data-markupenabled] a').on('click',this.contextAnnotationActions,this);
+
 				this.context.select('a[href^=tag]').set({href:undefined,target:undefined});
-				this.context.select('a[href^=#]').set({href:undefined,target:undefined});
 
                 Ext.each(this.context.query('.application-highlight'), function(h){
                     if(this.record.isModifiable()){
@@ -362,6 +367,22 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		}
 
 		this.loadReplies(r);
+	},
+
+
+	contextAnnotationActions: function(e,dom){
+		e.stopEvent();
+		var action = (dom.getAttribute('href')||'').replace('#',''),
+			d = Ext.fly(dom).up('[itemprop~=nti-data-markupenabled]').down('img'),
+			img = d && d.is('img') ? d.dom : null;
+
+		if(/^mark$/i.test(action)){
+			this.activateReplyEditor();
+			Ext.defer(this.editorActions.addWhiteboard,400,this.editorActions,[WBUtils.createFromImage(img)]);
+		}
+
+
+		return false;
 	},
 
 

@@ -176,6 +176,10 @@ div.redaction-control {
 #NTIContent {
 
 	[itemprop~="nti-data-markupenabled"] {
+		display: inline-block;
+		overflow: hidden;
+		position: relative;
+
 
 		&:hover {
 			box-shadow: 0 0 0 3px $primary-blue;
@@ -200,8 +204,10 @@ div.redaction-control {
 				margin: 3px 8px 0 0;
 				background: url(../images/spr_image_options.png) 100px 100px no-repeat;
 				opacity: 0.8;
+				pointer-events: all;
+
 				&:hover { opacity: 1; }
-				&.disabled { &, &:hover { opacity: 0.5; cursor: default; } }
+				&.disabled { &, &:hover { opacity: 0.5; cursor: default; pointer-events: none; } }
 
 				&.mark {
 					background-position: 0 -19px;
