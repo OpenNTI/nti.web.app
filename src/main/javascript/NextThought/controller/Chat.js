@@ -65,6 +65,10 @@ Ext.define('NextThought.controller.Chat', {
 				'send-whiteboard': this.sendWhiteboard
 			},
 
+            'chat-view': {
+                'flag-messages': this.flagMessages
+            },
+
 			'contacts-panel': {
 				'group-chat': this.enterRoom
 			},
@@ -359,6 +363,23 @@ Ext.define('NextThought.controller.Chat', {
 		//show window:
 		wbWin.show();
 	},
+
+
+    flagMessages: function(messages, chatView){
+        var m;
+        Ext.each(messages, function(e){
+            m = e.message;
+            m.postTo('flag', function(){
+                console.log('server says', arguments);
+            });
+
+            //apply some classes so once we close the moderation, it's still marked
+            e.el.down('.log-entry').addCls('confirmFlagged'); //permenantly flag
+        })
+
+        //return to non moderation view:
+        chatView.up('chat-window').onFlagToolClicked();
+    },
 
 /*
 	classroom: function(f, mid, channel, recipients) {

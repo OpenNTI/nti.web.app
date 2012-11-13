@@ -98,3 +98,24 @@ $button-text-weights: 500,500,600,500;
 		}
 	}
 }
+
+.x-btn-flat-large,
+.x-btn-flat-medium {
+	cursor: pointer;
+	button {
+		background: none;
+		border: none;
+		padding: 12px 20px;
+
+		.x-btn-inner{
+			font: {
+				size: 14px;
+				style: normal;
+				weight: normal;
+			}
+			color: $primary-grey;
+			padding-right: 2px;
+		}
+	}
+}
+

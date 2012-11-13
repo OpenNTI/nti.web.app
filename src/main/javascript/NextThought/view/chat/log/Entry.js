@@ -13,6 +13,7 @@ Ext.define('NextThought.view.chat.log.Entry', {
 	renderTpl: new Ext.XTemplate(
 		'<div class="log-entry-wrapper {me}">',
 			'<img src="{avatarURL}" class="avatar" alt="{name}">',
+            '<span class="control"></span>',
 			'<div class="message-bounding-box">',
 			'<div class="log-entry {me}">',
 				'<div class="name">{name}</div> ',
@@ -100,7 +101,24 @@ Ext.define('NextThought.view.chat.log.Entry', {
 //			this.initializeDragZone(this);
 //		}
 		this.el.on('click', this.click, this);
+        this.mon(this.getEl().select('.control'),{
+            scope: this,
+            click: this.onControlClick
+        });
 	},
+
+    onControlClick: function(e){
+        this.el.down('.control').toggleCls('checked');
+        this.el.down('.log-entry').toggleCls('flagged');
+        //let our parent know so he can do something.
+        this.up('chat-view').fireEvent('control-clicked');
+    },
+
+
+    isFlagged: function(){
+        return this.el.down('.log-entry').hasCls('flagged');
+    },
+
 
 	click: function(event, target, eOpts){
 		var t = event.getTarget('.whiteboard-wrapper', null, true);

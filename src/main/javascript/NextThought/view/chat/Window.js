@@ -36,7 +36,11 @@ Ext.define('NextThought.view.chat.Window', {
 		'add-people':{
 			tip:'View occupants',
 			handler:'addPeople'
-		}
+		},
+        'flag-for-moderation':{
+            tip:'Flag for moderation',
+            handler:'onFlagToolClicked'
+        }
 	},
 
 	initComponent:function () {
@@ -124,6 +128,15 @@ Ext.define('NextThought.view.chat.Window', {
 
 		//TODO: actually show an interface to add people to the conversation instead of playing with the gutter.
 	},
+
+
+    onFlagToolClicked: function(){
+        var logView = this.down('chat-log-view'),
+            chatView = this.down('.chat-view');
+
+        logView.toggleModerationPanel();
+        chatView.toggleModerationButtons();
+    },
 
 
 	setTitle:function (users) {

@@ -6,11 +6,19 @@
 	.nti-window-header {
 		.header-body {
 			.tools {
-				img.tool.add-people {
-					opacity: 0.6;
-					margin-right: 5px;
-					width: 17px;
-					background: url(../images/add-people.png) no-repeat 0 0;
+				img.tool{
+					&.add-people {
+						opacity: 0.6;
+						margin-right: 5px;
+						width: 17px;
+						background: url(../images/add-people.png) no-repeat 0 0;
+					}
+					&.flag-for-moderation {
+						opacity: 0.6;
+						margin-right: 5px;
+						width: 17px;
+						background: url(../images/options-menu-sprite.png) no-repeat -20px -20px;
+					}
 				}
 			}
 		}
@@ -108,7 +116,15 @@
 					}
 				}
 			}
+			&.moderating {
+				.log-entry-wrapper {
+					div.message-bounding-box {
+						margin-left: 75px;
+					}
+				}
+			}
 		}
+
 	}
 
 	.chat-log-view {
@@ -120,6 +136,39 @@
 		// box-shadow:  none | <shadow> [,<shadow>]*
 		//	where <shadow> is defined as:
 		//		inset? && [ <offset-x> <offset-y> <blur-radius>? <spread-radius>? <color>? ]
+
+		.control {
+			display: none;
+		}
+
+		&.moderating {
+			.control {
+				position: relative;
+				top: 15px; left: 7px;
+				float: left;
+				display: inline-block;
+				width: 15px;
+				height: 15px;
+				background: url(../images/quiz/sprite.png) -68px -68px no-repeat;
+				&.checked{
+					background-position: -68px -18px;
+					&::after {
+						content: ' ';
+						left: 0;
+						top: 0;
+						position: absolute;
+						height: 15px;
+						width: 15px;;
+						background: url(../images/quiz/sprite.png) -68px -119px no-repeat;
+					}
+				}
+			}
+			.log-entry-wrapper {
+				div.message-bounding-box {
+					margin-left: 25px;
+				}
+			}
+		}
 
 		.log-notification-wrapper {
 			clear: both;
@@ -136,8 +185,10 @@
 
 			&.me {
 				.name,
-				.avatar,
-					{
+				.avatar {
+					display: none;
+				}
+				.control{
 					display: none;
 				}
 
@@ -167,6 +218,22 @@
 				padding: 8px;
 				clear: right;
 				position: relative;
+
+				&.confirmFlagged,
+				&.flagged {
+					border: 1px solid #fd9191;
+					background: #fefefe;
+					.name{
+						color: #fd817f;
+					}
+					.body-text {
+						color: #fec1bf;
+						text-decoration: line-through;
+					}
+					&::before {
+						content: url(../images/other-bubble-tip-flagged.png);
+					}
+				}
 
 				//whiteboards inside chat:
 				img {
@@ -221,39 +288,47 @@
 		}
 	}
 
-	.chat-entry {
+	.entry-card {
 		border-radius: 0 0 5px 5px;
-		background: #f7f7f7;
-		box-shadow: inset 0 0 1px 1px white;
-
-		div {
-			margin: 12px 8px 10px 8px;
-			.add-whiteboard {
-				width: 28px;
-				height: 21px;
-				float: left;
-				margin: 4px;
-				background: url(../images/whiteboard/icon.png) 0px 0px no-repeat;
-				cursor: pointer;
-			}
+		.mod-buttons {
+			border-radius: 0 0 5px 5px;
+			padding: 8px 12px;
+		}
+		.chat-entry {
+			position: absolute;
+			border-radius: 0 0 5px 5px;
+			background: #f7f7f7;
+			box-shadow: inset 0 0 1px 1px white;
 
 			div {
-				margin: 0 0 0 37px;
-				input {
-					padding: 5px;
-					color: $secondary-grey;
-					height: 30px;
-					font-family: $font;
-					//font-size: 15pt;
-					width: 100%;
-					border-radius: 3px;
-					border: 1px solid #a0a0a0;
-					box-shadow: inset 3px 3px 10px -5px #a0a0a0;
-					//TODO: fix to be a sane value (use RGBA to lighten the shadow, not the blur & spread)
-					// REFRESHER: box-shadow syntax is:
-					// box-shadow:  none | <shadow> [,<shadow>]*
-					//	where <shadow> is defined as:
-					//		inset? && [ <offset-x> <offset-y> <blur-radius>? <spread-radius>? <color>? ]
+				margin: 10px 8px 10px 8px;
+				.add-whiteboard {
+					width: 28px;
+					height: 21px;
+					float: left;
+					margin: 4px;
+					background: url(../images/whiteboard/icon.png) 0px 0px no-repeat;
+					cursor: pointer;
+				}
+
+				div {
+					margin: 0 0 0 37px;
+					input {
+						padding: 5px;
+						color: $secondary-grey;
+						height: 30px;
+						font-family: $font;
+						//font-size: 15pt;
+						width: 100%;
+						border-radius: 3px;
+						border: 1px solid #a0a0a0;
+						box-shadow: inset 3px 3px 10px -5px #a0a0a0;
+						//TODO: fix to be a sane value (use RGBA to lighten the shadow, not the blur & spread)
+						// REFRESHER: box-shadow syntax is:
+						// box-shadow:  none | <shadow> [,<shadow>]*
+						//	where <shadow> is defined as:
+						//		inset? && [ <offset-x> <offset-y> <blur-radius>? <spread-radius>? <color>? ]
+					}
 				}
 			}
 		}

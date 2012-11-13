@@ -24,8 +24,89 @@ Ext.define('NextThought.view.chat.View', {
                 {cls: 'error-desc'}
             ]}
         },
-		{ xtype: 'chat-entry', mainEntry: true }
+        {
+            cls: 'entry-card',
+            border: 0,
+            entryCard: true,
+            layout: 'card',
+            items: [
+		        { xtype: 'chat-entry', itemId: 'entry', mainEntry: true },
+                {
+                    xtype: 'container',
+                    layout: {
+                        type: 'hbox',
+                        pack: 'end'
+                    },
+                    itemId: 'buttons',
+                    cls: 'mod-buttons',
+                    items: [
+                        {
+                            xtype: 'button',
+                            ui: 'flat',
+                            text: 'Cancel',
+                            scale: 'large',
+                            handler: function(btn){
+                                this.up('chat-window').onFlagToolClicked();
+                            }
+                        },
+                        {
+                            xtype: 'button',
+                            flagButton: true,
+                            ui: 'caution',
+                            text: 'Flag',
+                            scale: 'large',
+                            disabled: true,
+                            handler: function(){
+                                this.up('chat-view').flagMessages();
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
     ],
+
+
+    afterRender: function(){
+        this.callParent(arguments);
+        this.mon(this, 'control-clicked', this.maybeEnableButtons, this);
+    },
+
+
+    flagMessages: function(){
+        var allEntries = this.query('chat-log-entry'),
+            allFlaggedMessages = [];
+        Ext.each(allEntries, function(e){
+            if (e.isFlagged()){
+                allFlaggedMessages.push(e);
+            }
+        })
+
+        this.fireEvent('flag-messages', allFlaggedMessages, this);
+    },
+
+
+    maybeEnableButtons: function(){
+        var b = this.down('[flagButton]');
+        //if there is checked stuff down there, enable button
+        if(this.el.down('.control.checked')){
+            b.setDisabled(false);
+        }
+        //if not, disable
+        else{
+            b.setDisabled(true);
+        }
+    },
+
+
+    toggleModerationButtons:function() {
+        var layout = this.down('[entryCard]').getLayout(),
+            activeId = layout.getActiveItem().itemId,
+            toggledId = (activeId === 'entry') ? 'buttons' : 'entry';
+
+        layout.setActiveItem(toggledId);
+    },
+
 
 	showError: function(errorObject){
 		var box = this.down('[name=error]'),
@@ -34,6 +115,7 @@ Ext.define('NextThought.view.chat.View', {
         box.el.down('.error-desc').update(errorText);
         box.show();
 	},
+
 
 	clearError: function(){
 		var box = this.down('[name=error]');

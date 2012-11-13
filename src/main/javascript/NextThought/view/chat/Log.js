@@ -219,5 +219,16 @@ Ext.define('NextThought.view.chat.Log', {
 		});
 
 		return entries;
-	}
+	},
+
+
+    toggleModerationPanel: function(){
+        this.el.toggleCls('moderating');
+        Ext.each(this.el.query('.log-entry.flagged'), function(d){
+            Ext.fly(d).removeCls('flagged');
+        });
+        Ext.each(this.el.query('.control.checked'), function(d){
+            Ext.fly(d).removeCls('checked');
+        });
+    }
 });
