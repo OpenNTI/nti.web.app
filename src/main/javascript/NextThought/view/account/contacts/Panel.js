@@ -175,6 +175,8 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 			buttons: 9, // bitwise result of: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
 			scope: me,
 			icon: Ext.Msg.WARNING,
+			buttonText: {'ok': 'Delete'},
+			title: 'Are you sure?',
 			fn: function(str){
 				if(str === 'ok'){
 					me.fireEvent('delete-group',me.associatedGroup);
