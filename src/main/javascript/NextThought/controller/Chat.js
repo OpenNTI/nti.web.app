@@ -375,6 +375,7 @@ Ext.define('NextThought.controller.Chat', {
 
             //apply some classes so once we close the moderation, it's still marked
             e.el.down('.log-entry').addCls('confirmFlagged'); //permenantly flag
+            e.el.down('.control').addCls('confirmFlagged');
         })
 
         //return to non moderation view:
