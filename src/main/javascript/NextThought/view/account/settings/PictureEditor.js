@@ -70,9 +70,9 @@ Ext.define('NextThought.view.account.settings.PictureEditor',{
 	},
 
 
-	editMode: function(){
+	editMode: function(url){
 		this.reset();
-		this.down('picture-canvas').setImage($AppConfig.userObject.get('avatarURL'));
+		this.down('picture-canvas').setImage(url||$AppConfig.userObject.get('avatarURL'));
 	},
 
 

@@ -213,7 +213,7 @@ Ext.define('NextThought.view.account.settings.AvatarChoices',{
 
 	edit: function(){
 		var w = this.up('account-window');
-		w.down('picture-editor').editMode();
+		w.down('picture-editor').editMode(this.customChoiceImage.getAttribute('src'));
 		w.changeView({
 			associatedPanel: 'picture-editor',
 			pressed: true
