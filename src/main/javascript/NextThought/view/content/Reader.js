@@ -86,6 +86,13 @@ Ext.define('NextThought.view.content.Reader', {
 	},
 
 
+	//TODO In all the profiles for all the various IE performance
+	//issues looked at in IE.  This is constantly one of the most expensive
+	//functions.  Most of the time boils down to getWidth and getMargin
+	//which result in calls to getStyle.  We should figure out how to remove
+	//the fields we don't need and/or cache where we can.  As an example in the
+	//annotation manager moving calls to this function from the inside to the outside
+	//of the render loop sped that code up an obscene amount. (10x IIRC)
 	getAnnotationOffsets: function(){
 		var f = this.getIframe(),
 			l = f.getLeft()-this.getEl().getLeft(),
@@ -103,14 +110,17 @@ Ext.define('NextThought.view.content.Reader', {
 		catch(er){
 			console.error(Globals.getError(er));
 		}
+
+		//TODO Not all of these are used, some can be cached, and others can be
+		//calculated lazly
 		return {
-			top: f.getTop(),
-			left: f.getLeft(),
-			height: f.getHeight(),
-			width: f.getWidth(),
-			gutter: l+f.getMargin('l'),
-			contentLeftPadding: contentPadding,
-			scrollTop: this.body.getScroll().top
+			top: f.getTop(), //static value
+			left: f.getLeft(), //static based on window size.  left < gutter
+			height: f.getHeight(), //static based on window size.
+			width: f.getWidth(),//static value
+			gutter: l+f.getMargin('l'), //static based on page
+			contentLeftPadding: contentPadding, //static based on page
+			scrollTop: this.body.getScroll().top //dynamic
 		};
 	},
 
