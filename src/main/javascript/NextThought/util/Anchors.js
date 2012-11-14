@@ -547,7 +547,7 @@ Ext.define('NextThought.util.Anchors', {
 			return null;
 		}
 		else if( endResult.confidence < 1.0 ){
-			console.log('Matched start with confidence of', endResult.confidence, endResult, rangeDesc);
+			console.log('Matched end with confidence of', endResult.confidence, endResult, rangeDesc);
 		}
 		else{
 			console.log('Found an exact match for end', endResult, rangeDesc);
