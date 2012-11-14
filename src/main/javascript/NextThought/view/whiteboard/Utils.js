@@ -58,16 +58,25 @@ Ext.define('NextThought.view.whiteboard.Utils',{
 		var w = img.naturalWidth || img.width,
 			h = img.naturalHeight || img.height,
 			scale = 1/w,
+			wbCX,wbCY,
 			m = new NTMatrix(),
 			data = {
 			shapeList	: [],
 			MimeType	: "application/vnd.nextthought.canvas",
 			Class		: 'Canvas',
-			viewportRatio : (4/3)
+			viewportRatio : (16/9)
 		};
 
+		wbCX = (scale*w)/2;
+		wbCY = (1/data.viewportRatio)/2;
 
-		m.translate((scale*w)/2, (scale*h)/2);
+		if(h>w){
+			scale = (1/data.viewportRatio)/h;
+			wbCY = (scale*h)/2;
+			wbCX = 0.5;
+		}
+
+		m.translate(wbCX, wbCY);
 		m.scale(scale);
 
 		data.shapeList.push({

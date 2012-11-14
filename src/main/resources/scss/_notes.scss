@@ -212,8 +212,7 @@
 						border: 3px solid $primary-blue;
 						margin: 3px 0;
 
-						.fill,
-						.centerer {display: block;}
+						.fill {display: block;}
 					}
 
 					.fill {
@@ -223,7 +222,6 @@
 						background: rgba(0,0,0,0.05);
 					}
 					.centerer{
-						display: none;
 						position:absolute;
 						top: 50%;
 						left: 50%;
