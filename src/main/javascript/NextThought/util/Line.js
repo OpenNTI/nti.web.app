@@ -31,7 +31,13 @@ Ext.define('NextThought.util.Line',{
 			range = this.rangeForLineBySelection(y, doc);
 		}
 
-        range = Anchors.makeRangeAnchorable(range, doc);
+        try{
+            range = Anchors.makeRangeAnchorable(range, doc);
+        }
+        catch (e){
+            range = null;
+        }
+
 		if(range){
 			return { rect: range.getBoundingClientRect(), range: range };
 		}
