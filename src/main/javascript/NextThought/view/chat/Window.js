@@ -132,10 +132,12 @@ Ext.define('NextThought.view.chat.Window', {
 
     onFlagToolClicked: function(){
         var logView = this.down('chat-log-view'),
-            chatView = this.down('.chat-view');
+            chatView = this.down('.chat-view'),
+            btn = this.el.down('.flag-for-moderation');
 
         logView.toggleModerationPanel();
         chatView.toggleModerationButtons();
+        btn.toggleCls('moderating');
     },
 
 
