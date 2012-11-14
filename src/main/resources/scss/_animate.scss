@@ -6,6 +6,9 @@
 		$value: $name $duration $delay $function $mode;
   	}
 	@include experimental(animation, $value);
+	.x-safari5 & {
+		@include experimental(animation, none);
+	}
 }
 
 // http://daneden.me/animate/build/
