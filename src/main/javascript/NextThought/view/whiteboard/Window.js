@@ -12,8 +12,10 @@ Ext.define('NextThought.view.whiteboard.Window',{
 	cls: 'wb-window',
 	ui: 'wb-window',
 	minWidth: 750,
+    maxWidth: 750,
+    minHeight: 400,
 
-	resizable: false,
+	resizable: true,
 	maximizable: false,
 	draggable: true,
 
@@ -90,6 +92,7 @@ Ext.define('NextThought.view.whiteboard.Window',{
 			scope: this,
 			'click': this.absorbeClick
 		});
+
 
 		return r;
 	},
