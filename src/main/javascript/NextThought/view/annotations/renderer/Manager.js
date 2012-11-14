@@ -197,10 +197,10 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 			cT = this.controlLineTmpl,
 			wT = this.widgetLineTmpl,
 			sT = this.stackTmpl,
-			width = r.getAnnotationOffsets().gutter + 80,
+			annotationOffsets = r.getAnnotationOffsets(),
+			width = annotationOffsets.gutter + 80,
 			cls = (width <= 355)? 'narrow-gutter': '',
-			maxAnnotations = Math.floor(width / 34) - 3,
-			annotationOffsets = AnnotationsRenderer.getReader().getAnnotationOffsets();
+			maxAnnotations = Math.floor(width / 34) - 3;
 
 		g.setWidth(width);
 		g.controls.setLeft(width-50);
