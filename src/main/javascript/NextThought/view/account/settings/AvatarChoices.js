@@ -144,6 +144,7 @@ Ext.define('NextThought.view.account.settings.AvatarChoices',{
 		me.mon(me.up('window').down('picture-editor'),'saved',function(url){
 			me.select(me.customChoice);
 			me.customChoiceImage.set({src:url});
+			me.editCustomChoice.show();
 		});
 	},
 
@@ -171,9 +172,11 @@ Ext.define('NextThought.view.account.settings.AvatarChoices',{
 
 		if(changing) {
 			url = item.down('img').getAttribute('src');
-			if(item === this.customChoice && /@@view$/i.test(url)){
+			if(item === this.customChoice && !/^data/i.test(url)){
 				//If we jump back and forth between choices, why can't this be set back to the @@view it was?
-				// oh, well...regenerate the data,url
+				// UPDATE: if its a new @@view from the response of setting, it couldn't be set back (if the user
+				// toggled back&forth between random and uploaded)
+				// oh, well...regenerate the dataurl
 				url = this.imgToDataUrl(item.down('img'));
 			}
 			//set basic choice (take the value of the image in the choice)
@@ -200,8 +203,8 @@ Ext.define('NextThought.view.account.settings.AvatarChoices',{
 	makeAChoice: function(url){
 		var el = this.getEl(),
 			u = $AppConfig.userObject;
-		el.mask('Saving...');
-		if(Ext.Array.indexOf(u.get('AvatarURLChoices'), url) >= 0 || /^data/i.test(url)){
+		if(Ext.Array.indexOf(u.get('AvatarURLChoices'), url) >= 0 || /^data/i.test(url) || /@@view$/i.test(url)){
+			el.mask('Saving...');
 			u.saveField('avatarURL', url,
 				function good(){ el.unmask(); },
 				function bad(){ el.unmask(); alert({title:'Oops!',msg:'Something went wrong.'}); });
@@ -240,10 +243,6 @@ Ext.define('NextThought.view.account.settings.AvatarChoices',{
 	},
 
 	moreRandom: function(){
-
 		this.moreOptionsMenu.showBy(this.moreOptions);
-
 	}
-
-
 });
