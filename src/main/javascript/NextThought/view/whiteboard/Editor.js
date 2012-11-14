@@ -41,11 +41,14 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 		else{
 			this.initMixin(this.toolbar, this.canvas);
 		}
+
+		this.mon( this.up('wb-window'), 'activate', function(){this.canvas.drawScene();}, this);
 	},
 
 	reset: function(){
 		this.value = Ext.clone(this.initialConfig.value);
 		this.canvas.updateData(this.value);
+
 	},
 
 
