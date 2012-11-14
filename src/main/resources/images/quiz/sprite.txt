@@ -1,0 +1,16 @@
+spr_quiz
+
+Radio inactive..........16x16 (18, 17)
+Checkbox inactive.......14x14 (68, 18)
+Red circle X............18x18 (116, 16)
+Drag control inactive...21x15 (165, 19)
+
+Radio hover.............16x16 (17, 67)
+Checkbox hover..........14x14 (68, 68)
+Green circle check......18x18 (116, 66)
+Drag control active.....21x15 (165, 68)
+
+Radio active............16x16 (17, 117)
+Checkbox active.........14x14 (68, 118)
+Green check.............9x10 (121, 120)
+Red X...................10x10 (169, 119)

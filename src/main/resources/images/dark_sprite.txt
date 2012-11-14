@@ -1,0 +1,4 @@
+Spr_groups_dark
+
+Globe......26x26 (3, 3)
+Groups.....32x22 (32, 5)

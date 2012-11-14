@@ -1,0 +1,7 @@
+spr_math_symbols
+
+Square root.....12x13 (14, 13)
+Squared.........11x14 (52, 14)
+Parenthesis.....11x11 (94, 14)
+Wavy equals.....11x8 (134, 15)
+Pi..............11x11 (174, 14)

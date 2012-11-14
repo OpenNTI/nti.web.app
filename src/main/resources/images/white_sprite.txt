@@ -1,0 +1,6 @@
+Spr_groups_light
+
+Globe.........13x13 (0, 0)
+X inactive....7x7 (28, 0)
+Group.........12x9 (14, 16)
+X Active......7x7 (28, 17)

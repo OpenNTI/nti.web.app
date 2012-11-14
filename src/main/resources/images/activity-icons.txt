@@ -1,0 +1,7 @@
+Spr_activity_icons
+
+Highlight...........19x11 (0, 5)
+Note................11x14 (24x3)
+Comment.............13x12 (39, 5)
+Chat................18x12 (1, 24)
+Add to contacts.....14x14 (23, 23)
