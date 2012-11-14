@@ -1065,9 +1065,13 @@
 			background: #ffffff;
 			box-shadow: 0 1px 3px 0 rgba(0,0,0,0.2);
 			clear: both;
+			overflow: hidden;
 
 			img {
 				max-width: 100% !important;
+				.x-gecko & {
+					max-width: 90% !important;
+				}
 			}
 
 			sup {
