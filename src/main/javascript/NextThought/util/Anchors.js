@@ -39,7 +39,8 @@ Ext.define('NextThought.util.Anchors', {
 	//or locations but have the same container id.  That seem unlikely but may Need to figure that out eventually
 	preresolveLocatorInfo: function(contentRangeDescriptions, docElement, cleanRoot, containers, docElementContainerId){
 		var virginContentCache = {},
-			docElementContainerId = docElementContainerId || Anchors.rootContainerIdFromDocument(docElement);
+			docElementContainerId = docElementContainerId || Anchors.rootContainerIdFromDocument(docElement),
+			locatorsFound = 0;
 
 
 		if(!contentRangeDescriptions || (containers && contentRangeDescriptions.length !== containers.length)){
@@ -91,7 +92,9 @@ Ext.define('NextThought.util.Anchors', {
 			virginNode = getVirginNode(ancestorNode);
 
 			try{
-				Anchors.resolveCleanLocatorForDesc(desc, virginNode, docElement);
+				if(Anchors.resolveCleanLocatorForDesc(desc, virginNode, docElement)){
+					locatorsFound++;
+				}
 			}
 			catch(e){
 				console.error('Error resolving locator for desc', desc, Globals.getError(e));
@@ -110,6 +113,8 @@ Ext.define('NextThought.util.Anchors', {
 				Globals.getError(e);
 			}
 		});
+
+		console.log('Preresolved ' + locatorsFound + '/' + contentRangeDescriptions.length + ' range descriptions');
 	},
 
 	toDomRange: function(contentRangeDescription, docElement, cleanRoot, containerId, docElementContainerId) {
@@ -128,6 +133,9 @@ Ext.define('NextThought.util.Anchors', {
 			//FIXME we run into potential problems with this is ContentRangeDescriptions ever occur in different documents
 			//or locations but have the same container id.  That seem unlikely but may Need to figure that out eventually
 			//Optimization shortcut, if we have a cached locator use it
+			//TODO a potential optimization here is that if locator() is defined but null return null.  We already tried
+			//to resolve it once and it failed.  Right now we try again but in reality nothing changes between when we
+			//preresolve the locator and now
 			if(contentRangeDescription.locator()){
 				return Anchors.convertContentRangeToDomRange(contentRangeDescription.locator().start,
 															 contentRangeDescription.locator().end,
@@ -495,6 +503,8 @@ Ext.define('NextThought.util.Anchors', {
 	},
 
 	resolveCleanLocatorForDesc: function(rangeDesc, ancestor, docElement){
+		var confidenceCutoff = 0.4;
+
 		if(!rangeDesc){
 			Ext.Error.raise('Must supply Description');
 		}
@@ -507,31 +517,40 @@ Ext.define('NextThought.util.Anchors', {
 			return rangeDesc.locator();
 		}
 
-		//Resolve start and end.
 		var startResult = rangeDesc.getStart().locateRangePointInAncestor(ancestor);
-		//console.log('Resolution of start result was', startResult);
 		if(!startResult.node
 			|| !startResult.hasOwnProperty('confidence')
-			|| startResult.confidence < 0.4){
+			|| startResult.confidence === 0){
+			console.warn('No possible start found for', rangeDesc, startResult);
 			return null;
 		}
-		if(!startResult.node
-			|| !startResult.hasOwnProperty('confidence')
-			|| startResult.confidence !== 1){
-			console.error('startResult has low confidance', startResult.confidence, startResult, ancestor, rangeDesc);
+		if( startResult.confidence < confidenceCutoff ){
+			console.warn('No start found with an acceptable confidence.', startResult, rangeDesc);
+			return null;
+		}
+		else if( startResult.confidence < 1.0 ){
+			console.log('Matched start with confidence of', startResult.confidence, startResult, rangeDesc);
+		}
+		else{
+			console.log('Found an exact match for start', startResult, rangeDesc);
 		}
 
 		var endResult = rangeDesc.getEnd().locateRangePointInAncestor(ancestor, startResult);
-		//console.log('Resolution of end result was', endResult);
 		if(!endResult.node
 			|| !endResult.hasOwnProperty('confidence')
-			|| endResult.confidence < 0.4){
+			|| endResult.confidence === 0){
+			console.warn('No possible end found for', rangeDesc, endResult);
 			return null;
 		}
-		if(!endResult.node
-			|| !endResult.hasOwnProperty('confidence')
-			|| endResult.confidence !== 1){
-			console.error('endResult has low confidance', endResult.confidence, endResult, ancestor, rangeDesc);
+		if( endResult.confidence < confidenceCutoff ){
+			console.warn('No end found with an acceptable confidence.', endResult, rangeDesc);
+			return null;
+		}
+		else if( endResult.confidence < 1.0 ){
+			console.log('Matched start with confidence of', endResult.confidence, endResult, rangeDesc);
+		}
+		else{
+			console.log('Found an exact match for end', endResult, rangeDesc);
 		}
 
 		var startResultLocator = Anchors.toReferenceNodeXpathAndOffset(startResult);
@@ -752,22 +771,23 @@ Ext.define('NextThought.util.Anchors', {
 				//to non stable ids that have changed we end up never partial matching.
 				//Instead of doing that maybe instead of not trying to partial match we just take a
 				//deduciton from the overal confidence.
-				console.warn('Ignoring fuzzy matching because we could not resolve the pointers ancestor', pointer,
-							 'and we fell back to just looking in the whole descriptions ancestor', ancestorNode);
-				console.warn('Possible matches were', possibleNodes);
+				console.log('Ignoring fuzzy matching because we could not resolve the pointers ancestor', pointer, possibleNodes, ancestorNode );
 				return {confidence: 0};
 			}
 			else{
 				//We want the best match
-				var totalConfidenceScores = 0;
+				//NOTE in the past we were "normalizing" the highest confidence
+				//by dividing by the sum of all the confidence values.  Not
+				//only is that an improper way to normalize these values,
+				//it is counterintuitive to what we are actually trying to do.
 				if (result === null){result = {confidence: 0};}
+
+				console.log('Searching for best ' + pointer.getRole() + ' match in ', possibleNodes);
 				for (i = 0; i < possibleNodes.length; i++) {
-					totalConfidenceScores += possibleNodes[i].confidence;
 					if (possibleNodes[i].confidence > result.confidence) {
 						result = possibleNodes[i];
 					}
 				}
-				result.confidence *= 1 / totalConfidenceScores;
 			}
 		}
 		return result;
