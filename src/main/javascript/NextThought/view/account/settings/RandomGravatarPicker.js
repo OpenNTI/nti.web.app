@@ -79,6 +79,7 @@ Ext.define('NextThought.view.account.settings.RandomGravatarPicker',{
 			return;
 		}
 
+		this.fireEvent('new-avatar',url);
 		el.mask('Saving...');
 		u.saveField('avatarURL',url,function good(){
 			el.unmask();

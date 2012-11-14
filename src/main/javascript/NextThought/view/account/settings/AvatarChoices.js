@@ -61,6 +61,7 @@ Ext.define('NextThought.view.account.settings.AvatarChoices',{
 		customChoiceImage: 'li.custom img',
 		editCustomChoice: 'li.custom span.editCustom',
 		randomChoice: 'li.random',
+		randomChoiceImage: 'li.random img',
 		gravatarChoice: 'li.gravatar',
 		moreOptions: 'a.more-random-choices'
 
@@ -108,6 +109,7 @@ Ext.define('NextThought.view.account.settings.AvatarChoices',{
 			]
 		});
 
+		me.mon(me.moreOptionsMenu.down('random-gravatar-picker'),'new-avatar',this.updateRandromSelection,this);
 		me.callParent(arguments);
 
 		me.on('destroy', me.moreOptionsMenu.destroy, me.moreOptionsMenu);
@@ -204,6 +206,12 @@ Ext.define('NextThought.view.account.settings.AvatarChoices',{
 				function good(){ el.unmask(); },
 				function bad(){ el.unmask(); alert({title:'Oops!',msg:'Something went wrong.'}); });
 		}
+	},
+
+
+	updateRandromSelection: function(url){
+		this.randomChoiceImage.set({src:url});
+		this.select(this.randomChoice);
 	},
 
 
