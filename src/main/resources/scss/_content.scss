@@ -81,6 +81,12 @@
 		span {
 			padding-right: 15px !important;
 			background: url(../images/menu-arrow-down-default.png) no-repeat 100% 50%;
+
+			.x-ie & {
+				display: block;
+				text-overflow: ellipsis;
+				overflow: hidden;
+			}
 		}
 	}
 }
