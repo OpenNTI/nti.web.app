@@ -32,6 +32,10 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 			'markupenabled-action': this.contentDefinedAnnotationAction
 		});
 
+
+        //make sure we clear ranges when filter is changed
+        FilterManager.registerFilterListener(this, this.noteOverlayClearRestrictedRanges, this);
+
 		return this;
 	},
 
