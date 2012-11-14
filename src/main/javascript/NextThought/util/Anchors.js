@@ -76,6 +76,7 @@ Ext.define('NextThought.util.Anchors', {
 			}
 
 			if(desc.isEmpty || desc.locator()){
+				locatorsFound++;
 				return;
 			}
 
