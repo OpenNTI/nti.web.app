@@ -25,6 +25,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 				}
 				data.left = r.left;
 				data.width = r.width;
+                this.noteOverlayClearRestrictedRanges();
 			},
 			'afterRender': this.insertNoteOverlay,
 
