@@ -31,8 +31,16 @@ Ext.define('NextThought.util.Anchors', {
 		}
 	},
 
-	SHOULD_IGNORE_WHITESPACE_TEXTNODES : function(){
-		return this.IGNORE_WHITESPACE_TEXTNODES;
+	GET_WHITESPACE_FILTER : function(){
+		if(this.IGNORE_WHITESPACE_TEXTNODES){
+			return null;
+		}
+
+		//Sigh. Imagine that, some browsers want a proper NodeFilter and some want just a function.
+		//See http://stackoverflow.com/questions/5982648/recommendations-for-working-around-ie9-treewalker-filter-bug
+		var safeFilter = this.IGNORE_WHITESPACE_TEXTNODE_FILTER.acceptNode;
+		safeFilter.acceptNode = this.IGNORE_WHITESPACE_TEXTNODE_FILTER.acceptNode;
+		return safeFilter;
 	},
 
 	//FIXME we run into potential problems with this is ContentRangeDescriptions ever occur in different documents
@@ -386,7 +394,7 @@ Ext.define('NextThought.util.Anchors', {
 		var collectedCharacters = 0;
 		var maxSubsequentContextObjects = 5;
 		var maxCollectedChars = 15;
-		var filter = this.SHOULD_IGNORE_WHITESPACE_TEXTNODES() ? this.IGNORE_WHITESPACE_TEXTNODE_FILTER : null;
+		var filter = this.GET_WHITESPACE_FILTER();
 		var walker = document.createTreeWalker( referenceNode, NodeFilter.SHOW_TEXT, filter, false );
 		walker.currentNode = container;
 
@@ -688,7 +696,7 @@ Ext.define('NextThought.util.Anchors', {
 
 		//We use a tree walker to search beneath the reference node
 		//for textContent matching our contexts
-		var filter = this.SHOULD_IGNORE_WHITESPACE_TEXTNODES() ? this.IGNORE_WHITESPACE_TEXTNODE_FILTER : null;
+		var filter = this.GET_WHITESPACE_FILTER();
 		treeWalker = document.createTreeWalker( referenceNode, NodeFilter.SHOW_TEXT, filter, false );
 
 		//If we are looking for the end node.  we want to start
@@ -715,7 +723,7 @@ Ext.define('NextThought.util.Anchors', {
 		//to do this in getCurrentNodeMatches but that gets called for every node we
 		//are iterating over.  Maybe there is a better way to architect this since its probably
 		//a change that stays in place for ever...
-		if(this.SHOULD_IGNORE_WHITESPACE_TEXTNODES()){
+		if(this.GET_WHITESPACE_FILTER()){
 			pointer.nonEmptyContexts = Ext.Array.filter(pointer.getContexts(), function(c, i){
 				//Always keep the primary.  It should never be empty, but just in case
 				if(i===0){
