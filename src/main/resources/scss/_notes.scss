@@ -148,8 +148,8 @@
 						width: auto;
 						white-space: nowrap;
 						background:{
-							image: url(../images/share.png), url(../images/share-drop-arrow.png);
-							position: 4px 8px, right 15px;
+							image: url(../images/ico_share.png), url(../images/elements/share-drop-arrow.png);
+							position: 3px 7px, right 15px;
 							repeat: no-repeat;
 						};
 						text-align: center;
@@ -287,7 +287,7 @@
 					font-weight: bold;
 					font-style: italic;
 					color: #ffffff;
-					background: $primary-blue url(../images/comment-icon-white.png) 15px 8px no-repeat;
+					background: $primary-blue url(../images/ico_comment_white.png) 15px 8px no-repeat;
 					border: 1px solid #39a1dd;
 					padding: 0 0 0 24px;
 				}
@@ -319,7 +319,7 @@
 
 		.reply {
 			padding-left: 24px;
-			background: url(../images/reply.png) 0 8px no-repeat;
+			background: url(../images/ico_reply.png) 0 8px no-repeat;
 		}
 
 	  	.share {
@@ -552,7 +552,7 @@
 				position: absolute;
 				bottom: 4px; right: 38px;
 				width: 16px; height: 16px;
-				background: url(../images/clear-line.png) 0 0 no-repeat;
+				background: url(../images/ico_clear_line.png) 0 0 no-repeat;
 				opacity: 0.6;
 				&:hover{
 					opacity: 1;
@@ -564,7 +564,7 @@
 				cursor: pointer;
 				position: absolute;
 				top: 0; right: 0;
-				background: url(../images/comment-icon-small-active.png) 0 0 no-repeat;
+				background: url(../images/ico_comment_small_active.png) 0 0 no-repeat;
 				width: 30px;
 				height: 27px;
 			}
@@ -655,7 +655,7 @@
 			}
 
 			&::after {
-				content: url(../images/bubble-tip-top.png);
+				content: url(../images/elements/bubble-tip-top.png);
 				top: auto;
 				bottom: -18px;
 			}
@@ -694,7 +694,7 @@
 		}
 
 		&::after {
-			 content: url(../images/bubble-tip.png);
+			 content: url(../images/elements/bubble-tip.png);
 			 display: none;
 			 position: absolute;
 			 top: -18px;
@@ -884,7 +884,7 @@
 
 
 	.carousel {
-		background: url(../images/carousel.png) -365px 0px no-repeat;
+		background: url(../images/elements/carousel.png) -365px 0px no-repeat;
 		border: 1px solid #c5c5c5;
 		border-bottom-width: 0;
 		border-left-width: 0;
@@ -985,10 +985,10 @@
 				left: 0;
 			}
 			.forward{
-				background: url(../images/next.png) 0 50% no-repeat;
+				background: url(../images/ico_next_dupe.png) 0 50% no-repeat;
  			}
 			.backward{
-				background: url(../images/prev.png) 0 50% no-repeat;
+				background: url(../images/ico_prev_dupe.png) 0 50% no-repeat;
  			}
 		}
 
@@ -1223,7 +1223,7 @@
 	.note-reply {
 		//border-bottom-width: 0px;
 		&.first{
-			background-image: url(../images/reply-arrow.png);
+			background-image: url(../images/ico_reply_arrow.png);
 			background-position: 18px 15px;
 			background-repeat: no-repeat;
 		}
@@ -1315,7 +1315,7 @@
 	.circle {
 	  	z-index: 99999;
 		position: absolute;
-		background: url(../images/prev-next-circles.png) 0 0 no-repeat;
+		background: url(../images/spr_prev_next_circles.png) 0 0 no-repeat;
 		width: 77px;
 		height: 77px;
 		margin-top: 125px;
@@ -1346,7 +1346,7 @@
 }
 
 .note-add-to-contacts-popout::before{
-	content: url(../images/add_contact_pointer_left.png);
+	content: url(../images/elements/add_contact_pointer_left.png);
 	position: absolute;
 	top: 26px;
 	left: -12px;

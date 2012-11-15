@@ -11,7 +11,7 @@
 						opacity: 0.6;
 						margin-right: 5px;
 						width: 17px;
-						background: url(../images/add-people.png) no-repeat 0 0;
+						background: url(../images/ico_add_people.png) no-repeat 0 0;
 					}
 					&.flag-for-moderation {
 						opacity: 0.6;
@@ -237,7 +237,7 @@
 						text-decoration: line-through;
 					}
 					&::before {
-						content: url(../images/other-bubble-tip-flagged.png);
+						content: url(../images/elements/other-bubble-tip-flagged.png);
 					}
 				}
 
@@ -253,7 +253,7 @@
 					top: 0;
 					left: -9px;
 					position: absolute;
-					content: url(../images/other-bubble-tip.png);
+					content: url(../images/elements/other-bubble-tip.png);
 				}
 
 				&.me {
@@ -274,7 +274,7 @@
 						top: inherit;
 						bottom: 4px;
 						right: -9px;
-						content: url(../images/my-bubble-tip.png);
+						content: url(../images/elements/my-bubble-tip.png);
 					}
 				}
 

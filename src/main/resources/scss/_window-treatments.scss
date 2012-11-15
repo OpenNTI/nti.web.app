@@ -67,7 +67,7 @@
 				float: right;
 				padding: 0;
 				&.has-tools {
-					background: url(../images/window_controls_v_div.png) left center no-repeat;
+					background: url(../images/elements/window_controls_v_div.png) left center no-repeat;
 				}
 
 				img.tool {
@@ -287,7 +287,7 @@
 
 		img.x-tool-close {
 			background:{
-				image: url(../images/alert-close.png);
+				image: url(../images/ico_message_box_close.png);
 				position: 2px 2px;
 				repeat: no-repeat;
 			}

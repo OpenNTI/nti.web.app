@@ -2,7 +2,7 @@ $font: 'Open Sans', sans-serif;
 
 
 //icons
-$uploading-file-icon-generic: url(../images/upload.png);
+$uploading-file-icon-generic: url(../images/ico_upload.png);
 $file-type-unknown:			url(../images/file-types/unknown.png);
 $file-type-unknown-large:	url(../images/file-types/unknown-64.png);
 $file-type-ai:				url(../images/file-types/ai.png);
@@ -14,7 +14,7 @@ $file-type-swf:				url(../images/file-types/swf.png);
 $file-type-xls:				url(../images/file-types/xls.png);
 $file-type-zip:				url(../images/file-types/zip.png);
 
-$loading-indicator:			url(../images/ajax-loader.gif);
+$loading-indicator:			url(../images/elements/ajax-loader.gif);
 $tokens-sprite:				url(../images/spr_groups_light.png);
 
 $note-action-chat-icon:		url(../images/chat/chat-16.png);
@@ -26,8 +26,8 @@ $note-action-mute-icon:		url(../images/chat/mute-16.png);
 
 $empty-reader-bg:			url(../images/empty-content.png);
 $empty-class-resources-bg:	url(../images/folder_web_upload.png);
-$data-view-over-bg:			url(../images/over.gif);
-$data-view-selected-bg:		url(../images/selected.gif);
+$data-view-over-bg:			url(../images/elements/over.gif);
+$data-view-selected-bg:		url(../images/elements/selected.gif);
 
 $presences-offline:			url(../images/offline.png);
 $presences-online:			url(../images/online.png);

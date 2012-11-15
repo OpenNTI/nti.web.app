@@ -28,7 +28,7 @@
 
 
 .populate-contacts {
-	background: url(../images/populate_contacts_bubble.png) 3px -1px no-repeat;
+	background: url(../images/elements/populate_contacts_bubble.png) 3px -1px no-repeat;
 	width: 259px;
 	height: 151px;
 	overflow: hidden;
@@ -144,7 +144,7 @@
 	border: 1px solid #cecece;
 	box-shadow: 0 2px 10px 0 rgba(0,0,0,0.14), inset 0 2px 0 0 rgba(255,255,255,0.5);
 	&::after{
-		content: url(../images/add_contact_pointer2.png);
+		content: url(../images/elements/add_contact_pointer2.png);
 		position: absolute;
 		top: 26px;
 		right: -12px;

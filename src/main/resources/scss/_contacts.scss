@@ -176,7 +176,7 @@ $over-color: #f4f3f3;
 			li.selection-list-item {
 				padding: 5px 5px 5px 35px;
 				color: $secondary-grey !important;
-				background: transparent url(../images/check_box.png) no-repeat 12px 7px;
+				background: transparent url(../images/ico_check_box.png) no-repeat 12px 7px;
 
 				&.selection-item-over{
 					background-color: $over-color;
@@ -186,9 +186,9 @@ $over-color: #f4f3f3;
 
 
 				&.selection-selected {
-					background: transparent url(../images/check_mark_a.png) no-repeat 15px 10px;
+					background: transparent url(../images/ico_check_mark_a.png) no-repeat 15px 10px;
 					&:active {
-						background-image: url(../images/check_mark_b.png);
+						background-image: url(../images/ico_check_mark_b.png);
 					}
 				}
 
@@ -257,7 +257,7 @@ $over-color: #f4f3f3;
 	@include side-panel-view-title;
 	.view-title {
 		.search {
-			background: url(../images/search.png) 11px 8px no-repeat;
+			background: url(../images/ico_search.png) 11px 8px no-repeat;
 			position: absolute;
 			width: 39px;
 			height: 32px;
@@ -391,7 +391,7 @@ div.group-buttons {
 			content: ' ';
 			position: absolute;
 			top: 0; left: 0;
-			background: url(../images/add-people.png) 0 0 no-repeat;
+			background: url(../images/ico_add_people.png) 0 0 no-repeat;
 			width: 17px;
 			height: 14px;
 		}

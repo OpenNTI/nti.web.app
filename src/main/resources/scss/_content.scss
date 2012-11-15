@@ -16,14 +16,14 @@
 	}
 
 	&.top::after{
-		content: url(../images/bubble-tip-top.png);
+		content: url(../images/elements/bubble-tip-top.png);
 		position: absolute;
 		top: -15px;
 		left: 160px;
 	}
 
 	&.bottom::after{
-		content: url(../images/bubble-tip.png);
+		content: url(../images/elements/bubble-tip.png);
 		position: absolute;
 		bottom: -20px;
 		left: 160px;
@@ -50,7 +50,7 @@
 			.label { color: $primary-grey; }
 			.menu {
 				span {
-					background-image: url(../images/menu-arrow-down-active.png);
+					background-image: url(../images/elements/menu-arrow-down-active.png);
 				}
 			}
 		}
@@ -80,7 +80,7 @@
 		white-space: nowrap;
 		span {
 			padding-right: 15px !important;
-			background: url(../images/menu-arrow-down-default.png) no-repeat 100% 50%;
+			background: url(../images/elements/menu-arrow-down-default.png) no-repeat 100% 50%;
 
 			.x-ie & {
 				display: block;
@@ -213,7 +213,7 @@
 
 			&.selection-selected,
 			&.x-menu-item-checked {
-				background: transparent url(../images/menu-check.png) no-repeat 10px 50%;
+				background: transparent url(../images/ico_menu_check.png) no-repeat 10px 50%;
 			}
 
 			&.multiselect,
@@ -271,7 +271,7 @@
 		}
 
 		.x-box-scroller-bottom .x-menu-scroll-bottom {
-			background-image: url(../images/menu-arrow-down-active.png);
+			background-image: url(../images/elements/menu-arrow-down-active.png);
 			opacity: 0.5;
 			&.x-menu-scroll-bottom-hover {
 				opacity: 1;
@@ -282,7 +282,7 @@
 		}
 
 		.x-box-scroller-top .x-menu-scroll-top {
-			background-image: url(../images/menu-arrow-up-active.png);
+			background-image: url(../images/elements/menu-arrow-up-active.png);
 			opacity: 0.5;
 			&.x-menu-scroll-top-hover {
 				opacity: 1;
@@ -342,7 +342,7 @@
 		border-radius: 3px;
 		.x-btn-icon {
 			background-position: 6px 9px;
-			background-image: url(../images/page-font.png);
+			background-image: url(../images/ico_font.png);
 		}
 	}
 
@@ -352,14 +352,14 @@
 		.x-btn-icon {
 			width: 46px;
 			background-position: 10px 7px;
-			background-image: url(../images/page-settings.png);
+			background-image: url(../images/ico_settings.png);
 		}
 	}
 
 	&.prev {
 		border-radius: 3px 0 0 3px;
 		.x-btn-icon {
-			background-image: url(../images/page-prev.png);
+			background-image: url(../images/ico_prev.png);
 		}
 	}
 	&.next {
@@ -367,7 +367,7 @@
 		border-left-width: 0 !important;
 		.x-btn-icon {
 			left: 1px;
-			background-image: url(../images/page-next.png);
+			background-image: url(../images/ico_next.png);
 		}
 	}
 }

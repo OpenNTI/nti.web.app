@@ -91,7 +91,7 @@
 
 		&::before {
 			position: absolute;
-			content: url(../images/flyout-nib.png);
+			content: url(../images/elements/flyout-nib.png);
 			width: 12px;
 			height: 8px;
 			top: -12px;
@@ -264,7 +264,7 @@
 
 			.x-btn-arrow-right,
 			.x-btn-split-right {
-				background: url(../images/menu-arrow-down-active.png) right 20px no-repeat;
+				background: url(../images/elements/menu-arrow-down-active.png) right 20px no-repeat;
 				padding-right: 15px!important;
 				.x-btn-inner{
 					padding-right: 0px;
@@ -312,7 +312,7 @@
 				&.whiteboard-tool-option-split-right {
 					display: block;
 					padding-right: 15px;
-					background: url(../images/split-light-nib.png) right 14px no-repeat;
+					background: url(../images/elements/split-light-nib.png) right 14px no-repeat;
 					margin-right: 2px;
 
 					//for poly
