@@ -85,43 +85,82 @@ Ext.define('NextThought.view.content.Reader', {
 		return this.contentRootElement;
 	},
 
+	//TODO Not all the things this object returns appear used.
+	//As a further optimization we can stop calculating them
+	//or create getters for the properties that handle lazy
+	//calculations.
+	calculateNecessaryAnnotationOffsets: function(){
+		var cache = this.annotationOffsetsCache || {},
+			statics = cache.statics || {},
+			windowSizeStatics = cache.windowSizeStatics || {},
+			f = this.getIframe(),
+			currentWindowSize = Ext.dom.Element.getViewSize(),
+			locationStatics = cache.locationStatics || {},
+			defaultContentPadding = 0, e, l;
 
-	//TODO In all the profiles for all the various IE performance
-	//issues looked at in IE.  This is constantly one of the most expensive
-	//functions.  Most of the time boils down to getWidth and getMargin
-	//which result in calls to getStyle.  We should figure out how to remove
-	//the fields we don't need and/or cache where we can.  As an example in the
-	//annotation manager moving calls to this function from the inside to the outside
-	//of the render loop sped that code up an obscene amount. (10x IIRC)
-	getAnnotationOffsets: function(){
-		var f = this.getIframe(),
-			l = f.getLeft()-this.getEl().getLeft(),
-			e = Ext.get(this.getContentRoot()),
-			contentPadding = 0;
+		//Right now certain thins are static to the reader.
+		//currently those props are top and width
+		if(!statics.hasOwnProperty('top')){
+			statics.top = f.getTop();
+		}
+		if(!statics.hasOwnProperty('width')){
+			statics.width = f.getWidth();
+		}
+		cache.statics = statics;
 
-		try {
-			if(e){
-				if(this.contentPaddingCache === undefined){
-					this.contentPaddingCache = e.getMargin('l') + e.getPadding('l');
+		//Other things are based on the windowSize. left and height
+		if(   !windowSizeStatics.hasOwnProperty('windowSize')
+		   || !windowSizeStatics.windowSize.width
+		   || !windowSizeStatics.windowSize.height
+		   || windowSizeStatics.windowSize.width !== currentWindowSize.width
+		   || windowSizeStatics.windowSize.height !== currentWindowSize.height){
+			windowSizeStatics.windowSize = currentWindowSize;
+			windowSizeStatics.left = f.getLeft();
+			windowSizeStatics.height = f.getHeight();
+		}
+
+		cache.windowSizeStatics = windowSizeStatics;
+
+		//The last set is static based on location.  We handle
+		//purging this cache in onNavigate so we just need to set it
+		//here if it doesn't exist. contentLeftPadding and gutter
+		if(!locationStatics.hasOwnProperty('gutter')){
+			if(!l){
+				l = windowSizeStatics.left - this.getEl().getLeft();
+			}
+			locationStatics.gutter = l + f.getMargin('l');
+		}
+		if(!locationStatics.hasOwnProperty('contentLeftPadding')){
+			try {
+				if(!e){
+					e = Ext.get(this.getContentRoot());
 				}
-				contentPadding = this.contentPaddingCache;
+				if(e){
+					locationStatics.contentLeftPadding = e.getMargin('l') + e.getPadding('l');
+				}
+			}
+			catch(er){
+				console.error(Globals.getError(er));
 			}
 		}
-		catch(er){
-			console.error(Globals.getError(er));
-		}
+		cache.locationStatics = locationStatics;
 
-		//TODO Not all of these are used, some can be cached, and others can be
-		//calculated lazly
+		//Incase the cache object didn't exist before set it back
+		this.annotationOffsetsCache = cache;
+
 		return {
-			top: f.getTop(), //static value
-			left: f.getLeft(), //static based on window size.  left < gutter
-			height: f.getHeight(), //static based on window size.
-			width: f.getWidth(),//static value
-			gutter: l+f.getMargin('l'), //static based on page
-			contentLeftPadding: contentPadding, //static based on page
+			top: statics.top, //static
+			left: windowSizeStatics.left, //static based on window size.  left < gutter
+			height: windowSizeStatics.height, //static based on window size.
+			width: statics.width,//static value
+			gutter: locationStatics.gutter, //static based on page
+			contentLeftPadding: locationStatics.contentLeftPadding || defaultContentPadding, //static based on page
 			scrollTop: this.body.getScroll().top //dynamic
-		};
+		};;
+	},
+
+	getAnnotationOffsets: function(){
+		return this.calculateNecessaryAnnotationOffsets();
 	},
 
 
@@ -131,7 +170,9 @@ Ext.define('NextThought.view.content.Reader', {
 
 
 	onNavigate: function(ntiid) {
-		delete this.contentPaddingCache;
+		if(this.annotationOffsetsCache){
+			delete this.annotationOffsetsCache.locationStatics;
+		}
 
 		this.clearAnnotations();
 
