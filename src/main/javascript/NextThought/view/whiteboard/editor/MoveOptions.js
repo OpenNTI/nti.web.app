@@ -102,11 +102,17 @@ Ext.define('NextThought.view.whiteboard.editor.MoveOptions',{
 		}
 
 		if(options.stroke){
-			val = Color.rgbaToHex(options.stroke).substr(1).toUpperCase();
-			strokeButton.setValue(val);
+            val = null;
+            if (options.stroke !== 'NONE'){
+                val = Color.rgbaToHex(options.stroke).substr(1).toUpperCase();
+            }
+            strokeButton.setValue(val);
 		}
 		if(options.fill) {
-			val = Color.rgbaToHex(options.fill).substr(1).toUpperCase();
+            val = null;
+            if (options.fill !== 'NONE'){
+			    val = Color.rgbaToHex(options.fill).substr(1).toUpperCase();
+            }
 			fillButton.setValue(val);
 		}
 
