@@ -227,7 +227,7 @@
 						content: ' ';
 						width: 10px;
 						height: 10px;
-						background: url(../images/quiz/sprite.png) 0 0 no-repeat;
+						background: url(../images/spr_quiz.png) 0 0 no-repeat;
 					}
 
 					&.correct::after { background-position: -120px -121px; }
@@ -307,7 +307,7 @@
 							position: absolute;
 							top: 10px; left: 10px;
 							display: none;
-							background: url(../images/quiz/sprite.png) -116px -16px no-repeat;
+							background: url(../images/spr_quiz.png) -116px -16px no-repeat;
 						}
 
 					  	.mathquill-editable,
@@ -371,7 +371,7 @@
 
 						&::after{
 							content: ' ';
-							background: url(../images/quiz/spr_answer_history.png) 0 0 no-repeat;
+							background: url(../images/spr_answer_history.png) 0 0 no-repeat;
 							position: absolute;
 							width: 30px;
 							height: 18px;
@@ -416,7 +416,7 @@
 							height: 38px;
 							border: none;
 							border-left: 6px solid white;
-							background: url(../images/quiz/sprite.png) -1000px -1000px no-repeat;
+							background: url(../images/spr_quiz.png) -1000px -1000px no-repeat;
 							&.checked {
 								border-color: $primary-blue;
 							}
@@ -465,7 +465,7 @@
 							position: absolute;
 							top: 0;
 							right: 0;
-							background: url(../images/window_controls.png) -51px 0 no-repeat;
+							background: url(../images/spr_window_controls.png) -51px 0 no-repeat;
 							&:hover{
 								opacity: 1;
 							}
@@ -507,7 +507,7 @@
 						cursor: pointer;
 						width: 36px;
 						height: 36px;
-						background: url(../images/symbols/math_symbols_sprite.png) 0 0 no-repeat;
+						background: url(../images/spr_math_symbols.png) 0 0 no-repeat;
 						float: left;
 
 						&.sqrt { background-position: -2px -2px; }

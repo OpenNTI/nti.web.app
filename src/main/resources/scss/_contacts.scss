@@ -24,7 +24,7 @@ $over-color: #f4f3f3;
 	}
 
 	.x-panel-header {
-		background: url(../images/collapse-expand.png) no-repeat 10px 7px;
+		background: url(../images/spr_collapse_expand.png) no-repeat 10px 7px;
 		cursor: pointer;
 		padding-left: 20px;
 		padding-right: 10px;
@@ -38,7 +38,7 @@ $over-color: #f4f3f3;
 				width: 20px;
 				height: 20px;
 				opacity: 0.5;
-				background: url(../images/contact_options.png) 0px 0px no-repeat;
+				background: url(../images/spr_contact_options.png) 0px 0px no-repeat;
 				&:hover {
 					opacity: 1;
 				}
@@ -57,7 +57,7 @@ $over-color: #f4f3f3;
 		margin-left: 0;
 		img {
 			&.nib {
-				background: transparent url(../images/add_remove_gry.png) -2px -2px no-repeat;
+				background: transparent url(../images/spr_add_remove_gry.png) -2px -2px no-repeat;
 				margin-top: 10px;
 				border: none !important;
 				float: right;
@@ -94,14 +94,14 @@ $over-color: #f4f3f3;
 
 		&.public,
 		&.group {
-			background: url(../images/dark_sprite.png) 0 0 no-repeat;
+			background: url(../images/spr_groups_dark.png) 0 0 no-repeat;
 		}
 		&.group {
 			background-position: -32px 0;
 		}
 
 		&.nib {
-			background: transparent url(../images/contact_options.png) 0px 0px no-repeat;
+			background: transparent url(../images/spr_contact_options.png) 0px 0px no-repeat;
 			display: none;
 			margin-top: 7px;
 			border: none !important;
@@ -176,7 +176,7 @@ $over-color: #f4f3f3;
 			li.selection-list-item {
 				padding: 5px 5px 5px 35px;
 				color: $secondary-grey !important;
-				background: transparent url(../images/forms/check_box.png) no-repeat 12px 7px;
+				background: transparent url(../images/check_box.png) no-repeat 12px 7px;
 
 				&.selection-item-over{
 					background-color: $over-color;
@@ -186,9 +186,9 @@ $over-color: #f4f3f3;
 
 
 				&.selection-selected {
-					background: transparent url(../images/forms/check_mark_a.png) no-repeat 15px 10px;
+					background: transparent url(../images/check_mark_a.png) no-repeat 15px 10px;
 					&:active {
-						background-image: url(../images/forms/check_mark_b.png);
+						background-image: url(../images/check_mark_b.png);
 					}
 				}
 
@@ -232,7 +232,7 @@ $over-color: #f4f3f3;
 
 				img.delete-group {
 					display: none;
-					background: transparent url(../images/add_remove_gry.png) -20px -2px no-repeat;
+					background: transparent url(../images/spr_add_remove_gry.png) -20px -2px no-repeat;
 					margin-top: 3px;
 					border: none !important;
 					float: right;

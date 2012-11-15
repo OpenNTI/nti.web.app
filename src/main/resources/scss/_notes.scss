@@ -148,7 +148,7 @@
 						width: auto;
 						white-space: nowrap;
 						background:{
-							image: url(../images/tools/share.png), url(../images/tools/share-drop-arrow.png);
+							image: url(../images/share.png), url(../images/share-drop-arrow.png);
 							position: 4px 8px, right 15px;
 							repeat: no-repeat;
 						};
@@ -274,7 +274,7 @@
 				margin: -1px;
 
 				&.whiteboard {
-					background: url(../images/whiteboard/icon.png) 9px 12px no-repeat;
+					background: url(../images/ico_whiteboard.png) 9px 12px no-repeat;
 				}
 
 				&.cancel {
@@ -287,7 +287,7 @@
 					font-weight: bold;
 					font-style: italic;
 					color: #ffffff;
-					background: $primary-blue url(../images/notes/comment-icon-white.png) 15px 8px no-repeat;
+					background: $primary-blue url(../images/comment-icon-white.png) 15px 8px no-repeat;
 					border: 1px solid #39a1dd;
 					padding: 0 0 0 24px;
 				}
@@ -338,7 +338,7 @@
 			margin-right: 0;
 			width: 32px;
 			//overflow: hidden;
-			background: url(../images/more-options.png) -27px center no-repeat;
+			background: url(../images/spr_more_options.png) -27px center no-repeat;
 			border: 1px solid rgba(0,0,0,0);
 			border-radius: 2px;
 
@@ -382,7 +382,7 @@
 						content: ' ';
 						width: 18px;
 						height: 18px;
-						background: url(../images/options-menu-sprite.png) 0 0 no-repeat;
+						background: url(../images/spr_options_menu.png) 0 0 no-repeat;
 						position: absolute;
 						top: 5px;
 						left: 10px;
@@ -438,7 +438,7 @@
 				content: ' ';
 				width: 18px;
 				height: 18px;
-				background: url(../images/options-menu-sprite.png) 0 0 no-repeat;
+				background: url(../images/spr_options_menu.png) 0 0 no-repeat;
 				position: absolute;
 				top: 5px;
 				left: 10px;
@@ -552,7 +552,7 @@
 				position: absolute;
 				bottom: 4px; right: 38px;
 				width: 16px; height: 16px;
-				background: url(../images/tools/clear-line.png) 0 0 no-repeat;
+				background: url(../images/clear-line.png) 0 0 no-repeat;
 				opacity: 0.6;
 				&:hover{
 					opacity: 1;
@@ -564,7 +564,7 @@
 				cursor: pointer;
 				position: absolute;
 				top: 0; right: 0;
-				background: url(../images/notes/comment-icon-small-active.png) 0 0 no-repeat;
+				background: url(../images/comment-icon-small-active.png) 0 0 no-repeat;
 				width: 30px;
 				height: 27px;
 			}
@@ -593,7 +593,7 @@
 		margin-left: 19px;
 		top: -7px;
 		right: -3px;
-		background: url(../images/notes/ico_comment_indicator.png) 0 0 no-repeat;
+		background: url(../images/ico_comment_indicator.png) 0 0 no-repeat;
 		font-size: 11px;
 		font-weight: semibold;
 		font-style: italic;
@@ -612,7 +612,7 @@
 			top: 2px; left: 3px;
 			width: 29px;
 			height: 26px;
-			background: url(../images/notes/add_note_sprite.png) 0 0 no-repeat;
+			background: url(../images/spr_add_note.png) 0 0 no-repeat;
 		}
 
 		&:hover {
@@ -655,7 +655,7 @@
 			}
 
 			&::after {
-				content: url(../images/notes/bubble-tip-top.png);
+				content: url(../images/bubble-tip-top.png);
 				top: auto;
 				bottom: -18px;
 			}
@@ -694,7 +694,7 @@
 		}
 
 		&::after {
-			 content: url(../images/notes/bubble-tip.png);
+			 content: url(../images/bubble-tip.png);
 			 display: none;
 			 position: absolute;
 			 top: -18px;
@@ -884,7 +884,7 @@
 
 
 	.carousel {
-		background: url(../images/notes/carousel.png) -365px 0px no-repeat;
+		background: url(../images/carousel.png) -365px 0px no-repeat;
 		border: 1px solid #c5c5c5;
 		border-bottom-width: 0;
 		border-left-width: 0;
@@ -943,7 +943,7 @@
 				.count {
 					opacity: 1; font-size: 12px;
 					span {
-						background: url(../images/notes/ico_comment_indicator.png) 0 center no-repeat;
+						background: url(../images/ico_comment_indicator.png) 0 center no-repeat;
 						padding-left: 18px;
 
 						&:empty{
@@ -985,10 +985,10 @@
 				left: 0;
 			}
 			.forward{
-				background: url(../images/notes/next.png) 0 50% no-repeat;
+				background: url(../images/next.png) 0 50% no-repeat;
  			}
 			.backward{
-				background: url(../images/notes/prev.png) 0 50% no-repeat;
+				background: url(../images/prev.png) 0 50% no-repeat;
  			}
 		}
 
@@ -1044,7 +1044,7 @@
 				opacity: 1;
 			}
 			&::after{
-				background: url(../images/add_contact.png) 0 0 no-repeat;
+				background: url(../images/spr_add_contact.png) 0 0 no-repeat;
 				height: 18px;
 				width: 18px;
 				position: absolute;
@@ -1315,7 +1315,7 @@
 	.circle {
 	  	z-index: 99999;
 		position: absolute;
-		background: url(../images/notes/prev-next-circles.png) 0 0 no-repeat;
+		background: url(../images/prev-next-circles.png) 0 0 no-repeat;
 		width: 77px;
 		height: 77px;
 		margin-top: 125px;

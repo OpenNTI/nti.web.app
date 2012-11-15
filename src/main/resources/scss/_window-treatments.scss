@@ -79,7 +79,7 @@
 					cursor: pointer;
 
 
-					background: url(../images/window_controls.png) -100px -100px no-repeat;
+					background: url(../images/spr_window_controls.png) -100px -100px no-repeat;
 					&.close { background-position: -54px 0; }
 					&.minimize { background-position: -27px 0; }
 					&.popout { background-position: 0 0; }
@@ -236,7 +236,7 @@
 				opacity: 0.5;
 				width: 30px; height: 26px;
 				cursor: pointer;
-				background: url(../images/window_controls.png) -49px -1px no-repeat;
+				background: url(../images/spr_window_controls.png) -49px -1px no-repeat;
 			}
 		}
 	}

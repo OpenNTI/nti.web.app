@@ -54,7 +54,7 @@
 				display: inline-block;
 
 				&.nib-stack{
-					background: url(../images/notes/margin_note_endcap.png) right center no-repeat;
+					background: url(../images/margin_note_endcap.png) right center no-repeat;
 					width: 10px;
 					height: 30px;
 				}
@@ -103,7 +103,7 @@
 		font-size: 8pt;
 		color: $tertiary-grey;
 		padding: 0 0 0 25px;
-		//TODO: fix these references to use the activity-icons.png sprite.
+		//TODO: fix these references to use the spr_activity_icons.png sprite.
 		.comment & {	background: url(../images/activity-comment.png) 0 2px no-repeat;}
 		.highlight & {	background: url(../images/activity-highlight.png) 0 3px no-repeat;}
 		.note & {		background: url(../images/activity-note.png) 4px 0 no-repeat;}
@@ -147,7 +147,7 @@ div.redaction-control {
 	z-index: 9999;
 
 	img {
-		background: url(../images/redactions/redact_plus.png) 4px 4px no-repeat;
+		background: url(../images/redact_plus.png) 4px 4px no-repeat;
 		border: 0px solid #c4c4c4;
 		border-radius: 4px;
 		width: 20px;
@@ -157,7 +157,7 @@ div.redaction-control {
 	}
 
 	&.redacted img {
-		background-image: url(../images/redactions/redact_minus.png);
+		background-image: url(../images/redact_minus.png);
 	}
 }
 
@@ -255,7 +255,7 @@ div.redaction-control {
 				&::after {
 					position: absolute;
 					content: '';
-					background: url(../images/redactions/div_block_redaction.png) 0 0 repeat-x;
+					background: url(../images/div_block_redaction.png) 0 0 repeat-x;
 					top: -6px; left: 0;
 					width: 100%;
 					height: 11px;
@@ -357,7 +357,7 @@ div.redaction-control {
 				box-shadow: inset 0 0 0 1px $border-grey;
 
 				&::after {
-					background: url(../images/redactions/spr_redaction.png) 0 0 no-repeat;
+					background: url(../images/spr_redaction.png) 0 0 no-repeat;
 					content: ' ';
 					width: 16px;
 					height: 16px;
@@ -494,12 +494,12 @@ div.redaction-control {
 				&.with-count {
 					overflow: hidden;
 					width: 30px;
-					background-image: url(../images/highlights/counter_tip_default.png);
+					background-image: url(../images/counter_tip_default.png);
 
 
 					&.highlight-mouse-over{
 						color: #ffffff;
-						background-image: url(../images/highlights/counter_tip_hover.png);
+						background-image: url(../images/counter_tip_hover.png);
 					}
 
 					span {
