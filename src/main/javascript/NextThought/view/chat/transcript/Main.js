@@ -42,7 +42,8 @@ Ext.define('NextThought.view.chat.transcript.Main',{
 
 	afterRender: function(){
 		this.callParent(arguments);
-		this.el.down('.reply').remove();
+        var r = this.el.down('.reply');
+		if(r){r.remove();}
 		this.el.on('click', this.click, this);
 		/*Ext.each(this.el.query('.whiteboard-thumbnail'),
 				function(wb){
