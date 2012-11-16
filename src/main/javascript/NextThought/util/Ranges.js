@@ -72,7 +72,8 @@ Ext.define('NextThought.util.Ranges',{
             r.expand('word');
         }
         catch(e){
-            //we might overflow boundries, that's okay, get what we can...
+            //we might overflow boundries, that's okay, get what we can but be sure to ask for word resolution...
+            r.expand('word');
         }
 
         sel.setSingleRange(r);
