@@ -682,7 +682,9 @@ Ext.define('NextThought.controller.Chat', {
 
 	onMembershipOrModerationChanged: function(msg) {
 		var newRoomInfo = ParseUtils.parseItems([msg])[0],
-			oldRoomInfo = this.getRoomInfoFromSessionStorage(newRoomInfo.getId());
+			oldRoomInfo = this.getRoomInfoFromSessionStorage(newRoomInfo.getId()),
+            occupants = newRoomInfo.get('Occupants'),
+            toast;
 
 		if(newRoomInfo.get('Moderators').length === 0 && newRoomInfo.get('Moderated')) {
 			console.log('Transient moderation change encountered, ignoring', newRoomInfo);
@@ -691,6 +693,16 @@ Ext.define('NextThought.controller.Chat', {
 
 		this.sendChangeMessages(oldRoomInfo, newRoomInfo);
 		this.updateRoomInfo(newRoomInfo);
+
+        //if membership falls to just me, and we have a toast, DESTROY!
+        if (occupants.length === 1 && occupants[0] === $AppConfig.userObject.get('Username')) {
+            toast = Ext.ComponentQuery.query('toast[roomId='+IdCache.getIdentifier(newRoomInfo.getId())+']');
+            if(toast && toast.length === 1){
+                toast[0].close();
+            }
+        }
+
+
 		return newRoomInfo; //for convinience chaining
 	},
 
@@ -936,8 +948,11 @@ Ext.define('NextThought.controller.Chat', {
 		me.putRoomInfoIntoSessionStorage(roomInfo);
 		w = me.openChatWindow(roomInfo);
 
-        //if I created the window, then that's an auto-accept
-        if(me.isRoomIdAccepted(roomInfo.getId()) || (roomInfo.get('Creator') === $AppConfig.userObject.get('Username'))){
+        //Rules for auto-accepting are getting complicated, I will enumerate them here:
+        //1) if it's not a group chat, accept
+        //2) regardless of group or not, if the room has been previously accepted, accept (like a refresh)
+        //3) if you created it, accept
+        if(!isGroupChat || me.isRoomIdAccepted(roomInfo.getId()) || (roomInfo.get('Creator') === $AppConfig.userObject.get('Username'))){
             isAcceptedOrTimedOut();
             return;
         }
@@ -945,21 +960,25 @@ Ext.define('NextThought.controller.Chat', {
         UserRepository.getUser(roomInfo.get('Creator'), function(u){
             //at this point, window has been created but not accepted.
             Toaster.makeToast({
+                roomId: IdCache.getIdentifier(roomInfo.getId()),
                 title: isGroupChat ? 'Group Chat...' : 'Chat Invitation...',
                 message: isGroupChat
-                    ? 'You\'ve been invited to chat with <span>'+(occupants.length-2)+'</span> friends.'
+                    ? 'You\'ve been invited to chat with <span>'+(occupants.length-1)+'</span> friends.'
                     : '<span>'+ u.getName()+'</span> would like to chat.',
                 iconCls: 'chat-bubble-32',
-                buttons: [{
-                    label: 'accept',
-                    callback: isAcceptedOrTimedOut,
-                    scope: this},
+                buttons: [
                     {
                         label: 'decline',
                         callback: isDeclined,
                         scope: me
-                    }],
-                callback: isAcceptedOrTimedOut,
+                    },
+                    {
+                        label: 'accept',
+                        callback: isAcceptedOrTimedOut,
+                        scope: this
+                    }
+                ],
+                callback: isDeclined,
                 scope: me
             });
         });
