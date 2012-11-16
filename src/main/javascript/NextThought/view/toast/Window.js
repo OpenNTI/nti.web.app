@@ -53,7 +53,7 @@ Ext.define('NextThought.view.toast.Window',{
 	},
 
 	renderButton: function(button){
-		var b = this.buttonTpl.append(this.buttonRowEl,button);
+		var b = this.buttonTpl.append(this.buttonRowEl,button,true);
 		this.mon(b,'click',
 				Ext.Function.createSequence(
 						this.close,

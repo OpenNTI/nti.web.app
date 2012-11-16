@@ -52,11 +52,17 @@
 	}
 
 	.button-row {
-		&:not(:empty){
-			margin-top: 10px;
-		}
+		position: relative;
+		overflow: hidden;
+		text-align: right;
 
-		.button {
+		&:not(:empty){ margin-top: 10px; }
+
+
+		.toast-button {
+			margin: 0 10px;
+			display: inline-block;
+			white-space: nowrap;
 			text-transform: uppercase;
 			font-family: $font;
 			font-size: 12px;
@@ -64,6 +70,10 @@
 			font-weight: 600;
 			color: $tertiary-grey;
 			cursor: pointer;
+
+			&:last-of-type {
+				margin-right: 0;
+			}
 		}
 	}
 }
