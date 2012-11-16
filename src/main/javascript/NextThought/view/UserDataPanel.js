@@ -125,7 +125,7 @@ Ext.define('NextThought.view.UserDataPanel',{
 		}
 
         var storeId = this.self.storeIds[this.mimeType[0]];
-
+		this.alwaysShowHeading = true;
         if (!this.store){
             if(Ext.Array.contains(this.mimeTypes, 'note')){
                 this.store = this.buildStore('MeOnly',storeId,'GroupingField');
@@ -164,6 +164,7 @@ Ext.define('NextThought.view.UserDataPanel',{
             }
             else if (Ext.Array.contains(this.mimeTypes, 'transcriptsummary')){
                 this.store = this.buildStore(null,storeId,'MimeType');
+				this.alwaysShowHeading = false;
                 //TODO - what about adding/deleting?
                 this.mon(this.store, 'datachanged', this.applyTranscriptSummaryMimetypeFilter, this);
             }
@@ -370,10 +371,15 @@ Ext.define('NextThought.view.UserDataPanel',{
 		me.dataGuidMap = {};
 
 		function doGroup(group){
-			var label = (group.name||'').replace(/^[A-Z]\d{0,}\s/,'') || 'Today';
+			var groupName = (group.name || ''),
+				regex = /^[A-Z]\d{0,}\s/,
+				label = groupName.replace(regex,'') || 'Today';
+
 			label = label.replace(/^application\/vnd.nextthought\.(.*)$/,'$1s');
 
-			items.push({ label: label });
+			if(this.alwaysShowHeading || groups.length != 1){
+				items.push({ label: label });
+			}
 
 			Ext.each(group.children,function(c){
 				var fn = me.dataMapper[c.mimeType];
