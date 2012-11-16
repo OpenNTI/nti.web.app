@@ -6,7 +6,7 @@ Ext.define('NextThought.view.toast.Window',{
 	cls: 'toast',
 	floating: true,
 	plain: true,
-	width: 240,
+	width: 275,
 
 	renderTpl: Ext.DomHelper.markup([{
 		cls: 'close'
