@@ -1,16 +1,3 @@
-//Animate Mixin Plugin
-
-@mixin animate($name: fadeIn, $duration: 1s, $delay: 0.2s, $function: ease, $mode: both, $iteration:null) {
-	$value: $name $duration $delay $function $iteration $mode;
-	@if $iteration==null {
-		$value: $name $duration $delay $function $mode;
-  	}
-	@include experimental(animation, $value);
-	.x-safari5 & {
-		@include experimental(animation, none);
-	}
-}
-
 // http://daneden.me/animate/build/
 
 //KeyFrame Defaults (pre-made don't edit)
