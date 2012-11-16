@@ -153,17 +153,13 @@
 				display: inline-block;
 				width: 15px;
 				height: 15px;
-				background: url(../images/spr_quiz.png) -68px -68px no-repeat;
+				background: url(../images/spr_quiz.png) -68px -18px no-repeat;
+				&:hover {
+					background-position: -68px -68px ;
+				}
 				&.checked{
-					background-position: -68px -18px;
-					&::after {
-						content: ' ';
-						left: 0;
-						top: 0;
-						position: absolute;
-						height: 15px;
-						width: 15px;;
-						background: url(../images/spr_quiz.png) -68px -119px no-repeat;
+					&,&:hover {
+						background-position: -68px -118px;
 					}
 				}
 				&.confirmFlagged {
