@@ -56,15 +56,23 @@ Ext.define('NextThought.view.toast.Window',{
 		var b = this.buttonTpl.append(this.buttonRowEl,button,true);
 		this.mon(b,'click',
 				Ext.Function.createSequence(
-						this.close,
+						Ext.Function.createSequence(
+							this.setActedOn,
+							this.close,this),
+
 						button.callback,
 						button.scope||this),
-				this);
+				this, {buttonCfg: button});
+	},
+
+
+	setActedOn: function(clickEvent,dom,eOpts){
+		this.actedOn = eOpts.buttonCfg || true;
 	},
 
 
 	close: function(e){
-		e.stopEvent();
+		if(e){ e.stopEvent(); }
 		var size = Ext.dom.Element.getViewSize();
 		this.animate({
 			to:{ top: size.height + 10 },
@@ -74,6 +82,11 @@ Ext.define('NextThought.view.toast.Window',{
 	            scope: this
 			}
 		});
+
+		if(!this.actedOn){
+			Ext.callback(this.callback,this.scope||this);
+		}
+
 		return false;
 	}
 });

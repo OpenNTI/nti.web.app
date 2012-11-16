@@ -5,6 +5,7 @@ Ext.define('NextThought.view.toast.Manager',{
 
 	PADDING: 10,
 
+	/** @private */
 	constructor: function(){
 		this.callParent(arguments);
 		this.stack = [];
@@ -13,6 +14,7 @@ Ext.define('NextThought.view.toast.Manager',{
 	/**
 	 *
 	 * @param bread - TODO: write this doc :P
+	 * @returns toast
 	 */
 	makeToast: function(bread){
 		var size = Ext.dom.Element.getViewSize(),
@@ -25,9 +27,11 @@ Ext.define('NextThought.view.toast.Manager',{
 		toast.on('afterRender',this.popToast,this, {single:true});
 		toast.on('destroy',this.eatToast,this);
 		toast.show();
+
+		return toast;
 	},
 
-
+	/** @private */
 	measure: function(loaf){
 		var padding = this.PADDING,
 			sum = 0;
@@ -35,7 +39,7 @@ Ext.define('NextThought.view.toast.Manager',{
 		return sum;
 	},
 
-
+	/** @private */
 	eatToast: function(toast){
 		var idx = Ext.Array.indexOf(this.stack,toast);
 		if(idx < 0){return;}
@@ -45,6 +49,7 @@ Ext.define('NextThought.view.toast.Manager',{
 	},
 
 
+	/** @private */
 	popToast: function(toast){
 
 		var top = Ext.dom.Element.getViewSize().height,
