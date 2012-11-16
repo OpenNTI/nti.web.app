@@ -93,16 +93,15 @@ Ext.define('NextThought.view.content.Reader', {
 		var cache = this.annotationOffsetsCache || {},
 			statics = cache.statics || {},
 			windowSizeStatics = cache.windowSizeStatics || {},
+			scrollStatics = cache.scrollStatics || {},
 			f = this.getIframe(),
 			currentWindowSize = Ext.dom.Element.getViewSize(),
 			locationStatics = cache.locationStatics || {},
-			defaultContentPadding = 0, e, l;
+			defaultContentPadding = 0, e, l,
+			scrollPosition = this.body.getScroll().top;
 
 		//Right now certain thins are static to the reader.
-		//currently those props are top and width
-		if(!statics.hasOwnProperty('top')){
-			statics.top = f.getTop();
-		}
+		//currently those props are width
 		if(!statics.hasOwnProperty('width')){
 			statics.width = f.getWidth();
 		}
@@ -120,6 +119,16 @@ Ext.define('NextThought.view.content.Reader', {
 		}
 
 		cache.windowSizeStatics = windowSizeStatics;
+
+		//some are based on scroll position
+		if(   !scrollStatics.hasOwnProperty('lastScroll')
+		   || !scrollStatics.top
+		   || scrollStatics.lastScroll !== scrollPosition){
+			scrollStatics.lastScroll = scrollPosition;
+			scrollStatics.top = f.getTop();
+		}
+
+		cache.scrollStatics = scrollStatics;
 
 		//The last set is static based on location.  We handle
 		//purging this cache in onNavigate so we just need to set it
@@ -149,13 +158,13 @@ Ext.define('NextThought.view.content.Reader', {
 		this.annotationOffsetsCache = cache;
 
 		return {
-			top: statics.top, //static
+			top: scrollStatics.top, //static by scroll position
 			left: windowSizeStatics.left, //static based on window size.  left < gutter
 			height: windowSizeStatics.height, //static based on window size.
 			width: statics.width,//static value
 			gutter: locationStatics.gutter, //static based on page
 			contentLeftPadding: locationStatics.contentLeftPadding || defaultContentPadding, //static based on page
-			scrollTop: this.body.getScroll().top //dynamic
+			scrollTop: scrollPosition //dynamic
 		};;
 	},
 
