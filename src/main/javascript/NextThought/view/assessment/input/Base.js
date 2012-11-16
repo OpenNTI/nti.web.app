@@ -285,12 +285,23 @@ Ext.define('NextThought.view.assessment.input.Base',{
 	},
 
 	showHistoryMenu: function(e){
+        var me = this;
+        function closeAndDestroyMenu(){
+            console.log('destroy');
+            me.historyMenu.destroy();
+            delete me.historyMenu;
+        }
+
+        if (me.historyMenu){
+            closeAndDestroyMenu();
+            return;
+        }
 
 		var id;
-		if(!this.historyMenu){
-			this.historyMenu = Ext.widget('answer-history-menu', {
-				width: this.inputBox.getWidth(),
-				ownerCmp: this,
+		if(!me.historyMenu){
+            me.historyMenu = Ext.widget('answer-history-menu', {
+				width: me.inputBox.getWidth(),
+				ownerCmp: me,
 				items: [{
 					text: 'ANSWER HISTORY', cls:'answer-title', allowUncheck: false
 				},{
@@ -299,9 +310,10 @@ Ext.define('NextThought.view.assessment.input.Base',{
 			});
 		}
 
-		id = this.up('[question]').question.getId();
-		this.historyMenu.showBy(this.inputBox,'tl-bl?',[0,0]);
-		this.loadAnswerHistory(id);
+		id = me.up('[question]').question.getId();
+        me.historyMenu.showBy(me.inputBox,'tl-bl?',[0,0]);
+        me.mon(me.historyMenu, 'hide', closeAndDestroyMenu);
+        me.loadAnswerHistory(id);
 	},
 
 	buildAnswerHistoryStore: function(id){
