@@ -5,6 +5,7 @@
 	white-space: -moz-pre-wrap; /* Firefox */
 	white-space: -o-pre-wrap;   /* Opera */
 	word-wrap: break-word;      /* IE */
+	word-break: break-word;     /* WEBKIT */
 }
 
 @mixin meta-row {
