@@ -13,7 +13,7 @@ Ext.define('NextThought.view.assessment.input.Base',{
 			cls: 'response-container',
 			cn:[
 				{ cls: 'inputbox', html: '{input}' },
-				{ cls:'historyMenu' },
+				{ cls:'historyMenu x-menu' },
 				{ cls: 'solution', cn:[
 					{ cls: 'close' },
 					{ cls: 'answer', cn:[{tag: 'span'}] },
@@ -287,7 +287,6 @@ Ext.define('NextThought.view.assessment.input.Base',{
 	showHistoryMenu: function(e){
         var me = this;
         function closeAndDestroyMenu(){
-            console.log('destroy');
             me.historyMenu.destroy();
             delete me.historyMenu;
         }
