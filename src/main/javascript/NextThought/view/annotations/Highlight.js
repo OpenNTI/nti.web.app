@@ -142,15 +142,10 @@ Ext.define('NextThought.view.annotations.Highlight', {
 		rect = r ? r.getBoundingClientRect() : null;
 
 		try {
-			if(rect.top === 0 && r.getClientRects().length === 0 ){
+			if(rect.top === 0 && !r.collapsed && r.toString() === '' && !Ext.isTextNode(r.startContainer)){
 				console.log('No rect information...attempting to get selected node rect instead');
 				node = r.startContainer.childNodes[r.startOffset];
-				if(node.tagName === 'IMG'){
-					rect = node.getBoundingClientRect();
-				}
-				else {
-					console.log('selected node was not an image, skipping');
-				}
+				rect = node.getBoundingClientRect();
 			}
 		}
 		catch(er){
