@@ -1,4 +1,4 @@
-@import "variables";
+
 
 @mixin reset-window-border-radius($radius){
 	&,iframe,.x-window-body{ border-radius: $radius; }
