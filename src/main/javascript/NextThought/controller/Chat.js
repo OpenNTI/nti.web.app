@@ -934,9 +934,11 @@ Ext.define('NextThought.controller.Chat', {
             w.show();
         }
 
-        function isDeclined(){
-            me.leaveRoom(roomInfo);
-            w.close();
+        function isDeclined(btnOrFalse){
+            if (btnOrFalse === false){
+                me.leaveRoom(roomInfo);
+                w.close();
+            }
         }
 
 		var me = this,
