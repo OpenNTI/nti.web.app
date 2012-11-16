@@ -111,7 +111,7 @@ Ext.define('NextThought.controller.Chat', {
 			roomInfos = me.getAllRoomInfosFromSessionStorage(),
 			w;
 		Ext.each(roomInfos, function(ri) {
-			me.onEnteredRoom(ri);
+			me.onEnteredRoom(ri, true);
 			w = me.getChatWindow(ri);
 			w.show();
 			w.minimize();
@@ -272,7 +272,7 @@ Ext.define('NextThought.controller.Chat', {
 
 		ri = this.existingRoom(users, (options.ContainerId || null), options);
 		if (ri) {
-			this.onEnteredRoom(ri);
+			this.onEnteredRoom(ri, true);
 		}
 		else { //If we get here, there were no existing rooms, so create a new one.
 			roomCfg = {'Occupants': users};
@@ -515,6 +515,7 @@ Ext.define('NextThought.controller.Chat', {
 		if(isMe(roomInfo.get('Creator')) || existingChatWindow){
 			w.show();
 		}
+        return w;
 	},
 
 
@@ -779,7 +780,7 @@ Ext.define('NextThought.controller.Chat', {
 
 		this.channelMap[channel].call(this, m, opts||{});
 
-		if(!w.minimized && !w.isVisible()){
+		if(!w.minimized && !w.isVisible() && w.hasBeenAccepted()){
 			w.show();
 		}
 		else {
@@ -912,10 +913,51 @@ Ext.define('NextThought.controller.Chat', {
 //	},
 
 
-	onEnteredRoom: function(msg) {
-		var roomInfo = msg && msg.isModel? msg : ParseUtils.parseItems([msg])[0];
-		this.putRoomInfoIntoSessionStorage(roomInfo);
-		this.openChatWindow(roomInfo);
+	onEnteredRoom: function(msg, autoAccept) {
+        function isAcceptedOrTimedOut(){
+            w.accept(true);
+            w.show();
+        }
+
+        function isDeclined(){
+            me.leaveRoom(roomInfo);
+            w.close();
+        }
+
+		var me = this,
+            roomInfo = msg && msg.isModel? msg : ParseUtils.parseItems([msg])[0],
+            w,
+            occupants = roomInfo.get('Occupants'),
+            isGroupChat = (occupants.length > 2);
+
+		me.putRoomInfoIntoSessionStorage(roomInfo);
+		w = me.openChatWindow(roomInfo);
+
+        //if I created the window, then that's an auto-accept
+        if(autoAccept || (roomInfo.get('Creator') === $AppConfig.userObject.get('Username'))){
+            isAcceptedOrTimedOut();
+            return;
+        }
+
+        UserRepository.getUser(roomInfo.get('Creator'), function(u){
+            //at this point, window has been created but not accepted.
+            Toaster.makeToast({
+                title: isGroupChat ? 'Group Chat...' : 'Chat Invitation...',
+                message: isGroupChat
+                    ? 'You\'ve been invited to chat with <span>'+(occupants.length-2)+'</span> friends.'
+                    : '<span>'+ u.getName()+'</span> would like to chat.',
+                iconCls: 'chat-bubble-32',
+                buttons: [{
+                    label: 'accept',
+                    callback: isAcceptedOrTimedOut,
+                    scope: this},
+                    {
+                        label: 'decline',
+                        callback: isDeclined,
+                        scope: me
+                    }]
+            });
+        });
 	},
 
 

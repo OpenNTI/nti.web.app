@@ -169,5 +169,15 @@ Ext.define('NextThought.view.chat.Window', {
 
 	left:function () {
 		this.down('chat-entry').destroy();
-	}
+	},
+
+
+    accept: function(b){
+        this.chatAccepted = b;
+    },
+
+
+    hasBeenAccepted: function(){
+        return this.chatAccepted;
+    }
 });
