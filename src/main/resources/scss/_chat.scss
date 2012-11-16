@@ -12,15 +12,23 @@
 						margin-right: 5px;
 						width: 17px;
 						background: url(../images/ico_add_people.png) no-repeat 0 0;
+						&:hover{
+							opacity: 1;
+						}
 					}
 					&.flag-for-moderation {
 						opacity: 0.6;
 						margin-right: 5px;
 						width: 17px;
 						background: url(../images/spr_options_menu.png) no-repeat -20px -162px;
+						&:hover{
+							opacity: 1;
+						}
 						&.moderating {
-							background-position: -1px -179px;
-							opacity: 1.0;
+							&,&:hover{
+								background-position: -1px -179px;
+								opacity: 1.0;
+							}
 						}
 					}
 				}
