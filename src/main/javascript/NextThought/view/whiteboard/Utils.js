@@ -70,7 +70,7 @@ Ext.define('NextThought.view.whiteboard.Utils',{
 		wbCX = (scale*w)/2;
 		wbCY = (1/data.viewportRatio)/2;
 
-		if(h>w){
+		if(h>w || (h*scale)>(1/data.viewportRatio)){
 			scale = (1/data.viewportRatio)/h;
 			wbCY = (scale*h)/2;
 			wbCX = 0.5;
