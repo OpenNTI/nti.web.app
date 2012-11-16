@@ -83,7 +83,7 @@ Ext.define('NextThought.view.toast.Window',{
 			}
 		});
 
-		Ext.callback(this.callback,this.scope||this,this.actedOn||false);
+		Ext.callback(this.callback,this.scope||this,[this.actedOn||false]);
 		return false;
 	}
 });
