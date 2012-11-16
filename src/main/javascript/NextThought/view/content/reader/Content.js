@@ -152,8 +152,8 @@ Ext.define('NextThought.view.content.reader.Content',{
 		}
 
 		function cssObj(m){
-			var i = m.length-1, k=/href="([^"]*)"/i, o, c = {};
-			for(i; i>=0; i--){
+			var i = 0, k=/href="([^"]*)"/i, o, c = {};
+			for(i; i<m.length; i++){
 				o = k.test(m[i]) ? basePath + k.exec(m[i])[1] : m[i];
 				c[o] = {};
 				if(!rc[o]) {
