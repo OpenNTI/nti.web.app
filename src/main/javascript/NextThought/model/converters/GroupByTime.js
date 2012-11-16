@@ -9,28 +9,41 @@ Ext.define('NextThought.model.converters.GroupByTime',{
 
 			var now = new Date(),
 				v = new Date(r*1000),
-				today = new Date(now.getFullYear(),now.getMonth(),now.getDate()),
-				yesterday = new Date(now.getFullYear(),now.getMonth(),now.getDate()-1),
-				day = new Date(v.getFullYear(), v.getMonth(), v.getDate()),
-				dv = today - day,
-				WEEK = 604800000,//milliseconds in a week
-				MONTH = 2419200000; //millis in a 28day month (4 week)
+				oneDayAgo = Ext.Date.add(now, Ext.Date.DAY, -1),
+				twoDaysAgo = Ext.Date.add(now, Ext.Date.DAY, -2),
+				oneWeekAgo = Ext.Date.add(now, Ext.Date.DAY, -1 * 7),
+				twoWeeksAgo = Ext.Date.add(now, Ext.Date.DAY, -2 * 7),
+				threeWeeksAgo = Ext.Date.add(now, Ext.Date.DAY, -3 * 7),
+				fourWeeksAgo = Ext.Date.add(now, Ext.Date.DAY, -4 * 7),
+				oneMonthAgo = Ext.Date.add(now, Ext.Date.MONTH, -1),
+				twoMonthsAgo = Ext.Date.add(now, Ext.Date.MONTH, -2),
+				oneYearAgo = Ext.Date.add(now, Ext.Date.YEAR, -1);
 
-			//TODO: make this better...serously.
+			v = new Date(v.getFullYear(), v.getMonth(), v.getDate())
 
-			if(day.getTime()===today.getTime()){ return 'A '; }
+			//We take inspiration from outlook here.  Despite being a terrible piece of
+			//software it actually does this well.  Today, Yesterday, Wed, tue, ..., Last week,
+			//two weeks ago, three weeks ago, last month, this year, last year
 
-			if(day.getTime()===yesterday.getTime()){ return 'B Yesterday'; }
+			//TODO: make this better...serously. Grouping is better sort prefix is still wacky.
 
-			if(dv < WEEK){ return 'C'+(364-parseInt(Ext.Date.format(day,'z'),10))+Ext.Date.format(day,' l'); }
+			if(Ext.Date.between(v, oneDayAgo, now)){ return 'A '; }
 
-			if(dv < (2*WEEK)){ return 'D Last Week'; }
+			if(Ext.Date.between(v, twoDaysAgo, oneDayAgo)){ return 'B Yesterday'; }
 
-			if(dv < MONTH) { return 'E'+(12-parseInt(Ext.Date.format(day,'m'),10))+Ext.Date.format(day,' F'); }
+			if(Ext.Date.between(v, oneWeekAgo, twoDaysAgo)){return 'C'+(364-parseInt(Ext.Date.format(v,'z'),10))+Ext.Date.format(v, ' l');}
 
-			if(dv < (2*MONTH)){ return 'F Last Month'; }
+			if(Ext.Date.between(v, twoWeeksAgo, oneWeekAgo)){ return 'D Last week'; }
 
-			return 'G Older';
+			if(Ext.Date.between(v, threeWeeksAgo, twoWeeksAgo)){ return 'E 2 weeks ago'; }
+
+			if(Ext.Date.between(v, fourWeeksAgo, threeWeeksAgo)){ return 'F 3 weeks ago'; }
+
+			if(Ext.Date.between(v, twoMonthsAgo, oneMonthAgo)){ return 'G Last month'; }
+
+			if(Ext.Date.between(v, oneYearAgo, twoMonthsAgo)){ return 'H This year'; }
+
+			return 'I Older';
 		}
 	}
 });
