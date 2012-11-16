@@ -111,11 +111,12 @@ Ext.define('NextThought.controller.Chat', {
 			roomInfos = me.getAllRoomInfosFromSessionStorage(),
 			w;
 		Ext.each(roomInfos, function(ri) {
-			me.onEnteredRoom(ri, true);
+			me.onEnteredRoom(ri);
 			w = me.getChatWindow(ri);
-			w.show();
-			w.minimize();
-
+			if(me.isRoomIdAccepted(ri.getId())){
+                w.show();
+                w.minimize();
+            }
 			//This chunk will try to recover the history and insert it into the chat again...
 			ViewUtils.getTranscript(ri.getId(),
 				ri.get('Last Modified'),
@@ -272,7 +273,7 @@ Ext.define('NextThought.controller.Chat', {
 
 		ri = this.existingRoom(users, (options.ContainerId || null), options);
 		if (ri) {
-			this.onEnteredRoom(ri, true);
+			this.onEnteredRoom(ri);
 		}
 		else { //If we get here, there were no existing rooms, so create a new one.
 			roomCfg = {'Occupants': users};
@@ -561,6 +562,7 @@ Ext.define('NextThought.controller.Chat', {
 		if (!room) {
 			return;
 		}
+        this.deleteRoomIdStatusAccepted(room.getId());
 
 		if (this.isModerator(room)) {
 			console.log('leaving room but I\'m a moderator, relinquish control');
@@ -913,8 +915,9 @@ Ext.define('NextThought.controller.Chat', {
 //	},
 
 
-	onEnteredRoom: function(msg, autoAccept) {
+	onEnteredRoom: function(msg) {
         function isAcceptedOrTimedOut(){
+            me.setRoomIdStatusAccepted(roomInfo.getId());
             w.accept(true);
             w.show();
         }
@@ -934,7 +937,7 @@ Ext.define('NextThought.controller.Chat', {
 		w = me.openChatWindow(roomInfo);
 
         //if I created the window, then that's an auto-accept
-        if(autoAccept || (roomInfo.get('Creator') === $AppConfig.userObject.get('Username'))){
+        if(me.isRoomIdAccepted(roomInfo.getId()) || (roomInfo.get('Creator') === $AppConfig.userObject.get('Username'))){
             isAcceptedOrTimedOut();
             return;
         }
@@ -955,7 +958,9 @@ Ext.define('NextThought.controller.Chat', {
                         label: 'decline',
                         callback: isDeclined,
                         scope: me
-                    }]
+                    }],
+                callback: isAcceptedOrTimedOut,
+                scope: me
             });
         });
 	},
@@ -969,6 +974,7 @@ Ext.define('NextThought.controller.Chat', {
 
 
 	getRoomInfoFromSessionStorage: function(key) {
+        debugger;
 		if (!key){Ext.Error.raise('Requires key to look up RoomInfo');}
 		var jsonString = sessionStorage.getItem(key);
 		if (jsonString){
@@ -984,12 +990,43 @@ Ext.define('NextThought.controller.Chat', {
 
 
 	getAllRoomInfosFromSessionStorage: function(){
-		var i, roomInfos = [], ri;
+        debugger;
+		var i, roomInfos = [], ri, key;
 		for (i = 0; i < sessionStorage.length; i++) {
-			ri = this.getRoomInfoFromSessionStorage(sessionStorage.key(i));
-			if (ri){roomInfos.push(ri);}
+            key = sessionStorage.key(i);
+            if (key && key !== 'roomIdsAccepted'){
+                ri = this.getRoomInfoFromSessionStorage(key);
+                if (ri){roomInfos.push(ri);}
+            }
 		}
 		return roomInfos;
-	}
+	},
+
+    setRoomIdStatusAccepted: function(id){
+        debugger;
+         var key = 'roomIdsAccepted',
+             status = Ext.JSON.decode(sessionStorage.getItem(key)) || {};
+
+        status[id] = true;
+        sessionStorage.setItem(key, Ext.JSON.encode(status));
+    },
+
+    deleteRoomIdStatusAccepted: function(id){
+        debugger;
+        var key = 'roomIdsAccepted',
+            status = Ext.JSON.decode(sessionStorage.getItem(key)) || {};
+
+        delete status[id];
+        sessionStorage.setItem(key, Ext.JSON.encode(status));
+    },
+
+
+    isRoomIdAccepted: function(id){
+        debugger;
+        var status = Ext.JSON.decode(sessionStorage.getItem('roomIdsAccepted')) || {},
+            found = status[id];
+
+        return found;
+    }
 
 });
