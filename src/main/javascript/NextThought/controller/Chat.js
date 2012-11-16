@@ -974,7 +974,6 @@ Ext.define('NextThought.controller.Chat', {
 
 
 	getRoomInfoFromSessionStorage: function(key) {
-        debugger;
 		if (!key){Ext.Error.raise('Requires key to look up RoomInfo');}
 		var jsonString = sessionStorage.getItem(key);
 		if (jsonString){
@@ -990,7 +989,6 @@ Ext.define('NextThought.controller.Chat', {
 
 
 	getAllRoomInfosFromSessionStorage: function(){
-        debugger;
 		var i, roomInfos = [], ri, key;
 		for (i = 0; i < sessionStorage.length; i++) {
             key = sessionStorage.key(i);
@@ -1003,7 +1001,6 @@ Ext.define('NextThought.controller.Chat', {
 	},
 
     setRoomIdStatusAccepted: function(id){
-        debugger;
          var key = 'roomIdsAccepted',
              status = Ext.JSON.decode(sessionStorage.getItem(key)) || {};
 
@@ -1012,7 +1009,6 @@ Ext.define('NextThought.controller.Chat', {
     },
 
     deleteRoomIdStatusAccepted: function(id){
-        debugger;
         var key = 'roomIdsAccepted',
             status = Ext.JSON.decode(sessionStorage.getItem(key)) || {};
 
@@ -1022,7 +1018,6 @@ Ext.define('NextThought.controller.Chat', {
 
 
     isRoomIdAccepted: function(id){
-        debugger;
         var status = Ext.JSON.decode(sessionStorage.getItem('roomIdsAccepted')) || {},
             found = status[id];
 
