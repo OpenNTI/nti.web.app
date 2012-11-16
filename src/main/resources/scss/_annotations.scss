@@ -207,7 +207,7 @@ div.redaction-control {
 				pointer-events: all;
 
 				&:hover { opacity: 1; }
-				&.disabled { &, &:hover { opacity: 0.5; cursor: default; pointer-events: none; } }
+				&.disabled { &, &:hover { display:none; opacity: 0.5; cursor: default; pointer-events: none; } }
 
 				&.mark {
 					background-position: 0 -19px;
