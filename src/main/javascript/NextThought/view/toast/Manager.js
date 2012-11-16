@@ -23,6 +23,7 @@ Ext.define('NextThought.view.toast.Manager',{
 	 *         title: 'Chat Invitation...',
 	 *         message: 'You\'ve been invited to chat with <span>Math Buddies</span>.',
 	 *         iconCls: 'chat-bubble-32',
+	 *         timeout: 60,
 	 *         //Buttons appear in the RTL order, so decline, here, will be the rigth-most button
 	 *         buttons: [{
 	 *             label: 'decline',
@@ -51,7 +52,8 @@ Ext.define('NextThought.view.toast.Manager',{
 	 */
 	makeToast: function(bread){
 		var size = Ext.dom.Element.getViewSize(),
-			toast;
+			toast,
+			timeout = bread.timeout || false;
 
 		toast = Ext.widget('toast',bread);
 		this.stack.push(toast);
@@ -60,6 +62,10 @@ Ext.define('NextThought.view.toast.Manager',{
 		toast.on('afterRender',this.popToast,this, {single:true});
 		toast.on('destroy',this.eatToast,this);
 		toast.show();
+
+		if(timeout && timeout > 0){
+			toast.timeoutId = Ext.delay(this.eatToast,timeout,this,[toast]);
+		}
 
 		return toast;
 	},
@@ -74,6 +80,10 @@ Ext.define('NextThought.view.toast.Manager',{
 
 	/** @private */
 	eatToast: function(toast){
+		if(toast.hasOwnProperty('timeoutId')){
+			clearTimeout(toast.timeoutId);
+		}
+
 		var idx = Ext.Array.indexOf(this.stack,toast);
 		if(idx < 0){return;}
 
