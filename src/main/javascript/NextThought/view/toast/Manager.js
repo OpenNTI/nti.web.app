@@ -9,12 +9,45 @@ Ext.define('NextThought.view.toast.Manager',{
 	constructor: function(){
 		this.callParent(arguments);
 		this.stack = [];
+
+		Ext.EventManager.onWindowResize(this.adjustStack,this,null);
 	},
 
 	/**
 	 *
-	 * @param bread - TODO: write this doc :P
-	 * @returns toast
+	 * Pop up a toast notification.
+	 *
+	 * ### Example: (Chat invitation)
+	 *
+	 *     myToastMessage = Toaster.makeToast({
+	 *         title: 'Chat Invitation...',
+	 *         message: 'You\'ve been invited to chat with <span>Math Buddies</span>.',
+	 *         iconCls: 'chat-bubble-32',
+	 *         //Buttons appear in the RTL order, so decline, here, will be the rigth-most button
+	 *         buttons: [{
+	 *             label: 'decline',
+	 *             callback: [...],
+	 *             scope: this
+	 *         }, {
+	 *             label: 'accept',
+	 *             callback: [...],
+	 *             scope: this
+	 *         }],
+	 *         callback: [...],
+	 *         scope: this
+	 *     });
+	 *
+	 * #### Note about callbacks:
+	 *
+	 * The main callback is called when the toast message is closed, eiher by acting on a button, closing it or timing
+	 * out. The callback is called with the actedOn button config or false if the notification is closing without
+	 * action.
+	 *
+	 * The individual buttons' callback's are called on the click event of that button after the main callback.
+	 * You cannot stop the main callback from being called.
+	 *
+	 * @param {Object} bread Configuration for {@link NextThought.view.toast.Window}
+	 * @returns {Object} Toast component instance
 	 */
 	makeToast: function(bread){
 		var size = Ext.dom.Element.getViewSize(),
@@ -45,6 +78,11 @@ Ext.define('NextThought.view.toast.Manager',{
 		if(idx < 0){return;}
 
 		this.stack.splice(idx,1);
+		this.adjustStack();
+	},
+
+
+	adjustStack: function(){
 		Ext.each(this.stack,this.popToast,this);
 	},
 
