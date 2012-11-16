@@ -35,7 +35,8 @@ Ext.define('NextThought.view.chat.View', {
                     xtype: 'container',
                     layout: {
                         type: 'hbox',
-                        pack: 'end'
+                        pack: 'end',
+                        align: 'middle'
                     },
                     itemId: 'buttons',
                     cls: 'mod-buttons',
