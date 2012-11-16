@@ -5,7 +5,8 @@ Ext.define('NextThought.controller.Chat', {
 		'NextThought.util.Annotations',
 		'NextThought.util.Classrooms',
 		'NextThought.util.Parsing',
-		'NextThought.proxy.Socket'
+		'NextThought.proxy.Socket',
+		'NextThought.view.toast.Manager'
 	],
 
 

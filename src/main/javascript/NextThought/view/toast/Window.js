@@ -65,7 +65,15 @@ Ext.define('NextThought.view.toast.Window',{
 
 	close: function(e){
 		e.stopEvent();
-		this.destroy();
+		var size = Ext.dom.Element.getViewSize();
+		this.animate({
+			to:{ top: size.height + 10 },
+			duration: 200,
+			listeners: {
+	            afteranimate: this.destroy,
+	            scope: this
+			}
+		});
 		return false;
 	}
 });
