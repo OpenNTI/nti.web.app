@@ -29,4 +29,8 @@ chat active............18x12 (19, 147)
 
 flag 02 inactive.......13x13 (2, 163)
 flag 02 hover..........13x13 (21, 163)
+
 flag 02 active.........13x13 (2, 180)
+Add user14px active....14x14 (21, 180)
+
+Add user14px inactive..14x14 (2, 198)
