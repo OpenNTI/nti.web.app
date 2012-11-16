@@ -1,0 +1,69 @@
+@import "variables";
+
+.x-component-toast-message {
+	background: rgba(255,255,255,0.95);
+	border: 4px solid $toast-border-top;
+	border-width: 4px 0 0 0;
+	box-shadow: 0 3px 6px 0 rgba(0,0,0,0.25);
+	padding: 10px;
+
+	.close {
+		position: absolute;
+		width: 10px;
+		height: 10px;
+		background: url(../images/ico_message_box_close.png) 0 0 no-repeat;
+		top: 8px;
+		right: 8px;
+		cursor: pointer;
+		opacity: 0.7;
+		&:hover {
+			opacity: 1;
+		}
+	}
+
+	.icon {
+		display: inline-block;
+		float: left;
+		margin: 5px 2px;
+		& + .wrapper { margin-left: 50px; }
+	}
+
+	.title {
+		font-family: $font;
+		font-size: 18px;
+		font-style: italic;
+		color: $secondary-grey;
+	}
+
+	.message {
+		font-family: $font;
+		font-size: 12px;
+		font-style: normal;
+		font-weight: 600;
+		color: $secondary-grey;
+
+		a,span {
+			&,&:link,&:active,&:visited {
+				color: $primary-blue;
+				text-decoration: none;
+				cursor: none;
+			}
+		}
+	}
+
+	.button-row {
+		&:not(:empty){
+			margin-top: 10px;
+		}
+
+		.button {
+			text-transform: uppercase;
+			font-family: $font;
+			font-size: 12px;
+			font-style: normal;
+			font-weight: 600;
+			color: $tertiary-grey;
+			cursor: pointer;
+		}
+	}
+}
