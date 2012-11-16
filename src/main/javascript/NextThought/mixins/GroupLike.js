@@ -2,13 +2,15 @@ Ext.define('NextThought.mixins.GroupLike',{
 //must be mixed into a model
 
 	EVERYONE_USERNAME: 'everyone',
-	SYSTEM_CREATOR: 'zope.security.management.system_user',
+	SYSTEM_CREATOR: 'system',
+	OLD_SYSTEM_CREATOR: 'zope.security.management.system_user',
 
 	isGroup: true,
 
 
 	isSystem: function(){
-		return this.SYSTEM_CREATOR === this.get('Creator').toLowerCase();
+		var c = this.get('Creator').toLowerCase();
+		return this.SYSTEM_CREATOR === c || this.OLD_SYSTEM_CREATOR === c;
 	},
 
 
