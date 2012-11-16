@@ -14,6 +14,7 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 	wbThumbnailTpm: Ext.DomHelper.createTemplate({
 		contentEditable: false,
 		cls: 'whiteboard-divider',
+		unselectable: 'on',
 		cn:[{
 			cls: 'whiteboard-wrapper',
 			cn:[{
@@ -22,8 +23,9 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 				id    : '{1}',
 				cls   : 'wb-thumbnail',
 				alt   : 'Whiteboard Thumbnail',
+				unselectable: 'on',
 				border: 0
-			},{cls: 'fill'},{
+			},{cls: 'fill', unselectable: 'on'},{
 				cls:'centerer',
 				unselectable: 'on',
 				cn: [{

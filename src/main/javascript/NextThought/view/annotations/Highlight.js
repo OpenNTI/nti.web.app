@@ -158,7 +158,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
 
 	render: function(){
         if (this.isDestroyed){return;}
-    	var me = this,
+		var me = this,
             range = null,
 			style = me.getRecordField('style'),
             bounds,
