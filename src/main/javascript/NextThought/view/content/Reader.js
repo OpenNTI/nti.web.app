@@ -90,7 +90,7 @@ Ext.define('NextThought.view.content.Reader', {
 	//or create getters for the properties that handle lazy
 	//calculations.
 	calculateNecessaryAnnotationOffsets: function(){
-		var cache = this.annotationOffsetsCache || {},
+		var cache =  this.annotationOffsetsCache || {},
 			statics = cache.statics || {},
 			windowSizeStatics = cache.windowSizeStatics || {},
 			scrollStatics = cache.scrollStatics || {},
@@ -116,6 +116,10 @@ Ext.define('NextThought.view.content.Reader', {
 			windowSizeStatics.windowSize = currentWindowSize;
 			windowSizeStatics.left = f.getLeft();
 			windowSizeStatics.height = f.getHeight();
+			if(!l){
+				l = windowSizeStatics.left - this.getEl().getLeft();
+			}
+			windowSizeStatics.gutter = l + f.getMargin('l');
 		}
 
 		cache.windowSizeStatics = windowSizeStatics;
@@ -132,13 +136,7 @@ Ext.define('NextThought.view.content.Reader', {
 
 		//The last set is static based on location.  We handle
 		//purging this cache in onNavigate so we just need to set it
-		//here if it doesn't exist. contentLeftPadding and gutter
-		if(!locationStatics.hasOwnProperty('gutter')){
-			if(!l){
-				l = windowSizeStatics.left - this.getEl().getLeft();
-			}
-			locationStatics.gutter = l + f.getMargin('l');
-		}
+		//here if it doesn't exist. contentLeftPadding
 		if(!locationStatics.hasOwnProperty('contentLeftPadding')){
 			try {
 				if(!e){
@@ -162,14 +160,16 @@ Ext.define('NextThought.view.content.Reader', {
 			left: windowSizeStatics.left, //static based on window size.  left < gutter
 			height: windowSizeStatics.height, //static based on window size.
 			width: statics.width,//static value
-			gutter: locationStatics.gutter, //static based on page
+			gutter: windowSizeStatics.gutter, //static based on window size
 			contentLeftPadding: locationStatics.contentLeftPadding || defaultContentPadding, //static based on page
 			scrollTop: scrollPosition //dynamic
 		};;
 	},
 
 	getAnnotationOffsets: function(){
-		return this.calculateNecessaryAnnotationOffsets();
+		var r = this.calculateNecessaryAnnotationOffsets();
+	//	console.log(JSON.stringify(r));
+		return r;
 	},
 
 
