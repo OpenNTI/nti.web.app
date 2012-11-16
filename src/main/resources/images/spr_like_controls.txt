@@ -1,0 +1,6 @@
+spr_like_controls
+
+inactive bookmark.....12x24 (3, 3)
+active bookmark.......12x24 (23, 3)
+active heart..........14x13 (39, 1)
+inactive heart........14x13 (39, 16)
