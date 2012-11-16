@@ -130,7 +130,7 @@ Ext.define('NextThought.view.annotations.Highlight', {
 
 
 	resolveVerticalLocation: function(){
-		var r;
+		var r, rect, node;
 
 		if (this.rendered){
 			r = this.buildRange();
@@ -139,9 +139,25 @@ Ext.define('NextThought.view.annotations.Highlight', {
 			r = this.getRange();
 		}
 
-		r = r ? r.getBoundingClientRect() : null;
+		rect = r ? r.getBoundingClientRect() : null;
 
-		return r ? r.top : -2;
+		try {
+			if(rect.top === 0 && r.getClientRects().length === 0 ){
+				console.log('No rect information...attempting to get selected node rect instead');
+				node = r.startContainer.childNodes[r.startOffset];
+				if(node.tagName === 'IMG'){
+					rect = node.getBoundingClientRect();
+				}
+				else {
+					console.log('selected node was not an image, skipping');
+				}
+			}
+		}
+		catch(er){
+			console.error(er);
+		}
+
+		return rect ? rect.top : -2;
 	},
 
 
