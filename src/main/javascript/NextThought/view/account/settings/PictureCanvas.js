@@ -458,6 +458,7 @@ Ext.define('NextThought.view.account.settings.PictureCanvas',{
 		});
 	},
 
+
 	dragEnter: function(e){
 		var b = e.browserEvent,
 			dt = b.dataTransfer;

@@ -3,7 +3,8 @@ Ext.define('NextThought.view.account.settings.AvatarChoices',{
 	alias: 'widget.avatar-choices',
 
 	requires: [
-		'NextThought.view.account.settings.RandomGravatarPicker'
+		'NextThought.view.account.settings.RandomGravatarPicker',
+		'NextThought.view.whiteboard.Utils'
 	],
 
 	renderTpl: Ext.DomHelper.markup({
@@ -54,6 +55,7 @@ Ext.define('NextThought.view.account.settings.AvatarChoices',{
 		]
 
 	}),
+
 
 	renderSelectors: {
 		list: 'ul.avatar-choices',
@@ -188,18 +190,6 @@ Ext.define('NextThought.view.account.settings.AvatarChoices',{
 	},
 
 
-	imgToDataUrl: function(img){
-		img = Ext.getDom(img);
-		var c = document.createElement('canvas');
-		
-		c.width = img.naturalWidth || img.width;
-		c.height = img.naturalHeight || img.height;
-		//hopefully this won't degrade the image quality. (PNG after all)
-		c.getContext('2d').drawImage(img,0,0);
-		return c.toDataURL('imge/png');
-	},
-
-
 	makeAChoice: function(url){
 		var el = this.getEl(),
 			u = $AppConfig.userObject;
@@ -233,6 +223,7 @@ Ext.define('NextThought.view.account.settings.AvatarChoices',{
 		});
 	},
 
+
 	upload: function(){
 		var w = this.up('account-window');
 		w.down('picture-editor').reset();
@@ -242,7 +233,10 @@ Ext.define('NextThought.view.account.settings.AvatarChoices',{
 		});
 	},
 
+
 	moreRandom: function(){
 		this.moreOptionsMenu.showBy(this.moreOptions);
 	}
+}, function(){
+	this.prototype.imgToDataUrl = WBUtils.imgToDataUrl;
 });

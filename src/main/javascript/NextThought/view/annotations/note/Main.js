@@ -389,11 +389,14 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		e.stopEvent();
 		var action = (dom.getAttribute('href')||'').replace('#',''),
 			d = Ext.fly(dom).up('[itemprop~=nti-data-markupenabled]').down('img'),
-			img = d && d.is('img') ? d.dom : null;
+			img = d && d.is('img') ? d.dom : null,
+			me = this;
 
 		if(/^mark$/i.test(action)){
-			this.activateReplyEditor();
-			Ext.defer(this.editorActions.addWhiteboard,400,this.editorActions,[WBUtils.createFromImage(img)]);
+			me.activateReplyEditor();
+			WBUtils.createFromImage(img,function(data){
+				Ext.defer(me.editorActions.addWhiteboard,400,me.editorActions,[data]);
+			});
 		}
 
 

@@ -53,19 +53,76 @@ Ext.define('NextThought.view.whiteboard.Utils',{
 
 
 
-	createFromImage: function(img){
+	imgToDataUrl: function(img){
+		img = Ext.getDom(img);
+		var c = document.createElement('canvas');
 
-		var w = img.naturalWidth || img.width,
-			h = img.naturalHeight || img.height,
+		c.width = img.naturalWidth || img.width;
+		c.height = img.naturalHeight || img.height;
+		//hopefully this won't degrade the image quality. (PNG after all)
+		c.getContext('2d').drawImage(img,0,0);
+		return c.toDataURL('imge/png');
+	},
+
+
+
+	createFromImage: function(img, cb){
+
+		function error(){
+			alert('Hmm, there seems to be a problem with that image');
+		}
+
+
+		function requestDataURL(){
+			var proxyUrl, proxy, dataUrl;
+			try {
+				dataUrl = me.imgToDataUrl(img);
+				image.src = dataUrl;
+			}
+			catch(er){
+				Ext.getBody().mask('Loading...');
+				proxyUrl = getURL($AppConfig.server.data+'@@echo_image_url?image_url='+encodeURIComponent(img.src));
+				proxy = new Image();
+				proxy.onerror = function(){
+					Ext.getBody().unmask();
+					error('bad_proxy');
+				};
+				proxy.onload = function(){
+					Ext.getBody().unmask();
+					dataUrl = me.imgToDataUrl(proxy);
+					image.src = dataUrl;
+				};
+				proxy.src = proxyUrl;
+			}
+		}
+
+		var me = this, image = new Image();
+		image.onerror = error;
+		image.onload = function(){
+			Ext.callback(cb,null,[me.buildCanvasFromDataUrl(image)],1);
+		};
+		requestDataURL();
+	},
+
+
+
+	buildCanvasFromDataUrl: function(img){
+		if(!/^data:/i.test(img.src)){
+			console.error('Image is not a data url '+img.src);
+			return null;
+		}
+
+		var w = img.width,
+			h = img.height,
 			scale = 1/w,
 			wbCX,wbCY,
 			m = new NTMatrix(),
 			data = {
-			shapeList	: [],
-			MimeType	: "application/vnd.nextthought.canvas",
-			Class		: 'Canvas',
-			viewportRatio : (16/9)
-		};
+				shapeList	: [],
+				MimeType	: "application/vnd.nextthought.canvas",
+				Class		: 'Canvas',
+				viewportRatio : (16/9)
+			};
 
 		wbCX = (scale*w)/2;
 		wbCY = (1/data.viewportRatio)/2;
@@ -86,7 +143,6 @@ Ext.define('NextThought.view.whiteboard.Utils',{
 		});
 
 		return data;
-
 	}
 
 

@@ -201,8 +201,6 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 			range;
 
 		if(/mark/i.test(action)){
-			console.log(id, img);
-
 			range = doc.createRange();
 			range.selectNode(img);
 			o.lastLine = {
@@ -212,7 +210,9 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 
 			this.noteOverlayPositionInputBox();
 			this.noteOverlayActivateRichEditor();
-			o.editorActions.addWhiteboard(WBUtils.createFromImage(img));
+			WBUtils.createFromImage(img,function(data){
+				o.editorActions.addWhiteboard(data);
+			});
 		}
 	},
 
