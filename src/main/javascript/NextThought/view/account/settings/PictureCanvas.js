@@ -114,8 +114,8 @@ Ext.define('NextThought.view.account.settings.PictureCanvas',{
 				newSize,
 				diff;
 
-			origin[0] = xy[0] - origin[0];
-			origin[1] = xy[1] - origin[1];
+			origin[0] = xy[0] - origin[0] - i.x;
+			origin[1] = xy[1] - origin[1] - i.y;
 
 			dx = anchor[0] - origin[0];
 			dy = anchor[1] - origin[1];
