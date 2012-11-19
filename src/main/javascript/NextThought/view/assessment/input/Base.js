@@ -404,6 +404,7 @@ Ext.define('NextThought.view.assessment.input.Base',{
 
 	markCorrect: function(){
 		this.hideSolution();
+		this.hintActive = false;
 		this.updateSolutionButton();
 		this.checkItBtn.hide();
 		this.up('question-parts').removeCls('incorrect').addCls('correct');
