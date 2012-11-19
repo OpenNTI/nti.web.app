@@ -274,7 +274,7 @@ Ext.define('NextThought.view.account.settings.PictureCanvas',{
 
 		ctx.rotate(Math.PI/2);
 		ctx.drawImage(img,0,-h);
-		this.setImage(c.toDataURL('imge/png'));
+		this.setImage(c.toDataURL('image/png'));
 	},
 
 

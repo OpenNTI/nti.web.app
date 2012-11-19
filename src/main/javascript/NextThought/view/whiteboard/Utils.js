@@ -62,7 +62,7 @@ Ext.define('NextThought.view.whiteboard.Utils',{
 			img = Ext.getDom(image);
 			c = document.createElement('canvas');
 			c.getContext('2d').drawImage(img,0,0);
-			c.toDataURL('imge/png');
+			c.toDataURL('image/png');
 			c.width = 0;//should free the buffer we just rendered
 		}
 		catch(e){
@@ -113,7 +113,7 @@ Ext.define('NextThought.view.whiteboard.Utils',{
 		c.width = img.naturalWidth || img.width;
 		c.height = img.naturalHeight || img.height;
 		c.getContext('2d').drawImage(img,0,0);
-		url = c.toDataURL('imge/png');
+		url = c.toDataURL('image/png');
 		c.width = 0;//should free the buffer we just rendered
 		return url;
 	},
