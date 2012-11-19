@@ -212,6 +212,40 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Base', {
 		return m.toTransform();
 	},
 
+	/**
+	 *  @param p - the [x,y] of the destination point( scaled down)
+	 *
+	 * */
+	scaleWithConstraint: function(nib, p){
+		var m = new NTMatrix(this.transform),
+			s = m.getScale(),
+			c = m.getTranslation(),
+			ratio = s[0]/s[1],
+			pts = [c[0], c[1], p[0], p[1]],
+			d =  WBUtils.getDistance(pts),
+			cosVal= Math.cos(WBUtils.toRadians(WBUtils.getDegrees(pts))),
+			sinVal= Math.sin(WBUtils.toRadians(WBUtils.getDegrees(pts))), sx,sy;
+
+		m.scale(1/s[0], 1/s[1]);
+
+		if(nib === 't-l'){
+			sx = -2*d*sinVal;
+			sy = -2*(d/ratio)*sinVal;
+			m.scale( sx, sy);
+		}
+		else if(nib === 'b-l'){
+			sx = 2*d*sinVal;
+			sy = 2*(d/ratio)*sinVal;
+			m.scale(sx, sy);
+		}
+		else{
+			sx = 2*d*cosVal;
+			sy =  2*(d/ratio)*cosVal;
+			m.scale(sx , sy);
+		}
+
+		this.transform = m.toTransform();
+	},
 
 	nibRotate: function(m, x,y){
 		var t = m.getTranslation(),

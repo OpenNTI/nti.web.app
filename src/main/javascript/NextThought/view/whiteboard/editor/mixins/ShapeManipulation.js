@@ -316,9 +316,16 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 		dy = (xy[1]-m[1])/w;
 
 		try{
-			if(nib){ s.modify(nib,	xy[0]/w,xy[1]/w,	m[0]/w,m[1]/w,	dx,dy); }
+			if(nib){
+				//Corners
+				if(nib === 'b-r' || nib === 'b-l' || nib === 't-l' || nib === 't-r'){
+					s.scaleWithConstraint(nib, this.getRelativeXY(e, true));
+				}
+				else{
+					s.modify(nib,	xy[0]/w,xy[1]/w,	m[0]/w,m[1]/w,	dx,dy);
+				}
+			}
 			else { s.translate(dx,dy); }
-
 			this.mouseDown = xy;
 		}
 		catch(ex){
