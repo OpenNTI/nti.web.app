@@ -128,18 +128,27 @@ Ext.define('NextThought.util.Line',{
 
 	/** @private */
 	rangeForLineBySelection: function(y, doc){
-		var sel = doc.parentWindow.getSelection(),
+		var xStart = 0,
+            xEnd = doc.querySelector('#NTIContent .page-contents').getBoundingClientRect().width,
+            sel = doc.parentWindow.getSelection(),
 			elem,
 			iterationCount = 0,
-			range,
-			x = 340; //was 81 but the object tags in mathcounts seem to have an additional 30 px margin.
-					 //shoot for the middle of the content.  //TODO sure wish we could dynamically determine this
-					 //as mentioned below
+			range;
 
 			//clear ranges and get the node on this y
 			sel.removeAllRanges();
 
-            elem = doc.elementFromPoint(x, y); //TODO - dynamically figure out the number 80?
+            while(xStart < xEnd) {
+                elem = doc.elementFromPoint(xStart, y);
+                if(!this.isNodeAnchorable(elem) && elem.getAttribute('Id') !== 'NTIContent'){
+                    elem = AnnotationUtils.getTextNodes(elem)[0];
+                }
+                xStart += 20;
+            }
+
+            if (!this.isNodeAnchorable(elem)){
+                return null;
+            }
 
             if (Ext.fly(elem).is('object:not(.naqvideo)') || Ext.fly(elem).parent('object:not(.naqvideo)')) {
 				elem = Ext.fly(elem).parent('object') || elem;
@@ -147,12 +156,6 @@ Ext.define('NextThought.util.Line',{
                 range = sel.getRangeAt(0);
                 sel.removeAllRanges();
                 return range;
-            }
-
-            //Do something interesting, if we aren't a txt node, dig to a paragraph?
-            if (!Ext.isTextNode(elem)){
-                var e = Ext.fly(elem).down('p', true);
-                elem = e || elem;
             }
 
 		    elem = Anchors.referenceNodeForNode(elem);
@@ -183,13 +186,6 @@ Ext.define('NextThought.util.Line',{
 			//If we have selected a range that is still collapsed.  No anchor.
 			if (sel.toString().trim().length === 0){return false;}
 
-			//detect weirdness where sometimes extending to a line causes entire paragraphs to be selected.
-			/* TODO finish
-			while(sel.getRangeAt(0).getBoundingClientRect().height > 35) {
-				sel.modify('extend', 'backward', 'word');
-			}
-			*/
-
 			//get the range, clear the selection, and return the range:
 			range = sel.getRangeAt(0);
 
@@ -210,6 +206,9 @@ Ext.define('NextThought.util.Line',{
         }
 
 		var node = Anchors.referenceNodeForNode(n);
+
+        //shortcut, found nothing..
+        if(!node){return false;}
 
 		if (Ext.isTextNode(node) && node.nodeValue.trim().length > 0) {
 			return true;
