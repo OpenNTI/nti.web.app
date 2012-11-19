@@ -1,6 +1,10 @@
 Ext.define(	'NextThought.view.whiteboard.shapes.Url', {
 	extend:	'NextThought.view.whiteboard.shapes.Base',
 
+	requires: [
+		'NextThought.view.whiteboard.Utils'
+	],
+
 	constructor: function(){
 		this.calculatedAttributes = ['url'];
 		return this.callParent(arguments);
@@ -16,10 +20,12 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Url', {
 				renderCallback.call(me);
 				return;
 			}
+
+
 			image = new Image();
 			image.onload = function(){ me.draw(ctx,renderCallback); };
 			image.onerror = function(){ console.log('failed to load: '+me.url); renderCallback.call(me); };
-			image.src = me.url;
+			WBUtils.maybeProxyImage(me.url,image);
 			me.cache.url = image;
 			return;
 		}

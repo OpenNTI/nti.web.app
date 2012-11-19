@@ -7,6 +7,9 @@ Ext.define('NextThought.view.whiteboard.Utils',{
 	],
 
 
+	USE_DATA_URLS: false,
+
+
 	getSlope: function(x0,y0, x1,y1){
 		if(Ext.isArray(x0)){
 			y1 = x0[3];
@@ -53,25 +56,78 @@ Ext.define('NextThought.view.whiteboard.Utils',{
 
 
 
-	imgToDataUrl: function(img){
-		img = Ext.getDom(img);
-		var c = document.createElement('canvas');
+	doesImageRequireProxy: function(image){
+		var proxy = false, c, img;
+		try {
+			img = Ext.getDom(image);
+			c = document.createElement('canvas');
+			c.getContext('2d').drawImage(img,0,0);
+			c.toDataURL('imge/png');
+			c.width = 0;//should free the buffer we just rendered
+		}
+		catch(e){
+			proxy = true;
+		}
+		return proxy;
+	},
 
-		c.width = img.naturalWidth || img.width;
-		c.height = img.naturalHeight || img.height;
-		//hopefully this won't degrade the image quality. (PNG after all)
-		c.getContext('2d').drawImage(img,0,0);
-		return c.toDataURL('imge/png');
+
+	maybeProxyImage: function(url, image){
+		var tempImage = new Image(),
+			me = this;
+		tempImage.onload = finishTest;
+		tempImage.onerror = errorPassthrough;
+		tempImage.src = url;
+
+		function errorPassthrough(){
+			console.error('Could not load: '+url);
+			passthrough();
+		}
+
+		function passthrough(){ image.src = url; }
+
+		function finishTest(){
+			if(me.doesImageRequireProxy(tempImage)){
+				image.src = me.proxyImage(url);
+				return;
+			}
+			passthrough();
+		}
+	},
+
+
+	proxyImage: function(imageUrl){
+		if(/^data:/i.test(imageUrl)){
+			console.error('A data url was attempted to be proxied.');
+			throw 'A data url was attempted to be proxied.';
+		}
+		return getURL($AppConfig.server.data+'@@echo_image_url?image_url='+encodeURIComponent(imageUrl));
 	},
 
 
 
-	createFromImage: function(img, cb){
+	imgToDataUrl: function(img){
+		var c, url;
+		img = Ext.getDom(img);
+		c = document.createElement('canvas');
+		c.width = img.naturalWidth || img.width;
+		c.height = img.naturalHeight || img.height;
+		c.getContext('2d').drawImage(img,0,0);
+		url = c.toDataURL('imge/png');
+		c.width = 0;//should free the buffer we just rendered
+		return url;
+	},
+
+
+
+	createFromImage: function(img, cb, forceDataUrl){
+		var me = this,
+			image,
+			useClonedImage = forceDataUrl || me.USE_DATA_URLS;
 
 		function error(){
 			alert('Hmm, there seems to be a problem with that image');
 		}
-
 
 		function requestDataURL(){
 			var proxyUrl, proxy, dataUrl;
@@ -81,7 +137,7 @@ Ext.define('NextThought.view.whiteboard.Utils',{
 			}
 			catch(er){
 				Ext.getBody().mask('Loading...');
-				proxyUrl = getURL($AppConfig.server.data+'@@echo_image_url?image_url='+encodeURIComponent(img.src));
+				proxyUrl = me.proxyImage(img.src);
 				proxy = new Image();
 				proxy.onerror = function(){
 					Ext.getBody().unmask();
@@ -96,22 +152,22 @@ Ext.define('NextThought.view.whiteboard.Utils',{
 			}
 		}
 
-		var me = this, image = new Image();
-		image.onerror = error;
-		image.onload = function(){
-			Ext.callback(cb,null,[me.buildCanvasFromDataUrl(image)],1);
-		};
-		requestDataURL();
+
+		if(useClonedImage === true) {
+			image = new Image();
+			image.onerror = error;
+			image.onload = function(){ Ext.callback(cb,null,[me.buildCanvasFromImage(image)],1); };
+			requestDataURL();
+		}
+		else {
+			Ext.callback(cb,null,[this.buildCanvasFromImage(img)],1);
+		}
+
 	},
 
 
 
-	buildCanvasFromDataUrl: function(img){
-		if(!/^data:/i.test(img.src)){
-			console.error('Image is not a data url '+img.src);
-			return null;
-		}
-
+	buildCanvasFromImage: function(img){
 		var w = img.width,
 			h = img.height,
 			scale = 1/w,
