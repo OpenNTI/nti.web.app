@@ -690,6 +690,7 @@
 			.text {
 				overflow: hidden;
 				text-overflow: ellipsis;
+				text-align: left;
 
 				@include text-pre-wrap;
 
