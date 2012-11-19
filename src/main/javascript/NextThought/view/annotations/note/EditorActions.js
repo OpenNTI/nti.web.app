@@ -8,6 +8,10 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 		observable: 'Ext.util.Observable'
 	},
 
+	statics: {
+		supportedTypingAttributes : ['bold', 'underline', 'italic']
+	},
+
 	//default value (allow the cursor into the placeholder div, but don't take any space)
 	defaultValue: '&#8203;',
 
@@ -92,10 +96,7 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 		cmp.on('destroy',function(){
 			Ext.Object.each(me.openWhiteboards,function(k,v){v.destroy();}); });
 
-		//Keep state of text treatments
-		me.bold = false;
-		me.underline = false;
-		me.italic = false;
+		this.typingAttributes = [];
 	},
 
 
@@ -237,7 +238,7 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 	},
 
 
-	editorFocus: function () {
+	editorFocus: function (e) {
 		var s = window.getSelection();
 		if (this.lastRange) {
 			s.removeAllRanges();
@@ -246,12 +247,15 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 		else if (s.rangeCount > 0) {
 			this.lastRange = s.getRangeAt(0);
 		}
+		if(!this.dontDetectTypingAttributes){
+			this.detectTypingAttributes();
+		}
 	},
 
 
 	handleOnKeyup: function(e){
 		this.maybeResizeContentBox();
-		this.detectFontStyleAction();
+		this.detectTypingAttributes();
 	},
 
 
@@ -266,56 +270,79 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 		}
 	},
 
+	syncTypingAttributeButtons: function(){
+		var me = this;
+		var buttonsName = ['bold', 'italic', 'underline'];
+		Ext.each(buttonsName, function(bn){
+			var b = me.editor.down('.'+bn);
+			b[Ext.Array.contains(me.typingAttributes, bn) ? 'addCls' : 'removeCls']('selected');
+		});
+	},
+
+	setTypingAttributes: function(attrs, alreadyFocused){
+		console.log('Setting attrs to ', attrs);
+		this.typingAttributes = attrs.slice();
+		if(!alreadyFocused){
+			this.dontDetectTypingAttributes = true;
+			this.editor.down('[contenteditable=true]').focus();
+			this.dontDetectTypingAttributes = false;
+		}
+		this.syncTypingAttributeButtons();
+		this.applyTypingAttributesToEditable();
+	},
+
+	getTypingAttributes: function(){
+		if(this.typingAttributes === undefined){
+			this.typingAttributes = [];
+		}
+		return this.typingAttributes;
+	},
+
+	applyTypingAttributesToEditable: function(){
+		var actions = this.self.supportedTypingAttributes, me = this;
+		Ext.each(actions, function(action){
+			if(   document.queryCommandSupported(action)
+			   && document.queryCommandState(action) !== Ext.Array.contains(me.getTypingAttributes(), action)){
+				document.execCommand(action, false, false);
+			}
+		});
+	},
 
 	editorContentAction: function (e) {
-		var t = e.getTarget('.action', undefined, true), action;
+		console.log('editor action', e);
+		var t = e.getTarget('.action', undefined, true), action
 		if (t) {
 			if (t.is('.whiteboard')) {
 				this.addWhiteboard();
 			}
-			else {
+			else{
 				action = t.getAttribute('class').split(' ')[1];
-
-				if(action === 'bold'){ this.bold = !this.bold; }
-				if(action === 'italic'){ this.italic = !this.italic; }
-				if(action === 'underline'){ this.underline = !this.underline; }
+				this.toggleTypingAttribute(action);
 			}
-			this.applyTextTreatments();
 		}
 	},
 
-
-	applyTextTreatments: function(){
-		var b =  this.editor.down('.bold'),
-			i =  this.editor.down('.italic'),
-			u = this.editor.down('.underline');
-
-		this.editor.dom.querySelector('[contenteditable=true]').focus();
-
-		if(this.bold !== document.queryCommandState('bold')){
-			document.execCommand('bold', null, null);
+	toggleTypingAttribute: function(action){
+		var attrs = this.getTypingAttributes().slice();
+		if(Ext.Array.contains(attrs, action)){
+			Ext.Array.remove(attrs, action);
 		}
-		if(this.italic !== document.queryCommandState('italic')){
-			document.execCommand('italic', null, null);
+		else{
+			Ext.Array.push(attrs, action);
 		}
-		if(this.underline !== document.queryCommandState('underline')){
-			document.execCommand('underline', null, null);
-		}
-
-		b[document.queryCommandState('bold') ? 'addCls':'removeCls']('selected');
-		i[document.queryCommandState('italic') ? 'addCls' : 'removeCls']('selected');
-		u[document.queryCommandState('underline') ? 'addCls':'removeCls']('selected');
+		this.setTypingAttributes(attrs);
 	},
 
-
-	detectFontStyleAction: function(){
-		var b =  this.editor.down('.bold'),
-			i =  this.editor.down('.italic'),
-			u = this.editor.down('.underline');
-
-		b[document.queryCommandState('bold') ? 'addCls':'removeCls']('selected');
-		i[document.queryCommandState('italic') ? 'addCls' : 'removeCls']('selected');
-		u[document.queryCommandState('underline') ? 'addCls':'removeCls']('selected');
+	detectTypingAttributes: function(){
+		var actions = this.self.supportedTypingAttributes;
+		var attrs = [];
+		this.editor.down('[contenteditable=true]').focus();
+		Ext.each(actions, function(action){
+			if(document.queryCommandState(action)){
+				attrs.push(action);
+			}
+		});
+		this.setTypingAttributes(attrs, true);
 	},
 
 
@@ -333,7 +360,7 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 			}
 		}
 		else{
-			this.detectFontStyleAction(e);
+			this.detectTypingAttributes(e);
 		}
 	},
 
