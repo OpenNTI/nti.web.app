@@ -605,6 +605,10 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 				}
 			};
 
+		if(/poly/i.test(shape.Class)){
+			defs.sides = shape.sides;
+		}
+
 		newShape = this.canvas.makeShape(defs);
 		newShape.cache = {
 			fill: shape.cache.fill,
@@ -616,7 +620,6 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 			newShape.closed = shape.closed;
 		}
 
-		newShape.sides = shape.sides;
 		this.canvas.addShape(newShape);
 		return newShape;
 	}
