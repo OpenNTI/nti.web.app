@@ -23,6 +23,7 @@ Ext.define('NextThought.view.account.contacts.Search',{
 		},
 		{
 			xtype: 'dataview',
+			preserveScrollOnRefresh: true,
 			flex:1,
 
 			overflowX: 'hidden',
