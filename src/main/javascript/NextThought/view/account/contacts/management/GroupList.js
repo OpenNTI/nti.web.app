@@ -9,6 +9,7 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
 	shadow: false,
 	frame: false,
 	border: false,
+	preserveScrollOnRefresh: true,
 
 	cls: 'group-selection-list',
 	baseCls: 'selection',
