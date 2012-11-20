@@ -8,15 +8,13 @@ Ext.define('NextThought.view.account.contacts.Card',{
 	cls: 'contact-card x-menu',
 	renderTpl: Ext.DomHelper.markup([
 		{tag:'tpl', 'if':'!hideNib', cn:[
-			{tag:'img', cls:'nib', src:'{blank}', alt:'Menu', title:'Options'}]},
+			{tag:'img', cls:'nib', src:'{blank}', alt:'Menu', 'data-qtip':'Options'}]},
 		{tag:'img', src:'{avatarURL}'},
 		{ cls:'card-body', cn:[
 			{cls:'name', html:'{name}'},
 			{cls:'status', html:'{status}'}
 		]}
 	]),
-
-
 
 	constructor: function(){
 		return this.callParent(arguments);
@@ -34,7 +32,6 @@ Ext.define('NextThought.view.account.contacts.Card',{
 		//for querying later:
 		this.username = this.user.getId();
 
-
 		this.renderData = Ext.apply(this.renderData||{},{
 			hideNib: Boolean(this.hideNib),
 			blank: Ext.BLANK_IMAGE_URL,
@@ -47,14 +44,18 @@ Ext.define('NextThought.view.account.contacts.Card',{
 
 
 	afterRender: function(){
-		var el = this.getEl();
+		var el = this.getEl(),
+			online = this.user.get('Presence') === 'Online';
 
 		el.on('click', this.clicked, this);
 		el.addClsOnOver('card-over');
 
-        if(this.user.get('Presence') !== 'Online'){this.addCls('offline');}
-
+        if(!online){this.addCls('offline');}
 		this.callParent(arguments);
+
+		if(online){
+			el.dom.setAttribute('data-qtip', 'Start a chat');
+		}
 	},
 
 
