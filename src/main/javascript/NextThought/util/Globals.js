@@ -33,7 +33,13 @@ Ext.define('NextThought.util.Globals', {
 	HOST_PREFIX_PATTERN: /^(http(s)?):\/\/([a-z.\-_0-9]+)(:(\d+))?/i,
 	INVALID_CHARACTERS_PATTERN: /^[^\/\\";=?<>#%'\{\}\|\^\[\]\-]+$/,
 
+
+	CANVAS_URL_SHAPE_BROKEN_IMAGE: 'ico_error_wbimage.png',
+	CANVAS_BROKEN_IMAGE: 'ico_error_image.png',
+
 	CANVAS_GOLDEN_RATIO: 1.6180,    //http://en.wikipedia.org/wiki/Golden_ratio
+
+
 	//Holy mother of perl! JSLint really hates the javascript protocol. :( We have to really obfuscate that string for it not to complain.
 	EMPTY_WRITABLE_IFRAME_SRC : ('javascript' + (function(){return ':';}())),
 
@@ -365,17 +371,32 @@ Ext.define('NextThought.util.Globals', {
 			return $AppConfig.server.host + u;
 		}
 		return u;
+	},
+
+	getResourceURL: function(name){
+		return 'resources/images/'+name;
 	}
+
 },
 function(){
+	var proto = '__proto__';
 	window.Globals = this;
 	window.guidGenerator = this.guidGenerator;
 	window.isMe = this.isMe;
 	window.getURL = this.getURL;
+	window.swallow = function(e){};
+	window.getResourceURL = this.getResourceURL;
 
 	this.stopBackspace(document);
 
 	this.handleCache();
 
-	window.swallow = function(e){};
+
+
+	Ext.Object.each(this[proto],function(k,v,o){
+		if(/_IMAGE$/.test(k) && typeof(v) === 'string'){
+			o[k] = new Image();
+			o[k].src = getResourceURL(v);
+		}
+	});
 });

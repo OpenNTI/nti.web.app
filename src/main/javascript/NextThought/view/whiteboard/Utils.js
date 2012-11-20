@@ -56,8 +56,8 @@ Ext.define('NextThought.view.whiteboard.Utils',{
 
 
 
-	doesImageRequireProxy: function(image){
-		var proxy = false, c, img;
+	canUse: function(image){
+		var c, img;
 		try {
 			img = Ext.getDom(image);
 			c = document.createElement('canvas');
@@ -66,9 +66,9 @@ Ext.define('NextThought.view.whiteboard.Utils',{
 			c.width = 0;//should free the buffer we just rendered
 		}
 		catch(e){
-			proxy = true;
+			return false;
 		}
-		return proxy;
+		return true;
 	},
 
 
@@ -87,7 +87,7 @@ Ext.define('NextThought.view.whiteboard.Utils',{
 		function passthrough(){ image.src = url; }
 
 		function finishTest(){
-			if(me.doesImageRequireProxy(tempImage)){
+			if(!me.canUse(tempImage)){
 				image.src = me.proxyImage(url);
 				return;
 			}

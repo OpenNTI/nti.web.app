@@ -188,7 +188,8 @@ Ext.define(	'NextThought.view.whiteboard.Canvas',{
 		getThumbnail: function(scene, resultCallback){
 
 			function finish(){
-				var data = c.dom.toDataURL("image/png");
+				var data = Globals.CANVAS_BROKEN_IMAGE.src;
+				try { data = c.dom.toDataURL("image/png"); } catch(er){swallow(er);}
 				try { c.remove(); }catch(e){ console.warn(Globals.getError(e)); }
 				resultCallback.call(window,data);
 			}
