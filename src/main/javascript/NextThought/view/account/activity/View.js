@@ -76,12 +76,44 @@ Ext.define('NextThought.view.account.activity.View',{
 			'click':this.itemClick,
 			'mouseover': this.itemHover
 		});
+        this.mon(this.down('box[activitiesHolder]').getEl(), {
+            scope: this,
+            'scroll': this.onScroll
+        });
 	},
 
 
     maybeReload: function(){
         if (this.isVisible() && !this.dontReload && this.rendered){
             this.reloadActivity();
+        }
+    },
+
+
+    onScroll: function(e,dom){
+        var el = dom.lastChild,
+            offsets = Ext.fly(el).getOffsetsTo(dom),
+            top = offsets[1] + dom.scrollTop,
+            ctBottom = dom.scrollTop + dom.clientHeight;
+
+        if(ctBottom > top){
+            this.prefetchNext();
+        }
+    },
+
+
+    prefetchNext: function(){
+        var s = this.store, max;
+
+        if (!s.hasOwnProperty('data')) {
+            return;
+        }
+
+        max = s.getPageFromRecordIndex(s.getTotalCount());
+        if(s.currentPage < max && !s.isLoading()){
+            this.el.parent().mask('Loading...','loading');
+            s.clearOnPageLoad = false;
+            s.nextPage();
         }
     },
 
@@ -151,7 +183,7 @@ Ext.define('NextThought.view.account.activity.View',{
 		}
 
 		Ext.each(store.getGroups(),doGroup,this);
-
+        this.el.parent().unmask();
 	},
 
 
