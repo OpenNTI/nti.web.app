@@ -931,11 +931,15 @@ Ext.define('NextThought.controller.Chat', {
         function isAcceptedOrTimedOut(){
             me.setRoomIdStatusAccepted(roomInfo.getId());
             w.accept(true);
-            w.show();
+            if(isGroupChat){
+                w.show();
+            }
         }
 
+        //because we are using this callback for both the button and window close callback.  There are 2 signatures,
+        //we ignore one so we dont try to exit a room twice.
         function isDeclined(btnOrFalse){
-            if (btnOrFalse === false){
+            if ((btnOrFalse === false || btnOrFalse.label === 'decline') && w && !w.isDestroyed){
                 me.leaveRoom(roomInfo);
                 w.close();
             }
@@ -971,7 +975,7 @@ Ext.define('NextThought.controller.Chat', {
                 buttons: [
                     {
                         label: 'decline',
-                        callback: isDeclined,
+                        callback: isDeclined, //see comment about argument in callback
                         scope: me
                     },
                     {

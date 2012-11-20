@@ -8,6 +8,7 @@
 			.tools {
 				img.tool{
 					&.add-people {
+						display: none; //turned off until this is possible in the server...
 						opacity: 0.6;
 						margin-right: 5px;
 						width: 17px;
