@@ -40,7 +40,7 @@ Ext.define('NextThought.view.chat.Window', {
 			handler:'addPeople'
 		},
         'flag-for-moderation':{
-            tip:'Flag for moderation',
+            tip:'Flag as Inappropriate',
             handler:'onFlagToolClicked'
         }
 	},
