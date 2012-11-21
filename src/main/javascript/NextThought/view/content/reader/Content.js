@@ -72,6 +72,7 @@ Ext.define('NextThought.view.content.reader.Content',{
 	resolveContainers: function(){
 		var d = this.getDocumentElement(),
 			els, containers = [];
+
 		//TODO: get all ntiids on the page.
 		//els = d.querySelectorAll('[data-ntiid],[ntiid]');
 
@@ -98,12 +99,30 @@ Ext.define('NextThought.view.content.reader.Content',{
 					{tag: 'a', href:'#zoom', title:'Zoom', cls: 'zoom disabled', html: ' '},
 					{tag: 'a', href:'#mark', title:'Make a note', cls: 'mark', html: ' '}
 				]
-			}).compile();
+			}).compile(),
+			activators = {
+				'nti-data-resizeable': Ext.bind(this.activateZoomBox,this)
+			};
+
 
 		Ext.each(els,function(el){
-			var p = el.getAttribute('itemprop');
-			tpl.append(el,[p],false);
+			var p = (el.getAttribute('itemprop')||'').split(' '),
+				bar = tpl.append(el,null,false);
+
+			Ext.each(p,function(feature){
+				(activators[feature]||Ext.emptyFn)(el,bar);
+			});
 		});
+	},
+
+
+	activateZoomBox: function(containerEl, toolbarEl){
+		Ext.fly(toolbarEl.querySelector('a.zoom')).removeCls('disabled');
+	},
+
+
+	zoomImage: function(el){
+		console.log('zoom',el);
 	},
 
 
@@ -280,7 +299,12 @@ Ext.define('NextThought.view.content.reader.Content',{
 			return false;
 		}
 
-		if(/^mark$|^zoom$/i.test(target)){
+		if(/^zoom$/i.test(target)){
+			m.zoomImage(el);
+			return false;
+		}
+
+		if(/^mark$/i.test(target)){
 			m.fireEvent('markupenabled-action',el,target);
 			return false;
 		}
