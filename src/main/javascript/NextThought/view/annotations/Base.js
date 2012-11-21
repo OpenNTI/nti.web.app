@@ -10,6 +10,10 @@ Ext.define( 'NextThought.view.annotations.Base', {
 		shareable: 'NextThought.mixins.Shareable'
 	},
 
+	statics: {
+		NOT_FOUND: -3,
+		NOT_VISIBLE: -4
+	},
 
 	onClassExtended: function(cls, data, hooks) {
 		var onBeforeClassCreated = hooks.onBeforeCreated;

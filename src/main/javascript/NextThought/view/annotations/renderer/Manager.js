@@ -282,7 +282,8 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 
 
 	render: function(prefix){
-		var me = this, containers = {}, renderedCount = 0;
+		var me = this, containers = {}, renderedCount = 0,
+		cleanContent, rootContainerId;
 
 		if(me.rendering){
 			console.warn('Render called while rendering...');
@@ -329,8 +330,11 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 		});
 
 		if(cloned && cloned.length > 0 && doc){
-			Anchors.preresolveLocatorInfo(descs, doc, ReaderPanel.get().getCleanContent(), cids);
+			cleanContent = descs, doc, ReaderPanel.get().getCleanContent();
+			rootContainerId = Anchors.rootContainerIdFromDocument(doc);
+			Anchors.preresolveLocatorInfo(descs, doc, cleanContent, cids, rootContainerId);
 			Ext.each(cloned, function(o){
+				var containerNode, containerRect;
 				try {
 					if(!o.isVisible){
 						return;
@@ -344,16 +348,27 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 					}
 
 					y = o.render();
-
-					//uncomment for testing
-					//console.log('Rendered', o.getRecord().get('body')[0], y);
-
-					if(!y){
-						//console.log(o, 'returned a falsy y:',y);
+					if(y === NextThought.view.annotations.Base.HIDDEN){
+						return true; //continue
 					}
-					else {
-						b = me.getBucket(prefix,Math.ceil(y));
+
+					if(y === NextThought.view.annotations.Base.NOT_FOUND){
+						//Code to stick things we can't resolve on teh container somewhere.  In general top looks better than bottom
+						//even though I think we would prefer jamming them at the bottom
+						/*
+						console.log('Displaying annotations with unresolvable anchor information at bottom of container');
+						//Consider caching these outside this loop
+						containerNode = Anchors.scopedContainerNode(doc, o.getContainerId(), rootContainerId);
+						containerRect = containerNode ? containerNode.getBoundingClientRect() : null;
+						if(containerRect.top && containerRect.height){
+							y = containerRect.top;
+						}
+						if(y){
+							console.log('Positioned missing annotation at bottom of container', containerNode, y);
+						}*/
 					}
+
+					b = me.getBucket(prefix,Math.ceil(y));
 					if(b){
 						renderedCount++;
 						b.put(o);
