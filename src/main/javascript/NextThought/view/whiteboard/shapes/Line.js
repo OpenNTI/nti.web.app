@@ -23,7 +23,7 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Line', {
 		delete this.cache.fill;
 		this.bbox = {
 			x: 0,	w: 1,
-			y: -ctx.lineWidth*3,	h: ctx.lineWidth*6
+			y: (-ctx.lineWidth*3 - 40/ctx.canvas.width)/2,	h: (ctx.lineWidth*3 + 40/ctx.canvas.width)
 		};
 
 		this.performFillAndStroke(ctx);
@@ -34,7 +34,7 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Line', {
 	getEndPoint: function(m){
 		m = m || new NTMatrix(this.transform);
 		var scale = m.getScale(true),
-			rad = -m.getRotation();
+			rad = m.getRotation();
 		return [
 			scale * Math.cos(rad),
 			scale * Math.sin(rad)
@@ -64,17 +64,23 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Line', {
 
 		ctx.save();
 
-		var m = new NTMatrix(this.transform), xy;
+		var m = new NTMatrix(this.transform), xy, drawMatrix= new NTMatrix(), t, scale, rot;
 
 		m.scaleAll(ctx.canvas.width);
 
+		scale = m.getScale();
+		t = m.getTranslation();
+		rot = m.getRotation();
+
+		drawMatrix.translate(t[0], t[1]);
+		drawMatrix.scale(scale[0], scale[1]);
+		drawMatrix.rotate(rot);
+
 		ctx.setTransform(1,0,0,1,0,0);
-
-
 
 		ctx.lineWidth = 2;
 		ctx.beginPath();
-		this.drawNib(ctx, 7, 1, 0, m, 'line');
+		this.drawNib(ctx, 7, 1, 0, drawMatrix, m, 'line');
 
 		ctx.closePath();
 		ctx.shadowColor = 'None';

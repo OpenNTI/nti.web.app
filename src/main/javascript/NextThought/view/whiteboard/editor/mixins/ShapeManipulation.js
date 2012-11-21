@@ -265,7 +265,7 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 			s = null,
 			cs = this.selected,
 			p = this.getRelativeXY(e),
-			sp = this.scalePoint(p), l,sw;
+			sp = this.scalePoint(p), l,sw, angle = 0;
 
 		if(cs && cs.isPointInNib.apply(cs,p)){
 			return;
@@ -298,6 +298,22 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 		}
 
 		c.drawScene();
+
+//		clearInterval(this.rotationTimer);
+//		if(!s){ return;}
+//
+//		angle = 0;
+//		this.rotationTimer = setInterval( function(){
+//		//debugger;
+//			var center = new NTMatrix(Ext.clone(s.transform)).getTranslation(),
+//				x = Math.cos(angle),
+//				y = Math.sin(angle);
+//			x += center[0];
+//			y += center[1];
+//			s.modify('rot',	x, y);
+//			angle += 0.1;
+//			c.drawScene();
+//		}, 1000);
 	},
 
 

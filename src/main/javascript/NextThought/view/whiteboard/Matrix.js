@@ -75,8 +75,8 @@ Ext.define('NextThought.view.whiteboard.Matrix', {
 		var m = this.m,
 			a = m[0], b = m[1],
 			c = m[2], d = m[3],
-			sx= Math.sqrt(a*a + b*b) * (a<0? -1 : 1),
-			sy= Math.sqrt(c*c + d*d) * (d<0? -1 : 1);
+			sx= Math.sqrt(a*a + b*b), //*(a<0? -1 : 1),
+			sy= Math.sqrt(c*c + d*d); //*(d<0? -1 : 1);
 
 		return averaged? (sx+sy)/2 : [sx,sy];
 	},
@@ -86,7 +86,7 @@ Ext.define('NextThought.view.whiteboard.Matrix', {
 		var m = this.m, a = m[0], b = m[1];
 //			c = m[2], d = m[3];
 
-		return Math.atan( -b/a );
+		return Math.atan2( b, a);
 	},
 
 

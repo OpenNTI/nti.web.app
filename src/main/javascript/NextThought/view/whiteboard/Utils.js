@@ -29,11 +29,9 @@ Ext.define('NextThought.view.whiteboard.Utils',{
 			x0 = x0[0];
 		}
 		var dx	= x1-x0,
-			dy	= y1-y0,
-			a	= dx<0? 180: dy<0? 360: 0,
-			rad = Math.atan(dy/dx);
+			dy	= y1-y0;
 
-		return ((180/Math.PI)*rad) + a;
+		return Math.atan2(dy, dx) * 180 / Math.PI;
 	},
 
 

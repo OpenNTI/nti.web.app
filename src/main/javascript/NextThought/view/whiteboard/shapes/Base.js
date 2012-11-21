@@ -253,8 +253,10 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Base', {
 
 		m = new NTMatrix();
 		m.translate(t[0],t[1]);
-		m.scale(s[0],s[1]);
+
 		m.rotate(WBUtils.toRadians(WBUtils.getDegrees([t[0],t[1], x,y])));
+
+		m.scale(s[0],s[1]);
 
 		return m.toTransform();
 	},
@@ -289,23 +291,37 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Base', {
 	},
 
 
-	drawNib: function(ctx,r,x,y, m, name, s, a){
+	drawNib: function(ctx,r,x,y, drawMatrix, m, name, s, a){
 
 		s = s || 0;
 		a = a || Math.PI*2;
 
-		var xy = m.transformPoint(x,y);
+		var xy = drawMatrix.transformPoint(x,y);
 		if(name === 'l' || name === 'r' || name === 'b' || name === 't'){
 			ctx.lineWidth = 1;
 			ctx.fillRect(xy[0]-r/2, xy[1]-r/2, r, r);
 			ctx.strokeRect(xy[0]-r/2, xy[1]-r/2, r, r);
 		}
-		else if(name!=='rot1' && name !== 'rot2'){
+		else if(name!=='rot'){
 			ctx.lineWidth = 2;
 			ctx.moveTo(xy[0]+r,xy[1]);
 			ctx.arc(xy[0], xy[1], r, s,a, name!=='rot2');
 		}
+		else if(name === 'rot'){
+			ctx.lineWidth = 1;
+			ctx.fillStyle = '#8ED6FF';
 
+			ctx.moveTo(xy[0]+3, xy[1]);
+
+			xy[0] += 50;
+			x += (50/ m.getScale()[0]);
+
+			ctx.lineTo(xy[0]-r/2, xy[1]);
+			ctx.fillRect(xy[0]-r/2, xy[1]-r/2, r, r);
+			ctx.strokeRect(xy[0]-r/2, xy[1]-r/2, r, r);
+		}
+
+		xy = m.transformPoint(x,y);
 		//if nibData is there, fill it in, otherwise, throw away the data
 		(this.nibData||{})[name] = {
 			x: xy[0],
@@ -324,14 +340,24 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Base', {
 
 		var b = this.bbox,
 			m = new NTMatrix(this.transform),
-			r, rot, a;
+			drawMatrix = new NTMatrix(),
+			r, rot, a, scale, center;
 
 		//scale the normal values to the current size of the canvas
 		m.scaleAll(ctx.canvas.width);
 
-		rot = -m.getRotation();
+		rot = m.getRotation();
+		scale = m.getScale();
+		center = m.getTranslation();
+
+		drawMatrix.translate(center[0],center[1]);
+		drawMatrix.scale(scale[0],scale[1]);
+
 
 		ctx.setTransform(1,0,0,1,0,0);
+		ctx.translate(center[0], center[1]);
+		ctx.rotate(rot);
+		ctx.translate(-center[0], -center[1]);
 
 		r = 6;  //circle
 		a = 8;  //square
@@ -345,17 +371,17 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Base', {
 		ctx.fillStyle = '#ffffff';
 		ctx.strokeStyle = '#b1b1b1';
 		ctx.beginPath();
-		this.drawNib(ctx, r, b.x,  b.y, m, 't-l');
+		this.drawNib(ctx, r, b.x,  b.y, drawMatrix, m, 't-l');
 
-		this.drawNib(ctx, a, b.mx, b.y, m, 't');
-		this.drawNib(ctx, r, b.xx, b.y, m, 't-r');
+		this.drawNib(ctx, a, b.mx, b.y, drawMatrix, m, 't');
+		this.drawNib(ctx, r, b.xx, b.y, drawMatrix, m, 't-r');
 
-		this.drawNib(ctx, a, b.x,  b.my, m, 'l');
-		this.drawNib(ctx, a, b.xx, b.my, m, 'r');
-		this.drawNib(ctx, r, b.x,  b.yy, m, 'b-l');
+		this.drawNib(ctx, a, b.x,  b.my, drawMatrix, m, 'l');
+		this.drawNib(ctx, a, b.xx, b.my, drawMatrix, m, 'r');
+		this.drawNib(ctx, r, b.x,  b.yy, drawMatrix, m, 'b-l');
 
-		this.drawNib(ctx, a, b.mx, b.yy, m, 'b');
-		this.drawNib(ctx, r, b.xx, b.yy, m, 'b-r');
+		this.drawNib(ctx, a, b.mx, b.yy, drawMatrix, m, 'b');
+		this.drawNib(ctx, r, b.xx, b.yy, drawMatrix, m, 'b-r');
 		ctx.closePath();
 		ctx.shadowColor = 'None';
 		ctx.fill();
@@ -364,17 +390,12 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Base', {
 		ctx.lineCap = 'round';
 		ctx.lineWidth *= 2;
 
-		//FIXME: Comment out rotation logic for now.
-//		ctx.beginPath();
-//		this.drawNib(ctx, r*2, b.xx+((r)/m.getScale(true)), b.my, m, 'rot1', (rot+(Math.PI/3)), (rot-(Math.PI/4)));
-//		ctx.stroke();
-//
-//		ctx.beginPath();
-//		this.drawNib(ctx, r*2, b.x-((r)/m.getScale(true)), b.my, m, 'rot2', rot+(2*Math.PI/3), rot-(3*Math.PI/4));
-//		ctx.stroke();
+		//Note: COMMENT OUT THE NEXT THREE LINE TO TURN OFF ROTATION, if it's needed.
+		ctx.beginPath();
+		this.drawNib(ctx, r*2, b.xx, b.my, drawMatrix, m, 'rot', rot );
+		ctx.stroke();
 
 		ctx.restore();
-
 	},
 
 
@@ -447,10 +468,7 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Base', {
 		y4 = x4[1];
 		x4 = x4[0];
 
-		return this.pointInPolygon(x,y,[
-			[x1, x2, x3, x4],
-			[y1, y2, y3, y4]
-		]);
+		return this.pointInPolygon(x,y,[[x1,y1], [x4,y4], [x3,y3], [x2,y2]]);
 	},
 
 
@@ -464,27 +482,26 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Base', {
 	 *  @returns true if the point x,y is inside the polygon, or false if it is not.  If the point is
 	 *  exactly on the edge of the polygon, then the function may return true or false.
 	 */
-	pointInPolygon: function(x,y,poly) {
+	pointInPolygon: function(x,y, points) {
 
-		var polyX = poly[0],
-			polyY = poly[1],
-			sides = polyX.length,
-			i = 0,
-			j=sides-1,
-			oddNodes=false;
+		function dotProduct(p1, p2){
+			return p1[0]*p2[0] + p1[1]*p2[1];
+		};
 
-		for (; i<sides; i++)
-		{
-			if(((polyY[i]< y && polyY[j]>=y)
-			||  (polyY[j]< y && polyY[i]>=y))
-			&&  (polyX[i]<=x || polyX[j]<=x))
-			{
-				oddNodes^=(polyX[i]+(y-polyY[i])/(polyY[j]-polyY[i])*(polyX[j]-polyX[i]) < x);
-			}
-			j=i;
+		function subtractVector(v1, v2){
+			return [v1[0] - v2[0], v1[1] - v2[1]];
 		}
 
-		return oddNodes;
+		var	point = [x, y],
+		p0p3 = subtractVector(points[3], points[0]),
+			p0p1 = subtractVector(points[1], points[0]),
+			v = subtractVector(point, points[0]);
+
+		return 0<=dotProduct(v, p0p3) && dotProduct(v, p0p3)<=dotProduct(p0p3, p0p3)
+			&&  0<=dotProduct(v, p0p1) && dotProduct(v, p0p1)<=dotProduct(p0p1, p0p1)
+
+
+
 	}
 
 });
