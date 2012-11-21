@@ -10,12 +10,10 @@ Ext.define('NextThought.ux.ImageZoomView',{
 	width: 275,
 	height: 200,
 
-	renderTpl: Ext.DomHelper.markup({
-		cn: [{ tag: 'img' },{ cls: 'bar', cn: [{cls: 'close'}] }]
-	}),
+	renderTpl: Ext.DomHelper.markup([{ tag: 'img' },{ cls: 'bar', cn: [{tag: 'a', cls: 'unzoom close', href:'#unzoom'}] }]),
 
 	renderSelectors: {
-		closeEl: '.close',
+		closeEl: 'a.close',
 		image: 'img'
 	},
 
@@ -36,8 +34,9 @@ Ext.define('NextThought.ux.ImageZoomView',{
 
 		img.onload = function(){
 
-			var vpH = El.getViewportHeight(),
-				vpW = El.getViewportWidth(),
+			var padding = 50,
+				vpH = (El.getViewportHeight()-padding),
+				vpW = (El.getViewportWidth()-padding),
 				h = img.height,
 				w = img.width;
 
@@ -64,8 +63,13 @@ Ext.define('NextThought.ux.ImageZoomView',{
 
 
 
-	close: function(){
+	close: function(e){
 		this.destroy();
+		if(e && e.stopEvent){
+			e.stopEvent();
+			return false;
+		}
+		return true;
 	}
 
 });
