@@ -190,16 +190,32 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Base', {
 	 * @param y - the mouse's Y cordinate on the canvas
 	 * @param dx - the mouse's change in X (magnitude)
 	 * @param dy - the mouse's change in Y (magnitude)
-	 * @param sx - the sign of dx
-	 * @param sy - the sign of dy
+	 * @param sx - 0 or 1 to indicate if the nib can move in that direction
+	 * @param sy - 0 or 1 to indicate if the nib can move in that direction
 	 */
 	nibUpdate: function(m, x,y, dx,dy, sx,sy){
+
+		function clamp(n){
+			if(n === 0){
+				return 0;
+			}
+			return n < 0 ? -1 : 1;
+		}
+
 		var s = m.getScale(),
 			w = this.bbox.w/2,
-			h = this.bbox.h/2;
+			h = this.bbox.h/2,
+			r = -m.getRotation(),
+			adjustedDx, adjustedDy, mag;
 
-		sx = s[0]+((sx*dx)/w);
-		sy = s[1]+((sy*dy)/h);
+		//console.log(sx, sy);
+		adjustedDx = dx*Math.cos(r) - dy*Math.sin(r);
+		adjustedDy = dx*Math.sin(r) + dy*Math.cos(r);
+
+		//console.log(adjustedDx, adjustedDy, mag);
+		sx = s[0] + (sx*adjustedDx)/w;
+		sy = s[1] + (sy*adjustedDy)/w;
+		//console.log(sx, sy);
 
 		if(sx >= 0 && sy >= 0){
 			m.scale( 1/s[0], 1/s[1] );
@@ -265,14 +281,14 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Base', {
 	modify: function(nib,	x1,y1,	x2,y2,	dx,dy){
 		var m = new NTMatrix(this.transform),
 			map = {
-				'l'		: function() { return this.nibUpdate(m, x1,y1, dx, 0, -1,-1); },
-				't'		: function() { return this.nibUpdate(m, x1,y1, 0, dy, -1,-1); },
-				't-l'	: function() { return this.nibUpdate(m, x1,y1, dx,dy, -1,-1); },
-				'r'		: function() { return this.nibUpdate(m, x1,y1, dx, 0,  1, 1); },
-				'b'		: function() { return this.nibUpdate(m, x1,y1, 0, dy,  1, 1); },
-				'b-r'	: function() { return this.nibUpdate(m, x1,y1, dx,dy,  1, 1); },
-				't-r'	: function() { return this.nibUpdate(m, x1,y1, dx,dy,  1,-1); },
-				'b-l'	: function() { return this.nibUpdate(m, x1,y1, dx,dy, -1, 1); },
+				'l'		: function() { return this.nibUpdate(m, x1,y1, dx, dy, -1, 0);},
+ 				't'		: function() { return this.nibUpdate(m, x1,y1, dx, dy, 0, -1) },
+				't-l'	: function() { return this.nibUpdate(m, x1,y1, dx, dy, 1, 1); },
+				'r'		: function() { return this.nibUpdate(m, x1,y1, dx, dy, 1, 0); },
+				'b'		: function() { return this.nibUpdate(m, x1,y1, dx, dy, 0, 1); },
+				'b-r'	: function() { return this.nibUpdate(m, x1,y1, dx, dy, 1, 1); },
+				't-r'	: function() { return this.nibUpdate(m, x1,y1, dx, dy, 1, 1); },
+				'b-l'	: function() { return this.nibUpdate(m, x1,y1, dx, dy, 1, 1); },
 				'rot'	: function() { return this.nibRotate(m, x1,y1 ); }
 			};
 
