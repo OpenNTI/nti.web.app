@@ -229,36 +229,33 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Base', {
 	},
 
 	/**
-	 *  @param p - the [x,y] of the destination point( scaled down)
+     * For resizing from the conrners we constrain the aspect ratio of the shape.
+	 * We model the interaction off of google docs constrained image resizing.
+	 * We look only at the change in y value (corrected for any current rotation)
+	 * and adjust the size soley based on that while ensuring we maintain the ratio
+     *
+	 * @param p - the [x,y] of the destination point( scaled down)
+	 * @param dx - the mouse's change in X (magnitude)
+	 * @param dy - the mouse's change in Y (magnitude)
 	 *
 	 * */
-	scaleWithConstraint: function(nib, p){
+	scaleWithConstraint: function(nib,dx,dy){
 		var m = new NTMatrix(this.transform),
 			s = m.getScale(),
 			c = m.getTranslation(),
+			r = -m.getRotation(),
 			ratio = s[0]/s[1],
-			pts = [c[0], c[1], p[0], p[1]],
-			d =  WBUtils.getDistance(pts),
-			cosVal= Math.cos(WBUtils.toRadians(WBUtils.getDegrees(pts))),
-			sinVal= Math.sin(WBUtils.toRadians(WBUtils.getDegrees(pts))), sx,sy;
+			sign = /t-/.test(nib) ? -1 : 1,
+			adjustedDx, adjustedDy;
 
-		m.scale(1/s[0], 1/s[1]);
+		adjustedDy = dx*Math.sin(r) + dy*Math.cos(r);
+		adjustedDx = adjustedDy * ratio;
 
-		if(nib === 't-l'){
-			sx = -2*d*sinVal;
-			sy = -2*(d/ratio)*sinVal;
-			m.scale( sx, sy);
-		}
-		else if(nib === 'b-l'){
-			sx = 2*d*sinVal;
-			sy = 2*(d/ratio)*sinVal;
-			m.scale(sx, sy);
-		}
-		else{
-			sx = 2*d*cosVal;
-			sy =  2*(d/ratio)*cosVal;
-			m.scale(sx , sy);
-		}
+		sx = s[0] + sign*adjustedDx*2;
+		sy = s[1] + sign*adjustedDy*2;
+
+		m.scale( 1/s[0], 1/s[1]);
+		m.scale( sx, sy );
 
 		this.transform = m.toTransform();
 	},
