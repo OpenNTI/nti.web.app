@@ -149,7 +149,7 @@ Ext.define('NextThought.view.content.reader.Content',{
 			sizeMap = {
 				'quarter':0,
 				'half':1,
-				'full':2
+				'full':1
 			},
 			currentSize = img.getAttribute('data-nti-image-size'),
 			nextSize = sizes[sizeMap[currentSize]+1],
