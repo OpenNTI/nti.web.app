@@ -239,7 +239,8 @@ Ext.define('NextThought.view.Window',{
 
 		this.resizer.on({
 			scope: this,
-			beforeresize: this.dragMaskOn,
+			beforeresize: this.resizeDragMaskOn,
+			resizedrag: this.cancelResizeMaskTimeout,
 			resize: this.dragMaskOff
 		});
 	},
@@ -303,6 +304,14 @@ Ext.define('NextThought.view.Window',{
 		}
 	},
 
+	resizeDragMaskOn: function(){
+		this.dragMaskOn();
+		this.resizeDragTimeout = Ext.defer(this.dragMaskOff,2000,this);
+	},
+
+	cancelResizeMaskTimeout: function(){
+		clearTimeout(this.resizeDragTimeout);
+	},
 
 	dragMaskOn: function(){
 		if(Ext.getCmp('viewport')){
