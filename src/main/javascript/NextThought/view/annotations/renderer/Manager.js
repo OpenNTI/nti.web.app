@@ -330,7 +330,7 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 		});
 
 		if(cloned && cloned.length > 0 && doc){
-			cleanContent = descs, doc, ReaderPanel.get().getCleanContent();
+			cleanContent = ReaderPanel.get().getCleanContent();
 			rootContainerId = Anchors.rootContainerIdFromDocument(doc);
 			Anchors.preresolveLocatorInfo(descs, doc, cleanContent, cids, rootContainerId);
 			Ext.each(cloned, function(o){
