@@ -282,8 +282,18 @@ Ext.define('NextThought.util.Anchors', {
 			return null;
 		}
 
-		var selector = '['+(containerId.indexOf('tag:nextthought.com') >= 0 ? 'data-ntiid' : 'Id')+'="'+containerId+'"]',
-			potentials = Ext.query(selector, root);
+        var potentials = [];
+
+        if(containerId.indexOf('tag:nextthought.com') >= 0){
+            Ext.each(Ext.query('[data-ntiid]', root), function(x){
+                if (x.getAttribute('data-ntiid') === containerId){
+                    potentials.push(x);
+                }
+            });
+        }
+        else{
+             potentials.push(root.getElementById(containerId));
+        }
 
 		if(!potentials || potentials.length === 0){
 			return defaultNode;
