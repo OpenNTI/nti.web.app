@@ -32,7 +32,7 @@ Ext.define('NextThought.util.Anchors', {
 	},
 
 	GET_WHITESPACE_FILTER : function(){
-		if(this.IGNORE_WHITESPACE_TEXTNODES){
+		if(!this.IGNORE_WHITESPACE_TEXTNODES){
 			return null;
 		}
 
