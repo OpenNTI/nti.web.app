@@ -421,7 +421,7 @@ Ext.define('NextThought.controller.UserData', {
     },
 
 
-    onFootnoteHover: function(id, text, node) {
+    onFootnoteHover: function(id, html, node) {
         var offsets = AnnotationsRenderer.getReader().getAnnotationOffsets(),
             position = Ext.fly(node).getXY(),
             me=this;
@@ -451,7 +451,7 @@ Ext.define('NextThought.controller.UserData', {
             delete this.footnoteWidget;
         }
 
-        me.footnoteWidget = Ext.widget('footnote-widget', {text: text});
+        me.footnoteWidget = Ext.widget('footnote-widget', {text: html.innerHTML});
         me.footnoteWidget.showAt(adjustPosition(position));
     },
 

@@ -196,7 +196,17 @@ Ext.define('NextThought.view.content.reader.IFrame',{
                 var fn;
                 try{fn = d.querySelector(href);}
                 catch (e){fn = d.getElementById(href.substring(1));}
-                return fn.textContent;
+
+                Ext.each(Ext.fly(fn).query('a'),
+                    function(d){
+                        var href = d.getAttribute ? d.getAttribute('href') : '';
+                        if(href.indexOf('#ma') >= 0){
+                            fn.removeChild(d);
+                        }
+                    }
+                );
+
+                return fn.cloneNode(true);
             }
 
             if (!target){return;}
