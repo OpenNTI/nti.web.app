@@ -517,7 +517,6 @@
 	}
 }
 
-
 .body-divider {
 	display: block;
 
@@ -578,6 +577,7 @@
 				height: 18px;
 			}
 
+
 			.reply {
 				background-position: 0 -19px;
 				width: 25px;
@@ -586,4 +586,9 @@
 		}
 	}
 }
+
+.log-entry .whiteboard-wrapper .toolbar .reply {
+	display: none;
+}
+
 
