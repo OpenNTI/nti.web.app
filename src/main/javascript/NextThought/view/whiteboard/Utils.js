@@ -40,6 +40,11 @@ Ext.define('NextThought.view.whiteboard.Utils',{
 	},
 
 
+	toDegree: function(radians){
+		return Math.round((radians * 180)/Math.PI);
+	},
+
+
 	getDistance: function(x1, y1, x2, y2) {
 		if(Ext.isArray(x1)){
 			y2 = x1[3];
