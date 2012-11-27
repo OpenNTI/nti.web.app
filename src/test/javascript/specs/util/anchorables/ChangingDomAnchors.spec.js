@@ -14,20 +14,20 @@ describe("Tests with Changing Documents", function() {
 	function addElement(daddy, tag, attrs) {
 		var sonny = document.createElement(tag);
 		for (var a in attrs) sonny.setAttribute(a, attrs[a]);
-		if (daddy) daddy.appendChild(sonny); 
+		if (daddy) daddy.appendChild(sonny);
 		return sonny;
 	}
 
 	function insertElement(daddy, bigBrother, tag, attrs) {
 		var sonny = document.createElement(tag);
 		for (var a in attrs) sonny.setAttribute(a, attrs[a]);
-		if (daddy) daddy.insertBefore(sonny, bigBrother); 
+		if (daddy) daddy.insertBefore(sonny, bigBrother);
 		return sonny;
 	}
 
 	function addTextNode(daddy, text) {
 		var sonny = document.createTextNode(text);
-		if (daddy) daddy.appendChild(sonny); 
+		if (daddy) daddy.appendChild(sonny);
 		return sonny;
 	}
 
@@ -53,27 +53,27 @@ describe("Tests with Changing Documents", function() {
 			var pointer = rangeDescription.getStart();
 			expect(Anchors.getCurrentNodeMatches(pointer, walker)[0].confidence).toBeCloseTo(0.458);
 		});
-        it('Multiple paragraphs with in-between additions', function() {       
-            var div = addElement(testBody,'div',{'Id':'ThisIdIsTheBest'});                
-                var p1 = addElement(div,'p',{});                                          
+        it('Multiple paragraphs with in-between additions', function() {
+            var div = addElement(testBody,'div',{'Id':'ThisIdIsTheBest'});
+                var p1 = addElement(div,'p',{});
                     var t1 = addTextNode(p1,'This is some somewhat but not particularly long text for readers with short attention spans.');
-                var p2 = addElement(div,'p',{});                                          
+                var p2 = addElement(div,'p',{});
                     var t2 = addTextNode(p2,'This is some more text containing many, many uninteresting words.');
-            range = makeRange(t1,13,t2,22);                                               
+            range = makeRange(t1,13,t2,22);
             rangeDescription = Anchors.createRangeDescriptionFromRange(range, document).description;
-            var start = rangeDescription.getStart();                                      
-            var startWalker = document.createTreeWalker(div, NodeFilter.SHOW_TEXT);       
-            startWalker.currentNode = t1;                                                 
-            var end = rangeDescription.getEnd();                                          
-            var endWalker = document.createTreeWalker(div, NodeFilter.SHOW_TEXT);         
-            endWalker.currentNode = t2;                                                   
-            //Insert image element in between                                             
-            var img = insertElement(div,p2,'img',{});                                     
+            var start = rangeDescription.getStart();
+            var startWalker = document.createTreeWalker(div, NodeFilter.SHOW_TEXT);
+            startWalker.currentNode = t1;
+            var end = rangeDescription.getEnd();
+            var endWalker = document.createTreeWalker(div, NodeFilter.SHOW_TEXT);
+            endWalker.currentNode = t2;
+            //Insert image element in between
+            var img = insertElement(div,p2,'img',{});
             expect(Anchors.getCurrentNodeMatches(start, startWalker)[0].confidence).toEqual(1);
             expect(Anchors.getCurrentNodeMatches(end, endWalker)[0].confidence).toEqual(1);
-            //Insert span containing text in between                                      
-            var span = insertElement(div,p2,'span',{});                                   
-                var t15 = addTextNode(span,'Here are some extra words in a span');        
+            //Insert span containing text in between
+            var span = insertElement(div,p2,'span',{});
+                var t15 = addTextNode(span,'Here are some extra words in a span');
             expect(Anchors.getCurrentNodeMatches(start, startWalker)[0].confidence).toEqual(1);
             expect(Anchors.getCurrentNodeMatches(end, endWalker)[0].confidence).toEqual(1);
         });
@@ -137,10 +137,10 @@ describe("Tests with Changing Documents", function() {
 			expect(Anchors.getCurrentNodeMatches(end, afterEndWalker)[1].confidence).toBeCloseTo(0.476);
 			var bkStart = Anchors.locateRangeEdgeForAnchor(start,div,null);
 			var bkEnd = Anchors.locateRangeEdgeForAnchor(end,div,null);
-			expect(bkStart.confidence).toBeCloseTo(0.554);
+			expect(bkStart.confidence).toBeCloseTo(0.666);
 			expect(bkStart.node.data).toEqual(t1.data);
 			//Currently breaks on this case
-			expect(bkEnd.confidence).toBeCloseTo(0.372);
+			expect(bkEnd.confidence).toBeCloseTo(0.679);
 			expect(bkEnd.node.data).toEqual(t3.data);
 		});
 	});

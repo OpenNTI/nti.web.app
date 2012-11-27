@@ -28,6 +28,50 @@ describe("Anchor Utils", function() {
 		});
 	});
 
+	describe('getContainerNtiid', function(){
+		it('resolves question node', function(){
+			var question = document.createElement('object'),
+				result;
+			question.setAttribute('data-ntiid', 'foo');
+			question.setAttribute('type', 'naquestion');
+
+			testBody.appendChild(question);
+
+			result = Anchors.getContainerNtiid(question, null);
+
+			expect(result).toEqual('foo');
+		});
+
+		it('resolves children of questions properly', function(){
+			var question = document.createElement('object'),
+				child = document.createElement('span'),
+				result;
+			question.setAttribute('data-ntiid', 'foo');
+			question.setAttribute('type', 'naquestion');
+			question.appendChild(child);
+
+			testBody.appendChild(question);
+
+			result = Anchors.getContainerNtiid(child, null);
+
+			expect(result).toEqual('foo');
+		});
+
+		it('ignores subcontainers that arent questions', function(){
+			var container = document.createElement('div'),
+				child = document.createElement('span'),
+				result;
+			container.setAttribute('data-ntiid', 'foo');
+			container.appendChild(child);
+
+			testBody.appendChild(container);
+
+			result = Anchors.getContainerNtiid(child, null);
+
+			expect(result).toBeFalsy();
+		});
+	});
+
 	describe('createRangeDescriptionFromRange Tests', function(){
 		it('Create Description with non-anchorable', function(){
 			var div = document.createElement('div'),
@@ -1830,12 +1874,12 @@ describe("Anchor Utils", function() {
 			root.appendChild(p2);
 			testBody.appendChild(root);
 
-			recreatedRange = Anchors.toDomRange(emptyDesc.description, document, document.body);
+			recreatedRange = Anchors.toDomRange(emptyDesc.description, document, document.body, null, 'foo');
 			expect(recreatedRange).toBeTruthy();
 			expect(recreatedRange.commonAncestorContainer).toBe(document.body);
 
 			root.setAttribute('Id', '123242354543523');
-			recreatedRange = Anchors.toDomRange(emptyDesc.description, document, document.body, '123242354543523');
+			recreatedRange = Anchors.toDomRange(emptyDesc.description, document, document.body, '123242354543523', '123242354543523');
 			expect(recreatedRange).toBeTruthy();
 			expect(recreatedRange.commonAncestorContainer).toBe(root);
 		});

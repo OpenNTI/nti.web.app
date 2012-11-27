@@ -258,7 +258,8 @@ Ext.define('NextThought.util.Anchors', {
 		}
 		ancestorNode = Anchors.referenceNodeForNode(ancestorNode);
 
-        result.container = this.getContainerNtiid(ancestorNode);
+		//TODO instead of defaulting to LocationProvider.currentNTIID default to rootContainerIdFromDocument
+        result.container = this.getContainerNtiid(ancestorNode, LocationProvider.currentNTIID);
 
 		var ancestorAnchor = Ext.create('NextThought.model.anchorables.ElementDomContentPointer', {
 			node: ancestorNode,
@@ -277,7 +278,16 @@ Ext.define('NextThought.util.Anchors', {
         return result;
 	},
 
+	/*
+	 *	Returns the node for the supplied container or defaultNode
+	 *  if that container can't be found.  If containerId resolves
+	 *  to a node that isn't valid as described by getContainerNtiid
+	 *  we warn and return the node anyway
+	 */
 	getContainerNode: function(containerId, root, defaultNode){
+		var ntiidAttr = 'data-ntiid',
+			questionSel = 'object[type$=naquestion]['+ntiidAttr+']',
+			result;
 		if(!containerId){
 			return null;
 		}
@@ -292,7 +302,12 @@ Ext.define('NextThought.util.Anchors', {
             });
         }
         else{
-             potentials.push(root.getElementById(containerId));
+			if(Ext.isFunction(root.getElementById)){
+				potentials.push(root.getElementById(containerId));
+			}
+			else{
+				potentials = Ext.query('[Id='+containerId+']', root);
+			}
         }
 
 		if(!potentials || potentials.length === 0){
@@ -303,26 +318,39 @@ Ext.define('NextThought.util.Anchors', {
 			//TODO what do we actually do here?
 			console.warn('Found several matches for container. Will return first', containerId, potentials);
 		}
+		result = Ext.fly(potentials[0]);
 
-		return potentials[0];
+		if(!result.is(questionSel)){
+			console.warn('Found container we think is an invalid container node', result);
+		}
+
+		return result.dom;
 	},
 
-    getContainerNtiid: function(node){
+	/*
+	 *	Finds a containerId for the closet valid container
+	 *  of node.  At this point valid cantainers are questions
+	 *  with a data-ntiid attribute or the page.  Note we currently
+	 *  don't contain things in section-style sub containers.  Support on
+	 *  the ds is questionable and other parts of the app (carousel?) will
+	 *  need to be reworked
+	 */
+    getContainerNtiid: function(node, def){
         var n = Ext.get(node),
-            a = 'data-ntiid',
-            s = '['+a+']',
-            up = n.up(s);
+			ntiidAttr = 'data-ntiid',
+			questionSel = 'object[type$=naquestion]['+ntiidAttr+']',
+			up;
 
-        if (n.is(s)){
-            return n.getAttribute(a);
+        if (n.is(questionSel)){
+            return n.getAttribute(ntiidAttr);
         }
-        else if (up) {
-            return up.getAttribute(a);
-        }
-        else {
-            return LocationProvider.currentNTIID;
+		up = n.up(questionSel);
+		if (up) {
+            return up.getAttribute(ntiidAttr);
         }
 
+		//ok its not in a subcontainer, return default
+		return def;
     },
 
 
@@ -859,7 +887,17 @@ Ext.define('NextThought.util.Anchors', {
 		}
 
 		if(pointer.nonEmptyContexts === undefined){
-			Ext.Error.raise('nonEmptyContexts not set');
+			console.error('nonEmptyContexts not set. This should only happen when testing');
+			pointer.nonEmptyContexts = Ext.Array.filter(pointer.getContexts(), function(c, i){
+				//Always keep the primary.  It should never be empty, but just in case
+				if(i===0){
+					if(Ext.isEmpty(c.contextText.trim())){
+						console.error('Found a primary context with empty contextText.  Where did that come from?', pointer);
+					}
+					return true;
+				}
+				return !Ext.isEmpty(c.contextText.trim());
+			});
 		}
 
 		var currentNode = treeWalker.currentNode,
