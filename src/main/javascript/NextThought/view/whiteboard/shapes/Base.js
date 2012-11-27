@@ -214,7 +214,7 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Base', {
 
 		//console.log(adjustedDx, adjustedDy, mag);
 		sx = s[0] + (sx*adjustedDx)/w;
-		sy = s[1] + (sy*adjustedDy)/w;
+		sy = s[1] + (sy*adjustedDy)/h;
 		//console.log(sx, sy);
 
 		if(sx >= 0 && sy >= 0){
@@ -244,19 +244,32 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Base', {
 			s = m.getScale(),
 			c = m.getTranslation(),
 			r = -m.getRotation(),
+			w = this.bbox.w/2,
+			h = this.bbox.h/2,
 			ratio = s[0]/s[1],
-			sign = /t-/.test(nib) ? -1 : 1,
-			adjustedDx, adjustedDy;
+			adjustedDx, adjustedDy, sign;
 
 		adjustedDy = dx*Math.sin(r) + dy*Math.cos(r);
-		adjustedDx = adjustedDy * ratio;
+		adjustedDx = dx*Math.cos(r) - dy*Math.sin(r);
 
-		sx = s[0] + sign*adjustedDx*2;
-		sy = s[1] + sign*adjustedDy*2;
+		//but lock depending on the the ratio
+		if(ratio <= 1){ //lock moving in the y
+			adjustedDx = adjustedDy * ratio;
+			sign = /t-/.test(nib) ? -1 : 1;
+		}
+		else{ //look moving in the x
+			adjustedDy = adjustedDx / ratio;
+			sign = /-l/.test(nib) ? -1 : 1;
 
+		}
+
+		adjustedDx *= sign;
+		adjustedDy *= sign;
+
+		sx = s[0] + adjustedDx/w;
+		sy = s[1] + adjustedDy/h;
 		m.scale( 1/s[0], 1/s[1]);
 		m.scale( sx, sy );
-
 		this.transform = m.toTransform();
 	},
 
