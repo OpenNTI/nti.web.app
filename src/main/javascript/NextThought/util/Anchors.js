@@ -1390,7 +1390,7 @@ Ext.define('NextThought.util.Anchors', {
 			}
 		}
 		else {
-			node.removeAttribute(attr);
+			node.removeAttribute(attr+'-'+tag);
 		}
 		return offset;
 	},

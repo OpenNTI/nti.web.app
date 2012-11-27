@@ -1505,8 +1505,8 @@ describe("Anchor Utils", function() {
 			Anchors.cleanNode(textNodeWithNoTag, 'x');
 
 			Anchors.cleanNode(textNodeWithTag, 'tagged-baby!');
-			expect(nodeWithNoAttr.getAttribute(Anchors.PURIFICATION_TAG)).toBeNull();
-			expect(nodeWithAttr.getAttribute(Anchors.PURIFICATION_TAG)).toBeNull();
+			expect(nodeWithNoAttr.getAttribute(Anchors.PURIFICATION_TAG+'-x')).toBeNull();
+			expect(nodeWithAttr.getAttribute(Anchors.PURIFICATION_TAG+'-tagged')).toBeNull();
 			expect(textNodeWithNoTag.textContent.indexOf(Anchors.PURIFICATION_TAG)).toEqual(-1);
 			expect(textNodeWithTag.textContent.indexOf(Anchors.PURIFICATION_TAG)).toEqual(-1);
 		});
