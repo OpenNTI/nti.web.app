@@ -171,8 +171,8 @@ Ext.define('NextThought.view.whiteboard.Utils',{
 
 
 	buildCanvasFromImage: function(img){
-		var w = img.width,
-			h = img.height,
+		var w = img.naturalWidth || img.width,
+			h = img.naturalHeight || img.height,
 			scale = 1/w,
 			wbCX,wbCY,
 			m = new NTMatrix(),
@@ -182,7 +182,7 @@ Ext.define('NextThought.view.whiteboard.Utils',{
 				Class		: 'Canvas',
 				viewportRatio : (16/9)
 			};
-
+     debugger;
 		wbCX = (scale*w)/2;
 		wbCY = (1/data.viewportRatio)/2;
 
