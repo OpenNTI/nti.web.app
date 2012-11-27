@@ -33,6 +33,7 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 				cls:'centerer',
 				unselectable: 'on',
 				cn: [{
+					unselectable: 'on',
 					cls:'edit',
 					html:'Edit'
 				}]
