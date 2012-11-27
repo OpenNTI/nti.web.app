@@ -316,7 +316,7 @@ Ext.define('NextThought.util.Anchors', {
 
 		if(potentials.length > 1){
 			//TODO what do we actually do here?
-			console.warn('Found several matches for container. Will return first', containerId, potentials);
+			console.warn('Found several matches for container. Will return first. Bad content?', containerId, potentials);
 		}
 		result = Ext.fly(potentials[0]);
 
