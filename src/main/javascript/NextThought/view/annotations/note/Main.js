@@ -342,6 +342,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
                 }
 
 				this.context.select('.injected-related-items,.related,iframe,object').remove();
+				if(this.context.select('.redacted')){   this.context.select('.redacted').remove(); }
 				this.context.select('[itemprop~=nti-data-markupenabled] .bar').addCls('skip-anchor-descendants');
 				this.context.select('*:not(.skip-anchor-descendants) > a[href]').set({target:'_blank'});
 				this.context.select('*:not(.skip-anchor-descendants) > a[href^=#]').set({href:undefined,target:undefined});
