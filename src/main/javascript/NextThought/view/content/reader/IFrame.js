@@ -200,7 +200,7 @@ Ext.define('NextThought.view.content.reader.IFrame',{
                 Ext.each(Ext.fly(fn).query('a'),
                     function(d){
                         var href = d.getAttribute ? d.getAttribute('href') : '';
-                        if(href.indexOf('#ma') >= 0){
+                        if(href.indexOf('#m') >= 0){
                             fn.removeChild(d);
                         }
                     }
