@@ -182,7 +182,7 @@ Ext.define('NextThought.view.whiteboard.Utils',{
 				Class		: 'Canvas',
 				viewportRatio : (16/9)
 			};
-     debugger;
+
 		wbCX = (scale*w)/2;
 		wbCY = (1/data.viewportRatio)/2;
 
