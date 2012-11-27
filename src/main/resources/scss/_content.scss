@@ -213,7 +213,7 @@
 
 			&.selection-selected,
 			&.x-menu-item-checked {
-				background: transparent url(../images/icons/ico_menu_check.png) no-repeat 10px 50%;
+				background: transparent url(../images/icons/menu_check.png) no-repeat 10px 50%;
 			}
 
 			&.multiselect,
@@ -342,7 +342,7 @@
 		border-radius: 3px;
 		.x-btn-icon {
 			background-position: 6px 9px;
-			background-image: url(../images/icons/ico_font.png);
+			background-image: url(../images/icons/font.png);
 		}
 	}
 
@@ -352,14 +352,14 @@
 		.x-btn-icon {
 			width: 46px;
 			background-position: 10px 7px;
-			background-image: url(../images/icons/ico_settings.png);
+			background-image: url(../images/icons/settings.png);
 		}
 	}
 
 	&.prev {
 		border-radius: 3px 0 0 3px;
 		.x-btn-icon {
-			background-image: url(../images/icons/ico_prev.png);
+			background-image: url(../images/icons/prev.png);
 		}
 	}
 	&.next {
@@ -367,7 +367,7 @@
 		border-left-width: 0 !important;
 		.x-btn-icon {
 			left: 1px;
-			background-image: url(../images/icons/ico_next.png);
+			background-image: url(../images/icons/next.png);
 		}
 	}
 }

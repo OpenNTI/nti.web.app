@@ -149,7 +149,7 @@
 						width: auto;
 						white-space: nowrap;
 						background:{
-							image: url(../images/icons/ico_share.png), url(../images/elements/share-drop-arrow.png);
+							image: url(../images/icons/share.png), url(../images/elements/share-drop-arrow.png);
 							position: 3px 7px, right 15px;
 							repeat: no-repeat;
 						};
@@ -279,7 +279,7 @@
 				margin: -1px;
 
 				&.whiteboard {
-					background: url(../images/icons/ico_whiteboard.png) 9px 12px no-repeat;
+					background: url(../images/icons/whiteboard.png) 9px 12px no-repeat;
 				}
 
 				&.cancel {
@@ -292,7 +292,7 @@
 					font-weight: bold;
 					font-style: italic;
 					color: #ffffff;
-					background: $primary-blue url(../images/icons/ico_comment_white.png) 15px 8px no-repeat;
+					background: $primary-blue url(../images/icons/comment_white.png) 15px 8px no-repeat;
 					border: 1px solid #39a1dd;
 					padding: 0 0 0 24px;
 				}
@@ -324,12 +324,12 @@
 
 		.reply {
 			padding-left: 24px;
-			background: url(../images/icons/ico_reply.png) 0 8px no-repeat;
+			background: url(../images/icons/reply.png) 0 8px no-repeat;
 		}
 
 	  	.share {
 			padding-left: 24px;
-			background: url(../images/icons/ico_share.png) 0 8px no-repeat;
+			background: url(../images/icons/share.png) 0 8px no-repeat;
 		}
 /*
 		.chat {
@@ -557,7 +557,7 @@
 				position: absolute;
 				bottom: 4px; right: 38px;
 				width: 16px; height: 16px;
-				background: url(../images/icons/ico_clear_line.png) 0 0 no-repeat;
+				background: url(../images/icons/clear_line.png) 0 0 no-repeat;
 				opacity: 0.6;
 				&:hover{
 					opacity: 1;
@@ -569,7 +569,7 @@
 				cursor: pointer;
 				position: absolute;
 				top: 0; right: 0;
-				background: url(../images/icons/ico_comment_small_active.png) 0 0 no-repeat;
+				background: url(../images/icons/comment_small_active.png) 0 0 no-repeat;
 				width: 30px;
 				height: 27px;
 			}
@@ -598,7 +598,7 @@
 		margin-left: 19px;
 		top: -7px;
 		right: -3px;
-		background: url(../images/icons/ico_comment_indicator.png) 0 0 no-repeat;
+		background: url(../images/icons/comment_indicator.png) 0 0 no-repeat;
 		font-size: 11px;
 		font-weight: semibold;
 		font-style: italic;
@@ -949,7 +949,7 @@
 				.count {
 					opacity: 1; font-size: 12px;
 					span {
-						background: url(../images/icons/ico_comment_indicator.png) 0 center no-repeat;
+						background: url(../images/icons/comment_indicator.png) 0 center no-repeat;
 						padding-left: 18px;
 
 						&:empty{
@@ -991,10 +991,10 @@
 				left: 0;
 			}
 			.forward{
-				background: url(../images/icons/ico_next_dupe.png) 0 50% no-repeat;
+				background: url(../images/icons/next_dupe.png) 0 50% no-repeat;
  			}
 			.backward{
-				background: url(../images/icons/ico_prev_dupe.png) 0 50% no-repeat;
+				background: url(../images/icons/prev_dupe.png) 0 50% no-repeat;
  			}
 		}
 
@@ -1229,7 +1229,7 @@
 	.note-reply {
 		//border-bottom-width: 0px;
 		&.first{
-			background-image: url(../images/icons/ico_reply_arrow.png);
+			background-image: url(../images/icons/reply_arrow.png);
 			background-position: 18px 15px;
 			background-repeat: no-repeat;
 		}
