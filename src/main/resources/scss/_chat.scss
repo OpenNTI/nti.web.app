@@ -12,7 +12,7 @@
 						opacity: 0.6;
 						margin-right: 5px;
 						width: 17px;
-						background: url(../images/ico_add_people.png) no-repeat 0 0;
+						background: url(../images/icons/ico_add_people.png) no-repeat 0 0;
 						&:hover{
 							opacity: 1;
 						}
@@ -21,7 +21,7 @@
 						opacity: 0.6;
 						margin-right: 5px;
 						width: 17px;
-						background: url(../images/spr_options_menu.png) no-repeat -20px -162px;
+						background: url(../images/old_sprites/spr_options_menu.png) no-repeat -20px -162px;
 						&:hover{
 							opacity: 1;
 						}
@@ -162,7 +162,7 @@
 				display: inline-block;
 				width: 15px;
 				height: 15px;
-				background: url(../images/spr_quiz.png) -68px -18px no-repeat;
+				background: url(../images/old_sprites/spr_quiz.png) -68px -18px no-repeat;
 				&:hover {
 					background-position: -68px -68px ;
 				}
@@ -325,7 +325,7 @@
 					height: 21px;
 					float: left;
 					margin: 4px;
-					background: url(../images/ico_whiteboard.png) 0px 0px no-repeat;
+					background: url(../images/icons/ico_whiteboard.png) 0px 0px no-repeat;
 					cursor: pointer;
 				}
 

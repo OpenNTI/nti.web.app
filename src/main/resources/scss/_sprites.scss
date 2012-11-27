@@ -1,5 +1,5 @@
 @mixin dropdown-share-menu-sprite {
-	background: url(../images/spr_share_options.png);
+	background: url(../images/old_sprites/spr_share_options.png);
 }
 @mixin sprite-lock {
 	width: 9px;
@@ -36,11 +36,4 @@
 @mixin sprite-gear-active {
 	@include sprite-gear;
 	background-position: -2px -17px;
-}
-
-
-.chat-bubble-32 {
-	background: url(../images/ico_chat_32.png) 0 0 no-repeat;
-	width: 32px;
-	height: 21px;
 }

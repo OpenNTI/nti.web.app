@@ -1,6 +1,0 @@
-spr_image_options
-
-Expand larger......18x18 (0, 0)
-Expand Smaller.....18x18 (19, 0)
-Add Note Icon......25x22 (0, 19)
-Edit icon..........14x14 (25, 19)

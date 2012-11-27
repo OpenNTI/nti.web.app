@@ -971,7 +971,7 @@ Ext.define('NextThought.controller.Chat', {
                 message: isGroupChat
                     ? 'You\'ve been invited to chat with <span>'+(occupants.length-1)+'</span> friends.'
                     : '<span>'+ u.getName()+'</span> would like to chat.',
-                iconCls: 'chat-bubble-32',
+                iconCls: 'icons-chat-32',
                 buttons: [
                     {
                         label: 'decline',

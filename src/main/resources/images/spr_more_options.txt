@@ -1,4 +1,0 @@
-spr_more_options
-
-active.......22x10 (0, 0)
-inactive.....22x10 (32, 0)

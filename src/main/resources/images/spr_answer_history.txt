@@ -1,4 +1,0 @@
-spr_answer_history
-
-inactive.....30x18 (0, 0)
-active.......30x18 (0, 20)

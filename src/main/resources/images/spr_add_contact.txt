@@ -1,4 +1,0 @@
-spr_add_contact
-
-Inactive.....18x17 (0, 0)
-Active.......18x17 (18, 0)

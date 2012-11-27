@@ -1,0 +1,6 @@
+$icons-layout:smart;
+$backdrops-layout:smart;
+@import "backdrops/*.png";
+@import "icons/*.png";
+@include all-backdrops-sprites($dimensions:true);
+@include all-icons-sprites($dimensions:true);

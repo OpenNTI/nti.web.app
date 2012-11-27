@@ -11,7 +11,7 @@
 		position: absolute;
 		width: 30px;
 		height: 30px;
-		background: url(../images/ico_close_popup.png) 0 0 no-repeat;
+		background: url(../images/icons/ico_close_popup.png) 0 0 no-repeat;
 		cursor: pointer;
 		box-shadow: 0 0 10px 5px #ffffff;
 		border-radius: 90px;
@@ -36,7 +36,7 @@
 				top: 25px; left: 25px;
 				width: 80px; height: 27px;
 				content: ' ';
-				background: url(../images/ico_now_playing.png) no-repeat;
+				background: url(../images/icons/ico_now_playing.png) no-repeat;
 				z-index: 1;
 			}
 

@@ -1,5 +1,0 @@
-spr_library
-
-Dashboard.....16x12 (0, 1)
-Folder........17x13 (18, 0)
-Gear..........14x14 (36, 0)

@@ -123,7 +123,7 @@
 			top: 0; left: 0;
 			width: 50px;
 			height: 30px;
-			background: url(../images/spr_whiteboard.png) 0 0 no-repeat;
+			background: url(../images/old_sprites/spr_whiteboard.png) 0 0 no-repeat;
 
 			&.undo{ background-position:  -325px -1335px; }
 			&.redo{ background-position:  -425px -1335px; }
@@ -245,7 +245,7 @@
 					@include button-base(30px, 3px);
 					position: absolute;
 					top: 0; left: 0;
-					background: url(../images/spr_whiteboard.png) 0 0 no-repeat;
+					background: url(../images/old_sprites/spr_whiteboard.png) 0 0 no-repeat;
 
 					&.bold { background-position: -36px -1336px; }
 					&.italic { background-position: -136px -1336px; }
@@ -347,7 +347,7 @@
 				@include whiteboard-toolbar-common;
 				position: absolute; top: 0; left: 0;
 				width: 32px; height: 32px;
-				background: url(../images/spr_whiteboard.png) 0 0 no-repeat;
+				background: url(../images/old_sprites/spr_whiteboard.png) 0 0 no-repeat;
 
 				&.stroke {
 					&.fine { background-position: -34px -1034px; }
@@ -430,7 +430,7 @@
 			.whiteboard-tool-icon {
 				position: absolute; top: 0; left: 0;
 				@include whiteboard-tool-button-common;
-				background: url(../images/spr_whiteboard.png) 0 0 no-repeat;
+				background: url(../images/old_sprites/spr_whiteboard.png) 0 0 no-repeat;
 
 				&.move { background-position: -10px -110px; }
 				&.pencil{ background-position: -110px -110px; }
@@ -478,7 +478,7 @@
 	input.x-form-text {
 		height: 32px;
 		text-indent: -1000px;
-		background: url(../images/spr_whiteboard.png) no-repeat;
+		background: url(../images/old_sprites/spr_whiteboard.png) no-repeat;
 
 		&[value="fine"] { background-position: -16px -732px; }
 		&[value="thin"] { background-position: -116px -732px; }
@@ -498,7 +498,7 @@
 		padding: 0;
 
 		.stroke {
-			background: url(../images/spr_whiteboard.png) 0 0 no-repeat;
+			background: url(../images/old_sprites/spr_whiteboard.png) 0 0 no-repeat;
 
 			&.fine { background-position: -16px -740px; height: 20px; }
 			&.thin { background-position: -116px -740px; height: 20px; }
@@ -562,7 +562,7 @@
 
 			div {
 				display: block;
-				background: url(../images/spr_image_options.png) 100px 100px no-repeat;
+				background: url(../images/old_sprites/spr_image_options.png) 100px 100px no-repeat;
 				margin: 3px 8px 0 0;
 				float: right;
 				opacity: 0.8;
@@ -592,3 +592,11 @@
 }
 
 
+.whiteboard-error-image {
+	display: none;
+	background-image: url(../images/backdrops/whiteboard_error_unknown.png);
+}
+.whiteboard-broken-image {
+	display: none;
+	background-image: url(../images/backdrops/whiteboard_error_loading_image.png);
+}

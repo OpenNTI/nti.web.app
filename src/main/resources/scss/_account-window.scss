@@ -17,7 +17,7 @@
 		right: 10px;
 		width: 10px;
 		height: 10px;
-		background: url(../images/spr_window_controls.png) -59px -9px no-repeat;
+		background: url(../images/old_sprites/spr_window_controls.png) -59px -9px no-repeat;
 		
 		&:hover{
 			opacity: 1;
@@ -58,7 +58,7 @@
 		}
 
 		canvas {
-			background: #ffffff url(../images/ico_choose_file.png) center center no-repeat;
+			background: #ffffff url(../images/backdrops/choose_file.png) center center no-repeat;
 			&.withImage {
 				background: #d5d5d5;
 			}
@@ -129,7 +129,7 @@
 					top: 3px; left: 0;
 					width: 13px;
 					height: 12px;
-					background: url(../images/spr_account_page.png) 0 0 no-repeat;
+					background: url(../images/old_sprites/spr_account_page.png) 0 0 no-repeat;
 				}
 			}
 
@@ -167,7 +167,7 @@
 				}
 
 				.rotate {
-					background: url(../images/ico_rotate.png) no-repeat;
+					background: url(../images/icons/ico_rotate.png) no-repeat;
 					width: 14px;
 					height: 15px;
 					left: 0;
@@ -279,7 +279,7 @@
 				display: none;
 				width: 16px;
 				height: 16px;
-				background: url(../images/ico_clear_line.png) 0 0 no-repeat;
+				background: url(../images/icons/ico_clear_line.png) 0 0 no-repeat;
 			}
 
 			.placeholder {

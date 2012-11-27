@@ -13,7 +13,7 @@
 		content: ' ';
 		height: 14px;
 		width: 18px;
-		background: url(../images/spr_activity_icons.png) -2px -24px no-repeat;
+		background: url(../images/old_sprites/spr_activity_icons.png) -2px -24px no-repeat;
 	}
 
 	.occupants {
@@ -116,10 +116,10 @@
 				font-weight: normal;
 				color: $primary-grey;
 				word-wrap: break-word;
-				background: url(../images/ldquo.png) 15px 0 no-repeat;
+				background: url(../images/backdrops/ldquo.png) 15px 0 no-repeat;
 
 				&::after{
-					content: url(../images/rdquo.png);
+					content: url(../images/backdrops/rdquo.png);
 					display: inline-block;
 					margin-left: 5px;
 				}

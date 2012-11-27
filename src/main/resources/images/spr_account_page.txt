@@ -1,4 +1,0 @@
-spr_account_page
-
-User icon......13x12 (0, 0)
-Email icon.....15x11 (16, 0)

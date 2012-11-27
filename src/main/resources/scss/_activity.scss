@@ -23,7 +23,7 @@
 				height: 20px;
 				top: 10px;
 				left: 0;
-				background: url(../images/spr_activity_icons.png) 0 0 no-repeat;
+				background: url(../images/old_sprites/spr_activity_icons.png) 0 0 no-repeat;
 			}
 
 			&.nothing{
@@ -137,10 +137,10 @@
 				font-weight: normal;
 				color: $primary-grey;
 				word-wrap: break-word;
-				background: url(../images/ldquo.png) 15px 15px no-repeat;
+				background: url(../images/backdrops/ldquo.png) 15px 15px no-repeat;
 
 				&::after{
-					content: url(../images/rdquo.png);
+					content: url(../images/backdrops/rdquo.png);
 					display: inline-block;
 					margin-left: 5px;
 				}

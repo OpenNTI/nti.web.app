@@ -1,4 +1,0 @@
-spr_settings
-
-inactive.....28x17 (0, 0)
-active.......28x17 (0, 17)

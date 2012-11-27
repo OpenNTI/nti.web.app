@@ -1,4 +1,0 @@
-spr_video_icon
-
-Inactive.....16x16 (2, 2)
-Active.......16x16 (2, 20)

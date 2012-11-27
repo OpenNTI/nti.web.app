@@ -34,8 +34,8 @@ Ext.define('NextThought.util.Globals', {
 	INVALID_CHARACTERS_PATTERN: /^[^\/\\";=?<>#%'\{\}\|\^\[\]\-]+$/,
 
 
-	CANVAS_URL_SHAPE_BROKEN_IMAGE: 'ico_error_wbimage.png',
-	CANVAS_BROKEN_IMAGE: 'ico_error_image.png',
+	CANVAS_URL_SHAPE_BROKEN_IMAGE: 'whiteboard-error-image',
+	CANVAS_BROKEN_IMAGE: 'whiteboard-broken-image',
 
 	CANVAS_GOLDEN_RATIO: 1.6180,    //http://en.wikipedia.org/wiki/Golden_ratio
 
@@ -374,7 +374,12 @@ Ext.define('NextThought.util.Globals', {
 	},
 
 	getResourceURL: function(name){
-		return 'resources/images/'+name;
+		var url, d = document.createElement('div');
+		d.setAttribute('class',name);
+		document.body.appendChild(d);
+		url = Ext.fly(d).getStyle('background-image');
+		document.body.removeChild(d);
+		return (/^url\((.*)\)$/).exec(url)[1];
 	}
 
 },

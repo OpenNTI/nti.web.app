@@ -1,9 +1,0 @@
-spr_redaction
-
-Edit inactive.....12x12 (2, 1)
-share inactive....12x13 (17, 1)
-trash inactive....11x14 (34, 0)
-
-Edit active.......12x12 (2, 17)
-Share active......12x13 (17, 17)
-Trash active......11x14 (34, 16)

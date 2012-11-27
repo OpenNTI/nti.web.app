@@ -1,4 +1,0 @@
-spr_contact_options
-
-Inactive.....20x20 (0, 0)
-Active.......20x20 (20, 0)

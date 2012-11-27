@@ -1,4 +1,0 @@
-Spr_add_note
-
-Add note Inactive.....24x21 (3, 3) 
-Add note Active.......24x21 (3, 29)

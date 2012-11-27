@@ -22,7 +22,7 @@ Ext.define('NextThought.view.toast.Manager',{
 	 *     myToastMessage = Toaster.makeToast({
 	 *         title: 'Chat Invitation...',
 	 *         message: 'You\'ve been invited to chat with <span>Math Buddies</span>.',
-	 *         iconCls: 'chat-bubble-32',
+	 *         iconCls: 'icons-chat-32',
 	 *         timeout: 60,
 	 *         //Buttons appear in the RTL order, so decline, here, will be the rigth-most button
 	 *         buttons: [{

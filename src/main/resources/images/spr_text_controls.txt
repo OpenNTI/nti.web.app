@@ -1,9 +1,0 @@
-spr_text_controls
-
-Bold inactive..........11x12 (0, 1)
-Italic inactive........8x12 (22, 1)
-Underline inactive.....12x15 (40, 0)
-
-Bold active............11x12 (0, 21)
-Italic active..........8x12 (22, 21)
-Underline inactive.....12x15 (40, 20)

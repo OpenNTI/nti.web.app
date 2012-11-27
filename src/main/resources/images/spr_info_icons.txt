@@ -1,4 +1,0 @@
-Spr_info_icons
-
-Active.....16x15 (2, 3)
-Inactive...16x15 (21, 3)
