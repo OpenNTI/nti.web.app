@@ -1,7 +1,7 @@
 @mixin image-bar {
 	.bar {
 		@include animate(fadeInDown,0.3s,0s);
-		position: absolute;
+		position: absolute !important;
 		top: 0; left: 0; right: 0;
 		height: 28px;
 		background: rgba(0,0,0,0.6);
@@ -11,7 +11,8 @@
 			display: block;
 			float: right;
 			margin: 3px 8px 0 0;
-			background: url(../images/spr_image_options.png) 100px 100px no-repeat;
+			background: transparent url(../images/spr_image_options.png) 100px 100px no-repeat;
+			background-color: transparent !important;
 			opacity: 0.8;
 			pointer-events: all;
 
@@ -224,6 +225,10 @@ div.redaction-control {
 }
 
 /* Styles below are intended to target things inside the content iframe */
+
+.note-window .main-view .context [itemprop~="nti-data-markupenabled"] {
+	margin: 3px !important;
+}
 
 .note-window .main-view .context,
 #NTIContent {

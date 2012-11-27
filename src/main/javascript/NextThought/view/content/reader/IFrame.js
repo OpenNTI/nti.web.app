@@ -72,7 +72,7 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 			if (doc.body || doc.readyState === 'complete') {
 				Ext.TaskManager.stop(task);
 				doc.open();
-				doc.write('<!DOCTYPE html><html><head></head><body></body></html>');
+				doc.write('<!DOCTYPE html><html lang="en"><head></head><body></body></html>');
 				doc.close();
 				delete me.contentDocumentElement;
 				setTimeout(function(){

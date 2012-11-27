@@ -137,34 +137,6 @@ Ext.define('NextThought.view.content.reader.Content',{
 	},
 
 
-	zoomImage: function(el){
-		var img = Ext.fly(el)
-				.up('[itemprop~=nti-data-markupenabled]')
-				.down('img[id]:not([id^=ext])').dom,
-			sizes = [
-				'data-nti-image-quarter',
-				'data-nti-image-half',
-				'data-nti-image-full'
-			],
-			sizeMap = {
-				'quarter':0,
-				'half':1,
-				'full':1
-			},
-			currentSize = img.getAttribute('data-nti-image-size'),
-			nextSize = sizes[sizeMap[currentSize]+1],
-			nextSizeUrl = this.basePath+img.getAttribute(nextSize),
-			rect = img.getBoundingClientRect(),//these are in the document space. We need to convert this to screen space.
-			offsets = this.getAnnotationOffsets();
-
-		// TODO: optimzise for bandwidth and screen size and choose the best one based on current and client screen size
-		// For now, i'm not going to grab the full.
-		console.log('zoom', img.width+'x'+img.height, rect, offsets, currentSize, nextSize, nextSizeUrl);
-
-		Ext.widget('image-zoom-view',{url: nextSizeUrl, refEl: img, offsets: offsets}).show();
-	},
-
-
 	setContent: function(resp, assessmentItems, finish){
 		var me = this,
 			c = me.parseHTML(resp),
@@ -341,7 +313,7 @@ Ext.define('NextThought.view.content.reader.Content',{
 		}
 
 		if(/^zoom$/i.test(target)){
-			m.zoomImage(el);
+			ImageZoomView.zoomImage(el, this.basePath, this.getAnnotationOffsets());
 			return false;
 		}
 

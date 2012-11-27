@@ -399,7 +399,9 @@ Ext.define('NextThought.view.annotations.note.Main',{
 				Ext.defer(me.editorActions.addWhiteboard,400,me.editorActions,[data]);
 			});
 		}
-
+		else if(/^zoom$/i.test(action)){
+			ImageZoomView.zoomImage(dom);
+		}
 
 		return false;
 	},
