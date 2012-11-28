@@ -21,9 +21,6 @@ Ext.define('NextThought.controller.Navigation', {
 					LocationProvider.setLastLocationOrRoot(ntiid);
 				}
 			},
-			'notifications': {
-				'navigation-selected': this.navigate
-			},
 			'activity-view': {
 				'navigation-selected': this.navigate
 			},

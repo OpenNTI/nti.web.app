@@ -1,9 +1,6 @@
 Ext.define('NextThought.view.account.View',{
 	extend: 'Ext.container.Container',
 	alias: 'widget.account-view',
-	requires: [
-		'NextThought.view.account.Notifications'
-	],
 
 	iconCls: 'account',
 	tooltip: 'My Account',
@@ -35,8 +32,6 @@ Ext.define('NextThought.view.account.View',{
 				}
 			},
 			items:[
-//			{xtype: 'notifications', cls: 'notifications'},
-
 			{html: ' ', autoEl: 'div'}
 			]
 		}
