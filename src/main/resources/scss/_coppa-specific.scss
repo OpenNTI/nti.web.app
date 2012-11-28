@@ -40,8 +40,8 @@
 				z-index: 1999;
 				bottom: -9px;
 				right: -9px;
-				width: 18px; height: 18px;
-				background: url(../images/icons/green_check.png) 0 0 no-repeat;
+				background: transparent $icons no-repeat;
+				@include sprite($icons,'green_check',$dimensions: true);
 			}
 
 		}
@@ -147,9 +147,8 @@
 				cursor: pointer;
 				position: absolute;
 				display: none;
-				width: 16px;
-				height: 16px;
-				background: url(../images/icons/clear_line.png) 0 0 no-repeat;
+				background: transparent $icons no-repeat;
+				@include sprite($icons,'clear_line',$dimensions: true);
 			}
 
 			.placeholder {

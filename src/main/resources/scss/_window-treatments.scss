@@ -46,8 +46,8 @@
 			span {
 				@include menu-label-text-treatment;
 				padding: 8px 10px;
-				float: left;
-				display: inline-block;
+				//float: left;
+				display: block;
 			}
 
 			.tools {
@@ -67,22 +67,36 @@
 				float: right;
 				padding: 0;
 				&.has-tools {
-					background: url(../images/elements/window_controls_v_div.png) left center no-repeat;
+					padding-left: 11px;
+					position: relative;
+					&::after{
+						content: ' ';
+						position: absolute;
+						overflow: hidden;
+						top: 4px; left: 0;
+						background: $elements no-repeat;
+						@include sprite($elements,'window-control-divider',$dimensions: true);
+					}
 				}
 
 				img.tool {
 					&:hover{ opacity: 1; }
 					opacity: 0.5;
-					width: 27px; height: 28px;
-					margin: 0;
+					margin: 8px 11px 8px 0;
 					float: right;
 					cursor: pointer;
 
 
-					background: url(../images/old_sprites/spr_window_controls.png) -100px -100px no-repeat;
-					&.close { background-position: -54px 0; }
-					&.minimize { background-position: -27px 0; }
-					&.popout { background-position: 0 0; }
+					background: $icons no-repeat;
+					&.close {
+						@include sprite($icons,'window-control-close',$dimensions: true);
+					}
+					&.minimize {
+						@include sprite($icons,'window-control-minimize',$dimensions: true);
+					}
+					&.popout {
+						@include sprite($icons,'window-control-maximize',$dimensions: true);
+					}
 				}
 			}
 		}
@@ -234,9 +248,11 @@
 
 			img.closer-nib {
 				opacity: 0.5;
-				width: 30px; height: 26px;
 				cursor: pointer;
-				background: url(../images/old_sprites/spr_window_controls.png) -49px -1px no-repeat;
+				background: $icons no-repeat;
+				@include sprite($icons,'window-control-close',$dimensions: true);
+
+				margin: 10px 10px 5px 10px;
 			}
 		}
 	}
@@ -286,12 +302,9 @@
 		margin: 10px;
 
 		img.x-tool-close {
-			background:{
-				image: url(../images/icons/message_box_close.png);
-				position: 2px 2px;
-				repeat: no-repeat;
-			}
-
+			margin: 2px;
+			background: transparent $icons no-repeat;
+			@include sprite($icons,'message_box_close',$dimensions: true);
 		}
 	}
 

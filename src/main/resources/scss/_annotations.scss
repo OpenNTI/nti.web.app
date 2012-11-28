@@ -178,30 +178,6 @@
 	}
 }
 
-div.redaction-control {
-	width: 20px;
-	height: 20px;
-	border: 1px solid #c4c4c4;
-	border-radius: 4px;
-	position: absolute;
-	margin: 9px 0 0 20px;
-	display: block; //default
-	z-index: 9999;
-
-	img {
-		background: url(../images/icons/redact_plus.png) 4px 4px no-repeat;
-		border: 0px solid #c4c4c4;
-		border-radius: 4px;
-		width: 20px;
-		height: 20px;
-		cursor: pointer;
-
-	}
-
-	&.redacted img {
-		background-image: url(../images/icons/redact_minus.png);
-	}
-}
 
 .body-divider {
 	@include no-select;

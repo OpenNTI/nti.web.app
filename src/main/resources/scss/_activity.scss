@@ -137,12 +137,23 @@
 				font-weight: normal;
 				color: $primary-grey;
 				word-wrap: break-word;
-				background: url(../images/backdrops/ldquo.png) 15px 15px no-repeat;
+				position: relative;
+
+				&::before {
+					content: ' ';
+					overflow: hidden;
+					position: absolute;
+					top: 15px; left: 15px;
+					background: transparent $backdrops no-repeat;
+					@include sprite($backdrops,'ldquo',$dimensions: true);
+				}
 
 				&::after{
-					content: url(../images/backdrops/rdquo.png);
+					content: ' ';
 					display: inline-block;
 					margin-left: 5px;
+					background: transparent $backdrops no-repeat;
+					@include sprite($backdrops,'rdquo',$dimensions: true);
 				}
 			}
 

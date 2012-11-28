@@ -6,8 +6,7 @@
 	}
 
 	.upload-icon{
-	    width: 32px;
-	 	height: 32px;
-		background-image: $uploading-file-icon-generic;
+		background: transparent $icons no-repeat;
+		@include sprite($icons,'upload',$dimensions: true);
 	}
 }

@@ -11,8 +11,8 @@
 						display: none; //turned off until this is possible in the server...
 						opacity: 0.6;
 						margin-right: 5px;
-						width: 17px;
-						background: url(../images/icons/add_people.png) no-repeat 0 0;
+						background: transparent $icons no-repeat;
+						@include sprite($icons,'add_people',$dimensions: true);
 						&:hover{
 							opacity: 1;
 						}
@@ -321,11 +321,10 @@
 			div {
 				margin: 10px 8px 10px 8px;
 				.add-whiteboard {
-					width: 28px;
-					height: 21px;
 					float: left;
 					margin: 4px;
-					background: url(../images/icons/whiteboard.png) 0px 0px no-repeat;
+					background: transparent $icons no-repeat;
+					@include sprite($icons,'whiteboard',$dimensions: true);
 					cursor: pointer;
 				}
 

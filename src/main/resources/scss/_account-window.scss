@@ -15,9 +15,8 @@
 		position: absolute;
 		top: 10px;
 		right: 10px;
-		width: 10px;
-		height: 10px;
-		background: url(../images/old_sprites/spr_window_controls.png) -59px -9px no-repeat;
+		background: $icons no-repeat;
+		@include sprite($icons,'window-control-close',$dimensions: true);
 		
 		&:hover{
 			opacity: 1;
@@ -57,12 +56,22 @@
 			border-top: 1px solid #e7e7e7;
 		}
 
+
+		.x-box-inner > div::after {
+			content: ' ';
+			position: absolute;
+			top: 50px;
+			left: 66px;
+			background: #ffffff $backdrops no-repeat;
+			@include sprite($backdrops,'choose_file',$dimensions:true);
+			z-index: 0;
+		}
+
 		canvas {
-			background: #ffffff url(../images/backdrops/choose_file.png) center center no-repeat;
+			z-index: 2;
 			&.withImage {
 				background: #d5d5d5;
 			}
-
 		}
 
 		.file-input {
@@ -76,6 +85,7 @@
 			cursor: pointer;
 			width: 600px;
 			height: 400px;
+			z-index: 4;
 		}
 	}
 
@@ -127,9 +137,8 @@
 					content: ' ';
 					position: absolute;
 					top: 3px; left: 0;
-					width: 13px;
-					height: 12px;
-					background: url(../images/old_sprites/spr_account_page.png) 0 0 no-repeat;
+					background: $icons no-repeat;
+					@include sprite($icons,'account-username',$dimensions: true);
 				}
 			}
 
@@ -141,8 +150,8 @@
 
 				&::after {
 					top: 4px;
-					width: 15px; height: 11px;
-					background-position: -16px 0;
+					background: $icons no-repeat;
+					@include sprite($icons,'account-email',$dimensions: true);
 				}
 			}
 		}
@@ -167,9 +176,8 @@
 				}
 
 				.rotate {
-					background: url(../images/icons/rotate.png) no-repeat;
-					width: 14px;
-					height: 15px;
+					background: $icons no-repeat;
+					@include sprite($icons,'rotate',$dimensions: true);
 					left: 0;
 					top: 13px;
 				}
@@ -277,9 +285,8 @@
 				cursor: pointer;
 				position: absolute;
 				display: none;
-				width: 16px;
-				height: 16px;
-				background: url(../images/icons/clear_line.png) 0 0 no-repeat;
+				background: $icons 0 0 no-repeat;
+				@include sprite($icons,'clear_line',$dimensions: true);
 			}
 
 			.placeholder {

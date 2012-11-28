@@ -16,12 +16,11 @@
 			box-shadow: inset 4px 0 0 0 $primary-blue;
 			&::after {
 				content: ' ';
-				width: 15px;
-				height: 15px;
 				position: absolute;
 				right: 25px;
 				top: 43px;
-				background: url(../images/icons/blue_check.png) 0 0;
+				background: $icons no-repeat;
+				@include sprite($icons,'blue_check',$dimensions: true);
 			}
 		}
 

@@ -371,17 +371,16 @@
 
 						&::after{
 							content: ' ';
-							background: url(../images/old_sprites/spr_answer_history.png) 0 0 no-repeat;
+							background: $icons no-repeat;
+							@include sprite($icons,'answer-history',$dimensions: true);
 							position: absolute;
-							width: 30px;
-							height: 18px;
 							top: 0;
 							left: 0;
 						}
 
 						&:hover{
 							&::after{
-								background-position: 0 -20px;
+								@include sprite($icons,'answer-history_active',$dimensions: true);
 							}
 						}
 					}
@@ -461,11 +460,10 @@
 						.close {
 							opacity: 0.8;
 							cursor: pointer;
-							width: 27px; height: 26px;
 							position: absolute;
-							top: 0;
-							right: 0;
-							background: url(../images/old_sprites/spr_window_controls.png) -51px 0 no-repeat;
+							right: 17px; top: 16px;
+							background: $icons no-repeat;
+							@include sprite($icons,'window-control-close',$dimensions: true);
 							&:hover{
 								opacity: 1;
 							}
@@ -602,9 +600,8 @@
 						top: 2px;
 
 						content: ' ';
-						width: 16px;
-						height: 16px;
-						background: url(../images/old_sprites/spr_video_icon.png) -2px -20px no-repeat;
+						background: $icons no-repeat;
+						@include sprite($icons,'video',$dimensions: true);
 					}
 				}
 			}

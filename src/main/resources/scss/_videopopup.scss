@@ -9,9 +9,9 @@
 		top: -34px;
 		right: -34px;
 		position: absolute;
-		width: 30px;
-		height: 30px;
-		background: url(../images/icons/close_popup.png) 0 0 no-repeat;
+
+		background: transparent $icons no-repeat;
+		@include sprite($icons,'close_popup',$dimensions: true);
 		cursor: pointer;
 		box-shadow: 0 0 10px 5px #ffffff;
 		border-radius: 90px;
@@ -34,10 +34,10 @@
 			&.x-item-selected::after {
 				position: absolute;
 				top: 25px; left: 25px;
-				width: 80px; height: 27px;
 				content: ' ';
-				background: url(../images/icons/now_playing.png) no-repeat;
 				z-index: 1;
+				background: transparent $icons no-repeat;
+				@include sprite($icons,'now_playing',$dimensions: true);
 			}
 
 			&.x-item-selected,

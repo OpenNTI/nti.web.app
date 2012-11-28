@@ -56,7 +56,7 @@ Ext.define('NextThought.view.account.contacts.View',{
 					xtype: 'box',
 					autoEl: { cn: [
 						{cls: 'title', html: 'Welcome to NextThought!'},
-						'Search for friends to add to your contact list.'
+						{html:'Search for friends to add to your contact list.'}
 					] }
 				},
 

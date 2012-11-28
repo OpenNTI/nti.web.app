@@ -35,8 +35,8 @@
 				z-index: 1999;
 				top: -9px;
 				right: -9px;
-				width: 18px; height: 18px;
-				background: url(../images/icons/green_check.png) 0 0 no-repeat;
+				background: transparent $icons no-repeat;
+				@include sprite($icons,'green_check',$dimensions: true);
 			}
 		}
 	}

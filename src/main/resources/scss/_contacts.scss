@@ -15,8 +15,8 @@ $over-color: #f4f3f3;
 .x-panel.contacts-panel {
 	//padding: 0 10px 20px 10px;
 
-	&.x-collapsed .x-panel-header{
-		background-position: 10px -11px;
+	&.x-collapsed .x-panel-header::after {
+		@include sprite($icons,'expand',$dimensions: true);
 	}
 
 	.x-panel-body{
@@ -24,7 +24,14 @@ $over-color: #f4f3f3;
 	}
 
 	.x-panel-header {
-		background: url(../images/old_sprites/spr_collapse_expand.png) no-repeat 10px 7px;
+		&::after {
+			content: ' ';
+			position: absolute;
+			top: 7px; left: 10px;
+			background: transparent $icons no-repeat;
+			@include sprite($icons,'collapse',$dimensions: true);
+		}
+
 		cursor: pointer;
 		padding-left: 20px;
 		padding-right: 10px;
@@ -35,10 +42,9 @@ $over-color: #f4f3f3;
 			margin-left: 0px;
 
 			.x-tool-options {
-				width: 20px;
-				height: 20px;
 				opacity: 0.5;
-				background: url(../images/old_sprites/spr_contact_options.png) 0px 0px no-repeat;
+				background: transparent $icons no-repeat;
+				@include sprite($icons,'options',$dimensions: true);
 				&:hover {
 					opacity: 1;
 				}
@@ -57,15 +63,15 @@ $over-color: #f4f3f3;
 		margin-left: 0;
 		img {
 			&.nib {
-				background: transparent url(../images/old_sprites/spr_add_remove_gry.png) -2px -2px no-repeat;
+				background: transparent $icons no-repeat;
+				@include sprite($icons,'add',$dimensions: true);
 				margin-top: 10px;
 				border: none !important;
 				float: right;
-				width: 14px;
-				height: 14px;
 
 				.contacts-panel & {
-					background-position: -20px -2px;
+					background: transparent $icons no-repeat;
+					@include sprite($icons,'remove',$dimensions: true);
 					margin-right: 5px;
 				}
 			}
@@ -101,13 +107,12 @@ $over-color: #f4f3f3;
 		}
 
 		&.nib {
-			background: transparent url(../images/old_sprites/spr_contact_options.png) 0px 0px no-repeat;
+			background: transparent $icons no-repeat;
+			@include sprite($icons,'options',$dimensions: true);
 			display: none;
 			margin-top: 7px;
 			border: none !important;
 			float: right;
-			width: 20px;
-			height: 20px;
 			cursor: pointer;
 		}
 	}
@@ -121,7 +126,7 @@ $over-color: #f4f3f3;
 		img.nib{
 			display: block;
 			&:active,&:hover {
-				background-position: -20px 0;
+				@include sprite($icons,'options_active',$dimensions: true);
 			}
 		}
 	}
@@ -233,12 +238,11 @@ $over-color: #f4f3f3;
 
 				img.delete-group {
 					display: none;
-					background: transparent url(../images/old_sprites/spr_add_remove_gry.png) -20px -2px no-repeat;
+					background: transparent $icons no-repeat;
+					@include sprite($icons,'remove',$dimensions: true);
 					margin-top: 3px;
 					border: none !important;
 					float: right;
-					width: 14px;
-					height: 14px;
 					cursor: pointer;
 					opacity: 0.5;
 					&:active {
@@ -258,13 +262,20 @@ $over-color: #f4f3f3;
 	@include side-panel-view-title;
 	.view-title {
 		.search {
-			background: url(../images/icons/search.png) 11px 8px no-repeat;
 			position: absolute;
 			width: 39px;
 			height: 32px;
 			top: 30px;
 			right: 0;
 		  	cursor: pointer;
+
+			&::after{
+				content: ' ';
+				position: absolute;
+				top: 8px; left: 11px;
+				background: transparent $icons no-repeat;
+				@include sprite($icons,'search',$dimensions: true);
+			}
 
 			&:active,
 			&.active {
@@ -392,9 +403,8 @@ div.group-buttons {
 			content: ' ';
 			position: absolute;
 			top: 0; left: 0;
-			background: url(../images/icons/add_people.png) 0 0 no-repeat;
-			width: 17px;
-			height: 14px;
+			background: transparent $icons no-repeat;
+			@include sprite($icons,'add_people',$dimensions: true);
 		}
 	}
 }

@@ -21,16 +21,16 @@
 
 		img.tool {
 			position: absolute;
-			top: 0; right: 5px;
+			top: 9px; right: 10px;
 			opacity: 0.5;
-			width: 27px; height: 27px;
 			cursor: pointer;
-			background: url(../images/old_sprites/spr_window_controls.png) -30px -2px no-repeat;
+			background: $icons no-repeat;
+			@include sprite($icons,'window-control-minimize',$dimensions: true);
 
 			&:hover{ opacity: 1; }
 
 			&.maximize {
-				background-position: -80px -2px;
+				@include sprite($icons,'window-control-restore',$dimensions: true);
 			}
 		}
 

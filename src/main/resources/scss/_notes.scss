@@ -113,49 +113,60 @@
 					width: 20px;
 					height: 32px;
 					line-height: 32px;
+					position: relative;
+
+					&.bold, &.italic, &.underline {
+						margin-right: 5px;
+						margin-top: 4px;
+						height: 28px;
+
+						&::after{
+							content: ' ';
+							overflow: hidden;
+							position: absolute;
+							top: 5px; left: 2px;
+							background: $icons no-repeat;
+						}
+					}
 
 					&.bold {
-						background: url(../images/old_sprites/spr_text_controls.png) 0px 7px no-repeat;
-						margin-right: 5px;
-						margin-top: 4px;
-						height: 28px;
-
-						&.selected{
-							background-position: 0px -13px;
-						}
+						&::after{ @include sprite($icons,'bold',$dimensions: true); }
+						&.selected::after{ @include sprite($icons,'bold_active',$dimensions: true); }
 					}
 					&.italic {
-						background: url(../images/old_sprites/spr_text_controls.png) -20px 7px no-repeat;
-						margin-right: 5px;
-						margin-top: 4px;
-						height: 28px;
-
-						&.selected{
-							background-position: -20px -13px;
-						}
+						&::after{ @include sprite($icons,'italic',$dimensions: true); }
+						&.selected::after{ @include sprite($icons,'italic_active',$dimensions: true); }
 					}
 					&.underline {
-						background: url(../images/old_sprites/spr_text_controls.png) -40px 8px no-repeat;
-						margin-top: 4px;
-						height: 28px;
-
-						&.selected{
-							background-position: -40px -15px;
-							margin-top: 7px;
-							height: 25px;
-						}
+						&::after{ @include sprite($icons,'underline',$dimensions: true); }
+						&.selected::after{ @include sprite($icons,'underline_active',$dimensions: true); }
 					}
 					&.share {
+						position: relative;
 						width: auto;
 						white-space: nowrap;
-						background:{
-							image: url(../images/icons/share.png), url(../images/elements/share-drop-arrow.png);
-							position: 3px 7px, right 15px;
-							repeat: no-repeat;
-						};
+
 						text-align: center;
 						padding: 0 12px 0 25px;
 						margin: 0 5px 0 0;
+
+						&::after {
+							content: ' ';
+							overflow: hidden;
+							position: absolute;
+							top: 15px; right: 0;
+							background: $elements no-repeat;
+							@include sprite($elements,'share-drop-arrow',$dimensions: true);
+						}
+
+						&::before {
+							content: ' ';
+							overflow: hidden;
+							position: absolute;
+							top: 7px; left: 3px;
+							background: $icons no-repeat;
+							@include sprite($icons,'share',$dimensions: true);
+						}
 					}
 				}
 
@@ -279,7 +290,14 @@
 				margin: -1px;
 
 				&.whiteboard {
-					background: url(../images/icons/whiteboard.png) 9px 12px no-repeat;
+					&::after{
+						content: ' ';
+						overflow: hidden;
+						position: absolute;
+						top: 12px; left: 9px;
+						background: $icons no-repeat;
+						@include sprite($icons,'whiteboard',$dimensions: true);
+					}
 				}
 
 				&.cancel {
@@ -292,9 +310,19 @@
 					font-weight: bold;
 					font-style: italic;
 					color: #ffffff;
-					background: $primary-blue url(../images/icons/comment_white.png) 15px 8px no-repeat;
 					border: 1px solid #39a1dd;
 					padding: 0 0 0 24px;
+					background: $primary-blue;
+					position: relative;
+
+					&::after {
+						content: ' ';
+						overflow: hidden;
+						position: absolute;
+						top: 8px; left: 15px;
+						background: $icons no-repeat;
+						@include sprite($icons,'comment_white',$dimensions: true);
+					}
 				}
 			}
 		}
@@ -320,108 +348,57 @@
 			&:hover {
 				opacity: 1;
 			}
+
+			padding-left: 24px;
+			position: relative;
+
+			&::after {
+				content: ' ';
+				position: absolute;
+				top: 8px; left: 0;
+				overflow: hidden;
+				background: $icons no-repeat;
+			}
 		}
 
-		.reply {
-			padding-left: 24px;
-			background: url(../images/icons/reply.png) 0 8px no-repeat;
+		.reply::after {
+			@include sprite($icons,'reply',$dimensions: true);
 		}
 
-	  	.share {
-			padding-left: 24px;
-			background: url(../images/icons/share.png) 0 8px no-repeat;
+	  	.share::after {
+			@include sprite($icons,'share',$dimensions: true);
 		}
 /*
 		.chat {
 			display: none;
 			padding-left: 28px;
-			background: url(../images/start-chat.png) 0 8px no-repeat;
+			&::after {
+				@include sprite($icons,'start-chat',$dimensions: true);
+			}
 		}
 */
 		.more {
 			position: relative;
 			margin-right: 0;
 			width: 32px;
-			//overflow: hidden;
-			background: url(../images/old_sprites/spr_more_options.png) -27px center no-repeat;
 			border: 1px solid rgba(0,0,0,0);
 			border-radius: 2px;
+
+			&::after {
+				content: ' ';
+				overflow: hidden;
+				position: absolute;
+				top: 10px; left: 5px;
+				background: $icons no-repeat;
+				@include sprite($icons,'more-options',$dimensions: true);
+			}
 
 			&.active {
 				border-color: #dcdcdc;
 				background-color: #ffffff;
-				background-position: 5px center;
 				box-shadow: 1px 1px 2px 0 rgba(0,0,0,0.09);
-
-				ol {
-					display: block;
-				}
-			}
-
-			ol {
-				&::before{
-					position: absolute;
-					width: 30px;
-					height: 2px;
-					background: white;
-					top: -1px;
-					left: 0;
-					z-index: 10;
-					content: ' ';
-					overflow: hidden;
-				}
-				font-size: 14px;
-				font-weight: normal;
-				line-height: 27px;
-				background: #ffffff;
-				border: 1px solid #dcdcdc;
-				box-shadow: 1px 1px 2px 0 rgba(0,0,0,0.09);
-				display: none;
-				position: absolute;
-				margin: -8px 0 0 -1px;
-				padding: 5px 0 10px 0;
-				z-index: 9999;
-
-				li {
-					&::after {
-						content: ' ';
-						width: 18px;
-						height: 18px;
-						background: url(../images/old_sprites/spr_options_menu.png) 0 0 no-repeat;
-						position: absolute;
-						top: 5px;
-						left: 10px;
-					}
-					cursor: pointer;
-					position: relative;
-					padding: 0 10px 0 37px;
-
-					&:hover {
-						background-color: #efefef;
-						&.chat::after {
-						  	//background: url(../images/start-chat.png) 0 0 no-repeat;
-						}
-						&.edit::after { background-position: -20px -90px; }
-						&.flag::after { background-position: -20px -18px; }
-						&.add-contact::after { background-position: -20px -36px; }
-						&.chat::after { background-position: 0 -144px; }
-						&.follow::after { background-position: -20px -54px; }
-						&.block::after { background-position: -20px -72px; }
-						&.mute::after { background-position: -20px -126px; }
-						&.delete::after { background-position: -20px -108px; }
-					}
-
-					&.chat::after {
-					  	background: url(../images/icons/start-chat.png) 0 0 no-repeat;
-					}
-					&.edit::after { background-position: 0 -90px; }
-					&.flag::after { background-position: 0 -18px; }
-					&.add-contact::after { background-position: 0 -36px; }
-					&.chat::after { background-position: 0 -144px; }
-					&.follow::after { background-position: 0 -54px; }
-					&.block::after { background-position: 0 -72px; }
-					&.mute::after { background-position: 0 -126px; }
-					&.delete::after { background-position: 0 -108px; }
+				&::after {
+					@include sprite($icons,'more-options_active',$dimensions: true);
 				}
 			}
 		}
@@ -556,8 +533,9 @@
 				cursor: pointer;
 				position: absolute;
 				bottom: 4px; right: 38px;
-				width: 16px; height: 16px;
-				background: url(../images/icons/clear_line.png) 0 0 no-repeat;
+
+				background: $icons no-repeat;
+				@include sprite($icons,'clear_line',$dimensions: true);
 				opacity: 0.6;
 				&:hover{
 					opacity: 1;
@@ -569,9 +547,8 @@
 				cursor: pointer;
 				position: absolute;
 				top: 0; right: 0;
-				background: url(../images/icons/comment_small_active.png) 0 0 no-repeat;
-				width: 30px;
-				height: 27px;
+				background: $icons no-repeat;
+				@include sprite($icons,'comment_small_active',$dimensions: true);
 			}
 
 			.shadow-text {
@@ -598,11 +575,19 @@
 		margin-left: 19px;
 		top: -7px;
 		right: -3px;
-		background: url(../images/icons/comment_indicator.png) 0 0 no-repeat;
 		font-size: 11px;
 		font-weight: semibold;
 		font-style: italic;
 		color: #787878;
+
+		&::after{
+			content: ' ';
+			position: absolute;
+			top: 0; left: 0;
+			overflow: hidden;
+			background: $icons no-repeat;
+			@include sprite($icons,'comment_indicator',$dimensions: true);
+		}
   	}
 
 	&.add-note {
@@ -615,9 +600,8 @@
 			content: ' ';
 			position: absolute;
 			top: 2px; left: 3px;
-			width: 29px;
-			height: 26px;
-			background: url(../images/old_sprites/spr_add_note.png) 0 0 no-repeat;
+			background: $icons no-repeat;
+			@include sprite($icons,'add-note',$dimensions: true);
 		}
 
 		&:hover {
@@ -625,7 +609,7 @@
 		}
 		&:active::after,
 		&:focus::after {
-			background-position: 0 -26px;
+			@include sprite($icons,'add-note_active',$dimensions: true);
 		}
 
 		&.expanded{
@@ -660,7 +644,7 @@
 			}
 
 			&::after {
-				content: url(../images/elements/bubble-tip-top.png);
+				@include sprite($elements,'bubble-tip-top',$dimensions: true);
 				top: auto;
 				bottom: -18px;
 			}
@@ -700,14 +684,15 @@
 		}
 
 		&::after {
-			 content: url(../images/elements/bubble-tip.png);
-			 display: none;
-			 position: absolute;
-			 top: -18px;
-			 left: -14px;
-			 width: 34px;
-			 height: 15px;
-		  	 z-index: 10000;
+			content: ' ';
+			overflow: hidden;
+			background: $elements;
+			@include sprite($elements,'bubble-tip',$dimensions: true);
+			display: none;
+			position: absolute;
+			top: -18px;
+			left: -14px;
+			z-index: 10000;
 		}
 
 
@@ -949,11 +934,19 @@
 				.count {
 					opacity: 1; font-size: 12px;
 					span {
-						background: url(../images/icons/comment_indicator.png) 0 center no-repeat;
+						position: relative;
 						padding-left: 18px;
-
 						&:empty{
 							height: 12px;
+						}
+
+						&::after {
+							content: ' ';
+							overflow: hidden;
+							position: absolute;
+							top: 0; left: 0;
+							background: $icons no-repeat;
+							@include sprite($icons,'comment_indicator',$dimensions: true);
 						}
 					}
 
@@ -968,11 +961,10 @@
 			width: 50px;
 
 			.slide {
+				background: $icons no-repeat;
 				position: absolute;
-				top: 0;
-				bottom: 0;
+				top: 22px;
 				left: 15px;
-				width: 20px;
 				opacity: 0.4;
 				cursor: pointer;
 				&:hover {
@@ -990,11 +982,12 @@
 			&.backward{
 				left: 0;
 			}
+
 			.forward{
-				background: url(../images/icons/next_dupe.png) 0 50% no-repeat;
+				@include sprite($icons,'next',$dimensions: true);
  			}
 			.backward{
-				background: url(../images/icons/prev_dupe.png) 0 50% no-repeat;
+				@include sprite($icons,'prev',$dimensions: true);
  			}
 		}
 
@@ -1050,9 +1043,8 @@
 				opacity: 1;
 			}
 			&::after{
-				background: url(../images/old_sprites/spr_add_contact.png) 0 0 no-repeat;
-				height: 18px;
-				width: 18px;
+				background: transparent $icons no-repeat;
+				@include sprite($icons,'add-contact',$dimensions: true);
 				position: absolute;
 				content: ' ';
 				top: 5px;
@@ -1229,9 +1221,14 @@
 	.note-reply {
 		//border-bottom-width: 0px;
 		&.first{
-			background-image: url(../images/icons/reply_arrow.png);
-			background-position: 18px 15px;
-			background-repeat: no-repeat;
+			&::after {
+				content: ' ';
+				position: absolute;
+				overflow: hidden;
+				top: 15px; left: 18px;
+				background: $icons no-repeat;
+				@include sprite($icons,'reply_arrow',$dimensions: true);
+			}
 		}
 		position: relative;
 		padding-left: 30px;
@@ -1321,7 +1318,7 @@
 	.circle {
 	  	z-index: 99999;
 		position: absolute;
-		background: url(../images/old_sprites/spr_prev_next_circles.png) 0 0 no-repeat;
+		background: $icons no-repeat;
 		width: 77px;
 		height: 77px;
 		margin-top: 125px;
@@ -1337,23 +1334,20 @@
 		&.forward{
 			right: -100px;
 			margin-left: 75px;
-			background-position: -77px 0;
+			@include sprite($icons,'circle-next',$dimensions: true);
 		}
 		&.backward{
 			left: 0;
 			margin-left: -100px;
+			@include sprite($icons,'circle-prev',$dimensions: true);
 		}
 	}
 }
 
 
 .note-add-to-contacts-popout::after{
-	content: '' !important;
-}
-
-.note-add-to-contacts-popout::before{
-	content: url(../images/elements/add_contact_pointer_left.png);
-	position: absolute;
+	background: $elements no-repeat;
+	@include sprite($elements,'add_contact_pointer_left',$dimensions: true);
 	top: 26px;
 	left: -12px;
 }

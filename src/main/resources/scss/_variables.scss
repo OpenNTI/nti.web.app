@@ -1,41 +1,14 @@
+$backdrops: sprite-map("backdrops/*.png",$layout:smart);
+$icons: sprite-map("icons/*.png",$layout:smart);
+$elements: sprite-map("elements/*.png",$layout:smart);
+$file-types: sprite-map("file-types/*.png",$layout:smart);
+
 $font: 'Open Sans', sans-serif;
 
-
-//icons
-$uploading-file-icon-generic: url(../images/icons/upload.png);
-$file-type-unknown:			url(../images/file-types/unknown.png);
-$file-type-unknown-large:	url(../images/file-types/unknown-64.png);
-$file-type-ai:				url(../images/file-types/ai.png);
-$file-type-doc:				url(../images/file-types/doc.png);
-$file-type-pdf:				url(../images/file-types/pdf.png);
-$file-type-pps:				url(../images/file-types/pps.png);
-$file-type-ppt:				url(../images/file-types/ppt.png);
-$file-type-swf:				url(../images/file-types/swf.png);
-$file-type-xls:				url(../images/file-types/xls.png);
-$file-type-zip:				url(../images/file-types/zip.png);
-
 $loading-indicator:			url(../images/elements/ajax-loader.gif);
-$tokens-sprite:				url(../images/old_sprites/spr_groups_light.png);
-
-$note-action-chat-icon:		url(../images/chat/chat-16.png);
-$note-action-delete-icon:	url(../images/chat/delete-16.png);
-$note-action-edit-icon:		url(../images/chat/edit-16.png);
-$note-action-reply-icon:	url(../images/chat/re-16.png);
-$note-action-share-icon:	url(../images/chat/share-16.png);
-$note-action-mute-icon:		url(../images/chat/mute-16.png);
-
-$empty-reader-bg:			url(../images/backdrops/empty-content.png);
-$empty-class-resources-bg:	url(../images/backdrops/folder_web_upload.png);
 $data-view-over-bg:			url(../images/elements/over.gif);
 $data-view-selected-bg:		url(../images/elements/selected.gif);
 
-$presences-offline:			url(../images/offline.png);
-$presences-online:			url(../images/online.png);
-
-$whiteboard-tools-sprite:	url(../images/draw/sprite.png);
-$whiteboard-color-none:		url(../images/draw/nofill.png);
-$whiteboard-color-none-sm:	url(../images/draw/nofill-sm.png);
-$magnifying-glass:			url(../images/old_sprites/spr_zoom_preview.png);
 
 //colors
 $primary-grey: #494949;
