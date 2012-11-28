@@ -45,18 +45,19 @@ Ext.define('NextThought.view.Main', {
 
 
 	detectZoom: function(){
-		var z = DetectZoom.zoom();
+		var z = DetectZoom.zoom(),
+			el = Ext.getBody();
 		console.log("Zoom:",z);
 
 		if(z !== 1) {
-			if(!this.el.isMasked()){
-				Ext.getBody().addCls('dark');
-				this.el.mask('Zoom levels are not supported, return your view to normal zoom','zoom');
+			if(!el.isMasked()){
+				el.addCls('dark');
+				el.mask('Zoom levels are not supported, return your view to normal zoom','zoom');
 			}
 		}
-		else if(this.el.isMasked()){
-			Ext.getBody().removeCls('dark');
-			this.el.unmask();
+		else if(el.isMasked()){
+			el.removeCls('dark');
+			el.unmask();
 		}
 	}
 });
