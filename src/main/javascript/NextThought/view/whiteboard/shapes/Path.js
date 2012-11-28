@@ -43,6 +43,13 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Path', {
 		ctx.lineCap = 'round';
 		this.performFillAndStroke(ctx);
 		renderCallback.call(this);
-	}
+	},
 
+	scaleWithConstraint: function(nib,dx,dy){
+		console.log('Resizing path is currently not supported');
+	},
+
+	modify: function(nib,	x1,y1,	x2,y2,	dx,dy){
+		console.log('Resizing and rotation of path is currently not supported');
+	}
 });
