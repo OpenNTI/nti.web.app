@@ -32,6 +32,11 @@ Ext.define('NextThought.util.Line',{
 		}
 
         try{
+            //ranges created next to videos sometimes require massaging to be anchorable, do that now.
+            if(!Ext.isTextNode(range.commonAncestorContainer) && Ext.fly(range.commonAncestorContainer).hasCls('externalvideo')){
+                range.setStartBefore(range.startContainer);
+                range.setEndAfter(range.endContainer);
+            }
             range = Anchors.makeRangeAnchorable(range, doc);
         }
         catch (e){
