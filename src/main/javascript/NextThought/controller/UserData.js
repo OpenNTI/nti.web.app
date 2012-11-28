@@ -451,6 +451,8 @@ Ext.define('NextThought.controller.UserData', {
             delete this.footnoteWidget;
         }
 
+	    Ext.fly(html).select('a[href]', true).set({target:'_blank'});
+
         me.footnoteWidget = Ext.widget('footnote-widget', {text: html.innerHTML});
         me.footnoteWidget.showAt(adjustPosition(position));
     },
