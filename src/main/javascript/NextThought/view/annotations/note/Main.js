@@ -342,7 +342,17 @@ Ext.define('NextThought.view.annotations.note.Main',{
                 }
 
 				this.context.select('.injected-related-items,.related,iframe,object').remove();
-				if(this.context.select('.redacted')){   this.context.select('.redacted').remove(); }
+
+				//WE want to remove redaction text in the context body of the note viewer.
+				Ext.each(this.context.query('.redaction '), function(redaction){
+					if( !Ext.fly(redaction).hasCls('redacted') ){
+						Ext.fly(redaction).addCls('redacted');
+					}
+				});
+				if(this.context.down('.redactionAction')){
+					this.context.select('.redactionAction').remove();
+				}
+
 				this.context.select('[itemprop~=nti-data-markupenabled] .bar').addCls('skip-anchor-descendants');
 				this.context.select('*:not(.skip-anchor-descendants) > a[href]').set({target:'_blank'});
 				this.context.select('*:not(.skip-anchor-descendants) > a[href^=#]').set({href:undefined,target:undefined});
