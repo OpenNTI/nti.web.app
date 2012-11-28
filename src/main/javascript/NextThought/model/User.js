@@ -74,7 +74,7 @@ Ext.define(	'NextThought.model.User', {
 		getUnresolved: function(username){
 			return new NextThought.model.User({
 				Username: username,
-				avatarURL: 'resources/images/unresolved-user.png',
+				avatarURL: 'resources/images/icons/unresolved-user.png',
 				affiliation: 'Unknown',
 				status: 'Unresolved',
 				Presence: 'Offline'

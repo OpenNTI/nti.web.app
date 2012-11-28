@@ -379,7 +379,12 @@ Ext.define('NextThought.util.Globals', {
 		document.body.appendChild(d);
 		url = Ext.fly(d).getStyle('background-image');
 		document.body.removeChild(d);
+		try{
 		return (/^url\((.*)\)$/).exec(url)[1];
+		}
+		catch(e){
+			return null;
+		}
 	}
 
 },
