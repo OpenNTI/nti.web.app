@@ -1,5 +1,8 @@
+Ext.Loader.setPath('DetectZoom', 'resources/lib/detect-zoom.js');
+
 Ext.define('NextThought.util.Globals', {
 	requires: [
+		'DetectZoom',
 		'NextThought.overrides.app.Application',
 		'NextThought.overrides.builtins.Array',
 		'NextThought.overrides.builtins.Console',
@@ -15,7 +18,6 @@ Ext.define('NextThought.util.Globals', {
 		'NextThought.overrides.panel.Panel',
 		'NextThought.overrides.picker.Color',
 		'NextThought.overrides.XTemplate'
-
 	],
 	singleton: true,
 

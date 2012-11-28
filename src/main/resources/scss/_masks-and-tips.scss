@@ -77,6 +77,15 @@
 		}
 	}
 
+	&.zoom {
+		div{
+			background: none !important;
+			padding: 1em;
+			font-size: 3em;
+			color: #fff;
+			cursor: none;
+		}
+	}
 }
 
 .body-mask {
@@ -91,8 +100,13 @@
 
 .nt-mask,
 .x-mask {
-	background: rgba(255,255,255,0.85);
+	opacity: 1;
+	background: rgba(255,255,255,0.9);
 	z-index: 999991;
 }
 
 .x-tip { background-color: white; }
+
+.dark .x-mask {
+	background: rgba(0,0,0,0.9) !important;
+}

@@ -36,8 +36,27 @@ Ext.define('NextThought.view.Main', {
 		this.callParent(arguments);
 
 
+		Ext.EventManager.onWindowResize(this.detectZoom,this);
+		this.detectZoom();
 		Ext.widget('main-sidebar', {
 			host: this.down('[region=east]'), hidden: this.hidden
 		});
+	},
+
+
+	detectZoom: function(){
+		var z = DetectZoom.zoom();
+		console.log("Zoom:",z);
+
+		if(z !== 1) {
+			if(!this.el.isMasked()){
+				Ext.getBody().addCls('dark');
+				this.el.mask('Zoom levels are not supported, return your view to normal zoom','zoom');
+			}
+		}
+		else if(this.el.isMasked()){
+			Ext.getBody().removeCls('dark');
+			this.el.unmask();
+		}
 	}
 });
