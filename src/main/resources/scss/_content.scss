@@ -394,7 +394,17 @@ div.no-content-splash {
     left: 0;
     right: 0;
 	bottom: 0;
-	background: url(../images/backdrops/empty-content.png) center no-repeat;
+	&::after{
+		content: ' ';
+		position: absolute;
+		top: 25%;
+		right: 150px;
+		$height: image-height(sprite-file($backdrops,'empty-content'))/2;
+		@include experimental-value(top, calc(50% - #{$height}));
+
+		background: $backdrops no-repeat;
+		@include sprite($backdrops,'empty-content',$dimensions: true);
+	}
 	z-index: 99;
 	background-color: white;
 }

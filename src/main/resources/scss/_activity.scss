@@ -144,16 +144,16 @@
 					overflow: hidden;
 					position: absolute;
 					top: 15px; left: 15px;
-					background: transparent $backdrops no-repeat;
-					@include sprite($backdrops,'ldquo',$dimensions: true);
+					background: transparent $icons no-repeat;
+					@include sprite($icons,'ldquo',$dimensions: true);
 				}
 
 				&::after{
 					content: ' ';
 					display: inline-block;
 					margin-left: 5px;
-					background: transparent $backdrops no-repeat;
-					@include sprite($backdrops,'rdquo',$dimensions: true);
+					background: transparent $icons no-repeat;
+					@include sprite($icons,'rdquo',$dimensions: true);
 				}
 			}
 
