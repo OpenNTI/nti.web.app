@@ -592,7 +592,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 			r = me.record, re = /((&nbsp;)|(\u200B)|(<br\/?>)|(<\/?div>))*/g;
 
 		function callback(success, record){
-			me.el.unmask();
+			me.el.parent().unmask();
 			if (success) {
 				me.deactivateReplyEditor();
 				if (me.recordUpdated) {
@@ -607,7 +607,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 			me.deactivateReplyEditor();
 			return;
 		}
-		me.el.mask('Saving...');
+		me.el.parent().mask('Saving...');
 		console.log('Editor saved', v);
 
 		if(this.editMode){
@@ -630,7 +630,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
         }
         catch(e){
 			console.error(Globals.getError(e));
-            me.el.unmask();
+            me.el.parent().unmask();
         }
 	},
 
