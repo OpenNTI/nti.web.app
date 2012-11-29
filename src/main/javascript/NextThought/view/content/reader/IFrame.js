@@ -193,20 +193,22 @@ Ext.define('NextThought.view.content.reader.IFrame',{
             }
 
             function getFootnoteContent(href){
-                var fn;
+                var fn, clonedFn;
                 try{fn = d.querySelector(href);}
                 catch (e){fn = d.getElementById(href.substring(1));}
 
-                Ext.each(Ext.fly(fn).query('a'),
+				clonedFn = fn.cloneNode(true);
+
+                Ext.each(Ext.fly(clonedFn).query('a'),
                     function(d){
                         var href = d.getAttribute ? d.getAttribute('href') : '';
                         if(href.indexOf('#m') >= 0){
-                            fn.removeChild(d);
+                            clonedFn.removeChild(d);
                         }
                     }
                 );
 
-                return fn.cloneNode(true);
+                return clonedFn;
             }
 
             if (!target){return;}
