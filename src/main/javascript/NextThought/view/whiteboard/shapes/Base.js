@@ -356,6 +356,10 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Base', {
 		};
 	},
 
+	shouldEnableRotation: function(){
+		return true;
+	},
+
 
 	showNibs: function(ctx){
 		if(!this.bbox){
@@ -417,9 +421,11 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Base', {
 		ctx.lineWidth *= 2;
 
 		//Note: COMMENT OUT THE NEXT THREE LINE TO TURN OFF ROTATION, if it's needed.
-		ctx.beginPath();
-		this.drawNib(ctx, r*2, b.xx, b.my, drawMatrix, m, 'rot', rot );
-		ctx.stroke();
+		if(this.shouldEnableRotation()){
+			ctx.beginPath();
+			this.drawNib(ctx, r*2, b.xx, b.my, drawMatrix, m, 'rot', rot );
+			ctx.stroke();
+		}
 
 		ctx.restore();
 	},

@@ -51,5 +51,9 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Path', {
 
 	modify: function(nib,	x1,y1,	x2,y2,	dx,dy){
 		console.log('Resizing and rotation of path is currently not supported');
+	},
+
+	shouldEnableRotation: function(){
+		return false;
 	}
 });
