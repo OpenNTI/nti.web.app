@@ -135,15 +135,21 @@ Ext.define('NextThought.controller.Navigation', {
 
 	/*
 	 *	Navigates to the provided content, optionally targets the provided
-	 *  userdata using a set of optional options
+	 *  rec using a set of optional options
 	 */
 	navigate: function(ntiid, rec, options) {
 		var callback = Ext.emptyFn(),
 			reply, targets;
+
 		if (rec) {
 			reply = (options || {}).reply;
 			targets = (rec.get('references') || []).slice();
 			targets.push( rec.getId() );
+
+			//TODO instead of just passing in the record we provide the reference list and id
+			//and then the callback turns around and fetches the object again.  It owuld
+			//bo good to not do that, but if I recall at one point we had to do that
+			//to make sure we didn't show a deleted object.  Is that still an issue?
 			callback = this.scrollToObject(targets, reply);
 		}
 
