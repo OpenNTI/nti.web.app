@@ -21,7 +21,7 @@ Ext.define('NextThought.ux.ImageZoomView',{
 		this.callParent(arguments);
 		//{url: nextSizeUrl, refEl: img, offsets: offsets}
 
-		var keyMap = new Ext.util.KeyMap({
+		var n, keyMap = new Ext.util.KeyMap({
 			target: document,
 			binding: [{
 				key: Ext.EventObject.ESC,
@@ -30,6 +30,18 @@ Ext.define('NextThought.ux.ImageZoomView',{
 			}]
 		});
 		this.on('destroy',function(){keyMap.destroy(false);});
+
+		n = Ext.query('.nav-helper').first();
+		if(n){
+			Ext.fly(n).hide();
+		}
+	},
+
+
+	destroy: function(){
+		var n = Ext.query('.nav-helper').first();
+		if(n){ Ext.fly(n).show(); }
+		return this.callParent(arguments);
 	},
 
 
