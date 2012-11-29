@@ -20,6 +20,16 @@ Ext.define('NextThought.ux.ImageZoomView',{
 	initComponent: function(){
 		this.callParent(arguments);
 		//{url: nextSizeUrl, refEl: img, offsets: offsets}
+
+		var keyMap = new Ext.util.KeyMap({
+			target: document,
+			binding: [{
+				key: Ext.EventObject.ESC,
+				fn: this.destroy,
+				scope: this
+			}]
+		});
+		this.on('destroy',function(){keyMap.destroy(false);});
 	},
 
 
