@@ -33,7 +33,8 @@ Ext.define('NextThought.view.account.settings.PictureCanvas',{
 			scope: this,
 			mousedown: this.onMouseDown,
 			mousemove: this.onMouseMove,
-			mouseup: this.onMouseUp
+			mouseup: this.onMouseUp,
+			mouseout: this.onMouseUp
 		});
 
 		this.createFileInput();
