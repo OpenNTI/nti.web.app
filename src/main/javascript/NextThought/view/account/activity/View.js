@@ -239,19 +239,15 @@ Ext.define('NextThought.view.account.activity.View',{
 		var target = e.getTarget('div.activity',null,true),
 				guid = (target||{}).id,
 				item = this.stream[guid],
-				rec = (item||{}).record,
-				targets;
+			rec = (item||{}).record;
 
 		if (!rec || rec.get('Class') === 'User'){
 			return false;
 		}
 
-		targets = (rec.get('references') || []).slice();
-
 		e.stopEvent();
 		try{
-			targets.push( rec.getId() );
-			this.fireEvent('navigation-selected', item.ContainerId, targets, false);
+			this.fireEvent('navigation-selected', item.ContainerId, rec);
 		}
 		catch(er){
 			console.error(Globals.getError(er));

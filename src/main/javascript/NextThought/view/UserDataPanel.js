@@ -303,7 +303,7 @@ Ext.define('NextThought.view.UserDataPanel',{
 	onClick: function(evt){
 		var historyElement = evt.getTarget('.history'),
 				data = NextThought.model,
-				rec, cid, targets, mt;
+				rec, cid, mt;
 
 		evt.stopEvent();
 		if (!historyElement){return;}
@@ -316,9 +316,7 @@ Ext.define('NextThought.view.UserDataPanel',{
 		}
 		else {
 			cid = rec.get('ContainerId');
-			targets = (rec.get('references')||[]).slice();
-			targets.push(rec.getId());
-			this.fireEvent('navigation-selected', cid, targets, null);
+			this.fireEvent('navigation-selected', cid, rec);
 		}
 	},
 

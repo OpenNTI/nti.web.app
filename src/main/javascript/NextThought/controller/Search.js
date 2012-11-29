@@ -219,9 +219,7 @@ Ext.define('NextThought.controller.Search', {
 			cat = result.up('search-result-category').category;
 
 		function success(obj){
-			var refs = (obj.get('references')||[]).slice();
-			refs.push(obj.getId());
-			nav.navigate(cid,refs);
+			nav.navigate(cid,obj);
 		}
 
 		function failure(req, resp){

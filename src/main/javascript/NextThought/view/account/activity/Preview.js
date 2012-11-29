@@ -96,11 +96,8 @@ Ext.define('NextThought.view.account.activity.Preview',{
 			return;
 		}
 
-		targets = (rec.get('references') || []).slice();
-
 		try{
-			targets.push( rec.getId() );
-			this.fireEvent('navigation-selected', rec.get('ContainerId'), targets, Boolean(event.getTarget('.reply')));
+			this.fireEvent('navigation-selected', rec.get('ContainerId'), rec, {reply: Boolean(event.getTarget('.reply'))});
 		}
 		catch(er){
 			console.error(Globals.getError(er));

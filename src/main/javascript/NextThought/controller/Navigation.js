@@ -133,10 +133,18 @@ Ext.define('NextThought.controller.Navigation', {
 	},
 
 
-	navigate: function(ntiid, scrollToTargetId, reply) {
-		var callback = Ext.emptyFn();
-		if (scrollToTargetId) {
-			callback = this.scrollToObject(scrollToTargetId, reply);
+	/*
+	 *	Navigates to the provided content, optionally targets the provided
+	 *  userdata using a set of optional options
+	 */
+	navigate: function(ntiid, rec, options) {
+		var callback = Ext.emptyFn(),
+			reply, targets;
+		if (rec) {
+			reply = (options || {}).reply;
+			targets = (rec.get('references') || []).slice();
+			targets.push( rec.getId() );
+			callback = this.scrollToObject(targets, reply);
 		}
 
 		this.maybeLoadNewPage(ntiid, callback);
