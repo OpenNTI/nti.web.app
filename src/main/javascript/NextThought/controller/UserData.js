@@ -431,16 +431,15 @@ Ext.define('NextThought.controller.UserData', {
                 //bottom
                 position[0] = position[0] + offsets.gutter + 80;
                 position[0] = position[0] - (me.footnoteWidget.width/2);
-                position[1] = position[1] - offsets.scrollTop;
-                position[1] = position[1] + (me.footnoteWidget.getHeight()/2);
+                position[1] = position[1] + offsets.top + 30;
                 me.footnoteWidget.addCls('top');
             }
             else{
                 //top
                 position[0] = position[0] + offsets.gutter + 80;
                 position[0] = position[0] - (me.footnoteWidget.width/2);
-                position[1] = position[1] - offsets.scrollTop;
-                position[1] = position[1] - (me.footnoteWidget.getHeight()/2) - 40;
+                position[1] = position[1] + offsets.top;
+                position[1] = position[1] - me.footnoteWidget.getHeight() - 20;
                 me.footnoteWidget.addCls('bottom');
             }
             return position;
