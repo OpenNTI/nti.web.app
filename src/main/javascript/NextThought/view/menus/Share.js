@@ -16,6 +16,7 @@ Ext.define('NextThought.view.menus.Share',{
 	hideMode: 'display',
 	minWidth: 150,
     cls: 'share-menu',
+	constrainTo: Ext.getBody(),
 
 	defaults: {
 		ui: 'nt-menuitem',
