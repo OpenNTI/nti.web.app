@@ -49,7 +49,6 @@ Ext.define('NextThought.ux.ImageZoomView',{
 		this.callParent(arguments);
 		this.el.mask('Loading...');
 		this.mon(this.closeEl,'click', this.close, this);
-        this.mon(this.el,'keypress', function(){console.log('keydown', arguments);}, this);
 
 		var me = this,
 			img = new Image(),
