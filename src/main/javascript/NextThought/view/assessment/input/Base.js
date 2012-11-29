@@ -357,15 +357,14 @@ Ext.define('NextThought.view.assessment.input.Base',{
 		var me = this;
 
 		function loaded(records){
-			var parts, items = [];
+			var part, parts, items = [];
 			Ext.each( records, function(r){
 				parts = r.get('parts');
-				Ext.each(parts, function(p){
-					var t = p.get('submittedResponse');
-					items.push({
-						xtype: me.getPreviousMenuItemType(),
-						text: t
-					});
+				part = parts[me.ordinal];
+				var t = part.get('submittedResponse');
+				items.push({
+					xtype: me.getPreviousMenuItemType(),
+					text: t
 				});
 			});
 
