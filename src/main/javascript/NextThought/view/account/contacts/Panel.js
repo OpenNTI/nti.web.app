@@ -84,6 +84,25 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 
 
 	showMenu: function(toolEl){
+		var g = this.associatedGroup, me = this;
+
+		//Update group chat state.
+		//TODO listen for changes instead of rechecking each time
+		if(g){
+			friends = g.get('friends');
+			if(Ext.isEmpty(friends)){
+				this.groupChatAction.setDisabled(true);
+			}
+			else{
+				UserRepository.getUser(friends, function(rFriends){
+					var canGroupChat = Ext.Array.some(rFriends, function(f){
+											return f.get('Presence') === 'Online';
+									   });
+					me.groupChatAction.setDisabled(!canGroupChat);
+				});
+			}
+		}
+
 		this.menu.showBy(toolEl,'tr-tl',[0,0]);
 	},
 
