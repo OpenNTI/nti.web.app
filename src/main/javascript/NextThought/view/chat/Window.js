@@ -50,11 +50,16 @@ Ext.define('NextThought.view.chat.Window', {
 
         this.defaultFocus = this.down('chat-entry');
 
+		var entry = this.down('chat-entry');
 		if (!this.roomInfo) {
 			Ext.Error.raise('roomInfo required');
 		}
-		this.on('close', function(){ this.dragMaskOff(); });
-		this.on('hide', function(){ this.dragMaskOff(); });
+		this.on({
+			scope: this,
+			'close' : this.dragMaskOff,
+			'hide'  : this.dragMaskOff
+		});
+
 
 		this.roomInfoChanged(this.roomInfo);
 	},

@@ -66,6 +66,10 @@ Ext.define('NextThought.controller.Chat', {
 				'send-whiteboard': this.sendWhiteboard
 			},
 
+            'chat-view chat-log-entry': {
+	            'reply-to-whiteboard': this.replyToWhiteboard
+            },
+
             'chat-view': {
                 'flag-messages': this.flagMessages
             },
@@ -341,15 +345,22 @@ Ext.define('NextThought.controller.Chat', {
 		f.focus();
 	},
 
+	replyToWhiteboard: function(wbData, cmp, midReplyOf, channel, recipients){
+		this.showWhiteboard(wbData,cmp,midReplyOf,channel, recipients);
+	},
 
 	sendWhiteboard: function(chatEntryWidget, mid, channel, recipients) {
+		this.showWhiteboard(null,chatEntryWidget,mid,channel, recipients);
+	},
+
+	showWhiteboard: function(data, cmp, mid, channel, recipients) {
 		var me = this,
-			room = ClassroomUtils.getRoomInfoFromComponent(chatEntryWidget),
-			wbWin = Ext.widget('wb-window', {width: 802}),
+			room = ClassroomUtils.getRoomInfoFromComponent(cmp),
+			wbWin = Ext.widget('wb-window', {width: 802, value: data}),
 			wbData;
 
 		//hook into the window's save and cancel operations:
-		chatEntryWidget.mon(wbWin, {
+		wbWin.on({
 			save: function(win, wb){
 				wbData = wb.getValue();
 				me.clearErrorForRoom(room);
@@ -378,7 +389,7 @@ Ext.define('NextThought.controller.Chat', {
             //apply some classes so once we close the moderation, it's still marked
             e.el.down('.log-entry').addCls('confirmFlagged'); //permenantly flag
             e.el.down('.control').addCls('confirmFlagged');
-        })
+        });
 
         //return to non moderation view:
         chatView.up('chat-window').onFlagToolClicked();

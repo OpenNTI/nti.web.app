@@ -35,18 +35,19 @@ Ext.define('NextThought.view.chat.log.Entry', {
 	},
 
 	initComponent: function(){
-		this.addEvents('rendered-late');
-		this.enableBubble('rendered-late');
+		this.addEvents('rendered-late','reply-to-whiteboard');
+		this.enableBubble('rendered-late','reply-to-whiteboard');
 		this.callParent(arguments);
 		this.update(this.message);
 	},
 
 	add: function(){
 		var r = this.callParent(arguments),
-			reply = this.down('chat-reply-to');
+			reply = this.down('chat-reply-to'),
+			ci;
 
 		if(reply && r!==reply){
-			var ci = this.items.indexOf(reply);
+			ci = this.items.indexOf(reply);
 			this.move(ci, this.items.getCount()-1);
 			reply.down('textfield').focus();
 		}
@@ -107,7 +108,7 @@ Ext.define('NextThought.view.chat.log.Entry', {
         });
 	},
 
-    onControlClick: function(e){
+    onControlClick: function(){
         this.el.down('.control').toggleCls('checked');
         this.el.down('.log-entry').toggleCls('flagged');
         //let our parent know so he can do something.
@@ -120,14 +121,19 @@ Ext.define('NextThought.view.chat.log.Entry', {
     },
 
 
-	click: function(event, target, eOpts){
+	click: function(event){
 		var t = event.getTarget('.whiteboard-wrapper', null, true);
 
 		if(!t){ return; }
 
 		if(event.getTarget('.reply')){
-			//TODO: make the chat window/entry listen for this:
-			this.fireEvent('reply-to-whiteboard',Ext.clone(this.message.get('body')[0]));
+			this.fireEvent('reply-to-whiteboard',
+					Ext.clone(this.message.get('body')[0]), //wbData
+					this,
+					this.message.getId(),           //midReplyOf
+					this.message.get('channel'),    //channel
+					this.message.get('recipients')  //recipients
+			);
 			return;
 		}
 
@@ -136,9 +142,9 @@ Ext.define('NextThought.view.chat.log.Entry', {
 	},
 
 	fillInUser: function(u) {
-		var name = u.getName();
-		var url = u.get('avatarURL');
-		console.log(url, u);
+		var name = u.getName(),
+			url = u.get('avatarURL');
+//		console.log(url, u);
 		this.renderData.name = name;
 		this.renderData.avatarURL = url;
 		if(this.rendered){
@@ -151,9 +157,8 @@ Ext.define('NextThought.view.chat.log.Entry', {
 	},
 
 	initializeDragZone: function(v) {
-		v.dragZone = Ext.create('Ext.dd.DragZone', v.getEl(), {
-
-			getDragData: function(e) {
+		v.dragZone = new Ext.dd.DragZone(v.getEl(), {
+			getDragData: function() {
 				var sourceEl = v.el.dom, d;
 				if (sourceEl) {
 					d = sourceEl.cloneNode(true);
@@ -166,6 +171,7 @@ Ext.define('NextThought.view.chat.log.Entry', {
 					};
 					return v.dragData;
 				}
+				return null;
 			},
 
 			getRepairXY: function() {
