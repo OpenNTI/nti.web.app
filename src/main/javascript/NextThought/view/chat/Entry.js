@@ -37,10 +37,6 @@ Ext.define('NextThought.view.chat.Entry', {
 		});
 
 		var me = this;
-		setTimeout(function () {
-			me.focus();
-		}, 100);
-
 		this.buttonEl.on('click', this.addWhiteboard, this);
 	},
 
