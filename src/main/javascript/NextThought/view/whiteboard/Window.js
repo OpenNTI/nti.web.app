@@ -68,6 +68,12 @@ Ext.define('NextThought.view.whiteboard.Window',{
 	],
 
 	constructor: function(config){
+        var vpHeight = Ext.Element.getViewportHeight(),
+            r;
+
+        //ensure the max height is not bigger than the viewport
+        this.maxHeight = vpHeight;
+
 		//ensure we're dealing with a local instance copy instead of prototype instance
 		this.items = Ext.clone(this.items);
 
@@ -77,7 +83,7 @@ Ext.define('NextThought.view.whiteboard.Window',{
 		//see parent class as to why there is an extra level of items...
 		Ext.copyTo(this.items[1].items[0],config,'value');
 
-		var r = this.callParent(arguments);
+		r = this.callParent(arguments);
 
 		//in readonly mode, remove buttons that do stuff, except for cancel, call it close:
 		if(config.readonly){
