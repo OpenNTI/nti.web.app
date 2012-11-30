@@ -27,6 +27,7 @@ Ext.define('NextThought.view.chat.log.Entry', {
 	),
 
 	childEls: ['body'],
+	getTargetEl: function () { return this.body; },
 
 	renderSelectors: {
 		icon: 'img',
@@ -122,9 +123,10 @@ Ext.define('NextThought.view.chat.log.Entry', {
 
 
 	click: function(event){
+		event.stopEvent();
 		var t = event.getTarget('.whiteboard-wrapper', null, true);
 
-		if(!t){ return; }
+		if(!t){ return false; }
 
 		if(event.getTarget('.reply')){
 			this.fireEvent('reply-to-whiteboard',
@@ -134,11 +136,11 @@ Ext.define('NextThought.view.chat.log.Entry', {
 					this.message.get('channel'),    //channel
 					this.message.get('recipients')  //recipients
 			);
-			return;
 		}
-
-		Ext.widget('wb-window', { width: 802, value:this.message.get('body')[0], readonly: true}).show();
-
+		else {
+			Ext.widget('wb-window', { width: 802, value:this.message.get('body')[0], readonly: true}).show();
+		}
+		return false;
 	},
 
 	fillInUser: function(u) {
