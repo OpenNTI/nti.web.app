@@ -36,6 +36,8 @@ Ext.define('NextThought.view.form.fields.SearchField', {
 	afterRender: function(){
 		this.callParent(arguments);
 
+		this.inputEl.selectable();
+
 		var parentMenu = this.up('menu');
 
 		this.triggerEl.on('click',this.triggerMenu,this);
