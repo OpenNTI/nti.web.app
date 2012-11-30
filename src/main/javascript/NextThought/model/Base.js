@@ -237,7 +237,9 @@ Ext.define('NextThought.model.Base', {
 		var me = this,
 			l = this.getLink(link);
 
-
+        if (!l){
+            console.error('Cannot find link "' + link + ' on this model.', this);
+        }
 
 		if (l && !this.activePostTos[link]) {
 			this.activePostTos[link] = Ext.Ajax.request({
