@@ -32,9 +32,9 @@
 
 
 @mixin hardware-accelerate() {
-	-webkit-transform: translate3d(0, 0, 0);
-	-webkit-backface-visibility: hidden;
-	-webkit-perspective: 1000;
+	@include experimental(transform, translate3d(0, 0, 0));
+	@include experimental(backface-visibility, hidden);
+	@include experimental(perspective, 1000);
 }
 
 

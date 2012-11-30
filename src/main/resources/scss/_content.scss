@@ -380,7 +380,8 @@
 .x-reader-pane {
 
 	&, iframe {
-		@include hardware-accelerate();
+		//@include hardware-accelerate();
+
 	}
 
 	.x-panel-body-reader {
