@@ -68,7 +68,7 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 		cmp.mon(editorEl, {
 			scope      : me,
 			mousedown  : me.editorMouseDown,
-			selectstart: me.editorSelectionStart,
+//			selectstart: me.editorSelectionStart,
 			click      : function (e) {
 				if(!e.getTarget('.content')){ editorEl.down('.content > *').focus(); }
 			}
@@ -78,7 +78,7 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 
 		cmp.mon(editorEl.down('.content'), {
 			scope      : me,
-			selectstart: me.editorSelectionStart,
+//			selectstart: me.editorSelectionStart,
 			focus      : me.editorFocus,
 			keyup      : me.handleOnKeyup,
 			paste      : me.handlePaste,
@@ -242,14 +242,13 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 	editorFocus: function (e) {
 		var s = window.getSelection();
 		if (this.lastRange) {
-			s.removeAllRanges();
+			if(s.rangeCount > 0){
+				s.removeAllRanges();
+			}
 			s.addRange(this.lastRange);
 		}
 		else if (s.rangeCount > 0) {
 			this.lastRange = s.getRangeAt(0);
-		}
-		if(!this.dontDetectTypingAttributes){
-			this.detectTypingAttributes();
 		}
 	},
 
@@ -281,12 +280,11 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 	},
 
 	setTypingAttributes: function(attrs, alreadyFocused){
-		console.log('Setting attrs to ', attrs);
 		this.typingAttributes = attrs.slice();
 		if(!alreadyFocused){
-			this.dontDetectTypingAttributes = true;
-			this.editor.down('[contenteditable=true]').focus();
-			this.dontDetectTypingAttributes = false;
+			//NOTE: For some reasons calling firing the focus event from the contentEditable div doesn't work.
+			// So we will go ahead and call the focus fn directly.
+			this.editorFocus();
 		}
 		this.syncTypingAttributeButtons();
 		this.applyTypingAttributesToEditable();
@@ -309,9 +307,8 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 		});
 	},
 
-	editorContentAction: function (e) {
-		console.log('editor action', e);
-		var t = e.getTarget('.action', undefined, true), action
+	editorContentAction: function(e){
+		var t = e.getTarget('.action', undefined, true), action;
 		if (t) {
 			if (t.is('.whiteboard')) {
 				this.addWhiteboard();
@@ -337,7 +334,6 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 	detectTypingAttributes: function(){
 		var actions = this.self.supportedTypingAttributes;
 		var attrs = [];
-		this.editor.down('[contenteditable=true]').focus();
 		Ext.each(actions, function(action){
 			if(document.queryCommandState(action)){
 				attrs.push(action);
