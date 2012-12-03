@@ -7,12 +7,17 @@ Ext.define('NextThought.store.Stream',{
 	model: 'NextThought.model.Change',
 
 	autoLoad: false,
+	pageSize: 100,
 
 	proxy: {
 		type: 'rest',
+		limitParam: 'batchSize',
+		pageParam: undefined,
+		startParam: 'batchStart',
 		reader: {
-			type: 'json',
-			root: 'Items'
+			type: 'nti',
+			root: 'Items',
+			totalProperty: 'FilteredTotalItemCount'
 		},
 		headers: {
 			'Accept': 'application/vnd.nextthought.collection+json'
