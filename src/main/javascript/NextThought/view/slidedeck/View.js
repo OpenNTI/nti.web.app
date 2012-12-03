@@ -5,5 +5,34 @@ Ext.define('NextThought.view.slidedeck.View',{
 		'NextThought.view.slidedeck.Slide',
 		'NextThought.view.slidedeck.Queue',
 		'NextThought.view.slidedeck.Video'
-	]
+	],
+
+	cls: 'view',
+	ui: 'slidedeck',
+	plain: true,
+	layout: {
+		type: 'hbox',
+		align: 'stretch'
+	},
+
+	renderTpl: Ext.DomHelper.markup([
+		'{%this.renderContainer(out,values)%}',
+		{ cls: 'exit-button', html: 'Exit Presentation'}]),
+
+	items: [{
+		width: 400,
+		layout: {
+			type: 'vbox',
+			align: 'stretch'
+		},
+		items: [{
+			xtype: 'slidedeck-video'
+		},{
+			flex: 1,
+			xtype: 'slidedeck-queue'
+		}]
+	},{
+		flex: 1,
+		xtype: 'slidedeck-slide'
+	}]
 });

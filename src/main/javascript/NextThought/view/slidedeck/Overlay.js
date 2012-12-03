@@ -3,5 +3,25 @@ Ext.define('NextThought.view.slidedeck.Overlay',{
 	alias: 'widget.slidedeck-overlay',
 	requires: [
 		'NextThought.view.slidedeck.View'
-	]
+	],
+
+	cls: 'overlay',
+	ui: 'slidedeck',
+	plain: true,
+	layout: 'fit',
+	maximized: true,
+	floating: true,
+
+	items: [{xtype: 'slidedeck-view'}],
+
+	initComponent: function(){
+		this.callParent(arguments);
+
+		Ext.EventManager.onWindowResize(this.setSize,this,false);
+	},
+
+	setSize: function(){
+		if(this.rendered){this.toFront();}
+		return this.callParent(arguments);
+	}
 });

@@ -1,0 +1,17 @@
+
+.x-container-slidedeck{
+
+	&.overlay{
+		background: rgba(0,0,0,0.85);
+	}
+
+	&.view {
+		.exit-button {
+			position: absolute;
+			top: 10px; right: 10px;
+
+			color: white;
+			background: #a9a9a9;
+		}
+	}
+}
