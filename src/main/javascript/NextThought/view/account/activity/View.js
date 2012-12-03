@@ -54,12 +54,13 @@ Ext.define('NextThought.view.account.activity.View',{
 
 
 	initComponent: function(){
+		var me = this;
 		this.callParent(arguments);
 		this.store = Ext.getStore('Stream');
 		this.mon(this.store,{
 			scope: this,
 			datachanged: this.maybeReload,
-			load: this.maybeReload,
+			//load: this.maybeReload,
 			clear: function(){console.log('stream clear',arguments);},
 			remove: function(){console.log('stream remove',arguments);},
 			update: function(){console.log('stream update',arguments);}
@@ -76,26 +77,9 @@ Ext.define('NextThought.view.account.activity.View',{
 			'click':this.itemClick,
 			'mouseover': this.itemHover
 		});
-
-		this.mon(this.down('box[activitiesHolder]').getEl(), {
-            scope: this,
-            'scroll': this.onScroll
-        });
 	},
 
-	onScroll: function(e, dom){
-        var el = dom.lastChild,
-            offsets = Ext.fly(el).getOffsetsTo(dom),
-            top = offsets[1] + dom.scrollTop,
-            ctBottom = dom.scrollTop + dom.clientHeight;
-
-        if(ctBottom > top){
-            this.prefetchNext();
-        }
-    },
-
-
-    prefetchNext: function(){
+    fetchMore: function(){
         var s = this.store, max;
 
         if (!s.hasOwnProperty('data')) {
@@ -103,7 +87,8 @@ Ext.define('NextThought.view.account.activity.View',{
         }
 
         max = s.getPageFromRecordIndex(s.getTotalCount());
-        if(s.currentPage < max && !s.isLoading()){
+		this.currentCount = s.getCount();
+        if(s.currentPage < max){
             this.el.parent().mask('Loading...','loading');
             s.clearOnPageLoad = false;
             s.nextPage();
@@ -111,16 +96,15 @@ Ext.define('NextThought.view.account.activity.View',{
     },
 
     maybeReload: function(){
-        if (this.isVisible() && !this.dontReload && this.rendered){
+        if (this.isVisible() && this.rendered){
             this.reloadActivity();
         }
     },
 
 	reloadActivity: function(store){
-        console.log('reloading');
 		var container = this.down('box[activitiesHolder]'),
-				totalExpected,
-				items = [];
+			totalExpected,
+			items = [], oldestRecord;
 
 		if(store && !store.isStore){
 			store = null;
@@ -128,18 +112,56 @@ Ext.define('NextThought.view.account.activity.View',{
 
 		this.store = store = store||this.store;
 
+		this.store.suspendEvents();
+		this.store.clearFilter(true);
+		this.store.sort();
+		//For bonus points tell the user how far back they are asking for
+		oldestRecord = this.store.last();
+		this.store.filterBy(this.filterStore, this);
+		this.store.resumeEvents();
+
 		totalExpected = store.getCount();
+		if(this.currentCount !== undefined && totalExpected <= this.currentCount){
+			console.log('Need to fetch again. Didn\'t return any new data');
+			delete this.currentCount;
+			this.fetchMore();
+			return;
+		}
+
+		//Did we get anymore for this tab
 
 		if(!this.rendered){
 			this.on('afterrender',this.reloadActivity,this,{single:true});
 			return;
 		}
 
+		console.log('Redrawing activity panel');
+
 		this.stream = {};
 
+		function groupToLabel(name){
+			return (name||'').replace(/^[A-Z]\d{0,}\s/,'') || false;
+		}
+
+		function maybeAddMoreButton(){
+			var s=me.store, max, oldestGroup = groupToLabel(s.getGroupString(oldestRecord));
+			max = s.getPageFromRecordIndex(s.getTotalCount());
+			if(s.currentPage < max){
+				Ext.create('Ext.Button', {
+					text: oldestGroup ? 'More from ' + oldestGroup.toLowerCase() : 'Load more',
+					renderTo: container.getEl(),
+					scale: 'medium',
+					ui: 'secondary',
+					handler: function(){
+						me.fetchMore();
+						return false;
+					}});
+			}
+		}
+
 		function doGroup(group){
-			var label = (group.name||'').replace(/^[A-Z]\d{0,}\s/,'') || false,
-					me = this;
+			var label = groupToLabel(group.name);
+			me = this;
 
 			if(label){
 				items.push({ label: label });
@@ -155,6 +177,7 @@ Ext.define('NextThought.view.account.activity.View',{
 				totalExpected--;
 				if(totalExpected === 0){
 					me.feedTpl.overwrite(container.getEl(),items);
+					maybeAddMoreButton();
 					container.updateLayout();
 				}
 			}
@@ -176,11 +199,13 @@ Ext.define('NextThought.view.account.activity.View',{
 		}
 
 		if(store.getGroups().length === 0){
-			this.feedTpl.overwrite(container.getEl(), []);
+			this.feedTpl.overwrite(container.getEl(), items);
+			maybeAddMoreButton();
 			container.updateLayout();
 		}
 
 		Ext.each(store.getGroups(),doGroup,this);
+
 		this.el.parent().unmask();
 
 	},
@@ -266,11 +291,11 @@ Ext.define('NextThought.view.account.activity.View',{
 
 
 	itemClick: function(e){
+		var activityTarget = e.getTarget('div.activity', null, true);
 
-		var target = e.getTarget('div.activity',null,true),
-				guid = (target||{}).id,
-				item = this.stream[guid],
-			rec = (item||{}).record;
+		guid = (activityTarget||{}).id;
+		item = this.stream[guid];
+		ec = (item||{}).record;
 
 		if (!rec || rec.get('Class') === 'User'){
 			return false;
@@ -366,27 +391,26 @@ Ext.define('NextThought.view.account.activity.View',{
 		return foundInCommunities;
 	},
 
-    onActivate: function(){
-        var communities = $AppConfig.userObject.get('Communities') || [],
+	filterStore: function(change){
+		var communities = $AppConfig.userObject.get('Communities') || [],
         	community = (this.filter === 'inCommunity'),
 			flStore = Ext.getStore('FriendsList'),
 			me = this;
+		if(community){
+			return me.belongsInCommunity(change, flStore, communities);
+		}
+		else{
+			return me.belongsInMyContacts(change, flStore, communities);
+		}
+    },
 
-        var filterFn = function(change){
-			if(community){
-				return me.belongsInCommunity(change, flStore, communities);
-			}
-			else{
-				return me.belongsInMyContacts(change, flStore, communities);
-			}
-        }
-
-        this.dontReload = true;
-        this.store.clearFilter();
-        delete this.dontReload;
-        this.store.filterBy(filterFn);
+    onActivate: function(){
+		//Suspend events and let the last sort take care of it
+		this.store.suspendEvents();
+        this.store.clearFilter(true);
+        this.store.filterBy(this.filterStore, this);
+		this.store.resumeEvents();
         this.store.sort();
-
         //Now the listeners on the store will take care of rendering.
     }
 });
