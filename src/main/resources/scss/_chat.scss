@@ -392,6 +392,9 @@
 
 			.body {
 				color: $primary-grey;
+				.body-divider .whiteboard-wrapper .toolbar .reply{
+					display: none !important;
+				}
 			}
 		}
 	}
