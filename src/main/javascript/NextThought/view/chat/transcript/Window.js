@@ -7,7 +7,7 @@ Ext.define('NextThought.view.chat.transcript.Window',{
 		'NextThought.view.chat.Gutter'
 	],
 
-	cls:'chat-window no-gutter',
+	cls:'chat-window no-gutter chat-transcript-window',
 	ui:'chat-window',
 
 	minWidth:350,
@@ -21,8 +21,117 @@ Ext.define('NextThought.view.chat.transcript.Window',{
 	titleTpl:'{0} (Chat History)',
 
 	dockedItems:[
-		{xtype:'chat-gutter', dock:'left', hidden:true}
+		{xtype:'chat-gutter', dock:'left', hidden:true},
+        {
+            xtype: 'container',
+            hidden: true,
+            layout: {
+                type: 'hbox',
+                pack: 'end',
+                align: 'middle'
+            },
+            itemId: 'buttons',
+            cls: 'mod-buttons',
+            dock: 'bottom',
+            items: [
+                {
+                    xtype: 'button',
+                    ui: 'flat',
+                    text: 'Cancel',
+                    scale: 'large',
+                    handler: function(btn){
+                        this.up('chat-window').onFlagToolClicked();
+                    }
+                },
+                {
+                    xtype: 'button',
+                    flagButton: true,
+                    ui: 'caution',
+                    text: 'Flag',
+                    scale: 'large',
+                    disabled: true,
+                    handler: function(){
+                        this.up('window').flagMessages();
+                    }
+                }
+            ]
+        }
 	],
+
+
+    tools:{
+        'flag-for-moderation':{
+            tip:'Flag as Inappropriate',
+            handler:'onFlagToolClicked'
+        }
+    },
+
+    afterRender: function(){
+        this.callParent(arguments);
+        this.mon(this, 'control-clicked', this.maybeEnableButtons);
+    },
+
+
+    maybeEnableButtons: function(){
+        var b = this.down('[flagButton]');
+        //if there is checked stuff down there, enable button
+        if(this.el.down('.control.checked')){
+            b.setDisabled(false);
+        }
+        //if not, disable
+        else{
+            b.setDisabled(true);
+        }
+    },
+
+
+    flagMessages: function(){
+        var allFlaggedEntries = this.el.query('.message.flagged'),
+            allFlaggedMessages = [],
+            guid, m;
+
+        Ext.each(allFlaggedEntries, function(e){
+            guid = e.getAttribute('data-guid');
+            m = this.messageMap[guid];
+            if(m){allFlaggedMessages.push(m);}
+        }, this);
+
+        this.fireEvent('flag-messages', allFlaggedMessages, this);
+    },
+
+
+    onFlagToolClicked: function(){
+        var transcriptViews = this.query('chat-transcript'),
+            btn = this.el.down('.flag-for-moderation');
+
+        this.el.toggleCls('moderating');
+        Ext.each(transcriptViews, function(v){
+            v.toggleModerationPanel();
+        });
+        btn.toggleCls('moderating');
+
+        //if we are now moderating, do something to the docked item
+        if (btn.hasCls('moderating')){
+            this.down('[itemId=buttons]').show();
+        }
+        else {
+            this.down('[itemId=buttons]').hide();
+        }
+    },
+
+
+    clearFlagOptions: function(){
+        var allFlaggedEntries = this.el.query('.message.flagged'),
+            checked = this.el.query('.control.checked');
+        Ext.each(allFlaggedEntries, function(f){
+            Ext.fly(f).toggleCls('flagged');
+            if(!Ext.fly(f).hasCls('confirmFlagged')){Ext.fly(f).toggleCls('confirmFlagged');}
+        });
+        Ext.each(checked, function(f){
+            Ext.fly(f).toggleCls('checked');
+        });
+        this.maybeEnableButtons();
+    },
 
 
 	failedToLoadTranscript: function(){
@@ -56,7 +165,14 @@ Ext.define('NextThought.view.chat.transcript.Window',{
 		this.setTitleInfo(record.get('Contributors'));
 		var container = this.down('[windowContentWrapper]'),
 			time = record.get('RoomInfo').get('CreatedTime') || record.get('CreatedTime'),
+            messages = record.get('Messages'),
 		    existing = container.items, idx = 0, inserted;
+
+        //keep all messages for later flagging:
+        if (!this.messageMap){this.messageMap = {};}
+        Ext.each(messages, function(m){
+            this.messageMap[IdCache.getIdentifier(m.getId())] = m;
+        }, this);
 
 		//assume existing is already sorted
 		existing.each(function(v,i){
@@ -64,10 +180,11 @@ Ext.define('NextThought.view.chat.transcript.Window',{
 //			console.log(v.time, v, time, i);
 		},this);
 
+
 		inserted = container.insert(idx,{
 			xtype: 'chat-transcript',
 			time: time,
-			messages: record.get('Messages')
+			messages: messages
 		});
 
 		this.show();

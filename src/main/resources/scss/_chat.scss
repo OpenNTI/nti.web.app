@@ -364,6 +364,37 @@
 		}
 	}
 
+	&.moderating {
+		.control {
+			position: relative;
+			top: 15px; left: 7px;
+			float: left;
+			display: inline-block;
+			width: 15px;
+			height: 15px;
+			background: url(../images/old_sprites/spr_quiz.png) -68px -18px no-repeat;
+			&:hover {
+				background-position: -68px -68px ;
+			}
+			&.checked{
+				&,&:hover {
+					background-position: -68px -118px;
+				}
+			}
+			&.confirmFlagged {
+				display: none;
+			}
+		}
+		.message {
+			.time {
+			    margin-left: 30px;
+			}
+			.wrap {
+				margin-left: 100px;
+			}
+		}
+	}
+
 	.message {
 		margin: 20px 15px;
 		overflow: hidden;
@@ -397,6 +428,19 @@
 				}
 			}
 		}
+
+		&.flagged,
+		&.confirmFlagged {
+			background: #fefefe;
+			.name{
+				color: #fd817f;
+			}
+			.body {
+				color: #fec1bf;
+				text-decoration: line-through;
+			}
+		}
 	}
+
 
 }

@@ -10,6 +10,7 @@ Ext.define('NextThought.view.chat.transcript.Main',{
 		{tag:'tpl', 'for':'messages', cn:[
 
 			{cls: 'message {me}', 'data-guid': '{guid}', cn:[
+                {cls: 'control', tag: 'span'},
 				{cls: 'time', html: '{time:date("g:i:s A")}'},
 				{ cls: 'wrap', cn: [
 					{cls: 'name {me}', html: '{name:ellipsis(50)}'},
@@ -45,6 +46,9 @@ Ext.define('NextThought.view.chat.transcript.Main',{
         var r = this.el.down('.reply');
 		if(r){r.remove();}
 		this.el.on('click', this.click, this);
+        Ext.each(this.el.query('.control'), function(c){
+            this.mon(Ext.fly(c), 'click', this.onControlClick, this);
+        }, this);
 		/*Ext.each(this.el.query('.whiteboard-thumbnail'),
 				function(wb){
 					Ext.fly(wb).on('click', this.click, this);
@@ -58,6 +62,8 @@ Ext.define('NextThought.view.chat.transcript.Main',{
 
 	formatMessages: function(messages){
 		var m = [], me = this;
+
+
 
 		function getEl(guid){
 			return me.getEl().down('[data-guid='+guid+']');
@@ -73,15 +79,17 @@ Ext.define('NextThought.view.chat.transcript.Main',{
 		});
 
 		Ext.each(messages,function(msg){
-			var guid = guidGenerator(),
+			var guid = IdCache.getIdentifier(msg.getId()),
 				creator = msg.get('Creator'),
 				o = {
 					guid: guid,
 					me: isMe(creator) ? 'me' : undefined,
 					name: creator,
 					time: msg.get('CreatedTime'),
-					body: 'Loading...'
+					body: 'Loading...',
+                    msg: msg      //just pass the message back
 				};
+
 
 			UserRepository.getUser(creator,function(u){
 				try{
@@ -107,6 +115,8 @@ Ext.define('NextThought.view.chat.transcript.Main',{
 			}, me, me.generateClickHandler, 225);
 
 			m.push(o);
+
+
 			o = null;
 		});
 
@@ -130,5 +140,20 @@ Ext.define('NextThought.view.chat.transcript.Main',{
 		if(t && this.readOnlyWBsData[guid]){
 			Ext.widget('wb-window',{ width: 802, value: this.readOnlyWBsData[guid], readonly: true}).show();
 		}
-	}
+	},
+
+
+    onControlClick: function(evt, dom, opts){
+        var message = evt.getTarget('.message');
+
+        Ext.fly(message).toggleCls('flagged');
+        Ext.fly(dom).toggleCls('checked');
+        this.up('chat-transcript-window').fireEvent('control-clicked');
+    },
+
+
+    toggleModerationPanel:function() {
+        this.el.toggleCls('moderating');
+    }
+
 });

@@ -18,7 +18,8 @@ Ext.define('NextThought.controller.Chat', {
 
 
 	views: [
-		'chat.Window'
+		'chat.Window',
+        'chat.transcript.Window'
 	],
 
 
@@ -72,6 +73,11 @@ Ext.define('NextThought.controller.Chat', {
 
             'chat-view': {
                 'flag-messages': this.flagMessages
+            },
+
+
+            'chat-transcript-window': {
+                'flag-messages': this.flagTranscriptMessages
             },
 
 			'contacts-panel': {
@@ -395,32 +401,47 @@ Ext.define('NextThought.controller.Chat', {
         chatView.up('chat-window').onFlagToolClicked();
     },
 
-/*
-	classroom: function(f, mid, channel, recipients) {
-		var cv = f.up('chat-view'),
-			room = ClassroomUtils.getRoomInfoFromComponent(f),
-			mlog = cv.down('chat-log-view[moderated=true]'),
-			log = cv.down('chat-log-view[moderated=false]'),
-			messages = log.getMessages(),
-			moderated = mlog ? true : false,
-			c = this.getClassroom();
 
-		if (!ClassroomUtils.isClassroomId(room.get('ContainerId'))) {
-			console.warn('not a chat room that can turn into a classroom, sorry, figure out how to disable this button or hide it');
-			return;
-		}
+    flagTranscriptMessages: function(messages, chatView){
+        Ext.each(messages, function(m){
 
-		//close this tab, hide window
-		this.getChatWindow().closeChat(room, true);
-		this.getChatWindow().hide();
+            m.postTo('flag', function(){
+                console.log('server says', arguments);
+            });
+        });
 
-		//view to classroom, call showClassroom on Classroom view?
-		this.getClassroomMode().activate();
-		this.getClassroomMode().hideClassChooser();
-		c.onEnteredRoom(room, moderated);
-		c.onMessage(messages);
-	 },
-*/
+        //return to non moderation view:
+        chatView.onFlagToolClicked();
+        chatView.clearFlagOptions();
+    },
+
+
+    /*
+        classroom: function(f, mid, channel, recipients) {
+            var cv = f.up('chat-view'),
+                room = ClassroomUtils.getRoomInfoFromComponent(f),
+                mlog = cv.down('chat-log-view[moderated=true]'),
+                log = cv.down('chat-log-view[moderated=false]'),
+                messages = log.getMessages(),
+                moderated = mlog ? true : false,
+                c = this.getClassroom();
+
+            if (!ClassroomUtils.isClassroomId(room.get('ContainerId'))) {
+                console.warn('not a chat room that can turn into a classroom, sorry, figure out how to disable this button or hide it');
+                return;
+            }
+
+            //close this tab, hide window
+            this.getChatWindow().closeChat(room, true);
+            this.getChatWindow().hide();
+
+            //view to classroom, call showClassroom on Classroom view?
+            this.getClassroomMode().activate();
+            this.getClassroomMode().hideClassChooser();
+            c.onEnteredRoom(room, moderated);
+            c.onMessage(messages);
+         },
+    */
 
 
 //	flaggedMenuItemClicked: function(mi) {
