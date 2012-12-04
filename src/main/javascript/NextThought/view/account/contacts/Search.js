@@ -97,13 +97,6 @@ Ext.define('NextThought.view.account.contacts.Search',{
 		});
 	},
 
-
-
-
-
-
-
-
 	destroy: function(){
 		Ext.getBody().un('click',this.detectBlur,this);
 		this.callParent(arguments);
@@ -132,17 +125,6 @@ Ext.define('NextThought.view.account.contacts.Search',{
 		this.hide();
 	},
 
-
-
-
-
-
-
-
-
-
-
-
 	itemClicked: function(view,record,item){
 		var add = Ext.fly(item).down('img:not(.add)');
 
@@ -157,16 +139,17 @@ Ext.define('NextThought.view.account.contacts.Search',{
 //		Ext.defer(show,500,this);
 	},
 
-
-	search: function(value){
+	//We buffer this slightly to avoid unecessary searches
+	search: Ext.Function.createBuffered(function(value){
 		if(!value || value.replace(SearchUtils.trimRe,'').length < 2 ){
 			this.clearResults();
 		}
 		else {
+
 			this.setHeight(Ext.Element.getViewportHeight()-this.getPosition()[1]);
 			this.store.search(value);
 		}
-	},
+	}, 250),
 
 	clearResults: function(){
 		this.setHeight(52);
