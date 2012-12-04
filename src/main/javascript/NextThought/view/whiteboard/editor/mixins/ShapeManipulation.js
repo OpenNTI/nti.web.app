@@ -53,7 +53,7 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 
 		this.on('turnOnSelection', this.onTurnOnSelection);
 
-		function clearFlag(){ delete this.mouseLeftNoMouseUp;console.log('clear!'); }
+		function clearFlag(){ delete this.mouseLeftNoMouseUp;}
 
 		this.mon( Ext.getBody(), {
 			scope: this,
@@ -529,7 +529,7 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 
 		if(!this.selected || !l || l.length === 0){ console.warn("Nothing is selected."); return;}
 		Ext.Array.erase(l,i,1);
-		Ext.Array.push(l, this.selected);
+        Ext.Array.insert(l, i+1, [this.selected]);
 		c.drawScene();
 	},
 
@@ -540,7 +540,7 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 
 		if(!this.selected || !l || l.length === 0){ console.warn("Nothing is selected."); return;}
 		Ext.Array.erase(l,i,1);
-		c.addShape(this.selected);
+        Ext.Array.insert(l, (i-1) >= 0 ? (i-1) : 0, [this.selected]);
 		c.drawScene();
 	},
 
