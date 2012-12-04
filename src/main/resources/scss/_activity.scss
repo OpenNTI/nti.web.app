@@ -70,6 +70,10 @@
 			margin-left: auto;
 			margin-right: auto;
 			margin-top: 5px;
+
+			span {
+				text-transform: capitalize;
+			}
 		}
 
 		//add some space between the divider and the next activity
