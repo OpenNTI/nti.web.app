@@ -7,7 +7,7 @@ Ext.define('NextThought.store.Stream',{
 	model: 'NextThought.model.Change',
 
 	autoLoad: false,
-	pageSize: 5,
+	pageSize: 100,
 
 	proxy: {
 		type: 'rest',

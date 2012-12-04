@@ -144,7 +144,7 @@ Ext.define('NextThought.view.account.activity.View',{
 		}
 
 		function maybeAddMoreButton(){
-			var s=me.store, max, oldestGroup = groupToLabel(s.getGroupString(oldestRecord));
+			var s=me.store, max, oldestGroup = oldestRecord ? groupToLabel(s.getGroupString(oldestRecord)) : null;
 			max = s.getPageFromRecordIndex(s.getTotalCount());
 			if(s.currentPage < max){
 				Ext.create('Ext.Button', {
@@ -156,7 +156,9 @@ Ext.define('NextThought.view.account.activity.View',{
 					handler: function(){
 						me.fetchMore();
 					}});
+				return true;
 			}
+			return false;
 		}
 
 		function doGroup(group){
@@ -198,8 +200,13 @@ Ext.define('NextThought.view.account.activity.View',{
 		}
 
 		if(store.getGroups().length === 0){
-			this.feedTpl.overwrite(container.getEl(), items);
-			maybeAddMoreButton();
+			Ext.DomHelper.overwrite(container.getEl(), []); //Make sure the initial mask clears
+			if(!maybeAddMoreButton()){
+				Ext.DomHelper.overwrite(container.getEl(), {
+					cls:"activity nothing",
+					cn: [' No Activity yet']
+				});
+			}
 			container.updateLayout();
 		}
 
