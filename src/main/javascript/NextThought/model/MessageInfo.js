@@ -11,5 +11,11 @@ Ext.define('NextThought.model.MessageInfo', {
 		{ name: 'body', type: 'auto', defaultValue: [''] },
 		{ name: 'channel', type: 'string' },
 		{ name: 'recipients', type: 'auto' }
-	]
+	],
+
+    hasBeenModerated: function(){
+        var flag = this.getLink('flag') || this.getLink('flag.metoo');
+        if (!flag){return true;}
+        return false;
+    }
 });

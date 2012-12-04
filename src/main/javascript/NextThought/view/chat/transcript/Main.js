@@ -9,7 +9,7 @@ Ext.define('NextThought.view.chat.transcript.Main',{
 
 		{tag:'tpl', 'for':'messages', cn:[
 
-			{cls: 'message {me}', 'data-guid': '{guid}', cn:[
+			{cls: 'message {me} {moderatedCls}', 'data-guid': '{guid}', cn:[
                 {cls: 'control', tag: 'span'},
 				{cls: 'time', html: '{time:date("g:i:s A")}'},
 				{ cls: 'wrap', cn: [
@@ -82,6 +82,7 @@ Ext.define('NextThought.view.chat.transcript.Main',{
 			var guid = IdCache.getIdentifier(msg.getId()),
 				creator = msg.get('Creator'),
 				o = {
+                    moderatedCls: msg.hasBeenModerated() ? 'moderated' : '',
 					guid: guid,
 					me: isMe(creator) ? 'me' : undefined,
 					name: creator,
