@@ -10,10 +10,10 @@ Ext.define('NextThought.view.chat.transcript.Window',{
 	cls:'chat-window no-gutter chat-transcript-window',
 	ui:'chat-window',
 
-	minWidth:350,
+	minWidth:400,
 	minHeight:200,
 	height:400,
-	width:350,
+	width:400,
 	managed: false,
 	modal: true,
 
