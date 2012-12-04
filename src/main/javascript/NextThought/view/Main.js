@@ -49,15 +49,12 @@ Ext.define('NextThought.view.Main', {
 			el = Ext.getBody();
 		console.log("Zoom:",z);
 
-		if(z !== 1) {
-			if(!el.isMasked()){
-				el.addCls('dark');
-				el.mask('Zoom levels are not supported, return your view to normal zoom','zoom');
+		if(Ext.isIE){
+			if(z !== 1) {
+				//TODO If not already shown present new warning bar thingy
+				console.warn('Warning IE miscalculates positioning information when a scale is involved');
 			}
-		}
-		else if(el.isMasked()){
-			el.removeCls('dark');
-			el.unmask();
+			//TODO else if shown remove warning bar thingy
 		}
 	}
 });
