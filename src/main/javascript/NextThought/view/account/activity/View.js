@@ -104,7 +104,7 @@ Ext.define('NextThought.view.account.activity.View',{
 	reloadActivity: function(store){
 		var container = this.down('box[activitiesHolder]'),
 			totalExpected,
-			items = [], oldestRecord;
+		items = [], oldestRecord, me = this;
 
 		if(store && !store.isStore){
 			store = null;
@@ -149,19 +149,18 @@ Ext.define('NextThought.view.account.activity.View',{
 			if(s.currentPage < max){
 				Ext.create('Ext.Button', {
 					text: oldestGroup ? 'More from ' + oldestGroup.toLowerCase() : 'Load more',
-					renderTo: container.getEl(),
+					renderTo: Ext.DomHelper.append(container.getEl(), {cls:'center-button'} ),
 					scale: 'medium',
 					ui: 'secondary',
+					cls: 'more-button',
 					handler: function(){
 						me.fetchMore();
-						return false;
 					}});
 			}
 		}
 
 		function doGroup(group){
 			var label = groupToLabel(group.name);
-			me = this;
 
 			if(label){
 				items.push({ label: label });
@@ -295,7 +294,7 @@ Ext.define('NextThought.view.account.activity.View',{
 
 		guid = (activityTarget||{}).id;
 		item = this.stream[guid];
-		ec = (item||{}).record;
+		rec = (item||{}).record;
 
 		if (!rec || rec.get('Class') === 'User'){
 			return false;
