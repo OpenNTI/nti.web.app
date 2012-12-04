@@ -27,14 +27,14 @@ Ext.define('NextThought.ux.TextRangeFinder', {
     },
 
 
-	/** 
-	 * A heavily modified version of Raymond Hill's doHighlight code. Attribution below 
+	/**
+	 * A heavily modified version of Raymond Hill's doHighlight code. Attribution below
 	 *
 	 * @param node - the node to search for ranges beneath
 	 * @param doc - the document fragment node is a child of
 	 * @param searchFor - a string or a regex to search for
 	 * @param which - if provided the subexpression of the regex to be matched
-	 * 
+	 *
 	 * @returns a list of range objects that represent the portion of text to highlight
 	 **/
 
@@ -181,7 +181,7 @@ Ext.define('NextThought.ux.TextRangeFinder', {
 			iNodeTextStart = iTextStart - entryLeft.i;
 			iNodeTextEnd = iTextEnd - entryRight.i;
 
-			range = document.createRange();
+			range = doc.createRange();
 			range.setStart(entryLeft.n, Math.max(iNodeTextStart, 0));
 			range.setEnd(entryRight.n, iNodeTextEnd);
 
