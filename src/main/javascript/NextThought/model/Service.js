@@ -310,12 +310,14 @@ Ext.define('NextThought.model.Service', {
 		return this.hasCapability('nti.platform.p2p.friendslists');
 	},
 
+	canCreateDynamicGroups: function(){
+		return this.hasCapability('nti.platform.p2p.dynamicfriendslists');
+	},
 
 	hasCapability: function(c){
 		var caps = this.get('CapabilityList') || [];
 		return Ext.Array.contains(caps, c);
 	},
-
 
 	canCanvasURL: function() {
 		var coll = $AppConfig.service.getCollectionFor('application/vnd.nextthought.canvasurlshape', 'Pages');

@@ -11,7 +11,8 @@ Ext.define('NextThought.model.FriendsList', {
 		{ name: 'friends', type: 'UserList' },
 		{ name: 'realname', type: 'string' },
 		{ name: 'CompositeGravatars', type: 'AvatarURL' },
-		{ name: 'displayName', convert: function(v,r){return r.getName();}}
+		{ name: 'displayName', convert: function(v,r){return r.getName();}},
+		{ name: 'IsDynamicSharing', type: 'auto'}
 	],
 
 	destroy: function() {
