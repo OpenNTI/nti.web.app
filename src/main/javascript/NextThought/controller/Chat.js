@@ -155,9 +155,26 @@ Ext.define('NextThought.controller.Chat', {
 		if (!r){return null;}
 
 		var rIsString = (typeof(r) === 'string'),
-			id = IdCache.getIdentifier(rIsString ? r : r.getId());
+			id = IdCache.getIdentifier(rIsString ? r : r.getId()),
+            w = Ext.ComponentQuery.query('chat-window[roomInfoHash='+id+']')[0],
+            allRooms = Ext.ComponentQuery.query('chat-window'),
+            xOcc;
 
-		return Ext.ComponentQuery.query('chat-window[roomInfoHash='+id+']')[0];
+        if (!w){
+            //see if we have rooms with the same occupants list:
+            Ext.each(allRooms, function(x){
+                xOcc = x.roomInfo.get('Occupants');
+                //only do the next step for 1 to 1 chats, group chat changes like this could really mess everyone else up.
+                if(xOcc.length > 2){return;}
+                if(Ext.Array.union(xOcc, r.get('Occupants')).length === xOcc.length){
+                    console.log('found a different room with same occupants');
+                    x.roomInfoChanged(r);
+                    w = x;
+                }
+            });
+        }
+
+        return w;
 	},
 
 
