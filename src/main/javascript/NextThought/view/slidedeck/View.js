@@ -19,6 +19,10 @@ Ext.define('NextThought.view.slidedeck.View',{
 		'{%this.renderContainer(out,values)%}',
 		{ cls: 'exit-button', html: 'Exit Presentation'}]),
 
+	renderSelectors: {
+		exitEl: '.exit-button'
+	},
+
 	items: [{
 		width: 400,
 		layout: {
@@ -34,5 +38,11 @@ Ext.define('NextThought.view.slidedeck.View',{
 	},{
 		flex: 1,
 		xtype: 'slidedeck-slide'
-	}]
+	}],
+
+
+	afterRender: function(){
+		this.callParent(arguments);
+		this.mon(this.exitEl,'click',function(){this.destroy();},this);
+	}
 });

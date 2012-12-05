@@ -12,11 +12,11 @@ Ext.define('NextThought.view.slidedeck.Overlay',{
 	maximized: true,
 	floating: true,
 
-	items: [{xtype: 'slidedeck-view'}],
-
 	initComponent: function(){
 		this.callParent(arguments);
+		this.view = this.add({xtype:'slidedeck-view'});
 
+		this.mon(this.view,'destroy',this.destroy,this);
 		Ext.EventManager.onWindowResize(this.setSize,this,false);
 	},
 
