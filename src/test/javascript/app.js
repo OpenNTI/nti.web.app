@@ -104,6 +104,7 @@ Ext.application({
 		'Navigation',
 		'Search',
 		'Session',
+		'SlideDeck',
 		'State',
 		'Stream'
 	],
