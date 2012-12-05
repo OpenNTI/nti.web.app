@@ -3,6 +3,7 @@
 
 .contact-us-window,
 .code-window,
+.codecreation-window,
 .recovery-email-window,
 .coppa-window {
 	@extend .nti-window;
@@ -67,6 +68,7 @@
 	}
 
 	.code-main-view,
+	.codecreation-main-view,
 	.recovery-email-view,
 	.contact-main-view,
 	.coppa-main-view {
@@ -214,6 +216,7 @@
 	}
 
 	.code-main-view,
+	.codecreation-main-view,
 	.contact-main-view {
 		.input-wrapper {
 			margin-left: 34px;
@@ -235,3 +238,59 @@
 	}
 
 }
+
+.codecreation-window{
+	.codecreation-main-view{
+		.group-name {
+			input {
+				color: $secondary-grey;
+				border-left-width: 4px;
+				border-left-color: $primary_green;
+			}
+			input.empty{
+				border-left-color: $border_grey;
+			}
+			.x-mask{
+				background-color: white;
+				opacity: 0;
+			}
+			&.x-masked{
+				.clear{
+					display: none !important;
+				}
+			}
+		}
+
+		.group-code{
+			color: $secondary-grey;
+			font-size: 14px;
+			font-weight: 500;
+			line-height: 25px;
+			border: 1px solid $border-grey;//#dcdcdc;
+			background: #ffffff;
+			padding: 6px 10px;
+			margin: 0;
+			min-height: 39px;
+			@include experimental-value(width, calc(100% - 8px));
+			.x-opera &,
+			.x-safari5 & {
+				width: 90%;
+			}
+			position: relative;
+			left: 4px;
+		}
+
+		.label{
+			text-transform: uppercase;
+			font-weight: 700;
+			font-size: 10px;
+			padding-left: 4px;
+			padding-bottom: 4px;
+		}
+
+		.name-label{
+			margin-bottom: -5px;
+		}
+	}
+}
+

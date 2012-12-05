@@ -389,7 +389,7 @@ div.add-group-action{
 div.group-buttons {
 	@include top-etch();
 	text-transform: uppercase;
-	div.join-group{
+	div.group-button{
 		cursor: pointer;
 		display: inline-block;
 		position: relative;
@@ -399,6 +399,10 @@ div.group-buttons {
 		font-weight: 600;
 		font-size: 10px;
 		color: $secondary-grey;
+
+	}
+
+	div.join-group {
 		&::after {
 			content: ' ';
 			position: absolute;

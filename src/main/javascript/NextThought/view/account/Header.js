@@ -25,22 +25,30 @@ Ext.define('NextThought.view.account.Header',{
         detail: '.text .detail'
     },
 
-    initComponent: function(){
-        this.callParent(arguments);
-
-        var iconURL;
+	updateRenderData: function(){
+		var iconURL;
          /*
         if (this.icon === 'alert'){
             iconURL = Ext.BLANK_IMAGE_URL;
         }
         */
-        this.renderData = Ext.apply(this.renderData||{},{
+		 this.renderData = Ext.apply(this.renderData||{},{
             img: iconURL || $AppConfig.userObject.get('avatarURL'),
             title: this.title || 'Congratulations!',
             detail: this.detail || 'We received consent for you to use social features on our site. Please provide the following information to update your account.'
         });
+	},
+
+    initComponent: function(){
+        this.callParent(arguments);
+
+		this.updateRenderData();
     },
 
+	updateHeaderText: function(t, d){
+		this.title.dom.innerHTML=t;
+		this.detail.dom.innerHTML=d;
+	},
 
     afterRender: function(){
         this.callParent(arguments);

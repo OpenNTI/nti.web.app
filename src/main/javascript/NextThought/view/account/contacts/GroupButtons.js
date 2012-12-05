@@ -7,12 +7,18 @@ Ext.define('NextThought.view.account.contacts.GroupButtons',{
     cls: 'group-buttons',
 
     autoEl: { cn:[
-            {cls: 'join-group', html: 'join group'}
+		{cls: 'create-group group-button', html: 'create group'},
+        {cls: 'join-group group-button', html: 'join group'}
         ]
     },
 
     afterRender: function(){
         this.callParent(arguments);
+
+		if(!$AppConfig.service.canCreateDynamicGroups()){
+			this.down('.create-group').hide();
+		}
+
         this.mon(this.el, 'click', this.onClick, this);
     },
 

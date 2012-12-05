@@ -45,7 +45,6 @@ Ext.define('NextThought.view.form.fields.SimpleTextField',{
 		var e = this.inputEl;
 		e.dom.value = '';
 		e.removeCls('error');
-		this.lastValue = this.getValue();
 		this.clearEl.hide();
 		this.keyPressed(new Ext.EventObjectImpl());
 		if(!silent){
