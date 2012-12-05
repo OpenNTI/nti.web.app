@@ -247,7 +247,7 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Base', {
 			w = this.bbox.w/2,
 			h = this.bbox.h/2,
 			ratio = s[0]/s[1],
-			adjustedDx, adjustedDy, sign;
+			adjustedDx, adjustedDy, sign, sx, sy;
 
 		adjustedDy = dx*Math.sin(r) + dy*Math.cos(r);
 		adjustedDx = dx*Math.cos(r) - dy*Math.sin(r);

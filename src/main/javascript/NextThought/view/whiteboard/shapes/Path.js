@@ -45,15 +45,65 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Path', {
 		renderCallback.call(this);
 	},
 
-	scaleWithConstraint: function(nib,dx,dy){
-		console.log('Resizing path is currently not supported');
+	modify: function(nib,	x1,y1,	x2,y2,	dx,dy){
+		var c = this.getCenter(true), newM, c1;
+
+		this.callParent(arguments);
+		newM = new NTMatrix(this.transform);
+		c1 = this.getCenter(true);
+		newM.translate(  c[0]-c1[0], c[1]-c1[1] );
+		this.transform = newM.toTransform();
 	},
 
-	modify: function(nib,	x1,y1,	x2,y2,	dx,dy){
-		console.log('Resizing and rotation of path is currently not supported');
+	scaleWithConstraint: function(nib,dx,dy){
+		var c = this.getCenter(true), newM, c1;
+
+		this.callParent(arguments);
+		newM = new NTMatrix(this.transform);
+		c1 = this.getCenter(true);
+
+		newM.translate(  c[0]-c1[0], c[1]-c1[1]);
+		this.transform = newM.toTransform();
+	},
+
+	getCenter: function(transformed){
+		if(!this.bbox){ return; }
+
+		var center = [this.bbox.x + (this.bbox.w/2), this.bbox.y + (this.bbox.h/2)],
+			m = new NTMatrix(this.transform);
+		if(transformed){
+			return m.transformPoint(center);
+		}
+		return center;
 	},
 
 	shouldEnableRotation: function(){
 		return false;
 	}
+
+//	nibRotate: function(m, x,y){
+//		var c = this.getCenter(true),
+//			t = m.getTranslation(),
+//			rot = m.getRotation(),
+//			newM, c1, cx, cy;
+//
+//		console.log('current Matrix: ', m.m);
+//
+//		//Inverse rotation.
+//		m.rotate(-rot);
+//
+//		console.log('Initial starting point: ', t);
+////		cx = c[0]-t[0];
+////		cy = c[1]-t[1];
+////		m.translate( -cx, -cy);
+//
+//		this.transform = this.callParent(arguments);
+//		newM = new NTMatrix(this.transform);
+//		console.log('new starting point after rotation: ', newM.getTranslation());
+//
+//		c1 = this.getCenter(true);
+//		newM.translate(  c[0]-c1[0], c[1]-c1[1] );
+//
+//		return newM.toTransform();
+//	}
 });
