@@ -13,13 +13,15 @@ Ext.define('NextThought.view.slidedeck.Video',{
 
 	renderTpl: Ext.DomHelper.markup([{
 		cls: 'video-wrapper', cn: [{
-			tag: 'iframe', cls:'video', name: 'slide-video',
+			tag: 'iframe', cls:'video', name: 'slide-video', id: '{id}-video',
 			frameBorder: 0, scrolling: 'no', seamless: true
 		}]
 	},{
-		cls: 'video-checkbox checked',
-		html: 'Synchronize video with slides'
-	}])
+		cls: 'video-checkbox',
+		html: 'Synchronize video with slides',
+		tabIndex: 0,
+		role: 'button'
+	}]),
 
 	// YouTube: https://developers.google.com/youtube/iframe_api_reference
 	// Embed Code: http://www.youtube.com/embed/VIDEO_ID?enablejsapi=1&playerapiid=player_id&origin=http://example.com
@@ -31,4 +33,50 @@ Ext.define('NextThought.view.slidedeck.Video',{
 
 	// Embed Code: http://player.vimeo.com/video/VIDEO_ID?api=1&player_id=player_id
 	// use event "playProgress" and keep track of our times to fire an event like "at" for youtube.
+
+
+	renderSelectors: {
+		videoEl: 'iframe',
+		checkboxEl: 'div.video-checkbox'
+	},
+
+
+	initComponent: function(){
+		this.callParent(arguments);
+		//default the value
+		if(typeof(this.synchronizeWithSlides) !== 'boolean'){
+			this.synchronizeWithSlides = true;
+		}
+	},
+
+
+	afterRender: function(){
+		this.callParent(arguments);
+
+		function enterFilter(e) {console.log(e.getKey()); return (e.getKey() === e.ENTER); }
+
+		this.mon(this.checkboxEl,{
+			scope:this,
+			click:this.checkboxClicked,
+			keydown: Ext.Function.createInterceptor(enterFilter,this.checkboxClicked,this,null)
+		});
+		this.updateCheckbox();
+	},
+
+
+	updateCheckbox: function(){
+		this.checkboxEl[this.synchronizeWithSlides?'addCls':'removeCls']('checked');
+	},
+
+
+	checkboxClicked: function(){
+		this.synchronizeWithSlides = !this.synchronizeWithSlides;
+		this.updateCheckbox();
+	},
+
+
+	//called by the event of selecting something in the slide queue.
+	updateVideoFromSelection: function(){
+		console.log('updateVideoFromSelection',arguments);
+	}
 });
