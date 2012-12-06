@@ -19,7 +19,7 @@ Ext.define('NextThought.model.converters.GroupByTime',{
 				twoMonthsAgo = Ext.Date.add(now, Ext.Date.MONTH, -2),
 				oneYearAgo = Ext.Date.add(now, Ext.Date.YEAR, -1);
 
-			v = new Date(v.getFullYear(), v.getMonth(), v.getDate())
+			v = new Date(v.getFullYear(), v.getMonth(), v.getDate());
 
 			//We take inspiration from outlook here.  Despite being a terrible piece of
 			//software it actually does this well.  Today, Yesterday, Wed, tue, ..., Last week,

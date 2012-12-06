@@ -163,7 +163,7 @@ Ext.define('NextThought.view.content.Reader', {
 			gutter: windowSizeStatics.gutter, //static based on window size
 			contentLeftPadding: locationStatics.contentLeftPadding || defaultContentPadding, //static based on page
 			scrollTop: scrollPosition //dynamic
-		};;
+		};
 	},
 
 	getAnnotationOffsets: function(){

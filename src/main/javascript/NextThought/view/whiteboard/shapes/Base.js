@@ -292,7 +292,7 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Base', {
 		var m = new NTMatrix(this.transform),
 			map = {
 				'l'		: function() { return this.nibUpdate(m, x1,y1, dx, dy, -1, 0);},
- 				't'		: function() { return this.nibUpdate(m, x1,y1, dx, dy, 0, -1) },
+				't'		: function() { return this.nibUpdate(m, x1,y1, dx, dy, 0, -1);},
 				't-l'	: function() { return this.nibUpdate(m, x1,y1, dx, dy, 1, 1); },
 				'r'		: function() { return this.nibUpdate(m, x1,y1, dx, dy, 1, 0); },
 				'b'		: function() { return this.nibUpdate(m, x1,y1, dx, dy, 0, 1); },
@@ -515,22 +515,21 @@ Ext.define(	'NextThought.view.whiteboard.shapes.Base', {
 	 *  exactly on the edge of the polygon, then the function may return true or false.
 	 */
 	pointInPolygon: function(x,y, points) {
-
 		function dotProduct(p1, p2){
 			return p1[0]*p2[0] + p1[1]*p2[1];
-		};
+		}
 
 		function subtractVector(v1, v2){
 			return [v1[0] - v2[0], v1[1] - v2[1]];
 		}
 
-		var	point = [x, y],
-		p0p3 = subtractVector(points[3], points[0]),
+		var	point = [x, y];
+		var p0p3 = subtractVector(points[3], points[0]),
 			p0p1 = subtractVector(points[1], points[0]),
 			v = subtractVector(point, points[0]);
 
 		return 0<=dotProduct(v, p0p3) && dotProduct(v, p0p3)<=dotProduct(p0p3, p0p3)
-			&&  0<=dotProduct(v, p0p1) && dotProduct(v, p0p1)<=dotProduct(p0p1, p0p1)
+			&&  0<=dotProduct(v, p0p1) && dotProduct(v, p0p1)<=dotProduct(p0p1, p0p1);
 
 
 

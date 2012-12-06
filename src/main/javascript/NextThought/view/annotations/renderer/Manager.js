@@ -352,10 +352,10 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 						return true; //continue
 					}
 
+					/*
 					if(y === NextThought.view.annotations.Base.NOT_FOUND){
 						//Code to stick things we can't resolve on teh container somewhere.  In general top looks better than bottom
 						//even though I think we would prefer jamming them at the bottom
-						/*
 						console.log('Displaying annotations with unresolvable anchor information at bottom of container');
 						//Consider caching these outside this loop
 						containerNode = Anchors.scopedContainerNode(doc, o.getContainerId(), rootContainerId);
@@ -365,8 +365,9 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 						}
 						if(y){
 							console.log('Positioned missing annotation at bottom of container', containerNode, y);
-						}*/
+						}
 					}
+				    */
 
 					b = me.getBucket(prefix,Math.ceil(y));
 					if(b){

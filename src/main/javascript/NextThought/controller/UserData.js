@@ -183,7 +183,7 @@ Ext.define('NextThought.controller.UserData', {
 						if(rootid){
 							root = pageStore.getById(rootid);
 							if(root){
-								root.set(c, Math.max((root.get(c)||0) + (1 * (/deleted/i.test(change.get('ChangeType')) ? -1 : 1)), 0));
+								root.set(c, Math.max((root.get(c)||0) + (/deleted/i.test(change.get('ChangeType')) ? -1 : 1), 0));
 							}
 						}
 					}
@@ -204,8 +204,8 @@ Ext.define('NextThought.controller.UserData', {
 					}
 				}
 			}
-			catch(error){
-				console.error(Globals.getError(error));
+			catch(e){
+				console.error(Globals.getError(e));
 			}
 		});
 
@@ -395,7 +395,7 @@ Ext.define('NextThought.controller.UserData', {
 		//FIXME seems strange we should have to clean the body here...
 		b = rec.get('body');
 		if(Ext.isArray(b)){
-			b = Ext.Array.clean(b)
+			b = Ext.Array.clean(b);
 		}
 		rec.set('body', b);
 

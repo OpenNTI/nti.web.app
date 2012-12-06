@@ -81,7 +81,7 @@ Ext.define('NextThought.view.chat.View', {
             if (e.isFlagged()){
                 allFlaggedMessages.push(e);
             }
-        })
+        });
 
         this.fireEvent('flag-messages', allFlaggedMessages, this);
     },

@@ -400,7 +400,7 @@ Ext.define('NextThought.view.account.activity.View',{
 
 	filterStore: function(change){
 		var communities = $AppConfig.userObject.get('Communities') || [],
-        	community = (this.filter === 'inCommunity'),
+			community = (this.filter === 'inCommunity'),
 			flStore = Ext.getStore('FriendsList'),
 			me = this;
 		if(community){

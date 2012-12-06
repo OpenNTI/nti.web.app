@@ -375,7 +375,7 @@ Ext.define('NextThought.view.UserDataPanel',{
 
 			label = label.replace(/^application\/vnd.nextthought\.(.*)$/,'$1s');
 
-			if(this.alwaysShowHeading || groups.length != 1){
+			if(this.alwaysShowHeading || groups.length !== 1){
 				items.push({ label: label });
 			}
 

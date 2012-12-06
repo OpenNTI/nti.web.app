@@ -102,7 +102,7 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 	onToolbarClick: function(e){
 		var action, c, me = this, n;
 		function togglePressed(){
-			var b = Ext.Array.filter(me.toolbar.query('[isEditAction]'), function(b){ return b.pressed});
+			var b = Ext.Array.filter(me.toolbar.query('[isEditAction]'), function(b){ return b.pressed; });
 			if(b.length > 0){ b[0].toggle();}
 		}
 
@@ -657,6 +657,5 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 		'forward':      p.sendSelectedFront,
 		'duplicate':    p.duplicateSelected,
 		'delete':       p.deleteSelected
-	}
-
+	};
 });

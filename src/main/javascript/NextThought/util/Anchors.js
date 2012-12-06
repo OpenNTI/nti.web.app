@@ -47,9 +47,9 @@ Ext.define('NextThought.util.Anchors', {
 	//or locations but have the same container id.  That seem unlikely but may Need to figure that out eventually
 	preresolveLocatorInfo: function(contentRangeDescriptions, docElement, cleanRoot, containers, docElementContainerId){
 		var virginContentCache = {},
-			docElementContainerId = docElementContainerId || Anchors.rootContainerIdFromDocument(docElement),
 			locatorsFound = 0;
 
+        docElementContainerId = docElementContainerId || Anchors.rootContainerIdFromDocument(docElement);
 
 		if(!contentRangeDescriptions || (containers && contentRangeDescriptions.length !== containers.length)){
 			Ext.Error.raise('toDomRanges requires contentRangeDescriptions and containers to be the same length if containers provided');
@@ -127,9 +127,11 @@ Ext.define('NextThought.util.Anchors', {
 	},
 
 	toDomRange: function(contentRangeDescription, docElement, cleanRoot, containerId, docElementContainerId) {
-		var ancestorNode, resultRange, searchWithin,
-			docElementContainerId = docElementContainerId || Anchors.rootContainerIdFromDocument(docElement);
-		try{
+		var ancestorNode, resultRange, searchWithin;
+
+        docElementContainerId = docElementContainerId || Anchors.rootContainerIdFromDocument(docElement);
+
+        try{
 			if(!contentRangeDescription){
 				console.warn('nothing to parse?');
 				return null;
@@ -153,7 +155,7 @@ Ext.define('NextThought.util.Anchors', {
 
 
 			if ( contentRangeDescription.isEmpty ){
-				return Anchors.createEmptyContentRangeDescription(docElement, containerId, docElementContainerId)
+				return Anchors.createEmptyContentRangeDescription(docElement, containerId, docElementContainerId);
 			}
 
 			if(!cleanRoot){
@@ -908,7 +910,7 @@ Ext.define('NextThought.util.Anchors', {
 			contextObj = contexts[0],
 			numContexts = contexts.length,
 			matches = getPrimaryContextMatches(contextObj, lookingAtNode, isStart),
-			i, c, numContexts;
+			i, c;
 
 		var confidenceMultiplier = 1;
 		lookingAtNode = siblingFunction.call(treeWalker);
@@ -1042,7 +1044,7 @@ Ext.define('NextThought.util.Anchors', {
 
 
         var walker = document.createTreeWalker(commonParent, NodeFilter.SHOW_ALL, null, null),
-        	temp;
+			temp;
 
 		walker.currentNode = startNode;
 		temp = walker.currentNode;

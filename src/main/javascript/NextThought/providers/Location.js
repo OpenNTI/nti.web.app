@@ -255,6 +255,8 @@ Ext.define('NextThought.providers.Location', {
 
 
 	getSortIndexes: function(ntiid){
+        function findByFunction(r){return r.get('NTIID') ===id;}
+
 		var noLeaf = {},
 			leaf = this.find(ntiid||this.currentNTIID) || noLeaf,
 			node = leaf.location,
@@ -268,7 +270,7 @@ Ext.define('NextThought.providers.Location', {
 			levelnum = node.getAttribute ? node.getAttribute('levelnum') : null;
 			if( id ) {
 				if( levelnum === "0" ){
-					j = Library.getStore().findBy(function(r){return r.get('NTIID') ===id;});
+					j = Library.getStore().findBy(findByFunction);
 					if(j < 0){ j = Infinity ;}
 				}
 				else if( node.parentNode ){

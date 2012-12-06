@@ -80,7 +80,7 @@ Ext.define('NextThought.store.PageItem',{
 
 	buildThreads: function(bins){
 		var tree = {},
-            bms = bins['Bookmark'];
+            bms = bins.Bookmark;
 
         //handle bookmarks here:
         if(bms){
@@ -88,7 +88,7 @@ Ext.define('NextThought.store.PageItem',{
                 console.error('Oops, more than 1 bookmark on this page??', bms);
             }
             NextThought.model.events.Bus.fireEvent('bookmark-loaded',bms[0]);
-            delete bins['Bookmark'];
+            delete bins.Bookmark;
         }
 
 		if(bins){

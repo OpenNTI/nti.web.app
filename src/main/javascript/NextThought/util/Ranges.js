@@ -25,7 +25,7 @@ Ext.define('NextThought.util.Ranges',{
            selectionStart: i.selectionStart,
            selectionEnd: i.selectionEnd,
            input: i
-        }
+        };
     },
 
 
@@ -144,10 +144,9 @@ Ext.define('NextThought.util.Ranges',{
             nodes = [],
             startAt = Ext.isTextNode(sc) ? sc : sc.childNodes[so],
             endAt = Ext.isTextNode(ec) ? ec : ec.childNodes[eo],
-            next,
-        	parentNodesSeen = [],
-			doc = doc || document, node;
+			node;
 
+		doc = doc || document;
 		//NOTE in every browser but IE the last two params are optional, but IE explodes if they aren't provided
 
 		walker = doc.createTreeWalker(range.commonAncestorContainer, NodeFilter.SHOW_ELEMENT|NodeFilter.SHOW_TEXT, null, false);

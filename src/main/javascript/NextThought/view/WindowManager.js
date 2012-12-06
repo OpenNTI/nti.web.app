@@ -82,7 +82,8 @@ Ext.define('NextThought.view.WindowManager',{
 	},
 
 	setNarrow: function(flag){
-		flag ? this.tracker.setStyle({ 'right': '275px'}) : this.tracker.setStyle({	'right': '0' });
+		if(flag){ this.tracker.setStyle({ 'right': '275px'}); }
+		else{ this.tracker.setStyle({	'right': '0' }); }
 	},
 
 	register: function(win){

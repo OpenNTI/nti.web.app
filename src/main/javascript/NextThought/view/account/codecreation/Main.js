@@ -65,8 +65,10 @@ Ext.define('NextThought.view.account.codecreation.Main',{
 	},
 
 	showError: function(errorText){
-		var box = this.down('[name=error]'),
-			errorText = errorText || 'An unknown error occurred. Please try again.';
+		var box = this.down('[name=error]');
+
+		errorText = errorText || 'An unknown error occurred. Please try again.';
+
         //make main error field show up
         box.el.down('.error-desc').update(errorText);
         box.show();

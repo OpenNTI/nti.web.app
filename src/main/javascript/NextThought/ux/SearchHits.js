@@ -102,11 +102,11 @@ Ext.define('NextThought.ux.SearchHits', {
                         height:b.height,
                         width:b.width
                     }];
-                }
+                };
                 sel.noOverlay = true;
             }
 
-            if(!sel.getClientRects){sel.getClientRects = function(){return [];}}
+            if(!sel.getClientRects){sel.getClientRects = function(){return [];};}
 			rects = RectUtils.merge(sel.getClientRects(), null);
 
 			Ext.each(rects, function(range){

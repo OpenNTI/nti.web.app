@@ -76,12 +76,6 @@ Ext.define('NextThought.view.whiteboard.Utils',{
 
 
 	maybeProxyImage: function(url, image){
-		var tempImage = new Image(),
-			me = this;
-		tempImage.onload = finishTest;
-		tempImage.onerror = errorPassthrough;
-		tempImage.src = url;
-
 		function errorPassthrough(){
 			console.error('Could not load: '+url);
 			passthrough();
@@ -96,6 +90,12 @@ Ext.define('NextThought.view.whiteboard.Utils',{
 			}
 			passthrough();
 		}
+
+		var tempImage = new Image(),
+			me = this;
+		tempImage.onload = finishTest;
+		tempImage.onerror = errorPassthrough;
+		tempImage.src = url;
 	},
 
 

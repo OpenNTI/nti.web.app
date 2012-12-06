@@ -9,8 +9,6 @@ Ext.define('NextThought.view.content.FootnoteWidget',{
     maxHeight: 200,
 
     layout: 'fit',
-    cls: 'footnote-widget',
-
 
     initComponent: function(){
         this.callParent(arguments);
