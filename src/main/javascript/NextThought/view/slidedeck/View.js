@@ -56,7 +56,7 @@ Ext.define('NextThought.view.slidedeck.View',{
 		this.callParent(arguments);
 		var me = this;
 
-		function enterFilter(e) { console.log(e.getKey(), e.ENTER); return (e.getKey() === e.ENTER); }
+		function enterFilter(e) { return (e.getKey() === e.ENTER); }
 		function close(){me.destroy();}
 
 		this.mon(this.exitEl,{

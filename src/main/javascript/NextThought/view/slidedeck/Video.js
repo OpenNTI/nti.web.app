@@ -53,7 +53,7 @@ Ext.define('NextThought.view.slidedeck.Video',{
 	afterRender: function(){
 		this.callParent(arguments);
 
-		function enterFilter(e) {console.log(e.getKey()); return (e.getKey() === e.ENTER); }
+		function enterFilter(e) { return (e.getKey() === e.ENTER); }
 
 		this.mon(this.checkboxEl,{
 			scope:this,
