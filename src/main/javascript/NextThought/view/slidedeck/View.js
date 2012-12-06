@@ -61,7 +61,7 @@ Ext.define('NextThought.view.slidedeck.View',{
 
 		this.mon(this.exitEl,{
 			click: close,
-			keydown: Ext.Function.createInterceptor(enterFilter,close,null,null)
+			keydown: Ext.Function.createInterceptor(close,enterFilter,null,null)
 		});
 	}
 });

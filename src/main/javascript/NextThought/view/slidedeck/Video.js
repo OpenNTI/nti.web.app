@@ -58,7 +58,7 @@ Ext.define('NextThought.view.slidedeck.Video',{
 		this.mon(this.checkboxEl,{
 			scope:this,
 			click:this.checkboxClicked,
-			keydown: Ext.Function.createInterceptor(enterFilter,this.checkboxClicked,this,null)
+			keydown: Ext.Function.createInterceptor(this.checkboxClicked,enterFilter,this,null)
 		});
 		this.updateCheckbox();
 	},
