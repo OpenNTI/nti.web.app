@@ -8,14 +8,14 @@ Ext.define('NextThought.view.account.codecreation.Main',{
 
 	items: [
 		{xtype: 'container', layout: 'anchor', cls: 'input-wrapper', items:[
-			{xtype: 'box', name: 'namelabel', cls: 'label name-label',  html: 'Group Name'},
+			{xtype: 'box', name: 'namelabel', cls: 'label',  html: 'Group Name'},
             {xtype: 'simpletext', name: 'groupname', cls: 'input-box group-name', inputType: 'text', placeholder:'Choose a name for your group...',
 			 allowBlank: false}
         ]},
 		{xtype: 'container', layout: 'anchor', cls: 'input-wrapper', items:[
 			{xtype: 'box', name: 'codelabel', cls: 'label', hidden: true, html: 'Group Code'},
-            {xtype: 'box', name: 'code', cls: 'group-code', hidden: true},
-			//{xtype: 'simpletext', name: 'code', cls: 'input-box group-code', inputType: 'text', disabled: true, disabledCls: 'read-only', hidden: true}
+            //{xtype: 'box', name: 'code', cls: 'group-code', hidden: true},
+			{xtype: 'simpletext', name: 'code', cls: 'input-box group-code', inputType: 'text', readOnly: true, hidden: true}
         ]},
         {xtype: 'container', cls: 'submit',  layout:{type: 'hbox', pack: 'end'}, items: [
             {xtype: 'button', ui: 'secondary', scale: 'large', name: 'cancel', text:'Cancel', handler: function(b){
