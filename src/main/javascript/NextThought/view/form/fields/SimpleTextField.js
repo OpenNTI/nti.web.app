@@ -70,7 +70,7 @@ Ext.define('NextThought.view.form.fields.SimpleTextField',{
 		var e = this.inputEl;
 		e.addCls('empty');
 
-		if(this.readOnly){ e.set('readonly','readonly'); }
+		if(this.readOnly){ e.set({readonly:'readonly'}); }
 
 		this.mon(e, {
 			scope: this,
