@@ -68,9 +68,11 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 		cmp.mon(editorEl, {
 			scope      : me,
 			mousedown  : me.editorMouseDown,
-//			selectstart: me.editorSelectionStart,
 			click      : function (e) {
-				if(!e.getTarget('.content')){ editorEl.down('.content > *').focus(); }
+				if(!e.getTarget('.content') && !e.getTarget('.action') && !e.getTarget('.content')){
+					editorEl.down('.content').focus();
+					this.collapseToEnd();
+				}
 			}
 		});
 
@@ -78,8 +80,6 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 
 		cmp.mon(editorEl.down('.content'), {
 			scope      : me,
-//			selectstart: me.editorSelectionStart,
-			focus      : me.editorFocus,
 			keyup      : me.handleOnKeyup,
 			paste      : me.handlePaste,
 			click      : me.handleClick,
@@ -226,12 +226,6 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 	},
 
 
-	editorSelectionStart: function (e) {
-		e.stopPropagation();//re-enable selection, and prevent the handlers higher up from firing.
-		return true;//re-enable selection
-	},
-
-
 	openShareMenu: function (e) {
 		e.stopEvent();
 		this.shareMenu.showBy(this.editor.down('.action.share'), 't-b?');
@@ -282,8 +276,7 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 	setTypingAttributes: function(attrs, alreadyFocused){
 		this.typingAttributes = attrs.slice();
 		if(!alreadyFocused){
-			//NOTE: For some reasons calling firing the focus event from the contentEditable div doesn't work.
-			// So we will go ahead and call the focus fn directly.
+			this.editor.down('.content').focus();
 			this.editorFocus();
 		}
 		this.syncTypingAttributeButtons();
@@ -491,32 +484,29 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 		return r;
 	},
 
+	collapseToEnd: function(){
+		var s, me = this, content, c = me.editor.down('.content').dom, r;
+		if (c.innerHTML) {
+			try {
+				s = window.getSelection();
+				r = document.createRange();
+				r.selectNodeContents(c.lastChild);
+				s.removeAllRanges();
+				r.collapse(false);
+				me.lastRange = r;
+				s.addRange(me.lastRange);
 
-	focus: function (collapse) {
-		var me = this;
-
-		function collapseToEnd() {
-			var s, content, c = me.editor.down('.content').dom, r;
-			if (c.innerHTML) {
-				try {
-					s = window.getSelection();
-					r = document.createRange();
-					r.selectNodeContents(c.firstChild);
-					s.removeAllRanges();
-					r.collapse(false);
-					me.lastRange = r;
-					s.addRange(me.lastRange);
-
-				}
-				catch (e) {
-					console.warn('focus issue: ' + e.message, '\n\n\n', content);
-				}
+			}
+			catch (e) {
+				console.warn('focus issue: ' + e.message, '\n\n\n', content);
 			}
 		}
+	},
 
-		this.editor.down('.content').focus();
+	focus: function (collapse) {
+		this.editor.down('[contenteditable=true]').focus();
 		if (collapse) {
-			collapseToEnd();
+			this.collapseToEnd();
 		}
 	},
 
@@ -593,11 +583,22 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 
 
 	reset: function () {
+		var buttonsName = ['bold', 'italic', 'underline'], me = this, selection;
 		this.editor.down('.content').innerHTML = '<div>'+this.defaultValue+'</div>';
 		this.cleanOpenWindows();
 		try {
-			window.getSelection().removeAllRanges();
+			// Deselect btns.
+			Ext.each(buttonsName, function(bn){
+				var b = me.editor.down('.'+bn);
+				if(b){ b.removeCls('selected'); }
+			});
+			delete this.typingAttributes;
 			this.lastRange = null;
+
+			if(window.getSelection){
+				selection = window.getSelection();
+				selection.removeAllRanges();
+			}
 		}
 		catch (e) {
 			console.log('Removing all ranges from selection failed: ', e.message);
