@@ -21,7 +21,6 @@
 
 		img.tool {
 			position: absolute;
-			top: 9px; right: 10px;
 			opacity: 0.5;
 			cursor: pointer;
 			background: $icons no-repeat;
@@ -30,10 +29,16 @@
 			&:hover{ opacity: 1; }
 
 			&.maximize {
+				top: 9px;
+				right: 10px;
 				@include sprite($icons,'window-control-restore',$dimensions: true);
 			}
-		}
 
+			&.minimize {
+				top: 9px;
+				right: 30px;
+			}
+		}
 	}
 
 	.x-panel-body-sidebar{
