@@ -190,7 +190,6 @@ Ext.define('NextThought.controller.Chat', {
 	 *
 	 * @param users - list of users
 	 * @param roomId - roomid
-	 * @param options - options
 	 * @return {*}
 	 */
 	existingRoom: function(users, roomId, options) {

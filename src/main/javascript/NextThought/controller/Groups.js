@@ -48,7 +48,7 @@ Ext.define('NextThought.controller.Groups', {
 
 			'codecreation-main-view button[name=submit]': {
 				'click': this.createGroupAndCode
-			},
+			}
 
 		},{});
 
@@ -371,6 +371,54 @@ Ext.define('NextThought.controller.Groups', {
 
 
 	createGroupAndCode: function(btn){
+        function handleError(errorText){
+            console.error('An error occured', errorText);
+            w.showError(errorText);
+            btn.setDisabled(false);
+        }
+
+        function onError(record, operation){
+            Ext.callback(handleError, this, ['An error occurred creating '+displayName+' : '+ operation.response.status]);
+        }
+
+        function onCreated(success, record){
+            console.log(record);
+            var link = record.getLink('default-trivial-invitation-code');
+
+            if(!link){
+                Ext.callback(handleError, this, ['Group code cannot be created for '+displayName]);
+                return;
+            }
+
+            Ext.Ajax.request({
+                url: link,
+                scope: this,
+                method: 'GET',
+                headers: {
+                    Accept: 'application/json'
+                },
+                callback: function(q, success, r){
+                    console.log(r.responseText);
+                    var result, errorText = 'An error occurred generating \'Group Code\' for '+displayName;
+                    if(success){
+                        result = Ext.decode(r.responseText, true);
+                        result = result ? result.invitation_code : null;
+                    }
+                    if(!result) {
+                        Ext.callback(handleError, this, [errorText+' : '+r.status]);
+                    }
+                    else{
+                        Ext.callback(onCodeFetched, this, [result]);
+                    }
+                }
+            });
+        }
+
+        function onCodeFetched(code){
+            btn.setDisabled(false);
+            w.showCreatedGroupCode(code);
+        }
+
 		var w = btn.up('window'),
 			username, displayName;
 
@@ -386,56 +434,7 @@ Ext.define('NextThought.controller.Groups', {
 			username = this.generateUsername(displayName);
 			console.log('Create group with name '+ displayName);
 			btn.setDisabled(true);
-
-			function handleError(errorText){
-				console.error('An error occured', errorText);
-				w.showError(errorText);
-				btn.setDisabled(false);
-			}
-
-			function onError(record, operation){
-				Ext.callback(handleError, this, ['An error occurred creating '+displayName+' : '+ operation.response.status]);
-			}
-
-			function onCreated(success, record){
-				console.log(record);
-				var link = record.getLink('default-trivial-invitation-code');
-
-				if(!link){
-					Ext.callback(handleError, this, ['Group code cannot be created for '+displayName]);
-					return;
-				}
-
-				Ext.Ajax.request({
-					url: link,
-					scope: this,
-					method: 'GET',
-					headers: {
-						Accept: 'application/json'
-					},
-					callback: function(q, success, r){
-						console.log(r.responseText);
-						var result, errorText = 'An error occurred generating \'Group Code\' for '+displayName;
-						if(success){
-							result = Ext.decode(r.responseText, true);
-							result = result ? result.invitation_code : null;
-						}
-						if(!result) {
-							Ext.callback(handleError, this, [errorText+' : '+r.status]);
-						}
-						else{
-							Ext.callback(onCodeFetched, this, [result]);
-						}
-					}
-				});
-			}
-
-			function onCodeFetched(code){
-				btn.setDisabled(false);
-				w.showCreatedGroupCode(code);
-			}
-
 			this.createDFLUnguarded(displayName, username, null, onCreated, onError, this);
 		}
-	},
+	}
 });
