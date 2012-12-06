@@ -297,7 +297,8 @@ Ext.define('NextThought.view.account.activity.View',{
 
 
 	itemClick: function(e){
-		var activityTarget = e.getTarget('div.activity', null, true);
+		var activityTarget = e.getTarget('div.activity', null, true),
+			guid, item, rec;
 
 		guid = (activityTarget||{}).id;
 		item = this.stream[guid];
