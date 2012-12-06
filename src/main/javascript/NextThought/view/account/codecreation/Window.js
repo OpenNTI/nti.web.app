@@ -27,14 +27,24 @@ Ext.define('NextThought.view.account.codecreation.Window',{
 
 
     items: [
-        {
-            xtype: 'account-header-view',
-            noIcon: true,
-            title: 'Create a New Group...',
-            detail: 'Once your group has been created, you\'ll receive a \'Group Code\' that you can share with others who want to join your group'
-        },
+		{xtype: 'container', layout: {type: 'absolute'}, items: [
+			{
+				anchor: '100% 100%',
+				xtype: 'account-header-view',
+				noIcon: true,
+				title: 'Create a New Group...',
+				detail: 'Once your group has been created, you\'ll receive a \'Group Code\' that you can share with others who want to join your group'
+			},
+			{xtype: 'box', cls: 'close', width: 10, height: 10}
+		]},
+
 		{xtype: 'codecreation-main-view'}
     ],
+
+	afterRender: function(){
+		this.callParent(arguments);
+		this.mon( this.el.down('.close'), 'click', this.close, this);
+	},
 
 	showCreatedGroupCode: function(code){
 		var headerView = this.query('account-header-view')[0];

@@ -240,6 +240,21 @@
 }
 
 .codecreation-window{
+
+	.close {
+		opacity: 0.5;
+		cursor: pointer;
+		position: absolute;
+		top: 10px;
+		right: 10px;
+		background: $icons no-repeat;
+		@include sprite($icons,'window-control-close',$dimensions: true);
+
+		&:hover{
+			opacity: 1;
+		}
+	}
+
 	.codecreation-main-view{
 		.group-name {
 			input {
