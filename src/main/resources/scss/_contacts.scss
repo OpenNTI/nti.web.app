@@ -410,7 +410,7 @@ div.group-buttons {
 			position: absolute;
 			top: 0; left: 0;
 			background: transparent $icons no-repeat;
-			@include sprite($icons,'add-contact-14x14_disabled',$dimensions: true);
+			@include sprite($icons,'add-contact-14x14',$dimensions: true);
 		}
 		&:hover::after{
 			@include sprite($icons,'add-contact-14x14_hover',$dimensions: true);
@@ -423,7 +423,7 @@ div.group-buttons {
 			position: absolute;
 			top: 1px; left: 0;
 			background: transparent $icons no-repeat;
-			@include sprite($icons,'create-group-14x10_disabled',$dimensions: true);
+			@include sprite($icons,'create-group-14x10',$dimensions: true);
 		}
 		&:hover::after{
 			@include sprite($icons,'create-group-14x10_hover',$dimensions: true);
