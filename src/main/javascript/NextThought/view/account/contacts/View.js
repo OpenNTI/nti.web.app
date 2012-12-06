@@ -52,12 +52,30 @@ Ext.define('NextThought.view.account.contacts.View',{
 				},
 
 				{
-					cls: "populate-contacts",
-					xtype: 'box',
-					autoEl: { cn: [
-						{cls: 'title', html: 'Welcome to NextThought!'},
-						{html:'Search for friends to add to your contact list.'}
-					] }
+					xtype: 'container',
+					autoScroll: false,
+					overflowX: 'hidden',
+					overflowY: 'hidden',
+					layout: {type: 'vbox', align: 'stretch', reserveScrollbar: false},
+					items: [{
+						xtype: 'box',
+						flex: 1,
+						cls: "populate-contacts",
+						autoEl: {
+							cn: [{
+									cls: 'title',
+									html: 'Welcome to NextThought!'
+							},{
+								html:'Search for friends to add to your contact list.'
+							},{
+								html:'Create a group or join a group.',
+								cls: 'group-button-label'
+							}]
+						}
+					},{
+						xtype: 'group-buttons',
+						height: '50px'
+					}]
 				},
 
 				{

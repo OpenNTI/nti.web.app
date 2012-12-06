@@ -134,7 +134,9 @@ Ext.define('NextThought.controller.Groups', {
 		groups.removeAll(true);
 		people.removeAll(true);
 
-		if(store.getContacts().length === 0){
+		//If there are no contacts or no friendslists other than omnipresent mycontacts group
+		//hence < 2. Show the coppa or empty view
+		if(store.getContacts().length === 0 && store.getCount() < 2){
 			ct.getLayout().setActiveItem( $AppConfig.service.canFriend() ? 1:2 );
 			return;
 		}

@@ -39,6 +39,15 @@
 	&::after {
 		content: ' '; overflow: hidden;
 		position: absolute;
+		bottom: 5px; left: 0;
+		background: $elements no-repeat;
+		@include sprite($elements,'bubble_create_join_group',$dimensions: true);
+		z-index: 0;
+	}
+
+	&::before {
+		content: ' '; overflow: hidden;
+		position: absolute;
 		top: 0; left: 0;
 		background: $elements no-repeat;
 		@include sprite($elements,'populate_contacts_bubble',$dimensions: true);
@@ -54,6 +63,11 @@
 		font-style: italic;
 		color: #7dbe35;
 		margin: 0 0 5px 0;
+	}
+	.group-button-label{
+		position: absolute;
+		bottom: 36px;
+		left: 20px;
 	}
 }
 
