@@ -46,6 +46,7 @@ Ext.define('NextThought.view.account.codecreation.Main',{
 		var code = this.query('[name=code]')[0];
 		code.update(c || null);
 		code.setVisible(!!c);
+		code.el.selectable();
 		this.query('[name=codelabel]')[0].setVisible(!!c);
 		this.query('[name=groupname]')[0].disable(true);
 		this.query('[name=submit]')[0].setText('OK');

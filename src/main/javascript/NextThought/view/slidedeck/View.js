@@ -24,7 +24,10 @@ Ext.define('NextThought.view.slidedeck.View',{
 	},
 
 	items: [{
+		xtype: 'container',
 		width: 400,
+		plain: true,
+		ui: 'slidedeck-controls',
 		layout: {
 			type: 'vbox',
 			align: 'stretch'

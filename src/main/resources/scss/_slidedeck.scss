@@ -1,5 +1,59 @@
+$video-background: #242424;
+$slidedeck-controls-background: #161616;
+$slidedeck-exit-button-gradient-top: #464646;
+$slidedeck-exit-button-gradient-bottom: #3a3a3a;
+
+$experimental-support-for-svg: true;
 
 .x-container-slidedeck{
+
+
+	.x-container-slidedeck-controls{
+
+		box-shadow: 0 0 10px 0 black;
+		background: $slidedeck-controls-background;
+
+		&::after {
+			content: ' ';
+			position: absolute;
+			width: 1px;
+			height: 100%;
+			top: 0; right: 0;
+			background: rgba(255, 255, 255, 0.04);
+			z-index: 9999999;
+		}
+
+		.video-wrapper {
+			background: $video-background;
+			position: relative;
+			overflow: hidden;
+			margin: 0 0 2px 0;
+
+			iframe {
+				margin: 6px 4px 5px 4px;
+				background: rgba(255, 255, 255, 0.04);
+				width: 392px;
+				height: 221px;
+			}
+		}
+
+		.video-checkbox {
+			cursor: pointer;
+			background: $video-background;
+			line-height: 18px;
+			padding: 16px 0 16px 45px;
+			color: $secondary-grey;
+			font: {
+				family: $font;
+				size: 14px;
+				weight: normal;
+			}
+
+			&:hover {
+				color: $tertiary-grey;
+			}
+		}
+	}
 
 	&.overlay{
 		background: rgba(0,0,0,0.85);
@@ -21,15 +75,18 @@
 			font-weight: 500;
 
 			color: $tertiary-grey;
-			$experimental-support-for-svg: true;
-			@include background-image(linear-gradient(top,  rgba(70,70,70,1) 0%,rgba(58,58,58,1) 100%));
+			@include background-image(linear-gradient(top,
+						$slidedeck-exit-button-gradient-top 0%,
+						$slidedeck-exit-button-gradient-bottom 100%));
 
 
 			box-shadow: inset 0 1px 0px 0px rgba(255,255,255,0.13),
 							0 2px 0px 0px rgba(255,255,255,0.12);
 
 			&:active, &:target {
-				@include background-image(linear-gradient(top, rgba(58,58,58,1) 0%, rgba(70,70,70,1) 100%));
+				@include background-image(linear-gradient(top,
+						$slidedeck-exit-button-gradient-bottom 0%,
+						$slidedeck-exit-button-gradient-top 100%));
 			}
 		}
 	}

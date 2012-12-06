@@ -6,7 +6,20 @@ Ext.Loader.loadScript({
 
 Ext.define('NextThought.view.slidedeck.Video',{
 	extend: 'Ext.Component',
-	alias: 'widget.slidedeck-video'
+	alias: 'widget.slidedeck-video',
+
+	plain: true,
+	ui: 'slidedeck-video',
+
+	renderTpl: Ext.DomHelper.markup([{
+		cls: 'video-wrapper', cn: [{
+			tag: 'iframe', cls:'video', name: 'slide-video',
+			frameBorder: 0, scrolling: 'no', seamless: true
+		}]
+	},{
+		cls: 'video-checkbox checked',
+		html: 'Synchronize video with slides'
+	}])
 
 	// YouTube: https://developers.google.com/youtube/iframe_api_reference
 	// Embed Code: http://www.youtube.com/embed/VIDEO_ID?enablejsapi=1&playerapiid=player_id&origin=http://example.com
