@@ -51,6 +51,10 @@ Ext.define('NextThought.view.account.codecreation.Window',{
 		headerView.updateHeaderText('Your Group Has Been Created...', 'Share the Group Code below to invite users to your group');
 		this.query('codecreation-main-view')[0].setGroupCode(code);
 		this.doLayout();
+	},
+
+	getGroupName: function(){
+		return this.query('codecreation-main-view')[0].getGroupName();
 	}
 });
 

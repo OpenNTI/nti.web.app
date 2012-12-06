@@ -82,10 +82,6 @@ Ext.define('NextThought.controller.Account', {
                 'click': this.groupCodeSubmit
             },
 
-			'codecreation-main-view button[name=submit]': {
-				'click': this.createGroupAndCode
-			},
-
             'contacts-view': {
                 'resendConsent': this.resendConsent
             },
@@ -151,18 +147,6 @@ Ext.define('NextThought.controller.Account', {
 		u.set(form.getValues());
         u.save({callback: callback});
     },
-
-
-	createGroupAndCode: function(btn){
-		if(btn.text === 'OK'){
-			btn.up('window').close();
-		}
-		else{
-			var mainView = btn.up('window');
-			console.log(mainView);
-			mainView.showCreatedGroupCode('foobar');
-		}
-	},
 
     groupCodeSubmit: function(btn){
         var view = btn.up('code-main-view'),

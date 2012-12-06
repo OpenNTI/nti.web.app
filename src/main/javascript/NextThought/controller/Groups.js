@@ -15,7 +15,8 @@ Ext.define('NextThought.controller.Groups', {
 	views: [
 		'account.contacts.management.GroupList',
 		'account.contacts.management.Person',
-		'account.contacts.management.AddGroup'
+		'account.contacts.management.AddGroup',
+		'account.codecreation.Main'
 	],
 
 	MY_CONTACTS_PREFIX_PATTERN: 'mycontacts-{0}',
@@ -43,7 +44,11 @@ Ext.define('NextThought.controller.Groups', {
 
 			'add-group' : {
 				'add-group': this.addGroup
-			}
+			},
+
+			'codecreation-main-view button[name=submit]': {
+				'click': this.createGroupAndCode
+			},
 
 		},{});
 
@@ -172,10 +177,10 @@ Ext.define('NextThought.controller.Groups', {
 			Ext.each(addedCmps, function(cmp){
 				if(cmp.setUsers && cmp.associatedGroup){
 					var list = cmp.associatedGroup.get('friends'),
-					online=[]; 
+					online=[];
 					Ext.each(list,function(n){
 						var o = friends.Online[n] || friends.Offline[n];
-						if(o){online.push(o);} 
+						if(o){online.push(o);}
 					});
 
 					cmp.setUsers(online);
@@ -226,34 +231,53 @@ Ext.define('NextThought.controller.Groups', {
 		});
 	},
 
-
-	addGroup: function(newGroupName, friends, callback, scope){
+	generateUsername: function(newGroupName){
 		var username = newGroupName
 				.replace(/[^0-9A-Z\-@\+\._]/ig, '')
 				+'-'+ $AppConfig.username+'_'+guidGenerator();
+
+		return username;
+	},
+
+
+	addGroup: function(newGroupName, friends, callback, scope){
+		var username = this.generateUsername(newGroupName);
 
 		this.createGroupUnguarded(newGroupName,username,friends||[],callback,scope||this);
 	},
 
 
-
-	createGroupUnguarded: function(displayName, username, friends, callback, scope){
+	createFriendsListUnguarded: function(displayName, username, friends, dynamic, callback, errorCallback, scope){
 		var rec = this.getFriendsListModel().create(),
 			store = this.getFriendsListStore();
 
 		rec.set('Username',username);
 		rec.set('realname', displayName);
 		rec.set('friends', friends||[]);
+		rec.set('IsDynamicSharing', !!dynamic);
 		rec.save({
 			scope: this,
-			success: function(){
-				Ext.callback(callback,scope, [true]);
+			success: function(record, operation){
+				Ext.callback(callback,scope, [true, record, operation]);
 				store.load();
 			},
-			failed: function(){
-				Ext.callback(callback,scope, [false]);
+			failed: function(record, operation){
+				if(errorCallback){
+					Ext.callback(errorCallback, scope, [operation]);
+				}
+				else{
+					Ext.callback(callback,scope, [false]);
+				}
 			}
 		});
+	},
+
+	createGroupUnguarded: function(displayName, username, friends, callback, scope){
+		this.createFriendsListUnguarded(displayName, username, friends, false, callback, null, scope);
+	},
+
+	createDFLUnguarded: function(displayName, username, friends, callback, error, scope){
+		this.createFriendsListUnguarded(displayName, username, friends, true, callback, error, scope);
 	},
 
 
@@ -343,5 +367,74 @@ Ext.define('NextThought.controller.Groups', {
 		else {
 			store.each(remove);
 		}
-	}
+	},
+
+
+	createGroupAndCode: function(btn){
+		var window = btn.up('window'),
+			username, displayName;
+
+		if(!$AppConfig.service.canCreateDynamicGroups()){
+			Ext.Error.raise('Permission denied.  AppUser is not allowed to create dfls');
+		}
+
+		if(btn.text === 'OK'){
+			window.close();
+		}
+		else{
+			displayName = window.getGroupName();
+			username = this.generateUsername(displayName);
+			console.log('Create group with name '+ displayName);
+			btn.setDisabled(true);
+
+			function handleError(errorText){
+				console.error('An error occured', errorText);
+				btn.setDisabled(false);
+			}
+
+			function onError(record, operation){
+				Ext.callback(handleError, this, ['An error occurred creating '+displayName+' : '+ operation.response.status]);
+			}
+
+			function onCreated(success, record){
+				console.log(record);
+				var link = record.getLink('default-trivial-invitation-code');
+
+				if(!link){
+					Ext.callback(handleError, this, ['Group code cannot be created for '+displayName]);
+					return;
+				}
+
+				Ext.Ajax.request({
+					url: link,
+					scope: this,
+					method: 'GET',
+					headers: {
+						Accept: 'application/json'
+					},
+					callback: function(q, success, r){
+						console.log(r.responseText);
+						var result, errorText = 'An error occurred generating \'Group Code\' for '+displayName;
+						if(success){
+							result = Ext.decode(r.responseText, true);
+							result = result ? result.invitation_code : null;
+						}
+						if(!result) {
+							Ext.callback(handleError, this, [errorText+' : '+r.status]);
+						}
+						else{
+							Ext.callback(onCodeFetched, this, [result]);
+						}
+					}
+				});
+			}
+
+			function onCodeFetched(code){
+				btn.setDisabled(false);
+				window.showCreatedGroupCode(code);
+			}
+
+			this.createDFLUnguarded(displayName, username, null, onCreated, onError, this);
+		}
+	},
 });

@@ -51,6 +51,11 @@ Ext.define('NextThought.view.account.codecreation.Main',{
 		this.query('[name=groupname]')[0].disable(true);
 		this.query('[name=submit]')[0].setText('OK');
 		this.query('[name=cancel]')[0].setVisible(false);
+	},
+
+	getGroupName: function(){
+		var name = this.down('[name=groupname]').getValue();
+		return name ? name.trim() : name;
 	}
 
 });
