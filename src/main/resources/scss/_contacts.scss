@@ -398,8 +398,10 @@ div.group-buttons {
 		margin-top: 16px;
 		font-weight: 600;
 		font-size: 10px;
-		color: $secondary-grey;
-
+		color: $tertiary-grey;
+		&:hover{
+			color: $secondary-grey;
+		}
 	}
 
 	div.join-group {
@@ -408,7 +410,23 @@ div.group-buttons {
 			position: absolute;
 			top: 0; left: 0;
 			background: transparent $icons no-repeat;
-			@include sprite($icons,'add_people',$dimensions: true);
+			@include sprite($icons,'add-contact-14x14_disabled',$dimensions: true);
+		}
+		&:hover::after{
+			@include sprite($icons,'add-contact-14x14_hover',$dimensions: true);
+		}
+	}
+
+	div.create-group {
+		&::after {
+			content: ' ';
+			position: absolute;
+			top: 1px; left: 0;
+			background: transparent $icons no-repeat;
+			@include sprite($icons,'create-group-14x10_disabled',$dimensions: true);
+		}
+		&:hover::after{
+			@include sprite($icons,'create-group-14x10_hover',$dimensions: true);
 		}
 	}
 }
