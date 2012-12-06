@@ -17,6 +17,11 @@ Ext.define('NextThought.view.account.codecreation.Main',{
             //{xtype: 'box', name: 'code', cls: 'group-code', hidden: true},
 			{xtype: 'simpletext', name: 'code', cls: 'input-box group-code', inputType: 'text', readOnly: true, hidden: true}
         ]},
+		{xtype: 'box', hidden: true, name:'error', autoEl: {cls: 'error-box', tag:'div',
+            cn:[
+                {cls: 'error-desc'}
+            ]}
+        },
         {xtype: 'container', cls: 'submit',  layout:{type: 'hbox', pack: 'end'}, items: [
             {xtype: 'button', ui: 'secondary', scale: 'large', name: 'cancel', text:'Cancel', handler: function(b){
                 b.up('window').close();
@@ -28,6 +33,7 @@ Ext.define('NextThought.view.account.codecreation.Main',{
 	afterRender: function(){
 		this.callParent(arguments);
 		this.mon(this.down('[name=groupname]'), 'changed', this.changed, this);
+		this.mon(this.down('[name=submit]'), 'click', this.clearError, this);
 	},
 
 	changed: function(val, t){
@@ -56,6 +62,20 @@ Ext.define('NextThought.view.account.codecreation.Main',{
 	getGroupName: function(){
 		var name = this.down('[name=groupname]').getValue();
 		return name ? name.trim() : name;
+	},
+
+	showError: function(errorText){
+		var box = this.down('[name=error]'),
+			errorText = errorText || 'An unknown error occurred. Please try again.';
+        //make main error field show up
+        box.el.down('.error-desc').update(errorText);
+        box.show();
+	},
+
+
+	clearError: function(){
+		var box = this.down('[name=error]');
+		box.hide();
 	}
 
 });

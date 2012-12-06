@@ -55,6 +55,10 @@ Ext.define('NextThought.view.account.codecreation.Window',{
 
 	getGroupName: function(){
 		return this.query('codecreation-main-view')[0].getGroupName();
+	},
+
+	showError: function(errorText){
+		return this.query('codecreation-main-view')[0].showError(errorText);
 	}
 });
 

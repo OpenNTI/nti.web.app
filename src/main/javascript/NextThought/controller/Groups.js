@@ -371,7 +371,7 @@ Ext.define('NextThought.controller.Groups', {
 
 
 	createGroupAndCode: function(btn){
-		var window = btn.up('window'),
+		var w = btn.up('window'),
 			username, displayName;
 
 		if(!$AppConfig.service.canCreateDynamicGroups()){
@@ -379,16 +379,17 @@ Ext.define('NextThought.controller.Groups', {
 		}
 
 		if(btn.text === 'OK'){
-			window.close();
+			w.close();
 		}
 		else{
-			displayName = window.getGroupName();
+			displayName = w.getGroupName();
 			username = this.generateUsername(displayName);
 			console.log('Create group with name '+ displayName);
 			btn.setDisabled(true);
 
 			function handleError(errorText){
 				console.error('An error occured', errorText);
+				w.showError(errorText);
 				btn.setDisabled(false);
 			}
 
@@ -431,7 +432,7 @@ Ext.define('NextThought.controller.Groups', {
 
 			function onCodeFetched(code){
 				btn.setDisabled(false);
-				window.showCreatedGroupCode(code);
+				w.showCreatedGroupCode(code);
 			}
 
 			this.createDFLUnguarded(displayName, username, null, onCreated, onError, this);
