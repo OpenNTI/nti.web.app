@@ -69,6 +69,9 @@ Ext.define('NextThought.view.form.fields.SimpleTextField',{
 		this.callParent(arguments);
 		var e = this.inputEl;
 		e.addCls('empty');
+
+		if(this.readOnly){ e.set('readonly','readonly'); }
+
 		this.mon(e, {
 			scope: this,
 			keyup: this.keyPressed,
