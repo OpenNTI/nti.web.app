@@ -123,8 +123,9 @@
 	z-index: 999999;
 	text-align: center;
 	line-height: 32px;
-	padding-top: 2px;
+	padding: 2px 210px 0 210px;
 	box-shadow: 0 1px 5px 0px rgba(0,0,0,.5);
+
 	a{
 		margin-left: 0.5em;
 		font-weight: 500;
@@ -132,7 +133,7 @@
 		height: 15px;
 		overflow: hidden;
 		position: relative;
-		top: 0px;
+		top: 3px;
 		line-height: normal;
 		color: $primary-grey;
 		text-decoration: none;
@@ -142,10 +143,13 @@
 	.remember{
 		display: inline-block;
 		position: absolute;
-		right: 50px;
+		//position: relative;
+		//float: right;
+		right: 0px;
 		top: 0px;
 		text-align: left;
 		padding-left: 25px;
+		width: 200px;
 		&::after{
 			content: ' ';
 			position: absolute;
