@@ -47,6 +47,12 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
             console.log('username blocked', record);
             return;
         }
+
+		//See comment about adding to dfls in fn: refresh
+		if(record.get('IsDynamicSharing')){
+			return;
+		}
+
         this.callParent(arguments);
     },
 
@@ -73,7 +79,11 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
 			if(Ext.Array.contains(blocked||[], r.get('Username'))){
 				Ext.fly(li).setStyle({display: 'none'});
 			}
-			if (!r.isModifiable()){
+			//We don't allow dfls in this list.  Right now
+			//You can only be added to a dfl by inputting a code and joining
+			//yourself. period!  Obviously we also don't let you modify things you
+			//can't modify
+			if (!r.isModifiable() || r.get('IsDynamicSharing')){
 				//Ext.fly(li).down('img.delete-group').remove();
 				Ext.fly(li).setStyle({display:'none'});
 			}
