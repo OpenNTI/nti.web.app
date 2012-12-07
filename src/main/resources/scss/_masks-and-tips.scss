@@ -110,3 +110,62 @@
 .dark .x-mask {
 	background: rgba(0,0,0,0.9) !important;
 }
+
+.message-bar{
+	color: $secondary-grey;
+	background-color: #fffbe3;
+	border: 3px solid #f5e28a;
+	border-width: 0 0 0 3px;
+	position: fixed;
+	left: 0;
+	right: 0;
+	top: 0;
+	z-index: 999999;
+	text-align: center;
+	line-height: 32px;
+	padding-top: 2px;
+	box-shadow: 0 1px 5px 0px rgba(0,0,0,.5);
+	a{
+		margin-left: 0.5em;
+		font-weight: 500;
+		display: inline-block;
+		height: 15px;
+		overflow: hidden;
+		position: relative;
+		top: 0px;
+		line-height: normal;
+		color: $primary-grey;
+		text-decoration: none;
+		border-bottom: 1px dotted $primary-grey;
+	}
+
+	.remember{
+		display: inline-block;
+		position: absolute;
+		right: 50px;
+		top: 0px;
+		text-align: left;
+		padding-left: 25px;
+		&::after{
+			content: ' ';
+			position: absolute;
+			top: 6px; left: 0;
+			background: $icons no-repeat;
+			@include sprite($icons, 'checkbox-light-unchecked', $dimensions: true);
+		}
+
+		&:hover::after{
+			@include sprite($icons, 'checkbox-light-unchecked_hover', $dimensions: true);
+		}
+
+		&.checked{
+			&::after{
+				@include sprite($icons, 'checkbox-light-checked', $dimensions: true);
+			}
+			&:hover::after{
+				@include sprite($icons, 'checkbox-light-checked_hover', $dimensions: true);
+			}
+		}
+	}
+
+}

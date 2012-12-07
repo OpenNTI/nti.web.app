@@ -10,7 +10,8 @@ Ext.define('NextThought.view.Main', {
 		'NextThought.view.MessageBox',
 		'NextThought.view.Navigation',
 		'NextThought.view.SideBar',
-		'NextThought.view.Views'
+		'NextThought.view.Views',
+		'NextThought.view.MessageBar'
 	],
 
 	border: false,
@@ -47,15 +48,24 @@ Ext.define('NextThought.view.Main', {
 
 	detectZoom: function(){
 		var z = DetectZoom.zoom(),
-			el = Ext.getBody();
+			el = Ext.getBody(),
+			currentBar;
 		console.log("Zoom:",z);
 
+		//IEs returns jacked up coordinates when zoom is applied.  Scold if they are in 
+		//IE and a zoom level other than 1
 		if(Ext.isIE){
-			if(z !== 1) {
-				//TODO If not already shown present new warning bar thingy
-				console.warn('Warning IE miscalculates positioning information when a scale is involved');
+			if(z!==1){
+				Ext.create('widget.message-bar', {
+					renderTo: Ext.getBody()
+				});
 			}
-			//TODO else if shown remove warning bar thingy
+			else{
+				currentBar = Ext.ComponentQuery.query('message-bar');
+				if(!Ext.isEmpty(currentBar)){
+					currentBar[0].destroy();
+				}
+			}
 		}
 	}
 });
