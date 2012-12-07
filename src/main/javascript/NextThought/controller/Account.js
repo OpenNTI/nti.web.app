@@ -10,7 +10,8 @@ Ext.define('NextThought.controller.Account', {
 	],
 
 	stores: [
-		'UserSearch'
+		'UserSearch',
+		'FriendsList'
 	],
 
 	views: [
@@ -168,12 +169,17 @@ Ext.define('NextThought.controller.Account', {
                 Accept: 'application/json'
             },
             callback: function(q,success,r){
+				var store;
                 btn.removeCls('disabled');
                 if(!success){
                     view.setError({field:'Code', message: 'That Group Code is not valid.'});
                     return;
                 }
                 else {
+					store = this.getFriendsListStore();
+					if(store){
+						store.load();
+					}
                     w.close();
                 }
             }
