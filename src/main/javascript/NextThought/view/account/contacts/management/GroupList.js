@@ -148,10 +148,6 @@ Ext.define('NextThought.view.account.contacts.management.GroupList', {
 	onSelect:function (view, group) {
 		if (this.username && !this.ignoreSelection && group && !group.hasFriend(this.username)) {
 			this.fireEvent('add-contact', this.username, [group]);
-		} else {
-			if (!group) {
-				return;
-			}
 		}
 	},
 
