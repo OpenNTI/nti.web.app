@@ -181,7 +181,8 @@
 				padding: 2px 0 0 0;
 				color: $secondary-grey;
 				font: 14px 'Droid Serif';
-				overflow: auto;
+				overflow-x: hidden;
+				overflow-y: auto;
 				min-height: 50px;
 				margin-bottom: 46px;
 				max-height: 200px;
