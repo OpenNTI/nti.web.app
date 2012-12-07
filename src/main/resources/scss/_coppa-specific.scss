@@ -4,6 +4,7 @@
 .contact-us-window,
 .code-window,
 .codecreation-window,
+.coderetrieval-window,
 .recovery-email-window,
 .coppa-window {
 	@extend .nti-window;
@@ -69,6 +70,7 @@
 
 	.code-main-view,
 	.codecreation-main-view,
+	.coderetrieval-main-view,
 	.recovery-email-view,
 	.contact-main-view,
 	.coppa-main-view {
@@ -217,6 +219,7 @@
 
 	.code-main-view,
 	.codecreation-main-view,
+	.coderetrieval-main-view,
 	.contact-main-view {
 		.input-wrapper {
 			margin-left: 34px;
@@ -239,7 +242,8 @@
 
 }
 
-.codecreation-window{
+.codecreation-window,
+.coderetrieval-window{
 
 	.close {
 		opacity: 0.5;
@@ -255,7 +259,8 @@
 		}
 	}
 
-	.codecreation-main-view{
+	.codecreation-main-view,
+	.coderetrieval-main-view{
 		.group-name {
 			input {
 				color: $secondary-grey;

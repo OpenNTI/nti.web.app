@@ -32,7 +32,8 @@ Ext.define('NextThought.controller.Groups', {
 			},
 
 			'contacts-panel':{
-				'delete-group': this.deleteGroup
+				'delete-group': this.deleteGroup,
+				'get-group-code': this.getGroupCode
 			},
 
 			'management-group-list': {
@@ -380,6 +381,52 @@ Ext.define('NextThought.controller.Groups', {
 	},
 
 
+	fetchGroupCode: function(record, displayName, success, onError){
+		var link = record.getLink('default-trivial-invitation-code');
+
+        if(!link){
+			Ext.callback(onError, this, ['Group code cannot be created for '+displayName]);
+            return;
+        }
+
+        Ext.Ajax.request({
+				url: link,
+                scope: this,
+                method: 'GET',
+                headers: {
+                    Accept: 'application/json'
+                },
+                callback: function(q, s, r){
+                    console.log(r.responseText);
+                    var result, errorText = 'An error occurred generating \'Group Code\' for '+displayName;
+                    if(s){
+                        result = Ext.decode(r.responseText, true);
+                        result = result ? result.invitation_code : null;
+                    }
+                    if(!result) {
+                        Ext.callback(onError, this, [errorText+' : '+r.status]);
+                    }
+                    else{
+                        Ext.callback(success, this, [result]);
+                    }
+                }
+		});
+	},
+
+	getGroupCode: function(record){
+		var dn = record.get('displayName');
+		function onSuccess(code){
+			var win = Ext.create('NextThought.view.account.coderetrieval.Window', {groupName: dn, code: code});
+            win.show();
+		}
+
+		function onError(errorText){
+			alert(errorText);
+		}
+
+		this.fetchGroupCode(record, dn, onSuccess, onError);
+	},
+
 	createGroupAndCode: function(btn){
         function handleError(errorText){
             console.error('An error occured', errorText);
@@ -392,36 +439,7 @@ Ext.define('NextThought.controller.Groups', {
         }
 
         function onCreated(success, record){
-            console.log(record);
-            var link = record.getLink('default-trivial-invitation-code');
-
-            if(!link){
-                Ext.callback(handleError, this, ['Group code cannot be created for '+displayName]);
-                return;
-            }
-
-            Ext.Ajax.request({
-                url: link,
-                scope: this,
-                method: 'GET',
-                headers: {
-                    Accept: 'application/json'
-                },
-                callback: function(q, success, r){
-                    console.log(r.responseText);
-                    var result, errorText = 'An error occurred generating \'Group Code\' for '+displayName;
-                    if(success){
-                        result = Ext.decode(r.responseText, true);
-                        result = result ? result.invitation_code : null;
-                    }
-                    if(!result) {
-                        Ext.callback(handleError, this, [errorText+' : '+r.status]);
-                    }
-                    else{
-                        Ext.callback(onCodeFetched, this, [result]);
-                    }
-                }
-            });
+            this.fetchGroupCode(record, displayName, onCodeFetched, onError);
         }
 
         function onCodeFetched(code){
@@ -430,7 +448,7 @@ Ext.define('NextThought.controller.Groups', {
         }
 
 		var w = btn.up('window'),
-			username, displayName;
+			username, displayName, me=this;
 
 		if(!$AppConfig.service.canCreateDynamicGroups()){
 			Ext.Error.raise('Permission denied.  AppUser is not allowed to create dfls');

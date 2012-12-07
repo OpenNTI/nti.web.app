@@ -54,6 +54,15 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 			hidden: !$AppConfig.service.canChat() || !g || g.getFriendCount() === 0
 		});
 
+		this.getGroupCodeAction =  new Ext.Action({
+			text: 'Group Code',
+			scope: this,
+			handler: this.getGroupCode,
+			itemId: 'get-group-code',
+			ui: 'nt-menuitem', plain: true,
+			hidden: !g || !g.getLink('default-trivial-invitation-code')
+		});
+
 		this.menu = Ext.widget('menu',{
 			ui: 'nt',
 			plain: true,
@@ -65,7 +74,8 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 			parentItem: this,
 			items: [
 				this.deleteGroupAction,
-				this.groupChatAction
+				this.groupChatAction,
+				this.getGroupCodeAction
 			]
 		});
 
@@ -208,6 +218,12 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 	chatWithGroup: function(){
 		if(this.associatedGroup.getFriendCount() > 0){
 			this.fireEvent('group-chat', this.associatedGroup);
+		}
+	},
+
+	getGroupCode: function(){
+		if(this.associatedGroup.getLink('default-trivial-invitation-code')){
+			this.fireEvent('get-group-code', this.associatedGroup);
 		}
 	}
 

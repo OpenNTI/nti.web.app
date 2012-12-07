@@ -50,6 +50,10 @@ Ext.define('NextThought.view.account.Header',{
 		this.detail.dom.innerHTML=d;
 	},
 
+	updateTitle: function(t){
+		this.title.dom.innerHTML = t;
+	},
+
     afterRender: function(){
         this.callParent(arguments);
 
