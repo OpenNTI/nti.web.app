@@ -122,14 +122,14 @@ Ext.define('NextThought.view.annotations.note.Templates',{
 			handler: moreMenuClick
 		});
 
-		chatItem = new Ext.Action({
-			text: 'Start a chat',
-			cls: 'reply-option chat',
-			itemId: 'Chat',
-			scope: this,
-			ui: 'nt-menuitem', plain: true,
-			handler: moreMenuClick
-		});
+//		chatItem = new Ext.Action({
+//			text: 'Start a chat',
+//			cls: 'reply-option chat',
+//			itemId: 'Chat',
+//			scope: this,
+//			ui: 'nt-menuitem', plain: true,
+//			handler: moreMenuClick
+//		});
 
 		flagItem = new Ext.Action({
 			text: 'Flag as Inappropriate',
@@ -159,15 +159,21 @@ Ext.define('NextThought.view.annotations.note.Templates',{
 		}
 
 		if(options.record){
-			involved = (options.record.get('sharedWith') || []).slice();
-			shared = involved.length > 0;
+//			involved = (options.record.get('sharedWith') || []).slice();
+//			shared = involved.length > 0;
 
-			if(options.user){involved.push(options.user);}
-			if(	$AppConfig.service.canChat() 
-				&& shared
-				&& hasUser(involved, $AppConfig.username) ){
-				items.push(chatItem);
-			}
+			/* NOTE: We are hiding the 'start chat' feature from a note window,
+				because right now, the note window is displayed in a modal view and
+				we would want the chat window to be on top of note window. Since we can't have more than one modal view,
+				the chat window gets hidden behind the window. As per Aaron, we will revisit this when needed.
+			 */
+
+//			if(options.user){involved.push(options.user);}
+//			if(	$AppConfig.service.canChat()
+//				&& shared
+//				&& hasUser(involved, $AppConfig.username) ){
+//				items.push(chatItem);
+//			}
 
             if(!options.record.isModifiable() || (this.canDelete && !this.canDelete())){
                 hideDelete = true;
