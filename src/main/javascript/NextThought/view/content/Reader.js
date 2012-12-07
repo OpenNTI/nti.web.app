@@ -3,6 +3,7 @@ Ext.define('NextThought.view.content.Reader', {
 	alias: 'widget.reader-panel',
 	requires: [
 		'NextThought.providers.Location',
+		'NextThought.proxy.JSONP',
 		'NextThought.util.Base64'
 	],
 	mixins:{
@@ -201,27 +202,10 @@ Ext.define('NextThought.view.content.Reader', {
 
 
 	onNavigateComplete: function(pageInfo, finish, hasCallback){
-		var me = this, cls = this.self;
-		function f(resp){
+		var me = this, options, proxy = Ext.Ajax;
+		function success(resp){
 			me.splash.hide();
 			me.setContent(resp, pageInfo.get('AssessmentItems'), finish, hasCallback);
-		}
-
-		function jsonp(script){
-			f({
-				responseText: cls.getContent(LocationProvider.currentNTIID),
-				request: {
-					options: {
-						url: pageInfo.getLink('content')
-					}
-				}
-			});
-			Ext.fly(script).remove();
-		}
-
-		function onError(script){
-			Ext.fly(script).remove();
-			console.error('PROBLEMS!', pageInfo);
 		}
 
 		if(!pageInfo.isModel){
@@ -233,53 +217,37 @@ Ext.define('NextThought.view.content.Reader', {
 			me.relayout();
 		}
 		else {
-			if ($AppConfig.server.jsonp){
-				Globals.loadScript(pageInfo.getLink('jsonp_content'), jsonp, onError, this);
-				return;
-			}
-			Ext.Ajax.request({
+			options = {
+				ntiid: pageInfo.getId(),
+				jsonpUrl: pageInfo.getLink('jsonp_content'),
 				url: pageInfo.getLink('content'),
-				success: f,
+				expectedContentType: 'text/html',
+				scope: this,
+				success: success,
 				failure: function(r) {
 					console.log('server-side failure with status code ' + r.status+': Message: '+ r.responseText);
 					me.splash.hide();
 				}
-			});
+			};
+
+
+			if ($AppConfig.server.jsonp){
+				proxy = JSONP;
+			}
+
+			proxy.request(options);
 		}
 	},
 
 
 	statics : {
-		bufferedContent: {},
-
 		get: function(prefix){
 			return Ext.ComponentQuery.query(
 					Ext.String.format('reader-panel[prefix={0}]',prefix||'default'))[0];
-		},
-		getContent: function(ntiid){
-			console.log('getContent called...(should be after receiveContent)');
-			return this.bufferedContent[ntiid];
-		},
-		receiveContent: function(content){
-			console.log('receiveContent called...');
-			var decodedContent;
-			//expects: {content:?, contentEncoding:?, NTIID:?, version: ?}
-			//1) decode content
-			if(/base64/i.test(content['Content-Encoding'])){
-				decodedContent = Base64.decode(content.content);
-			}
-			else {
-				Ext.Error.raise('not handing content encoding ' + content['Content-Encoding']);
-			}
-
-			//2) put in bucket
-			this.bufferedContent[content.ntiid] = decodedContent;
 		}
-
 	}
 }, function(){
 	window.ReaderPanel = this;
-	window.jsonpContent = Ext.bind(this.receiveContent, this);
 
 	ContentAPIRegistry.register('NTIHintNavigation',LocationProvider.setLocation,LocationProvider);
 	ContentAPIRegistry.register('togglehint',function(e) {

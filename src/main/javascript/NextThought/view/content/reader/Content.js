@@ -1,6 +1,9 @@
 Ext.define('NextThought.view.content.reader.Content',{
 
-	requires: ['NextThought.ux.ImageZoomView','NextThought.ux.SlideDeck'],
+	requires: [
+		'NextThought.ux.ImageZoomView',
+		'NextThought.ux.SlideDeck'
+	],
 
 	constructor: function(){
 		this.loadedResources = {};

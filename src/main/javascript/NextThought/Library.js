@@ -4,6 +4,7 @@ Ext.define('NextThought.Library', {
 	requires:[
 		'Ext.data.Store',
 		'NextThought.model.Title',
+		'NextThought.proxy.JSONP',
 		'NextThought.util.Base64'
 	],
 
@@ -168,7 +169,7 @@ Ext.define('NextThought.Library', {
 
 
 	loadToc: function(index, url, ntiid, callback){
-		var me = this;
+		var proxy = Ext.Ajax;
 		if(!this.loaded && !callback){
 			Ext.Error.raise('The library has not loaded yet, should not be making a synchronous call');
 		}
@@ -197,24 +198,18 @@ Ext.define('NextThought.Library', {
 		}
 
 
-		function jsonp(script){
-			fn.call(me,{},true,{ responseText: me.getContent(ntiid) });
-			Ext.fly(script).remove();
-		}
 
-		function jsonpError(script){
-			fn.call(me,{},false,{});
-			Ext.fly(script).remove();
-		}
 
 		try{
 			url = getURL(url);
 			if($AppConfig.server.jsonp){
-				Globals.loadScript(url, jsonp, jsonpError, this);
-				return;
+				proxy = JSONP;
 			}
-			Ext.Ajax.request({
+			proxy.request({
+				ntiid: ntiid,
+				jsonpUrl: url,
 				url: url,
+				expectedContentType: 'text/xml',
 				async: !!callback,
 				scope: this,
 				callback: fn
@@ -267,32 +262,8 @@ Ext.define('NextThought.Library', {
 			}
 		}
 		return null;
-	},
-
-
-	getContent: function(ntiid){
-		return this.bufferedToc[ntiid];
-	},
-
-
-	receiveContent: function(content){
-		var decodedContent;
-		//expects: {content:?, contentEncoding:?, NTIID:?, version: ?}
-		//1) decode content
-		if(/base64/i.test(content['Content-Encoding'])){
-			decodedContent = Base64.decode(content.content);
-		}
-		else {
-			Ext.Error.raise('not handing content encoding ' + content['Content-Encoding']);
-		}
-
-		//2) put in bucket
-		this.bufferedToc[content.ntiid] = decodedContent;
 	}
-
-	},
-	function(){
-		window.Library = this;
-		window.jsonpToc = Ext.bind(this.receiveContent, this);
-	}
-);
+},
+function(){
+	window.Library = this;
+});
