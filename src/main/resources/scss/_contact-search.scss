@@ -45,6 +45,12 @@
 		z-index: 0;
 	}
 
+	&.left{
+		&::after{
+			@include sprite($elements,'bubble_create_join_group_left',$dimensions: true);
+		}
+	}
+
 	&::before {
 		content: ' '; overflow: hidden;
 		position: absolute;
@@ -68,7 +74,9 @@
 		position: absolute;
 		bottom: 36px;
 		left: 20px;
+		right: 20px;
 	}
+
 }
 
 

@@ -147,6 +147,11 @@ Ext.define('NextThought.view.account.contacts.View',{
 	afterRender: function(){
 		this.callParent(arguments);
 
+		if(!$AppConfig.service.canCreateDynamicGroups()){
+			this.el.down('.populate-contacts').addCls('left');
+			this.el.down('.group-button-label').update('If you have a Group Code, enter it below to join a group.');
+		}
+
 		this.mon(this.up('main-sidebar'),{
 			scope: this,
 			beforemove: this.hideSearch,

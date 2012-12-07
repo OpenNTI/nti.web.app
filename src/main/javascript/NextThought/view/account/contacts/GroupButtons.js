@@ -12,11 +12,17 @@ Ext.define('NextThought.view.account.contacts.GroupButtons',{
         ]
     },
 
+	renderSelectors: {
+		createEl: '.create-group',
+		joinEl: '.join-group'
+	},
+
     afterRender: function(){
         this.callParent(arguments);
 
 		if(!$AppConfig.service.canCreateDynamicGroups()){
-			this.el.down('.create-group').hide();
+			this.createEl.setVisibilityMode(Ext.dom.Element.DISPLAY);
+			this.createEl.hide();
 		}
 
         this.mon(this.el, 'click', this.onClick, this);
