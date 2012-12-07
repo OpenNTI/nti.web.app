@@ -44,6 +44,14 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 			hidden: g && !g.getLink('edit')
 		});
 
+		this.leaveGroupAction = new Ext.Action({
+			text: 'Leave Group',
+			scope: this,
+			handler: this.leaveGroup,
+			itemId: 'leave-group',
+			ui: 'nt-menuitem', plain: true,
+			hidden: g && !g.getLink('my_membership')
+		});
 
 		this.groupChatAction = new Ext.Action({
 			text: 'Group Chat',
@@ -73,6 +81,7 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 			hideMode: 'display',
 			parentItem: this,
 			items: [
+				this.leaveGroupAction,
 				this.deleteGroupAction,
 				this.groupChatAction,
 				this.getGroupCodeAction
@@ -224,6 +233,12 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 	getGroupCode: function(){
 		if(this.associatedGroup.getLink('default-trivial-invitation-code')){
 			this.fireEvent('get-group-code', this.associatedGroup);
+		}
+	},
+
+	leaveGroup: function(){
+		if(this.associatedGroup.getLink('my_membership')){
+			this.fireEvent('leave-group', this.associatedGroup);
 		}
 	}
 

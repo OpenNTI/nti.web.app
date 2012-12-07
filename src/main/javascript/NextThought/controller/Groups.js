@@ -33,7 +33,8 @@ Ext.define('NextThought.controller.Groups', {
 
 			'contacts-panel':{
 				'delete-group': this.deleteGroup,
-				'get-group-code': this.getGroupCode
+				'get-group-code': this.getGroupCode,
+				'leave-group': this.leaveGroup
 			},
 
 			'management-group-list': {
@@ -464,5 +465,56 @@ Ext.define('NextThought.controller.Groups', {
 			btn.setDisabled(true);
 			this.createDFLUnguarded(displayName, username, null, onCreated, onError, this);
 		}
+	},
+
+	leaveGroup: function(record){
+		//onSuccess instead of reloading the whole store
+		//lets try and just remove the one thing we need
+		function success(record){
+			var store = this.getFriendsListStore(),
+				idx = store.indexOfId(record.getId());
+
+			if(idx >= 0){
+				store.removeAt(idx);
+			}
+			else{
+				console.warn('Falling back to expensive reload');
+				store.reload();
+			}
+		}
+
+		function onError(errorText){
+			alert(errorText);
+		}
+
+		var link = record.getLink('my_membership'),
+			dn = record.get('displayName');
+		if(!link){
+			onError('Unable to leave '+dn);
+			return;
+		}
+
+		Ext.Ajax.request({
+				url: link,
+                scope: this,
+                method: 'DELETE',
+                headers: {
+                    Accept: 'application/json'
+                },
+                callback: function(q, s, r){
+                    console.log(r.responseText);
+                    var result, errorText = 'An error occurred leaving  '+dn;
+                    if(s){
+                        result = Ext.decode(r.responseText, true);
+                        result = ParseUtils.parseItems(result);
+                    }
+                    if(Ext.isEmpty(result)) {
+                        Ext.callback(onError, this, [errorText+' : '+r.status]);
+                    }
+                    else{
+                        Ext.callback(success, this, [result[0]]);
+                    }
+                }
+		});
 	}
 });
