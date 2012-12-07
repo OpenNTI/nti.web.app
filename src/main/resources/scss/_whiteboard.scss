@@ -562,7 +562,7 @@
 
 			div {
 				display: block;
-				background: url(../images/old_sprites/spr_image_options.png) 100px 100px no-repeat;
+				background: $icons no-repeat;
 				margin: 3px 8px 0 0;
 				float: right;
 				opacity: 0.8;
@@ -571,18 +571,8 @@
 				&.disabled { &, &:hover { opacity: 0.5; cursor: default; pointer-events: none; } }
 			}
 
-			.magnifier{
-				background-position: 0 0;
-				width: 18px;
-				height: 18px;
-			}
-
-
-			.reply {
-				background-position: 0 -19px;
-				width: 25px;
-				height: 22px;
-			}
+			.magnifier{ @include sprite($icons,'image-zoom',$dimensions:true); }
+			.reply { @include sprite($icons,'image-add-note',$dimensions:true); }
 		}
 	}
 }

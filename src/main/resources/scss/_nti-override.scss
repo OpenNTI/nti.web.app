@@ -121,7 +121,8 @@
 		vertical-align:	middle;
 	}
 
-	[itemprop~=nti-data-markupenabled] {
+	[itemprop~=nti-data-markupenabled],
+	[itemprop~="nti-slide-video"] {
 		display: inline-block;
 		overflow: hidden;
 		position: relative;

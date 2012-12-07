@@ -261,9 +261,8 @@
 								position: absolute;
 								top: 5px;
 								left: 12px;
-								background: url(../images/old_sprites/spr_image_options.png) -25px -19px no-repeat;
-								width: 14px;
-								height: 14px;
+								background: $icons;
+								@include sprite($icons,'image-edit-14',$dimensions:true);
 							}
 						}
 					}

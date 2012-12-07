@@ -11,7 +11,7 @@
 			display: block;
 			float: right;
 			margin: 3px 8px 0 0;
-			background: transparent url(../images/old_sprites/spr_image_options.png) 100px 100px no-repeat;
+			background: $icons no-repeat;
 			background-color: transparent !important;
 			opacity: 0.8;
 			pointer-events: all;
@@ -19,22 +19,13 @@
 			&:hover { opacity: 1; }
 			&.disabled { &, &:hover { display:none; opacity: 0.5; cursor: default; pointer-events: none; } }
 
-			&.mark {
-				background-position: 0 -19px;
-				width: 25px;
-				height: 22px;
+			&.mark { @include sprite($icons,'image-add-note',$dimensions:true); }
+			&.zoom { @include sprite($icons,'image-zoom',$dimensions:true); }
+			&.unzoom { @include sprite($icons,'image-unzoom',$dimensions:true); }
 
-			}
-
-			&.unzoom,
-			&.zoom {
-				background-position: 0 0;
-				width: 18px;
-				height: 18px;
-			}
-
-			&.unzoom {
-				background-position: -19px 0;
+			&.slide {
+				display: none;
+				@include sprite($icons,'image-edit-14',$dimensions:true);
 			}
 		}
 	}
@@ -209,7 +200,8 @@
 .note-window .main-view .context,
 #NTIContent {
 
-	[itemprop~="nti-data-markupenabled"] {
+	[itemprop~="nti-data-markupenabled"],
+	[itemprop~="nti-slide-video"]{
 		display: inline-block;
 		overflow: hidden;
 		position: relative;
@@ -227,6 +219,12 @@
 			display: none;
 		}
 	}
+
+	object[type$=slide],object[type$=slidevideo] {
+		.bar a.slide { display: inline-block; }
+	}
+
+	object[type$=slidevideo] .bar a.mark {display: none;}
 
 	/*Sometimes footnotes are redacted, this will hide the actual footnote when that is the case*/
 	li.footnote.redacted {

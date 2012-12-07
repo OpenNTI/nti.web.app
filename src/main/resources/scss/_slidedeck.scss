@@ -59,11 +59,11 @@ $experimental-support-for-svg: true;
 				@include sprite($icons,'checkbox-dark',$dimensions: true);
 			}
 
-			&:focus,
+			&:focus {}
+
 			&:active,
 			&:target,
 			&:hover {
-				color: $tertiary-grey;
 				&::after{
 					@include sprite($icons,'checkbox-dark_hover',$dimensions: true);
 				}
@@ -109,11 +109,11 @@ $experimental-support-for-svg: true;
 			box-shadow: inset 0 1px 0px 0px rgba(255,255,255,0.13),
 							0 2px 0px 0px rgba(255,255,255,0.12);
 
-			&:focus,
+			&:focus {}
+
 			&:active,
 			&:target,
 			&:hover {
-				color: $quad-grey;
 				@include background-image(linear-gradient(top,
 						$slidedeck-exit-button-gradient-bottom 0%,
 						$slidedeck-exit-button-gradient-top 100%));

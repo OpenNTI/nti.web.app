@@ -1,6 +1,6 @@
 Ext.define('NextThought.view.content.reader.Content',{
 
-	requires: ['NextThought.ux.ImageZoomView'],
+	requires: ['NextThought.ux.ImageZoomView','NextThought.ux.SlideDeck'],
 
 	constructor: function(){
 		this.loadedResources = {};
@@ -94,12 +94,13 @@ Ext.define('NextThought.view.content.reader.Content',{
 
 	activateAnnotatableItems: function(){
 		var d = this.getDocumentElement(),
-			els = d.querySelectorAll('[itemprop~=nti-data-markupenabled]'),
+			els = d.querySelectorAll('[itemprop~=nti-data-markupenabled],[itemprop~=nti-slide-video]'),
 			tpl = Ext.DomHelper.createTemplate({
 				cls: 'bar',
 				cn: [
 					{tag: 'a', href:'#zoom', title:'Zoom', cls: 'zoom disabled', html: ' '},
-					{tag: 'a', href:'#mark', title:'Make a note', cls: 'mark', html: ' '}
+					{tag: 'a', href:'#mark', title:'Make a note', cls: 'mark', html: ' '},
+					{tag: 'a', href:'#slide', title:'Open Slides', cls: 'slide', html: ' '}
 				]
 			}).compile(),
 			activators = {
@@ -312,6 +313,11 @@ Ext.define('NextThought.view.content.reader.Content',{
 			return false;
 		}
 
+		if(/^slide/i.test(target)){
+			SlideDeck.open(el, this.basePath, LocationProvider.currentNTIID);
+			return false;
+		}
+
 		if(/^zoom$/i.test(target)){
 			ImageZoomView.zoomImage(el, this.basePath, this.getAnnotationOffsets());
 			return false;
@@ -332,6 +338,7 @@ Ext.define('NextThought.view.content.reader.Content',{
 				}
 			});
 		}
+		return undefined;
 	}
 
 });

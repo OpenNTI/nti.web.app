@@ -44,7 +44,7 @@ Ext.define('NextThought.view.slidedeck.View',{
 
 		v = this.video = ctrls.add({ xtype: 'slidedeck-video'});
 		//Ths queue is the primary control. Selection causes video and slide to change.
-		q = this.queue = ctrls.add({ xtype: 'slidedeck-queue', store: store, flex: 1 });
+		q = this.queue = ctrls.add({ xtype: 'slidedeck-queue', store: store, video: v, flex: 1 });
 
 		//wire up
 		this.mon(q,'select', v.updateVideoFromSelection, v);
