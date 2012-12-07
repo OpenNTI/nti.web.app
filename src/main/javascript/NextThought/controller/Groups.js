@@ -107,6 +107,7 @@ Ext.define('NextThought.controller.Groups', {
 			rec = store.findRecord('Username',id,0,false,true,true),
 			contacts = [];
 
+		//TODO why reload here, createGroupUnguarded does a load
 		function finish(){
 			store.reload();
 		}
@@ -131,6 +132,8 @@ Ext.define('NextThought.controller.Groups', {
 			return;
 		}
 
+		console.log('Publishing contacts');
+		console.log('Removing all sub components from groups and people');
 		groups.removeAll(true);
 		people.removeAll(true);
 
@@ -146,7 +149,9 @@ Ext.define('NextThought.controller.Groups', {
 		this.getContacts(function(friends){
 			var componentsToAdd = [];
 
+			console.log('Adding online group to people');
 			people.add({ xtype: 'contacts-panel', title: 'Online', online:true }).setUsers(friends.Online);
+			console.log('Adding offling group to people');
 			people.add({ xtype: 'contacts-panel', title: 'Offline', offline:true }).setUsers(friends.Offline);
 
 			store.each(function(group){
