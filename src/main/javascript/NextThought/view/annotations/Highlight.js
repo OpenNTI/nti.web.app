@@ -437,11 +437,10 @@ Ext.define('NextThought.view.annotations.Highlight', {
 			sc = range.startContainer;
 			selectedNodes = RangeUtils.getSelectedNodes(range, range.commonAncestorContainer.ownerDocument);
 
+		//This drops entire empty ranges, anything that wraps no text is thrown out.
         if (!rangeString || /^\s+$/.test(rangeString)){
-            if(selectedNodes.length > 0 && /^(li|p)$/i.test(selectedNodes[0].tagName)){
-                return;
-            }
-        }
+			return;
+		}
 
         span = this.createNonAnchorableSpan();
 
