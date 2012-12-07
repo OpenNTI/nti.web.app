@@ -2,6 +2,7 @@ Ext.define('NextThought.view.account.code.Main',{
     extend: 'Ext.container.Container',
     alias: 'widget.code-main-view',
     requires: [
+		'NextThought.view.form.fields.SimpleTextField'
     ],
 
     cls: 'code-main-view',
