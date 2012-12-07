@@ -133,13 +133,12 @@ Ext.define('NextThought.controller.Groups', {
 		}
 
 		console.log('Publishing contacts');
-		console.log('Removing all sub components from groups and people');
-		groups.removeAll(true);
-		people.removeAll(true);
 
 		//If there are no contacts or no friendslists other than omnipresent mycontacts group
 		//hence < 2. Show the coppa or empty view
 		if(store.getContacts().length === 0 && store.getCount() < 2){
+			groups.removeAll(true);
+			people.removeAll(true);
 			ct.getLayout().setActiveItem( $AppConfig.service.canFriend() ? 1:2 );
 			return;
 		}
@@ -148,6 +147,10 @@ Ext.define('NextThought.controller.Groups', {
 
 		this.getContacts(function(friends){
 			var componentsToAdd = [];
+
+			console.log('Removing all sub components from groups and people');
+			groups.removeAll(true);
+			people.removeAll(true);
 
 			console.log('Adding online group to people');
 			people.add({ xtype: 'contacts-panel', title: 'Online', online:true }).setUsers(friends.Online);
