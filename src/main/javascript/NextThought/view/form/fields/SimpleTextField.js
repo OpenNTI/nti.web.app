@@ -78,7 +78,8 @@ Ext.define('NextThought.view.form.fields.SimpleTextField',{
 		this.mon(e, {
 			scope: this,
 			keyup: this.keyPressed,
-			keydown: this.keyDown //keypress does not always fire for escape
+			keydown: this.keyDown, //keypress does not always fire for escape
+			contextmenu: function(e){e.stopPropagation();} //allow context on simple texts
 		});
 		this.mon(this.clearEl,'click',function(){this.clearValue();},this);
 		this.lastValue = this.getValue();
