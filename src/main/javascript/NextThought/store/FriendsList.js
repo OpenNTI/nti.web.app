@@ -59,7 +59,13 @@ Ext.define('NextThought.store.FriendsList',{
 	getContacts: function(){
 		var names = [];
 		this.each(function(g){ names.push.apply(names,g.get('friends')); });
-		return Ext.Array.sort(Ext.Array.unique(names));
+		names = Ext.Array.sort(Ext.Array.unique(names));
+		//Usually you don't end up in friendslist but now that everyone is dfl crazy you do.
+		//This means you show up in your own contacts list (definately not desirable) and
+		//beneath any dfls you are a member of (questionable at this point).  Aaron claims the
+		//latter isn't allowed right now either.  Strip the appuser from contacts fixes both.
+		names = Ext.Array.remove(names, $AppConfig.username);
+		return names; 
 	},
 
 
