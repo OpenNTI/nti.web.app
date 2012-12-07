@@ -20,20 +20,17 @@ Ext.define('NextThought.view.annotations.note.Window',{
 	width: 670,
 	height: '80%',
 
-	layout: {
-		type: 'vbox',
-		align: 'stretch'
-	},
+	layout: 'anchor',
+	defaults:{anchor: '100%'},
 	items: [
 		{xtype: 'note-filter-bar' },
 		{xtype: 'note-carousel' },
 		{
+			anchor: '0 -117',
 			noteWindowBody: true,
 			xtype: 'container',
 			cls: 'note-content-container scrollbody',
 			autoScroll: true,
-			flex: 1,
-			layout: 'auto',
 			items: [
 				{xtype: 'note-main-view' },
 				{xtype: 'note-responses' },

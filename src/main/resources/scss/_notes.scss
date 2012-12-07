@@ -876,6 +876,7 @@
 
 
 	.carousel {
+		position: relative;//just in case ExtJS doesn't set this absolute... so that our inner coordinates are relative to here.
 		background: url(../images/elements/carousel.png) -365px 0px no-repeat;
 		border: 1px solid #c5c5c5;
 		border-bottom-width: 0;
@@ -1000,6 +1001,7 @@
 
 	.note-reply,
 	.main-view {
+		position: relative;//just in case ExtJS doesn't set this absolute... so that our inner coordinates are relative to here.
 		border: 0px solid #f2f2f2;
 		border-bottom-width: 1px;
 		padding: 16px 27px 5px 27px;
@@ -1067,10 +1069,7 @@
 			overflow: hidden;
 
 			img {
-				max-width: 100% !important;
-				.x-gecko & {
-					max-width: 90% !important;
-				}
+				max-width: 520px !important;
 			}
 
 			sup {
