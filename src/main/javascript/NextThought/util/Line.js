@@ -50,6 +50,7 @@ Ext.define('NextThought.util.Line',{
 	},
 
 	/** @private */
+	//IE
 	rangeByRecursiveSearch: function(y,doc) {
 		y -= 30; //Correction
 		var curNode = doc.documentElement, range, rect, sibling;
@@ -104,6 +105,7 @@ Ext.define('NextThought.util.Line',{
 
 
 	/** @private */
+	//webkit mostly
 	rangeForLineByPoint: function(y, doc) {
 		var xStart = 0,
 			xEnd = doc.querySelector('#NTIContent .page-contents').getBoundingClientRect().width,
@@ -132,6 +134,7 @@ Ext.define('NextThought.util.Line',{
 
 
 	/** @private */
+	//mozilla mostly
 	rangeForLineBySelection: function(y, doc){
 		var xStart = 0,
             xEnd = doc.querySelector('#NTIContent .page-contents').getBoundingClientRect().width,
@@ -148,6 +151,7 @@ Ext.define('NextThought.util.Line',{
                 if(!this.isNodeAnchorable(elem) && elem.getAttribute('Id') !== 'NTIContent'){
                     elem = AnnotationUtils.getTextNodes(elem)[0];
                 }
+				//more right 20, it's a guess of a reasonable offset.
                 xStart += 20;
             }
 
@@ -155,6 +159,7 @@ Ext.define('NextThought.util.Line',{
                 return null;
             }
 
+			//we have an element, it's an object but not a video (an assessment probably)
             if (Ext.fly(elem).is('object:not(.naqvideo)') || Ext.fly(elem).parent('object:not(.naqvideo)')) {
 				elem = Ext.fly(elem).parent('object') || elem;
                 sel.selectAllChildren(Ext.fly(elem).down('div.naquestionpart').dom);
