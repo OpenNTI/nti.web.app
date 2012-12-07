@@ -592,7 +592,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 			r = me.record, re = /((&nbsp;)|(\u200B)|(<br\/?>)|(<\/?div>))*/g;
 
 		function callback(success, record){
-			me.el.parent().unmask();
+			me.editor.unmask();
 			if (success) {
 				me.deactivateReplyEditor();
 				if (me.recordUpdated) {
@@ -602,36 +602,40 @@ Ext.define('NextThought.view.annotations.note.Main',{
 			}
 		}
 
+		function save(){
+			if(me.editMode){
+				r.set('body',v.body);
+				//todo: r.set('sharedWith',v.shareWith); -- only do this if the user changed it.
+				r.save({callback: function(record, request){
+					var success = request.success,
+						rec = success ? request.records[0]: null;
+					if(success){
+						r.fireEvent('updated', rec);
+						me.setRecord(rec);
+					}
+					Ext.callback(callback,me,[success,rec]);
+				}});
+				return;
+			}
+
+			try {
+				me.up('window').fireEvent('save-new-reply', r, v.body, v.shareWith, callback);
+			}
+			catch(e){
+				console.error(Globals.getError(e));
+				//me.el.unmask();
+				me.editor.unmask();
+			}
+		}
+
 		if( !Ext.isArray(v.body) || v.body.join('').replace(re,'') === '' ){
 			console.log('Dropping empty note body', v.body);
 			me.deactivateReplyEditor();
 			return;
 		}
-		me.el.parent().mask('Saving...');
-		console.log('Editor saved', v);
-
-		if(this.editMode){
-			r.set('body',v.body);
-			//todo: r.set('sharedWith',v.shareWith); -- only do this if the user changed it.
-			r.save({callback: function(record, request){
-				var success = request.success,
-				rec = success ? request.records[0]: null;
-				if(success){
-					r.fireEvent('updated', rec);
-                    me.setRecord(rec);
-				}
-				Ext.callback(callback,me,[success,rec]);
-			}});
-			return;
-		}
-
-        try {
-		    this.up('window').fireEvent('save-new-reply', r, v.body, v.shareWith, callback);
-        }
-        catch(e){
-			console.error(Globals.getError(e));
-            me.el.parent().unmask();
-        }
+		me.editor.mask('Saving...');
+		me.updateLayout();
+		Ext.defer(save, 500);
 	},
 
 
