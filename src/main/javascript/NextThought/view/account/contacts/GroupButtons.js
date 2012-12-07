@@ -16,7 +16,7 @@ Ext.define('NextThought.view.account.contacts.GroupButtons',{
         this.callParent(arguments);
 
 		if(!$AppConfig.service.canCreateDynamicGroups()){
-			this.down('.create-group').hide();
+			this.el.down('.create-group').hide();
 		}
 
         this.mon(this.el, 'click', this.onClick, this);
