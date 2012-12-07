@@ -1006,7 +1006,7 @@ Ext.define('NextThought.controller.Chat', {
         //1) if it's not a group chat, accept
         //2) regardless of group or not, if the room has been previously accepted, accept (like a refresh)
         //3) if you created it, accept
-        if(!isGroupChat || me.isRoomIdAccepted(roomInfo.getId()) || (roomInfo.get('Creator') === $AppConfig.userObject.get('Username'))){
+        if(!isGroupChat || me.isRoomIdAccepted(roomInfo.getId()) || (roomInfo.get('Creator') === $AppConfig.username)){
             isAcceptedOrTimedOut();
             return;
         }
