@@ -392,6 +392,10 @@
 			}
 			.wrap {
 				margin-left: 100px;
+
+				.body .body-divider {
+						margin-right: 0;
+				}
 			}
 		}
 	}
@@ -426,6 +430,9 @@
 				color: $primary-grey;
 				.body-divider .whiteboard-wrapper .toolbar .reply{
 					display: none !important;
+				}
+				.body-divider {
+					margin-right: 30px;
 				}
 			}
 		}
