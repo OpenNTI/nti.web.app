@@ -15,9 +15,10 @@ Ext.define('NextThought.view.slidedeck.Overlay',{
 	initComponent: function(){
 		this.callParent(arguments);
 		var store = this.store, keyMap;
-		this.view = this.add({xtype:'slidedeck-view', store: store});
+		this.view = this.add({xtype:'slidedeck-view', store: store, startOn: this.startOn});
 		//clean up references, we don't actually use the store here, so just pass it down.
 		delete this.store;
+		delete this.startOn;
 
 		this.mon(this.view,'destroy',this.destroy,this);
 		Ext.EventManager.onWindowResize(this.setSize,this,false);

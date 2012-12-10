@@ -37,14 +37,16 @@ Ext.define('NextThought.view.slidedeck.View',{
 	initComponent: function(){
 		this.callParent(arguments);
 		var store = this.store,
+			start = this.startOn,
 			ctrls = this.items.getAt(0), v,q;
 
 		//clear the reference, pass it along...
 		delete this.store;
+		delete this.startOn;
 
 		v = this.video = ctrls.add({ xtype: 'slidedeck-video'});
 		//Ths queue is the primary control. Selection causes video and slide to change.
-		q = this.queue = ctrls.add({ xtype: 'slidedeck-queue', store: store, video: v, flex: 1 });
+		q = this.queue = ctrls.add({ xtype: 'slidedeck-queue', store: store, startOn: start, video: v, flex: 1 });
 
 		//wire up
 		this.mon(q,'select', v.updateVideoFromSelection, v);

@@ -9,7 +9,8 @@ Ext.define('NextThought.ux.SlideDeck',{
 	open: function(el, startingNTIID){
 		var root = LocationProvider.getLineage(startingNTIID).last(),
 			toc = Library.getToc(Library.getTitle(root)),
-			ids = [];
+			ids = [],
+			obj = Ext.fly(el).up('object[data-ntiid]');
 
 		Ext.each(Ext.DomQuery.select('topic[ntiid]',toc),function(o){
 			ids.push(o.getAttribute('ntiid'));
@@ -19,7 +20,7 @@ Ext.define('NextThought.ux.SlideDeck',{
 
 		function finish(store){
 			Ext.getBody().unmask();
-			Ext.widget('slidedeck-overlay',{store: store, startOn: startingNTIID}).show();
+			Ext.widget('slidedeck-overlay',{store: store, startOn: obj.getAttribute('data-ntiid')}).show();
 		}
 
 		this.spider(ids, finish);

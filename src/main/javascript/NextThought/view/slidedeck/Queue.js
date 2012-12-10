@@ -30,6 +30,20 @@ Ext.define('NextThought.view.slidedeck.Queue',{
 	}),
 
 
+	afterRender: function(){
+		this.callParent(arguments);
+
+		var start = this.store.getAt(0),
+			startOn = this.startOn;
+
+		if(startOn){
+			start = this.store.findRecord('NTIID', startOn, 0, false, true, true) || start;
+		}
+
+		this.getSelectionModel().select(start);
+	},
+
+
 	updateSlideFromVideo: function(){
 		console.log('updateSlideFromVideo',arguments);
 	}

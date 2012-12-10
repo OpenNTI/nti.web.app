@@ -11,8 +11,8 @@ Ext.define('NextThought.model.Slide', {
 		{ name: 'video-type', type: 'string' },
 		{ name: 'video-id', type: 'string' },
 		{ name: 'video-thumbnail', type: 'string' },
-		{ name: 'video-start', type: 'string' },
-		{ name: 'video-end', type: 'string' },
+		{ name: 'video-start', type: 'number' },
+		{ name: 'video-end', type: 'number' },
 		{ name: 'ordinal', type: 'number' }
 	],
 

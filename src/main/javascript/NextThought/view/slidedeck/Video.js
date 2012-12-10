@@ -11,9 +11,11 @@ Ext.define('NextThought.view.slidedeck.Video',{
 	plain: true,
 	ui: 'slidedeck-video',
 
+	YOUTUBE_URL_PATTERN: '//www.youtube.com/embed/{0}?enablejsapi=1&playerapiid={1}&origin={2}',
+
 	renderTpl: Ext.DomHelper.markup([{
 		cls: 'video-wrapper', cn: [{
-			tag: 'iframe', cls:'video', name: 'slide-video', id: '{id}-video',
+			/*tag: 'iframe',*/ cls:'video', name: 'slide-video', id: '{id}-video',
 			frameBorder: 0, scrolling: 'no', seamless: true
 		}]
 	},{
@@ -36,7 +38,7 @@ Ext.define('NextThought.view.slidedeck.Video',{
 
 
 	renderSelectors: {
-		videoEl: 'iframe',
+		videoEl: '.video',
 		checkboxEl: 'div.video-checkbox'
 	},
 
@@ -76,7 +78,39 @@ Ext.define('NextThought.view.slidedeck.Video',{
 
 
 	//called by the event of selecting something in the slide queue.
-	updateVideoFromSelection: function(){
-		console.log('updateVideoFromSelection',arguments);
+	updateVideoFromSelection: function(queueCmp, slide){
+
+//		this.videoEl.set({src:
+//		Ext.String.format(this.YOUTUBE_URL_PATTERN,
+//				slide.get('video'),
+//				encodeURIComponent(this.videoEl.id),
+//				encodeURIComponent(location.protocol+'//'+location.host)
+//		)});
+
+		var startTime = slide.get('video-start'),
+			videoId = slide.get('video');
+
+		if(!this.ytPlayer){
+			this.ytPlayer = new YT.Player(this.videoEl.id, {
+				videoId: videoId,
+				height: '221',
+				width: '392',
+				playerVars: {
+					autohide: 1,
+					modestbranding: 1,
+					rel: 0,
+					showinfo: 0,
+					start: startTime
+				},
+				events: {
+					'onReady': function(){console.log('ready!');},
+					'onStateChange': function(){console.log('state!');}
+				}
+			});
+			return;
+		}
+
+		this.ytPlayer.loadVideoById(videoId, startTime, "medium");
+//		this.ytPlayer.seekTo(startTime,true);
 	}
 });
