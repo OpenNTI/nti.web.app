@@ -31,7 +31,7 @@ Ext.define('NextThought.model.Slide', {
 				'ContainerId': containerId,
 				'NTIID': dom.getAttribute('data-ntiid'),
 				'title': getParam('slidetitle'),
-				'image': getParam('slideimage'),
+				'image': LocationProvider.getContentRoot(containerId) + getParam('slideimage'),
 				'video': getParam('slidevideo'),
 				'video-type': getParam('slidevideotype'),
 				'video-id': getParam('slidevideoid'),
