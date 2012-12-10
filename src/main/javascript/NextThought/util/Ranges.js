@@ -57,11 +57,31 @@ Ext.define('NextThought.util.Ranges',{
 		return n.up(selector);
 	},
 
+	rangeIfItemPropSpan: function(range){
+		/*
+		 * Special case for annototable images: We don't want to expand past the annototable img.
+		 * And since we usually expand by a given number of characters,
+		 * if you have multiple consecutive images, we were getting all of them; which is an unexpected behavior.
+		 */
+		var node = range.commonAncestorContainer;
+
+		if(node.getAttribute('itemprop')){
+			console.log("we're inside a itemprop span.", node, ', itemprop: ',node.getAttribute('itemprop'));
+			return range;
+		}
+		return null;
+	},
+
     expandRange: function(range, doc){
-		var object = this.nodeIfObjectOrInObject(range.commonAncestorContainer) || this.nodeIfObjectOrInObject(range.startContainer);
+		var object = this.nodeIfObjectOrInObject(range.commonAncestorContainer) || this.nodeIfObjectOrInObject(range.startContainer), nr;
         if(object) {
             return object.down('.naquestion').dom.cloneNode(true);
         }
+
+	    nr = this.rangeIfItemPropSpan(range);
+	    if(nr){
+		    return this.clearNonContextualGarbage(nr.cloneContents());
+	    }
 
         var r = this.getRangyRange(range, doc),
             sel = rangy.getSelection(doc);
