@@ -65,7 +65,7 @@ Ext.define('NextThought.util.Ranges',{
 		 */
 		var node = range.commonAncestorContainer;
 
-		if(node.getAttribute('itemprop')){
+		if(node.getAttribute && node.getAttribute('itemprop')){
 			console.log("we're inside a itemprop span.", node, ', itemprop: ',node.getAttribute('itemprop'));
 			return range;
 		}
