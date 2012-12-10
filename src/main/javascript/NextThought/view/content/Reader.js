@@ -202,7 +202,9 @@ Ext.define('NextThought.view.content.Reader', {
 
 
 	onNavigateComplete: function(pageInfo, finish, hasCallback){
-		var me = this, options, proxy = Ext.Ajax;
+		var me = this,
+			proxy = ($AppConfig.server.jsonp) ? JSONP : Ext.Ajax;
+
 		function success(resp){
 			me.splash.hide();
 			me.setContent(resp, pageInfo.get('AssessmentItems'), finish, hasCallback);
@@ -217,7 +219,7 @@ Ext.define('NextThought.view.content.Reader', {
 			me.relayout();
 		}
 		else {
-			options = {
+			proxy.request({
 				ntiid: pageInfo.getId(),
 				jsonpUrl: pageInfo.getLink('jsonp_content'),
 				url: pageInfo.getLink('content'),
@@ -228,14 +230,7 @@ Ext.define('NextThought.view.content.Reader', {
 					console.log('server-side failure with status code ' + r.status+': Message: '+ r.responseText);
 					me.splash.hide();
 				}
-			};
-
-
-			if ($AppConfig.server.jsonp){
-				proxy = JSONP;
-			}
-
-			proxy.request(options);
+			});
 		}
 	},
 

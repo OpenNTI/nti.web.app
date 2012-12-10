@@ -103,7 +103,7 @@ Ext.define('NextThought.view.content.reader.Content',{
 				cn: [
 					{tag: 'a', href:'#zoom', title:'Zoom', cls: 'zoom disabled', html: ' '},
 					{tag: 'a', href:'#mark', title:'Make a note', cls: 'mark', html: ' '},
-					{tag: 'a', href:'#slide', title:'Open Slides', cls: 'slide', html: ' '}
+					{tag: 'a', href:'#slide', title:'Open Slides', cls: 'slide', html: 'Presentation View'}
 				]
 			}).compile(),
 			activators = {
@@ -317,12 +317,12 @@ Ext.define('NextThought.view.content.reader.Content',{
 		}
 
 		if(/^slide/i.test(target)){
-			SlideDeck.open(el, this.basePath, LocationProvider.currentNTIID);
+			SlideDeck.open(el, LocationProvider.currentNTIID);
 			return false;
 		}
 
 		if(/^zoom$/i.test(target)){
-			ImageZoomView.zoomImage(el, this.basePath, this.getAnnotationOffsets());
+			ImageZoomView.zoomImage(el, this.getAnnotationOffsets());
 			return false;
 		}
 

@@ -103,7 +103,7 @@ Ext.define('NextThought.ux.ImageZoomView',{
 
 
 	statics: {
-		zoomImage: function(el,basePath,offsets){
+		zoomImage: function(el,offsets){
 			var img = Ext.fly(el)
 					.up('[itemprop~=nti-data-markupenabled]')
 					.down('img[id]').dom,
@@ -122,7 +122,7 @@ Ext.define('NextThought.ux.ImageZoomView',{
 				currentSize = sizes[sizeMap[currentSizeName]],
 				currentSizeUrl = img.getAttribute(currentSize),
 				nextSize = sizes[Math.min(sizeMap[currentSizeName]+1,sizes.length-1)],
-				nextSizeUrl = (basePath||(src.replace(new RegExp(RegExp.escape(currentSizeUrl)),''))),
+				nextSizeUrl = src.replace(new RegExp(RegExp.escape(currentSizeUrl)),''),
 				rect = img.getBoundingClientRect();//these are in the document space. We need to convert this to screen space.
 
 			nextSizeUrl += img.getAttribute(nextSize);

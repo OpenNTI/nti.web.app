@@ -169,7 +169,7 @@ Ext.define('NextThought.Library', {
 
 
 	loadToc: function(index, url, ntiid, callback){
-		var proxy = Ext.Ajax;
+		var proxy = ($AppConfig.server.jsonp) ? JSONP : Ext.Ajax;
 		if(!this.loaded && !callback){
 			Ext.Error.raise('The library has not loaded yet, should not be making a synchronous call');
 		}
@@ -202,9 +202,7 @@ Ext.define('NextThought.Library', {
 
 		try{
 			url = getURL(url);
-			if($AppConfig.server.jsonp){
-				proxy = JSONP;
-			}
+
 			proxy.request({
 				ntiid: ntiid,
 				jsonpUrl: url,
