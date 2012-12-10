@@ -89,7 +89,11 @@ Ext.define('NextThought.controller.Account', {
 
             'contacts-view group-buttons' : {
                 'click': this.groupButtonClicked
-            }
+            },
+
+			'contacts-view list-buttons' : {
+				'click': this.groupButtonClicked
+			}
 
 		},{});
 	},
@@ -249,6 +253,10 @@ Ext.define('NextThought.controller.Account', {
 		else if(flyBtn.hasCls('create-group')){
 			this.codeCreationWin = Ext.create('NextThought.view.account.codecreation.Window');
             this.codeCreationWin.show();
+		}
+		else if(flyBtn.hasCls('create-list')){
+			this.createListWin = Ext.create('NextThought.view.account.contacts.createlist.Window');
+			this.createListWin.show();
 		}
         else {
             console.error('Group button clicked but I do not know what to do', btn);

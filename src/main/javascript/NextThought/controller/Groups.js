@@ -16,7 +16,8 @@ Ext.define('NextThought.controller.Groups', {
 		'account.contacts.management.GroupList',
 		'account.contacts.management.Person',
 		'account.contacts.management.AddGroup',
-		'account.codecreation.Main'
+		'account.codecreation.Main',
+		'account.contacts.createlist.Main'
 	],
 
 	MY_CONTACTS_PREFIX_PATTERN: 'mycontacts-{0}',
@@ -34,7 +35,8 @@ Ext.define('NextThought.controller.Groups', {
 			'contacts-panel':{
 				'delete-group': this.deleteGroup,
 				'get-group-code': this.getGroupCode,
-				'leave-group': this.leaveGroup
+				'leave-group': this.leaveGroup,
+				'remove-contact': this.removeContact
 			},
 
 			'management-group-list': {
@@ -50,6 +52,10 @@ Ext.define('NextThought.controller.Groups', {
 
 			'codecreation-main-view button[name=submit]': {
 				'click': this.createGroupAndCode
+			},
+
+			'createlist-main-view button[name=submit]' : {
+				'click': this.addList
 			}
 
 		},{});
@@ -126,6 +132,7 @@ Ext.define('NextThought.controller.Groups', {
 			store = me.getFriendsListStore(),
 			ct = Ext.getCmp('contacts-view-panel'),
 			people = Ext.getCmp('contact-list'),
+			lists = Ext.getCmp('my-lists'),
 			groups = Ext.getCmp('my-groups'),
 			contactsId = this.getMyContactsId();
 
@@ -141,6 +148,7 @@ Ext.define('NextThought.controller.Groups', {
 		if(store.getContacts().length === 0 && store.getCount() < 2){
 			groups.removeAll(true);
 			people.removeAll(true);
+			lists.removeAll(true);
 			ct.getLayout().setActiveItem( $AppConfig.service.canFriend() ? 1:2 );
 			return;
 		}
@@ -148,11 +156,13 @@ Ext.define('NextThought.controller.Groups', {
 		ct.getLayout().setActiveItem(0);
 
 		this.getContacts(function(friends){
-			var componentsToAdd = [];
+			var groupsToAdd = [];
+			var listsToAdd = [];
 
 			console.log('Removing all sub components from groups and people');
 			groups.removeAll(true);
 			people.removeAll(true);
+			lists.removeAll(true);
 
 			console.log('Adding online group to people');
 			people.add({ xtype: 'contacts-panel', title: 'Online', online:true }).setUsers(friends.Online);
@@ -161,7 +171,7 @@ Ext.define('NextThought.controller.Groups', {
 
 			store.each(function(group){
 				var id = ParseUtils.parseNtiid(group.getId()),
-					list = group.get('friends'), name;
+					list = group.get('friends'), name, target;
 
 				if(list.length === 1 && list[0] === 'Everyone'
 				&& id.specific.provider === 'zope.security.management.system_user'){
@@ -176,16 +186,19 @@ Ext.define('NextThought.controller.Groups', {
 					//lets just not show this in the view we now have the overall view in place.
 					return;
 				}
-
-				componentsToAdd.push({xtype: 'contacts-panel', title: name, associatedGroup: group});
+				target = group.get('IsDynamicSharing') ? groupsToAdd : listsToAdd;
+				target.push({xtype: 'contacts-panel', title: name, associatedGroup: group});
 			});
 
 			groups.suspendLayout = true;
+			lists.suspendLayout = true;
 
 			//Add the addGroup link on the groups
-			componentsToAdd.push({xtype: 'add-group'});
+			//groupsToAdd.push({xtype: 'add-group'});
 
-			var addedCmps = groups.add(componentsToAdd);
+			var addedCmps = groups.add(groupsToAdd);
+			Ext.Array.push(addedCmps, lists.add(listsToAdd));
+
 			Ext.each(addedCmps, function(cmp){
 				if(cmp.setUsers && cmp.associatedGroup){
 					var list = cmp.associatedGroup.get('friends'),
@@ -199,6 +212,8 @@ Ext.define('NextThought.controller.Groups', {
 				}
 			});
 
+			lists.suspendLayout = false;
+			lists.doLayout();
 			groups.suspendLayout = false;
 			groups.doLayout();
 		});
@@ -284,8 +299,8 @@ Ext.define('NextThought.controller.Groups', {
 		});
 	},
 
-	createGroupUnguarded: function(displayName, username, friends, callback, scope){
-		this.createFriendsListUnguarded(displayName, username, friends, false, callback, null, scope);
+	createGroupUnguarded: function(displayName, username, friends, callback, scope, error){
+		this.createFriendsListUnguarded(displayName, username, friends, false, callback, error, scope);
 	},
 
 	createDFLUnguarded: function(displayName, username, friends, callback, error, scope){
@@ -467,6 +482,33 @@ Ext.define('NextThought.controller.Groups', {
 		}
 	},
 
+	addList: function(btn){
+        function handleError(errorText){
+            console.error('An error occured', errorText);
+            w.showError(errorText);
+            btn.setDisabled(false);
+        }
+
+        function onError(record, operation){
+            Ext.callback(handleError, this, ['An error occurred creating '+displayName+' : '+ operation.response.status]);
+        }
+
+        function onCreated(){
+			w.close();
+        }
+
+		if(!$AppConfig.service.canFriend()){
+			Ext.Error.raise('Permission denied.  AppUser is not allowed to create lists');
+		}
+
+		var me = this,
+			w = btn.up('window'),
+			displayName = w.getListName(),
+			username = this.generateUsername(displayName);
+		btn.setDisabled(true);
+		this.createGroupUnguarded(displayName, username, null, onCreated, this, onError);
+	},
+
 	leaveGroup: function(record){
 		//onSuccess instead of reloading the whole store
 		//lets try and just remove the one thing we need
@@ -517,4 +559,5 @@ Ext.define('NextThought.controller.Groups', {
                 }
 		});
 	}
+
 });

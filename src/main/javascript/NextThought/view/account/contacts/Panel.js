@@ -13,7 +13,6 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 	collapsible: true,
 	hideCollapseTool: true,
 	collapsedCls: 'collapsed',
-
 	frame: false,
 	border: false,
 	unstyled: true,
@@ -28,7 +27,8 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 	}],
 
 	initComponent: function(){
-		var g = this.associatedGroup;
+		var g = this.associatedGroup,
+			listOrGroup = g && g.get('IsDynamicSharing') ? 'Group' : 'List';
 		if(!g){
 			this.tools = null;
 		}
@@ -36,7 +36,7 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 		this.setTitle(this.title);
 
 		this.deleteGroupAction = new Ext.Action({
-			text: 'Delete Group',
+			text: 'Delete '+listOrGroup,
 			scope: this,
 			handler: this.deleteGroup,
 			itemId: 'delete-group',
@@ -45,7 +45,7 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 		});
 
 		this.leaveGroupAction = new Ext.Action({
-			text: 'Leave Group',
+			text: 'Leave '+listOrGroup,
 			scope: this,
 			handler: this.leaveGroup,
 			itemId: 'leave-group',
@@ -54,12 +54,12 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 		});
 
 		this.groupChatAction = new Ext.Action({
-			text: 'Group Chat',
+			text: 'Chat With '+listOrGroup,
 			scope: this,
 			handler: this.chatWithGroup,
 			itemId: 'group-chat',
 			ui: 'nt-menuitem', plain: true,
-			hidden: !$AppConfig.service.canChat() || !g || g.getFriendCount() === 0
+			hidden: !$AppConfig.service.canChat() || !g || !isMe(g.get('Creator')) || g.getFriendCount() === 0
 		});
 
 		this.getGroupCodeAction =  new Ext.Action({
@@ -93,6 +93,36 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 			'mouseleave': this.startHide,
 			'mouseenter': this.stopHide
 		});
+
+		this.forcefullyRemoveUser =  new Ext.Action({
+			text: 'Remove User',
+			scope: this,
+			handler: this.forcefullyRemoveUser,
+			itemId: 'remove-user',
+			ui: 'nt-menuitem', plain: true
+		});
+
+		this.userMenu = Ext.widget('menu',{
+			ui: 'nt',
+			plain: true,
+			showSeparator: false,
+			shadow: false,
+			frame: false,
+			border: false,
+			hideMode: 'display',
+			parentItem: this,
+			items: [
+				this.forcefullyRemoveUser
+			]
+		});
+
+		this.mon(this.userMenu, {
+			scope: this,
+			'mouseleave': this.startHideUser,
+			'mouseenter': this.stopHideUser
+		});
+
+		this.on('nibClicked', this.nibClicked, this);
 	},
 
 
@@ -147,6 +177,13 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 
 	stopHide: function(){ clearTimeout(this.leaveTimer); },
 
+	startHideUser: function(){
+		var me = this;
+		me.stopHideUser();
+		me.leaveTimerUser = setTimeout(function(){me.userMenu.hide();}, 500);
+	},
+
+	stopHideUser: function(){ clearTimeout(this.leaveTimerUser); },
 
 	setTitle: function(title){
 		var itemsShown = 0;
@@ -171,15 +208,27 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 		this.setTitle(this.initialConfig.title);
 	},
 
+	//The nib is used to show either the group manangement screen or a remove user button for dfls
+	shouldHideUserNib: function(){
+		//No associated group means we want the nib
+		if(!this.associatedGroup){
+			return false;
+		}
+
+		//For dfls we show the nib if we are the creator
+		return this.associatedGroup.get('IsDynamicSharing') && !isMe(this.associatedGroup.get('Creator'));
+	},
+
 	setUsers: function(users){
 		var p = [],
-			g = this.associatedGroup;
+			g = this.associatedGroup,
+			hide = this.shouldHideUserNib();
 
 		if(Ext.isArray(users)){
-			Ext.each(users,function(u){ p.push({user: u, group: g}); });
+			Ext.each(users,function(u){ p.push({user: u, group: g, hideNib: hide}); });
 		}
 		else {
-			Ext.Object.each(users,function(n,u){ p.push({user: u, group: g}); });
+			Ext.Object.each(users,function(n,u){ p.push({user: u, group: g, hideNib: hide}); });
 		}
 		this.removeAll(true);
 		this.add(p);
@@ -189,7 +238,7 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 	addUser: function(user){
 		var existing = this.down('[username='+user.get('Username')+']');
 		if(!existing){
-			this.add({user: user, group: this.associatedGroup});
+			this.add({user: user, group: this.associatedGroup, hideNib: this.shouldHideUserNib()});
 			this.updateTitle();
 		}
 	},
@@ -239,6 +288,21 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 	leaveGroup: function(){
 		if(this.associatedGroup.getLink('my_membership')){
 			this.fireEvent('leave-group', this.associatedGroup);
+		}
+	},
+
+	forcefullyRemoveUser: function(t){
+		var user = t.up('menu').user;
+		this.fireEvent('remove-contact', this.associatedGroup, user.getId());
+	},
+
+	nibClicked: function(card, record, nib){
+		if(!this.associatedGroup || !this.associatedGroup.get('IsDynamicSharing')){
+			NextThought.view.account.contacts.management.Popout.popup(record, card.el.down('img:not(.nib)'), card.el, [-10,-18]);
+		}
+		else{
+			this.userMenu.user = record;
+			this.userMenu.showBy(nib,'tr-tl',[0,0]);
 		}
 	}
 

@@ -10,7 +10,7 @@ Ext.define('NextThought.mixins.AddGroup', {
 					cls: 'add-group-action selection-list-item',
 					role: 'button',
 					children: [
-						{ tag: 'a', href: '#', html: 'Add Group' },
+						{ tag: 'a', href: '#', html: 'Add List' },
 						{ cls: 'input-wrap empty', style: {display: 'none'}, cn: [
 							{ cls: 'clear' },
 							{ tag: 'input', type: 'text', cls: 'new-group-input' },

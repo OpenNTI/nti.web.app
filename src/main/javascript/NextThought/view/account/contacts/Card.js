@@ -28,6 +28,8 @@ Ext.define('NextThought.view.account.contacts.Card',{
 		if(!this.user){
 			Ext.Error.raise('No user specified');
 		}
+		this.addEvents('nibClicked');
+		this.enableBubble('nibClicked');
 
 		//for querying later:
 		this.username = this.user.getId();
@@ -74,7 +76,7 @@ Ext.define('NextThought.view.account.contacts.Card',{
 		try{
 			this.clickBlocker();
 			if(nib){
-				this.showPopout(this.user,nib);
+				this.fireEvent('nibClicked', this, this.user, nib);
 			}
 			else {
 				this.startChat();
@@ -83,11 +85,5 @@ Ext.define('NextThought.view.account.contacts.Card',{
 		catch(er){
 			this.fireEvent('blocked-click', this, this.user.getId());
 		}
-	},
-
-
-	showPopout: function(record, nib){
-		NextThought.view.account.contacts.management.Popout.popup(record,this.el.down('img:not(.nib)'),this.el,[-10,-18]);
 	}
-
 });

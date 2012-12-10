@@ -4,11 +4,11 @@ Ext.define('NextThought.view.account.contacts.GroupButtons',{
     requires: [
     ],
 
-    cls: 'group-buttons',
+    cls: 'contact-buttons',
 
     autoEl: { cn:[
-		{cls: 'create-group group-button', html: 'create group'},
-        {cls: 'join-group group-button', html: 'join group'}
+		{cls: 'create-group contact-button', html: 'create group'},
+        {cls: 'join-group contact-button', html: 'join group'}
         ]
     },
 

@@ -6,7 +6,8 @@ Ext.define('NextThought.view.account.contacts.View',{
 		'NextThought.view.account.contacts.Search',
 		'NextThought.view.account.contacts.Card',
 		'NextThought.view.account.contacts.Panel',
-        'NextThought.view.account.contacts.GroupButtons'
+        'NextThought.view.account.contacts.GroupButtons',
+		'NextThought.view.account.contacts.ListButtons'
 	],
 	tooltip: 'Contacts',
 	iconCls: 'contacts',
@@ -38,9 +39,18 @@ Ext.define('NextThought.view.account.contacts.View',{
 			items: [
 				{
 					xtype: 'secondary-tabpanel',
+
 					items: [
 						{ id: 'contact-list', title: 'All Contacts', autoScroll: true},
-                        { title:'Groups', layout: {
+                        { title: 'Lists', layout: {
+                            type: 'vbox',
+                            align: 'stretch'
+                            },
+                            items:[
+                            { xtype: 'container', id: 'my-lists', layout: 'auto', flex: 1, autoScroll: true},
+							{ xtype: 'list-buttons', height: '50px'}
+                        ]},
+						{ title: 'Groups', layout: {
                             type: 'vbox',
                             align: 'stretch'
                             },
