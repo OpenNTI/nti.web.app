@@ -10,6 +10,15 @@
 	@include sprite-lock;
 	background-position: -48px -17px;
 }
+@mixin sprite-list {
+	width: 14px;
+	height: 10px;
+	background-position: -60px -2px;
+}
+@mixin sprite-list-active {
+	@include sprite-lock;
+	background-position: -60px -17px;
+}
 @mixin sprite-globe {
 	width: 12px;
 	height: 12px;

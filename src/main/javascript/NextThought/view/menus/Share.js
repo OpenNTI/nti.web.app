@@ -174,7 +174,7 @@ Ext.define('NextThought.view.menus.Share',{
 			}
 
 			target.push({
-				cls: 'share-with contact-menu-item '+ (dfl ? 'group' : 'list'),
+				cls: 'share-with '+ (dfl ? 'group' : 'list')+'-menu-item',
 				text: v.getName(),
 				record: v,
 				isGroup: true,

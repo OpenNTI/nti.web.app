@@ -60,13 +60,21 @@
 		&.community-menu-item:hover::after {
 			@include sprite-globe-active;
 		}
-		&.contact-menu-item::after {
+		&.group-menu-item::after {
 			top: 13px;
 			left: 10px;
 			@include sprite-groups;
 		}
-		&.contact-menu-item:hover::after {
+		&.group-menu-item:hover::after {
 			@include sprite-groups-active;
+		}
+		&.list-menu-item::after {
+			top: 13px;
+			left: 10px;
+			@include sprite-list;
+		}
+		&.list-menu-item:hover::after {
+			@include sprite-list-active;
 		}
 		&.custom-menu-item::after {
 			top: 11px;
