@@ -295,7 +295,7 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 		var user = t.up('menu').user;
 
 		var me = this,
-			msg = user.get('displayName')+' will be permanently removed from the '+this.associatedGroup.readableType+' '+this.associatedGroup.get('displayName');
+			msg = user.get('displayName')+' will no longer be a member of '+this.associatedGroup.get('displayName');
 
 		Ext.Msg.show({
 			msg: msg,
