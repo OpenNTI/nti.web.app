@@ -109,7 +109,8 @@ Ext.define('NextThought.view.menus.Share',{
 			communities = $AppConfig.userObject.getCommunities(),
 			customSelected = false,
 			onlyMeSelected,
-			everyone = UserRepository.getTheEveryoneEntity();
+			everyone = UserRepository.getTheEveryoneEntity(),
+			groups=[], lists=[];
 
 		this.custom.setValue(sharedWith);
 
@@ -137,6 +138,12 @@ Ext.define('NextThought.view.menus.Share',{
 		if(communities.length>0){
 			//items.push({ xtype: 'labeledseparator', text: 'Communities'});
 			Ext.each(communities,function(c){
+
+				//Don't include the dfls here
+				if(!c.isCommunity){
+					return true; //Continue
+				}
+
 				var id=c.get('Username'),
 					chkd =  Ext.Array.contains(sharedWith, id);
 
@@ -157,23 +164,28 @@ Ext.define('NextThought.view.menus.Share',{
         items.push({ cls: 'share-with custom custom-menu-item', text: 'Custom', allowUncheck:false, isCustom:true});
 
         //add any groups
-        items.push({ xtype: 'labeledseparator', text: 'Contacts'});
 		this.store.each(function(v){
 			var id=v.get('Username'),
-				chkd =  Ext.Array.contains(sharedWith, id);
+				chkd =  Ext.Array.contains(sharedWith, id),
+				dfl = v.get('IsDynamicSharing'), target = dfl ? groups : lists;
 
 			if (chkd){
 				sharedWith = Ext.Array.remove(sharedWith, id);
 			}
 
-			items.push({
-				cls: 'share-with contact-menu-item',
+			target.push({
+				cls: 'share-with contact-menu-item '+ (dfl ? 'group' : 'list'),
 				text: v.getName(),
 				record: v,
 				isGroup: true,
                 selected: chkd
 			});
 		});
+
+		items.push({ xtype: 'labeledseparator', text: 'Lists'});
+		Ext.Array.push(items, lists);
+		items.push({ xtype: 'labeledseparator', text: 'Groups'});
+		Ext.Array.push(items, groups);
 
         //if nothing left, set custom
         if (sharedWith.length) {
