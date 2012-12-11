@@ -137,6 +137,19 @@ $experimental-support-for-svg: true;
 		}
 	}
 
+	.x-container-slide {
+		overflow-x: hidden;
+		overflow-y: auto;
+		padding: 95px 95px 0 95px;
+		img {
+			border-width: 0;
+			background: $video-background;
+			width: 100%;
+			box-shadow: 0 5px 75px 5px rgba(0, 0, 0, 0.8);
+		}
+
+	}
+
 	&.overlay{
 		background: rgba(0,0,0,0.85);
 	}

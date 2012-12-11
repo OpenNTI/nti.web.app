@@ -38,7 +38,9 @@ Ext.define('NextThought.view.slidedeck.View',{
 		this.callParent(arguments);
 		var store = this.store,
 			start = this.startOn,
-			ctrls = this.items.getAt(0), v,q;
+			ctrls = this.items.getAt(0),
+			slide = this.items.getAt(1),
+			v,q;
 
 		//clear the reference, pass it along...
 		delete this.store;
@@ -52,6 +54,7 @@ Ext.define('NextThought.view.slidedeck.View',{
 
 		//wire up
 		this.mon(q,'select', v.updateVideoFromSelection, v);
+		this.mon(q,'select', slide.updateSlide,slide);
 	},
 
 
