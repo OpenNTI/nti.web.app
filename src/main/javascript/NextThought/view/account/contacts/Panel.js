@@ -255,7 +255,7 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 
 	deleteGroup: function(){
 		var me = this,
-			msg = 'The '+(this.associatedGroup.readableType || 'list')+' '+ this.associatedGroup.get('displayName') + ' will be permanently deleted...';
+			msg = 'The '+this.associatedGroup.readableType+' '+ this.associatedGroup.get('displayName') + ' will be permanently deleted...';
 
 		Ext.Msg.show({
 			msg: msg,
@@ -293,7 +293,23 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 
 	forcefullyRemoveUser: function(t){
 		var user = t.up('menu').user;
-		this.fireEvent('remove-contact', this.associatedGroup, user.getId());
+
+		var me = this,
+			msg = user.get('displayName')+' will be permanently removed from the '+this.associatedGroup.readableType+' '+this.associatedGroup.get('displayName');
+
+		Ext.Msg.show({
+			msg: msg,
+			buttons: 9, // bitwise result of: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
+			scope: me,
+			icon: 'warning-red',
+			buttonText: {'ok': 'Delete'},
+			title: 'Are you sure?',
+			fn: function(str){
+				if(str === 'ok'){
+					this.fireEvent('remove-contact', this.associatedGroup, user.getId());
+				}
+			}
+		});
 	},
 
 	nibClicked: function(card, record, nib){
