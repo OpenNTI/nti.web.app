@@ -19,7 +19,8 @@ Ext.define(	'NextThought.model.User', {
         { name: 'opt_in_email_communication', type: 'boolean' },
 		{ name: 'following', type: 'UserList' },
 		{ name: 'Communities', type: 'UserList' },
-		{ name: 'displayName', convert: function(v,r){return r.getName();}}
+		{ name: 'displayName', convert: function(v,r){return r.getName();}},
+		{ name: 'role', type: 'string'}
 	],
 
 	constructor: function() {

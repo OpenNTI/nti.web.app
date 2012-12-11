@@ -310,8 +310,18 @@ Ext.define('NextThought.model.Service', {
 		return this.hasCapability('nti.platform.p2p.friendslists');
 	},
 
+	//Right now the cabability isn't enough so hack some crap in client
+	//side which I'm sure will break terribly at some point.  Logic is
+	//users with the capability and (those users that have no role field or a role field 
+	//not equal to student) should be allowed to create them.  The purpose
+	//is to further restrict the capability for mathcounts users that are students
+	//as specified by the unverified role field
 	canCreateDynamicGroups: function(){
-		return this.hasCapability('nti.platform.p2p.dynamicfriendslists');
+		var roleField = $AppConfig.userObject.get('role');
+		if(!this.hasCapability('nti.platform.p2p.dynamicfriendslists')){
+			return false;
+		}
+		return !roleField || roleField.toLowerCase() !== 'student';
 	},
 
 	hasCapability: function(c){
