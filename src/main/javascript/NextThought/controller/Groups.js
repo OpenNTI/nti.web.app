@@ -288,12 +288,12 @@ Ext.define('NextThought.controller.Groups', {
 				Ext.callback(callback,scope, [true, record, operation]);
 				store.load();
 			},
-			failed: function(record, operation){
+			failed: function(record, operation, response){
 				if(errorCallback){
-					Ext.callback(errorCallback, scope, [operation]);
+					Ext.callback(errorCallback, scope, [record, operation, response]);
 				}
 				else{
-					Ext.callback(callback,scope, [false]);
+					Ext.callback(callback,scope, [false, response]);
 				}
 			}
 		});
@@ -450,8 +450,10 @@ Ext.define('NextThought.controller.Groups', {
             btn.setDisabled(false);
         }
 
-        function onError(record, operation){
-            Ext.callback(handleError, this, ['An error occurred creating '+displayName+' : '+ operation.response.status]);
+        function onError(record, operation, response){
+			var code = response.code,
+				msg = errors[code] || errors['_default'];
+            Ext.callback(handleError, this, [msg]);
         }
 
         function onCreated(success, record){
@@ -464,7 +466,8 @@ Ext.define('NextThought.controller.Groups', {
         }
 
 		var w = btn.up('window'),
-			username, displayName, me=this;
+			username, displayName, me=this,
+			errors;
 
 		if(!$AppConfig.service.canCreateDynamicGroups()){
 			Ext.Error.raise('Permission denied.  AppUser is not allowed to create dfls');
@@ -478,19 +481,25 @@ Ext.define('NextThought.controller.Groups', {
 			username = this.generateUsername(displayName);
 			console.log('Create group with name '+ displayName);
 			btn.setDisabled(true);
+			errors = {
+				'RealnameInvalid': 'Invalid group name '+displayName
+			};
 			this.createDFLUnguarded(displayName, username, null, onCreated, onError, this);
 		}
 	},
 
 	addList: function(btn){
+
         function handleError(errorText){
             console.error('An error occured', errorText);
             w.showError(errorText);
             btn.setDisabled(false);
         }
 
-        function onError(record, operation){
-            Ext.callback(handleError, this, ['An error occurred creating '+displayName+' : '+ operation.response.status]);
+        function onError(record, operation, response){
+			var code = response.code,
+				msg = errors[code] || errors['_default'];
+            Ext.callback(handleError, this, [msg]);
         }
 
         function onCreated(){
@@ -504,7 +513,10 @@ Ext.define('NextThought.controller.Groups', {
 		var me = this,
 			w = btn.up('window'),
 			displayName = w.getListName(),
-			username = this.generateUsername(displayName);
+			username = this.generateUsername(displayName),
+			errors = {
+				'RealnameInvalid': 'Invalid list name '+displayName
+			};
 		btn.setDisabled(true);
 		this.createGroupUnguarded(displayName, username, null, onCreated, this, onError);
 	},
