@@ -209,7 +209,7 @@
 
 }
 
-/* Styles below are intended to target things inside the content iframe */
+// Styles below are intended to target things inside the content iframe
 
 .note-window .main-view .context [itemprop~="nti-data-markupenabled"] {
 	margin: 3px !important;
@@ -244,7 +244,7 @@
 
 	object[type$=slidevideo] .bar a.mark {display: none;}
 
-	/*Sometimes footnotes are redacted, this will hide the actual footnote when that is the case*/
+	//Sometimes footnotes are redacted, this will hide the actual footnote when that is the case
 	li.footnote.redacted {
 		//This will hide a footnote associated with a redacted chunk of content.  Turning off until Aaron approves a design.
 		span, a {

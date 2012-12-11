@@ -4,6 +4,16 @@
 
 @import "nti-override.css";
 
+
+@import "window-treatments";
+@import "chat";
+@import "whiteboard";
+@import "notes";
+@import "dictionary";
+@import "coppa-specific";
+@import "videopopup";
+@import "account-window";
+
 @import "buttons";
 @import "token";
 @import "header";
@@ -24,7 +34,7 @@
 @import "myaccount";
 @import "file-uploader";
 @import "link-styles";
-//@import "classroom";
+
 @import "sidebar";
 @import "search";
 @import "assessments";
@@ -39,14 +49,6 @@
 @import "random-gravatar-picker";
 @import "toast";
 
-@import "window-treatments";
-@import "chat";
-@import "whiteboard";
-@import "notes";
-@import "dictionary";
-@import "coppa-specific";
-@import "videopopup";
-@import "account-window";
 
 
 
