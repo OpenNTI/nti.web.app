@@ -65,6 +65,8 @@ Ext.define('NextThought.view.slidedeck.Video',{
 		};
 
 		this.players = {};
+
+		//build playlist
 	},
 
 
@@ -187,9 +189,6 @@ Ext.define('NextThought.view.slidedeck.Video',{
 		var startTime = slide.get('video-start') || 0,
 			videoId = slide.get('video') || null,
 			videoService = slide.get('video-type') || null;
-
-
-		console.log(videoService, videoId, startTime);
 
 		this.maybeSwitchPlayers(videoService);
 		this.setVideoAndPosition(videoId,startTime);
