@@ -357,6 +357,8 @@
 							padding: 0;
 							position: absolute;
 							left: 0; right: 0;
+							min-height: 28px; /* mainly a fix for IE*/
+							min-width: 85%;	/* mainly a fix for IE*/
 						}
 					}
 
