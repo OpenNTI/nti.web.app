@@ -11,8 +11,6 @@ Ext.define('NextThought.view.slidedeck.Video',{
 	plain: true,
 	ui: 'slidedeck-video',
 
-	YOUTUBE_URL_PATTERN: '//www.youtube.com/embed/{0}?enablejsapi=1&playerapiid={1}&origin={2}',
-
 	renderTpl: Ext.DomHelper.markup([{
 		cls: 'video-wrapper', cn: [{
 			//YouTube's player will replace this div and copy all its attributes
@@ -32,10 +30,6 @@ Ext.define('NextThought.view.slidedeck.Video',{
 		tabIndex: 0,
 		role: 'button'
 	}]),
-
-	// YouTube: https://developers.google.com/youtube/iframe_api_reference
-	// Embed Code: http://www.youtube.com/embed/VIDEO_ID?enablejsapi=1&playerapiid=player_id&origin=http://example.com
-	// use ytPlayer.at(millies,callback)
 
 	// Vimeo: http://developer.vimeo.com/player/js-api
 	// https://github.com/vimeo/player-api/tree/master/javascript
@@ -88,7 +82,6 @@ Ext.define('NextThought.view.slidedeck.Video',{
 		});
 
 		this.players.youtube = new YT.Player(this.playerIds.youtube, {
-			//videoId: 'u1zgFlCw8Aw',
 			height: '221',
 			width: '392',
 			playerVars: {
