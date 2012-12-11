@@ -1,10 +1,64 @@
 @import "compass";
 @import "variables";
 @import "animate";
-@import "fonts";
 
 @import "nti-override.css";
-@import "part1.css";
-@import "part2.css";
 
-@import "windows.css";
+@import "buttons";
+@import "token";
+@import "header";
+@import "content";
+@import "navigation-menu";
+@import "masks-and-tips";
+@import "form-fields";
+@import "menu-items";
+
+
+@import "contact-search";
+@import "contacts";
+@import "activity";
+
+
+@import "content-nav";
+@import "annotations";
+@import "myaccount";
+@import "file-uploader";
+@import "link-styles";
+//@import "classroom";
+@import "sidebar";
+@import "search";
+@import "assessments";
+@import "identity";
+
+@import "history-view";
+@import "user-data-panel";
+
+@import "slidedeck";
+
+@import "avatar-choices";
+@import "random-gravatar-picker";
+@import "toast";
+
+@import "window-treatments";
+@import "chat";
+@import "whiteboard";
+@import "notes";
+@import "dictionary";
+@import "coppa-specific";
+@import "videopopup";
+@import "account-window";
+
+
+
+body.x-border-layout-ct { background: white; }
+
+.x-form-item,
+.x-form-field,
+.x-body {
+	font-family: $font !important;
+}
+
+:-webkit-input-placeholder { @include placeholder-style(); }
+:-moz-placeholder { @include placeholder-style(); }
+:-ms-input-placeholder{ @include placeholder-style(); }
+
