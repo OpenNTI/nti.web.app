@@ -167,14 +167,14 @@ Ext.define('NextThought.view.menus.Share',{
 		this.store.each(function(v){
 			var id=v.get('Username'),
 				chkd =  Ext.Array.contains(sharedWith, id),
-				dfl = v.get('IsDynamicSharing'), target = dfl ? groups : lists;
+				dfl = v.isDFL, target = dfl ? groups : lists;
 
 			if (chkd){
 				sharedWith = Ext.Array.remove(sharedWith, id);
 			}
 
 			target.push({
-				cls: 'share-with '+ (dfl ? 'group' : 'list')+'-menu-item',
+				cls: 'share-with '+v.readableType+'-menu-item',
 				text: v.getName(),
 				record: v,
 				isGroup: true,

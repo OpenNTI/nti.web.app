@@ -15,6 +15,30 @@ Ext.define('NextThought.model.FriendsList', {
 		{ name: 'IsDynamicSharing', type: 'auto'}
 	],
 
+    constructor: function(){
+		this.callParent(arguments);
+		Ext.Object.defineAttributes(this,{
+			isDFL: {
+				getter: this.isDynamicSharing,
+				setter: function(){ throw 'readonly'; }
+			},
+
+			readableType: {
+				getter: this.getPresentationType,
+				setter: function(){ throw 'readonly'; }
+			}
+		});
+
+	},
+
+	isDynamicSharing: function(){
+		return this.get('IsDynamicSharing');
+	},
+
+	getPresentationType: function(){
+		return this.isDynamicSharing() ? 'group' : 'list';
+	},
+
 	destroy: function() {
 		this.set('friends', []);
 		this.callParent(arguments);

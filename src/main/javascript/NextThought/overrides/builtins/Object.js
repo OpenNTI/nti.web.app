@@ -26,7 +26,7 @@ Ext.define('NextThought.overrides.builtins.Object',{
 
 },function(){
 
-
+	Ext.Object.defineAttributes=this.defineAttributes;
 	this.defineAttributes($AppConfig,{
 		username: {
 			getter: function(){ try { return this.userObject.getId(); } catch(e){console.error(e.stack);} },

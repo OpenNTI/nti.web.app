@@ -133,6 +133,7 @@ Ext.application({
 			'javascript/specs/util/anchorables/Utils.spec.js',
             'javascript/specs/model/Base.spec.js',
 			'javascript/specs/model/Hit.spec.js',
+			'javascript/specs/model/FriendsList.spec.js',
 			'javascript/specs/model/anchorables/ContentRangeDescription.spec.js',
 			'javascript/specs/model/anchorables/DomContentRangeDescription.spec.js',
 			'javascript/specs/store/Hit.spec.js',

@@ -186,7 +186,7 @@ Ext.define('NextThought.controller.Groups', {
 					//lets just not show this in the view we now have the overall view in place.
 					return;
 				}
-				target = group.get('IsDynamicSharing') ? groupsToAdd : listsToAdd;
+				target = group.isDFL ? groupsToAdd : listsToAdd;
 				target.push({xtype: 'contacts-panel', title: name, associatedGroup: group});
 			});
 

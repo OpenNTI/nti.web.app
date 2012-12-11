@@ -49,7 +49,7 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
         }
 
 		//See comment about adding to dfls in fn: refresh
-		if(record.get('IsDynamicSharing')){
+		if(record.isDFL){
 			return;
 		}
 
@@ -83,7 +83,7 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
 			//You can only be added to a dfl by inputting a code and joining
 			//yourself. period!  Obviously we also don't let you modify things you
 			//can't modify
-			if (!r.isModifiable() || r.get('IsDynamicSharing')){
+			if (!r.isModifiable() || r.isDFL){
 				//Ext.fly(li).down('img.delete-group').remove();
 				Ext.fly(li).setStyle({display:'none'});
 			}

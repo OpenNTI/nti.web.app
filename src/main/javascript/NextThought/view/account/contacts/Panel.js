@@ -28,7 +28,7 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 
 	initComponent: function(){
 		var g = this.associatedGroup,
-			listOrGroup = g && g.get('IsDynamicSharing') ? 'Group' : 'List';
+			listOrGroup = g && Ext.String.capitalize(g.readableType);
 		if(!g){
 			this.tools = null;
 		}
@@ -216,7 +216,7 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 		}
 
 		//For dfls we show the nib if we are the creator
-		return this.associatedGroup.get('IsDynamicSharing') && !isMe(this.associatedGroup.get('Creator'));
+		return this.associatedGroup.isDFL && !isMe(this.associatedGroup.get('Creator'));
 	},
 
 	setUsers: function(users){
@@ -255,7 +255,7 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 
 	deleteGroup: function(){
 		var me = this,
-			msg = 'The '+(this.associatedGroup.get('IsDynamicSharing')?'group':'list')+' '+ this.associatedGroup.get('displayName') + ' will be permanently deleted...';
+			msg = 'The '+(this.associatedGroup.readableType || 'list')+' '+ this.associatedGroup.get('displayName') + ' will be permanently deleted...';
 
 		Ext.Msg.show({
 			msg: msg,
@@ -297,7 +297,7 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 	},
 
 	nibClicked: function(card, record, nib){
-		if(!this.associatedGroup || !this.associatedGroup.get('IsDynamicSharing')){
+		if(!this.associatedGroup || !this.associatedGroup.isDFL){
 			NextThought.view.account.contacts.management.Popout.popup(record, card.el.down('img:not(.nib)'), card.el, [-10,-18]);
 		}
 		else{
