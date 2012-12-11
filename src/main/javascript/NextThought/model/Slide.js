@@ -7,6 +7,7 @@ Ext.define('NextThought.model.Slide', {
 	fields: [
 		{ name: 'title', type: 'string' },
 		{ name: 'image', type: 'string' },
+		{ name: 'image-thumbnail', type: 'string' },
 		{ name: 'video', type: 'string' },
 		{ name: 'video-type', type: 'string' },
 		{ name: 'video-id', type: 'string' },
@@ -21,17 +22,28 @@ Ext.define('NextThought.model.Slide', {
 		fromDom: function(dom,containerId){
 
 			function getParam(name){
-				var DQ = Ext.DomQuery,
-					el = DQ.select('param[name="'+name+'"]',dom)[0];
+				var el = DQ.select('param[name="'+name+'"]',dom)[0];
 				return el ? el.getAttribute('value') : null;
 			}
 
-			var o = {
+			function getImage(){
+				var el = DQ.select('[itemprop] img',dom)[0], v = null;
+				if(el){
+					v = el.getAttribute('data-nti-image-thumbnail')
+						|| el.getAttribute('data-nti-image-quarter');
+				}
+				return v;
+			}
+
+			var DQ = Ext.DomQuery,
+				root = LocationProvider.getContentRoot(containerId),
+				o = {
 				'Class': 'Slide',
 				'ContainerId': containerId,
 				'NTIID': dom.getAttribute('data-ntiid'),
 				'title': getParam('slidetitle'),
-				'image': LocationProvider.getContentRoot(containerId) + getParam('slideimage'),
+				'image': root + getParam('slideimage'),
+				'image-thumbnail': root + getImage(),
 				'video': getParam('slidevideo'),
 				'video-type': getParam('slidevideotype'),
 				'video-id': getParam('slidevideoid'),

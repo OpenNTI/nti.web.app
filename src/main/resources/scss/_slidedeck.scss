@@ -32,7 +32,8 @@ $experimental-support-for-svg: true;
 			overflow: hidden;
 			margin: 0 0 2px 0;
 
-			iframe {
+			.video {
+				//position: absolute;
 				margin: 6px 4px 5px 4px;
 				background: rgba(255, 255, 255, 0.04);
 				width: 392px;
@@ -84,6 +85,7 @@ $experimental-support-for-svg: true;
 		}
 
 		.slidedeck-queue {
+			@include hardware-accelerate();
 			padding: 14px 0;
 
 			.item-wrap {
@@ -100,14 +102,13 @@ $experimental-support-for-svg: true;
 					overflow: hidden;
 					img {
 						float: left;
-						width: 120px;
-						//min-height: 65px;
-						//max-height: 90px;
-						height: 90px;
+						width: 128px;
+						min-height: 65px;
+						max-height: 96px;
 						border: 3px solid $slidedeck-primary-text-color;
 					}
 					.title {
-						margin: 0 0 0 150px;
+						margin: 0 0 0 135px;
 						font-size: 12px;
 						font-weight: 400;
 						h3 {
@@ -125,7 +126,8 @@ $experimental-support-for-svg: true;
 					padding-right: 5px;
 				}
 
-				&.over, &.x-item-selected {
+				&.over {opacity: 1;}
+				&.x-item-selected {
 					opacity: 1;
 					.content-wrap {
 						background: $slidedeck-selected-background;

@@ -18,7 +18,7 @@ Ext.define('NextThought.view.slidedeck.Queue',{
 				cn:[{
 					cls:'item',
 					tag: 'img',
-					src: '{image}'
+					src: '{image-thumbnail}'
 				},{
 					cls: 'title', cn:[
 						{ tag: 'h3', html: '{title:ellipsis(60)}' },

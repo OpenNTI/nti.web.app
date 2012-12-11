@@ -15,8 +15,16 @@ Ext.define('NextThought.view.slidedeck.Video',{
 
 	renderTpl: Ext.DomHelper.markup([{
 		cls: 'video-wrapper', cn: [{
-			/*tag: 'iframe',*/ cls:'video', name: 'slide-video', id: '{id}-video',
+			//YouTube's player will replace this div and copy all its attributes
+			/*tag: 'iframe',*/ cls:'video', name: 'slide-video', id: '{id}-youtube-video',
 			frameBorder: 0, scrolling: 'no', seamless: true
+		},{
+			tag: 'iframe', cls:'video', name: 'slide-video', id: '{id}-vimeo-video',
+			frameBorder: 0, scrolling: 'no', seamless: true
+		},{
+			tag: 'video', cls: 'video', name: 'slide-video', id: '{id}-native-video'
+		},{
+			cls: 'video placeholder', name: 'slide-video', id: '{id}-curtain'
 		}]
 	},{
 		cls: 'video-checkbox',
@@ -38,7 +46,6 @@ Ext.define('NextThought.view.slidedeck.Video',{
 
 
 	renderSelectors: {
-		videoEl: '.video',
 		checkboxEl: 'div.video-checkbox'
 	},
 
@@ -49,6 +56,21 @@ Ext.define('NextThought.view.slidedeck.Video',{
 		if(typeof(this.synchronizeWithSlides) !== 'boolean'){
 			this.synchronizeWithSlides = true;
 		}
+
+		this.commandQueue = {
+			'youtube': [],
+			'vimeo': [],
+			'html5': []
+		};
+
+		this.playerIds = {
+			'youtube': this.id+'-youtube-video',
+			'vimeo': this.id+'-vimeo-video',
+			'html5': this.id+'-native-video',
+			'none': this.id+'-curtain'
+		};
+
+		this.players = {};
 	},
 
 
@@ -57,12 +79,30 @@ Ext.define('NextThought.view.slidedeck.Video',{
 
 		function enterFilter(e) { var k = e.getKey(); return (k === e.ENTER || k === e.SPACE); }
 
+		this.updateCheckbox();
+
 		this.mon(this.checkboxEl,{
 			scope:this,
 			click:this.checkboxClicked,
 			keydown: Ext.Function.createInterceptor(this.checkboxClicked,enterFilter,this,null)
 		});
-		this.updateCheckbox();
+
+		this.players.youtube = new YT.Player(this.playerIds.youtube, {
+			//videoId: 'u1zgFlCw8Aw',
+			height: '221',
+			width: '392',
+			playerVars: {
+				autohide: 1,
+				modestbranding: 1,
+				rel: 0,
+				showinfo: 0
+			},
+			events: {
+				'onReady': Ext.bind(this.youtubePlayerReady,this)
+			}
+		});
+
+		this.maybeSwitchPlayers(null);
 	},
 
 
@@ -77,40 +117,97 @@ Ext.define('NextThought.view.slidedeck.Video',{
 	},
 
 
+	youtubePlayerReady: function(){
+		this.players.youtube.isReady = true;
+		var q = this.commandQueue.youtube;
+		while(q.length>0){
+			Ext.callback(this.issueCommand,this, q.shift());
+		}
+	},
+
+
+	issueCommand: function(target, command, args){
+		var t = this.players[target];
+		if(!t.isReady){
+			this.commandQueue[target].push([target,command,args]);
+			return null;
+		}
+		return Ext.callback(t[command],t,args);
+	},
+
+
+	stopPlayback: function(){
+		this.currentVideoId = null;
+		this.issueCommand('youtube','clearVideo');
+		//this.issueCommand('vimeo','stop');
+		//this.issueCommand('html5','stop');
+	},
+
+
+	setVideoAndPosition: function(videoId,startAt){
+		if(this.currentVideoId ===videoId){
+			this.issueCommand('youtube','seekTo',[startAt,true]);
+		}
+		else {
+			this.currentVideoId = videoId;
+			if(videoId){
+				this.issueCommand('youtube','loadVideoById',[videoId, startAt, "medium"]);
+			}
+			else {
+				this.stopPlayback();
+			}
+		}
+
+		this.issueCommand('youtube','pauseVideo');
+	},
+
+
+	maybeSwitchPlayers: function(service){
+		var me = this;
+
+		me.activeVideoService = service;
+
+		service = service || 'none';
+
+		Ext.Object.each(me.playerIds,function(k,id){
+			var v = Ext.get(id);
+			v.setVisibilityMode(Ext.dom.Element.DISPLAY);
+
+			if(v.isVisible()){
+				if(k!==service){ v.hide(); }
+				//else leave it visible
+			}
+			//not visible
+			else if(k===service){
+				v.show();
+				me.stopPlayback();
+			}
+
+		});
+
+	},
+
+
 	//called by the event of selecting something in the slide queue.
 	updateVideoFromSelection: function(queueCmp, slide){
 
-//		this.videoEl.set({src:
-//		Ext.String.format(this.YOUTUBE_URL_PATTERN,
-//				slide.get('video'),
-//				encodeURIComponent(this.videoEl.id),
-//				encodeURIComponent(location.protocol+'//'+location.host)
-//		)});
+		var startTime = slide.get('video-start') || 0,
+			videoId = slide.get('video') || null,
+			videoService = slide.get('video-type') || null;
 
-		var startTime = slide.get('video-start'),
-			videoId = slide.get('video');
 
-		if(!this.ytPlayer){
-			this.ytPlayer = new YT.Player(this.videoEl.id, {
-				videoId: videoId,
-				height: '221',
-				width: '392',
-				playerVars: {
-					autohide: 1,
-					modestbranding: 1,
-					rel: 0,
-					showinfo: 0,
-					start: startTime
-				},
-				events: {
-					'onReady': function(){console.log('ready!');},
-					'onStateChange': function(){console.log('state!');}
-				}
-			});
-			return;
+		console.log(videoService, videoId, startTime);
+
+		this.maybeSwitchPlayers(videoService);
+		this.setVideoAndPosition(videoId,startTime);
+
+		//Hide player?
+		/*
+		if(!videoService){
+			this.hide();
+		} else if(!this.isVisible()){
+			this.show();
 		}
-
-		this.ytPlayer.loadVideoById(videoId, startTime, "medium");
-//		this.ytPlayer.seekTo(startTime,true);
+		*/
 	}
 });
