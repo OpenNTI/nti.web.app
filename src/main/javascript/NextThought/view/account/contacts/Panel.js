@@ -255,7 +255,7 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 
 	deleteGroup: function(){
 		var me = this,
-			msg = 'The group '+ this.associatedGroup.get('displayName') + ' will be permanently deleted...';
+			msg = 'The '+(this.associatedGroup.get('IsDynamicSharing')?'group':'list')+' '+ this.associatedGroup.get('displayName') + ' will be permanently deleted...';
 
 		Ext.Msg.show({
 			msg: msg,
