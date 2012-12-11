@@ -93,6 +93,10 @@ Ext.define('NextThought.view.account.activity.View',{
             s.clearOnPageLoad = false;
             s.nextPage();
         }
+		else{
+			this.el.down('.center-button').remove();
+			this.el.parent().unmask();
+		}
     },
 
     maybeReload: function(){
@@ -148,7 +152,7 @@ Ext.define('NextThought.view.account.activity.View',{
 			max = s.getPageFromRecordIndex(s.getTotalCount());
 			if(s.currentPage < max){
 				Ext.create('Ext.Button', {
-					text: oldestGroup ? 'More from ' + oldestGroup.toLowerCase() : 'Load more',
+					text: oldestGroup && oldestGroup !== 'Older' ? 'More from ' + oldestGroup.toLowerCase() : 'Load more',
 					renderTo: Ext.DomHelper.append(container.getEl(), {cls:'center-button'} ),
 					scale: 'medium',
 					ui: 'secondary',
