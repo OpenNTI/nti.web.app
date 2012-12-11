@@ -315,7 +315,10 @@ Ext.define('NextThought.model.Service', {
 	//users with the capability and (those users that have no role field or a role field 
 	//not equal to student) should be allowed to create them.  The purpose
 	//is to further restrict the capability for mathcounts users that are students
-	//as specified by the unverified role field
+	//as specified by the unverified role field.
+	//
+	//Note this already breaks for coppa student accounts that get upgraded to none coppa
+	//status.  Their role changs from student to other.
 	canCreateDynamicGroups: function(){
 		var roleField = $AppConfig.userObject.get('role');
 		if(!this.hasCapability('nti.platform.p2p.dynamicfriendslists')){
