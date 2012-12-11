@@ -37,8 +37,9 @@ Ext.define('NextThought.view.account.codecreation.Main',{
 		this.mon(this.down('[name=submit]'), 'click', this.clearError, this);
 	},
 
-	changed: function(val, t){
-		var empty = Ext.isEmpty(val),
+	changed: function(value, t){
+		var val = value.trim(),
+			empty = Ext.isEmpty(val),
 			btn = this.query('[name=submit]',this)[0];
 		btn.setDisabled(empty);
 		if(Ext.isEmpty(val)){

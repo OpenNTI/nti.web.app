@@ -36,8 +36,9 @@ Ext.define('NextThought.view.account.contacts.createlist.Main',{
 		return name ? name.trim() : name;
 	},
 
-	changed: function(val, t){
-		var empty = Ext.isEmpty(val),
+	changed: function(value, t){
+		var val = value.trim(),
+			empty = Ext.isEmpty(val),
 			btn = this.query('[name=submit]',this)[0];
 		btn.setDisabled(empty);
 		if(Ext.isEmpty(val)){
