@@ -28,12 +28,11 @@ Ext.define('NextThought.view.account.contacts.View',{
 			flex: 1,
 			id: 'contacts-view-panel',
 			defaults :{
-				autoScroll: true,
-				overflowX: 'hidden',
 				xtype: 'container',
 				defaults: {
 					layout: 'anchor',
-					anchor: '100%'
+					anchor: '100%',
+					defaults: {anchor: '100%'}
 				}
 			},
 			items: [
@@ -41,21 +40,19 @@ Ext.define('NextThought.view.account.contacts.View',{
 					xtype: 'secondary-tabpanel',
 
 					items: [
-						{ id: 'contact-list', title: 'All Contacts', autoScroll: true},
-                        { title: 'Lists', layout: {
-                            type: 'vbox',
-                            align: 'stretch'
-                            },
-                            items:[
-                            { xtype: 'container', id: 'my-lists', layout: 'auto', flex: 1, autoScroll: true},
+						{ id: 'contact-list', title: 'All Contacts', autoScroll: true },
+                        { title: 'Lists',
+						  layout: 'anchor',
+						  defaults: {anchor: '100%'},
+                          items:[
+                            { xtype: 'container', id: 'my-lists', layout: 'auto', flex: 1, autoScroll: true, anchor: '100% -50px'},
 							{ xtype: 'list-buttons', height: '50px'}
                         ]},
-						{ title: 'Groups', layout: {
-                            type: 'vbox',
-                            align: 'stretch'
-                            },
-                            items:[
-                            { xtype: 'container', id: 'my-groups', layout: 'auto', flex: 1, autoScroll: true},
+						{ title: 'Groups',
+						  layout: 'anchor',
+						  defaults: {anchor: '100%'},
+                          items:[
+                            { xtype: 'container', id: 'my-groups', layout: 'auto', flex: 1, autoScroll: true, anchor: '100% -50px'},
                             { xtype: 'group-buttons', height: '50px'}
                         ]}
 					]
