@@ -5,6 +5,7 @@ Ext.define('NextThought.view.assessment.Parts',{
 	requires: [
 		'NextThought.view.assessment.PartContent',
 		'NextThought.view.assessment.MultiPartSubmission',
+		'NextThought.view.assessment.input.Unsupported',
 		'NextThought.view.assessment.input.FreeResponse',
 		'NextThought.view.assessment.input.Matching',
 		'NextThought.view.assessment.input.MultipleChoice',
@@ -45,7 +46,8 @@ Ext.define('NextThought.view.assessment.Parts',{
 
 
 	setSinglePart: function(question, questionSet, part, tabIndexTracker) {
-		var type = 'question-input-'+part.get('Class').toLowerCase();
+		var cls = (part && part.get)? part.get('Class') : 'unsupported',
+			type = 'question-input-'+cls.toLowerCase();
 		try {
 			this.add({
 				xtype: type,
