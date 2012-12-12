@@ -87,6 +87,7 @@ Ext.define('NextThought.view.slidedeck.Video',{
 			height: '221',
 			width: '392',
 			playerVars: {
+				html5: 1,
 				autohide: 1,
 				modestbranding: 1,
 				rel: 0,
