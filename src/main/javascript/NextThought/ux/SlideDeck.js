@@ -43,11 +43,12 @@ Ext.define('NextThought.ux.SlideDeck',{
 		var service = $AppConfig.service,
 			scope = this,
 			lock = ids.length,
-			data = new Ext.data.Store({proxy:'memory', sortOn:'ordinal', sortOrder: 'descending'});
+			data = new Ext.data.Store({proxy:'memory'});
 
 		function maybeFinish(){
 			lock--;
 			if(lock>0){return;}
+			data.sort('ordinal', 'ASC');
 			Ext.callback(callback,scope,[data]);
 		}
 
