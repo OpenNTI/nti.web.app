@@ -78,7 +78,7 @@ Ext.define('NextThought.ux.SlideDeck',{
 				url: pageInfo.getLink('content'),
 				expectedContentType: 'text/html',
 				scope: scope,
-				success: Ext.bind(parseContent,scope,[pageInfo],true),
+				success: Ext.bind(parseContent,scope,[pageInfo],1),
 				failure: failed
 			});
 		}
