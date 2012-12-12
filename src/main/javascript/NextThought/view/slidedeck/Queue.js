@@ -4,8 +4,6 @@ Ext.define('NextThought.view.slidedeck.Queue',{
 
 	singleSelect: true,
 	allowDeselect: false,
-	overflowX: 'hidden',
-	overflowY: 'scroll',
 	overItemCls: 'over',
 	itemSelector: 'div.item-wrap',
 	cls: 'slidedeck-queue',

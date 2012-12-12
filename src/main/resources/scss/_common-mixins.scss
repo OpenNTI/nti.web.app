@@ -37,6 +37,9 @@
 	@include experimental(perspective, 1000);
 }
 
+@mixin fixIEScrollbarGulf(){
+	.x-ie & { margin-right: -15px !important; }
+}
 
 @mixin scrollbar($track:white,$nib:rgba(0,0,0,0.5),$margin:5px 0){
 	.detected-scrollbars &::-webkit-scrollbar,

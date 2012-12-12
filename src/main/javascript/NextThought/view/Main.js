@@ -37,6 +37,9 @@ Ext.define('NextThought.view.Main', {
 	afterRender: function(){
 		this.callParent(arguments);
 
+		Ext.Object.each(Ext.getScrollbarSize(),function(k,v){
+			if(v){ Ext.getBody().addCls('detected-scrollbars'); }
+		});
 
 		Ext.EventManager.onWindowResize(this.detectZoom,this);
 		this.detectZoom();

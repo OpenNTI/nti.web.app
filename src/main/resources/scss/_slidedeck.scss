@@ -86,7 +86,13 @@ $experimental-support-for-svg: true;
 
 		.slidedeck-queue {
 			@include hardware-accelerate();
+			@include scrollbar($track:$slidedeck-controls-background,$nib:$slidedeck-primary-text-color);
+			@include fixIEScrollbarGulf();
+			overflow-x: hidden;
+			overflow-y: scroll;
 			padding: 14px 0;
+
+
 
 			.item-wrap {
 				cursor: pointer;
@@ -138,6 +144,8 @@ $experimental-support-for-svg: true;
 	}
 
 	.x-container-slide {
+		@include scrollbar($track:$slidedeck-controls-background,$nib:$slidedeck-primary-text-color);
+		@include fixIEScrollbarGulf();
 		overflow-x: hidden;
 		overflow-y: auto;
 		padding: 95px 95px 0 95px;
