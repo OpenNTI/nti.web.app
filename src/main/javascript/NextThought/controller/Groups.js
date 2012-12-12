@@ -80,14 +80,14 @@ Ext.define('NextThought.controller.Groups', {
 		app.registerInitializeTask(token);
 		store.on('load', function(s){ app.finishInitializeTask(token); }, this, {single: true});
 		store.on('load', this.ensureContactsGroup, this);
-		store.on('datachanged', this.publishContacts, this);
+		store.on('datachanged', this.publishGroupsData, this);
 		store.proxy.url = getURL(coll.href);
 		store.load();
 	},
 
 
 
-	getContacts: function(callback){
+	getResolvedContacts: function(callback){
 		var names = this.getFriendsListStore().getContacts();
 
 		names = Ext.Array.sort(Ext.Array.unique(names));
@@ -121,27 +121,182 @@ Ext.define('NextThought.controller.Groups', {
 		}
 
 		if(!rec){
-			store.each(function(g){contacts.push.apply(contacts,g.get('friends'));});
+			store.each(function(g){
+				//if(!g.isDFL){
+					contacts.push.apply(contacts,g.get('friends'));
+				//}
+			});
 			this.createGroupUnguarded('My Contacts',id,Ext.Array.unique(contacts),finish);
 		}
 	},
 
+	maybePublishContacts: function(contactList){
+		if(this.publishingContacts){
+			console.log('Defering contacts publication');
+			this.contactsNeedRepublished = true;
+			return false;
+		}
 
-	publishContacts: function(){
+		this.publishingContacts = true;
+		this.contactsNeedRepublished = false;
+		console.log('publishing contacts');
+		this.publishContacts(contactList, function(){
+			console.log('contact publication complete');
+			this.publishingContacts = false;
+			if(this.contactsNeedRepublished){
+				console.log('Will republish contacts');
+				this.maybePublishContacts(contactList);
+			}
+		});
+		return true;
+	},
+
+	publishContacts: function(contactList, onComplete){
+		var me = this;
+		this.getResolvedContacts(function(friends){
+			console.log('Removing all sub components for contactlist');
+			contactList.removeAll(true);
+
+			console.log('Adding online group to people');
+			contactList.add({ xtype: 'contacts-panel', title: 'Online', online:true }).setUsers(friends.Online);
+			console.log('Adding offling group to people');
+			contactList.add({ xtype: 'contacts-panel', title: 'Offline', offline:true }).setUsers(friends.Offline);
+			Ext.callback(onComplete, me);
+		});
+	},
+
+	maybePublishGroupsAndLists: function(groups, lists){
+		if(this.publishingGroups){
+			console.log('Deferring groups publication');
+			this.groupsNeedRepublished = true;
+			return false;
+		}
+
+		this.publishingGroups = true;
+		this.groupsNeedRepublished = false;
+		console.log('Publishing groups');
+		this.publishGroupsAndLists(groups, lists, function(){
+			console.log('group publication complete');
+			this.publishingGroups = false;
+			if(this.groupsNeedRepublished){
+				console.log('Will republish groups');
+				this.maybePublishGroupsAndLists(groups, lists);
+			}
+		});
+		return true;
+	},
+
+	publishGroupsAndLists: function(groups, lists, onComplete){
+		var store = this.getFriendsListStore(), me = this,
+			groupCmps = [], listCmps = [], remainingGroups, remainingLists,
+			addedCmps = [], contactsId = this.getMyContactsId();
+
+		//First we build up a list of the group and list cmps
+		//that will be added (these are the sections that can be collapsed)
+		store.each(function(group){
+			var id = ParseUtils.parseNtiid(group.getId()),
+				list = group.get('friends'), name, target;
+
+			if(list.length === 1 && list[0] === 'Everyone'
+				&& id.specific.provider === 'zope.security.management.system_user'){
+				return;
+			}
+
+			name = group.getName();
+
+			//don't associate the 'my contacts' group to the ui element...let it think its a "meta group"
+			if(group.get('Username')===contactsId){
+				group = null;
+				//lets just not show this in the view we now have the overall view in place.
+				return;
+			}
+			target = group.isDFL ? groupCmps : listCmps;
+			target.push({xtype: 'contacts-panel', title: name, associatedGroup: group});
+		});
+
+		//Now we need to actually add the components into the view.  we suspend layouts here
+		//to cut down on work
+		groups.removeAll(true);
+		lists.removeAll(true);
+
+		groups.suspendLayouts();
+		lists.suspendLayouts();;
+
+		//This part is asynchronous b/c we need to resolve users
+		//when we are complete we need to unsuspend and layout
+		function maybeCallback(){
+			if(remainingLists === 0  && remainingGroups === 0){
+				Ext.callback(onComplete, me);
+			}
+		}
+
+		function groupsFinished(){
+			groups.resumeLayouts(true);
+			maybeCallback();
+		}
+
+		function listsFinished(){
+			lists.resumeLayouts(true);
+			maybeCallback();
+		}
+
+		//Add the contactpanels
+		Ext.Array.push(addedCmps, groups.add(groupCmps));
+		Ext.Array.push(addedCmps, lists.add(listCmps));
+
+		remainingLists = listCmps.length;
+		remainingGroups = groupCmps.length;
+
+		//Now for each panel figure out what users we need to add,
+		//resolve them, add them, and then call finished if necessary
+		Ext.each(addedCmps, function(cmp){
+			var groupOrList = cmp.associatedGroup,
+				usersToAdd, creator = groupOrList.get('Creator');
+			if(cmp.setUsers && groupOrList){
+				usersToAdd = cmp.associatedGroup.get('friends');
+
+				//We want dfls owners to look like members, even though they arent.
+				//but make sure if we own it we don't look like a member
+				if(groupOrList.isDFL && !isMe(creator)){
+					usersToAdd.push(creator);
+				}
+
+				//Now with dfls there are cases where the friends array may
+				//contain the appuser.  Make sure we strip that out
+				Ext.Array.remove(usersToAdd, $AppConfig.username);
+
+				UserRepository.getUser(usersToAdd, function(resolvedUsers){
+					cmp.setUsers(resolvedUsers);
+					if(groupOrList.isDFL){
+						remainingGroups--;
+						if(remainingGroups === 0){
+							groupsFinished();
+						}
+					}
+					else{
+						remainingLists--;
+						if(remainingLists === 0){
+							listsFinished();
+						}
+					}
+				});
+
+			}
+		});
+	},
+
+	publishGroupsData: function(){
 		var me = this,
 			store = me.getFriendsListStore(),
 			ct = Ext.getCmp('contacts-view-panel'),
 			people = Ext.getCmp('contact-list'),
 			lists = Ext.getCmp('my-lists'),
-			groups = Ext.getCmp('my-groups'),
-			contactsId = this.getMyContactsId();
+			groups = Ext.getCmp('my-groups');
 
 		if(!groups){
-			setTimeout(function(){ me.publishContacts(); },10);
+			setTimeout(function(){ me.publishGroupsData(); },10);
 			return;
 		}
-
-		console.log('Publishing contacts');
 
 		//If there are no contacts or no friendslists other than omnipresent mycontacts group
 		//hence < 2. Show the coppa or empty view
@@ -155,68 +310,8 @@ Ext.define('NextThought.controller.Groups', {
 
 		ct.getLayout().setActiveItem(0);
 
-		this.getContacts(function(friends){
-			var groupsToAdd = [];
-			var listsToAdd = [];
-
-			console.log('Removing all sub components from groups and people');
-			groups.removeAll(true);
-			people.removeAll(true);
-			lists.removeAll(true);
-
-			console.log('Adding online group to people');
-			people.add({ xtype: 'contacts-panel', title: 'Online', online:true }).setUsers(friends.Online);
-			console.log('Adding offling group to people');
-			people.add({ xtype: 'contacts-panel', title: 'Offline', offline:true }).setUsers(friends.Offline);
-
-			store.each(function(group){
-				var id = ParseUtils.parseNtiid(group.getId()),
-					list = group.get('friends'), name, target;
-
-				if(list.length === 1 && list[0] === 'Everyone'
-				&& id.specific.provider === 'zope.security.management.system_user'){
-					return;
-				}
-
-				name = group.getName();
-
-				//don't associate the 'my contacts' group to the ui element...let it think its a "meta group"
-				if(group.get('Username')===contactsId){
-					group = null;
-					//lets just not show this in the view we now have the overall view in place.
-					return;
-				}
-				target = group.isDFL ? groupsToAdd : listsToAdd;
-				target.push({xtype: 'contacts-panel', title: name, associatedGroup: group});
-			});
-
-			groups.suspendLayout = true;
-			lists.suspendLayout = true;
-
-			//Add the addGroup link on the groups
-			//groupsToAdd.push({xtype: 'add-group'});
-
-			var addedCmps = groups.add(groupsToAdd);
-			Ext.Array.push(addedCmps, lists.add(listsToAdd));
-
-			Ext.each(addedCmps, function(cmp){
-				if(cmp.setUsers && cmp.associatedGroup){
-					var list = cmp.associatedGroup.get('friends'),
-					online=[];
-					Ext.each(list,function(n){
-						var o = friends.Online[n] || friends.Offline[n];
-						if(o){online.push(o);}
-					});
-
-					cmp.setUsers(online);
-				}
-			});
-
-			lists.suspendLayout = false;
-			lists.doLayout();
-			groups.suspendLayout = false;
-			groups.doLayout();
-		});
+		this.maybePublishContacts(people);
+		this.maybePublishGroupsAndLists(groups, lists);
 	},
 
 
@@ -392,7 +487,11 @@ Ext.define('NextThought.controller.Groups', {
 			remove(record);
 		}
 		else {
-			store.each(remove);
+			store.each(function(g){
+				//if(!g.isDFL){
+					remove(g);
+				//}
+			});
 		}
 	},
 
