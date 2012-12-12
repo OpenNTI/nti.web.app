@@ -49,7 +49,7 @@ Ext.define('NextThought.model.Slide', {
 				'video-id': getParam('slidevideoid'),
 				'video-thumbnail': getParam('slidevideothumbnail'),
 				'video-start': getParam('slidevideostart'),
-				'video-End': getParam('slidevideoend'),
+				'video-end': getParam('slidevideoend'),
 				'ordinal': getParam('slidenumber')
 			};
 

@@ -26,7 +26,7 @@ Ext.define('NextThought.view.slidedeck.Video',{
 		}]
 	},{
 		cls: 'video-checkbox',
-		html: 'Synchronize video with slides',
+		html: 'Link video with slides',
 		tabIndex: 0,
 		role: 'button'
 	}]),
@@ -67,6 +67,9 @@ Ext.define('NextThought.view.slidedeck.Video',{
 		this.players = {};
 
 		//build playlist
+
+		this.playlist = [];
+		this.store.each(function(s){ this.playlist.push(this.getVideoInfoFromSlide(s)); },this);
 	},
 
 
@@ -184,19 +187,41 @@ Ext.define('NextThought.view.slidedeck.Video',{
 	},
 
 
+	getVideoInfoFromSlide: function(slide){
+		return {
+			slideId: slide.getId(),
+			id: slide.get('video') || null,
+			service: slide.get('video-type') || null,
+			start: slide.get('video-start') || 0,
+			end: slide.get('video-end') || -1
+		};
+	},
+
+
+	getVideoInfoIndex: function(videoInfo){
+		var index = -1, id = videoInfo.slideId;
+		Ext.each(this.playlist,function(i,ix){
+			if(i.slideId===id){index=ix;}
+			return index < 0;//stop once found
+		});
+		return index;
+	},
+
+
 	//called by the event of selecting something in the slide queue.
 	updateVideoFromSelection: function(queueCmp, slide){
 
-		var startTime = slide.get('video-start') || 0,
-			videoId = slide.get('video') || null,
-			videoService = slide.get('video-type') || null;
+		var video = this.getVideoInfoFromSlide(slide),
+			playlistIndex = this.getVideoInfoIndex(video);
 
-		this.maybeSwitchPlayers(videoService);
-		this.setVideoAndPosition(videoId,startTime);
+		console.log(playlistIndex);
+
+		this.maybeSwitchPlayers(video.service);
+		this.setVideoAndPosition(video.id,video.start);
 
 		//Hide player?
 		/*
-		if(!videoService){
+		if(!video.service){
 			this.hide();
 		} else if(!this.isVisible()){
 			this.show();
