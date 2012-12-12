@@ -2,12 +2,10 @@ Ext.define('NextThought.view.slidedeck.Slide',{
 	extend: 'Ext.container.Container',
 	alias: 'widget.slidedeck-slide',
 	requires: [
-		'NextThought.layout.component.TemplatedContainer'
 	],
 
 	ui: 'slide',
-	componentLayout: 'templated-container',
-//	layout: 'auto',
+	layout: 'auto',
 
 	childEls: ['body'],
 	getTargetEl: function () { return this.body; },
