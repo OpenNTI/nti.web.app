@@ -121,12 +121,7 @@ Ext.define('NextThought.controller.Groups', {
 		}
 
 		if(!rec){
-			store.each(function(g){
-				//if(!g.isDFL){
-					contacts.push.apply(contacts,g.get('friends'));
-				//}
-			});
-			this.createGroupUnguarded('My Contacts',id,Ext.Array.unique(contacts),finish);
+			this.createGroupUnguarded('My Contacts', id, store.getContacts(), finish);
 		}
 	},
 
@@ -316,7 +311,8 @@ Ext.define('NextThought.controller.Groups', {
 
 
 	incomingPresenceChange: function(name, presence){
-		var contacts = Ext.getCmp('contact-list') || {down:Ext.emptyFn},
+		var ct = Ext.getCmp('contacts-view-panel'),
+			contacts = Ext.getCmp('contact-list') || {down:Ext.emptyFn},
 			offline = contacts.down('[offline]'),
 			online = contacts.down('[online]'),
 			map = { offline: offline, online: online };
@@ -326,14 +322,14 @@ Ext.define('NextThought.controller.Groups', {
 			return;
 		}
 
-		if(!Ext.Array.contains(this.getFriendsListStore().getContacts(),name)){
-			console.log('Ignoring presense from: '+name+', it is not in any groups');
-			return;
-		}
-
+		//We used to do a preflight check here to see if the name was a contact
+		//before we made the component query.  But now since my contacts isn't
+		//necessarily everyone we show cards for, it is not that simple.  Its not even
+		//clear that was benificial.  It may be find to just constrain the component
+		//query benieth the contacts-view-panel which is what we do now
 
 		Ext.each(
-				Ext.ComponentQuery.query(Ext.String.format('contact-card[username={0}]',name)),
+				Ext.ComponentQuery.query(Ext.String.format('contact-card[username={0}]',name), ct),
 				function(u){
 					u[/offline/i.test(presence)? 'addCls':'removeCls']('offline');
 				});
@@ -341,16 +337,18 @@ Ext.define('NextThought.controller.Groups', {
 		offline.removeUser(name);
 		online.removeUser(name);
 
-		UserRepository.getUser(name, function(u) {
+		if(this.getFriendsListStore().isContact(name)){
+			UserRepository.getUser(name, function(u) {
 
-			var panel = map[presence.toLowerCase()];
-			if(panel){
-				panel.addUser(u);
-			}
-			else {
-				console.log('No panel for presence: ',presence);
-			}
-		});
+				var panel = map[presence.toLowerCase()];
+				if(panel){
+					panel.addUser(u);
+				}
+				else {
+					console.log('No panel for presence: ',presence);
+				}
+			});
+		}
 	},
 
 	generateUsername: function(newGroupName){
@@ -488,9 +486,13 @@ Ext.define('NextThought.controller.Groups', {
 		}
 		else {
 			store.each(function(g){
-				//if(!g.isDFL){
+				//Removing a contact shouldn't remove them from dfls
+				if(!g.isDFL){
 					remove(g);
-				//}
+				}
+				else{
+					finish();
+				}
 			});
 		}
 	},

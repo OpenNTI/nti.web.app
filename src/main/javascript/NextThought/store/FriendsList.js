@@ -61,9 +61,9 @@ Ext.define('NextThought.store.FriendsList',{
 		this.each(function(g){
 			//Only people in your lists are your contacts.
 			//skip dfls
-			//if(!g.isDFL){
+			if(!g.isDFL){
 				names.push.apply(names,g.get('friends')); 
-		//	}
+			}
 		});
 		names = Ext.Array.sort(Ext.Array.unique(names));
 
@@ -78,10 +78,13 @@ Ext.define('NextThought.store.FriendsList',{
 	},
 
 
+	
 	isContact: function(username){
 		if(username && username.isModel){
 			username = username.get('Username');
 		}
+		//Rather than building the contacts array and doing a contains
+		//check this could be optimized if needed.
 		return Ext.Array.contains(this.getContacts(),username);
 	}
 });
