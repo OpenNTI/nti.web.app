@@ -15,6 +15,8 @@ Ext.define('NextThought.model.assessment.Question', {
 		'NextThought.model.assessment.MathSolution',
 		'NextThought.model.assessment.MultipleChoicePart',
 		'NextThought.model.assessment.MultipleChoiceSolution',
+		'NextThought.model.assessment.MultipleChoiceMultipleAnswerPart',
+		'NextThought.model.assessment.MultipleChoiceMultipleAnswerSolution',
 		'NextThought.model.assessment.NumericMathPart',
 		'NextThought.model.assessment.NumericMathSolution',
 		'NextThought.model.assessment.Part',

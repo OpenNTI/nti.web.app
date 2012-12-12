@@ -1,6 +1,7 @@
 Ext.define('NextThought.view.assessment.input.MultipleChoice',{
 	extend: 'NextThought.view.assessment.input.Base',
-	alias: 'widget.question-input-waitingforName',
+	alias: ['widget.question-input-waitingforName', 
+                'widget.question-input-multiplechoicemultipleanswerpart'],
 
 	inputTpl: Ext.DomHelper.markup({ cls: 'multi-choice {choice-style}', cn:[{
 		tag: 'tpl', 'for': 'choices', cn: [{
@@ -95,8 +96,10 @@ Ext.define('NextThought.view.assessment.input.MultipleChoice',{
 
 		Ext.each(part.get('solutions'),function(s){
 			var x = s.get('value');
-			out.push( tpl.apply( [String.fromCharCode(65+x), choices[x]]) );
-
+			// x may or may not be an Array.  Ext.each handles that for us.
+			Ext.each(x, function(s){
+				out.push( tpl.apply( [String.fromCharCode(65+s), choices[s]]) );
+			});
 		});
 
 		return out.join('');
@@ -105,8 +108,14 @@ Ext.define('NextThought.view.assessment.input.MultipleChoice',{
 
 	mark: function(){
 		var c = {};
-		Ext.each(this.part.get('solutions'),function(s){c[s.get('value')]=true;});
 
+		// Extract the solutions. A solution may or may not be an array
+		// Ext.each handles this case for us.
+		Ext.each(this.part.get('solutions'),function(s){
+			var value=s.get('value');
+			Ext.each(value, function(s){c[s]=true;});
+		});
+		
 		this.getEl().select('.choice').removeCls(['correct','incorrect']);
 
 		Ext.each(this.getEl().query('.control.checked'),function(e){
