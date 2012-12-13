@@ -57,17 +57,22 @@ Ext.define('NextThought.util.Ranges',{
 		return n.up(selector);
 	},
 
-	rangeIfItemPropSpan: function(range){
+	rangeIfItemPropSpan: function(range, doc){
 		/*
 		 * Special case for annototable images: We don't want to expand past the annototable img.
 		 * And since we usually expand by a given number of characters,
 		 * if you have multiple consecutive images, we were getting all of them; which is an unexpected behavior.
 		 */
-		var node = range.commonAncestorContainer;
+		var node = range.commonAncestorContainer, r;
 
-		if(node.getAttribute && node.getAttribute('itemprop')){
+		//If we are an annotatable image make sure we get the enclosing span so that it is
+		//annotatable in the note window.  TODO also see if we are actually on the image and our parent
+		//is the wrapper
+		if(node.getAttribute && node.getAttribute('itemprop') === 'nti-data-markupenabled'){
 			console.log("we're inside a itemprop span.", node, ', itemprop: ',node.getAttribute('itemprop'));
-			return range;
+			r = document.createRange();
+			r.selectNode(range.commonAncestorContainer);
+			return r;
 		}
 		return null;
 	},
@@ -93,7 +98,7 @@ Ext.define('NextThought.util.Ranges',{
             return this.contentsForObjectTag(object);
         }
 
-	    nr = this.rangeIfItemPropSpan(range);
+	    nr = this.rangeIfItemPropSpan(range, doc);
 	    if(nr){
 		    return this.clearNonContextualGarbage(nr.cloneContents());
 	    }
