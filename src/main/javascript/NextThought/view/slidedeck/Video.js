@@ -8,6 +8,8 @@ Ext.define('NextThought.view.slidedeck.Video',{
 	extend: 'Ext.Component',
 	alias: 'widget.slidedeck-video',
 
+	requires:['swfobject'],
+
 	plain: true,
 	ui: 'slidedeck-video',
 
@@ -99,7 +101,7 @@ Ext.define('NextThought.view.slidedeck.Video',{
 			height: '221',
 			width: '392',
 			playerVars: {
-				html5: 1,
+				html5: Ext.isIE9 ? 0 : 1,
 				autohide: 1,
 				modestbranding: 1,
 				rel: 0,

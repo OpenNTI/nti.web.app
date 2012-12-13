@@ -1,5 +1,6 @@
 //disable script cache-busting _dc=... get string args
 Ext.Loader.setConfig('disableCaching', false);
+Ext.Loader.setPath('swfobject', 'resources/lib/swfobject.js');
 
 Ext.application({
 	name: 'NextThought',
@@ -7,6 +8,7 @@ Ext.application({
 	autoCreateViewport: false,
 
 	requires: [
+		'swfobject',
 		'NextThought.util.Globals',
 		'NextThought.model.anchorables.ContentPointer',
 		'NextThought.model.anchorables.DomContentPointer',
@@ -58,6 +60,11 @@ Ext.application({
 		//if we get this far, we're good... no need to redirect to the unsupoprted page.
 		delete window.onerror;
 		window.onerror = null;
+
+		if(Ext.isIE9 && !swfobject.hasFlashPlayerVersion("9.0.18")){
+			alert('Flash is required for your browser to function correctly');
+			return;
+		}
 
 		Globals.loadScript(getURL('/socket.io/static/socket.io.js'));
 
