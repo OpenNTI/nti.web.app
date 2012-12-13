@@ -405,6 +405,12 @@ Ext.define('NextThought.view.annotations.note.Main',{
 			img = d && d.is('img') ? d.dom : null,
 			me = this, w;
 
+		function openSlideDeck(){
+			w.close();
+			SlideDeck.open(dom, LocationProvider.currentNTIID);
+		}
+
+
 		if(/^mark$/i.test(action)){
 			me.activateReplyEditor();
 			WBUtils.createFromImage(img,function(data){
@@ -416,11 +422,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		}
 		else if(/^slide$/.test(action)){
 			w = this.up('window');
-			function openSlideDeck(){
-				w.close();
-				SlideDeck.open(dom, LocationProvider.currentNTIID);
-			}
-
+		
 			if(w.editorActive()){
 				Ext.Msg.show({
 					msg: "This will discard the contents of your current message",

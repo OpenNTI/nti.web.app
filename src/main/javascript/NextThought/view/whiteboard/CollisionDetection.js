@@ -18,8 +18,8 @@ Ext.define('NextThought.view.whiteboard.CollisionDetection', {
 
 
     dot_product: function(v1,v2){
-        var dot = 0;
-        for(var i=0;i<v1.length;i++){
+        var dot = 0, i;
+        for(i=0;i<v1.length;i++){
             dot+=v1[i]*v2[i];
         }
         return dot;
@@ -45,6 +45,8 @@ Ext.define('NextThought.view.whiteboard.CollisionDetection', {
         var angle_2 = obj2.angle;
 
         var axes = [];
+
+		var j, i;
         axes[0] = this.normal([Math.cos(angle_1),Math.sin(angle_1)]);
         axes[1] = this.normal([Math.cos(angle_1+Math.PI/2),Math.sin(angle_1+Math.PI/2)]);
         axes[2] = this.normal([Math.cos(angle_2),Math.sin(angle_2)]);
@@ -55,11 +57,11 @@ Ext.define('NextThought.view.whiteboard.CollisionDetection', {
         var ang1 = Math.atan2(h1,w1);
         var ang2 = Math.atan2(h2,w2);
 
-        for (var j=0;j<4;j++){
+        for (j=0;j<4;j++){
             var p1 = [];
             var p2 = [];
 
-            for (var i=0;i<4;i++){
+            for (i=0;i<4;i++){
                 var newAng1 = angle_1;
                 var newAng2 = angle_2;
                 if (i===0){
@@ -83,33 +85,43 @@ Ext.define('NextThought.view.whiteboard.CollisionDetection', {
                 var point2 = [x2+l2*Math.cos(newAng2), y2+l2*Math.sin(newAng2)];
                 point2 = this.dot_product(point2,axes[j])/this.magnitude(axes[j]);
 
-                if ((point1<p1[0]) || (!p1[0]))
+                if ((point1<p1[0]) || (!p1[0])){
                     p1[0] = Math.round(point1);
-                if ((point1>p1[1]) || (!p1[1]))
+				}
+                if ((point1>p1[1]) || (!p1[1])){
                     p1[1] = Math.round(point1);
-                if ((point2<p2[0]) || (!p2[0]))
+				}
+                if ((point2<p2[0]) || (!p2[0])){
                     p2[0] = Math.round(point2);
-                if ((point2>p2[1]) || (!p2[1]))
+				}
+                if ((point2>p2[1]) || (!p2[1])){
                     p2[1] = Math.round(point2);
+				}
             }
-            if (!this.is_touching(p1,p2))
+            if (!this.is_touching(p1,p2)){
                 return false;
+			}
         }
         return true;
     },
 
 
     is_touching: function(p1,p2){
-        if ((p2[1]>=p1[0]) && (p2[1]<=p1[1]))
+        if ((p2[1]>=p1[0]) && (p2[1]<=p1[1])){
             return true;
-        else if ((p2[0]<=p1[1]) && (p2[0]>=p1[0]))
+		}
+		else if ((p2[0]<=p1[1]) && (p2[0]>=p1[0])){
             return true;
-        else if ((p1[0]>p2[0]) && (p1[1]<p2[1]))
+		}
+		else if ((p1[0]>p2[0]) && (p1[1]<p2[1])){
             return true;
-        else if ((p2[0]>p1[0]) && (p2[1]<p1[1]))
+        }
+		else if ((p2[0]>p1[0]) && (p2[1]<p1[1])){
             return true;
-        else
+        }
+		else{
             return false;
+		}
     }
 },
 function(){

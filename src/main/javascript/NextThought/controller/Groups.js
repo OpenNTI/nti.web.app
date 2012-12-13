@@ -215,7 +215,7 @@ Ext.define('NextThought.controller.Groups', {
 		lists.removeAll(true);
 
 		groups.suspendLayouts();
-		lists.suspendLayouts();;
+		lists.suspendLayouts();
 
 		//This part is asynchronous b/c we need to resolve users
 		//when we are complete we need to unsuspend and layout
@@ -324,7 +324,7 @@ Ext.define('NextThought.controller.Groups', {
 
 		//We used to do a preflight check here to see if the name was a contact
 		//before we made the component query.  But now since my contacts isn't
-		//necessarily everyone we show cards for, it is not that simple.  Its not even
+		//necessarily everyone we show cards for, it iPs not that simple.  Its not even
 		//clear that was benificial.  It may be find to just constrain the component
 		//query benieth the contacts-view-panel which is what we do now
 
@@ -553,7 +553,7 @@ Ext.define('NextThought.controller.Groups', {
 
         function onError(record, operation, response){
 			var code = response.code,
-				msg = errors[code] || errors['_default'];
+				msg = errors[code] || errors._default;
             Ext.callback(handleError, this, [msg]);
         }
 
@@ -599,7 +599,7 @@ Ext.define('NextThought.controller.Groups', {
 
         function onError(record, operation, response){
 			var code = response.code,
-				msg = errors[code] || errors['_default'];
+				msg = errors[code] || errors._default;
             Ext.callback(handleError, this, [msg]);
         }
 

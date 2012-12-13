@@ -1,29 +1,29 @@
 Ext.define('NextThought.view.account.contacts.createlist.Main',{
-    extend: 'Ext.container.Container',
-    alias: 'widget.createlist-main-view',
-    requires: [
+	extend: 'Ext.container.Container',
+	alias: 'widget.createlist-main-view',
+	requires: [
 		'NextThought.view.form.fields.SimpleTextField'
-    ],
+	],
 
-    cls: 'createlist-main-view',
+	cls: 'createlist-main-view',
 
-   	items: [
+	items: [
 		{xtype: 'container', layout: 'anchor', cls: 'input-wrapper', items:[
 			{xtype: 'box', name: 'namelabel', cls: 'label', html: 'List name'},
 			{xtype: 'simpletext', name: 'name', cls: 'input-box name', inputType: 'text', placeholder: 'Choose a name for your list...'}
-        ]},
-        {xtype: 'box', hidden: true, name:'error', autoEl: {cls: 'error-box', tag:'div',
-            cn:[
-                {cls: 'error-desc'}
-            ]}
-        },
-        {xtype: 'container', cls: 'submit',  layout:{type: 'hbox', pack: 'end'}, items: [
-            {xtype: 'button', ui: 'secondary', scale: 'large', name: 'cancel', text:'Cancel', handler: function(b){
-                b.up('window').close();
-            }},
+		]},
+		{xtype: 'box', hidden: true, name:'error', autoEl: {cls: 'error-box', tag:'div',
+			cn:[
+				{cls: 'error-desc'}
+			]}
+		},
+		{xtype: 'container', cls: 'submit',	 layout:{type: 'hbox', pack: 'end'}, items: [
+			{xtype: 'button', ui: 'secondary', scale: 'large', name: 'cancel', text:'Cancel', handler: function(b){
+				b.up('window').close();
+			}},
 			{xtype: 'button',  ui: 'primary', scale: 'large', name: 'submit', text: 'Create', disabled: true, minWidth: 96}
-        ]}
-    ],
+		]}
+	],
 
 	afterRender: function(){
 		this.callParent(arguments);
@@ -54,9 +54,9 @@ Ext.define('NextThought.view.account.contacts.createlist.Main',{
 
 		errorText = errorText || 'An unknown error occurred. Please try again.';
 
-        //make main error field show up
-        box.el.down('.error-desc').update(errorText);
-        box.show();
+		//make main error field show up
+		box.el.down('.error-desc').update(errorText);
+		box.show();
 	},
 
 
