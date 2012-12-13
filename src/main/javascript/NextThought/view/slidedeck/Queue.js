@@ -39,7 +39,7 @@ Ext.define('NextThought.view.slidedeck.Queue',{
 			start = this.store.findRecord('NTIID', startOn, 0, false, true, true) || start;
 		}
 
-		this.getSelectionModel().select(start);
+		this.selectSlide(start);
 
 		keyMap = new Ext.util.KeyMap({
 			target: document,
@@ -57,13 +57,23 @@ Ext.define('NextThought.view.slidedeck.Queue',{
 	},
 
 
+	selectSlide: function(slide){
+		var n = Ext.get(this.getNode(slide));
+		if(n && n.needsScrollIntoView(this.el)){
+			n.scrollIntoView(this.el);
+		}
+		this.getSelectionModel().select(slide);
+	},
+
+
 	changeSlide: function(direction){
 		var s = this.store,
-			sm = this.getSelectionModel(),
-			sel = sm.getLastSelected();
+			sel = this.getSelectionModel().getLastSelected();
 
 		sel = s.getAt(s.indexOf(sel) + direction);
-		if( sel ){ sm.select(sel); }
+		if( sel ){
+			this.selectSlide(sel);
+		}
 	},
 
 

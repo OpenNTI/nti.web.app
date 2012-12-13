@@ -11,6 +11,15 @@ Ext.define('NextThought.view.slidedeck.Video',{
 	plain: true,
 	ui: 'slidedeck-video',
 
+	states: {
+		UNSTARTED: -1,
+		ENDED: 0,
+		PLAYING: 1,
+		PAUSED: 2,
+		BUFFERING: 3,
+		CUED: 5
+	},
+
 	renderTpl: Ext.DomHelper.markup([{
 		cls: 'video-wrapper', cn: [{
 			//YouTube's player will replace this div and copy all its attributes
@@ -47,8 +56,8 @@ Ext.define('NextThought.view.slidedeck.Video',{
 	initComponent: function(){
 		this.callParent(arguments);
 		//default the value
-		if(typeof(this.synchronizeWithSlides) !== 'boolean'){
-			this.synchronizeWithSlides = true;
+		if(typeof(this.linkWithSlides) !== 'boolean'){
+			this.linkWithSlides = true;
 		}
 
 		this.commandQueue = {
@@ -102,16 +111,83 @@ Ext.define('NextThought.view.slidedeck.Video',{
 		});
 
 		this.maybeSwitchPlayers(null);
+
+		this.taskVideoQuery = {
+			interval: 1000,
+			scope: this,
+			run: this.videoQueryTask,
+			onError: function(){console.error(arguments);}
+		};
+
+		Ext.TaskManager.start(this.taskVideoQuery);
+		this.on('destroy',function cleanUpTask(){Ext.TaskManager.stop(this.taskVideoQuery);});
+	},
+
+
+	videoQueryTask: function videoQueryTask(){
+		var s = this.queryPlayer(),
+			pl= this.playlist,
+			ix= this.playlistIndex || 0,
+			o= pl[ix],
+			newIx;
+
+		if(!s || !this.linkWithSlides){return;}
+
+		if(!o) {
+			console.warn("No playlist item", pl, ix);
+			return;
+		}
+
+		//Naive approach to play list. Assume everything is in order and all i have to look at is that is the end triggers action.
+		//console.log('Video status', s.video, s.time, 'slide start', o.start, 'slide end',o.end);
+
+		if(s.time >= o.end || (s.state === 0 && Math.abs(s.time - o.end) < 1)){
+			this.videoTriggeredTransition = true;
+			this.queue.nextSlide();
+			return;
+		}
+
+		if(s.state === this.states.PLAYING){
+			//for people who jump around...
+			newIx = this.findPlaylistIndexFor(s.service, s.video, s.time);
+			if(Ext.isArray(newIx)){
+				console.log('Not sure what to do here.',newIx);
+				return;
+			}
+
+			if(newIx < 0 || newIx === ix){return;}
+			this.queue.selectSlide(newIx);
+		}
+	},
+
+
+	findPlaylistIndexFor: function(service,id,time){
+		var matching = [], len;
+		Ext.each(this.playlist,function(o,i){
+			/* slideId, id, service, start, end */
+			if(o.service === service && o.id === id && o.start <= time && time < o.end){
+				matching.push(i);
+			}
+		});
+
+		len = matching.length;
+
+
+		return len > 1
+				? matching
+				: len === 0
+					? -1
+					: matching[0];
 	},
 
 
 	updateCheckbox: function(){
-		this.checkboxEl[this.synchronizeWithSlides?'addCls':'removeCls']('checked');
+		this.checkboxEl[this.linkWithSlides?'addCls':'removeCls']('checked');
 	},
 
 
 	checkboxClicked: function(){
-		this.synchronizeWithSlides = !this.synchronizeWithSlides;
+		this.linkWithSlides = !this.linkWithSlides;
 		this.updateCheckbox();
 	},
 
@@ -125,13 +201,45 @@ Ext.define('NextThought.view.slidedeck.Video',{
 	},
 
 
+	isPlaying: function(){
+		var status = this.queryPlayer(),
+			state;
+		if(!status) { return null; }
+
+		state = status.state;
+
+		return state === 1 || state === 3;
+	},
+
+
+	queryPlayer: function(){
+		var target = this.activeVideoService,
+			t = this.players[target];
+		if(!t || !t.isReady){return null;}
+
+
+		return {
+			service: target,
+			video: this.currentVideoId,
+			time: this.issueCommand(target,'getCurrentTime'),
+			state: this.issueCommand(target,'getPlayerState')
+		};
+	},
+
+
 	issueCommand: function(target, command, args){
 		var t = this.players[target];
 		if(!t.isReady){
 			this.commandQueue[target].push([target,command,args]);
 			return null;
 		}
-		return Ext.callback(t[command],t,args);
+
+		function call(fn,o,args){
+			if(!o || !Ext.isFunction(fn)){return null;}
+			return fn.apply(o,args);
+		}
+
+		return call(t[command],t,args);
 	},
 
 
@@ -144,6 +252,16 @@ Ext.define('NextThought.view.slidedeck.Video',{
 
 
 	setVideoAndPosition: function(videoId,startAt){
+		var pause = (this.isPlaying() === false && !this.linkWithSlides);
+
+		if(this.videoTriggeredTransition){
+			delete this.videoTriggeredTransition;
+			pause = false;
+			if(this.currentVideoId === videoId){
+				return;
+			}
+		}
+
 		if(this.currentVideoId ===videoId){
 			this.issueCommand('youtube','seekTo',[startAt,true]);
 		}
@@ -153,11 +271,13 @@ Ext.define('NextThought.view.slidedeck.Video',{
 				this.issueCommand('youtube','loadVideoById',[videoId, startAt, "medium"]);
 			}
 			else {
+				console.log('stopping');
 				this.stopPlayback();
 			}
 		}
 
-		this.issueCommand('youtube','pauseVideo');
+
+		if(pause){ console.log('pausing'); this.issueCommand('youtube','pauseVideo'); }
 	},
 
 
@@ -211,13 +331,14 @@ Ext.define('NextThought.view.slidedeck.Video',{
 	//called by the event of selecting something in the slide queue.
 	updateVideoFromSelection: function(queueCmp, slide){
 
-		var video = this.getVideoInfoFromSlide(slide),
-			playlistIndex = this.getVideoInfoIndex(video);
+		if(!this.linkWithSlides){return;}
 
-		console.log(playlistIndex);
+		var video = this.getVideoInfoFromSlide(slide);
 
 		this.maybeSwitchPlayers(video.service);
 		this.setVideoAndPosition(video.id,video.start);
+
+		this.playlistIndex = this.getVideoInfoIndex(video);
 
 		//Hide player?
 		/*
