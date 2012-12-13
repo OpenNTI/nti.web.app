@@ -5,7 +5,9 @@ Ext.define('NextThought.view.annotations.note.Main',{
 	requires: [
 		'NextThought.cache.UserRepository',
 		'NextThought.view.annotations.note.EditorActions',
-		'NextThought.view.annotations.note.Templates'
+		'NextThought.view.annotations.note.Templates',
+		'NextThought.providers.Location',
+		'NextThought.ux.SlideDeck'
 	],
 
 	ui: 'nt',
@@ -336,12 +338,12 @@ Ext.define('NextThought.view.annotations.note.Main',{
                 this.context.setHTML(RangeUtils.expandRangeGetString(range, doc));
                 context = this.context.first();
 
-                if (!context || !context.is('div')){ //context may be null if child is a text node
+                if (!context || !(context.is('div') || context.is('object'))){ //context may be null if child is a text node
                     this.context.insertHtml('afterBegin', '[...] ');
                     this.context.insertHtml('beforeEnd', ' [...]');
                 }
 
-				this.context.select('.injected-related-items,.related,iframe,object').remove();
+				this.context.select('.injected-related-items,.related,iframe').remove();
 
 				//WE want to remove redaction text in the context body of the note viewer.
 				Ext.each(this.context.query('.redaction '), function(redaction){
@@ -401,7 +403,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		var action = (dom.getAttribute('href')||'').replace('#',''),
 			d = Ext.fly(dom).up('[itemprop~=nti-data-markupenabled]').down('img'),
 			img = d && d.is('img') ? d.dom : null,
-			me = this;
+			me = this, w;
 
 		if(/^mark$/i.test(action)){
 			me.activateReplyEditor();
@@ -411,6 +413,32 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		}
 		else if(/^zoom$/i.test(action)){
 			ImageZoomView.zoomImage(dom);
+		}
+		else if(/^slide$/.test(action)){
+			w = this.up('window');
+			function openSlideDeck(){
+				w.close();
+				SlideDeck.open(dom, LocationProvider.currentNTIID);
+			}
+
+			if(w.editorActive()){
+				Ext.Msg.show({
+					msg: "This will discard the contents of your current message",
+					scope: me,
+					buttons: 9,
+					icon: 'warning-red',
+					title: 'Are you sure?',
+					buttonText: {ok: 'caution:OK'},
+					fn: function(str){
+						if(str === 'ok'){
+							openSlideDeck();
+						}
+					}
+				});
+			}
+			else{
+				openSlideDeck();
+			}
 		}
 
 		return false;

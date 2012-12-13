@@ -298,7 +298,7 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 			msg = user.get('displayName')+' will no longer be a member of '+this.associatedGroup.get('displayName');
 
 		Ext.Msg.show({
-			msg: msg,
+			msg: "Viewing the presentation will cause any unsaved work to be lost.",
 			buttons: 9, // bitwise result of: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
 			scope: me,
 			icon: 'warning-red',

@@ -72,10 +72,25 @@ Ext.define('NextThought.util.Ranges',{
 		return null;
 	},
 
+	//A nicer OO way of doing this so we don't end up with a giant
+	//if else chain
+	contentsForObjectTag: function(object){
+		var contents = null;
+
+		//For questions we look for the contained div with class naquestion
+		//Why do we do this instead of cloning the object?
+		contents = object.down('.naquestion');
+		if(contents){
+			return contents.dom.cloneNode(true);
+		}
+
+		return object.dom.cloneNode(true);
+	},
+
     expandRange: function(range, doc){
 		var object = this.nodeIfObjectOrInObject(range.commonAncestorContainer) || this.nodeIfObjectOrInObject(range.startContainer), nr;
         if(object) {
-            return object.down('.naquestion').dom.cloneNode(true);
+            return this.contentsForObjectTag(object);
         }
 
 	    nr = this.rangeIfItemPropSpan(range);
@@ -117,7 +132,7 @@ Ext.define('NextThought.util.Ranges',{
         Ext.fly(tempDiv).destroy();
 
         //return string clean of ids:
-        return str.replace(/id=".*?"/ig, '');
+        return str.replace(/\wid=".*?"/ig, '');
     },
 
 

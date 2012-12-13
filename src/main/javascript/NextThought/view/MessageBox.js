@@ -40,7 +40,21 @@ Ext.define('NextThought.view.MessageBox',{
 			text: this.buttonText[btnId],
 
 			xhooks: {
+				//We support setting ui off a formatter in the text.
+				//we split by ':' and if there are two parts the first
+				//will be used to set the UI and the second will be the
+				//text
 				setText: function(text){
+					var parts = text.split(':') || [],
+						newArgs = Array.prototype.slice.call(arguments);
+					if(parts.length > 1){
+						this.setUI(parts[0]);
+						newArgs[0] = parts[1];
+						return this.callParent(newArgs);
+					}
+
+					//If there is no formatter do the same
+					//magical stuff we used to do
 					if(/delete/i.test(text)){
 						this.setUI('caution');
 					}
