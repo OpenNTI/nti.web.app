@@ -62,7 +62,11 @@ Ext.application({
 		window.onerror = null;
 
 		if(Ext.isIE9 && !swfobject.hasFlashPlayerVersion("9.0.18")){
-			alert('Flash is required for your browser to function correctly');
+			alert('Flash is required for this application to function correctly in your browser.'
+						+ Ext.DomHelper.markup([
+				{tag:'br'},{tag:'br'},
+				{tag: 'a', href: 'http://get.adobe.com/flashplayer/', html: 'Get it here.'}]));
+
 			return;
 		}
 
