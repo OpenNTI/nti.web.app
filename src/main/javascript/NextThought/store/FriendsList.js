@@ -83,6 +83,9 @@ Ext.define('NextThought.store.FriendsList',{
 
 		//Connections: include all my contacts + people in my dfls.
 		this.each(function(g){
+			if(g.isDFL){
+				names.push(g.get('Creator'));
+			}
 			names.push.apply(names, g.get('friends'));
 		});
 

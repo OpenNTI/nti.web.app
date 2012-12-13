@@ -353,8 +353,8 @@ Ext.define('NextThought.view.account.activity.View',{
 	},
 
 	//Right now things in the contacts are things shared
-	//directly to you, or creators in the mycontacts group.  Circled change
-	//also belong here
+	//directly to you, or creators that are connected to you.  Circled change
+	//also belong here.
 	belongsInMyContacts: function(change, flStore, communities, noVerify){
 		var belongs = false,
 			username = $AppConfig.username,
