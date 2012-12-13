@@ -367,8 +367,8 @@ Ext.define('NextThought.view.account.activity.View',{
 		}
 
 		belongs = belongs || Ext.Array.contains(sharedWith, username);
-		if(!belongs && flStore && flStore.isContact){
-			belongs = flStore.isContact(creator);
+		if(!belongs && flStore && flStore.isConnected){
+			belongs = flStore.isConnected(creator);
 		}
 
 		//Just log an error for now so we know there isn't
@@ -408,15 +408,11 @@ Ext.define('NextThought.view.account.activity.View',{
 			flStore = Ext.getStore('FriendsList'),
 			me = this;
 
-		//DFLs you own, but aren't a member of aren't in Communities or 
-		//DynamicMemberships list.  They only come in the FriendsLists
-		//We treat dfls like communties for this filter so make a pass
-		//adding them to the list
-		flStore.each(function(g){
-			if(g.isDFL){
-				communities.push(g.isModel ? g.get('Username') : g);
-			}
-		});
+		// Strip away all DFL in communities.
+		communities = Ext.Array.filter(communities, function(c){
+				var r = flStore.findRecord('Username', c);
+			    return !(r && r.isDFL);
+			});
 
 		if(community){
 			return me.belongsInCommunity(change, flStore, communities);

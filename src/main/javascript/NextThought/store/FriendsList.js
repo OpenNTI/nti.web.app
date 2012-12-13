@@ -78,6 +78,19 @@ Ext.define('NextThought.store.FriendsList',{
 	},
 
 
+	getConnections: function(){
+		var names = [];
+
+		//Connections: include all my contacts + people in my dfls.
+		this.each(function(g){
+			names.push.apply(names, g.get('friends'));
+		});
+
+		names = Ext.Array.sort(Ext.Array.unique(names));
+		names = Ext.Array.remove(names, $AppConfig.username);
+		return names;
+	},
+
 	
 	isContact: function(username){
 		if(username && username.isModel){
@@ -86,5 +99,13 @@ Ext.define('NextThought.store.FriendsList',{
 		//Rather than building the contacts array and doing a contains
 		//check this could be optimized if needed.
 		return Ext.Array.contains(this.getContacts(),username);
+	},
+
+	isConnected: function(username){
+		if(username && username.isModel){
+			username = username.get('Username');
+		}
+
+		return Ext.Array.contains( this.getConnections(), username);
 	}
 });
