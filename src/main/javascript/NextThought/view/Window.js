@@ -330,9 +330,9 @@ Ext.define('NextThought.view.Window',{
 
 
 	dragMaskOff: function(){
-		//if(this.wasMasked === false){
-		//	Ext.getBody().unmask();
-		//}
+		if(this.wasMasked === false){
+			Ext.getBody().unmask();
+		}
 		delete this.wasMasked;
 	},
 
