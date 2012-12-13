@@ -32,14 +32,45 @@ Ext.define('NextThought.view.slidedeck.Queue',{
 		this.callParent(arguments);
 
 		var start = this.store.getAt(0),
-			startOn = this.startOn;
+			startOn = this.startOn,
+			keyMap;
 
 		if(startOn){
 			start = this.store.findRecord('NTIID', startOn, 0, false, true, true) || start;
 		}
 
 		this.getSelectionModel().select(start);
+
+		keyMap = new Ext.util.KeyMap({
+			target: document,
+			binding: [{
+				key: [Ext.EventObject.DOWN,Ext.EventObject.RIGHT,Ext.EventObject.SPACE],
+				fn: this.nextSlide,
+				scope: this
+			},{
+				key: [Ext.EventObject.UP,Ext.EventObject.LEFT],
+				fn: this.previousSlide,
+				scope: this
+			}]
+		});
+		this.on('destroy',function(){keyMap.destroy(false);});
 	},
+
+
+	changeSlide: function(direction){
+		var s = this.store,
+			sm = this.getSelectionModel(),
+			sel = sm.getLastSelected();
+
+		sel = s.getAt(s.indexOf(sel) + direction);
+		if( sel ){ sm.select(sel); }
+	},
+
+
+	nextSlide: function(){ this.changeSlide(1); },
+
+
+	previousSlide: function(){ this.changeSlide(-1); },
 
 
 	updateSlideFromVideo: function(){
