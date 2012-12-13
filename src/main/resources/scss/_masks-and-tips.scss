@@ -103,6 +103,10 @@
 	opacity: 1;
 	background: rgba(255,255,255,0.9);
 	z-index: 999991;
+
+	&.nti-clear {
+		opacity: 0;
+	}
 }
 
 .x-tip { background-color: white; }

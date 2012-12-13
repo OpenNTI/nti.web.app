@@ -314,16 +314,26 @@ Ext.define('NextThought.view.Window',{
 	},
 
 	dragMaskOn: function(){
-		if(Ext.getCmp('viewport')){
-			Ext.getCmp('viewport').el.mask('','drag-mask');
+		var e = Ext.getBody();
+		this.wasMasked = this.modal || Boolean(Ext.getBody().isMasked());
+		if(!this.wasMasked){
+
+			e.mask('','drag-mask');
+			try{
+				e.getCache().data.maskEl.addCls('nti-clear');
+			}
+			catch(badThings){
+				console.error('ExtJS private api changed..., find another way to add the class to the mask element');
+			}
 		}
 	},
 
 
 	dragMaskOff: function(){
-		if(Ext.getCmp('viewport')){
-			Ext.getCmp('viewport').el.unmask();
-		}
+		//if(this.wasMasked === false){
+		//	Ext.getBody().unmask();
+		//}
+		delete this.wasMasked;
 	},
 
 
