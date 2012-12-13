@@ -386,13 +386,13 @@ Ext.define('NextThought.view.account.activity.View',{
             sharedWith = item.get('sharedWith') || [],
             foundInCommunities = false;
 
-            Ext.Array.each(sharedWith, function(u){
-				if (Ext.Array.contains(communities, u)){
-                    foundInCommunities = true;
-					return false;
-                }
-				return true;
-			});
+        Ext.Array.each(sharedWith, function(u){
+			if (Ext.Array.contains(communities, u)){
+				foundInCommunities = true;
+				return false;
+            }
+			return true;
+		});
 
 		//Just log an error for now so we know there isn't
 		//a missing condition we didn't consider
@@ -403,10 +403,21 @@ Ext.define('NextThought.view.account.activity.View',{
 	},
 
 	filterStore: function(change){
-		var communities = $AppConfig.userObject.get('Communities') || [],
+		var communities = ($AppConfig.userObject.get('Communities') || []).slice(),
 			community = (this.filter === 'inCommunity'),
 			flStore = Ext.getStore('FriendsList'),
 			me = this;
+
+		//DFLs you own, but aren't a member of aren't in Communities or 
+		//DynamicMemberships list.  They only come in the FriendsLists
+		//We treat dfls like communties for this filter so make a pass
+		//adding them to the list
+		flStore.each(function(g){
+			if(g.isDFL){
+				communities.push(g.isModel ? g.get('Username') : g);
+			}
+		});
+
 		if(community){
 			return me.belongsInCommunity(change, flStore, communities);
 		}
