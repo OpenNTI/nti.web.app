@@ -183,7 +183,7 @@ Ext.define('NextThought.controller.Groups', {
 
 	publishGroupsAndLists: function(groups, lists, onComplete){
 		var store = this.getFriendsListStore(), me = this,
-			groupCmps = [], listCmps = [], remainingGroups, remainingLists,
+			groupCmps = [], listCmps = [], remaining = {groups: 0, lists: 0},
 			addedCmps = [], contactsId = this.getMyContactsId();
 
 		//First we build up a list of the group and list cmps
@@ -220,27 +220,27 @@ Ext.define('NextThought.controller.Groups', {
 		//This part is asynchronous b/c we need to resolve users
 		//when we are complete we need to unsuspend and layout
 		function maybeCallback(){
-			if(remainingLists === 0  && remainingGroups === 0){
+			if(remaining.groups <= 0 && remaining.lists <= 0){
+				groups.resumeLayouts(true);
+				lists.resumeLayouts(true);
 				Ext.callback(onComplete, me);
+				return true;
 			}
-		}
-
-		function groupsFinished(){
-			groups.resumeLayouts(true);
-			maybeCallback();
-		}
-
-		function listsFinished(){
-			lists.resumeLayouts(true);
-			maybeCallback();
+			return false;
 		}
 
 		//Add the contactpanels
 		Ext.Array.push(addedCmps, groups.add(groupCmps));
 		Ext.Array.push(addedCmps, lists.add(listCmps));
 
-		remainingLists = listCmps.length;
-		remainingGroups = groupCmps.length;
+		remaining.lists = listCmps.length;
+		remaining.groups = groupCmps.length;
+
+		//We might be finished before we started.
+		//this is the case of no groups or lists to show
+		if( maybeCallback() ){
+			return;
+		}
 
 		//Now for each panel figure out what users we need to add,
 		//resolve them, add them, and then call finished if necessary
@@ -262,24 +262,15 @@ Ext.define('NextThought.controller.Groups', {
 
 				UserRepository.getUser(usersToAdd, function(resolvedUsers){
 					cmp.setUsers(resolvedUsers);
-					if(groupOrList.isDFL){
-						remainingGroups--;
-						if(remainingGroups === 0){
-							groupsFinished();
-						}
-					}
-					else{
-						remainingLists--;
-						if(remainingLists === 0){
-							listsFinished();
-						}
-					}
+					remaining[groupOrList.isDFL ? 'groups' : 'lists']--;
+					maybeCallback();
 				});
 
 			}
 		});
 	},
 
+	//It is unfortunate we have to synchonize this...
 	publishGroupsData: function(){
 		var me = this,
 			store = me.getFriendsListStore(),
