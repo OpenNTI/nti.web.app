@@ -34,7 +34,7 @@ Ext.define('NextThought.view.menus.Filter',{
 
 
 	reload: function(){
-		var items = [], communities = [];//$AppConfig.userObject.getCommunities();
+		var items = [], communities = [], lists = [];//$AppConfig.userObject.getCommunities();
 
 		this.removeAll(true);
 		items.push({ cls: 'type-filter nothing', text: 'Nothing', checked: false, allowUncheck: true, isNothing: true});
@@ -66,9 +66,15 @@ Ext.define('NextThought.view.menus.Filter',{
 			});
 		}
 
-		if(this.store.getCount()>0){
-			items.push({ xtype: 'labeledseparator', text: 'From Groups' });
-			this.store.each(function(v){
+		this.store.each(function(g){
+			if(!g.isDFL){
+				lists.push(g);
+			}
+		});
+
+		if(!Ext.isEmpty(lists)){
+			items.push({ xtype: 'labeledseparator', text: 'From Lists' });
+			Ext.Array.each(lists, function(v){
 				items.push({
 					cls: 'group-filter',
 					text: v.getName(),
