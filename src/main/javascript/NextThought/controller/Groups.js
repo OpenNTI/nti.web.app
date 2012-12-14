@@ -322,9 +322,30 @@ Ext.define('NextThought.controller.Groups', {
 		Ext.each(
 				Ext.ComponentQuery.query(Ext.String.format('contact-card[username={0}]',name), ct),
 				function(u){
+					var panel;
 					u[/offline/i.test(presence)? 'addCls':'removeCls']('offline');
+					panel = u.up('panel');
+					if( panel && !(panel.is('[offline]') || panel.is('[online]')) && panel.removeUser ){
+						panel.suspendLayouts();
+						if(panel.removeUser(name)){
+							UserRepository.getUser(name, function(u) {
+								if(panel.addUser){
+									panel.addUser(u);
+								}
+								else {
+									console.log('No panel for presence: ',presence);
+								}
+								panel.resumeLayouts(true);
+							});
+						}
+						else{
+							panel.resumeLayouts(true);
+						}
+					}
 				});
 
+		online.suspendLayouts();
+		offline.suspendLayouts();
 		offline.removeUser(name);
 		online.removeUser(name);
 
@@ -338,8 +359,15 @@ Ext.define('NextThought.controller.Groups', {
 				else {
 					console.log('No panel for presence: ',presence);
 				}
+				online.resumeLayouts(true);
+				offine.resumeLayouts(true);
 			});
 		}
+		else{
+			online.resumeLayouts(true);
+			offline.resumeLayouts(true);
+		}
+
 	},
 
 	generateUsername: function(newGroupName){

@@ -219,28 +219,67 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 		return this.associatedGroup.isDFL && !isMe(this.associatedGroup.get('Creator'));
 	},
 
+  	//Sort the users first by presense (online, offline) then
+	//alphabetically withing that
+	userSorterFunction: function(a, b){
+		var aPresence = a.get('Presence'),
+			bPresence = b.get('Presence'),
+			aName = a.get('displayName'),
+			bName = b.get('displayName'),
+			presenceResult, nameResult;
+
+		presenceResult = bPresence.localeCompare(aPresence);
+		if(presenceResult != 0){
+			return presenceResult;
+		}
+
+		return aName.localeCompare(bName);
+	},
+
 	setUsers: function(users){
 		var p = [],
 			g = this.associatedGroup,
-			hide = this.shouldHideUserNib();
+			hide = this.shouldHideUserNib(),
+			usersToAdd = [];
 
-		if(Ext.isArray(users)){
-			Ext.each(users,function(u){ p.push({user: u, group: g, hideNib: hide}); });
+		if(!Ext.isArray(users)){
+			Ext.Object.each(users, function(n, u){
+				usersToAdd.push(u);
+			});
 		}
-		else {
-			Ext.Object.each(users,function(n,u){ p.push({user: u, group: g, hideNib: hide}); });
+		else{
+			usersToAdd = users.slice();
 		}
+		usersToAdd = Ext.Array.sort(usersToAdd, this.userSorterFunction);
+		Ext.each(usersToAdd,function(u){ p.push({user: u, group: g, hideNib: hide}); });
 		this.removeAll(true);
 		this.add(p);
 		this.updateTitle();
 	},
 
+	//Users isn't very big here so do the naive thing
+	indexToInsertAt: function(users, newUser){
+		var idx = 0, me = this;
+		Ext.Array.each(users, function(u){
+			if(me.userSorterFunction(u, newUser) < 0){
+				idx++;
+				return true;
+			}
+			return false;
+		});
+		return idx;
+	},
+
 	addUser: function(user){
-		var existing = this.down('[username='+user.get('Username')+']');
+		var existing = this.down('[username='+user.get('Username')+']'), users;
 		if(!existing){
-			this.add({user: user, group: this.associatedGroup, hideNib: this.shouldHideUserNib()});
+			//Figure out where we need to insert it
+			users = Ext.Array.pluck(this.query('[username]') || [], 'user');
+			this.insert(this.indexToInsertAt(users, user), {user: user, group: this.associatedGroup, hideNib: this.shouldHideUserNib()});
 			this.updateTitle();
+			return true;
 		}
+		return false;
 	},
 
 	removeUser: function(user) {
@@ -249,7 +288,9 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 		if (existing){
 			this.remove(existing, true);
 			this.updateTitle();
+			return true;
 		}
+		return false;
 	},
 
 
@@ -298,7 +339,7 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 			msg = user.get('displayName')+' will no longer be a member of '+this.associatedGroup.get('displayName');
 
 		Ext.Msg.show({
-			msg: "Viewing the presentation will cause any unsaved work to be lost.",
+			msg: msg,
 			buttons: 9, // bitwise result of: Ext.MessageBox.OK | Ext.MessageBox.CANCEL,
 			scope: me,
 			icon: 'warning-red',
