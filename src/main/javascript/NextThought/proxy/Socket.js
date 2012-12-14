@@ -102,7 +102,12 @@ Ext.define('NextThought.proxy.Socket', {
 			socket.emit.chained = true;
 
 			socket.onPacket = Ext.Function.createSequence(
-				function(){ console.debug('socket.onPacket: args:'+JSON.stringify(arguments)); },
+				function(){
+					var o =JSON.stringify(arguments);
+					if(o !== '{"0":{"type":"noop","endpoint":""}}'){
+						console.debug('socket.onPacket: args:'+o);
+					}
+				},
 				socket.onPacket
 			);
 		}
