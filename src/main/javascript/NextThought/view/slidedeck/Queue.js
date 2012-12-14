@@ -78,10 +78,10 @@ Ext.define('NextThought.view.slidedeck.Queue',{
 
 
 	changeSlide: function(direction){
-		var s = this.store,
-			sel = this.getSelectionModel().getLastSelected();
+		var sel = this.getSelectionModel().getLastSelected();
 
-		sel = s.getAt(s.indexOf(sel) + direction);
+		sel = sel? sel.getSibling(direction) : null;
+
 		if( sel ){
 			this.selectSlide(sel);
 		}

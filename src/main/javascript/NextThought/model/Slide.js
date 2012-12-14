@@ -18,6 +18,12 @@ Ext.define('NextThought.model.Slide', {
 	],
 
 
+	getSibling: function(direction){
+		var s = this.store;
+		return s.getAt(s.indexOf(this) + direction);
+	},
+
+
 	statics:{
 		fromDom: function(dom,containerId){
 

@@ -36,10 +36,16 @@ Ext.define('NextThought.view.slidedeck.Video',{
 			cls: 'video placeholder', name: 'slide-video', id: '{id}-curtain'
 		}]
 	},{
-		cls: 'video-checkbox',
-		html: 'Link video with slides',
-		tabIndex: 0,
-		role: 'button'
+		cls: 'controls',
+		cn: [{
+			cls: 'buttons',
+			cn: [{ cls: 'next', tabIndex: 0 },{ cls: 'prev', tabIndex: 0 }]
+		},{
+			cls: 'video-checkbox',
+			html: 'Link video with slides',
+			tabIndex: 0,
+			role: 'button'
+		}]
 	}]),
 
 	// Vimeo: http://developer.vimeo.com/player/js-api
@@ -51,7 +57,9 @@ Ext.define('NextThought.view.slidedeck.Video',{
 
 
 	renderSelectors: {
-		checkboxEl: 'div.video-checkbox'
+		checkboxEl: 'div.video-checkbox',
+		nextEl: 'div.next',
+		prevEl: 'div.prev'
 	},
 
 
@@ -111,6 +119,18 @@ Ext.define('NextThought.view.slidedeck.Video',{
 		function enterFilter(e) { var k = e.getKey(); return (k === e.ENTER || k === e.SPACE); }
 
 		this.updateCheckbox();
+
+		this.mon(this.nextEl,{
+			scope:this.queue,
+			click:this.queue.nextSlide,
+			keydown: Ext.Function.createInterceptor(this.queue.nextSlide,enterFilter,this,null)
+		});
+
+		this.mon(this.prevEl,{
+			scope:this.queue,
+			click:this.queue.previousSlide,
+			keydown: Ext.Function.createInterceptor(this.queue.previousSlide,enterFilter,this,null)
+		});
 
 		this.mon(this.checkboxEl,{
 			scope:this,
@@ -381,9 +401,16 @@ Ext.define('NextThought.view.slidedeck.Video',{
 	//called by the event of selecting something in the slide queue.
 	updateVideoFromSelection: function(queueCmp, slide){
 
+		var video,
+			hasNext = Boolean(slide.getSibling(1)),
+			hasPrev = Boolean(slide.getSibling(-1));
+
+		this.nextEl[hasNext?'removeCls':'addCls']('disabled');
+		this.prevEl[hasPrev?'removeCls':'addCls']('disabled');
+
 		if(!this.linkWithSlides){return;}
 
-		var video = this.getVideoInfoFromSlide(slide);
+		video = this.getVideoInfoFromSlide(slide);
 
 		this.maybeSwitchPlayers(video.service);
 		this.setVideoAndPosition(video.id,video.start);

@@ -51,6 +51,7 @@ Ext.define('NextThought.view.slidedeck.View',{
 		q = this.queue = ctrls.add({ xtype: 'slidedeck-queue', store: store, startOn: start, flex: 1 });
 
 		v.queue = q;
+		slide.queue = q;
 
 		//wire up
 		this.mon(q,'select', v.updateVideoFromSelection, v);

@@ -10,12 +10,17 @@ Ext.define('NextThought.view.slidedeck.Slide',{
 	childEls: ['body'],
 	getTargetEl: function () { return this.body; },
 	renderTpl: Ext.DomHelper.markup([
-		{tag: 'img', cls: 'slide'},
+		{cls: 'image-wrap', cn:[
+			{tag: 'img', cls: 'slide'},
+			{cls: 'prev'},{cls: 'next'}
+		]},
 		{id: '{id}-body', html:'{%this.renderContainer(out,values)%}'}
 	]),
 
 	renderSelectors: {
-		slideImage: 'img.slide'
+		slideImage: 'img.slide',
+		next: '.next',
+		prev: '.prev'
 	},
 
 	updateSlide: function(v,slide){
@@ -24,7 +29,13 @@ Ext.define('NextThought.view.slidedeck.Slide',{
 			return;
 		}
 
+		var hasNext = Boolean(slide.getSibling(1)),
+			hasPrev = Boolean(slide.getSibling(-1));
+
 		this.slideImage.set({src: slide.get('image')});
+
+		this.next[hasNext?'removeCls':'addCls']('disabled');
+		this.prev[hasPrev?'removeCls':'addCls']('disabled');
 	},
 
 
@@ -34,6 +45,8 @@ Ext.define('NextThought.view.slidedeck.Slide',{
 		if(this.slide){
 			this.updateSlide({},this.slide);
 		}
-	}
 
+		this.mon(this.next,'click',this.queue.nextSlide,this.queue);
+		this.mon(this.prev,'click',this.queue.previousSlide,this.queue);
+	}
 });
