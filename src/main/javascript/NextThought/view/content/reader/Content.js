@@ -74,6 +74,25 @@ Ext.define('NextThought.view.content.reader.Content',{
 	},
 
 
+	pauseAllVideos: function(){
+		var d = this.getDocumentElement(),
+			frames = d.querySelectorAll('iframe');
+
+		Ext.each(frames,function(o){
+			if(/^(http(s)?:)?\/\/www\.youtube\.com/i.test(o.getAttribute('src'))){
+				o.contentWindow.postMessage(JSON.stringify({
+				        event: 'command',
+				        func: 'pauseVideo',
+				        args: [],
+				        id: o.getAttribute('id')
+				}), "*");
+			}
+			//else if(vimeo){}
+			//else if(html5){}...
+		});
+	},
+
+
 	resolveContainers: function(){
 		var d = this.getDocumentElement(),
 			els, containers = [];
@@ -265,11 +284,23 @@ Ext.define('NextThought.view.content.reader.Content',{
 				absolute = firstChar ==='/',
 				anchor = firstChar === '#',
 				external = me.externalUriRegex.test(url),
-				host = absolute?getURL():basePath;
+				host = absolute?getURL():basePath,
+				params;
 
 			if(/src/i.test(attr) && /youtube/i.test(url)){
-				return Ext.String.format('src="{0}?html5=1&rel=0&wmode=opaque"',
-						url.replace(/http:/i,'https:').replace(/\?.*/i,''));
+				params = [
+					'html5=1',
+					'enablejsapi=1',
+					'autohide=1',
+					'modestbranding=1',
+					'rel=0',
+					'showinfo=0',
+					'wmode=opaque',
+					'origin='+encodeURIComponent(location.protocol+'//'+location.host)];
+
+				return Ext.String.format('src="{0}?{1}"',
+						url.replace(/http:/i,'https:').replace(/\?.*/i,''),
+						params.join('&') );
 			}
 
 			//inline
@@ -283,6 +314,7 @@ Ext.define('NextThought.view.content.reader.Content',{
 	},
 
 
+	/** @private */
 	externalUriRegex : /^([a-z][a-z0-9\+\-\.]*):/i,
 
 
@@ -317,6 +349,7 @@ Ext.define('NextThought.view.content.reader.Content',{
 		}
 
 		if(/^slide/i.test(target)){
+			this.pauseAllVideos();
 			SlideDeck.open(el, LocationProvider.currentNTIID);
 			return false;
 		}
