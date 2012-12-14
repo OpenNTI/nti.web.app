@@ -1,5 +1,5 @@
 Ext.Loader.loadScript({
-	url:'//www.youtube.com/iframe_api',
+	url:'https://www.youtube.com/iframe_api',
 	onError:function(){console.error('YouTube API failed to load');},
 	onLoad:function(){console.log('YouTube API loaded');}
 });
@@ -24,9 +24,9 @@ Ext.define('NextThought.view.slidedeck.Video',{
 
 	renderTpl: Ext.DomHelper.markup([{
 		cls: 'video-wrapper', cn: [{
-			//YouTube's player will replace this div and copy all its attributes
-			/*tag: 'iframe',*/ cls:'video', name: 'slide-video', id: '{id}-youtube-video',
-			frameBorder: 0, scrolling: 'no', seamless: true
+			tag: 'iframe', cls:'video', name: 'slide-video', id: '{id}-youtube-video',
+			frameBorder: 0, scrolling: 'no', seamless: true,
+			src: 'https://www.youtube.com/embed/?{youtube-params}'
 		},{
 			tag: 'iframe', cls:'video', name: 'slide-video', id: '{id}-vimeo-video',
 			frameBorder: 0, scrolling: 'no', seamless: true
@@ -86,6 +86,22 @@ Ext.define('NextThought.view.slidedeck.Video',{
 				if(!s || s=== o.service){i.push(o.id);}
 			}); return i;
 		};
+
+		var pl = Ext.Array.unique(this.playlist.getIds('youtube')).join(','),
+			params = [
+			'html5=1',
+			'enablejsapi=1',
+			'autohide=1',
+			'modestbranding=1',
+			'rel=0',
+			'showinfo=0',
+			'list='+encodeURIComponent(pl),
+			'origin='+encodeURIComponent(location.protocol+'//'+location.host)
+		];
+
+		this.renderData = Ext.apply(this.renderData||{},{
+			'youtube-params':params.join('&')
+		});
 	},
 
 
@@ -102,20 +118,8 @@ Ext.define('NextThought.view.slidedeck.Video',{
 			keydown: Ext.Function.createInterceptor(this.checkboxClicked,enterFilter,this,null)
 		});
 
-		var pl = Ext.Array.unique(this.playlist.getIds('youtube')).join(',');
 
 		this.players.youtube = new YT.Player(this.playerIds.youtube, {
-			height: '221',
-			width: '392',
-			playerVars: {
-				html5: 1,
-				autohide: 1,
-				modestbranding: 1,
-				rel: 0,
-				showinfo: 0,
-				playlist: pl,
-				origin:window.location.toString()
-			},
 			events: {
 				'onReady': Ext.bind(this.youtubePlayerReady,this)
 			}
