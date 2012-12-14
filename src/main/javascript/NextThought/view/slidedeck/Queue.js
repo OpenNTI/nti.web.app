@@ -39,6 +39,8 @@ Ext.define('NextThought.view.slidedeck.Queue',{
 			start = this.store.findRecord('NTIID', startOn, 0, false, true, true) || start;
 		}
 
+		this.on('select',this.markLastSelectedTime,this);
+
 		this.selectSlide(start);
 
 		keyMap = new Ext.util.KeyMap({
@@ -54,6 +56,15 @@ Ext.define('NextThought.view.slidedeck.Queue',{
 			}]
 		});
 		this.on('destroy',function(){keyMap.destroy(false);});
+	},
+
+
+	markLastSelectedTime: function(){
+		this.lastChanged = new Date().getTime();
+	},
+
+	justChanged: function(){
+		return Boolean((new Date().getTime() - this.lastChanged) < 1000);
 	},
 
 

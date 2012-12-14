@@ -81,6 +81,11 @@ Ext.define('NextThought.view.slidedeck.Video',{
 
 		this.playlist = [];
 		this.store.each(function(s){ this.playlist.push(this.getVideoInfoFromSlide(s)); },this);
+		this.playlist.getIds = function(s){
+			var i = []; Ext.each(this,function(o){
+				if(!s || s=== o.service){i.push(o.id);}
+			}); return i;
+		};
 	},
 
 
@@ -97,15 +102,19 @@ Ext.define('NextThought.view.slidedeck.Video',{
 			keydown: Ext.Function.createInterceptor(this.checkboxClicked,enterFilter,this,null)
 		});
 
+		var pl = Ext.Array.unique(this.playlist.getIds('youtube')).join(',');
+
 		this.players.youtube = new YT.Player(this.playerIds.youtube, {
 			height: '221',
 			width: '392',
 			playerVars: {
-				html5: Ext.isIE9 ? 0 : 1,
+				html5: 1,
 				autohide: 1,
 				modestbranding: 1,
 				rel: 0,
-				showinfo: 0
+				showinfo: 0,
+				playlist: pl,
+				origin:window.location.toString()
 			},
 			events: {
 				'onReady': Ext.bind(this.youtubePlayerReady,this)
@@ -129,35 +138,61 @@ Ext.define('NextThought.view.slidedeck.Video',{
 	videoQueryTask: function videoQueryTask(){
 		var s = this.queryPlayer(),
 			pl= this.playlist,
-			ix= this.playlistIndex || 0,
+			ix= this.playlistIndex,
 			o= pl[ix],
 			newIx;
 
 		if(!s || !this.linkWithSlides){return;}
 
-		if(!o) {
+		if(!o || ix < 0) {
 			console.warn("No playlist item", pl, ix);
 			return;
 		}
 
-		//Naive approach to play list. Assume everything is in order and all i have to look at is that is the end triggers action.
-		//console.log('Video status', s.video, s.time, 'slide start', o.start, 'slide end',o.end);
-
-		if(s.time >= o.end || (s.state === 0 && Math.abs(s.time - o.end) < 1)){
-			this.videoTriggeredTransition = true;
-			this.queue.nextSlide();
+		if(this.queue.justChanged()){
+			console.log('Slide just changed');
 			return;
 		}
 
+
+		/**
+		 * Note, this is simply polling the active player and searching the playlist (slides) for where it should go,
+		 * and if it matches the current slide it stops.
+		 *
+		 * For Slides that jump around segments of a video in non-linear order and accounting for users jumping around
+		 * the slides and/or video position this gets pretty complicated.  We don't fully handle all edge cases, this
+		 * will probably end up with an over-arching timeline controlling everything. Still need to figure out how to
+		 * hide the YouTube/Vimeo/etc player controls so that we an super-impose our own scrub bar to accomodate that.
+		 *
+		 * These current changes attempt to make IE happier. It was incorrectly jumping to various slides and was also
+		 * failing to switch videos on slide change.
+		 */
+
 		if(s.state === this.states.PLAYING){
+
+			console.log('[video status] service: '+ s.service
+						+', state: '+s.state
+						+', id: '+s.video
+						+', time: '+s.time
+						+', [slide start: '+o.start
+						+', slide end: '+o.end+']');
+
 			//for people who jump around...
 			newIx = this.findPlaylistIndexFor(s.service, s.video, s.time);
+			console.log('[playlist] new index '+newIx+', old index: '+ix);
 			if(Ext.isArray(newIx)){
 				console.log('Not sure what to do here.',newIx);
 				return;
 			}
 
-			if(newIx < 0 || newIx === ix){return;}
+			if(newIx === ix){return;}
+
+			if(s.time >= o.end || (newIx === -1 && Math.abs(s.time - o.end) < 1)){
+				newIx = ix+1;
+				console.log('[End of Video]');
+			}
+
+			this.videoTriggeredTransition = true;
 			this.queue.selectSlide(newIx);
 		}
 	},
@@ -165,10 +200,19 @@ Ext.define('NextThought.view.slidedeck.Video',{
 
 	findPlaylistIndexFor: function(service,id,time){
 		var matching = [], len;
+
+//		time = Math.round(time);
+
 		Ext.each(this.playlist,function(o,i){
 			/* slideId, id, service, start, end */
-			if(o.service === service && o.id === id && o.start <= time && time < o.end){
-				matching.push(i);
+			var dE = Math.abs(time - o.end),
+				dS = Math.abs(o.start - time);
+
+			if(o.service === service && o.id === id){
+				console.log('[playlist-search]: '+i+': Start diff: '+dS+', End diff: '+dE+', start: '+ o.start+', end: '+o.end);
+				if((o.start <= time || dS < 1) && (time < o.end && dE > 1)){
+					matching.push(i);
+				}
 			}
 		});
 
@@ -279,7 +323,7 @@ Ext.define('NextThought.view.slidedeck.Video',{
 		}
 
 
-		if(pause){ console.log('pausing'); this.issueCommand('youtube','pauseVideo'); }
+		if(pause || !videoId){ console.log('pausing'); this.issueCommand('youtube','pauseVideo'); }
 	},
 
 
