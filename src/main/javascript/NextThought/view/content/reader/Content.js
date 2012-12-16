@@ -355,6 +355,10 @@ Ext.define('NextThought.view.content.reader.Content',{
 		}
 
 		if(/^zoom$/i.test(target)){
+			Ext.defer(function(){
+				m.getIframe().win.blur();
+				window.focus();
+			},100);
 			ImageZoomView.zoomImage(el, this.getAnnotationOffsets());
 			return false;
 		}
