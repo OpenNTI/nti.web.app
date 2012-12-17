@@ -75,7 +75,11 @@ Ext.define('NextThought.filter.FilterManager',{
 
 		Ext.each(list,function(f){
 			var m;
-
+			if(f.fieldName==='sharedWith'){
+				params.sharedWith = params.sharedWith || [];
+				params.sharedWith.push(f.value.getId ? f.value.getId() : f.value);
+				return;
+			}
 			if(f.fieldName==='Creator'){
 				if(isMe(f.value)){ params.me = true; }
 				else { params.groups = true; }

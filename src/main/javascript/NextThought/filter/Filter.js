@@ -1,7 +1,7 @@
 Ext.define('NextThought.filter.Filter',{
 	alternateClassName: 'NextThought.Filter',
 
-	statics: {
+	inheritableStatics: {
 		OPERATION_INCLUDE: 1,
 		OPERATION_EXCLUDE: 2
 	},
@@ -75,18 +75,11 @@ Ext.define('NextThought.filter.Filter',{
 
 	compareValue: function(value, testedValue){
 		var result = false;
-
-		if(value.isModel && value.isGroup){
-			value = value.get('friends');
+		result = Boolean(value === testedValue);
+		if(!result && testedValue.getId){
+			return this.compareValue(value, testedValue.getId());
 		}
-		if(Ext.isArray(value)){
-			result = Ext.Array.contains(value, testedValue);
-		}
-		else {
-			result = value === testedValue;
-		}
-
-		return Boolean(result);
+		return result;
 	}
 
 });

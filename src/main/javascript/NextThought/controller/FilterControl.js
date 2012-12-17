@@ -4,7 +4,9 @@ Ext.define('NextThought.controller.FilterControl', {
 	requires: [
 		'NextThought.filter.FilterManager',
 		'NextThought.filter.FilterGroup',
-		'NextThought.filter.Filter'
+		'NextThought.filter.Filter',
+		'NextThought.filter.ValueContainedFilter',
+		'NextThought.filter.ValueContainsFilter'
 	],
 
 	views: [
@@ -121,16 +123,14 @@ Ext.define('NextThought.controller.FilterControl', {
 			everyone = cmp.down('[isEveryone]').checked,
 			everything = cmp.down('[isEverything]').checked,
 			nothing = cmp.down('[isNothing]').checked,
-			groups = cmp.query('[isGroup]'),
+			groups = cmp.query('[isTarget],[isActor]'),
 			types = cmp.query('[model]'),
 			Filter = NextThought.Filter,
 			group = new NextThought.FilterGroup(id,NextThought.FilterGroup.OPERATION_INTERSECTION),
 			people = new NextThought.FilterGroup(id,NextThought.FilterGroup.OPERATION_UNION),
-			models = new NextThought.FilterGroup(id,NextThought.FilterGroup.OPERATION_UNION);
+			models = new NextThought.FilterGroup(id,NextThought.FilterGroup.OPERATION_UNION),
+			dfls = new NextThought.FilterGroup(id, NextThought.FilterGroup.OPERATION_INTERSECTION);
 
-		if (!everyone && !nothing) {
-			group.addFilter(people);
-		}
 		group.addFilter(models);
 
 		Ext.each( groups,
@@ -141,10 +141,23 @@ Ext.define('NextThought.controller.FilterControl', {
 					people.addFilter(new Filter('Creator',Filter.OPERATION_INCLUDE, $AppConfig.username));
 					return;
 				}
-
-				people.addFilter(new Filter('Creator',Filter.OPERATION_INCLUDE, g.record));
+				if(g.record.isDFL){
+					dfls.addFilter(new NextThought.filter.ValueContainedFilter('sharedWith',Filter.OPERATION_INCLUDE, g.record));
+				}
+				else{
+					people.addFilter(new NextThought.filter.ValueContainsFilter('Creator', Filter.OPERATION_INCLUDE, g.record));
+				}
 			},
 			this);
+
+		if(!everyone && !nothing){
+			if(!Ext.isEmpty(people.value)){
+				group.addFilter(people);
+			}
+			if(!Ext.isEmpty(dfls.value)){
+				group.addFilter(dfls);
+			}
+		}
 
 		Ext.each(types,function(t){
 			if(!t.checked && !everything) {

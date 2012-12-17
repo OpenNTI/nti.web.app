@@ -264,14 +264,30 @@ Ext.define('NextThought.controller.UserData', {
 
 
 		Ext.Object.each(stores,function(k,s){
-			s.on('load', loaded, this, { single: true });
-
-			s.proxy.extraParams = Ext.apply(s.proxy.extraParams||{},{
-				filter: filter.join(',').replace(/,+$/,''),
-				accept: listParams.accept,
+			var params = s.proxy.extraParams || {};
+			params = Ext.apply(params, {
 				sortOn: 'lastModified',
 				sortOrder: 'descending'
 			});
+
+			s.on('load', loaded, this, { single: true });
+
+			//Clear out any old filter information.  It has changed after all
+			delete params.filter;
+			delete params.accept;
+			delete params.sharedWith;
+
+			if(!Ext.isEmpty(filter)){
+				params.filter = filter.join(',').replace(/,+$/,'');
+			}
+			if(listParams.accept){
+				params.accept = listParams.accept;
+			}
+			if(!Ext.isEmpty(listParams.sharedWith)){
+				params.sharedWith = listParams.sharedWith.join(',');
+			}
+
+			s.proxy.extraParams = params;
 
 			s.removeAll();
 			s.loadPage(1);

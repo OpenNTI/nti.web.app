@@ -34,7 +34,7 @@ Ext.define('NextThought.view.menus.Filter',{
 
 
 	reload: function(){
-		var items = [], communities = [], lists = [];//$AppConfig.userObject.getCommunities();
+		var items = [], lists = [], groups = [];
 
 		this.removeAll(true);
 		items.push({ cls: 'type-filter nothing', text: 'Nothing', checked: false, allowUncheck: true, isNothing: true});
@@ -46,40 +46,38 @@ Ext.define('NextThought.view.menus.Filter',{
 			hidden: /mathcounts/i.test(LocationProvider.currentNTIID)
 		});
 		items.push({ cls: 'type-filter note', text: 'Notes', model: 'NextThought.model.Note' });
-//		items.push({ cls: 'type-filter transcript', text: 'Transcripts', model: 'NextThought.model.TranscriptSummary' });
-//		items.push({ cls: 'type-filter quizresult', text: 'Quiz Results', model: 'NextThought.model.QuizResult' });
 		items.push({ xtype: 'labeledseparator', text: 'From' });
 		items.push({ cls: 'group-filter everyone', text: 'Everyone', checked: true,
 			allowUncheck:false, isEveryone:true, record: UserRepository.getTheEveryoneEntity() });
-		items.push({ cls: 'group-filter', text: 'Me', isMe: true, record: $AppConfig.userObject, isGroup: true });
+		items.push({ cls: 'group-filter', text: 'Me', isMe: true, record: $AppConfig.userObject, isActor: true });
 
-
-		if(communities.length>0){
-			items.push({ xtype: 'labeledseparator', text: 'From Communities' });
-			Ext.each(communities,function(c){
-				items.push({
-					cls: 'group-filter',
-					text: c.getName(),
-					record: c,
-					isGroup: true
-				});
-			});
-		}
 
 		this.store.each(function(g){
-			if(!g.isDFL){
-				lists.push(g);
-			}
+			(g.isDFL ? groups : lists).push(g);
 		});
 
 		if(!Ext.isEmpty(lists)){
-			items.push({ xtype: 'labeledseparator', text: 'From Lists' });
+			items.push({ xtype: 'labeledseparator', text: 'Lists', cls: 'noline'});
 			Ext.Array.each(lists, function(v){
 				items.push({
 					cls: 'group-filter',
 					text: v.getName(),
 					record: v,
-					isGroup: true
+					isList: true,
+					isActor: true
+				});
+			});
+		}
+
+		if(!Ext.isEmpty(groups)){
+			items.push({ xtype: 'labeledseparator', text: 'Groups', cls: 'noline'});
+			Ext.Array.each(groups, function(v){
+				items.push({
+					cls: 'group-filter',
+					text: v.getName(),
+					record: v,
+					isGroup: true,
+					isTarget: true
 				});
 			});
 		}
@@ -91,22 +89,6 @@ Ext.define('NextThought.view.menus.Filter',{
 
 		this.maybeTurnOnEverything();
 
-	},
-
-	maybeTurnOnEverything: function(){
-		var a = this.query('[model]'),
-			b = Ext.Array.filter(a, function(i){ return i.checked; }, this);
-
-		//Turn on everything and turn off the other options.
-		if(a.length === b.length) {
-			Ext.each(a, function(i){ i.setChecked(false, true); });
-			this.query('[isEverything]').first().setChecked(true,true);
-		}
-		else if(b.length > 0) {
-			//Turn off everything.
-			this.query('[isEverything]').first().setChecked(false,true);
-		}
-		this.turnOffNothing();
 	},
 
 	maybeChangeVisibiltiy: function(){
@@ -136,20 +118,26 @@ Ext.define('NextThought.view.menus.Filter',{
 			var i, checked = false;
 			if(o.fieldName === '$className'){
 				i = me.down('[model='+o.value+']');
-				if(i){i.setChecked(true,true);}
+				if(i){
+					i.setChecked(true,true);
+					me.itemChanged(i);
+				}
 			}
-			else if(o.fieldName === 'Creator'){
+			else if(o.fieldName === 'Creator' || o.fieldName === 'sharedWith'){
 				if(isMe(o.value)){
 					me.down('[isMe]').setChecked(true,true);
+					me.itemChanged(me.down('[isMe]'));
 					// FIXME: turn everyone options off.
 					// It seems like when 'me' is turned on, 'everyone' isn't.
 					me.query('[isEveryone]').first().setChecked(false,true);
+					me.itemChanged(me.down('[isEveryone]'));
 				}
 				else if(o.value.isModel){
-					Ext.each(me.query('[isGroup]'),function(g){
-						if(g.record === o.value){
+					Ext.each(me.query('[isActor],[isTarget]'),function(g){
+						if(g.record.getId() === o.value.getId()){
 							g.setChecked(true,true);
                             checked = true;
+							me.itemChanged(g);
 						}
 					});
                     cantCheck = cantCheck || !checked;
@@ -167,7 +155,7 @@ Ext.define('NextThought.view.menus.Filter',{
 		}
 
 		var things = toStrings(this.query('[model][checked=true]')),
-			from = toStrings(this.query('[isGroup][checked=true]')),
+			from = toStrings(this.query('[isActor][checked=true],[isTarget][checked=true]')),
 			nothing = this.query('[isNothing][checked=true]'),
 			lastThing = things.pop(),
 			lastFrom = from.pop(),
@@ -197,7 +185,7 @@ Ext.define('NextThought.view.menus.Filter',{
 				o.setChecked(false,true);
 			}
 		});
-		Ext.each(this.query('[isGroup]'),function(o){
+		Ext.each(this.query('[isActor],[isTarget]'),function(o){
 			o.setChecked(false,true);
 		});
 		this.query('[isEverything]').first().setChecked(false,true);
@@ -205,7 +193,7 @@ Ext.define('NextThought.view.menus.Filter',{
 	},
 
 	turnOffNothing: function(){
-		if (!this.query('[isGroup][checked=true]').length){
+		if (!this.query('[isActor][checked=true],[isTarget][checked=true]').length){
 			this.query('[isEveryone]').first().setChecked(true,true);
 		}
 		if (!this.query('[model][checked=true]').length){
@@ -214,9 +202,25 @@ Ext.define('NextThought.view.menus.Filter',{
 		this.query('[isNothing]').first().setChecked(false,true);
 	},
 
-	handleClick: function(item){
+	maybeTurnOnEverything: function(){
+		var a = this.query('[model]'),
+			b = Ext.Array.filter(a, function(i){ return i.checked; }, this);
 
-		if(!item){return;}
+
+		//Turn on everything and turn off the other options.
+		if(a.length === b.length) {
+			Ext.each(a, function(i){ i.setChecked(false, true); });
+			this.query('[isEverything]').first().setChecked(true,true);
+		}
+		else if(b.length > 0) {
+			//Turn off everything.
+			this.query('[isEverything]').first().setChecked(false,true);
+		}
+		this.turnOffNothing();
+	},
+
+	itemChanged: function(item){
+		if(!item){return false;}
 
 		if(item.checked){
 			if(item.isEverything){
@@ -232,25 +236,37 @@ Ext.define('NextThought.view.menus.Filter',{
 				this.maybeTurnOnEverything();
 			}
 			else if(item.isEveryone){
-				Ext.each(this.query('[isGroup]'),function(o){
+				Ext.each(this.query('[isActor],[isTarget]'),function(o){
 					o.setChecked(false,true);
 				});
 				this.turnOffNothing();
 			}
-			else if(item.is('[isGroup]')){
+			else if(item.is('[isActor]')){
 				this.query('[isEveryone]').first().setChecked(false,true);
+				this.turnOffNothing();
+			}
+			else if(item.is('[isTarget]')){
+				this.query('[isEveryone]').first().setChecked(false,true);
+				Ext.each(this.query('[isTarget]'),function(o){
+					o.setChecked(o===item,true);
+				});
 				this.turnOffNothing();
 			}
 		}
 		else {
-			if (!this.query('[isGroup][checked=true]').length){
+			if (!this.query('[isActor][checked=true],[isTarget][checked=true]').length){
 				this.query('[isEveryone]').first().setChecked(true,true);
 			}
 			if (!this.query('[model][checked=true]').length){
 				this.query('[isEverything]').first().setChecked(true,true);
 			}
 		}
+		return true;
+	},
 
-		this.fireEvent('changed',this);
+	handleClick: function(item){
+		if(this.itemChanged(item)){
+			this.fireEvent('changed',this);
+		}
 	}
 });
