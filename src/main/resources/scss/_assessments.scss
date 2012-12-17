@@ -62,7 +62,12 @@
 			font-style: italic;
 		}
 
-			  
+		.tabular {
+			td {
+				padding-left: 1em;
+				padding-right: 1em;
+			}
+		}
 	}
 
 	.x-panel-assessment {
