@@ -140,7 +140,8 @@
 				@include experimental-value(width, calc(100% - 8px));
 				.x-opera &,
 				.x-safari5 & {
-					width: 90%;
+					width: 291px;
+					&[placeHolder$="Name"] { width: 145px; }
 				}
 				position: relative;
 				left: 4px;
