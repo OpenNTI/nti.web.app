@@ -229,7 +229,7 @@ Ext.define('NextThought.controller.Chat', {
 		var m = {ContainerId: room.getId(), body: message, Class: 'MessageInfo'},
 			messageRecord;
 
-		if (replyTo) {
+		if (replyTo && Ext.isArray(m.body) && !/canvas/i.test(m.body[0].MimeType)) {
 			m.inReplyTo = replyTo;
 		}
 		if (channel) {
