@@ -248,7 +248,8 @@ $experimental-support-for-svg: true;
 				background: rgba(36,36,36,0.8);
 				width: 35px;
 				height: 70px;
-				top: 35%;
+				top: 46%;
+				@include experimental-value(top, calc(50% - 45px));
 				&::after {
 					content: ' ';
 					position: absolute;
