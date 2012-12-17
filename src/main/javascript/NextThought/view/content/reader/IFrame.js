@@ -128,10 +128,11 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 			if(e.getKey() === e.BACKSPACE){
 				var t = e.getTarget();
 				e.stopPropagation();
-				if(!t || !(/input|textarea/i).test(t.tagName)){
-					//console.log('stopped backspace: ',t);
+
+				if(!t || (!(/input|textarea/i).test(t.tagName) && !t.getAttribute('contenteditable'))){
+//					console.log('stopped backspace: ',t);
 					e.stopEvent();
-				return false;
+					return false;
 				}
 			}
 		});
