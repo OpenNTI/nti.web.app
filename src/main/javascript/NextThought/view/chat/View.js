@@ -71,6 +71,7 @@ Ext.define('NextThought.view.chat.View', {
     afterRender: function(){
         this.callParent(arguments);
         this.mon(this, 'control-clicked', this.maybeEnableButtons, this);
+	    this.mon( this, 'add', this.maybeShowFlagIcon, this);
     },
 
 
@@ -86,6 +87,21 @@ Ext.define('NextThought.view.chat.View', {
         this.fireEvent('flag-messages', allFlaggedMessages, this);
     },
 
+	maybeShowFlagIcon: function(view, entry){
+		if(this.showFlagIcon){ return; }
+
+		//NOTE: we want to display the flag icon, only where we have at least one message
+		// that can be flagged( meaning that belongs to the other chat participant.)
+		var otherEntries = this.el.query('.log-entry-wrapper:not(.me)'), w, i;
+		if(otherEntries.length > 0 || !isMe(entry.message.get('Creator'))){
+			w = this.up('.chat-window');
+			if(w){
+				i =  w.el.select('.flag-for-moderation', null, true);
+				i ? i.show() : null;
+				this.showFlagIcon = true;
+			}
+		}
+	},
 
     maybeEnableButtons: function(){
         var b = this.down('[flagButton]');
