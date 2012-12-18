@@ -48,6 +48,7 @@ Ext.define('NextThought.ux.ImageZoomView',{
 	afterRender: function(){
 		this.callParent(arguments);
 		this.el.mask('Loading...');
+		this.el.set({tabindex:1});
 		this.mon(this.closeEl,'click', this.close, this);
 
 		var me = this,
@@ -87,7 +88,7 @@ Ext.define('NextThought.ux.ImageZoomView',{
 		};
 		img.src = this.url;
 
-
+		Ext.defer(this.el.focus,100,this.el);
 	},
 
 
