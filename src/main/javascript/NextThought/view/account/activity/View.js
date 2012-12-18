@@ -403,22 +403,23 @@ Ext.define('NextThought.view.account.activity.View',{
 	},
 
 	filterStore: function(change){
-		var communities = ($AppConfig.userObject.get('Communities') || []).slice(),
+		var communities = ($AppConfig.userObject.getCommunities() || []),
 			community = (this.filter === 'inCommunity'),
 			flStore = Ext.getStore('FriendsList'),
-			me = this;
+			me = this, communityNames = [];
 
 		// Strip away all DFL in communities.
-		communities = Ext.Array.filter(communities, function(c){
-				var r = flStore.findRecord('Username', c);
-			    return !(r && r.isDFL);
-			});
+		Ext.Array.each(communities, function(c){
+			if(c.isCommunity){
+				communityNames.push(c.get('Username'));
+			}
+		});
 
 		if(community){
-			return me.belongsInCommunity(change, flStore, communities);
+			return me.belongsInCommunity(change, flStore, communityNames);
 		}
 		else{
-			return me.belongsInMyContacts(change, flStore, communities);
+			return me.belongsInMyContacts(change, flStore, communityNames);
 		}
     },
 
