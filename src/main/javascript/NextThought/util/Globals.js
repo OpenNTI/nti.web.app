@@ -52,15 +52,16 @@ Ext.define('NextThought.util.Globals', {
 	stopBackspace: function(doc){
 		function fn(){
 			return function(e){
-				if(e.getKey()=== e.BACKSPACE){
-					var t = e.getTarget();
-					if(!t || !(/input|textarea/i).test(t.tagName)){
-						console.log(t);
-						e.preventDefault();
-						e.stopPropagation();
-						return false;
-					}
+				var t = e.getTarget(),
+					key = e.getKey(),
+					notInput = (!t || (!(/input|textarea/i).test(t.tagName) && !t.getAttribute('contenteditable')));
+
+				if( key === e.ESC || (key === e.BACKSPACE && notInput )){
+					console.log('blocking key for: ',t);
+					e.stopEvent();
+					return false;
 				}
+				return true;
 			};
 		}
 

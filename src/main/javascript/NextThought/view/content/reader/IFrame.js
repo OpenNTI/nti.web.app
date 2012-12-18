@@ -125,16 +125,16 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 
 		on(doc,['keypress','keydown','keyup'],function(e){
 			e = Ext.EventObject.setEvent(e||event);
-			if(e.getKey() === e.BACKSPACE){
+			if(e.getKey() === e.BACKSPACE || e.getKey() === e.ESC){
 				var t = e.getTarget();
 				e.stopPropagation();
 
 				if(!t || (!(/input|textarea/i).test(t.tagName) && !t.getAttribute('contenteditable'))){
-//					console.log('stopped backspace: ',t);
 					e.stopEvent();
 					return false;
 				}
 			}
+			return true;
 		});
 
 
