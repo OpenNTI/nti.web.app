@@ -26,7 +26,7 @@ Ext.define('NextThought.view.menus.AnswerHistory',{
 	},
 
 	handleClick: function(item){
-		if(item.text !== 'ANSWER HISTORY'){
+		if( !item.is('[answerHistoryTitle]') && !item.is('[noAnswerHistory]') ){
 			this.ownerCmp.setValue(item.text);
 		}
 	}

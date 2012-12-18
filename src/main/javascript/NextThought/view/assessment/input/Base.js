@@ -153,7 +153,6 @@ Ext.define('NextThought.view.assessment.input.Base',{
 				click: this.showHistoryMenu
 			});
 
-			this.shouldShowAnswerHistory();
 		}
 		else {
 			this.historyMenuEl.remove();
@@ -302,7 +301,7 @@ Ext.define('NextThought.view.assessment.input.Base',{
 				width: me.inputBox.getWidth(),
 				ownerCmp: me,
 				items: [{
-					text: 'ANSWER HISTORY', cls:'answer-title', allowUncheck: false
+					text: 'ANSWER HISTORY', cls:'answer-title', allowUncheck: false, answerHistoryTitle: true
 				},{
 					text: 'loading...'
 				}]
@@ -331,20 +330,6 @@ Ext.define('NextThought.view.assessment.input.Base',{
 
 		this.answerHistStore = s;
 
-
-		function func(store, recs){
-			if(!recs || recs.length === 0){
-				me.historyMenuEl.hide();
-			}
-			else{
-				if(!me.historyMenuEl.isVisible()){
-					me.historyMenuEl.show();
-				}
-			}
-		}
-
-		s.on('load', func);
-		s.on('add', func);
 		s.on('changed', function(){ me.loadAnswerHistory(id); });
 	},
 
@@ -370,9 +355,12 @@ Ext.define('NextThought.view.assessment.input.Base',{
 
 			if(me.historyMenu){
 				me.historyMenu.removeAll();
-				me.historyMenu.insert(0, {text: 'ANSWER HISTORY', cls:'answer-title', allowUncheck: false});
+				me.historyMenu.insert(0, {text: 'ANSWER HISTORY', cls:'answer-title', allowUncheck: false, answerHistoryTitle: true});
 				if(items.length > 0){
 					me.historyMenu.add(items);
+				}
+				else{
+					me.historyMenu.add({text: 'Not Yet Attempted', cls:'no-answer-history', allowUncheck: false, noAnswerHistory: true});
 				}
 			}
 		}
