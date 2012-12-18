@@ -58,6 +58,9 @@ Ext.define('NextThought.providers.Location', {
 
 	setLastLocationOrRoot: function(ntiid) {
 		var lastNtiid = localStorage[ntiid] || ntiid;
+		if(!ParseUtils.parseNtiid(lastNtiid)){
+			lastNtiid = ntiid;
+		}
 
 		function callback(a, errorDetails){
 			var error = (errorDetails||{}).error;
@@ -113,6 +116,7 @@ Ext.define('NextThought.providers.Location', {
 					//an alert box will just be unexpected and they won't know what to do about it. Until
 					//we move the error handling out to the caller the most friendly thing seems to 
 					//just log the issue and leave the splash showing.
+					return;//jslint hates empty blocks
 				}
 				return;
 			}
@@ -121,8 +125,10 @@ Ext.define('NextThought.providers.Location', {
 				history.pushState({location: ntiid}, "");
 			}
 
-			//remember last ntiid for this book
-			localStorage[rootId] = ntiid;
+			//remember last ntiid for this book if it is truthy
+			if(ntiid){
+				localStorage[rootId] = ntiid;
+			}
 		}
 
 		if(me.currentNTIID && ntiid !== me.currentNTIID){
@@ -372,13 +378,10 @@ Ext.define('NextThought.providers.Location', {
 				siblingNode = node[siblingMethod]; //execute directional sibling method
 
 			//If the sibling is TOC or topic, we are done here...
-			if (isTopicOrToc(siblingNode)){
-				return siblingNode;
-			}
-			//If not, recurse in the same direction
-			else {
-				return sibling(node[siblingMethod],previous);
-			}
+			return (isTopicOrToc(siblingNode))
+					? siblingNode
+					//If not, recurse in the same direction
+					: sibling(node[siblingMethod],previous);
 		}
 
 		loc = loc ? loc.location : null;
@@ -436,8 +439,9 @@ Ext.define('NextThought.providers.Location', {
 						icon: findIcon(r)
 					};
 				}
+				r = r.nextSibling;
 			}
-			while(Boolean(r = r.nextSibling));
+			while( r );
 
 		},this);
 
@@ -515,7 +519,7 @@ Ext.define('NextThought.providers.Location', {
 		}
 
         var lineage = this.getLineage(ntiid), result=null;
-        Ext.each(lineage, function(l){return !Boolean(result = this.preferenceMap[l]); }, this);
+        Ext.each(lineage, function(l){result = this.preferenceMap[l]; return !result; }, this);
         return result;
 	}
 
