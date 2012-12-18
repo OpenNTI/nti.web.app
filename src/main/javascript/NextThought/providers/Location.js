@@ -61,7 +61,7 @@ Ext.define('NextThought.providers.Location', {
 
 		function callback(a, errorDetails){
 			var error = (errorDetails||{}).error;
-			if( error.status !== undefined && Ext.Ajax.isHTTPErrorCode(error.status)) {
+			if(error && error.status !== undefined && Ext.Ajax.isHTTPErrorCode(error.status)) {
 				delete localStorage[ntiid];
 			}
 		}

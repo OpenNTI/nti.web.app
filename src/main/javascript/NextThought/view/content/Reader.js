@@ -210,12 +210,18 @@ Ext.define('NextThought.view.content.Reader', {
 			me.setContent(resp, pageInfo.get('AssessmentItems'), finish, hasCallback);
 		}
 
+		//TODO: don't know how we get into this state but sometimes the pageInfo is null.
+		// FIXME: In this case try aborting and the navigation. Don't know if it's the right approach.
+		if(!pageInfo){
+			me.onNavigationAborted();
+		}
+
 		//TODO doing error handling here doesn't really make sense.  We need 
 		//to move it up a few levels (using an error callback?) such that 
 		//the thing initiating the navigation request can handle the error.
 		//We may want to do differnt things depending on where the navigation request
 		//occurred from
-		if(!pageInfo.isModel){
+		else if(!pageInfo.isModel){
 			//If its not a model it may be a response object indicating an error.
 			//leave the mask in place and for now we assume something else is handling the
 			//error or presenting it appropriately. We will call anything no
