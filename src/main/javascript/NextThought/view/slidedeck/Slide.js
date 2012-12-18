@@ -12,7 +12,8 @@ Ext.define('NextThought.view.slidedeck.Slide',{
 	renderTpl: Ext.DomHelper.markup([
 		{cls: 'image-wrap', cn:[
 			{tag: 'img', cls: 'slide'},
-			{cls: 'prev'},{cls: 'next'}
+			{cls: 'left', cn:[{cls: 'prev'}]},
+			{cls: 'right',cn:[{cls: 'next'}]}
 		]},
 		{id: '{id}-body', html:'{%this.renderContainer(out,values)%}'}
 	]),

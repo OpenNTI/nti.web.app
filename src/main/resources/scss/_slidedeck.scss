@@ -241,6 +241,15 @@ $experimental-support-for-svg: true;
 				box-shadow: 0 5px 75px 5px rgba(0, 0, 0, 0.8);
 			}
 
+			.left, .right {
+				position: absolute;
+				overflow: hidden;
+				top: 0;
+				bottom: 0;
+			}
+			.left{left: 0; right: 50%;}
+			.right{left: 50%; right: 0;}
+
 			.next, .prev{
 				cursor: pointer;
 				display: none;
@@ -300,9 +309,11 @@ $experimental-support-for-svg: true;
 				}
 			}
 
-			&:hover {
-				.next, .prev {
-					display: block;
+			.left, .right {
+				&:hover {
+					.next, .prev {
+						display: block;
+					}
 				}
 			}
 		}
