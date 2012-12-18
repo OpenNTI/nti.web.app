@@ -15,6 +15,19 @@ Ext.define('NextThought.view.content.reader.Content',{
 	},
 
 
+	listenForImageLoads: function(){
+		var d = this.getDocumentElement(),
+			imgs = d.querySelectorAll('img'),
+			me = this;
+
+		Ext.each(imgs,function(i){
+			i.onload = function(){
+				me.fireEvent('image-loaded');
+			};
+		});
+	},
+
+
 	insertRelatedLinks: function(position,doc){
 		var tpl = this.relatedTemplate, last = null,
 			related = LocationProvider.getRelated(),c = 0,
@@ -166,6 +179,7 @@ Ext.define('NextThought.view.content.reader.Content',{
 			subContainers;
 
 		me.updateContent('<div id="NTIContent">'+c+'</div>');
+		me.listenForImageLoads();
 		me.scrollTo(0, false);
 
 		me.injectAssessments(assessmentItems);
@@ -332,7 +346,7 @@ Ext.define('NextThought.view.content.reader.Content',{
 		}
 
 		//pop out links that point to external resources
-		if(!ParseUtils.parseNtiid(r) && m.externalUriRegex.test(r) && r.indexOf(whref) < 0 ){
+		if(!ParseUtils.parseNtiid(newLocation) && m.externalUriRegex.test(r) && r.indexOf(whref) < 0 ){
 			//popup a leaving platform notice here...
 			try {
 				window.open(r, '_blank');

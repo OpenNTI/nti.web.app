@@ -11,6 +11,7 @@ Ext.define('NextThought.view.content.reader.AssessmentOverlay', {
 		this.on({
 			scope: this,
 			'content-updated': this.clearAssessments,
+			'image-loaded': this.adjustAssessments,
 			'afterRender': this.insertAssessmentOverlay
 		});
 
@@ -25,6 +26,10 @@ Ext.define('NextThought.view.content.reader.AssessmentOverlay', {
 		this.assessmentOverlay = container;
 	},
 
+
+	adjustAssessments: function(){
+		NextThought.view.assessment.Panel.syncPositioning();
+	},
 
 	clearAssessments: function(){
 		var active = this.activeAssessments;
