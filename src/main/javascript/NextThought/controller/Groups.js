@@ -360,7 +360,7 @@ Ext.define('NextThought.controller.Groups', {
 					console.log('No panel for presence: ',presence);
 				}
 				online.resumeLayouts(true);
-				offine.resumeLayouts(true);
+				offline.resumeLayouts(true);
 			});
 		}
 		else{
