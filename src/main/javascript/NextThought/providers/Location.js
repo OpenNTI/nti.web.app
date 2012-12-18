@@ -58,7 +58,15 @@ Ext.define('NextThought.providers.Location', {
 
 	setLastLocationOrRoot: function(ntiid) {
 		var lastNtiid = localStorage[ntiid] || ntiid;
-		this.setLocation(lastNtiid);
+
+		function callback(a, errorDetails){
+			var error = (errorDetails||{}).error;
+			if( error.status !== undefined && Ext.Ajax.isHTTPErrorCode(error.status)) {
+				delete localStorage[ntiid];
+			}
+		}
+
+		this.setLocation(lastNtiid, callback);
 	},
 
 
@@ -83,7 +91,7 @@ Ext.define('NextThought.providers.Location', {
 				console.warn('finish navigation called twice');
 				return;
 			}
-			var args = Array.prototype.slice.call(arguments);
+			var args = Array.prototype.slice.call(arguments), error = (errorDetails||{}).error;
 
 			finish.called = true;
 
@@ -94,9 +102,18 @@ Ext.define('NextThought.providers.Location', {
 			//Give the content time to settle. TODO: find a way to make an event, or prevent this from being called until the content is settled.
 			Ext.defer(Ext.callback,500,Ext,[callback,null,args]);
 
-			if((errorDetails||{}).error){
-				//blank it out
-				localStorage[rootId] = null;
+			if(error){
+				//Ok no bueno.  The page info request failed.  Ideally whoever
+				//initiated this request handles the error  but we aren't really setup for
+				//that everywhere. Need to work on error handling.
+				console.error('An error occurred from setLocation', errorDetails);
+				if( error.status !== undefined && Ext.Ajax.isHTTPErrorCode(error.status)) {
+					//We were displaying an alert box here on 403s, but since we don't know why we
+					//are being called we shouldn't do that.  I.E. unless the user triggered this action
+					//an alert box will just be unexpected and they won't know what to do about it. Until
+					//we move the error handling out to the caller the most friendly thing seems to 
+					//just log the issue and leave the splash showing.
+				}
 				return;
 			}
 
@@ -143,14 +160,7 @@ Ext.define('NextThought.providers.Location', {
 			console.error('resolvePageInfo Failure: ',arguments);
             me.fireEvent('change', undefined);
             Ext.callback(finish,null,[me,{failure:true,req:q,error:r}]);
-            if (r.status === 403 || !r.responseText) {
-                me.fireEvent('navigateAbort');
-                alert(r.status === 403
-						? 'You don\'t have access to that content.'
-						: 'An error occurred while loading this content. Please try again.');
-                delete me.currentNTIID;
-                return;
-            }
+			delete me.currentNTIID;
 			me.fireEvent('navigateComplete',r);
 		}
 

@@ -28,7 +28,14 @@ Ext.define('NextThought.overrides.data.Connection',{
 		}
 
 		return this.callParent(arguments);
+	},
+
+	//We define an error as 4xx or 5xx
+	//i.e. 400 <= statusCode <=599
+	isHTTPErrorCode: function(statusCode){
+		return 400 <= statusCode && statusCode <= 599;
 	}
+
 },function(){
 	Ext.Ajax.cors = true;
 	Ext.Ajax.withCredentials = true;

@@ -210,13 +210,23 @@ Ext.define('NextThought.view.content.Reader', {
 			me.setContent(resp, pageInfo.get('AssessmentItems'), finish, hasCallback);
 		}
 
+		//TODO doing error handling here doesn't really make sense.  We need 
+		//to move it up a few levels (using an error callback?) such that 
+		//the thing initiating the navigation request can handle the error.
+		//We may want to do differnt things depending on where the navigation request
+		//occurred from
 		if(!pageInfo.isModel){
-			if(pageInfo.responseText){
-				me.splash.hide();
-				//TODO: make a fun-light-spirited "Oh no!" page.
-				me.updateContent(pageInfo.responseText);
+			//If its not a model it may be a response object indicating an error.
+			//leave the mask in place and for now we assume something else is handling the
+			//error or presenting it appropriately. We will call anything no
+			if(pageInfo.status !== undefined && Ext.Ajax.isHTTPErrorCode(pageInfo.status)){
+				console.warn('onNavigationComplete called with pageInfo that looks like an error http response.'
+							 + ' Expecting someone else would have handled the error by now', pageInfo);
 			}
-			me.relayout();
+			else{
+				console.warn('onNavigationComplete not called with pageInfo but it doesn\'t look like an error.', pageInfo);
+			}
+			me.onNavigationAborted();
 		}
 		else {
 			proxy.request({

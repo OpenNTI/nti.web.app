@@ -50,6 +50,9 @@ Ext.define('NextThought.view.menus.navigation.Collection',{
 		if(r){
 			this.getSelectionModel().select(r,false, true);
 		}
+		else{
+			this.getSelectionModel().deselectAll();
+		}
 	},
 
 
