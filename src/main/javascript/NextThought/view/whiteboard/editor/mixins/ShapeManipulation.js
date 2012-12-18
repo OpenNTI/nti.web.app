@@ -184,7 +184,9 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 	},
 
 	onMouseLeave: function(e){
-		this.mouseLeftNoMouseUp = this.mouseDown;
+		if(!this.clickedNib){
+			this.mouseLeftNoMouseUp = this.mouseDown;
+		}
 		this.onMouseUp(e);
 	},
 
