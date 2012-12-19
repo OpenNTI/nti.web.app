@@ -8,6 +8,9 @@ Ext.define('NextThought.util.Line',{
 	},
 
 
+	//FIXME this is fairly tightly coupled to how Anchoring works.
+	//it would be nice if it was a bit more abstract such that the 
+	//implementation details aren't in both locations
 	/**
 	 * This is the main exported function in this utility.
 	 *
@@ -32,17 +35,7 @@ Ext.define('NextThought.util.Line',{
 			range = this.rangeForLineBySelection(y, doc);
 		}
 
-        try{
-            //ranges created next to videos sometimes require massaging to be anchorable, do that now.
-            if(!Ext.isTextNode(range.commonAncestorContainer) && Ext.fly(range.commonAncestorContainer).hasCls('externalvideo')){
-                range.setStartBefore(range.startContainer);
-                range.setEndAfter(range.endContainer);
-            }
-            range = Anchors.makeRangeAnchorable(range, doc);
-        }
-        catch (e){
-            range = null;
-        }
+		//If we are in a question we do something special
 		if(range){
 			//If we are in a question do some magic to make sure we only return one line.
 			//TODO actually refactor this stuff in a way that we work with the assessment overlay
@@ -54,10 +47,29 @@ Ext.define('NextThought.util.Line',{
 			if(questionObject){
 				range = doc.createRange();
 				range.selectNodeContents(questionObject);
+				return { rect: range.getBoundingClientRect(), range: range };
 			}
+		}
 
+        try{
+            //ranges created next to videos sometimes require massaging to be anchorable, do that now.
+            if(!Ext.isTextNode(range.commonAncestorContainer) && Ext.fly(range.commonAncestorContainer).hasCls('externalvideo')){
+                range.setStartBefore(range.startContainer);
+                range.setEndAfter(range.endContainer);
+            }
+			//Note this is being abused here.  Just because this returns null doesn't mean we can't anchor the range.
+			//Case in point for ranges within a question we can always anchor them, but this may return null.  The correct thing
+			//to do is actually call createDomContentPointer and see if it returns something, but that will have performance implications
+			//so we need to figure something else out
+            range = Anchors.makeRangeAnchorable(range, doc);
+        }
+        catch (e){
+            range = null;
+        }
+		if(range){
 			return { rect: range.getBoundingClientRect(), range: range };
 		}
+
 		return null;
 	},
 

@@ -97,7 +97,7 @@ Ext.define('NextThought.view.assessment.Panel',{
 		//IE line finding works off textnodes right now.  INject a magic one to ensure there is always some text.
 		//Firefox blows as much as IE
 		if(Ext.isIE9 || Ext.isGecko){
-			Ext.DomHelper.append(this.contentElement, {tag: 'span', html: 'ANCHOR_MAGIC', cls: 'anchor-magic '+Anchors.NON_ANCHORABLE_ATTRIBUTE+' '+Anchors.NO_ANCHORABLE_CHILDREN_ATTRIBUTE});
+			Ext.DomHelper.insertFirst(this.contentElement, {tag: 'span', html: 'ANCHOR_MAGIC', cls: 'anchor-magic '+Anchors.NON_ANCHORABLE_ATTRIBUTE+' '+Anchors.NO_ANCHORABLE_CHILDREN_ATTRIBUTE});
 		}
 	},
 
