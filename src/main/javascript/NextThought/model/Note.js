@@ -45,6 +45,7 @@ Ext.define('NextThought.model.Note', {
 		{ name: 'style', type: 'string' },
 		{ name: 'sharedWith', type: 'UserList' },
 		{ name: 'prohibitReSharing', type: 'boolean' },
+		{ name: 'RecursiveLikeCount', type: 'int'},
 
 		{ name: 'GroupingField', mapping: 'Last Modified', type: 'groupByTime', persist: false}
 	],
@@ -79,6 +80,17 @@ Ext.define('NextThought.model.Note', {
 
 		return (this.children||[]).reduce(function(sum,child){
 			return sum + 1 + (child.getReplyCount ? (child.getReplyCount()||0) : 0);
+		},0);
+	},
+
+
+	getTotalLikeCount: function(){
+		if(this.raw.hasOwnProperty('RecursiveLikeCount') ){
+			return this.get('RecursiveLikeCount') || 0;
+		}
+
+		return (this.children||[]).reduce(function(sum,child){
+			return sum + 1 + (child.getTotalLikeCount ? (child.getTotalLikeCount()||0) : 0);
 		},0);
 	}
 });

@@ -87,7 +87,7 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 		}
 		else if(filterName === "highestRated"){
 			m = Ext.Array.sort(m, function(a,b){
-				return b.record.get('LikeCount') - a.record.get('LikeCount');
+				return b.record.getTotalLikeCount() - a.record.getTotalLikeCount();
 			});
 		}
 		me.add(m);
@@ -394,7 +394,7 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 
 	highestRated: function(){
 		return function(item){
-			return item && item.get('LikeCount') > 0;
+			return item && item.getTotalLikeCount() > 0;
 		};
 	},
 
