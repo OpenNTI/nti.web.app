@@ -19,7 +19,8 @@ Ext.define('NextThought.util.Line',{
 		y = Math.round(y);
 		doc = doc || document;
 
-		var range;
+		var range, objectSelector = 'object[type$=naquestion]',
+			ancestor, questionObject;
 		//The "IE9" search is actually more accurate for assessment pages
 		if (Ext.isIE9) {
 			range = this.rangeByRecursiveSearch(y,doc);
@@ -42,8 +43,17 @@ Ext.define('NextThought.util.Line',{
         catch (e){
             range = null;
         }
-
 		if(range){
+			//If we are in a question do some magic to make sure we only return one line.
+			//TODO actually refactor this stuff in a way that we work with the assessment overlay
+			//to determine notability
+			ancestor = range.commonAncestorContainer;
+			questionObject = ancestor ? Ext.fly(ancestor).parent(objectSelector, true) : null;
+			if(questionObject){
+				range = doc.createRange();
+				range.selectNodeContents(questionObject);
+			}
+
 			return { rect: range.getBoundingClientRect(), range: range };
 		}
 		return null;

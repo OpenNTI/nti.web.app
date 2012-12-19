@@ -343,7 +343,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
                     this.context.insertHtml('beforeEnd', ' [...]');
                 }
 
-				this.context.select('.injected-related-items,.related,iframe').remove();
+				this.context.select('.injected-related-items,.related,iframe,.anchor-magic').remove();
 
 				//WE want to remove redaction text in the context body of the note viewer.
 				Ext.each(this.context.query('.redaction '), function(redaction){

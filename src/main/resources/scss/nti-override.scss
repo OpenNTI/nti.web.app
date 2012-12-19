@@ -20,19 +20,19 @@
 
 .x-gecko .mathjax.math.tex2jax_process {
 		font-size: 101%;
-}	
+}
 
 .x-ie .mathjax.math.tex2jax_process {
 		font-size: 101%;
-}	
+}
 
 .x-webkit .mathjax.math.tex2jax_process {
 		font-size: 101%;
-}	
+}
 
 .x-webkit.x-mac .mathjax.math.tex2jax_process {
 		font-size: 101%;
-}	
+}
 
 
 #NTIContent {
@@ -52,12 +52,6 @@
 		-moz-box-sizing: border-box;
 		-ms-box-sizing: border-box;
 		-webkit-box-sizing: border-box;
-	}
-
-	object[type$=naquestion] {
-		img {
-			display: none;
-		}
 	}
 
 	.math {
@@ -200,7 +194,7 @@
         margin: 0;
         padding: 0;
     }
-  
+
    div.picdefns,
    .xtra,
    div.defn,
