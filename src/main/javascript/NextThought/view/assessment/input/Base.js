@@ -375,7 +375,7 @@ Ext.define('NextThought.view.assessment.input.Base',{
 
 	updateWithResults: function(assessedQuestion){
 		var parts = assessedQuestion.get('parts'),
-			part = parts[this.ordinal];
+			part = parts[this.ordinal], id;
 
 		if (part.isCorrect()) { this.markCorrect(); }
 		else {this.markIncorrect(); }
@@ -383,6 +383,10 @@ Ext.define('NextThought.view.assessment.input.Base',{
 		if(this.canHaveAnswerHistory()){
 			if(!this.historyMenuEl.isVisible()){
 				this.shouldShowAnswerHistory();
+			}
+			if(!this.answerHistStore){
+				id = this.up('[question]').question.getId();
+				this.loadAnswerHistory(id);
 			}
 			this.answerHistStore.fireEvent('changed');
 		}
