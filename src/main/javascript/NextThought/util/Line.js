@@ -48,7 +48,9 @@ Ext.define('NextThought.util.Line',{
 			//TODO actually refactor this stuff in a way that we work with the assessment overlay
 			//to determine notability
 			ancestor = range.commonAncestorContainer;
-			questionObject = ancestor ? Ext.fly(ancestor).parent(objectSelector, true) : null;
+			if(ancestor){
+				questionObject = Ext.fly(ancestor).is(objectSelector) ? ancestor : Ext.fly(ancestor).parent(objectSelector, true);
+			}
 			if(questionObject){
 				range = doc.createRange();
 				range.selectNodeContents(questionObject);
