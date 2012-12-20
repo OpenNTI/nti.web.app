@@ -67,10 +67,13 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 	},
 
 
-	load: function(filter, filterName){
+	load: function(){
 		var me = this, m =[],
 			selectedRecordId = me.record ? me.record.getId() : null,
-			selectedNode;
+			selectedNode, 
+			filter = (me.filter||{}).filter, 
+			filterName = (me.filter||{}).filterName;
+
 		filter = Ext.isFunction(filter)? filter : null;
 
 		me.removeAll(true);
@@ -99,15 +102,22 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 	},
 
 
-	filterChanged: function(filter,value){
-		var el = this.el;
+	filterChanged: function(filterName,value){
+		var el = this.el,
+			f = this[filterName];
 		el.mask('');
+
+		delete this.filter;
+		if(filterName){
+			this.filter = {filter: f ? f(value) : null, filterName: filterName };
+		}
+
 		Ext.defer(function(){
-			var f = this[filter], rec = this.record, selected;
-			this.load(f?f(value):null, filter);
+			var rec = this.record, selected;
+			this.load();
 			el.unmask();
 			selected = this.items.findBy(function(o){return o.record.getId() === rec.getId();},null);
-			if(filter && filter!==''){
+			if(filterName && filterName!==''){
 				if(this.items.length <=0){
 					this.updateWith(null);
 					this.add( { xtype:'box', cls:"no-search-found", html:"No match found"});
