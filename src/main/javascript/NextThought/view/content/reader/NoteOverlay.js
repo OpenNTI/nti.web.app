@@ -297,8 +297,11 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 			newY = Math.round(o.lastLine.rect.top + offsets.top);
 		}
 
+		if(newY < 110){ newY = 110; }
+
 		//check for minute scroll changes to prevent jitter:
 		if(Math.abs(oldY - newY) > 4){
+			console.log(newY);
 			box.setY(newY);
 		}
 		//show thew box:
