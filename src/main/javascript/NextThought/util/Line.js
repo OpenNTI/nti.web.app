@@ -27,6 +27,8 @@ Ext.define('NextThought.util.Line',{
 		//The "IE9" search is actually more accurate for assessment pages
 		if (Ext.isIE9) {
 			range = this.rangeByRecursiveSearch(y,doc);
+			//Experimental line resolver for IE9... seems pretty fast.
+			//range = this.rangeForLineByPointIE(y,doc);
 		}
 		else if (doc.caretRangeFromPoint){
 			range = this.rangeForLineByPoint(y, doc);
@@ -155,6 +157,113 @@ Ext.define('NextThought.util.Line',{
 
 		return range;
 	},
+
+/*
+	isMath: function isMath(n){
+		return n && n.nodeType === 1
+				? Ext.fly(n).hasCls('math') || isMath(n.parentNode)
+				: false;
+	},
+
+	isUI: function isUI(n){
+		return n && n.nodeType === 1
+			? n.hasAttribute('aria-role') || /^object|img$/i.test(n.tagName) || isUI(n.parentNode)
+			: false;
+	},
+
+*/
+	isContent: function isContent(n){
+		var root = n.ownerDocument.getElementById('NTIContent');
+		//n must be a node, and must be at least 3 levels deep into the content, otherwise, n is just a top level container.
+		return n && n.parentNode && n.parentNode.parentNode
+			&& root !== n
+			&& root !== n.parentNode
+			&& root !== n.parentNode.parentNode
+			&& Ext.fly(root).contains(n)
+			&& !n.getAttribute('data-ntiid');//no containers...it selects too much
+	},
+
+
+	rangeForLineByPointIE: function(y, doc) {
+		var xStart = 0,
+			width = doc.querySelector('#NTIContent .page-contents').getBoundingClientRect().width,
+			xEnd = width,
+			range, rangeEnd, overlay, el,
+			sel = doc.parentWindow.getSelection();
+
+		while(!range && xStart < xEnd){
+			try {
+				range = doc.body.createTextRange();
+				range.moveToPoint(xStart,y);
+			}
+			catch(er){
+				range = null;
+				xStart += 10;
+			}
+		}
+
+		while(!rangeEnd && xEnd >= xStart){
+			try {
+				rangeEnd = doc.body.createTextRange();
+				rangeEnd.moveToPoint(xEnd,y);
+			}
+			catch(err){
+				rangeEnd = null;
+				xEnd -= 10;
+			}
+		}
+
+
+		//There is no text on this y coordinate.
+		if(!range){
+			//there might be something else though...(images, objects...)
+			overlay = Ext.select('.annotation-overlay');
+			xStart = 0; xEnd = width;
+			overlay.hide();
+			while(!range && xEnd >= xStart){
+				try {
+					el = doc.elementFromPoint(xStart,y);
+					xStart += 10;
+					if(el && this.isContent(el)){
+						range = doc.createRange();
+						range.setStartBefore(el);
+						range.setEndAfter(el);
+					} else {
+						range = null;
+					}
+				}
+				catch(error){
+					range = null;
+					console.log(error);
+				}
+			}
+			overlay.show();
+//			if(!range){return null;}
+			return range;
+		}
+		else {
+			if(!rangeEnd){ range.expand('word'); }
+
+			range.select();
+			//get range
+			range = sel.getRangeAt(0);
+			sel.removeAllRanges();
+
+			if(rangeEnd){
+				rangeEnd.select();
+				rangeEnd = sel.getRangeAt(0);
+				range.setEnd(rangeEnd.endContainer,rangeEnd.endOffset);
+			}
+		}
+
+		sel.removeAllRanges();
+		//testing, show ranges:
+		//sel.addRange(range);
+		//console.log('range', range, range.toString());
+
+		return range;
+	},
+
 
 
 	/** @private */
