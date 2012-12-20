@@ -103,9 +103,22 @@ Ext.define('NextThought.view.assessment.Parts',{
 		Ext.each(parts, function(part){part.updateWithResults(assessedQuestion);});
 	},
 
-	reset: function(){
+	reset: function(keepAnswers){
 		var inputs = this.query('abstract-question-input,assessment-multipart-submission');
-		Ext.each(inputs, function(input){input.reset();});
+		Ext.each(inputs, function(input){
+			var val;
+			if(keepAnswers && input.getValue){
+				val = input.getValue();
+			}
+			input.reset();
+			if(keepAnswers && input.setValue){
+				input.setValue(val);
+				input.focus();
+			}
+			if(input.enableSubmission){
+				input.enableSubmission();
+			}
+		});
 	},
 
 	afterRender: function(){

@@ -176,7 +176,7 @@ Ext.define('NextThought.view.assessment.input.Base',{
 		var ans;
 		if(this.submitted){
 			ans = this.getValue();
-			this.up('assessment-question').reset();
+			this.up('assessment-question').reset(true);
 			this.setValue(ans);
 			this.focus();
 			this.enableSubmission();

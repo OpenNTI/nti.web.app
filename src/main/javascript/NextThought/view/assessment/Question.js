@@ -149,10 +149,11 @@ Ext.define('NextThought.view.assessment.Question',{
 	},
 
 
-	reset: function(){
+	reset: function(keepAnswers){
 		this.down('question-header').reset();
-		this.down('question-parts').reset();
+		this.down('question-parts').reset(keepAnswers);
 		delete this.submitted;
+		this.determineSubmissionState();
 	//	var sub = this.down('assessment-multipart-submission');
 	//	if (sub){sub.enableSubmission();}
 	},
@@ -164,13 +165,13 @@ Ext.define('NextThought.view.assessment.Question',{
 		}
 
 		if(this.submitted) {
-			this.reset();
-			delete this.submitted;
+			this.reset(true);
 			return;
 		}
 		this.submitted = true;
 		var coll = {};
 		this.gatherQuestionResponse(null, coll);
 		this.fireEvent('check-answer', this, this.question, coll[this.question.getId()]);
+		return;
 	}
 });
