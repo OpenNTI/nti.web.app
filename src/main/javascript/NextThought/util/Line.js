@@ -165,7 +165,7 @@ Ext.define('NextThought.util.Line',{
             sel = doc.parentWindow.getSelection(),
 			elem,
 			iterationCount = 0,
-			range;
+			range, qpart;
 
 			//clear ranges and get the node on this y
 			sel.removeAllRanges();
@@ -184,12 +184,15 @@ Ext.define('NextThought.util.Line',{
             }
 
 			//we have an element, it's an object but not a video (an assessment probably)
-            if (Ext.fly(elem).is('object:not(.naqvideo)') || Ext.fly(elem).parent('object:not(.naqvideo)')) {
+            if (Ext.fly(elem).is('object[type$=naquestion]') || Ext.fly(elem).parent('object[type$=naquestion]')) {
 				elem = Ext.fly(elem).parent('object') || elem;
-                sel.selectAllChildren(Ext.fly(elem).down('div.naquestionpart').dom);
-                range = sel.getRangeAt(0);
-                sel.removeAllRanges();
-                return range;
+				qpart = Ext.fly(elem).down('div.naquestionpart');
+				if(qpart){
+					sel.selectAllChildren(qpart.dom);
+					range = sel.getRangeAt(0);
+					sel.removeAllRanges();
+					return range;
+				}
             }
 
 		    elem = Anchors.referenceNodeForNode(elem);
