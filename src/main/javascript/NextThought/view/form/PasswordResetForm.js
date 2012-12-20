@@ -80,11 +80,22 @@ Ext.define('NextThought.view.form.PasswordResetForm', {
 
 	setError: function(errorJson){
 		this.setMessage(errorJson.message,true);
+		if(errorJson.field === 'password'){
+			this.down('[name=old_password]').setError();
+		}
 	},
 
 
 	setSuccess: function(){
 		this.setMessage('Your password has\nbeen changed.');
+		Ext.each(this.query('simpletext'), function(t){
+			t.suspendEvents();
+			t.clearValue(true);
+			t.resumeEvents(false);
+		});
+		this.down('button[save]').disable();
+		this.updateLayout();
+
 	},
 
 
