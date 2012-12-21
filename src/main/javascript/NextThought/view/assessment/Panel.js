@@ -101,9 +101,10 @@ Ext.define('NextThought.view.assessment.Panel',{
 
 		this.removeContent('.naqsolutions,.naqchoices,.rightwrongbox,.hidden,INPUT,p.par,object,param');
 		//TODO figure out how to not do this
-		//IE line finding works off textnodes right now.  INject a magic one to ensure there is always some text.
+		//IE line finding works off textnodes right now.  In the event there is no text in the question
+		//INject some magic text to ensure there is always some text.
 		//Firefox blows as much as IE
-		if(Ext.isIE9 || Ext.isGecko){
+		if((Ext.isIE9 || Ext.isGecko) && /^\s*$/.test(this.contentElement.textContent)){
 			magic[Anchors.NON_ANCHORABLE_ATTRIBUTE] = true;
 			magic[Anchors.NO_ANCHORABLE_CHILDREN_ATTRIBUTE] = true;
 			Ext.DomHelper.insertFirst(this.contentElement, magic);
