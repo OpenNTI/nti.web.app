@@ -274,7 +274,9 @@ Ext.define('NextThought.util.Line',{
             sel = doc.parentWindow.getSelection(),
 			elem,
 			iterationCount = 0,
-			range, qpart;
+			range, qpart,
+			reader = ReaderPanel.get(),
+			readerScrollTop = reader.getAnnotationOffsets().scrollTop; //Tight coupling here
 
 			//clear ranges and get the node on this y
 			sel.removeAllRanges();
@@ -292,6 +294,15 @@ Ext.define('NextThought.util.Line',{
                 return null;
             }
 
+			//HACK to stop the page from jumping
+			function fixScroll(){
+				var newTop = reader.getAnnotationOffsets().scrollTop;
+				if(newTop !== readerScrollTop){
+					console.log('Fixing jumpy content', readerScrollTop, newTop);
+					reader.scrollTo(readerScrollTop, false);
+				}
+			}
+
 			//we have an element, it's an object but not a video (an assessment probably)
             if (Ext.fly(elem).is('object[type$=naquestion]') || Ext.fly(elem).parent('object[type$=naquestion]')) {
 				elem = Ext.fly(elem).parent('object') || elem;
@@ -300,6 +311,7 @@ Ext.define('NextThought.util.Line',{
 					sel.selectAllChildren(qpart.dom);
 					range = sel.getRangeAt(0);
 					sel.removeAllRanges();
+					fixScroll();
 					return range;
 				}
             }
@@ -307,14 +319,20 @@ Ext.define('NextThought.util.Line',{
 		    elem = Anchors.referenceNodeForNode(elem);
 
 			//check to make sure this node is selectable, if not, then return null:
-			if (!this.isNodeAnchorable(elem)){return null;}
+			if (!this.isNodeAnchorable(elem)){
+				fixScroll();
+				return null;
+			}
 
 			//we probably got a block node, select children and prepare to start looking for the correct y:
 			sel.selectAllChildren(elem);
 			sel.collapseToStart();
 
 			//If there is no range here, skip this line:
-			if (sel.rangeCount === 0){return null;}
+			if (sel.rangeCount === 0){
+				fixScroll();
+				return null;
+			}
 
 			//Go line by line until we get one on the correct y, quit trying after 100 tries:
 			while(iterationCount < 100 && sel.getRangeAt(0).getBoundingClientRect().bottom < y){
@@ -330,14 +348,17 @@ Ext.define('NextThought.util.Line',{
 			//detect weirdness, if we have not been able to select anything by this point,
 			//do not allow anchoring:
 			//If we have selected a range that is still collapsed.  No anchor.
-			if (sel.toString().trim().length === 0){return false;}
+			if (sel.toString().trim().length === 0){
+				fixScroll();
+				return false;
+			}
 
 			//get the range, clear the selection, and return the range:
 			range = sel.getRangeAt(0);
 
 			//for testing, comment next line to show ranges
 			sel.removeAllRanges();
-
+			fixScroll();
 			return range;
 	},
 
