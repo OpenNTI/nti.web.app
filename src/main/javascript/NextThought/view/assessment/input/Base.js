@@ -283,35 +283,36 @@ Ext.define('NextThought.view.assessment.input.Base',{
 		return false;
 	},
 
+	setupAnswerHistoryMenu: function(){
+		var me = this,
+			id = me.up('[question]').question.getId();
+		if(!me.answerHistStore){
+			me.answerHistStore = me.buildAnswerHistoryStore(id);
+		}
+		me.historyMenu = Ext.widget('answer-history-menu', {
+			width: me.inputBox.getWidth(),
+			ownerCmp: me,
+			store: me.answerHistStore,
+			renderedData: {
+				'partNum': me.ordinal,
+				menuItemType: me.getPreviousMenuItemType()
+			}
+		});
+	},
+
+	getPreviousMenuItemType: function(){
+		return 'menuitem';
+	},
+
 	showHistoryMenu: function(e){
         var me = this;
-        function closeAndDestroyMenu(){
+        if (me.historyMenu && me.historyMenu.isVisible()){
             me.historyMenu.destroy();
-            delete me.historyMenu;
-        }
-
-        if (me.historyMenu){
-            closeAndDestroyMenu();
             return;
         }
-
-		var id;
-		if(!me.historyMenu){
-            me.historyMenu = Ext.widget('answer-history-menu', {
-				width: me.inputBox.getWidth(),
-				ownerCmp: me,
-				items: [{
-					text: 'ANSWER HISTORY', cls:'answer-title', allowUncheck: false, answerHistoryTitle: true
-				},{
-					text: 'loading...', allowUncheck: false, noAnswerHistory: true
-				}]
-			});
-		}
-
-		id = me.up('[question]').question.getId();
+		me.setupAnswerHistoryMenu();
         me.historyMenu.showBy(me.inputBox,'tl-bl?',[0,0]);
-        me.mon(me.historyMenu, 'hide', closeAndDestroyMenu);
-        me.loadAnswerHistory(id);
+		me.answerHistStore.reload();
 	},
 
 	buildAnswerHistoryStore: function(id){
@@ -329,48 +330,7 @@ Ext.define('NextThought.view.assessment.input.Base',{
 		s.proxy.url = url.replace(root, encodeURIComponent(id));
 
 		this.answerHistStore = s;
-
-		s.on('changed', function(){ me.loadAnswerHistory(id); });
-	},
-
-
-	getPreviousMenuItemType: function(){
-		return 'menuitem';
-	},
-
-	loadAnswerHistory: function(id){
-		var me = this;
-
-		function loaded(records){
-			var part, parts, items = [];
-			Ext.each( records, function(r){
-				parts = r.get('parts');
-				part = parts[me.ordinal];
-				var t = part.get('submittedResponse');
-				items.push({
-					xtype: me.getPreviousMenuItemType(),
-					text: t
-				});
-			});
-
-			if(me.historyMenu){
-				me.historyMenu.removeAll();
-				me.historyMenu.insert(0, {text: 'ANSWER HISTORY', cls:'answer-title', allowUncheck: false, answerHistoryTitle: true});
-				if(items.length > 0){
-					me.historyMenu.add(items);
-				}
-				else{
-					me.historyMenu.add({text: 'Not Yet Attempted', cls:'no-answer-history', allowUncheck: false, noAnswerHistory: true});
-				}
-			}
-		}
-
-		if(!this.answerHistStore){
-			this.buildAnswerHistoryStore(id);
-			this.answerHistStore.load(loaded);
-		} else{
-			this.answerHistStore.reload();
-		}
+		return s;
 	},
 
 	updateWithResults: function(assessedQuestion){
@@ -386,7 +346,7 @@ Ext.define('NextThought.view.assessment.input.Base',{
 			}
 			if(!this.answerHistStore){
 				id = this.up('[question]').question.getId();
-				this.loadAnswerHistory(id);
+				this.buildAnswerHistoryStore(id);
 			}
 			this.answerHistStore.fireEvent('changed');
 		}

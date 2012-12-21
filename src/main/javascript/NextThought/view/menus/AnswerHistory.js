@@ -11,9 +11,18 @@ Ext.define('NextThought.view.menus.AnswerHistory',{
 	shadow: false,
 	frame: false,
 	border: false,
-	hideMode: 'visibility',
-	minWidth: 300,
+	hideMode: 'display',
 	cls:'answer_history_menu',
+	autoScroll:true,
+	constrainTo: Ext.getBody(),
+//	constrain: true,
+	items: [
+		{
+			text: 'ANSWER HISTORY', cls:'answer-title', allowUncheck: false, answerHistoryTitle: true},
+		{
+			text: 'loading...', allowUncheck: false, noAnswerHistory: true
+		}
+	],
 
 	defaults: {
 		ui: 'nt-menuitem',
@@ -23,6 +32,35 @@ Ext.define('NextThought.view.menus.AnswerHistory',{
 			'beforecheckchange':function(item, checked){ return item.allowUncheck!==false; },
 			'click': function(item){item.up('menu').handleClick(item);}
 		}
+	},
+
+	initComponent: function(){
+		this.callParent(arguments);
+		this.store.on('changed', this.reload, this);
+		this.store.on('load', this.reload, this);
+	},
+
+	reload: function(){
+		var items= [], me= this;
+
+		this.removeAll();
+		items.push( {text: 'ANSWER HISTORY', cls:'answer-title', allowUncheck: false, answerHistoryTitle: true});
+
+		this.store.each(function(r){
+			parts = r.get('parts');
+			part = parts[me.renderedData.partNum];
+			var t = part.get('submittedResponse');
+			items.push({
+				xtype: me.renderedData.menuItemType || 'menuitem',
+				text: t
+			});
+		});
+
+		if(items.length === 1){
+			items.push({text: 'Not Yet Attempted', cls:'no-answer-history', allowUncheck: false, noAnswerHistory: true});
+		}
+		this.add(items);
+		this.doConstrain();
 	},
 
 	handleClick: function(item){
