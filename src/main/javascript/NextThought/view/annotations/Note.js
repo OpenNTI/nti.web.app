@@ -98,7 +98,6 @@ Ext.define( 'NextThought.view.annotations.Note', {
 		}
 	},
 
-
 	openWindow: function(replyToId, isEdit){
 		if(Ext.isArray(replyToId)){
 			replyToId = replyToId.slice(-1);
@@ -167,12 +166,16 @@ Ext.define( 'NextThought.view.annotations.Note', {
 
 	setupMultiGutterDom: function(dom){
 		var el = this.attachListeners( Ext.get(dom)),
-            b = el.down('.bubble'),
-            rect = el.dom.getBoundingClientRect();
+            b = el.down('.bubble');
 
 		el.hover(function(){
-            var left = b.dom.getBoundingClientRect().left;
-            el[(rect.top < 170)?'addCls':'removeCls']('show-under');
+            var rect = el.dom.getBoundingClientRect(),
+				bubbleRect = b.dom.getBoundingClientRect(),
+				left = bubbleRect.left;
+
+			//We preference showing it above the line, but if it won't fit
+			//we show it below
+            el[(rect.top - bubbleRect.height - 95 < 0)?'addCls':'removeCls']('show-under');
 
 			if(left < 75) {
 				left = 75 - el.getX();
