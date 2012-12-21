@@ -303,7 +303,7 @@ Ext.define('NextThought.view.assessment.input.Base',{
 				items: [{
 					text: 'ANSWER HISTORY', cls:'answer-title', allowUncheck: false, answerHistoryTitle: true
 				},{
-					text: 'loading...'
+					text: 'loading...', allowUncheck: false, noAnswerHistory: true
 				}]
 			});
 		}
