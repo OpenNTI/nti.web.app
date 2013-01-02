@@ -49,7 +49,7 @@ Ext.define('NextThought.view.chat.transcript.Window',{
                     ui: 'caution',
                     text: 'Flag',
                     scale: 'large',
-                    disabled: true,
+                     disabled: true,
                     handler: function(){
                         this.up('window').flagMessages();
                     }
@@ -166,11 +166,15 @@ Ext.define('NextThought.view.chat.transcript.Window',{
 		var container = this.down('[windowContentWrapper]'),
 			time = record.get('RoomInfo').get('CreatedTime') || record.get('CreatedTime'),
             messages = record.get('Messages'),
-		    existing = container.items, idx = 0, inserted;
+		    existing = container.items, idx = 0, inserted, btn = this.el.down('.flag-for-moderation');
 
         //keep all messages for later flagging:
         if (!this.messageMap){this.messageMap = {};}
         Ext.each(messages, function(m){
+			if(!this.isFlagShown && !isMe(m.get('Creator'))){
+				btn.show();
+				this.isFlagShown = true;
+			}
             this.messageMap[IdCache.getIdentifier(m.getId())] = m;
         }, this);
 
