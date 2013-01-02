@@ -40,7 +40,7 @@ Ext.define('NextThought.view.chat.transcript.Window',{
                     text: 'Cancel',
                     scale: 'large',
                     handler: function(btn){
-                        this.up('chat-window').onFlagToolClicked();
+                        this.up('window').onFlagToolClicked();
                     }
                 },
                 {
@@ -67,8 +67,13 @@ Ext.define('NextThought.view.chat.transcript.Window',{
     },
 
     afterRender: function(){
+		var btn;
         this.callParent(arguments);
         this.mon(this, 'control-clicked', this.maybeEnableButtons);
+		btn = this.el.down('.flag-for-moderation');
+		if(btn && this.isFlagShown){
+			btn.show();
+		}
     },
 
 
@@ -166,13 +171,16 @@ Ext.define('NextThought.view.chat.transcript.Window',{
 		var container = this.down('[windowContentWrapper]'),
 			time = record.get('RoomInfo').get('CreatedTime') || record.get('CreatedTime'),
             messages = record.get('Messages'),
-		    existing = container.items, idx = 0, inserted, btn = this.el.down('.flag-for-moderation');
+		    existing = container.items, idx = 0, inserted, btn;
 
         //keep all messages for later flagging:
         if (!this.messageMap){this.messageMap = {};}
         Ext.each(messages, function(m){
 			if(!this.isFlagShown && !isMe(m.get('Creator'))){
-				btn.show();
+				btn = this.el ? this.el.down('.flag-for-moderation') : null;
+				if(btn){
+					btn.show();
+				}
 				this.isFlagShown = true;
 			}
             this.messageMap[IdCache.getIdentifier(m.getId())] = m;
