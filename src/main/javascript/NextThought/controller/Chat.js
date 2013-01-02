@@ -416,11 +416,17 @@ Ext.define('NextThought.controller.Chat', {
 
 
     flagTranscriptMessages: function(messages, chatView){
-        Ext.each(messages, function(m){
-
+		var m, s;
+        Ext.each(messages, function(e){
+			m = e.message;
+			s = Ext.fly(e.sender);
             m.postTo('flag', function(){
                 console.log('server says', arguments);
             });
+
+			//apply some classes so once we close the moderation, it's still marked
+			s.addCls('confirmFlagged'); //permenantly flag
+			s.down('.control').addCls('confirmFlagged');
         });
 
         //return to non moderation view:

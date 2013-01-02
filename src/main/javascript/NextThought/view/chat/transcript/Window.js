@@ -71,7 +71,7 @@ Ext.define('NextThought.view.chat.transcript.Window',{
         this.callParent(arguments);
         this.mon(this, 'control-clicked', this.maybeEnableButtons);
 		btn = this.el.down('.flag-for-moderation');
-		if(btn && this.isFlagShown){
+		if(btn){
 			btn.show();
 		}
     },
@@ -96,9 +96,14 @@ Ext.define('NextThought.view.chat.transcript.Window',{
             guid, m;
 
         Ext.each(allFlaggedEntries, function(e){
+			var arg = {};
             guid = e.getAttribute('data-guid');
             m = this.messageMap[guid];
-            if(m){allFlaggedMessages.push(m);}
+            if(m){
+				arg.sender = e;
+				arg.message = m;
+				allFlaggedMessages.push(arg);
+			}
         }, this);
 
         this.fireEvent('flag-messages', allFlaggedMessages, this);
@@ -176,13 +181,6 @@ Ext.define('NextThought.view.chat.transcript.Window',{
         //keep all messages for later flagging:
         if (!this.messageMap){this.messageMap = {};}
         Ext.each(messages, function(m){
-			if(!this.isFlagShown && !isMe(m.get('Creator'))){
-				btn = this.el ? this.el.down('.flag-for-moderation') : null;
-				if(btn){
-					btn.show();
-				}
-				this.isFlagShown = true;
-			}
             this.messageMap[IdCache.getIdentifier(m.getId())] = m;
         }, this);
 
