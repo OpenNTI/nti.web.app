@@ -15,7 +15,9 @@ Ext.define('NextThought.proxy.Socket', {
 				//'connect': function(){me.onConnect.apply(me, arguments);},
 				'serverkill': function() {me.onKill.apply(me, arguments);},
 				'error': function() {me.onError.apply(me, arguments);},
-				'disconnect': function() {me.onDisconnect.apply(me, arguments);}
+				'disconnect': function() {me.onDisconnect.apply(me, arguments);},
+				'connecting': function(){me.onConnecting.apply(me, arguments);},
+				'connect': function(){me.onConnected.apply(me, arguments);}
 			}
 		});
 
@@ -166,6 +168,14 @@ Ext.define('NextThought.proxy.Socket', {
 		if(this.isDebug) {
 			console.debug('Socket Disconnect ' + JSON.stringify(arguments) + ' count '+ds.count);
 		}
+	},
+
+	onConnecting: function(transportName){
+		console.log('Connecting with transport', transportName);
+	},
+
+	onConnected: function(){
+		console.log('Connected with transport', this.socket.socket.transport.name);
 	}
 
 },
