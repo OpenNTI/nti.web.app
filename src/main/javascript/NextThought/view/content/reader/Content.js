@@ -5,6 +5,55 @@ Ext.define('NextThought.view.content.reader.Content',{
 		'NextThought.ux.SlideDeck'
 	],
 
+
+	IMAGE_TEMPLATE: new Ext.XTemplate( Ext.DomHelper.markup([{
+		cls: 'wrapper',
+		cn:[{
+			tag: 'a',
+			href:'#zoom',
+			title:'Enlarge',
+			cls: 'zoom disabled',
+			html: ' '
+		}]
+	},{
+		tag: 'span',
+		cls: 'bar',
+		'data-non-anchorable': true,
+		unselectable: true,
+		cn: [{
+			tag: 'a',
+			href:'#slide',
+			title:'Open Slides',
+			cls: 'bar-cell slide',
+			html: ' '
+		},{
+			cls: 'bar-cell {[values.title || values.caption ? \'\' : \'no-details\']}',
+			cn: [{
+				tag: 'tpl',
+				if: 'title',
+				cn:{
+					tag: 'span',
+					cls: 'image-title',
+					html: '{title}'
+				}
+			},{
+				tag: 'tpl',
+				if: 'caption',
+				cn:{
+					tag: 'span',
+					cls: 'image-caption',
+					html: '{caption}'
+				}
+			},{
+				tag: 'a',
+				href:'#mark',
+				title:'Comment on this',
+				cls: 'mark',
+				html: 'Comment'
+			}]
+		}]
+	}])),
+
 	constructor: function(){
 		this.loadedResources = {};
 		this.meta = {};
@@ -130,22 +179,30 @@ Ext.define('NextThought.view.content.reader.Content',{
 	activateAnnotatableItems: function(){
 		var d = this.getDocumentElement(),
 			els = d.querySelectorAll('[itemprop~=nti-data-markupenabled],[itemprop~=nti-slide-video]'),
-			tpl = Ext.DomHelper.createTemplate({
-				cls: 'bar',
-				cn: [
-					{tag: 'a', href:'#zoom', title:'Zoom', cls: 'zoom disabled', html: ' '},
-					{tag: 'a', href:'#mark', title:'Make a note', cls: 'mark', html: ' '},
-					{tag: 'a', href:'#slide', title:'Open Slides', cls: 'slide', html: 'Presentation View'}
-				]
-			}).compile(),
+			tpl = this.IMAGE_TEMPLATE,
 			activators = {
 				'nti-data-resizeable': Ext.bind(this.activateZoomBox,this)
 			};
 
+		function get(el,attr){ return el? el.getAttribute(attr) : null; }
 
 		Ext.each(els,function(el){
 			var p = (el.getAttribute('itemprop')||'').split(' '),
-				bar = tpl.append(el,null,false);
+				target = Ext.fly(el).first(null,true),
+				title = get(target,'data-title'),
+				caption = get(target,'data-caption'),
+				bar = tpl.append(el,{
+					title: title,
+					caption: caption
+				},false);
+
+			if(!title && !caption){
+				Ext.fly(el).addCls('no-details');
+			}
+			Ext.fly(bar).unselectable();
+
+			//move the targeted element into a wrapper
+			el.querySelector('.wrapper').appendChild(target);
 
 			Ext.each(p,function(feature){
 				(activators[feature]||Ext.emptyFn)(el,bar);
@@ -155,8 +212,8 @@ Ext.define('NextThought.view.content.reader.Content',{
 
 
 	activateZoomBox: function(containerEl, toolbarEl){
-		Ext.fly(toolbarEl.querySelector('a.zoom')).removeCls('disabled');
 		try{
+			Ext.fly(containerEl.querySelector('a.zoom')).removeCls('disabled');
 			var img = containerEl.querySelector('img[id]:not([id^=ext])'),
 				current = img.getAttribute('data-nti-image-size'),
 				base = this.basePath;

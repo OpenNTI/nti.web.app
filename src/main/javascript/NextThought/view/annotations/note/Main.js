@@ -355,9 +355,9 @@ Ext.define('NextThought.view.annotations.note.Main',{
 					this.context.select('.redactionAction').remove();
 				}
 
-				this.context.select('[itemprop~=nti-data-markupenabled] .bar').addCls('skip-anchor-descendants');
-				this.context.select('*:not(.skip-anchor-descendants) > a[href]').set({target:'_blank'});
-				this.context.select('*:not(.skip-anchor-descendants) > a[href^=#]').set({href:undefined,target:undefined});
+				this.context.select('[itemprop~=nti-data-markupenabled] a').addCls('skip-anchor');
+				this.context.select('a[href]:not(.skip-anchor)').set({target:'_blank'});
+				this.context.select('a[href^=#]:not(.skip-anchor)').set({href:undefined,target:undefined});
 
 				this.context.select('[itemprop~=nti-data-markupenabled] a').on('click',this.contextAnnotationActions,this);
 

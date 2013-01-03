@@ -1,48 +1,122 @@
 @mixin image-bar {
+
+	.wrapper {
+		position: relative !important;
+		line-height: 0;
+		overflow: hidden;
+		display: block;
+	}
+
+	a {
+		pointer-events: all;
+		text-decoration: none;
+		&.disabled { &, &:hover { display:none; opacity: 0.5; cursor: default; pointer-events: none; } }
+		&.zoom {
+			display: block;
+			position: absolute;
+			top: 0; left: 0; right: 0; bottom: 0;
+			z-index: 2;
+		}
+	}
+
 	.bar {
-		@include animate(fadeInDown,0.3s,0s);
-		position: absolute !important;
-		top: 0; left: 0; right: 0;
-		height: 28px;
-		background: rgba(0,0,0,0.6);
-		z-index: 2;
+		cursor: default;
+		display: block;
+		position: relative;
+		z-index: 3;
+		width: 100%;
+		border-top: 1px solid #dadada;
+		padding: 0 14px 20px 14px;
+		background: #fafafa;
+		min-height: 37px;
+
+		span:first-child { margin-top: 14px; }
+
+		.image-caption,.image-title {
+			line-height: 1.2em;
+			display: block;
+			font-size: 16px;
+			font-weight: 600;
+			color: $primary-grey;
+		}
+
+		.image-caption {
+			font-size: 14px;
+			font-weight: normal;
+			color: $secondary-grey;
+		}
+
+		.bar-cell {
+			display: block;
+		}
+
+		a.bar-cell {
+			border-left: 1px solid #dadada;
+			& ~ .bar-cell {
+				margin-right: 33px;
+			}
+		}
 
 		a {
-			display: block;
-			float: right;
-			margin: 3px 8px 0 0;
-			background: $icons no-repeat;
-			background-color: transparent !important;
-			opacity: 0.8;
 			pointer-events: all;
 
-			&:hover { opacity: 1; }
-			&.disabled { &, &:hover { display:none; opacity: 0.5; cursor: default; pointer-events: none; } }
+			&.mark {
+				position: relative;
+				overflow: hidden;
+				width: 90px;
+				height: 19px;
+				line-height: 19px;
+				font-size: 12px;
+				font-weight: bold;
+				color: $tertiary-grey-alt;
+				padding-left: 24px;
+				display: block;
+				margin: 10px 0 -13px 0;
 
-			&.mark { @include sprite($icons,'image-add-note',$dimensions:true); }
-			&.zoom { @include sprite($icons,'image-zoom',$dimensions:true); }
-			&.unzoom { @include sprite($icons,'image-unzoom',$dimensions:true); }
+				&::after {
+					content: ' ';
+					overflow: hidden;
+					position: absolute;
+					top: 0; left: 3px;
+					background: $icons no-repeat;
+					@include sprite($icons,'add-comment-19x17',$dimensions:true);
+				}
+
+				&:hover {
+					color: $secondary-grey-alt;
+					&::after {
+						@include sprite($icons,'add-comment-19x17_hover',$dimensions:true);
+					}
+				}
+			}
+
+
 
 			&.slide {
-				display: none;
-				position: relative;
-				white-space: normal;
-				float: left;
-				line-height: 22px;
-				color: #fff;
-				text-decoration: none;
-				background-image: none;
-				font-weight: 400;
-				padding: 0 0 0 30px;
+				display: block;
+				width: 54px;
+
+				position: absolute;
+				top: 0;
+				right: 0;
+				bottom: 0;
 
 				&::after{
 					content: ' ';
 					overflow: hidden;
 					position: absolute;
-					top: 2px; left: 5px;
+					top: 44%;
+					@include experimental-value(top, calc(50% - 9px));
 
+					left: 17px;
 					background: $icons no-repeat;
-					@include sprite($icons,'presentation-view',$dimensions:true);
+					@include sprite($icons,'presentation-view-02',$dimensions:true);
+				}
+
+				&:hover {
+					&::after{
+						@include sprite($icons,'presentation-view-02_hover',$dimensions:true);
+					}
 				}
 			}
 		}
@@ -198,12 +272,6 @@
 }
 
 .x-component-zoom {
-	box-shadow: 0 0 0 3px $primary-blue;
-	&:hover {
-		.bar {
-			display: block;
-		}
-	}
 	img {width: 100%;}
 	@include image-bar;
 
@@ -212,7 +280,6 @@
 // Styles below are intended to target things inside the content iframe
 
 .note-window .main-view .context [itemprop~="nti-data-markupenabled"] {
-	margin: 3px !important;
 }
 
 .note-window .main-view .context,
@@ -223,18 +290,27 @@
 		display: inline-block;
 		overflow: hidden;
 		position: relative;
-
-		&:hover {
-			box-shadow: 0 0 0 3px $primary-blue;
-
-			.bar {
-				display: block;
+		border: 1px solid #dadada;
+		border-radius: 3px;
+		margin-bottom: 56px !important;//override the 4em
+		&:not(.no-details){
+			&:hover {
+				margin-bottom: 40px !important;
 			}
 		}
 
 		@include image-bar;
 		.bar {
-			display: none;
+			a.mark { display: none; }
+		}
+
+
+		&:hover {
+			a.zoom { box-shadow: inset 0 0 0 10px white; }
+			.bar {
+				a.mark { display: block; }
+			}
+
 		}
 	}
 
