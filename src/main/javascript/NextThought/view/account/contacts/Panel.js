@@ -19,11 +19,11 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 	showCount: true,
 	defaultType: 'contact-card',
 	tools:[{
-	    type:'options',
+		type:'options',
 		width: 20,
 		height: 20,
-	    tooltip: 'Options',
-	    handler: function(event, toolEl, panel){ panel.up('contacts-panel').showMenu(toolEl); }
+		tooltip: 'Options',
+		handler: function(event, toolEl, panel){ panel.up('contacts-panel').showMenu(toolEl); }
 	}],
 
 	initComponent: function(){
@@ -94,7 +94,7 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 			'mouseenter': this.stopHide
 		});
 
-		this.forcefullyRemoveUser =  new Ext.Action({
+		this.forcefullyRemoveUser =	 new Ext.Action({
 			text: 'Remove User',
 			scope: this,
 			handler: this.forcefullyRemoveUser,
@@ -219,7 +219,7 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 		return this.associatedGroup.isDFL && !isMe(this.associatedGroup.get('Creator'));
 	},
 
-  	//Sort the users first by presense (online, offline) then
+	//Sort the users first by presense (online, offline) then
 	//alphabetically withing that
 	userSorterFunction: function(a, b){
 		var aPresence = a.get('Presence'),
@@ -229,7 +229,7 @@ Ext.define('NextThought.view.account.contacts.Panel',{
 			presenceResult, nameResult;
 
 		presenceResult = bPresence.localeCompare(aPresence);
-		if(presenceResult != 0){
+		if(presenceResult !== 0){
 			return presenceResult;
 		}
 

@@ -6,8 +6,7 @@ Ext.define('NextThought.model.converters.GroupByTime',{
 		sortType: Ext.data.SortTypes.asUCString,
 
 		groupStringForElapsedTime: function(now, v){
-			
-			var	oneDayAgo = Ext.Date.add(now, Ext.Date.DAY, -1),
+			var oneDayAgo = Ext.Date.add(now, Ext.Date.DAY, -1),
 				twoDaysAgo = Ext.Date.add(now, Ext.Date.DAY, -2),
 				oneWeekAgo = Ext.Date.add(now, Ext.Date.DAY, -1 * 7),
 				twoWeeksAgo = Ext.Date.add(now, Ext.Date.DAY, -2 * 7),
@@ -20,7 +19,7 @@ Ext.define('NextThought.model.converters.GroupByTime',{
 			v = new Date(v.getFullYear(), v.getMonth(), v.getDate());
 
 			//We take inspiration from outlook here.  Despite being a terrible piece of
-			//software it actually does this well.  Today, Yesterday, Wed, tue, ..., Last week,
+			//software it actually does this well.	Today, Yesterday, Wed, tue, ..., Last week,
 			//two weeks ago, three weeks ago, last month, this year, last year
 
 			//TODO: make this better...serously. Grouping is better sort prefix is still wacky.

@@ -97,7 +97,9 @@ Ext.define('NextThought.view.chat.View', {
 			w = this.up('.chat-window');
 			if(w){
 				i =  w.el.select('.flag-for-moderation', null, true);
-				i ? i.show() : null;
+				if(i){
+					i.show();
+				}
 				this.showFlagIcon = true;
 			}
 		}
