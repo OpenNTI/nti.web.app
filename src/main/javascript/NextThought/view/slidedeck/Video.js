@@ -259,6 +259,10 @@ Ext.define('NextThought.view.slidedeck.Video',{
 	checkboxClicked: function(){
 		this.linkWithSlides = !this.linkWithSlides;
 		this.updateCheckbox();
+		if(this.linkWithSlides){
+			this.videoTriggeredTransition = true;
+			this.queue.selectSlide(this.playlistIndex);
+		}
 	},
 
 
