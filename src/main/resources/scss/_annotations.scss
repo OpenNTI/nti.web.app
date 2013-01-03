@@ -325,25 +325,15 @@
 		position: relative;
 		border: 1px solid #dadada;
 		border-radius: 3px;
-		margin-bottom: 56px !important;//override the 4em
-		&:not(.no-details){
-			&:hover {
-				margin-bottom: 40px !important;
-			}
-		}
 
 		@include image-bar;
-		.bar {
-			a.mark { display: none; }
-		}
-
 
 		&:hover {
-			a.zoom { box-shadow: inset 0 0 0 10px white; opacity: 1; }
-			.bar {
-				a.mark { display: block; }
+			a.zoom {
+				box-shadow: inset 0 0 0 10px white;
+				opacity: 1;
+				background: rgba(0,0,0,0.05);
 			}
-
 		}
 	}
 
