@@ -1,4 +1,6 @@
 // Config stubbing
+Ext.Loader.setPath('swfobject', 'resources/lib/swfobject.js');
+
 var $AppConfig = {
 	server: {
 		host: 'mock',
@@ -119,7 +121,6 @@ Ext.application({
 		}
 
 		NextThought.phantomRender = true;
-
 
 		Globals.loadScripts([
 			'javascript/specs/example.spec.js',
