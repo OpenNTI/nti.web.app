@@ -11,7 +11,7 @@
 		pointer-events: all;
 		text-decoration: none;
 		&.disabled { &, &:hover { display:none; opacity: 0.5; cursor: default; pointer-events: none; } }
-		&.zoom {
+		&.zoom, &.unzoom {
 			display: block;
 			position: absolute;
 			top: 0; left: 0; right: 0; bottom: 0;
@@ -93,7 +93,7 @@
 
 
 			&.slide {
-				display: block;
+				display: none;
 				width: 54px;
 
 				position: absolute;
@@ -282,6 +282,39 @@
 .note-window .main-view .context [itemprop~="nti-data-markupenabled"] {
 }
 
+.x-component-image-zoom-view {
+	overflow: visible;
+	border: 1px solid #bcbcbc;
+	border-radius: 1px;
+	box-shadow: 0 10px 40px 0 rgba(0,0,0,0.45);
+	background: #fafafa;
+
+	@include image-bar;
+
+	a.close {
+		top: -34px;
+		right: -34px;
+		position: absolute;
+
+		background: transparent $icons no-repeat;
+		@include sprite($icons,'close_popup',$dimensions: true);
+		cursor: pointer;
+		box-shadow: 0 0 10px 5px #ffffff;
+		border-radius: 90px;
+	}
+
+	.wrapper {
+		img {
+			width: 100% !important;
+			height: auto !important;
+		}
+		a {
+			box-shadow: inset 0 0 0 8px white;
+			opacity: 1;
+		}
+	}
+}
+
 .note-window .main-view .context,
 #NTIContent {
 
@@ -306,7 +339,7 @@
 
 
 		&:hover {
-			a.zoom { box-shadow: inset 0 0 0 10px white; }
+			a.zoom { box-shadow: inset 0 0 0 10px white; opacity: 1; }
 			.bar {
 				a.mark { display: block; }
 			}
@@ -315,7 +348,7 @@
 	}
 
 	object[type$=slide],object[type$=slidevideo] {
-		.bar a.slide { display: inline-block; }
+		.bar a.slide { display: block; }
 	}
 
 	object[type$=slidevideo] .bar a.mark {display: none;}

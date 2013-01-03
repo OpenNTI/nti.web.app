@@ -2,7 +2,11 @@ Ext.define('NextThought.ux.ImageZoomView',{
 	alias: 'widget.image-zoom-view',
 	extend: 'Ext.Component',
 
-	ui: 'zoom',
+	requires: [
+		'NextThought.ux.SlideDeck'
+	],
+
+	ui: 'image-zoom-view',
 	cls: 'zoom',
 	floating: true,
 	modal: true,
@@ -10,11 +14,62 @@ Ext.define('NextThought.ux.ImageZoomView',{
 	width: 275,
 	height: 200,
 
-	renderTpl: Ext.DomHelper.markup([{ tag: 'img' },{ cls: 'bar', cn: [{tag: 'a', cls: 'unzoom close', href:'#unzoom'}] }]),
+	renderTpl: Ext.DomHelper.markup([{
+		tag: 'a', href: '#unzoom', cls: 'close'
+	},{
+		cls: 'wrapper',
+		cn:[{
+			tag: 'img'
+		},{
+			tag: 'a',
+			href:'#unzoom',
+			cls: 'unzoom',
+			html: ' '
+		}]
+	},{
+		tag: 'span',
+		cls: 'bar',
+		cn: [{
+			tag: 'a',
+			href:'#slide',
+			title:'Open Slides',
+			cls: 'bar-cell slide',
+			html: ' '
+		},{
+			cls: 'bar-cell {[values.title || values.caption ? \'\' : \'no-details\']}',
+			cn: [{
+				tag: 'tpl',
+				'if': 'title',
+				cn:{
+					tag: 'span',
+					cls: 'image-title',
+					html: '{title}'
+				}
+			},{
+				tag: 'tpl',
+				'if': 'caption',
+				cn:{
+					tag: 'span',
+					cls: 'image-caption',
+					html: '{caption}'
+				}
+			},{
+				tag: 'a',
+				href:'#mark',
+				title:'Comment on this',
+				cls: 'mark',
+				html: 'Comment'
+			}]
+		}]
+	}]),
 
 	renderSelectors: {
 		closeEl: 'a.close',
-		image: 'img'
+		closeEl2: 'a.unzoom',
+		image: 'img',
+		barEl: '.bar',
+		commentEl: 'a.mark',
+		presentationEl: 'a.slide'
 	},
 
 	initComponent: function(){
@@ -50,10 +105,24 @@ Ext.define('NextThought.ux.ImageZoomView',{
 		this.el.mask('Loading...');
 		this.el.set({tabindex:1});
 		this.mon(this.closeEl,'click', this.close, this);
+		this.mon(this.closeEl2,'click', this.close, this);
+		this.mon(this.presentationEl,'click',this.openPresentation,this);
+		this.mon(this.commentEl,'click',this.commentOn,this);
 
 		var me = this,
 			img = new Image(),
-			El = Ext.dom.Element;
+			El = Ext.dom.Element,
+			barH = me.barEl.getHeight(),
+			isSlide = Boolean(
+					Ext.fly(me.refEl).parent('object[type$=slide]',true)
+				||  Ext.fly(me.refEl).parent('object[type$=slidevideo]',true)
+			);
+
+		if(isSlide){
+			me.presentationEl.show();
+		}
+
+		me.barEl.hide();
 
 		img.onerror = function(){
 			alert('Could not load image');
@@ -62,14 +131,13 @@ Ext.define('NextThought.ux.ImageZoomView',{
 
 		img.onload = function(){
 
-			var padding = 50,
-				vpH = (El.getViewportHeight()-padding),
-				vpW = (El.getViewportWidth()-padding),
+			var vpH = (El.getViewportHeight()-200),
+				vpW = (El.getViewportWidth()-200),
 				h = img.height,
 				w = img.width;
 
 			console.log(w,h);
-			if(h > vpH){
+			if((h+barH) > vpH){
 				w = (vpH/h) * w;
 				h = vpH;
 				console.log('sized h', w,h);
@@ -81,7 +149,8 @@ Ext.define('NextThought.ux.ImageZoomView',{
 				console.log('sized w', w,h);
 			}
 
-			me.setSize(w, h);
+			me.setSize(w, h+barH);
+			me.barEl.show();
 			me.center();
 			me.image.dom.src = img.src;
 			me.el.unmask();
@@ -91,6 +160,21 @@ Ext.define('NextThought.ux.ImageZoomView',{
 		Ext.defer(this.el.focus,100,this.el);
 	},
 
+
+	openPresentation: function(e){
+		this.close();
+		SlideDeck.open(this.refEl, LocationProvider.currentNTIID);
+		e.stopEvent();
+		return false;
+	},
+
+
+	commentOn: function(e){
+		this.close();
+		ReaderPanel.get().fireEvent('markupenabled-action',this.refEl,'mark');
+		e.stopEvent();
+		return false;
+	},
 
 
 	close: function(e){
