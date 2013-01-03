@@ -520,22 +520,37 @@
 .body-divider {
 	display: block;
 
-	.whiteboard-wrapper{
+	.whiteboard-container{
 		display: inline-block;
 		position: relative;
 		overflow: hidden;
 		cursor: pointer;
+
 		padding: 0px;
-		border: 1px solid $border-grey;
-		margin: 5px 2px;
-		box-shadow: 2px 1px 4px 0 rgba(0,0,0,0.12);
+		margin: 3px;
+		border: 1px solid $tertiary-grey-alt;
+		box-shadow: 2px 3px 1px 0 rgba(0,0,0,0.13);
 
+		.whiteboard-wrapper {
+			position: relative;
+			overflow: hidden;
+
+			.overlay {
+				position: absolute;
+				top: 0; left: 0; bottom: 0; right: 0;
+			}
+		}
+
+		.editor-active &,
 		&:hover {
-			border: 3px solid $primary-blue;
-			margin: 3px 0;
-
+			.whiteboard-wrapper {
+				.overlay {
+					box-shadow: inset 0 0 0 5px white;
+					background: rgba(63, 179, 246, 0.05);
+				}
+			}
 			.toolbar {
-				display: block;
+				visibility: visible;
 			}
 		}
 
@@ -550,29 +565,67 @@
 		}
 
 		.toolbar{
-			@include animate(fadeInDown,0.3s,0s);
-			display: none;
-			position: absolute;
-			top: 0;
-			left: 0;
-			width: 100%;
+			display: block;
+			visibility: hidden;
+			position: relative;
 			overflow: hidden;
-			background: rgba(0,0,0,0.6);
-			padding: 3px;
+			background: #fafafa;
+			border-top: 1px solid $tertiary-grey-alt;
 
-			div {
-				display: block;
-				background: $icons no-repeat;
-				margin: 3px 8px 0 0;
-				float: right;
-				opacity: 0.8;
-				pointer-events: all;
-				&:hover { opacity: 1; }
-				&.disabled { &, &:hover { opacity: 0.5; cursor: default; pointer-events: none; } }
+			.include,.reply {
+				color: #a8a8a8;
+				cursor: pointer;
+				font-family: $font;
+				font-size: 12px;
+				font-weight: normal;
+				line-height: 34px;
+				height: 34px;
+				position: relative;
+				overflow: hidden;
+				padding-left: 30px;
+
+				&::after{
+					content: ' ';
+					overflow: hidden;
+					position: absolute;
+					background: $icons no-repeat;
+					top: 10px;
+				}
 			}
 
-			.magnifier{ @include sprite($icons,'image-zoom',$dimensions:true); }
-			.reply { @include sprite($icons,'image-add-note',$dimensions:true); }
+			.include {
+				display: none;
+				&::after{
+					@include sprite($icons,'checkbox-14',$dimensions:true);
+					left: 9px;
+				}
+
+				&:hover {
+					&::after{ @include sprite($icons,'checkbox-14_hover',$dimensions:true); }
+				}
+
+				&.checked {
+					&,&:hover {
+						&::after{ @include sprite($icons,'checkbox-14_active',$dimensions:true); }
+					}
+				}
+			}
+
+			.reply {
+				color: $secondary-grey-alt;
+				font-weight: bold;
+
+				&::after{
+					left: 8px;
+					@include sprite($icons,'reply',$dimensions:true);
+				}
+			}
+
+			.editor-active & {
+				.reply {display: none;}
+				.include {display: block;}
+			}
+
 		}
 	}
 }

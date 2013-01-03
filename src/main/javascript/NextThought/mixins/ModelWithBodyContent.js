@@ -23,15 +23,12 @@ Ext.define('NextThought.mixins.ModelWithBodyContent',{
 		cls: 'body-divider',
 		cn:[{
 			onclick: '{2}',
-			cls:'whiteboard-wrapper',
+			cls:'whiteboard-container',
 			cn: [{
-				cls: 'toolbar',
-				cn: [
-					{ cls: 'magnifier' },
-					{ cls: 'reply' }
-				]
-			},
-				{
+				cls: 'whiteboard-wrapper',
+				cn:[{
+					cls: 'overlay'
+				},{
 					tag: 'img',
 					src: '{1}',
 					cls: 'whiteboard-thumbnail',
@@ -39,6 +36,13 @@ Ext.define('NextThought.mixins.ModelWithBodyContent',{
 					border: 0,
 					width: '{3}'
 				}]
+			},{
+				cls: 'toolbar',
+				cn: [
+					{ cls: 'reply', html: 'Reply with image' },
+					{ cls: 'checkbox include', html: 'Include image' }
+				]
+			}]
 		}]
 	}).compile(),
 

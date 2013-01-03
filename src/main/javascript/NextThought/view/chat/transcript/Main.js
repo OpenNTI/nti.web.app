@@ -49,14 +49,6 @@ Ext.define('NextThought.view.chat.transcript.Main',{
         Ext.each(this.el.query('.control'), function(c){
             this.mon(Ext.fly(c), 'click', this.onControlClick, this);
         }, this);
-		/*Ext.each(this.el.query('.whiteboard-thumbnail'),
-				function(wb){
-					Ext.fly(wb).on('click', this.click, this);
-					if(wb.previousSibling && Ext.fly(wb.previousSibling).hasCls('whiteboard-magnifier')){
-						Ext.fly(wb.previousSibling).on('click', this.click, this);
-					}
-				},
-				this);*/
 	},
 
 
@@ -133,7 +125,7 @@ Ext.define('NextThought.view.chat.transcript.Main',{
 	},
 
 	click: function(e){
-		var t = e.getTarget('.whiteboard-wrapper', null, true), guid;
+		var t = e.getTarget('.whiteboard-container', null, true), guid;
 
 		if(!t){ return;}
 

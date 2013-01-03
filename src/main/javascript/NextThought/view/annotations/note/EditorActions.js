@@ -355,16 +355,33 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 	},
 
 
-	addWhiteboard: function (data) {
+	removeWhiteboard: function(guid){
+		var w = this.openWhiteboards[guid],
+			el = Ext.get(guid);
+
+		if(el){ el.parent('.whiteboard-divider').remove();}
+
+		if(w){
+			w.destroy();
+			delete this.openWhiteboards[guid];
+		}
+	},
+
+
+	addWhiteboard: function (data,guid) {
+		data = data || (function () {}()); //force the falsy value of data to always be undefinded.
+
+		var me = this, wbWin, content;
+
+		guid = guid||guidGenerator();
+		if(this.openWhiteboards[guid]){
+			return;
+		}
+
 		//pop open a whiteboard:
-		data = data || (function () {
-		}()); //force the falsy value of data to always be undefinded.
+		wbWin = Ext.widget('wb-window', { width: 802, value: data, closeAction: 'hide' });
 
-		var me = this,
-				wbWin = Ext.widget('wb-window', { width: 802, value: data, closeAction: 'hide' }),
-				guid = guidGenerator(),
-				content = me.editor.down('.content');
-
+		content = me.editor.down('.content');
 		//remember the whiteboard window:
 		wbWin.guid = guid;
 		this.openWhiteboards[guid] = wbWin;

@@ -124,7 +124,7 @@ Ext.define('NextThought.view.chat.log.Entry', {
 
 	click: function(event){
 		event.stopEvent();
-		var t = event.getTarget('.whiteboard-wrapper', null, true);
+		var t = event.getTarget('.whiteboard-container', null, true);
 
 		if(!t){ return false; }
 

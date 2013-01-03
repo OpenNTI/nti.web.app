@@ -191,17 +191,31 @@ Ext.define('NextThought.view.annotations.note.Main',{
 
 
 	click: function(e){
-		var t = e.getTarget('.whiteboard-wrapper', null, true), guid;
+		var t = e.getTarget('.whiteboard-container', null, true), guid;
 		if(!t){ return;}
 
 		guid = t.up('.body-divider').getAttribute('id');
 		if(t && this.readOnlyWBsData[guid]){
-			if(e.getTarget('.reply')){
+			t = e.getTarget('.reply',null,true);
+			if(t){
+				t.up('.toolbar').down('.include').addCls('checked');
 				this.activateReplyEditor();
-				this.editorActions.addWhiteboard(Ext.clone(this.readOnlyWBsData[guid]));
+				this.editorActions.addWhiteboard(Ext.clone(this.readOnlyWBsData[guid]),guid+'-reply');
 			}
 			else {
-				Ext.widget('wb-window',{ width: 802, value: this.readOnlyWBsData[guid], readonly: true}).show();
+				t = e.getTarget('.include',null,true);
+				if(t){
+					t[t.hasCls('checked') ?'removeCls':'addCls']('checked');
+					if(t.hasCls('checked')){
+						this.editorActions.addWhiteboard(Ext.clone(this.readOnlyWBsData[guid]),guid+'-reply');
+					}
+					else {
+						this.editorActions.removeWhiteboard(guid+'-reply');
+					}
+				}
+				else {
+					Ext.widget('wb-window',{ width: 802, value: this.readOnlyWBsData[guid], readonly: true}).show();
+				}
 			}
 		}
 	},
@@ -459,7 +473,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		this.text.select('a[href]',true).set({target:'_blank'});
 
 
-		Ext.each(this.text.query('.whiteboard-wrapper'),
+		Ext.each(this.text.query('.whiteboard-container'),
 				function(wb){
 					Ext.fly(wb).on('click', this.click, this);
 				},
@@ -693,6 +707,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		this.text.show();
 		this.editorActions.setValue('');
 		this.up('window').down('note-carousel').removeCls('editor-active');
+		this.el.select('.whiteboard-container .checkbox').removeCls('checked');
 		this.editorActions.deactivate();
 		this.el.removeCls('editor-active');
 		if(this.editMode){

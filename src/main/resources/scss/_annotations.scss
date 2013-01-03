@@ -124,7 +124,6 @@
 }
 
 
-
 @mixin highlight-tip {
 	position: relative;
 	top: 0;
@@ -235,6 +234,7 @@
 	}
 }
 
+
 .x-dd-drag-proxy {
 
 	.x-dd-drop-icon{
@@ -271,16 +271,18 @@
 	//padding: 5px;
 }
 
+
 .x-component-zoom {
 	img {width: 100%;}
 	@include image-bar;
 
 }
 
+
 // Styles below are intended to target things inside the content iframe
 
-.note-window .main-view .context [itemprop~="nti-data-markupenabled"] {
-}
+
+.note-window .main-view .context [itemprop~="nti-data-markupenabled"] {}
 
 .x-component-image-zoom-view {
 	overflow: visible;
@@ -315,6 +317,7 @@
 	}
 }
 
+
 .note-window .main-view .context,
 #NTIContent {
 
@@ -332,7 +335,7 @@
 			a.zoom {
 				box-shadow: inset 0 0 0 10px white;
 				opacity: 1;
-				background: rgba(0,0,0,0.05);
+				background: rgba(63, 179, 246, 0.05);
 			}
 		}
 	}
@@ -632,11 +635,15 @@
 	}
 }
 
+
 div.section-problem .highlight-mouse-over .MathJax_Display { color: #076da7 }
 
-#NTIContent ol.parts > li.part::before{
+
+#NTIContent ol.parts > li.part::before {
 	z-index: 2;
 }
+
+
 #annotation-container {
 	&, .highlight-canvas {
 		position: absolute;
