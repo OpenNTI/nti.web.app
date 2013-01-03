@@ -30,7 +30,7 @@ Ext.define('NextThought.view.content.reader.Content',{
 			cls: 'bar-cell {[values.title || values.caption ? \'\' : \'no-details\']}',
 			cn: [{
 				tag: 'tpl',
-				if: 'title',
+				'if': 'title',
 				cn:{
 					tag: 'span',
 					cls: 'image-title',
@@ -38,7 +38,7 @@ Ext.define('NextThought.view.content.reader.Content',{
 				}
 			},{
 				tag: 'tpl',
-				if: 'caption',
+				'if': 'caption',
 				cn:{
 					tag: 'span',
 					cls: 'image-caption',
