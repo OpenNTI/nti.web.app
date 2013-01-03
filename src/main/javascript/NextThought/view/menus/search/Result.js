@@ -73,8 +73,9 @@ Ext.define('NextThought.view.menus.search.Result',{
 
 	//This code assumes matches within fragments don't overlap, which I was told can be guarenteed
 	wrapFragmentHits: function(){
-		var fragmentSeparator = '...',
-			wrappedSnippets = '';
+		var fragmentSeparator = ' ... ',
+			wrappedSnippets = '',
+			me = this;
 
 		if(this.fragments.length === 0){
 			console.warn('No fragments for term', this.term, ' and snippet ', this.snippet);
@@ -88,7 +89,7 @@ Ext.define('NextThought.view.menus.search.Result',{
 				console.warn('No matches or text for fragment. Dropping', fragment);
 			}
 			else{
-			
+
 				wrappedText = fragment.text;
 
 				//Sort the matches backwards so we can do string replaces without invalidating
@@ -112,14 +113,14 @@ Ext.define('NextThought.view.menus.search.Result',{
 				});
 
 				wrappedSnippets += wrappedText;
-				if(index < fragment.length-1){
+				if(index < me.fragments.length-1){
 					wrappedSnippets += fragmentSeparator;
 				}
 			}
 		});
 
 		this.renderData.snippet = wrappedSnippets || this.snippet;
-		
+
 	},
 
 	beforeRender: function() {
