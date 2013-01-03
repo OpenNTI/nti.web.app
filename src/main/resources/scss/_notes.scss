@@ -208,7 +208,6 @@
 					display: block;
 					clear: both;
 					cursor: pointer;
-					border: 1px solid #b2b2b2;
 				}
 
 				.whiteboard-wrapper{
@@ -217,14 +216,11 @@
 					overflow: hidden;
 					cursor: pointer;
 					padding: 0px;
-					border: 1px solid $border-grey;
 					margin: 5px 2px;
-					box-shadow: 2px 1px 4px 0 rgba(0,0,0,0.12);
+					border: 1px solid $tertiary-grey-alt;
+					box-shadow: 2px 3px 1px 0 rgba(0,0,0,0.13);
 
 					&:hover {
-						border: 3px solid $primary-blue;
-						margin: 3px 0;
-
 						.fill {display: block;}
 					}
 
@@ -232,7 +228,8 @@
 						display: none;
 						position:absolute;
 						top: 0; left: 0; right: 0; bottom: 0;
-						background: rgba(0,0,0,0.05);
+						box-shadow: inset 0 0 0 3px white;
+						background: rgba(63, 179, 246, 0.05);
 					}
 					.centerer{
 						position:absolute;

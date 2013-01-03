@@ -429,7 +429,7 @@
 
 			.body {
 				color: $primary-grey;
-				.body-divider .whiteboard-wrapper .toolbar .reply{
+				.body-divider .whiteboard-container .toolbar {
 					display: none !important;
 				}
 				.body-divider {
