@@ -4,12 +4,10 @@ Ext.define('NextThought.model.converters.GroupByTime',{
 	GROUPBYTIME:{
 		type: 'groupByTime',
 		sortType: Ext.data.SortTypes.asUCString,
-		convert: function(r,o){
-			if(!r && this.mapping){ r = o.raw[this.mapping]; }
 
-			var now = new Date(),
-				v = new Date(r*1000),
-				oneDayAgo = Ext.Date.add(now, Ext.Date.DAY, -1),
+		groupStringForElapsedTime: function(now, v){
+			
+			var	oneDayAgo = Ext.Date.add(now, Ext.Date.DAY, -1),
 				twoDaysAgo = Ext.Date.add(now, Ext.Date.DAY, -2),
 				oneWeekAgo = Ext.Date.add(now, Ext.Date.DAY, -1 * 7),
 				twoWeeksAgo = Ext.Date.add(now, Ext.Date.DAY, -2 * 7),
@@ -31,7 +29,10 @@ Ext.define('NextThought.model.converters.GroupByTime',{
 
 			if(Ext.Date.between(v, twoDaysAgo, oneDayAgo)){ return 'B Yesterday'; }
 
-			if(Ext.Date.between(v, oneWeekAgo, twoDaysAgo)){return 'C'+(364-parseInt(Ext.Date.format(v,'z'),10))+Ext.Date.format(v, ' l');}
+			if(Ext.Date.between(v, oneWeekAgo, twoDaysAgo)){
+				//C<elapsed time ago><day string>
+				return 'C' + (now.getTime() - v.getTime()) + Ext.Date.format(v, ' l');
+			}
 
 			if(Ext.Date.between(v, twoWeeksAgo, oneWeekAgo)){ return 'D Last week'; }
 
@@ -41,9 +42,24 @@ Ext.define('NextThought.model.converters.GroupByTime',{
 
 			if(Ext.Date.between(v, twoMonthsAgo, oneMonthAgo)){ return 'G Last month'; }
 
-			if(Ext.Date.between(v, oneYearAgo, twoMonthsAgo)){ return 'H This year'; }
+			if(Ext.Date.between(v, oneYearAgo, twoMonthsAgo)){ return 'H Last year'; }
 
 			return 'I Older';
+		},
+
+		groupTitle: function(groupLabel, defaultValue){
+			var groupName = groupLabel || '',
+				regex = /^[A-Z]\d{0,}\s/;
+
+			return groupName.replace(regex,'') || defaultValue;
+		},
+
+		convert: function(r,o){
+			if(!r && this.mapping){ r = o.raw[this.mapping]; }
+
+			var now = new Date(),
+				v = new Date(r*1000);
+			return this.type.groupStringForElapsedTime(now, v);
 		}
 	}
 });

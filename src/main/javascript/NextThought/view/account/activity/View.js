@@ -4,7 +4,8 @@ Ext.define('NextThought.view.account.activity.View',{
 
 	requires: [
 		'NextThought.view.account.activity.Popout',
-		'NextThought.view.account.contacts.management.Popout'
+		'NextThought.view.account.contacts.management.Popout',
+		'NextThought.model.converters.GroupByTime'
 	],
 
 	overflowY: 'hidden',
@@ -144,7 +145,7 @@ Ext.define('NextThought.view.account.activity.View',{
 		this.stream = {};
 
 		function groupToLabel(name){
-			return (name||'').replace(/^[A-Z]\d{0,}\s/,'') || false;
+			return Ext.data.Types.GROUPBYTIME.groupTitle(name, false);
 		}
 
 		function maybeAddMoreButton(){

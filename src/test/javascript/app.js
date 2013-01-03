@@ -138,7 +138,8 @@ Ext.application({
 			'javascript/specs/model/anchorables/ContentRangeDescription.spec.js',
 			'javascript/specs/model/anchorables/DomContentRangeDescription.spec.js',
 			'javascript/specs/store/Hit.spec.js',
-			'javascript/specs/view/whiteboard/NTMatrix.spec.js'
+			'javascript/specs/view/whiteboard/NTMatrix.spec.js',
+			'javascript/specs/model/converters/GroupByTime.spec.js'
         ],
 		go);
 	}

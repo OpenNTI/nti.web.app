@@ -4,7 +4,8 @@ Ext.define('NextThought.view.UserDataPanel',{
 
 	requires: [
 		'NextThought.model.events.Bus',
-		'NextThought.store.PageItem'
+		'NextThought.store.PageItem',
+		'NextThought.model.converters.GroupByTime'
 	],
 
 
@@ -369,9 +370,7 @@ Ext.define('NextThought.view.UserDataPanel',{
 		me.dataGuidMap = {};
 
 		function doGroup(group){
-			var groupName = (group.name || ''),
-				regex = /^[A-Z]\d{0,}\s/,
-				label = groupName.replace(regex,'') || 'Today';
+			var label = Ext.data.Types.GROUPBYTIME.groupTitle(group.name, 'Today');
 
 			label = label.replace(/^application\/vnd.nextthought\.(.*)$/,'$1s');
 
