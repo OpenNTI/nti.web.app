@@ -218,6 +218,18 @@ Ext.define('NextThought.view.content.reader.IFrame',{
             me.fireEvent('footnote-hover', href, getFootnoteContent(href), target);
         });
 
+
+		if(me.tip){me.tip.destroy();}
+/*
+		try{
+			me.tip = me.getIframe().win.Ext.widget('quicktip', {
+				id: 'tool-tip-'+me.prefix,
+				target: Ext.fly(me.getDocumentElement(),'__reader_doc_'+me.prefix),
+				renderTo: me.getDocumentElement().body
+			});
+		}
+		catch(e){console.log('still working on getting custom tooltips in the iframe...');}
+*/
 		ContentAPIRegistry.on('update',me.applyContentAPI,me);
 		me.applyContentAPI();
 		me.setSplash();

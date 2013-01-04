@@ -1,11 +1,25 @@
 Ext.define('NextThought.overrides.tip.QuickTip',{
 	override: 'Ext.tip.QuickTip',
 
+	constructor: function(config){
+		config = Ext.apply(config||{},{
+			showDelay: 500,
+			anchorTarget: true,
+			trackMouse: false,
+			shadow:false,
+			interceptTitles: true
+		});
+		return this.callParent([config]);
+	},
+
 	getTargetXY: function(){
 		this.anchorTarget = this.activeTarget.el;
 		this.anchor = 'bottom';
 
-		var vW = Ext.dom.Element.getViewportWidth(),
+		var doc = Ext.getDom(this.anchorTarget).ownerDocument,
+			vW = ((!Ext.isStrict && !Ext.isOpera) ? doc.body.clientWidth :
+		                   Ext.isIE ? doc.documentElement.clientWidth : doc.parentWindow.innerWidth),
+
 			r = this.callParent(arguments);
 
 		if(r[1] < 50 ){
@@ -41,11 +55,5 @@ Ext.define('NextThought.overrides.tip.QuickTip',{
 
 },function(){
 	// Init the singleton.  Any tag-based quick tips will start working.
-	Ext.tip.QuickTipManager.init(true,{
-	    showDelay: 500,
-		anchorTarget: true,
-		trackMouse: false,
-		shadow:false,
-		interceptTitles: true
-	});
+	Ext.tip.QuickTipManager.init();
 });
