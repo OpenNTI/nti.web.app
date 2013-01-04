@@ -202,6 +202,9 @@ Ext.define('NextThought.view.content.reader.Content',{
 			Ext.fly(bar).unselectable();
 
 			//move the targeted element into a wrapper
+			if(Ext.fly(target).is('iframe')){
+				Ext.fly(el.querySelector('.wrapper a')).remove();
+			}
 			el.querySelector('.wrapper').appendChild(target);
 
 			Ext.each(p,function(feature){
