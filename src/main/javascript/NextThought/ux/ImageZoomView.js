@@ -94,6 +94,7 @@ Ext.define('NextThought.ux.ImageZoomView',{
 
 
 	destroy: function(){
+		Ext.EventManager.removeResizeListener(this.viewportMonitor,this);
 		var n = Ext.query('.nav-helper').first();
 		if(n){ Ext.fly(n).show(); }
 		return this.callParent(arguments);
@@ -110,9 +111,7 @@ Ext.define('NextThought.ux.ImageZoomView',{
 		this.mon(this.commentEl,'click',this.commentOn,this);
 
 		var me = this,
-			img = new Image(),
-			El = Ext.dom.Element,
-			barH = me.barEl.getHeight(),
+			img = me.imageCache = new Image(),
 			isSlide = Boolean(
 					Ext.fly(me.refEl).parent('object[type$=slide]',true)
 				||  Ext.fly(me.refEl).parent('object[type$=slidevideo]',true)
@@ -122,6 +121,7 @@ Ext.define('NextThought.ux.ImageZoomView',{
 			me.presentationEl.show();
 		}
 
+		me.barHeightCache = me.barEl.getHeight();
 		me.barEl.hide();
 
 		img.onerror = function(){
@@ -130,35 +130,50 @@ Ext.define('NextThought.ux.ImageZoomView',{
 		};
 
 		img.onload = function(){
-
-			var vpH = (El.getViewportHeight()-200),
-				vpW = (El.getViewportWidth()-200),
-				h = img.height,
-				w = img.width;
-
-			console.log(w,h);
-			if((h+barH) > vpH){
-				w = (vpH/h) * w;
-				h = vpH;
-				console.log('sized h', w,h);
-			}
-
-			if(w > vpW){
-				h = (vpW/w) * h;
-				w = vpW;
-				console.log('sized w', w,h);
-			}
-
-			me.setSize(w, h+barH);
+			me.syncSize();
 			me.barEl.show();
-			me.center();
 			me.image.dom.src = img.src;
 			me.el.unmask();
 		};
 		img.src = this.url;
 
 		Ext.defer(this.el.focus,100,this.el);
+		Ext.EventManager.onWindowResize(this.viewportMonitor,this,undefined);
 	},
+
+	viewportMonitor: function(){
+		var b = this.barEl.getHeight();
+		this.barHeightCache = b > this.barHeightCache ? b : this.barHeightCache;
+		this.syncSize();
+	},
+
+	syncSize: Ext.Function.createBuffered( function(){
+		var El = Ext.dom.Element,
+			me = this,
+			barH = me.barHeightCache,
+			img = me.imageCache,
+			vpH = (El.getViewportHeight()-200),
+			vpW = (El.getViewportWidth()-200),
+			h = img.height,
+			w = img.width;
+
+		console.log(w,h);
+		if((h+barH) > vpH){
+			w = (vpH/h) * w;
+			h = vpH;
+			console.log('sized h', w,h);
+		}
+
+		if(w > vpW){
+			h = (vpW/w) * h;
+			w = vpW;
+			console.log('sized w', w,h);
+		}
+
+		me.setSize(w, h+barH);
+		me.center();
+
+	}, 80),
 
 
 	openPresentation: function(e){
