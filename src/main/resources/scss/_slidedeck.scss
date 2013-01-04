@@ -246,7 +246,6 @@ $experimental-support-for-svg: true;
 				overflow: hidden;
 				top: 0;
 				bottom: 0;
-				background: rgba(0,0,0,0);
 			}
 			.left{left: 0; right: 50%;}
 			.right{left: 50%; right: 0;}
@@ -260,7 +259,6 @@ $experimental-support-for-svg: true;
 				height: 70px;
 				top: 46%;
 				@include experimental-value(top, calc(50% - 45px));
-
 				&::after {
 					content: ' ';
 					position: absolute;
