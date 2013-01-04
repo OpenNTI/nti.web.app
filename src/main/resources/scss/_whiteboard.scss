@@ -583,7 +583,7 @@
 				cursor: pointer;
 				font-family: $font;
 				font-size: 12px;
-				font-weight: normal;
+				font-weight: 500;
 				line-height: 34px;
 				height: 34px;
 				position: relative;
@@ -602,17 +602,19 @@
 			.include {
 				display: none;
 				&::after{
-					@include sprite($icons,'checkbox-14',$dimensions:true);
-					left: 9px;
+					@include sprite($icons,'checkbox-light-unchecked',$dimensions:true);
+					left: 6px;
+					top: 7px;
 				}
 
 				&:hover {
-					&::after{ @include sprite($icons,'checkbox-14_hover',$dimensions:true); }
+					&::after{ @include sprite($icons,'checkbox-light-unchecked_hover',$dimensions:true); }
 				}
 
 				&.checked {
-					&,&:hover {
-						&::after{ @include sprite($icons,'checkbox-14_active',$dimensions:true); }
+					&::after{ @include sprite($icons,'checkbox-light-checked',$dimensions:true); }
+					&:hover::after {
+						@include sprite($icons,'checkbox-light-checked_hover',$dimensions:true);
 					}
 				}
 			}
