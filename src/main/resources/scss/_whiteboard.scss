@@ -528,6 +528,7 @@
 
 		padding: 0px;
 		margin: 3px;
+		margin-bottom: 8px;
 		border: 1px solid $tertiary-grey-alt;
 		box-shadow: 2px 3px 1px 0 rgba(0,0,0,0.13);
 
@@ -536,8 +537,12 @@
 			overflow: hidden;
 
 			.overlay {
+				display: none;
 				position: absolute;
-				top: 0; left: 0; bottom: 0; right: 0;
+				top: 0; left: 0; bottom: 35px; right: 0;
+				box-shadow: inset 0 0 0 5px white;
+				background: rgba(63, 179, 246, 0.05);
+				@include animate(pulseIn,0.5s);
 			}
 		}
 
@@ -545,8 +550,7 @@
 		&:hover {
 			.whiteboard-wrapper {
 				.overlay {
-					box-shadow: inset 0 0 0 5px white;
-					background: rgba(63, 179, 246, 0.05);
+					display: block;
 				}
 			}
 			.toolbar {
@@ -567,7 +571,9 @@
 		.toolbar{
 			display: block;
 			visibility: hidden;
-			position: relative;
+			position: absolute;
+			bottom: 0;
+			left: 0; right: 0;
 			overflow: hidden;
 			background: #fafafa;
 			border-top: 1px solid $tertiary-grey-alt;

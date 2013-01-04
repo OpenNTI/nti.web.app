@@ -62,6 +62,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		me.text.setVisibilityMode(Ext.dom.Element.DISPLAY);
 		try {
             me.editorActions = new NoteEditorActions(me,me.editor);
+			me.mon(me.editorActions,'droped-whiteboard',me.droppedWhiteboard,me);
             me.setRecord(me.record);
 
 			me.contactsMaybeChanged();
@@ -189,6 +190,16 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		this.showOrHideArrows(true);
 	},
 
+
+	droppedWhiteboard: function(guid){
+		try {
+			guid = guid.replace('-reply','');
+			Ext.get(guid).down('.include').removeCls('checked');
+		}
+		catch(e){
+			console.error('Whoops,..', e.message, e);
+		}
+	},
 
 	click: function(e){
 		var t = e.getTarget('.whiteboard-container', null, true), guid;

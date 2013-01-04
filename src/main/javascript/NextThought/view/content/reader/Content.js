@@ -188,7 +188,7 @@ Ext.define('NextThought.view.content.reader.Content',{
 
 		Ext.each(els,function(el){
 			var p = (el.getAttribute('itemprop')||'').split(' '),
-				target = Ext.fly(el).first(null,true),
+				target = Ext.fly(el).down('img,iframe',true),
 				title = get(target,'data-title'),
 				caption = get(target,'data-caption'),
 				bar = tpl.append(el,{

@@ -252,6 +252,7 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 	handleOnKeyup: function(e){
 		this.maybeResizeContentBox();
 		this.detectTypingAttributes();
+		this.checkWhiteboards();
 	},
 
 
@@ -357,6 +358,17 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 	},
 
 
+	checkWhiteboards: function(){
+		var me = this;
+		Ext.Object.each(this.openWhiteboards,function(guid){
+			if(!Ext.get(guid)){
+				me.removeWhiteboard(guid);
+				me.fireEvent('droped-whiteboard',guid);
+			}
+		});
+	},
+
+
 	removeWhiteboard: function(guid){
 		var w = this.openWhiteboards[guid],
 			el = Ext.get(guid);
@@ -426,7 +438,7 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 
 	insertWhiteboardThumbnail: function (content, guid, wb) {
 		var me = this,
-			el = Ext.get(guid), placeholder, p;
+			el = Ext.get(guid), placeholder;
 
 		//We need empty divs to allow to insert text before or after a WB.
 		placeholder = Ext.DomHelper.createTemplate({html: me.defaultValue});

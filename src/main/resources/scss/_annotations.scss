@@ -12,6 +12,7 @@
 		text-decoration: none;
 		&.disabled { &, &:hover { display:none; opacity: 0.5; cursor: default; pointer-events: none; } }
 		&.zoom, &.unzoom {
+			@include animate(pulseIn,0.5s);
 			display: block;
 			position: absolute;
 			top: 0; left: 0; right: 0; bottom: 0;
@@ -330,9 +331,11 @@
 		border-radius: 3px;
 
 		@include image-bar;
+		a.zoom { display: none; }
 
 		&:hover {
 			a.zoom {
+				display: block;
 				box-shadow: inset 0 0 0 10px white;
 				opacity: 1;
 				background: rgba(63, 179, 246, 0.05);

@@ -13,10 +13,12 @@ Ext.define('NextThought.util.Globals', {
 		'NextThought.overrides.data.Connection',
 		'NextThought.overrides.dom.Element',
 		'NextThought.overrides.draw.engine.Svg',
-		'NextThought.overrides.JSON',
 		'NextThought.overrides.layout.container.Container',
 		'NextThought.overrides.panel.Panel',
 		'NextThought.overrides.picker.Color',
+		'NextThought.overrides.tip.ToolTip',
+		'NextThought.overrides.tip.QuickTip',
+		'NextThought.overrides.JSON',
 		'NextThought.overrides.XTemplate'
 	],
 	singleton: true,
