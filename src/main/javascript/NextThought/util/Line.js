@@ -9,7 +9,7 @@ Ext.define('NextThought.util.Line',{
 
 
 	//FIXME this is fairly tightly coupled to how Anchoring works.
-	//it would be nice if it was a bit more abstract such that the 
+	//it would be nice if it was a bit more abstract such that the
 	//implementation details aren't in both locations
 	/**
 	 * This is the main exported function in this utility.
@@ -100,7 +100,13 @@ Ext.define('NextThought.util.Line',{
 				curNode = curNode.parentNode;
 			}
 		}
-		if (!curNode) { console.log('rangeByRecursiveSearch failed'); return null; }
+
+		//If we didn't find a node, or it is not a text node we have to bail.  Our IE algorithm relies heavily on search text
+		//nodes.  FIXME this appraoch is pretty flaky expecially on pages with minimal text
+		if (!curNode || curNode.nodeType !== Node.TEXT_NODE) {
+			//console.log('rangeByRecursiveSearch failed');
+			return null;
+		}
 		range = doc.createRange();
 		var left = 0, right = curNode.data.length, center;
 		// First single character ending past y
