@@ -161,7 +161,7 @@ Ext.define('NextThought.view.chat.Window', {
 			title = title[0];
 		}
 		else {
-			title = Ext.String.format('Group Chat ({0})', title.length);
+			title = Ext.String.format('Chat ({0})', title.length);
 		}
 
 		this.callParent([title]);
