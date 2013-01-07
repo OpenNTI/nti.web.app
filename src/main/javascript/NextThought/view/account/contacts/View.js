@@ -177,6 +177,11 @@ Ext.define('NextThought.view.account.contacts.View',{
 			this.mon(el,'click',this.toggleSearch,this);
 		}
 
+		Ext.QuickTips.register({
+			target: this.searchBtn.id,
+			text: this.searchBtn.getAndRemoveAttr('title')
+		});
+
         this.mon(this.el.down('.resend-consent'), 'click', this.resendClicked, this);
 
 	},

@@ -14,5 +14,12 @@ Ext.define('NextThought.overrides.dom.Element',{
             ctBottom = ctTop + ctClientHeight;
 
         return top > ctBottom || top < ctTop || bottom < ctTop || bottom > ctBottom;
+	},
+
+
+	getAndRemoveAttr: function(attr){
+		var r = this.dom.getAttribute(attr);
+		this.dom.removeAttribute(attr);
+		return r;
 	}
 });
