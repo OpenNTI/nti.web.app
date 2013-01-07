@@ -9,7 +9,11 @@ Ext.define('NextThought.view.account.contacts.View',{
         'NextThought.view.account.contacts.GroupButtons',
 		'NextThought.view.account.contacts.ListButtons'
 	],
-	tooltip: 'Contacts',
+
+	tabConfig: {
+		tooltip: 'Contacts'
+	},
+
 	iconCls: 'contacts',
 	ui: 'contacts',
 	cls: 'contacts-view',

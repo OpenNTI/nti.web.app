@@ -3,7 +3,7 @@ Ext.define('NextThought.view.account.View',{
 	alias: 'widget.account-view',
 
 	iconCls: 'account',
-	tooltip: 'My Account',
+	tabConfig:{tooltip: 'My Account'},
 	ui: 'account',
 	cls: 'account-view',
 	plain: true,

@@ -18,7 +18,7 @@ Ext.define('NextThought.overrides.tip.QuickTip',{
 
 		var doc = Ext.getDom(this.anchorTarget).ownerDocument,
 			vW = ((!Ext.isStrict && !Ext.isOpera) ? doc.body.clientWidth :
-		                   Ext.isIE ? doc.documentElement.clientWidth : doc.parentWindow.innerWidth),
+		                   !Ext.isIE ? doc.documentElement.clientWidth : doc.parentWindow.innerWidth),
 
 			r = this.callParent(arguments);
 

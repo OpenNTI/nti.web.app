@@ -7,7 +7,9 @@ Ext.define('NextThought.view.account.activity.ActivityTabs',{
         'NextThought.view.account.activity.View'
     ],
     iconCls: 'activity',
-    tooltip: 'Recent Activity',
+    tabConfig:{
+		tooltip: 'Recent Activity'
+    },
     ui: 'activity',
     cls: 'activity-tab-view',
     plain: true,

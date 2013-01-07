@@ -11,17 +11,7 @@ Ext.define('NextThought.view.SideBarTabPanel',{
 		ui: 'sidebar',
 		defaults: {
 			plain: true,
-			ui: 'sidebar',
-			tooltipType: 'title',
-			xhooks: {
-				afterRender: function(){
-					this.callParent(arguments);
-					if(this.tooltip){
-						var attr = this.tooltipType === 'qtip' ? 'data-qtip' : 'title';
-						this.el.dom.setAttribute(attr, this.tooltip);
-					}
-				}
-			}
+			ui: 'sidebar'
 		}
 	}
 
