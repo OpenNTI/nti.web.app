@@ -136,7 +136,7 @@
 		@include sprite($elements,'tooltip-pointer-black-right',$dimensions: true);
 	}
 	.x-tip-anchor-bottom{
-		@include sprite($elements,'tooltip_pointer_black',$dimensions: true);
+		@include sprite($elements,'tooltip-pointer-black-bottom',$dimensions: true);
 	}
 	.x-tip-anchor-left{
 		@include sprite($elements,'tooltip-pointer-black-left',$dimensions: true);

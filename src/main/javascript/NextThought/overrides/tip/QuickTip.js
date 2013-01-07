@@ -8,6 +8,8 @@
 Ext.define('NextThought.overrides.tip.QuickTip',{
 	override: 'Ext.tip.QuickTip',
 
+	EDGE_PADDING: 20, //pixals from any given edge to trigger a repositioning
+
 	//Apply defaults
 	constructor: function(config){
 		config = Ext.apply(config||{},{
@@ -46,17 +48,17 @@ Ext.define('NextThought.overrides.tip.QuickTip',{
 			w = this.el.getWidth(),
 			r = this.callParent(arguments);
 
-		if(r[1] < 50 ){
+		if(r[1] < this.EDGE_PADDING ){
 			//needs to swap down
 			this.anchor = 'top';
 		}
 
-		if(r[0] < 50){
+		if(r[0] < this.EDGE_PADDING){
 			//needs to swap left
 			this.anchor = 'left';
 		}
-		else if((vW - (r[0] + w ) ) < 50){
-			//needs to swap left
+		else if((vW - (r[0] + w ) ) < this.EDGE_PADDING){
+			//needs to swap right
 			this.anchor = 'right';
 		}
 
@@ -80,6 +82,21 @@ Ext.define('NextThought.overrides.tip.QuickTip',{
 
 		return r;
 	},
+
+
+	//center the tip pointer
+	//We prefer to align to the center posisitions instead of the corner positions.
+	syncAnchor: function() {
+        var me = this, pos;
+		me.callParent();
+        switch (me.tipAnchor.charAt(0)) {
+        case 't': pos = 'b-t'; break;
+        case 'r': pos = 'l-r'; break;
+        case 'b': pos = 't-b'; break;
+        default:  pos = 'r-l'; break;
+        }
+        me.anchorEl.alignTo(me.el, pos);
+    },
 
 
 	//We prefer to align to the center posisitions instead of the corner positions.
