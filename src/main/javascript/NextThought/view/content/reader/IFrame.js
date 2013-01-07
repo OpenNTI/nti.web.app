@@ -122,6 +122,9 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 		g.loadStyleSheet({
 			url: base+document.getElementById('main-stylesheet').getAttribute('href'),
 			document: doc });
+		g.loadStyleSheet({
+			url: 'https://fonts.googleapis.com/css?family=Droid+Serif:400,700,700italic,400italic|Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800',
+			document: doc });
 
 		on(doc,['keypress','keydown','keyup'],function(e){
 			e = Ext.EventObject.setEvent(e||event);
