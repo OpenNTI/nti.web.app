@@ -58,5 +58,10 @@ Ext.define('NextThought.view.account.Identity',{
         me.mon(me.menuBtn, 'click', function(){
             me.menu.showBy(me.menuBtn);
         });
+
+	    Ext.QuickTips.register({
+            target: me.menuBtn.id,
+            text: me.menuBtn.getAndRemoveAttr('title')
+        });
     }
 });

@@ -5,12 +5,12 @@ Ext.define('NextThought.overrides.Component', {
 		var me = this;
 		me.callParent(arguments);
 		if(me.tooltip){
-			me.setNTTooltip(me.tooltip, true);
+			me.setNTTooltip(me.tooltip);
 			me.el.set({title:undefined});
 		}
 	},
 
-	setNTTooltip: function(tooltip, initial) {
+	setNTTooltip: function(tooltip) {
 		var me = this;
 		if ( !Ext.isObject(tooltip) ) {
 			Ext.QuickTips.register({

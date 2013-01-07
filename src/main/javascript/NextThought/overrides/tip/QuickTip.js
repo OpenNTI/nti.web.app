@@ -47,7 +47,6 @@ Ext.define('NextThought.overrides.tip.QuickTip',{
 			this.anchor = 'left';
 		}
 		else if((vW - (r[0] + w ) ) < 50){
-			console.log('swapping to right')
 			//needs to swap left
 			this.anchor = 'right';
 		}
