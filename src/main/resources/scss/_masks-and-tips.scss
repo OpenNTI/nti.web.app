@@ -110,13 +110,14 @@
 }
 
 .x-tip{
-
-	border-color: $primary-grey !important;
-	background-color: $primary-grey !important;
+	background-color: #404040 !important;
+	border-width: 0 !important;
 	padding: 3px 5px !important;
 	border-radius: 0 !important;
+	box-shadow: 1px 2px 5px 0px rgba(0, 0, 0, 0.25);
 
 	.x-tip-body{
+		text-transform: uppercase;
 		color: #ffffff !important;
 		font-size: 11px;
 		font-weight: 600;
@@ -129,16 +130,16 @@
 	}
 
 	.x-tip-anchor-top{
-		@include sprite($elements,'tooltip_pointer_black',$dimensions: true);
+		@include sprite($elements,'tooltip-pointer-black-top',$dimensions: true);
 	}
 	.x-tip-anchor-right{
-		@include sprite($elements,'tooltip_pointer_black',$dimensions: true);
+		@include sprite($elements,'tooltip-pointer-black-right',$dimensions: true);
 	}
 	.x-tip-anchor-bottom{
 		@include sprite($elements,'tooltip_pointer_black',$dimensions: true);
 	}
 	.x-tip-anchor-left{
-		@include sprite($elements,'tooltip_pointer_black',$dimensions: true);
+		@include sprite($elements,'tooltip-pointer-black-left',$dimensions: true);
 	}
 }
 
