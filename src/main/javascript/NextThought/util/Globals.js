@@ -16,7 +16,6 @@ Ext.define('NextThought.util.Globals', {
 		'NextThought.overrides.layout.container.Container',
 		'NextThought.overrides.panel.Panel',
 		'NextThought.overrides.picker.Color',
-		'NextThought.overrides.tip.ToolTip',
 		'NextThought.overrides.tip.QuickTip',
 		'NextThought.overrides.Component',
 		'NextThought.overrides.JSON',
