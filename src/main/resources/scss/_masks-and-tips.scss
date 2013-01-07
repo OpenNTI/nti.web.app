@@ -111,28 +111,35 @@
 
 .x-tip{
 
-		background-color: $primary-grey !important;
-		padding: 3px 5px !important;
-		border-radius: 0 !important;
+	border-color: $primary-grey !important;
+	background-color: $primary-grey !important;
+	padding: 3px 5px !important;
+	border-radius: 0 !important;
 
-		//&::after{
-		//	position: absolute;
-		//	top: 100%;
-		//	left: 35%;
-		//	content: ' ';
-		//	width: 18px;
-		//	height: 11px;
-		//	background: transparent $elements no-repeat;
-		//	@include sprite($elements,'tooltip_pointer_black',$dimensions: true);
-		//}
+	.x-tip-body{
+		color: #ffffff !important;
+		font-size: 11px;
+		font-weight: 600;
+	}
 
-		.x-tip-body{
-			color: #ffffff !important;
-			font-size: 11px;
-			font-weight: 600;
-		}
+	.x-tip-anchor {
+		border-width: 0;
+		border-color: transparent;
+		background: transparent $elements no-repeat;
+	}
 
-
+	.x-tip-anchor-top{
+		@include sprite($elements,'tooltip_pointer_black',$dimensions: true);
+	}
+	.x-tip-anchor-right{
+		@include sprite($elements,'tooltip_pointer_black',$dimensions: true);
+	}
+	.x-tip-anchor-bottom{
+		@include sprite($elements,'tooltip_pointer_black',$dimensions: true);
+	}
+	.x-tip-anchor-left{
+		@include sprite($elements,'tooltip_pointer_black',$dimensions: true);
+	}
 }
 
 .dark .x-mask {
