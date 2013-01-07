@@ -6,6 +6,7 @@
 		$value: $name $duration $delay $function $mode;
   	}
 	@include experimental(animation, $value);
+	.disable-animations &,
 	.x-safari5 & {
 		@include experimental(animation, none);
 	}

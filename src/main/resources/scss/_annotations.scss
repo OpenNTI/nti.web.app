@@ -339,6 +339,11 @@
 
 			@include experimental(transform, scale(2.5) );
 			opacity: 0;
+
+			.disable-animations & {
+				@include experimental(transition, none );
+				@include experimental(transform, none );
+			}
 		}
 
 		&:hover {

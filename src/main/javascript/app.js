@@ -50,6 +50,10 @@ Ext.application({
 			location.replace($AppConfig.server.unsupported);
 		}
 
+		if(Ext.isSafari && Ext.safariVersion <= 6){
+			Ext.getBody().addCls('disable-animations');
+		}
+
 		if(!Globals.validateConfig()){
 			return;
 		}
