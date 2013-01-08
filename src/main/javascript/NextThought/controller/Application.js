@@ -1,9 +1,11 @@
 Ext.define('NextThought.controller.Application', {
 	extend: 'Ext.app.Controller',
 	requires: [
-		'NextThought.Library'
+		'swfobject',
+		'NextThought.Library',
+		'NextThought.view.MessageBar'
 	],
-	
+
 	views: ['Main'],
 
 	launchToken: {},
@@ -15,6 +17,26 @@ Ext.define('NextThought.controller.Application', {
 		this.application.on('finished-loading', function(){
 			NextThought.isInitialized = true;
 			Globals.removeLoaderSplash();
+
+			//We were doing the flash check just for IE.  But it seems like we need
+			//it everywhere b/c apperantly we can't force the youtube video api to use flash
+			//only suggest it.  TODO it would be nice if we didn't have to do this upfront, it
+			//may be a deterent.  Rather do it when we actually need flash (show it when a content page has a video,
+			//when the slide view is launched, etc..  Still this is better than
+			//the hard gate we were imposing...
+			if(!swfobject.hasFlashPlayerVersion("9.0.18")){
+				Ext.create('widget.message-bar', {
+					renderTo: Ext.getBody(),
+					messageType: 'flash-required',
+					message: {cls: 'message',
+							  tag: 'span',
+							  cn: [
+								  'Portions of this application may require Adobe Flash Player to work correctly.',
+								  {tag: 'a', href: 'http://get.adobe.com/flashplayer/', html: 'Download it here.', target: '_blank'}
+							  ]}
+				});
+			}
+
 		});
 	},
 

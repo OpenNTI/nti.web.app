@@ -12,6 +12,7 @@ Ext.application({
 		'NextThought.util.Globals',
 		'NextThought.model.anchorables.ContentPointer',
 		'NextThought.model.anchorables.DomContentPointer',
+		'NextThought.view.MessageBar',
 		'NextThought.view.MessageBox' //Require this early so we have it if we need it
 	],
 
@@ -64,15 +65,6 @@ Ext.application({
 		//if we get this far, we're good... no need to redirect to the unsupoprted page.
 		delete window.onerror;
 		window.onerror = null;
-
-		if(Ext.isIE9 && !swfobject.hasFlashPlayerVersion("9.0.18")){
-			alert('Flash is required for this application to function correctly in your browser.'
-						+ Ext.DomHelper.markup([
-				{tag:'br'},{tag:'br'},
-				{tag: 'a', href: 'http://get.adobe.com/flashplayer/', html: 'Get it here.'}]));
-
-			return;
-		}
 
 		Globals.loadScript(getURL('/socket.io/static/socket.io.js'));
 

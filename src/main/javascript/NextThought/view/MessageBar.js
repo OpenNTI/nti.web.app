@@ -6,26 +6,35 @@ Ext.define('NextThought.view.MessageBar', {
 
 	cls: 'message-bar',
 
-	statics: {
-		dontShow: false
-	},
+	inheritableStatics: {
+		dontShow: {}	},
 
 	renderTpl: Ext.DomHelper.markup([
 		{cls: 'remember', html: 'I get it. Don\'t show this again...'},
-		'Your browser\'s current zoom setting is not fully supported. Please reset it to the default zoom.',
-		{tag: 'a', href: '#', html: 'Dismiss'}
+		'{message}',
+		{tag: 'a', cls: 'dismiss', href: '#', html: 'Dismiss'}
 	]),
 
 	renderSelectors: {
-		closeEl: 'a',
+		closeEl: 'a.dismiss',
 		rememberEl: '.remember'
 	},
 
-	constructor: function(){
-		if(this.self.dontShow || !Ext.isEmpty(Ext.ComponentQuery.query('message-bar'))){
+	constructor: function(cfg){
+		var messageType = cfg.messageType || '';
+
+		if(this.self.dontShow[messageType] || !Ext.isEmpty(Ext.ComponentQuery.query('message-bar'))){
 			return null;
 		}
 		return this.callParent(arguments);
+	},
+
+	initComponent: function(){
+		this.callParent(arguments);
+		if(Ext.isObject(this.message)){
+			this.message = Ext.DomHelper.markup(this.message);
+		}
+		this.renderData = Ext.apply(this.renderData || {}, {message: this.message});
 	},
 
 	afterRender: function(){
@@ -35,7 +44,7 @@ Ext.define('NextThought.view.MessageBar', {
 	},
 
 	remember: function(){
-		this.self.dontShow = !this.self.dontShow;
+		this.self.dontShow[this.messageType] = !this.self.dontShow[this.messageType];
 		this.rememberEl[this.self.dontShow ? 'addCls' : 'removeCls']('checked');
 	}
 });

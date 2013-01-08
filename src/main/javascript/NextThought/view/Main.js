@@ -55,12 +55,14 @@ Ext.define('NextThought.view.Main', {
 			currentBar;
 		console.log("Zoom:",z);
 
-		//IEs returns jacked up coordinates when zoom is applied.  Scold if they are in 
+		//IEs returns jacked up coordinates when zoom is applied.  Scold if they are in
 		//IE and a zoom level other than 1
 		if(Ext.isIE){
 			if(z!==1){
 				Ext.create('widget.message-bar', {
-					renderTo: Ext.getBody()
+					renderTo: Ext.getBody(),
+					messageType: 'zoom',
+					message: 'Your browser\'s current zoom setting is not fully supported. Please reset it to the default zoom.'
 				});
 			}
 			else{
