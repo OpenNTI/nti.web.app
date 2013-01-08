@@ -19,6 +19,7 @@ Ext.define('NextThought.view.content.reader.Content',{
 		tag: 'span',
 		cls: 'bar',
 		'data-non-anchorable': true,
+		'data-no-anchors-within': true,
 		unselectable: true,
 		cn: [{
 			tag: 'a',
