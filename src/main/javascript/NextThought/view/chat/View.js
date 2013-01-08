@@ -10,15 +10,18 @@ Ext.define('NextThought.view.chat.View', {
 	header: false,
 	frame: false,
 	border: false,
+	autoScroll: false,
+	overflowX: 'hidden',
+	overflowY: 'hidden',
 
 	cls: 'chat-view',
 	ui: 'chat-view',
     layout: {
-		type: 'vbox',
-		align: 'stretch'
+		type: 'anchor'
 	},
+	defaults: {anchor: '100%'},
 	items: [
-		{ xtype: 'chat-log-view', flex:1 },
+		{ xtype: 'chat-log-view', anchor: '0 -51' },
 		{xtype: 'box', hidden: true, name:'error', autoEl: {cls: 'error-box', tag:'div',
             cn:[
                 {cls: 'error-desc'}
@@ -71,7 +74,8 @@ Ext.define('NextThought.view.chat.View', {
     afterRender: function(){
         this.callParent(arguments);
         this.mon(this, 'control-clicked', this.maybeEnableButtons, this);
-	    this.mon( this, 'add', this.maybeShowFlagIcon, this);
+	    this.mon(this, 'add', this.maybeShowFlagIcon, this);
+	    this.on('resize',this.reanchorLog,this);
     },
 
 
@@ -133,11 +137,30 @@ Ext.define('NextThought.view.chat.View', {
         //make main error field show up
         box.el.down('.error-desc').update(errorText);
         box.show();
+
+		this.reanchorLog();
 	},
 
 
 	clearError: function(){
-		var box = this.down('[name=error]');
+		var box = this.down('[name=error]'),
+			log = this.down('chat-log-view');
+		log.anchor = log.initialConfig.anchor;
 		box.hide();
+	},
+
+
+	reanchorLog: function(){
+		var log = this.down('chat-log-view'),
+			foot = 0;
+
+		this.items.each(function(cmp){
+			if(cmp !== log){
+				foot += cmp.getHeight();
+			}
+		});
+
+		log.anchor = '0 '+(-1*foot);
+		this.updateLayout();
 	}
 });

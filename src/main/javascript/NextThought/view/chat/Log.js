@@ -2,6 +2,7 @@ Ext.define('NextThought.view.chat.Log', {
 	extend:'Ext.container.Container',
 	alias: 'widget.chat-log-view',
 	requires: [
+		'NextThought.model.MessageInfo',
 		'NextThought.view.chat.log.Entry',
 		'NextThought.view.chat.log.NotificationEntry',
 		'NextThought.view.chat.log.Moderated',
@@ -11,8 +12,12 @@ Ext.define('NextThought.view.chat.Log', {
 	],
 
 	cls: 'chat-log-view',
-	autoScroll: true,
-	layout: 'anchor',
+	overflowX: 'hidden',
+	overflowY: 'auto',
+	layout: {
+		type:'auto',
+		reserveScrollbar: false
+	},
 	defaults: {border: false},
 
 
@@ -27,7 +32,6 @@ Ext.define('NextThought.view.chat.Log', {
 		this.moderated = !!this.moderated;
 		if(this.moderated){
 		   this.entryType+='-moderated';
-		   //todo - add docked item to bottom
 
 		   this.tools = [
 						{
@@ -145,7 +149,8 @@ Ext.define('NextThought.view.chat.Log', {
 		var id = msg.getId(),
 			rid = msg.get('inReplyTo'),
 			m = id ? this.down(this.getMessageQuery(id)) : null,
-			mStat = msg.get('Status');
+			mStat = msg.get('Status'),
+			o;
 		if (!id){console.warn('This message has no NTIID, cannot be targeted!', msg);}
 
 		if (m){
@@ -162,7 +167,7 @@ Ext.define('NextThought.view.chat.Log', {
 				//create place holder, reassign m the ref to place holder
 				m = this.add({
 					xtype: this.entryType,
-					message: Ext.create('NextThought.model.MessageInfo'),
+					message: new NextThought.model.MessageInfo(),
 					messageId: IdCache.getIdentifier(rid)
 				});
 			}
@@ -174,7 +179,7 @@ Ext.define('NextThought.view.chat.Log', {
 		}
 
 		//we are going to add then scroll to
-		var o = m.add({
+		o = m.add({
 						xtype: this.entryType,
 						message: msg,
 						messageId: IdCache.getIdentifier(msg.getId())
@@ -202,7 +207,7 @@ Ext.define('NextThought.view.chat.Log', {
 	scroll: function(entry) {
 		var input = entry.nextSibling('chat-reply-to');
 
-		entry = input? input : entry;
+		entry = input || entry;
 
 		if (entry.el){
 			entry.el.scrollIntoView(this.el.first('.x-panel-body'));
