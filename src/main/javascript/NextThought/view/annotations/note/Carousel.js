@@ -23,8 +23,8 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 				cls: 'carousel-body',
 				cn:'{%this.renderContainer(out,values)%}'
 			},
-			{ cls: 'slide-nav backward', cn:[{cls: 'slide backward'}], title: 'Slide left' },
-			{ cls: 'slide-nav forward', cn:[{cls: 'slide forward'}], title: 'Slide right'}
+			{ cls: 'slide-nav backward', cn:[{cls: 'slide backward'}], 'data-qtip': 'Slide left' },
+			{ cls: 'slide-nav forward', cn:[{cls: 'slide forward'}], 'data-qtip': 'Slide right'}
 		]),
 
 	navTpl: Ext.DomHelper.createTemplate({
@@ -238,10 +238,10 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 
 	maybeShowToolTip: function(el, show, tip){
 		if(!show){
-			el.dom.removeAttribute('title');
+			el.dom.removeAttribute('data-qtip');
 		}
 		else{
-			el.dom.setAttribute('title', tip);
+			el.dom.setAttribute('data-qtip', tip);
 		}
 	},
 

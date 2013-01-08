@@ -10,7 +10,7 @@ Ext.define('NextThought.view.chat.Entry', {
 		{
 			cn:[
 				{
-					cls:'add-whiteboard', title:'Create a whiteboard'
+					cls:'add-whiteboard', 'data-qtip':'Create a whiteboard'
 				},
 				{
 					cn:[

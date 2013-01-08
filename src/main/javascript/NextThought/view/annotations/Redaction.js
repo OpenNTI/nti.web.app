@@ -307,9 +307,9 @@ Ext.define('NextThought.view.annotations.Redaction', {
 	tpl = {tag:'span', 'data-non-anchorable': 'true', 'data-no-anchors-within': 'true', cls: 'redactionAction {style}', cn: [
 					{tag: 'span', 'data-non-anchorable':'true', cls: 'editableSpan', html: '{replacementContent}'},
 					{tag: 'span', 'data-non-anchorable':'true', cls: 'controls', cn:[
-						{tag: 'span', 'data-non-anchorable':'true', cls: 'edit', title: 'edit'},
-						{tag: 'span', 'data-non-anchorable':'true', cls: 'share', title: 'share'},
-						{tag: 'span', 'data-non-anchorable':'true', cls: 'delete', title: 'delete'}
+						{tag: 'span', 'data-non-anchorable':'true', cls: 'edit', 'data-qtip': 'edit'},
+						{tag: 'span', 'data-non-anchorable':'true', cls: 'share', 'data-qtip': 'share'},
+						{tag: 'span', 'data-non-anchorable':'true', cls: 'delete', 'data-qtip': 'delete'}
 					]}
 				]};
 

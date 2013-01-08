@@ -11,7 +11,7 @@ Ext.define('NextThought.view.content.reader.Content',{
 		cn:[{
 			tag: 'a',
 			href:'#zoom',
-			title:'Enlarge',
+			'data-qtip':'Enlarge',
 			cls: 'zoom disabled',
 			html: ' '
 		}]
@@ -23,7 +23,7 @@ Ext.define('NextThought.view.content.reader.Content',{
 		cn: [{
 			tag: 'a',
 			href:'#slide',
-			title:'Open Slides',
+			'data-qtip':'Open Slides',
 			cls: 'bar-cell slide',
 			html: ' '
 		},{
@@ -47,7 +47,7 @@ Ext.define('NextThought.view.content.reader.Content',{
 			},{
 				tag: 'a',
 				href:'#mark',
-				title:'Comment on this',
+				'data-qtip':'Comment on this',
 				cls: 'mark',
 				html: 'Comment'
 			}]

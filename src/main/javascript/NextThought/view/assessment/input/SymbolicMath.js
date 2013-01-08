@@ -14,11 +14,11 @@ Ext.define('NextThought.view.assessment.input.SymbolicMath',{
 	spanTpl: Ext.DomHelper.createTemplate({tag: 'span', cls: 'tabable'}).compile(),
 
 	toolbarTpl: Ext.DomHelper.markup([
-		{ cls: 'mathsymbol sqrt', 'data-latex': '\\\\surd', title: 'Insert square root' },
-		{ cls: 'mathsymbol square', 'data-latex': 'x^2', title: 'Insert squared' },
-		{ cls: 'mathsymbol parens', 'data-latex': '(x)', title: 'Insert parentheses'},
-		{ cls: 'mathsymbol approx', 'data-latex': '\\\\approx', title: 'Insert approximately' },
-		{ cls: 'mathsymbol pi', 'data-latex': '\\\\pi', title: 'Insert pi' }
+		{ cls: 'mathsymbol sqrt', 'data-latex': '\\\\surd', 'data-qtip': 'Insert square root' },
+		{ cls: 'mathsymbol square', 'data-latex': 'x^2', 'data-qtip': 'Insert squared' },
+		{ cls: 'mathsymbol parens', 'data-latex': '(x)', 'data-qtip': 'Insert parentheses'},
+		{ cls: 'mathsymbol approx', 'data-latex': '\\\\approx', 'data-qtip': 'Insert approximately' },
+		{ cls: 'mathsymbol pi', 'data-latex': '\\\\pi', 'data-qtip': 'Insert pi' }
 	]),
 
 

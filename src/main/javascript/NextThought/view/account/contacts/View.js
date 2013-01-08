@@ -25,7 +25,7 @@ Ext.define('NextThought.view.account.contacts.View',{
 	},
 
 	items: [
-		{xtype: 'box', cls: 'view-title', autoEl: {html: 'Contacts',cn:[{cls: 'search', title: 'Search for contacts'}]}},
+		{xtype: 'box', cls: 'view-title', autoEl: {html: 'Contacts',cn:[{cls: 'search', 'data-qtip': 'Search for contacts'}]}},
 		{
 			xtype: 'container',
 			layout: 'card',
@@ -177,13 +177,7 @@ Ext.define('NextThought.view.account.contacts.View',{
 			this.mon(el,'click',this.toggleSearch,this);
 		}
 
-		Ext.QuickTips.register({
-			target: this.searchBtn.id,
-			text: this.searchBtn.getAndRemoveAttr('title')
-		});
-
         this.mon(this.el.down('.resend-consent'), 'click', this.resendClicked, this);
-
 	},
 
 

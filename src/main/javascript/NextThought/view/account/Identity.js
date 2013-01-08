@@ -11,7 +11,7 @@ Ext.define('NextThought.view.account.Identity',{
 
 	renderTpl: Ext.DomHelper.markup([
 		{ tag: 'img', src: '{avatarURL}', cls: 'avatar'},
-        { tag: 'div', cls: 'menu', title: 'Settings'},
+        { tag: 'div', cls: 'menu', 'data-qtip': 'Settings'},
 		{
 			cls: 'wrap',
 			cn: [{
@@ -57,11 +57,6 @@ Ext.define('NextThought.view.account.Identity',{
         me.callParent(arguments);
         me.mon(me.menuBtn, 'click', function(){
             me.menu.showBy(me.menuBtn);
-        });
-
-	    Ext.QuickTips.register({
-            target: me.menuBtn.id,
-            text: me.menuBtn.getAndRemoveAttr('title')
         });
     }
 });

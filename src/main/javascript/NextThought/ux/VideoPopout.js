@@ -146,7 +146,7 @@ Ext.define('NextThought.ux.VideoPopout',{
 	afterRender: function(){
 		this.callParent(arguments);
 
-		this.mon( Ext.DomHelper.append(this.el, { cls:'close', title: 'close' }, true),{
+		this.mon( Ext.DomHelper.append(this.el, { cls:'close', 'data-qtip': 'close' }, true),{
 			scope: this,
 			click: this.close
 		});

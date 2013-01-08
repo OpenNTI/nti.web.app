@@ -10,10 +10,12 @@ Ext.define('NextThought.view.annotations.note.Templates',{
 					cls: 'toolbar',
 					cn: [{
 						cls: 'left',
-						cn: [{cls: 'action bold', title: 'Bold'},{cls:'action italic', title: 'Italic'},{cls:'action underline', title: 'Underline'}]
+						cn: [{cls: 'action bold', 'data-qtip': 'Bold'},
+							{cls:'action italic', 'data-qtip': 'Italic'},
+							{cls:'action underline', 'data-qtip': 'Underline'}]
 					},{
 						cls: 'right',
-						cn: [{cls: 'action share', html: 'Only Me', title: 'Shared with'}]
+						cn: [{cls: 'action share', html: 'Only Me', 'data-qtip': 'Shared with'}]
 					}]
 				},{
 					cls: 'content',
@@ -28,7 +30,7 @@ Ext.define('NextThought.view.annotations.note.Templates',{
 				cls: 'footer',
 				cn: [{
 					cls: 'left',
-					cn: [{cls: 'action whiteboard', title: 'Create a whiteboard'}]
+					cn: [{cls: 'action whiteboard', 'data-qtip': 'Create a whiteboard'}]
 				},{
 					cls: 'right',
 					cn: [{cls:'action save', html: 'Save'},{cls:'action cancel', html: 'Cancel'}]
@@ -44,7 +46,7 @@ Ext.define('NextThought.view.annotations.note.Templates',{
 			cn: [
 				{ cls: 'reply', html: 'Reply' },
 				{ cls: 'share', html: 'Share' },
-				{ cls: 'more', title: 'Options', html: '&nbsp;'}
+				{ cls: 'more', 'data-qtip': 'Options', html: '&nbsp;'}
 			]
 		};
 	},

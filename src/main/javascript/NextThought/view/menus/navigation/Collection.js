@@ -20,7 +20,7 @@ Ext.define('NextThought.view.menus.navigation.Collection',{
 		]},
 
 		{ tag: 'tpl', 'for':'items', cn: [
-			{ cls: 'stratum item', title: '{title}', cn:[
+			{ cls: 'stratum item', 'data-qtip': '{title}', cn:[
 				{ tag:'img', src: Ext.BLANK_IMAGE_URL, cls:'bookcover', style: {
 					backgroundImage: 'url({icon})'
 				}},
