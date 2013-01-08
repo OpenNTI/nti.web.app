@@ -363,15 +363,21 @@
 
 	//Sometimes footnotes are redacted, this will hide the actual footnote when that is the case
 	li.footnote.redacted {
-		//This will hide a footnote associated with a redacted chunk of content.  Turning off until Aaron approves a design.
 		span, a {
+			//visibility: hidden;
+			//background-color: yellow;
+			//overflow: hidden;
+			//height: 0;
+			//width: 0;
 			display: none;
 		}
-		&::after{
-			content: 'This content has been redacted.';
-			color: $tertiary_grey;
-			text-decoration: line-through;
-		}
+		//This explodes in IE.  It seems to not like the after psuedo element
+		//following a bunch of stuff that has display none
+		//&::after{
+		//	content: 'This content has been redacted.';
+		//	color: $tertiary_grey;
+		//	text-decoration: line-through;
+		//}
 	}
 
 
@@ -399,7 +405,9 @@
 		}
 
 		&.redacted .redactionAction{
-			.controls{display: none;}
+			.controls{
+				display: none;
+			}
 			span.editableSpan{ border-right-width: 1px; }
 		}
 	}
