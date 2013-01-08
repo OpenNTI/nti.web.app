@@ -19,7 +19,7 @@ Ext.define('NextThought.controller.Application', {
 			Globals.removeLoaderSplash();
 
 			//We were doing the flash check just for IE.  But it seems like we need
-			//it everywhere b/c apperantly we can't force the youtube video api to use flash
+			//it everywhere b/c apperantly we can't force the youtube video api to use html5,
 			//only suggest it.  TODO it would be nice if we didn't have to do this upfront, it
 			//may be a deterent.  Rather do it when we actually need flash (show it when a content page has a video,
 			//when the slide view is launched, etc..  Still this is better than
