@@ -387,7 +387,9 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 
 		var me = this, wbWin, content;
 
-		guid = guid||guidGenerator();
+		if(typeof(guid) !== 'string'){
+			guid = guidGenerator();
+		}
 		if(this.openWhiteboards[guid]){
 			return;
 		}
@@ -556,7 +558,7 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 				c.appendChild(d);
 			}
 			else {
-				me.addWhiteboard(part, c);
+				me.addWhiteboard(part);
 			}
 		});
 	},
