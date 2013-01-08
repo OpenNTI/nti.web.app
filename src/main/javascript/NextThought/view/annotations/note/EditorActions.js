@@ -112,6 +112,7 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 	deactivate: function () {
 		this.editor.removeCls('active');
 		this.lastRange = null;
+		this.cleanOpenWindows();
 	},
 
 

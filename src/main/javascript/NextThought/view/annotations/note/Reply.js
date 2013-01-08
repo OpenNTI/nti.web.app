@@ -190,6 +190,7 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 				console.warn('editor already deactivated?');
 			}
 			this.replyBox.removeCls('editor-active');
+			this.el.select('.whiteboard-container .checkbox').removeCls('checked');
 			this.editorActions.deactivate();
 			this.editorActions.setValue('');
 		}
