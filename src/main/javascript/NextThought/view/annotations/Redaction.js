@@ -263,8 +263,9 @@ Ext.define('NextThought.view.annotations.Redaction', {
 
 
 	toggleRedaction: function(e){
-		var closingRedaction = !this.compElements.first().hasCls(this.cls),
+		var redactionCollapsed = !this.compElements.first().hasCls(this.cls),
 			me = this;
+
 		//toggle redaction on generated spans:
 		this.compElements.toggleCls(this.cls);
 
@@ -283,22 +284,19 @@ Ext.define('NextThought.view.annotations.Redaction', {
 
 		//If there are any innerFootnotes we need to toggle them also
         if (this.innerFootnotes){
-			this.innerFootnotes.toggleCls(this.cls);
-			this.innerFootnotes.toggleCls('footnote');
 			this.innerFootnotes.each(function(footnote){
 				var redactedText = footnote.down('.redacted-text'),
-					count = redactedText ? redactedText.getAttribute('redactedCount') : undefined;
-				count = count !== undefined ? parseInt(count, 10) : undefined;
-				if(redactedText && count !== undefined){
+					count = footnote ? footnote.getAttribute('data-redactedCount') : undefined,
+					clsMnpFn;
+				count = Ext.isEmpty(count) ? 0 : parseInt(count, 10);
+				count = Ext.isNumber(count) ? count : 0;
+				if(footnote && count !== undefined){
 					//adjust the count
-					count += (closingRedaction ? 1 : -1);
-					redactedText.set({redactedCount: count});
-					if(count > 0){
-						redactedText.addCls('shown');
-					}
-					else{
-						redactedText.removeCls('shown');
-					}
+					count += (redactionCollapsed ? 1 : -1);
+					footnote.set({'data-redactedCount': count}); //TODO Should we just set a js prop on the dom node?
+					clsMnpFn = count > 0 ? 'addCls' : 'removeCls';
+					footnote[clsMnpFn]('footnote');
+					footnote[clsMnpFn](me.cls);
 				}
 			});
         }
@@ -353,7 +351,9 @@ Ext.define('NextThought.view.annotations.Redaction', {
 		{tag: 'span',
 		 cls: 'redacted-text',
 		 html: 'This content has been redacted.',
-		 redactedCount: '0'}
+		 'data-non-anchorable': 'true',
+		 'data-no-anchors-within': 'true'
+		}
 	]));
 
 });

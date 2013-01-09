@@ -212,6 +212,12 @@ Ext.define('NextThought.view.content.reader.IFrame',{
                     }
                 );
 
+				//Strip out the redacted text.  Note we look based on class
+				//here which is failry tightly coupled to annotations/Redaction.js/
+				//TODO for things like this key off some generic data-nti-injected-element
+				//attribute
+				Ext.fly(clonedFn).down('.redacted-text').remove();
+
                 return clonedFn;
             }
 
