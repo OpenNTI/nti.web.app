@@ -283,22 +283,27 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 
 	render: function(prefix){
 		var me = this, containers = {}, renderedCount = 0,
-		cleanContent, rootContainerId;
+			cleanContent, rootContainerId,
+			cloned, descs = [], cids = [], doc = null;
 
 		if(me.rendering){
 			console.warn('Render called while rendering...');
-			me.events.on('finish',me.render,me,{single:true});
+			me.events.on('finish',Ext.bind(me.render,me,arguments),me,{single:true});
 			return;
 		}
 		if (this.rendererSuspended[prefix]) {
 			return;
 		}
 		if(!me.gutter[prefix]){
-			console.warn('no gutter');
+			console.error('no gutter');
+			me.events.fireEvent('rendering');
+			me.events.fireEvent('finish');
 			return;
 		}
 
 		if(!me.registry[prefix]){
+			me.events.fireEvent('rendering');
+			me.events.fireEvent('finish');
 			return;//nothing to do
 		}
 
@@ -319,11 +324,10 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 
 		me.clearBuckets(prefix);
 
-		var cloned = Ext.Array.clone(me.registry[prefix]);
-		var descs = [], cids = [], doc = null;
+		cloned = Ext.Array.clone(me.registry[prefix]);
 		Ext.each(cloned, function(o){
-			var desc = o.getRecordField ? o.getRecordField('applicableRange') : null;
-			var cid = o.getRecordField ? o.getRecordField('ContainerId') : null;
+			var desc = o.getRecordField ? o.getRecordField('applicableRange') : null,
+				cid = o.getRecordField ? o.getRecordField('ContainerId') : null;
 			if(o.doc){doc = o.doc;}
 			descs.push(desc);
 			cids.push(cid);
@@ -398,13 +402,10 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 		fn = this.render,
 		timerId = {};
 
-	this.render = (function() {
-		return function(prefix) {
-			if (timerId[prefix]) {
-				clearTimeout(timerId[prefix]);
-			}
-			timerId[prefix] = setTimeout(function(){ fn.call(me, prefix); }, 100);
-		};
-
-	}());
+	this.render = function(prefix) {
+		if (timerId[prefix]) {
+			clearTimeout(timerId[prefix]);
+		}
+		timerId[prefix] = setTimeout(function(){ fn.call(me, prefix); }, 100);
+	};
 });

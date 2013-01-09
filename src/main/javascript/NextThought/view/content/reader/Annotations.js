@@ -26,7 +26,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 			searchAnnotations: null
 		});
 
-		me.addEvents('share-with','create-note');
+		me.addEvents('share-with','create-note','should-be-ready');
 
 		this.mon(c.UserData.events,{
 			scope: this,
@@ -42,7 +42,27 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 			afterRender: me.insertAnnotationGutter
 		});
 
+		me.mon(AnnotationsRenderer.events,'finish',me.fireReady,me,{buffer: 500});
+
 		return this;
+	},
+
+
+	primeReadyEvent: function(){
+		this.readyEventPrimed = true;
+	},
+
+	fireReady: function(){
+		if(this.navigating){
+			console.warn('fired ready while navigating');
+			return;
+		}
+
+		if(!this.readyEventPrimed){return;}
+
+		delete this.readyEventPrimed;
+		console.warn('should-be-ready fired');
+		this.fireEvent('should-be-ready',this);
 	},
 
 

@@ -191,6 +191,7 @@ Ext.define('NextThought.view.content.Reader', {
 			this.relayout();
 		}
 
+		this.navigating = true;
 		return true;
 	},
 
@@ -198,6 +199,7 @@ Ext.define('NextThought.view.content.Reader', {
     onNavigationAborted: function() {
         this.setSplash();
         this.relayout();
+	    delete this.navigating;
     },
 
 
@@ -206,6 +208,8 @@ Ext.define('NextThought.view.content.Reader', {
 			proxy = ($AppConfig.server.jsonp) ? JSONP : Ext.Ajax;
 
 		function success(resp){
+			delete me.navigating;
+			me.primeReadyEvent();
 			me.splash.hide();
 			me.setContent(resp, pageInfo.get('AssessmentItems'), finish, hasCallback);
 		}
@@ -243,8 +247,9 @@ Ext.define('NextThought.view.content.Reader', {
 				scope: this,
 				success: success,
 				failure: function(r) {
-					console.log('server-side failure with status code ' + r.status+': Message: '+ r.responseText);
+					console.log('server-side failure with status code ' + r.status+'. Message: '+ r.responseText);
 					me.splash.hide();
+					me.onNavigationAborted();
 				}
 			});
 		}
