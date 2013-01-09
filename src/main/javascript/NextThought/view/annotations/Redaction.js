@@ -293,7 +293,7 @@ Ext.define('NextThought.view.annotations.Redaction', {
 				if(footnote && count !== undefined){
 					//adjust the count
 					count += (redactionCollapsed ? 1 : -1);
-					footnote.set({'data-redactedCount': count}); //TODO Should we just set a js prop on the dom node?
+					footnote.set({'data-redactedCount': count});
 					clsMnpFn = count > 0 ? 'addCls' : 'removeCls';
 					footnote[clsMnpFn]('footnote');
 					footnote[clsMnpFn](me.cls);
