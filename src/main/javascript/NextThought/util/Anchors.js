@@ -197,6 +197,7 @@ Ext.define('NextThought.util.Anchors', {
 		return resultRange;
 	},
 
+	/*tested*/
 	scopedContainerNode: function(fragOrNode, containerId, rootId){
 		var searchWithin,
 			node = fragOrNode.body ? fragOrNode.body : fragOrNode;
@@ -205,7 +206,7 @@ Ext.define('NextThought.util.Anchors', {
 			searchWithin = node;
 		}
 		else{
-			searchWithin = Anchors.getContainerNode(containerId, node, rootId === containerId ? node : null);
+			searchWithin = (rootId !== containerId) ? Anchors.getContainerNode(containerId, node, null) : node;
 		}
 
 		return searchWithin;

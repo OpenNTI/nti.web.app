@@ -2100,4 +2100,93 @@ describe("Anchor Utils", function() {
 			expect(recreatedRange.commonAncestorContainer).toBe(range.commonAncestorContainer);
 		});
 	});
+
+	describe('scopeContainerId', function(){
+		it('searches within the body when rootId and containerId are equal.', function(){
+			var mainNode = document.createElement('div'),
+				pageContent = document.createElement('div'),
+				footNotesContent = document.createElement('div'),
+				footnotes = document.createElement('ol'),
+				rootId, head, meta, searchWithin,
+				containerId = 'tag:nextthought.com,2011-10:Columbia-HTML-Great_Leader_Essays.biography.4';
+
+			//Setup the page ntiid meta tag.
+			expect(Anchors.rootContainerIdFromDocument(document)).toBeFalsy();
+			head = document.getElementsByTagName('head')[0];
+			meta = document.createElement('meta');
+			meta.setAttribute('name', 'NTIID');
+			meta.setAttribute('content', containerId);
+			head.appendChild(meta);
+
+			//Check to see if the rootId is equal to the containerId
+			rootId = Anchors.rootContainerIdFromDocument(document);
+			expect(rootId).toBeTruthy();
+			expect(rootId).toEqual(containerId);
+
+
+			//Build the page content
+			mainNode.setAttribute('id', 'nti-content');
+			pageContent.setAttribute('data-ntiid', containerId);
+			pageContent.setAttribute('Id', 'a0000000050');
+			footNotesContent.setAttribute('Id','footnotes');
+
+			footNotesContent.appendChild(footnotes);
+			mainNode.appendChild(pageContent);
+			mainNode.appendChild(footNotesContent);
+			testBody.appendChild(mainNode);
+
+			//Check the scope container.
+			searchWithin = Anchors.scopedContainerNode( testBody, containerId, rootId);
+			expect(searchWithin).not.toBe(pageContent);
+			expect(searchWithin).toBe(testBody);
+
+		});
+
+		it('searches within the fragment node when the containerId is not provided', function(){
+			var mainNode = document.createElement('div'),
+				pageContent = document.createElement('div'),
+				rootId, searchWithin;
+
+			//We expect the rootId to valid because the ntiid
+			expect(Anchors.rootContainerIdFromDocument(document)).toBeTruthy();
+			rootId = Anchors.rootContainerIdFromDocument(document);
+
+			//Build the page content
+			mainNode.setAttribute('id', 'nti-content');
+			pageContent.setAttribute('Id', 'a0000000050');
+			pageContent.setAttribute('data-ntiid', 'foobar');
+
+			mainNode.appendChild(pageContent);
+			testBody.appendChild(mainNode);
+
+			//Check the scope container.
+			searchWithin = Anchors.scopedContainerNode( pageContent, null, rootId);
+			expect(searchWithin).not.toBe(testBody);
+			expect(searchWithin).toBe(pageContent);
+		});
+
+		it('looks for the containerNode when the containerId and rootId are different', function(){
+			var mainNode = document.createElement('div'),
+				pageContent = document.createElement('div'),
+				rootId, searchWithin, containerId = "tag:nextthought.com,2011-10:Columbia-HTML-Great_Leader_Essays.biography.3";
+
+			//Check to see if the rootId is equal to the containerId
+			rootId = Anchors.rootContainerIdFromDocument(document);
+
+			//Build the page content
+			mainNode.setAttribute('id', 'nti-content');
+			pageContent.setAttribute('Id', 'a0000000050');
+			pageContent.setAttribute('data-ntiid', "tag:nextthought.com,2011-10:Columbia-HTML-Great_Leader_Essays.biography.3");
+
+			mainNode.appendChild(pageContent);
+			testBody.appendChild(mainNode);
+
+			//Check the scope container.
+			// TODO: test not done. can't the searchWithin var is null, needs to do better setup.
+			searchWithin = Anchors.scopedContainerNode( pageContent, containerId, rootId);
+			expect(searchWithin).not.toBe(testBody);
+			expect(searchWithin).not.toBe(pageContent);
+			expect(searchWithin).toBeNull();
+		});
+	});
 });
