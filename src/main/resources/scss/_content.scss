@@ -28,6 +28,16 @@
 		bottom: -20px;
 		left: 160px;
 	}
+
+	&.right::after{
+		right: 26px;
+		left: auto;
+	}
+
+	&.left::after{
+		left: 26px;
+		right: auto;
+	}
 }
 
 .x-toolbar-content {

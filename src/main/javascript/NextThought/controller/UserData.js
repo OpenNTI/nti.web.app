@@ -443,21 +443,39 @@ Ext.define('NextThought.controller.UserData', {
             me=this;
 
         function adjustPosition(position){
+			var horizontalSpaceNeeded = me.footnoteWidget.getWidth()/2;
+
+			//adjust position depending on whether it should be shown on top or bottom
             if ((position[1] -offsets.scrollTop) < me.footnoteWidget.getHeight()) {
                 //bottom
-                position[0] = position[0] + offsets.gutter + 80;
-                position[0] = position[0] - (me.footnoteWidget.width/2);
                 position[1] = position[1] + offsets.top + 30;
                 me.footnoteWidget.addCls('top');
             }
             else{
                 //top
-                position[0] = position[0] + offsets.gutter + 80;
-                position[0] = position[0] - (me.footnoteWidget.width/2);
                 position[1] = position[1] + offsets.top;
                 position[1] = position[1] - me.footnoteWidget.getHeight() - 20;
                 me.footnoteWidget.addCls('bottom');
             }
+
+			//adjust position for left and right.  If we can be centered above it
+			//we allow that, otherwise we move the bubble left and right
+			if(position[0] + horizontalSpaceNeeded > offsets.width){
+				//the bubble needs to shift left, marker on the right
+				position[0] = position[0] - (horizontalSpaceNeeded * 2) + 20;
+				me.footnoteWidget.addCls('right');
+			}
+			else if(position[0] - horizontalSpaceNeeded < 0){
+				//bubble needs to shift right, arrow on left
+				position[0] = position[0] - 66;
+				me.footnoteWidget.addCls('left');
+			}
+			else{
+				//centered
+				position[0] = position[0] - (me.footnoteWidget.width/2);
+			}
+			position[0] = position[0] + offsets.gutter + 80;
+
             return position;
         }
 
