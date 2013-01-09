@@ -62,7 +62,6 @@
 
 			&.mark {
 				position: relative;
-				overflow: hidden;
 				width: 90px;
 				height: 19px;
 				line-height: 19px;
@@ -320,7 +319,7 @@
 	[itemprop~="nti-data-markupenabled"],
 	[itemprop~="nti-slide-video"]{
 		display: inline-block;
-		overflow: hidden;
+		//overflow: hidden;
 		position: relative;
 		border: 1px solid #dadada;
 		border-radius: 3px;

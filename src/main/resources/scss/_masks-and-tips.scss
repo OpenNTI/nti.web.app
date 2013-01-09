@@ -144,6 +144,41 @@
 	}
 }
 
+//#NTIContent *[data-qtip]:hover{
+//	position: relative;
+//	overflow: visible;
+//
+//	&::after {
+//		content: url(../images/elements/tooltip-pointer-black-bottom.png) !important;
+//		position: absolute !important;
+//		overflow: hidden !important;
+//		background: none !important;
+//		top: -7px !important;
+//		left: 50% !important;
+//	}
+//
+//	&::before{
+//		content: attr(data-qtip);
+//		display: block;
+//		position: absolute;
+//		overflow: hidden;
+//		pointer-events: none;
+//		background-color: #404040;
+//		border-width: 0;
+//		padding: 3px 5px;
+//		border-radius: 0;
+//		box-shadow: 1px 2px 5px 0px rgba(0, 0, 0, 0.25);
+//		text-transform: uppercase;
+//		color: #ffffff;
+//		font-size: 11px;
+//		font-weight: 600;
+//		top: -30px;
+//		white-space: nowrap;
+//		line-height: 20px;
+//		z-index: 9999;
+//	}
+//}
+
 .dark .x-mask {
 	background: rgba(0,0,0,0.9) !important;
 }
