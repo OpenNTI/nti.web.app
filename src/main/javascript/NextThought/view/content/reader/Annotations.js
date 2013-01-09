@@ -137,7 +137,9 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 				cmp.onDelete();
 			}
 			else {
-				cmp.getRecord().fireEvent('changed');
+				if(cmp.getRecord){
+					cmp.getRecord().fireEvent('changed');
+				}
 			}
 		});
 
