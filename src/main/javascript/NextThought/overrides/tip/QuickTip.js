@@ -16,9 +16,32 @@ Ext.define('NextThought.overrides.tip.QuickTip',{
 			showDelay: 500,
 			anchorTarget: true,
 			trackMouse: false,
-			shadow:false
+			shadow:false,
+			xhooks: {
+				getTargetXY: function(){
+					var me = this,
+						o = me.readerOffsets,
+						r = me.callParent(arguments);
+
+					if(o){
+						r[0] += o.left;
+						r[1] += o.top;
+					}
+
+					return r;
+				}
+			}
 		});
 		return this.callParent([config]);
+	},
+
+
+	onTargetOver: function(e,dom,opts){
+		delete this.readerOffsets;
+		if(opts.reader){
+			this.readerOffsets = opts.reader.getAnnotationOffsets();
+		}
+		return this.callParent(arguments);
 	},
 
 	//Override alignment and force the 'target' element to be the element with the title/tip attribute if not the
@@ -42,9 +65,7 @@ Ext.define('NextThought.overrides.tip.QuickTip',{
 		this.anchorTarget = Ext.getDom( getTarget(this.activeTarget.el) );
 		this.anchor = 'bottom';
 
-		var doc = Ext.getDom(this.anchorTarget).ownerDocument,
-			vW = ((!Ext.isStrict && !Ext.isOpera) ? doc.body.clientWidth :
-		                   !Ext.isIE ? doc.documentElement.clientWidth : doc.parentWindow.innerWidth),
+		var vW = Ext.dom.Element.getViewportWidth(),
 			w = this.el.getWidth(),
 			r = this.callParent(arguments);
 

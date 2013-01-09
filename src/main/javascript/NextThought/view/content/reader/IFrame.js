@@ -91,11 +91,8 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 		var me = this,
 			base = location.pathname.toString().replace('index.html',''),
 			doc = me.getDocumentElement(),
-			con = console,
+			con = console, tip,
 			meta, g = Globals;
-
-		//Hack...
-		Ext.util.Cookies.set('PREF', 'f2=40000000', Ext.Date.add(new Date(),'mo',1),'/','.youtube.com');
 
 
 		function on(dom,event,fn){
@@ -140,6 +137,14 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 			return true;
 		});
 
+		tip = Ext.tip.QuickTipManager.getQuickTip();
+		tip.mon(Ext.fly(doc.body,'__reader_body_'+me.prefix), {
+            mouseover: tip.onTargetOver,
+            mouseout: tip.onTargetOut,
+            mousemove: tip.onMouseMove,
+            scope: tip,
+			reader: me
+        });
 
 		on(doc,'mousedown',function(){ Ext.menu.Manager.hideAll(); });
 		on(doc,'contextmenu',function(e){
