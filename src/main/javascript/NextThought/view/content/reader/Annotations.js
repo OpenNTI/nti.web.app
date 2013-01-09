@@ -128,7 +128,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 			result = this.createAnnotationWidget(cls,item) || false;
 
 			if(result === false){
-				console.error('ERROR: Do not know what to do with this item',item);
+				console.info('Do not know what to do with this item. Not top level object?',item);
 			}
 		}
 	},
