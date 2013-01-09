@@ -73,31 +73,36 @@ Ext.define('NextThought.controller.Navigation', {
 		}
 
 
-
 		return function(reader) {
 			reader = (reader||ReaderPanel.get());
 			var id = findExisting(reader.prefix),
 				service = $AppConfig.service;
 
-
-
 			function loaded(object){
                 var c = object.get('ContainerId'),
                     inReplyTo = object.get('inReplyTo'),
-                    s = LocationProvider.getStore(c).hasOwnProperty('data'),
                     ref,
 		            scrollToReplyId;
 
                 function afterLoadedAgain(object){
-                    if(!s){
-                        console.warn('\n\n\n\n\n\n\nNo Store for: '+c+'\n\n\n\n\n\n');
-                    }
-
 	                if( (object.get('MimeType').split('.') || []).pop() === "note" ){
 		                Ext.widget('note-window', { scrollToId: scrollToReplyId, annotation: {getRecord:function(){return object;}}}).show();
 	                }
 
-                    reader.scrollToContainer(c);
+	                //Lets resolve the range and try to scroll to that.
+	                var range = Anchors.toDomRange(
+			                object.get('applicableRange'),
+			                reader.getDocumentElement(),
+			                reader.getCleanContent(),
+			                c);
+
+	                if(range){
+		                console.log('Scrolling to range:',range);
+		                reader.scrollToNode(range.startContainer);
+	                }
+	                else {
+                        reader.scrollToContainer(c);
+	                }
                 }
 
                 //in cases where we are scrolling to a reply, attempt to reload here with the root.
@@ -107,9 +112,9 @@ Ext.define('NextThought.controller.Navigation', {
                     if (!ref){
                          console.warn('inReplyTo set but no references found');
                     }
-                    service.getObject(ref, afterLoadedAgain, function(){
-                        afterLoadedAgain(object);
-                        console.log('Root note unresolvable, using reply instead.');
+                    service.getObject(ref, afterLoadedAgain, function failure(){
+	                    console.log('Root note unresolvable, using reply instead.');
+	                    afterLoadedAgain(object);
                     }, me);
                 }
                 else {
@@ -122,13 +127,21 @@ Ext.define('NextThought.controller.Navigation', {
 				console.warn('failed?', arguments);
 			}
 
+			function continueLoad(){
+				service.getObject(target.last(), loaded, fail, me);
+			}
 
 			if(id){
 				localCondition(id,reader);
 				return;
 			}
 
-			service.getObject(target.last(), loaded, fail, me);
+			if(reader.needsWaitingOnReadyEvent()){
+				reader.on('should-be-ready',continueLoad,me,{single:true});
+			}
+			else {
+				continueLoad();
+			}
 		};
 	},
 

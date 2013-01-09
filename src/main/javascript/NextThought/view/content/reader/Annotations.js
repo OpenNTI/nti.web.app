@@ -52,6 +52,11 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 		this.readyEventPrimed = true;
 	},
 
+
+	needsWaitingOnReadyEvent: function(){
+		return Boolean(this.readyEventPrimed);
+	},
+
 	fireReady: function(){
 		if(this.navigating){
 			console.warn('fired ready while navigating');
