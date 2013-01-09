@@ -87,6 +87,7 @@ Ext.define('NextThought.view.annotations.Redaction', {
 
         if (!this.innerFootnotes){
             this.innerFootnotes = this.containedFootnotes();
+			this.assureRedactedFootnoteText(this.innerFootnotes);
         }
 
 		if (this.actionSpan){
@@ -262,6 +263,8 @@ Ext.define('NextThought.view.annotations.Redaction', {
 
 
 	toggleRedaction: function(e){
+		var closingRedaction = !this.compElements.first().hasCls(this.cls),
+			me = this;
 		//toggle redaction on generated spans:
 		this.compElements.toggleCls(this.cls);
 
@@ -278,16 +281,41 @@ Ext.define('NextThought.view.annotations.Redaction', {
 			e.stopEvent();
 		}
 
+		//If there are any innerFootnotes we need to toggle them also
         if (this.innerFootnotes){
-            this.innerFootnotes.toggleCls(this.cls);
-            this.innerFootnotes.toggleCls('footnote');
+			this.innerFootnotes.toggleCls(this.cls);
+			this.innerFootnotes.toggleCls('footnote');
+			this.innerFootnotes.each(function(footnote){
+				var redactedText = footnote.down('.redacted-text'),
+					count = redactedText ? redactedText.getAttribute('redactedCount') : undefined;
+				count = count !== undefined ? parseInt(count, 10) : undefined;
+				if(redactedText && count !== undefined){
+					//adjust the count
+					count += (closingRedaction ? 1 : -1);
+					redactedText.set({redactedCount: count});
+					if(count > 0){
+						redactedText.addCls('shown');
+					}
+					else{
+						redactedText.removeCls('shown');
+					}
+				}
+			});
         }
 
 
 		return false;
 	},
 
-
+	assureRedactedFootnoteText: function(footnotes){
+		var me = this;
+		footnotes.each(function(footnote){
+			var toAdd;
+			if(!footnote.down('.redacted-text')){
+				me.footnoteRedactedTpl.append(footnote);
+			}
+		});
+	},
 
     containedFootnotes: function(){
         var me = this,
@@ -321,6 +349,11 @@ Ext.define('NextThought.view.annotations.Redaction', {
 	]));
 
 
-
+	p.footnoteRedactedTpl = new Ext.XTemplate(Ext.DomHelper.markup([
+		{tag: 'span',
+		 cls: 'redacted-text',
+		 html: 'This content has been redacted.',
+		 redactedCount: '0'}
+	]));
 
 });

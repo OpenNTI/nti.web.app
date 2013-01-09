@@ -361,6 +361,17 @@
 
 	object[type$=slidevideo] .bar a.mark {display: none;}
 
+	#footnotes{
+		.redacted-text{
+			color: $tertiary_grey;
+			text-decoration: line-through;
+			display: none;
+			&.shown{
+				display: inline;
+			}
+		}
+	}
+
 	//Sometimes footnotes are redacted, this will hide the actual footnote when that is the case
 	li.footnote.redacted {
 		span, a {
