@@ -197,7 +197,7 @@ Ext.define('NextThought.view.content.reader.IFrame',{
             }
 
             function getFootnoteContent(href){
-                var fn, clonedFn;
+                var fn, clonedFn, redactedPlaceholder;
                 try{fn = d.querySelector(href);}
                 catch (e){fn = d.getElementById(href.substring(1));}
 
@@ -216,7 +216,10 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 				//here which is failry tightly coupled to annotations/Redaction.js/
 				//TODO for things like this key off some generic data-nti-injected-element
 				//attribute
-				Ext.fly(clonedFn).down('.redacted-text').remove();
+				redactedPlaceholder = Ext.fly(clonedFn).down('.redacted-text');
+				if(redactedPlaceholder){
+					redactedPlaceholder.remove();
+				}
 
                 return clonedFn;
             }
