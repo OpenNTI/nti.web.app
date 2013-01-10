@@ -63,7 +63,6 @@ Ext.define('NextThought.view.video.Roll',{
 			preserveScrollOnRefresh: true,
 			overflowX: 'auto',
 			overflowY: 'hidden',
-			height: 115,
 			store: this.store,
 			cls: 'carousel',
 			singleSelect: true,
