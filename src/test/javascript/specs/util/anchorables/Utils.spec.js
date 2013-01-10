@@ -1879,7 +1879,7 @@ describe("Anchor Utils", function() {
 			expect(recreatedRange.commonAncestorContainer).toBe(document.body);
 
 			root.setAttribute('Id', '123242354543523');
-			recreatedRange = Anchors.toDomRange(emptyDesc.description, document, document.body, '123242354543523', '123242354543523');
+			recreatedRange = Anchors.toDomRange(emptyDesc.description, document, document.body, '123242354543523', 'pagecontainer');
 			expect(recreatedRange).toBeTruthy();
 			expect(recreatedRange.commonAncestorContainer).toBe(root);
 		});
