@@ -10,7 +10,8 @@ Ext.define('NextThought.ux.SlideDeck',{
 		var root = LocationProvider.getLineage(startingNTIID).last(),
 			toc = Library.getToc(Library.getTitle(root)),
 			ids = [],
-			obj = Ext.fly(el).up('object[data-ntiid]') || {getAttribute:Ext.emptyFn},
+			mockEl = {getAttribute:Ext.emptyFn},
+			obj = Ext.fly(el).up('object[data-ntiid]') || mockEl,
 			startingSlide = obj.getAttribute('data-ntiid') || undefined,
 			startingVideo;
 
@@ -18,9 +19,8 @@ Ext.define('NextThought.ux.SlideDeck',{
 		//In that case our starting slide is the earliest slide in the video.
 		//This hueristic may be changed
 		if(!startingSlide){
-			startingVideo = Ext.fly(el).up('object[type$=slidevideo]');
-			startingVideo = startingVideo ? startingVideo.down('param[name=ntiid]') : undefined;
-			startingVideo = startingVideo.getAttribute('value');
+			obj = Ext.fly(el).findParentNode('object[type$=slidevideo]',null,false);
+			startingVideo = (Ext.DomQuery.select('param[name=ntiid]',obj)[0] || mockEl).getAttribute('value');
 		}
 
 		Ext.each(Ext.DomQuery.select('topic[ntiid]',toc),function(o){
@@ -31,20 +31,12 @@ Ext.define('NextThought.ux.SlideDeck',{
 
 		function finish(store){
 			var earliestSlide;
+
 			//If now startingSlide but we have a starting video, find the earliest starting slide for that video
 			if(!startingSlide && startingVideo){
-				store.each(function(record){
-					var video = record.get('video-id'),
-						start = record.get('video-start');
-
-					if(video && start !== undefined && video === startingVideo){
-						if(!earliestSlide || earliestSlide.get('video-start') > start){
-							earliestSlide = record;
-						}
-					}
-				});
-				console.log('Resolved video to ', earliestSlide);
-				if(earliestSlide){
+				earliestSlide = store.findRecord('video-id',startingVideo,0,false,true,true);
+				//The store is sorted by slide, so the first find is the earliest
+				if( earliestSlide ){
 					startingSlide = earliestSlide.getId();
 				}
 			}
