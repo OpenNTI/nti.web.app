@@ -1,5 +1,5 @@
 Ext.define('NextThought.view.assessment.Scoreboard',{
-	extend: 'NextThought.view.assessment.Panel',
+	extend: 'NextThought.view.content.overlay.Panel',
 	alias: 'widget.assessment-scoreboard',
 	requires: [
 		'NextThought.view.assessment.Score',
@@ -9,6 +9,7 @@ Ext.define('NextThought.view.assessment.Scoreboard',{
 	],
 
 	cls: 'scoreboard',
+	ui: 'assessment',
 
 	hidden: true,
 	layout: {

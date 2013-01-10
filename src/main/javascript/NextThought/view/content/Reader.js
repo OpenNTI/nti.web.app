@@ -8,7 +8,8 @@ Ext.define('NextThought.view.content.Reader', {
 	],
 	mixins:{
 		annotations: 'NextThought.view.content.reader.Annotations',
-		assessments: 'NextThought.view.content.reader.AssessmentOverlay',
+		assessments: 'NextThought.view.content.reader.Assessment',
+		componentOverlay: 'NextThought.view.content.reader.ComponentOverlay',
 		content: 'NextThought.view.content.reader.Content',
 		iframe: 'NextThought.view.content.reader.IFrame',
 		scroll: 'NextThought.view.content.reader.Scroll',
@@ -34,8 +35,9 @@ Ext.define('NextThought.view.content.Reader', {
 		this.mixins.iframe.constructor.apply(this,arguments);
 		this.mixins.scroll.constructor.apply(this,arguments);
 		this.mixins.annotations.constructor.apply(this,arguments);
-		this.mixins.assessments.constructor.apply(this,arguments);
+		this.mixins.componentOverlay.constructor.apply(this,arguments);
 		this.mixins.noteOverlay.constructor.apply(this,arguments);
+		this.mixins.assessments.constructor.apply(this,arguments);
 	},
 
 

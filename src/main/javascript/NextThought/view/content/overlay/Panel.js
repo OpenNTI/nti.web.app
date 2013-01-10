@@ -1,20 +1,20 @@
-Ext.define('NextThought.view.assessment.Panel',{
+Ext.define('NextThought.view.content.overlay.Panel',{
 	extend: 'Ext.panel.Panel',
-	alias: 'widget.assessment-panel',
+	alias: 'widget.overlayed-panel',
 
 	requires: ['NextThought.util.Anchors'],
 
-	placementHolderTpl: Ext.DomHelper.createTemplate({type:'application/vnd.nextthought.nascoreboard'}),
+	placementHolderTpl: Ext.DomHelper.createTemplate({type:'application/vnd.nextthought.placeholder'}),
 
 	inheritableStatics: {
 		syncPositioning : Ext.Function.createBuffered(function(){
-			Ext.each(Ext.ComponentQuery.query('assessment-panel'),function(q){ q.syncTop(); }); },10)
+			Ext.each(Ext.ComponentQuery.query('overlayed-panel'),function(q){ q.syncTop(); }); },10)
 	},
 
 	appendPlaceholder: false,
 	plain: true,
 	autoRender: true,
-	ui: 'assessment',
+	ui: 'overlayed',
 
 
 	initComponent: function(){
@@ -22,7 +22,7 @@ Ext.define('NextThought.view.assessment.Panel',{
 		if(!this.contentElement){
 			this.insertedElement = true;
 			d = this.reader.getDocumentElement().getElementsByTagName('object');
-			//TODO: ensure its a 'type=application/vnd.nextthought.naquestion'
+			//TODO: ensure its a 'type=application/vnd.nextthought.*'
 			if(this.appendPlaceholder){
 				insert = 'insertAfter';
 				ix = d.length - 1;

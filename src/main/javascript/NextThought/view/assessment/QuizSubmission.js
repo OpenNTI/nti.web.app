@@ -1,10 +1,11 @@
 Ext.define('NextThought.view.assessment.QuizSubmission',{
-	extend: 'NextThought.view.assessment.Panel',
+	extend: 'NextThought.view.content.overlay.Panel',
 	alias: 'widget.assessment-quiz-submission',
 	requires: [
 	],
 
 	cls: 'submission-panel',
+	ui: 'assessment',
 	appendPlaceholder: true,
 	hidden: true,
 

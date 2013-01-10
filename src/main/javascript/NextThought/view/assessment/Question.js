@@ -1,5 +1,5 @@
 Ext.define('NextThought.view.assessment.Question',{
-	extend: 'NextThought.view.assessment.Panel',
+	extend: 'NextThought.view.content.overlay.Panel',
 	alias: 'widget.assessment-question',
 
 	requires: [
@@ -8,6 +8,7 @@ Ext.define('NextThought.view.assessment.Question',{
 	],
 
 	cls: 'question',
+	ui: 'assessment',
 
 	dockedItems: [
 		{ dock: 'top', xtype: 'question-header'},
