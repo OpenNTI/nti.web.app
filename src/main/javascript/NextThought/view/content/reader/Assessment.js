@@ -20,14 +20,14 @@ Ext.define('NextThought.view.content.reader.Assessment', {
 		//sound like its going to happen anytime soon.
 		q.getVideos = Ext.bind(DomUtils.getVideosFromDom,q,[contentElement]);
 
-		this.activeOverlayedPanels[q.getId()] = Ext.widget('assessment-question',{
+		this.registerOverlayedPanel(q.getId(), Ext.widget('assessment-question',{
 			reader: this,
 			question: q,
 			renderTo: this.componentOverlayEl,
 			questionSet: set || null,
 			tabIndexTracker: this.overlayedPanelTabIndexer,
 			contentElement: contentElement
-		});
+		}));
 	},
 
 
@@ -37,15 +37,15 @@ Ext.define('NextThought.view.content.reader.Assessment', {
 			guid = guidGenerator(),
 			questions = set.get('questions');
 
-		me.activeOverlayedPanels[guid+'scoreboard'] = Ext.widget('assessment-scoreboard',{
+		me.registerOverlayedPanel(guid+'scoreboard', Ext.widget('assessment-scoreboard',{
 			reader: me, renderTo: c, questionSet: set,
 			tabIndexTracker: this.overlayedPanelTabIndexer
-		});
+		}));
 
-		me.activeOverlayedPanels[guid+'submission'] = Ext.widget('assessment-quiz-submission',{
+		me.registerOverlayedPanel(guid+'submission', Ext.widget('assessment-quiz-submission',{
 			reader: me, renderTo: c, questionSet: set,
 			tabIndexTracker: this.overlayedPanelTabIndexer
-		});
+		}));
 
 		Ext.each(questions,function(q){me.makeAssessmentQuestion(q,set);});
 

@@ -25,6 +25,25 @@ Ext.define('NextThought.view.content.reader.ComponentOverlay', {
 	},
 
 
+	/**
+	 *
+	 * @param key String|Object
+	 * @param [panel] Object
+	 */
+	registerOverlayedPanel: function(key,panel){
+
+		if(!panel && Ext.isObject(key)){
+			panel = key;
+			key = guidGenerator();
+		}
+
+		if(!Ext.isString(key) || !(Ext.isObject(panel) && panel.isComponent) ){
+			Ext.Error.raise('Bad values');
+		}
+
+		this.registerOverlayedPanel[key] = panel;
+	},
+
 	adjustOverlayedPanels: function(){
 		NextThought.view.content.overlay.Panel.syncPositioning();
 	},

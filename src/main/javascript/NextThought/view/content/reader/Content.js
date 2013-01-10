@@ -2,7 +2,8 @@ Ext.define('NextThought.view.content.reader.Content',{
 
 	requires: [
 		'NextThought.ux.ImageZoomView',
-		'NextThought.ux.SlideDeck'
+		'NextThought.ux.SlideDeck',
+		'NextThought.view.video.OverlayedPanel'
 	],
 
 
@@ -177,6 +178,23 @@ Ext.define('NextThought.view.content.reader.Content',{
 	},
 
 
+	activateVideoRoll: function(){
+		var me = this,
+			d = me.getDocumentElement(),
+			els = d.querySelectorAll('object[type$=videoroll]');
+
+		Ext.each(els,function(el){
+
+			me.registerOverlayedPanel(el.getAttribute('data-ntiid'), Ext.widget('overlay-video-roll',{
+				reader: me,
+				renderTo: me.componentOverlayEl,
+				tabIndexTracker: this.overlayedPanelTabIndexer,
+				contentElement: el
+			}));
+		});
+	},
+
+
 	activateAnnotatableItems: function(){
 		var d = this.getDocumentElement(),
 			els = d.querySelectorAll('[itemprop~=nti-data-markupenabled],[itemprop~=nti-slide-video]'),
@@ -243,7 +261,6 @@ Ext.define('NextThought.view.content.reader.Content',{
 		me.listenForImageLoads();
 		me.scrollTo(0, false);
 
-		me.injectAssessments(assessmentItems);
 
 
 		//apply any styles that may be on the content's body, to the NTIContent div:
@@ -251,8 +268,11 @@ Ext.define('NextThought.view.content.reader.Content',{
 				resp.responseText.match(/<body([^>]*)>/i),
 				this.buildPath(resp.request.options.url));
 
+		me.injectAssessments(assessmentItems);
+
 		subContainers = me.resolveContainers();
 
+		me.activateVideoRoll();
 		me.activateAnnotatableItems();
 
 		me.loadContentAnnotations(LocationProvider.currentNTIID, subContainers);
