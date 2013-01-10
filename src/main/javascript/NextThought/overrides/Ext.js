@@ -35,7 +35,10 @@ Ext.define('NextThought.overrides.Ext',{
 
 			function testFrame(frame){
 				var win = frame.contentWindow || window.frames[frame.name];
-				el = win.document.getElementById(id) || false;
+				try{
+					el = win.document.getElementById(id) || false;
+				//for iframes where we cannot access its content(Cross Origin Content) ignore.
+				} catch(e){ swallow(e); }
 				return !el;
 			}
 
