@@ -250,7 +250,13 @@ Ext.define('NextThought.controller.Chat', {
 		Socket.emit('chat_approveMessages', messageIds);
 	},
 
-
+	/*
+	 * Creates a room to enter from the given user, list of user, or friends list / dfl.
+	 * If a friendslist or dfl is provided, the option persistent will define if that list is
+	 * expanding to a list of friends, or used to start a persistent room.  If persistent is missing
+	 * the default behaviour is to start a persistent list (this seems backwards but it is the old
+	 * behaviour.
+	 */
 	enterRoom: function(usersOrList, options) {
 		if (!$AppConfig.service.canChat()) {
 			console.log('User not permissioned to chat.');
@@ -258,7 +264,12 @@ Ext.define('NextThought.controller.Chat', {
 		}
 
 		options = options || {};
-		var users = [], k, ri, roomCfg;
+		var users = [], k, ri, roomCfg,
+			openPersistently = options.persistent !== undefined ? options.persistent : true,
+			isListOrDFL = usersOrList.get && usersOrList.get('friends');
+
+		//Don't send the persistent option to the ds
+		delete options.persistent;
 
 		//chat rooms need a containerId, make sure we add these, let them get overridden later if it's a persistant room
 		options.ContainerId = options.ContainerId || LocationProvider.currentNTIID || Globals.CONTENT_ROOT;
@@ -266,14 +277,27 @@ Ext.define('NextThought.controller.Chat', {
 			delete options.ContainerId;
 		}
 
-		if (usersOrList.get && usersOrList.get('friends')) {
+		//We do persistence if it was requested and we were given something that can
+		//be opened persistently
+		if(isListOrDFL && openPersistently){
+			//OK it is something that can be opened persistently, and we want it
+			//persistent.  Update the ContainerId to reflect it.  In this case we don't
+			//specify users
 			options.ContainerId = usersOrList.get('NTIID');
+			console.log('Will start a persistent room for container', options.ContainerId);
 		}
-		else if (!Ext.isArray(usersOrList)) {
-			users = [usersOrList];
-		}
-		else {
-			users = usersOrList;
+		else{
+			//Not persistent, if it is a group or dfl pull out the users, it could also
+			//already be a list of users, or a user
+			if(isListOrDFL){
+				users = usersOrList.get('friends');
+			}
+			else if(!Ext.isArray(usersOrList)){
+				users = [usersOrList];
+			}
+			else{
+				users = usersOrList;
+			}
 		}
 
 		users = Ext.Array.clone(users);
