@@ -11,7 +11,17 @@ Ext.define('NextThought.ux.SlideDeck',{
 			toc = Library.getToc(Library.getTitle(root)),
 			ids = [],
 			obj = Ext.fly(el).up('object[data-ntiid]') || {getAttribute:Ext.emptyFn},
-			startingSlide = obj.getAttribute('data-ntiid') || undefined;
+			startingSlide = obj.getAttribute('data-ntiid') || undefined,
+			startingVideo;
+
+		//If we don't find a starting slide it may be launched from a video
+		//In that case our starting slide is the earliest slide in the video.
+		//This hueristic may be changed
+		if(!startingSlide){
+			startingVideo = Ext.fly(el).up('object[type$=slidevideo]');
+			startingVideo = startingVideo ? startingVideo.down('param[name=ntiid]') : undefined;
+			startingVideo = startingVideo.getAttribute('value');
+		}
 
 		Ext.each(Ext.DomQuery.select('topic[ntiid]',toc),function(o){
 			ids.push(o.getAttribute('ntiid'));
@@ -20,6 +30,25 @@ Ext.define('NextThought.ux.SlideDeck',{
 		Ext.getBody().mask('Loading Slides...','navigation');
 
 		function finish(store){
+			var earliestSlide;
+			//If now startingSlide but we have a starting video, find the earliest starting slide for that video
+			if(!startingSlide && startingVideo){
+				store.each(function(record){
+					var video = record.get('video-id'),
+						start = record.get('video-start');
+
+					if(video && start !== undefined && video === startingVideo){
+						if(!earliestSlide || earliestSlide.get('video-start') > start){
+							earliestSlide = record;
+						}
+					}
+				});
+				console.log('Resolved video to ', earliestSlide);
+				if(earliestSlide){
+					startingSlide = earliestSlide.getId();
+				}
+			}
+
 			Ext.getBody().unmask();
 			Ext.widget('slidedeck-overlay',{store: store, startOn: startingSlide}).show();
 		}
