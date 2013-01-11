@@ -94,14 +94,13 @@ Ext.define('NextThought.overrides.tip.QuickTip',{
 	//Hack: The contents change during show, AFTER positioning and aligning, so if we change size, redo it all.
 	showAt: function(){
 		var size = this.el.getSize(),
-			r = this.callParent(arguments),
 			sizeAfter = this.el.getSize();
+
+		this.callParent(arguments);
 
 		if(size.width !== sizeAfter.width || size.height !== sizeAfter.height){
 			this.showAt(this.getTargetXY());
 		}
-
-		return r;
 	},
 
 
@@ -123,10 +122,10 @@ Ext.define('NextThought.overrides.tip.QuickTip',{
 	//We prefer to align to the center posisitions instead of the corner positions.
 	getAnchorAlign: function() {
         switch (this.anchor) {
-        case 'top': return 't-b?';
-        case 'left': return 'l-r?';
-        case 'right': return 'r-l?';
-        default: return 'b-t?';
+        case 'top': return 't-b';
+        case 'left': return 'l-r';
+        case 'right': return 'r-l';
+        default: return 'b-t';
         }
     }
 
