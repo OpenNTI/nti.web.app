@@ -14,7 +14,8 @@ Ext.define('NextThought.view.content.reader.Content',{
 			href:'#zoom',
 			'data-qtip':'Enlarge',
 			cls: 'zoom disabled',
-			html: ' '
+			html: ' ',
+			'data-non-anchorable': true
 		}]
 	},{
 		tag: 'span',
