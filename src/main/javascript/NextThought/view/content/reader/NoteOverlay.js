@@ -211,6 +211,8 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 			this.noteOverlayPositionInputBox();
 			this.noteOverlayActivateRichEditor();
 			WBUtils.createFromImage(img,function(data){
+				o.editorActions.reset();
+				o.editorActions.setValue('');
 				o.editorActions.addWhiteboard(data);
 			});
 		}
