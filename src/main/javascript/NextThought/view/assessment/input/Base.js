@@ -305,13 +305,21 @@ Ext.define('NextThought.view.assessment.input.Base',{
 	},
 
 	showHistoryMenu: function(e){
-        var me = this;
+        var me = this,
+		    maxHeight = Ext.dom.Element.getViewportHeight() - me.inputBox.getBox().bottom,
+		    anchor = 'tl-bl';
+
         if (me.historyMenu && me.historyMenu.isVisible()){
             me.historyMenu.destroy();
             return;
         }
 		me.setupAnswerHistoryMenu();
-        me.historyMenu.showBy(me.inputBox,'tl-bl?',[0,0]);
+		me.historyMenu.maxHeight = maxHeight;
+		if(maxHeight<=150){
+			delete me.historyMenu.maxHeight;
+			anchor = 'bl-tl?';
+		}
+        me.historyMenu.showBy(me.inputBox,anchor,[0,0]);
 		me.answerHistStore.reload();
 	},
 

@@ -61,12 +61,21 @@ Ext.define('NextThought.view.menus.AnswerHistory',{
 		}
 		this.add(items);
 		this.doConstrain();
+		if(this.isVisible() && this.showByArgs){
+			this.showBy.apply(this,this.showByArgs);
+		}
 	},
 
 	handleClick: function(item){
 		if( !item.is('[answerHistoryTitle]') && !item.is('[noAnswerHistory]') ){
 			this.ownerCmp.setValue(item.text);
 		}
+	},
+
+
+	showBy: function(){
+		this.showByArgs = Array.prototype.slice.call(arguments);
+		this.callParent(arguments);
 	}
 
 });
