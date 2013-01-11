@@ -7,6 +7,7 @@ Ext.define('NextThought.view.content.reader.Scroll',{
 
 			this.body.on('scroll',function(){
 				Ext.menu.Manager.hideAll();
+				Ext.tip.QuickTipManager.getQuickTip().hide();
 			},this);
 
 		},this);
