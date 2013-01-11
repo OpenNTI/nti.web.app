@@ -487,6 +487,11 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		Ext.each(this.text.query('.whiteboard-container'),
 				function(wb){
 					Ext.fly(wb).on('click', this.click, this);
+
+					if(!$AppConfig.service.canShare()){
+						Ext.fly(wb).select('.overlay').setStyle({bottom:0});
+						Ext.fly(wb).select('.toolbar').remove();
+					}
 				},
 				this);
 
