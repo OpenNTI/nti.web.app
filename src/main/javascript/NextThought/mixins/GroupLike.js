@@ -20,7 +20,7 @@ Ext.define('NextThought.mixins.GroupLike',{
 
 
 	getName: function(){
-		return this.get('realname') || this.get('alias') || this.get('Username');
+		return  this.get('alias') || this.get('realname') || this.get('Username');
 	},
 
 
