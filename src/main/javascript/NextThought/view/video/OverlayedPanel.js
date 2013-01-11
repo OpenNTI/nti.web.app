@@ -16,7 +16,6 @@ Ext.define('NextThought.view.video.OverlayedPanel',{
 		}
 
 		config = Ext.applyIf(config, {
-			width  : 690,
 			layout : 'fit'
 		});
 

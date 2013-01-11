@@ -1,7 +1,11 @@
 
 
 .x-component-content-navigation {
-	&.x-toolbar-item{margin-top: 5px !important;}
+	&.x-toolbar-item{
+		margin-top: 5px !important;
+		width: 620px;
+		.detected-scrollbars & {width: 635px;}
+	}
 
 	img.bookcover {
 		background-size: cover;
