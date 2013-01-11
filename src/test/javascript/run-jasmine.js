@@ -19,9 +19,6 @@ if(!path.length){ console.log('index.html not found'); phantom.exit(); }
 
 path = path.join(s);
 fs.changeWorkingDirectory( path );
-console.log("Will run from: "+fs.workingDirectory);
-
-
 
 function mime(extention){
 	return mimeMap[extention] || 'text/plain';
@@ -94,20 +91,15 @@ if (!listening) {
 
 
 	page.onConsoleMessage = function(msg, line, source) {
-		if(source)
-			console.log(msg+"\t\t"+source+":"+line);
-		else
-			console.log(msg);
+		// don't do anything
 	};
 
 
 	page.onLoadStarted = function(){
-		console.log("Loading...");
+		// don't do anything
 	};
 
 	page.open("http://localhost:"+port+"/index.html", function(status){
-
-		console.log('\nInitial Load finished, executing...\n');
 
 		if (status !== "success") {
 			console.log("Unable to access network\n\n"+JSON.stringify(status, null, 4));
@@ -121,14 +113,17 @@ if (!listening) {
 							&& Boolean(document.body.querySelector('.results'));
 					});
 				},
-				function(){
-					console.log('\n\nEvaluating results:\n');
 
-					page.evaluate( function() {
+				function(){
+						page.onConsoleMessage = function(msg, line, source) {
+							console.log(msg);
+						};
+						page.evaluate( function() {
+						var start = new Date();
 						var suites = document.body.querySelectorAll('.suite'),
 							i, j, suite, suiteName, specName, passOrFail,
-							specs, spec, passed, trace, runner, passedAll = true, suiteNameParent,
-								suiteId, m;
+								specs, spec, passed, trace, runner, passedAll = true, suiteNameParent,
+								suiteId, m, resultString = '', failedTests = [], numTests = 0, numPassed, numFailed;
 
 						for (i = 0; i < suites.length; i++){
 							suite = suites[i];
@@ -140,40 +135,46 @@ if (!listening) {
 								suiteNameParent = suiteNameParent.parentNode;
 							}
 
-
-
-							passOrFail = suite.className.indexOf('passed') != -1 ? "Passed" : "Failed";
-							console.log(passOrFail+':\t'+'Suite: '+suiteName);
-							console.log('--------------------------------------------------------');
-
 							suiteId = 'suite-'+i;
 							suite.setAttribute('id',suiteId);
 							specs = suite.querySelectorAll('#'+suiteId+' > .specSummary');
 
-
 							for (j = 0; j < specs.length; j++){
 								spec = specs[j];
 								passed = spec.className.indexOf('passed') != -1;
-
 								specName = spec.querySelector('.description').innerText;
 
-								passOrFail = passed ? 'Passed' : "Failed";
-								console.log('\t'+passOrFail+':\t'+specName);
+								numTests++;
 
 								if(!passed){
 									passedAll = false;
+									failedTests.push(suiteName+': '+specName)
 								}
 							}
-							console.log('');
 						}
+						var end = new Date();
+						var elapsedMillis = (end - start);
+						var elapsedSeconds = elapsedMillis / 1000;
+						var elapsedMinutes = Math.floor(elapsedSeconds / 60);
+						elapsedSeconds %= 60;
+						var elapsedHours = Math.floor(elapsedMinutes / 60);
+						elapsedMinutes %- 60;
+						var elapsedTime = elapsedSeconds + ' seconds';
+						if (elapsedMinutes > 0) elapsedTime = elapsedMinutes + ' minutes ' + elapsedTime;
+						if (elapsedHours > 0) elapsedTime = elapsedHours + ' hours ' + elapsedTime;
+						
+						numFailed = failedTests.length;
+						numPassed = numTests - numFailed;
 
-						runner = document.body.querySelector('.alert');
-						console.log('--------------------------------------------------------');
-						console.log('Finished: '+runner.innerText);
-						console.log('\nStatus: '+(passedAll? 'Good!':'There were failures!'));
+						console.log(numFailed + ' tests failed, ' + numPassed + ' tests passed in ' + elapsedTime)
+						if (numFailed > 0) {
+							console.log();
+							console.log('Failed tests:');
+							for (var i=0; i<failedTests.length; i++) {
+								console.log(failedTests[i]);
+							}
+						}
 					});
-					console.log('\n');
-
 					phantom.exit();
 				},
 				600001
