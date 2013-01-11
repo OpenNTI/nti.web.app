@@ -60,7 +60,9 @@ Ext.define('NextThought.view.menus.AnswerHistory',{
 			items.push({text: 'Not Yet Attempted', cls:'no-answer-history', allowUncheck: false, noAnswerHistory: true});
 		}
 		this.add(items);
-		this.doConstrain();
+		if(this.el){
+			this.doConstrain();
+		}
 		if(this.isVisible() && this.showByArgs){
 			this.showBy.apply(this,this.showByArgs);
 		}
