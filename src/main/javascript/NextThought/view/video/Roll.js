@@ -94,7 +94,7 @@ Ext.define('NextThought.view.video.Roll',{
 
 		if((/^(http(s)?:)?\/\/www.youtube.com/i).test(url)){
 			url = url.split('?')[0];
-			url += '?html5=1&&autohide=1&modestbranding=1&rel=0&showinfo=0';
+			url += '?html5=1&&autohide=1&modestbranding=0&rel=0&showinfo=1';
 		}
 
 		return url;
