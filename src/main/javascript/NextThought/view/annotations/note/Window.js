@@ -72,8 +72,12 @@ Ext.define('NextThought.view.annotations.note.Window',{
 
 
 	dismissClick: function(e){
+		var t = e.getTarget(),
+			p = t? t.parentNode: null;
+
 		if(!this.editorActive() //an editor is not active,
 		&& !e.getTarget('.note-window') // the click did not fall inside the note window
+		&& p //the thing clicked, has to still have a parent node. (if it was a button in a dialog that has been destroyed,...)
 		&& this.zIndexManager.getActive() === this){ // the note window is the top most active window
 			this.destroy(); //then you can close the note window
 		}
