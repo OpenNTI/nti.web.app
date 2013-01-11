@@ -14,7 +14,7 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
 	cls: 'group-selection-list',
 	baseCls: 'selection',
 	itemCls: 'selection-list-item multiselect',
-	displayField: 'realname',
+	displayField: 'displayName',
 	selModel: { mode: 'SIMPLE' },
 
 	initComponent: function(){
@@ -129,13 +129,9 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
 
 
 	getInnerTpl: function(displayField){
-		if (displayField !== 'realname'){
-			console.warn('displayField is not realname');
-		}
 		return ['<div class="name">',
-				'<tpl if="realname == \'\'">{Username}' +
-					'<tpl else>',
-						'{realname}',
+				'<tpl>',
+				'{'+displayField+'}',
 				'</tpl>',
 				'</div>'
 		].join('');
@@ -179,7 +175,7 @@ Ext.define('NextThought.view.account.contacts.management.GroupList',{
 	onSelect:function (view, group) {
 		if (this.username && !this.ignoreSelection && group && !group.hasFriend(this.username)) {
 			this.fireEvent('add-contact', this.username, [group]);
-		} 
+		}
 		else{
 			if(!group){ return;}
 
