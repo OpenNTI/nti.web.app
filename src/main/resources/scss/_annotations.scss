@@ -329,27 +329,13 @@
 			//display: none;
 			box-shadow: inset 0 0 0 10px white;
 			background: rgba(63, 179, 246, 0.05);
-
-			-webkit-transition: opacity 0.4s, -webkit-transform 0.5s;
-			-moz-transition: opacity 0.4s, -moz-transform 0.5s;
-			-ms-transition: opacity 0.4s, -ms-transform 0.5s;
-			-o-transition: opacity 0.4s, -o-transform 0.5s;
-			transition: opacity 0.4s, transform 0.5s;
-
-			@include experimental(transform, scale(2.5) );
-			opacity: 0;
-
-			.disable-animations & {
-				@include experimental(transition, none );
-				@include experimental(transform, none );
-			}
+			display: none;
+			@include animate($name: fadeZoomIn, $duration: 0.5s, $delay: 0s);
 		}
 
 		&:hover {
 			a.zoom {
-				@include experimental(transform, none );
-				opacity: 1;
-				//display: block;
+				display: block;
 			}
 		}
 	}

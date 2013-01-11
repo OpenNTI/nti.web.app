@@ -7,26 +7,51 @@
 
 .component-overlay .x-panel-video-roll {
 	z-index: 3;
-	margin: 0 5px;
+	margin: 0 10px;
+	padding: 0;
 	position: absolute;
-	width: 690px;
+	width: 680px;
 
-	background: #fbfbfb;
-	border: 1px solid #e2e2e2;
-	border-radius: 3px;
-	box-shadow: 0px 1px 2px 1px rgba(0, 0, 0, 0.08);
+	border: 1px solid #bcbcbc;
+	border-radius: 1px;
+	background: #fafafa;
+
 
 	& > .x-panel-body-video-roll {
-		padding: 5px;
+		padding: 0;
 		color: $primary-grey;
 
 		.carousel {
 			background: none;
-			padding: 0;
-			height: 90px;
+			padding: 0 10px;
+			height: 105px;
 
 			.item-wrap {
-				margin: 10px 10px 0 0;
+				line-height: 0;
+				overflow: hidden;
+				cursor: pointer;
+				padding: 0px;
+				margin: 15px 10px;
+				border: 1px solid $tertiary-grey-alt;
+				box-shadow: 2px 3px 1px 0 rgba(0,0,0,0.13);
+
+				&.x-item-selected {
+					img.item{
+						box-shadow: inset 0 0 0 5px $primary-blue;
+					}
+				}
+
+				&.over {
+					img.item {
+						box-shadow: inherit;
+					}
+				}
+
+				img.item {
+					width: 128px;
+					height: 73px;
+					box-shadow: none;
+				}
 			}
 		}
 	}

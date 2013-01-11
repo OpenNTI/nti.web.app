@@ -69,9 +69,12 @@ Ext.define('NextThought.view.video.Roll',{
 			allowDeselect: false,
 			overItemCls: 'over',
 			itemSelector: 'div.item-wrap',
-			tpl: Ext.DomHelper.markup(
-				{tag:'tpl', 'for':'.', cn: [
-					{cls:'item-wrap', cn:[{
+			tpl: Ext.DomHelper.markup({
+				tag:'tpl', 'for':'.',
+				cn: [{
+					cls:'item-wrap',
+					'data-qtip':'{title}',
+					cn:[{
 						cls:'item',
 						tag: 'img',
 						src: Ext.BLANK_IMAGE_URL,
