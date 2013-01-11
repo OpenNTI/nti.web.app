@@ -391,7 +391,11 @@ Ext.define('NextThought.controller.Groups', {
 			store = this.getFriendsListStore();
 
 		rec.set('Username',username);
-		rec.set('realname', displayName);
+		//We used to set realname here, but we really want alias
+		//realname doesn't even really make sense for [D]FLs.
+		//Downside is failure to set realname here results in the ds
+		//defaulting it to Username.
+		rec.set('alias', displayName);
 		rec.set('friends', friends||[]);
 		rec.set('IsDynamicSharing', !!dynamic);
 		rec.save({
@@ -571,8 +575,21 @@ Ext.define('NextThought.controller.Groups', {
         }
 
         function onError(record, operation, response){
-			var code = response.code,
-				msg = errors[code] || errors._default;
+			var msg = response.message;
+				field = response.field;
+			if(msg){
+				//Try and swizzle any field names to match what the user inputs
+				if(field){
+					msg = msg.replace(field, 'Group name');
+				}
+			}
+			else{
+				if(operation.error && operation.error === 422){
+					//Well a field was wrong, in this case the user only put one thing
+					//in so tell him that is invalid
+					msg = 'Invalid group name '+displayName;
+				}
+			}
             Ext.callback(handleError, this, [msg]);
         }
 
@@ -601,9 +618,6 @@ Ext.define('NextThought.controller.Groups', {
 			username = this.generateUsername(displayName);
 			console.log('Create group with name '+ displayName);
 			btn.setDisabled(true);
-			errors = {
-				'RealnameInvalid': 'Invalid group name '+displayName
-			};
 			this.createDFLUnguarded(displayName, username, null, onCreated, onError, this);
 		}
 	},
@@ -617,8 +631,22 @@ Ext.define('NextThought.controller.Groups', {
         }
 
         function onError(record, operation, response){
-			var code = response.code,
-				msg = errors[code] || errors._default;
+			var msg = response.message;
+				field = response.field;
+
+			if(msg){
+				//Try and swizzle any field names to match what the user inputs
+				if(field){
+					msg = msg.replace(field, 'List name');
+				}
+			}
+			else{
+				if(operation.error && operation.error === 422){
+					//Well a field was wrong, in this case the user only put one thing
+					//in so tell him that is invalid
+					msg = 'Invalid list name '+displayName;
+				}
+			}
             Ext.callback(handleError, this, [msg]);
         }
 
@@ -633,10 +661,7 @@ Ext.define('NextThought.controller.Groups', {
 		var me = this,
 			w = btn.up('window'),
 			displayName = w.getListName(),
-			username = this.generateUsername(displayName),
-			errors = {
-				'RealnameInvalid': 'Invalid list name '+displayName
-			};
+			username = this.generateUsername(displayName);
 		btn.setDisabled(true);
 		this.createGroupUnguarded(displayName, username, null, onCreated, this, onError);
 	},
