@@ -31,6 +31,7 @@ Ext.define('NextThought.controller.State', {
 				'activate-view': me.track
 			}
 		},{});
+		ContentAPIRegistry.register('NTIPreviousPage',this.navigatePreviousPage,this);
 	},
 
 
@@ -208,5 +209,11 @@ Ext.define('NextThought.controller.State', {
 			console.error('unknown username for state mgmt.');
 		}
 		return Base64.encode('state-' + username);
+	},
+
+
+	navigatePreviousPage: function(){
+		history.back();
+		return true;
 	}
 });
