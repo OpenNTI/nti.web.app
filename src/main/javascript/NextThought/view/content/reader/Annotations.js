@@ -234,6 +234,35 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 	},
 
 
+
+	getDefinitionMenuItem: function(range){
+		try {
+
+		range = range || this.getSelection();
+		var me = this,
+			boundingBox = me.convertRectToScreen(range.getBoundingClientRect()),
+			text = range.toString().trim(),
+			result = null;
+
+		if(/^\w+$|^\w+\s+\w+$/i.test(text)){//it is one or two words
+			result = {
+				text: 'Define...',
+				handler:function(){
+					me.fireEvent('define', text, boundingBox );
+					me.clearSelection();
+				}
+			};
+		}
+
+		return result;
+
+		}
+		catch(e){
+			return null;
+		}
+	},
+
+
 	addAnnotation: function(range, xy){
 		if(!range) {
 			console.warn('bad range');
@@ -241,14 +270,12 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 		}
 
 		var me = this,
-				rect = range.getBoundingClientRect(),
 				rect2 = RectUtils.getFirstNonBoundingRect(range),
 				record = AnnotationUtils.selectionToHighlight(range, null, me.getDocumentElement()),
 				menu,
+				define,
 				offset,
 				redactionRegex = /USSC-HTML|Howes_converted|USvJones2012_converted/i,
-				boundingBox = me.convertRectToScreen(rect),
-				text = range.toString().trim(),
 				innerDocOffset;
 
 		if(!record) {
@@ -271,15 +298,9 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 			defaults: {ui: 'nt-annotaion', plain: true }
 		});
 
-		if(/^\w+$|^\w+\s+\w+$/i.test(text)){//it is one or two words
-			//if(/^\w+$/i.test(text)){//is it a word
-			menu.add({
-				text: 'Define...',
-				handler:function(){
-					me.fireEvent('define', text, boundingBox );
-					me.clearSelection();
-				}
-			});
+		define = me.getDefinitionMenuItem(range);
+		if(define){
+			menu.add(define);
 		}
 
 		menu.add({

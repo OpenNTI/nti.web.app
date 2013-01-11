@@ -424,8 +424,9 @@ Ext.define('NextThought.view.annotations.Highlight', {
 			return null;
 		}
 		e.stopEvent();
-		this.doc.parentWindow.getSelection().removeAllRanges();
-		return this.callParent(arguments);
+		var p = this.callParent(arguments);
+		this.ownerCmp.clearSelection();
+		return p;
 	},
 
 

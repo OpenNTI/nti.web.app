@@ -264,9 +264,12 @@ Ext.define( 'NextThought.view.annotations.Base', {
 
 	buildMenu: function(items) {
 		var m = this,
-			r = m.getRecord();
+			r = m.getRecord(),
+			d = m.ownerCmp.getDefinitionMenuItem();
 
 		items = items || [];
+
+		if(d){ items.push(d); }
 
 		if(items.length) { items.push({xtype: 'menuseparator'}); }
 
