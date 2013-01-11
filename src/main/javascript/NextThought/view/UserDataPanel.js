@@ -142,7 +142,7 @@ Ext.define('NextThought.view.UserDataPanel',{
                 });
             }
             else if (Ext.Array.contains(this.mimeTypes, 'favorite')){
-                this.mimeTypes = this.mimeTypes.replace('favorite', 'bookmark'); //trick because the mimetype is bookmark, not favorite
+                this.mimeTypes = [];
                 this.store = this.buildStore('Bookmarks',storeId,'MimeType');
                 NextThought.model.events.Bus.on({
                     scope: this,
