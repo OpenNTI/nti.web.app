@@ -385,10 +385,10 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 
 
 		if (LocationProvider.currentNTIID.indexOf('mathcounts') < 0) {
-			console.debug('hack alert, annotation context menu not showing while in mathcounts content...');
 			menu.showAt(xy);
+		} else {
+			console.debug('hack alert; annotation context menu dilberately hidden in mathcounts content');
 		}
-
 		me.selectRange(range);
 	},
 
