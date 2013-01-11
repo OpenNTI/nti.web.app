@@ -41,7 +41,11 @@ Ext.define('NextThought.view.definition.Window', {
 
 		me.loadDefinition(me.term);
 
-		me.on('close', function(){ me.dragMaskOff(); });
+		me.on({
+			'close':function(){ me.dragMaskOff(); },
+			'show': me.fixMask,
+			'destroy': me.unfixMask
+		});
 
 		//figure out xy
 		p = this.pointTo;
@@ -53,6 +57,17 @@ Ext.define('NextThought.view.definition.Window', {
 			me.setPosition(x,y);
 			me.addCls(top?'south':'north');
 		}
+	},
+
+
+	fixMask: function(){
+		var m = this.maskEl = this.zIndexManager.mask;
+		m.addCls('nti-clear');
+	},
+
+	unfixMask: function(){
+		try { this.maskEl.removeCls('nti-clear'); }
+		catch(e){swallow(e);}
 	},
 
 
