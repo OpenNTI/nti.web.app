@@ -30,6 +30,7 @@ Ext.define('NextThought.view.assessment.input.FreeResponse',{
 
 		this.callParent(arguments);
 
+		this.setupAnswerLabel(this.part.get('answerLabel'));
 
 		this.mon(this.inputField,{
 			scope: this,
@@ -44,6 +45,34 @@ Ext.define('NextThought.view.assessment.input.FreeResponse',{
 				e.stopEvent();
 				return false;
 			}
+		});
+	},
+
+
+	setupAnswerLabel: function(label){
+		if(!label){return;}
+
+		var i = this.inputField,
+			el = this.answerLabelEl =
+			Ext.DomHelper.append(this.inputBox, {cls:'label',html:label},true);
+
+		el.hide();
+
+		function show(){
+			var l, m = new Ext.util.TextMetrics();
+			m.bind(i);
+			l = 10+m.getWidth(i.getValue());
+
+			m.destroy();
+			el.setStyle({left: l+'px'});
+			el.show();
+		}
+
+		this.mon(i,{
+			scope: this,
+			blur: function(){ el.hide(); },
+			focus: show,
+			keyup: show
 		});
 	},
 

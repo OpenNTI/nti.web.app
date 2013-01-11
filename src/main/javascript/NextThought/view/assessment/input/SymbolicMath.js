@@ -30,10 +30,11 @@ Ext.define('NextThought.view.assessment.input.SymbolicMath',{
 			click: this.mathSymbolClicked
 		});
 
-		var s = this.mathquillSpan = this.spanTpl.insertAfter(this.inputField),
-			me = this,
-			r = jQuery(s).mathquill('editable'),
-			timer;
+		var s = this.mathquillSpan = this.spanTpl.insertAfter(this.inputField);
+
+		jQuery(s).mathquill('editable');
+
+		Ext.fly(s).set({'data-label':this.part.get('answerLabel')});
 
 		s.focus = function(){
 			if (this.focusing){return;}
@@ -46,6 +47,9 @@ Ext.define('NextThought.view.assessment.input.SymbolicMath',{
 
 		this.inputField.hide().removeCls('tabable');
 	},
+
+	//don't let the base class's function run, we're using pure CSS for this version
+	setupAnswerLabel: Ext.emptyFn,
 
 	updateSubmission: function(){
 		console.log('keypress', 'disable?', !this.getValue());

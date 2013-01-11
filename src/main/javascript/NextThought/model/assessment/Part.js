@@ -8,7 +8,8 @@ Ext.define('NextThought.model.assessment.Part', {
 		{ name: 'content', type: 'string' },
 		{ name: 'hints', type: 'arrayItem' },
 		{ name: 'solutions', type: 'arrayItem' },
-		{ name: 'explanation', type: 'string' }
+		{ name: 'explanation', type: 'string' },
+		{ name: 'answerLabel', type: 'string' /*, defaultValue: 'unit/label'*/ } //uncomment or add your own default value to test the UI placement of labels until we have content
 	],
 
 
