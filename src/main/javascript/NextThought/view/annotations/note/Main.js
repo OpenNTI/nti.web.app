@@ -378,7 +378,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 					}
 				});
 
-				this.context.select('.redactionAction').remove();
+				this.context.select('.redactionAction .controls').remove();
 
 				this.context.select('[itemprop~=nti-data-markupenabled] a').addCls('skip-anchor');
 				this.context.select('a[href]:not(.skip-anchor)').set({target:'_blank'});
