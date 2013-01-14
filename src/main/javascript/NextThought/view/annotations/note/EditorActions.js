@@ -441,18 +441,25 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 
 	insertWhiteboardThumbnail: function (content, guid, wb) {
 		var me = this,
-			el = Ext.get(guid), placeholder;
+			el = Ext.get(guid), placeholder, test;
 
 		//We need empty divs to allow to insert text before or after a WB.
 		placeholder = Ext.DomHelper.createTemplate({html: me.defaultValue});
 
 		if (!el) {
-			Ext.DomHelper.append(content,placeholder);
+
+			Ext.each(content.query('> div'),function(n){
+				if(n.firstChild === n.lastChild && n.firstChild.nodeValue === '\u200B'){
+					Ext.removeNode(n);
+				}
+			});
+
+			placeholder.append(content);
 
 			el = me.wbThumbnailTpm.append(content, ['', guid]);
 			Ext.fly(el).unselectable();
 
-			Ext.DomHelper.append(content, placeholder);
+			placeholder.append(content);
 		}
 
 
