@@ -155,6 +155,7 @@ Ext.define('NextThought.view.content.reader.Content',{
 			//else if(vimeo){}
 			//else if(html5){}...
 		});
+		Ext.each(Ext.ComponentQuery.query('overlay-video-roll'),function(c){c.pauseVideo();});
 	},
 
 

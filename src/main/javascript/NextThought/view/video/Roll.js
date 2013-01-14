@@ -92,12 +92,21 @@ Ext.define('NextThought.view.video.Roll',{
 		}
 	},
 
+	pauseVideo: function(){
+		var o = this.iframe.el.dom;
+		o.contentWindow.postMessage(JSON.stringify({
+		        event: 'command',
+		        func: 'pauseVideo',
+		        args: [],
+		        id: o.getAttribute('id')
+		}), "*");
+	},
 
 	filterVideoUrl: function(url){
 
 		if((/^(http(s)?:)?\/\/www.youtube.com/i).test(url)){
 			url = url.split('?')[0];
-			url += '?html5=1&&autohide=1&modestbranding=0&rel=0&showinfo=1';
+			url += '?html5=1&enablejsapi=1&autohide=1&modestbranding=0&rel=0&showinfo=1';
 		}
 
 		return url;
