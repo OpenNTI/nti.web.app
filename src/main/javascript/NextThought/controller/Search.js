@@ -207,10 +207,21 @@ Ext.define('NextThought.controller.Search', {
 		this.searchForValue(searchValue);
 	},
 
-	searchResultClicked: function(result){
+	searchResultClicked: function(result, fragIdx){
 		var nav = this.getController('Navigation'),
 			cid = result.hit.get('ContainerId'),
-			cat = result.up('search-result-category').category;
+			cat = result.up('search-result-category').category,
+			fragments, clickedFragment;
+
+		if(fragIdx !== fragments){
+			fragments = result.hit.get('Fragments');
+			if(fragIdx >= 0 && fragIdx < fragments.length){
+				clickedFragment = fragments[fragIdx];
+			}
+			else{
+				console.warn('Bad fragment index', fragIdx, fragments);
+			}
+		}
 
 		function success(obj){
 			nav.navigate(cid, obj);

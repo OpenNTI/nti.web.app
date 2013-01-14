@@ -109,6 +109,9 @@
 				color: $primary-grey;
 				font-style: italic;
 				font-size: 15px;
+				.fragment{
+					margin-top: 1em;
+				}
 				span, .term {
 					background: #fcff13;
 					display: inline-block;

@@ -14,7 +14,11 @@ Ext.define('NextThought.view.menus.search.Result',{
 			cls:'wrap',
 			cn:[
 				{tag:'tpl', 'if':'name',cn:[{cls:'name',html:'{name}'}]},
-				{cls: 'fragments', cn: [{tag:'tpl', 'for':'fragments', cn:[{cls: 'fragment', html: '{.}'}]}]}
+				{cls: 'fragments', cn: [
+					{tag:'tpl', 'for':'fragments', cn:[
+						{cls: 'fragment', ordinal: '{#}', html: '{.}'}
+					]}
+				]}
 			]
 		}
 	]),
@@ -133,8 +137,29 @@ Ext.define('NextThought.view.menus.search.Result',{
 		this.getEl().removeCls('pulse');
 	},
 
-	clicked: function(){
-		this.getEl().addCls('pulse');
-		this.fireEvent('click', this);
+	clicked: function(e){
+		var target = Ext.fly(e.target),
+			selector = '.fragment',
+			fragNode = target.is(selector) ? e.target : target.parent(selector, true),
+			fragIdx, toFlash;
+
+		if(fragNode){
+			fragIdx = Ext.fly(fragNode).getAttribute('ordinal');
+			fragIdx = fragIdx ? parseInt(fragIdx, 10) : undefined;
+			//Make it 0 indexed
+			if(fragIdx !== undefined){
+				fragIdx--;
+			}
+			toFlash = fragNode;
+		}
+		else{
+			toFlash = this.getEl();
+		}
+
+		Ext.fly(toFlash).addCls('pulse');
+		Ext.defer(function(){
+			Ext.fly(toFlash).removeCls('pulse');
+		}, 1000);
+		this.fireEvent('click', this, fragIdx);
 	}
 });
