@@ -14,7 +14,7 @@ Ext.define('NextThought.view.menus.search.Result',{
 			cls:'wrap',
 			cn:[
 				{tag:'tpl', 'if':'name',cn:[{cls:'name',html:'{name}'}]},
-				{cls:'snippet',html:'{snippet}'}
+				{cls: 'fragments', cn: [{tag:'tpl', 'for':'fragments', cn:[{cls: 'fragment', html: '{.}'}]}]}
 			]
 		}
 	]),
@@ -31,7 +31,7 @@ Ext.define('NextThought.view.menus.search.Result',{
             chapter: '',
             section: 'Resolving...',
 			name: name,
-			snippet: hit.get('Snippet')
+			fragments: Ext.pluck(hit.get('Fragments'), 'text')
 		});
 
         LocationMeta.getMeta(containerId, function(meta){
@@ -78,29 +78,18 @@ Ext.define('NextThought.view.menus.search.Result',{
 	//This code assumes matches within fragments don't overlap, which I was told can be guarenteed
 	wrapFragmentHits: function(){
 		var fragments = this.hit.get('Fragments'),
-			fragmentSeparator = ' ... ',
-			wrappedSnippets = '',
+			wrappedFragmentText = [];
 			me = this;
 
-		if(fragments.length === 0){
-			console.warn('No fragments for term', this.term, ' and snippet ', this.snippet);
-			this.renderData.snippet = this.hit.get('Snippet');
-			return;
-		}
-
 		Ext.each(fragments, function(fragment, index){
-			var wrappedText;
+			var wrappedText = fragment.text;
 			if(!fragment.matches || fragment.matches.length === 0 || !fragment.text){
 				console.warn('No matches or text for fragment. Dropping', fragment);
 			}
 			else{
-
-				wrappedText = fragment.text;
-
 				//Sort the matches backwards so we can do string replaces without invalidating
 				fragment.matches.sort(function(a, b){return b[0] - a[0];});
 				Ext.each(fragment.matches, function(match, idx){
-
 					//Attempt to detect bad data from the server
 					var next = idx + 1 < fragment.matches.length ? fragment.matches[idx + 1] : [0, 0],
 						newString = '';
@@ -116,15 +105,11 @@ Ext.define('NextThought.view.menus.search.Result',{
 					newString += wrappedText.slice(match[1]);
 					wrappedText = newString;
 				});
-
-				wrappedSnippets += wrappedText;
-				if(index < fragments.length-1){
-					wrappedSnippets += fragmentSeparator;
-				}
 			}
+			wrappedFragmentText.push(wrappedText);
 		});
 
-		this.renderData.snippet = wrappedSnippets || this.snippet;
+		this.renderData.fragments = wrappedFragmentText || this.renderData.fragments;
 
 	},
 
