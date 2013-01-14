@@ -76,6 +76,13 @@ Ext.define('NextThought.ux.ImageZoomView',{
 		this.callParent(arguments);
 		//{url: nextSizeUrl, refEl: img, offsets: offsets}
 
+		function get(el,attr){ return el? el.getAttribute(attr) : null; }
+
+		this.renderData = Ext.apply(this.renderData||{},{
+			title: get(this.refEl,'data-title'),
+			caption: get(this.refEl,'data-caption')
+		});
+
 		var n, keyMap = new Ext.util.KeyMap({
 			target: document,
 			binding: [{

@@ -226,6 +226,8 @@ Ext.define('NextThought.view.content.reader.Content',{
 				Ext.fly(el.querySelector('.wrapper a')).remove();
 			}
 			el.querySelector('.wrapper').appendChild(target);
+			Ext.get(el).setWidth(Ext.fly(target).getWidth()+Ext.get(el).getBorderWidth('lr'));
+
 
 			Ext.each(p,function(feature){
 				(activators[feature]||Ext.emptyFn)(el,bar);
