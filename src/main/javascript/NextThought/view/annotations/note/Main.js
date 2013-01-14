@@ -57,6 +57,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 
 
 	afterRender: function(){
+
 		var me = this;
 		me.callParent(arguments);
 		me.text.setVisibilityMode(Ext.dom.Element.DISPLAY);
@@ -376,9 +377,8 @@ Ext.define('NextThought.view.annotations.note.Main',{
 						Ext.fly(redaction).addCls('redacted');
 					}
 				});
-				if(this.context.down('.redactionAction')){
-					this.context.select('.redactionAction').remove();
-				}
+
+				this.context.select('.redactionAction').remove();
 
 				this.context.select('[itemprop~=nti-data-markupenabled] a').addCls('skip-anchor');
 				this.context.select('a[href]:not(.skip-anchor)').set({target:'_blank'});
