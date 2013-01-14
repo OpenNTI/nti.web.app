@@ -88,7 +88,7 @@ Ext.define('NextThought.view.assessment.input.Base',{
 			solutions.push(s.get('value'));
 		});
 
-		return this.filterHTML(solutions.join('<br/> or: '));
+		return this.filterHTML(solutions[0]);
 	},
 
 
