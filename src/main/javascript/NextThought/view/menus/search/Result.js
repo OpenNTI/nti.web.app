@@ -20,17 +20,21 @@ Ext.define('NextThought.view.menus.search.Result',{
 	]),
 
 	initComponent: function(){
-		var me = this;
+		var me = this,
+			hit = me.hit,
+			containerId = hit.get('ContainerId'),
+			name = hit.get('Creator');
 		me.callParent(arguments);
-		me.renderData = Ext.copyTo({},me,'title,chapter,name,section,snippet');
 
-        Ext.apply(me.renderData, {
-            title: 'Resolving...',
+		me.renderData = Ext.apply(me.renderData || {},{
+			title: 'Resolving...',
             chapter: '',
-            section: 'Resolving...'
-        });
+            section: 'Resolving...',
+			name: name,
+			snippet: hit.get('Snippet')
+		});
 
-        LocationMeta.getMeta(this.ntiid, function(meta){
+        LocationMeta.getMeta(containerId, function(meta){
             var lin = meta ? LocationProvider.getLineage(meta.NTIID) : [],
                 chap = [];
 
@@ -52,11 +56,11 @@ Ext.define('NextThought.view.menus.search.Result',{
                 section: meta ? meta.label : 'Unlabeled'
             });
 
-            if(isMe(this.name)){
+            if(isMe(name)){
                 me.renderData.name = 'me';
             }
-            if(!isMe(me.name) && me.name){
-                UserRepository.getUser(me.name,function(user){
+            if(!isMe(name) && name){
+                UserRepository.getUser(name,function(user){
                     var n = user.getName();
                     if(!me.rendered){
                         me.renderData.name = n;
@@ -73,17 +77,18 @@ Ext.define('NextThought.view.menus.search.Result',{
 
 	//This code assumes matches within fragments don't overlap, which I was told can be guarenteed
 	wrapFragmentHits: function(){
-		var fragmentSeparator = ' ... ',
+		var fragments = this.hit.get('Fragments'),
+			fragmentSeparator = ' ... ',
 			wrappedSnippets = '',
 			me = this;
 
-		if(this.fragments.length === 0){
+		if(fragments.length === 0){
 			console.warn('No fragments for term', this.term, ' and snippet ', this.snippet);
-			this.renderData.snippet = this.snippet;
+			this.renderData.snippet = this.hit.get('Snippet');
 			return;
 		}
 
-		Ext.each(this.fragments, function(fragment, index){
+		Ext.each(fragments, function(fragment, index){
 			var wrappedText;
 			if(!fragment.matches || fragment.matches.length === 0 || !fragment.text){
 				console.warn('No matches or text for fragment. Dropping', fragment);
@@ -113,7 +118,7 @@ Ext.define('NextThought.view.menus.search.Result',{
 				});
 
 				wrappedSnippets += wrappedText;
-				if(index < me.fragments.length-1){
+				if(index < fragments.length-1){
 					wrappedSnippets += fragmentSeparator;
 				}
 			}

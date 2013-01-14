@@ -1,3 +1,4 @@
+
 Ext.define('NextThought.controller.Search', {
 	extend: 'Ext.app.Controller',
 
@@ -92,14 +93,7 @@ Ext.define('NextThought.controller.Search', {
 
 					//Refactor to just pas the hit model a
 					result.push( {
-                        ntiid: id,
-						name: hit.get('Creator'),
-						snippet: hit.get('Snippet'),
-						term: searchVal,
-						containerId: hit.get('ContainerId'),
-						hitId: hit.getId(),
 						sortId: sortIndexes,
-						fragments: hit.get('Fragments'),
 						hit: hit
 					});
 				},	this);
@@ -215,11 +209,11 @@ Ext.define('NextThought.controller.Search', {
 
 	searchResultClicked: function(result){
 		var nav = this.getController('Navigation'),
-			cid = result.containerId,
+			cid = result.hit.get('ContainerId'),
 			cat = result.up('search-result-category').category;
 
 		function success(obj){
-			nav.navigate(cid,obj);
+			nav.navigate(cid, obj);
 		}
 
 		function failure(req, resp){
@@ -236,7 +230,7 @@ Ext.define('NextThought.controller.Search', {
 					msgCfg.msg = 'You do not have access to this '+objDisplayType+'.';
 				}
 			}
-			console.log("Could not retrieve rawData for: ",result.hitId);
+			console.log("Could not retrieve rawData for: ",result.hit.getId());
 			console.log("Error: ", arguments);
 			alert(msgCfg);
 		}
@@ -253,7 +247,7 @@ Ext.define('NextThought.controller.Search', {
 			return;
 		}
 
-		$AppConfig.service.getObject(result.hitId, success, failure);
+		$AppConfig.service.getObject(result.hit.getId(), success, failure);
 	},
 
 
