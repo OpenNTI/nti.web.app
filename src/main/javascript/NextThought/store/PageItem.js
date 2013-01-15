@@ -97,6 +97,11 @@ Ext.define('NextThought.store.PageItem',{
 					this.buildItemTree(o, tree); } }, this);
 
 			this.prune(tree);
+
+			//take all children off the main collection... make them accessible only by following the children pointers.
+			Ext.Object.each(tree,function(k,o,a){
+				if(o.parent){ delete a[k]; }
+			});
 		}
 
 		return tree;
@@ -184,11 +189,6 @@ Ext.define('NextThought.store.PageItem',{
 		while(needsPruning()){
 			Ext.Object.each(tree, prune);
 		}
-
-		//take all children off the main collection... make them accessible only by following the children pointers.
-		Ext.Object.each(tree,function(k,o,a){
-			if(o.parent){ delete a[k]; }
-		});
 	},
 
 

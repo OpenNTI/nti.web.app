@@ -52,7 +52,7 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 			return;
 		}
 
-		else if (this.record.isFlagged()) {
+		if (this.record.isFlagged()) {
 			console.log('TODO - this is flagged, consider an indicator, or remove this log.');
 		}
 
@@ -131,8 +131,7 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 	},
 
 	setRecord: function(r){
-		var me = this,
-			likeTooltip;
+		var me = this;
 
 		//Remove the old listener
 		if(this.record){
@@ -219,11 +218,7 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 
 	canDelete: function(){
 		var r = this.record;
-		if(!r){
-			return true;
-		}
-
-		return r.children === undefined || r.children.length === 0;
+		return !r || r.isModifiable();
 	},
 
 	addNewChild: function(child){
@@ -242,6 +237,7 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 
 	addReplies: function(records){
 		var toAdd = [];
+
 		Ext.each(records, function(record){
 
 			var guid = IdCache.getComponentId(record, null, 'reply'),

@@ -504,7 +504,8 @@ Ext.define('NextThought.view.annotations.note.Main',{
 	loadReplies: function(record){
 		var me = this,
 			store = NextThought.store.PageItem.create(),
-			responses = me.up('window').down('note-responses');
+			responses = me.up('window').down('note-responses'),
+			recordClone = ParseUtils.parseItems(Ext.clone(record.raw))[0];
 		me.up('window').down('note-responses').removeAll(true);
 		console.log('loading replies');
 		me.mask();
@@ -512,11 +513,31 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		this.replyStore = store;
 
 		function setReplies(theStore){
-			var cmp, items = theStore.getItems();
 			console.log('Store load args', arguments);
+
+			// We add this so we don't generate a placeholder record for it in the buildTree function of the PageItem
+			// store. We don't want a placeholder representation of our parent record, because the pruning algorithm
+			// would see that and remove it, and we would be left without placeholders until there were gaps between
+			// replies of replies.
+			theStore.add(recordClone);
+
+			var cmp, items = theStore.getItems();
+
+			if(items.length === 1 && items[0]===recordClone){
+				items = items[0].children;
+			}
+			else {
+				console.warn('There was an unexpected result from the reply store.');
+			}
+
 			console.log('Setting replies to ', items);
-			record.set('ReferencedByCount',theStore.getCount());//update the count for next time the carousel renders
+
+
+			//the store's count (minus the parent clone) is the reply count.
+			//update the count for next time the carousel renders
+			record.set('ReferencedByCount',theStore.getCount()-1);
 			record.fireEvent('count-updated');
+
 			responses.setReplies(items);
 
 			function maybeOpenReplyEditor(){

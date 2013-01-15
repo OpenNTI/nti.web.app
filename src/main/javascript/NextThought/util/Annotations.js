@@ -8,15 +8,16 @@ Ext.define('NextThought.util.Annotations',{
 	singleton: true,
 
 
-//tested
+//needs testing? where did the test go?
 	/**
 	 * From a reply, build its absent parent
 	 * @param {NextThought.model.Note} note
 	 * @return {NextThought.model.Note}
 	 */
 	replyToPlaceHolder: function(note){
-		var holder = Ext.create('NextThought.model.Note'),
-			refs = (note.get('references') || []).slice();
+		var holder = new NextThought.model.Note(),
+			refs = (note.get('references') || []).slice(),
+			ct = note.get('CreatedTime');
 
 		if(refs.length){
 			refs = Ext.Array.clone(refs);
@@ -27,11 +28,15 @@ Ext.define('NextThought.util.Annotations',{
 			holder.set('inReplyTo', refs[refs.length-1]);
 		}
 
+		//this placeholder "happened in the past" so take the existing time and move it back
+		ct.setMinutes(ct.getMinutes()-1);
+
+		holder.set('CreatedTime', ct);
 		holder.set('Creator', null);
 		holder.set('ContainerId', note.get('ContainerId'));
 		holder.set('NTIID', note.get('inReplyTo'));
 		holder.set('references', refs);
-		holder.set('Last Modified', note.get('Last Modified'));
+		holder.set('Last Modified', ct);
 
 		holder.placeHolder = true;
 		delete holder.phantom;
@@ -48,7 +53,7 @@ Ext.define('NextThought.util.Annotations',{
 		//generate the range description
 		var contentRangeDescription = Anchors.createRangeDescriptionFromRange(range, documentElement);
 
-		return Ext.create('NextThought.model.Note', {
+		return new NextThought.model.Note({
 			applicableRange: contentRangeDescription.description,
             selectedText: range.toString(),
             ContainerId: contentRangeDescription.container
