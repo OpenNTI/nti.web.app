@@ -113,8 +113,11 @@ Ext.define('NextThought.util.Search',{
 	contentRegexForFragment: function(fragment, phraseSearch, captureMatches){
 		var sortedMatches, currentIdx = 0, terms = [], groups = [], currentCapture = 1, me = this;
 
-		function regexify(text, phrase){
+		function regexify(text, phrase, noCapture){
 			var re = me.contentRegexFromSearchTerm(text, phrase);
+			if(noCapture){
+				return re;
+			}
 			currentCapture++;
 			return '('+re+')';
 		}
@@ -159,7 +162,7 @@ Ext.define('NextThought.util.Search',{
 
 		//snag what is left
 		if(currentIdx < fragment.text.length){
-			terms.push(regexify(fragment.text.slice(currentIdx, fragment.text.length), true));
+			terms.push(regexify(fragment.text.slice(currentIdx, fragment.text.length), true, true));
 		}
 
 		return {re: terms.join(''), matchingGroups: groups};
