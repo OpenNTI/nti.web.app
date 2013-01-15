@@ -22,7 +22,6 @@ Ext.define('NextThought.view.whiteboard.editor.Tools',{
 	items:[{
 		ui: 'primary',
 		xtype:'toolbar',
-		primaryTools: true,
 		defaults: { xtype: 'wb-tool' },
 		items: [
 			{ tool: 'move'},
@@ -54,18 +53,15 @@ Ext.define('NextThought.view.whiteboard.editor.Tools',{
 		var me = this;
 		me.callParent(arguments);
 
+		me.addEvents({ 'wb-tool-change': true	});
+		me.enableBubble(['wb-tool-change']);
+
 		me.maybeRemoveImageFeature();
 
 		//attach click handlers:
 		Ext.each(me.query('button[tool]'),function(b){b.on('click',me.switchMenus,me);});
 	},
 
-	constructor: function(){
-		var t = this.callParent(arguments);
-		this.addEvents({ 'wb-tool-change': true	});
-		this.enableBubble(['wb-tool-change']);
-		return t;
-	},
 
 	afterRender: function(){
 		var me = this;

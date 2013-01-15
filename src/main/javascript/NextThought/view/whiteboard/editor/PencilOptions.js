@@ -54,18 +54,16 @@ Ext.define('NextThought.view.whiteboard.editor.PencilOptions',{
 
 
 	constructor:function(){
-		var t;
 		this.items = Ext.clone(this.items);//copy onto instance from prototype
 		this.items[0].defaults.toggleGroup += guidGenerator();
 		this.items[1].defaults.toggleGroup += guidGenerator();
-		t =  this.callParent(arguments);
+		return this.callParent(arguments);
+	},
 
-		this.addEvents({
-			'wb-options-change': true
-		});
-
+	initComponent: function(){
+		this.addEvents({ 'wb-options-change': true });
 		this.enableBubble(['wb-options-change']);
-		return t;
+		this.callParent(arguments);
 	},
 
 	afterRender: function(){

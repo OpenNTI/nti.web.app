@@ -62,11 +62,12 @@ Ext.define('NextThought.view.whiteboard.editor.ShapeOptions',{
 	constructor: function(){
 		this.items = Ext.clone(this.items);//copy onto instance from prototype
 		this.items[0].defaults.toggleGroup += guidGenerator();
+		return this.callParent(arguments);
+	},
 
-		var t = this.callParent(arguments);
+	initComponent: function(){
 		this.addEvents({'wb-options-change': true });
 		this.enableBubble(['wb-options-change']);
-		return t;
 	},
 
 	afterRender: function(){
@@ -108,8 +109,7 @@ Ext.define('NextThought.view.whiteboard.editor.ShapeOptions',{
 
 
 	setOptions: function(options) {
-		var shapeOptions = this.down('toolbar[cls=shape-options]'),
-			shapePicker = this.down('toolbar[cls=shape-picker]'),
+		var shapePicker = this.down('toolbar[cls=shape-picker]'),
 			button;
 
 		if(options.stroke){

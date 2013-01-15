@@ -61,11 +61,10 @@ Ext.define('NextThought.view.whiteboard.editor.MoveOptions',{
 		}
 	],
 
-	constructor: function(){
-		var t = this.callParent(arguments);
+	initComponent: function(){
 		this.addEvents({'wb-options-change': true });
 		this.enableBubble(['wb-options-change']);
-		return t;
+		this.callParent(arguments);
 	},
 
 	afterRender: function(){

@@ -26,7 +26,7 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 		this.toolbar = this.down('whiteboard-tools');
 		this.canvas.updateData(this.value);
 
-		this.mixins.toolState.constructor.apply(this,arguments);
+		this.mixins.toolState.constructor.apply(this);
 	},
 
 	constructor: function(){

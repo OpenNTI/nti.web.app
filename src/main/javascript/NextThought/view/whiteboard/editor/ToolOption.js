@@ -25,15 +25,10 @@ Ext.define('NextThought.view.whiteboard.editor.ToolOption',{
 		this.addCls(this.option);
 		this.iconCls = this.option;
 		this.tooltip = Ext.String.capitalize(this.option);
-		this.callParent(arguments);
-	},
-
-	constructor: function(){
-		var t = this.callParent(arguments);
 
 		this.addEvents({ 'wb-options-change': true });
 		this.enableBubble(['wb-options-change']);
-		return t;
+		this.callParent(arguments);
 	},
 
 
