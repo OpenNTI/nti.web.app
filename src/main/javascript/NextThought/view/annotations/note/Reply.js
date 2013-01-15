@@ -218,7 +218,11 @@ Ext.define('NextThought.view.annotations.note.Reply',{
 
 	canDelete: function(){
 		var r = this.record;
-		return !r || r.isModifiable();
+		if(!r){
+			return true;
+		}
+
+		return r.children === undefined || r.children.length === 0;
 	},
 
 	addNewChild: function(child){
