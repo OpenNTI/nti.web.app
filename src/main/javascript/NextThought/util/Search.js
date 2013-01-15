@@ -165,7 +165,7 @@ Ext.define('NextThought.util.Search',{
 			terms.push(regexify(fragment.text.slice(currentIdx, fragment.text.length), true, true));
 		}
 
-		return {re: terms.join(''), matchingGroups: groups};
+		return {re: new RegExp(terms.join(''), 'ig'), matchingGroups: groups};
 	}
 
 
