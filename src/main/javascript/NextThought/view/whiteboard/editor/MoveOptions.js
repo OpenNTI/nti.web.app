@@ -61,8 +61,26 @@ Ext.define('NextThought.view.whiteboard.editor.MoveOptions',{
 		}
 	],
 
+	constructor: function(){
+		var t = this.callParent(arguments);
+		this.addEvents({'wb-options-change': true });
+		this.enableBubble(['wb-options-change']);
+		return t;
+	},
+
 	afterRender: function(){
 		this.callParent(arguments);
+		var me = this;
+
+		Ext.each( me.query('color-picker-button'), function(i){
+			me.mon(i.palette, { select: function(){	me.fireEvent('wb-options-change', me);} });
+		});
+
+		me.mon(me.down('stroke-select'), {
+			scope: this,
+			select: function(){ me.fireEvent('wb-options-change', me); },
+			change: function(){ me.fireEvent('wb-options-change', me); }
+		});
 
 		//By Default hide the path stroke picker
 		this.down('toolbar[cls=pencil-stroke-options]').hide();
@@ -81,8 +99,9 @@ Ext.define('NextThought.view.whiteboard.editor.MoveOptions',{
 	setOptions: function(options) {
 		var toolbar = this.down('toolbar[cls=shape-options]'),
 			fillButton = toolbar.down('[fillSelectMove]'),
-			strokeButton = toolbar.down('[strokeSelectMove]'), val, s;
+			strokeButton = toolbar.down('[strokeSelectMove]'), val, s, hex;
 
+		if(!options){ return; }
 		if(options.shapeType){
 			s = options.shapeType.split('.').pop().toLowerCase();
 
@@ -104,14 +123,16 @@ Ext.define('NextThought.view.whiteboard.editor.MoveOptions',{
 		if(options.stroke){
             val = null;
             if (options.stroke !== 'NONE'){
-                val = Color.rgbaToHex(options.stroke).substr(1).toUpperCase();
+	            hex = Color.rgbaToHex(options.stroke);
+	            val = hex[0] === '#' ? hex.substr(1).toUpperCase() : hex.toUpperCase();
             }
             strokeButton.setValue(val);
 		}
 		if(options.fill) {
             val = null;
             if (options.fill !== 'NONE'){
-			    val = Color.rgbaToHex(options.fill).substr(1).toUpperCase();
+	            hex = Color.rgbaToHex(options.fill);
+	            val = hex[0] === '#' ? hex.substr(1).toUpperCase() : hex.toUpperCase();
             }
 			fillButton.setValue(val);
 		}
@@ -120,6 +141,7 @@ Ext.define('NextThought.view.whiteboard.editor.MoveOptions',{
 	},
 
 	setStrokeWidthValue: function(strokeValue, shapeType){
+		if(!shapeType){ return;}
 		var s = shapeType.split('.').pop().toLowerCase(), a, sel, btn;
 
 		if(s !== 'path'){

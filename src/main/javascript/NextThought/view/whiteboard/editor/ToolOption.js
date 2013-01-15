@@ -28,6 +28,14 @@ Ext.define('NextThought.view.whiteboard.editor.ToolOption',{
 		this.callParent(arguments);
 	},
 
+	constructor: function(){
+		var t = this.callParent(arguments);
+
+		this.addEvents({ 'wb-options-change': true });
+		this.enableBubble(['wb-options-change']);
+		return t;
+	},
+
 
 	onClick : function(e, t) {
 		var me = this;
@@ -60,7 +68,10 @@ Ext.define('NextThought.view.whiteboard.editor.ToolOption',{
 		function builder (o){
 			var i = o;
 			if(!Ext.isObject(o)){
-				i = { text: o, value: o, handler: function(m){me.setText(me.value = m.value);} };
+				i = { text: o, value: o, handler: function(m){
+					me.setText(me.value = m.value);
+					me.fireEvent('wb-options-change', me.up('wb-tool-shape-options') || me);
+				}};
 			}
 			i.plain = true;
 			menu.items.push(i);

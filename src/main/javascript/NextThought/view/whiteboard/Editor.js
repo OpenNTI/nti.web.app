@@ -6,7 +6,8 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 		'NextThought.view.whiteboard.editor.Tools'
 	],
 	mixins:{
-		interaction: 'NextThought.view.whiteboard.editor.mixins.ShapeManipulation'
+		interaction: 'NextThought.view.whiteboard.editor.mixins.ShapeManipulation',
+		toolState: 'NextThought.view.whiteboard.editor.mixins.ToolOptionsState'
 	},
 
 	autoScroll: true,
@@ -24,6 +25,8 @@ Ext.define(	'NextThought.view.whiteboard.Editor',{
 		this.canvas = this.down('whiteboard-canvas');
 		this.toolbar = this.down('whiteboard-tools');
 		this.canvas.updateData(this.value);
+
+		this.mixins.toolState.constructor.apply(this,arguments);
 	},
 
 	constructor: function(){

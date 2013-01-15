@@ -22,6 +22,7 @@ Ext.define('NextThought.view.whiteboard.editor.Tools',{
 	items:[{
 		ui: 'primary',
 		xtype:'toolbar',
+		primaryTools: true,
 		defaults: { xtype: 'wb-tool' },
 		items: [
 			{ tool: 'move'},
@@ -59,6 +60,24 @@ Ext.define('NextThought.view.whiteboard.editor.Tools',{
 		Ext.each(me.query('button[tool]'),function(b){b.on('click',me.switchMenus,me);});
 	},
 
+	constructor: function(){
+		var t = this.callParent(arguments);
+		this.addEvents({ 'wb-tool-change': true	});
+		this.enableBubble(['wb-tool-change']);
+		return t;
+	},
+
+	afterRender: function(){
+		var me = this;
+		me.callParent(arguments);
+		Ext.each( me.query('wb-tool'), function(i){
+			me.mon(i.el, {
+				click: function(){
+					me.fireEvent('wb-tool-change', me);
+				}
+			});
+		});
+	},
 
 	maybeRemoveImageFeature: function(){
 		if($AppConfig.service.canCanvasURL()){

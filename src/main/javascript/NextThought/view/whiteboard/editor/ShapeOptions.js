@@ -62,7 +62,38 @@ Ext.define('NextThought.view.whiteboard.editor.ShapeOptions',{
 	constructor: function(){
 		this.items = Ext.clone(this.items);//copy onto instance from prototype
 		this.items[0].defaults.toggleGroup += guidGenerator();
-		return this.callParent(arguments);
+
+		var t = this.callParent(arguments);
+		this.addEvents({'wb-options-change': true });
+		this.enableBubble(['wb-options-change']);
+		return t;
+	},
+
+	afterRender: function(){
+		var me = this;
+		me.callParent(arguments);
+
+		Ext.each( me.query('wb-tool-option'), function(i){
+			me.mon(i.el, {
+				click: function(){
+					me.fireEvent('wb-options-change', me);
+				}
+			});
+		});
+
+		Ext.each( me.query('color-picker-button'), function(i){
+			me.mon(i.palette, {
+				select: function(){
+					me.fireEvent('wb-options-change', me);
+				}
+			});
+		});
+
+		me.mon(me.down('stroke-select'), {
+			scope: this,
+			select: function(){ me.fireEvent('wb-options-change', me); },
+			change: function(){ me.fireEvent('wb-options-change', me); }
+		});
 	},
 
 
@@ -82,14 +113,19 @@ Ext.define('NextThought.view.whiteboard.editor.ShapeOptions',{
 			button;
 
 		if(options.stroke){
-			this.down('[stroke='+options.stroke+']').toggle(true);
+			this.down('[strokeSelect]').setValue(options.stroke);
+		}
+		if(options.fill) {
+			this.down('[fillSelect]').setValue(options.fill);
+
+			if(!options.sides || options.sides !== 1){
+				this.down('[fillSelect]').show();
+				this.down('[fillLabel]').show();
+			}
 		}
 		if (options.strokeWidth) {
-			this.down('[strokeWidth='+options.strokeWidth+']').toggle(true);
+			this.down('stroke-select').setValue(options.strokeWidth);
 		}
-//		if(options.fill) {
-//
-//		}
 		if (options.sides !== null) {
 			button = shapePicker.down('[sides='+options.sides+']') || shapePicker.down('wb-tool-option[option="poly shape"]');
 			button.setValue(options.sides);
