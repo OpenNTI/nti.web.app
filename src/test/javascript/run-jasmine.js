@@ -15,13 +15,12 @@ var mimeMap = {
 	jpg: 'image/jpeg',
 	png: 'image/png'
 };
-// if --verbose, store would-be console output to a string, for printing after the summary
+// get CLI options
 for (i = 0; i < phantom.args.length; i++) {
 	if (phantom.args[i] === '--verbose') {
 		verbose = true;
 	}
 }
-var longOutput = "";
 
 // find index.html
 while( !fs.exists(path.join(s)+s+'index.html') && path.length ){ path.pop(); }
@@ -67,15 +66,17 @@ if (!listening) {
 }
 
 // anonymous function to be immediately executed
-(function(verbose, longOutput){
+(function(verbose){
 
 	// waits for a certain condition to run some particular code
 	function waitFor(testFx, onReady, timeOutMillis) {
 		var maxtimeOutMillis = timeOutMillis ? timeOutMillis : 3001,
 			start = new Date().getTime(),
 			condition = false,
+			elapsedMillis = 0,
 			interval = setInterval(function() {
-				if ( (new Date().getTime() - start < maxtimeOutMillis) && !condition ) {
+				elapsedMillis = new Date().getTime() - start;
+				if ( (elapsedMillis < maxtimeOutMillis) && !condition ) {
 					condition = (testFx());
 				} else {
 					if(!condition) {
@@ -85,7 +86,7 @@ if (!listening) {
 
 						phantom.exit(1);
 					} else {
-						onReady();
+						onReady(elapsedMillis); // pass elapsed time to function
 						clearInterval(interval);
 					}
 				}
@@ -97,25 +98,14 @@ if (!listening) {
 		console.log('ALERT: '+msg);
 	};
 
-	// intercept console output and store it for later
+	// intercept console output
 	page.onConsoleMessage = function(msg, line, source) {
-		if (verbose) {
-			longOutput += msg + '\n';
-		}
-	};
-
-	page.onLoadStarted = function(){
-		if (verbose) {
-			longOutput += "Loading...\n";
-		}
+		// TODO: associate miscellaneous console output with the test that generated it
 	};
 
 	// open the page and check for success
 	page.open("http://localhost:"+port+"/index.html", function(status){
-		if (verbose) {
-			longOutput += "Initial Load finished, executing...\n";
-		}
-
+		// if the page failed to load, quit
 		if (status !== "success") {
 			console.log("Unable to access network\n\n"+JSON.stringify(status, null, 4));
 			phantom.exit();
@@ -129,76 +119,41 @@ if (!listening) {
 					});
 				},
 
-				function(){
-					if (verbose) {
-						longOutput += '\n\nEvaluating results:\n';
-					}
+				function(elapsedMillis){
+					var i, j;
 					// stop intercepting console messages; print them again
 					page.onConsoleMessage = function(msg, line, source) {
 						console.log(msg);
 					};
-					
 					// another anonymous immediate function
-					page.evaluate( function(verbose, longOutput) {
-						var start = new Date();
-						var suites = document.body.querySelectorAll('.suite'),
-							i, j, suite, suiteName, specName, passOrFail,
-								specs, spec, passed, trace, runner, passedAll = true, suiteNameParent,
-								suiteId, m, resultString = '', failedTests = [], numTests = 0, numPassed, numFailed;
-
-						// for each suite, run all the tests
-						for (i = 0; i < suites.length; i++){
-							suite = suites[i];
-
-							suiteName = suite.querySelector('.description').innerText;
-							suiteNameParent = suite.parentNode;
-							while(suiteNameParent && suiteNameParent.className.indexOf("suite") >= 0){
-								suiteName = suiteNameParent.querySelector('.description').innerText + " > " + suiteName;
-								suiteNameParent = suiteNameParent.parentNode;
-							}
-							
-							if (verbose) {
-								passOrFail = suite.className.indexOf('passed') !== -1 ? "Passed" : "Failed";
-								longOutput += ('\n'+passOrFail+':\t'+'Suite: '+suiteName + '\n');
-								longOutput += ('--------------------------------------------------------\n');
-							}
-
-							suiteId = 'suite-'+i;
-							suite.setAttribute('id',suiteId);
-							specs = suite.querySelectorAll('#'+suiteId+' > .specSummary');
-
-							// run each test
-							for (j = 0; j < specs.length; j++){
-								spec = specs[j];
-								passed = spec.className.indexOf('passed') !== -1;
-								specName = spec.querySelector('.description').innerText;
-
-								numTests++;
-								
-								if (verbose) {
-									passOrFail = passed ? 'Passed' : "Failed\n";
-									longOutput += ('\t'+passOrFail+':\t'+specName + '\n');
+					page.evaluate( function(elapsedMillis, verbose) {
+						// prints out the descriptions (and error messages, if any) of a list of specs
+						function printTestResults(testsToPrint, verbose) {
+							for (i = 0; i < testsToPrint.length; i++) {
+								var testToPrint = testsToPrint[i];
+								// print description
+								var passOrFail = testToPrint.className.indexOf('passed') >= 0 ? 'PASSED' : 'FAILED';
+								console.log(passOrFail + ': ' + testToPrint.getElementsByClassName('description')[0].innerHTML);
+								var messages = testToPrint.querySelectorAll('.resultMessage, .stackTrace');
+								// print error messages
+								for (j = 0; j < messages.length; j++) {
+									var message = messages[j];
+									// always print result messages
+									if (message.className.indexOf('resultMessage') >= 0) {
+										console.log(message.innerHTML);
+									}
+									// print stack trace if --verbose is set
+									if (verbose && message.className.indexOf('stackTrace') >= 0) {
+										console.log('Stack trace:');
+										console.log(message.innerHTML);
+									} 
 								}
-
-								// keep track of failed tests
-								if(!passed){
-									passedAll = false;
-									failedTests.push(suiteName+': '+specName);
+								if (messages.length > 0) {
+									console.log('');
 								}
 							}
 						}
-						
-						// end-of-verbose-output summary
-						if (verbose) {
-							runner = document.body.querySelector('.alert');
-							longOutput += ('--------------------------------------------------------\n');
-							longOutput += ('Finished: '+runner.innerText+'\n');
-							longOutput += ('\nStatus: '+(passedAll? 'Good!':'There were failures!' + '\n'));
-						}
-						
-						// get the elapsed hours, minutes, and seconds of the test run
-						var end = new Date();
-						var elapsedMillis = (end - start);
+						// turn the elapsed millis into a nice string
 						var elapsedSeconds = elapsedMillis / 1000;
 						var elapsedMinutes = Math.floor(elapsedSeconds / 60);
 						elapsedSeconds %= 60;
@@ -211,31 +166,27 @@ if (!listening) {
 						if (elapsedHours > 0) {
 							elapsedTime = elapsedHours + ' hours ' + elapsedTime;
 						}
-						
-						// all tests either pass or fail; there is no built-in skip functionality in Jasmine
-						numFailed = failedTests.length;
-						numPassed = numTests - numFailed;
+												
+						// count passed and failed tests
+						var passed = document.body.querySelectorAll('.specSummary.passed').length;
+						var failed = document.body.querySelectorAll('.specSummary.failed').length;
 
-						// non-verbose summary line
-						console.log(numFailed + ' tests failed, ' + numPassed + ' tests passed in ' + elapsedTime);
-						if (numFailed > 0) {
+						// summary line
+						console.log(failed + ' tests failed, ' + passed + ' tests passed in ' + elapsedTime);
+						// print failed tests, if any
+						if (failed > 0) {
 							console.log('');
-							console.log('Failed tests:');
-							for (i=0; i<failedTests.length; i++) {
-								console.log(failedTests[i]);
+							printTestResults(document.body.querySelectorAll('.specDetail.failed'), verbose);
+							if (verbose) {
+								printTestResults(document.body.querySelectorAll('.suite.passed'), verbose);
 							}
 						}
-						
-						// verbose additional info
-						if (verbose) {
-							console.log('');
-							console.log(longOutput);
-						}
-					}, verbose, longOutput); // pass these variables to the anonymous innermost function
+
+					}, elapsedMillis, verbose); // pass these variables to the anonymous innermost function
 					phantom.exit();
 				},
 				600001
 			);
 		}
 	});
-})(verbose, longOutput); // pass these variables to the anonymous inner function
+})(verbose); // pass these variables to the anonymous inner function
