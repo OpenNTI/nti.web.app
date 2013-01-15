@@ -6,7 +6,7 @@ Ext.define('NextThought.util.Search',{
 	splitWhitespaceRe: /\W+/,
 
 	trimRe: /^["'\s]+|["'\s]+$/ig,
-	trimPunctuationReStr: '[\?!()"\'`{}\[\]:;,\.\^%&#*@$&+\-<>=_\~\\\s]', //This matches the regex the DS uses
+	trimPunctuationReStr: '[\?!()"\'`{}\\[\\]:;,\\.\\^%&#\\*@$&\\+-<>=_~\\s]', //This matches the regex the DS uses
 
 	/**
 	 *
@@ -85,11 +85,11 @@ Ext.define('NextThought.util.Search',{
 				term = term.replace(/[^a-zA-Z0-9 ]/g, "[^a-zA-Z0-9 ]");
 
 				if(phraseSearch){
-					term = term.replace(/\s([^\]])/g, '[\\.,-\\/#!$%\\^&\\*;:{}=\\-_`~()\\s]+$1');
+					term = term.replace(/\s([^\]])/g, this.trimPunctuationReStr+'+$1');
 				}
 
 				escapedParts.push(term);
-			});
+			}, this);
 			combinedRegex = new RegExp(escapedParts.join('|'), 'ig');
 		}
 
@@ -106,7 +106,7 @@ Ext.define('NextThought.util.Search',{
 		term = fragment.text;
 		term = term.replace(/[.*+?|()\[\]{}\\$\^]/g,'\\$&');
 		term = term.replace(/[^a-zA-Z0-9 ]/g, "[^a-zA-Z0-9 ]");
-		term = term.replace(/\s([^\]])/g, '[\\.,-\\/#!$%\\^&\\*;:{}=\\-_`~()\\s]+$1');
+		term = term.replace(/\s([^\]])/g, this.trimPunctuationReStr+'+$1');
 
 		return new RegExp(term, 'ig');
 	}
