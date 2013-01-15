@@ -179,8 +179,8 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 		return this.searchAnnotations.firstHitLocation();
 	},
 
-	getFragmentLocation: function(fragment){
-		var fragRegex = SearchUtils.fragmentRegex(fragment),
+	getFragmentLocation: function(fragment, phrase){
+		var fragRegex = SearchUtils.contentRegexForFragment(fragment, phrase),
 			doc = this.getDocumentElement(),
 			ranges = this.findTextRanges(doc, doc, fragRegex),
 			range, pos = -2, nodeTop;
