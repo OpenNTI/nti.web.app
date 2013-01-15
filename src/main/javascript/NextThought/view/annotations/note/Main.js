@@ -505,7 +505,11 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		var me = this,
 			store = NextThought.store.PageItem.create(),
 			responses = me.up('window').down('note-responses'),
-			recordClone = ParseUtils.parseItems(Ext.clone(record.raw))[0];
+			recordClone = ParseUtils.parseItems(
+					Ext.apply(
+							Ext.clone(record.raw),
+							{inReplyTo:undefined}// don't let the buildTree algorithm create placeholders above this...throws things off
+					))[0];
 		me.up('window').down('note-responses').removeAll(true);
 		console.log('loading replies');
 		me.mask();
