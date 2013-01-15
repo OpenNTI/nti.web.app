@@ -254,7 +254,7 @@ Ext.define('NextThought.controller.Search', {
 		Ext.ComponentQuery.query('library-view-container')[0].activate();
 
 		if(cat==='Books'){
-			nav.navigateAndScrollToSearchHit(cid, result);
+			nav.navigateAndScrollToSearchHit(cid, result, clickedFragment);
 			return;
 		}
 

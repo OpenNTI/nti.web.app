@@ -6,6 +6,7 @@ Ext.define('NextThought.util.Search',{
 	splitWhitespaceRe: /\W+/,
 
 	trimRe: /^["'\s]+|["'\s]+$/ig,
+	trimPunctuationReStr: '[\?!()"\'`{}\[\]:;,\.\^%&#*@$&+\-<>=_\~\\\s]', //This matches the regex the DS uses
 
 	/**
 	 *
@@ -93,7 +94,23 @@ Ext.define('NextThought.util.Search',{
 		}
 
 		return combinedRegex;
+	},
+
+	fragmentRegex: function(fragment){
+		var term, combinedRegex, escapedParts;
+
+		if( !fragment ){
+			return null;
+		}
+
+		term = fragment.text;
+		term = term.replace(/[.*+?|()\[\]{}\\$\^]/g,'\\$&');
+		term = term.replace(/[^a-zA-Z0-9 ]/g, "[^a-zA-Z0-9 ]");
+		term = term.replace(/\s([^\]])/g, '[\\.,-\\/#!$%\\^&\\*;:{}=\\-_`~()\\s]+$1');
+
+		return new RegExp(term, 'ig');
 	}
+
 
 }, function(){
 	window.SearchUtils = this;

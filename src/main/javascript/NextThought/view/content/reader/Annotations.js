@@ -14,9 +14,11 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 		'NextThought.view.annotations.Transcript',
 		'NextThought.view.annotations.QuizResults',
 		'NextThought.view.assessment.Scoreboard',
-		'NextThought.cache.IdCache'
+		'NextThought.cache.IdCache',
+		'NextThought.util.Search'
 	],
 
+	mixins: {textRangeFinder: 'NextThought.ux.TextRangeFinder'},
 
 	constructor: function(){
 		var me = this, c = NextThought.controller;
@@ -175,6 +177,29 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 
 	getSearchHitLocation: function(){
 		return this.searchAnnotations.firstHitLocation();
+	},
+
+	getFragmentLocation: function(fragment){
+		var fragRegex = SearchUtils.fragmentRegex(fragment),
+			doc = this.getDocumentElement(),
+			ranges = this.findTextRanges(doc, doc, fragRegex),
+			range, pos = -2, nodeTop;
+
+		if(Ext.isEmpty(ranges)){
+			console.warn('Could not find location of fragment', fragment);
+			return -1;
+		}
+
+		if(ranges.length > 1){
+			console.warn('Found multiple hits for fragment.  Using first', fragment, ranges);
+		}
+		range = ranges[0];
+
+		//This breaks for assessment
+		if(range){
+			pos = range.getClientRects()[0].top;
+		}
+		return pos;
 	},
 
 	clearSearchHit: function() {

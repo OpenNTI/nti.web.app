@@ -124,7 +124,7 @@ Ext.define('NextThought.view.content.reader.Scroll',{
 		this.body.scrollTo('top', top, animate!==false);
 	},
 
-	scrollToSearchHit: function(result) {
+	scrollToSearchHit: function(result, fragment) {
 		var me = this, pos;
 
 		me.clearSearchHit();
@@ -133,6 +133,11 @@ Ext.define('NextThought.view.content.reader.Scroll',{
 		}
 		me.showSearchHit(result.hit);
 		pos = me.getSearchHitLocation();
+		/*if(fragment){
+			console.time('Fragment location');
+			pos = me.getFragmentLocation(fragment);
+			console.timeEnd('Fragment location');
+		}*/
 
 		if(pos >= 0){
 			try{

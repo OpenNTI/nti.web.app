@@ -170,9 +170,9 @@ Ext.define('NextThought.controller.Navigation', {
 	},
 
 
-	navigateAndScrollToSearchHit: function(ntiid, result){
+	navigateAndScrollToSearchHit: function(ntiid, result, fragment){
 		function callback(reader){
-			(reader||ReaderPanel.get()).scrollToSearchHit(result);
+			(reader||ReaderPanel.get()).scrollToSearchHit(result, fragment);
 		}
 
 		LocationProvider.setLocation(ntiid, callback, this);

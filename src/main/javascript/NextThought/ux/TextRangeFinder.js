@@ -26,18 +26,9 @@ Ext.define('NextThought.ux.TextRangeFinder', {
         return redactionAction;
     },
 
-
 	/**
-	 * A heavily modified version of Raymond Hill's doHighlight code. Attribution below
-	 *
-	 * @param node - the node to search for ranges beneath
-	 * @param doc - the document fragment node is a child of
-	 * @param searchFor - a string or a regex to search for
-	 * @param which - if provided the subexpression of the regex to be matched
-	 *
-	 * @returns a list of range objects that represent the portion of text to highlight
-	 **/
-
+	 * These functions are a heavily modified version of Raymond Hill's doHighlight code. Attribution below
+	 */
 	// Author: Raymond Hill
 	// Version: 2011-01-17
 	// Title: HTML text hilighter
@@ -48,19 +39,11 @@ Ext.define('NextThought.ux.TextRangeFinder', {
 	//   2012-01-29
 	//     fixed a bug which caused special regex characters in the
 	//     search string to break the highlighter
-	findTextRanges: function(node, doc, searchFor, which){
 
-		// normalize search arguments, here is what is accepted:
-		// - single string
-		// - single regex (optionally, a 'which' argument, default to 0)
-		if(Ext.isString(searchFor)) {
-			// rhill 2012-01-29: escape regex chars first
-			// http://stackoverflow.com/questions/280793/case-insensitive-string-replacement-in-javascript
-			searchFor = new RegExp(searchFor.replace(/[.*+?|()\[\]{}\\$\^]/g,'\\$&'),'ig');
-		}
-		which = which || 0;
-
-		// initialize root loop
+	//Returns an object with two properties indices
+	//and text.
+	indexText: function(node){
+			// initialize root loop
 		var indices = [],
 			text = [], // will be morphed into a string later
 			iNode = 0,
@@ -68,8 +51,7 @@ Ext.define('NextThought.ux.TextRangeFinder', {
 			nodeText,
 			textLength = 0,
 			stack = [],
-			child, nChildren,
-			state, ranges = [];
+			child, nChildren;
 		// collect text and index-node pairs
 		for (;;){
 			while (iNode<nNodes){
@@ -126,7 +108,7 @@ Ext.define('NextThought.ux.TextRangeFinder', {
 
 		// quit if found nothing
 		if (!indices.length){
-			return ranges;
+			return null;
 		}
 
 		// morph array of text into contiguous text
@@ -135,61 +117,115 @@ Ext.define('NextThought.ux.TextRangeFinder', {
 		// sentinel
 		indices.push({i:text.length});
 
-		// find and hilight all matches
+		return {text: text, indices: indices};
+	},
+
+	// find entry in indices array (using binary search)
+	searchForEntry: function(start, end, lookFor, array, endEdge){
+		var i;
+		while (start < end) {
+			i = start + end >> 1;
+			if(lookFor < array[i].i + (endEdge ? 1 : 0)){end = i;}
+			else if (lookFor >= array[i+1].i + (endEdge ? 1 : 0) ){start = i + 1;}
+			else {start = end = i;}
+		}
+		return start;
+	},
+
+	adjustLocatedRange: function(range){
+		return this.rangeIsInsideRedaction(range) || range;
+	},
+
+	/**
+	 * @param node - the node to search for ranges beneath
+	 * @param doc - the document fragment node is a child of
+	 * @param searchFor - a string or a regex to search for
+	 * @param which - if provided the subexpression of the regex to be matched or an array of subexpression idexes
+	 * Note cutz: for the which param to work it expects each part of your regex to be captured
+	 * IE if your goal is to have a capture in the middle of the regex you must also capture the first portion prior to it
+	 *
+	 * @returns a list of range objects that represent the portion of text to highlight
+	 **/
+	findTextRanges: function(node, doc, searchFor, which){
 		var iMatch, matchingText,
 			iTextStart, iTextEnd,
 			i, iLeft, iRight,
 			iEntryLeft, iEntryRight, entryLeft, entryRight,
 			parentNode, nextNode, newNode,
 			iNodeTextStart, iNodeTextEnd,
-			textStart, textMiddle, textEnd, range;
+			textStart, textMiddle, textEnd, range, indexedText, ranges = [],
+			text, indices, quit;
 
-		// find entry in indices array (using binary search)
-		function searchForEntry(start, end, lookFor, array, endEdge){
-			var i;
-			while (start < end) {
-				i = start + end >> 1;
-				if(lookFor < array[i].i + (endEdge ? 1 : 0)){end = i;}
-				else if (lookFor >= array[i+1].i + (endEdge ? 1 : 0) ){start = i + 1;}
-				else {start = end = i;}
-			}
-			return start;
+		// normalize search arguments, here is what is accepted:
+		// - single string
+		// - single regex (optionally, a 'which' argument, default to 0)
+		if(Ext.isString(searchFor)) {
+			// rhill 2012-01-29: escape regex chars first
+			// http://stackoverflow.com/questions/280793/case-insensitive-string-replacement-in-javascript
+			searchFor = new RegExp(searchFor.replace(/[.*+?|()\[\]{}\\$\^]/g,'\\$&'),'ig');
 		}
+		which = which || 0;
+		if(!Ext.isArray(which)){
+			which = [which];
+		}
+		which = Ext.Array.sort(which);
+
+		//Index all the text beneath node
+		indexedText = this.indexText(node);
+		if(!indexedText){
+			return ranges;
+		}
+
+		text = indexedText.text;
+		indices = indexedText.indices;
 
 		// loop until no more matches
 		for (;;){
-
 			// find matching text, stop if none
 			matchingText = searchFor.exec(text);
-			if (!matchingText || matchingText.length<=which || !matchingText[which].length){
+			if(!matchingText || matchingText.length <= which[which.length - 1]){
 				break;
 			}
+			quit = false;
 
-			// calculate a span from the absolute indices
-			// for start and end of match
-			iTextStart = matchingText.index;
-			for (iMatch=1; iMatch < which; iMatch++){
-				iTextStart += matchingText[iMatch].length;
+			//loop over the which capture groups
+			Ext.each(which, function(whichGroup){
+				if(!matchingText[whichGroup].length){
+					quit = true;
+					return false;
+				}
+
+				// calculate a span from the absolute indices
+				// for start and end of match
+
+				//TODO this could be optimized slightly to start with the
+				//offset of the last match
+				iTextStart = matchingText.index;
+				for (iMatch=1; iMatch < which; iMatch++){
+					iTextStart += matchingText[iMatch].length;
+				}
+				iTextEnd = iTextStart + matchingText[which].length;
+
+				iEntryLeft = this.searchForEntry(0, indices.length, iTextStart, indices);
+				iEntryRight = this.searchForEntry(iEntryLeft, indices.length, iTextEnd, indices, true);
+
+				entryLeft = indices[iEntryLeft];
+				entryRight = indices[iEntryRight];
+				iNodeTextStart = iTextStart - entryLeft.i;
+				iNodeTextEnd = iTextEnd - entryRight.i;
+
+				range = doc.createRange();
+				range.setStart(entryLeft.n, Math.max(iNodeTextStart, 0));
+				range.setEnd(entryRight.n, iNodeTextEnd);
+
+				range = this.adjustLocatedRange(range);
+
+				ranges.push(range);
+			}, this);
+
+			if(quit){
+				break;
 			}
-			iTextEnd = iTextStart + matchingText[which].length;
-
-			iEntryLeft = searchForEntry(0, indices.length, iTextStart, indices);
-			iEntryRight = searchForEntry(iEntryLeft, indices.length, iTextEnd, indices, true);
-
-			entryLeft = indices[iEntryLeft];
-			entryRight = indices[iEntryRight];
-			iNodeTextStart = iTextStart - entryLeft.i;
-			iNodeTextEnd = iTextEnd - entryRight.i;
-
-			range = doc.createRange();
-			range.setStart(entryLeft.n, Math.max(iNodeTextStart, 0));
-			range.setEnd(entryRight.n, iNodeTextEnd);
-
-            var redactionParent = this.rangeIsInsideRedaction(range);
-            if(redactionParent){
-                ranges.push(redactionParent);
-            }
-            ranges.push(range);
         }
 		return ranges;
 	}
