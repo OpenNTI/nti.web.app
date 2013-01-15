@@ -78,7 +78,8 @@ Ext.define('NextThought.view.whiteboard.editor.ShapeOptions',{
 
 	setOptions: function(options) {
 		var shapeOptions = this.down('toolbar[cls=shape-options]'),
-			shapePicker = this.down('toolbar[cls=shape-picker]');
+			shapePicker = this.down('toolbar[cls=shape-picker]'),
+			button;
 
 		if(options.stroke){
 			this.down('[stroke='+options.stroke+']').toggle(true);
@@ -89,12 +90,14 @@ Ext.define('NextThought.view.whiteboard.editor.ShapeOptions',{
 //		if(options.fill) {
 //
 //		}
-//		if (options.sides) {
-//			if (options.sides === 3){/*triangle?*/}
-//			else if (options.sides === 4){/*square?*/}
-//			else if (options.sides === 1){/*line?*/}
-//			else {/*um?*/}
-//		}
+		if (options.sides !== null) {
+			button = shapePicker.down('[sides='+options.sides+']') || shapePicker.down('wb-tool-option[option="poly shape"]');
+			button.setValue(options.sides);
+		}
+		else {
+			//circle
+			shapePicker.down('wb-tool-option[option="circle shape"]').toggle(true);
+		}
 	},
 
 

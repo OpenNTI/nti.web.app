@@ -72,6 +72,18 @@ Ext.define('NextThought.view.whiteboard.editor.ToolOption',{
 
 	getValue: function(){
 		return this.value;
-	}
+	},
 
+	setValue: function(v){
+		this.toggle(true);
+		if(this.options){
+			this.menu.items.each(function(o){
+				if(o.value === v){
+					o.handler(o);
+					return false;
+				}
+				return true;
+			});
+		}
+	}
 });
