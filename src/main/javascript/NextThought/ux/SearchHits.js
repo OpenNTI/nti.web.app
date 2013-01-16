@@ -72,7 +72,7 @@ Ext.define('NextThought.ux.SearchHits', {
 			return null;
 		}
 		this.ranges = this.findTextRanges(doc, doc, re);
-
+		//this.ranges = this.findTextRangesForSearchHit(this.hit, doc, doc )
 		return this.ranges;
 	},
 
@@ -149,7 +149,7 @@ Ext.define('NextThought.ux.SearchHits', {
 	},
 
 	firstHitLocation: function(){
-		var theRanges = this.getRanges(), assessmentAdjustment = 0, 
+		var theRanges = this.getRanges(), assessmentAdjustment = 0,
 			firstRange, nodeTop, scrollOffset, pos = -1;
 
 		//FIXME get this assessment hack out of here, the reader should ask whatever

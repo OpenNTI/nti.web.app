@@ -1,5 +1,4 @@
 Ext.define('NextThought.util.Search',{
-	singleton: true,
 
 	ignoredWordsRe: /\b(a|an|and|are|as|at|be|but|by|for|if|in|into|is|it|no|not|of|on|or|the|to|was)\b/ig,
 
@@ -48,15 +47,19 @@ Ext.define('NextThought.util.Search',{
 		return term;
 	},
 
-	contentRegexForSearchHit: function(hit, phraseSearch){
+	extractMatchFromFragment: function(fragText, match){
+		return fragText.slice(match[0], match[1]);
+	},
+
+	contentRegexPartsForHit: function(hit){
 		function isContent(hit){
 			return (/content/i).test(hit.get('Type'));
 		}
 
 		var fragments = hit.get('Fragments'),
-			terms = [], combinedRegex, escapedParts;
+			terms = [];
 
-		if(!isContent(hit) || !fragments || fragments.length === 0){
+		if(!isContent(hit) || Ext.isEmpty(fragments)){
 			return null;
 		}
 
@@ -67,29 +70,38 @@ Ext.define('NextThought.util.Search',{
 			}
 			else{
 				//Sort the matches backwards so we can do string replaces without invalidating
-
+				fragment.matches.sort(function(a, b){return b[0] - a[0];});
 				Ext.each(fragment.matches, function(match, idx){
 					var term,
-						//Attempt to detect bad data from the server
-						next = idx + 1 < fragment.matches.length ? fragment.matches[idx + 1] : [0, 0];
+					//Attempt to detect bad data from the server
+					next = idx + 1 < fragment.matches.length ? fragment.matches[idx + 1] : [0, 0];
 					if(next[1] > match[1]){
 						console.warn('Found a match that is a subset of a previous match.  Server breaking its promise?', fragment.matches);
 						return true; //continue
 					}
 
-					term = fragment.text.slice(match[0], match[1]);
+					term = this.extractMatchFromFragment(fragment.text, match);
 					if(term){
 						fragTerms.push(term);
 					}
 					return true;
-				});
+				}, this);
 
 				terms = Ext.Array.merge(terms, fragTerms);
 			}
-		});
+		}, this);
 
-		if(terms.length > 0){
-			terms = Ext.Array.unique(terms);
+		terms = Ext.Array.unique(terms);
+
+		return terms;
+	},
+
+	contentRegexForSearchHit: function(hit, phraseSearch){
+		var terms, combinedRegex, escapedParts;
+
+		terms = this.contentRegexPartsForHit(hit);
+
+		if(!Ext.isEmpty(terms)){
 			escapedParts = Ext.Array.map(terms, function(item){
 				return this.contentRegexFromSearchTerm(item, phraseSearch);
 			}, this);
@@ -153,7 +165,7 @@ Ext.define('NextThought.util.Search',{
 			}
 			groups.push(currentCapture);
 			//Now snag the actual match
-			terms.push(regexify(fragment.text.slice(match[0], match[1]), phraseSearch));
+			terms.push(regexify(this.extractMatchFromFragment(fragment.text, match), phraseSearch));
 
 			//update current
 			currentIdx = match[1];
@@ -170,5 +182,5 @@ Ext.define('NextThought.util.Search',{
 
 
 }, function(){
-	window.SearchUtils = this;
+	window.SearchUtils = new this();
 });
