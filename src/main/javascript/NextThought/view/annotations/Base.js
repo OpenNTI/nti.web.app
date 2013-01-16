@@ -330,13 +330,20 @@ Ext.define( 'NextThought.view.annotations.Base', {
 		if(!Ext.isArray(event)){
 			event = [event];
 		}
+
+		var called = false,
+			timerId;
+
+		function block(){
+			if(called){return undefined;}
+			called = true;
+			var r = fn.apply(scope,arguments);
+			timerId = setTimeout(function(){called=false;},50);
+			return r;
+		}
+
 		Ext.each(event,function(event){
-			function f(e){
-				e = Ext.EventObject.setEvent(e||event);
-				fn.apply(scope||window,[e,dom]);
-			}
-			if(dom.addEventListener) { dom.addEventListener(event,f,false); }
-			else if(dom.attachEvent) { dom.attachEvent(event,f); }
+			Ext.fly(dom).on(event,block);
 		});
 	},
 
@@ -344,7 +351,7 @@ Ext.define( 'NextThought.view.annotations.Base', {
 	onClick: function(e) {
 		if(!this.isVisible){
 			console.debug('DEBUG: Ignoring click on hidden annotation');
-			return;
+			return true;
 		}
 
 		var menu,
@@ -360,12 +367,13 @@ Ext.define( 'NextThought.view.annotations.Base', {
         if (menu){
             if(this.isSingleAction){
                 menu.items.first().handler.call(menu);
-                return;
+                return true;
             }
 
             menu.showAt.apply(menu,xy);
             menu.setPosition(xy[0]-menu.getWidth()/2,xy[1]+10);
         }
+
 		e.stopEvent();
 		return false;//IE :(
 	},
