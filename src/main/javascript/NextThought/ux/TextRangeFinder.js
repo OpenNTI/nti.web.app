@@ -1,5 +1,5 @@
 Ext.define('NextThought.ux.TextRangeFinder', {
-	requires: [],
+	requires: ['NextThought.util.Search'],
 
 
     rangeIsInsideRedaction: function(r){
@@ -146,7 +146,7 @@ Ext.define('NextThought.ux.TextRangeFinder', {
 	 *
 	 * @returns a list of range objects that represent the portion of text to highlight
 	 **/
-	findTextRanges: function(node, doc, searchFor, which){
+	findTextRanges: function(node, doc, searchFor, which, textIndex){
 		var iMatch, matchingText,
 			iTextStart, iTextEnd,
 			i, iLeft, iRight,
@@ -171,7 +171,7 @@ Ext.define('NextThought.ux.TextRangeFinder', {
 		which = Ext.Array.sort(which);
 
 		//Index all the text beneath node
-		indexedText = this.indexText(node);
+		indexedText = textIndex || this.indexText(node);
 		if(!indexedText){
 			return ranges;
 		}
@@ -201,10 +201,10 @@ Ext.define('NextThought.ux.TextRangeFinder', {
 				//TODO this could be optimized slightly to start with the
 				//offset of the last match
 				iTextStart = matchingText.index;
-				for (iMatch=1; iMatch < which; iMatch++){
+				for (iMatch=1; iMatch < whichGroup; iMatch++){
 					iTextStart += matchingText[iMatch].length;
 				}
-				iTextEnd = iTextStart + matchingText[which].length;
+				iTextEnd = iTextStart + matchingText[whichGroup].length;
 
 				iEntryLeft = this.searchForEntry(0, indices.length, iTextStart, indices);
 				iEntryRight = this.searchForEntry(iEntryLeft, indices.length, iTextEnd, indices, true);
@@ -227,6 +227,35 @@ Ext.define('NextThought.ux.TextRangeFinder', {
 				break;
 			}
         }
+		return ranges;
+	},
+
+	findTextRangesForSearchHit: function(hit, node, doc){
+		var fragments, phrase, ranges = [], textIndex;
+
+		if(!hit){
+			return null;
+		}
+
+		fragments = hit.get('Fragments');
+		phrase = hit.get('PhraseSearch');
+
+		if(Ext.isEmpty(fragments)){
+			return null;
+		}
+
+		//index the text
+		textIndex = this.indexText(node);
+
+		//For each fragment build are regex string
+		//and grap the ranges
+		Ext.each(fragments, function(frag){
+			console.log('Working on frag', frag);
+			var re = SearchUtils.contentRegexForFragment(frag, phrase, true);
+
+			Ext.Array.push(ranges, this.findTextRanges(node, doc, re.re, re.matchingGroups, textIndex));
+		}, this);
+
 		return ranges;
 	}
 

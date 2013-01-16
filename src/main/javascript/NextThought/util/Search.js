@@ -140,9 +140,9 @@ Ext.define('NextThought.util.Search',{
 		Ext.each(sortedMatches, function(match, idx){
 			var term,
 			//Attempt to detect bad data from the server
-			next = idx + 1 < fragment.matches.length ? fragment.matches[idx + 1] : [Infinity, Infinity];
+			next = idx + 1 < sortedMatches.length ? sortedMatches[idx + 1] : [Infinity, Infinity];
 			if(next[0] < match[1]){
-				console.warn('Found a match that is a subset of a previous match.  Server breaking its promise?', fragment.matches);
+				console.warn('Found a match that is a subset of a previous match.  Server breaking its promise?', sortedMatches);
 				return true; //continue
 			}
 
