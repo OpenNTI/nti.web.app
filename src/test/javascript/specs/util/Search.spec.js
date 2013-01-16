@@ -8,7 +8,7 @@ describe("Search utils", function() {
 
 	it("Makes Global SearchUtils available", function(){
 		expect(SearchUtils).toBeTruthy();
-		expect(Ext.getClassName(SearchUtils)).toEqual('NextThought.util.Search')
+		expect(Ext.getClassName(SearchUtils)).toEqual('NextThought.util.Search');
 	});
 
 	describe("contentRegexFromSearchTerm", function(){
@@ -31,6 +31,14 @@ describe("Search utils", function() {
 		it('Phrase search ignores punctuation', function(){
 			var content = 'were, did? Court\u0027s belong!',
 				term = 'were did Court\'s belong', re;
+
+			re = TestSearchUtils.contentRegexFromSearchTerm(term, true);
+			expect(new RegExp(re).test(content)).toBeTruthy();
+		});
+
+		it('Allows phrase search to span ?', function(){
+			var content = 'beef? chicken',
+				term = 'beef chicken', re;
 
 			re = TestSearchUtils.contentRegexFromSearchTerm(term, true);
 			expect(new RegExp(re).test(content)).toBeTruthy();

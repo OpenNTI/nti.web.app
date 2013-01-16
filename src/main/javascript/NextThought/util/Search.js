@@ -5,7 +5,7 @@ Ext.define('NextThought.util.Search',{
 	splitWhitespaceRe: /\W+/,
 
 	trimRe: /^["'\s]+|["'\s]+$/ig,
-	trimPunctuationReStr: '[\?!()"\'`{}\\[\\]:;,\\.\\^%&#\\*@$&\\+-<>=_~\\s]', //This matches the regex the DS uses
+	trimPunctuationReStr: '[\\?!()"\'`{}\\[\\]:;,\\.\\^%&#\\*@$&\\+-<>=_~\\s]', //This matches the regex the DS uses
 
 	/**
 	 *
