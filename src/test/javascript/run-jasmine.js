@@ -128,12 +128,18 @@ if (!listening) {
 					// another anonymous immediate function
 					page.evaluate( function(elapsedMillis, verbose) {
 						// prints out the descriptions (and error messages, if any) of a list of specs
-						function printTestResults(testsToPrint, verbose) {
+						function printTestResults(testsToPrint, verbose, printSuite) {
 							for (i = 0; i < testsToPrint.length; i++) {
 								var testToPrint = testsToPrint[i];
+								var testName = testToPrint.getElementsByClassName('description')[0].innerHTML;
 								// print description
 								var passOrFail = testToPrint.className.indexOf('passed') >= 0 ? 'PASSED' : 'FAILED';
-								console.log(passOrFail + ': ' + testToPrint.getElementsByClassName('description')[0].innerHTML);
+								var suite = '';
+								if (printSuite) {
+									suite = getTestSuiteFromTitle(testName) + ' > ';
+								}
+								console.log(passOrFail + ': ' + suite + testName);
+
 								var messages = testToPrint.querySelectorAll('.resultMessage, .stackTrace');
 								// print error messages
 								for (j = 0; j < messages.length; j++) {
@@ -150,6 +156,21 @@ if (!listening) {
 								}
 								if (messages.length > 0) {
 									console.log('');
+								}
+							}
+						}
+						// finds the name of the test suite from the title of the test
+						function getTestSuiteFromTitle(title) {
+							var suites = document.body.querySelectorAll('.suite');
+							var i, j;
+							for (i = 0; i < suites.length; i++) {
+								var suite = suites[i];
+								var specs = suite.getElementsByClassName('specSummary');
+								for (j = 0; j < specs.length; j++) {
+									var spec = specs[j];
+									if (spec && spec.getElementsByClassName('description')[0].getAttribute('title') === title) {
+										return suite.getElementsByClassName('description')[0].innerHTML;
+									}
 								}
 							}
 						}
@@ -176,10 +197,10 @@ if (!listening) {
 						// print failed tests, if any
 						if (failed > 0) {
 							console.log('');
-							printTestResults(document.body.querySelectorAll('.specDetail.failed'), verbose);
-							if (verbose) {
-								printTestResults(document.body.querySelectorAll('.suite.passed'), verbose);
-							}
+							printTestResults(document.body.querySelectorAll('.specDetail.failed'), verbose, true);
+						}
+						if (verbose) {
+							printTestResults(document.body.querySelectorAll('.suite.passed'), verbose, false);
 						}
 
 					}, elapsedMillis, verbose); // pass these variables to the anonymous innermost function
