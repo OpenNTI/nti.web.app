@@ -12,8 +12,8 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ToolOptionsState', {
 	},
 
 	applyPrevioustoolState: function(){
-		var tool = this.toolOptionsState.selectionsConfig.activeTool,
-			options = this.toolOptionsState.selectionsConfig.options;
+		var tool = this.getCurrentState().activeTool,
+			options = this.getCurrentState().options;
 		if(tool ){
 			this.toolbar.setCurrentTool(tool);
 			//Set options now.
@@ -34,6 +34,10 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ToolOptionsState', {
 		var currentTool = this.toolbar.getCurrentTool().forTool;
 		this.toolOptionsState.saveToolOptionState('options', toolOptions.getOptions());
 		this.toolOptionsState.saveToolState('activeTool', currentTool);
+	},
+
+	getCurrentState: function(){
+		return this.toolOptionsState.selectionsConfig;
 	},
 
 	statics: {
