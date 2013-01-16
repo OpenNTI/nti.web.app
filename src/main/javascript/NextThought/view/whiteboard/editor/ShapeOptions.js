@@ -68,6 +68,7 @@ Ext.define('NextThought.view.whiteboard.editor.ShapeOptions',{
 	initComponent: function(){
 		this.addEvents({'wb-options-change': true });
 		this.enableBubble(['wb-options-change']);
+		this.callParent(arguments);
 	},
 
 	afterRender: function(){
