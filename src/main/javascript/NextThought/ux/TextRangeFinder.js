@@ -192,7 +192,7 @@ Ext.define('NextThought.ux.TextRangeFinder', {
 			textStart, textMiddle, textEnd, range, indexedText, ranges = [],
 			text, indices, quit;
 
-		console.log('Finding text range for ', searchFor);
+		//console.log('Finding text range for ', searchFor);
 
 		// normalize search arguments, here is what is accepted:
 		// - single string
@@ -219,7 +219,7 @@ Ext.define('NextThought.ux.TextRangeFinder', {
 		}
 
 		text = indexedText.text;
-		console.log(text);
+		//console.log(text);
 		indices = indexedText.indices;
 
 		function processGroup(whichGroup){
