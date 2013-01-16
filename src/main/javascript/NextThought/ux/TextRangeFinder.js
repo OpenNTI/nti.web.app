@@ -136,6 +136,40 @@ Ext.define('NextThought.ux.TextRangeFinder', {
 		return this.rangeIsInsideRedaction(range) || range;
 	},
 
+	mapMatchToTextRange: function(match, whichGroup, textIndex, doc){
+		var iMatch, iTextStart, iTextEnd, iEntryLeft, iEntryRight,
+			entryLeft, entryRight, iNodeTextStart, iNodeTextEnd,
+			indices = textIndex.indices, range;
+		if(!match[whichGroup].length){
+			Ext.error("No match for group", match, whichGroup);
+		}
+
+		// calculate a span from the absolute indices
+		// for start and end of match
+
+		//TODO this could be optimized slightly to start with the
+		//offset of the last match
+		iTextStart = match.index;
+		for (iMatch=1; iMatch < whichGroup; iMatch++){
+			iTextStart += match[iMatch].length;
+		}
+		iTextEnd = iTextStart + match[whichGroup].length;
+
+		iEntryLeft = this.searchForEntry(0, indices.length, iTextStart, indices);
+		iEntryRight = this.searchForEntry(iEntryLeft, indices.length, iTextEnd, indices, true);
+
+		entryLeft = indices[iEntryLeft];
+		entryRight = indices[iEntryRight];
+		iNodeTextStart = iTextStart - entryLeft.i;
+		iNodeTextEnd = iTextEnd - entryRight.i;
+
+		range = doc.createRange();
+		range.setStart(entryLeft.n, Math.max(iNodeTextStart, 0));
+		range.setEnd(entryRight.n, iNodeTextEnd);
+
+		return range;
+	},
+
 	/**
 	 * @param node - the node to search for ranges beneath
 	 * @param doc - the document fragment node is a child of
@@ -179,6 +213,20 @@ Ext.define('NextThought.ux.TextRangeFinder', {
 		text = indexedText.text;
 		indices = indexedText.indices;
 
+		function processGroup(whichGroup){
+				var range;
+				try{
+					range = this.mapMatchToTextRange(matchingText, whichGroup, indexedText, doc);
+					if(range){
+						ranges.push(range);
+					}
+				}
+				catch(e){
+					quit = true;
+					return false;
+				}
+		}
+
 		// loop until no more matches
 		for (;;){
 			// find matching text, stop if none
@@ -189,40 +237,11 @@ Ext.define('NextThought.ux.TextRangeFinder', {
 			quit = false;
 
 			//loop over the which capture groups
-			Ext.each(which, function(whichGroup){
-				if(!matchingText[whichGroup].length){
-					quit = true;
-					return false;
-				}
+			Ext.each(which, processGroup, this);
 
-				// calculate a span from the absolute indices
-				// for start and end of match
-
-				//TODO this could be optimized slightly to start with the
-				//offset of the last match
-				iTextStart = matchingText.index;
-				for (iMatch=1; iMatch < whichGroup; iMatch++){
-					iTextStart += matchingText[iMatch].length;
-				}
-				iTextEnd = iTextStart + matchingText[whichGroup].length;
-
-				iEntryLeft = this.searchForEntry(0, indices.length, iTextStart, indices);
-				iEntryRight = this.searchForEntry(iEntryLeft, indices.length, iTextEnd, indices, true);
-
-				entryLeft = indices[iEntryLeft];
-				entryRight = indices[iEntryRight];
-				iNodeTextStart = iTextStart - entryLeft.i;
-				iNodeTextEnd = iTextEnd - entryRight.i;
-
-				range = doc.createRange();
-				range.setStart(entryLeft.n, Math.max(iNodeTextStart, 0));
-				range.setEnd(entryRight.n, iNodeTextEnd);
-
-				range = this.adjustLocatedRange(range);
-
-				ranges.push(range);
-			}, this);
-
+			//TODO should we just continue here?  The original
+			//implementation stops all work here but that may
+			//not be what we want
 			if(quit){
 				break;
 			}
