@@ -207,11 +207,18 @@ Ext.define('NextThought.view.content.reader.Content',{
 
 		function get(el,attr){ return el? el.getAttribute(attr) : null; }
 
+		function getStyle(el){
+			var s = (get(el,'style')||'').replace(/\s+/ig,'').split(';'), r = {};
+			Ext.each(s,function(v){v = (v||'').split(':');r[v[0].toLowerCase()] = v[1];});
+			return r;
+		}
+
 		Ext.each(els,function(el){
 			var p = (el.getAttribute('itemprop')||'').split(' '),
 				target = Ext.fly(el).down('img,iframe',true),
 				title = get(target,'data-title'),
 				caption = get(target,'data-caption'),
+				width,
 				bar = tpl.append(el,{
 					title: title,
 					caption: caption
@@ -227,7 +234,11 @@ Ext.define('NextThought.view.content.reader.Content',{
 				Ext.fly(el.querySelector('.wrapper a')).remove();
 			}
 			el.querySelector('.wrapper').appendChild(target);
-			Ext.get(el).setWidth(Ext.fly(target).getWidth()+Ext.get(el).getBorderWidth('lr'));
+
+			width = (parseInt(getStyle(target).width||get(target,'width'),10)||Ext.fly(target).getWidth())
+				+ Ext.get(el).getBorderWidth('lr');
+
+			Ext.get(el).setWidth(width);
 
 
 			Ext.each(p,function(feature){
