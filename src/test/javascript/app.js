@@ -132,6 +132,7 @@ Ext.application({
 			'javascript/specs/util/anchorables/Anchors.spec.js',
 			'javascript/specs/util/anchorables/ChangingDomAnchors.spec.js',
 			'javascript/specs/util/anchorables/Utils.spec.js',
+			'javascript/specs/util/Search.spec.js',
             'javascript/specs/model/Base.spec.js',
 			'javascript/specs/model/Hit.spec.js',
 			'javascript/specs/model/FriendsList.spec.js',
