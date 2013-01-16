@@ -41,8 +41,10 @@ Ext.define('NextThought.ux.TextRangeFinder', {
 	//     search string to break the highlighter
 
 	//Returns an object with two properties indices
-	//and text.
-	indexText: function(node){
+	//and text.  If nodeFilterFn is provided it will
+	//be called with each node before it is indexed.  nodes returning
+	//true will be indexed
+	indexText: function(node, nodeFilterFn){
 			// initialize root loop
 		var indices = [],
 			text = [], // will be morphed into a string later
@@ -59,6 +61,11 @@ Ext.define('NextThought.ux.TextRangeFinder', {
 
 				// text: collect and save index-node pair
 				if(child.nodeType === 3){
+
+					if(Ext.isFunction(nodeFilterFn) && !nodeFilterFn(child)){
+						continue;
+					}
+
 					indices.push({i:textLength, n:child});
 					nodeText = child.nodeValue;
 					text.push(nodeText);
@@ -70,11 +77,6 @@ Ext.define('NextThought.ux.TextRangeFinder', {
 
 					// skip style/script tags
 					if( child.tagName.search(/^(script|style)$/i) >= 0 ){
-						continue;
-					}
-
-					//skip assessment items
-					if( Ext.fly(child).is('.naquestion') ){
 						continue;
 					}
 
@@ -190,6 +192,8 @@ Ext.define('NextThought.ux.TextRangeFinder', {
 			textStart, textMiddle, textEnd, range, indexedText, ranges = [],
 			text, indices, quit;
 
+		console.log('Finding text range for ', searchFor);
+
 		// normalize search arguments, here is what is accepted:
 		// - single string
 		// - single regex (optionally, a 'which' argument, default to 0)
@@ -204,13 +208,18 @@ Ext.define('NextThought.ux.TextRangeFinder', {
 		}
 		which = Ext.Array.sort(which);
 
+		function allButQuestions(child){
+			return !Ext.fly(child).parent('.naquestion');
+		}
+
 		//Index all the text beneath node
-		indexedText = textIndex || this.indexText(node);
+		indexedText = textIndex || this.indexText(node, allButQuestions);
 		if(!indexedText){
 			return ranges;
 		}
 
 		text = indexedText.text;
+		console.log(text);
 		indices = indexedText.indices;
 
 		function processGroup(whichGroup){
@@ -235,7 +244,6 @@ Ext.define('NextThought.ux.TextRangeFinder', {
 				break;
 			}
 			quit = false;
-
 			//loop over the which capture groups
 			Ext.each(which, processGroup, this);
 

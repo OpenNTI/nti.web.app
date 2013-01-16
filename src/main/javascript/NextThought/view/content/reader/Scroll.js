@@ -131,13 +131,13 @@ Ext.define('NextThought.view.content.reader.Scroll',{
 		if (!result) {
 			return;
 		}
+		//show all the search hits
 		me.showSearchHit(result.hit);
-		pos = me.getSearchHitLocation();
-		/*if(fragment){
+		if(fragment){
 			console.time('Fragment location');
 			pos = me.getFragmentLocation(fragment);
 			console.timeEnd('Fragment location');
-		}*/
+		}
 
 		if(pos >= 0){
 			try{

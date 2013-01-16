@@ -41,7 +41,7 @@ Ext.define('NextThought.util.Search',{
 		term = term.replace(/[^a-zA-Z0-9 ]/g, "[^a-zA-Z0-9 ]");
 
 		if(isPhrase){
-			term = term.replace(/\s([^\]]|$)/g, this.trimPunctuationReStr+'+$1');
+			term = term.replace(/\s([^\]]|$)/g, '[^a-zA-Z0-9]+$1');
 		}
 
 		return term;

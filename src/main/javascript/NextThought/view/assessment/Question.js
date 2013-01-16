@@ -132,6 +132,7 @@ Ext.define('NextThought.view.assessment.Question',{
 			this.updateLayout();
 			this.syncElementHeight();
 		},this,{single:true});
+		this.getTargetEl().addCls('indexed-content');
 		this.syncTop();
 	},
 

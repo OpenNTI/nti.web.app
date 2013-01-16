@@ -72,7 +72,6 @@ Ext.define('NextThought.ux.SearchHits', {
 			return null;
 		}
 		this.ranges = this.findTextRanges(doc, doc, re);
-		//this.ranges = this.findTextRangesForSearchHit(this.hit, doc, doc )
 		return this.ranges;
 	},
 
@@ -134,53 +133,6 @@ Ext.define('NextThought.ux.SearchHits', {
 		//TODO should we really use dom helper here? I thought in the past we had performance issues
 		//with it
 		Ext.DomHelper.append( this.searchHitsOverlay, toAppend, true);
-	},
-
-	getAppRanges: function(){
-		var re;
-		if(!this.appRanges){
-			re = this.getRegex();
-			if(!re){
-				return null;
-			}
-			this.appRanges = this.findTextRanges(document, document, re);
-		}
-		return this.appRanges;
-	},
-
-	firstHitLocation: function(){
-		var theRanges = this.getRanges(), assessmentAdjustment = 0,
-			firstRange, nodeTop, scrollOffset, pos = -1;
-
-		//FIXME get this assessment hack out of here, the reader should ask whatever
-		//is managing the assessments to highlight as well...
-		//If we found no range, try again not in iframe in case of assessments,
-		//this is a bit of a hack to get it working for MC
-		if(!theRanges || theRanges.length === 0){
-			theRanges = this.getAppRanges();
-			assessmentAdjustment = 150;
-		}
-
-		//We may get ranges in our list that don't have any client rects.  A good example
-		//is a node that is currently display none so make sure we account for that.  The
-		//related topics list is one example of where we have seen this occur
-		Ext.each(theRanges, function(possibleRange){
-			if(possibleRange.getClientRects().length > 0){
-				firstRange = possibleRange;
-				return false; //Break
-			}
-			return true; //keep going
-		});
-
-		if(firstRange){
-			nodeTop = firstRange.getClientRects()[0].top;
-			//Assessment items aren't in the iframe so they don't take into account scroll
-			scrollOffset = this.ownerCmp.body.getScroll().top;
-			scrollOffset = ( assessmentAdjustment > 0 ? scrollOffset : 0);
-
-			pos = nodeTop - assessmentAdjustment + scrollOffset;
-		}
-		return pos;
 	},
 
 	reLayout: function(){

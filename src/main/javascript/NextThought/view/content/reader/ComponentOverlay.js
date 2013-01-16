@@ -41,7 +41,7 @@ Ext.define('NextThought.view.content.reader.ComponentOverlay', {
 			Ext.Error.raise('Bad values');
 		}
 
-		this.registerOverlayedPanel[key] = panel;
+		this.activeOverlayedPanels[key] = panel;
 	},
 
 	adjustOverlayedPanels: function(){
