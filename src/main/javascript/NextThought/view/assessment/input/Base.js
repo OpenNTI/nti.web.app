@@ -75,6 +75,10 @@ Ext.define('NextThought.view.assessment.input.Base',{
 					? original
 					: attr+'="'+root+url+'"'; }
 
+		if(!html.replace){
+			return html;
+		}
+
 		return html.replace(/<\/?(html|head|meta|title|link|body|a|p)((( |\t)[^>]*)?)>/ig, '')
 				.replace(/^\s+/,'')
 				.replace(/\s+$/,'')
