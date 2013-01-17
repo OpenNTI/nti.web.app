@@ -5,9 +5,7 @@ Ext.define('NextThought.view.annotations.note.Window',{
 	requires: [
 		'NextThought.view.annotations.note.FilterBar',
 		'NextThought.view.annotations.note.Carousel',
-		'NextThought.view.annotations.note.Main',
-		'NextThought.view.annotations.note.Responses',
-		'NextThought.view.annotations.note.Reply'
+		'NextThought.view.annotations.note.Main'
 	],
 
 	cls: 'note-window',
@@ -33,7 +31,6 @@ Ext.define('NextThought.view.annotations.note.Window',{
 			autoScroll: true,
 			items: [
 				{xtype: 'note-main-view' },
-				{xtype: 'note-responses' },
 				{xtype: 'box', cls: 'note-footer'}
 			]
 		}

@@ -33,6 +33,7 @@ Ext.define('NextThought.controller.UserData', {
 		'Views',
 		'annotations.Highlight',
 		'annotations.Note',
+		'annotations.note.Panel',
 		'annotations.note.Window',
 		'chat.transcript.Window',
 		'content.Reader',

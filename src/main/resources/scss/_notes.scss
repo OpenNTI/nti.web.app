@@ -831,14 +831,8 @@
 		}
 	}
 
-	.note-responses{
-		//.note-reply.first {
-		.note-reply {
-			box-shadow: inset 0 1px 0 0 #ffffff;
-		}
-		//.note-replies .note-reply.first {
-		//	box-shadow: none;
-		//}
+	.note {
+		box-shadow: inset 0 1px 0 0 #ffffff;
 	}
 
 	.filter-bar {
@@ -995,16 +989,160 @@
 		background: #FBFBFB;
 	}
 
-	.note-reply,
-	.main-view {
-		position: relative;//just in case ExtJS doesn't set this absolute... so that our inner coordinates are relative to here.
+	.note {
+		position: relative;
+		padding: 16px 27px 5px 30px;
 		border: 0px solid #f2f2f2;
 		border-bottom-width: 1px;
-		padding: 16px 27px 5px 27px;
-		&.editor-active, &.hover {
+
+
+		&.first{
+			&::after {
+				content: ' ';
+				position: absolute;
+				overflow: hidden;
+				top: 15px; left: 18px;
+				background: $icons no-repeat;
+				@include sprite($icons,'reply_arrow',$dimensions: true);
+			}
+		}
+
+		&.editor-active,&.hover {
 			border-color: #e6e6e6;
-			box-shadow: inset 0 1px 0 0 #ffffff;
+			box-shadow: none;
+			.meta .controls { display: block; }
 			.respond .reply-options{ opacity: 1; }
+		}
+
+		.avatar {
+			float: left;
+			img {
+				border-radius: 2px;
+				margin-left: 4px;
+				background-size: cover;
+				width: 32px;
+				height: auto;
+			}
+		}
+
+		@include meta-row-window;
+
+		.body {
+			margin-left: 45px;
+			font-size: 14px;
+			line-height: default;
+			font-family: 'Droid Serif';
+
+			color: $primary-grey;
+			@include text-pre-wrap;
+
+			a {
+				word-wrap: break-word;
+			}
+
+			strong, em strong {
+				font-weight: bold !important;
+			}
+
+			em, strong em {
+				font-style: italic !important;
+			}
+
+			.body-divider .whiteboard-thumbnail{
+				width: 240px !important;
+				clear: both;
+			}
+		}
+
+		&.deleted-reply {
+			padding-bottom: 11px;
+			.meta {
+				.time {
+					font-style: italic;
+				}
+			}
+		}
+
+		&.editor-active .respond{
+			display: block;
+			.reply-options{display: none;}
+			.time{display: none;}
+			.editor {
+				display: block;
+				.action.share {display: none !important;}
+			}
+		}
+
+		.respond {
+			position: relative;
+			overflow: hidden;
+
+			@include reply-options;
+			.reply-options .more ol{ position: fixed; }
+
+			&.shared .reply-options .share {
+				display: inline-block;
+			}
+
+			.time {
+				color: $tertiary-grey;
+				position: absolute;
+				right: 0px;
+				top: 8px;
+				font-size: 12px;
+				font-style: italic;
+				font-weight: 400;
+			}
+
+			@include note-editor;
+			.editor {
+				.main{
+					border: 1px solid #dcdcdc;
+					border-bottom-width: 0;
+
+					.content{
+
+
+					}
+				}
+				.footer {
+					.action {
+						&.whiteboard {
+							background-position: 2px 12px;
+						}
+					}
+				}
+			}
+		}
+	}
+
+	.note:not(.main-view) {
+		.meta {
+			margin-left: 45px;
+			margin-top: 5px;
+			font-size: 10px;
+
+			.name {
+				font-size: 14px;
+			}
+
+			.controls {
+				.favorite {
+					display:none;
+					margin-top: 0px;
+				}
+			}
+		}
+	}
+
+	.note.main-view {
+		//just in case ExtJS doesn't set this absolute...
+		//so that our inner coordinates are relative to here.
+		position: relative;
+		padding-left: 27px;
+
+		&.editor-active, &.hover {
+			box-shadow: inset 0 1px 0 0 #ffffff;
 		}
 
 		img.avatar {
@@ -1014,8 +1152,6 @@
 			border-radius: 5px;
 			background-size: cover;
 		}
-
-		@include meta-row-window;
 
 		.meta {
 			margin-left: 70px;
@@ -1051,9 +1187,6 @@
 			}
 		}
 
-		.search-term {
-			background: #fcff13 !important;
-		}
 
 		.context {
 		  	position: relative;
@@ -1139,153 +1272,28 @@
 		}
 
 		.body {
-			color: $primary-grey;
 			font: 16px/24px 'Droid Serif';
-			@include text-pre-wrap;
-
-			a {
-				word-wrap: break-word;
-			}
-
-			strong, em strong {
-				font-weight: bold !important;
-			}
-
-			em, strong em {
-				font-style: italic !important;
-			}
-
-			.body-divider .whiteboard-thumbnail{
-			  	width: 240px !important;
-			  	clear: both;
-			}
+			margin-left: auto;
 		}
 
-		&.editor-active .respond{
-			display: block;
-			.reply-options{display: none;}
-			.time{display: none;}
-			.editor {
-			    display: block;
-			  	.action.share {display: none !important;}
-			}
-		}
 
-		.respond {
-			position: relative;
-			overflow: hidden;
-
-			@include reply-options;
-			.reply-options .more ol{ position: fixed; }
-
-			&.shared .reply-options .share {
-				display: inline-block;
-			}
-
-			.time {
-				color: $tertiary-grey;
-				position: absolute;
-				right: 0px;
-				top: 8px;
-				font-size: 12px;
-				font-style: italic;
-				font-weight: 400;
-			}
-
-			@include note-editor;
-			.editor {
-				.main{
-					border: 1px solid #dcdcdc;
-					border-bottom-width: 0;
-
-				  	.content{
-
-
-					}
-				}
-				.footer {
-					.action {
-						&.whiteboard {
-							background-position: 2px 12px;
-						}
-					}
-				}
-			}
-		}
 	}
 
-	.note-reply {
-		//border-bottom-width: 0px;
-		&.first{
-			&::after {
-				content: ' ';
-				position: absolute;
-				overflow: hidden;
-				top: 15px; left: 18px;
-				background: $icons no-repeat;
-				@include sprite($icons,'reply_arrow',$dimensions: true);
-			}
-		}
-		position: relative;
-		padding-left: 30px;
-		&.editor-active,&.hover {
-			box-shadow: none;
-			.meta .controls {
-				display: block;
-			}
-		}
-		.avatar {
-			float: left;
-			img {
-				border-radius: 2px;
-				margin-left: 4px;
-				background-size: cover;
-				width: 32px;
-				height: auto;
-			}
-		}
-		.meta {
-			margin-left: 45px;
-			margin-top: 5px;
-			font-size: 10px;
-
-			.name {
-				font-size: 14px;
-			}
-
-			.controls {
-				.favorite {
-					display:none;
-					margin-top: 0px;
-				}
-			}
-		}
-		.body {
-			margin-left: 45px;
-			font-size: 14px;
-			line-height: default;
-		}
-
-		&.deleted-reply {
-			padding-bottom: 11px;
-			.meta {
-				.time {
-					font-style: italic;
-				}
-			}
-		}
-	}
-
-	.note-reply-container {
+	.note-container.child {
 		background: #ffffff;
 
-		.note-reply-container {
-			.note-reply {
+		.note-container.child {
+			.note {
 				padding-left: 60px;
 				background-position: 48px 15px;
+				&.first{
+					&::after{
+						left: 48px;
+					}
+				}
 			}
-			.note-reply-container {
-				.note-reply.first {
+			.note-container.child {
+				.note.first {
 					background-image: none;
 				}
 			}
