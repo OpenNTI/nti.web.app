@@ -40,6 +40,14 @@ Ext.define('NextThought.ux.SearchHits', {
 		}
 	},
 
+	//FIXME the caching that happens in this method is no longer safe.
+	//rangesForSearchHits returns an array objects.  These objects encapsulate
+	//not only the ranges to highlight but also some positioning information.
+	//In the current use case the ranges from assesment items have an offset
+	//that takes into account scroll position.  That obviously can't be cached
+	//across varying scroll positions.  Really what we are trying to cache here
+	//are the ranges because they take some cycles to calculate. We could move the caching
+	//of ranges into ownerCmp but I'm not sure that makes sense.  Need to ponder some options
 	getRanges: function(){
 		function anyRangesCollapsed(ranges){
 			var collapsed = false;
@@ -138,6 +146,7 @@ Ext.define('NextThought.ux.SearchHits', {
 	},
 
 	reLayout: function(){
+		console.log('Relaying out search hit overlays');
 		this.removeOverlay();
 		this.insertSearchHitsOverlay();
 	},

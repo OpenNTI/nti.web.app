@@ -176,6 +176,10 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 	},
 
 	//generalize this
+	//Returns an array of objects with two propertes.  ranges is a list
+	//of dom ranges that should be used to position the highlights.
+	//adjustments is an object with top and left properties used to adjust the
+	//coordinate space of teh ranges bounding client rects
 	rangesForSearchHits: function(hit){
 		var phrase = hit.get('PhraseSearch'),
 			fragments = hit.get('Fragments'),
@@ -197,7 +201,9 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 
 		//Leave this off for now, something is happening the overlays seem to move
 		//out from under the search hit overlay and I'm not sure how to adjust for it
-/*
+
+		//FIXME see notes in SearchHits getRanges for what needs to happen to enable this
+		/*
 		//Now look in assessment overlays
 		indexOverlayData = this.indexText(this.componentOverlayEl.dom, function(node){
 			return Ext.fly(node).parent('.indexed-content');
@@ -211,7 +217,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 												 regex, undefined, indexOverlayData);
 		result.push({ranges: ranges.slice(),
 					 adjustments: {top: overlayYAdjustment, left: overlayXAdjustment}});
-*/
+					 */
 		return result;
 	},
 
