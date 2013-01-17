@@ -175,6 +175,46 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 		this.searchAnnotations = Ext.widget('search-hits', {hit: hit, ps: hit.get('PhraseSearch'), owner: this});
 	},
 
+	//generalize this
+	rangesForSearchHits: function(hit){
+		var phrase = hit.get('PhraseSearch'),
+			fragments = hit.get('Fragments'),
+			regex, ranges,
+			contentDoc = this.getDocumentElement(), indexedOverlayData, result = [],
+			//annotationOffsets = this.getAnnotationOffsets(),
+			overlayXAdjustment = 0, overlayYAdjustment = 0;
+
+
+		console.log('Getting ranges for search hits');
+
+		//We get ranges from two places, the iframe content
+		//and the overlays
+		regex = SearchUtils.contentRegexForSearchHit(hit, phrase);
+		ranges = this.findTextRanges(contentDoc, contentDoc, regex);
+		result.push({ranges: ranges.slice(),
+					 adjustments: {top: 0, left: 0}});
+
+
+		//Leave this off for now, something is happening the overlays seem to move
+		//out from under the search hit overlay and I'm not sure how to adjust for it
+/*
+		//Now look in assessment overlays
+		indexOverlayData = this.indexText(this.componentOverlayEl.dom, function(node){
+			return Ext.fly(node).parent('.indexed-content');
+		});
+
+		overlayYAdjustment = -annotationOffsets.top;
+		overlayXAdjustment = -annotationOffsets.left;
+
+		ranges = this.findTextRanges(this.componentOverlayEl.dom,
+													 this.componentOverlayEl.dom.ownerDocument,
+												 regex, undefined, indexOverlayData);
+		result.push({ranges: ranges.slice(),
+					 adjustments: {top: overlayYAdjustment, left: overlayXAdjustment}});
+*/
+		return result;
+	},
+
 	getFragmentLocation: function(fragment, phrase){
 		var fragRegex = SearchUtils.contentRegexForFragment(fragment, phrase, true),
 			doc = this.getDocumentElement(),

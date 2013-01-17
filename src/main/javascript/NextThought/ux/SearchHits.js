@@ -40,24 +40,18 @@ Ext.define('NextThought.ux.SearchHits', {
 		}
 	},
 
-	getRegex: function(){
-		if(!this.regex && this.hit){
-			this.regex = SearchUtils.contentRegexForSearchHit(this.hit, this.phraseSearch);
-		}
-		return this.regex;
-	},
-
 	getRanges: function(){
-		var re, doc = this.ownerCmp.getDocumentElement();
-
 		function anyRangesCollapsed(ranges){
 			var collapsed = false;
 			Ext.each(ranges, function(range){
-				if(range.collapsed){
-					collapsed = true;
-					return false;
-				}
-				return true;
+				Ext.each(range.ranges, function(actualRange){
+					if(actualRange.collapsed){
+						collapsed = true;
+						return false;
+					}
+					return true;
+				});
+				return !collapsed;
 			});
 			return collapsed;
 		}
@@ -67,11 +61,8 @@ Ext.define('NextThought.ux.SearchHits', {
 		}
 
 		delete this.ranges;
-		re = this.getRegex();
-		if(!re){
-			return null;
-		}
-		this.ranges = this.findTextRanges(doc, doc, re);
+
+		this.ranges = this.ownerCmp.rangesForSearchHits(this.hit);
 		return this.ranges;
 	},
 
@@ -80,26 +71,27 @@ Ext.define('NextThought.ux.SearchHits', {
 		this.renderRanges(this.getRanges());
 	},
 
-
-	renderRanges: function(rangesToRender){
-		var toAppend = [], redactionAction, rects;
+	entriesToAppend: function(rangeInfo, toAppend){
+		var rangesToRender = rangeInfo.ranges,
+			adjustments = rangeInfo.adjustments || {},
+			redactionAction, rects;
 
 		if(!rangesToRender){
-			return;
+			return toAppend;
 		}
 		Ext.each(rangesToRender, function(sel){
             redactionAction = this.getRedactionActionSpan(sel);
-            if (!sel.commonAncestorContainer && redactionAction){
+            if (redactionAction){
                 redactionAction.addCls('searchHitInside');
                 sel.getClientRects = function(){
                     var b = redactionAction.getBox();
                     return [{
-                        bottom:b.bottom,
-                        top:b.y,
-                        left:b.x,
-                        right:b.right,
-                        height:b.height,
-                        width:b.width
+                        bottom: b.bottom,
+                        top: b.y + adjustments.top || 0,
+                        left: b.x + adjustments.left || 0,
+                        right: b.right,
+                        height: b.height,
+                        width: b.width
                     }];
                 };
                 sel.noOverlay = true;
@@ -110,18 +102,18 @@ Ext.define('NextThought.ux.SearchHits', {
 
 			Ext.each(rects, function(range){
 
-			//Instead of appending one element at a time build them into a list and
-			//append the whole thing.  This is a HUGE improvement for the intial rendering performance
-            if(!sel.noOverlay){
-			    toAppend.push({
-                   cls:'searchHit-entry',
-                   style: {
-                      height: range.height+'px',
-                      width: range.width+'px',
-                      top: range.top+'px',
-                      left: range.left+'px'
-                   }});
-            }
+				//Instead of appending one element at a time build them into a list and
+				//append the whole thing.  This is a HUGE improvement for the intial rendering performance
+				if(!sel.noOverlay){
+					toAppend.push({
+						cls:'searchHit-entry',
+						style: {
+							height: range.height+'px',
+							width: range.width+'px',
+							top: (range.top+adjustments.top || 0)+'px',
+							left: (range.left+adjustments.left || 0)+'px'
+						}});
+				}
 			});
 
 			//Arbitrarily cap at 100 until we can figure out a solution other than
@@ -129,9 +121,19 @@ Ext.define('NextThought.ux.SearchHits', {
 			//churn.  Maybe showing these things a secion at a time as the page scrolls
 			//is best
 			return toAppend.length <= 100;
+
 		}, this);
-		//TODO should we really use dom helper here? I thought in the past we had performance issues
-		//with it
+
+		return toAppend;
+	},
+
+	renderRanges: function(rangesToRender){
+		var toAppend = [], redactionAction, rects;
+
+		Ext.each(rangesToRender, function(rangeInfo){
+			this.entriesToAppend(rangeInfo, toAppend);
+		}, this);
+
 		Ext.DomHelper.append( this.searchHitsOverlay, toAppend, true);
 	},
 
