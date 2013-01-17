@@ -134,6 +134,7 @@ Ext.application({
 			'javascript/specs/util/anchorables/Utils.spec.js',
 			'javascript/specs/util/Search.spec.js',
             'javascript/specs/model/Base.spec.js',
+			'javascript/specs/model/Note.spec.js',
 			'javascript/specs/model/Hit.spec.js',
 			'javascript/specs/model/FriendsList.spec.js',
 			'javascript/specs/model/User.spec.js',

@@ -50,6 +50,79 @@ Ext.define('NextThought.model.Note', {
 		{ name: 'GroupingField', mapping: 'Last Modified', type: 'groupByTime', persist: false}
 	],
 
+	/*
+	 * Retrieves the descendants for the given note.
+	 * If this is a placeholder that means aggregating
+	 * getDescendants on each of it's children.  If this
+	 * is an actual note this means an ajax request to the server.
+	 *
+	 * When complete, callback will be called with a PageItem store
+	 * containing all the descendants of this note.
+
+	 * IMPORTANT:
+	 * the threading relationships of this tree are not modified. That means
+	 * if this is a placeholder or partial tree that the relationships may be
+	 * maintained in the result.  Doesn't seem like this functions job to muck
+	 * with that stuff.
+	 */
+	getDescendants: function(callback, scope){
+		var resultStore = NextThought.store.PageItem.create(),
+			outstandingChildren = 0, me = this;
+
+
+		function childFinished(childStore){
+			if(childStore){
+				resultStore.loadRecords(childStore.getRange(), {addRecords: true});
+			}
+			outstandingChildren--;
+
+			if(outstandingChildren === 0){
+				Ext.callback(callback, scope, [resultStore]);
+			}
+		}
+
+		if(this.placeholder){
+			if(Ext.isEmpty(this.children)){
+				//A placeholder with no children
+				//that probably shouldn't happen
+				console.warn('Encountered a placeholder with no children when getting descendants', this.children);
+				Ext.callback(callback, scope, [resultStore]);
+				return;
+			}
+
+			outstandingChildren += this.children.length;
+			Ext.each(this.children, function(child){
+				if(!child.placeholder){
+					//Note we don't use add here.  PageItem overrides
+					//that to generate threads, which we don't really want
+					resultStore.loadRecords([child], {addRecords: true});
+				}
+				child.getDescendants(childFinished);
+			});
+		}
+		else{
+			me.loadReplies(callback, scope);
+		}
+	},
+
+	/*
+	 * Asynchronously loads replies using the "replies" link type
+	 */
+	loadReplies: function(callback, scope){
+		var me = this,
+			link = this.getLink('replies'),
+			store = NextThought.store.PageItem.create();
+
+		if(!link){
+			Ext.callback(store);
+			return;
+		}
+
+		store.proxy.url = link;
+		store.on('load', callback, me, {single: true, scope: scope});
+		store.load({});
+	},
+
 	/**
 	 * From a note, build its reply
 	 * @return {NextThought.model.Note}
