@@ -140,10 +140,11 @@ Ext.application({
 			'javascript/specs/model/User.spec.js',
 			'javascript/specs/model/anchorables/ContentRangeDescription.spec.js',
 			'javascript/specs/model/anchorables/DomContentRangeDescription.spec.js',
+			'javascript/specs/model/converters/GroupByTime.spec.js',
 			'javascript/specs/store/Hit.spec.js',
 			'javascript/specs/view/whiteboard/NTMatrix.spec.js',
 			'javascript/specs/view/whiteboard/ToolOptionsState.spec.js',
-			'javascript/specs/model/converters/GroupByTime.spec.js'
+			'javascript/specs/view/assessment/input/NumericMath.spec.js'
         ],
 		go);
 	}
