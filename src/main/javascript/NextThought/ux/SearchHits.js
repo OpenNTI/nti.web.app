@@ -81,7 +81,7 @@ Ext.define('NextThought.ux.SearchHits', {
 
 	entriesToAppend: function(rangeInfo, toAppend){
 		var rangesToRender = rangeInfo.ranges,
-			adjustments = rangeInfo.adjustments || {},
+			adjustments = this.ownerCmp.getRangePositionAdjustments(rangeInfo.key) || {},
 			redactionAction, rects;
 
 		if(!rangesToRender){

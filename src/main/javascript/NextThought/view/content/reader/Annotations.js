@@ -178,15 +178,12 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 	//generalize this
 	//Returns an array of objects with two propertes.  ranges is a list
 	//of dom ranges that should be used to position the highlights.
-	//adjustments is an object with top and left properties used to adjust the
-	//coordinate space of teh ranges bounding client rects
+	//key is a string that used to help distinguish the type of content when we calculate the adjustments( top and left ) needed.
 	rangesForSearchHits: function(hit){
 		var phrase = hit.get('PhraseSearch'),
 			fragments = hit.get('Fragments'),
 			regex, ranges,
-			contentDoc = this.getDocumentElement(), indexedOverlayData, result = [],
-			//annotationOffsets = this.getAnnotationOffsets(),
-			overlayXAdjustment = 0, overlayYAdjustment = 0;
+			contentDoc = this.getDocumentElement(), indexedOverlayData, result = [];
 
 
 		console.log('Getting ranges for search hits');
@@ -196,29 +193,36 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 		regex = SearchUtils.contentRegexForSearchHit(hit, phrase);
 		ranges = this.findTextRanges(contentDoc, contentDoc, regex);
 		result.push({ranges: ranges.slice(),
-					 adjustments: {top: 0, left: 0}});
+					 key: 'content'});
 
-
-		//Leave this off for now, something is happening the overlays seem to move
-		//out from under the search hit overlay and I'm not sure how to adjust for it
-
-		//FIXME see notes in SearchHits getRanges for what needs to happen to enable this
-		/*
 		//Now look in assessment overlays
-		indexOverlayData = this.indexText(this.componentOverlayEl.dom, function(node){
+		indexedOverlayData = this.indexText(this.componentOverlayEl.dom, function(node){
 			return Ext.fly(node).parent('.indexed-content');
 		});
 
-		overlayYAdjustment = -annotationOffsets.top;
-		overlayXAdjustment = -annotationOffsets.left;
-
 		ranges = this.findTextRanges(this.componentOverlayEl.dom,
 													 this.componentOverlayEl.dom.ownerDocument,
-												 regex, undefined, indexOverlayData);
+												 regex, undefined, indexedOverlayData);
 		result.push({ranges: ranges.slice(),
-					 adjustments: {top: overlayYAdjustment, left: overlayXAdjustment}});
-					 */
+					 key: 'assessment'});
+
 		return result;
+	},
+
+	//	@returns an object with top and left properties used to adjust the
+	//  coordinate space of the ranges bounding client rects.
+	//  It decides based on the type of container( main content or overlays).
+	getRangePositionAdjustments: function(key){
+		var annotationOffsets, overlayXAdjustment, overlayYAdjustment;
+		if(key === 'content'){
+			return {top: 0, left: 0};
+		}
+
+		//For other overlays( i.e assessments )
+		annotationOffsets = this.getAnnotationOffsets();
+		overlayYAdjustment = -annotationOffsets.top;
+		overlayXAdjustment = -annotationOffsets.left;
+		return {top: overlayYAdjustment, left: overlayXAdjustment };
 	},
 
 	getFragmentLocation: function(fragment, phrase){
