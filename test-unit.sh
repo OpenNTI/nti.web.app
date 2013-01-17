@@ -9,7 +9,7 @@ fi
 
 cd src/test
 # run the Jasmine tests and parse the output line-by-line
-phantomjs javascript/run-jasmine.js | while read LINE
+phantomjs javascript/run-jasmine.js $@ | while read LINE
 do
 	echo "$LINE"
 	# search for failed tests so we can print the filename
