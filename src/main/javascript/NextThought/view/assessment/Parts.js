@@ -19,7 +19,7 @@ Ext.define('NextThought.view.assessment.Parts',{
 	ui: 'assessment',
 
 
-	setQuestionAndPart: function(question,questionSet,individual, tabIndexTracker){
+	setQuestionAndPart: function(question,questionSet,individual, tabIndexTracker, answerLabel){
 		var parts = question.get('parts'),
 			multiPart = (parts.length > 1);
 
@@ -41,13 +41,18 @@ Ext.define('NextThought.view.assessment.Parts',{
 			return;
 		}
 
-		this.setSinglePart(question, questionSet, parts.first(), tabIndexTracker);
+		this.setSinglePart(question, questionSet, parts.first(), tabIndexTracker, answerLabel);
 	},
 
 
-	setSinglePart: function(question, questionSet, part, tabIndexTracker) {
+	setSinglePart: function(question, questionSet, part, tabIndexTracker, answerLabel) {
 		var cls = (part && part.get)? part.get('Class') : 'unsupported',
 			type = 'question-input-'+cls.toLowerCase();
+
+		//Set the answerLabel on the model.
+		answerLabel ? part.set('answerLabel', answerLabel) : null;
+		console.log('set answer label to: ', answerLabel);
+
 		try {
 			this.add({
 				xtype: type,

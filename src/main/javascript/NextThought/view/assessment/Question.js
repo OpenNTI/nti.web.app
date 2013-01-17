@@ -26,7 +26,8 @@ Ext.define('NextThought.view.assessment.Question',{
 				this.question,
 				this.questionSet,
 				this.canSubmitIndividually(),
-				this.tabIndexTracker);
+				this.tabIndexTracker,
+				this.retrieveAnswerLabel());
 
 		if( this.questionSet ){
 			this.mon(this.questionSet,{
@@ -43,6 +44,14 @@ Ext.define('NextThought.view.assessment.Question',{
 
 		this.setQuestionContent(multiPart?null:parts.first());
 		this.setupContentElement();
+	},
+
+	retrieveAnswerLabel: function(){
+		var sln = Ext.get(this.contentElement).select('.naqsolution'),
+			firstSln = sln.elements[0];
+		// NOTE: We will take the first solution's answer as the preferred solution label in case we might have multiple possible answer.
+		// FIXME: does this still apply for a multi-parts question?
+		return firstSln.getAttribute('data-nti-units');
 	},
 
 
