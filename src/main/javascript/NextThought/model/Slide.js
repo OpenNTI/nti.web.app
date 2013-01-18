@@ -15,7 +15,7 @@ Ext.define('NextThought.model.Slide', {
 		{ name: 'video-start', type: 'number' },
 		{ name: 'video-end', type: 'number' },
 		{ name: 'ordinal', type: 'number' },
-		{ name: 'domClone', type: 'auto'}
+		{ name: 'dom-clone', type: 'auto'}
 	],
 
 
@@ -59,7 +59,7 @@ Ext.define('NextThought.model.Slide', {
 				'video-start': getParam('slidevideostart'),
 				'video-end': getParam('slidevideoend'),
 				'ordinal': getParam('slidenumber'),
-				'domClone': frag
+				'dom-clone': frag
 			};
 
 			frag.appendChild(dom.cloneNode(true));

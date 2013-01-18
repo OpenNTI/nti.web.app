@@ -58,6 +58,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 
 	initComponent: function(){
 		this.wbData = {};
+		this.addEvents('chat', 'share', 'save-new-reply');
 		this.callParent(arguments);
 	},
 
@@ -192,7 +193,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 			}
 
 			try {
-				me.up('window').fireEvent('save-new-reply', r, v.body, v.shareWith, callback);
+				me.fireEvent('save-new-reply', r, v.body, v.shareWith, callback);
 			}
 			catch(e){
 				console.error(Globals.getError(e));
@@ -383,7 +384,8 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 
 
 	setContent: function(text){
-		var search = this.up('window').getSearchTerm(), re;
+		var search = this.up('[getSearchTerm]'), re;
+		if(search){ search = search.getSearchTerm(); }
 		if(search){
 			search = Ext.String.htmlEncode( search );
 			re = new RegExp(['(\\>{0,1}[^\\<\\>]*?)(',RegExp.escape( search ),')([^\\<\\>]*?\\<{0,1})'].join(''), 'ig');
@@ -415,7 +417,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 		var me = this;
 		if(e){e.stopEvent();}
 
-		//up to root, not window
+		//TODO: change this to not rely on being in a "window" component.
 		if(me.noteBody && me.up('window').checkAndMarkAsActive()){
 			me.replyToId = null;
 			me.noteBody.addCls('editor-active');
@@ -429,6 +431,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 
 
 	deactivateReplyEditor: function(){
+		//TODO: change this to not rely on being in a "window" component.
 		var myWindow = this.up('window');
 		if(!myWindow.editorActive()){
 			return;
@@ -604,7 +607,6 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 
 
 	onChat: function() {
-		//this.up('window').fireEvent('chat', this.record);
 		this.fireEvent('chat', this.record);
 	},
 
@@ -646,7 +648,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 
 
 	onShare: function(){
-		this.up('window').fireEvent('share', this.record);
+		this.fireEvent('share', this.record);
 	}
 
 

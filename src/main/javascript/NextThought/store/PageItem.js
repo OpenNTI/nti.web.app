@@ -28,6 +28,23 @@ Ext.define('NextThought.store.PageItem',{
 	},
 
 
+	statics: {
+		make: function makeFactory(url,id,disablePaging){
+			var ps = this.create({
+				clearOnPageLoad: false,
+				containerId: id
+			});
+			ps.proxy.url = url;
+			if(disablePaging){
+				ps.proxy.limitParam = undefined;
+				ps.proxy.startParam = undefined;
+				delete ps.pageSize;
+			}
+			return ps;
+		}
+	},
+
+
 	GETTERS : {
 		'Highlight': function(r){return r;},
 		'Note': function(r){return r;},

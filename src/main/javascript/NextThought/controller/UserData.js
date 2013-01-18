@@ -85,12 +85,7 @@ Ext.define('NextThought.controller.UserData', {
 				'chat': this.replyAsChat
 			},
 
-			'note-reply': {
-				'share': this.shareWith,
-				'chat': this.replyAsChat
-			},
-
-			'note-window': {
+			'note-panel': {
 				'save-new-reply' : this.saveNewReply,
 				'share': this.shareWith,
 				'chat': this.replyAsChat
@@ -311,32 +306,18 @@ Ext.define('NextThought.controller.UserData', {
 
 
 	onAnnotationsLoad: function(cmp, containerId, subContainers) {
-
-		function make(url,id,disablePaging){
-			var ps = NextThought.store.PageItem.create({
-				clearOnPageLoad: false,
-				containerId: id
-			});
-			ps.proxy.url = url;
-			if(disablePaging){
-				ps.proxy.limitParam = undefined;
-				ps.proxy.startParam = undefined;
-				delete ps.pageSize;
-			}
-			return ps;
-		}
-
-		var rel = Globals.USER_GENERATED_DATA,
+		var Store = NextThought.store.PageItem,
+			rel = Globals.USER_GENERATED_DATA,
 			pi = LocationProvider.currentPageInfo,
 			stores = [],
-			ps = make(pi.getLink(rel),containerId,true),
+			ps = Store.make(pi.getLink(rel),containerId,true),
 			map = { root: ps };
 
 		LocationProvider.currentPageStores = map;
 
 		stores.push(ps);
 		Ext.each(subContainers,function(id){
-			var p = make(pi.getSubContainerURL(rel,id),id);
+			var p = Store.make(pi.getSubContainerURL(rel,id),id);
 			stores.push(p);
 			map[id]=p;
 		});

@@ -40,6 +40,12 @@ Ext.define('NextThought.providers.Location', {
 		});
 	},
 
+
+	hasStore: function(id){
+		return !id ? false : (this.currentPageStores||{}).hasOwnProperty(id);
+	},
+
+
 	getStore: function(id){
 		var theStore, root;
 		if(!id){ Ext.Error.raise('ID required'); }
@@ -227,7 +233,6 @@ Ext.define('NextThought.providers.Location', {
 	},
 
 
-
 	findTitle: function(containerId, defaultTitle){
 		var l = this.find(containerId);
 		if(defaultTitle === undefined){
@@ -313,6 +318,7 @@ Ext.define('NextThought.providers.Location', {
 
 		return indexes;
 	},
+
 
 	getContentRoot: function(ntiid){
 		var bookId = LocationProvider.getLineage(ntiid||this.currentNTIID).last(),
@@ -491,6 +497,7 @@ Ext.define('NextThought.providers.Location', {
 			console.error('No handler for type:',m.type, m);
 		}
 	},
+
 
 	updatePreferences: function(pi) {
 		var sharing = pi.get('sharingPreference'),
