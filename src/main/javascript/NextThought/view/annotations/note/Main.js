@@ -200,7 +200,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 
 		this.callParent(arguments);
 		if(this.record){
-			this.mun(this.record,'destroy',this.destroy,this);
+			this.mun(this.record,'destroy',this.wasDeleted,this);
 		}
 		if(!this.rendered){return;}
 
@@ -261,9 +261,11 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		}
 	},
 
-	onRemove: function(){
+
+	onRemove: function(cmp){
 		var c = this.items.getCount();
-		if(c === 0 && (!this.record || this.record.placeholder)){
+		console.log('removed child, it was deleting: ',cmp.deleting);
+		if(cmp.deleting && c === 0 && (!this.record || this.record.placeholder)){
 			this.record.destroy();
 		}
 	},

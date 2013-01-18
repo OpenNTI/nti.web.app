@@ -1017,12 +1017,28 @@
 		}
 
 		&.deleted-reply {
-			min-height: 65px;
-			.meta .controls {display: none;}
+			&::after {background: none !important;}
+			min-height: 35px;
+			padding: 6px 30px;
+			.meta {
+				display: none;
+				.controls {display: none !important;}
+			}
+			.avatar {display: none;}
+			.name {display: none;}
+			.respond {
+				overflow: visible;
+				.time {
+					position: static;
+					//float: right;
+					font-style: italic;
+				}
+			}
 			.reply-options {
 				display: none !important;
 			}
 		}
+
 
 		&.editor-active,&.hover {
 			border-color: #e6e6e6;
@@ -1071,14 +1087,6 @@
 			}
 		}
 
-		&.deleted-reply {
-			padding-bottom: 11px;
-			.meta {
-				.time {
-					font-style: italic;
-				}
-			}
-		}
 
 		&.editor-active .respond{
 			display: block;

@@ -255,7 +255,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 		//Remove the old listener
 		if(this.record){
 			this.mun(this.record, 'child-added', this.addNewChild, this);
-			this.mun(this.record, 'destroy', this.destroy, this);
+			this.mun(this.record, 'destroy', this.wasDeleted, this);
             this.mun(this.record, 'changed', this.recordChanged, this);
             this.mun(this.record, 'updated', this.recordUpdated, this);
 		}
@@ -297,7 +297,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 	        scope: this,
 	        'changed': function(){ this.recordChanged(); },
             'updated': this.recordUpdated,
-	        'destroy': this.destroy
+	        'destroy': this.wasDeleted
         });
 	},
 
@@ -564,9 +564,11 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 	},
 
 
-	onRemove: function(){
+	onRemove: function(cmp){
 		var c = this.items.getCount();
+		console.log('removed child, it was deleting: ',cmp.deleting);
 		if(c === 0 && (!this.record || this.record.placeholder)){
+			this.deleting = Boolean(cmp.deleting);
 			this.destroy();
 		}
 	},
@@ -575,9 +577,14 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 		this.record.destroy();
 	},
 
+	wasDeleted: function(){
+		console.log('Deleting panel from record destroy, marking deleteing=true');
+		this.deleting = true;
+		this.destroy();
+	},
 
 	setPlaceholderContent: function() {
-		this.time.update("THIS MESSAGE HAS BEEN DELETED");
+		this.time.update("This message has been deleted");
 		this.noteBody.addCls("deleted-reply");
 	},
 
