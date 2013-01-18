@@ -14,7 +14,8 @@ Ext.define('NextThought.model.Slide', {
 		{ name: 'video-thumbnail', type: 'string' },
 		{ name: 'video-start', type: 'number' },
 		{ name: 'video-end', type: 'number' },
-		{ name: 'ordinal', type: 'number' }
+		{ name: 'ordinal', type: 'number' },
+		{ name: 'domClone', type: 'auto'}
 	],
 
 
@@ -42,6 +43,7 @@ Ext.define('NextThought.model.Slide', {
 			}
 
 			var DQ = Ext.DomQuery,
+				frag = (dom.ownerDocument||document).createDocumentFragment(),
 				root = LocationProvider.getContentRoot(containerId),
 				o = {
 				'Class': 'Slide',
@@ -56,8 +58,11 @@ Ext.define('NextThought.model.Slide', {
 				'video-thumbnail': getParam('slidevideothumbnail'),
 				'video-start': getParam('slidevideostart'),
 				'video-end': getParam('slidevideoend'),
-				'ordinal': getParam('slidenumber')
+				'ordinal': getParam('slidenumber'),
+				'domClone': frag
 			};
+
+			frag.appendChild(dom.cloneNode(true));
 
 			return ParseUtils.parseItems(o)[0];
 		}

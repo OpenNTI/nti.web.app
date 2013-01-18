@@ -33,6 +33,8 @@ Ext.define('NextThought.view.slidedeck.Slide',{
 		var hasNext = Boolean(slide.getSibling(1)),
 			hasPrev = Boolean(slide.getSibling(-1));
 
+		console.log('Set slide:',slide);
+
 		this.slideImage.set({src: slide.get('image')});
 
 		this.next[hasNext?'removeCls':'addCls']('disabled');
