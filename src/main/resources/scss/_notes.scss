@@ -821,6 +821,148 @@
 	}
 }
 
+.note {
+	position: relative;
+	padding: 16px 27px 5px 30px;
+	border: 0px solid #f2f2f2;
+	border-bottom-width: 1px;
+
+
+	&.first{
+		&::after {
+			content: ' ';
+			position: absolute;
+			overflow: hidden;
+			top: 15px; left: 18px;
+			background: $icons no-repeat;
+			@include sprite($icons,'reply_arrow',$dimensions: true);
+		}
+	}
+
+	&.deleted-reply {
+		&::after {background: none !important;}
+		min-height: 35px;
+		padding: 6px 30px;
+		.meta {
+			display: none;
+			.controls {display: none !important;}
+		}
+		.avatar {display: none;}
+		.name {display: none;}
+		.respond {
+			overflow: visible;
+			.time {
+				position: static;
+				//float: right;
+				font-style: italic;
+			}
+		}
+		.reply-options {
+			display: none !important;
+		}
+	}
+
+
+	&.editor-active,&.hover {
+		border-color: #e6e6e6;
+		box-shadow: none;
+		.meta .controls { display: block; }
+		.respond .reply-options{ opacity: 1; }
+	}
+
+	.avatar {
+		float: left;
+		img {
+			border-radius: 2px;
+			margin-left: 4px;
+			background-size: cover;
+			width: 32px;
+			height: auto;
+		}
+	}
+
+	@include meta-row-window;
+
+	.body {
+		margin-left: 45px;
+		font-size: 14px;
+		line-height: default;
+		font-family: 'Droid Serif';
+
+		color: $primary-grey;
+		@include text-pre-wrap;
+
+		a {
+			word-wrap: break-word;
+		}
+
+		strong, em strong {
+			font-weight: bold !important;
+		}
+
+		em, strong em {
+			font-style: italic !important;
+		}
+
+		.body-divider .whiteboard-thumbnail{
+			width: 240px !important;
+			clear: both;
+		}
+	}
+
+
+	&.editor-active .respond{
+		display: block;
+		.reply-options{display: none;}
+		.time{display: none;}
+		.editor {
+			display: block;
+			.action.share {display: none !important;}
+		}
+	}
+
+	.respond {
+		position: relative;
+		overflow: hidden;
+
+		@include reply-options;
+		.reply-options .more ol{ position: fixed; }
+
+		&.shared .reply-options .share {
+			display: inline-block;
+		}
+
+		.time {
+			color: $tertiary-grey;
+			position: absolute;
+			right: 0px;
+			top: 8px;
+			font-size: 12px;
+			font-style: italic;
+			font-weight: 400;
+		}
+
+		@include note-editor;
+		.editor {
+			.main{
+				border: 1px solid #dcdcdc;
+				border-bottom-width: 0;
+
+				.content{
+
+
+				}
+			}
+			.footer {
+				.action {
+					&.whiteboard {
+						background-position: 2px 12px;
+					}
+				}
+			}
+		}
+	}
+}
 
 .note-window {
 	@extend .nti-window;
@@ -996,149 +1138,6 @@
 
 	.main-view {
 		background: #FBFBFB;
-	}
-
-	.note {
-		position: relative;
-		padding: 16px 27px 5px 30px;
-		border: 0px solid #f2f2f2;
-		border-bottom-width: 1px;
-
-
-		&.first{
-			&::after {
-				content: ' ';
-				position: absolute;
-				overflow: hidden;
-				top: 15px; left: 18px;
-				background: $icons no-repeat;
-				@include sprite($icons,'reply_arrow',$dimensions: true);
-			}
-		}
-
-		&.deleted-reply {
-			&::after {background: none !important;}
-			min-height: 35px;
-			padding: 6px 30px;
-			.meta {
-				display: none;
-				.controls {display: none !important;}
-			}
-			.avatar {display: none;}
-			.name {display: none;}
-			.respond {
-				overflow: visible;
-				.time {
-					position: static;
-					//float: right;
-					font-style: italic;
-				}
-			}
-			.reply-options {
-				display: none !important;
-			}
-		}
-
-
-		&.editor-active,&.hover {
-			border-color: #e6e6e6;
-			box-shadow: none;
-			.meta .controls { display: block; }
-			.respond .reply-options{ opacity: 1; }
-		}
-
-		.avatar {
-			float: left;
-			img {
-				border-radius: 2px;
-				margin-left: 4px;
-				background-size: cover;
-				width: 32px;
-				height: auto;
-			}
-		}
-
-		@include meta-row-window;
-
-		.body {
-			margin-left: 45px;
-			font-size: 14px;
-			line-height: default;
-			font-family: 'Droid Serif';
-
-			color: $primary-grey;
-			@include text-pre-wrap;
-
-			a {
-				word-wrap: break-word;
-			}
-
-			strong, em strong {
-				font-weight: bold !important;
-			}
-
-			em, strong em {
-				font-style: italic !important;
-			}
-
-			.body-divider .whiteboard-thumbnail{
-				width: 240px !important;
-				clear: both;
-			}
-		}
-
-
-		&.editor-active .respond{
-			display: block;
-			.reply-options{display: none;}
-			.time{display: none;}
-			.editor {
-				display: block;
-				.action.share {display: none !important;}
-			}
-		}
-
-		.respond {
-			position: relative;
-			overflow: hidden;
-
-			@include reply-options;
-			.reply-options .more ol{ position: fixed; }
-
-			&.shared .reply-options .share {
-				display: inline-block;
-			}
-
-			.time {
-				color: $tertiary-grey;
-				position: absolute;
-				right: 0px;
-				top: 8px;
-				font-size: 12px;
-				font-style: italic;
-				font-weight: 400;
-			}
-
-			@include note-editor;
-			.editor {
-				.main{
-					border: 1px solid #dcdcdc;
-					border-bottom-width: 0;
-
-					.content{
-
-
-					}
-				}
-				.footer {
-					.action {
-						&.whiteboard {
-							background-position: 2px 12px;
-						}
-					}
-				}
-			}
-		}
 	}
 
 	.note:not(.main-view) {
