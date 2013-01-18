@@ -45,7 +45,6 @@ Ext.define('NextThought.view.annotations.note.Window',{
 	initComponent: function(){
 		var a = this.annotation, m;
 		this.callParent(arguments);
-		this.isEditorActive = false;
 
 		m = this.down('note-main-view');
 		m.prefix = a.prefix;
@@ -72,7 +71,7 @@ Ext.define('NextThought.view.annotations.note.Window',{
 		var t = e.getTarget(),
 			p = t? t.parentNode: null;
 
-		if(!this.editorActive() //an editor is not active,
+		if(!this.down('note-main-view').editorActive() //an editor is not active,
 		&& !e.getTarget('.note-window') // the click did not fall inside the note window
 		&& p //the thing clicked, has to still have a parent node. (if it was a button in a dialog that has been destroyed,...)
 		&& this.zIndexManager.getActive() === this){ // the note window is the top most active window
@@ -80,28 +79,6 @@ Ext.define('NextThought.view.annotations.note.Window',{
 		}
 	},
 
-
-	editorActive: function(){
-		return this.isEditorActive;
-	},
-
-	setEditorActive: function(active){
-		console.log('Will mark window as having an ' + (active ? 'active' : 'inactive') + ' editor');
-		if(this.isEditorActive === active){
-			console.warn('Window already has an ' + (active ? 'active' : 'inactive') + ' editor. Unbalanced calls?');
-			return;
-		}
-		this.isEditorActive = active;
-		this.fireEvent(active ? 'editorActivated' : 'editorDeactivated', this);
-	},
-
-	checkAndMarkAsActive: function(){
-		if(!this.editorActive()){
-			this.setEditorActive(true);
-			return true;
-		}
-		return false;
-	},
 
 	getSearchTerm: function(){
 		var search = this.down('note-filter-bar').down('simpletext');

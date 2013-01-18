@@ -138,7 +138,7 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 
 	setRecord: function(rec, sender){
 		var me = this,
-			myWindow = me.up('window');
+			myWindow = me.up('window').down('note-main-view');
 
 		if(myWindow && myWindow.editorActive()){
 			return;
@@ -251,7 +251,7 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 	updateBigArrows: function(item){
 		var hasNext, hasPrev,
 			me = this,
-			editorActive = this.up('window').editorActive();
+			editorActive = this.up('window').down('note-main-view').editorActive();
 
 		hasNext = item && item.next() && !editorActive;
 		hasPrev = item && item.prev() && !editorActive;

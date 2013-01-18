@@ -8,6 +8,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		'NextThought.ux.SlideDeck'
 	],
 
+	root: true,
 
 	highlightTpl: Ext.DomHelper.createTemplate({tag: 'span', cls: 'highlight', html: '{0}'}),
 
@@ -31,7 +32,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 
 			this.el.hover(this.onMouseOver,this.onMouseOut,this);
 
-			this.mon(this.up('window'), 'editorDeactivated', function(w){
+			this.on('editorDeactivated', function(){
 				var bRecord = me.bufferedRecord;
 				if(bRecord){
 					console.log('Setting buffered record');
@@ -192,7 +193,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		var suppressed, context, doc, range;
 
 		//If we have an editor active for god sake don't blast it away
-		if(this.up('window').editorActive()){
+		if(this.editorActive()){
 			console.log('Need to buffer set record', r);
 			this.bufferedRecord = r;
 			return;
@@ -275,10 +276,10 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		var action = (dom.getAttribute('href')||'').replace('#',''),
 			d = Ext.fly(dom).up('[itemprop~=nti-data-markupenabled]').down('img'),
 			img = d && d.is('img') ? d.dom : null,
-			me = this, w;
+			me = this;
 
 		function openSlideDeck(){
-			w.close();
+			me.up('window').close();
 			SlideDeck.open(dom, LocationProvider.currentNTIID);
 		}
 
@@ -293,9 +294,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 			ImageZoomView.zoomImage(dom);
 		}
 		else if(/^slide$/.test(action)){
-			w = this.up('window');
-		
-			if(w.editorActive()){
+			if(this.editorActive()){
 				Ext.Msg.show({
 					msg: "This will discard the contents of your current message",
 					scope: me,

@@ -121,7 +121,7 @@ Ext.define('NextThought.view.slidedeck.Slide',{
 			}
 
 			if(add){
-				toAdd.push({record: record, id: guid});
+				toAdd.push({record: record, id: guid, root:true});
 			}
 		});
 

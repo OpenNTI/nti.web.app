@@ -18,6 +18,8 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 	getTargetEl: function () { return this.body; },
 
 
+	rootQuery: 'note-panel[root]',
+
 	renderSelectors: {
 		avatar: '.avatar img',
 		noteBody: '.note',
@@ -58,7 +60,8 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 
 	initComponent: function(){
 		this.wbData = {};
-		this.addEvents('chat', 'share', 'save-new-reply');
+		this.addEvents('chat', 'share', 'save-new-reply','editorActivated','editorDeactivated');
+		this.enableBubble('editorActivated', 'editorDeactivated');
 		this.callParent(arguments);
 	},
 
@@ -413,12 +416,46 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 	generateClickHandler: function(id,data){ this.wbData[id] = data; },
 
 
+	getRoot:function(){
+		var cmp = this.is(this.rootQuery) ? this : this.up(this.rootQuery);
+		if(!cmp){
+			Ext.Error.raise('No root found');
+		}
+		return cmp;
+	},
+
+	editorActive: function(){
+		return Boolean(this.getRoot().isEditorActive);
+	},
+
+
+	setEditorActive: function(active){
+		var root = this.getRoot();
+		console.log('Will mark Panel as having an ' + (active ? 'active' : 'inactive') + ' editor');
+		if(root.isEditorActive === active){
+			console.warn('Panel already has an ' + (active ? 'active' : 'inactive') + ' editor. Unbalanced calls?');
+			return;
+		}
+		root.isEditorActive = active;
+		root.fireEvent(active ? 'editorActivated' : 'editorDeactivated', this);
+	},
+
+
+	checkAndMarkAsActive: function(){
+		var root = this.getRoot();
+		if(!root.editorActive()){
+			root.setEditorActive(true);
+			return true;
+		}
+		return false;
+	},
+
+
 	activateReplyEditor: function(e){
 		var me = this;
 		if(e){e.stopEvent();}
 
-		//TODO: change this to not rely on being in a "window" component.
-		if(me.noteBody && me.up('window').checkAndMarkAsActive()){
+		if(me.noteBody && me.checkAndMarkAsActive()){
 			me.replyToId = null;
 			me.noteBody.addCls('editor-active');
 			me.editorActions.activate();
@@ -431,9 +468,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 
 
 	deactivateReplyEditor: function(){
-		//TODO: change this to not rely on being in a "window" component.
-		var myWindow = this.up('window');
-		if(!myWindow.editorActive()){
+		if(!this.editorActive()){
 			return;
 		}
 
@@ -447,7 +482,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 			this.text.show();
 		}
 		delete this.editMode;
-		myWindow.setEditorActive(false);
+		this.setEditorActive(false);
 	},
 
 
