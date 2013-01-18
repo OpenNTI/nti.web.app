@@ -57,7 +57,7 @@ Ext.define('NextThought.util.Color',{
 		}
 
 		if(!!(m = me.dsRGBARe.exec(string))){
-			console.log('DataServer color value: ',string);
+			//console.log('DataServer color value: ',string);
 			m = [
 				+(parseFloat(m[1])*255).toFixed(0),
 				+(parseFloat(m[3])*255).toFixed(0),
