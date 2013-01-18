@@ -101,7 +101,7 @@ Ext.define('NextThought.proxy.Rest', {
 
 		try{
 			
-			Ext.callback(operation.failed, operation.scope, [operation.records, operation, Ext.decode(response.responseText, true) || responseText]);
+			Ext.callback(operation.failed, operation.scope, [operation.records, operation, Ext.decode(response.responseText, true) || response.responseText]);
 		}
 		catch(e){
 			console.error(e.message, e);
