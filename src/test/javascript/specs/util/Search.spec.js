@@ -43,6 +43,14 @@ describe("Search utils", function() {
 			re = TestSearchUtils.contentRegexFromSearchTerm(term, true);
 			expect(new RegExp(re).test(content)).toBeTruthy();
 		});
+
+		it('checks a long phrase search', function(){
+			var content = "to shareholders, how to apply what little I\u0027d learned about management to the business of the company, how to maintain editorial quality while exercising financial",
+				term = "to shareholders how to apply what little I'd learned about management to the business of the company how to maintain editorial quality while exercising financial";
+
+			re = TestSearchUtils.contentRegexFromSearchTerm(term, true);
+			expect(new RegExp(re).test(content)).toBeTruthy();
+		});
 	});
 
 	describe("extractMatchFromFragment", function(){

@@ -135,7 +135,7 @@ Ext.define('NextThought.view.content.reader.Scroll',{
 		me.showSearchHit(result.hit);
 		if(fragment){
 			console.time('Fragment location');
-			pos = me.getFragmentLocation(fragment);
+			pos = me.getFragmentLocation(fragment, result.hit.get('PhraseSearch'));
 			console.timeEnd('Fragment location');
 		}
 

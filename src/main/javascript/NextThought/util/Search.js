@@ -38,7 +38,7 @@ Ext.define('NextThought.util.Search',{
 		//with a regex group that matches any other non alpha numeric character.
 		//Note this potentially matches court's to court-s but that is such a rare
 		//case this should be ok in practice.
-		term = term.replace(/[^a-zA-Z0-9 ]/g, "[^a-zA-Z0-9 ]");
+		term = term.replace(/[^a-zA-Z0-9\s]/g, "[^a-zA-Z0-9\\s]");
 
 		if(isPhrase){
 			term = term.replace(/\s([^\]]|$)/g, '[^a-zA-Z0-9]+$1');
