@@ -50,7 +50,9 @@ Ext.define('NextThought.view.assessment.Parts',{
 			type = 'question-input-'+cls.toLowerCase();
 
 		//Set the answerLabel on the model.
-		answerLabel ? part.set('answerLabel', answerLabel) : null;
+		if(answerLabel){
+			part.set('answerLabel', answerLabel);
+		}
 		console.log('set answer label to: ', answerLabel);
 
 		try {
