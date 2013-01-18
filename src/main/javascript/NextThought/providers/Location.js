@@ -46,6 +46,14 @@ Ext.define('NextThought.providers.Location', {
 	},
 
 
+	addStore: function(id,store){
+		if(this.hasStore(id) && this.getStore(id) !== store){
+			console.warn('replacing an existing store??');
+		}
+		this.currentPageStores[id] = store;
+	},
+
+
 	getStore: function(id){
 		var theStore, root;
 		if(!id){ Ext.Error.raise('ID required'); }

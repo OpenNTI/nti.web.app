@@ -518,11 +518,10 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 				add = true;
 
 			if (record.getModelName() !== 'Note') {
-				console.warn('can not at reply, it is not a note and I am not prepared to handle that.');
+				console.warn('can not add item, it is not a note and I am not prepared to handle that.');
 				add=false;
 			}
-
-			if (Ext.getCmp(guid)) {
+			else if (Ext.getCmp(guid)) {
 				console.log('already showing this reply');
 				add=false;
 			}
@@ -532,7 +531,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 			}
 		});
 
-		console.log('Adding reply records', toAdd);
+		console.log('Adding note records', toAdd);
 		this.add(toAdd);
 
 		Ext.defer(this.maybeOpenReplyEditor, 1, this);

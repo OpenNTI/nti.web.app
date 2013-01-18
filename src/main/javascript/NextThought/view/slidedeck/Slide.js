@@ -3,7 +3,8 @@ Ext.define('NextThought.view.slidedeck.Slide',{
 	alias: 'widget.slidedeck-slide',
 	requires: [
 		'NextThought.providers.Location',
-		'NextThought.view.annotations.note.Panel'
+		'NextThought.view.annotations.note.Panel',
+		'NextThought.util.Anchors'
 	],
 
 	ui: 'slide',
@@ -63,9 +64,21 @@ Ext.define('NextThought.view.slidedeck.Slide',{
 		}
 
 		function success(pi){
-			finish(NextThought.store.PageItem.make(
+			var id = pi.get('NTIID'), store;
+			if(LocationProvider.hasStore(id)){
+				store = LocationProvider.getStore(id);
+			}
+
+			store = store || NextThought.store.PageItem.make(
 					pi.getLink(Globals.USER_GENERATED_DATA),
-					containerId,true));
+					containerId,true);
+
+			//for caching?
+			//If we get here, the containerId didn't have a value associated with it.
+			// So put what ever we come up with under the "containerId" key, even if the store is from the pageInfo's id
+			// (even if it's different than what we started with)
+			LocationProvider.addStore(containerId,store);
+			finish(store);
 		}
 
 		function failure(){
@@ -84,19 +97,25 @@ Ext.define('NextThought.view.slidedeck.Slide',{
 
 	showUserData: function(){
 		var items = this.store.getItems(),
-			toAdd = [];
+			toAdd = [],
+			dom = this.slide.get('dom-clone');
 
 		Ext.each(items||[], function(record){
 
 			var guid = IdCache.getComponentId(record, null, 'reply'),
-				add = true;
+				add = true,
+				dec = record.get('applicableRange');
 
-			if (record.getModelName() !== 'Note') {
+
+			if(!Anchors.doesContentRangeDescriptionResolve(dec,dom)){
+				console.warn('Skipping item, because it does not anchor to this slide');
+				add = false;
+			}
+			else if (record.getModelName() !== 'Note') {
 				console.warn('it is not a note and I am not prepared to handle that.');
 				add=false;
 			}
-
-			if (Ext.getCmp(guid)) {
+			else if (Ext.getCmp(guid)) {
 				console.log('already showing this reply? Ensure the note window is not open.');
 				add=false;
 			}
@@ -106,7 +125,7 @@ Ext.define('NextThought.view.slidedeck.Slide',{
 			}
 		});
 
-		console.log('Adding reply records', toAdd);
+		console.log('Adding note records', toAdd);
 		this.removeAll(true);
 		this.add(toAdd);
 	},
