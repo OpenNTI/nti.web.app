@@ -111,7 +111,9 @@ Ext.define('NextThought.store.PageItem',{
 		if(bins){
 			Ext.Object.each(bins,function(k,o){
 				if(o && o[0].isThreadable){
-					this.buildItemTree(o, tree); } }, this);
+					this.buildItemTree(o, tree);
+				}
+			}, this);
 
 			//take all children off the main collection... make them accessible only by following the children pointers.
 			Ext.Object.each(tree,function(k,o,a){
@@ -128,10 +130,12 @@ Ext.define('NextThought.store.PageItem',{
 
 	buildItemTree: function(list, tree){
 		var me = this;
-console.group("Build Tree");
+		console.group("Build Tree");
 		Ext.each(list, function clearRefs(r){
-            delete r.children;
-            delete r.parent;
+			if(!r.placeholder){
+				delete r.children;
+				delete r.parent;
+			}
         });
 
 		Ext.each(list, function buildTree(r){
