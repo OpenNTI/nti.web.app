@@ -641,6 +641,9 @@ Ext.define('NextThought.view.whiteboard.editor.mixins.ShapeManipulation',{
 			newShape.points = Ext.clone(shape.points);
 			newShape.closed = shape.closed;
 		}
+		else if(shape.Class === "CanvasUrlShape"){
+			newShape.url = Ext.clone(shape.url);
+		}
 
 		this.canvas.addShape(newShape);
 		return newShape;
