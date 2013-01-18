@@ -449,7 +449,7 @@ Ext.define('NextThought.view.annotations.note.EditorActions', {
 		if (!el) {
 
 			Ext.each(content.query('> div'),function(n){
-				if(n.firstChild === n.lastChild && n.firstChild.nodeValue === '\u200B'){
+				if(n.firstChild === n.lastChild && n.firstChild && n.firstChild.nodeValue === '\u200B'){
 					Ext.removeNode(n);
 				}
 			});
