@@ -138,7 +138,7 @@ Ext.define('NextThought.util.Anchors', {
 			}
 
 			if(!containerId){
-				console.warn('No container id provided will use root without validating container ids');
+				console.log('No container id provided will use root without validating container ids');
 			}
 
 			//FIXME we run into potential problems with this is ContentRangeDescriptions ever occur in different documents
@@ -182,6 +182,31 @@ Ext.define('NextThought.util.Anchors', {
 			Globals.getError(e);
 		}
 		return null;
+	},
+
+	/*
+	 *	Returns a boolean indicating whether or not the provided contentRangeDescription
+	 *  can be found in the provided node
+	 *
+	 *	@param contentRagneDescription must not be null
+	 *  @param node the node to look in.  This node must be clean.  IE it must come from the virgin
+	 *				content document or it must have been cleaned already
+	 *  @param doc the doc or doc fragment that can be used to generate ranges.  If this param is undefined
+	 *				node.ownderDocument will be used
+	 *
+	 *  Note: if we find ourselves using inside a loop over contentRangeDescriptions on the same node
+	 *  an optimized versio nof this function should be written and used
+	 */
+	doesContentRangeDescriptionResolve: function(contentRangeDescription, node, doc){
+		var result, range, theDoc = (node ? node.ownerDocument : null) || doc;
+
+		range = this.toDomRange(contentRangeDescription, theDoc, node);
+
+		result = !!range;
+		if(range && range.detach){
+			range.detach();
+		}
+		return result;
 	},
 
 	createEmptyContentRangeDescription: function(docElement, containerId, rootId){

@@ -2189,4 +2189,30 @@ describe("Anchor Utils", function() {
 			expect(searchWithin).toBeNull();
 		});
 	});
+
+	describe('doesContentRangeDescriptionResolve', function(){
+		it('Works for things like slides', function(){
+			var div = document.createElement('div'),
+				childDiv = document.createElement('div'),
+				anotherDiv = document.createElement('div');
+				ancestor = Ext.create('NextThought.model.anchorables.ElementDomContentPointer', {role: 'ancestor', elementTagName: 'div', elementId: 'parent'}),
+				start = Ext.create('NextThought.model.anchorables.ElementDomContentPointer', {role: 'start', elementTagName: 'div', elementId: 'child'}),
+				end = Ext.create('NextThought.model.anchorables.ElementDomContentPointer', {role: 'end', elementTagName: 'div', elementId: 'child'}),
+				desc = Ext.create('NextThought.model.anchorables.DomContentRangeDescription', {start: start, end: end, ancestor: ancestor})	,
+				result;
+
+			anotherDiv.setAttribute('Id', 'thisIsNotTheDivYouSeek');
+			div.setAttribute('Id', 'parent');
+			childDiv.setAttribute('Id', 'child');
+			div.appendChild(childDiv);
+			testBody.appendChild(anotherDiv);
+			testBody.appendChild(div);
+
+			result = Anchors.doesContentRangeDescriptionResolve(desc, div);
+			expect(result).toBeTruthy();
+			desc.attachLocator(null);
+			result = Anchors.doesContentRangeDescriptionResolve(desc, anotherDiv);
+			expect(result).toBeFalsy();
+		});
+	});
 });
