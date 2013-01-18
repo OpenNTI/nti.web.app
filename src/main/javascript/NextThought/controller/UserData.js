@@ -173,7 +173,7 @@ Ext.define('NextThought.controller.UserData', {
 				//add it to the page items store I guess:
 				pageStore = LocationProvider.getStore(cid);
 				if(!pageStore || LocationProvider.currentNTIID !== meta.NTIID || (item && !item.isTopLevel())){
-					me.maybeFireChildAdded(item);
+					me.maybeAddOrRemoveChild(item,change.get('ChangeType'));
 
 					try{
 						if(!pageStore){
@@ -191,33 +191,40 @@ Ext.define('NextThought.controller.UserData', {
 					catch(error){
 						console.error(Globals.getError(error));
 					}
-
-					return;
 				}
-
-				if(!/deleted/i.test(change.get('ChangeType'))){
+				else if(!/deleted/i.test(change.get('ChangeType'))){
 					pageStore.add(item);
 				}
-				else {
+
+				if(/deleted/i.test(change.get('ChangeType'))){
 					item = pageStore.getById(item.getId());
-					if(item){
-						pageStore.remove(item);
-					}
+					me.convertToPlaceholder(item);
 				}
 			}
-			catch(e){
-				console.error(Globals.getError(e));
+			catch(e2){
+				console.error(Globals.getError(e2));
 			}
 		});
 
     },
 
 
-    maybeFireChildAdded: function(item) {
+	convertToPlaceholder: function(item){
+		if(!item){return;}
+		try{
+			item.convertToPlaceholer();
+			item.fireEvent('updated',item);
+		} catch(e) {
+			console.error('Trouble in the placeholder convertion', Globals.getError(e));
+		}
+	},
+
+
+    maybeAddOrRemoveChild: function(item, changeType) {
         if (!item){return;}
 
         var refs = (item.get('references') || []).slice(), parent, main;
-        if(refs.length===0){return;}
+        if(item.isTopLevel()){return;}
 
         //look for reply
         parent = Ext.getCmp(IdCache.getComponentId(refs.last(), null, 'reply'));
@@ -230,7 +237,14 @@ Ext.define('NextThought.controller.UserData', {
             }
         }
 
-        if (parent){parent.record.fireEvent('child-added', item);}
+        if (parent){
+	        if(/deleted/i.test(changeType)){
+		        main = parent.findWithRecordId(item.getId());
+		        this.convertToPlaceholder(main.record);
+		        return;
+	        }
+	        parent.record.fireEvent('child-added', item);
+        }
     },
 
 

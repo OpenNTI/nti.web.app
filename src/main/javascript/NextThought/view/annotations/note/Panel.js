@@ -42,6 +42,20 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 	},
 
 
+	findWithRecordId: function(ntiid){
+		var o = null;
+
+		if(this.record && this.record.getId()===ntiid){return this;}
+
+		this.items.each(function(c){
+			o = c.findWithRecordId(ntiid);
+			return !o;
+		});
+
+		return o;
+	},
+
+
 	initComponent: function(){
 		this.wbData = {};
 		this.callParent(arguments);
