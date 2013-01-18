@@ -330,9 +330,9 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 			});
 
 
-			//the store's count (minus the parent clone) is the reply count.
+			//the store's count is the reply count.
 			//update the count for next time the carousel renders
-			record.set('ReferencedByCount',theStore.getCount()-1);
+			record.set('ReferencedByCount',theStore.getCount());
 			record.fireEvent('count-updated');
 
 			me.addReplies(items);
@@ -563,6 +563,13 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 		this.activateReplyEditor();
 	},
 
+
+	onRemove: function(){
+		var c = this.items.getCount();
+		if(c === 0 && (!this.record || this.record.placeholder)){
+			this.destroy();
+		}
+	},
 
 	onDelete: function(){
 		this.record.destroy();

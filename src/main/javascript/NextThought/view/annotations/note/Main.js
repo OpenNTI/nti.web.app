@@ -261,6 +261,12 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		}
 	},
 
+	onRemove: function(){
+		var c = this.items.getCount();
+		if(c === 0 && (!this.record || this.record.placeholder)){
+			this.record.destroy();
+		}
+	},
 
 	contextAnnotationActions: function(e,dom){
 		e.stopEvent();
