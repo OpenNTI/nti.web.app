@@ -5,8 +5,9 @@ Ext.define('NextThought.model.converters.GroupByTime',{
 		type: 'groupByTime',
 		sortType: Ext.data.SortTypes.asUCString,
 
-		groupStringForElapsedTime: function(now, v){
-			var oneDayAgo = Ext.Date.add(now, Ext.Date.DAY, -1),
+		groupStringForElapsedTime: function(n, v){
+			var now = new Date(n.getFullYear(), n.getMonth(), n.getDate()),
+				oneDayAgo = Ext.Date.add(now, Ext.Date.DAY, -1),
 				twoDaysAgo = Ext.Date.add(now, Ext.Date.DAY, -2),
 				oneWeekAgo = Ext.Date.add(now, Ext.Date.DAY, -1 * 7),
 				twoWeeksAgo = Ext.Date.add(now, Ext.Date.DAY, -2 * 7),
@@ -16,6 +17,13 @@ Ext.define('NextThought.model.converters.GroupByTime',{
 				twoMonthsAgo = Ext.Date.add(now, Ext.Date.MONTH, -2),
 				oneYearAgo = Ext.Date.add(now, Ext.Date.YEAR, -1);
 
+
+			function betweenExclusive(date, start, end) {
+				var t = date.getTime();
+				return start.getTime() < t && t <= end.getTime();
+			}
+
+
 			v = new Date(v.getFullYear(), v.getMonth(), v.getDate());
 
 			//We take inspiration from outlook here.  Despite being a terrible piece of
@@ -24,24 +32,24 @@ Ext.define('NextThought.model.converters.GroupByTime',{
 
 			//TODO: make this better...serously. Grouping is better sort prefix is still wacky.
 
-			if(Ext.Date.between(v, oneDayAgo, now)){ return 'A '; }
+			if(betweenExclusive(v, oneDayAgo, now)){ return 'A '; }
 
-			if(Ext.Date.between(v, twoDaysAgo, oneDayAgo)){ return 'B Yesterday'; }
+			if(betweenExclusive(v, twoDaysAgo, oneDayAgo)){ return 'B Yesterday'; }
 
-			if(Ext.Date.between(v, oneWeekAgo, twoDaysAgo)){
+			if(betweenExclusive(v, oneWeekAgo, twoDaysAgo)){
 				//C<elapsed time ago><day string>
 				return 'C' + (now.getTime() - v.getTime()) + Ext.Date.format(v, ' l');
 			}
 
-			if(Ext.Date.between(v, twoWeeksAgo, oneWeekAgo)){ return 'D Last week'; }
+			if(betweenExclusive(v, twoWeeksAgo, oneWeekAgo)){ return 'D Last week'; }
 
-			if(Ext.Date.between(v, threeWeeksAgo, twoWeeksAgo)){ return 'E 2 weeks ago'; }
+			if(betweenExclusive(v, threeWeeksAgo, twoWeeksAgo)){ return 'E 2 weeks ago'; }
 
-			if(Ext.Date.between(v, fourWeeksAgo, threeWeeksAgo)){ return 'F 3 weeks ago'; }
+			if(betweenExclusive(v, fourWeeksAgo, threeWeeksAgo)){ return 'F 3 weeks ago'; }
 
-			if(Ext.Date.between(v, twoMonthsAgo, oneMonthAgo)){ return 'G Last month'; }
+			if(betweenExclusive(v, twoMonthsAgo, oneMonthAgo)){ return 'G Last month'; }
 
-			if(Ext.Date.between(v, oneYearAgo, twoMonthsAgo)){ return 'H Last year'; }
+			if(betweenExclusive(v, oneYearAgo, twoMonthsAgo)){ return 'H Last year'; }
 
 			return 'I Older';
 		},
