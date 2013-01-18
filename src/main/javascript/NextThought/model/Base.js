@@ -158,6 +158,7 @@ Ext.define('NextThought.model.Base', {
 			'NTIID':1,
 			'OID':1
 		};
+		me.placeholder = true;
 		me.fields.each(function(f){
 			if(!keepList[f.name]){
 				me.set(f.name, f.defaultValue);

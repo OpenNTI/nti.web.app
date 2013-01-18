@@ -221,6 +221,9 @@ Ext.define('NextThought.view.annotations.note.Panel',{
             this.time.update(r.getRelativeTimeString());
 			this.noteBody.removeCls("deleted-reply");
 
+			if(r.placeholder){
+				this.setPlaceholderContent();
+			}
 
             if (this.liked){
                 this.liked.update(r.getFriendlyLikeCount());
