@@ -75,11 +75,11 @@ Ext.define('NextThought.view.annotations.note.Main',{
 
 
 	contactsMaybeChanged: function(){
-		var me = this;
+		var me = this, r = this.record;
 		if(me.addToContacts){
 			me.mun(me.addToContacts, 'click');
 		}
-		if(!me.shouldShowAddContact(this.record.get('Creator'))){
+		if(r.placeholder || !me.shouldShowAddContact(r.get('Creator'))){
 			me.addToContacts.hide();
 		}
 		else{
@@ -199,6 +199,9 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		}
 
 		this.callParent(arguments);
+		if(this.record){
+			this.mun(this.record,'destroy',this.destroy,this);
+		}
 		if(!this.rendered){return;}
 
 		//this.ownerCt.getEl().dom.scrollTop = 0;
@@ -314,6 +317,12 @@ Ext.define('NextThought.view.annotations.note.Main',{
 	},
 
 
+	updateFromRecord:function(newRecord){
+		this.callParent(arguments);
+		this.contactsMaybeChanged();
+	},
+
+
 	activateReplyEditor: function(){
 		var r = this.callParent(arguments);
 		if(r){
@@ -326,15 +335,6 @@ Ext.define('NextThought.view.annotations.note.Main',{
 	deactivateReplyEditor: function(){
 		this.up('window').down('note-carousel').removeCls('editor-active');
 		this.callParent();
-	},
-
-
-	onDelete: function(){
-		var w = this.up('window');
-		if( this.record && this.record.destroy){
-            this.record.destroy();
-        }
-		w.close();//make select next in carousel, and only close if its the last one
 	}
 
 },

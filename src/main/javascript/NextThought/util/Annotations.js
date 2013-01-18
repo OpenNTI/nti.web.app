@@ -31,16 +31,18 @@ Ext.define('NextThought.util.Annotations',{
 		//this placeholder "happened in the past" so take the existing time and move it back
 		ct.setMinutes(ct.getMinutes()-1);
 
+		holder.beginEdit();
 		holder.set('CreatedTime', ct);
-		holder.set('Creator', null);
-		holder.set('ContainerId', note.get('ContainerId'));
-		holder.set('NTIID', note.get('inReplyTo'));
-		holder.set('references', refs);
 		holder.set('Last Modified', ct);
+		holder.set('Creator', User.getUnresolved('Unknown'));
+		holder.set('references', refs);
 
-		holder.placeHolder = true;
+		holder.copyFields(note,'style','applicableRange','sharedWith','selectedText','ContainerId',{'NTIID':'inReplyTo'});
+
+		holder.placeholder = true;
 		delete holder.phantom;
 
+		holder.endEdit();
 		return holder;
 	},
 

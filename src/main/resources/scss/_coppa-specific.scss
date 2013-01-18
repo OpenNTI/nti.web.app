@@ -141,7 +141,7 @@
 				.x-opera &,
 				.x-safari5 & {
 					width: 291px;
-					&[placeHolder$="Name"] { width: 145px; }
+					&[placeholder$="Name"] { width: 145px; }
 				}
 				position: relative;
 				left: 4px;

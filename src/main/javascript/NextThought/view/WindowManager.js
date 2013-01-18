@@ -75,7 +75,7 @@ Ext.define('NextThought.view.WindowManager',{
 			dragStartTolerance: 50,
 			trackWrapper: wrap,
 			minimizedButton: btn,
-			placeHolder: hlr
+			placeholder: hlr
 		});
 
 		btn.on('click',this.handleButtonClicked, this);
@@ -133,7 +133,7 @@ Ext.define('NextThought.view.WindowManager',{
 
 	handleMinimize: function(win){
 		var btn = win.minimizedButton,
-			hlr = win.placeHolder;
+			hlr = win.placeholder;
 		win.minimized = true;
 		win.hide();
 		hlr.hide();
@@ -204,16 +204,16 @@ Ext.define('NextThought.view.WindowManager',{
 		win.snapped = (bottom >= zone);
 
 		if(!win.snapped){
-			win.placeHolder.hide();
+			win.placeholder.hide();
 		}
 		else {
-			win.placeHolder.show();
+			win.placeholder.show();
 		}
 	},
 
 
 	handleResize: function(win,w){
-		win.placeHolder.setWidth(w);
+		win.placeholder.setWidth(w);
 		if(win.snapped){
 			this.organizeSnappedWindows();
 		}
@@ -232,10 +232,10 @@ Ext.define('NextThought.view.WindowManager',{
 		Ext.each(me.registry,function(win){
 			if(!win.snapped || win.minimized===true || win.dragging){return;}
 
-			win.placeHolder.show();
+			win.placeholder.show();
 
 
-			var box = win.placeHolder.getPageBox();
+			var box = win.placeholder.getPageBox();
 
 
 			win.setPosition(

@@ -21,7 +21,7 @@ Ext.define('NextThought.model.Base', {
 		{ name: 'Class', type: 'string', persist: false },
 		{ name: 'ContainerId', type: 'string' },
 		{ name: 'CreatedTime', type: 'date', persist: false, dateFormat: 'timestamp', defaultValue: new Date() },
-		{ name: 'Creator', type: 'string', persist: false },
+		{ name: 'Creator', type: 'auto', persist: false },
 		{ name: 'ID', type: 'string', persist: false },
 		{ name: 'Last Modified', type: 'date', persist: false, dateFormat: 'timestamp', defaultValue: new Date() },
 		{ name: 'Links', type: 'links', persist: false, defaultValue: [] },
@@ -76,6 +76,38 @@ Ext.define('NextThought.model.Base', {
 	},
 
 
+	/**
+	 * Caller should wrap in beginEdit() and endEdit()
+	 * @param recordSrc
+	 * @param fields - [String var args]
+	 */
+	copyFields: function(recordSrc, fields){
+		var me = this, maybeFields = fields;
+
+		if(!Ext.isArray(fields)){
+			maybeFields = Array.prototype.slice.call(arguments,1)||[];
+		}
+
+		Ext.each(maybeFields,function(f){
+			if(Ext.isObject(f)){
+				Ext.Object.each(f,function(dest,src){
+					if(me.hasField(dest) && recordSrc.hasField(src)){
+						me.set(dest,recordSrc.get(src));
+					} else {
+						console.warn("fields are not declared:\n",me,"(dest)",dest,"\n",recordSrc,"(src)",src);
+					}
+				});
+			}
+			else {
+				me.set(f,recordSrc.get(f));
+			}
+		});
+	},
+
+
+	hasField: function(fieldName){
+		return this[this.persistenceProperty].hasOwnProperty(fieldName);
+	},
 
 
 
@@ -117,13 +149,52 @@ Ext.define('NextThought.model.Base', {
 		return current;
 	},
 
+	convertToPlaceholer: function(){
+		var me = this, keepList = {
+			'Class':1,
+			'ContainerId':1,
+			'ID':1,
+			'MimeType':1,
+			'NTIID':1,
+			'OID':1
+		};
+		me.fields.each(function(f){
+			if(!keepList[f.name]){
+				me.set(f.name, f.defaultValue);
+			}
+		});
+	},
 
 	destroy: function(){
-		var me = this;
-		me.tearDownLinks();
+		var me = this, convert = false;
+		if(!me.isModifiable()){return;}
+
+		if(me.children && me.children.length > 0){
+			convert = true;
+			me.suspendEvents();
+		}
+		else {
+			me.tearDownLinks();
+		}
+
 		me.callParent(arguments);
 
-		NextThought.model.events.Bus.fireEvent('item-destroyed',me);
+		try {
+			NextThought.model.events.Bus.fireEvent('item-destroyed',me);
+		} catch(e2) {
+			console.error('Caught exception in item-destroyed event', Globals.getError(e2));
+		}
+
+		if(convert){
+			try{
+				me.convertToPlaceholer();
+			} catch(e) {
+				console.error('Trouble in the placeholder convertion', Globals.getError(e));
+			}
+			me.resumeEvents();
+			me.fireEvent('updated',me);
+			return;
+		}
 
 		if(me.stores){
 			Ext.each(me.stores.slice(),function(s){ s.remove(me); });
@@ -351,18 +422,18 @@ Ext.define('NextThought.model.Base', {
 	},
 
 
-	hasField: function(fieldName) {
-		var result = false;
-		this.fields.each(
-			function(f){
-				if (f.name === fieldName){
-					result = true;
-					return false;
-				}
-		});
-
-		return result;
-	},
+//	hasField: function(fieldName) {
+//		var result = false;
+//		this.fields.each(
+//			function(f){
+//				if (f.name === fieldName){
+//					result = true;
+//					return false;
+//				}
+//		});
+//
+//		return result;
+//	},
 
 
 	/**

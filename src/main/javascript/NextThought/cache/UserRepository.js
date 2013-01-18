@@ -83,7 +83,11 @@ Ext.define('NextThought.cache.UserRepository', {
 				if(typeof(o) === 'string') {
 					name = o;
 				}
-				else if(typeof(o.getId)!== 'undefined'){
+				else if(o.getId !== undefined){
+					if(o.get('status') === 'Unresolved'){
+						result.push(o);
+						return;
+					}
 					name = o.getId();
 				}
 				else {

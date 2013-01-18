@@ -165,5 +165,20 @@ Ext.define('NextThought.model.Note', {
 		return (this.children||[]).reduce(function(sum,child){
 			return sum + 1 + (child.getTotalLikeCount ? (child.getTotalLikeCount()||0) : 0);
 		},0);
+	},
+
+	convertToPlaceholer: function(){
+		var me = this,
+			data = this.getData(false);
+		this.callParent(arguments);
+
+		me.set('CreatedTime', data.CreatedTime);
+		me.set('Last Modified', new Date());
+		me.set('Creator', User.getUnresolved('Unknown'));
+		me.set('applicableRange', data.applicableRange);
+		me.set('selectedText',data.selectedText);
+		me.set('inReplyTo', data.inReplyTo);
+		me.set('references', data.references);
+		me.set('style',data.style);
 	}
 });

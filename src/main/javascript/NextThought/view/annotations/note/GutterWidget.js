@@ -18,7 +18,8 @@ Ext.define('NextThought.view.annotations.note.GutterWidget',{
 		replyOptions: '.respond .reply-options',
 		replyButton: '.respond .reply',
 		shareButton: '.respond .share',
-		more: '.respond .reply-options .more'
+		more: '.respond .reply-options .more',
+		mainBody: '.note-gutter-widget'
 	},
 
 	afterRender: function(){
@@ -64,12 +65,17 @@ Ext.define('NextThought.view.annotations.note.GutterWidget',{
 		if (r.phantom) { return; }
 		this.record = r;
 		var me = this;
+
 		if(!me.rendered){return;}
 		UserRepository.getUser(r.get('Creator'),me.fillInUser,me);
 		me.time.update(r.getRelativeTimeString());
 		me.replyCount.update(r.getReplyCount().toString());
-
-		me.text.update(r.getBodyText());
+		if(r.placeholder){
+			me.mainBody.addCls('deleted');
+			me.text.update('[Deleted]');
+		}else {
+			me.text.update(r.getBodyText());
+		}
 
 		r.on({
 			scope: this,
@@ -108,7 +114,7 @@ Ext.define('NextThought.view.annotations.note.GutterWidget',{
 	},
 
 	canDelete: function(){
-		return !this.record || this.record.getReplyCount() === 0;
+		return !this.record || this.record.isModifiable();
 	},
 
 	onChat: function(){

@@ -29,6 +29,18 @@ Ext.define('NextThought.view.annotations.note.CarouselItem',{
 		var m = this.record;
 		UserRepository.getUser(m.get('Creator'),this.fillInUser,this);
 		this.mon(m,'count-updated',this.updateCount,this);
+		this.mon(m,'destroy',this.moveSelection,this);
+	},
+
+
+	moveSelection: function(){
+		var n = this.next() || this.prev();
+		if(n){
+			n.clicked();
+		}
+		else {
+			this.up('window').close();
+		}
 	},
 
 
@@ -61,7 +73,7 @@ Ext.define('NextThought.view.annotations.note.CarouselItem',{
 		this.count.update(this.record.getReplyCount()||'');
 	},
 
-	clicked: function(e){
+	clicked: function(){
 		this.up('note-carousel').setRecord(this.record, this);
 	}
 });

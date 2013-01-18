@@ -77,7 +77,7 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 		filter = Ext.isFunction(filter)? filter : null;
 
 		me.removeAll(true);
-		this.store.each(function(item){
+		Ext.each(this.store.getItems(),function(item){
 			if(item instanceof NextThought.model.Note && (!filter || filter(item))){
 				m.push({record: item, autoRender:Boolean(me.rendered), selected: item.getId() === selectedRecordId});
 			}
@@ -159,7 +159,10 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 			o.markSelected(s);
 			if(s){
 				if(me.rendered){
-					setTimeout(function(){ me.updateWith(o, sender); },10);
+					//Sender was becoming undefined somehow... taking the timeout out seems to fix it, why did we need this?
+//					setTimeout(function(){
+						me.updateWith(o, sender);
+//					},10);
 				}
 				else { me.selected = o; }
 			}

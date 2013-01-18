@@ -497,7 +497,7 @@ Ext.define('NextThought.controller.UserData', {
 			e = this.self.events;
 
 		Ext.each(replies,function(r){
-			if(!r.placeHolder && r.store && r.stores.length > 0){
+			if(!r.placeholder && r.store && r.stores.length > 0){
 				delete r.parent;
 				r.pruned = true;
 				e.fireEvent('new-note', r, null);

@@ -96,12 +96,12 @@ Ext.define('NextThought.store.PageItem',{
 				if(o && o[0].isThreadable){
 					this.buildItemTree(o, tree); } }, this);
 
-			this.prune(tree);
-
 			//take all children off the main collection... make them accessible only by following the children pointers.
 			Ext.Object.each(tree,function(k,o,a){
 				if(o.parent){ delete a[k]; }
 			});
+
+			this.prune(tree);
 		}
 
 		return tree;
@@ -111,6 +111,11 @@ Ext.define('NextThought.store.PageItem',{
 
 	buildItemTree: function(list, tree){
 		var me = this;
+console.group("Build Tree");
+		Ext.each(list, function clearRefs(r){
+            delete r.children;
+            delete r.parent;
+        });
 
 		Ext.each(list, function buildTree(r){
 			var g = me.GETTERS[r.getModelName()](r),
@@ -130,6 +135,7 @@ Ext.define('NextThought.store.PageItem',{
 					p = (tree[parent] = getID(parent));
 				}
 				if(!p){
+					console.log('Generating placeholder for id:',parent, '  child:',oid);
 					p = (tree[parent] = AnnotationUtils.replyToPlaceHolder(g));
 					buildTree(p);
 				}
@@ -162,33 +168,14 @@ Ext.define('NextThought.store.PageItem',{
 			}
 			return r;
 		}
+
+		console.groupEnd("Build Tree");
 	},
 
 
 	prune: function(tree){
-
-		function canPrune(o){
-			return o!==null && (!o.parent && o.placeHolder);
-		}
-
-		function needsPruning(){
-			var k;
-			for(k in tree){ if(tree.hasOwnProperty(k) && canPrune(tree[k])) { return true; } }
-			return false;
-		}
-
-		function prune(k,o){
-			if(!canPrune(o)) { return; }
-			delete tree[k];
-			Ext.each(o.children, function(c){
-				delete c.parent;
-				c.pruned = true;
-			});
-		}
-
-		while(needsPruning()){
-			Ext.Object.each(tree, prune);
-		}
+		//until we decide we want to prune from the root down... this is a non-desired function. (we cannot have leaf
+		// placeholders with the current threading algorithm.)
 	},
 
 

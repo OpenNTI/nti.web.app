@@ -42,7 +42,6 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 	},
 
 
-
 	initComponent: function(){
 		this.wbData = {};
 		this.callParent(arguments);
@@ -72,7 +71,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 
 		me.setRecord(me.record);
 
-		if (me.record.placeHolder) {
+		if (me.record.placeholder) {
             me.setPlaceholderContent();
 			return;
 		}
@@ -139,6 +138,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 			console.error('Whoops,..', e.message, e);
 		}
 	},
+
 
 	editorSaved: function(){
 		var v = this.editorActions.getValue(),
@@ -216,12 +216,10 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 		var r = newRecord || this.record;
 
 		try {
-			if(this.contactsMaybeChanged){
-				this.contactsMaybeChanged();
-			}
             UserRepository.getUser(r.get('Creator'),this.fillInUser,this);
 		    UserRepository.getUser(r.get('sharedWith').slice(),this.fillInShare,this);
             this.time.update(r.getRelativeTimeString());
+			this.noteBody.removeCls("deleted-reply");
 
 
             if (this.liked){
@@ -242,6 +240,8 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 		//blank us out so we don't ghost note bodies onto the wrong note.
 		this.setContent('');
 		r.compileBodyContent(this.setContent, this, this.generateClickHandler, 226 );
+
+		this.updateToolState();
 	},
 
 
@@ -251,8 +251,8 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 	setRecord: function(r){
 		//Remove the old listener
 		if(this.record){
-			this.mun(this.record, 'updated', this.updateToolState, this);
 			this.mun(this.record, 'child-added', this.addNewChild, this);
+			this.mun(this.record, 'destroy', this.destroy, this);
             this.mun(this.record, 'changed', this.recordChanged, this);
             this.mun(this.record, 'updated', this.recordUpdated, this);
 		}
@@ -260,7 +260,8 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 		this.record = r;
 		this.guid = IdCache.getIdentifier(r.getId());
 		if(!this.rendered){return;}
-		if (!r.placeHolder){UserRepository.getUser(r.get('Creator'),this.fillInUser,this);}
+
+		UserRepository.getUser(r.get('Creator'),this.fillInUser,this);
 
 		//used by a controller in a component query
 		this.recordIdHash = IdCache.getIdentifier(r.getId());
@@ -277,16 +278,23 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 			this.onEdit();
 		}
 
-		this.loadReplies(r);
+		this.removeAll(true);
+
+		if(!r.hasOwnProperty('parent')){
+			this.loadReplies(r);
+		}
+		else {
+			this.addReplies(r.children);
+		}
 
 		this.updateToolState();
-		this.mon(r, 'updated', this.updateToolState, this);
 		this.mon(r, 'child-added', this.addNewChild, this);
         this.mon(r, {
 	        single:true,
 	        scope: this,
 	        'changed': function(){ this.recordChanged(); },
-            'updated': this.recordUpdated
+            'updated': this.recordUpdated,
+	        'destroy': this.destroy
         });
 	},
 
@@ -294,27 +302,18 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 	loadReplies: function(record){
 		var me = this;
 		me.mask();
+		console.group('Loading Replies');
 
 		function setReplies(theStore){
-			var cmp, items,
-				recordClone = ParseUtils.parseItems(
-					Ext.apply(
-							Ext.clone(record.raw),
-							// don't let the buildTree algorithm create placeholders above this...throws things off
-							{inReplyTo:undefined}
-					))[0];
-			console.log('Store load args', arguments);
 
-			// We add this so we don't generate a placeholder record for it in the buildTree function of the PageItem
-			// store. We don't want a placeholder representation of our parent record, because the pruning algorithm
-			// would see that and remove it, and we would be left without placeholders until there were gaps between
-			// replies of replies.
-			theStore.add(recordClone);
+			var cmp, items;
+
+			console.log('Store load args', arguments);
 
 			items = theStore.getItems();
 
-			if(items.length === 1 && items[0]===recordClone){
-				items = items[0].children;
+			if(items.length === 1 && items[0].getId() === record.getId()){
+				items = (items[0].children||[]).slice();
 			}
 			else {
 				console.warn('There was an unexpected result from the reply store.');
@@ -335,34 +334,35 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 
 			me.addReplies(items);
 
-			function maybeOpenReplyEditor(){
-                if(this.replyToId){
-                    cmp = Ext.getCmp(IdCache.getComponentId(this.replyToId, null, 'reply'));
-                    if(cmp){
-                        cmp.activateReplyEditor();
-                        delete this.replyToId;
-                    }
-                }
-                else if(this.scrollToId) {
-                    cmp = Ext.getCmp(IdCache.getComponentId(this.scrollToId, null, 'reply'));
-                    if(cmp){
-                        cmp.scrollIntoView();
-                        delete this.scrollToId;
-                    }
-                }
-            }
-
-            Ext.defer(maybeOpenReplyEditor, 1, this);
-
 			me.unmask();
 			if(me.hasCallback){
 				Ext.callback(me.hasCallback);
 				delete me.hasCallback;
 			}
+			console.groupEnd('Loading Replies');
 		}
 
 		record.getDescendants(setReplies);
 	},
+
+
+	maybeOpenReplyEditor: function(){
+		var cmp;
+        if(this.replyToId){
+            cmp = Ext.getCmp(IdCache.getComponentId(this.replyToId, null, 'reply'));
+            if(cmp){
+                cmp.activateReplyEditor();
+                delete this.replyToId;
+            }
+        }
+        else if(this.scrollToId) {
+            cmp = Ext.getCmp(IdCache.getComponentId(this.scrollToId, null, 'reply'));
+            if(cmp){
+                cmp.scrollIntoView();
+                delete this.scrollToId;
+            }
+        }
+    },
 
 
 	setContent: function(text){
@@ -453,10 +453,10 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 			return true;
 		}
 
-//		return true;
+		return r.isModifiable();
 
 // From Old Reply.js
-		return r.children === undefined || r.children.length === 0;
+//		return r.children === undefined || r.children.length === 0;
 
 // From: Old Main.js
 //		return !this.record || this.record.get('ReferencedByCount') === undefined
@@ -492,7 +492,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 	addReplies: function(records){
 		var toAdd = [];
 
-		Ext.each(records, function(record){
+		Ext.each(records||[], function(record){
 
 			var guid = IdCache.getComponentId(record, null, 'reply'),
 				add = true;
@@ -511,8 +511,11 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 				toAdd.push({record: record, id: guid});
 			}
 		});
+
 		console.log('Adding reply records', toAdd);
 		this.add(toAdd);
+
+		Ext.defer(this.maybeOpenReplyEditor, 1, this);
 	},
 
 
@@ -559,42 +562,13 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 
 
 	onDelete: function(){
-		var r = this.record;
-
-        if (!r.isModifiable()){return;}
-
-		r.set('body',['deleted']);
-		r.clearListeners();
-		r.placeHolder = true;
-		this.adjustRootsReferenceCount(r, -1);
-		if (r.children && r.children.length > 0){
-			this.setPlaceholderContent();
-		}
-		else {
-			this.destroy();
-		}
-
-		if(r.isModifiable()){
-			r.destroy();
-		}
-		else {
-			r.tearDownLinks();
-		}
+		this.record.destroy();
 	},
 
 
 	setPlaceholderContent: function() {
-		this.wipeOutContent("THIS MESSAGE HAS BEEN DELETED");
-	},
-
-
-	wipeOutContent: function(replacementText) {
-		this.time.update(replacementText);
-//		this.text.remove();
-//		this.responseBox.remove();
-//		this.avatar.remove();
-//		this.liked.remove();
-		this.noteBody.toggleCls("deleted-reply");
+		this.time.update("THIS MESSAGE HAS BEEN DELETED");
+		this.noteBody.addCls("deleted-reply");
 	},
 
 
