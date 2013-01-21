@@ -79,6 +79,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 		me.callParent(arguments);
 
 		if(me.first){ me.noteBody.addCls('first'); }
+		if(this.root){ me.noteBody.addCls('root'); }
 
 		me.editorActions = new NoteEditorActions(me,me.editor);
 

@@ -827,6 +827,16 @@
 	border: 0px solid #f2f2f2;
 	border-bottom-width: 1px;
 
+	&:not(.root) {
+		.meta {
+			.controls {
+				.favorite {
+					display:none;
+					margin-top: 0px;
+				}
+			}
+		}
+	}
 
 	&.first{
 		&::after {
@@ -882,6 +892,16 @@
 	}
 
 	@include meta-row-window;
+
+	.meta {
+		margin-left: 45px;
+		margin-top: 5px;
+		font-size: 10px;
+
+		.name {
+			font-size: 14px;
+		}
+	}
 
 	.body {
 		margin-left: 45px;
@@ -1140,25 +1160,6 @@
 		background: #FBFBFB;
 	}
 
-	.note:not(.main-view) {
-		.meta {
-			margin-left: 45px;
-			margin-top: 5px;
-			font-size: 10px;
-
-			.name {
-				font-size: 14px;
-			}
-
-			.controls {
-				.favorite {
-					display:none;
-					margin-top: 0px;
-				}
-			}
-		}
-	}
-
 	.note.main-view {
 		//just in case ExtJS doesn't set this absolute...
 		//so that our inner coordinates are relative to here.
@@ -1178,7 +1179,13 @@
 		}
 
 		.meta {
+			margin-top: 0;
 			margin-left: 70px;
+			font-size: 12px;
+
+			.name {
+				font-size: 24px;
+			}
 		}
 
 		.add-to-contacts {
