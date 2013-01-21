@@ -47,13 +47,9 @@ Ext.define('NextThought.view.menus.AnswerHistory',{
 		items.push( {text: 'ANSWER HISTORY', cls:'answer-title', allowUncheck: false, answerHistoryTitle: true});
 
 		this.store.each(function(r){
-			parts = r.get('parts');
-			part = parts[me.renderedData.partNum];
-			var t = part.get('submittedResponse');
-
-			//Clean up item text (sanitize laTeX).
-			t = t.replace(/\\[;:,]/g, ' ');
-			console.log('insert item: ',t);
+			var parts = r.get('parts'),
+				part = parts[me.renderedData.partNum],
+				t = part.get('submittedResponse');
 			items.push({
 				xtype: me.renderedData.menuItemType || 'menuitem',
 				text: t
