@@ -546,26 +546,18 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 
 
 	addReplies: function(records){
-		var toAdd = [];
+		var toAdd = [], recordCollection;
 
-		Ext.Array.sort(records||[], function(a, b){
-			var ta = a ? a.get('Last Modified') : undefined,
-				tb = b ? b.get('Last Modified') : undefined;
+		recordCollection = new Ext.util.MixedCollection();
+		recordCollection.addAll(records || []);
 
-			if( ta ){
-				ta = ta.getTime();
-			}
-			if( tb ){
-				tb = tb.getTime();
-			}
-
-			if(ta === undefined || tb === undefined){
-				return 0;
-			}
-			return ta - tb;
+		recordCollection.sort({
+			property: 'CreatedTime',
+			direction: 'ASC',
+			transform: Ext.data.SortTypes.asDate,
+			root: 'data'
 		});
-
-		Ext.each(records||[], function(record){
+		recordCollection.each(function(record){
 
 			var guid = IdCache.getComponentId(record, null, 'reply'),
 				add = true;
@@ -583,7 +575,6 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 				toAdd.push({record: record, id: guid});
 			}
 		});
-
 		console.log('Adding note records', toAdd);
 		this.add(toAdd);
 
