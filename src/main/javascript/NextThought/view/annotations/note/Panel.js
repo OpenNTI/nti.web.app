@@ -300,23 +300,23 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 			this.onEdit();
 		}
 
+		Ext.suspendLayouts();
+		this.removeAll(true);
+		Ext.resumeLayouts(true);
+
 		//Multiple containers/cmps involved here
 		//So notice we do the bulkiest suspend resume
 		//we can. Also getting this onto the next even pump
 		//helps the app not seem like it is hanging
 		Ext.defer(function(){
+			Ext.suspendLayouts();
 			if(!r.hasOwnProperty('parent')){
-				Ext.suspendLayouts();
-				this.removeAll(true);
-				Ext.resumeLayouts(true);
 				this.loadReplies(r);
 			}
 			else {
-				Ext.suspendLayouts();
-				this.removeAll(true);
 				this.addReplies(r.children);
-				Ext.resumeLayouts(true);
 			}
+			Ext.resumeLayouts(true);
 		}, 1, this);
 
 
