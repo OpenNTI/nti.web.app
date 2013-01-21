@@ -50,6 +50,10 @@ Ext.define('NextThought.view.menus.AnswerHistory',{
 			parts = r.get('parts');
 			part = parts[me.renderedData.partNum];
 			var t = part.get('submittedResponse');
+
+			//Clean up item text (sanitize laTeX).
+			t = t.replace(/\\[;:,]/g, ' ');
+			console.log('insert item: ',t);
 			items.push({
 				xtype: me.renderedData.menuItemType || 'menuitem',
 				text: t
