@@ -548,6 +548,23 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 	addReplies: function(records){
 		var toAdd = [];
 
+		Ext.Array.sort(records||[], function(a, b){
+			var ta = a ? a.get('Last Modified') : undefined,
+				tb = b ? b.get('Last Modified') : undefined;
+
+			if( ta ){
+				ta = ta.getTime();
+			}
+			if( tb ){
+				tb = tb.getTime();
+			}
+
+			if(ta === undefined || tb === undefined){
+				return 0;
+			}
+			return ta - tb;
+		});
+
 		Ext.each(records||[], function(record){
 
 			var guid = IdCache.getComponentId(record, null, 'reply'),
