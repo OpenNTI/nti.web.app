@@ -124,13 +124,21 @@ Ext.define('NextThought.util.Ranges',{
        return this.clearNonContextualGarbage(r.cloneContents());
     },
 
+	expandRangeGetNode: function(range, doc, dontClone){
+		var expanded = this.expandRange(range, doc),
+		    tempDiv = document.createElement('div');
+
+		tempDiv.appendChild(expanded);
+
+		if(!dontClone){
+			tempDiv = tempDiv.cloneNode(true);
+		}
+		return tempDiv;
+	},
 
     expandRangeGetString: function(range, doc){
-        var expanded = this.expandRange(range, doc),
-            tempDiv = document.createElement('div'),
-            str;
-
-        tempDiv.appendChild(expanded);
+        var tempDiv, str;
+		tempDiv = this.expandRangeGetNode(range, doc, true);
         str = tempDiv.innerHTML;
 
         //cleanup:

@@ -187,10 +187,56 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		return start - inc;
 	},
 
+	fixUpCopiedContext: function(n){
+		var node = Ext.get(n),
+			firstChild = node.first();
+
+        if (!firstChild || !(firstChild.is('div') || firstChild.is('object'))){ //node may be null if child is a text node
+            node.insertHtml('afterBegin', '[...] ');
+            node.insertHtml('beforeEnd', ' [...]');
+        }
+
+		node.select('.injected-related-items,.related,iframe,.anchor-magic').remove();
+
+		//WE want to remove redaction text in the node body of the note viewer.
+		Ext.each(node.query('.redaction '), function(redaction){
+			if( !Ext.fly(redaction).hasCls('redacted') ){
+				Ext.fly(redaction).addCls('redacted');
+			}
+		});
+
+		node.select('.redactionAction .controls').remove();
+		node.select('span[itemprop~=nti-data-markupenabled]').setStyle({width:undefined});
+		node.select('[itemprop~=nti-data-markupenabled] a').addCls('skip-anchor');
+		node.select('a[href]:not(.skip-anchor)').set({target:'_blank'});
+		node.select('a[href^=#]:not(.skip-anchor)').set({href:undefined,target:undefined});
+
+		node.select('[itemprop~=nti-data-markupenabled] a').on('click',this.nodeAnnotationActions,this);
+
+		node.select('a[href^=tag]').set({href:undefined,target:undefined});
+
+        Ext.each(node.query('.application-highlight'), function(h){
+            if(this.record.isModifiable()){
+                Ext.fly(h).addCls('highlight-mouse-over');
+            }
+        }, this);
+
+
+		//NOTE: THis code was moved, don't expect to uncomment this blindly and have it work
+		//
+        //for now, don't draw the stupid canvas...
+        //this.canvas.width = Ext.fly(this.canvas).getWidth();
+        //this.canvas.height = Ext.fly(this.canvas).getHeight();
+        //AnnotationUtils.drawCanvas(this.canvas, this.node, range,
+        //    this.node.down('.application-highlight').getStyle('background-color'), [-20, 30]);
+
+
+		return node;
+	},
 
 	setRecord: function(r){
 
-		var suppressed, context, doc, range;
+		var suppressed, context, doc, range, newContext;
 
 		//If we have an editor active for god sake don't blast it away
 		if(this.editorActive()){
@@ -213,45 +259,8 @@ Ext.define('NextThought.view.annotations.note.Main',{
 			doc = ReaderPanel.get(this.prefix).getDocumentElement();
 			range = Anchors.toDomRange(r.get('applicableRange'), doc, ReaderPanel.get(this.prefix).getCleanContent(), r.get('ContainerId'));
 			if(range){
-                this.context.setHTML(RangeUtils.expandRangeGetString(range, doc));
-                context = this.context.first();
-
-                if (!context || !(context.is('div') || context.is('object'))){ //context may be null if child is a text node
-                    this.context.insertHtml('afterBegin', '[...] ');
-                    this.context.insertHtml('beforeEnd', ' [...]');
-                }
-
-				this.context.select('.injected-related-items,.related,iframe,.anchor-magic').remove();
-
-				//WE want to remove redaction text in the context body of the note viewer.
-				Ext.each(this.context.query('.redaction '), function(redaction){
-					if( !Ext.fly(redaction).hasCls('redacted') ){
-						Ext.fly(redaction).addCls('redacted');
-					}
-				});
-
-				this.context.select('.redactionAction .controls').remove();
-				this.context.select('span[itemprop~=nti-data-markupenabled]').setStyle({width:undefined});
-				this.context.select('[itemprop~=nti-data-markupenabled] a').addCls('skip-anchor');
-				this.context.select('a[href]:not(.skip-anchor)').set({target:'_blank'});
-				this.context.select('a[href^=#]:not(.skip-anchor)').set({href:undefined,target:undefined});
-
-				this.context.select('[itemprop~=nti-data-markupenabled] a').on('click',this.contextAnnotationActions,this);
-
-				this.context.select('a[href^=tag]').set({href:undefined,target:undefined});
-
-                Ext.each(this.context.query('.application-highlight'), function(h){
-                    if(this.record.isModifiable()){
-                        Ext.fly(h).addCls('highlight-mouse-over');
-                    }
-                }, this);
-
-
-                //for now, don't draw the stupid canvas...
-                //this.canvas.width = Ext.fly(this.canvas).getWidth();
-                //this.canvas.height = Ext.fly(this.canvas).getHeight();
-                //AnnotationUtils.drawCanvas(this.canvas, this.context, range,
-                //    this.context.down('.application-highlight').getStyle('background-color'), [-20, 30]);
+				newContext = this.fixUpCopiedContext(RangeUtils.expandRangeGetNode(range, doc));
+                this.context.setHTML(newContext.dom.innerHTML);
 			}
 
 			if (Ext.isGecko || Ext.isIE9) { this.resizeMathJax(this.context); }

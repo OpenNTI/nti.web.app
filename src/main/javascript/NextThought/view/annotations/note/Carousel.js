@@ -70,8 +70,8 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 	load: function(){
 		var me = this, m =[],
 			selectedRecordId = me.record ? me.record.getId() : null,
-			selectedNode, 
-			filter = (me.filter||{}).filter, 
+			selectedNode,
+			filter = (me.filter||{}).filter,
 			filterName = (me.filter||{}).filterName;
 
 		filter = Ext.isFunction(filter)? filter : null;
@@ -138,7 +138,8 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 
 	setRecord: function(rec, sender){
 		var me = this,
-			myWindow = me.up('window').down('note-main-view');
+			myWindow = me.up('window').down('note-main-view'),
+			selectedItem;
 
 		if(myWindow && myWindow.editorActive()){
 			return;
@@ -154,19 +155,23 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 
 		me.record = rec;
 
+		Ext.suspendLayouts();
 		me.items.each(function(o){
 			var s = o.record.get('NTIID')===rec.get('NTIID');
 			o.markSelected(s);
 			if(s){
-				if(me.rendered){
-					//Sender was becoming undefined somehow... taking the timeout out seems to fix it, why did we need this?
-//					setTimeout(function(){
-						me.updateWith(o, sender);
-//					},10);
-				}
-				else { me.selected = o; }
+				selectedItem = o;
 			}
 		},this);
+		Ext.resumeLayouts();
+
+		if(me.rendered){
+			//Sender was becoming undefined somehow... taking the timeout out seems to fix it, why did we need this?
+			//					setTimeout(function(){
+			me.updateWith(selectedItem, sender);
+			//					},10);
+		}
+		else { me.selected = selectedItem; }
 	},
 
 
@@ -266,7 +271,7 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 		var bgx,
 		me = this;
 
-		
+		console.log('update with called with ', item);
 
 		if(item && !item.rendered){
 		//	setTimeout(function(){ me.updateWith(item, sender); },10);
@@ -284,7 +289,9 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 
 		this.updateSlide();
         if (item && sender && sender.isCarouselItem){
-		    this.up('window').down('note-main-view').setRecord(item.record);
+			Ext.defer(function(){
+				this.up('window').down('note-main-view').setRecord(item.record);
+			}, 1, this);
         }
 
 		bgx = parseInt(this.getEl().getStyle('background-position').match(/-?[0-9]+/g)[0],0);

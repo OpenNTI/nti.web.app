@@ -300,14 +300,25 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 			this.onEdit();
 		}
 
-		this.removeAll(true);
+		//Multiple containers/cmps involved here
+		//So notice we do the bulkiest suspend resume
+		//we can. Also getting this onto the next even pump
+		//helps the app not seem like it is hanging
+		Ext.defer(function(){
+			if(!r.hasOwnProperty('parent')){
+				Ext.suspendLayouts();
+				this.removeAll(true);
+				Ext.resumeLayouts(true);
+				this.loadReplies(r);
+			}
+			else {
+				Ext.suspendLayouts();
+				this.removeAll(true);
+				this.addReplies(r.children);
+				Ext.resumeLayouts(true);
+			}
+		}, 1, this);
 
-		if(!r.hasOwnProperty('parent')){
-			this.loadReplies(r);
-		}
-		else {
-			this.addReplies(r.children);
-		}
 
 		this.updateToolState();
 		this.mon(r, 'child-added', this.addNewChild, this);
@@ -322,8 +333,10 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 
 
 	loadReplies: function(record){
-		var me = this;
-		me.mask();
+		var me = this, toMask = me.el.down('.note-replies');
+		if(toMask){
+			toMask.mask('Loading...');
+		}
 		console.group('Loading Replies');
 
 		function setReplies(theStore){
@@ -348,7 +361,6 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 				i.parent = record;
 			});
 
-
 			//the store's count is the reply count.
 			//update the count for next time the carousel renders
 			record.set('ReferencedByCount',theStore.getCount());
@@ -356,7 +368,9 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 
 			me.addReplies(items);
 
-			me.unmask();
+			if(toMask){
+				toMask.unmask();
+			}
 			if(me.hasCallback){
 				Ext.callback(me.hasCallback);
 				delete me.hasCallback;
@@ -548,6 +562,11 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 	addReplies: function(records){
 		var toAdd = [], recordCollection;
 
+		//Shortcircuit
+		if(Ext.isEmpty(records)){
+			return;
+		}
+
 		recordCollection = new Ext.util.MixedCollection();
 		recordCollection.addAll(records || []);
 
@@ -576,7 +595,12 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 			}
 		});
 		console.log('Adding note records', toAdd);
-		this.add(toAdd);
+
+		//multiple components/containers involved here so
+		//we batch them for the entire fwk
+		Ext.batchLayouts(function(){
+			this.add(toAdd);
+		}, this);
 
 		Ext.defer(this.maybeOpenReplyEditor, 1, this);
 	},
