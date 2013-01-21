@@ -1,6 +1,8 @@
 Ext.define('NextThought.proxy.Socket', {
 	singleton: true,
 	isDebug: true,
+	//Uncomment to log heartbeats and noop packets. I don't recommend doing this outside local testing
+	//isVerbose: true,
 	mixins: { observable: 'Ext.util.Observable' },
 
 	constructor: function() {
@@ -107,12 +109,24 @@ Ext.define('NextThought.proxy.Socket', {
 			socket.onPacket = Ext.Function.createSequence(
 				function(){
 					var o =JSON.stringify(arguments);
-					if(o !== '{"0":{"type":"noop","endpoint":""}}'){
+					if((this.isDebug && this.isVerbose) || o !== '{"0":{"type":"noop","endpoint":""}}'){
 						console.debug('socket.onPacket: args:'+o);
 					}
 				},
 				socket.onPacket
 			);
+
+			if(io.Transport.prototype.onHeartbeat){
+				io.Transport.prototype.onHeartbeat = Ext.Function.createSequence(
+					function(){
+						me.lastHeartbeat = new Date();
+						if(me.isDebug && me.isVerbose){
+							console.debug('Recieved heartbeat from server', me.lastHeartbeat);
+						}
+					},
+					io.Transport.prototype.onHeartbeat
+				);
+			}
 		}
 
 		for (k in this.control) {
