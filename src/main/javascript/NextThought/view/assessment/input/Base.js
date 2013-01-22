@@ -217,7 +217,7 @@ Ext.define('NextThought.view.assessment.input.Base',{
 			a = this.solutionAnswerBox,
 			b = this.showSolutionBtn,
 			e = this.solutionExplanationBox,
-
+			sol,
 			answer = this.el.down('.answer'),
 			label = b.getHTML().replace(/(solution|hint)$/i,'{0}');
 
@@ -231,7 +231,11 @@ Ext.define('NextThought.view.assessment.input.Base',{
 		}
 		else if(this.submitted){
 			answer.show();
-			a.update(this.getSolutionContent(p));
+			sol = this.getSolutionContent(p);
+			if(!Ext.isString(sol)){
+				sol+='';
+			}
+			a.update(sol);
 			e.update(this.filterHTML(p.get('explanation')));
 		}
 		else {
