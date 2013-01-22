@@ -178,6 +178,8 @@ Ext.define('NextThought.view.chat.Log', {
 			m.addCls('shadowed');
 		}
 
+		this.shouldAddTimestampBeforeMessage(msg);
+
 		//we are going to add then scroll to
 		o = m.add({
 						xtype: this.entryType,
@@ -190,6 +192,24 @@ Ext.define('NextThought.view.chat.Log', {
 		}
 	},
 
+	shouldAddTimestampBeforeMessage: function(msg){
+		var newMsgTime =  msg.get('CreatedTime'),
+			lastTimeStamp, intervalTimeStamp,
+			stamp = Ext.Date.format( newMsgTime, 'F j, Y, g:i a');
+
+		lastTimeStamp = this.items.last() ? this.items.last().message.get('CreatedTime') : null;
+		if(!lastTimeStamp){
+			this.addNotification(stamp);
+			return;
+		}
+
+		// Check if the incoming message is within 5 mins from the previous message. If not, print the last timestamp.
+		// Time interval is arbitrary; we can make it whatever we want.
+		intervalTimeStamp = Ext.Date.add(lastTimeStamp, Ext.Date.MINUTE, 5);
+		if( !Ext.Date.between( newMsgTime, lastTimeStamp, intervalTimeStamp ) ){
+			this.addNotification(stamp);
+		}
+	},
 
 	addNotification: function(msg) {
 		//we are going to add then scroll to

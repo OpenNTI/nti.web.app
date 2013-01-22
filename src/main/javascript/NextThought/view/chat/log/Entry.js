@@ -15,7 +15,7 @@ Ext.define('NextThought.view.chat.log.Entry', {
 			'<img src="{avatarURL}" class="avatar" alt="{name}">',
             '<span class="control"></span>',
 			'<div class="message-bounding-box">',
-			'<div class="log-entry {me}">',
+			'<div class="log-entry {me}" data-qtip="{timestamp}">',
 				'<div class="name">{name}</div> ',
 				'<div class="body-text">{body}</div> ',
 			'</div>',
@@ -72,6 +72,7 @@ Ext.define('NextThought.view.chat.log.Entry', {
 			me.renderData.me = 'me';
 		}
 
+		me.renderData.timestamp = this.getTimeStamp(me.message.get('CreatedTime'));
 		m.compileBodyContent(function(content){
 			me.renderData.body = content;
 			if(me.rendered){
@@ -156,6 +157,16 @@ Ext.define('NextThought.view.chat.log.Entry', {
 				alt: name
 			});
 		}
+	},
+
+	getTimeStamp: function(date){
+		function isToday(t){
+			var today = new Date();
+			return  today.getYear() === t.getYear() &&
+					today.getMonth() === t.getMonth() &&
+					today.getDate() === t.getDate();
+		}
+		return isToday(date) ? Ext.Date.format(date, 'g:i a') : Ext.Date.format( date, 'F j, Y, g:i a');
 	},
 
 	initializeDragZone: function(v) {
