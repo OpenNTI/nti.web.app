@@ -980,6 +980,11 @@
 	}
 
 	&.child {
+
+		.note .respond .reply-options .share {
+			display: none;
+		}
+
 		.note-container.child {
 			.note {
 				padding-left: 60px;
