@@ -3,15 +3,17 @@ Ext.Loader.setPath('jQuery.fn.mathquill', 'resources/lib/mathquill/mathquill.min
 
 Ext.define('NextThought.view.assessment.input.SymbolicMath',{
 	extend: 'NextThought.view.assessment.input.FreeResponse',
+	alias: 'widget.question-input-symbolicmathpart',
+
 
 	requires: [
 		'jQuery.fn.mathquill',
 		'NextThought.view.menus.SymbolicMathMenuItem'
 	],
 
-	alias: 'widget.question-input-symbolicmathpart',
 
 	spanTpl: Ext.DomHelper.createTemplate({tag: 'span', cls: 'tabable'}).compile(),
+
 
 	toolbarTpl: Ext.DomHelper.markup([
 		{ cls: 'mathsymbol sqrt', 'data-latex': '\\\\surd', 'data-qtip': 'Insert square root' },
@@ -53,6 +55,7 @@ Ext.define('NextThought.view.assessment.input.SymbolicMath',{
 	//don't let the base class's function run, we're using pure CSS for this version
 	setupAnswerLabel: Ext.emptyFn,
 
+
 	updateSubmission: function(){
 		console.log('keypress', 'disable?', !this.getValue());
 		if(!this.getValue()){
@@ -63,6 +66,7 @@ Ext.define('NextThought.view.assessment.input.SymbolicMath',{
 			this.enableSubmission();
 		}
 	},
+
 
 	attachKeyListeners: function(span){
 		var s = span || this.mathquillSpan,
@@ -110,32 +114,33 @@ Ext.define('NextThought.view.assessment.input.SymbolicMath',{
 		this.lastHeight = currentHeight;
 	},
 
+
+	getSolutionContent: function(part){
+		var solutions = part.get('solutions'),
+			m = [];
+
+		function solutionBuilder(s, idx){
+			m.push({tag:'span',cls:'mathquill-embedded-latex',html:s.get('value')});
+			if(idx < solutions.length - 1){
+				m.push({tag:'br'},{tag:'span',html:' or: '});
+			}
+		}
+
+		Ext.each(solutions, solutionBuilder);
+
+		return Ext.DomHelper.markup(m);
+	},
+
+
 	updateSolutionButton: function(){
-		var solutions, solutionNode, ab, orNode;
 		this.callParent(arguments);
 		if(!this.submitted){
 			return;
 		}
 
-		ab = this.solutionAnswerBox;
-		ab.update('');
-
-		solutions = this.part.get('solutions');
-		Ext.each(solutions, function(s, idx){
-			solutionNode = document.createElement('span');
-			ab.appendChild(solutionNode);
-			solutionNode.innerHTML = s.get('value');
-			jQuery(solutionNode).mathquill();
-
-			if(idx < solutions.length - 1){
-				ab.appendChild(document.createElement('br'));
-				//WTF extjs why cant I just create and append a textnode
-				orNode = document.createElement('span');
-				orNode.innerHTML = ' or: ';
-				ab.appendChild(orNode);
-			}
-		});
+		jQuery('#'+this.solutionAnswerBox.id+' .mathquill-embedded-latex').mathquill();
 	},
+
 
 	mathSymbolClicked: function(e){
 		if(this.submitted){return;}
@@ -145,9 +150,11 @@ Ext.define('NextThought.view.assessment.input.SymbolicMath',{
 		this.updateSubmission();
 	},
 
+
 	getPreviousMenuItemType: function(){
 		return 'symbolicmath-menuitem';
 	},
+
 
 	getValue: function(){
 		var v = jQuery(this.mathquillSpan).mathquill('latex') || '';
@@ -155,13 +162,16 @@ Ext.define('NextThought.view.assessment.input.SymbolicMath',{
 		return this.self.sanitizeMathquillOutput(v);
 	},
 
+
 	sanitizeForMathquill: function(latex){
 		return this.self.transformToMathquillInput(latex);
 	},
 
+
 	canHaveAnswerHistory: function(){
 		return true;
 	},
+
 
 	setValue: function(latex){
 		jQuery(this.mathquillSpan).mathquill('latex', this.sanitizeForMathquill(latex));
@@ -188,14 +198,17 @@ Ext.define('NextThought.view.assessment.input.SymbolicMath',{
 		this.disableMathquillEditable();
 	},
 
+
 	disableMathquillEditable: function(){
 		console.log('disabling');
 		jQuery(this.mathquillSpan).mathquill('revert').mathquill();
 	},
 
+
 	focus: function(){
 		this.mathquillSpan.focus();
 	}
+
 
 }, function(){
 	this.transformToMathquillInput = function(latex){

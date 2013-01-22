@@ -92,7 +92,7 @@ Ext.define('NextThought.view.assessment.input.Base',{
 			solutions.push(s.get('value'));
 		});
 
-		return this.filterHTML(solutions[0]);
+		return this.filterHTML(solutions.join(''));
 	},
 
 
@@ -162,6 +162,12 @@ Ext.define('NextThought.view.assessment.input.Base',{
 			this.historyMenuEl.remove();
 		}
 
+	},
+
+
+	syncElementHeight: function(){
+		var o =this.up('[syncElementHeight]');
+		if(o){o.syncElementHeight();}
 	},
 
 
