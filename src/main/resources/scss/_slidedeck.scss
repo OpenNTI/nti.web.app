@@ -319,6 +319,120 @@ $experimental-support-for-svg: true;
 				}
 			}
 		}
+
+		.slide-notes {
+			margin: 40px 10% 0;
+			overflow: hidden;
+			border-radius: 5px 5px 0 0;
+			box-shadow: 0 0 50px 5px rgba(0, 0, 0, 0.3),
+						0 0 0 110px transparent;
+		}
+
+		.note-footer {
+			position: relative;
+			height: 60px;
+			text-align: center;
+			padding: 20px;
+			border: 0 solid #121212;
+			box-shadow: inset 0 1px 0 0 #3a3a3a;
+			background: rgba(44,44,44,0.9);
+			color: #656556;
+
+			&::after{
+				content: 'End';
+			}
+		}
+
+		.note-container.slide {
+			@extend .note-container;
+
+			.note {
+				border-color: #121212;
+				box-shadow: inset 0 1px 0 0 #3a3a3a;
+				background: #222222;
+
+				&::after{
+					opacity: 0.2;
+				}
+
+				.meta {
+					.name {
+						color: #3a9bd3;
+						font: normal 14px $font;
+					}
+					.controls{
+						.like,.favorite {
+							opacity: 0.2;
+							&:hover, &.on {
+								opacity: 1;
+							}
+						}
+					}
+					.shared-to {
+						color: #656565;
+						font: normal 12px/25px $font;
+					}
+				}
+
+				.body {
+					color: #949494;
+					font: normal 14px "Droid Serif";
+				}
+
+				.respond {
+					.time{
+						color: #6b6b6b;
+						font: italic 12px/25px $font;
+					}
+				}
+
+				&.root {
+					padding-left: 15px;
+					background: rgba(44,44,44,0.9);
+
+					.avatar {
+						img{
+							width: 60px;
+							height: 60px;
+							border-radius: 5px;
+						}
+					}
+
+					.meta {
+						margin-left: 70px;
+						margin-top: 0;
+
+						.name { font-size: 24px; }
+						.controls {
+							top: 1px;
+							.favorite-spacer {display:none;}
+						}
+					}
+
+					.body {
+						margin: 0;
+						padding: 10px 0;
+					}
+					.respond {
+						.time{
+							color: #9c9c9c;
+						}
+					}
+
+					& + .note-replies {
+						border: 0 solid #1a1a1a;
+						border-bottom-width: 1px;
+
+						& > .note-container > .first {
+							box-shadow: inset 0 1px 0 0 #1a1a1a;
+							.first {
+								box-shadow: inset 0 1px 0 0 #3a3a3a;
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 
 	&.overlay{

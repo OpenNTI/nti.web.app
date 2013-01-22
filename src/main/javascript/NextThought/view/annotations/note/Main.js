@@ -16,7 +16,6 @@ Ext.define('NextThought.view.annotations.note.Main',{
 	renderSelectors:{
 		avatar: 'img.avatar',
 		canvas: 'canvas',
-		sharedTo: '.shared-to',
 		addToContacts: '.meta .add-to-contacts',
 		context: '.context .text'
 	},
@@ -46,32 +45,6 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		catch(e){
 			console.error(Globals.getError(e));
 		}
-	},
-
-
-	fillInShare: function(sharedWith){
-		this.callParent(arguments);
-		var val, names = [], others;
-
-		this.responseBox[sharedWith.length===0?'removeCls':'addCls']('shared');
-
-		Ext.each(sharedWith,function(u){
-			names.push(u.getName());
-			return names.join(',').length <= 150;
-		});
-
-		others = sharedWith.length - names.length;
-		if(others){
-			names.push(Ext.String.format('and {0} others.',others));
-		}
-		else if(names.length > 1){
-			names.push(' and '+names.pop());
-		}
-
-		val = names.length? ('Shared with '+names.join(', ')) : '';
-
-		this.sharedTo.update(val);
-		this.sharedTo.set({title:val});
 	},
 
 

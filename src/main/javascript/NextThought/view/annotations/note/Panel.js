@@ -29,6 +29,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 		name: '.meta .name',
 		time: '.time',
 		text: '.body',
+		sharedTo: '.shared-to',
 		responseBox: '.respond',
 		editor: '.respond .editor',
 		replyOptions: '.respond .reply-options',
@@ -135,7 +136,27 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 
 
 	fillInShare: function(sharedWith){
+		var val, names = [], others;
 
+		this.responseBox[sharedWith.length===0?'removeCls':'addCls']('shared');
+
+		Ext.each(sharedWith,function(u){
+			names.push(u.getName());
+			return names.join(',').length <= 150;
+		});
+
+		others = sharedWith.length - names.length;
+		if(others){
+			names.push(Ext.String.format('and {0} others.',others));
+		}
+		else if(names.length > 1){
+			names.push(' and '+names.pop());
+		}
+
+		val = names.length? ('Shared with '+names.join(', ')) : '';
+
+		this.sharedTo.update(val);
+		this.sharedTo.set({title:val});
 	},
 
 
@@ -744,7 +765,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 				},{
 					tag: 'span',
 					cls: 'name'
-				}]
+				},{ cls: 'shared-to' }]
 			},{ cls: 'body' },{
 				cls: 'respond',
 				cn: [

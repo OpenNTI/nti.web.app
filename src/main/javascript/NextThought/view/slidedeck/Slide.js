@@ -3,14 +3,14 @@ Ext.define('NextThought.view.slidedeck.Slide',{
 	alias: 'widget.slidedeck-slide',
 	requires: [
 		'NextThought.providers.Location',
-		'NextThought.view.annotations.note.Panel',
+		'NextThought.view.slidedeck.ThreadRoot',
 		'NextThought.util.Anchors'
 	],
 
 	ui: 'slide',
 	layout: 'auto',
 
-	defaultType: 'note-panel',
+	defaultType: 'slidedeck-slide-note',
 
 	childEls: ['body'],
 	getTargetEl: function () { return this.body; },
@@ -20,7 +20,7 @@ Ext.define('NextThought.view.slidedeck.Slide',{
 			{cls: 'left', cn:[{cls: 'prev'}]},
 			{cls: 'right',cn:[{cls: 'next'}]}
 		]},
-		{id: '{id}-body', html:'{%this.renderContainer(out,values)%}'}
+		{id: '{id}-body', cls:'slide-notes', html:'{%this.renderContainer(out,values)%}'}
 	]),
 
 	renderSelectors: {
@@ -28,6 +28,17 @@ Ext.define('NextThought.view.slidedeck.Slide',{
 		next: '.next',
 		prev: '.prev'
 	},
+
+
+	initComponent: function(){
+		this.callParent(arguments);
+		this.on({
+			scope: this,
+//			beforecollapse: this.handleCollapsingThread,
+			beforeexpand: this.handleExpandingThread
+		});
+	},
+
 
 	updateSlide: function(v,slide){
 		this.slide = slide;
@@ -41,7 +52,7 @@ Ext.define('NextThought.view.slidedeck.Slide',{
 
 		console.log('Set slide:',slide, slide.get('dom-clone'));
 
-		// this.buildItemStore(cid);
+		this.buildItemStore(cid);
 
 		this.slideImage.set({src: slide.get('image')});
 
@@ -96,11 +107,13 @@ Ext.define('NextThought.view.slidedeck.Slide',{
 
 
 	showUserData: function(){
-		var items = this.store.getItems(),
+		var items = this.store.getItems()||[],
 			toAdd = [],
 			dom = this.slide.get('dom-clone');
 
-		Ext.each(items||[], function(record){
+		Ext.Array.sort(items,Globals.SortModelsBy('Last Modified'));
+
+		Ext.each(items, function(record){
 
 			var guid = IdCache.getComponentId(record, null, 'reply'),
 				add = true,
@@ -121,13 +134,16 @@ Ext.define('NextThought.view.slidedeck.Slide',{
 			}
 
 			if(add){
-				toAdd.push({record: record, id: guid, root:true});
+				toAdd.push({record: record, id: guid});
 			}
 		});
 
 		console.log('Adding note records', toAdd);
 		this.removeAll(true);
-		this.add(toAdd);
+		if(toAdd.length> 0){
+			toAdd.push({xtype: 'box', cls: 'note-footer'});
+			this.add(toAdd);
+		}
 	},
 
 
@@ -140,5 +156,21 @@ Ext.define('NextThought.view.slidedeck.Slide',{
 
 		this.mon(this.next,'click',this.queue.nextSlide,this.queue);
 		this.mon(this.prev,'click',this.queue.previousSlide,this.queue);
+	},
+
+
+	handleExpandingThread: function(root,childrenDom){
+		var h = 0, t = this.el.getScroll().top;
+		Ext.each(this.query(this.defaultType),function(i){
+			if(i === root){return;}
+			if(!i.collapsed){
+				h += i.getTargetEl().getHeight();
+				i.collapse();
+			}
+		});
+
+		console.debug('TODO: figure out a better scroll lock, lost height: '+h+', current scroll position: '+t);
+
+		this.el.scrollTo('top', t,true);
 	}
 });
