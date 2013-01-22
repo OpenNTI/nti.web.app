@@ -187,14 +187,15 @@ Ext.define('NextThought.controller.UserData', {
 						console.error(Globals.getError(error));
 					}
 				}
-				else if(!/deleted/i.test(change.get('ChangeType'))){
-					pageStore.add(item);
-				}
-
-				if(/deleted/i.test(change.get('ChangeType'))){
+				else if(/deleted/i.test(change.get('ChangeType'))){
 					item = pageStore.getById(item.getId());
 					me.convertToPlaceholder(item);
 				}
+
+				if(/created/i.test(change.get('ChangeType'))){
+					pageStore.add(item);
+				}
+
 			}
 			catch(e2){
 				console.error(Globals.getError(e2));

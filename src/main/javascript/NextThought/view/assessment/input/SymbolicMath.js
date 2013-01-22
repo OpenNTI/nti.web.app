@@ -34,6 +34,8 @@ Ext.define('NextThought.view.assessment.input.SymbolicMath',{
 
 		jQuery(s).mathquill('editable');
 
+
+
 		Ext.fly(s).set({'data-label':this.part.get('answerLabel')});
 
 		s.focus = function(){
@@ -71,8 +73,17 @@ Ext.define('NextThought.view.assessment.input.SymbolicMath',{
 		//bind on kepress so we can adjust size:
 		r.bind('keyup.mathquill', function(e){
 			//if enter:
-			if(e.which === 13) {
+			if(e.which === 13) { //enter
 				me.submitOrTabNext(s);
+			}
+			else if(e.which === 32){ //space
+
+				//Uncommenting this could allow a space to be typed but that is really only
+				//useful in text blocks which we sort of abstract away.  Part of a fix for supporting
+				//inputting labels
+
+				//jQuery(me.mathquillSpan).mathquill('write', '\\space ');
+				//me.mathquillSpan.focus();
 			}
 
 			clearTimeout(timer);
@@ -139,18 +150,13 @@ Ext.define('NextThought.view.assessment.input.SymbolicMath',{
 	},
 
 	getValue: function(){
-		return jQuery(this.mathquillSpan).mathquill('latex');
+		var v = jQuery(this.mathquillSpan).mathquill('latex') || '';
+
+		return this.self.sanitizeMathquillOutput(v);
 	},
 
 	sanitizeForMathquill: function(latex){
-		//Mathquill will produce latex it can't consume.
-		//Specifically we see issues arround the spacing
-		//comands \; \: and \,. We could probably patch this
-		//particular issue with a small change in mathquills
-		//symbol.js and cursor.js but for now this seems
-		//safest and fastest
-
-		return latex.replace(/\\[;:,]/g, ' ');
+		return this.self.transformToMathquillInput(latex);
 	},
 
 	canHaveAnswerHistory: function(){
@@ -191,4 +197,34 @@ Ext.define('NextThought.view.assessment.input.SymbolicMath',{
 		this.mathquillSpan.focus();
 	}
 
+}, function(){
+	this.transformToMathquillInput = function(latex){
+		//Mathquill will produce latex it can't consume.
+		//Specifically we see issues arround the spacing
+		//comands \; \: and \,. We could probably patch this
+		//particular issue with a small change in mathquills
+		//symbol.js and cursor.js but for now this seems
+		//safest and fastest
+		//console.log('Sanitizing raw value', latex);
+
+		latex = latex.trim();
+		latex = latex.replace(/\s+([^\\][^\s]+)/g,' \\text{$1}');
+		latex = latex.replace(/\s/g, '\\space ');
+		//console.log('Sanitized value is ', latex);
+
+		return latex;
+	};
+
+	this.sanitizeMathquillOutput = function(v){
+		//console.log('Got raw value', v);
+		v = v.trim();
+		v = v.replace(/\\text\{(.*)\}/, ' $1'); //Unwrap text so we don't send those macros to the server
+		v = v.replace(/\\[;:,]/g, '\\space ');
+		v = v.replace(/\\space /g, ' ');
+		v = v.replace(/\s+/g, ' ');
+
+		//console.log('Got clean value', v);
+
+		return v;
+	};
 });
