@@ -1,7 +1,8 @@
 Ext.define('NextThought.store.PageItem',{
 	extend: 'Ext.data.Store',
 	requires: [
-		'NextThought.proxy.reader.Json'
+		'NextThought.proxy.reader.Json',
+		'NextThought.util.UserDataThreader'
 	],
 	model: 'NextThought.model.GenericObject',
 
@@ -44,15 +45,6 @@ Ext.define('NextThought.store.PageItem',{
 		}
 	},
 
-
-	GETTERS : {
-		'Highlight': function(r){return r;},
-		'Note': function(r){return r;},
-		'TranscriptSummary': function(r){return r.get('RoomInfo');},
-		'QuizResult': function(r){return r;}
-	},
-
-
 	constructor: function(){
 		var r = this.callParent(arguments);
 
@@ -74,12 +66,13 @@ Ext.define('NextThought.store.PageItem',{
 	getBins: function(){
 		var groups = this.getGroups(),
 			bins = {},
-			k,b = null;
+			k,b = null,
+			getters = NextThought.util.UserDataThreader.GETTERS;
 
 		for(k in groups){
 			if(groups.hasOwnProperty(k)) {
 				b = groups[k].name;
-				bins[b] = Ext.Array.sort(groups[k].children,Globals.SortModelsBy(k,this.GETTERS[b]));
+				bins[b] = Ext.Array.sort(groups[k].children,Globals.SortModelsBy(k,getters[b]));
 			}
 		}
 
@@ -94,7 +87,6 @@ Ext.define('NextThought.store.PageItem',{
 		return Ext.Object.getValues(tree).concat(bins.Highlight||[]).concat(bins.Redaction||[]);
 	},
 
-
 	buildThreads: function(bins){
 		var tree = {},
             bms = bins.Bookmark;
@@ -108,95 +100,7 @@ Ext.define('NextThought.store.PageItem',{
             delete bins.Bookmark;
         }
 
-		if(bins){
-			Ext.Object.each(bins,function(k,o){
-				if(o && o[0].isThreadable){
-					this.buildItemTree(o, tree);
-				}
-			}, this);
-
-			//take all children off the main collection... make them accessible only by following the children pointers.
-			Ext.Object.each(tree,function(k,o,a){
-				if(o.parent){ delete a[k]; }
-			});
-
-			this.prune(tree);
-		}
-
-		return tree;
-	},
-
-
-
-	buildItemTree: function(list, tree){
-		var me = this;
-		console.group("Build Tree");
-		Ext.each(list, function clearRefs(r){
-			if(!r.placeholder){
-				delete r.children;
-				delete r.parent;
-			}
-        });
-
-		Ext.each(list, function buildTree(r){
-			var g = me.GETTERS[r.getModelName()](r),
-					oid = g.getId(),
-					parent = g.get('inReplyTo'),
-					p;
-
-			r.children = r.children || [];
-
-			if(!tree.hasOwnProperty(oid)) {
-				tree[oid] = r;
-			}
-
-			if(parent){
-				p = tree[parent];
-				if(!p) {
-					p = (tree[parent] = getID(parent));
-				}
-				if(!p){
-					console.log('Generating placeholder for id:',parent, '  child:',oid);
-					p = (tree[parent] = AnnotationUtils.replyToPlaceHolder(g));
-					buildTree(p);
-				}
-
-				p.children = p.children || [];
-				if(Ext.Array.indexOf(p.children, r) < 0){
-					p.children.push(r);
-				}
-				else{
-					console.warn('Ignoring duplicate record in child list', r, p.children);
-				}
-
-				r.parent = p;
-			}
-		});
-
-		function getID(id) {
-			var r = null,
-					f = function(o)
-					{
-						if( o && o.get && o.getId() === id ) {
-							r = o;
-							return false;
-						}
-						return true;
-					};
-			Ext.each(list,f);
-			if( !r ) {
-				Ext.each(tree,f);
-			}
-			return r;
-		}
-
-		console.groupEnd("Build Tree");
-	},
-
-
-	prune: function(tree){
-		//until we decide we want to prune from the root down... this is a non-desired function. (we cannot have leaf
-		// placeholders with the current threading algorithm.)
+		return NextThought.util.UserDataThreader.buildThreads(bins);
 	},
 
 

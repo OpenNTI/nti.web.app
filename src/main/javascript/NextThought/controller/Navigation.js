@@ -2,7 +2,8 @@ Ext.define('NextThought.controller.Navigation', {
 	extend: 'Ext.app.Controller',
 
 	require: [
-		'NextThought.providers.Location'
+		'NextThought.providers.Location',
+		'NextThought.util.UserDataThreader'
 	],
 
 	views: [
@@ -113,8 +114,11 @@ Ext.define('NextThought.controller.Navigation', {
                          console.warn('inReplyTo set but no references found');
                     }
                     service.getObject(ref, afterLoadedAgain, function failure(){
-	                    console.log('Root note unresolvable, using reply instead.');
-	                    afterLoadedAgain(object);
+						var mockThread;
+	                    console.log('Root note unresolvable, Will build thread with only reply');
+						mockThread = NextThought.util.UserDataThreader.threadUserData(object) || [];
+						mockThread = !Ext.isEmpty(mockThread) ? mockThread.first() : object;
+	                    afterLoadedAgain(mockThread);
                     }, me);
                 }
                 else {
