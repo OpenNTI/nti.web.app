@@ -218,7 +218,7 @@ Ext.define('NextThought.view.assessment.input.SymbolicMath',{
 	this.sanitizeMathquillOutput = function(v){
 		//console.log('Got raw value', v);
 		v = v.trim();
-		v = v.replace(/\\text\{(.*)\}/, ' $1'); //Unwrap text so we don't send those macros to the server
+		v = v.replace(/\\text\{(.*)\}/g, ' $1'); //Unwrap text so we don't send those macros to the server
 		v = v.replace(/\\[;:,]/g, '\\space ');
 		v = v.replace(/\\space /g, ' ');
 		v = v.replace(/\s+/g, ' ');
