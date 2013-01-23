@@ -1,20 +1,21 @@
 describe("Note Tests", function() {
 
-	describe('getDescendants', function(){
-
-		function createNote(id, placeholder, children){
-			var note = Ext.create('NextThought.model.Note', {
-				NTIID: id
+	function createNote(id, placeholder, children){
+		var note = Ext.create('NextThought.model.Note', {
+			NTIID: id
+		});
+		note.placeholder = placeholder;
+		note.children = children ? children.slice() : undefined;
+		if(note.children){
+			Ext.each(note.children, function(kid){
+				kid.parent = note;
 			});
-			note.placeholder = placeholder;
-			note.children = children ? children.slice() : undefined;
-			if(note.children){
-				Ext.each(note.children, function(kid){
-					kid.parent = note;
-				});
-			}
-			return note;
 		}
+		return note;
+	}
+
+
+	describe('getDescendants', function(){
 
 		function createEmptyStoreCallback(scope, obj){
 			return function(store){
@@ -149,4 +150,171 @@ describe("Note Tests", function() {
 	});
 
 	//TODO test that note with replies causes ajax request to the replies link?
+
+	describe('like and unlike', function(){
+
+		function createMockLikeWidget(){
+			var m = jasmine.createSpyObj('mockWidget', ['addCls', 'removeCls', 'update']);
+			//setup the mock widget to track some things
+			m.addCls.andCallFake(function(cls){
+				this[cls] = true;
+			});
+			m.removeCls.andCallFake(function(cls){
+				delete this[cls];
+			});
+			m.update.andCallFake(function(v){
+				this.value = v;
+			});
+			m.hasClass = function(cls){
+				return !!this[cls];
+			};
+			return m;
+		}
+
+		function mockLikeAction(o, success){
+			spyOn(o, 'postTo').andCallFake(function(action, callback){
+				Ext.callback(callback, this, [success ? {} : undefined]);
+			});
+		}
+
+		function initializeLikeInfo(notes, likes){
+			var total = Ext.Array.sum(likes),
+				i = 0, n;
+
+			function isLiked(){
+				return this.get('LikeCount');
+			}
+
+			for(i=0;i<notes.length;i++){
+				n = notes[i];
+				n.set('LikeCount', likes[i]);
+				n.isLiked = isLiked;
+				if(!n.parent){
+					n.raw.RecursiveLikeCount = total;
+					n.set('RecursiveLikeCount', total);
+				}
+			}
+		}
+
+		it('like works with ds success', function(){
+			var grandChild1 = createNote('gcn', false),
+				grandkids = [grandChild1],
+				child1 = createNote('cn', false, grandkids),
+				kids = [child1],
+				root = createNote('root', false, kids),
+				notes = [root, child1, grandChild1],
+				mockWidget = createMockLikeWidget();
+
+			//make all these notes not be liked
+			initializeLikeInfo(notes, [0,0,0]);
+
+			expect(root.getTotalLikeCount()).toBe(0);
+
+			//Mock our note we are going to like to act like a succesful post
+			mockLikeAction(grandChild1, true);
+
+			grandChild1.like(mockWidget);
+
+			//like count should now be one
+			//recursive like count should now be one
+			expect(grandChild1.get('LikeCount')).toBe(1);
+			expect(root.getTotalLikeCount()).toBe(1);
+
+			//Widget assertions, addCls should have been called with on
+			//and update should ahve been called with the new like count
+			expect(mockWidget.hasClass('on')).toBeTruthy();
+			expect(mockWidget.value).toBe('1');
+		});
+
+		it('unlike works with ds success', function(){
+			var grandChild1 = createNote('gcn', false),
+				grandkids = [grandChild1],
+				child1 = createNote('cn', false, grandkids),
+				kids = [child1],
+				root = createNote('root', false, kids),
+				notes = [root, child1, grandChild1],
+				mockWidget = createMockLikeWidget();
+
+			//make all these notes not be liked
+			initializeLikeInfo(notes, [0,2,1]);
+
+			expect(root.getTotalLikeCount()).toBe(3);
+
+			//Mock our note we are going to like to act like a succesful post
+			mockLikeAction(grandChild1, true);
+
+			grandChild1.like(mockWidget);
+
+			//like count should now be one
+			//recursive like count should now be one
+			expect(grandChild1.get('LikeCount')).toBe(0);
+			expect(root.getTotalLikeCount()).toBe(2);
+
+			//Widget assertions, addCls should have been called with on
+			//and update should ahve been called with the new like count
+			expect(mockWidget.hasClass('on')).toBeFalsy();
+			expect(mockWidget.value).toBe('');
+		});
+
+		it('unlike works with ds failure', function(){
+			var grandChild1 = createNote('gcn', false),
+				grandkids = [grandChild1],
+				child1 = createNote('cn', false, grandkids),
+				kids = [child1],
+				root = createNote('root', false, kids),
+				notes = [root, child1, grandChild1],
+				mockWidget = createMockLikeWidget();
+
+			//make all these notes not be liked
+			initializeLikeInfo(notes, [0,2,1]);
+
+			expect(root.getTotalLikeCount()).toBe(3);
+
+			//Mock our note we are going to like to act like a succesful post
+			mockLikeAction(grandChild1);
+
+			grandChild1.like(mockWidget);
+
+			//like count should now be one
+			//recursive like count should now be one
+			expect(grandChild1.get('LikeCount')).toBe(1);
+			expect(root.getTotalLikeCount()).toBe(3);
+
+			//Widget assertions, addCls should have been called with on
+			//and update should ahve been called with the new like count
+			expect(mockWidget.hasClass('on')).toBeTruthy();
+			expect(mockWidget.value).toBe('1');
+		});
+
+
+		it('like works with ds failure', function(){
+				var grandChild1 = createNote('gcn', false),
+				grandkids = [grandChild1],
+				child1 = createNote('cn', false, grandkids),
+				kids = [child1],
+				root = createNote('root', false, kids),
+				notes = [root, child1, grandChild1],
+				mockWidget = createMockLikeWidget();
+
+			//make all these notes not be liked
+			initializeLikeInfo(notes, [0,0,0]);
+
+			expect(root.getTotalLikeCount()).toBe(0);
+
+			//Mock our note we are going to like to act like a succesful post
+			mockLikeAction(grandChild1);
+
+			grandChild1.like(mockWidget);
+
+			//like count should now be one
+			//recursive like count should now be one
+			expect(grandChild1.get('LikeCount')).toBe(0);
+			expect(root.getTotalLikeCount()).toBe(0);
+
+			//Widget assertions, addCls should have been called with on
+			//and update should ahve been called with the new like count
+			expect(mockWidget.hasClass('on')).toBeFalsy();
+			expect(mockWidget.value).toBe('');
+		});
+	});
 });
