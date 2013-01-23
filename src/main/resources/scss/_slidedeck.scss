@@ -346,8 +346,23 @@ $experimental-support-for-svg: true;
 		.note-container.slide {
 			@extend .note-container;
 
+			&.collapsed {
+				.note,.note.hover{
+					border-color: #121212;
+					box-shadow: inset 0 1px 0 0 #3a3a3a;
+				}
+
+				.note.root{border-bottom-width: 1px;}
+			}
+
+			&:not(.collapsed) + .note-container {
+				.note,.note.hover {
+					border-color: #1a1a1a;
+				}
+			}
+
 			.note {
-				border-color: #121212;
+				border-color: #1a1a1a;
 				box-shadow: inset 0 1px 0 0 #3a3a3a;
 				background: #222222;
 
@@ -387,6 +402,7 @@ $experimental-support-for-svg: true;
 				}
 
 				&.root {
+					border-bottom-width: 0;
 					padding-left: 15px;
 					background: rgba(44,44,44,0.9);
 
@@ -420,8 +436,10 @@ $experimental-support-for-svg: true;
 					}
 
 					& + .note-replies {
-						border: 0 solid #1a1a1a;
-						border-bottom-width: 1px;
+						&:empty{
+							border: 0 solid #121212;
+							border-bottom-width: 1px;
+						}
 
 						& > .note-container > .first {
 							box-shadow: inset 0 1px 0 0 #1a1a1a;

@@ -84,7 +84,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 
 		me.editorActions = new NoteEditorActions(me,me.editor);
 
-		//this.noteBody.hover(this.onMouseOver,this.onMouseOut,this);
+		this.noteBody.hover(this.onMouseOver,this.onMouseOut,this);
 		me.text.setVisibilityMode(Ext.dom.Element.DISPLAY);
 
 		me.mon(me.editorActions,'droped-whiteboard',me.droppedWhiteboard,me);
@@ -124,6 +124,16 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 		if(me.replyToId === me.record.getId()){
 			me.activateReplyEditor();
 		}
+	},
+
+
+	onMouseOver: function(){
+		this.noteBody.addCls('hover');
+	},
+
+
+	onMouseOut: function(){
+		this.noteBody.removeCls('hover');
 	},
 
 

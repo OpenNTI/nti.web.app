@@ -29,6 +29,7 @@ Ext.define('NextThought.view.slidedeck.ThreadRoot',{
 		if(this.fireEvent('beforecollapse', this, el) !== false){
 			this.collapsed = true;
 			el.addCls(this.collapsedCls);
+			this.addCls(this.collapsedCls);
 			this.updateLayout();
 		}
 	},
@@ -39,6 +40,7 @@ Ext.define('NextThought.view.slidedeck.ThreadRoot',{
 		if(this.fireEvent('beforeexpand', this, el) !== false){
 			delete this.collapsed;
 			el.removeCls(this.collapsedCls);
+			this.removeCls(this.collapsedCls);
 			this.updateLayout();
 		}
 	}

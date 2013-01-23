@@ -29,8 +29,6 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		try {
 			me.contactsMaybeChanged();
 
-			this.el.hover(this.onMouseOver,this.onMouseOut,this);
-
 			this.on('editorDeactivated', function(){
 				var bRecord = me.bufferedRecord;
 				if(bRecord){
@@ -129,13 +127,13 @@ Ext.define('NextThought.view.annotations.note.Main',{
 
 	onMouseOver: function(){
 		this.up('window').down('note-carousel').getEl().addCls('hover');
-		this.el.addCls('hover');
+		this.callParent(arguments);
 	},
 
 
 	onMouseOut: function(){
 		this.up('window').down('note-carousel').getEl().removeCls('hover');
-		this.el.removeCls('hover');
+		this.callParent(arguments);
 	},
 
 
