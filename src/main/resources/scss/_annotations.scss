@@ -325,14 +325,6 @@
 		border-radius: 3px;
 
 		@include image-bar;
-		&[itemprop~="nti-data-resizeable"]{
-			.bar .image-title,
-			.bar .image-caption {
-				overflow: hidden;
-				white-space: nowrap;
-				text-overflow: ellipsis;
-			}
-		}
 
 		a.zoom {
 			//display: none;
@@ -658,6 +650,20 @@
 	}
 }
 
+#NTIContent {
+
+	[itemprop~="nti-data-markupenabled"],
+	[itemprop~="nti-slide-video"]{
+		&[itemprop~="nti-data-resizeable"]{
+			.bar .image-title,
+			.bar .image-caption {
+				overflow: hidden;
+				white-space: nowrap;
+				text-overflow: ellipsis;
+			}
+		}
+	}
+}
 
 div.section-problem .highlight-mouse-over .MathJax_Display { color: #076da7 }
 
