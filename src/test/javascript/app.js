@@ -145,7 +145,8 @@ Ext.application({
 			'javascript/specs/store/Hit.spec.js',
 			'javascript/specs/view/whiteboard/NTMatrix.spec.js',
 			'javascript/specs/view/whiteboard/ToolOptionsState.spec.js',
-			'javascript/specs/view/assessment/input/NumericMath.spec.js'
+			'javascript/specs/view/assessment/input/NumericMath.spec.js',
+			'javascript/specs/view/assessment/input/SymbolicMath.spec.js'
         ],
 		go);
 	}
