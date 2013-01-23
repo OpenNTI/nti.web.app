@@ -208,8 +208,16 @@ Ext.define('NextThought.controller.UserData', {
 	convertToPlaceholder: function(item){
 		if(!item){return;}
 		try{
-			item.convertToPlaceholer();
-			item.fireEvent('updated',item);
+			if(item.wouldBePlaceholderOnDelete()){
+				item.convertToPlaceholer(item);
+				item.fireEvent('updated',item);
+			}
+			else{
+				item.convertToPlaceholer(item);
+				item.destroy();
+			}
+
+
 		} catch(e) {
 			console.error('Trouble in the placeholder convertion', Globals.getError(e));
 		}

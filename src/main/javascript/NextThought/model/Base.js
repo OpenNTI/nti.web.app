@@ -149,6 +149,10 @@ Ext.define('NextThought.model.Base', {
 		return current;
 	},
 
+	wouldBePlaceholderOnDelete: function(){
+		return (this.children !== undefined && this.get('RecursiveReferenceCount')) || (!Ext.isEmpty(this.children))
+	},
+
 	convertToPlaceholer: function(){
 		var me = this, keepList = {
 			'Class':1,
