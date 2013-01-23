@@ -58,6 +58,12 @@ Ext.define('NextThought.util.UserDataThreader',{
 		var me = this;
 		console.group("Build Tree");
 
+		Ext.each(list, function clearRefs(r){
+			if(!r.placeholder){
+				me.tearDownThreadingLinks(r);
+			}
+		});
+
 		Ext.each(list, function buildTree(r){
 			var g = me.GETTERS[r.getModelName()](r),
 					oid = g.getId(),
@@ -117,6 +123,11 @@ Ext.define('NextThought.util.UserDataThreader',{
 	prune: function(tree){
 		//until we decide we want to prune from the root down... this is a non-desired function. (we cannot have leaf
 		// placeholders with the current threading algorithm.)
+	},
+
+	tearDownThreadingLinks: function(o){
+		delete o.parent;
+		delete o.children;
 	}
 
 },function(){});
