@@ -76,7 +76,7 @@ Ext.define('NextThought.view.assessment.input.SymbolicMath',{
 			if(e.which === 13) { //enter
 				me.submitOrTabNext(s);
 			}
-			else if(e.which === 32){ //space
+			/*else if(e.which === 32){ //space
 
 				//Uncommenting this could allow a space to be typed but that is really only
 				//useful in text blocks which we sort of abstract away.  Part of a fix for supporting
@@ -84,7 +84,7 @@ Ext.define('NextThought.view.assessment.input.SymbolicMath',{
 
 				//jQuery(me.mathquillSpan).mathquill('write', '\\space ');
 				//me.mathquillSpan.focus();
-			}
+			}*/
 
 			clearTimeout(timer);
 			timer = setTimeout(function(){
