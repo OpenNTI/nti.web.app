@@ -319,10 +319,21 @@ Ext.define('NextThought.model.Base', {
 		widget.update(me.getFriendlyLikeCount());
 
 		this.postTo(action, function(s){
+			var r;
 			if (!s) {
 				widget[postPost]('on');
 				me.set('LikeCount', lc);
 				widget.update(me.getFriendlyLikeCount());
+			}
+			else{
+				//Find the root if we are in a tree and update its recursive
+				//like count
+				r = me;
+				while(r.parent){r = r.parent;}
+
+				if(r.getTotalLikeCount){
+					r.set('RecursiveLikeCount', (r.get('RecursiveLikeCount') || 0) + polarity);
+				}
 			}
 		});
 	},
