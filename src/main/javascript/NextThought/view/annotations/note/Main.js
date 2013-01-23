@@ -185,7 +185,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		node.select('a[href^=#]:not(.skip-anchor)').set({href:undefined,target:undefined});
 
 		node.select('[itemprop~=nti-data-markupenabled] a').on('click',this.contextAnnotationActions,this);
-		this.on('markupenabled-action', this.commentOnZoomedImage);
+		this.on('markupenabled-action', this.commentOnAnnototableImage);
 
 		node.select('a[href^=tag]').set({href:undefined,target:undefined});
 
@@ -268,10 +268,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 
 
 		if(/^mark$/i.test(action)){
-			me.activateReplyEditor();
-			WBUtils.createFromImage(img,function(data){
-				Ext.defer(me.editorActions.addWhiteboard,400,me.editorActions,[data]);
-			});
+			this.commentOnAnnototableImage(img, action);
 		}
 		else if(/^zoom$/i.test(action)){
 			ImageZoomView.zoomImage(dom, null, this);
@@ -300,7 +297,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		return false;
 	},
 
-	commentOnZoomedImage: function(dom, action){
+	commentOnAnnototableImage: function(dom, action){
 		var me = this;
 		me.activateReplyEditor();
 		WBUtils.createFromImage(dom,function(data){
