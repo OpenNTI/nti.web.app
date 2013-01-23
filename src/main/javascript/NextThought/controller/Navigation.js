@@ -127,8 +127,24 @@ Ext.define('NextThought.controller.Navigation', {
 			}
 
 
-			function fail(){
-				console.warn('failed?', arguments);
+			function fail(req, resp){
+				//FIXME: could not figure out the type of the object. Normally, that's what we want but it's hard to get with info we have.
+				var objDisplayType = 'object',
+					msgCfg = { msg: 'An unexpected error occurred loading the '+ objDisplayType };
+
+				if(resp && resp.status){
+					if(resp.status === 404){
+						msgCfg.title = 'Not Found!';
+						msgCfg.msg = 'The '+objDisplayType+' you are looking for no longer exists.';
+					}
+					else if(resp.status === 403){
+						msgCfg.title = 'Unauthorized!';
+						msgCfg.msg = 'You do not have access to this '+objDisplayType+'.';
+					}
+				}
+				console.log("Could not retrieve rawData for: ", target);
+				console.log("Error: ", arguments);
+				alert(msgCfg);
 			}
 
 			function continueLoad(){
