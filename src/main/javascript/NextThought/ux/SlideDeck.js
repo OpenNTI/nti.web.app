@@ -7,21 +7,31 @@ Ext.define('NextThought.ux.SlideDeck',{
 	],
 
 	open: function(el, startingNTIID){
-		var root = LocationProvider.getLineage(startingNTIID).last(),
+		var DQ = Ext.DomQuery,
+			root = LocationProvider.getLineage(startingNTIID).last(),
 			toc = Library.getToc(Library.getTitle(root)),
 			ids = [],
-			mockEl = {getAttribute:Ext.emptyFn},
-			obj = Ext.fly(el).up('object[data-ntiid]') || mockEl,
-			startingSlide = obj.getAttribute('data-ntiid') || undefined,
-			startingVideo;
+			obj = Ext.fly(el).findParentNode('object[data-ntiid]'),
+			startingSlide = (!obj ? null : obj.getAttribute('data-ntiid')) || undefined,
+			startingVideo,
+			slidedeckId;
+
+		function getParam(name){
+			var el = DQ.select('param[name="'+name+'"]',obj)[0];
+			return el ? el.getAttribute('value') : null;
+		}
 
 		//If we don't find a starting slide it may be launched from a video
 		//In that case our starting slide is the earliest slide in the video.
 		//This hueristic may be changed
 		if(!startingSlide){
-			obj = Ext.fly(el).findParentNode('object[type$=slidevideo]',null,false);
-			startingVideo = (Ext.DomQuery.select('param[name=ntiid]',obj)[0] || mockEl).getAttribute('value');
+			obj = Ext.fly(el).findParentNode('object[type$=slidevideo]');
+			startingVideo = getParam('ntiid');
 		}
+
+		slidedeckId = getParam('slidedeckid') || 'default';
+
+		console.debug('opening slidedesk id: '+slidedeckId);
 
 		Ext.each(Ext.DomQuery.select('topic[ntiid]',toc),function(o){
 			ids.push(o.getAttribute('ntiid'));
@@ -31,6 +41,8 @@ Ext.define('NextThought.ux.SlideDeck',{
 
 		function finish(store){
 			var earliestSlide;
+
+			store.filter('slidedeck-id',slidedeckId);
 
 			//If now startingSlide but we have a starting video, find the earliest starting slide for that video
 			if(!startingSlide && startingVideo){

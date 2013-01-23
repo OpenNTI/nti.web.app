@@ -15,7 +15,8 @@ Ext.define('NextThought.model.Slide', {
 		{ name: 'video-start', type: 'number' },
 		{ name: 'video-end', type: 'number' },
 		{ name: 'ordinal', type: 'number' },
-		{ name: 'dom-clone', type: 'auto'}
+		{ name: 'dom-clone', type: 'auto'},
+		{ name: 'slidedeck-id', type: 'string' }
 	],
 
 
@@ -49,6 +50,7 @@ Ext.define('NextThought.model.Slide', {
 				'Class': 'Slide',
 				'ContainerId': containerId,
 				'NTIID': dom.getAttribute('data-ntiid'),
+				'slidedeck-id': getParam('slidedeckid') || 'default',
 				'title': getParam('slidetitle'),
 				'image': root + getParam('slideimage'),
 				'image-thumbnail': root + getImage(),
