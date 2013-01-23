@@ -193,7 +193,7 @@ Ext.define('NextThought.ux.ImageZoomView',{
 
 	commentOn: function(e){
 		this.close();
-		ReaderPanel.get().fireEvent('markupenabled-action',this.refEl,'mark');
+		(this.ownerCmp || ReaderPanel.get()).fireEvent('markupenabled-action',this.refEl,'mark');
 		e.stopEvent();
 		return false;
 	},
@@ -210,7 +210,7 @@ Ext.define('NextThought.ux.ImageZoomView',{
 
 
 	statics: {
-		zoomImage: function(el,offsets){
+		zoomImage: function(el,offsets,ownerCmp){
 			var img = Ext.fly(el)
 					.up('[itemprop~=nti-data-markupenabled]')
 					.down('img[id]').dom,
@@ -237,7 +237,7 @@ Ext.define('NextThought.ux.ImageZoomView',{
 			// For now, i'm not going to grab the full.
 			console.log('zoom', img.width+'x'+img.height, rect, offsets, currentSize, nextSize, nextSizeUrl);
 
-			Ext.widget('image-zoom-view',{url: nextSizeUrl, refEl: img, offsets: offsets}).show();
+			Ext.widget('image-zoom-view',{url: nextSizeUrl, refEl: img, offsets: offsets, ownerCmp: ownerCmp}).show();
 		}
 	}
 

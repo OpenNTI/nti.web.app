@@ -185,6 +185,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		node.select('a[href^=#]:not(.skip-anchor)').set({href:undefined,target:undefined});
 
 		node.select('[itemprop~=nti-data-markupenabled] a').on('click',this.contextAnnotationActions,this);
+		this.on('markupenabled-action', this.commentOnZoomedImage);
 
 		node.select('a[href^=tag]').set({href:undefined,target:undefined});
 
@@ -273,7 +274,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 			});
 		}
 		else if(/^zoom$/i.test(action)){
-			ImageZoomView.zoomImage(dom);
+			ImageZoomView.zoomImage(dom, null, this);
 		}
 		else if(/^slide$/.test(action)){
 			if(this.editorActive()){
@@ -297,6 +298,14 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		}
 
 		return false;
+	},
+
+	commentOnZoomedImage: function(dom, action){
+		var me = this;
+		me.activateReplyEditor();
+		WBUtils.createFromImage(dom,function(data){
+			Ext.defer(me.editorActions.addWhiteboard,400,me.editorActions,[data]);
+		});
 	},
 
 
