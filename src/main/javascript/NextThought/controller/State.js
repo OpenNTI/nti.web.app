@@ -186,14 +186,17 @@ Ext.define('NextThought.controller.State', {
 			return {};
 		}
 
+		// Default to the landing page of the first book if available,
+		// rather than the library landing page.
 		var defaultState = {
 			active: 'library',
-			location : Ext.util.Cookies.get('nti.landing_page') || undefined
-		};
+			location : Library.getFirstPage() || Ext.util.Cookies.get('nti.landing_page') || undefined
+		}, lastLocation;
 
 		try {
 			console.log('local state found', window.localStorage.getItem(this.getStateKey()));
-			return Ext.decode( window.localStorage.getItem(this.getStateKey()) ) || defaultState;
+			lastLocation = Ext.decode( window.localStorage.getItem(this.getStateKey()) );
+			return lastLocation && lastLocation.location ? lastLocation : defaultState;
 		}
 		catch(e){
 			console.error('failed to decode local state, use default.', Globals.getError(e), window.localStorage);
