@@ -150,7 +150,7 @@ Ext.define('NextThought.model.Base', {
 	},
 
 	wouldBePlaceholderOnDelete: function(){
-		return (this.children !== undefined && this.get('RecursiveReferenceCount')) || (!Ext.isEmpty(this.children))
+		return (this.children !== undefined && this.get('RecursiveReferenceCount')) || (!Ext.isEmpty(this.children));
 	},
 
 	convertToPlaceholer: function(){
