@@ -184,7 +184,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		node.select('a[href]:not(.skip-anchor)').set({target:'_blank'});
 		node.select('a[href^=#]:not(.skip-anchor)').set({href:undefined,target:undefined});
 
-		node.select('[itemprop~=nti-data-markupenabled] a').on('click',this.nodeAnnotationActions,this);
+		node.select('[itemprop~=nti-data-markupenabled] a').on('click',this.contextAnnotationActions,this);
 
 		node.select('a[href^=tag]').set({href:undefined,target:undefined});
 
@@ -233,7 +233,7 @@ Ext.define('NextThought.view.annotations.note.Main',{
 			range = Anchors.toDomRange(r.get('applicableRange'), doc, ReaderPanel.get(this.prefix).getCleanContent(), r.get('ContainerId'));
 			if(range){
 				newContext = this.fixUpCopiedContext(RangeUtils.expandRangeGetNode(range, doc));
-                this.context.setHTML(newContext.dom.innerHTML);
+                this.context.appendChild(newContext);
 			}
 
 			if (Ext.isGecko || Ext.isIE9) { this.resizeMathJax(this.context); }
