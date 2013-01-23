@@ -549,6 +549,7 @@
 			}
 
 			.shadow-text {
+				pointer-events: none;
 				color: #c4c4c4;
 				position: absolute;
 				padding: 0 4px;

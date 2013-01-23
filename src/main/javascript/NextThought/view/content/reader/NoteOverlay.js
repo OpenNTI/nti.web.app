@@ -76,7 +76,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 						tag: 'textarea',
 						cls: 'note-input'
 					},{
-						cls: 'shadow-text',html: 'Write a note...'
+						cls: 'shadow-text',html: 'Write a note...', unselectable: 'on'
 					}]
 				},{
 					cls: 'bottom-border',
@@ -94,6 +94,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		data.editor = box.down('.editor');
         data.main = box.down('.main');
         data.footer = box.down('.footer');
+		box.down('.shadow-text').unselectable();
 
         //Firefox likes to allow you to edit the toolbar, fix that
         if (data.main){
