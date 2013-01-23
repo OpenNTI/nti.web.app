@@ -123,10 +123,7 @@ Ext.define('NextThought.controller.Chat', {
 		Ext.each(roomInfos, function(ri) {
 			me.onEnteredRoom(ri);
 			w = me.getChatWindow(ri);
-			if(me.isRoomIdAccepted(ri.getId())){
-                w.show();
-                w.minimize();
-            }
+
 			//This chunk will try to recover the history and insert it into the chat again...
 			ViewUtils.getTranscript(ri.getId(),
 				ri.get('Last Modified'),
@@ -135,6 +132,10 @@ Ext.define('NextThought.controller.Chat', {
 					Ext.each(messages, function(m){
 						me.onMessage(m);
 					}, me);
+					if(me.isRoomIdAccepted(ri.getId())){
+		                w.show();
+		                w.minimize();
+		            }
 				},
 				function(){
 					console.error('Could not recover chat history.');
