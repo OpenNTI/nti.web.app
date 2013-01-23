@@ -325,6 +325,13 @@ Ext.define('NextThought.view.slidedeck.Video',{
 	},
 
 
+	pausePlayback: function(){
+		if(this.isPlaying()){
+			this.issueCommand('youtube','pauseVideo');
+		}
+	},
+
+
 	setVideoAndPosition: function(videoId,startAt){
 		var pause = (this.isPlaying() === false && !this.linkWithSlides);
 

@@ -232,7 +232,7 @@ $experimental-support-for-svg: true;
 
 		.image-wrap {
 			position: relative;
-			overflow: hidden;
+			//overflow: hidden;
 
 			img {
 				border-width: 0;
@@ -321,7 +321,9 @@ $experimental-support-for-svg: true;
 		}
 
 		.slide-notes {
-			margin: 40px 10% 0;
+			position: relative;
+			z-index: 2;
+			margin: 20px 0 0;
 			overflow: hidden;
 			border-radius: 5px 5px 0 0;
 			box-shadow: 0 0 50px 5px rgba(0, 0, 0, 0.3),
@@ -340,6 +342,55 @@ $experimental-support-for-svg: true;
 
 			&::after{
 				content: 'End';
+			}
+		}
+
+		.comment-header {
+			background: #2c2c2c;
+			padding: 10px;
+
+			@include note-editor;
+
+			.editor {
+				margin: 10px;
+			}
+
+			.comment {
+				position: relative;
+				overflow: hidden;
+
+				.input {
+					cursor: text;
+					font: 600 italic 16px/36px $font;
+					padding: 0 10px;
+					color: $primary-grey;
+					background: $slidedeck-controls-background;
+					border: 1px solid #323232;
+
+					$value: margin-right 0.5s;
+					@include experimental(transition, $value);
+				}
+				.count {
+					padding-right: 48px;
+					float: right;
+					color: #656565;
+					font: 600 italic 14px/38px $font;
+					opacity: 0;
+					visibility: hidden;
+					$value: opacity 0.5s;
+					@include experimental(transition, $value);
+					@include experimental(transition-delay, 0.3s);
+				}
+
+				&.has-count{
+					.count {
+						visibility: visible;
+						opacity: 1;
+						& + .input {
+							margin-right: 200px;
+						}
+					}
+				}
 			}
 		}
 
@@ -362,8 +413,10 @@ $experimental-support-for-svg: true;
 			}
 
 			.note {
+				&,&.hover {
 				border-color: #1a1a1a;
 				box-shadow: inset 0 1px 0 0 #3a3a3a;
+				}
 				background: #222222;
 
 				&::after{
@@ -404,7 +457,7 @@ $experimental-support-for-svg: true;
 				&.root {
 					border-bottom-width: 0;
 					padding-left: 15px;
-					background: rgba(44,44,44,0.9);
+					background: rgba(44,44,44,0.98);
 
 					.avatar {
 						img{

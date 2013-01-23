@@ -56,6 +56,8 @@ Ext.define('NextThought.view.slidedeck.View',{
 		//wire up
 		this.mon(q,'select', v.updateVideoFromSelection, v);
 		this.mon(q,'select', slide.updateSlide,slide);
+
+		this.on('editorActivated',function(){v.pausePlayback();}, this);
 	},
 
 

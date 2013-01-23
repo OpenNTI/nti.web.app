@@ -75,6 +75,11 @@ Ext.define('NextThought.controller.UserData', {
 			},
 
 
+			'slide-comment-header': {
+				'save-new-note': this.saveNewNote
+			},
+
+
 			'activity-preview': {
 				'share': this.shareWith,
 				'chat': this.replyAsChat

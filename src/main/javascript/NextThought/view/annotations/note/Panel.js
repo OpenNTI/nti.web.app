@@ -18,6 +18,7 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 	getTargetEl: function () { return this.body; },
 
 
+//	root: false,
 	rootQuery: 'note-panel[root]',
 
 	renderSelectors: {

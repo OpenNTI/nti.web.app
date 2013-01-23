@@ -3,6 +3,7 @@ Ext.define('NextThought.view.slidedeck.Slide',{
 	alias: 'widget.slidedeck-slide',
 	requires: [
 		'NextThought.providers.Location',
+		'NextThought.view.slidedeck.CommentHeader',
 		'NextThought.view.slidedeck.ThreadRoot',
 		'NextThought.util.Anchors'
 	],
@@ -32,6 +33,8 @@ Ext.define('NextThought.view.slidedeck.Slide',{
 
 	initComponent: function(){
 		this.callParent(arguments);
+		this.addEvents('editorActivated','editorDeactivated');
+		this.enableBubble('editorActivated', 'editorDeactivated');
 		this.on({
 			scope: this,
 //			beforecollapse: this.handleCollapsingThread,
@@ -142,8 +145,9 @@ Ext.define('NextThought.view.slidedeck.Slide',{
 		this.removeAll(true);
 		if(toAdd.length> 0){
 			toAdd.push({xtype: 'box', cls: 'note-footer'});
-			this.add(toAdd);
 		}
+		toAdd.unshift({xtype: 'slide-comment-header', store: this.store, slide: this.slide, count: toAdd.length-1});
+		this.add(toAdd);
 	},
 
 
@@ -172,5 +176,34 @@ Ext.define('NextThought.view.slidedeck.Slide',{
 		console.debug('TODO: figure out a better scroll lock, lost height: '+h+', current scroll position: '+t);
 
 		this.el.scrollTo('top', t,true);
+	},
+
+
+	getRoot:function(){	return this; },
+
+
+	editorActive: function(){ return Boolean(this.isEditorActive); },
+
+
+	setEditorActive: function(active){
+		active = Boolean(active);
+		var root = this.getRoot();
+		console.log('Will mark Slide as having an ' + (active ? 'active' : 'inactive') + ' editor');
+		if(root.isEditorActive === active){
+			console.warn('Slide already has an ' + (active ? 'active' : 'inactive') + ' editor. Unbalanced calls?');
+			return;
+		}
+		root.isEditorActive = active;
+		root.fireEvent(active ? 'editorActivated' : 'editorDeactivated', this);
+	},
+
+
+	checkAndMarkAsActive: function(){
+		var root = this.getRoot();
+		if(!root.editorActive()){
+			root.setEditorActive(true);
+			return true;
+		}
+		return false;
 	}
 });

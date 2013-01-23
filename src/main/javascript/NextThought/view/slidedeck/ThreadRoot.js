@@ -3,6 +3,7 @@ Ext.define('NextThought.view.slidedeck.ThreadRoot',{
 	alias: 'widget.slidedeck-slide-note',
 
 	root: true,
+	rootQuery: 'slidedeck-slide',
 	collapsedCls: 'collapsed',
 
 	initComponent: function(){
@@ -19,8 +20,10 @@ Ext.define('NextThought.view.slidedeck.ThreadRoot',{
 	},
 
 
-	toggleCollapse: function(){
-		return this.getTargetEl().hasCls(this.collapsedCls) ? this.expand() : this.collapse();
+	toggleCollapse: function(e){
+		e.stopEvent();
+		//We need to find all the click handlers in the note panel and make sure they are stopped...other wise this will trigger as well.
+		return (this.getTargetEl().hasCls(this.collapsedCls) ? this.expand() : this.collapse()) && false;
 	},
 
 
