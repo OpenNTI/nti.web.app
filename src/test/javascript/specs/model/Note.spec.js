@@ -16,11 +16,14 @@ describe("Note Tests", function() {
 			return note;
 		}
 
-		function createEmptyStoreCallback(scope){
+		function createEmptyStoreCallback(scope, obj){
 			return function(store){
 				expect(this).toBe(scope);
 				expect(store).toBeTruthy();
 				expect(store.getCount()).toBe(0);
+				if(scope){
+					scope.called = true;
+				}
 			};
 		}
 
@@ -28,6 +31,7 @@ describe("Note Tests", function() {
 			var p = createNote('1', true), scope = {};
 
 			p.getDescendants(createEmptyStoreCallback(scope), scope);
+			expect(scope.called).toBeTruthy();
 		});
 
 		it('Gracefully handles note with no link', function(){
@@ -36,6 +40,7 @@ describe("Note Tests", function() {
 
 			n.getDescendants(createEmptyStoreCallback(scope), scope);
 
+			expect(scope.called).toBeTruthy();
 			expect(n.getLink).toHaveBeenCalledWith('replies');
 		});
 

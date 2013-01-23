@@ -24,7 +24,7 @@ describe('NumericMath input Tests', function(){
 			});
 
 		solutionContent = nmInput.getSolutionContent(part);
-		expect(solutionContent).toBe(1.2);
+		expect(solutionContent).toBe('1.2');
 		nmInput.destroy();
 		document.body.removeChild(testBody);
 	});

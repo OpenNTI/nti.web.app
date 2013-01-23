@@ -114,7 +114,7 @@ Ext.define('NextThought.model.Note', {
 			store = NextThought.store.PageItem.create();
 
 		if(!link){
-			Ext.callback(store);
+			Ext.callback(callback, scope, [store]);
 			return;
 		}
 
