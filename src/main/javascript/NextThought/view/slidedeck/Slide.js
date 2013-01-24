@@ -65,20 +65,21 @@ Ext.define('NextThought.view.slidedeck.Slide',{
 
 
 	buildItemStore: function(containerId){
-		var me = this;
+		function getCacheKey(id){
+			return id+'-slides';
+		}
+
+		var me = this, cahceKey = getCacheKey(containerId);
+		delete me.store;//don't let this dangle if there is a problem down the road.
 
 		function finish(store){
 			me.store = store;
-			if(store.isLoading() || store.getCount() === 0){
-				store.on('load',me.showUserData,me,{single:true});
-				store.load();
-				return;
-			}
-			me.showUserData();
+			store.on('load',me.showUserData,me,{single:true});
+			store.load();
 		}
 
 		function success(pi){
-			var id = pi.get('NTIID'), store;
+			var id = getCacheKey(pi.get('NTIID')), store;
 			if(LocationProvider.hasStore(id)){
 				store = LocationProvider.getStore(id);
 			}
@@ -87,11 +88,12 @@ Ext.define('NextThought.view.slidedeck.Slide',{
 					pi.getLink(Globals.USER_GENERATED_DATA),
 					containerId,true);
 
-			//for caching?
-			//If we get here, the containerId didn't have a value associated with it.
-			// So put what ever we come up with under the "containerId" key, even if the store is from the pageInfo's id
-			// (even if it's different than what we started with)
-			LocationProvider.addStore(containerId,store);
+			Ext.apply(store.proxy.extraParams,{
+				accept: NextThought.model.Note.mimeType
+			});
+
+			//for caching
+			LocationProvider.addStore(cahceKey,store);
 			finish(store);
 		}
 
@@ -99,9 +101,9 @@ Ext.define('NextThought.view.slidedeck.Slide',{
 			console.error('Could not resolve pageinfo for: '+containerId);
 		}
 
-		if(LocationProvider.hasStore(containerId)){
-			console.debug('Using existing page store...',containerId);
-			finish(LocationProvider.getStore(containerId));
+		if(LocationProvider.hasStore(cahceKey)){
+			console.debug('Using existing page store...',cahceKey);
+			finish(LocationProvider.getStore(cahceKey));
 		}
 		else{
 			$AppConfig.service.getPageInfo(containerId,success, failure, this);
@@ -123,13 +125,13 @@ Ext.define('NextThought.view.slidedeck.Slide',{
 				dec = record.get('applicableRange');
 
 
-			if(!Anchors.doesContentRangeDescriptionResolve(dec,dom)){
-				console.warn('Skipping item, because it does not anchor to this slide');
-				add = false;
-			}
-			else if (record.getModelName() !== 'Note') {
+			if (record.getModelName() !== 'Note') {
 				console.warn('it is not a note and I am not prepared to handle that.');
 				add=false;
+			}
+			else if(!Anchors.doesContentRangeDescriptionResolve(dec,dom)){
+				console.warn('Skipping item, because it does not anchor to this slide');
+				add = false;
 			}
 			else if (Ext.getCmp(guid)) {
 				console.log('already showing this reply? Ensure the note window is not open.');
