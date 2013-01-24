@@ -160,7 +160,8 @@ Ext.define('NextThought.view.annotations.note.Main',{
 
 	fixUpCopiedContext: function(n){
 		var node = Ext.get(n),
-			firstChild = node.first();
+			firstChild = node.first(),
+			maxWidth = 574;//shortcut, probably should figure out how wide the context is...but that returns 0 when queried at this point.
 
         if (!firstChild || !(firstChild.is('div') || firstChild.is('object'))){ //node may be null if child is a text node
             node.insertHtml('afterBegin', '[...] ');
@@ -177,7 +178,15 @@ Ext.define('NextThought.view.annotations.note.Main',{
 		});
 
 		node.select('.redactionAction .controls').remove();
-		node.select('span[itemprop~=nti-data-markupenabled]').setStyle({width:undefined});
+
+		Ext.each(node.query('span[itemprop~=nti-data-markupenabled]'),function(i){
+			var e = Ext.get(i);
+			//only strip off the style for width that are too wide.
+			if(parseInt(i.style.width,10) >= maxWidth){
+				e.setStyle({width:undefined});
+			}
+		});
+
 		node.select('[itemprop~=nti-data-markupenabled] a').addCls('skip-anchor');
 		node.select('a[href]:not(.skip-anchor)').set({target:'_blank'});
 		node.select('a[href^=#]:not(.skip-anchor)').set({href:undefined,target:undefined});
