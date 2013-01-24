@@ -200,6 +200,16 @@ Ext.define('NextThought.view.assessment.input.SymbolicMath',{
 
 	focus: function(){
 		this.mathquillSpan.focus();
+	},
+
+	checkit: function(){
+		//Mathquil dies a horrible death (crashes the browser) in certain cases
+		//if we don't do a mouseup here.  Without this fix (hack?) selecting some text
+		//and while the mouse is down triggering a submission with enter causes the browser
+		//to hang if the mouse is moved again.  Something about the mathquil mousemove handlers
+		//does terrible things.
+		jQuery(this.mathquillSpan).mouseup();
+		this.callParent(arguments);
 	}
 
 }, function(){
