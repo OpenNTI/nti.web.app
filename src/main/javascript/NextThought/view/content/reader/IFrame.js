@@ -194,7 +194,7 @@ Ext.define('NextThought.view.content.reader.IFrame',{
             var d = doc,
                 evt = Ext.EventObject.setEvent(e||event),
                 target = evt.getTarget('a.footnote') || evt.getTarget('a.glossaryTerm'),
-	            targetType, href;
+	            targetType, href, popContent;
 
             function getId(e, type){
                 if(!Ext.fly(e).hasCls(type)){
@@ -208,6 +208,7 @@ Ext.define('NextThought.view.content.reader.IFrame',{
                 try{fn = d.querySelector(href);}
                 catch (e){fn = d.getElementById(href.substring(1));}
 
+	            if(!fn){ return; }
 				clonedFn = fn.cloneNode(true);
 
                 Ext.each(Ext.fly(clonedFn).query('a'),
@@ -234,7 +235,12 @@ Ext.define('NextThought.view.content.reader.IFrame',{
             if (!target){return;}
 			targetType = Ext.fly(target).hasCls('footnote') ? 'footnote' : 'glossaryTerm';
             href = getId(target, targetType);
-            me.fireEvent('display-popover', href, getPopoverContent(href), target);
+	        popContent = getPopoverContent(href);
+	        if(!popContent){
+		        console.log('Error: Could not find popover content for id:'+href+ ' from target: '+target);
+		        return;
+	        }
+            me.fireEvent('display-popover', href, popContent, target);
         });
 
 		ContentAPIRegistry.on('update',me.applyContentAPI,me);
