@@ -289,7 +289,7 @@ Ext.define('NextThought.util.Line',{
 
             while(xStart < xEnd) {
                 elem = doc.elementFromPoint(xStart, y);
-                if(!this.isNodeAnchorable(elem) && elem.getAttribute('Id') !== 'NTIContent'){
+                if(!this.isNodeAnchorable(elem) && elem.getAttribute('id') !== 'NTIContent'){
                     elem = AnnotationUtils.getTextNodes(elem)[0];
                 }
 				//more right 20, it's a guess of a reasonable offset.

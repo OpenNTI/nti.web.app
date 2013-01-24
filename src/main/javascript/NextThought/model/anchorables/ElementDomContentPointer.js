@@ -20,7 +20,7 @@ Ext.define('NextThought.model.anchorables.ElementDomContentPointer', {
 		//If we are given a dom element as input, pull the necessary parts and
 		//create a config we can use to create this.
 		if (o.node) {
-			o = {elementTagName:o.node.tagName, elementId: o.node.getAttribute('data-ntiid') || o.node.getAttribute('Id'), role:o.role};
+			o = {elementTagName:o.node.tagName, elementId: o.node.getAttribute('data-ntiid') || o.node.getAttribute('id'), role:o.role};
 		}
 
 		//do a little cleaning up, uppercase tagName if we plan on matching tag name later
