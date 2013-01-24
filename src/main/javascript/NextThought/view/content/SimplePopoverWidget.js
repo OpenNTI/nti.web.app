@@ -1,8 +1,8 @@
-Ext.define('NextThought.view.content.FootnoteWidget',{
+Ext.define('NextThought.view.content.SimplePopoverWidget',{
     extend: 'Ext.container.Container',
 
-    alias: 'widget.footnote-widget',
-    cls: 'footnote-widget' ,
+    alias: 'widget.simple-popover-widget',
+    cls: 'simple-popover-widget' ,
 
     renderTo: Ext.getBody(),
     width: 400,

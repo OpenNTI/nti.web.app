@@ -176,32 +176,34 @@ Ext.define('NextThought.view.content.reader.IFrame',{
 		});
 
 
-        function killFootnote(){me.fireEvent('kill-footnote-hover');}
+        function shouldDismissPopover(){
+	        me.fireEvent('dismiss-popover');
+        }
         on(doc, 'mouseout', function(e){
             var evt = Ext.EventObject.setEvent(e||event),
-                target = evt.getTarget('a.footnote');
+                target = evt.getTarget('a.footnote') || evt.getTarget('a.glossaryTerm');
 
                if(target){
-                   killFootnote();
+                   shouldDismissPopover();
                }
         });
-        me.registerScrollHandler(killFootnote);
+        me.registerScrollHandler(shouldDismissPopover);
 
 
         on(doc, 'mouseover', function(e){
             var d = doc,
                 evt = Ext.EventObject.setEvent(e||event),
-                target = evt.getTarget('a.footnote'),
-                href;
+                target = evt.getTarget('a.footnote') || evt.getTarget('a.glossaryTerm'),
+	            targetType, href;
 
-            function getId(e){
-                if(!Ext.fly(e).hasCls('footnote')){
-                    e = Ext.fly(e).up('.footnote');
+            function getId(e, type){
+                if(!Ext.fly(e).hasCls(type)){
+                    e = Ext.fly(e).up('.'+type);
                 }
                 return e.getAttribute('href');
             }
 
-            function getFootnoteContent(href){
+            function getPopoverContent(href){
                 var fn, clonedFn, redactedPlaceholder;
                 try{fn = d.querySelector(href);}
                 catch (e){fn = d.getElementById(href.substring(1));}
@@ -230,9 +232,9 @@ Ext.define('NextThought.view.content.reader.IFrame',{
             }
 
             if (!target){return;}
-
-            href = getId(target);
-            me.fireEvent('footnote-hover', href, getFootnoteContent(href), target);
+			targetType = Ext.fly(target).hasCls('footnote') ? 'footnote' : 'glossaryTerm';
+            href = getId(target, targetType);
+            me.fireEvent('display-popover', href, getPopoverContent(href), target);
         });
 
 		ContentAPIRegistry.on('update',me.applyContentAPI,me);

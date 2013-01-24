@@ -38,7 +38,7 @@ Ext.define('NextThought.controller.UserData', {
 		'chat.transcript.Window',
 		'content.Reader',
         'content.PageWidgets',
-        'content.FootnoteWidget',
+        'content.SimplePopoverWidget',
 		'definition.Window',
 		'sharing.Window',
 		'views.Library',
@@ -70,8 +70,8 @@ Ext.define('NextThought.controller.UserData', {
 				'redact'		: this.redact,
 				'save-new-note' : this.saveNewNote,
 				'bubble-replys-up':this.replyBubble,
-                'footnote-hover': this.onFootnoteHover,
-                'kill-footnote-hover': this.onKillFootnoteHover
+                'display-popover': this.onDisplayPopover,
+                'dismiss-popover': this.onDismissPopover
 			},
 
 
@@ -439,33 +439,33 @@ Ext.define('NextThought.controller.UserData', {
 	},
 
 
-    onKillFootnoteHover: function() {
+    onDismissPopover: function() {
         var me = this;
-        if (me.footnoteWidget){
-            me.footnoteWidget.startCloseTimer();
+        if (me.popoverWidget){
+            me.popoverWidget.startCloseTimer();
         }
     },
 
 
-    onFootnoteHover: function(id, html, node) {
+    onDisplayPopover: function(id, html, node) {
         var offsets = AnnotationsRenderer.getReader().getAnnotationOffsets(),
             position = Ext.fly(node).getXY(),
             me=this;
 
         function adjustPosition(position){
-			var horizontalSpaceNeeded = me.footnoteWidget.getWidth()/2;
+			var horizontalSpaceNeeded = me.popoverWidget.getWidth()/2;
 
 			//adjust position depending on whether it should be shown on top or bottom
-            if ((position[1] -offsets.scrollTop) < me.footnoteWidget.getHeight()) {
+            if ((position[1] -offsets.scrollTop) < me.popoverWidget.getHeight()) {
                 //bottom
                 position[1] = position[1] + offsets.top + 30;
-                me.footnoteWidget.addCls('top');
+                me.popoverWidget.addCls('top');
             }
             else{
                 //top
                 position[1] = position[1] + offsets.top;
-                position[1] = position[1] - me.footnoteWidget.getHeight() - 20;
-                me.footnoteWidget.addCls('bottom');
+                position[1] = position[1] - me.popoverWidget.getHeight() - 20;
+                me.popoverWidget.addCls('bottom');
             }
 
 			//adjust position for left and right.  If we can be centered above it
@@ -473,31 +473,31 @@ Ext.define('NextThought.controller.UserData', {
 			if(position[0] + horizontalSpaceNeeded > offsets.width){
 				//the bubble needs to shift left, marker on the right
 				position[0] = position[0] - (horizontalSpaceNeeded * 2) + 20;
-				me.footnoteWidget.addCls('right');
+				me.popoverWidget.addCls('right');
 			}
 			else if(position[0] - horizontalSpaceNeeded < 0){
 				//bubble needs to shift right, arrow on left
 				position[0] = position[0] - 66;
-				me.footnoteWidget.addCls('left');
+				me.popoverWidget.addCls('left');
 			}
 			else{
 				//centered
-				position[0] = position[0] - (me.footnoteWidget.width/2);
+				position[0] = position[0] - (me.popoverWidget.width/2);
 			}
 			position[0] = position[0] + offsets.gutter + 80;
 
             return position;
         }
 
-        if (me.footnoteWidget){
-            me.footnoteWidget.destroy();
-            delete this.footnoteWidget;
+        if (me.popoverWidget){
+            me.popoverWidget.destroy();
+            delete this.popoverWidget;
         }
 
 	    Ext.fly(html).select('a[href]', true).set({target:'_blank'});
 
-        me.footnoteWidget = Ext.widget('footnote-widget', {text: html.innerHTML});
-        me.footnoteWidget.showAt(adjustPosition(position));
+        me.popoverWidget = Ext.widget('simple-popover-widget', {text: html.innerHTML});
+        me.popoverWidget.showAt(adjustPosition(position));
     },
 
 
