@@ -431,11 +431,15 @@
 
 			.body {
 				color: $primary-grey;
-				.body-divider .whiteboard-container .toolbar {
-					display: none !important;
-				}
 				.body-divider {
 					margin-right: 30px;
+
+					.whiteboard-container {
+						.overlay {bottom: 0;}
+						.toolbar {
+							display: none !important;
+						}
+					}
 				}
 			}
 		}
