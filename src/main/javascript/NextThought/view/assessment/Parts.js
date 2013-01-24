@@ -53,7 +53,7 @@ Ext.define('NextThought.view.assessment.Parts',{
 		if(answerLabel){
 			part.set('answerLabel', answerLabel);
 		}
-		console.log('set answer label to: ', answerLabel);
+	//	console.log('set answer label to: ', answerLabel);
 
 		try {
 			this.add({
