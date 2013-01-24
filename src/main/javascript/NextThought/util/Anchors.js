@@ -690,7 +690,7 @@ Ext.define('NextThought.util.Anchors', {
 
 		var theId = pointer.getElementId(),
 			potentials = [], parts,
-			p, i;
+			p, i, r;
 
 		if(theId.indexOf('tag:nextthought.com') === 0){
 			parts = theId.split(',');
@@ -710,13 +710,15 @@ Ext.define('NextThought.util.Anchors', {
 		for(i in potentials){
 			if (potentials.hasOwnProperty(i)){
 				p = potentials[i];
-				if (p.tagName !== pointer.getElementTagName()) {
-					console.error('Found a potential match to node, but tagnames do not match', p);
+				if(Anchors.doesElementMatchPointer(p, pointer) ){
+					r = {confidence: 1, node: p};
 				}
-				else {
-					if(Anchors.doesElementMatchPointer(p, pointer) ){
-						return {confidence: 1, node: p};
-					}
+				else{
+					console.warn('Potential match doesn\'t match pointer', p, pointer);
+				}
+
+				if(r){
+					return r;
 				}
 			}
 		}
