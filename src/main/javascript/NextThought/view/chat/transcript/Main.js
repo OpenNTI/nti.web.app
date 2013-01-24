@@ -74,7 +74,11 @@ Ext.define('NextThought.view.chat.transcript.Main',{
 			var guid = IdCache.getIdentifier(msg.getId()),
 				creator = msg.get('Creator'),
 				o = {
-                    moderatedCls: msg.hasBeenModerated() ? 'moderated' : '',
+                    moderatedCls: msg.hasBeenModerated()
+		                    ? 'moderated'
+		                    : msg.hasBeenFlagged()
+		                        ? 'confirmFlagged'
+		                        : '',
 					guid: guid,
 					me: isMe(creator) ? 'me' : undefined,
 					name: creator,

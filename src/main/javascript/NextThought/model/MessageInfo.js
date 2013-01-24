@@ -14,8 +14,10 @@ Ext.define('NextThought.model.MessageInfo', {
 	],
 
     hasBeenModerated: function(){
-        var flag = this.getLink('flag') || this.getLink('flag.metoo');
-        if (!flag){return true;}
-        return false;
-    }
+        return Boolean(!this.getLink('flag') && !this.getLink('flag.metoo'));
+    },
+
+	hasBeenFlagged: function(){
+		return Boolean(this.getLink('flag.metoo'));
+	}
 });
