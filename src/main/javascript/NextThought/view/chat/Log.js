@@ -182,10 +182,10 @@ Ext.define('NextThought.view.chat.Log', {
 
 		//we are going to add then scroll to
 		o = m.add({
-						xtype: this.entryType,
-						message: msg,
-						messageId: IdCache.getIdentifier(msg.getId())
-					});
+			xtype: this.entryType,
+			message: msg,
+			messageId: IdCache.getIdentifier(msg.getId())
+		});
 
 		if(o.el && this.el){
 			o.el.scrollIntoView(this.el);
@@ -195,9 +195,13 @@ Ext.define('NextThought.view.chat.Log', {
 	shouldAddTimestampBeforeMessage: function(msg){
 		var newMsgTime =  msg.get('CreatedTime'),
 			lastTimeStamp, intervalTimeStamp,
-			stamp = Ext.Date.format( newMsgTime, 'F j, Y, g:i a');
+			stamp = Ext.Date.format( newMsgTime, 'F j, Y, g:i a'),//shouldn't this be the previous message's time?
 
-		lastTimeStamp = this.items.last() ? this.items.last().message.get('CreatedTime') : null;
+			message = (this.query('chat-log-entry[message]') || []).last() || {};//defensive ...make sure we always have a value.
+
+		message = message.message;
+
+		lastTimeStamp = message ? message.get('CreatedTime') : null;
 		if(!lastTimeStamp){
 			this.addNotification(stamp);
 			return;

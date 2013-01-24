@@ -13,6 +13,7 @@ Ext.define('NextThought.view.chat.log.NotificationEntry', {
 	},
 
 	initComponent: function(){
+		this.callParent(arguments);
 		this.renderData.message = this.message;
 	}
 });
