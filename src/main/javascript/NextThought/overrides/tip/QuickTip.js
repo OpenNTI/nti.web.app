@@ -49,7 +49,7 @@ Ext.define('NextThought.overrides.tip.QuickTip',{
 	getTargetXY: function getTargetXY(){
 		function getTarget(el){
 			el = Ext.get(el);
-			if(el.getAttribute('title') || el.getAttribute('data-qtip')){
+			if(!el || el.getAttribute('title') || el.getAttribute('data-qtip')){
 				return el;
 			}
 
@@ -62,7 +62,7 @@ Ext.define('NextThought.overrides.tip.QuickTip',{
 
 		getTargetXY.recursiveCall = true;
 
-		this.anchorTarget = Ext.getDom( getTarget(this.activeTarget.el) );
+		this.anchorTarget = Ext.getDom( getTarget((this.activeTarget||{}).el) );
 		this.anchor = 'bottom';
 
 		var vW = Ext.dom.Element.getViewportWidth(),
