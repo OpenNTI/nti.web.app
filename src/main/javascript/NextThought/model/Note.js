@@ -156,6 +156,21 @@ Ext.define('NextThought.model.Note', {
 		},0);
 	},
 
+	debugString: function(){
+		var bs = (this.get('body') || []).toString(), cs;
+
+		if(this.placeholder){
+			bs = '_';
+		}
+
+		if(Ext.isEmpty(this.children)){
+			return '['+bs+']';
+		}
+
+		cs = Ext.Array.map(this.children, function(c){return c.debugString();});
+
+		return '['+bs+' ('+cs.join(',')+') ]';
+	},
 
 	getTotalLikeCount: function(){
 		if(this.raw.hasOwnProperty('RecursiveLikeCount') ){
