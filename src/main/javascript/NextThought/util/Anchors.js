@@ -56,7 +56,7 @@ Ext.define('NextThought.util.Anchors', {
 		}
 
 		function getVirginNode(node){
-			var theId = node.getAttribute('Id'),
+			var theId = node.getAttribute('id'),
 				key = theId || node,
 				clean;
 
@@ -400,7 +400,7 @@ Ext.define('NextThought.util.Anchors', {
 			return Anchors.createTextPointerFromRange(range, role);
 		}
 		else if (Ext.isElement(edgeNode)) {
-			var id = edgeNode.getAttribute('data-ntiid') || edgeNode.getAttribute('Id'),
+			var id = edgeNode.getAttribute('data-ntiid') || edgeNode.getAttribute('id'),
 				tagName = edgeNode.tagName;
 			return Ext.create('NextThought.model.anchorables.ElementDomContentPointer', {
 				elementTagName: tagName,
@@ -688,7 +688,7 @@ Ext.define('NextThought.util.Anchors', {
 			return {confidence: 1, node: ancestor};
 		}
 
-		var selector = '['+(pointer.getElementId().indexOf('tag:nextthought.com') >= 0 ? 'data-ntiid' : 'Id')+'="'+pointer.getElementId()+'"]',
+		var selector = '['+(pointer.getElementId().indexOf('tag:nextthought.com') >= 0 ? 'data-ntiid' : 'id')+'="'+pointer.getElementId()+'"]',
 			potentials = Ext.query(selector, ancestor),
 			p, i;
 

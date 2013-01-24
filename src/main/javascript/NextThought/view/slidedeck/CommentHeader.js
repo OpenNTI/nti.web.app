@@ -89,6 +89,12 @@ Ext.define('NextThought.view.slidedeck.CommentHeader',{
 			}
 		}
 
+		function onError(error){
+			console.error('Error saving note - ' + (error ? Globals.getError(error) : ''));
+            alert('There was an error saving your note.');
+            me.editor.unmask();
+		}
+
 		var me = this,
 			p = (LocationProvider.getPreferences() || {}).sharing || {},
 			re = /((&nbsp;)|(\u200B)|(<br\/?>)|(<\/?div>))*/g,
@@ -98,7 +104,7 @@ Ext.define('NextThought.view.slidedeck.CommentHeader',{
 			sharing = v.shareWith || p.sharedWith || [],
 			range,
 			container = me.slide.get('ContainerId'),
-			dom = me.slide.get('dom-clone');
+			dom = me.slide.get('dom-clone'), img;
 
 
 
@@ -108,17 +114,22 @@ Ext.define('NextThought.view.slidedeck.CommentHeader',{
 			return false;
 		}
 
+		img = Ext.fly(dom).down('img', true);
+
+		if(!img){
+			onError();
+			return false;
+		}
+
 		range = dom.ownerDocument.createRange();
-		range.selectNode(dom.firstChild);
+		range.selectNode(img);
 
 		me.editor.mask('Saving...');
         try {
 		    me.fireEvent('save-new-note', note, range, container, sharing, style, callback);
         }
         catch (error) {
-            console.error('Error saving note - ' + Globals.getError(error));
-            alert('There was an error saving your note.');
-            me.editor.unmask();
+            onError(error);
         }
 		return false;
 	},
