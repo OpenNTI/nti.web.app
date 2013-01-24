@@ -383,7 +383,8 @@ Ext.define('NextThought.util.Anchors', {
 
 
 	doesElementMatchPointer: function(element, pointer) {
-		if( (element.id === pointer.elementId
+		var id = element.id || (element.getAttribute ? element.getAttribute('id') : null);
+		if( (id === pointer.elementId
 			 || (element.getAttribute && element.getAttribute('data-ntiid') === pointer.elementId))
 			&& element.tagName.toUpperCase() === pointer.elementTagName.toUpperCase() ){
 			return true;
