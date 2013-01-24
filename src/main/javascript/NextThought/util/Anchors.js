@@ -200,7 +200,7 @@ Ext.define('NextThought.util.Anchors', {
 	doesContentRangeDescriptionResolve: function(contentRangeDescription, node, doc){
 		var result, range, theDoc = (node ? node.ownerDocument : null) || doc;
 
-		range = this.toDomRange(contentRangeDescription, theDoc, node);
+		range = this.locateContentRangeDescription(contentRangeDescription, node, theDoc);
 
 		result = !!range;
 		if(range && range.detach){
@@ -208,6 +208,67 @@ Ext.define('NextThought.util.Anchors', {
 		}
 		return result;
 	},
+
+	//TODO lots of duplicated code here
+	locateContentRangeDescription: function(contentRangeDescription, cleanRoot, doc) {
+		var ancestorNode, resultRange, searchWithin, containerId, docElementContainerId,
+			docElement  = (cleanRoot ? cleanRoot.ownerDocument : null) || doc;
+
+        docElementContainerId = docElementContainerId || Anchors.rootContainerIdFromDocument(docElement);
+
+        try{
+			if(!contentRangeDescription){
+				console.warn('nothing to parse?');
+				return null;
+			}
+
+			if(!containerId){
+				console.log('No container id provided will use root without validating container ids');
+			}
+
+			//FIXME we run into potential problems with this is ContentRangeDescriptions ever occur in different documents
+			//or locations but have the same container id.  That seem unlikely but may Need to figure that out eventually
+			//Optimization shortcut, if we have a cached locator use it
+			//TODO a potential optimization here is that if locator() is defined but null return null.  We already tried
+			//to resolve it once and it failed.  Right now we try again but in reality nothing changes between when we
+			//preresolve the locator and now
+			if(contentRangeDescription.locator()){
+				return Anchors.convertContentRangeToDomRange(contentRangeDescription.locator().start,
+															 contentRangeDescription.locator().end,
+															 contentRangeDescription.locator().doc);
+			}
+
+
+			if ( contentRangeDescription.isEmpty ){
+				return Anchors.createEmptyContentRangeDescription(docElement, containerId, docElementContainerId);
+			}
+
+			if(!cleanRoot){
+				cleanRoot = (docElement.body || docElement).cloneNode(true);
+				Anchors.purifyNode(cleanRoot);
+			}
+
+			searchWithin = Anchors.scopedContainerNode(cleanRoot, containerId, docElementContainerId);
+			if(!searchWithin){
+				Ext.Error.raise('Unable to find container '+containerId+ ' in provided doc element');
+			}
+			ancestorNode = contentRangeDescription.getAncestor().locateRangePointInAncestor(searchWithin).node || searchWithin;
+
+			if (!ancestorNode){
+				Ext.Error.raise('Failed to get ancestor node for description. ' + contentRangeDescription + ' This should happen b/c we should default to ' + searchWithin);
+			}
+
+			resultRange = Anchors.resolveCleanLocatorForDesc(contentRangeDescription, ancestorNode, docElement);
+
+			return resultRange;
+		}
+		catch(e){
+			console.warn('Unable to generate range for description', e);
+			Globals.getError(e);
+		}
+		return null;
+	},
+
 
 	createEmptyContentRangeDescription: function(docElement, containerId, rootId){
 		var searchWithin = Anchors.scopedContainerNode(docElement, containerId, rootId);
