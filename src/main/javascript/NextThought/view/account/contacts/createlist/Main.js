@@ -10,7 +10,7 @@ Ext.define('NextThought.view.account.contacts.createlist.Main',{
 	items: [
 		{xtype: 'container', layout: 'anchor', cls: 'input-wrapper', items:[
 			{xtype: 'box', name: 'namelabel', cls: 'label', html: 'List name'},
-			{xtype: 'simpletext', name: 'name', cls: 'input-box name', inputType: 'text', placeholder: 'Choose a name for your list...'}
+			{xtype: 'simpletext', name: 'name', cls: 'input-box name group-name', inputType: 'text', placeholder: 'Choose a name for your list...'}
 		]},
 		{xtype: 'box', hidden: true, name:'error', autoEl: {cls: 'error-box', tag:'div',
 			cn:[
