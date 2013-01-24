@@ -90,9 +90,9 @@ describe("Anchor Utils", function() {
 			span.appendChild(p);
 			span.appendChild(span2);
 			span.appendChild(a);
-			span.setAttribute('Id', '12312312');
+			span.setAttribute('id', '12312312');
 			span.setAttribute('data-non-anchorable', 'true');
-			div.setAttribute('Id', 'ThisIdIsTheBest');
+			div.setAttribute('id', 'ThisIdIsTheBest');
 			div.appendChild(span);
 			testBody.appendChild(div);
 			range = document.createRange();
@@ -100,7 +100,7 @@ describe("Anchor Utils", function() {
 			range.setEndAfter(a);
 
 			result = Anchors.createRangeDescriptionFromRange(range, document).description;
-			expect(result.getAncestor().getElementId()).toEqual(div.getAttribute('Id'));
+			expect(result.getAncestor().getElementId()).toEqual(div.getAttribute('id'));
 		});
 
         it('Create Desciption from range of image with id', function(){
@@ -109,8 +109,8 @@ describe("Anchor Utils", function() {
                range, result;
 
             //set up img with data:
-            span.setAttribute('Id', 'sdfasdfsdfasd');
-            img.setAttribute('Id', '234234efjsdlkfjal2j4lkj');
+            span.setAttribute('id', 'sdfasdfsdfasd');
+            img.setAttribute('id', '234234efjsdlkfjal2j4lkj');
             img.setAttribute('src', '#');
 
             span.appendChild(img);
@@ -144,7 +144,7 @@ describe("Anchor Utils", function() {
 
 		it('MathJax node', function(){
 			var node = document.createElement('span');
-			node.setAttribute('Id', 'MathJax-blahblah');
+			node.setAttribute('id', 'MathJax-blahblah');
 			expect(Anchors.isNodeAnchorable(node)).toBeFalsy();
 		});
 
@@ -161,7 +161,7 @@ describe("Anchor Utils", function() {
 
         it('Anchor with invalidId id', function(){
             var node = document.createElement('a');
-            node.setAttribute('Id', 'a12309841');
+            node.setAttribute('id', 'a12309841');
             expect(Anchors.isNodeAnchorable(node)).toBeFalsy();
         });
 
@@ -174,20 +174,20 @@ describe("Anchor Utils", function() {
 
 		it('Node with Id', function(){
 			var node = document.createElement('span');
-			node.setAttribute('Id', '1234dfkdljl2j31lk3j');
+			node.setAttribute('id', '1234dfkdljl2j31lk3j');
 			expect(Anchors.isNodeAnchorable(node)).toBeTruthy();
 		});
 
 		it('Node with Id and data-non-anchorable Attribute', function(){
 			var node = document.createElement('span');
-			node.setAttribute('Id', 'sddfkja;sfkje;ljr;3');
+			node.setAttribute('id', 'sddfkja;sfkje;ljr;3');
 			node.setAttribute('data-non-anchorable', 'true');
 			expect(Anchors.isNodeAnchorable(node)).toBeFalsy();
 		});
 
 		it('Node with Auto-Generated ExtJS Id Attribute', function(){
 			var node = document.createElement('span');
-			node.setAttribute('Id', 'ext-gen1223423');
+			node.setAttribute('id', 'ext-gen1223423');
 			expect(Anchors.isNodeAnchorable(node)).toBeFalsy();
 		});
 	});
@@ -414,7 +414,7 @@ describe("Anchor Utils", function() {
                 empty = document.createTextNode(' '),
                 result;
 
-            div.setAttribute('Id', 'a0000000044');
+            div.setAttribute('id', 'a0000000044');
             a.setAttribute('name', 'a0000000044');
 
             //setup heirarchy
@@ -582,7 +582,7 @@ describe("Anchor Utils", function() {
 				span2 = document.createElement('span'),
 				result;
 
-			div.setAttribute('Id', 'a1234');
+			div.setAttribute('id', 'a1234');
 
 			span1.appendChild(t1);
 			div.appendChild(span1);
@@ -629,7 +629,7 @@ describe("Anchor Utils", function() {
 				range, result;
 
 			//make sure div is valid
-			div.setAttribute('Id', 'someid');
+			div.setAttribute('id', 'someid');
 
 			//add this stuff to the body so we can then put it in a range
 			div.appendChild(t1);
@@ -686,7 +686,7 @@ describe("Anchor Utils", function() {
 				t2 = document.createTextNode('See spot run'),
 				range, anchorableRange;
 
-            div.setAttribute('Id', 'sdfgkljsdflkjslkcms');
+            div.setAttribute('id', 'sdfgkljsdflkjslkcms');
 
 			big.appendChild(replacementText);
 			innerRedactionSpan.appendChild(big);
@@ -759,7 +759,7 @@ describe("Anchor Utils", function() {
 				second = document.createElement('span'),
 				third = document.createElement('p');
 
-			first.setAttribute('Id', 'someid');
+			first.setAttribute('id', 'someid');
 			second.appendChild(third);
 			first.appendChild(second);
 
@@ -808,7 +808,7 @@ describe("Anchor Utils", function() {
 			span.appendChild(span2);
 			span.appendChild(a);
 			div.appendChild(span);
-			p2.setAttribute('Id', 'SomeId');
+			p2.setAttribute('id', 'SomeId');
 			testBody.appendChild(div);
 
 			result = Anchors.locateElementDomContentPointer(pointer, div, {});
@@ -828,7 +828,7 @@ describe("Anchor Utils", function() {
 				pointer = Ext.create('NextThought.model.anchorables.ElementDomContentPointer', {role: 'end', elementTagName: 'p', elementId: 'SomeId2'}),
 				result = {};
 
-			p.setAttribute('Id', 'SomeId1');
+			p.setAttribute('id', 'SomeId1');
 			p2.appendChild(t2);
 			span2.appendChild(p2);
 			p.appendChild(t1);
@@ -836,7 +836,7 @@ describe("Anchor Utils", function() {
 			span.appendChild(span2);
 			span.appendChild(a);
 			div.appendChild(span);
-			p2.setAttribute('Id', 'SomeId2');
+			p2.setAttribute('id', 'SomeId2');
 			testBody.appendChild(div);
 
 			console.warn('ExtJS means after is not necessary, dupe test')
@@ -878,7 +878,7 @@ describe("Anchor Utils", function() {
 				t1 = document.createTextNode('text node 1'),
 				result = {};
 
-			p.setAttribute('Id', 'SomeId');
+			p.setAttribute('id', 'SomeId');
 
 			p.appendChild(t1);
 			div.appendChild(p);
@@ -938,9 +938,9 @@ describe("Anchor Utils", function() {
 				}),
 				result;
 
-			div1.setAttribute('Id', 'Id1');
-			div2.setAttribute('Id', 'Id2');
-			span.setAttribute('Id', 'Span1');
+			div1.setAttribute('id', 'Id1');
+			div2.setAttribute('id', 'Id2');
+			span.setAttribute('id', 'Span1');
 			div1.appendChild(t1);
 			div2.appendChild(t2);
 			span.appendChild(div1);
@@ -1000,9 +1000,9 @@ describe("Anchor Utils", function() {
 				}),
 				result;
 
-			div1.setAttribute('Id', 'DivId1');
-			div2.setAttribute('Id', 'DivId2');
-			span.setAttribute('Id', 'SpanId1');
+			div1.setAttribute('id', 'DivId1');
+			div2.setAttribute('id', 'DivId2');
+			span.setAttribute('id', 'SpanId1');
 			div1.appendChild(text1);
 			div2.appendChild(text2);
 			span.appendChild(div1);
@@ -1296,9 +1296,9 @@ describe("Anchor Utils", function() {
 				a = document.createElement('a'),
 				range, result;
 
-			p.setAttribute('Id', 'xzy1232314');
+			p.setAttribute('id', 'xzy1232314');
 			p.appendChild(t1);
-			p2.setAttribute('Id', 'xzydasdasae2342');
+			p2.setAttribute('id', 'xzydasdasae2342');
 			p2.appendChild(t2);
 			span2.appendChild(p2);
 			span.appendChild(p);
@@ -1314,7 +1314,7 @@ describe("Anchor Utils", function() {
 			result = Anchors.createTextPointerFromRange(range, 'end');
 			expect(result).toBeTruthy();
 			expect(result.getRole()).toEqual('end');
-			expect(result.getAncestor().getElementId()).toEqual(p2.getAttribute('Id'));
+			expect(result.getAncestor().getElementId()).toEqual(p2.getAttribute('id'));
 			expect(result.getContexts().length).toBeGreaterThan(0);
 		});
 
@@ -1332,9 +1332,9 @@ describe("Anchor Utils", function() {
 				a = document.createElement('a'),
 				range, result, ctxs;
 
-			p.setAttribute('Id', 'xzy1232314');
+			p.setAttribute('id', 'xzy1232314');
 			p.appendChild(t1);
-			p2.setAttribute('Id', 'xzydasdasae2342');
+			p2.setAttribute('id', 'xzydasdasae2342');
 			p2.appendChild(t2);
 			span2.appendChild(p2);
 			span.appendChild(p);
@@ -1352,7 +1352,7 @@ describe("Anchor Utils", function() {
 			result = Anchors.createTextPointerFromRange(range, 'end');
 			expect(result).toBeTruthy();
 			expect(result.getRole()).toEqual('end');
-			expect(result.getAncestor().getElementId()).toEqual(p2.getAttribute('Id'));
+			expect(result.getAncestor().getElementId()).toEqual(p2.getAttribute('id'));
 			expect(result.getContexts().length).toBeGreaterThan(0);
 
 			var anyEmpty = false;
@@ -1382,7 +1382,7 @@ describe("Anchor Utils", function() {
 			p.appendChild(t1);
 			p.appendChild(t2);
 			p.setAttribute('shouldBeThere', 'true');
-			p.setAttribute('Id', 'someRandomId');
+			p.setAttribute('id', 'someRandomId');
 			spanNoAnchors.setAttribute('data-non-anchorable', 'true');
 			em.appendChild(t3);
 			spanNoAnchors.appendChild(em);
@@ -1431,7 +1431,7 @@ describe("Anchor Utils", function() {
 			span.appendChild(t4);
 			spanNoAnchors.appendChild(span);
 			p.appendChild(spanNoAnchors);
-			div.setAttribute('Id', 'validId');
+			div.setAttribute('id', 'validId');
 			div.appendChild(p);
 			testBody.appendChild(div);
 
@@ -1469,7 +1469,7 @@ describe("Anchor Utils", function() {
 			span.appendChild(t4);
 			spanNoAnchors.appendChild(span);
 			p.appendChild(spanNoAnchors);
-			div.setAttribute('Id', 'validId');
+			div.setAttribute('id', 'validId');
 			div.appendChild(p);
 			testBody.appendChild(div);
 
@@ -1563,7 +1563,7 @@ describe("Anchor Utils", function() {
 
 			//add some stuff to span, clone it, add some more, see if it worked
 			p.appendChild(textNode);
-			p.setAttribute('Id', 'someRandomId');
+			p.setAttribute('id', 'someRandomId');
 			testBody.appendChild(p);
 
 			//create the initial range:
@@ -1594,9 +1594,9 @@ describe("Anchor Utils", function() {
 
 			//set up ids and heirarchy
 			div.setAttribute('id', 'nti-content');
-			li.setAttribute('Id', 'a0000003697');
+			li.setAttribute('id', 'a0000003697');
 			a.setAttribute('name', '95faafa5cbec328f1283c2167db1a3de');
-			p.setAttribute('Id', '95faafa5cbec328f1283c2167db1a3de');
+			p.setAttribute('id', '95faafa5cbec328f1283c2167db1a3de');
 			p.appendChild(t);
 			li.appendChild(s1);
 			li.appendChild(a);
@@ -1878,7 +1878,7 @@ describe("Anchor Utils", function() {
 			expect(recreatedRange).toBeTruthy();
 			expect(recreatedRange.commonAncestorContainer).toBe(document.body);
 
-			root.setAttribute('Id', '123242354543523');
+			root.setAttribute('id', '123242354543523');
 			recreatedRange = Anchors.toDomRange(emptyDesc.description, document, document.body, '123242354543523', 'pagecontainer');
 			expect(recreatedRange).toBeTruthy();
 			expect(recreatedRange.commonAncestorContainer).toBe(root);
@@ -1897,7 +1897,7 @@ describe("Anchor Utils", function() {
 				range, desc, recreatedRange;
 
 			//set up ids and heirarchy
-			root.setAttribute('Id', '123242354543523');
+			root.setAttribute('id', '123242354543523');
 			p1.setAttribute('position', 1);
 			p1.appendChild(t1);
 			p2.setAttribute('position', 2);
@@ -1922,7 +1922,7 @@ describe("Anchor Utils", function() {
 			desc = Anchors.createRangeDescriptionFromRange(range, document).description;
 			expect(desc).toBeTruthy();
 			expect(desc.getAncestor()).toBeTruthy();
-			expect(desc.getAncestor().getElementId()).toEqual(root.getAttribute('Id'));
+			expect(desc.getAncestor().getElementId()).toEqual(root.getAttribute('id'));
 
 			//now round trip back to a range, verify that it is the same range as before
 			recreatedRange = Anchors.toDomRange(desc, document, document.body);
@@ -2003,7 +2003,7 @@ describe("Anchor Utils", function() {
 				expectedRangeToString = 'This is a sentenceWOW. Another sentenceYIKES and foo. ';
 
 			//setup ids and heirarchies:
-			p.setAttribute('Id', 'id');
+			p.setAttribute('id', 'id');
 			b.setAttribute('class', 'bfseries');
 			//fill up ems
 			em3.appendChild(t6);
@@ -2038,7 +2038,7 @@ describe("Anchor Utils", function() {
 			desc = Anchors.createRangeDescriptionFromRange(range, document).description;
 			expect(desc).toBeTruthy();
 			expect(desc.getAncestor()).toBeTruthy();
-			expect(desc.getAncestor().getElementId()).toEqual(p.getAttribute('Id'));
+			expect(desc.getAncestor().getElementId()).toEqual(p.getAttribute('id'));
 
 			//now round trip back to a range, verify that it is the same range as before
 			recreatedRange = Anchors.toDomRange(desc, document, document.body);
@@ -2070,9 +2070,9 @@ describe("Anchor Utils", function() {
 
 			//set up ids and heirarchy
 			div.setAttribute('id', 'nti-content');
-			li.setAttribute('Id', 'a0000003697');
+			li.setAttribute('id', 'a0000003697');
 			a.setAttribute('name', '95faafa5cbec328f1283c2167db1a3de');
-			p.setAttribute('Id', '95faafa5cbec328f1283c2167db1a3de');
+			p.setAttribute('id', '95faafa5cbec328f1283c2167db1a3de');
 			p.appendChild(t);
 			li.appendChild(s1);
 			li.appendChild(a);
@@ -2127,8 +2127,8 @@ describe("Anchor Utils", function() {
 			//Build the page content
 			mainNode.setAttribute('id', 'nti-content');
 			pageContent.setAttribute('data-ntiid', containerId);
-			pageContent.setAttribute('Id', 'a0000000050');
-			footNotesContent.setAttribute('Id','footnotes');
+			pageContent.setAttribute('id', 'a0000000050');
+			footNotesContent.setAttribute('id','footnotes');
 
 			footNotesContent.appendChild(footnotes);
 			mainNode.appendChild(pageContent);
@@ -2153,7 +2153,7 @@ describe("Anchor Utils", function() {
 
 			//Build the page content
 			mainNode.setAttribute('id', 'nti-content');
-			pageContent.setAttribute('Id', 'a0000000050');
+			pageContent.setAttribute('id', 'a0000000050');
 			pageContent.setAttribute('data-ntiid', 'foobar');
 
 			mainNode.appendChild(pageContent);
@@ -2175,7 +2175,7 @@ describe("Anchor Utils", function() {
 
 			//Build the page content
 			mainNode.setAttribute('id', 'nti-content');
-			pageContent.setAttribute('Id', 'a0000000050');
+			pageContent.setAttribute('id', 'a0000000050');
 			pageContent.setAttribute('data-ntiid', "tag:nextthought.com,2011-10:Columbia-HTML-Great_Leader_Essays.biography.3");
 
 			mainNode.appendChild(pageContent);
@@ -2201,9 +2201,9 @@ describe("Anchor Utils", function() {
 				desc = Ext.create('NextThought.model.anchorables.DomContentRangeDescription', {start: start, end: end, ancestor: ancestor})	,
 				result;
 
-			anotherDiv.setAttribute('Id', 'thisIsNotTheDivYouSeek');
-			div.setAttribute('Id', 'parent');
-			childDiv.setAttribute('Id', 'child');
+			anotherDiv.setAttribute('id', 'thisIsNotTheDivYouSeek');
+			div.setAttribute('id', 'parent');
+			childDiv.setAttribute('id', 'child');
 			div.appendChild(childDiv);
 			testBody.appendChild(anotherDiv);
 			testBody.appendChild(div);

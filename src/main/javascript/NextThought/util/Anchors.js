@@ -240,7 +240,7 @@ Ext.define('NextThought.util.Anchors', {
 	rootContainerIdFromDocument: function(doc){
 		var foundContainer, metaNtiidTag;
 		if(doc.head){
-			metaNtiidTag = Ext.query( 'meta[name="NTIID"]', doc.head );
+			metaNtiidTag = doc.head.querySelectorAll( 'meta[name="NTIID"]' );
 			if(metaNtiidTag && metaNtiidTag.length > 0){
 				if(metaNtiidTag.length > 1){
 					console.error('Encountered more than one NTIID meta tag. Using first, expect problems', metaNtiidTag);
@@ -323,7 +323,7 @@ Ext.define('NextThought.util.Anchors', {
         var potentials = [];
 
         if(containerId.indexOf('tag:nextthought.com') >= 0){
-            Ext.each(Ext.query('[data-ntiid]', root), function(x){
+            Ext.each(root.querySelectorAll('[data-ntiid]'), function(x){
                 if (x.getAttribute('data-ntiid') === containerId){
                     potentials.push(x);
                 }
@@ -334,7 +334,7 @@ Ext.define('NextThought.util.Anchors', {
 				potentials.push(root.getElementById(containerId));
 			}
 			else{
-				potentials = Ext.query('[Id='+containerId+']', root);
+				potentials = root.querySelectorAll('[id="'+containerId+'"]');
 			}
         }
 
@@ -699,11 +699,11 @@ Ext.define('NextThought.util.Anchors', {
 			}
 			else{
 				//Note this may not technically be an exact match, but the potentials loop below should weed out any issues
-				potentials = Ext.query('[data-ntiid^="'+parts.first()+'"][data-ntiid$="'+parts.last()+'"]', ancestor);
+				potentials = ancestor.querySelectorAll('[data-ntiid^="'+parts.first()+'"][data-ntiid$="'+parts.last()+'"]');
 			}
 		}
 		else{
-			potentials = Ext.query('[id="'+theId+'"]', ancestor);
+			potentials = ancestor.querySelectorAll('[id="'+theId+'"]');
 		}
 
 
