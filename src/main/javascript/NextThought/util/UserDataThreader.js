@@ -54,9 +54,37 @@ Ext.define('NextThought.util.UserDataThreader',{
 		this.prune(tree);
 	},
 
-	buildItemTree: function(list, tree){
-		var me = this;
+	buildItemTree: function(rawList, tree){
+		var me = this, list=[];
 		console.group("Build Tree");
+		console.log('Using list of objects', rawList);
+
+		function contains(items, o){
+			return Ext.Array.some(items, function(a){
+				return a.getId() === o.getId();
+			});
+		}
+
+		//Flatten an preexisting relationships of list into the array ignoring
+		//duplicates.  A hash could speed this up
+		function flattenNode(n, list){
+			if(!n.placeholder && !contains(list, n)){
+				Ext.Array.push(list, n);
+			}
+			else{console.log('Skipping n b/c its already in the list', n);}
+
+			if(!Ext.isEmpty(n.children)){
+				Ext.each(n.children, function(kid){
+					flattenNode(kid, list);
+				});
+			}
+		}
+
+		Ext.Array.each(rawList, function(n){
+			flattenNode(n, list);
+		});
+
+		console.log('Flattened list is ', list);
 
 		Ext.each(list, function clearRefs(r){
 			if(!r.placeholder){
@@ -88,7 +116,8 @@ Ext.define('NextThought.util.UserDataThreader',{
 				}
 
 				p.children = p.children || [];
-				if(Ext.Array.indexOf(p.children, r) < 0){
+				if(!contains(p.children, r)){
+					console.log('Adding', r, 'as child of', p);
 					p.children.push(r);
 				}
 				else{
@@ -123,6 +152,7 @@ Ext.define('NextThought.util.UserDataThreader',{
 	prune: function(tree){
 		//until we decide we want to prune from the root down... this is a non-desired function. (we cannot have leaf
 		// placeholders with the current threading algorithm.)
+
 	},
 
 	tearDownThreadingLinks: function(o){
