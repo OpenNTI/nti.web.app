@@ -27,10 +27,6 @@ Ext.define('NextThought.controller.Stream', {
 			this.evtRouter.on(this.eventName, callback, scope||window);
 		},
 
-		removeChangeListener: function(callback, scope){
-			this.evtRouter.un(this.eventName, callback, scope||window);
-		},
-
 		fireChange: function(change){
 			this.evtRouter.fireEvent(this.eventName, change);
 		}
@@ -39,11 +35,7 @@ Ext.define('NextThought.controller.Stream', {
 
 	init: function() {
 		var me = this;
-
 		this.application.on('session-ready', this.onSessionReady, this);
-
-		this.streamStores = {};
-
 		Socket.register({
 			'data_noticeIncomingChange': function(){me.incomingChange.apply(me, arguments);}
 		});
@@ -72,64 +64,16 @@ Ext.define('NextThought.controller.Stream', {
 	},
 
 
-	getStoreForStream: function(containerId, success, failure, scope) {
-		var me = this,
-			stores = me.streamStores,
-			ps = stores[containerId];
-
-		//root all streams to the book...
-		containerId = LocationProvider.getLineage(containerId).last();
-
-		function pageInfoSuccess(pageInfo) {
-			var link = pageInfo.getLink(Globals.RECURSIVE_STREAM);
-			//page exists but no link, does this still happen?
-			if(link===null) {
-				return;
-			}
-
-			ps = stores[containerId] || Ext.create('NextThought.store.Stream',
-				{ storeId:'stream-store:'+containerId, containerId: containerId });
-
-			ps.getProxy().url = link;
-			stores[containerId] = ps;
-			Ext.callback(success, scope, [ps]);
-		}
-
-		//If we already have that store, just callback, otherwise go about loading it.
-		if (ps) {
-			Ext.callback(success, scope, [ps]);
-		}
-		else {
-			$AppConfig.service.getPageInfo(containerId, pageInfoSuccess, failure, this);
-		}
-	},
-
 
 	incomingChange: function(change) {
 		change = ParseUtils.parseItems([change])[0];
-		var me = this,
-			item = change.get('Item'),
-			cid = change.getItemValue('ContainerId'),
-			pageStore;
-
-		Ext.each(LocationProvider.getLineage(cid),function(cid){
-			me.getStoreForStream(cid,
-				//success
-				function(s){
-					s.add(change);
-				},
-				//failure
-				function(){
-					console.error('could not load store for', cid, arguments);
-				},
-				me
-			);
-		});
+		var item = change.get('Item');
 
 		//add it to the root stream store, why the heck not?
 		if(!item || item.mimeType.indexOf('redaction')<0){
 			this.getStreamStore().add(change);
 		}
+
 		this.self.fireChange(change);
 	}
 });
