@@ -190,7 +190,7 @@ Ext.define('NextThought.controller.State', {
 		// rather than the library landing page.
 		var defaultState = {
 			active: 'library',
-			location : Library.getFirstPage() || Ext.util.Cookies.get('nti.landing_page') || undefined
+			location : Ext.util.Cookies.get('nti.landing_page') || Library.getFirstPage() || undefined
 		}, lastLocation;
 
 		try {
