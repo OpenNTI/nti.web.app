@@ -56,8 +56,8 @@ Ext.define('NextThought.util.UserDataThreader',{
 
 	buildItemTree: function(rawList, tree){
 		var me = this, list=[];
-		console.group("Build Tree");
-		console.log('Using list of objects', rawList);
+	//	console.group("Build Tree");
+		//console.log('Using list of objects', rawList);
 
 		function contains(items, o){
 			return Ext.Array.some(items, function(a){
@@ -84,7 +84,7 @@ Ext.define('NextThought.util.UserDataThreader',{
 			flattenNode(n, list);
 		});
 
-		console.log('Flattened list is ', list);
+	//	console.log('Flattened list is ', list);
 
 		Ext.each(list, function clearRefs(r){
 			if(!r.placeholder){
@@ -110,18 +110,15 @@ Ext.define('NextThought.util.UserDataThreader',{
 					p = (tree[parent] = getID(parent));
 				}
 				if(!p){
-					console.log('Generating placeholder for id:',parent, '  child:',oid);
+					//console.log('Generating placeholder for id:',parent, '  child:',oid);
 					p = (tree[parent] = AnnotationUtils.replyToPlaceHolder(g));
 					buildTree(p);
 				}
 
 				p.children = p.children || [];
 				if(!contains(p.children, r)){
-					console.log('Adding', r, 'as child of', p);
+				//	console.log('Adding', r, 'as child of', p);
 					p.children.push(r);
-				}
-				else{
-					console.warn('Ignoring duplicate record in child list', r, p.children);
 				}
 
 				r.parent = p;
@@ -145,7 +142,7 @@ Ext.define('NextThought.util.UserDataThreader',{
 			return r;
 		}
 
-		console.groupEnd("Build Tree");
+	//	console.groupEnd("Build Tree");
 	},
 
 
