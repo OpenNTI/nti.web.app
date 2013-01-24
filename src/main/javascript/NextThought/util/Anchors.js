@@ -688,9 +688,24 @@ Ext.define('NextThought.util.Anchors', {
 			return {confidence: 1, node: ancestor};
 		}
 
-		var selector = '['+(pointer.getElementId().indexOf('tag:nextthought.com') >= 0 ? 'data-ntiid' : 'id')+'="'+pointer.getElementId()+'"]',
-			potentials = Ext.query(selector, ancestor),
+		var theId = pointer.getElementId(),
+			potentials = [], parts,
 			p, i;
+
+		if(theId.indexOf('tag:nextthought.com') === 0){
+			parts = theId.split(',');
+			if(parts.length < 2){
+				console.warn('Encountered an ntiid looking id that doesn\'t split by comma');
+			}
+			else{
+				//Note this may not technically be an exact match, but the potentials loop below should weed out any issues
+				potentials = Ext.query('[data-ntiid^="'+parts.first()+'"][data-ntiid$="'+parts.last()+'"]', ancestor);
+			}
+		}
+		else{
+			potentials = Ext.query('[id="'+theId+'"]', ancestor);
+		}
+
 
 		for(i in potentials){
 			if (potentials.hasOwnProperty(i)){

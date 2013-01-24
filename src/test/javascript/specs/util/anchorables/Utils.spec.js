@@ -1941,7 +1941,7 @@ describe("Anchor Utils", function() {
                 range, desc, recreatedRange;
 
             //set up ids and heirarchy
-            root.setAttribute('data-ntiid', 'tag:nextthought.com-123242354543523'); //Note this needs to look like an ntiid
+            root.setAttribute('data-ntiid', 'tag:nextthought.com,2011-123242354543523'); //Note this needs to look like an ntiid
             p1.setAttribute('position', 1);
             p1.appendChild(t1);
             p2.setAttribute('position', 2);
