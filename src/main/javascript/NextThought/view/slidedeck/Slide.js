@@ -70,6 +70,7 @@ Ext.define('NextThought.view.slidedeck.Slide',{
 		}
 
 		var me = this, cahceKey = getCacheKey(containerId);
+
 		delete me.store;//don't let this dangle if there is a problem down the road.
 
 		function finish(store){
@@ -119,7 +120,7 @@ Ext.define('NextThought.view.slidedeck.Slide',{
 			toAdd = [],
 			dom = this.slide.get('dom-clone');
 
-		Ext.Array.sort(items,Globals.SortModelsBy('Last Modified'));
+		Ext.Array.sort(items, Globals.SortModelsBy('Last Modified', 'ASC'));
 
 		Ext.each(items, function(record){
 

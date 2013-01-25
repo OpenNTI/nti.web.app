@@ -294,7 +294,7 @@ Ext.define('NextThought.util.Globals', {
 	 * Returns a sorter function for the Array/Ext.Array sort method.
 	 *
 	 * @param key - String, name of the field to compare.
-	 * @param [dir] - Object, Direction (not implemented)
+	 * @param [dir] - String, Direction "ASC" or "DESC" defaults to "DESC"
 	 * @param [g] - Function, Getter function, where the value in the array is passed, and the getter returns the comparable.
 	 */
 	SortModelsBy: function(key,dir,g){
@@ -307,6 +307,9 @@ Ext.define('NextThought.util.Globals', {
 
 			if($a !== $b){
 				c = $a < $b? -1 : 1;
+				if(dir && dir === 'ASC'){
+					c*=-1;
+				}
 			}
 
 			return c;
