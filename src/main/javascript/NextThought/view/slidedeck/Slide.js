@@ -83,17 +83,20 @@ Ext.define('NextThought.view.slidedeck.Slide',{
 			if(LocationProvider.hasStore(id)){
 				store = LocationProvider.getStore(id);
 			}
+			else {
+				store = NextThought.store.PageItem.make(
+						pi.getLink(Globals.USER_GENERATED_DATA),
+						containerId,true);
 
-			store = store || NextThought.store.PageItem.make(
-					pi.getLink(Globals.USER_GENERATED_DATA),
-					containerId,true);
+				Ext.apply(store.proxy.extraParams,{
+					accept: NextThought.model.Note.mimeType,
+					filter: 'TopLevel'
+				});
 
-			Ext.apply(store.proxy.extraParams,{
-				accept: NextThought.model.Note.mimeType
-			});
+				//for caching
+				LocationProvider.addStore(cahceKey,store);
+			}
 
-			//for caching
-			LocationProvider.addStore(cahceKey,store);
 			finish(store);
 		}
 
@@ -125,13 +128,11 @@ Ext.define('NextThought.view.slidedeck.Slide',{
 				dec = record.get('applicableRange');
 
 
-			if (record.getModelName() !== 'Note') {
-				console.warn('it is not a note and I am not prepared to handle that.');
-				add=false;
-			}
+			if (record.getModelName() !== 'Note') { add=false; }
+
 			else if(!Anchors.doesContentRangeDescriptionResolve(dec,dom)){
-				console.warn('Skipping item, because it does not anchor to this slide');
 				add = false;
+				console.warn('Skipping item, because it does not anchor to this slide');
 			}
 			else if (Ext.getCmp(guid)) {
 				console.log('already showing this reply? Ensure the note window is not open.');
