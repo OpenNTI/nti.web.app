@@ -60,9 +60,11 @@ Ext.define('NextThought.view.slidedeck.CommentHeader',{
 
 
 	activateEditor: function(){
-		if(this.getRoot().checkAndMarkAsActive()){
-			this.comment.hide();
-			this.editorActions.activate();
+		var me = this;
+		if(me.getRoot().checkAndMarkAsActive()){
+			me.comment.hide();
+			me.editorActions.activate();
+			setTimeout(function(){me.editorActions.focus(true);}, 300);
 		}
 	},
 
