@@ -21,7 +21,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 	mixins: {textRangeFinder: 'NextThought.ux.TextRangeFinder'},
 
 	constructor: function(){
-		var me = this, c = NextThought.controller;
+		var me = this;
 		Ext.apply(me,{
 			annotations: {},
 			filter: null,
@@ -30,13 +30,12 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 
 		me.addEvents('share-with','create-note','should-be-ready');
 
-		this.mon(c.UserData.events,{
+		this.mon(LocationProvider.storeEvents,{
 			scope: this,
-			'new-note':this.onNoteCreated,
-			'new-redaction':this.onRedactionCreated
+			add: this.storeEventsAdd,
+			remove: this.storeEventsRemove,
+			bulkremove: this.storeEventsBulkRemove
 		});
-
-		c.Stream.registerChangeListener(me.onNotification, me);
 
 		me.on({
 			scope: this,
@@ -47,6 +46,28 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 		me.mon(AnnotationsRenderer.events,'finish',me.fireReady,me,{buffer: 500});
 
 		return this;
+	},
+
+
+	storeEventsAdd: function(store,records){
+		Ext.each(records,function(r){
+			var cls = r.get('Class');
+			if(!this.createAnnotationWidget(cls,r)){
+				console.log('Apparently this record didn\'t get added',r);
+			}
+		},this);
+	},
+
+
+	storeEventsBulkRemove: function(store,records){
+		Ext.each(records,function(record){
+			this.removeAnnotation(record.getId());
+		},this);
+	},
+
+
+	storeEventsRemove: function(store,record){
+		this.removeAnnotation(record.getId());
 	},
 
 
@@ -99,67 +120,6 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 
 		me.setAssessedQuestions((bins||{}).AssessedQuestionSet);
 		me.buildAnnotations(items);
-	},
-
-
-	onNotification: function(change){
-		if(!change || !change.get) {
-			return;//abandon ship!!
-		}
-
-		var item = change.get('Item'),
-				type = change.get('ChangeType'),
-				oid = item? item.getId() : null,
-				cid = item? item.get('ContainerId') : null,
-				delAction = /deleted/i.test(type),
-				cmps = Ext.ComponentQuery.query(Ext.String.format('[recordIdHash={0}]' ,IdCache.getIdentifier(oid)))||[],
-				cls, result,
-				found = cid === LocationProvider.currentNTIID;
-
-		if(!found){
-			Ext.each(this.getDocumentElement().querySelectorAll('[data-ntiid]'),function(o){
-				found = o.getAttribute('data-ntiid')===cid;
-				return !found;
-			});
-		}
-
-		if (!item || !cid || !found) {
-			return;
-		}
-
-		//if exists, update
-		if(this.annotations.hasOwnProperty(oid)) {
-			if(delAction){
-				this.annotations[oid].cleanup();
-				delete this.annotations[oid];
-			}
-			else {
-				this.annotations[oid].getRecord().fireEvent('updated',item);
-			}
-		}
-
-		Ext.each(cmps,function(cmp){
-			//delete it
-			if (delAction) {
-				cmp.onDelete();
-			}
-			else {
-				if(cmp.getRecord){
-					cmp.getRecord().fireEvent('changed');
-				}
-			}
-		});
-
-		//if not exists, add
-		if(!delAction){
-			cls = item.get('Class');
-			//			replyTo = item.get('inReplyTo');
-			result = this.createAnnotationWidget(cls,item) || false;
-
-			if(result === false){
-				console.info('Do not know what to do with this item. Not top level object?',item);
-			}
-		}
 	},
 
 
@@ -494,7 +454,8 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 		if(!record.pruned && (record.get('inReplyTo') || record.parent)){
 			return false;
 		}
-		else if (this.annotationExists(record)) {
+
+		if (this.annotationExists(record)) {
 			this.annotations[record.getId()].getRecord().fireEvent('updated',record);
 			return true;
 		}
@@ -519,23 +480,11 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 		catch(e){
 			console.error(e);
 		}
-		return w;
-	},
 
-
-	onNoteCreated: function(record, browserRange){
-		//check to see if reply is already there, if so, don't do anything...
-		if (Ext.getCmp(IdCache.getComponentId(record,null,this.prefix))) {
-			return;
+		if(w && type === 'redaction'){
+			this.fireEvent('resize');
 		}
-
-		this.createAnnotationWidget('note',record, browserRange);
-	},
-
-
-	onRedactionCreated: function(record){
-		this.createAnnotationWidget('redaction',record);
-		this.fireEvent('resize');
+		return Boolean(w);
 	},
 
 

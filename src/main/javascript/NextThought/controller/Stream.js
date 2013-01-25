@@ -19,26 +19,8 @@ Ext.define('NextThought.controller.Stream', {
 
 	refs: [],
 
-	statics:{
-		eventName: 'changed',
-		evtRouter: new Ext.util.Observable(),
-
-		registerChangeListener: function(callback, scope){
-			this.evtRouter.on(this.eventName, callback, scope||window);
-		},
-
-		fireChange: function(change){
-			this.evtRouter.fireEvent(this.eventName, change);
-		}
-
-	},
-
 	init: function() {
-		var me = this;
 		this.application.on('session-ready', this.onSessionReady, this);
-		Socket.register({
-			'data_noticeIncomingChange': function(){me.incomingChange.apply(me, arguments);}
-		});
 	},
 
 	onSessionReady: function(){
@@ -66,14 +48,15 @@ Ext.define('NextThought.controller.Stream', {
 
 
 	incomingChange: function(change) {
-		change = ParseUtils.parseItems([change])[0];
+		if(!change.isModel){
+			change = ParseUtils.parseItems([change])[0];
+		}
+
 		var item = change.get('Item');
 
 		//add it to the root stream store, why the heck not?
 		if(!item || item.mimeType.indexOf('redaction')<0){
 			this.getStreamStore().add(change);
 		}
-
-		this.self.fireChange(change);
 	}
 });

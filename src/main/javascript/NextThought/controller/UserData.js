@@ -50,11 +50,6 @@ Ext.define('NextThought.controller.UserData', {
 	refs: [],
 
 
-	statics: {
-		events: new Ext.util.Observable()
-	},
-
-
 	init: function() {
         var me = this;
 
@@ -69,7 +64,6 @@ Ext.define('NextThought.controller.UserData', {
 				'define'		: this.define,
 				'redact'		: this.redact,
 				'save-new-note' : this.saveNewNote,
-				'bubble-replys-up':this.replyBubble,
                 'display-popover': this.onDisplayPopover,
                 'dismiss-popover': this.onDismissPopover
 			},
@@ -118,14 +112,21 @@ Ext.define('NextThought.controller.UserData', {
 		},{});
 
         Socket.register({
-            'data_noticeIncomingChange': function(){me.incomingChange.apply(me, arguments);}
+            'data_noticeIncomingChange': function(c){me.incomingChange.apply(me, [c]);}
         });
+
+		Ext.apply(this.changeActionMap,{
+			created: this.incomingCreatedChange,
+			deleted: this.incomingDeletedChange,
+			modified: this.incomingModifiedChange,
+			shared: this.incomingSharedChange
+			// circled: //do nothing? Thats what we have been doing :P
+		});
 	},
 
 
 	onSessionReady: function(){
 		var app = this.application,
-			me = this,
 			token = {};
 
 		function finish(){ app.finishInitializeTask(token); }
@@ -148,114 +149,163 @@ Ext.define('NextThought.controller.UserData', {
 	},
 
 
-    incomingChange: function(change) {
-        change = ParseUtils.parseItems([change])[0];
-        var item = change.get('Item'),
-            cid = change.getItemValue('ContainerId'),
-			me = this,
-			refs = item.get('references') || [],
-			c = 'ReferencedByCount',
-        pageStore, rootid, root;
-
-		//Don't even try this for Circled events.
-		//White list is probably safer in the long term
-		if(/circled/i.test(change.get('ChangeType'))){
-			return;
-		}
-
-
-		LocationMeta.getMeta(cid,function(meta){
-			try{
-				if(!meta){
-					return;
-				}
-
-				//add it to the page items store I guess:
-				pageStore = LocationProvider.getStore(cid);
-				if(!pageStore || LocationProvider.currentNTIID !== meta.NTIID || (item && !item.isTopLevel())){
-					me.maybeAddOrRemoveChild(item,change.get('ChangeType'));
-
-					try{
-						if(!pageStore){
-							return;
-						}
-
-						rootid = refs.length > 0 ? refs[0] : null;
-						if(rootid){
-							root = pageStore.getById(rootid);
-							if(root){
-								root.set(c, Math.max((root.get(c)||0) + (/deleted/i.test(change.get('ChangeType')) ? -1 : 1), 0));
-							}
-						}
-					}
-					catch(error){
-						console.error(Globals.getError(error));
-					}
-				}
-				else if(/deleted/i.test(change.get('ChangeType'))){
-					item = pageStore.getById(item.getId());
-					me.convertToPlaceholder(item);
-				}
-
-				if(/created/i.test(change.get('ChangeType'))){
-					pageStore.add(item);
-				}
-
-			}
-			catch(e2){
-				console.error(Globals.getError(e2));
-			}
-		});
-
-    },
+	changeActionMap: {
+		/**
+		 * Stubs that show what we could handle. They will be called with these args:
+		 *
+		 *  @param change Object/Ext.data.Model -  the change record.
+		 *  @param item Object/Ext.data.Model - Item the change is about.
+		 *  @param meta Object - Location meta data
+		 *
+		 * these are assigned in the init() above
+		 */
+		created: Ext.emptyFn,
+		deleted: Ext.emptyFn,
+		modified: Ext.emptyFn,
+		shared: Ext.emptyFn,
+		circled: Ext.emptyFn
+	},
 
 
-	convertToPlaceholder: function(item){
-		if(!item){return;}
+    incomingChange: function withMeta(change, meta, reCalled) {
+	    //fancy callback that calls this function back with addtional arguments
+	    function reCall(meta){ withMeta.call(me,change,meta,true); }
+
+	    //we require at least a change object
+	    if(!change){
+		    console.error('Invalid Argument for change');
+		    return;
+	    }
+
+	    //if this is the raw json from the event, parse it.
+	    if(!change.isModel){ change = ParseUtils.parseItems([change])[0]; }
+
+		var me = this,
+			item = change.get('Item'),
+			cid = change.getItemValue('ContainerId'),
+			type = (change.get('ChangeType')||'').toLowerCase(),//ensure lowercase
+			fn;
+
+	    //only call this on first call
+	    if(!reCalled){
+		    //update the stream
+		    this.getController('Stream').incomingChange(change);
+	    }
+
+	    //callback with ourself, only if we haven't already and there is a containerId to resolve
+	    if(!meta && !reCalled && cid){ LocationMeta.getMeta(cid,reCall,me); return; }
+
+	    //if there was a container id, but it didn't resolve, we're in trouble.
+	    if(!meta && cid){
+		    console.warn('No meta data for Container: '+cid);
+		    return;
+	    }
+
 		try{
-			if(item.wouldBePlaceholderOnDelete()){
-				item.convertToPlaceholer(item);
-				item.fireEvent('updated',item);
-			}
-			else{
-				item.convertToPlaceholer(item);
-				item.destroy();
-			}
-
-
-		} catch(e) {
-			console.error('Trouble in the placeholder convertion', Globals.getError(e));
+			//Now that all the data is in order, lets dole out the responsibility to chageType specific functions and,
+			// btw... Ext.callback handles unmapped actions for us. (if the callback is not a function, then it just
+			// returns)
+			fn = me.changeActionMap[type];
+			//But for sake of logging, lets test it.
+			if(!fn){ console.warn('"'+type+'" Change is not being handled:',change); }
+			Ext.callback(fn,me,[change,item,meta]);
+		}
+		catch(e2){
+			console.error(Globals.getError(e2));
 		}
 	},
 
 
-    maybeAddOrRemoveChild: function(item, changeType) {
-        if (!item){return;}
+	incomingCreatedChange: function(change,item,meta){
+		var cid = item.get('ContainerId'),
+			actedOn = false,
+			recordForStore = item;
 
-        var refs = (item.get('references') || []).slice(), parent, main;
-        if(item.isTopLevel()){return;}
+		LocationProvider.applyToStores(function(id,store){
+			if(store && store.containerId===cid){
+				actedOn = true;
+				console.log(store, cid);
 
-        //look for reply
-        parent = Ext.getCmp(IdCache.getComponentId(refs.last(), null, 'reply'));
+				if(store.findRecord('NTIID',item.get('NTIID'),0,false,true,true)){
+					console.warn('Store already has item with id: '+item.get('NTIID'), item);
+				}
 
-        //attempt for find main
-        if (!parent){
-            main = Ext.ComponentQuery.query('note-main-view').last();
-            if (main && Ext.Array.contains(refs, main.record.getId())){
-                 parent = main;
-            }
-        }
+				if(!recordForStore){
+					//Each store gets its own copy of the record. A null value indicates we already added one to a
+					// store, so we need a new instance.  Read it out of the orginal raw value.
+					recordForStore = ParseUtils.parseItems([item.raw])[0];
+				}
 
-        if (parent){
-	        if(/deleted/i.test(changeType)){
-		        main = parent.findWithRecordId(item.getId());
-		        this.convertToPlaceholder(main.record);
-		        return;
-	        }
-	        parent.record.fireEvent('child-added', item);
-        }
-    },
+				//The store will handle making all the threading/placement, etc
+				store.add(recordForStore);
+				//once added, null out this pointer so that subsequant loop iterations don't readd the same instance to
+				// another store. (I don't think our threading algorithm would appreciate that)
+				recordForStore = null;
+			}
+		});
 
+		if(!actedOn){
+			console.warn('We did not act on this created change event:',change,' location meta:',meta);
+		}
+	},
+
+
+	incomingDeletedChange: function(change,item,meta){
+		var cid = item.get('ContainerId'),actedOn = false;
+
+		LocationProvider.applyToStores(function(id,store){
+			var r;
+			if(store && store.containerId===cid){
+				actedOn = true;
+				console.log(store, cid);
+				r = store.findRecord('NTIID',item.get('NTIID'),0,false,true,true);
+				if(!r){
+					console.warn('Could not remove, the store did not have item with id: '+item.get('NTIID'), item);
+					return;
+				}
+
+				//The store will handle making it a placeholder if it needs and fire events,etc... this is all we need to do.
+				store.remove(r);
+			}
+		});
+
+		if(!actedOn){
+			console.warn('We did not act on this created change event:',change,' location meta:',meta);
+		}
+	},
+
+
+	incomingModifiedChange: function(change,item,meta){
+		var cid = item.get('ContainerId'),actedOn = false;
+
+		LocationProvider.applyToStores(function(id,store){
+			var r;
+			if(store && store.containerId===cid){
+				actedOn = true;
+				console.log(store, cid);
+				r = store.findRecord('NTIID',item.get('NTIID'),0,false,true,true);
+				if(!r){
+					console.warn('Store already has item with id: '+item.get('NTIID'), item);
+					store.add(item);
+					return;
+				}
+				//apply all the values of the new item to the existing one
+				r.set(item.asJSON());
+				r.fireEvent('updated',r);
+				r.fireEvent('changed');
+			}
+		});
+
+		if(!actedOn){
+			console.warn('We did not act on this created change event:',change,' location meta:',meta);
+		}
+	},
+
+
+	incomingSharedChange: function(change,item,meta){
+		console.warn('what would we do here? treading as a create.');
+		this.incomingCreatedChange.apply(this,arguments);
+	},
 
 
     openChatTranscript: function(records, clonedWidgetMarkup){
@@ -266,15 +316,12 @@ Ext.define('NextThought.controller.UserData', {
 
 
 	onAnnotationsFilter: function(cmp){
-		var stores = LocationProvider.currentPageStores,
-			listParams = FilterManager.getServerListParams(),
+		var listParams = FilterManager.getServerListParams(),
 			filter = ['TopLevel'];
 
 		if(listParams.filter){
 			filter.push(listParams.filter);
 		}
-
-		if(!stores){ return; }
 
 		function loaded(store,records,success){
 			var bins = store.getBins();
@@ -287,7 +334,7 @@ Ext.define('NextThought.controller.UserData', {
 		}
 
 
-		Ext.Object.each(stores,function(k,s){
+		LocationProvider.applyToStores(function(k,s){
 			var params = s.proxy.extraParams || {};
 			params = Ext.apply(params, {
 				sortOn: 'lastModified',
@@ -315,7 +362,7 @@ Ext.define('NextThought.controller.UserData', {
 
 			s.removeAll();
 			s.loadPage(1);
-		}, this);
+		});
 	},
 
 
@@ -323,17 +370,16 @@ Ext.define('NextThought.controller.UserData', {
 		var Store = NextThought.store.PageItem,
 			rel = Globals.USER_GENERATED_DATA,
 			pi = LocationProvider.currentPageInfo,
-			stores = [],
 			ps = Store.make(pi.getLink(rel),containerId,true),
-			map = { root: ps };
+			lp = LocationProvider;
 
-		LocationProvider.currentPageStores = map;
+		lp.clearStore();
 
-		stores.push(ps);
+		lp.addStore('root',ps);//add alias of root store
+
 		Ext.each(subContainers,function(id){
-			var p = Store.make(pi.getSubContainerURL(rel,id),id);
-			stores.push(p);
-			map[id]=p;
+			lp.addStore(id,(containerId === id)?//ensure we don't duplicate the root store
+				ps : Store.make(pi.getSubContainerURL(rel,id),id));
 		});
 
 		this.onAnnotationsFilter(cmp);
@@ -501,23 +547,6 @@ Ext.define('NextThought.controller.UserData', {
     },
 
 
-	replyBubble: function(replies){
-		var me = this,
-			e = this.self.events;
-
-		Ext.each(replies,function(r){
-			if(!r.placeholder && r.store && r.stores.length > 0){
-				delete r.parent;
-				r.pruned = true;
-				e.fireEvent('new-note', r, null);
-			}
-			else if(r.children){
-				me.replyBubble(r.children);
-			}
-		});
-	},
-
-
 	onLoadTranscript: function(record, cmp) {
 		var model = this.getModel('Transcript'),
 			id = record.get('RoomInfo').getId();
@@ -607,7 +636,6 @@ Ext.define('NextThought.controller.UserData', {
 					rec = success ? ParseUtils.parseItems(operation.response.responseText)[0] : null;
 					if (success){
 						LocationProvider.getStore(container).add(rec);
-						this.self.events.fireEvent('new-note', rec, range);
                         AnnotationUtils.addToHistory(rec);
 					}
 				}
@@ -639,7 +667,6 @@ Ext.define('NextThought.controller.UserData', {
 				console.log('Reply save successful?', success);
 				if (success){
                     rec = success ? ParseUtils.parseItems(operation.response.responseText)[0] : null;
-					this.self.events.fireEvent('new-note', rec);
 					parent = record.parent ? record : recordRepliedTo;
 					console.log('Firing child added on ', parent);
 					parent.fireEvent('child-added',rec);

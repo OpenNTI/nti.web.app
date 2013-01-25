@@ -8,6 +8,8 @@ Ext.define('NextThought.providers.Location', {
 	],
 
 	constructor: function(){
+		this.storeEvents = new Ext.util.Observable();
+
 		this.addEvents({
 			navigate: true,
             navigateAbort: true,
@@ -22,7 +24,22 @@ Ext.define('NextThought.providers.Location', {
 		});
 
         //init the page store.
-        this.currentPageStores = {};
+        var currentPageStoresMap = {};
+		Ext.Object.defineAttributes(this,{
+			currentPageStores: {
+				getter: function(){return currentPageStoresMap;},
+				setter: function(s){
+					var key, o, m = currentPageStoresMap||{};
+					currentPageStoresMap = s;
+					for(key in m){
+						if(m.hasOwnProperty(key)){
+							o = m[key]; delete m[key];
+							if(o){ o.clearListeners(); o.removeAll(); }
+						}
+					}
+				}
+			}
+		});
 
 		this.callParent(arguments);
 		this.mixins.observable.constructor.call(this);
@@ -30,14 +47,8 @@ Ext.define('NextThought.providers.Location', {
 
 
 	clearStore: function(){
-		var stores = this.currentPageStores;
-		delete this.currentPageStores;
-		Ext.Object.each(stores,function(id,s){
-			if(s){
-				s.clearListeners();
-				s.removeAll(true);
-			}
-		});
+		this.currentPageStores = {};//see above defineAttributes call
+		this.storeEvents.clearManagedListeners();//see addStore below
 	},
 
 
@@ -51,6 +62,15 @@ Ext.define('NextThought.providers.Location', {
 			console.warn('replacing an existing store??');
 		}
 		this.currentPageStores[id] = store;
+
+		//Discovered a gap in the documentation. It states that the replayEvents() call returns a 'destroyable' object
+		// so we can surgically remove the relayed events after we are done with them.... this didn't get added to ExtJS
+		// until after 4.1.1a-- wich is what we currently use.
+		//
+		//The replayEvents call creates managed listeners on the storeEvents object, so to work around the problem, we
+		// will just clear the managed listeners when we clear the stores.
+		/*var relayers = */this.storeEvents.relayEvents(store, ['add','bulkremove','remove']);
+		//relayers would be used and tracked, but... because we need 4.1.3 for that, meh...
 	},
 
 
@@ -67,6 +87,14 @@ Ext.define('NextThought.providers.Location', {
 			}
 		}
 		return theStore || { add: bad, getById: bad, remove: bad, on:bad, each:bad, un:bad };
+	},
+
+
+	applyToStores: function(fn){
+		Ext.Object.each(this.currentPageStores,function(k){
+			if(k==='root'){return;}//root is an alisas of the ntiid
+			Ext.callback(fn,null,arguments);
+		});
 	},
 
 
