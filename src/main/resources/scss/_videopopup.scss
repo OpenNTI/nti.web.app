@@ -4,14 +4,14 @@
 	background: #2b2b2b;
 	box-shadow: 0 0 30px 5px rgba(0, 0, 0, 0.6);
 }
-
+.component-overlay .x-panel-image-roll,
 .component-overlay .x-panel-video-roll {
 	padding: 0;
 	border: 1px solid #bcbcbc;
 	border-radius: 1px;
 	background: #fafafa;
 
-
+	& > .x-panel-body-image-roll,
 	& > .x-panel-body-video-roll {
 		padding: 0;
 		color: $primary-grey;
@@ -22,6 +22,7 @@
 			height: 105px;
 
 			.item-wrap {
+				display: inline-block;
 				line-height: 0;
 				overflow: hidden;
 				cursor: pointer;
@@ -49,9 +50,26 @@
 				}
 			}
 		}
+
+		.fade-outs {
+			overflow: visible;
+
+			* {position: absolute; bottom: 0; width: 20px; height: 109px; z-index: 2;}
+
+			.left {
+				@include background-image(linear-gradient(left,  rgba(250,250,250,1) 0%,rgba(250,250,250,0) 80%,rgba(250,250,250,0) 100%));
+				left: 0;
+			}
+
+			.right {
+				right: 0;
+				@include background-image(linear-gradient(left,  rgba(250,250,250,0) 0%,rgba(250,250,250,0) 20%,rgba(250,250,250,1) 100%));
+			}
+		}
 	}
 }
 
+.component-overlay .x-panel-image-roll,
 .component-overlay .x-panel-video-roll,
 .x-panel-video.videos {
 
@@ -79,7 +97,7 @@
 		.item-wrap {
 			position: relative;
 			overflow: hidden;
-			float: left;
+			//float: left;
 			margin: 10px;
 
 			&.x-item-selected::after {
@@ -106,5 +124,12 @@
 				box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.2);
 			}
 		}
+	}
+}
+
+
+.component-overlay .x-panel-image-roll{
+	.carousel {
+		.item-wrap.x-item-selected::after{display: none;}
 	}
 }

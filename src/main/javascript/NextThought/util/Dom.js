@@ -11,6 +11,11 @@ Ext.define('NextThought.util.Dom',{
 			videoObjects.push(videoObj);
 		});
 		return videoObjects;
+	},
+
+
+	getImagesFromDom: function(){
+
 	}
 
 },function(){

@@ -3,7 +3,8 @@ Ext.define('NextThought.view.content.reader.Content',{
 	requires: [
 		'NextThought.ux.ImageZoomView',
 		'NextThought.ux.SlideDeck',
-		'NextThought.view.video.OverlayedPanel'
+		'NextThought.view.video.OverlayedPanel',
+		'NextThought.view.image.OverlayedPanel'
 	],
 
 
@@ -197,6 +198,25 @@ Ext.define('NextThought.view.content.reader.Content',{
 	},
 
 
+	activateImageRoll: function(){
+		var me = this,
+			d = me.getDocumentElement(),
+			els = d.querySelectorAll('object[type$=image-collection]');
+
+//		els = [d.getElementById('a0000000001')];
+
+		Ext.each(els,function(el){
+
+			me.registerOverlayedPanel(el.getAttribute('data-ntiid')/*||'a0000000001'*/, Ext.widget('overlay-image-roll',{
+				reader: me,
+				renderTo: me.componentOverlayEl,
+				tabIndexTracker: this.overlayedPanelTabIndexer,
+				contentElement: el
+			}));
+		});
+	},
+
+
 	activateAnnotatableItems: function(){
 		var d = this.getDocumentElement(),
 			els = d.querySelectorAll('[itemprop~=nti-data-markupenabled],[itemprop~=nti-slide-video]'),
@@ -288,6 +308,7 @@ Ext.define('NextThought.view.content.reader.Content',{
 		subContainers = me.resolveContainers();
 
 		me.activateVideoRoll();
+		me.activateImageRoll();
 		me.activateAnnotatableItems();
 
 		me.loadContentAnnotations(LocationProvider.currentNTIID, subContainers);
