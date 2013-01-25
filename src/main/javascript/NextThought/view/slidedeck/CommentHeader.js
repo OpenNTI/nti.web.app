@@ -114,7 +114,7 @@ Ext.define('NextThought.view.slidedeck.CommentHeader',{
 			return false;
 		}
 
-		img = Ext.fly(dom).down('img', true);
+		img = dom.querySelector('img');
 
 		if(!img){
 			onError();
