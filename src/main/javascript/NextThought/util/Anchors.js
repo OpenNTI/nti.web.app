@@ -15,6 +15,9 @@ Ext.define('NextThought.util.Anchors', {
 
 	singleton: true,
 
+	//To control some logging
+	isDebug: false,
+
 	PURIFICATION_TAG: 'data-nti-purification-tag',
 	NON_ANCHORABLE_ATTRIBUTE: 'data-non-anchorable',
 	NO_ANCHORABLE_CHILDREN_ATTRIBUTE: 'data-no-anchors-within',
@@ -123,7 +126,7 @@ Ext.define('NextThought.util.Anchors', {
 			}
 		});
 
-		console.log('Preresolved ' + locatorsFound + '/' + contentRangeDescriptions.length + ' range descriptions');
+		console[locatorsFound === contentRangeDescriptions.length ? 'log': 'warn']('Preresolved ' + locatorsFound + '/' + contentRangeDescriptions.length + ' range descriptions');
 	},
 
 	toDomRange: function(contentRangeDescription, docElement, cleanRoot, containerId, docElementContainerId) {
@@ -658,36 +661,52 @@ Ext.define('NextThought.util.Anchors', {
 		if(!startResult.node
 			|| !startResult.hasOwnProperty('confidence')
 			|| startResult.confidence === 0){
-			console.warn('No possible start found for', rangeDesc, startResult);
+			if(this.isDebug){
+				console.warn('No possible start found for', rangeDesc, startResult);
+			}
 			return null;
 		}
 		if( startResult.confidence < confidenceCutoff ){
-			console.warn('No start found with an acceptable confidence.', startResult, rangeDesc);
+			if(this.isDebug){
+				console.warn('No start found with an acceptable confidence.', startResult, rangeDesc);
+			}
 			return null;
 		}
 		else if( startResult.confidence < 1.0 ){
-			console.log('Matched start with confidence of', startResult.confidence, startResult, rangeDesc);
+			if(this.isDebug){
+				console.log('Matched start with confidence of', startResult.confidence, startResult, rangeDesc);
+			}
 		}
 		else{
-			console.log('Found an exact match for start', startResult, rangeDesc);
+			if(this.isDebug){
+				console.log('Found an exact match for start', startResult, rangeDesc);
+			}
 		}
 
 		var endResult = rangeDesc.getEnd().locateRangePointInAncestor(ancestor, startResult);
 		if(!endResult.node
 			|| !endResult.hasOwnProperty('confidence')
 			|| endResult.confidence === 0){
-			console.warn('No possible end found for', rangeDesc, endResult);
+			if(this.isDebug){
+				console.warn('No possible end found for', rangeDesc, endResult);
+			}
 			return null;
 		}
 		if( endResult.confidence < confidenceCutoff ){
-			console.warn('No end found with an acceptable confidence.', endResult, rangeDesc);
+			if(this.isDebug){
+				console.warn('No end found with an acceptable confidence.', endResult, rangeDesc);
+			}
 			return null;
 		}
 		else if( endResult.confidence < 1.0 ){
-			console.log('Matched end with confidence of', endResult.confidence, endResult, rangeDesc);
+			if(this.isDebug){
+				console.log('Matched end with confidence of', endResult.confidence, endResult, rangeDesc);
+			}
 		}
 		else{
-			console.log('Found an exact match for end', endResult, rangeDesc);
+			if(this.isDebug){
+				console.log('Found an exact match for end', endResult, rangeDesc);
+			}
 		}
 
 		var startResultLocator = Anchors.toReferenceNodeXpathAndOffset(startResult);
@@ -775,7 +794,7 @@ Ext.define('NextThought.util.Anchors', {
 				if(Anchors.doesElementMatchPointer(p, pointer) ){
 					r = {confidence: 1, node: p};
 				}
-				else{
+				else if(this.isDebug){
 					console.warn('Potential match doesn\'t match pointer', p, pointer);
 				}
 
@@ -925,7 +944,9 @@ Ext.define('NextThought.util.Anchors', {
 				//to non stable ids that have changed we end up never partial matching.
 				//Instead of doing that maybe instead of not trying to partial match we just take a
 				//deduciton from the overal confidence.
-				console.log('Ignoring fuzzy matching because we could not resolve the pointers ancestor', pointer, possibleNodes, ancestorNode );
+				if(this.isDebug){
+					console.info('Ignoring fuzzy matching because we could not resolve the pointers ancestor', pointer, possibleNodes, ancestorNode );
+				}
 				return {confidence: 0};
 			}
 			else{
@@ -935,8 +956,9 @@ Ext.define('NextThought.util.Anchors', {
 				//only is that an improper way to normalize these values,
 				//it is counterintuitive to what we are actually trying to do.
 				if (result === null){result = {confidence: 0};}
-
-				console.log('Searching for best ' + pointer.getRole() + ' match in ', possibleNodes);
+				if(this.isDebug){
+					console.log('Searching for best ' + pointer.getRole() + ' match in ', possibleNodes);
+				}
 				for (i = 0; i < possibleNodes.length; i++) {
 					if (possibleNodes[i].confidence > result.confidence) {
 						result = possibleNodes[i];

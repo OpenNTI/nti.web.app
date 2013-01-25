@@ -17,6 +17,7 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 	stackTmpl: Ext.DomHelper.createTemplate( {cls:'thumb nib-stack'} ).compile(),
 	addNoteToOccupiedLineTmpl: Ext.DomHelper.createTemplate( {cls:'thumb note-gutter-widget add-note {0}', 'data-qtip':'Add Note'} ).compile(),
 
+	isDebug: false,
 
 	/**
 	 * @constructor Inner class
@@ -160,7 +161,9 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 //		}
 		if (line < 0){
 			//bad line, don't render:
-			console.error('Annotation cannot be rendered in gutter');
+			if(this.isDebug){
+				console.error('Annotation cannot be rendered in gutter');
+			}
 			return null;
 		}
 
@@ -383,7 +386,7 @@ Ext.define('NextThought.view.annotations.renderer.Manager',{
 					console.error(o.$className,Globals.getError(e));
 				}
 			});
-			console.log('Rendered '+renderedCount+'/'+cloned.length+' annotations');
+			console[renderedCount === cloned.length ? 'log' : 'warn']('Rendered '+renderedCount+'/'+cloned.length+' annotations');
 			me.layoutBuckets(prefix);
 		}
 
