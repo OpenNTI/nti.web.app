@@ -181,7 +181,7 @@ Ext.define('NextThought.view.content.reader.IFrame',{
         }
         on(doc, 'mouseout', function(e){
             var evt = Ext.EventObject.setEvent(e||event),
-                target = evt.getTarget('a.footnote') || evt.getTarget('a.glossaryTerm');
+                target = evt.getTarget('a.footnote') || evt.getTarget('a.ntiglossaryentry');
 
                if(target){
                    shouldDismissPopover();
@@ -193,7 +193,7 @@ Ext.define('NextThought.view.content.reader.IFrame',{
         on(doc, 'mouseover', function(e){
             var d = doc,
                 evt = Ext.EventObject.setEvent(e||event),
-                target = evt.getTarget('a.footnote') || evt.getTarget('a.glossaryTerm'),
+                target = evt.getTarget('a.footnote') || evt.getTarget('a.ntiglossaryentry'),
 	            targetType, href, popContent;
 
             function getId(e, type){
@@ -233,7 +233,7 @@ Ext.define('NextThought.view.content.reader.IFrame',{
             }
 
             if (!target){return;}
-			targetType = Ext.fly(target).hasCls('footnote') ? 'footnote' : 'glossaryTerm';
+			targetType = Ext.fly(target).hasCls('footnote') ? 'footnote' : 'ntiglossaryentry';
             href = getId(target, targetType);
 	        popContent = getPopoverContent(href);
 	        if(!popContent){
