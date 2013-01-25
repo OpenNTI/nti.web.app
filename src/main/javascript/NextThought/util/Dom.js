@@ -14,8 +14,26 @@ Ext.define('NextThought.util.Dom',{
 	},
 
 
-	getImagesFromDom: function(){
+	getImagesFromDom: function(contentElement){
+		var imageObjects = [];
+		Ext.each(contentElement.querySelectorAll('span > img'),function(i){
+			var imageObj = {},
+				base,
+				src = i.getAttribute('src'),
+				current = i.getAttribute('data-nti-image-size'),
+				full = i.getAttribute('data-nti-image-full'),
+				half = i.getAttribute('data-nti-image-half'),
+				quarter = i.getAttribute('data-nti-image-quarter');
 
+			current = src.indexOf(i.getAttribute('data-nti-image-'+current));
+			base = src.substr(0,current);
+
+			Ext.removeNode(i.parentNode);
+
+			imageObj.url = base + full;
+			imageObjects.push(imageObj);
+		});
+		return imageObjects;
 	}
 
 },function(){
