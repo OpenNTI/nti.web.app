@@ -71,11 +71,17 @@ Ext.define('NextThought.view.slidedeck.Slide',{
 
 		var me = this, cahceKey = getCacheKey(containerId);
 
+		if(me.store){
+			console.log('removing add listener from', me.store);
+			me.mun(me.store, 'add', this.itemAddedToStore, this);
+		}
 		delete me.store;//don't let this dangle if there is a problem down the road.
 
 		function finish(store){
 			me.store = store;
-			store.on('load',me.showUserData,me,{single:true});
+			me.mon(me.store, 'add', me.itemAddedToStore, me);
+			console.log('Adding add listener to ', me.store);
+			store.on('load',me.showUserData,me,{single:me});
 			store.load();
 		}
 
@@ -114,6 +120,9 @@ Ext.define('NextThought.view.slidedeck.Slide',{
 		}
 	},
 
+	itemAddedToStore: function(store, records, index){
+		console.log('Slide detected records added to store ', store, records);
+	},
 
 	showUserData: function(){
 		var items = this.store.getItems()||[],
