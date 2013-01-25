@@ -70,10 +70,9 @@ Ext.define('NextThought.view.menus.AnswerHistory',{
 
 	handleClick: function(item){
 		if( !item.is('[answerHistoryTitle]') && !item.is('[noAnswerHistory]') ){
+			this.ownerCmp.reset();
 			this.ownerCmp.setValue(item.text);
-			if(this.ownerCmp.enableSubmission){
-				this.ownerCmp.enableSubmission();
-			}
+			this.ownerCmp.enableSubmission();
 		}
 	},
 
