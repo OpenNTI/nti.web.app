@@ -34,8 +34,10 @@ Ext.define('NextThought.model.Base', {
 	],
 
 	onClassExtended: function(cls, data) {
+		var mime = {mimeType: 'application/vnd.nextthought.'+data.$className.replace(/^.*?model\./,'').toLowerCase()};
 		data.proxy = {type:'nti', model: cls};
-		data.mimeType = 'application/vnd.nextthought.'+data.$className.replace(/^.*?model\./,'').toLowerCase();
+		Ext.applyIf(cls,mime);//Allow overriding
+		Ext.applyIf(data,mime);//Allow overriding
 	},
 
 
