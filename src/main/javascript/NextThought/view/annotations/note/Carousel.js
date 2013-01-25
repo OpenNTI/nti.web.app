@@ -72,7 +72,12 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 			selectedRecordId = me.record ? me.record.getId() : null,
 			selectedNode,
 			filter = (me.filter||{}).filter,
-			filterName = (me.filter||{}).filterName;
+			filterName = (me.filter||{}).filterName,
+			sortFn;
+
+		sortFn = function(a, b){
+			return b.record.get('Last Modified') - a.record.get('Last Modified');
+		};
 
 		filter = Ext.isFunction(filter)? filter : null;
 
@@ -84,15 +89,18 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 		});
 
 		if(filterName === "mostPopular"){
-			m = Ext.Array.sort(m, function(a,b){
+			sortFn = function(a,b){
 				return b.record.getReplyCount() - a.record.getReplyCount();
-			});
+			};
 		}
 		else if(filterName === "highestRated"){
-			m = Ext.Array.sort(m, function(a,b){
+			sortFn = function(a,b){
 				return b.record.getTotalLikeCount() - a.record.getTotalLikeCount();
-			});
+			};
 		}
+
+		m = Ext.Array.sort(m, sortFn);
+
 		me.add(m);
 		selectedNode = me.down('[selected]');
 		if(selectedNode){
