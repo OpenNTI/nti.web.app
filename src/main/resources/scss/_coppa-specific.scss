@@ -216,8 +216,14 @@
 			@include top-etch($dark: #e2e2e2, $light: #fafafa);
 			background-color: #f3f3f3;
 			padding: 15px 10px;
-		}
 
+			.privacyLink{
+				text-decoration: none;
+				color: #3FB3F6;
+				font-size: 12px;
+				top:5px !important;
+			}
+		}
 	}
 
 	.code-main-view,

@@ -76,6 +76,16 @@ Ext.define('NextThought.view.account.coppa.Main',{
             ]}
         },
         {xtype: 'container', cls: 'submit',  layout:{type: 'hbox', pack: 'end'}, items: [
+	        {
+		        xtype:'box',
+		        cls: 'privacyLink',
+		        width: 365,
+		        autoEl:{
+		            tag:'a',
+		            html:'View Children\'s Privacy Policy',
+		            href:'#'
+	            }
+	        },
             {xtype: 'button', ui: 'primary', scale: 'medium', name: 'submit', text:'Submit'}
         ]}
     ],
@@ -123,6 +133,7 @@ Ext.define('NextThought.view.account.coppa.Main',{
         if (email){this.down('[name=email]').update(email);}
         if (aff){this.down('[name=affiliation]').setValue(aff);}
         this.down('[name=opt_in_email_communication]').setValue(u.get('opt_in_email_communication'));
+	    this.getEl().down('.privacyLink').on('click', this.openChildPrivacyWindow, this);
     },
 
 
@@ -161,5 +172,35 @@ Ext.define('NextThought.view.account.coppa.Main',{
         field.addCls('error');
 
         this.up('window').updateLayout();
-    }
+    },
+
+	openChildPrivacyWindow: function(e){
+		e.stopEvent();
+
+		var w = Ext.widget('nti-window',{
+			title: 'Children\'s Privacy Policy',
+			closeAction: 'hide',
+			width: '60%',
+			height: '75%',
+			layout: 'fit',
+			modal: true,
+			items: {
+				xtype: 'component',
+				cls: 'padded',
+				autoEl: {
+					tag: 'iframe',
+					src: 'https://docs.google.com/document/pub?id=1kNo6hwwKwWdhq7jzczAysUWhnsP9RfckIet11pWPW6k',
+					frameBorder: 0,
+					marginWidth: 0,
+					marginHeight: 0,
+					seamless: true,
+					transparent: true,
+					allowTransparency: true,
+					style: 'overflow-x: hidden; overflow-y:auto'
+				}
+			}
+		});
+
+		w.show();
+	}
 });
