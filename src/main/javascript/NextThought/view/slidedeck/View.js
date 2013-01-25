@@ -57,7 +57,17 @@ Ext.define('NextThought.view.slidedeck.View',{
 		this.mon(q,'select', v.updateVideoFromSelection, v);
 		this.mon(q,'select', slide.updateSlide,slide);
 
-		this.on('editorActivated',function(){v.pausePlayback();}, this);
+		this.on('editorActivated',function(){
+			this.pausedForEditing = v.pausePlayback();
+		}, this);
+		this.on('editorDeactivated', function(){
+			//Don't start back up if the user had us paused explictly
+			//only if we paused for the edit
+			if(this.pausedForEditing){
+				this.pausedForEditing = false;
+				v.resumePlayback();
+			}
+		}, this);
 	},
 
 

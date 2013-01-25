@@ -194,16 +194,16 @@ Ext.define('NextThought.view.slidedeck.Video',{
 
 		if(s.state === this.states.PLAYING){
 
-			console.log('[video status] service: '+ s.service
+			/*console.log('[video status] service: '+ s.service
 						+', state: '+s.state
 						+', id: '+s.video
 						+', time: '+s.time
 						+', [slide start: '+o.start
-						+', slide end: '+o.end+']');
+						+', slide end: '+o.end+']');*/
 
 			//for people who jump around...
 			newIx = this.findPlaylistIndexFor(s.service, s.video, s.time);
-			console.log('[playlist] new index '+newIx+', old index: '+ix);
+			//console.log('[playlist] new index '+newIx+', old index: '+ix);
 			if(Ext.isArray(newIx)){
 				console.log('Not sure what to do here.',newIx);
 				return;
@@ -233,7 +233,7 @@ Ext.define('NextThought.view.slidedeck.Video',{
 				dS = Math.abs(o.start - time);
 
 			if(o.service === service && o.id === id){
-				console.log('[playlist-search]: '+i+': Start diff: '+dS+', End diff: '+dE+', start: '+ o.start+', end: '+o.end);
+				//console.log('[playlist-search]: '+i+': Start diff: '+dS+', End diff: '+dE+', start: '+ o.start+', end: '+o.end);
 				if((o.start <= time || dS < 1) && (time < o.end && dE > 1)){
 					matching.push(i);
 				}
@@ -328,9 +328,18 @@ Ext.define('NextThought.view.slidedeck.Video',{
 	pausePlayback: function(){
 		if(this.isPlaying()){
 			this.issueCommand('youtube','pauseVideo');
+			return true;
 		}
+		return false;
 	},
 
+	resumePlayback: function(){
+		if(!this.isPlaying()){
+			this.issueCommand('youtube','playVideo');
+			return true;
+		}
+		return false;
+	},
 
 	setVideoAndPosition: function(videoId,startAt){
 		var pause = (this.isPlaying() === false && !this.linkWithSlides);
