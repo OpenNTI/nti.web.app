@@ -170,10 +170,13 @@ Ext.define('NextThought.model.Base', {
 				me.set(f.name, f.defaultValue);
 			}
 		});
+
+		me.fireEvent('updated', me);
+		me.fireEvent('changed');
 	},
 
-	destroy: function(){
-		var me = this, convert = false;
+	destroy: function(options){
+		var me = this, convert = false, successCallback = (options || {}).success;
 
 		if(me.placeholder){
 			me.fireEvent('destroy',me);
@@ -183,53 +186,26 @@ Ext.define('NextThought.model.Base', {
 			return;
 		}
 
-		function callback(op){
+		if(!me.isModifiable()){return;}
 
-			if(op && !op.wasSuccessful()){
-				alert('An error occurred');
-				return;
-			}
-
+		function fireItemDestroyed(){
 			try {
 				NextThought.model.events.Bus.fireEvent('item-destroyed',me);
 			} catch(e2) {
 				console.error('Caught exception in item-destroyed event', Globals.getError(e2));
 			}
-
-			if(convert){
-				try{
-					me.convertToPlaceholer();
-				} catch(e) {
-					console.error('Trouble in the placeholder convertion', Globals.getError(e));
-				}
-				me.resumeEvents();
-				me.fireEvent('updated',me);
-				return;
-			}
-
-			if(me.stores){
-				Ext.each(me.stores.slice(),function(s){ s.remove(me); });
-			}
-		}
-
-		if(!me.isModifiable()){return;}
-
-		if(me.children && me.children.length > 0){
-			convert = true;
-			me.suspendEvents();
-
-			me.getProxy().destroy(new Ext.data.Operation({
-			           records: [me],
-			           action : 'destroy'
-			       }), callback, me);
-		}
-		else {
-			me.tearDownLinks();
-			me.callParent(arguments);
-			callback();
 		}
 
 
+		if(Ext.isFunction(successCallback)){
+			successCallback = Ext.Function.createSequence(fireItemDestroyed, successCallback);
+		}
+
+		options = Ext.apply(options||{},{
+			success: successCallback
+		});
+
+		me.callParent([options]);
 	},
 
 

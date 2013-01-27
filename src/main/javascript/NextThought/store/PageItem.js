@@ -108,21 +108,70 @@ Ext.define('NextThought.store.PageItem',{
 		//get added to the store:
 		this.callParent(arguments);
 
-		//find my parent if it's there and add myself to it:
-		var parentId = record.get('inReplyTo'),
-			grandparent = null;
-		if (parentId) {
-			this.each(function(parent){
-				if (parentId === parent.getId()) {
-					//found our parent:
-					record.parent = parent;
-					if (!parent.children){parent.children = [];}
-					parent.children.push(record);
-					//fire events for anyone who cares:
-					parent.fireEvent('child-added',record);
-					record.fireEvent('parent-set',parent);
-				}
-			});
+		function adoptChild(parent, child){
+			//found our parent:
+			child.parent = parent;
+			if (!parent.children){parent.children = [];}
+			parent.children.push(child);
+			//fire events for anyone who cares:
+			parent.fireEvent('child-added', child);
+			child.fireEvent('parent-set', parent);
 		}
+
+		function checkStoreItem(ancestor){
+			return function checkItem(storeItem){
+				if (ancestor === storeItem.getId()) {
+					adopted = true;
+					adoptChild(storeItem, record);
+					return false; //Break if adopted
+				}
+				else if(!Ext.isEmpty(storeItem.children)){
+					Ext.each(storeItem.children, checkItem);
+				}
+				return true;
+			};
+		}
+
+		//find my parent if it's there and add myself to it:
+		var ancestor = null, adopted,
+			refs = record.get('references') || [];
+
+		if(Ext.isEmpty(refs)){
+			return;
+		}
+
+		while(!adopted && !Ext.isEmpty(refs) ){
+			this.each(checkStoreItem(refs.pop()));
+		}
+
+		if(!adopted){
+			console.warn('Unable to parent child', record);
+		}
+	},
+
+
+	remove: function(records){
+		var toActuallyRemove = [];
+
+		if (!Ext.isArray(records)) {
+            records = [records];
+        }
+
+		Ext.each(records, function(record){
+			if(record.placeholder || !record.wouldBePlaceholderOnDelete()){
+				Ext.Array.push(toActuallyRemove, record);
+			}
+			else{
+				record.convertToPlaceholer();
+			}
+		}, this);
+
+		if(!Ext.isEmpty(toActuallyRemove)){
+			this.callParent([toActuallyRemove]);
+		}
+
+		Ext.each(toActuallyRemove, function(record){
+			record.tearDownLinks();
+		});
 	}
 });

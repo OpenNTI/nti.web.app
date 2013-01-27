@@ -185,7 +185,8 @@ Ext.define('NextThought.model.Note', {
 	convertToPlaceholer: function(){
 		var me = this,
 			data = this.getData(false);
-		this.callParent(arguments);
+		me.suspendEvents(true);
+		me.callParent(arguments);
 
 		me.set('CreatedTime', data.CreatedTime);
 		me.set('Last Modified', new Date());
@@ -195,5 +196,7 @@ Ext.define('NextThought.model.Note', {
 		me.set('inReplyTo', data.inReplyTo);
 		me.set('references', data.references);
 		me.set('style',data.style);
+
+		me.resumeEvents();
 	}
 });

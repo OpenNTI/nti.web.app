@@ -55,7 +55,7 @@ Ext.define('NextThought.view.slidedeck.Slide',{
 
 		console.log('Set slide:',slide, slide.get('dom-clone'));
 
-		//this.buildItemStore(cid);
+		this.buildItemStore(cid);
 
 		this.slideImage.set({src: slide.get('image')});
 
@@ -122,6 +122,39 @@ Ext.define('NextThought.view.slidedeck.Slide',{
 
 	itemAddedToStore: function(store, records, index){
 		console.log('Slide detected records added to store ', store, records);
+		var dom = this.slide.get('dom-clone'), toAdd = [];
+
+		Ext.Array.sort(records, Globals.SortModelsBy('Last Modified', 'ASC'));
+
+		Ext.each(records, function(record){
+			var cmp = this.componentForRecord(record, dom);
+			if(cmp){
+				toAdd.push(cmp);
+			}
+		}, this, true);
+
+		//Uses semi-private implementation detail for speed.
+		this.add(1, toAdd);
+	},
+
+	componentForRecord: function(record, dom){
+		var guid = IdCache.getComponentId(record, null, 'reply'),
+			add = true,
+			dec = record.get('applicableRange');
+
+
+		if (record.getModelName() !== 'Note') { add=false; }
+
+		else if(!Anchors.doesContentRangeDescriptionResolve(dec,dom)){
+			add = false;
+			console.warn('Skipping item, because it does not anchor to this slide');
+		}
+		else if (Ext.getCmp(guid)) {
+			console.log('already showing this reply? Ensure the note window is not open.');
+			add=false;
+		}
+
+		return add ? {record: record, id: guid} : null;
 	},
 
 	showUserData: function(){
@@ -132,27 +165,11 @@ Ext.define('NextThought.view.slidedeck.Slide',{
 		Ext.Array.sort(items, Globals.SortModelsBy('Last Modified', 'ASC'));
 
 		Ext.each(items, function(record){
-
-			var guid = IdCache.getComponentId(record, null, 'reply'),
-				add = true,
-				dec = record.get('applicableRange');
-
-
-			if (record.getModelName() !== 'Note') { add=false; }
-
-			else if(!Anchors.doesContentRangeDescriptionResolve(dec,dom)){
-				add = false;
-				console.warn('Skipping item, because it does not anchor to this slide');
+			var cmp = this.componentForRecord(record, dom);
+			if(cmp){
+				toAdd.push(cmp);
 			}
-			else if (Ext.getCmp(guid)) {
-				console.log('already showing this reply? Ensure the note window is not open.');
-				add=false;
-			}
-
-			if(add){
-				toAdd.push({record: record, id: guid});
-			}
-		});
+		}, this);
 
 		console.log('Adding note records', toAdd);
 		this.removeAll(true);

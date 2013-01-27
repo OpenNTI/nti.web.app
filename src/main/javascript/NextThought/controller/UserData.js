@@ -604,7 +604,8 @@ Ext.define('NextThought.controller.UserData', {
 		var doc = ReaderPanel.get().getDocumentElement(),
 			noteRecord,
 			rangeDescription = Anchors.createRangeDescriptionFromRange(range, doc),
-			container = rangeDescription.container || c;
+			container = rangeDescription.container || c,
+			me = this;
 
 		//make sure the body is an array:
 		if(!Ext.isArray(body)){body = [body];}
@@ -635,7 +636,7 @@ Ext.define('NextThought.controller.UserData', {
 					success = operation.success;
 					rec = success ? ParseUtils.parseItems(operation.response.responseText)[0] : null;
 					if (success){
-						LocationProvider.getStore(container).add(rec);
+						me.incomingCreatedChange({}, rec, {});
                         AnnotationUtils.addToHistory(rec);
 					}
 				}
