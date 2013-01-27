@@ -134,7 +134,7 @@ Ext.define('NextThought.store.PageItem',{
 
 		//find my parent if it's there and add myself to it:
 		var ancestor = null, adopted,
-			refs = record.get('references') || [];
+			refs = (record.get('references') || []).slice();
 
 		if(Ext.isEmpty(refs)){
 			return;
