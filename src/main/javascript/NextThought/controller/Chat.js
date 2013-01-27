@@ -129,6 +129,8 @@ Ext.define('NextThought.controller.Chat', {
 				ri.get('Last Modified'),
 				function(transcript){
 					var messages = transcript.get('Messages');
+					messages = Ext.Array.sort(messages, Globals.SortModelsBy('CreatedTime'));
+
 					Ext.each(messages, function(m){
 						me.onMessage(m);
 					}, me);
