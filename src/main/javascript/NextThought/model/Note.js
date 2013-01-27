@@ -182,7 +182,7 @@ Ext.define('NextThought.model.Note', {
 		},0);
 	},
 
-	convertToPlaceholer: function(){
+	convertToPlaceholder: function(){
 		var me = this,
 			data = this.getData(false);
 		me.suspendEvents(true);

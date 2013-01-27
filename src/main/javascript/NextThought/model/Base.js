@@ -155,7 +155,7 @@ Ext.define('NextThought.model.Base', {
 		return (this.children !== undefined && this.get('RecursiveReferenceCount')) || (!Ext.isEmpty(this.children));
 	},
 
-	convertToPlaceholer: function(){
+	convertToPlaceholder: function(){
 		var me = this, keepList = {
 			'Class':1,
 			'ContainerId':1,

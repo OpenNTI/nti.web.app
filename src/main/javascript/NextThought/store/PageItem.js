@@ -162,7 +162,7 @@ Ext.define('NextThought.store.PageItem',{
 				Ext.Array.push(toActuallyRemove, record);
 			}
 			else{
-				record.convertToPlaceholer();
+				record.convertToPlaceholder();
 			}
 		}, this);
 
