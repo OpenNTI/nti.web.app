@@ -68,14 +68,6 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 	},
 
 
-	destroy: function(){
-		if( this.record ){
-			this.record.un('change',this.recordChanged,this);
-		}
-		return this.callParent(arguments);
-	},
-
-
 	afterRender: function(){
 		var me = this;
 		me.callParent(arguments);
