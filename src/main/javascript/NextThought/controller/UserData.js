@@ -366,18 +366,24 @@ Ext.define('NextThought.controller.UserData', {
 	},
 
 
-	onAnnotationsLoad: function(cmp, containerId, subContainers) {
+	onAnnotationsLoad: function(cmp, containerId, containers) {
 		var Store = NextThought.store.PageItem,
 			rel = Globals.USER_GENERATED_DATA,
 			pi = LocationProvider.currentPageInfo,
 			ps = Store.make(pi.getLink(rel),containerId,true),
 			lp = LocationProvider;
 
+		containers = containers || [];
+
 		lp.clearStore();
 
 		lp.addStore('root',ps);//add alias of root store
 
-		Ext.each(subContainers,function(id){
+		if(!Ext.Array.contains(containers, containerId)){
+			containers.push(containerId);
+		}
+
+		Ext.each(containers,function(id){
 			lp.addStore(id,(containerId === id)?//ensure we don't duplicate the root store
 				ps : Store.make(pi.getSubContainerURL(rel,id),id));
 		});

@@ -172,7 +172,7 @@ Ext.define('NextThought.view.content.reader.Content',{
 
 		Ext.each(els,function(el){
 			var id = el.getAttribute('data-ntiid') || el.getAttribute('ntiid');
-			if(!/tag:/i.test(id)){return;}
+			if(!/tag:/i.test(id) || !/naquestion$/i.test(el.getAttribute('type'))){return;}
 			containers.push(id);
 		});
 
