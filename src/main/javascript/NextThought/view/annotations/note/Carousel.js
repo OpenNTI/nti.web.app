@@ -112,6 +112,10 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 
 
 	removedItem: function(store, record, idx){
+		if(record && record.isTopLevel && !record.isTopLevel()){
+			return;
+		}
+
 		var c = this.query('note-carousel-item').length-1;
 		if(c === 0){
 			this.up('window').close();
