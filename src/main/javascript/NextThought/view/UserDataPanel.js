@@ -130,16 +130,6 @@ Ext.define('NextThought.view.UserDataPanel',{
         if (!this.store){
             if(Ext.Array.contains(this.mimeTypes, 'note')){
                 this.store = this.buildStore('MeOnly',storeId,'GroupingField');
-                NextThought.model.events.Bus.on({
-                    scope: this,
-                    'item-destroyed': function(rec){
-                        var store = this.store;
-                        if (store.isLoading()){
-                            return;
-                        }
-                        store.remove(store.findRecord('NTIID',rec.get('NTIID'),0,false,true,true));
-                    }
-                });
             }
             else if (Ext.Array.contains(this.mimeTypes, 'favorite')){
                 this.mimeTypes = [];
