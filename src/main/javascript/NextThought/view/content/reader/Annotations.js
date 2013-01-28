@@ -355,11 +355,13 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 		menu.add({
 			text: 'Save Highlight',
 			handler:function(){
-				me.createAnnotationWidget('highlight',record, range).savePhantom(
-                    function(success, rec){
-                       AnnotationUtils.addToHistory(rec);
-                    }
-                );
+				me.createAnnotationWidget('highlight',record, range, function(w){
+					//TODO: move to controller
+					w.savePhantom(
+							function(success, rec){
+		                       AnnotationUtils.addToHistory(rec);
+		                    });
+				});
 				me.clearSelection();
 			}
 		});
@@ -394,7 +396,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 					me.clearSelection();
 					var r = NextThought.model.Redaction.createFromHighlight(record,false);
 					try{
-						me.createAnnotationWidget('redaction',r, range).savePhantom();
+						me.createAnnotationWidget('redaction',r, range,function(w){w.savePhantom();});
 					}
 					catch(e){
 						alert('Coud not save redaction');
@@ -408,7 +410,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 					me.clearSelection();
 					var r = NextThought.model.Redaction.createFromHighlight(record,true);
 					try{
-						me.createAnnotationWidget('redaction',r, range).savePhantom();
+						me.createAnnotationWidget('redaction',r, range,function(w){w.savePhantom();});
 					}
 					catch(e){
 						alert('Coud not save redaction');
@@ -446,7 +448,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 	 *                         from the record
 	 * @return {*}
 	 */
-	createAnnotationWidget: function(type, record, browserRange){
+	createAnnotationWidget: function(type, record, browserRange, onCreated){
 		var oid = record.getId(),
 				style = record.get('style'),
 				w;
@@ -476,6 +478,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 			}
 
 			this.annotations[oid] = w;
+			Ext.callback(onCreated,w,[w]);
 		}
 		catch(e){
 			console.error(e);
