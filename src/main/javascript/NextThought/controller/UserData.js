@@ -593,6 +593,26 @@ Ext.define('NextThought.controller.UserData', {
     },
 
 
+	getSaveCallback: function(callback){
+		var me = this;
+		return function(record, operation){
+			var success = operation.success, rec;
+			console.log('Note save callback', success, operation);
+			try{
+				rec = success ? ParseUtils.parseItems(operation.response.responseText)[0] : null;
+				if (success){
+					me.incomingCreatedChange({}, rec, {});
+                    AnnotationUtils.addToHistory(rec);
+				}
+			}
+			catch(err){
+				console.error('Something went teribly wrong... ',err);
+			}
+			Ext.callback(callback, this, [success, rec]);
+		};
+	},
+
+
 	saveNewNote: function(body, range, c, shareWith, style, callback){
 		//check that our inputs are valid:
 		if (!body || (Ext.isArray(body) && body.length < 1)){
@@ -633,25 +653,7 @@ Ext.define('NextThought.controller.UserData', {
 
 		console.log('Saving new record', noteRecord);
 		//now save this:
-		noteRecord.save({
-			scope: this,
-			callback:function(record, operation){
-				var success, rec;
-				console.log('New note save callback', success, operation);
-				try{
-					success = operation.success;
-					rec = success ? ParseUtils.parseItems(operation.response.responseText)[0] : null;
-					if (success){
-						me.incomingCreatedChange({}, rec, {});
-                        AnnotationUtils.addToHistory(rec);
-					}
-				}
-				catch(err){
-					console.error('Something went teribly wrong... ',err);
-				}
-				Ext.callback(callback, this, [success, rec]);
-			}
-		});
+		noteRecord.save({ scope: this, callback:this.getSaveCallback(callback)});
 	},
 
 
@@ -666,22 +668,7 @@ Ext.define('NextThought.controller.UserData', {
 		console.log('Saving reply', replyRecord, ' to ', recordRepliedTo);
 
 		//now save this:
-		replyRecord.save({
-			scope: this,
-			callback:function(record, operation){
-				var success = operation.success,
-				rec, parent;
-				console.log('Reply save successful?', success);
-				if (success){
-                    rec = success ? ParseUtils.parseItems(operation.response.responseText)[0] : null;
-					parent = record.parent ? record : recordRepliedTo;
-					console.log('Firing child added on ', parent);
-					parent.fireEvent('child-added',rec);
-                    AnnotationUtils.addToHistory(rec);
-				}
-				Ext.callback(callback, this, [success, rec]);
-			}
-		});
+		replyRecord.save({ scope: this, callback:this.getSaveCallback(callback)});
 	},
 
 
