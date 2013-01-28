@@ -77,7 +77,7 @@ Ext.define('NextThought.view.annotations.note.GutterWidget',{
 			me.text.update(r.getBodyText());
 		}
 
-		r.on({
+		me.mon(r,{
 			scope: this,
 			single: true,
 			updated: this.setRecord,

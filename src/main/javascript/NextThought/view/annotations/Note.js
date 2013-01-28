@@ -57,7 +57,7 @@ Ext.define( 'NextThought.view.annotations.Note', {
 			}
 		},me);
 
-		me.record.on({
+		me.mon(me.record,{
 			scope: me,
 			updated: me.recordUpdated,
 			changed: me.recordUpdated

@@ -69,7 +69,7 @@ Ext.define( 'NextThought.view.annotations.Base', {
 			}
 		}
 
-		c.on('afterlayout',me.requestRender, me);
+		this.mon(c,'afterlayout',me.requestRender, me);
 		Ext.EventManager.onWindowResize(me.requestRender, me);
 
 		me.attachRecord(r);
@@ -134,16 +134,20 @@ Ext.define( 'NextThought.view.annotations.Base', {
 		var old = this.record;
 		this.record = record;
 
-		record.on('updated',this.attachRecord, this, {single: true});
-		record.on('destroy',this.onDestroy, this, {single:true});
+		this.mon(record,{
+			single: true,
+			scope: this,
+			updated:this.attachRecord,
+			destroy:this.onDestroy
+		});
 
 		if(old.getId() !== record.getId()){
 			console.warn('Annotation:',old, '!==', record);
 		}
 
 		if(old !== record) {
-			old.un('updated', this.attachRecord, this);
-			old.un('destroy',this.onDestroy, this);
+			this.mun(old,'updated', this.attachRecord, this);
+			this.mun(old,'destroy',this.onDestroy, this);
 		}
 	},
 
@@ -171,13 +175,11 @@ Ext.define( 'NextThought.view.annotations.Base', {
 
 		delete me.record;
 
-		r.clearListeners();
 		if(me.getItemId()){
 			Ext.ComponentManager.unregister(me);
 		}
 		AnnotationsRenderer.unregister(me);
 
-		c.un('afterlayout', this.requestRender, me);
 		Ext.EventManager.removeResizeListener(me.requestRender, me);
 
 		if( c.annotationExists(r)){
@@ -285,10 +287,10 @@ Ext.define( 'NextThought.view.annotations.Base', {
 				text: m.isModifiable ? 'Share With...' : 'Get Info...',
 				handler: function(){
 					if (m.record.phantom) {
-						m.record.on('updated', function(){
+						m.mon(m.record,'updated', function(){
 							m.ownerCmp.fireEvent('share-with',m.record);
-						},
-						{single: true});
+						},{single: true});
+
 						m.savePhantom();
 					}
 					else{
