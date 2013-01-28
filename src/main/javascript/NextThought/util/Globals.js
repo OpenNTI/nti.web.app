@@ -4,6 +4,7 @@ Ext.define('NextThought.util.Globals', {
 	requires: [
 		'DetectZoom',
 		'NextThought.overrides.app.Application',
+		'NextThought.overrides.app.EventBus',
 		'NextThought.overrides.builtins.Array',
 		'NextThought.overrides.builtins.Console',
 		'NextThought.overrides.builtins.Node',
