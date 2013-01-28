@@ -116,7 +116,14 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 			return;
 		}
 
-		var c = this.query('note-carousel-item').length-1;
+		var selectedRecordId = this.record ? this.record.getId() : null,
+			c = this.query('note-carousel-item').length-1;
+
+		if(selectedRecordId === record.getId() && !isMe(record.get('Creator'))){
+			console.warn('The active note was removed but was not yours. We will leave the selection alone');
+			return;
+		}
+
 		if(c === 0){
 			this.up('window').close();
 			return;
