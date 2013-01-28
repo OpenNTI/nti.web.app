@@ -179,6 +179,7 @@ Ext.define('NextThought.model.Base', {
 		var me = this, convert = false, successCallback = (options || {}).success;
 
 		if(me.placeholder){
+			console.debug('Firing destroy because destroying placeholder', me);
 			me.fireEvent('destroy',me);
 			if(me.stores){
 				Ext.each(me.stores.slice(),function(s){ s.remove(me); });
@@ -190,6 +191,7 @@ Ext.define('NextThought.model.Base', {
 
 		function fireItemDestroyed(){
 			try {
+				console.debug('Firing item-destroy from proxy destroy callback', me);
 				NextThought.model.events.Bus.fireEvent('item-destroyed',me);
 			} catch(e2) {
 				console.error('Caught exception in item-destroyed event', Globals.getError(e2));
@@ -197,10 +199,10 @@ Ext.define('NextThought.model.Base', {
 		}
 
 
-		if(Ext.isFunction(successCallback)){
-			successCallback = Ext.Function.createSequence(fireItemDestroyed, successCallback);
+		if(!Ext.isFunction(successCallback)){
+			successCallback = Ext.emptyFn;
 		}
-
+		successCallback = Ext.Function.createSequence(fireItemDestroyed, successCallback);
 		options = Ext.apply(options||{},{
 			success: successCallback
 		});

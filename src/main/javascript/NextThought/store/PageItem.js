@@ -153,6 +153,11 @@ Ext.define('NextThought.store.PageItem',{
 	remove: function(records){
 		var toActuallyRemove = [];
 
+		if(Ext.isEmpty(records)){
+			console.warn('Remove called with no records', records);
+			return;
+		}
+
 		if (!Ext.isArray(records)) {
             records = [records];
         }
