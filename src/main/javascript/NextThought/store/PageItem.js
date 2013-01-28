@@ -177,6 +177,7 @@ Ext.define('NextThought.store.PageItem',{
 
 		Ext.each(toActuallyRemove, function(record){
 			record.tearDownLinks();
+			record.fireEvent('destroy',record);
 		});
 	}
 });

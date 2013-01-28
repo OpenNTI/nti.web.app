@@ -60,7 +60,7 @@ Ext.define('NextThought.model.Base', {
 		f.getByKey('MimeType').defaultValue = this.mimeType;
 
 		this.callParent(arguments);
-		this.addEvents('changed','child-added','parent-set');
+		this.addEvents('changed','destroy','child-added','parent-set','modified');
 		this.enableBubble('changed','child-added','parent-set');
 		return this;
 	},
@@ -129,7 +129,7 @@ Ext.define('NextThought.model.Base', {
 			}
 		}
 
-		this.fireEvent('destroy', this);
+		this.fireEvent('links-destroyed', this);
 
 	},
 
@@ -150,6 +150,7 @@ Ext.define('NextThought.model.Base', {
 
 		return current;
 	},
+
 
 	wouldBePlaceholderOnDelete: function(){
 		return (this.children !== undefined && this.get('RecursiveReferenceCount')) || (!Ext.isEmpty(this.children));
@@ -176,7 +177,9 @@ Ext.define('NextThought.model.Base', {
 	},
 
 	destroy: function(options){
-		var me = this, convert = false, successCallback = (options || {}).success;
+		var me = this,
+			successCallback = (options || {}).success || Ext.emptyFn,
+			failureCallback = (options || {}).failure || Ext.emptyFn;
 
 		if(me.placeholder){
 			console.debug('Firing destroy because destroying placeholder', me);
@@ -189,24 +192,17 @@ Ext.define('NextThought.model.Base', {
 
 		if(!me.isModifiable()){return;}
 
-		function fireItemDestroyed(){
-			try {
-				console.debug('Firing item-destroy from proxy destroy callback', me);
-				NextThought.model.events.Bus.fireEvent('item-destroyed',me);
-			} catch(e2) {
-				console.error('Caught exception in item-destroyed event', Globals.getError(e2));
-			}
-		}
+		function clearFlag(){ delete me.destroyDoesNotClearListeners; console.log('clearing flag'); }
 
-
-		if(!Ext.isFunction(successCallback)){
-			successCallback = Ext.emptyFn;
-		}
-		successCallback = Ext.Function.createSequence(fireItemDestroyed, successCallback);
 		options = Ext.apply(options||{},{
-			success: successCallback
+			success: Ext.Function.createSequence(clearFlag, successCallback, null),
+			failure: Ext.Function.createSequence(clearFlag, failureCallback, null)
 		});
 
+
+		if( me.wouldBePlaceholderOnDelete() ){
+			me.destroyDoesNotClearListeners = true;
+		}
 		me.callParent([options]);
 	},
 
@@ -573,12 +569,12 @@ Ext.define('NextThought.model.Base', {
 
     //yanked & modifed from: http://stackoverflow.com/questions/6108819/javascript-timestamp-to-relative-time-eg-2-seconds-ago-one-week-ago-etc-best
     timeDifference: function(current, previous) {
-        var msPerMinute = 60 * 1000;
-        var msPerHour = msPerMinute * 60;
-        var msPerDay = msPerHour * 24;
-        var msPerMonth = msPerDay * 30;
-        var elapsed = current - previous;
-        var result;
+        var msPerMinute = 60 * 1000,
+		    msPerHour = msPerMinute * 60,
+		    msPerDay = msPerHour * 24,
+		    msPerMonth = msPerDay * 30,
+		    elapsed = current - previous,
+		    result;
 
         if (elapsed < msPerMinute) {
             result = Math.round(elapsed/1000) + ' seconds ago';
@@ -610,5 +606,31 @@ Ext.define('NextThought.model.Base', {
 
     getRelativeTimeString: function(){
 		return this.timeDifference(Ext.Date.now(),this.get('CreatedTime'));
+	},
+
+
+	fireEvent: function(event){
+		console.debug('Record firing event: '+event, this);
+		return this.callParent(arguments);
+	},
+
+
+	/**
+	 * @private
+	 * @property {Boolean} destroyDoesNotClearListeners
+	 */
+	destroyDoesNotClearListeners: false,
+
+
+	clearManagedListeners: function(){
+		if(!this.destroyDoesNotClearListeners){
+			this.callParent(arguments);
+		}
+	},
+
+	clearListeners: function(){
+		if(!this.destroyDoesNotClearListeners){
+			this.callParent(arguments);
+		}
 	}
 });
