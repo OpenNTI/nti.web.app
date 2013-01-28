@@ -105,8 +105,21 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 		selectedNode = me.down('[selected]');
 		if(selectedNode){
 			selectedNode.markSelected(true);
-			me.updateWith(selectedNode);
+			selectedNode.clicked();
 		}
+		console.log('test load');
+	},
+
+
+	removedItem: function(store, record, idx){
+		var c = this.query('note-carousel-item').length-1;
+		if(c === 0){
+			this.up('window').close();
+			return;
+		}
+
+		idx = Math.max(idx-1,0);
+		this.record = store.getAt(idx);
 	},
 
 
@@ -157,6 +170,7 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
         if (!this.store){
             this.store = LocationProvider.getStore(rec.get('ContainerId'));
             this.mon(this.store,'datachanged',this.load,this);
+	        this.mon(this.store,'remove',this.removedItem,this);
             this.prefetchNext();
             this.load();
         }
@@ -248,9 +262,11 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 		});
 	},
 
+
 	disableArrow: function(el,s){
 		el[(s?'remove':'add')+'Cls']('disabled');
 	},
+
 
 	maybeShowToolTip: function(el, show, tip){
 		if(!show){
@@ -260,6 +276,7 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 			el.dom.setAttribute('data-qtip', tip);
 		}
 	},
+
 
 	updateBigArrows: function(item){
 		var hasNext, hasPrev,
@@ -275,9 +292,9 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 
 	},
 
+
 	updateWith: function(item, sender){
-		var bgx,
-		me = this;
+		var bgx;
 
 		console.log('update with called with ', item);
 
@@ -307,6 +324,7 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 		//actually the background's negative offset coordinate
 		this.pointerCoordDifference = bgx + this.body.dom.scrollLeft;
 	},
+
 
 	updateSlide: function(pos) {
 		var dom = this.body.dom,
@@ -339,6 +357,7 @@ Ext.define('NextThought.view.annotations.note.Carousel',{
 			this.getEl().animate({to:{backgroundPositionX: newBgx+'px'}});
 		}
 	},
+
 
 	slideViewLeft: function(){
 		var b = this.body;
