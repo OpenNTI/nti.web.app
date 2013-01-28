@@ -65,18 +65,6 @@ describe("UserDataThreader utils", function() {
 			expect(Ext.isEmpty(results.children)).toBe(true);
 		});
 
-		it('keeps preexisting relationships for placeholders', function(){
-			var n = createThreadable('Note', true), tree = {}, results;
-
-			ThreaderUtil.buildItemTree([n], tree);
-			results = Ext.Object.getValues(tree);
-			expect(Ext.isEmpty(results)).toBeFalsy();
-			expect(results.length).toEqual(1);
-
-			results = results.first();
-			expect(results.parent).toBeDefined();
-			expect(results.children).toBeDefined();
-		});
 	});
 });
 
