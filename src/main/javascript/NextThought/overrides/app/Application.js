@@ -1,5 +1,6 @@
 Ext.define('NextThought.overrides.app.Application',{
 	override: 'Ext.app.Application',
+	requires: ['NextThought.overrides.app.EventBus'],
 
 	registerInitializeTask: function(task) {
 		this.initTasks = this.initTasks || [];
@@ -12,5 +13,11 @@ Ext.define('NextThought.overrides.app.Application',{
 			this.registerInitializeTask = this.finishInitializeTask = Ext.emptyFn;
 			this.fireEvent('finished-loading');
 		}
+	},
+
+
+	onBeforeLaunch: function(){
+		this.eventbus.injectHooks();
+		return this.callParent(arguments);
 	}
 });

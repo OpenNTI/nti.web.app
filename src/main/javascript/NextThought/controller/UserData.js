@@ -56,6 +56,10 @@ Ext.define('NextThought.controller.UserData', {
 		this.application.on('session-ready', this.onSessionReady, this);
 
 		this.control({
+			'annotations.base':{
+				'save-phantom': this.savePhantomAnnotation
+			},
+
 			'reader-panel':{
 				'annotations-load': this.onAnnotationsLoad,
 				'filter-annotations': this.onAnnotationsFilter,
@@ -688,6 +692,17 @@ Ext.define('NextThought.controller.UserData', {
 		refs = (record.get('references') || []).slice();
 
 		this.getController('Chat').enterRoom(people, {ContainerId: cId, references: refs, inReplyTo: parent});
+	},
+
+
+	savePhantomAnnotation: function(record, successFn, failureFn){
+
+		function callback(success,rec){
+			Ext.callback(success?successFn:failureFn,null,[record,rec]);
+		}
+
+		record.save({ scope: this, callback:this.getSaveCallback(callback) });
+
 	},
 
 

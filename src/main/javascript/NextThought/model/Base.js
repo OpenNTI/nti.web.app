@@ -41,6 +41,9 @@ Ext.define('NextThought.model.Base', {
 	},
 
 
+	is: function(selector){return false;},
+
+
 	constructor: function(data,id,raw){
 		var f = this.fields,
 			cName = this.self.getName().split('.').pop(),
@@ -192,7 +195,12 @@ Ext.define('NextThought.model.Base', {
 
 		if(!me.isModifiable()){return;}
 
-		function clearFlag(){ delete me.destroyDoesNotClearListeners; console.log('clearing flag'); }
+		function clearFlag(){
+			if(me.destroyDoesNotClearListeners){
+				console.log('clearing flag');
+			}
+			delete me.destroyDoesNotClearListeners;
+		}
 
 		options = Ext.apply(options||{},{
 			success: Ext.Function.createSequence(clearFlag, successCallback, null),

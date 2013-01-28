@@ -1,4 +1,5 @@
 Ext.define( 'NextThought.view.annotations.Base', {
+	alias: 'annotations.base',
 
 	requires: [
 		'NextThought.view.annotations.renderer.Manager',
@@ -16,15 +17,20 @@ Ext.define( 'NextThought.view.annotations.Base', {
 	},
 
 	onClassExtended: function(cls, data, hooks) {
-		var onBeforeClassCreated = hooks.onBeforeCreated;
-
+		var a,onBeforeClassCreated = hooks.onBeforeCreated;
 		hooks.onBeforeCreated = function(cls, data) {
 			if(data.requestRender){
 				Ext.Error.raise('You should not replace requestRender');
 			}
-
 			onBeforeClassCreated.call(this, cls, data, hooks);
 		};
+
+
+		a = data.annotationsType = (cls.prototype.annotationsType || []).slice();
+		if(a.length === 0){
+			a.push.apply(a,cls.prototype.alias);
+		}
+		a.push.apply(a, Ext.isArray(data.alias) ? data.alias.slice() : [data.alias]);
 	},
 
 	hasGutterWidgets: false,
@@ -59,7 +65,7 @@ Ext.define( 'NextThought.view.annotations.Base', {
 			requestRender: Ext.Function.createBuffered(me.requestRender, 10, me)
 		});
 
-		if(typeof r.data.sharedWith !== 'undefined'){
+		if(r.data.sharedWith !== undefined){
 			try{ this.mixins.shareable.afterRender.call(this); }
 			catch(e){
 				console.warn(
@@ -80,6 +86,10 @@ Ext.define( 'NextThought.view.annotations.Base', {
 		}
 	},
 
+	is: function(selector){
+		console.log(this.annotationsType);
+		return Ext.Array.contains(this.annotationsType,selector);
+	},
 	getBubbleTarget: function(){return this.ownerCmp; },
 	getItemId: function(){return this.id; },
 	isXType: function(){return false;},
@@ -158,6 +168,7 @@ Ext.define( 'NextThought.view.annotations.Base', {
 		}
 		catch(e){
 			swallow(e);
+			console.error(e.message,e);
 		}
 	},
 
@@ -225,42 +236,26 @@ Ext.define( 'NextThought.view.annotations.Base', {
 		return null;
 	},
 
-	savePhantom: function(callback){
+	savePhantom: function(){
 		var me = this, p;
 		if(!me.record.phantom){return;}
-		me.isSaving = true;
+
+
 
 		p = LocationProvider.getPreferences();
 		p = p ? p.sharing : null;
-
 		p = this.allowShare? p : null;
-
 		me.record.set('SharedWidth',p);
 
-		me.record.save({
-			scope: me,
-            callback:function(record, operation){
-                var success, rec;
-                try{
-                    success = operation.success;
-                    rec = success ? ParseUtils.parseItems(operation.response.responseText)[0] : null;
-                    if (success){
-                        me.record.fireEvent('updated', rec);
-                        me.record = rec;
-                    }
-                    else{
-                        me.cleanup();
-                        alert({title:'Ooops!', msg:'Something went wrong while saving. Please try again.'});
-                    }
-                }
-                catch(err){
-                    console.error('Something went wrong... ',err);
-                }
-                if (callback) {
-                    Ext.callback(callback, this, [success, rec]);
-                }
-            }
-		});
+		function success(oldRec, newRec){
+			me.record.fireEvent('updated', newRec);
+		}
+
+		function failure(){
+			me.cleanup();
+		}
+
+		me.fireEvent('save-phantom',me.record, success, failure);
 	},
 
 

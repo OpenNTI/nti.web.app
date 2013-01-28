@@ -355,13 +355,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 		menu.add({
 			text: 'Save Highlight',
 			handler:function(){
-				me.createAnnotationWidget('highlight',record, range, function(w){
-					//TODO: move to controller
-					w.savePhantom(
-							function(success, rec){
-		                       AnnotationUtils.addToHistory(rec);
-		                    });
-				});
+				me.createAnnotationWidget('highlight',record, range, function(w){ w.savePhantom(); });
 				me.clearSelection();
 			}
 		});
@@ -481,7 +475,7 @@ Ext.define('NextThought.view.content.reader.Annotations', {
 			Ext.callback(onCreated,w,[w]);
 		}
 		catch(e){
-			console.error(e);
+			console.error(Globals.getError(e));
 		}
 
 		if(w && type === 'redaction'){
