@@ -55,6 +55,9 @@ Ext.define('NextThought.view.slidedeck.View',{
 
 		//wire up
 		this.mon(q,'select', this.maybeSelect, this);
+		this.mon(q, 'beforeselect', function(dvm){
+			this.wasSelected = dvm.getSelection();
+		}, this);
 
 		this.on('editorActivated',function(){
 			this.pausedForEditing = v.pausePlayback();
@@ -122,6 +125,10 @@ Ext.define('NextThought.view.slidedeck.View',{
 				if(str === 'ok'){
 					allowDestructiveAction();
 				}
+				else{
+					v.select(me.wasSelected, false, true);
+				}
+				delete me.wasSelected;
 			}
 		});
 
