@@ -124,6 +124,9 @@ Ext.define('NextThought.view.slidedeck.Slide',{
 		console.log('Slide detected records added to store ', store, records);
 		var dom = this.slide.get('dom-clone'), toAdd = [];
 
+		//We only care about top level
+		records = Ext.Array.filter(records, function(r){ return !r || r.isTopLevel();});
+
 		Ext.Array.sort(records, Globals.SortModelsBy('Last Modified', 'ASC'));
 
 		Ext.each(records, function(record){
@@ -136,6 +139,30 @@ Ext.define('NextThought.view.slidedeck.Slide',{
 		//Uses semi-private implementation detail for speed.
 		this.add(1, toAdd);
 	},
+
+
+	updateCount: function(){
+		var header;
+		header = this.down('slide-comment-header');
+
+		if(header){
+			header.updateCount(this.query('slidedeck-slide-note').length);
+		}
+	},
+
+
+	onRemove: function(){
+		this.callParent(arguments);
+		this.updateCount();
+	},
+
+
+	onAdd: function(cmp){
+		this.callParent(arguments);
+		this.updateCount();
+	},
+
+
 
 	componentForRecord: function(record, dom){
 		var guid = IdCache.getComponentId(record, null, 'reply'),
@@ -187,7 +214,6 @@ Ext.define('NextThought.view.slidedeck.Slide',{
 		if(this.slide){
 			this.updateSlide({},this.slide);
 		}
-
 		this.mon(this.next,'click',this.queue.nextSlide,this.queue);
 		this.mon(this.prev,'click',this.queue.previousSlide,this.queue);
 	},

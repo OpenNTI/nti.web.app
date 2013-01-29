@@ -52,6 +52,15 @@ Ext.define('NextThought.view.slidedeck.CommentHeader',{
 	},
 
 
+	updateCount: function(c){
+		if(!this.rendered){
+			return;
+		}
+		this.comment[c > 0 ? 'addCls' : 'removeCls']('has-count');
+		this.count.update(c);
+	},
+
+
 	getRoot: function(){
 		var r = this.rootCache || this.up('slidedeck-slide');
 		if(!this.rootCache){ this.rootCache = r; }
