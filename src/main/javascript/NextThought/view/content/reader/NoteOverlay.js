@@ -215,6 +215,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 				o.editorActions.reset();
 				o.editorActions.setValue('');
 				o.editorActions.addWhiteboard(data);
+				o.editorActions.focus(true);
 			});
 		}
 	},
