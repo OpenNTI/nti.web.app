@@ -497,6 +497,10 @@ Ext.define('NextThought.view.annotations.note.Panel',{
 	},
 
 
+	deactivateEditor: function(){
+		this.deactivateReplyEditor.apply(this, arguments);
+	},
+
 	activateReplyEditor: function(e){
 		var me = this;
 		if(e){e.stopEvent();}
