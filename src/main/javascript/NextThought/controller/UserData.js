@@ -631,11 +631,16 @@ Ext.define('NextThought.controller.UserData', {
 		console.log('Saving new note with body', body);
 
 		//Define our vars and create our content range description:
-		var doc = ReaderPanel.get().getDocumentElement(),
+		var doc = range ? range.commonAncestorContainer.ownerDocument : null,
 			noteRecord,
 			rangeDescription = Anchors.createRangeDescriptionFromRange(range, doc),
-			container = rangeDescription.container || c,
+			container = c,
 			me = this;
+
+		if(!container){
+			console.error('No container supplied pulling container from rangeDescription', rangeDescription);
+			container = rangeDescription.container;
+		}
 
 		//make sure the body is an array:
 		if(!Ext.isArray(body)){body = [body];}

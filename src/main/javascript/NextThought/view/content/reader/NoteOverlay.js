@@ -444,7 +444,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 	//them to the container and a null range.  We only want to do this
 	//if they were created from the gutter since in theory eventually
 	//we allow selecting text and highlighting/noteing on parts of the question.
-	//Right now we identify created from the gutter by a style of surpressed, 
+	//Right now we identify created from the gutter by a style of surpressed,
 	//and we determine it is in an assessment if the ranges ancestor is or is contained in an
 	//assessment object tag
 	rangeForLastLineInfo: function(lastLine, style){
@@ -456,7 +456,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 			return {range: lastLine.range, container: null};
 		}
 
-		
+
 		//OK we are style suppressed
 		question = ancestor.is(questionSelector) ? ancestor : ancestor.up(questionSelector);
 		c = question ? question.getAttribute('data-ntiid') : null;
@@ -500,7 +500,7 @@ Ext.define('NextThought.view.content.reader.NoteOverlay', {
 		o.editor.mask('Saving...');
         try {
 			rangeInfo = this.rangeForLastLineInfo(o.lastLine, style);
-		    me.fireEvent('save-new-note', note, rangeInfo.range, rangeInfo.container, sharing, style, callback);
+		    me.fireEvent('save-new-note', note, rangeInfo.range, rangeInfo.container || LocationProvider.currentNTIID, sharing, style, callback);
         }
         catch (error) {
             console.error('Error saving note - ' + Globals.getError(error));
