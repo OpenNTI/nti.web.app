@@ -433,10 +433,10 @@ Ext.define('NextThought.util.Anchors', {
 			questionSel = 'object[type$=naquestion]['+ntiidAttr+']',
 			up;
 
-        if (n.is(questionSel)){
+        if (n && n.is(questionSel)){
             return n.getAttribute(ntiidAttr);
         }
-		up = n.up(questionSel);
+		up = n ?  n.up(questionSel) : null;
 		if (up) {
             return up.getAttribute(ntiidAttr);
         }
@@ -1108,7 +1108,7 @@ Ext.define('NextThought.util.Anchors', {
 			return node;
 		}
 		else{
-			return Anchors.referenceNodeForNode(node.parentElement, allowsUnsafeAnchors);
+			return Anchors.referenceNodeForNode(node.parentNode, allowsUnsafeAnchors);
 		}
 	},
 
